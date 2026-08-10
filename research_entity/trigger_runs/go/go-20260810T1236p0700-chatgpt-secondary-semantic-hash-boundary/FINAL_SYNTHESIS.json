@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1236p0700-chatgpt-secondary-semantic-hash-boundary",
+  "trigger": "go",
+  "created_at": "2026-08-10T12:51:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "canonical_boot": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_head_observed_before_close": "a30200dcf4f660cb72612bdfe8c11e332a94ece4",
+  "internal_evidence": [
+    "tools/claycode_base_frontend.py",
+    "tools/claycode_base_frontend_validation.py",
+    "tools/claycode_base_typed_ir.py",
+    "tools/claycode_wp03_main_port_validation.py",
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark",
+    "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+  ],
+  "external_primary_refresh": {
+    "source_family": "official Lark documentation",
+    "retrieved_on": "2026-08-10",
+    "supported_points": [
+      "maybe_placeholders=false represents absent [] optionals by absence rather than synthetic None placeholders",
+      "strict LALR mode is intended to surface shift/reduce and regex-collision problems",
+      "contextual lexing narrows token choices from parser-state expectations"
+    ]
+  },
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "CANONICAL_SEMANTIC_HASH_METAMORPHIC_GROUPING_PROBE",
+    "status": "COMPLETED",
+    "environment": {
+      "class": "LOCAL_PROXY_ANALYSIS_CONTAINER_NOT_UBUNTU_ACCEPTANCE",
+      "python": "3.13.5",
+      "lark": "1.3.1",
+      "interegular": "UNAVAILABLE",
+      "strict_collision_receipt": "NOT_EXECUTED"
+    },
+    "results": [
+      "Whitespace/comment changes preserved semantic_hash.",
+      "Equivalent JSON string spelling a vs unicode escape preserved semantic_hash.",
+      "Operator mutation > vs < changed semantic_hash.",
+      "Needle.owns vs Needle.lowers changed semantic_hash.",
+      "Redundant single and nested grouping parentheses changed semantic_hash unexpectedly.",
+      "A local minimal normalization that collapses only grammar-generated grouping-only primary(LPAR,expr,RPAR) restores grouping equivalence while preserving tested mutation discrimination."
+    ],
+    "non_promotion": "No production patch or WP02 PASS. Numeric 1 vs 1.0 remained intentionally unnormalized pending typed semantic proof."
+  },
+  "material_results": [
+    {
+      "id": "WP02_GROUPING_SEMANTIC_HASH_COUNTEREXAMPLE",
+      "status": "SUPPORTED_COUNTEREXAMPLE_UBUNTU_REPLICATION_REQUIRED",
+      "evidence_commit": "5cdd3b3e10a83b7439d6b11798a9eb2a65822563",
+      "work_revision_commit": "3913464903c50a1fab864d358463544f7d6a8245",
+      "finding": "Current frontend semantic identity retains redundant grouping punctuation, so semantically equivalent grouped/un-grouped expressions hash differently under the current hash contract.",
+      "next_falsifier": "Version/bind the canonical hash contract, add grouping metamorphic regression, rerun strict full current G9+Dialect on the valid Ubuntu execution lane."
+    },
+    {
+      "id": "WP03_SELECTED_V17_VS_OLDER_DEFAULT_RISK",
+      "status": "REFINED_INTEGRATION_RISK_NOT_BLANKET_V7_PRODUCTION_CLAIM",
+      "evidence_commit": "5d06dee82507c828343fd8c394b4af5c544b6221",
+      "initial_work_revision": "0ed625287894eaeb84835839dc4766e34c584979",
+      "refined_work_revision": "928201dc6776cb8e77fd0d43e3c5973accc6b86b",
+      "finding": "V7 and selected V17 differ semantically on Needle.owns(X) and hyphenated identifiers, but fresh parallel evidence shows the current favored WP03 path derives typed-fn contextually over selected V17 rather than treating V7 as production authority.",
+      "remaining_question": "Audit target/release consumers so none silently reparse through an older DEFAULT_GRAMMAR; require receipt-bound frontend/surface/grammar identity at the TypedIR boundary."
+    },
+    {
+      "id": "WP03_FRONTEND_ARTIFACT_ADAPTER_MESH_REENTRY",
+      "status": "PARALLEL_CANDIDATE_ALREADY_BUILT_NOT_PROMOTED",
+      "candidate_commit": "7839350ac4329a132153ed8270eb1a71e6c40f7c",
+      "workflow_commit": "69220005f2bbdc7e4eab5ab54706e94f9e6bad0b",
+      "latest_ci_exposure_commit": "a30200dcf4f660cb72612bdfe8c11e332a94ece4",
+      "finding": "A parallel worker consumed the shared frontier and built the intended explicit FrontendArtifact->TypedIR adapter. It binds surface, grammar identity and semantic hash and consumes canonical AST without reparsing. It remains research-only pending differential/Ubuntu gates."
+    }
+  ],
+  "negative_results_and_corrections": [
+    "Executable probe file creation through the GitHub connector was blocked by the connector safety layer; no claim was made that the file exists.",
+    "Local proxy lacks interegular, so strict collision evidence was not fabricated.",
+    "The broad initial interpretation that WP03 simply uses V7 production semantics was corrected after fresh V17-overlay evidence arrived.",
+    "Workflow definition and candidate code are not execution receipts; WP02/WP03 remain OPEN in the receipt-gated release workspace."
+  ],
+  "architecture_delta": {
+    "wp02": "CANDIDATE: semantic canonicalization should erase grouping-only syntax from semantic identity while preserving source/provenance and mutation discrimination; exact implementation remains fresh-head/Ubuntu gated.",
+    "wp03": "CANDIDATE: explicit surface-bound FrontendArtifact -> TypedIR boundary; no silent independent grammar ownership on acceptance paths.",
+    "frank_harness": "NO_CHANGE",
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+  },
+  "coordination": {
+    "shared_work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "durable_commits_from_this_run": [
+      "5cdd3b3e10a83b7439d6b11798a9eb2a65822563",
+      "3913464903c50a1fab864d358463544f7d6a8245",
+      "5d06dee82507c828343fd8c394b4af5c544b6221",
+      "0ed625287894eaeb84835839dc4766e34c584979",
+      "928201dc6776cb8e77fd0d43e3c5973accc6b86b"
+    ],
+    "mesh_reentry": "Parallel go synthesis 162231bdf7b2d3a7eff6a4e4b3785fef1b2e28ad incorporated this run's WP02/WP03 evidence; subsequent adapter candidate 7839350ac4329a132153ed8270eb1a71e6c40f7c implements the shared handoff direction."
+  },
+  "current_gates": [
+    "CC-WP-02 OPEN: canonical grouping hash + fresh-head canonicalizer/strict Ubuntu receipts unresolved.",
+    "CC-WP-03 OPEN: explicit frontend-artifact candidate exists, but target/release consumer audit and fresh remote/target receipts remain required.",
+    "BASE_CLAYCODE_RELEASE NOT_PASS.",
+    "Registered Andreas Ubuntu target acceptance cannot be replaced by local proxy, GitHub-hosted or Hostinger-only evidence."
+  ],
+  "next_frontier": [
+    "Let the active WP02 worker ingest the grouping hash regression at its next safe fresh-main point rather than race-editing its parser path.",
+    "Let the active WP03 artifact-boundary lane execute/receipt the existing candidate and audit direct typed-IR consumers for implicit older defaults.",
+    "Only after WP02/WP03 receipt closure continue the critical path into type/effect, evaluator and lowering without reopening semantics absent a new executable counterexample."
+  ]
+}

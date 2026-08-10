@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "F-V01-HARNESS-SQLITE-SCHEMA-OWNER-CI-TRANSPORT-20260810T2150P0700",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program": "FRANK_V0_1",
+  "target": "self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "delta_class": "FRANK_V0_1_TEST_DELTA_PLUS_SECURITY_REPAIR_CANDIDATE_PLUS_INFRASTRUCTURE_NEGATIVE_RESULT",
+  "affected_work_packages": [
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "current_target_receipt_observation": {
+    "source": "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/latest.log",
+    "hostname": "digital-retina",
+    "runner": "clay",
+    "tested_commit": "615542e7b2f653b7166a9c3876947e8906c73d74",
+    "repo_static_integrity": "FAIL",
+    "direct_canonical_db_openers": [
+      "runtime/state/repo_truth_gate.py",
+      "runtime/state/apply_current_schema.py"
+    ],
+    "noncanonical_executescript_offenders": [
+      "runtime/vps_unifieddb/clay_colocation_v1_probe.py",
+      "runtime/vps_integrity/clay_spm_s1_tripwire_probe.py",
+      "runtime/vps_integrity/clay_udb_auth_shadow_probe.py",
+      "runtime/vps_integrity/clay_udb_graph_hotpath_probe.py",
+      "runtime/vps_integrity/clay_udb_streaming_root_probe.py",
+      "runtime/temporal_entity_pulse_v1/target_vps_probe.py",
+      "runtime/clay_vps_mcp_v02/clay_vps_mcp/telemetry.py"
+    ],
+    "other_observed_gates": "Broadly PASS in the persisted receipt, including transaction replay, deep integrity v11, schema migration atomicity, causal re-entry and legacy conservation families.",
+    "interpretation": "Current Deep Integrity failure is narrow static schema-owner classification, not evidence of whole-runtime collapse."
+  },
+  "audit_repair_candidate": {
+    "target_repo_pr": 122,
+    "branch": "clay/frank-v01-static-schema-owner-audit-v2-20260810",
+    "principle": "Do not blanket-allow executescript. Canonical schema execution remains exclusive to the canonical migrator; every other schema owner must have an exact reviewed class and a mechanically checked ownership boundary.",
+    "classes": {
+      "DISPOSABLE_PROBE": "tempfile-bound",
+      "IN_MEMORY_MECHANISM_PROBE": "literal sqlite :memory: bound",
+      "DEDICATED_TELEMETRY_DB": "runtime path-ownership guard plus no literal canonical sqlite connect"
+    },
+    "unknown_executescript": "FAIL_CLOSED",
+    "unknown_canonical_db_open": "FAIL_CLOSED"
+  },
+  "telemetry_security_finding": {
+    "finding": "Original TelemetryStore accepted FRANK_TELEMETRY_DB/environment-selected path and then executed its schema at that path. A pure static allowlist would therefore hide a path-authority hazard.",
+    "deployment_mitigation_already_present": "systemd service uses ProtectSystem=strict and ReadWritePaths=/srv/frank-telemetry, so the current deployed unit already constrains the obvious production write path.",
+    "candidate_runtime_repair": [
+      "production/env telemetry DB must resolve below /srv/frank-telemetry",
+      "explicit constructor paths are fixture-only and must resolve below the OS temporary root",
+      "FRANK_UNIFIED.sqlite and FRANK_CLAYGRAPH.sqlite basenames are denied in either mode",
+      "Path.resolve(strict=False) makes existing symlink escapes resolve outside the owned root and fail"
+    ],
+    "authority_interpretation": "Filesystem sandbox and Python runtime contract now become defense-in-depth instead of relying on systemd alone."
+  },
+  "local_execution": {
+    "schema_owner_plus_path_regressions": {"tests": 18, "passed": 18, "failed": 0, "duration_s": 0.08},
+    "telemetry_path_regressions": {"tests": 8, "passed": 8, "failed": 0, "duration_s": 0.07},
+    "path_property_fuzz": {
+      "seed": 4815162342,
+      "cases": 50000,
+      "accepted": 23083,
+      "blocked": 26917,
+      "property_violations": 0,
+      "mutation": "REMOVE_ROOT_OWNERSHIP_CHECK_KEEP_CANONICAL_BASENAME_DENY",
+      "mutation_violations": 22980,
+      "first_mutation_violation": {"case": 1, "mode": "production_environment", "path": "/tmp/telemetry-537999457.sqlite3"}
+    },
+    "evidence_class": "LOCAL_DETERMINISTIC_EXACT_SEMANTIC_REPRODUCTION_NOT_TARGET_ACCEPTANCE"
+  },
+  "ci_transport_negative_result": {
+    "pull_request_lane": {
+      "status": "FALSIFIED_AS_SEMANTIC_TEST_INSTRUMENT",
+      "control_workflow": "Frank PR transport sentinel",
+      "run_id": 31399555814,
+      "control": "ubuntu-latest job with no checkout and no project code; only printf",
+      "result": "FAIL with no returned steps",
+      "consequence": "Red PR Actions on ingress/security and schema-owner PRs must not be interpreted as source-semantics failures until repository Actions transport is repaired."
+    },
+    "branch_push_lane": {
+      "control": "Frank branch push transport sentinel",
+      "receipt_expected": "runtime/vps_integrity/branch_push_transport_sentinel.json",
+      "receipt_observed": false,
+      "status": "UNRESOLVED_OR_NOT_EXECUTING"
+    },
+    "candidate_target_vps_lane": {
+      "receipt_expected": "runtime/vps_integrity/schema_owner_audit_v2_latest.json",
+      "receipt_observed": false,
+      "status": "NOT_EXECUTED_OR_NOT_PERSISTED",
+      "promotion_effect": "NONE"
+    }
+  },
+  "identity_interaction": {
+    "main_security_identity": "Current main still contains Frank.id security identity semantics.",
+    "separate_active_repair": "Dr.-Unterweger PR #102 repairs self.root/server-binary identity and must not be duplicated by this lane.",
+    "acceptance_rule": "Effect/security evidence produced before self.root identity integration remains component evidence and must be replayed after identity migration before terminal acceptance."
+  },
+  "strongest_counterhypotheses": [
+    "The original static executescript policy may intentionally be conservative enough that all probe-local schema creation should move outside runtime instead of being classified in-place.",
+    "The telemetry Python path guard may be redundant under the current systemd sandbox; if so, its value must be measured as defense-in-depth against alternate launch paths or deployment-policy drift.",
+    "The branch push/target receipt absence may be caused by workflow registration/trigger semantics rather than runner unavailability."
+  ],
+  "next_discriminators": [
+    "Obtain a real self-hosted receipt for PR #122 candidate or explicitly dispatch through a purpose-built authorized bridge; do not abuse Qwen/V18 bounded dispatch bridges.",
+    "Replay full Deep Integrity on the exact candidate SHA and require repo_static_integrity PASS while all previous PASS gates remain PASS.",
+    "After PR #102 identity migration, replay effect/security/telemetry tests under self.root identity and target-VPS continuity semantics.",
+    "Measure whether the path guard adds any material startup/runtime overhead and confirm production systemd environment resolves to the guarded telemetry root."
+  ],
+  "promotion": "NOT_PROMOTED",
+  "reason": "Local tests and mutation controls strongly support the repair, but no candidate-bound target-VPS receipt has yet been observed and current branch workflow transport is unresolved."
+}

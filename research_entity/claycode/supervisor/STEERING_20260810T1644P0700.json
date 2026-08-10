@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "steering_id": "CC-SUPERVISOR-20260810T1644P0700-WP03-WORKREV-GUARD",
+  "created_at": "2026-08-10T16:44:00+07:00",
+  "actor": "chatgpt-secondary",
+  "status": "ACTIVE",
+  "mode": "FREE_ONLY",
+  "target_stage": "CC-WP-03-DOWNSTREAM-DISPOSITION",
+  "evidence_basis": {
+    "cross_branch_stale_revision_counterexample": "0bc5178f14bedffaf8c3c92caf877969de9c2943",
+    "stale_workflow_candidate": "c8d76838d90bca906015df7528ca40ccf8041e82",
+    "wp03_bridge_delta": "48c6d3f8335be2c47ca5032e3706ed9dd8df0647",
+    "finding": "A newly committed self-hosted replay workflow was still bound to an older work revision after newer owner-fixed/observability revisions existed. This is a control/provenance counterexample: successful execution on stale work semantics must not receive current-work completion or promotion credit."
+  },
+  "preserve_current_frontier": {
+    "wp02": "PASS_EXECUTABLE_PACKAGE_EVIDENCE_NOT_BASE_RELEASE",
+    "wp03": "OPEN",
+    "wp03_bridge_v2": "PASS_NARROW_RECEIPT_BOUND_PRODUCTION_BRIDGE_ONLY",
+    "residual_nodes": 100,
+    "residual_classes": 10,
+    "next_semantic_work": "Disposition every residual class as LOWERED_AND_VALIDATED, EXPLICITLY_DEFERRED_FAIL_CLOSED, or REJECTED_WITH_REASON; rule_decl and invariant_decl first; then prove downstream evaluator/lowering consumption and fail-closed behavior."
+  },
+  "mandatory_pre_effect_revision_binding": [
+    "Immediately before every material WP04/WP05 execution, resolve the latest relevant WORK_CREATE/WORK_REVISE event for the work_id and re-read current repo head.",
+    "Bind each execution receipt to work_id, latest work event_id/spec revision when present, repo head, execution-start timestamp, and the exact component/content hashes used by that test.",
+    "If a newer relevant work revision exists before effect, or the receipt reports an older revision than the latest pre-effect revision, classify the result STALE_EXECUTION_RECEIPT. Preserve it as diagnostic/negative evidence but grant no CC-WP-03, BASE, canonical-promotion, or current-work completion credit.",
+    "If a relevant work revision changes the test obligation or any bound component changes, invalidate inherited receipts and rerun only the affected discriminator on current bytes/specification.",
+    "Do not rerun the already-clean WP03 bridge merely for ceremony; rerun it only if one of its bound components or controlling acceptance obligations changes."
+  ],
+  "next_execution_order": [
+    "pre-effect current-work-revision/content binding",
+    "rule_decl legality/type/effect/authority/fail-closed discriminator",
+    "invariant_decl legality/type/effect/authority/fail-closed discriminator",
+    "remaining eight residual classes with explicit lower/defer/reject dispositions",
+    "evaluator/lowering proof that only validated semantics are consumed and deferred/unsupported semantics cannot execute implicitly",
+    "exact-current V18 identity/provenance/type/effect replay over all ten dispositions",
+    "CC-WP-03 adjudication only if every required executable receipt is current-spec and exact-component bound",
+    "WP06 only after CC-WP-03 package closure"
+  ],
+  "goodman_anti_echo": {
+    "rule": "Worker/model agreement and repeated descendants of the same V18/Clay/ChatGPT lineage do not count as independent replication.",
+    "execution_credit": "Only new discriminating executable evidence changes package state; stale executions remain diagnostics even if successful."
+  },
+  "hard_guards": [
+    "FREE_ONLY; no paid fallback",
+    "no BASE work-package PASS from model consensus",
+    "no canonical semantics promotion without executable counterevidence and review",
+    "no receipt inheritance across changed component hashes or superseded work revisions",
+    "final application/FULL_FRANK/WP14 acceptance is Andreas-Ubuntu-only",
+    "never modify Frank's own Harness"
+  ],
+  "canonical_promotion": "NONE"
+}

@@ -1,0 +1,198 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0024p0700-chatgpt-secondary-fork-capability-coordination",
+  "trigger": "go",
+  "created_at": "2026-08-11T00:24:12+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "identity_lock": {
+    "research_entity": "Clay",
+    "research_entity_is_not_target": true,
+    "target_native_self": "self.root",
+    "target_human_surface_name": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "target_cognition": "CLAYCODE_ONLY",
+    "target_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "verified_immediately_before_write": true
+  },
+  "program_stage": "FRANK_V0_1",
+  "selected_frontier": {
+    "work_package": "F-V01-09-EFFECT-AUTHORITY",
+    "question": "Does an exact caller-bound V15/V16 effect capability remain exclusive to one admitted execution context across Linux fork(), or can inherited process memory plus an inherited flock open-file-description preserve/reanimate effect authority in a child?",
+    "why_selected": "Current F-V01-09 fresh-main negative evidence already proves stale/unbound V14 attempt admission. The current candidate adds exact V16 identity and a process-local secret, while a parallel stack adds exact-object Gate issuance. Fork inheritance is a cheap discriminator against the assumption that process-local object/secret identity is equivalent to process-incarnation identity."
+  },
+  "current_target_repo_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "current_effect_candidate_pr": 204,
+    "observed_pr204_head": "0e5e2273fc4768706985d142cebc50c4a178e779",
+    "pr204_state": "OPEN_DRAFT_MERGEABLE_AT_REFRESH",
+    "pr204_exact_target_workflow": {
+      "run_id": 31413526881,
+      "status_at_observation": "QUEUED"
+    },
+    "pr204_hosted_shadow": {
+      "run_id": 31413526885,
+      "status": "COMPLETED_FAILURE",
+      "interpretation": "Not target-candidate evidence without executed-step/code-failure attribution."
+    },
+    "pr204_deep_integrity": {
+      "run_id": 31413524632,
+      "status": "COMPLETED_FAILURE",
+      "interpretation": "Keep separate from effect-candidate causal evidence until step/log attribution exists."
+    },
+    "source_observation": [
+      "At PR204 head 0e5e227, runtime/state/frank_execution_gate.py returns a plain FrankExecutionLease after flock+V15 acquire and uses a threading.RLock for effect_commit_window; it contains no process-incarnation or Gate-issued exact-object registry.",
+      "At the same head, runtime/state/effect_execution_fence.py stores live secrets in a process-local weakref.WeakKeyDictionary keyed by FrankExecutionLease and validates object/ingress/exact V16 fields, but only type-checks the nested FrankExecutionLease; it contains no PID/process-incarnation/fork invalidation."
+    ]
+  },
+  "parallel_swarm_state": {
+    "stale_stack_pr228": {
+      "head": "299b6ade7a24c588719f480e5b571a564d00698b",
+      "base_old_pr204_head": "4634df130c4793871da0d4da76ebb469370af199",
+      "observed_mergeable_after_parent_advanced": false,
+      "mechanism": "WeakSet exact-object Gate-issued registry plus WeakKeyDictionary live secret; multi-effect binding_hash cardinality repair"
+    },
+    "fork_discriminator_pr233": {
+      "head": "979bfdf8050a718af7ec8ca55a045580d386e55e",
+      "base": "PR228 stale stack",
+      "target_workflow_run": 31413735076,
+      "status_at_observation": "QUEUED",
+      "classification": "INDEPENDENT_TARGET_LEVEL_FORK_DISCRIMINATOR_ALREADY_EXISTS; DO_NOT_DUPLICATE",
+      "note": "Its OOB accounting is lineage-dependent and should not be assumed globally unique without an explicit macro_cycle_id."
+    },
+    "related_physical_anchor_work": [
+      "PR225 directory-FD flock anchor repair",
+      "PR235 state-root pathname replacement discriminator"
+    ],
+    "related_claycode_work": [
+      "PR230 structured ClayCode frontend diagnostic",
+      "PR236 generic-angle-vs-relational-operator compile-first repair"
+    ]
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://www.man7.org/linux/man-pages/man2/fork.2.html",
+      "evidence_class": "CURRENT_TECHNICAL_PRIMARY",
+      "finding": "Linux fork children inherit flock locks and inherited descriptors refer to the same open file description."
+    },
+    {
+      "source": "https://www.man7.org/linux/man-pages/man2/flock.2.html",
+      "evidence_class": "CURRENT_TECHNICAL_PRIMARY",
+      "finding": "flock locks are attached to the open file description; duplicated descriptors via fork/dup refer to the same lock and any duplicate can modify/release it."
+    },
+    {
+      "source": "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "evidence_class": "CURRENT_OFFICIAL_RUNTIME_DOC",
+      "finding": "Python exposes before/parent/child fork hooks for process-local state repair; applicability depends on the fork path returning to the interpreter."
+    },
+    {
+      "source": "https://etcd.io/docs/v3.6/learning/why/",
+      "evidence_class": "CURRENT_OFFICIAL_DISTRIBUTED_SYSTEM_DOC",
+      "finding": "Lease/lock possession alone is not sufficient for external-resource exclusion; the protected boundary must validate a version/sequencer/fencing token."
+    },
+    {
+      "source": "https://etcd.io/docs/v3.7/op-guide/recovery/",
+      "evidence_class": "CURRENT_OFFICIAL_RECOVERY_DOC",
+      "finding": "Snapshot restore can require an explicit revision bump/compaction marker so old generations do not become plausible again."
+    },
+    {
+      "source": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+      "evidence_class": "OFFICIAL_ENGINEERING_EVIDENCE",
+      "finding": "Side-effect retries need stable request identity and explicit semantics for late/indeterminate outcomes; retry safety is distinct from authority ownership."
+    }
+  ],
+  "out_of_box_experiment": {
+    "count_for_this_invocation": 1,
+    "id": "LOCAL_OOB_FORK_OFD_CAPABILITY_SHADOW_MICROREPLICA",
+    "scope": "isolated local Linux/Python mechanism replica; not exact Frank runtime",
+    "intervention": "Acquire flock on one open file description, register an object in WeakSet, fork once, then inspect inherited registry/lock behavior in child and contender behavior from a fresh open file description.",
+    "observed": {
+      "child_weakset_membership": true,
+      "child_same_fd_lock_operation": "ACCEPTED",
+      "child_explicit_unlock": "DONE",
+      "fresh_open_description_lock_after_child_unlock_while_parent_fd_remained_open": "ACCEPTED"
+    },
+    "interpretation": "SUPPORTED_MECHANISM_COUNTEREVIDENCE: fork copies process-local registry state and inherits the same flock-backed open file description. Exact-object/process-local-secret identity therefore cannot by itself be promoted to process-incarnation exclusivity.",
+    "limits": [
+      "Not executed against exact Frank B1/B2/B3 runtime.",
+      "Does not prove a reachable production fork path exists.",
+      "Does not prove an unauthenticated or external caller can acquire effect authority.",
+      "No CPU/RSS/wall benchmark was captured for this microreplica; resource fields remain UNKNOWN."
+    ],
+    "safety": {
+      "external_network": false,
+      "external_provider_effect": false,
+      "canonical_target_state_mutation": false,
+      "paid_training": false,
+      "target_self_harness_authority": false
+    }
+  },
+  "leading_hypothesis": {
+    "id": "H-FV01-EFFECT-PROCESS-INCARNATION",
+    "claim": "If Frank permits fork/clone while an execution capability is live, transient effect authority must be bound to an explicit process incarnation (or equivalent non-inheritable capability) and child state must default fail-closed until explicit re-admission/delegation. A Python object identity, copied secret, or flock open-file-description alone is insufficient."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-FV01-NO-FORK-LIVE-LEASE",
+    "claim": "Production Frank can prohibit and measurably enforce all fork/clone paths while any FrankExecutionLease/effect capability is live; therefore no process-incarnation mechanism is needed and a simpler deployment/runtime invariant dominates.",
+    "discriminator": "Search actual process-spawn/fork surfaces, instrument target runtime, and run exact PR233-style child test. If no fork path is permitted and attempts fail closed before child Python/effect execution, retain the simpler no-fork architecture."
+  },
+  "architecture_delta_candidate": {
+    "status": "CANDIDATE_NOT_PROMOTED",
+    "name": "FORK_SAFE_EXECUTION_CAPABILITY_BOUNDARY",
+    "rules": [
+      "Fork/process cloning is an explicit execution-capability boundary, never an implicit authority delegation.",
+      "If child execution is not an admitted feature, inherited Frank execution/effect capabilities become invalid in the child before any Frank semantic/effect path runs.",
+      "A child invalidation path must not call LOCK_UN on an inherited flock open-file-description shared with the parent; child cleanup should close/drop inherited physical handles without semantically releasing the parent's V15/V16 execution.",
+      "If child delegation is an admitted feature, it requires an explicit new process-incarnation/delegation receipt and an inter-process commit/release protocol; threading.RLock is not a process-shared serialization primitive.",
+      "Outcome observation/reconciliation remains admissible after capability turnover because evidence is not effect authority.",
+      "At-fork hooks are a candidate mechanism, not sufficient proof; third-party/native fork paths and exec/spawn behavior must be measured.",
+      "Do not promote a process-incarnation mechanism if a simpler measured no-fork invariant dominates."
+    ],
+    "rollback": "Keep current candidate draft-only; do not merge process/fork hardening until exact target discriminator and normal baselines pass."
+  },
+  "coordination_delta": {
+    "status": "SUPPORTED_NEED_FOR_EXPLICIT_OOB_LINEAGE_ACCOUNTING",
+    "observation": "Multiple concurrent recent worker PRs each describe an exactly-one OOB experiment but do not expose a common macro_cycle_id in their PR metadata. This makes global-vs-worker-vs-invocation OOB accounting ambiguous.",
+    "proposal": "Add macro_cycle_id + parent_trigger_run_id to GO work/event/experiment receipts so the one-OOB invariant is machine-checkable across concurrent swarm workers without treating independent GO invocations as collisions.",
+    "no_duplicate_work_action": "No new target fork PR was created because PR233 already covers the exact target-level discriminator."
+  },
+  "current_adjudication": {
+    "pr204": "CANDIDATE_NOT_PROMOTED; exact target run still queued at observation and Gate-issued/process-incarnation closure absent in inspected current source.",
+    "pr228": "STALE_STACK_EVIDENCE_ONLY until rebased onto current PR204/current main; its Gate-issued WeakSet mechanism has unresolved fork inheritance counterevidence.",
+    "pr233": "PENDING_TARGET_EXECUTION; useful discriminator, not evidence until workflow executes.",
+    "fork_mechanism": "SUPPORTED_LOCALLY_AND_BY_PRIMARY_OS_SEMANTICS; TARGET_REACHABILITY_UNKNOWN",
+    "research_result": "ARCHITECTURE_DELTA_CANDIDATE + TEST_OBLIGATION + COORDINATION_DELTA"
+  },
+  "next_frontier_ranked": [
+    "Execute/adjudicate PR233 on accepted self-hosted Linux lane; treat queued != executed != pass.",
+    "Refresh PR204/main after target run; if current exact B1/B2/B3 passes, rebase the smallest Gate-issued/multi-effect fix rather than merge stale PR228 history.",
+    "Choose between enforced no-fork-live-lease invariant and process-incarnation/delegation semantics using exact target discriminator plus spawn/fork surface census.",
+    "Continue CC-WP-03 compile-first repair because exact ClayCode effect semantics remain a separate F-V01-09 promotion gate.",
+    "Add explicit macro_cycle_id/parent_trigger_run_id to future GO experiment accounting if current work/event schemas lack it."
+  ],
+  "execution_truth": {
+    "executed": [
+      "GitHub current-state refresh",
+      "primary external source refresh",
+      "isolated local fork/flock/WeakSet mechanism microreplica"
+    ],
+    "not_executed": [
+      "PR233 target workflow (queued at observation)",
+      "PR204 target workflow (queued at observation)",
+      "any external provider side effect",
+      "any canonical Frank database mutation",
+      "any product-code patch or merge",
+      "paid/final model training"
+    ]
+  }
+}

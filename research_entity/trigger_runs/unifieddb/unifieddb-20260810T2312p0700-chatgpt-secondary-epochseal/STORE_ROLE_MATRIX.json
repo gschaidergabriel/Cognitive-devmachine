@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "decision_classes": ["AUTHORITATIVE","DERIVED_REBUILDABLE","CACHE","EXTERNAL_ISOLATED","MODEL_STATE","EFFECT_OUTCOME"],
+  "stores": [
+    {"object":"state_epochs","role":"AUTHORITATIVE","physical":"canonical SQLite","rule":"append-only epoch chain; never reconstructed from activation"},
+    {"object":"semantic_transactions","role":"AUTHORITATIVE","physical":"canonical SQLite","rule":"idempotency + base_epoch precondition"},
+    {"object":"semantic_records","role":"AUTHORITATIVE","physical":"canonical SQLite","rule":"typed state/world/self/memory truth with provenance"},
+    {"object":"query_receipts","role":"AUTHORITATIVE","physical":"canonical SQLite","rule":"selection/query-plan provenance distinct from record provenance"},
+    {"object":"effect_outcomes","role":"EFFECT_OUTCOME","physical":"canonical receipt mirror + external provider truth","rule":"provider outcome must be verified before admitted re-entry"},
+    {"object":"reentry_receipts","role":"AUTHORITATIVE","physical":"canonical SQLite","rule":"bind effect/outcome to admitted epoch and provenance hash"},
+    {"object":"ClayGraph topology","role":"DERIVED_REBUILDABLE","physical":"sidecar/projection","rule":"derived_from_epoch required; stale output cannot become authority"},
+    {"object":"FTS index","role":"DERIVED_REBUILDABLE","physical":"SQLite FTS5 or equivalent sidecar","rule":"candidate retrieval only; rebuild from canonical content"},
+    {"object":"vector index","role":"DERIVED_REBUILDABLE","physical":"benchmark-selected sidecar or co-located extension","rule":"ANN rank is never truth; exact-vs-approx mode recorded"},
+    {"object":"activation/salience","role":"CACHE","physical":"memory/derived persistence optional","rule":"never canonical truth"},
+    {"object":"GWT candidate cache","role":"CACHE","physical":"runtime memory + receipts","rule":"selection episode receipt is authoritative; activation values are not"},
+    {"object":"model weights/KV","role":"MODEL_STATE","physical":"files/runtime memory","rule":"not merged into semantic DB; version/hash bound"},
+    {"object":"API tokens/credentials","role":"EXTERNAL_ISOLATED","physical":"secret store/environment","rule":"KEEP_ISOLATED; credential presence never identity/authority"},
+    {"object":"provider-side resources","role":"EXTERNAL_ISOLATED","physical":"Gmail/Calendar/etc.","rule":"external current state outranks local mirror for exact provider effect"}
+  ],
+  "selected_direction": "UNIFY_SEMANTICS_AND_CANONICAL_TRUTH; KEEP_DERIVED_ASSOCIATIVE_SURFACES_REBUILDABLE; KEEP_SECRETS_AND_EXTERNAL_PROVIDER_STATE_ISOLATED",
+  "status": "CANDIDATE_SUPPORTED_BY_LOCAL_SYNTHETIC_TEST"
+}

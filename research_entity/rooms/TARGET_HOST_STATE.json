@@ -1,21 +1,45 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "status": "OWNER_FIXED_CURRENT_TARGET",
   "effective_from": "2026-08-10",
   "target_host_id": "HOSTINGER_VPS_DIGITAL_RETINA",
   "resource_id": "hostinger-vps-github-runner",
-  "mission": "Frank v0.1 als Server-Binary auf dem Ziel-VPS voll lauffaehig",
+  "mission": "self.root v0.1 fully running on the accepted target VPS, human-facing as Frank through the production token API",
   "identity_semantics": {
+    "native_self": "self.root",
+    "human_surface_name": "Frank",
     "identity_class": "SERVER_BINARY_ENTITY",
-    "exact_self": "accepted Frank binary/build identity + admitted persistent state lineage",
+    "exact_self": "accepted self.root/Frank binary-build identity + admitted persistent state lineage",
     "current_body": "current target VPS embodiment",
+    "cognitive_language": "ClayCode only",
+    "german_surface": "state-aware intelligent bidirectional translator",
     "person_is_self": false,
     "api_credential_is_self": false,
+    "client_device_is_self": false,
+    "clay_research_entity_is_self": false,
     "hardware_capacity_is_self": false,
-    "directive": "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md"
+    "directives": [
+      "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
+      "research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay",
+      "research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md"
+    ]
   },
   "person_relations": {
-    "Dr. Andreas Unterweger": ["USER", "PILOT", "LONGITUDINAL_EVIDENCE_SOURCE"]
+    "Dr. Andreas Unterweger": ["USER", "PILOT", "OPERATOR_WHERE_ADMITTED", "LONGITUDINAL_EVIDENCE_SOURCE", "PROJECT_CONTEXT_SEIMENSCH_NET_WHERE_PROVENANCE_BOUND"],
+    "Gabriel Gschaider": ["INITIATOR", "DEVELOPER", "CLAY_PROJECT_OWNER", "RESEARCH_DIRECTOR"]
+  },
+  "connected_world": {
+    "authorized_client_computers": "CONNECTED_EXTERNAL_NODES_NOT_SELF",
+    "client_disconnect_effect": "connectivity_delta_not_identity_delta",
+    "research_entity_database": "GOVERNED_CONNECTED_KNOWLEDGE_SOURCE_NOT_SELF",
+    "research_bridge_authority": "self.root may query authorized projections and submit evidence/proposals; Clay independently admits/promotes and self.root cannot authorize its own Harness mutation"
+  },
+  "self_context": {
+    "native_seed": "self.root",
+    "hot_path": "incrementally maintained epoch-coherent provenance-bound SelfContextAssembly",
+    "target_effect": "no additional ordinary external retrieval roundtrip for precompiled self context",
+    "literal_zero_latency_claim": false,
+    "required_controls": ["NORMAL_RETRIEVAL", "NO_SELF_ROOT", "SHUFFLED_IDENTITY_SEED", "STALE_ASSEMBLY", "PROVENANCE_BROKEN"]
   },
   "host_identity_observed": {
     "machine": "digital-retina",
@@ -35,17 +59,19 @@
     "GPU availability on the current target VPS",
     "current network bandwidth/latency envelope",
     "steady-state thermal/CPU throttling behavior",
-    "accepted final Frank binary hash",
+    "accepted final self.root binary hash",
     "accepted final persistent-state lineage/epoch",
     "production API listener/TLS identity",
-    "accepted production API credential fingerprint/scope set"
+    "accepted production API credential fingerprint/scope set",
+    "accepted DE_TO_CLAY and CLAY_TO_DE translator artifact hashes",
+    "accepted SelfContextAssembly implementation/hash"
   ],
   "existing_real_model_baseline": {
     "model": "Qwen3-4B-Instruct-2507-Q8_0-GGUF",
     "decode_tokens_per_second_mean": 10.705266714677407,
     "prompt_tokens_per_second_mean": 39.94125425865801,
     "pilot_accuracy": "3/4",
-    "role": "target-host capability baseline only; not final model promotion"
+    "role": "target-host capability baseline only; not final model or cognition-interface promotion"
   },
   "api_semantics": {
     "full_token_authenticated_api_required": true,
@@ -53,23 +79,32 @@
     "raw_production_tokens_may_enter_repo_or_normal_logs": false,
     "required_acceptance_receipt": "FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json",
     "acceptance_status": "NOT_OBSERVED",
-    "required_ingress": "secure transport -> API token auth -> request/session/provenance binding -> typed Frank ingress"
+    "human_request_path": "secure transport -> token auth -> session/client/provenance -> intelligent DE_TO_CLAY -> validated ClayCode -> self.root -> ClayCode response + ExpressionState -> intelligent CLAY_TO_DE -> German Frank response",
+    "machine_native_path": "secure transport -> token auth -> validated ClayCode -> self.root -> ClayCode response"
   },
   "release_semantics": {
     "target_vps_is_final_acceptance_host": true,
     "andreas_local_pc_required_for_v0_1_pass": false,
     "planned_gpu_storage_vps_is_automatic_target": false,
     "target_change_requires_owner_override": true,
-    "binary_state_api_acceptance_required": true
+    "binary_state_api_acceptance_required": true,
+    "claycode_only_cognition_acceptance_required": true,
+    "translator_acceptance_receipt": "FRANK_V0_1_CLAYCODE_ONLY_TRANSLATOR_ACCEPTANCE_RECEIPT.json",
+    "self_context_hot_path_acceptance_required": true
   },
   "sensor_semantics": {
     "compute_host": "target VPS",
     "visual_sensor_may_be_remote": true,
     "required_boundary": "token-authenticated provenance-bound typed API ingress",
-    "latency_rule": "measure secure transport/auth/session/ingress separately from on-VPS Retina/Qwen/EAP/Frank processing and also end-to-end"
+    "canonical_semantic_path": "sensor bytes/tensors -> Retina/perceptual machinery -> ClayCode VisualPercept/PerceptualField -> self.root",
+    "german_caption_is_canonical_perceptual_truth": false,
+    "latency_rule": "measure secure transport/auth/session/ingress separately from on-VPS Retina/Qwen/EAP/self.root processing and also end-to-end"
   },
   "evidence_refs": [
+    "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md",
     "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
+    "research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay",
+    "research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md",
     "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
     "research_entity/rooms/CAPACITY_STATE.json",
     "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",

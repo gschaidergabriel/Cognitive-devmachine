@@ -1,8 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "harness-20260810T2212p0700-chatgpt-secondary-ci-prestep-transport",
   "trigger": "harness",
   "created_at": "2026-08-10T22:12:00+07:00",
+  "updated_at": "2026-08-10T22:16:00+07:00",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
@@ -22,7 +23,7 @@
   "hypothesis": {
     "primary": "The observed hosted-runner red checks are PRE_STEP_TRANSPORT_FAILURE and therefore cannot be credited as Frank semantic/runtime test failures unless at least one test step actually executed.",
     "strongest_counterhypothesis": "The workflow or repository itself causes an immediate job failure that is still meaningfully attributable to Frank even though no step is reported as executed.",
-    "discriminator": "Rerun a zero-dependency no-checkout control and the unchanged Deep Integrity job; compare job step execution. Independently inspect a self-hosted target-VPS validation receipt to ensure the accepted runner lane can execute current Frank discriminators."
+    "discriminator": "Rerun a zero-dependency no-checkout control and the unchanged Deep Integrity job; then execute the unchanged Deep Integrity test body on the accepted self-hosted Linux/X64 Hostinger lane."
   },
   "executions": [
     {
@@ -49,9 +50,39 @@
       "result": "FAILURE",
       "reported_steps": [],
       "classification": "PRE_STEP_TRANSPORT_FAILURE_NOT_EXECUTED_TEST_FAILURE"
+    },
+    {
+      "kind": "SELF_HOSTED_UNCHANGED_SUITE_FALSIFIER",
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 135,
+      "head_sha": "ac70a49006838c3c08850300284a22f9d758d176",
+      "workflow_run_id": 31402297859,
+      "job_id": 93499995547,
+      "workflow": "Frank Deep Integrity",
+      "runner_selector": "[self-hosted, Linux, X64]",
+      "result": "SUCCESS",
+      "executed_test_steps": {
+        "Compile Python runtime": "SUCCESS",
+        "Repo-wide static boundary audit": "SUCCESS",
+        "Semantic transaction parser census": "SUCCESS",
+        "Semantic transaction full replay": "SUCCESS",
+        "Deep integrity regressions": "SUCCESS",
+        "Schema migration atomicity regression": "SUCCESS",
+        "Device probe state-gate regression": "SUCCESS",
+        "Causal reentry contract regression": "SUCCESS",
+        "Source-backed legacy module conservation": "SUCCESS",
+        "Legacy successor lesion/rescue matrix": "SUCCESS",
+        "Historical 74-slot conservation gate": "SUCCESS",
+        "Historical 74-slot accounting guard": "SUCCESS",
+        "Historical 71-DB state conservation gate": "SUCCESS",
+        "Local model baseline regression": "SUCCESS",
+        "Local model endpoint boundary regression": "SUCCESS",
+        "Session skill and status regressions": "SUCCESS"
+      },
+      "classification": "EXECUTED_TEST_SUITE_PASS"
     }
   ],
-  "independent_self_hosted_evidence": {
+  "independent_self_hosted_identity_evidence": {
     "workflow_run_id": 31401264903,
     "workflow": "GO self.root current-main validation",
     "conclusion": "SUCCESS",
@@ -74,43 +105,48 @@
       "total": 10,
       "sensitivity": 1.0
     },
-    "limit": "This is repository/static owner-fixed identity evidence on the accepted self-hosted lane, not boot/API/restart/stale-clone or whole Frank v0.1 acceptance."
-  },
-  "external_current_status": {
-    "source": "official GitHub Status",
-    "observed": "Actions reported operational at retrieval time",
-    "interpretation": "No platform-wide Actions incident was visible; this does not rule out repository/account/runner-class/localized provisioning faults."
+    "limit": "Repository/static owner-fixed identity evidence only; not boot/API/restart/stale-clone or whole Frank v0.1 acceptance."
   },
   "result": {
-    "status": "SUPPORTED",
+    "status": "SUPPORTED_AND_FALSIFIER_CLOSED",
     "finding_id": "HARNESS-CI-PRESTEP-TRANSPORT-CLASSIFICATION-20260810",
-    "claim": "A red GitHub Actions conclusion with no executed steps is insufficient evidence of a Frank test failure. Current observed hosted Deep Integrity reds must be classified as PRE_STEP_TRANSPORT_FAILURE until an execution receipt proves the test body ran.",
+    "claim": "For the observed runs, GitHub-hosted red conclusions with no executed steps were transport/job-start failures rather than Frank regressions: the unchanged Frank Deep Integrity suite executed on the accepted self-hosted Linux/X64 Hostinger lane and every test stage passed.",
     "architecture_test_delta": [
       "CI_RED_PRESTEP != EXECUTED_TEST_FAILURE",
       "Acceptance/research receipts must record whether test steps actually executed before assigning semantic/runtime failure credit.",
-      "When hosted runner transport is ambiguous, use the accepted self-hosted Linux/X64 target-VPS lane for the same unchanged discriminator before repairing Frank code."
+      "When hosted runner transport is ambiguous, replay the unchanged discriminator on the accepted self-hosted Linux/X64 target-VPS lane before repairing Frank code.",
+      "A self-hosted full-suite PASS closes only the tested integrity surface; it does not imply whole Frank v0.1 acceptance."
     ]
   },
   "coordination": {
-    "concurrent_nonduplicate_lane": "Target PR #135 changes only Frank Deep Integrity runs-on from ubuntu-latest to [self-hosted, Linux, X64] to execute the unchanged suite and isolate transport from code failure.",
-    "observed_pr_135_head": "ac70a49006838c3c08850300284a22f9d758d176",
-    "observed_pr_135_run": 31402297859,
-    "observed_state": "QUEUED_AT_RECEIPT_TIME",
-    "law": "Do not duplicate PR #135; consume its first executed discriminator when available."
+    "pr_135": {
+      "purpose": "Transport falsifier only; runner selector change, unchanged Deep Integrity test body.",
+      "head_sha": "ac70a49006838c3c08850300284a22f9d758d176",
+      "workflow_run_id": 31402297859,
+      "job_id": 93499995547,
+      "state": "COMPLETED_SUCCESS"
+    },
+    "active_nonduplicate_identity_state_lanes": [
+      "PR #126 repository replay/materialization for self.root",
+      "PR #127 repository/UnifiedDB identity authority primitive",
+      "PR #130 adversarial state-lineage falsifiers",
+      "PR #134 fresh-main source identity migration"
+    ],
+    "law": "Do not duplicate active identity/state implementation lanes; consume their receipts and test the converged integration boundary next."
   },
   "negative_results_and_limits": [
     "GitHub decoded job-log endpoint returned BlobNotFound for the affected hosted jobs, so no unobserved stdout/stderr detail is promoted.",
-    "The exact root cause of hosted pre-step failure is UNKNOWN; this receipt classifies the evidence boundary, not the provider root cause.",
-    "Self-hosted identity conformance does not establish runtime/state lineage or full Frank v0.1 acceptance."
+    "The exact root cause of the hosted pre-step failures remains UNKNOWN; the evidence establishes transport-vs-test classification for these observed runs, not the provider root cause.",
+    "Self-hosted Deep Integrity PASS does not establish boot/restart/stale-clone/API identity continuity, production token API acceptance, final model acceptance, or whole Frank v0.1 PASS."
   ],
-  "next_falsifier": "Execute the unchanged Frank Deep Integrity suite on the accepted self-hosted Linux/X64 lane (PR #135). If steps execute, the first real failing test becomes the next Harness repair target; if the full suite passes, hosted red checks are transport-only for this observed case.",
+  "next_falsifier": "After the current self.root source/repository-replay/state-authority lanes converge, execute exact-current-main boot + restart + stale-clone + token/API identity-contamination continuity on the accepted target VPS. Require self.root to remain native SELF, Andreas/Gabriel/client/token/Clay/provider peers to remain external, stale epochs/clones to fail closed, and the single global execution fence to survive restart/recovery. Do not run this against a known-stale intermediate branch.",
   "frank_v0_1_reentry": {
     "affected_packages": [
       "F-V01-01-IDENTITY-SERVER-BINARY",
       "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
       "F-V01-16-END-TO-END-ACCEPTANCE"
     ],
-    "effect_on_acceptance": "Improves evidence hygiene and prevents false regression attribution; no work package is promoted to PASS by this receipt."
+    "effect_on_acceptance": "Removes a false CI-regression signal and establishes a clean executed Deep Integrity baseline on the accepted self-hosted lane. No work package is promoted to PASS solely by this receipt."
   },
   "research_write_result": "COMMITTED"
 }

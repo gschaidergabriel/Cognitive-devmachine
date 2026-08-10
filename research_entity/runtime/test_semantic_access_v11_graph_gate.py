@@ -2,39 +2,47 @@
 from __future__ import annotations
 
 import sqlite3
+import tempfile
 import unittest
 from pathlib import Path
 
 from semantic_access_generation_builder_v11 import Path as AccessPath
+from semantic_access_generation_builder_v11 import SemanticAccessBusyError
 from semantic_access_generation_builder_v11 import publish_generation, stage_generation, verify_generation
 
 HERE = Path(__file__).resolve().parent
+SCHEMAS = (
+    'RAE_CLAYGRAPH_SCHEMA.sql',
+    'RAE_CLAYGRAPH_V4_VERIFIED_ACCESS_PLANS.sql',
+    'RAE_UNIFIEDDB_V10_SEMANTIC_ACCESS_FABRIC.sql',
+    'RAE_UNIFIEDDB_V11_COHERENT_ACCESS_GENERATIONS.sql',
+    'RAE_UNIFIEDDB_V11B_GRAPH_PLAN_BINDINGS.sql',
+)
 
 
 class U11ClayGraphVerificationGateTests(unittest.TestCase):
-    def setUp(self):
-        self.con = sqlite3.connect(':memory:')
-        for name in (
-            'RAE_CLAYGRAPH_SCHEMA.sql',
-            'RAE_CLAYGRAPH_V4_VERIFIED_ACCESS_PLANS.sql',
-            'RAE_UNIFIEDDB_V10_SEMANTIC_ACCESS_FABRIC.sql',
-            'RAE_UNIFIEDDB_V11_COHERENT_ACCESS_GENERATIONS.sql',
-            'RAE_UNIFIEDDB_V11B_GRAPH_PLAN_BINDINGS.sql',
-        ):
-            self.con.executescript((HERE / name).read_text(encoding='utf-8'))
-        self.con.execute(
+    @staticmethod
+    def install(con: sqlite3.Connection) -> None:
+        for name in SCHEMAS:
+            con.executescript((HERE / name).read_text(encoding='utf-8'))
+        con.execute(
             "INSERT INTO graph_epochs(graph_epoch,source_epoch,reason,created_at,status) VALUES(9,7,'test','t','CURRENT')"
         )
-        self.con.execute(
+        con.execute(
             "INSERT INTO semantic_query_seeds VALUES('sv','s','shared semantic state','seed-logical','ALIAS',1.0,'{}',7,9,'CURRENT','t','t')"
         )
-        self.con.commit()
+        con.commit()
+
+    def setUp(self):
+        self.con = sqlite3.connect(':memory:')
+        self.install(self.con)
 
     def tearDown(self):
         self.con.close()
 
-    def add_plan(
-        self,
+    @staticmethod
+    def add_plan_to(
+        con: sqlite3.Connection,
         *,
         plan_id='p1',
         target='target-a',
@@ -45,7 +53,7 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
         missing_counter=0,
         topology='topo-1',
     ):
-        self.con.execute(
+        con.execute(
             """INSERT INTO graph_semantic_access_plans(
                  plan_id,seed_id,source_epoch,graph_epoch,planner_id,planner_hash,topology_hash,max_hops,
                  candidate_path_count,selected_path_count,counterevidence_path_count,verification_clay,
@@ -53,21 +61,24 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (plan_id,'s',7,9,'planner','planner-h',topology,2,1,1,0,'{}',status,'t','t'),
         )
-        self.con.execute(
+        con.execute(
             """INSERT INTO graph_semantic_access_plan_paths(
                  plan_id,path_id,target_logical_id,path_rank,hop_count,relation_signature,path_weight,
                  admissibility_clay,provenance_clay,counterevidence
                ) VALUES(?,?,?,?,?,?,?,?,?,?)""",
             (plan_id,f'path-{plan_id}',target,1,1,'REL',1.0,'{}','{}',0),
         )
-        self.con.execute(
+        con.execute(
             """INSERT INTO graph_access_plan_verification_receipts(
                  receipt_id,plan_id,graph_epoch,topology_hash,checked_path_count,invalid_path_count,
                  stale_reference_count,missing_counterevidence_count,verification_clay,passed,created_at
                ) VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
             (f'receipt-{plan_id}',plan_id,9,topology,1,invalid,stale,missing_counter,'{}',passed,'t'),
         )
-        self.con.commit()
+        con.commit()
+
+    def add_plan(self, **kwargs):
+        self.add_plan_to(self.con, **kwargs)
 
     @staticmethod
     def path(record='record-a', target='target-a'):
@@ -163,6 +174,36 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
             self.stage()
         self.con.rollback()
         self.assertEqual(self.con.execute("SELECT COUNT(*) FROM semantic_access_generations").fetchone()[0], 0)
+
+    def test_competing_writer_returns_retryable_busy_before_mutation(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = str(Path(td) / 'gate.sqlite')
+            reader = sqlite3.connect(db, timeout=0.0)
+            writer = sqlite3.connect(db, timeout=0.0)
+            try:
+                self.install(reader)
+                self.add_plan_to(reader)
+                writer.execute('BEGIN IMMEDIATE')
+                writer.execute("UPDATE semantic_query_seeds SET confidence=0.8 WHERE seed_id='s'")
+                with self.assertRaisesRegex(SemanticAccessBusyError, 'safe to retry from fresh state'):
+                    stage_generation(
+                        reader,
+                        generation_id='g-busy',
+                        source_epoch=7,
+                        graph_epoch=9,
+                        derivation_id='d',
+                        derivation_hash='h-busy',
+                        paths=[self.path()],
+                        created_at='t',
+                        verified_plan_ids=('p1',),
+                    )
+                writer.rollback()
+                self.assertEqual(reader.execute("SELECT COUNT(*) FROM semantic_access_generations").fetchone()[0], 0)
+            finally:
+                if writer.in_transaction:
+                    writer.rollback()
+                writer.close()
+                reader.close()
 
 
 if __name__ == '__main__':

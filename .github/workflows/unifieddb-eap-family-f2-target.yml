@@ -1,0 +1,70 @@
+name: UnifiedDB EAP family F2 target falsifier
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'chatgpt/eap-family-adaptive-f2-20260810'
+    paths:
+      - 'research_entity/harness/reference/unifieddb_emergent_family_factorized_v2.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized_v2.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized_v2.py'
+      - '.github/workflows/unifieddb-eap-family-f2-target.yml'
+  pull_request:
+    paths:
+      - 'research_entity/harness/reference/unifieddb_emergent_family_factorized_v2.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized_v2.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized_v2.py'
+      - '.github/workflows/unifieddb-eap-family-f2-target.yml'
+
+concurrency:
+  group: unifieddb-eap-family-f2-target-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eap-family-f2-target:
+    runs-on: [self-hosted, linux, x64, andreas, claycode, target]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+      - name: Environment
+        shell: bash
+        run: |
+          set -euxo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ'
+          git rev-parse HEAD
+          uname -a
+          cat /etc/os-release || true
+          python3 --version
+      - name: F2 boundary tests
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 -m py_compile \
+            research_entity/harness/reference/unifieddb_emergent_family_factorized_v2.py \
+            research_entity/harness/reference/test_unifieddb_emergent_family_factorized_v2.py \
+            research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized_v2.py
+          python3 -m research_entity.harness.reference.test_unifieddb_emergent_family_factorized_v2
+      - name: F2 multiplicity benchmark
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 -m research_entity.harness.reference.benchmark_unifieddb_emergent_family_factorized_v2 | tee /tmp/eap-family-f2.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/eap-family-f2.json'))
+          rows={r['bindings_per_family']:r for r in d['results']}
+          for n,r in sorted(rows.items()):
+              print('ROW',n,json.dumps(r,sort_keys=True))
+              assert r['top1_invariant'] is True
+              assert r['f2_one_pass_pool']['family_recall_at_12']==1.0
+              assert r['f2_one_pass_pool']['pool_exhausted'] is False
+              assert r['sqlite_group_window']['family_recall_at_12']==1.0
+          assert rows[6]['f1_fixed_4x_wrapper']['family_recall_at_12'] < 1.0
+          assert rows[8]['f1_fixed_4x_wrapper']['family_recall_at_12'] < 1.0
+          assert rows[16]['f1_fixed_4x_wrapper']['family_recall_at_12'] < 1.0
+          print('EAP_FAMILY_F2_ACCURACY_GATE_PASS')
+          PY

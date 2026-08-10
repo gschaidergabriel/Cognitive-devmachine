@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "status": "CANDIDATE_COMMITTED_EXECUTION_NOT_OBSERVED",
+  "subject": "WP04 type-name resemblance constructor false-friend discriminator",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T21:20:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "branch": "chatgpt/claycode-wp04-constructor-false-friend-20260810",
+  "pull_request": 190,
+  "stacked_on": {
+    "branch": "chatgpt/claycode-wp04-nested-call-path-v2-20260810",
+    "commit": "1887be310132638222f0489bc7fcb7f5c0c2df39",
+    "pull_request": 180
+  },
+  "source_evidence": {
+    "g9_path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "g9_blob": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+    "semantic_freeze_path": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+    "call_constraint_test_blob": "61faddc78177f4a2dade2cdc6c9eef9d6868a4d3",
+    "test_commit": "5bba4e76d8a26781066c34029ed2bc224193694a",
+    "workflow_commit": "970e3c33aee8fc761e8ad2bfe48ef62a3e635c1e"
+  },
+  "observed_static_facts": [
+    {
+      "target_arity": "EffectIntent/1",
+      "same_name_record_fields": 5,
+      "exact_function_declaration_in_current_typed_ir": false,
+      "current_resolution": "UNRESOLVED_SIGNATURE"
+    },
+    {
+      "target_arity": "Delta/1",
+      "same_name_record_fields": 6,
+      "exact_function_declaration_in_current_typed_ir": false,
+      "current_resolution": "UNRESOLVED_SIGNATURE"
+    }
+  ],
+  "hypothesis": "Type-name resemblance plus incompatible ordinary positional record-field arity is negative evidence against treating EffectIntent/1 or Delta/1 as an implicit record constructor CallContract.",
+  "strongest_counterhypothesis": "A separately specified ClayCode constructor or aggregate-shorthand semantic contract may exist outside the inspected frozen authority surface and could explicitly define a one-argument constructor despite record field count.",
+  "discriminator": "Execute tools/test_claycode_wp04_constructor_false_friend_v1.py on the exact stacked bytes. Promotion still requires independent exact constructor/function semantics and current runtime binding; test PASS alone cannot create such semantics.",
+  "ci_observation": {
+    "workflow_run_id": 31397529160,
+    "workflow_name": "WP04 Constructor False Friend V1",
+    "github_conclusion": "failure",
+    "job_id": 93484021334,
+    "job_steps_observed": 0,
+    "semantic_test_execution_observed": false,
+    "classification": "INFRASTRUCTURE_OR_POLICY_PREEXECUTION_FAILURE_NOT_A_CLAYCODE_TEST_RESULT",
+    "pass_claimed": false
+  },
+  "external_architecture_analogy": {
+    "finding": "WIT requires explicit function parameter/result types and MLIR call verification resolves an actual callee and checks operand/result types.",
+    "authority": "ANALOGY_ONLY_NOT_CLAYCODE_SEMANTIC_AUTHORITY"
+  },
+  "invariants": {
+    "signature_invention": "FORBIDDEN",
+    "type_name_resemblance_promotes_constructor": "FORBIDDEN",
+    "execution_admitted": false,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "frank_harness_mutation": false
+  },
+  "result": "NEW_NEGATIVE_EVIDENCE_CANDIDATE_PENDING_EXECUTION",
+  "architecture_delta": "NO_SEMANTIC_CHANGE; preserve EffectIntent/1 and Delta/1 fail-closed and prevent constructor shortcut until explicit semantics exist.",
+  "next_falsifier": "Find an independently authoritative exact non-effect callable signature plus current runtime binding for one of the remaining G9 call identities; otherwise keep all unresolved identities non-executable.",
+  "promotion": "NONE",
+  "wp03_status": "OPEN",
+  "wp04_status": "OPEN",
+  "base_status": "NOT_PASS"
+}

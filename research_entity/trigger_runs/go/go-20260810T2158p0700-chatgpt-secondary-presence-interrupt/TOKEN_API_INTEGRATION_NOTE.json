@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2158p0700-chatgpt-secondary-presence-interrupt",
+  "status": "TEST_OBLIGATION",
+  "finding": "Current main FrankExecutionGate returns physical BUSY without opening UnifiedDB; therefore ExecutionAcquireReceipt has lease_epoch=null, holder_kind=null and surface_location=null. Current token ingress further deliberately emits only coarse FRANK_BUSY.",
+  "security_reason": "Do not leak active holder/session/location merely because a bearer client collides with the physical execution lock.",
+  "integration_consequence": "PRESENCE_INTERRUPT_V1 cannot be safely wired by asking the current coarse BUSY response to echo observed_lease_epoch, because physical BUSY has no epoch at that boundary.",
+  "required_next_design": {
+    "preferred_shape": "separately authenticated presence/status-or-interrupt challenge path",
+    "canonical_truth": "frank_presence_lease only",
+    "minimum_stale_safety": "bind interrupt intent to exact canonical lease_epoch or an opaque server-side challenge bound to that epoch",
+    "location_policy": "surface_location must remain redacted by default and may be exposed only under an explicit authenticated scope/privacy policy",
+    "authority": "status/challenge must not acquire or transfer presence and must not bypass FrankExecutionGate for cognition/effects",
+    "race_test": "holder A observed -> holder transition -> stale challenge/request must not target holder B"
+  },
+  "evidence": [
+    "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_execution_gate.py@main",
+    "gschaidergabriel/Dr.-Unterweger:runtime/api/frank_token_ingress_core.py@main",
+    "gschaidergabriel/Dr.-Unterweger#140"
+  ],
+  "promotion": "NO_ARCHITECTURE_PROMOTION_UNTIL_TOKEN_API_STATUS_SCOPE_AND_TARGET_VPS_TEST_EXIST"
+}

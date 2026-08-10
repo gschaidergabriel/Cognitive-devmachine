@@ -15,6 +15,12 @@ The default gate includes one bounded admissible-successor lookahead. This preve
 multi-hop path from being cut merely because an intermediate bridge has an opaque label while a
 query-aligned successor provides the actual semantic evidence. Lookahead never changes the
 underlying edge strength; it only decides how much of that authoritative weight to retain.
+
+Explicit typed counterevidence relations are safety-protected: query-conditioned relevance may
+not damp a REFUTES/COUNTEREVIDENCE/CONTRADICTS-style edge below the parent path. This prevents
+the retrieval optimizer from silently manufacturing confirmation bias by hiding structurally
+admitted refuting evidence. The protection preserves the parent edge weight; it still cannot
+make an inadmissible epistemic/status node propagate through the parent negative-space guard.
 """
 
 from dataclasses import dataclass, fields
@@ -33,6 +39,14 @@ _TOKEN_RE = re.compile(r"[\w-]+", re.UNICODE)
 _TARGET_ONLY_MODE = "LEXICAL_COSINE_TARGET_RELATION"
 _LOOKAHEAD_MODE = "LEXICAL_COSINE_TARGET_OR_ADMISSIBLE_SUCCESSOR_V1"
 _SUPPORTED_MODES = frozenset({_TARGET_ONLY_MODE, _LOOKAHEAD_MODE})
+_COUNTER_RELATION_MARKERS = (
+    "refute",
+    "counterevidence",
+    "counterexample",
+    "contradict",
+    "disconfirm",
+)
+_COUNTEREVIDENCE_POLICY = "PRESERVE_EXPLICIT_TYPED_COUNTER_RELATIONS_AT_PARENT_WEIGHT"
 
 
 @dataclass(frozen=True)
@@ -84,12 +98,18 @@ class _QueryAwareAdjacency:
         self.sources_expanded = 0
         self.lookahead_edges_scanned = 0
         self.lookahead_affinity_wins = 0
+        self.counterevidence_edges_preserved = 0
 
     @staticmethod
     def _tokens(text: str) -> frozenset[str]:
         return frozenset(
             token.lower() for token in _TOKEN_RE.findall(text) if len(token) > 1
         )
+
+    @staticmethod
+    def _is_protected_counter_relation(relation: str) -> bool:
+        normalized = re.sub(r"[^a-z0-9]+", "", str(relation).lower())
+        return any(marker in normalized for marker in _COUNTER_RELATION_MARKERS)
 
     def _row_affinity(self, target: str, relation: str) -> float:
         key = (target, relation)
@@ -155,10 +175,17 @@ class _QueryAwareAdjacency:
         out: list[tuple[str, float, str, str]] = []
         for target, weight, relation, dependency_ref in edges:
             self.edges_observed += 1
-            affinity = self._effective_affinity(target, relation)
-            gate = self._floor + (1.0 - self._floor) * affinity
-            multiplier = (1.0 - self._strength) + self._strength * gate
-            effective = max(0.0, min(float(weight), float(weight) * multiplier))
+            if self._is_protected_counter_relation(relation):
+                # Safety invariant: query relevance may not erase explicit refuting evidence.
+                # Preserve exactly the parent edge weight; all normal parent admissibility,
+                # hop, budget and negative-space checks still apply downstream.
+                effective = float(weight)
+                self.counterevidence_edges_preserved += 1
+            else:
+                affinity = self._effective_affinity(target, relation)
+                gate = self._floor + (1.0 - self._floor) * affinity
+                multiplier = (1.0 - self._strength) + self._strength * gate
+                effective = max(0.0, min(float(weight), float(weight) * multiplier))
             if effective + 1e-15 < float(weight):
                 self.edges_damped += 1
             if (
@@ -227,6 +254,8 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
                 "sources_expanded": 0,
                 "lookahead_edges_scanned": 0,
                 "lookahead_affinity_wins": 0,
+                "counterevidence_edges_preserved": 0,
+                "counterevidence_policy": _COUNTEREVIDENCE_POLICY,
                 "authority": "PERFORMANCE_RETRIEVAL_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY",
             }
             return result
@@ -248,6 +277,7 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
                 "min_edge_weight": float(spec.min_edge_weight),
                 "allowed_epistemic": tuple(sorted(str(x).upper() for x in spec.allow_epistemic)),
                 "allowed_status": tuple(sorted(str(x).upper() for x in spec.allow_status)),
+                "counterevidence_policy": _COUNTEREVIDENCE_POLICY,
             }
         )
         gated_adj = _QueryAwareAdjacency(
@@ -298,6 +328,8 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
             "sources_expanded": gated_adj.sources_expanded,
             "lookahead_edges_scanned": gated_adj.lookahead_edges_scanned,
             "lookahead_affinity_wins": gated_adj.lookahead_affinity_wins,
+            "counterevidence_edges_preserved": gated_adj.counterevidence_edges_preserved,
+            "counterevidence_policy": _COUNTEREVIDENCE_POLICY,
             "authority": "PERFORMANCE_RETRIEVAL_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY",
         }
         result["persistent_second_store"] = False

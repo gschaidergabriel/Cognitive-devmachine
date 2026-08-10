@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2125p0700-wp04-signature-authority",
+  "branch": "claycode",
+  "status": "DELTA_FIRST_EXPLICIT_CALL_CONTRACT_TARGET_VPS_PASS",
+  "evidence_class": "CONTENT_ADDRESSED_TARGET_VPS_MECHANISM_PLUS_REAL_CONTRACT_DIFFERENTIAL",
+  "finding": "ClayCode WP04 signature authority now has a measured layered contract: explicit versioned Clay callable semantics precede static source compatibility validation, which precedes current runtime/binary/lease/effect binding. Runtime/source annotations cannot mint Clay semantic types. The first explicit candidate frank_reward.update/1 passed Target-VPS differential after a stale workflow blob pin correctly failed closed and was repaired without semantic change.",
+  "measurements": {
+    "baseline_exact_declared_matches": 0,
+    "candidate_exact_declared_matches": 1,
+    "baseline_unresolved_ordinary_signatures": 26,
+    "candidate_unresolved_ordinary_signatures": 25,
+    "effect_boundary_missing_signatures": 1,
+    "total_unresolved_signature_obligations": 26,
+    "anchored_components": 2,
+    "type_equality_components": 37,
+    "execution_admitted_calls": 0
+  },
+  "receipts": {
+    "static_admission_target_vps_run": 31397569012,
+    "real_contract_failed_stale_pin_run": 31397756769,
+    "transport_repair_commit": "7beea9b6c7bca528236dd1e3154ef659567414ea",
+    "real_contract_target_vps_pass_run": 31397986926,
+    "contract_semantic_hash": "999283fef30bb709b5247fa002a9dfb513843daee4a22442e476bcb6522617a4",
+    "typed_ir_sha256": "02ab372c762e5c617a80ab3e8e62975474eae42467207135e4eeecf8b24f6f01",
+    "constraint_graph_sha256": "62d549a239be2d4c3228c9fe0759535d9ebc425304cd4ef4be083d0810cbff49",
+    "anchor_report_sha256": "5d5a64b8c7ed5cd7a21824455421cb5f01be1c5b234285b57b9d32918733ba19"
+  },
+  "negative_evidence": [
+    "Runtime/source annotations are compatibility evidence, not Clay semantic authority.",
+    "Caller constraints, type-name resemblance and fuzzy identity remain insufficient signature authority.",
+    "A stale content-addressed pin must fail before analysis and execution.",
+    "One exact contract does not imply WP04 completion or execution authority."
+  ],
+  "counterhypotheses": [
+    "A simpler direct explicit contract registry may dominate static source validation if current runtime exports provide no useful exact annotations.",
+    "The authored reward callable may require revision if current runtime/binary binding cannot preserve its exact semantic contract without adapter ambiguity."
+  ],
+  "next_discriminators": [
+    "Current runtime/binary/lease binding for frank_reward.update/1 with zero execution.",
+    "Next explicit callable specification selected from architecture evidence rather than caller constraints.",
+    "Independent generic Frank Deep Integrity diagnosis remains required before any whole-program promotion."
+  ],
+  "authority": {
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "frank_harness_mutated": false
+  },
+  "canonical_promotion": "NONE"
+}

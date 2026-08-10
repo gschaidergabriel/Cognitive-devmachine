@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "deltas": [
+    {
+      "delta_id": "Q23-AD-VISION-FEATURE-TAP-01",
+      "status": "CANDIDATE",
+      "parent_architecture": "QNDRF-1 + dissolved Retina + MVC",
+      "proposed_change": "Insert a typed physical VisionFeatureTap directly at the libmtmd media-embedding boundary. One mtmd encode produces a version/provenance-bound media embedding buffer; a bounded descriptor/MVC readout may inspect it; if escalation is required, the same encoded buffer is passed to decoder processing without a second vision encode. The tap is implementation plumbing, not a new semantic organ and not truth authority.",
+      "required_binding": ["frame_id","source_epoch","roi_hash","model_hash","mmproj_hash","llama_cpp_build_hash","vision_token_count","image_min_tokens","image_max_tokens","batch","ubatch","flash_attention","kv_layout","mmproj_offload","buffer_shape","feature_pooling_projection_hash","observed_at"],
+      "preserved_historical_functions": ["sensor ingress/provenance","temporal continuity","change detection","ROI/token budget selection","familiarity/open-set routing","active sensing","action verification","PerceptualField/GWT re-entry","recovery/replay/version lineage"],
+      "expected_benefit": "Makes the QNDRF one-encode reuse claim executable and measurable; enables MVC decoder bypass without a duplicate deep visual encoder when raw/projected Qwen features are adequate.",
+      "strongest_counterhypothesis": "Raw mmproj features are unsuitable for calibrated familiarity/open-set routing or tap/copy/synchronization overhead negates reuse; a dedicated lightweight embedding path remains Pareto-superior.",
+      "discriminating_test": "Matched FULL_QWEN vs QNDRF_TAP_RAW vs QNDRF_TAP_PROJECTED vs dedicated-light-embedding baseline with an encode-invocation counter, equal visual fixtures, same action tasks, open-set/OOD controls and full latency/resource metadata.",
+      "rollback": "Disable VisionFeatureTap/MVC bypass and return to ordinary libmtmd encode->decode path; no canonical semantic state depends on tap-only data.",
+      "promotion_gate": "No promotion before target-VPS matched runtime stability, feature geometry, open-set, action success, recovery and resource receipts."
+    },
+    {
+      "delta_id": "Q23-AD-MODEL-SCALE-GATE-01",
+      "status": "CANDIDATE",
+      "parent_architecture": "current <=4B Qwen multimodal candidate family",
+      "proposed_change": "Add a pre-promotion scale gate comparing Qwen3.5 0.8B/2B/4B separately for vision-encode-only and decoder-inclusive cost. Do not infer perception cost from total parameter count.",
+      "expected_benefit": "Prevents selecting 2B as a presumed cheap visual core when its vision tower is architecturally almost the same as 4B, and exposes whether 0.8B offers a materially cheaper deep-vision regime on the target VPS.",
+      "strongest_counterhypothesis": "Quality loss or backend overhead makes 0.8B noncompetitive; 2B/4B end-to-end behavior may still dominate despite similar vision tower geometry.",
+      "discriminating_test": "Fixed-token encode-only and full visual task matrix on target VPS with 0.8B/2B/4B, then Pareto selection using task correctness, open-set, latency, RSS, CPU, recovery and visual-token cost.",
+      "rollback": "Retain current 4B candidate and treat smaller sizes as negative-result baselines.",
+      "promotion_gate": "Measured Pareto superiority only; official benchmark rank or size is insufficient."
+    },
+    {
+      "delta_id": "Q23-AD-RUNTIME-SANITY-GATE-01",
+      "status": "CANDIDATE",
+      "proposed_change": "Require a multimodal runtime sanity gate before any feature-quality or memory experiment: freeze and verify llama.cpp build, model/mmproj hashes and runtime flags; execute known-image correctness, encode stability, crash/restart and resource checks.",
+      "expected_benefit": "Separates model/feature errors from runtime/backend failures already observed in current llama.cpp issue ecology.",
+      "strongest_counterhypothesis": "Selected target-VPS CPU lane is stable enough that the gate adds little information.",
+      "discriminating_test": "Repeat fixed visual fixtures across relevant build/flag variants; if results are invariant and stable, collapse the gate to one verified configuration.",
+      "rollback": "Gate remains diagnostic-only and can be narrowed after stable evidence."
+    }
+  ]
+}

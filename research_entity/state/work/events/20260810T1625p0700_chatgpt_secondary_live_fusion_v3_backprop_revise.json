@@ -1,0 +1,40 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-live-fusion-v3-backprop-revise-20260810T1625p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T16:25:00+07:00",
+  "payload": {
+    "work_id": "WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810",
+    "title": "Real-replay and fault-test adaptive live fusion v2 plus universal intake/research-backprop v3",
+    "work_clay": "Extend the existing non-overlapping V2 real-replay instead of creating a duplicate lane. Replay current repository work events, branch feedback, research receipts and dependency projections through V2 routing plus V3 registered-source intake and mandatory research-backprop. Add SourceCursor coverage/gap detection, IntakeEnvelope normalization, EvidenceAtom novelty/conflict classification, ResearchObligation creation, ResearchBackpropReceipt closure and result re-entry. Compare broadcast, tag-only, V2 adaptive routing and V3 closed-loop fusion under matched inputs. Inject missing dependency edges, stale projection epochs, duplicate deltas, out-of-order causal predecessors, source outage, cursor gaps, conflicting high-quality evidence, stale-primary vs fresh-primary supersession, crash-mid-fusion and restart/replay. Measure stranded material deltas and broken feedback loops explicitly.",
+    "reason_clay": "The V2 candidate begins after a KnowledgeDelta already exists. Project-owner direction requires live fusion of all newly observable registered-source data and feedback of fused knowledge into research. V3 supplies the missing pre-delta intake and post-fusion research-backprop layers while preserving V2 dependency-aware routing, provenance, anti-entropy and non-promotion controls. Current primary research supports adaptive incremental refresh and current stream-processing practice requires checkpoint/replay plus explicit boundaries around external exactly-once effects.",
+    "completion_clay": "The combined replay report contains exact repo/commit/epoch hashes and raw metadata rows; registered-source coverage-to-cursor is measured; source gaps/outages are explicit; broadcast/tag-only/V2/V3 are matched; duplicate/out-of-order/stale/missing/conflict/restart faults are executed; anti-entropy permanent-miss rate and repair latency are measured; every material fusion on the declared corpus produces a ResearchObligation or evidence-backed EXPLICIT_NO_CHANGE; stranded_delta_count=0 and broken_feedback_loop_count=0 on the declared corpus; result_reentry_rate is measured; external effects are idempotency/receipt guarded; candidate receives SUPPORTED, REFUTED, REVISE or NO_CHANGE only; no ClayCode BASE PASS credit is granted from representability or synthetic replay alone.",
+    "executor_policy": "Use the first non-overlapping worker with repository checkout plus local Python/SQLite/ClayGraph capability. Refresh canonical/head and latest work revision before effect. Preserve the BASE ClayCode critical path: do not displace WORK-CLAYCODE-BASE14-CLOSE-20260809 when the same executor is required; run concurrently only with spare capacity or when the replay directly improves work-state/fusion reliability. No paid training. No Frank self-harness authority.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "GITHUB_READ_WRITE",
+      "LOCAL_TEST_EXECUTION",
+      "PYTHON",
+      "SQLITE_OR_UNIFIEDDB_REPLAY",
+      "CLAYGRAPH_DEPENDENCY_REPLAY"
+    ],
+    "dependencies": [
+      "research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay",
+      "research_entity/global/CLAY_LIVE_FUSION_RESEARCH_BACKPROP_V3_CANDIDATE.clay",
+      "research_entity/mesh_feedback/20260810T1624p0700-live-fusion-research-backprop-v3/BRANCH_FEEDBACK_MANIFEST.json",
+      "research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay"
+    ],
+    "invalidators": [
+      "A newer owner-fixed live-fusion protocol explicitly supersedes V2/V3",
+      "A newer real execution receipt already performs the same combined matched replay and fault matrix",
+      "Current repo state proves registered-source cursor semantics materially inapplicable",
+      "A concrete BASE critical-path collision leaves no spare execution capacity"
+    ],
+    "base_priority": 0.66,
+    "expected_impact": 0.91,
+    "urgency": 0.72,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

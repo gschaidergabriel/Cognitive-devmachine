@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:24:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXACT_CURRENT_BLOB_COMPLETE_REPAIRED_FRONTEND_CLOSURE",
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 58,
+    "workflow": "Clay WP02 Current Fixed Full Closure V2",
+    "run_id": 31343972917,
+    "job_id": 93322339694,
+    "workflow_conclusion": "success",
+    "artifact_id": 9046775720,
+    "artifact_zip_sha256": "6bf28269a543eff68a546de91aa8efa818d179e8e6b9fbfbedabe2e9781fd093"
+  },
+  "source_identity": {
+    "clay_source_revision": "d94a6807b0733860d3612b5cf205e95cb3367588",
+    "v9_git_blob": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+    "v17_git_blob": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "frontend_git_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "strict_probe_git_blob": "e050b922acefe554ba4d6de19c4324952d45e803",
+    "frontend_validation_git_blob": "031c08d42b3fe01376a83424f39cc6dc140b4adb",
+    "canonicalizer_git_blob": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+    "discriminator_git_blob": "8f2f9c317aa1f43488d20c05bc915f2ca60dfd74"
+  },
+  "runtime": {
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "machine_name": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "runner_version": "2.336.0"
+  },
+  "checks": {
+    "discriminator": true,
+    "strict": true,
+    "frontend": true,
+    "canonical": true
+  },
+  "selected_results": {
+    "strict_evidence_state": "PASS_STRICT_CONSTRUCTION",
+    "strict_conflict_diagnostic_count": 0,
+    "regex_lookaround_present": true,
+    "g9_full_corpus_deterministic_repeat": true,
+    "dialect_full_corpus_deterministic_repeat": true,
+    "v9_trivia_counterexample_confirmed": true,
+    "v17_relation_call_boundary_metamorphic_guards": "PASS",
+    "g9_canonical_roundtrip_hash_match": true,
+    "dialect_canonical_roundtrip_hash_match": true,
+    "layout_comment_whitespace_invariance": true,
+    "optional_type_semantic_discrimination": true,
+    "unpaired_unicode_surrogate_rejected": true
+  },
+  "canonical_hashes": {
+    "g9_canonical_syntax_sha256": "ec292e50f2f17dafd3832f808a7a5a0e74495f63916ef1249cdea818bfeca53d",
+    "dialect_canonical_syntax_sha256": "b810e464ec67bdde04c40a49d2186449091a4e26ec5404e8bc7a37e138e9eced"
+  },
+  "raw_receipt_sha256": {
+    "canonical.json": "31145217b731dcf2d3a266281650e3087f7b3cac5034f4549ecf0d5649fe1429",
+    "discriminator.json": "026ac30687756a229a0c421174fa98188a2cd937b250100c949b79e7ab5fa412",
+    "frontend.json": "de4dd2cd6cf1569c6bb840c5029016fc6cd8a186b0e360f7b88aef2f271c8f45",
+    "strict.json": "d2cd958a96d793585c1d969a2b5f2f30900e3cd04e70bdbd407194451b1a0620"
+  },
+  "measurements": {
+    "discriminator_wall_ms": 5180,
+    "strict_wall_ms": 769,
+    "frontend_wall_ms": 560,
+    "canonical_wall_ms": 559,
+    "user_s": "UNKNOWN",
+    "system_s": "UNKNOWN",
+    "max_rss_kb": "UNKNOWN"
+  },
+  "measurement_quality_note": "The workflow attempted /usr/bin/time -v resource capture, but aggregate parsing returned UNKNOWN for user_s/system_s/max_rss_kb. Preserve UNKNOWN literally. This is an observability defect in the benchmark wrapper, not a scientific failure of the parser/canonicalizer. Future production-gate replay should fix leading-whitespace parsing or upload raw .time files.",
+  "hypothesis": "Current main's maybe_placeholders=False frontend plus V17 trivia-safe grammar and receipt-path-fixed discriminator close the Hostinger-side parser/canonicalizer research gate without unintended admitted-surface semantic collapse.",
+  "strongest_counterhypothesis": "The exact Andreas Ubuntu developer system may expose environment/target-specific differences, and WP03 may still reconstruct a conflicting optional-placeholder policy; therefore Hostinger closure alone must not promote WP02 or downstream IR semantics.",
+  "adjudication": "HOSTINGER_WP02_RESEARCH_CLOSURE_PASS_TARGET_ADJUDICATION_STILL_REQUIRED",
+  "architecture_delta": "NO_FURTHER_WP02_SEMANTIC_PATCH_JUSTIFIED_BY_THIS_RUN",
+  "downstream_delta": "WP03 must consume the selected WP02 parse/optional/scalar contract or explicitly version any intentional typed-IR null/arity semantics.",
+  "next_falsifier": "Run the registered CC-WP-02 production acceptance bundle on Andreas' Ubuntu developer system with the same exact source identities, strict/full-corpus/canonical roundtrip gates, mutation discrimination, and corrected CPU/RSS resource capture. Then adjudicate formal WP02 PASS before promoting WP03.",
+  "counts_as_hostinger_wp02_research_closure": true,
+  "counts_as_andreas_target_acceptance": false,
+  "formal_wp02_promotion_allowed_from_this_receipt_alone": false,
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

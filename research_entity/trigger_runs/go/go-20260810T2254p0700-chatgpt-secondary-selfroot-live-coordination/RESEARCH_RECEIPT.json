@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2254p0700-chatgpt-secondary-selfroot-live-coordination",
+  "trigger": "go",
+  "created_at": "2026-08-10T22:54:32+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "active_target": "FRANK_V0_1",
+    "target_host": "accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "coordination": {
+    "initial_identity_lane": "gschaidergabriel/Dr.-Unterweger#124",
+    "stale_detection": {
+      "status": "SUPPORTED",
+      "observation": "PR #124 had diverged far behind current main and was no longer safe as a merge candidate while newer target work accumulated.",
+      "action": "PR #124 closed without merge; historical branch/evidence preserved.",
+      "closed_at_observed": "2026-08-10T15:53:28Z"
+    },
+    "selected_current_lane": {
+      "pr": "gschaidergabriel/Dr.-Unterweger#161",
+      "branch": "chatgpt/go-selfroot-main-current-20260810",
+      "observed_head": "f19a1eb87c3d55f2373f350aa69e00a508d6a851",
+      "status": "DRAFT_ACTIVE_NOT_PROMOTED",
+      "purpose": "Close self.root source-to-runtime-to-replay identity boundary while preserving newer single-instance/token/effect work.",
+      "latest_self_hosted_boundary_run": 31405768364,
+      "latest_run_state_when_observed": "QUEUED"
+    },
+    "duplicate_work_result": "STALE_IMPLEMENTATION_LANE_REMOVED_FROM_MERGE_FRONTIER"
+  },
+  "executed_evidence": {
+    "prior_pr124_target_vps_validation": {
+      "runner": "clay",
+      "machine": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "kernel": "6.8.0-117-generic",
+      "python": "3.12.3",
+      "owner_fixed_static_conformance": "PASS",
+      "metamorphic_identity_contamination": {
+        "status": "PASS",
+        "detected": 12,
+        "total": 12,
+        "sensitivity": 1.0
+      },
+      "replay_regression": {
+        "status": "TEST_DEFECT_FOUND",
+        "error": "sqlite3.OperationalError: no such column: display_name",
+        "root_cause": "Test queried entities.display_name while authoritative schema column is entities.label."
+      }
+    },
+    "stale_branch_test_repair": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "branch": "chatgpt/go-selfroot-current-main-20260810",
+      "commit": "568db24c979b49d8d69e850bda18b30ac716c4b8",
+      "change": "Replay test aligned display_name queries to entities.label.",
+      "promotion": "NOT_PROMOTED_BECAUSE_BRANCH_BECAME_STALE"
+    },
+    "current_main_identity_surface": {
+      "supported": [
+        "000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt already defines self.root / Frank / SERVER_BINARY_ENTITY / TARGET_VPS / CLAYCODE_ONLY.",
+        "claycode/frank_entity.clay already binds Frank compatibility symbol to #self_root."
+      ],
+      "still_conflicting_when_observed": [
+        "claycode/frank_runtime.clay retained invariant one_entity_across_nodes.",
+        "claycode/frank_hive.clay retained one_frank_many_nodes and node.frank equality semantics.",
+        "claycode/frank_state.clay retained local-Andreas-machine release/state semantics.",
+        "claycode/frank_release.clay retained final local Frank installed on Andreas machine semantics.",
+        "claycode/frank_self_model.clay retained provider/model/device embodiment semantics that conflict with the newer external-capability boundary."
+      ]
+    }
+  },
+  "hypothesis": {
+    "primary": "A single owner-fixed self.root authority must close the full source -> ClayCode runtime/security/hive/self-model/state/release -> public state runtime/materializer -> append-only replay path; fixing only frank_entity.clay is insufficient.",
+    "strongest_counterhypothesis": "The remaining stale strings are non-causal compatibility ancestry, while current execution and replay already resolve through the new owner-fixed source.",
+    "discriminator": "PR #161 source-to-replay regression plus current single-instance presence, repository transaction replay and repository-static differential on the self-hosted target lane.",
+    "status": "PRIMARY_SUPPORTED_BY_STATIC_CURRENT_MAIN_COUNTEREXAMPLES; EXECUTABLE_CURRENT_LANE_PENDING"
+  },
+  "external_research": [
+    {
+      "source": "arXiv:2503.18813",
+      "title": "Defeating Prompt Injections by Design",
+      "role": "Supports structural separation of trusted control flow from untrusted data and capability-mediated effects."
+    },
+    {
+      "source": "arXiv:2505.23643",
+      "title": "Securing AI Agents with Information-Flow Control",
+      "role": "Supports deterministic integrity/confidentiality label enforcement rather than model confidence as authority."
+    },
+    {
+      "source": "arXiv:2605.17634",
+      "title": "AI Agents May Always Fall for Prompt Injections",
+      "role": "Counterevidence against treating data/instruction separation as a complete security solution; contextual manipulation remains a material adversarial class."
+    },
+    {
+      "source": "arXiv:2608.00808",
+      "title": "Turning Interaction History into Execution State: A Runtime Layer for Long-Horizon Coding Agents",
+      "role": "Fresh execution-state evidence: explicit inform-before-decision plus deterministic govern-before-command reduces stale/redundant action errors and cost in reported coding-agent experiments."
+    },
+    {
+      "source": "arXiv:2606.06090",
+      "title": "Beyond Semantic Organization: Memory as Execution State Management for Long-Horizon Agents",
+      "role": "Supports explicit execution-state lineage, revision boundaries and active-path semantics over retrieval-only memory for long-horizon work."
+    }
+  ],
+  "external_fusion": {
+    "security_delta": "NO_ARCHITECTURE_REPLACEMENT: existing untrusted-web structural boundary and deterministic effect authority remain directionally supported, but acceptance must include contextual-manipulation adversarial tests and must never claim absolute injection impossibility.",
+    "execution_state_delta": "CANDIDATE_TEST_OBLIGATION: evaluate one ClayCode-authoritative ExecutionState view with INFORM before cognition and GOVERN before command/effect, derived from current lease/spec/repo/state epochs. It must not become a second semantic authority or bypass UnifiedDB/ClayCode effect gates.",
+    "ledger_mapping_candidate": {
+      "inform": ["current execution lease holder/epoch", "current work/spec revision", "repo/source hash", "state/materialization epoch", "still-valid prior receipts"],
+      "govern": ["reject stale lease epoch", "reject stale work/spec revision", "reuse still-valid deterministic receipts where safe", "flag redundant execution", "fail closed on unknown consequential effect state"],
+      "promotion_gate": "matched baseline + stale-state injection + crash/restart + lease turnover + resource/cost measurement"
+    }
+  },
+  "out_of_box_experiment": {
+    "count_for_parent_go_cycle": 1,
+    "name": "compatibility-symbol indirection",
+    "result": "NARROW_VARIANT_REJECTED",
+    "why": "It initially appeared sufficient for self.root compatibility, but counterhypothesis testing exposed causal stale identity semantics in runtime/hive/self-model/state/release/replay. The failure expanded the required boundary and produced the conventional PR #161 repair lane.",
+    "additional_oob_experiment_started_here": false
+  },
+  "architecture_delta": {
+    "identity": "KEEP PR #161 as current implementation candidate; PR #124 is historical evidence only.",
+    "runtime_state": "Add Ledger-like INFORM/GOVERN execution-state semantics only as a measured ClayCode/UnifiedDB-integrated candidate after identity source-to-replay closure; no second runtime authority.",
+    "security": "Add contextual-manipulation adversarial coverage to the open-web/token/effect acceptance matrix; structural taint/capability separation remains necessary but not sufficient evidence of complete security.",
+    "binary_continuity_next": "After source-to-replay PASS, require accepted binary digest + builder/source provenance + admitted state epoch/lineage + exclusive current instance/lease + restart/stale-clone discrimination."
+  },
+  "negative_results": [
+    "PR #124 is too stale for promotion despite useful earlier target-VPS evidence.",
+    "The PR #124 replay failure was a test/schema mismatch, not evidence that self.root replay semantics failed.",
+    "A compatibility-symbol-only identity migration is insufficient.",
+    "No current PR #161 target-VPS PASS is claimed while its observed self-hosted boundary run remains queued.",
+    "No final-model training authorization exists."
+  ],
+  "next_frontier": [
+    "Observe PR #161 exact self-hosted source-to-replay result and do not credit queued state as PASS.",
+    "Revalidate PR #161 against latest main because main continues to advance concurrently; stale success must not receive current-work credit.",
+    "If source-to-replay passes on a current merge revision, advance F-V01-01 to binary/state-lineage/restart/stale-clone acceptance rather than continuing textual identity cleanup.",
+    "Integrate stale execution-state INFORM/GOVERN discriminator with current single-instance/effect fences as a later cross-package test obligation, preserving one ClayCode semantic authority.",
+    "Preserve current token ingress, effect authority, type/effect and VPS receipts while porting identity semantics."
+  ],
+  "research_reentry": {
+    "status": "SYNC_PENDING_REVIEW",
+    "branch": "chatgpt/go-selfroot-live-coordination-20260810-2254",
+    "target": "Clay Research Center",
+    "raw_chain_of_thought_persisted": false
+  }
+}

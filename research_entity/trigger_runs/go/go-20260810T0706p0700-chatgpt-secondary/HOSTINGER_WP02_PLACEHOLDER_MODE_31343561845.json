@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:11:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "evidence_class": "REAL_SELF_HOSTED_HOSTINGER_UBUNTU_EXACT_SOURCE_FALSIFIER",
+  "source": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 58,
+    "workflow": "Clay WP02 Placeholder Mode Falsifier",
+    "run_id": 31343561845,
+    "job_id": 93321203518,
+    "github_merge_sha": "475a58481217576ffcabf6b03a18352cd5b24583",
+    "artifact_id": 9046585223,
+    "artifact_zip_sha256": "d96242b8cbc27ba0a30f8702f04fc7b1851e89131a40623b4cbbbf9bb70c78f9"
+  },
+  "source_blobs": {
+    "frontend": "55728fd20323a364bb5e831989644b65189603d1",
+    "v9": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+    "v17": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a"
+  },
+  "runtime": {
+    "runner_name": "clay",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "machine_name": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3"
+  },
+  "hypothesis": "Lark default [] placeholders caused the prior NoneType/cross-grammar false failure; explicit maybe_placeholders=False removes the artifact without collapsing optional semantics.",
+  "strongest_counterhypothesis": "V17 genuinely changes ordinary admitted semantics, or placeholder suppression erases meaningful optional distinctions.",
+  "result": {
+    "pass": true,
+    "expected_v9_v17_equal": {
+      "g9": true,
+      "dialect": true,
+      "ordinary_module": true,
+      "ordinary_record": true,
+      "ordinary_needle": true,
+      "ordinary_lifecycle": true,
+      "owns_tight": true,
+      "owns_prefix": true
+    },
+    "v9_counterexample_reproduced": true,
+    "v17_counterexample_rescued": true,
+    "optional_semantic_discrimination": {
+      "optional_type": true,
+      "needle_params": true,
+      "type_params": true,
+      "field_default": true
+    },
+    "exactly_one_out_of_box_experiment": {
+      "name": "OPTIONAL_OPERATOR_METAMORPHIC_EQUIVALENCE",
+      "absent_equal": true,
+      "present_equal": true,
+      "default_mode_lesion_has_none": true,
+      "pass": true,
+      "promotion": "NONE"
+    }
+  },
+  "raw_pair_timings_ns": {
+    "g9": {"v9": 440951366, "v17": 300503843},
+    "dialect": {"v9": 278539540, "v17": 265170823},
+    "ordinary_module": {"v9": 287393589, "v17": 251803658},
+    "ordinary_record": {"v9": 281862862, "v17": 248970379},
+    "ordinary_needle": {"v9": 259913520, "v17": 264131126},
+    "ordinary_lifecycle": {"v9": 265006752, "v17": 288832638},
+    "owns_tight": {"v9": 254417904, "v17": 261171359},
+    "owns_spaced": {"v9": 268000632, "v17": 249079369},
+    "owns_prefix": {"v9": 314750026, "v17": 292933365}
+  },
+  "timing_summary_non_inferential": {
+    "n_matched_pairs": 9,
+    "v9_mean_ms": 294.5373545555556,
+    "v17_mean_ms": 269.17739555555556,
+    "v9_median_ms": 278.53954,
+    "v17_median_ms": 264.131126,
+    "observed_mean_delta_percent_v17_vs_v9": -8.610099400895043,
+    "observed_median_delta_percent_v17_vs_v9": -5.172843324147081,
+    "interpretation": "Single-run paired timing shadow only; do not promote as a performance claim without repetitions/counterbalancing."
+  },
+  "adjudication": "PLACEHOLDER_ROOT_CAUSE_AND_REPAIR_SUPPORTED_ON_HOSTINGER_NOT_WP02_PASS",
+  "architecture_delta": "NO_CHANGE_FROM_THIS_RECEIPT_ALONE",
+  "package_impact": {
+    "CC-WP-02-PARSER-CANON": "OPEN_PENDING_FULL_MATCHED_PRODUCTION_GATE_AND_ANDREAS_TARGET_ADJUDICATION",
+    "CC-WP-03-IR-TYPES": "DO_NOT_PROMOTE_FROM_THIS_RECEIPT_ALONE"
+  },
+  "next_falsifier": "Run the hash-locked Placeholder Fix Matched Replay / Repaired Frontend Closure on Hostinger: discriminator + strict LALR probe + frontend full corpus + canonicalizer with resource shadows. Preserve exact blobs. If green, still require the registered Andreas Ubuntu target receipt before formal CC-WP-02 PASS.",
+  "counts_as_wp02_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "promotion_allowed": false,
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

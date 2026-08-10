@@ -7,9 +7,14 @@ import platform
 import random
 import sqlite3
 import statistics
+import sys
 import time
 import urllib.request
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from research_entity.harness.reference.state_ledger import StateLedger
 from research_entity.runtime.binary_entity_temporal_pulse_v2 import BinaryEntityTemporalStore

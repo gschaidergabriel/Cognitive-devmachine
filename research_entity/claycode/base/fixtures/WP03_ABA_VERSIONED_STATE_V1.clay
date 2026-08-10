@@ -1,0 +1,41 @@
+module claycode.wp03.fixture.aba_versioned_state
+version "1.0"
+status TEST_FIXTURE
+
+type AtomicIdentityMode = VALUE_ONLY|VERSION_BOUND
+type CasStrength = STRONG|WEAK
+type AtomicOrdering = RELAXED|ACQUIRE|RELEASE|ACQ_REL|SEQ_CST
+
+record VersionedExpected {
+  value:Int
+  version:Epoch
+}
+
+record AtomicCell {
+  cell_id:ResourceRef
+  value:Int
+  version:Epoch
+  identity_mode:AtomicIdentityMode
+  capability:CapabilityRef?
+}
+
+record CompareExchangeIntent {
+  op_id:IntentRef
+  cell_id:ResourceRef
+  expected:VersionedExpected
+  desired:Int
+  strength:CasStrength
+  success_order:AtomicOrdering
+  failure_order:AtomicOrdering
+}
+
+record CompareExchangeOutcome {
+  op_id:IntentRef
+  cell_id:ResourceRef
+  success:Bool
+  observed_value:Int
+  observed_version:Epoch
+  resulting_version:Epoch
+  semantic_receipt:ReceiptRef
+  execution_trace:TraceRef
+}

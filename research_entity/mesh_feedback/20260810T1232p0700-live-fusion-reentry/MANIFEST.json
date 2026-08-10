@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "live-fusion-reentry-20260810T1232p0700",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_id": "frank-project-global-research-entity",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "status": "MATERIAL_LIVE_FUSION_CANDIDATE_DISTRIBUTED",
+  "candidate_pr": 156,
+  "candidate_branch": "chatgpt/live-fusion-reentry-v1-20260810",
+  "dynamic_work_event": "research_entity/state/work/events/20260810T1232p0700_CHATGPT_LIVE_FUSION_REENTRY_V1_WORK_CREATE.json",
+  "live_stream_observation": {
+    "initial_observed_head": "310b3bde7ba742ffe485adafcd8b6ae6794151d2",
+    "later_heads_observed_during_same_run": [
+      "19dc92e871d8193ffebcfbd34fa20e3a5fcbf8f3",
+      "cb7b54b5514d9d42e64c7606b12c91be33bba65e",
+      "f115858f568378e4f0e2708a6c4d3382f9025e42",
+      "a7f9b85e7de67cc3676731a80ebb140d64cc35b0"
+    ],
+    "material_deltas_seen_intra_run": [
+      "Pulse S2 ABA identity blocker and later V6/EAP17/S2 fusion",
+      "new Pulse S2 base-epoch recovery falsifier execution",
+      "ClayCode V20/qid and WP03 selected-semantics changes",
+      "capability registry/live health changes",
+      "FRANK reward-state baseline-gated successor work"
+    ],
+    "inference": "A single refresh at chat start is insufficient: material assumptions changed repeatedly while the run was active."
+  },
+  "fused_architecture_delta": {
+    "chain": "incoming append-only delta -> event-id dedupe -> provenance/identity-preserving fusion -> semantic relevance routing -> delivery receipt -> worker plan re-evaluation -> ACK/plan revision -> effect guard -> outcome/re-entry",
+    "delivery_classes": ["INTERRUPT_NEXT_SAFE_POINT", "NEXT_CHECKPOINT", "INDEX_ONLY"],
+    "delivery_semantics": "AT_LEAST_ONCE_WITH_EVENT_ID_DEDUPE_AND_IDEMPOTENT_ACK",
+    "aba_invariant": "same content/payload hash cannot cancel a newer event/epoch/record-version/provenance identity",
+    "effect_guard": "only unacked high-impact conflicts intersecting an intended effect block the next affected effect",
+    "separation": "Database Pulse projection maintenance remains distinct from worker knowledge re-entry"
+  },
+  "affected_branches": {
+    "unifieddb": {
+      "delta": "Materialize LiveFusionDelta, Delivery and ACK as append-only coordination state only after PR156 tests; preserve event identity independently of payload equality.",
+      "priority": "HIGH",
+      "status": "TEST_AND_INTEGRATE_CANDIDATE"
+    },
+    "claygraph": {
+      "delta": "Use current semantic dependencies to route deltas to affected workers/work/claims; topology/relevance never promotes truth.",
+      "priority": "HIGH",
+      "status": "TEST_OBLIGATION"
+    },
+    "research-center/work-fabric": {
+      "delta": "Ingest work CLAY-LIVE-FUSION-REENTRY-V1, revalidate PR156/current main before effect, and require explicit ACK/plan-revision receipts.",
+      "priority": "HIGH",
+      "status": "READY_WORK_EVENT_PUBLISHED"
+    },
+    "harness/recovery": {
+      "delta": "Add crash/restart replay, duplicate redelivery, late/out-of-order event, concurrent-writer and stale-worker tests before promotion.",
+      "priority": "HIGH",
+      "status": "TEST_OBLIGATION"
+    },
+    "claycode": {
+      "delta": "Keep semantic_keys/affected branches/work machine-extractable so routing does not depend on prose similarity alone.",
+      "priority": "MEDIUM",
+      "status": "INTERFACE_OBLIGATION"
+    },
+    "frank/loop-core": {
+      "delta": "When research deltas affect Frank work, re-entry changes research plans only; Frank self-observation still has proposal-only Harness authority.",
+      "priority": "MEDIUM",
+      "status": "AUTHORITY_INVARIANT"
+    }
+  },
+  "fresh_external_design_evidence": {
+    "apache_flink": "Replayable source + state checkpoint patterns support deterministic recovery of stateful stream processing.",
+    "apache_kafka": "Idempotent/transactional producer-consumer semantics support separating event delivery identity from processing/output commit semantics.",
+    "nats_jetstream": "Consumer ACK/redelivery patterns support explicit delivery state and at-least-once re-delivery until acknowledgment.",
+    "evidence_role": "IMPLEMENTATION_PATTERN_ONLY_NOT_CLAY_TRUTH"
+  },
+  "validation": {
+    "local_reference_test": "PASS",
+    "local_test_count": 6,
+    "pr156_ci": "QUEUED_AT_LAST_OBSERVATION",
+    "unifieddb_materialization": "NOT_ATTEMPTED",
+    "active_worker_ack_roundtrip": "NOT_ATTEMPTED",
+    "crash_restart_real_process": "NOT_ATTEMPTED",
+    "concurrent_writer": "NOT_ATTEMPTED",
+    "hostinger": "NOT_ATTEMPTED",
+    "canonical_promotion": "NONE"
+  },
+  "counterhypothesis": "Repeated mandatory refresh plus existing append-only work events may already provide enough coordination; a first-class live fusion bus could add plan churn, latency and duplicated state without measurable mission benefit.",
+  "discriminating_test": "Compare existing refresh/poll baseline vs PR156 live re-entry on synthetic + real concurrent commit traces: stale-effect rate, missed invalidations, time-to-worker-plan-update, duplicate work, plan churn, CPU/RAM/I/O and crash recovery.",
+  "authority": "RESEARCH_COORDINATION_CANDIDATE_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY"
+}

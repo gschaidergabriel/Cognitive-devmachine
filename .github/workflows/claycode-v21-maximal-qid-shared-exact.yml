@@ -1,0 +1,79 @@
+name: ClayCode V21 Maximal QID Shared Exact
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-v21-maximal-qid-shared-exact.yml'
+      - 'tools/claycode_v21_maximal_qid_shared_exact_probe.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V21_MAXIMAL_QID_SHARED_EXACT.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hosted-strict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated parser environment
+        run: |
+          python3 -m venv /tmp/clay-v21-hosted-${GITHUB_RUN_ID}
+          /tmp/clay-v21-hosted-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+      - name: Execute strict V17-equivalence discriminator
+        run: |
+          VENV=/tmp/clay-v21-hosted-${GITHUB_RUN_ID}
+          if "$VENV/bin/python" tools/claycode_v21_maximal_qid_shared_exact_probe.py > /tmp/clay_v21.json; then rc=0; else rc=$?; fi
+          cat /tmp/clay_v21.json
+          exit "$rc"
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-v21-hosted-${GITHUB_RUN_ID}
+
+  hostinger-strict:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build isolated parser environment
+        run: |
+          python3 -m venv /tmp/clay-v21-hostinger-${GITHUB_RUN_ID}
+          /tmp/clay-v21-hostinger-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+      - name: Execute discriminator and persist positive or negative receipt
+        run: |
+          VENV=/tmp/clay-v21-hostinger-${GITHUB_RUN_ID}
+          if "$VENV/bin/python" tools/claycode_v21_maximal_qid_shared_exact_probe.py > /tmp/clay_v21.json; then rc=0; else rc=$?; fi
+          python3 - <<'PY'
+          import json, os, pathlib
+          d=json.loads(pathlib.Path('/tmp/clay_v21.json').read_text())
+          d['receipt_id']='CLAYCODE-V21-HOSTINGER-'+os.environ['GITHUB_RUN_ID']
+          d['commit']=os.environ['GITHUB_SHA']
+          d['run_id']=os.environ['GITHUB_RUN_ID']
+          d['runner_name']=os.environ.get('RUNNER_NAME','UNKNOWN')
+          d['truth_class']='VERIFIED_REMOTE_EXECUTION_BOUNDED_PARSER_DIFFERENTIAL'
+          d['promotion']='NONE'
+          out=pathlib.Path('research_entity/claycode/base/receipts/V21_MAXIMAL_QID_HOSTINGER_LATEST.json')
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/claycode/base/receipts/V21_MAXIMAL_QID_HOSTINGER_LATEST.json
+          git commit -m 'evidence(claycode): record V21 Hostinger differential' || true
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then exit "$rc"; fi
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 1
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-v21-hostinger-${GITHUB_RUN_ID}

@@ -1,0 +1,73 @@
+name: Database Pulse V6.1 Hardening
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/database_pulse_execution_plane_v6.py'
+      - 'research_entity/runtime/database_pulse_execution_plane_v6_1.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v6.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v6_1.py'
+      - '.github/workflows/database-pulse-v6-1-hardening.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-v6-1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - name: Compile V6.1 hardening
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_execution_plane_v6.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_1.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6_1.py
+      - name: Run V6 and V6.1 falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v6 \
+            research_entity.runtime.test_database_pulse_execution_plane_v6_1
+
+  hostinger-v6-1:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - name: Compile exact V6.1 candidate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v5.py \
+            research_entity/runtime/database_pulse_execution_plane_v6.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_1.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6_1.py
+      - name: Run V6.1 plus inherited rank/focus falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v6 \
+            research_entity.runtime.test_database_pulse_execution_plane_v6_1 \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_auth_shadow_focus_guard
+      - name: Exact runtime safety metadata
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,platform,sqlite3,sys
+          from research_entity.runtime.database_pulse_execution_plane_v6 import DatabasePulseExecutionPlaneV6
+          print(json.dumps({
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+            'platform':platform.platform(),
+            'wal_multiwriter_gate':DatabasePulseExecutionPlaneV6.sqlite_wal_multiwriter_safety(),
+          },indent=2))
+          PY

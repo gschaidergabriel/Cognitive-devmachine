@@ -15,12 +15,15 @@ from research_entity.runtime.eap_query_aware_gate_v17 import (
 
 TARGET_ONLY_MODE = "LEXICAL_COSINE_TARGET_RELATION"
 LOOKAHEAD_MODE = "LEXICAL_COSINE_TARGET_OR_ADMISSIBLE_SUCCESSOR_V1"
+COUNTEREVIDENCE_POLICY = "PRESERVE_EXPLICIT_TYPED_COUNTER_RELATIONS_AT_PARENT_WEIGHT"
 
 
 def _fixture(
     *,
     conflict_relevant_bridge: bool = False,
     opaque_relevant_bridge: bool = False,
+    include_counterevidence: bool = False,
+    counterevidence_epistemic: str = "KNOWN",
 ) -> StateLedger:
     ledger = StateLedger()
     bridge_text = "connector intermediate" if opaque_relevant_bridge else "alpha pathway bridge"
@@ -61,6 +64,30 @@ def _fixture(
             "value": {"source": "memory:noise_bridge", "target": "memory:noise_target", "strength": 0.99},
         },
     ]
+    if include_counterevidence:
+        ops.extend(
+            [
+                {
+                    "op": "SET",
+                    "domain": "memory",
+                    "key": "refutation",
+                    "value": {"text": "orthogonal rebuttal evidence"},
+                    "epistemic": counterevidence_epistemic,
+                    "status": "CURRENT",
+                },
+                {
+                    "op": "SET",
+                    "domain": "dependency",
+                    "key": "seed_refutation",
+                    "value": {
+                        "source": "memory:seed",
+                        "target": "memory:refutation",
+                        "strength": 0.80,
+                        "relation_type": "REFUTES",
+                    },
+                },
+            ]
+        )
     ledger.append_event(
         event_id="fixture",
         idem="fixture",
@@ -162,6 +189,44 @@ class QueryAwareGateV17Tests(unittest.TestCase):
             target_only["query_gate_manifest_hash"],
             lookahead["query_gate_manifest_hash"],
         )
+
+    def test_explicit_refuting_edge_is_not_erased_by_query_relevance(self):
+        ledger = _fixture(include_counterevidence=True)
+        parent = EmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+            _base_spec(ledger)
+        )
+        candidate = QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+            _query_spec(ledger)
+        )
+        parent_refute = next(
+            item for item in parent["selected"] if item["ref"] == "memory:refutation"
+        )
+        candidate_refute = next(
+            item for item in candidate["selected"] if item["ref"] == "memory:refutation"
+        )
+        self.assertEqual(candidate_refute["relation_type"], "REFUTES")
+        self.assertAlmostEqual(
+            candidate_refute["activation_score"], parent_refute["activation_score"], places=12
+        )
+        self.assertGreaterEqual(candidate["query_gate"]["counterevidence_edges_preserved"], 1)
+        self.assertEqual(
+            candidate["query_gate"]["counterevidence_policy"], COUNTEREVIDENCE_POLICY
+        )
+
+    def test_counterevidence_guard_does_not_bypass_epistemic_negative_space(self):
+        ledger = _fixture(
+            include_counterevidence=True, counterevidence_epistemic="CONFLICT"
+        )
+        candidate = QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+            _query_spec(ledger)
+        )
+        selected_refs = [x["ref"] for x in candidate["selected"]]
+        self.assertNotIn("memory:refutation", selected_refs)
+        self.assertIn("memory:refutation", candidate["blocked_propagation_refs"])
+        self.assertTrue(
+            any(x["ref"] == "memory:refutation" for x in candidate["suppressed"])
+        )
+        self.assertGreaterEqual(candidate["query_gate"]["counterevidence_edges_preserved"], 1)
 
     def test_zero_strength_is_exact_parent_lesion_for_selection_hash(self):
         ledger = _fixture()

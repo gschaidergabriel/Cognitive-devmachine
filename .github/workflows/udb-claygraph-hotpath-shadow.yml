@@ -1,0 +1,39 @@
+name: UnifiedDB ClayGraph Hotpath Shadow
+
+on:
+  push:
+    branches:
+      - chatgpt/udb-claygraph-hotpath-20260810
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: udb-claygraph-hotpath-shadow-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ubuntu-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Record runtime metadata
+        run: |
+          set -euo pipefail
+          python3 --version
+          python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('sqlite=', sqlite3.sqlite_version)
+          PY
+      - name: UnifiedDB query-plane conformance
+        run: |
+          set -euo pipefail
+          python3 -m unittest research_entity.harness.reference.test_unifieddb_query_plane -v
+      - name: UnifiedDB + ClayGraph shadow benchmark
+        run: |
+          set -euo pipefail
+          python3 tools/benchmark_udb_claygraph_hotpath.py --state-rows 10000 --nodes 1500 --edges 7500 --versions 5 --reps 60 --output /tmp/udb_claygraph_hotpath.json
+          cat /tmp/udb_claygraph_hotpath.json

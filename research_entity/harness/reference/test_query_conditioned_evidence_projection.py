@@ -51,6 +51,20 @@ class QCEP03Tests(unittest.TestCase):
         self.assertAlmostEqual(by['semantic:a']['activation_score'],.7*.88,12); self.assertAlmostEqual(by['semantic:b']['activation_score'],.6*.88,12)
         self.assertEqual(by['semantic:a']['edge_hub_factor'],1.0)
 
+    def test_structural_json_field_names_are_not_semantic_evidence(self):
+        rows=[
+            row('semantic','root',{}),row('semantic','a',{}),row('semantic','b',{}),
+            row('dependency','ra',{'source':'semantic:root','target':'semantic:a','strength':.7,'relation_type':'SUPPORTS'}),
+            row('dependency','rb',{'source':'semantic:root','target':'semantic:b','strength':.6,'relation_type':'RELATED'}),
+        ]
+        p=QueryConditionedEvidenceProjector(Ledger(rows))
+        out=p.project(QueryEvidenceSpec('schema','target source strength relation_type',('semantic:root',),1,max_items=3,max_hops=1,hop_decay=.88,hub_penalty=9,relevance_floor=.01))
+        by={x['ref']:x for x in out['selected']}
+        self.assertAlmostEqual(by['semantic:a']['activation_score'],.7*.88,12)
+        self.assertAlmostEqual(by['semantic:b']['activation_score'],.6*.88,12)
+        self.assertEqual(by['semantic:a']['edge_hub_factor'],1.0)
+        self.assertEqual(out['semantic_signal_rule'],'STRUCTURAL_JSON_KEYS_EXCLUDED_ONLY_EXPLICIT_EVIDENCE_FIELDS_COUNT')
+
     def test_stale_epoch_and_determinism(self):
         p=QueryConditionedEvidenceProjector(Ledger(self.fixture()))
         with self.assertRaises(StaleEvidenceProjection): p.project(QueryEvidenceSpec('stale','zircon',('semantic:root',),2))

@@ -32,7 +32,7 @@ HAVING COUNT(*)>1;
 CREATE TABLE IF NOT EXISTS graph_semantic_access_heads(
   seed_id TEXT NOT NULL,
   target_logical_id TEXT NOT NULL,
-  access_path_version_id TEXT NOT NULL UNIQUE,
+  access_path_version_id TEXT NOT NULL,
   seed_logical_id TEXT NOT NULL,
   graph_epoch INTEGER NOT NULL,
   source_epoch INTEGER NOT NULL,
@@ -49,6 +49,9 @@ CREATE TABLE IF NOT EXISTS graph_semantic_access_heads(
   FOREIGN KEY(graph_epoch) REFERENCES graph_epochs(graph_epoch)
 );
 
+-- access_path_version_id is already globally unique in the authoritative source log.
+-- Re-enforcing that uniqueness in the rebuildable head adds a B-tree/write cost without
+-- increasing semantic safety; the head can only be admitted after source/head verification.
 CREATE INDEX IF NOT EXISTS idx_graph_semantic_access_heads_hot
 ON graph_semantic_access_heads(seed_id,path_rank,path_weight DESC,target_logical_id)
 WHERE source_status='CURRENT';

@@ -95,6 +95,28 @@ def main() -> int:
     check(rows, "layout_insensitive_typed_identity", add["program_semantic_id"] == add_ws["program_semantic_id"], {"compact": add["program_semantic_id"], "spaced": add_ws["program_semantic_id"]})
     check(rows, "operator_mutation_discriminated", add["program_semantic_id"] != sub["program_semantic_id"], {"add": add["program_semantic_id"], "sub": sub["program_semantic_id"]})
 
+    keyword_ids = compile_text(
+        "record status {\n status:Symbol\n}\n"
+        "fn status(status:Symbol)->Symbol=status\n"
+        "interface status {\n status(status:Symbol)->Symbol\n}\n",
+        "keyword_identifiers.clay",
+        grammar_text,
+    )
+    keyword_record = next(x for x in keyword_ids["declarations"] if x["kind"] == "record")
+    keyword_fn = next(x for x in keyword_ids["declarations"] if x["kind"] == "function")
+    keyword_iface = next(x for x in keyword_ids["declarations"] if x["kind"] == "interface")
+    check(
+        rows,
+        "grammar_admitted_keyword_identifiers_preserved",
+        keyword_record["name"] == "status"
+        and keyword_record["fields"] == [{"name":"status","type":"Symbol","default_tokens":None}]
+        and keyword_fn["name"] == "status"
+        and keyword_fn["params"] == [{"name":"status","type":"Symbol"}]
+        and keyword_iface["name"] == "status"
+        and keyword_iface["methods"] == [{"name":"status","params":[{"name":"status","type":"Symbol"}],"returns":"Symbol"}],
+        {"record": keyword_record, "function": keyword_fn, "interface": keyword_iface},
+    )
+
     ext = compile_text("fn carry(x:MysteryRef)->MysteryRef=x\n", "external_nominal.clay", grammar_text)
     ext_types = {x["name"]: x["class"] for x in ext["types"]}
     check(rows, "unknown_nominal_never_any", ext_types.get("MysteryRef") == "EXTERNAL_NOMINAL", ext_types)
@@ -115,7 +137,7 @@ def main() -> int:
 
     failures = [r["name"] for r in rows if not r["pass"]]
     receipt = {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "scope": "CC-WP-03_TYPED_CANONICAL_IR_IMPLEMENTATION_SLICE",
         "grammar": str(GRAMMAR.relative_to(ROOT)),
         "grammar_sha256": grammar_sha256,
@@ -130,7 +152,7 @@ def main() -> int:
         "full_program_semantic_id": full_a["program_semantic_id"],
         "type_class_counts": {c: sum(1 for x in full_a["types"] if x["class"] == c) for c in sorted(classes)},
         "promotion": "NONE_AUTOMATIC",
-        "scope_guard": "PASS validates strict V7 production-frontend admission for the complete frozen G9+Dialect sources and every positive typed-IR fixture, deterministic typed nominal IR/signature identity, explicit external nominals, mutation discrimination and authority non-minting. It does not prove CC-WP-04 checker/effect closure, evaluator, compiler/lowering, real Frank/adaptive-state acceptance, or Andreas Ubuntu release acceptance.",
+        "scope_guard": "PASS validates strict V7 production-frontend admission for the complete frozen G9+Dialect sources and every positive typed-IR fixture, deterministic typed nominal IR/signature identity including grammar-admitted keyword identifier positions, explicit external nominals, mutation discrimination and authority non-minting. It does not prove CC-WP-04 checker/effect closure, evaluator, compiler/lowering, real Frank/adaptive-state acceptance, or Andreas Ubuntu release acceptance.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")

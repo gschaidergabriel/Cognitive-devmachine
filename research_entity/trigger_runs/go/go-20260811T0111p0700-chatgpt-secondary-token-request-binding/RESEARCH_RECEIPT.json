@@ -1,34 +1,34 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260811T0111p0700-chatgpt-secondary-token-request-binding",
   "trigger": "go",
-  "status": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
+  "status": "SUPPORTED_MECHANISM_REFUTED_AS_PROMOTABLE_SIDECAR",
   "origin_actor": "chatgpt-secondary",
   "ingested_by": "chatgpt-secondary",
   "adjudicated_by": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
-  "timestamp_local": "2026-08-11T01:34:00+07:00",
+  "timestamp_local": "2026-08-11T01:45:00+07:00",
   "program": "FRANK_V0_1",
   "component": "F-V01-08-TOKEN-API-CLIENTS",
   "target_repository": "gschaidergabriel/Dr.-Unterweger",
   "baseline": {
     "canonical_v16_target_receipt_commit": "2bb92d0675616c468bbbc90c31a10f775ad565db",
-    "observed_gap": "V16 durable request identity binds credential/session/client/request_id but stores no request-content identity; same request id with changed content can be classified as replay.",
-    "already_measured_open_fields": [
+    "observed_gap": "V16 durable request identity binds credential/session/client/request_id but not request content, so changed caller intent can alias as replay.",
+    "open_terminal_fields": [
       "network_server_implemented=false",
       "tls_termination_implemented=false",
       "response_replay_store_implemented=false",
       "whole_token_api_complete=false"
     ]
   },
-  "hypothesis": "An immutable content binding keyed by the existing V16 request_key_hash can prevent changed caller intent from aliasing as an idempotent replay without changing V15/V16 execution authority.",
-  "strongest_counterhypothesis": "request_id is already a sufficient immutable semantic request identity, or an additive sidecar creates a TOCTOU/cross-process observation gap that makes it unsafe to promote without atomic integration.",
+  "hypothesis": "Durable request-content binding is required in addition to request_id identity so changed content cannot reuse an earlier durable admission or response.",
+  "strongest_counterhypothesis": "An additive sidecar around canonical V16 is sufficient to provide that binding without changing the V16 transaction boundary.",
   "external_evidence": [
     {
       "class": "OFFICIAL_PROVIDER",
       "source": "https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html",
-      "use": "same client token with different parameters is an idempotency mismatch"
+      "use": "same idempotency token with different parameters is treated as mismatch"
     },
     {
       "class": "IETF_RFC",
@@ -38,116 +38,120 @@
     {
       "class": "IETF_RFC_INFORMATIONAL",
       "source": "https://www.rfc-editor.org/rfc/rfc8785",
-      "use": "deterministic JSON representation and I-JSON constraints motivate hashable request identity; candidate does not claim full JCS"
+      "use": "deterministic JSON representation motivates stable content identity; candidate deliberately does not claim full JCS"
     },
     {
       "class": "IETF_RFC",
       "source": "https://www.rfc-editor.org/rfc/rfc7493",
       "use": "I-JSON forbids duplicate object member names"
+    },
+    {
+      "class": "SQLITE_OFFICIAL",
+      "source": "https://www.sqlite.org/lang_transaction.html",
+      "use": "BEGIN IMMEDIATE starts a write transaction immediately; writer serialization supports moving request lookup/content comparison/admission/replay-event mutation into one transaction"
     }
   ],
   "candidate": {
     "pull_request": 259,
     "branch": "chatgpt/go-v16-request-semantic-binding-20260811",
-    "head": "c47d19e999f8c4dca1905207fb6f3023c9acd5de",
-    "base_at_creation": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
-    "target_tested_merge_ref": "071da3843b7ba71896d2d64aa4440524721d8ee7",
-    "target_tested_merge_base": "c82d40a5859784a52d700c5e85c251839cc47c30",
-    "architecture_delta_status": "SUPPORTED_CANDIDATE",
+    "head": "f90b6cc2d684a9b1ba0d8258df895d05488f6a7c",
+    "architecture_delta_status": "SUPPORTED_SEQUENTIAL_MECHANISM__REFUTED_AS_PROMOTABLE_SIDECAR",
     "canonical_v16_modified": false,
     "canonical_schema_promoted": false,
     "profile": "IJSON_EXACT_UTF8_BYTES_SHA256_V1",
-    "mechanism": [
+    "supported_mechanisms": [
       "authenticate before parsing caller JSON",
-      "validate bounded strict UTF-8/I-JSON-compatible top-level JSON object",
-      "hash exact admitted UTF-8 bytes with SHA-256",
-      "bind new V16 request_key_hash to immutable request-content digest",
-      "preflight known replay mismatch/unbound legacy requests before canonical V16 replay mutation",
-      "recheck after canonical core for race-safe fail-closed behavior",
-      "strip stable credential_fingerprint from candidate public success payload"
+      "strict bounded UTF-8/I-JSON-compatible object validation",
+      "exact admitted-byte SHA-256 request-content identity",
+      "same request identity + same content replay allowed",
+      "same request identity + changed content rejected",
+      "legacy unbound admissions require reconciliation",
+      "known mismatch/unbound sequential retries are fenced before REQUEST_REPLAYED mutation",
+      "stable credential fingerprint removed from candidate public response"
     ],
-    "explicit_nonclaim": "Sidecar binding and canonical V16 admission are separate SQLite transactions/connections. Cross-process first-admission atomicity is not solved; canonical promotion requires a unified atomic storage-level request identity/content invariant or equivalent proof."
+    "refuted_architecture_claim": "A separate request-content sidecar plus preflight/postcheck is sufficient for canonical promotion.",
+    "required_successor": "Keep request_key stable for mismatch diagnosis, but perform durable lookup, content-digest comparison/binding, request admission, and REQUEST_REPLAYED/REQUEST_ADMITTED provenance mutation under one V16 write transaction/storage invariant."
   },
-  "tests": {
-    "normal_matrix": {
-      "same_request_same_content_replay": true,
-      "same_request_changed_content_rejected": true,
-      "durable_restart_same_content_replay": true,
-      "durable_restart_changed_content_rejected": true,
-      "legacy_unbound_replay_requires_reconciliation": true,
-      "binding_update_immutable": true,
-      "binding_delete_immutable": true,
-      "candidate_rollback_preserves_base_v16": true,
-      "sqlite_integrity_after_rollback": "ok",
-      "foreign_key_violations_after_rollback": 0,
-      "public_credential_fingerprint_removed_by_candidate_facade": true,
-      "auth_precedes_json_parse": true,
-      "exact_replay_event_delta": 1,
-      "mismatched_payload_replay_event_delta": 0,
-      "legacy_unbound_replay_event_delta": 0,
-      "repo_static_integrity": "PASS"
-    },
-    "exactly_one_go_oob": {
-      "name": "DUPLICATE_JSON_KEY_IDEMPOTENCY_ALIAS",
-      "question": "Can duplicate JSON member ambiguity acquire durable replay identity before strict validation rejects it?",
-      "full_candidate_facade_exercised": true,
-      "duplicate_member_rejected_before_admission": true,
-      "admission_row_delta": 0,
-      "status": "PASS"
-    },
-    "local_execution": {
-      "status": "LOCAL_INFRA_FAILURE",
-      "reason": "container DNS could not resolve github.com before repository checkout; no candidate test executed"
-    },
-    "target_vps": {
-      "workflow": "GO V16 Request Content Binding Candidate VPS",
-      "run_id": 31419430210,
-      "job_id": 93556334241,
-      "status": "PASS",
-      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_CANDIDATE_DIFFERENTIAL",
-      "runner_name": "clay",
-      "hostname": "digital-retina",
-      "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
-      "python": "3.12.3",
-      "repository_permission": "contents:read",
-      "checkout_persist_credentials": false,
-      "repo_write_attempted": false,
-      "tested_merge_ref": "071da3843b7ba71896d2d64aa4440524721d8ee7",
-      "candidate_head_in_merge": "c47d19e999f8c4dca1905207fb6f3023c9acd5de",
-      "base_in_merge": "c82d40a5859784a52d700c5e85c251839cc47c30",
-      "artifact_id": 9074816115,
-      "artifact_sha256": "a5ac660994e9d74d206a20185a3789799171b185183acd723a2ae45de96dbf98",
-      "result_sha256": "b629d6f9f477eaa76f9af5522906d906bbaa640f37f7c513818ba6ce4a695fcb",
-      "elapsed_seconds_main_matrix": 0.20,
-      "user_cpu_seconds_main_matrix": 0.13,
-      "system_cpu_seconds_main_matrix": 0.03,
-      "max_rss_kib_main_matrix": 25212,
-      "major_page_faults": 0,
-      "minor_page_faults": 3946,
-      "voluntary_context_switches": 135,
-      "involuntary_context_switches": 4,
-      "filesystem_inputs": 0,
-      "filesystem_outputs": 7896,
-      "socket_messages_sent": 0,
-      "socket_messages_received": 0,
-      "exit_status": 0
-    }
+  "target_vps_latest": {
+    "workflow": "GO V16 Request Content Binding Candidate VPS",
+    "run_id": 31420395677,
+    "job_id": 93559458137,
+    "status": "PASS_WITH_EXPECTED_NEGATIVE_COUNTEREVIDENCE",
+    "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_CANDIDATE_DIFFERENTIAL_PLUS_DETERMINISTIC_TOCTOU_SURROGATE",
+    "tested_merge_ref": "12c1e17e4d805510f9fa6a0b4348c972999500ba",
+    "candidate_head_in_merge": "f90b6cc2d684a9b1ba0d8258df895d05488f6a7c",
+    "base_in_merge": "3a7ca32266fbebec57777673515b9ec988b19c66",
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "repository_permission": "contents:read",
+    "checkout_persist_credentials": false,
+    "repo_write_attempted": false,
+    "artifact_id": 9075086417,
+    "artifact_sha256": "dc040fb043aa428efdeb1ccd0bd761b9bc36b211ce9a9e37060bcda831872e73",
+    "result_sha256": "b629d6f9f477eaa76f9af5522906d906bbaa640f37f7c513818ba6ce4a695fcb",
+    "static_integrity": "PASS"
   },
+  "positive_target_results": {
+    "same_request_same_content_replay": true,
+    "same_request_changed_content_rejected": true,
+    "durable_restart_same_content_replay": true,
+    "durable_restart_changed_content_rejected": true,
+    "legacy_unbound_replay_requires_reconciliation": true,
+    "binding_update_immutable": true,
+    "binding_delete_immutable": true,
+    "candidate_rollback_preserves_base_v16": true,
+    "sqlite_integrity_after_rollback": "ok",
+    "foreign_key_violations_after_rollback": 0,
+    "auth_precedes_json_parse": true,
+    "exact_replay_event_delta": 1,
+    "mismatched_payload_replay_event_delta": 0,
+    "legacy_unbound_replay_event_delta": 0
+  },
+  "exactly_one_go_oob": {
+    "name": "DUPLICATE_JSON_KEY_IDEMPOTENCY_ALIAS",
+    "full_candidate_facade_exercised": true,
+    "duplicate_member_rejected_before_admission": true,
+    "admission_row_delta": 0,
+    "status": "PASS",
+    "external_network_used": false,
+    "real_external_effect_performed": false
+  },
+  "strongest_counterhypothesis_target_test": {
+    "status": "CONFIRMED_V16_LOOKUP_TO_BIND_TOCTOU_GAP_SURROGATE",
+    "classification": "EXPECTED_NEGATIVE_DETERMINISTIC_INTERLEAVING_SURROGATE_NOT_OOB",
+    "real_multi_process_race_measured": false,
+    "interleaving": "A_V16_LOOKUP_NONE__B_ADMIT_RELEASE_DIFFERENT_CONTENT__A_NEW_V15_EPOCH__A_V16_BIND_REPLAY__A_CONTENT_REJECT",
+    "a_mismatch_failed_closed": true,
+    "a_public_new_execution_spawned": false,
+    "admission_row_delta": 1,
+    "v15_lease_epoch_delta": 2,
+    "request_replayed_event_delta": 1,
+    "interpretation": "The caller ultimately receives mismatch/fail-closed, but the stale V16 lookup-to-bind window can still perturb semantic generation and replay provenance before rejection. This refutes promotion of the sidecar transaction shape."
+  },
+  "negative_results": [
+    "Initial candidate revision detected changed content only after core replay mutation; repaired and retained as regression.",
+    "First atomicity probe referenced nonexistent frank_execution_leases table; classified as test-harness defect and repaired, not candidate evidence.",
+    "Latest deterministic target interleaving confirms the V16 lookup-to-bind TOCTOU architecture gap.",
+    "A real multi-process race has not been measured; surrogate evidence must not be overstated."
+  ],
   "cross_branch_integration": {
     "related_pr": 257,
     "relation": "COMPLEMENTARY_RESPONSE_REPLAY_DEPENDENCY",
-    "distributed_comment_id": 5244287931,
-    "integration_obligation": "request-content identity must be resolved before durable response replay can safely serve the old response for a repeated V16 request key"
+    "prior_distributed_comment_id": 5244287931,
+    "integration_obligation": "Resolve atomic request-content identity before durable response replay can safely serve a prior response for a repeated V16 request key. Target sequence: atomic request identity/content -> durable admission -> final response bind/replay."
   },
-  "negative_results_and_open_obligations": [
-    "first candidate revision could append REQUEST_REPLAYED before detecting content mismatch; fixed before target execution and converted into regression",
-    "cross-process atomic admission/content binding still open and is the next highest-value falsifier",
-    "production HTTP server still open",
-    "TLS termination still open",
-    "strict HTTP framing still open",
-    "durable response replay is separate candidate PR #257",
-    "task-switch consent/cancellation and multimodal ingress remain open",
-    "whole token API acceptance not claimed"
+  "open_obligations": [
+    "atomic V16 request lookup/content/admission/replay-event transaction",
+    "fresh-main integration with response replay PR #257 or successor",
+    "production HTTP server",
+    "TLS termination",
+    "strict HTTP framing",
+    "task-switch consent/cancellation",
+    "multimodal ingress",
+    "end-to-end response transport/reconnect/replay",
+    "whole token API terminal receipt"
   ],
   "authority": {
     "external_effect_performed": false,
@@ -156,6 +160,6 @@
     "final_training_authorized": false,
     "training_started": false
   },
-  "promotion": "NO_PROMOTION_SUPPORTED_CANDIDATE_ONLY",
-  "next_falsifier": "Attack the cross-process first-admission race and integrate request-content identity atomically with the eventual response replay contract before any canonical promotion. Then implement/test production network/TLS/framing and end-to-end response transport on the accepted target VPS."
+  "promotion": "BLOCKED_DO_NOT_MERGE_SIDECAR_AS_CANONICAL_V16_CONTRACT",
+  "next_falsifier": "Implement atomic request-content semantics inside the same BEGIN IMMEDIATE V16 admission/replay transaction, then rerun the exact deterministic lookup-to-bind interleaving and require v15_lease_epoch_delta=1 for the winning request only, request_replayed_event_delta=0 for changed content, no second physical execution attributable to stale lookup, plus all current normal/OOB/restart/rollback gates."
 }

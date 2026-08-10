@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2103p0700-chatgpt-secondary-v18-contract-mesh",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_target": "FRANK_V0_1",
+  "executions": [
+    {
+      "id": "CC-V18-CONTRACT-TAMPER-REPRO",
+      "class": "LOCAL_DETERMINISTIC_COMPONENT_REPRODUCTION",
+      "result": "BUG_REPRODUCED",
+      "input_contract": "ClayCodeBaseFrontendAST/v1 / BASE_D_V18_REWARD_RELATIONS",
+      "grammar_sha256": "99a3b35acfe491081773b9666d9131dae8b2dd3b3bde7ac8569f6428a5fdb180",
+      "before_patch": {
+        "valid_artifact_accepted": true,
+        "contract_hash_replaced_with_ffffffff_accepted": true
+      },
+      "finding": "V18 bridge recomputed semantic_hash but passed frontend contract_hash through without validation."
+    },
+    {
+      "id": "CC-V18-CONTRACT-TAMPER-POSTFIX",
+      "class": "LOCAL_DETERMINISTIC_COMPONENT_REGRESSION",
+      "result": "PASS",
+      "after_patch": {
+        "valid_artifact_accepted": true,
+        "tampered_contract_hash_rejected": true,
+        "missing_contract_hash_rejected": true,
+        "semantic_hash_tamper_rejected": true
+      },
+      "implementation_commit": "f90c1b0382ffc7f4845d461c9c4a27bbbf43d7d6",
+      "regression_test_commit": "3642f9a0f913255cf78664351a8c783a1fb7c129"
+    },
+    {
+      "id": "REGISTRY-V3-MESH-CLASSIFICATION",
+      "class": "LOCAL_STATIC_AND_SYNTHETIC_GOVERNANCE_REGRESSION",
+      "result": "PASS_FOR_PEER_CLASSIFICATION",
+      "observed_peer_count": 10,
+      "observed_peers": [
+        "clayresearch", "frank", "q23", "gwt", "emergenz", "claycode",
+        "hyperposition", "claygraph", "unifieddb", "harness"
+      ],
+      "old_failure": "legacy preflight kind filter would infer an incomplete peer set under RESEARCH_TRIGGER_REGISTRY schema 3.0 and trip its own fail-closed invariant",
+      "repair_commits": [
+        "b551cab75d2e4653aa10e7d8abb03f45c1cd40a0",
+        "58703c0070290de2ecc6118bc8a4b9303e2b73c8",
+        "05da53f89948fb488e83edf134aa1564bb0308b2"
+      ]
+    },
+    {
+      "id": "TARGET-VPS-REGRESSION-WORKFLOW",
+      "class": "REMOTE_SELF_HOSTED_TARGET_VPS_EXECUTION_REQUESTED_BY_COMMITTED_CI",
+      "result": "DISPATCHED_BY_MAIN_PUSH_RECEIPT_PENDING",
+      "workflow": ".github/workflows/claycode-frank-v01-regression.yml",
+      "workflow_commit": "e5d0a483d4122573f6e26f6511102c95cbde50f9",
+      "expected_receipt": "research_entity/claycode/base/receipts/CLAYCODE_FRANK_V01_REGRESSION_LATEST.json",
+      "promotion_rule": "No target-VPS PASS is claimed until the persisted receipt exists and binds the tested GitHub SHA."
+    }
+  ],
+  "local_environment": {
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "3.13.5",
+    "cpu": "Intel Xeon Platinum 8573C",
+    "logical_cpu_available": 5,
+    "evidence_scope": "local component execution only"
+  },
+  "semantic_change": "NONE",
+  "release_promotion": "NONE",
+  "training_started": false
+}

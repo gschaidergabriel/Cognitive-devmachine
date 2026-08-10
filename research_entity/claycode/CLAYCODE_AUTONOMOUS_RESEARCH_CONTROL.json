@@ -1,9 +1,9 @@
 {
-  "schema_version": "1.9",
+  "schema_version": "2.0",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
-  "owner_directive": "Exploit all currently free Mistral, NVIDIA, Clay repository and ChatGPT-supervisor capabilities to accelerate the ClayCode compiler/runtime component of Frank v0.1 in evidence-bearing cycles. Never create paid usage automatically.",
+  "owner_directive": "Exploit currently free provider, repository, retrieval and execution capabilities to accelerate the ClayCode compiler/runtime component of Frank v0.1. Never create paid usage automatically.",
   "target_stage": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
   "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
@@ -36,21 +36,21 @@
     "SELECT_NEXT_HIGHEST_INFORMATION_TARGET"
   ],
   "model_role_policy": {
-    "architect": ["mistral:reasoning_high", "nvidia:strong_reasoning_or_coding"],
-    "falsifier": ["nvidia:different_model_family_from_architect", "mistral:independent_counterhypothesis"],
-    "alternative": ["nvidia:deepseek_or_qwen_or_glm_or_other_nonarchitect_family"],
+    "architect": ["mistral:reasoning_high_when_free_available", "nvidia:strong_reasoning_or_coding"],
+    "falsifier": ["nvidia:different_model_family_from_architect", "mistral:independent_counterhypothesis_when_free_available"],
+    "alternative": ["nvidia:deepseek_or_glm_or_other_nonarchitect_family"],
     "judge": ["nvidia:nemotron_or_other_nonidentical_family"],
-    "mass_workers": ["free_small_models", "groq", "huggingface_free_when_verified"],
     "retrieval": ["nvidia:nv-embedcode-7b-v1", "repo_search", "claygraph", "unifieddb"],
-    "reranker": ["nvidia:llama-nemotron-rerank-vl-1b-v2", "nvidia:llama-3.2-nv-rerankqa-1b-v2_when_verified"],
-    "execution_oracles": ["judge0", "e2b_if_free_verified", "sandboxapi_if_free_verified", "fixed_local_tests"]
+    "reranker": ["nvidia:llama-nemotron-rerank-vl-1b-v2"],
+    "execution_oracles": ["fixed_local_tests", "self_hosted_ubuntu_target", "other_oracles_only_when_free_verified"]
   },
   "independence_rules": [
     "same_model_via_two_providers_is_shared_ancestry_not_replication",
     "same_base_family_counts_as_correlated_evidence",
     "prefer_distinct_model_families_for_architect_falsifier_judge",
     "model_agreement_never_overrides_executable_counterexample",
-    "retrieval_or_graph_salience_never_mints_semantic_truth"
+    "retrieval_or_graph_salience_never_mints_semantic_truth",
+    "accepted_target_execution_on_exact_bytes_has_higher_weight_than_model_consensus"
   ],
   "authority_rules": [
     "model_output_is_candidate_not_truth",
@@ -63,17 +63,6 @@
     "semantic_change_requires_executable_counterexample_and_supervisor_review",
     "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle"
   ],
-  "capability_classes": {
-    "AUTONOMOUS_CALLABLE": [
-      "GitHub Actions", "repository filesystem/read/search", "Mistral API when credential present and free-mode succeeds", "NVIDIA free development APIs", "OpenAlex", "arXiv", "Crossref", "Tavily", "Exa", "DuckDuckGo/DDGS", "Groq", "Hugging Face under explicit zero-cost policy", "Judge0", "E2B only when free-access verified", "SandboxAPI only when free-access verified", "NVIDIA embeddings", "NVIDIA reranking"
-    ],
-    "CHATGPT_SUPERVISOR_ONLY": [
-      "ChatGPT web search and official-source verification", "GitHub connector read/write/review", "File Library search", "current user/project context", "interactive reasoning and cross-branch synthesis", "supported connected-app tools when materially relevant"
-    ],
-    "DISCOVERY_ONLY_UNTIL_FREE_VERIFIED": [
-      "Mistral batch", "Mistral OCR/vision/tools", "NVIDIA multimodal/vision APIs", "NVIDIA self-hosted NIM", "provider features whose free eligibility is not machine-verifiable in the active account"
-    ]
-  },
   "priority_order": [
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-03-IR-TYPES",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-04-TYPE-EFFECT",
@@ -88,34 +77,35 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep executable-selected V18 frozen. Accepted-target diagnostic V3 has now removed the prior exact-current bootstrap/transport ambiguity: the pinned V18 frontend, canonicalizer, grammar, G9, Dialect and current TypedIR materialize from local Git objects with REMOTE_GIT_TRANSPORT=NONE and byte-compile cleanly. The next cycle must therefore work on the first real post-bootstrap discriminators, not repeat packaging work. Preserve the dedicated WP03 type/class nominal-identity probe as an independent unresolved gate. Repair only diagnostic fixture/API drift: express block/effect fixtures using forms already admitted by V18 instead of adding top-level use syntax, and bind the exact frontend contract explicitly for probes that currently depend on removed target_vps_probe.current_frontend_contract. Then rerun the exact-current ladder. Separately treat uppercase-vs-title-case collection constructor divergence as a bounded dialect/lowering hypothesis: corpus frequency and absence of conflicting declarations are not alias semantics, and OPTION already demonstrates accepted-but-different canonical values. Require explicit dialect lineage plus executable semantic-hash/value/mutation/conflict negatives before any normalization. Resume broad CallContract/type/effect/runtime-binding work only after these upstream gates are current-executable. FREE_ONLY, no paid fallback, no canonical semantic promotion without executable counterevidence plus review, no receipt inheritance across changed hashes or superseded work revisions, and do not modify Frank's Harness.",
+  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep V18 frozen. Fresh-main accepted-target run 31418150523 has already combined the target-supported generic/relational token repair and declaration-aware legacy constructor lowering and carried current claycode/frank_effects.clay through strict structured frontend into current TypedIR. Do not spend the next cycle repeating parser integration. Correct and refine the exact external-contract frontier: current main explicitly defines module frank.hive and module frank.memory, so resolve imported names/types/functions from those exact Clay source files and record qualified-symbol/type/effect provenance. Partition the remaining call targets into source-resolvable Clay declarations versus genuinely unmaterialized host/runtime primitives. For source-resolvable declarations, feed exact target+arity/types into existing WP04 admission gates with execution=false and authority NONE. For genuinely absent primitives such as runtime_effect, trusted_runtime_effect_authorization and final_security_gate, remain fail-closed and require explicit owner-reviewed host contracts; never infer signatures from caller constraints, names, constructor resemblance, graph salience or model consensus. Preserve the dedicated type/class nominal mutation/duplicate/local-name gate unless exact-byte subsumption is demonstrated. Later external-effect lowering must preserve typed provider-contract/request-fingerprint identity and bind runtime/binary/lease, execution generation and process incarnation; compiler contracts themselves mint no authority. FREE_ONLY, no paid fallback, no canonical semantic promotion without executable counterevidence plus review, no receipt inheritance across changed hashes/work revisions, and do not modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "Exact-current accepted-target V3 execution materially changes the evidence boundary. It closes the prior local-object bootstrap/packaging uncertainty and exposes three concrete post-bootstrap issues: a constructor-spelling differential, unsupported use syntax in two probe fixtures, and a removed frontend-contract helper used by four WP04 probes. Continuing to prioritize the old bundle replay or broad CallContract expansion would now waste execution budget and risk mistaking diagnostic drift for semantics.",
+    "reason": "New accepted-target evidence supersedes the prior combined-parser replay target and a current-source correction refutes the blanket assumption that frank.hive and frank.memory are absent. The highest-information next cycle is exact module/name resolution plus explicit host-contract separation, while preserving independent nominal negatives and runtime authority boundaries.",
     "evidence_priority": [
-      "accepted-target V3 exact-current local-object materialization and pinned component identity",
-      "dedicated WP03 type/class nominal-identity target gate remains separate and unresolved",
-      "repair diagnostic-only use-syntax and current_frontend_contract drift without weakening V18",
-      "rerun block/effect/linker/effect-inventory ladder after diagnostic drift removal",
-      "bounded constructor-spelling dialect/lowering falsifier with lineage plus semantic value/hash controls",
-      "downstream exact CallContract/type/effect/runtime-binding closure only after upstream current-executable gates",
-      "FRANK_V0_1 re-entry and final Ubuntu target acceptance"
+      "fresh-main accepted-target real-Frank structured frontend -> TypedIR run 31418150523",
+      "current exact source for module frank.hive and module frank.memory",
+      "preserved synthetic dynamic_complete ambiguity witness and independent nominal-identity negatives",
+      "exact source-backed WP04 signature/type/effect admission with execution=false",
+      "owner-reviewed host-contract materialization for truly absent runtime primitives",
+      "WP05 runtime/binary/lease/execution-generation/process-incarnation binding",
+      "FRANK_V0_1 Ubuntu target re-entry and final component audit"
     ],
     "required_next_actions": [
-      "do not rerun the obsolete remote-fetch materializer; V3 local-object bootstrap is the current exact mechanism",
-      "preserve the separate WP03 class_decl/type nominal candidate and obtain its own accepted-target content-addressed receipt before production integration",
-      "modify diagnostic fixtures or adapters, not V18 grammar, so block_function and effect_boundary reach the intended semantic layer without unsupported top-level use",
-      "replace implicit target_vps_probe.current_frontend_contract dependency with an explicit exact frontend-contract input or narrow diagnostic helper and rerun indirect_dependency nominal_universe effect_completeness and function_linker",
-      "for SET OPTION ORDERED MAP LIST RESULT spelling divergence, inspect explicit dialect lineage first; if evidence supports a mapping, test a non-authoritative lowering candidate against conflicting declarations, semantic hashes, canonical values and mutation pairs",
-      "never treat safe_alias_candidate_precondition, corpus frequency, no-conflict search or model consensus as sufficient alias evidence",
-      "after current WP03/WP04 counterexamples are classified, resume exact evidence-backed CallContract population; unresolved signatures and Needle.execute remain fail-closed"
+      "enumerate qualified declarations exported/used by current frank.hive and frank.memory and bind them to exact source blob provenance",
+      "recompute the current 23 external-call candidates after local module resolution and report which targets cease to be external",
+      "do not fabricate runtime_effect/trusted_runtime_effect_authorization/final_security_gate or other host contracts; require explicit owner-reviewed definitions",
+      "reuse existing WP04 static signature/admission/runtime-binding mechanisms instead of building duplicate checkers",
+      "keep every unresolved/effectful call execution=false and effect/truth authority NONE",
+      "preserve the type/class nominal mutation/duplicate/local-name discriminator unless identical-byte exact tests prove full subsumption",
+      "carry typed provider contract plus request fingerprint and process-incarnation/execution-generation identity into later effect lowering/runtime falsifiers",
+      "preserve FREE_ONLY and Goodman ancestry collapse"
     ],
     "do_not_infer": [
-      "Frank v0.1 or legacy BASE PASS from workflow success, model-family agreement, candidate code, packaging success or component PASS",
-      "independent replication from shared owner/Clay/Frank/GPT-5.6-Sol ancestry",
-      "need to reopen V18 grammar because a diagnostic fixture uses unsupported use syntax",
-      "uppercase collection spellings are aliases merely because current Frank corpus uses them heavily",
-      "semantic success from exact-current materialization or byte-compile success",
-      "execution authority from type declaration, constructor spelling, CallContract, graph salience, model confidence, token or GWT state"
+      "legacy BASE or Frank v0.1 PASS from component workflow success or model-family consensus",
+      "independent replication from shared Clay/Frank/owner/GPT ancestry",
+      "general grammar unambiguity from full-real-Frank parser convergence because the synthetic dynamic_complete counterexample remains",
+      "host/runtime signatures from call sites, names or type-name resemblance",
+      "execution authority from source declaration, type/effect contract, provider-idempotency type, graph salience or model confidence",
+      "canonical semantic promotion from materializer, parser or TypedIR success alone"
     ]
   },
   "supervisor": {

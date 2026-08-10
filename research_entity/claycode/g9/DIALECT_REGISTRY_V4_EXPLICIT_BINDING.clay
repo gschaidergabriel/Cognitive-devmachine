@@ -1,0 +1,88 @@
+module claycode.g9.v4.dialects
+version "0.5-g9-explicit-binding-candidate"
+parent [@research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay]
+
+// V4 keeps the V3 registry semantics and makes only the measured dialect_extension mixed-flat
+// binding explicit. No global precedence or executable authority is introduced.
+
+interface Temporal {time:Time}
+interface Provenanced {e:Set<EvidenceRef>}
+interface Epistemic {epi:Epi}
+interface Retractable {parents:Set<SemanticRef>;status:Stage}
+interface Projectable {semantic_hash:Hash;projection(reader:ReaderId)->Ref}
+interface Verifiable {expected:Set<Predicate>;verify(receipt:ReceiptRef)->Verification}
+interface Effectful {required_capabilities:Set<CapabilityRef>;authority:Set<AuthorityRef>;rollback:RecoveryRef?}
+interface Incremental {delta(input:Delta)->Delta;dependencies:Set<Ref>}
+interface CausallyCreditable {receipts:Set<ReceiptRef>;outcome:OutcomeRef?}
+
+// Always-resident conceptual core. Keep tiny in reader projection.
+dialect core {
+  owns=[Ref,Semantic,Time,Evidence,Epi,Stage,Unknown,Conflict,Delta,Hash,Predicate]
+  interfaces=[Temporal,Provenanced,Epistemic,Retractable,Projectable,Incremental]
+}
+
+// Authoritative semantic/query/materialization layer.
+dialect state {
+  owns=[Query,CognitiveView,AnswerCapsule,Dependency,Invalidation,PressureEvent,GoalCoalition,Prospect]
+  imports=[core]
+  interfaces=[Incremental,Provenanced,Verifiable]
+}
+
+// Derived associative/activation topology.
+dialect graph {
+  owns=[Relation,Hyperrelation,Activation,Assembly,SelectionReceipt,ProjectionReceipt]
+  imports=[core,state]
+  interfaces=[Temporal,Provenanced,Projectable,Incremental]
+  invariant activation!=truth
+}
+
+// Workspace competition/broadcast/use/re-entry.
+dialect gwt {
+  owns=[GWTTensor,WorkspaceCandidate,ReceiverReceipt,Ignition,Reentry]
+  imports=[core,state,graph]
+  interfaces=[CausallyCreditable,Provenanced]
+}
+
+// Capability/authority/effect intent boundary; Needle lowers this dialect to concrete tools.
+dialect effect {
+  owns=[Capability,Affordance,AffordanceRule,RouteProof,Witness,Intent,Effect,Abstention,RiskCoverage,FastShield]
+  imports=[core,state]
+  interfaces=[Effectful,Verifiable,Provenanced]
+  invariant model_output!=authority
+}
+
+// Program search/equivalence/directcode.
+dialect direct {
+  owns=[ProgramClass,EClass,Rewrite,SearchBudget,Extractor,Proof,Counterexample]
+  imports=[core,effect]
+  interfaces=[Verifiable,Provenanced]
+}
+
+// Reader/compiler/runtime projection and context economics.
+dialect reader {
+  owns=[Reader,ReaderProjection,ContextRent,Surface,Codec]
+  imports=[core]
+  interfaces=[Projectable]
+}
+
+// Research evolution of ClayCode itself. RAE ChatGPT uses this; Claude does not self-mine per turn.
+dialect meta {
+  owns=[UsageObservation,LanguageCandidate,CounterHypothesis,ExperimentPlan,PromotionReceipt]
+  imports=[core,reader]
+  interfaces=[Provenanced,Verifiable]
+}
+
+// Experimental provenance algebra; not truth or authority by itself.
+dialect provx {
+  owns=[ProvExpr,Why,How,NegEvidence,DerivationCircuit]
+  imports=[core]
+  status=EXPERIMENTAL
+  invariant provenance_weight!=truth
+  invariant provenance_expression!=authority
+}
+
+rule load_dialects(task)=minimal_closure(required_interfaces(task))
+rule stable_reader_core=[core,gwt.summary,state.query_summary,effect.intent_summary]
+rule on_demand=[graph.detail,direct,reader.detail,meta,provx]
+rule dialect_extension requires (interface_conformance + semantic_hash_compatibility + rollback)
+rule dialect_name_not_authority

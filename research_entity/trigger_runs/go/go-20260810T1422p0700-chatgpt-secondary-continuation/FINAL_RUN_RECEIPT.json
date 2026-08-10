@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1422p0700-chatgpt-secondary-continuation",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "not_frank": true,
+  "canonical": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "goal": "Frank v0.1 voll lauffaehig auf Andreas PC",
+  "material_results": {
+    "cc_wp02": {
+      "status": "PASS",
+      "acceptance_receipt": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+      "release_workspace_commit": "4c594fcd2a71370aa7c8ce7dbfeb4009a53f267c",
+      "hostinger_run_id": 31367208214,
+      "evidence": "exact-current component blobs + locked Lark/interegular + strict full G9/Dialect + canonical roundtrip/mutation + production/standalone parity",
+      "scope": "package-only; BASE release, Andreas target and final Frank acceptance remain NOT_PASS"
+    },
+    "cc_wp03_primary_negative": {
+      "status": "OPEN_BLOCKER",
+      "hostinger_run_id": 31368203462,
+      "finding": "Four tested frontend-semantically-distinct rule programs collapsed to the same declarations-only typed_ir_sha256.",
+      "colliding_typed_ir_sha256": "f61bd407ad31201df12076ee3fc0acdeb21d995222ee10c1f615638fecd379ea",
+      "cases": ["greater_vs_less", "preserves_vs_required_before", "preserves_vs_requires", "postfix_reward_vs_plain"]
+    },
+    "cc_wp03_supported_candidate": {
+      "implementation": "tools/claycode_wp03_residual_semantics_candidate.py",
+      "mechanism": "preserve not-yet-lowered top-level canonical semantic AST in opaque_unlowered_semantics and bind it into candidate semantic identity while retaining existing structured declaration lowering",
+      "ubuntu_differential_run": 31368672238,
+      "baseline_unique_hashes": 1,
+      "candidate_unique_hashes": 3,
+      "layout_control_equivalent": true,
+      "full_bridge_run": 31369178423,
+      "full_bridge_pass": true,
+      "downstream_parser_calls": 0,
+      "full_source_units": 2,
+      "opaque_unlowered_semantics_count": 100,
+      "tamper_rejections": 5,
+      "authority": "NONE",
+      "promotion": "SUPPORTED_CANDIDATE_ONLY",
+      "wp03_status": "OPEN"
+    }
+  },
+  "external_primary_analogy": {
+    "topic": "partial lowering / dialect conversion",
+    "sources": ["https://mlir.llvm.org/docs/DialectConversion/", "https://mlir.llvm.org/getting_started/Glossary/"],
+    "use": "Supports preserving not-yet-lowered semantics explicitly rather than silently dropping them; does not by itself validate Clay semantics."
+  },
+  "negative_transport_evidence": {
+    "hostinger_run_id": 31366858915,
+    "failure": "private Clay HTTPS clone required credentials unavailable to executor token",
+    "classification": "TRANSPORT_FAILURE_NOT_WP02_FAILURE",
+    "repair": "content-addressed executor reconstruction with exact current Clay component blob gates"
+  },
+  "out_of_box_accounting": {
+    "local_trace_unusual_probe": "same source/event identity with conflicting content in live-delta router; older router admitted conflict, concurrent worker then absorbed fail-closed identity repair",
+    "concurrent_durable_go_receipt_claims_different_oob": "research_entity/trigger_runs/go/go-20260810T1441p0700-chatgpt-secondary-wp03-semantics/FINAL_RUN_RECEIPT.json",
+    "adjudication": "AMBIGUOUS_ROOT_IDENTITY",
+    "reason": "Receipts lack a common machine-checkable root_go_id, so current state cannot prove whether two OOB labels belong to one root go or distinct concurrent roots.",
+    "coordination_blocker": "research_entity/state/work/events/20260810T1518p0700_GO_ROOT_OOB_SLOT_IDENTITY_BLOCKER.json",
+    "no_additional_oob_executed_after_detection": true
+  },
+  "architecture_adjudication": {
+    "wp02": "PROMOTED_PACKAGE_PASS",
+    "wp03": "SUPPORTED_REPAIR_CANDIDATE_NOT_PROMOTED",
+    "wp04_wp05": "NO_CREDIT; must explicitly validate/lower/consume preserved semantic classes without silent drop or authority minting",
+    "frank_harness": "UNCHANGED",
+    "training": "NOT_AUTHORIZED"
+  },
+  "current_formal_progress": {
+    "base_packages_passed": 2,
+    "base_packages_total": 14,
+    "base_percent": 14.3,
+    "h1_completed_weight": 1,
+    "h1_total_weight": 22,
+    "doomsday_progress_percent_resolver_equivalent": 26.9,
+    "forecast_low": "2026-08-23",
+    "forecast_high": "2026-10-02",
+    "forecast_center": "2026-09-12",
+    "forecast_confidence": "VERY_LOW",
+    "training_authorization_assumption": "conditional immediate authorization when frozen data gate is ready"
+  },
+  "next_frontier": [
+    "Inventory the 100 opaque_unlowered_semantics classes and bind each to explicit WP04 legality/type/effect handling or a fail-closed unsupported diagnostic.",
+    "Implement/measure downstream WP04/05 consumption so preserved semantics cannot become stranded identity-only payload.",
+    "Only then integrate the minimal residual-preservation mechanism into production TypedIR under a versioned contract and rerun exact Ubuntu identity/provenance/type corpus gates.",
+    "Keep BASE release NOT_PASS and do not start final training."
+  ],
+  "research_write": "COMMITTED",
+  "status": "CLOSED_AT_CURRENT_IMPLEMENTATION_FRONTIER"
+}

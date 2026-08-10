@@ -13,6 +13,10 @@ on:
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
       - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
       - '.github/workflows/claycode-v7-v16-v17-fusion-discriminator.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-v7-v16-v17-fusion-discriminator.yml'
   workflow_dispatch:
 
 permissions:

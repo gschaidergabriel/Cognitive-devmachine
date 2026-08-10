@@ -1,0 +1,74 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "routes":[
+    {
+      "query_class":"authoritative_semantic_read",
+      "route":"published UnifiedDB read snapshot",
+      "requires":["selected-head match","published state commitment","actual UnifiedDB schema attestation","StateWitness emission"],
+      "fallback":"DEGRADED_UNKNOWN_OR_RECOVERY_REQUIRED"
+    },
+    {
+      "query_class":"self_identity_or_continuation_read",
+      "route":"UnifiedDB published semantic state + external selected continuation head + build/identity conjuncts",
+      "requires":["exact semantic root/head","provenance-bound lineage","rollback-domain checks"],
+      "fallback":"FAIL_CLOSED_CONTINUATION_UNKNOWN"
+    },
+    {
+      "query_class":"claygraph_topology_read",
+      "route":"ClayGraph only when GraphProjectionWitness.source_semantic_root == current selected semantic root and materialization status CURRENT",
+      "requires":["actual graph schema attestation","derivation program hash","graph projection root","source selected head/root"],
+      "fallback":"QUARANTINE_AND_REBUILD_GRAPH"
+    },
+    {
+      "query_class":"vector_fts_embedding_retrieval",
+      "route":"derived index -> candidate refs -> canonical UnifiedDB provenance/admissibility validation",
+      "requires":["index source root/head","model/index version","SelectionWitness"],
+      "fallback":"bounded canonical query or explicit stale result"
+    },
+    {
+      "query_class":"gwt_candidate_formation",
+      "route":"bounded candidate assembly over one StateWitness",
+      "requires":["candidate_universe_hash","selection policy identity","graph/source witness if graph used"],
+      "fallback":"rebuild candidate universe on current witness"
+    },
+    {
+      "query_class":"needle_or_tool_route",
+      "route":"selection result + StateWitness + capability/effect policy",
+      "requires":["route provenance","current execution identity for action-capable path"],
+      "fallback":"proposal/abstain; no effect authority from route score"
+    },
+    {
+      "query_class":"authoritative_state_mutation",
+      "route":"short BEGIN IMMEDIATE transaction under exact current execution generation",
+      "requires":["current selected head","fresh StateWitness or explicit rebase","dirty-domain root update","PREPARED publication receipt"],
+      "postcommit":"external selected-head CAS then PUBLISHED finalize",
+      "fallback":"REJECT_STALE_EXECUTION_OR_RECOVERY_REQUIRED"
+    },
+    {
+      "query_class":"effect_reservation_or_provider_precommit",
+      "route":"existing execution-generation/effect fence + current StateWitness validation",
+      "requires":["exact execution binding","current selected state head","request/effect identity","provider idempotency/reconciliation contract"],
+      "fallback":"FAIL_CLOSED_OR_RECONCILE; never blind retry"
+    },
+    {
+      "query_class":"snapshot_restore",
+      "route":"restore candidate -> actual schema attestation -> full commitment recompute -> external floor/head reconciliation -> controlled new continuation child",
+      "requires":["snapshot provenance","semantic root","selected-head relation","execution floor","recovery receipt"],
+      "fallback":"QUARANTINE"
+    },
+    {
+      "query_class":"audit_replay",
+      "route":"checkpoint + ordered admitted deltas/events -> deterministic replay -> full commitment recompute",
+      "requires":["event cursor","transaction identities","published commitment expected"],
+      "fallback":"STATE_DIVERGENCE_QUARANTINE"
+    }
+  ],
+  "staleness_semantics":{
+    "read_only_observation":"may return explicit stale witness if caller accepts stale semantics",
+    "model_reasoning":"may reason over bounded witness but result retains witness identity",
+    "state_mutation":"must revalidate/rebase before commit",
+    "external_effect":"must revalidate selected head + execution generation at effect boundary"
+  },
+  "status":"COMPLETE"
+}

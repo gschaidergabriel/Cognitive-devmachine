@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2318p0700-chatgpt-secondary-reward-clay-authority",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "TARGET_DISCRIMINATOR_PENDING",
+  "trigger_parent": "go-20260811T2258p0700-chatgpt-secondary-reward-authority-frontier",
+  "fresh_finding": "The current ClayCode reward semantic source still represented dimension, utility, confidence and causal_credit as direct fields of the same RewardOutcomeEvidence consumed by material_reward_admitted, contradicting the target-supported producer-owned valuation boundary in PR #368.",
+  "candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 382,
+    "branch": "chatgpt/go-reward-clay-authority-split-20260811",
+    "base_pr": 368,
+    "base_head": "b238e5cf0ffd9d3277d2674b7749d19ddb204de0",
+    "head_at_write": "b119c5c09fd061c5991c81299a230061982483e1",
+    "promotion": "NONE_CANDIDATE_ONLY"
+  },
+  "architecture_delta": {
+    "name": "CLAYCODE_MATERIAL_REWARD_INPUT_SPLIT_FROM_CALLER_VALUATION_PROPOSAL",
+    "binary_material_input": "BinaryTaskTerminalEvidence with terminal identity, success and verified state only; no caller dimension, utility, confidence or causal-credit fields",
+    "non_authoritative_surface": "RewardValuationCandidate preserves proposed typed values for bounded exploration only",
+    "multidimensional_material_valuation": "OPEN_REQUIRES_PRODUCER_OWNED_REWARD_VALUATION_RECEIPT_OR_EQUIVALENT_VERIFIER",
+    "historical_replacement": "NOT_CLAIMED"
+  },
+  "counterevidence": {
+    "source": "research(go) reward exactly-once synthesis commit 65190814cda8bf7eb2c7016630dac84767891e30",
+    "finding": "Current reward ClayCode source uses syntax beyond the currently accepted parser/evaluator surface, including word-form and, membership/list syntax and arithmetic; target parser/evaluator execution may therefore fail before semantic admission can be measured.",
+    "response": "Do not contort reward semantics around parser gaps. Run a strict target discriminator; parse/evaluator rejection is negative evidence and should route to the ClayCode surface dependency rather than be hidden."
+  },
+  "target_discriminator": {
+    "workflow": ".github/workflows/frank-reward-clay-authority-v1-vps.yml",
+    "requires": [
+      "static valuation-authority surface PASS",
+      "ClayCode parse PASS",
+      "analysis PASS",
+      "material_reward_admitted executes true for verified terminal sample",
+      "material_learning_weight executes 1.0 for the binary comparison arm",
+      "producer-owned multidimensional valuation remains explicitly unimplemented",
+      "additional GO OOB count = 0"
+    ],
+    "result": "PENDING"
+  },
+  "go_oob": {
+    "new_oob_added": false,
+    "macrocycle_oob_remains": "DIMENSION_CROWN_SWAP",
+    "count_for_this_follow_on": 0
+  },
+  "required_next": [
+    "adjudicate strict target parser/analyzer/evaluator result",
+    "if parser/evaluator rejection occurs, preserve it as ClayCode dependency evidence and avoid semantic workaround",
+    "if execution passes, keep candidate shadow-only until producer-owned multidimensional valuation and full 21-obligation transition gate exist",
+    "compare later against simpler binary scalar and producer-owned typed/multiscale alternatives on frozen replay/OOD/resource corpus"
+  ],
+  "claims_not_made": [
+    "producer-owned multidimensional valuation solved",
+    "full Clay-native reward transition solved",
+    "historical NAcc/E-PQ replacement justified",
+    "whole F-V01-11 complete",
+    "whole Frank v0.1 accepted",
+    "final training authorized",
+    "Frank/self.root Harness mutation authority"
+  ]
+}

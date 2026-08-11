@@ -171,7 +171,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             [], model="mock", environ=env, opener=lambda *args, **kwargs: Response(),
             now=iter((20.0, 20.01)).__next__,
         )
-        self.assertEqual(result["receipt"]["outcome"], "invalid_or_unreachable_provider_response")
+        self.assertEqual(result["receipt"]["status"], 200)
+        self.assertEqual(result["receipt"]["outcome"], "invalid_provider_response")
         self.assertIn("EXECUTED", result["receipt"]["lifecycle"])
         self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
         self.assertNotIn("DONE", result["receipt"]["lifecycle"])
@@ -202,7 +203,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     now=iter((50.0, 50.01)).__next__,
                 )
                 receipt = result["receipt"]
-                self.assertEqual(receipt["outcome"], "invalid_or_unreachable_provider_response")
+                self.assertEqual(receipt["status"], 200)
+                self.assertEqual(receipt["outcome"], "invalid_provider_response")
                 self.assertIn("EXECUTED", receipt["lifecycle"])
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
@@ -229,6 +231,24 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIn("EXECUTED", receipt["lifecycle"])
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
+
+    def test_unreachable_provider_has_no_http_status_or_executed_state(self):
+        def opener(request, timeout):
+            raise MOD.urllib.error.URLError("connection refused")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env, opener=opener,
+            now=iter((70.0, 70.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "unreachable_provider")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
 
 
 if __name__ == "__main__":

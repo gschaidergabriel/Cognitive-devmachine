@@ -384,6 +384,36 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_oversized_response_is_detected_without_verifying_truncated_body(self):
+        requested_sizes = []
+
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                requested_sizes.append(limit)
+                return b"x" * limit
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((95.0, 95.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(requested_sizes, [MOD.MAX_PROVIDER_RESPONSE_BYTES + 1])
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "provider_response_too_large")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
 
 if __name__ == "__main__":
     unittest.main()

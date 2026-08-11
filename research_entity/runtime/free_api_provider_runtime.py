@@ -194,15 +194,16 @@ def execute_chat(
         cooldown_seconds = 15
 
     finished = now()
+    body_digest = hashlib.sha256(body).hexdigest()
+    request_id = _safe_request_id(f"{selected}:{parsed.hostname}:{body_digest}")
     receipt_data = {
         "schema_version": "1.0",
         "kind": "FREE_API_EXECUTION_RECEIPT",
         "provider": selected,
         "model": model,
         "endpoint_host": parsed.hostname,
-        "request_id": _safe_request_id(
-            f"{selected}:{started}:{hashlib.sha256(body).hexdigest()}"
-        ),
+        "request_id": request_id,
+        "attempt_id": _safe_request_id(f"{request_id}:{started}"),
         "status": status,
         "outcome": outcome,
         "lifecycle": lifecycle,

@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:04:25+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_state": {
+    "research_main_seen": "17490365260cb5e5ef9008e445d324762fe01b35",
+    "frank_main_seen": "beb895b951826f28cd0c38baba3565e7dd976fda",
+    "accepted_target_absent_anchor_receipt_commit": "12439ef0a436d139278e09b99dcce56a1cfa41d2"
+  },
+  "work_packages": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+  ],
+  "observed_anchors": [
+    "Frank main contains the V5 fixed-SQLite guard/launcher lineage and subsequent pre-guard PATH hardening.",
+    "Current Frank main makes blocked V5 target evidence non-success by returning exit 78 instead of exit 0.",
+    "Accepted-target evidence already supports the absent-anchor fail-closed property but does not contain positive fixed-SQLite admission.",
+    "The accepted-target receipt explicitly leaves production non-bypassability and the productive boot dependency graph unproven."
+  ],
+  "grf": {
+    "generated_reality": "The remaining SQLite release uncertainty is primarily deployment/start-path admission: once the root-owned trust anchor exists, every productive SQLite opener must be forced through V5 and positively attest the pinned runtime.",
+    "strongest_counter_reality": "The accepted Hostinger service configuration already forces all productive openers through V5; the repository merely lacks a captured start-edge/exec-ancestry receipt.",
+    "hidden_assumption": "Repository presence of a guard/launcher does not by itself establish the external service start edge.",
+    "discriminating_observation": "Capture the accepted-host service/start command and process exec ancestry through the V5 launcher/guard to each productive Frank SQLite opener, then combine it with positive V5 admission after reviewed anchor installation.",
+    "outcome": "DEFER_UNTIL_START_EDGE_AND_POSITIVE_ADMISSION_OBSERVED"
+  },
+  "unusual_experiment": {
+    "name": "DEPLOYMENT_GRAPH_LESION",
+    "count_for_go_cycle": "1_OF_1",
+    "bounded": true,
+    "reversible": true,
+    "external_effect": false,
+    "method": "Enumerate two minimal counterfactual start graphs consistent with the currently open boot-edge evidence, then lesion the V5 launcher node and compare reachability.",
+    "secure_world": {
+      "edges": ["PROD_START->V5_LAUNCHER", "V5_LAUNCHER->V5_GUARD", "V5_GUARD->FRANK_ENTRY"],
+      "baseline": "FRANK_ENTRY reachable only through V5",
+      "after_launcher_lesion": "FRANK_ENTRY unreachable"
+    },
+    "bypass_world": {
+      "edges": ["PROD_START->FRANK_ENTRY", "V5_LAUNCHER->V5_GUARD", "V5_GUARD->FRANK_ENTRY"],
+      "baseline": "FRANK_ENTRY reachable without V5",
+      "after_launcher_lesion": "FRANK_ENTRY remains reachable"
+    },
+    "result": "Both worlds remain compatible with the presently unobserved external productive start edge; guard existence/merge alone cannot discriminate them.",
+    "falsifier": "Exact accepted-host service/start-edge plus exec-ancestry evidence.",
+    "production_claim": false
+  },
+  "counterevidence_and_negative_results": [
+    "A successful absent-anchor fail-closed run does not prove positive SQLite 3.53.4 admission on the productive path.",
+    "A merged V5 guard/launcher does not alone prove that productive Frank cannot bypass it.",
+    "The counterfactual graph lesion is a discriminator design result, not production runtime evidence."
+  ],
+  "next_falsifier": {
+    "priority": "P0_RELEASE_EVIDENCE",
+    "steps": [
+      "Materialize the reviewed root-owned V5 trust anchor on the accepted Hostinger target through the intended deployment path.",
+      "Run the unchanged V5 guard and capture positive version/source-id, absolute loaded-library identity, manifest digest, inode/device identity, trust-root snapshots, and sanitized interpreter/environment evidence.",
+      "Capture service unit or equivalent start command plus process exec ancestry proving every productive Frank SQLite opener traverses the accepted V5 boundary.",
+      "Run bypass-negative, restart/persistence, downgrade and library-swap controls before any release promotion."
+    ],
+    "promotion_condition": "Positive pinned-runtime admission AND non-bypassable productive start graph AND restart/downgrade/library-swap controls pass on the accepted target."
+  },
+  "disposition": {
+    "F-V01-13": "OPEN",
+    "F-V01-09": "OPEN",
+    "workspace_promotion": "NONE",
+    "research_delta": "SUPPORTED_DISCRIMINATOR"
+  },
+  "training": "NOT_AUTHORIZED_NOT_STARTED"
+}

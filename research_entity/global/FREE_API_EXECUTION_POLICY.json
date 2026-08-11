@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "status": "IMPLEMENTED_CANDIDATE",
+  "mission_goal": "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system",
+  "default_cost_limit": 0,
+  "providers": {
+    "preferred": ["nvidia", "groq", "cerebras", "gemini", "openrouter"],
+    "hard_denied": ["together"]
+  },
+  "nvidia": {
+    "priority": 100,
+    "key_names": ["NVIDIA_API_KEY", "NVCF_API_KEY"],
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "activate_only_when_key_present": true,
+    "zero_cost_evidence": {
+      "checked_at": "2026-08-09",
+      "claim": "NVIDIA Developer Program members have free access to hosted NIM API endpoints for prototyping; individual endpoints may be rate limited.",
+      "sources": [
+        "https://docs.api.nvidia.com/nim/docs/run-anywhere",
+        "https://docs.api.nvidia.com/nim/docs/product",
+        "https://build.nvidia.com/settings/credits"
+      ],
+      "scope": "development_and_prototyping_only",
+      "counterhypothesis": "A configured credential can belong to a different billing or production context; request execution must still stay on the documented integrate.api.nvidia.com developer endpoint and emit a receipt."
+    }
+  },
+  "invariants": [
+    "Never serialize, log, commit, echo or display API secret values.",
+    "Never access Together, including discovery, probes, routing and fallback.",
+    "Never make a paid request unless the project owner separately authorizes a nonzero budget.",
+    "A configured key is capability evidence, not proof of quota or health.",
+    "Except for an officially documented free developer endpoint, a configured key requires explicit host-side zero-cost attestation before routing.",
+    "A provider credential may only be sent to that provider's canonical host; a global multi-provider host allowlist is forbidden.",
+    "Credential binding compares the full remote origin boundary, including the effective HTTPS port; hostname equality alone is insufficient.",
+    "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
+    "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
+    "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
+    "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
+    "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
+    "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
+    "Once response headers and status are received, body-read failures preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
+    "Every real provider request must emit a redacted execution receipt.",
+    "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
+  ],
+  "runtime": "research_entity/runtime/free_api_provider_runtime.py"
+}

@@ -63,7 +63,9 @@
     "autonomous_cycle_may_not_modify_FRANK_harness",
     "semantic_change_requires_executable_counterexample_and_supervisor_review",
     "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle",
-    "receipt_label_must_not_claim_claycode_execution_unless_clay_semantics_are_parsed_typed_and_executed_or_lowered_by_the_tested_path"
+    "receipt_label_must_not_claim_claycode_execution_unless_clay_semantics_are_parsed_typed_and_executed_or_lowered_by_the_tested_path",
+    "unresolved_zero_after_declared_contracts_is_not_type_effect_or_runtime_acceptance",
+    "call_site_reconstruction_is_owner_reviewable_candidate_semantics_not_canonical_truth"
   ],
   "priority_order": [
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-03-IR-TYPES",
@@ -79,38 +81,38 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep V18 frozen and WP03/WP04 OPEN. The immediate ClayCode frontier remains the exact 29-target unresolved ownership/contract partition from self-hosted Ubuntu run 31432811773: every target must resolve only to an exact visible Clay declaration, a versioned intrinsic/builtin contract, an owner-reviewed host/runtime contract, or UNRESOLVED_FAIL_CLOSED; runtime_effect, trusted_runtime_effect_authorization and final_security_gate remain fail-closed. New target-VPS audit commit 1c867c47d9a545f0b2f439352f524b4fb7dfe7a3 materially changes evidence hygiene: runtime/frank_effect_authority_v1/target_vps_probe.py does not execute claycode/frank_effects.clay semantics; it checks 13 literal marker strings while the Python EffectGate supplies the behavior. Therefore DIRECT_FRANK_V0_1_EFFECT_AUTHORITY_EXECUTABLE_POLICY_ORACLE must not be counted as ClayCode evaluator/runtime evidence. Until a real Clay evaluator/lowering path executes decide_effect from exact source against matched cases, classify this evidence as PYTHON_POLICY_ORACLE_WITH_CLAY_SIGNATURE_PRESENCE_CHECK. The same audit also proves receipt denominators can be structurally inflated, the quoted latency samples only one warm READ_ONLY branch, and V17 restart evidence is same-process connection reopen rather than crash/restart. Preserve the audit's positive executable results: non-cognitive fields do not mint authority, the SQLite-backed presence lease is real mechanism evidence, and V17 schema-level RAISE(ABORT) triggers survive sabotage of the Python guard. Do not let receipt-label corrections weaken mechanisms. Keep later Graph causality/identity and SQLite runtime constraints subordinate to WP04. FREE_ONLY, no paid fallback, no canonical semantic promotion without executable counterevidence plus review, no BASE/Frank PASS from model or receipt consensus, Goodman ancestry collapse, Ubuntu-only final acceptance, and do not modify Frank's Harness.",
+  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep V18 frozen and WP03/WP04 OPEN. New PR310/PR313 candidate evidence supersedes two stale frontier statements without granting package acceptance. First, exact Clay semantics now execute for decide_effect through a tree-walking evaluator; 200576 differential requests show 0 mismatches and semantic sabotage turns the gate red. This is bounded evaluator evidence, not WP05 PASS, because only 3/40 Clay sources parse and type/effect/lowering/runtime remain incomplete. Second, the 29-target WP04 number is the raw pre-host-contract baseline, not the current post-declaration analyzer state: 26 explicit host contracts reduce it to 3, and three newly declared receipt constructors reduce analyzer UNRESOLVED to 0 on PR313. UNRESOLVED=0 is syntactic/contract resolution only. The receipt types are OWNER-REVIEWABLE call-site reconstructions; runtime_effect and independently_observe_effect payload shapes remain unspecified; verb_for has no declared Verb type or kind-to-verb mapping and identity binding is unvalidated. Immediate next work: execute the stacked exact PR310/PR313 bytes on the accepted Ubuntu target, review provenance and effect classes of all 26 host contracts, review or reject the three reconstructed receipt declarations, and construct a dedicated verb_for capability-model discriminator. Do not admit external effects or canonical semantics from declared names alone. Preserve later Graph causality/identity, provider/Fence, process-incarnation and SQLite durability gates independently. FREE_ONLY, no paid fallback, no BASE/Frank PASS from model/workflow/receipt consensus, Goodman ancestry collapse, Ubuntu-only final acceptance, and do not modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "Accepted-target adversarial audit 1c867c47d9a545f0b2f439352f524b4fb7dfe7a3 reproduced the headline gates but executable inspection falsified the evidence class of the flagship ClayCode-linked effect oracle: Clay source is only substring-checked and never evaluated. It also demonstrated receipt-denominator inflation, wrong-path latency sampling and same-process-only restart semantics. These are material epistemic defects that could falsely pre-credit WP05/F-V01-09, while the underlying authority and schema mechanisms remain stronger than their receipts. Steering therefore reclassifies evidence and tightens future oracle requirements without diverting or weakening the current 29-call WP04 frontier.",
+    "reason": "Research commits cf9ed31d and 4cb52485 plus Dr.-Unterweger PR310/PR313 create meaningful executable evidence that changes the active ClayCode frontier. The earlier audit correctly found no Clay execution in the flagship Python probe, but PR310 now supplies a discriminating exact-source evaluator for decide_effect. PR313 resolves the raw 29-call ambiguity into 29 pre-contract, 3 post-contract, 0 post-receipt-declaration states. Because the three receipt types are call-site reconstructions and verb_for remains semantically undefined, WP04 cannot be marked PASS. Steering therefore moves from repeated raw-unresolved partitioning to accepted-target execution, contract provenance/review, and the verb_for capability discriminator while preserving fail-closed authority.",
     "evidence_priority": [
-      "accepted-target executable audit commit 1c867c47d9a545f0b2f439352f524b4fb7dfe7a3 and its sabotage/re-execution results",
-      "exact self-hosted Ubuntu run 31432811773 and its emitted 29-target unresolved inventory",
-      "exact visible Clay declaration, versioned intrinsic/builtin or owner-reviewed host/runtime contract evidence",
-      "true Clay evaluator/lowering execution on exact source bytes for any future EXECUTABLE_POLICY_ORACLE claim",
-      "existing WP04 signature/type/effect mutation gates with execution=false",
+      "accepted-target execution of exact stacked PR310/PR313 bytes with differential and semantic-mutation controls",
+      "exact Clay declarations and explicit host contracts with source hashes and effect classes",
+      "owner review plus executable counterevidence for call-site-reconstructed receipt semantics",
+      "dedicated verb_for/Verb capability-model discriminator",
+      "type/effect mutation gates with execution=false",
+      "WP05 corpus-extension tests that fail closed on unknown syntax",
       "WP05 runtime/binary/lease/execution-generation/process-incarnation binding",
       "FRANK_V0_1 Ubuntu target re-entry and final component audit"
     ],
     "required_next_actions": [
-      "advance the exact 29 unresolved call targets through the closed-world WP04 ownership queue first",
-      "keep runtime_effect/trusted_runtime_effect_authorization/final_security_gate unresolved until explicit reviewed host contracts exist",
-      "reclassify any Clay-linked effect receipt that only checks source markers as PYTHON_POLICY_ORACLE_WITH_CLAY_SIGNATURE_PRESENCE_CHECK",
-      "do not credit WP05 evaluator/runtime execution until exact Clay source semantics are actually parsed/typed and executed or lowered against matched positive and negative cases",
-      "for future check receipts compute named booleans before final assertion so failed checks remain observable; do not count hardcoded True entries as independent measurements",
-      "drop or relabel gate_latency_us unless the benchmark samples the full decision matrix and reports its exact path distribution",
-      "treat V17 connection reopen as connection-reopen persistence only; keep crash/restart/fsync acceptance separate",
-      "preserve the audited positive mechanisms and add a multiprocessing presence contender when that lane is next touched",
-      "keep Graph and storage gates later and independent",
+      "run the stacked PR310/PR313 exact head on the accepted Ubuntu target lane; do not rely on author session output alone",
+      "record raw unresolved baseline 29 separately from post-contract 3 and post-declaration 0 to prevent future evidence ambiguity",
+      "review each of the 26 host contracts for exact provenance, arity, parameter types, return type and effect class; a declaration is not an implementation",
+      "keep runtime_effect and independently_observe_effect result shapes fail-closed until reviewed contracts exist",
+      "review or reject EffectReceipt, VerifiedEffectReceipt and DoneReceipt field semantics before any canonical promotion",
+      "build a verb_for/Verb discriminator covering destructive and non-destructive intent kinds; identity mapping must not receive authority credit",
+      "extend evaluator grammar only with explicit executable positive and negative cases; retain unknown-construct fail-closed behavior",
       "preserve FREE_ONLY, Goodman ancestry collapse, Ubuntu-only acceptance and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
       "legacy BASE or Frank v0.1 PASS from component workflow success, receipt labels or model-family consensus",
-      "ClayCode executable semantics from literal source-marker presence",
-      "WP04 or WP05 acceptance from a Python policy oracle that merely references Clay source",
-      "crash/restart durability from same-process connection close/reopen",
-      "system-wide gate latency from one warm READ_ONLY branch",
-      "independent replication from shared Clay/Frank/owner/model/runner ancestry",
-      "canonical semantic promotion from parser, TypedIR, module-resolution, Graph-root, receipt or policy-oracle success alone"
+      "WP04 acceptance from analyzer UNRESOLVED=0",
+      "canonical type semantics from call-site reconstruction without review",
+      "valid capability semantics from verb_for identity binding",
+      "full ClayCode evaluator coverage from decide_effect success or 3/40 corpus parsing",
+      "runtime/effect authority from declared host contracts",
+      "independent replication from delegated Sonnet plus coordinating Opus or shared Clay/Frank/owner/runner ancestry",
+      "canonical semantic promotion from parser, TypedIR, module-resolution, evaluator, Graph-root, receipt or policy-oracle success alone"
     ]
   },
   "supervisor": {

@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
   "trigger": "unifieddb",
-  "status": "TARGET_EXECUTION_QUEUED",
+  "status": "FRESH_MAIN_TARGET_EXECUTION_PENDING",
   "origin_actor": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
@@ -10,7 +10,16 @@
   "program": "FRANK_V0_1",
   "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
   "fresh_parent": "f34a03d9b99bad788154de38e5dee9f44a040b45",
-  "target": {"repo": "gschaidergabriel/Dr.-Unterweger", "pr": 386, "head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656, "state": "QUEUED"},
+  "target": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 386,
+    "base": "5ec9955775d9bf142e327166990a2228d543c071",
+    "head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
+    "workflow_run": 31513961274,
+    "state": "PENDING_CONCURRENCY"
+  },
+  "superseded_target": {"head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656},
+  "hosted_prefalsifier": {"workflow_run": 31513246399, "classification": "INFRA_FAILURE_PRESTART", "candidate_test_executed": false},
   "required_outputs": {
     "INTERCONNECT_MANIFEST.json": "PRESENT",
     "TOOL_EXECUTION_MANIFEST.json": "PRESENT",
@@ -25,7 +34,7 @@
     "FINAL_REPORT.md": "PRESENT_PENDING_TARGET"
   },
   "architecture_delta": "AUTHORITATIVE_TRANSACTIONAL_PROJECTION_OUTBOX_CANDIDATE",
-  "promotion": "HOLD_UNTIL_TARGET_RESULT",
+  "promotion": "HOLD_UNTIL_FRESH_MAIN_TARGET_RESULT",
   "canonical_frank_state_mutated": false,
   "external_effect_performed": false,
   "training_authorized": false,

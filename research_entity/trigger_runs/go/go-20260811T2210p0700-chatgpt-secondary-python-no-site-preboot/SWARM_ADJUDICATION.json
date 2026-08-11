@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2210p0700-chatgpt-secondary-python-no-site-preboot",
+  "actor_id": "chatgpt-secondary",
+  "adjudication": "PREFER_PR_338_TO_348_LINEAGE; CLOSE_PR_342_AS_REDUNDANT_REPLICATION",
+  "reason": [
+    "Concurrent shared-state refresh revealed PR #338 and repair successor #348 after PR #342 had already been built and target-tested.",
+    "PR #338 is causally stronger than the marker-only #342 OOB: on target runner digital-retina / Python 3.12.3 it obtained a PASS_FIXED_SQLITE_RUNTIME_V3_CANDIDATE_ADMISSION receipt while an executable site hook had already replaced high-level sqlite3.connect behavior; the genuine stdlib sqlite3 origin remained /usr/lib/python3.12/sqlite3/__init__.py and the target observed synchronous=0.",
+    "PR #338 cleanly separates the consumed OOB from its ordinary repair successor #348, improving experimental lineage and avoiding mixing discriminator plus repair in one candidate PR.",
+    "PR #342 independently reproduced the same architectural startup gap and its target workflow run 31505610504 completed success including V4 regression, exact pinned SQLite 3.53.4 build, V17 composition, and disposable UnifiedDB+ClayGraph pair composition. It remains replication evidence, not selected implementation ownership."
+  ],
+  "preferred_evidence": {
+    "oob_pr": 338,
+    "oob_head_sha": "fae476035c2437a7435efe90c9a5b18eeb8f4cf2",
+    "target_workflow_run": 31505385422,
+    "target_job": 93825523115,
+    "target_job_conclusion": "success",
+    "classification": "SUPPORTED_FAIL_OPEN_SYSTEM_SITE_PREINIT_HOOK",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "system_sqlite_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+    "pinned_private_sqlite": "3.53.4",
+    "pinned_private_library_sha256": "433dcd999af98ffc3de2773ed5b1d8f78bf4ac7e716a94242386962e7c719007",
+    "v3_receipt_passed_under_mutation": true,
+    "genuine_sqlite3_module_origin_preserved": true,
+    "target_observed_mutated_synchronous": 0
+  },
+  "preferred_repair": {
+    "pr": 348,
+    "head_sha": "70c90e38f1301e99367ed6aa300796524bf9f56d",
+    "status_at_adjudication": "DRAFT_OPEN_TARGET_WORKFLOW_QUEUED",
+    "architecture": "Trusted product launch must establish python -I -S before any import-capable Frank Python code; preserve -I -S through child exec; retain V1/V2/V3 SQLite, ELF-loader and stdlib sqlite3-origin controls.",
+    "promotion": "NOT_YET_PROMOTED"
+  },
+  "redundant_replication": {
+    "pr": 342,
+    "head_sha": "d2cd87589c7c21901937588229eb95d2b00b6684",
+    "target_workflow_run": 31505610504,
+    "target_job": 93826288250,
+    "target_job_conclusion": "success",
+    "action": "CLOSED_SUPERSEDED_NOT_DISPROVEN",
+    "recoverable_if_preferred_repair_fails": true
+  },
+  "distribution": {
+    "pr_348_review_id": 4907804844,
+    "message": "Independent #342 target evidence and #338-vs-#342 causal comparison were routed to the preferred repair lane."
+  },
+  "next_frontier": {
+    "status": "BLOCKED_ON_CONCRETE_PRODUCT_ENTRYPOINT_AND_CURRENT_REPAIR_ADJUDICATION",
+    "search_result": "No stable current systemd/Type=exec/ExecStart or FastAPI/uvicorn product entrypoint was resolved by repository search in this cycle.",
+    "action": "Do not invent speculative service wiring. After #348 exact-head target adjudication and once the current product entrypoint is canonical, bind exact Python executable + -I -S + source/binary/private-SQLite manifest identities and fail closed on service drift; validate real production dependency compatibility under -S.",
+    "second_oob_allowed_this_run": false
+  },
+  "non_claims": [
+    "No whole Frank v0.1 acceptance",
+    "No production systemd/deployment launch acceptance",
+    "No promotion of #348 while its exact-head target workflow remains unresolved",
+    "No final/paid training authorization",
+    "No self.root/Frank Harness mutation authority"
+  ]
+}

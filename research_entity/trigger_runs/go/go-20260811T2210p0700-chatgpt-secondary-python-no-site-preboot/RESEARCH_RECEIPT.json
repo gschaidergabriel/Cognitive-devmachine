@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "run_id": "go-20260811T2210p0700-chatgpt-secondary-python-no-site-preboot",
   "trigger": "go",
-  "status": "MATERIAL_DELTA_TARGET_VALIDATION_PENDING",
+  "status": "MATERIAL_DELTA_TARGET_SUPPORTED",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
@@ -71,8 +71,16 @@
       "environment": "isolated local sandbox; CPython 3.13",
       "baseline": "venv Python -I processed an executable .pth line before main and wrote the marker",
       "rescue": "the same interpreter with -I -S did not execute the .pth payload",
-      "classification": "SUPPORTED_V3_FAIL_OPEN_PRE_GUARD_PTH_EXECUTION_LOCAL_MECHANISM",
-      "target_claim": "NOT_YET_TARGET_VPS_EVIDENCE"
+      "classification": "SUPPORTED_V3_FAIL_OPEN_PRE_GUARD_PTH_EXECUTION_LOCAL_MECHANISM"
+    },
+    "target_vps_execution": {
+      "status": "EXECUTED_SUPPORTED",
+      "workflow_id": 31505610504,
+      "job_id": 93826288250,
+      "job_conclusion": "success",
+      "step": "Execute the single GO OOB and same-discriminator V4 repair regression",
+      "step_conclusion": "success",
+      "classification": "TARGET_SUPPORTED_V3_PRE_GUARD_PTH_GAP_AND_V4_REPAIR_REGRESSION"
     },
     "counterevidence_status": "No evidence found that -I itself implies -S; official Python 3.12 documentation explicitly separates the flags."
   },
@@ -94,35 +102,49 @@
     "local_oob": "EXECUTED_SUPPORTED",
     "target_vps_workflow_id": 31505610504,
     "target_vps_workflow_name": "Frank fixed SQLite V4 no-site startup repair VPS",
-    "target_vps_workflow_status_at_reentry": "QUEUED",
-    "target_vps_pass_claim": false,
-    "queued_is_pass": false
+    "target_vps_job_id": 93826288250,
+    "target_vps_job_status": "completed",
+    "target_vps_job_conclusion": "success",
+    "target_vps_pass_claim": true,
+    "successful_target_steps": [
+      "Fetch exact PR head into isolated worktree",
+      "Capture exact target and candidate metadata",
+      "Execute the single GO OOB and same-discriminator V4 repair regression",
+      "Build exact pinned private SQLite 3.53.4",
+      "Ordinary V17 and UnifiedDB pair composition through V4",
+      "Emit bounded GO receipt",
+      "Preserve bounded evidence"
+    ]
   },
+  "resolved_falsifiers": [
+    "Exact executable-.pth pre-guard OOB reproduced on the target VPS lane and the same-discriminator V4 repair regression passed.",
+    "V17 candidate gate composed through V4 on the target VPS lane with the pinned SQLite 3.53.4 build.",
+    "Current disposable UnifiedDB+ClayGraph pair smoke composed through V4 on the target VPS lane."
+  ],
   "architecture_delta": {
-    "status": "CANDIDATE",
+    "status": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
     "change": "Treat Python site initialization as part of the trusted pre-Frank launch boundary. Require -I -S before any import-capable Frank Python code in the storage/state process, then preserve the flags through admission re-exec.",
     "expected_effect": "Closes the reproduced executable-.pth pre-guard startup path while preserving the fixed private SQLite admission chain.",
-    "strongest_counterhypothesis": "The extra no-site constraint may be unnecessary in a fully immutable trusted Python installation or may break required site-provided dependencies; target composition and final service wiring must measure this rather than assume it.",
+    "strongest_counterhypothesis": "The extra no-site constraint may be unnecessary in a fully immutable trusted Python installation or may break required site-provided dependencies; real product service wiring and actual production dependency composition must measure this rather than assume it.",
     "rollback": "Drop PR #342 / V4 candidate and retain V3 with the negative result recorded; no canonical target state was changed."
   },
   "negative_results": [
     {
       "id": "N-GO-20260811-PYTHON-I-SITE-PREBOOT",
       "claim_refuted": "V3 -I alone is a complete Python startup trust boundary against site-path startup code",
-      "scope": "Local reproduced CPython startup mechanism; target-VPS reproduction pending",
+      "scope": "Reproduced locally and on the accepted target VPS workflow lane",
       "preserve": true
     }
   ],
   "remaining_falsifiers": [
-    "Execute the exact .pth OOB on the accepted target-VPS Python 3.12 runtime.",
-    "Run V17 and current UnifiedDB+ClayGraph disposable pair through V4 with pinned SQLite 3.53.4.",
     "Verify real product service/deployment wiring launches the exact admitted interpreter with -I -S before any import-capable Frank Python code.",
     "Bind accepted source/binary/private-SQLite manifest identities and fail closed on service drift.",
-    "Measure whether -S removes any dependency required by the real production API/runtime; do not infer from synthetic gates."
+    "Measure whether -S removes any dependency required by the real production token API/runtime; do not infer from candidate gates or disposable pair smoke.",
+    "Revalidate the same startup boundary on the final Andreas Ubuntu target system before release acceptance."
   ],
   "non_claims": [
     "No whole Frank v0.1 acceptance",
-    "No target-VPS PASS for V4 while workflow is queued",
+    "No production systemd/deployment launch acceptance",
     "No remote exploitability claim",
     "No universal Python compromise proof",
     "No power-loss/kernel-panic proof",
@@ -137,6 +159,6 @@
       "effect-authority persistence",
       "future token-API/product service boot"
     ],
-    "next_frontier": "Adjudicate target run 31505610504. If target-supported, retain V3 as insufficient negative evidence, make V4 the repair successor candidate, then close the still-open production systemd/deployment launch composition rather than declaring storage acceptance."
+    "next_frontier": "Retain V3 as insufficient negative evidence and V4 as the target-supported repair successor candidate. The next useful non-OOB frontier is real product systemd/deployment launch composition: exact admitted Python executable, -I -S before import-capable Frank code, accepted source/binary/private-SQLite manifest identities, fail-closed drift detection, and production dependency compatibility under -S."
   }
 }

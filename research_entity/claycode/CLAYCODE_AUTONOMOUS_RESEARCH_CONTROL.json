@@ -51,7 +51,8 @@
     "model_agreement_never_overrides_executable_counterexample",
     "retrieval_or_graph_salience_never_mints_semantic_truth",
     "accepted_target_execution_on_exact_bytes_has_higher_weight_than_model_consensus",
-    "external_reviewer_execution_on_same_project_and_runner_is_executable_counterevidence_but_not_independent_model_replication"
+    "external_reviewer_execution_on_same_project_and_runner_is_executable_counterevidence_but_not_independent_model_replication",
+    "two_lowering_backends_over_the_same_source_evaluator_and_project_lineage_are_correlated_translation_validation_not_independent_semantic_authority"
   ],
   "authority_rules": [
     "model_output_is_candidate_not_truth",
@@ -78,10 +79,15 @@
     "measurement_metadata_must_be_state_derived_or_revalidated_before_it_can_block_promotion",
     "package_safe_import_and_namespace_binding_are_required_before_clay_evaluator_runtime_substrate_promotion",
     "test_only_sys_path_injection_is_not_product_importability_evidence",
+    "completed_cancelled_or_queued_workflow_is_not_executable_acceptance",
+    "lowering_backend_may_only_receive_credit_for_exact_executed_closure_and_must_fail_closed_on_semantics_not_already_authorized",
+    "stacked_lowering_candidate_cannot_receive_promotion_credit_ahead_of_its_exact_dependency_acceptance",
+    "generated_host_ast_or_generated_c_is_projection_not_claycode_semantic_authority",
     "native_library_identity_and_python_module_origin_are_separate_runtime_evidence_axes",
     "runtime_admission_must_fail_closed_on_unreviewed_python_module_shadowing_before_product_binding_credit",
     "execution_generation_identity_must_not_be_inferred_as_exact_request_effect_ancestry_when_multiple_requests_can_share_an_execution",
     "response_replay_credit_requires_durable_trusted_request_to_effect_ancestry_and_terminal_response_semantics",
+    "productstart_is_conjunctive_and_no_single_storage_identity_lineage_or_startup_green_can_mint_whole_frank_continuity",
     "http_402_payment_required_is_nonretryable_provider_hard_stop_for_current_free_only_cycle",
     "provider_runtime_candidate_requires_accepted_ubuntu_execution_receipt_before_capability_credit",
     "provider_payment_latch_must_survive_same_budget_epoch_restart_before_release_credit",
@@ -102,41 +108,41 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as F-V01-02. Keep V18 frozen and WP03/WP04/WP05 OPEN. The newest highest-information F-V01-02 runtime blocker is package/namespace binding: current PR310 evaluator/analyzer use bare sibling imports, while the differential harness injects runtime/claycode_eval_v1 into sys.path; isolated repository-root package import fails. Close that with package-stable imports or an explicitly tested package/CLI dual-entry contract, plus namespace-collision controls, without changing ClayCode semantics. Preserve the corrected WP04 census at 429 unique unresolved names / 464 call-site occurrences, with only 45/464 global-name candidates and 419/464 without. Keep the three unparsed chained-!= invariants semantic-authority unresolved. Cross-branch, PR336 run 31503138219 refutes SQLite V2 admission sufficiency by executing a PYTHONPATH-shadowed sqlite3.py while the pinned native SQLite 3.53.4 remains correct; require Python module-origin admission before storage product credit. V17 request-effect ownership is target-ambiguous on run 31502734782; response replay remains blocked until durable trusted request ancestry exists. Provider PR232 remains without accepted-Ubuntu capability credit. Preserve Together hard-denial, FREE_ONLY with no paid fallback, Goodman ancestry collapse, Ubuntu-only final acceptance, no BASE/Frank PASS from consensus, no canonical semantic promotion, and do not modify Frank's Harness.",
+  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as F-V01-02. Keep V18 frozen and WP03/WP04/WP05/WP06 OPEN. Bounded package/evaluator integration from PR310 is now target-supported and merged; the active semantic integration gate is PR357 exact repaired head, which composes the 90% surface and 429 unique / 464 occurrence WP04 census but remains queued for fresh accepted-Ubuntu validation. Do not broaden semantics while that composition is pending. PR364 Python-AST lowering has NO_CREDIT because run 31508447693 was cancelled. PR366 native-C lowering is a useful alternative backend candidate but is stacked on PR357 and its run 31509020626 is queued; require dependency acceptance plus exact translation-validation before bounded WP06 credit. Preserve unresolved comparison-chain and Bool/Int equality semantics as fail-closed refusals. Keep ProductStart conjunctive, provider/storage/request-lineage lanes separate, Together hard-denied, FREE_ONLY with no paid fallback, Goodman ancestry collapse, Ubuntu-only final acceptance, no BASE/Frank PASS from consensus, no canonical semantic promotion, and do not modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "New executable/source evidence exposes two runtime binding assumptions that were not represented in the previous control state. First, the current ClayCode evaluator's test harness makes bare sibling imports work by mutating sys.path, while normal package import fails. Second, SQLite V2 can attest the correct native object yet execute a PYTHONPATH-substituted high-level sqlite3 module. A separate target falsifier also proves execution-generation identity is not exact request ancestry. These are integration/provenance counterexamples, not reasons to invent new ClayCode semantics. Steering therefore adds product-safe package/module binding gates while preserving the existing WP04/WP05 semantic frontiers and FREE_ONLY policy.",
+    "reason": "The prior supervisor focus is stale because the original package-import counterexample has been repaired for the bounded PR310 scope and target-promoted into main. The next stronger claim is PR357 composition, which still lacks a completed exact repaired-head target receipt. In parallel, compiler/lowering has started: PR364's Python-AST target run was cancelled and therefore has zero credit, while PR366's C backend is queued and dependency-gated. Steering moves from the retired package blocker to exact composed execution and fail-closed lowering without allowing queued/cancelled/model evidence to mint WP06 or semantics.",
     "evidence_priority": [
-      "repository-root package import and namespace-collision repair for PR310 exact evaluator bytes while all existing semantic differentials remain green",
+      "PR357 exact repaired-head composed Ubuntu execution covering package namespace, decide_effect differential, confirmation/hash, operator survival, corpus measurement and independent 429/464 census",
+      "PR363 exact target adjudication for ambiguous variant fail-closed consistency repair",
+      "PR366 exact target native-C translation validation only after PR357 dependency acceptance",
       "semantic classification of 464 unresolved call-site occurrences while preserving 429 unique-name cardinality separately",
-      "classification of the three chained-!= invariants as documentary versus executable before semantic admission",
-      "Ubuntu rescue of the exact PR336 PYTHONPATH sqlite3 shadow discriminator with explicit high-level module-origin admission",
-      "trusted request-scoped ingress identity to durable request-effect lineage before any response-replay credit",
+      "owner-reviewed semantics before any comparison-chain or cross-nominal equality admission",
+      "ProductStart installed-path conjunction rather than subsystem substitution",
       "PR232 accepted-Ubuntu FREE_ONLY payment-fence evidence",
       "FRANK_V0_1 Ubuntu target re-entry and final component audit"
     ],
     "required_next_actions": [
-      "repair bare sibling imports without relying on test-only sys.path injection; prove import from repository root as runtime.claycode_eval_v1 and add an earlier-path fake syntax.py/host.py collision control",
-      "keep decide_effect, confirmation/hash, purity, unresolved fail-closed and semantic-mutation regressions green on repaired package bytes",
-      "preserve 429 unique unresolved names and 464 unresolved call-site occurrences as separate metrics; classify before binding",
-      "classify the three chained-!= invariants before changing parser/evaluator semantics",
-      "repair storage admission so PYTHONPATH/PYTHONHOME or equivalent high-level module substitution cannot survive as an admitted SQLite runtime; rerun the same target discriminator",
-      "do not infer exact request ownership from execution generation; bind request-scoped trusted ingress identity to effects before provider execution",
-      "preserve provider/storage/GWT/agency lanes as separate unless exact integration evidence creates a dependency",
+      "do not repeat the original PR310 bare-import blocker as current after its scoped target-supported merge; instead verify PR357 current exact composition",
+      "treat queued PR357 package/frontier workflows as pending and no-credit until completed executable receipts are inspected",
+      "record PR364 cancelled lowering run as NO_CREDIT and do not infer compiler support from candidate prose or local/model consensus",
+      "keep PR366 stacked and fail-closed; do not promote ahead of PR357; require actual native compilation/execution, deterministic generated artifact identity and 200576 three-way zero-mismatch checks on exact accepted-target bytes",
+      "require PR366 to reject multi-relation chains, cross-nominal equality, unresolved calls and effectful/host intrinsics until those semantics/contracts are independently authorized",
+      "preserve 429 unique unresolved names and 464 unresolved call-site occurrences separately and classify before binding",
+      "keep ProductStart as an AND gate over installed storage admission, trusted build/artifact attestation, selected state lineage, owner identity, exclusive lease/restart classification, installed entrypoint and installed recovery",
       "preserve FREE_ONLY, Goodman ancestry collapse, Ubuntu-only acceptance and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
       "legacy BASE or Frank v0.1 PASS from component workflow success, receipt labels or model-family consensus",
-      "WP03 runtime readiness from semantic differentials that require a test-only import path",
+      "PR357 composed acceptance from merged PR310 bounded evidence",
+      "compiler or WP06 support from cancelled PR364 or queued PR366 workflows",
+      "independent semantic replication from Python-AST and C lowering that share the same Clay source/evaluator/project ancestry",
       "WP04 acceptance from frank.effects UNRESOLVED=0 or corpus resolution counts",
-      "canonical comparison semantics from current evaluator behavior or external language precedent",
+      "canonical comparison or equality semantics from current evaluator/backend host behavior or external language precedent",
       "global binding authority from a declaration-name match",
       "WP05 evaluator correctness from operator-survival or request-differential counts",
-      "storage runtime sufficiency from correct native SQLite object identity alone",
-      "response replay correctness from execution-generation ancestry alone",
       "verified free provider execution from catalog presence, local PR tests or credential configuration",
-      "provider restart safety from a process-local payment latch",
-      "independent replication from shared model/project/owner/runner ancestry",
-      "canonical semantic promotion from parser, TypedIR, module-resolution, evaluator, Graph-root, receipt or policy-oracle success alone"
+      "ProductStart or whole Frank continuity from storage V4 success alone",
+      "canonical semantic promotion from parser, TypedIR, module-resolution, evaluator, lowering backend, Graph-root, receipt or policy-oracle success alone"
     ]
   },
   "supervisor": {

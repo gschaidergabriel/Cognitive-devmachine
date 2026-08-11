@@ -176,6 +176,39 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
         self.assertNotIn("DONE", result["receipt"]["lifecycle"])
 
+    def test_structurally_invalid_json_responses_fail_closed_with_receipt(self):
+        class Response:
+            status = 200
+            def __init__(self, body): self.body = body
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return self.body
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        malformed = (
+            b"[]",
+            b'{"choices":[]}',
+            b'{"choices":[{"message":{"content":null}}]}',
+            b'{"choices":[{"message":"not-an-object"}]}',
+        )
+        for body in malformed:
+            with self.subTest(body=body):
+                result = MOD.execute_chat(
+                    [], model="mock", environ=env,
+                    opener=lambda *args, body=body, **kwargs: Response(body),
+                    now=iter((50.0, 50.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["outcome"], "invalid_or_unreachable_provider_response")
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,7 @@
 import importlib.util
 import http.client
 import json
+import ssl
 import sys
 import unittest
 from pathlib import Path
@@ -412,6 +413,27 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         result = MOD.execute_chat(
             [], model="mock", environ=env, opener=opener,
             now=iter((76.0, 76.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "unreachable_provider")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_tls_error_before_response_emits_unreachable_receipt(self):
+        def opener(request, timeout):
+            raise ssl.SSLError("certificate verify failed")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env, opener=opener,
+            now=iter((77.0, 77.01)).__next__,
         )
         receipt = result["receipt"]
         self.assertIsNone(receipt["status"])

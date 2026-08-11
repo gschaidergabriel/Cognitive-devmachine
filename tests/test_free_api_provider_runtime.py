@@ -96,6 +96,19 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             MOD.execute_chat([], model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
+    def test_default_transport_rejects_redirects_before_auth_can_be_forwarded(self):
+        request = MOD.urllib.request.Request(
+            "https://integrate.api.nvidia.com/v1/chat/completions",
+            headers={"Authorization": "Bearer secret"},
+            method="POST",
+            data=b"{}",
+        )
+        redirected = MOD._NoRedirectHandler().redirect_request(
+            request, None, 302, "Found", {},
+            "https://api.groq.com/openai/v1/chat/completions",
+        )
+        self.assertIsNone(redirected)
+
     def test_invalid_response_is_executed_but_never_verified(self):
         class Response:
             status = 200

@@ -190,8 +190,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         malformed = (
-            b"[]",
-            b'{"choices":[]}',
+            b"[]", b'{"choices":[]}',
             b'{"choices":[{"message":{"content":null}}]}',
             b'{"choices":[{"message":"not-an-object"}]}',
         )
@@ -208,6 +207,28 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
                 self.assertIsNone(result["content"])
+
+    def test_http_error_is_executed_but_never_verified(self):
+        def opener(request, timeout):
+            raise MOD.urllib.error.HTTPError(
+                request.full_url, 429, "Too Many Requests", {}, None,
+            )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env, opener=opener,
+            now=iter((60.0, 60.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 429)
+        self.assertEqual(receipt["outcome"], "rate_limited")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
 
 
 if __name__ == "__main__":

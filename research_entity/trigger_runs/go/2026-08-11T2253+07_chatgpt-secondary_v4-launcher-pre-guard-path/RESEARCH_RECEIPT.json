@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT_V1",
+  "trigger": "go",
+  "run_local_time": "2026-08-11T22:53:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_lock": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "research_entity": "Clay",
+    "target_subject": "self.root / human-surface Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1"
+  },
+  "coordination": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "overlap_found": [
+      "PR #359 current fresh-main SQLite V4 no-site admission integration",
+      "PR #348 target-proven V4 python -I -S repair",
+      "PR #327/#336/#338 historical falsifiers for LD_PRELOAD, PYTHONPATH and system-site preinitialization"
+    ],
+    "selection": "Do not duplicate SQLite-core work; attack the adjacent pre-Python product-launch boundary explicitly left open by #359."
+  },
+  "live_external_evidence": [
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "SQLite WAL documentation / WAL-reset bug history",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "WAL-reset corruption defect affects the vulnerable historical range and motivates fixed-runtime admission."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "SQLite 3.51.3 release notes",
+      "url": "https://sqlite.org/releaselog/3_51_3.html",
+      "finding": "Official fix for the WAL-reset corruption defect is present in the fixed line."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "Python 3.12 command-line documentation",
+      "url": "https://docs.python.org/3.12/using/cmdline.html",
+      "finding": "-I isolates Python path/environment influence; -S separately disables automatic site initialization. These protections begin only after Python is invoked."
+    }
+  ],
+  "hypothesis": "The #359 frank_v0_1_sqlite_v4_launcher.sh is already a complete pre-Python trust boundary before the V4 guard.",
+  "strongest_counterhypothesis": "Inherited PATH can shadow dirname(1), execute code before /usr/bin/python3 -I -S begins, then return a correct directory so the real V4 guard still starts.",
+  "oob_experiment": {
+    "name": "PRE_GUARD_PATH_DIRNAME_HIJACK",
+    "count_for_this_go_macrocycle": 1,
+    "intervention": "Place a disposable hostile dirname earlier in PATH; it writes a marker then delegates to /usr/bin/dirname.",
+    "sensitivity_anti_control": "Exact vulnerable launcher path-resolution shape executes the hostile marker.",
+    "local_observation": {
+      "vulnerable_marker": "EXECUTED",
+      "repaired_candidate_marker": "ABSENT"
+    },
+    "classification": "SUPPORTED_PRE_GUARD_PATH_HELPER_EXECUTION_GAP_LOCALLY; REPAIR_LOCALLY_SUPPORTED; TARGET_REVALIDATION_PENDING"
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "target_pr": 373,
+    "parent_pr": 359,
+    "target_branch": "chatgpt/go-v4-launcher-pre-guard-path-fence-20260811",
+    "head_sha": "588ee32ae01f6e97dfce06e9d7d4b32e9a08610a",
+    "changes": [
+      "Set a fixed /usr/bin:/bin PATH before any pre-admission helper resolution.",
+      "Remove dirname(1) from launcher path derivation using POSIX shell parameter expansion.",
+      "Retain absolute /usr/bin/python3 -I -S -> V4 guard execution.",
+      "Add an executable anti-control/candidate falsifier for pre-guard PATH helper execution.",
+      "Bind launcher and falsifier bytes into the existing full V4 self-hosted target workflow and make launcher changes trigger that workflow."
+    ],
+    "files": [
+      "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v4_launcher.sh",
+      "tests/frank_sqlite_v4_launcher_pre_guard_path_gate.py",
+      ".github/workflows/frank-fixed-sqlite-v4-no-site-repair-vps.yml"
+    ],
+    "rollback": "Drop PR #373 / revert its three commits; parent #359 remains unchanged."
+  },
+  "execution": {
+    "local_mechanism_test": "PASS: vulnerable marker yes; repaired marker no",
+    "github_pr": "#373 draft child of #359",
+    "accepted_target_workflow": {
+      "run_id": 31510437731,
+      "name": "Frank fixed SQLite V4 no-site repair VPS",
+      "state_at_receipt": "QUEUED",
+      "required_composed_acceptance": [
+        "PASS_PRE_GUARD_PATH_HELPER_FENCED",
+        "PASS_V4_NO_SITE_REPAIRS_SYSTEM_SITE_PREINIT",
+        "PASS_V17_BOUND_REENTRY_DONE_CANDIDATE_DIFFERENTIAL",
+        "PASS_FIXED_SQLITE_UNIFIEDDB_PAIR_SMOKE"
+      ]
+    }
+  },
+  "negative_results_and_limits": [
+    "The parent #359 launcher is not sufficient as a pre-Python trust boundary under hostile inherited PATH.",
+    "Local repair evidence is not accepted-target evidence.",
+    "This does not prove installed systemd/service ownership or immutable installed launcher/manifest binding.",
+    "No power-loss durability, whole Frank v0.1 acceptance, external effect authority, training authorization, or self.root Harness authority is claimed."
+  ],
+  "next_frontier": [
+    "Adjudicate exact PR #373 head on the accepted Hostinger Ubuntu self-hosted runner.",
+    "If green, compose the repaired launcher with an installed service/systemd entrypoint and immutable deployed SQLite/manifest identity, then perform restart/recovery on installed bytes.",
+    "If red, preserve the failure as evidence and repair the smallest demonstrated pre-admission gap before any promotion."
+  ]
+}

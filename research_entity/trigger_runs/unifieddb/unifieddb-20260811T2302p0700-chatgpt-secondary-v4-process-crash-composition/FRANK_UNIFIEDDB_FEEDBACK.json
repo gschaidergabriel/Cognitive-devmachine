@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "research_subject": "self.root / Frank",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "status": "EVIDENCE_ADVANCED_REMAINS_OPEN",
+  "supported_now": [
+    "private fixed SQLite 3.53.4 can be admitted behind V4 on accepted Ubuntu target",
+    "current V17 semantics and a disposable UnifiedDB+ClayGraph pair can execute behind V4",
+    "UnifiedDB should remain authoritative semantic state while ClayGraph/retrieval remain derived projections",
+    "recovery evidence must be typed by failure class"
+  ],
+  "pending": [
+    "PR #371 exact-target per-process V4 crash/restart result",
+    "selected-lineage logical rollback/recovery composed with repaired runtime",
+    "installed service/systemd non-bypass boot proof",
+    "canonical migration/rollback owner gate",
+    "separate OS-crash/power-loss evidence if required by final acceptance"
+  ],
+  "state_policy_delta": {
+    "proposal": "persist recovery_evidence_class on recovery/continuity receipts and prohibit promotion across PROCESS_CRASH -> OS_CRASH -> POWER_LOSS without direct evidence",
+    "status": "CANDIDATE",
+    "effect_authority": "NONE"
+  },
+  "self_harness_authority": "PROPOSAL_ONLY",
+  "canonical_state_mutated_by_this_run": false,
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": false
+}

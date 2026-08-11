@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "GO-20260811-FV01-08-TASK-SWITCH-CONSENT-AUTHORITY-COUNTEREVIDENCE",
+  "recorded_at_utc": "2026-08-11T16:13:10Z",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity_identity": "Clay temporary worker; not self.root; not Frank",
+  "target": "self.root / Frank v0.1",
+  "work_package": "F-V01-08-TOKEN-API-CLIENTS",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "parent_candidate_pr": 370,
+  "parent_candidate_head": "5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba",
+  "parent_candidate_runtime_blob": "6af60e078043693290544b6da66530a5a3d7b168",
+  "adversarial_child_pr": 378,
+  "adversarial_child_branch": "chatgpt/go-task-switch-consent-authority-countercheck-20260811",
+  "current_classification": "SUPPORTED_FROM_CURRENT_CODE_PATH_PENDING_TARGET_VPS_RECEIPT",
+  "hypothesis_under_test": "A nonce-bound one-shot task-switch challenge is sufficient to prove current-user consent for replacing an unfinished task.",
+  "strongest_counterhypothesis": "Nonce possession plus a caller-supplied stable TaskSnapshot is not current-user consent authority. If the same proposer receives the nonce and may call grant(), it can self-grant without any new authenticated user confirmation event.",
+  "source_observation": {
+    "request_returns_nonce_to_calling_path": true,
+    "grant_inputs": [
+      "TaskSnapshot",
+      "challenge_id",
+      "consent_nonce"
+    ],
+    "separate_authenticated_user_confirmation_receipt_required_by_grant": false,
+    "current_code_outcome_if_exact_nonce_echoed_with_same_snapshot": "GRANTED then consumable as ALLOW_SWITCH_ONCE",
+    "claim_scope": "Current parent code path and adversarial test design; target-VPS execution receipt still pending/unknown."
+  },
+  "owner_contract_relation": {
+    "owner_fixed_requirement": "unfinished current user task may not be silently abandoned; unrelated task switch requires current-user consent",
+    "gap": "The candidate proves challenge freshness/replay binding but does not itself prove that a distinct current-user confirmation occurred.",
+    "promotion_effect": "BLOCK_CURRENT_USER_CONSENT_GATE_PROMOTION_UNTIL_CONFIRMATION_AUTHORITY_BOUND"
+  },
+  "exactly_one_go_out_of_box_experiment": {
+    "name": "CONSENT_NONCE_ECHO_SELF_GRANT",
+    "sequence": [
+      "sync RUNNING current-task snapshot",
+      "request unrelated task switch",
+      "perform zero external user-confirmation/elicitation events",
+      "echo returned nonce into grant() with same snapshot",
+      "consume the granted switch"
+    ],
+    "support_condition": "grant=GRANTED and consume=ALLOW_SWITCH_ONCE with external_user_confirmation_events=0",
+    "local_static_semantic_prediction": "SUPPORTED_AUTHORITY_GAP",
+    "target_vps_status": "QUEUED_OR_NOT_YET_OBSERVED_NO_PASS_CLAIM"
+  },
+  "external_primary_mechanism_evidence": [
+    {
+      "source": "Model Context Protocol 2026-07-28 release",
+      "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+      "relevance": "MRTR represents user confirmation/input as an input_required response followed by a client-supplied answer on retry, separating request-for-input from receipt-of-input. Mechanism evidence only."
+    },
+    {
+      "source": "MCP 2026-07-28 elicitation/MRTR SDK documentation",
+      "url": "https://csharp.sdk.modelcontextprotocol.io/concepts/elicitation/elicitation.html",
+      "relevance": "User confirmation is returned as client input and then processed on re-entry; mechanism evidence only, not Frank authority."
+    }
+  ],
+  "required_architecture_delta_candidate": {
+    "name": "AUTHENTICATED_CURRENT_USER_CONFIRMATION_RECEIPT",
+    "status": "TEST_OBLIGATION",
+    "must_bind": [
+      "challenge_id",
+      "stable_user_principal",
+      "session_or_client_provenance",
+      "execution_id",
+      "lease_epoch",
+      "from_task_id",
+      "from_task_revision",
+      "to_task_id",
+      "explicit_action_accept_decline_cancel"
+    ],
+    "invariants": [
+      "proposer/model cannot synthesize the confirmation receipt",
+      "nonce possession alone is not consent authority",
+      "confirmation receipt cannot mint execution/effect authority",
+      "stale execution/task revision invalidates confirmation",
+      "decline/cancel remain distinguishable from accept"
+    ],
+    "rollback": "Keep #370 as candidate-only replay/snapshot mechanism; do not promote its consent-authority claim until the independent confirmation producer is composed and falsified."
+  },
+  "counterevidence_scope": {
+    "parent_snapshot_replay_mechanism_refuted": false,
+    "parent_current_user_consent_authority_claim_supported": false,
+    "whole_F_V01_08_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "canonical_frank_state_mutated": false,
+    "external_effect_performed": false,
+    "training_authorized": false,
+    "self_root_harness_authority_changed": false
+  },
+  "next_falsifiers": [
+    "Run PR #378 on the accepted target VPS and preserve the bounded receipt.",
+    "Add a distinct authenticated user-confirmation producer/receipt to the parent candidate and rerun the nonce-echo experiment; repaired candidate must deny self-grant without a valid receipt.",
+    "Verify AI_BRIDGE versus HUMAN_DIRECT semantics so bridge transport cannot silently substitute model assent for current-user assent.",
+    "Integrate the accepted consent decision with canonical task transition/cancel-or-suspend/new-admission receipts without creating a second semantic state authority."
+  ],
+  "provenance": {
+    "parent_pr_url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/370",
+    "countercheck_pr_url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/378",
+    "parent_runtime_url": "https://github.com/gschaidergabriel/Dr.-Unterweger/blob/5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba/runtime/api/frank_task_switch_consent_v1_candidate.py",
+    "verification_class": "CURRENT_CODE_INSPECTION_PLUS_DURABLE_ADVERSARIAL_TEST_PENDING_TARGET_EXECUTION",
+    "confidence": "HIGH_FOR_AUTHORITY_BOUNDARY_GAP; TARGET_EXECUTION_PENDING"
+  }
+}

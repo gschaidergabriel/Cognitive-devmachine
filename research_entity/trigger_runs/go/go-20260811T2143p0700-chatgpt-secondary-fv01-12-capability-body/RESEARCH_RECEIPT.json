@@ -9,7 +9,6 @@
   "entity": "Clay",
   "research_subject": "self.root / Frank v0.1",
   "observed_at_local": "2026-08-11T21:43:38+07:00",
-  "updated_at_local": "2026-08-11T21:45:30+07:00",
   "canonical_parent": {
     "entity_version": "RAE-8.8",
     "revision": 2,
@@ -147,13 +146,15 @@
     "tests/frank_capability_body_v1_candidate_gate.py": "5e9eb9248247d01f02bd714d8b91ecb8016b2da0",
     "tests/frank_capability_ghost_peer_root_crown_oob.py": "a097e57f498527836b49d635904c923ba9b5bc90"
   },
-  "global_ci_observation": {
+  "global_ci_reconciliation": {
     "workflow": "Frank Deep Integrity",
-    "run": 31503079248,
-    "status": "FAILURE",
-    "steps_or_logs_retrieved": false,
-    "causal_attribution_to_pr335": "UNKNOWN_NOT_ESTABLISHED",
-    "release_interpretation": "DO_NOT_IGNORE; specialized target PASS does not convert unexplained global failure into PASS"
+    "current_run": 31503079248,
+    "current_status": "FAILURE_WITH_ZERO_RETRIEVABLE_STEPS_OR_LOGS",
+    "historical_repo_precedent_commit": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+    "historical_precedent": "hosted Deep Integrity failure with zero executed steps was explicitly classified infrastructure-only and not candidate evidence",
+    "causal_attribution_to_pr335": "NOT_ESTABLISHED",
+    "adjudication": "INFRASTRUCTURE_ONLY_UNLESS_NEW_EXECUTED_STEP_EVIDENCE_APPEARS",
+    "candidate_evidence_effect": "NO_NEGATIVE_CANDIDATE_EVIDENCE_FROM_ZERO_STEP_HOSTED_FAILURE"
   },
   "architecture_adjudication": {
     "status": "CANDIDATE_TARGET_SUPPORTED",
@@ -163,11 +164,11 @@
     "whole_Frank_v0_1_acceptance_claimed": false
   },
   "required_successors": [
-    "resolve unexplained Frank Deep Integrity global workflow failure before release promotion",
     "add independent external-peer route verification producer before any peer CAN_DELEGATE promotion",
     "test freshness expiry/revocation/stale capability behavior",
     "compose capability routing with separate effect authority without authority laundering",
-    "measure routing calibration and OOD transfer rather than treating two local successes as general competence"
+    "measure routing calibration and OOD transfer rather than treating two local successes as general competence",
+    "continue to treat hosted Deep Integrity zero-step failures as infrastructure-only unless executed-step evidence changes that classification"
   ],
   "workspace_delta": {
     "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES": {
@@ -177,7 +178,7 @@
       "status": "OPEN_TARGET_SUPPORTED_PARTIAL"
     }
   },
-  "research_disposition": "TARGET_SUPPORTED_PARTIAL_CANDIDATE_WITH_ACTIVE_COUNTERHYPOTHESIS_AND_GLOBAL_CI_BLOCKER",
+  "research_disposition": "TARGET_SUPPORTED_PARTIAL_CANDIDATE_WITH_ACTIVE_COUNTERHYPOTHESIS",
   "training_authorization_changed": false,
   "frank_self_harness_authority_changed": false
 }

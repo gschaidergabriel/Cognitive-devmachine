@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260811T2213p0700-chatgpt-secondary-fv01-14-heldout-integrity",
   "trigger": "go",
   "status": "CANDIDATE_LOCAL_PASS_TARGET_QUEUED",
@@ -26,7 +26,32 @@
     "package": "F-V01-14-TRAINING-DATA-HELDOUT",
     "reason": "Mandatory DOOMSDAY component gate with no overlapping open heldout/training-data implementation PR discovered after refreshing current target work.",
     "historical_organ_replacement_claim": false,
-    "original_baseline_gate": "NOT_APPLICABLE_TO_NEW_BOUNDARY; any later-discovered historical corpus tool must be baseline-tested before replacement/promotion"
+    "original_baseline_gate": "NEW_BOUNDARY_WITH_RELEVANT_HISTORICAL_TRAINING_ANCESTRY; no organ replacement is claimed, but PF-SOMA-004 training/evaluate/deploy/rollback ancestry must be reconstructed and differentially tested before promotion"
+  },
+  "historical_training_baseline": {
+    "source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "research_mapping": "PF-SOMA-004 / HEW-PF-SOMA-006",
+    "source_files_inspected": [
+      "services/soma/interaction_buffer.py",
+      "services/soma/micro_trainer.py"
+    ],
+    "preserved_functions": [
+      "conversation quality scoring and qualification",
+      "fresh-unused training-pool selection",
+      "LoRA train lifecycle",
+      "before/after behavioral probes",
+      "adapter safety/deploy/rollback lineage"
+    ],
+    "observed_gap": "The inspected historical selection/trainer path exposes a qualified training pool and before/after probes, but no explicit TRAIN/DEV/HELDOUT partition or contamination-resistant heldout gate was found in those files.",
+    "repository_reported_baseline": {
+      "conversations_scored": 104,
+      "qualified": 80,
+      "cpu_cycle_minutes": 18.7,
+      "safety_check": "REPORTED_PASS",
+      "adapter_deployed": "REPORTED_TRUE",
+      "epistemic_class": "REPOSITORY_REPORTED_MEASUREMENT_NOT_INDEPENDENTLY_REPRODUCED"
+    },
+    "transfer_rule": "Reuse lifecycle/rollback/scoring ancestry only where current Clay-native interfaces preserve provenance and differential tests support transfer; the new heldout boundary supplements rather than erases ancestry."
   },
   "fresh_external_primary_evidence": [
     {
@@ -123,7 +148,8 @@
     "Complete accepted-target VPS run for exact head and inspect evidence/resource metadata.",
     "Add sealed heldout commitment/export semantics that never require final test plaintext in the public repository.",
     "Independently infer/verify near-duplicate semantic families rather than trusting caller-supplied family identifiers.",
-    "Add dynamic/OOD evaluation generation and compare against static frozen heldout behavior.",
+    "After any future model training, compare frozen heldout performance against matched rephrased/synthetic or dynamic/OOD reference evaluations to detect contamination-like inflation rather than trusting the manifest gate alone.",
+    "Differentially compose the historical SOMA scoring/train/deploy/rollback lifecycle with the current Clay-native heldout boundary and preserve lineage/negative-result tests.",
     "Freeze a real corpus only after provenance/cutoff/dedup/licensing/eval contracts are complete.",
     "Keep final training blocked until explicit project-owner authorization."
   ]

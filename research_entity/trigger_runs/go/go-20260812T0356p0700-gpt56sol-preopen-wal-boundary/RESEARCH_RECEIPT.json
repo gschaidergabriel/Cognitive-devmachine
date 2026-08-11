@@ -49,7 +49,7 @@
   },
   "tests": {
     "candidate_self_hosted_run": 31535070745,
-    "candidate_self_hosted_status_when_written": "QUEUED",
+    "candidate_self_hosted_status_last_observed": "QUEUED",
     "required_cases_added": [
       "vulnerable WAL open rejects before sqlite3.connect",
       "vulnerable rollback-journal open remains admitted and FULL synchronous",
@@ -64,11 +64,20 @@
     "product_branch": "chatgpt/sqlite-env-repro-counterworld-20260812",
     "commit": "d26c319c857ebe143c0839ae02475f9bba28ba4a",
     "workflow_run": 31534509781,
-    "status_when_written": "IN_PROGRESS",
+    "runner": "clay / digital-retina / Linux 6.8.0-117-generic x86_64",
+    "status": "PASS_ENVIRONMENTALLY_STABLE",
     "control": "umask 022, TZ=UTC, LC_ALL=C, JOBS=2, isolated HOME/TMP, SOURCE_DATE_EPOCH unset",
     "treatment": "umask 077, TZ=Pacific/Honolulu, LC_ALL=C, JOBS=1, isolated HOME/TMP, SOURCE_DATE_EPOCH=946684800",
+    "baseline_library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "treatment_library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "baseline_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "treatment_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "same_library_sha256": true,
+    "same_runtime_manifest_bytes": true,
     "falsifier": "Exact SQLite 3.53.4 library SHA-256 or exact runtime-manifest bytes differ between control and treatment.",
+    "interpretation": "The tested 3.53.4 build is stable across this deliberately widened legitimate build-environment vector. This strengthens reproducible-artifact evidence only; it does not establish production installation, parent authority, runtime admission, or whole Frank acceptance.",
     "production_state_mutated": false,
+    "system_install_performed": false,
     "additional_unusual_experiments": 0
   },
   "counterevidence_and_nonclaims": {

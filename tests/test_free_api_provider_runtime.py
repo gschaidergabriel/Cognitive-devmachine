@@ -1,4 +1,5 @@
 import importlib.util
+import http.client
 import json
 import sys
 import unittest
@@ -425,6 +426,32 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(requested_sizes, [MOD.MAX_PROVIDER_RESPONSE_BYTES + 1])
         self.assertEqual(receipt["status"], 200)
         self.assertEqual(receipt["outcome"], "provider_response_too_large")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_incomplete_http_body_preserves_status_and_emits_receipt(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise http.client.IncompleteRead(b"partial", 12)
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((96.0, 96.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "incomplete_provider_response")
         self.assertIn("EXECUTED", receipt["lifecycle"])
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])

@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "status": "TARGET_EXECUTION_QUEUED",
+  "hypothesis": "a transactional authoritative projection event plus idempotent derived apply preserves exact UnifiedDB->ClayGraph semantics across the tested process-exit windows without cross-file atomicity assumptions",
+  "counterhypotheses": [
+    "authoritative commit may survive while projection event does not",
+    "mid-graph crash may leak a partial derived mutation",
+    "graph-commit-before-ACK may duplicate projection on replay",
+    "lag or derived receipt tamper may pass unnoticed",
+    "full derived rebuild may not reproduce current relation semantics/root",
+    "added durability may impose unacceptable latency/storage amplification"
+  ],
+  "target_candidate": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 386,
+    "head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd",
+    "workflow": "Frank UnifiedDB projection outbox V1 VPS",
+    "workflow_run": 31512653656,
+    "state_at_write": "QUEUED"
+  },
+  "matrix": {
+    "runtime": "V4 / private SQLite 3.53.4",
+    "databases": "disposable current UnifiedDB + ClayGraph schemas plus candidate-only SQL",
+    "crash_windows": 3,
+    "steady_updates": 72,
+    "selection_falsifiers": ["projection lag", "derived applied-event hash tamper"],
+    "recovery": "full derived graph wipe + authoritative replay"
+  },
+  "promotion_state": "PENDING_TARGET_RESULT",
+  "canonical_state_mutated": false,
+  "external_effect_performed": false,
+  "training_authorized": false
+}

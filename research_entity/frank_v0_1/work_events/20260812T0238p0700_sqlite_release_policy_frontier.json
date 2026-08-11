@@ -1,8 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "event_type": "FRANK_V0_1_WORK_FRONTIER_DELTA",
-  "status": "MERGED_MECHANISM_PASS / PRODUCTION_GATE_OPEN",
+  "status": "MERGED_MECHANISMS_PASS / PRODUCTION_GATE_OPEN",
   "created_at": "2026-08-12T02:38:00+07:00",
+  "updated_at": "2026-08-12T02:40:00+07:00",
   "actor": "OpenAI / GPT-5.6 Sol",
   "actor_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
   "owner_program": "FRANK_V0_1",
@@ -10,8 +11,11 @@
   "fresh_product_main_evidence": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "release_identity_merge": "abd769d5cee835af2b1b867041e52f8a443a3060",
-    "target_regression_run": 31528402922,
-    "target_regression_status": "PASS"
+    "release_identity_target_regression_run": 31528402922,
+    "release_identity_target_regression_status": "PASS",
+    "subsequent_loader_boundary_merge": "aa5f84c31c46ab3e3c405231cf93bddd1f7d51d8",
+    "subsequent_loader_boundary_pr": 439,
+    "subsequent_loader_boundary_result": "MERGED_AFTER_ACCEPTED_TARGET_PATH_REGRESSION_PASS"
   },
   "collapsed_frontier": {
     "accepted_target_observed_runtime": "SQLite 3.45.1 / libsqlite3-0 3.45.1-1ubuntu2.7",
@@ -21,13 +25,15 @@
     "upstream_fix_identity": "sqlite/sqlite commit fe57e14b49f9189b56da8233ab3415ce5ff6b1ff / WAL live-header salt recheck after read-lock-0 acquisition",
     "backport_route_disposition": "REJECTED_FOR_THE_PUBLISHED_3.45.1-1ubuntu2.7_SOURCE_PATCHSET",
     "release_identity_policy": "MERGED; exact reviewed 3.53.4 source identity allowed, vulnerable/mismatched/future-unreviewed identities fail closed",
-    "mapped_object_truth": "ldd is diagnostic only; active-object admission must bind the live mapped object/inode"
+    "mapped_object_truth": "ldd is diagnostic only; active-object admission must bind the live mapped object/inode",
+    "loader_environment_boundary": "PR #439 merged fail-closed rejection/sanitization for LD_PRELOAD, LD_AUDIT and LD_LIBRARY_PATH before accepted helper execution, while explicitly preserving the need for an upstream trusted parent/environment boundary because shell-level checks cannot undo loader code that already executed."
   },
   "remaining_release_gate": [
     "Provision a fixed release-accepted SQLite runtime through deployment-owned/root-protected bytes.",
     "Provision and attest the root-owned /etc/frank-v0.1 SQLite runtime anchor without granting Frank mutation authority over it.",
     "Bind the actual Frank production service entrypoint non-bypassably to the admitted runtime object and V5 release policy.",
-    "Prove service start, restart, downgrade/library-swap rejection, parent loader-environment continuity and rollback/recovery behavior on the accepted target.",
+    "Discover and attest the actual production parent/environment construction and prove loader-control contamination cannot reach the admitted Frank process; PR #439 is a downstream fail-closed mechanism, not proof that the production parent is trusted.",
+    "Prove service start, restart, downgrade/library-swap rejection and rollback/recovery behavior on the accepted target.",
     "Prove the active service's mapped libsqlite device/inode/hash/version/source-id equals the admitted anchor after restart.",
     "Keep semantic-lineage selection and recovery-generation obligations independently fail-closed."
   ],

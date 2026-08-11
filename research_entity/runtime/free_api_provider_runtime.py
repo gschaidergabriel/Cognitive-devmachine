@@ -437,8 +437,7 @@ def execute_chat(
         retryable = False
     except (
         urllib.error.URLError,
-        TimeoutError,
-        ConnectionError,
+        OSError,
         http.client.HTTPException,
     ):
         content = None

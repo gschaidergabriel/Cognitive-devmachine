@@ -2,11 +2,11 @@
 
 Run: `unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1`
 
-Status: **CANDIDATE BUILT / TARGET EXECUTION QUEUED / NO PROMOTION YET**
+Status: **FRESH-MAIN CANDIDATE BUILT / TARGET EXECUTION PENDING / NO PROMOTION YET**
 
 ## Why this cycle exists
 
-The preceding UnifiedDB cycle closed a real PROCESS_CRASH slice for independently V4-admitted SQLite 3.53.4 WAL writers, but it did not solve cross-store semantic continuity between authoritative UnifiedDB and derived ClayGraph.
+The preceding UnifiedDB cycle closed a real `PROCESS_CRASH` slice for independently V4-admitted SQLite 3.53.4 WAL writers, but it did not solve cross-store semantic continuity between authoritative UnifiedDB and derived ClayGraph.
 
 Current target code already says cross-file atomicity is not claimed and the existing ClayGraph Clay contract already says `source_of_truth UnifiedDB`, `rebuildable_from_UnifiedDB`, and `activation != truth`. What was missing is a durable executable bridge that preserves these semantics through cross-store crash windows.
 
@@ -26,17 +26,29 @@ SQLite primary documentation also means separate WAL database files must not be 
 
 Direct dual writes and pretending separate WAL files are one atomic durability domain are rejected candidates. Physical graph colocation remains a later measured comparison candidate rather than a premise.
 
+## Freshness repair
+
+The first PR #386 head was based on target `main@9085f0b...`. During the run, target main advanced to `5ec9955775d9bf142e327166990a2228d543c071` through an unrelated ClayCode/WP03 integration.
+
+Rather than accept stale evidence, the UnifiedDB candidate was rebuilt through the Git database as **one commit on fresh main plus exactly the six original candidate blobs**:
+
+- fresh base: `5ec9955775d9bf142e327166990a2228d543c071`;
+- fresh candidate: `6201556c8f47f1226ed8c2bc3792851ed3912294`;
+- PR #386 now contains 1 commit / 6 files and remains mergeable;
+- old target run `31512653656` is superseded before execution;
+- current target run is `31513961274`.
+
 ## Target implementation
 
 Target PR: `gschaidergabriel/Dr.-Unterweger#386`
 
-Head: `2f86298b8d1e2196d199ea6d69965d62d54bd1bd`
+Fresh head: `6201556c8f47f1226ed8c2bc3792851ed3912294`
 
 Workflow: `Frank UnifiedDB projection outbox V1 VPS`
 
-Run: `31512653656`
+Fresh target run: `31513961274`
 
-State at report write: `QUEUED`.
+State at report write: `PENDING` behind the same PR concurrency/self-hosted execution lane.
 
 Candidate changes are deliberately not in production migration lists. Canonical Frank state is never opened by the gate.
 
@@ -58,8 +70,12 @@ Additional falsifiers:
 - p50/p95/p99/max latency shadow for authoritative commit+outbox and projection drain;
 - physical file-size shadow.
 
+## Supplemental pre-falsifier result
+
+A separate GitHub-hosted precheck (`31513246399`) ended before any workflow step executed and produced zero artifacts. It is therefore recorded as `INFRA_FAILURE_PRESTART`, not as candidate counterevidence. No candidate semantic change was made from that failure and the diagnostic PR was closed.
+
 ## Promotion rule
 
-No result is promoted while the target run is queued. If target PASS occurs, promotion is limited to this candidate projection continuity mechanism on disposable current-schema state. Production migration, projector scheduling/backpressure, selected-lineage canonical recovery, OS/power-loss durability and whole Frank v0.1 remain separate gates.
+No result is promoted while the fresh target run has not executed. If target PASS occurs, promotion is limited to this candidate projection continuity mechanism on disposable current-schema state. Production migration, projector scheduling/backpressure, selected-lineage canonical recovery, OS/power-loss durability and whole Frank v0.1 remain separate gates.
 
 No external effect, training action, canonical state mutation or Frank self-Harness authority is introduced.

@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
   "trigger": "unifieddb",
-  "status": "FRESH_MAIN_TARGET_EXECUTION_PENDING",
+  "status": "TARGET_SUPPORTED_CANDIDATE_INTEGRATED_REMAINING_GATES_OPEN",
   "origin_actor": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
@@ -14,27 +14,56 @@
     "repo": "gschaidergabriel/Dr.-Unterweger",
     "pr": 386,
     "base": "5ec9955775d9bf142e327166990a2228d543c071",
-    "head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
-    "workflow_run": 31513961274,
-    "state": "PENDING_CONCURRENCY"
+    "head": "b8858f949d4ad855bff5d682994de69bfd10b7c9",
+    "workflow_run": 31514757454,
+    "job": 93857015099,
+    "state": "COMPLETED_SUCCESS",
+    "checks": "23/23 PASS",
+    "merge_commit": "72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "production_migration_lists_changed": false
   },
-  "superseded_target": {"head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656},
-  "hosted_prefalsifier": {"workflow_run": 31513246399, "classification": "INFRA_FAILURE_PRESTART", "candidate_test_executed": false},
+  "superseded_target": {
+    "head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd",
+    "workflow_run": 31512653656,
+    "result": "23/23 PASS BUT SUPERSEDED_BY_FRESHNESS_REBASE"
+  },
+  "hosted_prefalsifier": {
+    "workflow_run": 31513246399,
+    "classification": "INFRA_FAILURE_PRESTART",
+    "candidate_test_executed": false
+  },
   "required_outputs": {
     "INTERCONNECT_MANIFEST.json": "PRESENT",
-    "TOOL_EXECUTION_MANIFEST.json": "PRESENT",
+    "TOOL_EXECUTION_MANIFEST.json": "PRESENT_UPDATED_TARGET_RESULT",
     "STORE_ROLE_MATRIX.json": "PRESENT",
     "UNIFIED_DATABASE_ARCHITECTURE.claycode.json": "PRESENT",
     "QUERY_ROUTING_PLAN.json": "PRESENT",
-    "EXPERIMENT_RESULTS.json": "PRESENT_PENDING_TARGET",
+    "EXPERIMENT_RESULTS.json": "PRESENT_TARGET_SUPPORTED",
     "MIGRATION_PLAN.json": "PRESENT",
     "BRANCH_FEEDBACK_MANIFEST.json": "PRESENT",
-    "FRANK_UNIFIEDDB_FEEDBACK.json": "PRESENT_PENDING_TARGET",
+    "FRANK_UNIFIEDDB_FEEDBACK.json": "PRESENT_TARGET_SUPPORTED",
     "RUN_MANIFEST.json": "PRESENT",
-    "FINAL_REPORT.md": "PRESENT_PENDING_TARGET"
+    "FINAL_REPORT.md": "PRESENT_UPDATED_TARGET_RESULT"
   },
-  "architecture_delta": "AUTHORITATIVE_TRANSACTIONAL_PROJECTION_OUTBOX_CANDIDATE",
-  "promotion": "HOLD_UNTIL_FRESH_MAIN_TARGET_RESULT",
+  "architecture_delta": "AUTHORITATIVE_TRANSACTIONAL_PROJECTION_OUTBOX_CANDIDATE_SUPPORTED",
+  "negative_results_preserved": [
+    "direct cross-file dual write is not recovery-safe enough",
+    "separate WAL databases are not promoted as one power-loss atomicity domain",
+    "hosted prefalsifier prestart failure is infrastructure evidence only",
+    "old-head target PASS is not freshness-promoted after main advanced",
+    "small-scale latency does not prove large-corpus cost dominance"
+  ],
+  "promotion": "CANDIDATE_REGRESSION_PATH_MERGED_PRODUCTION_ACTIVATION_HELD",
+  "remaining_gates": [
+    "production projector scheduling/backpressure/lag telemetry",
+    "schema promotion into current migration lists only after production integration gate",
+    "selected-lineage LOGICAL_ROLLBACK recovery on repaired runtime",
+    "DEPLOYMENT_BOOT service/systemd non-bypass proof",
+    "canonical migration + last-known-good owner gate",
+    "OS_CRASH/POWER_LOSS direct evidence if required",
+    "large-corpus graph/vector/FTS quality and resource shadows",
+    "whole-product Frank v0.1 composition"
+  ],
   "canonical_frank_state_mutated": false,
   "external_effect_performed": false,
   "training_authorized": false,

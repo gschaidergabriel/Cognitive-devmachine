@@ -1,27 +1,26 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "trigger": "go",
   "created_at": "2026-08-12T01:35:00+07:00",
-  "updated_at": "2026-08-12T01:50:00+07:00",
+  "updated_at": "2026-08-12T01:52:30+07:00",
   "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
   "program": "FRANK_V0_1",
   "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
   "grf": {
     "observed_reality": [
-      "Frank central state code uses Python sqlite3 and WAL without an exact loaded-runtime identity gate before canonical database opens.",
-      "The self-hosted Ubuntu lane runner clay on host digital-retina executes /usr/bin/python3 with SQLite 3.45.1 on the measured baseline path.",
-      "The baseline loaded libsqlite3 artifact is /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6 with SHA-256 f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7.",
-      "A disposable rootless build of official SQLite 3.53.4 was loaded by the same /usr/bin/python3 with the expected source ID and without opening a Frank database.",
-      "Fresh main independently proved that V4 can admit two distinct internally self-consistent SQLite 3.53.4 builds when the caller supplies the matching manifest digest; caller-selected consistency is not an independent deployment trust anchor.",
-      "V5 candidate removes caller-selected SQLite identity arguments and binds admission to a fixed root-owned deployment anchor candidate at /opt/frank-v0.1/sqlite-runtime-v1.",
-      "On the self-hosted target lane V5 passed deterministic gates and failed closed with exit 78 before target execution when the fixed deployment anchor was absent.",
-      "A full ephemeral root-owned anchor E2E attempt was blocked at sudo -n true because the runner requires a sudo password; this occurred before any /opt mutation or Frank database open."
+      "The accepted self-hosted Ubuntu lane baseline /usr/bin/python3 loads SQLite 3.45.1, not a fixed SQLite runtime.",
+      "The exact baseline mapped libsqlite3 object is /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6 with SHA-256 f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7.",
+      "Official SQLite 3.53.4 is technically loadable by the same /usr/bin/python3 via a disposable rootless overlay, but that is not production binding.",
+      "Fresh main proved that V4 admits two byte-distinct self-consistent SQLite 3.53.4 builds when the caller supplies the corresponding manifest digest, so caller-selected consistency is not deployment authority.",
+      "Fresh main now contains an OS-owned V5 candidate that fixes the trust-anchor path at /etc/frank-v0.1/sqlite-runtime-anchor-v1.json, requires non-root Frank runtime, checks root-owned/non-writable ancestor chain, rejects symlinks, checks opened-inode continuity, pins manifest/library/version/source-id, and binds parent/child re-exec to the same anchor digest.",
+      "The fresh-main V5 target workflow completed as a measurement workflow but its mechanism receipt is BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN because sudo_nopasswd=false; positive root-owned-anchor execution and full fixed-SQLite process admission were not run.",
+      "This worker's overlapping V5 draft PR #418 was closed without merge after fresh main superseded it."
     ],
-    "hypothesis": "Release-safe WAL persistence requires both exact active-library attestation and an independently authorized deployment trust anchor that a process caller cannot choose.",
-    "strongest_counterhypothesis": "A caller-supplied manifest digest plus internal artifact consistency is sufficient to establish the authorized SQLite runtime identity.",
-    "collapse": "The strongest counterhypothesis is refuted by the fresh-main two-build counterworld. V5 closes the caller-selection interface in candidate code and proves fail-closed behavior without an anchor, but independent privileged anchor provisioning is not available from the current GitHub Actions runner capability.",
-    "outcome": "RETAIN_AND_NARROW",
-    "confidence": "HIGH_FOR_MEASURED_BASELINE_V4_TRUST_GAP_AND_V5_FAIL_CLOSED_BEHAVIOR; PRODUCTION_ADMISSION_UNPROVED"
+    "leading_hypothesis": "Release-safe WAL persistence requires exact active-library attestation plus an independently authorized OS/deployment trust anchor that the Frank process or caller cannot choose.",
+    "strongest_counterhypothesis": "Caller-selected manifest digest plus internal artifact consistency is sufficient to authorize the runtime.",
+    "collapse": "The strongest counterhypothesis is refuted. Main V5 is now the preferred implementation lineage, but the independent root-owned anchor positive path remains privilege-blocked on the current self-hosted Actions runner and production admission remains unproved.",
+    "outcome": "RETAIN_MAIN_V5_AND_BLOCK_RELEASE",
+    "confidence": "HIGH_FOR_BASELINE_V4_TRUST_GAP_AND_MAIN_V5_STATIC_MECHANISM; POSITIVE_ROOT_ANCHOR_AND_PRODUCTION_PATH_UNPROVED"
   },
   "upstream_evidence": {
     "sqlite_wal_reset_affected": "3.7.0 through 3.51.2 under documented concurrent writer/checkpoint conditions",
@@ -32,9 +31,6 @@
     "sqlite_3_53_4_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
   },
   "baseline_target_measurement": {
-    "repository": "gschaidergabriel/frankv0.1",
-    "connector_alias": "gschaidergabriel/Dr.-Unterweger",
-    "tested_sha": "9e370da7777e434feacde3137a43cf1ff453d983",
     "github_run_id": "31523402893",
     "github_job_id": "93885768788",
     "runner_name": "clay",
@@ -52,81 +48,62 @@
     "artifact_zip_sha256": "9c1f1f5e835d4059b35cfec4b778fd3317a4cfaed3997ad5468fcc6677c4db70",
     "gate_result": "EXPECTED_FAIL_UNSAFE_RUNTIME"
   },
-  "remediation_feasibility": {
+  "rootless_3534_feasibility": {
     "status": "PASS_TECHNICAL_FEASIBILITY_ONLY",
     "github_run_id": "31523517392",
     "github_job_id": "93886135104",
     "same_python_executable": "/usr/bin/python3",
-    "baseline_version": "3.45.1",
     "overlay_version": "3.53.4",
     "overlay_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
     "overlay_library_sha256": "766647ee994e598c87ebf8827cf065c6880b2f29e8a112db56b564f0a84f973a",
     "official_archive_hash_verified": true,
-    "frank_database_opened": false,
-    "system_install_performed": false,
     "production_upgrade_performed": false,
     "artifact_id": "9114063482",
     "artifact_zip_sha256": "0d884ef58eefc171706a2172594e333b11089fa6c90471a447776bccf5579082"
   },
-  "parallel_worker_fusion": {
-    "fresh_main_sha": "a4f11b7ecb185a8e9e1e86818c4662b7a90fb133",
+  "v4_counterworld": {
+    "main_sha": "a4f11b7ecb185a8e9e1e86818c4662b7a90fb133",
     "workflow_run_id": "31523441341",
     "workflow_job_id": "93885889689",
-    "status": "PASS_COUNTERWORLD_RETAINED_TRUST_ANCHOR_GAP",
+    "status": "RETAIN_TRUST_ANCHOR_GAP_CALLER_CAN_SELECT_DISTINCT_SELF_CONSISTENT_RUNTIME",
     "reality_a_library_sha256": "9791a0b0b1f7a60f1e6a93e7b9532e72ea16b0059ade057b3f6995aa4d496cbc",
     "reality_b_library_sha256": "d6fa0b1168e8edb9eda1f125dbba7c734af90b49327ac209588d758befd1191e",
-    "same_upstream_source_id": true,
-    "both_v4_admitted": true,
-    "interpretation": "V4 proves consistency with caller-supplied digest, not independent authorization of which digest/runtime is allowed.",
+    "same_sqlite_source_id": true,
+    "both_admitted": true,
     "promotion": "NO_RELEASE_PROMOTION"
   },
-  "v5_candidate": {
-    "branch": "clay-go-sqlite-v5-deployment-anchor-20260812",
-    "head_sha": "2a1b62b2e07417fa7e203fd55f09bad21d4bc0bd",
-    "draft_pr": 418,
-    "fixed_trust_root": "/opt/frank-v0.1/sqlite-runtime-v1",
-    "caller_selectable_identity_arguments": false,
-    "anchor_policy": "absolute fixed path; non-symlink; UID 0; not group/world writable; manifest digest read without following symlinks",
-    "target_fail_closed_run_id": "31524271372",
-    "target_fail_closed_job_id": "93888608248",
-    "target_fail_closed_result": "PASS_FAIL_CLOSED_NO_DEPLOYMENT_ANCHOR",
-    "target_exit_code": 78,
-    "target_executed": false,
-    "artifact_id": "9114260526",
-    "artifact_zip_sha256": "837f2afc7c6863672a44fabb5e2ec2c907b125c478b0832d5911929ff1d406ef",
-    "state": "CANDIDATE_DRAFT_NOT_MAIN_NOT_RELEASE_PROMOTED"
+  "fresh_main_v5": {
+    "implementation_commits": [
+      "cbdccb49c923371847107718144680b994369e86",
+      "022d8f5f0a1a343e8a3e755c11011ab9013c71c1",
+      "6f200ca443d2a354b4a0a3e5a27bd7057f09a5c6"
+    ],
+    "anchor_path": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+    "guard_sha256_on_target": "4929b26aafa80bf04cf9afac89c8616dce498e1f356981a547d92290dd934165",
+    "launcher_sha256_on_target": "12c20235020646cd35fefc5129bc1571556be435ab64ddb772571428e8f3d3df",
+    "workflow_run_id": "31524848656",
+    "workflow_job_id": "93890523985",
+    "workflow_conclusion": "SUCCESS_MEASUREMENT_WORKFLOW",
+    "mechanism_status": "BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN",
+    "sudo_nopasswd": false,
+    "positive_root_owned_anchor_tested": false,
+    "full_fixed_sqlite_process_admission_tested": false,
+    "production_anchor_provisioned": false,
+    "canonical_state_mutated": false,
+    "artifact_id": "9114482399",
+    "artifact_zip_sha256": "694a0b9a064e2fe6539f8b178b183b4ff24595c316aebdce6325f5580a756adf"
   },
-  "privileged_anchor_e2e": {
-    "github_run_id": "31524535474",
-    "github_job_id": "93889482339",
-    "status": "BLOCKED_PRIVILEGE_NO_MEASUREMENT_OF_ROOT_ANCHORED_ADMISSION",
-    "blocking_operation": "sudo -n true",
-    "observed_error": "sudo: a password is required",
-    "failure_stage": "BEFORE_ANY_PRIVILEGED_PROVISIONING_OR_FRANK_DB_OPEN",
-    "trust_root_created": false,
-    "system_sqlite_replaced": false,
-    "frank_database_opened": false,
-    "state_mutation_performed": false,
-    "artifact_receipt_created": false,
-    "interpretation": "Current self-hosted Actions lane lacks noninteractive admin capability needed to establish the proposed root-owned independent deployment anchor. Do not weaken the anchor merely to make CI pass."
+  "superseded_local_v5": {
+    "branch": "clay-go-sqlite-v5-deployment-anchor-20260812",
+    "pull_request": 418,
+    "pull_request_state": "CLOSED_UNMERGED_SUPERSEDED_BY_MAIN",
+    "preserve_as": "HISTORICAL_CANDIDATE_EVIDENCE_ONLY"
   },
   "negative_results": [
-    {
-      "id": "NEG-SQLITE-CLI-IS-NOT-RUNTIME-V1",
-      "result": "A good CLI/package version cannot establish the library identity loaded by Python."
-    },
-    {
-      "id": "NEG-SQLITE-3534-CANDIDATE-NOT-BASELINE-LOADED-V1",
-      "result": "The measured baseline /usr/bin/python3 path loads SQLite 3.45.1, not 3.53.4."
-    },
-    {
-      "id": "NEG-SQLITE-V4-CALLER-DIGEST-NOT-AUTHORITY-V1",
-      "result": "Two distinct 3.53.4 artifacts can both pass V4 when the caller supplies the corresponding self-consistent manifest digest."
-    },
-    {
-      "id": "NEG-SQLITE-ROOT-ANCHOR-CI-PRIVILEGE-V1",
-      "result": "The current self-hosted GitHub Actions runner cannot noninteractively provision a root-owned trust anchor because sudo requires a password."
-    }
+    "CLI/package version is not sufficient evidence for the SQLite library loaded by Python.",
+    "The measured accepted-lane baseline still loads SQLite 3.45.1.",
+    "V4 caller-supplied manifest consistency is not independent runtime authorization.",
+    "The current self-hosted Actions runner does not provide passwordless sudo, so the positive root-owned V5 anchor path cannot be established from that lane."
   ],
   "unusual_experiment": {
     "count": 1,
@@ -134,18 +111,18 @@
     "bounded": true,
     "reversible": true,
     "description": "A temporary fake sqlite3 CLI reported 3.53.4 while Python in the same environment reported its actually loaded SQLite 3.46.1; the temporary decoy was deleted immediately after measurement.",
-    "purpose": "Falsify package/CLI-version evidence as a sufficient release signal.",
     "result": "PASS_AS_FALSIFIER",
-    "production_claim": false
+    "production_claim": false,
+    "note": "Fresh-main V5 workflow contains code for an atomic-replace unusual experiment, but that branch did not execute because sudo_nopasswd=false; it is not counted as an executed experiment in this cycle."
   },
   "release_adjudication": {
     "F-V01-13": "OPEN_RELEASE_BLOCKING",
-    "reason": "The accepted-lane baseline Python runtime is still SQLite 3.45.1. V4 has an independently measured caller-selected trust-anchor gap. V5 closes that interface in candidate code and fails closed without the fixed anchor, but the current CI lane cannot provision the root-owned independent anchor for end-to-end production-path proof.",
-    "next_smallest_falsifier": "Use an independently authorized deployment/admin lane to provision the approved fixed SQLite bundle at the accepted trust anchor, then prove V5 exact-target admission plus downgrade/library-swap rejection and non-bypassable service/bootstrap routing before any canonical WAL DB open. If privileged provisioning is intentionally unavailable, canonically choose and test an equivalently independent trust anchor rather than caller-selected input.",
+    "reason": "Accepted-lane baseline is SQLite 3.45.1. Main V5 materially improves the independent OS trust-anchor design, but its positive root-owned anchor path and full fixed-SQLite process admission were not executed, the production anchor is not provisioned, and non-bypassable product boot/persistence routing is unproved.",
+    "next_smallest_falsifier": "Use an independently authorized admin/deployment lane to provision the root-owned V5 anchor and approved fixed SQLite bundle, then run full V5 admission through the exact product service/bootstrap path before canonical WAL DB open, including downgrade/library-swap/bypass rejection and crash/restart recovery evidence.",
     "promotion_forbidden_until": [
-      "fixed productive runtime is installed or otherwise independently bound",
-      "independent trust-anchor authority is proven and not caller/model/Frank selectable",
-      "exact runtime/source/artifact identity is fail-closed before canonical WAL database opens",
+      "positive independently provisioned root-owned V5 anchor path passes",
+      "fixed productive SQLite runtime is independently bound",
+      "full V5 runtime/source/artifact admission passes before canonical WAL DB open",
       "downgrade/library-swap and bypass rejection are tested",
       "relevant crash/restart/recovery acceptance remains satisfied"
     ]

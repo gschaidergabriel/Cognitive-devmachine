@@ -1,13 +1,15 @@
 {
   "schema_version": "3.0",
   "status": "ACTIVE",
-  "last_reviewed_cycle": "ccauto-20260811T1049Z-supervisor",
-  "current_focus": "FRANK_V0_1 component F-V01-02 remains active with V18 frozen and WP03/WP04/WP05 OPEN. The unary-negation evaluator counterexample remains the highest ClayCode semantic blocker. Provider-runtime PR231 is now closed unmerged and superseded by draft PR232 head 65d5572a722bb5e5a1d42b80d8058f8463c38b86. PR232 adds pre-network text-request validation and preserves the useful origin, redirect, request/attempt identity and non-2xx verification fences, but it repeats the same FREE_ONLY control violation: both a transport-returned HTTP 402 and HTTPError(402) are still classified as ordinary provider_error with cooldown_seconds=15 rather than HARD_STOP_PROVIDER_AND_FALLBACK_FREE_ONLY. PR232 has no live external request or accepted-Ubuntu redacted receipt, and its PR-head Research Entity Identity Guard run 31483529694 and Research Entity Verify run 31483529764 both completed FAILURE; archived job logs are unavailable, so causes remain UNKNOWN. Do not admit provider capability or retry permission until PR232 implements explicit nonretryable payment-required semantics in both paths, proves provider removal from the current FREE_ONLY cycle, and passes exact-byte accepted-Ubuntu execution with inspectable evidence. Preserve accepted-Ubuntu final acceptance, Goodman ancestry collapse, no canonical semantic promotion, no BASE/Frank PASS from consensus, and no Frank-Harness modification.",
+  "last_reviewed_cycle": "ccauto-20260811T1144Z-supervisor",
+  "current_focus": "FRANK_V0_1 component F-V01-02 remains active with V18 frozen and WP03/WP04/WP05 OPEN. The unary-negation evaluator counterexample remains the highest ClayCode semantic blocker. Provider-runtime PR232 head 65d5572a722bb5e5a1d42b80d8058f8463c38b86 remains blocked: ordinary-response HTTP 402 and HTTPError(402) still become provider_error with cooldown_seconds=15 instead of the FREE_ONLY hard stop. New direct static inspection also shows request_id binds provider, endpoint host and body digest but not credential/account/project/billing-principal identity. Therefore the same semantic request can retain one request_id while execution authority changes across NVIDIA_API_KEY/NVCF_API_KEY or credential rotation. Do not treat semantic request identity as cost/execution authority. Require a separate opaque cost-principal/execution-lineage identity, a monotonic current-budget-epoch payment latch, and a two-attempt no-network-after-402 falsifier before provider capability credit. PR232 still has no live external request or accepted-Ubuntu receipt; PR-head verification runs 31483529694 and 31483529764 remain FAILURE with unavailable logs, so causes remain UNKNOWN. Preserve accepted-Ubuntu final acceptance, Goodman ancestry collapse, no canonical semantic promotion, no BASE/Frank PASS from consensus, and no Frank-Harness modification.",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
     "mistral_runtime": "CREDENTIAL_NOT_CONFIGURED_IN_AUTONOMOUS_RUNNER",
-    "free_api_runtime_pr232": "OPEN_FREE_ONLY_BLOCKER: successor PR232 repeats HTTP 402 as ordinary provider_error/cooldown instead of HARD_STOP_PROVIDER_AND_FALLBACK_FREE_ONLY; PR-head verification workflows fail with unavailable logs and no accepted-Ubuntu live receipt exists",
+    "free_api_runtime_pr232": "OPEN_FREE_ONLY_BLOCKER: HTTP 402 is retryable cooldown in both transport paths; no accepted-Ubuntu live receipt; PR-head verification failures remain uninspectable",
+    "provider_cost_principal_identity": "OPEN_COUNTEREXAMPLE: request_id excludes credential/account/project/billing-principal identity, so equal semantic request identity can alias distinct cost/execution authorities",
+    "provider_payment_latch": "OPEN: FREE_ONLY 402 hard-stop must persist for the current budget epoch and suppress subsequent same-provider network attempts; cooldown expiry may not resurrect eligibility",
     "wp03_package_pass": "OPEN; bounded parser/TypedIR/evaluator evidence only",
     "wp04_contract_review": "OPEN: analyzer reaches UNRESOLVED=0 only after candidate declarations/contracts; ownership, type/effect validity and owner review are not complete",
     "wp04_reconstructed_receipts": "OPEN_REVIEW: EffectReceipt, VerifiedEffectReceipt and DoneReceipt are call-site reconstructions marked OWNER-REVIEWABLE, not canonical owner-reviewed semantics",
@@ -59,11 +61,14 @@
     {"cycle": "ccauto-20260809T104300Z", "successful_role": "alternative", "model": "z-ai/glm-5.2", "family": "glm", "note": "Historical startup evidence only."},
     {"cycle": "ccauto-20260809T105416Z", "families": ["nemotron", "deepseek", "glm", "gpt-oss"], "status": "MULTI_FAMILY_SUCCESS", "note": "Agreement is correlated support, not executable replication."},
     {"cycle": "target-audit-20260811T1339p0700", "families": ["claude-opus"], "status": "EXECUTABLE_ADVERSARIAL_COUNTEREVIDENCE_SHARED_PROJECT_TARGET_LINEAGE", "note": "Re-execution and sabotage outrank model consensus, but shared project/runner ancestry is not independent replication."},
-    {"cycle": "claycode-surface-negation-20260811", "families": ["claude-fable"], "status": "EXECUTABLE_COUNTEREXAMPLE_SHARED_PROJECT_LINEAGE", "note": "The unary-not lesion is direct executable counterevidence; model lineage is not independent replication."}
+    {"cycle": "claycode-surface-negation-20260811", "families": ["claude-fable"], "status": "EXECUTABLE_COUNTEREXAMPLE_SHARED_PROJECT_LINEAGE", "note": "The unary-not lesion is direct executable counterevidence; model lineage is not independent replication."},
+    {"cycle": "research-center-cost-principal-20260811", "families": ["shared-project-research-lineage"], "status": "STATIC_COUNTEREVIDENCE_PLUS_OFFICIAL_PRIMARY_CONTEXT", "note": "Cost-principal aliasing is supported by direct PR232 code inspection; research routing/model agreement itself is not independent replication."}
   ],
   "high_information_targets": [
-    "repair PR232 so both transport-returned HTTP 402 and HTTPError(402) produce an explicit payment-required hard-stop and make that provider ineligible for retry in the current FREE_ONLY cycle",
-    "add an executable regression proving a 402 cannot be followed by another attempt on the same provider in the same cycle",
+    "repair PR232 so both transport-returned HTTP 402 and HTTPError(402) produce an explicit payment-required hard-stop and make that provider ineligible for retry in the current FREE_ONLY budget epoch",
+    "split semantic request identity from opaque cost-principal/execution-lineage identity; credential/account/project changes require fresh authorization without serializing secrets",
+    "add credential-rotation and alternate NVIDIA key-name fixtures proving equal payload may keep semantic identity while cost/execution lineage changes",
+    "persist the payment hard-stop latch across same-budget-epoch runtime restart and prove cooldown alone cannot restore eligibility",
     "run PR232 exact repaired bytes on accepted Ubuntu target with redacted receipt; no author-local test or CI prose is acceptance by itself",
     "run exact successor evaluator bytes containing the unary-not repair on the accepted Ubuntu target and require pre-repair lesion failure plus repaired semantics",
     "track request/input coverage and language-construct coverage separately",
@@ -72,10 +77,11 @@
     "preserve Graph causality, provider/Fence, process-incarnation and SQLite durability gates as separate constraints"
   ],
   "steering_notes": [
-    "PR232 supersedes PR231 but does not repair its payment-required control-plane defect.",
-    "HTTP 402 is a nonretryable current-cycle provider boundary under FREE_ONLY; a 15-second cooldown is insufficient.",
-    "PR232 pre-network request validation is useful candidate progress but cannot compensate for payment-required retry semantics.",
-    "PR232 workflow failures are UNKNOWN because logs are unavailable; neither semantic failure nor harmless infrastructure may be inferred.",
+    "Research-center commit c7afadb83c9bfd4e6527bd32b87b4e163750c08a is one shared project evidence family, not independent confirmation of prior supervisor writes.",
+    "Direct PR232 code inspection independently confirms request_id excludes credential/account/project/billing-principal identity; semantic equality must not mint cost authority.",
+    "HTTP 402 remains reserved/underspecified in RFC 9110, so provider-wide current-cycle hard-stop is a conservative project FREE_ONLY rule, not an inferred RFC retry semantic.",
+    "NVIDIA documentation supports free Developer Program prototyping but does not attest the entitlement, remaining credits, project or zero-cost state of a concrete credential at execution time.",
+    "PR232 workflow failures remain UNKNOWN because logs are unavailable; neither semantic failure nor harmless infrastructure may be inferred.",
     "36/40 parser coverage and 200576/0 differential do not establish evaluator language correctness.",
     "UNRESOLVED=0 remains non-acceptance; receipt semantics, host contracts and verb_for remain separately open.",
     "Goodman anti-echo remains mandatory; shared model/project/runner evidence is correlated.",

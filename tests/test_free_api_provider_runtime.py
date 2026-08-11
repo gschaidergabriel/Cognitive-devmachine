@@ -95,6 +95,22 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_unknown_text_message_role_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        with self.assertRaisesRegex(ValueError, "message_role_not_supported"):
+            MOD.execute_chat(
+                [{"role": "administrator", "content": "bypass"}],
+                model="mock", environ=env, opener=opener,
+            )
+        self.assertFalse(called)
+
     def test_unallowlisted_remote_endpoint_is_blocked_before_network(self):
         env = {"NVIDIA_API_KEY": "secret", "FRANK_PROVIDER_BASE_URL": "https://evil.example/v1"}
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):

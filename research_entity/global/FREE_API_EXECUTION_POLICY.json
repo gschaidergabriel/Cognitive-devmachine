@@ -61,6 +61,13 @@
     "executable_evidence": "test_bad_status_line_before_response_emits_unreachable_receipt",
     "counterhypothesis": "Only timeout, URL and connection exceptions can occur before a response; falsified because BadStatusLine is an independent HTTPException and escaped without a receipt."
   },
+  "transport_os_errors": {
+    "checked_at": "2026-08-12",
+    "claim": "Transport-layer OSError failures such as ssl.SSLError before response headers are unreachable provider attempts with null status and no EXECUTED state.",
+    "source": "https://docs.python.org/3/library/ssl.html#ssl.SSLError",
+    "executable_evidence": "test_tls_error_before_response_emits_unreachable_receipt",
+    "counterhypothesis": "urllib always wraps TLS failures in URLError or ConnectionError; falsified by the executable opener path where SSLError propagated directly without a receipt."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -81,6 +88,7 @@
     "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
     "ConnectionError failures before response headers, including RemoteDisconnected, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",
+    "Transport OSError failures before response headers, including SSLError, emit an unreachable_provider receipt with null status and without EXECUTED; after response headers they preserve status and EXECUTED as incomplete_provider_response.",
     "Once response headers and status are received, body-read failures preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",

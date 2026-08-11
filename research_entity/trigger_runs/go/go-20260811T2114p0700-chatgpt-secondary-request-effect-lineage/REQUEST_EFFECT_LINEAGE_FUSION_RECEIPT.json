@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_FUSION_RECEIPT",
+  "run_id": "go-20260811T2114p0700-chatgpt-secondary-request-effect-lineage",
+  "created_at_local": "2026-08-11T21:37:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "native_target": "self.root",
+    "human_surface": "Frank"
+  },
+  "topic": "Stable logical request identity to effect lineage and replayable semantic response continuity",
+  "ordinary_parent_evidence": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "parent_pr": 331,
+    "latest_observed_head": "476ec1719fc7c2bc9267c7cd7b9eeec3d94a5598",
+    "target_workflow_run": 31501836858,
+    "positive_status": "PASS_V16_EXPIRED_TAKEOVER_INGRESS_RECONCILIATION_WITH_V17_DONE_RECOVERY",
+    "authority_negative_status": "PASS_V16_CRASH_RECONCILIATION_AUTHORITY_NEGATIVES",
+    "facts": [
+      "A proven EXPIRED_TAKEOVER can reconcile one dead V16 ADMITTED request to FAILED while preserving its durable request key.",
+      "The old holder remains fenced and exactly one effect attempt remains recorded.",
+      "V17 recovery reaches DONE_VALID and COMPLETE without duplicate effect execution.",
+      "Normal release/reacquire without EXPIRED_TAKEOVER and mismatched recovery holders are denied mutation authority.",
+      "The repaired path still lacks an immutable completed semantic response/result receipt for retry replay."
+    ]
+  },
+  "go_oob": {
+    "count": 1,
+    "name": "REQUEST_EFFECT_LINEAGE_CARDINALITY",
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "draft_pr": 334,
+    "tested_sha": "4f6dc4025ba477391cb64e524988a15dc75cf581",
+    "workflow_run": 31501663097,
+    "job": 93812945476,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "python": "3.12.3",
+    "status": "SUPPORTED_GO_OOB_REQUEST_EFFECT_LINEAGE_CARDINALITY_GAP",
+    "artifact_id": 9105319072,
+    "artifact_sha256": "04470d96a39e94069458d72e5e5a2aea93b6c6678ac4c561ce1ec43ba0f83085",
+    "measurements": {
+      "requests_admitted_same_execution": 2,
+      "distinct_request_keys_same_execution": 2,
+      "typed_request_effect_bridge_tables": [],
+      "effect_fence_is_execution_scoped_not_request_scoped": true,
+      "unique_effect_per_execution_generation_constraint": false,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "external_effect_performed": false,
+      "canonical_product_database_touched": false
+    }
+  },
+  "hypothesis": "Execution-level V16 admission plus effect-generation fencing is sufficient to recover the exact prior effect/result for an exact retried ingress request.",
+  "counterhypothesis": "Because one execution can admit multiple logical requests while effect-generation persistence is execution-scoped, exact request retry cannot select a unique prior effect/result unless a request-specific lineage or higher-layer response ledger exists.",
+  "oob_adjudication": "COUNTERHYPOTHESIS_SUPPORTED_FOR_CURRENT_TYPED_V16_EFFECT_SURFACES",
+  "counterevidence_search": {
+    "searched_concepts": [
+      "request_key_hash response",
+      "response_receipt",
+      "semantically equivalent response replay request effect lineage"
+    ],
+    "result": "No current target-repo code-search hit located a higher-layer typed response ledger keyed to the V16 request identity. Absence remains non-exhaustive and must not be promoted as proof of global nonexistence."
+  },
+  "cross_branch_fusion": {
+    "adjacent_pr": 329,
+    "candidate": "FRANK_REQUEST_IDENTITY_V1",
+    "stable_identity_semantics": "request_identity_hash = H(principal_id, session_ref, client_ref, request_id)",
+    "credential_semantics": "credential_id and credential_fingerprint remain separate authentication-use provenance and must not define logical request identity across rotation",
+    "target_validation_status": "CANDIDATE_NOT_YET_WIRED_INTO_V16_V17_EFFECTS",
+    "decision": "Do not promote legacy credential-coupled V16 request_key_hash as the new request-to-effect lineage authority. Use the stable principal request identity or its promoted successor."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
+    "affected_packages": [
+      "F-V01-08-TOKEN-API-CLIENTS",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "proposal": [
+      "Persist one immutable stable logical request admission identity independent of rotatable credential instances.",
+      "Persist request-to-effect causal lineage as 1:N keyed by stable request_identity_hash because one logical request may legitimately cause multiple effects.",
+      "Persist one terminal semantic response receipt per logical request, referencing verified effect/outcome/re-entry receipts and carrying COMPLETE, RECONSTRUCTION_REQUIRED, FAILED or CANCELLED semantics without inventing historical bytes.",
+      "On exact retry, return or reconstruct the prior semantic result without re-executing already terminal effects; if outcome remains ambiguous, fail closed into reconciliation rather than guessing success/failure."
+    ],
+    "rejected_shortcut": "Enforcing a one-to-one execution-to-effect assumption is inconsistent with current follow-up request semantics and would hide the measured cardinality gap.",
+    "rollback": "No canonical schema/runtime mutation occurred in this receipt; reject the candidate and remove the stacked diagnostic branch if a stronger existing canonical response ledger is proven."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "AWS Builders Library - Making retries safe with idempotent APIs",
+      "support": "Caller-provided request identifiers support duplicate detection and semantically equivalent retry responses."
+    },
+    {
+      "source": "AWS Well-Architected REL04-BP04",
+      "support": "Idempotency tokens support retries without duplicate side effects and returning the prior response/result semantics."
+    },
+    {
+      "source": "RFC 9700",
+      "support": "Credential/token replay protection and sender constraints reinforce keeping credential instance/security provenance distinct from higher-level logical request identity."
+    }
+  ],
+  "strongest_remaining_counterhypothesis": "A current canonical response/result ledger outside the inspected typed request/effect schema already binds stable logical request identity to all effects and terminal semantic response, making the proposed new lineage layer redundant.",
+  "next_falsifier": "Compose the PR #329 stable request identity candidate with V16/V17 effect recovery in an isolated target test: admit two logical requests in one execution, bind distinct effect sets, rotate the credential for one retry, crash after effect terminalization but before response delivery, and require replay/reconstruction to select only the original logical request's verified effect set with zero duplicate effect attempts. This is an ordinary successor test, not a second GO OOB experiment.",
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "canonical_promotion_authorized": false
+}

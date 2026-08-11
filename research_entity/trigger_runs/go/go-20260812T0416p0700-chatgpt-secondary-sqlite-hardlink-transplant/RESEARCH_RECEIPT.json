@@ -14,8 +14,8 @@
     "generated_reality": "A same-inode hardlink of the trusted launcher into a foreign directory can preserve launcher bytes while changing sibling guard resolution without satisfying -L.",
     "counter_reality": "Linux hardlink protections or trusted deployment ownership might make the path unreachable in production; if so, the source-level gap would be non-exploitable under the proven service topology.",
     "falsifier": "Create a hardlink transplant of the exact current launcher shape beside a foreign fixed_sqlite_runtime_guard_v5_candidate.py and execute it before root-anchor admission.",
-    "outcome": "RETAIN",
-    "promotion_state": "SUPPORTED_LOCAL_NOT_TARGET_ACCEPTED"
+    "outcome": "PROMOTE_TO_VERIFIED",
+    "promotion_state": "SUPPORTED_TARGET_REGRESSION"
   },
   "unusual_experiment": {
     "count": 1,
@@ -28,11 +28,13 @@
     "observation": "The transplanted hardlink reached and executed the foreign sibling Python guard; traceback provenance demonstrated pre-real-guard code execution. The marker write itself failed only because the chosen directory was not writable by the non-root test user.",
     "rollback": "Temporary sandbox files only; removed/isolated outside Frank state."
   },
-  "repair_candidate": {
+  "repair": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "branch": "go/sqlite-v5-hardlink-transplant-20260812",
-    "head_sha": "fb83b1a308d4e096c3cea802895b6841ea4ee03a",
+    "tested_head_sha": "fb83b1a308d4e096c3cea802895b6841ea4ee03a",
     "pull_request": 482,
+    "merged": true,
+    "merge_sha": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
     "changes": [
       "Launcher now fails closed when absolute /usr/bin/stat reports st_nlink != 1 before sibling resolution.",
       "Existing pre-guard path regression now covers the hardlink-transplant counterworld and verifies no hostile sibling guard execution."
@@ -46,8 +48,10 @@
     "target_ci": {
       "workflow_run": 31537077376,
       "workflow": "Frank SQLite V5 launcher pre-guard PATH regression",
-      "state_at_receipt": "QUEUED",
-      "target_pass_claimed": false
+      "state": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "exact_tested_head_sha": "fb83b1a308d4e096c3cea802895b6841ea4ee03a",
+      "target_regression_pass": true
     }
   },
   "external_primary_evidence": [
@@ -62,15 +66,15 @@
   ],
   "negative_and_open_evidence": [
     "F-V01-13 remains OPEN: no productive fixed SQLite/root-anchor/service acceptance receipt was produced.",
-    "Self-hosted targeted PR workflow was still queued at receipt time.",
+    "The target regression proves only the pre-Python launcher hardlink/symlink/PATH boundary, not productive installed service ownership or root-anchor continuity.",
     "Frank Deep Integrity GitHub-hosted job failed before running steps and is not treated as evidence against or for this specific repair."
   ],
   "next_falsifiers": [
-    "Obtain exact self-hosted PR #482 regression result for fb83b1a308d4e096c3cea802895b6841ea4ee03a.",
     "Re-run the productive read-only SQLite path probe after the accepted target provisions the root-owned anchor/service/runtime.",
-    "Prove service topology and filesystem ownership make alternate launcher path selection impossible even before source-level defense."
+    "Prove service topology and filesystem ownership make alternate launcher path selection impossible even before source-level defense.",
+    "Exercise restart/rollback with the productive root anchor and fixed runtime while preserving semantic lineage fail-closed behavior."
   ],
-  "claim_boundary": "Local security finding plus repair candidate only; no accepted-target PASS, no production provisioning, no whole Frank v0.1 acceptance.",
+  "claim_boundary": "Target-regression-supported pre-Python launcher hardening only; no productive root-anchor/service acceptance and no whole Frank v0.1 acceptance.",
   "effect_authority": "NONE",
   "harness_authority": "NONE",
   "training_started": false

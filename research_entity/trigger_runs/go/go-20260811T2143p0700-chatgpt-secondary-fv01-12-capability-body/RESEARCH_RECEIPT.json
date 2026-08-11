@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260811T2143p0700-chatgpt-secondary-fv01-12-capability-body",
   "trigger": "go",
   "origin_actor": "chatgpt-secondary",
@@ -9,6 +9,7 @@
   "entity": "Clay",
   "research_subject": "self.root / Frank v0.1",
   "observed_at_local": "2026-08-11T21:43:38+07:00",
+  "updated_at_local": "2026-08-11T21:58:13+07:00",
   "canonical_parent": {
     "entity_version": "RAE-8.8",
     "revision": 2,
@@ -26,19 +27,12 @@
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "main_at_branch_claim": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
     "candidate_pr": 335,
-    "candidate_head": "94f6c457547dcd52fd12b7c4c19699c0caf4f241",
+    "candidate_head": "b87bc2ffe386ee64282bcde85687f9ce88e423f0",
     "draft": true,
     "mergeable_last_observed": true
   },
-  "hypothesis": "A typed external-capability/body projection can expose currently observed tools and peers to Frank self-modeling while preserving self.root/TARGET_VPS identity and preventing presence, provider/model labels or capability advertisements from minting SELF or authority.",
+  "hypothesis": "A typed external-capability/body projection can expose currently observed tools and peers to Frank self-modeling while preserving self.root/TARGET_VPS identity and preventing presence, provider/model labels or capability advertisements from minting SELF or authority. Capability evidence must additionally fail closed on staleness/revocation and old successful trials must never resurrect revoked competence.",
   "strongest_counterhypothesis": "The adapter may be redundant or overconservative; two local executions may not predict future availability, and external peer capability requires a stronger independent route-verification producer rather than this slice.",
-  "internal_contract_basis": [
-    "claycode/frank_entity.clay",
-    "claycode/frank_self_model.clay",
-    "claycode/frank_hive.clay",
-    "runtime/state/UNIFIEDDB_SCHEMA.sql",
-    "runtime/state/frank_state_runtime_impl.py"
-  ],
   "fresh_external_evidence": [
     {
       "source": "NIST SP 800-207 Zero Trust Architecture",
@@ -50,6 +44,13 @@
       "url": "https://csrc.nist.gov/pubs/sp/800/207/a/final",
       "claim_used": "application/service identity and explicit policy enforcement replace affiliation/location based implicit trust"
     }
+  ],
+  "internal_contract_basis": [
+    "claycode/frank_entity.clay",
+    "claycode/frank_self_model.clay",
+    "claycode/frank_hive.clay",
+    "runtime/state/UNIFIEDDB_SCHEMA.sql",
+    "runtime/state/frank_state_runtime_impl.py"
   ],
   "baseline_gap_found": {
     "surface": "FrankStateRuntime programmer API",
@@ -64,11 +65,14 @@
       "claycode/frank_capability_body.clay",
       "runtime/capabilities/frank_capability_body_v1_candidate.py",
       "tests/frank_capability_body_v1_candidate_gate.py",
+      "tests/frank_capability_freshness_revocation_v1_gate.py",
       "tests/frank_capability_ghost_peer_root_crown_oob.py",
       ".github/workflows/frank-fv01-12-capability-body-v1-vps.yml"
     ],
     "presence_policy": "external node/tool presence => UNKNOWN capability and zero implicit authority",
-    "local_tool_policy": "exact stored executable path is self-executed; >=2 successful local trials => CAN_DELEGATE candidate",
+    "local_tool_policy": "exact stored executable path is self-executed; >=2 successful local trials in the current trial_generation => CAN_DELEGATE candidate",
+    "freshness_policy": "stale capability evidence reads UNKNOWN without deleting raw history",
+    "revocation_policy": "revocation advances trial_generation; all pre-revocation trials remain raw evidence but cannot contribute to current capability",
     "external_peer_policy": "UNKNOWN until a separate independently verified external-route producer exists",
     "identity_policy": "SELF remains self.root; body remains TARGET_VPS",
     "authority_policy": "CAN_DELEGATE never mints effect or Harness authority"
@@ -83,6 +87,11 @@
       "finding": "first hardened draft overwrote executable presence provenance after the first probe",
       "impact": "second exact-path probe could not reconstruct binding",
       "repair": "behavioral receipts now preserve original PRESENCE_ONLY executable provenance across repeated probes"
+    },
+    {
+      "finding": "first revocation design used a timestamp cutoff",
+      "impact": "same-second timestamp resolution could admit pre-revocation trials into a post-revocation calculation",
+      "repair": "replaced timestamp cutoff with explicit random trial_generation binding"
     }
   ],
   "normal_target_gate": {
@@ -93,9 +102,24 @@
     "external_presence_mints_authority": false,
     "node_observation_provenance_persisted": true,
     "restart_preserved": true,
-    "integrity_check": "ok",
-    "wall_seconds": 0.14,
-    "max_rss_kib": 25972
+    "integrity_check": "ok"
+  },
+  "freshness_revocation_target_gate": {
+    "status": "PASS_FV01_12_FRESHNESS_REVOCATION_GATE",
+    "fresh_prediction": "CAN_DELEGATE",
+    "stale_prediction": "UNKNOWN",
+    "revoked_prediction": "UNKNOWN",
+    "reobserve_after_revocation_prediction": "UNKNOWN",
+    "post_revocation_one_probe_prediction": "UNKNOWN",
+    "post_revocation_two_probe_prediction": "CAN_DELEGATE",
+    "pre_revocation_raw_trials": 2,
+    "final_raw_trials": 4,
+    "effective_current_generation_trials": 2,
+    "raw_history_preserved": true,
+    "pre_revocation_trials_resurrected": false,
+    "revocation_provenance_persisted": true,
+    "restart_preserved": true,
+    "integrity_check": "ok"
   },
   "go_oob_experiment": {
     "count_new_in_this_invocation": 1,
@@ -109,16 +133,14 @@
     "candidate_self_id": "self.root",
     "candidate_body": "TARGET_VPS",
     "claim_boundary": "PROGRAMMER_API_TRUST_GAP_NOT_REMOTE_EXPLOIT_PROOF",
-    "wall_seconds": 0.14,
-    "max_rss_kib": 24960,
     "external_effect_performed": false,
     "canonical_frank_state_mutated": false
   },
   "target_vps_execution": {
     "workflow": "Frank F-V01-12 capability/body candidate VPS",
-    "workflow_run": 31503078981,
-    "job": 93817756239,
-    "head_sha": "94f6c457547dcd52fd12b7c4c19699c0caf4f241",
+    "workflow_run": 31504081257,
+    "job": 93821125709,
+    "head_sha": "b87bc2ffe386ee64282bcde85687f9ce88e423f0",
     "status_observed": "COMPLETED_SUCCESS",
     "runner_name": "clay",
     "hostname": "digital-retina",
@@ -129,56 +151,56 @@
     "git": "2.43.0",
     "sqlite": "3.45.1",
     "repo_static_integrity": "PASS",
-    "artifact_id": 9105886572,
-    "artifact_sha256": "129c7b5604b40837ffbfc00568cbeaece205ea24a0ac15bf5605a530eb7982f8",
+    "artifact_id": 9106418562,
+    "artifact_sha256": "e82d581d84c18a0c54fea9223670e369892d1a9d32409dcc703ff55fd7e1b367",
+    "environment_json_sha256": "c9c8dfde03c95cca5b78d5e2a020861172ce6e26822a30d35f3eaedf7e3961c0",
     "normal_json_sha256": "339d64bd85f96e9041c04cf5091023caf311f009d5d2ebe650259e80e7f81a03",
+    "freshness_revocation_json_sha256": "c450a1b0d311e7fafbb4d1f45b426606a49d99c08595e16fbe592bea33925f92",
     "oob_json_sha256": "67ed10866ed151263f5853ca03db9117af26fe0f970e780c0db0996ab2a4dfb3"
   },
   "exact_candidate_blob_bindings": {
     "claycode/frank_entity.clay": "e90e88ac85fe77a3d7358594505121b3d9cf23ee",
     "claycode/frank_self_model.clay": "364db4637f6f44f44262e602cd32eedab2c3678d",
     "claycode/frank_hive.clay": "bf427fdfc9409fb93c87af7d2453c491eadd15be",
-    "claycode/frank_capability_body.clay": "26483ee9e280f2e6b284bd6a96ba1c294fe719c6",
+    "claycode/frank_capability_body.clay": "147b7493a70f3aff930f28ec4badad26730a3599",
     "runtime/state/UNIFIEDDB_SCHEMA.sql": "20e5269c2770d98896477b4f263efb8c35d3c1fb",
     "runtime/state/frank_state_runtime.py": "9b07686c873127568d8b02ae57aec3932a1b8fd0",
     "runtime/state/frank_state_runtime_impl.py": "cd91031d2eacc9f195a3f6e608c52adf7219fc90",
-    "runtime/capabilities/frank_capability_body_v1_candidate.py": "ef19901813efb975c993c5f78bad2b076e12859b",
+    "runtime/capabilities/frank_capability_body_v1_candidate.py": "5a2f5482cf8747408be9dbf344af3c83d833ff42",
     "tests/frank_capability_body_v1_candidate_gate.py": "5e9eb9248247d01f02bd714d8b91ecb8016b2da0",
+    "tests/frank_capability_freshness_revocation_v1_gate.py": "9aa2dfef26098c74c3cd363fbcdc810f3026cdce",
     "tests/frank_capability_ghost_peer_root_crown_oob.py": "a097e57f498527836b49d635904c923ba9b5bc90"
   },
   "global_ci_reconciliation": {
     "workflow": "Frank Deep Integrity",
-    "current_run": 31503079248,
     "current_status": "FAILURE_WITH_ZERO_RETRIEVABLE_STEPS_OR_LOGS",
     "historical_repo_precedent_commit": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
     "historical_precedent": "hosted Deep Integrity failure with zero executed steps was explicitly classified infrastructure-only and not candidate evidence",
-    "causal_attribution_to_pr335": "NOT_ESTABLISHED",
-    "adjudication": "INFRASTRUCTURE_ONLY_UNLESS_NEW_EXECUTED_STEP_EVIDENCE_APPEARS",
-    "candidate_evidence_effect": "NO_NEGATIVE_CANDIDATE_EVIDENCE_FROM_ZERO_STEP_HOSTED_FAILURE"
+    "adjudication": "INFRASTRUCTURE_ONLY_UNLESS_NEW_EXECUTED_STEP_EVIDENCE_APPEARS"
   },
   "architecture_adjudication": {
     "status": "CANDIDATE_TARGET_SUPPORTED",
-    "architecture_delta": "ADD_TYPED_EXTERNAL_CAPABILITY_BODY_PROJECTION_WITH_ZERO_IMPLICIT_AUTHORITY",
+    "architecture_delta": "ADD_TYPED_EXTERNAL_CAPABILITY_BODY_PROJECTION_WITH_ZERO_IMPLICIT_AUTHORITY_AND_GENERATION_BOUND_FRESHNESS_REVOCATION",
     "promotion": "NOT_AUTHORIZED",
     "whole_F_V01_12_completion_claimed": false,
     "whole_Frank_v0_1_acceptance_claimed": false
   },
   "required_successors": [
     "add independent external-peer route verification producer before any peer CAN_DELEGATE promotion",
-    "test freshness expiry/revocation/stale capability behavior",
     "compose capability routing with separate effect authority without authority laundering",
     "measure routing calibration and OOD transfer rather than treating two local successes as general competence",
+    "exercise revocation concurrently with in-flight local-tool probes under realistic scheduler pressure",
     "continue to treat hosted Deep Integrity zero-step failures as infrastructure-only unless executed-step evidence changes that classification"
   ],
   "workspace_delta": {
     "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES": {
-      "action": "ADD_TARGET_SUPPORTED_PARTIAL_CANDIDATE_KEEP_PACKAGE_OPEN",
+      "action": "ADD_TARGET_SUPPORTED_CAPABILITY_LIFECYCLE_CANDIDATE_KEEP_PACKAGE_OPEN",
       "candidate_pr": 335,
-      "target_run": 31503078981,
+      "target_run": 31504081257,
       "status": "OPEN_TARGET_SUPPORTED_PARTIAL"
     }
   },
-  "research_disposition": "TARGET_SUPPORTED_PARTIAL_CANDIDATE_WITH_ACTIVE_COUNTERHYPOTHESIS",
+  "research_disposition": "TARGET_SUPPORTED_PARTIAL_CANDIDATE_WITH_FRESHNESS_REVOCATION_PROVEN_AND_EXTERNAL_PEER_ROUTE_STILL_OPEN",
   "training_authorization_changed": false,
   "frank_self_harness_authority_changed": false
 }

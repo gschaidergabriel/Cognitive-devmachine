@@ -379,6 +379,8 @@ def execute_chat(
             response_started = True
             lifecycle.append("EXECUTED")
             response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
+            if not isinstance(response_body, bytes):
+                raise TypeError("response_body_must_be_bytes")
             if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
                 raise ProviderResponseTooLarge
         if not 200 <= status < 300:

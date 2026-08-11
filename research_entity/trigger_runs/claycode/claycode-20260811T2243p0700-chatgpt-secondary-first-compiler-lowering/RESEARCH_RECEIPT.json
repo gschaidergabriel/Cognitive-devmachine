@@ -1,11 +1,11 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "run_id": "claycode-20260811T2243p0700-chatgpt-secondary-first-compiler-lowering",
   "trigger": "claycode",
   "created_at_local": "2026-08-11T22:43:00+07:00",
   "created_at_utc": "2026-08-11T15:43:00Z",
-  "refreshed_at_local": "2026-08-11T23:02:38+07:00",
-  "refreshed_at_utc": "2026-08-11T16:02:38Z",
+  "refreshed_at_local": "2026-08-11T23:10:44+07:00",
+  "refreshed_at_utc": "2026-08-11T16:10:44Z",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
@@ -20,27 +20,24 @@
     "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
   },
   "research_center_parent_initial": "b17bfec872bd1dcc8f6e2d6f4bc54feac57f4dee",
-  "research_center_head_before_refresh": "b916f83d9b3d43a4b5732b88643aeb0b8237889b",
+  "research_center_head_before_refresh": "b1281980bd153d3a22a903d7c18ee6fd7e8fb580",
   "program": "FRANK_V0_1",
   "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
   "target_repository": "gschaidergabriel/Dr.-Unterweger",
-  "fresh_target_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+  "current_target_main_at_refresh": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
   "current_evidence_input": {
     "merged_executable_evaluator_pr": 310,
-    "merged_main_commit": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
     "accepted_target_run": 31506115570,
     "decide_effect_requests_compared": 200576,
     "decide_effect_mismatches": 0,
-    "package_binding_checks": "7/7 PASS",
     "scope_limit": "decide_effect and destructive_guard_complete only"
   },
   "mesh_inputs": {
-    "unifieddb_claygraph_current_delta": "caf8d5acd1f867af2ee479b5506fdce9c6b9af62",
-    "relevant_constraint": "canonical/current production state remains unopened/unmigrated until accepted migration/rollback/recovery; this compiler experiment is source/value-only and performs no UnifiedDB/ClayGraph canonical mutation",
-    "semantic_authority_constraint": "ClayCode remains semantic authority; backend representation is compiled projection only",
+    "semantic_authority_constraint": "ClayCode remains semantic authority; backends are compiled projections only",
+    "unifieddb_claygraph_constraint": "this compiler experiment performs no canonical UnifiedDB/ClayGraph migration or state mutation",
     "nominal_typecheck_lane": {
       "pr": 369,
-      "head": "cf4957650af239f9ad9880b60b72cc31d9da8cb2",
+      "head_observed": "cf4957650af239f9ad9880b60b72cc31d9da8cb2",
       "target_run": 31509914652,
       "target_job": 93840836630,
       "target": "clay/digital-retina Linux X64 Python 3.12.3",
@@ -49,131 +46,165 @@
       "elapsed_wall_seconds": 0.20,
       "max_rss_kib": 25088,
       "key_result": "real decide_effect + destructive_guard_complete nominally type-admit; Bool==Int, comparison chains, wrong argument/return/condition and untyped host intrinsic controls fail closed",
-      "authority_claim": "NONE",
+      "ownership": "bounded nominal type admission; backend lanes must not invent a second type system",
       "wp04_pass_claim": false
     },
-    "native_backend_lane": {
+    "python_ast_backend_lane": {
+      "pr": 364,
+      "accepted_head": "74bc81aaff436e1c1b96f6365818bb8d222f9f38",
+      "accepted_synthetic_merge": "919751adb962fe995b890bab961e8c93ff0c2580",
+      "accepted_merge_base_main": "0b765534e693707b813dab9ff7471189ee48ef91",
+      "accepted_target_run": 31510276958,
+      "accepted_target_job": 93842059040,
+      "status": "PASS_CLAYCODE_PYTHON_LOWERING_V1",
+      "checks": "12/12",
+      "requests_compared": 200576,
+      "mismatches": 0,
+      "generated_ast_sha256": "4705d614089878c6e5b0b334c20a80431d3b16e4401b388fa19c16cf2f8c5bc8",
+      "compiler_source_sha256": "9df4a79c961a7bcd869ed78a8661c783291fb8d1e02b7167af15ed8035447166",
+      "clay_source_sha256": "fb1e7316f0987e917da4385e50dd5b1037a02500c2cdbbb2266f36a74bfd0d88",
+      "grammar_sha256": "64a22026f16802c06f6a11613315bdbcee938c11a5f32e66eccde7e093478ac4",
+      "analyzer_sha256": "28de0788992b27a260da40cecaf1b4ca3552c790f1c89d135f2eb528f192030d",
+      "evaluator_sha256": "8e6e239a38122020b91c42fe9b2cdb683113c2ff4c58a67c723a26b259c53759",
+      "syntax_sha256": "43078694850dc6c8bce1cc295e397d010f14fe550871af1b7a68f5ddec1d9b5d",
+      "benchmark": {
+        "corpus_size": 2048,
+        "rounds": 6,
+        "counterbalanced": true,
+        "evaluator_median_ns_per_call": 15777.2470703125,
+        "compiled_median_ns_per_call": 7196.484130859375,
+        "median_speedup_evaluator_over_compiled": 2.192354875439494,
+        "promotion_gate": false
+      },
+      "whole_gate": {
+        "elapsed_wall_seconds": 10.50,
+        "max_rss_kib": 29056,
+        "exit_status": 0
+      },
+      "capability_audit": "PASS",
+      "adversarial_host_capability_ast_graft": "DETECTED",
+      "bool_int_alias": "FAIL_CLOSED_CROSS_RUNTIME_TYPE_COMPARISON_REFUSED",
+      "comparison_chain": "FAIL_CLOSED_UNRESOLVED",
+      "semantic_sabotage": "DIFFERENTIAL_TURNS_RED",
+      "artifact": {
+        "id": 9108775196,
+        "digest": "sha256:e1f0a6b7ea64c908b3f9869ea099bb61017faffa9980f4d84486596a7db02e07",
+        "expires_at": "2026-08-25T16:03:06Z"
+      },
+      "staleness_at_refresh": "SUPPORTED_MECHANISM_BUT_NOT_FRESH_CURRENT_MERGE_EVIDENCE",
+      "reason": "accepted synthetic merge used main 0b765534...; current main later advanced to 94bc32c..."
+    },
+    "native_c_backend_lane": {
       "pr": 366,
-      "head": "ee6536ea9ca5382931a050cb0c195d4945ca9cdc",
-      "backend": "deterministic C11 -> target shared object",
+      "head_observed": "ee6536ea9ca5382931a050cb0c195d4945ca9cdc",
       "base": "PR #357 ClayCode frontier integration",
       "target_run": 31509419897,
-      "target_state_at_refresh": "PENDING",
-      "role_relative_to_pr364": "independent native compiler competitor / differential backend",
-      "promotion_dependency": "PR #357 target composition must be accepted first"
+      "target_job": 93839163226,
+      "target": "clay/digital-retina Linux X64 Python 3.12.3 / cc 13.3.0",
+      "status": "PASS_CLAYCODE_C_LOWERING_V1_CANDIDATE",
+      "checks": "8/8",
+      "requests_compared": 200576,
+      "mismatches": 0,
+      "generated_c_bytes": 7648,
+      "generated_c_sha256": "b8bdd0da5eab025676fe91e9ca5835dc3ad5250afe032099a1e1043547183bdf",
+      "shared_object_sha256": "4b8ff5d3af602fd5b1615a7b74f4bcac7e61c59825c7a662006b5fd4df21576e",
+      "clay_source_sha256": "37a636f7cc2fce7dc9336adc54eef699bd8ccf0e3c9a885b126906783493992a",
+      "grammar_sha256": "dcca9d62a8e2f7cc7aa8529c531a6398595800f42aead9c87076b245998c5d54",
+      "analyzer_sha256": "18dc2a8070f89568eef94c7ec3edd263946e6258bad338e1192ee81fa3f238ac",
+      "evaluator_sha256": "6451c40f93e2fed32c4c88fe2c10104588dd63decdb5c74ccb989a45c9970331",
+      "syntax_sha256": "c683fe466c6c61d495f37859a774312e074d28998b79585f42d9275432133c3d",
+      "whole_gate": {
+        "elapsed_wall_seconds": 10.12,
+        "max_rss_kib": 34476,
+        "exit_status": 0
+      },
+      "fail_closed": ["comparison chain", "Bool==Int cross nominal", "unresolved call", "host intrinsic calls absent"],
+      "evidence_class": "ACTUAL_CLAY_AST_TO_C_TO_NATIVE_SHARED_OBJECT_THREE_WAY_DIFFERENTIAL",
+      "wp06_pass_claim": false
     }
+  },
+  "hypothesis": "An already target-supported pure ClayCode subset can be lowered into more than one deterministic executable backend without semantic drift when open semantics fail closed and backend capabilities remain bounded.",
+  "strongest_counterhypothesis": "Backend agreement is an artifact of shared or differing harness/source ancestry; Python-AST may import host semantics while C may encode translation-specific assumptions, so neither backend can be selected without matched source/type/base comparison.",
+  "backend_comparison": {
+    "python_ast_mechanism_supported": true,
+    "native_c_mechanism_supported": true,
+    "winner_selected": false,
+    "reason_no_winner": "source/grammar/analyzer/evaluator hashes differ across accepted backend runs; wall-clock scopes also differ and C lacks a matched per-call microbenchmark",
+    "required_next_comparison": "same accepted nominal typecheck + same Clay source/grammar/analyzer/evaluator + same request corpus + same target + matched warm runtime benchmark + capability/isolation audit",
+    "selection_axes": ["semantic correctness", "semantic isolation", "determinism", "reproducibility", "latency", "resources", "integration complexity", "recovery/rollback"]
+  },
+  "fresh_current_replay": {
+    "pr": 364,
+    "current_candidate_head": "1bb229db3e212ef8426d9d817107e4c109eca152",
+    "current_synthetic_merge": "715e9ea3e6c55b0ba9e747578172161d012782fd",
+    "verified_merge_relation": "Merge 1bb229db3e212ef8426d9d817107e4c109eca152 into 94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+    "target_run": 31510501416,
+    "target_job": 93842809798,
+    "state_at_refresh": "QUEUED",
+    "promotion_rule": "no merge/promotion from earlier green synthetic merge; require this fresh-current composition to pass first"
+  },
+  "frontier_integration": {
+    "pr": 357,
+    "current_head_observed": "1a8dc9afb6a0f73ccf588e1897388c48b47a3170",
+    "state": "OPEN_DRAFT_CURRENTLY_NOT_MERGEABLE",
+    "active_resolver": "current worker detected an active main-lineage resolver workflow in the branch and did not duplicate its work",
+    "dependency_for_native_c": "PR #366 remains stacked/dependency-gated on #357"
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_DUAL_BACKEND_MECHANISMS_PENDING_CURRENT_COMPOSITION_AND_MATCHED_SELECTION",
+    "affected_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "semantic_change": false,
+    "type_system_ownership": "PR #369 bounded nominal checker / future canonical Clay type-effect layer",
+    "reference_backend": "PR #364 CPython AST",
+    "native_backend_candidate": "PR #366 C11/shared object",
+    "backend_is_semantic_authority": false,
+    "rollback": "all backend candidates remain PR-scoped; no current-main compiler merge claimed by this receipt"
   },
   "external_primary_evidence": [
     {
-      "source": "Python 3.12 compile() documentation",
+      "source": "Python 3.12 compile()/AST documentation",
       "retrieved": "2026-08-11",
-      "use": "supports an AST/code-object bootstrap backend without string code generation"
-    },
-    {
-      "source": "Python 3.12 ast.fix_missing_locations documentation",
-      "retrieved": "2026-08-11",
-      "use": "generated AST nodes require location attributes before compile(); semantic identity is frozen before location repair"
+      "use": "bootstrap AST/code-object backend mechanics only"
     },
     {
       "source": "actions/upload-artifact v4.6.2 verified GitHub release",
       "retrieved": "2026-08-11",
       "commit": "ea165f8d65b6e75b540449e92b4886f43607fa02",
-      "use": "target-evidence upload action pinned by immutable verified commit rather than moving major tag"
-    },
-    {
-      "source": "Cranelift codegen 0.134.2 documentation",
-      "retrieved": "2026-08-11",
-      "use": "retained as later lower-level native-code candidate; current live native comparison is PR #366 C11 lowering"
+      "use": "immutable evidence-upload action pin"
     }
   ],
-  "hypothesis": "The already target-supported pure ClayCode effect-policy subset can be lowered into a deterministic executable reference backend while preserving source-evaluator semantics exactly and without opening an effect/authority path.",
-  "strongest_counterhypothesis": "A host-AST backend imports Python coercion/capability behavior and becomes a second semantic architecture rather than a faithful compiled projection of ClayCode; a native backend may therefore dominate it once type-admitted semantics and integration ancestry are equivalent.",
-  "discriminating_design": {
-    "candidate": "CPYTHON_AST_BOOTSTRAP_V1",
-    "target_pr": 364,
-    "target_branch": "chatgpt/claycode-python-lowering-v1-fresh-main-20260811",
-    "target_head": "52fd13a99a6ba06a2183f78a0fbf862835292250",
-    "target_pr_run_visible_to_connector": 31509860930,
-    "target_pr_run_state_at_refresh": "PENDING_WITH_JOB_QUEUED",
-    "target_pr_job": 93840651297,
-    "compiled_entry": "frank.effects::decide_effect",
-    "reachable_clay_functions": ["decide_effect", "destructive_guard_complete"],
-    "three_way_oracles": ["ClayCode tree evaluator", "compiled Python-AST backend", "shipping Python EffectGate reference"],
-    "planned_requests": 200576,
-    "checks_total": 12,
-    "fail_closed_guards": [
-      "intrinsic-reachable entry is refused",
-      "multi-relation comparison chain is refused until semantics are adjudicated",
-      "Bool-vs-Int host equality alias is refused instead of inheriting Python True==1",
-      "unknown AST statement/expression node is refused",
-      "compiled AST/global capability surface is independently audited",
-      "adversarial host-capability AST graft must be detected",
-      "no authority-minting intrinsic binding exists",
-      "no external effect path exists"
-    ],
-    "sensitivity": "one in-memory semantic sabotage must turn the three-way differential red",
-    "determinism": "repeated lowering must produce the same location-free generated AST hash",
-    "performance_shadow": {
-      "corpus_size": 2048,
-      "rounds": 6,
-      "counterbalanced": true,
-      "warmup_calls_per_mode": 128,
-      "promotion_gate": false
-    },
-    "supply_chain_binding": "actions/upload-artifact pinned to ea165f8d65b6e75b540449e92b4886f43607fa02 (v4.6.2)"
-  },
   "stale_work_adjudication": {
     "stale_pr": 362,
-    "stale_head": "91b21b5413f8683c638552d79126045bcbfa818c",
-    "reason": "target main advanced concurrently when PR #310 merged",
     "action": "CLOSED_NOT_MERGED_AND_REBUILT_FROM_FRESH_MAIN",
-    "new_pr": 364
-  },
-  "concurrent_worker_fusion": {
-    "accepted": [
-      "PR #369 owns bounded nominal type admission and has exact target PASS; PR #364 must not duplicate it into a second type system",
-      "PR #366 is a native C lowering competitor; PR #364 is reclassified as independent bootstrap/reference backend rather than the only compiler lane",
-      "concurrent PR #364 test hardening replaced tautological safety booleans with real capability-surface audit plus adversarial AST-graft detection"
-    ],
-    "new_dependency_rule": "promotion of a backend beyond isolated mechanism evidence requires composition with the accepted nominal type-admission boundary once #369 is integrated, then matched semantic corpus comparison against other viable backends",
-    "backend_selection_rule": "do not promote Python-AST merely because it is first; prefer Pareto evidence across correctness, semantic isolation, reproducibility, latency/resources and integration complexity"
-  },
-  "architecture_delta": {
-    "status": "CANDIDATE_TESTING_REFERENCE_BACKEND",
-    "affected_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-    "change": "introduce a bounded deterministic executable Python-AST lowering as a reference/backend differential for the already evidenced pure policy subset",
-    "semantic_change": false,
-    "backend_is_semantic_authority": false,
-    "type_system_ownership": "PR #369 nominal checker / future canonical Clay type-effect layer, not PR #364 backend",
-    "native_competitor": "PR #366 C11 lowering",
-    "rollback": "close PR #364 / delete candidate branch; merged main remains unchanged until scoped promotion evidence is accepted"
+    "first_green_pr364_reclassified": "SUPPORTED_MECHANISM_NOT_CURRENT_MERGE_EVIDENCE",
+    "fresh_current_replay_required": true
   },
   "negative_results_and_nonclaims": [
-    "The first compiler PR #362 is stale historical evidence and was closed without merge.",
-    "Several PR-triggered self-hosted #364 runs were cancelled before steps during concurrent branch movement; cancellation is missing execution evidence, not product counterevidence.",
-    "The sandbox could not DNS-resolve github.com for an independent git clone, so no local execution receipt is claimed.",
-    "No #364 target PASS is claimed while exact current candidate execution is still pending.",
-    "No WP04 type/effect completion is claimed; #369 itself also claims only bounded nominal admission, not WP04 completion.",
+    "No backend winner is selected from non-matched ancestry.",
+    "No #364 current-main merge PASS is claimed while fresh-current run 31510501416 is queued.",
+    "No WP04 completion is claimed; #369 is bounded nominal admission only.",
+    "No WP06 completion is claimed; #366 and #364 are bounded backend mechanisms only.",
     "No comparison-chain semantics are selected.",
     "No Bool/Int cross-nominal equality semantics are selected.",
-    "No host intrinsic/effect runtime is compiled.",
-    "No UnifiedDB/ClayGraph canonical state is opened or migrated.",
+    "No canonical UnifiedDB/ClayGraph state is opened or migrated.",
     "No whole Frank v0.1 acceptance or training authorization is claimed."
   ],
   "open_risks": [
-    "Backend-reserved helper-name shadowing by source bindings remains a compiler-specific hardening target for any scope broader than the current fixed source closure.",
-    "Python function globals are host-runtime objects; capability audit is evidence for the emitted bounded program, not a hostile-Python sandbox claim.",
-    "PR #364 and #366 currently do not yet share one accepted typecheck+source+base ancestry, so raw speed/result comparison before composition would be confounded.",
-    "GitHub-hosted global Deep Integrity failures expose a separate repo/CI lane issue but have not produced compiler-specific executed steps in the observed failed runs."
+    "Backend-reserved helper-name shadowing by future broader source bindings remains a compiler hardening target.",
+    "Python capability audit is evidence for the emitted bounded program, not a hostile-Python sandbox claim.",
+    "C and Python accepted runs have different source/type ancestry and non-identical performance measurement scopes.",
+    "PR #357 frontier integration is currently not mergeable and has its own active lineage resolver.",
+    "GitHub-hosted global Deep Integrity failures remain a separate repo/CI issue without compiler-specific executed-step evidence in observed instant failures."
   ],
   "next_falsifiers": [
-    "observe exact current PR #364 target run and require 12/12 checks, zero three-way mismatches, capability audit PASS and adversarial graft detection",
-    "compose backend admission with the target-supported nominal typecheck contract from PR #369 after its repository integration/adjudication",
-    "obtain exact comparable target evidence for PR #366 C backend and compare correctness, resource/latency shadows and semantic-isolation risk on matched source/type ancestry",
-    "probe backend reserved-name shadowing before expanding compiler scope beyond the fixed decide_effect closure",
-    "compile the next source subset only after its nominal/effect semantics are statically admitted and differentially evidenced"
+    "complete fresh-current PR #364 target run 31510501416 against synthetic merge 715e9ea3... and require all compiler gates green",
+    "compose #369 nominal type admission with both viable backend paths after integration",
+    "re-run Python-AST and C backends on identical source/grammar/analyzer/evaluator ancestry and same target/corpus",
+    "add a matched C-vs-Python warm per-call benchmark rather than comparing whole gate wall times",
+    "probe backend reserved-name shadowing before expanding compiler scope",
+    "keep PR #357 resolver work non-duplicated and ingest its result when available"
   ],
-  "research_write": "COMMITTED_CANDIDATE_PENDING_TARGET_RECEIPT",
+  "research_write": "COMMITTED_SUPPORTED_MECHANISMS_PENDING_FRESH_CURRENT_REPLAY",
   "external_effect_performed": false,
   "frank_harness_modified_under_frank_authority": false,
   "final_training_authorized": false

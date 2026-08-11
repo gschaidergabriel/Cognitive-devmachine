@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2143p0700-chatgpt-secondary-fv01-12-capability-body",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "observed_at_local": "2026-08-11T21:43:38+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "self_coordination": {
+    "initial_candidate_gap": "F-V01-11-MEMORY-REWARD-GOALS",
+    "collision_detected": "chatgpt/go-reward-plasticity-v1-20260811 plus concurrent Clay reward receipts",
+    "collision_action": "ABANDON_DUPLICATE_LANE_BEFORE_BUILD",
+    "selected_nonoverlapping_gap": "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES"
+  },
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_at_branch_claim": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "candidate_pr": 335,
+    "candidate_head": "94f6c457547dcd52fd12b7c4c19699c0caf4f241",
+    "draft": true,
+    "mergeable_last_observed": true
+  },
+  "hypothesis": "A typed external-capability/body projection can expose currently observed tools and peers to Frank self-modeling while preserving self.root/TARGET_VPS identity and preventing presence, provider/model labels or capability advertisements from minting SELF or authority.",
+  "strongest_counterhypothesis": "The adapter may be redundant or overconservative; two local executions may not predict future availability, and external peer capability requires a stronger independent route-verification producer rather than this slice.",
+  "internal_contract_basis": [
+    "claycode/frank_entity.clay",
+    "claycode/frank_self_model.clay",
+    "claycode/frank_hive.clay",
+    "runtime/state/UNIFIEDDB_SCHEMA.sql",
+    "runtime/state/frank_state_runtime_impl.py"
+  ],
+  "fresh_external_evidence": [
+    {
+      "source": "NIST SP 800-207 Zero Trust Architecture",
+      "url": "https://csrc.nist.gov/pubs/sp/800/207/final",
+      "claim_used": "network/location/ownership presence does not establish implicit trust; authentication and authorization remain explicit policy decisions"
+    },
+    {
+      "source": "NIST SP 800-207A",
+      "url": "https://csrc.nist.gov/pubs/sp/800/207/a/final",
+      "claim_used": "application/service identity and explicit policy enforcement replace affiliation/location based implicit trust"
+    }
+  ],
+  "baseline_gap_found": {
+    "surface": "FrankStateRuntime programmer API",
+    "register_node": "accepts caller-supplied authority_clay",
+    "capability": "accepts caller-supplied prediction/confidence/evidence",
+    "claim_boundary": "PROGRAMMER_API_TRUST_GAP_NOT_REMOTE_EXPLOIT_PROOF"
+  },
+  "candidate_delta": {
+    "target_pr": 335,
+    "files": [
+      "claycode/frank_capability_body.clay",
+      "runtime/capabilities/frank_capability_body_v1_candidate.py",
+      "tests/frank_capability_body_v1_candidate_gate.py",
+      "tests/frank_capability_ghost_peer_root_crown_oob.py",
+      ".github/workflows/frank-fv01-12-capability-body-v1-vps.yml"
+    ],
+    "presence_policy": "external node/tool presence => UNKNOWN capability and zero implicit authority",
+    "local_tool_policy": "exact stored executable path is self-executed; >=2 successful local trials => CAN_DELEGATE candidate",
+    "external_peer_policy": "UNKNOWN until a separate independently verified external-route producer exists",
+    "identity_policy": "SELF remains self.root; body remains TARGET_VPS",
+    "authority_policy": "CAN_DELEGATE never mints effect or Harness authority"
+  },
+  "normal_self_falsification": [
+    {
+      "finding": "first draft exposed generic record_behavioral_probe(actual_success=True)",
+      "impact": "would relocate caller-trust gap",
+      "repair": "removed generic peer promotion API; only self-executed local-tool probe can directly create behavioral trials"
+    },
+    {
+      "finding": "first hardened draft overwrote executable presence provenance after the first probe",
+      "impact": "second exact-path probe could not reconstruct binding",
+      "repair": "behavioral receipts now preserve original PRESENCE_ONLY executable provenance across repeated probes"
+    }
+  ],
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "GHOST_PEER_ROOT_CROWN",
+    "falsifier": "current low-level API is asked to persist an external peer that claims SELF/TARGET_VPS/effect+Harness authority plus unproven CAN_NOW, then the candidate must scrub authority and return capability to UNKNOWN without altering SELF/body",
+    "claim_boundary": "programmer API trust gap only; no remote exploit inference",
+    "target_status": "QUEUED_NOT_YET_EXECUTED",
+    "external_effect_performed": false,
+    "canonical_frank_state_mutated": false
+  },
+  "target_vps_execution": {
+    "workflow": "Frank F-V01-12 capability/body candidate VPS",
+    "workflow_run": 31503078981,
+    "head_sha": "94f6c457547dcd52fd12b7c4c19699c0caf4f241",
+    "status_observed": "QUEUED",
+    "result": "UNKNOWN_UNTIL_EXECUTED",
+    "no_pass_claim_before_execution": true
+  },
+  "global_ci_observation": {
+    "workflow": "Frank Deep Integrity",
+    "run": 31503079248,
+    "status": "FAILURE",
+    "steps_or_logs_retrieved": false,
+    "causal_attribution_to_pr335": "UNKNOWN_NOT_ESTABLISHED"
+  },
+  "architecture_adjudication": {
+    "status": "CANDIDATE_TESTING",
+    "architecture_delta": "ADD_TYPED_EXTERNAL_CAPABILITY_BODY_PROJECTION_WITH_ZERO_IMPLICIT_AUTHORITY",
+    "promotion": "NOT_AUTHORIZED",
+    "whole_F_V01_12_completion_claimed": false,
+    "whole_Frank_v0_1_acceptance_claimed": false
+  },
+  "required_successors": [
+    "execute target VPS gate and bind exact environment/blob receipts",
+    "add independent external-peer route verification producer before any peer CAN_DELEGATE promotion",
+    "test freshness expiry/revocation/stale capability behavior",
+    "compose capability routing with separate effect authority without authority laundering",
+    "measure routing calibration and OOD transfer rather than treating two local successes as general competence"
+  ],
+  "workspace_delta": {
+    "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES": {
+      "action": "ADD_PARTIAL_CANDIDATE_TESTING_EVIDENCE_KEEP_PACKAGE_OPEN",
+      "candidate_pr": 335,
+      "target_run": 31503078981,
+      "status": "OPEN_CANDIDATE_TESTING"
+    }
+  },
+  "research_disposition": "CANDIDATE_DELTA_WITH_ACTIVE_COUNTERHYPOTHESIS_AND_TARGET_RUN_PENDING",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

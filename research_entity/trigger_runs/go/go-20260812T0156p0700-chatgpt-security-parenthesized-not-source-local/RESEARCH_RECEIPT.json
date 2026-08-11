@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T01:56:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "fresh_state": {
+    "research_main_seen": "597876012ae16547dc25b8ebde51c6724b75cf34",
+    "frank_main_after_concurrent_progress": "352e2c6de3440a68b7ed63ef4e48190b7ff82d7d",
+    "diagnostic_pr": 417,
+    "repair_pr": 419,
+    "repair_head_tested": "9bce046f444d445ac1bec0084d0404e77e7957f8"
+  },
+  "grf": {
+    "observed_anchors": [
+      "Current main frank_security.clay still contains the unparenthesized guard `if !target within FRANK_PRIVATE_REPO`.",
+      "PR #417 target-runner diagnostic passes and discriminates current `Compare(Not(target), within repo)` from intended relation negation.",
+      "Current ClayCode grammar gives unary `!` a tighter syntactic layer than relational operators.",
+      "A source-only repair `!(target within FRANK_PRIVATE_REPO)` parses as `Not(Compare(...))` without changing grammar bytes.",
+      "The grammar blob and syntax.py blob on current main are identical to the blobs on the tested repair branch after concurrent main advancement."
+    ],
+    "generated_reality": "A global operator-precedence change is required so unparenthesized `!a within b` carries relation-negation semantics throughout ClayCode.",
+    "strongest_counter_reality": "The grammar is coherent and the security source alone omitted explicit grouping; source-local parenthesization is sufficient for this security predicate and has lower semantic blast radius.",
+    "discriminating_test": "Parse repaired and historical source under identical grammar bytes and compare typed AST topology, then rerun the existing operator-survival baseline on the accepted self-hosted Linux/X64 lane.",
+    "predicted_if_global_change_required": "Source-only grouping would fail to produce the intended AST or would regress the operator-survival baseline.",
+    "predicted_if_source_local_counter_reality_right": "Explicit membership grouping produces Not(Compare(...)), historical bytes remain Compare(Not(...), ...), identical grammar bytes are preserved, and existing unary-operator baseline remains PASS.",
+    "outcome": "RETAIN_SOURCE_LOCAL_REPAIR_CANDIDATE; DEFER_GLOBAL_PRECEDENCE_CHANGE_FOR_THIS_CASE",
+    "confidence": "HIGH_FOR_THIS_SECURITY_PREDICATE; NOT_A_LANGUAGE_WIDE_PRECEDENCE_PROOF"
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/security-parenthesized-not-repair-20260812",
+    "pr": 419,
+    "product_change_commit": "5547ba3fd32da10e628a7d713102fa6eaaffb94a",
+    "product_change": "claycode/frank_security.clay: parenthesize `target within FRANK_PRIVATE_REPO` beneath unary negation",
+    "grammar_changed": false,
+    "parser_changed": false,
+    "evaluator_changed": false,
+    "effect_authority_changed": false,
+    "harness_authority_changed": false
+  },
+  "target_evidence": {
+    "workflow_run": 31524861098,
+    "job": 93890566030,
+    "runner": "clay",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "conclusion": "SUCCESS",
+    "checks": [
+      "exact candidate SHA fetched into a run-owned temporary tree",
+      "Lark 1.3.1 pinned",
+      "security AST discriminator PASS",
+      "existing ClayCode operator-survival baseline PASS",
+      "exact evidence metadata bound and uploaded"
+    ],
+    "whole_frank_v0_1_acceptance": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "PARENTHESIS_TOPOLOGY_METAMORPH",
+    "bounded": true,
+    "reversible": true,
+    "external_effect": false,
+    "intervention": "In-memory parenthesis-topology perturbations around the same security membership predicate.",
+    "baseline": "Repaired explicit grouping `!(target within repo)`.",
+    "result": "Double/spaced explicit relation grouping collapses to the repaired Not(Compare(...)) AST class; explicit `(!target) within repo` collapses to the historical Compare(Not(...), ...) AST class.",
+    "rollback": "No persistent mutation from experiment; only the separately reviewed source repair remains on its branch.",
+    "production_claim": false
+  },
+  "counterevidence_and_negative_results": [
+    "This does not prove a preferred language-wide interpretation for every unparenthesized unary-plus-relation expression.",
+    "PR #419 remains draft and has not been merged to current main.",
+    "Two broad PR checks failed before semantic execution because their checkout step encountered a non-git workspace; those failures are neither PASS nor evidence against the source repair.",
+    "Existing runner-workspace forensics already detects hazards on the self-hosted lane; root-cause remediation is a separate active lane and was not duplicated here."
+  ],
+  "coordination": {
+    "pr_419_comment": 5257497455,
+    "pr_417_comment": 5257499119,
+    "duplicate_runner_forensics_avoided": true
+  },
+  "next_discriminating_test": {
+    "priority": "P1",
+    "test": "After synchronizing the repair with then-current main, rerun the exact security AST discriminator plus operator-survival baseline on the accepted target lane; merge only if the semantic dependency blobs remain current and no security/type-effect regression appears.",
+    "pass_effect": "Promote the source-local security repair; retain PR #417 as precedence diagnostic evidence without requiring a global grammar change for this case.",
+    "fail_effect": "Reject or revise the source-local candidate and reopen the global precedence or typed-semantic alternatives."
+  },
+  "training": "NOT_AUTHORIZED_NOT_STARTED"
+}

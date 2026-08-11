@@ -65,7 +65,11 @@
     "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle",
     "receipt_label_must_not_claim_claycode_execution_unless_clay_semantics_are_parsed_typed_and_executed_or_lowered_by_the_tested_path",
     "unresolved_zero_after_declared_contracts_is_not_type_effect_or_runtime_acceptance",
-    "call_site_reconstruction_is_owner_reviewable_candidate_semantics_not_canonical_truth"
+    "call_site_reconstruction_is_owner_reviewable_candidate_semantics_not_canonical_truth",
+    "parser_surface_coverage_is_not_evaluator_semantic_correctness",
+    "request_differential_coverage_and_language_construct_coverage_are_independent_axes",
+    "every_newly_admitted_evaluator_construct_requires_positive_negative_and_semantic_mutation_controls",
+    "silently_dropped_operator_or_construct_is_fail_closed_release_blocker"
   ],
   "priority_order": [
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-03-IR-TYPES",
@@ -81,37 +85,37 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep V18 frozen and WP03/WP04 OPEN. New PR310/PR313 candidate evidence supersedes two stale frontier statements without granting package acceptance. First, exact Clay semantics now execute for decide_effect through a tree-walking evaluator; 200576 differential requests show 0 mismatches and semantic sabotage turns the gate red. This is bounded evaluator evidence, not WP05 PASS, because only 3/40 Clay sources parse and type/effect/lowering/runtime remain incomplete. Second, the 29-target WP04 number is the raw pre-host-contract baseline, not the current post-declaration analyzer state: 26 explicit host contracts reduce it to 3, and three newly declared receipt constructors reduce analyzer UNRESOLVED to 0 on PR313. UNRESOLVED=0 is syntactic/contract resolution only. The receipt types are OWNER-REVIEWABLE call-site reconstructions; runtime_effect and independently_observe_effect payload shapes remain unspecified; verb_for has no declared Verb type or kind-to-verb mapping and identity binding is unvalidated. Immediate next work: execute the stacked exact PR310/PR313 bytes on the accepted Ubuntu target, review provenance and effect classes of all 26 host contracts, review or reject the three reconstructed receipt declarations, and construct a dedicated verb_for capability-model discriminator. Do not admit external effects or canonical semantics from declared names alone. Preserve later Graph causality/identity, provider/Fence, process-incarnation and SQLite durability gates independently. FREE_ONLY, no paid fallback, no BASE/Frank PASS from model/workflow/receipt consensus, Goodman ancestry collapse, Ubuntu-only final acceptance, and do not modify Frank's Harness.",
+  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep V18 frozen and WP03/WP04/WP05 OPEN. Commit 53c85d379e4e97708011c35c8d1f692d49cd951d is the current highest-priority executable counterexample: parser surface coverage increased to 36/40 sources (90.0%), but unary ! is silently ignored by the tree-walking evaluator because the anonymous token disappears before Not construction. Minimal execution gives f(true)=True and f(false)=False with no diagnostic. The previous 200576/0 decide_effect differential does not cover this construct because frank_effects.clay uses == false. Therefore do not treat request-count success or parser-source coverage as language correctness. First reproduce the pre-repair negation failure and successor repair on exact accepted-Ubuntu-target bytes, with lesion/rescue and construct-specific mutation tests. Do not merge/promote PR310 evaluator evidence without the negation fix referenced by successor PR314. Keep the four unsupported source forms fail-closed rather than inventing grammar semantics. After this blocker, continue WP04 provenance review of 26 host contracts, three reconstructed receipt types, runtime_effect/independently_observe_effect shapes and verb_for/Verb semantics. Preserve later Graph, provider/Fence, process-incarnation and SQLite gates independently. FREE_ONLY, no paid fallback, no BASE/Frank PASS from consensus, Goodman ancestry collapse, Ubuntu-only final acceptance, and do not modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "Research commits cf9ed31d and 4cb52485 plus Dr.-Unterweger PR310/PR313 create meaningful executable evidence that changes the active ClayCode frontier. The earlier audit correctly found no Clay execution in the flagship Python probe, but PR310 now supplies a discriminating exact-source evaluator for decide_effect. PR313 resolves the raw 29-call ambiguity into 29 pre-contract, 3 post-contract, 0 post-receipt-declaration states. Because the three receipt types are call-site reconstructions and verb_for remains semantically undefined, WP04 cannot be marked PASS. Steering therefore moves from repeated raw-unresolved partitioning to accepted-target execution, contract provenance/review, and the verb_for capability discriminator while preserving fail-closed authority.",
+    "reason": "The new executable unary-negation counterexample falsifies the inference that a large request differential plus broad parser coverage establishes evaluator correctness. A silent dropped ! can invert DENY/ALLOW semantics while all existing decide_effect cases remain green. This is a material authority-critical blocker and justifies steering construct-level conformance ahead of further surface-credit expansion without changing WP04/WP05 package status.",
     "evidence_priority": [
-      "accepted-target execution of exact stacked PR310/PR313 bytes with differential and semantic-mutation controls",
+      "accepted-target reproduction of unary-not pre-repair failure and exact successor repair with semantic lesion/rescue",
+      "construct-level positive/negative/mutation coverage ledger independent of request/input corpus counts",
+      "36/40 parser-surface preservation with four unsupported sources remaining fail-closed",
       "exact Clay declarations and explicit host contracts with source hashes and effect classes",
       "owner review plus executable counterevidence for call-site-reconstructed receipt semantics",
       "dedicated verb_for/Verb capability-model discriminator",
-      "type/effect mutation gates with execution=false",
-      "WP05 corpus-extension tests that fail closed on unknown syntax",
       "WP05 runtime/binary/lease/execution-generation/process-incarnation binding",
       "FRANK_V0_1 Ubuntu target re-entry and final component audit"
     ],
     "required_next_actions": [
-      "run the stacked PR310/PR313 exact head on the accepted Ubuntu target lane; do not rely on author session output alone",
-      "record raw unresolved baseline 29 separately from post-contract 3 and post-declaration 0 to prevent future evidence ambiguity",
-      "review each of the 26 host contracts for exact provenance, arity, parameter types, return type and effect class; a declaration is not an implementation",
-      "keep runtime_effect and independently_observe_effect result shapes fail-closed until reviewed contracts exist",
-      "review or reject EffectReceipt, VerifiedEffectReceipt and DoneReceipt field semantics before any canonical promotion",
-      "build a verb_for/Verb discriminator covering destructive and non-destructive intent kinds; identity mapping must not receive authority credit",
-      "extend evaluator grammar only with explicit executable positive and negative cases; retain unknown-construct fail-closed behavior",
+      "run exact pre-repair unary ! minimal repro on accepted Ubuntu target and require it to fail semantic conformance",
+      "run exact repaired successor bytes on the same target and require f(true)=false and f(false)=true plus nested/double-negation mutations",
+      "add a construct-coverage receipt so parser acceptance cannot exceed semantic-tested construct acceptance by implication",
+      "retain unknown or prose-like constructs as rejected fail-closed inputs until independently specified",
+      "do not merge/promote PR310 evaluator evidence without the negation successor gate",
+      "then resume review of the 26 host contracts, three reconstructed receipt types, runtime payload shapes and verb_for/Verb mapping",
       "preserve FREE_ONLY, Goodman ancestry collapse, Ubuntu-only acceptance and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
       "legacy BASE or Frank v0.1 PASS from component workflow success, receipt labels or model-family consensus",
       "WP04 acceptance from analyzer UNRESOLVED=0",
+      "WP05 evaluator correctness from 200576/0 decide_effect differential",
+      "evaluator semantic correctness from 36/40 parser coverage",
       "canonical type semantics from call-site reconstruction without review",
       "valid capability semantics from verb_for identity binding",
-      "full ClayCode evaluator coverage from decide_effect success or 3/40 corpus parsing",
       "runtime/effect authority from declared host contracts",
-      "independent replication from delegated Sonnet plus coordinating Opus or shared Clay/Frank/owner/runner ancestry",
+      "independent replication from shared Claude/project/owner/runner ancestry",
       "canonical semantic promotion from parser, TypedIR, module-resolution, evaluator, Graph-root, receipt or policy-oracle success alone"
     ]
   },

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260811T2258p0700-chatgpt-secondary-reward-authority-frontier",
   "actor": {
     "actor_id": "chatgpt-secondary",
@@ -14,7 +14,7 @@
     "harness_authority_changed": false
   },
   "component": "F-V01-11-MEMORY-REWARD-GOALS",
-  "status": "TARGET_VALIDATION_PENDING",
+  "status": "SUPPORTED_TARGET_CANDIDATE_NOT_PROMOTED",
   "internal_evidence": [
     {
       "ref": "c7444dd321cdd824f21dd18168726477ecbbc59c",
@@ -29,22 +29,60 @@
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "pr": 368,
     "branch": "chatgpt/go-reward-valuation-authority-fix-20260811",
-    "latest_authored_sha": "2c02c32018d5c78870a2916a2228ddae815f1cc4",
-    "stacked_on": "chatgpt/go-reward-plasticity-v1-20260811@9d62101046f8629b67817578371b59dc0e94b0d2",
+    "fresh_main_parent": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+    "fresh_main_sync_commit": "de65cf4f1c8f5ce9186de1a81fa7e8139bb07b1b",
+    "tested_sha": "570d56124f9cf4b0e8e3c899844c3a964e771f62",
+    "workflow_run_id": 31510652772,
+    "target_receipt": "runtime/vps_unifieddb/frank_reward_valuation_authority_v1/LATEST.json",
+    "target_receipt_sha256": "b0ec594e2dd6644da5fc2c70a0b4817e4bcdc563a14002915391e7d2158ae832",
+    "runner": {
+      "name": "clay",
+      "hostname": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "kernel": "6.8.0-117-generic",
+      "python": "3.12.3",
+      "sqlite": "3.45.1"
+    },
     "promotion": "NONE_CANDIDATE_ONLY"
+  },
+  "target_measurements": {
+    "ordinary_fold": {
+      "checks": "10/10 PASS",
+      "elapsed_wall_s": 0.74,
+      "max_rss_kib": 25332
+    },
+    "source_frontier": {
+      "checks": "7/7 PASS",
+      "elapsed_wall_s": 0.36,
+      "max_rss_kib": 24588,
+      "during_fold_drift": "FAIL_CLOSED_REWARD_SOURCE_FRONTIER_CHANGED_DURING_FOLD"
+    },
+    "dimension_crown_swap_oob": {
+      "checks": "6/6 PASS",
+      "elapsed_wall_s": 0.37,
+      "max_rss_kib": 24448,
+      "fixed_task_tonic": -0.3323920282449055,
+      "fixed_safety_tonic": 0.0,
+      "fixed_safety_veto": false,
+      "unsafe_relabelled_safety_tonic": -0.3323920282449055,
+      "unsafe_relabelled_safety_veto": true
+    }
   },
   "architecture_deltas": [
     {
       "name": "CODE_OWNED_BINARY_TASK_VALUATION_POLICY",
+      "status": "SUPPORTED_TARGET_CANDIDATE",
       "change": "Remove reward dimension and policy-version selection from the receipt-fold caller surface. The explicit binary comparison arm binds TASK, success/failure utility mapping, binary bound attribution and policy identity in code.",
       "reason": "Choosing SAFETY/RESOURCE/TASK is downstream control authority, not metadata, because those channels affect veto/brake/control readouts.",
       "production_multidimensional_semantics": "OPEN_REQUIRES_PRODUCER_OWNED_REWARD_VALUATION_RECEIPT"
     },
     {
       "name": "V17_DONE_SOURCE_FRONTIER_REVALIDATION",
+      "status": "SUPPORTED_TARGET_CANDIDATE",
       "change": "Capture ordered DONE receipts and monotonic DONE event seq under one explicit SQLite read transaction; bind exact count/digest/frontier identity; re-read after fold and fail closed on drift; require consumer revalidation before a cached derived reward projection is treated as current.",
       "reason": "A valid deterministic prefix is not proof of exact-current source completeness under concurrent terminal commits.",
-      "promotion": "PENDING_TARGET_MEASUREMENT"
+      "promotion": "NONE_CANDIDATE_ONLY"
     }
   ],
   "hypothesis": "A code-owned binary TASK baseline plus explicit source-frontier binding removes two independent authority/currentness leaks without claiming that binary scalar reward is the final Frank reward architecture.",
@@ -80,22 +118,23 @@
   "go_oob": {
     "count": 1,
     "name": "DIMENSION_CROWN_SWAP",
-    "unsafe_anti_control": "Relabel 20 verified task failures as SAFETY; expected to drive SAFETY tonic below current veto threshold, proving dimension choice has a real downstream control effect.",
-    "candidate_acceptance": "Same producer-owned terminal outcomes can only enter code-owned TASK in the binary test arm; SAFETY/RESOURCE remain untouched and no safety/resource control authority is minted by caller relabelling.",
-    "target_result": "PENDING"
+    "unsafe_anti_control": "Relabel 20 verified task failures as SAFETY; observed SAFETY tonic -0.3323920282449055 and safety_veto=true.",
+    "candidate_acceptance": "Same producer-owned terminal outcomes enter only code-owned TASK in the binary test arm; SAFETY remains 0.0 and safety_veto=false.",
+    "target_result": "PASS_6_OF_6"
   },
   "required_next": [
-    "accepted-target self-hosted Linux/X64 execution of ordinary fold, source-frontier and exactly-one OOB gates",
-    "persist exact target receipt and resource/environment metadata",
-    "if green, fuse supported candidate status back into Clay without promoting multidimensional reward semantics",
-    "later compare binary TASK against producer-owned typed/multiscale valuation on frozen replay/OOD/resource corpus",
-    "retain historical NAcc/E-PQ baseline gate before any successor/replacement claim"
+    "design producer-owned RewardValuationReceipt or equivalent that binds exact terminal receipt, dimension, utility semantics, policy identity and evidence without caller authority",
+    "compare binary TASK against producer-owned typed/multiscale valuation on frozen replay, OOD, conflict and resource corpus",
+    "compose source-frontier currentness with selected UnifiedDB semantic-lineage rollback/recovery authority",
+    "retain historical NAcc/E-PQ baseline gate before any successor/replacement claim",
+    "compile/execute the reward semantic surface through current ClayCode rather than treating Python reference behavior as final cognition"
   ],
   "claims_not_made": [
     "whole F-V01-11 complete",
     "whole Frank v0.1 accepted",
     "typed/multidimensional reward superiority",
     "fractional causal credit solved",
+    "historical NAcc/E-PQ replacement justified",
     "final training authorized",
     "Frank/self.root Harness mutation authority"
   ],

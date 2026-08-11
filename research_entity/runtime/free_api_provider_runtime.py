@@ -435,7 +435,12 @@ def execute_chat(
         outcome = "invalid_provider_response"
         cooldown_seconds = 15
         retryable = False
-    except (urllib.error.URLError, TimeoutError, http.client.IncompleteRead):
+    except (
+        urllib.error.URLError,
+        TimeoutError,
+        ConnectionError,
+        http.client.IncompleteRead,
+    ):
         content = None
         outcome = (
             "incomplete_provider_response"

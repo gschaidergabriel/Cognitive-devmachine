@@ -1,25 +1,43 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
   "research_subject": "self.root / Frank",
   "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
-  "status": "CANDIDATE_PENDING_FRESH_MAIN_TARGET",
-  "proposed_delta": [
-    "authoritative semantic mutation emits a stable ProjectionEvent in the same UnifiedDB transaction",
-    "ClayGraph persists exact applied event identity/hash and remains derived/rebuildable",
-    "consequential graph use requires exact authoritative/destination event-set root plus relation equivalence",
-    "PENDING/APPLIED delivery state is advisory and cannot replace destination identity verification",
-    "projection lag/divergence/tamper fails closed"
+  "status": "PROJECTION_CONTINUITY_CANDIDATE_SUPPORTED_COMPONENT_REMAINS_OPEN",
+  "supported_now": [
+    "authoritative semantic mutation can emit a stable ProjectionEvent in the same UnifiedDB transaction on current disposable schema",
+    "ClayGraph can persist exact applied-event identity/hash and remain derived/rebuildable",
+    "three tested cross-store process-exit windows recover to exact source event root and current relation equivalence",
+    "consequential graph admission can fail closed on lag and derived payload-hash tamper",
+    "full tested derived graph state can be rebuilt from retained authoritative projection history",
+    "fresh-main target run passed 23/23 checks behind V4-admitted private SQLite 3.53.4"
   ],
-  "target_candidate": {
+  "target_receipt": {
     "pr": 386,
-    "base": "5ec9955775d9bf142e327166990a2228d543c071",
-    "head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
-    "workflow_run": 31513961274,
-    "state": "PENDING_AT_WRITE"
+    "head": "b8858f949d4ad855bff5d682994de69bfd10b7c9",
+    "workflow_run": 31514757454,
+    "job": 93857015099,
+    "checks": "23/23 PASS",
+    "events": 76,
+    "current_relations": 16,
+    "projection_root": "be0090b4bfbe176862fccc736d0f6abdc16a752d16769a7fe7f254005b368316",
+    "merge_commit": "72029f838176fff5189b8c3cfd4ef5d957de6ba2"
   },
-  "superseded_target": {"head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656},
-  "promotion": "NONE_UNTIL_FRESH_MAIN_TARGET_RESULT",
+  "pending": [
+    "production projector scheduling/backpressure/lag telemetry",
+    "candidate schema promotion into migration lists only after production integration gate",
+    "selected-lineage logical rollback/recovery composed with repaired runtime",
+    "installed service/systemd non-bypass boot proof",
+    "canonical migration/rollback owner gate",
+    "separate OS-crash/power-loss evidence if required by final acceptance",
+    "large-corpus projection/retrieval quality-resource evidence",
+    "whole-product accepted-target composition"
+  ],
+  "state_policy_delta": {
+    "proposal": "model/effect-facing graph use requires exact authoritative projection event-set/root equivalence; delivery_state is advisory only",
+    "status": "SUPPORTED_DIRECTION_CANDIDATE_PATH_MERGED_NOT_PRODUCTION_ACTIVATED",
+    "effect_authority": "NONE"
+  },
   "self_harness_authority": "PROPOSAL_ONLY",
   "canonical_state_mutated": false,
   "training_authorized": false,

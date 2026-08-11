@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T04:25:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "framework": "GRF",
+  "research_main_seen_before_write": "fe70e32ba4122c063bb640f784fd93eafea9ee86",
+  "frank_main_seen": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+  "focus": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "CI_RELEASE_EVIDENCE_EXECUTABILITY"
+  ],
+  "r0_observed": [
+    "SQLite V5 hardlink-transplant repair is merged on Frank main at 33bb74de9074042e3c1a186ea3f22d2ea8a572f4; exact self-hosted regression run 31537077376 completed success. F-V01-13 remains open.",
+    "PR #486 Deep Integrity run 31537313824 executed zero steps because GitHub reported account payment/spending-limit state for ubuntu-latest; this is infrastructure-blocked, not semantic FAIL.",
+    "Historical self-hosted Deep Integrity candidate #427 run 31526032869 started on runner clay / machine digital-retina but failed inside actions/checkout before any integrity test. Logs show the persistent workspace was deleted and subsequent local Git auth cleanup failed with not-a-git-repository errors.",
+    "A neighboring SQLite V5 exact-head regression already uses a target-proven isolated RUNNER_TEMP git-init/depth-1 exact-SHA fetch pattern and completed success on the same self-hosted lane.",
+    "PR #486 exact-head directory-anchor-repair run 31537313557 completed success, but the PR itself claims no productive /opt or /etc provisioning and therefore does not close the production SQLite gate."
+  ],
+  "generated_reality": "Deep Integrity can regain executable release evidence without paid GitHub-hosted runners or contaminated persistent workspace semantics by running on the same-repository self-hosted lane from an isolated exact-SHA checkout that removes its remote before tests.",
+  "strongest_counter_reality": "Once checkout suppression is removed, the unchanged integrity suite may expose a genuine current-main target-Python or repository failure; dispatch or checkout success must not be promoted to semantic PASS.",
+  "implementation_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 488,
+    "branch": "clay/go-deep-integrity-selfhosted-20260812",
+    "head": "05a2d8fcaf98387a1489b601a7415bfa812528bd",
+    "base": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+    "changes": [
+      "Move Deep Integrity from ubuntu-latest to [self-hosted, Linux, X64].",
+      "Fence fork pull requests from the persistent runner and keep contents permission read-only.",
+      "Avoid actions/checkout; fetch exact github.sha into unique RUNNER_TEMP directory using git init + depth-1 fetch.",
+      "Remove repository remote before testing; assert HEAD equals GITHUB_SHA and no remote remains.",
+      "Run unchanged semantic suite with /usr/bin/python3 and clean the isolated tree on every outcome."
+    ],
+    "exact_head_deep_integrity_run": 31537787604,
+    "execution_state_at_receipt": "QUEUED_UNKNOWN",
+    "release_promotion": false
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "id": "HARDLINK_SIBLING_GUARD_TRANSPLANT",
+    "scope": "Disposable local Linux sandbox; user-owned launcher semantics; no production or canonical Frank mutation.",
+    "observed": "A same-inode hardlink launch from a foreign directory selected and executed a foreign same-named sibling guard while the symlink control was denied. This independently converged with the already durable project hardlink counterworld and merged #482 repair.",
+    "promotion": "INDEPENDENT_REPLICATION_ONLY; DO_NOT_DUPLICATE_AS_NEW_ARCHITECTURE_CLAIM"
+  },
+  "grf_collapse": {
+    "sqlite_3_53_4_fix_lineage": "RETAIN_VERIFIED_PRIMARY_SOURCE",
+    "launcher_hardlink_transplant": "REPAIRED_NARROW_TARGET_REGRESSION_PASS",
+    "deep_integrity_hosted_failure_is_semantic_fail": "REJECT",
+    "historical_selfhosted_427_failure_is_integrity_suite_fail": "REJECT",
+    "isolated_exact_sha_deep_integrity_current_main": "TESTING_EXECUTION_QUEUED",
+    "f_v01_13": "OPEN"
+  },
+  "next_falsifier": "Read exact PR #488 run 31537787604 after execution. Require actual semantic suite completion before promotion. Independently continue productive root-owned SQLite 3.53.4 provisioning, exact service-parent/runtime mapping, restart, downgrade/library-swap/rollback and WAL-state recovery evidence on the accepted Hostinger Ubuntu target.",
+  "claim_boundary": "No production root provisioning, no product Frank service start/restart, no F-V01-13 closure, no whole Frank v0.1 acceptance, no Harness/effect authority change, and no final model training authorization.",
+  "outcome": "CURRENT_MAIN_CI_REPAIR_COMMITTED; SEMANTIC_RESULT_UNKNOWN"
+}

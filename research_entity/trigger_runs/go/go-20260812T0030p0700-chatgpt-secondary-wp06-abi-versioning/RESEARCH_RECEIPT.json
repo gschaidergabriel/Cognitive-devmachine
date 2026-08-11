@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0030p0700-chatgpt-secondary-wp06-abi-versioning",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "bounded ClayCode WP06 native ABI cross-version semantic compatibility",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "diagnostic_pr": 411,
+  "diagnostic_head": "ff3cd5c9956d3266cc49f9bd02dc046f9aca0545",
+  "tested_merge_sha": "5c9c9cefd8fec187045936a31183d5efcf59f93e",
+  "accepted_target_validation": {
+    "workflow_run": 31521540516,
+    "job": 93879487199,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "c_compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "status": "PASS_WP06_UNVERSIONED_VARIANT_ABI_DRIFT_REPRODUCED",
+    "checks": "10/10",
+    "wall_seconds": 0.73,
+    "max_rss_kib": 31980
+  },
+  "hypothesis": "The current same-build native differential cannot detect cross-version semantic ABI drift because its client and library consume the same freshly generated variant map; declaration-order drift can therefore silently reinterpret a stale client's integer under the same external symbol and argument shape.",
+  "strongest_counterhypothesis": "The bounded generated ABI is intrinsically compatible across declaration-order-only changes, or such a change would fail WP04/compilation rather than silently changing meaning.",
+  "counterhypothesis_result": "REFUTED_ON_ACCEPTED_TARGET",
+  "causal_witness": {
+    "mutation": "in-memory only: swap READ_ONLY and REVERSIBLE_WRITE declaration order in EffectClass",
+    "product_source_mutated": false,
+    "old_effect_class": {"READ_ONLY": 0, "REVERSIBLE_WRITE": 1},
+    "new_effect_class": {"READ_ONLY": 1, "REVERSIBLE_WRITE": 0},
+    "external_argument_shape_changed": false,
+    "baseline_library_plus_old_client_READ_ONLY": "ALLOW",
+    "reordered_library_plus_reordered_client_READ_ONLY": "ALLOW",
+    "reordered_library_plus_old_client_integer_0": "DEGRADE_TO_PROPOSAL",
+    "stale_encoding_rejected": false
+  },
+  "interpretation": "Same-build 200576/0 remains valid exact-build translation evidence, but not cross-version ABI compatibility evidence. Native product exposure must bind/version the semantic ABI or use a representation stable by explicit contract.",
+  "external_primary_context": [
+    {
+      "source": "Linux Standard Base / ELF Symbol Versioning",
+      "url": "https://refspecs.linuxfoundation.org/LSB_1.1.0/gLSB/symversion.html",
+      "use": "confirms explicit version identity is a native-interface mechanism; no claim that ClayCode must use ELF symbol versioning"
+    }
+  ],
+  "architecture_delta": {
+    "status": "BUG_REPRODUCED_REPAIR_IN_TESTING",
+    "repair_pr": 414,
+    "repair_direction": "application-level ABI v1 symbol plus canonical semantic-manifest SHA-256 fingerprint checked before policy arguments",
+    "elf_symbol_versioning_selected": false,
+    "stable_wire_format_selected": false
+  },
+  "go_oob": {
+    "new_experiment_added": false,
+    "invocation_single_oob_remains": "CORPUS_GHOST_APPEND"
+  },
+  "external_effect_executed": false,
+  "authority_claim": "NONE",
+  "wp06_completion_claim": false,
+  "whole_frank_v0_1_acceptance": false,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

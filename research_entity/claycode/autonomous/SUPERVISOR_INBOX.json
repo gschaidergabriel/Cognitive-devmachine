@@ -1,36 +1,36 @@
 {
   "schema_version": "3.2",
-  "latest_cycle": "ccauto-20260811T1449Z-supervisor",
+  "latest_cycle": "ccauto-20260811T1552Z-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "First close the new package/runtime integration counterexample without changing ClayCode semantics: PR310's evaluator/analyzer use bare sibling imports and the current differential harness injects runtime/claycode_eval_v1 into sys.path; repository-root package import fails with ModuleNotFoundError. Repair to package-stable imports or an explicitly tested package/CLI dual-entry contract, then require namespace-collision controls and all existing differential/purity/fail-closed gates. Continue WP04 with the corrected 429 unique / 464 occurrence census and keep the three chained-!= invariants authority-unselected. Cross-branch, treat SQLite V2 as refuted-as-sufficient after PR336 run 31503138219 admitted a PYTHONPATH sqlite3.py shadow; require separate Python-module-origin admission before storage product credit. Keep response replay blocked until exact trusted request-to-effect ancestry is durable. Preserve FREE_ONLY and all no-promotion rules.",
+  "next_focus": "The bounded PR310 package/evaluator slice is now target-supported and merged, so stop treating the original bare-import counterexample as the first unresolved blocker. First finish exact repaired-head PR357 composed target validation on Ubuntu. Keep WP03/WP04/WP05 OPEN until the package namespace, 200576 differential, confirmation/hash, operator-survival and 429-unique/464-occurrence census all pass on the same exact composed bytes. Then adjudicate compiler lowering fail-closed: PR364 Python-AST run 31508447693 was CANCELLED and receives zero credit; PR366 native-C run 31509020626 is QUEUED and dependency-gated on PR357. Preserve comparison-chain and Bool/Int equality authority as UNSELECTED, keep the 429/464 WP04 frontier explicit, and maintain the conjunctive ProductStart gate. Preserve FREE_ONLY and all no-promotion rules.",
   "errors": [],
   "provider_discovery": {
     "nvidia": {"status": "OFFICIAL_HOSTED_API_SURFACE_DOCUMENTED", "base_url": "https://integrate.api.nvidia.com/v1"},
-    "pr232_runtime": {"status": "LOCAL_REPAIR_CANDIDATE_NO_ACCEPTED_UBUNTU_PROVIDER_RECEIPT", "http_402_local_hardstop": true, "same_epoch_second_attempt_local_block": true, "restart_durable_latch": false, "external_cost_account_identity": "UNKNOWN"}
+    "pr232_runtime": {"status": "CANDIDATE_NO_ACCEPTED_UBUNTU_PROVIDER_RECEIPT", "live_external_request": false, "restart_durable_payment_latch": false, "external_cost_account_identity": "UNKNOWN"}
   },
   "receipt_gaps": {
-    "wp03_package_import": "OPEN_EXECUTABLE_BLOCKER: repo-root package import of current PR310 evaluator fails without test-only sys.path insertion; add package-stable sibling resolution and namespace-collision regression",
-    "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY: 429 unique names / 464 unresolved call-site occurrences; preserve both count semantics",
-    "wp04_linker_contract": "OPEN_HIGH_PRIORITY: 45/464 have a global declaration-name candidate; 419/464 require qualified/member/library/host classification or fail-closed unknown",
-    "wp05_comparison_chain": "OPEN_NARROWED: zero multi-relation chains in 36 parsed sources; three unparsed chained-!= invariants remain semantic-authority unresolved",
-    "wp04_frank_effects": "BOUNDED_RESOLVED: frank.effects has 0 unresolved on exact composed bytes; this is not WP04 PASS",
-    "wp04_verb_capability": "OPEN: verb_for/Verb semantics still require reviewed declaration and discriminator",
-    "storage_python_module_origin": "REFUTED_V2_SUFFICIENCY: PR336 run 31503138219 executes a PYTHONPATH-shadowed sqlite3.py after V2 PASS admission",
-    "request_effect_ancestry": "OPEN_TARGET_COUNTEREXAMPLE: run 31502734782 shows execution-generation join is ambiguous across two requests; response replay must not infer ownership",
-    "provider_target_receipt": "OPEN: PR232 repaired candidate lacks accepted-Ubuntu provider-runtime receipt",
-    "provider_payment_latch_restart": "OPEN: same-budget-epoch latch must survive restart through authoritative state",
+    "wp03_wp05_composed_frontier": "OPEN_PENDING_TARGET: PR357 head 1c0a20d3ec412724f79bd444820c526722def8b5 repaired harness composition but exact accepted-target package/frontier runs remain queued",
+    "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY: 429 unique names / 464 unresolved call-site occurrences; preserve both metrics and semantic classification",
+    "wp04_frank_effects": "BOUNDED_RESOLVED: frank.effects 0 unresolved on composed candidate bytes is not WP04 PASS",
+    "wp05_comparison_chain": "OPEN_SEMANTIC_AUTHORITY: no canonical multi-relation chain rule selected",
+    "wp05_bool_int_equality": "OPEN_SEMANTIC_AUTHORITY: host True==1 behavior is not ClayCode authority",
+    "wp06_python_ast": "NO_CREDIT: PR364 target run 31508447693 CANCELLED",
+    "wp06_native_c": "OPEN_QUEUED: PR366 head 98def04d173eee894dac5485f8a9753bde1f7aa4 run 31509020626 queued and stacked on PR357",
+    "ambiguous_variant_failclosed": "OPEN_QUEUED: PR363 run 31508959552 queued",
+    "productstart": "OPEN_CONJUNCTIVE: V4 storage target success cannot substitute for installed entrypoint/build attestation/state lineage/identity/lease/restart recovery",
+    "provider_target_receipt": "OPEN: no accepted-Ubuntu live/redacted PR232 provider receipt",
     "frank_v0_1_target": "Final acceptance remains owner-fixed Ubuntu VPS only"
   },
   "new_material_evidence": {
-    "clay_package_import": "Current PR310 evaluator.py/analyzer.py use bare sibling imports; the differential harness alters sys.path. Isolated repository-root package import reproduces ModuleNotFoundError for syntax. Existing function differential evidence remains bounded and is not refuted.",
-    "sqlite_pythonpath_shadow": "PR336 run 31503138219 / job 93817951790 on clay@digital-retina: clean V2 target uses stdlib sqlite3 with synchronous=2; attack preserves correct private SQLite 3.53.4 native object identity yet V2 admits a PYTHONPATH sqlite3.py shadow and target runs it with synchronous=0. Status SUPPORTED_FAIL_OPEN_PYTHONPATH_SQLITE_MODULE_SHADOW.",
-    "request_effect_ancestry": "PR331 run 31502734782: two distinct V16 request admissions in one execution both satisfy the current V17 generation join for one effect; effect reaches DONE_VALID with no exact durable request-effect edge.",
-    "fv01_12": "PR335 run 31503078981 target-supports bounded capability/body projection and ghost-peer authority scrubbing; package remains OPEN_TARGET_SUPPORTED_PARTIAL. Its separate hosted Deep Integrity zero-step failure is infrastructure-only absent executed-step evidence.",
-    "base_alignment": "File Library master source keeps BASE_CLAYCODE_RELEASE implementation-first: less change, more compile; semantics change only after concrete executable counterexample; shared ancestry is not replication.",
-    "goodman": "All new target/project evidence shares project/runner ancestry; executable evidence outranks model consensus but does not count as ancestry-independent replication."
+    "package_scope_promotion": "Merged target main commit a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3 carries the bounded executable evaluator/package repair after accepted target run 31506115570: hostile namespace gate 7/7 and decide_effect 200576/0 mismatches. This is scoped integration, not WP03/WP05 or Frank v0.1 PASS.",
+    "frontier_composition": "PR357 combines later #313/#314/#319/#325 surface/count work with package binding. Its repaired exact head still lacks a completed composed target receipt; queued status is not evidence.",
+    "python_ast_lowering": "PR364 is the first fresh-main Python-AST lowering candidate, but its dedicated target workflow 31508447693 completed CANCELLED. No compiler/lowering credit may be inferred from PR text or local/model agreement.",
+    "native_c_lowering": "PR366 adds a translation-validated C11 backend candidate for the same pure decide_effect closure, with explicit refusals for open comparison/equality/effect semantics. Dedicated target run 31509020626 is queued and dependency-gated on PR357.",
+    "productstart": "Fresh research receipt e8d5e94aaeb52c142b8b91f76dbeaf11a203d155 makes ProductStart conjunctive across storage admission, selected-state lineage, trusted build/attestation, owner identity, exclusive lease/restart classification, installed entrypoint and installed recovery.",
+    "goodman": "Python-AST and C-lowering candidates share ClayCode source/evaluator/project ancestry; even if both later agree, that agreement is correlated translation-validation support rather than independent semantic authority."
   },
-  "instruction": "Steer F-V01-02 toward product-safe runtime binding, not broader semantic invention. Close the package-import counterexample first with exact source/package execution and collision controls. Preserve 429-unique/464-occurrence WP04 metrics and the unresolved three-chain semantic boundary. Treat native-library identity and Python-module origin as separate storage evidence axes; V2 remains insufficient until the exact PR336 discriminator is rescued. Do not infer response ownership from execution-generation identity. Keep WP03/WP04/WP05 OPEN. Preserve FREE_ONLY, Together hard-denial, no paid fallback, Goodman ancestry collapse, no BASE/Frank PASS from model or receipt consensus, no canonical semantics without executable counterevidence plus review, Ubuntu-only final target, and no Frank-Harness modification."
+  "instruction": "Steer the next F-V01-02 cycle to exact composed execution, not wider semantic invention. Finish PR357 exact repaired-head Ubuntu gate first. Treat cancelled PR364 as NO_CREDIT. Keep PR366 fail-closed and dependency-gated; if it becomes green, promote only the exact pure lowering slice after review and preserve all open semantics as refusals. Keep WP03/WP04/WP05/WP06 OPEN, keep ProductStart conjunctive, preserve FREE_ONLY/Together hard-denial/no paid fallback/Goodman ancestry collapse/no BASE or Frank PASS from consensus/no canonical semantics without executable counterevidence plus review/Ubuntu-only final target/no Frank-Harness modification."
 }

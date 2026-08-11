@@ -157,6 +157,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         first, concurrent = execute("attempt-a"), execute("attempt-b")
         self.assertEqual(first["request_id"], concurrent["request_id"])
         self.assertNotEqual(first["attempt_id"], concurrent["attempt_id"])
+        self.assertEqual(len(first["attempt_id"]), 32)
+        self.assertEqual(len(concurrent["attempt_id"]), 32)
         self.assertNotIn("attempt-a", repr(first))
         self.assertNotIn("attempt-b", repr(concurrent))
 

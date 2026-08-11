@@ -132,6 +132,34 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(first["request_id"], retry["request_id"])
         self.assertNotEqual(first["attempt_id"], retry["attempt_id"])
 
+    def test_equal_time_concurrent_attempts_do_not_alias(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"message":{"content":"ok"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def execute(nonce):
+            return MOD.execute_chat(
+                [{"role": "user", "content": "same operation"}], model="mock",
+                environ=env, opener=lambda *args, **kwargs: Response(),
+                now=iter((80.0, 80.01)).__next__,
+                nonce_factory=lambda: nonce,
+            )["receipt"]
+
+        first, concurrent = execute("attempt-a"), execute("attempt-b")
+        self.assertEqual(first["request_id"], concurrent["request_id"])
+        self.assertNotEqual(first["attempt_id"], concurrent["attempt_id"])
+        self.assertNotIn("attempt-a", repr(first))
+        self.assertNotIn("attempt-b", repr(concurrent))
+
     def test_different_equal_length_payloads_have_distinct_request_ids(self):
         class Response:
             status = 200

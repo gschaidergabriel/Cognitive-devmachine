@@ -31,6 +31,7 @@
     "A configured key is capability evidence, not proof of quota or health.",
     "Except for an officially documented free developer endpoint, a configured key requires explicit host-side zero-cost attestation before routing.",
     "A provider credential may only be sent to that provider's canonical host; a global multi-provider host allowlist is forbidden.",
+    "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "Every real provider request must emit a redacted execution receipt.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
   ],

@@ -2,80 +2,118 @@
 
 Run: `unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1`
 
-Status: **FRESH-MAIN CANDIDATE BUILT / TARGET EXECUTION PENDING / NO PROMOTION YET**
+Status: **FRESH-MAIN TARGET SUPPORTED / CANDIDATE+REGRESSION PATH MERGED / PRODUCTION ACTIVATION HELD**
 
-## Why this cycle exists
+## Research delta
 
-The preceding UnifiedDB cycle closed a real `PROCESS_CRASH` slice for independently V4-admitted SQLite 3.53.4 WAL writers, but it did not solve cross-store semantic continuity between authoritative UnifiedDB and derived ClayGraph.
+The preceding UnifiedDB cycle closed a real `PROCESS_CRASH` slice for independently V4-admitted SQLite 3.53.4 WAL writers. This cycle closed the next narrower gap: cross-store semantic continuity from authoritative UnifiedDB to derived/rebuildable ClayGraph without pretending separate WAL database files share one cross-file durability transaction.
 
-Current target code already says cross-file atomicity is not claimed and the existing ClayGraph Clay contract already says `source_of_truth UnifiedDB`, `rebuildable_from_UnifiedDB`, and `activation != truth`. What was missing is a durable executable bridge that preserves these semantics through cross-store crash windows.
+The existing ClayGraph contract already declared UnifiedDB source-of-truth and graph rebuildability. The missing executable bridge is now represented by `C_AUTHORITATIVE_TRANSACTIONAL_OUTBOX`:
 
-SQLite primary documentation also means separate WAL database files must not be treated as one power-loss-atomic transaction. The preferred design therefore does not try to make ClayGraph co-own truth.
-
-## Selected candidate
-
-`C_AUTHORITATIVE_TRANSACTIONAL_OUTBOX`:
-
-1. authoritative semantic mutation and stable ProjectionEvent are committed in one UnifiedDB transaction;
-2. the event has stable identity, source epoch, semantic-record identity and payload hash;
-3. ClayGraph applies the event in its own transaction and records exact applied-event identity/hash;
-4. the later UnifiedDB `delivery_state=APPLIED` marker is advisory only;
+1. authoritative semantic mutation and stable `ProjectionEvent` commit in the same UnifiedDB transaction;
+2. stable event identity binds unified epoch, semantic-record identity and payload hash;
+3. ClayGraph applies each event in its own idempotent transaction and durably records exact applied-event identity/hash;
+4. later UnifiedDB `delivery_state=APPLIED` is advisory only and is not treated as cross-file atomicity proof;
 5. consequential graph use requires exact authoritative/destination event-set/root equivalence plus current relation-query equivalence;
-6. stale, missing, extra or hash-divergent graph state fails closed;
-7. ClayGraph can be deleted and deterministically rebuilt from retained authoritative event history.
+6. missing/extra/hash-divergent or lagging graph state fails closed;
+7. derived graph state can be removed and deterministically rebuilt from retained authoritative projection history.
 
-Direct dual writes and pretending separate WAL files are one atomic durability domain are rejected candidates. Physical graph colocation remains a later measured comparison candidate rather than a premise.
+Direct dual-write and cross-file WAL atomicity assumptions remain rejected candidates. Physical graph colocation remains a measured comparison candidate, not a premise.
 
-## Freshness repair
+## Freshness discipline
 
-The first PR #386 head was based on target `main@9085f0b...`. During the run, target main advanced to `5ec9955775d9bf142e327166990a2228d543c071` through an unrelated ClayCode/WP03 integration.
+The first target head passed its mechanism gate but target `main` advanced through unrelated ClayCode work. That old PASS was deliberately not promoted. The candidate was rebuilt through Git objects from fresh target `main@5ec9955775d9bf142e327166990a2228d543c071` plus exactly the six UnifiedDB candidate blobs.
 
-Rather than accept stale evidence, the UnifiedDB candidate was rebuilt through the Git database as **one commit on fresh main plus exactly the six original candidate blobs**:
+A second CI-only scheduler commit changed PR concurrency from `cancel-in-progress: false` to `true` so stale PR-head runs could not indefinitely block the newest evidence. Candidate semantics and test matrix were otherwise unchanged.
 
-- fresh base: `5ec9955775d9bf142e327166990a2228d543c071`;
-- fresh candidate: `6201556c8f47f1226ed8c2bc3792851ed3912294`;
-- PR #386 now contains 1 commit / 6 files and remains mergeable;
-- old target run `31512653656` is superseded before execution;
-- current target run is `31513961274`.
+Final tested head: `b8858f949d4ad855bff5d682994de69bfd10b7c9`.
 
-## Target implementation
+## Fresh-main accepted-target result
 
-Target PR: `gschaidergabriel/Dr.-Unterweger#386`
+Target repo: `gschaidergabriel/Dr.-Unterweger`
 
-Fresh head: `6201556c8f47f1226ed8c2bc3792851ed3912294`
+PR: #386
 
-Workflow: `Frank UnifiedDB projection outbox V1 VPS`
+Workflow run: `31514757454`
 
-Fresh target run: `31513961274`
+Job: `93857015099`
 
-State at report write: `PENDING` behind the same PR concurrency/self-hosted execution lane.
+Runner/machine: `clay` / `digital-retina`
 
-Candidate changes are deliberately not in production migration lists. Canonical Frank state is never opened by the gate.
+Result: **23/23 PASS**.
 
-## Falsification matrix
+Observed runtime:
 
-Three real process-exit windows are exercised behind the exact V4/private SQLite 3.53.4 path:
+- kernel `6.8.0-117-generic`;
+- Python `3.12.3`;
+- host `libsqlite3-0` remained `3.45.1-1ubuntu2.7`;
+- exact V4-admitted private SQLite `3.53.4` with expected source-id.
 
-- A: after authoritative UnifiedDB COMMIT, before any ClayGraph write or graceful close;
-- B: inside the ClayGraph projection transaction;
-- C: after ClayGraph COMMIT, before advisory UnifiedDB delivery ACK.
+Three hard process-exit windows:
 
-Additional falsifiers:
+- after authoritative UnifiedDB COMMIT, before graph write/close -> authoritative event survived, graph gate refused lag, replay recovered exactly;
+- inside ClayGraph transaction -> partial graph mutation rolled back, replay recovered exactly;
+- after ClayGraph COMMIT, before advisory UnifiedDB ACK -> graph commit survived and replay produced no duplicate.
 
-- repeated relation supersession + query equivalence;
-- explicit projection lag -> consequential graph gate must refuse;
-- derived applied-event payload-hash tamper -> must refuse;
-- full derived graph deletion -> rebuild must reproduce exact projection root and current relation set;
-- post-run `integrity_check` on both databases;
-- p50/p95/p99/max latency shadow for authoritative commit+outbox and projection drain;
-- physical file-size shadow.
+Selection/recovery falsifiers:
 
-## Supplemental pre-falsifier result
+- explicit graph lag: detected and fail-closed;
+- derived applied-event payload-hash tamper: detected and fail-closed;
+- complete derived graph wipe: rebuilt exact event root and exact current relation set;
+- both database `integrity_check` results: `ok`.
 
-A separate GitHub-hosted precheck (`31513246399`) ended before any workflow step executed and produced zero artifacts. It is therefore recorded as `INFRA_FAILURE_PRESTART`, not as candidate counterevidence. No candidate semantic change was made from that failure and the diagnostic PR was closed.
+Exact recovered projection:
 
-## Promotion rule
+- authoritative events: `76`;
+- applied events: `76`;
+- projection root: `be0090b4bfbe176862fccc736d0f6abdc16a752d16769a7fe7f254005b368316`;
+- current relation count: `16`;
+- event-root equivalence: true;
+- relation-query equivalence: true.
 
-No result is promoted while the fresh target run has not executed. If target PASS occurs, promotion is limited to this candidate projection continuity mechanism on disposable current-schema state. Production migration, projector scheduling/backpressure, selected-lineage canonical recovery, OS/power-loss durability and whole Frank v0.1 remain separate gates.
+Latency shadow on this small disposable target workload:
 
-No external effect, training action, canonical state mutation or Frank self-Harness authority is introduced.
+- authoritative commit + outbox: p50 `1.035 ms`, p95 `2.359 ms`, p99 `3.514 ms`, max `4.039 ms`;
+- projection drain: p50 `2.107 ms`, p95 `4.598 ms`, p99 `5.383 ms`, max `7.930 ms`.
+
+Storage shadow:
+
+- UnifiedDB: `1,269,760` bytes;
+- ClayGraph: `413,696` bytes.
+
+Evidence artifact: ID `9110606930`, SHA-256 `9ce0640a2e65b0967e01c6956bc92e211250306d17f3350eb979f51d311ff06a`.
+
+## Integration result
+
+PR #386 was squash-merged to target main as `72029f838176fff5189b8c3cfd4ef5d957de6ba2`.
+
+What is merged:
+
+- typed Clay projection contract;
+- candidate-only UnifiedDB and ClayGraph SQL extensions;
+- executable projection candidate;
+- crash/replay/lag/tamper/rebuild gate;
+- self-hosted target regression workflow.
+
+What is **not** activated:
+
+- candidate SQL is still absent from production `apply_current_schema` migration lists;
+- no canonical Frank state migration occurred;
+- no production projector daemon/scheduler/backpressure path is claimed;
+- no OS-crash or power-loss durability claim is made;
+- no whole Frank v0.1 acceptance is made.
+
+## Next gates
+
+`F-V01-04-UNIFIEDDB-STATE-CONTINUITY` remains OPEN. Highest-value remaining gates are:
+
+1. production projector scheduling/backpressure/lag telemetry and deterministic recovery;
+2. only then consider candidate schema promotion into current migration lists;
+3. selected-lineage `LOGICAL_ROLLBACK` recovery on the repaired runtime;
+4. `DEPLOYMENT_BOOT` service/systemd non-bypass proof;
+5. canonical migration + last-known-good owner gate;
+6. direct `OS_CRASH` / `POWER_LOSS` evidence if required by final acceptance;
+7. large-corpus graph/vector/FTS quality and resource shadows;
+8. whole-product Frank v0.1 accepted-target composition.
+
+No external Frank effect, training action, canonical-state mutation or Frank self-Harness authority was introduced by this run.

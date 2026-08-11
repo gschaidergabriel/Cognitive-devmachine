@@ -197,12 +197,15 @@ def execute_chat(
         outcome = "rate_limited" if status == 429 else "provider_error"
         cooldown_seconds = 60 if status == 429 else 15
     except (
-        urllib.error.URLError, TimeoutError, json.JSONDecodeError,
-        KeyError, IndexError, TypeError, ValueError,
+        json.JSONDecodeError, KeyError, IndexError, TypeError, ValueError,
     ):
+        content = None
+        outcome = "invalid_provider_response"
+        cooldown_seconds = 15
+    except (urllib.error.URLError, TimeoutError):
         status = None
         content = None
-        outcome = "invalid_or_unreachable_provider_response"
+        outcome = "unreachable_provider"
         cooldown_seconds = 15
 
     finished = now()

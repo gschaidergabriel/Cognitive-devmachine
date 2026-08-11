@@ -105,6 +105,16 @@
     "executable_evidence": "test_duplicate_json_names_cannot_reach_verified_state",
     "counterhypothesis": "Python's last-name-wins behavior is a safe canonical interpretation; falsified as a portability claim because RFC 8259 documents error, last-only and all-pairs behaviors as interoperably unpredictable."
   },
+  "json_nesting_failure_receipts": {
+    "checked_at": "2026-08-12",
+    "claim": "Excessively nested provider JSON that reaches Python's recursion limit must emit invalid_provider_response rather than escape without an execution receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/json.html",
+      "https://docs.python.org/3/library/exceptions.html#RecursionError"
+    ],
+    "executable_evidence": "test_excessive_json_nesting_emits_invalid_response_receipt",
+    "counterhypothesis": "The 2000000-byte response limit is sufficient to bound every JSON parser failure; falsified by a roughly 40000-byte, 20000-level array that raised RecursionError without a receipt."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -126,6 +136,7 @@
     "A received adapter body must be bytes before JSON parsing; text, bytearray and other body types remain EXECUTED with their valid status but cannot reach VERIFIED or DONE.",
     "Provider response JSON is parsed with non-finite constants rejected; NaN, Infinity and -Infinity remain invalid_provider_response and never reach VERIFIED or DONE.",
     "Every provider JSON object must have unique member names; duplicates remain invalid_provider_response and never reach VERIFIED or DONE.",
+    "JSON parser RecursionError after a valid response remains EXECUTED with its status, emits invalid_provider_response, and never escapes the receipt path or reaches VERIFIED or DONE.",
     "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
     "ConnectionError failures before response headers, including RemoteDisconnected, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",

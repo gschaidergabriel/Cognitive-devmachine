@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "executed":[
+    {"tool":"GitHub","purpose":"refresh target/research main, overlap search, prior UnifiedDB receipts","result":"VERIFIED_RW"},
+    {"tool":"web.run","purpose":"primary SQLite WAL/durability/cross-file atomicity evidence carried forward from same unifieddb trigger","result":"PRIMARY_SQLITE_EVIDENCE_ACTIVE"},
+    {"tool":"GitHub","purpose":"build Clay semantic contract + candidate worker SQL + Python implementation + target gate + workflow","result":{"target_pr":391,"head":"6fe47f9672a997f784ac168314f8bc0c65afcd65","workflow_run":31515873771,"state":"QUEUED_AT_WRITE"}}
+  ],
+  "guards":[
+    "candidate worker schema not in production migration lists",
+    "disposable current-schema target state only",
+    "no canonical Frank state",
+    "no systemd/service deployment",
+    "no external effect",
+    "no training",
+    "no whole-product promotion"
+  ]
+}

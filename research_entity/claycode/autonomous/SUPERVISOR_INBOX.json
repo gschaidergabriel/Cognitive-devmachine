@@ -1,23 +1,25 @@
 {
   "schema_version": "3.2",
-  "latest_cycle": "ccauto-20260811T1049Z-supervisor",
+  "latest_cycle": "ccauto-20260811T1144Z-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "Keep the unary-negation evaluator lesion/rescue as the highest ClayCode semantic blocker. In parallel, provider-runtime PR231 is closed unmerged and superseded by PR232 head 65d5572a722bb5e5a1d42b80d8058f8463c38b86. PR232 adds pre-network text-request validation but repeats the FREE_ONLY HTTP-402 defect: both a regular 402 response and HTTPError(402) still map to provider_error with cooldown_seconds=15. CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL requires HTTP 402 => HARD_STOP_PROVIDER_AND_FALLBACK_FREE_ONLY. Repair both paths, emit an explicit payment-required hard-stop, make the affected provider ineligible for any further attempt in the current cycle, and add a two-attempt regression proving the second attempt is suppressed. Then run exact repaired bytes on the accepted Ubuntu target with redacted receipts. Preserve Together hard-denial, no paid fallback, Goodman ancestry collapse, Ubuntu-only final acceptance, no canonical promotion, and no Frank-Harness modification.",
+  "next_focus": "Keep the unary-negation evaluator lesion/rescue as the highest ClayCode semantic blocker. In parallel, provider-runtime PR232 head 65d5572a722bb5e5a1d42b80d8058f8463c38b86 remains blocked by FREE_ONLY payment semantics and a newly verified identity gap. Both regular-response 402 and HTTPError(402) still map to provider_error with cooldown_seconds=15. Direct PR232 code inspection also shows request_id binds provider, endpoint host and body digest but not credential/account/project/billing-principal identity, so equal semantic requests can alias different cost/execution authorities. Repair both 402 paths, persist a current-budget-epoch provider hard-stop, suppress attempt two before network, and split semantic_request identity from an opaque cost-principal/execution-lineage identity. Add credential-rotation/alternate-key-name falsifiers without exposing secrets. Then run exact repaired bytes on the accepted Ubuntu target with redacted receipts. Preserve Together hard-denial, no paid fallback, Goodman ancestry collapse, Ubuntu-only final acceptance, no canonical promotion, and no Frank-Harness modification.",
   "errors": [
-    "PR232 Research Entity Identity Guard run 31483529694 and Research Entity Verify run 31483529764 both completed FAILURE; archived job logs are BlobNotFound, so causes are UNKNOWN and receive neither acceptance nor semantic-failure classification."
+    "PR232 Research Entity Identity Guard run 31483529694 and Research Entity Verify run 31483529764 both completed FAILURE; archived job logs are unavailable, so causes remain UNKNOWN and receive neither acceptance nor semantic-failure classification."
   ],
   "provider_discovery": {
     "mistral": {"status": "CREDENTIAL_NOT_CONFIGURED"},
     "nvidia": {"status": "AVAILABLE_DOCUMENTED_ENDPOINT_AND_CATALOG", "models": 100},
     "nvidia_executable_pool": {"families": ["deepseek", "glm", "gpt-oss", "nemotron"]},
-    "pr232_runtime": {"status": "CANDIDATE_BLOCKED_HTTP_402_SEMANTICS_FAILED_UNINSPECTABLE_CI_NO_TARGET_RECEIPT", "head": "65d5572a722bb5e5a1d42b80d8058f8463c38b86"}
+    "pr232_runtime": {"status": "CANDIDATE_BLOCKED_HTTP_402_AND_COST_PRINCIPAL_ALIAS_FAILED_UNINSPECTABLE_CI_NO_TARGET_RECEIPT", "head": "65d5572a722bb5e5a1d42b80d8058f8463c38b86"}
   },
   "receipt_gaps": {
-    "provider_402": "OPEN_HIGH_PRIORITY: successor PR232 still treats payment-required as ordinary cooldown/retryable provider error; current-cycle hard-stop is mandatory",
-    "provider_402_cycle_fence": "OPEN: must prove a first 402 suppresses every later attempt to that provider in the same FREE_ONLY cycle",
+    "provider_402": "OPEN_HIGH_PRIORITY: PR232 still treats payment-required as ordinary cooldown/retryable provider error; current-budget-epoch hard-stop is mandatory",
+    "provider_402_cycle_fence": "OPEN: must prove a first 402 suppresses every later attempt to that provider before network in the same FREE_ONLY budget epoch",
+    "provider_cost_principal_identity": "OPEN_HIGH_PRIORITY: semantic request_id excludes credential/account/project/billing-principal identity; equal payload identity cannot authorize execution under a changed cost principal",
+    "provider_payment_latch_restart": "OPEN: payment hard-stop must survive runtime restart inside the same budget epoch; elapsed cooldown alone must not restore eligibility",
     "provider_target_receipt": "OPEN: no live external request or accepted-Ubuntu execution receipt exists for PR232",
     "provider_ci": "OPEN_UNKNOWN_FAILURE: PR-head workflows 31483529694 and 31483529764 failed; logs unavailable",
     "wp03": "OPEN; parser/evaluator progress does not close IR/type package acceptance",
@@ -30,10 +32,12 @@
     "frank_v0_1_target": "Final acceptance remains owner-fixed Hostinger Ubuntu VPS only"
   },
   "new_material_evidence": {
-    "pr232": "Draft successor PR adds strict pre-network model/message validation on top of the prior provider-runtime hardening and supersedes PR231 without merging it.",
+    "research_center_cost_principal": "Commit c7afadb83c9bfd4e6527bd32b87b4e163750c08a routes cost-principal/payment-boundary falsifiers and correctly collapses repeated 402 supervisor writes into one evidence family.",
     "free_only_counterexample": "PR232 code still routes any non-429 non-2xx response, including 402, to provider_error/cooldown_seconds=15 in both normal-response and HTTPError branches.",
+    "cost_principal_counterexample": "PR232 computes request_id from selected provider, parsed hostname and body digest only. Switching allowed credentials/account/project context can therefore preserve semantic request identity while changing cost authority.",
+    "official_context": "RFC 9110 leaves HTTP 402 reserved/underspecified; NVIDIA documents free Developer Program prototyping access but that documentation does not attest a concrete credential's current entitlement, project or remaining zero-cost state.",
     "workflow_results": "Research Entity Identity Guard 31483529694 FAILURE; Research Entity Verify 31483529764 FAILURE; cause UNKNOWN because logs are unavailable.",
-    "goodman": "PR author-local tests and same-repo CI are shared implementation/project lineage; executable counterexamples and accepted-target behavior outrank model consensus."
+    "goodman": "Research-center routing, PR author-local tests and same-repo CI share project lineage; direct code/executable counterexamples and accepted-target behavior outrank model consensus."
   },
-  "instruction": "Carry the existing FREE_ONLY 402 hard-stop rule into PR232 before any provider-runtime capability credit. Require both 402 transport paths plus a same-cycle no-second-attempt discriminator. Treat uninspectable failed CI as UNKNOWN. Do not divert the main ClayCode semantic frontier: exact Ubuntu unary-negation lesion/rescue remains required, followed by WP04 contract/receipt/verb_for review. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS from consensus, no canonical semantics without executable counterevidence plus review, Ubuntu-only final target, and no Frank-Harness modification."
+  "instruction": "Carry the existing FREE_ONLY 402 hard-stop rule plus the new cost-principal identity separation into the next provider-runtime candidate. Require both 402 transport paths, a same-budget-epoch no-second-network-attempt discriminator, persistence of the payment latch across runtime restart, and separate opaque semantic-request versus cost-authority/execution-lineage identities under credential rotation. Do not serialize raw secrets or unsalted secret hashes. Treat uninspectable failed CI as UNKNOWN. Do not divert the main ClayCode semantic frontier: exact Ubuntu unary-negation lesion/rescue remains required, followed by WP04 contract/receipt/verb_for review. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS from consensus, no canonical semantics without executable counterevidence plus review, Ubuntu-only final target, and no Frank-Harness modification."
 }

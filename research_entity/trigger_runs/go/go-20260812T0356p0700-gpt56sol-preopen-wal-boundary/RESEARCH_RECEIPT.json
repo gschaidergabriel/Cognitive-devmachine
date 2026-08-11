@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0356p0700-gpt56sol-preopen-wal-boundary",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_components": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+  ],
+  "research_repo_parent_observed_before_write": "ed18b85508679cf98d5896144b6363b8ee86d47b",
+  "product_main_observed_before_write": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+  "product_candidate": {
+    "pr": 460,
+    "branch": "chatgpt/go-wal-runtime-gate-head-20260812",
+    "head_after_repair": "c87668a49486f40726d0323f822dd43c06539108",
+    "mergeable": true,
+    "mergeable_state_when_observed": "unstable",
+    "draft": true
+  },
+  "observed_reality": {
+    "prior_candidate_gap": "The PR 460 runtime check inspected PRAGMA journal_mode only after sqlite3.connect(); existing migrations also connected before applying migration storage policy.",
+    "upstream_boundary": "SQLite WAL documentation states that the first connection after a crash may participate in WAL recovery; the database header encodes file-format write/read versions at bytes 18 and 19, where 2 denotes WAL.",
+    "risk": "On a vulnerable or unattested SQLite runtime, a post-connect gate can be too late to guarantee that unsafe WAL recovery was never entered."
+  },
+  "grf": {
+    "generated_reality": "A post-connect PRAGMA gate is sufficient because it rejects WAL before Frank performs ordinary application reads or writes.",
+    "counter_reality": "sqlite3.connect itself can enter WAL recovery after a crash, so the safety boundary must discriminate persisted WAL before invoking vulnerable/unattested SQLite.",
+    "discriminating_test": "Create an existing WAL database, substitute a vulnerable semantic SQLite version, patch sqlite3.connect to raise if called, and require rejection from ordinary file-header inspection with connect call count exactly zero. Repeat for the existing-database migration path.",
+    "collapse": "COUNTER_REALITY_SUPPORTED_PREOPEN_BOUNDARY_REQUIRED",
+    "confidence": "HIGH_FOR_BOUNDARY_LOGIC_MEDIUM_FOR_PRODUCT_ACCEPTANCE"
+  },
+  "implemented_delta": {
+    "runtime_file": "runtime/state/apply_current_schema.py",
+    "test_file": "tests/unifieddb_migration_storage_policy_regression.py",
+    "commits": [
+      "84cac33d72cc9757fd3887b181279454eca0204d",
+      "3c0e3d52fbdcdaf96050aa9d2e11570d6d6d58bd",
+      "e4d214ad34e3531d56fe2e4f6dc1ca849a72c346",
+      "c87668a49486f40726d0323f822dd43c06539108"
+    ],
+    "mechanism": "For vulnerable/unattested SQLite families, read and validate the first 20 database bytes with ordinary file I/O before sqlite3.connect; reject WAL header versions (2,2), reject unsupported/malformed formats, admit rollback header (1,1), and keep post-open storage verification as a second boundary. Existing migration databases receive the same preflight before any connection.",
+    "rollback": "Revert the four candidate commits on PR 460; no production installation or canonical state was mutated by this repair."
+  },
+  "tests": {
+    "candidate_self_hosted_run": 31535070745,
+    "candidate_self_hosted_status_when_written": "QUEUED",
+    "required_cases_added": [
+      "vulnerable WAL open rejects before sqlite3.connect",
+      "vulnerable rollback-journal open remains admitted and FULL synchronous",
+      "unknown/mixed file-format versions fail before connect",
+      "existing vulnerable WAL migration rejects before sqlite3.connect"
+    ],
+    "promotion_state": "TESTING"
+  },
+  "exactly_one_bounded_unusual_experiment_this_invocation": {
+    "count": 1,
+    "name": "SQLITE_35304_ENVIRONMENTAL_REPRO_COUNTERWORLD",
+    "product_branch": "chatgpt/sqlite-env-repro-counterworld-20260812",
+    "commit": "d26c319c857ebe143c0839ae02475f9bba28ba4a",
+    "workflow_run": 31534509781,
+    "status_when_written": "IN_PROGRESS",
+    "control": "umask 022, TZ=UTC, LC_ALL=C, JOBS=2, isolated HOME/TMP, SOURCE_DATE_EPOCH unset",
+    "treatment": "umask 077, TZ=Pacific/Honolulu, LC_ALL=C, JOBS=1, isolated HOME/TMP, SOURCE_DATE_EPOCH=946684800",
+    "falsifier": "Exact SQLite 3.53.4 library SHA-256 or exact runtime-manifest bytes differ between control and treatment.",
+    "production_state_mutated": false,
+    "additional_unusual_experiments": 0
+  },
+  "counterevidence_and_nonclaims": {
+    "preflight_toctou_remaining": "A path can in principle change between file-header preflight and sqlite3.connect; this patch does not prove hostile path-swap resistance or exact mapped-object identity.",
+    "fixed_runtime_identity_remaining": "Semantic version-family classification is not artifact authority; accepted product runtime still requires provenance-bound exact loaded-object/source identity.",
+    "productive_parent_remaining": "No claim that the productive Frank service/start parent non-bypassably installs or admits the accepted private SQLite runtime.",
+    "no_whole_frank_pass": true,
+    "no_fv01_13_promotion": true,
+    "no_harness_authority_change": true,
+    "training_authorized": false
+  },
+  "reentry": {
+    "state": "TESTING",
+    "architecture_delta": "Move the WAL safety boundary before any vulnerable/unattested SQLite connection, while retaining a second post-open verification boundary.",
+    "next_falsifier": "On the accepted Hostinger Ubuntu VPS, bind the productive Frank start path to the accepted artifact and prove the actually mapped sqlite object plus canonical state header/mode across clean start, crash/restart, downgrade/library-swap, path-swap and rollback controls.",
+    "promotion_requirement": "Self-hosted exact-head regression PASS plus a provenance-bound accepted-host receipt tying trusted parent/start identity, exact artifact and mapped-object identity, pre-open persisted-state classification, post-open source/version/mode, restart continuity and negative substitution controls."
+  }
+}

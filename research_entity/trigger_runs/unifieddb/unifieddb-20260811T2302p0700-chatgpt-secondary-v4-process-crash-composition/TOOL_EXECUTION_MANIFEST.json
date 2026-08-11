@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "executed": [
+    {
+      "tool": "GitHub",
+      "purpose": "verify current Clay canonical/program/trigger/workspace state and current target repo work",
+      "result": "VERIFIED_RW"
+    },
+    {
+      "tool": "GitHub",
+      "purpose": "inspect target V17/UnifiedDB SQLite topology, current V4 repair PRs and target workflow receipts",
+      "result": "CURRENT_TARGET_EVIDENCE_LOADED"
+    },
+    {
+      "tool": "web.run",
+      "purpose": "fresh primary SQLite mechanism evidence for WAL checkpointing and synchronous durability boundaries",
+      "result": "PRIMARY_SQLITE_DOCS_REFRESHED"
+    },
+    {
+      "tool": "GitHub",
+      "purpose": "build non-overlapping V4 process-crash composition candidate",
+      "result": {
+        "repo": "gschaidergabriel/Dr.-Unterweger",
+        "branch": "chatgpt/unifieddb-v4-process-crash-composition-20260811",
+        "pull_request": 371,
+        "head": "c4cf3747ee8e57c10c754b7a8898264181744777",
+        "workflow_run": 31510023573,
+        "workflow_state_at_manifest_write": "QUEUED"
+      }
+    }
+  ],
+  "primary_external_sources": [
+    {
+      "source": "SQLite WAL documentation",
+      "use": "checkpoint topology, automatic checkpoint behavior and WAL-reset mechanism boundary"
+    },
+    {
+      "source": "SQLite PRAGMA synchronous documentation",
+      "use": "distinguish application/process crash from OS/power durability semantics"
+    },
+    {
+      "source": "SQLite corruption guidance",
+      "use": "checkpoint and storage-sync failure boundary"
+    }
+  ],
+  "guards": [
+    "no canonical Frank state opened by new experiment",
+    "no host SQLite package replacement",
+    "no external Frank effect",
+    "no training action",
+    "no whole-product acceptance claim"
+  ]
+}

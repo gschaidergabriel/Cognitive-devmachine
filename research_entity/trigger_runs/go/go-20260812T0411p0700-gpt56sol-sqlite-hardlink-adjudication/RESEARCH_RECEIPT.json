@@ -1,20 +1,23 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "run_id": "go-20260812T0411p0700-gpt56sol-sqlite-hardlink-adjudication",
   "worker": "GPT-5.6 Sol temporary Clay worker",
   "program": "FRANK_V0_1",
   "framework": "GRF",
   "canonical_research_head_before_write": "af6cae5bbcf750d54c1149d3314d52bc70044236",
-  "frank_main_observed": "985f8370a6a6047d9962206f4fb6f2c049f4d370",
+  "frank_main_observed_initial": "985f8370a6a6047d9962206f4fb6f2c049f4d370",
+  "frank_main_observed_final": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
   "focus": ["F-V01-13-SECURITY-RECOVERY-OBSERVABILITY", "F-V01-01-IDENTITY-SERVER-BINARY"],
   "r0_observed": [
-    "Current main rejects file-level symlink launcher transplantation before sibling guard resolution.",
+    "Initial current main rejected file-level symlink launcher transplantation before sibling guard resolution.",
     "Merged SQLite 3.53.4 parity work is accepted-target validated and byte-reproducible but explicitly does not provision production /opt or /etc state and does not close F-V01-13.",
-    "Current V5 launcher derives fixed_sqlite_runtime_guard_v5_candidate.py from SELF_DIR and checks symlink launch shape, but current main does not reject a same-inode hardlink launch shape.",
+    "Initial current V5 launcher derived fixed_sqlite_runtime_guard_v5_candidate.py from SELF_DIR and rejected symlink launch shape, but did not reject a same-inode hardlink launch shape.",
     "Accepted-target production-parent inventory previously observed no separate Frank/self.root product service/unit from the runner context.",
-    "PR #482 independently exists on current main to reject hardlinked launcher invocation and is mergeable; its dedicated self-hosted regression run 31537077376 was still QUEUED at adjudication time.",
-    "Generic Frank Deep Integrity for PR #482 failed before any job step/runner execution; this is not treated as product semantic evidence."
+    "PR #482 independently encoded the same hardlink counterworld repair on initial main.",
+    "Dedicated self-hosted Linux/X64 V5 pre-guard regression run 31537077376 completed SUCCESS on exact PR head fb83b1a308d4e096c3cea802895b6841ea4ee03a.",
+    "PR #482 was subsequently merged to main as 33bb74de9074042e3c1a186ea3f22d2ea8a572f4.",
+    "Generic Frank Deep Integrity for PR #482 failed before any job step/runner execution; it is not treated as product semantic evidence."
   ],
   "primary_external_evidence": [
     {
@@ -49,18 +52,18 @@
     "candidate": "gschaidergabriel/Dr.-Unterweger PR #482 @ fb83b1a308d4e096c3cea802895b6841ea4ee03a",
     "mechanism": "Reject launcher link count != 1 using absolute /usr/bin/stat before sibling resolution.",
     "local_replay": "PASS_LOCAL_REPAIR_REGRESSION: hardlink and symlink controls both denied with RC 78 before foreign guard execution.",
-    "accepted_target": "UNKNOWN_QUEUED",
-    "promotion": "DEFER_UNTIL_EXACT_HEAD_TARGET_EVIDENCE"
+    "accepted_target": "PASS_EXACT_HEAD_SELF_HOSTED_RUN_31537077376",
+    "promotion": "PROMOTED_NARROW_REPAIR_TO_MAIN_33bb74de9074042e3c1a186ea3f22d2ea8a572f4"
   },
   "grf_collapse": {
     "symlink_only_is_complete_origin_proof": "REJECT",
     "hardlink_transplant_possible_for_same_principal_user_owned_launcher": "SUPPORTED",
-    "pr_482_narrow_hardlink_repair": "TESTING_LOCAL_PASS_TARGET_UNKNOWN",
+    "pr_482_narrow_hardlink_repair": "PROMOTED_NARROW_MECHANISM",
     "sqlite_3_53_4_upstream_wal_fix_status": "VERIFIED_BY_PRIMARY_SOURCE",
     "f_v01_13_release_gate": "OPEN",
     "production_root_service_boundary": "HIGHEST_VALUE_NEXT_DISCRIMINATOR"
   },
-  "claim_boundary": "No production /opt or /etc provisioning, no product service start/restart, no accepted-target hardlink-repair PASS, no F-V01-13 closure, no whole Frank v0.1 acceptance, no effect/Harness authority, no final model training authorization.",
-  "next_falsifier": "On the accepted Hostinger lane, obtain exact-head target evidence for the composed root-owned fixed-address service/launcher/guard/runtime chain and then prove restart plus downgrade/library-swap/rollback controls against the exact productive mapped SQLite object and provenance-bound state lineage.",
-  "outcome": "RETAIN_COUNTEREVIDENCE_AND_DEFER_PROMOTION"
+  "claim_boundary": "The hardlink launcher repair is target-validated and merged, but there is still no production /opt or /etc provisioning, product service start/restart evidence, F-V01-13 closure, whole Frank v0.1 acceptance, effect/Harness authority change, or final model training authorization.",
+  "next_falsifier": "On the accepted Hostinger lane, obtain exact evidence for the composed root-owned fixed-address service/launcher/guard/runtime chain and then prove restart plus downgrade/library-swap/rollback controls against the exact productive mapped SQLite object and provenance-bound state lineage.",
+  "outcome": "PROMOTE_NARROW_REPAIR_RETAIN_RELEASE_GATE"
 }

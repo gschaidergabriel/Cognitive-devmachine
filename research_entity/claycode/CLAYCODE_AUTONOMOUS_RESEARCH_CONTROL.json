@@ -69,7 +69,10 @@
     "parser_surface_coverage_is_not_evaluator_semantic_correctness",
     "request_differential_coverage_and_language_construct_coverage_are_independent_axes",
     "every_newly_admitted_evaluator_construct_requires_positive_negative_and_semantic_mutation_controls",
-    "silently_dropped_operator_or_construct_is_fail_closed_release_blocker"
+    "silently_dropped_operator_or_construct_is_fail_closed_release_blocker",
+    "http_402_payment_required_is_nonretryable_provider_hard_stop_for_current_free_only_cycle",
+    "provider_runtime_candidate_requires_accepted_ubuntu_execution_receipt_before_capability_credit",
+    "failed_or_uninspectable_ci_never_counts_as_provider_or_semantic_acceptance"
   ],
   "priority_order": [
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-03-IR-TYPES",
@@ -85,37 +88,38 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep V18 frozen and WP03/WP04/WP05 OPEN. Commit 53c85d379e4e97708011c35c8d1f692d49cd951d is the current highest-priority executable counterexample: parser surface coverage increased to 36/40 sources (90.0%), but unary ! is silently ignored by the tree-walking evaluator because the anonymous token disappears before Not construction. Minimal execution gives f(true)=True and f(false)=False with no diagnostic. The previous 200576/0 decide_effect differential does not cover this construct because frank_effects.clay uses == false. Therefore do not treat request-count success or parser-source coverage as language correctness. First reproduce the pre-repair negation failure and successor repair on exact accepted-Ubuntu-target bytes, with lesion/rescue and construct-specific mutation tests. Do not merge/promote PR310 evaluator evidence without the negation fix referenced by successor PR314. Keep the four unsupported source forms fail-closed rather than inventing grammar semantics. After this blocker, continue WP04 provenance review of 26 host contracts, three reconstructed receipt types, runtime_effect/independently_observe_effect shapes and verb_for/Verb semantics. Preserve later Graph, provider/Fence, process-incarnation and SQLite gates independently. FREE_ONLY, no paid fallback, no BASE/Frank PASS from consensus, Goodman ancestry collapse, Ubuntu-only final acceptance, and do not modify Frank's Harness.",
+  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep V18 frozen and WP03/WP04/WP05 OPEN. The unary-negation evaluator counterexample remains the primary semantic blocker and requires accepted-Ubuntu lesion/rescue plus construct-level conformance. New provider runtime PR231 is a separate FREE_ONLY capability lane and must not divert or inflate ClayCode acceptance. Its origin-binding, redirect, response-shape and HTTP-success fences are candidate progress only. Before the autonomous cycle may use or credit PR231, repair HTTP 402 so both ordinary-response and HTTPError paths emit a nonretryable payment-required hard stop and remove that provider from the current cycle; then obtain an exact-byte accepted-Ubuntu redacted execution receipt and green inspectable CI. Current PR231 head e042a1f195e665127b4ee67281f4076c7144a00b has no live external request and two failed uninspectable verification workflows. Preserve Together hard-denial, FREE_ONLY with no paid fallback, Goodman ancestry collapse, Ubuntu-only final acceptance, no BASE/Frank PASS from consensus, and do not modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "The new executable unary-negation counterexample falsifies the inference that a large request differential plus broad parser coverage establishes evaluator correctness. A silent dropped ! can invert DENY/ALLOW semantics while all existing decide_effect cases remain green. This is a material authority-critical blocker and justifies steering construct-level conformance ahead of further surface-credit expansion without changing WP04/WP05 package status.",
+    "reason": "PR231 exposes a direct mismatch between the existing FREE_ONLY control plane and the candidate provider runtime: payment-required HTTP 402 is currently treated as a transient provider_error with cooldown, while the control policy requires a hard provider stop. This is materially relevant because retry classification is itself a cost-safety boundary. The candidate also lacks accepted-Ubuntu live execution and its two PR-head verification workflows failed with unavailable logs. Steering adds explicit nonretryable 402 and target-receipt gates without changing ClayCode package status or semantic priority.",
     "evidence_priority": [
-      "accepted-target reproduction of unary-not pre-repair failure and exact successor repair with semantic lesion/rescue",
-      "construct-level positive/negative/mutation coverage ledger independent of request/input corpus counts",
-      "36/40 parser-surface preservation with four unsupported sources remaining fail-closed",
-      "exact Clay declarations and explicit host contracts with source hashes and effect classes",
-      "owner review plus executable counterevidence for call-site-reconstructed receipt semantics",
-      "dedicated verb_for/Verb capability-model discriminator",
-      "WP05 runtime/binary/lease/execution-generation/process-incarnation binding",
+      "accepted-target unary-not pre-repair failure and exact repaired semantic rescue",
+      "construct-level positive/negative/mutation coverage independent of request counts",
+      "PR231 HTTP-402 regular-response and HTTPError hard-stop falsifiers",
+      "accepted-Ubuntu redacted provider-runtime receipt on exact repaired bytes with FREE_ONLY invariant",
+      "inspectable green CI for provider runtime before capability credit",
+      "exact Clay declaration/host-contract provenance and verb_for/Verb discriminator",
       "FRANK_V0_1 Ubuntu target re-entry and final component audit"
     ],
     "required_next_actions": [
-      "run exact pre-repair unary ! minimal repro on accepted Ubuntu target and require it to fail semantic conformance",
-      "run exact repaired successor bytes on the same target and require f(true)=false and f(false)=true plus nested/double-negation mutations",
-      "add a construct-coverage receipt so parser acceptance cannot exceed semantic-tested construct acceptance by implication",
-      "retain unknown or prose-like constructs as rejected fail-closed inputs until independently specified",
-      "do not merge/promote PR310 evaluator evidence without the negation successor gate",
-      "then resume review of the 26 host contracts, three reconstructed receipt types, runtime payload shapes and verb_for/Verb mapping",
+      "run exact pre-repair unary ! minimal repro on accepted Ubuntu target and require failure, then exact repair rescue",
+      "repair PR231 so HTTP 402 cannot be treated as cooldown/retryable provider_error in either transport path",
+      "add regression proving payment-required removes the provider from current FREE_ONLY cycle and never reaches VERIFIED/DONE",
+      "do not infer zero-cost account state from credential presence; official free-endpoint documentation is context, not account execution proof",
+      "treat PR231 workflow failures as UNKNOWN until inspectable; do not mark harmless infra or semantic failure without evidence",
+      "then resume WP04 host-contract/receipt/verb_for review",
       "preserve FREE_ONLY, Goodman ancestry collapse, Ubuntu-only acceptance and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
       "legacy BASE or Frank v0.1 PASS from component workflow success, receipt labels or model-family consensus",
       "WP04 acceptance from analyzer UNRESOLVED=0",
-      "WP05 evaluator correctness from 200576/0 decide_effect differential",
-      "evaluator semantic correctness from 36/40 parser coverage",
+      "WP05 evaluator correctness from 200576/0 decide_effect differential or 36/40 parser coverage",
+      "verified free provider execution from a configured credential, provider catalog listing, or PR author tests",
+      "retry permission after HTTP 402 payment-required",
+      "provider-runtime acceptance from failed or log-unavailable CI",
       "canonical type semantics from call-site reconstruction without review",
       "valid capability semantics from verb_for identity binding",
       "runtime/effect authority from declared host contracts",
-      "independent replication from shared Claude/project/owner/runner ancestry",
+      "independent replication from shared model/project/owner/runner ancestry",
       "canonical semantic promotion from parser, TypedIR, module-resolution, evaluator, Graph-root, receipt or policy-oracle success alone"
     ]
   },

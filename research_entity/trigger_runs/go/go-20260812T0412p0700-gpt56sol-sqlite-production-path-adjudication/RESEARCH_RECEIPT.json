@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "organ": "gpt-5.6-sol temporary Clay research organ",
+  "started_from_research_head": "fe70e32ba4122c063bb640f784fd93eafea9ee86",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+  "affected_packages": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-09-EFFECT-AUTHORITY"
+  ],
+  "r0_observed": {
+    "workspace_gate": "F-V01-13 remains IN_PROGRESS and requires fail-closed SQLite/WAL plus recovery/lineage evidence.",
+    "sqlite_upstream": "Upstream documents the WAL-reset corruption bug through 3.51.2 and the fix from 3.51.3; project release policy pins exact SQLite 3.53.4 source identity rather than semver alone.",
+    "current_v5": "Current main V5 already rejects symlink and hardlink launcher transplants and binds release acceptance to exact 3.53.4 source identity.",
+    "accepted_target_parent_inventory_run": 31529433345,
+    "accepted_target_parent_inventory_head": "a6c5c10e11e03ab0eb46c71be8e43403f3e5d26f",
+    "accepted_target_parent_inventory_result": {
+      "runner": "clay / digital-retina",
+      "runner_user": "frankrunner",
+      "systemd": "255 (255.4-1ubuntu8.17)",
+      "runner_loader_env": "LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH absent",
+      "product_candidate_systemd_unit_count": 0,
+      "product_candidate_process_count": 0,
+      "product_candidate_service_file_count": 0,
+      "status": "NO_SEPARATE_FRANK_PRODUCTION_PARENT_CANDIDATE_OBSERVED_FROM_RUNNER_CONTEXT",
+      "release_gate_closed": false
+    }
+  },
+  "preferred_reality": "The remaining SQLite blocker is now principally productive deployment/start-path composition: provision the accepted fixed runtime/root anchor and bind an exact non-bypassable Frank production service/start tuple before writable WAL state, then prove restart/rollback/downgrade/library-swap continuity.",
+  "strongest_counter_reality": "The name-based accepted-target inventory could miss a production process hidden under unrelated process/unit naming or another execution view, so zero named candidates is strong negative deployment evidence but not universal proof of absence.",
+  "collapse": {
+    "claim_sqlite_3_53_4_candidate_alone_closes_release": "REJECT",
+    "claim_current_v5_same_version_wrong_source_id_gap_is_open": "REJECT_ALREADY_FENCED",
+    "claim_separate_production_parent_is_currently_attested": "REJECT_BY_ACCEPTED_TARGET_INVENTORY",
+    "productive_fixed_runtime_service_path": "OPEN",
+    "f_v01_13": "IN_PROGRESS"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "id": "BIND_MOUNT_LAUNCHER_TRANSPLANT",
+    "purpose": "Probe whether a file bind mount could transplant the current V5 launcher to a foreign sibling-guard directory while evading file-symlink and hardlink-count rejection.",
+    "scope": "Disposable local sandbox only; no Frank state, no VPS mutation, no effect authority.",
+    "baseline": "Synthetic current-main launcher copy with disposable sibling guard; instrumentation did not yield a promotable positive baseline in this sandbox.",
+    "intervention": "Attempt file bind mount of launcher into a foreign directory containing a different sibling guard.",
+    "observed": "mount --bind denied by sandbox with rc=32 / permission denied.",
+    "outcome": "INCONCLUSIVE_ENVIRONMENT",
+    "promotion": "NONE",
+    "followup_law": "Do not infer vulnerability or safety from this local result. Existing systemd/filesystem-view work remains the relevant candidate lane; avoid duplicate implementation."
+  },
+  "coordination": {
+    "overlap_observed": [
+      "Open product PR #484 binds systemd ExecStart argv semantics.",
+      "Open product PR #481 addresses service filesystem/content-remapping identity.",
+      "Open product PR #486 hardens privileged root provisioning ordering.",
+      "Current product main #482 already merged hardlink-transplant rejection."
+    ],
+    "decision": "NO_DUPLICATE_PRODUCT_PATCH_THIS_CYCLE"
+  },
+  "next_discriminator": "Compose one canonical ProductStart tuple on fresh product main and accepted Hostinger Ubuntu: exact production unit/parent + full ExecStart/ExecStartEx argv/flags + trusted launcher/guard/release-bundle hashes + root-owned runtime anchor + mapped SQLite 3.53.4 object/source/hash + exact Frank target/state lineage. Absence of the exact product unit is fail-closed. Then replay start/restart/crash and downgrade/library-swap/stale-anchor/rollback controls before writable WAL acceptance.",
+  "external_primary_sources": [
+    "https://www.sqlite.org/wal.html",
+    "https://sqlite.org/releaselog/3_51_3.html",
+    "https://sqlite.org/releaselog/3_53_4.html",
+    "https://sqlite.org/c3ref/c_source_id.html"
+  ],
+  "negative_results_preserved": true,
+  "canonical_frank_state_mutated": false,
+  "effect_authority": "NONE",
+  "harness_authority": "NONE",
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

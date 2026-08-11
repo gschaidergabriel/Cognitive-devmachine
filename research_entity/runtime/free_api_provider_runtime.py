@@ -22,6 +22,7 @@ from urllib.parse import urlparse
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
+MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 PROCESS_PAYMENT_LATCHES: set[str] = set()
 
 
@@ -215,6 +216,10 @@ class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
         return None
 
 
+class ProviderResponseTooLarge(ValueError):
+    """The provider response exceeded the bounded adapter's byte limit."""
+
+
 def _open_no_redirect(request: urllib.request.Request, timeout: int):
     return urllib.request.build_opener(_NoRedirectHandler()).open(
         request, timeout=timeout
@@ -358,7 +363,9 @@ def execute_chat(
             status = getattr(response, "status", 200)
             response_started = True
             lifecycle.append("EXECUTED")
-            response_body = response.read(2_000_000)
+            response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
+            if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
+                raise ProviderResponseTooLarge
         if not isinstance(status, int):
             raise ValueError("response_status_must_be_integer")
         if not 200 <= status < 300:
@@ -408,6 +415,11 @@ def execute_chat(
             outcome = "provider_error"
             cooldown_seconds = 15
             retryable = True
+    except ProviderResponseTooLarge:
+        content = None
+        outcome = "provider_response_too_large"
+        cooldown_seconds = 15
+        retryable = False
     except (
         json.JSONDecodeError,
         KeyError,

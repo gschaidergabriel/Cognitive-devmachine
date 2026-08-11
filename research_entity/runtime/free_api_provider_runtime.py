@@ -311,6 +311,10 @@ def _is_valid_http_status(value: object) -> bool:
     )
 
 
+def _reject_nonfinite_json_constant(value: str) -> None:
+    raise ValueError(f"nonstandard_json_constant:{value}")
+
+
 def execute_chat(
     messages: list[dict[str, str]],
     *,
@@ -399,7 +403,10 @@ def execute_chat(
                 cooldown_seconds = 15
                 retryable = True
         else:
-            payload = json.loads(response_body)
+            payload = json.loads(
+                response_body,
+                parse_constant=_reject_nonfinite_json_constant,
+            )
             choices = payload["choices"]
             if not isinstance(choices, list) or not choices:
                 raise ValueError("response_choices_must_be_nonempty_list")

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "trigger": "unifieddb",
+  "status": "TARGET_EXECUTION_QUEUED",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_boot": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "fresh_parent_before_research_write": "b042b39f746a958b3baaedbfcfe51e8fd06e82c1",
+  "target_candidate": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "parent_pr": 359,
+    "pull_request": 371,
+    "head": "c4cf3747ee8e57c10c754b7a8898264181744777",
+    "workflow_run": 31510023573,
+    "workflow_state": "QUEUED"
+  },
+  "required_outputs": {
+    "INTERCONNECT_MANIFEST.json": "PRESENT",
+    "TOOL_EXECUTION_MANIFEST.json": "PRESENT",
+    "STORE_ROLE_MATRIX.json": "PRESENT",
+    "UNIFIED_DATABASE_ARCHITECTURE.claycode.json": "PRESENT",
+    "QUERY_ROUTING_PLAN.json": "PRESENT",
+    "EXPERIMENT_RESULTS.json": "PRESENT_PENDING_TARGET",
+    "MIGRATION_PLAN.json": "PRESENT",
+    "BRANCH_FEEDBACK_MANIFEST.json": "PRESENT",
+    "FRANK_UNIFIEDDB_FEEDBACK.json": "PRESENT",
+    "RUN_MANIFEST.json": "PRESENT",
+    "FINAL_REPORT.md": "PRESENT"
+  },
+  "architecture_decision": "PREFERRED_C_SHARED_CANONICAL_PLUS_SIDECARS",
+  "new_research_delta": "typed non-substitutable recovery evidence classes + per-process V4 admission crash composition",
+  "negative_results_preserved": [
+    "same-domain recovery floor cannot detect same-domain rewind",
+    "V1/V2/V3 admission predecessors were insufficient against previously demonstrated loader/Python startup classes",
+    "disposable pair PASS is not canonical migration evidence",
+    "process-crash PASS cannot be promoted to OS/power-loss durability",
+    "separate green composition runs are not whole Frank acceptance"
+  ],
+  "promotion": "HOLD_UNTIL_TARGET_RESULT_AND_REMAINING_RECOVERY_GATES",
+  "canonical_frank_state_mutated": false,
+  "external_effect_performed": false,
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": false
+}

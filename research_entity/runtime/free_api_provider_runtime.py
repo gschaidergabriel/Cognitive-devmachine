@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import os
+import secrets
 import time
 import urllib.error
 import urllib.request
@@ -137,6 +138,7 @@ def execute_chat(
     environ: dict[str, str] | None = None,
     opener=None,
     now=time.time,
+    nonce_factory=None,
 ) -> dict:
     """Execute one bounded chat request and return output plus a redacted receipt.
 
@@ -162,6 +164,9 @@ def execute_chat(
     if parsed.hostname != provider_host and not local_test:
         raise RuntimeError("provider_endpoint_not_bound_to_selected_provider")
 
+    attempt_nonce = secrets.token_hex(16) if nonce_factory is None else nonce_factory()
+    if not isinstance(attempt_nonce, str) or not attempt_nonce:
+        raise ValueError("attempt_nonce_must_be_nonempty_string")
     started = now()
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
     body = json.dumps({"model": model, "messages": messages, "stream": False}).encode()
@@ -218,7 +223,7 @@ def execute_chat(
         "model": model,
         "endpoint_host": parsed.hostname,
         "request_id": request_id,
-        "attempt_id": _safe_request_id(f"{request_id}:{started}"),
+        "attempt_id": _safe_request_id(f"{request_id}:{started}:{attempt_nonce}"),
         "status": status,
         "outcome": outcome,
         "lifecycle": lifecycle,

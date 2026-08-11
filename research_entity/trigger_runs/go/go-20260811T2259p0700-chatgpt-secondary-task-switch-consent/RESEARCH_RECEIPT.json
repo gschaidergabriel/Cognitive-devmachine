@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2259p0700-chatgpt-secondary-task-switch-consent",
+  "trigger": "go",
+  "status": "CANDIDATE_TARGET_EXECUTION_QUEUED",
+  "origin_actor": "chatgpt-secondary",
+  "ingested_by": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-08-TOKEN-API-CLIENTS",
+  "mission": "Frank v0.1 fully operational on the accepted Ubuntu target",
+  "work_selection": {
+    "selected_gap": "unfinished current user task can receive same-holder V16 follow-up requests without an explicit task relation or task-switch consent boundary",
+    "overlap_refresh": "no open task-switch-consent PR found before implementation",
+    "avoided_active_lanes": [
+      "ClayCode compiler/evaluator",
+      "SQLite/recovery",
+      "Needle",
+      "reward plasticity",
+      "token rotation/request identity",
+      "TLS transport",
+      "response replay",
+      "effect authority",
+      "proactive agency"
+    ]
+  },
+  "internal_evidence": [
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "path": "runtime/api/frank_token_ingress_core.py",
+      "finding": "same-holder/session active execution accepts a new request through admit_followup_request; the ingress surface does not carry explicit requested task identity or task-switch consent"
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "path": "runtime/state/frank_execution_continuity.py",
+      "finding": "V16 persists current_task_id/current_task_state and follow-up request admission but exposes no explicit unrelated-task switch-consent transition"
+    }
+  ],
+  "external_mechanism_evidence": [
+    {
+      "source": "Model Context Protocol 2026-07-28 release",
+      "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+      "use": "mechanism evidence only: per-request identity and separate long-running Tasks extension"
+    },
+    {
+      "source": "A2A latest specification",
+      "url": "https://a2a-protocol.org/latest/specification/",
+      "use": "mechanism evidence only: taskId is distinct from contextId and cancellation is task-scoped"
+    }
+  ],
+  "hypothesis": "A durable exact-snapshot one-shot consent guard can prevent silent abandonment of a nonterminal current user task while allowing same-task continuation and new tasks after terminal state.",
+  "strongest_counterhypothesis": "A separate guard may duplicate canonical task state or bind consent to unstable token credentials; therefore it must consume producer-owned canonical task snapshots plus a stable authenticated principal and must not own cancellation, execution admission or effect authority.",
+  "candidate": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-task-switch-consent-v1-20260811",
+    "pull_request": 370,
+    "current_head_at_receipt": "d1883ace021e3e45c8a0e6b8089ff94bab682661",
+    "initial_base": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "pr_current_base_observed": "0b765534e693707b813dab9ff7471189ee48ef91",
+    "base_delta_after_start": "5 commits, ClayCode unary-negation hotfix surface only; GitHub recomputed PR as mergeable with no task/API file overlap",
+    "files": [
+      "runtime/api/frank_task_switch_consent_v1_candidate.py",
+      "tests/frank_task_switch_consent_v1_gate.py",
+      "claycode/frank_task_switch_consent.clay",
+      ".github/workflows/frank-task-switch-consent-v1-vps.yml"
+    ],
+    "stable_actor_dependency": "EXTERNAL_AUTHENTICATED_STABLE_PRINCIPAL_REQUIRED",
+    "authority": "NONE",
+    "canonical_state_mutation": false,
+    "external_effect": false
+  },
+  "local_execution": {
+    "mode": "isolated candidate-only",
+    "status": "PASS_TASK_SWITCH_CONSENT_V1_CANDIDATE",
+    "checks_passed": 10,
+    "checks_total": 10,
+    "current_v16_dynamic_baseline": "DEFERRED_TO_REPOSITORY_TARGET_PATH",
+    "sqlite_integrity": "ok"
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "name": "CONSENT_REPLAY_AFTER_TASK_ADVANCE",
+    "intervention": "grant A@rev9 -> D, then legitimately advance current task A to rev10 before consuming switch consent",
+    "anti_control": "consent keyed only to actor/execution/from/to would still allow",
+    "candidate_result": "PASS_STALE_CONSENT_INVALIDATED",
+    "architectural_consequence": "task revision/state/identity and execution epoch must be part of the consent evidence boundary"
+  },
+  "instrument_negative_result": {
+    "finding": "first target-workflow draft contained an invalid YAML here-doc in SQLite-version metadata capture and was not registered by GitHub Actions",
+    "classification": "HARNESS_YAML_INSTRUMENT_BUG_NOT_CANDIDATE_SEMANTIC_EVIDENCE",
+    "repair": "replace nested here-doc with a single-line python3 -c metadata probe and validate YAML locally before repush",
+    "repaired_head": "d1883ace021e3e45c8a0e6b8089ff94bab682661"
+  },
+  "target_execution": {
+    "workflow": "Frank task switch consent v1 VPS",
+    "run_id": 31509948272,
+    "runner_class": "self-hosted Linux X64 / accepted Ubuntu target lane",
+    "status_at_receipt": "QUEUED",
+    "acceptance_requires": [
+      "dynamic current-V16 baseline reproduces inability to distinguish an unrelated same-holder follow-up task",
+      "all candidate deterministic gates pass",
+      "exactly one OOB experiment is CONSENT_REPLAY_AFTER_TASK_ADVANCE and passes",
+      "execution/effect authority remains unminted",
+      "no canonical state mutation or external effect"
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "proposal": "insert a revision-bound one-shot current-user task-switch consent gate between task-intent classification and any cancellation/suspension/new-execution admission",
+    "must_bind_to": [
+      "canonical producer-owned task snapshot",
+      "stable authenticated principal",
+      "current execution_id + lease_epoch",
+      "source task_id/state/revision",
+      "target task_id"
+    ],
+    "must_not_own": [
+      "task cancellation/suspension",
+      "execution admission",
+      "effect authority",
+      "truth authority",
+      "Harness mutation authority"
+    ],
+    "rollback": "remove the four candidate files/PR; current V16 remains unchanged"
+  },
+  "baseline_discipline": {
+    "historical_replacement_claim": false,
+    "reason": "this is a new owner-required API safety boundary candidate, not a claimed replacement/fusion of a reconstructed historical Frank organ"
+  },
+  "next_falsifiers": [
+    "execute exact candidate on accepted target and require dynamic V16 baseline + candidate PASS",
+    "compose with stable principal/token-rotation identity so credential rotation cannot change current-user identity",
+    "compose with canonical task producer and actual cancellation/suspension/new-admission transition",
+    "crash between consent consume and authoritative switch; require no double-switch/no silent abandonment",
+    "concurrent double-consume race on one grant under target SQLite/recovery lane"
+  ],
+  "claims": {
+    "f_v01_08_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "training_authorized": false,
+    "frank_self_harness_authority_granted": false
+  }
+}

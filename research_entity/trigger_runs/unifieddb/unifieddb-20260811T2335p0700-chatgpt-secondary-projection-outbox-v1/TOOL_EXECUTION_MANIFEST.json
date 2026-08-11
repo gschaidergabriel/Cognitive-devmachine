@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "executed": [
+    {"tool": "GitHub", "purpose": "fresh current target/research state, overlap search and build", "result": "VERIFIED_RW"},
+    {"tool": "web.run", "purpose": "primary SQLite WAL/durability/multi-database atomicity refresh", "result": "PRIMARY_SQLITE_DOCS_USED"},
+    {"tool": "GitHub", "purpose": "build candidate contract/schema/runtime/gate/workflow", "result": {"pr": 386, "head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656, "state": "QUEUED_AT_WRITE"}}
+  ],
+  "source_fusion": [
+    "existing claycode/frank_claygraph.clay source_of_truth/rebuildability contract",
+    "current apply_current_schema.py explicit no-cross-file-atomicity contract",
+    "SQLite WAL/synchronous/super-journal primary documentation"
+  ],
+  "guards": ["candidate-only migrations", "disposable DBs", "no canonical Frank state", "no external effect", "no training", "no whole-product promotion"]
+}

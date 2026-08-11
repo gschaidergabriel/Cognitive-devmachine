@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-training-heldout-freeze",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_at_claim": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "candidate_pr": 347,
+    "candidate_head": "593764a2fa7a5dcf1dce00454eda4e77f7f203ab",
+    "candidate_branch": "chatgpt/go-training-heldout-freeze-v1-20260811"
+  },
+  "work_package": "F-V01-14-FINAL-TRAINING-DATA",
+  "overlap_check": {
+    "open_f_v01_14_pr_found_before_claim": false,
+    "open_training_heldout_freeze_pr_found_before_claim": false,
+    "duplicate_work_selected": false
+  },
+  "hypothesis": "Known training/evaluation leakage and post-freeze mutation can be made fail-closed by a deterministic corpus manifest binding exact and normalized content hashes, source lineage, provenance, explicit independently assigned semantic-family identity, split identity and one complete manifest root.",
+  "strongest_counterhypothesis": "A manifest can create false confidence if semantic-family discovery is incomplete, caller-controlled, contaminated or bypassed by the real corpus pipeline; therefore the mechanism cannot itself establish semantic decontamination or final training-data acceptance.",
+  "live_external_evidence": [
+    {
+      "source": "Soft Contamination Means Benchmarks Test Shallow Generalization (arXiv:2602.12413)",
+      "claim_used": "semantic duplicates can evade string-space decontamination and materially confound benchmark generalization estimates",
+      "url": "https://arxiv.org/abs/2602.12413"
+    },
+    {
+      "source": "Simulating Training Data Leakage in Multiple-Choice Benchmarks for LLM Evaluation (arXiv:2505.24263)",
+      "claim_used": "controlled leakage changes evaluation reliability and motivates contamination checks before benchmark release",
+      "url": "https://arxiv.org/abs/2505.24263"
+    },
+    {
+      "source": "The Emperor's New Clothes in Benchmarking? (arXiv:2503.16402)",
+      "claim_used": "benchmark reformulation/mitigation strategies do not universally balance contamination resistance and fidelity",
+      "url": "https://arxiv.org/abs/2503.16402"
+    }
+  ],
+  "candidate_delta": {
+    "runtime": "runtime/training/frank_training_data_freeze_v1_candidate.py",
+    "gate": "tests/frank_training_data_freeze_v1_candidate_gate.py",
+    "workflow": ".github/workflows/frank-training-data-freeze-v1-vps.yml",
+    "manifest_dimensions": [
+      "content_sha256",
+      "normalized_text_sha256",
+      "source_lineage_id",
+      "semantic_family_id",
+      "provenance_hash",
+      "TRAIN_DEV_HELDOUT_split",
+      "complete_manifest_root_sha256"
+    ],
+    "semantic_family_assignment_authority": "EXTERNAL_AUDIT_REQUIRED_NOT_INFERRED_BY_THIS_GATE",
+    "claycode_binding": "OPEN",
+    "real_corpus_freeze": "NOT_RUN"
+  },
+  "local_mechanism_evidence": {
+    "evidence_class": "LOCAL_EQUIVALENT_DETERMINISTIC_EXECUTION",
+    "checks_passed": 13,
+    "checks_total": 13,
+    "failed_checks": [],
+    "fixture_manifest_root_sha256": "20a0a369375c030bb1d3117da233a1cbf862a6043e9d2e02c26d5a680671585a",
+    "target_equivalence_claimed": false
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "SEMANTIC_TWIN_SPLIT_LEAK",
+    "hash_only_anticontrol": "byte/normalization-distinct paraphrases are not identified as duplicates",
+    "candidate_intervention": "both paraphrases carry one explicit semantic_family_id across TRAIN and HELDOUT",
+    "local_result": "PASS_REJECTED_SEMANTIC_FAMILY_CROSS_SPLIT",
+    "automatic_semantic_duplicate_detection_claimed": false,
+    "target_result": "QUEUED"
+  },
+  "target_vps_execution": {
+    "workflow_run": 31505871330,
+    "status": "QUEUED",
+    "conclusion": null,
+    "pass_claimed": false
+  },
+  "cross_worker_delta": {
+    "sqlite_pr": 338,
+    "workflow_run": 31505040918,
+    "job": 93824338450,
+    "classification": "TEST_ORACLE_INCONCLUSIVE",
+    "root_cause": "generated frank_v3_site_oob_patch.py failed with SyntaxError unterminated string literal at line 4, so the intended .pth mutation never executed",
+    "v3_supported_or_refuted_by_that_run": false,
+    "distribution": "posted PR #338 comment 5255086739 with exact repair/re-run guidance",
+    "new_oob_counted_here": false
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "decision": "Add explicit split-integrity/freeze identity mechanism to F-V01-14; keep semantic-family discovery as a separate evidence producer rather than allowing the freeze gate to self-certify semantics.",
+    "required_successors": [
+      "target VPS execution of PR #347",
+      "bind the mechanism to the actual Frank training/dev/held-out corpus",
+      "define and attest the semantic-family audit/decontamination producer",
+      "run contamination-sensitivity evaluation rather than only static split checks",
+      "bind final mechanism into ClayCode/accepted v0.1 training-data contract",
+      "freeze immutable real-corpus provenance and emit final training-data acceptance receipt"
+    ],
+    "rollback": "delete the three isolated candidate files / close PR #347; no canonical Frank state or corpus was mutated"
+  },
+  "research_disposition": "CANDIDATE_BUILT_LOCAL_PASS_TARGET_QUEUED_PLUS_SWARM_ORACLE_BUG_DISTRIBUTED",
+  "training_authorization_changed": false,
+  "final_training_started": false,
+  "external_effect_performed": false,
+  "canonical_frank_state_mutated": false,
+  "frank_self_harness_authority_changed": false
+}

@@ -32,6 +32,14 @@
     "executable_evidence": "test_oversized_response_is_detected_without_verifying_truncated_body",
     "counterhypothesis": "Reading exactly the accepted limit is sufficient; falsified because HTTPResponse.read(amt) returns only up to amt bytes and therefore cannot prove end-of-body at that boundary."
   },
+  "text_message_roles": {
+    "allowed": ["system", "user", "assistant"],
+    "checked_at": "2026-08-11",
+    "claim": "The plain-text adapter accepts only system, user and assistant roles; tool/function messages require the separate typed tool-calling path.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/1.13.0/system-example.html",
+    "executable_evidence": "test_unknown_text_message_role_is_blocked_before_network",
+    "counterhypothesis": "An arbitrary nonempty role can be delegated to provider-side validation; falsified for this adapter because it causes an avoidable authenticated network call before the provider can reject it."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -43,6 +51,7 @@
     "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates a nonempty model plus object messages with nonempty string roles and string content before network access; typed multimodal requests require a separate adapter.",
+    "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",

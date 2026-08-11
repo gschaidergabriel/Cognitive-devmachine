@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "program": "FRANK_V0_1",
   "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
@@ -9,7 +9,7 @@
   "observed_state": {
     "sqlite_fixed_candidate": "SQLite 3.53.4 reproducible Frank capability-parity artifact is merged in main but productive root provisioning/start-path/mapped-object acceptance remains open",
     "current_launcher": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v5_launcher.sh",
-    "current_parent_frontier": "stacked systemd parent gate V2 / PR #479",
+    "current_parent_frontier": "systemd parent gate V2 current head d4d9308897bdaef999ce233ca1ce5b01f76301cb / PR #479 stack",
     "v2_gap": "host-visible launcher path and ExecStartEx identity are observed, but service filesystem-root/remap properties are not"
   },
   "grf": {
@@ -43,26 +43,39 @@
   ],
   "repair": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
-    "branch": "chatgpt/go-systemd-root-namespace-20260812",
-    "head": "76899a8bac93ac4e599271133c5ca35785e0f169",
-    "pull_request": 485,
+    "stale_stack_branch": "chatgpt/go-systemd-root-namespace-20260812",
+    "stale_stack_pull_request": 485,
+    "stale_stack_disposition": "CLOSED_SUPERSEDED_AFTER_BASE_ADVANCED",
+    "current_base": "d4d9308897bdaef999ce233ca1ce5b01f76301cb",
+    "current_branch": "chatgpt/go-systemd-root-namespace-current-20260812",
+    "current_head": "3aa9da4f230ebabedf876820db581ac490cc7bab",
+    "current_pull_request": 489,
     "status": "DRAFT_TESTING",
     "candidate": "runtime/frank_storage_truth_v1/sqlite_v5_systemd_parent_gate_v3_candidate.py",
-    "policy": "compose V2 and fail closed on non-empty RootDirectory, RootImage, BindPaths, BindReadOnlyPaths, TemporaryFileSystem",
+    "policy": "compose current V2 and fail closed on non-empty RootDirectory, RootImage, BindPaths, BindReadOnlyPaths, TemporaryFileSystem",
     "local_regression": "PASS sqlite_v5_systemd_parent_gate_v3_candidate 7/7",
-    "target_workflow_run": 31537273510,
-    "target_status_at_receipt": "QUEUED_UNKNOWN_NOT_PASS"
+    "target_workflow_run": 31537514436,
+    "target_status_at_update": "QUEUED_UNKNOWN_NOT_PASS"
+  },
+  "ci_adjudication": {
+    "github_hosted_deep_integrity_run": 31537534821,
+    "status": "COMPLETED_FAILURE_WITH_ZERO_STEPS",
+    "annotation": "job not started because recent account payments failed or spending limit needs increase",
+    "interpretation": "INFRASTRUCTURE_BILLING_BLOCK_NOT_CODE_FAILURE",
+    "accepted_target_lane": "self-hosted SQLite V5 parent workflow remains separately queued"
   },
   "counterevidence_and_nonclaims": [
     "V3 does not prove productive mapped SQLite identity",
     "V3 does not enumerate every present/future systemd namespace mechanism",
     "V3 does not provision or start Frank",
+    "GitHub hosted Deep Integrity did not execute code because billing blocked job start",
+    "self-hosted target run is queued and therefore is not PASS",
     "no production /opt or /etc mutation was performed",
     "no canonical Frank state or effect authority was mutated",
     "F-V01-13 remains IN_PROGRESS",
     "whole Frank v0.1 acceptance is not claimed",
     "final/paid model training remains unauthorized"
   ],
-  "next_discriminator": "Adjudicate exact-head target run 31537273510. Even if deterministic V3 passes, require an actual productive Frank/self.root unit observation plus productive mapped-object identity across start/restart and rollback/downgrade/library-swap controls.",
-  "outcome": "RETAIN_REPAIR_CANDIDATE_AND_KEEP_RELEASE_GATE_OPEN"
+  "next_discriminator": "Adjudicate exact-head self-hosted target run 31537514436. Even if deterministic V3 passes, require an actual productive Frank/self.root unit observation plus productive mapped-object identity across start/restart and rollback/downgrade/library-swap controls.",
+  "outcome": "RETAIN_CURRENT_REPAIR_CANDIDATE_AND_KEEP_RELEASE_GATE_OPEN"
 }

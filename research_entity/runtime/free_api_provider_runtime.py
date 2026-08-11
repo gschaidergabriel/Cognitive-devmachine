@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import json
 import os
 import secrets
@@ -434,7 +435,7 @@ def execute_chat(
         outcome = "invalid_provider_response"
         cooldown_seconds = 15
         retryable = False
-    except (urllib.error.URLError, TimeoutError):
+    except (urllib.error.URLError, TimeoutError, http.client.IncompleteRead):
         content = None
         outcome = (
             "incomplete_provider_response"

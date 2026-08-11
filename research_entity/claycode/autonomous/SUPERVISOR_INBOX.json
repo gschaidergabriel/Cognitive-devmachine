@@ -1,33 +1,36 @@
 {
   "schema_version": "3.2",
-  "latest_cycle": "ccauto-20260811T1348Z-supervisor",
+  "latest_cycle": "ccauto-20260811T1449Z-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "Use the corrected target census, not the stale 320 count. PR325 run 31495403495 measures 429 unique unresolved target names and 464 unresolved call-site occurrences; 45/464 have any global declaration-name candidate and 419/464 do not. Build explicit module/import/qualification plus typed member/library resolution rather than a permissive global linker. PR323 run 31494862017 finds 239 parsed compare nodes and zero parsed multi-relation chains; the only three current unparsed chained-expression candidates are != invariants in ClayGraph/UnifiedDB. Classify each as documentary semantic distinction versus executable invariant before parser admission. If executable, recover or owner-fix semantics and require discriminating target fixtures. Keep WP03/WP04/WP05 OPEN and preserve separate provider/storage/GWT obligations.",
+  "next_focus": "First close the new package/runtime integration counterexample without changing ClayCode semantics: PR310's evaluator/analyzer use bare sibling imports and the current differential harness injects runtime/claycode_eval_v1 into sys.path; repository-root package import fails with ModuleNotFoundError. Repair to package-stable imports or an explicitly tested package/CLI dual-entry contract, then require namespace-collision controls and all existing differential/purity/fail-closed gates. Continue WP04 with the corrected 429 unique / 464 occurrence census and keep the three chained-!= invariants authority-unselected. Cross-branch, treat SQLite V2 as refuted-as-sufficient after PR336 run 31503138219 admitted a PYTHONPATH sqlite3.py shadow; require separate Python-module-origin admission before storage product credit. Keep response replay blocked until exact trusted request-to-effect ancestry is durable. Preserve FREE_ONLY and all no-promotion rules.",
   "errors": [],
   "provider_discovery": {
     "nvidia": {"status": "OFFICIAL_HOSTED_API_SURFACE_DOCUMENTED", "base_url": "https://integrate.api.nvidia.com/v1"},
     "pr232_runtime": {"status": "LOCAL_REPAIR_CANDIDATE_NO_ACCEPTED_UBUNTU_PROVIDER_RECEIPT", "http_402_local_hardstop": true, "same_epoch_second_attempt_local_block": true, "restart_durable_latch": false, "external_cost_account_identity": "UNKNOWN"}
   },
   "receipt_gaps": {
-    "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY: 429 unique names / 464 unresolved call-site occurrences on current target measurement; preserve both count semantics",
-    "wp04_linker_contract": "OPEN_HIGH_PRIORITY: only 45/464 unresolved occurrences have any global declaration-name candidate; 419/464 require qualified/member/library/host classification or remain fail-closed",
-    "wp05_comparison_chain": "OPEN_NARROWED: zero multi-relation chains in the 36 parsed sources; three unparsed chained != invariants remain semantic-authority unresolved",
+    "wp03_package_import": "OPEN_EXECUTABLE_BLOCKER: repo-root package import of current PR310 evaluator fails without test-only sys.path insertion; add package-stable sibling resolution and namespace-collision regression",
+    "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY: 429 unique names / 464 unresolved call-site occurrences; preserve both count semantics",
+    "wp04_linker_contract": "OPEN_HIGH_PRIORITY: 45/464 have a global declaration-name candidate; 419/464 require qualified/member/library/host classification or fail-closed unknown",
+    "wp05_comparison_chain": "OPEN_NARROWED: zero multi-relation chains in 36 parsed sources; three unparsed chained-!= invariants remain semantic-authority unresolved",
     "wp04_frank_effects": "BOUNDED_RESOLVED: frank.effects has 0 unresolved on exact composed bytes; this is not WP04 PASS",
     "wp04_verb_capability": "OPEN: verb_for/Verb semantics still require reviewed declaration and discriminator",
+    "storage_python_module_origin": "REFUTED_V2_SUFFICIENCY: PR336 run 31503138219 executes a PYTHONPATH-shadowed sqlite3.py after V2 PASS admission",
+    "request_effect_ancestry": "OPEN_TARGET_COUNTEREXAMPLE: run 31502734782 shows execution-generation join is ambiguous across two requests; response replay must not infer ownership",
     "provider_target_receipt": "OPEN: PR232 repaired candidate lacks accepted-Ubuntu provider-runtime receipt",
     "provider_payment_latch_restart": "OPEN: same-budget-epoch latch must survive restart through authoritative state",
-    "storage_product_binding": "OPEN: fixed SQLite candidate evidence does not equal actual Frank runtime binding",
-    "frank_v0_1_target": "Final acceptance remains owner-fixed Hostinger Ubuntu VPS only"
+    "frank_v0_1_target": "Final acceptance remains owner-fixed Ubuntu VPS only"
   },
   "new_material_evidence": {
-    "comparison_pressure_target": "PR323 run 31494862017 SUCCESS: 36/40 sources parsed, 239 compare nodes, 0 parsed multi-relation chain nodes, and exactly 3 current unparsed chained-!= expression candidates.",
-    "count_semantics_target": "PR325 run 31495403495 SUCCESS: schema 1.2 separates 429 unresolved unique target names from 464 unresolved call-site occurrences; earlier ambiguity came from len(Counter) versus sum(Counter.values()).",
-    "symbol_resolution_census": "On the current measured corpus, 45/464 unresolved occurrences have a global declaration-name candidate, 419/464 have none, and 22 open member-call segments include filter/map/sort_desc. A global linker is therefore not the general repair.",
-    "external_design_space": "Python and Julia official documentation both define chained comparisons but with language-specific evaluation rules. This demonstrates design-space divergence and cannot select ClayCode semantics.",
-    "goodman": "Target runs and research-center fusion share project/runner ancestry; executable evidence outranks model consensus but is not independent replication."
+    "clay_package_import": "Current PR310 evaluator.py/analyzer.py use bare sibling imports; the differential harness alters sys.path. Isolated repository-root package import reproduces ModuleNotFoundError for syntax. Existing function differential evidence remains bounded and is not refuted.",
+    "sqlite_pythonpath_shadow": "PR336 run 31503138219 / job 93817951790 on clay@digital-retina: clean V2 target uses stdlib sqlite3 with synchronous=2; attack preserves correct private SQLite 3.53.4 native object identity yet V2 admits a PYTHONPATH sqlite3.py shadow and target runs it with synchronous=0. Status SUPPORTED_FAIL_OPEN_PYTHONPATH_SQLITE_MODULE_SHADOW.",
+    "request_effect_ancestry": "PR331 run 31502734782: two distinct V16 request admissions in one execution both satisfy the current V17 generation join for one effect; effect reaches DONE_VALID with no exact durable request-effect edge.",
+    "fv01_12": "PR335 run 31503078981 target-supports bounded capability/body projection and ghost-peer authority scrubbing; package remains OPEN_TARGET_SUPPORTED_PARTIAL. Its separate hosted Deep Integrity zero-step failure is infrastructure-only absent executed-step evidence.",
+    "base_alignment": "File Library master source keeps BASE_CLAYCODE_RELEASE implementation-first: less change, more compile; semantics change only after concrete executable counterexample; shared ancestry is not replication.",
+    "goodman": "All new target/project evidence shares project/runner ancestry; executable evidence outranks model consensus but does not count as ancestry-independent replication."
   },
-  "instruction": "Steer F-V01-02 to semantic classification rather than raw unresolved-count reduction. Preserve corrected 429-unique/464-occurrence metrics. First classify the three chained != invariants; no external-language analogy may mint ClayCode semantics. Then define explicit module/import/qualification and typed member/library/host contracts for the 464 unresolved occurrences, prioritizing the 419 with no global name candidate. Never use permissive defaults or name match as authority. Keep WP03/WP04/WP05 OPEN. Preserve FREE_ONLY, Together hard-denial, no paid fallback, Goodman ancestry collapse, no BASE/Frank PASS from model or receipt consensus, no canonical semantics without executable counterevidence plus review, Ubuntu-only final target, and no Frank-Harness modification."
+  "instruction": "Steer F-V01-02 toward product-safe runtime binding, not broader semantic invention. Close the package-import counterexample first with exact source/package execution and collision controls. Preserve 429-unique/464-occurrence WP04 metrics and the unresolved three-chain semantic boundary. Treat native-library identity and Python-module origin as separate storage evidence axes; V2 remains insufficient until the exact PR336 discriminator is rescued. Do not infer response ownership from execution-generation identity. Keep WP03/WP04/WP05 OPEN. Preserve FREE_ONLY, Together hard-denial, no paid fallback, Goodman ancestry collapse, no BASE/Frank PASS from model or receipt consensus, no canonical semantics without executable counterevidence plus review, Ubuntu-only final target, and no Frank-Harness modification."
 }

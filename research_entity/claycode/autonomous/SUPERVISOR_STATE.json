@@ -2,7 +2,7 @@
   "schema_version": "3.0",
   "status": "ACTIVE",
   "last_reviewed_cycle": "ccauto-20260809T105416Z",
-  "current_focus": "FRANK_V0_1 component F-V01-02 remains active with V18 frozen. Self-hosted Ubuntu run 31432811773 on PR266 has executed the exact module/name frontier successfully: frank.hive and frank.memory resolve only through pinned imported Clay source/blob provenance, the non-imported decoy module cannot ghost-export runtime_effect, and signature inference remains false. On the exact same PR266 merge SHA 806a4b7fcfded083a1fb27726ebaec6c08cd445c, self-hosted run 31432811985 now also passes the preserved PR261 effect-generation + typed-provider + V17 provenance-reentry + current structured-frontend/TypedIR regression surface with no external effect and no type/effect/runtime acceptance claim. Separate self.root and execution-gate regressions on that same commit also pass. This is bounded compatibility evidence only; WP03 and WP04 remain OPEN. Do not spend the next cycle re-running these unchanged regression bytes. The next highest-information work remains partitioning all 29 still-unresolved call targets from run 31432811773 into exactly one provenance class: visible imported/local Clay declaration, explicit language intrinsic/builtin contract, owner-reviewed host/runtime contract, or UNRESOLVED_FAIL_CLOSED. Only exact declared/intrinsic/host contracts may enter existing WP04 arity/type/effect admission, always with execution=false and authority NONE. Preserve the dedicated type/class nominal-identity negative gate and the separate F-V01-09 production effect-routing non-bypassability proof obligation. Cross-branch runtime durability must also remain fail-closed: the exact target regression reports SQLite 3.45.1, and current upstream SQLite documentation identifies that version range as susceptible to the WAL-reset corruption race under the stated multi-connection concurrent write/checkpoint conditions; later WP05/runtime durability evidence must bind SQLite source identity, journal mode and connection/checkpoint topology rather than inheriting durability from compiler contracts.",
+  "current_focus": "FRANK_V0_1 component F-V01-02 remains active with V18 frozen. Self-hosted Ubuntu run 31432811773 on PR266 remains the exact module/name frontier: frank.hive and frank.memory resolve only through pinned imported Clay source/blob provenance, the non-imported decoy module cannot ghost-export runtime_effect, and signature inference remains false. Same-merge run 31432811985 preserves the PR261 effect-generation + typed-provider + V17 provenance-reentry + structured-frontend/TypedIR regression surface; WP03/WP04 remain OPEN and unchanged bytes should not be rerun. The next highest-information ClayCode work remains partitioning all 29 unresolved call targets into visible imported/local Clay declaration, explicit language intrinsic/builtin contract, owner-reviewed host/runtime contract, or UNRESOLVED_FAIL_CLOSED, then applying exact WP04 arity/type/effect gates with execution=false and authority NONE. New cross-branch executable evidence sharpens the later WP05 storage-runtime constraint without diverting WP04: PR288 run 31434825206 SUCCESS on clay@digital-retina proved the existing Python 3.12.3 _sqlite3 extension can bind a private official SQLite 3.53.4 library with exact source id, preserve V16 ingress continuity, and pass a disposable 256-write two-connection WAL smoke. However the private build exposes a different compile-option/capability vector from system SQLite 3.45.1 (notably baseline ENABLE_SESSION is absent), so version replacement alone is not runtime acceptance. System Ubuntu 3.45.1-1ubuntu2.7 WAL-reset backport provenance remains separately unresolved in PR274. Later WP05/runtime acceptance must therefore bind exact SQLite source/build identity plus required compile capabilities, journal/synchronous/VFS and connection/writer/checkpointer topology and executable crash/concurrency evidence.",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
@@ -14,7 +14,7 @@
     "wp04_type_effect": "OPEN; name/module resolution does not imply type/effect acceptance",
     "effect_execution": "NO_EXTERNAL_CALL_EXECUTION_ADMITTED UNTIL EXACT CONTRACT + RUNTIME/BINARY/LEASE + EXECUTION_GENERATION + PROCESS_INCARNATION + EFFECTGATE PRECONDITIONS PASS",
     "production_effect_routing": "NON_BYPASSABLE_END_TO_END_ROUTING_NOT_YET_PROVEN; separate F-V01-09 obligation",
-    "wp05_storage_runtime_identity": "OPEN_CROSS_BRANCH; target regression uses SQLite 3.45.1. Before any SQLite-backed durability/runtime acceptance bind exact sqlite_source_id/build, journal_mode, synchronous/VFS and connection/writer/checkpointer topology and run the relevant crash/concurrency oracle; compiler/type contracts mint no durability authority.",
+    "wp05_storage_runtime_identity": "OPEN_CROSS_BRANCH; system target is SQLite 3.45.1-1ubuntu2.7 with downstream WAL-reset backport provenance unresolved. PR288 run 31434825206 proves a private official SQLite 3.53.4 can bind Python _sqlite3 and pass bounded V16/WAL smoke, but its compile-option vector differs from baseline. Before SQLite-backed durability/runtime acceptance bind exact source/build identity, required compile capabilities, journal_mode, synchronous/VFS and connection/writer/checkpointer topology and run crash/concurrency oracles; compiler/type contracts mint no durability authority.",
     "frank_v0_1_release": "UBUNTU TARGET VPS FINAL INTEGRATION/RECOVERY/COMPONENT AUDIT PENDING"
   },
   "verified_capabilities": {
@@ -47,6 +47,17 @@
     "same_merge_self_root_result": "PASS_REGRESSION",
     "same_merge_execution_gate_run": 31432810918,
     "same_merge_execution_gate_result": "PASS_REGRESSION",
+    "private_sqlite_preflight_run": 31434825206,
+    "private_sqlite_preflight_job": 93606495029,
+    "private_sqlite_preflight_runner": "clay@digital-retina",
+    "private_sqlite_version": "3.53.4",
+    "private_sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "private_sqlite_python_binding": "PASS_EXISTING_PYTHON_3_12_3__sqlite3_TO_PRIVATE_LIB",
+    "private_sqlite_v16_ingress": "PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY",
+    "private_sqlite_wal_smoke": "PASS_256_WRITES_TWO_CONNECTIONS_WAL_INTEGRITY_OK",
+    "private_sqlite_system_install": false,
+    "private_sqlite_canonical_state_mutated": false,
+    "private_sqlite_compile_capability_delta": "BASELINE_ENABLE_SESSION_PRESENT_PRIVATE_BUILD_ABSENT_AND_OTHER_COMPILE_LIMITS_DIFFER",
     "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST",
     "active_program": "FRANK_V0_1",
     "claycode_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME"
@@ -64,17 +75,20 @@
     "do not repeat PR266 provider/Fence/V17/self.root/execution-gate regressions unless their bound bytes or ancestry change",
     "retain the independent type/class nominal mutation/duplicate/local-name discriminator",
     "keep F-V01-09 production routing non-bypassability separate from ClayCode type/effect contracts",
-    "carry exact storage-runtime identity/topology as a later WP05 durability precondition rather than letting compiler contracts imply durable authority",
+    "for later WP05 compare required SQLite capability vectors as well as exact source/build identity; PR288 proves private 3.53.4 availability but not release durability acceptance",
+    "keep Ubuntu 3.45.1-1ubuntu2.7 backport provenance separate until PR274 provides executable/source adjudication",
     "re-enter material findings into FRANK_V0_1 work/test/negative-result surfaces and keep final acceptance Ubuntu-only"
   ],
   "steering_notes": [
     "Run 31432811773 remains the exact WP04 module/name discriminator; 29 targets remain unresolved and ownership remains the frontier.",
-    "Run 31432811985 completed SUCCESS on the exact same PR266 merge and proves that the WP04 diagnostic delta does not regress the current effect-generation, typed-provider, V17 reentry/DONE or structured provider TypedIR regression surface for those bytes. It is regression compatibility evidence, not WP04 acceptance.",
-    "Same-merge self.root run 31432811337 and execution-gate directory-anchor run 31432810918 also completed SUCCESS; do not count correlated same-merge runs as independent semantic replications.",
-    "The provider regression reports SQLite 3.45.1. Upstream SQLite documents the WAL-reset corruption bug through 3.51.2 under specific multi-connection concurrent write/checkpoint conditions. Treat this as a later storage-runtime identity/topology gate, not as a ClayCode semantic result and not as a reason to divert the current WP04 ownership partition.",
+    "Run 31432811985 proves same-merge regression compatibility only; it does not close WP04 or Frank acceptance.",
+    "PR288 run 31434825206 is a meaningful new storage-runtime capability result: official private SQLite 3.53.4 binds the existing target Python extension and preserves V16 ingress plus a bounded two-connection WAL smoke without system install or canonical-state mutation.",
+    "Do not promote private SQLite 3.53.4 from version/smoke alone. Its compile-option vector is not baseline-equivalent: the system 3.45.1 build reports ENABLE_SESSION while the private build does not, and multiple limits/options differ. Required capability equivalence must be explicit before runtime selection.",
+    "Upstream SQLite 3.53.4 includes the WAL-reset fix and the exact source id observed by the target matches the official 2026-07-24 release. This external documentation is design/provenance support; target execution remains the software evidence.",
+    "Ubuntu system-package backport status remains unresolved rather than presumed unsafe solely from semantic version; PR274 is the dedicated provenance lane.",
     "The decoy ghost-export negative control remains decisive: repository-global name presence is not sufficient resolution evidence.",
     "Three hard runtime/security primitives remain explicitly unresolved: final_security_gate, runtime_effect and trusted_runtime_effect_authorization.",
-    "Goodman anti-echo remains mandatory; exact Ubuntu execution has more evidentiary weight than repeated model agreement, while multiple workflows on the same merge remain ancestry-correlated.",
+    "Goodman anti-echo remains mandatory; exact Ubuntu execution has more evidentiary weight than repeated model agreement, while multiple workflows on shared project/source ancestry remain correlated.",
     "FREE_ONLY remains mandatory; no paid fallback, no package/release PASS from model/workflow consensus, no canonical semantic promotion without executable counterevidence plus review, and no Frank-Harness modification."
   ],
   "steering_ref": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"

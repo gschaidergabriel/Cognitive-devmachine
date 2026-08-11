@@ -251,7 +251,7 @@ def execute_chat(
     key_name = _configured_key_name(spec, env)
     base_url = env.get(
         "FRANK_PROVIDER_BASE_URL", spec.openai_compatible_base_url
-    ).rstrip("/")
+    )
 
     parsed, parsed_port = _canonical_remote_endpoint(
         base_url,
@@ -266,8 +266,9 @@ def execute_chat(
     started = now()
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
     body = json.dumps({"model": model, "messages": messages, "stream": False}).encode()
+    request_base_url = base_url[:-1] if base_url.endswith("/") else base_url
     request = urllib.request.Request(
-        f"{base_url}/chat/completions",
+        f"{request_base_url}/chat/completions",
         data=body,
         headers={
             "Authorization": f"Bearer {env[key_name]}",

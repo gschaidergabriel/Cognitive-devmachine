@@ -75,6 +75,16 @@
     "executable_evidence": "test_invalid_http_status_is_rejected_before_body_and_execution_state",
     "counterhypothesis": "A missing adapter status can safely default to 200 and Python isinstance(value, int) is sufficient; falsified because missing status verified arbitrary content and bool is an int subclass."
   },
+  "http_response_body_type": {
+    "checked_at": "2026-08-12",
+    "claim": "The HTTP adapter body must be bytes before JSON parsing; text and bytearray values are invalid transport responses even when they contain valid JSON.",
+    "sources": [
+      "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read",
+      "https://docs.python.org/3/library/json.html#json.loads"
+    ],
+    "executable_evidence": "test_non_bytes_response_body_cannot_reach_verified_state",
+    "counterhypothesis": "Successful json.loads parsing proves a valid HTTP body; falsified because json.loads intentionally accepts str and bytearray in addition to bytes."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -93,6 +103,7 @@
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
     "Before body consumption or EXECUTED, adapter status must be a non-boolean integer in the RFC 9110 range 100 through 599; missing or invalid values remain null and invalid_provider_response.",
+    "A received adapter body must be bytes before JSON parsing; text, bytearray and other body types remain EXECUTED with their valid status but cannot reach VERIFIED or DONE.",
     "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
     "ConnectionError failures before response headers, including RemoteDisconnected, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",

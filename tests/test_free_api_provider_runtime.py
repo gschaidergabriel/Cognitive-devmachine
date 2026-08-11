@@ -99,15 +99,38 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_default_transport_rejects_redirects_before_auth_can_be_forwarded(self):
         request = MOD.urllib.request.Request(
             "https://integrate.api.nvidia.com/v1/chat/completions",
-            headers={"Authorization": "Bearer secret"},
-            method="POST",
-            data=b"{}",
+            headers={"Authorization": "Bearer secret"}, method="POST", data=b"{}",
         )
         redirected = MOD._NoRedirectHandler().redirect_request(
             request, None, 302, "Found", {},
             "https://api.groq.com/openai/v1/chat/completions",
         )
         self.assertIsNone(redirected)
+
+    def test_retry_keeps_request_identity_but_gets_unique_attempt_identity(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"message":{"content":"ok"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def execute(started):
+            return MOD.execute_chat(
+                [{"role": "user", "content": "same operation"}], model="mock",
+                environ=env, opener=lambda *args, **kwargs: Response(),
+                now=iter((started, started + 0.01)).__next__,
+            )["receipt"]
+
+        first, retry = execute(40.0), execute(41.0)
+        self.assertEqual(first["request_id"], retry["request_id"])
+        self.assertNotEqual(first["attempt_id"], retry["attempt_id"])
 
     def test_different_equal_length_payloads_have_distinct_request_ids(self):
         class Response:

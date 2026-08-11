@@ -2,7 +2,7 @@
   "schema_version": "3.0",
   "status": "ACTIVE",
   "last_reviewed_cycle": "ccauto-20260809T105416Z",
-  "current_focus": "FRANK_V0_1 component F-V01-02 remains active with V18 frozen. Self-hosted Ubuntu run 31432811773 on PR266 has now executed the exact module/name frontier successfully: frank.hive and frank.memory resolve only through their pinned imported Clay source/blob provenance, the non-imported decoy module cannot ghost-export runtime_effect, and signature inference remains false. This is bounded WP04 name/provenance evidence only; WP03 and WP04 remain OPEN. The next highest-information work is to partition all 29 still-unresolved call targets from the exact run into exactly one provenance class: visible imported/local Clay declaration, explicit language intrinsic/builtin contract, owner-reviewed host/runtime contract, or UNRESOLVED_FAIL_CLOSED. Only exact declared/intrinsic/host contracts may enter existing WP04 arity/type/effect admission, always with execution=false and authority NONE. Preserve the dedicated type/class nominal-identity negative gate, the PR261 provider/Fence TypedIR regression surface, and the separate F-V01-09 production effect-routing non-bypassability proof obligation.",
+  "current_focus": "FRANK_V0_1 component F-V01-02 remains active with V18 frozen. Self-hosted Ubuntu run 31432811773 on PR266 has executed the exact module/name frontier successfully: frank.hive and frank.memory resolve only through pinned imported Clay source/blob provenance, the non-imported decoy module cannot ghost-export runtime_effect, and signature inference remains false. On the exact same PR266 merge SHA 806a4b7fcfded083a1fb27726ebaec6c08cd445c, self-hosted run 31432811985 now also passes the preserved PR261 effect-generation + typed-provider + V17 provenance-reentry + current structured-frontend/TypedIR regression surface with no external effect and no type/effect/runtime acceptance claim. Separate self.root and execution-gate regressions on that same commit also pass. This is bounded compatibility evidence only; WP03 and WP04 remain OPEN. Do not spend the next cycle re-running these unchanged regression bytes. The next highest-information work remains partitioning all 29 still-unresolved call targets from run 31432811773 into exactly one provenance class: visible imported/local Clay declaration, explicit language intrinsic/builtin contract, owner-reviewed host/runtime contract, or UNRESOLVED_FAIL_CLOSED. Only exact declared/intrinsic/host contracts may enter existing WP04 arity/type/effect admission, always with execution=false and authority NONE. Preserve the dedicated type/class nominal-identity negative gate and the separate F-V01-09 production effect-routing non-bypassability proof obligation. Cross-branch runtime durability must also remain fail-closed: the exact target regression reports SQLite 3.45.1, and current upstream SQLite documentation identifies that version range as susceptible to the WAL-reset corruption race under the stated multi-connection concurrent write/checkpoint conditions; later WP05/runtime durability evidence must bind SQLite source identity, journal mode and connection/checkpoint topology rather than inheriting durability from compiler contracts.",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
@@ -14,6 +14,7 @@
     "wp04_type_effect": "OPEN; name/module resolution does not imply type/effect acceptance",
     "effect_execution": "NO_EXTERNAL_CALL_EXECUTION_ADMITTED UNTIL EXACT CONTRACT + RUNTIME/BINARY/LEASE + EXECUTION_GENERATION + PROCESS_INCARNATION + EFFECTGATE PRECONDITIONS PASS",
     "production_effect_routing": "NON_BYPASSABLE_END_TO_END_ROUTING_NOT_YET_PROVEN; separate F-V01-09 obligation",
+    "wp05_storage_runtime_identity": "OPEN_CROSS_BRANCH; target regression uses SQLite 3.45.1. Before any SQLite-backed durability/runtime acceptance bind exact sqlite_source_id/build, journal_mode, synchronous/VFS and connection/writer/checkpointer topology and run the relevant crash/concurrency oracle; compiler/type contracts mint no durability authority.",
     "frank_v0_1_release": "UBUNTU TARGET VPS FINAL INTEGRATION/RECOVERY/COMPONENT AUDIT PENDING"
   },
   "verified_capabilities": {
@@ -38,8 +39,14 @@
     "wp04_truth_authority": "NONE",
     "wp04_effect_authority": "NONE",
     "wp04_promotion": "NONE",
-    "fresh_main_provider_target_run": 31423170075,
-    "fresh_main_provider_result": "PASS_FRESH_MAIN_TYPED_PROVIDER_CURRENT_STRUCTURED_FRONTEND_TYPEDIR_NO_PROMOTION",
+    "fresh_main_provider_target_run": 31432811985,
+    "fresh_main_provider_tested_merge_sha": "806a4b7fcfded083a1fb27726ebaec6c08cd445c",
+    "fresh_main_provider_result": "PASS_CURRENT_PR266_MERGE_EFFECT_GENERATION_TYPED_PROVIDER_V17_REENTRY_AND_STRUCTURED_TYPEDIR_REGRESSION_NO_PROMOTION",
+    "fresh_main_provider_sqlite": "3.45.1",
+    "same_merge_self_root_run": 31432811337,
+    "same_merge_self_root_result": "PASS_REGRESSION",
+    "same_merge_execution_gate_run": 31432810918,
+    "same_merge_execution_gate_result": "PASS_REGRESSION",
     "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST",
     "active_program": "FRANK_V0_1",
     "claycode_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME"
@@ -47,25 +54,27 @@
   "model_family_history": [
     {"cycle": "ccauto-20260809T104300Z", "successful_role": "alternative", "model": "z-ai/glm-5.2", "family": "glm", "note": "Historical startup evidence only."},
     {"cycle": "ccauto-20260809T105416Z", "families": ["nemotron", "deepseek", "glm", "gpt-oss"], "status": "MULTI_FAMILY_SUCCESS", "note": "Agreement is correlated support, not executable replication."},
-    {"cycle": "go-20260811T0415p0700-chatgpt-secondary-wp04-module-frontier", "families": ["gpt-5.6-sol"], "status": "SHARED_PROJECT_ANCESTRY_PLUS_EXACT_SELF_HOSTED_EXECUTION", "note": "Run 31432811773 adds exact-byte mechanism evidence; it is not independent model replication and cannot promote WP04 by agreement."}
+    {"cycle": "go-20260811T0415p0700-chatgpt-secondary-wp04-module-frontier", "families": ["gpt-5.6-sol"], "status": "SHARED_PROJECT_ANCESTRY_PLUS_EXACT_SELF_HOSTED_EXECUTION", "note": "Runs 31432811773/31432811985 add exact-byte mechanism/regression evidence on one shared PR266 merge; they are not independent model replications and cannot promote WP04 by agreement."}
   ],
   "high_information_targets": [
     "partition the exact 29 unresolved frank.effects call targets into visible Clay declaration, explicit intrinsic/builtin, owner-reviewed host/runtime contract, or UNRESOLVED_FAIL_CLOSED",
     "for every resolved target record exact qualified identity, source/contract hash, arity, parameter types, return type and effect class before WP04 admission",
     "mutation-test ownership resolution against non-imported shadow declarations, duplicate visible bindings, changed contract hash, changed arity and changed effect class",
     "keep runtime_effect, trusted_runtime_effect_authorization and final_security_gate fail-closed until explicit reviewed host/runtime contracts exist",
-    "preserve PR261 provider functions/types/invariants and ExecutionGenerationFence opacity while WP04 advances",
+    "do not repeat PR266 provider/Fence/V17/self.root/execution-gate regressions unless their bound bytes or ancestry change",
     "retain the independent type/class nominal mutation/duplicate/local-name discriminator",
     "keep F-V01-09 production routing non-bypassability separate from ClayCode type/effect contracts",
+    "carry exact storage-runtime identity/topology as a later WP05 durability precondition rather than letting compiler contracts imply durable authority",
     "re-enter material findings into FRANK_V0_1 work/test/negative-result surfaces and keep final acceptance Ubuntu-only"
   ],
   "steering_notes": [
-    "Run 31432811773 completed SUCCESS on the self-hosted Ubuntu target and therefore supersedes the prior PENDING module-frontier checkpoint.",
-    "The decoy ghost-export negative control passed: repository-global name presence is not sufficient resolution evidence.",
-    "The exact diagnostic still emits 29 unresolved targets; do not collapse them into a generic host bucket. Ownership itself is now the discriminator.",
+    "Run 31432811773 remains the exact WP04 module/name discriminator; 29 targets remain unresolved and ownership remains the frontier.",
+    "Run 31432811985 completed SUCCESS on the exact same PR266 merge and proves that the WP04 diagnostic delta does not regress the current effect-generation, typed-provider, V17 reentry/DONE or structured provider TypedIR regression surface for those bytes. It is regression compatibility evidence, not WP04 acceptance.",
+    "Same-merge self.root run 31432811337 and execution-gate directory-anchor run 31432810918 also completed SUCCESS; do not count correlated same-merge runs as independent semantic replications.",
+    "The provider regression reports SQLite 3.45.1. Upstream SQLite documents the WAL-reset corruption bug through 3.51.2 under specific multi-connection concurrent write/checkpoint conditions. Treat this as a later storage-runtime identity/topology gate, not as a ClayCode semantic result and not as a reason to divert the current WP04 ownership partition.",
+    "The decoy ghost-export negative control remains decisive: repository-global name presence is not sufficient resolution evidence.",
     "Three hard runtime/security primitives remain explicitly unresolved: final_security_gate, runtime_effect and trusted_runtime_effect_authorization.",
-    "Official Rust/MLIR design references support declaration/scope-based resolution but do not constitute ClayCode semantic evidence.",
-    "Goodman anti-echo remains mandatory; exact Ubuntu execution has more evidentiary weight than repeated model agreement.",
+    "Goodman anti-echo remains mandatory; exact Ubuntu execution has more evidentiary weight than repeated model agreement, while multiple workflows on the same merge remain ancestry-correlated.",
     "FREE_ONLY remains mandatory; no paid fallback, no package/release PASS from model/workflow consensus, no canonical semantic promotion without executable counterevidence plus review, and no Frank-Harness modification."
   ],
   "steering_ref": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"

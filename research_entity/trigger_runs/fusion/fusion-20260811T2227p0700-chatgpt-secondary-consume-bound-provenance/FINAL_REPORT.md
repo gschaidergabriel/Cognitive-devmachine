@@ -8,108 +8,113 @@ Training authorized: **FALSE**
 
 ## Global synthesis
 
-The highest-value cross-branch result is not another Frank subsystem. It is a candidate invariant spanning existing subsystems:
+The highest-value whole-mesh result is not another Frank subsystem. It is a candidate invariant spanning existing subsystems:
 
-> **Recorded provenance is not enough. The exact consumer must verify that producer identity, artifact/state identity, epoch, authority and receipt still bind the exact object/action being consumed; mutable consumption must additionally be replay-safe/exactly-once where duplicate application would change persistent state.**
+> **Recorded provenance is not enough. The exact consumer must verify that producer identity, artifact/state identity, epoch, authority and receipt still bind the exact object/action being consumed. If consumption mutates persistent state, replay/exactly-once semantics must also be explicit.**
 
 Working name: `CONSUME_BOUND_PROVENANCE_CONTRACT` (CBPC). Status: **candidate/test obligation, not promoted architecture**.
 
-## Why this emerged
+## Evidence convergence
 
-Six current lanes independently exposed variants of the same structural failure class:
+1. **Storage/boot.** V3 could identify the private SQLite object while Python had already been influenced by normal site startup. V4 therefore moves admission to `python -I -S` before import-capable Frank code. A concurrent accepted-target Axis-D discriminator reconstructed the exact Ubuntu `3.45.1-1ubuntu2.7` source and produced corruption under the targeted WAL-reset fault while upstream private 3.53.4 remained integral. Current system SQLite is rejected for Frank WAL state. Installed service/entrypoint and restart/recovery remain open.
+2. **Capabilities.** Path identity is insufficient: same-path executable replacement can make old successful trials stale. The candidate binds capability evidence to exact executable artifact identity and rechecks at use. Its observed target run was cancelled, so target promotion is absent.
+3. **Needle.** Provider/adapter output may contain authority-shaped fields but cannot overwrite admitted authorization/reservation/execution-generation/capability bindings. Current exact-head target workflow remains queued.
+4. **Reward.** Valid terminal DONE receipts are rereadable. A new deterministic receipt-fold candidate now treats producer-owned DONE rows as source truth and reward state as a rebuildable projection, preventing duplicate accumulation from repeated reads by construction. Target evidence and source-lineage rollback remain open.
+5. **Heldout/training.** A semantic-audit receipt hash improves lineage but does not verify the audit's content/correctness. An earlier repaired PR347 head passed target, then new swarm counterevidence fused a narrow non-semantic Unicode `Cf` leakage-surface fence into a newer preferred head. That newest head is target-pending; no final freeze claim follows.
+6. **GWT.** Accepted-target episode/signal/causal identifier splices still reached DONE and learning. Causal ancestry must therefore be producer/storage/receipt enforced, not trusted because caller-carried identifiers are present.
+7. **UnifiedDB/ClayGraph.** Separately green repaired-runtime composition runs are not an atomic whole-product composition. Composition identity and recovery remain explicit gates.
 
-1. **Storage/boot:** V3 could correctly identify the private SQLite object while import-capable Python had already been influenced by system-site startup. The target-supported V4 successor moves the boundary earlier to `python -I -S`. A concurrent Axis-D target discriminator additionally reconstructed the exact Ubuntu `3.45.1-1ubuntu2.7` source and classified it vulnerable under the targeted WAL-reset fault while the private upstream 3.53.4 control remained integral. System SQLite is therefore rejected for Frank WAL-state on current evidence. Real installed service/entrypoint composition and recovery remain open.
-2. **Capabilities:** a pathname was not enough identity; same-path byte replacement could leave stale successful tool trials actionable. The candidate binds trials to executable bytes/filesystem identity and rechecks at use. Its observed exact-head target workflow was cancelled, so no target promotion follows.
-3. **Needle:** provider/adapter output may describe authority-like fields but cannot overwrite the externally admitted authorization/reservation/execution-generation/capability bindings. The current exact-head target workflow remains queued.
-4. **Reward:** valid terminal receipts are rereadable. A fresh-main deterministic receipt-fold candidate now treats producer-owned DONE receipts as source truth and reward state as a rebuildable projection, avoiding a mutable per-read consume operation; its target gate is queued and source-lineage rollback remains unresolved.
-5. **Heldout/training data:** binding a semantic-audit receipt hash closes one lineage gap, but the receipt's content/correctness still needs verification. An earlier repaired PR347 head reached target PASS; subsequent swarm counterevidence then fused a non-semantic Unicode-format-control leakage surface into the preferred lane, producing a newer head whose target gate is queued. Latest-head evidence therefore remains pending.
-6. **GWT:** on accepted target, caller-spliced episode/signal/causal identities still reached DONE and learning. Causal ancestry must therefore be producer/storage/receipt enforced rather than trusted because the identifiers are present.
+## Anti-echo
 
-UnifiedDB/ClayGraph adds the composition lesson: separately green repaired-runtime runs do not imply an atomic whole-product run.
+This is cross-branch convergence, not independent replication. Many lanes share Frank/Clay/UnifiedDB/effect/re-entry ancestry. CBPC must win a discriminating common fault matrix; repeated vocabulary across branches is not sufficient evidence.
 
-## Anti-echo adjudication
+## Strongest counterhypothesis
 
-This is cross-branch convergence, not independent replication. The branches share Frank/Clay/UnifiedDB/effect/re-entry ancestry. CBPC must therefore earn promotion through a common integrated discriminator, not through the number of branches in which similar language appears.
+Boot artifacts, capabilities, causal receipts, rewards and datasets may differ enough that one universal CBPC abstraction creates more complexity than it removes. Branch-local contracts may be simpler and safer.
 
-## Strongest global counterhypothesis
+## Highest-information discriminator
 
-Boot artifacts, tool capabilities, causal receipts, reward events and training samples may be different enough that one universal CBPC abstraction creates schema/runtime complexity without preventing more failures than small branch-local contracts.
-
-### Highest-information discriminator
-
-Build the smallest typed common contract that can represent:
+Implement the smallest common typed vocabulary needed to bind:
 
 - producer identity;
-- object/artifact/state/receipt identity;
-- semantic epoch/generation;
+- artifact/state/receipt identity;
+- epoch/generation;
 - intended consumer/use;
-- authority class where applicable;
+- authority class when applicable;
 - verification state;
-- unique consumption identity where mutation occurs.
+- unique consumption identity when mutation occurs.
 
-Then run a matched fault matrix against both the shared primitive and branch-local guards:
+Compare it against branch-local guards under matched faults:
 
 - same-path artifact substitution;
 - stale/sibling state identity;
-- causal-ID splice;
+- GWT causal-ID splice;
 - provider authority-field echo;
 - duplicate terminal reward delivery / ACK loss / rollback resurrection;
-- stale semantic-audit receipt;
+- stale or invalid semantic-audit receipt;
 - boot/import-path drift.
 
-Compare fail-closed coverage, false rejection, recovery equivalence, latency, resource cost and implementation complexity. **NO BENEFIT** is a valid result.
+Measure fail-closed coverage, false rejection, recovery equivalence, latency, resource cost and implementation complexity. `NO BENEFIT` is a valid outcome.
 
-## Immediate architecture consequences
+## Immediate branch consequences
 
-### Product boot — highest priority
+### Frank / product boot
 
-Resolve the actual installed production entrypoint before speculative wiring. The trusted startup must be the first import-capable Python boundary, preserve the admitted isolated/no-site topology, and only add an explicitly attested source/package root if the real dependency graph requires it. Then run the real token API/runtime graph and installed-service restart/recovery path, not only synthetic V17/UDB pair slices. Do not fall back to target system SQLite for WAL state.
+Highest priority is the actual installed product entrypoint. Prove that the trusted V4 launcher is the first import-capable Python boundary, preserve no-site isolation, add only explicitly attested package roots if the real dependency graph requires them, reject system-SQLite WAL fallback, and execute the real token-API/runtime + restart/recovery path.
 
-### GWT / loop core
+### GWT
 
-Keep existing truthful/shuffled/provenance/no-reentry smoke evidence. Downgrade any stronger claim of complete causal ancestry until the exact episode/signal/causal splice discriminator fails before `REENTERED` after producer/storage-bound support is composed.
+Keep existing truthful/shuffled/provenance/no-reentry smoke evidence, but keep the stronger complete-causal-ancestry claim refuted until the exact splice discriminator fails before `REENTERED` on a producer/storage-bound successor.
 
 ### UnifiedDB / reward
 
-Do not create a second private persistence architecture. The deterministic unique-terminal-receipt fold is now an implemented candidate and should be compared against a transactionally correct mutable consumption ledger under crash-after-plasticity-before-ack, retry, rollback-resurrection, source-lineage replacement and performance scaling. No exactly-once promotion before target evidence.
+Do not create a second private persistence architecture. Target-test the deterministic DONE-receipt fold and compare it against an atomically persisted mutable consumption ledger under ACK-loss, retry, rollback-resurrection, source-lineage replacement and scaling.
 
 ### ClayCode
 
-The package/runtime binding blocker advanced materially during this Fusion: target workflow `31506115570` completed green and PR #310 was merged to target main as `a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3`. The measured scope remains deliberately narrow: package/module origin, legacy CLI compatibility, safe-path shadow resistance and the executable `decide_effect` differential are integrated; this is not complete ClayCode corpus/compiler/runtime or whole Frank acceptance. The next CBPC step should therefore use this merged executable substrate rather than inventing a parallel evaluator.
+This Fusion observed a major live delta: target workflow `31506115570` completed successfully and PR #310 merged to target main as `a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3`. The merged scope is package/module origin binding, legacy CLI compatibility, safe-path shadow resistance and executable `decide_effect` differential evidence; it is not full ClayCode corpus/compiler/runtime or Frank acceptance. Any CBPC executable slice should build on this merged substrate rather than introducing a parallel evaluator.
 
 ### Needle / capabilities
 
-Keep Needle exact hard-field preservation and capability artifact-bound generations. Needle target execution is still queued at the observed head. The capability candidate's observed target workflow was cancelled; rerun/rebase on current main is required before any target claim.
+Needle target execution remains queued. Capability/body target execution was cancelled and must be rebased/rerun before target claims.
 
-### Heldout / training data
+### Heldout/training
 
-Keep PR #347 as preferred lane and avoid duplicate full freeze architectures. The earlier target-tested semantic-audit-bound head is useful evidence, but the newest head additionally contains a narrow non-semantic leakage-surface fence for Unicode `Cf` controls and is target-pending. Separately verify semantic-audit content/family discovery and retain protected/dynamic/OOD evaluation. Training remains owner-gated and is not started.
+Keep PR347 as preferred lane, not multiple competing full freeze mechanisms. Preserve deterministic provenance/split identity, the fused narrow Unicode-format leakage fence, independent semantic-audit verification and protected/dynamic/OOD evaluation. Training remains owner-gated and has not started.
 
 ### Emergenz
 
-No emergence promotion follows. CBPC is a reliability/causal-provenance hypothesis, not consciousness evidence.
+No emergence or consciousness claim follows. This is reliability/causal-provenance research.
 
-## External primary/standards refresh
+## External refresh
 
-Current SQLite documentation confirms the WAL-reset defect is fixed in 3.51.3 and later. This is consistent with the target Axis-D differential: exact Ubuntu 3.45.1 source corrupted under the targeted fault while the private upstream 3.53.4 control remained integral. Exact loaded-object and trusted-startup checks are still required because version family alone is not runtime provenance.
+Current SQLite documentation places the WAL-reset fix in 3.51.3 and later, consistent with the project discriminator rejecting the current Ubuntu 3.45.1 source and retaining private 3.53.4 as the fixed-line candidate. Exact loaded-object and trusted-startup evidence is still required.
 
-Python documentation supports treating isolated/no-site flags and module-search-path construction as part of the actual execution boundary rather than merely environment decoration.
+Python documentation supports treating isolated/no-site state and module-search-path construction as part of the execution boundary.
 
-SLSA artifact-verification guidance independently reinforces the distinction discovered inside Frank: provenance metadata has operational value only when verified against expectations before use.
+SLSA artifact-verification guidance independently supports the central distinction: provenance metadata does not provide assurance unless a verifier checks it against expectations before use.
 
-## Fusion disposition
+## Live disposition
 
 - CBPC: `CANDIDATE_TEST_OBLIGATION_NOT_PROMOTED`.
-- V4 storage repair: `TARGET_SUPPORTED_CANDIDATE`; system SQLite current target line rejected; installed product boot/recovery gate remains open.
-- ClayCode package binding: `TARGET_SUPPORTED_AND_MERGED_SCOPED_SUBSTRATE`; broader ClayCode/Frank obligations remain open.
-- GWT causal ancestry: stronger DB-enforced ancestry claim remains refuted until splice successor passes.
-- Reward exactly-once: deterministic receipt-fold candidate implemented; target gate queued; not promoted.
+- V4 storage: target-supported candidate; system SQLite current target line rejected; installed product boot/recovery open.
+- ClayCode package-bound executable substrate: target-supported and merged; broader ClayCode work open.
+- GWT complete causal ancestry: not proven; splice negative remains active.
+- Reward exactly-once: deterministic receipt-fold candidate implemented; target queued.
 - Needle: target queued.
-- Capability/body artifact binding: target run cancelled; target evidence absent for current candidate.
-- F-V01-14: preferred lane #347 preserved; prior repaired head target-supported, newest Unicode-fused head target-pending; no training authorization.
+- Capability/body: observed target run cancelled; no target PASS.
+- F-V01-14: prior repaired head target-supported; newest Unicode-fused preferred head target-pending; no training authorization.
 - Whole Frank v0.1: **OPEN / NOT ACCEPTED**.
 - Frank self-Harness authority: unchanged, proposal-only.
 
-## Contract limitation
+## Fusion contract
 
-All required durable Fusion artifacts were written and reread. `tools/fusion_research_contract.py` could not be executed because this invocation had GitHub repository read/write but no repository-shell execution surface. Therefore this run explicitly does **not** claim the protocol's 100% completion gate; the next shell-capable worker should execute the contract and repair only concrete failures.
+The canonical `tools/fusion_research_contract.py` was fetched at SHA `0ec3ea4442c0d881f3e5673e9c32072db91849ed`. Its current validator defines contract scientific branches narrowly as registry kinds `domain_research` or `integrated_research_foundry`; with the present registry that yields `gwt`, `emergenz`, `hyperposition`, `claygraph`. The manifests were repaired to match that executable definition while broader mesh feedback for ClayResearch/Frank/ClayCode/UnifiedDB is preserved separately.
+
+A direct local Git checkout was impossible because the container could not resolve `github.com`. The canonical validator logic was therefore executed locally against a mirror of the contract-relevant fields just written via the verified GitHub connector. Result:
+
+- `ok: true`
+- branches: `gwt`, `emergenz`, `hyperposition`, `claygraph`
+- violations: `[]`
+
+This is recorded as `CONTRACT_LOGIC_PASS_ON_LOCAL_MIRROR_OF_CANONICAL_REQUIRED_FIELDS`; it is not falsely represented as a network Git checkout of the repository.

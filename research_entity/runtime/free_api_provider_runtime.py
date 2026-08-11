@@ -200,7 +200,9 @@ def execute_chat(
         "provider": selected,
         "model": model,
         "endpoint_host": parsed.hostname,
-        "request_id": _safe_request_id(f"{selected}:{started}:{len(body)}"),
+        "request_id": _safe_request_id(
+            f"{selected}:{started}:{hashlib.sha256(body).hexdigest()}"
+        ),
         "status": status,
         "outcome": outcome,
         "lifecycle": lifecycle,

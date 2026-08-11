@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2206p0700-chatgpt-secondary-sqlite-axis-d-metamorphic",
+  "trigger": "go",
+  "status": "TESTING",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "not_frank": true,
+  "frank_self_harness_authority": "PROPOSAL_ONLY",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "program_id": "frank-v0.1-only",
+    "current_stage": "FRANK_V0_1",
+    "target": "Frank v0.1 fully operational on accepted Hostinger Ubuntu VPS"
+  },
+  "question": "Can the accepted target's Ubuntu SQLite 3.45.1 WAL path be behaviourally classified for the upstream WAL-reset corruption race, and can the deterministic fault harness distinguish the old line from fixed upstream SQLite 3.53.4?",
+  "internal_evidence": [
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 337,
+      "commit": "279b555bb16052a0b20ab2fb71312d14c7137905",
+      "run": 31503879257,
+      "finding": "V3 private SQLite 3.53.4 admission/composition passed on target with Python isolated mode, PYTHONPATH sqlite3 shadow rejection, V17 composition and UnifiedDB+ClayGraph pair smoke; whole Frank v0.1 acceptance not claimed."
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "run": 31503879596,
+      "artifact": 9106297250,
+      "finding": "Axis-D source/runtime identity binding passed, but the discriminator did not execute because reconstructed Ubuntu source configure rejected unsupported option --debug. This is a harness build failure, not a vulnerable/fixed SQLite result."
+    }
+  ],
+  "fresh_external_evidence": [
+    {
+      "source": "https://sqlite.org/wal.html",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "retrieved_date": "2026-08-11",
+      "finding": "SQLite documents the WAL-reset bug as likely present from 3.7.0 through 3.51.2 and fixed in 3.51.3 and later; trigger topology requires WAL, at least two connections, and concurrent write/checkpoint timing."
+    },
+    {
+      "source": "https://www2.sqlite.org/releaselog/3_53_4.html",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "retrieved_date": "2026-08-11",
+      "finding": "SQLite 3.53.4 is a fixed-line release and its release page carries the WAL-reset fix in the 3.53 lineage."
+    }
+  ],
+  "hypothesis": "The exact accepted-target Ubuntu 3.45.1 source lineage remains behaviourally vulnerable to the WAL-reset fault and should stay excluded from correctness-sensitive Frank WAL state; the already target-green private 3.53.4 V3 path is the safer release candidate.",
+  "strongest_counterhypothesis": "The Ubuntu package may contain an equivalent backport not obvious from version number, or the deterministic injected fault harness may itself produce corruption independently of the upstream WAL-reset bug and therefore be non-discriminating.",
+  "repair": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 339,
+    "head": "8788c123b066f1ccbb7ff24fbfd9c39c1edad096",
+    "base": "chatgpt/sqlite-v3-python-isolated-repair-20260811",
+    "change": "Replace unsupported reconstructed-source ./configure --debug with supported ./configure and preserve explicit -O0 -g -DSQLITE_DEBUG harness compilation."
+  },
+  "go_oob_experiment": {
+    "count": 1,
+    "name": "METAMORPHIC_SAME_FAULT_OLD_VS_FIXED_SQLITE",
+    "status": "QUEUED",
+    "workflow_run": 31505374170,
+    "design": "Inject the same deterministic sqlite3FaultSim(660) checkpoint fault into exact Ubuntu 3.45.1 source and upstream 3.53.4, then run the same integrity harness on the same target lane.",
+    "discriminating_prediction": {
+      "ubuntu_3_45_1": "VULNERABLE / integrity corruption",
+      "upstream_3_53_4": "FIXED_OR_EQUIVALENT / integrity pass"
+    },
+    "falsifier": "If both lines corrupt, both pass, or either result is unclassified, reject the harness as non-discriminating and do not promote the system-SQLite vulnerability claim from this experiment."
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "affected_work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "change": "Keep correctness-sensitive Frank WAL state fail-closed against system SQLite 3.45.1 while behavioural classification is unresolved; retain private pinned SQLite 3.53.4 under V3 isolated-Python admission as the currently stronger candidate. Product boot must still establish the -I boundary before any import-capable Frank Python.",
+    "rollback": "No system SQLite replacement, no canonical database mutation, no external effect. Drop PR #339 and retain previous fail-closed gate if the discriminator does not validate."
+  },
+  "negative_results": [
+    "Axis-D run 31503879596 is INCONCLUSIVE_HARNESS_BUILD_FAILURE because ./configure --debug is unsupported in the reconstructed Ubuntu source package.",
+    "A successful source/runtime identity probe alone does not establish vulnerability or fix presence."
+  ],
+  "executed_vs_queued": {
+    "executed": [
+      "GitHub canonical/program boot verification",
+      "PR #337 target-VPS evidence review",
+      "Axis-D failed artifact download and root-cause analysis",
+      "official SQLite primary-source refresh",
+      "PR #339 test-only repair commit and registered workflow trigger"
+    ],
+    "queued": [
+      "GitHub Actions run 31505374170 on accepted self-hosted Ubuntu lane"
+    ]
+  },
+  "acceptance_boundary": {
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "system_sqlite_replaced": false,
+    "canonical_database_touched": false,
+    "external_effect_performed": false
+  },
+  "next_falsifier": "Adjudicate workflow run 31505374170. Promote only if old-vs-fixed metamorphic discrimination succeeds and exact source/runtime identity remains bound; otherwise repair or reject the test before making any storage-release claim."
+}

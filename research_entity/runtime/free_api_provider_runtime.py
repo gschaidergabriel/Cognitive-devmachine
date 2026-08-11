@@ -467,6 +467,7 @@ def execute_chat(
         json.JSONDecodeError,
         KeyError,
         IndexError,
+        RecursionError,
         TypeError,
         ValueError,
     ):

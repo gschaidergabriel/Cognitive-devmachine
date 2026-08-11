@@ -1,0 +1,25 @@
+name: GateFlow branch freshness gate
+
+on:
+  pull_request:
+    paths:
+      - "tools/gateflow_branch_freshness.py"
+      - "tests/test_gateflow_branch_freshness.py"
+      - "research_entity/gateflow/BRANCH_FRESHNESS_GATE.md"
+      - ".github/workflows/gateflow-branch-freshness.yml"
+  push:
+    branches: [main]
+    paths:
+      - "tools/gateflow_branch_freshness.py"
+      - "tests/test_gateflow_branch_freshness.py"
+      - "research_entity/gateflow/BRANCH_FRESHNESS_GATE.md"
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m unittest -v tests/test_gateflow_branch_freshness.py

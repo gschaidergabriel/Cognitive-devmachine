@@ -178,7 +178,15 @@ def execute_chat(
             status = getattr(response, "status", 200)
         lifecycle.append("EXECUTED")
         payload = json.loads(response_body)
-        content = payload["choices"][0]["message"]["content"]
+        choices = payload["choices"]
+        if not isinstance(choices, list) or not choices:
+            raise ValueError("response_choices_must_be_nonempty_list")
+        message = choices[0]["message"]
+        if not isinstance(message, dict):
+            raise ValueError("response_message_must_be_object")
+        content = message["content"]
+        if not isinstance(content, str):
+            raise ValueError("response_content_must_be_string")
         lifecycle.extend(["VERIFIED", "DONE"])
         outcome = "success"
         cooldown_seconds = 0
@@ -187,7 +195,10 @@ def execute_chat(
         content = None
         outcome = "rate_limited" if status == 429 else "provider_error"
         cooldown_seconds = 60 if status == 429 else 15
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, KeyError):
+    except (
+        urllib.error.URLError, TimeoutError, json.JSONDecodeError,
+        KeyError, IndexError, TypeError, ValueError,
+    ):
         status = None
         content = None
         outcome = "invalid_or_unreachable_provider_response"

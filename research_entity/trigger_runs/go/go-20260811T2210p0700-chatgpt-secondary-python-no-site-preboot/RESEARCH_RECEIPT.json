@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2210p0700-chatgpt-secondary-python-no-site-preboot",
+  "trigger": "go",
+  "status": "MATERIAL_DELTA_TARGET_VALIDATION_PENDING",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "target_native_identity": "self.root",
+    "target_human_surface_name": "Frank",
+    "worker_is_target": false,
+    "target_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "program_id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "affected_work_packages": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-09-EFFECT-AUTHORITY"
+    ]
+  },
+  "frontier_selection": {
+    "reason": "Fresh swarm refresh showed active parallel lanes for ClayCode, loop-core/GWT, UnifiedDB, Retina, token API, effect authority, web ingress, reward and capability/body. PR #337 had a target-green V3 SQLite admission repair with one explicit remaining product boundary: trusted product boot/service wiring must establish the isolated interpreter before import-capable Frank code.",
+    "duplicate_work_avoided": true
+  },
+  "fresh_external_evidence": [
+    {
+      "class": "PRIMARY_OFFICIAL",
+      "source": "Python 3.12 command-line documentation",
+      "url": "https://docs.python.org/3.12/using/cmdline.html",
+      "finding": "-I implies -E, -P and -s; -S is a separate option disabling site import and site-dependent sys.path manipulations."
+    },
+    {
+      "class": "PRIMARY_OFFICIAL",
+      "source": "Python 3.12 site documentation",
+      "url": "https://docs.python.org/3.12/library/site.html",
+      "finding": "Executable import lines in .pth files are processed by site and run at Python startup when that site path is processed."
+    },
+    {
+      "class": "PRIMARY_OFFICIAL",
+      "source": "systemd systemd.service source documentation",
+      "url": "https://github.com/systemd/systemd/blob/main/man/systemd.service.xml",
+      "finding": "Type=exec reports failure when execve of the configured service binary cannot be performed, making it preferable to Type=simple for a trusted launcher composition."
+    },
+    {
+      "class": "PRIMARY_OFFICIAL",
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "finding": "3.53.4 includes the WAL-reset database corruption fix already selected by the storage lane."
+    }
+  ],
+  "hypothesis": "The V3 trusted Python -I startup boundary prevents site-path executable code from running before V3 admission.",
+  "strongest_counterhypothesis": "-I does not disable site initialization, so an executable .pth import line can run before V3 main; the trusted launcher must also supply -S.",
+  "go_oob": {
+    "count": 1,
+    "experiment_id": "EXECUTABLE_PTH_PRE_GUARD_SITE_INITIALIZATION",
+    "safety": "Disposable Python virtual environment and marker file only; no Frank database, external provider effect, host package replacement, training action or Harness mutation.",
+    "local_execution": {
+      "status": "EXECUTED_SUPPORTED",
+      "environment": "isolated local sandbox; CPython 3.13",
+      "baseline": "venv Python -I processed an executable .pth line before main and wrote the marker",
+      "rescue": "the same interpreter with -I -S did not execute the .pth payload",
+      "classification": "SUPPORTED_V3_FAIL_OPEN_PRE_GUARD_PTH_EXECUTION_LOCAL_MECHANISM",
+      "target_claim": "NOT_YET_TARGET_VPS_EVIDENCE"
+    },
+    "counterevidence_status": "No evidence found that -I itself implies -S; official Python 3.12 documentation explicitly separates the flags."
+  },
+  "target_repo_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "parent_pr": 337,
+    "pull_request": 342,
+    "branch": "chatgpt/go-product-trusted-python-boot-v1-20260811",
+    "head_sha": "d2cd87589c7c21901937588229eb95d2b00b6684",
+    "files": [
+      "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v4_candidate.py",
+      "tests/fixed_sqlite_runtime_guard_v3_pth_oob_and_v4_repair.py",
+      ".github/workflows/frank-fixed-sqlite-v4-no-site-repair-vps.yml"
+    ],
+    "candidate_change": "V4 requires isolated+ignore_environment+safe_path+no_user_site+no_site, preserves -I -S across child execve, and retains V1/V2/V3 SQLite/loader/module-origin checks.",
+    "promotion_status": "CANDIDATE_NOT_PROMOTED"
+  },
+  "execution_state": {
+    "local_oob": "EXECUTED_SUPPORTED",
+    "target_vps_workflow_id": 31505610504,
+    "target_vps_workflow_name": "Frank fixed SQLite V4 no-site startup repair VPS",
+    "target_vps_workflow_status_at_reentry": "QUEUED",
+    "target_vps_pass_claim": false,
+    "queued_is_pass": false
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "change": "Treat Python site initialization as part of the trusted pre-Frank launch boundary. Require -I -S before any import-capable Frank Python code in the storage/state process, then preserve the flags through admission re-exec.",
+    "expected_effect": "Closes the reproduced executable-.pth pre-guard startup path while preserving the fixed private SQLite admission chain.",
+    "strongest_counterhypothesis": "The extra no-site constraint may be unnecessary in a fully immutable trusted Python installation or may break required site-provided dependencies; target composition and final service wiring must measure this rather than assume it.",
+    "rollback": "Drop PR #342 / V4 candidate and retain V3 with the negative result recorded; no canonical target state was changed."
+  },
+  "negative_results": [
+    {
+      "id": "N-GO-20260811-PYTHON-I-SITE-PREBOOT",
+      "claim_refuted": "V3 -I alone is a complete Python startup trust boundary against site-path startup code",
+      "scope": "Local reproduced CPython startup mechanism; target-VPS reproduction pending",
+      "preserve": true
+    }
+  ],
+  "remaining_falsifiers": [
+    "Execute the exact .pth OOB on the accepted target-VPS Python 3.12 runtime.",
+    "Run V17 and current UnifiedDB+ClayGraph disposable pair through V4 with pinned SQLite 3.53.4.",
+    "Verify real product service/deployment wiring launches the exact admitted interpreter with -I -S before any import-capable Frank Python code.",
+    "Bind accepted source/binary/private-SQLite manifest identities and fail closed on service drift.",
+    "Measure whether -S removes any dependency required by the real production API/runtime; do not infer from synthetic gates."
+  ],
+  "non_claims": [
+    "No whole Frank v0.1 acceptance",
+    "No target-VPS PASS for V4 while workflow is queued",
+    "No remote exploitability claim",
+    "No universal Python compromise proof",
+    "No power-loss/kernel-panic proof",
+    "No final/paid training authorization",
+    "No self.root/Frank Harness mutation authority"
+  ],
+  "research_reentry": {
+    "material_delta": true,
+    "targeted_to": [
+      "storage/recovery",
+      "UnifiedDB continuity",
+      "effect-authority persistence",
+      "future token-API/product service boot"
+    ],
+    "next_frontier": "Adjudicate target run 31505610504. If target-supported, retain V3 as insufficient negative evidence, make V4 the repair successor candidate, then close the still-open production systemd/deployment launch composition rather than declaring storage acceptance."
+  }
+}

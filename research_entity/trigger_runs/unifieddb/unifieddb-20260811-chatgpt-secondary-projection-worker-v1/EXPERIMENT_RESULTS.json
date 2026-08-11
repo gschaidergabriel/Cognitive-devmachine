@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "status":"TARGET_EXECUTION_QUEUED",
+  "hypothesis":"a single-active UnifiedDB lease generation plus bounded batches and exact-current graph admission recovers safely from tested projector process crash while preserving authoritative-write availability under projection backpressure",
+  "strongest_counterhypotheses":[
+    "a process crash can leave the lease or destination in a state that prevents bounded takeover",
+    "a competing worker can enter while a live lease exists",
+    "an expired/stale generation can continue projecting after takeover",
+    "backpressure may accidentally block or demote authoritative writes",
+    "bounded drain may report healthy before exact projection is restored",
+    "worker receipt/lag telemetry may not match durable queue state"
+  ],
+  "target_candidate":{"repo":"gschaidergabriel/Dr.-Unterweger","pr":391,"head":"6fe47f9672a997f784ac168314f8bc0c65afcd65","workflow":"Frank UnifiedDB projection worker V1 VPS","workflow_run":31515873771,"state_at_write":"QUEUED"},
+  "matrix": {
+    "runtime":"V4 / private SQLite 3.53.4",
+    "initial_pending_events":96,
+    "hard_threshold":64,
+    "crash_after_applied":7,
+    "lease_ms":1200,
+    "immediate_contender":"must be refused",
+    "recovery_batch":16,
+    "second_backlog":80,
+    "bounded_batches":[13,55,12],
+    "expected_pressure_path":["HARD","HARD","SOFT","NONE"]
+  },
+  "promotion":"PENDING_TARGET_RESULT",
+  "canonical_state_mutated":false,
+  "external_effect_performed":false,
+  "training_authorized":false
+}

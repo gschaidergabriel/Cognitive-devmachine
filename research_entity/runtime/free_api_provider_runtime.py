@@ -119,12 +119,23 @@ def _safe_request_id(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()[:16]
 
 
+class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Reject redirects so bearer credentials cannot cross an origin boundary."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def _open_no_redirect(request: urllib.request.Request, timeout: int):
+    return urllib.request.build_opener(_NoRedirectHandler()).open(request, timeout=timeout)
+
+
 def execute_chat(
     messages: list[dict[str, str]],
     *,
     model: str,
     environ: dict[str, str] | None = None,
-    opener=urllib.request.urlopen,
+    opener=None,
     now=time.time,
 ) -> dict:
     """Execute one bounded chat request and return output plus a redacted receipt.
@@ -160,8 +171,9 @@ def execute_chat(
         headers={"Authorization": f"Bearer {env[key_name]}", "Content-Type": "application/json"},
         method="POST",
     )
+    request_opener = _open_no_redirect if opener is None else opener
     try:
-        with opener(request, timeout=30) as response:
+        with request_opener(request, timeout=30) as response:
             response_body = response.read(2_000_000)
             status = getattr(response, "status", 200)
         lifecycle.append("EXECUTED")

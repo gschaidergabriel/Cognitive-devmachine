@@ -109,6 +109,29 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
         self.assertIsNone(redirected)
 
+    def test_different_equal_length_payloads_have_distinct_request_ids(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"message":{"content":"ok"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def request_id(content):
+            return MOD.execute_chat(
+                [{"role": "user", "content": content}], model="mock",
+                environ=env, opener=lambda *args, **kwargs: Response(),
+                now=iter((30.0, 30.01)).__next__,
+            )["receipt"]["request_id"]
+
+        self.assertNotEqual(request_id("AA"), request_id("BB"))
+
     def test_invalid_response_is_executed_but_never_verified(self):
         class Response:
             status = 200

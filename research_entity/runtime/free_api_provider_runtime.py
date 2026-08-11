@@ -303,6 +303,14 @@ def _cost_policy_principal_id(
     return _safe_request_id(value)
 
 
+def _is_valid_http_status(value: object) -> bool:
+    return (
+        isinstance(value, int)
+        and not isinstance(value, bool)
+        and 100 <= value <= 599
+    )
+
+
 def execute_chat(
     messages: list[dict[str, str]],
     *,
@@ -364,14 +372,15 @@ def execute_chat(
 
     try:
         with request_opener(request, timeout=30) as response:
-            status = getattr(response, "status", 200)
+            candidate_status = getattr(response, "status", None)
+            if not _is_valid_http_status(candidate_status):
+                raise ValueError("response_status_must_be_http_integer")
+            status = candidate_status
             response_started = True
             lifecycle.append("EXECUTED")
             response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
             if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
                 raise ProviderResponseTooLarge
-        if not isinstance(status, int):
-            raise ValueError("response_status_must_be_integer")
         if not 200 <= status < 300:
             content = None
             if status == PAYMENT_REQUIRED_STATUS:
@@ -403,19 +412,28 @@ def execute_chat(
             cooldown_seconds = 0
             retryable = False
     except urllib.error.HTTPError as exc:
-        lifecycle.append("EXECUTED")
-        status = exc.code
         content = None
-        if status == PAYMENT_REQUIRED_STATUS:
+        if not _is_valid_http_status(exc.code):
+            status = None
+            outcome = "invalid_provider_response"
+            cooldown_seconds = 15
+            retryable = False
+        elif exc.code == PAYMENT_REQUIRED_STATUS:
+            status = exc.code
+            lifecycle.append("EXECUTED")
             latches.add(_payment_latch_key(selected, env))
             outcome = "payment_required_hard_stop"
             cooldown_seconds = 0
             retryable = False
-        elif status == 429:
+        elif exc.code == 429:
+            status = exc.code
+            lifecycle.append("EXECUTED")
             outcome = "rate_limited"
             cooldown_seconds = 60
             retryable = True
         else:
+            status = exc.code
+            lifecycle.append("EXECUTED")
             outcome = "provider_error"
             cooldown_seconds = 15
             retryable = True

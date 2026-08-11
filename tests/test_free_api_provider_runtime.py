@@ -312,6 +312,39 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("DONE", receipt["lifecycle"])
                 self.assertIsNone(result["content"])
 
+    def test_non_bytes_response_body_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __init__(self, body): self.body = body
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return self.body
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        valid_json = '{"choices":[{"message":{"content":"must-not-pass"}}]}'
+        for invalid_body in (valid_json, bytearray(valid_json.encode())):
+            with self.subTest(body_type=type(invalid_body).__name__):
+                result = MOD.execute_chat(
+                    [], model="mock", environ=env,
+                    opener=lambda *args, body=invalid_body, **kwargs: (
+                        Response(body)
+                    ),
+                    now=iter((55.0, 55.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], 200)
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
     def test_http_error_is_executed_but_never_verified(self):
         def opener(request, timeout):
             raise MOD.urllib.error.HTTPError(

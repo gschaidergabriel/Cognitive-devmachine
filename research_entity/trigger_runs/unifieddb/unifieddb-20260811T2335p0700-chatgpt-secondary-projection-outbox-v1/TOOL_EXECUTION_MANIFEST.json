@@ -1,15 +1,19 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
   "executed": [
     {"tool": "GitHub", "purpose": "fresh current target/research state, overlap search and build", "result": "VERIFIED_RW"},
     {"tool": "web.run", "purpose": "primary SQLite WAL/durability/multi-database atomicity refresh", "result": "PRIMARY_SQLITE_DOCS_USED"},
-    {"tool": "GitHub", "purpose": "build candidate contract/schema/runtime/gate/workflow", "result": {"pr": 386, "head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656, "state": "QUEUED_AT_WRITE"}}
+    {"tool": "GitHub", "purpose": "build candidate contract/schema/runtime/gate/workflow", "result": {"pr": 386}},
+    {"tool": "GitHub Git database", "purpose": "rebuild candidate as one commit on fresh target main while preserving exact six candidate blobs", "result": {"base": "5ec9955775d9bf142e327166990a2228d543c071", "head": "6201556c8f47f1226ed8c2bc3792851ed3912294", "files": 6}},
+    {"tool": "GitHub Actions hosted diagnostic", "purpose": "supplemental pre-falsifier", "result": {"run": 31513246399, "classification": "INFRA_FAILURE_PRESTART", "steps": 0, "artifacts": 0, "candidate_test_executed": false}},
+    {"tool": "GitHub Actions self-hosted target", "purpose": "fresh-main projection crash/replay/lag/tamper/rebuild gate", "result": {"run": 31513961274, "state": "PENDING_CONCURRENCY_AT_WRITE"}}
   ],
   "source_fusion": [
     "existing claycode/frank_claygraph.clay source_of_truth/rebuildability contract",
     "current apply_current_schema.py explicit no-cross-file-atomicity contract",
     "SQLite WAL/synchronous/super-journal primary documentation"
   ],
+  "negative_result_discipline": "hosted prestart failure has no epistemic effect on candidate hypothesis",
   "guards": ["candidate-only migrations", "disposable DBs", "no canonical Frank state", "no external effect", "no training", "no whole-product promotion"]
 }

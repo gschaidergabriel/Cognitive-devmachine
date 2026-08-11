@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2212p0700-chatgpt-secondary-claycode-host-equality-alias",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity": "Clay",
+  "research_subject": "self.root / human-surface Frank",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "status": "TARGET_EXECUTION_PENDING",
+  "internal_evidence": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "base_pr": 314,
+    "candidate_pr": 350,
+    "candidate_head": "bc707e82499b97e96e5c886e7197c8327196b03d",
+    "workflow_run": 31506193679,
+    "workflow_status_observed": "queued",
+    "evaluator_observation": "_apply_relation delegates == and != directly to Python values without an explicit ClayCode type/equality gate"
+  },
+  "fresh_external_research": [
+    {
+      "source": "Python official documentation, Built-in Types",
+      "observation": "bool is a subclass of int; Python discourages relying on its integer behavior",
+      "role": "host-mechanism evidence only, not ClayCode semantic authority"
+    }
+  ],
+  "hypothesis": "Executable ClayCode equality is isolated from host-language Bool/Int aliasing.",
+  "counterhypothesis": "Direct Python ==/!= delegation causes True==1 and False==0 to cross ClayCode declared Bool/Int domains unless an explicit type/equality rule intervenes.",
+  "out_of_box_experiment": {
+    "count": 1,
+    "id": "HOST_EQUALITY_NOMINAL_ALIAS",
+    "implementation": "tests/claycode_host_equality_alias_oob.py",
+    "workflow": ".github/workflows/claycode-host-equality-alias-oob-vps.yml",
+    "interpretation": "PASS_DIAGNOSTIC means host alias reproduced, not semantic correctness"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_PENDING_TARGET_EVIDENCE",
+    "change": "No semantic repair selected. If target evidence supports the alias, recover or owner-fix ClayCode equality/type semantics before implementing WP04/evaluator/compiler regression.",
+    "rollback": "Close PR #350 and delete candidate branch/files; no canonical Frank state was mutated."
+  },
+  "negative_result_policy": "If the target evaluator does not reproduce the alias, retain that as a refutation of this mechanism hypothesis and search for the actual type boundary before any change.",
+  "authority": {
+    "external_effect": false,
+    "canonical_frank_state_mutation": false,
+    "training_authorized": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "next_falsifier": "Observe workflow 31506193679. Only after an actual target receipt classify the mechanism SUPPORTED or REFUTED; do not infer PASS from queued state."
+}

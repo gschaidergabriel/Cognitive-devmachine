@@ -315,6 +315,17 @@ def _reject_nonfinite_json_constant(value: str) -> None:
     raise ValueError(f"nonstandard_json_constant:{value}")
 
 
+def _reject_duplicate_json_names(
+    pairs: list[tuple[str, object]],
+) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for name, value in pairs:
+        if name in result:
+            raise ValueError("duplicate_json_name")
+        result[name] = value
+    return result
+
+
 def execute_chat(
     messages: list[dict[str, str]],
     *,
@@ -406,6 +417,7 @@ def execute_chat(
             payload = json.loads(
                 response_body,
                 parse_constant=_reject_nonfinite_json_constant,
+                object_pairs_hook=_reject_duplicate_json_names,
             )
             choices = payload["choices"]
             if not isinstance(choices, list) or not choices:

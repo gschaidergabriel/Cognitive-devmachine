@@ -19,7 +19,7 @@
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "main_at_claim": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
     "candidate_pr": 347,
-    "candidate_head": "2f0f1f8c23532ea6de218f4627340b8e0111c3c3",
+    "candidate_head": "4b907a9287c07b43957a2002fd2458660301dbe3",
     "candidate_branch": "chatgpt/go-training-heldout-freeze-v1-20260811"
   },
   "work_package": "F-V01-14-FINAL-TRAINING-DATA",
@@ -98,63 +98,94 @@
     {
       "finding": "Parallel PR #349 had a useful protected-evaluation export boundary and ClayCode semantic source not present in the first #347 slice.",
       "repair": "Add ADVERSARIAL as a protected split, export TRAIN/DEV payloads only, add a dedicated export regression and add a ClayCode semantic source contract."
+    },
+    {
+      "finding": "The first green self-hosted pull_request workflow claimed exact-head checkout while actually using GitHub's synthetic pull-request merge SHA via GITHUB_SHA.",
+      "repair": "Bind EXPECTED_SHA to github.event.pull_request.head.sha (fallback github.sha), fetch that exact object, assert ACTUAL_SHA equals EXPECTED_SHA, and record event SHA separately."
     }
   ],
-  "local_evidence": {
-    "previous_exact_candidate_gate_before_swarm_fusion": {
-      "checks_passed": 17,
-      "checks_total": 17,
-      "failed_checks": [],
-      "evidence_class": "LOCAL_EQUIVALENT_DETERMINISTIC_EXECUTION"
-    },
-    "current_head_fusion_spot_execution": {
-      "evidence_class": "LOCAL_EQUIVALENT_SPOT_EXECUTION_NOT_TARGET",
-      "semantic_twin_result": "SEMANTIC_FAMILY_CROSS_SPLIT",
-      "zero_width_result": "LEAKAGE_SURFACE_CROSS_SPLIT",
-      "protected_export_result": "TRAIN_DEV_ONLY_HELDOUT_ADVERSARIAL_EXCLUDED",
-      "full_current_head_gate_pass_claimed": false,
-      "target_equivalence_claimed": false
-    }
-  },
   "go_oob_experiment": {
     "count_new_in_this_invocation": 1,
     "experiment": "SEMANTIC_TWIN_SPLIT_LEAK",
     "hash_only_anticontrol": "byte/normalization-distinct paraphrases are not identified as duplicates",
     "candidate_intervention": "both paraphrases carry one explicit semantic_family_id across TRAIN and HELDOUT under one bound semantic-audit receipt",
-    "local_result": "PASS_REJECTED_SEMANTIC_FAMILY_CROSS_SPLIT",
-    "automatic_semantic_duplicate_detection_claimed": false,
-    "target_result": "QUEUED"
+    "integration_target_result": "PASS_REJECTED_SEMANTIC_FAMILY_CROSS_SPLIT",
+    "automatic_semantic_duplicate_detection_claimed": false
   },
   "cross_worker_oob_reuse": {
     "experiment": "ZERO_WIDTH_HELDOUT_GHOST_FROM_PR_354",
     "reuse_class": "ORDINARY_REGRESSION_NOT_NEW_OOB",
     "finding": "old normalized hash misses Unicode Cf alias",
     "fused_repair": "LEAKAGE_SURFACE_CROSS_SPLIT",
+    "integration_target_result": "PASS_FUSED_LEAKAGE_SURFACE_FENCE",
     "counts_as_new_oob_for_this_invocation": false
   },
   "target_vps_execution": {
-    "workflow_run": 31507749378,
-    "head": "2f0f1f8c23532ea6de218f4627340b8e0111c3c3",
-    "status": "QUEUED",
-    "conclusion": null,
-    "pass_claimed": false
+    "integration_run": {
+      "workflow_run": 31507749378,
+      "job": 93833561267,
+      "workflow_conclusion": "success",
+      "classification": "PASS_PR_MERGE_REF_INTEGRATION_NOT_EXACT_HEAD",
+      "expected_pr_head_at_time": "2f0f1f8c23532ea6de218f4627340b8e0111c3c3",
+      "tested_synthetic_merge_sha": "ef6aa2561f6682beaec6e5e3de16ca6ab9daa5a4",
+      "runner_name": "clay",
+      "machine_name": "digital-retina",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "kernel": "6.8.0-117-generic",
+      "python": "3.12.3",
+      "candidate_checks": "20/20_PASS",
+      "protected_export_checks": "5/5_PASS",
+      "fixture_manifest_root_sha256": "db19ba54cb40a11641ba45523ee1ff61e983311ac37d59df149524920514eca3",
+      "fixture_semantic_audit_receipt_hash": "5d245a75c3d076cc34ff8593fc2a3ec59f10634d9fe0618899641f38d185f30b",
+      "resource_shadow": {
+        "wall_seconds": 0.05,
+        "user_seconds": 0.03,
+        "system_seconds": 0.01,
+        "max_rss_kb": 18432,
+        "swap_count": 0,
+        "exit_status": 0
+      },
+      "artifact_id": 9107863492,
+      "artifact_digest": "sha256:5404ceb88cf4aee5cd3afeac6c56a184f2d4826f9360a8a9159d463591e8502c"
+    },
+    "exact_head_repair": {
+      "current_head": "4b907a9287c07b43957a2002fd2458660301dbe3",
+      "workflow_run": 31508396616,
+      "status_at_last_refresh": "QUEUED",
+      "conclusion": null,
+      "exact_head_pass_claimed": false
+    }
   },
   "historical_corpus_archaeology": {
-    "reported_source": "superseded PR #349",
-    "reported_artifact": "frank-v26.1-train.jsonl plus v26.1 validation family in user File Library",
-    "reported_counts": {
-      "master_examples": 4113,
-      "train": 2039,
-      "dev": 203,
-      "test": 207,
-      "leakage_clusters": 1858,
-      "adversarial": 49
+    "direct_drive_documents": [
+      "v26-stand-2026-08-02.txt",
+      "frank-v26.1-forschungsbericht-arxiv.txt",
+      "frank-v26.1-entscheidungsregister.txt",
+      "v26-1-gemergt-eval-gebaut-2026-08-04.txt",
+      "frank-lora-training-suite.txt",
+      "frank-zwitter-architektur.txt"
+    ],
+    "directly_reverified_historical_facts": {
+      "generated_master_examples": 4113,
+      "clustered_train": 2039,
+      "clustered_dev": 203,
+      "clustered_test": 207,
+      "clusters": 1858,
+      "adversarial_tests": 49,
+      "v26_1_training_reported_steps": "474/474",
+      "v26_1_training_reported_epochs": 2,
+      "v26_1_training_reported_duration": "12h20m"
     },
-    "direct_reverification_in_this_invocation": "FAILED_FILE_LIBRARY_RETRIEVAL_SERVICE_ERROR_TWICE",
-    "github_copy_found": false,
-    "evidence_class": "HISTORICAL_BASELINE_REPORTED_NOT_DIRECTLY_REVERIFIED",
+    "historical_model_training_context": {
+      "host": "Andreas historical Windows laptop / RTX 5070",
+      "pipeline": "historical LoRA/QLoRA v19f->v22->v23->v26.1",
+      "architecture_warning": "historical Qwen3.5-4B hybrid attention report says q/k/v/o projections occur in only 8/32 layers while 24 layers use different linear-attention module names"
+    },
+    "actual_frank_v26_1_train_jsonl_directly_fetched": false,
+    "evidence_class": "HISTORICAL_BASELINE_DOCUMENTS_DIRECTLY_REVERIFIED_DATASET_BYTES_NOT_REVERIFIED",
     "promotion_to_current_corpus": false,
-    "reason": "Historical v26.1 semantics are reported to contain pre-current tool/body/state conventions and current ClayCode contracts supersede those semantics."
+    "reason": "Historical v26.1 predates current owner-fixed ClayCode semantics and v0.1 Ubuntu target contracts; data rows require current-contract migration/adjudication before reuse."
   },
   "cross_worker_storage_delta": {
     "v3_pr": 338,
@@ -177,18 +208,18 @@
     "status": "CANDIDATE_TESTING",
     "decision": "Consolidate F-V01-14 on PR #347 rather than parallel freeze implementations. Bind lexical/surface leakage evidence, one corpus-wide semantic audit identity, source lineage/provenance and protected export semantics while keeping semantic discovery/audit correctness and final owner training authority outside this gate.",
     "required_successors": [
-      "obtain accepted-target execution for exact current #347 head",
+      "obtain accepted-target exact-head execution for current #347 head",
       "bind the mechanism to the actual intended current Frank TRAIN/DEV/HELDOUT/ADVERSARIAL artifacts byte-for-byte",
       "define and independently verify the semantic-family audit/decontamination producer and receipt content",
       "bind source snapshots, labels and knowledge cutoffs with current-contract provenance",
       "run contamination-sensitivity plus dynamic/OOD/sealed-eval checks rather than only static split checks",
       "execute/compile the ClayCode semantic source through the accepted ClayCode toolchain",
-      "adjudicate any historical v26.1 corpus rows against current owner-fixed ClayCode semantics before reuse",
+      "adjudicate historical v26.1 corpus rows against current owner-fixed ClayCode semantics before reuse",
       "freeze immutable real-corpus provenance and emit final F-V01-14 acceptance receipt"
     ],
     "rollback": "close PR #347 and remove its isolated candidate files; no current corpus, final model or canonical Frank state was mutated"
   },
-  "research_disposition": "F_V01_14_SWARM_FUSED_ON_347_DUPLICATE_LANES_CLOSED_TARGET_QUEUED_STORAGE_V4_TARGET_PASS_RECORDED",
+  "research_disposition": "F_V01_14_SWARM_FUSED_TARGET_INTEGRATION_PASS_SHA_BINDING_FIXED_EXACT_HEAD_QUEUED_HISTORICAL_V26_1_BASELINE_PARTIALLY_REVERIFIED_STORAGE_V4_TARGET_PASS_RECORDED",
   "training_authorization_changed": false,
   "final_training_started": false,
   "external_effect_performed": false,

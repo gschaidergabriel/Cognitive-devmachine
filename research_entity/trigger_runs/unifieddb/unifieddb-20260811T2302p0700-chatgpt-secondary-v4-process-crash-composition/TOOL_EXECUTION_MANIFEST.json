@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
   "executed": [
     {
@@ -14,26 +14,34 @@
     },
     {
       "tool": "web.run",
-      "purpose": "fresh primary SQLite mechanism evidence for WAL checkpointing and synchronous durability boundaries",
+      "purpose": "fresh primary SQLite mechanism evidence for WAL checkpointing, synchronous durability boundaries and multi-database WAL atomicity limits",
       "result": "PRIMARY_SQLITE_DOCS_REFRESHED"
     },
     {
       "tool": "GitHub",
-      "purpose": "build non-overlapping V4 process-crash composition candidate",
+      "purpose": "build and target-execute non-overlapping V4 process-crash composition candidate",
       "result": {
         "repo": "gschaidergabriel/Dr.-Unterweger",
         "branch": "chatgpt/unifieddb-v4-process-crash-composition-20260811",
         "pull_request": 371,
         "head": "c4cf3747ee8e57c10c754b7a8898264181744777",
         "workflow_run": 31510023573,
-        "workflow_state_at_manifest_write": "QUEUED"
+        "job": 93841210700,
+        "workflow_state": "COMPLETED",
+        "workflow_conclusion": "SUCCESS",
+        "checks": "10/10 PASS",
+        "acknowledged_commits": 4250,
+        "lost_acknowledged_commits": 0,
+        "phantom_commits": 0,
+        "artifact_id": 9109020862,
+        "artifact_digest_sha256": "7940c5f03d3fe865e8220386f7f0bda93c09df77da5a323e5aeac8432bd62ea3"
       }
     }
   ],
   "primary_external_sources": [
     {
       "source": "SQLite WAL documentation",
-      "use": "checkpoint topology, automatic checkpoint behavior and WAL-reset mechanism boundary"
+      "use": "checkpoint topology, automatic checkpoint behavior and WAL durability boundary"
     },
     {
       "source": "SQLite PRAGMA synchronous documentation",
@@ -42,6 +50,10 @@
     {
       "source": "SQLite corruption guidance",
       "use": "checkpoint and storage-sync failure boundary"
+    },
+    {
+      "source": "SQLite temporary files / super-journal documentation",
+      "use": "multi-database transactions in WAL mode are not assumed atomic across separate database files on power loss"
     }
   ],
   "guards": [

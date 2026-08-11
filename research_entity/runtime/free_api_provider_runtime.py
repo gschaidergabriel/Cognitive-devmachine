@@ -439,7 +439,7 @@ def execute_chat(
         urllib.error.URLError,
         TimeoutError,
         ConnectionError,
-        http.client.IncompleteRead,
+        http.client.HTTPException,
     ):
         content = None
         outcome = (

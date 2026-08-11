@@ -120,6 +120,10 @@ def _safe_request_id(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()[:16]
 
 
+def _safe_attempt_id(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()[:32]
+
+
 class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
     """Reject redirects so bearer credentials cannot cross an origin boundary."""
 
@@ -223,7 +227,7 @@ def execute_chat(
         "model": model,
         "endpoint_host": parsed.hostname,
         "request_id": request_id,
-        "attempt_id": _safe_request_id(f"{request_id}:{started}:{attempt_nonce}"),
+        "attempt_id": _safe_attempt_id(f"{request_id}:{started}:{attempt_nonce}"),
         "status": status,
         "outcome": outcome,
         "lifecycle": lifecycle,

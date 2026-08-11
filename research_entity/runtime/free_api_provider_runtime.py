@@ -23,6 +23,7 @@ DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
+TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 PROCESS_PAYMENT_LATCHES: set[str] = set()
 
 
@@ -205,6 +206,8 @@ def _validate_text_chat_request(messages, model) -> None:
             raise ValueError("message_must_be_object")
         if not isinstance(message.get("role"), str) or not message["role"].strip():
             raise ValueError("message_role_must_be_nonempty_string")
+        if message["role"] not in TEXT_CHAT_ROLES:
+            raise ValueError("message_role_not_supported_by_text_adapter")
         if not isinstance(message.get("content"), str):
             raise ValueError("message_content_must_be_string")
 

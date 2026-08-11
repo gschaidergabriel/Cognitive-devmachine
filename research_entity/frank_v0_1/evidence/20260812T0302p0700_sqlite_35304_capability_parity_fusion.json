@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "record_type": "GRF_RESEARCH_FUSION",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+  ],
+  "created_local": "2026-08-12T03:02:00+07:00",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "worker_is_not_frank": true,
+  "trigger": "go",
+  "grf": {
+    "R0_observed": [
+      "Accepted-target system Python reports SQLite 3.45.1 while Frank uses WAL; upstream fixes the WAL-reset corruption defect beginning with 3.51.3.",
+      "The accepted-host read-only production-parent inventory fused earlier in Clay observed no separate Frank production process/systemd unit/service file from runner context; the privileged product-start/provision boundary remains unproven.",
+      "PR #440 is a separate deferred privileged provisioning lane accepting FRANK_FIXED_SQLITE_RUNTIME_V1 manifest fields; this record does not authorize or execute it."
+    ],
+    "R1_inferred": "Version/source-id/loader correctness is necessary but insufficient for a replacement SQLite runtime: compile-time capability surface can silently change Frank behavior.",
+    "R2_generated_hypothesis": "A WAL-reset-safe private SQLite 3.53.4 can load correctly yet regress effective capabilities present in the accepted Ubuntu 3.45.1 runtime.",
+    "R3_counterhypothesis": "A pinned loader-correct SQLite 3.53.4 private build is behaviorally drop-in equivalent for Frank-relevant SQLite use.",
+    "R4_intervention": {
+      "classification": "BOUNDED_UNUSUAL_EXPERIMENT",
+      "count_for_this_go_macrocycle": 1,
+      "product_repo_run": 31528097773,
+      "branch": "chatgpt/go-sqlite-v5-capability-shadow-20260812",
+      "safety_boundary": "private /tmp build plus in-memory/disposable databases only; no system install, no canonical state mutation, no effect authority",
+      "result": "SUPPORTED_PRIVATE_RUNTIME_CAPABILITY_SURFACE_REGRESSION",
+      "observed_regressions": [
+        "DBSTAT unavailable",
+        "FTS3 unavailable",
+        "FTS4 unavailable",
+        "FTS5 unavailable",
+        "RTREE unavailable",
+        "UPDATE/DELETE ORDER BY LIMIT unavailable",
+        "variable index 33000 unavailable because private default MAX_VARIABLE_NUMBER was 32766 while accepted Ubuntu runtime exposed 250000"
+      ],
+      "compile_option_loss_count": 23,
+      "outcome": "RETAIN"
+    },
+    "collapse": "The counterhypothesis was refuted for the stock private build. A capability-parity build became the repair candidate, not production truth."
+  },
+  "repair": {
+    "principles": [
+      "Build from canonical sqlite-src-3530400.zip so parser-generation-dependent SQLITE_ENABLE_UPDATE_DELETE_LIMIT is actually generated.",
+      "Verify upstream canonical source SHA3 and exact SQLite source-id before use.",
+      "Restore accepted-target Frank-relevant capabilities and tighter limits rather than blindly copying every distro macro.",
+      "Preserve ZIP archived executable modes for canonical build tooling after Python zip extraction.",
+      "Do not restore ENABLE_FTS3_TOKENIZER; upstream documents the legacy tokenizer interface as security-sensitive and the repository search used in this cycle found no direct dependency.",
+      "Do not infer load-extension removal from missing ENABLE_LOAD_EXTENSION compile metadata; directly verify the safe API-disable behavior instead.",
+      "Remove the unrelated 3.53.4 ENABLE_PERCENTILE surface so the candidate gains no unexpected compile option relative to the accepted baseline.",
+      "Emit an independently hashable FRANK_FIXED_SQLITE_RUNTIME_V1 manifest compatible with the separate #440 provision contract."
+    ],
+    "product_repo_draft_pr": 444,
+    "product_repo_pr_state_at_fusion": "OPEN_DRAFT_MERGEABLE",
+    "product_repo_head_sha": "24f25e27c6923e5f284cd868acb83a6c8537aeef"
+  },
+  "verification": {
+    "prior_hardened_replication": {
+      "run": 31530354673,
+      "tested_sha": "1fd1bbcfb853e7024ba889413bf0b7ab1566aa62",
+      "behavioral_probe_pass": "10/10",
+      "v16": "PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY",
+      "wal": "PASS_PARITY_WAL_COMPATIBILITY_REGRESSION"
+    },
+    "fresh_current_main_replication": {
+      "run": 31530666897,
+      "tested_sha": "24f25e27c6923e5f284cd868acb83a6c8537aeef",
+      "status": "PASS_CANDIDATE",
+      "behavioral_probe_pass": "10/10",
+      "unexpected_missing_compile_options": [],
+      "new_compile_options": [],
+      "baseline_sqlite": "3.45.1",
+      "candidate_sqlite": "3.53.4",
+      "v16": "PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY",
+      "wal": "PASS",
+      "runtime_manifest_protocol": "FRANK_FIXED_SQLITE_RUNTIME_V1",
+      "runtime_manifest_sha256": "420c3bfbd6a1f2c5a88d86579c826bf74bb6e4354867a43b0605f9d48c8fcc36",
+      "library_relpath": "lib/libsqlite3.so.3.53.4",
+      "library_sha256": "f7a4396eda772d01814653098d97778069ebe3e1f875660b1fcc82a6a10f867b",
+      "system_install_performed": false,
+      "production_anchor_provisioned": false,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    }
+  },
+  "preserved_counterevidence": [
+    "repo_static_integrity_audit remained rc=1 because runtime/state/projection_outbox_v1_candidate.py and runtime/state/projection_worker_v1_candidate.py contain schema executescript outside the recognized migrator boundary; this cycle did not mask or fix that orthogonal blocker.",
+    "A current accepted-host production parent/service is not yet observed; a private-runtime PASS is not productive Frank runtime attestation.",
+    "The current Ubuntu package line has no promoted proof in Clay that its exact productive SQLite 3.45.1 library contains the WAL-reset fix/backport."
+  ],
+  "promotion": {
+    "sqlite_35304_capability_parity_build": "SUPPORTED_CANDIDATE",
+    "production_admission": "NOT_PROMOTED",
+    "F-V01-13": "IN_PROGRESS",
+    "whole_frank_v0_1": "NOT_ACCEPTED"
+  },
+  "next_discriminating_falsifier": "At the privileged deployment/start boundary, provision only an independently accepted final runtime manifest, create/start a deployment-owned Frank parent/service, attest the exact mapped SQLite object and hash from the live Frank process, then prove fail-closed rejection of stale anchor/downgrade/library-swap and continuity across restart/crash/recovery. Do not infer this from the Actions runner process.",
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "effect_authority_used": false,
+    "canonical_frank_state_mutated": false,
+    "paid_final_training_authorized": false,
+    "together_service_used": false
+  }
+}

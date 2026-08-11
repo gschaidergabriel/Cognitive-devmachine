@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "status": "TARGET_EXECUTION_QUEUED",
+  "hypothesis": "multiple concurrent WAL writers that each independently cross the V4 no-site fixed-SQLite 3.53.4 boundary preserve every application-acknowledged commit across process termination and reopen integral+writable",
+  "strongest_counterhypothesis": "prior process-crash success may not transfer to the repaired runtime/topology, or nested writer launch may inherit admission state and produce false composition evidence",
+  "prior_target_evidence": [
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 359,
+      "head": "5466b52d13284ce325c8e26f7d0b90e7636283d9",
+      "workflow_run": 31507571217,
+      "workflow": "Frank fixed SQLite V4 no-site repair VPS",
+      "conclusion": "SUCCESS",
+      "observations": [
+        "pinned private SQLite 3.53.4 built on accepted Ubuntu target",
+        "V4 repair regression passed",
+        "V17 composition under V4 passed",
+        "disposable current UnifiedDB+ClayGraph pair under V4 passed"
+      ]
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "evidence_class": "SYSTEM_SQLITE_PROCESS_CRASH_ORACLE",
+      "observations": [
+        "previous target oracle recorded zero lost acknowledged commits and zero excess phantoms across process SIGKILL cycles",
+        "not a targeted WAL-reset discriminator",
+        "not power-loss/kernel-panic evidence"
+      ]
+    }
+  ],
+  "new_candidate": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 371,
+    "branch": "chatgpt/unifieddb-v4-process-crash-composition-20260811",
+    "head": "c4cf3747ee8e57c10c754b7a8898264181744777",
+    "workflow_run": 31510023573,
+    "workflow": "Frank UnifiedDB V4 process crash composition VPS",
+    "state_at_write": "QUEUED",
+    "matrix": {
+      "sync_modes": ["NORMAL", "FULL"],
+      "cycles_per_mode": 4,
+      "writers_per_cycle": 4,
+      "database": "disposable WAL only",
+      "ack_rule": "append+fsync transaction id only after COMMIT returns"
+    },
+    "novel_discriminator": "strip inherited internal V4 child markers before each nested launcher invocation; every writer must create its own V4 admission receipt and observe exact runtime identity before READY"
+  },
+  "acceptance_checks": [
+    "every writer independently V4 admitted",
+    "every writer target observes SQLite 3.53.4 exact source-id and python -I -S flags",
+    "every cycle produces acknowledged work",
+    "all selected worker processes actually terminate by requested process-crash mechanism",
+    "zero lost acknowledged commits",
+    "zero unbounded phantom commits",
+    "committed-but-not-yet-logged window bounded to <=1 per writer",
+    "integrity_check ok after every cycle",
+    "database writable after every cycle"
+  ],
+  "promotion_state": "PENDING_TARGET_RESULT",
+  "claim_boundaries": [
+    "PROCESS_CRASH only",
+    "no OS-crash claim",
+    "no power-loss claim",
+    "no canonical migration claim",
+    "no selected-lineage recovery claim",
+    "no service boot non-bypass claim",
+    "no whole Frank v0.1 acceptance"
+  ]
+}

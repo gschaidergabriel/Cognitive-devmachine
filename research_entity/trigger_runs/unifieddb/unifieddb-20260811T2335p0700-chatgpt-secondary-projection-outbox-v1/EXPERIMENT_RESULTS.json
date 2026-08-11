@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
-  "status": "TARGET_EXECUTION_QUEUED",
+  "status": "FRESH_MAIN_TARGET_EXECUTION_PENDING",
   "hypothesis": "a transactional authoritative projection event plus idempotent derived apply preserves exact UnifiedDB->ClayGraph semantics across the tested process-exit windows without cross-file atomicity assumptions",
   "counterhypotheses": [
     "authoritative commit may survive while projection event does not",
@@ -11,13 +11,18 @@
     "full derived rebuild may not reproduce current relation semantics/root",
     "added durability may impose unacceptable latency/storage amplification"
   ],
+  "freshness": {
+    "stale_target_run": {"head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656, "status": "SUPERSEDED_BY_FRESH_MAIN_BEFORE_EXECUTION"},
+    "fresh_main": "5ec9955775d9bf142e327166990a2228d543c071",
+    "fresh_candidate_head": "6201556c8f47f1226ed8c2bc3792851ed3912294"
+  },
   "target_candidate": {
     "repo": "gschaidergabriel/Dr.-Unterweger",
     "pr": 386,
-    "head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd",
+    "head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
     "workflow": "Frank UnifiedDB projection outbox V1 VPS",
-    "workflow_run": 31512653656,
-    "state_at_write": "QUEUED"
+    "workflow_run": 31513961274,
+    "state_at_write": "PENDING"
   },
   "matrix": {
     "runtime": "V4 / private SQLite 3.53.4",
@@ -27,7 +32,14 @@
     "selection_falsifiers": ["projection lag", "derived applied-event hash tamper"],
     "recovery": "full derived graph wipe + authoritative replay"
   },
-  "promotion_state": "PENDING_TARGET_RESULT",
+  "supplemental_prefalsifier": {
+    "workflow_run": 31513246399,
+    "classification": "HOSTED_INFRA_PRESTART_FAILURE",
+    "executed_steps": 0,
+    "candidate_test_executed": false,
+    "epistemic_effect": "NONE"
+  },
+  "promotion_state": "PENDING_FRESH_MAIN_TARGET_RESULT",
   "canonical_state_mutated": false,
   "external_effect_performed": false,
   "training_authorized": false

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
   "architectures": [
     {
@@ -39,12 +39,21 @@
     "delivery_state advisory only",
     "full graph rebuild reproduces projection root"
   ],
+  "freshness_rebase": {
+    "old_candidate_head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd",
+    "fresh_main": "5ec9955775d9bf142e327166990a2228d543c071",
+    "fresh_candidate_head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
+    "method": "new git tree from fresh main plus exact six candidate blobs",
+    "candidate_files": 6,
+    "unrelated_main_deltas_preserved": true
+  },
   "target_candidate": {
     "repo": "gschaidergabriel/Dr.-Unterweger",
     "pr": 386,
-    "head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd",
-    "workflow_run": 31512653656,
-    "state": "QUEUED_AT_ARTIFACT_WRITE"
+    "head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
+    "base": "5ec9955775d9bf142e327166990a2228d543c071",
+    "workflow_run": 31513961274,
+    "state": "PENDING_AT_ARTIFACT_WRITE"
   },
   "promotion": "PENDING_TARGET_EVIDENCE"
 }

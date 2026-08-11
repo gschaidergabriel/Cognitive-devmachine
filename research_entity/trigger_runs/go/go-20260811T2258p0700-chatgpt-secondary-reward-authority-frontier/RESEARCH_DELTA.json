@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2258p0700-chatgpt-secondary-reward-authority-frontier",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_boundary": {
+    "entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "harness_authority_changed": false
+  },
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "TARGET_VALIDATION_PENDING",
+  "internal_evidence": [
+    {
+      "ref": "c7444dd321cdd824f21dd18168726477ecbbc59c",
+      "finding": "V17 terminal identity does not prove RewardDimension, calibrated utility magnitude or fractional causal contribution; caller-supplied valuation must not become material-learning authority."
+    },
+    {
+      "ref": "dbb5974587bb6fd89689b3f895e79c8ce09c4fb0",
+      "finding": "Receipt-set fold can otherwise return an unlabelled prefix projection when a new DONE becomes durable during fold; source frontier/currentness must be bound and revalidated."
+    }
+  ],
+  "target_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 368,
+    "branch": "chatgpt/go-reward-valuation-authority-fix-20260811",
+    "latest_authored_sha": "2c02c32018d5c78870a2916a2228ddae815f1cc4",
+    "stacked_on": "chatgpt/go-reward-plasticity-v1-20260811@9d62101046f8629b67817578371b59dc0e94b0d2",
+    "promotion": "NONE_CANDIDATE_ONLY"
+  },
+  "architecture_deltas": [
+    {
+      "name": "CODE_OWNED_BINARY_TASK_VALUATION_POLICY",
+      "change": "Remove reward dimension and policy-version selection from the receipt-fold caller surface. The explicit binary comparison arm binds TASK, success/failure utility mapping, binary bound attribution and policy identity in code.",
+      "reason": "Choosing SAFETY/RESOURCE/TASK is downstream control authority, not metadata, because those channels affect veto/brake/control readouts.",
+      "production_multidimensional_semantics": "OPEN_REQUIRES_PRODUCER_OWNED_REWARD_VALUATION_RECEIPT"
+    },
+    {
+      "name": "V17_DONE_SOURCE_FRONTIER_REVALIDATION",
+      "change": "Capture ordered DONE receipts and monotonic DONE event seq under one explicit SQLite read transaction; bind exact count/digest/frontier identity; re-read after fold and fail closed on drift; require consumer revalidation before a cached derived reward projection is treated as current.",
+      "reason": "A valid deterministic prefix is not proof of exact-current source completeness under concurrent terminal commits.",
+      "promotion": "PENDING_TARGET_MEASUREMENT"
+    }
+  ],
+  "hypothesis": "A code-owned binary TASK baseline plus explicit source-frontier binding removes two independent authority/currentness leaks without claiming that binary scalar reward is the final Frank reward architecture.",
+  "strongest_counterhypothesis": "Typed multi-dimensional and multi-timescale valuation may materially outperform the binary TASK baseline, and a separate logical DONE frontier may be redundant if product topology can machine-enforce folds only at frozen semantic checkpoints. Both simpler and richer alternatives remain test obligations.",
+  "external_primary_evidence": [
+    {
+      "source": "Lee et al., Nature Neuroscience 2024, DOI 10.1038/s41593-024-01689-1",
+      "use": "supports testing heterogeneous/feature-specific prediction-error representations; does not define Frank reward dimensions"
+    },
+    {
+      "source": "Masset et al., Nature 2025, DOI 10.1038/s41586-025-08929-9",
+      "use": "supports testing multiple reward-learning timescales; does not authorize a Frank caller-selected valuation policy"
+    },
+    {
+      "source": "Sousa et al., Nature 2025, DOI 10.1038/s41586-025-09089-6",
+      "use": "supports testing multidimensional/distributional future-reward representations; does not define Frank semantic authority"
+    },
+    {
+      "source": "Everitt et al., arXiv:1908.04734",
+      "use": "supports protecting reward-process influence points from tampering/control incentives"
+    },
+    {
+      "source": "SQLite official transaction/isolation documentation",
+      "use": "explicit read transactions provide a stable historical database view while concurrent writers may commit; candidate binds a logical DONE frontier over that stable source read"
+    }
+  ],
+  "ordinary_discriminators": [
+    "existing deterministic unique DONE-set fold regression",
+    "stable DONE frontier identity/restart replay",
+    "old cached projection becomes non-current after a new DONE",
+    "new DONE injected during row-by-row fold causes REWARD_SOURCE_FRONTIER_CHANGED_DURING_FOLD rather than silent prefix currentness"
+  ],
+  "go_oob": {
+    "count": 1,
+    "name": "DIMENSION_CROWN_SWAP",
+    "unsafe_anti_control": "Relabel 20 verified task failures as SAFETY; expected to drive SAFETY tonic below current veto threshold, proving dimension choice has a real downstream control effect.",
+    "candidate_acceptance": "Same producer-owned terminal outcomes can only enter code-owned TASK in the binary test arm; SAFETY/RESOURCE remain untouched and no safety/resource control authority is minted by caller relabelling.",
+    "target_result": "PENDING"
+  },
+  "required_next": [
+    "accepted-target self-hosted Linux/X64 execution of ordinary fold, source-frontier and exactly-one OOB gates",
+    "persist exact target receipt and resource/environment metadata",
+    "if green, fuse supported candidate status back into Clay without promoting multidimensional reward semantics",
+    "later compare binary TASK against producer-owned typed/multiscale valuation on frozen replay/OOD/resource corpus",
+    "retain historical NAcc/E-PQ baseline gate before any successor/replacement claim"
+  ],
+  "claims_not_made": [
+    "whole F-V01-11 complete",
+    "whole Frank v0.1 accepted",
+    "typed/multidimensional reward superiority",
+    "fractional causal credit solved",
+    "final training authorized",
+    "Frank/self.root Harness mutation authority"
+  ],
+  "training_authorization_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

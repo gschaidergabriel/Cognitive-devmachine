@@ -132,6 +132,24 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             MOD.execute_chat([], model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
+    def test_provider_url_userinfo_is_rejected_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {
+            "NVIDIA_API_KEY": "nvidia-secret",
+            "FRANK_PROVIDER_BASE_URL": (
+                "https://embedded:credential@integrate.api.nvidia.com/v1"
+            ),
+        }
+        with self.assertRaisesRegex(RuntimeError, "userinfo_forbidden"):
+            MOD.execute_chat([], model="x", environ=env, opener=opener)
+        self.assertFalse(called)
+
     def test_default_transport_rejects_redirects_before_auth_can_be_forwarded(self):
         request = MOD.urllib.request.Request(
             "https://integrate.api.nvidia.com/v1/chat/completions",

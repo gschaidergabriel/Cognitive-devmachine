@@ -1,9 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
   "research_subject": "self.root / Frank",
   "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
-  "status": "CANDIDATE_PENDING_TARGET",
+  "status": "CANDIDATE_PENDING_FRESH_MAIN_TARGET",
   "proposed_delta": [
     "authoritative semantic mutation emits a stable ProjectionEvent in the same UnifiedDB transaction",
     "ClayGraph persists exact applied event identity/hash and remains derived/rebuildable",
@@ -11,8 +11,15 @@
     "PENDING/APPLIED delivery state is advisory and cannot replace destination identity verification",
     "projection lag/divergence/tamper fails closed"
   ],
-  "target_candidate": {"pr": 386, "workflow_run": 31512653656, "state": "QUEUED_AT_WRITE"},
-  "promotion": "NONE_UNTIL_TARGET_RESULT",
+  "target_candidate": {
+    "pr": 386,
+    "base": "5ec9955775d9bf142e327166990a2228d543c071",
+    "head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
+    "workflow_run": 31513961274,
+    "state": "PENDING_AT_WRITE"
+  },
+  "superseded_target": {"head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd", "workflow_run": 31512653656},
+  "promotion": "NONE_UNTIL_FRESH_MAIN_TARGET_RESULT",
   "self_harness_authority": "PROPOSAL_ONLY",
   "canonical_state_mutated": false,
   "training_authorized": false,

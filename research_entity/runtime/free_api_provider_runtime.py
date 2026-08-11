@@ -176,6 +176,8 @@ def execute_chat(
     parsed = urlparse(base_url)
     provider_url = urlparse(spec.openai_compatible_base_url)
     provider_host = provider_url.hostname
+    if parsed.username is not None or parsed.password is not None:
+        raise RuntimeError("provider_endpoint_userinfo_forbidden")
     local_test = parsed.hostname in {"127.0.0.1", "localhost"} and env.get(
         "FRANK_ALLOW_LOCAL_TEST_ENDPOINT"
     ) == "1"

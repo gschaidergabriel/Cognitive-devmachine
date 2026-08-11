@@ -19,12 +19,6 @@ from pathlib import Path
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-ALLOWED_REMOTE_HOSTS = frozenset({
-    "integrate.api.nvidia.com", "api.groq.com", "api.cerebras.ai",
-    "generativelanguage.googleapis.com", "openrouter.ai",
-})
-
-
 @dataclass(frozen=True)
 class ProviderSpec:
     provider_id: str
@@ -148,13 +142,14 @@ def execute_chat(
     base_url = env.get("FRANK_PROVIDER_BASE_URL", spec.openai_compatible_base_url).rstrip("/")
     from urllib.parse import urlparse
     parsed = urlparse(base_url)
+    provider_host = urlparse(spec.openai_compatible_base_url).hostname
     local_test = parsed.hostname in {"127.0.0.1", "localhost"} and env.get(
         "FRANK_ALLOW_LOCAL_TEST_ENDPOINT"
     ) == "1"
     if parsed.scheme != "https" and not local_test:
         raise RuntimeError("provider_endpoint_must_use_https")
-    if parsed.hostname not in ALLOWED_REMOTE_HOSTS and not local_test:
-        raise RuntimeError("provider_endpoint_not_allowlisted")
+    if parsed.hostname != provider_host and not local_test:
+        raise RuntimeError("provider_endpoint_not_bound_to_selected_provider")
 
     started = now()
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]

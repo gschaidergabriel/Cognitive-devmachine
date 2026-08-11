@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
   "trigger": "user_continue_do_what_is_needed",
   "origin_actor": "chatgpt-secondary",
@@ -7,7 +7,7 @@
   "model": "GPT-5.6 Sol",
   "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
   "component": "F-V01-11-MEMORY-REWARD-GOALS",
-  "status": "PRODUCTIVE_HANDOFF_WITH_ONE_EXTERNAL_RUNNER_QUEUE_DEPENDENCY",
+  "status": "PRODUCTIVE_HANDOFF_WITH_STACKED_CLAY_SURFACE_DIAGNOSTIC_QUEUED",
   "candidate_pr": 332,
   "candidate_branch": "chatgpt/go-reward-plasticity-v1-20260811",
   "candidate_head": "a24dbbc6bc1d169377b4bd503913dd01a2800bb8",
@@ -17,18 +17,9 @@
   "main_delta_since_reward_composition": {
     "merge_pr": 359,
     "domain": "fixed SQLite V4 no-site launcher/admission",
-    "changed_paths": [
-      ".github/workflows/frank-fixed-sqlite-v4-no-site-repair-vps.yml",
-      "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard.py",
-      "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v2_candidate.py",
-      "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v3_candidate.py",
-      "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v4_candidate.py",
-      "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v4_launcher.sh",
-      "tests/fixed_sqlite_runtime_guard_v4_repair_gate.py",
-      "tests/fixed_sqlite_unifieddb_pair_smoke.py"
-    ],
     "direct_reward_file_overlap": false,
-    "interpretation": "No component claim is upgraded to final-current-main promotion; final merge still requires fresh composition. Existing reward target evidence is not invalidated by direct file overlap."
+    "changed_paths_are_storage_launcher_guard_and_tests_only": true,
+    "final_promotion_still_requires_fresh_main_composition": true
   },
   "target_evidence": {
     "recomposed_plasticity_historical_baseline": {
@@ -68,35 +59,42 @@
       "mutable_consumption_ledger_added": false,
       "source_lineage_rollback_solved": false
     },
-    "claycode_negation_package_context": {
-      "run": 31510240800,
-      "status": "PASS",
-      "note": "Current main negation hotfix/package context executed successfully on this PR composition; this is not reward Clay-native execution."
+    "current_main_reward_claycode_frontier": {
+      "run": 31510240843,
+      "synthetic_merge": "5120eec34e649c0c753a465d323072c5534d9e93",
+      "status": "MEASURED_PARSE_REJECTION",
+      "measurement_workflow_completed": true,
+      "parsed": false,
+      "analyzed": false,
+      "executable_functions": [],
+      "first_rejection": "COMMA at line 12 column 22 in comma-separated reward record fields",
+      "transition_obligations_required": 21,
+      "transition_obligations_explicit": 3,
+      "transition_obligations_missing": 18,
+      "artifact_id": 9109196624,
+      "artifact_digest": "sha256:213a1ee4e93c7a194b251f96d25de3b05201ced2a33836cce92fb3ab6a45b4b8",
+      "receipt_sha256": "c9d236a29086df455e08d179b086fb42c6bc8e43963ea2b229389753a5acdbcd",
+      "resource_wall_s": 0.18,
+      "max_rss_kib": 25088,
+      "interpretation": "Workflow green means the frontier measurement completed successfully; it is explicitly not Clay-native reward execution PASS."
     }
   },
-  "claycode_reward_frontier": {
-    "workflow_run": 31510240843,
-    "status_at_handoff": "QUEUED_NO_TARGET_RESULT_CREDIT",
-    "static_current_main_source_evidence": {
-      "grammar_blob": "82aeaf494b35b4f825f62112846af68bce00fd70",
-      "grammar_supports": ["&&", "||", "ordinary relation operators", "not/! after hotfix"],
-      "grammar_does_not_define_required_reward_forms": ["word-form and", "membership in", "list literal", "arithmetic *"],
-      "reward_source_uses_these_missing_forms": true,
-      "classification": "CURRENT_MAIN_PARSE_GAP_SOURCE_SUPPORTED_TARGET_CONFIRMATION_QUEUED"
-    },
-    "historical_transition_readiness_fusion": {
-      "source": "PR #128 finite reward-transition readiness family",
-      "required_obligations": 21,
-      "rule": "parser or executable-subset PASS can never satisfy full reward-state transition readiness by itself",
-      "current_reward_clay_scope": "only material admission, material weight and exploration-nudge boundary functions plus invariants; Python reference still owns the full dynamic state update choices"
-    },
-    "surface_successor": {
-      "pr": 314,
-      "status": "OPEN",
-      "measured_claim_from_pr": "syntax surface expands 7.5% to 90% corpus coverage",
-      "relevant_added_syntax": ["word-form and", "in membership", "list/set literals", "arithmetic"],
-      "important_limit": "syntax expansion does not by itself prove evaluator support for the new AST nodes or full reward semantics"
-    }
+  "stacked_clay_surface_successor_diagnostic": {
+    "pr": 383,
+    "base_pr": 314,
+    "base_head": "1f90de1082fbd73599f343d87d7bb85d47484d7e",
+    "head": "23d030fe0f8d2bb37f4f64c6422d93026154574c",
+    "target_run": 31511862605,
+    "status_at_handoff": "QUEUED_NO_RESULT_CREDIT",
+    "purpose": "Run the unchanged reward source against #314's measured comma-field/arithmetic/in/list/word-and syntax expansion to locate the next parser/analyzer/evaluator frontier.",
+    "static_expected_next_limits": [
+      "#314 parser surface may remove current comma/and/in/list/arithmetic parse blockers",
+      "#314 analyzer remains the older walker and does not recursively model all newly added AST forms",
+      "#314 evaluator does not implement ListLiteral or arithmetic AST evaluation and its relation dispatcher has no in-membership implementation",
+      "exploration_nudge still contains min(...) without an owner-reviewed Clay/host binding",
+      "even complete subset execution cannot satisfy the 18 still-missing full reward-state transition/receipt definitions"
+    ],
+    "promotion": "NONE_STACKED_DIAGNOSTIC_ONLY"
   },
   "architecture_fusion": {
     "outcome_truth": "producer-owned verified V17 terminal outcome/DONE identity",
@@ -105,7 +103,7 @@
     "persistent_reward_state": "derived/rebuildable projection, never independent truth",
     "reward_dimension_and_utility": "not producer-owned yet; current TASK +/-1 binary mapping is test-only policy identity",
     "source_currentness": "must later bind shared UnifiedDB/recovery selected typed SemanticCheckpointIdentity and terminal frontier; no private reward epoch",
-    "full_clay_native_update": "open; partial semantic boundary source only"
+    "full_clay_native_update": "not ready: current main fails parse and only 3/21 finite transition definitions are explicit"
   },
   "unifieddb_recovery_dependency": {
     "pr_297": "authoritative semantic checkpoint root in one stable read transaction",
@@ -116,21 +114,26 @@
   "highest_information_next_discriminators": [
     {
       "rank": 1,
+      "name": "CONSUME_PR383_SURFACE314_REWARD_FRONTIER",
+      "purpose": "measure exact post-#314 parser/analyzer/evaluator frontier without modifying reward semantics"
+    },
+    {
+      "rank": 2,
       "name": "REWARD_FOLD_CONCURRENT_DONE_FRONTIER",
       "purpose": "prove exact source snapshot/frontier completeness under concurrent DONE commits and classify stale/prefix projections"
     },
     {
-      "rank": 2,
+      "rank": 3,
       "name": "PRODUCER_OWNED_REWARD_VALUATION_OR_SCALAR_CONTROL",
       "purpose": "prevent caller/model reward-dimension and utility self-labeling; compare producer-owned typed valuation against simpler scalar binary control"
     },
     {
-      "rank": 3,
+      "rank": 4,
       "name": "CLAY_NATIVE_REWARD_21_OBLIGATION_TRANSITION_GATE",
-      "purpose": "after the shared ClayCode surface/evaluator supports the syntax, require every finite state-transition/receipt obligation explicitly in Clay and execute it; no Python implication"
+      "purpose": "after shared ClayCode syntax/evaluator support exists, require all finite state-transition/receipt obligations explicitly in Clay and execute them; no Python implication"
     },
     {
-      "rank": 4,
+      "rank": 5,
       "name": "SCALAR_VS_TYPED_VS_MULTISCALE_AND_GUIDANCE_ABLATIONS",
       "purpose": "matched replay/OOD/resource/proxy tests plus NAcc/E-PQ lesion-rescue and long-run drift"
     }

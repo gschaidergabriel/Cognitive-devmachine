@@ -377,6 +377,29 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(receipt["outcome"], "unreachable_provider")
         self.assertNotIn("EXECUTED", receipt["lifecycle"])
 
+    def test_remote_disconnect_before_response_emits_unreachable_receipt(self):
+        def opener(request, timeout):
+            raise http.client.RemoteDisconnected(
+                "remote end closed connection without response"
+            )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env, opener=opener,
+            now=iter((75.0, 75.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "unreachable_provider")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
     def test_body_read_timeout_preserves_received_status_and_executed_state(self):
         class Response:
             status = 200

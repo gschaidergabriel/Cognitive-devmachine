@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "research_subject":"self.root / Frank",
+  "component":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "status":"WORKER_CANDIDATE_PENDING_TARGET",
+  "proposed_delta":[
+    "projection worker scheduling state is durable in UnifiedDB with one current lease generation",
+    "every projection batch is bounded and writes before/after backlog/lag/pressure receipts",
+    "HARD derived backlog never blocks authoritative UnifiedDB writes",
+    "consequential ClayGraph use remains fail-closed until exact-current projection",
+    "expired crashed-worker lease may be taken over only with a newer fencing generation",
+    "stale generation is rejected after takeover"
+  ],
+  "target_candidate":{"pr":391,"head":"6fe47f9672a997f784ac168314f8bc0c65afcd65","workflow_run":31515873771,"state":"QUEUED_AT_WRITE"},
+  "promotion":"NONE_UNTIL_TARGET_RESULT",
+  "self_harness_authority":"PROPOSAL_ONLY",
+  "canonical_state_mutated":false,
+  "training_authorized":false,
+  "whole_frank_v0_1_acceptance":false
+}

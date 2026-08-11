@@ -191,6 +191,7 @@ def execute_chat(
         outcome = "success"
         cooldown_seconds = 0
     except urllib.error.HTTPError as exc:
+        lifecycle.append("EXECUTED")
         status = exc.code
         content = None
         outcome = "rate_limited" if status == 429 else "provider_error"

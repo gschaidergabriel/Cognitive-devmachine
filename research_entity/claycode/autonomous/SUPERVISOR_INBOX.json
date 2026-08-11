@@ -1,37 +1,39 @@
 {
   "schema_version": "3.2",
-  "latest_cycle": "ccauto-20260811T0843Z-supervisor",
+  "latest_cycle": "ccauto-20260811T0947Z-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "A new executable counterexample supersedes the previous benign evaluator-progress interpretation. Commit 53c85d379e4e97708011c35c8d1f692d49cd951d independently remeasures parser surface coverage at 36/40 sources (90.0%) but shows unary ! is silently ignored by the evaluator: f(true)=True and f(false)=False. The prior 200576/0 decide_effect differential did not exercise ! because frank_effects.clay uses == false. Therefore request/input differential coverage and construct coverage must be tracked independently. Do not merge/promote PR310 evaluator evidence without the successor negation repair and explicit lesion/rescue control referenced by the research as PR314. First reproduce exact pre-repair failure and repaired behavior on the accepted Ubuntu target; require positive, negative and semantic-mutation cases per newly admitted construct; keep the four unsupported sources fail-closed. Then continue the existing WP04 host-contract, reconstructed-receipt and verb_for/Verb review. Preserve FREE_ONLY, no paid fallback, Goodman ancestry collapse, Ubuntu-only final acceptance, no canonical promotion from parser/evaluator coverage, and no Frank-Harness modification.",
-  "errors": [],
+  "next_focus": "Keep the unary-negation evaluator lesion/rescue as the highest ClayCode semantic blocker. In parallel, a new FREE_ONLY provider-runtime candidate in Clay PR231 materially hardens provider transport, but do not admit it yet: exact head e042a1f195e665127b4ee67281f4076c7144a00b has two failed PR-head repository verification workflows (31479208490 and 31479208493), no accepted-Ubuntu live external receipt, and an explicit control mismatch. CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL requires HTTP 402 => HARD_STOP_PROVIDER_AND_FALLBACK_FREE_ONLY, while PR231 classifies 402 as ordinary provider_error with 15-second cooldown. Repair both regular-response 402 and HTTPError(402) paths to emit payment-required hard-stop semantics and make the provider ineligible for retry in the current cycle. Then run exact repaired bytes on the accepted Ubuntu target with redacted receipts. Preserve Together hard-denial, no paid fallback, Goodman ancestry collapse, Ubuntu-only final acceptance, no canonical promotion, and no Frank-Harness modification.",
+  "errors": [
+    "PR231 CI cause is not inspectable because both completed failure jobs currently return no step summaries and archived log retrieval returns BlobNotFound; classify cause UNKNOWN rather than semantic failure or harmless infrastructure."
+  ],
   "provider_discovery": {
     "mistral": {"status": "CREDENTIAL_NOT_CONFIGURED"},
-    "nvidia": {"status": "AVAILABLE", "models": 100},
-    "nvidia_executable_pool": {"families": ["deepseek", "glm", "gpt-oss", "nemotron"]}
+    "nvidia": {"status": "AVAILABLE_DOCUMENTED_ENDPOINT_AND_CATALOG", "models": 100},
+    "nvidia_executable_pool": {"families": ["deepseek", "glm", "gpt-oss", "nemotron"]},
+    "pr231_runtime": {"status": "CANDIDATE_BLOCKED_HTTP_402_SEMANTICS_AND_FAILED_CI", "head": "e042a1f195e665127b4ee67281f4076c7144a00b"}
   },
   "receipt_gaps": {
-    "wp03": "OPEN; parser/evaluator progress does not close IR/type package acceptance.",
-    "wp04_unresolved_frontier": "REFINED: raw baseline 29; candidate host-contract partition leaves 3; candidate receipt declarations yield analyzer UNRESOLVED=0. Ownership/type/effect/review obligations remain OPEN.",
-    "wp04_receipt_semantics": "OPEN_REVIEW: three receipt types are reconstructed from call sites and are not canonical until reviewed with executable counterevidence.",
-    "wp04_host_contracts": "OPEN_REVIEW: 26 names are declared as host contracts, but declaration is not implementation or semantic acceptance; runtime_effect and independently_observe_effect payload shapes remain unspecified.",
-    "wp04_verb_capability": "OPEN_HIGH_PRIORITY: verb_for lacks a declared Verb domain and kind-to-verb mapping; identity binding is unvalidated.",
-    "wp04_type_effect_contracts": "OPEN; arity/name resolution does not establish parameter, return or effect correctness.",
-    "wp05_evaluator": "OPEN_COUNTEREXAMPLE: 36/40 parser coverage exists, but unary ! silently disappears in the evaluator. 200576/0 request differential is insufficient because the construct was not exercised.",
-    "effect_routing_non_bypassability": "OPEN_SEPARATE_F_V01_09; evaluator evidence cannot satisfy production route non-bypassability by label.",
-    "v17_restart_semantics": "PARTIAL: process-SIGKILL evidence exists, but power-loss/kernel-panic and targeted WAL-reset discrimination remain open.",
-    "frank_v0_1_target": "Final acceptance remains owner-fixed Hostinger Ubuntu VPS only."
+    "provider_402": "OPEN_HIGH_PRIORITY: payment-required must hard-stop the provider under FREE_ONLY; ordinary cooldown/retry semantics are forbidden",
+    "provider_target_receipt": "OPEN: no live external request or accepted-Ubuntu execution receipt exists for PR231",
+    "provider_ci": "OPEN_UNKNOWN_FAILURE: PR-head workflows 31479208490 and 31479208493 failed; logs unavailable",
+    "wp03": "OPEN; parser/evaluator progress does not close IR/type package acceptance",
+    "wp04_unresolved_frontier": "REFINED: raw baseline 29; candidate host-contract partition leaves 3; candidate receipt declarations yield analyzer UNRESOLVED=0. Ownership/type/effect/review obligations remain OPEN",
+    "wp04_receipt_semantics": "OPEN_REVIEW: three receipt types are reconstructed from call sites and are not canonical until reviewed with executable counterevidence",
+    "wp04_host_contracts": "OPEN_REVIEW: 26 names are declared as host contracts, but declaration is not implementation or semantic acceptance",
+    "wp04_verb_capability": "OPEN_HIGH_PRIORITY: verb_for lacks a declared Verb domain and kind-to-verb mapping",
+    "wp05_evaluator": "OPEN_COUNTEREXAMPLE: 36/40 parser coverage exists, but unary ! silently disappears in the evaluator",
+    "effect_routing_non_bypassability": "OPEN_SEPARATE_F_V01_09",
+    "frank_v0_1_target": "Final acceptance remains owner-fixed Hostinger Ubuntu VPS only"
   },
   "new_material_evidence": {
-    "research_commit": "53c85d379e4e97708011c35c8d1f692d49cd951d",
-    "parser_surface": "36/40 Clay sources parse = 90.0%; six increments were independently remeasured with no LALR conflict and baseline-structure/differential checks; four sources remain intentionally rejected rather than receiving invented semantics.",
-    "executable_counterexample": "Unary ! is filtered/inlined away; minimal repro returns f(true)=True and f(false)=False, silently inverting intended semantics.",
-    "why_prior_gate_missed": "frank_effects.clay contains no unary ! and writes == false, so the 200576 request corpus had zero construct coverage for unary negation.",
-    "method_rule": "N-CLAYCODE-006: request coverage and language-construct coverage are independent evidence axes.",
-    "promotion_boundary": "PR310 evaluator evidence must not be merged/promoted without successor negation repair plus explicit negative control; WP03/WP04/WP05 remain OPEN.",
-    "goodman": "The executable counterexample has high evidentiary weight, but same Claude/project ancestry is not independent replication."
+    "pr231": "Draft Clay provider-runtime candidate adds canonical-origin binding including port, authenticated redirect refusal, nonce-bound attempt identity, malformed-body and non-2xx verification fences, and Together hard-denial.",
+    "free_only_counterexample": "Control says on_http_402=HARD_STOP_PROVIDER_AND_FALLBACK_FREE_ONLY; candidate code routes every non-429 non-2xx, including 402, to provider_error with cooldown_seconds=15.",
+    "workflow_results": "Research Entity Identity Guard run 31479208490 FAILURE; Research Entity Verify run 31479208493 FAILURE; cause UNKNOWN because logs are unavailable.",
+    "official_nvidia_context": "NVIDIA official pages identify https://integrate.api.nvidia.com/v1 as hosted endpoint and advertise free serverless/prototype API access; this is policy context, not executable project acceptance.",
+    "goodman": "Provider-runtime author tests and same-repo CI are shared implementation/project lineage; only executable counterexamples and accepted-target behavior receive mechanism credit."
   },
-  "instruction": "Prioritize exact accepted-target lesion/rescue for unary ! and construct-level evaluator conformance before treating 90% parser coverage as useful evaluator acceptance. Keep unsupported constructs fail-closed. Continue WP04 contract/receipt/verb_for obligations afterward. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence plus review, Ubuntu-only final target, and no Frank-Harness modification."
+  "instruction": "Repair and falsify HTTP-402 hard-stop semantics before PR231 can be used by the autonomous FREE_ONLY cycle. Treat failed CI with unavailable logs as UNKNOWN, not PASS or semantic FAIL. Do not divert the main ClayCode semantic frontier: exact Ubuntu unary-negation lesion/rescue remains required, followed by WP04 contract/receipt/verb_for review. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS from consensus, no canonical semantics without executable counterevidence plus review, Ubuntu-only final target, and no Frank-Harness modification."
 }

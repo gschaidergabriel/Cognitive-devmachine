@@ -1,0 +1,198 @@
+module atomic.swc.v0_1
+version "SWC-001"
+status CANDIDATE_NOT_PROMOTED
+
+// Research semantics first. Exact current ClayCode parser/typechecker acceptance is NOT claimed.
+
+enum TopologyClass {
+  ACYCLIC_CERTIFIED,
+  BOUNDED_WIDTH_CANDIDATE,
+  CYCLIC_OR_UNKNOWN
+}
+
+enum CoherenceState {
+  COHERENT_UNIQUE,
+  COHERENT_HYPERPOSITION,
+  OBSTRUCTED,
+  PARTIAL,
+  STALE,
+  UNKNOWN
+}
+
+enum CoherencePlanKind {
+  LOCAL_JOIN_TREE,
+  DECOMPOSED_EXACT,
+  GLOBAL_RESIDUAL_SOLVER,
+  FAIL_CLOSED
+}
+
+record PartialAssignment {
+  bindings:Map<SemanticKey, SemanticValueRef>
+  assignment_hash:Hash
+}
+
+record LocalReceiverSection {
+  episode_id:EpisodeRef
+  receiver_id:ReceiverRef
+  scope:Set<SemanticKey>
+  allowed:Set<PartialAssignment>
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+  provenance:Set<ProvenanceRef>
+  source_receipts:Set<ReceiptRef>
+}
+
+record WorkspaceSectionFamily {
+  episode_id:EpisodeRef
+  sections:Set<LocalReceiverSection>
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+  claygraph_topology_hash:Hash
+  family_hash:Hash
+}
+
+record CoherencePlan {
+  kind:CoherencePlanKind
+  topology:TopologyClass
+  family_hash:Hash
+  decomposition_hash:OPTION<Hash>
+  exactness_required:Bool
+  planner_version:Symbol
+}
+
+record CoherenceWitness {
+  episode_id:EpisodeRef
+  family_hash:Hash
+  state:CoherenceState
+  topology:TopologyClass
+  plan_kind:CoherencePlanKind
+  global_section_count_lower_bound:Int
+  global_section_count_exact:OPTION<Int>
+  global_sections:OPTION<Set<PartialAssignment>>
+  obstruction_scope:OPTION<Set<SemanticKey>>
+  obstruction_receipts:Set<ReceiptRef>
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+  witness_hash:Hash
+}
+
+fn compile_coherence_plan(
+  family:WorkspaceSectionFamily,
+  topology:ClayGraphTopology,
+  current_state_epoch:Epoch,
+  current_semantic_epoch:Epoch
+) -> CoherencePlan {
+  if family.state_epoch != current_state_epoch { return fail_closed(STALE) }
+  if family.semantic_epoch != current_semantic_epoch { return fail_closed(STALE) }
+  require topology.hash == family.claygraph_topology_hash
+  require topology.receiver_scope_family_hash == family.family_hash
+
+  let tc = classify_scope_hypergraph(topology, family.sections)
+  if tc == ACYCLIC_CERTIFIED {
+    return exact_plan(LOCAL_JOIN_TREE, tc, family.family_hash)
+  }
+  if tc == BOUNDED_WIDTH_CANDIDATE && exact_decomposition_available(topology) {
+    return exact_plan(DECOMPOSED_EXACT, tc, family.family_hash)
+  }
+  return exact_plan(GLOBAL_RESIDUAL_SOLVER, CYCLIC_OR_UNKNOWN, family.family_hash)
+}
+
+fn evaluate_coherence(
+  family:WorkspaceSectionFamily,
+  plan:CoherencePlan
+) -> CoherenceWitness {
+  require plan.family_hash == family.family_hash
+  match plan.kind {
+    LOCAL_JOIN_TREE -> exact_local_to_global_join_check(family, plan),
+    DECOMPOSED_EXACT -> exact_decomposed_check(family, plan),
+    GLOBAL_RESIDUAL_SOLVER -> exact_global_section_search(family, plan),
+    FAIL_CLOSED -> unknown_or_stale_witness(family, plan)
+  }
+}
+
+fn reentry_admission(
+  witness:CoherenceWitness,
+  causal_use:ReceiverCausalUseReceipt,
+  current_state_epoch:Epoch,
+  current_semantic_epoch:Epoch
+) -> ReentryAdmission {
+  if witness.state_epoch != current_state_epoch { return REJECT_STALE }
+  if witness.semantic_epoch != current_semantic_epoch { return REJECT_STALE }
+  require causal_use.episode_id == witness.episode_id
+  if witness.state == OBSTRUCTED { return REJECT_INCOHERENT }
+  if witness.state == PARTIAL || witness.state == UNKNOWN || witness.state == STALE { return REJECT_UNRESOLVED }
+  return ELIGIBLE_FOR_EXISTING_PROVENANCE_REENTRY_GATE
+}
+
+fn project_action_invariance(
+  witness:CoherenceWitness,
+  action_projection:Fn<PartialAssignment, ActionSemanticKey>
+) -> OPTION<InvariantActionWitness> {
+  require witness.state == COHERENT_UNIQUE || witness.state == COHERENT_HYPERPOSITION
+  require witness.global_sections.some
+  let actions = set_map(witness.global_sections.value, action_projection)
+  if cardinality(actions) != 1 { return none }
+  return some(non_authoritative_action_invariance_witness(actions.only, witness.witness_hash))
+}
+
+law local_receiver_validity_does_not_imply_global_coherence
+law pairwise_overlap_consistency_does_not_imply_global_coherence_on_uncertified_cyclic_topology
+law certified_acyclic_fast_path_requires_exact_theorem_preconditions
+law multiple_global_sections_preserve_hyperposition
+law zero_global_sections_forbid_coherent_reentry
+law coherence_is_not_truth
+law coherence_is_not_self_identity
+law coherence_is_not_user_intent
+law coherence_is_not_effect_authority
+law coherence_is_not_causal_credit
+law claygraph_topology_is_derived_evidence_not_truth
+law stale_epoch_forbids_coherence_witness_reuse
+law provenance_survives_projection_join_and_decomposition
+law native_model_workspace_observation_is_distinct_from_clay_workspace_section_family
+law action_invariance_witness_remains_non_authoritative
+law existing_effect_gate_always_dominates_action_projection
+law no_new_runtime_service_boundary_without_measured_need
+law no_final_training_authority
+law self_root_self_harness_authority_proposal_only
+
+observe topology_class
+observe section_count
+observe scope_count
+observe overlap_edge_count
+observe estimated_width
+observe local_prune_count
+observe global_solver_invoked
+observe global_solver_nodes
+observe global_section_count
+observe obstruction_size
+observe false_coherent_admission
+observe false_incoherent_rejection
+observe planner_overhead_ns
+observe validation_latency_ns
+observe state_amplification_bytes
+observe witness_bytes
+observe reentry_decision
+
+ablation replace_with_pairwise_overlap_check
+ablation always_global_exact_solver
+ablation arc_consistency_then_always_global_solver
+ablation disable_topology_fast_path
+ablation discard_multiple_global_sections_to_one
+ablation remove_epoch_guard
+ablation remove_provenance_binding
+ablation ignore_obstruction_and_allow_reentry
+
+failure STALE_FAMILY -> FAIL_CLOSED
+failure TOPOLOGY_HASH_MISMATCH -> FAIL_CLOSED
+failure UNKNOWN_TOPOLOGY -> GLOBAL_RESIDUAL_SOLVER
+failure DECOMPOSITION_NOT_EXACT -> GLOBAL_RESIDUAL_SOLVER
+failure NO_GLOBAL_SECTION -> REJECT_INCOHERENT
+failure SOLVER_TIMEOUT -> REJECT_UNRESOLVED
+failure PROVENANCE_INCOMPLETE -> REJECT_UNRESOLVED
+
+invariant exactness_over_speed
+invariant unresolved_alternatives_preserved
+invariant no_truth_promotion
+invariant no_identity_promotion
+invariant no_effect_authority_promotion
+invariant no_second_hidden_semantic_architecture

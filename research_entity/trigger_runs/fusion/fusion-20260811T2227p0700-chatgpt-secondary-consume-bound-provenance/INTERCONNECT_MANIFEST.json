@@ -1,59 +1,33 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "fusion-20260811T2227p0700-chatgpt-secondary-consume-bound-provenance",
+  "trigger": "fusion",
   "classification": "WHOLE_MESH_CROSS_BRANCH_SYNTHESIS",
+  "registry_scientific_branches": ["gwt", "emergenz", "hyperposition", "claygraph"],
+  "branch_priority": ["gwt", "emergenz", "hyperposition", "claygraph"],
+  "special_rules": {
+    "fusion_requires_global_coverage_manifest": true,
+    "fusion_requires_feedback_receipt_for_every_branch": true
+  },
+  "contract_note": "tools/fusion_research_contract.py currently defines scientific branches narrowly as registry triggers whose kind is exactly domain_research or integrated_research_foundry. Current registry therefore yields gwt/emergenz/hyperposition/claygraph; broader material mesh feedback is preserved separately and is not misrepresented as the executable contract set.",
+  "broader_mesh_branches": ["clayresearch", "frank", "claycode", "unifieddb"],
   "central_candidate": {
     "name": "CONSUME_BOUND_PROVENANCE_CONTRACT",
     "status": "CANDIDATE_TEST_OBLIGATION_NOT_PROMOTED",
-    "statement": "For any state, artifact, identity, capability, causal receipt, authority decision, training split or provider result that can influence persistent state or an effect, recording provenance is insufficient: the exact consumer must verify that the provenance and identity still bind the exact object/epoch/action being consumed, and consumption semantics must be replay-safe where mutation is possible."
+    "statement": "For any state, artifact, identity, capability, causal receipt, authority decision, training split or provider result that can influence persistent state or an effect, recording provenance is insufficient: the exact consumer must verify that provenance and identity still bind the exact object/epoch/action being consumed, and mutation-capable consumption must be replay-safe/exactly-once."
   },
-  "converging_independent_mechanism_classes": [
-    {
-      "source": "F-V01-13 storage/boot",
-      "finding": "V3 could validate the private SQLite object yet still run after system-site preinitialization had already mutated high-level sqlite behavior; V4 moves admission to python -I -S before import-capable Frank code."
-    },
-    {
-      "source": "F-V01-12 capability/body",
-      "finding": "Path identity was insufficient because same-path executable bytes could drift after successful probes; candidate binds capability evidence to exact executable artifact bytes/filesystem identity and rechecks at use."
-    },
-    {
-      "source": "F-V01-07 Needle",
-      "finding": "Provider/adapter output must remain data and cannot overwrite authorization/reservation/execution-generation/capability hard bindings."
-    },
-    {
-      "source": "F-V01-11 reward",
-      "finding": "A valid terminal outcome receipt can be reread; exactly-once persistent reward consumption is therefore a separate unresolved requirement."
-    },
-    {
-      "source": "F-V01-14 heldout",
-      "finding": "Binding a semantic-audit receipt hash improves lineage but does not verify the audit receipt content/correctness; audit identity and audit validity remain distinct."
-    },
-    {
-      "source": "F-V01-03/F-V01-05 GWT",
-      "finding": "Accepted-target episode/signal/causal identity splices could still reach DONE and learning; GWT causal ancestry therefore must be storage- or receipt-enforced, not caller-carried metadata."
-    },
-    {
-      "source": "F-V01-04 UnifiedDB/ClayGraph",
-      "finding": "Disposable schema-pair and producer-bound V17 runs can both be green without forming one atomic whole-product composition; composition identity must be explicit."
-    }
+  "converging_mechanism_classes": [
+    "storage/boot pre-admission identity and import topology",
+    "capability executable artifact identity at probe and use",
+    "Needle provider output separated from admitted authority bindings",
+    "reward producer-owned terminal source plus exactly-once/rebuild semantics",
+    "heldout manifest identity plus independent audit validity",
+    "GWT causal identity ancestry enforcement",
+    "UnifiedDB/ClayGraph composition identity"
   ],
   "anti_echo": {
-    "shared_ancestry_warning": "The repeated pattern across branches is cross-branch convergence, not independent replication, because many lanes share Clay/Frank/UnifiedDB/effect-receipt ancestry.",
-    "promotion_rule": "Promote only after branch-specific falsifiers plus at least one integrated consumer-bound composition test on the accepted target."
+    "shared_ancestry_warning": "Cross-branch convergence is not independent replication because many lanes share Frank/Clay/UnifiedDB/effect/re-entry ancestry.",
+    "promotion_rule": "Promote only after branch-specific falsifiers plus an integrated consume-bound composition discriminator on accepted target."
   },
-  "affected_work_packages": [
-    "F-V01-01-IDENTITY-SERVER-BINARY",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-    "F-V01-03-COGNITIVE-LOOP-CORE",
-    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
-    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
-    "F-V01-07-NEEDLE-TRANSLATOR",
-    "F-V01-08-TOKEN-API-CLIENTS",
-    "F-V01-09-EFFECT-AUTHORITY",
-    "F-V01-11-MEMORY-REWARD-GOALS",
-    "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
-    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
-    "F-V01-14-TRAINING-DATA-HELDOUT"
-  ],
-  "authority_boundary": "This fusion creates research/test obligations only; it grants no Frank self-Harness authority and no effect or training authority."
+  "authority_boundary": "Research/test obligations only; no Frank self-Harness authority, effect authority or training authority granted."
 }

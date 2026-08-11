@@ -24,6 +24,14 @@
       "counterhypothesis": "A configured credential can belong to a different billing or production context; request execution must still stay on the documented integrate.api.nvidia.com developer endpoint and emit a receipt."
     }
   },
+  "response_bounds": {
+    "max_bytes": 2000000,
+    "checked_at": "2026-08-11",
+    "claim": "A bounded read must request one sentinel byte beyond the accepted limit to distinguish an oversized response from a response that merely fills the limit.",
+    "source": "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read",
+    "executable_evidence": "test_oversized_response_is_detected_without_verifying_truncated_body",
+    "counterhypothesis": "Reading exactly the accepted limit is sufficient; falsified because HTTPResponse.read(amt) returns only up to amt bytes and therefore cannot prove end-of-body at that boundary."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -42,6 +50,7 @@
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
     "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
     "Once response headers and status are received, body-read failures preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
+    "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Every real provider request must emit a redacted execution receipt.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
   ],

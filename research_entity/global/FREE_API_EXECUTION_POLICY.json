@@ -47,6 +47,13 @@
     "executable_evidence": "test_incomplete_http_body_preserves_status_and_emits_receipt",
     "counterhypothesis": "Timeout handling covers every interrupted body read; falsified because IncompleteRead is an HTTPException rather than TimeoutError or URLError and escaped without a receipt."
   },
+  "pre_response_disconnects": {
+    "checked_at": "2026-08-11",
+    "claim": "A ConnectionError such as http.client.RemoteDisconnected before response headers is an unreachable provider attempt with null status and no EXECUTED state.",
+    "source": "https://docs.python.org/3/library/http.client.html#http.client.RemoteDisconnected",
+    "executable_evidence": "test_remote_disconnect_before_response_emits_unreachable_receipt",
+    "counterhypothesis": "urllib always wraps remote disconnects in URLError; falsified by the executable opener path where RemoteDisconnected escaped directly without a receipt."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -65,6 +72,7 @@
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
     "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
+    "ConnectionError failures before response headers, including RemoteDisconnected, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "Once response headers and status are received, body-read failures preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",

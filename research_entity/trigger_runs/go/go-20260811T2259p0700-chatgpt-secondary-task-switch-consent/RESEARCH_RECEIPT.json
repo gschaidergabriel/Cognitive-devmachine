@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260811T2259p0700-chatgpt-secondary-task-switch-consent",
   "trigger": "go",
-  "status": "CANDIDATE_TARGET_EXECUTION_QUEUED",
+  "status": "CANDIDATE_HARDENED_TARGET_EXECUTION_QUEUED",
   "origin_actor": "chatgpt-secondary",
   "ingested_by": "chatgpt-secondary",
   "provider": "OpenAI",
@@ -45,7 +45,7 @@
     {
       "repo": "gschaidergabriel/Dr.-Unterweger",
       "path": "runtime/state/frank_execution_continuity.py",
-      "finding": "V16 persists current_task_id/current_task_state and follow-up request admission but exposes no explicit unrelated-task switch-consent transition"
+      "finding": "V16 sets current_task_id when the execution is bound, admits follow-up requests, permits task-state changes, and exposes no canonical same-execution transition that replaces current_task_id"
     }
   ],
   "external_mechanism_evidence": [
@@ -66,7 +66,7 @@
     "repo": "gschaidergabriel/Dr.-Unterweger",
     "branch": "chatgpt/go-task-switch-consent-v1-20260811",
     "pull_request": 370,
-    "current_head_at_receipt": "d1883ace021e3e45c8a0e6b8089ff94bab682661",
+    "current_head_at_receipt": "5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba",
     "initial_base": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
     "pr_current_base_observed": "0b765534e693707b813dab9ff7471189ee48ef91",
     "base_delta_after_start": "5 commits, ClayCode unary-negation hotfix surface only; GitHub recomputed PR as mergeable with no task/API file overlap",
@@ -84,8 +84,13 @@
   "local_execution": {
     "mode": "isolated candidate-only",
     "status": "PASS_TASK_SWITCH_CONSENT_V1_CANDIDATE",
-    "checks_passed": 10,
-    "checks_total": 10,
+    "checks_passed": 13,
+    "checks_total": 13,
+    "checks_added_after_race_audit": [
+      "stale_projection_revision_rejected",
+      "concurrent_double_consume_exactly_once",
+      "challenge_collision_cannot_resurrect_consumed"
+    ],
     "current_v16_dynamic_baseline": "DEFERRED_TO_REPOSITORY_TARGET_PATH",
     "sqlite_integrity": "ok"
   },
@@ -97,25 +102,59 @@
     "candidate_result": "PASS_STALE_CONSENT_INVALIDATED",
     "architectural_consequence": "task revision/state/identity and execution epoch must be part of the consent evidence boundary"
   },
-  "instrument_negative_result": {
-    "finding": "first target-workflow draft contained an invalid YAML here-doc in SQLite-version metadata capture and was not registered by GitHub Actions",
-    "classification": "HARNESS_YAML_INSTRUMENT_BUG_NOT_CANDIDATE_SEMANTIC_EVIDENCE",
-    "repair": "replace nested here-doc with a single-line python3 -c metadata probe and validate YAML locally before repush",
-    "repaired_head": "d1883ace021e3e45c8a0e6b8089ff94bab682661"
+  "negative_results_and_repairs": [
+    {
+      "finding": "first target-workflow draft contained an invalid YAML here-doc in SQLite-version metadata capture and was not registered by GitHub Actions",
+      "classification": "HARNESS_YAML_INSTRUMENT_BUG_NOT_CANDIDATE_SEMANTIC_EVIDENCE",
+      "repair": "replace nested here-doc with a single-line python3 -c metadata probe and validate YAML locally before repush",
+      "repaired_head": "d1883ace021e3e45c8a0e6b8089ff94bab682661"
+    },
+    {
+      "finding": "stale-revision read occurred before BEGIN IMMEDIATE, permitting a theoretical delayed stale writer to regress the projection across independent connections",
+      "classification": "REAL_CANDIDATE_CONCURRENCY_BUG",
+      "repair": "move stale revision read/check and projection update into the same BEGIN IMMEDIATE writer transaction"
+    },
+    {
+      "finding": "INSERT OR REPLACE on challenge_id could resurrect a consumed consent if nonce/challenge identity repeated",
+      "classification": "REAL_CANDIDATE_PERSISTENCE_REPLAY_BUG",
+      "repair": "use plain INSERT and fail closed with CONSENT_CHALLENGE_ID_COLLISION; deterministic collision regression preserves CONSUMED"
+    },
+    {
+      "finding": "grant/consume checked current snapshot and challenge state outside the same writer transaction as state mutation",
+      "classification": "REAL_CANDIDATE_TOCTOU_BUG",
+      "repair": "BEGIN IMMEDIATE now encloses current snapshot revalidation, challenge-state validation and GRANTED/CONSUMED mutation with rowcount race checks"
+    }
+  ],
+  "current_v16_task_model_adjudication": {
+    "result": "SUPPORTED_CURRENT_V16_TASK_ID_FIXED_FOR_ACTIVE_EXECUTION",
+    "evidence": "current_task_id is assigned at execution bind; later current API provides follow-up request admission and set_task_state but no current_task_id replacement transition",
+    "consequence": "candidate monotonic task revision scoped to the current execution does not block a supported same-execution new-task transition; future addition of such a transition is an explicit invalidator"
   },
   "target_execution": {
     "workflow": "Frank task switch consent v1 VPS",
-    "run_id": 31509948272,
+    "superseded_run_id": 31509948272,
+    "current_run_id": 31510821479,
+    "current_candidate_head": "5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba",
     "runner_class": "self-hosted Linux X64 / accepted Ubuntu target lane",
     "status_at_receipt": "QUEUED",
     "acceptance_requires": [
       "dynamic current-V16 baseline reproduces inability to distinguish an unrelated same-holder follow-up task",
-      "all candidate deterministic gates pass",
+      "all 13 candidate deterministic/race/persistence gates pass",
       "exactly one OOB experiment is CONSENT_REPLAY_AFTER_TASK_ADVANCE and passes",
       "execution/effect authority remains unminted",
       "no canonical state mutation or external effect"
     ]
   },
+  "coordination_distribution": [
+    {
+      "target": "gschaidergabriel/Dr.-Unterweger#329",
+      "delta": "task-switch consent must compose with stable principal identity across credential rotation; credential identity itself must not become current-user identity"
+    },
+    {
+      "target": "gschaidergabriel/Dr.-Unterweger#370",
+      "delta": "main drift, workflow instrumentation repair, current V16 task-id model and transaction hardening documented in PR conversation"
+    }
+  ],
   "architecture_delta": {
     "status": "CANDIDATE",
     "proposal": "insert a revision-bound one-shot current-user task-switch consent gate between task-intent classification and any cancellation/suspension/new-execution admission",
@@ -140,11 +179,10 @@
     "reason": "this is a new owner-required API safety boundary candidate, not a claimed replacement/fusion of a reconstructed historical Frank organ"
   },
   "next_falsifiers": [
-    "execute exact candidate on accepted target and require dynamic V16 baseline + candidate PASS",
+    "execute exact hardened candidate on accepted target and require dynamic V16 baseline + 13/13 candidate PASS",
     "compose with stable principal/token-rotation identity so credential rotation cannot change current-user identity",
     "compose with canonical task producer and actual cancellation/suspension/new-admission transition",
-    "crash between consent consume and authoritative switch; require no double-switch/no silent abandonment",
-    "concurrent double-consume race on one grant under target SQLite/recovery lane"
+    "crash between consent consume and authoritative switch; require no double-switch/no silent abandonment"
   ],
   "claims": {
     "f_v01_08_complete": false,

@@ -1,9 +1,11 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "claycode-20260811T2243p0700-chatgpt-secondary-first-compiler-lowering",
   "trigger": "claycode",
   "created_at_local": "2026-08-11T22:43:00+07:00",
   "created_at_utc": "2026-08-11T15:43:00Z",
+  "refreshed_at_local": "2026-08-11T23:02:38+07:00",
+  "refreshed_at_utc": "2026-08-11T16:02:38Z",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
@@ -17,7 +19,8 @@
     "revision": 2,
     "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
   },
-  "research_center_parent_observed": "b17bfec872bd1dcc8f6e2d6f4bc54feac57f4dee",
+  "research_center_parent_initial": "b17bfec872bd1dcc8f6e2d6f4bc54feac57f4dee",
+  "research_center_head_before_refresh": "b916f83d9b3d43a4b5732b88643aeb0b8237889b",
   "program": "FRANK_V0_1",
   "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
   "target_repository": "gschaidergabriel/Dr.-Unterweger",
@@ -33,8 +36,32 @@
   },
   "mesh_inputs": {
     "unifieddb_claygraph_current_delta": "caf8d5acd1f867af2ee479b5506fdce9c6b9af62",
-    "relevant_constraint": "canonical/current production state must remain unopened/unmigrated until accepted migration/rollback/recovery; compiler experiment therefore operates only on source/evaluator values and performs no UnifiedDB/ClayGraph mutation",
-    "semantic_authority_constraint": "ClayCode remains semantic authority; backend representation is compiled projection only"
+    "relevant_constraint": "canonical/current production state remains unopened/unmigrated until accepted migration/rollback/recovery; this compiler experiment is source/value-only and performs no UnifiedDB/ClayGraph canonical mutation",
+    "semantic_authority_constraint": "ClayCode remains semantic authority; backend representation is compiled projection only",
+    "nominal_typecheck_lane": {
+      "pr": 369,
+      "head": "cf4957650af239f9ad9880b60b72cc31d9da8cb2",
+      "target_run": 31509914652,
+      "target_job": 93840836630,
+      "target": "clay/digital-retina Linux X64 Python 3.12.3",
+      "status": "PASS_CLAYCODE_NOMINAL_TYPECHECK_V1_GATE",
+      "checks": "12/12",
+      "elapsed_wall_seconds": 0.20,
+      "max_rss_kib": 25088,
+      "key_result": "real decide_effect + destructive_guard_complete nominally type-admit; Bool==Int, comparison chains, wrong argument/return/condition and untyped host intrinsic controls fail closed",
+      "authority_claim": "NONE",
+      "wp04_pass_claim": false
+    },
+    "native_backend_lane": {
+      "pr": 366,
+      "head": "ee6536ea9ca5382931a050cb0c195d4945ca9cdc",
+      "backend": "deterministic C11 -> target shared object",
+      "base": "PR #357 ClayCode frontier integration",
+      "target_run": 31509419897,
+      "target_state_at_refresh": "PENDING",
+      "role_relative_to_pr364": "independent native compiler competitor / differential backend",
+      "promotion_dependency": "PR #357 target composition must be accepted first"
+    }
   },
   "external_primary_evidence": [
     {
@@ -45,36 +72,55 @@
     {
       "source": "Python 3.12 ast.fix_missing_locations documentation",
       "retrieved": "2026-08-11",
-      "use": "generated AST nodes require location attributes before compile(); semantic identity is therefore frozen before location repair"
+      "use": "generated AST nodes require location attributes before compile(); semantic identity is frozen before location repair"
+    },
+    {
+      "source": "actions/upload-artifact v4.6.2 verified GitHub release",
+      "retrieved": "2026-08-11",
+      "commit": "ea165f8d65b6e75b540449e92b4886f43607fa02",
+      "use": "target-evidence upload action pinned by immutable verified commit rather than moving major tag"
     },
     {
       "source": "Cranelift codegen 0.134.2 documentation",
       "retrieved": "2026-08-11",
-      "use": "retained as a stronger later native-code backend candidate; not selected for this first bounded compiler falsifier because it would add a new IR/runtime integration surface before source semantics are broad enough"
+      "use": "retained as later lower-level native-code candidate; current live native comparison is PR #366 C11 lowering"
     }
   ],
-  "hypothesis": "The already target-supported pure ClayCode effect-policy subset can be lowered into a deterministic executable backend while preserving source-evaluator semantics exactly and without opening an effect/authority path.",
-  "strongest_counterhypothesis": "A host-AST backend will merely reproduce Python semantics and hidden coercions, creating a second semantic architecture rather than a faithful compiled projection of ClayCode.",
+  "hypothesis": "The already target-supported pure ClayCode effect-policy subset can be lowered into a deterministic executable reference backend while preserving source-evaluator semantics exactly and without opening an effect/authority path.",
+  "strongest_counterhypothesis": "A host-AST backend imports Python coercion/capability behavior and becomes a second semantic architecture rather than a faithful compiled projection of ClayCode; a native backend may therefore dominate it once type-admitted semantics and integration ancestry are equivalent.",
   "discriminating_design": {
     "candidate": "CPYTHON_AST_BOOTSTRAP_V1",
     "target_pr": 364,
     "target_branch": "chatgpt/claycode-python-lowering-v1-fresh-main-20260811",
-    "target_head": "bef7686f909f9d87d59f33731f0f7241e78bc2fe",
-    "target_workflow_run": 31508447693,
-    "target_workflow_state_at_write": "QUEUED",
+    "target_head": "52fd13a99a6ba06a2183f78a0fbf862835292250",
+    "target_pr_run_visible_to_connector": 31509860930,
+    "target_pr_run_state_at_refresh": "PENDING_WITH_JOB_QUEUED",
+    "target_pr_job": 93840651297,
     "compiled_entry": "frank.effects::decide_effect",
     "reachable_clay_functions": ["decide_effect", "destructive_guard_complete"],
-    "three_way_oracles": ["ClayCode tree evaluator", "compiled backend", "shipping Python EffectGate reference"],
+    "three_way_oracles": ["ClayCode tree evaluator", "compiled Python-AST backend", "shipping Python EffectGate reference"],
     "planned_requests": 200576,
+    "checks_total": 12,
     "fail_closed_guards": [
       "intrinsic-reachable entry is refused",
       "multi-relation comparison chain is refused until semantics are adjudicated",
+      "Bool-vs-Int host equality alias is refused instead of inheriting Python True==1",
       "unknown AST statement/expression node is refused",
+      "compiled AST/global capability surface is independently audited",
+      "adversarial host-capability AST graft must be detected",
       "no authority-minting intrinsic binding exists",
       "no external effect path exists"
     ],
-    "sensitivity": "one in-memory semantic sabotage must turn the differential red",
-    "determinism": "repeated lowering must produce the same location-free generated AST hash"
+    "sensitivity": "one in-memory semantic sabotage must turn the three-way differential red",
+    "determinism": "repeated lowering must produce the same location-free generated AST hash",
+    "performance_shadow": {
+      "corpus_size": 2048,
+      "rounds": 6,
+      "counterbalanced": true,
+      "warmup_calls_per_mode": 128,
+      "promotion_gate": false
+    },
+    "supply_chain_binding": "actions/upload-artifact pinned to ea165f8d65b6e75b540449e92b4886f43607fa02 (v4.6.2)"
   },
   "stale_work_adjudication": {
     "stale_pr": 362,
@@ -83,29 +129,49 @@
     "action": "CLOSED_NOT_MERGED_AND_REBUILT_FROM_FRESH_MAIN",
     "new_pr": 364
   },
+  "concurrent_worker_fusion": {
+    "accepted": [
+      "PR #369 owns bounded nominal type admission and has exact target PASS; PR #364 must not duplicate it into a second type system",
+      "PR #366 is a native C lowering competitor; PR #364 is reclassified as independent bootstrap/reference backend rather than the only compiler lane",
+      "concurrent PR #364 test hardening replaced tautological safety booleans with real capability-surface audit plus adversarial AST-graft detection"
+    ],
+    "new_dependency_rule": "promotion of a backend beyond isolated mechanism evidence requires composition with the accepted nominal type-admission boundary once #369 is integrated, then matched semantic corpus comparison against other viable backends",
+    "backend_selection_rule": "do not promote Python-AST merely because it is first; prefer Pareto evidence across correctness, semantic isolation, reproducibility, latency/resources and integration complexity"
+  },
   "architecture_delta": {
-    "status": "CANDIDATE_TESTING",
+    "status": "CANDIDATE_TESTING_REFERENCE_BACKEND",
     "affected_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-    "change": "introduce the first bounded compiler/lowering stage from executable ClayCode AST to deterministic CPython AST/code for the already evidenced pure policy subset",
+    "change": "introduce a bounded deterministic executable Python-AST lowering as a reference/backend differential for the already evidenced pure policy subset",
     "semantic_change": false,
     "backend_is_semantic_authority": false,
-    "rollback": "close PR #364 / delete candidate branch; merged main remains unchanged until target evidence is accepted"
+    "type_system_ownership": "PR #369 nominal checker / future canonical Clay type-effect layer, not PR #364 backend",
+    "native_competitor": "PR #366 C11 lowering",
+    "rollback": "close PR #364 / delete candidate branch; merged main remains unchanged until scoped promotion evidence is accepted"
   },
   "negative_results_and_nonclaims": [
     "The first compiler PR #362 is stale historical evidence and was closed without merge.",
-    "No compiler PASS is claimed while target workflow 31508447693 is queued.",
-    "No WP04 type/effect completion is claimed.",
+    "Several PR-triggered self-hosted #364 runs were cancelled before steps during concurrent branch movement; cancellation is missing execution evidence, not product counterevidence.",
+    "The sandbox could not DNS-resolve github.com for an independent git clone, so no local execution receipt is claimed.",
+    "No #364 target PASS is claimed while exact current candidate execution is still pending.",
+    "No WP04 type/effect completion is claimed; #369 itself also claims only bounded nominal admission, not WP04 completion.",
     "No comparison-chain semantics are selected.",
-    "No Bool/Int equality semantics are selected.",
+    "No Bool/Int cross-nominal equality semantics are selected.",
     "No host intrinsic/effect runtime is compiled.",
     "No UnifiedDB/ClayGraph canonical state is opened or migrated.",
     "No whole Frank v0.1 acceptance or training authorization is claimed."
   ],
+  "open_risks": [
+    "Backend-reserved helper-name shadowing by source bindings remains a compiler-specific hardening target for any scope broader than the current fixed source closure.",
+    "Python function globals are host-runtime objects; capability audit is evidence for the emitted bounded program, not a hostile-Python sandbox claim.",
+    "PR #364 and #366 currently do not yet share one accepted typecheck+source+base ancestry, so raw speed/result comparison before composition would be confounded.",
+    "GitHub-hosted global Deep Integrity failures expose a separate repo/CI lane issue but have not produced compiler-specific executed steps in the observed failed runs."
+  ],
   "next_falsifiers": [
-    "observe exact target run 31508447693 and require 10/10 checks with zero three-way mismatches",
-    "if target passes, independently inspect generated AST for semantic aliasing and resource regression before promotion",
-    "then compile the next source subset only after its type/effect semantics are executable and differentially evidenced",
-    "evaluate Cranelift/native lowering only after the Clay IR/type/effect boundary is sufficiently frozen to avoid encoding host semantics by accident"
+    "observe exact current PR #364 target run and require 12/12 checks, zero three-way mismatches, capability audit PASS and adversarial graft detection",
+    "compose backend admission with the target-supported nominal typecheck contract from PR #369 after its repository integration/adjudication",
+    "obtain exact comparable target evidence for PR #366 C backend and compare correctness, resource/latency shadows and semantic-isolation risk on matched source/type ancestry",
+    "probe backend reserved-name shadowing before expanding compiler scope beyond the fixed decide_effect closure",
+    "compile the next source subset only after its nominal/effect semantics are statically admitted and differentially evidenced"
   ],
   "research_write": "COMMITTED_CANDIDATE_PENDING_TARGET_RECEIPT",
   "external_effect_performed": false,

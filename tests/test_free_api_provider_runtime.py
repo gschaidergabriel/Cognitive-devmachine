@@ -77,8 +77,24 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
     def test_unallowlisted_remote_endpoint_is_blocked_before_network(self):
         env = {"NVIDIA_API_KEY": "secret", "FRANK_PROVIDER_BASE_URL": "https://evil.example/v1"}
-        with self.assertRaisesRegex(RuntimeError, "not_allowlisted"):
+        with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
             MOD.execute_chat([], model="x", environ=env)
+
+    def test_key_cannot_be_sent_to_another_allowlisted_provider_host(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {
+            "NVIDIA_API_KEY": "nvidia-secret",
+            "FRANK_PROVIDER_BASE_URL": "https://api.groq.com/openai/v1",
+        }
+        with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
+            MOD.execute_chat([], model="x", environ=env, opener=opener)
+        self.assertFalse(called)
 
     def test_invalid_response_is_executed_but_never_verified(self):
         class Response:

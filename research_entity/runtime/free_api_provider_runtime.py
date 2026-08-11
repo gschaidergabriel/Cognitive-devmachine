@@ -16,10 +16,13 @@ import urllib.error
 import urllib.request
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
+
+
 @dataclass(frozen=True)
 class ProviderSpec:
     provider_id: str
@@ -31,25 +34,42 @@ class ProviderSpec:
 
 
 PROVIDERS = (
-    ProviderSpec("nvidia", ("NVIDIA_API_KEY", "NVCF_API_KEY"), 100,
-                 "https://integrate.api.nvidia.com/v1", True,
-                 "nvidia_developer_program_free_prototype_endpoint"),
+    ProviderSpec(
+        "nvidia",
+        ("NVIDIA_API_KEY", "NVCF_API_KEY"),
+        100,
+        "https://integrate.api.nvidia.com/v1",
+        True,
+        "nvidia_developer_program_free_prototype_endpoint",
+    ),
     ProviderSpec("groq", ("GROQ_API_KEY",), 80, "https://api.groq.com/openai/v1"),
-    ProviderSpec("cerebras", ("CEREBRAS_API_KEY",), 75,
-                 "https://api.cerebras.ai/v1"),
-    ProviderSpec("gemini", ("GEMINI_API_KEY", "GOOGLE_API_KEY"), 70,
-                 "https://generativelanguage.googleapis.com/v1beta/openai"),
-    ProviderSpec("openrouter", ("OPENROUTER_API_KEY",), 50,
-                 "https://openrouter.ai/api/v1"),
+    ProviderSpec(
+        "cerebras",
+        ("CEREBRAS_API_KEY",),
+        75,
+        "https://api.cerebras.ai/v1",
+    ),
+    ProviderSpec(
+        "gemini",
+        ("GEMINI_API_KEY", "GOOGLE_API_KEY"),
+        70,
+        "https://generativelanguage.googleapis.com/v1beta/openai",
+    ),
+    ProviderSpec(
+        "openrouter",
+        ("OPENROUTER_API_KEY",),
+        50,
+        "https://openrouter.ai/api/v1",
+    ),
 )
 
 
 def _attested_zero_cost_providers(environ: dict[str, str]) -> set[str]:
     """Return explicitly operator-attested zero-cost provider IDs.
 
-    A key proves configuration, not billing state.  Non-NVIDIA providers therefore
+    A key proves configuration, not billing state. Non-NVIDIA providers therefore
     fail closed unless the execution host explicitly attests that its account/project
-    is on a zero-cost plan.  The attestation contains provider IDs only, never secrets.
+    is on a zero-cost plan. The attestation contains provider IDs only, never secrets.
     """
     raw = environ.get("FRANK_ZERO_COST_ATTESTED_PROVIDERS", "")
     return {
@@ -76,14 +96,16 @@ def inventory(environ: dict[str, str] | None = None) -> list[dict]:
             zero_cost_evidence = "operator_zero_cost_attestation"
         row = asdict(spec)
         row["key_names"] = list(spec.key_names)
-        row.update({
-            "configured": key_name is not None,
-            "configured_via": key_name,
-            "secret_exposed": False,
-            "zero_cost_assured": zero_cost_evidence is not None,
-            "zero_cost_evidence": zero_cost_evidence,
-            "eligible": bool(key_name and zero_cost_evidence and ZERO_COST_ONLY),
-        })
+        row.update(
+            {
+                "configured": key_name is not None,
+                "configured_via": key_name,
+                "secret_exposed": False,
+                "zero_cost_assured": zero_cost_evidence is not None,
+                "zero_cost_evidence": zero_cost_evidence,
+                "eligible": bool(key_name and zero_cost_evidence and ZERO_COST_ONLY),
+            }
+        )
         rows.append(row)
     return sorted(rows, key=lambda x: (-x["priority"], x["provider_id"]))
 
@@ -95,8 +117,11 @@ def route(environ: dict[str, str] | None = None) -> dict:
         "candidates": [row["provider_id"] for row in eligible],
         "zero_cost_only": ZERO_COST_ONLY,
         "denied_providers": sorted(DENIED_PROVIDERS),
-        "reason": "highest_priority_configured_zero_cost_provider" if eligible
-                  else "no_configured_zero_cost_provider",
+        "reason": (
+            "highest_priority_configured_zero_cost_provider"
+            if eligible
+            else "no_configured_zero_cost_provider"
+        ),
     }
 
 
@@ -149,6 +174,59 @@ def _open_no_redirect(request: urllib.request.Request, timeout: int):
     return urllib.request.build_opener(_NoRedirectHandler()).open(request, timeout=timeout)
 
 
+def _effective_port(parsed) -> int:
+    try:
+        return parsed.port or (443 if parsed.scheme == "https" else 80)
+    except ValueError as exc:
+        raise RuntimeError("provider_endpoint_not_bound_to_selected_provider") from exc
+
+
+def _canonical_remote_endpoint(
+    base_url: str,
+    *,
+    spec: ProviderSpec,
+    allow_local_test: bool,
+) -> tuple[object, int]:
+    """Validate exact provider operation namespace before credential construction.
+
+    Host/origin equality is insufficient: the provider capability is the documented
+    base path plus the fixed chat-completions operation. Query/fragment/params and
+    path aliases are rejected for remote authenticated requests.
+    """
+    parsed = urlparse(base_url)
+    provider_url = urlparse(spec.openai_compatible_base_url.rstrip("/"))
+
+    if parsed.username is not None or parsed.password is not None:
+        raise RuntimeError("provider_endpoint_userinfo_forbidden")
+
+    local_test = (
+        parsed.hostname in {"127.0.0.1", "localhost"}
+        and allow_local_test
+    )
+    if local_test:
+        if parsed.scheme not in {"http", "https"}:
+            raise RuntimeError("provider_endpoint_must_use_http_or_https")
+        return parsed, _effective_port(parsed)
+
+    if parsed.scheme != "https":
+        raise RuntimeError("provider_endpoint_must_use_https")
+
+    parsed_port = _effective_port(parsed)
+    provider_port = _effective_port(provider_url)
+    if parsed.hostname != provider_url.hostname or parsed_port != provider_port:
+        raise RuntimeError("provider_endpoint_not_bound_to_selected_provider")
+
+    if (
+        parsed.path != provider_url.path
+        or parsed.params
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise RuntimeError("provider_endpoint_not_exact_selected_capability")
+
+    return parsed, parsed_port
+
+
 def execute_chat(
     messages: list[dict[str, str]],
     *,
@@ -161,8 +239,8 @@ def execute_chat(
     """Execute one bounded chat request and return output plus a redacted receipt.
 
     The injectable opener makes the full lifecycle testable without an external API.
-    Remote execution is limited to policy-listed provider hosts. A localhost override is
-    accepted only when FRANK_ALLOW_LOCAL_TEST_ENDPOINT=1.
+    Remote execution is limited to the exact documented provider capability. A
+    localhost override is accepted only when FRANK_ALLOW_LOCAL_TEST_ENDPOINT=1.
     """
     _validate_text_chat_request(messages, model)
     env = os.environ if environ is None else environ
@@ -171,38 +249,30 @@ def execute_chat(
         raise RuntimeError("no_configured_zero_cost_provider")
     spec = next(item for item in PROVIDERS if item.provider_id == selected)
     key_name = _configured_key_name(spec, env)
-    base_url = env.get("FRANK_PROVIDER_BASE_URL", spec.openai_compatible_base_url).rstrip("/")
-    from urllib.parse import urlparse
-    parsed = urlparse(base_url)
-    provider_url = urlparse(spec.openai_compatible_base_url)
-    provider_host = provider_url.hostname
-    if parsed.username is not None or parsed.password is not None:
-        raise RuntimeError("provider_endpoint_userinfo_forbidden")
-    local_test = parsed.hostname in {"127.0.0.1", "localhost"} and env.get(
-        "FRANK_ALLOW_LOCAL_TEST_ENDPOINT"
-    ) == "1"
-    if parsed.scheme != "https" and not local_test:
-        raise RuntimeError("provider_endpoint_must_use_https")
-    try:
-        parsed_port = parsed.port or 443
-        provider_port = provider_url.port or 443
-    except ValueError as exc:
-        raise RuntimeError("provider_endpoint_not_bound_to_selected_provider") from exc
-    if (
-        parsed.hostname != provider_host or parsed_port != provider_port
-    ) and not local_test:
-        raise RuntimeError("provider_endpoint_not_bound_to_selected_provider")
+    base_url = env.get(
+        "FRANK_PROVIDER_BASE_URL", spec.openai_compatible_base_url
+    ).rstrip("/")
+
+    parsed, parsed_port = _canonical_remote_endpoint(
+        base_url,
+        spec=spec,
+        allow_local_test=env.get("FRANK_ALLOW_LOCAL_TEST_ENDPOINT") == "1",
+    )
 
     attempt_nonce = secrets.token_hex(16) if nonce_factory is None else nonce_factory()
     if not isinstance(attempt_nonce, str) or not attempt_nonce:
         raise ValueError("attempt_nonce_must_be_nonempty_string")
+
     started = now()
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
     body = json.dumps({"model": model, "messages": messages, "stream": False}).encode()
     request = urllib.request.Request(
         f"{base_url}/chat/completions",
         data=body,
-        headers={"Authorization": f"Bearer {env[key_name]}", "Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {env[key_name]}",
+            "Content-Type": "application/json",
+        },
         method="POST",
     )
     request_opener = _open_no_redirect if opener is None else opener
@@ -240,31 +310,39 @@ def execute_chat(
         content = None
         outcome = "rate_limited" if status == 429 else "provider_error"
         cooldown_seconds = 60 if status == 429 else 15
-    except (
-        json.JSONDecodeError, KeyError, IndexError, TypeError, ValueError,
-    ):
+    except (json.JSONDecodeError, KeyError, IndexError, TypeError, ValueError):
         content = None
         outcome = "invalid_provider_response"
         cooldown_seconds = 15
     except (urllib.error.URLError, TimeoutError):
         content = None
         outcome = (
-            "incomplete_provider_response" if response_started
+            "incomplete_provider_response"
+            if response_started
             else "unreachable_provider"
         )
         cooldown_seconds = 15
 
     finished = now()
     body_digest = hashlib.sha256(body).hexdigest()
-    request_id = _safe_request_id(f"{selected}:{parsed.hostname}:{body_digest}")
+    request_target_digest = hashlib.sha256(
+        request.full_url.encode("utf-8")
+    ).hexdigest()
+    request_id = _safe_request_id(
+        f"{selected}:{request_target_digest}:{body_digest}"
+    )
     receipt_data = {
         "schema_version": "1.0",
         "kind": "FREE_API_EXECUTION_RECEIPT",
         "provider": selected,
         "model": model,
         "endpoint_host": parsed.hostname,
+        "endpoint_port": parsed_port,
+        "request_target_digest": request_target_digest,
         "request_id": request_id,
-        "attempt_id": _safe_attempt_id(f"{request_id}:{started}:{attempt_nonce}"),
+        "attempt_id": _safe_attempt_id(
+            f"{request_id}:{started}:{attempt_nonce}"
+        ),
         "status": status,
         "outcome": outcome,
         "lifecycle": lifecycle,
@@ -281,7 +359,13 @@ def main() -> None:
     parser.add_argument("command", choices=("inventory", "route", "receipt"))
     parser.add_argument("--write", type=Path)
     args = parser.parse_args()
-    payload = inventory() if args.command == "inventory" else route() if args.command == "route" else receipt()
+    payload = (
+        inventory()
+        if args.command == "inventory"
+        else route()
+        if args.command == "route"
+        else receipt()
+    )
     encoded = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if args.write:
         args.write.parent.mkdir(parents=True, exist_ok=True)

@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "trigger": "go",
   "created_at": "2026-08-12T01:35:00+07:00",
-  "updated_at": "2026-08-12T01:38:30+07:00",
+  "updated_at": "2026-08-12T01:50:00+07:00",
   "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
   "program": "FRANK_V0_1",
   "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
@@ -11,16 +11,17 @@
       "Frank central state code uses Python sqlite3 and WAL without an exact loaded-runtime identity gate before canonical database opens.",
       "The self-hosted Ubuntu lane runner clay on host digital-retina executes /usr/bin/python3 with SQLite 3.45.1 on the measured baseline path.",
       "The baseline loaded libsqlite3 artifact is /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6 with SHA-256 f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7.",
-      "The baseline _sqlite3 extension SHA-256 is b30bc4b6a8fa3c80fa0ff79b752e811ffda985497155501691c1d169b289b238.",
-      "The baseline sqlite_source_id is 2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1.",
-      "A disposable rootless build of official SQLite 3.53.4 was loaded by the same /usr/bin/python3 using a temporary LD_LIBRARY_PATH overlay; it reported the expected 3.53.4 source ID and no Frank database was opened."
+      "A disposable rootless build of official SQLite 3.53.4 was loaded by the same /usr/bin/python3 with the expected source ID and without opening a Frank database.",
+      "Fresh main independently proved that V4 can admit two distinct internally self-consistent SQLite 3.53.4 builds when the caller supplies the matching manifest digest; caller-selected consistency is not an independent deployment trust anchor.",
+      "V5 candidate removes caller-selected SQLite identity arguments and binds admission to a fixed root-owned deployment anchor candidate at /opt/frank-v0.1/sqlite-runtime-v1.",
+      "On the self-hosted target lane V5 passed deterministic gates and failed closed with exit 78 before target execution when the fixed deployment anchor was absent.",
+      "A full ephemeral root-owned anchor E2E attempt was blocked at sudo -n true because the runner requires a sudo password; this occurred before any /opt mutation or Frank database open."
     ],
-    "hypothesis": "A package/CLI upgrade can diverge from the SQLite library actually loaded by the productive Python persistence path; release safety therefore requires runtime/source/artifact attestation rather than package-version evidence.",
-    "counterhypothesis": "The productive Python persistence path already loads a fixed SQLite runtime even if older system evidence exists.",
-    "discriminating_test": "Query sqlite_version() and sqlite_source_id() inside /usr/bin/python3 and fingerprint the mapped SQLite artifacts on the self-hosted Ubuntu lane without opening Frank databases.",
-    "collapse": "The counterhypothesis is rejected for the measured baseline path. A fixed 3.53.4 runtime is technically loadable by the same Python executable, but production integration/pinning remains unproved.",
+    "hypothesis": "Release-safe WAL persistence requires both exact active-library attestation and an independently authorized deployment trust anchor that a process caller cannot choose.",
+    "strongest_counterhypothesis": "A caller-supplied manifest digest plus internal artifact consistency is sufficient to establish the authorized SQLite runtime identity.",
+    "collapse": "The strongest counterhypothesis is refuted by the fresh-main two-build counterworld. V5 closes the caller-selection interface in candidate code and proves fail-closed behavior without an anchor, but independent privileged anchor provisioning is not available from the current GitHub Actions runner capability.",
     "outcome": "RETAIN_AND_NARROW",
-    "confidence": "HIGH_FOR_MEASURED_PYTHON_BASELINE_AND_OVERLAY_FEASIBILITY; NOT_WHOLE_PRODUCTION_ACCEPTANCE"
+    "confidence": "HIGH_FOR_MEASURED_BASELINE_V4_TRUST_GAP_AND_V5_FAIL_CLOSED_BEHAVIOR; PRODUCTION_ADMISSION_UNPROVED"
   },
   "upstream_evidence": {
     "sqlite_wal_reset_affected": "3.7.0 through 3.51.2 under documented concurrent writer/checkpoint conditions",
@@ -30,14 +31,12 @@
     "sqlite_3_53_4_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
     "sqlite_3_53_4_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
   },
-  "target_measurement": {
+  "baseline_target_measurement": {
     "repository": "gschaidergabriel/frankv0.1",
     "connector_alias": "gschaidergabriel/Dr.-Unterweger",
-    "candidate_branch": "clay-go-sqlite-runtime-attestation-20260812",
     "tested_sha": "9e370da7777e434feacde3137a43cf1ff453d983",
     "github_run_id": "31523402893",
     "github_job_id": "93885768788",
-    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
     "runner_name": "clay",
     "hostname": "digital-retina",
     "python_executable": "/usr/bin/python3",
@@ -45,23 +44,71 @@
     "sqlite_version": "3.45.1",
     "sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
     "wal_reset_fix_known": false,
-    "loaded_artifacts": [
-      {
-        "path": "/usr/lib/python3.12/lib-dynload/_sqlite3.cpython-312-x86_64-linux-gnu.so",
-        "sha256": "b30bc4b6a8fa3c80fa0ff79b752e811ffda985497155501691c1d169b289b238",
-        "size": 144792
-      },
-      {
-        "path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
-        "sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
-        "size": 1468440
-      }
-    ],
+    "sqlite_extension_sha256": "b30bc4b6a8fa3c80fa0ff79b752e811ffda985497155501691c1d169b289b238",
+    "libsqlite3_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
     "frank_database_opened": false,
     "state_mutation_performed": false,
-    "receipt_artifact_id": "9113930400",
-    "receipt_zip_sha256": "9c1f1f5e835d4059b35cfec4b778fd3317a4cfaed3997ad5468fcc6677c4db70",
+    "artifact_id": "9113930400",
+    "artifact_zip_sha256": "9c1f1f5e835d4059b35cfec4b778fd3317a4cfaed3997ad5468fcc6677c4db70",
     "gate_result": "EXPECTED_FAIL_UNSAFE_RUNTIME"
+  },
+  "remediation_feasibility": {
+    "status": "PASS_TECHNICAL_FEASIBILITY_ONLY",
+    "github_run_id": "31523517392",
+    "github_job_id": "93886135104",
+    "same_python_executable": "/usr/bin/python3",
+    "baseline_version": "3.45.1",
+    "overlay_version": "3.53.4",
+    "overlay_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "overlay_library_sha256": "766647ee994e598c87ebf8827cf065c6880b2f29e8a112db56b564f0a84f973a",
+    "official_archive_hash_verified": true,
+    "frank_database_opened": false,
+    "system_install_performed": false,
+    "production_upgrade_performed": false,
+    "artifact_id": "9114063482",
+    "artifact_zip_sha256": "0d884ef58eefc171706a2172594e333b11089fa6c90471a447776bccf5579082"
+  },
+  "parallel_worker_fusion": {
+    "fresh_main_sha": "a4f11b7ecb185a8e9e1e86818c4662b7a90fb133",
+    "workflow_run_id": "31523441341",
+    "workflow_job_id": "93885889689",
+    "status": "PASS_COUNTERWORLD_RETAINED_TRUST_ANCHOR_GAP",
+    "reality_a_library_sha256": "9791a0b0b1f7a60f1e6a93e7b9532e72ea16b0059ade057b3f6995aa4d496cbc",
+    "reality_b_library_sha256": "d6fa0b1168e8edb9eda1f125dbba7c734af90b49327ac209588d758befd1191e",
+    "same_upstream_source_id": true,
+    "both_v4_admitted": true,
+    "interpretation": "V4 proves consistency with caller-supplied digest, not independent authorization of which digest/runtime is allowed.",
+    "promotion": "NO_RELEASE_PROMOTION"
+  },
+  "v5_candidate": {
+    "branch": "clay-go-sqlite-v5-deployment-anchor-20260812",
+    "head_sha": "2a1b62b2e07417fa7e203fd55f09bad21d4bc0bd",
+    "draft_pr": 418,
+    "fixed_trust_root": "/opt/frank-v0.1/sqlite-runtime-v1",
+    "caller_selectable_identity_arguments": false,
+    "anchor_policy": "absolute fixed path; non-symlink; UID 0; not group/world writable; manifest digest read without following symlinks",
+    "target_fail_closed_run_id": "31524271372",
+    "target_fail_closed_job_id": "93888608248",
+    "target_fail_closed_result": "PASS_FAIL_CLOSED_NO_DEPLOYMENT_ANCHOR",
+    "target_exit_code": 78,
+    "target_executed": false,
+    "artifact_id": "9114260526",
+    "artifact_zip_sha256": "837f2afc7c6863672a44fabb5e2ec2c907b125c478b0832d5911929ff1d406ef",
+    "state": "CANDIDATE_DRAFT_NOT_MAIN_NOT_RELEASE_PROMOTED"
+  },
+  "privileged_anchor_e2e": {
+    "github_run_id": "31524535474",
+    "github_job_id": "93889482339",
+    "status": "BLOCKED_PRIVILEGE_NO_MEASUREMENT_OF_ROOT_ANCHORED_ADMISSION",
+    "blocking_operation": "sudo -n true",
+    "observed_error": "sudo: a password is required",
+    "failure_stage": "BEFORE_ANY_PRIVILEGED_PROVISIONING_OR_FRANK_DB_OPEN",
+    "trust_root_created": false,
+    "system_sqlite_replaced": false,
+    "frank_database_opened": false,
+    "state_mutation_performed": false,
+    "artifact_receipt_created": false,
+    "interpretation": "Current self-hosted Actions lane lacks noninteractive admin capability needed to establish the proposed root-owned independent deployment anchor. Do not weaken the anchor merely to make CI pass."
   },
   "negative_results": [
     {
@@ -70,7 +117,15 @@
     },
     {
       "id": "NEG-SQLITE-3534-CANDIDATE-NOT-BASELINE-LOADED-V1",
-      "result": "The measured baseline /usr/bin/python3 path on the self-hosted lane loads SQLite 3.45.1, not the newer 3.53.4 candidate."
+      "result": "The measured baseline /usr/bin/python3 path loads SQLite 3.45.1, not 3.53.4."
+    },
+    {
+      "id": "NEG-SQLITE-V4-CALLER-DIGEST-NOT-AUTHORITY-V1",
+      "result": "Two distinct 3.53.4 artifacts can both pass V4 when the caller supplies the corresponding self-consistent manifest digest."
+    },
+    {
+      "id": "NEG-SQLITE-ROOT-ANCHOR-CI-PRIVILEGE-V1",
+      "result": "The current self-hosted GitHub Actions runner cannot noninteractively provision a root-owned trust anchor because sudo requires a password."
     }
   ],
   "unusual_experiment": {
@@ -83,50 +138,15 @@
     "result": "PASS_AS_FALSIFIER",
     "production_claim": false
   },
-  "candidate_implementation": {
-    "branch": "clay-go-sqlite-runtime-attestation-20260812",
-    "head_after_feasibility": "531324f797736aaed289d7df31b2f6975933ebc3",
-    "files": [
-      "runtime/state/sqlite_runtime_attestation.py",
-      "tests/sqlite_runtime_attestation_gate.py",
-      ".github/workflows/clay-go-sqlite-runtime-attestation-vps.yml",
-      ".github/workflows/clay-go-sqlite-3534-overlay-vps.yml"
-    ],
-    "state": "CANDIDATE_NOT_MAIN",
-    "architecture_delta": "Probe -> trusted runtime pin -> fail-closed canonical DB open. Reject downgrade/library swap by exact runtime/source/artifact identity; do not accept CLI/package version alone."
-  },
-  "remediation_feasibility": {
-    "candidate": "Official SQLite 3.53.4 rootless disposable runtime overlay on self-hosted Ubuntu lane",
-    "github_run_id": "31523517392",
-    "github_job_id": "93886135104",
-    "tested_sha": "531324f797736aaed289d7df31b2f6975933ebc3",
-    "status": "PASS_TECHNICAL_FEASIBILITY_ONLY",
-    "baseline_version": "3.45.1",
-    "baseline_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
-    "overlay_version": "3.53.4",
-    "overlay_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
-    "loaded_overlay_artifact": {
-      "path_class": "DISPOSABLE_TEMP_PREFIX/lib/libsqlite3.so.3.53.4",
-      "sha256": "766647ee994e598c87ebf8827cf065c6880b2f29e8a112db56b564f0a84f973a",
-      "size": 5032360
-    },
-    "receipt_artifact_id": "9114063482",
-    "receipt_zip_sha256": "0d884ef58eefc171706a2172594e333b11089fa6c90471a447776bccf5579082",
-    "official_archive_hash_verified": true,
-    "same_python_executable": "/usr/bin/python3",
-    "frank_database_opened": false,
-    "system_install_performed": false,
-    "state_mutation_performed": false,
-    "production_upgrade_performed": false
-  },
   "release_adjudication": {
     "F-V01-13": "OPEN_RELEASE_BLOCKING",
-    "reason": "The baseline Python runtime remains SQLite 3.45.1. The official 3.53.4 overlay proves a viable local remediation mechanism but is disposable and not bound into Frank boot/persistence.",
-    "next_smallest_falsifier": "Install or provision the fixed runtime in the accepted production path, then make repo_truth_gate and migration/open paths fail closed on the exact admitted runtime/source/artifact identity; test downgrade and library-swap rejection before any canonical WAL DB open.",
+    "reason": "The accepted-lane baseline Python runtime is still SQLite 3.45.1. V4 has an independently measured caller-selected trust-anchor gap. V5 closes that interface in candidate code and fails closed without the fixed anchor, but the current CI lane cannot provision the root-owned independent anchor for end-to-end production-path proof.",
+    "next_smallest_falsifier": "Use an independently authorized deployment/admin lane to provision the approved fixed SQLite bundle at the accepted trust anchor, then prove V5 exact-target admission plus downgrade/library-swap rejection and non-bypassable service/bootstrap routing before any canonical WAL DB open. If privileged provisioning is intentionally unavailable, canonically choose and test an equivalently independent trust anchor rather than caller-selected input.",
     "promotion_forbidden_until": [
-      "fixed productive runtime is installed or otherwise bound",
+      "fixed productive runtime is installed or otherwise independently bound",
+      "independent trust-anchor authority is proven and not caller/model/Frank selectable",
       "exact runtime/source/artifact identity is fail-closed before canonical WAL database opens",
-      "downgrade/library-swap rejection is tested",
+      "downgrade/library-swap and bypass rejection are tested",
       "relevant crash/restart/recovery acceptance remains satisfied"
     ]
   }

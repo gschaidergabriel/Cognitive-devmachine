@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260811T2243p0700-chatgpt-secondary-first-compiler-lowering",
+  "trigger": "claycode",
+  "created_at_local": "2026-08-11T22:43:00+07:00",
+  "created_at_utc": "2026-08-11T15:43:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_center_parent_observed": "b17bfec872bd1dcc8f6e2d6f4bc54feac57f4dee",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "fresh_target_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+  "current_evidence_input": {
+    "merged_executable_evaluator_pr": 310,
+    "merged_main_commit": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "accepted_target_run": 31506115570,
+    "decide_effect_requests_compared": 200576,
+    "decide_effect_mismatches": 0,
+    "package_binding_checks": "7/7 PASS",
+    "scope_limit": "decide_effect and destructive_guard_complete only"
+  },
+  "mesh_inputs": {
+    "unifieddb_claygraph_current_delta": "caf8d5acd1f867af2ee479b5506fdce9c6b9af62",
+    "relevant_constraint": "canonical/current production state must remain unopened/unmigrated until accepted migration/rollback/recovery; compiler experiment therefore operates only on source/evaluator values and performs no UnifiedDB/ClayGraph mutation",
+    "semantic_authority_constraint": "ClayCode remains semantic authority; backend representation is compiled projection only"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Python 3.12 compile() documentation",
+      "retrieved": "2026-08-11",
+      "use": "supports an AST/code-object bootstrap backend without string code generation"
+    },
+    {
+      "source": "Python 3.12 ast.fix_missing_locations documentation",
+      "retrieved": "2026-08-11",
+      "use": "generated AST nodes require location attributes before compile(); semantic identity is therefore frozen before location repair"
+    },
+    {
+      "source": "Cranelift codegen 0.134.2 documentation",
+      "retrieved": "2026-08-11",
+      "use": "retained as a stronger later native-code backend candidate; not selected for this first bounded compiler falsifier because it would add a new IR/runtime integration surface before source semantics are broad enough"
+    }
+  ],
+  "hypothesis": "The already target-supported pure ClayCode effect-policy subset can be lowered into a deterministic executable backend while preserving source-evaluator semantics exactly and without opening an effect/authority path.",
+  "strongest_counterhypothesis": "A host-AST backend will merely reproduce Python semantics and hidden coercions, creating a second semantic architecture rather than a faithful compiled projection of ClayCode.",
+  "discriminating_design": {
+    "candidate": "CPYTHON_AST_BOOTSTRAP_V1",
+    "target_pr": 364,
+    "target_branch": "chatgpt/claycode-python-lowering-v1-fresh-main-20260811",
+    "target_head": "bef7686f909f9d87d59f33731f0f7241e78bc2fe",
+    "target_workflow_run": 31508447693,
+    "target_workflow_state_at_write": "QUEUED",
+    "compiled_entry": "frank.effects::decide_effect",
+    "reachable_clay_functions": ["decide_effect", "destructive_guard_complete"],
+    "three_way_oracles": ["ClayCode tree evaluator", "compiled backend", "shipping Python EffectGate reference"],
+    "planned_requests": 200576,
+    "fail_closed_guards": [
+      "intrinsic-reachable entry is refused",
+      "multi-relation comparison chain is refused until semantics are adjudicated",
+      "unknown AST statement/expression node is refused",
+      "no authority-minting intrinsic binding exists",
+      "no external effect path exists"
+    ],
+    "sensitivity": "one in-memory semantic sabotage must turn the differential red",
+    "determinism": "repeated lowering must produce the same location-free generated AST hash"
+  },
+  "stale_work_adjudication": {
+    "stale_pr": 362,
+    "stale_head": "91b21b5413f8683c638552d79126045bcbfa818c",
+    "reason": "target main advanced concurrently when PR #310 merged",
+    "action": "CLOSED_NOT_MERGED_AND_REBUILT_FROM_FRESH_MAIN",
+    "new_pr": 364
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "affected_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "change": "introduce the first bounded compiler/lowering stage from executable ClayCode AST to deterministic CPython AST/code for the already evidenced pure policy subset",
+    "semantic_change": false,
+    "backend_is_semantic_authority": false,
+    "rollback": "close PR #364 / delete candidate branch; merged main remains unchanged until target evidence is accepted"
+  },
+  "negative_results_and_nonclaims": [
+    "The first compiler PR #362 is stale historical evidence and was closed without merge.",
+    "No compiler PASS is claimed while target workflow 31508447693 is queued.",
+    "No WP04 type/effect completion is claimed.",
+    "No comparison-chain semantics are selected.",
+    "No Bool/Int equality semantics are selected.",
+    "No host intrinsic/effect runtime is compiled.",
+    "No UnifiedDB/ClayGraph canonical state is opened or migrated.",
+    "No whole Frank v0.1 acceptance or training authorization is claimed."
+  ],
+  "next_falsifiers": [
+    "observe exact target run 31508447693 and require 10/10 checks with zero three-way mismatches",
+    "if target passes, independently inspect generated AST for semantic aliasing and resource regression before promotion",
+    "then compile the next source subset only after its type/effect semantics are executable and differentially evidenced",
+    "evaluate Cranelift/native lowering only after the Clay IR/type/effect boundary is sufficiently frozen to avoid encoding host semantics by accident"
+  ],
+  "research_write": "COMMITTED_CANDIDATE_PENDING_TARGET_RECEIPT",
+  "external_effect_performed": false,
+  "frank_harness_modified_under_frank_authority": false,
+  "final_training_authorized": false
+}

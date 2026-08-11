@@ -71,7 +71,18 @@
       "reject group/world-writable components",
       "apply shared helper to launcher and systemd FragmentPath"
     ],
-    "ordinary_regression_expected": "13/13",
+    "ordinary_local_path_regression": {
+      "status": "PASS",
+      "checks": "4/4",
+      "scope": "isolated helper-semantics regression; not an accepted-target or whole-repository PASS",
+      "observed": [
+        "secure direct path admitted",
+        "leaf symlink denied",
+        "parent symlink denied",
+        "group-writable parent denied"
+      ]
+    },
+    "full_repo_regression_expected": "13/13 once exact-head workflow executes",
     "accepted_target_workflow_run": 31535261727,
     "accepted_target_workflow_status_at_receipt": "QUEUED_NO_RUNNER",
     "accepted_target_pass_claimed": false

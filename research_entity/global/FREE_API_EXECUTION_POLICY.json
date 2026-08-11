@@ -32,6 +32,7 @@
     "Except for an officially documented free developer endpoint, a configured key requires explicit host-side zero-cost attestation before routing.",
     "A provider credential may only be sent to that provider's canonical host; a global multi-provider host allowlist is forbidden.",
     "Credential binding compares the full remote origin boundary, including the effective HTTPS port; hostname equality alone is insufficient.",
+    "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates a nonempty model plus object messages with nonempty string roles and string content before network access; typed multimodal requests require a separate adapter.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",

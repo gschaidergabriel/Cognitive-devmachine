@@ -40,6 +40,13 @@
     "executable_evidence": "test_unknown_text_message_role_is_blocked_before_network",
     "counterhypothesis": "An arbitrary nonempty role can be delegated to provider-side validation; falsified for this adapter because it causes an avoidable authenticated network call before the provider can reject it."
   },
+  "incomplete_body_errors": {
+    "checked_at": "2026-08-11",
+    "claim": "http.client.IncompleteRead after a received response is an incomplete provider response, not an unhandled process exception.",
+    "source": "https://docs.python.org/3/library/http.client.html#http.client.IncompleteRead",
+    "executable_evidence": "test_incomplete_http_body_preserves_status_and_emits_receipt",
+    "counterhypothesis": "Timeout handling covers every interrupted body read; falsified because IncompleteRead is an HTTPException rather than TimeoutError or URLError and escaped without a receipt."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -59,6 +66,7 @@
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
     "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
     "Once response headers and status are received, body-read failures preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
+    "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Every real provider request must emit a redacted execution receipt.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."

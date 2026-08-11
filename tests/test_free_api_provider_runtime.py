@@ -360,6 +360,60 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_invalid_http_status_is_rejected_before_body_and_execution_state(self):
+        missing = object()
+        body_reads = []
+
+        class Response:
+            def __init__(self, status):
+                if status is not missing:
+                    self.status = status
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                body_reads.append(limit)
+                return b'{"choices":[{"message":{"content":"must-not-pass"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for invalid_status in (missing, True, "200", 99, 600):
+            with self.subTest(status=invalid_status):
+                result = MOD.execute_chat(
+                    [], model="mock", environ=env,
+                    opener=lambda *args, status=invalid_status, **kwargs: (
+                        Response(status)
+                    ),
+                    now=iter((67.0, 67.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertIsNone(receipt["status"])
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertNotIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
+        def invalid_http_error(request, timeout):
+            raise MOD.urllib.error.HTTPError(
+                request.full_url, "402", "invalid typed status", {}, None,
+            )
+
+        result = MOD.execute_chat(
+            [], model="mock", environ=env, opener=invalid_http_error,
+            now=iter((68.0, 68.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
+        self.assertFalse(receipt["payment_latch_active"])
+        self.assertEqual(body_reads, [])
+
     def test_unreachable_provider_has_no_http_status_or_executed_state(self):
         def opener(request, timeout):
             raise MOD.urllib.error.URLError("connection refused")

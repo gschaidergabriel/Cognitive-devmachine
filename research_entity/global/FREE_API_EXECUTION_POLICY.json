@@ -33,6 +33,7 @@
     "A provider credential may only be sent to that provider's canonical host; a global multi-provider host allowlist is forbidden.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
+    "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
     "Every real provider request must emit a redacted execution receipt.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
   ],

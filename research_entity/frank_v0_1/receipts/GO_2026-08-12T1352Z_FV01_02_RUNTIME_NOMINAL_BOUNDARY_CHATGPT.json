@@ -1,8 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "receipt_id": "GO-2026-08-12T1352Z-FV01-02-RUNTIME-NOMINAL-BOUNDARY-CHATGPT",
   "trigger": "go",
   "created_at_utc": "2026-08-12T13:52:00Z",
+  "updated_at_utc": "2026-08-12T13:56:00Z",
   "entity_id": "frank-project-global-research-entity",
   "actor": {
     "actor_id": "chatgpt-secondary",
@@ -24,13 +25,15 @@
     "initial_fresh_main": "d7307539d9d30940a1761f5e567374e951a2ea48",
     "candidate_branch": "chatgpt/go-claycode-runtime-nominal-boundary-20260812",
     "tested_repair_head": "646d654b2189eb4452328c5285948db1d4f1a11a",
-    "current_pr_head_at_receipt": "2eb2ba63f1fe19e6ad69870fc81948481e731a87",
+    "current_pr_head": "2eb2ba63f1fe19e6ad69870fc81948481e731a87",
     "pull_request": 536,
     "pull_request_state": "DRAFT_OPEN",
-    "main_at_pr_merge_event": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
-    "main_drift_overlap_check": "NO_CLAYCODE_FILE_OVERLAP_IN_FIVE_NEWER_COMMITS",
+    "pr_merge_sha": "7a2b5fb3ecb922189159a857220c259bc6f44159",
+    "pr_merge_main_parent": "53d0906e5e0d5493517393164854681c2db06854",
+    "main_drift_overlap_check": "NO_CLAYCODE_FILE_OVERLAP_IN_PRE_REPLAY_MAIN_DRIFT",
     "exact_pr_merge_replay_run": 31603641934,
-    "exact_pr_merge_replay_status_at_receipt": "QUEUED"
+    "exact_pr_merge_replay_job": 94136953174,
+    "exact_pr_merge_replay_status": "PASS"
   },
   "go_oob_accounting": {
     "count": 1,
@@ -69,8 +72,13 @@
     "next_falsifier": "Preserve opaque as an explicit named grammar/typed-syntax signal, then require parsed plain-vs-opaque discrimination before relaxing the record quarantine."
   },
   "accepted_target_evidence": {
-    "repair_run": 31603073835,
-    "job": 94135047124,
+    "feature_repair_run": 31603073835,
+    "feature_repair_job": 94135047124,
+    "feature_artifact_sha256": "92528d7aca6f9861176769d411015ab82136ccecfcfd2b0fabb8fde646395cd3",
+    "pr_merge_replay_run": 31603641934,
+    "pr_merge_replay_job": 94136953174,
+    "pr_merge_tested_sha": "7a2b5fb3ecb922189159a857220c259bc6f44159",
+    "pr_merge_event": "pull_request",
     "runner": "clay",
     "machine": "digital-retina",
     "python": "3.12.3",
@@ -80,7 +88,7 @@
     "repo_static_integrity": "PASS",
     "consumed_oob_replay": "HOST_RUNTIME_NOMINAL_CROWN_SWAP_REJECTED_AFTER_REPAIR",
     "new_go_oob_count_after_initial_experiment": 0,
-    "artifact_sha256": "92528d7aca6f9861176769d411015ab82136ccecfcfd2b0fabb8fde646395cd3",
+    "pr_merge_artifact_sha256": "48c7a2601760bc172a3dc06d9e06a2959d66e5cf863094003fb3feca4acfc8ac",
     "external_effect_executed": false,
     "authority_minted": false,
     "canonical_frank_state_mutated": false,
@@ -92,6 +100,7 @@
     "architecture_action": "NO_DUPLICATE_SQLITE_WRAPPER_FROM_THIS_LANE"
   },
   "promotion": "NOT_PROMOTED_DRAFT_PR",
+  "promotion_boundary": "Exact current PR merge-SHA replay is green, but parsed-source record opacity fidelity remains falsified and quarantined. Do not promote the full record runtime boundary until that semantic metadata path is repaired and retested.",
   "non_claims": [
     "No whole WP04 completion.",
     "No complete ClayCode runtime codec or F-V01-02 completion.",
@@ -102,7 +111,6 @@
     "No final model training authorization."
   ],
   "next_frontier": [
-    "Complete exact PR merge-SHA replay against current main and keep the PR draft until green.",
     "Repair source opaque metadata fidelity in grammar/typed syntax and replay plain-vs-opaque parsed-record discrimination.",
     "Bind future host/FFI/runtime codecs to explicit Clay nominal decoding rather than Python object shape/coercion.",
     "Continue productive Hostinger process/binary/state-lineage attestation for F-V01-13 independently of this ClayCode lane."

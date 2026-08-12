@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1145p0700-chatgpt-secondary-identity-guard-semantic-drift",
+  "organ": "chatgpt-secondary / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_at_initial_branch": "cebf0cbc7543bcd1ed09bd104d2963bb5d3b0bc1",
+    "research_main_refreshed_before_receipt": "3c851cced1921856e4b17c67750e91c77a5609d9",
+    "new_main_delta_overlap": false,
+    "new_main_delta_scope": "Two later GO receipts only; no overlap with identity checker, lifecycle hook, or identity workflow files.",
+    "draft_pr": 259
+  },
+  "r0_observed": [
+    "The current owner-fixed identity contract uses self.root as the target native identity and Frank as its human-surface name while Clay remains the separate persistent research entity.",
+    "The current tools/research_identity_guard_check.py still required historical lexical sentinels and bootstrap fields that are absent from current BOOTSTRAP_MINIMAL.json and RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md.",
+    "The current .claude/hooks/rae_hook.py identity_lock() likewise required historical identity strings and would degrade the identity lock under the current owner-fixed injection text.",
+    "The mandatory hosted Research Entity Identity Guard run 31555181597/job 93986017506 executed zero steps, so the stale semantic checker was masked by an infrastructure failure.",
+    "A separate Frank-repository self-hosted Linux/X64 run 31540064442 executed real steps successfully on runner clay, proving some self-hosted capacity exists project-wide but not that this research repository can route to it."
+  ],
+  "r1_r2_generated_realities": [
+    {
+      "id": "H-HOSTED-ONLY-BLOCKER",
+      "hypothesis": "The identity guard is semantically current and only unavailable because the hosted runner cannot start.",
+      "outcome": "REJECT",
+      "reason": "Direct checker/hook comparison against the current owner-fixed identity sources exposed stale required fields and lexical sentinels."
+    },
+    {
+      "id": "H-SEMANTIC-GUARD-DRIFT",
+      "hypothesis": "The identity enforcement instrumentation lagged the self.root identity migration and must be realigned without weakening the owner-fixed separation or Harness-authority boundary.",
+      "outcome": "RETAIN_TESTING",
+      "confidence": "HIGH_FOR_STATIC_CONTRACT_DRIFT; EXECUTABLE_REPAIR_EVIDENCE_PENDING"
+    }
+  ],
+  "r3_counter_reality": {
+    "strongest_counterhypothesis": "Changing the checker to current strings could accidentally weaken identity separation by deleting historical guard clauses rather than preserving their current semantic equivalents.",
+    "discriminator": "Require the current checker to bind self.root native identity, Frank human surface, Clay/target separation, canonical revision/hash coherence, proposal-only target Harness authority, training-authority state, current stack/turn hooks, and explicit anti-collapse patterns.",
+    "status": "ENCODED_IN_REPAIR; RUNTIME_EXECUTION_PENDING"
+  },
+  "repair_candidate": {
+    "branch": "chatgpt/go-identity-guard-semantic-drift-20260812",
+    "head_before_receipt": "041f6b56071feb89facd81361bba8c2515576543",
+    "pr": 259,
+    "files": [
+      "tools/research_identity_guard_check.py",
+      ".claude/hooks/rae_hook.py",
+      ".github/workflows/research-identity-guard.yml"
+    ],
+    "semantics": [
+      "checker aligned to current self.root / Frank owner-fixed contract",
+      "hook identity lock aligned to same contract",
+      "PR lane remains ephemeral GitHub-hosted",
+      "trusted push lane may use read-only self-hosted Linux/x64 if actually available",
+      "no Frank Harness mutation or target authority change"
+    ]
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "id": "IDENTITY_GUARD_EXECUTION_SURFACE_FAILOVER",
+    "baseline": "Hosted Identity Guard run 31555181597/job 93986017506: zero steps, no enforcement credit.",
+    "intervention": "On a reversible feature branch, split PR execution from trusted push execution and attempt the trusted push guard on self-hosted Linux/x64.",
+    "specialized_label_run": 31564135119,
+    "reduced_label_run": 31564167375,
+    "observed": "Both self-hosted jobs remained queued with no assigned runner and no executed steps at adjudication.",
+    "result": "DEFER",
+    "interpretation": "The research repository does not currently have proven available self-hosted guard execution. This is not a code failure and not guard PASS.",
+    "rollback": "Do not merge PR #259; main remains unchanged.",
+    "production_state_mutated": false,
+    "canonical_state_mutated": false
+  },
+  "external_primary_evidence": [
+    {
+      "source": "GitHub Docs / About self-hosted runners",
+      "claim": "Self-hosted runner label selection is cumulative and persistent self-hosted runners require stronger trust controls than ephemeral hosted runners."
+    },
+    {
+      "source": "GitHub Docs / Secure use reference",
+      "claim": "Untrusted pull-request code can persistently compromise a self-hosted runner; therefore the repair does not route PR-head execution to the persistent self-hosted lane."
+    }
+  ],
+  "collapse": {
+    "outcome": "DEFER",
+    "promoted": [
+      "There is a real static semantic drift between the current owner-fixed identity contract and the old checker/hook requirements.",
+      "The repair candidate is durably available in draft PR #259.",
+      "A configured but zero-step workflow is not identity enforcement evidence."
+    ],
+    "not_promoted": [
+      "repaired identity guard PASS",
+      "self-hosted research-repo execution availability",
+      "whole Frank v0.1 acceptance",
+      "any F-V01 package closure"
+    ]
+  },
+  "next_discriminating_test": "Execute PR #259 checker on exact repository bytes on an authorized surface. If no research-repo self-hosted runner becomes available, use an ephemeral/sandboxed zero-cost execution path that does not expose a persistent runner to untrusted PR code. Promote only after exact checker PASS and preserve the current zero-step negatives.",
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "REPAIR_CANDIDATE_COMMITTED_DRAFT_PR_259; EXECUTABLE_GUARD_EVIDENCE_BLOCKED"
+}

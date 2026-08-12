@@ -1,12 +1,12 @@
 {
   "schema_version": "3.0",
   "status": "ACTIVE",
-  "last_reviewed_cycle": "ccauto-20260812T0150Z-supervisor",
-  "current_focus": "FRANK_V0_1 F-V01-02 remains active with WP03/WP04/WP05/WP06 OPEN, but the autonomous execution surface has a new hard FREE_ONLY blocker. Scheduled ClayCode autonomous run 31548258330 on main 58886c6d896e9cfca2a8aa972c013f4604a6ddbc failed before any step executed. Job 93965229487 has steps=[], runner_id=0 and no runner name; its GitHub annotation says the job was not started because recent account payments failed or the spending limit must be increased. This is infrastructure/billing evidence only: grant zero code, semantic, provider, BASE or Frank credit. FREE_ONLY forbids increasing the spending limit or enabling paid Actions usage. Do not repeatedly rerun the same github-hosted ubuntu-latest lane while that is the expected outcome. Route subsequent autonomous execution only through a currently verifiable zero-cost surface, preferring an already-authorized self-hosted Ubuntu runner/target; if none can be verified, fail closed and preserve queued research requests. The ClayCode evidence frontier itself is unchanged: PR478 remains bounded WP04-before-tree-evaluator route evidence, PR480 bounded MethodChain analyzer fail-closed observability, and PR462/PR477 one bounded WP04-before-Python plus private admitted-state route. Recompose PR478/PR480 on latest product main and audit every productive tree-evaluator/compiler/lowering/FFI entrypoint for mandatory WP04 admission plus immutable/private admitted-state handoff. Preserve 429 unique/464 unresolved Call occurrences, all 22 callable MethodChain segments, comparison-chain semantics, Bool/Int equality, verb_for and global NOT/relation precedence as authority-unselected. Prior PR499 clean-V4 evidence remains scoped candidate support only; F-V01-04 remains OPEN. ProductStart remains conjunctive and incomplete. No new accepted-Ubuntu live free-provider receipt exists. Together remains denied, paid fallback false, Goodman ancestry collapsed, Ubuntu-only final acceptance, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence plus review, and no Frank-Harness modification.",
+  "last_reviewed_cycle": "ccauto-20260812T0341Z-supervisor",
+  "current_focus": "FRANK_V0_1 F-V01-02 remains active with WP03/WP04/WP05/WP06 OPEN. The FREE_ONLY execution-surface blocker is now broader than the autonomous workflow: after main commit 4c6ed3b521ac324a241671892cd7d9a422001c4f paused automatic ClayCode autonomous scheduling, push-triggered Research Entity Identity Guard run 31555181597 also failed before any step executed; job 93986017506 has steps=[] and therefore supplies zero guard, code, semantic, provider, BASE or Frank credit. This means GitHub-hosted Actions cannot presently be treated as an effective enforcement surface for either autonomous research or repository identity guarding. FREE_ONLY still forbids increasing spending limits, purchasing Actions capacity or enabling paid fallback. Do not route mandatory safety or acceptance claims through github-hosted jobs until a runner actually executes them. Prefer a currently verified zero-cost self-hosted Ubuntu surface; if none is verifiable, fail closed and preserve pending requests. ClayCode evidence frontier otherwise remains unchanged: PR478 bounded WP04-before-tree-evaluator route evidence, PR480 bounded MethodChain analyzer fail-closed observability, and PR462/PR477 one bounded WP04-before-Python plus private admitted-state route. Recompose PR478/PR480 on latest product main and audit every productive evaluator/compiler/lowering/FFI entrypoint for mandatory WP04 admission plus immutable/private admitted-state handoff. Preserve 429 unique/464 unresolved Call occurrences, all 22 callable MethodChain segments, comparison-chain semantics, Bool/Int equality, verb_for and global NOT/relation precedence as authority-unselected. Prior PR499 clean-V4 evidence remains scoped candidate support only; F-V01-04 OPEN. ProductStart remains conjunctive and incomplete. No new accepted-Ubuntu live free-provider receipt exists. Together denied, paid fallback false, Goodman ancestry collapsed, Ubuntu-only final acceptance, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence plus review, and no Frank-Harness modification.",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
-    "github_hosted_autonomous_cycle": "HARD_BLOCKED_BEFORE_START_BY_GITHUB_ACCOUNT_BILLING_OR_SPENDING_LIMIT; FREE_ONLY_FORBIDS_PAID_REMEDIATION; RUN_31548258330_JOB_93965229487_ZERO_STEPS_ZERO_CREDIT",
+    "github_hosted_actions": "HARD_BLOCKED_BEFORE_START_ACROSS_AUTONOMOUS_AND_IDENTITY_GUARD_OBSERVED_LANES; RUN_31548258330_JOB_93965229487_ZERO_STEPS; RUN_31555181597_JOB_93986017506_ZERO_STEPS; FREE_ONLY_FORBIDS_PAID_REMEDIATION",
     "self_hosted_ubuntu_execution": "PREFERRED_FREE_ONLY_SURFACE_IF_CURRENTLY_REGISTERED_AND_VERIFIABLE; AVAILABILITY_NOT_VERIFIED_BY_CURRENT_GITHUB_APP",
     "mistral_runtime": "CREDENTIAL_NOT_CONFIGURED_IN_AUTONOMOUS_RUNNER",
     "free_api_runtime": "NO_NEW_ACCEPTED_UBUNTU_LIVE_PROVIDER_RECEIPT; restart-durable 402 latch and external billing-principal evidence remain open",
@@ -42,7 +42,10 @@
     "latest_autonomous_run": 31548258330,
     "latest_autonomous_run_job": 93965229487,
     "latest_autonomous_run_status": "ZERO_STEP_GITHUB_HOSTED_BILLING_BLOCK_INFRASTRUCTURE_ONLY",
-    "latest_autonomous_run_head": "58886c6d896e9cfca2a8aa972c013f4604a6ddbc",
+    "latest_hosted_guard_run": 31555181597,
+    "latest_hosted_guard_job": 93986017506,
+    "latest_hosted_guard_status": "ZERO_STEP_GITHUB_HOSTED_INFRASTRUCTURE_ONLY_NO_GUARD_CREDIT",
+    "current_main": "4c6ed3b521ac324a241671892cd7d9a422001c4f",
     "current_product_main": "138d6ec70a0b4fb3d2b438766481f6775ce9f495",
     "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST"
   },
@@ -50,10 +53,11 @@
     {"cycle": "ccauto-20260809T105416Z", "families": ["nemotron", "deepseek", "glm", "gpt-oss"], "status": "MULTI_FAMILY_SUCCESS", "note": "Correlated support only; model agreement never overrides executable evidence."},
     {"cycle": "pr478-pr480-claycode-admission-20260812", "families": ["shared-clay-source-project-self-hosted-runner-lineage"], "status": "EXECUTABLE_TARGET_SUPPORT", "note": "Distinct executable boundary repairs remain Goodman-correlated and not independent semantic replication."},
     {"cycle": "unifieddb-v4-composed-20260812", "families": ["same-project-same-exact-head-same-target-research-lineage"], "status": "EXECUTABLE_COMPOSED_SCOPED_SUPPORT", "note": "Prior candidate evidence does not close F-V01-04."},
-    {"cycle": "ccauto-20260812T0150Z", "families": [], "status": "NO_EXECUTION_INFRASTRUCTURE_BLOCK", "note": "GitHub-hosted job never obtained a runner or executed a step; no model, code, provider or semantic evidence was produced."}
+    {"cycle": "ccauto-20260812T0150Z", "families": [], "status": "NO_EXECUTION_INFRASTRUCTURE_BLOCK", "note": "GitHub-hosted autonomous job never obtained a runner or executed a step; no model, code, provider or semantic evidence was produced."},
+    {"cycle": "ccauto-20260812T0341Z", "families": [], "status": "NO_EXECUTION_GUARD_SURFACE_BLOCK", "note": "Research Entity Identity Guard also executed zero steps; hosted CI cannot currently be counted as an active enforcement oracle."}
   ],
   "high_information_targets": [
-    "restore autonomous execution only on a currently verified zero-cost surface; prefer authorized self-hosted Ubuntu; do not purchase GitHub-hosted Actions capacity or raise a spending limit",
+    "restore mandatory research and guard execution only on a currently verified zero-cost surface; prefer authorized self-hosted Ubuntu; do not purchase GitHub-hosted Actions capacity or raise a spending limit",
     "audit every productive raw/admitted tree-evaluator, compiler/lowering and FFI entrypoint for mandatory canonical WP04 admission plus immutable/private admitted-state handoff",
     "recompose PR478 and PR480 against latest current main before promotion, preserving exact counterworlds and ordinary positive baselines",
     "classify all 22 callable MethodChain segments by owner-reviewed executable contract; analyzer fail-closed observability is not semantic resolution",
@@ -64,12 +68,12 @@
     "keep provider lane fail-closed until an accepted-Ubuntu live FREE_ONLY receipt proves real zero-cost execution, 402 hard-stop and durable cost-principal lineage"
   ],
   "steering_notes": [
-    "Run 31548258330 is a new provider/execution-surface capability change: GitHub-hosted ubuntu-latest did not start because GitHub reported account payment/spending-limit blockage.",
-    "Zero executed steps means zero executable ClayCode evidence. Do not reinterpret the failure as a test failure, model result, or semantic counterexample.",
-    "FREE_ONLY makes increasing the GitHub spending limit or purchasing additional Actions minutes an invalid remediation.",
-    "GitHub documents self-hosted runners as free to use with GitHub Actions, but this cycle could not verify repository runner registration because the connected GitHub integration lacks runner-list access; availability must therefore be established before routing.",
-    "All prior ClayCode semantic and BASE work-package boundaries remain unchanged.",
-    "FREE_ONLY remains mandatory; Together denied, no paid fallback, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence plus review, and no Frank-Harness modification."
+    "Run 31555181597 / job 93986017506 shows the hosted Actions block also disables the Research Entity Identity Guard, not only the ClayCode autonomous lane.",
+    "A zero-step guard run means the guard supplied no enforcement evidence; do not assume repository identity protection from that workflow while hosted execution is blocked.",
+    "No new executable ClayCode, provider, BASE or semantic evidence appeared after the prior cycle.",
+    "FREE_ONLY makes spending-limit increases or purchased Actions capacity invalid remediation.",
+    "Self-hosted Ubuntu remains the preferred zero-cost route only after current registration and availability are actually verified.",
+    "All prior ClayCode semantic and BASE work-package boundaries remain unchanged; no Frank-Harness modification."
   ],
   "steering_ref": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"
 }

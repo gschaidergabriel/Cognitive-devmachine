@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.2",
+  "schema_version": "2.3",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -8,30 +8,23 @@
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
   "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST",
   "cycle_policy": {
-    "github_cycle_cron": "13 * * * *",
     "supervisor_review_target": "hourly",
     "max_llm_calls_per_cycle": 8,
     "max_output_tokens_per_llm_call": 2048,
-    "max_mistral_completions_per_request": 2,
-    "max_retrieval_passages_per_rerank": 64,
     "on_http_402": "HARD_STOP_PROVIDER_AND_FALLBACK_FREE_ONLY",
     "on_http_429": "COOLDOWN_PROVIDER_AND_CONTINUE_OTHER_FREE_CAPABILITIES",
     "paid_fallback": false,
     "automatic_subscription_upgrade": false,
     "github_hosted_actions_paid_remediation": false,
     "github_hosted_actions_blocked_run": 31548258330,
-    "github_hosted_actions_blocked_job": 93965229487,
     "github_hosted_identity_guard_blocked_run": 31555181597,
-    "github_hosted_identity_guard_blocked_job": 93986017506,
-    "github_hosted_actions_block_class": "ZERO_STEP_BLOCK_OBSERVED_ACROSS_AUTONOMOUS_AND_IDENTITY_GUARD_LANES",
     "next_execution_surface": "VERIFIED_ZERO_COST_ONLY_PREFER_SELF_HOSTED_UBUNTU_ELSE_FAIL_CLOSED",
-    "repeat_blocked_ubuntu_latest_without_changed_surface_evidence": false,
-    "assume_hosted_guard_enforcement_without_executed_steps": false
+    "generic_self_hosted_labels_mint_product_target_identity": false
   },
   "research_loop": [
     "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
     "VERIFY_FREE_EXECUTION_SURFACE_BEFORE_COMPUTE",
-    "VERIFY_MANDATORY_GUARD_SURFACE_EXECUTED_NOT_MERELY_CONFIGURED",
+    "VERIFY_RUNNER_AND_PRODUCT_TARGET_PROVENANCE_SEPARATELY_FROM_ROUTING_LABELS",
     "HARVEST_PROVIDER_MODELS_AND_CAPABILITIES",
     "SELECT_NON_REDUNDANT_MODEL_FAMILIES",
     "RETRIEVE_AND_RERANK_RELEVANT_CLAYCODE_EVIDENCE",
@@ -47,22 +40,22 @@
     "SELECT_NEXT_HIGHEST_INFORMATION_TARGET"
   ],
   "model_role_policy": {
-    "architect": ["mistral:reasoning_high_when_free_available", "nvidia:strong_reasoning_or_coding"],
-    "falsifier": ["nvidia:different_model_family_from_architect", "mistral:independent_counterhypothesis_when_free_available"],
-    "alternative": ["nvidia:deepseek_or_glm_or_other_nonarchitect_family"],
-    "judge": ["nvidia:nemotron_or_other_nonidentical_family"],
-    "retrieval": ["nvidia:nv-embedcode-7b-v1", "repo_search", "claygraph", "unifieddb"],
-    "reranker": ["nvidia:llama-nemotron-rerank-vl-1b-v2"],
-    "execution_oracles": ["fixed_local_tests", "self_hosted_ubuntu_target", "other_oracles_only_when_free_verified"]
+    "architect":["mistral:reasoning_high_when_free_available","nvidia:strong_reasoning_or_coding"],
+    "falsifier":["nvidia:different_model_family_from_architect","mistral:independent_counterhypothesis_when_free_available"],
+    "alternative":["nvidia:deepseek_or_glm_or_other_nonarchitect_family"],
+    "judge":["nvidia:nemotron_or_other_nonidentical_family"],
+    "retrieval":["nvidia:nv-embedcode-7b-v1","repo_search","claygraph","unifieddb"],
+    "reranker":["nvidia:llama-nemotron-rerank-vl-1b-v2"],
+    "execution_oracles":["fixed_local_tests","self_hosted_ubuntu_target","other_oracles_only_when_free_verified"]
   },
   "independence_rules": [
     "same_model_via_two_providers_is_shared_ancestry_not_replication",
     "same_base_family_counts_as_correlated_evidence",
-    "prefer_distinct_model_families_for_architect_falsifier_judge",
     "model_agreement_never_overrides_executable_counterexample",
     "retrieval_or_graph_salience_never_mints_semantic_truth",
-    "accepted_target_execution_on_exact_bytes_has_higher_weight_than_model_consensus",
-    "multiple_tests_on_shared_source_project_runner_or_candidate_ancestry_are_goodman_correlated_not_independent_semantic_replication"
+    "multiple_tests_on_shared_source_project_runner_or_candidate_ancestry_are_goodman_correlated_not_independent_semantic_replication",
+    "self_hosted_linux_x64_or_custom_runner_labels_are_routing_selectors_not_independent_product_host_identity",
+    "productive_target_credit_requires_independently_bound_owner_fixed_host_or_deployment_provenance"
   ],
   "authority_rules": [
     "model_output_is_candidate_not_truth",
@@ -75,22 +68,25 @@
     "semantic_change_requires_executable_counterexample_and_supervisor_review",
     "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle",
     "cancelled_queued_failed_zero_step_or_uninspectable_workflow_never_counts_as_positive_semantic_compiler_provider_guard_or_release_acceptance",
-    "configured_guard_workflow_without_executed_steps_is_not_enforcement_evidence",
     "github_hosted_runner_billing_or_spending_limit_failure_is_infrastructure_only_and_must_not_trigger_paid_remediation_under_free_only",
     "free_only_forbids_increasing_actions_spending_limit_purchasing_additional_runner_minutes_or_enabling_paid_fallback",
-    "blocked_github_hosted_jobs_must_not_be_retried_as_code_or_guard_tests_without_new_execution_surface_evidence",
     "self_hosted_or_other_execution_surface_must_be_currently_verifiable_and_zero_cost_before_autonomous_credit",
-    "mandatory_identity_or_safety_guard_credit_requires_actual_guard_execution_on_the_relevant_bytes",
+    "generic_self_hosted_linux_x64_labels_do_not_mint_hostinger_productstart_or_final_target_identity",
+    "runner_local_mechanism_success_may_be_preserved_without_upgrading_to_productive_target_acceptance",
+    "productstart_pre_first_guard_trust_closure_must_cover_launcher_and_all_executable_imported_guard_code",
+    "productstart_pre_first_guard_trust_closure_must_cover_loader_search_directory_ancestry_and_transitive_dependency_authority",
+    "script_based_productstart_must_bind_shebang_interpreter_identity_and_resolved_interpreter_path_under_deployment_policy",
+    "pinned_primary_dso_identity_does_not_authenticate_unpinned_dt_needed_dependencies",
+    "trusted_parent_directory_does_not_authenticate_preexisting_child_module_ownership_or_content",
+    "productstart_is_conjunctive_and_no_single_storage_identity_lineage_or_startup_green_can_mint_whole_frank_continuity",
     "raw_tree_evaluator_exposure_must_not_bypass_canonical_wp04_admission_on_productive_paths",
     "wp04_admission_must_bind_an_immutable_or_private_admitted_state_for_all_subsequent_analysis_and_lowering",
     "analyzer_resolvable_must_fail_closed_when_method_or_member_semantics_are_unbound",
     "corpus_unresolved_calls_and_member_segments_must_be_semantically_classified_before_host_binding_or_defaulting",
     "generated_host_ast_or_generated_c_is_projection_not_claycode_semantic_authority",
     "candidate_or_caller_selected_expected_artifact_digest_is_self_consistency_not_independent_release_authority",
-    "productstart_is_conjunctive_and_no_single_storage_identity_lineage_or_startup_green_can_mint_whole_frank_continuity",
     "provider_runtime_candidate_requires_accepted_ubuntu_execution_receipt_before_capability_credit",
     "http_402_payment_required_is_nonretryable_provider_hard_stop_for_current_free_only_cycle",
-    "provider_payment_latch_must_survive_same_budget_epoch_restart_before_release_credit",
     "successor_provider_pr_must_inherit_unresolved_free_only_safety_blockers_from_superseded_pr"
   ],
   "priority_order": [
@@ -107,34 +103,29 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "FREE_ONLY execution-surface blocker first. GitHub-hosted autonomous run 31548258330/job 93965229487 and Research Entity Identity Guard run 31555181597/job 93986017506 both executed zero steps. Therefore github-hosted Actions currently supplies neither ClayCode execution evidence nor identity/safety guard enforcement evidence. Do not raise spending limits, buy Actions capacity or enable paid fallback. Route mandatory execution only through a currently verified zero-cost surface, preferring an authorized self-hosted Ubuntu target; otherwise fail closed and preserve requests. Once execution is available, keep WP03/WP04/WP05/WP06 OPEN and resume current-main PR478/PR480 recomposition, productive evaluator/compiler/lowering/FFI route audit for mandatory WP04 admission and immutable/private admitted-state handoff, preserve all 22 MethodChain segments and 429 unique/464 unresolved calls plus comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence as authority-unselected. Prior PR499 clean-V4 evidence remains scoped candidate support, F-V01-04 OPEN, ProductStart conjunctive, no new accepted-Ubuntu live FREE_ONLY provider receipt. Together denied, paid fallback false, Goodman ancestry collapsed, Ubuntu-only final acceptance, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
+  "current_focus": "New executable ProductStart counterevidence requires a complete pre-first-guard execution trust closure. Preserve the loader-dependency counterworld, imported-guard-chain counterworld and interpreter-identity discriminator as scoped mechanism evidence. Recompose against current product main and test launcher identity, every executable imported guard module, loader search directory ancestry, transitive DT_NEEDED dependency authority and shebang interpreter identity before granting ProductStart credit; then require exact mapped SQLite identity plus start/restart/recovery/rollback/downgrade continuity on independently bound owner-fixed Hostinger Ubuntu deployment provenance. Self-hosted/Linux/X64 labels alone are routing metadata and must not mint Hostinger target identity. Keep WP03/WP04/WP05/WP06 OPEN; resume PR478/PR480 current-main recomposition and productive evaluator/compiler/lowering/FFI audit for mandatory WP04 admission plus immutable/private admitted state. Preserve all 22 MethodChain segments, 429 unique/464 unresolved calls, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence as authority-unselected. GitHub-hosted research-repo Actions remains blocked under FREE_ONLY; no paid remediation. No new accepted-Ubuntu live FREE_ONLY provider receipt. Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
   "supervisor_last_steer": {
-    "reason": "The post-pause push produced a second zero-step GitHub-hosted failure in the Research Entity Identity Guard. This broadens the prior blocker from the autonomous lane to a mandatory safety/identity lane. Steering therefore forbids treating configured hosted guards as effective enforcement without executed steps and keeps all acceptance claims fail-closed until a verified zero-cost execution surface is available.",
+    "reason": "Three new executable/mechanism findings expand ProductStart pre-guard trust obligations: transitive loader dependency code, imported Python guard code, and script interpreter identity. Steering prevents narrow DSO/launcher success from being mistaken for ProductStart acceptance and separates self-hosted routing labels from independently proven Hostinger product identity.",
     "evidence_priority": [
-      "verify a currently available zero-cost execution and guard surface, preferring authorized self-hosted Ubuntu",
-      "do not pay for or raise limits on GitHub-hosted Actions",
-      "require actual identity/safety guard execution before guard credit",
-      "recompose PR478 and PR480 against latest current main when executable capacity exists",
-      "audit productive evaluator compiler lowering and FFI entrypoints for mandatory WP04 admission and immutable/private admitted-state handoff",
-      "classify 22 MethodChain segments and 429/464 unresolved calls without semantic invention",
-      "compose ProductStart and UnifiedDB product-service evidence only on accepted Ubuntu paths"
+      "recompose complete pre-first-guard execution closure on current product main",
+      "bind owner-fixed Hostinger deployment provenance independently from generic runner labels",
+      "run dependency swap, imported-module ownership/content swap, interpreter swap, start/restart/recovery/rollback/downgrade falsifiers",
+      "continue ClayCode productive-route WP04 admission and immutable-state closure",
+      "preserve unresolved semantic authority and Goodman ancestry collapse"
     ],
     "required_next_actions": [
-      "record identity guard run 31555181597 and job 93986017506 as zero-step infrastructure-only evidence",
-      "do not infer identity enforcement from workflow configuration while hosted jobs cannot execute",
-      "do not retry equivalent github-hosted lanes until execution-surface state changes",
-      "use self-hosted Ubuntu only after current availability is verified; otherwise leave executable requests pending",
-      "continue prior ClayCode frontier unchanged once free execution resumes",
-      "preserve FREE_ONLY Goodman ancestry collapse Ubuntu-only acceptance and zero Frank-Harness mutation"
+      "retain PR503/V6 self-hosted result as bounded mechanism evidence until productive target binding exists",
+      "retest merged imported-guard repair in composed current ProductStart path",
+      "add deterministic interpreter-identity negative control to ProductStart admission where script launch applies",
+      "do not derive Hostinger target credit from self-hosted/Linux/X64 labels alone",
+      "preserve FREE_ONLY and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
-      "ClayCode or guard test failure from a zero-step GitHub Actions failure",
-      "identity/safety enforcement from a configured but unexecuted guard workflow",
-      "provider capability or provider failure from zero-step GitHub Actions",
-      "permission to increase a spending limit under FREE_ONLY",
-      "legacy BASE or Frank v0.1 PASS from model-family consensus",
-      "canonical MethodChain comparison equality verb or precedence semantics from host behavior or model agreement",
-      "F-V01-04 or ProductStart completion from prior candidate-level evidence"
+      "ProductStart or F-V01-13 PASS from any single new storage guard",
+      "Hostinger production identity from self-hosted runner labels",
+      "canonical ClayCode semantics from storage/runtime findings",
+      "BASE or Frank v0.1 PASS from model consensus",
+      "provider capability change without an accepted-Ubuntu live FREE_ONLY receipt"
     ]
   },
   "supervisor": {

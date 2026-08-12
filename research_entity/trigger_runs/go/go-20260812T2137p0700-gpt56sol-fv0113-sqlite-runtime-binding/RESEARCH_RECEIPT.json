@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260812T2137p0700-gpt56sol-fv0113-sqlite-runtime-binding",
   "program": "FRANK_V0_1",
   "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
@@ -10,7 +10,6 @@
     "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
     "canonical_head_before_write": "d55015e482dc3bc3c2fc09031167fe92054f20c5",
     "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
-    "product_main_latest_observed": "196bbc3505bf6d2da47de89214278d84d5de21cf",
     "workspace_status": "F-V01-13 IN_PROGRESS",
     "workspace_sqlite_blocker": "Accepted target is recorded as SQLite 3.45.1 while Frank uses WAL; release remains fail-closed until fixed/backported exact build, fixed productive runtime, or machine-checked unreachable trigger topology is proven.",
     "accepted_host_live_shell_available_to_this_organ": false,
@@ -24,23 +23,21 @@
     "scope": "Upstream suitability only; this is not evidence that Frank's productive persistence process loads this build."
   },
   "generated_reality": {
-    "hypothesis": "If the exact productive Frank process on the accepted Hostinger target loads an attested fixed SQLite build (for example official 3.53.4), and that loaded object is bound to the admitted Frank binary/state/database path and WAL mode, the SQLite-version branch of F-V01-13 can be closed subject to crash/restart/replay and remaining recovery obligations.",
-    "strongest_counter_reality": "A process or receipt can report version 3.53.4 while the productive persistence path actually uses a sibling/swapped/stale SQLite object, a different Frank binary, or a different database path; version-only gating would then create a false release PASS.",
+    "hypothesis": "If the exact productive Frank process on the accepted Hostinger target loads an attested fixed SQLite build and that loaded object is bound to admitted Frank identity, execution generation, productive database path and WAL mode, the SQLite-version branch of F-V01-13 can be closed subject to crash/restart/replay and remaining recovery obligations.",
+    "strongest_counter_reality": "A process or receipt can report a fixed SQLite version while the productive persistence path actually uses a sibling/swapped/stale SQLite object, a different Frank process, or a different database path; version-only gating would then create a false release PASS.",
     "hidden_assumption_rejected": "reported sqlite version uniquely identifies the code object used by the productive WAL path"
   },
   "discriminating_test": {
     "target": "accepted Hostinger Ubuntu VPS, exact productive Frank persistence process",
     "required_observations": [
-      "sqlite3_libversion() from the in-process connection used by productive persistence",
-      "sqlite3_sourceid() from that same process",
-      "loaded SQLite object path plus immutable digest/inode/build identity, or equivalent static-link build attestation",
-      "Frank executable digest and source commit bound to the same execution generation",
+      "fixed sqlite version/source identity from the actual mapped object",
+      "loaded SQLite object path plus immutable digest/inode/build identity",
+      "admitted Frank service/process identity and execution generation",
       "exact productive database path and PRAGMA journal_mode result",
-      "compile options relevant to the deployed build",
       "crash/restart/replay evidence on the exact bound runtime",
-      "fail-closed rejection on downgrade, source-id mismatch, library swap, binary mismatch, stale generation, or database-path mismatch"
+      "fail-closed rejection on downgrade, source-id mismatch, library swap, wrong process identity, stale generation, rollback or database-path mismatch"
     ],
-    "promotion_rule": "Version >= fixed release is necessary for a normal upstream build but is not sufficient by itself; runtime/build/source/path binding must survive negative controls."
+    "promotion_rule": "A fixed release is necessary for the normal upstream-build lane but is not sufficient by itself; productive identity/path binding must survive negative controls and recovery."
   },
   "unusual_experiment": {
     "name": "VERSION_MASK_LIBRARY_SWAP",
@@ -56,7 +53,19 @@
       "right_sqlite_wrong_frank_binary": "naive PASS / strict REJECT"
     },
     "outcome": "VERSION_ONLY_GATE_FALSIFIED",
-    "meaning": "A high reported SQLite version can be insufficient release evidence when runtime identity is not cryptographically/provenance bound. Synthetic result only; no production PASS is implied."
+    "meaning": "A high reported SQLite version can be insufficient release evidence when runtime identity is not provenance bound. Synthetic result only; no production PASS is implied."
+  },
+  "post_write_fusion": {
+    "newer_product_evidence_discovered": [
+      "gschaidergabriel/Dr.-Unterweger@9c891aa8b076113b21903ac3db0d39a61aec6a91",
+      "gschaidergabriel/Dr.-Unterweger@b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+      "gschaidergabriel/Dr.-Unterweger@78da21ee80732a9ba40b01ecc0bde2d0399c0944",
+      "gschaidergabriel/Dr.-Unterweger:runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py"
+    ],
+    "adjudication": "The product repository already implements most of the proposed SQLite object-binding mechanism. SQLite 3.53.4 capability-parity build/probes are merged but explicitly not production provisioned. The current live-process attestor root-anchors the expected library, verifies mapped path/device/inode and same-FD digest, rejects mapping mutation and PID-generation change, records sqlite_version/sqlite_source_id and process metadata, and explicitly declares frank_identity_attested=false, productive_persistence_path_exercised=false and restart_recovery_attested=false.",
+    "novelty_correction": "Do not treat this run's binding proposal as a missing product mechanism. The useful delta is the falsification of version-only promotion and the prioritization of the remaining productive service/process + database-path + restart/recovery proof.",
+    "latest_generic_deep_integrity": "A fresh REAL_SELF_HOSTED_UBUNTU_EXECUTION deep-integrity receipt reports zero failures across its generic gate set, but it does not by itself attest the exact productive SQLite persistence path.",
+    "workspace_promotion": "NO_CHANGE"
   },
   "grf_collapse": [
     {
@@ -65,25 +74,41 @@
       "scope": "upstream SQLite release semantics only"
     },
     {
-      "claim": "A 3.53.4 version string alone closes F-V01-13.",
+      "claim": "A fixed SQLite version string alone closes F-V01-13.",
       "outcome": "REJECT",
-      "reason": "productive runtime identity and persistence-path binding are unproven; synthetic counterworld demonstrates a version-only false positive"
+      "reason": "synthetic counterworld demonstrates a version-only false positive"
     },
     {
-      "claim": "The current accepted Hostinger Frank runtime has been proven to use the fixed SQLite build.",
+      "claim": "Frank lacks a live mapped-SQLite identity attestor.",
+      "outcome": "REJECT",
+      "reason": "current product main contains FRANK_SQLITE_LIVE_PROCESS_ATTESTOR_V1 with FD/inode/hash/PID-generation fencing"
+    },
+    {
+      "claim": "The current accepted Hostinger productive Frank persistence path has been proven to use the fixed SQLite build across restart/recovery.",
       "outcome": "DEFER",
-      "reason": "this organ has no accepted-host live shell/runtime execution evidence"
+      "reason": "current attestor explicitly leaves Frank identity, productive persistence exercise and restart/recovery unattested; this organ has no accepted-host live shell evidence to close them"
     }
   ],
   "integration_delta": {
-    "architecture_delta": "Candidate acceptance gate should bind SQLite source/build/load identity to Frank executable, execution generation, database path and journal mode rather than accepting a version string alone.",
+    "architecture_delta": "NO_NEW_BINDING_PRIMITIVE_REQUIRED_FROM_THIS_RUN: current product already contains the strong live SQLite object attestor. Reprioritize F-V01-13 to compose that attestor with admitted Frank service/process identity, exact productive DB/WAL exercise, restart/recovery and rollback/downgrade/library-swap negative controls.",
     "affected_components": [
       "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
       "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
       "F-V01-01-IDENTITY-SERVER-BINARY",
       "terminal Frank v0.1 acceptance"
     ],
-    "rollback": "Remove the stronger binding candidate if a cheaper mechanism proves equivalent under library-swap/downgrade/binary-mismatch negative controls; never weaken fail-closed behavior without replacement evidence."
+    "rollback": "If a smaller existing receipt already proves the exact productive composition, replace this prioritization with that stronger receipt; never relax fail-closed behavior without equivalent negative-control evidence."
+  },
+  "next_smallest_falsifier": {
+    "target": "run the existing live SQLite attestor against the exact admitted productive Frank service/PID on the accepted Hostinger VPS, then exercise the exact productive DB path in WAL mode across restart/recovery",
+    "negative_controls": [
+      "downgraded or wrong SQLite object",
+      "library replacement or in-place mutation",
+      "wrong/sibling Frank process or stale PID generation",
+      "wrong database path or non-WAL path substitution",
+      "rollback/stale semantic lineage after restart"
+    ],
+    "pass_boundary": "Only the exact bound productive composition may advance the SQLite branch; generic self-hosted, build-only, synthetic or one-live-process mapping evidence remains narrower."
   },
   "coordination": {
     "parallel_canonical_result_observed": "d55015e482dc3bc3c2fc09031167fe92054f20c5",

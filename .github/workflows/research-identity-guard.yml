@@ -31,13 +31,12 @@ jobs:
       - name: Validate every-turn Research Entity identity lock
         run: python tools/research_identity_guard_check.py
 
-  # Controlled pushes/main can use the already-authorized zero-cost target
-  # runner.  This restores real post-merge guard enforcement while hosted
-  # private-repo Actions are unavailable.  The label set is deliberately
-  # cumulative and matches the registered ClayCode target workflow.
+  # Controlled pushes/main can use any already-authorized zero-cost Linux/x64
+  # self-hosted runner visible to this repository.  No target-specific hardware
+  # or custom label is required for this pure read-only identity check.
   identity-guard-selfhosted-push:
     if: github.event_name != 'pull_request'
-    runs-on: [self-hosted, linux, x64, andreas, claycode, target]
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4

@@ -1,28 +1,24 @@
 {
-  "schema_version": "3.5",
-  "latest_cycle": "ccauto-20260812T1541Z-supervisor",
+  "schema_version": "3.6",
+  "latest_cycle": "ccauto-20260812T1647Z-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "PR556 exact head c42c201b65d9635cf6f577f91fa9bd2facf3ec54 now provides bounded executable corpus-authority evidence: Corpus Authority V1 run 31613346285 succeeded with authorized=40, explicitly_excluded=2, unclassified=0, selected_parsed=36, selected_rejected=4, unresolved=429 unique/464 occurrences. But Current-Main Composition run 31613346293 failed on the same head because the legacy workflow derives FRONTIER_SCOPE_COUNT=42 from git ls-tree/raw .clay discovery and then demands 36/40. This is an executable integration blocker showing that promotion-relevant legacy corpus tooling still bypasses the explicit authority selector. Repair/recompose the composition/frontier path to consume the manifest-authorized set; do not repair by changing the denominator to 42 or authorizing the projection sources. Keep projection sources excluded only from ClayCode language-corpus authority, not from UnifiedDB functionality. Keep PR556 promotion=false until repaired exact-head current-main composition passes and the in-progress/queued Frontier Integration and opaque parser fidelity jobs complete successfully on explicitly bound bytes. Preserve WP03-WP06 OPEN, 429/464 unresolved calls, 22 MethodChain segments, comparison-chain, Bool/Int equality, verb_for, and global NOT/relation precedence authority-unselected. Provider capability unchanged: no new accepted-Ubuntu live FREE_ONLY receipt. FREE_ONLY hard; no paid fallback, no BASE/Frank PASS, no canonical semantics promotion, no Frank Harness modification.",
+  "next_focus": "PR556 final exact head c2bec73425855c2a4b83e450cb8149f279295355 has repaired the legacy raw-glob composition bypass. Corpus Authority V1 run 31613977937 succeeded on the exact head, and Current-Main Composition run 31613978002 succeeded while composing that head onto main 59f306af93e2e4d49f94a281b691f7304d9db44c. Preserve authorized=40, explicitly_excluded=2, unclassified=0, selected_parsed=36, selected_rejected=4, unresolved=429 unique/464 occurrences; do not infer language authority for the two UnifiedDB projection sources. The next cycle should not repeat this solved integration test unless recomposition bytes change materially. Instead keep PR556 Draft/TESTING until a required Deep Integrity or equivalent zero-cost Ubuntu guard actually executes on the final reviewed bytes; the observed GitHub-hosted billing/spending-limit pre-start failure receives zero credit and FREE_ONLY forbids paid remediation. Preserve the macro-cycle protocol deviation as negative evidence: an inherited CORPUS_GHOST_APPEND workflow consumed a second unusual experiment, so this cycle cannot satisfy the exactly-one-unusual-experiment law. Add a fail-closed preflight/accounting rule so inherited automatically triggered workflows cannot silently consume unusual-experiment budget in later cycles. Continue WP03-WP06 OPEN, 429/464 unresolved calls, 22 MethodChain segments, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. Provider capability unchanged: no new accepted-Ubuntu live FREE_ONLY receipt. No BASE/Frank PASS, no canonical semantics promotion, no Frank Harness modification.",
   "errors": [
     {
-      "kind": "LEGACY_CORPUS_GATE_BYPASSES_EXPLICIT_AUTHORITY",
+      "kind": "MACRO_CYCLE_UNUSUAL_EXPERIMENT_BUDGET_VIOLATION",
       "pr": 556,
-      "head": "c42c201b65d9635cf6f577f91fa9bd2facf3ec54",
-      "workflow_run": 31613346293,
-      "observed_frontier_scope_count": 42,
-      "observed_frontier_scope_parsed": 36,
-      "authority_authorized": 40,
-      "authority_excluded": 2,
-      "classification": "GATE_AUTHORITY_INTEGRATION_BLOCKER_NOT_LANGUAGE_SEMANTIC_COUNTEREVIDENCE"
+      "head": "c2bec73425855c2a4b83e450cb8149f279295355",
+      "classification": "NEGATIVE_PROTOCOL_EVIDENCE_PRESERVE_NO_CYCLE_PROTOCOL_PASS",
+      "cause": "Inherited automatically triggered CORPUS_GHOST_APPEND OOB executed in addition to the intended unusual experiment before detection."
     },
     {
-      "kind": "CORPUS_AUTHORITY_CANDIDATE_BOUNDED_PASS",
-      "workflow_run": 31613346285,
-      "head": "c42c201b65d9635cf6f577f91fa9bd2facf3ec54",
-      "classification": "SCOPED_EXACT_HEAD_MECHANISM_EVIDENCE_NO_COMPONENT_PROMOTION"
+      "kind": "FINAL_HEAD_DEEP_INTEGRITY_NOT_EXECUTED",
+      "pr": 556,
+      "head": "c2bec73425855c2a4b83e450cb8149f279295355",
+      "classification": "GITHUB_HOSTED_INFRASTRUCTURE_BLOCKED_ZERO_CREDIT_FREE_ONLY_NO_PAID_REMEDIATION"
     },
     {
       "kind": "LIVE_PROVIDER_CAPABILITY_UNPROVEN",
@@ -34,9 +30,10 @@
     }
   ],
   "receipt_gaps": {
-    "pr556_current_main_composition": "BLOCKED_BY_LEGACY_RAW_GLOB_SCOPE; REPAIR MUST USE EXPLICIT AUTHORIZED SET",
-    "pr556_frontier_integration": "IN_PROGRESS_AT_REVIEW_RUN_31613346278_ZERO_CREDIT_UNTIL_COMPLETED",
-    "pr556_parser_fidelity": "QUEUED_AT_REVIEW_RUN_31613346281_ZERO_CREDIT_UNTIL_COMPLETED",
+    "pr556_current_main_composition": "CLOSED_FOR_THIS_CANDIDATE_BY_SUCCESS_RUN_31613978002_AUTHORIZED_FRONTIER",
+    "pr556_corpus_authority": "BOUNDED_EXACT_HEAD_PASS_RUN_31613977937_NO_COMPONENT_OR_SEMANTIC_PROMOTION",
+    "pr556_deep_integrity": "OPEN_ZERO_CREDIT_NO_STEPS_EXECUTED_ON_FINAL_HEAD",
+    "macro_cycle_protocol": "OPEN_NEGATIVE_EXACTLY_ONE_UNUSUAL_EXPERIMENT_INVARIANT_VIOLATED",
     "wp03_ir_types": "OPEN",
     "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY_429_UNIQUE_464_OCCURRENCES",
     "wp04_member_library": "OPEN_SEMANTIC_AUTHORITY_22_METHODCHAIN_SEGMENTS",
@@ -46,10 +43,11 @@
     "productstart_runtime_identity": "OPEN"
   },
   "new_material_evidence": {
-    "corpus_authority": "Exact-head PR556 authority run succeeds with explicit 40-authorized/2-excluded accounting and preserves 36/40 plus 429/464.",
-    "composition_counterexample": "Exact-head Current-Main Composition run fails because legacy scope construction snapshots all 42 PR-head .clay files, proving the new authority boundary is not yet transitively enforced by all promotion gates.",
-    "semantic_boundary": "The failure changes gate integration, not canonical language semantics; no excluded projection source gains or loses UnifiedDB product meaning from this classification.",
-    "goodman": "All successes remain same-project/self-hosted lineage and are correlated scoped evidence, not independent semantic replication."
+    "corpus_authority": "Exact-head PR556 authority run 31613977937 succeeds with 40 authorized, 2 excluded, 0 unclassified and preserves 36/40 plus 429/464.",
+    "composition_repair": "Exact-head Current-Main Composition run 31613978002 succeeds after semantic scope is derived from explicit corpus authority instead of raw filesystem discovery.",
+    "protocol_counterexample": "An inherited automatically triggered CORPUS_GHOST_APPEND OOB created a second unusual experiment, so the macro-cycle's exactly-one experiment invariant is false and must remain explicit negative evidence.",
+    "guard_blocker": "Final-head Deep Integrity did not execute because GitHub-hosted infrastructure was blocked before runner/steps; no guard or release credit is allowed.",
+    "goodman": "Successful same-project/self-hosted runs remain correlated scoped evidence, not independent semantic replication."
   },
-  "instruction": "Recompose every promotion-relevant corpus/frontier gate through the explicit ClayCode authority selector. Discovery may report 42, but semantic coverage denominator remains the reviewed authorized 40 until an explicit authority change with executable counterevidence and review. Never fix the integration failure by denominator drift or filename/parser-based admission. Preserve FREE_ONLY, WP03-WP06 OPEN, unresolved semantics, no BASE/Frank PASS from consensus, no canonical semantics promotion, and never modify Frank Harness."
+  "instruction": "Treat the legacy corpus composition bypass as repaired for PR556 final head, but do not promote corpus semantics or BASE packages. Preserve the two UnifiedDB projection sources as excluded from ClayCode language authority pending separate reviewed evidence. Require a zero-cost Ubuntu Deep Integrity/equivalent guard execution before any further PR556 promotion. Preserve the unusual-experiment budget violation and harden future cycle accounting against inherited auto-triggered OOBs. Preserve FREE_ONLY, WP03-WP06 OPEN, unresolved semantics, no BASE/Frank PASS from consensus, no canonical semantics promotion, and never modify Frank Harness."
 }

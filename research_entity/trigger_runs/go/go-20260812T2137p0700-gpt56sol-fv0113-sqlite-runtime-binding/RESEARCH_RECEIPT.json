@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2137p0700-gpt56sol-fv0113-sqlite-runtime-binding",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_head_before_write": "d55015e482dc3bc3c2fc09031167fe92054f20c5",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_latest_observed": "196bbc3505bf6d2da47de89214278d84d5de21cf",
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "workspace_sqlite_blocker": "Accepted target is recorded as SQLite 3.45.1 while Frank uses WAL; release remains fail-closed until fixed/backported exact build, fixed productive runtime, or machine-checked unreachable trigger topology is proven.",
+    "accepted_host_live_shell_available_to_this_organ": false,
+    "terminal_acceptance_claimed": false
+  },
+  "primary_source_context": {
+    "sqlite_wal_reset_doc": "https://sqlite.org/wal.html",
+    "sqlite_3534_release": "https://sqlite.org/releaselog/3_53_4.html",
+    "upstream_fact": "SQLite documents the WAL-reset corruption bug as present through 3.51.2 and fixed in 3.51.3 and later, with selected backports. SQLite 3.53.4 therefore contains the upstream fix.",
+    "sqlite_3534_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "scope": "Upstream suitability only; this is not evidence that Frank's productive persistence process loads this build."
+  },
+  "generated_reality": {
+    "hypothesis": "If the exact productive Frank process on the accepted Hostinger target loads an attested fixed SQLite build (for example official 3.53.4), and that loaded object is bound to the admitted Frank binary/state/database path and WAL mode, the SQLite-version branch of F-V01-13 can be closed subject to crash/restart/replay and remaining recovery obligations.",
+    "strongest_counter_reality": "A process or receipt can report version 3.53.4 while the productive persistence path actually uses a sibling/swapped/stale SQLite object, a different Frank binary, or a different database path; version-only gating would then create a false release PASS.",
+    "hidden_assumption_rejected": "reported sqlite version uniquely identifies the code object used by the productive WAL path"
+  },
+  "discriminating_test": {
+    "target": "accepted Hostinger Ubuntu VPS, exact productive Frank persistence process",
+    "required_observations": [
+      "sqlite3_libversion() from the in-process connection used by productive persistence",
+      "sqlite3_sourceid() from that same process",
+      "loaded SQLite object path plus immutable digest/inode/build identity, or equivalent static-link build attestation",
+      "Frank executable digest and source commit bound to the same execution generation",
+      "exact productive database path and PRAGMA journal_mode result",
+      "compile options relevant to the deployed build",
+      "crash/restart/replay evidence on the exact bound runtime",
+      "fail-closed rejection on downgrade, source-id mismatch, library swap, binary mismatch, stale generation, or database-path mismatch"
+    ],
+    "promotion_rule": "Version >= fixed release is necessary for a normal upstream build but is not sufficient by itself; runtime/build/source/path binding must survive negative controls."
+  },
+  "unusual_experiment": {
+    "name": "VERSION_MASK_LIBRARY_SWAP",
+    "count_for_this_go_macrocycle": 1,
+    "environment": "disposable local synthetic attestation validator",
+    "external_effect": false,
+    "canonical_state_mutation": false,
+    "baseline": "naive gate accepts reported SQLite version >= 3.51.3",
+    "treatment": "strict gate additionally binds SQLITE_SOURCE_ID, loaded-library digest, Frank-binary digest, database path, and WAL mode",
+    "cases": {
+      "genuine_bound_runtime": "naive PASS / strict PASS",
+      "forged_version_library_swap": "naive PASS / strict REJECT",
+      "right_sqlite_wrong_frank_binary": "naive PASS / strict REJECT"
+    },
+    "outcome": "VERSION_ONLY_GATE_FALSIFIED",
+    "meaning": "A high reported SQLite version can be insufficient release evidence when runtime identity is not cryptographically/provenance bound. Synthetic result only; no production PASS is implied."
+  },
+  "grf_collapse": [
+    {
+      "claim": "SQLite 3.53.4 is upstream-fixed for the WAL-reset corruption bug.",
+      "outcome": "PROMOTE_TO_VERIFIED",
+      "scope": "upstream SQLite release semantics only"
+    },
+    {
+      "claim": "A 3.53.4 version string alone closes F-V01-13.",
+      "outcome": "REJECT",
+      "reason": "productive runtime identity and persistence-path binding are unproven; synthetic counterworld demonstrates a version-only false positive"
+    },
+    {
+      "claim": "The current accepted Hostinger Frank runtime has been proven to use the fixed SQLite build.",
+      "outcome": "DEFER",
+      "reason": "this organ has no accepted-host live shell/runtime execution evidence"
+    }
+  ],
+  "integration_delta": {
+    "architecture_delta": "Candidate acceptance gate should bind SQLite source/build/load identity to Frank executable, execution generation, database path and journal mode rather than accepting a version string alone.",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "terminal Frank v0.1 acceptance"
+    ],
+    "rollback": "Remove the stronger binding candidate if a cheaper mechanism proves equivalent under library-swap/downgrade/binary-mismatch negative controls; never weaken fail-closed behavior without replacement evidence."
+  },
+  "coordination": {
+    "parallel_canonical_result_observed": "d55015e482dc3bc3c2fc09031167fe92054f20c5",
+    "parallel_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "overlap": false,
+    "action": "retain both results; do not overwrite the parallel parser-fidelity receipt"
+  },
+  "nonclaims": {
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "accepted_hostinger_product_runtime_proven": false,
+    "terminal_acceptance_pass": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

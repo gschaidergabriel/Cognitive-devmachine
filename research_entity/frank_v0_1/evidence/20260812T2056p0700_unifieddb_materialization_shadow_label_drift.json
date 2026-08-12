@@ -1,6 +1,7 @@
 {
   "schema": "clay.frank_v0_1.grf_evidence.v1",
   "created_at": "2026-08-12T20:56:00+07:00",
+  "updated_at": "2026-08-12T21:00:00+07:00",
   "program_stage": "FRANK_V0_1",
   "work_item": "F-V01-04",
   "topic": "UnifiedDB to ClayGraph projection materialization equivalence",
@@ -53,13 +54,24 @@
   "implementation_reentry": {
     "candidate_pr": 540,
     "candidate_head": "c7d284b1c8e3da49de1bcb0e3d29100913173819",
-    "candidate_state": "TESTING",
+    "candidate_state": "SUPPORTED_SELF_HOSTED_EXACT_HEAD_NARROW_SCOPE",
     "repair_scope": "preserve V1 gate and additionally compare authoritative entity labels for current projected relation participants against ClayGraph node labels",
     "test": "tests/unifieddb_projection_materialization_equivalence_v2_gate.py",
     "workflow": ".github/workflows/frank-unifieddb-materialization-equivalence-v2-vps.yml",
-    "self_hosted_ci_at_record_time": "QUEUED_NO_RUNNER_ASSIGNED",
+    "self_hosted_ci": {
+      "run_id": 31604035115,
+      "runner": "clay",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "exact_head": "c7d284b1c8e3da49de1bcb0e3d29100913173819",
+      "conclusion": "SUCCESS",
+      "steps": [
+        "exact PR head isolated fetch PASS",
+        "py_compile PASS",
+        "materialization regression PASS"
+      ]
+    },
     "deep_integrity": "BASELINE_AND_CANDIDATE_BOTH_FAILED_WITH_ZERO_STEPS_ON_UBUNTU_LATEST; CLASSIFIED_TRANSPORT_PROVISIONING_NOT_CODE_EVIDENCE"
   },
-  "next_discriminating_falsifier": "execute the exact PR-540 head regression on a self-hosted Linux X64 runner; promote only the narrow label-parity mechanism if the exact-head test passes, and do not infer full materialization equivalence",
+  "next_discriminating_falsifier": "before broader promotion, derive the minimal authoritative materialization surface beyond labels and test additional mutable projected fields with conventional regressions; do not infer full materialization equivalence from the label-only success",
   "authority_boundary": "candidate research/build evidence only; no production activation, no Harness authority change, no F-V01-04 closure, no final model training authorization"
 }

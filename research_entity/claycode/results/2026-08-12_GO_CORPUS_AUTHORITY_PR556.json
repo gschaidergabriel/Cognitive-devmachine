@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "result_id": "GO-2026-08-12-CLAYCODE-CORPUS-AUTHORITY-PR556",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-02",
+  "state": "TESTING",
+  "generated_at": "2026-08-12T15:34:00Z",
+  "observed_anchors": {
+    "frank_repo": "gschaidergabriel/Dr.-Unterweger",
+    "fresh_main_base": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "candidate_head": "aeebc860cae66ef3a96a995ba20bb28aaf435721",
+    "pull_request": 556,
+    "historical_pre_projection_reference": "5ec9955775d9bf142e327166990a2228d543c071",
+    "projection_outbox_introduction": "72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "projection_worker_introduction": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5"
+  },
+  "generated_reality_hypothesis": "A frozen explicit source manifest anchored to the pre-projection 40-source frontier plus one shared fail-closed selector prevents filesystem discovery/parser acceptance from silently minting ClayCode corpus authority.",
+  "strongest_counter_reality": "A manifest can become stale or self-authorizing; moving its reference or changing its membership could merely relocate the authority ambiguity instead of solving it.",
+  "mechanism": {
+    "manifest": "claycode/CLAYCODE_CORPUS_AUTHORITY_V1.json",
+    "selector": "runtime/claycode_eval_v1/corpus_authority.py",
+    "shared_consumers": [
+      "runtime/claycode_eval_v1/corpus_probe.py",
+      "tests/claycode_analyzer_call_surface_coverage_gate.py",
+      "tests/claycode_corpus_count_semantics_gate.py"
+    ],
+    "fail_closed_on": [
+      "unclassified newly discovered .clay source",
+      "missing authorized source",
+      "reference commit drift",
+      "authorized/excluded overlap",
+      "malformed authority manifest"
+    ],
+    "reference_commit_double_bound_in_manifest_and_selector": true
+  },
+  "exactly_one_unusual_experiment": {
+    "name": "UNCLASSIFIED_PARSEABLE_CORPUS_INFLATION",
+    "execution_class": "OFFLINE_IN_MEMORY_PREDICATE_COUNTERWORLD",
+    "baseline": "36 parsed / 6 rejected / 42 discovered; 429 unique unresolved / 464 occurrences",
+    "treatment": "add one hypothetical syntactically accepted but non-authorized inert source -> 37 parsed / 6 rejected / 43 discovered; unresolved frontier unchanged",
+    "observed_result": "old composed frontier predicate accepted baseline and treatment",
+    "interpretation": "supports a corpus-authority blindspot at predicate level; does not prove any arbitrary source is parseable",
+    "committed_regression_replays_same_condition": true,
+    "new_unusual_experiments_in_regression": 0
+  },
+  "target_evidence": {
+    "push_workflow_run": 31612676728,
+    "tested_exact_head": "aeebc860cae66ef3a96a995ba20bb28aaf435721",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "provenance_limit": "runner identity is execution provenance only; it does not prove accepted Hostinger product-host identity",
+    "status": "PASS",
+    "authority_checks": "12/12",
+    "discovered": 42,
+    "authorized": 40,
+    "explicitly_excluded": 2,
+    "unclassified": 0,
+    "missing_authorized": 0,
+    "selected_parsed": 36,
+    "selected_rejected": 4,
+    "selected_total": 40,
+    "selected_coverage_percent": 90.0,
+    "unresolved_unique_names": 429,
+    "unresolved_occurrences": 464,
+    "call_surface": "PASS",
+    "count_semantics": "PASS"
+  },
+  "pr_composition_status": {
+    "own_exact_head_authority_workflow": "PASS",
+    "existing_claycode_composition_workflows": "PENDING_AT_REENTRY",
+    "promotion_allowed": false
+  },
+  "predicted_observations": {
+    "if_hypothesis_right": "current selected frontier remains 36/40, future unclassified filesystem additions fail closed before changing denominator, and existing composed ClayCode gates remain green",
+    "if_counter_reality_right": "a relevant composition gate fails or authority can still be shifted/admitted without explicit reviewed reclassification"
+  },
+  "next_falsifiers": [
+    "PR-head ClayCode Frontier Integration VPS",
+    "PR-head ClayCode Frontier Current-Main Composition VPS",
+    "runtime nominal/package/parser composition gates",
+    "review that the two projection candidates remain excluded only from language-corpus measurement, not from UnifiedDB functionality"
+  ],
+  "outcome": "RETAIN_TESTING",
+  "claim_boundary": {
+    "language_semantics_promoted": false,
+    "host_bindings_authorized": false,
+    "effect_authority_minted": false,
+    "frank_harness_mutated": false,
+    "whole_f_v01_02_complete": false,
+    "accepted_hostinger_vps_proven": false,
+    "whole_frank_v0_1_acceptance": false,
+    "final_training_authorized": false
+  }
+}

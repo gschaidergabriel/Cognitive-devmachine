@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.4",
+  "schema_version": "2.5",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -24,6 +24,8 @@
   "research_loop": [
     "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
     "VERIFY_FREE_EXECUTION_SURFACE_BEFORE_COMPUTE",
+    "VERIFY_EXACT_TESTED_COMMIT_PROVENANCE_BEFORE_CREDIT",
+    "VERIFY_AUTHORIZED_CLAYCODE_CORPUS_SEPARATELY_FROM_FILESYSTEM_DISCOVERY",
     "VERIFY_RUNNER_AND_PRODUCT_TARGET_PROVENANCE_SEPARATELY_FROM_ROUTING_LABELS",
     "VERIFY_SUCCESSOR_ENTRYPOINT_PRESERVES_PREDECESSOR_SECURITY_INVARIANTS",
     "VERIFY_PRODUCTSTART_SERVICE_FILESYSTEM_NAMESPACE_SEMANTICS",
@@ -58,7 +60,8 @@
     "retrieval_or_graph_salience_never_mints_semantic_truth",
     "multiple_tests_on_shared_source_project_runner_or_candidate_ancestry_are_goodman_correlated_not_independent_semantic_replication",
     "self_hosted_linux_x64_or_custom_runner_labels_are_routing_selectors_not_independent_product_host_identity",
-    "productive_target_credit_requires_independently_bound_owner_fixed_host_or_deployment_provenance"
+    "productive_target_credit_requires_independently_bound_owner_fixed_host_or_deployment_provenance",
+    "duplicate_or_converged_prs_with_shared_patch_ancestry_are_not_independent_semantic_replication"
   ],
   "authority_rules": [
     "model_output_is_candidate_not_truth",
@@ -71,6 +74,14 @@
     "semantic_change_requires_executable_counterexample_and_supervisor_review",
     "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle",
     "cancelled_queued_failed_zero_step_or_uninspectable_workflow_never_counts_as_positive_semantic_compiler_provider_guard_or_release_acceptance",
+    "pull_request_github_sha_may_be_synthetic_merge_commit_and_must_not_be_labeled_exact_head",
+    "exact_head_credit_requires_explicit_pr_head_fetch_binding_and_tested_sha_equality",
+    "synthetic_pull_request_merge_ref_execution_may_receive_composition_credit_only_not_exact_head_credit",
+    "filesystem_extension_or_glob_discovery_does_not_mint_claycode_corpus_authority",
+    "claycode_coverage_denominator_must_use_explicit_authorized_corpus_not_raw_discovered_dot_clay_count",
+    "new_or_unclassified_dot_clay_sources_must_be_reported_separately_and_fail_closed_until_authority_classification",
+    "unifieddb_projection_or_contract_sources_must_not_be_promoted_to_claycode_language_corpus_from_filename_extension_or_parser_acceptance_alone",
+    "offline_provider_contract_success_with_external_effect_false_or_external_network_false_does_not_mint_live_provider_capability",
     "github_hosted_runner_billing_or_spending_limit_failure_is_infrastructure_only_and_must_not_trigger_paid_remediation_under_free_only",
     "free_only_forbids_increasing_actions_spending_limit_purchasing_additional_runner_minutes_or_enabling_paid_fallback",
     "self_hosted_or_other_execution_surface_must_be_currently_verifiable_and_zero_cost_before_autonomous_credit",
@@ -114,30 +125,29 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "No new autonomous ClayCode semantic computation has earned credit, so keep WP03/WP04/WP05/WP06 OPEN and preserve all unresolved semantics. Cross-branch ProductStart evidence now adds two hard conjunctive gates. First, PR521 exact-head self-hosted evidence supports a real service-filesystem namespace blindspot: host-visible FragmentPath/path/hash identity can remain stable while RootDirectory changes the service-visible object namespace. Recompose its fail-closed namespace observation on current product main and exercise the exact accepted systemd service before ProductStart credit. Second, PR520 run 31602051728 passed six release-identity regressions but its actual live observer on clay/digital-retina returned BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED. A green workflow containing that typed BLOCKED result is not productive Hostinger evidence. Positive actual-process SQLite identity must bind independently accepted Hostinger host/unit/executable/process provenance, exact mapped-object FD/hash, trusted root anchor, SQLite 3.53.4 and official SOURCE_ID together. Continue successor-entrypoint invariant re-entry, interpreter/loader/dependency closure and restart/recovery/rollback falsifiers. Do not derive Hostinger target credit from runner clay, digital-retina, self-hosted/Linux/X64 labels, or default interpreter observations. Continue ClayCode productive-route WP04 admission and immutable-state closure; preserve 22 MethodChain segments, 429 unique/464 unresolved calls, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. GitHub-hosted research-repo Actions remains blocked under FREE_ONLY; no paid remediation. No new accepted-Ubuntu live FREE_ONLY provider receipt. Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
+  "current_focus": "PR552 is the current parsed-record/runtime-nominal candidate, but successful pull_request runtime jobs currently test GitHub synthetic merge commits rather than the explicit PR head. Preserve run 31609707205 as bounded merge-composition evidence only: it passed 22/22 runtime nominal and 14/14 WP04 checks on clay/Ubuntu while testing ead250d6d5d0cb0188f2be781ced405f01677c53, not head a9925f9558bd985c40f00637d5c3526c51f794d4. Require promotion-relevant workflows to fetch the explicit PR head and assert tested_sha==expected_pr_head; merge-ref tests may remain separate composition gates. Also separate raw .clay discovery from semantic corpus authority. Earlier current-main composition observed 42 discovered sources with 36 parsed versus the frozen 36/40 frontier; do not silently redefine the denominator or admit the additional projection/UnifiedDB sources. Require an explicit authorized-corpus set and separate discovered/rejected/unclassified accounting. Current provider-contract run 31609707160 tested exact head and is useful contract evidence, but external_effect_performed=false and external_network_used=false, so no free-provider capability change is credited. Keep WP03/WP04/WP05/WP06 OPEN and preserve 429 unique/464 unresolved Calls, 22 MethodChain segments, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. Existing ProductStart/Hostinger provenance gates remain. FREE_ONLY hard, Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
   "supervisor_last_steer": {
-    "reason": "New executable ProductStart counterevidence shows service filesystem namespaces can invalidate host-visible path/hash assumptions, while the new SQLite release-identity observer demonstrates that workflow success can coexist with a typed BLOCKED live product observation. Both require explicit fail-closed promotion gates.",
+    "reason": "Executable inspection found two promotion-boundary flaws: successful pull_request jobs were being described as exact-head while testing GitHub synthetic merge SHAs, and composition accounting could treat raw .clay discovery growth as corpus authority. Provider-contract success also remains offline/mechanism-only because no network or external effect occurred.",
     "evidence_priority": [
-      "recompose and test service-filesystem namespace constraints on current product main and exact accepted systemd service",
-      "distinguish green orchestration from positive live product observation",
-      "bind mapped SQLite object/root anchor to exact release-accepted version and SOURCE_ID before productive runtime credit",
-      "continue predecessor-security-invariant re-entry and interpreter/loader/dependency closure",
-      "continue ClayCode productive-route WP04 admission and immutable-state closure"
+      "bind explicit PR head SHA in every exact-head-labelled promotion gate",
+      "keep synthetic merge-ref execution as separate composition evidence",
+      "introduce explicit authorized ClayCode corpus accounting distinct from discovered/rejected/unclassified .clay files",
+      "preserve parsed-record runtime semantics only after exact-head recomposition",
+      "do not credit provider capability without real accepted-Ubuntu live FREE_ONLY execution"
     ],
     "required_next_actions": [
-      "recompose PR521 namespace repair on current product main and verify RootDirectory/RootImage/bind/tmpfs/image/extension properties are observable and accepted-policy compliant on the exact target service",
-      "run PR520/V2 observer only after independently configuring accepted Hostinger hostname/machine, canonical unit/final executable and trusted root anchor; require positive terminal status rather than typed BLOCKED",
-      "replay start/restart plus downgrade/library-swap/rollback controls after positive product binding",
-      "do not derive Hostinger target credit from runner clay, digital-retina, self-hosted/Linux/X64 labels, or default interpreter observations",
+      "update or add a bounded self-hosted gate that resolves PR head SHA explicitly, fetches that commit and fails if tested_sha differs",
+      "re-run PR552 runtime nominal, parser fidelity, package import and composition gates with explicit exact-head provenance; keep merge-ref integration as a distinct gate if desired",
+      "add corpus-authority manifest or equivalent explicit set and report discovered, authorized, rejected and unclassified counts separately",
+      "classify the additional projection/UnifiedDB .clay files without inferring language authority from extension, name, parser acceptance or model consensus",
       "preserve FREE_ONLY and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
-      "ProductStart or F-V01-13 PASS from PR521 candidate mechanism success",
-      "productive Hostinger SQLite identity from PR520 workflow SUCCESS when live observation is BLOCKED",
-      "accepted Hostinger runtime identity from digital-retina or default-/usr/bin/python3 observations",
-      "canonical ClayCode semantics from storage/runtime findings",
-      "BASE or Frank v0.1 PASS from model consensus",
-      "provider capability change without an accepted-Ubuntu live FREE_ONLY receipt"
+      "exact-head PASS from GITHUB_SHA on a pull_request event unless PR head equality is independently bound",
+      "ClayCode corpus membership or canonical semantics from a .clay extension or filesystem glob",
+      "provider capability change from offline contract matrices with no network/external effect",
+      "BASE or Frank v0.1 PASS from model consensus or correlated runners",
+      "canonical ClayCode semantics from storage/runtime findings"
     ]
   },
   "supervisor": {

@@ -1,48 +1,35 @@
 {
-  "schema_version": "3.7",
-  "latest_cycle": "ccauto-20260813T0049p0700-supervisor",
+  "schema_version": "3.8",
+  "latest_cycle": "ccauto-20260813T0141p0700-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "Repair the repeated exact-head provenance defect before crediting PR558 or PR560. PR558 declared head ad3807e64f6ed0db9ea60ab1e082fccdf7fa42b9, but successful self-hosted run 31621120442 logged tested_sha=f21e140d9fd6daec14ba1bdf7ecedb911cc8b082, the pull-request merge commit. Preserve its 22/22 runtime nominal, 3/3 recursive-record, 14/14 WP04 and static-integrity successes as bounded merge-composition mechanism evidence only. PR560 declared head 7ac9b4a55a1500b32d9fe367a45abac217f391c6, but successful self-hosted budget-guard run 31621438068 logged tested_sha=f6dd5805afb07e7bc8de0cb013005cf06b737b91, again the synthetic pull-request merge commit. Preserve its 145-workflow scan and zero violations as bounded merge-composition/process evidence only. Promotion-relevant pull_request lanes must resolve github.event.pull_request.head.sha explicitly, fetch it, record expected_pr_head and tested_sha, and assert equality. A separate synthetic-merge composition lane may remain. Do not rerun solved PR556 corpus-authority work unless relevant bytes change. PR560 Deep Integrity run 31621438056 had zero executed steps and receives zero credit. Cross-branch, F-V01-13 gained a real SQLite hardlink-alias counterexample: HAS_MOVED remained 0 with a second hardlink; st_nlink==1 now has bounded self-hosted repair evidence but no Hostinger/ProductStart promotion. Continue WP03-WP06 OPEN, 429/464 unresolved calls, 22 MethodChain segments, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. No new accepted-Ubuntu live FREE_ONLY model-provider receipt. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS, no canonical semantics promotion, Goodman ancestry collapse, Ubuntu-only final target, and never modify Frank Harness.",
+  "next_focus": "Treat PR558/560/561 exact-head failures as one shared pull_request provenance defect. New PR561 head 181a2f95619faf3ac471a259573a54e78acc848a has useful bounded alias-cycle repair evidence: run 31621638641 executed all steps on self-hosted Linux/X64 runner clay, nominal gate 14/14 and alias-cycle gate 4/4 PASS. But artifact evidence says event_head_sha=181a2f95619faf3ac471a259573a54e78acc848a while event_target_sha=tested_sha=fa5d087b91a4d2c5d3cf21ebaf06c8a8ec340e67 and evidence_context=PR_MERGE_CONTEXT. The workflow sets TARGET_SHA from github.sha, so under pull_request it tested the synthetic merge commit. Preserve this as merge-composition mechanism evidence only. Repair the common promotion-workflow pattern so pull_request lanes fetch github.event.pull_request.head.sha, emit expected_pr_head and tested_sha, and assert equality before exact-head credit; keep synthetic merge lanes separate. Then rerun PR561, PR558 and PR560 on actual reviewed heads. Do not promote alias-cycle semantics: the repair only aligns WP04 fail-closed admission with existing runtime denial. Continue WP03-WP06 OPEN, 429/464 unresolved calls, 22 MethodChain segments, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. No new accepted-Ubuntu live FREE_ONLY provider receipt. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS, Goodman ancestry collapse, Ubuntu-only final target, and never modify Frank Harness.",
   "errors": [
     {
-      "kind": "PR558_EXACT_HEAD_PROVENANCE_REENTRY_FAILURE",
-      "pr": 558,
-      "declared_head": "ad3807e64f6ed0db9ea60ab1e082fccdf7fa42b9",
-      "workflow_run": 31621120442,
-      "tested_sha": "f21e140d9fd6daec14ba1bdf7ecedb911cc8b082",
-      "classification": "SYNTHETIC_MERGE_COMPOSITION_PASS_NOT_EXACT_HEAD_PASS"
+      "kind": "SHARED_PULL_REQUEST_EXACT_HEAD_PROVENANCE_DEFECT",
+      "affected_prs": [558, 560, 561],
+      "classification": "PROMOTION_WORKFLOW_TEMPLATE_REPAIR_REQUIRED"
     },
     {
-      "kind": "PR560_EXACT_HEAD_PROVENANCE_REENTRY_FAILURE",
-      "pr": 560,
-      "declared_head": "7ac9b4a55a1500b32d9fe367a45abac217f391c6",
-      "workflow_run": 31621438068,
-      "tested_sha": "f6dd5805afb07e7bc8de0cb013005cf06b737b91",
+      "kind": "PR561_EXACT_HEAD_PROVENANCE_REENTRY_FAILURE",
+      "pr": 561,
+      "declared_head": "181a2f95619faf3ac471a259573a54e78acc848a",
+      "workflow_run": 31621638641,
+      "tested_sha": "fa5d087b91a4d2c5d3cf21ebaf06c8a8ec340e67",
       "classification": "SYNTHETIC_MERGE_COMPOSITION_PASS_NOT_EXACT_HEAD_PASS"
-    },
-    {
-      "kind": "PR560_DEEP_INTEGRITY_NOT_EXECUTED",
-      "workflow_run": 31621438056,
-      "classification": "ZERO_STEP_INFRASTRUCTURE_FAILURE_ZERO_CREDIT_FREE_ONLY"
     },
     {
       "kind": "LIVE_PROVIDER_CAPABILITY_UNPROVEN",
       "classification": "NO_NEW_ACCEPTED_UBUNTU_LIVE_FREE_PROVIDER_RECEIPT"
-    },
-    {
-      "kind": "PRODUCTSTART_HARDLINK_ALIAS_COUNTEREXAMPLE",
-      "classification": "F_V01_13_BOUNDED_MECHANISM_EVIDENCE_NO_PRODUCTIVE_HOSTINGER_PROMOTION"
     }
   ],
   "receipt_gaps": {
-    "pr558_exact_head_recursive_record": "OPEN_REQUIRES_EXPLICIT_HEAD_SHA_BOUND_RERUN",
-    "pr560_exact_head_budget_guard": "OPEN_REQUIRES_EXPLICIT_HEAD_SHA_BOUND_RERUN",
-    "pr560_deep_integrity": "OPEN_ZERO_STEP_HOSTED_FAILURE",
-    "pr556_current_main_composition": "CLOSED_FOR_PR556_FINAL_HEAD_ONLY",
-    "macro_cycle_protocol": "OPEN_PRIOR_EXACTLY_ONE_UNUSUAL_EXPERIMENT_VIOLATION_PRESERVED",
+    "shared_pull_request_exact_head": "OPEN_REPAIR_COMMON_WORKFLOW_PATTERN",
+    "pr558_exact_head_recursive_record": "OPEN",
+    "pr560_exact_head_budget_guard": "OPEN",
+    "pr561_exact_head_alias_cycle": "OPEN_REQUIRES_HEAD_BOUND_RERUN",
     "wp03_ir_types": "OPEN",
     "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY_429_UNIQUE_464_OCCURRENCES",
     "wp04_member_library": "OPEN_SEMANTIC_AUTHORITY_22_METHODCHAIN_SEGMENTS",
@@ -52,11 +39,10 @@
     "productstart_runtime_identity": "OPEN"
   },
   "new_material_evidence": {
-    "recursive_record_counterexample_and_repair": "PR558 shows unbounded runtime record-contract descent can raise RecursionError; direct and mutual recursion now fail closed in bounded merge-composition execution without selecting recursive-value semantics.",
-    "budget_guard_mechanism": "PR560 process guard passes on a synthetic merge composition and correctly states it cannot prove absence of unmarked experiments or prevent same-change scheduling.",
-    "provenance_counterexample": "Both PR558 and PR560 workflows call GITHUB_SHA exact tested SHA on pull_request events and executable logs show that value is the synthetic merge commit rather than the PR head.",
-    "storage_counterexample": "F-V01-13 hardlink alias demonstrates pathname HAS_MOVED is insufficient for SQLite database alias safety; st_nlink==1 is retained as a point-in-time guard only.",
-    "goodman": "All new self-hosted clay/digital-retina results share project/runner ancestry and remain correlated scoped evidence."
+    "pr561_alias_cycle_mechanism": "Self-hosted run 31621638641 passed 14/14 nominal checks and 4/4 alias-cycle admission checks, including self-cycle, two-node cycle and ignored-parameter cycle rejection with acyclic control admitted.",
+    "pr561_provenance_counterexample": "Uploaded event/evidence files prove tested_sha was synthetic merge fa5d087... while event_head_sha was 181a2f9..., so exact-head credit is invalid.",
+    "shared_defect_inference": "PR558, PR560 and PR561 now independently expose the same github.sha-on-pull_request acquisition defect; repair should target the shared workflow pattern.",
+    "goodman": "Same-project/self-hosted clay results remain correlated scoped evidence, not independent semantic replication."
   },
-  "instruction": "Enforce the existing exact-head authority rule rather than adding semantic authority. Repair PR558/PR560 workflow provenance first, then rerun their bounded gates on the actual reviewed heads; keep merge-ref executions as separate composition evidence. Preserve PR556 corpus authority without semantic promotion. Keep PR560 process guard bounded to accounting/preflight. Preserve F-V01-13 hardlink result as storage mechanism evidence only. Preserve FREE_ONLY, WP03-WP06 OPEN, unresolved semantics, no BASE/Frank PASS from consensus, no canonical semantics promotion, and never modify Frank Harness."
+  "instruction": "Repair shared exact-head provenance first. On pull_request use github.event.pull_request.head.sha as the fetched candidate, record expected_pr_head and tested_sha, assert equality, and label github.sha merge-ref runs only as composition evidence. Rerun PR561/558/560 afterward. Preserve FREE_ONLY, WP03-WP06 OPEN, unresolved semantics, no BASE/Frank PASS from consensus, no canonical semantics promotion, and never modify Frank Harness."
 }

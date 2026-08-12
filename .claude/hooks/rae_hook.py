@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Clay Research Entity Claude-Code lifecycle adapter.
 
-Every substantive prompt re-injects the Research Entity/Frank identity boundary.
-Frank is a separate research subject and Andreas-facing operational entity; the
-Research Entity never role-transitions into Frank while researching or modifying it.
+Every substantive prompt re-injects the Research Entity/target identity boundary.
+self.root / human-surface Frank is a separate research subject and Andreas-facing
+operational entity; the Research Entity never role-transitions into the target
+while researching or modifying it.
 """
 from __future__ import annotations
 import hashlib,json,os,pathlib,sqlite3,subprocess,sys,time
@@ -43,15 +44,25 @@ def stack():
         return f'STACK{{ptr=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay;epoch:{ep};sha:{h}}}'
     except Exception:return 'STACK{state=DEGRADED_STALE_STACK}'
 def identity_lock():
-    required=('I_AM=RESEARCH_ENTITY_TEMPORARY_WORKER','I_AM_NOT=FRANK','ANDREAS_INTERFACE=FRANK_ONLY','FRANK_ROOM_MEANS=RESEARCH_ABOUT_FRANK_NOT_ROLEPLAY_AS_FRANK')
+    required=(
+        'I_AM=RESEARCH_ENTITY_TEMPORARY_WORKER',
+        'I_AM_NOT=self.root',
+        'I_AM_NOT=Frank',
+        'TARGET_NATIVE_SELF=self.root',
+        'TARGET_HUMAN_SURFACE_NAME=Frank',
+        'RESEARCH_ENTITY!=self.root',
+        'FRANK_SELF_HARNESS_AUTHORITY=PROPOSAL_ONLY',
+        'RESEARCH_ENTITY_MAY_INDEPENDENTLY_RESEARCH_TEST_AND_IMPLEMENT_TARGET_HARNESS_CHANGES',
+    )
     try:
         text=IDENTITY.read_text(encoding='utf-8')
         if not all(x in text for x in required):return 'RAE_IDENTITY_LOCK{state=DEGRADED_IDENTITY;action=STOP_RELOAD_GUARD}'
     except Exception:return 'RAE_IDENTITY_LOCK{state=DEGRADED_IDENTITY;action=STOP_RELOAD_GUARD}'
-    return ('RAE_IDENTITY_LOCK{state=ACTIVE;actor=RESEARCH_ENTITY_TEMPORARY_WORKER;actor_not=FRANK;'
-            'FRANK=SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY;ANDREAS_INTERFACE=FRANK_ONLY;'
-            'frank_room=RESEARCH_ABOUT_FRANK_NOT_ROLEPLAY;provider_model=PROVENANCE_NOT_FRANK_IDENTITY;'
-            'FRANK_SELF_HARNESS=PROPOSAL_ONLY;RESEARCH_ENTITY=INDEPENDENT_RESEARCH_TEST_IMPLEMENTATION_AUTHORITY;'
+    return ('RAE_IDENTITY_LOCK{state=ACTIVE;actor=RESEARCH_ENTITY_TEMPORARY_WORKER;actor_not=self.root|Frank;'
+            'TARGET_NATIVE=self.root;TARGET_HUMAN_SURFACE=Frank;'
+            'TARGET=SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY;ANDREAS_INTERFACE=FRANK_ONLY;'
+            'frank_room=RESEARCH_ABOUT_TARGET_NOT_ROLEPLAY;provider_model=PROVENANCE_NOT_TARGET_IDENTITY;'
+            'FRANK_SELF_HARNESS_AUTHORITY=PROPOSAL_ONLY;RESEARCH_ENTITY=INDEPENDENT_RESEARCH_TEST_IMPLEMENTATION_AUTHORITY;'
             'drift=STOP_REINJECT_RESTATE_ACTOR_SUBJECT_AUTHORITY}')
 def registry():
     try:return json.loads(TRIG.read_text()).get('triggers',{})
@@ -69,10 +80,10 @@ def ops():
         return 'OPS{work='+json.dumps([{'id':x[0],'rev':x[1],'t':x[2],'p':x[3],'s':x[4],'x':x[5]} for x in w],ensure_ascii=False,separators=(',',':'))+';poss='+json.dumps([{'r':x[0],'c':x[1],'a':x[2],'cap':x[3],'cs':x[4],'q':x[5]} for x in p],ensure_ascii=False,separators=(',',':'))+';remote='+json.dumps([{'p':x[0],'tr':x[1],'rid':x[2],'s':x[3]} for x in r],ensure_ascii=False,separators=(',',':'))+'}'
     except Exception:return 'OPS{state=DEGRADED}'
 def kernel():
-    return identity_lock()+'\n'+stack()+'\nTURN{E=ClayResearchEntity;SUBJECT_IF_FRANK=FRANK_NOT_SELF;GOAL="Frank v0.1 voll lauffähig auf Andreas PC";THINK=STACK.claycode;TRACE=STACK.claycode;USER=EN_CAVEMAN;GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];READ=T0(identity+researcher_guard+persona+stack)>T1(route)>T2(UnifiedDB+ClayGraph+SystemPossibility+DynamicWork)>T3(deep_if_needed);LOCAL_TRUTH=verified_local_execution_receipt_for_exact_effect;CLAUDE_OPINION!=truth;WORK=revisioned+revalidate_before_effect;CENTER=ClayCode;OFFLOAD=max_useful(ChatGPT);META_CLAYCODE_RESEARCH=OFF;STATUS=CLAY_STATUS}'
+    return identity_lock()+'\n'+stack()+'\nTURN{E=ClayResearchEntity;SUBJECT_IF_FRANK=self.root/human-surface-Frank-not-self;GOAL="Frank v0.1 voll lauffähig auf Andreas PC";THINK=STACK.claycode;TRACE=STACK.claycode;USER=EN_CAVEMAN;GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];READ=T0(identity+researcher_guard+persona+stack)>T1(route)>T2(UnifiedDB+ClayGraph+SystemPossibility+DynamicWork)>T3(deep_if_needed);LOCAL_TRUTH=verified_local_execution_receipt_for_exact_effect;CLAUDE_OPINION!=truth;WORK=revisioned+revalidate_before_effect;CENTER=ClayCode;OFFLOAD=max_useful(ChatGPT);META_CLAYCODE_RESEARCH=OFF;STATUS=CLAY_STATUS}'
 def frank_related(d):
     text=json.dumps({'tool':d.get('tool_name'),'input':d.get('tool_input'),'output':d.get('tool_response')},ensure_ascii=False).lower()
-    return any(x in text for x in ('frank','dr.-unterweger','dr-unterweger','andreas'))
+    return any(x in text for x in ('frank','self.root','dr.-unterweger','dr-unterweger','andreas'))
 
 def main():
     d=inp();ev=d.get('hook_event_name','');log(ev,d)
@@ -87,16 +98,16 @@ def main():
             rr,ro,_=rae('run','start','--actor','claude-code-lead','--task',f"trigger:{k} {s.get('purpose',k)}",'--capture-level','L2')
             run_summary=ro[:450] if rr==0 else 'START_FAIL'
             extra='trigger{id:'+k+';protocol:@'+str(s.get('protocol'))+';run:'+run_summary+'}'
-            if k=='frank':extra+='\nFRANK_RESEARCH_FRAME{actor=RESEARCH_ENTITY;subject=FRANK;room=frank;role_transition=FORBIDDEN;Andreas_interface=FRANK_ONLY}'
+            if k=='frank':extra+='\nFRANK_RESEARCH_FRAME{actor=RESEARCH_ENTITY;subject=self.root/human-surface-Frank;room=frank;role_transition=FORBIDDEN;Andreas_interface=FRANK_ONLY}'
         else:
             rr,ro,_=rae('boot','--actor','claude-code-lead','--task',prompt,'--max-claims','4','--max-packets','2','--max-chunks','1');extra='TASK='+(ro[:1600] if rr==0 else 'boot=DEGRADED')
-        emit(ev,kernel()+'\n'+base+'\n'+ops()+'\n'+extra+'\nDO=remain Research Entity; treat Frank as separate subject; latest ClayCode; map intent to current possibility/work; local real tests when discriminating; revalidate work rev before effect; useful ChatGPT offload; persist receipts; reenter G0; final caveman English');return
+        emit(ev,kernel()+'\n'+base+'\n'+ops()+'\n'+extra+'\nDO=remain Research Entity; treat self.root / Frank as separate subject; latest ClayCode; map intent to current possibility/work; local real tests when discriminating; revalidate work rev before effect; useful ChatGPT offload; persist receipts; reenter G0; final caveman English');return
     if ev=='PreToolUse':
         tool=d.get('tool_name','');ti=d.get('tool_input') or {};txt=str(ti.get('file_path') or ti.get('command') or '').replace('\\','/').lower()
         if any(x in txt for x in CRITICAL) and not ('python rae.py' in txt or 'python3 rae.py' in txt):deny('Protected Clay canonical state. Use Clay runtime.');return
     if ev=='PostToolUse':
         py(STATE,'refresh',timeout=30)
-        if frank_related(d):emit(ev,identity_lock()+'\nPOST_FRANK_CONTEXT_REINJECTION{actor=RESEARCH_ENTITY;subject=FRANK;role_transition=FORBIDDEN;Andreas_interface=FRANK_ONLY}')
+        if frank_related(d):emit(ev,identity_lock()+'\nPOST_FRANK_CONTEXT_REINJECTION{actor=RESEARCH_ENTITY;subject=self.root/human-surface-Frank;role_transition=FORBIDDEN;Andreas_interface=FRANK_ONLY}')
         return
     if ev in {'Stop','SessionEnd'}:py(STATE,'close','--session-id',str(d.get('session_id') or 'unknown'),timeout=30);return
     if ev=='PreCompact':emit(ev,kernel()+'\n'+ops()+'\nClay.compact{reload=identity_lock+stack+work+possibility+delta}');return

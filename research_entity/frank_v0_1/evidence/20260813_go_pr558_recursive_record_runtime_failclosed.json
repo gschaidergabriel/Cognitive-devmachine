@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "GO-20260813-FV01-02-RECURSIVE-RECORD-RUNTIME-FAILCLOSED",
+  "trigger": "go",
+  "framework": "GRF",
+  "target_program": "FRANK_V0_1",
+  "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "observed_main_before_delta": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "product_pr": 558,
+  "product_candidate_head": "ad3807e64f6ed0db9ea60ab1e082fccdf7fa42b9",
+  "observed_reality": {
+    "current_runtime_boundary": "runtime/claycode_eval_v1/admitted_evaluator.py",
+    "gap": "Runtime nominal contract traversal had alias-cycle detection but no active-path cycle detection for recursive non-opaque record graphs.",
+    "typechecker_boundary": "The current nominal checker does not reject a local record declaration merely because its field graph is recursive.",
+    "existing_regression_gap": "The merged runtime nominal-boundary suite covered primitives, sums, plain/opaque records, external nominals and branch scope, but not direct or mutual record recursion."
+  },
+  "generated_reality": {
+    "hypothesis": "A recursive local record contract can drive pre-exposure runtime-contract traversal into unbounded Python recursion instead of a typed fail-closed denial.",
+    "strongest_counterhypothesis": "The existing WP04/type/runtime boundary is already total for every parser-admitted local nominal graph, so recursive record declarations cannot escape into unbounded traversal."
+  },
+  "bounded_unusual_experiment": {
+    "name": "SELF_RECURSIVE_RECORD_CONTRACT_DESCENT",
+    "count_for_this_go_macrocycle": 1,
+    "scope": "disposable in-memory reproduction of the exact current-main runtime-contract traversal; no Frank/VPS/canonical/product state or external effect",
+    "control": "acyclic Leaf { value: Int } contract traversal",
+    "control_result": "PASS",
+    "treatment": "self-recursive Node { next: Node } contract traversal",
+    "treatment_result": "Python RecursionError: maximum recursion depth exceeded",
+    "outcome": "SUPPORTED_FAIL_CLOSED_TOTALITY_GAP",
+    "authority_minted": false,
+    "external_effect_executed": false
+  },
+  "collapse": {
+    "record_traversal_automatically_bounded_by_finite_declarations": "REJECT",
+    "global_visited_set_as_repair": "REJECT_TOO_STRONG_REPEATED_ACYCLIC_SIBLINGS_MUST_REMAIN_VALID",
+    "active_descent_record_stack_with_typed_denial": "RETAIN_TESTING",
+    "recursive_runtime_value_semantics_supported": "REJECT_NOT_CLAIMED"
+  },
+  "repair": {
+    "status": "TESTING",
+    "typed_denial": "RUNTIME_RECURSIVE_RECORD_CONTRACT_UNBOUND",
+    "mechanism": "Per-descent immutable active record stack in contract binding and runtime nominal validation; direct or mutual recursion fails closed before evaluator exposure.",
+    "files": [
+      "runtime/claycode_eval_v1/admitted_evaluator.py",
+      "tests/claycode_runtime_recursive_record_contract_gate.py",
+      ".github/workflows/claycode-runtime-nominal-boundary-oob-vps.yml"
+    ],
+    "ordinary_regression_contract": [
+      "acyclic repeated Leaf siblings remain admitted",
+      "direct self-recursive record contract receives typed denial",
+      "mutual Alpha/Beta record recursion receives typed denial"
+    ],
+    "ordinary_local_logic_slice": "3/3 PASS after repair; not target/self-hosted evidence"
+  },
+  "execution_evidence_at_write": {
+    "decisive_self_hosted_workflow": {
+      "run_id": 31621120442,
+      "name": "ClayCode runtime nominal boundary repair VPS",
+      "status": "QUEUED",
+      "claim": "UNKNOWN until execution completes"
+    },
+    "hosted_deep_integrity": {
+      "run_id": 31621120432,
+      "status": "COMPLETED_FAILURE_WITHOUT_EXECUTION",
+      "observed_steps": 0,
+      "runner_id": 0,
+      "runner_label": "ubuntu-latest",
+      "classification": "INFRASTRUCTURE_BLOCKED_OR_UNKNOWN_NOT_PRODUCT_COUNTEREVIDENCE"
+    }
+  },
+  "negative_results_and_limits": [
+    "No accepted Hostinger execution receipt exists for PR #558 at this evidence point.",
+    "No recursive ClayCode value/codec semantics are selected by this repair.",
+    "No whole F-V01-02 completion claim is made.",
+    "No whole Frank v0.1 acceptance claim is made.",
+    "Hosted Deep Integrity failure contained no executed steps and cannot be promoted to code failure."
+  ],
+  "next_falsifier": "Require exact candidate-head self-hosted runtime nominal-boundary workflow to execute the new 3-case regression plus legacy nominal/WP04/static-integrity gates; preserve any failure without weakening the fail-closed predicate.",
+  "harness_authority_changed": false,
+  "training_authorized": false,
+  "together_used": false
+}

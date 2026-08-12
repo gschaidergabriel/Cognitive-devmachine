@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.3",
+  "schema_version": "2.4",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -17,7 +17,7 @@
     "automatic_subscription_upgrade": false,
     "github_hosted_actions_paid_remediation": false,
     "github_hosted_actions_blocked_run": 31548258330,
-    "github_hosted_identity_guard_blocked_run": 31555181597,
+    "github_hosted_identity_guard_blocked_run": 31566209713,
     "next_execution_surface": "VERIFIED_ZERO_COST_ONLY_PREFER_SELF_HOSTED_UBUNTU_ELSE_FAIL_CLOSED",
     "generic_self_hosted_labels_mint_product_target_identity": false
   },
@@ -25,6 +25,7 @@
     "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
     "VERIFY_FREE_EXECUTION_SURFACE_BEFORE_COMPUTE",
     "VERIFY_RUNNER_AND_PRODUCT_TARGET_PROVENANCE_SEPARATELY_FROM_ROUTING_LABELS",
+    "VERIFY_SUCCESSOR_ENTRYPOINT_PRESERVES_PREDECESSOR_SECURITY_INVARIANTS",
     "HARVEST_PROVIDER_MODELS_AND_CAPABILITIES",
     "SELECT_NON_REDUNDANT_MODEL_FAMILIES",
     "RETRIEVE_AND_RERANK_RELEVANT_CLAYCODE_EVIDENCE",
@@ -60,7 +61,7 @@
   "authority_rules": [
     "model_output_is_candidate_not_truth",
     "model_output_never_mints_capability_or_execution_authority",
-    "autonomous_cycle_may_write_research_receipts_and_requests",
+    "autonomous_cycle_may_write_research_receipts_and requests",
     "autonomous_cycle_may_not_mark_legacy_BASE_work_packages_PASS",
     "autonomous_cycle_may_not_mark_FRANK_V0_1_complete",
     "autonomous_cycle_may_not_promote_canonical_semantics",
@@ -73,9 +74,13 @@
     "self_hosted_or_other_execution_surface_must_be_currently_verifiable_and_zero_cost_before_autonomous_credit",
     "generic_self_hosted_linux_x64_labels_do_not_mint_hostinger_productstart_or_final_target_identity",
     "runner_local_mechanism_success_may_be_preserved_without_upgrading_to_productive_target_acceptance",
-    "productstart_pre_first_guard_trust_closure_must_cover_launcher_and_all_executable_imported_guard_code",
-    "productstart_pre_first_guard_trust_closure_must_cover_loader_search_directory_ancestry_and_transitive_dependency_authority",
+    "successor_launcher_or_entrypoint_must_explicitly_recompose_and_regression_test_predecessor_security_invariants_before_productstart_credit",
+    "source_chain_hashes_and_source_only_pycache_exclusion_are_source_bundle_controls_not_productive_host_process_or_runtime_identity",
+    "productstart_pre_first_guard_trust_closure_must_cover_launcher_and all executable imported guard code",
+    "productstart_pre_first_guard_trust_closure_must_cover_loader search directory ancestry and transitive dependency authority",
     "script_based_productstart_must_bind_shebang_interpreter_identity_and_resolved_interpreter_path_under_deployment_policy",
+    "productive_sqlite_identity_credit_requires_independently_bound_host_plus_canonical_unit_and selected process plus mapped inode fd hash plus trusted root anchor",
+    "default_interpreter_or_runner_local_sqlite_observation_must_not_be_attributed_to_accepted_hostinger_productive_frank_without_independent_host_productstart_binding",
     "pinned_primary_dso_identity_does_not_authenticate_unpinned_dt_needed_dependencies",
     "trusted_parent_directory_does_not_authenticate_preexisting_child_module_ownership_or_content",
     "productstart_is_conjunctive_and_no_single_storage_identity_lineage_or_startup_green_can_mint_whole_frank_continuity",
@@ -103,26 +108,26 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "New executable ProductStart counterevidence requires a complete pre-first-guard execution trust closure. Preserve the loader-dependency counterworld, imported-guard-chain counterworld and interpreter-identity discriminator as scoped mechanism evidence. Recompose against current product main and test launcher identity, every executable imported guard module, loader search directory ancestry, transitive DT_NEEDED dependency authority and shebang interpreter identity before granting ProductStart credit; then require exact mapped SQLite identity plus start/restart/recovery/rollback/downgrade continuity on independently bound owner-fixed Hostinger Ubuntu deployment provenance. Self-hosted/Linux/X64 labels alone are routing metadata and must not mint Hostinger target identity. Keep WP03/WP04/WP05/WP06 OPEN; resume PR478/PR480 current-main recomposition and productive evaluator/compiler/lowering/FFI audit for mandatory WP04 admission plus immutable/private admitted state. Preserve all 22 MethodChain segments, 429 unique/464 unresolved calls, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence as authority-unselected. GitHub-hosted research-repo Actions remains blocked under FREE_ONLY; no paid remediation. No new accepted-Ubuntu live FREE_ONLY provider receipt. Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
+  "current_focus": "Use the new V6 evidence to harden ProductStart composition without changing ClayCode semantics. PR516 run 31565182557 shows a successor V6 launcher omitted a predecessor V5 source-only __pycache__ invariant until explicit repair; therefore successor entrypoints must recompose predecessor security invariants and rerun their falsifiers. PR518 run 31565689905 supports merged exact source-chain SHA-256 binding, but source hashes/cache exclusion remain mechanism evidence only. The merged PR515 observer defines the productive target predicate: independently bound accepted Hostinger host identity + canonical systemd unit/final executable + stable selected process + mapped SQLite dev/inode matched to same O_NOFOLLOW FD hash + root-protected trusted anchor. Correct stale FRANK workspace language that attributes digital-retina/default-interpreter SQLite 3.45.1 to the accepted Hostinger productive runtime. Latest ubuntu-latest identity guard run 31566209713/job 94018417568 executed zero steps and supplies zero guard credit. Keep WP03/WP04/WP05/WP06 OPEN; continue productive-route WP04 admission and immutable-state closure and preserve 22 MethodChain segments, 429 unique/464 unresolved calls, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. GitHub-hosted research-repo Actions remains blocked under FREE_ONLY; no paid remediation. No new accepted-Ubuntu live FREE_ONLY provider receipt. Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
   "supervisor_last_steer": {
-    "reason": "Three new executable/mechanism findings expand ProductStart pre-guard trust obligations: transitive loader dependency code, imported Python guard code, and script interpreter identity. Steering prevents narrow DSO/launcher success from being mistaken for ProductStart acceptance and separates self-hosted routing labels from independently proven Hostinger product identity.",
+    "reason": "New executable V6 re-entry evidence refutes automatic inheritance of predecessor ProductStart security invariants; merged source identity and actual-process observer mechanisms also expose a provenance overclaim that must be corrected before release evidence use.",
     "evidence_priority": [
-      "recompose complete pre-first-guard execution closure on current product main",
-      "bind owner-fixed Hostinger deployment provenance independently from generic runner labels",
-      "run dependency swap, imported-module ownership/content swap, interpreter swap, start/restart/recovery/rollback/downgrade falsifiers",
-      "continue ClayCode productive-route WP04 admission and immutable-state closure",
-      "preserve unresolved semantic authority and Goodman ancestry collapse"
+      "make predecessor-security-invariant re-entry a mandatory successor-entrypoint regression gate",
+      "correct accepted-target SQLite provenance wording",
+      "exercise merged actual-process observer only on independently bound owner-fixed Hostinger ProductStart provenance",
+      "preserve source-chain hashes/cache exclusion as mechanism controls rather than productive identity",
+      "continue ClayCode productive-route WP04 admission and immutable-state closure"
     ],
     "required_next_actions": [
-      "retain PR503/V6 self-hosted result as bounded mechanism evidence until productive target binding exists",
-      "retest merged imported-guard repair in composed current ProductStart path",
-      "add deterministic interpreter-identity negative control to ProductStart admission where script launch applies",
-      "do not derive Hostinger target credit from self-hosted/Linux/X64 labels alone",
+      "correct FRANK_V0_1_WORKSPACE wording that currently says accepted target reports SQLite 3.45.1",
+      "on any ProductStart successor, enumerate inherited security invariants and replay predecessor negative controls before promotion",
+      "bind accepted hostname/machine identity, canonical unit/final executable, stable product process and mapped SQLite object before productive runtime credit",
+      "do not derive Hostinger target credit from runner clay, digital-retina, self-hosted/Linux/X64 labels, or default interpreter observations",
       "preserve FREE_ONLY and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
-      "ProductStart or F-V01-13 PASS from any single new storage guard",
-      "Hostinger production identity from self-hosted runner labels",
+      "ProductStart or F-V01-13 PASS from source-chain hashing or pycache exclusion",
+      "accepted Hostinger runtime identity from digital-retina or default-/usr/bin/python3 observations",
       "canonical ClayCode semantics from storage/runtime findings",
       "BASE or Frank v0.1 PASS from model consensus",
       "provider capability change without an accepted-Ubuntu live FREE_ONLY receipt"

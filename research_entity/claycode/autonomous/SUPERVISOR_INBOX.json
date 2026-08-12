@@ -1,49 +1,54 @@
 {
   "schema_version": "3.2",
-  "latest_cycle": "ccauto-20260812T0150Z-supervisor",
+  "latest_cycle": "ccauto-20260812T0341Z-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "The latest scheduled ClayCode autonomous FREE_ONLY run 31548258330 on main 58886c6d896e9cfca2a8aa972c013f4604a6ddbc failed before any step executed. GitHub check annotation states the job was not started because recent account payments failed or the spending limit must be increased; job 93965229487 has runner_id=0, runner_name empty and steps=[], so this is infrastructure/billing evidence only and grants zero ClayCode, provider, BASE or Frank credit. Under FREE_ONLY do not increase a spending limit, enable paid Actions usage, or repeatedly rerun the same github-hosted ubuntu-latest path. Route the next autonomous cycle only through a verified zero-cost execution surface, preferring an already-authorized self-hosted Ubuntu runner/target if available; if no such surface is presently verifiable, fail closed and preserve the pending research requests instead of purchasing capacity. ClayCode semantic frontier is otherwise unchanged: recompose PR478/PR480 on latest product main, audit every productive evaluator/compiler/lowering/FFI route for mandatory WP04 admission plus immutable/private admitted-state handoff, and keep all 22 MethodChain sites, 429 unique/464 unresolved Call occurrences, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence OPEN. F-V01-04 remains OPEN with prior PR499 candidate evidence only; ProductStart remains conjunctive and incomplete; no new accepted-Ubuntu live free-provider receipt exists.",
+  "next_focus": "GitHub-hosted Actions is now observed blocked across two materially relevant lanes. Autonomous run 31548258330/job 93965229487 executed zero steps; after the fail-closed workflow pause, Research Entity Identity Guard run 31555181597/job 93986017506 also executed zero steps. Treat both strictly as infrastructure-only evidence. The second result means the identity guard itself is not currently an effective enforcement oracle. Under FREE_ONLY never raise spending limits, buy Actions capacity, or enable paid fallback. Do not attach safety, acceptance, identity-guard or ClayCode credit to github-hosted workflows unless a runner actually executes them. Route mandatory executable work only through a currently verified zero-cost surface, preferring authorized self-hosted Ubuntu; otherwise preserve requests fail-closed. ClayCode semantic frontier remains unchanged: PR478/PR480 recomposition on current product main, productive evaluator/compiler/lowering/FFI route audit for mandatory WP04 admission plus immutable/private admitted-state handoff, 22 MethodChain segments and 429 unique/464 unresolved Calls remain open, as do comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence. F-V01-04 and ProductStart remain OPEN; no new accepted-Ubuntu live free-provider receipt exists.",
   "errors": [
     {
       "kind": "GITHUB_HOSTED_ACTIONS_BILLING_BLOCK",
       "workflow_run": 31548258330,
       "job": 93965229487,
-      "head_sha": "58886c6d896e9cfca2a8aa972c013f4604a6ddbc",
       "executed_steps": 0,
-      "runner_id": 0,
-      "classification": "INFRASTRUCTURE_ONLY_ZERO_CODE_CREDIT",
-      "free_only_response": "DO_NOT_INCREASE_SPENDING_LIMIT_OR_ENABLE_PAID_USAGE; USE_VERIFIED_ZERO_COST_OR_SELF_HOSTED_UBUNTU_OR_FAIL_CLOSED"
+      "classification": "INFRASTRUCTURE_ONLY_ZERO_CODE_CREDIT"
+    },
+    {
+      "kind": "GITHUB_HOSTED_IDENTITY_GUARD_ZERO_STEP",
+      "workflow_run": 31555181597,
+      "job": 93986017506,
+      "head_sha": "4c6ed3b521ac324a241671892cd7d9a422001c4f",
+      "executed_steps": 0,
+      "classification": "INFRASTRUCTURE_ONLY_ZERO_GUARD_CREDIT",
+      "free_only_response": "DO_NOT_PURCHASE_OR_RAISE_LIMITS; REQUIRE_VERIFIED_ZERO_COST_EXECUTION_OR_FAIL_CLOSED"
     }
   ],
   "provider_discovery": {
     "nvidia": {"status": "OFFICIAL_HOSTED_API_SURFACE_DOCUMENTED_NO_NEW_EXECUTION_CREDIT", "base_url": "https://integrate.api.nvidia.com/v1"},
     "free_provider_runtime": {"status": "NO_NEW_ACCEPTED_UBUNTU_LIVE_PROVIDER_RECEIPT", "paid_fallback": false, "http_402_hard_stop_required": true, "restart_durable_payment_latch": false, "external_cost_account_identity": "UNKNOWN"},
-    "github_actions_hosted": {"status": "BLOCKED_BEFORE_JOB_START_BY_ACCOUNT_BILLING_OR_SPENDING_LIMIT", "capability_credit": false, "paid_remediation_allowed": false},
+    "github_actions_hosted": {"status": "BLOCKED_BEFORE_JOB_START_ON_AUTONOMOUS_AND_IDENTITY_GUARD_OBSERVED_LANES", "capability_credit": false, "guard_credit": false, "paid_remediation_allowed": false},
     "self_hosted_ubuntu": {"status": "PREFERRED_FREE_ONLY_EXECUTION_SURFACE_IF_CURRENTLY_REGISTERED_AND_VERIFIABLE", "availability_verified_this_cycle": false}
   },
   "receipt_gaps": {
     "wp03_ir_types": "OPEN",
     "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY: 429 unique names / 464 unresolved call-site occurrences",
-    "wp04_member_library": "OPEN_SEMANTIC_AUTHORITY: 22 callable MethodChain segments; PR480 adds fail-closed analyzer observability only",
+    "wp04_member_library": "OPEN_SEMANTIC_AUTHORITY: 22 callable MethodChain segments",
     "wp04_verb_for": "OPEN",
-    "wp05_tree_evaluator_routes": "OPEN_ROUTE_CLOSURE: PR478 proves one WP04-before-tree-evaluator wrapper, all productive exposures still require audit/recomposition",
+    "wp05_tree_evaluator_routes": "OPEN_ROUTE_CLOSURE",
     "wp05_comparison_chain": "OPEN_SEMANTIC_AUTHORITY",
     "wp05_bool_int_equality": "OPEN_SEMANTIC_AUTHORITY",
-    "wp06_python_routes": "OPEN_NON_BYPASSABILITY_AND_STATE_HANDOFF: PR462+PR477 prove one admitted snapshot route only",
-    "productstart_artifact_authority": "PARTIAL_TARGET_SUPPORT: PR496 prior-pin external admission passed; productive root/service binding absent",
-    "productstart_parent_path": "PARTIAL_TARGET_SUPPORT: PR469 exact-head success on stacked candidate; current-main/product service composition absent",
-    "productstart_preopen_wal": "PARTIAL_TARGET_SUPPORT: PR460 exact-head success on candidate; current-main integration, TOCTOU and mapped-object identity remain open",
-    "unifieddb_fv0104": "OPEN_WITH_COMPOSED_CLEAN_V4_TARGET_SUPPORT: prior PR499 exact-head candidate evidence remains scoped; current-main/product migration/service startup, power-loss, multi-host and unbounded contention remain required",
+    "wp06_python_routes": "OPEN_NON_BYPASSABILITY_AND_STATE_HANDOFF",
+    "unifieddb_fv0104": "OPEN_WITH_SCOPED_CANDIDATE_SUPPORT",
+    "productstart": "OPEN_CONJUNCTIVE_PRODUCT_SERVICE_EVIDENCE",
     "provider_target_receipt": "OPEN",
-    "autonomous_execution_surface": "BLOCKED_ON_GITHUB_HOSTED_UBUNTU_LATEST; REQUIRE_VERIFIED_ZERO_COST_OR_SELF_HOSTED_UBUNTU",
+    "autonomous_execution_surface": "BLOCKED_ON_GITHUB_HOSTED; REQUIRE_VERIFIED_ZERO_COST_OR_SELF_HOSTED_UBUNTU",
+    "identity_guard_execution_surface": "BLOCKED_ZERO_STEP_ON_GITHUB_HOSTED; DO_NOT ASSUME ENFORCEMENT",
     "frank_v0_1_target": "Final acceptance remains owner-fixed Ubuntu VPS only"
   },
   "new_material_evidence": {
-    "github_actions_hosted_blocker": "Run 31548258330 / job 93965229487 failed before step execution on main 58886c6d896e9cfca2a8aa972c013f4604a6ddbc. GitHub annotation says the job was not started because recent account payments failed or the spending limit needs increasing. Job metadata records steps=[], runner_id=0 and no runner name. Treat strictly as infrastructure/billing evidence; no executable ClayCode or provider evidence exists in this run.",
-    "goodman": "No new model or executable semantic evidence was produced by the zero-step run, so ancestry/consensus cannot change any BASE or canonical-semantic status."
+    "hosted_guard_blocker": "Research Entity Identity Guard run 31555181597 on main 4c6ed3b521ac324a241671892cd7d9a422001c4f ended failure with job 93986017506 and steps=[]. It contributes zero executable guard evidence and demonstrates the hosted execution blockage affects a safety/identity lane as well as the autonomous ClayCode lane.",
+    "goodman": "No model or semantic execution occurred in the new zero-step guard result; ancestry and model consensus cannot alter any BASE or canonical-semantic status."
   },
-  "instruction": "Preserve FREE_ONLY. Never remediate the GitHub-hosted Actions failure by increasing a spending limit, paying for additional minutes, or enabling paid fallback. Do not rerun an equivalent ubuntu-latest cycle while the billing block is the only expected outcome. Prefer an already-authorized, currently verifiable self-hosted Ubuntu execution surface or another explicitly verified zero-cost oracle; otherwise fail closed and preserve requests. Give run 31548258330 zero code/provider/semantic credit. Once a free execution surface is available, continue the existing highest-information ClayCode work: current-main PR478/PR480 recomposition; productive-route WP04 admission plus immutable/private admitted-state audit; explicit ownership for 22 MethodChain segments and 429/464 unresolved Calls; no host-name defaulting; no semantic promotion without executable counterevidence and review. Preserve Goodman ancestry collapse, Ubuntu-only final acceptance, Together hard denial, no BASE or Frank PASS from consensus, and zero Frank-Harness modification."
+  "instruction": "Preserve FREE_ONLY and fail closed. Treat github-hosted Actions as unavailable for mandatory research or guard credit until actual runner execution is observed. Never remediate by increasing a spending limit or buying runner minutes. Prefer a currently verified self-hosted Ubuntu or other explicitly zero-cost oracle. Once free execution exists, resume current-main PR478/PR480 recomposition, productive-route WP04 admission plus immutable/private admitted-state audit, explicit ownership for 22 MethodChain segments and 429/464 unresolved Calls, and ProductStart/UnifiedDB product composition. Preserve Goodman ancestry collapse, Ubuntu-only final acceptance, Together hard denial, no BASE/Frank PASS from consensus, no canonical semantics without executable counterevidence plus review, and zero Frank-Harness modification."
 }

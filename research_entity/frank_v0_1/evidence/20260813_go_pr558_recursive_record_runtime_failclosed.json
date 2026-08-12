@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "evidence_id": "GO-20260813-FV01-02-RECURSIVE-RECORD-RUNTIME-FAILCLOSED",
   "trigger": "go",
   "framework": "GRF",
@@ -19,9 +19,9 @@
     "hypothesis": "A recursive local record contract can drive pre-exposure runtime-contract traversal into unbounded Python recursion instead of a typed fail-closed denial.",
     "strongest_counterhypothesis": "The existing WP04/type/runtime boundary is already total for every parser-admitted local nominal graph, so recursive record declarations cannot escape into unbounded traversal."
   },
-  "bounded_unusual_experiment": {
+  "intended_bounded_unusual_experiment": {
     "name": "SELF_RECURSIVE_RECORD_CONTRACT_DESCENT",
-    "count_for_this_go_macrocycle": 1,
+    "intended_count_for_this_go_macrocycle": 1,
     "scope": "disposable in-memory reproduction of the exact current-main runtime-contract traversal; no Frank/VPS/canonical/product state or external effect",
     "control": "acyclic Leaf { value: Int } contract traversal",
     "control_result": "PASS",
@@ -30,6 +30,16 @@
     "outcome": "SUPPORTED_FAIL_CLOSED_TOTALITY_GAP",
     "authority_minted": false,
     "external_effect_executed": false
+  },
+  "go_protocol_deviation": {
+    "status": "PRESERVED_NEGATIVE_EVIDENCE",
+    "actual_unusual_experiment_count_observed": 2,
+    "unexpected_second_experiment": "CORPUS_GHOST_APPEND",
+    "cause": "A pre-existing automatically triggered ClayCode Frontier Current-Main Composition workflow on main still contained its own GO-OOB step and executed it after PR #558 was opened.",
+    "workflow_run": 31621120426,
+    "workflow_observation": "Composition discriminator completed successfully, inherited CORPUS_GHOST_APPEND step completed, then the old exact-frontier gate failed.",
+    "existing_nonduplicate_repair": "PR #556 already removes the inherited CORPUS_GHOST_APPEND step and repairs the stale 42-source frontier path through explicit corpus authority.",
+    "action": "Do not duplicate PR #556. Execute no further unusual experiment in this macrocycle and retain the protocol violation visibly."
   },
   "collapse": {
     "record_traversal_automatically_bounded_by_finite_declarations": "REJECT",
@@ -53,12 +63,20 @@
     ],
     "ordinary_local_logic_slice": "3/3 PASS after repair; not target/self-hosted evidence"
   },
-  "execution_evidence_at_write": {
+  "execution_evidence": {
     "decisive_self_hosted_workflow": {
       "run_id": 31621120442,
       "name": "ClayCode runtime nominal boundary repair VPS",
-      "status": "QUEUED",
+      "status": "QUEUED_AT_LAST_OBSERVATION",
       "claim": "UNKNOWN until execution completes"
+    },
+    "self_root_current_head": {"run_id": 31621120543, "status": "PASS"},
+    "package_import": {"run_id": 31621120425, "status": "PASS"},
+    "ambiguous_variant_fail_closed": {"run_id": 31621120501, "status": "PASS"},
+    "frontier_current_main_composition": {
+      "run_id": 31621120426,
+      "status": "FAIL_OLD_GATE_AFTER_SUCCESSFUL_COMPOSITION_DISCRIMINATOR",
+      "known_overlap": "PR #556 repairs this stale corpus-authority/frontier path; do not classify as a recursive-record semantic failure."
     },
     "hosted_deep_integrity": {
       "run_id": 31621120432,
@@ -70,6 +88,7 @@
     }
   },
   "negative_results_and_limits": [
+    "The GO exactly-one-unusual-experiment invariant was violated by an inherited auto-triggered workflow; this is retained as negative evidence.",
     "No accepted Hostinger execution receipt exists for PR #558 at this evidence point.",
     "No recursive ClayCode value/codec semantics are selected by this repair.",
     "No whole F-V01-02 completion claim is made.",

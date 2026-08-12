@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "trigger": "go",
+  "research_parent_run": "go-20260812T2127p0700-gpt56sol-opaque-green-adjudication",
+  "observed_at": "2026-08-12T14:52:00Z",
+  "canonical_entity_revision": 2,
+  "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_base": "b93639b57a62d692d6bc829a16b1994d4a7eb127",
+  "merged_prerequisites": {
+    "opaque_parser_fidelity": {
+      "pr": 544,
+      "merge_commit": "196bbc3505bf6d2da47de89214278d84d5de21cf",
+      "self_hosted_green_run": 31606560787
+    },
+    "runtime_nominal_boundary": {
+      "pr": 536,
+      "merge_commit": "b93639b57a62d692d6bc829a16b1994d4a7eb127"
+    }
+  },
+  "duplicate_candidates": [
+    {
+      "pr": 548,
+      "outcome": "CLOSED_STALE_ANCESTRY",
+      "accepted_evidence": false
+    },
+    {
+      "pr": 551,
+      "outcome": "CLOSED_STALE_ANCESTRY_AFTER_536_MERGE",
+      "accepted_evidence": false
+    },
+    {
+      "pr": 554,
+      "head": "a6f264e4530eed9334bc79e0b8b209fab8ab7175",
+      "outcome": "CLOSED_INDEPENDENT_REPLICATION",
+      "semantic_result": "CONVERGED_WITH_PR_552",
+      "accepted_evidence": false
+    }
+  ],
+  "authoritative_live_candidate": {
+    "pr": 552,
+    "state": "OPEN_DRAFT_TESTING",
+    "branch": "chatgpt/go-claycode-parsed-record-runtime-boundary-20260812",
+    "head": "84c78a09314933872999bd191c8855a809204074",
+    "base": "b93639b57a62d692d6bc829a16b1994d4a7eb127",
+    "reason": "Same narrow semantic repair as independent replication #554, plus the existing self-hosted runtime workflow binds FRANK_STRUCTURED_V1.lark bytes, compiles syntax.py and explicitly asserts the parser-dependency and parsed-plain/parsed-opaque policy.",
+    "runtime_gate_run": 31609138918,
+    "runtime_gate_state_at_receipt": "QUEUED",
+    "parser_fidelity_run": 31609138885,
+    "parser_fidelity_state_at_receipt": "QUEUED",
+    "pass_claimed": false
+  },
+  "semantic_candidate": {
+    "change": "Remove only the obsolete source_sha256 blanket quarantine for parsed records after merged opacity fidelity.",
+    "parsed_plain": "ADMIT_ONLY_THROUGH_EXISTING_EXACT_RECORD_OWNER_FIELDSET_AND_NESTED_NOMINAL_CHECKS",
+    "parsed_opaque": "FAIL_CLOSED_TRUSTED_PRODUCER_REQUIRED",
+    "unknown_imported_parametric": "FAIL_CLOSED_UNCHANGED",
+    "raw_evaluator": "RESEARCH_DIFFERENTIAL_ONLY_UNCHANGED"
+  },
+  "grf_adjudication": {
+    "generated_reality": "The parser-fidelity and runtime-nominal mechanisms compose cleanly at the parsed-record boundary.",
+    "counter_reality": "The two mechanisms can each pass independently while a composition or parser dependency drifts, allowing an unsafe parsed record.",
+    "discriminator": "Exact current-head self-hosted runtime gate must bind parser grammar bytes and pass parsed plain/opaque, nested nominal, WP04 and static-integrity controls; independent parser-fidelity gate must also pass.",
+    "current_outcome": "DEFER_TESTING"
+  },
+  "unusual_experiment_accounting": {
+    "this_macrocycle_exact_count": 1,
+    "this_macrocycle_experiment": "OPAQUE_PREFIX_CROWN",
+    "additional_unusual_experiment_in_this_adjudication": false,
+    "note": "Other workers may have separate GO run receipts with their own bounded unusual experiment; they are not counted as additional experiments in this macrocycle receipt."
+  },
+  "promotion_law": {
+    "merge_before_exact_current_head_green": false,
+    "f_v01_02_pass_claimed": false,
+    "whole_frank_v01_pass_claimed": false,
+    "accepted_hostinger_runtime_claimed": false,
+    "training_authorized": false
+  }
+}

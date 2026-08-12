@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.1",
+  "event_type": "FRANK_V0_1_WORK_FRONTIER_DELTA",
+  "status": "SOURCE_RELEASE_IDENTITY_SUPPORTED_SELF_HOSTED_PREDECESSOR / EXACT_CURRENT_DEEP_RUN_QUEUED / PRODUCTION_GATE_OPEN",
+  "created_at": "2026-08-12T12:13:30+07:00",
+  "updated_at": "2026-08-12T12:13:30+07:00",
+  "actor": "OpenAI / GPT-5.6 Sol",
+  "actor_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "owner_program": "FRANK_V0_1",
+  "work_package_reentry": ["F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+  "fresh_product_main_evidence": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "observed_main": "93a5a883aafe6cc174b0abc65722d52e31e7796e",
+    "observed_main_contains": [
+      "PR#511 V6 trusted launcher wiring",
+      "PR#516 V6 source-only __pycache__ invariant preservation"
+    ],
+    "candidate_pr": 518,
+    "candidate_branch": "chatgpt/go-sqlite-v6-source-hash-main-93a5-20260812",
+    "candidate_head": "ac3e65ec0a53c5561927f1ff0428dd56edad7038",
+    "exact_current_deep_run": 31565689905,
+    "exact_current_deep_run_status_at_event_write": "QUEUED",
+    "predecessor_exact_head_run": 31565542167,
+    "predecessor_exact_head": "0e0514ec416708e874bd2bf524030cfffbe19905",
+    "predecessor_runner": "clay",
+    "predecessor_host": "digital-retina",
+    "predecessor_result": "PASS",
+    "predecessor_receipt": "FRANK_SQLITE_V6_SOURCE_IDENTITY_CURRENT_V1"
+  },
+  "grf_discriminator": {
+    "unusual_experiment_count": 1,
+    "unusual_experiment": "ROOT_OWNED_SIBLING_GUARD_SUBSTITUTION_V1",
+    "scope": "disposable local root-owned /opt-shaped sandbox only",
+    "observed": "Two byte-identical root-owned/non-writable launcher copies each selected and executed a different root-owned/non-writable sibling guard under the then-current ownership/mode semantics.",
+    "cleanup": "COMPLETED",
+    "accepted_vps_mutated": false,
+    "canonical_frank_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "collapse": {
+      "root_owned_nonwritable_implies_accepted_release_bytes": "REJECT",
+      "exact_source_hash_binding_closes_wrong_or_stale_source_bundle_ambiguity_for_known_chain": "SUPPORTED_AT_SELF_HOSTED_MECHANISM_LEVEL_ON_PREDECESSOR_HEAD",
+      "source_hashes_alone_prove_productive_runtime_or_service_identity": "REJECT"
+    }
+  },
+  "candidate_mechanism": {
+    "entrypoint": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v6_launcher.sh",
+    "law": "Before first Python exec, compose existing path/link/root-ownership/write-protection and source-only cache exclusion with exact source-controlled SHA-256 pins for every executable V6->V1 source-chain member.",
+    "fail_closed_tokens": [
+      "PYTHON_CHAIN_UNPINNED_FILE",
+      "PYTHON_CHAIN_SHA256_UNAVAILABLE",
+      "PYTHON_CHAIN_SHA256_MISMATCH",
+      "PYTHON_CHAIN_CACHE_PRESENT"
+    ],
+    "source_sha256": {
+      "fixed_sqlite_runtime_guard_v6_candidate.py": "a6f24ad15cf7eec8dedca4ba62ce5f6bef364bee39d4c4a126a417b1d47c22af",
+      "fixed_sqlite_runtime_guard_v5_candidate.py": "1b053c55f80c71f1381bca607d71bcac34c7ad948c8cf74dda5276ef4e1321d7",
+      "fixed_sqlite_runtime_guard_v4_candidate.py": "5ef79018298116709e4cf8c87a4f0e34de8a9c375a35693f63f54f96b96ed699",
+      "fixed_sqlite_runtime_guard_v3_candidate.py": "59d93110da08bda60facfc74bca3dfc5fa04027d0bc521714f90bfd10eb01ede",
+      "fixed_sqlite_runtime_guard_v2_candidate.py": "ee3d474384f56e6c1920b4329831653c2414f931ef2e974fe80ab8170a3bbf18",
+      "fixed_sqlite_runtime_guard.py": "0c871579d503dfafc95e36dce2bbfe801687a0ce16f9ada26da531df7d3087f2"
+    },
+    "predecessor_self_hosted_checks": {
+      "source_hash_regression": "PASS_5_OF_5",
+      "v6_pycache_gate": "PASS",
+      "v6_launcher_wiring": "PASS",
+      "v6_loader_directory_trust": "PASS",
+      "static_integrity": "PASS",
+      "all_six_source_hashes_match_pins": true,
+      "production_root_mutation": false,
+      "frank_database_opened": false,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    }
+  },
+  "coordination": {
+    "stale_pr_512": "CLOSED_UNMERGED_SUPERSEDED_BY_PR_518",
+    "parallel_actual_product_process_lane": "PR#515 complementary; do not conflate source release identity with accepted-host/product-process mapping",
+    "current_candidate_pr_state": "DRAFT_UNTIL_EXACT_CURRENT_DEEP_RUN_COMPLETES"
+  },
+  "remaining_release_gate": [
+    "Provision the fixed release-accepted SQLite runtime through deployment-owned/root-protected bytes on the accepted Hostinger Ubuntu target.",
+    "Provision and attest the root-owned /etc/frank-v0.1 SQLite runtime anchor without granting Frank mutation authority over it.",
+    "Bind the actual Frank production service entrypoint non-bypassably to the current V6 admission path and admitted runtime object.",
+    "Attest the trusted production parent/environment construction before the shell admission boundary.",
+    "Prove the actual Frank production process maps the admitted SQLite object and matches anchor/hash/source identity.",
+    "Prove service start/restart, rollback, downgrade/library-swap rejection and recovery on the accepted target.",
+    "Keep semantic-lineage selection and recovery-generation obligations independently fail-closed."
+  ],
+  "workspace_status_instruction": "F-V01-13 remains IN_PROGRESS. PR #518 is a narrow source-release-identity candidate. Do not mark F-V01-13 or Frank v0.1 PASS from source-hash/self-hosted mechanism evidence; exact productive Hostinger service/runtime/recovery/lineage evidence remains required.",
+  "authority": {
+    "frank_self_harness_mutation": false,
+    "effect_authority": "NONE",
+    "training_authorized": false
+  }
+}

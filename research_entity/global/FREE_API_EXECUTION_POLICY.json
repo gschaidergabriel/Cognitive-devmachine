@@ -137,14 +137,17 @@
     "counterhypothesis": "Successful json.loads parsing proves a valid HTTP body; falsified because json.loads intentionally accepts str and bytearray in addition to bytes."
   },
   "strict_json_numbers": {
-    "checked_at": "2026-08-12",
-    "claim": "Provider response JSON containing NaN, Infinity or -Infinity is invalid and cannot reach VERIFIED or DONE.",
+    "checked_at": "2026-08-14",
+    "claim": "Provider response JSON containing NaN, Infinity, -Infinity or an exponent that overflows the runtime float range is invalid and cannot reach VERIFIED or DONE.",
     "sources": [
       "https://datatracker.ietf.org/doc/html/rfc8259#section-6",
       "https://docs.python.org/3/library/json.html#json.loads"
     ],
-    "executable_evidence": "test_nonfinite_json_constants_cannot_reach_verified_state",
-    "counterhypothesis": "Python json.loads success proves standards-compliant JSON; falsified because the default decoder accepts non-finite constants that RFC 8259 does not permit."
+    "executable_evidence": [
+      "test_nonfinite_json_constants_cannot_reach_verified_state",
+      "test_overflowing_json_exponents_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Rejecting the nonstandard NaN and Infinity literals through parse_constant is sufficient to keep non-finite values out; falsified because CPython decodes RFC-grammar exponents such as 1e400 through the separate default float path and produced infinity that reached success, VERIFIED and DONE."
   },
   "unique_json_object_names": {
     "checked_at": "2026-08-12",
@@ -273,7 +276,7 @@
     "Unexpected 2xx statuses remain EXECUTED as unexpected_success_status, cannot reach VERIFIED/DONE, and are nonretryable because the POST may already have been accepted.",
     "Before body consumption or EXECUTED, adapter status must be a non-boolean integer in the RFC 9110 range 100 through 599; missing or invalid values remain null and invalid_provider_response.",
     "A received adapter body must be bytes before JSON parsing; text, bytearray and other body types remain EXECUTED with their valid status but cannot reach VERIFIED or DONE.",
-    "Provider response JSON is parsed with non-finite constants rejected; NaN, Infinity and -Infinity remain invalid_provider_response and never reach VERIFIED or DONE.",
+    "Provider response JSON rejects every non-finite decoded number; NaN/Infinity literals and finite-syntax exponents that overflow the runtime float range remain invalid_provider_response and never reach VERIFIED or DONE.",
     "Every provider JSON object must have unique member names; duplicates remain invalid_provider_response and never reach VERIFIED or DONE.",
     "JSON parser RecursionError after a valid response remains EXECUTED with its status, emits invalid_provider_response, and never escapes the receipt path or reaches VERIFIED or DONE.",
     "Text-chat model, role, request content and verified response content contain only Unicode scalar values; lone UTF-16 surrogates are rejected before network or VERIFIED/DONE.",

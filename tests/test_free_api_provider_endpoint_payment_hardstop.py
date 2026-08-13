@@ -11,6 +11,8 @@ MOD = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = MOD
 SPEC.loader.exec_module(MOD)
 
+VALID_MESSAGES = [{"role": "user", "content": "test"}]
+
 
 class Response:
     def __init__(self, status=200, body=b'{"choices":[{"message":{"content":"ok"}}]}'):
@@ -51,7 +53,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
                     RuntimeError, "not_bound_to_selected_provider"
                 ):
                     MOD.execute_chat(
-                        [],
+                        VALID_MESSAGES,
                         model="x",
                         environ={
                             "NVIDIA_API_KEY": "secret",
@@ -68,7 +70,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
             "https://integrate.api.nvidia.com:443/v1",
         ):
             result = MOD.execute_chat(
-                [],
+                VALID_MESSAGES,
                 model="x",
                 environ={
                     "NVIDIA_API_KEY": "secret",
@@ -104,7 +106,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
             with self.subTest(opener=repr(opener)):
                 latches = set()
                 result = MOD.execute_chat(
-                    [],
+                    VALID_MESSAGES,
                     model="x",
                     environ=env,
                     opener=opener,
@@ -123,7 +125,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
                     RuntimeError, "payment_required_hard_stop_active"
                 ):
                     MOD.execute_chat(
-                        [],
+                        VALID_MESSAGES,
                         model="x",
                         environ=env,
                         opener=lambda *args, **kwargs: Response(),
@@ -140,7 +142,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
         }
         env_b = {**env_a, "FRANK_FREE_ONLY_BUDGET_EPOCH": "epoch-b"}
         MOD.execute_chat(
-            [],
+            VALID_MESSAGES,
             model="x",
             environ=env_a,
             opener=lambda *args, **kwargs: Response(status=402, body=b"{}"),

@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.7",
+  "schema_version": "2.8",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -16,21 +16,18 @@
     "paid_fallback": false,
     "automatic_subscription_upgrade": false,
     "github_hosted_actions_paid_remediation": false,
-    "github_hosted_actions_blocked_run": 31548258330,
-    "github_hosted_identity_guard_blocked_run": 31566209713,
-    "next_execution_surface": "VERIFIED_ZERO_COST_ONLY_PREFER_SELF_HOSTED_UBUNTU_ELSE_FAIL_CLOSED",
-    "generic_self_hosted_labels_mint_product_target_identity": false
+    "next_execution_surface": "VERIFIED_ZERO_COST_ONLY_PREFER_SELF_HOSTED_UBUNTU_WHEN_EVENT_TRUST_BOUNDARY_IS_ACCEPTABLE_ELSE_FAIL_CLOSED",
+    "generic_self_hosted_labels_mint_product_target_identity": false,
+    "persistent_self_hosted_pull_request_default": "FAIL_CLOSED_UNLESS_SOURCE_ADMISSION_OR_ISOLATION_IS_EXPLICIT"
   },
   "research_loop": [
     "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
     "VERIFY_FREE_EXECUTION_SURFACE_BEFORE_COMPUTE",
+    "VERIFY_EVENT_TRUST_BOUNDARY_BEFORE_PERSISTENT_SELF_HOSTED_EXECUTION",
     "VERIFY_EXECUTION_DEPTH_AND_WORKFLOW_LINEAGE_BEFORE_READING_GATE_VERDICT",
     "VERIFY_EXACT_TESTED_COMMIT_PROVENANCE_BEFORE_CREDIT",
     "VERIFY_AUTHORIZED_CLAYCODE_CORPUS_SEPARATELY_FROM_FILESYSTEM_DISCOVERY",
     "VERIFY_RUNNER_AND_PRODUCT_TARGET_PROVENANCE_SEPARATELY_FROM_ROUTING_LABELS",
-    "VERIFY_SUCCESSOR_ENTRYPOINT_PRESERVES_PREDECESSOR_SECURITY_INVARIANTS",
-    "VERIFY_PRODUCTSTART_SERVICE_FILESYSTEM_NAMESPACE_SEMANTICS",
-    "VERIFY_LIVE_PRODUCT_OBSERVATION_IS_POSITIVE_NOT_TYPED_BLOCKED_BEFORE_PRODUCTIVE_CREDIT",
     "HARVEST_PROVIDER_MODELS_AND_CAPABILITIES",
     "SELECT_NON_REDUNDANT_MODEL_FAMILIES",
     "RETRIEVE_AND_RERANK_RELEVANT_CLAYCODE_EVIDENCE",
@@ -46,13 +43,13 @@
     "SELECT_NEXT_HIGHEST_INFORMATION_TARGET"
   ],
   "model_role_policy": {
-    "architect":["mistral:reasoning_high_when_free_available","nvidia:strong_reasoning_or_coding"],
-    "falsifier":["nvidia:different_model_family_from_architect","mistral:independent_counterhypothesis_when_free_available"],
-    "alternative":["nvidia:deepseek_or_glm_or_other_nonarchitect_family"],
-    "judge":["nvidia:nemotron_or_other_nonidentical_family"],
-    "retrieval":["nvidia:nv-embedcode-7b-v1","repo_search","claygraph","unifieddb"],
-    "reranker":["nvidia:llama-nemotron-rerank-vl-1b-v2"],
-    "execution_oracles":["fixed_local_tests","self_hosted_ubuntu_target","other_oracles_only_when_free_verified"]
+    "architect": ["mistral:reasoning_high_when_free_available", "nvidia:strong_reasoning_or_coding"],
+    "falsifier": ["nvidia:different_model_family_from_architect", "mistral:independent_counterhypothesis_when_free_available"],
+    "alternative": ["nvidia:deepseek_or_glm_or_other_nonarchitect_family"],
+    "judge": ["nvidia:nemotron_or_other_nonidentical_family"],
+    "retrieval": ["nvidia:nv-embedcode-7b-v1", "repo_search", "claygraph", "unifieddb"],
+    "reranker": ["nvidia:llama-nemotron-rerank-vl-1b-v2"],
+    "execution_oracles": ["fixed_local_tests", "self_hosted_ubuntu_target", "other_oracles_only_when_free_verified"]
   },
   "independence_rules": [
     "same_model_via_two_providers_is_shared_ancestry_not_replication",
@@ -78,7 +75,9 @@
     "zero_step_or_no_runner_red_is_instrument_state_not_code_or_semantic_failure",
     "workflow_repair_on_main_does_not_retroactively_repair_stale_pull_request_event_lineage",
     "lane_only_green_transition_after_branch_ingestion_does_not_by_itself_prove_code_improvement",
-    "translated_external_gate_status_requires_bound_target_instrument_workflow_steps_assertion_pass_markers_exitcode_and_log_hash_before_semantic_credit",
+    "persistent_self_hosted_pull_request_execution_is_a_separate_trust_boundary_and_must_not_be_enabled_only_to_replace_unavailable_hosted_minutes",
+    "pull_request_capable_persistent_self_hosted_jobs_require_explicit_source_admission_or_ephemeral_isolation_before_autonomous_credit",
+    "transport_or_materialization_failure_before_gate_assertions_is_instrument_evidence_not_semantic_counterevidence",
     "pull_request_github_sha_may_be_synthetic_merge_commit_and_must_not_be_labeled_exact_head",
     "exact_head_credit_requires_explicit_pr_head_fetch_binding_and_tested_sha_equality",
     "synthetic_pull_request_merge_ref_execution_may_receive_composition_credit_only_not_exact_head_credit",
@@ -92,20 +91,6 @@
     "self_hosted_or_other_execution_surface_must_be_currently_verifiable_and_zero_cost_before_autonomous_credit",
     "generic_self_hosted_linux_x64_labels_do_not_mint_hostinger_productstart_or_final_target_identity",
     "runner_local_mechanism_success_may_be_preserved_without_upgrading_to_productive_target_acceptance",
-    "successor_launcher_or_entrypoint_must_explicitly_recompose_and_regression_test_predecessor_security_invariants_before_productstart_credit",
-    "source_chain_hashes_and_source_only_pycache_exclusion_are_source_bundle_controls_not_productive_host_process_or_runtime_identity",
-    "productstart_pre_first_guard_trust_closure_must_cover_launcher_and_all_executable_imported_guard_code",
-    "productstart_pre_first_guard_trust_closure_must_cover_loader_search_directory_ancestry_and_transitive_dependency_authority",
-    "productstart_service_filesystem_namespace_must_be_observed_and_constrained_before_host_visible_path_or_hash_identity_can_receive_productstart_credit",
-    "productstart_namespace_modifiers_rootdirectory_rootimage_bindpaths_bindreadonlypaths_temporaryfilesystem_mountimages_extensionimages_extensiondirectories_must_fail_closed_when_unobserved_or_disallowed",
-    "script_based_productstart_must_bind_shebang_interpreter_identity_and_resolved_interpreter_path_under_deployment_policy",
-    "productive_sqlite_identity_credit_requires_independently_bound_host_plus_canonical_unit_and_selected_process_plus_mapped_inode_fd_hash_plus_trusted_root_anchor",
-    "productive_sqlite_positive_observation_requires_release_accepted_version_and_source_id_in_addition_to_mapped_object_and_root_anchor_hash_equality",
-    "green_workflow_with_typed_blocked_live_product_observation_is_mechanism_orchestration_not_productive_target_acceptance",
-    "default_interpreter_or_runner_local_sqlite_observation_must_not_be_attributed_to_accepted_hostinger_productive_frank_without_independent_host_productstart_binding",
-    "pinned_primary_dso_identity_does_not_authenticate_unpinned_dt_needed_dependencies",
-    "trusted_parent_directory_does_not_authenticate_preexisting_child_module_ownership_or_content",
-    "productstart_is_conjunctive_and_no_single_storage_identity_lineage_or_startup_green_can_mint_whole_frank_continuity",
     "raw_tree_evaluator_exposure_must_not_bypass_canonical_wp04_admission_on_productive_paths",
     "wp04_admission_must_bind_an_immutable_or_private_admitted_state_for_all_subsequent_analysis_and_lowering",
     "analyzer_resolvable_must_fail_closed_when_method_or_member_semantics_are_unbound",
@@ -113,7 +98,6 @@
     "generated_host_ast_or_generated_c_is_projection_not_claycode_semantic_authority",
     "finite_valid_claycode_type_structures_must_not_change_semantic_verdict_only_due_to_host_interpreter_recursion_limit",
     "host_recursionerror_is_implementation_totality_counterevidence_not_claycode_type_semantics_unless_explicitly_authorized",
-    "candidate_or_caller_selected_expected_artifact_digest_is_self_consistency_not_independent_release_authority",
     "provider_runtime_candidate_requires_accepted_ubuntu_execution_receipt_before_capability_credit",
     "http_402_payment_required_is_nonretryable_provider_hard_stop_for_current_free_only_cycle",
     "successor_provider_pr_must_inherit_unresolved_free_only_safety_blockers_from_superseded_pr"
@@ -132,33 +116,32 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "PR572 closed one real WP04 implementation-totality defect on the exact tested non-parametric alias path: recursive host traversal could turn a finite acyclic ClayCode alias graph into Python RecursionError, while exact-head run 31678577942 on zero-cost self-hosted runner clay-2 executed 9 steps and passed the 4096-link staircase plus typed cycle regressions before merge 3a69b78a344791ef111558713e0696a7818adbc6. Do not recycle that staircase unless relevant bytes change and do not infer generic or recursive-type semantics from the repair. The adjacent high-information falsifier is parameterized TypeRef structural depth/resource behavior, because that descent remains recursive. In parallel classify the authorized-corpus 429 unique/464 unresolved Calls and 22 MethodChain/member segments without host/library defaulting, and falsify every productive evaluator/compiler/lowering/FFI route for canonical WP04 admission plus immutable/private admitted-state continuity. PR557 exact-head acquisition is already closed for its scoped storage lane; do not reopen it. Productive Hostinger ProductStart/persistence/restart/rollback remains separate and open. PR232/provider-runtime local adapter/security results remain candidate/offline evidence only; its current GitHub PR workflows execute zero steps and the branch itself reports no live external request, so no FREE provider capability is credited until an accepted-Ubuntu live network/external-effect receipt exists. FREE_ONLY hard, Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
+  "current_focus": "PR575 is a meaningful FREE_ONLY execution-surface change, not a semantic promotion. On exact head 92c927f5dc53e2b9840e72dce2f9f40111d72a11, previously hosted lanes now execute on clay-* and Deep Integrity, opaque parser fidelity, runtime nominal and provider-contract integration are green. The provider-contract run still reports external_network_used=false and external_effect_performed=false, so no live FREE provider capability is credited. WP04 Shadow run 31689036939/job 94411824966 executes on clay-2 but fails during private materialization before semantic assertions; classify it as transport/instrument evidence. PR575 also routes pull_request-capable workflows to persistent self-hosted compute. Do not treat that as an automatic FREE_ONLY replacement for hosted PR isolation: split trusted push/dispatch lanes from PR lanes and require explicit source admission or ephemeral isolation for the latter. If no safe zero-cost PR surface exists, fail closed rather than buy hosted minutes. After execution-surface review, continue parameterized TypeRef resource-totality, 429/464 unresolved Call ownership, 22 MethodChain/member segments and productive WP04 admission/private-state continuity. FREE_ONLY hard, Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
   "supervisor_last_steer": {
-    "reason": "SUPERVISOR_STATE and SUPERVISOR_INBOX had advanced to the executable PR572 alias-totality result and parameterized-TypeRef frontier, while autonomous control 2.6 still steered the older Deep-Integrity/PR557 work. This drift could waste FREE_ONLY cycles on already-consumed falsifiers. The provider branch also advanced only with local/offline adapter evidence and zero-step GitHub PR workflows, so its capability status must remain unpromoted.",
+    "reason": "PR575 converted a previously theoretical runner migration into executable evidence and exposed two distinct boundaries: a real pre-assertion private-materialization failure in WP04 Shadow, and a trust-boundary regression risk from blanket pull_request migration to persistent self-hosted runners. Both materially affect how future FREE_ONLY gate results must be interpreted.",
     "evidence_priority": [
-      "parameterized TypeRef depth/resource totality under varied host recursion limits without selecting new generic semantics",
+      "separate trusted push/dispatch self-hosted lanes from pull_request-capable persistent self-hosted lanes",
+      "repair WP04 materialization transport and rerun only on an accepted safe zero-cost surface",
+      "parameterized TypeRef depth/resource totality without selecting generic semantics",
       "429/464 unresolved Call ownership and 22 MethodChain/member segments",
       "productive evaluator/compiler/lowering/FFI WP04-admission bypass and post-admission mutation falsifiers",
-      "execution depth and exact tested-byte provenance before reading any workflow verdict",
       "accepted-Ubuntu live FREE provider execution only for provider capability credit"
     ],
     "required_next_actions": [
-      "run one bounded executable parameterized-TypeRef structural-depth/resource falsifier and preserve host-stack failures as implementation counterevidence rather than language semantics",
-      "do not repeat the closed non-parametric 4096-alias staircase unless relevant resolver bytes change",
-      "classify unresolved Call and MethodChain ownership without host or library defaulting",
-      "test all productive evaluator/compiler/lowering/FFI routes for mandatory WP04 admission and immutable/private admitted-state continuity",
-      "keep PR557 exact-head mechanism closed and move storage effort only to productive Hostinger ProductStart/persistence/restart/rollback evidence",
-      "do not credit PR232 or any provider capability from local mocks, offline tests, zero-step workflows, configured keys, or model consensus; require a redacted accepted-Ubuntu live FREE_ONLY receipt",
+      "review PR575 pull_request-capable jobs before merge; require explicit source admission or isolation rather than blanket persistent self-hosted execution",
+      "keep trusted push/dispatch self-hosted evidence separate from PR execution-safety evidence",
+      "repair WP04 shadow pinned-substrate materialization without weakening credential isolation and rerun on a safe zero-cost lane",
+      "do not credit run 31689036878 as live provider capability because external network/effect are false",
+      "continue parameterized TypeRef and unresolved Call/MethodChain falsifiers without BASE promotion",
       "preserve FREE_ONLY and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
-      "ClayCode type semantics from Python RecursionError or host recursion-limit behavior",
-      "generic or recursive-type semantics from PR572 non-parametric alias repair",
-      "Frank or ClayCode failure from zero-step/no-runner platform reds",
-      "provider capability from offline/local mock security regressions or no-external-effect success",
+      "ClayCode failure from PR575 WP04 Shadow red before semantic assertions",
+      "safe PR isolation from self-hosted routing labels alone",
+      "provider capability from offline/no-external-effect contract success",
       "independent replication from repeated clay-* or digital-retina executions sharing project ancestry",
       "BASE or Frank v0.1 PASS from model consensus or correlated runners",
-      "canonical ClayCode semantics from storage/runtime or host-language behavior"
+      "canonical ClayCode semantics from host-language behavior"
     ]
   },
   "supervisor": {

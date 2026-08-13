@@ -736,7 +736,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
 
-    def test_rate_limit_retry_after_controls_cooldown(self):
+    def test_rate_limit_retry_after_controls_cooldown_without_post_replay(self):
         class Response:
             status = 429
             def __init__(self, retry_after):
@@ -774,7 +774,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 )
                 receipt = result["receipt"]
                 self.assertEqual(receipt["outcome"], "rate_limited")
-                self.assertTrue(receipt["retryable"])
+                self.assertFalse(receipt["retryable"])
                 self.assertEqual(receipt["cooldown_seconds"], expected)
 
     def test_regular_error_status_response_cannot_be_verified(self):

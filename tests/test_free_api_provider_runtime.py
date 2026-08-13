@@ -13,6 +13,8 @@ MOD = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = MOD
 SPEC.loader.exec_module(MOD)
 
+VALID_MESSAGES = [{"role": "user", "content": "test"}]
+
 
 class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_nvidia_is_preferred_and_secret_is_not_exposed(self):
@@ -97,6 +99,21 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_empty_message_list_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        with self.assertRaisesRegex(ValueError, "messages_must_be_nonempty"):
+            MOD.execute_chat(
+                [], model="mock", environ={"NVIDIA_API_KEY": "secret"},
+                opener=opener,
+            )
+        self.assertFalse(called)
+
     def test_unknown_text_message_role_is_blocked_before_network(self):
         called = False
 
@@ -156,7 +173,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_unallowlisted_remote_endpoint_is_blocked_before_network(self):
         env = {"NVIDIA_API_KEY": "secret", "FRANK_PROVIDER_BASE_URL": "https://evil.example/v1"}
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
-            MOD.execute_chat([], model="x", environ=env)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env)
 
     def test_key_cannot_be_sent_to_another_allowlisted_provider_host(self):
         called = False
@@ -171,7 +188,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_PROVIDER_BASE_URL": "https://api.groq.com/openai/v1",
         }
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
-            MOD.execute_chat([], model="x", environ=env, opener=opener)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
     def test_key_cannot_be_sent_to_noncanonical_provider_port(self):
@@ -187,7 +204,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_PROVIDER_BASE_URL": "https://integrate.api.nvidia.com:444/v1",
         }
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
-            MOD.execute_chat([], model="x", environ=env, opener=opener)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
     def test_provider_url_userinfo_is_rejected_before_network(self):
@@ -205,7 +222,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             ),
         }
         with self.assertRaisesRegex(RuntimeError, "userinfo_forbidden"):
-            MOD.execute_chat([], model="x", environ=env, opener=opener)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
     def test_default_transport_rejects_redirects_before_auth_can_be_forwarded(self):
@@ -310,7 +327,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=lambda *args, **kwargs: Response(),
+            VALID_MESSAGES, model="mock", environ=env, opener=lambda *args, **kwargs: Response(),
             now=iter((20.0, 20.01)).__next__,
         )
         self.assertEqual(result["receipt"]["status"], 200)
@@ -340,7 +357,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         for body in malformed:
             with self.subTest(body=body):
                 result = MOD.execute_chat(
-                    [], model="mock", environ=env,
+                    VALID_MESSAGES, model="mock", environ=env,
                     opener=lambda *args, body=body, **kwargs: Response(body),
                     now=iter((50.0, 50.01)).__next__,
                 )
@@ -369,7 +386,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         for invalid_body in (valid_json, bytearray(valid_json.encode())):
             with self.subTest(body_type=type(invalid_body).__name__):
                 result = MOD.execute_chat(
-                    [], model="mock", environ=env,
+                    VALID_MESSAGES, model="mock", environ=env,
                     opener=lambda *args, body=invalid_body, **kwargs: (
                         Response(body)
                     ),
@@ -405,7 +422,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
             with self.subTest(token=token):
                 result = MOD.execute_chat(
-                    [], model="mock", environ=env,
+                    VALID_MESSAGES, model="mock", environ=env,
                     opener=lambda *args, body=body, **kwargs: Response(body),
                     now=iter((57.0, 57.01)).__next__,
                 )
@@ -436,7 +453,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((58.0, 58.01)).__next__,
         )
@@ -462,7 +479,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((58.5, 58.51)).__next__,
         )
@@ -493,7 +510,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((58.6, 58.61)).__next__,
         )
@@ -520,7 +537,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((59.0, 59.01)).__next__,
         )
@@ -544,7 +561,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=opener,
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
             now=iter((60.0, 60.01)).__next__,
         )
         receipt = result["receipt"]
@@ -568,7 +585,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((65.0, 65.01)).__next__,
         )
@@ -594,7 +611,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((66.0, 66.01)).__next__,
         )
@@ -629,7 +646,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         for invalid_status in (missing, True, "200", 99, 600):
             with self.subTest(status=invalid_status):
                 result = MOD.execute_chat(
-                    [], model="mock", environ=env,
+                    VALID_MESSAGES, model="mock", environ=env,
                     opener=lambda *args, status=invalid_status, **kwargs: (
                         Response(status)
                     ),
@@ -651,7 +668,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
 
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=invalid_http_error,
+            VALID_MESSAGES, model="mock", environ=env, opener=invalid_http_error,
             now=iter((68.0, 68.01)).__next__,
         )
         receipt = result["receipt"]
@@ -671,7 +688,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=opener,
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
             now=iter((70.0, 70.01)).__next__,
         )
         receipt = result["receipt"]
@@ -691,7 +708,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=opener,
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
             now=iter((75.0, 75.01)).__next__,
         )
         receipt = result["receipt"]
@@ -712,7 +729,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=opener,
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
             now=iter((76.0, 76.01)).__next__,
         )
         receipt = result["receipt"]
@@ -733,7 +750,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=opener,
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
             now=iter((77.0, 77.01)).__next__,
         )
         receipt = result["receipt"]
@@ -757,7 +774,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((90.0, 90.01)).__next__,
         )
@@ -785,7 +802,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((95.0, 95.01)).__next__,
         )
@@ -812,7 +829,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((96.0, 96.01)).__next__,
         )

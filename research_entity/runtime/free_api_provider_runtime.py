@@ -243,6 +243,10 @@ class ProviderResponseTooLarge(ValueError):
     """The provider response exceeded the bounded adapter's byte limit."""
 
 
+class ProviderOutputTruncated(ValueError):
+    """The provider explicitly stopped because its output limit was reached."""
+
+
 def _open_no_redirect(request: urllib.request.Request, timeout: int):
     return urllib.request.build_opener(_NoRedirectHandler()).open(
         request, timeout=timeout
@@ -445,7 +449,15 @@ def execute_chat(
             choices = payload["choices"]
             if not isinstance(choices, list) or not choices:
                 raise ValueError("response_choices_must_be_nonempty_list")
-            message = choices[0]["message"]
+            choice = choices[0]
+            if not isinstance(choice, dict):
+                raise ValueError("response_choice_must_be_object")
+            finish_reason = choice.get("finish_reason")
+            if finish_reason == "length":
+                raise ProviderOutputTruncated
+            if finish_reason not in (None, "stop"):
+                raise ValueError("response_finish_reason_not_supported")
+            message = choice["message"]
             if not isinstance(message, dict):
                 raise ValueError("response_message_must_be_object")
             if not set(message).issubset(TEXT_RESPONSE_MESSAGE_FIELDS):
@@ -489,6 +501,11 @@ def execute_chat(
         content = None
         outcome = "provider_response_too_large"
         cooldown_seconds = 15
+        retryable = False
+    except ProviderOutputTruncated:
+        content = None
+        outcome = "provider_output_truncated"
+        cooldown_seconds = 0
         retryable = False
     except (
         json.JSONDecodeError,

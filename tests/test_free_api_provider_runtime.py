@@ -736,6 +736,47 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_rate_limit_retry_after_controls_cooldown(self):
+        class Response:
+            status = 429
+            def __init__(self, retry_after):
+                self.headers = {"Retry-After": retry_after}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        cases = (
+            ("response", "137", 100.0, 137),
+            ("http_error", "137", 100.0, 137),
+            ("response", "Thu, 01 Jan 1970 00:04:00 GMT", 100.0, 140),
+            ("http_error", "Thu, 01 Jan 1970 00:04:00 GMT", 100.0, 140),
+        )
+        for transport, retry_after, started, expected in cases:
+            with self.subTest(transport=transport, retry_after=retry_after):
+                if transport == "response":
+                    opener = lambda *args, **kwargs: Response(retry_after)
+                else:
+                    def opener(request, timeout, retry_after=retry_after):
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 429, "Too Many Requests",
+                            {"Retry-After": retry_after}, None,
+                        )
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((started, started + 0.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["outcome"], "rate_limited")
+                self.assertTrue(receipt["retryable"])
+                self.assertEqual(receipt["cooldown_seconds"], expected)
+
     def test_regular_error_status_response_cannot_be_verified(self):
         class Response:
             status = 500

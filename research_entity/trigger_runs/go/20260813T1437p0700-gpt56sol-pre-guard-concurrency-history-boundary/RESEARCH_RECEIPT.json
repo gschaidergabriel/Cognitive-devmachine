@@ -11,18 +11,23 @@
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "main_observed": "dc31d365ee8699602f4dc2225fb767a0f12f9e2f",
     "parent_candidate_pr": 557,
-    "parent_base_observed_during_stack_creation": "af152599cfe1bf66c71c6b5e81e0f9ffd9c5e389",
+    "parent_head_fresh_for_final_run": "b722001510f63ee186ba2f9546dd5e944aa7546b",
     "stacked_boundary_pr": 571,
-    "stacked_head": "6564f448d63d52ca1ae9dd89bb8faca079559852",
-    "tested_current_composition_sha": "b2c7d194f59e25f5d9a1eb6fd27b831073f6822c",
-    "self_hosted_run": 31678380784,
-    "self_hosted_job": 94377952064,
-    "self_hosted_conclusion": "success"
+    "stacked_head": "dcd06ec60013cd7911fe02f4fca00721823a6697",
+    "tested_current_composition_sha": "fe57f78006fe8079889e04a9b6fbb88c3f246543",
+    "self_hosted_run": 31678643697,
+    "self_hosted_job": 94378793861,
+    "self_hosted_conclusion": "success",
+    "superseded_earlier_green_composition": {
+      "tested_sha": "b2c7d194f59e25f5d9a1eb6fd27b831073f6822c",
+      "run": 31678380784,
+      "reason_superseded": "PR557 advanced after that run; own stack was reset to the new parent and the same ordinary regression was rerun."
+    }
   },
   "observed_reality": [
     "The current connection-guard candidate deliberately makes point-in-time database/WAL object claims but keeps exclusive_connection_bootstrap_attested=false, temporal_no_move_history_attested=false, productive_persistence_path_exercised=false, restart_recovery_attested=false, and whole Frank v0.1 acceptance unclaimed.",
-    "The parent SQLite guard branch was moving concurrently during this cycle; the new work was therefore isolated as stacked draft PR571 rather than overwriting PR557.",
-    "The dedicated PR571 self-hosted Linux/X64 lane rebuilt and bound SQLite 3.53.4 with SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and passed the ordinary temporal-boundary regression plus repository static integrity on synthetic current-composition SHA b2c7d194f59e25f5d9a1eb6fd27b831073f6822c."
+    "The parent SQLite guard branch moved concurrently during this cycle. PR571 was kept stacked rather than overwriting PR557; when PR557 advanced, the owned stack branch was reset to the new parent head b722001510f63ee186ba2f9546dd5e944aa7546b and only the two boundary files were replayed.",
+    "The refreshed PR571 self-hosted Linux/X64 lane rebuilt and bound SQLite 3.53.4 with SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and passed the ordinary temporal-boundary regression plus repository static integrity on synthetic current-composition SHA fe57f78006fe8079889e04a9b6fbb88c3f246543."
   ],
   "macrocycle_unusual_experiment": {
     "count": 1,
@@ -49,7 +54,9 @@
     "expected_semantics": "The later current guard legitimately passes point-in-time object checks after the prior connection episode, while temporal/bootstrap/productive/restart/whole-acceptance claims remain false or unclaimed.",
     "run_result": "PASS",
     "new_go_unusual_experiment_count_in_ci": 0,
-    "static_integrity": "PASS"
+    "static_integrity": "PASS",
+    "runner": "clay-4",
+    "host": "digital-retina"
   },
   "grf_outcome": {
     "point_in_time_identity_implies_prior_exclusive_bootstrap": "REJECT",
@@ -81,6 +88,6 @@
     "https://sqlite.org/releaselog/3_53_4.html",
     "gschaidergabriel/Dr.-Unterweger#557",
     "gschaidergabriel/Dr.-Unterweger#571",
-    "GitHub Actions run 31678380784"
+    "GitHub Actions run 31678643697"
   ]
 }

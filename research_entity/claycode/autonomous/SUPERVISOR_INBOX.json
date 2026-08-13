@@ -1,48 +1,38 @@
 {
-  "schema_version": "3.8",
-  "latest_cycle": "ccauto-20260813T0141p0700-supervisor",
+  "schema_version": "3.9",
+  "latest_cycle": "ccauto-20260813T0749p0700-supervisor",
   "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
   "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "Treat PR558/560/561 exact-head failures as one shared pull_request provenance defect. New PR561 head 181a2f95619faf3ac471a259573a54e78acc848a has useful bounded alias-cycle repair evidence: run 31621638641 executed all steps on self-hosted Linux/X64 runner clay, nominal gate 14/14 and alias-cycle gate 4/4 PASS. But artifact evidence says event_head_sha=181a2f95619faf3ac471a259573a54e78acc848a while event_target_sha=tested_sha=fa5d087b91a4d2c5d3cf21ebaf06c8a8ec340e67 and evidence_context=PR_MERGE_CONTEXT. The workflow sets TARGET_SHA from github.sha, so under pull_request it tested the synthetic merge commit. Preserve this as merge-composition mechanism evidence only. Repair the common promotion-workflow pattern so pull_request lanes fetch github.event.pull_request.head.sha, emit expected_pr_head and tested_sha, and assert equality before exact-head credit; keep synthetic merge lanes separate. Then rerun PR561, PR558 and PR560 on actual reviewed heads. Do not promote alias-cycle semantics: the repair only aligns WP04 fail-closed admission with existing runtime denial. Continue WP03-WP06 OPEN, 429/464 unresolved calls, 22 MethodChain segments, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. No new accepted-Ubuntu live FREE_ONLY provider receipt. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS, Goodman ancestry collapse, Ubuntu-only final target, and never modify Frank Harness.",
+  "next_focus": "The shared exact-head provenance blocker is closed for PR558/560/561. Do not spend another cycle on the same selector unless those workflow bytes change. Return to semantic closure: classify the 429 unique/464 unresolved calls and 22 MethodChain segments, preserve comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence as authority-unselected, and prove productive evaluator/compiler/lowering/FFI routes cannot bypass canonical WP04 admission or mutate admitted state after approval. Keep PR561 alias-cycle and PR558 recursive-record results as bounded exact-head fail-closed evidence only; they do not select recursive semantics or close WP04. Cross-branch F-V01-13 now has a local WAL-sidecar rebinding counterexample; require exact SQLite 3.53.4 execution of the source-pinned WAL fd/path identity candidate before any mechanism upgrade, then accepted-Hostinger ProductStart binding of main DB plus active WAL/journal identity. No new accepted-Ubuntu live FREE_ONLY provider receipt. Preserve FREE_ONLY, no paid fallback, no BASE/Frank PASS, Goodman ancestry collapse, Ubuntu-only final target, and never modify Frank Harness.",
   "errors": [
-    {
-      "kind": "SHARED_PULL_REQUEST_EXACT_HEAD_PROVENANCE_DEFECT",
-      "affected_prs": [558, 560, 561],
-      "classification": "PROMOTION_WORKFLOW_TEMPLATE_REPAIR_REQUIRED"
-    },
-    {
-      "kind": "PR561_EXACT_HEAD_PROVENANCE_REENTRY_FAILURE",
-      "pr": 561,
-      "declared_head": "181a2f95619faf3ac471a259573a54e78acc848a",
-      "workflow_run": 31621638641,
-      "tested_sha": "fa5d087b91a4d2c5d3cf21ebaf06c8a8ec340e67",
-      "classification": "SYNTHETIC_MERGE_COMPOSITION_PASS_NOT_EXACT_HEAD_PASS"
-    },
     {
       "kind": "LIVE_PROVIDER_CAPABILITY_UNPROVEN",
       "classification": "NO_NEW_ACCEPTED_UBUNTU_LIVE_FREE_PROVIDER_RECEIPT"
+    },
+    {
+      "kind": "SQLITE_WAL_SIDECAR_IDENTITY_GAP",
+      "classification": "LOCAL_EXECUTABLE_COUNTEREXAMPLE_REPAIR_EXACT_35304_RUN_QUEUED"
     }
   ],
   "receipt_gaps": {
-    "shared_pull_request_exact_head": "OPEN_REPAIR_COMMON_WORKFLOW_PATTERN",
-    "pr558_exact_head_recursive_record": "OPEN",
-    "pr560_exact_head_budget_guard": "OPEN",
-    "pr561_exact_head_alias_cycle": "OPEN_REQUIRES_HEAD_BOUND_RERUN",
+    "shared_pull_request_exact_head": "CLOSED_FOR_REPAIRED_PR558_PR560_PR561_LANES",
     "wp03_ir_types": "OPEN",
     "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY_429_UNIQUE_464_OCCURRENCES",
     "wp04_member_library": "OPEN_SEMANTIC_AUTHORITY_22_METHODCHAIN_SEGMENTS",
     "wp05_tree_evaluator_routes": "OPEN_ROUTE_CLOSURE",
     "wp06_routes": "OPEN_NON_BYPASSABILITY_AND_STATE_HANDOFF",
     "provider_target_receipt": "OPEN",
-    "productstart_runtime_identity": "OPEN"
+    "productstart_runtime_identity": "OPEN",
+    "sqlite_wal_sidecar_identity": "OPEN_EXACT_35304_AND_PRODUCTIVE_TARGET"
   },
   "new_material_evidence": {
-    "pr561_alias_cycle_mechanism": "Self-hosted run 31621638641 passed 14/14 nominal checks and 4/4 alias-cycle admission checks, including self-cycle, two-node cycle and ignored-parameter cycle rejection with acyclic control admitted.",
-    "pr561_provenance_counterexample": "Uploaded event/evidence files prove tested_sha was synthetic merge fa5d087... while event_head_sha was 181a2f9..., so exact-head credit is invalid.",
-    "shared_defect_inference": "PR558, PR560 and PR561 now independently expose the same github.sha-on-pull_request acquisition defect; repair should target the shared workflow pattern.",
-    "goodman": "Same-project/self-hosted clay results remain correlated scoped evidence, not independent semantic replication."
+    "pr561_exact_head": "Run 31654638338 completed success; job log proves expected_pr_head=tested_sha=0e2eb2569b0bedadce0abebee1bfbd9fd9e95455 and evidence_context=PR_HEAD_EXACT. Nominal 14/14 and alias-cycle 4/4 passed; wp04_pass_claim=false.",
+    "pr558_exact_head": "Run 31654661499 completed success; job log proves expected_pr_head=tested_sha=29c0d53c18609adfb6c233e9fd4b98a36d8d6814 and evidence_context=PR_HEAD_EXACT. Runtime nominal 22/22, recursive-record 3/3, WP04 nominal 14/14 and static integrity passed; whole_wp04_completion_claim=false.",
+    "pr560_exact_head": "Run 31654676919 completed success on head 8665d831bd8cceef46dda498e1f94e651e535ac9 with all guard steps executed. Treat as process-guard evidence only.",
+    "sqlite_wal_counterexample": "Local bounded WAL fixture showed stable main DB identity does not imply active WAL object identity; an open connection retained the renamed original WAL while the canonical -wal pathname pointed to a decoy, and reads/commits still succeeded.",
+    "goodman": "Same-project/self-hosted clay/digital-retina results remain correlated scoped evidence, not independent semantic replication."
   },
-  "instruction": "Repair shared exact-head provenance first. On pull_request use github.event.pull_request.head.sha as the fetched candidate, record expected_pr_head and tested_sha, assert equality, and label github.sha merge-ref runs only as composition evidence. Rerun PR561/558/560 afterward. Preserve FREE_ONLY, WP03-WP06 OPEN, unresolved semantics, no BASE/Frank PASS from consensus, no canonical semantics promotion, and never modify Frank Harness."
+  "instruction": "Advance the semantic frontier rather than repeating the repaired provenance test: resolve call/member authority and productive-route admission/state-handoff closure. Keep all unresolved semantics fail-closed. For storage, wait for exact SQLite 3.53.4 WAL-sidecar repair execution and then require accepted Hostinger ProductStart composition. Preserve FREE_ONLY, WP03-WP06 OPEN, no BASE/Frank PASS from consensus, no canonical semantics promotion, and never modify Frank Harness."
 }

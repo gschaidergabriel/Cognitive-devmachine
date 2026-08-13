@@ -80,7 +80,7 @@
   },
   "generic_provider_error_replay_safety": {
     "checked_at": "2026-08-13",
-    "claim": "Generic 4xx and 5xx responses to a non-idempotent Chat Completions POST are not automatically retryable; 429 remains the only received error status with an explicit bounded retry path.",
+    "claim": "Generic 4xx and 5xx responses to a non-idempotent Chat Completions POST are not automatically retryable; a received status never proves replay safety.",
     "sources": [
       "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
       "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5",
@@ -91,13 +91,13 @@
   },
   "rate_limit_retry_after": {
     "checked_at": "2026-08-13",
-    "claim": "A received HTTP 429 Retry-After field controls the rate-limit cooldown and is parsed in either delay-seconds or HTTP-date form across regular-response and HTTPError adapter paths.",
+    "claim": "A received HTTP 429 Retry-After field controls when a later request may be attempted and is parsed in either delay-seconds or HTTP-date form across regular-response and HTTPError paths; it does not authorize automatic replay of the same non-idempotent POST.",
     "sources": [
       "https://www.rfc-editor.org/rfc/rfc6585.html#section-4",
       "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
     ],
-    "executable_evidence": "test_rate_limit_retry_after_controls_cooldown",
-    "counterhypothesis": "A fixed 60-second cooldown is an adequate interpretation of every 429; falsified because valid provider instructions for 137 and 140 seconds were both overwritten with 60 seconds on both adapter paths."
+    "executable_evidence": "test_rate_limit_retry_after_controls_cooldown_without_post_replay",
+    "counterhypothesis": "Retry-After both supplies the cooldown and proves that identical POST replay is safe; falsified because RFC 6585 only describes when to make a new request, while RFC 9110 separately requires idempotency or proof that the original request was never applied."
   },
   "http_status_validation": {
     "checked_at": "2026-08-12",
@@ -266,8 +266,8 @@
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Every real provider request must emit a redacted execution receipt.",
-    "Only HTTP 429 is automatically retryable among received non-2xx statuses; generic 4xx and 5xx provider errors require changed input, operator recovery or provider-supported idempotency before replay.",
-    "A valid Retry-After field on HTTP 429 determines cooldown in either delay-seconds or HTTP-date form; absent or invalid fields use the conservative 60-second fallback.",
+    "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
+    "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
   ],
   "runtime": "research_entity/runtime/free_api_provider_runtime.py"

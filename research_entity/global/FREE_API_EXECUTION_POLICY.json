@@ -68,6 +68,16 @@
     "executable_evidence": "test_tls_error_before_response_emits_unreachable_receipt",
     "counterhypothesis": "urllib always wraps TLS failures in URLError or ConnectionError; falsified by the executable opener path where SSLError propagated directly without a receipt."
   },
+  "transport_post_replay_safety": {
+    "checked_at": "2026-08-13",
+    "claim": "A Chat Completions POST with a transport or response-read failure is not automatically retryable unless the client can prove the original request was never applied or the operation is idempotent.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "https://docs.python.org/3/library/http.client.html#http.client.RemoteDisconnected"
+    ],
+    "executable_evidence": "test_transport_ambiguity_cannot_trigger_automatic_post_replay",
+    "counterhypothesis": "No response bytes or an incomplete response proves the POST was not applied and makes blind retry safe; falsified because RemoteDisconnected describes failure while reading the response, and the adapter cannot observe whether the provider already processed the request."
+  },
   "http_status_validation": {
     "checked_at": "2026-08-12",
     "claim": "A provider adapter must supply an integer HTTP status from 100 through 599 before the body is consumed or EXECUTED is asserted; missing, boolean, textual and out-of-range values are invalid.",
@@ -231,6 +241,7 @@
     "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "Transport OSError failures before response headers, including SSLError, emit an unreachable_provider receipt with null status and without EXECUTED; after response headers they preserve status and EXECUTED as incomplete_provider_response.",
     "Once response headers and status are received, body-read failures preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
+    "Transport and response-read failures for the Chat Completions POST are nonretryable without provider-supported idempotency or proof that the original request was never applied.",
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Every real provider request must emit a redacted execution receipt.",

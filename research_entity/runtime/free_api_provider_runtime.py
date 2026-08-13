@@ -471,11 +471,12 @@ def execute_chat(
             response_started = True
             response_headers = getattr(response, "headers", None)
             lifecycle.append("EXECUTED")
-            response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
-            if not isinstance(response_body, bytes):
-                raise TypeError("response_body_must_be_bytes")
-            if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
-                raise ProviderResponseTooLarge
+            if status == 200:
+                response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
+                if not isinstance(response_body, bytes):
+                    raise TypeError("response_body_must_be_bytes")
+                if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
+                    raise ProviderResponseTooLarge
         if status != 200:
             content = None
             if status == 202:

@@ -113,6 +113,24 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_unpaired_request_surrogate_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        with self.assertRaisesRegex(
+            ValueError, "message_content_must_be_unicode_scalar_string"
+        ):
+            MOD.execute_chat(
+                [{"role": "user", "content": "\ud800"}],
+                model="mock", environ=env, opener=opener,
+            )
+        self.assertFalse(called)
+
     def test_unallowlisted_remote_endpoint_is_blocked_before_network(self):
         env = {"NVIDIA_API_KEY": "secret", "FRANK_PROVIDER_BASE_URL": "https://evil.example/v1"}
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
@@ -399,6 +417,32 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             [], model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((58.0, 58.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_unpaired_json_surrogate_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"message":{"content":"\\uDEAD"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((58.5, 58.51)).__next__,
         )
         receipt = result["receipt"]
         self.assertEqual(receipt["status"], 200)

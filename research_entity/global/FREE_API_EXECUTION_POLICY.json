@@ -145,6 +145,13 @@
     "executable_evidence": "test_response_tool_calls_cannot_reach_text_verified_state",
     "counterhypothesis": "A nonempty content string is sufficient proof of a complete text response; falsified because a response carrying both content and tool_calls reached success/VERIFIED/DONE while the tool instruction was silently ignored."
   },
+  "pending_http_results": {
+    "checked_at": "2026-08-13",
+    "claim": "For NVIDIA Chat Completions, HTTP 200 is fulfilled while HTTP 202 is pending and requires requestId polling; a 202 response cannot reach VERIFIED/DONE or trigger a blind replay of the original request.",
+    "source": "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+    "executable_evidence": "test_http_202_pending_response_cannot_be_verified_as_final_text",
+    "counterhypothesis": "Every 2xx response can be treated as a final chat completion; falsified because NVIDIA explicitly assigns pending semantics to 202 and a valid-looking 202 text body previously reached success/VERIFIED/DONE. Polling remains intentionally unsupported until a requestId-bound adapter exists."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -164,6 +171,7 @@
     "The text-only response adapter accepts only optional assistant role plus content; tool_calls, reasoning_content and other typed extensions require a separate response path and cannot reach VERIFIED or DONE.",
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
+    "Only HTTP 200 is final for this NVIDIA text-completion path; HTTP 202 remains EXECUTED as provider_result_pending, cannot reach VERIFIED/DONE, and is not blindly replayed without a requestId-bound polling adapter.",
     "Before body consumption or EXECUTED, adapter status must be a non-boolean integer in the RFC 9110 range 100 through 599; missing or invalid values remain null and invalid_provider_response.",
     "A received adapter body must be bytes before JSON parsing; text, bytearray and other body types remain EXECUTED with their valid status but cannot reach VERIFIED or DONE.",
     "Provider response JSON is parsed with non-finite constants rejected; NaN, Infinity and -Infinity remain invalid_provider_response and never reach VERIFIED or DONE.",

@@ -467,6 +467,8 @@ def execute_chat(
             content = message["content"]
             if not _is_unicode_scalar_text(content):
                 raise ValueError("response_content_must_be_unicode_scalar_string")
+            if not content:
+                raise ValueError("response_content_must_be_nonempty_string")
             lifecycle.extend(["VERIFIED", "DONE"])
             outcome = "success"
             cooldown_seconds = 0

@@ -26,6 +26,7 @@ DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
+MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
 TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
@@ -219,14 +220,17 @@ def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
     value = value.strip()
     if value and all("0" <= character <= "9" for character in value):
         try:
-            return int(value)
+            return min(int(value), MAX_PROVIDER_COOLDOWN_SECONDS)
         except ValueError:
             return default
     try:
         retry_at = parsedate_to_datetime(value)
         if retry_at.tzinfo is None:
             return default
-        return max(0, math.ceil(retry_at.timestamp() - received_at))
+        return min(
+            max(0, math.ceil(retry_at.timestamp() - received_at)),
+            MAX_PROVIDER_COOLDOWN_SECONDS,
+        )
     except (OverflowError, TypeError, ValueError):
         return default
 

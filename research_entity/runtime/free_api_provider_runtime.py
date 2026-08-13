@@ -455,7 +455,7 @@ def execute_chat(
             finish_reason = choice.get("finish_reason")
             if finish_reason == "length":
                 raise ProviderOutputTruncated
-            if finish_reason not in (None, "stop"):
+            if finish_reason != "stop":
                 raise ValueError("response_finish_reason_not_supported")
             message = choice["message"]
             if not isinstance(message, dict):

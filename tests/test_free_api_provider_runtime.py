@@ -121,6 +121,44 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_invalid_conversation_sequence_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        invalid_conversations = (
+            (
+                [{"role": "assistant", "content": "orphan answer"}],
+                "conversation_must_end_with_user",
+            ),
+            (
+                [
+                    {"role": "user", "content": "first"},
+                    {"role": "user", "content": "second"},
+                ],
+                "conversation_roles_must_alternate",
+            ),
+            (
+                [
+                    {"role": "user", "content": "first"},
+                    {"role": "system", "content": "late instruction"},
+                    {"role": "user", "content": "second"},
+                ],
+                "system_message_must_be_first",
+            ),
+        )
+        for messages, error in invalid_conversations:
+            with self.subTest(error=error):
+                with self.assertRaisesRegex(ValueError, error):
+                    MOD.execute_chat(
+                        messages, model="mock", environ=env, opener=opener,
+                    )
+        self.assertFalse(called)
+
     def test_unknown_text_message_role_is_blocked_before_network(self):
         called = False
 

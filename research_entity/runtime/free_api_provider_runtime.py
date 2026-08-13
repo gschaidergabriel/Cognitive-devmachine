@@ -197,9 +197,18 @@ def _safe_attempt_id(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()[:32]
 
 
+def _is_unicode_scalar_text(value) -> bool:
+    """Reject lone UTF-16 surrogates that are not Unicode characters."""
+    return isinstance(value, str) and not any(
+        0xD800 <= ord(character) <= 0xDFFF for character in value
+    )
+
+
 def _validate_text_chat_request(messages, model) -> None:
     if not isinstance(model, str) or not model.strip():
         raise ValueError("model_must_be_nonempty_string")
+    if not _is_unicode_scalar_text(model):
+        raise ValueError("model_must_be_unicode_scalar_string")
     if not isinstance(messages, list):
         raise ValueError("messages_must_be_list")
     for message in messages:
@@ -207,10 +216,14 @@ def _validate_text_chat_request(messages, model) -> None:
             raise ValueError("message_must_be_object")
         if not isinstance(message.get("role"), str) or not message["role"].strip():
             raise ValueError("message_role_must_be_nonempty_string")
+        if not _is_unicode_scalar_text(message["role"]):
+            raise ValueError("message_role_must_be_unicode_scalar_string")
         if message["role"] not in TEXT_CHAT_ROLES:
             raise ValueError("message_role_not_supported_by_text_adapter")
         if not isinstance(message.get("content"), str):
             raise ValueError("message_content_must_be_string")
+        if not _is_unicode_scalar_text(message["content"]):
+            raise ValueError("message_content_must_be_unicode_scalar_string")
 
 
 class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
@@ -426,8 +439,8 @@ def execute_chat(
             if not isinstance(message, dict):
                 raise ValueError("response_message_must_be_object")
             content = message["content"]
-            if not isinstance(content, str):
-                raise ValueError("response_content_must_be_string")
+            if not _is_unicode_scalar_text(content):
+                raise ValueError("response_content_must_be_unicode_scalar_string")
             lifecycle.extend(["VERIFIED", "DONE"])
             outcome = "success"
             cooldown_seconds = 0

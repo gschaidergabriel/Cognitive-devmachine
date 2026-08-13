@@ -259,6 +259,8 @@ def _validate_text_chat_request(messages, model) -> None:
             raise ValueError("message_content_must_be_string")
         if not _is_unicode_scalar_text(message["content"]):
             raise ValueError("message_content_must_be_unicode_scalar_string")
+        if not message["content"].strip():
+            raise ValueError("message_content_must_be_nonempty_string")
 
     if messages[-1]["role"] != "user":
         raise ValueError("conversation_must_end_with_user")

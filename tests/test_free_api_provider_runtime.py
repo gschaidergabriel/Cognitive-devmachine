@@ -131,6 +131,28 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_extra_message_fields_are_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        with self.assertRaisesRegex(
+            ValueError, "message_fields_not_supported_by_text_adapter"
+        ):
+            MOD.execute_chat(
+                [{
+                    "role": "assistant",
+                    "content": "plain text",
+                    "tool_calls": [{"function": {"name": "bypass"}}],
+                }],
+                model="mock", environ=env, opener=opener,
+            )
+        self.assertFalse(called)
+
     def test_unallowlisted_remote_endpoint_is_blocked_before_network(self):
         env = {"NVIDIA_API_KEY": "secret", "FRANK_PROVIDER_BASE_URL": "https://evil.example/v1"}
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):

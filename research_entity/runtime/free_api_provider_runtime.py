@@ -415,9 +415,13 @@ def execute_chat(
                 raise TypeError("response_body_must_be_bytes")
             if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
                 raise ProviderResponseTooLarge
-        if not 200 <= status < 300:
+        if status != 200:
             content = None
-            if status == PAYMENT_REQUIRED_STATUS:
+            if status == 202:
+                outcome = "provider_result_pending"
+                cooldown_seconds = 0
+                retryable = False
+            elif status == PAYMENT_REQUIRED_STATUS:
                 latches.add(_payment_latch_key(selected, env))
                 outcome = "payment_required_hard_stop"
                 cooldown_seconds = 0

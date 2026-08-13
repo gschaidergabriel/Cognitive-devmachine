@@ -1,8 +1,8 @@
 {
-  "schema_version": "4.2",
+  "schema_version": "4.3",
   "status": "ACTIVE",
-  "last_reviewed_cycle": "ccauto-20260813T1048p0700-supervisor",
-  "current_focus": "Material FREE_ONLY execution-surface evidence landed after the prior review. Dr.-Unterweger PR565 changed Frank Deep Integrity from ubuntu-latest to [self-hosted, Linux, X64] and merged as 925ed87f0644dafd4dfbe899ee83cc80478e26a4. Post-merge main run 31662361357 executed 21 steps on runner clay and succeeded. A controlled propagation test on PR567 is causal evidence: close/reopen of the unchanged stale branch still selected ubuntu-latest and produced a zero-step failure (31662464840), while update-branch against main caused the same PR/content lineage to select the self-hosted lane and execute 21 successful steps (31662607317). Therefore zero-step hosted reds on stale branches are instrument-state artifacts, not Frank/ClayCode failures; branch ingestion of the repaired workflow is required before a real verdict exists. This does not mint ProductStart/Hostinger identity because self-hosted/Linux/X64 labels are routing selectors and runner clay remains a correlated secondary execution surface. It also does not repair unrelated promotion workflows automatically. Prior external translated-gate requirements remain: no negative semantic credit without a durable receipt binding exact target SHA, instrument/workflow identity, executed steps, assertion reached, PASS markers, exit code and log hash. BASE workspace remains WP01/WP02 PASS only and WP03-WP14 OPEN; preserve 429 unique/464 unresolved calls and 22 MethodChain segments fail-closed. FREE_ONLY hard, no paid fallback, Together denied, Ubuntu-only final acceptance, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence plus review, and no Frank-Harness modification.",
+  "last_reviewed_cycle": "ccauto-20260813T1241p0700-supervisor",
+  "current_focus": "The autonomous control file had drifted behind executable evidence and still steered PR552 plus the already-closed 42-discovered/40-authorized corpus boundary. Control was synchronized at commit 5ccbdb8ac12d5c646cc2a9b65f6b6fe41e38eb57. Current decision protocol is execution-depth first: Deep Integrity main run 31662361357 executed 21 successful steps on zero-cost self-hosted runner clay after merge 925ed87f0644dafd4dfbe899ee83cc80478e26a4; PR567 close/reopen run 31662464840 stayed on stale ubuntu-latest and executed zero steps, while update-branch run 31662607317 ingested the repaired workflow and executed 21 successful steps. The Research Center fusion delta 671699980ed8a82b07f980534a473cafa22c1a4d adds no independent semantic/provider authority: it explicitly collapses shared ancestry and preserves no whole-system promotion. The push caused Identity Guard run 31671515422, job 94356927416, to fail with steps=[] and runner_id=0 on ubuntu-latest, so it receives zero guard/code/release credit. External translated-gate rc values remain instrument-only unless durable receipts bind exact target SHA, translator/workflow identity, executed steps, decision assertion, PASS markers, exit code and log hash. BASE remains WP01/WP02 PASS only; WP03-WP14 OPEN. ClayCode frontier remains 429 unique/464 unresolved Calls and 22 MethodChain segments plus mandatory WP04 admission/private admitted-state continuity across productive evaluator/compiler/lowering/FFI routes. FREE_ONLY hard, no paid fallback, Together denied, Ubuntu-only final acceptance, Goodman ancestry collapsed, no canonical semantic promotion, no BASE/Frank PASS from consensus, and no Frank-Harness modification.",
   "free_only": true,
   "blocked_capabilities": {
     "free_api_runtime": "NO_NEW_ACCEPTED_UBUNTU_LIVE_PROVIDER_RECEIPT",
@@ -11,6 +11,7 @@
     "shared_pull_request_exact_head_provenance": "CLOSED_FOR_REPAIRED_PR558_PR560_PR561_LANES_NOT_GLOBALLY_CLOSED",
     "pr557_storage_exact_head": "OPEN_RUN_31655138751_TESTED_SYNTHETIC_MERGE_7FD5704_NOT_PR_HEAD_517883F",
     "stale_branch_deep_integrity_verdict": "ZERO_CREDIT_UNTIL_BRANCH_INGESTS_SELF_HOSTED_WORKFLOW_REPAIR_AND_EXECUTES_STEPS",
+    "research_repo_identity_guard": "RUN_31671515422_JOB_94356927416_FAILURE_ZERO_STEPS_RUNNER_ID_0_ZERO_EVIDENCE_CREDIT",
     "wp03_ir_types": "OPEN",
     "wp04_type_effect": "OPEN_WITH_BOUNDED_EVIDENCE",
     "wp05_evaluator": "OPEN_WITH_BOUNDED_EVIDENCE",
@@ -37,26 +38,26 @@
     "external_provider_fence_postfix": "RC0_ON_PR520_AND_PRS557_558_560_564_565_566_567_NO_LIVE_PROVIDER_CAPABILITY_MINTED",
     "external_pr558_frontier_integration": "RC0_STATUS_AT_2026_08_13T023921Z_SECONDARY_INSTRUMENT_MECHANISM_EVIDENCE",
     "pr556_corpus_authority": "BOUNDED_EXACT_HEAD_PASS_AUTHORIZED_40_EXCLUDED_2_NO_SEMANTIC_PROMOTION",
+    "control_plane_sync_commit": "5ccbdb8ac12d5c646cc2a9b65f6b6fe41e38eb57",
+    "latest_research_fusion_delta": "671699980ed8a82b07f980534a473cafa22c1a4d_CORRELATED_NO_PROMOTION",
     "corpus_unresolved_unique_names": 429,
     "corpus_unresolved_occurrences": 464,
     "callable_method_segments_open": 22,
     "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST"
   },
   "high_information_targets": [
-    "classify workflow verdicts by execution depth before reading red/green: zero-step/no-runner is instrument state; executed-step failure is genuine gate evidence",
-    "before re-running stale open PR gates, first verify whether the PR head lineage contains the repaired self-hosted workflow; update/recompose only when needed and never infer code improvement from a lane-only green transition",
-    "persist an external-gate-runner receipt per verdict with exact target SHA, translator/instrument commit, workflow bytes/config identity, executed step count, assertion-reached state, PASS-marker count/presence, exit code and log hash",
-    "re-adjudicate PR558 current-main-composition rc=1 only after its external-runner receipt proves whether the gate assertion was reached",
+    "classify workflow verdicts by execution depth and event-associated workflow lineage before reading red/green",
+    "persist translated external-gate receipts with exact target SHA, instrument/workflow identity, executed steps, assertion reached, PASS markers, exit code and log hash",
     "repair PR557 pull_request exact-head acquisition and rerun exact SQLite 3.53.4 WAL-sidecar regression on reviewed bytes",
     "classify unresolved call ownership across the authorized ClayCode corpus and the 22 MethodChain/member segments without host/library defaulting",
     "prove every productive evaluator/compiler/lowering/FFI route passes canonical WP04 admission and uses immutable/private admitted state"
   ],
   "steering_notes": [
-    "The Deep Integrity lane repair is executable causal evidence that a large class of historical red checks are workflow-instrument artifacts rather than product failures.",
-    "A main-branch workflow fix does not retroactively change the workflow carried by stale pull-request head lineage; re-triggering alone can repeat the old instrument.",
-    "Do not bulk-convert old reds to green or bulk-retry without first separating zero-step artifact reds from executed-step genuine reds.",
-    "Self-hosted runner labels route jobs but do not independently authenticate the owner-fixed Hostinger product target; keep ProductStart evidence separate.",
-    "Goodman anti-echo remains active: repeated runs on runner clay and translated executions on digital-retina are correlated mechanism evidence, not independent semantic replication.",
+    "The autonomous control plane must not recycle closed PR552/exact-head/corpus-authority work unless relevant bytes change.",
+    "GitHub event-associated workflow lineage is part of the measurement instrument; zero-step/no-runner is instrument state, not a code verdict.",
+    "The 6716999 Research Center delta is a same-project fusion receipt and explicitly does not claim independent replication or whole Frank acceptance.",
+    "The new Identity Guard failure on the steering commit executed zero steps and therefore receives zero evidence credit.",
+    "Goodman anti-echo remains active: runner clay, digital-retina and same-project translated executions are correlated mechanism evidence, not independent semantic replication.",
     "No BASE/Frank promotion, no canonical semantic selection, no paid fallback, and no Frank Harness modification."
   ],
   "steering_ref": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"

@@ -136,6 +136,16 @@
     "executable_evidence": "test_non_bytes_response_body_cannot_reach_verified_state",
     "counterhypothesis": "Successful json.loads parsing proves a valid HTTP body; falsified because json.loads intentionally accepts str and bytearray in addition to bytes."
   },
+  "network_json_encoding": {
+    "checked_at": "2026-08-14",
+    "claim": "Network-transmitted provider JSON is decoded strictly as UTF-8 before parsing; UTF-16 and UTF-32 response bodies cannot reach VERIFIED or DONE.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc8259.html#section-8.1",
+      "https://docs.python.org/3/library/json.html#json.loads"
+    ],
+    "executable_evidence": "test_non_utf8_network_json_cannot_reach_verified_state",
+    "counterhypothesis": "Passing response bytes directly to Python json.loads enforces the network JSON encoding contract; falsified because the decoder automatically recognized UTF-16 and UTF-32 bodies and both reached success, VERIFIED and DONE."
+  },
   "strict_json_numbers": {
     "checked_at": "2026-08-14",
     "claim": "Provider response JSON containing NaN, Infinity, -Infinity or an exponent that overflows the runtime float range is invalid and cannot reach VERIFIED or DONE.",
@@ -276,6 +286,7 @@
     "Unexpected 2xx statuses remain EXECUTED as unexpected_success_status, cannot reach VERIFIED/DONE, and are nonretryable because the POST may already have been accepted.",
     "Before body consumption or EXECUTED, adapter status must be a non-boolean integer in the RFC 9110 range 100 through 599; missing or invalid values remain null and invalid_provider_response.",
     "A received adapter body must be bytes before JSON parsing; text, bytearray and other body types remain EXECUTED with their valid status but cannot reach VERIFIED or DONE.",
+    "Network-transmitted provider JSON must decode strictly as UTF-8 before parsing; UTF-16, UTF-32 and malformed UTF-8 remain invalid_provider_response and cannot reach VERIFIED or DONE.",
     "Provider response JSON rejects every non-finite decoded number; NaN/Infinity literals and finite-syntax exponents that overflow the runtime float range remain invalid_provider_response and never reach VERIFIED or DONE.",
     "Every provider JSON object must have unique member names; duplicates remain invalid_provider_response and never reach VERIFIED or DONE.",
     "JSON parser RecursionError after a valid response remains EXECUTED with its status, emits invalid_provider_response, and never escapes the receipt path or reaches VERIFIED or DONE.",

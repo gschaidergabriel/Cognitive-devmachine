@@ -552,7 +552,7 @@ def execute_chat(
             else "unreachable_provider"
         )
         cooldown_seconds = 15
-        retryable = True
+        retryable = False
 
     finished = now()
     body_digest = hashlib.sha256(body).hexdigest()

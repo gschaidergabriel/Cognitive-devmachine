@@ -20,7 +20,7 @@ class Response:
         status=200,
         body=(
             b'{"choices":[{"finish_reason":"stop",'
-            b'"message":{"content":"ok"}}]}'
+            b'"message":{"role":"assistant","content":"ok"}}]}'
         ),
     ):
         self.status = status

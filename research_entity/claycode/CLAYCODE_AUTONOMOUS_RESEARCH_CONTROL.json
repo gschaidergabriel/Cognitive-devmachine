@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.5",
+  "schema_version": "2.6",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -24,6 +24,7 @@
   "research_loop": [
     "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
     "VERIFY_FREE_EXECUTION_SURFACE_BEFORE_COMPUTE",
+    "VERIFY_EXECUTION_DEPTH_AND_WORKFLOW_LINEAGE_BEFORE_READING_GATE_VERDICT",
     "VERIFY_EXACT_TESTED_COMMIT_PROVENANCE_BEFORE_CREDIT",
     "VERIFY_AUTHORIZED_CLAYCODE_CORPUS_SEPARATELY_FROM_FILESYSTEM_DISCOVERY",
     "VERIFY_RUNNER_AND_PRODUCT_TARGET_PROVENANCE_SEPARATELY_FROM_ROUTING_LABELS",
@@ -74,6 +75,10 @@
     "semantic_change_requires_executable_counterexample_and_supervisor_review",
     "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle",
     "cancelled_queued_failed_zero_step_or_uninspectable_workflow_never_counts_as_positive_semantic_compiler_provider_guard_or_release_acceptance",
+    "zero_step_or_no_runner_red_is_instrument_state_not_code_or_semantic_failure",
+    "workflow_repair_on_main_does_not_retroactively_repair_stale_pull_request_event_lineage",
+    "lane_only_green_transition_after_branch_ingestion_does_not_by_itself_prove_code_improvement",
+    "translated_external_gate_status_requires_bound_target_instrument_workflow_steps_assertion_pass_markers_exitcode_and_log_hash_before_semantic_credit",
     "pull_request_github_sha_may_be_synthetic_merge_commit_and_must_not_be_labeled_exact_head",
     "exact_head_credit_requires_explicit_pr_head_fetch_binding_and_tested_sha_equality",
     "synthetic_pull_request_merge_ref_execution_may_receive_composition_credit_only_not_exact_head_credit",
@@ -125,29 +130,31 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "PR552 is the current parsed-record/runtime-nominal candidate, but successful pull_request runtime jobs currently test GitHub synthetic merge commits rather than the explicit PR head. Preserve run 31609707205 as bounded merge-composition evidence only: it passed 22/22 runtime nominal and 14/14 WP04 checks on clay/Ubuntu while testing ead250d6d5d0cb0188f2be781ced405f01677c53, not head a9925f9558bd985c40f00637d5c3526c51f794d4. Require promotion-relevant workflows to fetch the explicit PR head and assert tested_sha==expected_pr_head; merge-ref tests may remain separate composition gates. Also separate raw .clay discovery from semantic corpus authority. Earlier current-main composition observed 42 discovered sources with 36 parsed versus the frozen 36/40 frontier; do not silently redefine the denominator or admit the additional projection/UnifiedDB sources. Require an explicit authorized-corpus set and separate discovered/rejected/unclassified accounting. Current provider-contract run 31609707160 tested exact head and is useful contract evidence, but external_effect_performed=false and external_network_used=false, so no free-provider capability change is credited. Keep WP03/WP04/WP05/WP06 OPEN and preserve 429 unique/464 unresolved Calls, 22 MethodChain segments, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. Existing ProductStart/Hostinger provenance gates remain. FREE_ONLY hard, Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
+  "current_focus": "The prior PR552 exact-head/corpus-authority focus is closed for the repaired lanes and must not be recycled. Current executable evidence shows Frank Deep Integrity main run 31662361357 executed 21 steps successfully on zero-cost self-hosted runner clay after merge 925ed87f0644dafd4dfbe899ee83cc80478e26a4. Controlled PR567 evidence separates workflow lineage from code verdict: unchanged close/reopen run 31662464840 remained on stale ubuntu-latest and executed zero steps, while update-branch against main produced run 31662607317 on the repaired self-hosted lane with 21 successful steps. Therefore first classify execution depth and workflow lineage; zero-step/no-runner reds are instrument state and lane migration alone is not code improvement. The external translated gate runner remains secondary correlated instrumentation: PR558 Current-Main Composition rc=1 remains INSTRUMENT_VERDICT_UNADJUDICATED until a durable receipt binds exact target SHA, translator/workflow identity, executed steps, decision assertion reached, PASS markers, exit code and log hash. No provider capability change is credited without an accepted-Ubuntu live FREE_ONLY network/external-effect receipt. ClayCode semantic frontier remains WP03/WP04/WP05/WP06 OPEN with 429 unique/464 unresolved Calls and 22 MethodChain segments fail-closed; classify ownership without host/library defaulting and falsify every productive evaluator/compiler/lowering/FFI route for canonical WP04 admission plus immutable/private admitted-state handoff. ProductStart/Hostinger identity remains separate and open. FREE_ONLY hard, Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
   "supervisor_last_steer": {
-    "reason": "Executable inspection found two promotion-boundary flaws: successful pull_request jobs were being described as exact-head while testing GitHub synthetic merge SHAs, and composition accounting could treat raw .clay discovery growth as corpus authority. Provider-contract success also remains offline/mechanism-only because no network or external effect occurred.",
+    "reason": "Control-plane drift was executable-risk relevant: SUPERVISOR_STATE had advanced through exact-head repair, corpus-authority repair and Deep Integrity lane-propagation evidence, while this control file still steered PR552 and the already-closed 36-vs-42 corpus problem. Synchronize the autonomous controller so it does not spend FREE_ONLY cycles on superseded falsifiers or misread stale zero-step workflow reds as product evidence.",
     "evidence_priority": [
-      "bind explicit PR head SHA in every exact-head-labelled promotion gate",
-      "keep synthetic merge-ref execution as separate composition evidence",
-      "introduce explicit authorized ClayCode corpus accounting distinct from discovered/rejected/unclassified .clay files",
-      "preserve parsed-record runtime semantics only after exact-head recomposition",
-      "do not credit provider capability without real accepted-Ubuntu live FREE_ONLY execution"
+      "execution depth and workflow lineage before any gate verdict",
+      "durable translated-runner receipts before semantic credit",
+      "429/464 unresolved Call ownership and 22 MethodChain/member segments",
+      "productive evaluator/compiler/lowering/FFI WP04-admission bypass and post-admission mutation falsifiers",
+      "accepted-Ubuntu live FREE provider execution only for provider capability credit"
     ],
     "required_next_actions": [
-      "update or add a bounded self-hosted gate that resolves PR head SHA explicitly, fetches that commit and fails if tested_sha differs",
-      "re-run PR552 runtime nominal, parser fidelity, package import and composition gates with explicit exact-head provenance; keep merge-ref integration as a distinct gate if desired",
-      "add corpus-authority manifest or equivalent explicit set and report discovered, authorized, rejected and unclassified counts separately",
-      "classify the additional projection/UnifiedDB .clay files without inferring language authority from extension, name, parser acceptance or model consensus",
+      "classify new workflow results as zero-step instrument state versus executed decision-surface evidence before scheduling reruns",
+      "do not repeat the closed PR552 exact-head or 42-discovered/40-authorized corpus falsifiers unless relevant bytes change",
+      "re-adjudicate external PR558 composition only when the instrument receipt proves decision depth and binds exact bytes",
+      "repair and rerun PR557 WAL-sidecar exact-head provenance on reviewed bytes before upgrading that storage mechanism",
+      "classify unresolved call and MethodChain ownership, then test all productive routes for mandatory WP04 admission and immutable/private admitted-state continuity",
       "preserve FREE_ONLY and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
-      "exact-head PASS from GITHUB_SHA on a pull_request event unless PR head equality is independently bound",
-      "ClayCode corpus membership or canonical semantics from a .clay extension or filesystem glob",
-      "provider capability change from offline contract matrices with no network/external effect",
+      "Frank or ClayCode failure from zero-step/no-runner platform reds",
+      "code improvement from a lane-only transition after workflow ingestion",
+      "independent replication from repeated runner-clay or digital-retina executions sharing project ancestry",
+      "provider capability from offline or no-external-effect contract success",
       "BASE or Frank v0.1 PASS from model consensus or correlated runners",
-      "canonical ClayCode semantics from storage/runtime findings"
+      "canonical ClayCode semantics from storage/runtime or host-language behavior"
     ]
   },
   "supervisor": {

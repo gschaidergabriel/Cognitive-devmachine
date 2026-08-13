@@ -161,16 +161,17 @@
   },
   "completion_finish_reason": {
     "checked_at": "2026-08-13",
-    "claim": "A non-streaming NVIDIA Chat Completions choice reaches final-text VERIFIED only with explicit finish_reason stop; length is truncated and null is a nonterminal streaming-chunk state.",
+    "claim": "A non-streaming NVIDIA Chat Completions choice reaches final-text VERIFIED only with explicit finish_reason stop and nonempty final content; length is truncated and null is a nonterminal streaming-chunk state.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-nemotron-3.5-lightning.html",
       "https://docs.nvidia.com/nim/large-language-models/2.0.10/get-started/quickstart.html"
     ],
     "executable_evidence": [
       "test_length_finished_response_cannot_reach_verified_state",
-      "test_null_finish_reason_cannot_reach_verified_state"
+      "test_null_finish_reason_cannot_reach_verified_state",
+      "test_empty_stopped_response_cannot_reach_verified_state"
     ],
-    "counterhypothesis": "A nonempty assistant content string is sufficient evidence of a completed answer; falsified twice because both an explicit length stop and a null nonterminal finish reason with partial content previously reached success, VERIFIED and DONE. Identical blind retry after length remains disabled because NVIDIA requires changing token limits or reasoning budget."
+    "counterhypothesis": "Either a nonempty assistant content string or finish_reason stop alone is sufficient evidence of a completed answer; falsified because length and null with partial text and stop with empty content all previously reached success, VERIFIED and DONE. Identical blind retry after length remains disabled because NVIDIA requires changing token limits or reasoning budget."
   },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
@@ -191,6 +192,7 @@
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",
+    "A stopped non-streaming text choice requires nonempty scalar content before VERIFIED or DONE; empty final content remains invalid_provider_response.",
     "The text-only response adapter accepts only optional assistant role plus content; tool_calls, reasoning_content and other typed extensions require a separate response path and cannot reach VERIFIED or DONE.",
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",

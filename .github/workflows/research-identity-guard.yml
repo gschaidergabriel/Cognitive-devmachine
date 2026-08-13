@@ -1,19 +1,55 @@
 name: Research Entity Identity Guard
+
 on:
   pull_request:
+  workflow_dispatch:
   push:
     branches:
       - main
       - 'research/strengthen-researcher-identity-*'
+      - 'chatgpt/go-identity-guard-*'
+
+permissions:
+  contents: read
 
 jobs:
-  identity-guard:
+  # Keep pull-request evaluation on an ephemeral GitHub-hosted VM.  A persistent
+  # self-hosted runner must not execute repository code from an untrusted PR.
+  # Under the current FREE_ONLY account block this lane may remain zero-step;
+  # that is infrastructure evidence, never guard PASS evidence.
+  identity-guard-pr:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Validate every-turn Research Entity identity lock
         run: python tools/research_identity_guard_check.py
+
+  # Controlled pushes/main can use any already-authorized zero-cost Linux/x64
+  # self-hosted runner visible to this repository.  No target-specific hardware
+  # or custom label is required for this pure read-only identity check.
+  identity-guard-selfhosted-push:
+    if: github.event_name != 'pull_request'
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          clean: true
+      - name: Prove self-hosted guard execution surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "Linux"
+          test "${RUNNER_ARCH}" = "X64"
+          /usr/bin/python3 --version
+          printf 'IDENTITY_GUARD_EXECUTION_SURFACE=self-hosted-linux-x64\n'
+      - name: Validate every-turn Research Entity identity lock
+        run: /usr/bin/python3 tools/research_identity_guard_check.py

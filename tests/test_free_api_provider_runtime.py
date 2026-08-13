@@ -567,6 +567,43 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("DONE", receipt["lifecycle"])
                 self.assertIsNone(result["content"])
 
+    def test_non_utf8_network_json_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __init__(self, body): self.body = body
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return self.body
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        document = json.dumps({
+            "choices": [{
+                "finish_reason": "stop",
+                "message": {"role": "assistant", "content": "must-not-pass"},
+            }]
+        })
+        for encoding in ("utf-16", "utf-32"):
+            body = document.encode(encoding)
+            with self.subTest(encoding=encoding):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, body=body, **kwargs: Response(body),
+                    now=iter((56.0, 56.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], 200)
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
     def test_nonfinite_json_constants_cannot_reach_verified_state(self):
         class Response:
             status = 200

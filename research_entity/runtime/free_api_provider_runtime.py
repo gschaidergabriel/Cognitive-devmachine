@@ -10,12 +10,14 @@ import argparse
 import hashlib
 import http.client
 import json
+import math
 import os
 import secrets
 import time
 import urllib.error
 import urllib.request
 from dataclasses import asdict, dataclass
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -204,6 +206,26 @@ def _is_unicode_scalar_text(value) -> bool:
     return isinstance(value, str) and not any(
         0xD800 <= ord(character) <= 0xDFFF for character in value
     )
+
+
+def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
+    """Parse RFC Retry-After delay-seconds or HTTP-date, else use default."""
+    try:
+        value = headers.get("Retry-After") if headers is not None else None
+    except (AttributeError, TypeError):
+        return default
+    if not isinstance(value, str):
+        return default
+    value = value.strip()
+    if value and all("0" <= character <= "9" for character in value):
+        return int(value)
+    try:
+        retry_at = parsedate_to_datetime(value)
+        if retry_at.tzinfo is None:
+            return default
+        return max(0, math.ceil(retry_at.timestamp() - received_at))
+    except (OverflowError, TypeError, ValueError):
+        return default
 
 
 def _validate_text_chat_request(messages, model) -> None:
@@ -421,6 +443,7 @@ def execute_chat(
     request_opener = _open_no_redirect if opener is None else opener
     status = None
     response_started = False
+    response_headers = None
     retryable = False
 
     try:
@@ -430,6 +453,7 @@ def execute_chat(
                 raise ValueError("response_status_must_be_http_integer")
             status = candidate_status
             response_started = True
+            response_headers = getattr(response, "headers", None)
             lifecycle.append("EXECUTED")
             response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
             if not isinstance(response_body, bytes):
@@ -453,7 +477,9 @@ def execute_chat(
                 retryable = False
             elif status == 429:
                 outcome = "rate_limited"
-                cooldown_seconds = 60
+                cooldown_seconds = _retry_after_seconds(
+                    response_headers, started
+                )
                 retryable = True
             else:
                 outcome = "provider_error"
@@ -510,7 +536,7 @@ def execute_chat(
             status = exc.code
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
-            cooldown_seconds = 60
+            cooldown_seconds = _retry_after_seconds(exc.headers, started)
             retryable = True
         else:
             status = exc.code

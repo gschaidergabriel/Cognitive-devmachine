@@ -56,7 +56,12 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return json.dumps({"choices": [{"message": {"content": "mock-ok"}}]}).encode()
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {"content": "mock-ok"},
+                    }]
+                }).encode()
 
         captured = {}
         def opener(request, timeout):
@@ -242,7 +247,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -267,7 +272,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -297,7 +302,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -366,6 +371,36 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_null_finish_reason_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":null,'
+                    b'"message":{"role":"assistant","content":"partial"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((26.0, 26.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
     def test_structurally_invalid_json_responses_fail_closed_with_receipt(self):
         class Response:
             status = 200
@@ -381,8 +416,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         }
         malformed = (
             b"[]", b'{"choices":[]}',
-            b'{"choices":[{"message":{"content":null}}]}',
-            b'{"choices":[{"message":"not-an-object"}]}',
+            b'{"choices":[{"finish_reason":"stop","message":{"content":null}}]}',
+            b'{"choices":[{"finish_reason":"stop","message":"not-an-object"}]}',
         )
         for body in malformed:
             with self.subTest(body=body):
@@ -501,7 +536,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"message":{"content":"\\uDEAD"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"content":"\\uDEAD"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -528,7 +563,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __exit__(self, *args): pass
             def read(self, limit):
                 return (
-                    b'{"choices":[{"message":{'
+                    b'{"choices":[{"finish_reason":"stop","message":{'
                     b'"role":"assistant","content":"must-not-pass",'
                     b'"tool_calls":[{"id":"call-1","type":"function",'
                     b'"function":{"name":"act","arguments":"{}"}}]}}]}'

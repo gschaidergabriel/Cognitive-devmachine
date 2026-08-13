@@ -115,6 +115,16 @@
     "executable_evidence": "test_excessive_json_nesting_emits_invalid_response_receipt",
     "counterhypothesis": "The 2000000-byte response limit is sufficient to bound every JSON parser failure; falsified by a roughly 40000-byte, 20000-level array that raised RecursionError without a receipt."
   },
+  "unicode_scalar_text_boundaries": {
+    "checked_at": "2026-08-13",
+    "claim": "Text-chat request and response strings must contain Unicode scalar values; lone UTF-16 surrogates cannot cross the authenticated request boundary or reach VERIFIED/DONE.",
+    "source": "https://datatracker.ietf.org/doc/html/rfc8259#section-8.2",
+    "executable_evidence": [
+      "test_unpaired_request_surrogate_is_blocked_before_network",
+      "test_unpaired_json_surrogate_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Successful Python json.loads parsing proves an interoperable Unicode string; falsified because an escaped lone surrogate was decoded as str and reached success/VERIFIED/DONE even though RFC 8259 calls receiver behavior unpredictable."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -137,6 +147,7 @@
     "Provider response JSON is parsed with non-finite constants rejected; NaN, Infinity and -Infinity remain invalid_provider_response and never reach VERIFIED or DONE.",
     "Every provider JSON object must have unique member names; duplicates remain invalid_provider_response and never reach VERIFIED or DONE.",
     "JSON parser RecursionError after a valid response remains EXECUTED with its status, emits invalid_provider_response, and never escapes the receipt path or reaches VERIFIED or DONE.",
+    "Text-chat model, role, request content and verified response content contain only Unicode scalar values; lone UTF-16 surrogates are rejected before network or VERIFIED/DONE.",
     "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
     "ConnectionError failures before response headers, including RemoteDisconnected, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",

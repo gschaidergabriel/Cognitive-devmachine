@@ -142,6 +142,13 @@
     "executable_evidence": "test_empty_message_list_is_blocked_before_network",
     "counterhypothesis": "Provider-side validation is sufficient; falsified because an empty messages list reached the authenticated opener and caused an avoidable network attempt."
   },
+  "text_conversation_sequence": {
+    "checked_at": "2026-08-13",
+    "claim": "NVIDIA Chat Completions requires user and assistant messages to alternate, the final input message to have role user, and an optional system message to be first; invalid sequences are rejected before credential use or network access.",
+    "source": "https://docs.api.nvidia.com/nim/reference/meta-llama-3_1-70b-infer",
+    "executable_evidence": "test_invalid_conversation_sequence_is_blocked_before_network",
+    "counterhypothesis": "Validating each role independently is sufficient; falsified because assistant-ended, consecutive-user and late-system conversations all reached the authenticated opener despite violating the documented conversation grammar."
+  },
   "plain_text_response_fields": {
     "checked_at": "2026-08-13",
     "claim": "A text-only response message requires role assistant plus scalar content only; missing authorship, tool_calls and other typed response extensions cannot reach VERIFIED or DONE through this adapter.",
@@ -189,6 +196,7 @@
     "The text-chat adapter validates a nonempty model plus object messages with nonempty string roles and string content before network access; typed multimodal requests require a separate adapter.",
     "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",
     "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
+    "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with user; invalid sequences are rejected before routing, credential use or network access.",
     "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",

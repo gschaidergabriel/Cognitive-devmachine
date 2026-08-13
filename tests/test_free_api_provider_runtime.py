@@ -59,7 +59,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 return json.dumps({
                     "choices": [{
                         "finish_reason": "stop",
-                        "message": {"content": "mock-ok"},
+                        "message": {
+                            "role": "assistant", "content": "mock-ok"
+                        },
                     }]
                 }).encode()
 
@@ -247,7 +249,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"finish_reason":"stop","message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -272,7 +274,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"finish_reason":"stop","message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -302,7 +304,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"finish_reason":"stop","message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -431,6 +433,36 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_missing_assistant_role_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop",'
+                    b'"message":{"content":"unattributed"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((28.0, 28.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
     def test_structurally_invalid_json_responses_fail_closed_with_receipt(self):
         class Response:
             status = 200
@@ -446,7 +478,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         }
         malformed = (
             b"[]", b'{"choices":[]}',
-            b'{"choices":[{"finish_reason":"stop","message":{"content":null}}]}',
+            b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":null}}]}',
             b'{"choices":[{"finish_reason":"stop","message":"not-an-object"}]}',
         )
         for body in malformed:
@@ -566,7 +598,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"finish_reason":"stop","message":{"content":"\\uDEAD"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"\\uDEAD"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",

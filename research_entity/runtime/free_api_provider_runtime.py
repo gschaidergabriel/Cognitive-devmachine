@@ -231,6 +231,21 @@ def _validate_text_chat_request(messages, model) -> None:
         if not _is_unicode_scalar_text(message["content"]):
             raise ValueError("message_content_must_be_unicode_scalar_string")
 
+    if messages[-1]["role"] != "user":
+        raise ValueError("conversation_must_end_with_user")
+
+    conversation = messages
+    if messages[0]["role"] == "system":
+        conversation = messages[1:]
+    if any(message["role"] == "system" for message in conversation):
+        raise ValueError("system_message_must_be_first")
+
+    expected_role = "user"
+    for message in conversation:
+        if message["role"] != expected_role:
+            raise ValueError("conversation_roles_must_alternate")
+        expected_role = "assistant" if expected_role == "user" else "user"
+
 
 class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
     """Reject redirects so bearer credentials cannot cross an origin boundary."""

@@ -501,7 +501,7 @@ def execute_chat(
                 retryable = False
         else:
             payload = json.loads(
-                response_body,
+                response_body.decode("utf-8"),
                 parse_constant=_reject_nonfinite_json_constant,
                 parse_float=_parse_finite_json_float,
                 object_pairs_hook=_reject_duplicate_json_names,

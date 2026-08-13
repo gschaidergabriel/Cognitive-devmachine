@@ -442,6 +442,10 @@ def execute_chat(
                 outcome = "provider_result_pending"
                 cooldown_seconds = 0
                 retryable = False
+            elif 200 <= status <= 299:
+                outcome = "unexpected_success_status"
+                cooldown_seconds = 0
+                retryable = False
             elif status == PAYMENT_REQUIRED_STATUS:
                 latches.add(_payment_latch_key(selected, env))
                 outcome = "payment_required_hard_stop"

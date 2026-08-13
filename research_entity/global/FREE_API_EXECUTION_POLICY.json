@@ -109,6 +109,16 @@
     "executable_evidence": "test_oversized_retry_after_emits_receipt_with_safe_fallback",
     "counterhypothesis": "Checking that every character is an ASCII digit makes int conversion total; falsified because CPython limits decimal integer-string conversion and raises ValueError for the 5000-digit header on the default configuration."
   },
+  "bounded_retry_after_cooldown": {
+    "checked_at": "2026-08-14",
+    "claim": "Retry-After cooldown metadata is bounded to 86400 seconds in receipts for both delay-seconds and HTTP-date forms; the nonretryable request requires fresh operator or scheduler evaluation beyond that horizon.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3",
+      "internal:FREE_API_EXECUTION_POLICY.invariants.bounded_cooldown"
+    ],
+    "executable_evidence": "test_retry_after_cooldown_is_bounded_in_receipts",
+    "counterhypothesis": "Syntactically valid Retry-After values are inherently operationally bounded; falsified by a 100-digit delay and a year-9999 HTTP-date that produced unbounded receipt integers on both response paths."
+  },
   "http_status_validation": {
     "checked_at": "2026-08-12",
     "claim": "A provider adapter must supply an integer HTTP status from 100 through 599 before the body is consumed or EXECUTED is asserted; missing, boolean, textual and out-of-range values are invalid.",
@@ -279,6 +289,7 @@
     "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
     "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
     "Oversized Retry-After decimal values that exceed runtime integer-conversion limits use the 60-second fallback and cannot escape or suppress the execution receipt.",
+    "Retry-After receipt cooldown metadata is capped at 86400 seconds for both delay-seconds and HTTP-date forms; the request remains nonretryable and requires fresh evaluation after the bounded horizon.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
   ],
   "runtime": "research_entity/runtime/free_api_provider_runtime.py"

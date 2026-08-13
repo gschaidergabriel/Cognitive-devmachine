@@ -32,6 +32,16 @@
     "executable_evidence": "test_oversized_response_is_detected_without_verifying_truncated_body",
     "counterhypothesis": "Reading exactly the accepted limit is sufficient; falsified because HTTPResponse.read(amt) returns only up to amt bytes and therefore cannot prove end-of-body at that boundary."
   },
+  "payment_status_precedes_body": {
+    "checked_at": "2026-08-14",
+    "claim": "A valid HTTP 402 status activates the current-budget-epoch payment hard stop immediately from response metadata; the adapter does not consume a non-200 body before status classification.",
+    "sources": [
+      "https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required"
+    ],
+    "executable_evidence": "test_http_402_latches_before_response_body_is_read",
+    "counterhypothesis": "Reading an error body before classifying its already received status is harmless; falsified because a stalled 402 body changed the outcome to incomplete_provider_response and suppressed the payment latch."
+  },
   "text_message_roles": {
     "allowed": ["system", "user", "assistant"],
     "checked_at": "2026-08-11",
@@ -306,7 +316,8 @@
     "ConnectionError failures before response headers, including RemoteDisconnected, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "Transport OSError failures before response headers, including SSLError, emit an unreachable_provider receipt with null status and without EXECUTED; after response headers they preserve status and EXECUTED as incomplete_provider_response.",
-    "Once response headers and status are received, body-read failures preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
+    "A received non-200 status is classified directly from response metadata without consuming its body; in particular, HTTP 402 activates the payment hard stop even if its body would stall.",
+    "For HTTP 200, body-read failures after response headers preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
     "Transport and response-read failures for the Chat Completions POST are nonretryable without provider-supported idempotency or proof that the original request was never applied.",
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",

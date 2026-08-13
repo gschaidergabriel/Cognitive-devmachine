@@ -15,7 +15,14 @@ VALID_MESSAGES = [{"role": "user", "content": "test"}]
 
 
 class Response:
-    def __init__(self, status=200, body=b'{"choices":[{"message":{"content":"ok"}}]}'):
+    def __init__(
+        self,
+        status=200,
+        body=(
+            b'{"choices":[{"finish_reason":"stop",'
+            b'"message":{"content":"ok"}}]}'
+        ),
+    ):
         self.status = status
         self.body = body
 

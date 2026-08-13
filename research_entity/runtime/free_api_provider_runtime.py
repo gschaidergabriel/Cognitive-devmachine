@@ -218,7 +218,10 @@ def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
         return default
     value = value.strip()
     if value and all("0" <= character <= "9" for character in value):
-        return int(value)
+        try:
+            return int(value)
+        except ValueError:
+            return default
     try:
         retry_at = parsedate_to_datetime(value)
         if retry_at.tzinfo is None:

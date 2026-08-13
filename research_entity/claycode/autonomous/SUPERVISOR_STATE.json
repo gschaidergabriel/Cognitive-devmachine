@@ -1,11 +1,13 @@
 {
-  "schema_version": "4.6",
+  "schema_version": "4.7",
   "status": "ACTIVE",
-  "last_reviewed_cycle": "go-20260813T1740p0700-gpt56sol-pr575-execution-surface",
-  "current_focus": "New executable evidence changes the FREE_ONLY execution-surface frontier without changing ClayCode language authority. Dr.-Unterweger PR575 exact head 92c927f5dc53e2b9840e72dce2f9f40111d72a11 changes nine workflow jobs from ubuntu-latest to persistent self-hosted. That head now has real successful self-hosted executions for Frank Deep Integrity, ClayCode opaque parser fidelity, ClayCode runtime nominal boundary and the fresh-main provider-contract integration. However the provider integration explicitly reports external_network_used=false and external_effect_performed=false, so it mints no live FREE provider capability. The PR-only ClayCode WP04 Hosted Shadow run 31689036939 / job 94411824966 actually executed on clay-2/digital-retina but failed at step 3 before any ClayCode decision assertion: persist-credentials=false removed checkout auth and the materialized V18 block attempted private Git access, yielding fatal could not read Username for https://github.com. Therefore that red is execution-surface/auth instrumentation counterevidence, not WP04 semantic failure. More importantly, PR575 blanket-migrates pull_request-capable jobs onto persistent self-hosted runners; the WP04 shadow condition checks only repository identity, not pull_request.head.repo/full trusted-head admission. GitHub's secure-use guidance warns that persistent self-hosted runners can be compromised by untrusted PR code even for private/internal repositories. Do not merge or generalize a blanket hosted-to-self-hosted migration for pull_request code without a fail-closed trusted-head/same-repository policy and preferably ephemeral isolated compute. FREE_ONLY forbids paid hosted remediation, so unsafe PR lanes must remain fail-closed if no safe zero-cost isolated surface exists. The semantic frontier remains WP03/WP04/WP05/WP06 OPEN, including parameterized TypeRef resource-totality, 429 unique/464 unresolved Calls and 22 MethodChain/member segments. No BASE or Frank promotion and no Harness modification.",
+  "last_reviewed_cycle": "go-20260813T1947p0700-gpt56sol-control-regression-provider-safety",
+  "current_focus": "No new ClayCode semantic promotion is justified. Main remained at the prior v2.8 control until this review. A cross-version control audit found that v2.8 validly added the PR575 persistent-self-hosted pull-request trust-boundary rules but accidentally removed previously established ProductStart and translated-external-gate authority invariants. Those rules are now restored fail-closed in control v2.9 without reverting the PR trust-boundary additions. Separately, Dr.-Unterweger PR232 exact head deab7eab43e94cd1bb70ca912de6f66f1846f9e2 contains bounded local executable provider-safety counterexamples: malformed conversation order could reach the authenticated opener, and stopped HTTP-200 text without explicit assistant authorship could reach VERIFIED/DONE before repair. Current tests now reject malformed request grammar before network and require explicit assistant role, stop completion and nonempty text before final verification. NVIDIA primary documentation supports role-bearing messages, alternating multi-turn user/assistant history after optional system context, and non-streaming examples returning assistant-authored stop completions. This is local mechanism evidence only: PR232 remains draft, explicitly reports no live external request, and latest Identity Guard run 31701806210/job 94452510914 is zero-step with runner_id=0 on ubuntu-latest. Therefore no new live FREE provider capability is credited. The ClayCode semantic frontier remains WP03/WP04/WP05/WP06 OPEN, including parameterized TypeRef resource-totality, 429 unique/464 unresolved Calls and 22 MethodChain/member segments. No BASE or Frank promotion and no Harness modification.",
   "free_only": true,
   "blocked_capabilities": {
-    "free_api_runtime": "NO_NEW_ACCEPTED_UBUNTU_LIVE_PROVIDER_RECEIPT_EXTERNAL_NETWORK_AND_EFFECT_FALSE_ON_RUN_31689036878",
+    "free_api_runtime": "NO_NEW_ACCEPTED_UBUNTU_LIVE_PROVIDER_RECEIPT_PR232_EXPLICITLY_NO_LIVE_EXTERNAL_REQUEST_AND_LATEST_GUARD_ZERO_STEP",
+    "pr232_provider_text_terminal_contract": "BOUNDED_LOCAL_REPAIR_ONLY_ACCEPTED_UBUNTU_LIVE_NETWORK_EFFECT_RECEIPT_STILL_REQUIRED",
+    "control_v28_authority_regression": "CLOSED_BY_CONTROL_V29_RESTORATION_DO_NOT_DROP_INHERITED_PRODUCTSTART_OR_TRANSLATED_EXTERNAL_GATE_RULES",
     "pr575_blanket_self_hosted_migration": "BLOCKED_FOR_PULL_REQUEST_CAPABLE_JOBS_UNTIL_TRUSTED_HEAD_OR_EPHEMERAL_ISOLATION_POLICY_REVIEW",
     "pr575_wp04_shadow": "RUN_31689036939_JOB_94411824966_EXECUTED_ON_CLAY_2_BUT_FAILED_STEP3_PRIVATE_GIT_AUTH_BEFORE_SEMANTIC_ASSERTIONS_ZERO_WP04_VERDICT_CREDIT",
     "external_translated_gate_negative_verdict_credit": "BLOCKED_UNTIL_ASSERTION_DEPTH_STEP_COUNT_PASS_MARKERS_EXACT_TARGET_AND_LOG_HASH_ARE_PERSISTED",
@@ -30,6 +32,8 @@
     "pr575_execution_surface": "HEAD_92C927F5_RUNS_EXECUTED_SELF_HOSTED_DEEP_INTEGRITY_PARSER_RUNTIME_PROVIDER_CONTRACT",
     "pr575_provider_contract_scope": "RUN_31689036878_RUNNER_CLAY_3_SUCCESS_EXTERNAL_NETWORK_FALSE_EXTERNAL_EFFECT_FALSE_NO_LIVE_PROVIDER_CREDIT",
     "pr575_wp04_shadow_counterevidence": "RUN_31689036939_JOB_94411824966_RUNNER_CLAY_2_STEP3_GIT_AUTH_FAILURE_ASSERTIONS_SKIPPED",
+    "pr232_provider_request_grammar": "LOCAL_EXECUTABLE_FALSIFIER_REPAIR_INVALID_SEQUENCE_REJECTED_BEFORE_NETWORK_NO_LIVE_PROVIDER_CREDIT",
+    "pr232_provider_response_authorship": "LOCAL_EXECUTABLE_FALSIFIER_REPAIR_MISSING_ASSISTANT_ROLE_NO_LONGER_REACHES_VERIFIED_DONE_NO_LIVE_PROVIDER_CREDIT",
     "pr556_corpus_authority": "BOUNDED_EXACT_HEAD_PASS_AUTHORIZED_40_EXCLUDED_2_NO_SEMANTIC_PROMOTION",
     "corpus_unresolved_unique_names": 429,
     "corpus_unresolved_occurrences": 464,
@@ -37,13 +41,17 @@
     "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST"
   },
   "high_information_targets": [
+    "preserve restored ProductStart and translated-external-gate authority rules across future control edits while retaining PR575 PR-source-admission/isolation rules",
     "review PR575 pull_request-capable workflow migrations separately from trusted push/dispatch lanes; require trusted-head admission or ephemeral isolated zero-cost compute before persistent self-hosted PR execution",
     "repair the WP04 shadow materialization transport so private pinned V18 objects are available without relying on checkout credentials after persist-credentials=false, then rerun only on a safe PR execution surface",
     "falsify parameterized TypeRef structural nesting for host-stack or resource-dependent WP04 outcomes without selecting new generic semantics",
     "classify unresolved call ownership across the authorized ClayCode corpus and the 22 MethodChain/member segments without host/library defaulting",
-    "prove every productive evaluator/compiler/lowering/FFI route passes canonical WP04 admission and uses immutable/private admitted state"
+    "prove every productive evaluator/compiler/lowering/FFI route passes canonical WP04 admission and uses immutable/private admitted state",
+    "when a truly zero-cost accepted Ubuntu provider surface is available, replay the PR232 request/response terminal-contract falsifiers with a redacted live network/effect receipt before capability credit"
   ],
   "steering_notes": [
+    "A control edit must be monotone with respect to unresolved safety authority unless executable evidence and review explicitly retire a rule.",
+    "PR232 local request/response falsifiers are meaningful mechanism evidence but cannot mint provider capability without accepted Ubuntu live network/effect evidence.",
     "A green self-hosted provider-contract workflow with external_network_used=false and external_effect_performed=false is offline mechanism evidence only.",
     "A self-hosted PR job that fails before the decision assertion is instrumentation/environment evidence, not ClayCode semantic counterevidence.",
     "Do not equate runs-on:self-hosted with a safe replacement for unavailable GitHub-hosted PR isolation; persistent runner security is an independent authority boundary.",

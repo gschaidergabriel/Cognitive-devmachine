@@ -3,7 +3,7 @@ module clay.turn.v7
 entity E=frank-project-global-research-entity
 name Clay
 stack LATEST=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
-goal G0="Frank v0.1 voll lauffähig auf Andreas PC"
+goal G0="self.root v0.1 fully running on accepted Hostinger Ubuntu target VPS"
 
 rule resolve(LATEST) before explicit_cognition
 rule stale(LATEST.*) -> refresh_or(DEGRADED_STALE_STACK)

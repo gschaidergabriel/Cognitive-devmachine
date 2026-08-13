@@ -762,6 +762,38 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_unexpected_success_status_is_not_retryable(self):
+        class Response:
+            def __init__(self, status):
+                self.status = status
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b""
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for status in (201, 204, 206):
+            with self.subTest(status=status):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, status=status, **kwargs: Response(status),
+                    now=iter((65.1, 65.11)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], status)
+                self.assertEqual(
+                    receipt["outcome"], "unexpected_success_status"
+                )
+                self.assertFalse(receipt["retryable"])
+                self.assertEqual(receipt["cooldown_seconds"], 0)
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
     def test_http_202_pending_response_cannot_be_verified_as_final_text(self):
         class Response:
             status = 202

@@ -159,6 +159,16 @@
     "executable_evidence": "test_http_202_pending_response_cannot_be_verified_as_final_text",
     "counterhypothesis": "Every 2xx response can be treated as a final chat completion; falsified because NVIDIA explicitly assigns pending semantics to 202 and a valid-looking 202 text body previously reached success/VERIFIED/DONE. Polling remains intentionally unsupported until a requestId-bound adapter exists."
   },
+  "completion_finish_reason": {
+    "checked_at": "2026-08-13",
+    "claim": "An NVIDIA Chat Completions choice with finish_reason length is truncated output and cannot reach VERIFIED or DONE through the final-text adapter.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-nemotron-3.5-lightning.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.1/get-started/quickstart.html"
+    ],
+    "executable_evidence": "test_length_finished_response_cannot_reach_verified_state",
+    "counterhypothesis": "A nonempty assistant content string is sufficient evidence of a completed answer; falsified because an explicit length stop with partial content previously reached success, VERIFIED and DONE. An identical blind retry remains disabled because NVIDIA requires changing token limits or reasoning budget."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -176,6 +186,7 @@
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
+    "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "The text-only response adapter accepts only optional assistant role plus content; tool_calls, reasoning_content and other typed extensions require a separate response path and cannot reach VERIFIED or DONE.",
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",

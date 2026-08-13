@@ -26,6 +26,7 @@ PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
+TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
 PROCESS_PAYMENT_LATCHES: set[str] = set()
 
 
@@ -441,6 +442,10 @@ def execute_chat(
             message = choices[0]["message"]
             if not isinstance(message, dict):
                 raise ValueError("response_message_must_be_object")
+            if not set(message).issubset(TEXT_RESPONSE_MESSAGE_FIELDS):
+                raise ValueError("response_fields_not_supported_by_text_adapter")
+            if "role" in message and message["role"] != "assistant":
+                raise ValueError("response_role_must_be_assistant")
             content = message["content"]
             if not _is_unicode_scalar_text(content):
                 raise ValueError("response_content_must_be_unicode_scalar_string")

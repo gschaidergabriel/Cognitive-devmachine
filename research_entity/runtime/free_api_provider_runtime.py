@@ -462,7 +462,7 @@ def execute_chat(
                 raise ValueError("response_message_must_be_object")
             if not set(message).issubset(TEXT_RESPONSE_MESSAGE_FIELDS):
                 raise ValueError("response_fields_not_supported_by_text_adapter")
-            if "role" in message and message["role"] != "assistant":
+            if message.get("role") != "assistant":
                 raise ValueError("response_role_must_be_assistant")
             content = message["content"]
             if not _is_unicode_scalar_text(content):

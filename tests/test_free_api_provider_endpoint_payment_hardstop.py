@@ -139,6 +139,46 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
                         payment_latches=latches,
                     )
 
+    def test_http_402_latches_before_response_body_is_read(self):
+        body_reads = []
+
+        class StalledPaymentResponse:
+            status = 402
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                pass
+
+            def read(self, limit):
+                body_reads.append(limit)
+                raise TimeoutError("payment response body stalled")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "stalled-402-epoch",
+        }
+        latches = set()
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="x",
+            environ=env,
+            opener=lambda *args, **kwargs: StalledPaymentResponse(),
+            now=iter((2.1, 2.11)).__next__,
+            payment_latches=latches,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 402)
+        self.assertEqual(receipt["outcome"], "payment_required_hard_stop")
+        self.assertFalse(receipt["retryable"])
+        self.assertTrue(receipt["payment_latch_active"])
+        self.assertEqual(body_reads, [])
+        self.assertIsNone(MOD.route(env, payment_latches=latches)["selected"])
+
     def test_new_budget_epoch_does_not_inherit_old_epoch_payment_latch(self):
         latches = set()
         env_a = {

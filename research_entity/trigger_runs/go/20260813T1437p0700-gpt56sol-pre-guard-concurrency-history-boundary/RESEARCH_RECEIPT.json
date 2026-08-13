@@ -11,23 +11,28 @@
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "main_observed": "dc31d365ee8699602f4dc2225fb767a0f12f9e2f",
     "parent_candidate_pr": 557,
-    "parent_head_fresh_for_final_run": "b722001510f63ee186ba2f9546dd5e944aa7546b",
+    "parent_head_tested": "b722001510f63ee186ba2f9546dd5e944aa7546b",
+    "parent_head_observed_after_final_run": "cf9227927f756b759c1294f647ca89c39378f20f",
     "stacked_boundary_pr": 571,
     "stacked_head": "dcd06ec60013cd7911fe02f4fca00721823a6697",
     "tested_current_composition_sha": "fe57f78006fe8079889e04a9b6fbb88c3f246543",
     "self_hosted_run": 31678643697,
     "self_hosted_job": 94378793861,
     "self_hosted_conclusion": "success",
+    "freshness_status": "SYNC_PENDING_PARENT_ADVANCED_AFTER_GREEN_RUN",
+    "freshness_policy": "Do not promote or merge PR571 until the ordinary regression is rerun against a composition containing parent head cf9227927f756b759c1294f647ca89c39378f20f or a later settled parent head.",
+    "stop_reason": "Parent PR557 advanced repeatedly during this single macro-cycle. A second ordinary rebase/retest was already performed after the first stale green run; further immediate chasing was stopped as recurrence/repetition rather than falsely claiming current acceptance.",
     "superseded_earlier_green_composition": {
       "tested_sha": "b2c7d194f59e25f5d9a1eb6fd27b831073f6822c",
       "run": 31678380784,
-      "reason_superseded": "PR557 advanced after that run; own stack was reset to the new parent and the same ordinary regression was rerun."
+      "reason_superseded": "PR557 advanced after that run; the owned stack was reset once to the newer parent and the same ordinary regression was rerun."
     }
   },
   "observed_reality": [
     "The current connection-guard candidate deliberately makes point-in-time database/WAL object claims but keeps exclusive_connection_bootstrap_attested=false, temporal_no_move_history_attested=false, productive_persistence_path_exercised=false, restart_recovery_attested=false, and whole Frank v0.1 acceptance unclaimed.",
-    "The parent SQLite guard branch moved concurrently during this cycle. PR571 was kept stacked rather than overwriting PR557; when PR557 advanced, the owned stack branch was reset to the new parent head b722001510f63ee186ba2f9546dd5e944aa7546b and only the two boundary files were replayed.",
-    "The refreshed PR571 self-hosted Linux/X64 lane rebuilt and bound SQLite 3.53.4 with SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and passed the ordinary temporal-boundary regression plus repository static integrity on synthetic current-composition SHA fe57f78006fe8079889e04a9b6fbb88c3f246543."
+    "PR571 is an isolated stacked boundary regression; it does not overwrite PR557.",
+    "The refreshed PR571 self-hosted Linux/X64 lane rebuilt and bound SQLite 3.53.4 with SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and passed the ordinary temporal-boundary regression plus repository static integrity on composition SHA fe57f78006fe8079889e04a9b6fbb88c3f246543.",
+    "After that green run, PR557 advanced again from tested head b722001510f63ee186ba2f9546dd5e944aa7546b to cf9227927f756b759c1294f647ca89c39378f20f. Therefore PR571 is intentionally marked SYNC_PENDING rather than current-parent PASS."
   ],
   "macrocycle_unusual_experiment": {
     "count": 1,
@@ -52,7 +57,8 @@
     "path": "tests/test_frank_sqlite_pre_guard_history_boundary_v1.py",
     "workflow": ".github/workflows/frank-sqlite-pre-guard-history-boundary-v1.yml",
     "expected_semantics": "The later current guard legitimately passes point-in-time object checks after the prior connection episode, while temporal/bootstrap/productive/restart/whole-acceptance claims remain false or unclaimed.",
-    "run_result": "PASS",
+    "last_run_result": "PASS_ON_PARENT_b722001510f63ee186ba2f9546dd5e944aa7546b",
+    "current_parent_recheck": "PENDING",
     "new_go_unusual_experiment_count_in_ci": 0,
     "static_integrity": "PASS",
     "runner": "clay-4",

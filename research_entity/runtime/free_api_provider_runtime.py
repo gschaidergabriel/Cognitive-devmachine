@@ -458,7 +458,7 @@ def execute_chat(
             else:
                 outcome = "provider_error"
                 cooldown_seconds = 15
-                retryable = True
+                retryable = False
         else:
             payload = json.loads(
                 response_body,
@@ -517,7 +517,7 @@ def execute_chat(
             lifecycle.append("EXECUTED")
             outcome = "provider_error"
             cooldown_seconds = 15
-            retryable = True
+            retryable = False
     except ProviderResponseTooLarge:
         content = None
         outcome = "provider_response_too_large"

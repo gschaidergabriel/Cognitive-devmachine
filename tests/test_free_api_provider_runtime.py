@@ -813,6 +813,48 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_retry_after_cooldown_is_bounded_in_receipts(self):
+        class Response:
+            status = 429
+            def __init__(self, retry_after):
+                self.headers = {"Retry-After": retry_after}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            for retry_after in ("9" * 100, "Fri, 31 Dec 9999 23:59:59 GMT"):
+                with self.subTest(transport=transport, retry_after=retry_after):
+                    if transport == "response":
+                        opener = (
+                            lambda *args, retry_after=retry_after, **kwargs:
+                            Response(retry_after)
+                        )
+                    else:
+                        def opener(request, timeout, retry_after=retry_after):
+                            raise MOD.urllib.error.HTTPError(
+                                request.full_url, 429, "Too Many Requests",
+                                {"Retry-After": retry_after}, None,
+                            )
+
+                    result = MOD.execute_chat(
+                        VALID_MESSAGES, model="mock", environ=env,
+                        opener=opener,
+                        now=iter((100.0, 100.01)).__next__,
+                    )
+                    receipt = result["receipt"]
+                    self.assertEqual(receipt["outcome"], "rate_limited")
+                    self.assertEqual(
+                        receipt["cooldown_seconds"],
+                        86_400,
+                    )
+                    self.assertFalse(receipt["retryable"])
+
     def test_regular_error_status_response_cannot_be_verified(self):
         class Response:
             status = 500

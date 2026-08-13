@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "event_id": "clay-live-20260813T165102Z-evidence-plane-split-brain",
+  "kind": "LIVE_RESEARCH_FUSION_DELTA",
+  "observed_at_utc": "2026-08-13T16:51:02Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "training_authorized": false
+  },
+  "comparison_cut": {
+    "previous_research_head": "fd606fbbe30c98d8683dbba028f030f2104cc9d2",
+    "research_head_observed": "80b52e62cf6dfae6ded002b597e01b5b6ddf11a9",
+    "target_main_observed": "8e861c13dbf9215c3e21afa3372fb43ab35bd709"
+  },
+  "substantive_delta": {
+    "id": "D-EVIDENCE-PLANE-SPLIT-BRAIN-001",
+    "disposition": "CONFLICTING_PROVENANCE_OBSERVATIONS_FAIL_CLOSED",
+    "research_control_claim": {
+      "current_pr232_head": "14514f2c31990be93f02df9d3f5fa4bc4cf7be55",
+      "historical_ancestor": "deab7eab43e94cd1bb70ca912de6f66f1846f9e2",
+      "claimed_compare": "deab7eab...14514f2 status ahead with merge_base deab7eab"
+    },
+    "fresh_connector_observation": {
+      "pr232_head": "ab82f6c4e34fbcb79a9ed89a2c4e46de6f514d95",
+      "deab_fetch": "422 No commit found",
+      "deab_search_results": 0,
+      "head_14514f2_search_results": 0,
+      "compare_deab_to_14514f2": "404 Not Found"
+    },
+    "boundary": "This conflict does not prove either observation plane globally authoritative. It does prove that current evidence cannot satisfy referent closure; exact-head, historical-mechanism and provider capability credit remain quarantined."
+  },
+  "preserved_negative_null_and_inconclusive": [
+    "Target main is unchanged.",
+    "No accepted Ubuntu live external network/effect receipt was found.",
+    "No ClayCode semantic verdict, provider capability, Frank promotion or independent replication follows from control text.",
+    "No new GWT, emergence, hyperposition, ClayGraph or UnifiedDB execution evidence was found."
+  ],
+  "testable_hypotheses": [
+    {
+      "id": "H-EVIDENCE-PLANE-QUORUM-001",
+      "hypothesis": "Credit is safe only when the repository object, PR head, reachability comparison and workflow tested SHA agree within one freshness-bounded observation receipt or across independently identified consistent planes.",
+      "counterhypothesis": "A committed supervisor statement can resolve a conflicting connector observation.",
+      "test": "Persist raw API endpoint, repository ID, observed_at, ETag/version, PR head, commit fetch, compare result and workflow head_sha; immediately replay through a second authenticated observation path.",
+      "falsifier": "Semantic credit remains sound when these bound observations disagree."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Evidence-Plane Split Brain",
+      "definition": "Two provenance surfaces report incompatible repository objects or ref topology for the same claim."
+    },
+    {
+      "name": "Referent Quorum",
+      "definition": "A credit gate requiring agreement among object existence, ref role, reachability and executed SHA under explicit freshness."
+    }
+  ],
+  "routing": [
+    {
+      "consumers": ["claycode", "clayresearch", "frank", "gwt", "emergenz", "hyperposition", "claygraph", "unifieddb", "harness"],
+      "priority": "CRITICAL",
+      "impulse": "Keep PR232 provider and historical mechanism credit quarantined. Produce one raw, freshness-bound referent receipt containing repository ID, API endpoints, PR head, commit object, compare topology, workflow head_sha, steps and verdict; reconcile connector/cache divergence before re-entry."
+    }
+  ],
+  "deduplication": {
+    "independent_replication_claimed": false,
+    "note": "The three research commits are one corrective control lineage responding to fd606fb and receive no semantic credit."
+  },
+  "nonclaims": {
+    "target_execution_by_this_organ": false,
+    "target_repository_mutated": false,
+    "harness_mutated": false,
+    "training_performed": false,
+    "canonical_promotion": false,
+    "provider_capability_promoted": false
+  }
+}

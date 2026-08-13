@@ -135,6 +135,13 @@
     "executable_evidence": "test_extra_message_fields_are_blocked_before_network",
     "counterhypothesis": "Validating role and content is enough for a text-only adapter; falsified because an assistant message carrying tool_calls passed unchanged to the authenticated network opener."
   },
+  "nonempty_text_conversation": {
+    "checked_at": "2026-08-13",
+    "claim": "NVIDIA Chat Completions requires messages to contain at least one item; an empty conversation is rejected before credential use or network access.",
+    "source": "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+    "executable_evidence": "test_empty_message_list_is_blocked_before_network",
+    "counterhypothesis": "Provider-side validation is sufficient; falsified because an empty messages list reached the authenticated opener and caused an avoidable network attempt."
+  },
   "plain_text_response_fields": {
     "checked_at": "2026-08-13",
     "claim": "A text-only response may contain assistant role and scalar content only; tool_calls and other typed response extensions cannot reach VERIFIED or DONE through this adapter.",
@@ -163,6 +170,7 @@
     "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates a nonempty model plus object messages with nonempty string roles and string content before network access; typed multimodal requests require a separate adapter.",
+    "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",
     "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
     "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",

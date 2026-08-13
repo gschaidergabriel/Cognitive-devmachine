@@ -777,6 +777,42 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertFalse(receipt["retryable"])
                 self.assertEqual(receipt["cooldown_seconds"], expected)
 
+    def test_oversized_retry_after_emits_receipt_with_safe_fallback(self):
+        class Response:
+            status = 429
+            headers = {"Retry-After": "9" * 5000}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                if transport == "response":
+                    opener = lambda *args, **kwargs: Response()
+                else:
+                    def opener(request, timeout):
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 429, "Too Many Requests",
+                            Response.headers, None,
+                        )
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((100.0, 100.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["outcome"], "rate_limited")
+                self.assertEqual(receipt["cooldown_seconds"], 60)
+                self.assertFalse(receipt["retryable"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+
     def test_regular_error_status_response_cannot_be_verified(self):
         class Response:
             status = 500

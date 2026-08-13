@@ -480,7 +480,7 @@ def execute_chat(
                 cooldown_seconds = _retry_after_seconds(
                     response_headers, started
                 )
-                retryable = True
+                retryable = False
             else:
                 outcome = "provider_error"
                 cooldown_seconds = 15
@@ -537,7 +537,7 @@ def execute_chat(
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
             cooldown_seconds = _retry_after_seconds(exc.headers, started)
-            retryable = True
+            retryable = False
         else:
             status = exc.code
             lifecycle.append("EXECUTED")

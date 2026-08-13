@@ -246,7 +246,7 @@
   },
   "completion_finish_reason": {
     "checked_at": "2026-08-13",
-    "claim": "A non-streaming NVIDIA Chat Completions choice reaches final-text VERIFIED only with explicit finish_reason stop and nonempty final content; length is truncated and null is a nonterminal streaming-chunk state.",
+    "claim": "A non-streaming NVIDIA Chat Completions choice reaches final-text VERIFIED only with explicit finish_reason stop and nonblank final content; length is truncated and null is a nonterminal streaming-chunk state. Treating whitespace-only content as empty is this adapter's fail-closed operationalization of NVIDIA's non-empty-final-answer guidance, not an additional provider-schema claim.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-nemotron-3.5-lightning.html",
       "https://docs.nvidia.com/nim/large-language-models/2.0.10/get-started/quickstart.html"
@@ -254,9 +254,10 @@
     "executable_evidence": [
       "test_length_finished_response_cannot_reach_verified_state",
       "test_null_finish_reason_cannot_reach_verified_state",
-      "test_empty_stopped_response_cannot_reach_verified_state"
+      "test_empty_stopped_response_cannot_reach_verified_state",
+      "test_whitespace_only_stopped_response_cannot_reach_verified_state"
     ],
-    "counterhypothesis": "Either a nonempty assistant content string or finish_reason stop alone is sufficient evidence of a completed answer; falsified because length and null with partial text and stop with empty content all previously reached success, VERIFIED and DONE. Identical blind retry after length remains disabled because NVIDIA requires changing token limits or reasoning budget."
+    "counterhypothesis": "Either any nonempty assistant content string or finish_reason stop alone is sufficient evidence of a completed answer; falsified locally because length and null with partial text, stop with empty content, and stop with whitespace-only content all previously reached success, VERIFIED and DONE. The whitespace-only case could represent intentional formatting, but the plain-text adapter cannot distinguish that from a missing answer and therefore fails closed. Identical blind retry after length remains disabled because NVIDIA requires changing token limits or reasoning budget."
   },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
@@ -278,7 +279,7 @@
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",
-    "A stopped non-streaming text choice requires nonempty scalar content before VERIFIED or DONE; empty final content remains invalid_provider_response.",
+    "A stopped non-streaming text choice requires nonblank scalar content before VERIFIED or DONE; empty and whitespace-only final content remain invalid_provider_response.",
     "The text-only response adapter requires role assistant plus content; missing authorship, tool_calls, reasoning_content and other typed extensions cannot reach VERIFIED or DONE.",
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",

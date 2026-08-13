@@ -144,13 +144,16 @@
   },
   "plain_text_response_fields": {
     "checked_at": "2026-08-13",
-    "claim": "A text-only response may contain assistant role and scalar content only; tool_calls and other typed response extensions cannot reach VERIFIED or DONE through this adapter.",
+    "claim": "A text-only response message requires role assistant plus scalar content only; missing authorship, tool_calls and other typed response extensions cannot reach VERIFIED or DONE through this adapter.",
     "sources": [
-      "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+      "https://docs.nvidia.com/nim/large-language-models/latest/deployment/csp-deployment/aws.html",
       "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
     ],
-    "executable_evidence": "test_response_tool_calls_cannot_reach_text_verified_state",
-    "counterhypothesis": "A nonempty content string is sufficient proof of a complete text response; falsified because a response carrying both content and tool_calls reached success/VERIFIED/DONE while the tool instruction was silently ignored."
+    "executable_evidence": [
+      "test_response_tool_calls_cannot_reach_text_verified_state",
+      "test_missing_assistant_role_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "A nonempty content string plus terminal finish reason is sufficient proof of a complete text response; falsified because both a response carrying tool_calls and a response without assistant authorship reached success/VERIFIED/DONE."
   },
   "pending_http_results": {
     "checked_at": "2026-08-13",
@@ -193,7 +196,7 @@
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",
     "A stopped non-streaming text choice requires nonempty scalar content before VERIFIED or DONE; empty final content remains invalid_provider_response.",
-    "The text-only response adapter accepts only optional assistant role plus content; tool_calls, reasoning_content and other typed extensions require a separate response path and cannot reach VERIFIED or DONE.",
+    "The text-only response adapter requires role assistant plus content; missing authorship, tool_calls, reasoning_content and other typed extensions cannot reach VERIFIED or DONE.",
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
     "Only HTTP 200 is final for this NVIDIA text-completion path; HTTP 202 remains EXECUTED as provider_result_pending, cannot reach VERIFIED/DONE, and is not blindly replayed without a requestId-bound polling adapter.",

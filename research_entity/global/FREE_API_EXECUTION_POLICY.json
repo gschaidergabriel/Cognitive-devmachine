@@ -89,6 +89,16 @@
     "executable_evidence": "test_generic_provider_errors_cannot_trigger_automatic_post_replay",
     "counterhypothesis": "Every non-429 provider error becomes safe to replay after a short cooldown; falsified because unchanged 4xx requests require request, credential or policy correction, while a 5xx response does not prove that the original POST had no application-side effects."
   },
+  "rate_limit_retry_after": {
+    "checked_at": "2026-08-13",
+    "claim": "A received HTTP 429 Retry-After field controls the rate-limit cooldown and is parsed in either delay-seconds or HTTP-date form across regular-response and HTTPError adapter paths.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc6585.html#section-4",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_rate_limit_retry_after_controls_cooldown",
+    "counterhypothesis": "A fixed 60-second cooldown is an adequate interpretation of every 429; falsified because valid provider instructions for 137 and 140 seconds were both overwritten with 60 seconds on both adapter paths."
+  },
   "http_status_validation": {
     "checked_at": "2026-08-12",
     "claim": "A provider adapter must supply an integer HTTP status from 100 through 599 before the body is consumed or EXECUTED is asserted; missing, boolean, textual and out-of-range values are invalid.",
@@ -257,6 +267,7 @@
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Every real provider request must emit a redacted execution receipt.",
     "Only HTTP 429 is automatically retryable among received non-2xx statuses; generic 4xx and 5xx provider errors require changed input, operator recovery or provider-supported idempotency before replay.",
+    "A valid Retry-After field on HTTP 429 determines cooldown in either delay-seconds or HTTP-date form; absent or invalid fields use the conservative 60-second fallback.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
   ],
   "runtime": "research_entity/runtime/free_api_provider_runtime.py"

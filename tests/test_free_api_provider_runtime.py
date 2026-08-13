@@ -958,6 +958,39 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_transport_ambiguity_cannot_trigger_automatic_post_replay(self):
+        class BodyTimeoutResponse:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): raise TimeoutError("body stalled")
+
+        def remote_disconnect(request, timeout):
+            raise http.client.RemoteDisconnected(
+                "remote end closed connection without response"
+            )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        openers = (
+            remote_disconnect,
+            lambda *args, **kwargs: BodyTimeoutResponse(),
+        )
+        for opener in openers:
+            with self.subTest(opener=opener.__name__):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env, opener=opener,
+                    now=iter((80.0, 80.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertFalse(receipt["retryable"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
     def test_body_read_timeout_preserves_received_status_and_executed_state(self):
         class Response:
             status = 200

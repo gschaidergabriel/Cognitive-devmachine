@@ -135,6 +135,16 @@
     "executable_evidence": "test_extra_message_fields_are_blocked_before_network",
     "counterhypothesis": "Validating role and content is enough for a text-only adapter; falsified because an assistant message carrying tool_calls passed unchanged to the authenticated network opener."
   },
+  "plain_text_response_fields": {
+    "checked_at": "2026-08-13",
+    "claim": "A text-only response may contain assistant role and scalar content only; tool_calls and other typed response extensions cannot reach VERIFIED or DONE through this adapter.",
+    "sources": [
+      "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
+    ],
+    "executable_evidence": "test_response_tool_calls_cannot_reach_text_verified_state",
+    "counterhypothesis": "A nonempty content string is sufficient proof of a complete text response; falsified because a response carrying both content and tool_calls reached success/VERIFIED/DONE while the tool instruction was silently ignored."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -151,6 +161,7 @@
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
+    "The text-only response adapter accepts only optional assistant role plus content; tool_calls, reasoning_content and other typed extensions require a separate response path and cannot reach VERIFIED or DONE.",
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
     "Before body consumption or EXECUTED, adapter status must be a non-boolean integer in the RFC 9110 range 100 through 599; missing or invalid values remain null and invalid_provider_response.",

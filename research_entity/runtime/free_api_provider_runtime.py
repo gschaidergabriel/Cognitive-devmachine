@@ -25,6 +25,7 @@ ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
+TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
 PROCESS_PAYMENT_LATCHES: set[str] = set()
 
 
@@ -214,6 +215,8 @@ def _validate_text_chat_request(messages, model) -> None:
     for message in messages:
         if not isinstance(message, dict):
             raise ValueError("message_must_be_object")
+        if set(message) != TEXT_CHAT_MESSAGE_FIELDS:
+            raise ValueError("message_fields_not_supported_by_text_adapter")
         if not isinstance(message.get("role"), str) or not message["role"].strip():
             raise ValueError("message_role_must_be_nonempty_string")
         if not _is_unicode_scalar_text(message["role"]):

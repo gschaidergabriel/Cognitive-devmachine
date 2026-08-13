@@ -382,6 +382,13 @@ def _reject_nonfinite_json_constant(value: str) -> None:
     raise ValueError(f"nonstandard_json_constant:{value}")
 
 
+def _parse_finite_json_float(value: str) -> float:
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise ValueError("json_float_out_of_range")
+    return parsed
+
+
 def _reject_duplicate_json_names(
     pairs: list[tuple[str, object]],
 ) -> dict[str, object]:
@@ -496,6 +503,7 @@ def execute_chat(
             payload = json.loads(
                 response_body,
                 parse_constant=_reject_nonfinite_json_constant,
+                parse_float=_parse_finite_json_float,
                 object_pairs_hook=_reject_duplicate_json_names,
             )
             choices = payload["choices"]

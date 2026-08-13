@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1437p0700-gpt56sol-pre-guard-concurrency-history-boundary",
+  "trigger": "go",
+  "timestamp_local": "2026-08-13T14:37:00+07:00",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "research_parent_observed": "48f5f341762c7d1e76d261e2d87eac536a7747bb",
+  "product_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "dc31d365ee8699602f4dc2225fb767a0f12f9e2f",
+    "parent_candidate_pr": 557,
+    "parent_base_observed_during_stack_creation": "af152599cfe1bf66c71c6b5e81e0f9ffd9c5e389",
+    "stacked_boundary_pr": 571,
+    "stacked_head": "6564f448d63d52ca1ae9dd89bb8faca079559852",
+    "tested_current_composition_sha": "b2c7d194f59e25f5d9a1eb6fd27b831073f6822c",
+    "self_hosted_run": 31678380784,
+    "self_hosted_job": 94377952064,
+    "self_hosted_conclusion": "success"
+  },
+  "observed_reality": [
+    "The current connection-guard candidate deliberately makes point-in-time database/WAL object claims but keeps exclusive_connection_bootstrap_attested=false, temporal_no_move_history_attested=false, productive_persistence_path_exercised=false, restart_recovery_attested=false, and whole Frank v0.1 acceptance unclaimed.",
+    "The parent SQLite guard branch was moving concurrently during this cycle; the new work was therefore isolated as stacked draft PR571 rather than overwriting PR557.",
+    "The dedicated PR571 self-hosted Linux/X64 lane rebuilt and bound SQLite 3.53.4 with SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and passed the ordinary temporal-boundary regression plus repository static integrity on synthetic current-composition SHA b2c7d194f59e25f5d9a1eb6fd27b831073f6822c."
+  ],
+  "macrocycle_unusual_experiment": {
+    "count": 1,
+    "name": "PRE_GUARD_CONCURRENCY_ERASURE",
+    "scope": "disposable local SQLite 3.46.1 WAL fixture only",
+    "intervention": "Connection A established the baseline. Connection B opened the same WAL database, wrote and committed, ran a PASSIVE checkpoint, then closed. A then ran wal_checkpoint(TRUNCATE).",
+    "observations": [
+      "PRAGMA database_list before and after the parallel-connection episode was identical.",
+      "The second connection's committed row remained visible.",
+      "After TRUNCATE the canonical WAL path remained present at size 0 bytes."
+    ],
+    "result": "A later clean point-in-time database/WAL observation does not establish that no prior parallel SQLite connection existed.",
+    "nonclaim": "The experiment did not reproduce corruption, did not falsify the current point-in-time guard, and did not touch productive Hostinger or canonical Frank state."
+  },
+  "generated_reality": {
+    "hypothesis": "If release acceptance treats a later clean SQLite object-attestation PASS as proof of exclusive/single-connection bootstrap history, a prior parallel writer/checkpointer episode can be erased from the observable boundary and the acceptance claim can exceed the evidence.",
+    "strongest_counterhypothesis": "Temporal exclusivity may be independently guaranteed by the productive launch/service/lease topology, making historical inference from the SQLite guard unnecessary; in that world the guard is correctly scoped as a point-in-time boundary only.",
+    "discriminator": "Require a separately measured productive bootstrap/execution exclusivity proof and keep the SQLite guard receipt incapable of claiming historical exclusivity by itself.",
+    "status": "SUPPORTED_SCOPE_BOUNDARY"
+  },
+  "ordinary_regression": {
+    "path": "tests/test_frank_sqlite_pre_guard_history_boundary_v1.py",
+    "workflow": ".github/workflows/frank-sqlite-pre-guard-history-boundary-v1.yml",
+    "expected_semantics": "The later current guard legitimately passes point-in-time object checks after the prior connection episode, while temporal/bootstrap/productive/restart/whole-acceptance claims remain false or unclaimed.",
+    "run_result": "PASS",
+    "new_go_unusual_experiment_count_in_ci": 0,
+    "static_integrity": "PASS"
+  },
+  "grf_outcome": {
+    "point_in_time_identity_implies_prior_exclusive_bootstrap": "REJECT",
+    "point_in_time_connection_guard": "RETAIN",
+    "independent_temporal_bootstrap_or_single_writer_proof": "RETAIN_AS_RELEASE_OBLIGATION",
+    "mechanism_test_implies_productive_hostinger_acceptance": "REJECT"
+  },
+  "next_falsifier": {
+    "id": "PRODUCTIVE_BOOTSTRAP_EXCLUSIVITY_BINDING",
+    "goal": "Bind the accepted Hostinger ProductStart/self.root generation to the exact canonical UnifiedDB open path and prove or fail closed on concurrent/stale sibling access across bootstrap, steady state, crash/restart and reopen.",
+    "required_controls": [
+      "second concurrent opener denied or detected",
+      "stale generation denied",
+      "restart/reopen preserves admitted lineage",
+      "library/runtime downgrade or swap denied",
+      "fresh point-in-time DB/WAL guard rechecked at consequential boundaries"
+    ],
+    "promotion_rule": "Only exact productive accepted-host evidence may close the corresponding F-V01-13 release obligation."
+  },
+  "architecture_delta": "TEST_OBLIGATION_PLUS_SCOPE_REGRESSION",
+  "effect_authority_change": false,
+  "frank_harness_authority_change": false,
+  "canonical_frank_state_mutated": false,
+  "productive_hostinger_mutation": false,
+  "training_authorization_change": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "sources": [
+    "https://sqlite.org/wal.html",
+    "https://sqlite.org/releaselog/3_53_4.html",
+    "gschaidergabriel/Dr.-Unterweger#557",
+    "gschaidergabriel/Dr.-Unterweger#571",
+    "GitHub Actions run 31678380784"
+  ]
+}

@@ -1,3 +1,7 @@
+<!-- RAE_META
+{"packet_id":"KMP-FRANK-R10-LOOP-QUALITY-POLICY-RECEIPT-20260809","title":"KMP-FRANK-R10-LOOP-QUALITY-POLICY-RECEIPT-20260809","domains":["frank"],"epistemic_class":"REPOSITORY_CODE_AUDIT_PLUS_LOCAL_COMPONENT_VALIDATION_PLUS_PRIMARY_STANDARD_SUPPORT","claim_status_hint":"CURRENT","origin_actor":"chatgpt-secondary","source_refs":["research_entity/trigger_runs/frank/frank-20260809T1931p0700-chatgpt-secondary-log-state-three-cycle/EXECUTION_RECEIPT.json","gschaidergabriel/Dr.-Unterweger@ef22a56990e8ebdfc3e7cab6292b74daf55d94d2"]}
+RAE_META -->
+
 # KMP-FRANK-R10-LOOP-QUALITY-POLICY-RECEIPT-20260809
 
 packet_id: `KMP-FRANK-R10-LOOP-QUALITY-POLICY-RECEIPT-20260809`

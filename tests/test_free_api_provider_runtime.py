@@ -106,6 +106,53 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_request_messages_are_snapshotted_before_routing_side_effects(self):
+        messages = [{"role": "user", "content": "validated-text"}]
+
+        class MutatingEnvironment(dict):
+            mutated = False
+
+            def get(self, key, default=None):
+                if not self.mutated:
+                    self.mutated = True
+                    messages[0]["content"] = ""
+                    messages[0]["tool_calls"] = [{"id": "unvalidated"}]
+                return super().get(key, default)
+
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {"role": "assistant", "content": "ok"},
+                    }]
+                }).encode()
+
+        captured = {}
+
+        def opener(request, timeout):
+            captured["body"] = json.loads(request.data)
+            return Response()
+
+        env = MutatingEnvironment({
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        })
+        result = MOD.execute_chat(
+            messages, model="mock", environ=env, opener=opener,
+            now=iter((20.0, 20.01)).__next__,
+        )
+
+        self.assertEqual(result["content"], "ok")
+        self.assertEqual(
+            captured["body"]["messages"],
+            [{"role": "user", "content": "validated-text"}],
+        )
+
     def test_model_name_with_surrounding_whitespace_is_blocked_before_network(self):
         called = False
 

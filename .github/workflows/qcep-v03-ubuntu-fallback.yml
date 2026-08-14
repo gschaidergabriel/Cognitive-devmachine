@@ -1,0 +1,115 @@
+name: QCEP V03 Hosted Ubuntu Fallback
+
+on:
+  push:
+    branches: ['research/qcep-exact-topk-v03-20260810']
+    paths:
+      - 'research_entity/harness/reference/query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/test_query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py'
+      - 'research_entity/harness/reference/benchmark_qcep_u15_exact_topk_v03.py'
+      - '.github/workflows/qcep-v03-ubuntu-fallback.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/test_query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py'
+      - 'research_entity/harness/reference/benchmark_qcep_u15_exact_topk_v03.py'
+      - '.github/workflows/qcep-v03-ubuntu-fallback.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: qcep-v03-hosted-ubuntu-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and run invariants
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python -m py_compile \
+            research_entity/harness/reference/query_conditioned_evidence_projection.py \
+            research_entity/harness/reference/test_query_conditioned_evidence_projection.py \
+            research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py \
+            research_entity/harness/reference/benchmark_qcep_u15_exact_topk_v03.py \
+            research_entity/harness/reference/unifieddb_emergent_exact_topk.py \
+            research_entity/harness/reference/unifieddb_emergent_preprocessor.py \
+            research_entity/runtime/semantic_gap_controller_v15.py
+          python -m unittest -v research_entity.harness.reference.test_query_conditioned_evidence_projection
+      - name: Execute both differentials
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/qcep-v03
+          python -m research_entity.harness.reference.benchmark_qcep_exact_topk_v03 > /tmp/qcep-v03/QCEP_GRAPH.json
+          python -m research_entity.harness.reference.benchmark_qcep_u15_exact_topk_v03 > /tmp/qcep-v03/QCEP_U15.json
+      - name: Adjudicate and bind runtime metadata
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,platform,socket,sqlite3,sys
+          from datetime import datetime,timezone
+          from pathlib import Path
+          meta={
+            'evidence_class':'REAL_GITHUB_HOSTED_UBUNTU_EXECUTION_NOT_HOSTINGER_NOT_TARGET_HOST',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'github_sha':os.environ['GITHUB_SHA'],
+            'github_run_id':os.environ['GITHUB_RUN_ID'],
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+          }
+          specs=[
+            ('QCEP_GRAPH.json','candidate_gate','promote_for_u15_falsifier'),
+            ('QCEP_U15.json','candidate_gate','promote_for_real_corpus_falsifier'),
+          ]
+          failed=[]
+          for filename,gate_key,promotion_key in specs:
+            p=Path('/tmp/qcep-v03')/filename
+            x=json.loads(p.read_text()); x['execution_metadata']=meta
+            p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+            gate=x[gate_key]
+            print(filename,json.dumps(gate,indent=2,sort_keys=True))
+            if not bool(gate[promotion_key]): failed.append(filename)
+          if failed: raise SystemExit('QCEP lesion gate failed: '+','.join(failed))
+          PY
+      - name: Persist hosted-Ubuntu receipts to candidate branch
+        if: ${{ always() && github.event_name == 'push' }}
+        run: |
+          set -euo pipefail
+          test -f /tmp/qcep-v03/QCEP_GRAPH.json
+          test -f /tmp/qcep-v03/QCEP_U15.json
+          mkdir -p research_entity/experiments/unifieddb_qcep_v03_hosted_ubuntu
+          cp /tmp/qcep-v03/QCEP_GRAPH.json research_entity/experiments/unifieddb_qcep_v03_hosted_ubuntu/LATEST_GRAPH.json
+          cp /tmp/qcep-v03/QCEP_U15.json research_entity/experiments/unifieddb_qcep_v03_hosted_ubuntu/LATEST_U15.json
+          git config user.name 'clay-qcep-hosted-ubuntu'
+          git config user.email 'clay-qcep-hosted-ubuntu@users.noreply.github.com'
+          git add research_entity/experiments/unifieddb_qcep_v03_hosted_ubuntu/
+          git commit -m "evidence(unifieddb): persist QCEP hosted-Ubuntu receipts [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qcep-v03-hosted-ubuntu-${{ github.run_id }}
+          path: /tmp/qcep-v03/*.json
+          if-no-files-found: error

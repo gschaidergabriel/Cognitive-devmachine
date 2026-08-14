@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "recorded_at": "2026-08-13T00:08:00+07:00",
+  "research_organ": "chatgpt-gpt-5.6-sol-temporary-clay-worker",
+  "parent_research_main_observed": "26accebc2fcd4d3e52645d8a8f842c1e26a0ca53",
+  "product_observed": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_sha": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "candidate_pr": 557,
+    "candidate_head_observed": "ea3d3a28f1f4beaf0bca40ccf90913a4010f1208"
+  },
+  "grf": {
+    "r0_observed": [
+      "PR #557 temporarily calls Connection.enable_load_extension(True), loads the hash-bound guard extension, then disables extension loading.",
+      "Python documents that check_same_thread=False permits one sqlite3.Connection to be accessed from multiple threads, with user serialization obligations.",
+      "SQLite documents that sqlite3_enable_load_extension enables both the C load API and the SQL load_extension() function and recommends SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION when only the C API is needed."
+    ],
+    "hypothesis": "The candidate's temporary extension-loading enablement is effectively private to load_guard and cannot be observed by another user of the same shared connection.",
+    "strongest_counterhypothesis": "If the same connection is thread-shared and execution interleaves after enablement but before disablement, another holder of that connection can use the temporary load capability.",
+    "falsifier": "One disposable shared sqlite3.Connection with check_same_thread=False; intentionally force one scheduler yield immediately after enable_load_extension(True), then have a second thread attempt to load a benign marker extension before the guard path disables extension loading.",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED_AT_MECHANISM_LEVEL",
+    "collapse": [
+      "REJECT general inference: temporary enable_load_extension(True) is connection-private or intrinsically race-free.",
+      "RETAIN the hash/open-fd binding of the intended guard artifact as useful for that intended load only.",
+      "DEFER production exploitability: the experiment deliberately forced an interleaving and did not run on accepted Hostinger or Frank ProductStart.",
+      "PROMOTION OBLIGATION: productive integration must either make guard loading a provably exclusive pre-publication/bootstrap operation, or use a stronger non-shared/non-loadable mechanism; SQL-level extension loading should remain disabled."
+    ]
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "SQLITE_EXTENSION_ENABLE_WINDOW_RACE",
+    "scope": "disposable local temporary directory; benign diagnostic extensions only",
+    "environment": {
+      "python_sqlite_version": "3.46.1",
+      "production_host": false,
+      "frank_runtime": false
+    },
+    "intervention": "A sqlite3.Connection subclass intentionally yielded after enabling extension loading. A second thread sharing that same connection attempted one benign marker-extension load during the enabled interval.",
+    "observations": {
+      "concurrent_marker_load_during_window": "LOADED",
+      "marker_function_after_guard": "RACE_MARKER_LOADED",
+      "same_marker_load_after_disable": "DENIED_OPERATIONAL_ERROR"
+    },
+    "limitations": [
+      "The scheduling yield was deliberately injected; natural exploit frequency was not measured.",
+      "The competing thread had direct Python Connection access, which is a stronger capability than SQL-only ingress.",
+      "No accepted-host, ProductStart, UnifiedDB or effect-authority mutation was performed."
+    ],
+    "cleanup": "temporary build/database directory removed"
+  },
+  "primary_external_evidence": [
+    {
+      "source": "Python 3.13 sqlite3 documentation",
+      "claim": "check_same_thread=False permits multi-thread access to a connection and requires user serialization where needed."
+    },
+    {
+      "source": "SQLite Enable Or Disable Extension Loading",
+      "claim": "sqlite3_enable_load_extension enables both C and SQL loading; SQLite recommends SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION to keep SQL load_extension disabled."
+    },
+    {
+      "source": "SQLite Database Connection Configuration Options",
+      "claim": "SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION enables the C sqlite3_load_extension interface independently of the SQL load_extension function."
+    }
+  ],
+  "frank_v0_1_impact": {
+    "workspace_status_change": "NO_CHANGE",
+    "release_status": "F-V01-13 remains IN_PROGRESS",
+    "candidate_pr557_status": "DRAFT_TESTING",
+    "recommended_hardening": [
+      "Do not treat temporary Connection.enable_load_extension(True) as a safe production primitive on a connection that can already be shared or reached by competing execution.",
+      "At minimum keep SQL load_extension disabled via SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION when dynamic loading is unavoidable.",
+      "Require machine-checkable exclusive bootstrap/pre-publication ownership for the productive connection during any C-API extension load, or replace loadable diagnostics with a stronger built-in/static mechanism.",
+      "Add an ordinary regression/precondition that distinguishes exclusive bootstrap from a shared-connection state; do not claim this receipt closes the accepted Hostinger gate."
+    ],
+    "training_authorized": false,
+    "harness_authority_changed": false
+  }
+}

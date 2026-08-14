@@ -1,0 +1,68 @@
+{
+  "candidate": "ATOMIC-CANDIDATE-CJC-001",
+  "direct_frank_v0_1_gate": {
+    "architecture_promotion": false,
+    "authority_minted": false,
+    "components": [
+      {
+        "reasons": ["COORDINATE_HIDDEN_CAUSAL", "COORDINATE_STATE_ORDER"],
+        "use_refs": ["A", "B", "C"]
+      }
+    ],
+    "independent_use_refs": ["D"],
+    "route_counts": {
+      "COORDINATE_HIDDEN_CAUSAL": 1,
+      "COORDINATE_STATE_ORDER": 1,
+      "FALLBACK_EFFECT_GATE": 0,
+      "FALLBACK_UNKNOWN": 0,
+      "INDEPENDENT_EXACT": 4,
+      "REJECT_STALE_STATE": 0
+    },
+    "target_vps_evidence": false
+  },
+  "evidence_class": "LOCAL_SYNTHETIC_EXECUTABLE_PROXY",
+  "primary_pair": {
+    "n": 20000,
+    "seed": 20260810,
+    "class_counts": {
+      "FULL_COMMUTE": 14928,
+      "HIDDEN_CAUSAL_NONCOMMUTE": 784,
+      "STATE_NONCOMMUTE": 4288
+    },
+    "cjc_exact_classification_accuracy": 1.0,
+    "state_only_hidden_false_safe_count": 784,
+    "state_only_hidden_false_safe_rate_all": 0.0392,
+    "rw_false_conflict_count": 1016,
+    "rw_unsafe_commute_count": 0,
+    "generic_python_cjc_over_exhaustive_reference": 13.429897782459392
+  },
+  "context_scale": [
+    {"context_length":0,"total_use_refs":2,"truth_table_points":4,"accuracy_when_exact":1.0,"reference_over_cjc":0.028461038194107956},
+    {"context_length":2,"total_use_refs":4,"truth_table_points":16,"accuracy_when_exact":1.0,"reference_over_cjc":0.14433821896678795},
+    {"context_length":4,"total_use_refs":6,"truth_table_points":64,"accuracy_when_exact":1.0,"reference_over_cjc":0.35785913577080924},
+    {"context_length":6,"total_use_refs":8,"truth_table_points":256,"accuracy_when_exact":1.0,"reference_over_cjc":1.242056646166534},
+    {"context_length":8,"total_use_refs":10,"truth_table_points":1024,"accuracy_when_exact":1.0,"reference_over_cjc":5.2408426413405}
+  ],
+  "replication": {
+    "seeds": [20260820, 20260821, 20260822, 20260823, 20260824],
+    "pair_cases_total": 25000,
+    "all_pair_accuracies_exact_1": true,
+    "hidden_rate_mean": 0.03684,
+    "hidden_rate_min": 0.0324,
+    "hidden_rate_max": 0.039,
+    "first_crossover_context_lengths": [6, 8, 6, 6, 8],
+    "all_replications_show_crossover_by_context_8": true
+  },
+  "negative_controls": {
+    "stale_epoch": "PASS_FAIL_CLOSED",
+    "opaque_boundary": "PASS_FAIL_CLOSED",
+    "degree_or_term_overflow": "PASS_NOT_EXACT",
+    "effect_authority_minted": false
+  },
+  "test_summary": {
+    "full_local_suite": {"passed": 35, "failed": 0, "errors": 0},
+    "repo_packet_consolidated_suite": {"passed": 17, "failed": 0, "errors": 0, "random_differential_cases": 2500}
+  },
+  "scope_warning": "No target-VPS or real Frank-v0.1 task evidence; timings are generic Python proxy only.",
+  "schema_version": "1.0"
+}

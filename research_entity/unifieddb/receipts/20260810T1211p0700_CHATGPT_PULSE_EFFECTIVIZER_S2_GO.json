@@ -1,0 +1,194 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "20260810T1211p0700-chatgpt-pulse-effectivizer-s2-go",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_subject": "UNIFIEDDB_DATABASE_PULSE_FINAL_STATE_EFFECTIVIZER_S2",
+  "status": "LOCAL_PROXY_SUPPORTED_REMOTE_UBUNTU_PENDING_NOT_PROMOTED",
+  "canonical_promotion": "NONE",
+  "program_stage_observed": "BASE_CLAYCODE_RELEASE",
+  "coordination": {
+    "decision": "ADDITIVE_UNIFIEDDB_RESEARCH_LANE",
+    "reason": "Concurrent BASE ClayCode parser workers were active; this work touches new UnifiedDB runtime/test/benchmark/workflow paths and does not overwrite their critical-path files.",
+    "concurrent_head_evidence": [
+      "e005557a6a9381bff39465c42f33930b54b48807",
+      "3cf17c3fbe53242c54d53e34bdb5da6435e56448",
+      "cf7f66b356168137908a279d4135fde845799591",
+      "8643f7eeb97459585a63984f8f2a3bb7f59f4e8f"
+    ]
+  },
+  "hypothesis": "During an explicitly read-free interval, safe complete Pulse notifications can be composed into one final-state projection delta and one coherent SPM generation without changing the final projection state, reducing complete generation-map publication amplification and redundant seed recomputation.",
+  "strongest_counterhypothesis": "Intermediate observers, temporal consumers, non-composable transitions, incomplete impact closure or epoch discontinuity require every Pulse to remain individually observable; batching across such boundaries would be semantically wrong and must fail back to sequential publication.",
+  "existing_baseline": {
+    "implementation": "UNIFIEDDB_SEGMENTED_PULSE_MAINTENANCE_S1",
+    "relevant_property": "Each coherent SPM-S1 Pulse publishes a complete generation->seed->immutable-segment map even when only a bounded seed subset is recomputed.",
+    "prior_vps_integrity_receipt": "research_entity/unifieddb/receipts/20260810T0759p0700_CHATGPT_SPM_S1_INTEGRITY_VPS.json",
+    "prior_guarded_read_p50_ms": 0.021825,
+    "prior_raw_read_p50_ms": 0.0167955,
+    "prior_guard_delta_p50_ms": 0.0050295,
+    "prior_full_repair_ms": 1289.507415
+  },
+  "implemented": [
+    {
+      "path": "research_entity/runtime/semantic_pulse_effectivizer_s2.py",
+      "commit": "a9d34c66ceac1ea7e120c7bfdf2ad86a840e43ab"
+    },
+    {
+      "path": "research_entity/runtime/test_semantic_pulse_effectivizer_s2.py",
+      "commit": "6bec81cee427e79afd920b50f7858641bd4872f0"
+    },
+    {
+      "path": "research_entity/runtime/benchmark_semantic_pulse_effectivizer_s2.py",
+      "commit": "c68baa7694c705ad872c5c0a6bc13f55b46492e5"
+    },
+    {
+      "path": ".github/workflows/unifieddb-pulse-effectivizer-s2-hostinger.yml",
+      "commit": "9093efff6a257d991c6fcfbc9378344017e5dd9b"
+    }
+  ],
+  "semantic_guards": [
+    "raw authoritative events remain preserved outside the effectivizer",
+    "only VALUE_UPDATE/STATUS_UPDATE/EDGE_WEIGHT_UPDATE/EDGE_REMOVE/LOCAL_REWRITE are admitted",
+    "final_state_projection_safe must be explicit",
+    "intermediate_observation_required must be false",
+    "source and graph epochs must be contiguous",
+    "per-logical-id before/after fingerprint lineage must compose exactly",
+    "net-zero chains may cancel only inside the final-state projection work plan",
+    "impact seeds are unioned only for remaining effective changes",
+    "authority remains projection-preprocessor-only with no truth/GWT/model/tool/effect authority"
+  ],
+  "local_tests": {
+    "truth_class": "VERIFIED_LOCAL_EXECUTION_SYNTHETIC_SCOPE_ONLY",
+    "passed": 8,
+    "total": 8,
+    "covered": [
+      "chain composition and exact net-zero cancellation",
+      "fully cancelled batch exposes metadata-only epoch gap",
+      "SPM-S1 adapter shape",
+      "fingerprint discontinuity rejection",
+      "non-contiguous epoch rejection",
+      "intermediate observation boundary rejection",
+      "unsafe change-class rejection",
+      "duplicate event-id rejection"
+    ]
+  },
+  "local_proxy_benchmark": {
+    "truth_class": "VERIFIED_LOCAL_EXECUTION_BOUNDED_MECHANISM_PROXY_ONLY",
+    "platform": "Linux 6.18.35 x86_64 glibc2.41",
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "fixture": {
+      "seeds": 5000,
+      "logicals": 200,
+      "events": 200,
+      "batch_size": 10,
+      "repetitions": 3,
+      "rng_seed": 7,
+      "intermediate_observation": false
+    },
+    "sequential": {
+      "generation_count": 200,
+      "generation_map_rows": 1000000,
+      "recomputed_seeds": 4800,
+      "p50_seconds": 1.169420399,
+      "p95_seconds": 1.176191911
+    },
+    "effectivized": {
+      "generation_count": 20,
+      "generation_map_rows": 100000,
+      "recomputed_seeds": 3774,
+      "p50_seconds": 0.114670046,
+      "p95_seconds": 0.115815418
+    },
+    "comparison": {
+      "p50_speedup": 10.198,
+      "generation_map_row_reduction_fraction": 0.9,
+      "recompute_reduction_fraction": 0.21375,
+      "final_state_hash_equal": true,
+      "final_state_hash": "ad67f11b16a3dce861011d4aae1b5b91d631fa5f783cb14a0bcdbaae61b6f5cb"
+    },
+    "limitations": [
+      "synthetic read-free final-state projection workload",
+      "proxy includes complete generation-map publication plus deterministic seed recomputation rather than the entire SPM-S1 schema/runtime",
+      "real Frank Pulse distributions are unmeasured",
+      "crash/recovery/concurrency are unmeasured",
+      "downstream Frank outcome quality is unmeasured",
+      "Andreas target hardware is unmeasured"
+    ]
+  },
+  "out_of_box_experiment": {
+    "count_in_this_go_macrocycle": 1,
+    "name": "FINAL_STATE_PULSE_EFFECTIVIZATION",
+    "inspiration": "Cost-based incremental view maintenance and changeset effectivization/consolidation rather than treating every logical update as requiring immediate full projection publication.",
+    "result": "SUPPORTED_AS_BOUNDED_MECHANISM_CANDIDATE_ONLY"
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Enzyme: Cost-Based Incremental View Maintenance",
+      "url": "https://arxiv.org/abs/2603.27775",
+      "relevance": "Cost-based IVM, batching opportunities and effectivized changesets support testing consolidation as a physical-maintenance optimization, not a truth mechanism."
+    },
+    {
+      "source": "SQLite Session Extension Introduction",
+      "url": "https://www.sqlite.org/sessionintro.html",
+      "relevance": "Demonstrates constrained changeset coalescing/net-effect semantics; does not prove Clay semantic safety."
+    },
+    {
+      "source": "SQLite 3.51.3 release log",
+      "url": "https://www.sqlite.org/releaselog/3_51_3.html",
+      "relevance": "Prior SPM concurrency evidence on SQLite 3.45.1 remains insufficient for WAL-reset stress promotion."
+    }
+  ],
+  "remote_ubuntu": {
+    "workflow_commit": "9093efff6a257d991c6fcfbc9378344017e5dd9b",
+    "expected_receipt": "research_entity/unifieddb/receipts/PULSE_EFFECTIVIZER_S2_HOSTINGER_LATEST.json",
+    "status": "UNKNOWN_PENDING",
+    "observed_at_local": "2026-08-10T12:11:10+07:00",
+    "evidence": "No matching Hostinger receipt commit was present in the fresh main commit tail; connector-visible combined status and commit-associated workflow-run queries returned no runs/statuses. This is not PASS and not FAIL."
+  },
+  "newly_exposed_gap": {
+    "name": "SPM_S1_METADATA_ONLY_EPOCH_ADVANCE",
+    "description": "A fully net-cancelled read-free batch still spans authoritative epochs, but SPM-S1 currently rejects a Pulse with no changed logical ids. S2 therefore refuses adaptation rather than inventing a fake change.",
+    "status": "OPEN_TEST_OBLIGATION",
+    "safe_current_behavior": "FAIL_TO_SEQUENTIAL_OR_EXPLICIT_METADATA_ONLY_PRIMITIVE_BEFORE_USE"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "change": "Insert an optional bounded final-state Pulse effectivizer before SPM-S1 projection maintenance only across proven read-free semantic intervals; retain raw event history and publish one coherent final-state generation at the observation boundary.",
+    "rollback": "Disable S2 and process every Pulse sequentially through existing SPM-S1.",
+    "promotion_gate": [
+      "remote exact current-main Ubuntu tests and benchmark receipt",
+      "SPM-S1 metadata-only epoch semantics resolved or explicit full-cancel fallback proven",
+      "full SPM-S1 matched benchmark rather than map proxy",
+      "crash/restart and reader/writer boundary tests",
+      "real Frank Pulse trace replay with observation-boundary labels",
+      "downstream retrieval/GWT/tool outcome equivalence or improvement",
+      "strong conventional SQLite/PostgreSQL baseline where applicable"
+    ]
+  },
+  "negative_and_counterevidence": [
+    "The 10.198x local p50 result is dominated by a synthetic complete-map publication proxy and must not be called a 10x UnifiedDB or Frank speedup.",
+    "Effectivization is invalid whenever an intermediate Pulse is semantically observable or causal.",
+    "A fully net-zero batch exposes a real epoch-publication gap in current SPM-S1.",
+    "Remote Ubuntu and target-hardware evidence are not yet available.",
+    "UnifiedDB/ClayGraph held-out superiority over strong conventional baselines remains unproven."
+  ],
+  "distribution": [
+    "unifieddb",
+    "claygraph",
+    "harness/recovery",
+    "runtime/continuity",
+    "frank/database-pulse"
+  ],
+  "next_falsifiers_ranked": [
+    "consume Hostinger S2 receipt or classify workflow failure",
+    "add/test metadata-only coherent generation epoch-advance primitive or prove sequential fallback",
+    "integrate S2 into a shadow-only SPM-S1 full-schema replay harness",
+    "replay real Pulse traces and label every intermediate-observation boundary",
+    "kill/restart around batched publication and verify last-known-good/raw-event recoverability",
+    "compare policy regret versus SEQUENTIAL_SPM, FULL_GENERATION and ONLINE under burst/churn regime changes"
+  ]
+}

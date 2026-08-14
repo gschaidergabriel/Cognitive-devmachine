@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.1",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "status": "TARGET_SUPPORTED_PROCESS_CRASH",
+  "hypothesis": "multiple concurrent WAL writers that each independently cross the V4 no-site fixed-SQLite 3.53.4 boundary preserve every application-acknowledged commit across process termination and reopen integral+writable",
+  "strongest_counterhypothesis": "prior process-crash success may not transfer to the repaired runtime/topology, or nested writer launch may inherit admission state and produce false composition evidence",
+  "target_result": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 371,
+    "head": "c4cf3747ee8e57c10c754b7a8898264181744777",
+    "workflow": "Frank UnifiedDB V4 process crash composition VPS",
+    "workflow_run": 31510023573,
+    "job": 93841210700,
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "system_sqlite_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+    "private_sqlite": {
+      "version": "3.53.4",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "library_sha256": "3bc7d1bfd013ffb645e7e16414f498873b13044a26a114c5fa12e24ef18968df",
+      "manifest_sha256": "7567f708d6c02f02a1c07c03ec05d563c21b7f081001cf33b0c9752aa35b02c8",
+      "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338"
+    },
+    "matrix": {
+      "sync_modes": ["NORMAL", "FULL"],
+      "cycles_total": 8,
+      "cycles_per_mode": 4,
+      "writers_per_cycle": 4,
+      "database": "disposable WAL only",
+      "ack_rule": "append+fsync transaction id only after COMMIT returns"
+    },
+    "checks_passed": 10,
+    "checks_total": 10,
+    "totals": {
+      "acknowledged_commits": 4250,
+      "lost_acknowledged_commits": 0,
+      "phantom_commits": 0,
+      "committed_but_unlogged_in_flight": 7
+    },
+    "all_cycles_integrity_check_ok": true,
+    "all_cycles_writable_after_process_crash": true,
+    "all_writers_independently_v4_admitted": true,
+    "all_writer_targets_observed_exact_v4_runtime": true,
+    "all_selected_writer_processes_terminated_by_sigkill": true,
+    "artifact": {
+      "id": 9109020862,
+      "digest_sha256": "7940c5f03d3fe865e8220386f7f0bda93c09df77da5a323e5aeac8432bd62ea3"
+    }
+  },
+  "counterhypothesis_adjudication": {
+    "runtime_transfer_failure": "REFUTED_FOR_TESTED_PROCESS_CRASH_MATRIX",
+    "nested_admission_state_transfer": "FENCED_BY_STRIPPING_INTERNAL_CHILD_MARKERS_AND_REQUIRING_PER_WRITER_V4_RECEIPTS"
+  },
+  "promotion_state": "PROCESS_CRASH_SLICE_SUPPORTED_REMAINING_RECOVERY_CLASSES_OPEN",
+  "claim_boundaries": [
+    "PROCESS_CRASH only",
+    "no OS-crash claim",
+    "no power-loss claim",
+    "no canonical migration claim",
+    "no selected-lineage logical rollback claim",
+    "no service boot non-bypass claim",
+    "no whole Frank v0.1 acceptance"
+  ],
+  "canonical_state_mutated": false,
+  "external_effect_performed": false,
+  "training_authorized": false
+}

@@ -1,0 +1,62 @@
+module clay.atomic.swarm_reentry
+version "0.1-owner-fixed-2026-08-10"
+status PROJECT_OWNER_FIXED_RESEARCH_TRANSPORT
+
+atomic=@research_entity/triggers/ATOMIC_RADICAL_INVENTION_RESEARCH_PROTOCOL.md
+envelope=@research_entity/global/ATOMIC_GWT_THINKSPACE_AND_CANDIDATE_ENVELOPE.clay
+work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+mesh=@research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md
+
+goal_ref="SELF_ROOT_V0_1_TARGET_VPS_API"
+possibility_projection=UnifiedDB.v_clay_system_possibility_table
+
+record AtomicReentry {
+  reentry_id: String;
+  run_id: String;
+  candidate_id: String;
+  candidate_version: String;
+  candidate_semantic_hash: Hash;
+  status: envelope.AtomicStatus;
+  novelty: envelope.AtomicNovelty;
+  evidence_class: envelope.AtomicEvidence;
+  measurement_ref: Ref;
+  counterhypothesis_ref: Ref;
+  prior_art_ref: Ref;
+  affected_branches: Set<String>;
+  integration_prerequisites: Set<Clay>;
+  strongest_remaining_falsifier: Clay;
+  current_v0_1_relevance: DIRECT|DE_RISKING|POST_V0_1|UNKNOWN;
+  ancestry: Set<Ref>;
+  created_at: Time;
+}
+
+rule every_tested_atomic_candidate -> append AtomicReentry
+rule AtomicReentry -> UnifiedDB materialization -> possibility_projection
+rule possibility_projection_is_derived_not_truth
+rule candidate_version_measured -> immutable
+rule candidate_refinement -> new_candidate_version + parent_hash
+rule candidate_status in {PROMISING,SUPPORTED_PROXY,SUPPORTED_TARGET} -> may_create WORK_CREATE origin_class=ATOMIC_MEASURED_POSSIBILITY goal_ref=goal_ref
+rule candidate_status in {REFUTED,NO_GAIN} -> preserve_negative_result + no_implementation_work_required
+rule candidate_status=GENERATED|COHERENT|TESTABLE -> research_possibility_only
+rule WORK_CREATE_from_atomic requires exact candidate_version + measurement_ref + falsifier + affected_branch feedback
+rule work_creation != architecture_promotion
+rule architecture_promotion requires owning_branch_review + evidence_gate + compatibility_test + rollback_path
+rule all_affected_branches receive evidence_preserving feedback|NO_CHANGE
+rule frank receives architecture_implication
+rule claycode receives primitive_or_expressibility_delta
+rule harness receives executable_discriminator_and_regression
+rule gwt receives thinkspace_and_workspace_delta
+rule hyperposition receives alternative/topology_delta
+rule claygraph receives relational/topology_delta
+rule unifieddb receives persistence/query/reentry_delta
+rule emergenz receives causal_readout_delta
+rule clayresearch receives global_synthesis_delta
+rule q23 receives perception_delta when applicable
+rule fusion+hypofusion+go+666+future_atomic discover AtomicReentry through current research mesh/projection
+rule self.root may receive admitted ResearchEntity projection but never self-promotes AtomicReentry into own Harness
+
+invariant ATOMIC_RESULT_IS_POSSIBILITY_UNTIL_PROMOTED
+invariant MEASUREMENTS_AND_COUNTEREVIDENCE_TRAVEL_WITH_CANDIDATE
+invariant NO_WORLD_FIRST_WITHOUT_SCOPED_PRIOR_ART_EVIDENCE
+invariant NO_EFFECT_AUTHORITY_FROM_NOVELTY_OR_GWT_IGNITION

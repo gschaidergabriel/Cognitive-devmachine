@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0404p0700-chatgpt-secondary-effect261-semantic-lineage",
+  "trigger": "go",
+  "started_local": "2026-08-11T04:04:00+07:00",
+  "receipt_local": "2026-08-11T04:18:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_harness_authority": "INDEPENDENT_RESEARCH_TEST_IMPLEMENTATION_ALLOWED",
+    "training_authorized": false
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "target_identity": "self.root",
+    "target_body": "accepted Hostinger Ubuntu VPS"
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "cycle_summary": {
+    "primary_effect_result": "MERGED_SUPPORTED_INTEGRATION",
+    "primary_identity_result": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
+    "exactly_one_new_oob_experiment": "SEMANTIC_TWIN_CAS_RACE",
+    "research_write": "COMMITTED"
+  },
+  "effect_authority_integration": {
+    "pull_request": 261,
+    "candidate_head": "cbb603fe9c0b8d28988a60612d562347d3edc000",
+    "tested_synthetic_merge": "10018046ca74e0cf4fc7002a3a0d62779efef855",
+    "target_run": 31423170075,
+    "target_runner": "clay",
+    "target_machine": "digital-retina",
+    "os_kernel": "Linux 6.8.0-117-generic Ubuntu x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "passed": [
+      "repo_static_integrity_audit",
+      "exact caller-bound execution-generation reservation/attempt/provider-precommit matrix",
+      "typed provider idempotency/reconciliation runtime matrix",
+      "verified provider outcome -> provenance-bound V17 re-entry -> DONE",
+      "current WP03 structured frontend + TypedIR provider declarations",
+      "current V17 schema authority/apply/rollback",
+      "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT prior-cycle discriminator"
+    ],
+    "merge_commit": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+    "merged_to_main": true,
+    "hosted_deep_integrity_disposition": "INFRASTRUCTURE_ONLY_ZERO_EXECUTED_STEPS_NOT_CANDIDATE_EVIDENCE",
+    "remaining_nonclaims": [
+      "real provider timeout-after-acceptance/reconciliation",
+      "WP04 type/effect/compiler/lowering/runtime acceptance",
+      "ordinary production effect routing non-bypassability end-to-end",
+      "final effect-authority terminal receipt",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "reused_swarm_evidence": {
+    "provider_snapshot_rollback": {
+      "pull_request": 263,
+      "target_run": 31432605112,
+      "tested_merge": "cb28d4f4624362b7f6f73cdc4dba519263eeb98e",
+      "status": "PASS_PROVIDER_RECONCILIATION_SURVIVES_LOCAL_SNAPSHOT_ROLLBACK",
+      "provider_commit_count": 1,
+      "second_provider_effect": false,
+      "recovered_state_before_reconciliation": "COMMITTING",
+      "recovered_state_after_reconciliation": "OUTCOME_SUCCEEDED",
+      "architecture_delta": "NO_CHANGE_MECHANISM_SUPPORTED_FOR_BOUND_PROVIDER_IDENTITY_ROLLBACK_WINDOW",
+      "scope": "local DB snapshot rollback with exact bound provider identity; not whole-VM rollback"
+    }
+  },
+  "identity_lineage_hypothesis": {
+    "problem": "same-source/same-metadata sibling state lineages can remain semantically divergent; metadata equality is not unique continuation",
+    "hypothesis": "an external selected semantic-lineage head with exact-parent hash binding and atomic compare-and-swap can select at most one concurrent sibling successor within the surviving selected-head failure domain",
+    "strongest_counterhypothesis": "the selected-head authority can itself be rolled back/replaced or lose trusted recovery/build provenance, so CAS alone is insufficient for finished boot continuity",
+    "candidate_pr": 267,
+    "candidate_head_after_mechanism_repair": "77cd21bf5e2d8b1df326a549e72ecb6890bcdfc7",
+    "latest_branch_head_workflow_only": "45152d1c5c9fc696a35f102fdda44a0e14c30d18"
+  },
+  "identity_lineage_first_falsifier": {
+    "target_run": 31432727356,
+    "status": "BLOCKED_BEFORE_OOB",
+    "failure": "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/identity/state_lineage_head_candidate.py",
+    "interpretation": "repository static authority correctly rejected broad schema executescript outside central migrator policy",
+    "oob_executed": false,
+    "repair": "replace executescript with explicit transaction-bounded candidate DDL without weakening audit",
+    "repair_commit": "77cd21bf5e2d8b1df326a549e72ecb6890bcdfc7"
+  },
+  "identity_lineage_target_evidence": {
+    "target_run": 31432856721,
+    "target_job": 93600149720,
+    "tested_synthetic_merge": "0b4e33ef5060cf7052f88cb5e3b95749db1b3b89",
+    "base_main": "d55b452776295153576011988b0befce7f13b238",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os_kernel": "Linux 6.8.0-117-generic Ubuntu x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "module_blob": "71a44af7851b0c28fd3538e84859a0eb4895e66a",
+    "test_blob": "4fca0a43e165426c6a830b364b3916259edf89ea",
+    "repo_static_integrity": "PASS",
+    "baseline": {
+      "status": "PASS_SEQUENTIAL_SELECTED_LINEAGE_BASELINE",
+      "final_sequence": 2,
+      "history_count": 3,
+      "immutable_update": true,
+      "immutable_delete": true,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    "oob": {
+      "experiment": "SEMANTIC_TWIN_CAS_RACE",
+      "status": "PASS_SINGLE_SELECTED_LINEAGE_HEAD_CAS_RACE",
+      "contenders": 2,
+      "winners": 1,
+      "losers": 1,
+      "twin_roots_distinct": true,
+      "loser_persisted": false,
+      "loser_initial_reason": "SELECTED_LINEAGE_HEAD_MOVED",
+      "loser_replay": "SELECTED_LINEAGE_HEAD_MOVED",
+      "history_count": 2,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "external_network_used": false,
+      "external_provider_used": false,
+      "canonical_state_mutated": false,
+      "effect_authority": "NONE",
+      "identity_authority": "NONE_CANDIDATE_SELECTION_MECHANISM_ONLY"
+    },
+    "promotion": "CANDIDATE_NOT_PROMOTED"
+  },
+  "external_primary_sources": [
+    {
+      "source": "RFC 9162 Certificate Transparency Version 2.0",
+      "url": "https://www.rfc-editor.org/rfc/rfc9162.html",
+      "used_for": "append-only predecessor/consistency relation analogy and split-view caveat"
+    },
+    {
+      "source": "The Update Framework specification",
+      "url": "https://theupdateframework.github.io/specification/",
+      "used_for": "rollback, freeze and mix-and-match threat separation"
+    },
+    {
+      "source": "etcd v3.6 concurrency/API guarantees",
+      "url": "https://etcd.io/docs/v3.6/dev-guide/api_concurrency_reference_v3/",
+      "used_for": "lock ownership combined with revision/transaction validation rather than lease possession alone"
+    },
+    {
+      "source": "SLSA Provenance v1.2",
+      "url": "https://slsa.dev/spec/v1.2/provenance",
+      "used_for": "artifact/source/build provenance remains separate from state-lineage selection"
+    }
+  ],
+  "architecture_delta": {
+    "effect_authority": "PROMOTED_TO_MAIN_PARTIAL_GATE: exact execution-generation + typed provider contract substrate",
+    "identity_recovery": "TESTING: selected semantic-lineage CAS candidate supported on target, not production-wired",
+    "recommended_composition": "bind one selected semantic-lineage head to boot continuity and compose it with a non-rollback generation/recovery authority such as the independently target-supported external generation-floor mechanism, while retaining trusted-builder/artifact provenance as a separate gate",
+    "merkle_tree_decision": "NOT_SELECTED_FOR_V0_1_YET: single selected-head hash chain + atomic CAS is the simpler tested primitive; full Merkle consistency machinery is unnecessary until multi-reader audit/log inclusion requirements justify it"
+  },
+  "negative_results": [
+    "candidate schema executescript outside migrator policy was rejected before experiment",
+    "CAS result does not establish whole-VM/storage rollback resistance",
+    "CAS result does not establish trusted builder/artifact provenance",
+    "CAS result does not mint production identity or effect authority"
+  ],
+  "next_frontier": [
+    "integrate selected-head proof into the fresh-main boot continuity evaluator without duplicating identity semantics",
+    "compose semantic lineage selection with surviving external generation/recovery authority and explicitly define the v0.1 rollback failure domain",
+    "retain owner-pinned trusted builder/artifact attestation as a separate F-V01-01 blocker",
+    "let parallel lanes continue WP04 module/type-effect work and provider-retention/real-provider uncertainty tests; do not duplicate them"
+  ]
+}

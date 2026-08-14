@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "HP-PAIRWISE-REDUCTION-FALSIFIER-V1-LOCAL",
+  "run_id": "hyperposition-20260810T2347p0700-chatgpt-secondary-bounded-irreducibility",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "evidence_class": "LOCAL_EXECUTION_NOT_TARGET_VPS",
+  "target_credit": {
+    "counts_as_frank_v0_1_pass": false,
+    "counts_as_claycode_wp03_pass": false,
+    "counts_as_hyperposition_component_pass": false
+  },
+  "experiment": {
+    "artifact": "PAIRWISE_REDUCTION_FALSIFIER.py",
+    "local_source_sha256": "0a63dc584f941eaf5d79b641bfdb220d711315bae496b347bb608cbd1e5981c6",
+    "result_sha256": "611776bd1eb8b1265d641a38577369e4374be6d6692930cd177471ee8807b3fe",
+    "runtime": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5"
+    },
+    "rows_per_relation": 8,
+    "observed": {
+      "pairwise_projection_collision": true,
+      "pairwise_projection_hash": "90bf0de7e6b9e82aaaf28a0cc158c5f7126fa3b6793cd2f29e786b7763d9b774",
+      "full_relation_hash_parity": "d76d14d5bf7ca875ff0589515716e3530df0cde53107aded564d93b6b236d1b9",
+      "full_relation_hash_inverted": "dadaae0ff0dfa3d1ed71c6639255fd5d5bb4825aca8edccf03d08523854f5547",
+      "reified_incidence_distinguishes_relations": true,
+      "contextual_projection_accuracy_collapsed": 0.5,
+      "contextual_projection_accuracy_hyperposition": 1.0,
+      "latent_pairwise_state_machine_accuracy": 1.0
+    }
+  },
+  "adjudication": {
+    "supported": [
+      "naive pairwise projection can destroy higher-order relation identity",
+      "context-preserving facets can avoid destructive last-write collapse in the constructed context-swap discriminator",
+      "a reified relation identity with typed roles can preserve n-ary semantics while physical incidence remains pairwise"
+    ],
+    "refuted_or_narrowed": [
+      "higher-order representation alone establishes absolute computational irreducibility",
+      "higher-order representation establishes hypercomputation or a beyond-Turing result"
+    ],
+    "new_definition_candidate": "Bounded irreducibility must be indexed by comparator class, intervention set and resource budget."
+  },
+  "limitations": [
+    "synthetic finite discriminator",
+    "local execution, not accepted target VPS",
+    "does not establish downstream Frank task benefit",
+    "does not establish phenomenal consciousness"
+  ],
+  "next_falsifier": "Run the same comparator bank on real Frank v0.1 GWT/Hyperposition episodes with matched seeds, intervention receipts and cost shadows; compare clique-pairwise, reified-relation-node and pairwise-state-machine reductions on the accepted target VPS."
+}

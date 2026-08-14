@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2216p0700-chatgpt-secondary-effect-boundary-mismatch",
+  "verdict": "REFINED_NO_LANGUAGE_SEMANTIC_CHANGE",
+  "prior_result": {
+    "commit": "c999441a759c8f319d27090c0768e9d6762b8d6a",
+    "finding": "G9 capability/effect semantics were adequate as an Ubuntu lowering candidate; concrete host enforcement and lowering remained implementation work.",
+    "ancestry": "PROJECT_INTERNAL_SHARED_ANCESTRY"
+  },
+  "new_current_evidence": [
+    {
+      "source": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "git_blob_sha": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+      "finding": "The current cycle calls Needle.execute(effect_intent) with one argument while separately declaring EffectIntent lowering."
+    },
+    {
+      "source": "gschaidergabriel/Dr.-Unterweger:claycode/frank_effects.clay",
+      "git_blob_sha": "8679542da4f31b99ae4a171f86554ed894eb6e34",
+      "source_sha256": "10fbc45dca45fe09322b4ab7c0b6621547918dd6fa8e1d37be5817b26ab59544",
+      "finding": "Current target API requires explicit authority, reservation and attempt construction before execute(intent, capability, node, attempt)."
+    },
+    {
+      "source": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
+      "run_id": "31400023607",
+      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_FRANK_V0_1_EFFECT_AUTHORITY_V1",
+      "finding": "The exact current target effect source passed the executable policy matrix on the accepted target VPS, but ClayCode-compiled execution and whole-Frank acceptance were explicitly not claimed."
+    }
+  ],
+  "strongest_counterhypothesis": "Needle.execute(effect_intent) is merely pseudocode shorthand and an already-existing deterministic hidden adapter materializes the target authority/lifecycle chain before execution.",
+  "counterhypothesis_status": "NOT_SUPPORTED_BY_CURRENT_EXACT_CONTRACT_EVIDENCE",
+  "falsifier": "Locate that exact current adapter with typed input/output, current component hash, authority provenance and runtime binding; execute it on the accepted target VPS and show model/cognitive state cannot mint actor, capability, authorization, reservation or attempt authority.",
+  "external_prior": {
+    "source": "WebAssembly Component Model WIT specification",
+    "use": "Implementation comparator only: explicit typed interface functions with named typed parameters/results support exact ABI-style contract boundaries.",
+    "limit": "Does not supply or justify any Frank production signature."
+  },
+  "decision": "Preserve frozen ClayCode semantics. Treat the current direct G9 V3 effect call as an implementation/type-effect boundary defect. Prefer a deterministic typed Needle lowering/adapter proven against the current Frank target API before considering any language-semantic change.",
+  "promotion": "NONE"
+}

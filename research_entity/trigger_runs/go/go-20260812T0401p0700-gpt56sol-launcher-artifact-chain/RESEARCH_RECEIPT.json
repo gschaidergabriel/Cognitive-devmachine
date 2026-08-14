@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0401p0700-gpt56sol-launcher-artifact-chain",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "3f57c1a09349e878b8333eb41631ae200255f1d9",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "fresh_product_main_observed": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+  "source_product_prs": [466, 468, 469, 470],
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "claim": "The WAL-reset bug affects upstream through 3.51.2 and is fixed in 3.51.3+; WAL mode with concurrent writers/checkpoint is the relevant trigger topology."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "claim": "SQLite 3.53.4 is on the fixed line and publishes source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "observed_reality": {
+    "current_workspace": "F-V01-13 remains IN_PROGRESS; production fixed-runtime admission and recovery remain release gates.",
+    "merged_runtime_state": "Main includes reproducible SQLite 3.53.4 parity runtime and V5 launcher GLIBC_TUNABLES rejection, but production /opt+/etc provisioning is not claimed closed.",
+    "parallel_lanes": {
+      "PR466": "SQLite library/manifest artifact authority candidate",
+      "PR468": "fresh-main systemd pre-exec parent gate candidate",
+      "PR469": "full parent-path no-symlink/root-owned integrity candidate stacked on systemd parent gate",
+      "PR470": "direct V5 guard loader-environment defense-in-depth candidate"
+    },
+    "target_checks_at_observation": "Relevant PR468/PR470 self-hosted checks were queued; no target PASS credited.",
+    "composition_gap": "The PR468/PR469 parent gate checks loaded/active systemd semantics, non-root user, loader-environment removal, launcher basename/absolute path, root ownership, no writable/symlink path components and unit fragment integrity, but it does not bind the launcher bytes or the recursively imported V5/V4/V3/V2/V1 admission-chain bytes to an independently accepted release artifact identity."
+  },
+  "grf": {
+    "generated_reality": "Root ownership + non-writable full path + direct V5 launcher basename is sufficient parent-to-launcher identity for ProductStart once SQLite library artifact authority is independently pinned.",
+    "counter_reality": "Two byte-distinct root-owned non-writable launcher objects with the accepted basename can both satisfy the parent gate because the gate proves path authority but not executable artifact identity; the same architectural distinction extends to the Python V5->V1 guard chain unless those bytes are independently bound.",
+    "falsifier": "Execute the PR469-composed path-integrity and PR468 systemd decision logic over disposable root-owned/non-writable launcher twins that have different bytes and SHA-256 values but the accepted basename and otherwise identical valid service snapshot.",
+    "collapse": "GENERATED_REALITY_REFUTED_COUNTER_REALITY_SUPPORTED"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "ROOT_OWNED_LAUNCHER_TWIN",
+    "classification": "BOUNDED_UNUSUAL_EXPERIMENT",
+    "scope": "disposable local /opt sandbox tree only; no production/canonical state mutation; tree removed after observation",
+    "baseline": {
+      "launcher": "/opt/frank-go-oob-launcher-twin/a/frank_v0_1_sqlite_v5_launcher.sh",
+      "sha256": "2105aa400987bc34f774f1be75d2e1f43a78cb065e13d41427f566491c7b70a4",
+      "result": "PASS_PARENT_BOUNDARY_CANDIDATE"
+    },
+    "intervention": {
+      "launcher": "/opt/frank-go-oob-launcher-twin/b/frank_v0_1_sqlite_v5_launcher.sh",
+      "sha256": "bd2fb48eb95fba6b795bebbc28278c9cc5277fa752b6a40189c9dedb3d28a4ca",
+      "bytes_distinct": true,
+      "same_required_basename": true,
+      "same_root_owned_nonwritable_path_policy": true,
+      "result": "PASS_PARENT_BOUNDARY_CANDIDATE"
+    },
+    "interpretation": "Parent-path provenance and executable artifact identity are independent axes. The current parent gate is not evidence that the accepted launcher/guard code bytes are the bytes that ProductStart executes.",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "architecture_consequence": {
+    "state": "SUPPORTED_COMPOSITION_REQUIREMENT",
+    "required_invariant": "ProductStart must bind the pre-exec parent to an independently accepted executable admission-chain artifact identity, not merely to a root-owned non-writable path and basename. SQLite library artifact authority does not automatically cover launcher/guard-chain authority.",
+    "do_not_repair_with": [
+      "caller-selected launcher digest",
+      "candidate/self-derived launcher digest",
+      "basename equality alone",
+      "root ownership alone",
+      "path integrity alone"
+    ],
+    "preferred_next_design_question": "Define one antecedent release artifact/bundle identity that covers the exact launcher plus all executable/imported guard-chain bytes (or an equivalent signed/build-attested immutable bundle), then require the systemd ProductStart gate to prove that exact bundle before exec while preserving PR469 path integrity and PR466 independent SQLite runtime artifact authority.",
+    "required_regressions": [
+      "byte-distinct root-owned launcher twin must be denied",
+      "byte-distinct V5/V4/V3/V2/V1 guard-chain member must be denied or make ProductStart fail closed",
+      "exact independently accepted bundle must pass",
+      "rollback/downgrade/library/path swap across restart must remain fail closed"
+    ]
+  },
+  "promotion": {
+    "negative_result": "PROMOTED_TO_RESEARCH_EVIDENCE",
+    "PR466": "RETAIN_TESTING_LIBRARY_ARTIFACT_AXIS",
+    "PR468": "RETAIN_TESTING_PARENT_PREEXEC_AXIS",
+    "PR469": "RETAIN_TESTING_PARENT_PATH_AXIS",
+    "PR470": "RETAIN_TESTING_DIRECT_GUARD_DEFENSE_IN_DEPTH",
+    "F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "authority": {
+    "canonical_frank_state_mutation": false,
+    "production_effect": false,
+    "harness_authority": "NONE",
+    "training_authorized": false
+  }
+}

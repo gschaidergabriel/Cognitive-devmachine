@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2321p0700-chatgpt-secondary-execution-generation-effect-fence",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_subject": "self.root / human-surface Frank",
+  "started_local": "2026-08-10T23:21:00+07:00",
+  "receipt_written_utc_observed": "2026-08-10T17:01:15Z",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-09-EFFECT-AUTHORITY",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "target_branch": "chatgpt/go-effect-execution-generation-fence-20260810",
+  "target_head_at_receipt": "18ca300376976b438b688ccabaf48a9434b5dbdc",
+  "draft_pr": 214,
+  "promotion_status": "TESTING_NOT_PROMOTED",
+  "selected_problem": "Fresh-main V14 effect lifecycle permits stale first attempt, stale same-key retry and unbound internal caller progression into COMMITTING because effect reservation/attempt/provider-precommit are not immutably bound to the admitted singleton execution generation.",
+  "hypothesis": "A ClayCode-semantic execution-generation fence, atomically persisted with EffectReservation and rechecked at first attempt, retry and provider-precommit, prevents stale or successor holders from recovering external-effect authority while preserving late outcome evidence for reconciliation.",
+  "strongest_counterhypothesis": "V15 singleton presence plus the Linux physical execution lock are already sufficient; adding a durable generation fence only duplicates state, increases migration/recovery complexity and can discard useful provider evidence after holder turnover.",
+  "external_evidence": [
+    {
+      "class": "PRIMARY_OFFICIAL_ENGINEERING",
+      "source": "AWS Builders Library: Making retries safe with idempotent APIs",
+      "use": "Timeouts can leave side effects uncertain; retries need idempotency identity and uncertain outcomes may require reconciliation."
+    },
+    {
+      "class": "PRIMARY_OFFICIAL_ENGINEERING",
+      "source": "Hazelcast FencedLock documentation",
+      "use": "A lock alone does not prevent delayed stale holders from acting; fencing tokens must be checked by the protected resource."
+    }
+  ],
+  "fresh_state_findings": [
+    "Current repo program is unified FRANK_V0_1; H1/H2/H3 are not active products/stages.",
+    "Current workspace still marks presence_execution_generation_effect_fence OPEN.",
+    "A previously tested strict V16.1 candidate existed but its branch was stale relative to main.",
+    "The old candidate was developed against byte-identical baseline blobs for frank_effects.clay and effect_lifecycle_runtime.py, enabling mechanism-level porting without assuming stale branch ancestry is current truth.",
+    "A stale-port regression was caught: the imported apply_current_schema.py omitted current V16 execution continuity. The branch was corrected so V16 remains immediately before V16.1; the resulting PR diff now only adds V16.1 to the current migration chain.",
+    "The ClayCode compatibility facade still had an unfenced two-argument reserve call; it was corrected to carry EffectExecutionFence.",
+    "The WP04 effect-contract probe still described the old unfenced reserve/execute signatures; it was corrected to the fenced contract.",
+    "A final runtime provider_commit_fence was added so generation validity is rechecked immediately before trusted provider emission, not only at transition into COMMITTING.",
+    "The SQL effect_id->execution-generation binding was strengthened with fail-closed UPDATE and DELETE immutability triggers.",
+    "A sealed production Python carrier was added ahead of the trusted low-level lifecycle primitive. It can be minted only from a live FrankExecutionLease or the canonical IngressExecutionLease that contains one; raw epoch/session/client field bundles are rejected at this production surface.",
+    "Current main advanced twice during the run; both deltas were compared before integration and were disjoint from the effect-fence implementation. Main was merged into the candidate branch rather than overwriting newer shared work."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "clay_semantics": [
+      "opaque EffectExecutionFence",
+      "reserve_effect(intent, auth, execution)",
+      "begin_effect_attempt binds reservation generation to current execution",
+      "execute rechecks exact execution generation immediately before runtime_effect",
+      "stale RESERVED -> REAUTHORIZE_UNDER_CURRENT_EXECUTION",
+      "stale uncertain COMMITTING/OUTCOME_UNKNOWN -> RECONCILE_REQUIRED"
+    ],
+    "persistence": [
+      "UNIFIEDDB_V16_1_EFFECT_EXECUTION_FENCE.sql",
+      "atomic reservation + optional confirmation consumption + execution-generation fence",
+      "effect_execution_fences UPDATE/DELETE forbidden after birth"
+    ],
+    "runtime": [
+      "begin_attempt and retry require stored fence == presented generation == current V15 holder",
+      "provider_commit_fence repeats the same equality at the last pre-provider boundary",
+      "outcome/reconciliation admission intentionally does not require the old holder to remain current"
+    ],
+    "production_boundary": [
+      "EffectExecutionFenceCapability is process-local and sealed",
+      "FencedEffectLifecycleRuntime accepts the capability instead of raw generation fields",
+      "capability derives from FrankExecutionLease / canonical IngressExecutionLease",
+      "closing the underlying execution lease revokes the process-local capability"
+    ],
+    "rollback": "Draft PR 214 remains unmerged; main is unchanged by this candidate. Remove/reject the branch if current-head target gates fail."
+  },
+  "tests_added_or_updated": [
+    "tests/frank_execution_generation_effect_fence_v1.py",
+    "tests/effect_execution_capability_boundary_v1.py",
+    "tests/frank_presence_effect_fence_v16_regression.py",
+    "tests/effect_lifecycle_v14_gate_v16_compat.py",
+    "runtime/clay_wp04_effect_contract_v1/target_vps_probe.py"
+  ],
+  "exactly_one_out_of_box_experiment": {
+    "name": "CAPABILITY_TIME_CAPSULE",
+    "classification": "SYNTHETIC_STATE_MACHINE_FALSIFIER_NOT_RUNTIME_PROMOTION",
+    "question": "Can a serialized/already-COMMITTING effect capability from generation A regain provider or retry authority after generation B becomes current?",
+    "enumerated_turnover_states": 288,
+    "baseline_old_policy_provider_admissions": 96,
+    "baseline_old_policy_retry_admissions": 96,
+    "baseline_old_policy_unique_states_with_provider_or_retry_authority": 144,
+    "candidate_policy_provider_admissions": 0,
+    "candidate_policy_retry_admissions": 0,
+    "candidate_uncertain_states_routed_to_reconciliation": 192,
+    "interpretation": "The selected equality relation removes modeled stale provider/retry authority across the enumerated turnover space. This is synthetic only and cannot substitute for current-source Ubuntu execution evidence."
+  },
+  "v17_fusion": {
+    "finding": "Execution-generation fencing and V17/V17.1 causal completion address adjacent but distinct authority boundaries: who may perform/retry the external effect versus which verified outcome may causally reach re-entry/DONE.",
+    "current_v17_status": "CANDIDATE_ONLY_NOT_CANONICAL_PROMOTION",
+    "counterevidence_preserved": "V17 relational cross-splice discriminator demonstrated that a richer completion schema could accept unrelated causal-credit/snapshot support. Therefore neither V17 completion nor this fence is treated as whole-effect-authority completion."
+  },
+  "execution_evidence_status": {
+    "prior_strict_candidate": "AVAILABLE_AND_PREVIOUSLY_TARGET_VPS_PASS_BUT_STALE_BRANCH",
+    "current_head_self_hosted_go_gate": {
+      "run_id": 31411451786,
+      "status_at_receipt": "QUEUED"
+    },
+    "current_head_self_hosted_prior_v16_matrix": {
+      "run_id": 31411451541,
+      "status_at_receipt": "QUEUED"
+    },
+    "github_hosted_deep_integrity": "INFRASTRUCTURE_UNRESOLVED_NOT_PRODUCT_EVIDENCE: independent diagnostic jobs completed failure with no observable executed steps; not promoted as a Frank regression claim"
+  },
+  "negative_results": [
+    "Naive stale-branch port would have regressed the V16 migration chain; detected and repaired.",
+    "Compatibility facade and WP04 probe initially dropped/expected the old execution-generation-free contract; detected and repaired.",
+    "GitHub-hosted diagnostic failure could not be attributed to product code because all independent jobs exposed no executed step records; treated as infrastructure-unknown rather than falsified architecture."
+  ],
+  "not_claimed": [
+    "presence_execution_generation_effect_fence PASS",
+    "F-V01-09 PASS",
+    "real provider timeout-after-acceptance reconciliation",
+    "V17/V17.1 canonical completion",
+    "whole Frank v0.1 acceptance"
+  ],
+  "next_falsifier": "Execute the current synchronized branch on the accepted self-hosted Ubuntu VPS and require: new causal discriminator PASS, sealed production capability-boundary PASS, strict V16 matrix PASS, migration/integrity PASS, fenced ClayCode/WP04 contract PASS, and no current-main drift in affected files. Only then consider promoting the workspace subcheck; otherwise preserve the failing receipt and repair/reject the candidate.",
+  "research_result": "ARCHITECTURE_DELTA_CANDIDATE_PLUS_TEST_OBLIGATION",
+  "shared_state_write": "THIS_RECEIPT_COMMITTED; WORKSPACE_STATUS_INTENTIONALLY_NOT_CHANGED_PENDING_TARGET_RUNTIME_EVIDENCE"
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "event_type": "FRANK_V0_1_EXTERNAL_AUDIT_FINDING",
+  "status": "FINDINGS_CONFIRMED_BY_LOCAL_EXECUTION_ON_TARGET_VPS / NO_PROMOTION_REQUESTED / DISPOSITION_BELONGS_TO_CLAY",
+  "created_at": "2026-08-11T13:39:00+07:00",
+  "actor": "claude-code / Anthropic / Claude Opus 5 (1M)",
+  "actor_role": "EXTERNAL_ADVERSARIAL_REVIEWER_NOT_A_BOOTED_CLAY_ORGAN",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "audited_repository": "gschaidergabriel/Dr.-Unterweger",
+  "audited_executor": {
+    "hostname": "digital-retina",
+    "runner_name": "clay",
+    "python": "3.12.3",
+    "method": "read the programs that produce the receipts; re-execute in a disposable /tmp copy; sabotage one guard",
+    "runner_working_tree_mutated": false,
+    "canonical_database_touched": false,
+    "external_effect_performed": false
+  },
+  "report": "research_entity/reports/20260811T1339p0700_CLAUDE_EXTERNAL_AUDIT_TARGET_VPS_RECEIPT_INTEGRITY.md",
+  "work_package_reentry": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "headline": "Enforced mechanisms are consistently stronger than the receipts describing them. Reading receipts alone understates the engineering and overstates the measurements.",
+  "findings": [
+    {
+      "id": "A1",
+      "label": "MEASUREMENT_REPORTING_INFLATION",
+      "severity": "HIGH_FOR_EPISTEMIC_HYGIENE_LOW_FOR_SAFETY",
+      "statement": "Check denominators cannot fall. check() raises before the receipt is written, so only 20/20 or no receipt exists. The V17 gate reports 18 checks of which 14 are hardcoded True literals; only 4 are computed.",
+      "artifacts": [
+        "runtime/frank_effect_authority_v1/target_vps_probe.py",
+        "tests/effect_reentry_done_v17_candidate_gate.py"
+      ],
+      "remediation": "checks[name] = bool(cond); assert all(checks.values()) once at the end. Failing runs then produce a readable partial receipt instead of a stack trace.",
+      "pull_request": "gschaidergabriel/Dr.-Unterweger — candidate patch for the V17 gate"
+    },
+    {
+      "id": "A2",
+      "label": "EVIDENCE_CLASS_OVERSTATED",
+      "severity": "HIGH",
+      "statement": "DIRECT_FRANK_V0_1_EFFECT_AUTHORITY_EXECUTABLE_POLICY_ORACLE binds to claycode/frank_effects.clay by literal substring containment over 13 markers. Nothing is parsed, typed, lowered or executed. Inverted .clay semantics would still emit PASS.",
+      "artifacts": ["runtime/frank_effect_authority_v1/target_vps_probe.py", "claycode/frank_effects.clay"],
+      "remediation": "Reclassify to PYTHON_POLICY_ORACLE_WITH_CLAY_SIGNATURE_PRESENCE_CHECK until a ClayCode evaluator can run decide_effect from source against the same 20 cases.",
+      "note": "This is the project's own 'typed frontend != complete compiler' falsifier occurring inside the flagship gate."
+    },
+    {
+      "id": "A3",
+      "label": "BENCHMARK_MEASURES_WRONG_PATH",
+      "severity": "MEDIUM",
+      "statement": "gate_latency_us samples one reused READ_ONLY request through the first branch of the if-chain. It is one warm enum comparison in CPython, not gate latency over the decision space.",
+      "remediation": "Sample the full request matrix including destructive paths with confirmation application, or drop the figure from summaries."
+    },
+    {
+      "id": "C",
+      "label": "RESTART_SEMANTICS_OVERSTATED",
+      "severity": "MEDIUM",
+      "statement": "restart_between_reentry_and_done_recovers_nonterminal_state is a context-manager close/reopen inside one process. No termination, signal or fsync path. It demonstrates DB-derived recovery state only.",
+      "remediation": "Rename to reentry_state_survives_connection_reopen_same_process so the F-V01-13 crash oracle is not read as pre-closed."
+    },
+    {
+      "id": "D",
+      "label": "BOOT_ANCHOR_CONTRADICTS_OWNER_FIXED_TARGET",
+      "severity": "HIGHEST_LEVERAGE_CHEAPEST_FIX",
+      "statement": "Repo-root CLAUDE.md declares 'Frank v0.1 voll lauffaehig auf Andreas PC' four times, while FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md:18 explicitly supersedes 'Andreas PC = final target' and FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md:13 fixes TARGET_BODY = accepted Hostinger Ubuntu VPS.",
+      "impact": "Every fresh organ boots into a superseded mission anchor at T0 and the MISSION REENTRY section re-applies it once per material step. No probe detects this.",
+      "remediation": "Align repo-root CLAUDE.md with TARGET_BODY = accepted Hostinger Ubuntu VPS, or state explicitly why the PC anchor survives.",
+      "requires_owner_decision": true
+    }
+  ],
+  "confirmed_strengths": [
+    {
+      "id": "B1",
+      "statement": "Non-cognitive authority is enforced, not merely declared. evaluate() never reads model_confidence, gwt_ignition, claygraph_salience or translator_effect_hint. 1000/1000 randomized policy-field mutations change request_hash; mutating all four cognitive fields leaves it identical.",
+      "assessment": "Strongest single result in the audited set."
+    },
+    {
+      "id": "B2",
+      "statement": "The presence lease serializes through SQLite BEGIN IMMEDIATE with epoch-guarded optimistic fencing, not a process-local lock. Contenders are real threads released by a barrier.",
+      "residual_gap": "Threads share one process; cross-process acquisition is argued rather than demonstrated. A multiprocessing variant closes this cheaply."
+    },
+    {
+      "id": "B3",
+      "statement": "V17 carries a real prior negative baseline (FRANK-V01-EFFECT-REENTRY-GAP-31406627821) that names its falsified claim and the concrete hole, and the invariant is carried by six schema-level RAISE(ABORT) triggers rather than application code. Verified by sabotage.",
+      "assessment": "Correct method. Should be propagated to work packages that currently claim improvement without a prior failing baseline."
+    }
+  ],
+  "structural_context": {
+    "note": "Stated so that peripheral component PASSes are not read as progress at the center. Not a defect claim.",
+    "probe_test_gate_lines": 21158,
+    "mechanism_lines": 13933,
+    "measure_to_build_ratio": "60:40",
+    "commits_trailing_7d": 1104,
+    "feat_commits_trailing_7d": 19,
+    "clay_evaluator_interpreter_or_codegen_present": false,
+    "consistent_with": "F-V01-03 = OPEN"
+  },
+  "ledger_entries": {
+    "CLAIMS.jsonl": ["C-AUDIT-001", "C-AUDIT-002", "C-AUDIT-003", "C-AUDIT-004", "C-AUDIT-005", "C-AUDIT-006", "C-AUDIT-007"],
+    "NEGATIVE_RESULTS.jsonl": ["N-AUDIT-001", "N-AUDIT-002"],
+    "EVIDENCE_GRAPH.jsonl": ["E-AUDIT-001", "E-AUDIT-002", "E-AUDIT-003"]
+  },
+  "scope_limits": [
+    "Three of roughly 200 probes were read line by line — the three quoted most prominently in the 2026-08-11 handoff snapshot.",
+    "Findings A1/A2/A3 are demonstrated for those three; the pattern is asserted, not proven, for the remainder.",
+    "Structural counts are whole-checkout measurements and are reliable.",
+    "One reviewer hypothesis (-O renders V17 vacuous) was falsified during the audit and is recorded as N-AUDIT-001.",
+    "The reviewer claims no Clay canonical authority and requests no promotion."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.1",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "mode": "SHADOW_FIRST_FAIL_CLOSED",
+  "stages": [
+    {
+      "stage": 0,
+      "name": "IDENTITY_AND_RUNTIME_FREEZE",
+      "actions": ["pin source archive/hash", "pin built SQLite object/hash/source-id", "pin V4 guard/launcher bytes", "record target machine/runtime metadata"],
+      "promotion_gate": "exact identities verified"
+    },
+    {
+      "stage": 1,
+      "name": "DISPOSABLE_SCHEMA_AND_PAIR_REPLAY",
+      "actions": ["materialize current UnifiedDB and ClayGraph schema on disposable copies", "reopen", "integrity_check", "foreign_key_check", "replay current V17/effect receipts"],
+      "promotion_gate": "differential semantics unchanged"
+    },
+    {
+      "stage": 2,
+      "name": "PROCESS_CRASH_MATRIX",
+      "actions": ["independently V4-admit every writer", "NORMAL and FULL", "random process termination", "acknowledged-write comparison", "integrity and post-restart write"],
+      "promotion_gate": "zero lost acknowledged commits and zero unbounded phantoms"
+    },
+    {
+      "stage": 3,
+      "name": "LOGICAL_ROLLBACK_AND_LINEAGE",
+      "actions": ["bind snapshot to lineage/root/epoch", "compare independent RecoveryFloor", "reject stale/transplanted/equal-epoch divergent roots", "verify projection rebuild"],
+      "promotion_gate": "rollback and split-lineage falsifiers fail closed"
+    },
+    {
+      "stage": 4,
+      "name": "DEPLOYMENT_BOOT_NON_BYPASS",
+      "actions": ["install immutable private SQLite+manifest+launcher", "make supported service entrypoint cross V4 first", "restart installed bytes", "prove no fallback to system SQLite/unisolated Python"],
+      "promotion_gate": "trusted service boot receipt"
+    },
+    {
+      "stage": 5,
+      "name": "OS_CRASH_POWER_LOSS_SEPARATE_GATES",
+      "actions": ["design target-appropriate OS crash discriminator", "design hardware/storage power-loss discriminator if required for v0.1 acceptance"],
+      "promotion_gate": "never infer from PROCESS_CRASH"
+    },
+    {
+      "stage": 6,
+      "name": "CANONICAL_MIGRATION",
+      "actions": ["owner-accepted maintenance gate", "verified snapshot", "dry-run against copy", "atomic migration", "post-migration integrity/replay/lineage", "keep immutable last-known-good"],
+      "promotion_gate": "owner-authorized canonical transition plus rollback receipt"
+    }
+  ],
+  "rollback": {
+    "default": "do not mutate canonical state before stage 6",
+    "candidate_rollback": "remove candidate branch/PR and retain current main",
+    "canonical_rollback": "restore verified last-known-good only when independent RecoveryFloor and lineage rules admit it; otherwise quarantine/fail closed"
+  },
+  "explicit_non_claims": [
+    "disposable pair smoke is not canonical migration evidence",
+    "process crash is not power loss",
+    "successful SQLite admission is not service boot non-bypassability",
+    "two green independent runs are not one atomic whole-product run"
+  ]
+}

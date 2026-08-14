@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0415p0700-chatgpt-secondary-wp04-module-frontier",
+  "recorded_at": "2026-08-11T04:20:00+07:00",
+  "status": "TARGET_EXECUTION_NOT_YET_STARTED",
+  "candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 266,
+    "head_sha": "95d580ba46736dc6d865bf7a7a0c48a7542fda38",
+    "semantic_candidate_sha_before_workflow_comment_only_sync": "188b0d7a21fb3aa31a9db680d36f1d765d04bfd7"
+  },
+  "target_runs": [
+    {
+      "run_id": 31432688543,
+      "job_id": 93599604931,
+      "status": "QUEUED",
+      "executed_steps": 0,
+      "note": "first PR-triggered run for the same diagnostic semantics"
+    },
+    {
+      "run_id": 31432811773,
+      "status": "PENDING_BEHIND_CONCURRENCY_GROUP",
+      "executed_steps": 0,
+      "note": "synchronize-triggered run after workflow-comment-only branch delta"
+    }
+  ],
+  "fresh_main": {
+    "latest_observed": "c8b41f3cb423a6ef5406b7111979f415c00bec2c",
+    "post_candidate_main_changes": "EVIDENCE_RECEIPTS_ONLY_NON_OVERLAPPING",
+    "changed_surfaces_since_40cd96f": [
+      "runtime/vps_unifieddb/frank_effect_reentry_v17_support_binding_gap_v1/**",
+      "runtime/vps_unifieddb/frank_single_instance_presence_v1/**"
+    ],
+    "claycode_frank_effects_changed": false,
+    "claycode_frank_hive_changed": false,
+    "claycode_frank_memory_changed": false,
+    "diagnostic_changed_on_main": false
+  },
+  "evidence_class": "QUEUE_STATE_ONLY_NOT_EXECUTION_EVIDENCE",
+  "module_frontier_pass": false,
+  "architecture_promotion": "NONE",
+  "effect_authority": "NONE",
+  "truth_authority": "NONE",
+  "external_effect_executed": false,
+  "training_authorized": false,
+  "next_action": "Consume the first actually executed exact-module-resolution job; on executed failure patch the same candidate without adding a second GO OOB, on success preserve exact runner/result/resource metadata and only then support the module-frontier diagnostic."
+}

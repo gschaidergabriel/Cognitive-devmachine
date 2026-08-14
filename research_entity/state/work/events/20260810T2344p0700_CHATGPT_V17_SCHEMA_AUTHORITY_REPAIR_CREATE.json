@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:frank-v17-candidate-schema-authority:20260810T2344p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T16:44:00Z",
+  "payload": {
+    "work_id": "FRANK-V17-CANDIDATE-SCHEMA-AUTHORITY-REPAIR",
+    "goal_ref": "FRANK_V0_1",
+    "origin_class": "BLOCKER_REMOVAL",
+    "title": "Isolate V17 differential schema mutation behind explicit Research-Entity migrator",
+    "scope": {
+      "target_repository": "gschaidergabriel/Dr.-Unterweger",
+      "target_pr": 209,
+      "target_branch": "chatgpt/go-v17-candidate-schema-authority-20260810",
+      "affected_files": [
+        "runtime/state/effect_terminal_runtime_v17_candidate.py",
+        "runtime/state/effect_terminal_schema_migrator_v17_candidate.py",
+        "tests/repo_static_integrity_audit.py",
+        "tests/test_effect_terminal_v17_candidate_schema_authority.py",
+        ".github/workflows/frank-v17-candidate-schema-authority-vps.yml"
+      ]
+    },
+    "problem": "Repository integrity correctly rejects executescript DDL authority in effect_terminal_runtime_v17_candidate.py. A separate colocated runtime test path is also a known false-positive in the same audit and has already been discriminated by closed PR 192.",
+    "evidence": {
+      "epoch_fence_target_run_exposed_current_failures": 31408572649,
+      "exact_v17_failure": "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/effect_terminal_runtime_v17_candidate.py",
+      "exact_test_fixture_false_positive": "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
+      "closed_pr_192_path_aware_fixture_mechanism": "TARGET_DISCRIMINATED",
+      "current_main_canonical_migration_chain": "ENDS_AT_V16",
+      "v17_candidate_and_v17_completion_sql": "PRESENT_AS_ACTIVE_RESEARCH_ALTERNATIVES"
+    },
+    "selected_mechanism": [
+      "move candidate apply/rollback DDL into explicit migrator",
+      "require RESEARCH_ENTITY_ONLY for non-test schema mutation",
+      "preserve runtime compatibility wrappers without DDL",
+      "reuse already-discriminated path-aware runtime-test classification",
+      "add disposable migration/rollback integrity regression"
+    ],
+    "counterhypotheses": [
+      "Delete candidate runtime because stronger V17 SQL exists",
+      "Promote V17 candidate schema into canonical migration chain",
+      "Merely allow-list the runtime executescript"
+    ],
+    "why_rejected_for_now": "Current migration chain is V16 and multiple V17 alternatives are under active differential testing; deletion or promotion changes architecture, while runtime allow-listing violates the explicit schema-authority contract. The migrator split is reversible and semantic-neutral.",
+    "oob_experiment_count_added": 0,
+    "go_oob_budget_total_remains": 1,
+    "status": "TESTING",
+    "completion": {
+      "authority_unit_regression": "REQUIRED",
+      "repo_static_integrity": "REQUIRED",
+      "accepted_target_vps": "REQUIRED",
+      "fresh_main_overlap_check": "REQUIRED",
+      "v17_semantics_change": "FORBIDDEN_IN_THIS_WORK_ITEM",
+      "promotion": "PROHIBITED_UNTIL_GREEN"
+    }
+  }
+}

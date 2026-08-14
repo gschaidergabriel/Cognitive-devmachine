@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO_20260812T0356p0700_SYSTEMD_PARENT_PATH_INTEGRITY",
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "organ": "GPT-5.6 Sol temporary Clay worker",
+  "generated_at_local": "2026-08-12T03:56:00+07:00",
+  "canonical_head_seen_before_write": "ed18b85508679cf98d5896144b6363b8ee86d47b",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_base": {
+    "branch": "chatgpt/sqlite-v5-parent-boundary-20260812",
+    "sha": "45ee3e4dd18aab56a95407bc7b6189ec601af8ce",
+    "existing_pr": 453
+  },
+  "focus": "F-V01-13 systemd parent-boundary path integrity above SQLite V5 admission",
+  "observed_anchor": {
+    "candidate_path": "runtime/frank_storage_truth_v1/sqlite_v5_systemd_parent_gate_v1.py",
+    "pre_repair_blob_sha": "648a9ec6acba88f5f6e4bd8e9430a7cfce529683",
+    "pre_repair_mechanism": "Path.stat() attested only the resolved leaf uid/mode",
+    "risk": "a symlinked leaf or symlinked/writable ancestor could preserve apparently acceptable leaf metadata while changing the executable/unit path provenance"
+  },
+  "grf": {
+    "generated_reality": "root-owned non-group/world-writable resolved leaf is sufficient parent-path evidence",
+    "counter_reality": "path transplantation through symlink or writable ancestor preserves the apparent resolved leaf and defeats leaf-only attestation",
+    "discriminator": "attempt leaf-symlink and ancestor-symlink transplant worlds against the unchanged candidate",
+    "collapse": {
+      "leaf_only_reality": "REJECT",
+      "path_transplant_counter_reality": "RETAIN_SUPPORTED",
+      "full_lstat_chain_repair": "TESTING"
+    }
+  },
+  "unusual_experiment": {
+    "count_in_this_go_cycle": 1,
+    "experiment_id": "SYSTEMD_PARENT_PATH_TRANSPLANT_MATRIX",
+    "bounded": true,
+    "reversible": true,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE",
+    "baseline": "direct secure launcher -> PASS_PARENT_BOUNDARY_CANDIDATE",
+    "observations": [
+      "leaf symlink under world-writable parent -> PASS_PARENT_BOUNDARY_CANDIDATE",
+      "regular launcher through symlinked parent component -> PASS_PARENT_BOUNDARY_CANDIDATE"
+    ],
+    "counterworld_reproduced": true,
+    "cleanup": "temporary directory removed"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Linux man-pages path_resolution(7)",
+      "claim": "pathname resolution follows symlink components under normal resolution; secure no-symlink policies must control component resolution"
+    },
+    {
+      "source": "Linux man-pages openat2(2)",
+      "claim": "RESOLVE_NO_SYMLINKS rejects symlink resolution in all pathname components, distinguishing all-component control from trailing-only checks"
+    }
+  ],
+  "repair": {
+    "branch": "chatgpt/go-systemd-parent-path-integrity-20260812",
+    "head_sha": "b38fc501d7377c80a95e9f17e5d985ae258ed420",
+    "commits": [
+      "cc4219321b4a4aafcff10f254bb21da00ef94c13",
+      "ec9eacd5978cec34d5892dc27fbeb340ceb6b209",
+      "b38fc501d7377c80a95e9f17e5d985ae258ed420"
+    ],
+    "draft_pr": 469,
+    "mechanism": [
+      "lstat leaf and every ancestor",
+      "reject any symlink component",
+      "require regular-file leaf and directory ancestors",
+      "require every component root-owned",
+      "reject group/world-writable components",
+      "apply shared helper to launcher and systemd FragmentPath"
+    ],
+    "ordinary_local_path_regression": {
+      "status": "PASS",
+      "checks": "4/4",
+      "scope": "isolated helper-semantics regression; not an accepted-target or whole-repository PASS",
+      "observed": [
+        "secure direct path admitted",
+        "leaf symlink denied",
+        "parent symlink denied",
+        "group-writable parent denied"
+      ]
+    },
+    "full_repo_regression_expected": "13/13 once exact-head workflow executes",
+    "accepted_target_workflow_run": 31535261727,
+    "accepted_target_workflow_status_at_receipt": "QUEUED_NO_RUNNER",
+    "accepted_target_pass_claimed": false
+  },
+  "promotion": {
+    "status": "TESTING",
+    "f_v01_13_closed": false,
+    "production_parent_identity_verified": false,
+    "production_sqlite_fixed_runtime_verified": false,
+    "whole_frank_v0_1_acceptance_claimed": false,
+    "next_falsifier": "exact-head self-hosted Ubuntu job must execute and pass; then production parent/service and exact SQLite runtime identity still require accepted-target evidence"
+  },
+  "authority": {
+    "harness_mutation_by_frank": false,
+    "production_effect": false,
+    "training_authorized": false,
+    "together_used": false
+  }
+}

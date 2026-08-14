@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "frontier": [
+    {
+      "rank": 1,
+      "question": "Do public merged Qwen/mmproj features support calibrated user-specific known/unknown GUI/object familiarity strongly enough to bypass semantic decode safely?",
+      "next_action": "Execute TO-Q23-MVC-OPENSET-01 variants A/B/C on matched target-like fixtures.",
+      "expected_information_gain": "VERY_HIGH",
+      "dependency": "target-compatible multimodal runtime + fixture corpus"
+    },
+    {
+      "rank": 2,
+      "question": "Are MVC prototypes stable across the exact runtime/preprocessing compatibility envelope?",
+      "next_action": "Execute TO-Q23-VISUAL-COMPAT-02 before allowing prototype reuse across runtime upgrades.",
+      "expected_information_gain": "VERY_HIGH",
+      "dependency": "at least two comparable runtime/preprocessing configurations"
+    },
+    {
+      "rank": 3,
+      "question": "If merged-only misses the open-set gate, does a tiny frozen-feature projection recover the margin without another deep encoder?",
+      "next_action": "Run variant D only after C is characterized.",
+      "expected_information_gain": "HIGH",
+      "dependency": "variant C result"
+    },
+    {
+      "rank": 4,
+      "question": "If merged/tiny-projection still fail, does same-encode pre-merger spatial geometry add enough value to justify runtime instrumentation?",
+      "next_action": "Bounded experimental pre-merger readout; no production fork first.",
+      "expected_information_gain": "MEDIUM_HIGH",
+      "dependency": "C/D failure or non-inferiority miss"
+    },
+    {
+      "rank": 5,
+      "question": "Can canonical-pixel gating reduce deep vision duty cycle without missing small action-critical GUI deltas?",
+      "next_action": "Execute TO-Q23-CANONICAL-PIXELS-03 and couple gate thresholds to residual uncertainty/action criticality.",
+      "expected_information_gain": "HIGH",
+      "dependency": "canonicalizer implementation"
+    }
+  ],
+  "saturation": false,
+  "why_not_saturated": "The decisive target-runtime feature/open-set benchmark remains unexecuted."
+}

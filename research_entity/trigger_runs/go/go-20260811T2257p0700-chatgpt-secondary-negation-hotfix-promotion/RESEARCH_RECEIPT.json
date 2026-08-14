@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2257p0700-chatgpt-secondary-negation-hotfix-promotion",
+  "trigger": "go",
+  "created_at_local": "2026-08-11T22:57:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_boot_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_center_parent_observed": "dbb5974587bb6fd89689b3f895e79c8ce09c4fb0",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "finding": {
+    "class": "SILENT_UNARY_NEGATION_SEMANTIC_ERASURE",
+    "cause": "Anonymous ! token under Lark keep_all_tokens=false could be filtered and the conditional unary rule inlined, so negation could disappear before AST lowering. Boolean literals also lacked a word boundary and could prefix-capture identifiers such as false_alarm_rate.",
+    "severity": "HIGH_SEMANTIC_CORRECTNESS",
+    "counterevidence_to_prior_gate": "The prior 200576 decide_effect differential did not cover unary-negation syntax because the exercised source used equality-to-false forms. Therefore its PASS was valid only for its declared closure, not evidence against this bug."
+  },
+  "repair": {
+    "target_pr": 365,
+    "candidate_head": "e67ac52b7b93eaf2f3f9ccca315c0b7160fa5cab",
+    "tested_synthetic_merge": "27c8baf118e0e82e63e60f00ccad251e375b95a5",
+    "merged_main_commit": "0b765534e693707b813dab9ff7471189ee48ef91",
+    "scope": [
+      "named BANG and NOT_KW terminals lower through explicit not_expr",
+      "not_expr lowers to a Not AST node using the operand child",
+      "Boolean literals use word boundaries",
+      "not is excluded from ordinary NAME"
+    ],
+    "broad_surface_v2_not_promoted": true
+  },
+  "accepted_target_evidence": {
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "python": "3.12.3",
+    "kernel": "6.8.0-117-generic x86_64",
+    "lark": "1.3.1",
+    "negation_run": 31508673212,
+    "negation_job": 93836643408,
+    "operator_checks": "8/8 PASS",
+    "observations": {
+      "bang_not_depth": 1,
+      "double_bang_not_depth": 2,
+      "word_not_depth": 1,
+      "boolean_prefix_ast_type": "Path"
+    },
+    "policy_differential": {
+      "requests_compared": 200576,
+      "mismatches": 0,
+      "checks": "6/6 PASS",
+      "seed": 90211
+    },
+    "byte_compile": "PASS",
+    "git_status_count": 0,
+    "blobs": {
+      "grammar": "82aeaf494b35b4f825f62112846af68bce00fd70",
+      "syntax": "9dfb236969aa28a69767dc7ef9ba4b0c32e4988a",
+      "operator_gate": "34da82aaaa31407d8060744078af1b013acb6df3",
+      "frank_effects": "949d5972645d36300d4421619021379c79249213"
+    },
+    "independent_existing_package_gate": {
+      "run": 31508673085,
+      "job": 93836643168,
+      "package_modulespec_checks": "7/7 PASS",
+      "policy_requests_compared": 200576,
+      "policy_mismatches": 0
+    }
+  },
+  "negative_results": [
+    {
+      "class": "SELF_HOSTED_SHARED_WORKSPACE_CHECKOUT_COLLISION",
+      "run": 31508673096,
+      "job": 93836642900,
+      "result": "FAILED_BEFORE_PRODUCT_TESTS",
+      "observation": "actions/checkout deleted the shared workspace contents and then git config --local failed because .git was absent; all product stages were skipped.",
+      "architecture_consequence": "Treat checkout-only reds as infrastructure evidence. Prefer run-owned isolated Git trees for accepted-target workflows; do not infer product failure from this class."
+    },
+    {
+      "class": "WP03_SHALLOW_TREE_MISSING_PINNED_OBJECTS",
+      "run": 31507925203,
+      "job": 93834148609,
+      "result": "FAILED_BEFORE_PRODUCT_REGRESSIONS",
+      "observation": "The exact-local-object WP03 materializer requires commits c3709c4e4f78b6d45bfa8b174f2d07deb6091ff8 and ab2e2a7d0788c0ed0e243288cfa969dbf9ab2342, but the depth-1 run-owned tree lacked them.",
+      "repair_candidate": "Fetch only the two pinned historical commit objects in addition to the exact PR merge tree; do not broaden history or change ClayCode semantics."
+    }
+  ],
+  "semantic_scope_recovery": {
+    "comparison_chain_status": "OPEN_SEMANTIC_CONFLICT",
+    "discriminator": "5 < 10 < 8",
+    "prior_metamorphic_divergences": "1596/12348",
+    "authority_search_result": "BASE semantic freeze points to G9 V3; no owner-fixed comparison-chain meaning was found there.",
+    "decision": "Do not patch by Python or other host-language analogy. Require owner-fixed or recovered ClayCode semantics first."
+  },
+  "go_oob_accounting": {
+    "count_for_macrocycle": 1,
+    "only_experiment": "PACKAGE_NAMESPACE_SHADOW_INJECTION",
+    "this_receipt_adds_oob": false
+  },
+  "promotion_boundary": {
+    "status": "PROMOTED_SCOPED_IMPLEMENTATION_DELTA",
+    "wp03": "OPEN",
+    "wp04": "OPEN",
+    "wp05": "OPEN",
+    "wp06": "OPEN",
+    "f_v01_02_evaluator": "OPEN",
+    "whole_frank_v0_1": "NOT_ACCEPTED"
+  },
+  "next_frontier": [
+    "Refresh WP03 combined relation-token plus declaration-aware alias integration against main after 0b765534 and rerun exact accepted-target gate.",
+    "Require broad frontier PR357 exact target composition before any 90-percent-surface promotion; keep comparison-chain and Bool/Int equality semantics open.",
+    "Refresh bounded compiler/lowering candidates against the semantic-hotfix main before any translation-validation credit.",
+    "Create a measured cross-workflow continuity repair lane for remaining self-hosted actions/checkout shared-workspace users rather than treating infrastructure red as product evidence."
+  ],
+  "frank_harness_modified_under_frank_authority": false,
+  "final_training_authorized": false
+}

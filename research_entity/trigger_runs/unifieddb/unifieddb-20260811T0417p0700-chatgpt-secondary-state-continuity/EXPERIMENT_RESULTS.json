@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "evidence_class":"LOCAL_SYNTHETIC_MECHANISM_TEST_ONLY",
+  "environment":{"python":"3.13.5","sqlite":"3.46.1","platform":"Linux-6.18.35-x86_64-with-glibc2.41","storage":"in-memory SQLite for latency proxy; temp-file copy for rollback falsifier"},
+  "tests":[
+    {"name":"current_generation_commit","result":"PASS"},
+    {"name":"stale_execution_binding_rejected","result":"PASS","observed":"FRANK_TX_BINDING_STALE_EXECUTION"},
+    {"name":"same_epoch_execution_change_rejected","result":"PASS","observed":"FRANK_EXECUTION_CHANGE_REQUIRES_NEW_EPOCH"},
+    {"name":"sibling_current_lineage_rejected","result":"PASS","observed":"unique admitted-current lineage constraint"},
+    {"name":"new_generation_commit","result":"PASS"},
+    {"name":"restored_old_snapshot_with_external_floor_rejected","result":"PASS","observed":"EXTERNAL_FLOOR_AHEAD_OF_DB"},
+    {"name":"current_db_external_floor_accepts","result":"PASS"},
+    {"name":"wal_gate_target_workspace_3_45_1_wal_no_backport_no_topology_proof","result":"FAIL_CLOSED_AS_DESIGNED"},
+    {"name":"wal_gate_3_51_3_wal","result":"PASS"},
+    {"name":"wal_gate_3_50_7_named_backport_wal","result":"PASS"},
+    {"name":"wal_gate_non_wal","result":"PASS_NOT_APPLICABLE"}
+  ],
+  "latency_proxy_us":{"n":1500,"baseline":{"p50":7.2855,"p95":11.187,"p99":16.3909},"continuity_guard_candidate":{"p50":40.32,"p95":77.58905,"p99":146.99437},"increment":{"p50":33.0345,"p95":66.40205,"p99":130.60347}},
+  "interpretation":"The mechanism rejects the tested stale/sibling/rollback cases with small in-memory transaction overhead, but these numbers are not target-VPS storage durability or end-to-end latency evidence.",
+  "negative_results":[
+    "A monotonic generation stored only inside the same UnifiedDB rollback domain cannot detect a whole-DB snapshot rewind.",
+    "Current target SQLite 3.45.1 + WAL cannot be promoted safe from version string alone because upstream places generic affected versions through 3.51.2; a verified distro backport or topology proof is still required."
+  ],
+  "promotion":"HOLD_PENDING_TARGET_VPS_REPLICATION_AND_STORAGE_GATE",
+  "status":"COMPLETE"
+}

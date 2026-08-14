@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "fusion_nodes": [
+    {"id":"N1","kind":"INTERNAL_CANDIDATE","ref":"QNDRF-1"},
+    {"id":"N2","kind":"INTERNAL_CANDIDATE","ref":"PAR-1"},
+    {"id":"N3","kind":"IMPLEMENTATION_FACT","ref":"pre-decoder Qwen/libmtmd media embedding boundary"},
+    {"id":"N4","kind":"HYPOTHESIS","ref":"Q23-H-FEATURE-TAP-01"},
+    {"id":"N5","kind":"HYPOTHESIS","ref":"Q23-H-VISION-SCALE-01"},
+    {"id":"N6","kind":"HYPOTHESIS","ref":"Q23-H-RUNTIME-CONFOUND-01"},
+    {"id":"N7","kind":"COUNTERHYPOTHESIS","ref":"Q23-CH-RAW-FEATURE-01"},
+    {"id":"N8","kind":"COUNTERHYPOTHESIS","ref":"Q23-CH-ENCODE-DOMINANCE-01"},
+    {"id":"N9","kind":"COUNTERHYPOTHESIS","ref":"Q23-CH-MEMORY-PRIMING-01"},
+    {"id":"N10","kind":"COUNTERHYPOTHESIS","ref":"Q23-CH-ROI-CONTEXT-01"},
+    {"id":"N11","kind":"ARCHITECTURE_DELTA","ref":"Q23-AD-VISION-FEATURE-TAP-01"},
+    {"id":"N12","kind":"ARCHITECTURE_DELTA","ref":"Q23-AD-MODEL-SCALE-GATE-01"},
+    {"id":"N13","kind":"ARCHITECTURE_DELTA","ref":"Q23-AD-RUNTIME-SANITY-GATE-01"},
+    {"id":"N14","kind":"TARGET_CONSTRAINT","ref":"accepted Hostinger VPS: 4 logical CPUs verified; exact RAM/swap/GPU currently unknown"}
+  ],
+  "fusion_edges": [
+    {"from":"N3","to":"N4","relation":"SUPPORTS_PHYSICAL_FEASIBILITY"},
+    {"from":"N4","to":"N11","relation":"GENERATES_CANDIDATE"},
+    {"from":"N7","to":"N11","relation":"BLOCKS_PROMOTION_UNTIL_OPEN_SET_TEST"},
+    {"from":"N5","to":"N12","relation":"GENERATES_CANDIDATE"},
+    {"from":"N8","to":"N12","relation":"MOTIVATES_ENCODE_ONLY_DECOMPOSITION"},
+    {"from":"N6","to":"N13","relation":"GENERATES_GATE"},
+    {"from":"N14","to":"N5","relation":"MAKES_TARGET_MEASUREMENT_HIGH_PRIORITY"},
+    {"from":"N9","to":"N2","relation":"REQUIRES_WRONG_SEED_AND_DOSE_CONTROLS"},
+    {"from":"N10","to":"N1","relation":"REQUIRES_ROI_CONTEXT_AND_ANCHOR_CONTROLS"},
+    {"from":"N11","to":"N1","relation":"REFINES_IMPLEMENTATION_WITHOUT_NEW_SEMANTIC_ORGAN"}
+  ],
+  "fusion_disposition": "QNDRF-1 remains a candidate but gains a concrete executable VisionFeatureTap hinge and two mandatory pre-promotion gates: runtime sanity and scale decomposition. PAR-1 remains later-stage and dose-response-bound. No architecture promotion occurred."
+}

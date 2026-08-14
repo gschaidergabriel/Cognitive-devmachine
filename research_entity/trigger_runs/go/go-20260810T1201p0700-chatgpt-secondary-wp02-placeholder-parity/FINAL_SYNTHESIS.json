@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:12:00+07:00",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "frontier": {
+    "selected_work": "CC-WP-02 parser/canonical syntax identity parity",
+    "collision_check": "No open placeholder/canonicalizer PR found before patch; main advanced concurrently in unrelated WP03/UnifiedDB work, so code change isolated in a draft PR.",
+    "formal_gate_before": "OPEN_TARGET_RECEIPT_REQUIRED"
+  },
+  "hypothesis": "The standalone grammar-bound canonicalizer can mint a different canonical syntax identity than the production frontend because it uses Lark's default maybe_placeholders=True while production explicitly uses maybe_placeholders=False.",
+  "strongest_counterhypothesis": "The placeholder default is representation-only and cannot change the canonical tree/hash for admitted ClayCode sources, so no repair is needed.",
+  "current_source_evidence": {
+    "production_frontend_path": "tools/claycode_base_frontend.py",
+    "production_frontend_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "production_maybe_placeholders": false,
+    "standalone_canonicalizer_path": "tools/claycode_base_canonicalizer.py",
+    "standalone_canonicalizer_blob_before": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+    "standalone_constructor_before": "direct Lark(...) with maybe_placeholders omitted",
+    "standalone_none_behavior_before": "canonical_node(None) -> {literal:null}",
+    "selected_grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "selected_grammar_blob": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a"
+  },
+  "fresh_external_primary_evidence": {
+    "retrieved_on": "2026-08-10",
+    "sources": [
+      "https://lark-parser.readthedocs.io/en/latest/tree_construction.html",
+      "https://lark-parser.readthedocs.io/en/stable/classes.html",
+      "https://lark-parser.readthedocs.io/en/latest/grammar.html"
+    ],
+    "supported_point": "Lark documents maybe_placeholders=True as the default; with it, an absent [] optional produces None, while maybe_placeholders=False makes [] absence behave without a synthetic placeholder.",
+    "late_refresh_state": "A later repeat search attempt returned HTTP 503; no newer contradictory primary evidence was obtained in that subcycle."
+  },
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "OPTIONAL_PLACEHOLDER_SENSITIVITY_AS_SEMANTIC_DIFF_FALSIFIER",
+    "evidence_class": "LOCAL_CONTAINER_EXACT_GRAMMAR_LOGIC_NOT_UBUNTU_TARGET_ACCEPTANCE",
+    "runtime": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5",
+      "lark": "1.3.1",
+      "interegular": null,
+      "cpu_count": 5
+    },
+    "method": "Parse exact V17 fixtures once with Lark default placeholder semantics and once with the production maybe_placeholders=False contract; count synthetic None children and compare canonicalized tree hashes.",
+    "rows": [
+      {
+        "source": "record X { a:Int }\\n",
+        "default_none_children": 5,
+        "production_none_children": 0,
+        "canonical_equal": false,
+        "default_hash_prefix": "3b8de75414d99f2a",
+        "production_hash_prefix": "fd4894ad37b31e2f"
+      },
+      {
+        "source": "needle f()->Int\\n",
+        "default_none_children": 3,
+        "production_none_children": 0,
+        "canonical_equal": false,
+        "default_hash_prefix": "c9ca09f63f54dea4",
+        "production_hash_prefix": "efb3c6bf0fb42599"
+      },
+      {
+        "source": "record X { a:Int; b:Ref }\\n",
+        "default_none_children": 9,
+        "production_none_children": 0,
+        "canonical_equal": false,
+        "default_hash_prefix": "91de33cca7477b29",
+        "production_hash_prefix": "29480b686eae57d9"
+      },
+      {
+        "source": "module clay.demo\\nlaw residual>=0\\n",
+        "default_none_children": 0,
+        "production_none_children": 0,
+        "canonical_equal": true,
+        "default_hash_prefix": "13332ec3737fc05b",
+        "production_hash_prefix": "13332ec3737fc05b"
+      }
+    ],
+    "result": "COUNTERHYPOTHESIS_FALSIFIED_CANONICAL_IDENTITY_SPLIT_REPRODUCED",
+    "promotion": "NONE"
+  },
+  "repair_candidate": {
+    "branch": "chatgpt/go-wp02-placeholder-parity-20260810",
+    "commit": "4b5d969923ba348b71d228f108c04eccfacc135f",
+    "pull_request": 142,
+    "pull_request_state": "DRAFT",
+    "change": [
+      "Use claycode_base_frontend.build_parser so canonicalizer and production frontend share maybe_placeholders=False.",
+      "Fail closed if an unexpected None child appears.",
+      "Add explicit absent-optional regression fixtures and receipt metadata."
+    ],
+    "rollback": "Do not merge PR 142; current main remains unchanged by this code candidate.",
+    "frank_harness_mutation": false
+  },
+  "candidate_validation": {
+    "local_semantic_replay": {
+      "fixtures": 4,
+      "none_placeholder_counts_after_candidate": [0, 0, 0, 0],
+      "result": "PASS_FOR_TARGETED_FALSIFIER_ONLY"
+    },
+    "github_pr_checks": {
+      "head": "4b5d969923ba348b71d228f108c04eccfacc135f",
+      "runs": [
+        {"run_id": 31357613744, "name": "Research Entity Verify", "conclusion": "failure", "visible_steps": 0},
+        {"run_id": 31357613771, "name": "ClayCode BASE Frontend CI", "job_id": 93360157003, "conclusion": "failure", "visible_steps": 0, "log_blob": "NOT_AVAILABLE_404"},
+        {"run_id": 31357613742, "name": "Research Entity Identity Guard", "conclusion": "failure", "visible_steps": 0}
+      ],
+      "classification": "PRE_STEP_CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_NO_PATCH_EXECUTION_EVIDENCE",
+      "scientific_interpretation": "Neither supports nor refutes the code candidate."
+    }
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "affected": ["CC-WP-02-PARSER-CANON", "canonical syntax identity", "strict closure receipt integrity"],
+    "change": "Canonical identity generators should share the production parser absence semantics; synthetic parser placeholders must never silently become semantic identity.",
+    "strongest_remaining_counterhypothesis": "The standalone canonicalizer is intentionally a distinct representation whose hash is never compared or consumed as production semantic identity, making parity unnecessary. This must be falsified by tracing its receipt/hash consumers before promotion.",
+    "no_semantic_language_change": true,
+    "no_frank_harness_change": true
+  },
+  "gate_impact": {
+    "CC-WP-02-PARSER-CANON": "REMAINS_OPEN",
+    "BASE_CLAYCODE_RELEASE": "REMAINS_NOT_PASS",
+    "counts_as_andreas_target_acceptance": false,
+    "counts_as_wp02_pass": false,
+    "promotion_allowed": false
+  },
+  "next_falsifiers": [
+    "Trace every consumer of claycode_base_canonicalizer.py hashes/receipts to determine whether the divergent identity can escape into promotion or downstream cache/equality decisions.",
+    "Execute PR 142 exact bytes in an actually admitted CI/Ubuntu lane; require production frontend/canonicalizer parity fixtures and strict V17 closure.",
+    "If executable CI is green, rerun the same exact hash-locked candidate on the registered Andreas Ubuntu developer target before formal WP02 promotion.",
+    "Repair resource aggregation independently; do not conflate it with placeholder semantics."
+  ],
+  "negative_results_preserved": [
+    "PR CI red status is not compiler/canonicalizer failure evidence because no visible job step executed.",
+    "No claim that canonicalizer parity closes typed IR, type/effect, WP03, WP04, WP06, WP14 or Frank release acceptance."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

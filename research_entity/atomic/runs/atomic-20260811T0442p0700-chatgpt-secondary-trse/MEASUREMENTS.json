@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "candidate":"TRSE-001 Transverse Recurrence Stability Envelope",
+  "evidence_class":"LOCAL_SYNTHETIC_REFERENCE_MODEL_ONLY",
+  "seed":20260811,
+  "systems_per_class":6000,
+  "total_systems":12000,
+  "phase_steps_per_return":4,
+  "transverse_dimensions":2,
+  "neutral_phase_dimensions":1,
+  "probes_per_noisy_fit":16,
+  "exact_classifier_accuracy":{"FULL_RETURN_RHO":1.0,"MAX_LOCAL_RHO":0.0,"PRODUCT_LOCAL_RHO":0.5,"SCALAR_HISTORY_ONLY":0.5,"TRANSVERSE_RETURN_RHO":1.0},
+  "distribution":{
+    "stable_max_local_rho":{"p05":1.0638603772423485,"p50":1.1974675336305918,"p95":1.3350984054025787},
+    "stable_transverse_rho":{"p05":0.29539599861232296,"p50":0.40854686977304766,"p95":0.541573068155819},
+    "unstable_max_local_rho":{"p05":0.8786850578063469,"p50":0.916516806250746,"p95":0.9380148668184514},
+    "unstable_transverse_rho":{"p05":1.0338779797476503,"p50":1.1499526880144413,"p95":1.28046419999807}
+  },
+  "noisy_return_estimation":{
+    "0.005":{"full_return_accuracy":0.9980833333333333,"transverse_phase_aligned_accuracy":1.0,"full_return_false_positive":0,"full_return_false_negative":23,"transverse_false_positive":0,"transverse_false_negative":0},
+    "0.01":{"full_return_accuracy":0.99675,"transverse_phase_aligned_accuracy":1.0,"full_return_false_positive":1,"full_return_false_negative":38,"transverse_false_positive":0,"transverse_false_negative":0},
+    "0.02":{"full_return_accuracy":0.9835833333333334,"transverse_phase_aligned_accuracy":1.0,"full_return_false_positive":118,"full_return_false_negative":79,"transverse_false_positive":0,"transverse_false_negative":0},
+    "0.03":{"full_return_accuracy":0.9531666666666667,"transverse_phase_aligned_accuracy":0.9996666666666667,"full_return_false_positive":454,"full_return_false_negative":108,"transverse_false_positive":0,"transverse_false_negative":4},
+    "0.05":{"full_return_accuracy":0.8903333333333333,"transverse_phase_aligned_accuracy":0.997,"full_return_false_positive":1151,"full_return_false_negative":165,"transverse_false_positive":0,"transverse_false_negative":36},
+    "0.08":{"full_return_accuracy":0.8295,"transverse_phase_aligned_accuracy":0.9910833333333333,"full_return_false_positive":1796,"full_return_false_negative":250,"transverse_false_positive":0,"transverse_false_negative":107}
+  },
+  "coupling_lesion_control":{"n":51,"both_couplings_median_rho":1.1485904010484884,"both_unstable_fraction":0.8235294117647058,"lesion_first_coupling_median_rho":0.35283600000000004,"lesion_second_coupling_median_rho":0.35283600000000004,"first_lesion_stable_fraction":1.0,"second_lesion_stable_fraction":1.0},
+  "meaning":{"stable_counterexample":"a locally expansive phase can belong to a stable full recurrence","unstable_counterexample":"all local phase spectral radii can be <1 while non-normal cross-phase coupling makes the full recurrence unstable","phase_law":"productive recurrence may carry a neutral tangent/phase mode; transverse perturbation decay is the relevant orbital-stability quantity","nonclaim":"does not establish real Frank loop stability, optimal thresholds, target-VPS cost, or unique architecture benefit"},
+  "environment":{"python":"3.13.5","numpy":"2.3.5","os":"Linux-6.18.35-x86_64-with-glibc2.41","machine":"x86_64","processor":"UNKNOWN","cpu_count":5,"network":"NOT_USED","gpu":"NOT_USED","target_vps":false},
+  "reproducibility_note":"Rerun reproduced all deterministic classifications, distributions and confusion counts exactly; elapsed wall-clock timing fields were intentionally omitted because they vary by run and are not evidence for this candidate."
+}

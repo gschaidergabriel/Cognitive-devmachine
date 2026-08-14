@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-CCF-001",
+  "claim_under_test":"For pure deterministic typed local transitions, a sparse epoch-bound semantic commutator can match full two-order replay for order sensitivity while exposing more safe independence than conservative read/write conflicts at lower cost than full-state replay.",
+  "evidence_scope":"SYNTHETIC_PROXY_ONLY",
+  "primary_baselines":[
+    "FULL_REPLAY: apply both operations in both orders to complete 512-dimensional state",
+    "RW_CONFLICT: conservative read/write overlap declares conflict",
+    "NO_CANDIDATE: equivalent to current conservative/fixed coordination for this proxy"
+  ],
+  "controls":[
+    "SHUFFLED: shuffle commutator labels while preserving prevalence",
+    "STALE_EPOCH: perturb 25% of base state while reusing old commutator decision",
+    "RESOURCE_MATCHED_FULL_PLUS_RW: spend only local-commutator wall-clock on full replays, use conservative RW for remainder",
+    "FIVE_SEED_ROBUSTNESS: seeds 7,42,101,2026,9001 at N=10000 each"
+  ],
+  "success_criteria":[
+    "zero false-commute labels on eligible synthetic operations",
+    "exact match to full replay on generated pure deterministic transition class",
+    "safe-independence fraction greater than RW conflict baseline",
+    "local commutator materially cheaper than full replay",
+    "stale-state control must demonstrate why epoch binding is required rather than silently remaining trusted"
+  ],
+  "automatic_failure_conditions":[
+    "any effect-authority inference from proxy result",
+    "any promotion to target-supported without H1/H2/target-VPS evidence",
+    "any reuse of commutator receipt across mismatched state instance/epoch"
+  ]
+}

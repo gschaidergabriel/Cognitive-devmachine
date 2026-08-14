@@ -1,0 +1,51 @@
+module clay.atomic.trse
+version "0.1-research"
+status TEST_OBLIGATION_ONLY_NOT_PROMOTED
+
+record TransverseReturnReadout {
+  cycle_id: SemanticId
+  state_epoch: SemanticEpoch
+  reference_phase_id: SemanticId
+  perturbation_basis_hash: Hash
+  return_period_steps: Int
+  estimator_id: SemanticId
+  transverse_gain_p50: Float
+  transverse_gain_p95: Float
+  transverse_rho_estimate: Float
+  uncertainty_upper: Float
+  probe_count: Int
+  evidence_class: EvidenceClass
+}
+
+record RecurrenceStabilityEnvelope {
+  readout: TransverseReturnReadout
+  task_utility_evidence: EvidenceRef
+  loop_regime_readout: EvidenceRef
+  lesion_rescue_refs: Set<EvidenceRef>
+  source_baseline_refs: Set<EvidenceRef>
+  expires_on_epoch_or_basis_change: Bool = true
+}
+
+law trajectory_periodicity != orbital_stability
+law local_loop_stability != composed_loop_of_loops_stability
+law phase_drift != transverse_divergence
+law RecurrenceStabilityEnvelope != EffectAuthorization
+law RecurrenceStabilityEnvelope != ContinuationAuthority
+law stability_measurement != architecture_promotion
+
+rule candidate_productive_orbit(readout) requires
+  readout.evidence_class in {TARGET_MEASURED, MATCHED_REPLAY_MEASURED}
+  && readout.uncertainty_upper < 1.0
+
+rule suspected_overcoupling(readout) if
+  readout.transverse_gain_p95 > 1.0
+  || readout.uncertainty_upper >= 1.0
+
+rule invalidate(envelope) if
+  current_state_epoch != envelope.readout.state_epoch
+  || current_perturbation_basis_hash != envelope.readout.perturbation_basis_hash
+  || source_baseline_superseded(envelope.source_baseline_refs)
+
+// Diagnostic evidence only. The existing loop controller may consume a validated
+// envelope, but the envelope cannot mint truth, learning credit, continuation,
+// effect authority, or architecture promotion.

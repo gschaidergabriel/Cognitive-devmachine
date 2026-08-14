@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2125p0700-eudi-e1e5-falsification",
+  "update_timestamp": "2026-08-10T21:28:00+07:00",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+  "repository": "gschaidergabriel/Dr.-Unterweger",
+  "pull_request": 119,
+  "candidate_head_sha": "ec434c2f80a3ea9ddc2153f45cfe106def005d2c",
+  "github_pr_merge_sha_executed": "da04646e4b8046ec910aaab9306e0288bf458902",
+  "workflow_run_id": 31398279985,
+  "job_id": 93486546203,
+  "host": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "user": "frankrunner",
+    "uid": 1000,
+    "kernel": "6.8.0-117-generic",
+    "machine": "x86_64"
+  },
+  "eudi_e1_e3": {
+    "status": "PASS_BOUNDED",
+    "direct_self_open_etxtbsy_all": true,
+    "detached_write_pass_all": true,
+    "restart_lineage_pass": true,
+    "state_counter_after_second_start": 2,
+    "immutable_identity_preserved": true,
+    "interpretation": "H-EUDI-03 remains supported only as an executable-image detachment mechanism."
+  },
+  "eudi_e5": {
+    "status": "COUNTEREVIDENCE",
+    "eudi_state_write_succeeded": true,
+    "eudi_immutable_prefix_write_succeeded": true,
+    "eudi_immutable_changed": true,
+    "eudi_immutable_sha256_before": "642144668841783c9f93d12d028695ee3b1c746a976ed85c237b57695a3c0f59",
+    "eudi_immutable_sha256_after": "d06a8288cfea443beb96c7f7bc8bf9645ead48957e82420ee8026e99270bb80c",
+    "split_state_write_succeeded": true,
+    "split_root_odrdw_succeeded": false,
+    "split_root_errno": 13,
+    "split_root_error": "EACCES",
+    "interpretation": "On the actual Frank Hostinger body under frankrunner uid 1000, the one-writable-inode layout loses the straightforward POSIX immutable-root boundary available to a split layout. This is direct target-VPS counterevidence against naive H-EUDI-05."
+  },
+  "architecture_effect": "NO_PROMOTION; EUDI now has simultaneously one supported mechanism and one verified target-VPS security deficit.",
+  "required_resolution": "Any EUDI candidate must demonstrate a lower-level bounded-write/confinement mechanism that prevents mutable-state authority from addressing immutable root/model bytes, or strict one-file EUDI should be rejected in favor of split layout.",
+  "next": ["EUDI-E4 crash-cut matrix", "EUDI-E5 confinement candidate differential", "EUDI-E2 embedded GGUF mmap differential"]
+}

@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T2306p0700-chatgpt-secondary-receipt-contract-cohort",
+  "trigger": "go",
+  "timestamp_local": "2026-08-14T23:06:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "28ae89bb2b701bf00ca7760a712934c3f1406d19",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "996c7e91584b4ad91920ce591bc6fc569362013f",
+    "candidate_pr": 577,
+    "candidate_head": "5684403bc5f1d679bb80ebde9d8dade4d18fc9d9",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "SQLite 3.53.4 is upstream-fixed for the WAL-reset defect and existing work already covers fixed-runtime identity and cross-generation receipt cohort binding. The highest-information remaining local composition question was whether equal cohort identity also establishes equal receipt-contract semantics.",
+    "duplicate_avoidance": [
+      "Did not rerun the existing CROSS_GENERATION_RECEIPT_SPLICE experiment",
+      "Did not rerun SQLite WAL corruption/recovery experiments",
+      "Did not mutate accepted Hostinger production state",
+      "Extended existing draft PR #577 rather than opening a duplicate branch"
+    ]
+  },
+  "observed_reality": {
+    "sqlite_upstream_wal_reset_fix": "SQLite documents the WAL-reset defect through 3.51.2 and the fix from 3.51.3 onward; 3.53.4 is therefore version-suitable when exact productive binding is proven.",
+    "pr_577_pre_delta_head": "fd740fe4f0e85fde64ef53cdd22d87579a96e100",
+    "pr_577_pre_delta_run": 31779867376,
+    "pr_577_pre_delta_run_status": "SUCCESS",
+    "pre_delta_cohort_semantics": "Common binding digest covered host/boot/process/repo/SQLite library/SQLite trust anchor/UnifiedDB object/semantic lineage/external freshness but did not validate per-kind receipt producer contract identity.",
+    "productive_hostinger_persistence_proven": false
+  },
+  "hypothesis": "A receipt with incompatible producer semantics can be spliced into an otherwise coherent observation cohort if its common binding fields match, because the current cohort normalizer ignores producer protocol/schema contract identity.",
+  "strongest_counterhypothesis": "Receipt semantic identity is already guaranteed by an upstream trusted normalization/authentication layer, so repeating a contract identity discriminator in the cohort layer adds no useful fail-closed information and only duplicates authority elsewhere.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "SEMANTIC_PROTOCOL_SPLICE",
+    "class": "cross-contract evidence composition",
+    "reversible": true,
+    "disposable_state": true,
+    "product_bytes_modified_by_experiment": false,
+    "canonical_state_modified_by_experiment": false,
+    "description": "A disposable source-equivalent discriminator held every cohort binding field constant for product_start, sqlite_runtime, persistence and restart. The treatment changed only persistence producer protocol/schema metadata to an incompatible legacy contract.",
+    "baseline_unique_cohort_digests": 1,
+    "treatment_unique_cohort_digests": 1,
+    "baseline_digest": "cc739edf7e460a68d72dc41987158df4cd39b3fc37f8b615e00bed9ce491bacb",
+    "treatment_digest": "cc739edf7e460a68d72dc41987158df4cd39b3fc37f8b615e00bed9ce491bacb",
+    "result": "SEMANTIC_CONTRACT_IDENTITY_NOT_DISCRIMINATED_BY_PRE_DELTA_COHORT",
+    "interpretation": "Equal observation-cohort identity did not imply equal receipt-contract semantics. This does not prove receipt forgery, authentication bypass, or accepted-Hostinger exploitability."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption defect affected releases through 3.51.2 and is fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite current release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "Current SQLite release observed during this run is 3.53.4."
+    }
+  ],
+  "repair": {
+    "status": "IMPLEMENTED_ON_EXISTING_DRAFT_BRANCH",
+    "branch": "chatgpt/go-receipt-cohort-anchor-binding-20260814",
+    "commits": [
+      "a5038875cfc792fb49cf5cdaccd91272197464cf",
+      "bd7900ac4dce06255ae9864b3d2a4327fffe170f",
+      "5684403bc5f1d679bb80ebde9d8dade4d18fc9d9"
+    ],
+    "mechanism": [
+      "Require top-level receipt_contract_sha256 on every normalized receipt",
+      "Require an explicit required_contracts map covering exactly the required receipt kinds",
+      "Fail closed on per-kind receipt contract mismatch",
+      "Keep per-kind contract identity separate from the common observation cohort digest",
+      "Emit a domain-separated contract-policy manifest digest",
+      "Explicitly retain receipt_contract_policy_authority_established=false"
+    ],
+    "authority_nonclaim": "The candidate validates equality against a supplied contract policy; it does not establish that policy's authority or authenticate receipts."
+  },
+  "tests": {
+    "local_deterministic": {
+      "status": "PASS",
+      "count": "13/13"
+    },
+    "self_hosted": {
+      "workflow": "Frank product receipt cohort V1",
+      "run_id": 31817736595,
+      "head_sha": "5684403bc5f1d679bb80ebde9d8dade4d18fc9d9",
+      "runner": "clay-4",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "status": "SUCCESS",
+      "successful_steps": [
+        "Fetch exact candidate",
+        "Compile candidate and regression",
+        "Product cohort regression",
+        "Repository integrity replay",
+        "Emit bounded receipt",
+        "Upload evidence",
+        "Cleanup"
+      ],
+      "workflow_new_go_unusual_experiment_count": 0
+    }
+  },
+  "grf_collapse": {
+    "r0": "PR #577 pre-delta bound one observation cohort but ignored per-kind producer contract identity.",
+    "r2": "Equal cohort identity is enough because receipt semantics are implicitly homogeneous.",
+    "r3": "A semantically incompatible persistence receipt can preserve all common cohort fields.",
+    "r4": "SEMANTIC_PROTOCOL_SPLICE produced the same cohort digest before repair.",
+    "collapse": "Reject implicit semantic homogeneity. Retain explicit per-kind contract-digest discrimination as a composition precondition, but do not promote the caller-supplied contract map to trusted authority."
+  },
+  "outcomes": [
+    {
+      "claim": "same cohort binding implies same receipt semantic contract",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "explicit per-kind receipt contract digest is a useful fail-closed composition discriminator",
+      "outcome": "RETAIN",
+      "evidence_class": "SELF_HOSTED_MECHANISM"
+    },
+    {
+      "claim": "caller-supplied contract policy is itself trusted authority",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "F-V01-13 or whole Frank v0.1 is complete",
+      "outcome": "REJECT"
+    }
+  ],
+  "remaining_discriminator": "On one accepted ProductStart/self.root service generation, bind an independently admitted receipt-contract policy to exact ProductStart identity, fixed SQLite 3.53.4/root anchor, real canonical UnifiedDB WAL transaction, semantic lineage/freshness, clean restart/readback, and rollback/downgrade/library-swap controls. The current mechanism does not authenticate the policy or prove productive Hostinger persistence.",
+  "authority": {
+    "effect_authority_changed": false,
+    "harness_authority_changed": false,
+    "frank_self_harness_mutation": false,
+    "final_training_authorized": false
+  }
+}

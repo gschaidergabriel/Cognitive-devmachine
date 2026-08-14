@@ -1,0 +1,17 @@
+{
+  "affected_branches":["frank","unifieddb","claycode","harness","clayresearch","security/recovery"],
+  "architecture_promotion":"NO",
+  "candidate_id":"ATOMIC-CANDIDATE-MOLT-001",
+  "evidence_class":"LOCAL_LINUX_USERSPACE_SIMULATION_PLUS_PRIMARY_EXTERNAL_MECHANISM_RESEARCH",
+  "integration_status":"POSSIBILITY_ONLY_NOT_CANONICAL",
+  "key_negative_results":{"byte_amplification_vs_tiny_simple_log":16.43098007393382,"local_fs_append_flag_test":"BLOCKED_CAPABILITY","o_append_alone":"REFUTED_AS_SECURITY_BOUNDARY_BY_RWF_NOAPPEND_EXTERNAL_EVIDENCE"},
+  "key_positive_results":{"partial_frame_cuts_without_fabricated_state":451,"restart_continuity":{"after_epoch":810,"before_epoch":800,"expected_after":810,"pass":true},"state_corruption_cases_no_fabrication":712},
+  "name":"Monotonic One-Inode Lineage Tail",
+  "next_highest_information_falsifier":"Target-VPS kernel append-only inode attack: with FS_APPEND_FL/equivalent set by provisioning and broker lacking CAP_LINUX_IMMUTABLE, attempt nonappend open, pwrite, pwritev2 RWF_NOAPPEND, ftruncate, fallocate and alternate write paths; compare to split and loop-subrange controls.",
+  "one_sentence_mechanism":"Keep root/model bytes as an immutable one-inode prefix and dissolve mutable UDB writes into brokered, kernel-bound append-only typed state epochs; ordinary cognition never receives a writable image descriptor.",
+  "run_id":"atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "schema_version":"1.0",
+  "selected_problem":"EUDI same-inode region isolation counterevidence on state writer O_RDWR capability.",
+  "status":"SUPPORTED_LOCAL_PROXY_RETEST",
+  "training_authorized":false
+}

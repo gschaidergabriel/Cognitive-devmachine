@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:26:41+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_continuity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "observed_reality": {
+    "source_repo": "gschaidergabriel/Dr.-Unterweger",
+    "diagnostic_hardening_commit": "dae420a0409d8cd6744f7cdc6b116d09b3c6f342",
+    "accepted_target_run": 31527596099,
+    "accepted_target_job": 93899599287,
+    "workflow_conclusion": "failure_expected_fail_closed",
+    "diagnostic_status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+    "runtime_sqlite_version": "3.45.1",
+    "runtime_sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "runtime_library_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "runtime_library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "root_anchor_present": false,
+    "anchor_metadata_trusted": false,
+    "anchor_runtime_match": false
+  },
+  "grf": {
+    "generated_reality": "A content-matching SQLite runtime anchor is sufficient evidence for productive runtime admission.",
+    "counter_reality": "A matching anchor whose file or ancestor path is symlinked, non-root-owned, or group/other-writable can be mutable by a weaker authority and therefore cannot act as an independent deployment trust anchor.",
+    "falsifier": "Transpose ownership/path-writability while holding anchor content and runtime identity constant.",
+    "collapse": "COUNTER_REALITY_SUPPORTED_FOR_DIAGNOSTIC_POLICY; POSITIVE_PRODUCTION_ADMISSION_NOT_PROVEN"
+  },
+  "single_bounded_unusual_experiment": {
+    "id": "PARENT_WRITABILITY_TRANSPOSITION",
+    "count_for_macro_cycle": 1,
+    "additional_unusual_experiments_in_same_macro_cycle": false,
+    "scope": "local deterministic policy simulation only",
+    "baseline": "root-owned regular anchor and root-owned non-writable ancestor chain",
+    "perturbations": [
+      "world-writable parent with identical anchor content",
+      "user-owned anchor with identical content",
+      "symlink anchor with identical content"
+    ],
+    "old_policy_result": "accepted all four arms because only runtime/content equality decided admission",
+    "hardened_policy_result": "accepted trusted baseline; rejected all three authority-weakened perturbations",
+    "production_mutation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE"
+  },
+  "architecture_delta": {
+    "state": "TESTED_FAIL_CLOSED_DIAGNOSTIC_HARDENING",
+    "commit": "dae420a0409d8cd6744f7cdc6b116d09b3c6f342",
+    "workflow": ".github/workflows/frank-sqlite-productive-path-readonly-v1.yml",
+    "changes": [
+      "require anchor file to be regular, non-symlink, UID-0-owned and not group/other writable",
+      "require every resolved anchor ancestor through root to be a regular directory, non-symlink, UID-0-owned and not group/other writable",
+      "fail closed as BLOCKED_PRODUCTION_TRUST_ANCHOR_METADATA_UNTRUSTED when metadata trust fails",
+      "emit decisive runtime and anchor trust fields as GitHub annotation"
+    ],
+    "accepted_target_result": "Workflow executed on self-hosted Linux/X64 and intentionally exited 78 because the production root anchor is absent; runtime observation remained mutation-free.",
+    "non_claim": "This does not provision the anchor, upgrade SQLite, prove a WAL fix, or close F-V01-13."
+  },
+  "external_primary_evidence": {
+    "sqlite_upstream": "SQLite documents the WAL-reset corruption race as likely present from 3.7.0 through 3.51.2 and fixed in 3.51.3 and later.",
+    "ubuntu_current_package_negative": "A coordinated accepted-target read-only provenance probe for installed libsqlite3-0 3.45.1-1ubuntu2.7 found no explicit WAL-reset fix evidence in the installed Debian changelog; this is negative evidence only and does not prove the binary lacks an unmentioned backport.",
+    "promotion_boundary": "Exact Ubuntu patch/source/build provenance or a separately attested fixed runtime remains required."
+  },
+  "coordination": {
+    "research_head_seen_before_write": "a26920e22e6ff63c37ab4e56b468018cf7e58780",
+    "workspace_blob_seen": "620971f539766258886899040984097dbd1cdddc",
+    "related_draft_pr": 433,
+    "relationship": "PR 433 tests deployment ownership of the runtime loader object; this delta independently hardens the diagnostic trust-anchor file and ancestor authority. No PR 433 merge or acceptance claim is made.",
+    "duplicate_work_avoided": true
+  },
+  "release_effect": {
+    "F_V01_13": "IN_PROGRESS_BLOCKED",
+    "whole_frank_v0_1": "IN_PROGRESS",
+    "reason": "Productive runtime is still SQLite 3.45.1, exact WAL-fix provenance is unproven, and the required root-owned runtime anchor is absent.",
+    "training_authorized": false
+  },
+  "next_falsifier": "Through a separate trusted deployment/admin authority, provision and attest an exact fixed SQLite runtime plus root-owned/non-writable anchor, then rerun the productive-path probe and V5 positive admission with downgrade, stale-anchor, library-swap, restart and recovery rejection tests.",
+  "negative_results_preserved": [
+    "No root anchor was provisioned.",
+    "No sudo privilege was granted or bypassed.",
+    "No second unusual experiment was executed.",
+    "The accepted-target diagnostic remains deliberately non-success while blocked.",
+    "SQLite 3.45.1-1ubuntu2.7 WAL-reset backport status is not promoted beyond negative changelog evidence.",
+    "No final/model training was started."
+  ]
+}

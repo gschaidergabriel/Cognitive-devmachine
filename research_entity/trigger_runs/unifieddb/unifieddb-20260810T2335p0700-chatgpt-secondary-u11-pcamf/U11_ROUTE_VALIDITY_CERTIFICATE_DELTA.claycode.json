@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0","delta_id":"U11_RVC_SHADOW_SENTINEL_V1","status":"CANDIDATE_NOT_PROMOTED",
+  "purpose":"Give learned/opaque retrieval accelerators a revocable, empirically scoped right to execute while preserving deterministic fallback.",
+  "RouteValidityCertificate":{"binds":["accelerator_id","accelerator_build_hash","canonical_index_hash","source_state_epoch","calibration_dataset_hash","score_function_hash","threshold","risk_metric","target_risk","confidence","calibration_selected_n","calibration_errors","risk_upper_bound","validity_scope","created_at","expiry"],"admission":"route only if certificate hash/version matches current field+index and risk_upper_bound <= target_risk and query is inside declared validity scope","non_authority":"certificate permits an accelerator query, never truth/effect/reentry authority"},
+  "ShadowRiskSentinel":{"mechanism":"sample a configurable fraction of accelerated routes; run exact/reference path in shadow; compare selected canonical references; update online risk evidence","tripwire":"evidence of risk violation, hash drift, epoch mismatch, unexplained distribution drift, or repeated disagreement -> QUARANTINE accelerator + fallback","recovery":"recalibrate/rebuild in shadow; new certificate required before READY"},
+  "hard_negative":"finite-sample IID calibration alone did not protect against a constructed same-index tail shift; universal guarantee is forbidden",
+  "interaction_with_canonical_rebind":"canonical rebind proves returned candidate identity/state validity, not retrieval optimality/relevance; routing risk and authority proof are separate."
+}

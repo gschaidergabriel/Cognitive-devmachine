@@ -1,0 +1,125 @@
+name: ClayCode G9 Frank Effect Boundary Compatibility
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-effect-boundary-compatibility.yml'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/trigger_runs/claycode/20260810T2216p0700-chatgpt-secondary-effect-boundary-mismatch/TARGET_FRANK_EFFECT_CONTRACT_SNAPSHOT.json'
+      - 'research_entity/trigger_runs/claycode/20260810T2216p0700-chatgpt-secondary-effect-boundary-mismatch/claycode_effect_boundary_compatibility_probe.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycode-effect-boundary-compatibility
+  cancel-in-progress: false
+
+jobs:
+  target-vps-compatibility:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact current main read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Execute cross-source compatibility discriminator
+        shell: bash
+        run: |
+          set -euo pipefail
+          probe='research_entity/trigger_runs/claycode/20260810T2216p0700-chatgpt-secondary-effect-boundary-mismatch/claycode_effect_boundary_compatibility_probe.py'
+          out=/tmp/CC_G9_V3_FRANK_EFFECT_BOUNDARY.json
+          /usr/bin/time -v python3 "$probe" > "$out" 2> /tmp/CC_G9_V3_FRANK_EFFECT_BOUNDARY.time
+          python3 - <<'PY'
+          import json, os, platform, socket
+          from datetime import datetime, timezone
+          from pathlib import Path
+          p=Path('/tmp/CC_G9_V3_FRANK_EFFECT_BOUNDARY.json')
+          data=json.loads(p.read_text(encoding='utf-8'))
+          assert data['pass'] is True
+          assert data['compatibility']=='INCOMPATIBLE_FAIL_CLOSED'
+          assert data['promotion']=='NONE'
+          data['evidence_class']='REAL_SELF_HOSTED_TARGET_VPS_CROSS_SOURCE_BOUNDARY_DISCRIMINATOR'
+          data['execution_environment']={
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+            'hostname':socket.gethostname(),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'observed_at':datetime.now(timezone.utc).isoformat(),
+            'target_vps':True,
+          }
+          data['resource_shadow_time_v']=Path('/tmp/CC_G9_V3_FRANK_EFFECT_BOUNDARY.time').read_text(encoding='utf-8',errors='replace')
+          p.write_text(json.dumps(data,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps({'compatibility':data['compatibility'],'github_sha':data['execution_environment']['github_sha']},sort_keys=True))
+          PY
+
+      - name: Upload target-VPS receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-effect-boundary-${{ github.run_id }}
+          path: /tmp/CC_G9_V3_FRANK_EFFECT_BOUNDARY.json
+          if-no-files-found: error
+          retention-days: 30
+
+  persist-receipt:
+    needs: target-vps-compatibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout persistence lane
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Download exact target receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: claycode-effect-boundary-${{ github.run_id }}
+          path: /tmp/claycode-effect-boundary
+
+      - name: Validate and persist receipt
+        shell: bash
+        env:
+          TESTED_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          src=/tmp/claycode-effect-boundary/CC_G9_V3_FRANK_EFFECT_BOUNDARY.json
+          python3 - "$src" "$TESTED_SHA" <<'PY'
+          import json,sys
+          p=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert p['schema_version']=='1.0'
+          assert p['test']=='CC_G9_V3_TO_FRANK_V01_EFFECT_BOUNDARY_COMPATIBILITY'
+          assert p['pass'] is True
+          assert p['compatibility']=='INCOMPATIBLE_FAIL_CLOSED'
+          assert p['promotion']=='NONE'
+          assert p['execution_environment']['github_sha']==sys.argv[2]
+          assert p['execution_environment']['target_vps'] is True
+          PY
+          mkdir -p research_entity/claycode/base/receipts
+          cp "$src" "research_entity/claycode/base/receipts/CC_G9_V3_FRANK_EFFECT_BOUNDARY_${RUN_ID}.json"
+          cp "$src" research_entity/claycode/base/receipts/CC_G9_V3_FRANK_EFFECT_BOUNDARY_LATEST.json
+          git config user.name 'clay-ci-receipt-writer'
+          git config user.email 'clay-ci-receipt-writer@users.noreply.github.com'
+          git add "research_entity/claycode/base/receipts/CC_G9_V3_FRANK_EFFECT_BOUNDARY_${RUN_ID}.json" research_entity/claycode/base/receipts/CC_G9_V3_FRANK_EFFECT_BOUNDARY_LATEST.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "ci(claycode): persist G9 Frank effect-boundary receipt ${RUN_ID}"
+          git pull --rebase origin main
+          git push origin HEAD:main

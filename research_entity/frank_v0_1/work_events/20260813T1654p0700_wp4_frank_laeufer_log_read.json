@@ -1,0 +1,14 @@
+{
+  "type": "work_event",
+  "timestamp": "2026-08-13T16:54:00+07:00",
+  "actor": "gabriel-claude wp4",
+  "task": "wp4 laeufer-Logs lesen: read-only SSH inspection of frank-api /root/frank-laeufer/log/ for the 3 red gate labels found by wp1 (claycode-opaque-parser-fidelity-v1, claycode-runtime-nominal-boundary-oob-vps, frank-provider-fence-fresh-main-vps)",
+  "method": "ssh frank-api (31.97.117.141) with sudo cat, read only, no write on remote host",
+  "commands": [
+    "ssh frank-api 'sudo ls -la /root/frank-laeufer/log/'",
+    "ssh frank-api 'sudo cat <logfile>'",
+    "loop over ls -t <gate>-*.log, grep TOR_RC=, take first file with rc=1"
+  ],
+  "outcome": "for all 3 gate, most recent rc=1 log = ENV error (missing file at pinned-sha checkout / bind step), not a content verdict. newest log per gate (PR 571, sha dcd06ec6) = clean PASS.",
+  "package_path": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-164423-wp4/"
+}

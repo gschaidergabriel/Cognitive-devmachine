@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0424p0700-chatgpt-secondary-human-projection-hardfield-fence",
+  "trigger": "go",
+  "status": "TESTING_TARGET_PENDING",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_join": {
+    "entity_id": "frank-project-global-research-entity",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "project_repo_head_observed_before_branch": "c0ada1fab20b6872ccf15553a3249977b6e15306",
+    "program": "FRANK_V0_1",
+    "target_identity": "self.root",
+    "human_surface": "Frank"
+  },
+  "fresh_state": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_initial": "d55b452776295153576011988b0befce7f13b238",
+    "target_main_candidate_base": "f649ce7ab8249c9dbc61ad7018804204ade53cb5",
+    "target_main_latest_observed": "c8b41f3cb423a6ef5406b7111979f415c00bec2c",
+    "latest_main_delta_from_candidate_base": "single-instance presence evidence only; no overlapping human-projection files observed",
+    "workspace_staleness_observed": true,
+    "workspace_staleness_note": "FRANK_V0_1_WORKSPACE.json still contains some pre-#261 F-V01-09 blocker text and was deliberately not overwritten from a stale snapshot."
+  },
+  "coordination_negative_result": {
+    "candidate_pr": 269,
+    "disposition": "NOT_SELECTED_SUPERSEDED_DUPLICATE",
+    "superseded_by_pr": 266,
+    "reason": "Fresh overlap search showed PR #266 already owns the exact current ClayCode module/symbol frontier and current main contains frank.hive/frank.memory modules. The stale #245 absence premise was invalidated.",
+    "merged": false,
+    "production_delta_promoted": false
+  },
+  "selected_work": {
+    "work_package": "F-V01-07-NEEDLE-TRANSLATOR",
+    "reason": "Dense active workers occupied identity/lineage, compiler module resolution, token ingress, effect authority and recovery. No current open PR owned the explicit German human-projection hard-field boundary.",
+    "target_pr": 275,
+    "target_branch": "chatgpt/go-human-projection-hardfield-fence-20260811",
+    "candidate_base": "f649ce7ab8249c9dbc61ad7018804204ade53cb5",
+    "candidate_head_at_receipt_start": "f3e957d5be56209ae276ae8955fa2ccd9268c651",
+    "pr_mergeable_observed": true,
+    "pr_draft": true
+  },
+  "hypothesis": "Human-language projection may change surface wording, but canonical SELF and authority-bearing runtime fields must travel as an independently bound Clay hard-field capsule and must never be reconstructed from localized text, aliases, confirmation phrases or Unicode-confusable surface identifiers.",
+  "strongest_counterhypothesis": "A future production translator/model adapter could bypass the hard-field capsule and independently reparse localized text into identity, confirmation or authority fields. A green reference test therefore proves only the boundary mechanism; production integration and non-bypassability remain open.",
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "clay_semantic_source": "gschaidergabriel/Dr.-Unterweger:claycode/frank_human_projection.clay",
+    "reference_test": "gschaidergabriel/Dr.-Unterweger:tests/frank_human_projection_hardfield_fence.py",
+    "target_workflow": "gschaidergabriel/Dr.-Unterweger:.github/workflows/frank-human-projection-hardfield-fence-vps.yml",
+    "hard_fields": [
+      "native_self_id",
+      "native_self_name",
+      "security_subject",
+      "security_epoch",
+      "execution_generation_binding_hash",
+      "effect_authorization_hash",
+      "effect_reservation_hash",
+      "harness_mutation_authority",
+      "provenance"
+    ],
+    "symmetric_boundary": "Both Clay->human and human->Clay surfaces carry the same runtime-supplied hard-field capsule and semantic hash.",
+    "no_second_semantic_architecture": true
+  },
+  "external_knowledge": {
+    "primary_sources": [
+      {
+        "source": "Unicode Technical Standard #39: Unicode Security Mechanisms",
+        "url": "https://www.unicode.org/reports/tr39/",
+        "use": "Confusable/mixed-script adversarial surface input only; no Unicode conformance claim."
+      },
+      {
+        "source": "Unicode Standard Annex #31: Unicode Identifiers and Syntax",
+        "url": "https://www.unicode.org/reports/tr31/",
+        "use": "Identifier-profile context only; canonical Frank identity remains Clay/runtime authority."
+      }
+    ]
+  },
+  "go_out_of_box_experiment": {
+    "name": "SURFACE_ALIAS_AUTHORITY_SMUGGLING",
+    "new_experiment_count": 1,
+    "variants": [
+      "German text claiming authority as Frank",
+      "German text claiming authority as literal self.root",
+      "German text claiming authority as mixed-script U+0455 CYRILLIC SMALL LETTER DZE + elf.root"
+    ],
+    "local_micro_replica": {
+      "status": "PASS_MECHANISM_ONLY",
+      "canonical_self_all_variants": "self.root",
+      "hard_field_digest_preserved_all_variants": true,
+      "authority_from_text_all_variants": false,
+      "mixed_script_simple_self_detector_detected": false,
+      "interpretation": "Authority safety does not depend on perfect confusable detection because surface text is not an authority source."
+    },
+    "target_vps": {
+      "status": "PENDING_NO_VISIBLE_RECEIPT_AT_WRITE_TIME",
+      "runner_required": ["self-hosted", "Linux", "X64"],
+      "candidate_branch_receipt_path": "runtime/vps_evidence/frank_human_projection_hardfield_fence/LATEST.json"
+    }
+  },
+  "measurements": {
+    "target_measurements_available": false,
+    "local_external_effects": 0,
+    "local_canonical_state_mutations": 0,
+    "local_authority_promotions": 0,
+    "resource_metrics": "TARGET_PENDING"
+  },
+  "promotion": {
+    "F_V01_07_complete": false,
+    "whole_translator_complete": false,
+    "ClayCode_parser_typed_ir_acceptance_for_new_contract": false,
+    "production_translator_non_bypassable": false,
+    "Needle_integration_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "final_training_authorized": false,
+    "status": "NONE"
+  },
+  "next_falsifiers": [
+    "Target-VPS execute exact candidate and persist SHA/blob/environment/time/RSS receipt.",
+    "Pass new Clay source through current authoritative structured frontend/TypedIR without signature/type guessing.",
+    "Build a production translator adapter whose API structurally requires the hard-field capsule.",
+    "Run matched German <-> ClayCode round trips and compare hard-field hashes exactly while separately scoring soft-language fidelity.",
+    "Attempt bypass through model output, translator output, Needle observation and confirmation-looking phrases; none may mint execution/effect/Harness authority."
+  ],
+  "authority": "NONE",
+  "execution_authority": "NONE",
+  "external_effect_performed": false,
+  "canonical_frank_state_mutated": false,
+  "training_authorized": false,
+  "decision_trace": {
+    "selected": "F-V01-07 human-projection hard-field fence",
+    "rejected": "duplicate WP04 external-contract resolver lane",
+    "uncertainty": "Target-VPS receipt and production translator integration remain open.",
+    "rollback": "Close/unmerge PR #275 if target test, current parser/TypedIR or later production-bypass tests falsify the candidate."
+  }
+}

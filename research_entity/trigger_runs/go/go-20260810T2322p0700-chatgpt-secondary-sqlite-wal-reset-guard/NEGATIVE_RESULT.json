@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "NR-FV01-SQLITE-WAL-CANARY-001",
+  "status": "NEGATIVE_RESULT_PRESERVED",
+  "experiment": "OOB_BOUNDED_WAL_RESET_RACE_CANARY",
+  "target_receipt": "gschaidergabriel/Dr.-Unterweger@295cd5d101318c66b66b157677d094617b6d8bde",
+  "observed": {
+    "duration_seconds": 2.0,
+    "writes": 2495,
+    "checkpoint_calls": 465272,
+    "worker_exit_codes": [0, 0, 0],
+    "integrity_check": "ok",
+    "corruption_observed": false
+  },
+  "rejected_inference": "No observed corruption under high-rate disposable stress does NOT imply the SQLite WAL-reset race is absent or that Frank release safety is proven.",
+  "reason": "SQLite's own primary documentation says the race has very tight timing constraints and required special deliberate test logic to reproduce for validation.",
+  "architecture_consequence": "Retain fail-closed version/patch/topology evidence gate. Do not spend repeated compute attempting to Goodhart a rare-race absence statistic into a safety claim.",
+  "future_reuse": "Use this result as evidence that ordinary stress frequency is a poor promotion metric for this bug class and that causal precondition/provenance tests dominate repeated null stress trials."
+}

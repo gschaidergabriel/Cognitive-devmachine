@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "20260810T1230p0700-execution-capability-sandbox-audit",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "status": "PARTIAL_LIVE_AUDIT_CI_SURFACE_BLOCKED_PROVIDER_REVERIFY_PENDING",
+  "canonical_promotion": "NONE",
+  "subject": "Clay remote execution / sandbox capability surface",
+  "findings": [
+    {
+      "id": "CAP-DRIFT-SANDBOXAPI-REGISTRY",
+      "finding": "SandboxAPI adapter and dedicated capability file existed, and the research-tool bridge already allowlisted sandboxapi_sandbox, but EXTERNAL_RESEARCH_TOOL_REGISTRY and provider_health_audit did not consistently surface it.",
+      "evidence": [
+        "tools/sandboxapi_sandbox.py",
+        "research_entity/global/SANDBOXAPI_RESEARCH_CAPABILITY.json",
+        "tools/research_tool_bridge.py",
+        "research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json",
+        "tools/provider_health_audit.py"
+      ],
+      "status": "REPAIRED_IN_CODE_REVERIFY_PENDING"
+    },
+    {
+      "id": "CAP-DRIFT-E2B-STATUS",
+      "finding": "The registry described E2B as credential-unavailable while PROVIDER_HEALTH and e2b_verification preserved a successful 2026-08-08 live runtime receipt. Credential health, runtime health and worker invocability had drifted into contradictory status fields.",
+      "status": "RECONCILER_ADDED_CURRENT_LIVE_REVERIFY_PENDING"
+    },
+    {
+      "id": "SANDBOXAPI-ENDPOINT-DRIFT",
+      "finding": "Current official SandboxAPI documentation uses the direct api.sandboxapi.dev REST endpoint with X-RapidAPI-Key, while the existing adapter only probed RapidAPI gateway hosts. Adapter now probes the current direct endpoint first and retains gateway fallback.",
+      "source": "https://sandboxapi.dev/",
+      "status": "PATCHED_REVERIFY_PENDING"
+    }
+  ],
+  "prior_remote_evidence": {
+    "sandboxapi": {
+      "status": "BLOCKED_NOT_SUBSCRIBED_AS_OF_2026_08_08",
+      "receipt": "research_entity/runtime/tool_results/sandboxapi-rest-smoke-20260808T2014p0700.json",
+      "observed_failure": "HTTP 403 not subscribed through RapidAPI gateway"
+    },
+    "e2b": {
+      "status": "RUNTIME_VERIFIED_AS_OF_2026_08_08",
+      "receipt": "research_entity/runtime/tool_results/e2b-smoke-20260808T2026p0700.json",
+      "sentinel": "RAE_E2B_OK:42"
+    },
+    "judge0": {
+      "status": "RUNTIME_VERIFIED_AS_OF_2026_08_08",
+      "receipt": "research_entity/runtime/judge0_verification.json"
+    },
+    "piston": {
+      "status": "CREDENTIAL_UNAVAILABLE_AS_OF_PROVIDER_HEALTH_SNAPSHOT",
+      "receipt": "research_entity/runtime/piston_verification.json"
+    }
+  },
+  "fresh_live_requests": [
+    "research_entity/runtime/tool_requests/sandboxapi-live-probe-20260810T1216p0700.json",
+    "research_entity/runtime/tool_requests/judge0-live-probe-20260810T1216p0700.json",
+    "research_entity/runtime/tool_requests/e2b-live-probe-20260810T1216p0700.json",
+    "research_entity/runtime/tool_requests/piston-live-probe-20260810T1216p0700.json"
+  ],
+  "current_live_request_results": "NOT_MATERIALIZED_ON_MAIN_AT_AUDIT_CUTOFF",
+  "observable_pr_probe": {
+    "pr": 155,
+    "head_sha": "ee457e176faa94e4f49aea35bbf6b1afcee2a227",
+    "workflow_run": 31358691375,
+    "first_job": 93363093007,
+    "first_conclusion": "FAILURE_BEFORE_VISIBLE_STEPS",
+    "rerun_job": 93363241185,
+    "rerun_conclusion": "FAILURE_BEFORE_VISIBLE_STEPS",
+    "independent_identity_guard_run": 31358691353,
+    "independent_identity_guard_job": 93363093098,
+    "independent_identity_guard_conclusion": "FAILURE_BEFORE_VISIBLE_STEPS",
+    "interpretation": "Current PR GitHub Actions execution surface is unhealthy or blocked before job steps. Do not classify SandboxAPI, E2B, Judge0 or Piston as current FAIL from these workflow failures."
+  },
+  "local_notebook_probe": {
+    "filesystem_roundtrip": "PASS",
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "child_python_process": "NOT_VERIFIED_TIMEOUT_5S",
+    "interpretation": "Useful local computation surface, not evidence of remote sandbox provider health and not yet proven suitable for untrusted subprocess execution."
+  },
+  "implemented": [
+    {"commit": "a30582cd94eccb76c250a99693c004c589f1c3a6", "change": "include SandboxAPI and additional secret redaction in provider health audit"},
+    {"commit": "311c65fe51416cc1172e74749eb97b0377649bb2", "change": "provider health workflow observes SandboxAPI adapter changes"},
+    {"commit": "12969cd0052c2e75e3ac4a9a72e0a9332e3d21ae", "change": "research bridge observes and compile-validates all execution adapters"},
+    {"commit": "a42464c9dafd50225f9d0d5ca9f215c8818d7636", "change": "SandboxAPI direct official endpoint first with RapidAPI gateway fallback"},
+    {"commit": "195171fd2248fa02d33cb4ae2cd8831cd8e7660e", "change": "execution capability registry reconciler"},
+    {"commit": "3a1fbab1c922a1a7fd3059a6bc2b0012892e33bd", "change": "provider health workflow reconciles measured execution capability status back into registry"},
+    {"commit": "00fcac245f039a7e6db396dc8d73ffc28e5f0fd6", "change": "observable PR execution capability probe workflow"}
+  ],
+  "local_reconciler_test": {
+    "status": "PASS",
+    "cases": [
+      "E2B stale credential-unavailable -> measured RUNTIME_VERIFIED",
+      "SandboxAPI absent -> inserted and measured AUTH_FAILED",
+      "Piston stale adapter-ready -> measured CREDENTIAL_UNAVAILABLE",
+      "Judge0 verified -> health timestamp synchronized"
+    ]
+  },
+  "routing_recommendation_current": {
+    "e2b": "PREFERRED_FOR_DEPENDENCY_HEAVY_OR_MULTI_STEP_SANDBOX_WHEN_FRESH_LIVE_VERIFIED",
+    "sandboxapi": "PROMISING_MULTI_LANGUAGE_GVISOR_PATH_BUT_DO_NOT_USE_UNTIL_FRESH_EXECUTE_RECEIPT_SUCCEEDS",
+    "judge0": "SMALL_STATELESS_REMOTE_EXECUTION_FALLBACK_BASED_ON_LAST_VERIFIED_RECEIPT",
+    "piston": "DISABLED_UNTIL_TOKEN_OR_SELF_HOSTED_ENDPOINT_VERIFIED",
+    "local_notebook": "LOCAL_COMPUTE_ONLY_NOT_REMOTE_SANDBOX_EQUIVALENT"
+  },
+  "next_falsifiers": [
+    "restore/identify GitHub Actions PR runner failure and re-run PR #155",
+    "consume the four current bridge result files if/when they materialize and update current provider state",
+    "run SandboxAPI direct-endpoint sentinel and then cross-language Python/Go/JS equivalence if authenticated",
+    "run E2B filesystem + dependency install + generated-host execution smoke after fresh verification",
+    "run Judge0 matched small-code differential against E2B/SandboxAPI",
+    "measure latency, cold-start, timeout, memory metadata, failure recovery and cost per useful experiment",
+    "feed measured status through reconcile_execution_capabilities and verify registry/health/bridge agree"
+  ],
+  "authority": "CAPABILITY_AND_RUNTIME_EVIDENCE_ONLY_NO_SEMANTIC_TRUTH_OR_EFFECT_AUTHORITY"
+}

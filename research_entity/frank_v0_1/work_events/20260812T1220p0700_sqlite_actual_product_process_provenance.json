@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.1",
+  "event_type": "FRANK_V0_1_WORK_FRONTIER_DELTA",
+  "status": "MERGED_ACTUAL_PROCESS_OBSERVER / PRODUCTIVE_HOST_BINDING_OPEN",
+  "created_at": "2026-08-12T12:20:00+07:00",
+  "actor": "OpenAI / GPT-5.6 Sol",
+  "actor_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "owner_program": "FRANK_V0_1",
+  "work_package_reentry": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "observed_anchors": {
+    "implementation_repository": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr": 515,
+    "merge_commit": "9519a8fe151867d2c5a26ae43c0b63cfeb6ab6bd",
+    "exact_pr_head": "d61aa95104f06b43b600ccf0589f62e7ee6d5a83",
+    "integration_run": 31565850463,
+    "integration_tested_main": "93a5a883aafe6cc174b0abc65722d52e31e7796e",
+    "integration_result": "PASS_INSTRUMENTATION_AND_STATIC_INTEGRITY",
+    "observed_runner": "clay",
+    "observed_machine": "digital-retina",
+    "runtime_observation_status": "BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED",
+    "accepted_hostinger_product_runtime_observed": false
+  },
+  "evidence_correction": {
+    "prior_overclaim": "Treating the self-hosted digital-retina / default-/usr/bin/python3 SQLite observation as if it were already the accepted Hostinger productive Frank runtime.",
+    "collapse": "REJECT",
+    "reason": "Generic self-hosted runner identity and a workflow-launched default interpreter do not bind either the accepted Hostinger body or the actual Frank product process.",
+    "workspace_wording_conflict": "FRANK_V0_1_WORKSPACE.json currently says the accepted target reports SQLite 3.45.1. Current provenance evidence supports only that the observed digital-retina/default-interpreter lane reported 3.45.1; accepted Hostinger productive runtime identity remains unverified.",
+    "required_workspace_semantics": "Do not attribute the digital-retina 3.45.1 observation to the accepted Hostinger product runtime unless host and ProductStart/process identity are independently bound. Keep F-V01-13 fail-closed."
+  },
+  "merged_observer_mechanism": {
+    "path": "tests/frank_sqlite_actual_process_readonly_observation_v1.py",
+    "positive_observation_requires": [
+      "independently configured expected hostname",
+      "independently configured SHA-256 of accepted target /etc/machine-id value",
+      "exact canonical systemd unit",
+      "exact final executable image",
+      "exactly one stable selected process in the unit cgroup",
+      "stable PID start-time and executable across observation",
+      "stable SQLite mapping set across observation window",
+      "mapped device+inode equals one O_NOFOLLOW opened file descriptor",
+      "SHA-256 computed from that same file descriptor",
+      "mapped SQLite object root-owned and not group/other writable",
+      "trusted root-anchor path and valid anchor JSON",
+      "mapped SQLite object SHA-256 equals anchor library_sha256"
+    ],
+    "positive_status": "OBSERVED_ACCEPTED_HOST_SELECTED_FRANK_PROCESS_SQLITE_OBJECT_MATCHES_ROOT_ANCHOR",
+    "claim_boundary": "Read-only runtime identity observation only; not whole Frank v0.1 acceptance, effect authority, or cryptographic remote attestation against a root-compromised host."
+  },
+  "grf_collapse": {
+    "workflow_label_or_generic_runner_implies_accepted_hostinger": "REJECT",
+    "host_default_python_sqlite_implies_product_frank_sqlite": "REJECT",
+    "path_only_hash_implies_mapped_bytes": "REJECT",
+    "accepted_host_plus_exact_product_process_plus_mapped_inode_fd_hash_plus_trusted_anchor": "SUPPORTED_AS_OBSERVATION_INSTRUMENTATION"
+  },
+  "remaining_release_gate": [
+    "Provide an independently trusted accepted-Hostinger host identity binding.",
+    "Define and bind the canonical Frank ProductStart systemd unit and final executable.",
+    "Provision the fixed release-accepted SQLite runtime and root anchor on that accepted host.",
+    "Observe the actual selected Frank process mapping the anchored fixed SQLite object.",
+    "Prove service start/restart/recovery plus rollback, downgrade and library-swap rejection on the accepted host.",
+    "Keep semantic-lineage selection and recovery-generation obligations independently fail-closed."
+  ],
+  "workspace_status_instruction": "F-V01-13 remains IN_PROGRESS. The old phrase that the accepted target reports SQLite 3.45.1 is too strong for the current provenance. The measured digital-retina/default-interpreter lane reported 3.45.1; the accepted Hostinger productive process/runtime remains unverified until explicit host + ProductStart/process binding and live mapped-object evidence close the gap.",
+  "authority": {
+    "frank_self_harness_mutation": false,
+    "effect_authority": "NONE",
+    "training_authorized": false
+  },
+  "go_accounting": {
+    "new_unusual_experiment_in_this_event": false,
+    "macro_cycle_unusual_experiment_count": 1,
+    "macro_cycle_unusual_experiment": "mutable imported V5 sibling pre-admission execution discriminator; independently repaired by merged implementation PR #504"
+  },
+  "outcome": "PROMOTE_TO_VERIFIED_PROVENANCE_CORRECTION_AND_MERGED_INSTRUMENTATION; PRODUCT_RUNTIME_GATE_REMAINS_OPEN"
+}

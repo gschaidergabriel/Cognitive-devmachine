@@ -1,0 +1,85 @@
+module clay.atomic.causal_quotient_compiler
+version "CQC-001"
+status CANDIDATE_NOT_PROMOTED
+
+record ProtectedObservable {
+  semantic_id: String;
+  class: String;
+  source: String;
+}
+
+record InterventionSpec {
+  intervention_id: String;
+  class: String;
+  source_epoch: String;
+  reversible: Bool;
+}
+
+record BaselineRef {
+  baseline_id: String;
+  organ_or_function: String;
+  evidence_class: String;
+  source_hash: String;
+}
+
+record QuotientCertificate {
+  certificate_id: String;
+  candidate_version: String;
+  source_semantic_epoch: String;
+  source_graph_epoch: String;
+  baseline_refs: Ordered<BaselineRef>;
+  protected_observables: Ordered<ProtectedObservable>;
+  intervention_alphabet: Ordered<InterventionSpec>;
+  equivalence_partition_hash: String;
+  test_corpus_hash: String;
+  recovery_corpus_hash: String;
+  status: String;
+}
+
+record QuotientPlan {
+  source_units: Set<String>;
+  causal_classes: Set<String>;
+  lineage_map: Map<String,String>;
+  certificate: QuotientCertificate;
+}
+
+law no_original_baseline_no_replacement_claim
+law quotient_candidate_is_not_architecture_promotion
+law causal_equivalence_is_scoped_to_declared_observables_and_intervention_alphabet
+law unknown_intervention_invalidates_universal_equivalence_claim
+law new_protected_observable_requires_revalidation
+law source_epoch_change_requires_revalidation
+law effect_authority_is_protected_observable
+law gwt_receiver_use_outcome_reentry_is_protected_observable
+law identity_lineage_and_provenance_are_protected_observables
+law crash_restart_rollback_recovery_is_protected_observable
+law quotient_compiler_never_mints_effect_authority
+law physical_deduplication_never_erases_historical_lineage
+law approximate_equivalence_cannot_promote_without_explicit_error_budget
+
+rule quotientable(a,b) requires baseline_complete(a)
+rule quotientable(a,b) requires baseline_complete(b)
+rule quotientable(a,b) requires same_protected_observables(a,b)
+rule quotientable(a,b) requires mirrors_transitions_under_declared_alphabet(a,b)
+rule quotientable(a,b) requires preserves_receiver_use_outcome_reentry(a,b)
+rule quotientable(a,b) requires preserves_identity_authority_recovery(a,b)
+rule quotientable(a,b) requires no_counterexample_in_declared_test_corpus(a,b)
+rule certificate_current(c) requires same_semantic_epoch(c)
+rule certificate_current(c) requires same_protected_observable_contract(c)
+rule certificate_current(c) requires same_intervention_alphabet(c)
+rule certificate_current(c) requires baseline_ancestry_still_valid(c)
+rule intervention_not_in_certificate(i,c) -> invalidate(c)
+rule observable_not_in_certificate(o,c) -> invalidate(c)
+rule stale_epoch(c) -> invalidate(c)
+rule failed_rescue_or_replay(c) -> invalidate(c)
+
+cycle (source: String) {
+  baselines = load_original_baseline_refs(source)
+  observables = compile_protected_observables(source)
+  interventions = compile_intervention_alphabet(source)
+  initial_partition = partition_by_protected_observables(source)
+  causal_partition = refine_until_stable(initial_partition,interventions,observables)
+  counterexamples = run_lesion_rescue_shuffle_replay(source,causal_partition)
+  plan = emit_quotient_plan(causal_partition,baselines,observables,interventions,counterexamples)
+  certificate = emit_revocable_quotient_certificate(plan)
+}

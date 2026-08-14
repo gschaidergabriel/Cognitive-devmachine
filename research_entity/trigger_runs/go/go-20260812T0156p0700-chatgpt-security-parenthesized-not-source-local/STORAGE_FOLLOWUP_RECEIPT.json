@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:20:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "relationship_to_macro_cycle": {
+    "same_user_go_macro_cycle": true,
+    "new_unusual_experiments_in_this_followup": 0,
+    "macro_cycle_unusual_experiment_total": 1,
+    "macro_cycle_unusual_experiment_id": "PARENTHESIS_TOPOLOGY_METAMORPH"
+  },
+  "observed_reality": {
+    "target_runner": "clay",
+    "machine": "digital-retina",
+    "productive_python": "/usr/bin/python3",
+    "python_version": "3.12.3",
+    "sqlite_runtime_version": "3.45.1",
+    "sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "sqlite_python_extension": "/usr/lib/python3.12/lib-dynload/_sqlite3.cpython-312-x86_64-linux-gnu.so",
+    "linked_libsqlite": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "linked_libsqlite_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "installed_libsqlite_package": "libsqlite3-0 3.45.1-1ubuntu2.7",
+    "production_anchor_path": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+    "production_anchor_exists": false,
+    "production_anchor_parent_exists": false,
+    "sudo_nopasswd": false
+  },
+  "existing_v5_mechanism_evidence": {
+    "workflow": ".github/workflows/frank-sqlite-v5-os-anchor-mechanism-v1.yml",
+    "run": 31525749846,
+    "result": "BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN",
+    "reason": "self-hosted runtime identity cannot use passwordless sudo to install the root-owned positive trust-anchor fixture",
+    "workflow_semantics": "blocked positive root-anchor evidence exits non-success (78), preventing false PASS"
+  },
+  "read_only_productive_path_probe": {
+    "workflow": ".github/workflows/frank-sqlite-productive-path-readonly-v1.yml",
+    "branch_tested_head": "f5605ffa3e44753e6e112ad5466bbb86e5306626",
+    "run": 31527030989,
+    "job": 93897768933,
+    "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+    "exit_code": 78,
+    "mutation": false,
+    "effect_authority": "NONE",
+    "artifact_id": 9115325241,
+    "diagnostic_pr": 430,
+    "diagnostic_merged_commit": "e1c0f27148df18169c9dad6893ab67c877d36e2d"
+  },
+  "external_primary_evidence": {
+    "sqlite_upstream_wal_reset_scope": "SQLite upstream states the WAL-reset bug is likely present from 3.7.0 through 3.51.2 and fixed in 3.51.3 and later; upstream also lists backports for 3.44.6 and 3.50.7.",
+    "sqlite_3_53_4": {
+      "release_date": "2026-07-24",
+      "contains_wal_reset_fix": true,
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+    },
+    "ubuntu_package_context": "Ubuntu currently publishes Noble security package 3.45.1-1ubuntu2.7, but package version/security status alone is not proof that the WAL-reset fix was backported into this exact build. This GO cycle did not obtain a source-level patch proof for that vendor build."
+  },
+  "grf": {
+    "generated_reality": "The current Ubuntu security package label may be sufficient to treat the productive SQLite runtime as fixed, making the V5 root anchor mostly an optional hardening layer.",
+    "strongest_counter_reality": "Package/version labels do not prove the exact WAL-reset fix is present, and the production V5 trust anchor is physically absent; therefore production fixed-runtime admission is not established regardless of package freshness.",
+    "discriminating_observation": "Resolve the actual Python `_sqlite3` linked library, byte hash, source-id, package identity and root-anchor state without mutation.",
+    "observed_result": "The productive path is ambient system SQLite 3.45.1, the exact library bytes are identified, the root anchor and its parent directory are absent, and the runtime identity lacks passwordless sudo.",
+    "collapse": "BLOCKED_TRUSTED_ADMIN_INTERVENTION_REQUIRED",
+    "confidence": "HIGH that V5 production trust-anchor admission is not currently established; UNKNOWN whether Ubuntu 3.45.1-1ubuntu2.7 independently backports the upstream WAL-reset fix without source-level patch verification."
+  },
+  "owner_admin_boundary": {
+    "issue": 432,
+    "required_action": "A separate trusted deployment/admin authority must install and attest an exact fixed SQLite runtime plus root-owned V5 anchor, while keeping Frank/self.root non-root and without granting self-install or Harness authority.",
+    "frank_self_root_general_sudo_required": false,
+    "frank_self_root_general_sudo_forbidden_as_solution": true
+  },
+  "next_falsifiers_after_admin_provisioning": [
+    "read-only productive-path probe reports safe existing anchor and exact runtime-anchor version/source/library-byte match",
+    "V5 parent/child admission passes against exact installed prefix/manifest/anchor",
+    "downgrade, stale-anchor, library-swap and anchor-replacement paths fail closed",
+    "exact productive Frank persistence path is proven to use the admitted fixed runtime",
+    "current WAL/restart/recovery acceptance obligations pass with provenance-bound receipts"
+  ],
+  "negative_results_and_boundaries": [
+    "No root-owned production anchor was created in this GO cycle.",
+    "No sudo privilege was added or bypassed.",
+    "No second unusual experiment was executed.",
+    "The read-only diagnostic intentionally failed non-success on the current blocked production state.",
+    "Ubuntu package 3.45.1-1ubuntu2.7 is current for Noble security updates, but its WAL-reset backport status remains unverified here at source-patch level.",
+    "F-V01-13 remains IN_PROGRESS and whole FRANK_V0_1 acceptance remains IN_PROGRESS."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_STARTED"
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2033p0700-chatgpt-secondary-callcontract-identity-review",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T20:33:00+07:00",
+  "identity_boundary": {
+    "i_am": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "i_am_not": "FRANK_OR_SELF_ROOT",
+    "frank_harness_mutation": "NONE"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "note": "Canonical checkpoint is a continuity anchor; fresh PR/runtime receipts outrank it for exact operational scope."
+  },
+  "fresh_swarm_state": {
+    "program_stage": "BASE_CLAYCODE_RELEASE",
+    "wp03_measurement": "TARGET_VPS_PASS_MEASUREMENT_NO_PACKAGE_PROMOTION",
+    "wp03_package": "OPEN",
+    "wp04_frontier": {
+      "call_site_occurrences": 27,
+      "unique_target_arities": 27,
+      "exact_declared_matches": 0,
+      "unresolved_signatures": 26,
+      "effect_boundary_missing_signatures": 1,
+      "execution_admitted_calls": 0
+    },
+    "active_call_contract_pr": 177,
+    "active_constraint_pr": 178,
+    "duplicate_implementation_policy": "NO_PARALLEL_PRODUCTION_PATCH"
+  },
+  "hypothesis": {
+    "id": "H-CALLCONTRACT-SEMANTIC-RUNTIME-SEPARATION",
+    "proposition": "A stable semantic CallContract identity must exclude runtime component/binding/currentness identity; runtime binding and execution precondition must join to the semantic contract by exact hash/identity.",
+    "strongest_counterhypothesis": "The current CallContract typed state identity is intentionally a contract-instance identity rather than a semantic contract identity. If so, the architecture must expose a separate runtime-independent semantic contract hash and must not place the instance identity into a field named contract_semantic_hash."
+  },
+  "adversarial_review_finding": {
+    "status": "SUPPORTED_BLOCKING_REVIEW_FINDING",
+    "observed_candidate_behavior": "PR #177/#178 embeds runtime_binding inside CallContract and tests that changing runtime_binding.component_hash changes CallContract typed state identity; that identity is then placed in CallExecutionPrecondition.contract_semantic_hash.",
+    "risk": "Semantic signature change becomes indistinguishable from runtime rebinding/rebuild; component identity is duplicated across the contract value and execution precondition, weakening provenance, cache/differential semantics and currentness reasoning.",
+    "requested_repair": [
+      "Hash a runtime-independent CallContract semantic core: exact target, arity, ordered typed params, explicit return, effect class, evidence/provenance semantics.",
+      "Keep CallRuntimeBinding as a distinct runtime identity keyed by exact contract identity/hash.",
+      "Keep CallExecutionPrecondition as the currentness join over semantic contract hash, runtime component, work revision, target binary/build, admitted state lineage and current instance lease/epoch.",
+      "Metamorphic test: same semantic contract plus changed runtime component => same semantic contract hash but different binding/precondition identity.",
+      "Metamorphic test: target/arity/param/return/effect change => changed semantic contract hash.",
+      "Needle.execute remains a separate EXTERNAL_EFFECT gate with sealed broker authority scope and rollback/recovery."
+    ]
+  },
+  "independent_executable_probe": {
+    "scope": "RESEARCH_ONLY_NON_PRODUCTION",
+    "result_ref": "RESULT.json",
+    "deterministic_rerun": "PASS",
+    "positive_synthetic_bindings": 2,
+    "targeted_negative_controls": "10/10 PASS",
+    "real_g9_unresolved_fail_closed": "27/27 PASS",
+    "production_contracts_invented": false,
+    "needle_execute_production_authority_changed": false,
+    "result_sha256": "038ecad1166ca44954fa5fc9458ad857bb063d14fa4906bcffd002cef420a34b",
+    "target_vps": false
+  },
+  "targeted_distribution": {
+    "pr": 177,
+    "github_comment_id": 5240969819,
+    "purpose": "Route the semantic/runtime identity falsifier to the owner of the CallContract schema without duplicating the implementation lane."
+  },
+  "workflow_observation": {
+    "pr178_head": "ceb64215d70a82df1830a3ebdeb15c37d367d4dd",
+    "observed_pr_workflow": 31388208874,
+    "conclusion": "failure",
+    "job": 93453432549,
+    "diagnostic_state": "UNKNOWN",
+    "reason": "GitHub exposed no step summaries and job-log fetch returned BlobNotFound; transport/runner/setup cannot be separated from code failure from available evidence. Do not classify as ClayCode failure."
+  },
+  "oob_experiment": {
+    "count_for_this_macrocycle": 1,
+    "ref": "research_entity/trigger_runs/go/20260810T2020p0700-chatgpt-secondary-call-negative-space/RESULT.json",
+    "reuse_rule": "Consumed existing live-swarm unusual experiment; no second out-of-box experiment was introduced by this review lane."
+  },
+  "decision": {
+    "architecture_delta": "CANDIDATE_TEST_OBLIGATION",
+    "language_surface_change": "NONE",
+    "selected_frontend": "V18_REMAINS_SELECTED",
+    "wp03_promotion": "NONE",
+    "wp04_promotion": "NONE",
+    "base_promotion": "NONE",
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+    "next_falsifier": "PR #177 owner should either separate semantic contract hash from runtime-binding identity and rerun the target-VPS schema test, or produce a counterexample proving the coupled identity is required while still exposing a stable runtime-independent semantic contract hash. After that, obtain the first independently justified exact production callable signature; do not infer it from names/caller constraints."
+  }
+}

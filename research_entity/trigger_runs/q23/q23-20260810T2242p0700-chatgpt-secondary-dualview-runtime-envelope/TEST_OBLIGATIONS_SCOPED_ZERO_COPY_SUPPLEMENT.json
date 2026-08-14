@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "test_obligations": [
+    {
+      "id": "TO-Q23-SCOPED-ZC-07",
+      "priority": "P0_FOR_ZERO_COPY_SELECTION",
+      "status": "READY_WHEN_EXACT_MULTIMODAL_RUNTIME_AND_FIXTURES_EXIST",
+      "variants": {
+        "A": "FULL_COPY_THEN_POOL",
+        "B": "SCOPED_ZERO_COPY_POOL_THEN_COMPACT_DESCRIPTOR_COPY",
+        "C": "DEDICATED_LIGHT_ENCODER"
+      },
+      "correctness_invariants": [
+        "A and B produce equivalent descriptors within preregistered numeric tolerance from the same encoded frame",
+        "ephemeral view invalidates before/at next same-context encode, owner free/reset, session/slot reset, reload or generation mismatch",
+        "ephemeral view cannot cross serialization, replay, queue/await or restart boundaries",
+        "decoder escalation consumes the same intended frame buffer before owner scope closes",
+        "durable state contains compact descriptor/prototype/evidence and compatibility identity, never a process pointer"
+      ],
+      "fault_schedule": [
+        "next encode with larger token geometry",
+        "next encode with smaller token geometry",
+        "batch free immediately after MVC readout",
+        "forced reader/writer interleavings",
+        "slot/session reset",
+        "runtime/model/mmproj reload",
+        "restart/replay with durable descriptor store"
+      ],
+      "metrics": [
+        "descriptor equivalence error",
+        "stale-view rejection rate",
+        "cross-frame contamination rate",
+        "direct pool plus descriptor-copy p50/p95/p99",
+        "full tensor copy plus pool p50/p95/p99",
+        "bytes copied per frame",
+        "RAM high-water mark",
+        "same-buffer decoder handoff correctness",
+        "sensor-to-correct-decision latency",
+        "false familiarity and false bypass rate"
+      ],
+      "hard_reject": "Any stale-view acceptance, torn/cross-frame read, wrong-frame descriptor, decoder corruption or owner-scope escape rejects B regardless of latency benefit.",
+      "evidence_class_required_for_selection": "TARGET_COMPATIBLE_RUNTIME_EXECUTION_RECEIPT",
+      "current_evidence": "Proxy copy/pool benchmark only; not target acceptance."
+    }
+  ],
+  "promotion": "NONE"
+}

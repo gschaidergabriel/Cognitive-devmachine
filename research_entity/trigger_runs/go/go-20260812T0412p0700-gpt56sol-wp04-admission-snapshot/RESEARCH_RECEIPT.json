@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0412p0700-gpt56sol-wp04-admission-snapshot",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T04:12:00+07:00",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "80076a40ce62f7d163f4ecc9bd059ac1360a6d86",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "frontier_selection": {
+    "initial_high_value_blocker": "F-V01-13 SQLite/WAL productive-path attestation",
+    "duplicate_avoidance": "Fresh shared research showed concurrent workers had already advanced SQLite loader/inode/artifact-authority falsifiers, so this run moved to a non-duplicate ClayCode admission boundary.",
+    "selected_uncovered_boundary": "WP04-admitted Module object remained shallow-frozen: declaration maps are mutable dictionaries and the same caller-owned object was checked, analyzed and lowered."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "finding": "WAL-reset corruption bug is documented through 3.51.2 and fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite release history",
+      "finding": "SQLite 3.51.3 includes the WAL-reset corruption fix; version 3.53.4 is therefore post-fix by version, but Frank still requires exact productive loaded-runtime attestation."
+    }
+  ],
+  "observed_reality": {
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_before_patch": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "module_shape": "Module is frozen=True but contains mutable dict declaration maps",
+    "pre_patch_flow": "compile_admitted_entry performed check_entry(module), then analyze(module), then compile_entry(module)",
+    "identity_risk": "python lowering receipts preserve module.source_sha256, so post-parse AST mutation could diverge structure from the original source identity"
+  },
+  "grf": {
+    "generated_reality": "A caller-held mutation after WP04 admission but before Python lowering can make the projection consume AST content that WP04 did not admit while retaining the old source_sha256.",
+    "strongest_counter_reality": "Compilation is synchronous and Module is a frozen dataclass, so mutation may be operationally unreachable and the admission object may be effectively immutable in normal callers.",
+    "discriminator": "Deterministically inject mutation of the caller-owned function map immediately after WP04 admission while observing whether lowering consumes caller state or a private admitted snapshot.",
+    "collapse": "POST_ADMISSION_CALLER_MUTATION_RISK_SUPPORTED_AND_REPAIRED; PRE_SNAPSHOT_IDENTITY_DRIFT_REMAINS_OPEN"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "SHALLOW_FROZEN_AST_ADMISSION_TO_LOWERING_TOCTOU_MIRROR",
+    "classification": "BOUNDED_SYNTHETIC_STRUCTURE_EXPERIMENT",
+    "scope": "local disposable mirror only; no production effect",
+    "baseline": "without intervention, admitted identity and lowered structure remained stable",
+    "intervention": "mutate a dict-held AST member after an admission snapshot point while keeping the original source identity field unchanged",
+    "result": "STRUCTURAL_DIVERGENCE_REPRODUCED_IN_SYNTHETIC_MIRROR",
+    "evidence_tier": "SYNTHETIC_MECHANISM_ONLY_BEFORE_PRODUCT_REGRESSION",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "repair": {
+    "branch": "clay/go-wp04-admission-snapshot-20260812",
+    "pr": 477,
+    "head_before_merge": "ebd7a403775da842944d3ccbb1ad77e58635c58a",
+    "merged_main": "e31f9d6142d2a4a94a66a6301dc8c381468a47b3",
+    "change": [
+      "deepcopy Module once at compile_admitted_entry boundary",
+      "run WP04 admission, analyzer and Python lowering on the same private snapshot",
+      "add deterministic regression that mutates the caller-owned original after admission",
+      "extend the self-hosted VPS gate to hash, syntax-check and execute the new regression"
+    ],
+    "authority_change": false,
+    "wp04_remains_type_semantic_authority": true,
+    "python_backend_authority": "NONE"
+  },
+  "accepted_target_test": {
+    "workflow": "ClayCode WP04 to WP06 Python admission barrier VPS",
+    "run": 31536332090,
+    "job": 93928187788,
+    "runner": "clay / digital-retina / self-hosted Linux X64",
+    "tested_pr_merge_sha": "1758b33f152c7cc791f7139dd1386ac03e7e6a85",
+    "event_head": "ebd7a403775da842944d3ccbb1ad77e58635c58a",
+    "event_base": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "tested_tree_sha": "548441be77530d77f651fdfaa388abd8259f2f4c",
+    "actual_merged_main_sha": "e31f9d6142d2a4a94a66a6301dc8c381468a47b3",
+    "actual_merged_tree_sha": "548441be77530d77f651fdfaa388abd8259f2f4c",
+    "exact_tree_identity_between_tested_candidate_and_merged_main": true,
+    "wp04_gate": "PASS 14/14",
+    "existing_python_admission_barrier": "PASS 8/8",
+    "snapshot_mutation_regression": "PASS 6/6",
+    "snapshot_regression_status": "PASS_WP04_WP06_ADMISSION_SNAPSHOT_GATE",
+    "external_effect_executed": false,
+    "whole_frank_v0_1_acceptance": false
+  },
+  "infrastructure_counterevidence": {
+    "workflow": "Frank Deep Integrity",
+    "run": 31536332163,
+    "status": "FAILURE_BEFORE_STEPS",
+    "steps_executed": 0,
+    "github_annotation": "job not started because recent account payments failed or spending limit needs to be increased",
+    "interpretation": "Infrastructure/account failure, not evidence of product-test failure; does not count as PASS and does not establish whole-system acceptance."
+  },
+  "architecture_delta": {
+    "status": "PROMOTED_BOUNDED_COMPONENT_REPAIR",
+    "supported_change": "An admission boundary that accepts a mutable parsed representation must bind semantic admission and downstream projection to one private immutable-in-practice snapshot; shallow dataclass freezing is insufficient when nested maps remain mutable.",
+    "affected": [
+      "F-V01-02 ClayCode compiler/runtime",
+      "WP04 to WP06 Python projection composition",
+      "semantic provenance between admitted representation and generated backend artifact"
+    ],
+    "rollback": "Revert merge e31f9d6142d2a4a94a66a6301dc8c381468a47b3 if the Module representation becomes structurally immutable or a stronger canonical admission artifact supersedes deepcopy.",
+    "residual_risk": "Mutation before the private snapshot can still leave a stale source_sha256 paired with a changed but possibly WP04-valid AST because Module does not retain original source bytes for re-derivation.",
+    "next_discriminator": "Bind admission to a canonical structural/semantic digest or reparse canonical source bytes, then prove pre-call mutation cannot masquerade under stale source identity."
+  },
+  "nonclaims": [
+    "No WP04 completion claim",
+    "No WP06 completion claim",
+    "No whole Frank v0.1 acceptance",
+    "No claim that F-V01-13 SQLite release gate is closed",
+    "No production effect authority exercised",
+    "No final model training authorization"
+  ],
+  "promotion": {
+    "component_repair": "MERGED_TO_MAIN_WITH_ACCEPTED_SELF_HOSTED_TREE_IDENTICAL_EVIDENCE",
+    "F_V01_02": "IN_PROGRESS",
+    "F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  }
+}

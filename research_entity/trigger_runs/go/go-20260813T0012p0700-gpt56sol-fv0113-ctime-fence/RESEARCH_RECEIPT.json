@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260813T0012p0700-gpt56sol-fv0113-ctime-fence",
+  "trigger": "go",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "created_at": "2026-08-13T00:12:22+07:00",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_entity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "research_head_observed_before_write": "9839faf2ffe9da24899163a798e41acd2f1b0083",
+  "overlap_refresh": {
+    "query": "ctime SQLite",
+    "result": "NO_DIRECT_DUPLICATE_FOUND"
+  },
+  "observed_current_mechanism": {
+    "file": "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py",
+    "blob_sha": "3a317aa256f17ef316580947e9a44e43aca6fe1a",
+    "facts": [
+      "stat snapshot binds device, inode, size, mtime_ns and ctime_ns",
+      "mapped object is SHA-256 hashed through one O_NOFOLLOW FD and fstat metadata is compared before/after hashing",
+      "receipt-tail mapping is resampled and final stat metadata must equal the original observed stat snapshot",
+      "scope is explicitly one live process generation; productive persistence/restart/recovery remain separate obligations"
+    ]
+  },
+  "grf": {
+    "observed_anchor": "Current attestor includes ctime_ns in both hash-window and receipt-tail metadata equality fences.",
+    "generated_reality": "An in-place same-inode/same-size mutation might hide from the final metadata fence if an actor restores mtime to its original value.",
+    "counter_reality": "Even with exact mtime restoration, Linux ctime changes, so the existing stat equality fence still distinguishes the mutation.",
+    "falsifier": "Mutate a mapped file in place without changing inode or size, restore mtime_ns exactly to baseline, then compare ctime_ns and observed mapped bytes.",
+    "outcome": "COUNTER_REALITY_SUPPORTED_LOCAL_ONLY",
+    "collapse": {
+      "restored_mtime_bypasses_current_stat_fence": "REJECT",
+      "ctime_ns_as_useful_member_of_current_metadata_fence": "RETAIN",
+      "product_code_change": "NO_CHANGE",
+      "F_V01_13_release_promotion": "NO_CHANGE"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "RESTORED_MTIME_SAME_INODE_CONTENT_MUTATION",
+    "scope": "DISPOSABLE_LOCAL_SANDBOX_FILE_ONLY",
+    "intervention": "Create a 4096-byte file of A, map it read-only, overwrite the same inode in place with 4096 bytes of B, fsync, then restore atime/mtime nanoseconds to the exact baseline values.",
+    "baseline": {
+      "inode": 443446,
+      "size": 4096,
+      "mtime_ns": 1786554690973859291,
+      "ctime_ns": 1786554690973859291
+    },
+    "observations": {
+      "inode_same": true,
+      "size_same": true,
+      "mtime_restored_exactly": true,
+      "ctime_changed": true,
+      "ctime_ns_after": 1786554690980674851,
+      "mapped_first_byte_after_mutation": "B"
+    },
+    "interpretation": "The local counterexample changed real mapped content while preserving inode, size and mtime, yet ctime diverged. The current attestor compares ctime_ns, so this specific restored-mtime chameleon is distinguishable by the implemented metadata fence.",
+    "limitations": [
+      "Not executed on the accepted Hostinger target.",
+      "Does not prove all filesystems or privileged threat models preserve the same ctime behavior.",
+      "Does not exercise Frank, UnifiedDB, SQLite WAL, restart/recovery or productive persistence.",
+      "Does not promote the live-process attestor beyond its declared one-process-generation proof scope."
+    ],
+    "cleanup": "DISPOSABLE_FILE_REMOVED"
+  },
+  "primary_source_alignment": {
+    "sqlite_upstream": "SQLite documents the WAL-reset bug as fixed in 3.51.3 and later; 3.53.4 is on the fixed line. Version suitability alone is not productive Frank runtime/path evidence."
+  },
+  "architecture_delta": {
+    "state": "NO_CHANGE_PLUS_EVIDENCE",
+    "affected_components": [
+      "F-V01-13 security/recovery/storage",
+      "accepted Hostinger ProductStart persistence evidence"
+    ],
+    "delta": "Retain the current device/inode/size/mtime_ns/ctime_ns + FD-bound hash + receipt-tail resampling mechanism. Do not add a duplicate restored-mtime fence based on this experiment.",
+    "smallest_next_discriminator": "Run the current exact product main on the accepted Hostinger ProductStart path with non-synthetic canonical UnifiedDB WAL state, attest the actual loaded fixed SQLite object and active main/WAL persistence objects during a unique transaction/readback, then repeat after service restart/reopen and under rollback/downgrade/library-swap negative controls.",
+    "rollback": "No product code changed."
+  },
+  "authority": {
+    "frank_or_vps_mutated": false,
+    "canonical_product_state_mutated": false,
+    "harness_authority_mutated": false,
+    "effect_authority": "NONE",
+    "final_training_authorized": false
+  },
+  "research_result": "LOCAL_COUNTERHYPOTHESIS_REFUTED_PLUS_NO_CHANGE",
+  "product_code_delta": "NO_CHANGE",
+  "next_priority": "Accepted Hostinger ProductStart + exact fixed SQLite runtime + real canonical UnifiedDB WAL operation + main/WAL object binding + restart/reopen + downgrade/library-swap/rollback + semantic-lineage evidence in one fail-closed provenance chain."
+}

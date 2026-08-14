@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "amends": "RESEARCH_RECEIPT.json",
+  "created_at_local": "2026-08-11T00:36:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "reason": "After creating repair PR237, fresh cross-branch review showed that its hard real-Frank structured-frontend baseline would inherit the already-known independent PR236 generic-angle/REL_OP parser counterexample from current main. A workflow-level failure would therefore conflate the alias mechanism under test with an upstream parser blocker.",
+  "scientific_correction": {
+    "rule": "The declaration-aware alias regression remains a hard mechanism gate. The current real Frank structured-frontend probe remains required evidence but is classified independently as REAL_FRANK_BASELINE_PASS or UPSTREAM_STRUCTURED_FRONTEND_GATE_PENDING_OR_COUNTEREXAMPLE until PR236 is adjudicated.",
+    "why": "A known upstream failure must not be attributed to the downstream candidate under test, and a downstream mechanism PASS must not erase the upstream blocker.",
+    "go_out_of_box_experiment_added": false,
+    "out_of_box_count_unchanged": 1
+  },
+  "repair_candidate_update": {
+    "pr": 237,
+    "new_head": "dcf28123e35d5e67e7e3d43c265f13786c21edb0",
+    "workflow_adjustment_commit": "dcf28123e35d5e67e7e3d43c265f13786c21edb0",
+    "new_workflow_run_id": 31414585939,
+    "workflow_state_at_amendment": "QUEUED",
+    "old_superseded_queued_run_id": 31414140275,
+    "promotion": "NONE"
+  },
+  "upstream_parser_candidate": {
+    "pr": 236,
+    "head": "8532d17a3128b32317276fc1b1533fbabc0472c1",
+    "target_workflow_run_id": 31414516451,
+    "state_at_amendment": "QUEUED",
+    "relationship": "ORTHOGONAL_UPSTREAM_GATE"
+  },
+  "negative_result_discipline": [
+    "Do not call PR237 failed merely because the separate structured frontend baseline remains on the current-main REL_OP/generic-angle counterexample.",
+    "Do not call PR237 passed unless its own declaration-aware alias regression executes on the accepted target lane.",
+    "Do not promote PR236 or PR237 while their self-hosted workflows remain queued."
+  ],
+  "research_write_result": "COMMITTED"
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-WP02-V18-HOSTINGER-EXACT-BYTE-20260810T074624Z",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "decision": "PASS",
+  "created_from_evidence_at": "2026-08-10T07:46:24Z",
+  "adjudicated_by": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent_observed_before_adjudication": "a896ce5b1b61de5f0e4058c972dd6a4e08c0fbc0",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION_CONTENT_ADDRESSED_CURRENT_COMPONENTS",
+  "execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 31367208214,
+    "receipt_commit": "30923fb88d31b320c121c05c7f336b0354006574",
+    "summary_path": "runtime/vps_unifieddb/exact_clay_branch_bridge_v2/runs/31367208214/SUMMARY.json",
+    "canonical_receipt_path": "runtime/vps_unifieddb/exact_clay_branch_bridge_v2/runs/31367208214/wp02_v18_canonical.json",
+    "parity_receipt_path": "runtime/vps_unifieddb/exact_clay_branch_bridge_v2/runs/31367208214/wp02_v18_parity.json",
+    "runner": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "parser_lock": {
+      "lark": "1.3.1",
+      "interegular": "0.3.3"
+    },
+    "transport": "content_addressed_executor_reconstruction",
+    "private_clay_clone_required": false
+  },
+  "current_clay_main_component_blobs_verified_before_and_after_run": {
+    "tools/claycode_base_frontend.py": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "tools/claycode_base_canonicalizer.py": "5605e33c83ca75eb7ede7677328df622731e0461",
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay": "dbb72460bc5a049c784d1acd1aaef152fa37f797"
+  },
+  "grammar_sha256": "99a3b35acfe491081773b9666d9131dae8b2dd3b3bde7ac8569f6428a5fdb180",
+  "surface": "BASE_D_V18_REWARD_RELATIONS",
+  "acceptance_gates": {
+    "strict_lalr_contextual_construction": "PASS",
+    "full_current_g9_and_dialect_parse": {
+      "status": "PASS",
+      "rule_invariant_statements": 85,
+      "rejected": 0
+    },
+    "production_vs_standalone_ast_parity": "PASS",
+    "production_vs_standalone_canonical_bytes_parity": "PASS",
+    "repeat_determinism": "PASS",
+    "comment_whitespace_layout_equivalence": "PASS",
+    "redundant_grouping_equivalence": "PASS",
+    "call_whitespace_equivalence": "PASS",
+    "semantic_mutation_discrimination": "PASS",
+    "reward_relation_discrimination": "PASS",
+    "decoded_string_identity_and_invalid_surrogate_rejection": "PASS",
+    "optional_placeholder_absence": "PASS",
+    "canonical_json_roundtrip_hash_recompute": "PASS"
+  },
+  "negative_transport_evidence_preserved": {
+    "preceding_run_id": 31366858915,
+    "clone_returncode": 128,
+    "failure": "private Clay HTTPS clone could not read Username",
+    "classification": "TRANSPORT_FAILURE_NOT_WP02_FAILURE"
+  },
+  "promotion_basis": "The CC-WP-02 closure contract requires strict construction, full-corpus repaired-frontend evidence, and deterministic canonical roundtrip/hash evidence with mutation discrimination on Ubuntu. Run 31367208214 executes the exact currently selected component bytes under the locked parser environment and satisfies those classes. The runner receipts deliberately self-mark promotion NONE/counts_as_wp02_pass false because execution lanes do not self-promote; this separate adjudication receipt performs the package decision.",
+  "scope_guards": {
+    "counts_as_cc_wp02_pass": true,
+    "counts_as_base_release_pass": false,
+    "counts_as_wp03_pass": false,
+    "counts_as_andreas_target_acceptance": false,
+    "counts_as_final_frank_v0_1_acceptance": false,
+    "frank_harness_mutation": false,
+    "training_authorization": false
+  },
+  "next_falsifier": "Execute the receipt-bound V18 FrontendArtifact -> TypedIR bridge and WP03 typed identity corpus on Ubuntu without silent reparse; retain expected_surface and grammar binding fail-closed.",
+  "rollback": "If any later current-main replay changes one of the six bound component blobs or falsifies a WP02 invariant, reopen CC-WP-02 and retain this receipt as historical evidence rather than silently reusing it."
+}

@@ -73,6 +73,35 @@ PROVIDERS = (
     ),
 )
 
+RUNTIME_ENVIRONMENT_KEYS = frozenset(
+    {
+        "FRANK_ALLOW_LOCAL_TEST_ENDPOINT",
+        "FRANK_FREE_ONLY_BUDGET_EPOCH",
+        "FRANK_PROVIDER_BASE_URL",
+        "FRANK_ZERO_COST_ATTESTED_PROVIDERS",
+    }
+    | {key_name for spec in PROVIDERS for key_name in spec.key_names}
+)
+
+
+def _snapshot_runtime_environment(
+    environ: dict[str, str] | None,
+) -> dict[str, str]:
+    """Capture only recognized runtime inputs before authorization begins."""
+    source = os.environ if environ is None else environ
+    snapshot: dict[str, str] = {}
+    try:
+        for name in sorted(RUNTIME_ENVIRONMENT_KEYS):
+            value = source.get(name)
+            if value is None:
+                continue
+            if not isinstance(value, str):
+                raise ValueError("runtime_environment_values_must_be_strings")
+            snapshot[name] = value
+    except (AttributeError, RuntimeError, TypeError) as exc:
+        raise ValueError("runtime_environment_could_not_be_snapshotted") from exc
+    return snapshot
+
 
 def _attested_zero_cost_providers(environ: dict[str, str]) -> set[str]:
     """Return explicitly operator-attested zero-cost provider IDs."""
@@ -431,7 +460,7 @@ def execute_chat(
 ) -> dict:
     """Execute one bounded chat request and return output plus a redacted receipt."""
     request_messages = _snapshot_text_chat_request(messages, model)
-    env = os.environ if environ is None else environ
+    env = _snapshot_runtime_environment(environ)
     latches = PROCESS_PAYMENT_LATCHES if payment_latches is None else payment_latches
     route_state = route(env, payment_latches=latches)
     selected = route_state["selected"]

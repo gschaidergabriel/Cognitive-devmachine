@@ -1,0 +1,121 @@
+module clay.research.live_fusion_strong_mesh_v14
+version "1.4-shadow-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+
+parent=@research_entity/global/CLAY_LIVE_FUSION_REENTRY_PROTOCOL.clay
+transport=@research_entity/runtime/live_fusion_reentry_v13.py
+router=@research_entity/runtime/live_fusion_strong_mesh_v14.py
+state=UnifiedDB
+topology=ClayGraph
+goal="Frank v0.1 voll lauffaehig auf Andreas PC"
+
+// V1.4 does not replace V1.3 transport/durability/resolution semantics.
+// It adds a shadow routing plane that tests whether stronger inter-worker connectivity can
+// increase causal reach while decreasing irrelevant active delivery density.
+
+law STRONGER_NETWORKING_MEANS_MORE_CAUSAL_REACH_NOT_MORE_EDGE_DENSITY=true
+law V13_CAUSAL_TRANSPORT_REMAINS_PARENT=true
+law ROUTING_CANDIDATE_IS_SHADOW_ONLY=true
+law SHADOW_DECISION_NEVER_MINTS_TRUTH_OR_EFFECT_AUTHORITY=true
+law CLAYGRAPH_DEPENDENCY_PROJECTION_IS_DERIVED_REBUILDABLE_AND_NONAUTHORITATIVE=true
+law DEPENDENCY_UPGRADE_REQUIRES_CURRENT_EPOCH_BOUND_PROJECTION=true
+law STALE_DEPENDENCY_PROJECTION_CANNOT_UPGRADE_LIVE_RELEVANCE=true
+law CURRENT_BUT_FALSE_DEPENDENCY_MAY_CREATE_SHADOW_FALSE_POSITIVE=true
+law FALSE_DEPENDENCY_MUST_REMAIN_CONTAINED_FROM_V13_LIVE_ROUTING=true
+law EXPLICIT_DIRECT_WORK_CLAIM_KEY_ROUTES_REMAIN_FIRST_CLASS=true
+law HIDDEN_CROSS_BRANCH_DEPENDENCY_MAY_UPGRADE_INDEX_ONLY_TO_ACTIVE_DELIVERY=true
+law LOW_IMPACT_LOW_URGENCY_BRANCH_ONLY_CHATTER_MAY_SHADOW_DEMOTE_TO_INDEX_ONLY=true
+law HIGH_IMPACT_CONFLICT_WITH_CURRENT_DEPENDENCY_MAY_SHADOW_UPGRADE_TO_INTERRUPT=true
+law NO_LIVE_ROUTING_CHANGE_BEFORE_SHADOW_VALIDATION=true
+law NEGATIVE_RESULT_OR_REGRESSION_PRESERVED=true
+
+record WorkerDependencyProjection {
+  worker_id:Ref
+  graph_epoch:Ref
+  state_hash:Hash
+  semantic_keys:Set<Ref>
+  work_ids:Set<Ref>
+  claim_ids:Set<Ref>
+  provenance_refs:Set<Ref>
+  current:Bool
+}
+
+record ShadowRouteDecision {
+  event_id:Ref
+  worker_id:Ref
+  base_class:INTERRUPT_NEXT_SAFE_POINT|NEXT_CHECKPOINT|INDEX_ONLY
+  base_relevance:Score
+  candidate_class:INTERRUPT_NEXT_SAFE_POINT|NEXT_CHECKPOINT|INDEX_ONLY
+  candidate_relevance:Score
+  direct_branch:Set<Ref>
+  direct_keys:Set<Ref>
+  direct_work:Set<Ref>
+  direct_claims:Set<Ref>
+  dependency_keys:Set<Ref>
+  dependency_work:Set<Ref>
+  dependency_claims:Set<Ref>
+  projection_epoch:Ref
+  projection_state_hash:Hash
+  projection_used:Bool
+  change:UNCHANGED|UPGRADED_DEPENDENCY_REACH|UPGRADED_INTERRUPT|DEMOTED_LOW_SIGNAL|CHANGED
+  authority=SHADOW_ROUTING_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY
+}
+
+rule current_worker_subscription + current_ClayGraph_epoch -> derive WorkerDependencyProjection
+rule dependency_projection -> bind(worker_id,graph_epoch,state_hash,provenance_refs)
+rule wrong_worker_projection -> FAIL_CLOSED
+rule stale_projection -> preserve_for_diagnostics + ignore_for_upgrade
+rule current_false_projection -> permit_shadow_false_positive_for_measurement + never_mutate_V13_live_route
+rule delta + worker + projection -> compute(base_V13_route,candidate_V14_route)
+rule direct_work_or_claim -> never_demote_merely_for_sparse_topology
+rule hidden_dependency + material_delta -> candidate_active_delivery
+rule hidden_dependency + high_impact_conflict -> candidate_interrupt_if_threshold_met
+rule branch_only + low_impact + low_urgency + nonconflict -> candidate_INDEX_ONLY
+rule candidate_route -> durable_shadow_receipt
+rule shadow_receipts -> compare(required_reach,missed_invalidations,false_dependency_rate,active_delivery_density,interrupt_precision,latency,resource_cost)
+rule live_admission -> require_no_critical_recall_regression + bounded_false_dependency_rate + bounded_noise + current_projection_integrity + rollback
+
+// Exactly one bounded GO out-of-box experiment for this cycle:
+// lesion all direct branch/key/work/claim overlap for one adjudicated dependency, then rescue
+// only through the current derived dependency projection. Success demonstrates possible hidden
+// causal reach; it does not establish general benefit.
+experiment OOB_HIDDEN_DEPENDENCY_LESION_RESCUE {
+  baseline=V13_EXACT_OVERLAP_ONLY
+  lesion=remove_all_direct_overlap
+  rescue=restore_only_current_dependency_projection_edge
+  expected=INDEX_ONLY -> INTERRUPT_NEXT_SAFE_POINT for high_impact_conflict
+  rollback=drop_V14_shadow_router
+  authority=NONE
+}
+
+reference_external_patterns {
+  task_group_sparse_topology="GoAgent arXiv:2603.19677"
+  shadow_before_live_topology_mutation="Autonomous Topology Mutation arXiv:2607.20488"
+  self_describing_routable_requests="MCP specification 2026-07-28"
+}
+
+promotion_gate {
+  local_shadow_unit_tests=PASS
+  synthetic_hidden_dependency_lesion_rescue=PASS
+  synthetic_matched_fixture=PASS
+  false_dependency_shadow_containment=PASS_LOCAL
+  exact_parent_V13_import_on_CI=REQUIRED
+  active_worker_dependency_projection=REQUIRED
+  real_cross_branch_missed_dependency_corpus=REQUIRED
+  real_false_dependency_rate=REQUIRED
+  stale_epoch_control=PASS_LOCAL
+  latency_p50_p95_p99=REQUIRED
+  active_delivery_amplification=REQUIRED
+  crash_restart_replay_parent_semantics=REQUIRED
+  UnifiedDB_materialization=REQUIRED
+  Hostinger_Ubuntu=REQUIRED
+  rollback=REQUIRED
+}
+
+invariant V14_SHADOW_ROUTER != V13_TRANSPORT_REPLACEMENT
+invariant CLAYGRAPH_ACTIVATION != TRUTH
+invariant DEPENDENCY_EDGE != EFFECT_AUTHORITY
+invariant DENSER_MESH != STRONGER_MESH
+invariant SHADOW_PASS != LIVE_PROMOTION
+invariant FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT
+invariant FRANK_NEVER_MUTATES_CLAY

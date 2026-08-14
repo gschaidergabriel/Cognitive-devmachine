@@ -1,0 +1,240 @@
+module claycode.g9.v4
+version "0.6-g9-explicit-binding-candidate"
+parent [@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay,@research_entity/claycode/g9/DIALECT_REGISTRY_V4_EXPLICIT_BINDING.clay]
+status CURRENT_RESEARCH_CANDIDATE
+
+// G9 V4: V3 semantics with only the 16 measured G9 mixed-flat rule bindings made explicit.
+// No global precedence table is introduced. Parentheses resolve exactly those clauses while
+// all other V3 rule/invariant text remains unchanged. The 17th measured ambiguity belongs to
+// the Dialect Registry and is handled in its separate V4 candidate.
+// Candidate only until exact-current differential/evaluator evidence passes.
+
+import dialects=@research_entity/claycode/g9/DIALECT_REGISTRY_V4_EXPLICIT_BINDING.clay
+import frank_reward=@research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay
+
+// ---------- CORE / DELTA CALCULUS ----------
+record Delta<T> {
+  item:T
+  diff:Int
+  logical_time:Epoch
+  valid_time:TimeRange?
+  cause:Set<Ref>
+  e:Set<EvidenceRef>
+}
+rule (diff>0) => ADD_OR_STRENGTHEN
+rule (diff<0) => RETRACT_OR_WEAKEN
+rule (diff=0) => NO_CHANGE
+rule Delta never_implies epistemic_upgrade
+
+record IncrementalReceipt {
+  input_delta:Set<DeltaRef>
+  affected_dependencies:Set<Ref>
+  recomputed:Set<Ref>
+  unchanged:Set<Ref>
+  source_epoch:Epoch
+  output_epoch:Epoch
+  derivation_hash:Hash
+  cost:Cost
+}
+rule state.write -> Delta -> dependency_closure -> affected_view_recompute
+rule graph.project -> Delta -> affected_topology_recompute
+rule prompt_read never_requires global_recompute
+
+// ---------- PROVENANCE ALGEBRA CANDIDATE ----------
+record ProvAtom {source:EvidenceRef;polarity:POS|NEG;role:Symbol}
+record ProvExpr {op:ATOM|ANY|ALL|DIFF;args:Ordered<ProvExpr|ProvAtom>;semantic_scope:Scope;status:Symbol}
+rule prov.ANY(a,b)=alternative_derivation(a,b)
+rule prov.ALL(a,b)=joint_derivation(a,b)
+rule prov.DIFF(a,b)=derivation_minus_invalidated_support(a,b)
+rule ProvExpr is_explanation_of_derivation
+rule ProvExpr != truth
+rule ProvExpr != authority
+rule provx_promotion requires negation_difference_regression_suite
+
+// ---------- CAPABILITY-BEARING EFFECTS ----------
+record CapabilityToken {
+  id:CapabilityRef
+  designates:ResourceRef
+  permits:Set<Verb>
+  scope:Set<Constraint>
+  issuer:AuthorityRef
+  delegate_to:Set<OrganRef>
+  valid:TimeRange
+  nonce:Nonce?
+  revocation:RevocationRef?
+  evidence:Set<EvidenceRef>
+}
+rule effect.Intent may_reference capability_id
+rule effect.commit requires (possession(valid(CapabilityToken)) && Witness.aw && Witness.cw)
+rule textual_capability_name never_confers authority
+rule delegation returns narrower_or_equal(CapabilityToken)
+
+// ---------- DIALECT INTEROP ----------
+record DialectContract {
+  dialect:Symbol
+  version:Version
+  provides:Set<InterfaceRef>
+  requires:Set<InterfaceRef>
+  semantic_hash:Hash
+  migration:Set<MigrationRef>
+  rollback:RecoveryRef
+}
+rule cross_dialect_transform requires (interface_match + semantic_hash_compatibility)
+rule task_context loads minimal_dialect_closure
+rule unknown_dialect -> expand_or_abstain
+
+// ---------- STATE / UNIFIEDDB ----------
+record ViewDelta<T> {view:ViewRef;changes:Set<Delta<T>>;dependency_hash:Hash;selector_hash:Hash}
+rule materialize(Query) -> CognitiveView
+rule update(CognitiveView,Delta) -> ViewDelta
+rule current_answer_context = (AnswerCapsule + relevant(ViewDelta))
+rule UnifiedDB_semantic_authority != physical_monolith_requirement
+
+// ---------- GRAPH / CLAYGRAPH ----------
+record GraphDelta {
+  nodes:Set<Delta<NodeRef>>
+  relations:Set<Delta<RelationRef>>
+  hyperrelations:Set<Delta<HyperRef>>
+  activation:Set<Delta<ActivationRef>>
+  source_epoch:Epoch
+  graph_epoch:Epoch
+  projection_receipt:ReceiptRef
+}
+rule graph.derived_relation cannot_authorize effect
+rule graph.selection_receipt distinct_from graph.provenance_receipt
+rule graph.hyperrelation roles_are_typed
+
+// ---------- GWT ----------
+tensor GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry]
+rule gwt.selection_axes=[rel,impact,unc,novel,info]
+rule gwt.causal_credit_axes=[deliv,recon,use,effect,reentry]
+rule gwt.broadcast!=gwt.use
+rule gwt.reentry requires observed_outcome_or_state_delta
+
+// ---------- REWARD / VALUE / SLOW PLASTICITY ----------
+// Historical NAcc function is a baseline-gated FUSE candidate, not a promoted biological claim.
+rule reward.material_update requires (verified_outcome + causal_credit)
+rule reward.self_proposal_or_activity -> exploration_only_until_independent_verified_outcome
+rule reward.value_state preserves (typed_dimensions + predictions([FAST,MEDIUM,SLOW]))
+rule (reward.low_prediction_error + low_residual_pressure) != automatic_boredom
+rule (reward.low_prediction_error + high_residual_pressure + low_route_diversity) -> STAGNATION_CANDIDATE
+rule reward.safety_or_resource_brake cannot_be_silently_averaged_away
+rule reward.control != truth
+rule reward.control != effect_authority
+rule reward.plasticity_receipt required_before slow_personality_or_memory_value_update
+
+// ---------- NEEDLE / EFFECT LOWERING ----------
+record EffectIntent {
+  semantic_intent:IntentRef
+  capability:CapabilityRef?
+  desired:Set<OutcomePredicate>
+  constraints:Set<Predicate>
+  rollback:RecoveryRef?
+}
+rule 4B_emits EffectIntent
+rule Needle.lowers EffectIntent -> concrete_adapter_plan
+rule Needle.owns [tool_schema,api_wire,shell_wire,device_wire,retry,serialization,auth_transport]
+rule 4B_need_not_learn Needle.owns
+rule external_effect lifecycle=[REQUESTED,AUTHORIZED,CLAIMED,EXECUTED,VERIFIED,DONE]
+
+// ---------- BUDGETED EQUIVALENCE / DIRECTCODE ----------
+record Rewrite {
+  id:RewriteRef
+  lhs:ProgramPattern
+  rhs:ProgramPattern
+  pre:Set<Predicate>
+  proof:Set<ProofRef>
+  domain:Scope
+  cost_hint:Cost
+}
+record SearchBudget {iterations:Int;eclasses:Int;wall:Duration;memory:Bytes;proof_budget:Cost;guides:Set<ProgramSketch>}
+record EClass {id:EClassRef;members:Set<ProgramRef>;analysis:Set<SemanticRef>;counterexamples:Set<CounterexampleRef>}
+rule direct.search = bounded_equality_saturation(ProgramClass,Rewrite,SearchBudget)
+rule saturation_timeout != failure
+rule extraction requires (verified_equivalence + target_cost_model)
+rule opaque_candidate requires independent_verifier
+
+// ---------- READER / CONTEXT RENT ----------
+record ContextFragment {ref:Ref;stable:Bool;tokens:Int?;cache_cost:Cost?;reuse:Int;success_delta:Score?;critical_loss_delta:Score?;repair_delta:Score?;latency_delta:Duration?}
+rule permanent_context(fragment) iff (amortized_value(fragment)>risk_calibrated_threshold)
+rule dynamic_ids_time_hash_runtime outside_stable_prefix
+rule reader_compaction = (persist_canonical_state -> compact -> reload(stable_core+needed_dialects+current_delta))
+
+// ---------- META / LANGUAGE EVOLUTION ----------
+record UsageObservation {
+  organ:OrganRef
+  stack:Ref
+  trace_shape:Ref
+  signals:Set<Symbol>
+  outcome:Set<OutcomeRef>
+  candidate_layers:Set<Symbol>
+  evidence:Set<EvidenceRef>
+}
+rule RAE.CHATGPT.endturn -> UsageObservation -> (hypothesis+counterhypothesis+candidate)
+rule RAE.CLAUDE.endturn_meta_research=false
+rule (Claude_only consumes latest_stack) + (Claude_only writes task_receipts)
+rule successful_motif must_be_preserved_unless_counterevidence
+rule language_delta requires executable_or_usage_counterexample
+
+// ---------- NATIVE 4B TRAINING CONTRACT ----------
+record NativeCognitionTask {
+  clay_state:AnswerCapsule|CognitiveView|Hyperposition|WorkspaceCandidate
+  residual_target:SELF_CONTINUITY|GOAL_FORMATION|AUTONOMY|LONG_HORIZON|UNCERTAINTY|CORRECTION|INITIATIVE|RECRUITMENT
+  forbidden_burden:Set<Symbol>
+  expected_intent:IntentRef?
+}
+rule NativeCognitionTask.forbidden_burden includes [filesystem_search,api_selection,json_arguments,capability_enumeration_if_precomputed,goal_list_recall]
+rule training_data personalizes_for_Andreas_when_FRANK_target && preserves_general_transfer_variants
+
+// ---------- GENERATION VALIDITY ----------
+record GenerationResult {
+  id:GenerationRef
+  classes:Set<LANGUAGE_GAIN|READER_RUNTIME_GAIN|TRANSFER_PRIMITIVE|DIRECTCODE_GAIN|TOOLING_GAIN|FALSIFICATION|NEGATIVE_RESULT|COST_GAIN|RISK_COVERAGE_GAIN|ARCHIVE_GAIN|CREDIT_GAIN|RATIONAL_ROLLBACK>
+  executable:Set<ArtifactRef>
+  evidence:Set<EvidenceRef>
+}
+rule valid_generation requires ((count(distinct(classes))>=2) && (count(executable)>=1))
+rule long_output_without_new_information!=progress
+
+// ---------- MAIN CYCLE ----------
+cycle(input,node){
+  stack=resolve_latest(ClayCode,ClayGraph,UnifiedDB)
+  dialect_set=load_dialects(task(input))
+  verify(entity,canonical,reader,stack,dialect_set)
+  cue=normalize(input)
+  delta_in=observe_changes(cue,current_state)
+  apply_incremental(delta_in)
+  state=state.query(task_relevant(cue))
+  assoc=graph.project(state)
+  hp=preserve_conflict_unknown(state+assoc)
+  pressures=state.open_pressures(hp)
+  coalition=emerge(pressures)
+  ws=gwt.select(state+hp+coalition)
+  capsule=state.answer_capsule(ws)
+  residual=cognitive_choice(capsule)
+  if residual.effect {effect_intent=EffectIntent(residual);receipt=Needle.execute(effect_intent)}
+  outcome=verify(receipt? or residual)
+  credit=causal_credit(outcome,ws)
+  reward_evidence=frank_reward.derive_typed_reward_outcome_evidence(outcome,credit,state)
+  reward_plasticity=frank_reward.update(reward_evidence)
+  reward_control=frank_reward.control(state.unresolved_pressure,state.loop_dynamics)
+  slow_delta=admit_slow_plasticity(reward_plasticity,reward_control,state)
+  reenter(Delta(outcome+credit+reward_plasticity+reward_control+slow_delta))
+  if node.organ==CHATGPT {meta.analyze_explicit_turn()}
+}
+
+// ---------- HARD INVARIANTS ----------
+invariant XENO_G8_hard_loss_fields_preserved
+invariant omission_never_invented
+invariant conflict_unknown_revocation_preserved
+invariant provenance_and_authority_separate
+invariant state_truth_and_graph_relevance_separate
+invariant model_intent_and_effect_authority_separate
+invariant goal_coalition_not_goal_list
+invariant latent_never_sole_critical_control_channel
+invariant hidden_provider_cot_not_persisted
+invariant candidate_language_semantics_reversible_until_validated
+invariant material_reward_requires_verified_outcome_and_causal_credit
+invariant self_generated_activity_cannot_mint_material_reward
+invariant reward_control_never_mints_truth_or_execution_authority
+invariant slow_reward_personality_memory_plasticity_is_receipted_before_reentry

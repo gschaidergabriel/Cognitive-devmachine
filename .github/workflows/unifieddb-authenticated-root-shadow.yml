@@ -1,0 +1,50 @@
+name: UnifiedDB Authenticated Root Shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/experiments/unifieddb_sparse_merkle/**'
+      - '.github/workflows/unifieddb-authenticated-root-shadow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authenticated-root-shadow:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Runtime metadata
+        run: |
+          set -euo pipefail
+          uname -a
+          python3 --version
+          python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('machine=', platform.machine())
+          print('processor=', platform.processor() or 'UNKNOWN')
+          print('sqlite=', sqlite3.sqlite_version)
+          PY
+      - name: Compile and tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research_entity/experiments/unifieddb_sparse_merkle/state_sparse_merkle_shadow.py
+          python3 -m py_compile research_entity/experiments/unifieddb_sparse_merkle/state_merkle_treap_shadow.py
+          python3 -m unittest research_entity.experiments.unifieddb_sparse_merkle.test_state_sparse_merkle_shadow -v
+          python3 -m unittest research_entity.experiments.unifieddb_sparse_merkle.test_state_merkle_treap_shadow -v
+      - name: Matched benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 research_entity/experiments/unifieddb_sparse_merkle/benchmark_state_authenticated_roots.py --sizes 1000,10000,50000 --reps 3 --updates 120 --output artifacts/authenticated_root_shadow.json
+          cat artifacts/authenticated_root_shadow.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: authenticated-root-shadow-${{ github.sha }}
+          path: artifacts/authenticated_root_shadow.json
+          if-no-files-found: error

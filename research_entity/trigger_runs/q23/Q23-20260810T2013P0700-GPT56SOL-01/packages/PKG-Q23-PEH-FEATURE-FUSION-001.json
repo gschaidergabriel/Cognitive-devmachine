@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "package_id":"PKG-Q23-PEH-FEATURE-FUSION-001",
+  "run_id":"Q23-20260810T2013P0700-GPT56SOL-01",
+  "topic":"QWEN_VISION_FEATURE_REUSE_AND_RUNTIME_LIFETIME",
+  "source_classes":["CURRENT_REPO","OFFICIAL_MODEL","PRIMARY_GITHUB_PROJECT","ISSUE_OR_FAILURE","PRIMARY_PAPER"],
+  "finding":"Qwen3.5-4B supplies a real final visual representation and llama.cpp exposes the encoded embedding buffer before image decode, but stock request/slot lifetime and reported Qwen3.5 multi-turn reprocessing mean architectural reuse must be explicit and measured. Strong embedding literature also argues against assuming raw generative feature geometry is calibrated for Frank MVC/open-set use.",
+  "fusion_result":"REFINES",
+  "hypotheses":["H-Q23-PEH-001","H-Q23-Q1-REFINE-002","H-Q23-RUNTIME-META-003"],
+  "architecture_delta":"AD-Q23-PEH-001",
+  "tests":["T-Q23-PEH-001","T-Q23-Q0Q1-002","T-Q23-CONFIG-003"],
+  "affected_components":["retina","mvc","qwen35","libmtmd","harness","claycode","gwt","unifieddb"],
+  "confidence":0.74,
+  "unresolved_uncertainty":"No exact target-VPS runtime receipt was executed in this worker; PEH benefit and feature geometry remain unmeasured on Frank workload.",
+  "promotion":"NOT_PROMOTED"
+}

@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T0012p0700-gpt56sol-unusual-experiment-budget-guard",
+  "program": "FRANK_V0_1",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "component": "GO_PROCESS_INTEGRITY__F-V01-02_SUPPORT",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_immediately_before_write": "c51f74a116ad07f2e3436c1908cd0d4201005ee9",
+    "product_main": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "parent_candidate_pr": 556,
+    "parent_candidate_head": "c2bec73425855c2a4b83e450cb8149f279295355",
+    "new_candidate_pr": 560,
+    "new_candidate_head": "7ac9b4a55a1500b32d9fe367a45abac217f391c6",
+    "new_candidate_base": "chatgpt/go-claycode-corpus-authority-v1-20260812",
+    "training_authorized": false
+  },
+  "anchor_and_overlap_review": {
+    "supervisor_instruction": "Add a fail-closed preflight/accounting rule so inherited automatically triggered workflows cannot silently consume unusual-experiment budget in later cycles.",
+    "duplicate_work_avoided": [
+      "Did not repeat PR556 corpus-authority composition because supervisor marks it solved for unchanged bytes.",
+      "Did not repeat prior LIVE_SQLITE_MAPPING_TEMPORAL_ABA because existing Clay receipt already preserves that counterevidence.",
+      "Stacked on PR556 so the already-removed CORPUS_GHOST_APPEND step is not reintroduced from stale main."
+    ]
+  },
+  "grf": {
+    "hypothesis": "An executable repository preflight can prevent a detected unusual-experiment workflow from being treated as manual-safe unless its GitHub trigger set is exactly workflow_dispatch.",
+    "strongest_counter_reality": "A workflow may include workflow_dispatch and an automatic trigger, so a naive has-workflow_dispatch predicate can still allow automatic budget consumption. Marker scanning also cannot prove that unmarked code is non-experimental.",
+    "falsifier": "Compare naive manual-presence admission against strict trigger-set equality on one synthetic mixed-trigger workflow.",
+    "collapse": "STRICT_DISPATCH_ONLY_RETAINED_AS_PROCESS_GUARD; NAIVE_MANUAL_PRESENCE_REJECTED; SEMANTIC_ABSENCE_PROOF_REJECTED"
+  },
+  "unusual_experiment": {
+    "name": "AUTO_PLUS_MANUAL_TRIGGER_BUDGET_TRAP",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "environment": "local synthetic in-memory workflow text",
+    "external_effect": false,
+    "repo_mutation_during_experiment": false,
+    "baseline_predicate": "has workflow_dispatch => manual-safe",
+    "treatment": "workflow trigger set contains workflow_dispatch plus pull_request",
+    "observed": {
+      "marker_detected": true,
+      "triggers": ["pull_request", "workflow_dispatch"],
+      "naive_has_manual_dispatch_allows": true,
+      "strict_dispatch_only_allows": false,
+      "counter_reality_observed": true
+    },
+    "outcome": "SUPPORTED_MIXED_TRIGGER_BUDGET_TRAP"
+  },
+  "candidate_delta": {
+    "product_pr": 560,
+    "files": [
+      "tests/go_unusual_experiment_budget_gate.py",
+      ".github/workflows/go-unusual-experiment-budget-guard.yml"
+    ],
+    "mechanism": [
+      "Scan GitHub workflow files for explicit GO OOB/unusual-experiment markers.",
+      "Ignore comment-only markers and explicit zero-count metadata.",
+      "Fail closed when a marked workflow trigger cannot be parsed or is not exactly workflow_dispatch.",
+      "Require fresh-base preflight before GO branch mutations likely to fire inherited workflows.",
+      "Run deterministic regression and repository static integrity on exact candidate SHA."
+    ],
+    "ordinary_regressions": {
+      "auto_oob_denied": true,
+      "mixed_manual_auto_denied": true,
+      "manual_only_allowed": true,
+      "workflow_call_denied": true,
+      "zero_count_metadata_allowed": true,
+      "comment_only_marker_ignored": true,
+      "new_go_unusual_experiment_count": 0
+    }
+  },
+  "execution_evidence": {
+    "local_deterministic_fixture_gate": "PASS",
+    "github_guard_workflow_run": 31621438068,
+    "github_guard_workflow_status_at_receipt": "QUEUED",
+    "github_guard_workflow_credit": "ZERO_UNTIL_COMPLETED",
+    "deep_integrity_run": 31621438056,
+    "deep_integrity_status": "FAILURE_WITH_ZERO_STEPS",
+    "deep_integrity_classification": "GITHUB_HOSTED_BILLING_OR_SPENDING_LIMIT_PRESTART_BLOCKER__ZERO_PRODUCT_CREDIT",
+    "deep_integrity_annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased."
+  },
+  "limitations_and_counterevidence": [
+    "Marker-based scanning is not semantic proof that an unmarked workflow contains no unusual experiment.",
+    "A sibling guard job cannot prove GitHub did not already schedule a newly introduced bad workflow on the same event; strongest use is fresh-base preflight plus durable regression.",
+    "No accepted Hostinger runtime, Frank persistence path, Harness, effect authority, or final model was mutated.",
+    "PR560 is Draft/TESTING and must receive exact-head execution evidence before promotion."
+  ],
+  "architecture_delta": {
+    "state": "CANDIDATE_TESTING",
+    "new_invariant": "Before a GO worker performs durable branch mutations likely to trigger inherited workflows, scan the fresh base. Any explicitly marked unusual-experiment workflow must be manual-only with trigger set exactly {workflow_dispatch}; unknown/mixed/automatic trigger state fails closed.",
+    "affected_components": [
+      "GO_RECURSIVE_SWARM_CYCLE_PROTOCOL",
+      "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "research workflow integrity"
+    ],
+    "rollback": "Drop PR560 and this process guard if a stronger execution-level budget authority replaces marker preflight; preserve the PR556 protocol violation as negative evidence."
+  },
+  "next_falsifier": {
+    "priority": "HIGH",
+    "test": "Observe exact-head PR560 self-hosted guard execution and inspect its full scan result. If green, recompose the guard after PR556 ancestry changes; if any inherited marked workflow is found, keep fail-closed and repair the trigger rather than weakening the policy.",
+    "promotion_requires": [
+      "exact-head guard workflow completed",
+      "zero violations on reviewed ancestry",
+      "no weakening of PR556 corpus authority",
+      "limitations remain explicit"
+    ]
+  },
+  "nonclaims": {
+    "f_v01_02_pass": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v0_1_pass": false,
+    "accepted_hostinger_runtime_proven": false,
+    "harness_mutated": false,
+    "effect_authority_minted": false,
+    "final_training_authorized": false
+  }
+}

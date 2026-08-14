@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0405p0700-chatgpt-secondary-provider-retention-failclosed",
+  "recorded_at": "2026-08-11T04:11:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "parent_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr": 261,
+    "merge_sha": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4"
+  },
+  "finding": {
+    "classification": "ADVERSARIAL_FAIL_OPEN_FOUND",
+    "surface": "ProviderIdempotencyContract.assert_same_intent_retry",
+    "problem": "valid_until=None was semantically labeled UNBOUNDED_UNKNOWN but still authorized uncertain mutating retries indefinitely.",
+    "risk": "Provider idempotency retention can expire or be pruned; after retention loss, reuse of an old key can become a new external effect.",
+    "counterhypothesis": "mismatch rejection plus duplicate-result observability is sufficient even when the provider retention horizon is unknown.",
+    "counterhypothesis_status": "REFUTED_FOR_RETRY_AUTHORITY",
+    "reason": "Retry safety depends on the provider still recognizing the key. Unknown retention cannot establish that predicate. Read-only reconciliation is a separate operation and does not mint replay authority."
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Stripe API idempotent requests",
+      "fact": "Idempotency keys may be removed after at least 24 hours; reuse after pruning is treated as a new request.",
+      "retrieved_at": "2026-08-11T04:08:00+07:00"
+    },
+    {
+      "source": "AWS ECS idempotency documentation",
+      "fact": "RunTask client-token TTL is 24 hours.",
+      "retrieved_at": "2026-08-11T04:08:00+07:00"
+    }
+  ],
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-provider-retention-failclosed-main-20260811",
+    "pr": 265,
+    "head_sha": "8eb588e9cd175251d0835031c36761f736480843",
+    "files": [
+      "runtime/state/provider_idempotency_types.py",
+      "tests/test_provider_idempotency_retention_failclosed.py"
+    ],
+    "semantic_delta": [
+      "unknown provider retention -> PROVIDER_IDEMPOTENCY_RETENTION_UNKNOWN -> retry denied",
+      "expired provider retention -> PROVIDER_IDEMPOTENCY_RETENTION_EXPIRED -> retry denied",
+      "known live retention -> same-intent retry remains admissible when all other provider contract predicates hold",
+      "read-only reconciliation remains separately admissible when reconciliation_lookup_supported is true"
+    ]
+  },
+  "measurements": {
+    "isolated_local_regression": {
+      "status": "PASS",
+      "tests": 1,
+      "duration_seconds": 0.05,
+      "matrix": {
+        "unknown_retention_retry": "DENY",
+        "expired_retention_retry": "DENY",
+        "known_live_retention_retry": "ALLOW",
+        "unknown_retention_read_only_reconciliation": "ALLOW_READ_ONLY"
+      }
+    },
+    "github_self_root_current_head": "SUCCESS",
+    "github_deep_integrity": "FAIL_PREEXISTING_PATTERN_REQUIRES_SEPARATE_ADJUDICATION",
+    "github_effect_provider_self_hosted": "QUEUED_AT_CHECKPOINT",
+    "promotion": "NONE"
+  },
+  "go_out_of_box": {
+    "new_experiment_added": false,
+    "retained_single_experiment_from_parent_cycle": "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT",
+    "reason": "This checkpoint is a normal adversarial provider-contract regression and must not introduce a second GO OOB experiment."
+  },
+  "authority": {
+    "external_effect_performed": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "clay_runtime_authority_claim": "NONE",
+    "training_authorized": false
+  },
+  "next_falsifiers": [
+    "Run the exact #265 candidate through the self-hosted effect/provider workflow and preserve the result.",
+    "Adjudicate the repository-wide Deep Integrity failure independently; it predates this retention patch on #261 and is not currently evidence of a retention regression.",
+    "Real provider timeout-after-acceptance evidence must bind exact documented retention horizon and reconciliation semantics before any production retry authority is promoted."
+  ]
+}

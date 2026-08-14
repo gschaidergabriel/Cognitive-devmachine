@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0415p0700-chatgpt-secondary-wp04-module-frontier",
+  "trigger": "go",
+  "status": "TARGET_RUN_PENDING",
+  "recorded_at": "2026-08-11T04:15:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "entity_boundary": {
+    "clay_is_research_entity": true,
+    "self_root_is_separate_research_subject": true,
+    "frank_human_surface_name": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "question": "Which current frank.effects call/name obligations are exact-source resolvable through imported Clay modules, and which remain genuine unresolved host/runtime boundaries?",
+  "coordination": {
+    "initial_target_main": "3a7ca32266fbebec57777673515b9ec988b19c66",
+    "stale_pr_closed": 262,
+    "stale_reason": "main advanced by PR261 and materially changed claycode/frank_effects.clay before execution",
+    "fresh_main_after_pr261": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+    "later_non_overlapping_main_receipts_observed": [
+      "d55b452776295153576011988b0befce7f13b238",
+      "40cd96f70a1dc378bdb7ba41f3faa0d3c5c776d1"
+    ],
+    "current_candidate_pr": 266,
+    "current_candidate_head": "95d580ba46736dc6d865bf7a7a0c48a7542fda38",
+    "candidate_mergeable_at_checkpoint": true,
+    "duplicate_work_detected": false
+  },
+  "exact_source_evidence": {
+    "frank.effects": {
+      "path": "claycode/frank_effects.clay",
+      "git_blob": "949d5972645d36300d4421619021379c79249213"
+    },
+    "frank.hive": {
+      "path": "claycode/frank_hive.clay",
+      "git_blob": "bf427fdfc9409fb93c87af7d2453c491eadd15be",
+      "module_present": true
+    },
+    "frank.memory": {
+      "path": "claycode/frank_memory.clay",
+      "git_blob": "7206577ab67213ba7393c51e0e49e264995455c6",
+      "module_present": true
+    }
+  },
+  "hypothesis": "Exact imported module declarations resolve the frank.hive.* and frank.memory.* namespace/symbol surface from current Clay source provenance, while genuinely undeclared host/runtime primitives remain unresolved and fail closed.",
+  "strongest_counterhypothesis": "Repository-global or basename symbol presence is sufficient resolution evidence, so exact imported module identity is unnecessary.",
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-wp04-module-resolution-fresh-20260811",
+    "pr": 266,
+    "head_sha": "95d580ba46736dc6d865bf7a7a0c48a7542fda38",
+    "files": [
+      "diagnostics/claycode_wp04_module_resolution_v1.py",
+      ".github/workflows/go-claycode-wp04-module-resolution-vps.yml"
+    ],
+    "semantics": [
+      "resolve only through exact current imported Clay module declarations",
+      "record exact source SHA-256 and Git blob provenance",
+      "do not infer signatures from callers, names, type resemblance, model output or ClayGraph salience",
+      "require runtime_effect, trusted_runtime_effect_authorization and final_security_gate to remain unresolved absent exact imported declarations",
+      "no ClayCode semantic-freeze mutation",
+      "no runtime/effect execution authority"
+    ]
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Rust Reference - Names / Name resolution / Use declarations",
+      "finding": "Names and paths are resolved to declarations; use declarations create bindings to explicit paths and glob imports bind names from a specified prefix.",
+      "retrieved_at": "2026-08-11T04:12:00+07:00"
+    },
+    {
+      "source": "MLIR - Symbols and Symbol Tables",
+      "finding": "Symbol references resolve through explicit symbol tables; declarations may refer to definitions outside visible IR without becoming local definitions.",
+      "retrieved_at": "2026-08-11T04:12:00+07:00"
+    },
+    {
+      "source": "WebAssembly Component Model resource/import-export model",
+      "finding": "Host/component resource boundaries remain explicit imported/exported opaque runtime identities rather than authority implied by type-name presence.",
+      "retrieved_at": "2026-08-11T04:12:00+07:00"
+    }
+  ],
+  "go_out_of_box": {
+    "experiment": "DECOY_MODULE_GHOST_EXPORT",
+    "count_for_this_macrocycle": 1,
+    "design": "Inject a disposable non-imported module decoy.hive declaring NodeId and runtime_effect; exact resolution must ignore it, keep runtime_effect unresolved, and leave the unresolved call-target set unchanged.",
+    "target_status": "PENDING",
+    "external_effect_performed": false,
+    "rollback": "temporary tree only"
+  },
+  "target_execution": {
+    "workflow": "GO ClayCode WP04 Module Resolution VPS",
+    "run_id": 31432811773,
+    "status": "PENDING",
+    "runner_requirement": ["self-hosted", "Linux", "X64"],
+    "expected_checks": [
+      "exact current source blob identity",
+      "frank.hive wildcard import exact-source resolution",
+      "frank.memory wildcard import exact-source resolution",
+      "hard host frontier remains unresolved",
+      "DECOY_MODULE_GHOST_EXPORT",
+      "signature_inference_used=false",
+      "runtime_execution_acceptance_claim=false",
+      "truth_authority=NONE",
+      "effect_authority=NONE",
+      "promotion=NONE"
+    ]
+  },
+  "repository_wide_gate_observation": {
+    "deep_integrity_run": 31432810894,
+    "status": "FAIL_INFRASTRUCTURE_ZERO_STEPS_AT_CHECKPOINT",
+    "executed_steps": 0,
+    "candidate_defect_credit": false
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "proposal": "Replace the stale blanket module-absence premise with an exact module/symbol partition: current Clay declarations are local semantic evidence; absent runtime primitives require explicit host contracts and remain fail closed.",
+    "promotion": "NONE_UNTIL_TARGET_EXECUTION"
+  },
+  "authority": {
+    "truth_authority": "NONE_FROM_DIAGNOSTIC",
+    "effect_authority": "NONE",
+    "external_effect_performed": false,
+    "training_authorized": false,
+    "harness_mutation_under_frank_authority": false
+  },
+  "next_falsifiers": [
+    "Consume exact self-hosted run 31432811773; patch immediately on an executed diagnostic failure.",
+    "If module partition passes, feed only exact resolved declarations plus owner-reviewed explicit host contracts into WP04 type/effect admission; do not infer host signatures.",
+    "Preserve PR261 provider/fence declarations as regression obligations and keep F-V01-09 runtime non-bypassability separate from compiler contract resolution."
+  ]
+}

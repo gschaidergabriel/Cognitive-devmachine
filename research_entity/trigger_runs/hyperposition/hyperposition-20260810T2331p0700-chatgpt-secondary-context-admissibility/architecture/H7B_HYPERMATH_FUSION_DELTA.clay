@@ -1,0 +1,73 @@
+module clay.hyperposition.h7b.hypermath_fusion
+version "HYP-RC7B-HYPERMATH-FUSION-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+import h7b=@research_entity/trigger_runs/hyperposition/hyperposition-20260810T2331p0700-chatgpt-secondary-context-admissibility/architecture/HYPERPOSITION_CONTEXT_ADMISSIBILITY_GATE_CANDIDATE.clay
+import hypermath=@research_entity/trigger_runs/hyperposition/hyperposition-20260810-hypermath-thin-net/architecture/CLAY_HYPERPOSITION_ALGEBRA_FABRIC_CANDIDATE.clay
+
+// Cross-worker fusion after live refresh.
+// HyperMath introduces carrier-specific LawCertificates and CONTEXT_GATE / MARGINALIZE /
+// factorization rewrites. H7B contributes the missing semantic-admissibility precondition:
+// a rewrite is not evidence of lower-order semantic reducibility if a relation member or
+// its dependency closure is merely moved into context/hidden state.
+
+record ReductionLawWitness {
+  rewrite_ref:RewriteRef
+  carrier:CarrierRef
+  source_relation:Ref
+  reduced_expr:Ref
+  context_receipt:h7b.ContextAdmissibilityReceipt
+  material_read_signature:Set<Ref>|UNKNOWN
+  hidden_state_schema:Ref?
+  semantic_reduction_claim:Bool
+  operational_equivalence_claim:Bool
+  evidence:Set<EvidenceRef>
+}
+
+rule HyperMath.CONTEXT_GATE rewrite claiming semantic_reduction requires ReductionLawWitness.context_receipt.semantic_reduction_admissible=true
+rule HyperMath.MARGINALIZE rewrite claiming semantic_reduction requires no_relation_member_leakage + no_derived_member_leakage
+rule HyperMath.factorization claiming semantic_reduction requires complete_or_conservative_material_read_signature
+rule UNKNOWN_material_reads -> semantic_reduction_claim=false + exactness=UNKNOWN
+rule hidden_state_without_explicit_schema -> semantic_reduction_claim=false + exactness=UNKNOWN
+
+// Operational optimization is still allowed when semantics are preserved separately.
+rule context_smuggling_detected + operational_equivalence=true -> allow REDUCED_RUNTIME_CANDIDATE only_if canonical_nary_semantics_remain_reified + no_truth_or_authority_promotion
+rule context_smuggling_detected -> forbid LawCertificate.exact_rewrites from asserting lower_order_semantic_equivalence
+
+// HyperMath's large synthetic factorization/transport gains remain conventional-mechanism
+// evidence until current Frank traces show benefit. H7B does not reduce or inflate that claim.
+rule synthetic_factorization_gain != target_live_gain
+rule content_addressing_gain != cognitive_gain
+rule law_certificate_soundness requires adversarial_context_source_tests
+
+// Joint target-live discriminator.
+experiment HYPERMATH_H7B_REAL_FRANK_DISCRIMINATOR {
+  arms=[
+    PLAIN_CLAYCODE_UDB,
+    HYPERRELATION_FACTORIZED_PLANNER,
+    HYPERMATH_WITHOUT_H7B_GUARD,
+    HYPERMATH_WITH_H7B_GUARD
+  ]
+  controls=[
+    MEMBER_CONTEXT_WITHHELD,
+    MEMBER_CONTEXT_SHUFFLED,
+    EXOGENOUS_CONTEXT_SHUFFLED,
+    RELATION_LESION,
+    TOPOLOGY_FROZEN_CONTEXT_CHANGED,
+    MODEL_OUTPUT_FROZEN_TOPOLOGY_CHANGED,
+    CRASH_RESTART_REPLAY
+  ]
+  matched=[state_epoch,graph_epoch,gwt_episode,model,seeds,effect_policy,budget,input]
+  measure=[semantic_roundtrip_error,operational_error,intervention_response_error,replay_divergence,workspace_selection_delta,outcome_delta,context_tokens,wire_bytes,latency_p50,latency_p95,latency_p99,CPU,RSS,recovery_time,false_merge_rate,stale_epoch_rejection,effect_authority_integrity]
+}
+
+counterhypothesis H0_H7B_HYPERMATH_FUSION {
+  proposition="HyperMath LawCertificate proof/test refs plus ordinary read-set tracking already prevent unsound context rewrites; a named H7B fusion condition adds no measurable correctness benefit."
+  discriminator="Run the four-arm current-Frank adversarial context-source suite. Keep H7B validator-only if HyperMath without H7B has zero semantic false-reduction events and equal recovery/cost across representative traces."
+}
+
+invariant algebraic_rewrite_soundness != semantic_reduction_without_context_admissibility
+invariant optimized_runtime_representation != canonical_truth
+invariant context_or_hidden_state_cannot_mint_lower_order_equivalence_by_renaming_dependency
+invariant model_graph_gwt_hypermath_salience_never_mints_effect_authority
+invariant self.root_self_harness_authority_is_proposal_only

@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "architecture_deltas": [
+    {
+      "delta_id": "Q23-AD-VSTG-01",
+      "status": "CANDIDATE",
+      "target_components": ["DigitalRetina","MVC","UnifiedDB","ClayGraph","EAP","PerceptualField","TaskState","GWT","Harness","FrankLoopCore"],
+      "proposed_change": "Add a VisualStateTransition semantic record to canonical UnifiedDB and a rebuildable transition topology projection to ClayGraph. Each accepted edge binds pre_perceptual_state evidence, task_state/context, proposed effect identity, deterministic authority/effect receipt, observed post_state evidence, verified outcome, causal credit eligibility, model/mmproj/feature hashes and timestamps. Retrieval may propose prior transition paths through EAP/ActiveAssembly but may never execute effects or mint truth. On mismatch, unknown state or VISUAL_ALIAS_CONFLICT, abandon the fast path and re-ground using current perception/full decode/active sensing.",
+      "preserved_historical_functions": ["Digital Retina sensor provenance","temporal continuity","change detection","visual familiarity/open-set routing","action outcome verification","uncertainty preservation","GWT causal re-entry","recovery/replay lineage"],
+      "not_added": ["independent GUI knowledge-graph authority","second visual semantic architecture","memory-derived effect authority","memory-as-sensor-truth"],
+      "expected_benefit": "Convert verified GUI experience into compact action-grounded transition structure, reduce repeated full VLM interpretation on recurring states, improve long-horizon task continuity and make post-action verification explicit.",
+      "strongest_counterhypothesis": "Partial observability and visual aliasing dominate real desktop GUIs; transition reuse either becomes unsafe or escalates so often that it adds complexity without end-to-end benefit.",
+      "discriminating_test": "Q23-T-VSTG-MATRIX-01 plus experience-dose study N={0,1,2,4,8,16,32,64}; include stale layouts, hidden operations, visual twins with distinct task state, shuffled edges, wrong seeds and restart replay.",
+      "matched_baselines": ["QWEN_ONLY","PAR_EAP","DIRECT_MEMORY","VSTG_VISUAL_ONLY","VSTG_TASK_BOUND","VSTG_HYBRID_FINGERPRINT"],
+      "metric_vector": ["task_success","wrong_action_rate","transition_retrieval_precision_recall","VISUAL_ALIAS_CONFLICT_precision_recall","full_decoder_calls_per_success","visual_and_text_tokens_per_success","sensor_to_correct_decision_p50_p95_p99","stale_transition_acceptance","memory_induced_sensor_override","post_action_verification_accuracy","GWT_false_ignition","CPU_RAM_VRAM","restart_replay_equivalence"],
+      "resource_budget": "Must be Pareto-competitive with QWEN_ONLY/PAR under target-VPS total pathway cost; graph activation and retrieval overhead are included, not hidden.",
+      "rollback": "Disable VSTG retrieval/projection and retain QNDRF/PAR/direct-memory baselines; transition records remain provenance evidence but are not active routing inputs.",
+      "evidence_refs": ["E-STP-2026","E-ACTIONENGINE-2026","E-EAM-2026","E-TSR-2026","E-AGMEM-2026","Q23-PKG-RUNTIME-SCALE-FEATURE-TAP-20260810"]
+    },
+    {
+      "delta_id": "Q23-AD-VISUAL-ALIAS-GATE-01",
+      "status": "CANDIDATE",
+      "target_components": ["MVC","PerceptualMemorySeed","TaskState","EAP","GWT"],
+      "proposed_change": "Introduce VISUAL_ALIAS_CONFLICT as an abstention state when a perceptual fingerprint resolves to incompatible task states, transition edges or outcomes above the current ambiguity threshold. Conflict cannot be collapsed by retrieval popularity; it requires task/context disambiguation, active sensing or semantic decode.",
+      "expected_benefit": "Prevents high-confidence visual similarity from becoming a self-confirming memory/action loop.",
+      "strongest_counterhypothesis": "Conflict frequency is high enough to erase fast-path gains.",
+      "discriminating_test": "Q23-T-ALIAS-01 with visually identical/near-identical UI fixtures and incompatible hidden/task states.",
+      "matched_baselines": ["nearest_visual_state_without_conflict_gate","QWEN_ONLY","PAR_EAP"],
+      "rollback": "Remove gate from routing while preserving conflict telemetry for analysis.",
+      "evidence_refs": ["E-AGMEM-2026","E-TSR-2026"]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "OPEN_BLOCKER_BEFORE_PRODUCT_REWARD_PROJECTION",
+  "supported_parent_evidence": {
+    "target_run": 31508591524,
+    "tested_pr_merge_sha": "78d9c1d313786e263b7838f95a742e427899d924",
+    "result": "10/10 PASS deterministic unique DONE-set fold under intact bounded source",
+    "receipt": "research_entity/trigger_runs/go/go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once/TARGET_VPS_REWARD_RECEIPT_FOLD_RESULT.json"
+  },
+  "observed_candidate_read_shape": [
+    "TerminalRewardReceiptFoldCandidate first opens V17 and scans effect_done_receipts_v17 into a Python list, then closes that connection.",
+    "Each source effect is subsequently re-adjudicated through TerminalRewardBridgeCandidate, which opens another V17 runtime/connection.",
+    "The receipt binds source-universe count/digest and canonical order but no authoritative transaction/checkpoint/frontier identity."
+  ],
+  "gap": "The bounded fold proves duplicate/retry/cache-crash idempotence for an intact source, but it does not prove that the projected DONE universe is a complete snapshot of one authoritative source frontier under concurrent terminal commits. A new DONE can become durable after the initial scan while the fold is still verifying earlier rows. The result may be a valid prefix projection without an identity proving which authoritative frontier it covers.",
+  "risk": [
+    "a consumer may treat a valid but stale prefix projection as current reward state",
+    "cache invalidation cannot distinguish exact-current from prefix-current without a source frontier",
+    "cross-process concurrent terminal commits are not covered by the existing exactly-once gate",
+    "recovery/replay cannot prove projection completeness from count/digest alone unless the source frontier is independently bound"
+  ],
+  "required_successor_contract": {
+    "source_read": "one stable authoritative read transaction/snapshot or an independently admitted immutable terminal-event frontier",
+    "must_bind": [
+      "selected semantic checkpoint/lineage identity or equivalent authoritative source identity",
+      "exact terminal-event/DONE frontier or cursor",
+      "source-universe digest/count at that frontier",
+      "reward policy identity",
+      "canonical order identity",
+      "projected state digest"
+    ],
+    "currentness_rule": "projection may be CURRENT only when its bound source frontier equals the currently admitted authoritative frontier; otherwise it is STALE/PREFIX and may remain evidence-only",
+    "cache_rule": "incremental/materialized reward cache is discardable derived state and must never advance its source frontier by assertion"
+  },
+  "required_discriminator": {
+    "name": "REWARD_FOLD_CONCURRENT_DONE_FRONTIER",
+    "arms": [
+      "stable source baseline",
+      "new DONE committed before snapshot acquisition",
+      "new DONE committed after snapshot/frontier capture but during fold",
+      "new DONE committed after fold completion",
+      "restart/rebuild at the exact captured frontier",
+      "stale cache presented against a newer authoritative frontier"
+    ],
+    "acceptance": "every projection states and verifies the exact authoritative source frontier it covers; concurrent additions are either included in that frontier or cause explicit STALE/PREFIX classification, never silent currentness"
+  },
+  "strongest_counterhypothesis": "If reward projection is only consumed at already-frozen semantic checkpoints and no terminal writer can coexist with a fold, a separate frontier mechanism may be redundant. That simpler topology must be machine-checked and enforced rather than assumed.",
+  "architecture_delta": "DO_NOT_PROMOTE_REWARD_FOLD_AS_CURRENT_PRODUCT_STATE_UNTIL SOURCE_FRONTIER/SNAPSHOT_COMPLETENESS IS TARGET-PROVEN",
+  "promotion": "NONE",
+  "go_oob_experiment_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

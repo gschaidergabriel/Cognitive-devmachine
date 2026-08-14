@@ -1,0 +1,111 @@
+module clay.hyperposition.topology_scope.v1
+version "HP-TOPOLOGY-SCOPE-CERTIFICATE-V1-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Purpose: close a stale-reuse gap in proof-carrying Hyperposition rewrites/caches when
+// active, coordination, or physical topology changes without a semantic-root/state-epoch change.
+// This does not change truth, identity, or effect authority.
+
+type TopologyPlane = SEMANTIC|ACTIVE|COORDINATION|PHYSICAL
+
+type DependencyPrecision = EXACT_DECLARED|CONSERVATIVE_ALL|UNKNOWN
+
+record TopologySnapshotV1 {
+  semantic_root:Hash
+  active_root:Hash
+  coordination_root:Hash
+  physical_root:Hash
+  state_epoch:Epoch
+  execution_generation:Int
+  delivery_generation:Int
+  schema_version:Version
+}
+
+record TopologyReadEffectV1 {
+  declared:Set<TopologyPlane>
+  observed:Set<TopologyPlane>
+  material_read_set:Set<Ref>|UNKNOWN
+  closure_complete:Bool
+  precision:DependencyPrecision
+  evidence:Set<EvidenceRef>
+}
+
+record TopologyScopeCertificateV1 {
+  certificate_id:HashRef
+  program_or_rewrite:Ref
+  semantic_hash:Hash
+  contract_hash:Hash
+  bound_planes:Set<TopologyPlane>
+  bound_roots:Map<TopologyPlane,Hash>
+  state_epoch:Epoch
+  execution_generation:Int
+  delivery_generation:Int
+  schema_version:Version
+  read_effect:TopologyReadEffectV1
+  law_ref:LawCertificateRef?
+  exactness:EXACT|TESTED_BOUNDED|CONSERVATIVE|UNKNOWN
+  effect_class:PURE|READ_ONLY|EXTERNAL|SECURITY_SENSITIVE|UNKNOWN
+  provenance:Set<EvidenceRef>
+}
+
+rule TopologyReadEffectV1.declared always_includes SEMANTIC
+rule closure_complete=true requires observed subset_of declared
+rule observed not_subset_of declared -> REJECT_UNDECLARED_TOPOLOGY_READ
+rule closure_complete=false -> precision=CONSERVATIVE_ALL
+rule precision=CONSERVATIVE_ALL -> bound_planes={SEMANTIC,ACTIVE,COORDINATION,PHYSICAL}
+rule precision=EXACT_DECLARED -> bound_planes=declared
+rule precision=UNKNOWN -> exactness=UNKNOWN
+rule UNKNOWN material_read_set -> exactness!=EXACT
+
+rule compile_scope(program,read_effect,current) -> TopologyScopeCertificateV1 {
+  require current.schema_version compatible
+  if read_effect.closure_complete=false {
+    bind all topology roots
+    exactness=CONSERVATIVE
+  }
+  else {
+    require read_effect.observed subset_of read_effect.declared
+    bind exactly read_effect.declared topology roots
+  }
+}
+
+rule validate(cert,current) requires
+  cert.state_epoch=current.state_epoch +
+  cert.execution_generation=current.execution_generation +
+  cert.delivery_generation=current.delivery_generation +
+  cert.schema_version=current.schema_version +
+  forall plane in cert.bound_planes: cert.bound_roots[plane]=current.root(plane)
+
+rule changed_unbound_topology_plane alone_does_not_invalidate cert
+rule changed_bound_topology_plane -> INVALIDATE_REWRITE_PLAN_CACHE_HANDLE
+rule semantic_root_change -> INVALIDATE_REWRITE_PLAN_CACHE_HANDLE
+rule stale_execution_generation|stale_delivery_generation|stale_state_epoch -> INVALIDATE_REWRITE_PLAN_CACHE_HANDLE
+
+rule rewrite.exact requires
+  valid(TopologyScopeCertificateV1) +
+  read_effect.precision=EXACT_DECLARED +
+  read_effect.closure_complete=true +
+  complete_or_conservative(material_read_set) +
+  law_ref.status in [PROVED,TESTED_BOUNDED]
+
+rule EXTERNAL|SECURITY_SENSITIVE|UNKNOWN effect_class -> no_cross_alternative_multi_execution
+rule TopologyScopeCertificateV1 != truth
+rule TopologyScopeCertificateV1 != effect_authority
+rule topology_hash_match != causal_use
+rule physical_topology_equivalence != semantic_equivalence
+
+// Integration with HYPERMATH-GRF-PCIR-V1.1:
+// HyperFenceKey remains the transport-generation fence.
+// TopologyScopeCertificateV1 becomes a compiler-visible dependency certificate for any
+// HyperPlan/RewriteWitness/cache entry whose validity depends on one or more topology planes.
+// Cache identity becomes semantic root + generation fence + material-read signature +
+// topology scope certificate + carrier/law/compiler versions.
+
+hypothesis H_HP_TS_01 = "Typed topology-scoped dependency certificates prevent stale Hyperposition rewrite/cache reuse without the needless invalidation caused by binding all four topology planes to every read."
+counterhypothesis H_HP_TS_01_NULL = "State epoch and semantic root already advance for every materially relevant topology change, so topology-scoped roots add complexity without catching real Frank failures."
+falsifier H_HP_TS_01_F = "On current Frank traces, no active/coordination/physical topology mutation exists inside a stable semantic/state epoch that changes any Hyperposition/GWT result; or a simpler single generation counter provides equal safety with lower cost and equivalent recovery behavior."
+
+invariant four_topologies_remain_distinct
+invariant scoped_invalidation_never_mints_truth
+invariant scoped_invalidation_never_mints_effect_authority
+invariant unknown_dependency_scope_fails_conservative_not_permissive

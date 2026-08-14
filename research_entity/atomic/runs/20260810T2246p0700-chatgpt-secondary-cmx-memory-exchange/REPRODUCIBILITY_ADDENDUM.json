@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2246p0700-chatgpt-secondary-cmx-memory-exchange",
+  "rerun_surface": "local container",
+  "executable": "implementation/cmx_reference.py",
+  "command": "python implementation/cmx_reference.py --seeds 6 --output cmx_rerun.json",
+  "deterministic_metric_matches": {
+    "noise_0_latest_accuracy": true,
+    "noise_0_cmx_accuracy": true,
+    "noise_0_10_latest_accuracy": true,
+    "noise_0_10_cmx_accuracy": true,
+    "noise_0_15_latest_accuracy": true,
+    "noise_0_15_cmx_accuracy": true,
+    "no_coupon_accuracy": true,
+    "no_rent_accuracy": true
+  },
+  "replay_same_digest": true,
+  "replay_digest": "f11c8c8e3ff3053c0e418d1c0f216f44b7073e8e60d7657a3d127f0eec4cbe0e",
+  "stale_epoch_rejected": 100,
+  "duplicate_receipts_rejected": 200,
+  "unique_receipts_applied": 1000,
+  "authority_classes_unchanged": true,
+  "truth_class": "UNVERIFIED_PROCEDURAL_HINT",
+  "authority_class": "NO_EFFECT_AUTHORITY",
+  "rerun_runtime_seconds": 20.881673468999907,
+  "adjudication": "DETERMINISTIC_CORE_RESULTS_REPRODUCED; microbenchmark timing is intentionally not equality-gated."
+}

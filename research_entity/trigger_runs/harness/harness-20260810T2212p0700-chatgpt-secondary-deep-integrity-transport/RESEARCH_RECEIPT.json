@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2212p0700-chatgpt-secondary-deep-integrity-transport",
+  "trigger": "harness",
+  "created_at": "2026-08-10T22:12:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger (connector alias for gschaidergabriel/frankv0.1)",
+  "selected_gap": "Current Frank Deep Integrity validation is not yielding executable step evidence on the GitHub-hosted ubuntu-latest lane, blocking discrimination of the already-supported repo_static_integrity defect and current repairs.",
+  "hypothesis": {
+    "primary": "The immediate repeated Deep Integrity failures observed on PR branches are a hosted-runner/job-start transport class rather than Frank test failures, and routing the unchanged workflow step set to the accepted self-hosted Linux/X64 lane should at least reach QUEUED/RUNNING execution semantics.",
+    "strongest_counterhypothesis": "The workflow definition itself is invalid or repository-wide Actions policy prevents all runner classes, so changing only the runner selector will fail before any job can queue.",
+    "falsifier": "Run the same Deep Integrity workflow from current main with only runs-on changed to [self-hosted, Linux, X64]. If it reaches QUEUED/RUNNING rather than immediate completed/failure with zero steps, the generic workflow-invalid/all-runner-policy counterhypothesis is weakened. The first real executed failing step then becomes the next Frank Harness discriminator."
+  },
+  "observations": [
+    {
+      "kind": "REPRODUCED_PRE_STEP_FAILURE",
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "source_pr": 122,
+      "workflow_run_id": 31401549373,
+      "attempt_1_job_id": 93497503412,
+      "attempt_1": {"status": "completed", "conclusion": "failure", "steps": []},
+      "explicit_rerun_requested": true,
+      "attempt_2_job_id": 93498958720,
+      "attempt_2": {"status": "completed", "conclusion": "failure", "steps": []},
+      "interpretation": "The same Deep Integrity run failed twice before observable Step 1. This is not evidence that any Frank integrity assertion failed."
+    },
+    {
+      "kind": "CURRENT_WORKFLOW_STATIC_INSPECTION",
+      "path": ".github/workflows/frank-deep-integrity.yml",
+      "main_blob_sha": "82a1a49f55a5100c4583e7ac072059418ab38810",
+      "main_runner": "ubuntu-latest",
+      "workflow_steps_present": true,
+      "interpretation": "The checked-in workflow contains checkout/setup plus the full Deep Integrity step set; empty executed step arrays therefore arise before normal step execution."
+    },
+    {
+      "kind": "EXTERNAL_STATUS_CROSSCHECK",
+      "source": "official GitHub Status",
+      "retrieved_during_run": true,
+      "actions_global_state": "Operational",
+      "interpretation": "No global Actions outage was observed at retrieval time. This does not identify the repository/account-specific cause."
+    },
+    {
+      "kind": "TARGET_VPS_TRANSPORT_FALSIFIER",
+      "draft_pr": 135,
+      "branch": "research/fix-frank-deep-bugs-harness-transport-20260810",
+      "base_main_at_pr_creation": "0332257ebd31ebf23d52285d86856e41cd58ca00",
+      "first_commit": "ac70a49006838c3c08850300284a22f9d758d176",
+      "trigger_commit": "2893f9d9ff1f7340f3224be378283343d3188972",
+      "semantic_change": "Route the unchanged Deep Integrity job from ubuntu-latest to [self-hosted, Linux, X64]; an explanatory workflow comment was added in the trigger commit.",
+      "production_mutation": "NONE",
+      "main_mutation": false,
+      "workflow_run_id": 31402352367,
+      "job_id": 93500176924,
+      "observed_state": "QUEUED",
+      "conclusion": null,
+      "interpretation": "The same workflow now enters the self-hosted runner queue instead of immediately completing as pre-step failure. This supports a hosted-lane/runner-start transport distinction but does not yet identify billing, quota, policy, or other exact cause."
+    }
+  ],
+  "secondary_finding": {
+    "id": "HARNESS-OWNER-FIXED-IDENTITY-COVERAGE-DRIFT-20260810",
+    "status": "SUPPORTED_BY_STATIC_INSPECTION",
+    "claim": "Current main tests/repo_static_integrity_audit.py still asserts legacy/human-surface Frank separation phrases but contains no positive gate for the newer owner-fixed native identity fields self.root, SERVER_BINARY_ENTITY, TARGET_VPS, CLAYCODE_ONLY, or token/client/Clay non-SELF boundaries.",
+    "risk": "Deep Integrity can remain green for legacy human-surface identity assertions while native self.root conformance is tested only in separate newer branches, creating a coverage split during the current identity migration.",
+    "counterpoint": "Some legacy phrases remain valid human-surface compatibility semantics; the finding is missing positive native-identity coverage, not proof that every legacy assertion is wrong."
+  },
+  "relationship_to_existing_work": {
+    "issue_192": "The previously supported repo_static_integrity false-positive on noncanonical SQLite schema owners is NOT refuted. PR #122 remains the active repair lane for that defect.",
+    "identity_pr_124": "The self.root migration remains a separate active implementation lane; this Harness run does not duplicate or supersede it.",
+    "new_pr_135": "Disposable/reversible transport falsifier only. Do not merge merely because QUEUED was observed."
+  },
+  "negative_results_and_limits": [
+    "No executed Deep Integrity assertion result was obtained from run 31401549373 because both observed attempts had zero steps.",
+    "The exact root cause of the ubuntu-latest pre-step failure was not identified; billing/quota/policy remain hypotheses, not findings.",
+    "The new self-hosted run 31402352367 was observed QUEUED, not completed; no PASS/FAIL is claimed for Frank Deep Integrity from PR #135 in this receipt.",
+    "No target runtime state, canonical DB, effect authority, self.root identity state, paid training, or main branch was mutated."
+  ],
+  "architecture_and_work_reentry": {
+    "frank_v0_1": "Treat Deep Integrity transport health as a validation dependency, never as product architecture.",
+    "harness": "Do not classify pre-step Actions failures as Frank test failures. Preserve runner/job-start evidence class separately from executed discriminator evidence.",
+    "identity": "After the self.root implementation lane stabilizes, integrate positive native-identity conformance into the ordinary Deep Integrity regression set so legacy surface checks cannot be the only identity gate.",
+    "security_recovery_observability": "Record CI/runner health state and fail visibly when validation transport is unavailable; no release credit from unexecuted checks.",
+    "static_schema_owner": "Continue PR #122 only after a real execution lane produces exact-current-source focused + full audit evidence."
+  },
+  "next_falsifier": [
+    "Observe self-hosted run 31402352367 until it either starts or produces a runner-level failure.",
+    "If steps execute, capture the first actual failing Deep Integrity step and its exact log/receipt; repair only that localized Frank/test defect.",
+    "If repo_static_integrity is the first executed failure, replay PR #122's classification candidate against the current-main source plus the active self.root identity migration surface before promotion.",
+    "If the job cannot leave QUEUED, inspect self-hosted runner availability/labels/concurrency separately from Frank semantics."
+  ],
+  "research_write_result": "COMMITTED"
+}

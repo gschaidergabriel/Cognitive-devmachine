@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "event_type": "FRANK_V0_1_CODE_DELTA",
+  "status": "EXECUTED_ON_TARGET_VPS / PULL_REQUEST_OPEN / NO_PROMOTION_REQUESTED",
+  "created_at": "2026-08-11T14:05:00+07:00",
+  "actor": "claude-code / Anthropic / Claude Opus 5 (1M)",
+  "actor_role": "EXTERNAL_CONTRIBUTOR_NOT_A_BOOTED_CLAY_ORGAN",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "report": "research_entity/reports/20260811T1405p0700_CLAYCODE_FIRST_EXECUTABLE_SUBSTRATE_AND_MEASURED_ROADMAP.md",
+  "predecessor_report": "research_entity/reports/20260811T1339p0700_CLAUDE_EXTERNAL_AUDIT_TARGET_VPS_RECEIPT_INTEGRITY.md",
+  "pull_request": "gschaidergabriel/Dr.-Unterweger#310",
+  "work_package_reentry": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-09-EFFECT-AUTHORITY"
+  ],
+  "headline": "ClayCode executes. decide_effect runs from claycode/frank_effects.clay and matches the Python policy reference on 200,576 sampled requests with zero mismatches. Measured corpus coverage of the surface is 7.5 %.",
+  "code_delta": [
+    "runtime/claycode_eval_v1/syntax.py",
+    "runtime/claycode_eval_v1/analyzer.py",
+    "runtime/claycode_eval_v1/host.py",
+    "runtime/claycode_eval_v1/evaluator.py",
+    "runtime/claycode_eval_v1/corpus_probe.py"
+  ],
+  "test_delta": [
+    "tests/claycode_decide_effect_differential_gate.py",
+    ".github/workflows/claycode-decide-effect-differential-vps.yml"
+  ],
+  "executed": {
+    "hostname": "digital-retina",
+    "runner_name": "clay",
+    "python": "3.12.3",
+    "dependency": "lark==1.3.1 (pinned; the evaluator depends on this release's LALR/contextual-lexer behaviour)",
+    "requests_compared": 200576,
+    "mismatches": 0,
+    "checks": "6/6",
+    "exit_code": 0,
+    "runner_working_tree_mutated": false,
+    "canonical_database_touched": false,
+    "external_effect_performed": false,
+    "authority_minted": false
+  },
+  "discriminating_power_demonstrated": {
+    "note": "A green gate is worthless until shown able to go red. The .clay source was sabotaged and restored.",
+    "sabotage_1": {"mutation": "DENY -> ALLOW for WIPE_DEVICE/FORMAT_FILESYSTEM", "result": "FAIL, 7 mismatches"},
+    "sabotage_2": {"mutation": "one conjunct dropped in destructive_guard_complete", "result": "FAIL, 1 mismatch in 3576"}
+  },
+  "wp04_call_target_partition": {
+    "unresolved_total_reproduced": 29,
+    "cross_validation": "matches the supervisor count from an independent implementation",
+    "groups": {
+      "pure_semantic_projections": 4,
+      "state_reads": 16,
+      "clock": 1,
+      "authority_minting": 3,
+      "external_effect": 2,
+      "undeclared_types_requiring_clay_declaration": 3
+    },
+    "undeclared_types": ["EffectReceipt", "VerifiedEffectReceipt", "DoneReceipt"],
+    "undeclared_types_note": "Used as return types and constructed positionally, but declared in no .clay source anywhere in claycode/. No host binding can resolve them. Pooling them with the intrinsics hid work belonging to a different owner.",
+    "decide_effect_unresolved_targets": 0,
+    "decide_effect_note": "Calls only destructive_guard_complete, which calls nothing. The most-quoted policy in the program was executable all along and only lacked an evaluator."
+  },
+  "measured_roadmap": {
+    "sources_total": 40,
+    "sources_parsed": 3,
+    "coverage_percent": 7.5,
+    "distinct_missing_constructs": 13,
+    "gaps_by_frequency": {
+      "multiline_forms": 8,
+      "equals_field_defaults_or_const": 8,
+      "state_declarations": 5,
+      "hash_character": 4,
+      "in_operator": 2,
+      "database_declarations": 2,
+      "const_declarations": 2,
+      "receipt_declaration": 1,
+      "entity_declaration": 1,
+      "view_declaration": 1,
+      "minus_character": 1,
+      "andand_in_unsupported_position": 1
+    },
+    "rescoping_note": "The structured frontend TARGET_VPS_PASS is a real pass over 7.5 % of the corpus, not over ClayCode.",
+    "method_note": "No construct's meaning was guessed. An unparsed source is reported as unparsed, honouring the grammar's own law that new syntax requires a new version and unknown constructs fail closed."
+  },
+  "recommended_next_steps": [
+    "Declare EffectReceipt, VerifiedEffectReceipt and DoneReceipt in ClayCode — cheapest item on the work package; unblocks execute, verify_effect and finish.",
+    "Bind the 4 pure intrinsics, then extend the differential gate to effect_request_hash and confirmation_matches without touching authority.",
+    "Extend the surface by the 13 constructs, highest frequency first, each with a corpus-coverage delta so F-V01-02 progress becomes a measured percentage.",
+    "Let target_vps_probe.py call the evaluator instead of its substring check, so its evidence_class can honestly say EXECUTABLE. Closes audit finding A2 at the source.",
+    "Restore or vendor claycode_base_frontend.py into the Frank repo, or drop the workflow step asserting a file the repo does not contain."
+  ],
+  "ledger_entries": {
+    "CLAIMS.jsonl": ["C-CLAYCODE-001", "C-CLAYCODE-002", "C-CLAYCODE-003", "C-CLAYCODE-004"],
+    "NEGATIVE_RESULTS.jsonl": ["N-CLAYCODE-001", "N-CLAYCODE-002", "N-CLAYCODE-003"],
+    "EVIDENCE_GRAPH.jsonl": ["E-CLAYCODE-001", "E-CLAYCODE-002", "E-CLAYCODE-003"]
+  },
+  "scope_limits": [
+    "Only decide_effect and destructive_guard_complete are executed. Nothing is claimed about the other 13 functions in the module.",
+    "The evaluator is a tree-walking interpreter, not a compiler. Sufficient for differential semantic evidence and for running policy; not a performance substrate.",
+    "ClayCode is not finished. This closes the execution gap on the critical path and replaces an estimate with a measured construct list; type/effect checking, lowering, runtime/FFI, stdlib and concurrency remain open.",
+    "Delivered as an open pull request. Disposition belongs to Clay and the project owner."
+  ]
+}

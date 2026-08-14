@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2350p0700-chatgpt-secondary-hp-wp03-binding",
+  "attempts": [
+    {
+      "surface": "GitHub connector",
+      "action": "read current compiler/frontend/TypedIR and write discriminator artifacts",
+      "status": "PASS",
+      "evidence_class": "VERIFIED_REMOTE_REPOSITORY_EFFECT",
+      "notes": "GitHub read/write capability verified; concurrent main movement produced one 409 during the preceding Hyperposition write and was handled by refresh/retry without overwrite."
+    },
+    {
+      "surface": "local container",
+      "action": "clone current GitHub repository and execute WP03_FRONTEND_BINDING_FALSIFIER.py",
+      "status": "BLOCKED_TRANSPORT",
+      "evidence_class": "EXECUTION_ATTEMPT_NOT_CODE_RESULT",
+      "stderr": "fatal: unable to access GitHub repository: Could not resolve host: github.com",
+      "interpretation": "DNS/network transport failure; must not be counted as a ClayCode test failure."
+    },
+    {
+      "surface": "local Python research runtime",
+      "action": "parse HYPERPOSITION_READOUT_V1 candidate using reconstructed V18 Lark surface",
+      "status": "PASS_NON_STRICT_LOCAL_COMPATIBILITY",
+      "evidence_class": "LOCAL_EXECUTION_NOT_TARGET_VPS",
+      "runtime": {"python": "3.13.5", "lark": "1.3.1"},
+      "strict_replication": "BLOCKED_LOCAL_INTEREGULAR_MISSING",
+      "notes": "Does not replace exact-byte accepted target-VPS WP02 evidence."
+    }
+  ],
+  "next_required_execution": "Run WP03_FRONTEND_BINDING_FALSIFIER.py against fresh current main on the accepted Hostinger Ubuntu VPS with the receipt-bound V18 parser environment."
+}

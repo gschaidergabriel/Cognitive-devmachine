@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.1",
+  "event_id": "20260811T180431Z-chatgpt-secondary-cc-wp04-arith-receipt",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-11T18:04:31Z",
+  "payload": {
+    "work_id": "CC-WP04-ARITHMETIC-NOMINAL-ALGEBRA-DISCRIMINATOR-20260812",
+    "spec_rev": 1,
+    "execution_receipt_id": "DRU-PR410-RUN31520738889-WP04-ARITH-INVENTORY",
+    "executor_class": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "machine_ref": "clay@digital-retina / Hostinger Ubuntu self-hosted GitHub Actions runner",
+    "action": "Executed diagnostic-only arithmetic AST/type inventory over current parser-admitted ClayCode corpus without modifying parser, evaluator, checker or runtime semantics.",
+    "observed_effect": "28 Arith nodes observed. 7 had all operand nominal types explicitly resolvable; 0 of those were same-nominal and all 7 were cross-nominal. Explicit signatures included Epoch + Int, five Float * Score occurrences, and Score * Score * Confidence. Remaining arithmetic operands stayed UNKNOWN where their types depend on still-open host/member/collection/index/update contracts. No numeric coercion or arithmetic rule was selected.",
+    "verification": "Target workflow 31520738889 completed SUCCESS on branch head 96c7f8f09ff69198eece0f8aaed9a95bdc2ce98e, created 2026-08-11T18:03:29Z and completed by 18:04:28Z. Result explicitly reported semantic_rule_selected=false, numeric_coercion_selected=false, unknown_is_zero=false and promotion=NONE_DIAGNOSTIC_ONLY.",
+    "evidence_refs": [
+      "gschaidergabriel/Dr.-Unterweger#410",
+      "GitHubActions:31520738889",
+      "gschaidergabriel/Dr.-Unterweger@96c7f8f09ff69198eece0f8aaed9a95bdc2ce98e"
+    ],
+    "conclusion": "REFUTED: adding a generic same-nominal arithmetic rule as the next WP04 step is not supported by the current explicit corpus. NEXT_FALSIFIER: determine whether arithmetic-participating domain nominals have explicit scalar/representation/algebra contracts anywhere in canonical ClayCode sources; if not, create that contract as an explicit architecture/type-system obligation rather than inheriting host coercion.",
+    "truth_class": "REMOTE_EXECUTION_RECEIPT",
+    "success": true,
+    "complete": true
+  }
+}

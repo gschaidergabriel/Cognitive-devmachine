@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2050p0700-gpt56sol-sqlite-live-attestor-decoy",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:50:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "171415456b42c9df3ad0d215b9c43f0ab0f11d93",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "program": "FRANK_V0_1",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "e711a114d282a921f13d0ae2b1d1898a461d4cc4",
+    "training_authorized": false
+  },
+  "duplicate_avoidance": {
+    "prior_receipt": "research_entity/trigger_runs/go/20260812T2046p0700-gpt56sol-productstart-v4-fresh-main/RESEARCH_RECEIPT.json",
+    "rule": "Do not duplicate ProductStart V4 composition or anti-rollback work. This receipt records only the newer live SQLite process-attestor delta, the decoy falsifier, and the productive trust-binding blocker."
+  },
+  "observed_reality": {
+    "new_product_delta": [
+      "b60c869e2c48007e3f42fcda488ca193f3c43a61 adds runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py",
+      "1d104517f2fd03c82a5154edd0df7f6f2f3aa215 adds primitive regression tests",
+      "dc81f6697b787e0bee7d391daf91008276280106 isolates deep-integrity checkout from stale runner files",
+      "e711a114d282a921f13d0ae2b1d1898a461d4cc4 persists a fresh 23-gate self-hosted deep-integrity receipt with fail_count=0"
+    ],
+    "attestor_scope_from_current_source": {
+      "status": "PASS_SQLITE_LIVE_PROCESS_IDENTITY is intentionally narrow",
+      "frank_identity_attested": false,
+      "productive_persistence_path_exercised": false,
+      "restart_recovery_attested": false,
+      "effect_authority": "NONE"
+    },
+    "actual_process_observer_evidence": {
+      "workflow_run": 31565850463,
+      "workflow_conclusion": "success",
+      "runner": "clay",
+      "machine_name": "digital-retina",
+      "status": "BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED",
+      "expected_hostname_configured": false,
+      "expected_machine_id_sha256_configured": false,
+      "expected_systemd_unit_configured": false,
+      "expected_executable_configured": false,
+      "root_anchor_path": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+      "root_anchor_status": "MISSING",
+      "release_credit": "NOT_GRANTED"
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "WAL-reset corruption race affects releases through 3.51.2 under concurrent writer/checkpoint conditions; fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite current release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "Current upstream release observed is 3.53.4 (2026-07-24), containing the WAL-reset fix."
+    }
+  ],
+  "grf": {
+    "anchor_R0": "Current source now has exact live mapped-library identity primitives but productive accepted-host/service/persistence/restart binding remains absent.",
+    "generated_reality_R2": "A malicious or accidental extra mapping with a SQLite-like basename might confuse the mapping selector and yield a false PASS.",
+    "counter_reality_R3": "The selector may conservatively detect multiple identities and deny admission, producing availability loss but no false acceptance.",
+    "discriminating_test": "Map a harmless sandbox file named libsqlite3.so.decoy alongside the real SQLite library and apply current selector semantics.",
+    "predicted_if_hypothesis": "Selector collapses to one trusted identity or otherwise emits acceptance despite the decoy.",
+    "predicted_if_counterhypothesis": "Selector sees multiple identities and fails closed."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "SQLITE_DECOY_MAPPING_IDENTITY",
+    "scope": "Disposable local sandbox process only; no Frank/VPS/provider/Harness/canonical runtime mutation.",
+    "baseline_unique_identities": 1,
+    "decoy_unique_identities": 2,
+    "result": "FAIL_CLOSED_SQLITE_MULTIPLE_MAPPING_IDENTITIES",
+    "false_pass_observed": false,
+    "outcome": "RETAIN",
+    "interpretation": "Conservative multi-identity rejection survives this adversarial nuisance mapping. This is not production release evidence."
+  },
+  "fusion": {
+    "hypothesis": "The new live-process attestor materially closes mapped-library identity ambiguity for one PID generation.",
+    "strongest_counterhypothesis": "Even perfect mapped-library identity can be irrelevant to release safety if the observed PID is not the accepted Frank service or the productive persistence path is not exercised.",
+    "outcome": "MERGE",
+    "promotion": "Mechanism evidence retained; F-V01-13 remains IN_PROGRESS."
+  },
+  "reentry": {
+    "product_work_item": "gschaidergabriel/Dr.-Unterweger#534",
+    "next_falsifier": "On the accepted Hostinger target, owner-pin hostname + machine-id hash + systemd unit + executable, install the trusted root SQLite anchor, select the live Frank service PID, exercise the real UnifiedDB persistence path, then prove restart plus rollback/downgrade/library-swap rejection in one provenance-bound receipt.",
+    "forbidden_promotion": "Do not promote deep-integrity workflow success, synthetic observer success, or generic SQLite version output to productive Frank release acceptance."
+  },
+  "effect_authority": "NONE",
+  "canonical_state_mutated": false,
+  "product_code_mutated": false
+}

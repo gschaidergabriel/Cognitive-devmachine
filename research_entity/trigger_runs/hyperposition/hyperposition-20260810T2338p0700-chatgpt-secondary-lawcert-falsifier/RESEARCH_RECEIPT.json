@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier",
+  "trigger": "hyperposition",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity": "Clay",
+  "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+  "status": "ARCHITECTURE_DELTA_CANDIDATE_VALIDATOR_ONLY",
+  "target_live_evidence": false,
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "current_program": "FRANK_V0_1",
+  "work_package": "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+  "ancestry": [
+    "7828b70f989ff3e675ff90d684fe02eecc24ce2b",
+    "da1fac98794464b07b6b8d3dce93d80ed18e3677",
+    "00d6a7d68ab65a5bff10e858743142fb55bd4c96",
+    "cdfe6067aaa40468de4e9500971e9e5628f7c235",
+    "fb8baa2dc47705e3ce59d9ceb26943c2280a43ff",
+    "25b4a296143a627a6417e426f0748640ab97ca8b"
+  ],
+  "hypothesis": "HyperMath LawCertificate declarations require implementation-bound executable/proof validation before they may license optimizing rewrites; otherwise a false algebraic law can produce fast but semantically incorrect Frank projections.",
+  "strongest_counterhypothesis": "Ordinary compiler unit/property tests plus existing LawCertificate proof_refs/test_refs are sufficient; a dedicated validation receipt contract adds complexity without measurable benefit.",
+  "local_synthetic_execution": {
+    "domain": [-2.0, -1.0, 0.0, 1.0, 2.0],
+    "min_associative": true,
+    "min_commutative": true,
+    "plus_associative": true,
+    "plus_commutative": true,
+    "plus_distributes_over_min": true,
+    "false_mean_associativity_rejected": true,
+    "false_mean_associativity_counterexample": {
+      "a": -2.0,
+      "b": -2.0,
+      "c": -1.0,
+      "left": -1.5,
+      "right": -1.75
+    }
+  },
+  "external_evidence": [
+    {
+      "source": "Chmielewski et al. 2026, The Role of Semirings in Incremental View Maintenance",
+      "finding": "Incremental maintenance complexity depends fundamentally on the underlying semiring."
+    },
+    {
+      "source": "Brinke et al. 2026, Preservation Theorems in Semiring Semantics",
+      "finding": "Preservation properties differ across semiring classes; laws valid in one carrier need not transfer to another."
+    },
+    {
+      "source": "Olteanu & Zavodny 2011, Factorised Representations of Query Results",
+      "finding": "Factorization can compress exponentially large flat query results when structural regularity permits it."
+    }
+  ],
+  "architecture_delta": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier/architecture/HYPERMATH_LAWCERT_VALIDATION_GATE_CANDIDATE.clay",
+  "test": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier/tests/law_certificate_falsifier.py",
+  "decision": "KEEP_HYPERMATH_AND_H7B_VALIDATOR_ONLY; ADD_LAWCERT_VALIDATION_OBLIGATION; NO_TARGET_RUNTIME_PROMOTION",
+  "next_falsifier": "When a real ClayCode/UnifiedDB HyperMath optimizer exists, inject false, stale, wrong-version and out-of-domain law certificates and compare semantic error, plan invalidation, latency and recovery against the simpler ordinary-test baseline.",
+  "authority": {
+    "architecture_promotion": false,
+    "effect_authority": false,
+    "training_authorized": false,
+    "target_self_harness_mutation": false
+  }
+}

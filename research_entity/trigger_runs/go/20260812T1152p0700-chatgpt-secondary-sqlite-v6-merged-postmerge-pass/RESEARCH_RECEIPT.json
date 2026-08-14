@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1152p0700-chatgpt-secondary-sqlite-v6-merged-postmerge-pass",
+  "organ": "chatgpt-secondary / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_refreshed_before_write": "6d0c092a949a4f1fd6df4d7e7b35260aebc44e2a",
+    "parent_discovery_receipt_commit": "65b7f4211759866cff7674992c63632f9dda8e20",
+    "parent_discovery_receipt": "research_entity/trigger_runs/go/20260812T1145p0700-chatgpt-secondary-sqlite-v6-loader-dir/RESEARCH_RECEIPT.json",
+    "superseded_pr": 503,
+    "superseding_pr": 506,
+    "stale_write_policy": "PR 503 was closed unmerged after main advanced. V6 was recreated from refreshed main edd253b8c00bcd408759ec6dff10f19c8ec64dec before revalidation and integration."
+  },
+  "r0_observed": [
+    "Frank main advanced during the GO cycle with #504 imported-guard-chain hardening, making the first V6 integration branch one commit stale.",
+    "The V6 candidate was recreated from refreshed main edd253b8c00bcd408759ec6dff10f19c8ec64dec rather than treating older-base evidence as current integration evidence.",
+    "Exact-head self-hosted run 31564493406 on candidate head e24f42aa79d450dd847ccc59b9a5d357c7993e4c completed SUCCESS on runner clay.",
+    "PR #506 merged the additive V6 candidate, regression and workflow into Frank main as e2dc384077c104791ccde5de082ec26d319163d7.",
+    "The feature ref was then fast-forwarded to the exact merge commit so the branch-filtered workflow executed against the merged tree.",
+    "Post-merge exact-main run 31564584414 on e2dc384077c104791ccde5de082ec26d319163d7 completed SUCCESS on runner clay, including exact candidate fetch, compile/regression, repository static integrity, evidence upload and cleanup."
+  ],
+  "grf_collapse": {
+    "generated_reality": "The V6 loader-directory trust gate composes with the newer #504 imported-guard-chain hardening and remains deterministic/static-integrity clean after merge.",
+    "strongest_counter_reality": "The new #504 composition or merge result changes import/runtime assumptions enough that V6 fails or repository static integrity regresses.",
+    "discriminator": "Recreate V6 from refreshed current main, self-hosted exact-head regression, then rerun the same workflow against the exact merged main commit.",
+    "outcome": "SUPPORTED_FOR_NARROW_MECHANISM_AND_SOURCE_INTEGRATION",
+    "promoted": [
+      "Frank main e2dc384077c104791ccde5de082ec26d319163d7 contains the additive SQLite V6 loader-directory trust gate candidate plus deterministic regression/workflow.",
+      "V6 is exact-head self-hosted PASS on the refreshed pre-merge composition.",
+      "V6 is post-merge exact-main self-hosted PASS on e2dc384077c104791ccde5de082ec26d319163d7.",
+      "Repository static integrity passed in both the refreshed candidate lane and post-merge exact-main lane."
+    ],
+    "not_promoted": [
+      "productive Hostinger Frank service uses V6",
+      "productive /opt SQLite runtime and /etc anchor are installed/accepted",
+      "productive process maps the pinned 3.53.4 object",
+      "dependency-transplant/downgrade/library-swap controls are proven on productive service",
+      "crash/restart/rollback continuity",
+      "F-V01-13 PASS",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "go_unusual_experiment_accounting": {
+    "exactly_one_for_macro_cycle": true,
+    "count": 1,
+    "id": "PINNED_DSO_UNPINNED_DEP_CONSTRUCTOR_COUNTERWORLD",
+    "new_unusual_experiments_in_revalidation_or_postmerge_steps": 0,
+    "result": "SUPPORTED_LOADER_DIRECTORY_TRUST_REQUIREMENT"
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr": 506,
+    "merged_main": "e2dc384077c104791ccde5de082ec26d319163d7",
+    "v6_guard": "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v6_candidate.py",
+    "regression": "tests/frank_sqlite_v6_loader_dir_trust_regression.py",
+    "workflow": ".github/workflows/frank-sqlite-v6-loader-dir-trust-final.yml",
+    "premerge_run": 31564493406,
+    "postmerge_run": 31564584414
+  },
+  "next_discriminating_test": {
+    "target": "accepted Hostinger Ubuntu productive Frank start/runtime path",
+    "requirements": [
+      "bind the productive service/launcher contract to the admitted guard chain including V6 or a measured stronger successor",
+      "prove the installed SQLite runtime object and loader-directory ancestry in the service filesystem view are root-owned and non-writable",
+      "capture exact productive process maps, SQLite library SHA-256, sqlite_version, sqlite_source_id, manifest and root-anchor identity",
+      "run dependency-transplant, downgrade and library-swap negative controls through the productive start path and require fail-closed denial",
+      "exercise real WAL multi-connection writer/checkpoint operation",
+      "prove crash/restart and rollback continuity preserves the admitted runtime/state lineage or fails closed"
+    ]
+  },
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "SQLITE_V6_MERGED_AND_EXACT_MAIN_POSTMERGE_PASS; F-V01-13_REMAINS_IN_PROGRESS"
+}

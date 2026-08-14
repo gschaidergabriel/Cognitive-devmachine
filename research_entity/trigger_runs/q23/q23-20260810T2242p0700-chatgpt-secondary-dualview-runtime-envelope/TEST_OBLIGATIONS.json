@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "test_obligations": [
+    {
+      "id": "TO-Q23-MVC-OPENSET-01",
+      "priority": "P0_FOR_F-V01-06_PROMOTION",
+      "status": "READY_WHEN_TARGET_FIXTURES_AND_RUNTIME_ARE_AVAILABLE",
+      "variants": {
+        "A": "Full Qwen visual encode + full semantic decode for every changed observation",
+        "B": "Dedicated lightweight visual embedding encoder + calibrated MVC + Qwen decode on escalation",
+        "C": "One Qwen/libmtmd encode + merged-feature MVC-M0 + same-encode Qwen decode on escalation",
+        "D": "One Qwen/libmtmd encode + tiny projection MVC-M1 + same-encode Qwen decode on escalation",
+        "E": "Optional same-Qwen-encode pre-merger+merged dual-view MVC-M2; run only if C/D miss gate"
+      },
+      "corpus_requirements": [
+        "user-specific known GUI states/objects",
+        "near-neighbor unknown states deliberately similar to known states",
+        "layout-shift/OOD screenshots",
+        "small action-critical visual changes",
+        "camera/object examples where applicable",
+        "OCR/grounding fixtures",
+        "blank/no-image/corrupted-image fixtures"
+      ],
+      "metrics": [
+        "known/unknown confusion matrix",
+        "precision/recall/F1 by known/unknown/ambiguous/conflict class",
+        "FPR at selected known-state recall",
+        "selective risk vs coverage",
+        "calibration/ECE/Brier where meaningful",
+        "routing false-bypass and unnecessary-decode rates",
+        "task outcome correctness after bypass/escalation",
+        "p50/p90/p95/p99 image encode latency",
+        "end-to-end first-decision latency",
+        "CPU/RAM/GPU/VRAM",
+        "decoder invocation rate",
+        "image tokens and context cost",
+        "crash/timeout/retry/recovery rate"
+      ],
+      "controls": [
+        "shuffled labels",
+        "prototype version mismatch",
+        "wrong ROI",
+        "orientation/metadata metamorphs",
+        "same pixels with different containers",
+        "tiny action-critical delta",
+        "no-change replay",
+        "full-decode no-MVC control"
+      ],
+      "statistical_law": "Preserve raw rows, matched inputs/seeds where stochasticity exists, warm/cold separation, outliers and all available machine/runtime/model metadata. No promotion from mean-only summaries."
+    },
+    {
+      "id": "TO-Q23-VISUAL-COMPAT-02",
+      "priority": "P0_FOR_PROTOTYPE_REUSE",
+      "status": "READY",
+      "purpose": "Determine whether visual prototype geometry survives runtime/preprocessing changes.",
+      "matrix_axes": [
+        "llama.cpp build/commit",
+        "libmtmd/preprocessor identity",
+        "CLI vs server path",
+        "Transformers reference path where feasible",
+        "CPU vs CUDA vs Vulkan only where target/available",
+        "Flash Attention on/off where applicable",
+        "batch/ubatch settings",
+        "image token min/max budget",
+        "canonicalizer version"
+      ],
+      "measurements": [
+        "same-image embedding cosine/L2 drift",
+        "feature norm/distribution drift",
+        "token count and spatial grid identity",
+        "OCR/grounding behavior",
+        "known/unknown decision flip rate",
+        "latency and resource delta",
+        "crash/error state"
+      ],
+      "decision": "If a compatibility change produces material feature/behavior drift, namespace prototypes by the new VisualEncoderCompatibilityID and require re-admission/recalibration; never silently migrate."
+    },
+    {
+      "id": "TO-Q23-CANONICAL-PIXELS-03",
+      "priority": "P1",
+      "status": "READY",
+      "purpose": "Validate canonical pixel identity before cheap unchanged-frame gating and prototype admission.",
+      "cases": [
+        "EXIF orientations 1-8",
+        "same rendered pixels across PNG/JPEG/WebP where loss permits tolerance",
+        "color-profile differences",
+        "scaled UI with same semantic state",
+        "one-pixel/text/icon/checkbox/focus changes",
+        "cursor-only motion separated from action-critical content"
+      ],
+      "acceptance": "Visually equivalent canonicalized inputs should share the intended identity; semantically/action-relevant visual differences must not be collapsed."
+    },
+    {
+      "id": "TO-Q23-MM-RUNTIME-RECOVERY-04",
+      "priority": "P0_FOR_END_TO_END",
+      "status": "READY",
+      "purpose": "Treat multimodal runtime failure as observable/recoverable rather than silent perception corruption.",
+      "tests": [
+        "mmproj OOM/reservation failure",
+        "encode timeout",
+        "server crash during image encode",
+        "stale prototype compatibility ID",
+        "corrupted image/preprocess failure",
+        "restart with prototype store",
+        "rollback to full-decode path"
+      ],
+      "required_behavior": "Fail closed for consequential effects, mark perception DEGRADED/UNKNOWN, quarantine incompatible MVC state, recover from last-known-good, then revalidate before HEALTHY."
+    }
+  ]
+}

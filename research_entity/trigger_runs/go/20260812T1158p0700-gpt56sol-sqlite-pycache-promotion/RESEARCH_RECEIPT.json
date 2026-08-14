@@ -1,0 +1,82 @@
+{
+  "protocol": "CLAY_GO_RESEARCH_RECEIPT_V1",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T11:58:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "entity_id": "frank-project-global-research-entity",
+  "program": "FRANK_V0_1",
+  "scope": ["F-V01-13", "sqlite-runtime-admission", "python-import-trust", "release-recovery"],
+  "canonical_continuity_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_refreshed_before_write": "334f7550e8d5d4a69ec6b1d9f7f806200b28f0be",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_before_candidate": "e2dc384077c104791ccde5de082ec26d319163d7",
+    "product_main_after_merge": "88a376e26f0556598358dd4746378a245610c06c",
+    "merged_pr": 508,
+    "candidate_head": "031e8b3f94e0815560903eeacef9d932a61f3688",
+    "exact_head_run": 31564794517,
+    "exact_head_run_status": "SUCCESS",
+    "merge_method": "squash"
+  },
+  "observed_reality": [
+    "Merged PR #504 already pre-attested the known Python source chain V5->V4->V3->V2->V1 before first Python exec.",
+    "Merged PR #506 added V6 loader-directory trust hardening and did not modify the V5 shell launcher patched by #508.",
+    "CPython 3.12 SourceLoader.get_code can read and validate a source module's bytecode cache and return compiled cached code before source bytes are read/compiled.",
+    "Before #508, the V5 launcher did not explicitly exclude or attest a pre-existing local __pycache__ tree.",
+    "Fresh-current-main exact-head self-hosted run 31564794517 on 031e8b3f94e0815560903eeacef9d932a61f3688 completed SUCCESS for exact fetch, launcher syntax/source-only cache gate, inherited V5 path/import-chain regressions, static integrity, artifact upload and cleanup.",
+    "PR #508 was merged to product main as 88a376e26f0556598358dd4746378a245610c06c."
+  ],
+  "hypothesis": {
+    "claim": "A source-only V5 admission boundary should fail closed when a local __pycache__ path exists, because source-file attestation alone does not bind all executable bytes that CPython may select for source imports.",
+    "mechanism": "The launcher rejects $SELF_DIR/__pycache__ before root-anchor check and before /usr/bin/python3 -I -S exec; the already admitted root-owned/non-group-or-other-writable SELF_DIR prevents an unprivileged runtime from creating the local cache after this pre-exec check.",
+    "confidence": "SUPPORTED_MECHANISM_SELF_HOSTED_REGRESSION"
+  },
+  "strongest_counterhypothesis": {
+    "claim": "The productive release bundle may already guarantee no local bytecode cache can exist, making explicit cache rejection redundant defense-in-depth.",
+    "status": "NOT_DISPROVEN_AT_PRODUCTIVE_DEPLOYMENT_LEVEL",
+    "consequence": "Do not promote #508 into productive F-V01-13 acceptance by itself."
+  },
+  "exactly_one_unusual_experiment": {
+    "count_this_invocation": 1,
+    "id": "V5_WRITABLE_IMPORTED_PREDECESSOR",
+    "status": "COMPLETED_EARLIER_IN_THIS_INVOCATION_AND_FUSED_WITH_PARALLEL_MERGED_PR504",
+    "new_pycache_unusual_experiment_run": false,
+    "note": "The pycache result was derived from primary CPython implementation evidence plus ordinary deterministic regression only."
+  },
+  "intervention": {
+    "merged_policy": "SOURCE_ONLY_REJECT_LOCAL_PYCACHE_BEFORE_PYTHON",
+    "denial": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:PYTHON_CHAIN_CACHE_PRESENT",
+    "test": "tests/frank_sqlite_v5_pycache_source_only_gate.py",
+    "workflow": ".github/workflows/frank-sqlite-v5-pycache-source-only.yml",
+    "status": "MERGED_MECHANISM_PASS",
+    "rollback": "Revert product commit 88a376e26f0556598358dd4746378a245610c06c if productive release-bundle requirements prove the source-only policy incompatible.",
+    "canonical_frank_state_mutated": false,
+    "productive_service_state_mutated": false,
+    "effect_authority_changed": false,
+    "harness_authority": "NONE"
+  },
+  "parallel_counterevidence_preserved": {
+    "research_commit": "334f7550e8d5d4a69ec6b1d9f7f806200b28f0be",
+    "finding": "V6 directory-ancestry trust does not itself attest every loader-visible object/subpath; productive loader-visible object inventory remains an explicit test obligation.",
+    "work_item": "gschaidergabriel/Dr.-Unterweger#510",
+    "effect_on_this_merge": "NO_CONFLICT_WITH_PYCACHE_SOURCE_ONLY_MECHANISM; REMAINS_HIGHER_RELEASE_FRONTIER"
+  },
+  "collapse": {
+    "source_chain_attestation_alone_binds_all_python_import_bytes": "REJECT_AS_GENERAL_CPYTHON_CLAIM",
+    "explicit_source_only_cache_exclusion": "PROMOTE_TO_MERGED_MECHANISM_PASS",
+    "productive_fixed_sqlite_admission": "DEFER_OPEN",
+    "f_v01_13": "IN_PROGRESS",
+    "frank_v0_1": "NOT_PASS"
+  },
+  "next_high_information_step": "On an authorized root-capable accepted Hostinger target, bind exact productive service/parent -> release bundle -> trust anchor -> loader-visible object inventory -> mapped SQLite 3.53.4 -> persistence/state lineage, then capture clean start/restart plus downgrade/library-swap/rollback controls. The current session has no SSH/root-capable Hostinger execution surface, so this cannot be truthfully promoted here.",
+  "authority": {
+    "frank_harness_mutation_authority": "PROPOSAL_ONLY",
+    "final_model_training_authorized": false,
+    "together_api_used": false
+  },
+  "final_status": "PYCACHE_SOURCE_ONLY_HARDENING_MERGED_MECHANISM_PASS; PRODUCTIVE_F-V01-13_REMAINS_OPEN"
+}

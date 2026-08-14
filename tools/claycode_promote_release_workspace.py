@@ -5,6 +5,10 @@ This is bookkeeping, not evidence generation. It cannot turn proxy/hosted result
 release evidence: the WP14 manifest it consumes is itself fail-closed on the registered
 Andreas Ubuntu strict target receipt, ten real application receipts, full FRANK handoff
 and zero open P0/P1 defects.
+
+Freshness law: the manifest's release repository commit must equal the checkout HEAD that
+is attempting promotion. A fully coherent old target bundle is still stale evidence for a
+newer source tree and must fail closed rather than replay into BASE PASS.
 """
 from __future__ import annotations
 
@@ -81,6 +85,18 @@ def main() -> int:
     workspace = load(args.workspace)
     failures: list[str] = []
 
+    git_cp = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, capture_output=True, check=False
+    )
+    git_head = git_cp.stdout.strip() if git_cp.returncode == 0 else ""
+    manifest_repository_commit = str(manifest.get("repository_commit") or "").strip()
+    if not git_head:
+        failures.append("CURRENT_GIT_HEAD_UNAVAILABLE")
+    if not manifest_repository_commit:
+        failures.append("MANIFEST_REPOSITORY_COMMIT_MISSING")
+    elif git_head and manifest_repository_commit != git_head:
+        failures.append("MANIFEST_REPOSITORY_COMMIT_NOT_CURRENT")
+
     if manifest.get("manifest") != "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST":
         failures.append("WRONG_MANIFEST_KIND")
     if manifest.get("target_host") != TARGET:
@@ -108,13 +124,15 @@ def main() -> int:
             failures.append("APPLICATION_NOT_ACCEPTED:" + app)
 
     if failures:
-        print(json.dumps({"pass": False, "failures": failures}, ensure_ascii=False))
+        print(json.dumps({
+            "pass": False,
+            "failures": failures,
+            "manifest_repository_commit": manifest_repository_commit or None,
+            "current_git_head": git_head or None,
+        }, ensure_ascii=False))
         return 2
 
     manifest_hash = sha(args.manifest)
-    git_head = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, capture_output=True, check=False
-    ).stdout.strip()
     promoted_at = datetime.now(timezone.utc).isoformat()
 
     for wp in EXPECTED_WPS:
@@ -124,6 +142,9 @@ def main() -> int:
         row["promotion_basis"] = {
             "manifest_sha256": manifest_hash,
             "manifest_work_package_pass": True,
+            "manifest_repository_commit": manifest_repository_commit,
+            "current_git_head": git_head,
+            "fresh_commit_match": True,
         }
 
     workspace["status"] = "BASE_PASS"
@@ -156,7 +177,9 @@ def main() -> int:
         "manifest": str(args.manifest.relative_to(ROOT)) if args.manifest.is_relative_to(ROOT) else str(args.manifest),
         "manifest_sha256": manifest_hash,
         "strict_target_receipt": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
+        "manifest_repository_commit": manifest_repository_commit,
         "git_head_before_generated_evidence": git_head,
+        "fresh_commit_match": True,
         "work_packages_passed": EXPECTED_WPS,
         "application_count": len(required_apps),
         "authority_invariant": "model output != execution authority",
@@ -174,6 +197,9 @@ def main() -> int:
         "pass": reread_ok,
         "workspace": str(args.workspace.relative_to(ROOT)) if args.workspace.is_relative_to(ROOT) else str(args.workspace),
         "manifest_sha256": manifest_hash,
+        "manifest_repository_commit": manifest_repository_commit,
+        "current_git_head": git_head,
+        "fresh_commit_match": manifest_repository_commit == git_head,
         "work_packages_pass": 14 if reread_ok else None,
         "applications_pass": len(required_apps) if reread_ok else None,
     }))

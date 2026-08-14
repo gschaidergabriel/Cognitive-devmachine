@@ -1,0 +1,18 @@
+{
+  "package_id":"Q23-PKG-002-QWEN-VL-EMBEDDING-COUNTEREVIDENCE",
+  "run_id":"q23-20260810T1737p0700",
+  "observed_at":"2026-08-10T17:37:00+07:00",
+  "topic":"MULTIMODAL_EMBEDDING_AND_FEATURE_GEOMETRY",
+  "source_class":"OFFICIAL_MODEL_REPOSITORY",
+  "source_refs":["https://github.com/QwenLM/Qwen3-VL-Embedding","https://github.com/QwenLM/Qwen3-VL-Embedding/blob/main/src/models/qwen3_vl_embedding.py"],
+  "finding":"Qwen's dedicated 2026 Qwen3-VL-Embedding family explicitly trains/uses a multimodal representation path for retrieval across text, images, screenshots and video, rather than presenting arbitrary raw base-VLM visual states as a calibrated retrieval embedding.",
+  "why_interesting_for_target_architecture":"This directly challenges the strongest simplification assumption in QNDRF: raw Qwen3.5 mmproj features may be reusable physically but may still need a tiny learned projection/readout for stable familiarity/open-set geometry.",
+  "fusion_result":"REFINES",
+  "hypothesis_created_or_revised":["H-Q23-002","H-Q23-007"],
+  "counterhypothesis_created_or_revised":["CH-Q23-001","CH-Q23-007"],
+  "architecture_delta_candidates":["AD-Q23-001","AD-Q23-002"],
+  "test_obligations":["TO-Q23-002","TO-Q23-003"],
+  "swarm_targets":["frank","harness","unifieddb","claygraph"],
+  "confidence":0.94,
+  "falsifier":"Raw pooled Qwen3.5 features match or beat projected/dedicated representations on the frozen Frank familiarity/open-set benchmark under equal total resource cost."
+}

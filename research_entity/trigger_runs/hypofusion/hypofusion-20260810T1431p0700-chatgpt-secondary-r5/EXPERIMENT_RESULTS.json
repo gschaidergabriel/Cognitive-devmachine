@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260810T1431p0700-chatgpt-secondary-r5",
+  "experiment":"reexecute current committed research_entity/experiments/live_fusion_mesh_v2_sim.py logic",
+  "evidence_class":"LOCAL_DETERMINISTIC_REEXECUTION_OF_SHARED_PROJECT_SCRIPT_SIMULATION_ONLY",
+  "independent_replication":false,
+  "reason_not_independent":"The code, seed, synthetic topology model and hypothesis descend from the same Clay lineage; matching output is reproducibility evidence only.",
+  "seed":20260810,
+  "n_deltas":5000,
+  "missing_observed_dependency_edge_rate":0.08,
+  "results":{
+    "broadcast":{"messages_per_delta":9.0,"micro_recall":1.0,"micro_precision":0.32944444444444443,"perfect_event_recall":1.0,"missed":0,"redundant":30175},
+    "tag_only":{"messages_per_delta":1.7474,"micro_recall":0.5893423271500843,"micro_precision":1.0,"perfect_event_recall":0.621,"missed":6088,"redundant":0},
+    "dependency_candidate":{"messages_per_delta":2.8444,"micro_recall":0.9593254637436762,"micro_precision":1.0,"perfect_event_recall":0.9202,"missed":603,"redundant":0}
+  },
+  "derived":{"candidate_payload_reduction_vs_broadcast":0.6839555555555555,"candidate_recall_gain_vs_tag_only_percentage_points":36.99831365935919},
+  "high_centrality_contradiction":{"origin":"unifieddb:7","required_branches":9,"broadcast_recall":1.0,"tag_only_recall":0.1111111111111111,"candidate_recall":1.0},
+  "adjudication":"REPRODUCES_COMMITTED_SYNTHETIC_RESULT; STRENGTHENS_REPRODUCIBILITY_ONLY; NO_RUNTIME_PROMOTION",
+  "late_arrival_existing_persistent_receipt":"research_entity/experiments/LIVE_FUSION_MESH_V2_SYNTHETIC_20260810.md",
+  "next_discriminator":"Use existing WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810 rather than opening another lane."
+}

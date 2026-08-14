@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.2",
+  "run_id":"fusion-20260810T1624p0700",
+  "experiments":[
+    {
+      "id":"EXP-FUSION-POSTHOC-FANOUT-001",
+      "evidence_class":"DERIVED_FROM_REAL_REPO_BRANCH_FEEDBACK_POSTHOC",
+      "status":"DIAGNOSTIC_ONLY",
+      "source":"research_entity/mesh_feedback/20260810T1556p0700-clay-live-fusion/manifest.json",
+      "observed":{"registered_branches":9,"branches_with_material_delta":4,"branches_no_change":5,"broadcast_full_payloads":9,"oracle_targeted_full_payloads":4,"oracle_payload_reduction_vs_broadcast":0.5555555556},
+      "interpretation":"The 15:56 real fusion event was sparse enough that perfect targeting could reduce full payload fanout by 55.6%. This is an oracle lower-bound, not evidence that V2 predicted the same four branches.",
+      "blocker":"The durable event lacks promotion-grade per-delta pre-route projection/RoutePlan/receiver/reentry closure."
+    },
+    {
+      "id":"EXP-OMNISOURCE-V10-LOCAL-002",
+      "evidence_class":"LOCAL_SANDBOX_SQLITE_CANDIDATE_TEST",
+      "status":"SUPPORTED_LOCALLY_NOT_PROMOTED",
+      "source":"research_entity/experiments/OMNISOURCE_LIVE_FUSION_V1_LOCAL_20260810.json",
+      "observed":{"source_class_coverage":"19/19","stale_promotion_gate_ok":true,"duplicate_observations":2,"duplicate_distinct_provenance":2,"specific_material_reentry_pending_before_close":1,"specific_material_reentry_pending_after_close":0,"specific_material_reentry_pending_after_restart":0,"intentionally_open_other_material_contradictions_after_restart":2,"contradiction_rows_preserved":2,"pairs":5000,"elapsed_s":0.170692,"pairs_per_s":29292.5,"insert_assess_ms_p50":0.024416,"insert_assess_ms_p95":0.043054,"sqlite_db_bytes":4468736},
+      "out_of_box":{"name":"temporal_braid_fault","arrival_order_false_stale_promotions":1,"epoch_aware_false_stale_promotions":0},
+      "interpretation":"V10 is the first executable persistence/projection candidate aligned with owner-fixed OmniSource. The local test supports stale-promotion gating, distinct-provenance deduplication, contradiction retention and restart-visible reentry state. It is not target/Hostinger or real-work routing evidence and does not promote UnifiedDB V10.",
+      "negative_result_preserved":"Initial checkpoint test harness failed because 7 values were supplied for an 8-column table; the harness was fixed and rerun from scratch with no architecture credit from the failed attempt."
+    },
+    {
+      "id":"EXP-LIVE-FUSION-HOSTINGER-HARNESS-AUDIT-003",
+      "evidence_class":"PRE_EXECUTION_CODE_AND_WORK_REVISION_AUDIT",
+      "status":"REVISE",
+      "source":".github/workflows/live-fusion-real-replay.yml + research_entity/experiments/live_fusion_mesh_v2_real_replay.py",
+      "observed":{"original_workflow_checked_old_revision":"20260810T1625p0700_chatgpt_secondary_live_fusion_mesh_v2_revise.json","original_receipt_spec_rev":2,"newer_owner_fixed_omnisource":true,"newer_observability_revision":true,"derived_expected_branches_not_independent_ground_truth":true,"aggregate_route_metrics_only":true,"real_receiver_reentry_execution_in_script":false,"several_fault_results_are_in_memory_assertions":true},
+      "interpretation":"A green original Hostinger run would have been stale-spec diagnostic evidence, not current-work completion. The workflow was patched fail-closed to resolve the current 16:42 work revision, bind spec revision/event id, and force REVISE when promotion-grade pre-route or receiver/reentry observability is absent.",
+      "repair_refs":["research_entity/state/work/events/20260810T1642p0700_chatgpt_secondary_live_fusion_replay_failclosed_revision.json",".github/workflows/live-fusion-real-replay.yml"]
+    }
+  ],
+  "owner_fixed_omnisource_status":"ACTIVE_GLOBAL_OPERATION_LAW",
+  "unifieddb_v10_status":"CANDIDATE_TESTING_NOT_PROMOTED",
+  "live_fusion_v2_status":"CANDIDATE_NOT_PROMOTED",
+  "current_spec_hostinger_replay_verdict":"NO_VERIFIED_CURRENT_SPEC_EXECUTION_RECEIPT_OBSERVED_AT_CUTOFF"
+}

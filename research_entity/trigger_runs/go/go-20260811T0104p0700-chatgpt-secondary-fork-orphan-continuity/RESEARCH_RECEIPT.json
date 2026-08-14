@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0104p0700-chatgpt-secondary-fork-orphan-continuity",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_identity": "self.root/Frank"
+  },
+  "program": "FRANK_V0_1",
+  "native_target": "self.root",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scope": [
+    "F-V01-09 effect/execution authority continuity",
+    "one-host physical execution recovery after fork/crash"
+  ],
+  "coordination": {
+    "observed_current_target_main_base_sha_for_fresh_regression": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+    "historical_v5_diagnostic_pr": 243,
+    "fresh_main_normal_regression_pr": 246,
+    "parallel_explicit_descriptor_export_oob_pr": 242,
+    "merged_fork_incarnation_gate_repair_pr": 241,
+    "overlap_policy": "PR243 closed unmerged after evidence; PR246 is regression-only; explicit pass_fds/exec class left to PR242 worker"
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Linux fork(2)",
+      "url": "https://man7.org/linux/man-pages/man2/fork.2.html",
+      "fact": "forked file descriptors refer to the same open file description as the parent"
+    },
+    {
+      "source": "Linux flock(2)",
+      "url": "https://man7.org/linux/man-pages/man2/flock.2.html",
+      "fact": "flock locks are associated with open file descriptions; duplicate descriptors share the lock and it persists until unlock or all duplicate descriptors close"
+    },
+    {
+      "source": "Python os.register_at_fork",
+      "url": "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "fact": "Python exposes child/parent callbacks around fork for Python-mediated forks"
+    },
+    {
+      "source": "Linux pidfd_open(2)",
+      "url": "https://man7.org/linux/man-pages/man2/pidfd_open.2.html",
+      "fact": "pidfds provide a process-lifetime reference and avoid PID reuse ambiguity for supported process-lifetime observations"
+    }
+  ],
+  "hypothesis": {
+    "id": "H_FORK_ORPHAN_LOCK_LIMBO",
+    "statement": "A process-PID-bound Gate lease can correctly deny fork-child effect authority while still leaving recovery unavailable if the child retains the inherited flock-backed open-file-description after the issuing parent hard-crashes."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH_PROCESS_BINDING_SUFFICIENT_FOR_RECOVERY",
+    "statement": "Process-incarnation authority fencing alone is sufficient because inherited physical lock lifetime cannot outlive the issuing process in a way that blocks a fresh physical contender."
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "FORK_ORPHAN_LOCK_LIMBO",
+    "novelty_scope": "historical PR238/v5 lineage only",
+    "test": "real Gate acquire -> fork child -> issuing parent os._exit(23) without release -> child performs no lease method and stays alive -> fresh physical-lock probe before/after child exit",
+    "safety": {
+      "disposable_test_state": true,
+      "external_network_used": false,
+      "external_effect_performed": false,
+      "canonical_state_mutated": false
+    }
+  },
+  "executed_target_evidence": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 243,
+    "pr_disposition": "CLOSED_WITHOUT_MERGE_HISTORICAL_EVIDENCE",
+    "workflow_run_id": 31416768830,
+    "tested_pr_merge_sha": "10babbf234b82ede3b0ca23b29e22a60e9e0e9c7",
+    "candidate_head_sha": "1983fa7b9893dd40a8d7619817a2e38c4d686c12",
+    "runtime_gate_blob": "15f351b393b78d5acd823a941cda0d6955d24c35",
+    "oob_test_blob": "bf007637803484b3094b588eea82f5ed5bf1628e",
+    "runner": {
+      "runner_name": "clay",
+      "machine_name": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "kernel": "6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026",
+      "python": "3.12.3",
+      "sqlite": "3.45.1"
+    },
+    "baseline": {
+      "status": "PASS_GATE_PROCESS_INCARNATION_FORK_FENCE_V5",
+      "child_gate_issued": false,
+      "child_heartbeat": "EXECUTION_LEASE_PROCESS_INCARNATION_MISMATCH",
+      "parent_remained_gate_issued": true,
+      "parent_release": "IDLE"
+    },
+    "oob_result": {
+      "status": "SUPPORTED_FORK_ORPHAN_LOCK_LIMBO",
+      "owner_hard_exit_code": 23,
+      "physical_lock_busy_while_orphan_alive": true,
+      "authority_escalation_observed": false,
+      "availability_failure_observed": true,
+      "child_exit_signal_seconds": 3.000926,
+      "physical_lock_available_after_orphan_exit": true,
+      "post_exit_reacquire_seconds": 0.000216
+    },
+    "interpretation": "The old v5 lineage solved fork-child authority inheritance but not physical-holder lifetime/recovery. Authority and availability are distinct continuity dimensions."
+  },
+  "current_main_refresh": {
+    "gate_source_blob": "e3a59aee94acfa6150dfe968b693cbb057339a0d",
+    "observed_mechanism": "Gate-issued leases carry process incarnation; os.register_at_fork child hook detaches/closes inherited Gate anchor/runtime resources without LOCK_UN or semantic release and rotates child process incarnation.",
+    "status": "STATIC_MECHANISM_PRESENT_EXECUTED_FRESH_MAIN_RECOVERY_REGRESSION_PENDING"
+  },
+  "fresh_main_regression": {
+    "pr": 246,
+    "base_sha": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+    "head_sha": "c4977e4cb2bd9e44065aed76dc5a540a32e7c685",
+    "workflow_run_id": 31417022956,
+    "classification": "NORMAL_REGRESSION_REUSES_EXISTING_OOB_NO_NEW_OOB",
+    "required_result": "physical anchor reacquires while detached fork child is still alive",
+    "execution_status_at_receipt_write": "QUEUED"
+  },
+  "parallel_pass_fds_lane": {
+    "pr": 242,
+    "classification": "SEPARATE_EXPLICIT_DESCRIPTOR_EXPORT_EXEC_REACHABILITY",
+    "repository_search_observation": "No pass_fds or subprocess.Popen hit was found in the indexed current Dr.-Unterweger product repository during this run; production reachability therefore remains unproven by this worker.",
+    "disposition": "DO_NOT_DUPLICATE; await independent exact target/reachability evidence"
+  },
+  "hypothesis_adjudication": {
+    "H_FORK_ORPHAN_LOCK_LIMBO_on_old_v5": "SUPPORTED_ON_TARGET",
+    "CH_PROCESS_BINDING_SUFFICIENT_FOR_RECOVERY_on_old_v5": "REFUTED_ON_TARGET",
+    "current_main_normal_fork_repair": "PENDING_EXECUTED_PR246_RECEIPT",
+    "explicit_descriptor_export_exec_class": "SEPARATE_PENDING_PR242"
+  },
+  "architecture_delta": {
+    "status": "NO_NEW_PRODUCT_ARCHITECTURE_PROMOTION",
+    "reason": "Current main already contains a stronger Gate-level at-fork detach mechanism that directly targets the reproduced normal-fork liveness class. Evidence should first validate that existing repair. Separate pass_fds/exec reachability must be established before introducing another lock architecture.",
+    "test_obligation": "Retain fork-orphan crash recovery as a permanent current-main regression if PR246 passes; preserve historical PR243 as negative evidence."
+  },
+  "negative_results": [
+    "PID/process-incarnation authority fencing does not by itself guarantee recovery availability when inherited physical descriptors remain open.",
+    "A green authority regression must not be promoted as recovery/liveness evidence without a hard-crash + surviving-descendant discriminator."
+  ],
+  "next_frontier": [
+    "Classify exact target PR246 fresh-main recovery regression.",
+    "Keep explicit descriptor-export/exec reachability separate and consume PR242 evidence rather than duplicating it.",
+    "Fuse only target-supported execution-generation/physical-lock/recovery evidence into the F-V01-09 fresh-main effect-fence integration lane.",
+    "Do not merge historical PR243 or overwrite newer main semantics."
+  ],
+  "authority": {
+    "frank_harness_mutation_authority": false,
+    "training_authorized": false,
+    "whole_frank_v0_1_acceptance": false,
+    "external_effect_authority": false
+  }
+}

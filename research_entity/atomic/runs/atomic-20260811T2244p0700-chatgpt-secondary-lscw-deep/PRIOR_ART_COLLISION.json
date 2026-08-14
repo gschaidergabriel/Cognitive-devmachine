@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "candidate": "LSCW-R1",
+  "world_first_claim": false,
+  "novelty_class": "NOVEL_COMBINATION_CANDIDATE_ONLY",
+  "collisions": [
+    {"family": "proof carrying code", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "No novelty claim for machine-checkable safety evidence attached to code."},
+    {"family": "proof carrying data/history", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "No novelty claim for a proof/witness carrying history-wide compliance."},
+    {"family": "translation validation / verified compilation", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "No novelty claim for checking concrete source-target semantic preservation/refinement."},
+    {"family": "typestate / session protocols", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "No novelty claim for legal lifecycle transitions based on state."},
+    {"family": "linear types / capabilities / provenance", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "No novelty claim for single-use resources or provenance-bound authority."},
+    {"family": "Merkle/content addressing", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "No novelty claim for hash-linked artifact/history identity."},
+    {"family": "in-toto / SLSA", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "Do not invent a competing generic build provenance envelope; reuse compatible subject/provenance semantics."},
+    {"family": "RATS / attestation", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "Evidence, verifier, relying-party policy and freshness roles are established; witness cannot mint trust policy."},
+    {"family": "agent action certificates / runtime verification 2026", "status": "DIRECT_COMPONENT_COLLISION", "consequence": "No novelty claim for canonical action identity, approval binding, execution receipts or replay governance."},
+    {"family": "abstract interpretation / semantic shadows", "status": "NEAR_ANALOGUE", "consequence": "A common semantic projection can only be justified if exact policy-material dimensions are not lost."}
+  ],
+  "remaining_candidate_specificity": [
+    "Frank-specific common hard-field dimension basis spanning compile artifact identity, ProductStart, consumed runtime dependencies, selected state lineage, effect-policy/generation, outcome/reentry/reward authority and recovery.",
+    "Explicit stage allowed-transform set with residual = changed hard fields minus allowed fields.",
+    "Dual separation of semantic equivalence from exact admitted product/state/runtime identity.",
+    "Optional linear consume/reissue lineage spanning cross-stage transitions, evaluated against a simpler context baseline.",
+    "Binding independent stage-validator identity/results into the lifecycle evidence rather than treating the lifecycle witness as a compiler semantic oracle."
+  ],
+  "destruction_result": "Every constituent mechanism has substantial prior art. Candidate survives only as a project-specific composition to be falsified; novelty alone cannot justify architecture promotion."
+}

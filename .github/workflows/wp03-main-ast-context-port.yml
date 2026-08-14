@@ -1,0 +1,138 @@
+name: WP03 Main AST-Context Typed-IR Port
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/wp03-main-ast-context-port.yml'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/test_claycode_wp03_identifier_alias_integrity_main.py'
+      - 'tools/claycode_wp03_main_port_validation.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-port:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply exact supported AST-context delta with fail-closed alias guard
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('tools/claycode_base_typed_ir.py')
+          text = p.read_text(encoding='utf-8')
+
+          def swap(old: str, new: str, label: str) -> None:
+              global text
+              if new in text:
+                  if old in text and old != new:
+                      raise SystemExit(f'CAS_AMBIGUOUS {label}: old and new blocks both present')
+                  print(label + ': already_patched')
+                  return
+              n = text.count(old)
+              if n != 1:
+                  raise SystemExit(f'CAS_FAIL {label}: expected one old block, found {n}')
+              text = text.replace(old, new, 1)
+              print(label + ': patched')
+
+          old_first = '''def first_name(node: Any, *, after: str | None = None) -> str:\n    vals = token_values(node)\n    start = 0\n    if after is not None and after in vals:\n        start = vals.index(after) + 1\n    for value in vals[start:]:\n        if value in KEYWORDS or value in PUNCT:\n            continue\n        if value and (value[0].isalpha() or value[0] == "_"):\n            return value\n    raise TypedIRError(f"cannot find declaration name in {vals!r}")\n'''
+          new_first = '''def direct_identifier(node: Any) -> str | None:\n    """Return a direct grammar-admitted identifier and fail closed on alias corruption."""\n    for child in children(node):\n        t = token(child)\n        if t is not None and t[0] == "NAME":\n            return t[1]\n        k = kind(child)\n        if k is not None and k.startswith("ident_"):\n            vals = token_values(child)\n            expected = k.removeprefix("ident_")\n            if len(vals) != 1:\n                raise TypedIRError(f"malformed {k} identifier node: expected one token, got {vals!r}")\n            if vals[0] != expected:\n                raise TypedIRError(\n                    f"identifier alias/token mismatch: {k} requires {expected!r}, got {vals[0]!r}"\n                )\n            return vals[0]\n    return None\n\n\ndef first_name(node: Any, *, after: str | None = None) -> str:\n    name = direct_identifier(node)\n    if name:\n        return name\n    vals = token_values(node)\n    raise TypedIRError(f"cannot find declaration name in {vals!r}")\n'''
+          swap(old_first, new_first, 'direct_identifier')
+
+          old_field = '''def parse_field(node: Any) -> dict[str, Any]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"field without type annotation: {vals!r}") from exc\n    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)\n'''
+          new_field = '''def parse_field(node: Any) -> dict[str, Any]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"field without type annotation: {vals!r}") from exc\n    name = direct_identifier(node)\n'''
+          swap(old_field, new_field, 'field_name')
+
+          old_typed = '''def parse_typed_param(node: Any) -> dict[str, str]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"typed parameter without ':' in {vals!r}") from exc\n    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)\n'''
+          new_typed = '''def parse_typed_param(node: Any) -> dict[str, str]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"typed parameter without ':' in {vals!r}") from exc\n    name = direct_identifier(node)\n'''
+          swap(old_typed, new_typed, 'typed_param_name')
+
+          old_method = '''    for m in (x for x in walk(node) if kind(x) == "method_sig"):\n        mv = token_values(m)\n        mname = next((v for v in mv if v not in KEYWORDS and v not in PUNCT), None)\n        if not mname:\n'''
+          new_method = '''    for m in (x for x in walk(node) if kind(x) == "method_sig"):\n        mv = token_values(m)\n        mname = direct_identifier(m)\n        if not mname:\n'''
+          swap(old_method, new_method, 'method_name')
+
+          old_params = '''        for p in (x for x in walk(m) if kind(x) == "param"):\n            pv = token_values(p)\n            if ":" in pv:\n                c = pv.index(":")\n                params.append({"name": pv[0], "type": type_text(pv[c + 1:])})\n            else:\n                # Existing semantic registry permits untyped interface params; preserve explicitly.\n                params.append({"name": pv[0] if pv else "", "type": "OpaqueParam"})\n'''
+          new_params = '''        for p in (x for x in walk(m) if kind(x) == "param"):\n            pv = token_values(p)\n            pname = direct_identifier(p)\n            if ":" in pv:\n                c = pv.index(":")\n                params.append({"name": pname or "", "type": type_text(pv[c + 1:])})\n            else:\n                # Existing semantic registry permits untyped interface params; preserve explicitly.\n                params.append({"name": pname or "", "type": "OpaqueParam"})\n'''
+          swap(old_params, new_params, 'method_params')
+
+          p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Build isolated strict validation environment
+        run: |
+          python3 -m venv /tmp/clay-wp03-main-${GITHUB_RUN_ID}
+          /tmp/clay-wp03-main-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+
+      - name: Alias integrity matrix
+        run: |
+          VENV=/tmp/clay-wp03-main-${GITHUB_RUN_ID}
+          "$VENV/bin/python" tools/test_claycode_wp03_identifier_alias_integrity_main.py > /tmp/wp03_alias.json
+          cat /tmp/wp03_alias.json
+
+      - name: Selected V17 overlay plus main typed-IR validation
+        run: |
+          VENV=/tmp/clay-wp03-main-${GITHUB_RUN_ID}
+          "$VENV/bin/python" tools/claycode_wp03_main_port_validation.py > /tmp/wp03_main.json
+          cat /tmp/wp03_main.json
+
+      - name: Persist hosted implementation receipt and commit only after gates pass
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib
+          root=pathlib.Path('.')
+          alias=json.loads(pathlib.Path('/tmp/wp03_alias.json').read_text())
+          main=json.loads(pathlib.Path('/tmp/wp03_main.json').read_text())
+          target=root/'tools/claycode_base_typed_ir.py'
+          receipt={
+            'schema_version':'1.0',
+            'receipt_id':'WP03-MAIN-AST-CONTEXT-HOSTED-'+os.environ['GITHUB_RUN_ID'],
+            'created_by':'github-hosted-ubuntu',
+            'source_commit_before_port':os.environ['GITHUB_SHA'],
+            'run_id':os.environ['GITHUB_RUN_ID'],
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'truth_class':'VERIFIED_GITHUB_HOSTED_IMPLEMENTATION_SLICE_NOT_TARGET_ACCEPTANCE',
+            'typed_ir_sha256':hashlib.sha256(target.read_bytes()).hexdigest(),
+            'alias_integrity':alias,
+            'main_validation':main,
+            'pass':bool(alias.get('pass') and main.get('pass')),
+            'promotion':'NONE',
+            'wp03_status_change':'NONE',
+            'wp04_advance':False,
+            'frank_harness_mutation':False,
+            'scope_guard':'Hosted PASS supports this exact main implementation slice only; formal WP02/WP03 and registered Andreas Ubuntu acceptance remain separate gates.'
+          }
+          if not receipt['pass']:
+              raise SystemExit('receipt gates unexpectedly false')
+          out=root/'research_entity/claycode/base/receipts/WP03_MAIN_AST_CONTEXT_HOSTED_LATEST.json'
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-wp03-main-runner'
+          git config user.email 'clay-wp03-main-runner@users.noreply.github.com'
+          git add tools/claycode_base_typed_ir.py research_entity/claycode/base/receipts/WP03_MAIN_AST_CONTEXT_HOSTED_LATEST.json
+          if git diff --cached --quiet; then
+            echo 'Validated existing main bytes; no implementation delta.'
+            exit 0
+          fi
+          git commit -m 'fix(wp03): port validated AST-context identifier extraction'
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-wp03-main-${GITHUB_RUN_ID}

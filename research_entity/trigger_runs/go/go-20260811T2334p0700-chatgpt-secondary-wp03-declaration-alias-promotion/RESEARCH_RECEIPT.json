@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2334p0700-chatgpt-secondary-wp03-declaration-alias-promotion",
+  "trigger": "go",
+  "created_at_local": "2026-08-11T23:34:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "research_center_parent_observed": "47aa096a6d5ae2bf1c8a86cc77605adb5000820b",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME / WP03",
+  "finding": {
+    "class": "DECLARATION_VS_LEGACY_CONSTRUCTOR_ALIAS_PRECEDENCE",
+    "problem": "The compatibility layer previously applied closed legacy constructor aliases such as SET->Set before explicit declaration resolution, so a legitimate declared nominal type named SET/OPTION/ORDERED/LIST/MAP/RESULT could be silently rewritten.",
+    "invariant": "Explicit Clay declarations outrank compatibility aliases; only unresolved legacy constructor spellings use the closed alias table. Mere external type mentions do not become declarations."
+  },
+  "lineage": {
+    "stale_predecessor_pr": 358,
+    "stale_predecessor_disposition": "CLOSED_PRESERVED_AS_HISTORY",
+    "fresh_replacement_pr": 379,
+    "fresh_head": "7cd1d338d77d99fb656394d749119d25f2ca314e",
+    "tested_synthetic_merge": "fa67fcacec8d698cf5059f95bc92e614b37e9726",
+    "tested_base_main": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44",
+    "merged_main_commit": "5ec9955775d9bf142e327166990a2228d543c071"
+  },
+  "accepted_target": {
+    "workflow": "ClayCode WP03 Combined Relop Alias VPS",
+    "run": 31512064692,
+    "job": 93848093663,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "python": "3.12.3",
+    "result": "SUCCESS",
+    "pinned_historical_objects_present": [
+      "c3709c4e4f78b6d45bfa8b174f2d07deb6091ff8",
+      "ab2e2a7d0788c0ed0e243288cfa969dbf9ab2342"
+    ],
+    "checks": {
+      "strict_lalr_generic_relation": "PASS",
+      "micro_generic_set": "PASS",
+      "micro_relational_lt": "PASS",
+      "micro_relational_gt": "PASS",
+      "real_frank_effects_structured_parse": "PASS",
+      "explicit_declaration_shadow_rows": "6/6 PASS",
+      "legacy_alias_rows": "6/6 PASS",
+      "nested_LIST_declared_SET": "List<SET> PASS",
+      "external_type_mentions_not_declarations": "PASS",
+      "authority": "NONE",
+      "external_effect": false,
+      "canonical_state_mutated": false
+    },
+    "resource_note": "git_status_count was 3 after byte compilation because local Python cache artifacts were generated; no tracked source drift was reported by the bounded receipt."
+  },
+  "promotion": {
+    "status": "PROMOTED_SCOPED_IMPLEMENTATION_DELTA",
+    "scope": "declaration-aware legacy constructor compatibility resolution",
+    "wp03_overall": "OPEN",
+    "wp04_overall": "OPEN",
+    "f_v01_02_overall": "OPEN",
+    "whole_frank_v0_1": "NOT_ACCEPTED"
+  },
+  "go_oob_accounting": {
+    "new_experiment_added": false,
+    "macrocycle_oob_remains": "PACKAGE_NAMESPACE_SHADOW_INJECTION"
+  },
+  "next": [
+    "Continue exact-current compiler/lowering target gate with closed Clay path resolution.",
+    "Retain unresolved comparison-chain semantics; do not import host-language semantics.",
+    "Re-adjudicate broader frontier only from exact current-main merge evidence."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260814T045037Z_provider_authority_vector_snapshot",
+  "kind": "provider_authorization_to_use_toctou_candidate",
+  "canonical": {
+    "rae": "RAE-8.8 revision 2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_parent": "f36165d4c67552b9e08c9cf8895d75b727dc09df",
+    "target_main_observed": "dc2af6421355c899ee076a3e8089e8f6407a1d54"
+  },
+  "delta": {
+    "pr232_head": "5af19130821e5ce189e8ec602b03462ba1037d94",
+    "lineage": "three commits ahead of d6c14f0c1c823fc5a33ac9f6f00ea9d8987ba7c9",
+    "falsifier_commit": "4f99324f83399378ae00fbf1186521fa606041d7",
+    "repair_commit": "a6af97cd67cf5fbddf9c443bd558f1d9d86deacd",
+    "policy_commit": "5af19130821e5ce189e8ec602b03462ba1037d94",
+    "finding": "A deterministic local test mutates NVIDIA_API_KEY after authorization but before use; the candidate repair snapshots the recognized runtime environment once before routing, authorization and transport.",
+    "evidence_class": "SOURCE_AND_LOCAL_CANDIDATE_ONLY"
+  },
+  "primary_sources": [
+    {
+      "url": "https://cwe.mitre.org/data/definitions/367.html",
+      "finding": "TOCTOU applies when shared state, including memory or variables, can change between check and use."
+    },
+    {
+      "url": "https://docs.python.org/3/library/os.html#os.environ",
+      "finding": "os.environ is a mutable mapping representing process environment; direct modifications update it."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-AUTHORITY-VECTOR-SNAPSHOT",
+      "claim": "One provider execution is authorized safely only when credential identity, endpoint, provider, budget epoch and zero-cost attestation are derived from one immutable private snapshot also used by transport.",
+      "test": "Mutate each vector component independently and jointly in every hook between routing, authorization and opener invocation; serialized request, credential and endpoint must remain bound to the authorized snapshot digest.",
+      "falsifier": "Any post-authorization shared-state mutation changes the provider-visible authority vector or receipt identity."
+    },
+    {
+      "id": "CH-CREDENTIAL-ONLY-SNAPSHOT",
+      "claim": "Snapshotting only the API key is sufficient.",
+      "test": "Hold the key fixed while mutating endpoint, provider selector, budget epoch or zero-cost attestation. Any changed authorized effect falsifies the counterhypothesis."
+    },
+    {
+      "id": "H-DUAL-SNAPSHOT-COMPOSITION",
+      "claim": "Request-body snapshot and authority-environment snapshot must be joined by one receipt digest; securing either alone leaves a cross-snapshot substitution gap.",
+      "falsifier": "A mismatched request snapshot and authority snapshot reaches opener or VERIFIED/DONE."
+    }
+  ],
+  "new_concepts": [
+    "Authority Vector Snapshot",
+    "Dual-Snapshot Join",
+    "Authorization-to-Effect Seal"
+  ],
+  "null_and_negative_results": [
+    "Verify run 31767848256/job 94667309835 executed zero steps with runner_id 0.",
+    "Identity Guard run 31767848163/job 94667308952 executed zero steps with runner_id 0.",
+    "No accepted Ubuntu live external network/effect receipt exists.",
+    "No target-main change after dc2af642 was observed."
+  ],
+  "routing": ["clayresearch", "frank", "gwt", "emergence", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "constraints": {
+    "training": "NOT_PERFORMED",
+    "harness_mutation": "NOT_PERFORMED",
+    "promotion": "NOT_CLAIMED",
+    "independent_replication": "NOT_CLAIMED"
+  }
+}

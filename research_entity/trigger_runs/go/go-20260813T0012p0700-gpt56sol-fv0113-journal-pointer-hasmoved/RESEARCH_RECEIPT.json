@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260813T0012p0700-gpt56sol-fv0113-journal-pointer-hasmoved",
+  "trigger": "go",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "created_at": "2026-08-13T00:12:13+07:00",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_entity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "overlap_refresh": {
+    "research_head_before_write": "9839faf2ffe9da24899163a798e41acd2f1b0083",
+    "current_connection_guard_pr": 557,
+    "current_pr_head_observed": "c76616ee65300d0a7e88945f9985478fcea096f1",
+    "direct_duplicate_search": "JOURNAL_POINTER HAS_MOVED",
+    "direct_duplicate_found": false,
+    "shared_prior_counterevidence": "a505f9e48d298938779e45c4b5218058f04453fe"
+  },
+  "grf": {
+    "observed_anchor": "Shared evidence already showed that rebinding the active WAL pathname while leaving main untouched can leave main SQLITE_FCNTL_HAS_MOVED false while the same connection continues a successful transaction.",
+    "generated_reality": "SQLITE_FCNTL_JOURNAL_POINTER might expose the active WAL sqlite3_file strongly enough that calling that object's xFileControl(SQLITE_FCNTL_HAS_MOVED) detects the sidecar rename missed by the main-file guard.",
+    "strongest_counter_reality": "The WAL sqlite3_file object's xFileControl(SQLITE_FCNTL_HAS_MOVED) may also return false after a WAL rename/rebind on the tested Unix VFS, so JOURNAL_POINTER plus HAS_MOVED would still not bind WAL filesystem-object history.",
+    "discriminator": "Ordinary deterministic replay of the already-recorded WAL-sidecar rebind class using a diagnostic extension that obtains SQLITE_FCNTL_JOURNAL_POINTER and invokes the returned sqlite3_file pMethods->xFileControl with SQLITE_FCNTL_HAS_MOVED.",
+    "outcome": "COUNTER_REALITY_SUPPORTED",
+    "collapse": {
+      "journal_pointer_plus_has_moved_is_sufficient_WAL_rebind_detector": "REJECT",
+      "journal_pointer_exposes_connection_journal_or_WAL_sqlite3_file": "RETAIN_AS_DOCUMENTED_MECHANISM",
+      "product_code_change": "NO_CHANGE",
+      "release_gate": "NO_CHANGE"
+    }
+  },
+  "go_unusual_experiment": {
+    "count": 1,
+    "name": "TOCTOU_PATH_REBIND_AROUND_LSTAT",
+    "scope": "DISPOSABLE_LOCAL_SQLITE_FIXTURE_ONLY",
+    "result": "REFUTED_FOR_TESTED_INJECTION",
+    "observations": {
+      "baseline_receipt_inode": 2497614,
+      "decoy_inode": 2497617,
+      "treatment_status": "PASS",
+      "treatment_receipt_inode": 2497614,
+      "post_restore_inode": 2497614,
+      "receipt_misbinding": false,
+      "connection_remained_readable": true
+    },
+    "interpretation": "The hypothesized false receipt-inode binding was not reproduced under this injected timing. Do not promote this as a vulnerability finding."
+  },
+  "ordinary_followup": {
+    "name": "JOURNAL_POINTER_HAS_MOVED_REPLAY",
+    "new_unusual_experiment_count": 0,
+    "environment": {
+      "python": "3.13.5",
+      "sqlite_version": "3.46.1",
+      "platform_scope": "local Linux container; not accepted Hostinger"
+    },
+    "mechanism": "Loadable SQLite diagnostic extension; sqlite3_file_control(main, SQLITE_FCNTL_JOURNAL_POINTER, &journal_file); journal_file->pMethods->xFileControl(journal_file, SQLITE_FCNTL_HAS_MOVED, &moved).",
+    "baseline": {
+      "journal_mode": "wal",
+      "main_has_moved": 0,
+      "journal_has_moved": 0,
+      "wal_inode": 2497611
+    },
+    "intervention_replay": "Rename active WAL sidecar and place a distinct decoy file at the original -wal pathname, matching the already-recorded shared counterevidence class.",
+    "observations": {
+      "main_has_moved_after_rebind": 0,
+      "journal_has_moved_after_rebind": 0,
+      "same_connection_commit": "COMMIT_OK",
+      "main_has_moved_after_commit": 0,
+      "journal_has_moved_after_commit": 0
+    },
+    "limitations": [
+      "Not the accepted Hostinger runtime.",
+      "SQLite 3.46.1, not the release-pinned 3.53.4 runtime.",
+      "No corruption or data-loss claim.",
+      "No claim that production permissions permit WAL rebinding.",
+      "Result rejects only this proposed diagnostic mechanism as sufficient on the tested lane."
+    ]
+  },
+  "primary_source_alignment": {
+    "sqlite_file_control": "SQLite documents sqlite3_file_control as dispatching to the xFileControl method for a database file, with selected opcodes handled directly by core.",
+    "sqlite_journal_pointer": "SQLite documents SQLITE_FCNTL_JOURNAL_POINTER as returning the sqlite3_file object associated with the rollback journal or write-ahead log for a connection.",
+    "sqlite_has_moved": "SQLite documents SQLITE_FCNTL_HAS_MOVED as writing whether the nominated file has been renamed, moved, or deleted since it was opened."
+  },
+  "architecture_delta": {
+    "state": "NEGATIVE_RESULT_PLUS_TEST_OBLIGATION",
+    "affected_components": [
+      "F-V01-13 security/recovery/storage",
+      "UnifiedDB WAL persistence acceptance",
+      "accepted Hostinger ProductStart receipt"
+    ],
+    "delta": "Do not implement a WAL-sidecar acceptance gate that assumes JOURNAL_POINTER plus HAS_MOVED closes sidecar object identity. The productive acceptance path still needs an independently measured object-bound WAL/journal identity or an equivalently strong VFS/FD-bound mechanism, tied to the real connection and operation.",
+    "next_discriminator": "Prefer a mechanism that exposes or independently binds the actual OS-backed WAL object for the productive connection without depending on private SQLite VFS layout; then verify a real unique transaction/readback and revalidate across restart/reopen, rollback, downgrade and library-swap controls on accepted Hostinger.",
+    "rollback": "No product code was changed; retain current main and existing draft candidates."
+  },
+  "authority": {
+    "frank_or_vps_mutated": false,
+    "canonical_product_state_mutated": false,
+    "harness_authority_mutated": false,
+    "effect_authority": "NONE",
+    "final_training_authorized": false
+  },
+  "research_result": "NEGATIVE_EVIDENCE_COMMITTED",
+  "product_code_delta": "NO_CHANGE"
+}

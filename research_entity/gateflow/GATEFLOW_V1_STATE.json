@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "status": "PROMOTION_PRESSURE",
+  "generated_at": "2026-08-11T00:45:00+07:00",
+  "workspace_snapshot": {
+    "path": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+    "last_updated": "2026-08-10T23:15:00+07:00",
+    "formal_progress_percent": 3.0357142857
+  },
+  "primary_objectives": [
+    "accepted_gate_weight_delta_per_1m_tokens",
+    "accepted_gate_weight_delta_per_worker_hour",
+    "risk_retired_per_1m_tokens"
+  ],
+  "wip_policy": {
+    "max_implementation_owners_per_subcheck": 1,
+    "max_falsifiers_per_subcheck": 1,
+    "max_promotion_owners_per_subcheck": 1,
+    "exploration_never_globally_disabled": true,
+    "promotion_pressure_allocation": {
+      "promotion_min_fraction": 0.60,
+      "active_repair_and_falsification_min_fraction": 0.20,
+      "next_critical_path_target_fraction": 0.10,
+      "free_exploration_target_fraction": 0.05
+    }
+  },
+  "frontier": [
+    {
+      "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "subcheck": "typed_ir",
+      "semantic_surface": "WP03 structured frontend -> TypedIR / declaration-aware nominal resolution",
+      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#237",
+      "head_sha": "dcf28123e35d5e67e7e3d43c265f13786c21edb0",
+      "base_sha": "45afc72401b403d50c88f951ff58821f0f8a5d0e",
+      "state": "STALE_BASE",
+      "freshness": "RED",
+      "reason": "Dr.-Unterweger#236 merged after #237 was cut; combined fresh-main substrate must be rerun before promotion.",
+      "next_required_event": "rebase declaration-aware alias repair onto post-#236 main and run exact Target-VPS structured frontend -> TypedIR matrix"
+    },
+    {
+      "work_package": "F-V01-09-EFFECT-AUTHORITY",
+      "subcheck": "presence_execution_generation_effect_fence",
+      "semantic_surface": "exact V16 Gate-issued effect capability / process-incarnation fence",
+      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#238",
+      "falsifier_lineage": ["gschaidergabriel/Dr.-Unterweger#233", "gschaidergabriel/Dr.-Unterweger#239"],
+      "head_sha": "4e5240364dda454a298d76efdf6d647314245f11",
+      "state": "REPAIR_CANDIDATE",
+      "freshness": "AMBER",
+      "reason": "Exact Target-VPS fork counterexample falsified process-local WeakSet/WeakKey capability as sufficient; v5 binds Gate-issued lease to process incarnation and awaits exact target validation.",
+      "next_required_event": "Target-VPS v5 regression; if PASS, fresh-main integration plus remaining replacement/rollback boundaries"
+    },
+    {
+      "work_package": "F-V01-09-EFFECT-AUTHORITY",
+      "subcheck": "presence_execution_generation_effect_fence",
+      "semantic_surface": "physical singleton state-root anchor",
+      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#225",
+      "falsifier": "gschaidergabriel/Dr.-Unterweger#235",
+      "state": "NEGATIVE_EVIDENCE",
+      "freshness": "AMBER",
+      "reason": "Lockfile replacement was already falsified; directory-anchor repair has a separate state-root pathname-swap counterexample lane.",
+      "next_required_event": "adjudicate state-root swap result and select deployment invariant or external immutable anchor before promotion"
+    },
+    {
+      "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "subcheck": "recovery_generation_monotonicity",
+      "semantic_surface": "snapshot rollback / execution-generation resurrection",
+      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#240",
+      "state": "REPAIR_CANDIDATE",
+      "freshness": "GREEN",
+      "reason": "Target evidence reproduced rollback resurrection; candidate external write-ahead generation floor explicitly limits claim to snapshots that do not roll back the external anchor.",
+      "next_required_event": "normal Target-VPS regression, then integrate with physical singleton and restore policy; keep whole-VM rollback explicit"
+    },
+    {
+      "work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
+      "subcheck": "self_root_identity_continuity",
+      "semantic_surface": "fresh-main self.root identity/replay boundary",
+      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#227",
+      "promotion_owner": "gschaidergabriel/Dr.-Unterweger#231",
+      "state": "FRESH_MAIN_VERIFICATION_PENDING",
+      "freshness": "AMBER",
+      "reason": "Identity/replay candidate is a fresh-main content rebase; boot continuity is stacked and must be revalidated after any identity/main movement.",
+      "next_required_event": "exact fresh-main target run and overlap/mergeability check; keep binary trust/attestation as separate external blocker"
+    },
+    {
+      "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "subcheck": "storage_safety",
+      "semantic_surface": "SQLite WAL safety + schema materialization fingerprint",
+      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#222",
+      "state": "TARGET_VERIFICATION_PENDING",
+      "freshness": "AMBER",
+      "reason": "Candidate fails closed on affected/unproven WAL builds and divergent schema materializations; target execution/adjudication remains required.",
+      "next_required_event": "run/read target receipt and map resulting evidence to explicit F-V01-04 subcheck credit"
+    }
+  ],
+  "risk_events": [
+    {
+      "risk_id": "RISK-EFFECT-FORK-CAPABILITY-SHADOW",
+      "work_package": "F-V01-09-EFFECT-AUTHORITY",
+      "severity": "P1",
+      "evidence_class": "TARGET_VPS",
+      "disposition": "PROMOTION_BLOCKED",
+      "unique_failure_domain": "process fork inherits process-local capability registry/secret and inherited flock-backed fd",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#233", "target run 31413734864"],
+      "risk_units": 3.0
+    },
+    {
+      "risk_id": "RISK-EXECUTION-LOCKFILE-REPLACEMENT-SPLIT-BRAIN",
+      "work_package": "F-V01-09-EFFECT-AUTHORITY",
+      "severity": "P1",
+      "evidence_class": "TARGET_VPS",
+      "disposition": "PROMOTION_BLOCKED",
+      "unique_failure_domain": "flocked lockfile pathname unlink/recreate permits second physical lock object",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#216", "target run 31410535024"],
+      "risk_units": 3.0
+    },
+    {
+      "risk_id": "RISK-UNIFIEDDB-SNAPSHOT-GENERATION-RESURRECTION",
+      "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "severity": "P1",
+      "evidence_class": "TARGET_VPS",
+      "disposition": "PROMOTION_BLOCKED",
+      "unique_failure_domain": "older valid DB snapshot restores prior DB-local execution generation and revives stale capability",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#207", "target run 31409921422"],
+      "risk_units": 3.0
+    },
+    {
+      "risk_id": "RISK-CLAYCODE-ANGLE-RELATION-TOKEN-AMBIGUITY",
+      "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "severity": "P2",
+      "evidence_class": "TARGET_VPS",
+      "disposition": "RETIRED",
+      "unique_failure_domain": "generic angle brackets and relational operators had competing lexical token identities",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#230", "gschaidergabriel/Dr.-Unterweger#236"],
+      "risk_units": 3.0
+    }
+  ],
+  "metrics": {
+    "generated_repo_text_tokens": null,
+    "generated_repo_text_tokens_method": "must be materialized per window; commit-derived estimates remain explicitly proxy-only",
+    "accepted_gate_weight_delta": 0.0,
+    "risk_retired_units_current_snapshot": 12.0,
+    "risk_retired_per_1m_tokens": null,
+    "note": "No denominator is fabricated. Populate per-window generated_repo_text_tokens before calculating normalized rates."
+  }
+}

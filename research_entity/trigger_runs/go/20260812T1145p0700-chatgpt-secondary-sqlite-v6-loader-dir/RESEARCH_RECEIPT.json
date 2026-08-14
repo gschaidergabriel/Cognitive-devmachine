@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1145p0700-chatgpt-secondary-sqlite-v6-loader-dir",
+  "organ": "chatgpt-secondary / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_refreshed_before_write": "3c851cced1921856e4b17c67750e91c77a5609d9",
+    "frank_main_initial": "138d6ec70a0b4fb3d2b438766481f6775ce9f495",
+    "frank_main_refreshed_after_concurrent_merges": "c20a9277b95df4ad6cbcba11ed53a4f07e1745f1",
+    "stale_candidate_branch_abandoned_without_pr": "chatgpt/sqlite-v6-loader-dir-trust-20260812",
+    "fresh_candidate_branch": "chatgpt/sqlite-v6-loader-dir-trust-current-20260812",
+    "law": "A first candidate was not promoted after main advanced by four commits. The repair was recreated from the refreshed current main before PR creation and exact-head target-lane testing."
+  },
+  "r0_observed": [
+    "SQLite upstream documents the WAL-reset corruption defect through 3.51.2 and the fix in 3.51.3 and later; SQLite 3.53.4 is therefore in the fixed upstream line.",
+    "Current Frank V5 pins the accepted SQLite 3.53.4 DSO by root-owned anchor, manifest hash, library hash, version and source-id.",
+    "V5 parent intentionally sets LD_LIBRARY_PATH to the selected candidate library directory before re-execing Python.",
+    "Current V5 did not require that selected runtime library directory ancestry itself be root-owned and non-writable before the re-exec transition.",
+    "Concurrent work promoted an independent V5 anchor-parent symlink fence to Frank main c20a9277b95df4ad6cbcba11ed53a4f07e1745f1; the V6 candidate composes that refreshed V5 rather than overwriting it."
+  ],
+  "primary_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "claim": "WAL-reset bug affects versions through 3.51.2 and is fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "claim": "3.53.4 carries the fixed WAL-reset line and source identity 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    },
+    {
+      "source": "Linux ld.so manual / glibc dynamic-loader semantics",
+      "url": "https://man7.org/linux/man-pages/man8/ld.so.8.html",
+      "claim": "LD_LIBRARY_PATH participates in dependency resolution before default paths."
+    },
+    {
+      "source": "Linux dlopen manual",
+      "url": "https://man7.org/linux/man-pages/man3/dlclose.3.html",
+      "claim": "Dependencies of loaded shared objects are automatically loaded using dynamic-linker search rules."
+    }
+  ],
+  "r1_hypothesis": {
+    "hypothesis": "Pinning only the SQLite DSO hash/source-id is insufficient for pre-guard code identity if its LD_LIBRARY_PATH directory can contain attacker-controlled DT_NEEDED dependencies.",
+    "causal_mechanism": "The dynamic linker resolves dependencies before the V5 child guard executes; an unpinned dependency can run a constructor while the pinned SQLite-like DSO bytes and functional behavior remain unchanged.",
+    "predicted_if_right": "A byte-identical pinned DSO can coexist with pre-main constructor execution when only a dependency in the loader search directory changes.",
+    "predicted_if_counterhypothesis_right": "Changing an unpinned dependency while preserving the pinned DSO hash cannot produce code execution before program logic.",
+    "confidence_before_test": "MEDIUM_HIGH"
+  },
+  "r3_counter_reality": {
+    "counterhypothesis": "The V5 DSO hash/source-id/anchor is sufficient because any meaningful code substitution would necessarily change the pinned SQLite object itself.",
+    "falsifier": "Hold the pinned DSO bytes and output constant; change only a dependency in the loader search directory and observe whether constructor code runs before program logic."
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "id": "PINNED_DSO_UNPINNED_DEP_CONSTRUCTOR_COUNTERWORLD",
+    "kind": "bounded disposable local ELF loader counterworld",
+    "baseline": {
+      "pinned_dso_sha256": "934021c29cebe6eb9816dbeb5d81791df1aa5bf2b5abc45f6f6154c8337a9637",
+      "program_output": "victim=8",
+      "constructor_marker": false
+    },
+    "treatment": {
+      "pinned_dso_sha256": "934021c29cebe6eb9816dbeb5d81791df1aa5bf2b5abc45f6f6154c8337a9637",
+      "program_output": "victim=8",
+      "constructor_marker": true,
+      "marker_text": "PRE_GUARD_DEP_CONSTRUCTOR"
+    },
+    "result": "SUPPORTED_HYPOTHESIS_REFUTED_STRONGER_DSO_ONLY_TRUST_CLAIM",
+    "scope_limit": "Synthetic ELF dependency topology proves the loader mechanism; it does not by itself prove a malicious dependency exists in the productive Frank SQLite artifact tree.",
+    "production_state_mutated": false,
+    "canonical_state_mutated": false,
+    "rollback": "Disposable local directory removed."
+  },
+  "repair_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 503,
+    "draft": true,
+    "base_sha": "c20a9277b95df4ad6cbcba11ed53a4f07e1745f1",
+    "head_sha": "1d8ca7568965a5277e8f752a32247ce1d931913d",
+    "file": "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v6_candidate.py",
+    "mechanism": [
+      "compose V5 rather than mutate it",
+      "before V5 introduces LD_LIBRARY_PATH, resolve the exact anchor-matching candidate library",
+      "require the candidate library to be a root-owned regular file and not group/other writable",
+      "require every containing directory through / to be root-owned and not group/other writable",
+      "then preserve V5 probe, re-exec, mapped-object/hash/source-id and anchor-continuity semantics"
+    ],
+    "deterministic_regression": "tests/frank_sqlite_v6_loader_dir_trust_regression.py",
+    "workflow": ".github/workflows/frank-sqlite-v6-loader-dir-trust-current.yml"
+  },
+  "target_lane_receipt": {
+    "workflow_run_id": 31564228450,
+    "job_id": 94012664921,
+    "runner": "clay",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "head_sha": "1d8ca7568965a5277e8f752a32247ce1d931913d",
+    "conclusion": "SUCCESS",
+    "steps": {
+      "fetch_exact_candidate": "SUCCESS",
+      "compile_and_deterministic_regression": "SUCCESS",
+      "upload_evidence": "SUCCESS",
+      "cleanup": "SUCCESS"
+    },
+    "promotion_scope": "SUPPORTED_ON_EXACT_HEAD_DETERMINISTIC_TARGET_LANE_ONLY"
+  },
+  "collapse": {
+    "outcome": "MERGE_AS_CANDIDATE_NOT_RELEASE_PASS",
+    "promoted": [
+      "Upstream SQLite 3.53.4 is in the WAL-reset-fixed release line.",
+      "The DSO-only trust claim is refuted for writable loader directories by the bounded counterworld.",
+      "The V6 root-owned/non-writable runtime-library path gate is exact-head self-hosted PASS as a deterministic mechanism candidate."
+    ],
+    "not_promoted": [
+      "PR #503 merged",
+      "V6 wired into the productive launcher/service",
+      "productive /opt runtime and /etc anchor accepted",
+      "productive Frank process maps the pinned 3.53.4 object",
+      "crash/restart/rollback/downgrade continuity",
+      "F-V01-13 PASS",
+      "Frank v0.1 PASS"
+    ]
+  },
+  "next_discriminating_test": {
+    "target": "productive accepted Hostinger Ubuntu Frank service",
+    "requirements": [
+      "review/merge V6 only if no newer overlapping repair supersedes it",
+      "wire the trusted parent/service to the V6-composed guard without reintroducing a pre-shell loader gap",
+      "prove the installed SQLite runtime library and its loader-directory ancestry are root-owned/non-writable in the service filesystem view",
+      "capture exact mapped SQLite object path/hash/version/source-id plus anchor/manifest identity from the productive process",
+      "attempt downgrade, library swap, dependency transplant and restart/rollback controls; all nonaccepted paths must fail closed",
+      "exercise real WAL multi-connection writer/checkpoint operation and crash/restart recovery"
+    ]
+  },
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "NEW_LOADER_DIRECTORY_COUNTERWORLD_SUPPORTED; V6_EXACT_HEAD_TARGET_LANE_PASS; PR_503_DRAFT; F-V01-13_REMAINS_OPEN"
+}

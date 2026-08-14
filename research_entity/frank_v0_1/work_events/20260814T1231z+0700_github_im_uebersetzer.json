@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_github_im_uebersetzer",
+  "actor": "gabriel-claude/wp1",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "yml2sh.py: every GITHUB_* var it emits get default in script head. no unbound under set -u.",
+  "done_when": "local run of 314 gate get past step 1. no \"unbound variable\".",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: frank-api, torkonfig, yml2sh",
+  "source": {
+    "lauf": "20260813-082603",
+    "paket": "wp1",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-082603-wp1/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-082603-wp1/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 420,
+  "ergebnis_kurz": "kontext vollstaendig im uebersetzer, aber .sh auf frank-api noch alt",
+  "bericht": "GITHUB_* kontext schon drin, aus frueherer sitzung, NICHT committed.\nyml2sh.py line 212-241: 20 default + export. GITHUB_REF, REF_NAME, HEAD_REF, BASE_REF, EVENT_NAME, ACTOR, RUN_NUMBER, API_URL, SERVER_URL, GRAPHQL_URL, RUNNER_TEMP, CI.\nlaeufer.py: PR_HEAD_REF + PR_BASE_REF aus PR api. plus rc=78 = \"kein urteil\" statt rot.\nremote yml2sh.py md5 = local md5 (17f7ee44...). ABER remote tore/*.sh kopf hat block NICHT -> .sh alt, torkonfig lief nicht neu.\n"
+}

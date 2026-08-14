@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.5",
+  "schema_version": "3.1",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -16,15 +16,17 @@
     "paid_fallback": false,
     "automatic_subscription_upgrade": false,
     "github_hosted_actions_paid_remediation": false,
-    "github_hosted_actions_blocked_run": 31548258330,
-    "github_hosted_identity_guard_blocked_run": 31566209713,
-    "next_execution_surface": "VERIFIED_ZERO_COST_ONLY_PREFER_SELF_HOSTED_UBUNTU_ELSE_FAIL_CLOSED",
-    "generic_self_hosted_labels_mint_product_target_identity": false
+    "next_execution_surface": "VERIFIED_ZERO_COST_ONLY_PREFER_SELF_HOSTED_UBUNTU_WHEN_EVENT_TRUST_BOUNDARY_IS_ACCEPTABLE_ELSE_FAIL_CLOSED",
+    "generic_self_hosted_labels_mint_product_target_identity": false,
+    "persistent_self_hosted_pull_request_default": "FAIL_CLOSED_UNLESS_SOURCE_ADMISSION_OR_ISOLATION_IS_EXPLICIT"
   },
   "research_loop": [
     "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
     "VERIFY_FREE_EXECUTION_SURFACE_BEFORE_COMPUTE",
+    "VERIFY_EVENT_TRUST_BOUNDARY_BEFORE_PERSISTENT_SELF_HOSTED_EXECUTION",
+    "VERIFY_EXECUTION_DEPTH_AND_WORKFLOW_LINEAGE_BEFORE_READING_GATE_VERDICT",
     "VERIFY_EXACT_TESTED_COMMIT_PROVENANCE_BEFORE_CREDIT",
+    "VERIFY_EVIDENCE_REFERENT_REPOSITORY_PR_REF_REACHABILITY_AND_COMMIT_ROLE_BEFORE_CREDIT",
     "VERIFY_AUTHORIZED_CLAYCODE_CORPUS_SEPARATELY_FROM_FILESYSTEM_DISCOVERY",
     "VERIFY_RUNNER_AND_PRODUCT_TARGET_PROVENANCE_SEPARATELY_FROM_ROUTING_LABELS",
     "VERIFY_SUCCESSOR_ENTRYPOINT_PRESERVES_PREDECESSOR_SECURITY_INVARIANTS",
@@ -45,13 +47,13 @@
     "SELECT_NEXT_HIGHEST_INFORMATION_TARGET"
   ],
   "model_role_policy": {
-    "architect":["mistral:reasoning_high_when_free_available","nvidia:strong_reasoning_or_coding"],
-    "falsifier":["nvidia:different_model_family_from_architect","mistral:independent_counterhypothesis_when_free_available"],
-    "alternative":["nvidia:deepseek_or_glm_or_other_nonarchitect_family"],
-    "judge":["nvidia:nemotron_or_other_nonidentical_family"],
-    "retrieval":["nvidia:nv-embedcode-7b-v1","repo_search","claygraph","unifieddb"],
-    "reranker":["nvidia:llama-nemotron-rerank-vl-1b-v2"],
-    "execution_oracles":["fixed_local_tests","self_hosted_ubuntu_target","other_oracles_only_when_free_verified"]
+    "architect": ["mistral:reasoning_high_when_free_available", "nvidia:strong_reasoning_or_coding"],
+    "falsifier": ["nvidia:different_model_family_from_architect", "mistral:independent_counterhypothesis_when_free_available"],
+    "alternative": ["nvidia:deepseek_or_glm_or_other_nonarchitect_family"],
+    "judge": ["nvidia:nemotron_or_other_nonidentical_family"],
+    "retrieval": ["nvidia:nv-embedcode-7b-v1", "repo_search", "claygraph", "unifieddb"],
+    "reranker": ["nvidia:llama-nemotron-rerank-vl-1b-v2"],
+    "execution_oracles": ["fixed_local_tests", "self_hosted_ubuntu_target", "other_oracles_only_when_free_verified"]
   },
   "independence_rules": [
     "same_model_via_two_providers_is_shared_ancestry_not_replication",
@@ -74,6 +76,17 @@
     "semantic_change_requires_executable_counterexample_and_supervisor_review",
     "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle",
     "cancelled_queued_failed_zero_step_or_uninspectable_workflow_never_counts_as_positive_semantic_compiler_provider_guard_or_release_acceptance",
+    "zero_step_or_no_runner_red_is_instrument_state_not_code_or_semantic_failure",
+    "workflow_repair_on_main_does_not_retroactively_repair_stale_pull_request_event_lineage",
+    "lane_only_green_transition_after_branch_ingestion_does_not_by_itself_prove_code_improvement",
+    "evidence_credit_must_bind_repository_commit_role_and_claimed_pr_or_explicit_alternative_lineage",
+    "commit_existence_in_repository_is_necessary_but_not_sufficient_for_current_pr_exact_head_credit",
+    "historical_ancestor_commit_may_receive_scoped_mechanism_credit_when_reachability_is_verified_but_must_not_be_labeled_current_exact_head",
+    "current_pull_request_head_must_be_refetched_before_attributing_new_candidate_or_provider_results",
+    "translated_external_gate_status_requires_bound_target_instrument_workflow_steps_assertion_pass_markers_exitcode_and_log_hash_before_semantic_credit",
+    "persistent_self_hosted_pull_request_execution_is_a_separate_trust_boundary_and_must_not_be_enabled_only_to_replace_unavailable_hosted_minutes",
+    "pull_request_capable_persistent_self_hosted_jobs_require_explicit_source_admission_or_ephemeral_isolation_before_autonomous_credit",
+    "transport_or_materialization_failure_before_gate_assertions_is_instrument_evidence_not_semantic_counterevidence",
     "pull_request_github_sha_may_be_synthetic_merge_commit_and_must_not_be_labeled_exact_head",
     "exact_head_credit_requires_explicit_pr_head_fetch_binding_and_tested_sha_equality",
     "synthetic_pull_request_merge_ref_execution_may_receive_composition_credit_only_not_exact_head_credit",
@@ -82,10 +95,14 @@
     "new_or_unclassified_dot_clay_sources_must_be_reported_separately_and_fail_closed_until_authority_classification",
     "unifieddb_projection_or_contract_sources_must_not_be_promoted_to_claycode_language_corpus_from_filename_extension_or_parser_acceptance_alone",
     "offline_provider_contract_success_with_external_effect_false_or_external_network_false_does_not_mint_live_provider_capability",
+    "provider_text_verified_done_requires_explicit_final_assistant_authorship_stop_completion_nonempty_scalar_text_and_no_unadmitted_typed_extensions",
+    "provider_text_request_must_validate_nonempty_provider_appropriate_conversation_grammar_before_credential_use_or_network_access",
+    "provider_request_validation_and_serialization_must_use_the_same_private_snapshot_before_provider_mechanism_credit",
+    "repository_scoped_nonresolution_must_not_negate_commit_or_pr_evidence_from_a_different_repository_namespace",
     "github_hosted_runner_billing_or_spending_limit_failure_is_infrastructure_only_and_must_not_trigger_paid_remediation_under_free_only",
     "free_only_forbids_increasing_actions_spending_limit_purchasing_additional_runner_minutes_or_enabling_paid_fallback",
     "self_hosted_or_other_execution_surface_must_be_currently_verifiable_and_zero_cost_before_autonomous_credit",
-    "generic_self_hosted_linux_x64_labels_do_not_mint_hostinger_productstart_or_final_target_identity",
+    "generic_self_hosted_linux_x64_or_custom_runner_labels_do_not_mint_hostinger_productstart_or_final_target_identity",
     "runner_local_mechanism_success_may_be_preserved_without_upgrading_to_productive_target_acceptance",
     "successor_launcher_or_entrypoint_must_explicitly_recompose_and_regression_test_predecessor_security_invariants_before_productstart_credit",
     "source_chain_hashes_and_source_only_pycache_exclusion_are_source_bundle_controls_not_productive_host_process_or_runtime_identity",
@@ -106,6 +123,8 @@
     "analyzer_resolvable_must_fail_closed_when_method_or_member_semantics_are_unbound",
     "corpus_unresolved_calls_and_member_segments_must_be_semantically_classified_before_host_binding_or_defaulting",
     "generated_host_ast_or_generated_c_is_projection_not_claycode_semantic_authority",
+    "finite_valid_claycode_type_structures_must_not_change_semantic_verdict_only_due_to_host_interpreter_recursion_limit",
+    "host_recursionerror_is_implementation_totality_counterevidence_not_claycode_type_semantics_unless_explicitly_authorized",
     "candidate_or_caller_selected_expected_artifact_digest_is_self_consistency_not_independent_release_authority",
     "provider_runtime_candidate_requires_accepted_ubuntu_execution_receipt_before_capability_credit",
     "http_402_payment_required_is_nonretryable_provider_hard_stop_for_current_free_only_cycle",
@@ -125,29 +144,35 @@
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "PR552 is the current parsed-record/runtime-nominal candidate, but successful pull_request runtime jobs currently test GitHub synthetic merge commits rather than the explicit PR head. Preserve run 31609707205 as bounded merge-composition evidence only: it passed 22/22 runtime nominal and 14/14 WP04 checks on clay/Ubuntu while testing ead250d6d5d0cb0188f2be781ced405f01677c53, not head a9925f9558bd985c40f00637d5c3526c51f794d4. Require promotion-relevant workflows to fetch the explicit PR head and assert tested_sha==expected_pr_head; merge-ref tests may remain separate composition gates. Also separate raw .clay discovery from semantic corpus authority. Earlier current-main composition observed 42 discovered sources with 36 parsed versus the frozen 36/40 frontier; do not silently redefine the denominator or admit the additional projection/UnifiedDB sources. Require an explicit authorized-corpus set and separate discovered/rejected/unclassified accounting. Current provider-contract run 31609707160 tested exact head and is useful contract evidence, but external_effect_performed=false and external_network_used=false, so no free-provider capability change is credited. Keep WP03/WP04/WP05/WP06 OPEN and preserve 429 unique/464 unresolved Calls, 22 MethodChain segments, comparison chains, Bool/Int equality, verb_for and global NOT/relation precedence authority-unselected. Existing ProductStart/Hostinger provenance gates remain. FREE_ONLY hard, Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
+  "current_focus": "Fresh repository-scoped PR232 head is d6c14f0c1c823fc5a33ac9f6f00ea9d8987ba7c9, six commits ahead of prior observed 73332a06c74931fe0c468a3596d37e7ed91041f8. The newest Research-Center event 94c562d5b6e2109f6d8f04d504095e3c02e5dc8f reported failed PR232 referent lookups in gschaidergabriel/Dr.-Unterweger rather than this target repository; treat that as repository-namespace observation error and never as negative commit existence evidence for clay-global-research-entity. Current PR232 source work adds a deterministic mutable-request TOCTOU falsifier at 94fae1b3051a55b0125fb2a32f31d748d2415b04, a private request snapshot repair at 9b29eab835ef04efb2e0650d19d2687f60332a4f, and policy record at d6c14f0c. MITRE CWE-367 and Python copy semantics support the mechanism class, but current-head Research Entity Verify run 31764738034/job 94658124440 and Identity Guard run 31764738080/job 94658124507 executed zero steps. Therefore the snapshot repair remains source/local candidate evidence only until one safe verified zero-cost exact-head execution reaches the falsifier assertions; no live provider capability exists without an accepted-Ubuntu external network/effect receipt. Preserve PR-source-admission/isolation, ProductStart and translated-gate authority rules. Continue parameterized TypeRef resource-totality, 429/464 unresolved Call ownership, 22 MethodChain/member segments and productive WP04 admission/private-state continuity. FREE_ONLY hard, Together denied, paid fallback false, Goodman ancestry collapsed, no BASE/Frank PASS from consensus, no canonical semantic promotion without executable counterevidence and review, and no Frank-Harness modification.",
   "supervisor_last_steer": {
-    "reason": "Executable inspection found two promotion-boundary flaws: successful pull_request jobs were being described as exact-head while testing GitHub synthetic merge SHAs, and composition accounting could treat raw .clay discovery growth as corpus authority. Provider-contract success also remains offline/mechanism-only because no network or external effect occurred.",
+    "reason": "Two control-plane drifts became material: PR232 advanced to d6c14f0c while the autonomous control still named 14514f2c, and the newest Research-Center quarantine used a different repository namespace for PR232 commit lookups. In parallel a new mutable-request TOCTOU falsifier/repair appeared but its current-head workflows executed zero steps. Synchronize referent and namespace authority, preserve the candidate as unpromoted, and request a real zero-cost exact-head execution before mechanism credit.",
     "evidence_priority": [
-      "bind explicit PR head SHA in every exact-head-labelled promotion gate",
-      "keep synthetic merge-ref execution as separate composition evidence",
-      "introduce explicit authorized ClayCode corpus accounting distinct from discovered/rejected/unclassified .clay files",
-      "preserve parsed-record runtime semantics only after exact-head recomposition",
-      "do not credit provider capability without real accepted-Ubuntu live FREE_ONLY execution"
+      "repository namespace plus current PR/ref head plus tested SHA and execution depth before any evidence credit",
+      "safe zero-cost exact-head execution of the PR232 mutable-request snapshot lesion/repair before provider-mechanism upgrade",
+      "parameterized TypeRef depth/resource totality without selecting generic semantics",
+      "429/464 unresolved Call ownership and 22 MethodChain/member segments",
+      "productive evaluator/compiler/lowering/FFI WP04-admission bypass and post-admission mutation falsifiers",
+      "preserve ProductStart and translated-external-gate authority closure",
+      "accepted-Ubuntu live FREE provider execution only for provider capability credit"
     ],
     "required_next_actions": [
-      "update or add a bounded self-hosted gate that resolves PR head SHA explicitly, fetches that commit and fails if tested_sha differs",
-      "re-run PR552 runtime nominal, parser fidelity, package import and composition gates with explicit exact-head provenance; keep merge-ref integration as a distinct gate if desired",
-      "add corpus-authority manifest or equivalent explicit set and report discovered, authorized, rejected and unclassified counts separately",
-      "classify the additional projection/UnifiedDB .clay files without inferring language authority from extension, name, parser acceptance or model consensus",
+      "refetch current PR head and bind repository namespace before attributing candidate/provider evidence",
+      "do not convert the Research-Center Dr.-Unterweger lookup failure into negative evidence about clay-global-research-entity commits",
+      "execute the request-snapshot mutation falsifier on a safe verified zero-cost lane with exact tested SHA and assertion depth before upgrading the repair beyond source/local candidate evidence",
+      "keep trusted push/dispatch self-hosted evidence separate from PR execution-safety evidence",
+      "continue parameterized TypeRef and unresolved Call/MethodChain falsifiers without BASE promotion",
+      "do not credit PR232 as live provider capability until an accepted Ubuntu live network/effect receipt exists",
       "preserve FREE_ONLY and zero Frank-Harness mutation"
     ],
     "do_not_infer": [
-      "exact-head PASS from GITHUB_SHA on a pull_request event unless PR head equality is independently bound",
-      "ClayCode corpus membership or canonical semantics from a .clay extension or filesystem glob",
-      "provider capability change from offline contract matrices with no network/external effect",
+      "commit nonexistence from lookup failure in a different repository namespace",
+      "live provider capability from PR232 source changes local test claims documentation or zero-step hosted checks",
+      "canonical provider or ClayCode semantics from the request-snapshot implementation choice",
+      "safe PR isolation from self-hosted routing labels alone",
+      "independent replication from repeated clay-* or digital-retina executions sharing project ancestry",
       "BASE or Frank v0.1 PASS from model consensus or correlated runners",
-      "canonical ClayCode semantics from storage/runtime findings"
+      "canonical ClayCode semantics from host-language behavior"
     ]
   },
   "supervisor": {

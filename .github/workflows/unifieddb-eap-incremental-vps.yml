@@ -1,0 +1,153 @@
+name: UnifiedDB EAP Incremental VPS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-eap-incremental-vps.yml'
+      - 'research_entity/harness/reference/unifieddb_emergent_preprocessor.py'
+      - 'research_entity/harness/reference/unifieddb_emergent_incremental.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_incremental.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_incremental_updates.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_incremental_end_to_end.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+      - 'research_entity/harness/reference/unifieddb_query_plane.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-eap-incremental-vps
+  cancel-in-progress: false
+
+jobs:
+  incremental-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout tested tree read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Run incremental dependency-delta regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.harness.reference.test_unifieddb_emergent_incremental
+
+      - name: Benchmark full rebuild, incremental deltas and end-to-end ledger path
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m research_entity.harness.reference.benchmark_unifieddb_incremental_updates \
+            > /tmp/UNIFIEDDB_EAP_INCREMENTAL_BENCHMARK.json
+          python3 -m research_entity.harness.reference.benchmark_unifieddb_incremental_end_to_end \
+            > /tmp/UNIFIEDDB_EAP_INCREMENTAL_E2E_BENCHMARK.json
+          python3 - <<'PY'
+          import json, os, platform, socket
+          from datetime import datetime, timezone
+          from pathlib import Path
+          bench=json.loads(Path('/tmp/UNIFIEDDB_EAP_INCREMENTAL_BENCHMARK.json').read_text(encoding='utf-8'))
+          e2e=json.loads(Path('/tmp/UNIFIEDDB_EAP_INCREMENTAL_E2E_BENCHMARK.json').read_text(encoding='utf-8'))
+          payload={
+              'schema_version':'1.1',
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope':'EAP_INCREMENTAL_TOPOLOGY_AND_LEDGER_END_TO_END_PRELIMINARY',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'github_sha':os.environ.get('GITHUB_SHA',''),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+              'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+              'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+              'runner_os':os.environ.get('RUNNER_OS','unknown'),
+              'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+              'hostname':socket.gethostname(),
+              'platform':platform.platform(),
+              'python':platform.python_version(),
+              'topology_benchmark':bench,
+              'end_to_end_benchmark':e2e,
+              'acceptance':{
+                  'selection_equivalence_all_iterations':bench['equivalence']['selected_refs_exact_all_iterations'],
+                  'incremental_refresh_count':bench['incremental_eap_1_4']['incremental_refresh_true_count'],
+                  'iterations':bench['dataset']['iterations'],
+                  'topology_p50_speedup_over_full_rebuild':bench['delta']['p50_speedup'],
+                  'incremental_topology_faster_p50':bench['delta']['p50_speedup']>1.0,
+                  'e2e_selection_equivalence_all_iterations':e2e['equivalence']['selected_refs_exact_all_iterations'],
+                  'e2e_semantic_state_equal':e2e['equivalence']['final_semantic_state_hash_equal'],
+                  'e2e_trace_root_equal':e2e['equivalence']['final_trace_root_hash_equal'],
+                  'e2e_p50_speedup':e2e['delta']['end_to_end_p50_speedup'],
+                  'e2e_faster_p50':e2e['delta']['end_to_end_p50_speedup']>1.0,
+              },
+              'scope_guard':'Measures transient dependency topology and an in-memory SQLite reference StateLedger end-to-end path. It is not disk-backed production storage, concurrent load, or final Andreas target acceptance.',
+              'authority_invariant':'derived topology != truth or effect authority',
+          }
+          Path('/tmp/UNIFIEDDB_EAP_INCREMENTAL_VPS_RECEIPT.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload['acceptance'],sort_keys=True))
+          assert payload['acceptance']['selection_equivalence_all_iterations']
+          assert payload['acceptance']['incremental_refresh_count']==payload['acceptance']['iterations']
+          assert payload['acceptance']['incremental_topology_faster_p50']
+          assert payload['acceptance']['e2e_selection_equivalence_all_iterations']
+          assert payload['acceptance']['e2e_semantic_state_equal']
+          assert payload['acceptance']['e2e_trace_root_equal']
+          assert payload['acceptance']['e2e_faster_p50']
+          PY
+
+      - name: Upload incremental receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-eap-incremental-${{ github.run_id }}
+          path: /tmp/UNIFIEDDB_EAP_INCREMENTAL_VPS_RECEIPT.json
+          if-no-files-found: error
+          retention-days: 30
+
+  persist-receipt:
+    if: always()
+    needs: incremental-vps
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: unifieddb-eap-incremental-${{ github.run_id }}
+          path: /tmp/unifieddb-eap-incremental
+      - name: Validate and persist runner receipt
+        shell: bash
+        env:
+          TESTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          source=Path('/tmp/unifieddb-eap-incremental/UNIFIEDDB_EAP_INCREMENTAL_VPS_RECEIPT.json')
+          data=json.loads(source.read_text(encoding='utf-8'))
+          assert data['schema_version']=='1.1'
+          assert data['evidence_class']=='REAL_SELF_HOSTED_UBUNTU_EXECUTION'
+          assert data['github_sha']==os.environ['TESTED_SHA']
+          assert data['authority_invariant']=='derived topology != truth or effect authority'
+          root=Path('research_entity/state/system/unifieddb_eap_incremental')
+          root.mkdir(parents=True,exist_ok=True)
+          (root/'LATEST.json').write_text(json.dumps(data,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          (root/f"{data['github_run_id']}.json").write_text(json.dumps(data,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          git config user.name 'clay-eap-incremental'
+          git config user.email 'clay-eap-incremental@users.noreply.github.com'
+          git add research_entity/state/system/unifieddb_eap_incremental/
+          git commit -m "evidence(unifieddb): persist incremental EAP VPS ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0404p0700-chatgpt-secondary-provider-rollback-wal-gate",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_after_cycle": "40cd96f70a1dc378bdb7ba41f3faa0d3c5c776d1",
+    "effect_provider_merge": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+    "effect_provider_pr": 261,
+    "effect_provider_target_run": 31423170075
+  },
+  "hypothesis": "A durable exact provider identity plus read-only provider lookup is sufficient to reconcile an already committed provider effect even if Frank UnifiedDB is restored to a consistent pre-outcome COMMITTING snapshot.",
+  "strongest_counterhypothesis": "Rollback erases OUTCOME_UNKNOWN and leaves reconciliation unable to close a real provider commit, requiring a special recovery-only transition.",
+  "live_external_evidence": [
+    {
+      "source": "RFC 9110 HTTP Semantics",
+      "claim_used": "automatic retries require idempotent semantics or knowledge that the original request was not applied",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110"
+    },
+    {
+      "source": "Google AIP-155 Request Identification",
+      "claim_used": "stable request identity supports idempotent duplicate handling",
+      "url": "https://google.aip.dev/155"
+    },
+    {
+      "source": "AWS EC2 idempotency documentation",
+      "claim_used": "stable client token plus same semantic parameters deduplicates retries; mismatched parameters fail",
+      "url": "https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html"
+    },
+    {
+      "source": "RIFL SOSP 2015",
+      "claim_used": "exactly-once RPC handling requires durable request/completion identity across retries and reconfiguration",
+      "url": "https://dl.acm.org/doi/10.1145/2815400.2815416"
+    },
+    {
+      "source": "SQLite WAL documentation - WAL-reset bug",
+      "claim_used": "WAL-reset corruption bug affects SQLite 3.7.0 through 3.51.2 under concurrent write/checkpoint conditions and is fixed in 3.51.3+, with specified backports",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    }
+  ],
+  "target_vps_parent_evidence": {
+    "run_id": 31423170075,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "tested_merge_sha": "10018046ca74e0cf4fc7002a3a0d62779efef855",
+    "results": {
+      "execution_generation_fence": "PASS_FRESH_MAIN_EFFECT_GENERATION_INTEGRATION",
+      "typed_provider_contract": "PASS_TYPED_PROVIDER_CONTRACT_RUNTIME_MATRIX",
+      "provider_v17_reentry_done": "PASS_FRESH_MAIN_PROVIDER_TO_V17_REENTRY_DONE",
+      "current_frontend_typed_ir": "PASS_FRESH_MAIN_TYPED_PROVIDER_CURRENT_STRUCTURED_FRONTEND_TYPEDIR",
+      "ack_blackhole_existing_regression": "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB"
+    },
+    "epistemic_limits": [
+      "synthetic provider only",
+      "current frontend/TypedIR evidence explicitly does not claim WP04 type/effect acceptance or runtime execution acceptance",
+      "whole Frank v0.1 acceptance not claimed"
+    ]
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "PROVIDER_COMMIT_LOCAL_SNAPSHOT_ROLLBACK",
+    "pr": 263,
+    "workflow_run": 31432605112,
+    "job": 93599334633,
+    "tested_merge_sha": "cb28d4f4624362b7f6f73cdc4dba519263eeb98e",
+    "test_blob": "b6ef943343793a636bfed2558626723026a89e37",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "status": "PASS_PROVIDER_RECONCILIATION_SURVIVES_LOCAL_SNAPSHOT_ROLLBACK",
+    "snapshot_state": "COMMITTING",
+    "normal_state_after_ack_loss": "OUTCOME_UNKNOWN",
+    "recovered_state_before_reconciliation": "COMMITTING",
+    "recovered_state_after_reconciliation": "OUTCOME_SUCCEEDED",
+    "reconcile_reason": "PROVIDER_OUTCOME_RECONCILED",
+    "provider_commit_count": 1,
+    "provider_rows_after_recovery_probe": 1,
+    "second_provider_effect": false,
+    "integrity_check": "ok",
+    "foreign_key_violations": 0,
+    "external_network_used": false,
+    "external_provider_used": false,
+    "canonical_state_mutated": false,
+    "artifact_id": 9079719180,
+    "artifact_sha256": "44438d98c35e8985577ac475143784fd80a7d89612c3a6e6604f66f4ed0b8e08"
+  },
+  "oob_adjudication": {
+    "hypothesis_status": "SUPPORTED_WITHIN_EXACT_BOUND_PROVIDER_IDENTITY_ROLLBACK_WINDOW",
+    "counterhypothesis_status": "REFUTED_WITHIN_TESTED_WINDOW",
+    "architecture_delta": "NO_CHANGE_MECHANISM_SUPPORTED_FOR_BOUND_PROVIDER_IDENTITY_ROLLBACK_WINDOW",
+    "non_claims": [
+      "snapshot predating provider-contract binding is not covered",
+      "real providers without durable idempotent read-only lookup are not covered",
+      "arbitrary cross-resource exactly-once semantics are not claimed",
+      "target SQLite WAL safety is not implied by this test"
+    ]
+  },
+  "new_release_risk": {
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "risk": "Accepted target VPS reports SQLite 3.45.1 while Frank migration code requires WAL; upstream SQLite documents the WAL-reset corruption bug through 3.51.2 under concurrent writer/checkpoint topology.",
+    "target_evidence": "gschaidergabriel/Dr.-Unterweger@d55b452776295153576011988b0befce7f13b238",
+    "upstream_source": "https://www.sqlite.org/wal.html#the_wal_reset_bug",
+    "release_disposition": "BLOCK_UNTIL_EXACT_VENDOR_BACKPORT_PROVEN_OR_RUNTIME_SQLITE_UPGRADED_TO_FIXED_BUILD_OR_MACHINE_CHECKED_TOPOLOGY_EXCLUDES_TRIGGER",
+    "counterhypothesis": "Ubuntu may have backported the exact fix into 3.45.1-1ubuntu2.7 or Frank topology may make the race unreachable.",
+    "counterhypothesis_status": "OPEN_REQUIRES_BUILD_PROVENANCE_OR_TOPOLOGY_PROOF"
+  },
+  "workspace_delta": {
+    "F-V01-09-EFFECT-AUTHORITY": {
+      "presence_execution_generation_effect_fence": "PROMOTE_TO_PASS",
+      "current_claycode_frontend_typed_ir": "PROMOTE_TO_PASS",
+      "current_source_lifecycle_crash_replay": "KEEP_OPEN",
+      "real_provider_unknown_outcome_reconciliation": "KEEP_OPEN",
+      "verified_outcome_reentry_done_and_terminal_receipt": "KEEP_OPEN_MECHANISM_PASS_FINAL_COMPONENT_RECEIPT_INTEGRATION_PENDING"
+    },
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "ADD_SQLITE_WAL_RESET_RELEASE_GATE"
+    }
+  },
+  "research_disposition": "SUPPORTED_DELTA_PLUS_NEW_RELEASE_GATE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

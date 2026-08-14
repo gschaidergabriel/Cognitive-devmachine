@@ -1,0 +1,214 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/1.0",
+  "run_id": "GO-20260812T0041P0700-CHATGPT-SECONDARY-CLAYCODE-WITH-RHS-CROWN-SWAP",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T17:41:00Z",
+  "created_at_local": "2026-08-12T00:41:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not": "self.root/Frank"
+  },
+  "identity_and_authority": {
+    "clay_is_research_entity": true,
+    "self_root_frank_is_separate_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_may_independently_research_test_implement_harness_changes": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "note": "continuity record is older than active repository work; operational evidence below is bound to fresh repository heads"
+  },
+  "program": "FRANK_V0_1",
+  "primary_work_package": "F-V01-02_CLAYCODE",
+  "cross_impacts": [
+    "F-V01-04_UNIFIEDDB-CLAYGRAPH-PERSISTENCE",
+    "F-V01-16_END-TO-END-ACCEPTANCE"
+  ],
+  "coordination": {
+    "clay_global_main_at_refresh": "fcfc549b79c98d377b20165696d446af62b1d3ee",
+    "target_main_at_main-composition_observation": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+    "frontier_pr": 357,
+    "frontier_head_observed_during_run": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+    "diagnostic_pr": 390,
+    "this_go_child_pr": 395,
+    "this_go_branch": "chatgpt/go-with-rhs-precedence-oob-20260812",
+    "overlap_decision": "did not duplicate the active #357 product patch; built an adversarial child diagnostic and routed evidence back to #357 review 4909102574"
+  },
+  "internal_evidence": {
+    "strict_repair_discriminator": {
+      "pr": 390,
+      "accepted_target_run": 31517320226,
+      "job": 93865605550,
+      "tested_merge_sha": "f53077ea4aed3bb6c0100de8e158da9bea76f482",
+      "baseline": "strict LALR generation fails",
+      "selected_candidate": "RHS_ADD",
+      "selected_rule": "with_assign: ident = add_expr",
+      "corpus": "36/40 preserved",
+      "existing_with_updates": 5,
+      "existing_rhs_ast_class": "Path",
+      "rejected_alternatives": {
+        "RHS_UNARY": "strict builds but rejects real arithmetic source",
+        "RHS_PRIMARY": "strict builds but rejects real arithmetic source"
+      },
+      "resource": {
+        "wall_seconds": 24.48,
+        "max_rss_kib": 35364
+      }
+    },
+    "current_main_composition_negative_result": {
+      "run": 31517971317,
+      "job": 93867739555,
+      "result": "FAIL_STALE_FIXED_DENOMINATOR",
+      "merge_clean": true,
+      "current_main_sha": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+      "frontier_head_sha": "89d720950d330c6bb2ed792fb97575321cc6a1a4",
+      "mechanism_checks": {
+        "decide_effect_comparisons": 200576,
+        "decide_effect_mismatches": 0,
+        "effect_request_hash_comparisons": 56000,
+        "effect_request_hash_mismatches": 0,
+        "confirmation_comparisons": 16000,
+        "confirmation_mismatches": 0,
+        "frank_effects_unresolved": 0,
+        "ordinary_calls_missed": 0,
+        "callable_method_segments_open": 22,
+        "unresolved_unique_names": 429,
+        "unresolved_occurrences": 464
+      },
+      "count_observation": {
+        "sources_parsed": 36,
+        "sources_total": 42,
+        "coverage_percent": 85.7,
+        "old_gate_expected": "36/40 == 90.0%"
+      },
+      "interpretation": "failure was a stale source-universe denominator, not evidence that the RHS_ADD product repair changed the already-measured executable semantics"
+    },
+    "new_main_source_delta": [
+      {
+        "path": "claycode/frank_unifieddb_projection_outbox_v1.clay",
+        "surface": ["projection_contract", "commit", "project", "recover", "BEGIN/COMMIT", "transition arrows"]
+      },
+      {
+        "path": "claycode/frank_unifieddb_projection_worker_v1.clay",
+        "surface": ["projection_worker_contract", "acquire", "project", "recover", "transition arrows"]
+      }
+    ],
+    "frontier_scope_repair_parallel_worker": {
+      "latest_observed_head": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+      "design": "measure frozen 40-source frontier separately from descriptive expanding current-main source universe",
+      "status_at_receipt": "target rerun queued/in progress; no new PASS claimed by this receipt"
+    }
+  },
+  "hypothesis": {
+    "id": "H-CLAYCODE-WITH-RHS-ADDITIVE-PRECEDENCE",
+    "statement": "Bounding unparenthesized with-update field RHS at additive precedence removes the strict-LALR ambiguity while preserving explicit full boolean/relational field values through parentheses and retaining deterministic outer relation/boolean ownership."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-CLAYCODE-WITH-RHS-CORPUS-OVERFIT",
+    "statement": "RHS_ADD only works because all five current corpus WithUpdate values are paths; nested relational/boolean field values combined with outer relational/boolean operators will expose another strict-generation or AST-boundary failure."
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "name": "WITH_RHS_BOOLEAN_CROWN_SWAP",
+    "intervention": "Combine a multiline WithUpdate containing arithmetic plus parenthesized relation/boolean field values with outer equality/AND, then remove parentheses in a second case so relation/AND must bind outside WithUpdate.",
+    "baseline": "five measured corpus WithUpdate values are path-valued and do not exercise this boundary",
+    "falsifier": "strict parser failure or typed AST swallowing/releasing the wrong relation/boolean continuation",
+    "rescue": "reopen grammar factoring; do not use rule priority as an unexplained semantic substitute",
+    "status": "TARGET_PASS"
+  },
+  "target_measurement": {
+    "evidence_class": "ACCEPTED_TARGET_ADVERSARIAL_SYNTAX_DIAGNOSTIC",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 395,
+    "workflow_run_id": 31518337418,
+    "job_id": 93868937243,
+    "tested_merge_sha": "dc4ab07b217cef3bcc5c8b80fd1ca69546a30020",
+    "grammar_sha256": "1880638608fdc93c8fda7973f8c09247ec8fd7214e20305ae0aa7656b73d1c6d",
+    "result": "PASS_WITH_RHS_BOOLEAN_CROWN_SWAP",
+    "checks": {
+      "strict_lalr": true,
+      "parenthesized_full_expr_inside_update": true,
+      "unparenthesized_relation_bool_outside_update": true,
+      "go_oob_count_exactly_one": true,
+      "product_bytes_mutated_by_test": false,
+      "authority": "NONE",
+      "external_effect": false,
+      "promotion": "NONE"
+    },
+    "resource": {
+      "wall_seconds": 0.77,
+      "user_seconds": 0.74,
+      "system_seconds": 0.03,
+      "max_rss_kib": 34800,
+      "cpu_percent": 99
+    },
+    "artifact": {
+      "artifact_id": 9112029145,
+      "zip_sha256": "be736df236a4b70f92c058f5464f297eeeee6f6e2d99d94015ffb46773e0b1e8"
+    },
+    "environment": {
+      "runner": "clay",
+      "machine": "digital-retina",
+      "os_family": "Linux/X64 accepted Hostinger lane",
+      "python": "3.12.3",
+      "lark": "1.3.1",
+      "interegular": "0.3.3"
+    }
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Lark official grammar reference",
+      "url": "https://lark-parser.readthedocs.io/en/stable/grammar.html",
+      "use": "current grammar imports/composition capability; supports separating grammar families while converging downstream semantics"
+    },
+    {
+      "source": "Lark official repository",
+      "url": "https://github.com/lark-parser/lark",
+      "use": "current toolkit capability surface includes LALR(1), Earley and grammar composition"
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_BOUNDED_REPAIR_PLUS_NEW_CANDIDATE_FRONTEND_SPLIT",
+    "supported": [
+      "retain the structural RHS_ADD repair candidate for #357 subject to its full target promotion matrix",
+      "keep frozen 36/40 frontier regression metrics distinct from descriptive current-main parser coverage"
+    ],
+    "candidate": [
+      "treat the new UnifiedDB projection-contract sources as a separate syntax-family/frontend or composable grammar fragment instead of using them to silently redefine the historical #357 frontier",
+      "converge any projection-contract frontend into the same Clay typed IR/type-effect/evaluator authority boundaries; do not create a second semantic architecture"
+    ],
+    "counterevidence_preserved": [
+      "current main parser coverage observed as 36/42 = 85.7%, not 90%",
+      "the two new projection-contract sources are not yet supported by the Structured-V1 parser",
+      "RHS_ADD does not close WP04 type/effect checking, compiler/lowering, runtime ABI or whole Frank acceptance"
+    ],
+    "rollback": "PR #395 is diagnostic-only and changes no product bytes; close/delete it without product effect. #357 product repair remains independently reviewable."
+  },
+  "distribution": {
+    "target_pr_357_review_id": 4909102574,
+    "adversarial_child_pr": 395,
+    "primary": ["F-V01-02_CLAYCODE"],
+    "secondary": ["F-V01-04_UNIFIEDDB-CLAYGRAPH-PERSISTENCE", "F-V01-16_END-TO-END-ACCEPTANCE"]
+  },
+  "next_falsifiers_ranked": [
+    "Obtain a fresh accepted-target PASS/FAIL for #357 head a2505ca8 after frozen-frontier/current-main scope separation; preserve both 36/40 frontier and 36/42-or-newer current-main metrics explicitly.",
+    "Recompose #357 with WP04 nominal/type-effect candidate #369 and prove the RHS precedence repair does not broaden admitted type/effect semantics.",
+    "Build a diagnostic-only projection-contract syntax inventory and test whether a separate composable grammar/frontend can parse the two new UnifiedDB projection sources into a shared typed IR without weakening fail-closed behavior.",
+    "Keep the four historical Structured-V1 rejects and the two new projection-contract rejects separate by syntax-family/reason rather than one undifferentiated coverage percentage.",
+    "After any frontend expansion, rerun strict LALR, operator survival, 200576 policy differential, 56000 hash differential, 16000 confirmation differential, call-surface coverage and current unresolved census on accepted target."
+  ],
+  "non_claims": [
+    "no whole ClayCode acceptance",
+    "no WP04/WP06 completion",
+    "no canonical UnifiedDB schema activation",
+    "no external effect",
+    "no Frank self-Harness authority",
+    "no final training authorization",
+    "no whole Frank v0.1 acceptance"
+  ]
+}

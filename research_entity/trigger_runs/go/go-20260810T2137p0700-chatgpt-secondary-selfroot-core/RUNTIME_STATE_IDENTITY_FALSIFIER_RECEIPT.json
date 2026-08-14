@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2137p0700-chatgpt-secondary-selfroot-core",
+  "receipt_id": "runtime-state-identity-falsifier-vps-20260810",
+  "created_at": "2026-08-10T21:49:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "diagnostic_pr": 125,
+  "diagnostic_branch": "clay/go-selfroot-runtime-state-falsifier-20260810",
+  "branch_head_sha": "2da9181f9710eb0320aad2a9247cb9b6db814146",
+  "tested_pr_merge_sha": "00b34444868fa2c192b79ee247f7cc92cc0852c8",
+  "github_actions": {
+    "run_id": 31400073275,
+    "job_id": 93492541075,
+    "workflow_conclusion": "success",
+    "meaning": "diagnostic successfully reproduced the known nonconformance; this is not system conformance",
+    "runner": "digital-retina",
+    "runner_class": "self-hosted Linux/X64 accepted target-VPS lane",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "artifact_id": 9067246559,
+    "artifact_digest": "sha256:00bc7b4fad06412e048cf3e0fd0265c2d5af8130103d27eb90a9297660771c35",
+    "artifact_size_bytes": 2597
+  },
+  "probe": {
+    "status": "FAIL_RUNTIME_STATE_IDENTITY_DRIFT",
+    "exit_status": 1,
+    "finding_count": 8,
+    "wall_seconds": 0.03,
+    "max_rss_kib": 12288,
+    "effect_authority": "READ_ONLY_DISCRIMINATOR",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "findings": [
+      {"code": "OLD_ENTITY_ID_CONSTITUTIONAL_AUTHORITY", "surface": "state/STATE_AUTHORITY.clay"},
+      {"code": "OLD_ENTITY_ID_BOOT_REQUIREMENT", "surface": "state/STATE_AUTHORITY.clay"},
+      {"code": "OLD_ENTITY_ID_PREFLIGHT_CONSTANT", "surface": "runtime/state/repo_truth_gate.py"},
+      {"code": "OLD_ENTITY_ID_MATERIALIZATION_ENFORCEMENT", "surface": "runtime/state/repo_truth_gate.py"},
+      {"code": "OLD_ENTITY_ID_RUNTIME_CONSTANT", "surface": "runtime/state/frank_state_runtime_impl.py"},
+      {"code": "OLD_ENTITY_ID_RUNTIME_FAIL_CLOSED", "surface": "runtime/state/frank_state_runtime_impl.py"},
+      {"code": "OLD_ENTITY_ID_RUNTIME_CONTRACT", "surface": "runtime/state/CENTRAL_STATE_CONTRACT.md"},
+      {"code": "NODE_PROVIDER_SURFACE_STILL_SELF", "surface": "runtime/state/CENTRAL_STATE_CONTRACT.md"}
+    ],
+    "source_git_blobs": {
+      "state/STATE_AUTHORITY.clay": "52724fa95d14d219220a8cd14fc9b51d5fce8fb7",
+      "runtime/state/repo_truth_gate.py": "9aa1964c2f83b461a7f46f1e6658cdd4884ff778",
+      "runtime/state/frank_state_runtime_impl.py": "cd91031d2eacc9f195a3f6e608c52adf7219fc90",
+      "runtime/state/CENTRAL_STATE_CONTRACT.md": "6614f12b605e5a73e731d08ba4c04e01141fed85"
+    }
+  },
+  "interpretation": {
+    "supported": "The CURRENT runtime/state authority layer still enforces the historical pre-self.root personal entity identity at constitutional, boot-preflight, runtime-lineage and documentation-contract surfaces.",
+    "stronger_causal_consequence": "A materialization changed to self.root without coordinated migration would currently be rejected fail-closed by repo_truth_gate/state runtime rather than cleanly continue identity.",
+    "not_supported": [
+      "whole Frank v0.1 failure beyond this scoped identity layer",
+      "a safe migration by direct string replacement",
+      "boot/restart continuity after migration",
+      "stale-clone rejection after migration"
+    ],
+    "required_migration_law": "old identity remains ancestry evidence; CURRENT identity becomes self.root only through repository-admitted semantic migration plus materialization/version/recovery receipt"
+  },
+  "coordination": {
+    "active_executable_identity_lane": "PR 124 (current-main ClayCode identity migration)",
+    "pr_124_comment_id": 5241933367,
+    "diagnostic_pr_role": "REGRESSION_FALSIFIER_NOT_IMPLEMENTATION",
+    "overlap_check": "PR 124/123/102 do not currently modify the four runtime/state authority surfaces named by this receipt."
+  },
+  "next_falsifier": [
+    "Apply candidate migration only in disposable materialization/test roots first.",
+    "Require old-id ancestry preserved but old id rejected as CURRENT after migration.",
+    "Require self.root CURRENT materialization passes fail-closed repo/runtime identity checks.",
+    "Require restart same binary+state lineage preserves self.root.",
+    "Require stale/copied lineage cannot silently attach as self.root without accepted continuity evidence.",
+    "Require rollback to last-known-good when migration validation fails."
+  ],
+  "research_write_result": "COMMITTED"
+}

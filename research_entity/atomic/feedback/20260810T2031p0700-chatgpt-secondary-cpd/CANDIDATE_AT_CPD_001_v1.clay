@@ -1,0 +1,145 @@
+module clay.atomic.cpd.at_cpd_001_v1
+version "AT-CPD-001-v1"
+status TESTED_PROMISING_PROXY
+parent none
+run_id atomic_20260810T2012p0700_cpd
+
+// Causal Provenance Differential (CPD)
+// Goal: derive bounded counterfactual causal-use credit algebraically through deterministic
+// ClayCode segments without K shadow executions, while refusing exact credit at opaque,
+// truncated or unaudited boundaries.
+
+class InfluenceExactness = EXACT | BOUNDED | UNKNOWN | TRUNCATED
+class CreditDisposition = ADMISSIBLE | EXPLORATORY_ONLY | UNKNOWN_BLOCKED
+
+record CausalTerm<T> {
+  uses:Set<UseRef>
+  delta:T
+  evidence:Set<EvidenceRef>
+}
+
+record CausalPolynomial<T> {
+  base:T
+  terms:Set<CausalTerm<T>>
+  max_order:Int
+  exactness:InfluenceExactness
+  residual_bound:Uncertainty
+  source_epoch:Epoch
+  derivation_hash:Hash
+}
+
+record InfluenceContract {
+  operator:Ref
+  version:Version
+  accepted_input_types:Set<TypeRef>
+  transfer:Ref
+  max_supported_order:Int
+  exactness:InfluenceExactness
+  proof_or_test:Set<EvidenceRef>
+  resource_bound:Cost
+  rollback:RecoveryRef
+}
+
+record CausalCreditReceipt {
+  outcome:OutcomeRef
+  verified_outcome:EvidenceRef
+  use:UseRef
+  source_epoch:Epoch
+  lesion_delta:MeasureSet
+  pair_interactions:Set<MeasureSet>
+  exactness:InfluenceExactness
+  residual_bound:Uncertainty
+  derivation_hash:Hash
+  disposition:CreditDisposition
+}
+
+record CausalOverflowReceipt {
+  source_epoch:Epoch
+  operator:Ref
+  attempted_order:Int
+  max_order:Int
+  dropped_support:Set<UseRef>
+  residual_bound:Uncertainty
+}
+
+fn tag_use<T>(x:T, use:UseRef, epoch:Epoch) -> CausalPolynomial<T> {
+  return CausalPolynomial(base=zero_like(x),
+    terms={CausalTerm(uses={use},delta=x,evidence={use})},
+    max_order=2,exactness=EXACT,residual_bound=0,source_epoch=epoch,
+    derivation_hash=hash(use,epoch,x))
+}
+
+fn transfer<T>(op:Ref, xs:Set<CausalPolynomial<T>>, c:InfluenceContract) -> CausalPolynomial<T> {
+  require c.operator == op
+  if c.exactness == UNKNOWN { return unknown_influence(xs,op) }
+  y = c.transfer(xs)
+  if term_order(y) > c.max_supported_order {
+    emit CausalOverflowReceipt(op,term_order(y),c.max_supported_order,support(y),bound_dropped(y))
+    return truncate_with_bound(y,c.max_supported_order,TRUNCATED)
+  }
+  return y
+}
+
+fn lesion_delta<T>(p:CausalPolynomial<T>, use:UseRef) -> T {
+  return sum(term.delta for term in p.terms if use in term.uses)
+}
+
+fn pair_synergy<T>(p:CausalPolynomial<T>, a:UseRef, b:UseRef) -> T {
+  return sum(term.delta for term in p.terms if a in term.uses && b in term.uses)
+}
+
+fn credit(outcome:VerifiedOutcome, p:CausalPolynomial<MeasureSet>, use:UseRef) -> CausalCreditReceipt {
+  d=lesion_delta(p,use)
+  disp = if p.exactness==EXACT then ADMISSIBLE
+         else if p.exactness==BOUNDED && bound_small_enough(p.residual_bound) then EXPLORATORY_ONLY
+         else UNKNOWN_BLOCKED
+  return CausalCreditReceipt(outcome=outcome.id,verified_outcome=outcome.evidence,use=use,
+    source_epoch=p.source_epoch,lesion_delta=d,pair_interactions=interactions_touching(p,use),
+    exactness=p.exactness,residual_bound=p.residual_bound,derivation_hash=p.derivation_hash,
+    disposition=disp)
+}
+
+rule gwt.reconstructed_and_used(candidate,receiver) -> mint UseRef bound_to current WorkspaceEpisode + signal + receiver + epoch
+rule GWT_use_tag participates only in causal_provenance; never truth; never effect_authority
+rule verified_outcome + CausalPolynomial -> CausalCreditReceipt
+rule material_reward_credit requires CausalCreditReceipt.disposition == ADMISSIBLE
+rule EXPLORATORY_ONLY cannot update slow_personality|memory_value|material_reward
+rule UNKNOWN_BLOCKED -> no_material_credit + preserve_unresolved_pressure
+
+rule language_model_call without validated InfluenceContract -> UNKNOWN
+rule Needle_or_tool_or_external_effect without validated InfluenceContract -> UNKNOWN
+rule nondeterministic_host_effect without captured_semantics -> UNKNOWN
+rule unknown_influence cannot be silently treated_as_zero
+
+rule max_order default=2
+rule term_budget_exceeded -> TRUNCATED + residual_bound + overflow_receipt
+rule truncated_support_touches(use) -> material_credit(use)=UNKNOWN_BLOCKED
+rule exactness may_only_upgrade from evidence+versioned InfluenceContract
+
+rule CausalPolynomial persistence = episode_scoped_by_default
+rule persist material CausalCreditReceipt + contract_version + epoch + derivation_hash
+rule restart_replay must reproduce receipt or invalidate exactness
+rule stale_epoch -> reject_credit
+rule contract_version_change -> invalidate_or_recompute dependent receipts
+
+rule CausalPolynomial != CapabilityToken
+rule CausalCreditReceipt != EffectAuthority
+rule CPD cannot mint, widen, downgrade or delegate capability
+rule external effects remain governed by deterministic ClayCode effect gate
+
+observe [term_count,max_order,overflow_count,residual_bound,credit_exactness,credit_mae_vs_lesion_replay,
+         pair_synergy_mae,opaque_boundary_rate,credit_block_rate,wall_time,cpu,ram]
+ablate CPD_OFF -> current causal_credit baseline
+ablate PAIR_TERMS_OFF -> first_order_only
+ablate SHUFFLE_USE_TAGS -> provenance_broken_control
+ablate ALLOW_TRUNCATED_AS_EXACT -> forbidden_negative_control
+compare LEAVE_ONE_OUT_REPLAY -> exact_reference_when_replayable
+
+invariant thinkable_not_true
+invariant activation_not_truth
+invariant recurrence_not_emergence
+invariant material_reward_requires_verified_outcome_and_causal_credit
+invariant unknown_influence_never_becomes_zero_credit_by_default
+invariant exact_credit_never_crosses_unknown_or_truncated_boundary
+invariant effect_authority_is_orthogonal_to_causal_credit
+invariant measured_candidate_is_immutable

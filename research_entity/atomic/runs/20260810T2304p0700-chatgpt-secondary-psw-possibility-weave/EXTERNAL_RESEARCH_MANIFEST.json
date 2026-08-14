@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2304p0700-chatgpt-secondary-psw-possibility-weave",
+  "research_question":"Can PSW claim a mechanism-level advantage beyond established variational execution, persistent data structures, faceted/guarded values and incremental/self-adjusting computation?",
+  "sources":[
+    {
+      "source":"Christian Kästner / CMU research overview and OOPSLA 2018 publication page",
+      "type":"author/institution primary publication index",
+      "finding":"Variational execution executes many configurations at once, tracks alternative concrete values, follows configuration-dependent branches, and explicitly tracks differences only where they matter while sharing similarities. The 2018 bytecode-transformation work reports aggressive execution redundancy sharing and substantial speedups over a prior variational interpreter.",
+      "collision":"VERY_HIGH with PSW shared alternative values + shared pure execution",
+      "refs":["turn304301search12","turn304301search4","turn304301search6"]
+    },
+    {
+      "source":"Austin, Yang, Flanagan, Solar-Lezama, Faceted Execution of Policy-Agnostic Programs, PLAS 2013 / author publication page",
+      "type":"author primary publication index",
+      "finding":"Faceted execution is established prior art for values whose visible result depends on a condition/policy context, closely colliding with guarded alternative values.",
+      "collision":"HIGH with field-wise guards/faceted state",
+      "refs":["turn648607view0"]
+    },
+    {
+      "source":"Driscoll, Sarnak, Sleator, Tarjan, Making Data Structures Persistent, JCSS 1989 / Princeton",
+      "type":"institution publication record",
+      "finding":"Persistent structures keep old and new versions accessible and provide systematic structural-sharing techniques; reported persistent search-tree constructions have logarithmic access/update and O(1) space per update in the stated setting.",
+      "collision":"HIGH with branch versions/path-copy state sharing",
+      "refs":["turn304301search3","turn648607view3"]
+    },
+    {
+      "source":"Sarnak and Tarjan persistent search trees / Princeton technical report",
+      "type":"institution technical report",
+      "finding":"Persistent search trees preserve past and present versions with O(log m) query/update and O(1) space per update for their specific structure.",
+      "collision":"HIGH with multi-version state storage",
+      "refs":["turn304301search11"]
+    },
+    {
+      "source":"Acar self-adjusting computation thesis / CMU; Blelloch research overview",
+      "type":"institution thesis/research record",
+      "finding":"Self-adjusting computation tracks computation dependencies and propagates only changes required after inputs/decisions change; dependence tracking and change propagation directly collide with PSW causal/read-set-aware transition reuse.",
+      "collision":"HIGH with H5/H6 shared transition lifting and causal slicing",
+      "refs":["turn304301search5","turn304301search13"]
+    }
+  ],
+  "prior_art_effect":"Broad PSW novelty collapses. Structural sharing, guarded values, many-world/configuration co-execution and change-propagation are established mechanisms. Any surviving claim must be a project-specific composition and measured representation envelope for Frank unresolved epistemic alternatives, not a new general computing paradigm.",
+  "stronger_existing_mechanisms_to_test_or_model":["variational execution","faceted values","persistent/path-copy structures","ordinary sparse overlay + memoization","self-adjusting dependence tracking"],
+  "known_risk":"Existing variational execution work demonstrates that sharing can scale but also incurs significant runtime overhead; a Frank implementation cannot assume compression automatically produces end-to-end speedup.",
+  "novelty_ceiling_before_benchmark":"PROJECT_SPECIFIC_COMBINATION_ONLY"
+}

@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "trigger": "go",
+  "observed_at": "2026-08-12T15:05:54Z",
+  "worker_provenance": "GPT-5.6-Sol temporary Clay organ",
+  "canonical_entity": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_promotion": {
+    "pr": 552,
+    "base_before_merge": "b93639b57a62d692d6bc829a16b1994d4a7eb127",
+    "tested_raw_head": "a9925f9558bd985c40f00637d5c3526c51f794d4",
+    "merge_commit": "f60a08927e23e972127704f02d009854d1d1bf72",
+    "merge_commit_tree": "72315b2f46068d914a44d7c08a835560f3e7887d",
+    "tested_raw_head_tree": "72315b2f46068d914a44d7c08a835560f3e7887d",
+    "tree_identity": "EXACT_MATCH",
+    "outcome": "PROMOTED_TO_PRODUCT_MAIN"
+  },
+  "observed_problem": {
+    "prior_frontier_run": 31608638757,
+    "prior_head": "84c78a09314933872999bd191c8855a809204074",
+    "outcome": "FAIL_FINAL_COMPOSED_FRONTIER_ONLY",
+    "all_prior_steps_green": true,
+    "stale_assertion": "integration workflow hard-coded corpus coverage 90.0 percent, 36 parsed, 40 total",
+    "actual_measurement": {
+      "parsed": 36,
+      "rejected": 6,
+      "total": 42,
+      "coverage_percent": 85.7,
+      "unresolved_unique_names": 429,
+      "unresolved_occurrences": 464
+    },
+    "diagnosis": "STALE_CORPUS_SIZE_SNAPSHOT_NOT_RUNTIME_RECORD_REGRESSION"
+  },
+  "repair": {
+    "semantic_change": "Remove only the obsolete parsed-source blanket quarantine after parser opacity fidelity was promoted. Parsed plain records use exact nominal owner, fieldset and recursive nested-type checks; parsed opaque records remain fail-closed and require a trusted producer.",
+    "ci_change": "Replace stale fixed 36/40/90.0 corpus-size assertions with self-consistent parsed/rejected/total accounting and independent analyzer-count agreement while preserving the hard 429/464 unresolved semantic frontier.",
+    "authority_change": false,
+    "external_effect_change": false,
+    "harness_authority_change": false
+  },
+  "evidence": {
+    "raw_head_frontier_integration": {
+      "run": 31609707255,
+      "tested_sha": "a9925f9558bd985c40f00637d5c3526c51f794d4",
+      "runner": "clay",
+      "host": "digital-retina",
+      "outcome": "PASS",
+      "package_namespace_checks": "7/7",
+      "decide_effect_requests": 200576,
+      "decide_effect_mismatches": 0,
+      "confirmation_requests": 16000,
+      "confirmation_mismatches": 0,
+      "semantic_hash_requests": 56000,
+      "semantic_hash_mismatches": 0,
+      "corpus": "36 parsed / 6 rejected / 42 total / 85.7 percent",
+      "ordinary_parser_calls": 677,
+      "ordinary_calls_missed": 0,
+      "callable_method_segments_open": 22,
+      "unresolved_unique_names": 429,
+      "unresolved_occurrences": 464,
+      "final_exact_composed_frontier": "PASS"
+    },
+    "pr_merge_context_runtime_nominal": {
+      "run": 31609707205,
+      "tested_sha": "ead250d6d5d0cb0188f2be781ced405f01677c53",
+      "evidence_semantics": "GitHub pull_request merge context, not raw-head identity",
+      "runner": "clay",
+      "host": "digital-retina",
+      "outcome": "PASS",
+      "runtime_nominal_checks": "22/22",
+      "wp04_nominal_checks": "14/14",
+      "repository_static_integrity": "PASS",
+      "parser_grammar_bytes_bound": true,
+      "parsed_plain_records_admitted": true,
+      "parsed_opaque_records_admitted": false,
+      "opaque_trusted_producer_required": true,
+      "artifact_id": 9146635298,
+      "artifact_sha256": "44ae093b9e5f97f1612effeb12a551d6cf8a3b7b2f3e30207dc300151f8ac87a"
+    },
+    "self_root_no_regression_signal": {
+      "run": 31609707226,
+      "outcome": "PASS",
+      "claim_boundary": "self-hosted identity/continuity regression only; not accepted Hostinger final acceptance"
+    }
+  },
+  "unusual_experiment_accounting": {
+    "this_macrocycle_exact_count": 1,
+    "experiment": "OPAQUE_KW_IDENTIFIER_COLLISION_MINIMAL_MODEL",
+    "question": "Could the new named OPAQUE_KW token unintentionally consume ordinary identifier/type uses of exact opaque?",
+    "minimal_counterworld_observation": "A deliberately permissive minimal Lark NAME model could reproduce a collision such as type Alias = opaque.",
+    "actual_grammar_discriminator": "The real grammar already excludes exact opaque from NAME, so the minimal model was too permissive.",
+    "outcome": "REJECT_PRODUCT_DEFECT",
+    "product_change_caused_by_experiment": false,
+    "additional_unusual_experiment_by_this_worker": false
+  },
+  "grf": {
+    "r0_observed": "Parser opacity fidelity PR 544 and runtime nominal boundary PR 536 were independently promoted; parsed records remained quarantined pending composition.",
+    "r1_generated_reality": "The two mechanisms compose safely if parsed plain records inherit exact nominal checks while parsed opaque records remain trusted-producer fail-closed.",
+    "r3_counter_reality": "Independent green mechanisms could still compose unsafely, or a stale corpus-size gate could create a misleading failure that masks the true mechanism state.",
+    "r4_intervention": "Bounded parsed-record composition plus ordinary regression/CI repair; one separate bounded lexical counterworld experiment was rejected as a product defect.",
+    "r6_collapse": "PROMOTE_NARROW_COMPOSITION_ONLY"
+  },
+  "negative_and_boundary_evidence": {
+    "accepted_hostinger_runtime_proven": false,
+    "whole_f_v01_02_pass_claimed": false,
+    "whole_frank_v0_1_acceptance_claimed": false,
+    "full_runtime_codec_claimed": false,
+    "comparison_chain_semantics_selected": false,
+    "typed_member_library_contract_closed": false,
+    "final_model_training_authorized": false
+  },
+  "next_falsifier": "Continue F-V01-02 from the next highest-information OPEN compiler/runtime obligation on fresh main; do not reopen parsed-record quarantine unless new counterevidence appears. Accepted Hostinger runtime evidence remains separately required by the FRANK_V0_1 release gate."
+}

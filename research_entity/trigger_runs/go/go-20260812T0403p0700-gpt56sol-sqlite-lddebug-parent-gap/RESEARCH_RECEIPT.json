@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "recorded_at": "2026-08-12T04:03:00+07:00",
+  "program": "FRANK_V0_1",
+  "affected_work_packages": ["F-V01-13", "F-V01-09"],
+  "worker_provenance": "GPT-5.6 Sol temporary Clay research/build worker",
+  "observed_anchors": {
+    "frank_main_observed": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "sqlite_35304_parity_merged_commit": "9c891aa8b076113b21903ac3db0d39a61aec6a91",
+    "systemd_parent_candidate_pr": 468,
+    "systemd_parent_candidate_head": "0c658cf757f8d8118b3ee414de3f62f1b12de14b",
+    "existing_parent_loader_keys": ["LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH", "GLIBC_TUNABLES"]
+  },
+  "generated_reality": "A trusted pre-exec systemd parent can close the shell-before-loader gap only if its environment policy covers loader controls capable of acting before the shell guard.",
+  "counter_reality": "A finite four-variable loader deny-set may still admit a documented dynamic-linker variable that causes an observable side effect before the V5 shell executes its first statement.",
+  "unusual_experiment": {
+    "count": 1,
+    "protocol": "LD_DEBUG_OUTPUT_PRE_GUARD_SIDE_EFFECT_V1",
+    "environment": "disposable local Linux sandbox; glibc 2.41",
+    "baseline": {
+      "launcher_rc": 78,
+      "ld_debug_output_files": 0
+    },
+    "intervention": {
+      "variables": ["LD_DEBUG=libs", "LD_DEBUG_OUTPUT=<run-owned-prefix>"],
+      "launcher_rc": 78,
+      "ld_debug_output_files": 1,
+      "output_bytes": 462
+    },
+    "cleanup": "run-owned temporary directory removed",
+    "canonical_frank_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "outcome": "RETAIN_SUPPORTED_COUNTER_REALITY",
+  "interpretation": "LD_DEBUG_OUTPUT can create a loader-debug file before shell-level V5 rejection. The existing four-variable systemd parent candidate therefore does not cover this documented pre-exec loader-control surface.",
+  "product_delta": {
+    "branch": "chatgpt/sqlite-v5-parent-lddebug-20260812",
+    "head": "9452756798a7976ff717f0bd1f4d648da04da3cd",
+    "draft_pr": 472,
+    "changes": [
+      "Require LD_DEBUG and LD_DEBUG_OUTPUT in systemd UnsetEnvironment",
+      "Reject Environment reintroduction of both variables",
+      "Expand deterministic fixtures from 9 to 11 checks",
+      "Run dedicated exact-branch self-hosted parent-boundary workflow"
+    ]
+  },
+  "current_execution_evidence": {
+    "dedicated_workflow_run": 31535822472,
+    "status_at_receipt": "QUEUED",
+    "accepted_target_pass_claimed": false,
+    "whole_release_pass_claimed": false
+  },
+  "strongest_remaining_counterhypothesis": "Even the six-variable policy is not a proof of complete dynamic-linker/environment closure, and the actual production parent/unit may not match the candidate configuration.",
+  "next_falsifier": "Execute the exact candidate on the accepted self-hosted Ubuntu lane, then observe the actual productive Frank service parent and effective pre-exec environment; require the exact root-owned unit/launcher path, fixed SQLite mapped-object identity, and restart/crash/rollback/downgrade continuity before any F-V01-13 promotion.",
+  "promotion": "DEFER",
+  "training_authorized": false
+}

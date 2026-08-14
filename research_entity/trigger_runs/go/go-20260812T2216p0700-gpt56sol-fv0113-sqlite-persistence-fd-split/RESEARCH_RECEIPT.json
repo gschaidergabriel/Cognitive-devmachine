@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2216p0700-gpt56sol-fv0113-sqlite-persistence-fd-split",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "7c94d59cd596f38185f2a7cbe7754f5a82b89710",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "training_authorized": false,
+    "current_live_attestor_scope": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY",
+    "current_live_attestor_productive_persistence_path_exercised": false,
+    "latest_observed_self_hosted_host": "digital-retina",
+    "accepted_release_host": "Hostinger Ubuntu VPS",
+    "coordination": [
+      "Refreshed research main immediately before write.",
+      "Preserved parallel SQLite temporal-ABA and symbol-provider work; no duplicate product patch created.",
+      "Open product work already targets systemd ProductStart and symbol-provider boundaries; this receipt sharpens only the database/WAL path discriminator."
+    ]
+  },
+  "primary_source_support": {
+    "sqlite_wal_doc": "https://sqlite.org/wal.html",
+    "sqlite_3_53_4_release": "https://sqlite.org/releaselog/3_53_4.html",
+    "verified_fact": "The WAL-reset corruption bug affects WAL-mode releases through 3.51.2 and is fixed in 3.51.3 and later; 3.53.4 is on the fixed side. This does not identify which database/WAL files a productive process is actually using."
+  },
+  "grf": {
+    "hypothesis": "Stable PID/process generation plus exact admitted libsqlite3 mapping identity is a sufficient proxy for the productive Frank database/WAL persistence path.",
+    "strongest_counter_reality": "The same process generation can keep the identical libsqlite3 mapping while closing the intended database and opening a different database/WAL/SHM set.",
+    "falsifier": "Hold PID, process start identity and attestor-style libsqlite3 mapping identity constant while switching the live SQLite connection from a canonical-looking FRANK_UNIFIED.sqlite fixture to a DECOY.sqlite fixture, then inspect open database/WAL/SHM file descriptors.",
+    "outcome": "HYPOTHESIS_REFUTED; LIBRARY_IDENTITY_AND_PERSISTENCE_FILE_IDENTITY_ARE_DISTINCT_OBLIGATIONS"
+  },
+  "unusual_experiment": {
+    "name": "SAME_PROCESS_SQLITE_DATABASE_FD_SPLIT",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "environment": "disposable local Linux child process and temporary directory",
+    "baseline": "Child imported Python sqlite3, opened temporary FRANK_UNIFIED.sqlite, enabled WAL, wrote/committed one row, and remained alive for parent /proc observation.",
+    "intervention": "Without changing PID or reloading libsqlite3, child closed the baseline connection and opened temporary DECOY.sqlite in WAL mode, wrote/committed one row, and remained alive for a second /proc observation.",
+    "observations": {
+      "same_pid": true,
+      "same_process_generation": true,
+      "same_attestor_style_libsqlite_mapping_identity": true,
+      "libsqlite_mapping": {
+        "path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+        "device": "fe:00",
+        "inode": 1311401
+      },
+      "baseline_database_fds": [
+        "FRANK_UNIFIED.sqlite",
+        "FRANK_UNIFIED.sqlite-wal",
+        "FRANK_UNIFIED.sqlite-shm"
+      ],
+      "intervention_database_fds": [
+        "DECOY.sqlite",
+        "DECOY.sqlite-wal",
+        "DECOY.sqlite-shm"
+      ],
+      "database_fd_set_changed": true,
+      "measurement_correction": "An initial broad filename filter accidentally treated .sqlite-shm as a SQLite shared-library mapping. Re-analysis of the same captured experiment with the current attestor's libsqlite3.so mapping predicate corrected the mapping comparison to identical; the intervention was not repeated."
+    },
+    "limitations": [
+      "This is a mechanism discriminator, not a productive Frank or Hostinger exploit.",
+      "The fixture database was temporary and not canonical Frank state.",
+      "The current live attestor is not falsified within its documented narrow scope because it already reports productive_persistence_path_exercised=false.",
+      "Observing /proc/<pid>/fd alone is not proposed as sufficient durable persistence authority; productive operation, canonical path/object identity, SQLite build, process generation, state lineage and restart/recovery must be bound together."
+    ]
+  },
+  "collapse": [
+    {
+      "claim": "Exact libsqlite3 mapping identity plus stable process generation proves the productive database/WAL target.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "Loaded SQLite build identity remains necessary evidence for F-V01-13.",
+      "outcome": "RETAIN",
+      "reason": "It answers which SQLite implementation supplies the process, not which state files the productive operation uses."
+    },
+    {
+      "claim": "Productive persistence acceptance must explicitly bind the actual database/WAL path/object and operation to the admitted Frank execution generation and fixed SQLite runtime.",
+      "outcome": "RETAIN",
+      "state": "TEST_OBLIGATION_SHARPENED"
+    },
+    {
+      "claim": "Another synthetic SQLite wrapper is justified by this result.",
+      "outcome": "REJECT",
+      "reason": "Current overlap already contains mapping, temporal, symbol-provider and ProductStart candidates; the high-information frontier is accepted-host productive persistence/restart observation."
+    },
+    {
+      "claim": "F-V01-13 or Frank v0.1 is complete.",
+      "outcome": "REJECT"
+    }
+  ],
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION_SHARPENED_NO_PRODUCT_PATCH",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY"
+    ],
+    "new_invariant": "A release receipt must not infer productive persistence identity from SQLite library identity. It must causally bind the exact admitted Frank execution generation, accepted SQLite object/build, canonical database/WAL object(s), productive persistence operation and semantic/recovery lineage.",
+    "rollback": "No product code changed. Supersede this obligation only if a stronger accepted-host mechanism proves the same causal binding without relying on database-file observation."
+  },
+  "next_falsifier": {
+    "priority": "P0_RELEASE_BLOCKER",
+    "test": "On the accepted Hostinger productive Frank service, observe/admit the exact ProductStart and self.root generation, root trust anchor and fixed SQLite 3.53.4 object; exercise a controlled canonical UnifiedDB WAL write/checkpoint; bind the exact opened database/WAL objects to that same generation; then perform clean restart plus downgrade/library-swap/rollback controls and verify fail-closed recovery/state lineage.",
+    "success_condition": "One receipt chain proves productive canonical persistence under the accepted fixed SQLite runtime and clean restart continuity, while wrong DB path/object, stale/sibling state, downgraded/swapped library and rollback controls are rejected or require explicit recovery/re-admission according to contract.",
+    "do_not_substitute": "version string, libsqlite mapping receipt, symbol-origin receipt, self-hosted digital-retina CI, synthetic database fixture or endpoint-only sampling for accepted Hostinger productive persistence evidence"
+  },
+  "nonclaims": {
+    "production_bypass_proven": false,
+    "accepted_hostinger_product_runtime_proven": false,
+    "productive_persistence_path_exercised": false,
+    "restart_recovery_attested": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

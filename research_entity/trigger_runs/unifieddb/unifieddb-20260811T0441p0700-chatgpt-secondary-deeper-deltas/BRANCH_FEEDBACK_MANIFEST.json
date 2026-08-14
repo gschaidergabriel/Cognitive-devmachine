@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.1",
+  "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "feedback": {
+    "unifieddb": [
+      "separate migration-source certificate, live sqlite_schema attestation, dynamic semantic root and dynamic Graph projection admission",
+      "make canonical UnifiedDB availability independent of rebuildable ClayGraph schema/source evolution",
+      "replace ambient CURRENT_TIMESTAMP replay semantics with explicit ReplayClock/as_of inputs",
+      "upgrade snapshots from filename hashes to SnapshotManifestV2 consistent-image receipts",
+      "define deterministic CanonicalRootChainV1 instead of opaque caller-supplied root_hash",
+      "compare DELETE+FULL attached projection with fixed-WAL canonical-outbox projection under one semantic contract",
+      "keep rollback floor outside protected rollback domain"
+    ],
+    "gwt": [
+      "add durable pre-action ordering so receiver use cannot be reconstructed only after verified outcome",
+      "model-facing assemblies must bind one semantic root, explicit as_of time and admitted selection/projection receipts"
+    ],
+    "claycode": [
+      "type EffectIntent, origin execution, reconciler execution, recovery admission and learning mode",
+      "type SemanticRoot, ReplayClock, SnapshotManifest, StateProjectionCertificate and SelectionReceipt as distinct non-coercible identities",
+      "forbid implicit authority conversion from Graph/index/ranker presence"
+    ],
+    "claygraph": [
+      "bind projection to exact source semantic root/selected lineage, not epoch alone",
+      "all authoritative current graph views require admitted projection freshness; STALE/CONFLICT is bypass/rebuild",
+      "store derivation/materializer/content digest sufficient for rebuild verification"
+    ],
+    "hyperposition": [
+      "candidate alternatives must preserve semantic-root and selector provenance; rank/coupling changes cannot silently change authoritative selected membership"
+    ],
+    "emergenz": [
+      "emergent retrieval output is a candidate set with SelectionReceiptV2, never direct truth; measure added recall separately from authority/admissibility"
+    ],
+    "harness": [
+      "add post-hoc support, stale-origin takeover, unrelated reconciler, semantic-supersession, same-certificate Graph rollback and attached-commit crash controls",
+      "add BYTE_STABLE_TIME_SHIFT, MIXED_TIMESTAMP_ENCODING, COMMITTED_WAL_ONLY_FRAME, SAME_EPOCH_SIBLING_ROOT, AUTHENTIC_RECORDS_UNTRUSTED_SELECTOR and STALE_GRAPH_CURRENT_VIEW falsifiers"
+    ],
+    "frank": [
+      "F-V01-04 remains OPEN; narrower V17 or U12 component evidence must not be promoted into whole continuity/replay proof",
+      "canonical cognition must remain available when ClayGraph is quarantined unless the exact requested operation semantically requires Graph"
+    ],
+    "security_recovery": [
+      "separate original effect provenance from current recovery executor provenance",
+      "adopt trusted_schema=OFF candidate and evaluate defensive-mode equivalent on exact target",
+      "recovery admission must verify consistent snapshot method, root replay and external floor before making restored state current"
+    ],
+    "retina": [
+      "percept-derived candidate inserts/updates need the same explicit semantic epoch/as_of/root provenance before model-visible assembly"
+    ]
+  },
+  "promotion": "NO_AUTOMATIC_PROMOTION"
+}

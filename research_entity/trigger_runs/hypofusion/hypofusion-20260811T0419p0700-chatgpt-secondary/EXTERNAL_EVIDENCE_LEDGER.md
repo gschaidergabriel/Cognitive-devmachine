@@ -20,6 +20,8 @@ Evidence is classified by mechanism match; architectural resemblance is not trea
 | HC-09 Hyperposition | COUNTEREVIDENCE | 2026 higher-order interaction reduction work | A broad class of higher-order social-impact dynamics can be mapped exactly to a weighted pairwise projection preserving microscopic transition probabilities. | Strong reason to require pairwise baseline; not universal reducibility. |
 | HC-09 Hyperposition | REPRESENTATION_DEPENDENCE | Nature Communications higher-order network work | Hypergraph vs simplicial representations can produce materially different dynamics. | Shows representation choice matters, not that higher-order is always better. |
 | HC-10 SQLite WAL | DIRECT_PRIMARY_FAILURE_MODE | SQLite WAL documentation | WAL-reset corruption race affects documented versions through 3.51.2 under specific concurrent writer/checkpoint topology; fixed in later/current releases and selected backports. | Exact Ubuntu backport status must still be verified. |
+| HC-11 Causal Quotient Compiler | DIRECT_FORMAL_ANALOGUE | Hansen-Estruch et al., ICML/PMLR 2022 goal-conditioned bisimulation | Bisimulation-style state abstractions can preserve functional equivalence for a declared downstream task class. | Supports scoped behavioral equivalence, not universal Frank-organ fusion. |
+| HC-11 Causal Quotient Compiler | COUNTERBOUNDARY | Adhikary et al., ICML/PMLR 2024 behavioral representations | Exact/isometric behavioral compression objectives may fail to exist, motivating controlled distortion rather than assuming perfect equivalence. | Reinforces revocable/scoped certificates and explicit error budgets for approximate fusion. |
 
 ## Adversarial conclusions
 
@@ -28,3 +30,4 @@ Evidence is classified by mechanism match; architectural resemblance is not trea
 3. Adaptive recurrence and higher-order topology both have simpler viable countermodels. Neither should be promoted as a default because it sounds cognitively richer.
 4. Anti-entropy is a correctness-repair mechanism, not evidence-strength amplification.
 5. SQLite upstream evidence is strong enough for a fail-closed release gate, while the Ubuntu backport question remains explicitly unresolved rather than inferred.
+6. Causal quotienting has a formal analogue in bisimulation/state abstraction, but equivalence is always scoped to declared observables/tasks/interventions; unknown interventions or approximation error invalidate a universal fusion claim.

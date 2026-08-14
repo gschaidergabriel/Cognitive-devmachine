@@ -1,0 +1,340 @@
+{
+  "schema_version": "1.0",
+  "event_type": "RESEARCH_EVIDENCE_RECLASSIFICATION_AND_BASELINE_DELTA",
+  "event_id": "web-ingress-retina-delta-20260811T140207Z",
+  "created_at_utc": "2026-08-11T14:02:07.897Z",
+  "trigger": "clayresearch",
+  "status": "EVIDENCE_ONLY_NO_PROMOTION",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_cut": {
+    "canonical_head_observed_immediately_before_write": "36a3de9278d6a31e3d824ef32ace8f889d4201e3",
+    "canonical_recent_commits": [
+      {
+        "sha": "36a3de9278d6a31e3d824ef32ace8f889d4201e3",
+        "message": "research(center): add loader and identity polarity evidence",
+        "created_at": "2026-08-11T13:59:08Z"
+      },
+      {
+        "sha": "73960fe8cd182230bcd3ab05f502d15940579edc",
+        "message": "go: recover exact original Retina source and eval lineage",
+        "created_at": "2026-08-11T13:58:48Z"
+      },
+      {
+        "sha": "6b605fbc0e468e9fec328868e2503a86fc06fa1b",
+        "message": "research(go): record structural web-ingress candidate and provenance falsifier",
+        "created_at": "2026-08-11T13:58:47Z"
+      },
+      {
+        "sha": "126f70ff39709993043940ba0fc7688b5a3a1c6e",
+        "message": "research(center): fuse typed identity and V17 durability",
+        "created_at": "2026-08-11T13:56:06Z"
+      },
+      {
+        "sha": "bda91b0d80dce78673c331e32bca8a6280414c23",
+        "message": "research(go): fuse F-V01-08 token rotation request identity delta",
+        "created_at": "2026-08-11T13:55:22Z"
+      },
+      {
+        "sha": "57a5abe0b59ab89af3c3841df79a07c3767bdd03",
+        "message": "go: fuse target SQLite loader falsifier and V2 repair",
+        "created_at": "2026-08-11T13:54:40Z"
+      }
+    ],
+    "pr330": {
+      "number": 330,
+      "url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/330",
+      "title": "GO: structural open-web non-authority ingress gate",
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": true,
+      "head_sha": "c19005859ae132ec81091f66fb802592fe153dfb",
+      "base_sha": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+      "updated_at": "2026-08-11T14:01:17Z",
+      "commits": 9,
+      "changed_files": 4
+    },
+    "pr328": {
+      "number": 328,
+      "url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/328",
+      "title": "fix(q23): fence MVC FeatureEpoch across temporal-policy changes",
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": true,
+      "head_sha": "e3b33f5593b142aae92194f31001206e67e75891",
+      "base_sha": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+      "updated_at": "2026-08-11T14:00:15Z",
+      "commits": 3,
+      "changed_files": 2
+    },
+    "web_ingress_run": 31498893914,
+    "web_ingress_job": {
+      "id": 93803439734,
+      "name": "web-ingress-structural-gate",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_id": 31498893914,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Exact isolated checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Bind bytes and environment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Adversarial structural authority gate",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 4
+        },
+        {
+          "name": "Current repository static integrity observation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5
+        },
+        {
+          "name": "Build composed evidence receipt",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6
+        },
+        {
+          "name": "Persist bounded target evidence on candidate branch",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7
+        },
+        {
+          "name": "Upload bounded evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        }
+      ]
+    },
+    "checked_at_utc": "2026-08-11T14:02:07.897Z"
+  },
+  "web_ingress_target_reclassification": {
+    "canonical_parent_receipt": "6b605fbc0e468e9fec328868e2503a86fc06fa1b",
+    "target_pr": {
+      "number": 330,
+      "url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/330",
+      "title": "GO: structural open-web non-authority ingress gate",
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": true,
+      "head_sha": "c19005859ae132ec81091f66fb802592fe153dfb",
+      "base_sha": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+      "updated_at": "2026-08-11T14:01:17Z",
+      "commits": 9,
+      "changed_files": 4
+    },
+    "run": 31498893914,
+    "job": 93803439734,
+    "tested_merge_context_sha": "d7582ec0b21efd36748b8b9d6e852bde00bd0342",
+    "runner": "clay/digital-retina",
+    "python": "3.12.3",
+    "result": "EXECUTED_STATIC_INTEGRATION_ASSERTION_FAILURE_BEFORE_STRUCTURAL_DISCRIMINATOR",
+    "exact_failure": "tests/frank_web_ingress_v1_gate.py line 73 asserted raw source contained both 'Bearer' and required_scope=\"frank:interact\"; assertion failed.",
+    "completed_steps": [
+      "exact isolated checkout",
+      "byte/environment binding"
+    ],
+    "unexecuted_or_uncredited": [
+      "standard adversarial structural cases",
+      "schema mutation discriminator",
+      "useful-fact preservation",
+      "composed receipt"
+    ],
+    "artifact": {
+      "id": 9104195969,
+      "sha256": "ddb91680f764a8dd4df22440aaca193dd9197d6d41f3d97687ddabee29b656e5"
+    },
+    "adjudication": "This is not infrastructure-only because executable test code ran. It is not evidence that the structural authority hypothesis failed because the discriminator was never reached. It is a real integration-contract/test-oracle failure and target semantic credit remains zero.",
+    "predecessor_local_result": "Preserved as local-only: post-parser projection mutation was accepted before repair and rejected locally after parsed_payload_hash repair; no target credit transfers."
+  },
+  "retina_baseline_recovery": {
+    "canonical_receipt_commit": "73960fe8cd182230bcd3ab05f502d15940579edc",
+    "historical_repository_anchor": "gschaidergabriel/digital-retina@819dcac12253b7de45795239b44482627ade624f",
+    "recovered": {
+      "source_lineage": "RECOVERED_EXACT",
+      "eval_driver_and_result_lineage": "RECOVERED_SUBSTANTIALLY",
+      "dependency_manifest": "RECOVERED"
+    },
+    "still_missing": {
+      "exact_custom_weights": [
+        "retina_v8.pt",
+        "library_L3.npz",
+        "dinov2_small_int8.onnx"
+      ],
+      "accepted_target_reexecution": true,
+      "matched_original_vs_q23_comparison": true
+    },
+    "historical_measurement_boundary": "Recovered 44-image/960-phrase reports and protocols are historical, not current accepted-target receipts.",
+    "security_boundary": "A Drive-only historical evaluation driver contained embedded credential fallbacks. No secret values were copied or used. Treat them as potentially compromised, rotate/revoke through authorized security operations, sanitize the benchmark, and exclude credentials from training/receipts/semantic stores.",
+    "q23_current_state": {
+      "target_pr": {
+        "number": 328,
+        "url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/328",
+        "title": "fix(q23): fence MVC FeatureEpoch across temporal-policy changes",
+        "state": "open",
+        "draft": true,
+        "merged": false,
+        "mergeable": true,
+        "head_sha": "e3b33f5593b142aae92194f31001206e67e75891",
+        "base_sha": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+        "updated_at": "2026-08-11T14:00:15Z",
+        "commits": 3,
+        "changed_files": 2
+      },
+      "target_receipt_credit": "ZERO_AT_CUT",
+      "note": "PR328 advanced only to a target-gate retrigger commit at this observation. No custom exact-head PASS receipt was visible; mergeability was false."
+    },
+    "adjudication": "The blocker narrows from source archaeology to exact weight recovery/reconstruction plus accepted-target reexecution. NO EXECUTABLE ORIGINAL BASELINE => NO REPLACEMENT CLAIM remains active."
+  },
+  "hypotheses": [
+    {
+      "id": "H-EXECUTABLE-CONTRACT-NOT-SOURCE-SUBSTRING-001",
+      "concept": "TypedContractDiscovery",
+      "claim": "Cross-component security gates must consume a typed executable contract/schema or behavior receipt, not raw source-substring assertions that break under semantically equivalent refactors.",
+      "counterhypothesis": "Raw source-string assertions are a sufficient and lower-cost integration contract.",
+      "falsifier": "Refactor the token-ingress implementation without changing its auth/scope behavior. A typed contract gate must remain green while wrong auth scheme, missing scope, channel collapse and provenance loss fail. Rerun the full web-ingress discriminator on accepted target and inspect exact result/artifact hashes."
+    },
+    {
+      "id": "H-PARSED-PROJECTION-PROVENANCE-001",
+      "concept": "ProjectionBoundProvenance",
+      "claim": "The integrity identity of open-web evidence must bind the entire validated parsed projection and fixed non-authority fields, not raw-source hash alone.",
+      "counterhypothesis": "A raw-source hash plus schema validation is sufficient because parsed projections are deterministic.",
+      "falsifier": "Mutate extracted fields after parsing while retaining source hash; require denial. Then attack a compromised parser able to recompute hashes, downstream provenance stripping, adaptive model-mediated injection and visual/screenshot injection; the hypothesis fails as end-to-end protection if any route mints instruction/effect authority."
+    },
+    {
+      "id": "H-BASELINE-SOURCE-WEIGHT-SEPARATION-001",
+      "concept": "ExecutableBaselineCompleteness",
+      "claim": "Recovered source and evaluation logic do not constitute an executable comparison baseline unless exact or explicitly reconstructed weights, dependencies, fixtures and protocols are provenance-bound.",
+      "counterhypothesis": "A source-equivalent environment with substitute generic weights is sufficient for original-versus-successor comparison.",
+      "falsifier": "Recover exact weight hashes or document deterministic reconstruction separately; sanitize/freeze fixture hashes and ground truth; reproduce cold/warm historical behavior on accepted target. Any substitute artifact must be labeled reconstructed and may not support an original-baseline replacement claim."
+    },
+    {
+      "id": "H-CROSS-MODAL-INGRESS-NONAUTHORITY-001",
+      "concept": "IngressAuthorityConservation",
+      "claim": "Text and visual open-web paths must conserve a fixed UNTRUSTED_EXTERNAL_DATA/non-authority label through cognition to every effect sink; structural text success alone cannot close the Retina path.",
+      "counterhypothesis": "Securing the textual transport boundary is sufficient because screenshots are converted to text before action planning.",
+      "falsifier": "Run matched nested-authority attacks through raw text, parsed DOM and rendered screenshots; require identical provenance retention and zero instruction/effect authority escape, including downstream adapters and restart/replay paths."
+    }
+  ],
+  "fresh_primary_sources": [
+    {
+      "url": "https://aclanthology.org/2025.emnlp-main.53/",
+      "checked_at_utc": "2026-08-11T14:02:07.897Z",
+      "use": "Structural decoupling/action constraints are mechanism evidence for indirect prompt-injection defense, not Frank execution."
+    },
+    {
+      "url": "https://aclanthology.org/2025.emnlp-main.104/",
+      "checked_at_utc": "2026-08-11T14:02:07.897Z",
+      "use": "Rendered screenshot perturbations make visual ingress a separate attack surface."
+    },
+    {
+      "url": "https://arxiv.org/abs/2604.10134",
+      "checked_at_utc": "2026-08-11T14:02:07.897Z",
+      "use": "Planning/context consistency is external design evidence; preprocessing alone is not assumed sufficient."
+    },
+    {
+      "url": "https://arxiv.org/abs/2602.03117",
+      "checked_at_utc": "2026-08-11T14:02:07.897Z",
+      "use": "Dynamic evaluation motivates adaptive/open-ended falsifiers beyond a frozen corpus."
+    }
+  ],
+  "routed_impulses": [
+    {
+      "recipients": [
+        "F-V01-10 proactive agency/web",
+        "F-V01-08 token/API",
+        "separate Harness reviewer"
+      ],
+      "priority": "P0",
+      "impulse": "Replace the brittle source-substring assertion with a typed executable token-ingress contract or behavior gate. Preserve run 31498893914 as an integration-oracle failure, rerun exact current PR330 context, and inspect discriminator JSON/artifact before any target credit."
+    },
+    {
+      "recipients": [
+        "F-V01-06 Digital Retina MVC",
+        "security/recovery"
+      ],
+      "priority": "P0",
+      "impulse": "Treat source/eval lineage as recovered but weights as missing. Search authorized archives for exact filenames/hashes, sanitize historical benchmarks, rotate/revoke historical fallback credentials through authorized channels, and keep replacement claims blocked until accepted-target baseline reexecution."
+    },
+    {
+      "recipients": [
+        "F-V01-10 web",
+        "F-V01-06 Retina",
+        "effect authority",
+        "GWT/provenance"
+      ],
+      "priority": "P0",
+      "impulse": "Test IngressAuthorityConservation across text/DOM/screenshot paths and through cognition-to-effect sinks; include provenance stripping, adaptive injection, restart/replay and visual perturbation."
+    },
+    {
+      "recipients": [
+        "research_entity center"
+      ],
+      "priority": "P0",
+      "impulse": "Reclassify web-ingress run 31498893914 as executed pre-discriminator integration failure, not infrastructure and not hypothesis falsification; narrow the Retina blocker from source archaeology to weights plus reexecution."
+    }
+  ],
+  "evidence_deduplication": [
+    "Web-ingress local repair and target pre-discriminator failure are the same candidate lineage; local support does not offset target zero credit.",
+    "Recovered Retina history and reports are one historical evidence lineage, not independent current replications.",
+    "IPIGuard, WebInject, PlanGuard and AgentDyn are external mechanism/design evidence, not Frank target execution.",
+    "PR328 FeatureEpoch candidate and recovered original baseline are complementary dependencies, not a successor-versus-baseline comparison."
+  ],
+  "preserved_null_and_negative_results": [
+    "The web-ingress target discriminator did not execute; all claimed target security counts remain uncredited.",
+    "The failed raw-source assertion is a real target integration failure and must not be relabeled infrastructure-only.",
+    "Original Retina custom weights remain unfound; accepted-target cold/warm baseline and matched successor comparison remain unrun.",
+    "Historical credential fallbacks are a bounded Drive-surface finding, not a repository-wide leak claim.",
+    "No current target PASS for PR328 was visible at this cut."
+  ],
+  "routing_receipt": {
+    "mechanism": "repo_native_center_event",
+    "active_external_worker_session_observed": false
+  },
+  "safety_and_nonclaims": {
+    "secrets_copied_or_exposed": false,
+    "credential_rotation_performed": false,
+    "training_authorized": false,
+    "training_performed": false,
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "promotion_granted": false,
+    "target_execution_performed_by_this_worker": false,
+    "code_or_harness_modified_by_this_worker": false,
+    "target_repo_modified_by_this_worker": false,
+    "canonical_state_hash_changed": false,
+    "only_write": "this provenance-only center event"
+  }
+}

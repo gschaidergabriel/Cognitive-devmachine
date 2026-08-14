@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "recorded_at": "2026-08-12T04:07:14+07:00",
+  "program": "FRANK_V0_1",
+  "affected_work_packages": ["F-V01-13", "F-V01-09", "F-V01-01"],
+  "worker_provenance": "GPT-5.6 Sol temporary Clay research/build worker",
+  "observed_anchors": {
+    "research_head_before_write": "47f649e6ef5047889c57e413daecb61b4d9fe400",
+    "frank_main_observed": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "parent_hardening_pr": 472,
+    "parent_hardening_head": "9452756798a7976ff717f0bd1f4d648da04da3cd",
+    "workflow_run": 31535822472,
+    "workflow_conclusion": "success"
+  },
+  "r0_observation": {
+    "dedicated_parent_gate_tests": "PASS 11/11",
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "kernel": "Linux 6.8.0-117-generic",
+    "systemd": "systemd 255 (255.4-1ubuntu8.17)",
+    "product_candidate_unit_count": 0,
+    "parent_observation": "NO_PRODUCT_SYSTEMD_PARENT_OBSERVED"
+  },
+  "generated_reality": "The hardened parent gate can be correct as a candidate while productive Frank remains unbound to it; candidate CI success therefore cannot promote the ProductStart release gate.",
+  "counter_reality": "A productive parent may exist under a name or execution topology not matched by the discovery pattern, so zero discovered units is evidence of absence only for the exercised discovery scope, not proof of global absence.",
+  "unusual_experiment": {
+    "count": 1,
+    "protocol": "LD_PRELOAD_PRE_PYTHON_GUARD_CANARY_V1",
+    "environment": "disposable local Linux sandbox",
+    "baseline": {
+      "guard_rc": 0,
+      "pre_guard_marker": "absent",
+      "stdout": "GUARD_PASS"
+    },
+    "intervention": {
+      "mechanism": "harmless LD_PRELOAD constructor writes a run-owned marker before Python guard checks inherited LD_PRELOAD",
+      "guard_rc": 23,
+      "pre_guard_marker": "present",
+      "stdout": "GUARD_DENY:LD_PRELOAD",
+      "marker_content": "loader-ran-before-python"
+    },
+    "interpretation": "The in-process Python guard can deny admission but cannot retroactively prevent dynamic-loader effects that occur before Python guard code; a trusted pre-exec parent boundary remains architecturally required.",
+    "rollback": "run-owned /tmp canary only; no Frank/canonical state or external effect authority",
+    "canonical_frank_state_mutated": false
+  },
+  "fusion": {
+    "shared_research_relation": "Replication/convergence with existing pre-exec-parent-gap work; no duplicate product implementation created.",
+    "new_material_delta": "Workflow 31535822472 completed successfully after the earlier queued receipt, while its read-only discovery observed zero productive Frank/self.root systemd parent candidates.",
+    "promotion": "DEFER",
+    "reason": "F-V01-13 still lacks exact productive ProductStart binding to the accepted parent/admission bundle and fixed SQLite mapped object, including restart/crash/rollback/downgrade continuity."
+  },
+  "next_falsifier": "Resolve the actual productive Frank start topology on the accepted Hostinger Ubuntu target without assuming systemd naming; bind and attest the exact parent/launcher/guard bundle plus mapped SQLite identity before persisted writable state opens, then repeat across restart and downgrade/library-swap controls.",
+  "authority": {
+    "frank_harness_mutation": false,
+    "production_effect": false,
+    "training_authorized": false
+  }
+}

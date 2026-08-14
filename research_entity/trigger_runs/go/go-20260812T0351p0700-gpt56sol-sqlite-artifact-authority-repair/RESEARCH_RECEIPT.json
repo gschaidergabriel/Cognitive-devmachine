@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0351p0700-gpt56sol-sqlite-artifact-authority-repair",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_continuity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "12c3613890c4bb94b681b545d3911caa415a70ef",
+  "observed_reality": {
+    "product_repository_connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed_before_repair_pr": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "workspace_F_V01_13": "IN_PROGRESS",
+    "ordinary_productive_sqlite_state": "workspace still reports 3.45.1 outside the private fixed-runtime lane",
+    "merged_reproducible_artifact_pr": 444,
+    "trusted_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "trusted_library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "prior_stronger_falsifier": "research_entity/trigger_runs/go/go-20260812T0344p0700-gpt56sol-sqlite-selfpin-authority/RESEARCH_RECEIPT.json",
+    "root_provision_base_pr": 440,
+    "root_provision_base_head": "4e43a62c8cb84359cc66becd67111e9b27e07f72",
+    "concurrent_main_delta": "main advanced by three commits and hardened the SQLite V5 launcher/pre-exec boundary; it does not provide independent artifact authority"
+  },
+  "grf": {
+    "generated_reality": "A caller-supplied expected manifest digest is sufficient release-artifact authority if mismatches fail closed.",
+    "counter_reality": "If the caller can choose both manifest bytes and expected digest, digest equality proves consistency rather than canonical release provenance.",
+    "strongest_existing_discriminator": "The prior self-pin authority receipt admitted a byte-distinct library exporting the accepted SQLite version and accepted source-id when paired with a self-derived matching manifest digest.",
+    "collapse": "GENERATED_REALITY_REFUTED_COUNTER_REALITY_SUPPORTED",
+    "retained_repair": "Bind provisioning to an independently controlled exact reproducible artifact identity and remove the artifact digest from caller choice.",
+    "remaining_counter_reality": "A trusted wrapper is insufficient if production can bypass it or rollback restores another installed object/anchor."
+  },
+  "exactly_one_bounded_unusual_experiment_this_invocation": {
+    "count": 1,
+    "name": "SAME_VERSION_LIBRARY_TRANSPLANT_ATTESTATION",
+    "classification": "BOUNDED_UNUSUAL_EXPERIMENT_REPLICATION_ONLY",
+    "scope": "disposable local sandbox; harmless synthetic shared libraries; no production or canonical mutation",
+    "baseline": {
+      "library_A_sqlite_version": "3.53.4",
+      "library_A_source_marker": "AAAAAAAA",
+      "library_A_sha256_prefix": "ee4c9bc96088c9f0"
+    },
+    "intervention": {
+      "same_path_replaced_atomically": true,
+      "library_B_sqlite_version": "3.53.4",
+      "library_B_source_marker": "BBBBBBBB",
+      "library_B_sha256_prefix": "cbf6d6743dfce758",
+      "inode_changed": true
+    },
+    "result": {
+      "version_only_attestor_accepts_transplant": true,
+      "version_sourceid_hash_attestor_accepts_transplant": false,
+      "rollback_restored_semantic_identity": true
+    },
+    "negative_debug_observation": "An initial in-place overwrite of an already mapped shared object caused process status 139; the same experiment was then rerun safely across process boundaries with atomic replacement.",
+    "novelty_adjudication": "NO_NOVEL_PROMOTION: this is weaker independent replication of the already durable stronger self-pin falsifier.",
+    "additional_unusual_experiments": 0
+  },
+  "repair_build": {
+    "branch": "clay/go-sqlite-v5-artifact-authority-repair-20260812",
+    "head": "bfc2e9bdb0a869f546c6c965c98b7e37598f8f92",
+    "draft_pr": 466,
+    "files_added": [
+      "runtime/frank_storage_truth_v1/frank_sqlite_v5_root_provision_trusted_candidate.py",
+      "tests/test_frank_sqlite_v5_root_provision_trusted_candidate.py"
+    ],
+    "mechanism": [
+      "public API removes caller-selectable expected manifest SHA-256",
+      "CLI removes --manifest-sha256",
+      "exact PR#444 manifest SHA-256 is source-controlled",
+      "exact PR#444 library SHA-256 is source-controlled",
+      "manifest is denied before base provisioning if either exact identity differs",
+      "base root-security/fsync/anchor machinery remains delegated rather than duplicated",
+      "receipt records caller_selectable_manifest_pin=false"
+    ],
+    "local_test": {
+      "status": "PASS",
+      "checks": 7,
+      "py_compile": "PASS",
+      "checks_named": [
+        "API_HAS_NO_CALLER_PIN",
+        "CLI_HAS_NO_CALLER_PIN",
+        "SELF_PINNED_COUNTERFEIT_DENIED",
+        "FIXED_PIN_DELEGATED",
+        "RECEIPT_SAYS_CALLER_PIN_FALSE",
+        "RECEIPT_BINDS_MANIFEST",
+        "RECEIPT_BINDS_LIBRARY"
+      ]
+    },
+    "github_pr_state_at_observation": {
+      "draft": true,
+      "mergeable": false,
+      "reason_not_promoted": "current main advanced concurrently and accepted-runner workflow had not completed; no merge or PASS inferred"
+    },
+    "workflow": {
+      "run_id": 31535012143,
+      "name": "Frank execution gate directory anchor repair VPS",
+      "observed_status": "queued",
+      "conclusion": null
+    }
+  },
+  "architecture_consequence": {
+    "state": "TESTING",
+    "artifact_authority_invariant": "The productive release artifact identity must come from a source the provisioning caller cannot choose; exact artifact rotation requires explicit trusted policy update and fresh evidence.",
+    "composition_invariant": "Artifact authority and trusted pre-exec/service-parent authority are complementary and both must be non-bypassable on the productive path.",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-09-EFFECT-AUTHORITY"
+    ]
+  },
+  "promotion": {
+    "repair_candidate": "TESTING_DRAFT_PR_466",
+    "prior_negative_result": "RETAINED",
+    "F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "remaining_release_gates": [
+    "Synchronize/rebase the composed repair with fresh product main and obtain deterministic accepted-runner PASS.",
+    "Make the trusted artifact-authority path production-non-bypassable together with the trusted pre-exec/service-parent launcher boundary.",
+    "On an explicitly authorized root-capable accepted target, provision the exact trusted artifact and publish the root-owned anchor.",
+    "Prove the exact productive Frank process maps and uses that object across start/restart, rollback, downgrade and library-swap controls.",
+    "Close provenance-bound semantic-lineage selection and fail-closed recovery obligations independently."
+  ],
+  "authority": {
+    "canonical_frank_state_mutation": false,
+    "production_effect": false,
+    "root_production_install": false,
+    "harness_authority": "NONE",
+    "training_authorized": false
+  }
+}

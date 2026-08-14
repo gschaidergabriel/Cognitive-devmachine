@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CARF-001",
+  "controls":[
+    {"name":"NO_CANDIDATE_BROADCAST_ALL","purpose":"measure over-credit"},
+    {"name":"FIRST_PATH","purpose":"measure order-dependent under-credit"},
+    {"name":"SATISFIED_ANCESTOR_DAG","purpose":"strong binary dependency baseline"},
+    {"name":"EXPLICIT_RESPONSIBILITY","purpose":"strong conventional semantic baseline"},
+    {"name":"FACTORIZED_DAG","purpose":"strong representation/storage baseline"},
+    {"name":"PROVENANCE_BROKEN_CONTROL","purpose":"verify provenance identity matters"},
+    {"name":"STALE_EPOCH","purpose":"reject stale replay"},
+    {"name":"FUTURE_EPOCH","purpose":"reject mismatched future state"},
+    {"name":"REDUNDANT_DERIVATIONS","purpose":"test responsibility under alternative sufficient paths"}
+  ],
+  "lesion_rescue":"Next target test must lesion individual use edges and rescue with exact same provenance identity; correlated-only active state must not receive material credit merely for being active."
+}

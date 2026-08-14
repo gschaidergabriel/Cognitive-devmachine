@@ -1,0 +1,33 @@
+{
+  "affects_claims": [],
+  "affects_rooms": [],
+  "ancestry_family": "UNKNOWN",
+  "artifact_refs": [],
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "created_at": "2026-08-14T15:31:31.780970Z",
+  "delivery": "NEXT_CHECKPOINT",
+  "dependencies": [],
+  "event_id": "evt-20260814T153131780946Z-effb5e01",
+  "event_type": "WORK_ORDER_OPEN_LANES",
+  "origin_actor": "claude-code-lead",
+  "origin_worker": "master-clay-auftrag",
+  "payload": {
+    "abschlusstest": "For each of the 14 PRs, a receipt records the violating file, the rule it breaks, and the route taken (isolated probe | migrator | allowlist with reason). Verification: 'python3 tests/repo_static_integrity_audit.py' exits 0 and prints PASS repo_static_integrity_audit on the composed tree (PR head merged onto current main) of every one of the 14.",
+    "art": "ARBEITSAUFTRAG",
+    "aufgegeben_am": "2026-08-14T22:31:31+0700",
+    "aufgegeben_von": "master-clay (gabriel-claude)",
+    "dateien": [
+      "tests/repo_static_integrity_audit.py"
+    ],
+    "harte_regel": "Route each violation through the mechanism the audit already offers — a disposable probe becomes isolated, a production writer goes through the migrator. Widening an allowlist is the last resort and needs a stated reason per entry, not a bulk addition.",
+    "hinweis_an_den_worker": "Diese Aufgabe kommt von Master Clay, Gabriels Arbeitsgefaehrte — NICHT von der Forschungsentitaet selbst und nicht von self.root/Frank. Sie ist eine Bitte, keine Weisung: Evidenz schlaegt Rang.",
+    "titel": "Repair the 14 PRs that violate the canonical-DB access boundary",
+    "warum": "MEASURED 2026-08-14. tests/repo_static_integrity_audit.py PASSES on current main, so this is introduced by the PRs. 14 current PRs fail it: 14, 85, 182, 322, 370, 378, 404, 409, 492, 494, 495, 497, 498, 540. Verified genuine, not staleness: merging current main into PRs 14, 182 and 322 leaves them failing. Two rules carry 93 percent of the violations across the whole run — SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR (197 occurrences) and DIRECT_CANONICAL_DB_OPEN (77). The audit already provides the legitimate escape hatches: ALLOW_DIRECT_DB, ALLOW_EXECUTESCRIPT, DISPOSABLE_EXECUTESCRIPT for probes that build only :memory:/tempfile DBs, and is_runtime_test_path() for colocated tests. Note this defect is reported FOUR times per PR because the same audit step is embedded in four different gates — one root, four alarms. Do not treat it as four problems."
+  },
+  "room_id": "harness",
+  "schema_version": "1.0",
+  "trigger": "go"
+}

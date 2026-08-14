@@ -1,0 +1,19 @@
+{
+ "schema_version": "1.1",
+ "task_id": "task-MC-HARNESS-20260814T153131",
+ "room_id": "harness",
+ "title": "Repair the 14 PRs that violate the canonical-DB access boundary",
+ "goal_clay": "record Goal {origin:MASTER_CLAY;authority:PROPOSAL_ONLY;room:HARNESS;kind:ARBEITSAUFTRAG;work_package:NONE;action:REPAIR_THE_14_PRS_THAT_VIOLATE_THE_CANONICAL_D}",
+ "status": "OPEN",
+ "dependencies": [
+  "tests/repo_static_integrity_audit.py"
+ ],
+ "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:false;owner_decision_required:false}",
+ "created_by": "master-clay-auftrag",
+ "stack_epoch": 17,
+ "created_at": "2026-08-14T15:31:31Z",
+ "completion_test_prose": "For each of the 14 PRs, a receipt records the violating file, the rule it breaks, and the route taken (isolated probe | migrator | allowlist with reason). Verification: 'python3 tests/repo_static_integrity_audit.py' exits 0 and prints PASS repo_static_integrity_audit on the composed tree (PR head merged onto current main) of every one of the 14.",
+ "rationale_prose": "MEASURED 2026-08-14. tests/repo_static_integrity_audit.py PASSES on current main, so this is introduced by the PRs. 14 current PRs fail it: 14, 85, 182, 322, 370, 378, 404, 409, 492, 494, 495, 497, 498, 540. Verified genuine, not staleness: merging current main into PRs 14, 182 and 322 leaves them failing. Two rules carry 93 percent of the violations across the whole run — SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR (197 occurrences) and DIRECT_CANONICAL_DB_OPEN (77). The audit already provides the legitimate escape hatches: ALLOW_DIRECT_DB, ALLOW_EXECUTESCRIPT, DISPOSABLE_EXECUTESCRIPT for probes that build only :memory:/tempfile DBs, and is_runtime_test_path() for colocated tests. Note this defect is reported FOUR times per PR because the same audit step is embedded in four different gates — one root, four alarms. Do not treat it as four problems.",
+ "requested_by_prose": "Master Clay, Gabriels Arbeitsgefaehrte — NICHT die Forschungsentitaet und nicht self.root/Frank. Bitte, keine Weisung: Evidenz schlaegt Rang.",
+ "hard_rule_prose": "Route each violation through the mechanism the audit already offers — a disposable probe becomes isolated, a production writer goes through the migrator. Widening an allowlist is the last resort and needs a stated reason per entry, not a bulk addition."
+}

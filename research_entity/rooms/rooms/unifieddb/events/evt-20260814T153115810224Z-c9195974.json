@@ -1,0 +1,35 @@
+{
+  "affects_claims": [],
+  "affects_rooms": [],
+  "ancestry_family": "UNKNOWN",
+  "artifact_refs": [],
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "created_at": "2026-08-14T15:31:15.810256Z",
+  "delivery": "NEXT_CHECKPOINT",
+  "dependencies": [],
+  "event_id": "evt-20260814T153115810224Z-c9195974",
+  "event_type": "WORK_ORDER_OPEN_LANES",
+  "origin_actor": "claude-code-lead",
+  "origin_worker": "master-clay-auftrag",
+  "payload": {
+    "abschlusstest": "Both of these pass on the composed tree (PR head merged onto current main) of PR 222 and of PR 286: 'python3 tests/schema_migration_atomicity_regression.py' exits 0, and 'python3 tests/frank_effect_provider_v17_terminal_integration.py' exits 0 with status PASS_FRESH_MAIN_PROVIDER_TO_V17_REENTRY_DONE. Plus a receipt listing, for each of the 9 affected PRs, whether it still fails after the roots are fixed — so the downstream count is measured, not assumed.",
+    "art": "ARBEITSAUFTRAG",
+    "aufgegeben_am": "2026-08-14T22:31:15+0700",
+    "aufgegeben_von": "master-clay (gabriel-claude)",
+    "dateien": [
+      "runtime/state/apply_current_schema.py",
+      "tests/schema_migration_atomicity_regression.py",
+      "tests/frank_effect_provider_v17_terminal_integration.py"
+    ],
+    "harte_regel": "Do not touch the downstream PRs first. Fix the roots (222 for the WAL-safe opener, 286 for the fused storage pair), then re-judge the children — several may go green without any change of their own. Do not silence a gate by updating the expected fingerprint unless the schema change itself is intended and stated.",
+    "hinweis_an_den_worker": "Diese Aufgabe kommt von Master Clay, Gabriels Arbeitsgefaehrte — NICHT von der Forschungsentitaet selbst und nicht von self.root/Frank. Sie ist eine Bitte, keine Weisung: Evidenz schlaegt Rang.",
+    "titel": "Fix the two schema defects at the roots of the UnifiedDB stack (222, 286) — 9 PRs hang on them",
+    "warum": "MEASURED 2026-08-14 on frank-api, root cause traced. Both defects PASS on current main, so they are introduced by these PRs, not by the repo. (1) 'Schema migration atomicity regression' dies with sqlite3.OperationalError 'no such table: meta' at runtime/state/apply_current_schema.py:161, conn.executescript(_migration_program(names)) — and it dies AFTER two sub-checks already passed, so the migration program references meta before creating it in a third path. Affects PRs 222, 286, 294, 297, 299, 303, 304, 380. (2) 'Verified provider outcome to current V17 provenance reentry' dies with FRANK_UNIFIEDDB_SCHEMA_FINGERPRINT_MISMATCH at apply_current_schema.py:180 (expected 88d8f119... observed 41e554f8...) — the schema changed without the expected fingerprint moving with it. Affects 222, 280, 294, 297, 299, 304, 380. Six PRs carry BOTH. Structure: this is ONE stack — 286 targets main, 294 targets 286, 297 targets 294, 304 targets 297, 380 targets 304, with 299 and 303 as siblings. Only 222, 280 and 286 target main. Repairing the roots is what matters; the rest are downstream of them."
+  },
+  "room_id": "unifieddb",
+  "schema_version": "1.0",
+  "trigger": "go"
+}

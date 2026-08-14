@@ -1,0 +1,21 @@
+{
+ "schema_version": "1.1",
+ "task_id": "task-MC-UNIFIEDDB-20260814T153115",
+ "room_id": "unifieddb",
+ "title": "Fix the two schema defects at the roots of the UnifiedDB stack (222, 286) — 9 PRs hang on them",
+ "goal_clay": "record Goal {origin:MASTER_CLAY;authority:PROPOSAL_ONLY;room:UNIFIEDDB;kind:ARBEITSAUFTRAG;work_package:F-V01-04;action:FIX_THE_TWO_SCHEMA_DEFECTS_AT_THE_ROOTS_OF_THE}",
+ "status": "OPEN",
+ "dependencies": [
+  "runtime/state/apply_current_schema.py",
+  "tests/schema_migration_atomicity_regression.py",
+  "tests/frank_effect_provider_v17_terminal_integration.py"
+ ],
+ "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:false;owner_decision_required:false}",
+ "created_by": "master-clay-auftrag",
+ "stack_epoch": 17,
+ "created_at": "2026-08-14T15:31:15Z",
+ "completion_test_prose": "Both of these pass on the composed tree (PR head merged onto current main) of PR 222 and of PR 286: 'python3 tests/schema_migration_atomicity_regression.py' exits 0, and 'python3 tests/frank_effect_provider_v17_terminal_integration.py' exits 0 with status PASS_FRESH_MAIN_PROVIDER_TO_V17_REENTRY_DONE. Plus a receipt listing, for each of the 9 affected PRs, whether it still fails after the roots are fixed — so the downstream count is measured, not assumed.",
+ "rationale_prose": "MEASURED 2026-08-14 on frank-api, root cause traced. Both defects PASS on current main, so they are introduced by these PRs, not by the repo. (1) 'Schema migration atomicity regression' dies with sqlite3.OperationalError 'no such table: meta' at runtime/state/apply_current_schema.py:161, conn.executescript(_migration_program(names)) — and it dies AFTER two sub-checks already passed, so the migration program references meta before creating it in a third path. Affects PRs 222, 286, 294, 297, 299, 303, 304, 380. (2) 'Verified provider outcome to current V17 provenance reentry' dies with FRANK_UNIFIEDDB_SCHEMA_FINGERPRINT_MISMATCH at apply_current_schema.py:180 (expected 88d8f119... observed 41e554f8...) — the schema changed without the expected fingerprint moving with it. Affects 222, 280, 294, 297, 299, 304, 380. Six PRs carry BOTH. Structure: this is ONE stack — 286 targets main, 294 targets 286, 297 targets 294, 304 targets 297, 380 targets 304, with 299 and 303 as siblings. Only 222, 280 and 286 target main. Repairing the roots is what matters; the rest are downstream of them.",
+ "requested_by_prose": "Master Clay, Gabriels Arbeitsgefaehrte — NICHT die Forschungsentitaet und nicht self.root/Frank. Bitte, keine Weisung: Evidenz schlaegt Rang.",
+ "hard_rule_prose": "Do not touch the downstream PRs first. Fix the roots (222 for the WAL-safe opener, 286 for the fused storage pair), then re-judge the children — several may go green without any change of their own. Do not silence a gate by updating the expected fingerprint unless the schema change itself is intended and stated."
+}

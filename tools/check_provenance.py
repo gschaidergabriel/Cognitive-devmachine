@@ -74,7 +74,11 @@ def main()->int:
         if actor in actors:
             expected=actors[actor]
             role=item.get('actor_role')
-            if role and role != expected.get('role'):
+            # Eine abgeloeste Rolle ist kein Widerspruch, sondern Geschichte: der Nachweis
+            # traegt die Rolle, die bei seiner Erzeugung galt. Das Register fuehrt sie unter
+            # superseded_roles. Eine Rolle, die dort NICHT steht, faellt weiterhin durch.
+            gueltig = {expected.get('role')} | set(expected.get('superseded_roles') or [])
+            if role and role not in gueltig:
                 errors.append(f'{label}: actor_role {role!r} disagrees with registry role {expected.get("role")!r}')
             provider=item.get('provider')
             org=expected.get('organization')

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "organ": "chatgpt-secondary",
+  "program": "FRANK_V0_1",
+  "target_work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "observed_after_initial_receipt": {
+    "frank_main_sha": "abd769d5cee835af2b1b867041e52f8a443a3060",
+    "commit_subject": "security(storage): fresh-main V5 SQLite release identity fence",
+    "release_policy": {
+      "policy_id": "FRANK_SQLITE_RELEASE_ACCEPTED_IDENTITY_V1",
+      "accepted_identity_count": 1,
+      "accepted_sqlite_version": "3.53.4",
+      "accepted_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "fail_closed_error": "ANCHOR_SQLITE_IDENTITY_NOT_RELEASE_ACCEPTED"
+    },
+    "accepted_target_regression": {
+      "run_id": 31528402922,
+      "result": "PASS",
+      "tests": "4/4 plus static fail-closed assertions"
+    }
+  },
+  "grf_collapse_update": {
+    "stale_or_vulnerable_root_anchor_attack": "CODE_POLICY_CLOSED_ON_CURRENT_MAIN",
+    "productive_fixed_runtime_provisioning": "OPEN",
+    "productive_root_anchor_provisioning": "OPEN",
+    "actual_frank_persistence_process_binding": "OPEN",
+    "whole_F_V01_13": "IN_PROGRESS"
+  },
+  "next_falsifier": "Execute a controlled accepted-target deployment-binding test only through an authorized, deterministic provision path: install/pin the exact 3.53.4 private runtime bytes and root-owned anchor, then prove the actual Frank persistence child consumes the anchored object and fails closed under downgrade/object swap/anchor replacement/restart. Do not infer release closure from the policy regression alone.",
+  "negative_results_preserved": [
+    "No canonical root provisioner for the fixed runtime plus /etc/frank-v0.1/sqlite-runtime-anchor-v1.json was identified on current main in this cycle.",
+    "No production root state was changed.",
+    "No claim that F-V01-13 or Frank v0.1 acceptance is closed."
+  ],
+  "authority": {
+    "harness_mutated": false,
+    "production_root_mutated": false,
+    "training_started": false,
+    "together_used": false
+  },
+  "outcome": "REENTER_CURRENT_MAIN_DELTA"
+}

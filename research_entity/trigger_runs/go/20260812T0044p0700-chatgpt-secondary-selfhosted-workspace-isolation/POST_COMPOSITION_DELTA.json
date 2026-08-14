@@ -1,0 +1,100 @@
+{
+  "schema": "CLAY_GO_POST_COMPOSITION_DELTA/1.0",
+  "run_id": "GO-20260812T0044P0700-CHATGPT-SECONDARY-SELFHOSTED-WORKSPACE-ISOLATION",
+  "created_at_utc": "2026-08-11T17:54:00Z",
+  "actor_id": "chatgpt-secondary",
+  "prewrite_shared_head": "b3516f1d5fb37522c63e6ef4f2290677326c837a",
+  "purpose": "ordinary post-merge composition verification; not an out-of-box experiment",
+  "target_context": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "current_main_under_test": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+    "includes": [
+      "ClayCode executable frontier merge a5e79b2a1835e500e78b0373166b3437133c6f43",
+      "self-hosted isolated checkout repair 0ed593daaa2da072d13d15fbf658fe2f7312b930"
+    ],
+    "diagnostic_pr": 405,
+    "diagnostic_pr_head": "0c0878747c8e83741168254ed5d7046fcf5d9f23",
+    "tested_pr_merge_sha": "808999d105ff52366a688427cde0872fdaf4e88c",
+    "workflow_run_id": 31519471673,
+    "job_id": 93872685712,
+    "runner_name": "clay",
+    "machine": "digital-retina",
+    "runner_version": "2.336.0",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "git": "2.43.0"
+  },
+  "results": {
+    "job_conclusion": "SUCCESS",
+    "exact_merge_sha_checkout_assertion": "PASS",
+    "self_root_source_to_replay": {
+      "status": "PASS",
+      "static_checks": 38,
+      "transactions_replayed": 5,
+      "semantic_epoch": 5,
+      "fresh_graph_self": "self.root"
+    },
+    "prompt_execution_state": {
+      "status": "PASS",
+      "cases": 6,
+      "secrets_exposed": 0,
+      "authority": "V15/V16",
+      "inform_only": true
+    },
+    "single_instance_presence": {
+      "status": "PASS_SINGLE_INSTANCE_PRESENCE_DISCRIMINATOR",
+      "race_contenders": 12,
+      "race_winners": 1,
+      "race_busy": 11,
+      "sqlite_integrity": "ok",
+      "ghost_holder_experiment": "PASS",
+      "external_effect_performed": false
+    },
+    "v16_execution_continuity": {
+      "status": "PASS_FRANK_V16_EXECUTION_CONTINUITY_SCHEMA_GATE",
+      "foreign_key_violations": 0,
+      "runtime_semantics_promoted": false
+    },
+    "transaction_replay": {
+      "status": "PASS",
+      "replay_count": 5,
+      "epoch": 5
+    },
+    "static_integrity_differential": {
+      "base_sha": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+      "base_rc": 1,
+      "candidate_rc": 1,
+      "new_failure_count": 0
+    },
+    "artifact": {
+      "id": 9112534492,
+      "files_uploaded": 12,
+      "sha256": "3da88cb0f992f719b05b3ad29d5b0242aa5bb4d73749ce20ba62cb80e7c18754"
+    },
+    "isolated_tree_cleanup": "PASS"
+  },
+  "adjudication": {
+    "composition": "SUPPORTED_ON_ACCEPTED_TARGET_FOR_THE_BOUNDED_SELF_ROOT_IDENTITY_CONTINUITY_GATE",
+    "claycode_effect_on_this_gate": "NO_REGRESSION_OBSERVED",
+    "runner_isolation_after_claycode_merge": "SUPPORTED",
+    "whole_product_acceptance": false,
+    "diagnostic_pr_action": "CLOSED_WITHOUT_MERGE_AFTER_EVIDENCE_CAPTURE"
+  },
+  "diagnostic_pr_cleanup": {
+    "pr": 405,
+    "state": "closed",
+    "merged": false,
+    "reason": "only a one-line YAML comment was used to force the current-main merge context; no product change was intended"
+  },
+  "remaining_open_obligations": [
+    "Trace and remove the root-owned persistent Actions workspace bytecode producer; isolation is a bounded continuity defense, not the global root-cause repair.",
+    "Continue actual ClayCode WP04/type/effect and full product acceptance beyond this identity/continuity gate.",
+    "Bind installed product boot to the already target-supported V4/private SQLite 3.53.4 admission boundary and prove restart/recovery on installed bytes.",
+    "Resolve remaining effect-provider crash/restart and end-to-end acceptance work packages.",
+    "Final training remains owner-gated."
+  ],
+  "go_oob_count_for_invocation": 1,
+  "no_second_oob_performed": true
+}

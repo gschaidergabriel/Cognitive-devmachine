@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at_local": "2026-08-10T12:34:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_id": "frank-project-global-research-entity",
+  "identity": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "self_coordination": {
+    "collision_avoidance": [
+      "WP03 selected-V17 typed-fn/typed-IR lane is active under separate workers; no duplicate implementation was attempted after detection.",
+      "UnifiedDB Pulse S2 PR150 remains a separate draft/recovery-test lane; this run contributes external counterevidence only and does not mutate its candidate bytes.",
+      "Frank reward-state and fusion/reentry lanes observed active and left untouched."
+    ]
+  },
+  "primary_executable_result": {
+    "topic": "ClayCode parser V19 delimiter-normalizable candidate",
+    "hostinger_receipt": "research_entity/claycode/base/receipts/V19_DELIMITER_NORMALIZATION_HOSTINGER_NEGATIVE_20260810.json",
+    "receipt_commit": "b09cf81574d5f90fdae9f7a7bc70c222e2031efc",
+    "remote_run_id": 31358483832,
+    "remote_job_id": 93362521899,
+    "runtime": {
+      "runner_name": "clay",
+      "machine": "digital-retina",
+      "os": "Ubuntu 24.04.4 LTS",
+      "kernel": "6.8.0-117-generic",
+      "python": "3.12.3",
+      "lark": "1.3.1",
+      "interegular": "0.3.3"
+    },
+    "supported": [
+      "V19 strict LALR construction succeeds with interegular installed.",
+      "Frozen G9 and Dialect parse and normalize to deterministic V17 semantic hashes on the tested exact bytes.",
+      "Tested longer-qid prefix-shadow cases remain ordinary qids."
+    ],
+    "refuted": [
+      "V19 does not preserve selected V17 trailing-horizontal-trivia semantics for bare Needle.owns.",
+      "Four V17-valid trailing-space/tab/comment fixtures are rejected because delimiter consumption turns the bare qid into a relation requiring an RHS."
+    ],
+    "adjudication": "REFUTED_TRAILING_TRIVIA",
+    "architecture_delta": "NO_CHANGE_KEEP_V17_SELECTED",
+    "promotion": "NONE"
+  },
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "NEEDLE_OWNS_GRAMMAR_TOPOLOGY_2X2_LESION",
+    "method": "Cross bare needle_owns_atom presence/absence with keyword-identifier path presence/absence under strict LALR construction to isolate the source of the V18 shift/reduce family.",
+    "result": "Removing only the bare NEEDLE_OWNS atom path eliminated the observed grammar shift/reduce family up to the independent interegular lexical-collision requirement; removing keyword identifiers alone did not.",
+    "value": "Localized the conflict family and motivated a delimiter-token candidate that was then independently refuted by trailing-trivia semantics.",
+    "promotion": "NONE"
+  },
+  "fresh_external_knowledge": {
+    "retrieved_at": "2026-08-10",
+    "question": "Should an incremental UnifiedDB Pulse batch be allowed to publish against a projection head different from the basis against which the batch was computed?",
+    "sources": [
+      {
+        "class": "T0_OFFICIAL_DATABASE_DOCUMENTATION",
+        "url": "https://www.sqlite.org/isolation.html",
+        "claim": "SQLite WAL snapshot isolation rejects escalation from an old read snapshot to a write with SQLITE_BUSY_SNAPSHOT because writing from a stale snapshot would fork database history."
+      },
+      {
+        "class": "T1_PRIMARY_SYSTEM_SEMANTICS_VIA_VENDOR_TECHNICAL_DESCRIPTION",
+        "url": "https://materialize.com/blog/self-correcting-materialized-views/",
+        "claim": "Differential-dataflow updates carry (data,time,diff), and write frontiers make logical-time completeness explicit; final content alone is not the full incremental-state identity."
+      },
+      {
+        "class": "T0_OFFICIAL_DATABASE_DOCUMENTATION",
+        "url": "https://www.postgresql.org/docs/current/mvcc-intro.html",
+        "claim": "MVCC semantics are defined over a database snapshot/version, reinforcing that consistency is tied to a versioned basis rather than only current row values."
+      }
+    ],
+    "fusion": "External evidence supports the current Pulse recovery falsifier's fail-closed direction: S2 publication should be causally bound to the exact projection basis/head used to derive the batch. A content-ABA fix is necessary but not sufficient if from-epoch/generation identity is discarded before publication.",
+    "strongest_counterhypothesis": "Checking only monotonically increasing target epochs is sufficient because omitted intermediate epochs cannot affect untouched projection segments.",
+    "counterevidence": "The active recovery falsifier constructs precisely the omitted-change case: an untouched-looking segment can be stale when the batch skips an unrepresented base-to-head interval. The external snapshot/version semantics make such a fail-open assumption structurally unsafe.",
+    "architecture_delta": "TEST_OBLIGATION_ONLY_DO_NOT_COLLIDE_WITH_ACTIVE_PR150_OWNER",
+    "required_gate": "Before any S2 selection, require exact base binding (at minimum from_source_epoch/from_graph_epoch; preferably generation/head identity), fail closed before recompute/publication, then rerun crash/restart/replay plus sequential/full-rebuild equivalence."
+  },
+  "parallel_frontier_consumed": {
+    "wp03": "V17 remains selected; contextual typed-fn overlay and typed-IR keyword/alias integrity are active. Alias/token mismatch fail-closed hardening is required before PR145 merge.",
+    "unifieddb": "PR150 content-ABA identity preservation remains research-only and now faces an independent base-epoch/restart gate.",
+    "ci": "Identity guard version-drift hard-pinning was separately repaired; candidate-science failures must remain distinct from control-plane CI failures."
+  },
+  "negative_results_preserved": [
+    "V18 no-lookahead exact-prefix family does not dominate V17.",
+    "V19 delimiter-consuming family is refuted by trailing-trivia identity despite strict/full-source/hash structural success."
+  ],
+  "next_frontier": [
+    "Consume the PR158 hosted/self-hosted selected-V17 semantics differential when it completes; do not duplicate its implementation.",
+    "Consume the PR150 base-epoch/restart falsifier receipt when it materializes; if reproduced, require a basis-binding contract before S2 can be selected.",
+    "Keep V17 selected unless a later candidate survives strict interegular construction, full frozen corpus, semantic-hash identity, prefix/qid-continuation, trailing-trivia, source-span and compact-subtraction discriminators.",
+    "BASE remains NOT_PASS until the declared work-package and real Andreas Ubuntu acceptance gates are satisfied."
+  ],
+  "frank_harness_mutation": false,
+  "training_authorized": false,
+  "research_write": "COMMITTED"
+}

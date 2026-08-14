@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "recorded_at": "2026-08-12T04:07:00+07:00",
+  "program": "FRANK_V0_1",
+  "affected_work_packages": ["F-V01-02"],
+  "worker_provenance": "GPT-5.6 Sol temporary Clay research/build worker",
+  "observed_anchors": {
+    "research_main_before_write": "47f649e6ef5047889c57e413daecb61b4d9fe400",
+    "frank_main_observed": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "frank_main_latest_change": "WP04 admission before Python lowering (#462)",
+    "raw_evaluator_blob": "5b39f7c29303a86b7115ffa3fdd02c1d1eee396a",
+    "wp04_typechecker_blob": "8b49b3b925fd834b04654dc34c70967d6e3147ed",
+    "python_lowering_blob": "325d1a7295f78c880a2140501ce3d6ef5bf11fc2"
+  },
+  "grf": {
+    "observed_reality": "Evaluator.admit() checks analyzer/call/effect resolvability but does not invoke canonical WP04 nominal admission. WP04 checks nested if bodies with a copied type environment and rejects an outer reference to a branch-only let as UNBOUND_NAME. The current Python admitted backend already physically requires WP04 before lowering.",
+    "generated_reality": "The raw tree evaluator can broaden executable ClayCode beyond the canonical WP04 admission set when runtime control flow creates a name that static WP04 rejects.",
+    "counter_reality": "The raw evaluator may be intentionally research-only and all consequential/product callers may already be protected by an upstream WP04 gate, making this a defense-in-depth surface rather than a product bypass.",
+    "falsifier": "Execute a branch-local-name program through raw Evaluator.admit/call and through a WP04-admitted evaluator boundary on the accepted current Ubuntu lane, then audit real call paths for raw evaluator exposure."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "IF_BRANCH_LOCAL_TYPE_BYPASS",
+    "program_shape": "if flag { let branch_only = 7 } ; return branch_only",
+    "local_algorithmic_counterworld": {
+      "environment": "disposable local Python sandbox mirroring the exact current evaluator same-env recursion",
+      "baseline_flag_false": "UNBOUND",
+      "intervention_flag_true": 7,
+      "interpretation": "runtime branch execution changes name visibility under the raw evaluator algorithm"
+    },
+    "exact_product_gate": "tests/claycode_wp04_tree_evaluator_admission_gate.py",
+    "exact_product_execution_status_at_receipt": "QUEUED",
+    "canonical_frank_state_mutated": false,
+    "external_effect": false,
+    "effect_authority": "NONE"
+  },
+  "product_delta": {
+    "branch": "chatgpt/go-claycode-if-scope-20260812",
+    "head": "25b06a90678c9aeead3ebff0c941921765e88002",
+    "draft_pr": 478,
+    "changes": [
+      "Add WP04-admitted tree evaluator adapter without removing the raw evaluator",
+      "Add exact counterworld plus valid-control regression",
+      "Add dedicated accepted self-hosted Linux/X64 workflow",
+      "Preserve scope semantics as unresolved rather than forcing block scope"
+    ]
+  },
+  "negative_result_preserved": {
+    "rejected_candidate": "Change Evaluator if-body execution to dict(env) lexical block copy",
+    "reason": "This would select scope/shadowing semantics by implementation analogy; CPython lowering uses function-level runtime locals for existing names, so the apparent block-scope inference was not semantically justified.",
+    "outcome": "REJECT"
+  },
+  "current_execution_evidence": {
+    "dedicated_workflow_run": 31536316627,
+    "status_at_receipt": "QUEUED",
+    "accepted_target_pass_claimed": false,
+    "whole_release_pass_claimed": false
+  },
+  "sqlite_parallel_frontier": {
+    "pr460_preopen_wal_gate_run": 31535070745,
+    "status_last_observed": "QUEUED",
+    "action": "NO_DUPLICATE_PATCH; existing SQLite/runtime-lineage workers retained"
+  },
+  "outcome": "RETAIN_CANDIDATE_PENDING_EXACT_TARGET_EXECUTION",
+  "promotion": "DEFER",
+  "next_falsifier": "Wait only for currently observable CI state within a future active turn; require exact accepted-target PASS, then audit current-main raw Evaluator callers. If no product caller can bypass WP04, classify as defense-in-depth; otherwise compose the admitted evaluator into that caller and replay existing differentials.",
+  "training_authorized": false
+}

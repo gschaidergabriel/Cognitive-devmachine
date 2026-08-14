@@ -1,0 +1,174 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0030p0700-chatgpt-secondary-unifieddb-lease-clockwarp",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "identity_boundary": {
+    "worker_is_frank": false,
+    "frank_is_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "program_state": "IN_PROGRESS",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_main_at_receipt": "17c063bad59add4079764017841aa39c95e13720",
+  "target_host_evidence_class": "accepted self-hosted Hostinger Ubuntu Linux/X64 runner clay",
+  "fresh_internal_evidence": {
+    "unifieddb_v1_shadowload": {
+      "pr": 392,
+      "tested_head": "212a471e8c9022241fc6fb942581bd47d9918288",
+      "workflow_run": 31517421729,
+      "status": "PASS_UNIFIEDDB_PROJECTION_SHADOWLOAD_V1",
+      "checks": "22/22",
+      "produced_applied": "880/880",
+      "producer_commit_latency_ms_p50_p95_p99": [1.206, 8.6, 14.297],
+      "producer_commit_latency_ms_max": 431.424,
+      "max_pending": 339,
+      "max_lag": 338,
+      "post_producer_drain_s": 1.067,
+      "claim_boundary": "single-host load/crash-recovery evidence under ordinary clock progression only"
+    },
+    "claycode_strict_lalr": {
+      "pr": 357,
+      "tested_head": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+      "strict_discriminator_run": 31518547821,
+      "composition_run": 31518547883,
+      "status": "STRICT_LALR_TARGET_SUPPORTED",
+      "strict_lalr": true,
+      "frozen_frontier": "36/40",
+      "remaining_boundary": "broader WP04/WP06/compiler/runtime/FFI acceptance remains open"
+    },
+    "runner_forensics": {
+      "runner": "clay",
+      "listeners_workers_observed": "one listener / one worker",
+      "persistent_workspace_root_owned_files": 5,
+      "example_surface": "runtime/claycode_eval_v1/__pycache__",
+      "consequence": "checkout/cleanup failures can be runner-workspace contamination; isolated RUNNER_TEMP trees are preferred for material gates"
+    }
+  },
+  "go_oob": {
+    "experiment_count": 1,
+    "experiment": "LEASE_TIMEWARP_REWIND",
+    "diagnostic_pr": 399,
+    "tested_head": "0828809f23e18ea98e9fb5bd450827bb008b422e",
+    "workflow_run": 31518717901,
+    "job": 93870213702,
+    "runner": "clay",
+    "status": "SUPPORTED_WALL_CLOCK_REWIND_CAN_STALL_TAKEOVER",
+    "checks": "9/9",
+    "configured_lease_ms": 1200,
+    "synthetic_backward_jump_ms": 600000,
+    "observed_remaining_after_rewind_ms": 601200,
+    "remaining_to_configured_lease_ratio": 501.0,
+    "generation_fencing_after_takeover": "PASS",
+    "sqlite_integrity": "ok",
+    "artifact_id": 9112402991,
+    "artifact_digest": "sha256:dcdb0eab237f03d58ccd99b21a732555d5a351319a9f6af49548398aa2266c6f",
+    "resource_shadow": {
+      "wall_s": 0.05,
+      "max_rss_kib": 20464
+    },
+    "bounded_claim": "V1 crash-takeover liveness is mechanically sensitive to backward adjustable wall-clock discontinuity.",
+    "nonclaims": [
+      "no observed real target clock rewind",
+      "no authoritative-state corruption or split-brain claim",
+      "no multi-host lease-safety claim",
+      "no whole Frank v0.1 acceptance"
+    ]
+  },
+  "fresh_external_primary_mechanism_evidence": {
+    "retrieved_utc_date": "2026-08-11",
+    "linux_clock_semantics": "CLOCK_REALTIME is adjustable/discontinuous; CLOCK_BOOTTIME is nonsettable/monotonic-like and suspend-aware.",
+    "linux_time_namespace_semantics": "Linux time namespaces virtualize CLOCK_MONOTONIC and CLOCK_BOOTTIME; same boot_id alone does not prove a shared monotonic coordinate across different time namespaces.",
+    "machine_identity_semantics": "machine-id is deployment-stable but raw machine-id should not be exposed as an application identifier; an application-specific derived identifier is preferable where needed.",
+    "source_classes": [
+      "Linux clock_gettime(3) manual",
+      "Linux time_namespaces(7) manual",
+      "Linux boot_id kernel documentation",
+      "systemd machine-id documentation"
+    ]
+  },
+  "hypothesis": "The merged V1 projection-worker lease is not robust to adjustable wall-clock discontinuities and should not be promoted as crash-takeover-closed without a monotonic boot-scoped clock policy.",
+  "strongest_counterhypothesis": "Generation fencing and ordinary NTP behavior may be sufficient in the accepted deployment, so wall-clock discontinuity may have no operational relevance; a deterministic target discriminator is required before architecture action.",
+  "counterhypothesis_result": "PARTIALLY_REFUTED_MECHANICALLY: accepted-target deterministic execution reproduced the wall-clock liveness extension while preserving generation fencing; real-world incidence remains UNKNOWN.",
+  "repair_frontier": {
+    "preferred_candidate_pr": 404,
+    "candidate_head": "f1283362a1b04005f09f9c6fcb72ff969706343d",
+    "status": "TARGET_SUPPORTED_CANDIDATE_NOT_PRODUCTION_PROMOTED",
+    "accepted_target_candidate_run": 31520056249,
+    "accepted_target_candidate_job": 93874602499,
+    "accepted_target_candidate_result": "PASS",
+    "portable_job_result": "NO_STEP_FAILURE_NOT_MECHANISM_COUNTEREVIDENCE",
+    "v2_regression_run": 31520056201,
+    "v2_regression_job": 93874603570,
+    "v2_regression_result": "PASS",
+    "frozen_v1_baseline_preserved": "25-check baseline PASS",
+    "current_main_composition_after_17c063": "NOT_RETESTED_IN_THIS_RUN",
+    "open_obligations": [
+      "bind or explicitly enforce same time-namespace clock domain because CLOCK_BOOTTIME is virtualized by Linux time namespaces",
+      "force apply_event across lease expiry/takeover and prove no authoritative derived mutation can commit after generation loss",
+      "design and validate V1-to-V2 migration/service lifecycle before production wiring",
+      "retain explicit single-host boundary; multi-host/shared-storage safety remains unsupported"
+    ]
+  },
+  "collision_adjudication": {
+    "duplicate_pr": 407,
+    "state": "CLOSED_NOT_MERGED",
+    "classification": "SUPERSEDED_BY_HIGHER_CAUSAL_COVERAGE",
+    "winner": 404,
+    "reason": "#404 integrates actual V1 worker, clock sidecar, crash/recovery and frozen regression coverage; unique time-namespace obligation from #407 was routed to #404."
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "candidate": "Replace V1 adjustable wall-clock lease-duration authority with a boot-scoped monotonic lease policy while retaining generation fencing and explicit single-host authority boundary.",
+    "promotion_gate": "Do not production-wire until time-namespace comparability and in-flight apply-after-expiry authority tests pass, migration/lifecycle is defined, and fresh-main composition/recovery gates remain green.",
+    "rollback": "retain current V1 runtime and keep V2 additive/draft; #407 remains closed; no canonical Frank state mutation"
+  },
+  "negative_results_and_noncredit": [
+    "GitHub-hosted ubuntu-latest no-step failures are infrastructure/billing evidence, not product mechanism failures.",
+    "Persistent self-hosted checkout contamination is not product counterevidence when failure occurs before tested bytes execute.",
+    "Target-supported V2 candidate evidence is not whole Frank v0.1 acceptance.",
+    "Strict-LALR repair does not close broader ClayCode runtime/compiler boundaries."
+  ],
+  "research_feedback": [
+    "PR #392 received bounded shadow-load review plus explicit clock-discontinuity nonclaim.",
+    "PR #357 received status correction: strict-LALR is target-supported; broader boundaries remain open.",
+    "PR #399 received accepted-target OOB evidence and bounded adjudication.",
+    "PR #404 received time-namespace and in-flight apply-after-expiry adversarial obligations.",
+    "PR #407 was closed to avoid duplicate runner consumption."
+  ],
+  "exact_execution_vs_queue": {
+    "executed": [
+      "#399 accepted-target LEASE_TIMEWARP_REWIND 9/9",
+      "#404 exact-head accepted-target candidate gate",
+      "#404 exact-head frozen V2 regression through private SQLite 3.53.4",
+      "ClayCode strict-LALR target discriminator and composition evidence",
+      "UnifiedDB V1 shadow-load gate"
+    ],
+    "not_claimed_executed": [
+      "#404 composition onto target main 17c063bad59add4079764017841aa39c95e13720 after that main advance",
+      "time-namespace mismatch integration discriminator",
+      "apply_event crossing-expiry/takeover authority discriminator",
+      "V1-to-V2 live migration/service activation"
+    ]
+  },
+  "authority": {
+    "canonical_frank_state_mutated": false,
+    "external_effect_authority_changed": false,
+    "frank_self_harness_authority_changed": false,
+    "training_authorized": false
+  },
+  "next_frontier": [
+    "Rebase/compose #404 against fresh target main and rerun accepted-target candidate + V2 frozen regression.",
+    "Add same-time-namespace continuity/fail-closed discriminator.",
+    "Add in-flight apply crossing lease expiry/takeover authority-boundary falsifier.",
+    "Continue current SQLite WAL safety floor and ClayCode runtime critical path without duplicating active workers."
+  ]
+}

@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2044p0700-gpt56sol-lineage-freshness-anchor",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:44:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_branch": "45bc24a0cc1e66be139222dcf14fb1a7bffdc63a",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "program": "FRANK_V0_1",
+    "primary_component": "F-V01-01-IDENTITY-SERVER-BINARY",
+    "coupled_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "d7307539d9d30940a1761f5e567374e951a2ea48",
+    "stack_base_pr": 514,
+    "candidate_pr": 523,
+    "candidate_head": "fa69b906c37ad871a501849456f9435c660f1e03",
+    "accepted_release_host_contract": "Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "reason": "PR514 already composes typed semantic checkpoint identity with external admission into an immutable/CAS-selected lineage head, while PR240 already supplies a surviving external execution-generation floor. The remaining high-information gap is composition with external anchor identity/freshness without duplicating either mechanism.",
+    "duplicate_avoidance": [
+      "PR514 was inspected and retained as the selected-lineage composition base rather than reimplemented.",
+      "PR240 was inspected and retained as the external generation-floor mechanism rather than reimplemented.",
+      "PR515 and current F-V01-13 evidence were used to preserve the rule that generic self-hosted/digital-retina observations do not prove accepted Hostinger identity."
+    ]
+  },
+  "observed_reality": {
+    "selected_lineage_v3": {
+      "pr": 514,
+      "exact_head_self_hosted_run": 31564986096,
+      "status": "SUCCESS",
+      "remaining_explicit_limitation": "external admission content can still be cloned or rolled back; trusted boot-time external-anchor/freshness verification remains required"
+    },
+    "external_generation_floor": {
+      "pr": 240,
+      "mechanism": "monotonic floor outside UnifiedDB snapshot plus anchor_instance and recovery generation ordering",
+      "explicit_limitation": "does not protect whole-VM/filesystem rollback when the external anchor is rolled back too"
+    },
+    "host_provenance": {
+      "self_hosted_runner": "clay",
+      "self_hosted_machine": "digital-retina",
+      "accepted_hostinger_credit": "NOT_GRANTED"
+    }
+  },
+  "generated_reality": {
+    "hypothesis": "A selected V3 lineage admission that binds both the surviving external floor epoch and a domain-separated digest of the full external anchor identity can reject equal-epoch sibling anchors while preserving explicit fail-closed target/artifact policy checks.",
+    "strongest_counterhypothesis": "Epoch equality may be sufficient because a valid monotonic floor already identifies the current recovery generation; adding anchor-instance identity may add complexity without discriminating any meaningful sibling state.",
+    "hidden_assumption": "The supplied external anchor snapshot is independently trusted and lies outside the rollback failure domain being claimed; this candidate cannot establish that trust itself.",
+    "falsifier": "Construct two anchor states with equal floor epoch/revision but distinct anchor instances. If an epoch-only predicate and the full anchor digest both accept the sibling treatment, the proposed identity composition has no discriminatory value."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "EQUAL_EPOCH_SIBLING_ANCHOR_SWAP",
+    "class": "BOUNDED_DISPOSABLE_IN_MEMORY_DISCRIMINATOR",
+    "baseline": {
+      "floor_epoch": 42,
+      "revision": 7,
+      "anchor_instance": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "epoch_only_accepts": true,
+      "derived_anchor_digest": "b72347523b5f3bf03ddf258b537716fcc809e54429f4d17cd35d347078007954",
+      "digest_binding_accepts": true
+    },
+    "treatment": {
+      "floor_epoch": 42,
+      "revision": 7,
+      "anchor_instance": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "epoch_only_accepts": true,
+      "derived_anchor_digest": "fe8dcc63865d577bb9bb7b20d8fcff8a0afb8f4091eb6af0dab9426cee062c7c",
+      "digest_binding_accepts": false
+    },
+    "result": "SUPPORTED_NARROW_EQUAL_EPOCH_ANCHOR_IDENTITY_AMBIGUITY",
+    "interpretation": "Equal generation numbers alone do not identify the surviving external anchor. Binding the full anchor identity distinguishes this sibling treatment. This does not establish a production exploit and does not solve an exact clone/rollback of both lineage and external anchor.",
+    "product_state_mutated": false,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "external_evidence": [
+    {
+      "source": "The Update Framework security model",
+      "finding": "Trusted clients retain prior trusted metadata/version state specifically to detect rollback and mix-and-match classes; this supports preserving externally anchored freshness as a separate trust dimension rather than treating content identity as freshness."
+    },
+    {
+      "source": "etcd disaster recovery documentation",
+      "finding": "Restore can require revision advancement/compaction so consumers do not accept stale views as current; this supports explicit post-restore generation semantics rather than silent rollback acceptance."
+    }
+  ],
+  "repair": {
+    "draft_pr": 523,
+    "candidate_head": "fa69b906c37ad871a501849456f9435c660f1e03",
+    "files": [
+      "runtime/identity/lineage_boot_freshness_bridge_v1_candidate.py",
+      "tests/lineage_boot_freshness_bridge_v1_gate.py",
+      ".github/workflows/frank-lineage-freshness-bridge-v1-vps.yml"
+    ],
+    "behavior": [
+      "Domain-separate an external anchor digest over schema, positive floor_epoch, revision and anchor_instance.",
+      "Revalidate selected V3 head and external admission content hashes.",
+      "Require trusted-caller target-body identity and artifact identity to match admission exactly.",
+      "Require admission anchor_epoch to equal the surviving external floor.",
+      "Require admission external_anchor_digest to equal the full derived anchor identity.",
+      "Return authority NONE and never claim external anchor trust was verified by the module.",
+      "Preserve the explicit limitation that an exact clone of both lineage and external anchor remains indistinguishable without stronger out-of-snapshot freshness authority."
+    ]
+  },
+  "execution_evidence": {
+    "initial_run": {
+      "workflow_run": 31602532193,
+      "tested_sha": "1a98addea9e753634d76c090fc292b03e2ec95c0",
+      "candidate_compile": "PASS",
+      "v3_output": "PASS_SELECTED_LINEAGE_V3_COMPOSITION_CANDIDATE",
+      "freshness_gate_output": "PASS_ALL_CHECKS",
+      "workflow_conclusion": "FAILURE",
+      "failure_class": "CI_WRAPPER_ASSERTION_BUG",
+      "failure_detail": "wrapper asserted V3 status == PASS instead of the existing exact candidate status string; no semantic candidate failure",
+      "artifact_id": 9143769398,
+      "artifact_sha256": "e144412168fcc5c1a8b445d745b3aae5af45a897fe036f5a380448427ed61fb9"
+    },
+    "repair": "Only the CI wrapper assertion was corrected; no candidate semantics or safety invariant were weakened.",
+    "replacement_run": {
+      "workflow_run": 31602782546,
+      "job": 94134090572,
+      "tested_sha": "fa69b906c37ad871a501849456f9435c660f1e03",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "conclusion": "SUCCESS",
+      "dependency_blob_pins": "PASS",
+      "compile": "PASS",
+      "v3_composition_replay": "PASS_SELECTED_LINEAGE_V3_COMPOSITION_CANDIDATE",
+      "freshness_bridge_regression": "PASS_ALL_CHECKS",
+      "repository_static_integrity": "PASS",
+      "workflow_added_unusual_experiment_count": 0,
+      "artifact_id": 9143842523,
+      "artifact_sha256": "36cf5dc5199c93bd3fd8ebae69875f9594f4f5ed0ee267de1bfa23888483fa0e",
+      "accepted_hostinger_credit": "NOT_GRANTED"
+    }
+  },
+  "counterevidence_preserved": [
+    "An exact clone of the selected lineage plus the exact external anchor remains content-identical and is intentionally not claimed safe by this candidate.",
+    "The module does not verify the trust, location, persistence or non-clonability of the external anchor.",
+    "The successful self-hosted run executed on digital-retina and is not accepted Hostinger production evidence.",
+    "The candidate is stacked on PR514 rather than recomposed on current product main and therefore is not current-main production integration evidence.",
+    "No clean start/restart/restore, stale sibling/transplant, whole-VM rollback or productive service integration has been proven by this candidate."
+  ],
+  "grf_collapse": [
+    {
+      "claim": "same anchor epoch implies same external anchor",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "full external anchor identity digest plus selected V3 admission distinguishes equal-epoch sibling anchors",
+      "outcome": "SUPPORTED_AT_SELF_HOSTED_MECHANISM_LEVEL"
+    },
+    {
+      "claim": "content binding alone proves external anchor trust or whole-VM anti-rollback freshness",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "F-V01-01 or F-V01-13 is complete",
+      "outcome": "REJECT_NOT_CLAIMED"
+    }
+  ],
+  "next_falsifiers": [
+    "Establish independently trusted accepted-Hostinger host, ProductStart and artifact identity values without deriving trust from generic self-hosted labels.",
+    "Provision or identify an external freshness anchor demonstrably outside the rollback failure domain being claimed.",
+    "Compose PR523 semantics with real boot/recovery ordering and the PR240 generation floor without creating an authority cycle.",
+    "Replay clean start, restart, restore, stale-lineage, sibling-anchor, transplanted-state, rollback and missing/corrupt-anchor controls on the accepted productive path.",
+    "If whole-VM/whole-filesystem rollback must be covered, introduce and test a stronger remote or physically monotonic witness; do not relabel a clonable content hash as freshness authority."
+  ],
+  "promotion": {
+    "candidate_pr_state": "DRAFT_KEEP_OPEN",
+    "merge_to_product_main": "NOT_AUTHORIZED_BY_THIS_RECEIPT",
+    "f_v01_01": "IN_PROGRESS",
+    "f_v01_13": "IN_PROGRESS",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "final_model_training": "NOT_AUTHORIZED"
+  }
+}

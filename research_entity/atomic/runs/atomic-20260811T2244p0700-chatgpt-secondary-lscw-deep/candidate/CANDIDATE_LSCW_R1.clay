@@ -1,0 +1,152 @@
+module atomic.lscw.r1
+version "LSCW-R1"
+status REVISED_RESEARCH_CANDIDATE_NOT_PROMOTED
+
+enum Stage {
+  CLAY_SOURCE_TO_BACKEND,
+  BUILD_TO_INSTALLED_PRODUCT,
+  INSTALLED_PRODUCT_TO_CONSUMED_RUNTIME,
+  SELECTED_STATE_TO_BOOT,
+  EFFECT_OPEN_TO_PROVIDER_OUTCOME,
+  OUTCOME_TO_REENTRY,
+  REENTRY_TO_REWARD_UPDATE,
+  PROCESS_TO_RECOVERED_PROCESS
+}
+
+enum HardDimension {
+  TARGET_IDENTITY,
+  OWNER_BINDING,
+  STATE_LINEAGE,
+  ARTIFACT_SUBJECT,
+  INSTALLED_ARTIFACT,
+  CONSUMED_RUNTIME_DEPENDENCY,
+  SEMANTIC_SCHEMA,
+  STAGE_VALIDATOR_IDENTITY,
+  STAGE_VALIDATOR_RESULT,
+  EFFECT_AUTHORITY,
+  EFFECT_POLICY,
+  EXECUTION_GENERATION,
+  USER_INTENT_SCOPE,
+  VERIFIED_OUTCOME,
+  CAUSAL_CREDIT,
+  REWARD_UTILITY_AUTHORITY,
+  INSTANCE_LEASE
+}
+
+record HardFieldProjection {
+  dimension_set_hash:Hash
+  schema_epoch:Epoch
+  values:Map<HardDimension,Hash>
+}
+
+record IndependentStageValidatorReceipt {
+  validator_kind:Symbol
+  validator_identity:Hash
+  source_identity:Hash
+  target_identity:Hash
+  result:Symbol
+  evidence:Set<ProvenanceRef>
+}
+
+record StageRule {
+  stage:Stage
+  from_schema_epoch:Epoch
+  to_schema_epoch:Epoch
+  required_dimensions:Set<HardDimension>
+  allowed_changed_dimensions:Set<HardDimension>
+  requires_independent_semantic_validator:Bool
+  rule_hash:Hash
+}
+
+record LinearLifecycleWitness {
+  witness_id:Hash
+  parent_witness_id:Hash
+  stage:Stage
+  semantic_epoch:Epoch
+  transition_epoch:Epoch
+  projection:HardFieldProjection
+  exact_consumed_root:Hash
+  exact_produced_root:Hash
+  stage_validator:OPTION<IndependentStageValidatorReceipt>
+  state:Symbol
+  evidence:Set<ProvenanceRef>
+}
+
+fn hard_field_residual(
+  before:HardFieldProjection,
+  after:HardFieldProjection,
+  rule:StageRule
+) -> Set<HardDimension> {
+  require before.dimension_set_hash == after.dimension_set_hash
+  require before.schema_epoch == rule.from_schema_epoch
+  require after.schema_epoch == rule.to_schema_epoch
+  require rule.required_dimensions subset_of dimensions_present(after)
+  return changed_dimensions(before.values, after.values) minus rule.allowed_changed_dimensions
+}
+
+fn validate_transition_shadow(
+  parent:LinearLifecycleWitness,
+  after:HardFieldProjection,
+  exact_consumed_root:Hash,
+  exact_produced_root:Hash,
+  validator:OPTION<IndependentStageValidatorReceipt>,
+  rule:StageRule
+) -> Bool {
+  require parent.state == CURRENT
+  require witness_not_consumed(parent.witness_id)
+  require exact_consumed_object_matches(parent, exact_consumed_root)
+  require cardinality(hard_field_residual(parent.projection, after, rule)) == 0
+  if rule.requires_independent_semantic_validator {
+    require validator.some
+    require validator.value.result == PASS
+    require validator_is_independent_enough_for_stage(rule.stage, validator.value)
+    require validator.value.source_identity == parent.exact_produced_root or source_relation_matches(parent, validator.value)
+    require validator.value.target_identity == exact_produced_root
+  }
+  return true
+}
+
+law LSCW_R1_is_hard_field_lifecycle_composition_not_universal_semantic_oracle
+law compiler_language_semantics_require_independent_stage_validation
+law semantic_root_from_same_buggy_frontend_is_not_independent_evidence
+law ProductStart_conjunctive_gate_remains_required
+law build_attestation_subject_digest_cannot_be_substituted_by_signer_identity
+law exact_consumed_runtime_dependency_must_match_admitted_dependency
+law selected_state_lineage_cannot_be_substituted_by_same_epoch_sibling
+law linear_consumption_is_candidate_replay_control_not_effect_idempotency
+law provider_idempotency_and_unknown_outcome_reconciliation_remain_external_obligations
+law verified_outcome_plus_causal_credit_required_before_reward_update
+law reward_dimension_presence_does_not_mint_reward_utility_authority
+law GWT_salience_model_confidence_or_web_ingress_cannot_change_authority_dimensions
+law unknown_or_missing_hard_dimension_fails_closed
+law witness_cannot_mint_truth_identity_effect_authority_user_intent_or_Harness_authority
+
+observe unique_cross_stage_mutants_caught_over_CurrentExecutionContext
+observe valid_transform_false_rejects
+observe witness_validation_latency
+observe state_amplification_bytes
+observe TCB_delta
+observe replay_rejection
+observe sibling_lineage_rejection
+observe consumed_object_mismatch
+observe independent_validator_coverage
+
+ablation remove_linear_consumption
+ablation remove_state_lineage
+ablation remove_consumed_runtime_binding
+ablation remove_validator_identity
+ablation remove_dimension_set_hash
+ablation allow_unknown_dimensions
+ablation replace_with_CurrentExecutionContext
+
+failure NO_INDEPENDENT_VALIDATOR_WHEN_REQUIRED -> ABSTAIN
+failure SEMANTIC_RESIDUAL_NONZERO -> QUARANTINE
+failure PARENT_REPLAY -> ABSTAIN
+failure SIBLING_OR_TRANSPLANTED_LINEAGE -> QUARANTINE
+failure CONSUMED_OBJECT_MISMATCH -> QUARANTINE
+failure UNKNOWN_DIMENSION_SET -> REFRESH
+
+invariant research_only_shadow_until_real_target_discriminator
+invariant no_new_effect_authority
+invariant no_truth_promotion
+invariant no_training_authorization

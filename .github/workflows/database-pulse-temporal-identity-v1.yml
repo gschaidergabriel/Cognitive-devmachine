@@ -1,0 +1,190 @@
+name: FRANK Database Pulse Temporal Entity Identity V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/binary_entity_temporal_pulse_v2.py'
+      - 'research_entity/runtime/database_pulse_temporal_identity_v1.py'
+      - 'research_entity/runtime/gwt_split_pulse_twin_workspace_v1.py'
+      - 'research_entity/runtime/gwt_chrono_bridge_counterfactual_v1.py'
+      - 'research_entity/runtime/test_binary_entity_temporal_pulse_v2.py'
+      - 'research_entity/runtime/test_database_pulse_temporal_identity_v1.py'
+      - 'research_entity/runtime/test_gwt_split_pulse_twin_workspace_v1.py'
+      - 'research_entity/runtime/test_gwt_chrono_bridge_counterfactual_v1.py'
+      - 'tools/database_pulse_temporal_identity_v1_probe.py'
+      - 'research_entity/global/SELF_ROOT_BINARY_ENTITY_LINEAGE_AND_TEMPORAL_PULSE_CONTINUITY_DIRECTIVE.clay'
+      - 'research_entity/global/CLAY_FRESH_EVIDENCE_GWT_CHALLENGER_RESEARCH_DIRECTIVE.clay'
+      - '.github/workflows/database-pulse-temporal-identity-v1.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frank-database-pulse-temporal-identity-v1-main
+  cancel-in-progress: true
+
+jobs:
+  hosted-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - name: Compile current candidate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/binary_entity_temporal_pulse_v2.py \
+            research_entity/runtime/database_pulse_temporal_identity_v1.py \
+            research_entity/runtime/gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/gwt_chrono_bridge_counterfactual_v1.py \
+            research_entity/runtime/test_binary_entity_temporal_pulse_v2.py \
+            research_entity/runtime/test_database_pulse_temporal_identity_v1.py \
+            research_entity/runtime/test_gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/test_gwt_chrono_bridge_counterfactual_v1.py \
+            tools/database_pulse_temporal_identity_v1_probe.py
+      - name: Run identity temporal and two GWT falsifiers plus Pulse V5 regressions
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_binary_entity_temporal_pulse_v2 \
+            research_entity.runtime.test_database_pulse_temporal_identity_v1 \
+            research_entity.runtime.test_gwt_split_pulse_twin_workspace_v1 \
+            research_entity.runtime.test_gwt_chrono_bridge_counterfactual_v1 \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5_adversarial
+      - name: Hosted randomized differential and GWT reduction probe
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_temporal_identity_v1_probe.py \
+            --copies 500 --episodes 10000 --chrono-episodes 1000 \
+            --fuzz-seeds 25 --fuzz-copies 60 --fuzz-attempts 30 \
+            --output research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_hosted.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: temporal-entity-identity-v1-hosted
+          path: research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_hosted.json
+
+  target-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true, persist-credentials: true}
+      - name: Compile exact target candidate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/binary_entity_temporal_pulse_v2.py \
+            research_entity/runtime/database_pulse_temporal_identity_v1.py \
+            research_entity/runtime/gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/gwt_chrono_bridge_counterfactual_v1.py \
+            research_entity/runtime/test_binary_entity_temporal_pulse_v2.py \
+            research_entity/runtime/test_database_pulse_temporal_identity_v1.py \
+            research_entity/runtime/test_gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/test_gwt_chrono_bridge_counterfactual_v1.py \
+            tools/database_pulse_temporal_identity_v1_probe.py
+      - name: Run identity temporal and two GWT falsifiers plus Pulse V5 regressions on target VPS
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_binary_entity_temporal_pulse_v2 \
+            research_entity.runtime.test_database_pulse_temporal_identity_v1 \
+            research_entity.runtime.test_gwt_split_pulse_twin_workspace_v1 \
+            research_entity.runtime.test_gwt_chrono_bridge_counterfactual_v1 \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5_adversarial
+      - name: Target-VPS randomized differential copy-cost GWT and MCP live probe
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_temporal_identity_v1_probe.py \
+            --copies 1000 --episodes 20000 --chrono-episodes 3000 \
+            --fuzz-seeds 60 --fuzz-copies 80 --fuzz-attempts 40 \
+            --probe-mcp \
+            --output research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json
+      - name: Attach exact target-VPS and current-program metadata
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          if python3 tools/program_progress.py --json > /tmp/program-progress.json; then
+            :
+          else
+            printf '%s\n' '{"status":"UNKNOWN","reason":"program_progress_resolver_failed"}' > /tmp/program-progress.json
+          fi
+          python3 - <<'PY'
+          import json, os, pathlib
+          from datetime import datetime, timezone
+          p=pathlib.Path('research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          x['execution_metadata']={
+            'evidence_class':'REAL_CURRENT_TARGET_VPS_SUBSYSTEM_EXECUTION',
+            'scope':'TEMPORAL_ENTITY_DATABASE_PULSE_SUBSYSTEM_NOT_COMPLETE_V0_1_ACCEPTANCE',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'git_sha':os.environ.get('GIT_SHA',''),
+            'github_run_id':os.environ.get('RUN_ID',''),
+            'github_run_attempt':os.environ.get('RUN_ATTEMPT',''),
+          }
+          x['program_progress']=json.loads(pathlib.Path('/tmp/program-progress.json').read_text())
+          x['acceptance']={
+            'randomized_falsifier_pass':x['randomized_falsifier']['status']=='PASS',
+            'clock_boottime_available':bool(x['environment']['has_clock_boottime']),
+            'mcp_health_observed':x['mcp']['status'],
+            'mcp_release_current_exists':bool(x['mcp']['release_current_exists']),
+            'twin_gwt_distinct_mechanism_promoted':False,
+            'twin_gwt_reduced_to_simple_control':x['crazy_gwt_challenger']['promotion_decision']=='REFUTED_AS_DISTINCT_MECHANISM_USE_SIMPLE_REENTRY_INHIBITION',
+            'chrono_gwt_distinct_mechanism_promoted':False,
+            'chrono_gwt_reduced_to_direct_time_recompute':x['crazy_gwt_challenger_iteration_2']['promotion_decision']=='REFUTED_AS_DISTINCT_MECHANISM_USE_DIRECT_TIME_RECOMPUTE',
+            'chrono_phantom_pulses_materialized':x['crazy_gwt_challenger_iteration_2']['phantom_pulses_materialized'],
+          }
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          assert x['acceptance']['randomized_falsifier_pass'],x
+          assert x['acceptance']['clock_boottime_available'],x
+          assert x['acceptance']['twin_gwt_reduced_to_simple_control'],x
+          assert x['acceptance']['chrono_gwt_reduced_to_direct_time_recompute'],x
+          assert x['acceptance']['chrono_phantom_pulses_materialized']==0,x
+          PY
+      - name: Persist target-VPS subsystem receipt even when MCP health is negative evidence
+        run: |
+          set -euo pipefail
+          cp research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json /tmp/temporal_entity_identity_v1_vps.json
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p research_entity/benchmarks/database_pulse
+          cp /tmp/temporal_entity_identity_v1_vps.json research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json
+          git config user.name 'clay-temporal-pulse-runner'
+          git config user.email 'clay-temporal-pulse@users.noreply.github.com'
+          git add research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json
+          git commit -m 'evidence(frank): persist temporal entity Pulse target-VPS receipt [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
+      - name: MCP deployment truth gate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json')
+          x=json.loads(p.read_text())
+          if x['mcp']['status']!='HEALTHY':
+              raise SystemExit('MCP health is not live/healthy on this exact target runner: '+x['mcp']['status'])
+          if not x['mcp']['release_current_exists']:
+              raise SystemExit('MCP /opt/clay-vps-mcp/current release link missing')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: temporal-entity-identity-v1-target-vps
+          path: research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json

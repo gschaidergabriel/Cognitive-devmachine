@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2327p0700-idle-handoff-epoch-fence",
+  "trigger": "go",
+  "completed_at_local": "2026-08-11T00:10:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider_model": "OpenAI/GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_identity": "self.root",
+  "target_host": "accepted Hostinger Ubuntu target lane",
+  "macro_cycle_result": "PRODUCTIVE_STOP_AT_REQUIRED_CAPABILITY_GATE",
+  "exactly_one_oob_experiment": {
+    "count": 1,
+    "name": "ABA_STALE_IDLE_CONFIRMATION_FENCE",
+    "result": "PASS_ON_ACCEPTED_TARGET_LANE",
+    "no_second_oob_experiment": true
+  },
+  "primary_supported_result": {
+    "name": "V16 idle-handoff release-generation fence",
+    "status": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
+    "pull_request": 195,
+    "target_run": 31408572649,
+    "normal_regression": "PASS",
+    "aba_discriminator": "PASS",
+    "mechanism": "session + client + exact released_lease_epoch; conditional pending-state/epoch clear",
+    "security_effect": "delayed acknowledgement from an older same-session release cannot clear a newer pending handoff; autonomy remains blocked until current generation confirmation",
+    "resource_micro_gate": {
+      "normal_wall_seconds": 0.27,
+      "normal_max_rss_kib": 25400,
+      "aba_wall_seconds": 0.15,
+      "aba_max_rss_kib": 24576,
+      "scope": "single executions only; not whole-Frank performance"
+    },
+    "promotion_blockers": [
+      "repository-wide static integrity not green in target run",
+      "fresh-main merge safety required"
+    ]
+  },
+  "repository_integrity_adjudication": {
+    "target_run_failures": [
+      {
+        "code": "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
+        "class": "KNOWN_PATH_CLASSIFICATION_FALSE_POSITIVE",
+        "prior_discriminator": "closed PR 192 target evidence"
+      },
+      {
+        "code": "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/effect_terminal_runtime_v17_candidate.py",
+        "class": "REAL_SCHEMA_AUTHORITY_BOUNDARY_VIOLATION"
+      }
+    ],
+    "repair_pr": 209,
+    "repair_status": "TESTING_NOT_PROMOTED",
+    "repair_mechanism": [
+      "reuse validated path-aware exclusion for colocated runtime test fixtures",
+      "remove candidate DDL authority from effect runtime",
+      "explicit Research-Entity candidate migrator",
+      "non-test migration requires RESEARCH_ENTITY_ONLY",
+      "physical SQL-script execution reused from apply_current_schema.apply rather than adding a second executescript authority",
+      "disposable apply/rollback regression preserves V14/V15/V16 metadata and integrity"
+    ],
+    "first_target_attempt": {
+      "run": 31410771018,
+      "result": "HARNESS_DEPENDENCY_FAIL_NOT_PRODUCT_FALSIFICATION",
+      "error": "No module named pytest",
+      "product_assertions_executed": false
+    },
+    "harness_repair": "workflow-only switch to Python stdlib importlib execution of the same three zero-fixture tests",
+    "replacement_head": "92189c754c4224eb51a7ae74606d4df2df6955ba",
+    "replacement_target_run": 31411392331,
+    "replacement_target_state_at_stop": "QUEUED",
+    "stop_reason": "accepted target execution capability currently unavailable because the required self-hosted job has not started"
+  },
+  "architecture_test_obligations_added": [
+    {
+      "name": "typed task-switch consent boundary",
+      "status": "NO_BUILD_YET",
+      "reason": "transport request_id/free text is not authority-grade proposed task identity; Needle/intent must produce provenance-bound typed task identity before deterministic V16 transition consent"
+    },
+    {
+      "name": "production token API transport",
+      "status": "NO_BUILD_YET",
+      "candidate_topology": "one application worker behind TLS reverse proxy until cross-process continuation equivalence is proven",
+      "reason": "network server/TLS are absent and blind multi-worker deployment conflicts with current process-local active-execution projection"
+    }
+  ],
+  "external_primary_evidence_fused": [
+    "Kubernetes/etcd generation/CAS mechanisms as stale-update fencing analogies",
+    "Python/Uvicorn/FastAPI/Nginx official production/TLS deployment guidance",
+    "IETF RFC 6750 bearer-token transport/confidentiality guidance",
+    "IETF RFC 9700 current OAuth security BCP as candidate replay/scope hardening evidence",
+    "OWASP API Security Top 10 2023 authentication/authorization/resource-consumption test obligations"
+  ],
+  "durable_outputs": [
+    "RESEARCH_RECEIPT.json",
+    "FINAL_REPORT.md",
+    "INTEGRATION_UPDATE_TARGET_VPS.json",
+    "TARGET_VPS_RESOURCE_METRICS.json",
+    "TRANSPORT_FRONTIER_NOTE.json",
+    "TASK_SWITCH_CONSENT_FRONTIER_NOTE.json",
+    "TOKEN_API_PRODUCTION_ACCEPTANCE_MATRIX.json",
+    "FINAL_SYNTHESIS.json",
+    "work events for epoch-fence candidate and V17 schema-authority repair"
+  ],
+  "negative_results_preserved": [
+    "initial idle-handoff branch became stale under concurrent main development and was not merged",
+    "repository static-integrity failure prevented epoch-fence promotion despite target functional PASS",
+    "pytest was absent on accepted target image; this is a harness dependency failure, not product evidence",
+    "no framework selected for production token transport without target package/runtime capability evidence",
+    "no task-switch implementation built without trusted typed proposed-task identity"
+  ],
+  "next_frontier": [
+    "execute replacement PR 209 target job 31411392331 and adjudicate authority regression + repo static integrity",
+    "if green, refresh current main and verify no new static-authority blocker before promoting/merging #209",
+    "then refresh #195 against current main and re-run/merge only with repository integrity green",
+    "after integrity chain is green, probe target package/runtime capability and implement the one-worker TLS token transport gate",
+    "integrate typed Needle/intent ProposedTaskIdentity with deterministic V16 task-switch consent receipts",
+    "continue current ClayCode/effect-authority critical path without duplicating active worker lanes"
+  ],
+  "training_authorized": false,
+  "final_model_training_started": false,
+  "external_effect_performed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

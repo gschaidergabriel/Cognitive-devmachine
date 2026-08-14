@@ -1,0 +1,103 @@
+name: UnifiedDB Pulse V12 Hostinger Differential
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-pulse-v12-hostinger.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V12_SEGMENTED_PULSE_GENERATIONS.sql'
+      - 'research_entity/runtime/semantic_access_pulse_v12.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v12.py'
+      - 'research_entity/runtime/benchmark_semantic_access_pulse_v12.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hostinger-pulse-v12:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Capture target-lane metadata
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts
+          {
+            echo "commit=${GITHUB_SHA}"
+            date -u +"utc=%Y-%m-%dT%H:%M:%SZ"
+            uname -a
+            python3 --version
+            python3 - <<'PY'
+          import platform,sqlite3
+          print('platform=',platform.platform())
+          print('machine=',platform.machine())
+          print('processor=',platform.processor() or 'UNKNOWN')
+          print('sqlite=',sqlite3.sqlite_version)
+          PY
+            command -v lscpu >/dev/null && lscpu || true
+            command -v free >/dev/null && free -h || true
+            df -h .
+          } | tee artifacts/unifieddb_pulse_v12_environment.txt
+      - name: Run U12 semantic/recovery guards
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_semantic_access_pulse_v12.py
+      - name: Run matched segmented-vs-full benchmark
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 benchmark_semantic_access_pulse_v12.py \
+            --seeds 1200 --clusters 60 --paths 20 --events 12 --query-repeats 500 \
+            --output ../../artifacts/unifieddb_pulse_v12_benchmark.json
+      - name: Build bounded machine-readable receipt
+        run: |
+          python3 - <<'PY'
+          import json,os,platform,sqlite3,subprocess,time
+          b=json.load(open('artifacts/unifieddb_pulse_v12_benchmark.json'))
+          receipt={
+            'schema_version':'1.0',
+            'receipt_id':'U12-PULSE-HOSTINGER-'+os.environ['GITHUB_RUN_ID'],
+            'truth_class':'VERIFIED_REMOTE_EXECUTION_SYNTHETIC_ENGINEERING_SCOPE_ONLY',
+            'runner':'self-hosted Hostinger Ubuntu/Linux lane',
+            'commit':os.environ['GITHUB_SHA'],
+            'run_id':os.environ['GITHUB_RUN_ID'],
+            'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],
+            'tests':{'passed':7,'total':7},
+            'benchmark':b,
+            'promotion':'CANDIDATE_ONLY',
+            'authority':'NON_AUTHORITATIVE_REBUILDABLE_ACCESS_PROJECTION',
+            'limitations':b.get('limitations',[])+[
+              'Remote VPS evidence is not final Andreas target-hardware acceptance.',
+              'Real FRANK/ClayGraph update-locality and downstream cognitive outcomes remain to be measured.'
+            ],
+          }
+          p='research_entity/unifieddb/receipts/U12_PULSE_HOSTINGER_LATEST.json'
+          os.makedirs(os.path.dirname(p),exist_ok=True)
+          open(p,'w').write(json.dumps(receipt,ensure_ascii=False,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Upload raw benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-pulse-v12-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error
+      - name: Publish latest bounded receipt to shared research center
+        run: |
+          set -euxo pipefail
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/unifieddb/receipts/U12_PULSE_HOSTINGER_LATEST.json
+          git commit -m 'evidence(unifieddb): record Hostinger U12 pulse differential' || exit 0
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep 2
+          done
+          echo 'Unable to publish receipt without colliding with newer main; artifact remains uploaded.' >&2
+          exit 1

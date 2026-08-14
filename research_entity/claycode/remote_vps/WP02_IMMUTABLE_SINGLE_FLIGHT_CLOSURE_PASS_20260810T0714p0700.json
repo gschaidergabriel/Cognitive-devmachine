@@ -1,0 +1,180 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "WP02_IMMUTABLE_SINGLE_FLIGHT_CLOSURE_PASS_20260810T0714p0700",
+  "created_at": "2026-08-10T07:14:06+07:00",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity": "Clay",
+  "research_subject": "Frank",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "adjudication": "HOSTINGER_EXACT_SOURCE_PLACEHOLDER_FIX_REPLICATION_SUPPORTED_NOT_TARGET_PROMOTED",
+  "architecture_delta": "NO_CHANGE",
+  "counts_as_wp02_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "promotion_allowed": false,
+  "training_authorized": false,
+  "prior_negative_evidence": [
+    {
+      "clay_commit": "467900cc2b283191356b253e2aab3e48355b92c0",
+      "result": "Exact-source Hostinger full closure reached the scientific V9->V17 selection discriminator and failed semantic-equivalence checks after transport/blob/dependency verification passed."
+    },
+    {
+      "clay_commit": "c05b67c6a72a52f93d0dac22488c39956c929e6e",
+      "result": "V17 strict construction, standalone full-corpus frontend and canonicalizer remained green while the cross-version comparator failed; WP02 stayed OPEN."
+    }
+  ],
+  "root_cause_evidence": {
+    "clay_commit": "058751f983a152f99f00ff75e28a7daad084af5b",
+    "adjudication": "STALE_FRONTEND_ROOT_CAUSE_STRONGLY_SUPPORTED_NOT_PROMOTED",
+    "mechanism": "Lark maybe_placeholders=True/default emitted None for unmatched square-bracket optionals and the production canonical frontend treated that parser-representation difference as semantic structure.",
+    "counterhypothesis_test": "Disposable None-aware canonicalization candidate made V9/V17 neutral fixtures and admitted corpora equivalent while preserving the intended owns spaced-call repair; production chose the smaller parser-contract fix instead."
+  },
+  "production_fix": {
+    "clay_commit": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+    "path": "tools/claycode_base_frontend.py",
+    "git_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "delta": "build_parser(..., maybe_placeholders=False, ...)",
+    "interpretation": "Absent optional syntax remains absent rather than becoming a synthetic semantic None child."
+  },
+  "immutable_hostinger_replay": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 66,
+    "workflow": "Clay WP02 Immutable Single-Flight Closure",
+    "run_id": 31343808739,
+    "job_id": 93321887528,
+    "conclusion": "success",
+    "source_revision": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+    "executor_snapshot": "1a8c3d785a4d79cc2b8edece6d54878bbe7b78de",
+    "source_transport": "IMMUTABLE_GIT_COMMIT_EXACT_BLOB_BUNDLE",
+    "executor_permissions": "contents:read",
+    "checkout_persist_credentials": false,
+    "runner": {
+      "name": "clay",
+      "machine": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "uname": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+      "python": "3.12.3",
+      "git": "2.43.0",
+      "cpu_model": "AMD EPYC 9354P 32-Core Processor",
+      "available_cpu_threads": 4,
+      "mem_total_kb": 16376020,
+      "virtualization": "kvm",
+      "boot_id": "8fab241d-868e-447d-b802-01d403c22e88",
+      "lark": "1.3.1",
+      "interegular": "0.3.3",
+      "observed_utc": "2026-08-10T00:13:52Z"
+    },
+    "verified_git_blobs": {
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+      "research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+      "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+      "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+      "tools/claycode_base_frontend.py": "55728fd20323a364bb5e831989644b65189603d1",
+      "tools/claycode_strict_lalr_probe.py": "e050b922acefe554ba4d6de19c4324952d45e803",
+      "tools/claycode_base_frontend_validation.py": "031c08d42b3fe01376a83424f39cc6dc140b4adb",
+      "tools/claycode_base_canonicalizer.py": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+      "tools/claycode_v17_declarative_trivia_discriminator.py": "71fc016ecf8a6b6497cdfd115fdbcfee8c48486c"
+    },
+    "checks": {
+      "discriminator_rc": true,
+      "strict_rc": true,
+      "frontend_rc": true,
+      "canonical_rc": true,
+      "discriminator_pass": true,
+      "strict_pass": true,
+      "frontend_pass": true,
+      "canonical_pass": true
+    },
+    "semantic_results": {
+      "v9_counterexample_confirmed": true,
+      "v17_strict_construction": "PASS_STRICT_CONSTRUCTION",
+      "strict_conflict_diagnostics": [],
+      "g9_full_corpus_pass": true,
+      "dialect_full_corpus_pass": true,
+      "owns_call_horizontal_trivia_equivalence": true,
+      "owns_call_distinct_from_prefix_relation": true,
+      "canonical_repeat_determinism": true,
+      "canonical_layout_trivia_invariance": true,
+      "semantic_mutation_discrimination": true,
+      "string_escape_identity": true,
+      "unpaired_surrogate_rejection": true
+    },
+    "v17_grammar_sha256": "83abde2348e6a40204e94ed91021a6e2f79a5ad1f0d96b09437214158ac70a64",
+    "parse_receipts": {
+      "g9": {
+        "parse_tree_sha256": "4386e5e1e208394ebe120b80bbf8cd3a1d2fce34b5934a5800b8374af228d771",
+        "tree_nodes": 1071,
+        "canonical_syntax_sha256": "ec292e50f2f17dafd3832f808a7a5a0e74495f63916ef1249cdea818bfeca53d"
+      },
+      "dialect": {
+        "parse_tree_sha256": "97ec1c96f9993336c05657c2a8e6638e1aac457a153ff2d491b6951d74de104a",
+        "tree_nodes": 387,
+        "canonical_syntax_sha256": "b810e464ec67bdde04c40a49d2186449091a4e26ec5404e8bc7a37e138e9eced"
+      }
+    },
+    "wall_time_ms": {
+      "discriminator": 5705,
+      "strict": 1014,
+      "frontend": 794,
+      "canonical": 599
+    },
+    "resource_metadata_gap": {
+      "user_seconds": "UNKNOWN",
+      "system_seconds": "UNKNOWN",
+      "max_rss_kb": "UNKNOWN",
+      "page_faults": "UNKNOWN",
+      "context_switches": "UNKNOWN",
+      "reason": "The immutable workflow's /usr/bin/time detail parser did not recover these fields into the consolidated receipt even though per-component time files were generated.",
+      "obligation": "Repair extraction or capture equivalent exact resource counters on the formal Andreas Ubuntu target run. Unknown must remain UNKNOWN."
+    },
+    "artifacts": {
+      "canonical": {
+        "sha256": "42acc2cb774ff304f30a1db75f8d158231b8c45d8b2d578db5c34a4976d91cdb",
+        "bytes": 10516
+      },
+      "discriminator": {
+        "sha256": "4077ee011152f63bfbb45e2732f21b1a8c013f0c4d30a988b89e2ba2f519ee6a",
+        "bytes": 7114
+      },
+      "frontend": {
+        "sha256": "e86ffaf249b06e4f1c51ea4dd57106a1f3418097cfbcb7574416b629855c92d9",
+        "bytes": 15217
+      },
+      "strict": {
+        "sha256": "b439ffc91b181c1a66ad49498c5980f4c3868f9d502618a8dec8114647772297",
+        "bytes": 1172
+      },
+      "uploaded_bundle_sha256": "a833d73b909f228b9a5239e11eb0e7e6cf7c0fcb5d9689b65025eb5057d165f3",
+      "github_artifact_id": 9046651093
+    }
+  },
+  "hypothesis_result": {
+    "hypothesis": "The earlier V9->V17 semantic-drift failure was caused primarily by production frontend placeholder representation rather than a demonstrated V17 language-semantic regression.",
+    "result": "SUPPORTED_ON_HOSTINGER_EXACT_SOURCE_REPLAY",
+    "strongest_counterhypothesis": "V17 still contains a real semantic regression independent of placeholder handling.",
+    "counterhypothesis_status": "NOT_SUPPORTED_BY_THIS_REPLAY; strict/full-corpus/metamorphic/canonical gates all passed after the single placeholder-mode production delta. Formal target and broader downstream differential evidence remain required."
+  },
+  "original_baseline_relation": {
+    "baseline": "V9 declarative grammar behavior plus prior V9 horizontal-trivia counterexample",
+    "candidate": "V17 declarative trivia-safe grammar with fixed production frontend placeholder contract",
+    "result": "V9 counterexample remains reproducible; V17 repair survives strict exact-source replay without the prior neutral-fixture comparator failure."
+  },
+  "next_obligations": [
+    "Keep CC-WP-02 formally OPEN until the registered Andreas Ubuntu developer-system adjudication satisfies the target receipt contract.",
+    "On the target run, preserve exact selected-grammar/source hashes and repeat strict/full-corpus/canonical/metamorphic checks.",
+    "Capture complete resource metadata including user/system CPU, RSS, faults, context switches and available host state; never convert UNKNOWN to zero.",
+    "Do not merge executor-only branches into Frank or treat Hostinger evidence as final target hardware acceptance.",
+    "Do not start paid/final training; training remains owner-authorized only."
+  ],
+  "go_oob_budget": {
+    "exactly_one_experiment_already_consumed": true,
+    "experiment": "Lark optional-placeholder mode sensitivity / None-placeholder falsifier recorded in the current go lineage.",
+    "no_additional_oob_experiment_added_by_this_receipt": true
+  },
+  "scope_guard": "This receipt promotes the repaired WP02 mechanism to supported remote Hostinger exact-source evidence only. It does not promote CC-WP-02 to PASS, does not satisfy Andreas target acceptance, does not authorize release/freeze/training, and does not alter Frank Harness authority boundaries.",
+  "authority_invariant": "model output != execution authority"
+}

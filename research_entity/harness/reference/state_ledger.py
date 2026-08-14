@@ -29,6 +29,7 @@ def canon(v):
 def cjson(v): return json.dumps(canon(v),ensure_ascii=False,sort_keys=True,separators=(',',':'))
 def h(v): return hashlib.sha256(cjson(v).encode()).hexdigest()
 def rawh(s): return hashlib.sha256(s.encode()).hexdigest()
+def jstr(v): return json.dumps(str(v),ensure_ascii=False,separators=(',',':'))
 
 SCHEMA='''
 PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;
@@ -71,8 +72,37 @@ class StateLedger:
         for r in self.conn.execute('SELECT domain,k,value_json,epistemic,status,domain_epoch,semantic_hash FROM state ORDER BY domain,k'):
             out.append({'domain':r[0],'key':r[1],'value':json.loads(r[2]) if r[2] is not None else None,'epistemic':r[3],'status':r[4],'domain_epoch':int(r[5]),'semantic_hash':r[6]})
         return out
-    def _roots(self):
+    def _semantic_state_hash_streaming(self):
+        """Byte-exact equivalent of h(canonical semantic-state object) without materializing it."""
+        digest=hashlib.sha256()
+        def put(s): digest.update(s.encode())
+        put('{"domain_epochs":{')
+        first=True
+        for r in self.conn.execute('SELECT domain,epoch FROM domain_epochs ORDER BY domain'):
+            if not first: put(',')
+            first=False; put(jstr(r[0])); put(':'); put(str(int(r[1])))
+        put('},"global_epoch":'); put(str(self.epoch))
+        put(',"semantic_chain_hash":'); put(jstr(self._m('semantic_chain_hash')))
+        put(',"state":[')
+        first=True
+        for r in self.conn.execute('SELECT domain,k,value_json,epistemic,status,domain_epoch,semantic_hash FROM state ORDER BY domain,k'):
+            if not first: put(',')
+            first=False
+            put('{"domain":'); put(jstr(r[0]))
+            put(',"domain_epoch":'); put(str(int(r[5])))
+            put(',"epistemic":'); put(jstr(r[3]))
+            put(',"key":'); put(jstr(r[1]))
+            put(',"semantic_hash":'); put(jstr(r[6]))
+            put(',"status":'); put(jstr(r[4]))
+            put(',"value":'); put(r[2] if r[2] is not None else 'null')
+            put('}')
+        put(']}')
+        return digest.hexdigest()
+    def _roots_legacy(self):
         s=h({'global_epoch':self.epoch,'domain_epochs':self.domain_epochs(),'state':self.materialized(),'semantic_chain_hash':self._m('semantic_chain_hash')})
+        return s,h({'semantic_state_hash':s,'execution_chain_hash':self._m('execution_chain_hash')})
+    def _roots(self):
+        s=self._semantic_state_hash_streaming()
         return s,h({'semantic_state_hash':s,'execution_chain_hash':self._m('execution_chain_hash')})
     def _norm_ops(self,ops):
         out=[]
@@ -105,7 +135,7 @@ class StateLedger:
                 self.conn.execute('INSERT INTO domain_epochs VALUES(?,?) ON CONFLICT(domain) DO UPDATE SET epoch=excluded.epoch',(d,de))
             for x in ops:
                 rh=h({'domain':x['domain'],'key':x['key'],'value':x['value'],'epistemic':x['epistemic'],'status':x['status']})
-                self.conn.execute('INSERT INTO state VALUES(?,?,?,?,?,?,?) ON CONFLICT(domain,k) DO UPDATE SET value_json=excluded.value_json,epistemic=excluded.epistemic,status=excluded.status,domain_epoch=excluded.domain_epoch,semantic_hash=excluded.semantic_hash',(x['domain'],x['key'],cjson(x['value']),x['epistemic'],x['status'],touched[x['domain']],rh))
+                self.conn.execute('INSERT INTO state(domain,k,value_json,epistemic,status,domain_epoch,semantic_hash) VALUES(?,?,?,?,?,?,?) ON CONFLICT(domain,k) DO UPDATE SET value_json=excluded.value_json,epistemic=excluded.epistemic,status=excluded.status,domain_epoch=excluded.domain_epoch,semantic_hash=excluded.semantic_hash',(x['domain'],x['key'],cjson(x['value']),x['epistemic'],x['status'],touched[x['domain']],rh))
             sch=h({'prev':self._m('semantic_chain_hash'),'semantic_event_hash':seh,'epoch':ne,'domain_epochs':touched})
             ech=h({'prev':self._m('execution_chain_hash'),'event_id':event_id,'idem':idem,'semantic_event_hash':seh,'provenance_hash':ph,'source_hash':sh,'execution_hash':eh,'epoch':ne})
             self._set('global_epoch',ne); self._set('semantic_chain_hash',sch); self._set('execution_chain_hash',ech); ss,tr=self._roots(); self._set('semantic_state_hash',ss); self._set('trace_root_hash',tr)

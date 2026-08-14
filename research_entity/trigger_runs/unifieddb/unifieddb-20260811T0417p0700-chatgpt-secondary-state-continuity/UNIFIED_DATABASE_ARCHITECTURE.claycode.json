@@ -1,0 +1,39 @@
+{
+  "schema_version":"1.0",
+  "status":"CANDIDATE_NOT_PROMOTED",
+  "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "target":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "architecture":{
+    "semantic_authority":"ClayCode typed semantics",
+    "canonical_state":"UnifiedDB",
+    "derived_topology":"ClayGraph",
+    "physical_store_candidate":"SQLite on accepted single-VPS target only when storage safety gate passes",
+    "lineage":{
+      "rule":"exactly one ADMITTED_CURRENT semantic lineage head",
+      "identity":"lineage_id + lineage_generation + head_epoch + head_root_hash + parent_head_hash",
+      "sibling_policy":"same-source/same-epoch divergent siblings are distinct candidates; only one may be admitted current",
+      "recovery":"restored snapshots must prove ancestry to the admitted/recovery-selected lineage and satisfy external monotonic floor"
+    },
+    "execution_binding":{
+      "rule":"every authoritative semantic transaction/state-epoch mutation binds immutable execution_id + lease_epoch + session/client provenance + lineage head",
+      "effect_fence_dependency":"reuse current PASS effect execution-generation mechanism; do not duplicate provider lifecycle code",
+      "stale_policy":"stale generation cannot commit state even if process resumes"
+    },
+    "external_floor":{
+      "role":"rollback-domain-independent monotonic recovery input",
+      "rule":"DB generation below verified external floor => fail closed / recovery required",
+      "warning":"a copy of the floor inside the same UnifiedDB file is evidence only, not rollback protection"
+    },
+    "storage_safety_gate":{
+      "wal_mode":"allowed only when exact SQLite build is proven fixed/backported or machine-checked connection/checkpoint topology excludes upstream WAL-reset trigger conditions",
+      "unsafe_or_unknown":"QUARANTINE_WRITES",
+      "target_observation":"current workspace reports SQLite 3.45.1 + WAL on accepted target",
+      "upstream_fix":"SQLite >=3.51.3, or named fixed backports such as 3.44.6/3.50.7; exact distribution backport still requires verification"
+    },
+    "migration_mode":"SHADOW -> TARGET_FALSIFIER -> ENFORCE -> RECOVERY_REPLAY -> PROMOTION",
+    "rollback":"disable enforcement + restore prior schema/application path + preserve evidence; never delete lineage/receipt history"
+  },
+  "hypothesis":"A logically unified canonical state plane with physically isolated external rollback floor and derived/index sidecars gives the best current correctness/recovery tradeoff.",
+  "counterhypothesis":"Keeping more state physically specialized may reduce common-mode failure and be simpler; physical consolidation should be rejected unless target measurements show material IPC/serialization savings without recovery regression.",
+  "promotion":"HOLD"
+}

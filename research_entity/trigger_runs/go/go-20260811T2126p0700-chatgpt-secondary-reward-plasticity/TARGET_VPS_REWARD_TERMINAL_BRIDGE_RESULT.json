@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "TARGET_VPS_REWARD_TERMINAL_BRIDGE_RESULT",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 332,
+  "workflow_run_id": 31505085548,
+  "branch_head": "bea96bc8bb7c93017d57bd90de008e15c9e97795",
+  "tested_sha": "360a8903434bb2fe6c86878ab4f3f2c18b2ac38b",
+  "status": "PASS_TARGET_VPS_REWARD_TERMINAL_BRIDGE_V1_GATE",
+  "target": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1"
+  },
+  "checks": {
+    "passed": 10,
+    "total": 10,
+    "failed": [],
+    "default_abstains_when_fractional_credit_unresolved": true,
+    "explicit_binary_policy_admits_only_done_bound_success": true,
+    "fractional_credit_refused_until_producer_receipt_schema_exists": true,
+    "caller_fractional_credit_is_never_authoritative": true,
+    "bound_reentry_without_done_is_not_reward_authority": true,
+    "verified_outcome_without_bound_reentry_is_not_reward_authority": true,
+    "terminal_explicit_no_learning_blocks_material_reward": true,
+    "verified_bound_failure_can_admit_negative_utility": true,
+    "unverified_outcome_never_admitted": true,
+    "raw_candidate_requires_non_bypassable_upstream_bridge": true
+  },
+  "important_negative_evidence": {
+    "raw_candidate_forged_input_material_learning_weight": 1.0,
+    "interpretation": "The raw isolated RewardPlasticityCandidate assumes upstream verification and is therefore not safe as a public authority boundary. Composition must be through a producer-owned terminal bridge or equivalent non-bypassable guard."
+  },
+  "binary_arm_example": {
+    "credit_policy": "BINARY_BOUND_ATTRIBUTION",
+    "credit_semantics": "BINARY_NOT_CALIBRATED_FRACTION",
+    "material_credit": 1.0,
+    "utility": 1.0,
+    "reason": "BINARY_VERIFIED_BOUND_ATTRIBUTION_ADMITTED",
+    "identity_bound": ["effect_id", "outcome_hash", "episode_id", "signal_id", "causal_id", "admitted_delta_hash", "terminal_receipt_hash"]
+  },
+  "credit_adjudication": {
+    "default": "ABSTAIN",
+    "caller_fractional_credit": "FORBIDDEN",
+    "fractional_credit": "UNRESOLVED_NO_PRODUCER_OWNED_SCHEMA",
+    "binary_credit": "EXPLICIT_EXPERIMENTAL_POLICY_ARM_NOT_CALIBRATED_FRACTION",
+    "raw_reward_candidate": "NON_AUTHORITATIVE_INTERNAL_MECHANISM_ONLY"
+  },
+  "resource_shadow": {
+    "elapsed_wall_s": 0.21,
+    "max_rss_kib": 24832,
+    "exit_status": 0
+  },
+  "architecture_delta": "REQUIRE_NON_BYPASSABLE_PRODUCER_OWNED_TERMINAL_REWARD_BRIDGE_BEFORE_MATERIAL_PLASTICITY; DEFAULT_ABSTAIN; DO_NOT_ACCEPT_CALLER_FRACTIONAL_CREDIT",
+  "remaining_gap": "The bridge verifies producer-owned V17 terminal identity but does not yet perform a non-bypassable end-to-end material-plasticity application, and no producer-owned fractional credit schema exists.",
+  "promotion": "NONE_INTERFACE_HARDENING_CANDIDATE_ONLY",
+  "go_oob_count_delta": 0,
+  "external_effect_performed": false,
+  "canonical_state_mutated": false,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

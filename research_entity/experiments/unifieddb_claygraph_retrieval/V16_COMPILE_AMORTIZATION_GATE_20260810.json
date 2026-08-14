@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "benchmark":"U16_COMPILE_AMORTIZATION_GATE_FROM_V14_MEASURED_COSTS",
+  "execution_class":"DERIVED_FROM_EXECUTED_LOCAL_V14_MEASUREMENTS_PLUS_LOCAL_GATE_SIMULATION",
+  "origin_actor":"chatgpt-secondary",
+  "inputs":{"no_alias":{"build_us":72295.54633333333,"online_query_us":60.76010636666667,"compiled_query_us":4.294575966666667,"online_top1":1.0,"compiled_top1":1.0},"alias":{"build_us":62061.835666666666,"online_query_us":60.96073368333333,"compiled_query_us":4.824339183333334,"online_top1":1.0,"compiled_top1":1.0},"safety_factor":1.20},
+  "break_even":{"no_alias_raw_reads":1280.3483084493141,"no_alias_guarded_reads":1536.417970139177,"alias_raw_reads":1105.5543595103293,"alias_guarded_reads":1326.665231412395},
+  "decision_grid":{"no_alias":{"100":"ONLINE","500":"ONLINE","1000":"ONLINE","1200":"ONLINE","1500":"ONLINE","2000":"COMPILE","5000":"COMPILE","10000":"COMPILE"},"alias":{"100":"ONLINE","500":"ONLINE","1000":"ONLINE","1200":"ONLINE","1500":"COMPILE","2000":"COMPILE","5000":"COMPILE","10000":"COMPILE"}},
+  "hard_guards":["compiled quality below online quality => ONLINE regardless of expected read count","non-positive per-query saving => ONLINE","unknown/short lifetime below guarded break-even => ONLINE"],
+  "architecture_consequence":"Materialization is no longer an unconditional optimization. V14/U15 semantic fields should be compiled only when measured per-query savings, non-regressed quality, build cost and expected reads before epoch invalidation predict positive guarded total-work savings. Otherwise route to the already-valid online/index path.",
+  "limitations":["Expected reads-before-invalidation can be forecast incorrectly and must be updated from live Pulse telemetry.","Build/update cost may change with scale, WAL pressure, hardware and graph churn.","Current break-even numbers are fixture-specific, not universal constants."],
+  "promotion":"CANDIDATE_ONLY"
+}

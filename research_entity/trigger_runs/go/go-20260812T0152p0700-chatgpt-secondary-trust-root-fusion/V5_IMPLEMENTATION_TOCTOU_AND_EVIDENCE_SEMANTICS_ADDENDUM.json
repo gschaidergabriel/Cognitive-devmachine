@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:03:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "parent_receipt": "research_entity/trigger_runs/go/go-20260812T0152p0700-chatgpt-secondary-trust-root-fusion/RESEARCH_RECEIPT.json",
+  "related_addendum": "research_entity/trigger_runs/go/go-20260812T0152p0700-chatgpt-secondary-trust-root-fusion/TARGET_OBSERVATION_ADDENDUM.json",
+  "work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "grf": {
+    "observed_anchors": [
+      "The accepted-target V4 counterworld demonstrated two byte-distinct SQLite 3.53.4 builds with the same upstream sqlite_source_id can each be admitted when the caller supplies the matching manifest digest; caller-selected manifest identity is therefore self-consistency, not independent deployment authority.",
+      "V5 removes the caller-supplied manifest digest choice and instead requires /etc/frank-v0.1/sqlite-runtime-anchor-v1.json with root ownership, non-group/non-other-writable parent chain, symlink rejection, lstat/fstat inode continuity, and parent-to-child anchor digest continuity.",
+      "The accepted target is Ubuntu 24.04.4 LTS, runs the self-hosted lane as frankrunner uid 1000, has no /etc/frank-v0.1 directory or V5 anchor, and the V5 launcher fails closed before productive code with exit 78 when the anchor is absent.",
+      "The accepted-target runner has no passwordless sudo, so a positive root-owned anchor mechanism probe cannot be created by the current CI authority lane.",
+      "The initial V5 mechanism workflow represented this blocked positive probe as a successful workflow conclusion; that was evidence-semantics false-green rather than a runtime admission PASS.",
+      "Frank main concurrently integrated the V5 pre-guard PATH fence so caller-controlled PATH helpers are not executed before the Python V5 guard."
+    ],
+    "generated_reality": "An independently owned OS trust anchor can close the V4 caller-choice authority hole while preserving fail-closed startup and avoiding premature dependence on an as-yet-unproven Frank binary trust root.",
+    "strongest_counter_reality": "The OS anchor is only a relocation of trust unless its provisioning lane and the V5 guard/launcher installation are independently authenticated; alternatively a future independently proven F-V01-01 binary/verifier root may be the cleaner trust root.",
+    "discriminating_result": "Current accepted-target reality lacks the separate OS anchor and lacks CI privilege to create one, so V5 remains a candidate that fails closed rather than a positively admitted production path.",
+    "outcome": "RETAIN_V5_CANDIDATE_AND_PROMOTE_DEPLOYMENT_TRUST_DOMAIN_AS_EXPLICIT_BLOCKER",
+    "confidence": "HIGH_FOR_CURRENT_TARGET_ABSENCE_AND_FAIL_CLOSED_BEHAVIOR; MEDIUM_FOR_FINAL_TRUST_ROOT_ARCHITECTURE"
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "v5_guard_path": "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v5_candidate.py",
+    "v5_guard_commit": "cbdccb49c923371847107718144680b994369e86",
+    "v5_launcher_path": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v5_launcher.sh",
+    "v5_launcher_initial_commit": "022d8f5f0a1a343e8a3e755c11011ab9013c71c1",
+    "pre_guard_path_fence_main_merge": "81ec1c571e231cfe90c4a4343150a4f4b7e99ec8",
+    "evidence_semantics_fix_commit": "beb895b951826f28cd0c38baba3565e7dd976fda",
+    "evidence_semantics_change": "BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN now exits 78 instead of 0 in the self-hosted V5 OS-anchor mechanism workflow.",
+    "effect_authority_changed": false,
+    "harness_authority_changed": false,
+    "canonical_state_mutated_by_runtime_probe": false
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "experiment": "Atomically replace the candidate trust-anchor file after lstat() but immediately before os.open(), forcing a same-path inode swap at the admission boundary.",
+    "scope": "LOCAL_DETERMINISTIC_MECHANISM_TEST_ONLY",
+    "baseline": "Stable root-owned regular anchor opens with matching lstat/fstat device+inode identity.",
+    "predicted_if_v5_race_check_is_effective": "Admission rejects the swapped inode as ANCHOR_REPLACED_DURING_OPEN.",
+    "predicted_if_counter_reality_is_right": "The replacement is admitted because path-level checks do not bind the opened object to the pre-open observation.",
+    "observed": "PASS_DENIED: ANCHOR_REPLACED_DURING_OPEN",
+    "accepted_target_execution": false,
+    "accepted_target_blocker": "Current frankrunner lane cannot create the required root-owned test anchor because sudo -n is unavailable.",
+    "rollback": "No persistent production state was modified."
+  },
+  "accepted_target_evidence": {
+    "initial_false_green_run": {
+      "workflow_run_id": 31524848656,
+      "artifact_status": "BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN",
+      "sudo_nopasswd": false,
+      "interpretation": "BLOCKED, NOT PASS"
+    },
+    "read_only_observation_run": {
+      "workflow_run_id": 31525278195,
+      "tested_sha": "352e2c6de3440a68b7ed63ef4e48190b7ff82d7d",
+      "artifact_id": 9114660606,
+      "os": "Ubuntu 24.04.4 LTS",
+      "runtime_user": "frankrunner",
+      "euid": 1000,
+      "etc_frank_parent_exists": false,
+      "v5_anchor_exists": false,
+      "absent_anchor_launcher_exit_code": 78,
+      "absent_anchor_result": "PASS_FAIL_CLOSED_ABSENT_OS_TRUST_ANCHOR"
+    },
+    "post_fix_mechanism_run": {
+      "workflow_run_id": 31525749846,
+      "tested_sha": "beb895b951826f28cd0c38baba3565e7dd976fda",
+      "workflow_conclusion": "FAILURE",
+      "artifact_id": 9114856465,
+      "artifact_digest": "sha256:b118cacbcad6d18b820aaabff0fe03afeb1c05fe5754446b040231fb723978c3",
+      "artifact_status": "BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN",
+      "sudo_nopasswd": false,
+      "static_policy_checks": {
+        "guard_checks_inode_continuity": true,
+        "guard_checks_parent_chain": true,
+        "guard_checks_parent_child_anchor_digest": true,
+        "guard_has_fixed_anchor_literal": true,
+        "guard_has_no_manifest_sha_cli": true,
+        "guard_requires_nonroot": true,
+        "launcher_fixed_anchor_literal": true
+      },
+      "interpretation": "The same real blocker is now represented as non-success while preserving evidence output; false-green semantics are closed for this workflow."
+    },
+    "ubuntu_latest_companion_gate": {
+      "workflow_run_id": 31525749825,
+      "job_id": 93893517643,
+      "conclusion": "FAILURE",
+      "executed_steps": 0,
+      "interpretation": "BLOCKED/INFRASTRUCTURE-UNKNOWN, NOT A SEMANTIC TEST FAILURE"
+    }
+  },
+  "promotion_law": {
+    "f_v01_13_closed": false,
+    "release_promotion": false,
+    "positive_productive_fixed_sqlite_admission_proven": false,
+    "next_discriminators": [
+      "Establish an independently authorized provisioning lane for the root-owned OS anchor, or first independently prove the F-V01-01 binary/verifier trust root and demonstrate a non-cyclic trust dependency graph.",
+      "Run full productive fixed-SQLite V5 admission on the accepted target with the exact authorized anchor, manifest and library bytes.",
+      "Falsify downgrade, library-swap, stale-anchor, restart/re-exec, crash/replay and rollback branches against the exact productive path.",
+      "Bind the final admission receipt into the accepted self.root/Frank v0.1 binary/state identity and current release contract."
+    ]
+  },
+  "negative_results_preserved": [
+    "SQLite version/source-id plus caller-selected matching manifest digest does not prove owner-authorized library identity.",
+    "No root-owned V5 trust anchor currently exists on the accepted target.",
+    "Current CI authority cannot create the required root-owned anchor for a positive accepted-target probe.",
+    "A workflow conclusion alone is insufficient evidence when the recorded mechanism status is BLOCKED.",
+    "The ubuntu-latest companion evidence-gate failure with zero executed steps is not semantic evidence."
+  ]
+}

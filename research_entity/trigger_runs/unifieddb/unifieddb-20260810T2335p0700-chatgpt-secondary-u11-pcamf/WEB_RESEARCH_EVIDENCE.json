@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0","run_id":"unifieddb-20260810T2335p0700-chatgpt-secondary-u11-pcamf",
+  "research_question":"Which machine-native memory/query structures can improve Frank v0.1 without allowing learned/opaque mechanisms to become truth or effect authority?",
+  "evidence":[
+    {"topic":"learned indexes","source":"Kraska et al. 2017 arXiv:1712.01208","finding":"Indexes can be modeled as learned functions and can improve speed/memory on compatible distributions; applicability is distribution-dependent.","use":"supports learned addressers as candidates, not correctness authority"},
+    {"topic":"learned steering","source":"Marcus et al. Bao arXiv:2004.03814","finding":"A learned layer can steer an existing query optimizer and adapt without replacing all deterministic optimizer mechanics.","use":"supports learned router over deterministic plans"},
+    {"topic":"learned filters","source":"Mitzenmacher arXiv:1901.00902; Fidalgo/Ye arXiv:2508.00882","finding":"Guarantees require explicit backup/sandwich paths; recent learned LSM work reports zero-false-negative mode only with backup filters while an aggressive classifier can introduce false negatives.","use":"hard rule: approximate/learned path must abstain/fallback"},
+    {"topic":"product-key memory","source":"Lample et al. arXiv:1907.05242","finding":"Product keys enable fast exact nearest-neighbor addressing into very large structured memories.","use":"motivates product-manifold derived memory field"},
+    {"topic":"neural memory","source":"Titans arXiv:2501.00663; Memory Layers at Scale arXiv:2412.09764; PRECOG arXiv:2608.02560","finding":"Model-native persistent/sparse/hidden-state memories can add large capacity or reduce context ingestion, but mechanisms depend strongly on model architecture.","use":"candidate model-side memory plane only; never canonical DB truth"},
+    {"topic":"incremental views","source":"DBSP arXiv:2203.16684","finding":"Rich queries can be transformed into incremental maintenance programs.","use":"supports delta-maintained ClayGraph/FTS/derived projections"},
+    {"topic":"authenticated append-only state","source":"RFC 9162","finding":"Merkle inclusion and consistency proofs efficiently bind entries to append-only tree history.","use":"supports periodic authenticated epoch/checkpoint proofs without blockchain"},
+    {"topic":"ANN limitations","source":"Indyk/Xu arXiv:2310.19126","finding":"Popular graph ANN implementations can have linear empirical query behavior on constructed worst-case instances.","use":"forces workload/OOD/adversarial fallback tests before ANN routing promotion"}
+  ],
+  "synthesis":"The recurring externally supported design pattern is learned steering/addressing with deterministic guarantee/fallback layers. This matches local evidence: PKM is excellent on its manifold and catastrophically wrong off it."
+}

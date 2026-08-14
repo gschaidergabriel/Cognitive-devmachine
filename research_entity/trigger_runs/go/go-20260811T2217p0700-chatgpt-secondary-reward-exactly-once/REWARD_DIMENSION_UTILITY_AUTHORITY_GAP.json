@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "OPEN_BLOCKER_BEFORE_TYPED_REWARD_COMPOSITION",
+  "observed_source_contract": {
+    "v17_terminal_identity_proves": [
+      "verified outcome identity",
+      "outcome success/failure bit",
+      "effect/attempt/outcome binding",
+      "episode/signal/causal identity",
+      "provenance-bound re-entry",
+      "admitted delta or explicit_no_learning",
+      "terminal DONE receipt"
+    ],
+    "v17_terminal_identity_does_not_prove": [
+      "RewardDimension",
+      "calibrated utility magnitude",
+      "fractional causal contribution",
+      "homeostatic/safety/resource valuation policy"
+    ]
+  },
+  "architecture_rule": "CALLER-SUPPLIED reward dimension, utility magnitude or fractional causal credit MUST NOT become material-learning authority. A future producer-owned RewardValuationReceipt or equivalent must bind the exact terminal receipt and a versioned valuation policy before typed material reward is admitted.",
+  "current_test_policy": {
+    "dimension": "TASK",
+    "utility": "verified success -> +1.0; verified failure -> -1.0",
+    "credit": "BINARY_BOUND_ATTRIBUTION -> 1.0",
+    "scope": "EXPLICIT_EXPERIMENTAL_COMPARISON_ARM_ONLY",
+    "policy_identity_must_be_bound": true,
+    "production_semantics_claimed": false
+  },
+  "minimum_future_producer_receipt": {
+    "must_bind": [
+      "terminal_receipt_hash",
+      "effect_id",
+      "verified_outcome_hash",
+      "episode_id",
+      "causal_id",
+      "valuation_policy_id_and_version",
+      "reward_dimension",
+      "utility_value",
+      "utility_confidence_or_uncertainty",
+      "evidence/provenance for dimension and valuation",
+      "causal-credit receipt identity when fractional credit is used"
+    ],
+    "must_not_mint": [
+      "effect authority",
+      "outcome truth",
+      "SELF identity",
+      "Harness authority"
+    ]
+  },
+  "strongest_counterhypothesis": "Frank v0.1 may not need producer-valued multi-dimensional reward at all. A simpler binary TASK attribution plus explicit non-reward safety/homeostatic gates may be easier to identify and safer; typed reward should win only under matched replay/OOD/resource evidence.",
+  "next_discriminator": "After exactly-once source projection and current ClayCode frontier are target-measured, compare scalar binary TASK control against typed/multiscale valuation under a frozen producer-owned valuation corpus; do not allow the candidate itself to label its own reward dimension.",
+  "promotion": "NONE",
+  "go_oob_experiment_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2030p0700-chatgpt-secondary-hwp17-target-contract-gate",
+  "trigger": "harness",
+  "work_package": "H-WP-17-REFERENCE-RELEASE-AUDIT",
+  "component_scope": "owner-fixed target-contract preflight gate",
+  "status": "COMPLETE_COMPONENT_PACKAGE_REMAINS_OPEN",
+  "built": [
+    "tools/harness_target_contract_gate.py",
+    "tests/test_harness_target_contract_gate.py"
+  ],
+  "executed": {
+    "unit_tests": "2/2 PASS",
+    "observed_old_freeze_gate": "BLOCK_AS_DESIGNED_EXIT_1"
+  },
+  "finding": "The unmodified 2026-08-09 H1 architecture freeze is stale against owner-fixed 2026-08-10 self.root/TARGET_VPS/token-API/translator/proactive-agency/web-ingress/Research-DB target semantics.",
+  "architecture_delta": "TEST_OBLIGATION_AND_REFREEZE_REQUIRED_NO_PROMOTION",
+  "h1_release_gate": "NOT_PASS",
+  "h2_release_gate": "NOT_PASS",
+  "research_write": "COMMITTED",
+  "interconnect_manifest": "research_entity/trigger_runs/harness/harness-20260810T2030p0700-chatgpt-secondary-hwp17-target-contract-gate/INTERCONNECT_MANIFEST.json",
+  "test_execution": "research_entity/trigger_runs/harness/harness-20260810T2030p0700-chatgpt-secondary-hwp17-target-contract-gate/TEST_EXECUTION.json",
+  "branch_feedback": "research_entity/trigger_runs/harness/harness-20260810T2030p0700-chatgpt-secondary-hwp17-target-contract-gate/BRANCH_FEEDBACK_MANIFEST.json",
+  "final_report": "research_entity/trigger_runs/harness/harness-20260810T2030p0700-chatgpt-secondary-hwp17-target-contract-gate/FINAL_REPORT.md",
+  "completed_at": "2026-08-10T20:30:00+07:00",
+  "next_falsifier": "Regenerate the authoritative H1 freeze from current contracts/runtime, require this gate to PASS, then run target-VPS boot/API/translator/Agency/web-ingress/restart fixtures."
+}

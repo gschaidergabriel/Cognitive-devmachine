@@ -1,0 +1,328 @@
+{
+  "schema_version": "1.0",
+  "run_id": "clayresearch-20260810T2317p0700-chatgpt-secondary-comparative-agent-systems-fusion",
+  "trigger": "none",
+  "route": "standard_material_research_request_with_clayresearch_semantics",
+  "created_at": "2026-08-10T23:17:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "research_question": "Which mechanisms from current comparable agent frameworks, persistent-memory systems and cognitive architectures can improve Frank v0.1 without replacing its owner-fixed ClayCode-only causal semantic architecture, and which apparent similarities should be rejected?",
+  "method": {
+    "steps": [
+      "boot current Clay and Frank repository truth",
+      "inspect current Frank runtime/state code",
+      "survey comparable projects by architectural class",
+      "inspect representative implementation source, not only README/marketing",
+      "derive mechanism-level gaps and superior external mechanisms",
+      "fuse only mechanisms compatible with current Frank invariants",
+      "form hypotheses and strongest counterhypotheses",
+      "perform a second external search for counterevidence and newer memory/GWT/control results",
+      "convert supported discoveries into architecture candidates and falsifiable test obligations"
+    ],
+    "important_limit": "External repositories were inspected through current GitHub/web source surfaces. Their code was not executed locally in this run, so all external comparisons are SOURCE_LEVEL evidence until matched executable benchmarks are built."
+  },
+  "current_frank_baseline_observed": {
+    "target_repo": "gschaidergabriel/frankv0.1 via connector alias gschaidergabriel/Dr.-Unterweger",
+    "observed_files": [
+      "README.md",
+      "claycode/frank_runtime.clay",
+      "runtime/state/frank_presence_runtime.py",
+      "runtime/state/UNIFIEDDB_V15_SINGLE_INSTANCE_PRESENCE.sql"
+    ],
+    "key_properties": [
+      "one persistent self.root with Frank as human surface",
+      "ClayCode-only target cognition",
+      "one central authoritative UnifiedDB and derived ClayGraph",
+      "single active cognitive presence lease with monotonic lease_epoch fencing",
+      "runtime cycle already models workspace broadcast, receiver closure, verified outcomes, causal credit, admitted learning, provenance-bound re-entry and loop-regime readout",
+      "Hyperposition preserves materially different unresolved alternatives",
+      "Harness mutation authority remains external to self.root"
+    ]
+  },
+  "comparative_survey": {
+    "deep_code_inspection": [
+      {
+        "project": "LangGraph",
+        "repo": "langchain-ai/langgraph",
+        "code": "libs/langgraph/langgraph/pregel/_loop.py",
+        "strong_mechanisms": ["Pregel-style stateful execution", "ordered checkpoint writes", "durability modes", "interrupt/replay/retry semantics"],
+        "frank_gap_or_delta": "Frank has richer causal semantics but should borrow explicit durability-policy and checkpoint/write-order conformance tests."
+      },
+      {
+        "project": "OpenAI Agents SDK",
+        "repo": "openai/openai-agents-python",
+        "code": "src/agents/run.py",
+        "strong_mechanisms": ["small explicit agent loop", "guardrail tripwires", "sessions", "tracing", "sandbox integration"],
+        "frank_gap_or_delta": "Use as a simplicity baseline: every Frank loop-core mechanism must justify itself against a minimal tool/handoff loop under matched budgets."
+      },
+      {
+        "project": "Microsoft Agent Framework",
+        "repo": "microsoft/agent-framework",
+        "code": "python/packages/core/agent_framework/_workflows/_workflow.py",
+        "strong_mechanisms": ["Pregel-like supersteps", "data-plane/control-plane separation", "checkpoint restoration", "graph signature hash", "HITL external requests"],
+        "frank_gap_or_delta": "Add a resume compatibility fingerprint over semantic topology/schema/binary/config, but allow explicit validated migrations rather than strict hash equality."
+      },
+      {
+        "project": "Letta",
+        "repo": "letta-ai/letta",
+        "code": "letta/schemas/memory.py",
+        "strong_mechanisms": ["explicit context-window accounting", "labeled core memory blocks", "git-backed memory projection", "agent-state portability ecosystem"],
+        "frank_gap_or_delta": "Add typed ContextBudgetReadout and versioned projections; reject prompt-memory as semantic authority because Frank authority stays in UnifiedDB/ClayCode."
+      },
+      {
+        "project": "OpenHands Software Agent SDK",
+        "repo": "OpenHands/software-agent-sdk",
+        "code": "openhands-sdk/openhands/sdk/conversation/state.py",
+        "strong_mechanisms": ["event log as durable history", "movable active HEAD and preserved branches", "stuck status", "resume-time agent/tool compatibility", "secret registry", "derived read-only view"],
+        "frank_gap_or_delta": "Strong implementation model for Hyperposition as a semantic branch DAG plus active leaf, and for explicit stuck discriminators. Never persist hidden chain-of-thought."
+      },
+      {
+        "project": "Soar",
+        "repo": "SoarGroup/Soar",
+        "code": "Core/SoarKernel/src/decision_process/run_soar.cpp",
+        "strong_mechanisms": ["decision-cycle as measured object", "per-phase timers", "production firing counts", "working-memory change counts", "episodic/semantic/RL subsystems"],
+        "frank_gap_or_delta": "Add a low-overhead CognitiveCycleShadow with phase-level latency/state-change/activation/resource counters to make loop-regime claims experimentally discriminable."
+      },
+      {
+        "project": "OpenCog Hyperon / MeTTa",
+        "repo": "trueagi-io/hyperon-experimental",
+        "code": "hyperon-space/src/lib.rs",
+        "strong_mechanisms": ["typed symbolic atom spaces", "query/substitution", "space modification observers", "pluggable space implementations"],
+        "frank_gap_or_delta": "Use observer-style incremental projection as a test candidate for UnifiedDB -> ClayGraph updates; do not create a second semantic authority."
+      },
+      {
+        "project": "Graphiti",
+        "repo": "getzep/graphiti",
+        "code": "graphiti_core/edges.py",
+        "strong_mechanisms": ["episode provenance", "valid_at/invalid_at temporal validity", "reference_time", "fact embeddings", "incremental temporal graph"],
+        "frank_gap_or_delta": "High-value candidate: explicit bitemporal/temporal fact validity in UnifiedDB while raw episode provenance remains immutable."
+      },
+      {
+        "project": "Google Agent Development Kit",
+        "repo": "google/adk-python",
+        "code": "src/google/adk/runners.py",
+        "strong_mechanisms": ["runner separated from session/memory/artifact/credential services", "event-centric invocations", "resumability configuration", "scoped task isolation"],
+        "frank_gap_or_delta": "Keep transport/runtime services separable from self semantics; service boundaries must not become new cognitive identities."
+      },
+      {
+        "project": "Mastra",
+        "repo": "mastra-ai/mastra",
+        "code": "packages/core/src/agent/durable/stream-adapter.ts",
+        "strong_mechanisms": ["indexed stream replay offset", "durable run liveness probe", "idle timeout", "late-event safe enqueue/close", "suspend/resume stream semantics"],
+        "frank_gap_or_delta": "Add a transport replay sequence distinct from lease_epoch so authority fencing and client delivery/replay are never conflated."
+      }
+    ],
+    "broad_architecture_scan": [
+      "AutoGen",
+      "PydanticAI",
+      "smolagents",
+      "Agno",
+      "Mem0",
+      "Cognee",
+      "AutoGPT",
+      "Agent Zero",
+      "LlamaIndex Workflows",
+      "CrewAI",
+      "OpenNARS for Applications",
+      "pymdp / Active Inference"
+    ],
+    "coverage_note": "This is a broad representative architecture census, not a mathematically exhaustive list of every public agent repository. Projects were grouped by unique mechanism; near-duplicate orchestration frameworks were not given equal depth when they added no new mechanism."
+  },
+  "second_search_counterevidence": [
+    {
+      "finding": "GNW-like integration/ignition is not itself proof of broadcasting; directed information-flow signatures are required to distinguish broadcasting from generic integration.",
+      "impact": "Supports Frank's receiver-use/outcome/re-entry receipts and rejects a single emergence or ignition scalar as architecture truth."
+    },
+    {
+      "finding": "Long-term agent-memory research in 2026 reports major gains from structured, conflict-aware and temporally indexed memory, while high-accuracy coding-agent retrieval can carry high latency.",
+      "impact": "Supports cheap multi-stage candidate retrieval before expensive cognition, with conflict detection and temporal validity on the write/admission path."
+    },
+    {
+      "finding": "SQLite WAL permits concurrent readers but ordinarily only one writer at a time.",
+      "impact": "Current one-global-cognitive-lease design makes SQLite plausible for v0.1, but background telemetry/indexing/research/effect ingress still requires a measured write-contention lane and bounded transaction durations."
+    },
+    {
+      "finding": "Current LangGraph issue evidence shows that serializer/type mismatch can silently degrade checkpoint state if compatibility is not fail-closed.",
+      "impact": "Strengthens the resume-compatibility fingerprint and typed-state migration tests; a checkpoint existing is not sufficient evidence of faithful recovery."
+    },
+    {
+      "finding": "Active-inference work formalizes epistemic information value but also exposes exploration/exploitation sensitivity and potential over-exploration.",
+      "impact": "If used, epistemic value belongs only in bounded opportunity ranking under Frank's existing initiative budget; it must never become truth, reward, or effect authority."
+    }
+  ],
+  "fusion_model": {
+    "name": "FRANK_CAUSAL_SEMANTIC_KERNEL_WITH_DURABLE_PROJECTION_FABRICS",
+    "status": "CANDIDATE",
+    "core_claim": "Frank should not converge toward a generic agent framework. Its differentiator should remain a compact causal semantic kernel whose admitted state changes require provenance and whose learning path closes through verified outcome -> causal credit -> admitted delta -> provenance-bound re-entry. Orchestration, retrieval, graph projection, checkpointing and stream delivery should remain replaceable measured fabrics around that kernel.",
+    "retain_from_frank": [
+      "ClayCode semantic authority",
+      "UnifiedDB canonical state plane",
+      "ClayGraph derived-only topology",
+      "single-presence epoch fencing",
+      "GWT receiver closure and causal-use distinctions",
+      "verified outcome and causal credit",
+      "provenance-bound re-entry",
+      "Hyperposition unresolved alternatives",
+      "effect authority separation",
+      "Harness proposal-only boundary"
+    ],
+    "candidate_transplants": [
+      "Graphiti-style temporal validity + episode provenance fields",
+      "OpenHands-style semantic branch DAG/active leaf for Hyperposition",
+      "MAF-style topology/config resume fingerprint with migration compatibility relation",
+      "Mastra-style indexed transport replay sequence separate from cognitive lease epoch",
+      "Soar-style per-phase cycle telemetry shadow",
+      "Letta-style explicit context-budget accounting without prompt-memory authority",
+      "LangGraph-style durability policy and checkpoint write-order tests",
+      "Hyperon-style incremental projection observer candidate",
+      "OpenHands-style stuck discriminator and resume compatibility checks"
+    ]
+  },
+  "hypotheses": [
+    {
+      "id": "H-COMP-20260810-01",
+      "hypothesis": "Adding explicit temporal fact validity and immutable source-episode lineage to UnifiedDB will improve contradiction handling, temporal reasoning and stale-fact abstention without needing to make ClayGraph authoritative.",
+      "counterhypothesis": "Existing epoch/provenance structures already encode enough temporal information; new validity fields only duplicate state and increase write/update complexity.",
+      "falsifier": "Matched LongMemEval-style temporal/update tasks plus contradiction injection: compare existing schema against temporal-validity candidate on accuracy, abstention, stale-fact errors, write latency and state amplification."
+    },
+    {
+      "id": "H-COMP-20260810-02",
+      "hypothesis": "Representing Hyperposition alternatives as a semantic event/branch DAG with an active leaf will reduce snapshot duplication and improve reversible alternative exploration while preserving ancestry.",
+      "counterhypothesis": "Branch DAG bookkeeping adds complexity and biases cognition toward historical branches; current set-valued Hyperposition is simpler and sufficient.",
+      "falsifier": "Replay identical alternative-rich tasks with set-valued baseline vs branch-DAG candidate; measure storage amplification, recovery, branch switch latency, task success, false branch revival and semantic-equivalence errors."
+    },
+    {
+      "id": "H-COMP-20260810-03",
+      "hypothesis": "A ResumeCompatibilityFingerprint over binary/build, ClayCode semantic version, UnifiedDB schema epoch, loop topology and parameter vector will prevent silent state corruption across restarts/upgrades.",
+      "counterhypothesis": "Strict fingerprints create needless incompatibility and block safe rolling migrations.",
+      "falsifier": "Fault-inject old/new schema and topology combinations; compare strict rejection, explicit migration relation and current behavior on silent corruption, false rejects, recovery time and replay equivalence."
+    },
+    {
+      "id": "H-COMP-20260810-04",
+      "hypothesis": "Separating presence lease_epoch from a monotonic API/event stream sequence will improve reconnect/replay/idempotency semantics without weakening single-presence authority fencing.",
+      "counterhypothesis": "A second monotonic clock is redundant because existing presence event seq and effect/request IDs can cover replay.",
+      "falsifier": "Disconnect/reconnect, duplicated delivery, stale client and lease takeover matrix; measure missing/duplicate chunks, stale-effect attempts and recovery latency with one-clock vs dual-clock designs."
+    },
+    {
+      "id": "H-COMP-20260810-05",
+      "hypothesis": "A low-overhead CognitiveCycleShadow containing per-phase latency, candidate counts, receiver closure, memory/context cost, state delta and re-entry depth will materially improve loop-regime classification and configuration search.",
+      "counterhypothesis": "Instrumentation perturbs timing and creates observability/state amplification without improving decisions.",
+      "falsifier": "Enable/disable shadow on matched seeds and tasks; require useful regime-classification or tuning gain greater than CPU/RAM/latency/storage perturbation."
+    },
+    {
+      "id": "H-COMP-20260810-06",
+      "hypothesis": "Hybrid temporal+semantic+keyword+graph candidate retrieval can reduce expensive context assembly while improving recall, provided retrieval evidence never directly admits semantic truth.",
+      "counterhypothesis": "Fusing correlated retrieval channels produces false confidence and more distractors; a simpler typed query path is more accurate and cheaper.",
+      "falsifier": "Matched memory/OOD suite with independent channel ablations; measure recall@k, precision@k, nDCG, temporal correctness, contradiction rate, downstream task success, latency and token cost."
+    },
+    {
+      "id": "H-COMP-20260810-07",
+      "hypothesis": "A first-class typed ContextBudgetReadout will improve token/latency efficiency by making context sources and compression decisions measurable per cycle.",
+      "counterhypothesis": "Provider-specific token accounting leaks physical implementation details into cognitive semantics and causes brittle optimization.",
+      "falsifier": "Keep ContextBudgetReadout as non-authoritative resource shadow; compare adaptive vs fixed assembly across model/provider backends for outcome quality, token cost and transfer robustness."
+    },
+    {
+      "id": "H-COMP-20260810-08",
+      "hypothesis": "Because Frank permits only one active cognitive presence, SQLite single-writer semantics are likely sufficient for v0.1 if all auxiliary write paths are short, queued or serialized; a server DB migration is not justified without measured contention.",
+      "counterhypothesis": "Telemetry, indexing, effects, API state and proactive/research ingress will create enough independent writers that SQLite becomes a reliability/latency bottleneck before v0.1 acceptance.",
+      "falsifier": "Target-VPS mixed workload with cognitive lease activity plus telemetry/effect/index/background ingress; measure p50/p95/p99 write wait, SQLITE_BUSY, queue depth, checkpoint interference and recovery."
+    },
+    {
+      "id": "H-COMP-20260810-09",
+      "hypothesis": "Bounded epistemic information value can improve proactive opportunity ranking when uncertainty is reducible, but only as a small non-authoritative term beneath current user-task and effect constraints.",
+      "counterhypothesis": "Even bounded epistemic value creates curiosity loops and unnecessary exploration that reduce task closure.",
+      "falsifier": "Lesion/add epistemic term under identical opportunity sets; measure verified useful outcomes per cost, task interruption, unnecessary exploration, unresolved-pressure reduction and recovery."
+    }
+  ],
+  "new_integrated_hypothesis_after_countersearch": {
+    "id": "H-COMP-20260810-FUSION",
+    "statement": "The strongest near-term architecture is not a larger monolithic agent loop but a smaller causal semantic kernel surrounded by explicitly versioned and replaceable fabrics: (1) temporal/provenance memory admission, (2) branchable alternative-state projection, (3) durable checkpoint/resume compatibility, (4) separate transport replay sequencing, (5) hybrid candidate retrieval, and (6) low-overhead cycle/resource shadows. Every fabric must be lesionable and must beat a simpler baseline under outcome, recovery and resource metrics.",
+    "strongest_counterhypothesis": "This decomposition merely renames conventional workflow/database components and increases boundaries; the simplest successful Frank could be a LangGraph/MAF-style durable workflow plus memory and effect gates, with no special causal semantic kernel.",
+    "decisive_experiment": "Build a matched Minimal Durable Agent baseline using existing mature orchestration semantics and compare it against the current Frank causal-kernel candidate on the same identity, memory-update, tool-effect, restart, temporal-conflict and long-horizon tasks. Hold model, prompts/semantic inputs, tool access and budgets constant. Promote Frank-specific machinery only where it provides statistically and operationally meaningful benefit."
+  },
+  "architecture_delta_candidates": [
+    {
+      "id": "ADC-TEMPORAL-PROVENANCE-V1",
+      "targets": ["F-V01-04-UNIFIEDDB-STATE-CONTINUITY", "F-V01-11-MEMORY-REWARD-GOALS"],
+      "change": "Add explicit effective validity interval/reference-time/source-episode semantics for mutable world/self facts, preserving immutable observation/provenance history.",
+      "status": "CANDIDATE_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "ADC-HYPERPOSITION-BRANCH-DAG-V1",
+      "targets": ["F-V01-05-GWT-HYPERPOSITION-TOPOLOGY", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "change": "Test semantic alternative branches as parent-linked receipts with active leaf and abandoned-branch preservation; never persist hidden chain-of-thought.",
+      "status": "CANDIDATE_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "ADC-RESUME-COMPAT-FINGERPRINT-V1",
+      "targets": ["F-V01-01-IDENTITY-SERVER-BINARY", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "change": "Bind restart/resume to binary/build/schema/semantic/topology/config identity and explicit validated migration compatibility.",
+      "status": "CANDIDATE_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "ADC-DUAL-EPOCH-STREAM-SEQ-V1",
+      "targets": ["F-V01-08-TOKEN-API-CLIENTS", "F-V01-09-EFFECT-AUTHORITY"],
+      "change": "Keep authority fencing lease_epoch separate from delivery/replay stream sequence and idempotency identities.",
+      "status": "CANDIDATE_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "ADC-COGNITIVE-CYCLE-SHADOW-V1",
+      "targets": ["F-V01-03-COGNITIVE-LOOP-CORE", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "change": "Add lesionable per-phase dynamics/resource shadow for loop-regime classification and configuration search.",
+      "status": "CANDIDATE_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "ADC-HYBRID-RETRIEVAL-GATE-V1",
+      "targets": ["F-V01-04-UNIFIEDDB-STATE-CONTINUITY", "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY"],
+      "change": "Use multi-channel retrieval only for candidate generation; require normal semantic admission and provenance before any truth/state mutation.",
+      "status": "CANDIDATE_NOT_IMPLEMENTED"
+    }
+  ],
+  "rejected_or_not_promoted": [
+    "Do not replace Frank with LangGraph, MAF, ADK, Letta, OpenHands, Mastra or another general agent framework on source-level comparison alone.",
+    "Do not make ClayGraph or retrieval rank semantic truth.",
+    "Do not interpret GWT ignition/integration as consciousness or as proof of causal broadcasting.",
+    "Do not persist hidden chain-of-thought in branch/event structures; persist only typed semantic alternatives, evidence, decisions and receipts.",
+    "Do not copy self-editing prompt memory into Frank's authority plane; memory projections remain derived/model-facing views of admitted state.",
+    "Do not replace SQLite solely because server databases offer more concurrency; first measure target-VPS contention under the current single-presence contract.",
+    "Do not use epistemic curiosity as reward, truth or authority."
+  ],
+  "work_reentry": {
+    "F-V01-03-COGNITIVE-LOOP-CORE": ["test CognitiveCycleShadow", "compare against Minimal Durable Agent baseline"],
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY": ["temporal validity/provenance experiment", "hybrid retrieval candidate gate", "SQLite mixed-writer benchmark"],
+    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY": ["semantic branch-DAG Hyperposition experiment", "directed receiver-use evidence remains mandatory"],
+    "F-V01-08-TOKEN-API-CLIENTS": ["dual lease_epoch/stream-sequence reconnect-replay experiment"],
+    "F-V01-10-PROACTIVE-AGENCY-WEB": ["bounded epistemic-value lesion experiment only"],
+    "F-V01-11-MEMORY-REWARD-GOALS": ["conflict-aware temporal memory evaluation"],
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": ["resume compatibility fingerprint", "branch recovery", "checkpoint corruption/fail-closed tests"]
+  },
+  "priority_order": [
+    "P1: ResumeCompatibilityFingerprint + fail-closed restart differential tests",
+    "P1: Temporal validity/provenance memory experiment",
+    "P1: Minimal Durable Agent simplicity baseline against Frank causal kernel",
+    "P2: Hyperposition semantic branch DAG",
+    "P2: CognitiveCycleShadow instrumentation",
+    "P2: lease_epoch vs stream sequence transport test",
+    "P3: hybrid retrieval ablations",
+    "P3: SQLite mixed-writer target-VPS contention benchmark",
+    "P4: bounded epistemic opportunity-value experiment"
+  ],
+  "evidence_classes": {
+    "frank": "CURRENT_GITHUB_SOURCE_INSPECTION",
+    "external_frameworks": "CURRENT_PRIMARY_REPOSITORY_SOURCE_INSPECTION",
+    "external_research": "PRIMARY_ORIGINAL_PAPER_OR_OFFICIAL_DOCUMENTATION_SEARCH",
+    "execution": "NO_EXTERNAL_CODE_EXECUTION_IN_THIS_RUN"
+  },
+  "research_write_result": "COMMITTED_BY_THIS_FILE_CREATE"
+}

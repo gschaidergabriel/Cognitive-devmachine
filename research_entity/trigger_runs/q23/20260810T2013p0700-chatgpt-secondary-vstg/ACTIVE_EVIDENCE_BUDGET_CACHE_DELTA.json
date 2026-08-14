@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "delta_id": "Q23-DELTA-PBC-VEC-20260810",
+  "parent_package": "Q23-PKG-ACTIVE-EVIDENCE-BUDGET-CACHE-20260810",
+  "hypotheses": [
+    {
+      "hypothesis_id": "Q23-H-ACTIVE-COVERAGE-01",
+      "status": "OPEN",
+      "claim": "A target-calibrated active sensing controller with explicit global coverage debt can reduce deep-vision tokens and full decoder calls while preserving hidden-operation detection, grounding and task success better than ROI-only and at lower total cost than full-frame-every-cycle.",
+      "strongest_counterhypothesis": "Selective confidence is too brittle under GUI distribution shift and the controller adds enough extra sensing/control overhead that a simple periodic-anchor hybrid dominates.",
+      "falsifier": "Matched held-out GUI/action episodes show no Pareto gain versus HYBRID_PERIODIC_ANCHOR across task success, hidden-operation misses, grounding, visual tokens, decoder calls, latency and resources.",
+      "cheapest_discriminating_test": "Offline replay with identical episodes comparing FULL_FRAME, ROI_ONLY, ROI_PLUS_CONTEXT, HYBRID_PERIODIC_ANCHOR and PBC_COVERAGE_DEBT using frozen target-model calibration; include modal-outside-ROI, background transition, small-text, wrong-confidence, model/interface-shift and post-action mismatch fixtures."
+    },
+    {
+      "hypothesis_id": "Q23-H-FEATURE-CACHE-LIFETIME-01",
+      "status": "OPEN",
+      "claim": "The libmtmd media embedding boundary is suitable for synchronous one-encode MVC tapping, but safe reuse beyond the owning batch lifetime requires an explicit owned, bounded, versioned descriptor cache rather than retaining raw embedding pointers.",
+      "strongest_counterhypothesis": "Native runtime multimodal cache/KV behavior already provides equivalent safe reuse, or cross-request descriptor caching provides no net benefit over re-encode/on-demand paths.",
+      "falsifier": "Runtime inspection/measurement demonstrates native version-safe cross-request reuse with no second encode, or VEC does not reduce pathway cost while preserving stale/version mismatch rejection.",
+      "cheapest_discriminating_test": "Instrument encode invocation count and batch lifetime; compare NO_CACHE, NATIVE_RUNTIME_CACHE_ONLY and VEC_OWNED_DESCRIPTOR across same-frame, changed-frame, mmproj-swap, preprocess-swap, crash/restart and concurrent-slot fixtures."
+    }
+  ],
+  "architecture_delta": {
+    "delta_id": "Q23-AD-PBC-VEC-01",
+    "status": "CANDIDATE",
+    "target_components": ["DigitalRetina", "VisionFeatureTap", "MVC", "PerceptualField", "VSTG", "FrankLoopCore"],
+    "proposed_change": "Insert a typed PerceptualBudgetController after deterministic change/provenance extraction and before/around Qwen vision escalation. It selects no-deep-vision, ROI+context, coarse-global, targeted-zoom or full-frame observation from calibrated uncertainty, visual alias conflict, task/action criticality, topology change and coverage debt. Couple the synchronous libmtmd VisionFeatureTap to a VersionedVisualEvidenceCache containing only owned bounded descriptors and receipts keyed by exact source/model/mmproj/preprocess/projection/token-budget/crop identities.",
+    "preserved_historical_functions": ["sensor ingress/provenance", "temporal continuity", "change detection", "ROI selection", "periodic/global re-observation", "familiarity/open-set routing", "action verification", "recovery/replay"],
+    "authority": "Cached/retrieved visual evidence remains evidence/context only. It cannot mint truth, task completion, GWT causal credit or effect authority.",
+    "rollback": "Disable PBC and VEC independently; revert to deterministic change gate + existing hybrid anchor/Qwen path; invalidate cache by schema/version epoch."
+  },
+  "test_obligations": [
+    {
+      "test_id": "Q23-T-PBC-COVERAGE-01",
+      "priority": "P2_AFTER_RUNTIME_SANITY_AND_FEATURE_TAP",
+      "variants": ["FULL_FRAME", "ROI_ONLY", "ROI_PLUS_CONTEXT", "HYBRID_PERIODIC_ANCHOR", "PBC_COVERAGE_DEBT"],
+      "controls": ["modal outside ROI", "background-only state change", "small text", "wrong high confidence", "interface shift", "visual alias conflict", "no-op action", "post-action mismatch"],
+      "metrics": ["task success", "hidden-operation miss", "grounding error", "visual tokens", "vision encode count", "full decoder count", "sensor-to-state p50/p95/p99", "sensor-to-action p50/p95/p99", "CPU/RSS", "false bypass", "forced-wide-observation rate"],
+      "pass_rule": "No promotion from token savings alone. PBC must be Pareto-competitive with HYBRID_PERIODIC_ANCHOR and must not worsen hidden-operation or grounding failure beyond frozen tolerance."
+    },
+    {
+      "test_id": "Q23-T-VEC-LIFETIME-01",
+      "priority": "P1_WITH_FEATURE_TAP",
+      "variants": ["NO_CACHE", "NATIVE_RUNTIME_CACHE_ONLY", "VEC_OWNED_DESCRIPTOR"],
+      "controls": ["same frame", "changed ROI", "source epoch change", "mmproj swap", "visual model swap", "preprocess change", "projection change", "token-budget change", "crash restart", "concurrent slot reuse"],
+      "metrics": ["vision encode invocation count", "cache hit/miss", "stale reuse rate", "version mismatch rejection", "copy bytes", "descriptor bytes", "latency quantiles", "RSS", "task/familiarity correctness", "replay equivalence"],
+      "pass_rule": "Any unowned-pointer persistence or silent version-mismatch reuse is FAIL. VEC survives only if it provides measurable benefit over native/no-cache baselines."
+    }
+  ],
+  "research_progress_delta": {
+    "kind": "REVISED_HYPOTHESIS_PLUS_ARCHITECTURE_AND_TEST_DELTA",
+    "description": "Sharpened q23 from generic ROI/token budgeting into target-calibrated active sensing with explicit coverage debt, and from generic feature-tap lifetime warning into an exact owned/versioned cache boundary. This adds falsifiers not present in the parent runtime-scale or VSTG hypotheses.",
+    "information_gain": 0.84,
+    "uncertainty_reduction": 0.21,
+    "architecture_impact": 0.76
+  }
+}

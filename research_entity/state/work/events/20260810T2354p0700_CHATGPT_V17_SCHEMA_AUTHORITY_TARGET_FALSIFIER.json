@@ -1,0 +1,49 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-evidence:frank-v17-candidate-schema-authority:20260810T2354p0700",
+  "kind": "WORK_EVIDENCE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T16:54:00Z",
+  "payload": {
+    "work_id": "FRANK-V17-CANDIDATE-SCHEMA-AUTHORITY-REPAIR",
+    "target_pr": 209,
+    "target_workflow_run": 31410771018,
+    "target_job": 93528002557,
+    "runner": {
+      "name": "clay",
+      "machine": "digital-retina",
+      "runner_version": "2.336.0",
+      "git_version": "2.43.0"
+    },
+    "tested_merge_sha": "b81bb5cfb71c349a109a26cac4976ce093028fe3",
+    "candidate_parent": "8e4cada36f62e3533019f6275cdcf3f02af1a890",
+    "base_parent": "a2fd2354affc861cd91083882e4c75f597e592a1",
+    "result": "HARNESS_DEPENDENCY_FAIL_NOT_PRODUCT_FALSIFICATION",
+    "passed_before_failure": [
+      "checkout",
+      "exact execution identity capture",
+      "Python compile"
+    ],
+    "failure": {
+      "step": "Compile and run authority regression",
+      "exact_error": "/usr/bin/python3: No module named pytest",
+      "exit_status": 1,
+      "product_assertion_executed": false,
+      "repo_static_integrity_executed": false
+    },
+    "artifact": {
+      "id": 9071639465,
+      "sha256": "c49fd3a70637b0f98ee4bd9c3de97c8661689750fb776d4af4627dccb293c0c8"
+    },
+    "adjudication": "UNKNOWN_PRODUCT_RESULT; TARGET_IMAGE_DOES_NOT_PROVIDE_PYTEST; DO_NOT COUNT AS PASS OR FAIL FOR V17 AUTHORITY MECHANISM",
+    "repair": {
+      "product_code_changed": false,
+      "workflow_change_only": true,
+      "new_candidate_head": "92189c754c4224eb51a7ae74606d4df2df6955ba",
+      "method": "Compile and execute the same three zero-fixture test functions with Python stdlib importlib instead of installing a third-party test runner.",
+      "replacement_target_run": 31411392331
+    },
+    "oob_experiment_count_added": 0,
+    "promotion": "PROHIBITED_UNTIL_REPLACEMENT_TARGET_RUN_EXECUTES_ASSERTIONS_AND_REPO_INTEGRITY"
+  }
+}

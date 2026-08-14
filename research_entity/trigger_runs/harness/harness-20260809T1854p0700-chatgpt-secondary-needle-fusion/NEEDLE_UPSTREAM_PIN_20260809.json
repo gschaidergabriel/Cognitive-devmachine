@@ -1,8 +1,20 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "captured_at": "2026-08-09T18:54:00+07:00",
   "upstream_source_repo": "cactus-compute/needle",
   "upstream_model_repo": "Cactus-Compute/needle",
+  "drive_checkout": {
+    "remote_origin": "https://github.com/cactus-compute/needle.git",
+    "branch": "main",
+    "commit": "6fdddb874dd6f46dabeea88d0bf239fc4a2474c4",
+    "git_index_contains_model_or_tokenizer_binary": false,
+    "git_index_binary_note": "Drive .git index lists source/docs/assets/UI only; no needle.pkl, model.safetensors, CQ4 bundle, tokenizer/needle.model or tokenizer/needle.vocab.",
+    "current_main_compare": {
+      "ahead_by": 1,
+      "changed_files_since_drive_commit": ["README.md", "setup.bat"],
+      "source_code_changes": 0
+    }
+  },
   "source_blobs_git_sha1": {
     "needle/model/constrained.py": "b6afbd7a06378d0d146caba881dac92be5d00cd9",
     "needle/model/run.py": "954022e5b96dcf3aee30a3537c3a2cd2ac1c0e67",
@@ -28,9 +40,10 @@
       "size_bytes_approx": 16200000,
       "sandbox_present": false
     },
-    "tokenizer.model": {
+    "tokenizer/needle.model": {
       "size_bytes": 124960,
       "sha256": "0823f5b9133c68a8140addc5d7a425fa9119c4c8cb4a550363b4bffa4ba1c8c7",
+      "downloaded_by_current_python_source": true,
       "sandbox_present": false
     }
   },
@@ -48,5 +61,5 @@
     ]
   },
   "runtime_rule": "H1 must not identify Needle merely by display name. Any executable model receipt must bind a verified checkpoint hash, tokenizer hash, source/runtime profile and exact offered-toolset hash. Arbitrary unverified pickle is not admissible.",
-  "current_execution_limit": "Source-level execution is verified. Full model/tokenizer inference is blocked only because model/tokenizer binary blobs are not mounted into the isolated sandbox through current connectors."
+  "current_execution_limit": "Source-level execution is verified. Full model/tokenizer inference is blocked only because model/tokenizer binary blobs are not mounted into the isolated sandbox through current connectors; direct external download was also denied by the container backend."
 }

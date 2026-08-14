@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "feedback": {
+    "claycode": {
+      "verdict": "NEW_IMPLEMENTATION_CONSTRAINT",
+      "delta": "Keep current capability semantics; add proof-carrying GateExecutionReceipt/admission infrastructure for runtime/ABI/FFI gates. Bind exact runtime, validation, invocation/workflow, semantic inputs and execution scope. Do not add core syntax without an executable counterexample."
+    },
+    "harness": {
+      "verdict": "NEW_EXECUTION_EVIDENCE_CONSTRAINT",
+      "delta": "Harness may only treat a gate as executed/verified when an exact subject/material/scope-bound receipt is verified. Workflow presence, queued work or commit wording are not execution evidence."
+    },
+    "frank": {
+      "verdict": "NEW_ARCHITECTURE_ASSURANCE_CONSTRAINT",
+      "delta": "Frank's effect authority remains live runtime capability possession; build/test attestations are evidence objects only. FRANK/H2/H3 admission must never let attestation/provenance substitute for capability authority or vice versa."
+    },
+    "unifieddb": {
+      "verdict": "NEW_STATE_MODEL_CONSTRAINT",
+      "delta": "Persist gate transitions append-only with evidence refs and immutable subject/material identities; preserve DEFINED, QUEUED, RUNNING, EXECUTED, VERIFIED and ADMITTED as distinct states."
+    },
+    "claygraph": {
+      "verdict": "NO_SEMANTIC_CHANGE_WITH_PROJECTION_NOTE",
+      "delta": "Graph may index receipt/material/run relations for retrieval; graph activation or agreement never promotes gate truth."
+    },
+    "gwt": {
+      "verdict": "NO_MECHANISM_CHANGE",
+      "delta": "If gate evidence enters workspace competition, broadcast/relevance remains distinct from verification/admission and effect authority."
+    },
+    "hyperposition": {
+      "verdict": "NO_CORE_CHANGE_WITH_UNCERTAINTY_NOTE",
+      "delta": "Unknown/multiple possible gate states remain explicit until receipt verification; uncertainty is not collapsed to PASS."
+    },
+    "emergenz": {
+      "verdict": "MEASUREMENT_HYGIENE_DELTA",
+      "delta": "Causal/replay comparisons should bind exact executable/harness/test identities and scope so software-version drift cannot masquerade as an emergence/intervention effect."
+    },
+    "clayresearch": {
+      "verdict": "SYSTEM_INTEGRATION_DELTA",
+      "delta": "Make authority, provenance, execution evidence, truth and release admission orthogonal in the shared semantic fabric; this reduces cross-layer state collapse without changing the fixed Clay-native FRANK target."
+    }
+  },
+  "global_negative_receipt": "No branch receives a scientific promotion from this run. The executable discriminator is synthetic proxy evidence and target-host BASE acceptance remains open."
+}

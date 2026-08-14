@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-RUNTIME-CAPABILITY-CLOSURE-20260811T025021Z",
+  "event_type": "LIVE_RESEARCH_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "prior_live_event_commit": "d638f307a9b9178a617c811848ca8d250e203d4c",
+    "observed_head": "4aaba6c36881ff4c216d3818a98c7f5b51771664"
+  },
+  "intended_recipients": [
+    "F-V01-04 UnifiedDB/state-continuity worker",
+    "F-V01-09 effect-authority/reentry worker",
+    "F-V01-13 security/recovery worker",
+    "ClayCode WP05 runtime worker"
+  ],
+  "delta": {
+    "evidence_class": "ACCEPTED_TARGET_BOUNDED_CAPABILITY_EVIDENCE_SHARED_PROJECT_RUNNER_ANCESTRY",
+    "project_receipt": {
+      "supervisor_commit": "198e9b861eacb81e9673ff3ce89372b56c6ad4fe",
+      "target_pr": 288,
+      "run": 31434825206,
+      "job": 93606495029,
+      "runner": "clay@digital-retina",
+      "result": "SUCCESS",
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "bounded_passes": [
+        "existing Python 3.12.3 _sqlite3 bound to private library",
+        "V16 ingress continuity",
+        "disposable 256-write two-connection WAL smoke",
+        "integrity ok and zero FK violations"
+      ],
+      "boundaries": [
+        "no system install",
+        "no canonical state mutation",
+        "no crash-window oracle",
+        "no WAL-reset race reproduction",
+        "no product runtime selection",
+        "private compile-option vector differs from system baseline; ENABLE_SESSION absent"
+      ]
+    },
+    "upstream_primary": {
+      "url": "https://www2.sqlite.org/releaselog/3_53_4.html",
+      "checked_utc": "2026-08-11T02:50:21Z",
+      "release_date": "2026-07-24",
+      "source_id_match": true,
+      "note": "Official release publishes the exact target-observed SQLITE_SOURCE_ID and inherits the WAL-reset fix."
+    },
+    "deduplication": [
+      "PR288 build/binding/V16/WAL checks are one target-run evidence family, not four replications.",
+      "PR266 runs 31432811773, 31432811985, 31432811337 and 31432810918 share the same tested merge and count as correlated mechanism/regression evidence.",
+      "This event refines the previously routed StorageTopologyIdentity; it does not recount the earlier upstream WAL/ATTACH family."
+    ]
+  },
+  "hypotheses": [
+    {
+      "id": "H-MINIMAL-RUNTIME-CAPABILITY-CLOSURE-001",
+      "claim": "Release acceptance should bind the minimal transitive capability closure actually required by Frank, not demand equality of the entire SQLite compile-option vector and not rely on semantic version/source ID alone.",
+      "new_concept": "MinimalRuntimeCapabilityClosure := hash(required C symbols, Python _sqlite3 ABI expectations, compile-enabled extensions, limits, pragmas, VFS behavior, journal/recovery semantics, loader binding).",
+      "support": [
+        "Exact official 3.53.4 source can bind and run on target.",
+        "The successful candidate lacks baseline ENABLE_SESSION, proving version/source identity and capability identity are different axes."
+      ],
+      "counterhypothesis": "Full build-vector equality is the only safe fail-closed contract; deriving a minimal closure risks omitting rare recovery or migration paths.",
+      "decisive_test": [
+        "Extract required SQLite symbols/options/limits from all reachable Frank runtime, migration, replay, Graph and recovery paths.",
+        "Run feature probes and exact application tests against system 3.45.1 and private 3.53.4.",
+        "Ablate each claimed-required capability independently, including ENABLE_SESSION, JSON/FTS, load-extension policy, thread-safety, limits and VFS behavior.",
+        "If an ablated capability cannot change any accepted workload or recovery oracle, classify it non-required with receipt; otherwise add it to the closure.",
+        "Run held-out migrations/recovery paths to falsify incompleteness before promotion."
+      ]
+    },
+    {
+      "id": "H-LOADER-BINDING-RECEIPT-001",
+      "claim": "A private-library success is restart-stable only if every accepted process proves which SQLite object was actually loaded, rather than trusting LD_LIBRARY_PATH configuration.",
+      "new_concept": "LoaderBindingReceipt := hash(executable, Python extension, resolved libsqlite realpath/build-id, sqlite_source_id, capability-closure hash, loader environment, process incarnation).",
+      "counterhypothesis": "Runtime sqlite_source_id plus capability probes are sufficient; filesystem path/inode binding is brittle across legitimate deployments.",
+      "decisive_test": [
+        "Capture dynamic-loader resolution and sqlite_source_id inside the live process.",
+        "Restart under systemd/service, clean shell, altered LD_LIBRARY_PATH and adversarial shadow-library conditions.",
+        "Require fail-closed mismatch before any authoritative database open.",
+        "Permit legitimate relocation only when immutable build/source/capability identities remain equal under an owner-reviewed deployment receipt."
+      ]
+    }
+  ],
+  "preserved_results": [
+    "Private 3.53.4 availability is supported; durability and product integration remain open.",
+    "Ubuntu 3.45.1-1ubuntu2.7 backport status remains UNKNOWN pending dedicated adjudication; do not infer vulnerable or patched from version alone.",
+    "WP04 remains focused on 29 unresolved contracts; storage work must not divert or promote it.",
+    "No training, external effect, canonical semantic promotion or Frank completion."
+  ],
+  "requested_reentry": [
+    "WP05/F-V01-13: preregister MinimalRuntimeCapabilityClosure and LoaderBindingReceipt gates.",
+    "F-V01-04: add capability/loader identity to the pending crash/concurrency A/B matrix.",
+    "F-V01-09: require the same receipt for verified-outcome/reentry durability.",
+    "Keep PR288 as candidate capability evidence only until crash, restart and held-out feature ablations pass."
+  ]
+}

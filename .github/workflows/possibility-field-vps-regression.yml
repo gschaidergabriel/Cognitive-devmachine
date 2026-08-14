@@ -1,0 +1,134 @@
+name: Possibility Field VPS Regression
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/possibility-field-vps-regression.yml'
+      - 'research_entity/harness/reference/possibility_frontier.py'
+      - 'research_entity/harness/reference/possibility_field_compiler.py'
+      - 'research_entity/harness/reference/unifieddb_emergent_preprocessor.py'
+      - 'research_entity/harness/test_possibility_frontier.py'
+      - 'research_entity/harness/test_possibility_field_compiler.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: possibility-field-vps-regression
+  cancel-in-progress: false
+
+jobs:
+  possibility-field-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout tested tree read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Run possibility field regression suites
+        shell: bash
+        run: |
+          set -uo pipefail
+          LOG=/tmp/POSSIBILITY_FIELD_TESTS.log
+          set +e
+          python3 -m unittest -v \
+            research_entity.harness.test_possibility_frontier \
+            research_entity.harness.test_possibility_field_compiler \
+            >"${LOG}" 2>&1
+          TEST_EXIT=$?
+          set -e
+          cat "${LOG}"
+          export TEST_EXIT
+          python3 - <<'PY'
+          import hashlib, json, os, platform, socket
+          from datetime import datetime, timezone
+          from pathlib import Path
+          log=Path('/tmp/POSSIBILITY_FIELD_TESTS.log').read_text(encoding='utf-8',errors='replace')
+          payload={
+              'schema_version':'1.0',
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope':'POSSIBILITY_FIELD_UNIT_REGRESSION_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'github_sha':os.environ.get('GITHUB_SHA',''),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+              'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+              'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+              'runner_os':os.environ.get('RUNNER_OS','unknown'),
+              'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+              'hostname':socket.gethostname(),
+              'platform':platform.platform(),
+              'python':platform.python_version(),
+              'test_exit_code':int(os.environ['TEST_EXIT']),
+              'tests_passed':int(os.environ['TEST_EXIT'])==0,
+              'log_sha256':hashlib.sha256(log.encode()).hexdigest(),
+              'authority_invariant':'possibility field output != truth/effect authority',
+          }
+          Path('/tmp/POSSIBILITY_FIELD_VPS_RECEIPT.json').write_text(
+              json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8'
+          )
+          PY
+          exit "${TEST_EXIT}"
+
+      - name: Upload VPS receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: possibility-field-vps-${{ github.run_id }}
+          path: /tmp/POSSIBILITY_FIELD_VPS_RECEIPT.json
+          if-no-files-found: error
+          retention-days: 30
+
+  persist-receipt:
+    if: always()
+    needs: possibility-field-vps
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout persistence lane
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Download tested receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: possibility-field-vps-${{ github.run_id }}
+          path: /tmp/possibility-field
+
+      - name: Persist receipt
+        shell: bash
+        env:
+          TESTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          source=Path('/tmp/possibility-field/POSSIBILITY_FIELD_VPS_RECEIPT.json')
+          data=json.loads(source.read_text(encoding='utf-8'))
+          assert data['evidence_class']=='REAL_SELF_HOSTED_UBUNTU_EXECUTION'
+          assert data['github_sha']==os.environ['TESTED_SHA']
+          root=Path('research_entity/state/system/possibility_field_vps')
+          root.mkdir(parents=True,exist_ok=True)
+          (root/'LATEST.json').write_text(json.dumps(data,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          (root/f"{data['github_run_id']}.json").write_text(json.dumps(data,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          git config user.name 'clay-possibility-field-benchmark'
+          git config user.email 'clay-possibility-field-benchmark@users.noreply.github.com'
+          git add research_entity/state/system/possibility_field_vps/
+          git commit -m "evidence(unifieddb): persist possibility-field VPS regression ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

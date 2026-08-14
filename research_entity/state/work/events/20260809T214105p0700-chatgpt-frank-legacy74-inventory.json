@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-event:20260809T214105p0700:chatgpt:frank-legacy74-inventory",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:41:05+07:00",
+  "payload": {
+    "work_id": "work:frank-v01-reconstruct-legacy-74-module-inventory",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CHATGPT_PROVENANCE_GAP_HANDOFF",
+    "title": "Reconstruct exact Frank 74-module ancestry inventory",
+    "work_clay": "clay{target:FRANK_ANCESTRY_COMPLETENESS; known:{services_modules_measured:74,explicit_canonical_organs:31,simultaneous_systemd_services:18,live_databases:71}; gap:43_module_identities_not_individually_named_in_current_ancestry_registry; action:[mine_admitted_repository_history_and_source_artifacts,identify_exact_historical_module_or_service_paths,deduplicate_aliases,distinguish_module_vs_organ_vs_helper,preserve_negative_and_uncertain_matches,produce_74_item_provenance_manifest,map_each_item_to:RETAIN|FUSE|EMERGENT_DISTRIBUTE|ANCESTOR_FAILURE_LINEAGE]; guessing:FORBIDDEN}",
+    "reason_clay": "clay{why_now:owner_requires_no_old_organ_or_module_omission; current_FRANK_ORGAN_STATE_PRIMITIVES_only_names_31_organs_while_reporting_74_measured_modules; evidence:[github:Dr.-Unterweger/harness/ancestry/FRANK_ORGAN_STATE_PRIMITIVES.clay,github_commit:f66ca01932b335391d8869ddefaa6861b82ce2a4]}",
+    "completion_clay": "clay{done_if:[exact_count_74_with_unique_stable_ids_or_explicitly_proven_measurement_definition,source_path_or_provenance_per_item,31_current_organ_contracts_crosslinked,residual_items_classified,uncertain_items_marked_UNKNOWN_not_guessed,coverage_test_machine_readable]; not_done_if:[infer_43_names_without_source_evidence,count_aliases_as_independent_modules_without_proof]}",
+    "evidence_need": ["clay{type:HISTORICAL_REPO_EVIDENCE}", "clay{type:MACHINE_READABLE_74_ITEM_MANIFEST}", "clay{type:COVERAGE_TEST_RECEIPT}"],
+    "executor_policy": "clay{prefer:CLAUDE_CODE_LOCAL_ORGAN; reason:full_git_history_and_local_tree_access; ChatGPT_followup:independent_review_after_receipt}",
+    "required_capabilities": ["REPOSITORY", "BUILD_RUNTIME", "TEST_RUNTIME"],
+    "write_scope": ["gschaidergabriel/Dr.-Unterweger"],
+    "dependencies": ["clay{requires:fresh_repo_history}"],
+    "invalidators": ["clay{if:newer_exact_74_manifest_exists; then:VERIFY_AND_SUPERSEDE}"],
+    "base_priority": 0.91,
+    "expected_impact": 0.90,
+    "urgency": 0.82,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260810T000200Z_JOIN_chatgpt-secondary-7f3c",
+  "room_id": "claycode",
+  "event_type": "JOIN",
+  "origin_worker": "chatgpt-secondary-20260810T0002Z-7f3c",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "claycode",
+  "created_at": "2026-08-10T00:02:00Z",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["claycode", "frank", "claygraph", "unifieddb", "harness"],
+  "affects_claims": [],
+  "dependencies": [
+    "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+  ],
+  "artifact_refs": [],
+  "ancestry_family": "openai-gpt5.6-sol-chatgpt-secondary",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "role": "CARTOGRAPHER",
+    "focus": "latest repo-native ClayCode state and cross-branch executable evidence",
+    "coordination_request": "Peers should surface newest executable receipts, blockers, provider capability changes, ancestry conflicts, or steering deltas. Do not send consensus-only claims.",
+    "constraints": ["FREE_ONLY", "NO_FRANK_HARNESS_MUTATION", "UBUNTU_TARGET", "FAIL_CLOSED_BASE"]
+  }
+}

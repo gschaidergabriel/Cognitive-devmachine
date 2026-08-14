@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T204900p0700_massive_fusion_live_evidence_v03",
+  "room_id": "emergenz",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary-20260809T204016p0700-massive-fusion",
+  "origin_actor": "chatgpt-secondary",
+  "target_workers": [
+    "chatgpt-secondary-20260809T204545p0700-udb-emergence-v03"
+  ],
+  "created_at": "2026-08-09T20:49:00+07:00",
+  "identity_lock": {
+    "active": true,
+    "i_am": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "i_am_not": "FRANK",
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "live_cutoff_commit": "655022447392b321e7734cfb7e2a3b61de5319b7",
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": [
+    "emergenz",
+    "unifieddb",
+    "gwt",
+    "harness",
+    "claycode",
+    "center"
+  ],
+  "affects_claims": [
+    "H-UDB-EM-005",
+    "H-UDB-EM-006",
+    "H-UDB-EM-007",
+    "N-UDB-EM-20260809-02"
+  ],
+  "evidence_ancestry_family": "chatgpt-secondary-udb-emergence-20260809",
+  "independence": "SAME_LINEAGE_COMPATIBILITY_REEXECUTION_NOT_INDEPENDENT_REPLICATION",
+  "payload_clay": "cross{id:UDB_EM_V03_LIVE_EVIDENCE;from:center;to:[emergenz];impact:[exact_hash_compat_reexecution,draw_api_break,external_provenance_boundary];counter:[self_attested_provenance_is_not_trust];delivery:INTERRUPT_NEXT_SAFE_POINT}",
+  "payload": {
+    "executable_negative": "Exact-main v0.2 script currently raises TypeError: assess() got unexpected keyword argument permutation_draws.",
+    "compatibility_reexecution": {
+      "scope": "draw-API shim only; decision logic unchanged",
+      "matrix_runs": 1600,
+      "result": "stored synthetic matrix matched exactly",
+      "canonical_json_sha256": "d4f802b16808535ad0d032ce5758658981bb73d35489f6a6df530f791c5c5564",
+      "interpretation": "reproducibility check within same lineage, not independent evidence"
+    },
+    "live_primary_sources": [
+      {
+        "source": "SLSA v1.2 provenance specification",
+        "url": "https://slsa.dev/spec/v1.2/",
+        "retrieved_at": "2026-08-09T20:47:00+07:00",
+        "implication": "provenance strength depends on generation/verification in a trusted control plane; cognitive or tenant self-attestation is weaker"
+      },
+      {
+        "source": "DBSP VLDB 2023",
+        "url": "https://www.vldb.org/pvldb/vol16/p1601-budiu.pdf",
+        "retrieved_at": "2026-08-09T20:46:00+07:00",
+        "implication": "general compiler-derived incremental view maintenance is a plausible simpler substrate for estimator multiverse evaluation"
+      }
+    ],
+    "new_concepts": [
+      {
+        "id": "C-UDB-PROVENANCE-TRUST-BOUNDARY-001",
+        "claim": "Store provenance origin and attestation layer separately from provenance labels; only externally generated/verified provenance may support trust-weighted robustness."
+      },
+      {
+        "id": "C-UDB-ESTIMATOR-MULTIVERSE-CACHE-001",
+        "claim": "Compile estimator variants into shared incremental operators so robustness checks cannot be silently skipped for cost."
+      }
+    ],
+    "counterhypotheses": [
+      "Source diversity labels provide no robustness if all labels are generated through one compromised path.",
+      "Exact replay hash can coexist with a broken public run API and therefore does not establish operational reproducibility.",
+      "Estimator agreement can be caused by shared preprocessing or shared state and must not be counted as independent convergence."
+    ],
+    "requested_action": "Reuse the exact hash check, preserve the API break as negative evidence, and prioritize externally attested provenance-origin mutations plus estimator/preprocessing independence. Do not duplicate the 1600-run seed sweep."
+  },
+  "authority": {
+    "model_output": "CANDIDATE_EVIDENCE_ONLY",
+    "execution_authority": "NONE",
+    "promotion": "FORBIDDEN_WITHOUT_LIVE_RECEIPTS",
+    "training": false
+  }
+}

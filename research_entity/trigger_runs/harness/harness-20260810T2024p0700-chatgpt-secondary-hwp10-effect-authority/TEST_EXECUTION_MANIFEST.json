@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2024p0700-chatgpt-secondary-hwp10-effect-authority",
+  "trigger": "harness",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "H-WP-10-EFFECT-AUTHORITY",
+  "program_stage_observed": "BASE_CLAYCODE_RELEASE",
+  "h1_gate_observed": "BLOCKED_ON_BASE_CLAYCODE_RELEASE",
+  "evidence_class": "LOCAL_DETERMINISTIC_TEST",
+  "target_runtime_claim": false,
+  "implementation": {
+    "path": "research_entity/harness/reference_effect_authority.py",
+    "sha256": "6315de8c535195e007a92d0866db9977726181b47f95508111fe91348df4c33d",
+    "commit": "e389be2a56a0c3a694b3d6b20abc299bb48f2c32"
+  },
+  "tests": {
+    "path": "research_entity/harness/test_reference_effect_authority.py",
+    "sha256": "09e33c450260e51f77ac6c6581f1a15b2e10287731c4d2ea2231dcc8d1d876fd",
+    "commit": "544f3d2e5710bde59972cdcf696d990aabde515b",
+    "runner": "python -m unittest -v test_reference_effect_authority.py",
+    "passed": 12,
+    "failed": 0,
+    "errors": 0,
+    "duration_seconds_reported": 0.001
+  },
+  "acceptance_cases": [
+    "ordinary_read_executes_without_confirmation",
+    "reversible_write_executes_with_scoped_authority",
+    "external_message_executes_when_destination_and_payload_match_intent",
+    "privileged_change_requires_correct_gate",
+    "delete_requires_exact_target_and_confirmation",
+    "format_wipe_denied_without_owner_fixed_one_shot_recovery_protocol",
+    "stale_confirmation_rejected",
+    "replayed_confirmation_rejected",
+    "translator_cannot_bypass_effect_class",
+    "model_or_gwt_confidence_cannot_mint_authority",
+    "unknown_effect_degrades_to_proposal",
+    "eligible_non_destructive_fixture_unnecessary_refusal_rate_zero"
+  ],
+  "environment": {
+    "host_class": "containerized local execution environment",
+    "cpu_model": "Intel Xeon Platinum 8573C",
+    "logical_cpu_available": 5,
+    "mem_total_kb": 6219544,
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "3.13.5",
+    "timezone": "UTC",
+    "executed_at_utc": "2026-08-10T13:30:05Z"
+  },
+  "source_contract": "research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay",
+  "source_contract_status": "PROJECT_OWNER_FIXED_DIRECTIVE",
+  "counterhypothesis": "A simpler allow/confirm boolean gate might suffice without typed effect classes or one-time confirmation identity.",
+  "counterhypothesis_result": "NOT_SUPPORTED_BY_CURRENT_CONTRACT: stale/replay resistance, UNKNOWN degradation, and class-specific destructive rules require typed state and request-bound confirmation identity. Runtime value versus a simpler implementation still requires matched integration measurement.",
+  "limitations": [
+    "Not executed on the accepted Hostinger target VPS.",
+    "Not yet integrated into the full H1 turn pipeline.",
+    "No ClayCode H2 differential equivalence claim.",
+    "No concurrency or crash-between-confirmation-and-effect test yet.",
+    "H-WP-10 remains open until integration, recovery and target-runtime evidence exist."
+  ],
+  "result": "PASS_COMPONENT_LOCAL_ONLY",
+  "promotion": "NOT_PROMOTED_TO_H1_RELEASE"
+}

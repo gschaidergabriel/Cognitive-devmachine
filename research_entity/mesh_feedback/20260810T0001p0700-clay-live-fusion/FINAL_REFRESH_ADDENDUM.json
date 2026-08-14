@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-live-fusion-20260810T0001p0700",
+  "source_commits":["206609184cde21bec9ff3000f92712a0185e166a","e4b760eac7cc298fbf990ce25104e59aab202018"],
+  "material":true,
+  "evidence_adjudication":{
+    "206609184cde21bec9ff3000f92712a0185e166a":"PROJECT_OWNER_FIXED_IDENTITY_ARCHITECTURE",
+    "e4b760eac7cc298fbf990ce25104e59aab202018":"WORK_CREATE_READY_ONLY_NOT_IMPLEMENTATION_RECEIPT"
+  },
+  "finding":"A new Clay Identity Registry contract makes FRANK the architecture/family name and ClayID the immutable canonical identity of each individual synthetic entity. Registry entries are append-only; copies mint a new ClayID before first Pulse; each ClayID owns an independent authoritative current-state namespace; same-lineage restore may retain identity only with a continuity receipt. The subsequent work event queues implementation and tests but does not prove that the registry/copy gate is implemented or passing.",
+  "provenance_boundary":"The contract and the work event share one owner-directed architecture lineage and are not independent replication. A READY work event is not execution evidence.",
+  "branch_effects":{
+    "frank":"DELTA: individual identity becomes immutable ClayID; FRANK remains architecture/family; copy birth occurs before first Pulse.",
+    "harness":"DELTA: add copy-vs-restore, raw-copy detection, parent/child/sibling state-isolation and identity-corruption fail-closed tests when implementation exists.",
+    "unifieddb":"DELTA: append-only ClayID birth ledger and per-ClayID current-state key are required architecture surfaces; no implementation PASS yet.",
+    "claygraph":"REFINEMENT: identity edges may derive from ClayID birth/lineage events but graph remains non-authoritative.",
+    "claycode":"NO_CHANGE_EXECUTION: representability requirement only; no V17/BASE evidence.",
+    "gwt":"NO_CHANGE: individual identity must be provenance-bound but no GWT mechanism result changed.",
+    "hyperposition":"NO_CHANGE: no new mechanism evidence.",
+    "emergenz":"NO_CHANGE: identity/copy architecture is not emergence or consciousness evidence.",
+    "clayresearch":"DELTA: preregister registry atomicity, million-candidate synthetic mint uniqueness, crash/restart, raw-copy detection and state-isolation tests before claiming implementation."
+  },
+  "canonical_promotion":"NONE",
+  "release_promotion":"NONE"
+}

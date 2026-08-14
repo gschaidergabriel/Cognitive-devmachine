@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T0007p0700-gpt56sol-fv0113-loader-interposition",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_main_before_write": "26accebc2fcd4d3e52645d8a8f842c1e26a0ca53",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "overlapping_open_candidates": [555, 557],
+    "issue_frontier": 534,
+    "training_authorized": false
+  },
+  "primary_source_support": {
+    "sqlite_wal_reset": {
+      "source": "sqlite.org/wal.html#the_wal_reset_bug",
+      "fact": "WAL-reset corruption bug is documented through SQLite 3.51.2 and fixed in 3.51.3+; documented fixed backports also exist."
+    },
+    "sqlite_current_fixed_release_observed": {
+      "source": "sqlite.org/releaselog/3_53_4.html",
+      "version": "3.53.4",
+      "release_date": "2026-07-24",
+      "interpretation": "Version suitability does not prove productive-process binding."
+    },
+    "dlsym_scope": {
+      "source": "Linux man-pages dlsym(3)",
+      "fact": "Handle-scoped dlsym searches the specified object and objects automatically loaded with it in dependency order; global/default lookup and preload interposition are distinct loader mechanisms."
+    }
+  },
+  "grf": {
+    "observed_anchor": "PR #555 uses _sqlite3-handle dlsym(sqlite3_libversion) plus dladdr, exact expected version/path/hash and a Python sqlite3.sqlite_version cross-check; it explicitly does not claim productive persistence.",
+    "generated_reality": "The handle-scoped symbol-origin probe may still identify the admitted dependency libsqlite3 while actual _sqlite3 calls are interposed by a globally preloaded object.",
+    "strongest_counter_reality": "If loader symbol resolution for the module and handle-scoped dlsym are inseparable in the tested environment, preload treatment should change the observed dlsym origin or otherwise make the candidate fail closed before productive call divergence.",
+    "falsifier": "Use one disposable LD_PRELOAD interposition experiment and compare handle-scoped dlsym/dladdr identity with actual Python SQLite call behavior.",
+    "outcome": "GENERATED_REALITY_OBSERVED",
+    "collapse": "REJECT productive-call binding as a general inference from handle-scoped sqlite3_libversion origin alone. RETAIN PR #555 as scoped dependency-tree symbol-origin evidence."
+  },
+  "exactly_one_unusual_experiment": {
+    "name": "LD_PRELOAD_SYMBOL_ORIGIN_DIVERGENCE",
+    "environment": "local disposable Linux container; Python 3.13.5; SQLite 3.46.1; glibc dynamic loader",
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "repository_mutation_during_experiment": false,
+    "baseline": {
+      "dlsym_value": "3.46.1",
+      "dlsym_origin": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "dlsym_origin_sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71",
+      "python_sqlite_version": "3.46.1",
+      "sqlite_connect": "PASS"
+    },
+    "intervention_family": "One temporary LD_PRELOAD shim family used within the single experiment to distinguish global interposition from handle-scoped dependency lookup.",
+    "phase_parseable_version_control": {
+      "preloaded_sqlite3_libversion": "3.46.99",
+      "observed_python_sqlite_version": "3.46.99",
+      "observed_sql_select_sqlite_version": "3.46.99",
+      "observed_handle_dlsym_value": "3.46.1",
+      "observed_handle_dlsym_origin": "/lib/x86_64-linux-gnu/libsqlite3.so.0",
+      "result": "GLOBAL_INTERPOSITION_AND_HANDLE_DLSYM_DIVERGED"
+    },
+    "phase_same_version_productive_call_interposition": {
+      "preloaded_sqlite3_libversion": "3.46.1",
+      "preloaded_sqlite3_open_v2": "forced SQLITE_CANTOPEN",
+      "observed_handle_dlsym_value": "3.46.1",
+      "observed_handle_dlsym_origin": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "observed_handle_origin_sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71",
+      "observed_python_sqlite_version": "3.46.1",
+      "core_version_crosscheck": true,
+      "sqlite_connect": "FAIL",
+      "sqlite_connect_error": "MemoryError caused by forced sqlite3_open_v2 failure",
+      "identity_delta_vs_baseline": "NONE for handle-observed version/path/hash"
+    },
+    "rollback": "Temporary shim and files deleted; no product, VPS, canonical Frank state, provider or Harness state touched.",
+    "interpretation": "A handle-scoped sqlite3_libversion origin can remain pinned to the real dependency libsqlite3 while other SQLite API calls from the process are globally interposed."
+  },
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION_SHARPENED",
+    "new_invariant": "Do not promote productive SQLite call binding from mapped-library identity or _sqlite3-handle sqlite3_libversion symbol-origin identity alone. Accepted ProductStart evidence must additionally bind or fail-close unexpected dynamic-loader interposition state, or provide an equivalent direct relocation/call-path integrity mechanism, together with the real UnifiedDB transaction.",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY"
+    ],
+    "strongest_counterhypothesis": "A production service may already execute in a sanitized loader environment where LD_PRELOAD/audit-style interposition is structurally unreachable; if machine-checked and bound to ProductStart, a separate relocation attestor may be unnecessary.",
+    "next_falsifier": "On the accepted Hostinger ProductStart service, bind systemd/environment/loader state and selected process identity, exercise a real UnifiedDB WAL transaction, and prove unexpected preload/audit/interposition or library swap causes fail-closed rejection before acceptance.",
+    "rollback": "No product patch promoted from this receipt; retain existing candidates as Draft/TESTING until accepted-host evidence discriminates the loader counter-reality."
+  },
+  "coordination": {
+    "product_pr_555_comment_id": 5269944323,
+    "issue_534_comment_id": 5269946311,
+    "duplicate_work_avoided": "Did not duplicate PR #557 HAS_MOVED/path-rebind work or the concurrent temporal ABA research receipt at Clay head 26accebc2fcd4d3e52645d8a8f842c1e26a0ca53."
+  },
+  "nonclaims": {
+    "hostinger_vulnerability_proven": false,
+    "productive_frank_database_attested": false,
+    "accepted_restart_recovery_attested": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v0_1_pass": false,
+    "harness_mutated": false,
+    "effect_authority_mutated": false,
+    "training_authorized": false
+  }
+}

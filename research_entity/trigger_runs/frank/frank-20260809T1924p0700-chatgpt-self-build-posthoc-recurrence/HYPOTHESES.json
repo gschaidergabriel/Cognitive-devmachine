@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1924p0700-chatgpt-self-build-posthoc-recurrence",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "hypotheses": [
+    {
+      "id": "H-FRANK-POSTHOC-01",
+      "status": "OPEN_EXECUTABLE_BASELINE_BUILT",
+      "claim": "For FRANK recurrence control, a deterministic post-hoc readout over a frozen short trajectory can reduce transient false-halt decisions compared with a one-state threshold controller without shaping the trajectory itself.",
+      "prediction": "On matched frozen H1 and later target-4B recurrence traces, the post-hoc baseline will improve the false-halt/extra-compute frontier for at least one nontrivial task family.",
+      "counterhypothesis": "Windowing merely delays valid halts and adds compute; the existing single-state controller equals or dominates it once thresholds are calibrated.",
+      "falsifier": "Matched trace evaluation where the post-hoc baseline never improves false-halt rate at equal or lower total recurrence cost and consistently increases latency/overshoot."
+    },
+    {
+      "id": "H-FRANK-POSTHOC-02",
+      "status": "OPEN",
+      "claim": "A learned halting gate should not become FRANK's default recurrence controller unless it beats simple frozen-trajectory readouts and fixed-depth baselines under matched quality, latency and intervention robustness.",
+      "prediction": "Some learned gates will fail to dominate simple baselines because trajectory formation and readout quality are separable failure sources.",
+      "counterhypothesis": "FRANK-specific signals are sufficiently different from looped-transformer experiments that an end-to-end learned gate consistently dominates simple readouts.",
+      "falsifier": "Repeated H1 and target-4B trials showing a learned gate Pareto-dominates fixed-depth, single-step and post-hoc baselines across task families and OOD conditions."
+    },
+    {
+      "id": "H-FRANK-VERIFIER-01",
+      "status": "OPEN_EXTERNAL_EVIDENCE_SUPPORTED",
+      "claim": "For high-risk correction decisions made by a small local model, FRANK should prefer an independent stronger verifier/peer when available rather than trusting weak self-verification as the sole stop/correct signal.",
+      "prediction": "Verifier-backed correction will improve error localization or calibration on at least some difficult tasks, particularly when the 4B's own verifier is weak.",
+      "counterhypothesis": "The additional verifier adds latency/cost/dependency without material accuracy gain after local fine-tuning and recurrence.",
+      "falsifier": "Target-4B experiments where local self-verification matches or exceeds strong-peer verification at lower cost across safety-relevant and reasoning tasks."
+    },
+    {
+      "id": "H-FRANK-AUTH-01",
+      "status": "OPEN_ARCHITECTURE_SUPPORTED",
+      "claim": "FRANK's external-effect authority should remain host-rooted and handle/capability based; cognitive state, model text, recurrence receipts and diagnostic records must remain descriptive and unable to mint bearer authority.",
+      "prediction": "A typed handle/import boundary plus Linux sandbox restrictions can preserve expressibility while making authority provenance independently testable.",
+      "counterhypothesis": "The extra capability/host boundary is redundant because process sandboxing alone is sufficient for all FRANK effect safety requirements.",
+      "falsifier": "A simpler architecture demonstrates equivalent least-authority, delegation, revocation, replay and confused-deputy resistance under the same adversarial test suite."
+    },
+    {
+      "id": "H-FRANK-QWEN35-01",
+      "status": "OPEN_CANDIDATE",
+      "claim": "Qwen3.5-4B is a materially stronger current candidate for the local Clay-native 4B because it is an official 4B vision-language model with a hybrid recurrent/attention architecture, but runtime/backend maturity must be treated as a moving target rather than assumed.",
+      "prediction": "A pinned Linux runtime build will execute the target 4B with acceptable text/vision correctness and resource cost, but some runtime versions/backends will regress or expose unsupported paths.",
+      "counterhypothesis": "Another Qwen-class 4B/runtime pairing is more stable or efficient for the owner hardware and FRANK workload despite weaker nominal feature fit.",
+      "falsifier": "Pinned owner-host benchmarks showing Qwen3.5-4B materially loses on latency/RAM/vision/tool workload or backend reliability versus another candidate."
+    },
+    {
+      "id": "H-FRANK-AA-CB-LINK-01",
+      "status": "OPEN_LINKED_TO_CONCURRENT_RUN",
+      "claim": "Recurrence readout quality and ActiveAssembly conflict allocation interact: a controller can appear stalled or uncertain because its active slice is budget-starved, so recurrence policy must not be optimized independently of Assembly selection quality.",
+      "prediction": "Under conflict-dense traces, at least part of apparent recurrence pressure disappears when Assembly allocation improves at fixed model and recurrence policy.",
+      "counterhypothesis": "Assembly composition has negligible effect on recurrence dynamics once the core state summary is present.",
+      "falsifier": "Factorial Assembly-policy x recurrence-policy experiments show no meaningful interaction on task outcome, residual pressure, correction time or compute."
+    }
+  ],
+  "promotion": "NONE",
+  "next_discriminator": "Run matched frozen H1 trajectories through existing single-state controller, new post-hoc trajectory baseline and later a learned-gate candidate; compare false halt, extra recurrence count, routing/rollback correctness, task outcome and latency."
+}

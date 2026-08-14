@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "candidate_id": "CLAYCODE_CAPABILITY_GATE_ATTESTATION_V1",
+  "status": "OPEN_IMPLEMENTATION_CANDIDATE_NOT_BASE_SEMANTIC_CHANGE",
+  "origin_run": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "purpose": "Bind runtime/ABI/FFI authority-boundary evidence to exact executed inputs and scope while preserving the hard distinction between provenance/evidence and live effect authority.",
+  "semantic_change_required": false,
+  "existing_laws_reused": [
+    "model_output != execution_authority",
+    "textual_capability_name never_confers authority",
+    "effect.commit requires independently valid capability possession and witnesses",
+    "provenance != truth",
+    "provenance != authority"
+  ],
+  "gate_state_machine": [
+    "DEFINED",
+    "QUEUED",
+    "RUNNING",
+    "EXECUTED",
+    "RECEIPT_PRESENT",
+    "VERIFIED",
+    "ADMITTED",
+    "REJECTED"
+  ],
+  "state_laws": [
+    "DEFINED != EXECUTED",
+    "QUEUED != EXECUTED",
+    "RUNNING != EXECUTED",
+    "EXECUTED != VERIFIED",
+    "RECEIPT_PRESENT != VERIFIED",
+    "VERIFIED != ADMITTED",
+    "commit_message != gate_state",
+    "workflow_definition != execution_receipt",
+    "attestation != capability_authority",
+    "capability_authority != execution_attestation"
+  ],
+  "required_receipt": {
+    "gate_id": "Symbol",
+    "gate_contract_version": "Version",
+    "subject": [
+      {
+        "name": "runtime/compiler/artifact under test",
+        "digest": "sha256"
+      }
+    ],
+    "materials": [
+      "runtime_source_digest",
+      "validation_suite_digest",
+      "workflow_or_invocation_definition_digest",
+      "semantic_contract_digest_or_refs",
+      "grammar_digest_when_frontend_semantics_are_in_scope",
+      "typed_ir_or_source_semantic_digest_when_applicable"
+    ],
+    "execution": {
+      "run_state": "completed",
+      "conclusion": "success",
+      "invocation_id": "opaque unique run id",
+      "repository_head_or_subject_commit": "exact immutable id",
+      "builder_or_host_id": "identity of actual execution environment",
+      "platform_fingerprint": "OS/kernel/arch/runtime versions sufficient for the gate",
+      "started_at": "timestamp optional for semantics but useful for audit",
+      "finished_at": "timestamp optional for semantics but useful for audit"
+    },
+    "test_result": {
+      "pass": true,
+      "positive_checks": "explicit named checks or digest-bound result object",
+      "negative_controls": "explicit named checks; authority rejection tests mandatory for effect gates",
+      "failures": []
+    },
+    "evidence_scope": {
+      "class": "HOSTED_UBUNTU_CI_PROXY | ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM | OTHER_EXPLICIT_SCOPE",
+      "counts_as_target_acceptance": "Boolean fixed by gate policy, never inferred from platform name"
+    },
+    "external_attestation_ref": "optional signed in-toto/SLSA/GitHub artifact-attestation reference; strengthens builder provenance but is not execution authority"
+  },
+  "admission_policy": {
+    "fail_closed_on_missing_field": true,
+    "fail_closed_on_subject_mismatch": true,
+    "fail_closed_on_material_mismatch": true,
+    "fail_closed_on_noncompleted_run": true,
+    "fail_closed_on_nonsuccess_conclusion": true,
+    "fail_closed_on_failed_positive_check": true,
+    "fail_closed_on_failed_negative_control": true,
+    "fail_closed_on_scope_mismatch": true,
+    "stale_successful_ancestor_receipt_may_be_reused": false,
+    "hosted_ci_satisfies_andreas_target_by_default": false,
+    "commit_title_or_workflow_presence_satisfies_execution": false
+  },
+  "capability_authority_contract": {
+    "preferred_base_shape": "runtime-minted opaque live handle bound to runtime instance, kind, epoch/revocation state and broker registry",
+    "serializable_clay_descriptor_is_authority": false,
+    "attestation_object_is_authority": false,
+    "cross_process_rule": "If BASE/FRANK requires authority to cross an isolated process or component boundary, lower through a broker/table/OS-handle mechanism that preserves unforgeability and lifetime. Do not upgrade a Clay capability-shaped record into authority by parsing it.",
+    "cross_component_reference": "WASI-style resource-handle tables are an external precedent, not a required implementation."
+  },
+  "github_ci_candidate": {
+    "plain_receipt_minimum": "Always generate the project GateExecutionReceipt with exact hashes and scope, commit/store it only after tests complete successfully, then verify before admission.",
+    "signed_attestation_optional_layer": "Where repository/plan policy permits, GitHub artifact attestations may bind a built executable/artifact to workflow/repository/commit provenance. Signed provenance augments but does not replace the project gate receipt or authority tests.",
+    "required_permissions_if_github_artifact_attestation_is_used": [
+      "id-token: write",
+      "contents: read",
+      "attestations: write"
+    ]
+  },
+  "andreas_target_candidate": {
+    "required": true,
+    "scope_id": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+    "rule": "Re-run the same digest-bound runtime/ABI/FFI and negative-authority suite on the actual target host. The resulting receipt may share subject/material digests with hosted CI but must carry target-host execution identity and must be independently verified before target acceptance."
+  },
+  "next_discriminating_tests": [
+    "Run current tools/claycode_base_runtime_validation.py against the exact current runtime blob on hosted Ubuntu and materialize a digest-bound proxy receipt.",
+    "Mutate runtime source after a passing receipt and prove admission rejects the stale receipt.",
+    "Mutate validation suite/workflow after a passing receipt and prove admission rejects stale evidence.",
+    "Feed a valid attestation object to the effect adapter in place of CapabilityHandle and prove rejection.",
+    "Execute identical digest-bound suite on Andreas target host and compare behavior while keeping evidence scopes distinct.",
+    "If an isolated FFI/process boundary actually requires authority transfer, implement and fuzz a broker/table handle lowering; otherwise preserve process-local opacity for BASE."
+  ],
+  "promotion_guard": "Candidate belongs in compiler/runtime/CI/admission infrastructure first. Do not change ClayCode core syntax unless an executable application or FRANK counterexample proves the existing semantic contract insufficient."
+}

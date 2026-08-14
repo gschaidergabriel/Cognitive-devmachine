@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "event_id":"center-frank-reentry-identity-lineage-20260809T2207p0700",
+  "event_type":"CROSS_ROOM_DELTA",
+  "created_at":"2026-08-09T22:07:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "origin":{"actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","mode":"PARALLEL_WORKER_DELTA_INGEST"},
+  "depends_on":"center-frank-v01-sandbox-integration-consolidated-20260809T2205p0700",
+  "frank_main_latest_observed":"21dfb30674fd4ffa605bdb438059eb6d1e24f068",
+  "new_commits":[
+    "3151bf9dd75fd363b3aa95e3e93a3a2a280de1cb",
+    "8c2cc7b356488580492ffe720c89284d857604d3",
+    "21dfb30674fd4ffa605bdb438059eb6d1e24f068"
+  ],
+  "delta":"Causal reentry now requires identity-addressed episode/signal/causal lineage and persists episode_id, signal_id and causal_identity into the reentry receipt. This strengthens causal closure/provenance and does not grant effect authority.",
+  "compatibility":{"historical_74_slot_gate":"UNCHANGED_AND_COMPOSABLE","single_module_target":"SUPPORTED","effect_authority":"UNCHANGED_FAIL_CLOSED"},
+  "feedback":{"gwt":"Bind outcome/reentry evidence to exact episode/signal identity, not merely adjacent epochs.","emergenz":"Use identity-addressed reentry for lesion/shuffle/null controls to reduce false causal attribution.","claycode":"Preserve episode_id/signal_id/causal_identity in compiled transition receipts.","harness":"Replay and differential tests must compare identity lineage as well as state delta.","frank":"Retain this contract through monolith collapse; reentry lineage is part of the conserved causal surface."},
+  "research_state_change":"ENGINEERING_DELTA_NO_CANONICAL_SCIENTIFIC_PROMOTION"
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2032p0700-chatgpt-secondary-cas-wp04-frontier",
+  "observed_at": "2026-08-10T20:33:00+07:00",
+  "telemetry_class": "REPO_COMMIT_AND_WORK_RECEIPT_OBSERVATION",
+  "known_limits": [
+    "No canonical CURRENT_DYNAMIC_WORK projection file was available at the expected path during this run.",
+    "Worker liveness is inferred only from fresh commits/PR/work receipts visible through connected GitHub; worker_count is not epistemic evidence."
+  ],
+  "concurrent_material_lanes": [
+    {"lane":"claycode_wp03_wp04","evidence":["PR#178","PR#179","commit:f85ae415fbbbffdccf1c728ad41585ee45b6ad58","commit:beadd7a325d63f565867d54ce4c5aa7bc6422362","commit:90a06ed8128feaca9da808667c5c9627ece28f42"],"disposition":"REUSE_AND_DO_NOT_DUPLICATE"},
+    {"lane":"harness","evidence":["commit:64316f2f28b297549403beee827535f6d8ac1af2","commit:1ad5ec3d51058973e2bcdf20edb032f76f73158c"],"disposition":"INDEX_AND_REVALIDATE_IF_BLOCKING"},
+    {"lane":"gwt","evidence":["commit:9e6989f308254d87d633131dc4c8bdfd249472ce"],"disposition":"INDEX"},
+    {"lane":"atomic","evidence":["commit:1397ff35ee4ec6c284bfc29aee198c1f8fd8e2dc"],"disposition":"INDEX_ONLY_NO_PROMOTION"},
+    {"lane":"frank_identity","evidence":["commit:56e45218fe76e2c08b571d154d33a04459d170aa"],"disposition":"INDEX"}
+  ],
+  "collision_event": {
+    "attempted_parent": "a34fa5e8b08c80e2e9e4b527384dc0bc6bd57236",
+    "prepared_commit": "00efbadd7831f736e3aabcbeb7b9763420af4259",
+    "main_update": "REJECTED_NON_FAST_FORWARD",
+    "outcome": "SAFE_STOP_REFRESH_REPLAN",
+    "followup": "Concurrent worker had already built a stronger receipt-bound V18 no-reparse bridge; dangling duplicate commit was not forced onto main."
+  },
+  "duplicate_suppression": {
+    "candidate": "local WP03 no-reparse bridge",
+    "superseding_current_work": ["tools/claycode_base_typed_ir_v18_bridge.py","tools/claycode_base_typed_ir_v18_bridge_validation.py"],
+    "evidence_class": "SAME_ANCESTRY_CONVERGENT_NOT_INDEPENDENT_REPLICATION",
+    "saved_action": "NO_DUPLICATE_MAINLINE_CODE_MERGE"
+  },
+  "work_state_repair": {
+    "cancelled": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "replacement": "WORK-CLAYCODE-BASE14-TARGET-VPS-20260810",
+    "reason": "old target-host invalidator became true under owner-fixed target-VPS semantics"
+  }
+}

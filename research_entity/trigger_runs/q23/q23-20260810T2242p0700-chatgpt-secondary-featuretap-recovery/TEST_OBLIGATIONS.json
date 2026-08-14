@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "tests": [
+    {
+      "test_id": "T-Q23-FTAP-01",
+      "purpose": "Measure same-pass Qwen3.5 pre-merger versus post-merger visual feature geometry for MVC/open-set routing.",
+      "variants": ["QWEN_PRE_MERGER", "QWEN_POST_MERGER", "QWEN_TINY_PROJECTION", "DEDICATED_LIGHTWEIGHT_EMBEDDING"],
+      "metrics": ["known_accuracy", "unknown_AUROC", "FPR95", "false_familiar_rate", "selective_risk", "calibration", "p50_p95_p99_latency", "RAM_VRAM_peak", "bytes_moved", "task_success"],
+      "controls": ["shuffled_labels", "near_neighbor_unknowns", "stale_feature_version", "model_mmproj_version_swap"],
+      "acceptance": "No Qwen feature-tap promotion unless it is Pareto-competitive with the dedicated lightweight baseline under complete pathway cost."
+    },
+    {
+      "test_id": "T-Q23-ONEPASS-02",
+      "purpose": "Verify that escalation consumes the same post-merger embedding buffer produced for MVC/readout without a second visual encode.",
+      "metrics": ["vision_encode_count_per_changed_frame", "embedding_buffer_identity_or_hash", "sensor_to_decode_latency", "bytes_copied"],
+      "acceptance": "Escalated changed frame performs exactly one deep visual encode unless an explicit retry/recovery event is recorded."
+    },
+    {
+      "test_id": "T-Q23-RECOVERY-03",
+      "purpose": "Determine exact multimodal crash/restart persistence semantics on the accepted Hostinger Ubuntu VPS.",
+      "variants": ["slot_save_restore_if_supported", "source_evidence_reencode", "metadata_only_restore_negative_control"],
+      "metrics": ["restart_success", "state_replay_equivalence", "visual_outcome_equivalence", "recovery_latency", "stale_cache_rejection", "data_loss"],
+      "acceptance": "No durable visual-KV assumption without exact current-source PASS; metadata-only placeholder must never be mistaken for recoverable sensor evidence."
+    },
+    {
+      "test_id": "T-Q23-TEMPORAL-04",
+      "purpose": "Compare pre-encoder-only gating with combined pre-encoder + post-encoder structured temporal pruning.",
+      "variants": ["FULL_QWEN", "PRE_GATE_ONLY", "POST_FEATURE_HISTORY_ONLY", "COMBINED_TWO_STAGE"],
+      "metrics": ["task_success", "visual_tokens_per_verified_action", "vision_encode_rate", "decoder_prefill_cost", "sensor_to_action_latency", "off_ROI_miss_rate", "stale_history_error_rate"],
+      "controls": ["full_screen_modal_outside_ROI", "small_text_OCR", "stale_history", "slow_static_transition", "action_mismatch"]
+    },
+    {
+      "test_id": "T-Q23-PROVENANCE-05",
+      "purpose": "Separate libmtmd cache/media ID from Frank evidence identity.",
+      "requirements": ["cryptographic source hash", "ROI hash", "perception/source epoch", "model hash", "mmproj hash", "feature tap version", "prototype/readout version"],
+      "negative_control": "Force duplicate or adversarial cache IDs and verify they cannot substitute for evidence identity, current epoch or sensor provenance."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_effect_optimization_barrier",
+  "branch": "claycode",
+  "status": "OPEN_MECHANISM_RESEARCH",
+  "hypotheses": [
+    {"id":"H-OPT-01","status":"SUPPORTED_BY_HOSTED_CONSTRUCTED_DISCRIMINATOR","claim":"Output-only translation validation is insufficient for effectful lowering; a transform can preserve returned values while deleting, duplicating, reordering or bypassing effects/authority checks.","falsifier":"Production-language proof/test shows returned-value equality entails all externally observable effect/outcome equivalence for the admitted effect surface."},
+    {"id":"H-OPT-02","status":"SUPPORTED_BY_HOSTED_CONSTRUCTED_DISCRIMINATOR","claim":"Exact total effect-trace equality is a safe conservative BASE oracle but is unnecessarily restrictive for effects on proven-disjoint resources.","falsifier":"Frozen ClayCode semantics intentionally make total source order of all effects observable even across disjoint resources."},
+    {"id":"H-OPT-03","status":"OPEN_SUPPORTED_BY_EXTERNAL_ANALOGY_AND_PROJECT_CONSTRAINT","claim":"ClayCode lowering should represent effect-dependency/order separately from capability authority; ordering constrains transforms but never grants authority.","falsifier":"A simpler production mechanism proves equivalent transformation safety, replay and authority closure across all BASE targets without an explicit dependency/order plane."},
+    {"id":"H-OPT-04","status":"SUPPORTED_BY_CODE_INSPECTION_PLUS_DISCRIMINATOR","claim":"A flat transitive effect set is insufficient for optimization legality; resource/order-domain identity and operation phase are needed to distinguish conflicting from commuting effects.","falsifier":"Production alias/resource analysis derives every required conflict fact without enriching semantic/lowering effect identity."},
+    {"id":"H-OPT-05","status":"OPEN","claim":"Optimizer/pass provenance and optimized-IR/artifact hashes belong in translation receipts but should not rewrite source canonical semantic identity.","falsifier":"A concrete BASE replay/cache requirement proves optimizer configuration is part of source semantic identity."},
+    {"id":"H-OPT-06","status":"OPEN_HIGH_PRIORITY","claim":"Authority checks, reserve/commit/rollback and error/re-entry boundaries are non-speculatable by default.","falsifier":"A production effect class is proven speculatable without changing denial, outcome, durable state, replay or re-entry observations."},
+    {"id":"H-OPT-07","status":"STATIC_CODE_COUNTEREXAMPLE_CANDIDATE","claim":"Current pure evaluator versus C lowering likely diverges on short-circuit: evaluator paths eagerly evaluate both operands while C lowering preserves &&/|| short-circuit; a recursive/trapping RHS should discriminate it.","falsifier":"Current-checkout regression shows evaluator and backend agree for false&&diverging_RHS and true||diverging_RHS, or the inspected path has been superseded."}
+  ],
+  "counterhypotheses": [
+    {"id":"CH-OPT-A","status":"PLAUSIBLE_NEAR_TERM","claim":"BASE should avoid Clay-level optimizer complexity and use conservative direct lowering until release.","discriminator":"Compare BASE acceptance/performance with no Clay optimizer and explicit backend effect conservatism."},
+    {"id":"CH-OPT-B","status":"WEAKENED_BY_MULTI_BACKEND_REPLAY_AND_AUTHORITY_REQUIREMENTS","claim":"Backend compiler side-effect semantics are sufficient; ClayCode IR needs no explicit effect-order plane.","discriminator":"Prove identical effectful Python/C/native behavior and replay under optimization without Clay-level order metadata."},
+    {"id":"CH-OPT-C","status":"PLAUSIBLE_FOR_BASE_ONLY","claim":"Exact total effect trace equality should remain the permanent contract.","discriminator":"Measure whether safe disjoint-resource reordering yields material concurrency/latency gains without replay loss."},
+    {"id":"CH-OPT-D","status":"OPEN","claim":"Effect sets plus runtime alias/resource analysis are enough; resource identity need not be in semantic/lowering IR.","discriminator":"Ask the optimizer to prove same-resource versus disjoint-resource reordering using only current IR metadata."}
+  ]
+}

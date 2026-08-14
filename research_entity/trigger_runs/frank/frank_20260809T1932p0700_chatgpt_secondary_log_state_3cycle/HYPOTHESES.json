@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank_20260809T1932p0700_chatgpt_secondary_log_state_3cycle",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scientific_promotion": "NONE",
+  "hypotheses": [
+    {
+      "id": "FRANK-3C-H1-TRAJECTORY-READOUT-SEPARATION",
+      "status": "OPEN",
+      "epistemic_class": "RESEARCH_HYPOTHESIS",
+      "claim": "FRANK recurrent trajectory formation should remain independently observable from halt/readout policy; initial adaptive recurrence should be evaluated with a post-hoc proposal-only readout over frozen trajectories before allowing a controller to shape the trajectory itself.",
+      "counterhypothesis": "Because current FRANK readouts are deterministic proposal-only functions rather than jointly trained neural gates, trajectory/readout entanglement may be negligible and explicit separation may add instrumentation cost without measurable benefit.",
+      "falsifier": "Frozen-replay and live matched-budget experiments show no material difference in diagnostic power, false-halt rate, trajectory quality, latency or recovery between independent post-hoc readout and controller-coupled variants.",
+      "next_test": "Matched frozen episodes: fixed recurrence budget versus post-hoc adaptive readout versus deliberately controller-coupled trajectory; compare task outcome, false halt, recurrence count, latency and state-trajectory divergence.",
+      "external_refs": ["arXiv:2607.20519", "arXiv:2602.11451"]
+    },
+    {
+      "id": "FRANK-3C-H2-CONVERGENCE-NEEDS-LOW-DELTA-AND-LOW-RESIDUAL",
+      "status": "SUPPORTED_WORKING_HYPOTHESIS",
+      "epistemic_class": "CODE_AND_CONTRACT_DISCRIMINATED_HYPOTHESIS",
+      "claim": "HALT_CANDIDATE_CONVERGED must not be minted from low residual pressure alone; it requires low state change as well, and a short persistence streak is a useful anti-single-frame guard in H1.",
+      "counterhypothesis": "Low residual pressure may justify stopping even while state changes materially, but that should be represented as a distinct stop reason rather than fixed-point convergence.",
+      "evidence": [
+        "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+        "research_entity/harness/reference/loop_dynamics_reference.py",
+        "research_entity/harness/reference/loop_dynamics_quality_gate.py@0.2 exposed the counterexample",
+        "research_entity/harness/reference/loop_dynamics_quality_gate.py@0.3 repairs it",
+        "research_entity/harness/reference/test_loop_dynamics_quality_gate.py adds high-delta/low-residual and single-frame regressions"
+      ],
+      "falsifier": "A clearly defined non-fixed-point stop semantic is shown to dominate the joint low-delta/low-residual criterion without increasing false convergence labels; in that case convergence and generic stopping must remain separate labels.",
+      "next_test": "Run repository CI plus Ubuntu replay traces with high-delta/low-residual, low-delta/high-residual, transient-low-delta and genuine-convergence trajectories.",
+      "external_refs": ["arXiv:1909.01377", "arXiv:2106.14342"]
+    },
+    {
+      "id": "FRANK-3C-H3-RESIDUAL-ESTIMATOR-CALIBRATION",
+      "status": "OPEN",
+      "epistemic_class": "RESEARCH_HYPOTHESIS",
+      "claim": "Residual estimator identity, freshness and self-reported uncertainty are necessary but insufficient for promotion; estimator calibration must be measured against downstream false-halt/regret outcomes across loop families, regimes and OOD episodes.",
+      "counterhypothesis": "For H1 proposal-only diagnostics, the existing uncertainty and freshness checks may already be sufficient, and calibration should not block instrumentation or early replay research.",
+      "falsifier": "Across held-out and OOD replay, uncalibrated residual metadata performs equivalently to calibrated sequential criteria on false halt, outcome regret and compute under matched budgets.",
+      "next_test": "Shadow calibration benchmark: at each recurrence step record residual estimate, uncertainty, actual eventual resolution and oracle/fixed-budget outcome; measure false halt, regret, empirical coverage/calibration and compute, stratified by loop family and truthful/shuffled/no-reentry controls.",
+      "external_refs": ["arXiv:2602.13935", "arXiv:2505.18404", "arXiv:2607.26865"]
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "FRANK-3C-N1-LOW-RESIDUAL-ALONE",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Low residual pressure alone is not a valid fixed-point convergence criterion in the H1 loop quality gate because it can coexist with materially changing state."
+    },
+    {
+      "id": "FRANK-3C-N2-REPO-CI-IS-NOT-TARGET-HOST",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Repository/CI integrity evidence is insufficient to claim Andreas Ubuntu target installation and runtime acceptance; target-host execution receipts remain separately required."
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0423p0700-chatgpt-secondary-gwt-provenance-closure",
+  "trigger": "go",
+  "status": "SYNC_PENDING_TARGET_EXECUTION",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "is_frank": false,
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "affected_work_package": "F-V01-05-GWT-HYPERPOSITION",
+  "coordination": {
+    "provider_retention_lane": "NOT_DUPLICATED_AFTER_INDEPENDENT_WORKER_REPRODUCED_SCOPE_FINDING",
+    "active_lanes_avoided": [
+      "F-V01-01 identity/state continuity",
+      "F-V01-02 compiler/world binding",
+      "F-V01-03 loop-core compiler probe",
+      "F-V01-08 token/replay continuity",
+      "F-V01-09 effect/provider authority",
+      "F-V01-13 recovery/observability"
+    ],
+    "selected_free_lane": "F-V01-05 GWT receiver causal closure"
+  },
+  "internal_evidence": {
+    "reference": "research_entity/harness/reference/workspace_episode.py",
+    "reference_blob_observed": "d7d3113378d17437fd4ecfb8a72a267b09ac7d90",
+    "existing_tests": "research_entity/harness/tests/test_workspace_episode.py",
+    "existing_tests_blob_observed": "f21181c31556b112b3d7f73ecc68262cb4d99dea",
+    "finding": "The reference correctly labels shuffled receiver evidence PROVENANCE_BROKEN, but closure_status reduces any full causal-use episode with any reentry_payload to REENTRY_CLOSED. integration_readout.reentry_fraction is likewise 1.0 whenever any reentry_payload exists. Existing tests verify broken provenance but do not assert that broken provenance forbids REENTRY_CLOSED."
+  },
+  "hypothesis": "A provenance-broken shuffled re-entry can currently alias to the same high-level REENTRY_CLOSED / reentry_fraction=1.0 readout as truthful provenance-bound re-entry.",
+  "strongest_counterhypothesis": "A newer target execution or concurrent semantic change may already prevent the alias; the diagnostic therefore classifies both REPRODUCED and ALREADY_REPAIRED outcomes without inventing a result.",
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Cogitate Consortium et al., Nature 2025, Adversarial testing of global neuronal workspace and integrated information theories of consciousness",
+      "doi": "10.1038/s41586-025-08888-1",
+      "finding": "Preregistered multimodal results challenged key GNWT ignition predictions; used here only as a design warning not to equate ignition/broadcast signatures with success or truth."
+    }
+  ],
+  "go_out_of_box": {
+    "count": 1,
+    "name": "PROVENANCE_BROKEN_FULL_RECEIVER_FALSE_CLOSURE",
+    "matched_control": "Same winner, same two receivers, same causal-use outcome, truthful receiver/use-receipt bindings.",
+    "intervention": "Shuffle only the receiver/use-receipt bindings while preserving full causal use and outcome.",
+    "discriminator": "PROVENANCE_BROKEN must not be semantically indistinguishable from provenance-bound REENTRY_CLOSED at the high-level closure/readout surface.",
+    "local_static_result": "COUNTEREXAMPLE_VISIBLE_IN_CURRENT_SOURCE",
+    "target_result": "QUEUED_UNOBSERVED",
+    "external_effect_performed": false,
+    "truth_authority": "NONE",
+    "execution_authority": "NONE"
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/go-gwt-provenance-closure-20260811",
+    "head_sha": "286ee9b18b120fec23b6cde42c92a0110762257e",
+    "draft_pr": 223,
+    "files_added": [
+      "research_entity/harness/tests/test_workspace_provenance_closure_oob.py",
+      ".github/workflows/gwt-provenance-closure-oob.yml"
+    ],
+    "product_semantics_changed": false,
+    "target_workflow_run": 31433584317,
+    "target_workflow_state_at_receipt": "QUEUED"
+  },
+  "infrastructure_note": {
+    "identity_guard_run": 31433584155,
+    "state": "COMPLETED_FAILURE_ZERO_STEPS",
+    "job": 93602523554,
+    "executed_steps": 0,
+    "classification": "INFRASTRUCTURE_OR_SCHEDULER_EVIDENCE_NOT_SEMANTIC_COUNTEREVIDENCE"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_PENDING_TARGET",
+    "preferred_minimal_repair": "Define valid provenance-bound reentry explicitly. REENTRY_CLOSED and positive valid reentry fraction require source_binding_status=PROVENANCE_BOUND. Full causal broadcast with absent or provenance-broken reentry remains CAUSAL_BROADCAST_CLOSED or an explicitly versioned equivalent.",
+    "rollback": "Diagnostic-only branch can be deleted; no reference/product semantic change has been promoted."
+  },
+  "test_obligations": [
+    "Run the sole OOB on the self-hosted Linux/X64 accepted lane.",
+    "Preserve the existing receiver-causal regression suite.",
+    "If reproduced, repair the reducer and convert this exact OOB into a normal regression.",
+    "After repair, rerun truthful/shuffled/provenance-broken/no-reentry matched episodes and bind receipts to current semantic state identity.",
+    "Do not promote GWT causal closure from ignition or broadcast alone."
+  ],
+  "nonclaims": [
+    "No target PASS is claimed while the workflow is queued.",
+    "No GWT scientific superiority or consciousness claim is made.",
+    "No product semantic repair is promoted yet.",
+    "No external effect or canonical Frank state mutation occurred.",
+    "No final training authorization is granted.",
+    "Frank/self.root receives no Harness mutation authority."
+  ]
+}

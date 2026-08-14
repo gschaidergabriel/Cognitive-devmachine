@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T2142p0700_claycode_v16_linear_lookahead_delta",
+  "room_id": "center",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:42:00+07:00",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["claycode","harness","frank","center"],
+  "affects_claims": ["CC-WP-02-PARSER-CANON","CC-WP-03-IR-TYPES","CC-WP-06-COMPILER-LOWERING","CC-WP-11-FUZZ-CONFORMANCE","CC-WP-13-HARNESS-HANDOFF"],
+  "artifact_refs": [
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V16_GENERIC_DOTTED_LINEAR_LOOKAHEAD.lark",
+    "tools/claycode_wp02_v16_discriminator.py",
+    "research_entity/claycode/base/receipts/CC_WP02_V16_SANDBOX_20260809T2140p0700.json",
+    "research_entity/claycode/base/receipts/CC_WP02_V15_PURE_FN_DIFFERENTIAL_20260809T2135p0700.json"
+  ],
+  "payload": {
+    "evidence_class": "EXECUTABLE_SANDBOX_COUNTEREXAMPLE_REFINEMENT",
+    "supersedes_candidate": "V15_GENERIC_DOTTED_TRIVIA_SAFE",
+    "finding": "V15 passed semantic/trivia tests but exposed adversarial trailing-whitespace backtracking (~1.23 s at 10k spaces in this sandbox). V16 reduces the lookahead to a simple RHS-start discriminator and retains inherited semantics while showing near-linear scaling.",
+    "v16": {
+      "candidate_sha256": "e577603d83b8e37a06c7ee98e38e66ed994b01545b99da1378e61a23cf9c0b63",
+      "sandbox_checks": "69/69 PASS",
+      "inherited_v15": "55/55 PASS",
+      "whitespace_scaling_ratio_40k_vs_5k": 4.943254473672903,
+      "whitespace_40k_median_seconds": 0.000617803,
+      "strict_state": "INTEREGULAR_DEPENDENCY_MISSING_IN_SANDBOX"
+    },
+    "compiler_surface_crosscheck": "A separate V15/V10 parser-canonical differential found 0 mismatches across 12,000 generated typed-function/operator programs and 64 targeted function patterns; V16 inherits the same typed-function/operator grammar and changes only the dotted relation lookahead.",
+    "test_oracle_correction": "`rule Foo.owns / X` is not a malformed dotted relation; under the existing expression grammar it is ordinary division of qid Foo.owns by X. The sandbox oracle was corrected rather than altering language semantics to satisfy a mistaken test.",
+    "next_discriminator": "Clean Ubuntu/current-main: install lark[interegular]==1.3.1; run `python3 tools/claycode_wp02_v16_discriminator.py --require-strict`; then official canonical-IR, WP03 typed-IR, integrated compiler/evaluator/C-lowering and provenance-bound FRANK frontend differential all against the same V16 grammar hash. No promotion before all pass.",
+    "gate_effect": "NO_PASS_CHANGE",
+    "authority_invariant": "model output != execution authority"
+  }
+}

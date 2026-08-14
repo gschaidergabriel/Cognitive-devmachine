@@ -9,7 +9,7 @@ No cognitive/model/peer/visual state in this module can mint execution authority
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import Any, Iterable, Optional
 import hashlib
 import json
@@ -55,11 +55,12 @@ class BasisWitness:
     semantic_state_hash: str
     state_version_hash: str
     trace_root_hash: str
+    semantic_contract_hash: str = "frank.workspace-contract.v0"
 
     def validate(self) -> None:
         if self.basis_epoch < 0:
             raise WorkspaceError("BAD_BASIS_EPOCH")
-        for name in ("semantic_state_hash", "state_version_hash", "trace_root_hash"):
+        for name in ("semantic_state_hash", "state_version_hash", "trace_root_hash", "semantic_contract_hash"):
             value = getattr(self, name)
             if not isinstance(value, str) or not value:
                 raise WorkspaceError(f"MISSING_WITNESS:{name}")
@@ -119,7 +120,10 @@ class WorkspaceIntervention:
 
 
 class _ReceiptChain:
-    def __init__(self, episode_id: str, witness: BasisWitness, intervention_id: str):
+    def __init__(
+        self, episode_id: str, witness: BasisWitness, intervention_id: str, *,
+        intervention_hash: str, candidate_set_hash: str, receiver_policy_hash: str,
+    ):
         self._prev = _hash({
             "schema": "frank.workspace-receipts.v0",
             "episode_id": episode_id,
@@ -127,7 +131,11 @@ class _ReceiptChain:
             "semantic_state_hash": witness.semantic_state_hash,
             "state_version_hash": witness.state_version_hash,
             "trace_root_hash": witness.trace_root_hash,
+            "semantic_contract_hash": witness.semantic_contract_hash,
             "intervention_id": intervention_id,
+            "intervention_hash": intervention_hash,
+            "candidate_set_hash": candidate_set_hash,
+            "receiver_policy_hash": receiver_policy_hash,
         })
         self.receipts: list[dict[str, Any]] = []
 
@@ -196,7 +204,15 @@ def run_workspace_episode(
     for x in recv:
         x.validate()
 
-    chain = _ReceiptChain(episode_id, witness, iv.intervention_id)
+    candidate_set_hash = _hash([asdict(x) for x in sorted(cand, key=lambda x: x.candidate_id)])
+    receiver_policy_hash = _hash([asdict(x) for x in sorted(recv, key=lambda x: x.receiver_id)])
+    intervention_hash = _hash(asdict(iv))
+    chain = _ReceiptChain(
+        episode_id, witness, iv.intervention_id,
+        intervention_hash=intervention_hash,
+        candidate_set_hash=candidate_set_hash,
+        receiver_policy_hash=receiver_policy_hash,
+    )
 
     live: list[WorkspaceCandidate] = []
     for x in cand:
@@ -396,6 +412,12 @@ def run_workspace_episode(
             "semantic_state_hash": witness.semantic_state_hash,
             "state_version_hash": witness.state_version_hash,
             "trace_root_hash": witness.trace_root_hash,
+        },
+        "semantic_contract_hash": witness.semantic_contract_hash,
+        "input_identity": {
+            "candidate_set_hash": candidate_set_hash,
+            "receiver_policy_hash": receiver_policy_hash,
+            "intervention_hash": intervention_hash,
         },
         "winner_id": winner.candidate_id if winner else None,
         "ignited": ignited,

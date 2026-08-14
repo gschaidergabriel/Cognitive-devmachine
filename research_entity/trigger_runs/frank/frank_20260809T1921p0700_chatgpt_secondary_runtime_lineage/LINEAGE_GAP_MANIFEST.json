@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank_20260809T1921p0700_chatgpt_secondary_runtime_lineage",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "status": "OPEN_INTEGRATION_GAP",
+  "scientific_promotion": "NONE",
+  "target_host_acceptance": false,
+  "current_mainline": {
+    "decision": "research_entity/claycode/base/BASE_RUNTIME_INTEGRATION_DECISION_V2.json",
+    "runtime": "tools/claycode_base_runtime.py",
+    "runtime_version": "claycode-base-runtime/0.3",
+    "effect_bridge": "tools/claycode_base_effect_pipeline.py",
+    "crosscheck_not_mainline": "tools/claycode_base_runtime_gateway.py"
+  },
+  "inherited_negative_result": {
+    "run": "claycode-20260809T1709p0700-effect-recovery-abi",
+    "negative_result_id": "NR-CC-LOCAL-PREPARED-NOT-EXACTLY-ONCE-20260809",
+    "required_candidate_semantics": [
+      "stable effect_operation_id",
+      "semantic request fingerprint",
+      "explicit delivery/recovery class",
+      "UNCERTAIN outcome when the external world cannot be reconciled"
+    ]
+  },
+  "current_head_inspection": {
+    "mainline_runtime_exposes_required_operation_identity_contract": false,
+    "mainline_runtime_exposes_uncertain_outcome_state": false,
+    "effect_pipeline_exposes_required_operation_identity_contract": false,
+    "authority_controls_present": [
+      "opaque runtime-minted capability handle",
+      "policy hash binding",
+      "epoch rotation",
+      "revocation",
+      "foreign-runtime rejection",
+      "absolute executable identity policy",
+      "generation/version identity"
+    ],
+    "interpretation": "Authority hardening and effect recovery are orthogonal. The selected mainline can be strong against capability forgery while still lacking a generic contract for an external effect that succeeds before the worker loses the completion evidence."
+  },
+  "whole_mesh_delta": {
+    "previous_boundary": [
+      "cognitive consistency",
+      "effect-time freshness",
+      "execution authority"
+    ],
+    "new_required_boundary": [
+      "cognitive consistency",
+      "effect-time freshness",
+      "execution authority",
+      "outcome certainty/recoverability"
+    ],
+    "candidate_spine": "snapshot -> EffectIntent -> fresh dependency/capability revalidation -> opaque authority -> dispatch(effect_operation_id, semantic_fingerprint, recovery_class) -> external effect -> VERIFIED|UNCERTAIN outcome -> reconcile -> re-entry/causal credit"
+  },
+  "negative_result_lineage_gate_hypothesis": {
+    "id": "H-FRANK-NR-LINEAGE-GATE-001",
+    "status": "OPEN_SUPPORTED_BY_CURRENT_CARRY_FORWARD_COUNTEREXAMPLE",
+    "claim": "A current implementation candidate should not be release-eligible unless every still-applicable durable negative result in its semantic dependency closure is either represented by a passing regression/receipt or explicitly marked NOT_APPLICABLE with evidence.",
+    "counterhypothesis": "Normal code review and current-component tests are sufficient; explicit negative-result lineage adds bookkeeping without preventing material regressions.",
+    "falsifier": "Across a controlled history of component replacements, ordinary tests catch all seeded semantic regressions with no worse detection latency or false-pass rate than the lineage gate while using materially less maintenance cost."
+  },
+  "repo_native_probe": {
+    "script": "tools/frank_effect_recovery_mainline_probe.py",
+    "workflow": ".github/workflows/frank-mainline-effect-recovery-lineage.yml",
+    "script_commit": "7c486eae3226a72015c31c19bbaee2cc7a2ad0d0",
+    "workflow_commit": "deaadddcac6763e26f389db494434c569915febf",
+    "receipt_path": "research_entity/trigger_runs/frank/frank_20260809T1921p0700_chatgpt_secondary_runtime_lineage/MAINLINE_EFFECT_RECOVERY_RECEIPT.json",
+    "execution_status_at_report_write": "PENDING_NO_RECEIPT_OBSERVED",
+    "claim_limit": "The probe/workflow are committed and executable; no CI execution result is claimed until the receipt exists and is reread."
+  },
+  "external_triangulation": [
+    {
+      "source_class": "OFFICIAL_DATABASE_DOCUMENTATION",
+      "source": "SQLite atomic commit/crash recovery",
+      "supports": "atomicity can be made crash-safe inside one transactional storage domain"
+    },
+    {
+      "source_class": "OFFICIAL_STREAMING_DOCUMENTATION",
+      "source": "Apache Kafka idempotent producer / transactions / Streams exactly-once scope",
+      "supports": "stronger exactly-once guarantees depend on integrated idempotence/transactional coordination rather than a generic local caller receipt"
+    },
+    {
+      "source_class": "FORMAL_PREPRINT",
+      "source": "Machine-Checked Dual-Write Recovery from a Committed Log, arXiv:2608.00501",
+      "supports": "post-crash local state may be insufficient to determine whether an external sink accepted an effect; sink evidence/fencing changes the information boundary"
+    },
+    {
+      "source_class": "EXPIRED_IETF_INTERNET_DRAFT_CONTEXT_ONLY",
+      "source": "Idempotency-Key HTTP Header Field draft-07",
+      "supports": "stable request identity/fingerprint is a concrete retry architecture analogue; not a current RFC"
+    }
+  ],
+  "next_discriminator": "Execute the committed current-mainline fault-injection probe, then integrate the inherited recovery contract into the selected production runtime/effect bridge and rerun idempotent, non-idempotent, queryable, same-transaction-domain, crash/restart and semantic-fingerprint-drift arms."
+}

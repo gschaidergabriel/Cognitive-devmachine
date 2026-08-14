@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "retrieved_local":"2026-08-10T22:12:00+07:00",
+  "sources":[
+    {"class":"PRIMARY_SYSTEMS_PAPER","title":"The Chubby Lock Service for Loosely-Coupled Distributed Systems","author":"Mike Burrows","year":2006,"url":"https://www.usenix.org/conference/osdi-06/chubby-lock-service-loosely-coupled-distributed-systems","finding":"Lock sequencers include lock generation and are carried to protected operations so recipients reject stale sequencers. This strongly supports operation-time fencing and destroys novelty claims for the general fencing pattern."},
+    {"class":"PRIMARY_RESEARCH","title":"Propositions as Sessions","author":"Philip Wadler","year":2012,"url":"https://www.research.ed.ac.uk/en/publications/propositions-as-sessions/","finding":"Linear logic corresponds to session-typed communication; linear resources/session progression are established prior art for non-freely-duplicable protocol state."},
+    {"class":"OFFICIAL_LANGUAGE_DOCS","title":"Understanding Ownership","publisher":"Rust Project","url":"https://doc.rust-lang.org/stable/book/ch04-00-understanding-ownership.html","finding":"Rust ownership/move semantics provide an established practical analogue for unique ownership and invalidation after move; this is an analogy, not Frank task authority."},
+    {"class":"OFFICIAL_RUNTIME_PROTOCOL_DOCS","title":"Temporal API protocol documentation — HistoryEvent","publisher":"Temporal","url":"https://api-docs.temporal.io/","finding":"Workflow history events are persisted with monotonically increasing event IDs and are used by SDKs to advance/recreate workflow state; durable replay is established prior art."}
+  ],
+  "counterevidence":"No source supports a claim that LICF as a broad mechanism is world-first. The ingredients have strong prior art. Search did not establish an exact prior implementation of a ClayCode self.root task-continuation fiber spanning GWT/reentry/effects, so narrow classification remains NOVEL_COMBINATION_CANDIDATE rather than NEW_MECHANISM_CANDIDATE.",
+  "freshness_note":"External mechanisms are mostly stable historic foundations; current 2026 Rust and Temporal documentation were checked to avoid relying on stale interface descriptions."
+}

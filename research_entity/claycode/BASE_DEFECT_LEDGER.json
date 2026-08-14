@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "ledger": "CLAYCODE_BASE_DEFECT_LEDGER",
+  "updated_at": "2026-08-09T19:58:00+07:00",
+  "actor": "chatgpt-secondary",
+  "authority_invariant": "model_output != execution_authority",
+  "defects": [
+    {
+      "id": "CC-DEFECT-P0-001",
+      "severity": "P0",
+      "status": "CLOSED",
+      "title": "Caller-controlled process allowlist could launder execution authority",
+      "failure": "Runtime v0.1 accepted the process allowlist at invocation time instead of binding it to a runtime-minted capability.",
+      "repair": "Process policy is sealed at mint time; current runtime additionally requires canonical absolute executable identity plus fingerprint and executes the opened pinned file descriptor.",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_validation.py"]
+    },
+    {
+      "id": "CC-DEFECT-P0-002",
+      "severity": "P0",
+      "status": "CLOSED",
+      "title": "Arbitrary Python callable could cross async capability boundary",
+      "failure": "Runtime v0.1 async.map accepted a caller-supplied callable, allowing host behavior outside the capability policy.",
+      "repair": "async.map now accepts only runtime-owned named operations permitted by the sealed async.compute capability policy; callable laundering is an explicit negative test.",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_validation.py"]
+    },
+    {
+      "id": "CC-DEFECT-P1-001",
+      "severity": "P1",
+      "status": "CLOSED",
+      "title": "Parser/canonical hashes could erase operator literal identity",
+      "failure": "Default Lark trees can omit anonymous literal terminals, allowing meaning-changing operator mutations such as > versus < to collapse in structural fingerprints.",
+      "repair": "Literal-preserving validation/canonicalization was added and the production frontend advanced to V7 named operator nodes with semantic mutation discriminators.",
+      "evidence": ["tools/claycode_base_frontend.py", "tools/claycode_base_canonicalizer.py", "tools/claycode_v7_frontend_identity_regression.py", "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark"]
+    },
+    {
+      "id": "CC-DEFECT-P1-002",
+      "severity": "P1",
+      "status": "CLOSED",
+      "title": "Strict frontend CI was wired to superseded V4 grammar",
+      "failure": "The active CI path still selected V4 after full-corpus evidence had moved to later repairs, guaranteeing stale failure/evidence.",
+      "repair": "Strict/full-corpus validation was rewired through the current repaired grammar path and target gate now explicitly selects V7.",
+      "evidence": [".github/workflows/claycode-strict-lalr-probe.yml", "tools/claycode_andreas_ubuntu_target_gate.py"]
+    },
+    {
+      "id": "CC-DEFECT-P1-003",
+      "severity": "P1",
+      "status": "CLOSED",
+      "title": "Two executable compiler slices briefly disagreed on Int division semantics",
+      "failure": "A new vertical-slice implementation treated Int/Int division as Real while the integrated BASE compiler preserved Int arithmetic semantics.",
+      "repair": "The extra pure toolchain was converted into a compatibility facade over tools/claycode_base_compiler.py, leaving one executable arithmetic/type/evaluator/lowering semantics.",
+      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain.py", "tools/claycode_base_pure_toolchain_validation.py"]
+    },
+    {
+      "id": "CC-DEFECT-P1-004",
+      "severity": "P1",
+      "status": "CLOSED",
+      "title": "Andreas target gate referenced obsolete insecure application proxy API",
+      "failure": "The target preflight still called the old app suite after runtime authority hardening, so it could neither execute current runtime semantics nor serve as a valid preflight.",
+      "repair": "Target gate now runs the sealed-capability application proxy v2 plus current package and real effect-runtime bridge gates.",
+      "evidence": ["tools/claycode_andreas_ubuntu_target_gate.py", "tools/claycode_base_application_proxy_suite_v2.py", "tools/claycode_effect_runtime_bridge_validation.py"]
+    },
+    {
+      "id": "CC-LIMIT-P2-001",
+      "severity": "P2",
+      "status": "OPEN",
+      "title": "Package linker currently requires globally unique bare function symbols",
+      "impact": "Packages and deterministic import resolution work, but module-qualified symbol namespaces remain a language/toolchain extension rather than current BASE behavior.",
+      "acceptance_effect": "Does not block the current BASE package gate as long as duplicate symbols fail closed and acceptance fixtures remain within the frozen subset.",
+      "next_test": "Add an explicit two-module same-name fixture before introducing namespace-qualified calls."
+    }
+  ],
+  "open_p0": 0,
+  "open_p1": 0,
+  "note": "Missing target-host execution or missing acceptance receipts are tracked as release evidence gaps, not silently reclassified as software defects. WP14 still fails until those evidence gaps are closed."
+}

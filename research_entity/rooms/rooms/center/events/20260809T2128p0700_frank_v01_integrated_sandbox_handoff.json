@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T2128p0700_frank_v01_integrated_sandbox_handoff",
+  "room_id": "center",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:28:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["frank", "harness", "gwt", "emergenz", "unifieddb", "claygraph", "center"],
+  "affects_claims": ["FRANK_V0_1_ANDREAS_PC", "FRANK_LOOP_OF_LOOPS", "ORGAN_CONSERVATION", "H0-C_LEGACY_REGULATORS"],
+  "artifact_refs": [
+    "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
+  ],
+  "payload_clay": "handoff{subject:FRANK_V0_1;target:Ubuntu;truth:SIMULATION_ONLY;sandbox_unit:17/17;sandbox_cycles:1032;organs_named:31;legacy_modules_measured:74;negative:[decorative_regulators,acc_goodhart];repairs:[causal_gating,true_residual,false_halt];next:integrate_against_current_Frank_main_without_copying_stale_boundaries}",
+  "payload": {
+    "evidence_class": "EXECUTABLE_SANDBOX_IMPLEMENTATION_AND_ABLATION_EVIDENCE",
+    "user_directive": "For the present phase reproducible sandbox execution is sufficient operational evidence. Assemble the new Frank architecture in sandbox while preserving every old organ/module function by retain/fuse/emergent distribution; no function deletion.",
+    "architecture_candidate": "One integrated multiscale recurrent loop-of-loops kernel with central SQLite persistence, adaptive recurrence, explicit organ lineage, legacy observability projection, lesion/rescue handles, rollback and function receipts. Historical service/process boundaries are not reproduced as architecture authority.",
+    "canonical_organ_function_coverage": {
+      "named_organs": 31,
+      "historical_measured_services_modules": 74,
+      "coverage_rule": "All 31 organ functions explicitly named by harness/ancestry/FRANK_ORGAN_STATE_PRIMITIVES.clay are registered, non-deletable and measurable. The ancestry source reports 74 historical services/modules but does not enumerate all 74 names in that canonical organ registry; do not claim per-filename 74/74 proof without primary inventory evidence."
+    },
+    "sandbox_receipts": {
+      "unit_integration": "17/17 PASS",
+      "stress": "1000 sequential + 32 concurrent cycles PASS; restart hash stable; SQLite integrity ok; zero thread errors",
+      "candidate_runtime_sha256": "1ab2d9e6ad516ecc5c032e46207ac3f110a72355f1226d4ac58d3789c25c3eda",
+      "candidate_tests_sha256": "16a969ba30f0bd8a47ae15dacc01094baddccb6e6c8f11607174bf5dbcc6b917",
+      "factorial_receipt_sha256": "2b7e00fc2f73c173116c14e0843210d970dcc57024d49ac84566d92e6c36ba14",
+      "stress_receipt_sha256": "2ec8fca18a49b976bd2de393939afb3caf9f173dd567e5d91f2a20f7e0e428e9"
+    },
+    "negative_results": [
+      "Initial 12-scenario factorial showed Thalamus/Amygdala/NAcc/ACC lesions had no quality or recurrence effect: organ calls were causally decorative. Repaired by routing their state into control paths.",
+      "Second factorial exposed ACC-lesion Goodhart artifact: disabling conflict sensing superficially improved controller quality and halted early. Repaired by separating controller-seen residual from task-ground-truth residual and measuring false-halt risk."
+    ],
+    "post_repair_factorial": {
+      "baseline": {"quality_mean": 0.719524, "true_residual_mean": 0.194767, "recurrence_mean": 3.333, "false_halt_rate": 0.0},
+      "lesion_thalamus": {"quality_delta": 0.011984, "recurrence_delta": 0.334},
+      "lesion_nacc": {"quality_delta": -0.002825, "recurrence_delta": -0.166},
+      "lesion_gwt": {"quality_delta": -0.033799, "ignition_rate": 0.0},
+      "lesion_acc": {"quality_delta": -0.042101, "recurrence_delta": -2.0, "false_halt_rate": 0.5},
+      "lesion_all_regulators": {"quality_delta": -0.067567, "recurrence_delta": -2.0, "false_halt_rate": 0.5}
+    },
+    "interpretation_guard": "These numbers validate implementation wiring only. They are synthetic sandbox results, not evidence of real cognitive efficacy, causal emergence or phenomenal consciousness.",
+    "fresh_external_transfer": "Recent recurrent-depth work supports adaptive variable-depth recurrence and warns about overthinking/early-exit failure modes; use as architecture motivation only, not as proof of Frank-specific benefit.",
+    "current_frank_parallel_work_observed": "Frank main advanced during this run through F6 engine-neutral local inference adapter/evaluator commits ending at f83ba6881474b98dc64b56b6ffbd772abf6a2b4a. Integrate with current main; do not overwrite or fork parallel work.",
+    "next_discriminator": "On current Frank main, implement the smallest compatible organ-function receipt + true-residual/false-halt controller layer inside the admitted harness/state architecture, then replay current harness tests plus matched lesion/rescue and F6 model-adapter regression. Preserve rollback and no organ deletion. Sandbox evidence is sufficient for this stage; do not falsely mark actual Andreas-host release complete.",
+    "authority_invariant": "Research Entity may implement/test Frank harness changes; Frank self-observation remains proposal-only; model output != execution authority."
+  }
+}

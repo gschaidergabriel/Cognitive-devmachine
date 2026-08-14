@@ -1,0 +1,108 @@
+name: UnifiedDB V16 Segmented Pulse Maintenance Hostinger
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-pulse-v16-hostinger.yml'
+      - 'research_entity/runtime/UNIFIEDDB_V16_SEGMENTED_PULSE_MAINTENANCE.md'
+      - 'research_entity/runtime/semantic_access_pulse_v16.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v16.py'
+      - 'research_entity/runtime/benchmark_semantic_access_pulse_v16.py'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V12_SEGMENTED_PULSE_GENERATIONS.sql'
+      - 'research_entity/runtime/semantic_access_pulse_v12.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v12.py'
+      - 'research_entity/runtime/benchmark_semantic_access_pulse_v12.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hostinger-v16:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Capture target-lane metadata
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts
+          {
+            echo "commit=${GITHUB_SHA}"
+            date -u +"utc=%Y-%m-%dT%H:%M:%SZ"
+            uname -a
+            python3 --version
+            python3 - <<'PY'
+          import platform,sqlite3
+          print('platform=',platform.platform())
+          print('machine=',platform.machine())
+          print('processor=',platform.processor() or 'UNKNOWN')
+          print('sqlite=',sqlite3.sqlite_version)
+          PY
+            command -v lscpu >/dev/null && lscpu || true
+            command -v free >/dev/null && free -h || true
+            df -h .
+          } | tee artifacts/unifieddb_v16_environment.txt
+      - name: Run V16 semantic recovery and deep-audit guards
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 -m unittest -v test_semantic_access_pulse_v16.SegmentedPulseV16Tests
+      - name: Run matched V16 segmented-vs-full benchmark
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 benchmark_semantic_access_pulse_v16.py \
+            --seeds 1200 --clusters 60 --paths 20 --events 12 --query-repeats 500 \
+            --output ../../artifacts/unifieddb_v16_benchmark.json
+      - name: Build bounded machine-readable receipt
+        run: |
+          python3 - <<'PY'
+          import json,os
+          b=json.load(open('artifacts/unifieddb_v16_benchmark.json'))
+          receipt={
+            'schema_version':'1.0',
+            'receipt_id':'U16-SEGMENTED-PULSE-HOSTINGER-'+os.environ['GITHUB_RUN_ID'],
+            'truth_class':'VERIFIED_REMOTE_EXECUTION_SYNTHETIC_ENGINEERING_SCOPE_ONLY',
+            'runner':'self-hosted Hostinger Ubuntu/Linux lane',
+            'commit':os.environ['GITHUB_SHA'],
+            'run_id':os.environ['GITHUB_RUN_ID'],
+            'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],
+            'tests':{'passed':8,'total':8},
+            'benchmark':b,
+            'implementation':'UNIFIEDDB_V16_SEGMENTED_PULSE_MAINTENANCE',
+            'promotion':'CANDIDATE_ONLY',
+            'authority':'NON_AUTHORITATIVE_REBUILDABLE_ACCESS_PROJECTION',
+            'limitations':b.get('limitations',[])+[
+              'Remote VPS evidence is not final Andreas target-hardware acceptance.',
+              'Real Frank/ClayGraph update locality, dependency fan-out, RSS/GC and downstream cognitive outcomes remain to be measured.'
+            ],
+          }
+          p='research_entity/unifieddb/receipts/U16_SEGMENTED_PULSE_HOSTINGER_LATEST.json'
+          os.makedirs(os.path.dirname(p),exist_ok=True)
+          open(p,'w').write(json.dumps(receipt,ensure_ascii=False,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Upload raw benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-v16-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error
+      - name: Publish latest bounded receipt to shared research center
+        run: |
+          set -euxo pipefail
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/unifieddb/receipts/U16_SEGMENTED_PULSE_HOSTINGER_LATEST.json
+          git commit -m 'evidence(unifieddb): record Hostinger V16 segmented Pulse maintenance' || exit 0
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep 2
+          done
+          echo 'Unable to publish V16 receipt without colliding with newer main; artifact remains uploaded.' >&2
+          exit 1

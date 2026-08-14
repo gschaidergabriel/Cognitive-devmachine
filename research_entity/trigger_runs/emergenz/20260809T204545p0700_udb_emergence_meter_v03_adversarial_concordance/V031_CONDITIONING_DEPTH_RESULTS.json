@@ -1,0 +1,41 @@
+{
+  "adjudication": "ADD_CONDITIONING_DEPTH_STABILITY_DIAGNOSTIC_BUT_NEVER_TREAT_STABILITY_AS_CAUSAL_PROOF",
+  "conditioning_depth_definition": "depth d adds X lags 2..d+1 and Y lags 1..d while testing candidate X[t-1]->Y[t]",
+  "depth1_retention_fraction_omitted_path": 0.0003716953641195737,
+  "depth1_retention_fraction_true_path": 0.32645116038366595,
+  "depths": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "evidence_class": "SYNTHETIC_CONDITIONING_DEPTH_COUNTEREXAMPLE",
+  "limitations": [
+    "The diagnostic flags observed-state inadequacy but does not identify hidden memory, latent confounding, nonstationarity or measurement dynamics as the cause.",
+    "Finite-sample CMI bias increases with conditioning dimension.",
+    "A weak or highly predictable true path may also lose conditional information.",
+    "Adaptive parent-selection methods do not expose one directly comparable nominal depth parameter.",
+    "Thresholds require regime-specific null calibration and power analysis."
+  ],
+  "live_frank_validated": false,
+  "omitted_lag3_apparent_lag1_median_information_bits": [
+    0.2430331379967,
+    9.033429072080601e-05,
+    0.0005348324111509317,
+    0.0015032851146110637,
+    0.0031114671430008123
+  ],
+  "samples_per_seed": 20000,
+  "schema_version": "1.0",
+  "seeds": 20,
+  "source_persistence": 0.92,
+  "target_flip_noise": 0.1,
+  "true_lag1_path_median_information_bits": [
+    0.5315662835325011,
+    0.17353043008001778,
+    0.17390809525620488,
+    0.17485232353892854,
+    0.1758196365337903
+  ]
+}

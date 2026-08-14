@@ -1,0 +1,28 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-receipt:chatgpt-secondary:20260809T154200Z:frank-v01-whole-system-sandbox-v9",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "payload": {
+    "work_id": "FRANK-V01-WHOLE-SYSTEM-SANDBOX-INTEGRATE-20260809",
+    "spec_rev": 1,
+    "execution_receipt_id": "sandbox:chatgpt-secondary:frank-v01:20260809T154200Z:v9",
+    "supersedes_execution_receipt_id": "sandbox:chatgpt-secondary:frank-v01:20260809T154000Z:v8",
+    "executor_class": "CHATGPT_HOSTED_SANDBOX",
+    "machine_ref": "chatgpt-sandbox-local-ephemeral",
+    "action": "Preserved all v8 sandbox evidence and refreshed the remaining UnifiedDB V13 admission repair onto the newest Frank main after the 71/71 historical database identity-conservation commits. Closed stale PR #22 and opened mergeable PR #24 from current main with the same manifest-loader consistency regression and disposable full-chain schema test.",
+    "observed_effect": "Sandbox evidence remains unchanged and PASS: whole-system 22/22; fault/stress 12/12; GoldenLoop counterfactual PASS; current-schema property fuzz 430 PASS; lineage lesion/rescue 31 organs + 41 technical lineages PASS; current-main causal reentry 10/10; F6 adapter self-test PASS, Frank mock eval 7/7 and endpoint security PASS; 71/71 source-resolved historical DB identities conserved with synthetic state roundtrip/rollback while historical payload migration remains explicitly unclaimed. Current main still declares UnifiedDB 12.0 although apply_current_schema.py loads V13. PR #24 updates manifest to 13.0, admits V13 bug-feedback migration/surface and adds regression coverage; PR #24 is open and GitHub reports mergeable=true. No canonical DB migration was performed.",
+    "verification": "Current-main mismatch re-read after 71-state commits: APPLIED_SCHEMA_MANIFEST_REQUIRED sha 2d82fbf2ede33995dd6859e308cbae6e69aae258 still UnifiedDB 12.0; apply_current_schema.py sha 73005c691d4138309dafceacc8fd56668cbe242a still loads UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql. PR #24 base b33092d2f1a6fc5b4dfeb4dddb984c4dca022184, head 6d6deda6448f44d6a57bfe36b3285d6d7832e0ef, mergeable=true. Sandbox evidence bundle SHA256 e7e179b53d85b2c65ee9c174d1741014f9f809b61f576b472921a65e98342904.",
+    "evidence_refs": [
+      "sandbox-bundle-sha256:e7e179b53d85b2c65ee9c174d1741014f9f809b61f576b472921a65e98342904",
+      "frank-commit:b33092d2f1a6fc5b4dfeb4dddb984c4dca022184",
+      "frank-pr:24",
+      "frank-main:runtime/state/APPLIED_SCHEMA_MANIFEST_REQUIRED@2d82fbf2ede33995dd6859e308cbae6e69aae258",
+      "frank-main:runtime/state/apply_current_schema.py@73005c691d4138309dafceacc8fd56668cbe242a"
+    ],
+    "truth_class": "LOCAL_EXECUTION_PRIMARY",
+    "success": true,
+    "complete": false
+  },
+  "created_at": "2026-08-09T15:42:00Z"
+}

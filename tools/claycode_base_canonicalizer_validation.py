@@ -29,6 +29,20 @@ def run() -> dict:
     result("layout_comment_semantic_equivalence", a["semantic_hash"] == b["semantic_hash"], {"a": a["semantic_hash"], "b": b["semantic_hash"]})
     result("source_identity_remains_exact", a["source_sha256"] != b["source_sha256"])
 
+    # V17 repair invariant: horizontal trivia before a call parenthesis cannot change a
+    # qualified `owns` call into a dotted-prefix relation. The prefix relation remains a
+    # semantically distinct program.
+    owns_call_tight = front.compile_frontend("rule Needle.owns(X)\n", grammar)
+    owns_call_spaced = front.compile_frontend("rule Needle.owns (X)\n", grammar)
+    owns_call_long = front.compile_frontend("rule Needle.owns          (X)\n", grammar)
+    owns_prefix = front.compile_frontend("rule Needle.owns X\n", grammar)
+    result(
+        "qualified_owns_call_horizontal_trivia_equivalence",
+        owns_call_tight["semantic_hash"] == owns_call_spaced["semantic_hash"] == owns_call_long["semantic_hash"],
+        {"tight": owns_call_tight["semantic_hash"], "spaced": owns_call_spaced["semantic_hash"], "long": owns_call_long["semantic_hash"]},
+    )
+    result("qualified_owns_call_distinct_from_prefix_relation", owns_call_tight["semantic_hash"] != owns_prefix["semantic_hash"])
+
     # Semantic operator/order mutations must remain distinguishable in this surface AST.
     gt = front.compile_frontend("module clay.demo\nlaw residual > 0\n", grammar)
     lt = front.compile_frontend("module clay.demo\nlaw residual < 0\n", grammar)
@@ -53,6 +67,7 @@ def run() -> dict:
     for name, source in {
         "reserved_if_identifier_rejected": "module clay.demo\nsurface if\n",
         "dangling_operator_rejected": "module clay.demo\nlaw residual >=\n",
+        "reserved_lowers_call_with_trivia_rejected": "rule Needle.lowers (X)\n",
     }.items():
         try:
             front.compile_frontend(source, grammar)
@@ -69,18 +84,19 @@ def run() -> dict:
 
     failures = [x["name"] for x in checks if not x["pass"]]
     return {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "scope": "PRODUCTION_BASE_SURFACE_PARSER_CANONICALIZER_ACTIVE_GRAMMAR",
         "grammar": str(GRAMMAR.relative_to(ROOT)),
         "checks": checks,
+        "v9_trivia_counterexample_guard_present": True,
         "passed": len(checks) - len(failures),
         "total": len(checks),
         "failures": failures,
         "pass": not failures,
         "limitations": [
             "typed collection Set/Ordered normalization belongs to CC-WP-03 typed IR",
-            "strict LALR conflict freedom is proven by the separate strict frontend CI gate",
-            "this receipt alone does not promote CC-WP-02 until full admitted G9+Dialect and differential receipts also pass"
+            "strict LALR conflict freedom is proven by the separate strict frontend/target gate",
+            "this receipt alone does not promote CC-WP-02 until full admitted G9+Dialect and strict grammar-bound receipts also pass"
         ]
     }
 

@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1934p0700-chatgpt-secondary-context-budget",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_scope": "Frank v0.1 Ubuntu Linux developer system; hosted Linux evidence only in this receipt",
+  "selected_gap": "P2 bounded ActiveAssembly: enforce actual model-facing context cost and benchmark against budget-matched selection baselines",
+  "implementation": {
+    "reference_file": "research_entity/harness/reference/active_assembly.py",
+    "schema_after": "frank.active-assembly.v1.2",
+    "changes": [
+      "AssemblyPacket.context_cost positive deterministic integer, included in packet identity",
+      "optional max_context_cost hard budget while preserving default count-only compatibility",
+      "conflict visibility cannot bypass context-cost budget",
+      "omitted over-budget packets retain re-expansion references",
+      "context_cost_used/context_cost_remaining/omitted_reasons become explicit receipts",
+      "concurrent v1.1 identity/collision/idempotency semantics preserved"
+    ],
+    "semantic_change_scope": "H1_REFERENCE_ONLY",
+    "effect_authority_change": "NONE"
+  },
+  "tests": {
+    "environment": "hosted Linux container, Python 3.13",
+    "command": "python -m unittest research_entity.harness.tests.test_active_assembly research_entity.harness.tests.test_active_assembly_context_budget -v",
+    "passed": 16,
+    "failed": 0,
+    "target_ubuntu_executed": false
+  },
+  "benchmark": {
+    "script": "research_entity/harness/benchmarks/active_assembly_context_budget_benchmark.py",
+    "result": "research_entity/trigger_runs/frank/frank-20260809T1934p0700-chatgpt-secondary-context-budget/BENCHMARK_RESULT.json",
+    "evidence_class": "SYNTHETIC_H1_MECHANISM",
+    "seed": 20260809,
+    "trials_per_scenario": 5000,
+    "scenarios": 5,
+    "episodes_total": 25000,
+    "context_budget_units": 18,
+    "max_items": 6,
+    "methods": ["topk_cost", "mmr_cost", "active_cost", "active_count_only"],
+    "key_results": {
+      "count_only_overflow_rate": {
+        "clean": 0.9472,
+        "concentrated_family": 0.5174,
+        "echo_conflict": 0.9022,
+        "misinfo_swarm": 0.421,
+        "variable_cost": 1.0
+      },
+      "active_cost_utility": {
+        "clean": 0.99993,
+        "concentrated_family": 0.5274,
+        "echo_conflict": 0.8782,
+        "misinfo_swarm": 0.99127,
+        "variable_cost": 0.591
+      },
+      "mmr_cost_utility": {
+        "clean": 0.9876,
+        "concentrated_family": 0.9932,
+        "echo_conflict": 0.91238,
+        "misinfo_swarm": 0.594,
+        "variable_cost": 0.61407
+      },
+      "topk_cost_utility": {
+        "clean": 0.99993,
+        "concentrated_family": 0.99853,
+        "echo_conflict": 0.33685,
+        "misinfo_swarm": 0.03095,
+        "variable_cost": 0.591
+      }
+    },
+    "negative_results": [
+      "A global ancestry cap can suppress multiple distinct necessary facts from one legitimate source family; concentrated_family active_cost utility=0.5274 while budget-matched top-k=0.99853 and MMR=0.9932.",
+      "Current score-first ActiveAssembly does not optimize information utility per cost in the variable_cost fixture; MMR=0.61407 vs ActiveAssembly=0.591.",
+      "The synthetic misinformation utility metric is mechanism-level and is not sufficient to claim live misinformation robustness."
+    ]
+  },
+  "hypotheses": [
+    {
+      "id": "H-FRANK-CB-001",
+      "claim": "A hard model-facing context-cost budget is required in addition to item count for bounded local-4B ActiveAssembly construction.",
+      "status": "SUPPORTED_BY_SYNTHETIC_MECHANISM_AND_GENERAL_EXTERNAL_EVIDENCE_TARGET_OPEN",
+      "falsifier": "Matched target-tokenizer H1/4B traces show item count alone never breaches the preregistered context/KV resource envelope or the added estimator causes greater correctness/recovery harm than it prevents."
+    },
+    {
+      "id": "H-FRANK-CB-002",
+      "claim": "Global ancestry caps are too coarse for final selection and should be compared against semantic-local redundancy/set-level selection rather than promoted as fixed target semantics.",
+      "status": "SUPPORTED_BY_SYNTHETIC_COUNTEREXAMPLE_OPEN",
+      "falsifier": "Frozen H1 and target-4B traces show global caps dominate semantic-local/set-level baselines on verified outcome, conflict retention, provenance fidelity and resource cost without distinct-fact suppression."
+    },
+    {
+      "id": "H-FRANK-CB-003",
+      "claim": "Selection should eventually optimize marginal future utility under token/KV/latency cost rather than raw packet score alone.",
+      "status": "EXTERNAL_AND_SYNTHETIC_SUPPORT_FRANK_OPEN",
+      "falsifier": "A simpler deterministic score-first selector matches or beats set-level/adaptive methods on matched frozen traces and real Andreas outcomes at lower complexity and equivalent safety."
+    }
+  ],
+  "external_evidence": [
+    {"class":"PRIMARY_PREPRINT","ref":"arXiv:2307.03172","role":"long-context utilization remains non-uniform; long window != reliable use"},
+    {"class":"PRIMARY_PREPRINT","ref":"arXiv:2512.25052","role":"redundancy-aware set selection under token budget"},
+    {"class":"PRIMARY_PREPRINT","ref":"arXiv:2507.05633","role":"tight-budget retrieval/compression with detail preservation"},
+    {"class":"PRIMARY_PREPRINT","ref":"arXiv:2606.29959","role":"adaptive retrieval-budget allocation and explicit latency/token tradeoff"},
+    {"class":"PRIMARY_PREPRINT","ref":"arXiv:2506.08500","role":"retrieval conflict remains a model failure mode"},
+    {"class":"PRIMARY_PREPRINT","ref":"arXiv:2607.20519","role":"adaptive recurrent compute must separate trajectory formation from halt/readout selection"},
+    {"class":"OFFICIAL_MODEL_CARD","ref":"Qwen/Qwen3.5-4B","role":"current 4B-class multimodal candidate exists; target choice remains measurement-gated"}
+  ],
+  "architecture_fidelity": "IMPROVED_RESOURCE_BOUNDARY_WITH_SELECTION_QUALITY_STILL_OPEN",
+  "scientific_promotion": "NONE",
+  "next_discriminator": "Run budget-matched ActiveAssembly vs top-k/MMR/set-level redundancy-aware selectors on frozen real H1 traces with target-tokenizer token costs; preserve global-cap counterexample and measure future task outcome, conflicts, provenance, re-expansion, latency/KV and update amplification.",
+  "non_claims": [
+    "No Andreas target-host execution occurred in this hosted run.",
+    "No target 4B benchmark occurred.",
+    "No H1/BASE release gate was promoted.",
+    "No evidence here establishes consciousness or causal emergence.",
+    "No model/assembly packet gains execution authority."
+  ]
+}

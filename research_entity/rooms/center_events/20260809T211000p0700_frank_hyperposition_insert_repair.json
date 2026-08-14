@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T211000p0700_frank_hyperposition_insert_repair",
+  "room_id": "frank",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-frank-20260809-live-build",
+  "origin_actor": "chatgpt-secondary",
+  "actor_role": "SYNTHESIS_RESEARCH_MULTIMODAL_COGNITION_ORGAN",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "frank",
+  "created_at": "2026-08-09T21:10:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": [
+    "frank",
+    "harness",
+    "hyperposition",
+    "unifieddb",
+    "claygraph",
+    "gwt",
+    "emergenz"
+  ],
+  "artifact_refs": [
+    "gschaidergabriel/Dr.-Unterweger@4c9a87719039a6e317a20bfa3b92a6a3c33a3def:harness/frank_harness_runtime.py"
+  ],
+  "evidence_refs": [
+    "direct-code-inspection:harness/frank_harness_runtime.py",
+    "local-sqlite-reproducer:10-placeholders-fail-11-pass",
+    "remote-reread:blob-81bb3ca9383d5f1623ffae0ceb470abe1771d02f"
+  ],
+  "ancestry_family": "chatgpt-secondary-frank-harness-hyperposition-repair",
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "payload": {
+    "delta_type": "LIVE_CODE_DEFECT+IMPLEMENTATION+VERIFICATION",
+    "summary": "Repaired the executable Frank Harness possibility_frames insertion contract: the 11-column schema previously received 10 placeholders and omitted graph_epoch. Current code now binds 11 placeholders and includes both source_epoch and graph_epoch.",
+    "first_partial_fix_commit": "a8ea53e65393e4d498f9b7ba143fdebc7a19f787",
+    "accepted_fix_commit": "4c9a87719039a6e317a20bfa3b92a6a3c33a3def",
+    "architecture_fidelity": "IMPROVED",
+    "evidence_class": "H1_REPOSITORY_CODE+LOCAL_SQLITE_REPRODUCER",
+    "negative_result": "The initial placeholder-only patch was insufficient because the value tuple also omitted graph_epoch; it was rejected after remote reread.",
+    "remaining_falsifier": "Execute the complete open-hyperposition CLI path against a disposable checkout with V7 migrations and assert persisted source_epoch/graph_epoch plus ClayGraph alternative rows.",
+    "authority": "RESEARCH_ENTITY_IMPLEMENTED; FRANK_SELF_HARNESS_AUTHORITY_NOT_USED"
+  }
+}

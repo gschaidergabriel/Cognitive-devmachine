@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-frank-bugsearch-repairs-20260809T1941p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T19:41:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-BUGSEARCH-INTEGRITY-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "USER_DIRECTED_FRANK_BUGSEARCH",
+    "title": "Repair Frank bug-feedback and Harness integrity regressions",
+    "work_clay": "Reproduce and repair FB-01..FB-13 from research_entity/research/frank/FRANK_BUGSEARCH_20260809T1941p0700.md plus its ADDENDUM against current Frank remote main. Highest priority is one canonical V13/bug trigger schema contract, one authoritative exact-bug dispatcher excluded from generic skill invocation, immutable or explicitly revisioned bug identity, atomic Frank DB/export publication, explicit same-ID/different-hash conflict handling in Clay ingest, executed CI regressions, and fail-closed Harness canonical state opening. Preserve concurrent Harness/loop-dynamics work and re-read remote main before every Frank mutation. Then harden pair-persistence diagnostics, session identity, secret scrubbing and watcher quarantine/checkpoint behavior.",
+    "reason_clay": "The audit found source-level contradictions across Frank schema truth gates, exact-command routing, bug payload identity, cross-repo deduplication, file-vs-DB publication order, reserved trigger migration, CI coverage and legacy Harness state opening. These defects can make a bug report disappear, double-route as a generic skill, diverge silently between Frank and Clay, leak an orphan export, fail migration, or recreate stale partial central state even though older deep-integrity receipts passed.",
+    "completion_clay": "All FB-01..FB-13 have reproducible test dispositions. Current schema manifest/truth/materializer gates fail closed without the exact bug channel contract; exact bug has one authoritative dispatch path and creates no generic skill invocation; v12→v13 migration handles preexisting bug-trigger collision explicitly; repeated identical captures are byte/hash-idempotent or use immutable revision identity; DB failure cannot expose an uncommitted consumable export; Clay same-ID/different-hash is an explicit conflict; bug-feedback pytest regressions and Harness Python/state-boundary checks execute in CI; every normal Harness entrypoint fails closed on missing canonical DBs; pair persistence failures are observable; full/collision-resistant session identity is consistent; shared secret scrubber passes supported credential corpus; watcher checkpoints or quarantines invalid content revisions; restart/recovery and Ubuntu target-host end-to-end bug capture→Clay ingest receipts pass; no known P0/P1 remains in this lane.",
+    "evidence_need": ["FRANK_V13_TRUTH_GATE_REGRESSION","EXACT_BUG_SINGLE_DISPATCH_TRACE","V12_TO_V13_BUG_TRIGGER_COLLISION_MIGRATION_TEST","BUG_CAPTURE_IMMUTABILITY_OR_REVISION_TEST","FRANK_EXPORT_DB_FAILURE_INJECTION_TEST","CLAY_SAME_ID_DIFFERENT_HASH_CONFLICT_TEST","BUG_FEEDBACK_CI_EXECUTION_RECEIPT","HARNESS_STATE_BOUNDARY_STATIC_AND_RUNTIME_TEST","PAIR_PERSISTENCE_FAILURE_OBSERVABILITY_TEST","SESSION_IDENTITY_COLLISION_TEST","SECRET_REDACTION_NEGATIVE_CORPUS","WATCHER_INVALID_CONTENT_QUARANTINE_TEST","UBUNTU_FRANK_TO_CLAY_BUG_FEEDBACK_E2E_RECEIPT"],
+    "executor_policy": "Research-Entity-owned repair only. Frank may report/observe but does not mutate its own Harness. Prefer a worker with current Frank checkout plus local test execution; preserve all concurrent remote-main changes, use small reviewable commits, add failing regression before or with each fix, and do not claim Andreas-PC deployment until a target-host receipt exists.",
+    "required_capabilities": ["GITHUB_READ_WRITE","FRANK_REPOSITORY_CHECKOUT","PYTHON_TEST_EXECUTION","SQLITE_MIGRATION_TESTING","UBUNTU_DEVELOPER_HOST_EXECUTION"],
+    "write_scope": ["gschaidergabriel/frankv0.1/**","research_entity/research/frank/","research_entity/state/work/events/","research_entity/trigger_runs/frank/"],
+    "dependencies": ["research_entity/research/frank/FRANK_BUGSEARCH_20260809T1941p0700.md","research_entity/research/frank/FRANK_BUGSEARCH_20260809T1941p0700_ADDENDUM.md","Frank remote main snapshot observed at 22638720574ce33821b021d78f4ebbbdb5e65df7 and advanced during audit","FRANK_V0_1_ANDREAS_PC"],
+    "invalidators": ["A newer verified Frank repair receipt proves one or more FB findings already superseded","Project owner explicitly changes the exact bug feedback contract"],
+    "base_priority": 1.0,
+    "expected_impact": 0.98,
+    "urgency": 0.98,
+    "information_gain": 0.99,
+    "status": "READY"
+  }
+}

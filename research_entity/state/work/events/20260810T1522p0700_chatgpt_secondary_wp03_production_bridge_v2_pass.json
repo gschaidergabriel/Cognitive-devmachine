@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "event_id": "wp03-production-bridge-v2-pass-20260810T1522p0700-chatgpt-secondary",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "not_frank": true,
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-03-IR-TYPES",
+  "source_change": {
+    "path": "tools/claycode_wp03_frontend_artifact_bridge.py",
+    "commit": "f19aaf5759f55a85a1263b56e981ca614150049e",
+    "blob": "79d9474817bccae2d611940a0bee8bbac95ceee3",
+    "bridge_schema": "ClayCodeTypedIRFrontendBinding/v2-residual-semantics",
+    "change": "receipt-bound production bridge now invokes tested residual-semantics TypedIR builder; legacy declaration-only builder remains preserved as baseline and is explicitly forbidden as the production entrypoint"
+  },
+  "remote_execution": {
+    "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "f3db93743532e584c69a3784ac0c338c2ea476d6",
+    "github_run_id": "31369677917",
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_WP03_PRODUCTION_BRIDGE_V2_DIFFERENTIAL",
+    "runner": "clay@digital-retina Linux X64 Python 3.12.3",
+    "pass": true,
+    "elapsed_seconds_production_test": 1.71,
+    "max_rss_kb_production_test": 30848,
+    "elapsed_seconds_tamper_regression": 0.89,
+    "max_rss_kb_tamper_regression": 32240
+  },
+  "bound_blobs": {
+    "frontend": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "v18_grammar": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "g9": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+    "dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "legacy_current_typed_ir_baseline": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "production_bridge_v2": "79d9474817bccae2d611940a0bee8bbac95ceee3",
+    "residual_builder": "d7f4c9b475466c813ae85716e9c57d7ee9f99512",
+    "production_test": "6e050070df3fe23d1a105bb90907ccfe2e04a617",
+    "tamper_test": "0a3d1962d16d22b24a8debdd29471a4536fdd53d"
+  },
+  "measured": {
+    "production_bridge_schema": "ClayCodeTypedIRFrontendBinding/v2-residual-semantics",
+    "production_bridge_output_schema": "2.0",
+    "full_source_count": 2,
+    "full_opaque_unlowered_semantics_count": 100,
+    "downstream_parser_calls": 0,
+    "reward_unique_typed_ir_hashes": 3,
+    "reward_expected_distinctions": 3,
+    "tamper_cases": 5,
+    "tamper_rejected": 5,
+    "opaque_semantics_mint_effect_authority": "FORBIDDEN",
+    "legacy_declaration_only_builder_is_production_entrypoint": "FORBIDDEN",
+    "production_typed_ir_sha256": "28d4a5fa00d9852c608d513ad5fe358763ca8fc6a035c0678a454eb8bb9bc661",
+    "production_typed_ir_artifact_sha256": "89d8f9e7d5b834eda435dad63b6915b07cbf0b3ba8be4b54af4d2825b51c42b4"
+  },
+  "promotion": {
+    "status": "PROMOTED_ON_NARROW_SCOPE",
+    "scope": "RECEIPT_BOUND_WP03_PRODUCTION_TYPEDIR_BRIDGE_V2_ONLY",
+    "wp03_package_status": "OPEN",
+    "base_release_status": "NOT_PASS",
+    "legacy_baseline_preserved": true
+  },
+  "remaining_counterhypothesis": "Lossless opaque preservation can still strand meaning if WP04/05 neither validates nor lowers/consumes a preserved semantic class. Therefore identity preservation alone is insufficient for WP03 package closure or executable semantics.",
+  "next_falsifier": "Enumerate preserved top-level semantic classes and require an explicit downstream disposition per class: lowered+validated, intentionally deferred with fail-closed execution, or rejected. Prove no class silently disappears and no opaque class mints effect authority.",
+  "distribution": {
+    "claycode": "PRODUCTION_BRIDGE_V2_PROMOTED_NARROW_SCOPE_PLUS_DOWNSTREAM_CONSUMPTION_GATE",
+    "clayresearch": "BASELINE_FALSIFICATION_AND_REPAIR_CAUSAL_CHAIN",
+    "harness": "NO_CREDIT_UNTIL_WP04_05_CONSUMPTION",
+    "unifieddb": "PRESERVE_CONTENT_ADDRESSED_PROMOTION_RECEIPT",
+    "claygraph": "REWIRE_CURRENT_WP03_PRODUCTION_EDGE_TO_BRIDGE_V2; KEEP_LEGACY_BASELINE_EDGE_AS_NEGATIVE_EVIDENCE",
+    "hyperposition": "RESIDUAL_BUILDER_SELECTED_FOR_PRODUCTION_BRIDGE_SCOPE; FULL_WP03_DESIGN_STILL_OPEN",
+    "frank": "NO_HARNESS_MUTATION"
+  },
+  "exactly_one_out_of_box_experiment_for_parent_go": "COMPONENT_ADDRESSED_MOVING_MAIN_CANARY_ALREADY_EXECUTED; NO_SECOND_OOB_EXPERIMENT",
+  "frank_harness_mutation": false,
+  "andreas_target_acceptance": false,
+  "training_authorized": false,
+  "authority": "NONE",
+  "status": "COMMITTED"
+}

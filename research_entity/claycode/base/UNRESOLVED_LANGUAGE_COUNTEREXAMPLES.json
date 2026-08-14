@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "ledger_id": "CLAYCODE-BASE-UNRESOLVED-LANGUAGE-COUNTEREXAMPLES",
+  "updated_at": "2026-08-09",
+  "policy": "A language semantic change is justified only by a concrete executable application or frozen-FRANK counterexample that cannot be expressed/lowered by the frozen semantics. Compiler/runtime/stdlib/FFI incompleteness is not a language counterexample.",
+  "unresolved_language_counterexamples": [],
+  "open_implementation_gaps_not_language_counterexamples": [
+    {
+      "id": "IMPL-GAP-EFFECTFUL-PRODUCTION-BRIDGE",
+      "status": "OPEN",
+      "blocks": ["CC-WP-06-COMPILER-LOWERING", "CC-WP-07-RUNTIME-ABI-FFI", "CC-WP-08-STDLIB-SDK", "CC-WP-10-GENERAL-APP-SUITE"],
+      "description": "The pure ClayCode compiler and the effect/authority experiments are not yet one production source->typed IR->effect checker->lowerer->sealed host runtime pipeline for the complete application suite.",
+      "classification": "IMPLEMENTATION_INTEGRATION_GAP",
+      "language_change_required": false,
+      "falsifier": "A concrete admitted ClayCode/FRANK program whose required semantics cannot be represented by the frozen BASE contract even with typed host lowering."
+    },
+    {
+      "id": "IMPL-GAP-APP04-CANCELLATION-ERROR",
+      "status": "OPEN",
+      "blocks": ["CC-WP-09-CONCURRENCY-MEMORY", "CC-WP-10-GENERAL-APP-SUITE"],
+      "description": "Hosted application proxies exercise concurrent execution but do not yet satisfy the APP-04 cancellation/error-path acceptance contract through the production ClayCode chain.",
+      "classification": "RUNTIME_STDLIB_ACCEPTANCE_GAP",
+      "language_change_required": false,
+      "falsifier": "Cancellation/error semantics cannot be represented or lowered without adding a new ClayCode semantic primitive."
+    },
+    {
+      "id": "IMPL-GAP-APP05-TARGET-UI",
+      "status": "OPEN",
+      "blocks": ["CC-WP-08-STDLIB-SDK", "CC-WP-10-GENERAL-APP-SUITE"],
+      "description": "The current interactive adapter is hosted/headless evidence; target-host GUI/event/render acceptance through a typed adapter remains unproven.",
+      "classification": "HOST_ADAPTER_ACCEPTANCE_GAP",
+      "language_change_required": false,
+      "falsifier": "A real Ubuntu UI adapter requires semantics that cannot be expressed by the frozen typed host-adapter/effect model."
+    },
+    {
+      "id": "IMPL-GAP-FRANK-FULL-HANDOFF",
+      "status": "OPEN",
+      "blocks": ["CC-WP-13-HARNESS-HANDOFF", "CC-WP-14-BASE-AUDIT"],
+      "description": "A real frozen FRANK subsystem and the full H2/H3-facing handoff have not yet been compiled through the production ClayCode chain on the Ubuntu developer target without semantic escape hatches.",
+      "classification": "INTEGRATION_ACCEPTANCE_GAP",
+      "language_change_required": false,
+      "falsifier": "A frozen FRANK subsystem exposes a semantic requirement that cannot be represented/lowered under BASE_SEMANTIC_FREEZE_V1."
+    },
+    {
+      "id": "IMPL-GAP-ANDREAS-TARGET-RECEIPTS",
+      "status": "OPEN",
+      "blocks": ["CC-WP-07-RUNTIME-ABI-FFI", "CC-WP-08-STDLIB-SDK", "CC-WP-09-CONCURRENCY-MEMORY", "CC-WP-10-GENERAL-APP-SUITE", "CC-WP-13-HARNESS-HANDOFF", "CC-WP-14-BASE-AUDIT"],
+      "description": "Hosted/local Linux evidence is not the project-owner-fixed Andreas Ubuntu developer-system acceptance evidence.",
+      "classification": "TARGET_EXECUTION_GAP",
+      "language_change_required": false,
+      "falsifier": "Successful reproducible target-host receipts satisfying the corresponding acceptance contract."
+    }
+  ],
+  "decision": "NO_EXECUTABLE_LANGUAGE_COUNTEREXAMPLE_CURRENTLY_REQUIRES_SEMANTIC_REDSEIGN",
+  "promotion_effect": "NONE. An empty language-counterexample list does not close any implementation or target-host work package."
+}

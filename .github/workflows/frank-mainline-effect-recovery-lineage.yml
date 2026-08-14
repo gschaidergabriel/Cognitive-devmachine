@@ -1,0 +1,42 @@
+name: FRANK mainline effect recovery lineage probe
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_base_runtime.py'
+      - 'tools/frank_effect_recovery_mainline_probe.py'
+      - '.github/workflows/frank-mainline-effect-recovery-lineage.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frank-mainline-effect-recovery-lineage-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  effect-recovery-lineage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reproduce current-mainline post-effect pre-receipt crash ambiguity
+        run: python tools/frank_effect_recovery_mainline_probe.py
+      - name: Commit research receipt
+        run: |
+          git config user.name 'frank-effect-recovery-lineage'
+          git config user.email 'frank-effect-recovery-lineage@users.noreply.github.com'
+          git add research_entity/trigger_runs/frank/frank_20260809T1921p0700_chatgpt_secondary_runtime_lineage/MAINLINE_EFFECT_RECOVERY_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'frank: record mainline effect recovery lineage receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

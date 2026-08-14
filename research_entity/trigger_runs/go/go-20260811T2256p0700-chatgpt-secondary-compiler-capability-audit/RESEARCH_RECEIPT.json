@@ -1,0 +1,110 @@
+{
+  "schema_version": "ClayGoResearchReceipt/v1",
+  "run_id": "go-20260811T2256p0700-chatgpt-secondary-compiler-capability-audit",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "canonical_boot": {
+    "entity": "Clay",
+    "canonical_revision": 2,
+    "canonical_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "target": "self.root / Frank v0.1 on accepted Ubuntu target"
+  },
+  "fresh_state_revalidation": {
+    "target_main_observed": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "supervisor_head_observed": "50e39a7a9e07da7a8100615fe68de1084e0f1b15",
+    "active_frontier": "PR357 composed ClayCode frontier exact-head Ubuntu validation before lowering promotion",
+    "queued_or_cancelled_is_credit": false
+  },
+  "hypothesis": "A host backend may receive bounded translation credit only if the exact generated capability surface is independently inspectable and the already-authorized ClayCode semantic closure remains behaviorally equivalent on accepted target bytes.",
+  "strongest_counterhypothesis": "A generated host AST or generated C backend can smuggle host-language capability or coercion semantics while still passing value-only differential cases; backend agreement that shares the same Clay source/evaluator ancestry is correlated translation validation, not independent semantic authority.",
+  "finding": {
+    "class": "EVIDENCE_INSTRUMENT_BUG",
+    "target_pr": 364,
+    "detail": "The Python-AST lowering gate asserted external_effect_performed_false and authority_minted_false as literal True values. Those receipt fields were tautologies, not measurements.",
+    "repair_commits": [
+      "1f954beac9da5b40a8d57a38e1dea410f5117243",
+      "e0b84927072a4b0ee136a5ba18749582e9126aa0"
+    ],
+    "repair": [
+      "Expose the exact generated ast.Module in CompiledProgram for independent inspection.",
+      "Replace tautological safety receipts with a bounded AST-node/call-target audit, exact execution namespace audit, empty-builtins check and helper-identity checks.",
+      "Preserve the concurrently-added counterbalanced warm benchmark rather than overwriting newer worker work."
+    ]
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "ADVERSARIAL_AST_HOST_CAPABILITY_GRAFT",
+    "method": "Deep-copy the generated backend AST, synthetically graft an os.system-style Attribute call edge, and require the independent allowlist audit to reject the modified tree without executing the graft.",
+    "local_secondary_sanity": "DETECTED: Attribute appears both as forbidden AST node and invalid call shape.",
+    "reversible": true,
+    "lesionable": true,
+    "external_effect": false,
+    "target_acceptance": "PENDING_EXACT_UBUNTU_RUN"
+  },
+  "concurrency_receipt": {
+    "observed_collision": true,
+    "mechanism": "GitHub contents CAS returned HTTP 409 after another worker changed the test blob.",
+    "response": "Stopped stale write, re-fetched newest blob, preserved newly-added benchmark work, then applied only the still-needed capability-audit delta.",
+    "stale_overwrite_performed": false
+  },
+  "frontier_fusion": {
+    "pr357": {
+      "head": "2ac082f8694dd7a37388a4e2691ca8bf766d54e4",
+      "role": "higher-priority composed semantic frontier",
+      "target_workflows": "QUEUED at last observation",
+      "credit": "NO_CREDIT_UNTIL_EXECUTED"
+    },
+    "pr364": {
+      "head": "e0b84927072a4b0ee136a5ba18749582e9126aa0",
+      "role": "bounded CPython-AST lowering candidate with repaired capability evidence gate",
+      "target_workflow": "QUEUED at last observation",
+      "credit": "NO_CREDIT_UNTIL_EXECUTED"
+    },
+    "pr366": {
+      "head": "ee6536ea9ca5382931a050cb0c195d4945ca9cdc",
+      "role": "stacked native-C lowering counterbackend",
+      "github_hosted_shadow": "FAIL at last observation",
+      "target_workflow": "PENDING/QUEUED at last observation",
+      "credit": "NO_CREDIT; dependency PR357 must validate first"
+    }
+  },
+  "external_primary_refresh": [
+    {
+      "source": "Python 3.12 ast documentation",
+      "fact": "ASTs can be compiled to code objects; Python explicitly states the abstract syntax may change across releases.",
+      "decision_effect": "Bind Python runtime/version plus generated-AST identity in receipts; treat CPython AST as a bootstrap projection, not semantic authority."
+    },
+    {
+      "source": "Python 3.12 compile documentation",
+      "fact": "compile() emits a compile audit event and can fail on invalid or excessively complex inputs.",
+      "decision_effect": "Keep compiler input bounded and fail-closed; target receipt must include execution/resource evidence."
+    },
+    {
+      "source": "Bytecode Alliance Wasmtime/Cranelift current release/docs",
+      "fact": "Cranelift remains a current production code generator with explicit IR, but recent Wasmtime release history also demonstrates that backend miscompilations and sandbox-relevant bugs are real engineering risks.",
+      "decision_effect": "Do not jump to a larger native backend solely for novelty; require the same translation-validation, capability-boundary and target-execution discipline for every backend."
+    }
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "change": "Any bounded ClayCode lowering promotion should include a computed backend capability-surface receipt in addition to value differentials, deterministic generated-artifact identity and fail-closed semantic refusals.",
+    "semantic_change": false,
+    "authority_change": false,
+    "harness_mutation_by_frank": false,
+    "rollback": "Revert target PR364 commits 1f954be/e0b849 if the exact target gate falsifies the audit implementation; no canonical ClayCode semantics depend on them."
+  },
+  "next_falsifiers": [
+    "PR357 exact repaired head must complete the composed Ubuntu gate before it can receive frontier acceptance.",
+    "PR364 exact head e0b849 must pass the full source/evaluator/compiled/reference differential plus capability audit and OOB graft-detection check on accepted target bytes.",
+    "PR366 hosted/target failure must be diagnosed before any C-backend comparison; do not treat a second backend as independent semantic replication."
+  ],
+  "promotion": "NO_PROMOTION_THIS_RECEIPT",
+  "training_authorized": false
+}

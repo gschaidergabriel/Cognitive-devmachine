@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "reason": "Live main advanced during the run; the research worker re-read the current runtime and validation rather than freezing conclusions on the earlier v0.1 candidate.",
+  "current_runtime_observations": [
+    {
+      "ref": "tools/claycode_base_runtime.py",
+      "observed_runtime_version": "claycode-base-runtime/0.4",
+      "github_blob_sha": "dff10ac45c0738c5f239f4c4bf3793fca2084c79",
+      "improvements_observed": [
+        "policy hash and authority-context hash are sealed into capability handle validation",
+        "descriptors are explicitly non-authorizing",
+        "process policy uses canonical absolute executable paths and fingerprints",
+        "async boundary rejects arbitrary callables",
+        "cumulative resource/call budgets are tracked",
+        "capability validation remains runtime-instance, registry-identity, revocation and epoch bound"
+      ]
+    },
+    {
+      "ref": "tools/claycode_base_runtime_validation.py",
+      "github_blob_sha": "cc6fec3f0acc4a7368373146783149412d58e5fb",
+      "observed_report_schema": "1.2",
+      "negative_controls_observed": [
+        "textual capability name",
+        "descriptor as authority",
+        "wrong kind",
+        "revoked capability",
+        "stale epoch",
+        "cross-runtime capability",
+        "same-basename process spoof",
+        "relative process path",
+        "caller process allowlist widening",
+        "arbitrary async callable laundering"
+      ],
+      "remaining_receipt_gap": "The report object itself records runtime_version/checks/evidence class but does not visibly bind exact runtime-source/artifact digest, validation-suite digest, workflow/invocation digest, immutable run id/head subject, or a verified runner/host identity. The expected canonical receipt path remained absent during this run."
+    },
+    {
+      "ref": "tools/claycode_base_runtime_gateway.py",
+      "source_commit": "b5f9599834a724ad69fcaacbb916acb133949805",
+      "observation": "A second Linux runtime capability/resource ABI candidate exists with host-rooted issuer, generation-bound resource handles, reserve/commit/rollback effect receipts and semantic-versus-execution trace hashes.",
+      "risk": "Parallel runtime candidates increase the need for exact subject identity in receipts and a deliberate convergence decision; otherwise a PASS may become ambiguous about which runtime implementation was tested."
+    }
+  ],
+  "mint_root_boundary": {
+    "status": "OPEN_NOT_PROVEN_VULNERABILITY",
+    "observation": "The current runtime candidate exposes mint_capability(...) on ClayRuntime and the gateway candidate exposes grant(...). Both can still be secure if their host objects are never reachable from model/guest code; method visibility alone is not evidence of exploitability.",
+    "required_proof": "Inventory the actual guest/model/runtime ABI and show the issuer/grant root is not callable from untrusted generated code. Add an explicit negative test before claiming authority closure complete.",
+    "law": "effect request may reach policy adjudication; unrestricted mint/grant authority may not reach model/guest semantics"
+  },
+  "new_hypotheses": [
+    {
+      "id": "H8_KERNEL_DEFENSE_IN_DEPTH",
+      "status": "OPEN_OPTIONAL_FOR_BASE_UNLESS_THREAT_MODEL_REQUIRES",
+      "claim": "Application-level Clay capability checks should be complemented, where high-risk native/process adapters execute model-influenced work, by Linux kernel confinement such as Landlock for object-scoped filesystem/network restrictions and seccomp for syscall-surface reduction. These are defense-in-depth layers, not Clay semantic authority or proof of correct effect policy.",
+      "prediction": "If an adapter bug bypasses a Clay-level path/network check, a correctly configured kernel confinement layer blocks at least the covered ambient access class without granting any new right.",
+      "falsifier": "The actual one-module/runtime threat model proves generated/model-influenced code cannot directly execute host syscalls or native code outside trusted adapters, making kernel confinement unnecessary for the first BASE release, or the chosen kernel mechanism cannot cover the relevant access class."
+    },
+    {
+      "id": "H9_RUNTIME_CANDIDATE_IDENTITY",
+      "status": "OPEN_STRONG_CONSTRAINT",
+      "claim": "Each acceptance receipt must identify the exact runtime candidate/artifact under test because multiple same-stage runtime candidates may coexist concurrently.",
+      "prediction": "A receipt lacking exact subject digest can be ambiguously attributed to runtime.py versus runtime_gateway.py or a later revision.",
+      "falsifier": "Repository architecture converges to a single immutable runtime subject before any acceptance execution and the receipt is intrinsically tied to that immutable subject by another verified mechanism."
+    }
+  ],
+  "external_primary_sources_added": [
+    {
+      "title": "Linux Kernel Landlock userspace API",
+      "url": "https://cdn.kernel.org/doc/html/latest/userspace-api/landlock.html",
+      "supports": "Landlock can restrict ambient filesystem/network rights and stack restrictions as an unprivileged sandbox layer."
+    },
+    {
+      "title": "Linux Kernel seccomp BPF userspace API",
+      "url": "https://www.kernel.org/doc/html/v6.3/userspace-api/seccomp_filter.html",
+      "supports": "Seccomp filters reduce the available syscall surface and explicitly have architecture/TOCTOU considerations."
+    }
+  ],
+  "architecture_effect": "No core ClayCode semantic change. Candidate delta belongs to runtime trust-root isolation, exact execution receipts, release admission and optional Linux defense-in-depth."
+}

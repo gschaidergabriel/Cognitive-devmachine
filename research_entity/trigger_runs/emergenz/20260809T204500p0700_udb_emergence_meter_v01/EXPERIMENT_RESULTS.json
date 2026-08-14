@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T204500p0700_udb_emergence_meter_v01",
+  "evidence_classes": [
+    "SYNTHETIC_MECHANISM_INTERVENTION",
+    "REAL_REPO_DB_SNAPSHOT_OBSERVATION",
+    "SYNTHETIC_MUTATION_OF_COPIED_DATA"
+  ],
+  "tests": {"passed": 2, "failed": 0, "same_seed_reproducible": true},
+  "seed_sweep_after_factorial_permutation_fix": {
+    "seeds": 20,
+    "samples_per_regime_per_seed": 800,
+    "total_regime_runs": 100,
+    "all_expected_runs": 20,
+    "all_100_regime_classifications_expected": true,
+    "false_causal_emergence_promotions_on_negative_controls": 0
+  },
+  "calibration": {
+    "null": "NOT_SUPPORTED",
+    "additive": "INTERACTION_ONLY",
+    "common_driver": "NOT_SUPPORTED",
+    "xor_no_reentry": "MECHANISM_SUPPORTED_NOT_EMERGENCE",
+    "xor_reentry": "CAUSAL_EMERGENCE_CANDIDATE_OPEN"
+  },
+  "real_probe": {
+    "source_rows": 5000,
+    "derived_episodes": 3,
+    "channel_samples_per_invocation": 60000,
+    "sqlite_integrity": "ok",
+    "negative_result": "N-UDB-EM-20260809-01",
+    "density_entropy_pearson_r": 0.9997010415287402,
+    "density_entropy_normalized_mi": 1.0,
+    "peak_conditional_mi_bits": {
+      "density_to_coherence": 0.012905,
+      "entropy_to_coherence": 0.012905,
+      "change_to_coherence": 0.009654
+    },
+    "claim_boundary": "OBSERVATIONAL_NOT_CAUSAL"
+  },
+  "live_frank_validated": false,
+  "blocker": "missing stable episode and receiver-stage causal receipts in current runtime"
+}

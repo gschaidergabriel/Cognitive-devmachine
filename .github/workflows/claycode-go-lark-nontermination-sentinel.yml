@@ -1,0 +1,264 @@
+name: ClayCode GO Lark Nontermination Sentinel
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-go-lark-nontermination-sentinel.yml'
+      - 'tools/claycode_wp02_oob_lark_nontermination_sentinel.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycode-go-lark-nontermination-sentinel
+  cancel-in-progress: false
+
+jobs:
+  sentinel-vps:
+    permissions:
+      contents: read
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout tested main read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Verify execution authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          extra="$(git config --local --get-all http.https://github.com/.extraheader || true)"
+          test -z "$extra"
+
+      - name: Run bounded production closure plus one OOB sentinel
+        shell: bash
+        run: |
+          set -u
+          DEPS_DIR="${RUNNER_TEMP:-/tmp}/claycode-go-lark-sentinel-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT:-1}"
+          rm -rf "$DEPS_DIR"
+          mkdir -p "$DEPS_DIR"
+          export PYTHONNOUSERSITE=1
+
+          set +e
+          python3 -m pip install \
+            --target "$DEPS_DIR" \
+            --disable-pip-version-check \
+            --no-input \
+            --no-compile \
+            'lark==1.3.1' \
+            'interegular==0.3.3' \
+            >/tmp/CLAYCODE_GO_LARK_DEPS.log 2>&1
+          deps_rc=$?
+          export PYTHONPATH="$DEPS_DIR${PYTHONPATH:+:$PYTHONPATH}"
+
+          python3 - "$DEPS_DIR" <<'PY'
+          import importlib.metadata, json, os, sys
+          from pathlib import Path
+          root=Path(sys.argv[1]).resolve()
+          import lark, interegular
+          def inside(p):
+              try:
+                  Path(p).resolve().relative_to(root)
+                  return True
+              except ValueError:
+                  return False
+          d={
+              'lark_version':importlib.metadata.version('lark'),
+              'interegular_version':importlib.metadata.version('interegular'),
+              'lark_path':str(Path(lark.__file__).resolve()),
+              'interegular_path':str(Path(interegular.__file__).resolve()),
+              'all_modules_within_ephemeral_root':inside(lark.__file__) and inside(interegular.__file__),
+              'python_no_user_site':os.environ.get('PYTHONNOUSERSITE') == '1',
+          }
+          d['verified']=(
+              d['lark_version']=='1.3.1'
+              and d['interegular_version']=='0.3.3'
+              and d['all_modules_within_ephemeral_root']
+              and d['python_no_user_site']
+          )
+          Path('/tmp/CLAYCODE_GO_LARK_DEPS.json').write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          raise SystemExit(0 if d['verified'] else 4)
+          PY
+          deps_verify_rc=$?
+
+          prod_start=$(python3 - <<'PY'
+          import time; print(time.monotonic_ns())
+          PY
+          )
+          if [ "$deps_rc" -eq 0 ] && [ "$deps_verify_rc" -eq 0 ]; then
+            timeout --signal=TERM --kill-after=5s 90s \
+              python3 tools/claycode_wp02_strict_local_closure_v2.py \
+                --allow-ci \
+                --output /tmp/CLAYCODE_GO_LARK_WP02.json \
+                >/tmp/CLAYCODE_GO_LARK_WP02.stdout 2>/tmp/CLAYCODE_GO_LARK_WP02.stderr
+            prod_rc=$?
+          else
+            prod_rc=97
+          fi
+          prod_end=$(python3 - <<'PY'
+          import time; print(time.monotonic_ns())
+          PY
+          )
+
+          if [ "$deps_rc" -eq 0 ] && [ "$deps_verify_rc" -eq 0 ]; then
+            python3 tools/claycode_wp02_oob_lark_nontermination_sentinel.py \
+              --timeout-seconds 2.0 \
+              --output /tmp/CLAYCODE_GO_OOB_LARK.json \
+              >/tmp/CLAYCODE_GO_OOB_LARK.stdout 2>/tmp/CLAYCODE_GO_OOB_LARK.stderr
+            oob_rc=$?
+          else
+            oob_rc=97
+          fi
+
+          rm -rf "$DEPS_DIR"
+          cleanup_rc=$?
+          set -e
+
+          python3 - "$deps_rc" "$deps_verify_rc" "$prod_rc" "$oob_rc" "$cleanup_rc" "$prod_start" "$prod_end" "$DEPS_DIR" <<'PY'
+          import json, os, platform, socket, sys
+          from datetime import datetime, timezone
+          from pathlib import Path
+          deps_rc, deps_verify_rc, prod_rc, oob_rc, cleanup_rc = map(int, sys.argv[1:6])
+          prod_start, prod_end = map(int, sys.argv[6:8])
+          deps_root=Path(sys.argv[8])
+          def read(path, fallback):
+              try:
+                  return json.loads(Path(path).read_text(encoding='utf-8'))
+              except Exception as exc:
+                  return {**fallback,'parse_error':f'{type(exc).__name__}:{exc}'}
+          deps=read('/tmp/CLAYCODE_GO_LARK_DEPS.json', {'verified':False})
+          prod=read('/tmp/CLAYCODE_GO_LARK_WP02.json', {'pass':False})
+          oob=read('/tmp/CLAYCODE_GO_OOB_LARK.json', {'pass':False})
+          payload={
+              'schema_version':'1.0',
+              'run_kind':'GO_OOB_LARK_NONTERMINATION_SENTINEL',
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope':'REMOTE_PRELIMINARY_WP02_BOUNDED_TERMINATION_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'github_sha':os.environ.get('GITHUB_SHA',''),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+              'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+              'hostname':socket.gethostname(),
+              'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+              'runner_os':os.environ.get('RUNNER_OS','unknown'),
+              'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+              'platform':platform.platform(),
+              'python':platform.python_version(),
+              'dependency_install_returncode':deps_rc,
+              'dependency_verify_returncode':deps_verify_rc,
+              'dependency_environment':deps,
+              'dependency_cleanup_returncode':cleanup_rc,
+              'dependency_cleanup_confirmed':cleanup_rc==0 and not deps_root.exists(),
+              'production_wp02_returncode':prod_rc,
+              'production_wp02_watchdog_timeout':prod_rc in (124,137),
+              'production_wp02_elapsed_ns':max(0,prod_end-prod_start),
+              'production_wp02_pass':prod_rc==0 and prod.get('pass') is True,
+              'production_wp02_receipt':prod,
+              'oob_experiment_count':1,
+              'oob_experiment_id':'GO-OOB-LARK-1585-NONTERMINATION-SENTINEL',
+              'oob_returncode':oob_rc,
+              'oob_pass':oob_rc==0 and oob.get('pass') is True,
+              'oob_receipt':oob,
+              'self_hosted_repository_permission':'contents:read',
+              'checkout_persist_credentials':False,
+              'authority_invariant':'model output != execution authority',
+              'architecture_delta':'NO_CHANGE unless a production ClayCode nontermination counterexample is observed',
+              'final_release_boundary':'Remote Hostinger evidence is preliminary and cannot substitute for registered Andreas Ubuntu target acceptance.',
+          }
+          Path('/tmp/CLAYCODE_GO_LARK_SUMMARY.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps({
+              'production_wp02_pass':payload['production_wp02_pass'],
+              'production_watchdog_timeout':payload['production_wp02_watchdog_timeout'],
+              'oob_pass':payload['oob_pass'],
+              'dependency_verified':deps.get('verified') is True,
+              'cleanup':payload['dependency_cleanup_confirmed'],
+              'runner_name':payload['runner_name'],
+          },sort_keys=True))
+          PY
+
+      - name: Upload execution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-go-lark-sentinel-${{ github.run_id }}
+          path: /tmp/CLAYCODE_GO_LARK_SUMMARY.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce bounded production and OOB result
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/CLAYCODE_GO_LARK_SUMMARY.json',encoding='utf-8'))
+          assert p['oob_experiment_count']==1
+          assert p['dependency_environment']['verified'] is True, p
+          assert p['dependency_cleanup_confirmed'] is True, p
+          assert p['production_wp02_watchdog_timeout'] is False, p
+          assert p['production_wp02_pass'] is True, p
+          assert p['oob_pass'] is True, p
+          print('CLAYCODE_GO_PRODUCTION_WP02_BOUNDED=PASS')
+          print('CLAYCODE_GO_OOB_LARK_NONTERMINATION_SENTINEL=PASS')
+          PY
+
+  persist-receipt:
+    if: always()
+    needs: sentinel-vps
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout persistence lane
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Download execution receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: claycode-go-lark-sentinel-${{ github.run_id }}
+          path: /tmp/claycode-go-lark-sentinel
+
+      - name: Validate and persist constrained receipt
+        shell: bash
+        env:
+          TESTED_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          src=/tmp/claycode-go-lark-sentinel/CLAYCODE_GO_LARK_SUMMARY.json
+          python3 - <<'PY'
+          import json, os
+          p=json.load(open('/tmp/claycode-go-lark-sentinel/CLAYCODE_GO_LARK_SUMMARY.json',encoding='utf-8'))
+          assert p['github_sha']==os.environ['TESTED_SHA']
+          assert p['self_hosted_repository_permission']=='contents:read'
+          assert p['checkout_persist_credentials'] is False
+          assert p['oob_experiment_count']==1
+          assert p['authority_invariant']=='model output != execution authority'
+          PY
+          mkdir -p research_entity/claycode/remote_vps/go_oob_lark/runs
+          cp "$src" "research_entity/claycode/remote_vps/go_oob_lark/runs/${RUN_ID}.json"
+          cp "$src" research_entity/claycode/remote_vps/go_oob_lark/LATEST.json
+          git config user.name 'claycode-receipt-writer'
+          git config user.email 'claycode-receipt-writer@users.noreply.github.com'
+          git add research_entity/claycode/remote_vps/go_oob_lark/
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "evidence(vps): persist GO Lark sentinel ${RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

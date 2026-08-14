@@ -1,0 +1,26 @@
+name: FRANK Post-Hoc Recurrence Readout
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/harness/reference/loop_dynamics_reference.py'
+      - 'research_entity/harness/reference/posthoc_recurrence_readout.py'
+      - 'research_entity/harness/reference/test_posthoc_recurrence_readout.py'
+      - '.github/workflows/frank-posthoc-recurrence-readout.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  reference-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run deterministic post-hoc recurrence regressions
+        working-directory: research_entity/harness/reference
+        run: python -m unittest -v test_posthoc_recurrence_readout.py

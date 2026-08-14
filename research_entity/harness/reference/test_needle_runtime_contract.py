@@ -73,5 +73,22 @@ class RuntimeContractTests(unittest.TestCase):
         t=next(t for t in self.tools if not t["parameters"])
         for _ in range(1000):
             k="zz_"+''.join(random.choice(string.ascii_lowercase) for _ in range(10)); self.assertFalse(validate_output(json.dumps([{"name":t["name"],"arguments":{k:"v"}}]),self.tools,self.contract).accepted)
+    def test_multi_call_rejected_for_frank_single_shot(self):
+        noargs=[x for x in self.tools if not x["parameters"]][:2]
+        raw=json.dumps([{"name":noargs[0]["name"],"arguments":{}},{"name":noargs[1]["name"],"arguments":{}}],separators=(",",":"))
+        r=validate_output(raw,self.tools,self.contract)
+        self.assertFalse(r.accepted)
+        self.assertTrue(r.fallback_required)
+        self.assertTrue(any(x.startswith("MULTI_CALL_FORBIDDEN:") for x in r.rejection_reasons))
+    def test_no_tool_requires_fallback_to_4b(self):
+        r=validate_output("[]",self.tools,self.contract)
+        self.assertTrue(r.accepted)
+        self.assertEqual(r.outcome,"NO_TOOL_PROPOSAL")
+        self.assertTrue(r.fallback_required)
+    def test_valid_route_does_not_require_semantic_fallback(self):
+        r=validate_output('[{"name":"calc","arguments":{"expression":"2+2"}}]',self.tools,self.contract)
+        self.assertTrue(r.accepted)
+        self.assertEqual(r.outcome,"ROUTE_PROPOSAL")
+        self.assertFalse(r.fallback_required)
 
 if __name__=="__main__": unittest.main(verbosity=2)

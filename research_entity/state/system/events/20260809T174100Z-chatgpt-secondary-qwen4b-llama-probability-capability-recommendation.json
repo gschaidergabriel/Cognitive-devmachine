@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CAPABILITY-RECOMMENDATION-20260809T174100Z-QWEN4B-LLAMA-PROBS",
+  "kind": "CAPABILITY_RECOMMENDATION",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:41:00Z",
+  "payload": {
+    "recommendation_id": "CAPREC-QWEN4B-LLAMA-B10333-PROBABILITY-TELEMETRY-V1",
+    "field_or_work": "FRANK-QWEN4B-CALIBRATION-AND-RESEED",
+    "target_workers": [
+      "FRANK-QWEN4B-CALIBRATION-AND-RESEED",
+      "frank-loop-dynamics",
+      "frank-local-model-adapter"
+    ],
+    "candidate": "llama.cpp b10333 native n_probs / post_sampling_probs telemetry as a shadow-only uncertainty feature",
+    "candidate_kind": "RUNTIME",
+    "provider": "ggml-org/llama.cpp",
+    "field_fit": 0.94,
+    "expected_quality": 0.68,
+    "reliability": 0.72,
+    "latency_fit": 0.96,
+    "cost_fit": 0.98,
+    "privacy_fit": 1.0,
+    "security_fit": 0.92,
+    "integration_fit": 0.76,
+    "reproducibility": 0.93,
+    "execution_availability": 0.78,
+    "freshness": 0.98,
+    "evidence": [
+      "exact llama.cpp b10333 tools/server/README.md: n_probs>0 returns top-N token probabilities and completion_probabilities/top_logprobs; post_sampling_probs returns post-sampling probabilities",
+      "exact llama.cpp b10333 tools/server/README.md: /v1/chat/completions is OpenAI-compatible and also accepts llama.cpp completion-specific features",
+      "Dr.-Unterweger/runtime/vps_integrity/real_qwen4b_shadow_latest.json: real Qwen4B self-hosted execution exists on runner clay",
+      "Dr.-Unterweger/tests/vps_real_qwen4b_shadow_benchmark.py: current residual proxy is 1 - verbalized confidence",
+      "observed modular_power counterexample: fixed full-budget answer 4 vs expected 2 while visible confidence remains 100%"
+    ],
+    "alternatives_considered": [
+      "raw verbalized confidence alone: directly falsified as calibrated correctness by the current confidently-wrong counterexample",
+      "multi-generation semantic consistency/entropy: stronger independent uncertainty signal candidate but materially higher inference cost",
+      "separate learned black-box confidence/calibration model: potentially stronger calibration but adds training/integration/data dependencies"
+    ],
+    "caveats": [
+      "recommendation is not selection and creates no authority",
+      "b10333 feature existence is primary-source verified but exact Qwen4B Hostinger probability-output execution is not yet receipt-verified",
+      "token probability/logprob is not calibrated correctness probability and may be sensitive to tokenization, output length, prompt format and sampling chain",
+      "do not extend the production Frank semantic adapter boundary until a bounded shadow validation shows incremental predictive value over verbalized confidence and simple baselines",
+      "no expected answers may enter the runtime uncertainty feature or selector",
+      "measure added latency, CPU, memory, response-size amplification and any throughput change",
+      "model output or uncertainty telemetry remains non-authoritative data"
+    ]
+  }
+}

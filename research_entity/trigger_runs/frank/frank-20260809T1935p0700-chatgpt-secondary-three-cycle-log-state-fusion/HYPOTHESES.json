@@ -1,0 +1,71 @@
+{
+  "schema_version":"1.0",
+  "run_id":"frank-20260809T1935p0700-chatgpt-secondary-three-cycle-log-state-fusion",
+  "hypotheses":[
+    {
+      "id":"H-FRANK-3C-01",
+      "status":"OPEN",
+      "claim":"ActiveAssembly conflict-slot pressure should be explicitly observable before any conflict-allocation policy is changed.",
+      "prediction":"On frozen H1 traces, conflict_slot_fraction and pressure_band will discriminate episodes in which ordinary high-value evidence is crowded out and will improve policy-comparison diagnosis without changing task semantics.",
+      "counterhypothesis":"The telemetry adds no useful discrimination beyond existing selected packet IDs and re-expansion references.",
+      "falsifier":"Matched H1 trace analysis shows no additional predictive/diagnostic value after controlling for selected packet count, or the telemetry itself perturbs semantic identity/selection."
+    },
+    {
+      "id":"H-FRANK-3C-02",
+      "status":"OPEN",
+      "claim":"No single fixed global conflict quota is likely to dominate across FRANK task regimes.",
+      "prediction":"Matched live/reference tasks with different conflict density, correction cost and evidence asymmetry will produce a Pareto frontier between contradiction visibility and ordinary evidence retention.",
+      "counterhypothesis":"One simple fixed quota dominates adaptive/grouped alternatives across outcome, correction, latency and context cost.",
+      "falsifier":"A preregistered fixed quota wins or ties all primary metrics across frozen representative H1 traces and remains robust OOD."
+    },
+    {
+      "id":"H-FRANK-3C-03",
+      "status":"OPEN",
+      "claim":"Conflict-group compression plus provenance-preserving selective re-expansion can reduce ActiveAssembly slot pressure without hiding actionable contradiction.",
+      "prediction":"Grouped conflict representations achieve equal or better downstream correction and explicit contradiction recall using fewer local-4B slots than materializing every representative.",
+      "counterhypothesis":"Grouping hides detail/provenance and increases false certainty or correction latency.",
+      "falsifier":"Matched traces show worse contradiction detection, provenance fidelity, correction time or outcome at equivalent context cost."
+    },
+    {
+      "id":"H-FRANK-3C-04",
+      "status":"OPEN",
+      "claim":"A shared integrated Golden Trace identity across StateLedger, ActiveAssembly, WorkspaceEpisode and effect/outcome lineage will reveal mixed-epoch defects invisible in isolated component tests.",
+      "prediction":"Fault injection around concurrent state updates, stale assemblies, receiver episodes and effect commit/re-entry exposes at least one cross-module inconsistency not caught by current isolated tests.",
+      "counterhypothesis":"Existing per-component hashes/epochs already compose safely and an additional integrated trace contract adds only complexity.",
+      "falsifier":"Exhaustive frozen fault corpus commutes across components with no mixed-epoch ambiguity and no additional diagnostic value from shared trace identity."
+    },
+    {
+      "id":"H-FRANK-3C-05",
+      "status":"OPEN",
+      "claim":"Separating semantic_state_hash, state_version_hash and trace_root_hash is useful for H1/H2 replay and intervention equivalence.",
+      "prediction":"The separation distinguishes semantically equal states reached by different histories and prevents false H1/H2 differential failures.",
+      "counterhypothesis":"A simpler single-root ledger plus diagnostic metadata is sufficient and cheaper.",
+      "falsifier":"Target-host differential finds no downstream discriminator needing the separation or shows unacceptable recovery/cost complexity."
+    },
+    {
+      "id":"H-FRANK-3C-06",
+      "status":"OPEN",
+      "claim":"Receiver-causal WorkspaceEpisode stages improve diagnosis/correction over an equally instrumented conventional EVENT_BUS null.",
+      "prediction":"Matched lesions/corruptions are localized faster or corrected more reliably at comparable compute when addressability/delivery/reconstruction/uptake/causal-use/outcome/re-entry are separated.",
+      "counterhypothesis":"The stage decomposition adds bookkeeping without task or diagnostic benefit.",
+      "falsifier":"EVENT_BUS matches or beats verified outcome, diagnosis time, correction time and cost across preregistered traces."
+    },
+    {
+      "id":"H-FRANK-3C-07",
+      "status":"OPEN",
+      "claim":"Typed recurrence control is useful only when estimator identity, uncertainty and freshness are explicit and when it beats fixed/event-driven baselines after overhead.",
+      "prediction":"Typed control reduces false halts and stall burn on frozen trajectories at equal or better outcome-per-compute.",
+      "counterhypothesis":"Fixed budget or ordinary event-driven scheduling is equally good or better after controller overhead/noise.",
+      "falsifier":"Fixed/event-driven baselines match or beat typed control under matched trajectory and cost conditions."
+    },
+    {
+      "id":"H-FRANK-3C-08",
+      "status":"OPEN",
+      "claim":"Constrained generation can improve structural admissibility of model/tool proposals but cannot substitute for deterministic semantic validation and external authority closure.",
+      "prediction":"Grammar-constrained proposals reduce malformed outputs while fail-closed capability/effect checks remain necessary to block semantically invalid or unauthorized effects.",
+      "counterhypothesis":"A simpler deterministic post-validator without constrained decoding achieves equivalent total correctness with lower latency/complexity.",
+      "falsifier":"Matched tool traces show no incremental structural/selection benefit from constrained decoding or show degraded semantic tool choice that outweighs syntax gains."
+    }
+  ],
+  "promotion":"NONE"
+}

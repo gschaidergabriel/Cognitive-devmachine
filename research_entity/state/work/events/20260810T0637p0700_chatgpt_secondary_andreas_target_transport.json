@@ -1,0 +1,55 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK_CREATE-ANDREAS-TARGET-TRANSPORT-20260810T0637P0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T06:37:10+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-ANDREAS-TARGET-TRANSPORT-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "BLOCKER_REMOVAL",
+    "title": "Materialize first current strict Andreas Ubuntu BASE14 target receipt",
+    "work_clay": "Use the existing fail-closed .github/workflows/claycode-andreas-target-autoprobe.yml and tools/claycode_run_andreas_target_acceptance.py path. Verify the exact owner-registered Andreas self-hosted runner is online with self-hosted+linux+x64+andreas+claycode+target, preserve real desktop environment, execute the canonical closure, and materialize receipts. Do not weaken labels, identity checks, desktop checks, per-app evidence, Full-FRANK or WP14 gates.",
+    "reason_clay": "Current BASE implementation already contains the target collector phases for parser/canonicalizer, typed IR, effect pipeline, runtime hardening, compiler-to-mainline runtime bridge, concurrency, fuzz, corpus and FRANK preflight. A bounded branch pulse produced no ANDREAS_SELF_HOSTED_AUTOPROBE receipt in three observations, so physical target execution remains UNKNOWN and is the highest-value discriminator. Hosted/proxy evidence cannot close the gate.",
+    "completion_clay": "A fresh-main run produces ANDREAS_SELF_HOSTED_AUTOPROBE.json with target_identity_verified=true and release_pass_claimed=true OR produces a precise first-failing-step receipt that identifies the next smallest falsifier. No success claim from queue state alone.",
+    "evidence_need": [
+      "exact runner identity/status/labels",
+      "real mapped Ubuntu desktop receipt",
+      "ANDREAS_BASE14_CLOSURE_RUN.json",
+      "ten per-application target receipts",
+      "Full-FRANK handoff receipt",
+      "strict target acceptance assembly",
+      "WP14 independent audit",
+      "release workspace promotion only after all gates pass"
+    ],
+    "executor_policy": "Any capable Clay worker may take this lane only with real GitHub Actions/self-hosted target capability. Refresh main and active work first. If runner is unavailable, preserve BLOCKED/UNKNOWN rather than looping or weakening safety gates.",
+    "required_capabilities": [
+      "github-actions",
+      "self-hosted-runner-observation",
+      "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM"
+    ],
+    "write_scope": [
+      "research_entity/claycode/target/**",
+      "research_entity/claycode/target_receipts/**",
+      "research_entity/claycode/autonomous/**",
+      "research_entity/claycode/corpus/base_v1/**",
+      "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json"
+    ],
+    "dependencies": [
+      "exact registered Andreas runner online with all required labels",
+      "current main checkout",
+      "owner-fixed target identity remains valid"
+    ],
+    "invalidators": [
+      "newer target receipt already closes or precisely refutes this work",
+      "runner identity changes",
+      "target acceptance contract revision changes"
+    ],
+    "base_priority": 0.99,
+    "expected_impact": 0.99,
+    "urgency": 0.96,
+    "information_gain": 1.0,
+    "status": "BLOCKED"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2205p0700-chatgpt-secondary-effect-contract-vps-corroboration",
+  "trigger": "claycode",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "work_package": "CC-WP-04-TYPE-EFFECT",
+  "result": "SUPPORTED_CURRENT_PRODUCTION_EFFECT_CONTRACT_G9_BINDING_STILL_FAIL_CLOSED",
+  "hypothesis": "The current Frank production effect source already exposes an exact guarded execution contract that WP04 can bind without inventing a one-argument Needle.execute signature or changing frozen ClayCode language semantics.",
+  "counterhypothesis": "The production source has no exact executable contract, or its current facade/authority lifecycle permits a direct one-argument execute path equivalent to G9 V3 shorthand.",
+  "executed": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "probe_commit": "1e09c785004c4750dcb75d30054dd7de7b0e3685",
+    "workflow_commit": "1699b55b6c083f60f2196411a9052fc84b86aa5f",
+    "target_vps_receipt": "runtime/vps_unifieddb/claycode_wp04_effect_contract_v1/LATEST.json",
+    "github_run_id": "31402743514",
+    "workflow_source_sha": "1699b55b6c083f60f2196411a9052fc84b86aa5f",
+    "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_CLAYCODE_WP04_EFFECT_CONTRACT_DISCRIMINATOR"
+  },
+  "measurements": {
+    "exit_status": 0,
+    "elapsed_seconds": 0.04,
+    "user_seconds": 0.03,
+    "system_seconds": 0.00,
+    "max_rss_kb": 17152,
+    "socket_messages_sent": 0,
+    "socket_messages_received": 0,
+    "external_effect_performed": false,
+    "contract_checks_passed": 17,
+    "contract_checks_total": 17,
+    "one_argument_execute_contract_present": false
+  },
+  "exact_current_contract": {
+    "execute": "execute<T>(EffectIntent<T>, Capability, NodeId, EffectAttempt) -> EffectReceipt",
+    "preexecution": [
+      "EffectRequest -> authorize_effect -> EffectAuthorization",
+      "EffectIntent + EffectAuthorization -> reserve_effect -> EffectReservationReceipt",
+      "EffectIntent + authorization + reservation + capability + node + idempotency -> begin_effect_attempt -> EffectAttempt"
+    ],
+    "postexecution": [
+      "EffectReceipt -> verify_effect -> VerifiedEffectReceipt",
+      "VerifiedEffectReceipt -> finish -> DoneReceipt"
+    ],
+    "frank_effects_git_blob": "8679542da4f31b99ae4a171f86554ed894eb6e34",
+    "frank_effects_sha256": "10fbc45dca45fe09322b4ab7c0b6621547918dd6fa8e1d37be5817b26ab59544"
+  },
+  "fused_current_evidence": [
+    "research_entity/trigger_runs/claycode/20260810T2216p0700-chatgpt-secondary-effect-boundary-mismatch/TARGET_FRANK_EFFECT_CONTRACT_SNAPSHOT.json",
+    "research_entity/trigger_runs/claycode/20260810T2216p0700-chatgpt-secondary-effect-boundary-mismatch/claycode_effect_boundary_compatibility_probe.py",
+    "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/claycode_wp04_effect_contract_v1/LATEST.json"
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "change": "Bind WP04 to the exact current frank.effects callable lifecycle and reject G9 V3 Needle.execute(effect_intent) as an executable production CallContract until a typed boundary adapter supplies independently trusted authority, capability, reservation and attempt state.",
+    "semantic_language_change": false,
+    "grammar_change": false,
+    "effect_authority_change": false,
+    "affected": [
+      "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "F-V01-03-COGNITIVE-LOOP-CORE",
+      "F-V01-07-NEEDLE-TRANSLATOR",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ]
+  },
+  "goodman_review": {
+    "conclusion": "SUPPORTED_AS_EXECUTION_CORROBORATION_NOT_INDEPENDENT_SEMANTIC_REPLICATION",
+    "reason": "The target-VPS run independently executes the new discriminator on the accepted target lane, but it consumes the same canonical production source and therefore is not independent scientific ancestry for the semantic claim.",
+    "forbidden_promotion": [
+      "WP04_PASS",
+      "FRANK_V0_1_PASS",
+      "NEW_CLAYCODE_PRIMITIVE",
+      "ONE_ARGUMENT_NEEDLE_EXECUTE_SIGNATURE"
+    ]
+  },
+  "negative_results": [
+    "No valid one-argument production execute contract was found in current frank.effects.",
+    "The current G9 V3 one-argument direct call remains structurally incompatible with the exact production contract.",
+    "No evidence in this run justifies a ClayCode grammar or frozen-semantic change."
+  ],
+  "pending_nonduplicate_frontier": [
+    "Consume the target-VPS imported-nominal resolution discriminator when its exact receipt appears.",
+    "Resolve exact module/export symbol environments before full WP04 type acceptance.",
+    "Implement and test a deterministic typed G9/Needle boundary adapter that cannot mint authenticated actor, capability, authorization, reservation or attempt state.",
+    "Add stale/tampered/revoked authority and capability negative controls to the adapter path.",
+    "Require verified outcome plus provenance-bound re-entry before any DONE state."
+  ],
+  "research_write": "COMMITTED",
+  "progress_credit": "DISCRIMINATING_EVIDENCE_ONLY"
+}

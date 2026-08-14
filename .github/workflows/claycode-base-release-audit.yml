@@ -1,0 +1,60 @@
+name: ClayCode BASE fail-closed release audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_base_release_audit.py'
+      - 'research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json'
+      - 'research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json'
+      - 'research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json'
+      - 'research_entity/claycode/target/**'
+      - 'research_entity/claycode/autonomous/**'
+      - '.github/workflows/claycode-base-release-audit.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: claycode-base-release-audit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute fail-closed release audit while preserving blockers
+        run: python tools/claycode_base_release_audit.py || true
+      - name: Commit audit and conditional manifest
+        if: always()
+        run: |
+          test -f research_entity/claycode/autonomous/BASE_RELEASE_AUDIT_RECEIPT.json
+          git config user.name 'claycode-base-release-audit'
+          git config user.email 'claycode-base-release-audit@users.noreply.github.com'
+          git add research_entity/claycode/autonomous/BASE_RELEASE_AUDIT_RECEIPT.json
+          test -f research_entity/claycode/CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json && git add research_entity/claycode/CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json || true
+          git diff --cached --quiet || git commit -m 'ClayCode: record BASE release audit receipt'
+          if git log -1 --pretty=%B | grep -q 'record BASE release audit receipt'; then
+            for attempt in 1 2 3; do
+              git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+              sleep $((attempt * 2))
+            done
+          fi
+      - name: Enforce final gate
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          p='research_entity/claycode/autonomous/BASE_RELEASE_AUDIT_RECEIPT.json'
+          d=json.load(open(p,encoding='utf-8'))
+          assert d['wp14_pass_eligible'] is True, d['missing_or_blocking']
+          assert d['release_manifest_created'] is True
+          print('CLAYCODE_BASE_RELEASE_ELIGIBLE')
+          PY

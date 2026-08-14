@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T213600p0700_claycode_hosted_strict_v9_second_prestep_failure",
+  "room_id": "center",
+  "event_type": "NEGATIVE_RESULT",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:36:00+07:00",
+  "affects_rooms": ["claycode", "harness", "center"],
+  "payload": {
+    "evidence_class": "HOSTED_CI_TRANSPORT_NEGATIVE_RESULT_REPLICATION",
+    "workflow_run_id": 31318205382,
+    "original_job_id": 93256814556,
+    "rerun_job_id": 93258442470,
+    "rerun_request_accepted": true,
+    "rerun_status": "completed",
+    "rerun_conclusion": "failure",
+    "observed_steps": [],
+    "job_log_result": "BLOB_NOT_FOUND",
+    "replication": "The same workflow failed before executable steps/log materialized on both the original attempt and an explicit job re-run.",
+    "interpretation": "This is replicated GitHub-hosted Actions pre-step/transport negative evidence. It is not a V9 parser, canonicalizer, typed-IR, ClayCode semantic, or Andreas-target failure.",
+    "gate_effect": "NO_LANGUAGE_PASS_OR_FAIL_CHANGE",
+    "remaining_discriminator": "Use the fail-closed local Ubuntu V9 strict closure runner or the physical registered Andreas target path; do not infer parser failure from hosted pre-step infrastructure failure.",
+    "authority_invariant": "model output != execution authority"
+  }
+}

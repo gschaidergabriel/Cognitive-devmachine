@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "envelopes": [
+    {
+      "envelope_id": "GOQ23-Q23TOGO-20260810T2242-01",
+      "origin": "Q23",
+      "direction": "Q23_TO_GO",
+      "kind": "ARCHITECTURE_DELTA",
+      "semantic_epoch": "q23-20260810T2242p0700",
+      "topic_tags": ["multimodal","retina","mvc","qwen35","mmproj","open_set","runtime_recovery"],
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC","F-V01-08-TOKEN-API-CLIENTS","F-V01-13-SECURITY-RECOVERY-OBSERVABILITY","F-V01-16-END-TO-END-ACCEPTANCE"],
+      "affected_hypotheses": ["H-Q23-MERGED-REUSE-01","H-Q23-COMPAT-ENVELOPE-04"],
+      "payload_ref": "research_entity/trigger_runs/q23/q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope/ARCHITECTURE_DELTAS.json",
+      "urgency": "NEXT_SAFE_POINT",
+      "requires_reply": false,
+      "created_at": "2026-08-10T22:42:00+07:00",
+      "summary": "Test public merged Qwen/mmproj features first; bind MVC state to full visual-runtime compatibility identity; no raw-feature promotion yet."
+    },
+    {
+      "envelope_id": "GOQ23-Q23TOGO-20260810T2242-02",
+      "origin": "Q23",
+      "direction": "Q23_TO_GO",
+      "kind": "COUNTER_CHALLENGE",
+      "semantic_epoch": "q23-20260810T2242p0700",
+      "topic_tags": ["multimodal_embedding","qwen","open_set","architecture_simplification"],
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "affected_hypotheses": ["H-Q23-MERGED-REUSE-01","CH-Q23-RAW-NOT-EMBEDDING-01"],
+      "payload_ref": "research_entity/trigger_runs/q23/q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope/COUNTERHYPOTHESES.json",
+      "urgency": "INDEX_ONLY",
+      "requires_reply": false,
+      "created_at": "2026-08-10T22:42:00+07:00",
+      "summary": "Official Qwen retrieval architecture is counterevidence against treating raw generative vision tokens as already calibrated embeddings."
+    }
+  ],
+  "closure": {
+    "received_by_GO_runtime": false,
+    "reason": "This run persisted the targeted exchange payload in shared repository state; no separate live GO worker acknowledgement was observed in this invocation.",
+    "truth_effect": "NONE_UNTIL_RECEIVED_USED_AND_TESTED"
+  }
+}

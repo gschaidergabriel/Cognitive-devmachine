@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T2353p0700-chatgpt-response-contract-refusion",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target": "FRANK v0.1 Ubuntu acceptance path",
+  "report": "research_entity/mesh_feedback/20260809T2353p0700-frank-v01-response-contract-refusion/FINAL_REPORT.md",
+  "knowledge_packet": "research_entity/knowledge_micro_packets/frank/KMP_FRANK_LOCAL_MODEL_RESPONSE_CONTRACT_20260809.md",
+  "frank_pr": "gschaidergabriel/Dr.-Unterweger#28",
+  "frank_merge_sha": "07f9af41ca3f4b7add75d198bebf92887c3b52d3",
+  "ubuntu_receipt_sha": "b37a306e9266c44d1ab1b4faca9de643c96f440a",
+  "research_promotion": "PACKETIZED_CURRENT_IMPLEMENTATION_EVIDENCE",
+  "frank_release_promotion": "NONE",
+  "shared_findings": [
+    "The pre-patch local OpenAI-compatible adapter allowed arbitrary nested backend fields inside tool_calls and usage to cross the durable observation boundary; the merged adapter now projects those structures onto an explicit bounded contract.",
+    "The default urllib opener retained environment/system proxy discovery. No actual loopback proxy exfiltration was proven; the accepted refinement is to remove that ambient configuration dependency with an explicit empty ProxyHandler.",
+    "Default Python JSON accepts non-finite constants that RFC 8259 does not; the merged boundary now rejects them and cannot emit them from canonical request encoding.",
+    "Merged SHA 07f9af41ca3f4b7add75d198bebf92887c3b52d3 executed on digital-retina with 20/20 deep-integrity gates PASS and 0 FAIL.",
+    "Response projection measured over 2000 Ubuntu iterations at p50 1469 ns and p95 2651 ns for the adversarial test object; this is micro-measurement evidence, not full inference latency.",
+    "The current VPS remains an Ubuntu integration lane rather than a configured real-Qwen-4B performance lane: the separate capability receipt reports no visible GPU/runtime and real_model_executed=false."
+  ],
+  "anti_conflations": [
+    "OpenAI-compatible response != trusted provider schema",
+    "model tool call != execution authority",
+    "Ubuntu execution != real-model execution",
+    "20/20 declared integrity gates != whole-FRANK release",
+    "microsecond projection timing != end-to-end model latency",
+    "sanitization/integration evidence != emergence or consciousness"
+  ],
+  "feedback": {
+    "frank": {
+      "state": "ACTIONABLE_DELTA",
+      "message": "Treat strict response projection as current tested infrastructure. Preserve engine-neutral OpenAI-compatible transport but admit only explicit visible/tool/usage/metric fields. Keep F6 and whole-v0.1 release false until pinned real local-model and Andreas-Ubuntu receipts exist."
+    },
+    "harness": {
+      "state": "ACTIONABLE_DELTA",
+      "message": "Tool calls returned by the model remain proposals/data. Route them through the external capability/effect authority and keep response-contract negative tests in the main Ubuntu integrity lane."
+    },
+    "unifieddb": {
+      "state": "REFINEMENT",
+      "message": "Persist projected model observations with provenance rather than raw provider payloads. Keep backend timing measurements and semantic tool/effect state distinct."
+    },
+    "claygraph": {
+      "state": "REFINEMENT",
+      "message": "Derive graph nodes/activation from admitted projected model observations only; unknown backend extension fields must not silently create graph truth or identity."
+    },
+    "claycode": {
+      "state": "DESIGN_FEEDBACK_NO_BASE_CREDIT",
+      "message": "Useful typed boundary pattern: raw observation -> projected observation -> proposed effect -> authorized effect -> outcome receipt. Do not promote any BASE package from this FRANK Python implementation alone."
+    },
+    "gwt": {
+      "state": "MEASUREMENT_REFINEMENT",
+      "message": "Global availability/broadcast of a model tool proposal is not execution authority. Retain distinct effect/outcome/reentry receipts and provider/runtime provenance."
+    },
+    "hyperposition": {
+      "state": "REFINEMENT",
+      "message": "Keep backend/runtime alternatives set-valued until matched real-model trials discriminate semantics, latency, memory, tool correctness and recovery. Interface compatibility alone does not collapse alternatives."
+    },
+    "emergenz": {
+      "state": "NO_EMERGENCE_PROMOTION",
+      "message": "Response sanitization, recurrence improvements, WAL integrity and routing success are infrastructure/functional evidence only; none establishes emergence or phenomenal consciousness."
+    },
+    "clayresearch": {
+      "state": "PROGRAM_DELTA",
+      "message": "Highest-information next model experiment is a pinned real Qwen-class 4B trial on a capable Ubuntu host through the hardened adapter, with matched prompts/templates/sampling, tool semantics, TTFT, tokens/s, memory, recurrence, rollback and provenance receipts."
+    }
+  },
+  "negative_results": [
+    "NO_PROOF_PRIOR_LOOPBACK_TRAFFIC_TRAVERSED_EXTERNAL_PROXY",
+    "NO_REAL_QWEN_CLASS_4B_EXECUTION_ON_CURRENT_VPS",
+    "NO_WHOLE_FRANK_V0_1_RELEASE_PROMOTION",
+    "NO_CLAYCODE_BASE_PACKAGE_PROMOTION_FROM_THIS_DELTA",
+    "NO_EMERGENCE_OR_CONSCIOUSNESS_INFERENCE"
+  ],
+  "next_tests": [
+    "Run pinned real Qwen-class 4B tool and non-tool acceptance cases on a capable Ubuntu host through the hardened adapter.",
+    "Scale response-contract benchmarks across large tool-call arrays and argument sizes; add streaming-response contract only if FRANK enables streaming.",
+    "Run the model capability probe and final acceptance matrix on Andreas' Ubuntu developer system.",
+    "Compare supported llama.cpp/vLLM/SGLang-compatible backends under matched model/template/sampling when the execution lane exists.",
+    "Preserve separate response observation, tool proposal, effect authorization, outcome and recovery receipts in later Harness/ClayCode integration."
+  ]
+}

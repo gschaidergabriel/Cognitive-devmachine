@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T212450p0700_claycode_hosted_strict_v9_transport_negative",
+  "room_id": "center",
+  "event_type": "NEGATIVE_RESULT",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:24:50+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["claycode", "harness", "center"],
+  "payload": {
+    "evidence_class": "HOSTED_CI_TRANSPORT_NEGATIVE_RESULT",
+    "probe_pr": 36,
+    "source_commit": "d1a1b09823143129ca019237ed37332044e76c4b",
+    "workflow_run_id": 31318205382,
+    "workflow": "ClayCode BASE Frontend CI",
+    "job_id": 93256814556,
+    "job_name": "strict-v9-frontend",
+    "workflow_conclusion": "failure",
+    "job_conclusion": "failure",
+    "observed_steps": [],
+    "observed_artifacts": [],
+    "job_log_result": "BLOB_NOT_FOUND",
+    "interpretation": "The hosted probe failed before executable workflow steps/log evidence materialized. It is therefore transport/runner-start negative evidence only and MUST NOT be interpreted as a V9 parser, grammar, canonicalizer, typed-IR, or ClayCode semantic failure.",
+    "gate_effect": "NO_LANGUAGE_PASS_OR_FAIL_CHANGE",
+    "remaining_discriminator": "Obtain a persisted strict exact-main grammar-bound receipt in an environment where lark[interegular] can actually execute; physical Andreas target evidence remains separately mandatory.",
+    "authority_invariant": "model output != execution authority"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260811T2318p0700-chatgpt-secondary-reward-clay-authority",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "TARGET_RUN_QUEUED_LOCAL_FALSIFIER_COMPLETE",
+  "trigger_parent": "go-20260811T2258p0700-chatgpt-secondary-reward-authority-frontier",
+  "fresh_finding": "The full ClayCode reward-state source still accepts caller-carried dimension, utility, confidence and causal_credit in its material-admission surface, which conflicts with the target-supported authority boundary in PR #368 if treated as executable material authority.",
+  "pivot": {
+    "reason": "The current accepted FRANK_STRUCTURED_V1 parser cannot parse the full reward-state source, so changing full reward semantics to fit parser limitations would confound semantic authority with syntax availability.",
+    "full_reward_source": "claycode/frank_reward_state_v1_candidate.clay",
+    "full_reward_source_change": "REVERTED_TO_PARENT_BYTES_UNCHANGED",
+    "minimal_authority_source": "claycode/frank_reward_authority_v1_candidate.clay",
+    "minimal_authority_scope": "ONLY_BINARY_TASK_MATERIAL_REWARD_AUTHORITY_BOUNDARY"
+  },
+  "local_negative_evidence": {
+    "method": "exact accepted FRANK_STRUCTURED_V1 grammar with Lark 1.3.1, parser=lalr, lexer=contextual, keep_all_tokens=false, maybe_placeholders=false",
+    "full_reward_result": "PARSE_REJECT",
+    "first_rejection": "line 8 column 22 at first comma in RewardOutcomeEvidence record field; expected EQUAL/NEWLINE/RBRACE/SEMICOLON",
+    "interpretation": "Current accepted parser cannot execute the full reward-state source. This is dependency evidence, not evidence against the reward semantics themselves.",
+    "minimal_authority_result": "PARSE_PASS",
+    "target_credit": false
+  },
+  "candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 382,
+    "branch": "chatgpt/go-reward-clay-authority-split-20260811",
+    "base_pr": 368,
+    "base_head": "b238e5cf0ffd9d3277d2674b7749d19ddb204de0",
+    "head_at_write": "f4c1b821f0fba8a1f453a9ecfc5e9a0f89a452eb",
+    "promotion": "NONE_CANDIDATE_ONLY"
+  },
+  "architecture_delta": {
+    "name": "MINIMAL_CLAYCODE_REWARD_AUTHORITY_CONTRACT",
+    "binary_material_input": "BinaryTaskTerminalEvidence contains terminal identity, success and verified state only; it contains no caller dimension, utility, confidence or fractional causal-credit fields.",
+    "code_owned_policy": "TASK comparison dimension; verified success=+1, verified failure=-1; admitted binary weight=1",
+    "full_reward_state": "UNCHANGED_AND_STILL_SUBJECT_TO_21_OBLIGATION_TRANSITION_GATE",
+    "multidimensional_material_valuation": "OPEN_REQUIRES_PRODUCER_OWNED_REWARD_VALUATION_RECEIPT_OR_EQUIVALENT_VERIFIER",
+    "historical_replacement": "NOT_CLAIMED"
+  },
+  "counterevidence": {
+    "source": "research(go) reward exactly-once synthesis commit 65190814cda8bf7eb2c7016630dac84767891e30 and open ClayCode surface PR #314",
+    "finding": "Current accepted parser lacks syntax needed by the full reward-state file; broader ClayCode surface work exists separately and must not be silently duplicated in reward-specific syntax.",
+    "response": "Execute only the minimal authority law on the current accepted subset; preserve full reward-state transition completeness and richer valuation as separate gates."
+  },
+  "target_discriminator": {
+    "workflow": ".github/workflows/frank-reward-clay-authority-v1-vps.yml",
+    "workflow_run_id": 31512452282,
+    "job_id": 93849370700,
+    "status_at_write": "QUEUED",
+    "requires": [
+      "static authority surface PASS",
+      "minimal ClayCode authority source parses and analyzes",
+      "material_reward_admitted executes true for verified terminal sample",
+      "material_learning_weight executes 1.0",
+      "binary_task_utility executes +1 success / -1 failure",
+      "full 21-obligation transition gate remains false",
+      "producer-owned multidimensional valuation remains unimplemented",
+      "additional GO OOB count = 0"
+    ],
+    "result": "PENDING_NO_TARGET_CREDIT"
+  },
+  "go_oob": {
+    "new_oob_added": false,
+    "macrocycle_oob_remains": "DIMENSION_CROWN_SWAP",
+    "count_for_this_follow_on": 0
+  },
+  "required_next": [
+    "adjudicate target run 31512452282 when it executes; preserve parser/analyzer/evaluator rejection as negative evidence if it fails",
+    "do not promote minimal authority execution into full reward-state completion",
+    "design producer-owned RewardValuationReceipt or demonstrate a simpler scalar architecture dominates",
+    "compose future accepted ClayCode surface with full 21-obligation reward transition gate",
+    "retain NAcc/E-PQ baseline, lesion/rescue, OOD, drift and resource comparisons before successor promotion"
+  ],
+  "claims_not_made": [
+    "producer-owned multidimensional valuation solved",
+    "full Clay-native reward transition solved",
+    "historical NAcc/E-PQ replacement justified",
+    "whole F-V01-11 complete",
+    "whole Frank v0.1 accepted",
+    "final training authorized",
+    "Frank/self.root Harness mutation authority"
+  ]
+}

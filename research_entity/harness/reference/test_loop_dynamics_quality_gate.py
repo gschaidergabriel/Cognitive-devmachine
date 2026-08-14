@@ -1,3 +1,4 @@
+import math
 import unittest
 from loop_dynamics_quality_gate import *
 
@@ -25,7 +26,18 @@ class GateTests(unittest.TestCase):
         self.assertEqual(decide_recurrence(R()).decision, "ESCALATE_STALLED")
 
     def test_valid_low_residual_can_converge(self):
-        self.assertEqual(decide_recurrence(R(residual_pressure=.03, low_delta_streak=3)).decision, "HALT_CANDIDATE_CONVERGED")
+        x = decide_recurrence(R(residual_pressure=.03, low_delta_streak=3))
+        self.assertEqual(x.decision, "HALT_CANDIDATE_CONVERGED")
+        self.assertEqual(x.reason, "low_delta_and_low_residual_with_valid_readout")
+
+    def test_high_delta_low_residual_cannot_mint_convergence(self):
+        x = decide_recurrence(R(state_delta_norm=.20, residual_pressure=.03, low_delta_streak=0))
+        self.assertEqual(x.decision, "CONTINUE")
+        self.assertNotEqual(x.reason, "low_delta_and_low_residual_with_valid_readout")
+
+    def test_single_low_delta_frame_cannot_mint_convergence(self):
+        x = decide_recurrence(R(state_delta_norm=.01, residual_pressure=.03, low_delta_streak=1))
+        self.assertEqual(x.decision, "CONTINUE")
 
     def test_noisy_residual_cannot_mint_convergence(self):
         x = decide_recurrence(R(residual_pressure=.03, residual_uncertainty=.2))
@@ -63,6 +75,46 @@ class GateTests(unittest.TestCase):
             self.assertEqual(x.authority, "NONE")
             self.assertFalse(x.effect_eligible)
             self.assertTrue(x.effect_gate_required)
+
+    def test_invalid_numeric_domains_rejected(self):
+        cases = [
+            R(residual_uncertainty=-1.0),
+            R(measurement_age_cycles=-1),
+            R(residual_uncertainty=math.nan),
+            R(residual_pressure=math.nan),
+            R(residual_pressure=-.1),
+            R(state_delta_norm=math.inf),
+            R(oscillation_indicator=1.1),
+            R(low_delta_streak=-1),
+        ]
+        for r in cases:
+            with self.subTest(r=r):
+                with self.assertRaises(ValueError):
+                    decide_recurrence(r)
+
+    def test_policy_identity_is_receipt_bound(self):
+        r = R(residual_pressure=.03, low_delta_streak=3)
+        a = decide_recurrence(r, controller_policy_id="A", converged_residual=.08)
+        b = decide_recurrence(r, controller_policy_id="B", converged_residual=.08)
+        c = decide_recurrence(r, controller_policy_id="A", converged_residual=.02)
+        self.assertEqual(a.readout_sha256, b.readout_sha256)
+        self.assertNotEqual(a.policy_sha256, b.policy_sha256)
+        self.assertNotEqual(a.receipt_sha256, b.receipt_sha256)
+        self.assertEqual(a.readout_sha256, c.readout_sha256)
+        self.assertNotEqual(a.policy_sha256, c.policy_sha256)
+        self.assertNotEqual(a.receipt_sha256, c.receipt_sha256)
+        self.assertNotEqual(a.decision, c.decision)
+
+    def test_receipt_is_deterministic(self):
+        self.assertEqual(decide_recurrence(R()), decide_recurrence(R()))
+
+    def test_invalid_policy_rejected(self):
+        with self.assertRaises(ValueError):
+            decide_recurrence(R(), max_residual_uncertainty=math.nan)
+        with self.assertRaises(ValueError):
+            decide_recurrence(R(), max_measurement_age_cycles=-1)
+        with self.assertRaises(ValueError):
+            decide_recurrence(R(), stalled_residual=.01, converged_residual=.08)
 
 
 if __name__ == "__main__":

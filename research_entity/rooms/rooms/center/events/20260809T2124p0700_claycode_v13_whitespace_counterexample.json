@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T2124p0700_claycode_v13_whitespace_counterexample",
+  "room_id": "center",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:24:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["claycode", "harness", "frank", "center"],
+  "affects_claims": ["CC-WP-02-PARSER-CANON", "CC-WP-03-IR-TYPES", "CC-WP-05-EVALUATOR", "CC-WP-06-COMPILER-LOWERING", "CC-WP-13-HARNESS-HANDOFF"],
+  "artifact_refs": [
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V13_GENERIC_DOTTED_CALLSAFE.lark",
+    "tools/claycode_wp02_v13_discriminator.py",
+    "research_entity/claycode/base/receipts/CC_WP02_V13_SANDBOX_20260809T2120p0700.json"
+  ],
+  "payload_clay": "counterexample{v10:horizontal_whitespace_changes_semantics;example:[Needle.owns(X),Needle.owns_(X)];v13:generic_call_safe_dotted_prefix;sandbox:37/37;strict:INTEREGULAR_REQUIRED;promotion:NONE}",
+  "payload": {
+    "evidence_class": "EXECUTABLE_SANDBOX_COUNTEREXAMPLE_PLUS_IMPLEMENTATION_CANDIDATE",
+    "finding": "V10 makes ordinary horizontal whitespace semantically active: `rule Needle.owns(X)` canonicalizes as a call while `rule Needle.owns (X)` canonicalizes as a dotted-prefix relation. V10 also hardcodes the FRANK-specific identifier Needle inside the relation lexer token. Both properties are undesirable for the general-purpose ClayCode BASE grammar.",
+    "v13_result": {
+      "candidate_sha256": "c539659b3003a96c1d1320819b1eed8b901574495ea890f9e649a57841d259c1",
+      "sandbox_checks": "37/37 PASS",
+      "g9_v3": "PASS",
+      "dialect_v3": "PASS",
+      "v10_v13_current_corpus_semantic_hash_equivalence": true,
+      "generic_relation_fuzz": "5000/5000 accepted",
+      "call_whitespace_fuzz": "1000/1000 invariant",
+      "same_priority_bounded_lexical_collision_scan": "PASS",
+      "strict_state": "PARSER_TABLE_REACHED_INTEREGULAR_DEPENDENCY; strict lexer collision proof not available in this sandbox"
+    },
+    "candidate_design": "Use a generic qualified-id DOTTED_PREFIX_REL token for `.lowers`/`.owns`, but exclude the call form when the first non-whitespace character after the relation name is `(`. This avoids the structural qid/DOT shift-reduce conflict, removes Needle-specific lexical hardcoding, and preserves call whitespace invariance.",
+    "rejected_alternative": "A structural `qid '.' relation primary` V11 reintroduced the LALR DOT shift/reduce conflict and is rejected by executable counterexample.",
+    "next_discriminator": "On clean current Ubuntu/main with lark[interegular]==1.3.1, run `python3 tools/claycode_wp02_v13_discriminator.py --require-strict`. Then run the official canonical-IR tool against V13, the WP03 typed-IR binding/hash tests, the integrated V7 pure-compiler differential against V13, and the provenance-bound FRANK frontend probe. Promote no grammar identity until all are green and the frontend/compiler consumers converge on one versioned grammar hash.",
+    "gate_effect": "NO_PASS_CHANGE",
+    "authority_invariant": "model output != execution authority"
+  }
+}

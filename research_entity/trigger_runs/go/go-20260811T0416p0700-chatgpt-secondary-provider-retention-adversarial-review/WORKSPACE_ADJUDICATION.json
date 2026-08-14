@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0416p0700-chatgpt-secondary-provider-retention-adversarial-review",
+  "workspace": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+  "package": "F-V01-09-EFFECT-AUTHORITY",
+  "status": "EVIDENCE_ADJUDICATION_ONLY_NO_WORKSPACE_STATUS_MUTATION",
+  "current_main_runtime_anchor": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+  "later_main_commits_observed": [
+    "d55b452776295153576011988b0befce7f13b238",
+    "40cd96f70a1dc378bdb7ba41f3faa0d3c5c776d1",
+    "f649ce7ab8249c9dbc61ad7018804204ade53cb5"
+  ],
+  "adjudication": {
+    "owner_policy_semantics_and_target_vps_matrix": {
+      "recommendation": "KEEP_PASS",
+      "evidence": [
+        "runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
+        "run:31432535912",
+        "status:PASS_DIRECT_FRANK_V0_1_EFFECT_AUTHORITY_POLICY_MATRIX",
+        "20/20 policy checks",
+        "destructive_false_allow_rate_before_confirmation=0.0",
+        "non_destructive direct_execution_rate=1.0",
+        "gate latency n=20000 p50=0.28us p95=0.351us p99=0.45us max=29.051us"
+      ]
+    },
+    "receipt_writer_authority_isolation": {
+      "recommendation": "KEEP_PASS",
+      "reason": "No contradictory current evidence observed in this invocation."
+    },
+    "presence_execution_generation_effect_fence": {
+      "recommendation": "PASS_CANDIDATE_PENDING_CANONICAL_WORKSPACE_UPDATE",
+      "evidence": [
+        "PR#261 merged to main",
+        "self-hosted run:31423170075 SUCCESS",
+        "artifact:9076164663 digest sha256:b2e6cf7fc59b66b8aa2ba6d90738ce6b7587f6bf743e095c7f8468648351cb3d",
+        "same-epoch alias/rebind/provider-window/release/successor-adoption discriminators fenced",
+        "typed provider contract bound to exact execution generation",
+        "SQLite integrity ok and FK=0"
+      ],
+      "scope": "Execution-generation effect fence only; does not imply V17 causal support or real-provider closure."
+    },
+    "current_source_lifecycle_crash_replay": {
+      "recommendation": "KEEP_OPEN_UNLESS_SEPARATE_CURRENT_EXACT_CRASH_RECEIPT_IS_ADJUDICATED",
+      "reason": "#261 includes uncertain ACK/reconciliation and exact execution-generation matrices but this invocation did not verify the complete current-source crash/replay obligation named by the workspace."
+    },
+    "current_claycode_frontend_typed_ir": {
+      "recommendation": "PASS_CANDIDATE_FOR_THE_NAMED_WP03_FRONTEND_TYPEDIR_SUBCHECK",
+      "evidence": [
+        "PR#261 target artifact claycode-provider-probe.json",
+        "current structured frontend + current TypedIR bridge accepted stronger provider declarations",
+        "deterministic compile/probe path succeeded"
+      ],
+      "nonclaim": "No WP04 type/effect/compiler/lowering/runtime acceptance."
+    },
+    "real_provider_unknown_outcome_reconciliation": {
+      "recommendation": "KEEP_OPEN",
+      "reason": "All provider uncertainty/reconciliation evidence observed here is synthetic/local; no real provider timeout-after-acceptance receipt is promoted. Provider-retention semantics are additionally under adversarial review in PR#264/#265."
+    },
+    "verified_outcome_reentry_done_and_terminal_receipt": {
+      "recommendation": "KEEP_OPEN",
+      "positive_evidence": [
+        "PR#261 synthetic provider outcome -> candidate V17 provenance re-entry -> DONE path executed successfully"
+      ],
+      "blocking_counterevidence": [
+        "self-hosted run:31432535929 on merged runtime SHA 15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+        "status:CONFIRMED_V17_SUPPORT_IDENTITY_AND_EXECUTION_BINDING_GAP",
+        "terminal DONE accepted while V15 presence IDLE",
+        "terminal DONE accepted without V16 execution context",
+        "fabricated episode/signal/causal/delta identifiers accepted",
+        "canonical GWT causal/delta support rows absent"
+      ],
+      "required_next": "Bind terminalization to exact V15/V16 execution epoch and canonical support identities or equivalent verified support receipts, including an explicitly typed no-learning path where applicable."
+    }
+  },
+  "historical_stronger_candidate_baseline": {
+    "pr": 206,
+    "state": "OPEN_STALE_CONFLICTFUL_NOT_FOR_DIRECT_PROMOTION",
+    "target_run": 31416807230,
+    "artifact": 9073888652,
+    "artifact_digest": "sha256:cfb5fac071404b5635d1488babf10e506ac258ee53f883775f50e0854e726e79",
+    "observed_passes": [
+      "V17.2 causal evidence closure",
+      "V17.2 crash/restart atomic outcome evidence",
+      "V17.2.1 completion visibility",
+      "simulated provider timeout -> read-only reconciliation -> DONE"
+    ],
+    "resource_shadow": {
+      "v17_2_wall_s": 0.20,
+      "v17_2_max_rss_kib": 24704,
+      "crash_gate_wall_s": 0.27,
+      "crash_gate_max_rss_kib": 25840,
+      "completion_visibility_wall_s": 0.19,
+      "completion_visibility_max_rss_kib": 24572,
+      "provider_timeout_wall_s": 0.20,
+      "provider_timeout_max_rss_kib": 25004
+    },
+    "use": "MEASURED_MECHANISM_BASELINE_ONLY",
+    "reason_not_ported_now": "42-commit stale/conflictful branch; stronger V17.2 files are not fully present on current main; direct port would create a large overlapping integration rather than a bounded fresh-main repair."
+  },
+  "package_conclusion": "F-V01-09 remains IN_PROGRESS. Promote only individually supported subchecks; do not average the V17 negative away with the successful #261 synthetic happy-path integration."
+}

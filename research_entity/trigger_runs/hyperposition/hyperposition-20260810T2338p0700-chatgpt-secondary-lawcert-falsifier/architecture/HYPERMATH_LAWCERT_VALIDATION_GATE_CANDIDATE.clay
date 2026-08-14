@@ -1,0 +1,84 @@
+module clay.hyperposition.hypermath.lawcert_gate.h7c
+version "HYP-H7C-LAWCERT-GATE-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Purpose: make HyperMath rewrite laws executable/falsifiable without treating bounded tests
+// as mathematical proofs or allowing fast but unsound algebraic rewrites into Frank v0.1.
+
+record LawValidationReceipt {
+  certificate_ref:Ref
+  carrier_ref:Ref
+  carrier_implementation_hash:Hash
+  carrier_version:Version
+  law_ref:Ref
+  validation_class:FORMAL_PROOF|EXHAUSTIVE_FINITE_DOMAIN|PROPERTY_TEST_BOUNDED|DIFFERENTIAL_TEST|COUNTEREXAMPLE
+  domain_contract:Ref
+  seed_set:Set<Int>
+  sample_count:Int
+  tolerance:Float?
+  witness:Ref?
+  proof_ref:Ref?
+  result:PASS|FAIL|UNKNOWN
+  created_at:Time
+  evidence:Set<EvidenceRef>
+}
+
+record RewriteAdmission {
+  rewrite_ref:RewriteRef
+  certificate_ref:Ref
+  validation_receipts:Set<LawValidationReceipt>
+  exactness:EXACT|BOUNDED_APPROX|UNKNOWN
+  input_domain_contract:Ref
+  accumulated_error_bound:Float?
+  material_read_signature:Set<Ref>|UNKNOWN
+  context_admissibility_ref:Ref?
+  admitted:Bool
+  reason:Ref
+}
+
+rule LawCertificate binds exact carrier_implementation_hash + carrier_version
+rule certificate_without_matching_implementation_hash -> CANDIDATE_NOT_EXECUTABLE
+rule counterexample_to_declared_law -> certificate_status=REFUTED
+rule REFUTED_certificate invalidates dependent rewrite plans + cached optimization receipts
+
+// A finite/property test can falsify a universal law but cannot prove it outside its domain.
+rule PROPERTY_TEST_BOUNDED_PASS -> certificate_status<=TESTED_BOUNDED
+rule EXHAUSTIVE_FINITE_DOMAIN_PASS -> exact_only_inside(domain_contract)
+rule FORMAL_PROOF_PASS may_mark_PROVED only_if proof_scope_matches(carrier_implementation_hash,carrier_version,law_ref)
+
+// Exact optimizer rewrites need evidence appropriate to their scope.
+rule exact_rewrite_admission requires (
+  PROVED_matching_scope
+  or TESTED_BOUNDED_matching_runtime_domain
+)
+rule UNKNOWN_validation_scope -> rewrite_admission.exactness=UNKNOWN + admitted=false
+
+// Approximate rewrites are separate from exact laws and carry compositional error budgets.
+rule approximate_rewrite requires explicit_local_error_bound + declared_error_composition_rule
+rule accumulated_error_bound > task_error_budget -> admitted=false
+rule approximate_rewrite_never_relabels_semantic_equivalence_as_exact
+
+// Fuse H7B anti-smuggling semantics into algebraic rewrite admission.
+rule CONTEXT_GATE|MARGINALIZE|factorization claiming lower_order_semantic_equivalence requires context_admissibility_ref.PASS
+rule member_or_derived_member_context_leakage -> semantic_reduction_claim=false
+rule runtime_lowering_may_still_be_admitted_if canonical_semantic_relation_remains_reified
+
+// Provenance and authority boundaries.
+rule fast_rewrite != true_rewrite
+rule algebraic_equivalence != causal_equivalence_without_intervention_receipts
+rule optimized_projection != canonical_truth
+rule LawCertificate != effect_authority
+rule model_generated_certificate != host_or_research_authority
+rule self.root_self_harness_authority_is_proposal_only
+
+experiment H7C_LAWCERT_FALSIFIER {
+  controls=[VALID_MIN_PLUS_SUBSET,FALSE_ASSOCIATIVE_MEAN]
+  interventions=[REASSOCIATE,LEFT_RIGHT_SWAP,DISTRIBUTE]
+  measure=[law_violation_count,max_numeric_delta,semantic_roundtrip_error,plan_invalidation_correctness]
+  promotion="validator only until real Frank/ClayCode optimizer uses LawCertificate rewrites"
+}
+
+counterhypothesis H0_H7C {
+  proposition="Existing compiler tests plus proof_refs/test_refs on HyperMath LawCertificate are sufficient; a dedicated validation receipt type adds no measurable correctness or recovery value."
+  discriminator="Implement HyperMath rewrite planning first with ordinary test/proof references, inject false/stale/wrong-version certificates, and compare semantic errors plus rollback/recovery against this validator contract."
+}

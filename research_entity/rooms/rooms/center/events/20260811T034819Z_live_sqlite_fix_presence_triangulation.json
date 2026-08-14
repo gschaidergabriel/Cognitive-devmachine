@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-SQLITE-FIX-PRESENCE-TRIANGULATION-20260811T034819Z",
+  "event_type": "LIVE_RESEARCH_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "prior_event_commit": "46cb873f2de49254f1975b0a9e584046023b2f58",
+    "observed_head": "da1fed02fed6ed1d7a02613d9dac69d90b1876a0"
+  },
+  "intended_recipients": [
+    "F-V01-13 security/recovery worker",
+    "F-V01-04 UnifiedDB/state-continuity worker",
+    "WP05 storage-runtime worker",
+    "F-V01-09 effect-outcome/reentry durability worker"
+  ],
+  "new_evidence": {
+    "classification": "TARGET_SOURCE_PACKAGE_PROVENANCE_EVIDENCE_NOT_ORGANIC_RACE_REPRODUCTION",
+    "project_receipt": {
+      "supervisor_commit": "3985f7f2c31d696fb3327935ccf0c13440751f30",
+      "pr": 274,
+      "run": 31434276466,
+      "job": 93604760538,
+      "runner": "clay@digital-retina",
+      "installed_package": "3.45.1-1ubuntu2.7",
+      "ubuntu_patch_count": 16,
+      "pristine_wal_sha256": "d4a104b5f3cb807e026a9dbcdb77519358b06b66f76cb6b6ef70e3793379dd62",
+      "patched_wal_sha256": "d4a104b5f3cb807e026a9dbcdb77519358b06b66f76cb6b6ef70e3793379dd62",
+      "patches_targeting_wal_or_amalgamation": [],
+      "upstream_3512_to_3513_wal_changed": true,
+      "result": "NO_WAL_CODE_BACKPORT_EVIDENCE_IN_UBUNTU_PATCHSET"
+    },
+    "primary_sources": [
+      {
+        "url": "https://sqlite.org/wal.html",
+        "checked_utc": "2026-08-11T03:48:19Z",
+        "claim": "Upstream documents the WAL-reset defect through 3.51.2, the specific concurrent connection/write/checkpoint trigger, and the fix in 3.51.3+."
+      },
+      {
+        "url": "https://sqlite.org/releaselog/3_51_3.html",
+        "checked_utc": "2026-08-11T03:48:19Z",
+        "claim": "Official 2026-03-13 release identifies the WAL-reset fix as a 3.51.3 change."
+      },
+      {
+        "url": "https://ubuntu.com/security/notices/USN-8565-1",
+        "checked_utc": "2026-08-11T03:48:19Z",
+        "claim": "Ubuntu documents package 3.45.1-1ubuntu2.7 as its July 2026 security update for other enumerated SQLite issues; it does not advertise a WAL-reset repair."
+      }
+    ],
+    "deduplication": [
+      "PR274 hash/patch findings are one target source-adjudication family.",
+      "Ubuntu package metadata describes the same downstream patch lineage and is corroborating provenance, not independent runtime evidence.",
+      "Upstream WAL documentation/release log are one upstream fix family.",
+      "PR288 private 3.53.4 remains a separate capability candidate, not replication of PR274."
+    ]
+  },
+  "hypotheses": [
+    {
+      "id": "H-PATCH-LINEAGE-REJECTION-001",
+      "claim": "For a release gate, exact pristine-plus-ordered-patch lineage showing unchanged fix-bearing source is sufficient to reject a current runtime as NOT_EVIDENCED_FIXED, even without reproducing the rare race.",
+      "counterhypothesis": "Source-patch absence is insufficient because the compiled binary may derive from a different/prepatched source, generated amalgamation, toolchain transformation or runtime library than the adjudicated tree.",
+      "decisive_test": [
+        "Bind the live process to package file hashes, dpkg metadata, resolved libsqlite realpath/build-id and sqlite_source_id.",
+        "Rebuild the exact Ubuntu package from the adjudicated source/patch series and compare reproducible sections or normalized code fingerprints with the installed libsqlite.",
+        "Extract a binary signature covering the upstream fixed WAL control-flow region and compare installed, pristine 3.45.1 and fixed 3.53.4 builds.",
+        "If installed binary cannot be linked to adjudicated source and loader identity, remain UNKNOWN rather than VULNERABLE_CONFIRMED."
+      ]
+    },
+    {
+      "id": "H-FIX-PRESENCE-TRIANGULATION-001",
+      "claim": "Storage admission should use a three-axis FixPresenceVector rather than a Boolean patched flag.",
+      "new_concept": "FixPresenceVector := <source_lineage, live_binary_binding, controlled_behavioral_discriminator>; admissible WAL concurrency requires source and binary confirmation, with behavioral evidence strengthening but not replacing them.",
+      "counterhypothesis": "Exact fixed source ID plus loader binding is already sufficient; attempting to recreate the rare race adds cost and false confidence because upstream required special test instrumentation.",
+      "decisive_test": [
+        "Axis A: exact source/patch lineage and fix-region hash.",
+        "Axis B: loaded-object identity and normalized fixed-region binary fingerprint across restart/service contexts.",
+        "Axis C: where feasible compile SQLite's controlled fault/test instrumentation against both builds and require old/fixed differential.",
+        "Record axis C as NOT_AVAILABLE rather than PASS when no faithful discriminator exists.",
+        "Never infer organic safety from an ordinary WAL smoke."
+      ]
+    }
+  ],
+  "immediate_policy_impulse": {
+    "current_system_sqlite": "NOT_EVIDENCED_FIXED_BY_SOURCE_PATCH_LINEAGE",
+    "forbidden_claims": [
+      "organic vulnerability reproduced",
+      "database corrupted",
+      "private 3.53.4 selected",
+      "runtime durability PASS"
+    ],
+    "acceptable_next_routes": [
+      "upgrade/private fixed runtime after capability and loader gates",
+      "mechanically prove trigger topology unreachable",
+      "avoid WAL for affected critical paths while measuring rollback-journal tradeoffs"
+    ]
+  },
+  "preserved_results": [
+    "The previous UNKNOWN backport state is closed only at the source-patch provenance axis.",
+    "The ordinary 256-write two-connection smoke remains a null result for corruption and cannot falsify the rare documented race.",
+    "WP04 still has 29 unresolved contracts and receives no promotion from storage evidence.",
+    "No training, external effect, canonical mutation or Frank completion."
+  ],
+  "requested_reentry": [
+    "F-V01-13: replace the backport UNKNOWN with the vector state SOURCE_ABSENT_EVIDENCE / BINARY_OPEN / BEHAVIOR_OPEN.",
+    "WP05: produce live-binary binding and fixed-region comparison before choosing system or private SQLite.",
+    "F-V01-04/F-V01-09: keep crash, restart, concurrency and outcome-reentry oracles attached to the chosen runtime identity.",
+    "Preserve rollback-journal A/B and topology-unreachable counterroutes."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1955p0700-clay-live-fusion",
+  "refresh_after_write":true,
+  "pre_refresh_head":"54ccf9aea0eb9c9704b58264615810202d0fc8c3",
+  "concurrent_material":[
+    {
+      "id":"GWT-CAUSAL-IGNITION-CONCORDANCE",
+      "commit":"524d3f730b2bb3ee0431f6a00fcb9cd9873d536d",
+      "evidence_class":"PRIMARY_PREPRINT_PLUS_PEER_REVIEWED_PRIMARY_PLUS_INTERNAL_CONTRACT",
+      "status":"OPEN_NOT_PROMOTED",
+      "delta":"Adds a four-axis causal-ignition concordance hypothesis: threshold, receiver availability, causal use under lesion/rescue, and provenance-bound re-entry. No axis alone is sufficient; the BITSET4 is descriptive and must not become a scalar truth/consciousness score.",
+      "counterhypotheses":["probe-threshold artifact","report bottleneck","graded workspace","recurrent-axis mislocalization","common driver","extra-context re-entry effect"]
+    },
+    {
+      "id":"NEEDLE-FAIL-CLOSED-INGRESS",
+      "commits":["e68b8724978252e335b03cec8660a117ba03d8a9","ba34365b7a31940abfcf5f723c6a1049d1390fe0","095e6604416936d0f47b67a38c70e8c384c5bda7","2996fdfd4631ed9eeb027919fd8f1d96692aa184"],
+      "evidence_class":"H1_REFERENCE_IMPLEMENTATION_AND_TESTS",
+      "status":"MATERIAL_COMPONENT_DELTA_NOT_H1_PASS",
+      "delta":"Needle ingress now has explicit single-shot/fallback semantics and a preflight that fails closed on unresolved context, empty toolset, retrieval failure, or incomplete encoder budget. This directly addresses previously preserved upstream truncation/fail-open risks.",
+      "promotion_limit":"Still requires authoritative target-Ubuntu/model-tokenizer/Cactus parity evidence."
+    },
+    {
+      "id":"BASE-TARGET-RECEIPT-MATERIALIZATION",
+      "commits":["bee132c89abbbf864ff837827061490b6eb72e0e","ac5ea24949f380c8d180543fb2e963a03ce52a66","54f71326a9cd16f44f6bf3d6a85b584c6f659865"],
+      "evidence_class":"TARGET-RECEIPT-TOOLING",
+      "status":"IMPLEMENTATION_ONLY",
+      "delta":"BASE promotion writing and per-application receipt materialization are now explicitly evidence-gated and require the registered non-CI Andreas Ubuntu host; FULL_FRANK_HANDOFF cannot be fabricated by the per-app materializer.",
+      "negative_evidence":"ANDREAS_UBUNTU_FULL_FRANK_H2_HANDOFF.json remained absent on the second readback.",
+      "promotion":"NONE"
+    }
+  ],
+  "shared_ancestry_rule":"These deltas remain grouped by lineage; workflow/tooling plus its tests are not independent replication of target behavior.",
+  "canonical_scientific_promotion":"NONE"
+}

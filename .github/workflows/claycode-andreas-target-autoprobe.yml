@@ -1,0 +1,194 @@
+name: ClayCode Andreas target autoprobe
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/claycode-andreas-target-autoprobe.yml'
+      - 'tools/claycode_bootstrap_andreas_self_hosted_runner.sh'
+      - 'tools/claycode_target_host_identity.py'
+      - 'tools/claycode_run_andreas_target_acceptance.py'
+      - 'tools/claycode_base_andreas_target_runner_v2.py'
+      - 'tools/claycode_andreas_ubuntu_target_gate.py'
+      - 'tools/claycode_ubuntu_desktop_target_validation_runner.py'
+      - 'tools/claycode_full_frank_target_finalizer.py'
+      - 'tools/claycode_full_frank_target_finalizer_runner.py'
+      - 'tools/claycode_full_frank_active_assembly_validation.py'
+      - 'tools/claycode_base_target_application_suite_v2_runner.py'
+      - 'tools/claycode_materialize_real_app_receipts.py'
+      - 'tools/claycode_andreas_ubuntu_acceptance_assembler.py'
+      - 'tools/claycode_andreas_ubuntu_acceptance_assembler_runner.py'
+      - 'tools/claycode_base_wp14_strict_audit_v2.py'
+      - 'tools/claycode_promote_release_workspace.py'
+      - 'tools/claycode_strict_lalr_probe.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_frontend_validation.py'
+      - 'tools/claycode_base_canonicalizer.py'
+      - 'tools/claycode_base_canonicalizer_validation.py'
+      - 'tools/claycode_base_ir.py'
+      - 'tools/claycode_wp02_strict_local_closure_v2.py'
+      - 'tools/claycode_v17_declarative_trivia_discriminator.py'
+      - 'tools/claycode_wp03_typed_ir_validation.py'
+      - 'tools/claycode_base_compiler.py'
+      - 'tools/claycode_structured_backend.py'
+      - 'research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json'
+      - 'research_entity/claycode/base/UNRESOLVED_LANGUAGE_COUNTEREXAMPLES.json'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_*.lark'
+      - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay'
+      - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_H2_V1.clay'
+      - 'research_entity/claycode/apps/frank_active_assembly_packet_score_v1.clay'
+      - 'research_entity/claycode/base/examples/FRANK_GRT_FRAME_V1.clay'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: claycode-andreas-target-autoprobe
+  cancel-in-progress: true
+
+jobs:
+  target:
+    runs-on: [self-hosted, linux, x64, andreas, claycode, target]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Verify registered physical target and run canonical closure
+        shell: bash
+        run: |
+          mkdir -p research_entity/claycode/target research_entity/claycode/target_receipts
+          set +e
+          python3 tools/claycode_target_host_identity.py verify --json > /tmp/claycode_identity.json
+          identity_rc=$?
+          acceptance_rc=97
+
+          if [ "$identity_rc" -eq 0 ]; then
+            python3 -m pip install --user --disable-pip-version-check 'lark[interegular]==1.3.1'
+
+            # GitHub transport variables are removed only after the registered machine
+            # fingerprint has been verified. The canonical child still independently
+            # checks Ubuntu, local marker/fingerprint, container boundaries, semantics,
+            # the contract-selected WP02 grammar, real desktop, Full-FRANK, ten apps,
+            # strict target assembly and WP14.
+            env -u GITHUB_ACTIONS -u CI \
+              CLAYCODE_REGISTERED_SELF_HOSTED_ACTIONS=1 \
+              python3 tools/claycode_run_andreas_target_acceptance.py
+            acceptance_rc=$?
+          fi
+
+          python3 - "$identity_rc" "$acceptance_rc" <<'PY'
+          import json, platform, subprocess, sys
+          from pathlib import Path
+
+          identity_rc=int(sys.argv[1])
+          acceptance_rc=int(sys.argv[2])
+          try:
+              identity=json.load(open('/tmp/claycode_identity.json',encoding='utf-8'))
+          except Exception as exc:
+              identity={'parse_error':type(exc).__name__}
+          desktop={}
+          dp=Path('research_entity/claycode/target/APP05_UBUNTU_DESKTOP.json')
+          if dp.exists():
+              try: desktop=json.loads(dp.read_text(encoding='utf-8'))
+              except Exception as exc: desktop={'parse_error':type(exc).__name__}
+          desktop_pass=(
+              desktop.get('pass') is True
+              and desktop.get('counts_as_target_acceptance') is True
+              and (desktop.get('observed') or {}).get('io_mode')=='TK_REAL_DESKTOP_EVENT_LOOP'
+              and (desktop.get('observed') or {}).get('window_was_mapped') is True
+          )
+          contract={}
+          cp=Path('research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json')
+          if cp.exists():
+              try: contract=json.loads(cp.read_text(encoding='utf-8'))
+              except Exception as exc: contract={'parse_error':type(exc).__name__}
+          selected=((contract.get('wp02_parser_contract') or {}).get('selected_grammar_path')) if isinstance(contract,dict) else None
+          payload={
+              'schema_version':'2.6',
+              'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
+              'executed_on_self_hosted_runner':True,
+              'required_runner_labels':['self-hosted','linux','x64','andreas','claycode','target'],
+              'transport':'GITHUB_ACTIONS_SELF_HOSTED_AFTER_REGISTERED_FINGERPRINT_VERIFY',
+              'identity_returncode':identity_rc,
+              'identity':identity,
+              'target_identity_verified':identity_rc==0,
+              'acceptance_invoked':identity_rc==0,
+              'acceptance_returncode':acceptance_rc,
+              'selected_wp02_grammar':selected,
+              'desktop_gate_owned_by_canonical_closure':True,
+              'desktop_gate_pass':desktop_pass,
+              'release_pass_claimed':identity_rc==0 and acceptance_rc==0 and desktop_pass,
+              'runner_uname':subprocess.run(['uname','-a'],text=True,capture_output=True).stdout.strip(),
+              'python_version':platform.python_version(),
+              'authority_invariant':'model output != execution authority',
+              'queue_policy':'LATEST_WORKFLOW_REVISION_WINS',
+              'trigger_scope':'all_release_gate_dependencies_and_all_wp02_grammar_candidates',
+          }
+          Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(
+              json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          exit 0
+
+      - name: Preserve complete target evidence and receipt-gated promotion
+        if: always()
+        shell: bash
+        run: |
+          git config user.name 'claycode-andreas-autoprobe'
+          git config user.email 'claycode-andreas-autoprobe@users.noreply.github.com'
+          test -f research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json && \
+            git add research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json
+          git add research_entity/claycode/target 2>/dev/null || true
+          git add research_entity/claycode/target_receipts 2>/dev/null || true
+          git add research_entity/claycode/autonomous 2>/dev/null || true
+          git add research_entity/claycode/corpus/base_v1 2>/dev/null || true
+          test ! -f research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json || \
+            git add research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json
+          test ! -f CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json || \
+            git add CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json
+
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record registered Andreas target BASE14 closure'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 4))
+          done
+          exit 1
+
+      - name: Enforce physical target release verdict
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+
+          probe=json.load(open('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json',encoding='utf-8'))
+          assert probe['target_identity_verified'] is True, probe
+          assert probe['acceptance_returncode'] == 0, probe
+          assert probe['desktop_gate_pass'] is True, probe
+          assert probe['release_pass_claimed'] is True, probe
+
+          run=json.load(open('research_entity/claycode/target_receipts/ANDREAS_BASE14_CLOSURE_RUN.json',encoding='utf-8'))
+          assert run['overall_pass'] is True, run
+
+          manifest=json.load(open('CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json',encoding='utf-8'))
+          assert manifest['general_purpose_gate_pass'] is True, manifest
+          assert manifest['claycode_release_gate_pass'] is True, manifest
+          assert manifest.get('promotion_allowed') is True, manifest
+          assert manifest.get('failed_work_packages') in ([], None), manifest
+          assert (manifest.get('desktop_gui_independent_audit') or {}).get('pass') is True, manifest
+
+          ws=json.load(open('research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json',encoding='utf-8'))
+          packages=ws.get('work_packages') or {}
+          assert len(packages) == 14, packages
+          assert all((row or {}).get('status') == 'PASS' for row in packages.values()), packages
+          assert ws.get('gate_status') == 'PASS', ws.get('gate_status')
+          assert ws.get('general_purpose_gate_status') == 'PASS', ws.get('general_purpose_gate_status')
+          required=set((ws.get('application_acceptance') or {}).get('required') or [])
+          passed=set((ws.get('application_acceptance') or {}).get('passed') or [])
+          assert len(required) == 10 and required == passed, {'required':sorted(required),'passed':sorted(passed)}
+          print('ANDREAS_BASE14_SELF_HOSTED_RELEASE=PASS')
+          PY

@@ -1,0 +1,261 @@
+// CLAY POSSIBILITY FIELD COMPILER · FUSION CANDIDATE V3
+// Status: RESEARCH_CANDIDATE · NOT_CANONICAL · NOT_EFFECT_AUTHORITY
+// Model-facing thesis: the primary interface is a bounded POSSIBILITY FIELD / CONTEXT
+// COMPILER, not a generic database query surface. Conventional storage/index/database
+// mechanisms remain physical tools selected behind that compiler when they are cheapest.
+
+entity PossibilityFieldCompilerCandidate {
+  identity: CLAY_RESEARCH_MECHANISM
+  authority: CONTEXT_ONLY_NO_EFFECT_AUTHORITY
+
+  semantic_authority {
+    source_state: UnifiedDB
+    topology: ClayGraph.DERIVED_REBUILDABLE
+    access_generations: UnifiedDB.SemanticAccessGenerations
+    law: "Graph activation, retrieval rank, semantic resolution, route reachability and compilation never promote truth or effect authority."
+  }
+
+  outer_adaptive_read_plane {
+    principle: CHEAPEST_ALREADY_VALIDATED_SUFFICIENT_MECHANISM
+    exact_resolved_key: CONVENTIONAL_INDEX_LOOKUP
+    stable_semantic_family: VERIFIED_COMPILED_GENERATION
+    repeated_intent_entity_multihop: COMPILED_INTENT_FIELD_OR_PARETO_FRONTIER
+    unresolved_typed_gap: GAP_CONTROLLED_GRAPH_DEEPENING
+    unresolved_identity_or_miss: FAIL_CLOSED_ENTITY_RESOLVED_GRAPH_OR_CONVENTIONAL_FALLBACK
+    law: "Do not force preprocessing onto trivial exact reads merely to claim database replacement."
+  }
+
+  compile_admission CompileAdmission {
+    quality_gate: COMPILED_QUALITY_MUST_NOT_BE_WORSE_THAN_ONLINE
+    saving_gate: ONLINE_QUERY_COST_MINUS_COMPILED_QUERY_COST_MUST_BE_POSITIVE
+    break_even: BUILD_COST / PER_READ_SAVING
+    guarded_break_even: break_even * SAFETY_FACTOR
+    horizon_source: DATABASE_PULSE_COMPLETED_EPOCH_READ_LIFETIMES
+    horizon_lower_bound: EMPIRICAL_Q20_OR_RECENT_FLOOR_ON_CHURN_SHOCK
+    insufficient_history: ONLINE
+    churn_shock: ONLINE_UNLESS_RECENT_FLOOR_STILL_AMORTIZES
+    law: "Compile only when a conservative lower-bound reuse horizon exceeds guarded break-even. Preprocessing is an amortized workload decision, not an epistemic preference."
+  }
+
+  cycle_basis CyclePin {
+    cycle_id: Id
+    generation_id: SemanticGenerationId
+    source_epoch: Epoch
+    graph_epoch: Epoch
+    derivation_hash: Hash
+    law: "One cognitive cycle reads one coherent published generation; mixed-generation assembly is rejected."
+  }
+
+  entity_resolution Resolution {
+    classes: [EXACT_LOGICAL_ID, EVIDENCE_ALIAS, AMBIGUOUS, LOW_CONFIDENCE, MISS]
+    graph_anchor_allowed: [EXACT_LOGICAL_ID, EVIDENCE_ALIAS]
+    fail_closed: [AMBIGUOUS, LOW_CONFIDENCE, MISS]
+    law: "Resolution may select an existing evidence-bound identity; it may not mint identity, truth or authority."
+  }
+
+  semantic_field SemanticField {
+    generation_id: SemanticGenerationId
+    seed_id: SemanticSeedId
+    refs: [RecordRef]
+    proof: [EvidenceRef]
+    sufficient: Bool
+    verified: Bool
+    source_epoch: Epoch
+    graph_epoch: Epoch
+  }
+
+  typed_gap EvidenceGap {
+    requirements: [EvidenceRequirement]
+    missing_tags: [TypedTag]
+    missing_refs: [RecordRef]
+    source_epoch: Epoch
+    graph_epoch: Epoch
+    resolved_logical_id: LogicalId
+
+    structural_plan_signature: HASH(
+      source_epoch,
+      graph_epoch,
+      resolved_logical_id,
+      SORT_UNIQUE(missing_tags + missing_refs)
+    )
+
+    law: "After entity/intent/requirement typing, equivalent surface paraphrases share one structural plan key. Raw wording stays upstream evidence, not graph-plan identity."
+    law: "Deepen iff a typed evidence gap remains and the next bounded expansion yields novel admissible evidence."
+  }
+
+  compositional_frontier PossibilityFrontier {
+    input_edges: [CapabilityEdge]
+    routes: ParetoSet<PossibilityRoute>
+    source_epoch: Epoch
+    graph_epoch: Epoch
+    approximate: Bool
+    beam_per_node?: Int
+    hub_penalty?: Real
+
+    composition {
+      cost: SUM
+      latency: SUM
+      reliability: PRODUCT
+      authority: MIN
+      fresh: AND
+      local: AND
+      lineages: UNION
+    }
+
+    law: "Composition never upgrades authority, freshness, locality, evidence independence or epistemic status."
+    law: "Approximate frontiers remain explicitly approximate until matched exhaustive/held-out evidence promotes an operating window."
+  }
+
+  possibility_capsule PossibilityCapsule {
+    mode: [
+      EXACT_INDEX_BYPASS,
+      COMPILED_SUFFICIENT,
+      COMPILED_COMPOSITIONAL,
+      GAP_CONTROLLED_SUFFICIENT,
+      EAP_ACTIVE_ASSEMBLY,
+      ENTITY_RESOLVED_GRAPH_FALLBACK,
+      CONVENTIONAL_FALLBACK,
+      ABSTAIN
+    ]
+    selected: [Possibility]
+    alternatives: [Possibility]
+    counterevidence: [EvidenceRef]
+    conflicts: [EvidenceRef]
+    unknowns: [EvidenceRef]
+    suppressed: [SuppressedPossibility]
+    unresolved_gap_ids: [EvidenceRequirementId]
+    source_epoch: Epoch
+    graph_epoch: Epoch
+    generation_id?: SemanticGenerationId
+    resolution_class: ResolutionClass
+    receipt_hash: Hash
+    authority: CONTEXT_ONLY_NO_EFFECT_AUTHORITY
+  }
+
+  compile_nontrivial(query: PossibilityIntent, pin: CyclePin) -> PossibilityCapsule {
+    require pin.source_epoch == UnifiedDB.current_cycle_basis
+    require ClayGraph.projection_verified_equal(pin.graph_epoch, pin.source_epoch)
+    require ClayGraph.ambiguous_heads(pin.graph_epoch) == 0
+
+    resolution = resolve_existing_identity(query.natural_text, query.typed_seed, pin.source_epoch)
+    field = semantic_generation_lookup(resolution, pin)
+
+    if field.verified && field.sufficient && !field.refs.empty {
+      return capsule(mode=COMPILED_SUFFICIENT, selected=field.refs)
+    }
+
+    if query.requested_target.present && resolution.graph_anchor_allowed {
+      frontier = compile_or_read_frontier(pin, query.constraints)
+      route = frontier.best(resolution.logical_id, query.requested_target, query.constraints)
+      if route.present {
+        return capsule(mode=COMPILED_COMPOSITIONAL, selected=[route], alternatives=frontier.pareto_alternatives)
+      }
+    }
+
+    gaps = typed_evidence_gaps(query.requirements, field.refs)
+    if !gaps.empty && resolution.graph_anchor_allowed {
+      signature = typed_gap_signature(pin, resolution.logical_id, gaps)
+      additions = gap_controlled_expand(signature, field.refs, query.resource_budget)
+      merged = evidence_admissible_merge(field.refs, additions)
+      remaining = typed_evidence_gaps(query.requirements, merged)
+      if remaining.empty {
+        return capsule(mode=GAP_CONTROLLED_SUFFICIENT, selected=merged)
+      }
+      if additions.empty {
+        // anti-stagnation: do not keep walking simply because a depth budget exists
+        record_remaining_gap(remaining)
+      }
+    }
+
+    eap = bounded_active_assembly(query, pin)
+    if eap.sufficient {
+      return capsule(mode=EAP_ACTIVE_ASSEMBLY, selected=eap.refs, suppressed=eap.suppressed)
+    }
+
+    fallback = measured_conventional_fallback(query, pin)
+    if fallback.refs.present {
+      return capsule(mode=CONVENTIONAL_FALLBACK, selected=fallback.refs)
+    }
+    return capsule(mode=ABSTAIN, selected=[], unresolved_gap_ids=gaps.ids)
+  }
+
+  sufficiency_stop {
+    rule: "A VERIFIED/CURRENT epoch-coherent field satisfying typed evidence requirements stops retrieval."
+    forbidden: "Pad spare top-k slots with unrelated lexical hits after sufficiency is proven."
+    fallback_condition: "Missing, empty, stale, unverified, ambiguous or explicitly insufficient field."
+  }
+
+  maintenance {
+    preferred: TRANSACTION_COUPLED_TARGETED_DEPENDENCY_DELTAS
+    full_rebuild_when: [UNKNOWN_DELTA, SCHEMA_CHANGE, INTEGRITY_FAILURE, RECOVERY_REBUILD]
+    exact_rank_special_case: "When the required ordering is an authoritative deterministic scalar expression, prefer an index inside the authoritative state table over a second materialized candidate table if matched tests show equal semantics and lower total cost."
+    law: "Incremental maintenance may change derived topology/access cost, never canonical semantic truth."
+    law: "A simpler authoritative index can dominate an ActiveField for narrow scalar-ranking tasks without invalidating semantic possibility fields for multi-hop/context assembly."
+  }
+
+  invalidation {
+    on_source_epoch_change: invalidate_affected_semantic_generations_frontiers_gap_plans
+    on_graph_epoch_change: invalidate_affected_graph_dependent_generations_frontiers_gap_plans
+    on_entity_resolution_change: invalidate_affected_alias_anchor_gap_plans
+    strategy: TARGETED_DEPENDENCY_INVALIDATION
+    forbidden: EAGER_GLOBAL_COMBINATORIAL_CLOSURE
+  }
+
+  resource_control {
+    compile_cost_is_first_class: true
+    read_path_choice: AMORTIZED_TOTAL_COST_PLUS_QUALITY
+    compile_horizon: CONSERVATIVE_PULSE_LOWER_BOUND
+    insufficient_horizon_history: ONLINE
+    churn_shock_policy: USE_RECENT_FLOOR_OR_STAY_ONLINE
+    frontier_default: EXHAUSTIVE_BOUNDED_UNTIL_REAL_GATE
+    experimental_frontier_candidate: { beam_per_node: 16, hub_penalty: MEASURED_CONFIG }
+    law: "High-churn workloads may remain on online indexed/SQL/graph lookup when rebuild amplification dominates."
+  }
+
+  recovery {
+    last_known_good: SemanticAccessHead.CURRENT
+    publish: ATOMIC_GENERATION_HEAD_SWAP
+    failed_or_empty_generation: KEEP_LAST_KNOWN_GOOD
+    stale_or_ambiguous_graph: FAIL_CLOSED_TO_CONVENTIONAL_FALLBACK_OR_ABSTAIN
+  }
+
+  evidence_fusion {
+    real_clay_semantic_sufficiency_stress: "4db7fe3d46e73896c03fdd29a7ec7b508205842e"
+    coherent_generations: "69febf0808aec8197e69edc49ae2b01c32f49682"
+    sufficiency_runtime: "492a75bcb105fb0f4470c2d8c4d7f4448bde189d"
+    cycle_pin: "f02ea048440994d0888ea91cc72e2e283d191c93"
+    adaptive_read_plane_receipt: "2fee55409ff37c19f202f3a5b66c3b97f5db30af"
+    compiled_intent_vs_online_sql: "75d1b9c5fa20f8c8e91e922c7bfca22f771830d7"
+    compile_amortization_gate: "research_entity/runtime/semantic_compile_amortization_gate_v16.py"
+    pulse_horizon_estimator: "b61efcb9a7da9671f0e84414c3d3d034e4ac8e56"
+    incremental_eap_dependency_delta_candidate: "edfd62716c268277a5cdf8994ed92472ca112796"
+    simpler_authoritative_rank_index_falsifier: "132434c7b285116b197263a863d14c30025809d1"
+    epoch_bound_graph_assembly: "f69f05be0f4f3f2a82dd5cc90c9804fdbcc4a3b5"
+    entity_resolved_graph_fallback: "dbbe57f3bf6e21e58beaeb5c5137cbcce6fe7814"
+    alias_ood_control: "3171d844a91cf0a20fadb64bef078923bbec6260"
+    gap_controller: "4fd81671412b64e279c446e65167982acd1a73a2"
+    paraphrase_invariant_gap_signature: "eeb2421e605fa18a58e6f69be6f50ea2c3eda38d"
+    compositional_frontier: "f110e980faf8ba6bf7627a3b8cc610c4f3232b0e"
+    compositional_stress: "9019e44ddaff6c48a77d507e2224be1438caa581"
+    fused_runtime_bridge: "adb5b5951bbfb8a06d3b08552198e30c93223b85"
+    measured_break_even_analysis: "488bf1c48c8ea9742b65ced3806cb19fabd5dfbc"
+  }
+
+  promotion_gates [
+    HELD_OUT_REAL_NATURAL_LANGUAGE_ANCHOR_AND_REQUIREMENT_RESOLUTION,
+    REAL_CAPABILITY_ROUTE_FIXTURES,
+    STALE_NOISY_CONTRADICTORY_GRAPH_INJECTION,
+    ENTITY_ALIAS_MISSPELLING_PRONOUN_AMBIGUITY,
+    MATCHED_FTS5_POSTGRES_PGVECTOR_DENSE_LATE_INTERACTION_GRAPH_DATABASE_BASELINES,
+    WRITE_RATE_AMORTIZATION_BREAK_EVEN,
+    INCREMENTAL_VS_FULL_REBUILD_EQUIVALENCE_AND_TOTAL_COST,
+    BUILD_UPDATE_INVALIDATION_MEMORY_IO_TOKEN_COST,
+    DOWNSTREAM_ANSWER_TASK_AND_CONTEXT_QUALITY,
+    HOSTINGER_UBUNTU_REPLICATION,
+    ANDREAS_TARGET_ACCEPTANCE
+  ]
+
+  strongest_counterhypothesis: "Observed gains are workload-specific materialization/caching plus benchmark-aligned semantic typing; a well-tuned conventional exact, dense/late-interaction, relational or graph engine may dominate individual query classes, and churn/staleness may erase compile-time gains. The candidate wins only if adaptive routing plus preprocessing improves the end-to-end workload vector."
+
+  canonical_promotion: NONE
+}

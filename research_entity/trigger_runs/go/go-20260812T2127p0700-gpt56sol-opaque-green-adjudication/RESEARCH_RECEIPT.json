@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2127p0700-gpt56sol-opaque-green-adjudication",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "trigger": "go",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_at_boot": "c1a349a59d15b51c8e70dc02b21f7ac410e7db3c",
+    "product_pr": 544,
+    "candidate_head": "5662096961fc41482c5d62e9c9e2b9bd5ad17ebf",
+    "candidate_merge_sha": "844b4d9bc4fdc071aca4fda4f108148c481ead46",
+    "workflow_run": 31606560787,
+    "workflow_job": 94146883885,
+    "runner": "clay",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "workflow_conclusion": "success",
+    "green_steps": [
+      "immutable candidate SHA fetch",
+      "pinned lark/interegular dependency provisioning",
+      "changed-byte binding and compile",
+      "opaque-versus-plain parser fidelity",
+      "existing WP04 nominal source gate",
+      "repository static integrity"
+    ]
+  },
+  "primary_source_context": {
+    "lark_tree_construction": "Lark filters unnamed literals as punctuation by default while named terminals remain in the tree; keep_all_tokens defaults false.",
+    "interpretation": "This independently supports the mechanism behind moving opaque from an anonymous literal to named OPAQUE_KW at the class_decl lowering boundary. External documentation is mechanism context only, not Clay authority."
+  },
+  "generated_reality": {
+    "hypothesis": "The class-boundary OPAQUE_KW repair restores source opacity fidelity without changing ordinary identifier/alias behavior outside the exact reserved word.",
+    "strongest_counter_reality": "Introducing OPAQUE_KW could steal opaque-prefixed ordinary identifiers or otherwise broaden lexical shadowing beyond the pre-existing reserved exact word."
+  },
+  "unusual_experiment": {
+    "name": "OPAQUE_PREFIX_CROWN",
+    "count_for_this_go_macrocycle": 1,
+    "environment": "disposable local in-memory Lark 1.3.1 grammar projection",
+    "external_effect": false,
+    "canonical_state_mutation": false,
+    "baseline": "legacy anonymous opaque literal with the candidate NAME exclusion regex",
+    "treatment": "named OPAQUE_KW at class_decl boundary with the same NAME exclusion regex",
+    "cases": {
+      "plain_record": "legacy PASS / candidate PASS with matching tree shape",
+      "opaque_record": "legacy PASS but opaque marker filtered / candidate PASS with visible opaque token",
+      "opaque_prefix_type_name": "legacy PASS / candidate PASS",
+      "opaque_prefix_alias_rhs": "legacy PASS / candidate PASS",
+      "exact_opaque_type_name": "legacy REJECT / candidate REJECT",
+      "exact_opaque_field_name": "legacy REJECT / candidate REJECT"
+    },
+    "outcome": "NO_NEW_LEXICAL_SHADOW_OBSERVED",
+    "meaning": "The bounded counterworld did not reproduce a new OPAQUE_KW identifier regression. Exact opaque was already reserved by the legacy NAME negative lookahead; opaque-prefixed identifiers remained admitted."
+  },
+  "grf_collapse": [
+    {
+      "claim": "Current PR #544 repair is still unverified because its final run is queued.",
+      "outcome": "REJECT",
+      "evidence": "workflow 31606560787 completed success on self-hosted Linux/X64"
+    },
+    {
+      "claim": "Named OPAQUE_KW necessarily creates a new lexical shadow for opaque-prefixed identifiers.",
+      "outcome": "REFUTED_IN_BOUNDED_COUNTERWORLD"
+    },
+    {
+      "claim": "PR #544 closes F-V01-02 or evaluator/runtime acceptance.",
+      "outcome": "REJECT",
+      "reason": "It repairs parser/typed-syntax fidelity only; draft #536 still quarantines parsed-source records and must consume/rebase the fix plus rerun its runtime boundary."
+    },
+    {
+      "claim": "PR #544 parser fidelity mechanism is supported on the tested current PR composition.",
+      "outcome": "SUPPORTED",
+      "scope": "self-hosted parser/WP04/static-integrity evidence only"
+    }
+  ],
+  "next_smallest_falsifier": {
+    "target": "compose PR #544 opacity fidelity into draft #536 runtime nominal boundary",
+    "required_observations": [
+      "parsed plain record is runtime-contract admissible when all nested nominal fields are bound",
+      "parsed opaque record remains rejected as requiring a trusted producer",
+      "record identity/fieldset/nested nominal checks remain exact",
+      "Bool/Int crown-swap regression remains rejected",
+      "WP04 source gate remains PASS",
+      "no external effect or authority minted"
+    ],
+    "promotion_boundary": "Do not relax RUNTIME_PARSED_RECORD_OPAQUE_FIDELITY_UNPROVEN until the composed parsed-source runtime gate passes on an exact current composition."
+  },
+  "nonclaims": {
+    "f_v01_02_pass": false,
+    "whole_frank_v01_pass": false,
+    "harness_authority": false,
+    "effect_authority": false,
+    "training_authorized": false,
+    "accepted_hostinger_product_runtime_proven": false
+  }
+}

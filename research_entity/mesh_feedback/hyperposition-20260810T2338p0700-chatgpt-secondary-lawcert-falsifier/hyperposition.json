@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier",
+  "branch": "hyperposition",
+  "status": "ARCHITECTURE_DELTA_CANDIDATE",
+  "target_work_package": "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+  "cross_branch_consumers": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "finding": "HyperMath LawCertificate rewrite declarations need carrier-implementation/version-bound validation. A bounded executable falsifier rejected a false associativity declaration; bounded PASS is not universal proof.",
+  "architecture_ref": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier/architecture/HYPERMATH_LAWCERT_VALIDATION_GATE_CANDIDATE.clay",
+  "test_ref": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier/tests/law_certificate_falsifier.py",
+  "report_ref": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier/FINAL_REPORT.md",
+  "promotion": "NONE",
+  "required_validation": "When a real HyperMath optimizer exists, adversarially inject false/stale/wrong-version/out-of-domain certificates and measure semantic errors, invalidation, rollback/recovery and cost against ordinary compiler-test baselines.",
+  "authority": "validator-only; no Frank self-Harness mutation authority; no effect authority"
+}

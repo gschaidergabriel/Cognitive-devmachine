@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "candidate":"IAC-001",
+  "question":"Does exact action invariance save recurrence while avoiding premature halt, and does it require a distinct runtime architecture?",
+  "world_model":{"states":32,"binary_features":5,"actions":4,"regimes":["COMPRESSED","MODERATE","PARITY_SYNERGY","RARE_BRANCH","DIFFUSE randomized per seed"]},
+  "methods":["IAC","MYOPIC_VOC","ACTION_CONFIDENCE_0.90","STATE_CERTAINTY","FIXED3","ordinary ACTION_SET_CARDINALITY equivalence","resource-matched randomized fixed budget"],
+  "primary_metrics":["decision accuracy","queries/recurrences used","remaining epistemic states at halt","predicate-check cost proxy"],
+  "safety_controls":["stale decision epoch","broken Hyperposition coverage","random/diffuse action map","rare low-mass action branch","multi-query parity synergy"],
+  "acceptance_for_typed_law":["100% in-support decision correctness for IAC in deterministic corpus","coverage/epoch lesions fail closed","strictly less recurrence than state certainty in action-compressed regimes"],
+  "kill_distinct_architecture_if":["ordinary action-set cardinality predicate is equivalent","known action-preserving planning/belief methods subsume broad novelty"],
+  "evidence_class":"LOCAL_SYNTHETIC_REFERENCE_MODEL_ONLY"
+}

@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "run_id": "go-20260812T2215p0700-gpt56sol-sqlite-provider-scope",
+  "observed_at": "2026-08-12T15:15:00Z",
+  "canonical_entity_revision": 2,
+  "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "research_repo_head_before_write": "9b861b37c672df41e997aebb2b55c33c2dbe4e24",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_head": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "current_attestor": {
+    "path": "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py",
+    "blob_sha": "3a317aa256f17ef316580947e9a44e43aca6fe1a",
+    "proof_scope": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY",
+    "observed_filter_semantics": "Only /proc/<pid>/maps pathnames whose basename contains libsqlite3.so enter the SQLite mapping identity set.",
+    "nonclaim": "The attestor does not claim productive Frank persistence-path exercise or Frank identity."
+  },
+  "fresh_repo_evidence": [
+    {
+      "pr": 545,
+      "state": "MERGED",
+      "result": "Receipt-tail SQLite mapping is re-sampled after process metadata and same-generation mapping change fails closed.",
+      "boundary": "Productive Frank service/persistence-path/restart/rollback/provider-call identity remain open."
+    },
+    {
+      "pr": 546,
+      "state": "CLOSED_WITHOUT_MERGE_NEGATIVE_RESULT",
+      "result": "PID plus process start ticks does not uniquely identify executable image across same-PID execve; exact tested Python-to-sleep treatment is already closed by merged PR 545."
+    },
+    {
+      "pr": 327,
+      "state": "OPEN_DRAFT_HISTORICAL_MECHANISM_EVIDENCE",
+      "result": "Earlier same-source-id renamed-provider preload interposition falsified a weaker V1 admission claim; later guards added loader-environment/provider checks."
+    }
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://www.sqlite.org/wal.html",
+      "fact": "The WAL-reset corruption bug affects SQLite through 3.51.2 and is fixed in 3.51.3 and later; trigger requires WAL plus concurrent connections and concurrent write/checkpoint timing."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "fact": "3.53.4 descends from the fixed 3.53 line and reports source id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    },
+    {
+      "source": "Linux kernel /proc documentation",
+      "url": "https://www.kernel.org/doc/html/latest/filesystems/proc.html",
+      "fact": "/proc/PID/maps describes currently mapped memory regions with pathname/device/inode information; mapping presence is not itself an attribution of application call-path ownership."
+    },
+    {
+      "source": "Python sqlite3 documentation",
+      "url": "https://docs.python.org/3/library/sqlite3.html",
+      "fact": "sqlite3.sqlite_version reports the runtime SQLite library version used by the Python sqlite3 module."
+    }
+  ],
+  "grf": {
+    "observed_anchor": "Current live attestor strongly fences one expected libsqlite3 mapping identity but intentionally has narrower scope than productive persistence-path/provider identity.",
+    "generated_reality": "If the productive Frank DB call path is necessarily bound to the attested expected SQLite object, current mapping attestation plus a real persistence-path exercise can close the remaining storage-runtime identity gap.",
+    "counter_reality": "A process can retain the expected attested libsqlite3 mapping while a differently named second SQLite-API provider is also mapped; filename-filtered mapping identity alone cannot prove which provider a productive DB operation actually used.",
+    "falsifier": "Bind a real productive Frank persistence operation to provider identity from inside the actual SQLite call path, then require exact match to the root-anchored 3.53.4 object across restart and rollback/downgrade tests.",
+    "outcome": "RETAIN_TEST_OBLIGATION"
+  },
+  "unusual_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "name": "POST_ADMISSION_RENAMED_PROVIDER_MAPPING",
+    "class": "BOUNDED_LOCAL_LINUX_MECHANISM_CONTROL",
+    "setup": "A disposable C loader process dlopen()ed a tiny expected DSO named libsqlite3.so.0 exporting sqlite3_libversion, then treatment additionally dlopen()ed a second tiny provider exporting the same API under basename frank_shadow_provider.so. No database was opened.",
+    "baseline": {
+      "expected_symbol": "EXPECTED_PROVIDER",
+      "attestor_style_filtered_identity_count": 1,
+      "filtered_mapping": "<temp>/libsqlite3.so.0"
+    },
+    "treatment": {
+      "expected_symbol": "EXPECTED_PROVIDER",
+      "shadow_symbol": "RENAMED_SHADOW_PROVIDER",
+      "shadow_mapping_present": true,
+      "attestor_style_filtered_identity_count": 1,
+      "shadow_seen_by_current_name_filter": false
+    },
+    "interpretation": "SUPPORTED_SCOPE_LIMITATION_ONLY",
+    "claim_boundary": "This does not demonstrate a Frank exploit, does not bypass V5/V6 startup guards, and does not show that Frank currently calls an alternate provider. It only proves that the current live-attestor pathname filter cannot by itself establish closure over differently named SQLite-API providers.",
+    "rollback": "Temporary files/processes only; process terminated and temporary directory removed."
+  },
+  "recommended_next_falsifier": {
+    "priority": "HIGH",
+    "name": "PRODUCTIVE_SQLITE_CALLPATH_PROVIDER_ATTESTATION",
+    "requirements": [
+      "Exercise the exact productive Frank persistence path on the accepted Ubuntu lane.",
+      "Record sqlite3.sqlite_version and SQLite source id from that same runtime path.",
+      "Bind the provider used by the actual DB call path to the root-anchored DSO identity rather than inferring from a matching mapping elsewhere in the process.",
+      "Require exact device/inode/hash/source-id continuity before and after the operation.",
+      "Repeat after clean restart and under downgrade/library-swap negative controls.",
+      "Fail closed if provider attribution is unknown, divergent, stale, or cannot be reconciled."
+    ]
+  },
+  "release_effect": {
+    "F_V01_13": "REMAINS_IN_PROGRESS",
+    "FRANK_V0_1": "NO_COMPLETION_CLAIM",
+    "training_authorized": false,
+    "harness_authority_changed": false,
+    "productive_host_mutated": false,
+    "canonical_frank_state_mutated": false
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version":"2.0",
+  "run_id":"unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "status":"RESEARCH_PLAN_NOT_AUTHORIZED_FOR_CANONICAL_MIGRATION",
+  "phases":[
+    {
+      "phase":"P0_MEASURE_ONLY",
+      "changes":["record sqlite_source_id/compile options/journal mode","measure current query/recovery behavior","no schema enforcement"],
+      "rollback":"none required"
+    },
+    {
+      "phase":"P1_SHADOW_RECEIPTS",
+      "changes":["compute live sqlite_schema digests","compute candidate CanonicalRootChain in parallel with existing root_hash","emit StateProjectionCertificate candidates","emit SelectionReceiptV2 candidates","capture explicit as_of_valid_time beside legacy queries"],
+      "enforcement":"NONE",
+      "rollback":"stop emitting shadow receipts; preserve evidence"
+    },
+    {
+      "phase":"P2_REPLAY_FALSIFIERS",
+      "changes":["BYTE_STABLE_TIME_SHIFT","SAME_EPOCH_SIBLING_ROOT","SAME_SCHEMA_DYNAMIC_SKEW","AUTHENTIC_RECORDS_UNTRUSTED_SELECTOR","COMMITTED_WAL_ONLY_FRAME","live-schema rogue/missing object probes"],
+      "promotion_gate":"all negative controls discriminate correctly and current valid traces remain equivalent",
+      "rollback":"shadow only"
+    },
+    {
+      "phase":"P3_SNAPSHOT_MANIFEST_V2",
+      "changes":["create Online Backup/VACUUM INTO consistent images","bind build/source/schema/root/cursor/external-floor metadata","restore to disposable state and replay root"],
+      "promotion_gate":"restore equivalence + external-floor stale restore rejection",
+      "rollback":"retain legacy snapshots as historical but mark method/coverage UNKNOWN; do not delete"
+    },
+    {
+      "phase":"P4_QUERY_CONTRACT",
+      "changes":["route replay-critical temporal reads through explicit as_of_valid_time + semantic root","require SelectionReceiptV2 for authoritative derived selections","allow canonical-only fallback"],
+      "promotion_gate":"typed result equivalence against legacy live-now path at captured same as_of; deterministic historical replay",
+      "rollback":"switch planner feature flag to legacy route; preserve receipts"
+    },
+    {
+      "phase":"P5_PROJECTION_ADMISSION",
+      "changes":["authoritative StateProjectionCertificate admission in UnifiedDB","ClayGraph mirror/watermark","truth-critical exact-root gate","exploratory bounded-lag classes"],
+      "promotion_gate":"crash/rebuild/lag matrix + no authority promotion from Graph",
+      "rollback":"disable Graph-assisted truth-critical path; rebuild/fallback to UnifiedDB"
+    },
+    {
+      "phase":"P6_STORAGE_PROFILE_AB",
+      "profiles":[
+        {"name":"SYSTEM_SAFE_DELETE","journal":"DELETE","synchronous":"FULL","experiment":"bounded ATTACH atomic projection batch"},
+        {"name":"PRIVATE_FIXED_WAL","journal":"WAL","experiment":"canonical outbox + async StateProjectionCertificate replay"}
+      ],
+      "metrics":["correctness","crash recovery","p50/p95/p99","lock wait","fsync/io","write amplification","RSS/CPU","projection lag","rebuild time"],
+      "decision":"no mode promoted by speed if replay/selection/recovery invariants fail",
+      "rollback":"return to last target-proven storage profile"
+    },
+    {
+      "phase":"P7_ENFORCE_ROOT_AND_RECOVERY",
+      "changes":["CanonicalRootChain becomes mandatory for new epochs","lineage parent CAS","external floor binds canonical head/root and schema/build contract","SnapshotManifestV2 required for restore admission"],
+      "promotion_gate":"accepted-target crash/restart/rollback/sibling/transplant matrix",
+      "rollback":"fail closed to read-only/recovery mode; never invent a new current lineage"
+    }
+  ],
+  "keep_isolated":[
+    "external rollback floor",
+    "provider-side idempotency/reconciliation evidence",
+    "derived large vector/tensor payload where measured physical isolation is superior"
+  ],
+  "non_goals":["force all bytes into one SQLite file","make ClayGraph authoritative","start final/paid training","mutate Frank/self.root Harness"],
+  "promotion":"HOLD"
+}

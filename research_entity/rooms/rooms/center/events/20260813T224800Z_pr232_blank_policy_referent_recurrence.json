@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0",
+  "event_id": "clay-live-20260813T224800Z-pr232-blank-policy-referent-recurrence",
+  "kind": "LIVE_RESEARCH_FUSION_DELTA",
+  "observed_at_utc": "2026-08-13T22:48:00Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "training_authorized": false
+  },
+  "comparison_cut": {
+    "previous_research_head": "99bcc33c5f95ec85ee3f94908517a739271ac19a",
+    "research_head_observed": "fd902b4dbbf1b7bda174636ba3b75986dfca0e1f",
+    "target_main_observed": "dc2af6421355c899ee076a3e8089e8f6407a1d54"
+  },
+  "substantive_deltas": [
+    {
+      "id": "D-PR232-BLANK-POLICY-001",
+      "disposition": "UNCONFIRMED_FAIL_CLOSED_POLICY_HYPOTHESIS",
+      "research_claim": {
+        "claimed_current_pr_head": "f2e279e27c827219572258fcb436e5a1e271c43c",
+        "claimed_repair": "344acd5e2033b66cb4556260c209da9d087d0f3a",
+        "claimed_mechanism": "require assistant final content.strip() to be nonblank"
+      },
+      "primary_source_boundary": "NVIDIA NIM documents OpenAI-compatible chat completions and examples containing assistant content plus finish_reason, but no located primary text establishes whitespace-only content as a provider-schema violation. Nonblank acceptance is therefore local fail-closed adapter policy, not NVIDIA semantics."
+    },
+    {
+      "id": "D-PR232-REFERENT-RECURRENCE-002",
+      "disposition": "FRESH_AUTHENTICATED_OBJECT_CONTRADICTION_FAIL_CLOSED",
+      "fresh_connector_observation": {
+        "pr232_state": "OPEN_DRAFT",
+        "pr232_head": "ab82f6c4e34fbcb79a9ed89a2c4e46de6f514d95",
+        "pr232_updated_at": "2026-08-13T03:13:21Z",
+        "f2e279e_content_fetch": "404_NO_COMMIT_FOUND",
+        "repair_344acd5_content_fetch": "404_NO_COMMIT_FOUND",
+        "compare_344acd5_to_f2e279e": "404_NOT_FOUND",
+        "target_main": "dc2af6421355c899ee076a3e8089e8f6407a1d54"
+      },
+      "boundary": "This does not prove the two claimed commits never existed on another plane. It does prove that the current supervisor assertion is not referent-closed on the connected canonical GitHub plane and cannot mint current-head, code or provider credit."
+    },
+    {
+      "id": "D-PR232-ZERO-STEP-003",
+      "disposition": "RESEARCH_REPORTED_INSTRUMENT_NULL_RESULT_NOT_INDEPENDENTLY_PROMOTED",
+      "research_claim": {
+        "verify_run": 31747087811,
+        "verify_job": 94604107631,
+        "identity_run": 31747088116,
+        "identity_job": 94604108786,
+        "reported_steps_each": 0,
+        "reported_runner_id": 0
+      },
+      "boundary": "Preserve as a zero-step/no-runner instrument claim. It carries zero semantic, identity-guard or provider verdict credit, and its claimed tested head remains inside the referent conflict."
+    }
+  ],
+  "preserved_negative_null_and_inconclusive": [
+    "No new target-main commit exists after dc2af642.",
+    "No accepted Ubuntu live external network/effect receipt was found.",
+    "No current PR232 execution with bound tested SHA and executed decision steps was verified.",
+    "No evidence was found that NVIDIA guarantees whitespace-only assistant content to be invalid.",
+    "The two research commits are one supervisor/inbox response lineage and are not independent evidence.",
+    "No BASE/Frank promotion, training, productive Harness mutation or whole-system acceptance occurred."
+  ],
+  "testable_hypotheses": [
+    {
+      "id": "H-NONBLANK-TERMINAL-POLICY-001",
+      "hypothesis": "For text-only Frank routes, HTTP 200 plus finish_reason=stop is insufficient; a nonblank normalized assistant payload is required before VERIFIED/DONE.",
+      "counterhypothesis": "Transport success and terminal finish reason are sufficient even when visible content is whitespace-only.",
+      "test": "Execute an adapter matrix over empty, spaces, tabs, newlines, Unicode whitespace, tool-only, refusal and ordinary text responses; require explicit route-specific outcomes and no effect commitment before admissible content.",
+      "falsifier": "A whitespace-only response is safely and intentionally consumable by an authorized downstream route, or the policy rejects a valid non-text terminal route that was explicitly admitted."
+    },
+    {
+      "id": "H-PR-OBJECT-ATOMIC-REFERENT-001",
+      "hypothesis": "A current-PR credit receipt must atomically bind the PR object response, repository identity, head SHA, resolvable commit, workflow head_sha, job steps and verdict.",
+      "counterhypothesis": "A committed supervisor statement plus separately observed workflow metadata is sufficient.",
+      "test": "Produce one freshness-bounded raw receipt, immediately replay it through a second authenticated path and reject the entire credit unit if any referent differs.",
+      "falsifier": "Credit remains reproducibly sound despite an unresolved or contradictory PR head."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Policy/Schema Decoupling",
+      "definition": "A local fail-closed acceptance rule may be stricter than the provider schema and must be labeled as policy rather than external fact."
+    },
+    {
+      "name": "Referent Drift Recurrence",
+      "definition": "A previously quarantined object-identity conflict reappears in later control state despite an explicit freshness-bound closure rule."
+    },
+    {
+      "name": "Terminal Snow",
+      "label": "abgefahren / testable",
+      "definition": "A response looks structurally complete while its visible payload contains only whitespace, creating a false completion signal."
+    }
+  ],
+  "routing": [
+    {
+      "consumers": ["claycode", "clayresearch", "frank", "harness"],
+      "priority": "CRITICAL",
+      "impulse": "Quarantine f2e279e and 344acd5 current-head/code credit until one atomic PR-object receipt resolves them. Preserve the nonblank rule only as a testable local policy. Do not rerun on the productive Harness."
+    },
+    {
+      "consumers": ["unifieddb", "claygraph", "hyperposition"],
+      "priority": "HIGH",
+      "impulse": "Represent claim-source, observation-plane, repository object, PR role, commit existence and execution receipt as separate edges; mark this recurrence rather than overwriting the earlier conflict."
+    },
+    {
+      "consumers": ["gwt", "emergenz"],
+      "priority": "MEDIUM",
+      "impulse": "Treat structurally terminal but semantically blank messages as a null broadcast class; test whether downstream ignition/reentry occurs without usable content."
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html",
+      "use": "NIM exposes OpenAI-compatible chat completions; no located guarantee makes whitespace-only content a schema violation."
+    },
+    {
+      "url": "https://docs.nvidia.com/nim/large-language-models/2.0.6/day-0/get-started-nemotron-3-ultra.html",
+      "use": "Official completion examples separate assistant content from finish_reason and show empty streaming deltas can occur."
+    },
+    {
+      "url": "https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#get-a-pull-request",
+      "use": "The PR object is the authoritative freshness-bound source for its current head reference."
+    }
+  ],
+  "routing_receipt": {
+    "target": "research_entity/rooms/rooms/center/events",
+    "delivery": "repo-native provenance event",
+    "active_external_worker_execution_claimed": false
+  },
+  "nonclaims": {
+    "target_execution_by_this_organ": false,
+    "target_repository_mutated": false,
+    "harness_mutated": false,
+    "training_performed": false,
+    "canonical_promotion": false,
+    "provider_capability_promoted": false,
+    "independent_replication": false
+  }
+}

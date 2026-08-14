@@ -1,0 +1,29 @@
+{
+  "candidate": "ATOMIC-CMX-001",
+  "decision": "NO_ARCHITECTURE_PROMOTION",
+  "next_falsifier": "On exact current Frank procedural traces, compare latest-version/supersession, provenance+recency, explicit denoising/aggregation and any utility memory candidate. Only revisit CMX if a predeclared case shows unique defect coverage or Pareto gain and the counterfactual-coupon/rent ablations become positive.",
+  "primary_result": "Counterfactual coupon and rent are not causally supported by ablations. Strong newest-verified baseline wins from 0-10% evidence noise and is ~10x faster than CMX in the local selection microbench. CMX only crosses latest at 15% noise, where its defining ablations still fail.",
+  "proxy_numbers": {
+    "cmx_context_proxy": 4.11875,
+    "cmx_full_noise10": 0.8169791666666667,
+    "cmx_no_coupon_noise10": 0.82375,
+    "cmx_no_rent_noise10": 0.8266666666666667,
+    "cmx_ns_query": 53055.43916666666,
+    "latest_context_proxy": 3.3334375,
+    "latest_ns_query": 5031.7155,
+    "metadata_bytes_cmx": 175,
+    "metadata_bytes_conventional": 87,
+    "noise0_cmx": 0.8362499999999999,
+    "noise0_latest": 0.8979166666666667,
+    "noise10_cmx": 0.8169791666666667,
+    "noise10_latest": 0.8315625,
+    "noise15_cmx": 0.805625,
+    "noise15_latest": 0.7927083333333333
+  },
+  "run_id": "20260810T2246p0700-chatgpt-secondary-cmx-memory-exchange",
+  "schema_version": "1.0",
+  "status": "TESTED_PROXY_REFUTED_AS_DEFINED",
+  "training_started": false,
+  "useful_delta": "For Frank v0.1 F-V01-11, make version/provenance/supersession the first memory baseline and keep procedural utility separate from factual/identity/authority memory. Do not implement CMX unless a real procedural-memory benchmark defeats simpler denoising/versioned baselines.",
+  "whole_frank_acceptance_claimed": false
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "sources": [
+    {"id":"S1","class":"INTERNAL_CURRENT","ref":"research_entity/retina/QWEN_NATIVE_DISSOLVED_RETINA_FUSION_CANDIDATE_20260810.md"},
+    {"id":"S2","class":"PRIMARY_CODE","ref":"huggingface/transformers:src/transformers/models/qwen3_5/modeling_qwen3_5.py@blob:e563ad83c34494112557e88a8173e5a55b8d77f9"},
+    {"id":"S3","class":"PRIMARY_CODE","ref":"ggml-org/llama.cpp:tools/mtmd/mtmd.h@blob:e5063d114cc9dc534951a14c57d63b699fb6d182"},
+    {"id":"S4","class":"OFFICIAL_MODEL_REPO","ref":"QwenLM/Qwen3-VL-Embedding@README:273604572610ef6596c489f1a277539e8f2de81a;code:a2d4a73349c4648c5d66633eccd57e02aea1279f"},
+    {"id":"S5","class":"PRIMARY_RESEARCH","ref":"arXiv:2601.04720"},
+    {"id":"S6","class":"CURRENT_RUNTIME_FAILURE_REPORT","ref":"ggml-org/llama.cpp#25717"},
+    {"id":"S7","class":"RUNTIME_SEMANTIC_FAILURE_REPORT","ref":"ggml-org/llama.cpp#19929"},
+    {"id":"S8","class":"RUNTIME_SEMANTIC_FAILURE_REPORT","ref":"ggml-org/llama.cpp#22785"},
+    {"id":"S9","class":"RESOURCE_FAILURE_REPORT","ref":"ggml-org/llama.cpp#19980"},
+    {"id":"S10","class":"PREPROCESSING_FAILURE_REPORT","ref":"ggml-org/llama.cpp#20870"}
+  ],
+  "claims": [
+    {"id":"C1","claim":"One current Qwen vision forward can expose pre-merger and merged visual representations before language decoding.","supported_by":["S2"],"status":"PRIMARY_CODE_SUPPORTED"},
+    {"id":"C2","claim":"Current libmtmd public API exposes encoded merged media embeddings after encode.","supported_by":["S3"],"status":"PRIMARY_CODE_SUPPORTED"},
+    {"id":"C3","claim":"Raw generative vision-projector features must not be assumed calibrated for retrieval/open-set use.","supported_by":["S4","S5"],"status":"COUNTERHYPOTHESIS_SUPPORTED_NOT_UNIVERSAL_PROOF"},
+    {"id":"C4","claim":"Runtime/preprocessing configuration can materially affect multimodal correctness/stability and therefore must be part of the prototype compatibility test surface.","supported_by":["S6","S7","S8","S9","S10"],"status":"FAILURE_ECOLOGY_SUPPORTED_TARGET_MEASUREMENT_REQUIRED"},
+    {"id":"C5","claim":"Merged-feature-first MVC is the cheapest next discriminating architecture experiment.","supported_by":["S1","S2","S3","S4","S5"],"status":"INFERENCE_ARCHITECTURE_CANDIDATE"}
+  ],
+  "epistemic_rule": "Issue reports generate hazards/tests and can support existence claims; they do not establish prevalence or target-runtime failure without local reproduction."
+}

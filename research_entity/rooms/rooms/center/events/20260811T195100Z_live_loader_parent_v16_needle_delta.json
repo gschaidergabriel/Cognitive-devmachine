@@ -1,0 +1,207 @@
+{
+  "schema_version": "CLAY_CENTER_LIVE_RESEARCH_DELTA_V2",
+  "event_id": "20260811T195100Z_live_loader_parent_v16_needle_delta",
+  "created_at_utc": "2026-08-11T19:51:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "provider": "OpenAI",
+    "training_performed": false,
+    "external_target_execution_performed_by_this_actor": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "comparison_cut": {
+    "previous_notified_research_event_commit": "9f248e20e43dc7c02b70f6d568bc450b067e39c1",
+    "previous_notified_event_blob": "b7e915660f458ac9120338745a9ee9a8a4d67ab0",
+    "previous_notified_event_sha256": "700f433ca4f4b0e0532fe440da7bd915e587f305e90cdcc7bb6259e765baefce",
+    "previous_notified_event_path": "research_entity/rooms/rooms/center/events/20260811T185900Z_live_wp04_abi_sqlite_needle_delta.json",
+    "research_head_observed_before_write": "9678fc7cc33b60d92405510c69aa5a472dc2471a",
+    "target_main_previous": "81ec1c571e231cfe90c4a4343150a4f4b7e99ec8",
+    "target_main_observed": "0f0ea1e03c869167783d111a29b241424dfce111",
+    "change_class": "SUBSTANTIVE_LOADER_PARENT_STORAGE_V16_AND_COMPOSITION_DELTA"
+  },
+  "canonical": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "advanced_by_this_event": false
+  },
+  "fresh_primary_sources": [
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T19:48:00Z",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+      "finding": "SQLite documents the WAL-reset corruption race through 3.51.2 and the fixed floor at 3.51.3, with only explicitly identified backports."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T19:48:00Z",
+      "url": "https://sqlite.org/releaselog/3_51_3.html",
+      "finding": "SQLite 3.51.3 explicitly records the WAL-reset fix and an exact source identity; release identity must be reviewed, not inferred from a larger version string alone."
+    },
+    {
+      "source_class": "PRIMARY_SYSTEM_MANUAL",
+      "retrieved_at_utc": "2026-08-11T19:48:00Z",
+      "url": "https://man7.org/linux/man-pages/man8/ld.so.8.html",
+      "finding": "The ELF loader consumes LD_PRELOAD, LD_AUDIT and LD_LIBRARY_PATH before the program begins; a shell cannot retroactively prevent code already executed by its own loader."
+    },
+    {
+      "source_class": "PRIMARY_VENDOR_PACKAGE_RECORD",
+      "retrieved_at_utc": "2026-08-11T19:48:00Z",
+      "url": "https://launchpad.net/ubuntu/+source/sqlite3/3.45.1-1ubuntu2.5",
+      "finding": "Ubuntu's published SQLite package records enumerate patch purposes. Project inspection of the installed 3.45.1-1ubuntu2.7 source patchset found no wal.c touch or WAL-reset fix marker; this is a source-patchset negative, not universal binary proof."
+    }
+  ],
+  "material_deltas": [
+    {
+      "id": "D-SQLITE-RELEASE-IDENTITY-AND-LOADER-PARENT",
+      "routes": ["unifieddb", "frank", "security", "recovery", "harness", "claygraph"],
+      "support": [
+        "Target main abd769d5cee835af2b1b867041e52f8a443a3060 merged an exact V5 release identity fence after accepted-target run 31528402922 passed. It accepts only the reviewed SQLite 3.53.4 source identity and rejects 3.45.1, same-version wrong-source and unreviewed future identities.",
+        "The installed target line is libsqlite3-0 3.45.1-1ubuntu2.7. Published-source inspection found no patch touching wal.c and no WAL-reset marker; the published-backport route is therefore rejected for this exact source patchset while a universal binary-backport claim remains unmade.",
+        "Accepted-target PRE_GUARD_PRELOAD_SENTINEL showed an inherited LD_PRELOAD library executing before the V5 shell's first statement. Target main aa5f84c31c46ab3e3c405231cf93bddd1f7d51d8 now rejects and unsets LD_PRELOAD, LD_AUDIT and LD_LIBRARY_PATH before helpers, while explicitly requiring a clean upstream parent because the shell check is downstream of loader execution.",
+        "Read-only parent inventory run 31529433345 / job 93905615857 / artifact 9116256837 digest sha256:83aec89f7dac5076ea0ad1b5066f85af3a489665ab1b1ebd583a632260c21293 observed the Actions runner unit but zero separate Frank systemd units, live product processes and product service files from runner context."
+      ],
+      "counterevidence_and_limits": [
+        "The shell loader-variable check is useful fail-closed telemetry and propagation control, but cannot undo a preload that already executed.",
+        "Zero product-parent candidates is a scoped target observation, not proof about other namespaces, hosts or times.",
+        "No fixed runtime, root anchor or productive Frank service is presently evidenced as installed and composed; F-V01-13 remains release-blocking."
+      ],
+      "adjudication": "RELEASE IDENTITY AND DOWNSTREAM LOADER DEFENSE MERGED; TRUSTED PRODUCT PARENT AND POSITIVE FIXED-RUNTIME COMPOSITION ABSENT."
+    },
+    {
+      "id": "D-SQLITE-ROOT-PROVISION-CANDIDATE",
+      "routes": ["deployment", "unifieddb", "recovery", "security", "harness"],
+      "support": [
+        "Draft PR 440 stages an externally digest-pinned fixed SQLite manifest and library into a content-addressed root-owned /opt prefix, fsyncs and probes it, commits the runtime before atomically publishing the /etc V5 anchor, and rejects vulnerable or conflicting identity.",
+        "A disposable local root sandbox passed 14/14 including idempotent replay, manifest mismatch refusal, non-writable ownership and 3.45.1 denial."
+      ],
+      "counterevidence_and_limits": [
+        "The local test injects a fake ELF identity probe and is not accepted-target provisioning evidence.",
+        "The current self-hosted target lane has no root capability; /opt and /etc were not modified and PR 440 remains draft."
+      ],
+      "adjudication": "MECHANISM CANDIDATE RETAINED; TARGET ROOT EXECUTION AND PROMOTION BLOCKED."
+    },
+    {
+      "id": "D-V16-IDLE-HANDOFF-PROVENANCE-FENCE",
+      "routes": ["frank", "gwt", "hyperposition", "unifieddb", "harness", "agency"],
+      "support": [
+        "Baseline accepted-target run 31528096679 showed a stale predecessor confirmation could clear its pending handoff while a successor epoch was BUSY; separate V15 BUSY gating still blocked AUTONOMOUS, so this was provenance underbinding rather than a demonstrated parallel-execution escape.",
+        "Target main 0f0ea1e03c869167783d111a29b241424dfce111 merged the combined V16 repair: caller-supplied released epoch, identity match, exact pending epoch, current IDLE-at-that-epoch, cleared execution context and final compare-and-swap.",
+        "Accepted-target run 31529128237 passed normal V16 continuity and the ordinary combined ABA/successor-BUSY regression; artifact 9116156802 digest sha256:d27f762eb5321d451ab3a77081517c82a3b4018f7593f505e64882ff99a3e69d."
+      ],
+      "counterevidence_and_limits": [
+        "Two known unrelated projection schema static-integrity blockers remain and were preserved separately.",
+        "This closes only the tested idle-handoff temporal window; it is not whole Frank, agency or token-ingress acceptance."
+      ],
+      "adjudication": "TARGET-SUPPORTED COMBINED HANDOFF FENCE MERGED; BROADER CONTINUITY REMAINS OPEN."
+    },
+    {
+      "id": "D-CLAYCODE-SECURITY-RELATION-REPAIR",
+      "routes": ["claycode", "security", "frank", "harness"],
+      "support": [
+        "Fresh-main target runs 31526314626 and 31526371062 validated explicit grouping for both negated membership guards under unchanged grammar/parser bytes.",
+        "The tested tree equals the merged tree 9b3ba3688a9bdc8e06e5298930461d37f237381c; target main ab6b57741228c780f51581f8c46c49b295b8b3c5 contains both source-local repairs."
+      ],
+      "counterevidence_and_limits": [
+        "This supports two security predicates only and does not select a language-wide precedence change.",
+        "Unrelated checkout/static-integrity failures that did not reach this semantic gate receive zero credit."
+      ],
+      "adjudication": "SOURCE-LOCAL NEGATED-RELATION REPAIR MERGED WITH EXACT TREE IDENTITY."
+    },
+    {
+      "id": "D-LOOP-NEEDLE-V2-COMPOSITION",
+      "routes": ["gwt", "frank", "hyperposition", "claycode", "emergenz", "harness"],
+      "support": [
+        "Corrected accepted-target run 31525974456 / job 93894266127 passed 10/10 on exact head 3defec3e8882406592d05443c345eff0d3498a25, preserving the original four-arm loop discriminator through Needle preview, external authorization bindings, exact bind, adapter return, independently verified outcome and provenance-bound re-entry.",
+        "Truthful completed; shuffled stopped before preview; provenance-broken refused at re-entry; no-reentry never admitted learning. Artifact 9114993853 digest sha256:abea6cd660e9acf88106ef67cdd2c69393d67be2b88174097eeac8003da20b4d."
+      ],
+      "counterevidence_and_limits": [
+        "The first run was red only because false metadata was mistakenly counted as a PASS assertion; the corrected run supersedes that harness-accounting defect without adding independent evidence.",
+        "Capability, reservation and execution-generation bindings are test-derived; real providers, retries, crash/restart and recovery are untested. PRs 421 and 426 remain drafts and no external effect ran."
+      ],
+      "adjudication": "TARGET-SUPPORTED COMPOSITION CANDIDATE; NOT MAIN OR PRODUCTION."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-PRELOAD-ANTECEDENT-TRUST-001",
+      "claim": "A dynamically linked admission program cannot be its own earliest loader-environment authority; a trusted parent must construct or attest its environment before exec.",
+      "counterhypothesis": "Rejecting LD_PRELOAD, LD_AUDIT and LD_LIBRARY_PATH in the shell is sufficient because contaminated invocations still terminate before product logic.",
+      "discriminator": "Place a sentinel preload before the shell, then compare shell-only rejection with a dedicated parent/service that removes loader controls before exec and binds parent executable, unit bytes and child environment.",
+      "falsifier": "No attacker-controlled code executes before the shell rejection across held-out loader controls and /etc/ld.so.preload, or the proposed parent cannot establish a cleaner antecedent boundary."
+    },
+    {
+      "id": "H-TWO-KEY-SQLITE-ADMISSION-001",
+      "claim": "SQLite production admission needs two independent keys: a reviewed release identity and deployment-owned artifact/anchor authority, followed by live mapped-object equality.",
+      "counterhypothesis": "Exact reviewed version/source-id alone is enough because same-source builds are operationally equivalent.",
+      "discriminator": "Hold release identity constant while changing compile flags/library bytes, then hold bytes constant while changing authorization anchor; require both axes plus live inode/hash before WAL open."
+    },
+    {
+      "id": "H-PRODUCT-PARENT-EXISTENCE-GATE-001",
+      "claim": "ProductStart cannot be accepted until a distinct productive parent/service exists, is observable and binds the loader→launcher→guard→SQLite lineage.",
+      "counterhypothesis": "The CI runner can serve as the production parent because it already supplies a clean loader environment and exact checkout.",
+      "discriminator": "Install or identify a dedicated product unit, then compare its immutable configuration, user, environment, cgroup and live child lineage against the Actions runner while replaying contaminated-environment and restart controls."
+    },
+    {
+      "id": "H-EPOCH-SEMANTIC-IDLE-CONJUNCTION-001",
+      "claim": "Handoff confirmation requires identity, exact release epoch, semantic IDLE state, empty execution context and CAS as a conjunction; no subset safely represents current idleness.",
+      "counterhypothesis": "Explicit epoch equality alone is sufficient and the semantic-idle checks duplicate the execution gate.",
+      "discriminator": "Factorially lesion each conjunct across ABA, successor-BUSY, restart and concurrent confirmation; observe unauthorized clear versus availability cost."
+    }
+  ],
+  "novel_concepts": [
+    {"name": "Preload Antecedent Trust", "definition": "The earliest authority must exist before the dynamic loader can execute caller-selected code."},
+    {"name": "Two-Key SQLite Admission", "definition": "Reviewed semantic release identity and independently owned deployment artifact authority are both required before live-object admission."},
+    {"name": "No Parent, No ProductStart", "definition": "Absence of a separately observable productive execution parent is itself a release-blocking negative result."},
+    {"name": "Semantic Idle Conjunction", "definition": "Current idleness is the intersection of release epoch, presence state, cleared execution context and successful CAS."}
+  ],
+  "provenance_and_deduplication": {
+    "rules_applied": [
+      "SQLite identity, patchset inspection, preload counterworld, parent inventory and root provision are one evolving production-storage lineage with distinct boundaries, not independent votes.",
+      "The first red Needle composition and corrected pass are one lineage; the correction supersedes a metadata-accounting bug.",
+      "Security diagnostic, stale PR and fresh-main merge are one source-local repair lineage; exact tree identity permits merge credit without double counting runs.",
+      "V16 ABA and successor-BUSY are complementary temporal counterexamples fused into one combined fence, not independent whole-system replications.",
+      "No queued, checkout-failed, synthetic-only or blocked-root execution is promoted."
+    ],
+    "independent_replication_claimed": false
+  },
+  "preserved_nulls_and_negatives": [
+    "Published Ubuntu 3.45.1-1ubuntu2.7 source patches contain no observed wal.c or WAL-reset marker; this does not prove every binary-level backport impossible.",
+    "A preload sentinel executed before the shell; later shell rejection cannot erase that execution.",
+    "Zero distinct product units/processes/service files were observed from runner context; the Actions runner is explicitly separated as infrastructure.",
+    "Root provision passed only a disposable local sandbox with injected identity probe and remains blocked on target.",
+    "Needle composition used no real provider effect and remains draft.",
+    "No training, canonical DB mutation, emergence, consciousness or whole-Frank acceptance is claimed."
+  ],
+  "routing_impulses": [
+    {
+      "consumers": ["deployment", "F-V01-13", "UnifiedDB", "recovery", "harness"],
+      "action": "Define and provision a dedicated root-owned productive parent/service. Bind exact unit/drop-in/executable hashes, clean loader environment before exec, PR 440 content-addressed runtime and V5 anchor, then attest live mapped SQLite inode/hash/source-id across restart, downgrade, rollback, library swap and contaminated-parent controls."
+    },
+    {
+      "consumers": ["V16 continuity", "token ingress", "agency", "GWT", "hyperposition"],
+      "action": "Retain the merged semantic-idle conjunction and run held-out concurrent confirmation, restart and stale-epoch schedules. Keep the two unrelated projection schema static blockers separate."
+    },
+    {
+      "consumers": ["GWT", "Needle", "ClayCode authority", "effect gateway", "reentry", "harness"],
+      "action": "Replace test-derived hard-binding producers with canonical capability/reservation/generation producers and replay truthful/shuffled/provenance-broken/no-reentry plus provider uncertainty, retries and crash/restart before considering PRs 421/426."
+    },
+    {
+      "consumers": ["ClayCode parser", "security", "corpus audit"],
+      "action": "Keep the two merged predicates explicitly grouped; search the current corpus for remaining unary-before-relation policy guards, but require separate evidence before any global precedence change."
+    }
+  ],
+  "promotion_boundary": {
+    "canonical_state_changed": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "final_training_authorized": false,
+    "training_performed": false,
+    "productstart_pass": false,
+    "frank_harness_mutation_authority_changed": false,
+    "target_repo_modified_by_this_actor": false
+  }
+}

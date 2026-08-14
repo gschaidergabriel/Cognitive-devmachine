@@ -2,6 +2,7 @@ PRAGMA foreign_keys=ON;
 
 -- UnifiedDB V10 candidate: Omnisource live-fusion intake and mandatory research re-entry.
 -- Clay/ClayCode records remain semantic authority; this SQL is persistence/projection runtime only.
+-- V10 remains TESTING and is not part of the promoted UnifiedDB stack.
 
 CREATE TABLE IF NOT EXISTS clay_omnisource_observations(
   observation_id TEXT PRIMARY KEY,
@@ -26,9 +27,22 @@ CREATE TABLE IF NOT EXISTS clay_omnisource_observations(
   verification_state TEXT NOT NULL DEFAULT 'VERIFIED'
     CHECK(verification_state IN ('VERIFIED','UNVERIFIED','QUARANTINED')),
   promotion_eligible INTEGER NOT NULL DEFAULT 1 CHECK(promotion_eligible IN (0,1)),
+  work_id TEXT,
+  work_spec_rev INTEGER,
+  work_revision_state TEXT NOT NULL DEFAULT 'NOT_APPLICABLE'
+    CHECK(work_revision_state IN ('CURRENT','STALE','UNKNOWN','NOT_APPLICABLE')),
+  current_work_credit_eligible INTEGER NOT NULL DEFAULT 0 CHECK(current_work_credit_eligible IN (0,1)),
+  bound_repo_head TEXT,
+  bound_component_hashes_clay TEXT NOT NULL DEFAULT '[]',
+  execution_started_at TEXT,
   freshness REAL,
   confidence REAL,
-  created_by TEXT NOT NULL
+  created_by TEXT NOT NULL,
+  CHECK (
+    (work_revision_state='NOT_APPLICABLE' AND work_id IS NULL AND work_spec_rev IS NULL AND current_work_credit_eligible=0)
+    OR
+    (work_revision_state<>'NOT_APPLICABLE' AND work_id IS NOT NULL)
+  )
 );
 CREATE INDEX IF NOT EXISTS idx_omni_identity_epoch
   ON clay_omnisource_observations(semantic_identity,semantic_epoch DESC,observed_at DESC);
@@ -36,6 +50,8 @@ CREATE INDEX IF NOT EXISTS idx_omni_content
   ON clay_omnisource_observations(content_hash);
 CREATE INDEX IF NOT EXISTS idx_omni_source
   ON clay_omnisource_observations(source_class,observed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_omni_work_revision
+  ON clay_omnisource_observations(work_id,work_spec_rev,observed_at DESC);
 
 CREATE TRIGGER IF NOT EXISTS trg_omni_no_stale_promotion_insert
 BEFORE INSERT ON clay_omnisource_observations
@@ -53,6 +69,55 @@ WHEN (NEW.epoch_state IN ('STALE','UNKNOWN','QUARANTINED')
      AND NEW.promotion_eligible <> 0
 BEGIN
   SELECT RAISE(ABORT,'stale/unverified observation cannot be promotion eligible');
+END;
+
+-- A technically successful execution can still be stale with respect to the current work contract.
+-- Preserve it as evidence, but block current-work completion/promotion credit.
+CREATE TRIGGER IF NOT EXISTS trg_omni_no_stale_work_credit_insert
+BEFORE INSERT ON clay_omnisource_observations
+WHEN NEW.work_revision_state IN ('STALE','UNKNOWN')
+     AND NEW.current_work_credit_eligible <> 0
+BEGIN
+  SELECT RAISE(ABORT,'stale/unknown work revision cannot receive current-work credit');
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_omni_no_stale_work_credit_update
+BEFORE UPDATE OF work_revision_state,current_work_credit_eligible ON clay_omnisource_observations
+WHEN NEW.work_revision_state IN ('STALE','UNKNOWN')
+     AND NEW.current_work_credit_eligible <> 0
+BEGIN
+  SELECT RAISE(ABORT,'stale/unknown work revision cannot receive current-work credit');
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_omni_current_work_credit_requires_binding_insert
+BEFORE INSERT ON clay_omnisource_observations
+WHEN NEW.current_work_credit_eligible=1
+ AND (
+   NEW.work_revision_state<>'CURRENT'
+   OR NEW.work_id IS NULL
+   OR NEW.work_spec_rev IS NULL
+   OR NEW.bound_repo_head IS NULL
+   OR NEW.execution_started_at IS NULL
+   OR NEW.bound_component_hashes_clay='[]'
+ )
+BEGIN
+  SELECT RAISE(ABORT,'current-work credit requires current revision, repo head, start time and component hashes');
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_omni_current_work_credit_requires_binding_update
+BEFORE UPDATE OF current_work_credit_eligible,work_revision_state,work_id,work_spec_rev,bound_repo_head,bound_component_hashes_clay,execution_started_at
+ON clay_omnisource_observations
+WHEN NEW.current_work_credit_eligible=1
+ AND (
+   NEW.work_revision_state<>'CURRENT'
+   OR NEW.work_id IS NULL
+   OR NEW.work_spec_rev IS NULL
+   OR NEW.bound_repo_head IS NULL
+   OR NEW.execution_started_at IS NULL
+   OR NEW.bound_component_hashes_clay='[]'
+ )
+BEGIN
+  SELECT RAISE(ABORT,'current-work credit requires current revision, repo head, start time and component hashes');
 END;
 
 CREATE TABLE IF NOT EXISTS clay_fusion_assessments(
@@ -83,6 +148,13 @@ CREATE TABLE IF NOT EXISTS clay_research_reentry_receipts(
   observation_id TEXT NOT NULL REFERENCES clay_omnisource_observations(observation_id),
   assessment_id TEXT NOT NULL REFERENCES clay_fusion_assessments(assessment_id),
   fused_epoch INTEGER NOT NULL,
+  work_id TEXT,
+  work_spec_rev INTEGER,
+  work_revision_state TEXT NOT NULL DEFAULT 'NOT_APPLICABLE'
+    CHECK(work_revision_state IN ('CURRENT','STALE','UNKNOWN','NOT_APPLICABLE')),
+  current_work_credit_eligible INTEGER NOT NULL DEFAULT 0 CHECK(current_work_credit_eligible IN (0,1)),
+  bound_repo_head TEXT,
+  bound_component_hashes_clay TEXT NOT NULL DEFAULT '[]',
   evidence_updates_clay TEXT NOT NULL DEFAULT '[]',
   claim_updates_clay TEXT NOT NULL DEFAULT '[]',
   hypothesis_updates_clay TEXT NOT NULL DEFAULT '[]',
@@ -99,10 +171,22 @@ CREATE TABLE IF NOT EXISTS clay_research_reentry_receipts(
   closure_state TEXT NOT NULL CHECK(closure_state IN ('OPEN','PARTIAL','CLOSED','FAILED')),
   completed_at TEXT,
   created_at TEXT NOT NULL,
-  UNIQUE(assessment_id)
+  UNIQUE(assessment_id),
+  CHECK (
+    current_work_credit_eligible=0
+    OR (
+      work_revision_state='CURRENT'
+      AND work_id IS NOT NULL
+      AND work_spec_rev IS NOT NULL
+      AND bound_repo_head IS NOT NULL
+      AND bound_component_hashes_clay<>'[]'
+    )
+  )
 );
 CREATE INDEX IF NOT EXISTS idx_reentry_state
   ON clay_research_reentry_receipts(closure_state,created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_reentry_work_revision
+  ON clay_research_reentry_receipts(work_id,work_spec_rev,created_at DESC);
 
 CREATE TABLE IF NOT EXISTS clay_reentry_branch_receipts(
   receipt_id TEXT NOT NULL REFERENCES clay_research_reentry_receipts(receipt_id) ON DELETE CASCADE,
@@ -140,7 +224,8 @@ LEFT JOIN clay_fusion_assessments a USING(observation_id)
 WHERE a.observation_id IS NULL;
 
 CREATE VIEW IF NOT EXISTS v_clay_material_reentry_pending AS
-SELECT a.*,o.source_class,o.semantic_identity,o.semantic_epoch
+SELECT a.*,o.source_class,o.semantic_identity,o.semantic_epoch,
+       o.work_id,o.work_spec_rev,o.work_revision_state,o.current_work_credit_eligible
 FROM clay_fusion_assessments a
 JOIN clay_omnisource_observations o USING(observation_id)
 LEFT JOIN clay_research_reentry_receipts r USING(assessment_id)
@@ -155,6 +240,40 @@ SELECT content_hash,COUNT(*) AS observation_count,
 FROM clay_omnisource_observations
 GROUP BY content_hash
 HAVING COUNT(*)>1;
+
+CREATE VIEW IF NOT EXISTS v_clay_stale_work_evidence AS
+SELECT o.observation_id,o.source_class,o.source_ref,o.work_id,o.work_spec_rev,
+       o.work_revision_state,o.current_work_credit_eligible,o.bound_repo_head,
+       o.bound_component_hashes_clay,o.execution_started_at,o.observed_at
+FROM clay_omnisource_observations o
+WHERE o.work_revision_state IN ('STALE','UNKNOWN');
+
+-- Producer-declared CURRENT binding. This is only a candidate projection and must never be
+-- consumed as authoritative current-work completion credit by itself.
+CREATE VIEW IF NOT EXISTS v_clay_current_work_credit_receipts AS
+SELECT r.*
+FROM clay_research_reentry_receipts r
+WHERE r.current_work_credit_eligible=1
+  AND r.work_revision_state='CURRENT';
+
+-- Authoritative cross-check against the V9 dynamic-work current revision projection.
+-- V9 remains the work-spec authority; V10 does not duplicate or replace it.
+CREATE VIEW IF NOT EXISTS v_clay_authoritative_current_work_credit_receipts AS
+SELECT r.*
+FROM clay_research_reentry_receipts r
+JOIN v_clay_current_work_specs w
+  ON w.work_id=r.work_id AND w.spec_rev=r.work_spec_rev
+WHERE r.current_work_credit_eligible=1
+  AND r.work_revision_state='CURRENT';
+
+CREATE VIEW IF NOT EXISTS v_clay_work_credit_revision_mismatches AS
+SELECT r.receipt_id,r.work_id,r.work_spec_rev AS receipt_spec_rev,
+       w.spec_rev AS current_spec_rev,r.bound_repo_head,r.bound_component_hashes_clay,
+       r.closure_state,r.created_at
+FROM clay_research_reentry_receipts r
+LEFT JOIN v_clay_current_work_specs w ON w.work_id=r.work_id
+WHERE r.current_work_credit_eligible=1
+  AND (w.work_id IS NULL OR w.spec_rev<>r.work_spec_rev);
 
 CREATE VIEW IF NOT EXISTS v_clay_reentry_branch_closure AS
 SELECT r.receipt_id,

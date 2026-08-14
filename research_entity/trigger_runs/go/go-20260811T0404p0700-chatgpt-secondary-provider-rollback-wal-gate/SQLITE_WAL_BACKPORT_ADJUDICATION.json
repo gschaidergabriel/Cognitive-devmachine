@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "adjudication_id": "sqlite-wal-reset-noble-3.45.1-1ubuntu2.7-20260811",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "target_runtime_observation": {
+    "machine": "digital-retina",
+    "python_sqlite_version": "3.45.1",
+    "ubuntu_package": "libsqlite3-0=3.45.1-1ubuntu2.7",
+    "journal_mode_in_guard": "wal",
+    "evidence_ref": "gschaidergabriel/Dr.-Unterweger@d55b452776295153576011988b0befce7f13b238"
+  },
+  "upstream_primary_evidence": {
+    "source": "SQLite WAL documentation",
+    "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug",
+    "documented_affected_versions": "3.7.0 through 3.51.2",
+    "documented_fixed_versions": "3.51.3 and later; selected backports include 3.44.6 and 3.50.7",
+    "trigger_topology": "WAL mode with two or more connections on the same database, separate threads/processes, with concurrent write/checkpoint timing"
+  },
+  "ubuntu_primary_evidence": [
+    {
+      "source": "Ubuntu packages noble-updates sqlite3",
+      "url": "https://packages.ubuntu.com/noble-updates/amd64/sqlite3",
+      "observed": "current amd64 package is 3.45.1-1ubuntu2.7"
+    },
+    {
+      "source": "Ubuntu Security Notice USN-8565-1",
+      "url": "https://ubuntu.com/security/notices/USN-8565-1",
+      "observed": "3.45.1-1ubuntu2.7 is the Noble update for CVE-2026-50812/CVE-2026-50813; this notice does not establish the WAL-reset backport"
+    }
+  ],
+  "counterhypothesis": "Ubuntu's 3.45.1-1ubuntu2.7 may contain an unadvertised/backported WAL-reset fix despite reporting upstream semantic version 3.45.1.",
+  "search_result": "NO_PRIMARY_EVIDENCE_LOCATED_THAT_PROVES_THE_WAL_RESET_FIX_IS_PRESENT_IN_3.45.1-1ubuntu2.7",
+  "important_limitation": "absence of a located changelog/backport statement is not proof that the patch is absent",
+  "adjudication": "UNRESOLVED_FAIL_CLOSED",
+  "release_rule": "Do not promote WAL-backed production continuity on this target until exact source/build provenance proves the fix, runtime SQLite is upgraded to a known fixed build, or a machine-checked single-writer/checkpoint topology excludes the documented trigger conditions.",
+  "negative_result_value": "A 2-second disposable race canary with integrity_check=ok cannot falsify an upstream race that SQLite itself says required special trigger logic to reproduce.",
+  "training_authorization_changed": false,
+  "canonical_frank_state_mutated": false
+}

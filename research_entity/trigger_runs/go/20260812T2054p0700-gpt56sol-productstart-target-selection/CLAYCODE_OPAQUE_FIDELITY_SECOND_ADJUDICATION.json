@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260812T2054p0700-gpt56sol-productstart-target-selection",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "product_pr": 544,
+  "candidate_branch": "chatgpt/go-claycode-opaque-fidelity-20260812",
+  "second_run": {
+    "workflow_run": 31605998271,
+    "job": 94144962166,
+    "tested_merge_sha": "7f19be946efb6d48055bc3e75d450700cc21b9df",
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "result": "FAIL_REAL_PARSE_TREE_COUNTEREXAMPLE",
+    "trace": "parse_module reached type Alias = Int, then _type_ref rejected unsupported type node class_rhs",
+    "meaning": "the first named-token grammar location altered the parse-tree shape for non-opaque aliases; this is evidence against that placement, not against preserving opacity as a named signal"
+  },
+  "collapsed_repair": {
+    "head": "5662096961fc41482c5d62e9c9e2b9bd5ad17ebf",
+    "current_pr_merge_sha": "844b4d9bc4fdc071aca4fda4f108148c481ead46",
+    "grammar_rule": "class_decl: type ident [type_params] = _nls (OPAQUE_KW record_block | record_block | type_expr)",
+    "named_terminal": "OPAQUE_KW: opaque",
+    "lowerer_changed": false,
+    "semantic_reason": "OPAQUE_KW becomes a direct class_decl child beside record_block, exactly where the existing lowerer already searches for an opaque token; the explicit alternative keeps opaque illegal for aliases and sum types",
+    "diff_against_current_pr_base": {
+      "files": 3,
+      "grammar_additions": 5,
+      "grammar_deletions": 3,
+      "syntax_lowerer_changes": 0
+    }
+  },
+  "current_retest": {
+    "workflow_run": 31606560787,
+    "job": 94146883885,
+    "state_at_receipt_write": "QUEUED",
+    "pass_claimed": false,
+    "required_gates": [
+      "plain RecordTypeDecl opaque=false",
+      "otherwise-identical opaque RecordTypeDecl opaque=true",
+      "type Alias = Int unchanged",
+      "existing WP04 nominal source gate PASS",
+      "repository static integrity PASS"
+    ]
+  },
+  "grf_collapse": [
+    {
+      "claim": "placing [OPAQUE_KW] inside class_rhs is safe",
+      "outcome": "REJECT",
+      "falsifier": "run 31605998271 alias parse-tree wrapper"
+    },
+    {
+      "claim": "preserving opacity requires a syntax.py lowering special-case",
+      "outcome": "REJECT_FOR_NOW",
+      "reason": "moving the named terminal to the existing class_decl lowering boundary preserves the intended child contract more directly"
+    },
+    {
+      "claim": "current class-boundary repair is verified",
+      "outcome": "DEFER_TESTING",
+      "reason": "exact PR-composition retest has not executed yet"
+    }
+  ],
+  "unusual_experiment_budget": {
+    "whole_go_macrocycle_exact_count": 1,
+    "experiment": "FUTURE_TEST_GHOST",
+    "new_unusual_experiment_count": 0
+  },
+  "authority_nonclaims": {
+    "external_effect": false,
+    "harness_authority": false,
+    "effect_authority": false,
+    "canonical_frank_state_mutated": false,
+    "f_v01_02_pass": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false
+  }
+}

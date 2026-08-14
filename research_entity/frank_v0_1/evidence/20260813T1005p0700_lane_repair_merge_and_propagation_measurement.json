@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "GATE_LANE_REPAIR_AND_PROPAGATION_MEASUREMENT",
+  "measured_at": "2026-08-13T03:05Z",
+  "repository": "gschaidergabriel/Dr.-Unterweger",
+  "gate": {"workflow": "Frank Deep Integrity", "job": "integrity", "path": ".github/workflows/frank-deep-integrity.yml"},
+  "runs": [
+    {"run": 31655324376, "when": "2026-08-13T00:42:23Z", "branch": "clay/lineage-freshness-current-main-20260813", "event": "pull_request", "labels": ["ubuntu-latest"], "runner_name": null, "steps_executed": 0, "conclusion": "failure", "note": "pre-repair baseline, zero-step billing artifact"},
+    {"run": 31654715032, "when": "2026-08-13T00:44:04Z", "branch": "clay/go-deep-integrity-current-main-20260813", "event": "pull_request", "labels": ["self-hosted","Linux","X64"], "runner_name": "clay", "steps_executed": 21, "conclusion": "success", "note": "candidate repair on PR 565"},
+    {"run": 31662361357, "when": "2026-08-13T02:56:29Z", "branch": "main", "event": "push", "labels": ["self-hosted","Linux","X64"], "runner_name": "clay", "steps_executed": 21, "conclusion": "success", "note": "post-merge main"},
+    {"run": 31662464840, "when": "2026-08-13T02:58:31Z", "branch": "clay/lineage-freshness-current-main-20260813", "head_sha": "7368fec62a87dfa54b0cf597b899297d55bc3cd4", "event": "pull_request", "labels": ["ubuntu-latest"], "runner_name": "", "steps_executed": 0, "conclusion": "failure", "note": "PR 567 close+reopen AFTER main repair: unchanged, main fix does not propagate by itself"},
+    {"run": 31662607317, "when": "2026-08-13T03:03Z", "branch": "clay/lineage-freshness-current-main-20260813", "head_sha": "d89755c2ec16dce02c1fb3d6fab1f49e2c6c3abd", "event": "pull_request", "labels": ["self-hosted","Linux","X64"], "runner_name": "clay", "steps_executed": 21, "conclusion": "success", "note": "PR 567 after update-branch against main: same PR, same content, green"}
+  ],
+  "merge": {"pull_request": 565, "method": "squash", "merged_at": "2026-08-13T02:56:27Z", "merge_commit": "925ed87f0644dafd4dfbe899ee83cc80478e26a4", "mergeable_before": "MERGEABLE/CLEAN", "checks_before_merge": "all green, integrity SUCCESS"},
+  "census_after": {"open_pull_requests": 244, "red_on_integrity": 227, "repaired": [567], "method_to_repair_rest": "PUT /repos/{owner}/{repo}/pulls/{n}/update-branch"},
+  "reproduction": [
+    "gh api repos/gschaidergabriel/Dr.-Unterweger/actions/runs/31662464840/jobs --jq '.jobs[] | {labels, runner_name, steps: (.steps|length), conclusion}'",
+    "gh api repos/gschaidergabriel/Dr.-Unterweger/actions/runs/31662607317/jobs --jq '.jobs[] | {labels, runner_name, steps: (.steps|length), conclusion}'",
+    "gh api repos/gschaidergabriel/Dr.-Unterweger/contents/.github/workflows/frank-deep-integrity.yml?ref=7368fec62a87dfa54b0cf597b899297d55bc3cd4 --jq .content | base64 -d | grep runs-on"
+  ],
+  "verdict": "The lane is the sole causal factor. Zero executed steps on the hosted lane, 21 executed steps and success on the self-hosted lane, for the same gate and the same pull request head content. Repair landed on main; propagation to open pull requests requires per-branch ingestion of main."
+}

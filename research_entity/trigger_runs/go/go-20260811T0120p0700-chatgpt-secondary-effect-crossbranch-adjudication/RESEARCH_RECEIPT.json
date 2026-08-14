@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0120p0700-chatgpt-secondary-effect-crossbranch-adjudication",
+  "trigger": "go",
+  "status": "COMPLETED_USEFUL_STOP",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "identity_lock": {
+    "worker_is": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "Frank v0.1",
+  "program_stage": "FRANK_V0_1",
+  "primary_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "coordination": {
+    "collision_detected": true,
+    "overlapping_effect_lane": {
+      "pr": 250,
+      "head_observed_during_run": "b677591f649dafe69fc8ba1aa4d92136f7d23b9d",
+      "disposition": "ADJUDICATE_NOT_DUPLICATE"
+    },
+    "parallel_provider_lane": {
+      "pr": 254,
+      "head": "15d3bfae3afa645027316c660ad2651e543913df",
+      "disposition": "REUSE_TARGET_EVIDENCE_NOT_DUPLICATE"
+    },
+    "parallel_wp03_lane": {
+      "pr": 245,
+      "head": "072f6d1233decb4bd5772b8843bc7a80391cd638",
+      "disposition": "DEPENDENCY_EVIDENCE_ONLY_NOT_IMPLICITLY_IMPORTED"
+    },
+    "durable_distribution": {
+      "pr250_review_id": 4899758794,
+      "purpose": "mark exact cross-branch dependency failure and prevent false effect-regression or frontend-PASS claims"
+    }
+  },
+  "hypothesis": "The caller-bound immutable V15/V16 effect-generation fence is now supported strongly enough to keep as the current F-V01-09 mechanism candidate, but the current release frontier is integration closure: exact compiler substrate ancestry, ordinary production routing/lowering, provider uncertainty semantics, recovery lineage, and exact-current target reruns must all compose in one merge graph before promotion.",
+  "strongest_counterhypotheses": [
+    "The apparent effect-fence PASS is only branch-local and will fail when the verified WP03/TypedIR substrate and newer main identity/recovery changes are composed.",
+    "A workflow-level compiler probe can create false confidence if it references a sibling-branch artifact that is absent from the exact tested checkout.",
+    "Synthetic provider idempotency/reconciliation can pass while a real provider has different duplicate-result, retention, mismatch, or timeout-after-acceptance semantics.",
+    "Historical exact-head OOB evidence cannot be promoted automatically after the effect branch changes; changed heads require their own exact-current acceptance evidence."
+  ],
+  "current_main_observed": {
+    "sha": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+    "note": "main advanced during the run; all PR acceptance remains exact-merge-SHA scoped"
+  },
+  "target_evidence": {
+    "effect_v6_prior_full_pass": {
+      "workflow_run_id": 31417859101,
+      "job_id": 93551093545,
+      "tested_merge_sha": "9f0479b8ebb313c6a3a3dbba830e3800e37d3c29",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "platform": "Linux 6.8.0-117-generic x86_64",
+      "python": "3.12.3",
+      "sqlite": "3.45.1",
+      "effect_matrix": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+      "claycode_contract": "PASS_CLAYCODE_EXACT_V15_V16_EFFECT_GENERATION_CONTRACT",
+      "oob": {
+        "id": "RAW_LIBC_FORK_BYPASS",
+        "status": "PASS_RAW_LIBC_FORK_BYPASS_OOB",
+        "child_gate_assertion": "EXECUTION_LEASE_PROCESS_PID_MISMATCH",
+        "child_fence_assertion": "EXECUTION_LEASE_PROCESS_PID_MISMATCH",
+        "parent_fence_after_child": "LIVE"
+      },
+      "scope": "historical exact-head evidence; not current-head promotion evidence"
+    },
+    "effect_v6_current_deepened_run": {
+      "workflow_run_id": 31418282979,
+      "job_id": 93552519908,
+      "tested_merge_sha": "d19a8a901ade5189bac10788ee9de7c18df54ea5",
+      "main_parent_in_checkout": "0acf34879fb9cd1019ba33696552760c18d2e964",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "platform": "Linux 6.8.0-117-generic x86_64",
+      "python": "3.12.3",
+      "sqlite": "3.45.1",
+      "physical_gate": "PASS_FRANK_EXECUTION_GATE_V1",
+      "normal_effect_matrix": {
+        "status": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+        "same_epoch_v16_rebind": "FENCED_ZERO_STATE_MUTATION",
+        "stale_source": "FENCED_ZERO_STATE_MUTATION",
+        "successor_cross_splice": "FENCED_ZERO_STATE_MUTATION",
+        "uncertain_retry_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+        "outcome_reconciliation_after_turnover": "PASS",
+        "immutable_binding_update": "BLOCKED",
+        "immutable_binding_delete": "BLOCKED",
+        "foreign_key_violations": 0,
+        "integrity_check": "ok"
+      },
+      "claycode_semantic_contract": "PASS_CLAYCODE_EXACT_V15_V16_EFFECT_GENERATION_CONTRACT",
+      "frontend_typedir_step": {
+        "status": "FAIL_DEPENDENCY_MISSING",
+        "error": "bound grammar missing",
+        "missing_path": "runtime/clay_wp03_exact_bundle/research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark"
+      },
+      "raw_libc_oob_step": "SKIPPED_AFTER_FRONTEND_FAILURE",
+      "artifact_id": 9074303620,
+      "artifact_sha256": "e1b9fad8b78156922d2ff299a199af5ffbb5fb2d34c0dd603cfaeb2b6251234a",
+      "whole_job_conclusion": "FAILURE",
+      "interpretation": "integration/dependency failure, not an effect-fence regression"
+    },
+    "wp03_real_frank_sibling": {
+      "pr": 245,
+      "workflow_run_id": 31418150523,
+      "tested_merge_sha": "be772078ac13e54a2a442725bd1563df670d10cd",
+      "status": "SUCCESS",
+      "real_frank_structured_to_typedir": "PASS",
+      "function_count": 13,
+      "class_decl_count": 16,
+      "field_count": 80,
+      "invariant_count": 22,
+      "typed_ir_sha256": "821ccaab1a0b4d699ae6e6748eec5d16736c3e80d34568a217688d78cfd68371",
+      "important_limit": "open sibling branch evidence only; no implicit ancestry or compiler acceptance transfer to PR250"
+    },
+    "provider_reconciliation_sibling": {
+      "pr": 254,
+      "workflow_run_id": 31418397078,
+      "job_id": 93552879117,
+      "tested_merge_sha": "ad1f15e5f96e6c4eaa2e6eaa3d612a48828210b8",
+      "status": "SUCCESS",
+      "parent_effect_matrix": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+      "experiment": "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT",
+      "experiment_status": "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB",
+      "provider_commits_after_timeout": 1,
+      "provider_rows_after_reconciliation": 1,
+      "frank_state_after_timeout": "OUTCOME_UNKNOWN",
+      "successor_retry": "FENCED_ZERO_STATE_MUTATION",
+      "reconciliation_without_execution_fence": true,
+      "final_effect_state": "OUTCOME_SUCCEEDED",
+      "same_key_different_intent": "PROVIDER_IDEMPOTENCY_REQUEST_FINGERPRINT_MISMATCH",
+      "external_network_used": false,
+      "external_provider_used": false,
+      "artifact_id": 9074364789,
+      "artifact_sha256": "b67066a7561b9f7b8911d85257bf8096dc0cb0fd4bfcce104af91650623c2d25",
+      "important_limit": "synthetic-provider mechanism evidence only; real-provider semantics remain open"
+    }
+  },
+  "external_knowledge": {
+    "retrieved_during_run": "2026-08-11T01:xx:xx+07:00",
+    "source_policy": "PRIMARY_OR_OFFICIAL_FOR_TECHNICAL_CLAIMS",
+    "findings": [
+      {
+        "source": "Google/USENIX Chubby lock service",
+        "url": "https://research.google.com/archive/chubby.html",
+        "finding": "lock generation/sequencer evidence must be carried to and validated by the recipient of the protected operation; lock possession alone is insufficient against delayed/stale operations",
+        "architecture_implication": "B3/provider boundary generation revalidation is structurally justified"
+      },
+      {
+        "source": "Amazon Builders Library - Making retries safe with idempotent APIs",
+        "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+        "finding": "timeout can leave outcome indeterminate; stable caller request identity, atomic idempotency recording, and reconciliation are required to avoid duplicate side effects",
+        "architecture_implication": "OUTCOME_UNKNOWN plus stable provider request identity/reconciliation is preferable to blind retry"
+      },
+      {
+        "source": "Stripe API idempotent requests and error handling",
+        "url": "https://docs.stripe.com/api/idempotent_requests",
+        "finding": "same idempotency key is safe only for semantically identical retries; ambiguous connection/API outcomes must not be guessed",
+        "architecture_implication": "provider contract must bind key to semantic request fingerprint and preserve indeterminate outcomes"
+      }
+    ]
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "CROSS_BRANCH_DEPENDENCY_GHOST",
+    "class": "BOUND_BUILD_ARTIFACT_CAUSAL_ANCESTRY_FALSIFIER",
+    "question": "Can a current effect-authority candidate claim compiler/frontend evidence when its workflow references a verified sibling-branch grammar artifact that is absent from the exact checkout?",
+    "method": "Use the exact self-hosted PR250 merge checkout as the authority boundary and let the frontend probe resolve its bound grammar path without copying sibling artifacts or fallback inference.",
+    "result": "REFUTED_IMPLICIT_DEPENDENCY",
+    "observation": "The exact checkout passed Gate/effect/semantic-contract tests but failed immediately because the bound WP03 grammar file did not exist in the branch merge graph.",
+    "promotion": "NONE",
+    "external_effect": false,
+    "canonical_state_mutated": false,
+    "rollback": "No product mutation was made; PR250 received an adjudication comment only."
+  },
+  "analysis": {
+    "supported": [
+      "Exact execution-generation identity is a materially stronger effect-authority primitive than the historical unbound V14 start/retry path.",
+      "Generation turnover must revoke start/retry authority but does not erase independently observed outcome evidence.",
+      "Provider timeout-after-possible-acceptance belongs in OUTCOME_UNKNOWN until a provider-specific idempotent/reconciliation contract resolves it.",
+      "Compiler/frontend evidence is valid only for the exact tested dependency graph; sibling branch success cannot be silently inherited."
+    ],
+    "not_supported": [
+      "F-V01-09 closure.",
+      "Current PR250 head full target acceptance.",
+      "Real-provider timeout-after-acceptance acceptance.",
+      "Non-bypassable ordinary production effect routing/lowering.",
+      "WP04 full type/effect acceptance or runtime lowering for the current real Frank effect module.",
+      "Any final training authorization or Frank/self.root Harness authority."
+    ]
+  },
+  "architecture_delta": {
+    "status": "NO_AUTHORITY_SEMANTIC_CHANGE_IN_THIS_RUN; INTEGRATION_GATE_ADDED",
+    "retain_candidate": "CALLER_BOUND_IMMUTABLE_V15_V16_EXECUTION_GENERATION_EFFECT_FENCE",
+    "new_integration_law": "NO_SIBLING_ARTIFACT_ANCESTRY -> NO_COMPILER_OR_RUNTIME_ACCEPTANCE_CLAIM",
+    "required_resolution": [
+      "Compose PR250-equivalent effect authority with an accepted PR245-equivalent WP03 substrate in one exact merge graph, or explicitly mark the compiler gate BLOCKED until that substrate lands.",
+      "Re-run the whole exact-current self-hosted matrix after composition; do not reuse prior OOB PASS as current-head PASS after code/workflow changes.",
+      "Resolve authoritative frank.hive/frank.memory/host contracts before WP04/lowering; do not infer effectful signatures from call names.",
+      "Integrate provider-specific idempotency/reconciliation contracts only where the real provider can supply equivalent semantics; otherwise remain fail-closed/reconciliation-required.",
+      "Build and measure one canonical ordinary production effect route that consumes real EffectAuthorization and live execution-generation capability without exposing the historical unbound V14 path as product authority."
+    ]
+  },
+  "negative_results": [
+    "Current PR250 frontend/TypedIR workflow gate is not self-contained on its exact merge graph.",
+    "Current PR250 run 31418282979 is not a full PASS even though its effect mechanism subtests pass.",
+    "PR254 provider result is synthetic and cannot substitute for real provider evidence.",
+    "PR245 TypedIR success is sibling evidence and cannot be promoted as PR250 evidence until exact composition is tested."
+  ],
+  "next_frontier": "Cross-branch composition gate: exact effect-authority candidate + accepted WP03 substrate + authoritative external host contracts + WP04/lowering + canonical ordinary effect route, followed by one exact-current self-hosted acceptance run and real-provider uncertainty evidence where available.",
+  "authority": "NONE",
+  "execution_authority": "NONE",
+  "training_authorized": false
+}

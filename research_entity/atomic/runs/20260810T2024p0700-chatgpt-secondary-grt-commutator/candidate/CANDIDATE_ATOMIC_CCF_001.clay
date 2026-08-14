@@ -1,0 +1,141 @@
+module clay.atomic.candidate.causal_commutator_fabric
+version "0.1-proxy-2026-08-10"
+status ATOMIC_CANDIDATE_NOT_PROMOTED
+
+law outer_thinkspace = GENERATIVE_REALITY_THEORY
+law candidate_id = ATOMIC-CANDIDATE-CCF-001
+law target = self.root
+law candidate_is_possibility_only = true
+law thinkable != true
+law tested_proxy != supported_target
+
+symbol TransitionKnowledge = EXACT | CONSERVATIVE | UNKNOWN
+symbol CoordinationMode = LOCAL_INDEPENDENT | TRANSIENT_CELL | GWT_FALLBACK | BLOCKED_UNKNOWN
+
+record TransitionAtom {
+  transition_id:Ref
+  semantic_operator:ClayCode
+  base_state_instance:Ref
+  base_epoch:Epoch
+  read_set:Set<Ref>
+  write_set:Set<Ref>
+  purity:Bool
+  deterministic:Bool
+  effect_class:EffectClass
+  provenance:Set<Ref>
+}
+
+record CommutatorReceipt {
+  left:Ref
+  right:Ref
+  base_state_instance:Ref
+  base_epoch:Epoch
+  knowledge:TransitionKnowledge
+  noncommuting:Bool?
+  local_delta_ab:ClayCode?
+  local_delta_ba:ClayCode?
+  interaction_magnitude:Real>=0?
+  measured_cost:MeasureSet
+  provenance:Set<Ref>
+}
+
+record CoordinationCell {
+  cell_id:Ref
+  base_epoch:Epoch
+  transitions:Set<Ref>
+  noncommuting_edges:Set<Ref>
+  mode:CoordinationMode
+  unresolved_orders:Set<ClayCode>
+  observability:Set<Ref>
+}
+
+fn potentially_dependent(a:TransitionAtom,b:TransitionAtom)->Bool {
+  return intersects(a.write_set,union(b.read_set,b.write_set))
+      || intersects(b.write_set,union(a.read_set,a.write_set))
+}
+
+fn eligible_exact(a:TransitionAtom,b:TransitionAtom,current_state:Ref,current_epoch:Epoch)->Bool {
+  return a.purity && b.purity
+      && a.deterministic && b.deterministic
+      && a.effect_class == INTERNAL_REVERSIBLE
+      && b.effect_class == INTERNAL_REVERSIBLE
+      && a.base_state_instance == current_state
+      && b.base_state_instance == current_state
+      && a.base_epoch == current_epoch
+      && b.base_epoch == current_epoch
+}
+
+fn semantic_commutator(a:TransitionAtom,b:TransitionAtom,state:ClayCode)->CommutatorReceipt {
+  if !potentially_dependent(a,b) {
+    return receipt(knowledge=EXACT,noncommuting=false,interaction_magnitude=0)
+  }
+  if !eligible_exact(a,b,state.instance,state.epoch) {
+    return receipt(knowledge=UNKNOWN,noncommuting=null)
+  }
+  local = dependency_slice(state,union(a.read_set,a.write_set,b.read_set,b.write_set))
+  ab = apply_local(b,apply_local(a,local))
+  ba = apply_local(a,apply_local(b,local))
+  return receipt(
+    knowledge=EXACT,
+    noncommuting=(semantic_delta(ab,ba) != ZERO),
+    local_delta_ab=ab,
+    local_delta_ba=ba,
+    interaction_magnitude=semantic_distance(ab,ba)
+  )
+}
+
+fn form_fabric(candidates:Set<TransitionAtom>,state:ClayCode)->Set<CoordinationCell> {
+  receipts = sparse_pairwise_commutators(candidates,state)
+  graph = edges(receipts where knowledge==EXACT && noncommuting==true)
+  cells = connected_components(graph)
+  return classify_cells(cells,receipts)
+}
+
+rule exact_commuting_component -> LOCAL_INDEPENDENT
+rule exact_noncommuting_component -> TRANSIENT_CELL
+rule UNKNOWN_interaction_crosses_cell_boundary -> GWT_FALLBACK|BLOCKED_UNKNOWN
+rule opaque_model_call|stochastic_transition|external_effect -> UNKNOWN unless stronger typed model exists
+rule state_epoch_changed -> invalidate CommutatorReceipt + recompute_or_fallback
+rule stale_commutator never authorizes reorder
+
+// GRT consequence: a permanent global workspace is not required for every eligible internal transition.
+// GWT remains an allowed mechanism/fallback for unresolved, opaque or global coordination.
+rule transient_cell may expose candidate_competition + ordering_alternatives + causal_receipts
+rule transient_cell may use Hyperposition for unresolved order alternatives
+rule verified_outcome may update ClayGraph interaction edges + UnifiedDB evidence
+rule interaction_edge != truth_authority
+
+// Effect boundary.
+law speculative_commutator has effect_authority = NONE
+law reorder_proposal has effect_authority = NONE
+law external_action still requires @research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay
+law model_output|GWT_ignition|commutator_magnitude cannot mint effect_authority
+
+// Persistence and recovery.
+rule persist CommutatorReceipt only with exact base_state_instance + epoch + semantic operator identities
+rule recovery rejects stale_or_unknown transition identity
+rule rebuild fabric from admitted transition records after restart
+rule last_known_good architecture remains current accepted architecture, not this candidate
+
+observe CCF_METRICS=[eligible_coverage,pairs_examined,exact_commute_rate,noncommuting_edge_density,cell_size_distribution,unknown_rate,false_commute_rate,false_conflict_rate,latency_p50,latency_p95,cpu_cost,state_bytes,recompute_rate,stale_rejection_rate,task_outcome_delta]
+
+ablation NO_CCF = current accepted coordination
+ablation RW_CONFLICT = conservative read_write dependency graph
+ablation FULL_REPLAY = whole-state two-order replay
+ablation SHUFFLED_EDGE = preserve edge prevalence but destroy pair identity
+ablation STALE_EPOCH = reuse prior-epoch receipts; expected fail_closed_or_accuracy_drop
+ablation GWT_ONLY = fixed current GWT fallback
+
+failure QUADRATIC_PAIR_EXPLOSION
+failure STALE_EPOCH_REUSE
+failure OPAQUE_TRANSITION_FALSE_CERTAINTY
+failure HIDDEN_EXTERNAL_EFFECT
+failure PARTIAL_OBSERVABILITY_ALIAS
+failure TRANSIENT_CELL_GLOBALIZATION
+failure NO_ELIGIBLE_COVERAGE
+
+invariant no_false_exact_claim_for_UNKNOWN
+invariant no_stale_receipt_reuse
+invariant no_effect_authority_from_commutation
+invariant provenance_bound_reentry
+invariant negative_result_preserved

@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0","strategy":"ADDITIVE_SHADOW_MIGRATION",
+  "steps":[
+    {"id":"U11-M0","action":"Keep U10 candidate and current production paths untouched; snapshot/LKG."},
+    {"id":"U11-M1","action":"Add receipt registry/typed edges/terminal receipt schema and deterministic closure validator; dual-write shadow receipts."},
+    {"id":"U11-M2","action":"Run V17/U10 fabricated-support, stale-execution, zombie-writer, restart and DONE closure discriminators."},
+    {"id":"U11-M3","action":"Add associative field registry and selection-proof/rebind path; no field receives canonical write authority."},
+    {"id":"U11-M4","action":"Shadow PKM/ANN/HDC candidates on real Frank retrieval traces; collect recall@k, abstention, route errors, p50/p95/p99, memory and rebuild costs."},
+    {"id":"U11-M5","action":"Enable incremental projection maintenance shadow path and compare exact projection hashes against full rebuild."},
+    {"id":"U11-M6","action":"Add authenticated epoch checkpoint candidate; measure write amplification, proof cost, recovery value against root-chain-only baseline."},
+    {"id":"U11-M7","action":"Promote only individual mechanisms that pass target-VPS matched baselines; KEEP_ISOLATED/NO_BENEFIT are valid."}
+  ],
+  "rollback":"Every U11 object is additive; feature flags restore U10/current reads. Associative fields are rebuildable and disposable."
+}

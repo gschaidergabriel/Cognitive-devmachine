@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "package_id": "Q23-PKG-ACTIVE-EVIDENCE-BUDGET-CACHE-20260810",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "observed_at": "2026-08-10T20:13:00+07:00",
+  "topic": "ACTIVE_VISUAL_SENSING_AND_VERSIONED_FEATURE_REUSE",
+  "source_class": ["CURRENT_PRIMARY_GITHUB_PROJECT", "PRIMARY_PAPER", "CURRENT_REPO"],
+  "source_refs": [
+    "ggml-org/llama.cpp:tools/mtmd/mtmd.cpp",
+    "ggml-org/llama.cpp:tools/server/server-context.cpp",
+    "arXiv:2606.25760",
+    "arXiv:2602.02419",
+    "arXiv:2601.09770",
+    "arXiv:2606.14106",
+    "research_entity/retina/QWEN_NATIVE_DISSOLVED_RETINA_FUSION_CANDIDATE_20260810.md",
+    "research_entity/trigger_runs/q23/20260810T2004p0700-chatgpt-secondary-runtime-scale-tap/HYPOTHESES.json",
+    "research_entity/trigger_runs/q23/20260810T2013p0700-chatgpt-secondary-vstg/HYPOTHESES.json"
+  ],
+  "finding": {
+    "libmtmd_lifetime": "Current libmtmd aggregates encoded media features inside mtmd_batch.output_embd. The server keeps an mtmd batch object while processing the media chunk and can pass the encoded output to the decode path. This supports a synchronous feature tap before decode without a second vision encode. It does not by itself establish safe cross-request ownership of a raw float pointer.",
+    "active_perception": "Current GUI research supports adaptive crop/zoom and staged coarse-to-fine perception, but recent uncertainty-quantification evidence shows calibration/ranking does not transfer reliably across model classes and observable interfaces. Frank therefore needs target-model/runtime calibration rather than generic confidence thresholds.",
+    "memory_failure": "Full-image visual memory can reduce some state errors while worsening hidden-operation blindness and grounding. Action-grounded local evidence is a stronger candidate, but local evidence alone creates a global-coverage failure mode.",
+    "fusion": "Retina should remain temporal/provenance/control fabric. Add a bounded Perceptual Budget Controller that jointly uses current visual uncertainty, task/action criticality, visual alias conflict, change topology and explicit global coverage debt to decide NONE/ROI_PLUS_CONTEXT/COARSE_GLOBAL/ZOOM/FULL. Add a Versioned Visual Evidence Cache for owned descriptors and exact provenance, never for truth or effect authority."
+  },
+  "new_mechanism_candidate": {
+    "name": "PBC-VEC-1",
+    "perceptual_budget_controller": {
+      "inputs": ["frame_delta", "roi_candidates", "model_calibrated_uncertainty", "visual_alias_conflict", "task_criticality", "action_criticality", "coverage_debt", "time_since_global_observation", "memory_conflict"],
+      "choices": ["NO_DEEP_VISION", "ROI_PLUS_CONTEXT", "COARSE_GLOBAL", "TARGETED_ZOOM", "FULL_FRAME"],
+      "coverage_debt_law": "Every region or semantic surface not freshly observed accumulates bounded coverage debt. High debt, high action risk, detected topology change, alias conflict or memory contradiction can force a wider observation even when the local ROI is confident.",
+      "calibration_law": "Uncertainty thresholds are calibrated and revalidated on the exact target model/runtime/interface regime; verbal confidence or a threshold imported from another model is insufficient."
+    },
+    "versioned_visual_evidence_cache": {
+      "key_fields": ["source_epoch", "frame_hash", "roi_hash", "crop_geometry", "preprocess_hash", "visual_model_hash", "mmproj_hash", "feature_projection_hash", "image_token_budget", "resolution"],
+      "values": ["owned_pooled_descriptor", "optional_tiny_projected_descriptor", "familiarity_readout_receipt", "observed_at", "expiry_or_staleness_state"],
+      "forbidden": ["persist_raw_unowned_libmtmd_pointer", "treat_cached_feature_as_sensor_truth", "reuse_across_version_mismatch", "mint_effect_authority"],
+      "synchronous_tap": "A raw libmtmd embedding view may be consumed synchronously while the owning batch lifetime is valid. Any longer-lived use must copy/derive into an owned bounded descriptor with version/provenance identity."
+    }
+  },
+  "strongest_counterhypotheses": [
+    "A fixed hybrid periodic-anchor policy is simpler and Pareto-superior; PBC control overhead and extra sensing erase token/latency savings.",
+    "Model-calibrated uncertainty remains confidently wrong under GUI distribution shift, so coverage debt cannot make selective perception safe enough.",
+    "Native llama.cpp multimodal/KV caching already provides equivalent reusable representations, making a Frank-owned descriptor cache redundant.",
+    "Cross-request descriptor reuse creates more stale-state/alias errors than compute savings, so only within-request feature tapping should survive."
+  ],
+  "falsifiers": [
+    "Equal-budget GUI replay shows PBC-VEC-1 does not reduce visual tokens or decoder calls while preserving task success, hidden-operation detection and grounding versus FULL_FRAME and HYBRID_PERIODIC_ANCHOR.",
+    "Wrong-confidence and interface-shift fixtures show coverage debt fails to force wider sensing before consequential errors.",
+    "Exact target runtime demonstrates safe native cross-request media-feature reuse with version identity and no re-encode, removing the need for VEC.",
+    "VEC stale/version-swap controls produce any silent reuse rather than a cache miss/quarantine."
+  ],
+  "fusion_result": "REFINES_QNDRF_AND_VSTG",
+  "architecture_status": "CANDIDATE_NOT_PROMOTED",
+  "affected_components": ["DigitalRetina", "VisionFeatureTap", "MVC", "PerceptualField", "VSTG", "UnifiedDB", "ClayGraph", "GWT", "Harness", "FrankLoopCore"],
+  "swarm_targets": ["frank", "harness", "gwt", "claycode", "claygraph", "unifieddb", "emergenz", "clayresearch"],
+  "go_exchange_targets": ["multimodal", "vision", "retina", "mvc", "visual_memory", "active_sensing", "qwen35", "llama.cpp"],
+  "evidence_class": "PRIMARY_CODE_PLUS_PRIMARY_RESEARCH_FUSED_WITH_CURRENT_REPO",
+  "confidence": 0.78,
+  "unresolved_uncertainty": "No target-VPS PBC/VEC runtime measurement exists yet; no architecture promotion is justified."
+}

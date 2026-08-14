@@ -1,0 +1,21 @@
+{
+  "adjudication": {
+    "adaptive_budget": "SUPPORTED_AS_GENERIC_OPTIMIZATION_ONLY: fixed-k CMX is materially worse, but adaptive-k is conventional cost-sensitive routing and not unique CMX evidence.",
+    "authority": "PASS proxy invariant; capital did not change truth/authority classes.",
+    "context_rent": "FAILED_CAUSAL_ABLATION: cmx_no_rent accuracy exceeds full CMX in measured 10% noise matrix.",
+    "counterfactual_coupon": "FAILED_CAUSAL_ABLATION: cmx_no_coupon accuracy exceeds full CMX in measured 10% noise matrix.",
+    "provenance_prior": "NOT_UNIQUE: removing provenance did not create decisive collapse in this proxy, and real Frank provenance remains mandatory for semantic safety independent of accuracy.",
+    "replay": "PASS deterministic digest under reordered/duplicated receipts; 100 stale-epoch events rejected and 200 duplicate receipts rejected."
+  },
+  "authority_control": {"authority_class":"NO_EFFECT_AUTHORITY","classes_unchanged":true,"truth_class":"UNVERIFIED_PROCEDURAL_HINT"},
+  "candidate":"ATOMIC-CMX-001",
+  "noise_0_10": {
+    "cmx":{"accuracy_mean":0.8169791666666667,"accuracy_sd":0.01852117313149109,"avoidable_error_mean":0.0893640577574955,"final_kinds_total":{"echo":0,"prototype":0,"stale":0,"verified":720},"retrieved_per_turn_mean":4.11875,"segment_accuracy_mean":[0.8640625,0.7857638888888889,0.7854166666666667]},
+    "cmx_fixed_k":{"accuracy_mean":0.7644791666666667,"accuracy_sd":0.023635965268350382,"avoidable_error_mean":0.1471300817501905,"final_kinds_total":{"echo":0,"prototype":0,"stale":0,"verified":720},"retrieved_per_turn_mean":5.0,"segment_accuracy_mean":[0.82109375,0.7375,0.7159722222222222]},
+    "cmx_no_coupon":{"accuracy_mean":0.82375,"accuracy_sd":0.021549361939509938,"avoidable_error_mean":0.07481724671744192,"final_kinds_total":{"echo":0,"prototype":0,"stale":0,"verified":720},"retrieved_per_turn_mean":4.029166666666667,"segment_accuracy_mean":[0.8544270833333333,0.8072916666666666,0.7993055555555556]},
+    "cmx_no_provenance":{"accuracy_mean":0.819375,"accuracy_sd":0.009031195934094221,"avoidable_error_mean":0.08938919079755009,"final_kinds_total":{"echo":0,"prototype":0,"stale":0,"verified":720},"retrieved_per_turn_mean":4.1625,"segment_accuracy_mean":[0.85078125,0.7944444444444444,0.8024305555555555]},
+    "cmx_no_rent":{"accuracy_mean":0.8266666666666667,"accuracy_sd":0.021274495685366254,"avoidable_error_mean":0.08334933019921002,"final_kinds_total":{"echo":0,"prototype":0,"stale":0,"verified":720},"retrieved_per_turn_mean":4.1425,"segment_accuracy_mean":[0.8674479166666667,0.8024305555555555,0.7965277777777778]}
+  },
+  "replay_control":{"expected_unique":1000,"forward":["f11c8c8e3ff3053c0e418d1c0f216f44b7073e8e60d7657a3d127f0eec4cbe0e",100,200,1000],"reverse":["f11c8c8e3ff3053c0e418d1c0f216f44b7073e8e60d7657a3d127f0eec4cbe0e",100,200,1000],"same_digest":true},
+  "schema_version":"1.0"
+}

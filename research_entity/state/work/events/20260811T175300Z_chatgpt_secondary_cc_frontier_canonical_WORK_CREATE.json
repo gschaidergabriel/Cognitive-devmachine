@@ -1,0 +1,35 @@
+{
+  "schema_version": "2.1",
+  "event_id": "20260811T175300Z-chatgpt-secondary-cc-frontier-canonical-create",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-11T17:53:00Z",
+  "payload": {
+    "work_id": "CC-FV01-02-FRONTIER-STRICT-LALR-CANONICAL-20260812",
+    "goal_ref": "SELF_ROOT_V0_1_TARGET_VPS_API",
+    "origin_class": "CRITICAL_PATH_BUILD",
+    "title": "Canonicalize executable ClayCode frontier after strict-LALR and fail-closed validation",
+    "work_clay": "Adjudicate the executable ClayCode parser/evaluator frontier, repair the strict-LALR with-update ambiguity without changing the frozen admitted corpus, validate on the Hostinger Ubuntu runner, compose against current main, and merge only when exact target evidence is green.",
+    "reason_clay": "F-V01-02 required a canonical parser/evaluator basis before WP04 type/effect and WP06 lowering can inherit semantics safely. A non-strict parser pass was insufficient because the generic/relation gate exposed a real LALR ambiguity.",
+    "completion_clay": "Complete when the repair is strict-LALR green, the frozen 36/40 corpus and its exact reject set are preserved, policy/hash/confirmation differentials remain zero-mismatch, authority/opaque fail-closed canaries pass, current-main synthetic merge passes, and the reviewed frontier is merged to Dr.-Unterweger main.",
+    "evidence_need": [
+      "TARGET_VPS_STRICT_LALR",
+      "FROZEN_CORPUS_36_OF_40",
+      "POLICY_DIFFERENTIAL_200576_ZERO_MISMATCH",
+      "HASH_DIFFERENTIAL_56000_ZERO_MISMATCH",
+      "CONFIRMATION_DIFFERENTIAL_16000_ZERO_MISMATCH",
+      "OPAQUE_AND_PREARG_FAIL_CLOSED",
+      "CURRENT_MAIN_COMPOSITION"
+    ],
+    "executor_policy": "Clay temporary organs may research/build/test; target Frank/self.root has proposal-only Harness authority; no final training authority.",
+    "required_capabilities": ["GITHUB_RW", "HOSTINGER_UBUNTU_SELF_HOSTED_RUNNER", "CLAYCODE_ANALYSIS"],
+    "write_scope": ["gschaidergabriel/Dr.-Unterweger", "research_entity/state/work/events"],
+    "dependencies": ["F-V01-02 semantic freeze", "current ClayCode parser/evaluator frontier"],
+    "invalidators": ["new target counterexample", "main composition conflict", "non-zero semantic differential", "authority boundary regression"],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 0.9,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2322p0700-chatgpt-secondary-sqlite-wal-reset-guard",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity_identity": "Clay temporary worker; not self.root/Frank",
+  "canonical_revision": 2,
+  "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "program": "FRANK_V0_1",
+  "target": "self.root / human-surface Frank on accepted Hostinger Ubuntu VPS",
+  "affected_work_packages": [
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "coordination": {
+    "selected_lane": "SQLite WAL runtime safety / release gating",
+    "reason": "Fresh target/main activity showed V17/V18 effect-provenance and ClayCode lanes were already under active concurrent repair. SQLite WAL safety had no current competing work and affects authoritative UnifiedDB continuity plus release recovery semantics.",
+    "duplicate_work_check": "No WAL-reset research commit found in Clay project before durable write."
+  },
+  "internal_evidence": [
+    {
+      "ref": "gschaidergabriel/Dr.-Unterweger@39ab05470efedd792048b0611a01fbbb67b41040",
+      "finding": "Real Hostinger Ubuntu WAL receipt: Python 3.12.3, SQLite 3.45.1, WAL enabled, multi-connection writer/checkpoint behavior measured."
+    },
+    {
+      "ref": "gschaidergabriel/Dr.-Unterweger@295cd5d101318c66b66b157677d094617b6d8bde",
+      "artifact": "runtime/vps_integrity/sqlite_wal_reset_2026_guard_latest.json",
+      "finding": "Real self-hosted target-VPS run: SQLite 3.45.1, WAL active, release gate BLOCK; bounded canary completed 2495 writes and 465272 checkpoints over two checkpointer processes in 2 seconds, all workers exit 0, integrity_check=ok, corruption_observed=false. Null race result is diagnostic only and is explicitly forbidden from proving safety."
+    }
+  ],
+  "external_evidence": [
+    {
+      "evidence_class": "OFFICIAL_PRIMARY",
+      "source": "SQLite Write-Ahead Logging: The WAL-Reset Bug",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug",
+      "retrieved_date": "2026-08-10",
+      "finding": "SQLite documents a rare corruption race likely present in upstream 3.7.0 through 3.51.2, fixed in 3.51.3+, requiring WAL mode plus two or more connections in different threads/processes writing/checkpointing concurrently; ordinary organic reproduction is difficult."
+    },
+    {
+      "evidence_class": "OFFICIAL_PRIMARY",
+      "source": "SQLite 3.51.3 release log",
+      "url": "https://www.sqlite.org/releaselog/3_51_3.html",
+      "retrieved_date": "2026-08-10",
+      "finding": "3.51.3 explicitly fixes the WAL-reset database corruption bug."
+    },
+    {
+      "evidence_class": "OFFICIAL_DISTRIBUTION",
+      "source": "Ubuntu USN-8565-1 and Noble package index",
+      "url": "https://ubuntu.com/security/notices/USN-8565-1",
+      "retrieved_date": "2026-08-10",
+      "finding": "Current Ubuntu 24.04/Noble security package is SQLite 3.45.1-1ubuntu2.7. Visible current USN fixes concern other 2026 SQLite issues; semantic version/package number alone is not accepted as proof that the WAL-reset fix is or is not backported."
+    }
+  ],
+  "hypothesis": "Frank v0.1 needs a fail-closed SQLite WAL-reset release gate because its authoritative state plane uses WAL on a runtime whose upstream SQLite semantic version is inside SQLite's documented affected range.",
+  "strongest_counterhypothesis": "The target is safe despite the upstream-affected semantic version because Ubuntu has backported the exact WAL-reset fix, or Frank's actual connection/checkpoint topology makes the necessary concurrent reset race unreachable.",
+  "counterhypothesis_status": "OPEN; requires exact downstream source/build provenance or a machine-checked runtime topology exclusion. A clean stress canary is insufficient.",
+  "implementation": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "67adf12a986999a82eb3699eb42a5b2392238ec4",
+      "path": "tests/sqlite_wal_reset_2026_guard_probe.py",
+      "delta": "Added fail-closed upstream-version/WAL guard plus bounded disposable race canary."
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "be68b1ac35dddf014f836fc77d8cd738345d8b86",
+      "path": ".github/workflows/frank-sqlite-wal-reset-2026-guard.yml",
+      "delta": "Added real self-hosted Ubuntu execution and persisted receipt."
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "1b8349a040768aecb5713fac06bb7ca2e66e169d",
+      "path": "tests/sqlite_wal_reset_2026_guard_probe.py",
+      "delta": "Refined gate so upstream semantic version is risk evidence rather than a claim that a distro build is definitely unpatched."
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "67f8fbcf9b1ff6dae0e40213ea75a0ff14688098",
+      "path": ".github/workflows/frank-sqlite-wal-reset-2026-guard.yml",
+      "delta": "Extended target receipt to collect dpkg package versions, Python _sqlite3 extension path, linked libraries and sqlite3 CLI version for downstream provenance adjudication."
+    }
+  ],
+  "out_of_box_experiment": {
+    "count": 1,
+    "id": "OOB_BOUNDED_WAL_RESET_RACE_CANARY",
+    "design": "Disposable WAL database with one writer process plus two aggressive checkpoint processes alternating PASSIVE/RESTART/TRUNCATE for two seconds on the real target runner.",
+    "result": "NO_CORRUPTION_OBSERVED; 2495 writes; 247355 + 217917 checkpoint calls; all worker exit codes 0; final integrity_check ok.",
+    "interpretation": "NEGATIVE_RESULT_DIAGNOSTIC_ONLY. This does not refute SQLite's documented tight-timing race and cannot promote release safety."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_RELEASE_SAFETY_OBLIGATION",
+    "rule": "If Frank's authoritative SQLite state uses WAL and runtime upstream version is in the documented affected range, fail closed until one of three independent conditions is proven: upstream-fixed runtime, exact downstream/vendor patch provenance for the WAL-reset fix, or machine-checked topology exclusion of the necessary concurrent write/checkpoint race.",
+    "anti_goodhart": "Repeated clean stress runs cannot substitute for version/patch/topology evidence because the upstream race is explicitly difficult to reproduce organically.",
+    "rollback": "Guard is additive and uses disposable DBs only; remove/revert test/workflow commits if a superior accepted safety mechanism replaces it."
+  },
+  "target_vps_execution": {
+    "executed": true,
+    "receipt_commit": "295cd5d101318c66b66b157677d094617b6d8bde",
+    "result": "BLOCK_AFFECTED_SQLITE_WAL_RESET_RANGE",
+    "refined_provenance_rerun": "TRIGGERED_BY_67f8fbcf9b1ff6dae0e40213ea75a0ff14688098; exact new receipt not yet observed at research-reentry time"
+  },
+  "training_authorized": false,
+  "canonical_target_state_mutated": false,
+  "external_effect_performed": false,
+  "promotion": "NO_RELEASE_PASS; SECURITY_OBLIGATION_ADDED",
+  "next_falsifiers": [
+    "Inspect exact target dpkg/build/link provenance and verify whether Ubuntu carried the exact WAL-reset fix despite SQLite semantic version 3.45.1.",
+    "If no exact backport proof exists, upgrade/pin a fixed SQLite build and rerun full UnifiedDB WAL/recovery/latency suite.",
+    "Alternatively prove with machine-observed connection/checkpoint topology that the documented multi-connection concurrent reset precondition is unreachable; then adversarially test that invariant."
+  ]
+}

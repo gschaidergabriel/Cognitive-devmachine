@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "entity": "Clay",
+  "worker_provenance": "GPT-5.6 Sol temporary Clay worker",
+  "observed_at": "2026-08-12T20:59:00+07:00",
+  "target_work_packages": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-01-IDENTITY-SERVER-BINARY"
+  ],
+  "source_repo": "gschaidergabriel/Dr.-Unterweger",
+  "fresh_main_observed": "53d0906e5e0d5493517393164854681c2db06854",
+  "candidate": {
+    "branch": "chatgpt/go-sqlite-postload-temporal-fence-20260812",
+    "head_sha": "79b747fddcf0a19bdd149f75087a9202f485e216",
+    "stack_base_branch": "chatgpt/go-sqlite-live-content-stability-20260812",
+    "stack_base_sha": "a858df71ce327fe4291fec056cb2100a6d3f4a4b",
+    "draft_pr": 541,
+    "base_pr": 529
+  },
+  "r0_observed": [
+    "The current live-process SQLite attestor binds one process generation to the root-anchored SQLite mapping.",
+    "Stacked PR #529 adds same-FD hashing plus device/inode/size/mtime/ctime stability during the hash window.",
+    "V6 requires the accepted SQLite library and all parent directories to be root-owned and not group/other writable.",
+    "Current SQLite release policy in V5 accepts SQLite 3.53.4 with source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc.",
+    "The existing live attestor explicitly does not claim Frank identity, productive persistence-path exercise, or restart/recovery acceptance."
+  ],
+  "hypothesis": {
+    "id": "H-SQLITE-POSTLOAD-TEMPORAL-FENCE",
+    "claim": "A mapped backing object's ctime later than the target process start is a useful fail-closed indicator of post-start deploy/update/library-swap mutation on the already trusted root-owned V6 path.",
+    "mechanism": "Compare mapped-library ctime_ns with a conservative latest-process-start realtime bound derived from /proc start ticks, SC_CLK_TCK, CLOCK_BOOTTIME and current realtime; reject post-start backing-object mutation before accepting live SQLite identity.",
+    "confidence": "SUPPORTED_ON_TESTED_SELF_HOSTED_LINUX_LANE"
+  },
+  "strongest_counterhypothesis": {
+    "claim": "Current path/device/inode plus a trusted current hash and stable metadata are sufficient to infer that the process has always mapped the trusted bytes.",
+    "outcome": "REFUTED_BY_BOUNDED_COUNTERWORLD"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count": 1,
+    "id": "SAME_INODE_POSTLOAD_REWRITE",
+    "scope": "DISPOSABLE_LOCAL_SANDBOX_ONLY",
+    "steps": [
+      "Load a toy shared object named libsqlite3.so.0 whose sqlite3_libversion reports 9.99.0-toy.",
+      "Keep the child process alive after the toy object is mapped.",
+      "Overwrite the same backing inode in place with trusted system libsqlite3.so.0 bytes before external observation; do not unlink or rename.",
+      "Observe mapping/path/inode/deleted-marker/current-disk-hash conditions from the parent."
+    ],
+    "measured_observations": {
+      "loaded_baseline_version": "9.99.0-toy",
+      "sqlite_mapping_identity_count": 1,
+      "mapping_path_unchanged": true,
+      "mapping_inode_equals_original": true,
+      "path_stat_inode_equals_mapping": true,
+      "disk_hash_equals_trusted": true,
+      "deleted_marker_present": false,
+      "current_state_only_visibility_predicate_would_accept": true,
+      "instrumented_repeat_process_outcome": "SEGFAULT_139_AFTER_INPLACE_DSO_REWRITE"
+    },
+    "safety": {
+      "accepted_hostinger_touched": false,
+      "frank_database_opened": false,
+      "canonical_frank_state_mutated": false,
+      "effect_authority": "NONE",
+      "harness_authority": "NONE",
+      "cleanup": "DISPOSABLE_DIRECTORY_REMOVED"
+    }
+  },
+  "grf_collapse": [
+    {
+      "candidate": "stable pathname + device/inode + accepted current hash proves no post-load byte mutation",
+      "outcome": "REJECT"
+    },
+    {
+      "candidate": "PR #529 same-FD metadata stability closes mutation during its hash window",
+      "outcome": "RETAIN",
+      "scope": "MUTATION_DURING_ATTESTATION_ONLY"
+    },
+    {
+      "candidate": "ctime <= conservative latest process start catches ordinary post-start same-inode backing-object mutation on trusted V6 paths",
+      "outcome": "RETAIN",
+      "scope": "SUPPORTED_ON_SELF_HOSTED_LINUX"
+    },
+    {
+      "candidate": "ctime/realtime fence is malicious-root remote attestation",
+      "outcome": "REJECT"
+    }
+  ],
+  "implementation_delta": {
+    "new_files": [
+      "runtime/frank_storage_truth_v1/frank_sqlite_live_temporal_attestor_v2_candidate.py",
+      "tests/test_frank_sqlite_live_temporal_attestor_v2_candidate.py",
+      ".github/workflows/frank-sqlite-postload-temporal-fence.yml"
+    ],
+    "semantics": [
+      "Compose full PR #529 V1 live attestation.",
+      "Revalidate exact PID generation and mapping identity against the V1 receipt.",
+      "Derive conservative latest-process-start realtime upper bound from /proc start ticks, SC_CLK_TCK, CLOCK_BOOTTIME, current realtime, tick quantization and sampling span.",
+      "Fail closed when mapped-library ctime_ns is later than the latest possible process start.",
+      "Resample PID/mapping/stat after the temporal check.",
+      "Preserve effect_authority=NONE and canonical_state_mutated=false."
+    ],
+    "explicit_limitations": [
+      "not malicious-root remote attestation",
+      "not invariant to privileged system-clock manipulation",
+      "large realtime clock steps may cause fail-closed behavior or weaken historical discrimination",
+      "does not prove productive Hostinger ProductStart, persistence-path exercise, restart/recovery, rollback/downgrade/library-swap acceptance, semantic lineage, or whole Frank v0.1"
+    ]
+  },
+  "execution_evidence": {
+    "workflow_run": 31604014083,
+    "tested_sha": "79b747fddcf0a19bdd149f75087a9202f485e216",
+    "runner": "clay",
+    "host": "digital-retina",
+    "conclusion": "SUCCESS",
+    "base_v1_regressions": "6/6 PASS",
+    "temporal_v2_regressions": "5/5 PASS",
+    "repo_static_integrity": "PASS",
+    "deep_integrity_v11": "12/12 PASS",
+    "artifact_id": 9144365802,
+    "artifact_sha256": "76b9da2f652f3e2bd0458f44933b6b7f52fcb89e03ab801c570b26135400d69b",
+    "productive_hostinger_mutation": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "external_primary_evidence": {
+    "sqlite_wal_reset_fix": "SQLite documents the WAL-reset defect through 3.51.2 and fixes it in 3.51.3+, with designated backports.",
+    "sqlite_current_release_observed": "3.53.4 dated 2026-07-24"
+  },
+  "promotion_state": "TESTING_SUPPORTED_MECHANISM_ONLY",
+  "release_effect": "NO_RELEASE_PROMOTION",
+  "training_authorized": false,
+  "next_discriminators": [
+    "Adjudicate/land PR #529 first, then rebase PR #541 onto merged ancestry.",
+    "Compose surviving ProductStart identity (#524/#525) and lineage/freshness (#523) mechanisms rather than duplicate them.",
+    "On exact accepted Hostinger service, prove root anchor + ProductStart + actual mapped accepted SQLite identity + productive persistence path.",
+    "Execute clean start/restart and bounded rollback/downgrade/library-swap controls with durable receipts.",
+    "Keep F-V01-13 and whole Frank v0.1 acceptance open until exact production evidence exists."
+  ]
+}

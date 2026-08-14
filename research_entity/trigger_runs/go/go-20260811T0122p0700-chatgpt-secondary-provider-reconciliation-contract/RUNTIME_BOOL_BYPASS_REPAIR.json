@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "parent_receipt": "RESEARCH_RECEIPT.json",
+  "recorded_at": "2026-08-11T01:39:00+07:00",
+  "finding": "The first typed provider-contract candidate still left a same-generation direct runtime path in CallerBoundEffectLifecycleRuntime.retry_uncertain_attempt() where downstream_retry_safe + idempotency_key could authorize retry without presenting the typed provider contract. This violated the Clay-native single-semantic-authority premise.",
+  "classification": "BUG_REPAIR_AND_DISCRIMINATING_NORMAL_REGRESSION",
+  "oob_experiment_added": false,
+  "repair": {
+    "branch": "chatgpt/go-provider-reconciliation-contract-20260811",
+    "candidate_head": "6ec08d96fa06d5e157dfe971044cd594bc69e845",
+    "mechanisms": [
+      "Provider semantic value types centralized in runtime/state/provider_idempotency_types.py.",
+      "UNIFIEDDB_PROVIDER_IDEMPOTENCY_CONTRACT_V1.sql adds immutable per-effect provider contract binding.",
+      "Provider contract is inserted atomically with effect reservation + exact execution-generation binding when supplied.",
+      "Same-generation uncertain retry first validates the exact execution generation, then requires the exact immutable typed provider contract and semantic request fingerprint; the legacy downstream_retry_safe bit cannot authorize retry.",
+      "B3 provider precommit rechecks the exact bound provider contract inside the existing execution commit window when a provider contract is bound.",
+      "Read-only reconciliation checks exact bound provider identity but does not require a stale ExecutionGenerationFence and does not mint effect authority."
+    ],
+    "rollback": "Drop additive provider migration/types/runtime files and revert candidate branch; parent PR 250 remains independent."
+  },
+  "target_execution": {
+    "workflow_run_id": 31420115288,
+    "job_id": 93558541193,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "tested_pr_merge_sha": "26e5564660d75be71103ac5375c354752c7084eb",
+    "candidate_head": "6ec08d96fa06d5e157dfe971044cd594bc69e845",
+    "exact_parent_pr250_head": "ad6e22bc244ba2eee1684295c9dd4aec99ba953d",
+    "status": "PASS",
+    "artifact_id": 9074983135,
+    "artifact_sha256": "d7ce77a7929793172628ebb41c70b4ad9c170f4715ede6eaf982a27ae845b2be",
+    "source_blobs": {
+      "provider_idempotency_types.py": "83e7365d9d0d1f2a84aeb2c02420250136b13184",
+      "provider_idempotency_contract.py": "15c815bb64a894a51f45d2f483499dc8196271fb",
+      "caller_bound_effect_lifecycle.py": "c52854357de3824591d0cc2c7a84008884ee7ab3",
+      "effect_provider_commit.py": "e909e8a22689f54243a4ed0fdfa312fe1d4fdb71",
+      "UNIFIEDDB_PROVIDER_IDEMPOTENCY_CONTRACT_V1.sql": "9828f47149b50c139d7313ffdcd5fa174847bb5a",
+      "apply_current_schema.py": "73eb99f7d720d0d83f226c3a0e73f22a9a0d8afb",
+      "runtime_matrix": "5557336a6d5837be328a062780e729b369271690",
+      "ack_blackhole_oob": "c87c23a5a25bccfca8c67dc47180a030e6cfee27",
+      "parent_effect_matrix": "dcc0b1151c85e82cda31eb4d652ca06498361d4b"
+    }
+  },
+  "normal_runtime_matrix": {
+    "status": "PASS_TYPED_PROVIDER_CONTRACT_RUNTIME_MATRIX",
+    "legacy_bool_same_generation_retry": "RETRY_REQUIRES_TYPED_PROVIDER_CONTRACT",
+    "typed_same_generation_retry": "CALLER_BOUND_TYPED_PROVIDER_RETRY_DURABLY_STARTED",
+    "same_key_changed_intent": "PROVIDER_CONTRACT_FENCED:PROVIDER_REQUEST_FINGERPRINT_NOT_RESERVATION_REQUEST",
+    "contract_splice": "PROVIDER_CONTRACT_FENCED:BOUND_PROVIDER_CONTRACT_PROVIDER_CONTRACT_HASH_MISMATCH",
+    "b3_missing_bound_contract": "BOUND_PROVIDER_CONTRACT_NOT_PRESENTED",
+    "b3_exact_contract": "PASS",
+    "provider_contract_immutable_update": true,
+    "provider_contract_immutable_delete": true,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "external_effect_performed": false,
+    "external_network_used": false,
+    "canonical_state_mutated": false
+  },
+  "parent_normal_matrix": {
+    "status": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+    "same_epoch_v16_rebind_before_attempt": "FENCED_ZERO_STATE_MUTATION",
+    "stale_source": "FENCED_ZERO_STATE_MUTATION",
+    "successor_cross_splice": "FENCED_ZERO_STATE_MUTATION",
+    "uncertain_retry_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+    "outcome_reconciliation_after_turnover": "PASS",
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "single_go_oob_revalidation": {
+    "experiment": "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT",
+    "status": "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB",
+    "provider_contract_atomically_bound": true,
+    "provider_contract_immutable": true,
+    "provider_commits_after_timeout": 1,
+    "frank_state_after_timeout": "OUTCOME_UNKNOWN",
+    "successor_retry": "FENCED_ZERO_STATE_MUTATION",
+    "provider_rows_after_reconciliation": 1,
+    "final_effect_state": "OUTCOME_SUCCEEDED",
+    "reconciliation_without_execution_fence": true,
+    "external_network_used": false,
+    "external_provider_used": false,
+    "canonical_state_mutated": false
+  },
+  "adjudication": "SUPPORTED_AS_TARGET_VPS_MECHANISM_CANDIDATE_NOT_PROMOTED",
+  "promotion": "NONE",
+  "remaining_gates": [
+    "Real provider timeout-after-acceptance and provider-side exactly-once/reconciliation evidence.",
+    "Current ClayCode frontend/TypedIR plus later type/effect/compiler/lowering/runtime-binding evidence for the typed provider contract.",
+    "Ordinary non-bypassable effect routing through the mediated provider path.",
+    "Verified provider outcome -> provenance-bound re-entry -> DONE/terminal receipt.",
+    "Recovery generation/snapshot rollback semantics and exact-current ancestry recomposition before merge/promotion."
+  ],
+  "training_authorized": false,
+  "frank_self_harness_authority": "PROPOSAL_ONLY"
+}

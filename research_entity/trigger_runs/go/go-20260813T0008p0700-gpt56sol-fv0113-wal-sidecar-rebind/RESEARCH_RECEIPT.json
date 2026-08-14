@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260813T0008p0700-gpt56sol-fv0113-wal-sidecar-rebind",
+  "trigger": "go",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "created_at": "2026-08-13T00:08:46+07:00",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_entity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "overlap_refresh": {
+    "research_head_before_write": "a72270bfdbbbbb9a259556ee418eb76f12d6e651",
+    "issue": 534,
+    "overlap_search": [
+      "WAL sidecar HAS_MOVED",
+      "sqlite WAL sidecar rebind journal pointer"
+    ],
+    "overlap_result": "NO_DIRECT_DUPLICATE_FOUND"
+  },
+  "observed_current_candidate": {
+    "pr": 557,
+    "head": "2b154ac0b36b518e761ccea0acbc0977cab27c54",
+    "candidate": "connection-bound SQLITE_FCNTL_HAS_MOVED main-file diagnostic",
+    "workflow_run": 31613664992,
+    "workflow_status": "FAILURE_BEFORE_CANDIDATE_TESTS",
+    "failed_step": "Build exact diagnostic extension",
+    "exact_build_failure_cause": "UNKNOWN",
+    "note": "Immutable candidate fetch succeeded. Guard tests and static-integrity checks were skipped after the build step failed. Artifact did not preserve compiler stderr, so header absence or another exact runner cause is not inferred."
+  },
+  "grf": {
+    "observed_anchor": "PR #557 calls SQLITE_FCNTL_HAS_MOVED for schema main and is explicitly only a diagnostic candidate; SQLite WAL mode uses a separate WAL sqlite3_file object.",
+    "generated_reality": "If main-file HAS_MOVED is an adequate productive persistence-object discriminator in WAL mode, rebinding only the active WAL pathname/object should either be detected by the main-file guard or prevent the connection from continuing a successful WAL transaction.",
+    "counter_reality": "The main database file can remain unmoved while the already-open WAL file object is renamed/rebound independently; main-file HAS_MOVED can remain false while the same connection continues writing to its opened WAL object.",
+    "falsifier": "Rename the active WAL sidecar while leaving the main database object untouched, replace the visible -wal pathname with a distinct inode, then query main-file HAS_MOVED and execute a new transaction/readback on the same open connection.",
+    "outcome": "COUNTER_REALITY_SUPPORTED",
+    "collapse": {
+      "main_HAS_MOVED_implies_full_WAL_persistence_object_binding": "REJECT",
+      "main_HAS_MOVED_as_narrow_main_file_move_discriminator": "RETAIN",
+      "PR557_as_complete_productive_WAL_binding": "REJECT",
+      "F_V01_13_release_promotion": "NO_CHANGE"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "WAL_SIDECAR_REBIND_VISIBILITY",
+    "scope": "DISPOSABLE_LOCAL_SQLITE_WAL_FIXTURE_ONLY",
+    "environment": {
+      "python": "3.13.5",
+      "sqlite_version": "3.46.1",
+      "sqlite_source_id": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1",
+      "kernel": "6.18.35"
+    },
+    "baseline": {
+      "journal_mode": "wal",
+      "main_has_moved": 0,
+      "main_inode": 4063846,
+      "wal_inode": 4063847,
+      "shm_inode": 4063848
+    },
+    "intervention": {
+      "operation": "rename active FRANK_UNIFIED.sqlite-wal to FRANK_UNIFIED.original.sqlite-wal and create a distinct file at the original visible -wal pathname",
+      "main_database_object_changed": false,
+      "replacement_visible_wal_inode": 4063849
+    },
+    "observations": {
+      "main_has_moved_after_wal_rebind": 0,
+      "same_connection_insert_commit": "COMMIT_OK",
+      "same_connection_readback": "B",
+      "main_has_moved_after_commit": 0
+    },
+    "limitations": [
+      "Not the accepted Hostinger target.",
+      "Not a WAL corruption reproduction and not evidence of data loss.",
+      "Does not prove an attacker can perform this on the production deployment.",
+      "Shows a measurement-scope/object-binding gap only: main-file HAS_MOVED does not attest the WAL file object."
+    ],
+    "cleanup": "DISPOSABLE_FIXTURE_REMOVED"
+  },
+  "primary_source_alignment": {
+    "sqlite_fcntl_has_moved": "SQLite documents SQLITE_FCNTL_HAS_MOVED as reporting whether the nominated file has been renamed, moved, or deleted since it was opened.",
+    "sqlite_journal_pointer": "SQLite documents SQLITE_FCNTL_JOURNAL_POINTER as exposing the sqlite3_file object associated with the rollback journal or write-ahead log for a database connection.",
+    "wal_release_boundary": "SQLite WAL-reset corruption issue is fixed in 3.51.3+; version suitability alone still does not prove productive object/runtime binding."
+  },
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION",
+    "affected_components": [
+      "F-V01-13 security/recovery/storage",
+      "UnifiedDB persistence acceptance",
+      "accepted Hostinger ProductStart receipt"
+    ],
+    "delta": "Productive WAL acceptance must bind both the main database object and the connection's active WAL/journal object (or prove an equivalently strong fail-closed topology) across the measured operation. Main-file HAS_MOVED alone is insufficient.",
+    "smallest_next_discriminator": "On the actual productive Frank connection, combine connection-bound sqlite_version/sqlite_source_id/journal_mode with object-bound main and WAL/journal identity (prefer SQLITE_FCNTL_FILE_POINTER and SQLITE_FCNTL_JOURNAL_POINTER or an equivalently strong VFS/FD-bound mechanism), execute a unique transaction/readback, then revalidate after service restart/reopen and rollback/downgrade/library-swap controls on the accepted Hostinger target.",
+    "rollback": "No product code changed; retain current main and keep PR #557 Draft until a WAL-aware composition is independently tested."
+  },
+  "authority": {
+    "frank_or_vps_mutated": false,
+    "canonical_product_state_mutated": false,
+    "harness_authority_mutated": false,
+    "effect_authority": "NONE",
+    "final_training_authorized": false
+  },
+  "research_result": "NEGATIVE_EVIDENCE_PLUS_TEST_OBLIGATION",
+  "product_code_delta": "NO_CHANGE",
+  "next_priority": "Accepted Hostinger ProductStart + exact fixed SQLite runtime + real canonical UnifiedDB WAL operation + main/WAL object binding + restart/reopen + downgrade/library-swap/rollback + semantic-lineage evidence in one fail-closed provenance chain."
+}

@@ -1,0 +1,176 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2245p0700-chatgpt-secondary-v4-fresh-main-success",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "successor_of": {
+    "receipt": "go-20260811T2238p0700-chatgpt-secondary-v4-fresh-main-pending",
+    "clay_commit": "be52748c0485c239de43c2afce8fc6516e4ee656",
+    "prior_state": "UNKNOWN_PENDING_EXECUTION"
+  },
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "identity_lock": {
+    "worker_is_not_frank": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "training_authorized": false
+  },
+  "go_oob_accounting": {
+    "new_deliberately_unusual_experiments_designed_by_this_worker": 1,
+    "experiment": "GO_OOB_PYTHONPATH_SQLITE_MODULE_SHADOW",
+    "pr": 336,
+    "run": 31503138219,
+    "result": "SUPPORTED_FAIL_OPEN_PYTHONPATH_SQLITE_MODULE_SHADOW",
+    "later_v4_startup_class_origin": "CONCURRENT_WORKER_EVIDENCE_REUSED_ONLY_AS_ORDINARY_REPAIR_REGRESSION",
+    "second_new_oob": false
+  },
+  "target_revalidation": {
+    "pr": 359,
+    "branch": "chatgpt/sqlite-v4-fresh-main-product-boot-20260811",
+    "tested_sha": "5466b52d13284ce325c8e26f7d0b90e7636283d9",
+    "workflow_run": 31507571217,
+    "job": 93832964447,
+    "workflow_conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "system_sqlite_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+    "artifact": {
+      "id": 9107852950,
+      "name": "sqlite-v4-no-site-31507571217",
+      "size_bytes": 44835,
+      "digest": "sha256:d99d4b62c9f7ce7ac23dbef81ea37cf5198eb16bb6ff0d8e7905bb5633e7835d"
+    }
+  },
+  "current_main_relevance": {
+    "v17_blob_main_and_pr359": "22efd92b1b92cb5b0b9ebf2442ddd055bc68aa76",
+    "apply_current_schema_blob_main_and_pr359": "cf72e1f8b0b8a80b94471d51d1664e7d3eefdbee",
+    "interpretation": "Main advanced in unrelated ClayCode areas while the exact V17 and schema surfaces composed by this storage run remained byte-identical."
+  },
+  "fixed_sqlite": {
+    "version": "3.53.4",
+    "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+    "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "mapped_library_sha256": "58d7e38fc09c26d5e7df07a78262b66e554935a088b2f26b9f834ebc343e16cf",
+    "system_install_performed": false,
+    "build_resource": {
+      "wall_seconds": 46.86,
+      "user_seconds": 73.66,
+      "system_seconds": 3.33,
+      "cpu_percent": 164,
+      "max_rss_kb": 417484,
+      "exit_status": 0
+    }
+  },
+  "v4_repair_regression": {
+    "status": "PASS_V4_NO_SITE_REPAIRS_SYSTEM_SITE_PREINIT",
+    "classification": "ORDINARY_REPAIR_REGRESSION_AFTER_SINGLE_GO_OOB",
+    "bad_i_only": {
+      "returncode": 78,
+      "receipt_exists": false,
+      "target_exists": false,
+      "reason": "PYTHON_INTERPRETER_NOT_ISOLATED_NO_SITE_USE_DASH_I_DASH_S"
+    },
+    "good_i_s": {
+      "returncode": 0,
+      "admission_status": "PASS_FIXED_SQLITE_RUNTIME_V4_CANDIDATE_ADMISSION",
+      "python_isolated": true,
+      "python_ignore_environment": true,
+      "python_safe_path": true,
+      "python_no_site": true,
+      "python_sqlite3_module_origin": "/usr/lib/python3.12/sqlite3/__init__.py",
+      "target_startup_mutation_marker": null,
+      "pragma_synchronous": 2
+    },
+    "resource": {
+      "wall_seconds": 3.05,
+      "user_seconds": 2.57,
+      "system_seconds": 0.47,
+      "cpu_percent": 99,
+      "max_rss_kb": 75780,
+      "exit_status": 0
+    }
+  },
+  "v17_under_v4": {
+    "status": "PASS_V17_BOUND_REENTRY_DONE_CANDIDATE_DIFFERENTIAL",
+    "classification": "NORMAL_ARCHITECTURE_DISCRIMINATOR_NOT_OOB",
+    "checks_passed": 18,
+    "checks_total": 18,
+    "failed_checks": [],
+    "admission_status": "PASS_FIXED_SQLITE_RUNTIME_V4_CANDIDATE_ADMISSION",
+    "resource": {
+      "wall_seconds": 0.22,
+      "user_seconds": 0.13,
+      "system_seconds": 0.05,
+      "cpu_percent": 82,
+      "max_rss_kb": 25208,
+      "exit_status": 0
+    },
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "unifieddb_claygraph_under_v4": {
+    "status": "PASS_FIXED_SQLITE_UNIFIEDDB_PAIR_SMOKE",
+    "checks_passed": 9,
+    "checks_total": 9,
+    "failed_checks": [],
+    "journal_mode_initial": {"UnifiedDB": "wal", "ClayGraph": "wal"},
+    "journal_mode_reopened": {"UnifiedDB": "wal", "ClayGraph": "wal"},
+    "integrity_initial": {"UnifiedDB": "ok", "ClayGraph": "ok"},
+    "integrity_reopened": {"UnifiedDB": "ok", "ClayGraph": "ok"},
+    "schema_object_counts": {"UnifiedDB": 173, "ClayGraph": 45},
+    "canonical_state_opened": false,
+    "canonical_state_migrated": false,
+    "resource": {
+      "wall_seconds": 0.17,
+      "user_seconds": 0.10,
+      "system_seconds": 0.05,
+      "cpu_percent": 91,
+      "max_rss_kb": 24612,
+      "exit_status": 0
+    }
+  },
+  "python_startup_boundary": {
+    "verified_flags": {
+      "isolated": 1,
+      "ignore_environment": 1,
+      "safe_path": true,
+      "no_site": 1
+    },
+    "verified_sys_path": [
+      "/usr/lib/python312.zip",
+      "/usr/lib/python3.12",
+      "/usr/lib/python3.12/lib-dynload"
+    ],
+    "candidate_launcher_present_in_pr359": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v4_launcher.sh",
+    "candidate_launcher_contract": "/usr/bin/python3 -I -S -> V4 guard",
+    "candidate_launcher_directly_exercised_by_run31507571217": false,
+    "installed_product_service_binding_proven": false
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_CURRENT_RELEVANT_MAIN_TARGET_CANDIDATE_NOT_PRODUCT_PROMOTED",
+    "component": "F-V01-13 security/recovery/observability storage boot",
+    "selected_direction": "Private fixed SQLite 3.53.4 plus V4 pre-import admission requiring trusted Python -I -S. V1 native object/hash/source-id, V2 loader hardening, V3 stdlib module-origin checks, and V4 no-site startup closure remain layered evidence boundaries.",
+    "system_sqlite_3_45_1_wal_product_credit": "REJECTED",
+    "strongest_remaining_counterhypothesis": "The real installed Frank service can execute import-capable code or mutate runtime state before/outside V4, can bypass the supported launcher, or can use different installed manifest/library/config bytes than the tested candidate.",
+    "remaining_gate": "Resolve and install the canonical ProductStart/service entrypoint; bind service/config/launcher/private-SQLite/manifest hashes; then prove actual stop/start/crash-restart continuity and real runtime graph on the accepted target before release promotion.",
+    "rollback": "Keep V4 as a supported candidate only; do not promote service/product boot or whole Frank acceptance until installed-entrypoint and recovery evidence exist."
+  },
+  "negative_results_preserved": [
+    "V1 insufficient against demonstrated native-loader interposition class.",
+    "V2 insufficient against high-level Python sqlite3 module substitution.",
+    "V3 insufficient against pre-guard site/.pth/sitecustomize startup execution.",
+    "Component V4/V17/UnifiedDB greens are not an atomic Whole-Frank pass."
+  ],
+  "research_disposition": "SUPPORTED_V4_CURRENT_RELEVANT_MAIN_TARGET_CANDIDATE_WITH_PRODUCT_BOOT_GATE_OPEN",
+  "training_authorization_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

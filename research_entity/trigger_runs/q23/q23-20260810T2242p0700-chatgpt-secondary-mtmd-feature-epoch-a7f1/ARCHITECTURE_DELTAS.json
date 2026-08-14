@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "architecture_deltas": [
+    {
+      "id": "AD-Q23-SHARED-MTMD-PREDECODE-01",
+      "status": "CANDIDATE_IMPLEMENTED_ORACLE_NOT_PROMOTED",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-03-COGNITIVE-LOOP-CORE"],
+      "change": "Use the already-computed libmtmd projected visual-token buffer as the first Qwen-native MVC feature source before optional 4B image decode.",
+      "physical_hook": "after mtmd_batch_get_output_embd and before mtmd_helper_decode_image_chunk",
+      "semantic_authority": "claycode/frank_visual_embedding_gate.clay",
+      "rollback": "Disable bypass hook and return to normal llama-server media decode; no prototype becomes effect authority.",
+      "promotion_gate": ["original Retina baseline", "real target mtmd buffer", "open-set calibration", "end-to-end verified outcome", "recovery"]
+    },
+    {
+      "id": "AD-Q23-POSITION-AWARE-DESCRIPTOR-01",
+      "status": "CANDIDATE_IMPLEMENTED_ORACLE_NOT_PROMOTED",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "change": "Bind libmtmd decoder positions (t,x,y) to feature receipts and test global+coarse-x/y pooling instead of treating token enumeration order as spatial geometry.",
+      "supersedes_within_run": "token-order bucket pooling as any production spatial authority",
+      "rollback": "Global-only descriptor or normal full decode.",
+      "open_question": "Temporal/video pooling remains open and must have its own FeatureEpoch policy."
+    },
+    {
+      "id": "AD-Q23-FEATURE-EPOCH-01",
+      "status": "CANDIDATE_IMPLEMENTED_GUARD_NOT_PROMOTED",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "change": "Persistent visual prototypes carry an explicit compatibility identity binding model, mmproj, runtime, backend, runtime config, preprocessing, token policy, pooling/projection and temporal policy until ablation proves fields unnecessary.",
+      "safety_effect": "Stale epoch cannot silently bypass decoder.",
+      "counterrisk": "Over-conservative invalidation/relearning if numerically irrelevant runtime fields are bound.",
+      "rollback": "Relax individual fields only after differential invariance evidence."
+    },
+    {
+      "id": "AD-Q23-CONTENT-ADDRESSED-VISUAL-EVIDENCE-01",
+      "status": "CANDIDATE",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-04-UNIFIEDDB-EAP-EPISODIC", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "change": "Use immutable frame/ROI content identity as the join key among source artifact, VisualPercept, mtmd media identity/cache metadata, MVC descriptor and replay provenance.",
+      "hard_boundary": "mtmd serialized chunk metadata is not source-image replay evidence because media bytes are not included.",
+      "rollback": "Keep current source artifact path plus independent receipt IDs; never infer source bytes from descriptor/chunk metadata."
+    },
+    {
+      "id": "AD-Q23-DUAL-SCALE-GUI-01",
+      "status": "CANDIDATE",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-03-COGNITIVE-LOOP-CORE"],
+      "change": "Test cheap global structural evidence + high-detail changed/action-relevant ROI instead of ROI-only deep vision or unconditional full-frame decode.",
+      "reason": "External GUI evidence and historical Retina conditional paths both argue that global context and temporal redundancy matter, but do not fix the optimal mechanism.",
+      "rollback": "ROI-only or full-frame route based on matched test outcome."
+    },
+    {
+      "id": "AD-Q23-DETERMINISTIC-TEMPORAL-BASELINE-01",
+      "status": "CANDIDATE",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "change": "Keep frame/tile hash + bounded pixel-delta as first temporal-gating comparator; learned pruning is optional only if it beats verified total-path cost and consequential-change recall.",
+      "rollback": "Disable change gate and use anchor/full decode."
+    },
+    {
+      "id": "AD-Q23-LIGHT-COUNTERBASELINE-01",
+      "status": "TEST_PLAN_DELTA",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "change": "Replace vague dedicated-encoder counterhypothesis with a measured ladder: historical DINOv2-Small INT8, MobileCLIP2-S0 image encoder, optionally DINOv3 ViT-S/16; treat Qwen3-VL-Embedding-2B only as a non-micro upper bound.",
+      "reason": "Counterbaseline must be small enough to be a plausible permanent v0.1 MVC path."
+    },
+    {
+      "id": "AD-Q23-SINGLE-MODEL-SLOT-BASELINE-01",
+      "status": "CANDIDATE",
+      "affected": ["F-V01-08-TOKEN-API-CLIENTS", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "change": "Test llama-server parallel=1 as simplest baseline under the owner-fixed single global Frank execution lease.",
+      "promotion_gate": "parallel>1 remains allowed if measured serialized-workload benefit outweighs state/recovery complexity."
+    },
+    {
+      "id": "AD-Q23-RESOURCE-ACCOUNTING-01",
+      "status": "TEST_OBLIGATION",
+      "affected": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "change": "All resource receipts use exact deployed text GGUF + mmproj/vision + runtime allocations rather than nominal '4B' language-model label alone."
+    },
+    {
+      "id": "AD-Q23-PROGRAM-REBASE-01",
+      "status": "NO_ARCHITECTURE_CHANGE",
+      "affected": ["Q23 research bookkeeping"],
+      "change": "Interpret earlier QNDRF H1/H2/H3 language as historical test lineage only; current promotion target is the single FRANK_V0_1 program/work-package graph.",
+      "reason": "Current program state explicitly removed H1/H2/H3 as active stages."
+    }
+  ],
+  "promoted_architecture_count": 0,
+  "reason_no_promotion": "Real Qwen target buffer/open-set and original Retina matched baseline are still missing; target-VPS q23 workflow receipt was not observed."
+}

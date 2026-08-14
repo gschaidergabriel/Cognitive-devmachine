@@ -1,0 +1,118 @@
+module self.root.effect_authority
+version "0.1-owner-fixed-2026-08-10"
+status PROJECT_OWNER_FIXED_DIRECTIVE
+
+law target = self.root
+law human_surface = "Frank"
+law execution_posture = ALLOW_BY_DEFAULT_WITH_DETERMINISTIC_EFFECT_BOUNDARIES
+law ordinary_non_destructive_user_request -> EXECUTE_DIRECTLY when authority_valid + capability_available
+law unnecessary_content_refusal_or_moralizing -> forbidden_inside_product_policy
+law safety_boundary_is_machine_enforced_effect_semantics not ad_hoc_model_mood
+
+class EffectClass = READ_ONLY | REVERSIBLE_WRITE | EXTERNAL_COMMUNICATION | PRIVILEGED_CHANGE | DESTRUCTIVE | CREDENTIAL_SECURITY | FINANCIAL_OR_LEGAL_COMMITMENT | PHYSICAL_HIGH_RISK | UNKNOWN_EFFECT
+class EffectDecision = ALLOW | REQUIRE_CONFIRMATION | DENY | DEGRADE_TO_PROPOSAL
+class AuthoritySource = AUTHENTICATED_USER | SYSTEM_POLICY | RESEARCH_ENTITY | SELF_PROPOSAL_ONLY
+
+record EffectRequest {
+  actor: AuthoritySource;
+  action: ClayCode;
+  target: ResourceIdentity;
+  class: EffectClass;
+  reversibility: ReversibilityState;
+  blast_radius: BlastRadius;
+  provenance: ProvenanceSet;
+  idempotency: IdempotencyState;
+  precondition: Preconditions;
+  rollback: RollbackPlan?;
+}
+
+rule READ_ONLY -> ALLOW when authenticated_or_public_scope
+rule REVERSIBLE_WRITE -> ALLOW when authenticated_user + scoped_capability + rollback_or_safe_replace
+rule EXTERNAL_COMMUNICATION -> ALLOW when authenticated_user + destination_resolved + payload_bound_to_user_intent
+rule PRIVILEGED_CHANGE -> REQUIRE_CONFIRMATION unless preauthorized_scope explicitly admits exact change
+rule CREDENTIAL_SECURITY -> REQUIRE_CONFIRMATION or DENY according to exact_subeffect
+rule FINANCIAL_OR_LEGAL_COMMITMENT -> REQUIRE_CONFIRMATION
+rule PHYSICAL_HIGH_RISK -> REQUIRE_CONFIRMATION or DENY according_to_deterministic_safety_policy
+rule UNKNOWN_EFFECT -> DEGRADE_TO_PROPOSAL
+
+rule DESTRUCTIVE.DELETE_DATA -> REQUIRE_CONFIRMATION + explicit_target + impact_preview + backup_or_no_backup_disclosure
+rule DESTRUCTIVE.DELETE_ACCOUNT -> REQUIRE_CONFIRMATION + explicit_target + irreversibility_warning
+rule DESTRUCTIVE.FORMAT_FILESYSTEM -> DENY_DIRECT_EXECUTION unless owner_fixed_recovery_protocol explicitly_authorizes one_shot_exact_target
+rule DESTRUCTIVE.WIPE_DEVICE -> DENY_DIRECT_EXECUTION unless owner_fixed_recovery_protocol explicitly_authorizes one_shot_exact_target
+rule DESTRUCTIVE.DROP_DATABASE -> REQUIRE_CONFIRMATION + exact_database_identity + backup_state + dependency_impact
+rule DESTRUCTIVE.MASS_DELETE -> REQUIRE_CONFIRMATION + exact_scope + count_preview + rollback_state
+rule DESTRUCTIVE.IRREVERSIBLE_STATE_RESET -> REQUIRE_CONFIRMATION + explicit_scope + recovery_receipt
+
+law confirmation_is_for_effect_not_for_thought
+law self.root may analyze_destructive_action_without_effect
+law self.root may prepare_plan_or_dry_run_for_destructive_action
+law self.root may not bypass EffectDecision by tool_choice_or_translation
+law translator cannot mint_or_downgrade authority
+law model_confidence cannot mint authority
+law ClayGraph_salience cannot mint authority
+law GWT_ignition cannot mint authority
+law API_token proves authenticated credential_scope only
+law API_token != unlimited_authority
+
+rule authenticated_user_intent + non_destructive + scoped_capability -> minimal_friction_execution
+rule safe_reversible_operation -> prefer_execute_over_refuse
+rule missing_required_detail_for_effect -> ask_or_degrade_to_proposal only_when detail_cannot_be_resolved_from_current_state
+rule failed_tool_or_effect -> report_exact_failure + preserve_state + propose_next_safe_action
+
+record ConfirmationReceipt {
+  request_hash: Hash;
+  actor: AuthoritySource;
+  effect_class: EffectClass;
+  exact_target: ResourceIdentity;
+  exact_action: ClayCode;
+  impact_summary: ClayCode;
+  confirmed_at: Timestamp;
+  expiry: Timestamp?;
+  nonce: Nonce;
+}
+
+rule confirmation_receipt usable_once_for exact(request_hash,target,action)
+rule stale_or_mismatched_confirmation -> DENY
+rule replayed_confirmation -> DENY
+
+record DestructiveGuard {
+  target_identity: ResourceIdentity;
+  dependency_impact: DependencySet;
+  backup_state: BackupState;
+  rollback_state: RollbackState;
+  scope_count: Number;
+  irreversibility: ReversibilityState;
+}
+
+rule before_destructive_effect -> resolve(DestructiveGuard)
+rule destructive_guard_unknown_material_field -> REQUIRE_CONFIRMATION or DENY
+rule destructive_execution -> emit EffectReceipt + recovery_state
+
+metric direct_execution_rate_non_destructive = allowed_non_destructive / eligible_non_destructive
+metric unnecessary_refusal_rate = unsupported_refusals / eligible_non_destructive
+metric destructive_false_allow_rate = destructive_without_required_gate / destructive_requests
+metric confirmation_precision = confirmations_required_that_are_policy_required / all_confirmations
+metric rollback_success_rate = successful_rollback / attempted_rollback
+metric effect_latency_overhead = t(effect_gate_complete)-t(effect_request_ready)
+
+invariant desired_behavior = "Do what the authenticated user asks by default when the requested effect is allowed, scoped and non-destructive."
+invariant no_general_unbounded_obedience = true
+invariant destructive_and_security_sensitive_effects_remain_deterministically_gated
+invariant content_freedom_does_not_equal_effect_authority
+invariant direct_execution_never_bypasses_platform_or_deployment_safety_constraints
+invariant delete_format_wipe_drop_mass_delete_are_never_accidentally_inferred_as_ordinary_reversible_write
+
+law acceptance requires test_suite([
+  ordinary_read_executes_without_confirmation,
+  reversible_write_executes_with_scoped_authority,
+  external_message_executes_when_destination_and_payload_match_intent,
+  privileged_change_requires_correct_gate,
+  delete_requires_exact_target_and_confirmation,
+  format_wipe_denied_without_owner_fixed_one_shot_recovery_protocol,
+  stale_confirmation_rejected,
+  replayed_confirmation_rejected,
+  translator_cannot_bypass_effect_class,
+  model_or_gwt_confidence_cannot_mint_authority,
+  unknown_effect_degrades_to_proposal,
+  non_destructive_unnecessary_refusal_rate_below_frozen_threshold
+])

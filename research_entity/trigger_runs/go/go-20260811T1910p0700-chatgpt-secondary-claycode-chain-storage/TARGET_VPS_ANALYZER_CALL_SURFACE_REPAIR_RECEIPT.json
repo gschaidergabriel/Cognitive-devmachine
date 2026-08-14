@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "receipt_id": "TARGET-VPS-CLAYCODE-ANALYZER-CALL-SURFACE-REPAIR-20260811T125737Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "classification": "TARGET_SELF_HOSTED_UBUNTU_STRUCTURAL_ANALYZER_REPAIR_PASS",
+  "subject": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "integration_pr": 319,
+    "tested_head": "ccbd6ea2f4eaa55a9615c54a84cfbd55dae382f6",
+    "workflow_run_id": 31493695445,
+    "job_id": 93786050394,
+    "conclusion": "success"
+  },
+  "runner": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "machine_name": "digital-retina",
+    "runs_on": ["self-hosted", "Linux", "X64"],
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "lark": "1.3.1",
+    "token_permissions": ["contents:read", "metadata:read"],
+    "persisted_checkout_credentials": "ABSENT"
+  },
+  "exact_bytes_sha256": {
+    "claycode/frank_effects.clay": "37a636f7cc2fce7dc9336adc54eef699bd8ccf0e3c9a885b126906783493992a",
+    "grammar": "dcca9d62a8e2f7cc7aa8529c531a6398595800f42aead9c87076b245998c5d54",
+    "evaluator": "814bdfe932b4c0e07793fc41fd035812bede0036618f3b674cfe0104d6ca336c",
+    "syntax": "c683fe466c6c61d495f37859a774312e074d28998b79585f42d9275432133c3d",
+    "analyzer": "73a6742ea0e4bad1170b508cd8992ac57fa955019e7b436283abd539776e9025",
+    "pure_intrinsics_reference": "d9d8c704535c9c1f8d42b48094dce5ceaf5e99d050aaa45c81cafe66319e78a8",
+    "corpus_probe": "633a2e4b892a08ca3d442d9f71b7a1810ce46f5d353a2c6336f7071137af7c64",
+    "decide_effect_gate": "c40af23cd9fc03bf554b1853811ba058469d2bc4f444827796d81c20967233a1",
+    "confirmation_gate": "898247d8f885cebfbb7ebbb1fd27eac1c3926986fbeee7d2ce4233e82a3040c3",
+    "operator_gate": "2dbb60b4254e6cf981102191181b2cdeeee768147a5e7204a2bab4811d7cb3c7",
+    "call_surface_coverage_gate": "76c83a15124f7e245da81d24b2e4b4ef13efeb29cfb1351cfc31c616bba4cf97"
+  },
+  "repair_sequence": [
+    {
+      "state": "PRE_REPAIR",
+      "target_run": 31493030207,
+      "parser_call_nodes": 677,
+      "analyzer_visible_call_nodes": 517,
+      "ordinary_calls_missed": 160,
+      "callable_method_segments_open": 22,
+      "minimum_blind_spot_sites": 182,
+      "reported_unresolved": 320,
+      "interpretation": "320 was a lower bound because nested ordinary calls were structurally invisible."
+    },
+    {
+      "state": "EXPRESSION_CARRIERS_REPAIRED",
+      "commit": "01922b36461cafe665b779376a27646a78a7ba9a",
+      "target_run": 31493409890,
+      "parser_call_nodes": 677,
+      "analyzer_visible_call_nodes": 662,
+      "ordinary_calls_missed": 15,
+      "callable_method_segments_open": 22,
+      "minimum_blind_spot_sites": 37,
+      "reported_unresolved": 416,
+      "interpretation": "Remaining hidden ordinary calls were inside IfElse/ForIn/MatchStmt structured bodies."
+    },
+    {
+      "state": "FULL_CURRENT_ORDINARY_CALL_STRUCTURAL_VISIBILITY",
+      "commit": "ccbd6ea2f4eaa55a9615c54a84cfbd55dae382f6",
+      "target_run": 31493695445,
+      "parser_call_nodes": 677,
+      "analyzer_visible_call_nodes": 677,
+      "ordinary_calls_missed": 0,
+      "callable_method_segments_open": 22,
+      "ordinary_call_unresolved": 429,
+      "interpretation": "All ordinary parser-produced Call nodes in the 36 parsed sources are now visible to analyzer admission/accounting. MethodChain callable segments remain a separate explicit semantic surface."
+    }
+  ],
+  "latest_target_gates": {
+    "decide_effect": {
+      "status": "PASS_CLAYCODE_DECIDE_EFFECT_DIFFERENTIAL",
+      "checks": "6/6",
+      "requests": 200576,
+      "mismatches": 0,
+      "wall_seconds": 7.57,
+      "max_rss_kib": 31352
+    },
+    "confirmation_and_hash": {
+      "status": "PASS_CLAYCODE_CONFIRMATION_DIFFERENTIAL",
+      "checks": "9/9",
+      "hash_requests": 56000,
+      "hash_mismatches": 0,
+      "confirmation_requests": 16000,
+      "confirmation_mismatches": 0,
+      "wall_seconds": 5.76,
+      "max_rss_kib": 31872
+    },
+    "corpus": {
+      "coverage_percent": 90.0,
+      "sources_parsed": 36,
+      "sources_total": 40,
+      "CLAY_FN": 28,
+      "CONSTRUCTOR": 10,
+      "INTRINSIC": 26,
+      "UNRESOLVED": 429,
+      "frank_effects_UNRESOLVED": 0,
+      "current_undeclared_types": [],
+      "wall_seconds": 8.26,
+      "max_rss_kib": 33536
+    },
+    "ordinary_call_surface_coverage": {
+      "status": "PASS",
+      "parser_call_nodes": 677,
+      "analyzer_visible_call_nodes": 677,
+      "parser_call_nodes_missed": 0,
+      "unique_missed_call_callees": 0,
+      "wall_seconds": 8.03,
+      "max_rss_kib": 33152
+    },
+    "member_call_surface": {
+      "semantic_status": "OPEN_TYPED_MEMBER_LIBRARY_CONTRACT",
+      "callable_method_segments": 22,
+      "histogram": {
+        "filter": 11,
+        "map": 10,
+        "sort_desc": 1
+      }
+    },
+    "operator_survival": {
+      "status": "PASS_CLAYCODE_OPERATOR_SURVIVAL",
+      "checks": "8/8",
+      "wall_seconds": 0.31,
+      "max_rss_kib": 29952
+    }
+  },
+  "largest_current_ordinary_unresolved_modules": [
+    {"module": "frank.instance_memory", "unresolved": 79},
+    {"module": "frank.runtime", "unresolved": 52},
+    {"module": "frank.hyperposition", "unresolved": 25},
+    {"module": "frank.causal_reentry", "unresolved": 24},
+    {"module": "frank.memory", "unresolved": 24},
+    {"module": "frank.opportunity_engine", "unresolved": 20},
+    {"module": "frank.grt", "unresolved": 20},
+    {"module": "frank.self_model", "unresolved": 19}
+  ],
+  "remaining_parse_rejections": [
+    {"source": "claycode/FRANK_BINARY_TARGET.clay", "gap": "UNEXPECTED_LET"},
+    {"source": "claycode/frank_claygraph.clay", "gap": "UNSUPPORTED_DECLARATION_OR_KEYWORD", "detail": "database"},
+    {"source": "claycode/frank_research_sync.clay", "gap": "UNEXPECTED_IF"},
+    {"source": "claycode/frank_unifieddb.clay", "gap": "UNSUPPORTED_DECLARATION_OR_KEYWORD", "detail": "database"}
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED",
+    "decisions": [
+      "Use 429, not 320, as the current measured ordinary-call UNRESOLVED count for this exact composed head.",
+      "Treat the increase 320 -> 429 as measurement-correctness improvement, not a semantic regression.",
+      "Require structural analyzer coverage gates whenever parser AST surface expands.",
+      "Keep the 22 callable MethodChain segments outside ordinary-call completeness until typed member/library semantics are explicitly fixed.",
+      "Next resolve/classify the 429 ordinary unresolved targets using a global declaration/symbol census before adding any host bindings."
+    ],
+    "rollback": "If a newer parser introduces expression/statement carriers not covered by the structural regression gate, reopen call-surface completeness; do not silently retain a stale completeness claim."
+  },
+  "oob_accounting": {
+    "new_oob_experiment": false,
+    "macrocycle_oob_slot": "already consumed by RELATIONAL_CHAIN_METAMORPHIC_MUTATION_MATRIX"
+  },
+  "claim_boundary": {
+    "method_chain_semantics_selected": false,
+    "host_bindings_authorized": false,
+    "general_evaluator_completeness": false,
+    "comparison_chain_semantics_selected": false,
+    "whole_frank_v0_1_acceptance": false,
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "training_authorized": false
+  }
+}

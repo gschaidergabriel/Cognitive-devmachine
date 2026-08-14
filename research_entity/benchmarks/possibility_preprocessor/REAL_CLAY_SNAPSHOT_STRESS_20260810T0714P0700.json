@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "benchmark_id": "REAL-CLAY-SNAPSHOT-POSSIBILITY-STRESS-20260810T0714P0700",
+  "truth_class": "LOCAL_EXECUTION_RECEIPT_CURRENT_CLAY_CONTENT_STRESS_SCOPE_ONLY",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "inputs": {
+    "claims_source": "research_entity/ledgers/CLAIMS.jsonl",
+    "claims_blob_sha": "081908cd367d6466a178be2839cc4bead5b10f7a",
+    "claim_count": 17,
+    "project_bootstrap_sha256": "6dad0e67c0a80ad680625387e42b0f8673096d80b88d0094b2397c2cd459be90",
+    "project_bootstrap_chars": 52391,
+    "real_project_source_distractor_chunks": 225,
+    "distractor_chunk_max_chars": 420
+  },
+  "runtime": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "execution_host_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST"
+  },
+  "iteration_0_negative_result": {
+    "description": "Twelve proposition-near queries over the 17-claim ledger were too easy to discriminate retrieval mechanisms.",
+    "sqlite_fts5_bm25": {
+      "mean_precision_at_5": 0.47638888888888886,
+      "mean_recall_at_5": 1.0,
+      "mean_mrr": 1.0,
+      "mean_ndcg_at_5": 1.0,
+      "median_case_latency_ms": 0.046494
+    },
+    "structured_one_hop": {
+      "mean_precision_at_5": 0.4722222222222222,
+      "mean_recall_at_5": 1.0,
+      "mean_mrr": 1.0,
+      "mean_ndcg_at_5": 1.0,
+      "median_case_latency_ms": 0.101992
+    },
+    "counterevidence_reserve": {
+      "mean_precision_at_5": 0.4722222222222222,
+      "mean_recall_at_5": 1.0,
+      "mean_mrr": 1.0,
+      "mean_ndcg_at_5": 1.0,
+      "median_case_latency_ms": 0.11757975
+    },
+    "adjudication": "BENCHMARK_REFUTED_AS_TOO_EASY; COUNTEREVIDENCE_RESERVE_NO_MEASURED_BENEFIT_ON_THIS_SUITE"
+  },
+  "iteration_1_semantic_stress": {
+    "description": "Eleven query families are derived from existing topic_packet identifiers rather than claim proposition wording. Expected sets are exactly the current claims sharing the packet. Real bootstrap chunks compete as lexical distractors. All strategies use max budget k=5.",
+    "query_family_count": 11,
+    "sqlite_fts5_all_records": {
+      "mean_precision_at_5": 0.27272727272727276,
+      "mean_recall_at_5": 0.8484848484848485,
+      "mean_mrr": 0.7954545454545454,
+      "mean_ndcg_at_5": 0.7669918612002081,
+      "median_case_latency_ms": 0.07084,
+      "p95_case_median_latency_ms": 0.13797
+    },
+    "sqlite_fts5_claim_only_filter": {
+      "mean_precision_at_5": 0.4984848484848485,
+      "mean_recall_at_5": 1.0,
+      "mean_mrr": 0.8484848484848485,
+      "mean_ndcg_at_5": 0.8874417733766287,
+      "median_case_latency_ms": 0.0720575,
+      "p95_case_median_latency_ms": 0.1424365
+    },
+    "compiled_semantic_field_with_lexical_padding": {
+      "mean_precision_at_5": 0.32727272727272727,
+      "mean_recall_at_5": 1.0,
+      "mean_mrr": 1.0,
+      "mean_ndcg_at_5": 1.0,
+      "median_case_latency_ms": 0.081456,
+      "adjudication": "REJECT_PADDING; VERIFIED_FIELD_RECONSTRUCTS_TARGET_FAMILY_BUT_UNUSED_TOPK_SLOTS_REINTRODUCE_NOISE"
+    },
+    "compiled_semantic_field_sufficiency_stop": {
+      "mean_precision": 1.0,
+      "mean_recall": 1.0,
+      "mean_mrr": 1.0,
+      "mean_ndcg": 1.0,
+      "median_case_latency_ms": 0.0108665,
+      "p95_case_median_latency_ms": 0.011227
+    },
+    "candidate_vs_strong_claim_filtered_fts5": {
+      "precision_delta": 0.5015151515151515,
+      "recall_delta": 0.0,
+      "mrr_delta": 0.1515151515151515,
+      "ndcg_delta": 0.1125582266233713,
+      "median_latency_speedup": 6.631173791008605
+    }
+  },
+  "causal_interpretation": {
+    "supported": [
+      "For topic-packet semantic-anchor queries on this current Clay content snapshot, a precompiled exact family plus sufficiency-stop dominates the tested FTS5/BM25 claim-filter baseline on precision, MRR, nDCG and median retrieval latency while matching recall.",
+      "Padding a semantically complete field back to top-k measurably destroys precision and adds latency; no-padding is therefore a causal mechanism candidate rather than a presentation preference."
+    ],
+    "not_supported": [
+      "Universal superiority over every database, vector database, graph database or retrieval system.",
+      "Generalization to arbitrary natural-language queries without semantic-anchor resolution.",
+      "Live FRANK downstream answer or action-quality improvement.",
+      "Target Ubuntu/Hostinger/Andreas-PC latency equivalence."
+    ]
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE",
+    "mechanism": "SEMANTIC_GENERATION_SUFFICIENCY_STOP",
+    "implementation_commit": "492a75bcb105fb0f4470c2d8c4d7f4448bde189d",
+    "test_commit": "52d239f7d3d3620f97ebd57aae4a9f483ce4f3bc",
+    "rule": "When an epoch-coherent VERIFIED/CURRENT compiled semantic generation has a non-empty field for the resolved seed, return that field without lexical top-k padding. Otherwise fall back to measured conventional retrieval.",
+    "rollback": "Disable V11 semantic generation head or remove sufficient-field branch; canonical UnifiedDB truth is unchanged."
+  },
+  "next_falsifiers": [
+    "Held-out real Clay natural-language queries whose semantic anchors are independently adjudicated rather than derived from topic_packet strings.",
+    "Alias/misspelling/pronoun/entity-resolution perturbations.",
+    "Stale, missing, contradictory and untrusted graph-edge injections.",
+    "Dense/late-interaction and PostgreSQL FTS+pgvector matched-budget baselines.",
+    "Downstream answer-quality and token-context measurements.",
+    "Hostinger Ubuntu and Andreas target execution."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "record_type": "POST_MERGE_MAIN_EVIDENCE_POINTER",
+  "recorded_at_local": "2026-08-12T21:10:30+07:00",
+  "run_id": "go-20260812T2100p0700-gpt56sol-sqlite-pid-tail-fence",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "merged_security_commit": "78da21ee80732a9ba40b01ecc0bde2d0399c0944",
+  "current_main_after_post_merge_receipt": "c1a349a59d15b51c8e70dc02b21f7ac410e7db3c",
+  "current_main_parent": "78da21ee80732a9ba40b01ecc0bde2d0399c0944",
+  "runtime_receipt": {
+    "path": "runtime/vps_integrity/latest.json",
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "runner": "clay",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "gate_count": 23,
+    "pass_count": 23,
+    "fail_count": 0,
+    "deep_integrity_v11": "PASS",
+    "repo_static_integrity": "PASS",
+    "release_claim": false
+  },
+  "interpretation": "The merged main lineage survived the repository's real self-hosted Ubuntu integrity sweep. This strengthens integration evidence for the narrow PID-tail hardening but is not productive accepted-Hostinger persistence-path/restart/rollback proof and does not close F-V01-13.",
+  "promotion": {
+    "pid_tail_fence": "SUPPORTED_MERGED_POST_MERGE_INTEGRITY_PASS",
+    "F_V01_13": "IN_PROGRESS_NOT_PROMOTED",
+    "FRANK_V0_1": "NOT_PROMOTED",
+    "training_authorized": false
+  },
+  "unusual_experiment_count_for_original_macro_cycle": 1
+}

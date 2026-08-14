@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2203p0700-chatgpt-secondary-fv01-07-needle",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity_not": ["self.root", "Frank"],
+  "work_package": "F-V01-07-NEEDLE-TRANSLATOR",
+  "selected_lane": "NEEDLE_DETERMINISTIC_ADAPTER_BOUNDARY",
+  "selection_reason": "Fresh overlap refresh found active concurrent lanes for storage/recovery, ClayCode, loop-core/GWT, UnifiedDB, token API, web ingress, proactive agency, Retina, reward, capability/body and human projection, while repository history exposed the owner-fixed Needle offload contract but no executable Needle-router implementation on current main ancestry.",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 352,
+  "candidate_branch": "chatgpt/go-needle-v1-authority-boundary-20260811",
+  "candidate_head": "c673be56a1e1485ee7b2c9c8714798614570303b",
+  "candidate_base_at_build": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+  "freshness_recheck": {
+    "new_main_observed": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "delta_from_build_base": "tests/effect_reentry_done_v17_candidate_gate.py only",
+    "needle_or_effect_semantic_overlap": false,
+    "stale_overwrite_risk_observed": false
+  },
+  "owner_fixed_basis": {
+    "needle_contract": "architecture/FRANK_NEEDLE_MAXIMAL_OFFLOAD_CONTRACT.md",
+    "effect_authority_contract": "claycode/frank_effects.clay",
+    "law": "Needle absorbs reliable deterministic execution mechanics but does not become effect authority."
+  },
+  "original_baseline": {
+    "status": "NO_EXECUTABLE_NEEDLE_RUNTIME_RECOVERED_IN_HISTORY_SEARCH",
+    "replacement_claim": false,
+    "gate_interpretation": "This is a new candidate mechanism, not a superiority/replacement claim. If a historical executable Needle/reflex router is recovered later, reconstruct and benchmark it before any replacement promotion."
+  },
+  "hypothesis": "A deterministic Needle adapter compiler and receipt normalizer can offload exact routing, argument validation, adapter-version binding and provider-envelope mechanics while preserving externally admitted EffectAuthorization/reservation/execution-generation/capability/request bindings byte-for-byte and treating provider output as data rather than authority.",
+  "strongest_counterhypothesis": "A strict V1 schema subset is too narrow for current real MCP/provider schemas; mapping richer schema semantics incorrectly could create false acceptance or argument loss. Therefore unsupported schema features must fail closed until a full schema compiler is differentially validated.",
+  "fresh_external_evidence": [
+    {
+      "source": "Model Context Protocol 2026-07-28 specification release candidate",
+      "retrieved_utc": "2026-08-11T15:05:00Z",
+      "finding": "Tool inputSchema/outputSchema move to full JSON Schema 2020-12, including composition, conditionals and references.",
+      "impact": "V1 must not claim MCP-complete validation."
+    },
+    {
+      "source": "Model Context Protocol 2025-11-25 Tools specification plus 2026 tool-annotations guidance",
+      "retrieved_utc": "2026-08-11T15:20:00Z",
+      "finding": "Tool annotations are hints and must be treated as untrusted unless they originate from a trusted server; enforcement belongs in deterministic controls/authorization/runtime rather than hints.",
+      "impact": "Needle adapter metadata and provider output cannot mint Frank effect authority."
+    },
+    {
+      "source": "JSON Schema 2020-12 specification",
+      "retrieved_utc": "2026-08-11T15:05:00Z",
+      "finding": "additionalProperties and unevaluatedProperties have formal applicator semantics that must not be approximated as equivalent for arbitrary composed schemas.",
+      "impact": "Candidate implements only an explicit strict object subset and rejects unsupported keywords."
+    }
+  ],
+  "candidate_files": [
+    "claycode/frank_needle.clay",
+    "runtime/needle/frank_needle_v1_candidate.py",
+    "tests/frank_needle_v1_candidate_gate.py",
+    "tests/frank_needle_adapter_echo_authority_crown_oob.py",
+    ".github/workflows/frank-fv01-07-needle-v1-vps.yml"
+  ],
+  "local_execution": {
+    "environment_class": "OpenAI sandbox Linux local-only",
+    "python_compile": "PASS",
+    "ordinary_gate": {
+      "status": "PASS_FV01_07_NEEDLE_V1_CANDIDATE",
+      "checks": "16/16",
+      "compile_latency_sample_n": 2000,
+      "compile_latency_us_observed_sample": {
+        "p50": 20.209,
+        "p95": 26.894,
+        "min": 18.328,
+        "max": 1709.524
+      },
+      "claim_boundary": "Local sandbox sample only; not accepted-target performance evidence."
+    }
+  },
+  "go_oob": {
+    "count": 1,
+    "experiment": "ADAPTER_ECHO_AUTHORITY_CROWN",
+    "anti_control": "Deliberately unsafe naive guard/provider dictionary merge permits a hostile adapter result to overwrite effect_authorization_hash, demonstrating discriminator sensitivity.",
+    "candidate_result": "PASS_ADAPTER_ECHO_AUTHORITY_CROWN_FENCED",
+    "checks": "9/9",
+    "observed": [
+      "forged provider authority survives only as nested data",
+      "forged provider VERIFIED status survives only as nested data",
+      "authorization/reservation/execution-generation/capability hard fields remain exact",
+      "adapter outcome remains RETURNED",
+      "provider output mints neither effect authority nor verified-outcome authority"
+    ]
+  },
+  "target_workflow": {
+    "workflow_name": "Frank F-V01-07 Needle V1 candidate VPS",
+    "workflow_run": 31506303050,
+    "job": "needle-v1",
+    "status_at_receipt": "QUEUED",
+    "runner_requirement": ["self-hosted", "Linux", "X64"],
+    "promotion_before_target_result": false
+  },
+  "global_ci_context": {
+    "deep_integrity_run": 31506303191,
+    "status": "FAILURE_WITH_ZERO_EXECUTED_STEPS",
+    "adjudication": "INFRASTRUCTURE_ONLY_UNLESS_LATER_JOB_LOG_EVIDENCE_CONTRADICTS",
+    "precedent": "Repository merge history already documents the same hosted Deep Integrity zero-step failure class as infrastructure-only."
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "proposed_change": "Add one Clay-native Needle semantic boundary plus deterministic reference adapter compiler/normalizer that consumes, but never mints, current effect-authority hard bindings.",
+    "authority_boundary": "External current execution-binding verification remains mandatory immediately before any adapter invocation.",
+    "rollback": "Drop PR 352 / candidate files; current main effect authority and all existing runtime paths remain unchanged.",
+    "required_successors": [
+      "bind external verifier to canonical current effect/reservation/execution-generation/capability producer rather than a caller predicate",
+      "full provider/MCP schema compiler or explicit per-adapter safe subset with differential tests",
+      "real adapter registry and capability probing",
+      "retry/idempotency and recovery composition",
+      "filesystem/shell/MCP adapter differentials",
+      "token/context offload measurement against model-learned tool syntax",
+      "ClayCode executable/differential coverage once active compiler stack composes this file",
+      "accepted-target VPS evidence before promotion"
+    ]
+  },
+  "adjudication": "PATCHED_LOCAL_PASS_TARGET_PENDING",
+  "whole_fv01_07_complete": false,
+  "whole_frank_v0_1_acceptance_claimed": false,
+  "frank_self_harness_authority_changed": false,
+  "training_authorization_changed": false
+}

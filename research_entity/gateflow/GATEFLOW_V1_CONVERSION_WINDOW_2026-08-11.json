@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "status": "PARTIAL_OBSERVED_CONVERSION_WINDOW",
+  "observed_at": "2026-08-11T01:09:00+07:00",
+  "conversion_population": {
+    "complete": false,
+    "reason": "This first window records only directly verified recent research-to-product transitions. It is not a complete denominator for all swarm work, so population conversion rates must remain null."
+  },
+  "head_observation": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_main_sha": "35a5b44d017b27c652f926c8d4dfe0a18827db23",
+    "research_main_head_commit_at": "2026-08-11T01:07:07+07:00",
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_sha": "205e425ebeeb7c251f1c79647046cc5046658a4e",
+    "product_main_head_commit_at": "2026-08-11T01:06:15+07:00"
+  },
+  "conversion_events": [
+    {
+      "event_id": "CONV-CLAYCODE-RELATIONAL-GENERIC-ANGLE-20260811",
+      "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "subcheck": "parser_canonicalizer",
+      "current_stage": "PRODUCT_MAIN_MERGED",
+      "stage_times": {
+        "PRODUCT_MAIN_MERGED": "2026-08-11T00:42:54+07:00"
+      },
+      "product_main_sha": "53a7e1e85aa123956a90528b843495f05806d5f8",
+      "source_refs": [
+        "gschaidergabriel/Dr.-Unterweger#230",
+        "gschaidergabriel/Dr.-Unterweger#236",
+        "gschaidergabriel/Dr.-Unterweger@53a7e1e85aa123956a90528b843495f05806d5f8"
+      ],
+      "claim_boundary": "Target-verified strict parser repair merged; no WP04/type-effect/compiler authority promotion."
+    },
+    {
+      "event_id": "CONV-PHYSICAL-SINGLETON-DIRECTORY-ANCHOR-20260811",
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "subcheck": "physical_execution_singleton",
+      "current_stage": "PRODUCT_MAIN_MERGED",
+      "stage_times": {
+        "PRODUCT_MAIN_MERGED": "2026-08-11T00:47:45+07:00"
+      },
+      "product_main_sha": "4b5874cbc54cc94212f1e6cf8c6ca253739a27ca",
+      "source_refs": [
+        "gschaidergabriel/Dr.-Unterweger#216",
+        "gschaidergabriel/Dr.-Unterweger#225",
+        "gschaidergabriel/Dr.-Unterweger@4b5874cbc54cc94212f1e6cf8c6ca253739a27ca"
+      ],
+      "claim_boundary": "Replacement-safe directory-anchor repair merged; state-root replacement, recovery and effect authority remain separate."
+    },
+    {
+      "event_id": "CONV-PROCESS-INCARNATION-FORK-FENCE-20260811",
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "subcheck": "process_incarnation_fork_fence",
+      "current_stage": "PRODUCT_MAIN_MERGED",
+      "stage_times": {
+        "PRODUCT_MAIN_MERGED": "2026-08-11T00:54:31+07:00"
+      },
+      "product_main_sha": "c7dbfac70a00d54acaf5477e011f15fc4bb38769",
+      "source_refs": [
+        "gschaidergabriel/Dr.-Unterweger#233",
+        "target run 31413734864",
+        "gschaidergabriel/Dr.-Unterweger@c7dbfac70a00d54acaf5477e011f15fc4bb38769"
+      ],
+      "claim_boundary": "Target-verified process-incarnation/child-detach runtime repair merged; exact V16 effect-capability v5 remains separately open."
+    },
+    {
+      "event_id": "CONV-V17-CANDIDATE-SCHEMA-AUTHORITY-20260811",
+      "work_package": "F-V01-09-EFFECT-AUTHORITY",
+      "subcheck": "candidate_schema_authority_isolation",
+      "current_stage": "PRODUCT_MAIN_MERGED",
+      "stage_times": {
+        "PRODUCT_MAIN_MERGED": "2026-08-11T01:05:07+07:00"
+      },
+      "product_main_sha": "2e16c77dd95022fa1633196b2073c10af1f83ee8",
+      "source_refs": [
+        "gschaidergabriel/Dr.-Unterweger#209",
+        "gschaidergabriel/Dr.-Unterweger@2e16c77dd95022fa1633196b2073c10af1f83ee8"
+      ],
+      "claim_boundary": "Schema-authority isolation repair merged; V17 itself is not canonically promoted and effect authority is not accepted."
+    },
+    {
+      "event_id": "CONV-V17-BOUND-REENTRY-DONE-20260811",
+      "work_package": "F-V01-09-EFFECT-AUTHORITY",
+      "subcheck": "verified_outcome_reentry_done_and_terminal_receipt",
+      "current_stage": "TARGET_VERIFIED",
+      "stage_times": {
+        "TARGET_VERIFIED": "2026-08-11T01:06:15+07:00"
+      },
+      "source_refs": [
+        "target run 31417288227",
+        "gschaidergabriel/Dr.-Unterweger@205e425ebeeb7c251f1c79647046cc5046658a4e"
+      ],
+      "claim_boundary": "Bound reentry/DONE candidate differential passed on the accepted target; canonical integration, real provider outcome and terminal effect receipt remain required."
+    }
+  ]
+}

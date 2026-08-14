@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2325p0700-chatgpt-secondary-claycode-lowering-scope",
+  "trigger": "go",
+  "created_at_local": "2026-08-11T23:25:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "status": "TESTING_NO_PROMOTION",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "current_target_main_observed": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44",
+  "infrastructure_evidence": {
+    "moving_pr_merge_ref_race": {
+      "status": "SUPPORTED_BY_EXECUTION",
+      "observation": "A queued self-hosted PR job fetched the moving GITHUB_REF merge ref and then failed HEAD == GITHUB_SHA after main advanced before execution; no compiler stage ran.",
+      "failed_run": 31509140874,
+      "failed_job": 93839231531,
+      "repair": "Fetch immutable event GITHUB_SHA into a run-owned Git tree and execute that exact object; treat later main movement as freshness/adjudication, not byte mutation inside the run.",
+      "first_repaired_target_run": 31510276958,
+      "first_repaired_result": "PASS_12_OF_12_AND_200576_OF_200576_ZERO_MISMATCHES_BUT_NOT_FRESH_CURRENT",
+      "reason_not_promoted": "The exact tested synthetic merge had base main 0b765534e693707b813dab9ff7471189ee48ef91 and main advanced before promotion."
+    }
+  },
+  "python_backend_scope_counterexample": {
+    "status": "SUPPORTED_BY_SOURCE_AND_WAITING_TARGET_REGRESSION",
+    "counterhypothesis": "The CPython AST lowerer can accidentally resolve a ClayCode-unbound bare path through its injected Python namespace, especially backend helpers such as __clay_bool; it also previously selected a same-spelled sum variant before a legitimate local binding, opposite the evaluator resolution order.",
+    "prior_lowerer_behavior": [
+      "Path first tested sum constructors, otherwise emitted ast.Name for the path head without proving a ClayCode binding.",
+      "Generated namespace intentionally contains __clay_select, __clay_bool, __clay_require, __clay_compare and __clay_enum.",
+      "Backend AST audit checked helper names as call targets, not helper-object reads through bare ast.Name."
+    ],
+    "candidate_repair": {
+      "pr": 364,
+      "branch": "chatgpt/claycode-python-lowering-v1-fresh-main-20260811",
+      "mechanism": "Track parameters and already-bound lets as the Clay function environment; resolve env before sum variants; reject every other path head during lowering; do not propagate branch-local lets beyond if blocks.",
+      "scope": "CPYTHON_AST_BOOTSTRAP_V1_ONLY",
+      "type_system_replacement": false
+    },
+    "normal_regression": {
+      "test": "tests/claycode_python_lowering_unbound_path_gate.py",
+      "checks": [
+        "backend helper name cannot be read as unbound Clay path",
+        "ordinary unbound path fails closed",
+        "parameter and prior let preserve evaluator semantics",
+        "conditional let is not promoted to definite outer binding",
+        "local binding shadows a same-spelled sum variant"
+      ],
+      "go_out_of_box_experiment_added": false
+    },
+    "cross_backend_counterevidence": {
+      "backend": "C11_NATIVE_LOWERING_V1_PR366",
+      "finding": "C11 already carries an explicit env map through type inference/lowering, accepts a bare path only from env or a unique sum variant, and copies block environments so branch-local lets do not leak outward.",
+      "interpretation": "The scope bug is Python-backend-specific rather than a required ClayCode semantic ambiguity; C11 supplies a simpler existing implementation invariant to copy."
+    }
+  },
+  "target_gate_history": [
+    {
+      "run": 31511909950,
+      "tested_sha": "a46cb8abf8e99b645a7a9261c83348ed7fcafdd5",
+      "reserved_binding_gate": "PASS",
+      "scope_gate": "NOT_EXECUTED_DUE_TEST_IMPORT_ENVIRONMENT",
+      "failure": "ModuleNotFoundError runtime when direct file execution made tests/ the import root",
+      "classification": "HARNESS_FAILURE_NOT_PRODUCT_COUNTEREVIDENCE"
+    }
+  ],
+  "current_target_gate": {
+    "candidate_branch_head_after_package_invocation_fix": "06051ce66e02361238987e250fbc3b2f02e8f95f",
+    "invocation": "PYTHONPATH=$TREE python -P tests/claycode_python_lowering_unbound_path_gate.py",
+    "required_before_credit": [
+      "5/5 scope-resolution regression",
+      "reserved-binding fail-closed regression",
+      "existing 12/12 compiler differential gate",
+      "200576 three-way comparisons with zero mismatches",
+      "exact current-main synthetic composition",
+      "unchanged run-owned tree"
+    ],
+    "status": "PENDING_ACCEPTED_TARGET"
+  },
+  "comparison_chain_semantics": "OPEN_OWNER_SEMANTICS_NOT_RECOVERED_DO_NOT_GUESS",
+  "go_oob_accounting": {
+    "new_experiment_added_by_this_receipt": false,
+    "macrocycle_deliberate_oob_remains": "PACKAGE_NAMESPACE_SHADOW_INJECTION"
+  },
+  "promotion": "NONE",
+  "workspace_subcheck_changes": "NONE",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

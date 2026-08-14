@@ -1,0 +1,184 @@
+{
+  "schema_version": "1.0",
+  "benchmark_id": "COMPOSITIONAL-POSSIBILITY-FRONTIER-STRESS-20260810T0720P0700",
+  "truth_class": "LOCAL_EXECUTION_RECEIPT_SYNTHETIC_COMPOSITION_SCOPE_ONLY",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "implementation_refs": [
+    "f110e980faf8ba6bf7627a3b8cc610c4f3232b0e",
+    "1a559bcd15a2544cf6885df39d4f10ef90807958"
+  ],
+  "runtime": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "cpu_observed": "AMD EPYC 9V74 80-Core Processor",
+    "execution_host_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST"
+  },
+  "fixture": {
+    "semantic_types_per_world": 24,
+    "capability_edges_per_base_world": 655,
+    "max_hops": 3,
+    "seeds": [7, 17, 42],
+    "queries_per_seed": 200,
+    "total_queries": 600,
+    "queries_with_at_least_one_valid_route": 409,
+    "route_metrics": ["cost", "latency", "reliability", "authority", "freshness", "locality", "lineage"],
+    "composition_law": "cost=sum; latency=sum; reliability=product; authority=min; fresh=AND; local=AND; lineages=union"
+  },
+  "baselines": {
+    "direct_sql": "V9-like direct resource/capability lookup without multi-hop composition",
+    "recursive_sql_oracle": "SQLite recursive CTE enumerating valid routes up to 3 hops",
+    "preprocessor_v1": "compiled Pareto frontier scanned after filtering",
+    "preprocessor_v2": "compiled Pareto frontier ordered by fixed utility with sufficient early hit"
+  },
+  "aggregate": {
+    "direct_sql_feasible_hit_rate": 0.49388753,
+    "direct_sql_exact_best_route_rate": 0.27872861,
+    "preprocessor_v1_feasible_hit_rate": 1.0,
+    "preprocessor_v1_exact_best_route_rate": 1.0,
+    "preprocessor_v2_feasible_hit_rate": 1.0,
+    "preprocessor_v2_exact_best_route_rate": 1.0,
+    "median_of_seed_median_latency_ms": {
+      "direct_sql": 0.014762,
+      "recursive_sql_oracle": 26.780465,
+      "preprocessor_v2": 0.003034
+    },
+    "median_compile_seconds": 3.389964,
+    "median_candidate_routes_seen": 436825,
+    "median_retained_pareto_routes": 68916
+  },
+  "per_seed": [
+    {
+      "seed": 7,
+      "valid_queries": 131,
+      "candidate_routes_seen": 436825,
+      "retained_pareto_routes": 68916,
+      "compile_seconds": 3.682913,
+      "direct_feasible_hit_rate": 0.435115,
+      "direct_exact_best_rate": 0.274809,
+      "direct_median_ms": 0.014762,
+      "recursive_sql_median_ms": 26.4318275,
+      "preprocessor_v2_median_ms": 0.00337,
+      "preprocessor_v2_exact_best_rate": 1.0
+    },
+    {
+      "seed": 17,
+      "valid_queries": 138,
+      "candidate_routes_seen": 444049,
+      "retained_pareto_routes": 66785,
+      "compile_seconds": 3.389964,
+      "direct_feasible_hit_rate": 0.528986,
+      "direct_exact_best_rate": 0.333333,
+      "direct_median_ms": 0.015638,
+      "recursive_sql_median_ms": 28.05085,
+      "preprocessor_v2_median_ms": 0.003034,
+      "preprocessor_v2_exact_best_rate": 1.0
+    },
+    {
+      "seed": 42,
+      "valid_queries": 140,
+      "candidate_routes_seen": 432306,
+      "retained_pareto_routes": 70422,
+      "compile_seconds": 3.060938,
+      "direct_feasible_hit_rate": 0.514286,
+      "direct_exact_best_rate": 0.228571,
+      "direct_median_ms": 0.0138155,
+      "recursive_sql_median_ms": 26.780465,
+      "preprocessor_v2_median_ms": 0.002754,
+      "preprocessor_v2_exact_best_rate": 1.0
+    }
+  ],
+  "exactly_one_go_out_of_box_experiment": {
+    "experiment_class": "ANTI_HUB_ENERGY_BOUNDED_FRONTIER",
+    "stress_graph_edges": 907,
+    "queries": 300,
+    "reference_feasible_queries": 217,
+    "exhaustive": {
+      "candidate_routes_seen": 1682143,
+      "retained_pareto_routes": 98014,
+      "compile_seconds": 17.935338,
+      "feasible_hit_rate": 1.0,
+      "exact_best_route_rate": 1.0
+    },
+    "beam4_hub_penalty": {
+      "candidate_routes_seen": 110872,
+      "retained_pareto_routes": 42738,
+      "compile_seconds": 1.557637,
+      "feasible_hit_rate": 0.976959,
+      "exact_best_route_rate": 0.967742
+    },
+    "beam8_hub_penalty": {
+      "candidate_routes_seen": 194883,
+      "retained_pareto_routes": 56299,
+      "compile_seconds": 2.404813,
+      "feasible_hit_rate": 1.0,
+      "exact_best_route_rate": 0.995392
+    },
+    "beam16_hub_penalty": {
+      "candidate_routes_seen": 343503,
+      "retained_pareto_routes": 71292,
+      "compile_seconds": 3.580171,
+      "feasible_hit_rate": 1.0,
+      "exact_best_route_rate": 1.0,
+      "candidate_route_reduction_vs_exhaustive": 0.795799,
+      "compile_time_reduction_vs_exhaustive": 0.800377
+    },
+    "beam32_hub_penalty": {
+      "candidate_routes_seen": 628246,
+      "retained_pareto_routes": 84741,
+      "compile_seconds": 7.477483,
+      "feasible_hit_rate": 1.0,
+      "exact_best_route_rate": 1.0
+    },
+    "adjudication": "BEAM16_SUPPORTED_AS_EXPERIMENTAL_OPERATING_POINT_ON_THIS_SYNTHETIC_STRESS_ONLY; NOT_PROMOTED_DEFAULT"
+  },
+  "causal_interpretation": {
+    "supported": [
+      "Multi-hop possibility composition solves a task class that a direct V9-like lookup cannot represent completely.",
+      "Precompiling a Pareto possibility frontier can move graph-search cost off the hot query path and materially reduce query latency on this fixture.",
+      "Early sufficient-hit selection is materially faster than scanning the full retained frontier on this fixture.",
+      "Energy-bounded per-node beam pruning can control hub-driven route explosion; beam width is a measurable accuracy/resource parameter rather than a fixed truth."
+    ],
+    "not_supported": [
+      "Universal superiority over every relational, vector, graph, search, or multimodel database.",
+      "Live Frank downstream answer/action quality improvement.",
+      "Target Hostinger or Andreas-PC latency equivalence.",
+      "The fixed utility function is globally optimal.",
+      "Beam16 preserves exact best routes on arbitrary real ClayGraph distributions."
+    ]
+  },
+  "counterhypotheses": [
+    "The synthetic route generator and fixed utility may align with the preprocessor design.",
+    "A specialized graph database or compiled SQL/materialized-view design may achieve comparable composition and latency.",
+    "Precomputation may merely shift cost to rebuild/update time and memory amplification.",
+    "Real ClayGraph hubs, stale edges, ambiguous identities and dynamic capability churn may reduce exactness or increase invalidation cost."
+  ],
+  "fusion_refs": [
+    "4db7fe3d46e73896c03fdd29a7ec7b508205842e",
+    "69febf0808aec8197e69edc49ae2b01c32f49682",
+    "492a75bcb105fb0f4470c2d8c4d7f4448bde189d",
+    "f69f05be0f4f3f2a82dd5cc90c9804fdbcc4a3b5",
+    "f02ea048440994d0888ea91cc72e2e283d191c93",
+    "dbbe57f3bf6e21e58beaeb5c5137cbcce6fe7814",
+    "3171d844a91cf0a20fadb64bef078923bbec6260"
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE",
+    "mechanism": "COMPOSITIONAL_PARETO_POSSIBILITY_FRONTIER",
+    "integration_target": "V11/V13 coherent semantic generation + epoch-bound ClayGraph + entity-resolved fallback",
+    "rollback": "Disable compositional frontier use; existing UnifiedDB/ClayGraph/V11 conventional fallback remains intact."
+  },
+  "next_gate": "Held-out real Clay/Frank capability-route benchmark with real source/graph generations, churn/stale/noisy/ambiguous injections, matched graph/database baselines, build/update/memory/token cost, downstream task outcome, and Hostinger Ubuntu replication.",
+  "ancestry_policy": "This benchmark, the frontier implementation and its tests share one ChatGPT-authored development lineage and are not independent scientific replications.",
+  "canonical_promotion": "NONE"
+}

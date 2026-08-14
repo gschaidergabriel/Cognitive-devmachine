@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "outbound":[
+    {"kind":"ARCHITECTURE_DELTA","urgency":"NEXT_SAFE_POINT","topic_tags":["multimodal","retina","mvc","qwen35","mmproj","libmtmd","recovery"],"payload_ref":"ARCHITECTURE_DELTAS.json#AD-Q23-QNDRF-1.1-ZC","affected_work":["F-V01-06-DIGITAL-RETINA-MVC","F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],"summary":"Instrument a synchronous zero-copy MVC gate between mtmd encode and llama decode; prohibit full projected-token persistence by default; require target-VPS matched accuracy/resource/recovery evidence before promotion."},
+    {"kind":"COUNTER_CHALLENGE","urgency":"NEXT_CHECKPOINT","topic_tags":["open_set","multimodal_embedding","familiarity"],"payload_ref":"PROGRESS_DELTAS.json#PD-Q23-EMB-05","affected_work":["F-V01-06-DIGITAL-RETINA-MVC"],"summary":"Raw generative Qwen vision features are not established as calibrated open-set embeddings; compare raw pooling, tiny projection and dedicated lightweight embedder under identical fixtures/resources."},
+    {"kind":"RUNTIME_FAILURE","urgency":"NEXT_SAFE_POINT","topic_tags":["llama.cpp","qwen35","multimodal","recovery","cache"],"payload_ref":"PROGRESS_DELTAS.json#PD-Q23-RECOVERY-06","affected_work":["F-V01-06-DIGITAL-RETINA-MVC","F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],"summary":"Current multimodal llama.cpp issue ecology requires image-containing restart/cache/replay and backend-failure acceptance, not only happy-path vision tests."}
+  ],
+  "knowledge_need":[
+    {"question_id":"Q23-GO-KN-001","question":"What exact current target-VPS RAM/swap/storage/backend and current Qwen3.5-4B/mmproj build identities are available for executing T-Q23-ZC-001 and T-Q23-RECOVERY-002?","reason":"Target-host directive marks RAM/swap/storage/GPU/network partly UNKNOWN and q23 promotion requires exact current runtime receipts.","requested_evidence":["target host resource snapshot","llama.cpp commit/build","model GGUF hash","mmproj hash","backend","current launch parameters"],"urgency":"HIGH"}
+  ],
+  "closure_state":"OUTBOUND_RECORDED_REQUIRES_GO_OR_CAPABLE_WORKER_PULL"
+}

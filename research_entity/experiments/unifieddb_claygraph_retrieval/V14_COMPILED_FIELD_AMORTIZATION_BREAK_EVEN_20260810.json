@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "V14-COMPILED-FIELD-AMORTIZATION-BREAK-EVEN-20260810",
+  "evidence_class": "DERIVED_FROM_LOCAL_EXECUTION_RECEIPT",
+  "origin_actor": "chatgpt-secondary",
+  "source_receipt_commit": "75d1b9c5fa20f8c8e91e922c7bfca22f771830d7",
+  "formula": "break_even_reads = mean_generation_build_us / (online_sql_mean_latency_us - compiled_mean_latency_us)",
+  "no_alias": {
+    "mean_generation_build_us": 72295.54633333333,
+    "online_sql_mean_latency_us": 60.76010636666667,
+    "compiled_mean_latency_us": 4.294575966666667,
+    "saved_us_per_read": 56.4655304,
+    "break_even_reads": 1280.3483084493141,
+    "conservative_integer_break_even_reads": 1281
+  },
+  "alias_mode": {
+    "mean_generation_build_us": 62061.835666666666,
+    "online_sql_mean_latency_us": 60.96073368333333,
+    "compiled_mean_latency_us": 4.824339183333334,
+    "saved_us_per_read": 56.1363945,
+    "break_even_reads": 1105.5543595103293,
+    "conservative_integer_break_even_reads": 1106
+  },
+  "interpretation": "On the V14 synthetic fixture, compiling is latency-beneficial only after enough repeated reads amortize generation build cost. A workload with high semantic churn or low reuse can rationally stay on online indexed/SQL/graph lookup even when compiled hot reads are much faster.",
+  "architecture_consequence": "Adaptive read routing must estimate reuse horizon and invalidation/churn before choosing COMPILED_INTENT_FIELD. Compilation is a workload decision, not an epistemic preference.",
+  "limitations": [
+    "Derived from synthetic local-tool-container timing, not Hostinger or Andreas target hardware.",
+    "Ignores memory, I/O, concurrency, energy and rebuild contention unless already reflected in measured build/read latency.",
+    "Break-even changes with generation size, batch build strategy, query distribution and hardware.",
+    "Does not compare PostgreSQL/pgvector, a dedicated graph engine or late-interaction retrieval."
+  ],
+  "promotion": "ANALYSIS_ONLY_NO_CANONICAL_CHANGE"
+}

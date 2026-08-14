@@ -1,59 +1,157 @@
 module clay.research.intelligent_live_web_knowledge_fabric
-version "1.0"
+version "2.0"
 status PROJECT_OWNER_FIXED_GLOBAL_OPERATION_LAW
 
 goal="Frank v0.1 voll lauffähig auf Andreas PC"
 live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
 swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+omnisource=@research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay
+go_q23_bridge=@research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay
 state=UnifiedDB
 topology=ClayGraph
 coordination_language=latest_ClayCode
 
 law LIVE_EXTERNAL_KNOWLEDGE_IS_STANDING_INPUT=true
+law EXACT_GO_REQUIRES_FRESH_EXTERNAL_RESEARCH_EVERY_INVOCATION=true
+law MATERIAL_LONG_RUN_REQUIRES_REPEATED_EXTERNAL_REFRESH=true
 law BLIND_CRAWLING=FORBIDDEN
 law SEARCH_RELEVANCE_BEFORE_VOLUME=true
+law SOURCE_ECOLOGY_DIVERSITY_IS_REQUIRED_WHEN_MATERIAL=true
 law PRIMARY_OR_OFFICIAL_SOURCES_PREFERRED=true
+law JOURNAL_CONFERENCE_PUBLISHER_SOURCES_ARE_FIRST_CLASS=true
+law ARXIV_PREPRINT_PRIMARY_RESEARCH_IS_FIRST_CLASS=true
+law GITHUB_PRIMARY_REPOS_AND_COMPETING_PROJECTS_ARE_FIRST_CLASS=true
+law ISSUE_TRACKERS_RELEASE_NOTES_FAILURE_EVIDENCE_ARE_FIRST_CLASS=true
+law DATASETS_BENCHMARKS_STANDARDS_ARE_FIRST_CLASS=true
 law COUNTEREVIDENCE_SEARCH_REQUIRED_FOR_MATERIAL_CLAIMS=true
 law INTERNET_RESULT_WITHOUT_PROVENANCE_CANNOT_PROMOTE=true
 law SEARCH_ENGINE_SUMMARY_IS_DISCOVERY_NOT_TRUTH=true
 law DUPLICATE_KNOWLEDGE_DOES_NOT_CREATE_EVIDENCE=true
 law STALE_WEB_KNOWLEDGE_CANNOT_SILENTLY_OVERRIDE_FRESH_PRIMARY_EVIDENCE=true
+law FIRST_RESULT_IS_START_NODE_NOT_RESEARCH_COMPLETION=true
+law SOURCE_NETWORK_DEEPENING_IS_RECURSIVE_WHILE_INFORMATION_VALUE_POSITIVE=true
 
-// The fabric is event- and uncertainty-driven. Every material research/build cycle evaluates
-// whether external knowledge can change the next decision. When yes, it actively retrieves it.
 record KnowledgeNeed {
   id:Ref
   question:Clay
   affected_work:Set<Ref>
   affected_claims:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  requesting_workers:Set<Ref>
+  q23_relevance:Score?
   uncertainty:Score
   expected_information_gain:Score
   decision_impact:Score
   blocker_reduction:Score
   recency_need:Score
   source_specificity:Score
+  source_diversity_need:Score
   counterevidence_need:Score
+  network_deepening_value:Score
   cost_budget:Score
   urgency:Score
 }
 
-knowledge_need_score(n)=n.expected_information_gain+n.decision_impact+n.blocker_reduction+n.recency_need+n.counterevidence_need+n.urgency-n.cost_budget
+knowledge_need_score(n)=n.expected_information_gain+n.decision_impact+n.blocker_reduction+n.recency_need+n.source_diversity_need+n.counterevidence_need+n.network_deepening_value+n.urgency-n.cost_budget
 
-rule every_material_cycle -> derive(KnowledgeNeed from current_work+open_claims+blockers+recent_deltas+tool_runtime_changes)
+type SourceClass = OFFICIAL_RUNTIME|OFFICIAL_DOCS|OFFICIAL_MODEL_OR_LIBRARY_REPO|STANDARDS_BODY|PRIMARY_PAPER|ARXIV_PREPRINT|PEER_REVIEWED_JOURNAL|PEER_REVIEWED_CONFERENCE|PUBLISHER_METADATA|PRIMARY_DATASET|PRIMARY_BENCHMARK|PRIMARY_GITHUB_PROJECT|COMPETING_OPEN_SOURCE_PROJECT|ISSUE_TRACKER|RELEASE_NOTES|CHANGELOG|INDEPENDENT_REPLICATION|INDEPENDENT_TECHNICAL_BENCHMARK|REPUTABLE_ENGINEERING_REPORT|DISCOVERY_INDEX|FORUM_DISCOVERY|OTHER_VERIFIED
+
+record SourcePortfolio {
+  portfolio_id:Ref
+  question_id:Ref
+  desired_classes:Set<SourceClass>
+  obtained_classes:Set<SourceClass>
+  missing_relevant_classes:Set<SourceClass>
+  source_lineages:Set<Ref>
+  independent_lineage_count:Int
+  primary_or_official_fraction:Score
+  new_to_run_count:Int
+  counterevidence_count:Int
+  competing_mechanism_count:Int
+  freshness_range:Clay?
+  rationale:Clay
+}
+
+record ResearchThread {
+  thread_id:Ref
+  root_question:Ref
+  parent_thread:Ref?
+  trigger_finding:Ref?
+  search_queries:Set<Clay>
+  source_nodes:Set<Ref>
+  code_nodes:Set<Ref>
+  citation_nodes:Set<Ref>
+  dataset_nodes:Set<Ref>
+  issue_failure_nodes:Set<Ref>
+  competing_mechanism_nodes:Set<Ref>
+  counterevidence_nodes:Set<Ref>
+  unresolved_questions:Set<Ref>
+  progress_deltas:Set<Ref>
+  route_changes:Set<Ref>
+  status:OPEN|LOCALLY_SATURATED|DECISION_RESOLVED|SUPERSEDED
+}
+
+record ExternalEvidenceDelta {
+  delta_id:Ref
+  question_id:Ref
+  thread_id:Ref?
+  source_uri:Ref
+  source_class:SourceClass
+  publisher_or_repo:Ref
+  retrieved_at:Time
+  publication_or_update_time:Time?
+  version_or_commit:Ref?
+  discovery_path:Set<Ref>
+  claim_or_fact:Clay
+  evidence_for:Set<Ref>
+  evidence_against:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  novelty_class:NEW|REFINES|CONTRADICTS|CONFIRMS|SUPERSEDES|ALTERNATIVE|NO_MATERIAL_CHANGE
+  confidence:Score
+  freshness:Score
+  provenance_hash:Hash
+}
+
+record ExternalNetworkNode {
+  node_id:Ref
+  kind:PAPER|REPO|FILE|FUNCTION|MODEL|DATASET|BENCHMARK|STANDARD|ISSUE|RELEASE|PROJECT|AUTHOR|CLAIM|FAILURE_MODE|MECHANISM
+  ref:Ref
+  source_class:SourceClass
+  observed_at:Time
+  content_hash:Hash?
+}
+
+record ExternalNetworkEdge {
+  from_node:Ref
+  to_node:Ref
+  relation:CITES|IMPLEMENTS|USES|SUPERSEDES|CONTRADICTS|REPLICATES|BENCHMARKS|REPORTS_FAILURE|DERIVES_FROM|SAME_LINEAGE|COMPETES_WITH|REFERENCES|DEPENDS_ON
+  evidence_ref:Ref
+}
+
+rule every_material_cycle -> derive KnowledgeNeed from current_work+open_claims+hypotheses+counterhypotheses+blockers+recent_deltas+tool_runtime_changes+swarm_questions+q23_questions
 rule highest_material_knowledge_need -> retrieve_live_external_evidence
-rule no_material_external_need -> record NOT_APPLICABLE; do_not_search_for_noise
-rule version_sensitive_code_or_api_question -> official_docs_or_primary_repo_first
-rule scientific_mechanism_question -> original_paper_dataset_or_authoritative_preprint_first
-rule software_behavior_question -> current_release_notes_source_code_issue_tracker_when_needed
-rule provider_capability_question -> official_provider_surface_first
-rule implementation_pattern_question -> primary_repo_and_benchmark_evidence_before_blog_summary
+rule exact_go -> derive at least one fresh KnowledgeNeed even if current work appears internally clear
+rule no_material_external_need outside exact_go -> record NOT_APPLICABLE; do_not_search_for_noise
 
-// Adaptive source routing. Search breadth grows only when uncertainty or disagreement requires it.
+// Source ecology routing.
+rule version_sensitive_code_or_api_question -> OFFICIAL_DOCS|OFFICIAL_RUNTIME|OFFICIAL_MODEL_OR_LIBRARY_REPO first
+rule scientific_mechanism_question -> PRIMARY_PAPER|ARXIV_PREPRINT|PRIMARY_DATASET first
+rule mature_scientific_claim -> seek PEER_REVIEWED_JOURNAL|PEER_REVIEWED_CONFERENCE|PUBLISHER_METADATA when relevant
+rule software_behavior_question -> OFFICIAL_REPO|RELEASE_NOTES|ISSUE_TRACKER|CHANGELOG when needed
+rule provider_capability_question -> official_provider_surface first
+rule implementation_pattern_question -> PRIMARY_GITHUB_PROJECT|COMPETING_OPEN_SOURCE_PROJECT|benchmark_evidence before blog summary
+rule failure_risk_question -> ISSUE_TRACKER|negative_result|release_notes|independent_replication when available
+rule exact_go.major_research_phase -> build SourcePortfolio across multiple relevant source classes before deep narrowing
+rule source_portfolio_missing_class_but_irrelevant -> record reason_not_applicable
+rule source_portfolio_monoculture_for_high_impact_claim -> widen before promotion
+
 source_tiers {
-  T0_DIRECT_CURRENT=[official_runtime_observation,official_docs,current_primary_repo,current_dataset]
-  T1_PRIMARY_RESEARCH=[original_paper,preprint,standards_body,publisher_metadata]
-  T2_INDEPENDENT_TECHNICAL=[independent_implementation,benchmark,reputable_engineering_report]
-  T3_DISCOVERY=[web_search_index,secondary_summary,forum]
+  T0_DIRECT_CURRENT=[OFFICIAL_RUNTIME,OFFICIAL_DOCS,OFFICIAL_MODEL_OR_LIBRARY_REPO,STANDARDS_BODY,PRIMARY_DATASET]
+  T1_PRIMARY_RESEARCH=[PRIMARY_PAPER,ARXIV_PREPRINT,PEER_REVIEWED_JOURNAL,PEER_REVIEWED_CONFERENCE,PUBLISHER_METADATA,PRIMARY_BENCHMARK,PRIMARY_GITHUB_PROJECT]
+  T2_INDEPENDENT_TECHNICAL=[COMPETING_OPEN_SOURCE_PROJECT,INDEPENDENT_REPLICATION,INDEPENDENT_TECHNICAL_BENCHMARK,REPUTABLE_ENGINEERING_REPORT,ISSUE_TRACKER,RELEASE_NOTES,CHANGELOG]
+  T3_DISCOVERY=[DISCOVERY_INDEX,FORUM_DISCOVERY]
 }
 
 rule start_at_highest_available_source_tier
@@ -61,63 +159,95 @@ rule T3_may_discover_but_not_by_itself_promote_material_claim
 rule disagreement_between_high_quality_sources -> preserve_conflict+seek_discriminating_evidence
 rule single_source_high_impact_claim -> seek_second_independent_or_counter_source_when_feasible
 rule high_uncertainty -> widen_source_diversity
-rule low_uncertainty+fresh_primary_receipt -> avoid_redundant_search
+rule low_uncertainty+fresh_primary_receipt -> avoid_redundant_search_except exact_go_source_ecology_sweep
 
-record ExternalEvidenceDelta {
-  delta_id:Ref
-  question_id:Ref
-  source_uri:Ref
-  source_class:Ref
-  publisher_or_repo:Ref
-  retrieved_at:Time
-  publication_or_update_time:Time?
-  claim_or_fact:Clay
-  evidence_for:Set<Ref>
-  evidence_against:Set<Ref>
-  affected_work:Set<Ref>
-  affected_claims:Set<Ref>
-  novelty_class:NEW|REFINES|CONTRADICTS|CONFIRMS|SUPERSEDES|NO_MATERIAL_CHANGE
-  confidence:Score
-  freshness:Score
-  provenance_hash:Hash
-}
+// Recursive source-network deepening.
+rule material_external_finding -> add ExternalNetworkNode+edges
+rule paper_material -> inspect useful citations/references and newer citing/competing work when decision-relevant
+rule repo_material -> inspect relevant source_file/function/config/release/issue paths rather than README only when implementation claim matters
+rule benchmark_material -> trace dataset+metric+baseline lineage when promotion claim depends on it
+rule model_material -> trace model_card+config+runtime_support+quantization/export/version when deployment claim matters
+rule surprising_failure -> search known failure modes+issues+countermechanisms
+rule promising_mechanism -> search competing architecture under matched resource/task constraints
+rule new_material_network_edge -> derive new question if it can change architecture/test/work
+rule network_deepen while expected_information_gain > retrieval_cost+context_noise+coordination_cost and invocation_budget_remains
 
+// Search progress / anti-stagnation.
+rule same_query_family_same_source_ancestry_no_new_delta -> STAGNATION
+rule source_count_up_but_uncertainty_unchanged -> STAGNATION
+rule supporting_only_search_for_material_claim -> STAGNATION
+rule STAGNATION -> change query_family|source_class|abstraction_level|implementation_layer|countermechanism|historical_lineage
+rule repeated_route_changes_no_material_delta -> mark thread LOCALLY_SATURATED with attempts
+
+// Fusion.
 rule retrieved_material -> compare_against_current_UnifiedDB_and_recent_external_evidence
 rule semantic_duplicate -> deduplicate_preserve_provenance
+rule same_content_different_source_lineage -> preserve lineage but do_not_auto_count_as_independent_replication
 rule newer_source_supersedes_old_behavior -> invalidate_or_revise_affected_work_before_effect
-rule contradiction -> open_conflict+route_to_affected_workers
+rule contradiction -> open_conflict+route_to_affected_workers+derive strongest_counterhypothesis+discriminating_test
 rule material_new_mechanism -> create_or_revise_hypothesis_or_work
 rule external_negative_result -> preserve_as_negative_result
 rule no_material_change -> retain_lightweight_receipt_not_context_spam
+rule q23_relevant_external_delta -> go_q23_bridge.route_if_applicable
 
-// Targeted distribution instead of flooding every worker with every source.
-rule ExternalEvidenceDelta -> ClayGraph.project(semantic_dependencies,affected_work,affected_claims)
-rule route_delta_to_workers by semantic_relevance+current_work+dependency_unblock_value+conflict
+// Targeted distribution instead of flooding every worker.
+rule ExternalEvidenceDelta -> ClayGraph.project(semantic_dependencies,affected_work,affected_claims,affected_hypotheses)
+rule route_delta_to_workers by semantic_relevance+current_work+subscriptions+knowledge_need+dependency_unblock_value+conflict
 rule high_impact_contradiction -> INTERRUPT_NEXT_SAFE_POINT
 rule ordinary_relevant_delta -> NEXT_CHECKPOINT
 rule low_relevance_delta -> INDEX_ONLY
 rule worker_receiving_delta -> re-evaluate_current_plan_before_next_material_effect
+rule full_payload_not_required -> send digest+payload_ref
+rule receiver_requires_detail -> pull task_conditioned payload/subgraph
 
-// Recursive web-learning loop used by GO and substantive research cycles.
+// Recursive web-learning loop used by GO/Q23/substantive research cycles.
 recursive_live_knowledge_cycle =
   refresh_internal
   -> derive_high_value_question
+  -> build_or_update_source_portfolio
   -> retrieve_current_external_evidence
-  -> search_counterevidence
+  -> deepen_source_network
+  -> search_counterevidence_and_competing_mechanisms
   -> fuse_with_shared_state
-  -> measure_novelty_and_conflict
-  -> distribute_targeted_delta
-  -> update_hypotheses_and_work_frontier
+  -> measure_novelty_conflict_and_source_diversity
+  -> distribute_targeted_delta_or_answer KnowledgeNeed
+  -> update_hypotheses_work_and_questions
+  -> fresh_refresh_checkpoint_if_direction_changed
   -> next_question_if_marginal_value_positive
 
-rule continue_external_cycle iff expected_marginal_information_gain > search_cost+coordination_noise and invocation_budget_remains
-rule stop_external_cycle when no_material_need|source_exhausted|budget_exhausted|decision_resolved
+rule long_material_run -> repeat recursive_live_knowledge_cycle after each direction-changing finding
+rule continue_external_cycle iff expected_marginal_information_gain > search_cost+coordination_noise+context_noise and invocation_budget_remains
+rule stop_external_cycle when source_exhausted|budget_exhausted|decision_resolved|locally_saturated_after_route_changes
 
-// No silent internet-to-truth path.
+measure fresh_external_source_count
+measure fresh_source_classes_count
+measure primary_or_official_fraction
+measure peer_reviewed_or_publisher_source_count
+measure primary_github_or_competing_project_count
+measure issue_failure_source_count
+measure new_to_run_source_count
+measure source_lineage_diversity
+measure external_network_nodes_added
+measure external_network_edges_added
+measure counterevidence_source_count
+measure competing_mechanism_count
+measure route_changes_after_stagnation
+measure external_research_progress_delta_rate
+measure external_evidence_to_hypothesis_rate
+measure external_evidence_to_test_rate
+measure external_evidence_to_architecture_or_work_delta_rate
+measure stale_source_supersession_rate
+measure duplicate_source_suppression_rate
+measure affected_branch_recall
+measure external_research_CPU_RAM_IO_network_token_context_cost
+
 invariant WEB_SEARCH_NEVER_MINTS_EXECUTION_AUTHORITY
 invariant WEB_SEARCH_NEVER_MINTS_SCIENTIFIC_TRUTH
 invariant EXTERNAL_KNOWLEDGE_MUST_RETAIN_SOURCE_AND_TIME
 invariant CURRENT_PRIMARY_EVIDENCE_OUTRANKS_STALE_SECONDARY_SUMMARY
 invariant COUNTEREVIDENCE_SURVIVES_FUSION
-invariant TARGETED_DISTRIBUTION_BEATS_GLOBAL_CONTEXT_FLOOD
+invariant SOURCE_DIVERSITY_NEVER_REPLACES_SOURCE_QUALITY
+invariant TARGETED_DISTRIBUTION_BEATS_GLOBAL_CONTEXT_FLOOD_WHEN_RECALL_IS_PRESERVED
 invariant LIVE_WEB_KNOWLEDGE_IS_REEVALUATED_RECURSIVELY_NOT_ONLY_AT_RUN_START
+invariant EXACT_GO_ALWAYS_ATTEMPTS_FRESH_EXTERNAL_KNOWLEDGE
+invariant LONG_RESEARCH_FOLLOWS_SOURCE_NETWORK_WHERE_USEFUL

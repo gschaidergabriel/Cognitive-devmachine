@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "routes": [
+    {
+      "query_class": "AUTHORITATIVE_RELATION_READ_WRITE",
+      "route": "UnifiedDB",
+      "projection_side_effect": "append ProjectionEvent in same authoritative write transaction"
+    },
+    {
+      "query_class": "TOPOLOGY_OR_ASSEMBLY_READ",
+      "route": "ClayGraph",
+      "admission": "exact projection event-set/root equivalence to current UnifiedDB required for consequential use"
+    },
+    {
+      "query_class": "PROJECTION_RECOVERY",
+      "route": "ordered pending authoritative events -> idempotent ClayGraph apply",
+      "identity": "event_id + unified_epoch + semantic_record_id + payload_sha256"
+    },
+    {
+      "query_class": "PROJECTION_REBUILD",
+      "route": "wipe derived projection state -> replay retained authoritative event history -> compare root and relation query equivalence"
+    },
+    {
+      "query_class": "MODEL_FACING_GRAPH_SELECTION",
+      "route": "typed bounded assembly only after currentness gate",
+      "forbidden": ["raw DB authority", "stale graph best effort", "activation as truth", "retrieval score as effect authority"]
+    }
+  ],
+  "fail_closed": [
+    "missing event",
+    "extra destination event",
+    "payload hash conflict",
+    "relation-query mismatch",
+    "graph ahead/behind authoritative event set",
+    "unknown schema/epoch"
+  ]
+}

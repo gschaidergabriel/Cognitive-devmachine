@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "fusion_nodes": [
+    {
+      "node": "QNDRF_FEATURE_REUSE",
+      "disposition": "REFINED",
+      "fusion": "Feature reuse remains viable, but is split into pre-merger and post-merger taps from one Qwen3.5 visual pass; dedicated lightweight embeddings remain the required counterbaseline."
+    },
+    {
+      "node": "RETINA_TEMPORAL_CONTROL",
+      "disposition": "REFINED",
+      "fusion": "Retina temporal/control fabric should distinguish pre-encoder skip from post-encoder history/token pruning; background/layout cannot be assumed irrelevant."
+    },
+    {
+      "node": "VISUAL_RECOVERY",
+      "disposition": "CONSTRAINED",
+      "fusion": "Multimodal KV/media runtime state is not durable evidence by default. Persist provenance-bound source/semantic state and re-encode after restart unless exact current target-VPS cache persistence proves equivalent."
+    },
+    {
+      "node": "PAR_EAP_VISUAL_SEED",
+      "disposition": "NO_PROMOTION",
+      "fusion": "PAR remains a candidate. FeatureTap may improve seed formation, but wrong-seed/open-set and stale-epoch controls remain mandatory before memory can guide active perception."
+    }
+  ],
+  "global_effect": "Changes F-V01-06 test design and adds a recovery obligation to F-V01-13; no release credit and no final model training."
+}

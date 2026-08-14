@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "run_id": "Q23-20260810T2013P0700-GPT56SOL-01",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H-Q23-PEH-001",
+      "parent": "H-QNDRF-01/H-QNDRF-02",
+      "claim": "A first-class provenance-bound PerceptualEmbeddingHandle between libmtmd vision encoding, MVC readout and delayed semantic decode can make QNDRF's one-encode/zero-or-one-decode law executable without a second heavy visual encoder.",
+      "why_it_matters": "Current llama-server obtains mtmd output embeddings separately but consumes them inside slot/request processing; Qwen3.5 multi-turn image reprocessing has also been reported. QNDRF therefore needs an explicit measured lifetime/reuse contract rather than assuming server cache semantics.",
+      "strongest_counterhypothesis": "Copying/retaining visual embeddings plus compatibility bookkeeping costs enough RAM/bandwidth/latency that direct Qwen decode or a tiny dedicated embedding encoder is Pareto-superior; target runtime may also already eliminate re-encoding in the relevant workload.",
+      "falsifier": "On matched recurring-GUI episodes, a PEH path fails to reduce actual vision-encode count or end-to-end sensor-to-correct-decision cost without accuracy/open-set/recovery regression versus FULL_QWEN and dedicated-encoder baselines.",
+      "cheapest_discriminating_test": "Instrument target libmtmd path: count mtmd_batch_encode, bytes copied/retained, delayed decode reuse, p50/p95/p99, RAM/VRAM and semantic equivalence across repeated observations.",
+      "status": "OPEN",
+      "confidence": 0.76
+    },
+    {
+      "hypothesis_id": "H-Q23-Q1-REFINE-002",
+      "parent": "H-QNDRF-01",
+      "claim": "Raw final Qwen3.5 vision outputs should remain the diagnostic Q0 baseline, while a tiny calibrated learned projection/readout Q1 is the stronger operational candidate for user-specific familiarity/open-set routing.",
+      "why_it_matters": "Strong multimodal embedding systems derived from VLMs use explicit contrastive/distillation objectives; this is counterevidence against assuming raw generative-VLM geometry is already calibrated for identity/open-set distance.",
+      "strongest_counterhypothesis": "For Frank's narrow recurring GUI/entity states, deterministic pooling plus raw prototype distances are already sufficient and avoid learned-head drift/data requirements.",
+      "falsifier": "Q0 matches or beats Q1 on held-out exact/state-variant/near-neighbor unknown fixtures under equal calibration error, false-familiar tolerance and total cost.",
+      "cheapest_discriminating_test": "Frozen Qwen features; compare Q0 pooled prototypes vs Q1 tiny projection on the same independent episodes with AUROC/AUPR, ECE, FPR@known-recall and resource shadows.",
+      "status": "REFINED",
+      "confidence": 0.68
+    },
+    {
+      "hypothesis_id": "H-Q23-RUNTIME-META-003",
+      "parent": "Q23 failure-ecology frontier",
+      "claim": "Multimodal runtime parameters such as batch/ubatch, mmproj offload, backend, flash-attention and parallel/KV mode must be treated as semantic-correctness benchmark metadata, not performance metadata only.",
+      "why_it_matters": "Current llama.cpp issue evidence shows multimodal correctness/reprocessing/resource behavior can vary with runtime configuration on Qwen3.5-family workloads.",
+      "strongest_counterhypothesis": "Observed failures are isolated to other model sizes/hardware/backends and do not transfer to the exact 4B target lane.",
+      "falsifier": "Exact target 4B differential matrix shows invariant visual outputs/task correctness across supported runtime configurations within declared numerical tolerance.",
+      "cheapest_discriminating_test": "Small frozen image/UI corpus across a bounded target-VPS runtime configuration matrix before collecting MVC training/prototype data.",
+      "status": "OPEN",
+      "confidence": 0.58
+    }
+  ]
+}

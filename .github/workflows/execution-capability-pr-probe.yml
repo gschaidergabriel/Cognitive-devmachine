@@ -1,0 +1,48 @@
+name: Execution capability PR probe
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/CAPABILITY_LIVE_PROBE_TRIGGER.json'
+      - '.github/workflows/execution-capability-pr-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install bridge dependencies
+        run: python -m pip install --disable-pip-version-check --quiet ddgs e2b
+      - name: Validate execution adapters
+        run: python -m py_compile tools/research_tool_bridge.py tools/e2b_sandbox.py tools/judge0_execute.py tools/piston_execute.py tools/sandboxapi_sandbox.py
+      - name: Execute fresh remote capability probes
+        run: |
+          set -euo pipefail
+          for req in \
+            research_entity/runtime/tool_requests/sandboxapi-live-probe-20260810T1216p0700.json \
+            research_entity/runtime/tool_requests/judge0-live-probe-20260810T1216p0700.json \
+            research_entity/runtime/tool_requests/e2b-live-probe-20260810T1216p0700.json \
+            research_entity/runtime/tool_requests/piston-live-probe-20260810T1216p0700.json
+          do
+            python tools/research_tool_bridge.py "$req" --force
+          done
+      - name: Print sanitized receipts
+        run: |
+          set -euo pipefail
+          for f in \
+            research_entity/runtime/tool_results/sandboxapi-live-probe-20260810T1216p0700.json \
+            research_entity/runtime/tool_results/judge0-live-probe-20260810T1216p0700.json \
+            research_entity/runtime/tool_results/e2b-live-probe-20260810T1216p0700.json \
+            research_entity/runtime/tool_results/piston-live-probe-20260810T1216p0700.json
+          do
+            echo "===== $f ====="
+            cat "$f"
+          done

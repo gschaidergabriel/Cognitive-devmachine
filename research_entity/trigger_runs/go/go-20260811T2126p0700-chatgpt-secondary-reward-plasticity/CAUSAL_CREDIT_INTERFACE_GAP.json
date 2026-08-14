@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "CROSS_BRANCH_INTEGRATION_GAP",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "OPEN_INTERFACE_GAP",
+  "producer_state": {
+    "current_main_v17": "runtime/state/effect_terminal_runtime_v17_candidate.py",
+    "verified_fields": [
+      "effect_id",
+      "attempt_id",
+      "outcome_verified",
+      "outcome_hash",
+      "episode_id",
+      "signal_id",
+      "causal_id",
+      "admitted_delta_hash or explicit_no_learning",
+      "provenance_hash",
+      "reentry_hash",
+      "terminal_receipt_hash",
+      "DONE terminal state"
+    ],
+    "terminal_verifier": "verify_terminal_chain(effect_id) -> DONE_VALID or fail-closed reason",
+    "numeric_causal_credit_present": false
+  },
+  "loop_core_pr": {
+    "pr": 312,
+    "status": "OPEN",
+    "current_credit_semantics": "after receiver use and verified outcome the turn marks causal_credit as BOUND_TO_EPISODE, then creates delta_hash and bound re-entry; no numeric credit score is persisted",
+    "learning_admission": "only after provenance-bound re-entry plus terminal DONE"
+  },
+  "reward_contract": {
+    "source": "research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay",
+    "requires": "causal_credit in [0,1] and material_learning_weight = confidence * causal_credit",
+    "current_pr332_input": "caller-supplied RewardOutcomeEvidence.causal_credit"
+  },
+  "gap": "Current producer-owned terminal state proves that a verified outcome is bound to a causal episode, but does not prove a calibrated fractional causal contribution. Mapping BOUND_TO_EPISODE directly to causal_credit=1.0 would silently promote binary attribution into maximal numeric credit. Accepting a caller-supplied float would re-open reward laundering.",
+  "hypotheses": [
+    {
+      "id": "H1_TYPED_CAUSAL_CREDIT_RECEIPT",
+      "claim": "Add a producer-owned CausalCreditReceipt with effect/outcome/episode/signal/causal identities, score, method, uncertainty, counterfactual/control basis and provenance; reward plasticity consumes only this verified receipt after DONE."
+    },
+    {
+      "id": "H2_BINARY_ADMISSION_IS_ENOUGH_FOR_V01",
+      "claim": "For v0.1, calibrated fractional credit may be unnecessary complexity; exact verified bound attribution could be a binary material-learning admission gate while magnitude/confidence is determined elsewhere."
+    },
+    {
+      "id": "H3_NO_PERSISTENT_REWARD_UNTIL_CREDIT_IS_IDENTIFIABLE",
+      "claim": "If neither calibrated nor defensible binary attribution is available, persistent reward update should abstain rather than infer credit from mere activity or successful outcome."
+    }
+  ],
+  "strongest_counterhypothesis": "A numeric credit score can itself become an ungrounded proxy and add false precision. The simpler binary verified-attribution gate may be safer and sufficient until lesion/counterfactual evidence supports fractional credit.",
+  "required_discriminator": {
+    "name": "BINARY_VS_FRACTIONAL_CAUSAL_CREDIT_REPLAY",
+    "arms": [
+      "binary verified bound attribution",
+      "fractional producer-owned credit",
+      "caller-supplied fractional credit negative control",
+      "outcome-only/no causal binding negative control"
+    ],
+    "controls": [
+      "truthful",
+      "shuffled episode",
+      "provenance broken",
+      "no re-entry",
+      "multi-candidate shared-cause episode",
+      "spurious active-but-unused receiver"
+    ],
+    "metrics": [
+      "false reward admission",
+      "missed useful learning",
+      "calibration against known synthetic causal contributions",
+      "verified task outcome improvement",
+      "proxy exploitation",
+      "complexity/resource cost"
+    ]
+  },
+  "architecture_delta": "DO_NOT_WIRE_PR332_CALLER_FLOAT_DIRECTLY_TO_V17; REQUIRE_PRODUCER_OWNED_CREDIT_RECEIPT_OR_EXPLICIT_BINARY_CREDIT_DECISION",
+  "promotion": "NONE",
+  "go_oob_count_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

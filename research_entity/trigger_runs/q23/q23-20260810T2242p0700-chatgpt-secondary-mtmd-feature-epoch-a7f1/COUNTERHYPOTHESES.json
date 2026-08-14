@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "counterhypotheses": [
+    {
+      "counter_id": "CH-Q23-FEATURE-EPOCH-01",
+      "attacks": "H-Q23-FEATURE-EPOCH-01",
+      "claim": "Binding runtime commit/backend/config into persistent feature identity is over-conservative; output geometry may remain invariant enough that these should be run metadata rather than compatibility breakers.",
+      "discriminator": "Cross-runtime prototype transfer and open-set calibration with field-by-field epoch ablation.",
+      "status": "OPEN"
+    },
+    {
+      "counter_id": "CH-Q23-MTMD-PREDECODE-01",
+      "attacks": "H-Q23-MTMD-PREDECODE-01",
+      "claim": "The LLM-input-projected visual tokens are optimized for generative conditioning rather than metric identity; Qwen's own dedicated embedding models require explicit representation training, so raw mtmd descriptors may not support calibrated instance/layout familiarity.",
+      "discriminator": "Matched MVC-Q0 projected-token prototype vs tiny learned projection vs dedicated lightweight embedding baseline under equal total path cost.",
+      "status": "OPEN"
+    },
+    {
+      "counter_id": "CH-Q23-MROPE-CONFIG-01",
+      "attacks": "H-Q23-MROPE-CONFIG-01",
+      "claim": "Current public issue failures are model/build/backend specific and do not reproduce on Qwen3.5-4B target settings.",
+      "discriminator": "Exact 4B frozen-image correctness/crash matrix on target runtime.",
+      "status": "OPEN"
+    },
+    {
+      "counter_id": "CH-Q23-SINGLE-SLOT-01",
+      "attacks": "H-Q23-SINGLE-SLOT-01",
+      "claim": "Multiple model slots can improve pipeline overlap even with one active Frank execution lease, so hard parallel=1 may leave useful performance on the table.",
+      "discriminator": "Serialized workload benchmark plus state/recovery equivalence for parallel 1 vs 2+.",
+      "status": "OPEN"
+    },
+    {
+      "counter_id": "CH-Q23-MODEL-SIZE-ACCOUNTING-01",
+      "attacks": "H-Q23-MODEL-SIZE-ACCOUNTING-01",
+      "claim": "Exact deployed GGUF/mmproj resource receipts already prevent any practical undercount from the nominal 4B language-model label.",
+      "discriminator": "Audit active model metadata and resource receipts.",
+      "status": "OPEN"
+    }
+  ]
+}

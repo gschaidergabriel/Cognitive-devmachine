@@ -1,0 +1,87 @@
+name: ClayGraph Actual Corpus Benchmark
+
+on:
+  push:
+    branches:
+      - research/claygraph-actual-corpus-bench-20260810
+    paths:
+      - '.github/workflows/claygraph-actual-corpus-benchmark.yml'
+      - 'tools/claygraph_actual_corpus_benchmark.py'
+      - 'tools/claygraph_build.py'
+      - 'tools/claygraph_query.py'
+      - 'research_entity/claygraph/**'
+  pull_request:
+    paths:
+      - '.github/workflows/claygraph-actual-corpus-benchmark.yml'
+      - 'tools/claygraph_actual_corpus_benchmark.py'
+      - 'tools/claygraph_build.py'
+      - 'tools/claygraph_query.py'
+      - 'research_entity/claygraph/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claygraph-actual-corpus-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  actual-corpus:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Record runner metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, platform, socket, sqlite3
+          print(json.dumps({
+            'hostname': socket.gethostname(),
+            'runner_name': os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os': os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch': os.environ.get('RUNNER_ARCH','unknown'),
+            'platform': platform.platform(),
+            'python': platform.python_version(),
+            'sqlite': sqlite3.sqlite_version,
+            'github_sha': os.environ.get('GITHUB_SHA',''),
+          }, sort_keys=True))
+          PY
+
+      - name: Build real ClayGraph and benchmark retrieval arms
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/claygraph_actual_corpus_benchmark.py \
+            --max-per-relation 24 \
+            --k 8 \
+            --output /tmp/CLAYGRAPH_ACTUAL_CORPUS_BENCHMARK.json
+
+      - name: Enforce evidence sanity only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/CLAYGRAPH_ACTUAL_CORPUS_BENCHMARK.json',encoding='utf-8'))
+          assert p['benchmark']=='ACTUAL_REPOSITORY_RELATION_RETRIEVAL'
+          assert p['case_generation']['cases'] > 0, p
+          for name in ('sqlite_fts5','fixed_graph','planned_graph','sqlite_structured_upper_bound'):
+              assert p['arms'][name]['cases'] == p['case_generation']['cases'], (name,p['arms'][name])
+          print('CLAYGRAPH_ACTUAL_CORPUS_BENCHMARK=MEASURED')
+          print(json.dumps({name:{
+              'hit_rate':p['arms'][name]['hit_rate'],
+              'recall':p['arms'][name]['mean_recall_at_k'],
+              'precision':p['arms'][name]['mean_precision_at_k'],
+              'stale_rate':p['arms'][name]['stale_rate'],
+              'p50_ms':p['arms'][name]['latency_ms']['p50'],
+              'p95_ms':p['arms'][name]['latency_ms']['p95'],
+          } for name in p['arms']}, sort_keys=True))
+          PY

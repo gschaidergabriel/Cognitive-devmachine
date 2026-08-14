@@ -1,0 +1,234 @@
+module clay.research.omnisource_live_fusion_research_reentry
+version "2.0"
+status PROJECT_OWNER_FIXED_GLOBAL_OPERATION_LAW
+owner_instruction_date "2026-08-10T16:25:00+07:00"
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+identity_guard=@research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+live_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+mesh=@research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md
+adaptive_mesh_candidate=@research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+go_q23_bridge=@research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay
+work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+research_center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+law ALL_AVAILABLE_NEW_DATA_IS_INGESTION_CANDIDATE=true
+law EVERY_OBSERVATION_RETAINS_PROVENANCE_TIME_AND_CONTENT_IDENTITY=true
+law RAW_OBSERVATION_NEVER_AUTO_PROMOTES_TO_TRUTH=true
+law MATERIAL_SEMANTIC_DELTA_REQUIRES_RESEARCH_REENTRY=true
+law MATERIAL_WORK_DELTA_REQUIRES_CURRENT_WORK_REVISION_BINDING=true
+law STALE_WORK_EXECUTION_REMAINS_DIAGNOSTIC_BUT_NOT_CURRENT_WORK_CREDIT=true
+law NO_MATERIAL_CHANGE_REQUIRES_LIGHTWEIGHT_RECEIPT=true
+law COUNTEREVIDENCE_AND_NEGATIVE_RESULTS_SURVIVE_FUSION=true
+law RESEARCH_RESULTS_FLOW_BACK_TO_ARCHITECTURE_TESTS_AND_WORK=true
+law TARGETED_RELEVANCE_ROUTING_OVER_GLOBAL_CONTEXT_FLOOD=true
+law PULL_ON_DEMAND_IS_FIRST_CLASS=true
+law KNOWLEDGE_NEEDS_AND_COUNTER_CHALLENGES_ARE_FIRST_CLASS_INPUTS=true
+law FRESHNESS_IS_RECURSIVE_NOT_RUN_START_ONLY=true
+law CANDIDATE_ROUTING_MECHANISMS_REMAIN_EVIDENCE_GATED=true
+law OBSERVATION_AND_CONTROL_PLANE_BACKACTION_IS_MEASURABLE_COST=true
+law GO_Q23_EXCHANGE_ENTERS_SAME_REENTRY_SEMANTICS=true
+
+record OmniSourceObservation {
+  observation_id:Ref
+  source_class:REPO_STATE|WORK_EVENT|WORKER_RESULT|RUNTIME_RECEIPT|BENCHMARK_ROW|TEST_FAILURE|NEGATIVE_RESULT|USER_DIRECTIVE|USER_OBSERVATION|UPLOADED_SOURCE|EXTERNAL_PRIMARY|EXTERNAL_OFFICIAL|EXTERNAL_TECHNICAL|EXTERNAL_JOURNAL_OR_CONFERENCE|EXTERNAL_GITHUB_PROJECT|EXTERNAL_ISSUE_OR_FAILURE|PROVIDER_CAPABILITY|FRANK_TELEMETRY|UNIFIEDDB_DELTA|CLAYGRAPH_DELTA|EXPERIMENT_OUTPUT|KNOWLEDGE_NEED|COUNTER_CHALLENGE|GO_Q23_EXCHANGE|OTHER_PROVENANCE_BOUND
+  source_ref:Ref
+  source_actor:Ref?
+  source_time:Time?
+  observed_at:Time
+  semantic_epoch:Ref?
+  work_id:Ref?
+  work_spec_rev:Ref?
+  repo_head:Ref?
+  execution_start:Time?
+  component_hashes:Set<Hash>?
+  model_runtime_hashes:Set<Hash>?
+  content_hash:Hash
+  raw_payload_ref:Ref
+  provenance_hash:Hash
+  freshness:Score?
+  confidence:Score?
+}
+
+record FusionAssessment {
+  observation_id:Ref
+  compared_against_epoch:Ref
+  compared_against_work_rev:Ref?
+  novelty_class:NEW|REFINES|CONFIRMS|CONTRADICTS|SUPERSEDES|NO_MATERIAL_CHANGE|DUPLICATE
+  materiality:Score
+  uncertainty:Score
+  current_work_credit_eligible:Bool?
+  semantic_promotion_eligible:Bool?
+  affected_claims:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  affected_work:Set<Ref>
+  affected_components:Set<Ref>
+  evidence_for:Set<Ref>
+  evidence_against:Set<Ref>
+  strongest_counterhypothesis:Ref?
+  semantic_delta_ref:Ref?
+  route_recommendation:Ref?
+}
+
+record ResearchReentryReceipt {
+  receipt_id:Ref
+  observation_id:Ref
+  semantic_delta_ref:Ref?
+  fused_epoch:Ref
+  current_work_revision_checked:Ref?
+  current_work_credit_eligible:Bool?
+  semantic_promotion_eligible:Bool?
+  evidence_updates:Set<Ref>
+  claim_updates:Set<Ref>
+  hypothesis_created_or_revised:Set<Ref>
+  counterhypothesis_created_or_revised:Set<Ref>
+  experiment_created_or_revised:Set<Ref>
+  work_created_or_revised:Set<Ref>
+  architecture_delta_candidates:Set<Ref>
+  test_obligations:Set<Ref>
+  negative_results:Set<Ref>
+  branch_feedback_targets:Set<Ref>
+  discovery_beacons:Set<Ref>
+  knowledge_needs_answered:Set<Ref>
+  knowledge_needs_created:Set<Ref>
+  q23_go_exchange_refs:Set<Ref>
+  no_change_reason:Clay?
+  next_falsifier:Clay?
+  rollback_or_recovery_impact:Clay?
+  completed_at:Time
+}
+
+record ReentryDeliveryState {
+  receipt_or_delta:Ref
+  branch_or_worker:Ref
+  delivered:Bool
+  reconstructed:Bool
+  plan_revalidated:Bool
+  used:Bool
+  local_effect:Bool
+  causal_credit_supported:Bool
+  observed_at:Time
+}
+
+// Intake.
+rule new_available_observation -> canonicalize OmniSourceObservation
+rule new_available_observation -> persist_or_reference_raw_payload_without_context_flood
+rule same_content_hash+same_semantic_identity -> deduplicate_preserve_distinct_provenance
+rule same_payload_same_ancestry -> never_count_as_independent_replication
+rule source_missing_provenance -> quarantine_from_promotion + keep_as_unverified_intake
+rule stale_or_unknown_epoch -> mark_stale_or_UNKNOWN; never_guess_current
+rule runtime_or_work_receipt_missing_work_revision_binding_when_current_credit_matters -> current_work_credit_eligible=false
+
+// Work revision truth.
+rule work_bound_observation -> refresh current work_id/spec_rev/repo_head/dependencies/invalidators
+rule observation.work_spec_rev != current_work.spec_rev -> preserve_diagnostic + current_work_credit_eligible=false
+rule exact_current_work_binding+executed_receipt -> current_work_credit_eligible may_be_true_subject_to_completion_gate
+rule stale_execution cannot_be_promoted_to_current_work_pass merely_by_later_fusion
+rule semantic_scientific_value_of_stale_execution may_survive if mechanism remains applicable and provenance is explicit
+
+// Fusion.
+rule OmniSourceObservation -> refresh_current(UnifiedDB+ClayGraph+current_work+claims+hypotheses+negative_results+receipts+knowledge_needs+q23_exchange)
+rule OmniSourceObservation -> derive FusionAssessment
+rule contradiction -> preserve_both_sides + derive strongest_counterhypothesis + open_or_revise_discriminating_test
+rule supersession -> invalidate_or_revise_affected_current_work_before_next_material_effect
+rule negative_result -> preserve_as_active_architecture_knowledge
+rule duplicate -> lightweight_receipt_only
+rule NO_MATERIAL_CHANGE -> lightweight_receipt_only
+rule knowledge_need -> route_to_capable_workers_and_live_web_as_question_not_truth
+rule counter_challenge -> preserve challenger lineage + route_to_independent_or_adversarial lane
+rule q23_go_exchange -> apply same evidence/work-revision/reentry rules as other sources
+
+// Research re-entry.
+rule FusionAssessment.materiality is material -> create ResearchReentryReceipt
+rule material_delta -> update_evidence_graph_as_supported_by_provenance
+rule material_delta -> create_or_revise_claims_hypotheses_counterhypotheses_as_warranted
+rule material_delta -> create_or_revise_cheapest_discriminating_experiment_when_uncertainty_remains_material
+rule material_delta -> map_against_current_system_possibility_table_and_dynamic_work
+rule material_delta -> create_or_revise_architecture_delta_or_test_obligation_or_work_or_explicit_NO_CHANGE
+rule material_delta -> route_targeted_feedback_to_affected_branches_workers_and_q23_bridge_if_applicable
+rule high_impact_invalidation -> interrupt_affected_work_at_next_safe_point
+rule research_reentry_complete iff ResearchReentryReceipt exists and required targeted feedback is addressable
+
+// Targeted push + pull.
+rule material_delta -> emit compact discovery_or_material envelope with payload_ref
+rule explicit KnowledgeNeed match -> prioritize target even when semantic fanout would otherwise be low
+rule low_relevance_data -> INDEX_ONLY
+rule receiver_requires_details -> pull task_conditioned payload_or_subgraph
+rule receiver_not_relevant -> do_not_inject_full_payload
+rule missing_predecessor|stale_projection|ack_gap -> anti_entropy_repair
+rule delivery -> track ReentryDeliveryState
+rule delivery != reconstruction
+rule reconstruction != plan_revalidation
+rule plan_revalidation != use
+rule use != local_effect
+rule local_effect != causal_credit
+
+// Observation backaction.
+rule observer_control_plane_design -> account CPU_RAM_IO_network_WAL_checkpoint_and_latency_backaction where measurable
+rule same_hot_truth_store_observer_with_material_backaction -> penalize unless no safer isolated_or_rebuildable_projection exists
+rule isolated_rebuildable_observer_projection may_be_preferred_if matched correctness+recovery evidence supports it
+rule lower_nominal_latency_without_backaction_measurement != architecture_promotion
+
+// Research is itself an input source.
+rule experiment_result|benchmark_result|runtime_failure|recovery_receipt|worker_result -> new_available_observation
+rule external_evidence_delta -> new_available_observation
+rule user_material_direction_or_observation -> new_available_observation
+rule architecture_test_result -> new_available_observation
+rule KnowledgeNeed_answer -> new_available_observation
+rule GOQ23Envelope_or_answer -> new_available_observation
+rule ResearchReentryReceipt.material_next_question -> live_refresh + next_research_cycle_if_expected_value_positive
+
+// Routing candidate remains replaceable.
+rule routing_policy = current_promoted_mesh unless evidence_promotes(adaptive_mesh_candidate)
+rule adaptive_mesh_candidate may_shadow_evaluate_on_current_deltas=true
+rule candidate_visibility_or_owner_desire_for_more_connectivity != promotion_evidence
+rule dense_global_invalidation may_use_dense_fanout_when_safer_or_cheaper
+rule ordinary_local_delta prefers dependency_semantic_subscription_and_knowledge_need_targeting
+rule low_relevance_data remains indexed_and_pullable_not_broadcast
+
+// Measurements.
+measure source_coverage_by_class
+measure source_lineage_diversity
+measure ingestion_to_assessment_latency
+measure assessment_to_reentry_latency
+measure material_delta_reentry_closure_rate
+measure delivery_reconstruction_plan_use_effect_funnel
+measure contradiction_detection_rate
+measure counterevidence_retention_rate
+measure stale_epoch_rejection_rate
+measure stale_work_current_credit_rejection_rate
+measure work_revision_drift_rate
+measure duplicate_suppression_rate
+measure false_materiality_rate
+measure missed_material_delta_rate
+measure affected_branch_recall
+measure false_interrupt_rate
+measure knowledge_need_response_rate
+measure pull_request_rate
+measure research_to_architecture_feedback_rate
+measure research_to_test_obligation_rate
+measure research_to_work_revision_rate
+measure q23_go_exchange_closure_rate
+measure recovery_feedback_closure_rate
+measure observer_backaction_CPU_RAM_IO_WAL_network_latency
+measure CPU_RAM_IO_network_token_context_cost
+
+invariant all_new_data_source_coverage_does_not_mean_all_raw_data_in_active_context
+invariant ingestion_does_not_mint_truth
+invariant fusion_does_not_average_contradictions_away
+invariant repeated_or_multiworker_distribution_does_not_create_independent_replication
+invariant stale_work_execution_does_not_gain_current_work_credit_through_reentry
+invariant ClayGraph_activation_never_mints_truth_or_effect_authority
+invariant UnifiedDB_persistence_never_mints_truth_or_effect_authority
+invariant research_feedback_never_bypasses_original_baseline_or_release_gates
+invariant question_exchange_does_not_mint_truth
+invariant Frank_remains_separate_research_subject
+invariant Frank_self_harness_authority_is_PROPOSAL_ONLY
+invariant Frank_never_mutates_Clay
+invariant every_material_result_returns_to_research_architecture_tests_or_explicit_NO_CHANGE

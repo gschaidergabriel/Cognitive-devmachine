@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0052p0700-chatgpt-secondary-projection-lease-expired-owner",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T00:52:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "c5acc0a0555eda890e15b13520136945f2060776",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_at_final_refresh": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY + F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Current merged UnifiedDB->ClayGraph projection worker had strong ordinary crash/load evidence but a lease recovery invariant remained unmeasured. Broad duplicate clock-warp work was abandoned after swarm refresh found PR #399 and PR #400 covering backward/forward realtime discontinuities.",
+    "duplicate_avoidance": [
+      "PR#399 backward CLOCK_REALTIME discontinuity diagnostic",
+      "PR#400 forward CLOCK_REALTIME discontinuity diagnostic"
+    ]
+  },
+  "baseline": {
+    "source": "gschaidergabriel/Dr.-Unterweger PR#392 / workflow run 31517421729",
+    "accepted_target_runner": "clay Linux X64",
+    "result": "PASS",
+    "authoritative_events": 880,
+    "applied_events": 880,
+    "checks": "22/22",
+    "crash_worker_applied_before_exit": 11,
+    "recovery_worker_applied": 869,
+    "recovery_lease_held_retries": 10,
+    "producer_lock_retries": 0,
+    "max_pending": 339,
+    "max_lag_epochs": 338,
+    "max_oldest_pending_age_ms": 2046,
+    "producer_commit_latency_ms": {
+      "p50": 1.205757,
+      "p95": 8.599556,
+      "p99": 14.297143,
+      "max": 431.423787
+    },
+    "drain_after_producer_stop_s": 1.0670267595,
+    "final_health": "HEALTHY",
+    "final_pressure": "NONE",
+    "final_projection_exact": true,
+    "sqlite_runtime": "3.53.4",
+    "baseline_obligation": "Any lease repair must rerun equivalent crash/takeover/shadow-load and remain non-regressive against these bounded measurements."
+  },
+  "hypothesis": "Lease expiry is a hard recovery fence: once a worker lease deadline has passed, the same fencing generation must not regain scheduling authority by renewal; continued operation requires fresh acquisition and a newer generation.",
+  "strongest_counterhypothesis": "Generation fencing alone may be sufficient for safety: if no contender has yet acquired a newer generation, late renewal might affect only recovery timing and might not create simultaneous authoritative owners.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "EXPIRED_OWNER_SELF_RESURRECTION",
+    "class": "temporal recovery invariant",
+    "reversible": true,
+    "disposable_state": true,
+    "product_bytes_modified": false,
+    "description": "Acquire generation 1 with a 5000 ms lease, resume the same owner 1000 ms after its deadline, call renew directly, then attempt recovery by a second owner after the original deadline."
+  },
+  "experiment": {
+    "diagnostic_pr": 398,
+    "branch": "chatgpt/go-projection-monotonic-lease-v1-20260812",
+    "exact_head": "15138e578b7036c0947207c7b7e51634cf69fa1d",
+    "workflow_run": 31519027176,
+    "job": 93871231482,
+    "accepted_target_runner": "clay",
+    "accepted_target_labels": ["self-hosted", "Linux", "X64"],
+    "status": "PASS_DIAGNOSTIC_REPRODUCED_EXPIRED_OWNER_LEASE_RESURRECTION_V1",
+    "interpretation": "NEGATIVE_MECHANISM_REPRODUCED",
+    "pre_expiry_control": "PASS",
+    "initial_lease_until_ms": 105000,
+    "late_renew_at_ms": 106000,
+    "lateness_ms": 1000,
+    "generation_before": 1,
+    "generation_after": 1,
+    "resurrected_lease_until_ms": 111000,
+    "recovery_contender_at_ms": 106001,
+    "recovery_contender_blocked": true,
+    "recovery_error": "LEASE_HELD:owner-a:1:111000",
+    "resource_shadow": {
+      "wall_s": 0.05,
+      "max_rss_kib": 20736,
+      "exit_code": 0
+    },
+    "artifact": {
+      "id": 9112383042,
+      "name": "projection-expired-owner-resurrection-v1-31519027176",
+      "sha256": "6a4420298a56ce5454f5f40dd50aaa9264252d57b79e2ea6ebb34bb485b5d3c6"
+    },
+    "target_identity": {
+      "kernel": "6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+      "python": "3.12.3",
+      "boot_id": "8fab241d-868e-447d-b802-01d403c22e88",
+      "worker_sha256": "4d795bc8acd36eb2043cab028dd7313e62c6b57c67c663c592f525d6a5c77520",
+      "worker_schema_sha256": "8cce4b1f94495f7c906059b2c88667e7a71eaffddb7abe3c0a57686929bd56d3",
+      "diagnostic_sha256": "c73a1741895d2035b931afa0c2a526ed9710d3323a8ea054c22d494cb5141bc5"
+    }
+  },
+  "negative_and_harness_evidence": {
+    "first_run": 31518490204,
+    "classification": "HARNESS_FAILURE_NOT_MECHANISM_EVIDENCE",
+    "cause": "Standalone diagnostic initially did not bind repository root into sys.path.",
+    "repair": "Repository-root import binding plus stderr capture only; projection-worker semantics unchanged."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Python time documentation",
+      "url": "https://docs.python.org/3/library/time.html",
+      "finding": "monotonic clocks are not affected by system clock updates; realtime time is a separate adjustable clock domain",
+      "use": "supports separating lease duration from CLOCK_REALTIME"
+    },
+    {
+      "source": "Linux kernel random sysctl documentation",
+      "url": "https://docs.kernel.org/admin-guide/sysctl/kernel.html",
+      "finding": "boot_id is stable for the running boot",
+      "use": "supports boot-scoping monotonic/boottime lease state"
+    },
+    {
+      "source": "SQLite 3.53.4 release documentation",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "current private baseline runtime is a post-WAL-reset-fix SQLite release",
+      "use": "preserves physical runtime provenance for projection baseline"
+    }
+  ],
+  "repair_successor_adjudication": {
+    "pr": 404,
+    "head": "e3776a4c39b0efbb0857eab2cd3d44be16f8786c",
+    "title": "repair(unifieddb): make projection lease boot-aware and monotonic",
+    "accepted_target_job": 93872507853,
+    "accepted_target_result": "SUCCESS",
+    "supported_properties": [
+      "CLOCK_BOOTTIME + boot_id same-boot lease duration candidate",
+      "CLOCK_REALTIME retained as telemetry rather than lease authority",
+      "expired holder renewal rejected fail-closed",
+      "generation fencing retained in existing authority row",
+      "clock sidecar contains no owner/generation authority",
+      "reboot identity mismatch permits liveness takeover",
+      "missing active boot identity fails closed"
+    ],
+    "promotion_status": "TESTING_NOT_PROMOTED",
+    "ordinary_counterhypothesis": "run_batch_v2 asserts lease before v1.apply_event; apply_event commits derived ClayGraph in a separate transaction. A takeover can occur after the pre-apply assertion while the old worker is inside the graph commit, so zero stale-generation in-flight derived commits is not yet proven.",
+    "adjudication_write": "GitHub review 4909200085",
+    "required_followup": [
+      "Executable takeover-during-apply regression with exact generation/use receipts",
+      "Rerun PR#392-equivalent crash/takeover/shadow-load under V2 on accepted target",
+      "Preserve exact-current consequential-use gate and idempotent derived projection semantics",
+      "No production migration/systemd activation until recovery and performance gates pass"
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "affected": [
+      "UnifiedDB->ClayGraph projection worker lease/recovery",
+      "F-V01-04 state continuity",
+      "F-V01-13 recovery/observability"
+    ],
+    "supported_change": "An expired lease generation must not self-renew; continued execution requires a valid unexpired lease or fresh acquisition/generation. Boot-aware monotonic/boottime clock hardening is separately supported as a candidate, not yet promoted.",
+    "rollback": "Keep V1 production inactive; retain PR#392 V1 baseline and all current-main semantics until V2 satisfies recovery/performance/current-main composition gates.",
+    "effect_authority_change": false,
+    "harness_self_authority_change": false,
+    "training_authorization_change": false
+  },
+  "result_distribution": {
+    "diagnostic_pr_updated": 398,
+    "repair_pr_reviewed": 404,
+    "shared_research_receipt": true
+  },
+  "nonclaims": [
+    "No whole Frank v0.1 acceptance",
+    "No production projection service activation",
+    "No multi-host lease proof",
+    "No power-loss or kernel-panic proof",
+    "No claim that expired-renew reproduction alone creates split-brain",
+    "No final training authorization",
+    "No Frank/self.root Harness mutation authority"
+  ],
+  "next_frontier": [
+    "Adjudicate takeover-during-apply window in PR#404 without adding a second GO OOB to this macrocycle",
+    "Run V2 crash/takeover/shadow-load against the 880-event accepted-target baseline",
+    "Promote only if V2 preserves recovery exactness, fail-closed consequential graph use, and bounded latency/resource behavior"
+  ]
+}

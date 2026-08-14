@@ -1,0 +1,22 @@
+{
+  "count": 14,
+  "families": 7,
+  "hypotheses": [
+    {"id":"H1","family":"deletion","idea":"Delete writable DONE authority; derive CausalDone from canonical support."},
+    {"id":"H2","family":"deletion","idea":"Delete terminal receipt authority entirely; expose only reconstructible closure witnesses."},
+    {"id":"H3","family":"state_geometry","idea":"Factor terminality into OUTCOME_SETTLED, REENTRY_CLOSED and LEARNING_DECIDED instead of one monolithic DONE."},
+    {"id":"H4","family":"topology","idea":"Represent completion as one typed support hyperedge spanning execution, episode/use, outcome, credit and delta/no-learning."},
+    {"id":"H5","family":"temporal","idea":"Use an append-only event-sourced closure predicate; current closure is a fold, not a mutable terminal row."},
+    {"id":"H6","family":"temporal","idea":"Use bitemporal terminal validity so later support invalidation can quarantine causal closure without erasing external outcome history."},
+    {"id":"H7","family":"information","idea":"Use a Merkle-like closure witness hash over exact support identities, recomputed on read."},
+    {"id":"H8","family":"information","idea":"Allow a fast DONE cache, but make it rebuildable/non-authoritative and bind it to a support epoch/hash."},
+    {"id":"H9","family":"causal","idea":"Represent closure as a provenance expression whose derivation records exactly why completion holds."},
+    {"id":"H10","family":"causal","idea":"Require a typed proof object to construct terminal projection; strings cannot satisfy the constructor."},
+    {"id":"H11","family":"language_protocol","idea":"Model effect->outcome->reentry as linear typestate/session progression; terminal value exists only after protocol completion."},
+    {"id":"H12","family":"alien_cross_domain","idea":"Proof-carrying completion: terminal consumer validates a compact completion certificate against a fixed policy."},
+    {"id":"H13","family":"alien_cross_domain","idea":"Monotone logic only: external outcome facts accumulate; non-monotone causal validity is queried separately, preventing terminal state conflation."},
+    {"id":"H14","family":"baseline_simplification","idea":"Keep ordinary persisted DONE but add canonical FKs/triggers plus atomic terminal transaction and read-time revalidation."}
+  ],
+  "selected_for_destruction": "H1/CCW-001",
+  "selection_reason": "H1 directly attacks the newly reproduced failure class while remaining non-overlapping with active PR279/280 implementation ownership. H14 is retained as the strongest conventional baseline, not discarded."
+}

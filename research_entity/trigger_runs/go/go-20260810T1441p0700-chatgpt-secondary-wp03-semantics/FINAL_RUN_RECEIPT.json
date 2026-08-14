@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1441p0700-chatgpt-secondary-wp03-semantics",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "frank_role": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage_at_close": "BASE_CLAYCODE_RELEASE",
+  "goal": "Frank v0.1 voll lauffaehig auf Andreas PC",
+  "major_state_changes_observed": [
+    "CC-WP-02 exact-current-byte self-hosted Ubuntu V18 parser/canonicalizer acceptance arrived during this run and was promoted package-only; BASE release remained NOT_PASS.",
+    "The critical BASE frontier moved to CC-WP-03 exact-provenance TypedIR closure.",
+    "Live Fusion V3 dual-plane remained a candidate; no universal-targeting or architecture promotion was inferred from synthetic evidence."
+  ],
+  "external_research": [
+    {
+      "topic": "adaptive/cost-aware incremental refresh and targeted propagation",
+      "refs": ["https://arxiv.org/abs/2603.27775", "https://www.usenix.org/conference/osdi25/presentation/frank"],
+      "use": "analogue only for adaptive routing/acknowledgment economics; not direct Clay validation"
+    },
+    {
+      "topic": "hysteresis and switching chatter",
+      "refs": ["https://arxiv.org/abs/2602.01524"],
+      "use": "analogue for the one bounded route-mode hysteresis canary"
+    },
+    {
+      "topic": "partial lowering",
+      "refs": ["https://mlir.llvm.org/docs/DialectConversion/", "https://mlir.llvm.org/getting_started/Glossary/"],
+      "use": "primary implementation analogue for preserving not-yet-lowered semantics rather than silently dropping them"
+    }
+  ],
+  "exactly_one_out_of_box_experiment": {
+    "ref": "research_entity/experiments/GO_ROUTE_MODE_HYSTERESIS_CANARY_20260810.json",
+    "result": "SUPPORTED_AS_TEST_OBLIGATION_NOT_ARCHITECTURE_PROMOTION",
+    "switches_baseline": 62,
+    "switches_hysteresis": 23,
+    "switch_reduction_fraction": 0.6290322580645161,
+    "modeled_send_cost_increase_fraction": 0.41841004184100417,
+    "unsafe_targeted_steps": 0,
+    "next_test": "measure route_mode_switch_rate, dwell_time and hysteresis width in real-repo live-fusion replay"
+  },
+  "wp03_primary_falsifier": {
+    "evidence_ref": "research_entity/claycode/base/WP03_RULE_SEMANTICS_LOSS_FALSIFIER_20260810T1458P0700.json",
+    "result": "CURRENT_TYPED_IR_WHOLE_PROGRAM_SEMANTIC_IDENTITY_FALSIFIED_ON_TESTED_RULE_ONLY_PROGRAMS",
+    "remote_evidence": "REAL_SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_DIFFERENTIAL",
+    "github_run_id": "31368672238",
+    "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+    "observed_colliding_typed_ir_hash": "f61bd407ad31201df12076ee3fc0acdeb21d995222ee10c1f615638fecd379ea",
+    "baseline_collision_count": 4,
+    "candidate_unique_selected_reward_relation_hashes": 3,
+    "candidate_layout_control_equivalent": true,
+    "wp03_status": "OPEN"
+  },
+  "wp03_candidate": {
+    "implementation": "tools/claycode_wp03_residual_semantics_candidate.py",
+    "mechanism": "preserve not-yet-lowered top-level canonical semantic AST in opaque_unlowered_semantics and bind it into a candidate semantic hash while preserving existing structured type/declaration lowering",
+    "promotion": "NONE",
+    "authority": "NO_EFFECT_AUTHORITY",
+    "full_bridge_test": "tools/test_claycode_wp03_residual_bridge.py",
+    "hosted_ubuntu_snapshot_workflow": ".github/workflows/wp03-v18-full-residual-bridge-snapshot.yml",
+    "full_bridge_execution_state_at_receipt_write": "WORKFLOW_COMMITTED_EXECUTION_RECEIPT_NOT_YET_OBSERVED",
+    "remaining_gate": [
+      "full current G9/Dialect no-silent-reparse artifact bridge execution",
+      "expected_surface/source/grammar/frontend-contract/cross-surface tamper rejection",
+      "opaque semantics must remain non-authoritative and receive explicit WP04/WP05 legality/lowering before execution",
+      "rebind receipts after any production TypedIR/candidate blob change"
+    ]
+  },
+  "negative_results": [
+    "Current TypedIR semantic identity silently collapses tested rule-only semantic distinctions; this is now real Ubuntu evidence, not a static suspicion.",
+    "Route-mode hysteresis is not Pareto-superior in the canary because modeled send cost increased 41.84%; retain only as a sweep/test obligation.",
+    "Live Fusion V3 remains unpromoted pending exact-source reproducibility and real-repo fault-matrix evidence."
+  ],
+  "architecture_delta": {
+    "claycode": "BLOCKER_AND_SUPPORTED_CANDIDATE; WP03 OPEN",
+    "live_fusion": "NO_PROMOTION; add route-mode stability metrics to replay",
+    "frank_harness": "NO_MUTATION",
+    "training": "NOT_AUTHORIZED"
+  },
+  "writes_committed_during_run": [
+    "research_entity/experiments/GO_ROUTE_MODE_HYSTERESIS_CANARY_20260810.json",
+    "tools/claycode_wp03_reward_relation_identity_falsifier.py",
+    "tools/claycode_wp03_residual_semantics_candidate.py",
+    "tools/test_claycode_wp03_residual_semantics_candidate.py",
+    ".github/workflows/claycode-wp03-v18-reward-identity-hostinger.yml",
+    ".github/workflows/claycode-wp03-residual-semantics-candidate-hostinger.yml",
+    "research_entity/claycode/base/WP03_RULE_SEMANTICS_LOSS_FALSIFIER_20260810T1458P0700.json",
+    "tools/test_claycode_wp03_residual_bridge.py",
+    ".github/workflows/wp03-v18-full-residual-bridge-snapshot.yml"
+  ],
+  "next_frontier": [
+    "Execute/adjudicate the full V18 G9+Dialect residual artifact-bridge/tamper test on the exact candidate bytes.",
+    "If green, integrate the minimal semantics-preservation mechanism into the production WP03 path under a versioned contract and rerun exact provenance/type-identity gates.",
+    "Do not advance WP04/05 credit until WP03 closes; do not alter accepted WP02 frontend semantics without an executable counterexample.",
+    "Keep Live Fusion V3 candidate-only until exact-source real-repo replay/fault injection supports promotion."
+  ],
+  "final_adjudication": "MATERIAL_PROGRESS_WITH_REAL_NEGATIVE_RESULT_AND_SUPPORTED_REPAIR_CANDIDATE; CC-WP-02 PASS; CC-WP-03 OPEN; BASE NOT_PASS; FRANK HARNESS UNCHANGED; TRAINING NOT_AUTHORIZED"
+}

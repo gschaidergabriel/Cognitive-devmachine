@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.1",
+  "run_id": "harness-20260810T2024p0700-chatgpt-secondary-hwp10-effect-authority",
+  "finding": "Q23_REGISTRY_INTERCONNECT_GOVERNANCE_DRIFT",
+  "severity": "P0_FOR_RESEARCH_TRIGGER_PREFLIGHT",
+  "observed": {
+    "registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "q23_kind": "domain_research",
+    "preflight_old_sha": "4885746395663f4c6c40a7d3fd92fec7aaf07597",
+    "old_priority_peer_count": 9,
+    "registry_peer_count_expected": 10,
+    "failure_mode": "module import raises RuntimeError because every explicit priority omitted q23"
+  },
+  "repair": {
+    "path": "tools/research_interconnect_preflight.py",
+    "final_commit": "bc45678a8b2566d241b38ae4dadbef8028a12b21",
+    "final_content_sha": "6cef96fd9f7587e295140050221003afa56a86a2",
+    "superseded_intermediate_commit": "e4d6853a2ef503d2f50f4ad42db17f16ac839bbb",
+    "changes": [
+      "add q23 to every peer priority order",
+      "add direct q23 preflight route",
+      "add q23 packet budgets and aliases",
+      "add q23-specific deep packet routing",
+      "preserve prior branch-specific run-depth rules",
+      "preserve prior special-rules manifest surface",
+      "preserve fail-closed exact-set governance invariant"
+    ]
+  },
+  "regression_test": {
+    "path": "tools/test_research_interconnect_preflight_q23.py",
+    "commit": "5fe808ae054a14c3fc61e5cd74da79d343618c0e",
+    "sha256": "c94a8e2e349cbe70e020f0eab1051f4a7340fc054fa757445216a6890d2d8772",
+    "local_smoke_passed": 4,
+    "local_smoke_failed": 0,
+    "synthetic_peer_count": 10
+  },
+  "execution_scope": "LOCAL_SYNTHETIC_REPO_SMOKE_PLUS_STATIC_DIFF_REVIEW",
+  "full_repo_preflight_execution": "NOT_EXECUTED_IN_THIS_TOOL_ENVIRONMENT",
+  "promotion": "REPAIR_COMMITTED_BUT_FULL_REPO_PREFLIGHT_REVALIDATION_REQUIRED"
+}

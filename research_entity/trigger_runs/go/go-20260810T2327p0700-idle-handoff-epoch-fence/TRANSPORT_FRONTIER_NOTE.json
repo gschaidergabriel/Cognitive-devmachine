@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2327p0700-idle-handoff-epoch-fence",
+  "kind": "ARCHITECTURE_TEST_OBLIGATION_NO_BUILD_YET",
+  "recorded_at": "2026-08-10T16:50:00Z",
+  "actor": "chatgpt-secondary",
+  "target_package": "F-V01-08-TOKEN-API-CLIENTS",
+  "current_repo_observation": {
+    "token_ingress_core": "FRAMEWORK_INDEPENDENT_CORE_PRESENT",
+    "network_server": "NOT_IMPLEMENTED_IN_CURRENT_GATE_RESULT",
+    "tls_termination": "NOT_IMPLEMENTED_IN_CURRENT_GATE_RESULT",
+    "cross_process_same_session_continuation": "NOT_YET_ACCEPTED_AS_PRODUCTION_EQUIVALENT",
+    "process_local_active_execution_projection": true
+  },
+  "fresh_primary_external_evidence": [
+    {
+      "source_class": "OFFICIAL_PYTHON_DOCS",
+      "finding": "http.server is explicitly not recommended for production and provides only basic security checks"
+    },
+    {
+      "source_class": "OFFICIAL_UVICORN_DOCS",
+      "finding": "Uvicorn supports production deployment/process management and defaults to one worker unless configured otherwise"
+    },
+    {
+      "source_class": "OFFICIAL_FASTAPI_DEPLOYMENT_DOCS",
+      "finding": "HTTPS is commonly terminated by an external TLS termination proxy"
+    },
+    {
+      "source_class": "OFFICIAL_NGINX_DOCS",
+      "finding": "Nginx provides HTTPS and reverse proxy support"
+    }
+  ],
+  "candidate_direction": {
+    "status": "TEST_OBLIGATION_NOT_ARCHITECTURE_PROMOTION",
+    "shape": "ONE_APPLICATION_WORKER_BEHIND_TLS_REVERSE_PROXY",
+    "reason": "Multiple application workers are not automatically compatible with the current V16 process-local continuation projection and global single-spawn invariant.",
+    "explicitly_not_selected": [
+      "python_http_server_for_production",
+      "blind_multi_worker_uvicorn",
+      "transport_that_bypasses_FrankTokenIngressCore_or_V16_continuity"
+    ]
+  },
+  "required_next_discriminators": [
+    "verify target-VPS package/runtime availability before selecting framework",
+    "prove every network request enters authenticated token ingress before touching execution state",
+    "prove one global busy lease under concurrent remote clients",
+    "prove same-session continuation and idempotent replay through the real transport",
+    "prove idle-handoff/epoch fence behavior through the real transport",
+    "prove proxy/TLS headers cannot forge caller identity or bypass token scope",
+    "measure latency, memory, request concurrency and recovery on accepted target VPS",
+    "do not enable multiple application workers until durable cross-process continuation equivalence is proven"
+  ],
+  "build_decision_this_run": "NO_CHANGE_PENDING_INTEGRITY_AND_TARGET_CAPABILITY_PROBE",
+  "oob_experiment_count_added": 0
+}

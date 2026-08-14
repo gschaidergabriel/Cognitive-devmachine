@@ -1,0 +1,60 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:frank-v01-idle-handoff-epoch-fence:20260810T2330p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T16:30:00Z",
+  "payload": {
+    "work_id": "FRANK-V01-IDLE-HANDOFF-EPOCH-FENCE",
+    "goal_ref": "FRANK_V0_1",
+    "origin_class": "BUG_REPAIR",
+    "title": "Fence idle-handoff confirmation to exact released execution generation",
+    "scope": {
+      "packages": [
+        "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+        "F-V01-08-TOKEN-API-CLIENTS",
+        "F-V01-10-PROACTIVE-AGENCY-WEB",
+        "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+      ],
+      "target_pr": 195,
+      "target_branch": "chatgpt/go-v16-idle-handoff-epoch-fence-v2-20260810",
+      "research_receipt": "research_entity/trigger_runs/go/go-20260810T2327p0700-idle-handoff-epoch-fence/RESEARCH_RECEIPT.json"
+    },
+    "problem": "Current V16 idle confirmation identifies the released actor but not the superseded release generation, while same session/client may legally produce multiple sequential releases.",
+    "selected_mechanism": "Require session + client + released_lease_epoch and condition the singleton clear on the exact pending epoch.",
+    "counterhypothesis": "Session/client identity alone is sufficient because valid confirmations cannot be delayed across repeated releases from the same session.",
+    "evidence": {
+      "source_inspection": "SUPPORTED",
+      "first_target_vps_normal_regression": "PASS",
+      "first_target_vps_same_session_aba_discriminator": "PASS",
+      "first_target_vps_run": 31406944484,
+      "current_main_replacement_run": 31408572649,
+      "current_main_replacement_run_state": "QUEUED_AT_EVENT_WRITE"
+    },
+    "coordination": {
+      "do_not_duplicate": true,
+      "overlap_checked": [
+        "explicit-user-priority idle-handoff work already on main",
+        "effect-presence fencing lanes",
+        "presence recovery-validation lanes",
+        "cross-process ingress replay lanes"
+      ],
+      "distinct_slice": "same-session stale idle-confirmation generation fencing only",
+      "next_safe_action": "Wait for exact-head target runner; adjudicate static integrity; refresh main diff; merge only if current and green."
+    },
+    "completion": {
+      "normal_v16_regression": "PASS_REQUIRED",
+      "exact_one_go_aba_discriminator": "PASS_REQUIRED",
+      "repo_integrity": "ADJUDICATE_REQUIRED",
+      "current_main_overlap": "RECHECK_REQUIRED",
+      "hostinger_ubuntu_receipt": "REQUIRED",
+      "research_reentry": "DONE",
+      "promotion": "PROHIBITED_UNTIL_ALL_REQUIRED_CURRENT_EVIDENCE_IS_GREEN"
+    },
+    "status": "TESTING",
+    "base_priority": 0.93,
+    "expected_impact": 0.88,
+    "urgency": 0.94,
+    "information_gain": 0.90
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0030p0700-chatgpt-secondary-projection-syntax-frontier",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "ClayCode parser surface for UnifiedDB->ClayGraph projection contracts",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 406,
+  "tested_head": "93c8d0cbdba0e3007c3e259fc1ab6fa6496dfa58",
+  "accepted_target_validation": {
+    "workflow_run": 31519690899,
+    "job": 93873402105,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "status": "PASS_PROJECTION_SURFACE_FRONTIER_CHARACTERIZED",
+    "checks": "14/14",
+    "wall_seconds": 2.64,
+    "max_rss_kib": 32428,
+    "grammar_sha256": "1880638608fdc93c8fda7973f8c09247ec8fd7214e20305ae0aa7656b73d1c6d"
+  },
+  "positive_control": {
+    "source": "claycode/frank_effects.clay",
+    "sha256": "37a636f7cc2fce7dc9336adc54eef699bd8ccf0e3c9a885b126906783493992a",
+    "status": "PARSED"
+  },
+  "real_source_boundaries": [
+    {
+      "source": "claycode/frank_unifieddb_projection_outbox_v1.clay",
+      "sha256": "c34984a616e68c105b6bfb7de9c7c5624e5c422a53e5f874127db8edb1ce0118",
+      "first_failure": "line 5 col 1 token projection_contract",
+      "status": "REJECTED_BY_LARK"
+    },
+    {
+      "source": "claycode/frank_unifieddb_projection_worker_v1.clay",
+      "sha256": "cb821029592009faa4ef8934b17633dba0702f02c8b2e5176325de25e7014f98",
+      "first_failure": "line 5 col 1 token projection_worker_contract",
+      "status": "REJECTED_BY_LARK"
+    }
+  ],
+  "hypothesis": "The two projection contracts are outside the current structured parser at more than their wrapper keywords, so a wrapper-only grammar patch would be an incomplete and misleading repair.",
+  "strongest_counterhypothesis": "Only the projection_contract/projection_worker_contract wrappers are missing; once admitted, the existing body syntax would already parse.",
+  "counterhypothesis_result": "REFUTED_BY_INDEPENDENT_MICRO_PROBES",
+  "independently_rejected_attested_surface_families": [
+    "projection_contract declaration",
+    "projection_worker_contract declaration",
+    "schema assignment such as ProjectionEvent = { ... }",
+    "sum assignment without type keyword",
+    "named commit/acquire operation blocks",
+    "bare assignment/state update statements",
+    "BEGIN/COMMIT transaction markers",
+    "recovery transition arrow ->",
+    "require ... else FAIL_CLOSED suffix"
+  ],
+  "architecture_delta": {
+    "status": "NO_PRODUCT_CHANGE_DIAGNOSTIC_SUPPORTED",
+    "next_requirement": "Before parser admission, choose explicit syntax/AST/semantics per attested family or normalize projection contracts into already-canonical Clay constructs; do not add only wrapper keywords.",
+    "new_syntax_selected": false,
+    "ast_contract_selected": false,
+    "semantic_change": "NONE",
+    "rollback": "close diagnostic PR #406; no product grammar/runtime bytes were changed"
+  },
+  "go_oob": {
+    "new_experiment_added": false,
+    "invocation_single_oob_remains": "CORPUS_GHOST_APPEND"
+  },
+  "external_effect_executed": false,
+  "authority_claim": "NONE",
+  "whole_claycode_acceptance": false,
+  "whole_frank_v0_1_acceptance": false,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2125p0700-eudi-e1e5-falsification",
+  "status": "DISTRIBUTED_TARGET_VPS_COUNTEREVIDENCE",
+  "feedback": {
+    "frank": {
+      "effect": "ARCHITECTURE_CAUTION_INCREASED",
+      "delta": "Hostinger confirms the single-image boot handoff is viable, but also confirms that a writable self.root.udb inode gives frankrunner write reach into immutable-root bytes unless an additional mechanism intervenes.",
+      "next_test": "Do not adopt strict one-file layout until bounded-write containment beats the split-layout control."
+    },
+    "unifieddb": {
+      "effect": "BLOCKING_SECURITY_RESEARCH_OBLIGATION",
+      "delta": "Same-inode physical unity currently expands the writable blast radius from mutable state into immutable root/model address space.",
+      "next_test": "Design a state commit path that cannot issue arbitrary pwrite against the root/model extents, then attack it on Hostinger."
+    },
+    "claycode": {
+      "effect": "LOWERING_FIREBREAK_REQUIRED",
+      "delta": "Typed region distinctions must survive all the way to the syscall capability; handing O_RDWR for the whole image destroys the semantic boundary.",
+      "next_test": "Prove generated/runtime code cannot obtain a general writable fd for self.root.udb and can write only admitted state ranges."
+    },
+    "harness": {
+      "effect": "TARGET_VPS_COUNTEREVIDENCE_ACCEPTED",
+      "delta": "Run 31398279985 demonstrates both E1/E3 PASS_BOUNDED and E5 COUNTEREVIDENCE on digital-retina.",
+      "next_test": "Proceed to E4 crash cuts and E5 confinement candidates; preserve negative results."
+    },
+    "clayresearch": {
+      "effect": "HYPOTHESIS_REWEIGHTING",
+      "delta": "H-EUDI-03 probability rises as mechanism viability; naive H-EUDI-05 falls materially because the deficit replicated on target hardware.",
+      "next_test": "Prefer experiments capable of rejecting EUDI over additional demonstrations of boot feasibility."
+    },
+    "atomic": {
+      "effect": "CHALLENGE",
+      "delta": "Invent a physically single-image design without a general writable single-inode capability in the cognitive runtime; otherwise recommend abandoning strict physical unity."
+    }
+  },
+  "scientific_promotion": "NONE",
+  "architecture_promotion": "NONE",
+  "training_authorized": false
+}

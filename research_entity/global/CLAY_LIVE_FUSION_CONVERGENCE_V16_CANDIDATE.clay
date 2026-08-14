@@ -1,0 +1,187 @@
+module clay.research.live_fusion_convergence_v16
+version "0.16-convergence-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffaehig auf Andreas PC"
+state_authority=UnifiedDB
+derived_topology=ClayGraph
+research_entity=Clay
+frank=SEPARATE_RESEARCH_SUBJECT
+
+// This candidate is a convergence map, not a fifth router. It composes independently evolving
+// live-fusion lanes discovered during the same GO run and forbids duplicated semantic ownership.
+
+candidate MeshV2 {
+  ref="branch carrying research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay"
+  role=SEMANTIC_ROUTING_DEPENDENCY_PROPAGATION_ANTI_ENTROPY
+  owns=target_set+route_mode+causal_predecessor_readiness+dependency_repair
+  does_not_own=truth+transport_durability+effect_authority+work_lease
+}
+
+candidate DependencyEvidenceGateV15 {
+  ref="chatgpt/live-fusion-evidence-gated-v15-current-main-20260810"
+  role=DEPENDENCY_ONLY_INTERRUPT_ADJUDICATION
+  owns=hard_vs_soft_dependency_witness_gate+verification_required
+  does_not_own=target_discovery+transport+truth+effect_authority
+}
+
+candidate ReentryTransportPR156 {
+  ref="PR156 chatgpt/live-fusion-reentry-v1-20260810"
+  role=DURABLE_TRANSPORT_REPLAY_WORKER_REENTRY
+  owns=append+delivery+replay+delivery_ack+terminal_resolution+effect_guard_transport_basis
+  does_not_own=valid_mesh_target_reselection+dependency_truth+work_priority
+}
+
+candidate WorkLeasePR165 {
+  ref="PR165 chatgpt/live-fusion-work-lease-v1-20260810"
+  role=WORK_OWNERSHIP_FENCING_PRE_EFFECT_RESERVATION
+  owns=lease+fence_epoch+spec_revision_revalidation+durable_effect_reservation+effect_recovery_boundary
+  does_not_own=semantic_routing+truth+transport_ack_semantics
+}
+
+candidate StrongMeshPR166 {
+  ref="PR166 chatgpt/live-fusion-strong-mesh-v14-20260810"
+  role=SHADOW_DIFFERENTIAL_BASELINE_FOR_DEPENDENCY_REACH_AND_LOW_SIGNAL_DEMOTION
+  owns=measurable_V13_vs_dependency_projection_shadow_comparison
+  does_not_own=production_route+truth+effect_authority
+}
+
+candidate ReentryV2Alternative {
+  ref="chatgpt/live-fusion-reentry-v2-current-main-20260810"
+  role=TRANSPORT_MATERIALIZATION_REPLACEMENT_CANDIDATE
+  owns=plan_and_lease_bound_delivery_ack+stale_ack_rejection+SQLite_materialization_candidate
+  does_not_own=automatic_supersession_of_PR156_or_PR165
+}
+
+law ONE_SEMANTIC_ROUTING_OWNER_CANDIDATE=true
+law MeshV2_owns_semantic_target_set_candidate=true
+law valid_MeshV2_route -> PR156_transport_exact_target_set_without_local_reselection
+law V15_is_post_route_dependency_interrupt_gate_not_second_target_discovery_plane=true
+law PR166_is_measurement_ancestry_and_shadow_falsifier_not_parallel_production_router=true
+law PR156_is_transport_reentry_candidate_not_semantic_router_when_valid_mesh_decision_exists=true
+law PR165_is_collision_and_effect_recovery_control_not_truth=true
+law ReentryV2_is_differential_alternative_until_it_beats_or_matches_PR156_composition=true
+law NO_BLIND_MERGE_OF_DIVERGED_BRANCHES=true
+law every_candidate_rebased_or_replayed_against_current_main_before_integration=true
+law current_but_false_dependency != causal_truth
+law associative_dependency_without_hard_witness_cannot_mint_interrupt_blocking_power=true
+law soft_dependency_may_trigger_checkpoint_verification=true
+law direct_verified_conflict_must_not_be_weakened_by_missing_graph_witness=true
+law dependency_projection_stale_or_mismatched -> DEGRADED_COORDINATION+repair
+law missing_causal_predecessor -> hold_material_use+anti_entropy_repair
+law delivery != reconstructed != used != local_effect != verified_effect
+law transport_ack != semantic_resolution
+law semantic_resolution != effect_authority
+law lease != epistemic_rank
+law RESERVED_effect != verified_outcome
+law connectivity != evidence
+law repeated_distribution != independent_replication
+law stronger_networking = higher_causal_recall_per_coordination_cost_with_bounded_false_interrupts
+
+record ConvergedRouteEnvelope {
+  event_id:Ref
+  payload_hash:Hash
+  mesh_route_decision_ref:Ref
+  mesh_route_epoch:Ref
+  unifieddb_epoch:Ref
+  claygraph_projection_hash:Hash
+  receiver:Ref
+  route_reason:Ref
+  dependency_witness_class:Ref?
+  gate_decision:ALLOW_INTERRUPT|CAP_TO_CHECKPOINT|UNCHANGED|INDEX_ONLY
+  transport_version:Ref
+  plan_revision:Ref
+  lease_id:Ref
+  work_spec_rev:Int?
+  provenance_refs:Set<Ref>
+  authority=COORDINATION_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY
+}
+
+record ConvergenceReceipt {
+  event_id:Ref
+  receiver:Ref
+  mesh_addressed:Bool
+  transport_delivered:Bool
+  worker_seen:Bool
+  reconstructed:Bool
+  plan_revalidated:Bool
+  semantic_resolution:OPEN|DEFERRED|CONFLICT|ACCEPT|REPLAN|NO_CHANGE
+  used:Bool
+  local_effect:Bool
+  effect_reserved:Bool
+  effect_verified:Bool
+  causal_credit_admitted:Bool
+  false_dependency_detected:Bool
+  anti_entropy_repair_ref:Ref?
+  final_plan_revision:Ref?
+  final_lease_id:Ref?
+}
+
+pipeline material_delta {
+  1=UnifiedDB_preserve_raw_event_and_provenance
+  2=MeshV2_compute_adaptive_route_and_dependency_paths
+  3=V15_gate_dependency_only_interrupts_by_witness_class
+  4=PR156_transport_and_replay_exact_adjudicated_target_set
+  5=worker_reconstruct_and_revalidate_current_plan_work_spec_dependencies_invalidators
+  6=PR165_validate_current_lease_and_reserve_consequential_effect_before_external_operation
+  7=verify_outcome
+  8=terminal_reentry_resolution_bound_to_exact_event_basis
+  9=admit_causal_credit_and_provenance_bound_reentry_only_after_verified_use_outcome
+  10=checkpoint_anti_entropy_and_repair_missing_or_stale_dependency_state
+}
+
+alternative_eval ReentryV2 {
+  compare_against=PR156_plus_PR165_transport_reentry_surface
+  require=durability+crash_restart+concurrent_writer+stale_ack+plan_lease_redelivery+effect_reservation_composition
+  disposition=KEEP_SHADOW_UNTIL_DOMINANCE_OR_SIMPLIFICATION_PROVEN
+}
+
+metric_vector {
+  relevant_receiver_recall
+  permanent_high_impact_miss_rate_after_repair
+  false_interrupt_rate
+  false_non_interrupt_rate
+  active_delivery_amplification
+  full_payload_fanout_per_delta
+  checkpoint_verification_load
+  anti_entropy_repair_success_rate
+  reentry_closure_latency_p50_p95_p99
+  interrupt_latency_p50_p95_p99
+  transport_latency_p50_p95_p99
+  CPU_RAM_IO_network
+  SQLite_lock_busy_write_amplification
+  duplicate_external_effect_count
+  crash_restart_recovery_rate
+  stale_plan_ack_acceptance_count
+  stale_lease_effect_count
+}
+
+promotion_gate {
+  current_main_candidate_replay=REQUIRED
+  real_repository_worker_corpus=REQUIRED
+  broadcast_baseline=REQUIRED
+  exact_tag_direct_baseline=REQUIRED
+  PR166_dependency_shadow_baseline=REQUIRED
+  V15_evidence_gated_arm=REQUIRED
+  false_dependency_fault_injection=REQUIRED
+  missing_dependency_fault_injection=REQUIRED
+  stale_projection_fault_injection=REQUIRED
+  duplicate_and_causal_reorder=REQUIRED
+  PR156_cross_version_replay=REQUIRED
+  PR165_lease_collision_and_crash_effect_window=REQUIRED
+  ReentryV2_differential=REQUIRED
+  zero_permanent_high_impact_missed_receivers_after_repair=REQUIRED
+  zero_duplicate_consequential_effects_under_declared_fault_model=REQUIRED
+  Hostinger_Ubuntu_exact_candidate_receipt=REQUIRED
+  Andreas_Ubuntu_final_acceptance=REQUIRED_LATER
+  rollback_to_current_WorkEvent_Git_polling=REQUIRED
+}
+
+// The exact GO run already consumed its one deliberately unusual experiment in PR166:
+// OOB_HIDDEN_DEPENDENCY_LESION_RESCUE. Do not add a second OOB experiment in this same run.
+
+invariant UnifiedDB_is_semantic_authority
+invariant ClayGraph_is_derived_rebuildable_topology
+invariant Frank_self_harness_authority=PROPOSAL_ONLY
+invariant ResearchEntity!=Frank
+invariant CANDIDATE_NOT_PROMOTED

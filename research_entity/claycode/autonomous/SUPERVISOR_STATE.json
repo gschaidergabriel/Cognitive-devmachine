@@ -1,8 +1,8 @@
 {
-  "schema_version": "6.2",
+  "schema_version": "6.3",
   "status": "ACTIVE",
-  "last_reviewed_cycle": "go-20260815T0041p0700-claycode-supervisor-corpus-gate-liveness-adjudication",
-  "current_focus": "Canonical Dr.-Unterweger main advanced to b0518b68fe79140bfbc5c4b48d57aba746ece1ba by merging PR582 exact head 5189512aac9963111bb3b484de8250ac7529314c. PR582 fixes two corpus-gate liveness/scope defects discovered after PR580: freezing excluded_observed==2 made any additional excluded source unpassable, and the unresolved-symbol census compared all discovered .clay files against an authority-filtered corpus. The repair changes the exclusion assertion to >=2 while preserving authorized==40, unclassified==0, missing_authorized==0 and frozen 36/40=90.0, and runs the census on the same 40-source FRONTIER_SCOPE_DIR as corpus/count checks. Exact-head current-main composition run 31823962369/job 94843573266 ran on self-hosted Ubuntu clay-4, explicitly bound PR_HEAD_SHA=5189512..., composed onto main a8d82e65..., executed all 8 steps, and returned PASS_CURRENT_MAIN_COMPOSED_AUTHORIZED_FRONTIER with authorized 40, discovered 42, excluded_observed 2, 36/40 parsed, 429 unresolved unique names, 464 unresolved occurrences and 22 callable MethodChain segments open. The repair is therefore executable for current-main scope consistency, but the decisive >2-exclusion branches are not proven merely by this run because this tested tree still observed only two exclusions. PR582's commit message records PR105 and PR352 discriminator measurements motivating the fix, but downstream PRs still require individual current-main recomposition on b0518b68 before declaring the 13-PR unblock complete. Post-merge Frank Deep Integrity run 31824783506 completed success on b0518b68. The same push also ran SQLite published-patchset readonly 31824783354 and failed at the existing DSC/Ubuntu patch-series sentinel after real execution; retain that as storage fail-closed evidence, not a ClayCode regression. Preserve FREE_ONLY, Goodman ancestry collapse, BASE WP01/WP02 existing PASS only, WP03-WP14 OPEN, no live provider capability, no canonical semantic promotion and no Frank Harness mutation.",
+  "last_reviewed_cycle": "go-20260815-claycode-supervisor-downstream-provenance-repair",
+  "current_focus": "PR582 remains valid bounded executable evidence for corpus-gate liveness/scope consistency on exact head 5189512aac9963111bb3b484de8250ac7529314c merged as main b0518b68fe79140bfbc5c4b48d57aba746ece1ba. Current-main composition run 31823962369/job 94843573266 passed on self-hosted Ubuntu with authorized 40, discovered 42, excluded_observed 2, unclassified 0, 36/40 parsed, 429 unresolved unique names, 464 unresolved occurrences and 22 callable MethodChain segments open. However the prior next-step mapping of frank_web_ingress.clay to PR105 and frank_needle.clay to PR352 in gschaidergabriel/clay-global-research-entity is invalid. Fresh repository-bound inspection shows PR105 is a closed, unmerged UnifiedDB V16.1 integrity PR at head 33ab82df972dd6b3004c566b3d0ed373e8863172, while PR352 is not present in this repository. Therefore PR105/PR352 must not be used as ClayCode greater-than-two-exclusion falsifiers. Before any downstream recomposition, bind each pending excluded source to repository_full_name + source path + introducing commit/PR/ref + exact head + current reachability. Only then select a real branch that contains greater than two excluded_pending_authority sources and run the PR582-style exact-head current-main corpus/composition gate. If no such provenance-bound candidate exists, return to higher-information semantic frontiers rather than inventing PR mappings. The BASE audit triggered after the stale steering executed no useful steps and receives zero code/guard/release credit. Preserve FREE_ONLY, Goodman ancestry collapse, BASE WP01/WP02 existing PASS only, WP03-WP14 OPEN, no live provider capability, no canonical semantic promotion and no Frank Harness mutation.",
   "free_only": true,
   "blocked_capabilities": {
     "free_api_runtime": "NO_NEW_ACCEPTED_UBUNTU_LIVE_PROVIDER_RECEIPT",
@@ -11,7 +11,7 @@
     "pr232_live_provider": "OPEN_REQUIRE_CURRENT_EXACT_HEAD_EXECUTED_ZERO_COST_GATE_AND_ACCEPTED_UBUNTU_EXTERNAL_NETWORK_EFFECT_RECEIPT",
     "effect_authority_semantic_source": "BLOCKED_REQUIRES_RE_ADJUDICATION_CURRENT_FRANK_EFFECTS_BYTES_BEFORE_REPIN",
     "unifieddb_pr222_exact_head_credit": "BLOCKED_GREEN_PULL_REQUEST_GATES_TESTED_SYNTHETIC_MERGE_NOT_REVIEWED_HEAD_REQUIRE_TRUE_HEAD_BOUND_RERUN",
-    "corpus_downstream_recomposition": "PR582_FIXES_GATE_LIVENESS_AND_SCOPE_BUT_13_AFFECTED_DOWNSTREAM_PRS_REQUIRE_INDIVIDUAL_CURRENT_MAIN_B0518B68_RECOMPOSITION_ESPECIALLY_GREATER_THAN_TWO_EXCLUSIONS",
+    "corpus_downstream_recomposition": "BLOCKED_PENDING_REPOSITORY_BOUND_SOURCE_PROVENANCE; PRIOR_PR105_PR352_MAPPING_INVALID; PR582_MECHANISM_RESULT_RETAINED",
     "wp03_ir_types": "OPEN",
     "wp04_type_effect": "OPEN_WITH_BOUNDED_ALIAS_TOTALITY_AND_ADMISSION_EVIDENCE",
     "wp05_evaluator": "OPEN_WITH_BOUNDED_EVIDENCE",
@@ -41,18 +41,18 @@
     "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST"
   },
   "high_information_targets": [
-    "recompose PR105 and PR352 first against current main b0518b68 because they directly exercise excluded_observed greater than two and excluded-source census isolation; require PASS with authorized 40, unclassified 0, 36/40, 429/464 and preserve any residual non-corpus failures",
-    "then recompose the remaining PR580-affected downstream PRs individually; do not infer a global 13-PR unblock from PR582's own two-exclusion tree",
+    "resolve pending excluded-source provenance before downstream recomposition: bind repository_full_name, source path, introducing commit or PR/ref, exact head and current reachability; naked PR numbers are not authority",
+    "after provenance binding, choose a real candidate tree with greater than two excluded_pending_authority sources and execute exact-head current-main corpus authority plus composition; require authorized 40, unclassified 0, 36/40 and 429/464 while preserving unrelated failures",
+    "if no provenance-bound greater-than-two exclusion candidate is available, do not spend a cycle on guessed mappings; return to parameterized TypeRef resource-totality, 429/464 unresolved Calls, 22 MethodChain/member segments and productive WP04 admission/private-state non-bypassability",
     "rerun PR222 root-repair assertions on its reviewed true head before exact-head credit",
     "execute PR267 import-artifact byte/symlink/object mismatch falsifiers on a safe zero-cost Ubuntu lane binding actual origin, object, SHA-256 and independently admitted manifest",
-    "on exact accepted Hostinger ProductStart, write a UnifiedDB nonce plus semantic epoch through canonical WAL and require successor-generation restart/readback",
-    "falsify parameterized TypeRef structural nesting for host-stack/resource-dependent WP04 outcomes without selecting generic semantics",
-    "classify 429 unique/464 unresolved Calls and 22 MethodChain/member segments without host/library defaulting and prove productive evaluator/compiler/lowering/FFI routes cannot bypass canonical WP04 admission/private admitted state"
+    "on exact accepted Hostinger ProductStart, write a UnifiedDB nonce plus semantic epoch through canonical WAL and require successor-generation restart/readback"
   ],
   "steering_notes": [
-    "PR582 repairs an instrumentation liveness bug; it does not authorize any newly excluded source as ClayCode language semantics.",
-    "The exact-head PR582 run proves scope consistency on a tree with two observed exclusions, not the greater-than-two branch that motivated the repair; PR105/PR352 recomposition is the next causal falsifier.",
-    "Post-merge Deep Integrity is real executable evidence but does not close BASE or Frank-v0.1 release packages.",
+    "PR582 repairs an instrumentation liveness bug and retains bounded executable credit; this provenance correction does not revoke that result.",
+    "The prior PR105/PR352 downstream-target mapping is invalid in gschaidergabriel/clay-global-research-entity and must not be used for ClayCode recomposition.",
+    "A downstream source may enter a causal falsifier only after repository-bound provenance and reachability are established.",
+    "Zero-step/no-runner audit outcomes remain instrument state with zero code, guard or release credit.",
     "No BASE/Frank promotion, no paid fallback, no Together, no canonical semantic selection from model consensus or host behavior, and no Frank Harness modification."
   ],
   "steering_ref": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"

@@ -463,6 +463,7 @@ def execute_chat(
     response_started = False
     response_headers = None
     retryable = False
+    finished = None
 
     try:
         with request_opener(request, timeout=30) as response:
@@ -480,6 +481,7 @@ def execute_chat(
                 if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
                     raise ProviderResponseTooLarge
         if status != 200:
+            finished = now()
             content = None
             if status == 202:
                 outcome = "provider_result_pending"
@@ -497,7 +499,7 @@ def execute_chat(
             elif status == 429:
                 outcome = "rate_limited"
                 cooldown_seconds = _retry_after_seconds(
-                    response_headers, started
+                    response_headers, finished
                 )
                 retryable = False
             else:
@@ -540,6 +542,7 @@ def execute_chat(
             retryable = False
     except urllib.error.HTTPError as exc:
         content = None
+        finished = now()
         if not _is_valid_http_status(exc.code):
             status = None
             outcome = "invalid_provider_response"
@@ -556,7 +559,7 @@ def execute_chat(
             status = exc.code
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
-            cooldown_seconds = _retry_after_seconds(exc.headers, started)
+            cooldown_seconds = _retry_after_seconds(exc.headers, finished)
             retryable = False
         else:
             status = exc.code
@@ -600,7 +603,8 @@ def execute_chat(
         cooldown_seconds = 15
         retryable = False
 
-    finished = now()
+    if finished is None:
+        finished = now()
     body_digest = hashlib.sha256(body).hexdigest()
     request_id = _safe_request_id(
         f"{selected}:{endpoint_capability_id}:"

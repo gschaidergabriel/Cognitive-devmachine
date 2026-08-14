@@ -1,0 +1,18 @@
+{
+  "by_arity":{
+    "0":{"bool_only_unknown_rate_budget1":0.9812,"field_only_queries":{"max":13,"mean":6.9896,"min":1,"p50":7,"p95":12,"p99":13},"field_value_queries":{"max":3,"mean":2.7098,"min":1,"p50":3,"p95":3,"p99":3},"space":48},
+    "1":{"bool_only_unknown_rate_budget1":0.9972,"field_only_queries":{"max":20,"mean":10.5162,"min":1,"p50":11,"p95":17,"p99":19},"field_value_queries":{"max":4,"mean":3.5914,"min":1,"p50":4,"p95":4,"p99":4},"space":384},
+    "2":{"bool_only_unknown_rate_budget1":0.9992,"field_only_queries":{"max":27,"mean":13.847,"min":1,"p50":14,"p95":21,"p99":24},"field_value_queries":{"max":5,"mean":4.436,"min":1,"p50":5,"p95":5,"p99":5},"space":3072},
+    "3":{"bool_only_unknown_rate_budget1":1.0,"field_only_queries":{"max":34,"mean":17.5742,"min":2,"p50":18,"p95":26,"p99":29},"field_value_queries":{"max":6,"mean":5.3386,"min":2,"p50":5,"p95":6,"p99":6},"space":24576},
+    "4":{"bool_only_unknown_rate_budget1":1.0,"field_only_queries":{"max":40,"mean":20.9638,"min":5,"p50":21,"p95":30,"p99":33},"field_value_queries":{"max":7,"mean":6.2194,"min":3,"p50":6,"p95":7,"p99":7},"space":196608},
+    "5":{"bool_only_unknown_rate_budget1":1.0,"field_only_queries":{"max":44,"mean":24.5818,"min":3,"p50":25,"p95":34,"p99":38},"field_value_queries":{"max":8,"mean":7.0986,"min":3,"p50":7,"p95":8,"p99":8},"space":1572864}
+  },
+  "evidence_class":"LOCAL_SYNTHETIC_REFERENCE_PROXY",
+  "hashes":{"detail_measurements_sha256":"db5e5e141cafd0e3ed88ab06bcc281eb15bbb3b890436836768714903ad95f43","implementation_sha256":"3896d5b829258bc3019904a4dea2fb04432bd15ec48f4a43f7b49974096f55b6","raw_measurements_sha256":"de816b6d9769a175509e848446d5a8ac56988d80203560a2767a1041272e036a"},
+  "interpretation":{"authority_mint":"0 by construction and assertions","blind_search":"query counts are computed ranks/proxies, not actual callable executions","false_admission":"0 observed in implemented negative controls","field_only":"50,000/50,000 exact synthetic recovery; p50 15, p95 29, p99 34","field_value_witness":"50,000/50,000 exact synthetic recovery; p50 5, p95/p99 8 queries","trusted_metadata":"1 authenticated read dominates ECT when available"},
+  "machine":{"arch":"x86_64","container_runtime":"UNKNOWN","cpu":"AMD EPYC 9V74 80-Core Processor","git":"2.47.3","gpu":"UNKNOWN","kernel":"Linux 6.18.35","os":"Debian GNU/Linux 13 (trixie)","python":"3.13.5","ram_total":"5.9 GiB","swap":"0","virtualization":"full AMD-V","visible_cpus":5},
+  "not_measured":["target-VPS latency","real WP04 obligation coverage","real compiler/verifier diagnostic trust","CPU/RSS per probe","crash behavior of real unresolved callables","full witness corruption/fault-injection matrix"],
+  "raw":{"benchmark":{"contract_space_size":{"max":1572864,"mean":301150.09248,"min":48,"p50":3072,"p95":1572864,"p99":1572864},"elapsed_s":3.1769947689999753,"field_only":{"exact_recovery_rate":1.0,"queries":{"max":45,"mean":15.7023,"min":1,"p50":15,"p95":29,"p99":34}},"field_value":{"exact_recovery_rate":1.0,"queries":{"max":8,"mean":4.88964,"min":1,"p50":5,"p95":8,"p99":8}},"lexicographic_exhaustive":{"queries":{"max":1572656,"mean":151447.02916,"min":1,"p50":2646,"p95":1114491,"p99":1477940}},"n":50000,"random_without_replacement_proxy":{"queries":{"max":1572452,"mean":150661.01526,"min":1,"p50":2660,"p95":1101987,"p99":1476683}},"seed":20260810,"trusted_metadata_baseline":{"note":"dominates ECT when exact authenticated metadata already exists","queries":1}},"negative_tests":{"passed":6,"tests":6}},
+  "run_id":"20260810T2126p0700-chatgpt-secondary-ect-contract-tomography",
+  "schema_version":"1.0"
+}

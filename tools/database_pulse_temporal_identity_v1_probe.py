@@ -19,7 +19,8 @@ if str(ROOT) not in sys.path:
 from research_entity.harness.reference.state_ledger import StateLedger
 from research_entity.runtime.binary_entity_temporal_pulse_v2 import BinaryEntityTemporalStore
 from research_entity.runtime.database_pulse_temporal_identity_v1 import TemporalPulseBinder
-from research_entity.runtime.gwt_split_pulse_twin_workspace_v1 import benchmark as gwt_benchmark
+from research_entity.runtime.gwt_split_pulse_twin_workspace_v1 import benchmark as twin_gwt_benchmark
+from research_entity.runtime.gwt_chrono_bridge_counterfactual_v1 import benchmark as chrono_gwt_benchmark
 
 
 def q95(xs):
@@ -162,6 +163,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--copies', type=int, default=500)
     p.add_argument('--episodes', type=int, default=20_000)
+    p.add_argument('--chrono-episodes', type=int, default=2_000)
     p.add_argument('--fuzz-seeds', type=int, default=30)
     p.add_argument('--fuzz-copies', type=int, default=60)
     p.add_argument('--fuzz-attempts', type=int, default=30)
@@ -169,17 +171,19 @@ def main():
     p.add_argument('--output', required=True)
     a = p.parse_args()
     out = {
-        'schema_version': '1.0',
+        'schema_version': '1.1',
         'evidence_class': 'EXECUTED_RUNTIME_PROBE',
         'environment': environment(),
         'copy_storage_benchmark': copy_benchmark(a.copies),
         'randomized_falsifier': fuzz(a.fuzz_seeds, a.fuzz_copies, a.fuzz_attempts),
-        'crazy_gwt_challenger': gwt_benchmark(a.episodes),
+        'crazy_gwt_challenger': twin_gwt_benchmark(a.episodes),
+        'crazy_gwt_challenger_iteration_2': chrono_gwt_benchmark(a.chrono_episodes),
         'mcp': mcp_probe() if a.probe_mcp else {'status': 'NOT_REQUESTED'},
         'epistemic_boundaries': {
             'missed_slots_are_phantom_pulses': False,
             'entity_continuity_implies_compute_continuity': False,
             'twin_gwt_promoted': False,
+            'counterfactual_missed_pulse_simulation_promoted': False,
         },
     }
     Path(a.output).parent.mkdir(parents=True, exist_ok=True)

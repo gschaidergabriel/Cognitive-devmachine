@@ -1,4 +1,4 @@
-# Reserved Trigger: `atomic` — GWT Thinkspace Radical Invention Foundry
+# Reserved Trigger: `atomic` — GRT Thinkspace Radical Invention Foundry
 
 **Status:** PROJECT_OWNER_FIXED_RESEARCH_TRIGGER  
 **Trigger:** exact trimmed full message `atomic`  
@@ -6,7 +6,8 @@
 **Home room:** `center`  
 **Target:** current `self.root` / human-surface Frank v0.1 architecture and the complete Clay research organism  
 **Native invention language:** ClayCode  
-**Training auto-start:** FORBIDDEN
+**Training auto-start:** FORBIDDEN  
+**Owner semantic correction:** `research_entity/global/ATOMIC_GRT_THINKSPACE_OWNER_CORRECTION_20260810.md`
 
 ## 0. Core purpose
 
@@ -23,7 +24,7 @@ Compact law:
 `-> HYPOTHESES + COUNTERHYPOTHESES`
 `-> FRESH EXTERNAL RESEARCH`
 `-> FUSION 2`
-`-> GWT THINKSPACE DIVERGENT SEARCH`
+`-> GRT THINKSPACE DIVERGENT SEARCH`
 `-> RADICAL CLAYCODE CANDIDATE`
 `-> BUILD / SIMULATE`
 `-> TEST / ABLATE / MEASURE`
@@ -33,19 +34,19 @@ Compact law:
 
 A prose-only ATOMIC run is incomplete whenever an executable or simulatable discriminator is feasible on the current surface.
 
-## 1. GWT is the Denkraum
+## 1. Generative Reality Theory is the Denkraum
 
-For ATOMIC, the active Global Workspace is the generative **Thinkspace**.
+For ATOMIC, the **Generative Reality Theory (GRT)** is the outer generative **Thinkspace** / possibility space.
 
 Owner-fixed research premise:
 
-`anything internally consistent with the current GWT + ClayCode model is thinkable and worth entering the candidate search process`.
+`anything internally consistent with the current GRT constraints and ClayCode semantic invariants is thinkable and worth entering the candidate search process`.
 
-This does **not** mean that every consistent construction is true, useful, cheap, safe, or entitled to real-world effects.
+This does **not** mean that every consistent construction is true, useful, cheap, safe, scientifically supported, or entitled to real-world effects.
 
 The required distinction is:
 
-`GWT_CONSISTENT -> THINKABLE`
+`GRT_CONSISTENT -> THINKABLE`
 
 `THINKABLE + NOVELTY + RELEVANCE -> HYPOTHESIS_CANDIDATE`
 
@@ -55,14 +56,17 @@ The required distinction is:
 
 `SUPPORTED + AUTHORITY + RESOURCE_GATES -> MAY_BECOME_EXECUTABLE_ARCHITECTURE`
 
-No model-generated thought, GWT ignition, novelty score or repeated workspace recurrence may mint external effect authority.
+GWT is **not** the outer boundary of thinkability. GWT is one researchable mechanism family inside GRT: selection, competition, ignition, broadcast, reconstruction, uptake, causal use, outcome and re-entry may be instantiated, generalized, replaced, dissolved or omitted by a candidate if the candidate remains GRT-consistent and its claims are discriminably testable.
+
+For any candidate that **does** claim GWT behavior, the full causal distinctions remain mandatory. No model-generated thought, GWT ignition, novelty score, GRT consistency or repeated workspace recurrence may mint external effect authority.
 
 ### 1.1 Thinkspace closure
 
-ATOMIC must not restrict invention to known module categories. A candidate may introduce:
+ATOMIC must not restrict invention to known module categories or to current GWT structure. A candidate may introduce:
 
 - a new state primitive;
 - a new GWT competition/broadcast/re-entry geometry;
+- a non-GWT alternative to current workspace/selection/broadcast structure;
 - a new retrieval or memory mechanism;
 - a new temporal operator;
 - a new compiler/runtime primitive;
@@ -78,7 +82,7 @@ ATOMIC must not restrict invention to known module categories. A candidate may i
 - a new module class not presently named anywhere in the architecture;
 - or a dissolution/merger/removal of existing modules if the new mechanism subsumes them measurably better.
 
-The criterion is internal semantic consistency and discriminability, not familiarity.
+The criterion is GRT-level semantic consistency, owner-fixed invariant preservation and discriminability, not familiarity or compatibility with a preferred cognitive metaphor.
 
 ## 2. Absolute freshness law
 
@@ -95,7 +99,7 @@ Before ideation, re-read or equivalently reconstruct:
 7. current live worker claims, leases, receipts and in-progress deltas that can change the problem selection;
 8. current negative-results, refutations, supersessions, failure lineage and Project-Frankenstein archaeology;
 9. current ClayCode grammar/IR/compiler/runtime state;
-10. current GWT/Hyperposition/ClayGraph/UnifiedDB/Harness measurement contracts;
+10. current GRT-relevant theory constraints plus GWT/Hyperposition/ClayGraph/UnifiedDB/Harness measurement contracts;
 11. current capability/tool/provider state;
 12. every material commit or research result newer than the previous ATOMIC cutoff.
 
@@ -134,7 +138,7 @@ At minimum identify:
 - duplicated modules/representations;
 - places where one module exists only because another substrate is missing an expressive primitive;
 - places where sequential architecture may be replaceable by a different state geometry;
-- underused GWT signals, unresolved Hyperposition structure, unused graph/database topology and unused self.root context structure;
+- underused GWT signals where GWT is currently present, unresolved Hyperposition structure, unused graph/database topology and unused self.root context structure;
 - current strongest baseline for each selected problem.
 
 Do not choose the problem by narrative drama. Prefer a problem with high expected downstream leverage and a measurable discriminator.
@@ -215,22 +219,23 @@ Required operations:
 
 Then produce Hypothesis Field 2.
 
-## 8. GWT Thinkspace divergent search
+## 8. GRT Thinkspace divergent search
 
 This is the defining ATOMIC phase.
 
-Treat the current GWT model as a constrained generative state space. Generate candidate workspace configurations/mechanisms that are internally consistent even when no familiar architecture name describes them.
+Treat the current Generative Reality Theory constraints as the outer constrained generative state space. Generate candidate realities/architectures/mechanisms that are internally consistent even when no familiar architecture name describes them. GWT configurations are one subset of this space, not its boundary.
 
 ### 8.1 Candidate dimensions
 
 Vary at least:
 
+- theory/state geometry;
 - topology;
 - temporal order;
 - persistence lifetime;
 - selection rule;
-- broadcast granularity;
-- re-entry structure;
+- broadcast granularity or non-broadcast alternative;
+- re-entry structure or alternative recurrence geometry;
 - local/global state boundary;
 - uncertainty representation;
 - causal-credit path;
@@ -268,7 +273,7 @@ The final candidate must contain at least one mechanism-level departure that is 
 - standard scheduler/orchestrator decomposition;
 - an unmeasured metaphor.
 
-If the best candidate collapses to a known pattern, re-enter Thinkspace and search again.
+If the best candidate collapses to a known pattern, re-enter the GRT Thinkspace and search again.
 
 ## 9. ClayCode-first invention law
 
@@ -285,7 +290,8 @@ The ClayCode artifact must define at minimum:
 - transitions;
 - inputs/outputs;
 - uncertainty behavior;
-- GWT participation;
+- GRT/theory participation and constraints;
+- GWT participation **if the candidate uses GWT**;
 - persistence/recovery semantics;
 - effect-authority boundary;
 - observability hooks;
@@ -342,7 +348,7 @@ Candidate metric families:
 - recovery/replay integrity;
 - uncertainty calibration;
 - causal intervention effect size;
-- GWT selection/broadcast/re-entry changes;
+- GWT selection/broadcast/re-entry changes when GWT is used;
 - information gain;
 - diversity/coverage of useful solution states;
 - architecture/module count or semantic compression;
@@ -460,11 +466,11 @@ If three consecutive local expansions yield only paraphrase/echo, change source 
 
 ## 18. Radicalness is not a safety bypass
 
-Thinkspace exploration is broad. Real effects remain governed by the current Clay/self.root effect-authority architecture.
+GRT Thinkspace exploration is broad. Real effects remain governed by the current Clay/self.root effect-authority architecture.
 
 `THINKABLE != AUTHORIZED`.
 
-ATOMIC may freely construct and simulate internally consistent destructive/privileged mechanism concepts when scientifically necessary to understand failure boundaries, but real destructive/security-sensitive/high-impact execution remains subject to deterministic authority, sandbox and confirmation/denial rules.
+ATOMIC may freely construct and simulate internally consistent privileged or failure-boundary mechanism concepts when scientifically necessary to understand system limits, but real destructive/security-sensitive/high-impact execution remains subject to deterministic authority, sandbox and confirmation/denial rules.
 
 ## 19. Required final visible synthesis
 
@@ -488,7 +494,7 @@ An exact `atomic` run should visibly report:
 
 When the exact trigger `atomic` fires, execute this instruction as the governing research loop:
 
-> Reconstruct the complete current Clay research organism and the exact current self.root/Frank v0.1 target from fresh repository state. Read the newest material from every registered research branch, live worker/lease/receipt state, current Frank dynamic architecture fusion, Harness gap state, ClayCode compiler/runtime, GWT/Hyperposition/ClayGraph/UnifiedDB/q23 research, negative results, supersessions, current program/DOOMSDAY state, capabilities, and every material result newer than the previous ATOMIC cutoff. Preserve provenance and contradictions. Perform Fusion 1 and identify the highest-leverage measurable problem surface. Generate a broad population of falsifiable mechanism hypotheses plus strongest counterhypotheses across mutually distant mechanism families. Perform fresh hypothesis-guided external research using primary papers, official technical sources, source repositories, failure evidence, competing mechanisms and prior-art searches. Search for reasons each promising idea is already known, impossible, dominated or likely to fail. Fuse everything again. Then use GWT as the Thinkspace: every state/mechanism construction internally consistent with the current GWT+ClayCode model is thinkable and eligible for exploration. Search that space with explicit quality-diversity pressure rather than ordinary plausibility optimization. Force the final candidate into a sparsely occupied region of mechanism space and reject candidates that collapse to ordinary RAG, more prompting, more context, another scheduler, another database, another LLM call or a renamed existing Frank component. Create one radically alien but semantically coherent mechanism/module/architecture delta in native ClayCode, including state, transitions, invariants, uncertainty, GWT participation, persistence, recovery, authority, observability, ablation and version semantics. If ClayCode lacks an expressive primitive, surface the exact language gap and propose the smallest typed primitive rather than hiding the gap in prose. Build the smallest faithful executable or simulatable discriminator. Compare it against the current architecture, no-candidate ablation, simplest conventional alternative, resource-matched control and strongest known analogue where feasible; add stale/shuffle/lesion/rescue/counterfactual controls when relevant. Measure correctness, latency, resource/context cost, state amplification, recovery, uncertainty, causal effect and architecture compression as applicable. Preserve raw configs and measurements. Run a post-invention prior-art collision search by mechanism, mathematics, function, terminology and code; never claim world novelty or superiority beyond the searched and measured scope. Version the ClayCode candidate immutably with parent ancestry, evidence class, metadata, metrics, counterhypothesis result and novelty status. Deposit it as a POSSIBILITY, not canonical truth. Feed explicit evidence-preserving deltas and NO_CHANGE where appropriate to every affected branch and the shared research mesh, so all other workers can discover, test, combine, refute or promote it. Refresh live state again after any material new result, and recursively deepen while each cycle still produces new evidence, a new mechanism family, a stronger falsifier, an executable delta or a measurement. Stop paraphrase loops. No paid/final model training is authorized. End with the radical candidate, measurements, strongest remaining falsifier, integration status and dynamic current-milestone/finished-v0.1 DOOMSDAY status.
+> Reconstruct the complete current Clay research organism and the exact current self.root/Frank v0.1 target from fresh repository state. Read the newest material from every registered research branch, live worker/lease/receipt state, current Frank dynamic architecture fusion, Harness gap state, ClayCode compiler/runtime, GRT-relevant constraints, GWT/Hyperposition/ClayGraph/UnifiedDB/q23 research, negative results, supersessions, current program/DOOMSDAY state, capabilities, and every material result newer than the previous ATOMIC cutoff. Preserve provenance and contradictions. Perform Fusion 1 and identify the highest-leverage measurable problem surface. Generate a broad population of falsifiable mechanism hypotheses plus strongest counterhypotheses across mutually distant mechanism families. Perform fresh hypothesis-guided external research using primary papers, official technical sources, source repositories, failure evidence, competing mechanisms and prior-art searches. Search for reasons each promising idea is already known, impossible, dominated or likely to fail. Fuse everything again. Then use **Generative Reality Theory as the outer Thinkspace**: every state/mechanism/architecture construction internally consistent with current GRT constraints plus owner-fixed ClayCode invariants is thinkable and eligible for exploration. GWT is one optional mechanism family within that space, not the boundary of thought; ATOMIC may preserve, generalize, replace, dissolve or omit GWT if the resulting candidate remains GRT-consistent and testable. Search the GRT space with explicit quality-diversity pressure rather than ordinary plausibility optimization. Force the final candidate into a sparsely occupied region of mechanism space and reject candidates that collapse to ordinary RAG, more prompting, more context, another scheduler, another database, another LLM call or a renamed existing Frank component. Create one radically alien but semantically coherent mechanism/module/architecture delta in native ClayCode, including state, transitions, invariants, uncertainty, GRT participation, GWT participation when used, persistence, recovery, authority, observability, ablation and version semantics. If ClayCode lacks an expressive primitive, surface the exact language gap and propose the smallest typed primitive rather than hiding the gap in prose. Build the smallest faithful executable or simulatable discriminator. Compare it against the current architecture, no-candidate ablation, simplest conventional alternative, resource-matched control and strongest known analogue where feasible; add stale/shuffle/lesion/rescue/counterfactual controls when relevant. Measure correctness, latency, resource/context cost, state amplification, recovery, uncertainty, causal effect and architecture compression as applicable. Preserve raw configs and measurements. Run a post-invention prior-art collision search by mechanism, mathematics, function, terminology and code; never claim world novelty or superiority beyond the searched and measured scope. Version the ClayCode candidate immutably with parent ancestry, evidence class, metadata, metrics, counterhypothesis result and novelty status. Deposit it as a POSSIBILITY, not canonical truth. Feed explicit evidence-preserving deltas and NO_CHANGE where appropriate to every affected branch and the shared research mesh, so all other workers can discover, test, combine, refute or promote it. Refresh live state again after any material new result, and recursively deepen while each cycle still produces new evidence, a new mechanism family, a stronger falsifier, an executable delta or a measurement. Stop paraphrase loops. No paid/final model training is authorized. End with the radical candidate, measurements, strongest remaining falsifier, integration status and dynamic current-milestone/finished-v0.1 DOOMSDAY status.
 
 ## 21. Success criterion
 

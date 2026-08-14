@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2327p0700-idle-handoff-epoch-fence",
+  "kind": "SECURITY_ACCEPTANCE_MATRIX_NO_BUILD_YET",
+  "recorded_at": "2026-08-10T17:08:00Z",
+  "actor": "chatgpt-secondary",
+  "affected_packages": [
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "scope_note": "Frank's current token is a project-specific bearer credential, not automatically an OAuth access token. RFC 6750 is useful because it defines the general HTTP Bearer scheme and explicitly notes Bearer can protect resources using tokens from any source. RFC 9700 sender-constraining/audience guidance is therefore a candidate hardening mechanism, not silently promoted OAuth architecture.",
+  "fresh_primary_evidence": [
+    {
+      "source": "IETF RFC 6750",
+      "relevance": [
+        "bearer possession alone authorizes use, so disclosure is security-critical",
+        "TLS is mandatory for bearer-token use in the defined scheme",
+        "Authorization header is the preferred transport; URL/query token transport is discouraged because URLs are commonly logged",
+        "tokens must be protected in storage and transport"
+      ]
+    },
+    {
+      "source": "IETF RFC 9700 / BCP 240",
+      "relevance": [
+        "current OAuth security BCP recommends sender-constrained and audience-restricted access tokens where applicable",
+        "stolen-token replay is an explicit threat class",
+        "scope/privilege should be minimized"
+      ],
+      "frank_adoption_status": "CANDIDATE_HARDENING_NOT_REQUIRED_OAUTH_MIGRATION"
+    },
+    {
+      "source": "OWASP API Security Top 10 2023",
+      "relevance": [
+        "authentication endpoints are exposed attack surfaces",
+        "authorization must be checked for each protected function/object rather than trusted from caller-supplied IDs",
+        "unrestricted resource consumption requires explicit request/resource bounds",
+        "function-level authorization should be consistent and deny by default"
+      ]
+    },
+    {
+      "source": "official Python/Uvicorn/FastAPI/Nginx deployment documentation",
+      "relevance": [
+        "Python http.server is not a production server",
+        "TLS commonly terminates at a reverse proxy",
+        "generic multi-worker deployment advice must be constrained by Frank's single-spawn/current V16 process-local continuation semantics"
+      ]
+    }
+  ],
+  "current_v16_positive_evidence": [
+    "bearer required",
+    "unknown/revoked malformed tokens fail closed",
+    "scope check exists",
+    "raw bearer tokens are not persisted in UnifiedDB in the current target regression",
+    "raw bearer tokens are not returned in current public payloads",
+    "credential digest file rejects raw token fields",
+    "durable request idempotency exists",
+    "global busy/single-spawn gate exists",
+    "idle handoff blocks autonomous work until matching user confirmation"
+  ],
+  "required_production_transport_gates": {
+    "transport_confidentiality": [
+      "HTTPS only at public ingress",
+      "valid certificate chain and hostname semantics",
+      "plain HTTP must redirect without accepting/processing Authorization OR remain completely unbound externally; prove no token reaches logs during redirect",
+      "raw bearer token never appears in URL/query, access log, application log, trace, exception payload or metric label"
+    ],
+    "proxy_boundary": [
+      "reverse proxy is the only public listener",
+      "app listener binds private/loopback or protected Unix socket",
+      "strip/overwrite caller-supplied forwarding identity headers",
+      "client/session identity comes from authenticated Frank credential binding plus validated request fields, never trusted X-Forwarded-* identity",
+      "request/body/header size limits before expensive cognition"
+    ],
+    "authentication_authorization": [
+      "exact bearer parsing with indistinguishable invalid/revoked failure surface",
+      "every protected endpoint declares required scope",
+      "deny by default for unknown function/scope",
+      "health/readiness surface must not leak holder/session/task/token provenance beyond its declared public schema",
+      "status/read-only scopes cannot reach interaction/effect paths"
+    ],
+    "replay_and_generation": [
+      "request idempotency survives process restart",
+      "same request cannot spawn second execution",
+      "stale lease_epoch cannot write state or attempt effect",
+      "idle confirmation requires current released_lease_epoch",
+      "task-transition acceptance must eventually be generation-fenced just like idle handoff",
+      "evaluate sender-constrained token option only as a separately measured hardening candidate"
+    ],
+    "resource_and_abuse": [
+      "bounded header/body/multipart sizes",
+      "bounded concurrent unauthenticated handshakes and authenticated requests",
+      "per-credential/global rate and compute budgets measured against legitimate AI-client burst behavior",
+      "global one-Frank execution lease remains authoritative under remote concurrency",
+      "queue policy must not become an unbounded memory or disk amplifier",
+      "timeouts/cancellation may release resources but never imply user idle consent"
+    ],
+    "deployment_topology": [
+      "start with exactly one application worker behind TLS reverse proxy",
+      "multiple app workers remain forbidden until cross-process active-execution continuation, cancellation, idempotency and V16 task/handoff equivalence are durable and target-tested",
+      "service restart must preserve durable execution/request state and fail closed if physical/durable ownership disagrees",
+      "readiness must fail when schema epoch, lock state or critical dependency is unresolved"
+    ],
+    "adversarial_acceptance": [
+      "token in query rejected/no secret logged",
+      "forged forwarding headers cannot change Frank client/session identity",
+      "wrong-scope valid token gets 403-like semantic denial without execution acquisition",
+      "invalid/revoked token cannot learn busy holder details",
+      "concurrent remote credentials yield exactly one active Frank and sanitized FRANK_BUSY for competitors",
+      "duplicate request across restart never duplicates execution/effect",
+      "body/header flood hits transport limits before model/tool allocation",
+      "proxy/app restart during BUSY produces explicit recoverable state, not second spawn"
+    ]
+  },
+  "architecture_decision": "TEST_MATRIX_SUPPORTED; TRANSPORT_IMPLEMENTATION_NOT_SELECTED UNTIL TARGET_PACKAGE_CAPABILITY_AND_CURRENT_REPO_INTEGRITY_ARE GREEN",
+  "no_change_reason": "Selecting a framework or enabling multiple workers before target capability and cross-process continuity evidence would couple deployment topology to unverified assumptions.",
+  "oob_experiment_count_added": 0,
+  "external_effect_performed": false,
+  "whole_frank_acceptance": "NOT_CLAIMED"
+}

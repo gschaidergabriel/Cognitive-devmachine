@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2047p0700-chatgpt-secondary-web-ingress-structural-gate",
+  "observed_research_repo_head_before_write": "caf8d5acd1f867af2ee479b5506fdce9c6b9af62",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "pull_request": 330,
+  "pull_request_state": "OPEN_READY_FOR_REVIEW_MERGEABLE_NOT_MERGED",
+  "candidate_branch_head_with_evidence": "ac3664487a7aac67540eb66f24822a35e7ac3966",
+  "tested_candidate_sha": "da79f8c426899dec52952d521ff80e618263f23c",
+  "accepted_target_receipt": "runtime/vps_evidence/frank_web_ingress_v1/LATEST.json",
+  "accepted_target_receipt_blob": "85486b05ee06a9a082ecaeef7916c4942037b099",
+  "accepted_target_receipt_sha256": "8396db51189e994ef81a592e632cb5c8362e6db4c70dd2757a057087ff278bfb",
+  "workflow_run_id": "31499827908",
+  "status": "PASS_TARGET_VPS_WEB_INGRESS_STRUCTURAL_AUTHORITY_GATE",
+  "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_STRUCTURAL_WEB_INGRESS_CANDIDATE",
+  "runner": {
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "python": "Python 3.12.3",
+    "kernel": "Linux 6.8.0-117-generic Ubuntu x86_64",
+    "tested_utc": "2026-08-11T14:08:16Z",
+    "semantic_blob": "e14a7af26992726e6ce67fe8eae7c94877545921",
+    "runtime_blob": "496d5d84caf1099d9e1e4601aa46058c2332b987",
+    "test_blob": "28b6ee057a25391891e826e59170a091ca5e6c7a",
+    "effects_blob": "949d5972645d36300d4421619021379c79249213",
+    "security_blob": "7846cd0663e96ec79871d547c9cc814e3ed61aa1",
+    "token_ingress_blob": "9e0c563206302d412d8d397283e542749cf54b93"
+  },
+  "measured_result": {
+    "standard_adversarial_cases": 10,
+    "unauthorized_instruction_or_effect_authority_escape": 0,
+    "useful_fact_preserved_cases": 10,
+    "benign_exact_payload_preserved": "100/100",
+    "hard_authority_transport_mutations_rejected": "1000/1000",
+    "unknown_top_level_effect_authorization_rejected": true,
+    "duplicate_transport_key_rejected": true,
+    "post_parser_payload_mutation_with_unchanged_source_hash_rejected": true,
+    "malformed_json_fail_closed": true,
+    "invalid_utf8_fail_closed": true,
+    "non_http_source_fail_closed": true,
+    "duplicate_json_key_fail_closed": "AMBIGUOUS_JSON_DUPLICATE_KEY",
+    "nan_fail_closed": "NONFINITE_JSON_NUMBER:NaN",
+    "infinity_fail_closed": "NONFINITE_JSON_NUMBER:Infinity",
+    "deep_json_fail_closed": "JSON_DEPTH_BUDGET_EXCEEDED",
+    "timestamp_without_timezone_fail_closed": "FETCHED_AT_TIMEZONE_REQUIRED",
+    "oversized_source_url_fail_closed": "SOURCE_URL_TOO_LONG",
+    "effect_authority_minted": false,
+    "authenticated_direct_message_minted": false,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false,
+    "training_authorized": false
+  },
+  "latency_us_5000_mixed_parses": {
+    "n": 5000,
+    "p50": 151.241,
+    "p95": 277.422,
+    "p99": 340.963,
+    "mean": 160.76,
+    "max": 396.462
+  },
+  "resource_shadow_whole_test_process": {
+    "elapsed_seconds": 0.92,
+    "user_seconds": 0.90,
+    "system_seconds": 0.01,
+    "max_rss_kb": 21936,
+    "swaps": 0,
+    "exit_status": 0,
+    "interpretation": "resource shadow is for the complete 5000-parse Python test process, not a standalone production parser memory attribution"
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "name": "NESTED_AUTHORITY_MATRYOSHKA",
+    "result": "PASS_STRUCTURAL_NON_AUTHORITY",
+    "security_depends_on_instruction_detector": false
+  },
+  "additional_negative_results_and_repairs": [
+    {
+      "negative_result": "first target workflow checkout failed before test because Git smart-HTTP did not accept the chosen bearer-header transport",
+      "classification": "INFRASTRUCTURE_NOT_CANDIDATE",
+      "repair": "x-access-token exact-SHA checkout",
+      "revalidation": "PASS"
+    },
+    {
+      "negative_result": "first reached target test failed before the adversarial loop because a static oracle required literal capitalized source text Bearer",
+      "classification": "TEST_ORACLE_NOT_PRODUCTION_TOKEN_SEMANTICS",
+      "repair": "AST-based semantic string-constant anchor for frank:interact, BEARER_REQUIRED and INVALID_BEARER",
+      "revalidation": "PASS"
+    },
+    {
+      "negative_result": "Python default JSON parsing accepts duplicate object keys and non-standard NaN/Infinity; unbounded nested JSON is unsuitable for fail-closed ingress",
+      "classification": "AMBIGUITY_AND_RESOURCE_BOUNDARY",
+      "repair": "strict object-pair duplicate rejection, non-finite-number rejection, JSON depth/node budgets, bounded source metadata",
+      "revalidation": "PASS_ACCEPTED_TARGET"
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_BOUNDARY_CANDIDATE_READY_FOR_REVIEW",
+    "change": "Clay-native open-web evidence boundary with fixed non-authority semantics, provenance-bound parsed projection, strict unambiguous JSON, bounded parser resources, and SELF_PROPOSAL_ONLY action projection requiring independent effect-policy admission",
+    "canonical_main_promoted": false,
+    "rollback": "close/reject PR 330; target main remains unchanged"
+  },
+  "strongest_counterhypothesis_after_target_pass": "A downstream cognition/tool adapter or fetch/Retina path can still discard provenance, reclassify untrusted observations as trusted intent, or expose resource/credential authority outside this parser boundary. A checksum is not cryptographic sandbox attestation.",
+  "remaining_falsifiers": [
+    "real fetch-process OS sandbox, resource and credential isolation",
+    "end-to-end cognition -> tool proposal -> effect sink provenance retention",
+    "adaptive model-mediated indirect-prompt-injection red team",
+    "visual/screenshot prompt injection through Digital Retina",
+    "direct token-authenticated message versus web-evidence channel composition",
+    "historical injection_guard original-organ baseline and successor comparison",
+    "production ClayCode compiled execution of the new web semantic module",
+    "whole F-V01-10 acceptance composition"
+  ],
+  "promotion": "BOUNDARY_MECHANISM_SUPPORTED_NOT_WHOLE_F_V01_10_NOT_WHOLE_FRANK_V0_1"
+}

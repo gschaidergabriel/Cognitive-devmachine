@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-GO-CLAYCODE-SEMANTIC-DEBT-LOOPCORE-STORAGE-20260811T122614Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "created_at_utc": "2026-08-11T12:26:14Z",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "observed_center_head_before_this_go": "df69b177da10f44e466f78babad4416cb5f85913",
+    "go_receipt_commit": "c2c584393bae6d08ef1d4abdbf16d4e931f0f53f",
+    "loop_core_classification_commit": "8d5c990ae718be5bceea2144bba2ee3d162454d4"
+  },
+  "intended_recipients": [
+    "F-V01-02 ClayCode compiler/runtime worker",
+    "F-V01-03 cognitive loop-core worker",
+    "F-V01-05 GWT/Hyperposition worker",
+    "F-V01-13 security/recovery/observability worker",
+    "ClayCode semantic-contract and differential-testing worker",
+    "Research Center supervisor/adversarial replication worker"
+  ],
+  "evidence_families": [
+    {
+      "family_id": "E-CLAYCODE-COMPARISON-CHAIN-SCOPE-20260811",
+      "classification": "EXACT_PR_HEAD_CODE_INSPECTION_PLUS_BOUNDED_LOCAL_METAMORPHIC_FALSIFIER_PLUS_TARGET_PROBE_QUEUED",
+      "target": {
+        "repo": "gschaidergabriel/Dr.-Unterweger",
+        "base_pr": 310,
+        "base_head": "83754cfdb8839fdc839a0b524cc0f6a755b1c421",
+        "diagnostic_pr": 316,
+        "diagnostic_head": "dc0f4eeb7bbbe4ce044e1d780b8232fd4a8d3056",
+        "target_workflow_run": 31491147935,
+        "target_workflow_state_at_route": "QUEUED"
+      },
+      "direct_observation": "PR #310 Compare evaluation overwrites the left operand with each Boolean relation result before evaluating the next relation. Python numeric-type checks admit Bool because bool subclasses int.",
+      "minimal_discriminator": {
+        "expression": "5 < 10 < 8",
+        "adjacent_pair_reference": false,
+        "boolean_left_fold_reference": true
+      },
+      "bounded_experiment_reference": {
+        "name": "RELATIONAL_CHAIN_METAMORPHIC_MUTATION_MATRIX",
+        "counted_as_go_out_of_box_experiment": true,
+        "cases": 12348,
+        "mismatches_if_adjacent_pair_is_authoritative": 1596,
+        "mismatch_rate_percent": 12.92517006802721,
+        "important_boundary": "The experiment measures consequence conditional on adjacent-pair semantics; it does not select language semantics."
+      },
+      "positive_delta": [
+        "The issue is now executable as draft diagnostic PR #316 instead of remaining prose-only.",
+        "The diagnostic explicitly preserves both semantic interpretations and labels PASS as conflict reproduction, not evaluator correctness.",
+        "A read-only self-hosted Ubuntu workflow is restricted to the exact same-repo diagnostic head."
+      ],
+      "surviving_blockers": [
+        "No owner-fixed comparison-chain semantic authority was recovered in this cycle.",
+        "The branch target-VPS workflow was queued at routing time and therefore has no execution PASS credit yet.",
+        "PR #310's 200576-request differential baseline covers decide_effect, not generic relation-chain semantics.",
+        "PR #313/#314/#312 composition still lacks one accepted combined integration receipt."
+      ]
+    },
+    {
+      "family_id": "E-LOOPCORE-PYTHON-SEMANTIC-BOUNDARY-20260811",
+      "classification": "EXACT_PR_HEAD_ARCHITECTURE_CLASSIFICATION_AGAINST_OWNER_FIXED_CONTRACT",
+      "target": {
+        "repo": "gschaidergabriel/Dr.-Unterweger",
+        "pr": 312,
+        "head": "746640bda388aebf240c965afee744ce332f6a9a",
+        "file": "runtime/frank_loop_core_v1/loop_core_slice.py"
+      },
+      "positive_delta": [
+        "The slice executes effect authority by running ClayCode decide_effect.",
+        "Its four truthful/shuffled/provenance-broken/no-reentry arms remain useful causal reference evidence."
+      ],
+      "conflict": "Candidate/WorkspaceEpisode/ReceiverReport semantics, pressure, GWT selection, receiver-use and admitted-learning state are defined directly in Python, while the current owner-fixed FRANK_CLAY_NATIVE_CONTRACT requires these target semantic boundaries to be Clay-native and forbids a second independent Python semantic architecture.",
+      "adjudication": "RETAIN as DIAGNOSTIC_REFERENCE_TEST_OBLIGATION; do not grant TARGET_CLAYCODE_ONLY_LOOP_CORE_IMPLEMENTED progress credit.",
+      "counterhypothesis": "Because the file itself says it is not a cognitive architecture, the Python implementation is legitimate as a simpler reference scaffold if a Clay-native successor is differentially tested against it."
+    },
+    {
+      "family_id": "E-SQLITE-NOBLE-2_7-WAL-PROVENANCE-20260811",
+      "classification": "CURRENT_PRIMARY_UPSTREAM_PLUS_OFFICIAL_UBUNTU_SECURITY_NOTICE",
+      "facts": [
+        "SQLite upstream documents the WAL-reset corruption race through 3.51.2 and a fix in 3.51.3.",
+        "Ubuntu 24.04 currently publishes sqlite3/libsqlite3 3.45.1-1ubuntu2.7.",
+        "Ubuntu USN-8565-1 documents .7 as fixing CVE-2026-50812 and CVE-2026-50813 in the Session Extension; that notice does not document the separate WAL-reset fix."
+      ],
+      "adjudication": "Backport status for the exact WAL-reset fix remains UNKNOWN. Do not infer VULNERABLE from version alone and do not infer FIXED from .7. Keep F-V01-13 fail closed until exact source/patch provenance, a fixed build, or a machine-checked trigger-unreachability proof exists.",
+      "sources": [
+        "https://sqlite.org/wal.html",
+        "https://sqlite.org/releaselog/3_51_3.html",
+        "https://ubuntu.com/security/notices/USN-8565-1",
+        "https://packages.ubuntu.com/noble-updates/database/sqlite3"
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "id": "H-CLAYCODE-SEMANTIC-DECISION-DEBT-001",
+      "concept": "SemanticDecisionDebt",
+      "hypothesis": "Expanding the parser/canonicalizer faster than the owner-fixed executable semantic contract creates a high-risk zone where the evaluator may silently inherit Python host semantics for newly accepted constructs. Every newly parseable semantic construct therefore needs an explicit semantic owner, effect/type boundary and differential/metamorphic falsifier before executable promotion.",
+      "counterhypothesis": "Fail-closed evaluator coverage plus ordinary corpus tests are sufficient; a separate per-construct semantic-contract ledger adds bureaucracy without catching more bugs.",
+      "decisive_tests": [
+        "For each syntax/AST node introduced by #314, classify EXECUTABLE_DEFINED, PARSE_ONLY_FAIL_CLOSED or FORBIDDEN; no implicit fourth state.",
+        "Mutation-test each executable construct with at least one semantics-changing mutant and require the relevant gate to reject it.",
+        "Track parser coverage separately from executable semantic coverage so 90% parse coverage cannot be read as 90% language implementation."
+      ]
+    },
+    {
+      "id": "H-DIAGNOSTIC-SEMANTIC-FIREWALL-001",
+      "concept": "DiagnosticSemanticFirewall",
+      "hypothesis": "Python reference slices remain valuable after the Clay-native mandate if they are explicitly typed as diagnostic baselines, cannot mint target-implementation progress credit, and every target successor is differentially compared against them under the same controls.",
+      "counterhypothesis": "Keeping reference Python cognition encourages semantic drift and should be deleted once ClayCode execution exists.",
+      "decisive_tests": [
+        "Build the same four-arm PR #312 loop semantics in Clay/ClayCode and compare link-by-link receipts against the Python baseline.",
+        "Lesion the Python scaffold from the target runtime; final target behavior must remain unchanged except for test tooling.",
+        "Audit packaging/binary inputs to prove diagnostic reference modules are not runtime semantic dependencies."
+      ]
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "changes": [
+      "Separate PARSE_COVERAGE from EXECUTABLE_SEMANTIC_COVERAGE in ClayCode progress.",
+      "Require an explicit semantics decision or fail-closed state for multi-relation Compare before evaluator promotion.",
+      "Classify PR #312 as a reference baseline and require a Clay-native differential successor.",
+      "Keep SQLite WAL-reset closure blocked on exact evidence."
+    ],
+    "rollback": "Drop any candidate change whose owner-fixed contract is contradicted by newer owner directives or whose discriminating test refutes benefit. Preserve raw diagnostic evidence regardless."
+  },
+  "distribution": {
+    "target_repo_comments_written": [310, 311, 312, 314],
+    "diagnostic_pr_created": 316,
+    "research_receipts": [
+      "research_entity/trigger_runs/go/go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage/RESEARCH_RECEIPT.json",
+      "research_entity/trigger_runs/go/go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage/LOOP_CORE_ARCHITECTURE_CLASSIFICATION.json"
+    ]
+  },
+  "claims_not_made": [
+    "Frank v0.1 complete",
+    "ClayCode evaluator promoted",
+    "PR #312 invalid as a diagnostic",
+    "SQLite target fixed",
+    "SQLite target vulnerable",
+    "target workflow PASS before completion",
+    "emergence",
+    "final training authorized"
+  ]
+}

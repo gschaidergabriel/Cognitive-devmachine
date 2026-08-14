@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "frontier_ranked": [
+    {
+      "rank": 1,
+      "question": "Can public Qwen3.5 projected visual-token-grid descriptors meet Frank MVC open-set/calibration requirements without a private pre-merger feature tap or duplicate encoder?",
+      "value": "VERY_HIGH",
+      "next_falsifier": "T-Q23-FEATURE-LADDER-01",
+      "capability_needed": "target Qwen3.5-4B model/mmproj plus frozen user-specific GUI replay fixtures"
+    },
+    {
+      "rank": 2,
+      "question": "Does target runtime execute exactly one image encode when MVC first reads the embedding buffer and semantic Qwen decode follows?",
+      "value": "VERY_HIGH",
+      "next_falsifier": "T-Q23-ZERO-REENCODE-01",
+      "capability_needed": "instrumented llama.cpp/libmtmd target lane"
+    },
+    {
+      "rank": 3,
+      "question": "Is the L0/L1/L2/L3 lifetime split safer and smaller than a durable raw-embedding cache under restart/version/preprocess changes?",
+      "value": "HIGH",
+      "next_falsifier": "T-Q23-CACHE-LIFETIME-01"
+    },
+    {
+      "rank": 4,
+      "question": "How must Qwen3.5 hybrid recurrent continuation state be versioned/recovered around multimodal prefixes?",
+      "value": "HIGH",
+      "next_falsifier": "T-Q23-HYBRID-RESTART-01"
+    },
+    {
+      "rank": 5,
+      "question": "Does coarse decoder-position-aware spatial pooling improve GUI-state discrimination without overfitting translation/resize?",
+      "value": "MEDIUM_HIGH",
+      "next_falsifier": "T-Q23-TRANSFORM-INVARIANCE-01"
+    },
+    {
+      "rank": 6,
+      "question": "Does PAR-1/EAP seeding add causal value after the feature/cache architecture is fixed?",
+      "value": "DEFERRED_HIGH",
+      "reason": "Experience-dose claim requires independent Frank episode fixtures; current feature/runtime identity uncertainty is upstream and more discriminating."
+    }
+  ],
+  "closed_or_narrowed": [
+    "Qwen3.5 multimodality itself is not an open q23 question; it is established project/runtime input.",
+    "A second heavy multimodal embedding model is not the right first counterbaseline; use tiny MobileCLIP2-S0 and dense DINOv3-S/16 before considering 2B retrieval models.",
+    "A private decoder hook is not required merely to feed already-calculated image embeddings into llama.cpp decode; current helper code provides that path."
+  ],
+  "degraded_external_search": true
+}

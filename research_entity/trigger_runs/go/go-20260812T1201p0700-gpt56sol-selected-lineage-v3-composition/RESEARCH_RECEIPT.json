@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T12:01:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "boot": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_repo_main_observed_before_write": "ec3f68ece73724a3a4355b41c6eb40a9d75cd63d",
+    "frank_repo_alias": "gschaidergabriel/Dr.-Unterweger",
+    "frank_main_branch_cut": "e2dc384077c104791ccde5de082ec26d319163d7",
+    "frank_main_newer_observed": "7783c8bbeead158d1b56a44f441d15fec6614967"
+  },
+  "frontier_selection": {
+    "initial_sqlite_lane": "DEFERRED_AFTER_FRESH_OVERLAP",
+    "reason": "Parallel GO workers had already advanced the SQLite V5/V6 launcher/path lane with exact-head self-hosted evidence; repeating it would have low marginal information value.",
+    "selected_frontier": "compose typed semantic selected-lineage identity with independently admitted external lineage identity"
+  },
+  "observed_reality": {
+    "boot_continuity_anchor": "gschaidergabriel/Dr.-Unterweger PR#231",
+    "negative_anchor": "SAME_SOURCE_SIBLING_STATE_CHIMERA: two divergent semantic roots can both satisfy state-local admitted/recovery booleans under equal source/contract identity",
+    "typed_selected_head_anchor": "PR#436 / StateLineageHead V2",
+    "external_admission_anchor": "PR#458 / LineageAdmissionIdentity V1",
+    "external_admission_target_evidence": {
+      "run": 31535088114,
+      "head_sha": "6d12a27a70bdfa4cacde08b87de7262c432fbb09",
+      "status": "COMPLETED_SUCCESS"
+    },
+    "new_candidate_pr": 514,
+    "new_candidate_branch": "chatgpt/go-selected-lineage-v3-compose-20260812",
+    "candidate_head": "eb13e51f65f57d724461a9750637bae0ae6f081a",
+    "candidate_state": "DRAFT_TESTING",
+    "merge_to_main": false
+  },
+  "grf": {
+    "generated_reality": "A selected self.root continuation becomes materially harder to confuse with a same-source sibling when one immutable/CAS head commits simultaneously to typed semantic checkpoint identity, lineage position/parent, and an independently supplied external admission identity.",
+    "causal_mechanism": "The head hash and selected-match relation include both semantic-root identity and external admission identity, so changing either changes the selected identity and stale predecessors fail CAS.",
+    "strongest_counter_reality": "Content binding is not external authority. If the same external admission statement or its trusted anchor is cloned/rolled back, the derived admission identity and therefore the V3 content identity can remain identical; V3 alone is not full anti-transplant protection.",
+    "hidden_assumptions": [
+      "external admission is independently verified at a trusted boot/admission boundary",
+      "external anchor freshness/rollback resistance is not delegated to this candidate",
+      "semantic checkpoint producer semantics are themselves correct",
+      "production boot/recovery path eventually consumes the selected head non-bypassably"
+    ],
+    "discriminating_test": "For equal typed semantic state, derive two independently distinct admission identities and require distinct genesis heads; then deny wrong-admission and wrong-semantic selected_matches, stale predecessor, forged admission hash, and implicit V2->V3 reinterpretation.",
+    "collapse": "RETAIN_AS_CANDIDATE_LOCAL_PASS_TARGET_QUEUE_BLOCKED",
+    "confidence": "MEDIUM"
+  },
+  "candidate_delta": {
+    "schema_version": "SELF_ROOT_SELECTED_LINEAGE_HEAD_CANDIDATE_V3",
+    "semantic_identity": "root_protocol + semantic_root_manifest_id + semantic_root_hash + domain-separated identity_hash",
+    "admission_identity": "admission_protocol + admission_id + target_body_id + artifact_identity_hash + anchor_epoch + external_anchor_digest + domain-separated identity_hash",
+    "head_identity": "lineage_id + sequence + semantic_checkpoint_identity + lineage_admission_identity + parent_head_hash",
+    "selection": "selected_matches requires exact current head, exact typed semantic identity and exact admission identity",
+    "history": "immutable rows + CAS current pointer",
+    "migration": "non-V3 selected-lineage schema fails closed with EXPLICIT_MIGRATION_REQUIRED",
+    "authority": "NONE",
+    "external_anchor_verified_by_candidate": false,
+    "production_integrated": false
+  },
+  "local_execution": {
+    "status": "PASS_SELECTED_LINEAGE_V3_COMPOSITION_CANDIDATE",
+    "test_class": "ORDINARY_COMPOSITION_REGRESSION_NO_NEW_GO_OOB",
+    "checks_total": 12,
+    "checks_passed": 12,
+    "checks": {
+      "v2_state_local_siblings_collide": true,
+      "independent_admissions_separate_equal_semantic_siblings": true,
+      "exact_copied_admission_remains_same_known_limitation": true,
+      "selected_exact_pair_matches": true,
+      "wrong_admission_denied": true,
+      "wrong_semantic_denied": true,
+      "advance_composes_semantic_and_admission": true,
+      "stale_predecessor_denied": true,
+      "immutable_history": true,
+      "integrity": true,
+      "v2_requires_explicit_migration": true,
+      "forged_admission_hash_denied": true
+    },
+    "go_unusual_experiment_count_added": 0,
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "ABA_SEMANTIC_ROOT_REINCARNATION",
+    "intervention": "In disposable local state, construct A@10 -> B@11 -> A@12 where the semantic content at A@12 equals A@10 but the hash-chained lineage position differs; attempt replay of the old A@10 predecessor.",
+    "baseline": "content equality alone can make reincarnated A look identical to old A if lineage position is omitted",
+    "result": "PASS: chained head distinguished A@12 from A@10 and rejected replay of the old predecessor",
+    "rollback": "disposable local candidate state only; no canonical mutation"
+  },
+  "external_primary_evidence": {
+    "SLSA_and_GitHub_artifact_attestations": "build provenance binds an artifact to source/build context but is not by itself semantic persistent-state continuity authority",
+    "etcd_disaster_recovery": "restored state can form a new logical lineage/revision context and stale observer state requires explicit invalidation/bumping",
+    "TUF_rollback_protection": "trusted version relations reject stale trusted state; analogy only, not Frank authority"
+  },
+  "target_execution": {
+    "attempt_1": {
+      "run": 31564880447,
+      "head_sha": "f2bc83ea368ac08a46cfdec0e63937429c1eee7f",
+      "status": "COMPLETED_FAILURE_INFRASTRUCTURE_BEFORE_TEST",
+      "runner": "clay / self-hosted Linux X64",
+      "failure_boundary": "actions/checkout exited 128 before compile/test; semantic result UNKNOWN"
+    },
+    "checkout_repair": {
+      "commit": "eb13e51f65f57d724461a9750637bae0ae6f081a",
+      "change_scope": "workflow checkout only: run-owned git init + authenticated exact-SHA fetch + detached checkout",
+      "candidate_semantics_changed": false,
+      "go_unusual_experiment_count_added": 0
+    },
+    "attempt_2": {
+      "run": 31564986096,
+      "head_sha": "eb13e51f65f57d724461a9750637bae0ae6f081a",
+      "status_at_receipt": "QUEUED_SELF_HOSTED_RUNNER_BUSY",
+      "semantic_result": "UNKNOWN"
+    }
+  },
+  "promotion_boundary": {
+    "candidate_state": "TESTING",
+    "draft_pr": 514,
+    "merge_to_main": false,
+    "accepted_target_vps_pass": false,
+    "canonical_state_migration": false,
+    "production_boot_integration": false,
+    "whole_frank_v0_1_acceptance": false,
+    "training_authorized": false
+  },
+  "negative_results": [
+    "The first dedicated target workflow failed before executing candidate code; it is infrastructure evidence, not a V3 semantic failure or PASS.",
+    "An exactly copied admission statement deliberately hashes identically; V3 does not solve cloned/rolled-back external-anchor trust by itself.",
+    "The replacement target run was still queued because the single self-hosted runner was occupied by parallel SQLite V5/V6 validation.",
+    "Current main advanced beyond the branch cut during this cycle; candidate evidence must not be silently generalized to newer main.",
+    "No production integration, canonical state migration, effect authority, Harness self-authority or final-model training was granted."
+  ],
+  "next_falsifiers": [
+    "complete exact-head target run 31564986096 and require all ordinary V3 checks + static integrity on the accepted self-hosted runner",
+    "rebase/reconstruct the four-file V3 candidate on fresh main and re-run exact-head target evidence before promotion",
+    "bind a trusted independently verified external admission/freshness anchor at the production boot boundary and demonstrate cloned/stale anchor rejection",
+    "compose V3 with boot/recovery/execution-generation admission non-bypassably, then crash/restart/rollback-test exact productive persistence path",
+    "keep F-V01-01 and F-V01-13 IN_PROGRESS until productive Hostinger evidence closes those boundaries"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.2",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "executed": [
+    {"tool": "GitHub", "purpose": "fresh current target/research state, overlap search and build", "result": "VERIFIED_RW"},
+    {"tool": "web.run", "purpose": "primary SQLite WAL/durability/multi-database atomicity refresh", "result": "PRIMARY_SQLITE_DOCS_USED"},
+    {"tool": "GitHub", "purpose": "build candidate Clay/SQL/runtime/gate/workflow", "result": {"target_pr": 386}},
+    {"tool": "GitHub Git database", "purpose": "rebuild candidate as one commit on fresh target main while preserving exact six candidate blobs", "result": {"base": "5ec9955775d9bf142e327166990a2228d543c071", "semantic_candidate_head": "6201556c8f47f1226ed8c2bc3792851ed3912294", "files": 6}},
+    {"tool": "GitHub Actions hosted diagnostic", "purpose": "supplemental pre-falsifier", "result": {"run": 31513246399, "classification": "INFRA_FAILURE_PRESTART", "steps": 0, "artifacts": 0, "candidate_test_executed": false}},
+    {"tool": "GitHub", "purpose": "repair candidate workflow scheduler so superseded PR heads cannot block newest target evidence", "result": {"delta": "cancel-in-progress false -> true", "tested_head": "b8858f949d4ad855bff5d682994de69bfd10b7c9"}},
+    {"tool": "GitHub Actions self-hosted target", "purpose": "fresh-main projection crash/replay/lag/tamper/rebuild gate", "result": {"run": 31514757454, "job": 93857015099, "conclusion": "SUCCESS", "checks": "23/23 PASS", "runner": "clay", "machine": "digital-retina"}},
+    {"tool": "GitHub", "purpose": "merge target-validated candidate/regression path without production schema activation", "result": {"pr": 386, "merge_commit": "72029f838176fff5189b8c3cfd4ef5d957de6ba2", "production_migration_lists_changed": false}}
+  ],
+  "source_fusion": [
+    "existing claycode/frank_claygraph.clay source_of_truth/rebuildability contract",
+    "current apply_current_schema.py explicit no-cross-file-atomicity contract",
+    "SQLite WAL/synchronous/super-journal primary documentation"
+  ],
+  "target_measurement": {
+    "event_root": "be0090b4bfbe176862fccc736d0f6abdc16a752d16769a7fe7f254005b368316",
+    "authoritative_events": 76,
+    "applied_events": 76,
+    "current_relations": 16,
+    "commit_outbox_p50_us": 1035.2645,
+    "projection_drain_p50_us": 2107.3125,
+    "artifact_id": 9110606930,
+    "artifact_digest_sha256": "9ce0640a2e65b0967e01c6956bc92e211250306d17f3350eb979f51d311ff06a"
+  },
+  "negative_result_discipline": "hosted prestart failure has no epistemic effect; superseded old-head PASS retained as historical mechanism evidence but not freshness-promoted",
+  "guards": ["candidate SQL not in production migration lists", "disposable DB target experiment", "no canonical Frank state", "no external effect", "no training", "no whole-product promotion"]
+}

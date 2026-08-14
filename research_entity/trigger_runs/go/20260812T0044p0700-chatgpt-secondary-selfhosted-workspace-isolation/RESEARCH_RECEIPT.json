@@ -1,0 +1,164 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/1.0",
+  "run_id": "GO-20260812T0044P0700-CHATGPT-SECONDARY-SELFHOSTED-WORKSPACE-ISOLATION",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T17:44:00Z",
+  "created_at_local": "2026-08-12T00:44:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not": "self.root/Frank"
+  },
+  "identity_and_authority": {
+    "clay_is_research_entity": true,
+    "self_root_frank_is_separate_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_may_independently_research_test_implement_harness_changes": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "primary_work_package": "F-V01-13_SECURITY-RECOVERY-RESTART",
+  "cross_impacts": [
+    "F-V01-02_CLAYCODE",
+    "F-V01-16_END-TO-END-ACCEPTANCE"
+  ],
+  "coordination": {
+    "clay_global_main_at_prewrite_refresh": "c31fb7127e4c5f9f3cb2de4db75758f3e1da50ff",
+    "target_main_at_candidate_base": "f181fead56ec9336edc607c7451c46f5e7e69e8a",
+    "claycode_frontier_pr": 357,
+    "claycode_frontier_head_observed": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+    "parallel_claycode_target_receipt_commit": "709cacdb946eea91b1ac95b65575c5f70756660d",
+    "runner_hardening_pr": 396,
+    "runner_hardening_branch": "chatgpt/go-runner-isolated-checkout-20260812",
+    "runner_hardening_head": "381219c3535bcc7b3af269f4bd1882582e632757",
+    "overlap_decision": "Do not modify the already target-supported RHS_ADD product grammar. Use this lane for self-hosted execution continuity and route the strict-LALR mechanism evidence as corroboration only."
+  },
+  "finding": {
+    "classification": "SUPPORTED_ACCEPTED_TARGET_RUNNER_OWNERSHIP_CONTAMINATION; ISOLATION_REPAIR_TESTING",
+    "summary": "The accepted self-hosted runner can fail before product regressions execute because the persistent GitHub Actions workspace contains root-owned Python bytecode under runtime/claycode_eval_v1/__pycache__. Checkout cleanup therefore cannot reliably reset the tree as the frankrunner user. A run-unique RUNNER_TEMP checkout avoids that contaminated persistent worktree for the self.root current-head boundary workflow, but the repair is not promoted until the corrected workflow passes its existing semantic/static gates.",
+    "scientific_boundary": "Checkout/runner failures are infrastructure evidence, not evidence for or against Frank/ClayCode semantics. Per-workflow isolation does not repair the root ownership source globally."
+  },
+  "accepted_target_forensics": {
+    "workflow_run_id": 31518421180,
+    "job_id": 93869217872,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_version": "2.336.0",
+    "runner_user": "frankrunner",
+    "uid": 1000,
+    "gid": 1000,
+    "listener_count": 1,
+    "worker_count_observed": 1,
+    "shared_resolved_workfolders": {},
+    "foreign_owned_count": 5,
+    "foreign_owned_surface": "runtime/claycode_eval_v1/__pycache__ plus four .cpython-312.pyc files",
+    "foreign_owner": "root:root",
+    "hazard": "WORKSPACE_OWNERSHIP_CONTAMINATION",
+    "gate_result": "EXPECTED_FAIL_ON_DETECTED_HAZARD",
+    "interpretation": "Multiple-listener and multiple-worker hypotheses were not observed in this run; ownership contamination was directly observed."
+  },
+  "prior_checkout_failure": {
+    "evidence": "self-hosted current-head checkout cleanup failed with EACCES on analyzer.cpython-312.pyc before tests ran",
+    "classification": "INFRA_FAILURE_BEFORE_TEST"
+  },
+  "hypothesis": {
+    "id": "H-RUNNER-ISOLATED-CHECKOUT-CONTINUITY",
+    "statement": "For regression workflows that only need a clean exact-SHA tree, fetching the tested SHA into a run/attempt-unique RUNNER_TEMP tree as the runner user will decouple product validation from foreign-owned residue in the persistent Actions workspace."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-RUNNER-TEMP-CAN-ALSO-CONTAMINATE",
+    "statement": "Per-run isolation only masks the current persistent-workspace symptom. A test or privileged subprocess could still create foreign-owned files in RUNNER_TEMP, and the global source of root-owned bytecode remains unresolved; the correct long-term repair must identify and remove the privilege/ownership source and restore ordinary checkout cleanliness."
+  },
+  "built_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 396,
+    "branch": "chatgpt/go-runner-isolated-checkout-20260812",
+    "head": "381219c3535bcc7b3af269f4bd1882582e632757",
+    "file": ".github/workflows/frank-self-root-current-head-v2.yml",
+    "changes": [
+      "replace shared actions/checkout tree reuse with exact github.sha fetch into run-unique RUNNER_TEMP tree",
+      "assert detached HEAD equals tested SHA",
+      "run existing identity, prompt-state, single-instance, V16, replay and static-differential gates from isolated tree",
+      "set PYTHONDONTWRITEBYTECODE=1",
+      "use run-unique temporary main worktree for differential audit",
+      "preserve evidence and cleanup isolated tree"
+    ],
+    "product_semantics_changed": false,
+    "harness_authority_changed": false,
+    "training_authorized": false
+  },
+  "candidate_self_falsification": {
+    "first_head": "cc60ab5ad5d3edaad7adf7d7881e4a8898f7a87a",
+    "first_run": 31518404861,
+    "result": "WORKFLOW_INVALID_ZERO_JOBS",
+    "cause": "runner context was incorrectly used in jobs.<job>.env before runner assignment",
+    "repair": "bind TREE from RUNNER_TEMP in the first shell step via GITHUB_ENV",
+    "corrected_head": "381219c3535bcc7b3af269f4bd1882582e632757",
+    "corrected_run": 31518756350,
+    "corrected_job": 93870326463,
+    "state_at_receipt": "QUEUED; job exists; NO_PASS_CLAIM"
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "name": "LALR_AMBIGUITY_MICROSCOPE",
+    "intervention": "Construct a deliberately tiny Lark LALR grammar around WithUpdate precedence, compare with_assign RHS=full expr against RHS=add_expr, and parse an input where equality and AND can be swallowed by the field RHS or remain outer operators.",
+    "baseline_result": "RHS=expr emitted six shift/reduce warnings across relation/or/and continuations and swallowed relation/boolean structure into the WithUpdate RHS.",
+    "candidate_result": "RHS=add_expr emitted no conflict warnings in the reduced grammar and left equality/AND as outer structure.",
+    "evidence_class": "LOCAL_REDUCED_MECHANISM_DIAGNOSTIC",
+    "status": "MECHANISM_SUPPORTED_NOT_PROMOTIONAL",
+    "independent_followup": "Parallel Clay target receipt 709cacdb946eea91b1ac95b65575c5f70756660d independently selected RHS_ADD on the accepted target and ran a stronger WithUpdate boolean-boundary adversarial test.",
+    "note": "This invocation performs no second out-of-box experiment."
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Lark official documentation: Strict-Mode",
+      "use": "strict=True treats shift/reduce and regex collisions as errors requiring grammar resolution"
+    },
+    {
+      "source": "Lark official grammar reference",
+      "use": "rule priorities can resolve LALR collisions, but structural factoring was preferred here because the intended precedence is explicit"
+    },
+    {
+      "source": "GitHub Actions contexts reference",
+      "use": "runner context is step-available and is not valid in jobs.<job>.env; RUNNER_TEMP can be bound after runner assignment"
+    },
+    {
+      "source": "GitHub self-hosted runners documentation",
+      "use": "ephemeral/disposable runner patterns provide stronger isolation; persistent runners require explicit hygiene"
+    }
+  ],
+  "claycode_fusion": {
+    "parallel_result": "RHS_ADD target-supported; fixed 36/40 frontier gate separated from descriptive expanding current-main corpus",
+    "this_worker_action": "NO_DUPLICATE_PRODUCT_GRAMMAR_CHANGE",
+    "reason": "A parallel worker already produced stronger accepted-target evidence and promoted the composition-scope repair."
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "proposal": "Use isolated exact-SHA checkout for the current self.root boundary workflow as a continuity guard until root-owned persistent-workspace residue is eliminated at source.",
+    "rollback": "Close PR #396 and retain the prior workflow if isolated target execution does not pass the unchanged gates.",
+    "global_repair_obligation": "Identify the process that creates root-owned Python bytecode, normalize/delete contaminated persistent files safely, and prove ordinary checkout workflows recover without privileged residue."
+  },
+  "next_falsifiers_ranked": [
+    "Corrected PR #396 boundary job must start, fetch the exact tested SHA into RUNNER_TEMP and pass all unchanged identity/replay/static-differential tests.",
+    "Cleanup of the isolated tree must succeed with no foreign-owned residue.",
+    "Trace which workflow/process created root-owned runtime/claycode_eval_v1/__pycache__ and remove that privilege path rather than relying permanently on isolation.",
+    "After root-cause cleanup, re-run at least one ordinary actions/checkout-based target gate that previously failed and prove clean reset succeeds.",
+    "Continue full #357 current-main composition validation using the promoted frozen-frontier versus expanding-main source-universe measurement semantics."
+  ],
+  "negative_results_preserved": [
+    "First isolation workflow candidate was invalid because runner context was used at job-env scope; it created zero jobs and was corrected.",
+    "GitHub-hosted check availability is independently degraded by account spending/payment limits; this is not a product semantic failure.",
+    "No corrected PR #396 target PASS existed at receipt time."
+  ],
+  "distribution": {
+    "primary": ["F-V01-13_SECURITY-RECOVERY-RESTART"],
+    "secondary": ["F-V01-02_CLAYCODE", "F-V01-16_END-TO-END-ACCEPTANCE"],
+    "material_result_available_in_shared_research_center": true
+  }
+}

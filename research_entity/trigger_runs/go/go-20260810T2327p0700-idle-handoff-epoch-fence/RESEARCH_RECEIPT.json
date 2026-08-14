@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2327p0700-idle-handoff-epoch-fence",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider_model": "OpenAI/GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_identity": "self.root",
+  "affected_components": [
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-10-PROACTIVE-AGENCY-WEB",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "status": "SUPPORTED_CANDIDATE_CURRENT_MAIN_PR_TESTING_NOT_PROMOTED",
+  "promotion": "NONE",
+  "problem": "V16 idle-handoff confirmation is keyed by released session/client hashes but not by the specific released lease epoch. Because one singleton handoff row may be superseded and the same authenticated session/client may legitimately release multiple sequential executions, a delayed acknowledgement for an older release can be indistinguishable from current consent without a generation fence.",
+  "source_observation": {
+    "current_main_before_candidate": {
+      "continuity_behavior": "confirm_idle_handoff matched only released_session_ref_hash + released_client_ref_hash before clearing the singleton handoff row",
+      "api_behavior": "token ingress confirmation accepted authorization_header + session_id and supplied no released generation",
+      "owner_contract_consistency": [
+        "interactive release requires AWAITING_USER_IDLE_CONFIRMATION",
+        "silence/timeout/disconnect are not consent",
+        "new explicit authenticated interactive work may acquire while a prior handoff is pending",
+        "later interactive release supersedes older pending handoff",
+        "autonomous acquisition requires handoff CLEAR"
+      ]
+    },
+    "inference": "Session/client identity is reusable across legal releases; released_lease_epoch is already durable in V16 and is the narrowest available generation fence."
+  },
+  "hypothesis": "Idle confirmation must be bound to session + client + exact released_lease_epoch, and the clear must be conditional on the same pending epoch, so delayed or duplicated acknowledgements cannot clear a superseding handoff.",
+  "strongest_counterhypothesis": "Session/client identity alone is sufficient because valid callers will not produce an acknowledgement delayed across two releases by the same session.",
+  "repair_candidate": {
+    "branch": "chatgpt/go-v16-idle-handoff-epoch-fence-v2-20260810",
+    "pull_request": 195,
+    "candidate_head": "b0b48e13c514e929aea44db5c2106b5b7ff372a4",
+    "changed_files": [
+      "runtime/state/frank_execution_continuity.py",
+      "runtime/api/frank_token_ingress_core.py",
+      "tests/frank_token_ingress_core_v1.py",
+      "tests/frank_idle_handoff_aba_fence_oob.py",
+      ".github/workflows/frank-v16-idle-handoff-aba-epoch-fence-vps.yml"
+    ],
+    "mechanism": [
+      "require positive released_lease_epoch at the public token-ingress confirmation boundary",
+      "compare pending session hash + client hash + released lease epoch",
+      "return HANDOFF_CONFIRMATION_EPOCH_MISMATCH without clearing on stale generation",
+      "clear with a pending-state + epoch conditional update and verify one-row change",
+      "preserve explicit-user-priority behavior while autonomous acquisition remains blocked until the current handoff clears"
+    ]
+  },
+  "exactly_one_go_oob_experiment": {
+    "count": 1,
+    "name": "ABA_STALE_IDLE_CONFIRMATION_FENCE",
+    "design": "The same authenticated session/client performs release A, then explicit new work and release B. A delayed confirmation carrying epoch A is submitted after B supersedes the pending row. The discriminator requires rejection, B to remain pending, autonomous acquisition to remain blocked, then allows autonomy only after confirmation carrying epoch B.",
+    "purpose": "Map the ABA/stale-update generation problem from concurrent systems onto the user-idle handoff without changing owner policy.",
+    "no_external_effect": true
+  },
+  "execution_evidence": {
+    "first_candidate_pr": 178,
+    "first_candidate_status": "CLOSED_SUPERSEDED_NOT_MERGED",
+    "target_vps_run": 31406944484,
+    "target_vps_runner_class": "self-hosted Linux X64 accepted target lane",
+    "normal_v16_regression": "PASS",
+    "aba_oob_discriminator": "PASS",
+    "post_test_repo_static_integrity": "FAIL_UNRESOLVED_IN_THAT_RUN",
+    "interpretation": "The repaired handoff semantics and the single ABA discriminator executed successfully on the accepted Ubuntu target lane before a later repository-wide static-integrity step failed. This supports the narrow mechanism but is not current-main promotion evidence.",
+    "current_main_replacement_pr": 195,
+    "current_main_target_vps_run": 31408572649,
+    "current_main_target_vps_state_at_receipt_write": "QUEUED",
+    "whole_frank_acceptance": "NOT_CLAIMED"
+  },
+  "external_primary_technical_analogy": {
+    "sources": [
+      "Kubernetes API/Lease optimistic concurrency and resourceVersion guarded updates",
+      "etcd transaction compare-and-swap semantics"
+    ],
+    "use": "Mechanism support only: version/generation predicates are a standard way to reject stale concurrent updates. These sources do not define Frank's user-consent policy."
+  },
+  "negative_results_and_limits": [
+    "No baseline executable ABA failure was promoted; the vulnerability is established by current-source control-flow inspection plus the fact that session/client identity can legally repeat across releases.",
+    "The first current-target candidate branch became stale under rapid concurrent main development and was closed rather than merged.",
+    "The current replacement PR is not promoted until its exact head receives current execution evidence and merge safety is re-evaluated.",
+    "No real external effect was performed and no final model training was authorized."
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "proposed_change": "Treat released_lease_epoch as an immutable user-idle-handoff fencing token at confirmation and conditional clear boundaries.",
+    "rollback": "Revert the narrow confirmation/API/test commits; V16 session/client-only semantics remain the previous last-known implementation.",
+    "next_falsifier": "Execute PR 195 exact head on the accepted self-hosted Ubuntu runner; require normal V16 regression + same-session ABA discriminator + repository-integrity diagnostics, then re-check current-main diff before any merge."
+  },
+  "training_authorized": false,
+  "final_model_training_started": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

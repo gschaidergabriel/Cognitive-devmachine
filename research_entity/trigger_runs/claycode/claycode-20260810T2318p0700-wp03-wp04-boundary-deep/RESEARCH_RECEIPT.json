@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2318p0700-wp03-wp04-boundary-deep",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "provider_model": "OpenAI/GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "adjacent_components": [
+    "F-V01-07-NEEDLE-TRANSLATOR",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "work_packages": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT"],
+  "status": "CANDIDATES_COMMITTED_VERIFIED_BOOTSTRAP_COUNTEREXAMPLE_POST_BOOTSTRAP_DIAGNOSTIC_PENDING",
+  "promotion": "NONE",
+  "verified_negative_result": {
+    "class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_READ_ONLY_PR_DIAGNOSTIC",
+    "github_run_id": "31406878642",
+    "job_id": "93515268433",
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "result": "WP03_DIRECT_CHECKOUT_IMPORT_TOPOLOGY_GAP",
+    "error": "ModuleNotFoundError: No module named 'claycode_base_frontend'",
+    "interpretation": "All candidate Python sources byte-compile, but semantic probes cannot import checked-in claycode_base_typed_ir without the workflow-materialized V18 frontend substrate. No higher-layer semantic PASS/FAIL is inferred from this run."
+  },
+  "historical_resolution": {
+    "successful_wp03_pattern": "materialize exact committed V18 frontend/grammar/canonicalizer/lockfile into /tmp, create locked venv, set materialized tools on PYTHONPATH, then execute typed IR/residual gates",
+    "frontend_git_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "grammar_git_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "direct_bundle_self_contained": false
+  },
+  "target_repo_artifacts": [
+    "1120853d05694f8f3195a20eb5a4e1ed00ee62fd",
+    "0a5145b8fe92698f30bf4e30ab72cf2bc7bc681f",
+    "ba9e758aab9b896bd7ac70254f24f90971078f00",
+    "64b3ed3c8d6284634241d8470ce323545c0d09f4",
+    "8961c1de6d27b645bf476057595ded0d2f9b31bb",
+    "62821e6ebaf25b5bcd475689a07fe47b6703fc36",
+    "a91dd04d6056c20e617ea5a7ce706c4019371c2b",
+    "f07114394eca7adef9ce18063dd2650c70b83f5a",
+    "b09c62c12b29ba4378698b998978761c2d5d3b2b",
+    "7609b0896ee7257032d5414487bb54539efa19de",
+    "a068dc7010f2cd5f187984f6a52de3aca58df4e",
+    "7e4cbacca3042a7209a44ab68702d8ab324beb1c",
+    "a41a8b460b2cb97a0e9cfb33190099b356cab604",
+    "1e59da287673f7fcacd4a43db382012d1ef4e897",
+    "3841b0df323ebff3ae5bdb104ae630691bbb7d06"
+  ],
+  "active_hypotheses": [
+    "WP03 legacy parse_fn equals-body assumption is an executable compatibility gap for current Frank block functions",
+    "uppercase collection constructor spellings in current Frank source are not executable-equivalent to title-case WP03 constructors unless an explicit dialect/lowering contract binds them",
+    "module source hash trust is insufficient without transitive dependency and compiler/frontend/grammar identity",
+    "trusted code provenance is insufficient without value/ingress provenance and scoped authority witness",
+    "unknown external calls must remain explicit unclassified effect obligations rather than defaulting to PURE"
+  ],
+  "strongest_counterhypotheses": [
+    "block functions may already be preserved through another residual path after exact V18 substrate materialization",
+    "uppercase constructor spellings may be intentional distinct dialect/external nominals rather than aliases",
+    "many unresolved nominal names may be valid external host/FFI nominals rather than linker errors",
+    "a bounded Frank effect slice cannot establish general-purpose WP04 completeness"
+  ],
+  "runtime_ingress_bridge": {
+    "authenticated_principal_fields": ["credential_id", "credential_fingerprint", "client_id", "holder_kind", "scopes"],
+    "required_interaction_scope": "frank:interact",
+    "durable_request_binding": "UnifiedDB V16 bound to V15 lease epoch",
+    "compiler_implication": "code trust and value provenance must remain orthogonal; structural authenticated/scoped booleans are data, not authority witnesses"
+  },
+  "pending_diagnostic": {
+    "draft_pr": 177,
+    "replacement_workflow": "ClayCode WP04 PR Diagnostic",
+    "post_bootstrap_run_state_at_write": "QUEUED_OR_NOT_YET_ADJUDICATED",
+    "promotion_if_green": "NONE_AUTOMATIC"
+  },
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "final_report": "research_entity/trigger_runs/claycode/claycode-20260810T2318p0700-wp03-wp04-boundary-deep/FINAL_REPORT.md"
+}

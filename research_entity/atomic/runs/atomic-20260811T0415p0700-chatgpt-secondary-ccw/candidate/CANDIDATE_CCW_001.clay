@@ -1,0 +1,71 @@
+module clay.atomic.causal_closure_witness
+version "CCW-001"
+status CANDIDATE_NOT_PROMOTED
+
+type LearningDecision =
+    AdmittedDelta { delta: SemanticDeltaRef }
+  | ExplicitNoLearning { receipt: NoLearningReceiptRef }
+
+record CausalClosureSupport {
+  effect: EffectId;
+  execution: ExecutionGenerationRef;
+  verified_outcome: VerifiedEffectOutcomeRef;
+  episode: WorkspaceEpisodeRef;
+  receiver_use: ReceiverUseReceiptRef;
+  causal_credit: CausalCreditRef;
+  learning: LearningDecision;
+  reentry: ReentryRef;
+  provenance: Set<EvidenceRef>;
+}
+
+opaque record CausalDoneProjection {
+  effect: EffectId;
+  support_hash: Symbol;
+  semantic_epoch: Epoch;
+  derived_at: Time;
+}
+
+record DoneCache {
+  effect: EffectId;
+  support_hash: Symbol;
+  semantic_epoch: Epoch;
+  cached_projection: CausalDoneProjection;
+}
+
+fn derive_causal_done(s: CausalClosureSupport) -> Option<CausalDoneProjection> pure {
+  require exact_canonical_execution_support(s.effect, s.execution)
+  require exact_verified_outcome_for_effect(s.effect, s.verified_outcome)
+  require exact_workspace_receiver_use_chain(s.execution, s.episode, s.receiver_use)
+  require receiver_use_causally_targets_effect(s.receiver_use, s.effect)
+  require exact_noncorrelated_credit(s.receiver_use, s.verified_outcome, s.causal_credit)
+  require learning_decision_admitted_for_credit(s.learning, s.causal_credit)
+  require exact_provenance_bound_reentry(s.effect, s.execution, s.episode, s.receiver_use, s.causal_credit, s.learning, s.reentry)
+  require all_support_current_and_valid(s)
+  return Some(trusted_runtime_derive_terminal_projection(s))
+}
+
+fn terminal_cache_valid(c: DoneCache, s: CausalClosureSupport) -> Bool pure {
+  let d = derive_causal_done(s)
+  if d.none { return false }
+  return c.support_hash == d.value.support_hash && c.semantic_epoch == d.value.semantic_epoch
+}
+
+law no_persisted_done_row_is_semantic_authority
+law done_projection_is_derived_not_minted
+law done_cache_is_rebuildable_and_non_authoritative
+law external_verified_outcome_survives_causal_support_invalidation
+law causal_support_invalidation_removes_causal_done_without_retry_authority
+law explicit_no_learning_is_positive_typed_support
+law missing_learning_evidence_is_not_no_learning
+law gwt_activation_is_not_receiver_use
+law receiver_use_is_not_causal_credit
+law causal_credit_is_not_learning_admission
+law provenance_identity_is_not_effect_authority
+law claygraph_projection_cannot_mint_done
+law self_root_cannot_use_ccw_to_mutate_harness
+law physical_materialization_may_accelerate_but_must_revalidate_support
+
+rule consequential_terminal_read(effect) requires derive_causal_done(load_support(effect)).some
+rule stale_cache(cache,support) -> rebuild_or_ignore(cache)
+rule invalid_support(support) -> no_causal_done
+rule verified_outcome_without_closure(effect) -> reentry_or_review_pending

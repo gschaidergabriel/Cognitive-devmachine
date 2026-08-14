@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260811T0425p0700-chatgpt-secondary-selected-lineage-rollback-composition",
+  "trigger": "go",
+  "status": "PARTIAL_EXECUTED_DEPENDENCY_PASS_STACKED_TARGET_PENDING",
+  "created_at": "2026-08-11T04:25:00+07:00",
+  "origin": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "self_harness_authority": "NONE_PROPOSAL_ONLY_FOR_FRANK"
+  },
+  "program": {
+    "program_id": "FRANK_V0_1",
+    "target": "finished self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "fresh_state": {
+    "clay_canonical_revision": 2,
+    "clay_canonical_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "c8b41f3cb423a6ef5406b7111979f415c00bec2c",
+    "current_stage": "FRANK_V0_1"
+  },
+  "coordination": {
+    "initial_nonoverlap_assumption": "PR267 was not returned by the first narrower semantic-continuation search, so a separate root-bound continuation-head diagnostic was started as PR273.",
+    "collision_detected": "A later broader live swarm refresh discovered earlier overlapping PR267 after PR273 had been built.",
+    "resolution": "PR273 was explicitly marked superseded and closed unmerged. No competing selected-head mechanism will be promoted from that branch.",
+    "closed_duplicate_pr": 273,
+    "primary_dependency_pr": 267,
+    "stacked_nonoverlapping_pr": 281,
+    "stacked_base": "chatgpt/go-semantic-twin-lineage-cas-20260811"
+  },
+  "baseline_and_prior_counterevidence": {
+    "pr231": {
+      "role": "boot/binary continuity evaluator baseline",
+      "result": "mechanism target PASS but unique semantic lineage not proven",
+      "counterexample": "SAME_SOURCE_SIBLING_STATE_CHIMERA",
+      "remaining": "trusted builder/artifact verification and unique admitted recovery lineage"
+    },
+    "pr240": {
+      "role": "external write-ahead execution-generation-floor baseline",
+      "result": "target PASS for protected DB snapshot rollback while external anchor survives",
+      "remaining": "generation alone does not bind equal-generation divergent semantic roots"
+    }
+  },
+  "hypothesis": "After an independently admitted semantic lineage exists, an external selected-head CAS binding exact parent and semantic root can enforce one current sibling. When composed with protected state, exact head+root comparison detects one-sided state/selector rollback while the opposite side survives.",
+  "strongest_counterhypothesis": "Selected-head CAS is not a whole-system rollback authority. If protected state and the selected-head store roll back together to a mutually consistent historical pair, the local relation cannot detect rollback. An out-of-domain monotonic authority or externally coordinated recovery protocol is still required.",
+  "executed_target_evidence": {
+    "source_pr": 267,
+    "candidate_head_sha": "45152d1c5c9fc696a35f102fdda44a0e14c30d18",
+    "tested_merge_sha": "843915f7e0ceb82744fda0a1a753870d6a8d5533",
+    "workflow_run": 31433086428,
+    "job_id": 93600892797,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "module_blob": "71a44af7851b0c28fd3538e84859a0eb4895e66a",
+    "test_blob": "4fca0a43e165426c6a830b364b3916259edf89ea",
+    "workflow_blob": "570fd7a9e1527ad58c8412d235093e22504be5dc",
+    "repo_static_integrity": "PASS",
+    "sequential_baseline": "PASS_SEQUENTIAL_SELECTED_LINEAGE_BASELINE",
+    "sqlite_integrity_check": "ok",
+    "foreign_key_violations": 0,
+    "elapsed_wall_seconds": 0.10,
+    "user_seconds": 0.06,
+    "system_seconds": 0.03,
+    "max_rss_kb": 22528,
+    "socket_messages_sent": 0,
+    "socket_messages_received": 0,
+    "exit_status": 0
+  },
+  "go_out_of_box": {
+    "count_executed_for_swarm_macrocycle": 1,
+    "experiment": "SEMANTIC_TWIN_CAS_RACE",
+    "source_pr": 267,
+    "status": "PASS_SINGLE_SELECTED_LINEAGE_HEAD_CAS_RACE",
+    "contenders": 2,
+    "winners": 1,
+    "losers": 1,
+    "loser_persisted": false,
+    "loser_replay": "SELECTED_LINEAGE_HEAD_MOVED",
+    "twin_roots_distinct": true,
+    "canonical_state_mutated": false,
+    "external_network_used": false,
+    "external_provider_used": false,
+    "effect_authority": "NONE",
+    "identity_authority": "NONE_CANDIDATE_SELECTION_MECHANISM_ONLY",
+    "note": "The temporary worker's independently started EQUAL_EPOCH_TWIN_ROOT_FORK branch was closed before promotion once overlap with the already-executed swarm experiment was discovered; it is not counted as a second executed GO OOB."
+  },
+  "stacked_recovery_test": {
+    "pr": 281,
+    "head_sha": "3a1ec2248067f1a437551d6f9ab73228ba5042d8",
+    "base_pr": 267,
+    "adds_new_oob": false,
+    "workflow_run": 31433761378,
+    "workflow_status_at_receipt": "QUEUED",
+    "target_claim": "NONE_PENDING_EXECUTION",
+    "normal_controls": [
+      "protected-state-only rollback while selector survives must mismatch",
+      "selector-only rollback while protected state survives must mismatch",
+      "whole-domain rollback of both must reproduce expected limitation",
+      "restore of old semantic root must create a new child head rather than resurrect historical head",
+      "SQLite integrity and FK checks must remain clean"
+    ]
+  },
+  "construction_findings_from_closed_duplicate": [
+    "Git source digest and semantic/identity digest spaces must not be silently conflated: current repository Git heads are 40-hex SHA-1 while semantic roots/head identities in these candidates are 64-hex SHA-256.",
+    "An ordinary checkpoint path should not be allowed to disguise semantic rollback as a fresh head merely by advancing an independent head sequence; controlled rollback/restore requires explicit recovery semantics and authority."
+  ],
+  "external_primary_design_context": [
+    {
+      "source": "IETF RFC 9162 Certificate Transparency Version 2.0",
+      "use": "append-only consistency relation / predecessor-extension analogy",
+      "promotion_authority": false
+    },
+    {
+      "source": "The Update Framework specification",
+      "use": "trusted persisted version state and rollback/mix-and-match separation analogy",
+      "promotion_authority": false
+    },
+    {
+      "source": "SLSA Build Provenance v1.2",
+      "use": "build/source/builder identity remains distinct from runtime semantic-state continuity",
+      "promotion_authority": false
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_COMPOSITION_REQUIRED",
+    "supported": [
+      "selected semantic-head CAS prevents two concurrent sibling roots from both becoming CURRENT while the selected-head authority survives",
+      "head history can be immutable and exact-parent-bound without becoming identity/effect authority"
+    ],
+    "not_yet_supported": [
+      "whole-VM/filesystem rollback resistance",
+      "malicious replacement of selected-head authority",
+      "trusted builder/artifact provenance",
+      "source_repo_head and owner identity-contract binding in the selected-head primitive",
+      "recovery authority for re-selecting historical semantic payload",
+      "production boot integration",
+      "whole Frank v0.1 acceptance"
+    ],
+    "preferred_direction": "Fuse PR267's CAS-selected semantic head with the independently verified build/source/identity gate and an out-of-protected-domain recovery/monotonicity mechanism; do not promote PR273's duplicate implementation."
+  },
+  "next_falsifiers": [
+    "Execute stacked PR281 on the accepted self-hosted target and preserve the both-rolled-back limitation as negative evidence.",
+    "Compose selected-head acceptance with exact source_repo_head + owner identity-contract + trusted builder/artifact evidence rather than duplicating those checks.",
+    "Choose and test an authority/failure-domain model for selector rollback: TPM/monotonic external service/independent durable store/externally coordinated restore are candidates, not assumptions.",
+    "After composition, repeat restart/move continuity and stale-clone tests before any production boot promotion."
+  ],
+  "negative_results_preserved": [
+    "PR231 same-source sibling acceptance falsifies provenance-label equality as unique lineage proof.",
+    "Whole-domain rollback remains detectable only with authority outside that rollback domain; local selected-head history alone is insufficient.",
+    "Duplicate mechanism PR273 was stopped and closed once overlap was discovered."
+  ],
+  "authority_and_nonclaims": {
+    "canonical_frank_state_mutated": false,
+    "effect_authority": "NONE",
+    "frank_self_harness_authority": "NONE",
+    "binary_freeze": false,
+    "whole_frank_v0_1_acceptance": false,
+    "paid_or_final_training_authorized": false
+  }
+}

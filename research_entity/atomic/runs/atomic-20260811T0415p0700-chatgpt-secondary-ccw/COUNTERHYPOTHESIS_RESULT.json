@@ -1,0 +1,17 @@
+{
+  "counterhypothesis":"Exact canonical support references + semantic closure trigger + REENTERED/DONE in one transaction + immutable receipt can match CCW correctness/recovery with lower terminal-read cost and less architecture change.",
+  "result":"SUBSTANTIALLY_SUPPORTED",
+  "support":[
+    "Shared strong closure predicate made conventional receipt and CCW tie on the local 14-case mutation corpus: valid 1/1, invalid accepted 0/13.",
+    "One transaction fully rolled back state/reentry when fault was injected before DONE, removing the candidate's naive two-write crash argument.",
+    "At N=10,000 over six alternating repetitions, receipt point reads were about 4x faster at median and about 5.13x faster at p95 in the local SQLite model."
+  ],
+  "remaining_ccw_difference":[
+    "CCW cannot be directly inserted/updated in SQLite without deliberately adding an INSTEAD OF trigger.",
+    "CCW used about 89.0% of the receipt database bytes and about 71.6% of the population time in the matched local benchmark because it omits the terminal receipt write/table.",
+    "When one support fact was invalidated after terminalization, the derived closure vanished automatically while the persisted receipt remained present. A conventional design can match this only by revalidating or maintaining explicit invalidation semantics, making the receipt non-sufficient authority."
+  ],
+  "decision":"KILL_CCW_AS_DISTINCT_DEFAULT_PHYSICAL_RUNTIME_ARCHITECTURE",
+  "retained_design_law":"A persisted DONE receipt/cache may exist for performance/audit, but it must not be sufficient semantic authority. Terminal closure must remain independently re-derivable and revalidatable from exact canonical support. If support is invalid/quarantined, causal DONE must not be trusted even if a historical receipt row remains.",
+  "target_action":"NO_NEW_TARGET_BRANCH_FROM_CCW; consume PR279/PR280 conventional repair and add the retained design law as a review/test obligation rather than duplicating implementation."
+}

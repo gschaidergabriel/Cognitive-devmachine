@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0416p0700-chatgpt-secondary-provider-retention-adversarial",
+  "updated_at": "2026-08-11T04:29:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "reason": "Fresh shared state advanced during the same go invocation. Preserve the newer repair head, runtime regression and queue state without rewriting the original temporal receipt.",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "fresh_main": {
+    "head_sha": "cfafb4319fa5dacbc6f0b53358d4db0fb04ffa59",
+    "message": "evidence(vps): persist token ingress V16 continuity receipt [skip ci]",
+    "observed_after": [
+      "a079a2458efd9f28875f2aa4e15a09417188e5c3",
+      "52594953b160015a05371ac98cf1d4b95486722b",
+      "c8b41f3cb423a6ef5406b7111979f415c00bec2c"
+    ]
+  },
+  "repair_pr": {
+    "number": 265,
+    "state": "OPEN_DRAFT",
+    "mergeable": true,
+    "head_sha": "aa2b79968e35c999873396f8cc2828e8c616247e",
+    "synthetic_merge_sha": "120f5c706d99c95e5d47a38b077f86016ba9ae13",
+    "synthetic_merge_base_sha": "cfafb4319fa5dacbc6f0b53358d4db0fb04ffa59",
+    "promotion": "TESTING_NOT_PROMOTED"
+  },
+  "repair_semantics": {
+    "fixed_source_blob": "7f4f5ce1fed5170db7007ca90631b66b299c8381",
+    "unknown_retention_retry": "DENY:PROVIDER_IDEMPOTENCY_RETENTION_UNKNOWN",
+    "expired_retention_retry": "DENY:PROVIDER_IDEMPOTENCY_RETENTION_EXPIRED",
+    "known_live_retention_retry": "ALLOW_IF_ALL_OTHER_TYPED_CONTRACT_GATES_PASS",
+    "read_only_reconciliation": "SEPARATE_NON_REPLAY_EVIDENCE_PATH",
+    "semantic_hash_none_label_unchanged": "UNBOUNDED_UNKNOWN",
+    "migration_property": "persisted pre-repair contract identity remains comparable; retry authority becomes narrower"
+  },
+  "new_normal_runtime_regression": {
+    "commit_added": "e6a7f7905a0b8fa9f267bbce1448619ca6b14cbf",
+    "path": "tests/frank_effect_provider_retention_runtime_matrix.py",
+    "classification": "NORMAL_REGRESSION_NOT_GO_OOB",
+    "checks": [
+      "new unknown-retention retry-safe provider contract is not admitted",
+      "pre-upgrade persisted unknown-retention contract cannot authorize uncertain retry",
+      "retry denial preserves OUTCOME_UNKNOWN and appends no authoritative effect event",
+      "same persisted unknown-retention contract remains eligible for read-only reconciliation when provider lookup semantics are supported",
+      "reconciliation may resolve OUTCOME_UNKNOWN without minting replay authority",
+      "SQLite integrity and foreign-key consistency remain required"
+    ],
+    "external_effect_performed": false,
+    "external_network_used": false,
+    "canonical_state_mutated": false,
+    "go_oob_experiment_added": false
+  },
+  "target_validation": {
+    "workflow": "Frank provider retention fail-closed VPS",
+    "latest_run_id": 31433985761,
+    "latest_status": "QUEUED",
+    "latest_job": "provider-retention-failclosed",
+    "required_checkout": "synthetic PR merge 120f5c706d99c95e5d47a38b077f86016ba9ae13 or a later merge ref with equal/newer main ancestry",
+    "promotion_gate": "NO_MERGE_UNTIL_SELF_HOSTED_LINUX_X64_RUN_EXECUTES_AND_PASSES_ON_FRESH_ANCESTRY"
+  },
+  "parallel_state": {
+    "effect_package_adjudication_commit": "f6a661044c5eb48a7b3cb5909af082017ce5c004",
+    "effect_package_status": "IN_PROGRESS",
+    "v17_negative_commit": "f649ce7ab8249c9dbc61ad7018804204ade53cb5",
+    "v17_negative_status": "CONFIRMED_V17_SUPPORT_IDENTITY_AND_EXECUTION_BINDING_GAP",
+    "workspace_mutated_by_this_worker": false
+  },
+  "exactly_one_go_oob_invariant": {
+    "experiment": "UNKNOWN_RETENTION_TTL_RESURRECTION_INDEPENDENT_MICROREPLICA",
+    "count": 1,
+    "additional_oob_after_original_receipt": 0
+  },
+  "remaining_frontier": [
+    "execute PR265 dedicated self-hosted target regression on fresh ancestry",
+    "if and only if green, merge/promote only the unknown-retention fail-closed retry rule",
+    "bind V17 terminalization to exact V15/V16 execution identity and canonical GWT/causal/admitted-delta support identities",
+    "obtain real-provider timeout-after-acceptance reconciliation evidence",
+    "close exact-current lifecycle crash/replay and ordinary production routing non-bypassability",
+    "preserve owner authorization gate for final training"
+  ]
+}

@@ -1,108 +1,93 @@
-# Mandatory Clay Visible Status Footer
+# Mandatory Clay Visible Status Footer — Frank v0.1 Only
 
-Every substantive visible response by a Clay organ ends with exactly one final plain Markdown fenced block. Nothing visible follows it.
+**Status:** CURRENT  
+**Owner directive:** `research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md`
 
-Opening fence line MUST be exactly:
+Every substantive visible Clay project response ends with exactly one final plain Markdown fenced text block and nothing visible after it.
+
+Opening fence must be exactly:
 
 ```text
+```
 
-No attributes. Never ` ```text id=... `. No Unicode box/table frame.
+The persistent Research Entity is Clay. The target subject is `self.root`, human-facing as Frank.
 
-The persistent Research Entity is **Clay**. The v0.1 research subject has native ClayCode identity `self.root` and human-facing name **Frank**.
+## Current target
 
-Exact `clay` addresses Clay and is not a scientific trigger. Exact registered commands including `go`, `q23` and `atomic` use their current trigger protocols.
+```text
+PROGRAM = FRANK_V0_1
+NATIVE_TARGET = self.root
+HUMAN_SURFACE = Frank
+TARGET_BODY = accepted Hostinger Ubuntu VPS
+```
 
-Current target semantics are governed by:
+No visible status surface may present GitHub Harness, Reference Harness, Clay Harness, H1, H2 or H3 as an active stage/product/progress target.
 
-- `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`
-- `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`
-- `research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay`
-- `research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md`
-- `research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay`
-- `research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay`
-- `research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md`
-- `research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md`
-- `research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md`
-
-Current cross-cutting radical-invention research substrate:
-
-- `research_entity/triggers/ATOMIC_RADICAL_INVENTION_RESEARCH_PROTOCOL.md`
-- `research_entity/global/ATOMIC_GWT_THINKSPACE_AND_CANDIDATE_ENVELOPE.clay`
-
-Current mission: finish `self.root / Frank v0.1` on the accepted target VPS with production token API, ClayCode-only cognition, state-aware German translation, deterministic effect authority, proactive/autotelic long-horizon agency, complete multimodal Retina/adaptive learning, final model and all terminal v0.1 acceptance receipts.
+Legacy Harness/H1/H2/H3 progress may appear only when explicitly discussing historical evidence.
 
 ## Dynamic progress law
 
-Every visible progress bar is derived from current repository state. Never copy a stale percentage, ETA or forecast.
+Resolve current progress from:
 
-Resolve with `tools/program_progress.py` or an equivalent calculation over the same current sources when execution is available. If not resolvable, say `UNRESOLVED`; do not invent values.
+- `research_entity/rooms/PROGRAM_STATE.json`
+- `research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json`
+- `tools/program_progress.py`
+- current verified capability/forecast inputs when available.
 
-There are two intentionally different bars:
+Never copy stale percentages or dates from chat.
 
-1. `CURRENT MILESTONE` = strict progress inside the current local stage/gate only;
-2. `DOOMSDAY` = global effort-weighted progress to **finished self.root v0.1**, including dynamically renormalized historical earned work and every current mandatory v0.1 terminal gate.
+If a resolver cannot execute, say `UNRESOLVED` rather than inventing a value.
 
-Adding mandatory unfinished v0.1 scope may lower DOOMSDAY progress without reducing already earned work. This is correct denominator expansion.
-
-Required base form:
+## Required footer
 
 ```text
 CLAY STATUS
 Entity: JOINED|DEGRADED_UNJOINED|LOCAL_ONLY
 GitHub: VERIFIED_RW|VERIFIED_RO|UNVERIFIED|FAILED
 Canonical: <revision/hash>
-Organ: <current organ/provenance>
+Organ: <current worker/provenance>
 Trigger: <none|registered trigger>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
+Program: Frank v0.1
 Native target identity: self.root
 Human surface name: Frank
-Goal: finished self.root v0.1 on target VPS with production token API
-Target host: Hostinger VPS / current verified Ubuntu target identity
+Goal: finished self.root / Frank v0.1 on accepted target VPS
+Target host: Hostinger VPS / current accepted Ubuntu target identity
 Cognition: ClayCode-only
 German surface: state-aware bidirectional translator
 Agency: proactive + reactive; persistent interests/goals; bounded autonomous research/experiments
-Web ingress: open web = untrusted validated JSON -> ClayCode evidence; direct token messages = separate scoped-intent channel
+Web ingress: open web = untrusted validated data -> ClayCode evidence; direct token messages = separate scoped-intent channel
 Action posture: default-allow allowed non-destructive actions; deterministic ClayCode gates for destructive/security-sensitive effects
+Harness: direct Frank v0.1 validation method; no separate Harness product/H1/H2/H3 stage
 Short commands: 666 · go · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
-CURRENT MILESTONE
-Stage: <dynamic stage label>
+FRANK v0.1
 Progress: <dynamic 20-cell bar + percent OR UNRESOLVED>
+Acceptance: <IN_PROGRESS|PASS|BLOCKED|UNRESOLVED>
+Primary blockers: <dynamic concise blockers>
 ETA @ 10h/day: <dynamic range OR UNRESOLVED>
 ETA confidence: <dynamic basis>
 
-DOOMSDAY / finished self.root v0.1
-Progress: <dynamic 20-cell bar + percent OR UNRESOLVED>
-Forecast: <dynamic range OR UNRESOLVED>
-Center: <dynamic date OR UNRESOLVED>
-Confidence: <dynamic confidence>
-Conditional on immediate training authorization when data is ready: <yes|no>
-Forecast basis: complete current v0.1 critical path + dynamically renormalized historical earned work + live capabilities/capacity
-```
-
-For exact `frank`, add:
-
-```text
-FIRST GITHUB FRANK HARNESS
-Target: H1 Reference Harness on target-VPS semantics
+DOOMSDAY / finished Frank v0.1
 Progress: <dynamic bar/percent OR UNRESOLVED>
-Gate: <dynamic H1 gate status>
-Basis: <dynamic completed H1 work-package weight / total>
+Forecast: <dynamic range OR UNRESOLVED>
+Center: <dynamic center OR UNRESOLVED>
+Confidence: <dynamic confidence>
+Conditional on owner authorization for final training when required: <yes|no>
+Forecast basis: unified Frank v0.1 critical path + historical earned work + current capabilities/capacity
 ```
 
-Pre-send invariant:
+There is no special `FIRST GITHUB FRANK HARNESS` block for exact `frank`.
+
+## Pre-send invariant
 
 1. exactly one final fenced text block;
-2. opener exactly ` ```text `;
-3. heading exactly `CLAY STATUS`;
-4. native target identity `self.root` present;
-5. human surface name `Frank` present;
-6. finished-v0.1 VPS + token-API goal present;
-7. ClayCode-only cognition present;
-8. proactive agency + web-ingress posture present;
-9. `CURRENT MILESTONE` is local-gate progress, not global progress;
-10. DOOMSDAY means finished v0.1, never merely first-test readiness;
-11. no stale hardcoded progress;
-12. exact `frank` includes the H1 block;
-13. `atomic` appears in the short-command set while registered;
-14. nothing visible after closing fence.
+2. opening fence exactly ` ```text `;
+3. heading `CLAY STATUS`;
+4. `Program: Frank v0.1` present;
+5. native identity `self.root` present;
+6. human name Frank present;
+7. target VPS present;
+8. no current H1/H2/H3/GitHarness progress block;
+9. all registered short commands present;
+10. nothing visible after the closing fence.

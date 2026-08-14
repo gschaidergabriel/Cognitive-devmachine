@@ -695,6 +695,17 @@ def _execute_chat_locked(
         )
         cooldown_seconds = 15
         retryable = False
+    except Exception:
+        # Custom transport adapters are not constrained to urllib's exception
+        # hierarchy. Fail closed with a receipt without catching BaseException.
+        content = None
+        outcome = (
+            "incomplete_provider_response"
+            if response_started
+            else "unreachable_provider"
+        )
+        cooldown_seconds = 15
+        retryable = False
 
     if finished is None:
         finished = now()

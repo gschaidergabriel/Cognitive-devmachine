@@ -28,6 +28,7 @@ ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
+EXECUTION_LOCK_TIMEOUT_SECONDS = 35
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
 TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
@@ -461,7 +462,12 @@ def execute_chat(
     payment_latches: set[str] | None = None,
 ) -> dict:
     """Serialize authorization through receipt so payment latches are atomic."""
-    with PROCESS_EXECUTION_LOCK:
+    acquired = PROCESS_EXECUTION_LOCK.acquire(
+        timeout=EXECUTION_LOCK_TIMEOUT_SECONDS
+    )
+    if not acquired:
+        raise RuntimeError("execution_busy")
+    try:
         return _execute_chat_locked(
             messages,
             model=model,
@@ -471,6 +477,8 @@ def execute_chat(
             nonce_factory=nonce_factory,
             payment_latches=payment_latches,
         )
+    finally:
+        PROCESS_EXECUTION_LOCK.release()
 
 
 def _execute_chat_locked(

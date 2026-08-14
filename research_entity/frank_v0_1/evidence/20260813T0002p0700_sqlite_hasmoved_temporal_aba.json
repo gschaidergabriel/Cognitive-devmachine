@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "recorded_at": "2026-08-13T00:02:00+07:00",
+  "research_organ": "chatgpt-gpt-5.6-sol-temporary-clay-worker",
+  "observed_repo": {
+    "product_alias_repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_sha": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "work_item": "gschaidergabriel/Dr.-Unterweger#534",
+    "overlap_candidate": "gschaidergabriel/Dr.-Unterweger#557"
+  },
+  "grf": {
+    "r0_observed": [
+      "PR #557 proposes a same-connection SQLITE_FCNTL_HAS_MOVED diagnostic after OPEN_CONNECTION_PATH_REBIND counterevidence.",
+      "SQLite public documentation describes SQLITE_FCNTL_HAS_MOVED as reporting whether the opened file has been renamed, moved or deleted since open.",
+      "SQLite Unix source fileHasMoved() checks the current pathname with stat() and compares its inode to the open file inode, which suggests a present-state discriminator rather than a durable movement history."
+    ],
+    "hypothesis": "SQLITE_FCNTL_HAS_MOVED remains true after a move-away/move-back ABA of the exact same database object and can therefore attest movement history.",
+    "strongest_counterhypothesis": "On Unix, SQLITE_FCNTL_HAS_MOVED only reflects whether the current path presently resolves to the opened inode; moving the same object away and back before the check returns false and erases the transient movement from this observation.",
+    "falsifier": "One disposable SQLite WAL connection; measure HAS_MOVED baseline, rename the main DB away and back to the identical pathname/object, then measure HAS_MOVED again on the same still-open connection and verify write/read continuity.",
+    "predicted_if_hypothesis": "baseline=0, after_ABA=1",
+    "predicted_if_counterhypothesis": "baseline=0, after_ABA=0 with same inode and successful same-connection write/read",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED",
+    "collapse": [
+      "REJECT general inference: HAS_MOVED=0 proves the database pathname/object never moved since open.",
+      "RETAIN SQLITE_FCNTL_HAS_MOVED as a useful same-connection current-state discriminator for a path that is presently moved/rebound.",
+      "DEFER any release claim requiring temporal continuity to a stronger deployment/operation boundary, external monotonic witness, immutable topology, or checks that make transient ABA impossible/observable."
+    ]
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "SQLITE_HAS_MOVED_TEMPORAL_ABA",
+    "scope": "disposable local /tmp SQLite fixture only",
+    "environment": {
+      "python_sqlite_version": "3.46.1",
+      "journal_mode": "wal",
+      "production_host": false,
+      "frank_runtime": false
+    },
+    "intervention": "Rename FRANK_UNIFIED.sqlite to a temporary away path and immediately rename the exact same file object back before the next SQLITE_FCNTL_HAS_MOVED query.",
+    "observations": {
+      "baseline_has_moved": 0,
+      "after_aba_has_moved": 0,
+      "same_inode": true,
+      "same_connection_write_readback": "B",
+      "journal_mode_after": "wal"
+    },
+    "authority_or_product_mutation": false,
+    "cleanup": "temporary directory removed"
+  },
+  "primary_external_evidence": [
+    {
+      "source": "SQLite Standard File Control Opcodes",
+      "url": "https://www.sqlite.org/c3ref/c_fcntl_begin_atomic_write.html",
+      "claim": "SQLITE_FCNTL_HAS_MOVED reports whether the opened file has been renamed, moved or deleted."
+    },
+    {
+      "source": "SQLite canonical Unix VFS source artifact",
+      "url": "https://sqlite.org/src/artifact/410185df49",
+      "claim": "fileHasMoved() uses stat(pFile->zPath) and compares current pathname inode to the opened inode on Unix."
+    },
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://www.sqlite.org/wal.html",
+      "claim": "WAL-reset corruption bug affects versions through 3.51.2 and is fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "claim": "Current release 3.53.4 carries the WAL-reset fix; version suitability does not substitute for productive binding evidence."
+    }
+  ],
+  "frank_v0_1_impact": {
+    "workspace_status_change": "NO_CHANGE",
+    "release_status": "F-V01-13 remains IN_PROGRESS",
+    "new_test_obligation": "Do not let a point-in-time HAS_MOVED=0 receipt claim temporal no-move history. Accepted Hostinger product evidence must bind the real UnifiedDB operation/object across the measured critical interval and preserve restart/reopen, downgrade/library-swap/rollback and semantic-lineage controls.",
+    "suggested_pr557_hardening": "Add an ordinary regression for move-away/move-back ABA and narrow receipt wording from historical continuity to present path/object consistency unless another temporal invariant closes ABA.",
+    "training_authorized": false,
+    "harness_authority_changed": false
+  }
+}

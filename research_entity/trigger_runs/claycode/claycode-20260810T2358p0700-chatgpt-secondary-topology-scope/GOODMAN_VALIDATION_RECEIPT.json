@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260810T2358p0700-chatgpt-secondary-topology-scope",
+  "validator_source":"tools/goodman_filter_check.py",
+  "validator_blob_sha":"625441a98a061cc61ea806e389f2fe722dd5d626",
+  "command_semantics":"validate-run <run_dir>",
+  "execution_surface":"local sandbox reconstruction of the validation-significant fields from the just-authored repository INTERCONNECT_MANIFEST.json and FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+  "result":{"ok":true,"violations":[]},
+  "repository_artifact_blobs":{
+    "INTERCONNECT_MANIFEST.json":"dbe3bb415abccf82713871da49e7b17aaa402274",
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json":"82adb1c68432d422e4a21ace00666611a4cf9c2e"
+  },
+  "scope_note":"The full private repository checkout is not mounted in the local execution sandbox, so the checker was executed against a local reconstruction containing the exact fields the validator inspects, while the durable repository files were written and content-addressed through the GitHub connector. This validates schema/checker compatibility only; it is not target runtime evidence.",
+  "promotion":"NONE"
+}

@@ -1,0 +1,154 @@
+{
+  "receipt_version": "GO_RESEARCH_RECEIPT_V1",
+  "run_id": "go-20260811T0032p0700-chatgpt-secondary-wp03-declaration-aware-alias",
+  "created_at_local": "2026-08-11T00:32:00+07:00",
+  "created_at_utc": "2026-08-10T17:32:00Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_entity": "frank-project-global-research-entity",
+  "research_entity_display_name": "Clay",
+  "research_subject": "self.root",
+  "human_surface_name": "Frank",
+  "program_stage": "FRANK_V0_1",
+  "work_packages": ["F-V01-02"],
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_shared_head_before_write": "8c1ba257910c9e59001a25443733c596b01e6fc0",
+  "authority_boundary": {
+    "worker_is_clay_temporary_organ": true,
+    "worker_is_frank_or_self_root": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "training_authorized": false
+  },
+  "coordination": {
+    "overlap_avoided": [
+      "F-V01-09 execution-generation effect fence already has active PRs 204/208/214 and shared research receipts",
+      "self.root identity migration already has active PR124 stack",
+      "REL_OP/generic-angle structured frontend repair already has active PR236 and queued target evidence"
+    ],
+    "selected_non_overlapping_frontier": "F-V01-02 / CC-WP-03 typed IR name resolution and constructor compatibility"
+  },
+  "current_main": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "sha": "45afc72401b403d50c88f951ff58821f0f8a5d0e",
+    "source_file": "runtime/clay_wp04_type_effect_v1/constructor_compat_v1.py",
+    "source_blob_before_repair": "50c4355bf039a4cd2c490e399753b58b9ee6e439"
+  },
+  "finding": {
+    "id": "CC-WP03-CONSTRUCTOR-ALIAS-DECLARATION-SHADOW-20260811",
+    "status": "STATICALLY_SUPPORTED_TARGET_EXECUTION_PENDING",
+    "claim": "The current constructor compatibility overlay applies the closed uppercase alias table by nominal name before consulting explicit TypedIR declarations. Therefore a syntactically valid explicit declaration whose name equals SET/OPTION/ORDERED/LIST/MAP/RESULT can lose nominal identity in compatibility canonicalization.",
+    "direct_code_evidence": [
+      "current normalize_expr performs ALIASES.get(original, original) without a symbol/declaration set",
+      "current canonicalize_compatible_value normalizes spelling before calling the declaration-aware TypedIR value canonicalizer",
+      "current main strict grammar permits uppercase identifiers and reserves the listed lowercase language keywords, not SET/OPTION/ORDERED/LIST/MAP/RESULT",
+      "structured_frontend_probe describes constructor spelling compatibility as a separate post-parse overlay rather than case-insensitive language semantics"
+    ],
+    "current_corpus_scope": "No current repository occurrence of an explicit `record SET` collision was found in the bounded search. This is a general-purpose compiler/name-resolution correctness gap, not a demonstrated live Frank corpus failure.",
+    "not_claimed": [
+      "No target-VPS execution PASS exists yet for the discriminator or repair at receipt creation time.",
+      "No current Frank runtime failure from this collision is claimed.",
+      "No CC-WP-03, CC-WP-04, BASE or whole Frank v0.1 promotion is claimed."
+    ]
+  },
+  "hypothesis": {
+    "primary": "Explicit current-program type declarations must resolve before the legacy constructor alias overlay; unresolved legacy constructor spellings may then fall back to the closed versioned alias table.",
+    "strongest_counterhypothesis": "The uppercase legacy constructor names are semantically reserved, so declaring a nominal type such as SET should be invalid and declaration-aware shadowing would preserve an invalid program.",
+    "counterhypothesis_adjudication": "CURRENTLY_UNSUPPORTED_PENDING_EXECUTION. BASE_SEMANTIC_FREEZE_V1 and the frozen G9 contract inspected contain no uppercase-reserved-name law; the current strict grammar accepts uppercase identifiers. The repair is therefore treated as lowering/name-resolution behavior, not a semantic freeze amendment.",
+    "falsifier": "Show an authoritative frozen/current ClayCode contract that reserves the six uppercase names, or show on the exact target substrate that declaration-aware resolution breaks a valid current Frank program or changes intended legacy constructor semantics."
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "id": "CONSTRUCTOR_SHADOW_COLLISION",
+    "diagnostic_pr": 234,
+    "branch": "chatgpt/go-wp03-constructor-shadow-20260811",
+    "head": "24c83b31e6abb4003804f76e45f05bdf79ea3eef",
+    "workflow_run_id": 31413660994,
+    "workflow_state_at_receipt": "QUEUED",
+    "design": "Construct a minimal current TypedIR with an explicit record named SET; compare direct declaration-aware TypedIR canonicalization against the current legacy compatibility overlay; retain SET<String> as the legacy-control spelling.",
+    "safety": "read-only target checkout; disposable in-memory IR only; no external effect/network; no canonical DB mutation; authority NONE",
+    "scientific_result_at_receipt": "PENDING_TARGET_EXECUTION",
+    "static_prediction": "REPRODUCED_GLOBAL_ALIAS_BEFORE_DECLARATION_RESOLUTION"
+  },
+  "repair_candidate": {
+    "pr": 237,
+    "branch": "chatgpt/go-wp03-declaration-aware-alias-20260811",
+    "head": "0d6e2878d7bc651384e1a1c3575ba9f497d4b6d8",
+    "constructor_repair_commit": "391995c5ac28dd46f3d9c65344b85996076aca59",
+    "mechanism": [
+      "derive declared names only from explicit structural_records and declarations",
+      "explicit declaration identity shadows a legacy alias candidate",
+      "unresolved legacy names still use the closed versioned alias table",
+      "nested nominal names resolve independently",
+      "ir.types external mentions do not count as declarations",
+      "provenance separates actual alias application from declaration-shadow resolution"
+    ],
+    "normal_regressions": [
+      "six explicit collision declarations",
+      "six unresolved parameterized legacy constructors",
+      "nested LIST<SET> with declared inner SET",
+      "external type mention is not declaration",
+      "existing real Frank structured frontend -> current TypedIR baseline"
+    ],
+    "workflow_run_id": 31414140275,
+    "workflow_state_at_receipt": "QUEUED",
+    "promotion": "NONE"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "The Rust Reference — Name resolution / Use declarations",
+      "retrieved_at_utc": "2026-08-10T17:31:00Z",
+      "supports": "Identifiers are resolved to declarations; explicit/named bindings can shadow lower-priority glob-imported names in the same namespace.",
+      "role": "DESIGN_COMPARATOR_NOT_CLAYCODE_AUTHORITY"
+    },
+    {
+      "source": "MLIR Language Reference — Type System / Type Aliases / Dialect Types",
+      "retrieved_at_utc": "2026-08-10T17:31:00Z",
+      "supports": "Open type systems use explicit aliases and namespaced dialect type syntax, providing a comparator against indiscriminate global text-level type-name rewriting.",
+      "role": "DESIGN_COMPARATOR_NOT_CLAYCODE_AUTHORITY"
+    }
+  ],
+  "executed_vs_queued": {
+    "executed": [
+      "GitHub current-source inspection and frozen-contract adjudication",
+      "repair branch and regression/workflow construction",
+      "draft diagnostic PR234 and draft repair PR237 creation"
+    ],
+    "queued_not_results": [
+      "PR234 target self-hosted OOB run 31413660994",
+      "PR237 target self-hosted repair regression run 31414140275"
+    ],
+    "pre_execution_infrastructure_signals": [
+      "concurrent GitHub-hosted Deep Integrity / WP04 shadow failures exposed steps=null and are not treated as mechanism evidence"
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING_PENDING_TARGET_RUN",
+    "component": "ClayCode CC-WP-03 constructor/type name resolution overlay",
+    "change": "resolve explicit local declarations before applying versioned legacy constructor aliases",
+    "expected_benefit": "preserve nominal identity and general-purpose expressibility without changing syntax or disabling legacy Frank constructor spellings",
+    "rollback": "close PR237 and retain current constructor_compat_v1.py blob 50c4355bf039a4cd2c490e399753b58b9ee6e439",
+    "next_gate": "Target-VPS discriminator + repair regression + current real Frank structured frontend differential. Promote nothing until these execute and are adjudicated."
+  },
+  "negative_result_discipline": [
+    "No current explicit collision was found in the bounded Frank corpus search.",
+    "Queued target workflows are UNKNOWN/PENDING, not PASS.",
+    "Hosted jobs with steps=null are pre-execution infrastructure failures, not code failures.",
+    "External compiler references are design evidence only and cannot override ClayCode frozen semantics."
+  ],
+  "next_frontier": [
+    "Adjudicate PR234 target result when/if the self-hosted runner executes it.",
+    "Adjudicate PR237 normal regression + real Frank baseline when/if the target runner executes it.",
+    "If both support the repair, compare exact output hashes/latency/resource shadows against current compatibility baseline before considering CC-WP-03 integration.",
+    "If target evidence falsifies declaration-aware resolution, retain the negative result and do not widen language semantics.",
+    "Continue to avoid overlap with active PR236 structured-parser and F-V01-09 authority-product lanes."
+  ],
+  "evidence_class": "CURRENT_SOURCE_PLUS_FROZEN_CONTRACT_PLUS_QUEUED_TARGET_DISCRIMINATORS",
+  "promotion": "NONE",
+  "research_write_result": "COMMITTED"
+}

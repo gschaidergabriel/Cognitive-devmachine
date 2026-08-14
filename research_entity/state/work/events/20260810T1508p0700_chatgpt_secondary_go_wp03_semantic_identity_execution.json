@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "event_id": "go-wp03-semantic-identity-execution-20260810T1508p0700-chatgpt-secondary",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "not_frank": true,
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-03-IR-TYPES",
+  "research_write_class": "EXECUTABLE_NEGATIVE_RESULT_PLUS_CANDIDATE_DIFFERENTIAL",
+  "fresh_state_consumed": {
+    "wp02_status": "PASS_ON_EXACT_V18_SELF_HOSTED_UBUNTU_SCOPE_ONLY",
+    "wp02_acceptance_commit": "5fec5d15d577884a2976d1f2c1bacb7044d0e6be",
+    "base_release": "NOT_PASS",
+    "wp03": "OPEN"
+  },
+  "primary_result": {
+    "classification": "TYPED_IR_SEMANTIC_IDENTITY_COLLISION_REPRODUCED",
+    "current_typed_ir_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "frontend_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "v18_grammar_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "real_ubuntu_receipt_commit": "1beb43de0a7d5a7a35aa108a6c55d07d16e4db15",
+    "github_run_id": "31368672238",
+    "runner": "clay@digital-retina Linux X64",
+    "collision_pairs": 4,
+    "collision_pairs_reproduced": 4,
+    "shared_baseline_typed_ir_sha256": "f61bd407ad31201df12076ee3fc0acdeb21d995222ee10c1f615638fecd379ea",
+    "wp03_identity_gate_pass": false,
+    "promotion_effect": "BLOCK_WP03_WHOLE_PROGRAM_SEMANTIC_IDENTITY_PROMOTION"
+  },
+  "candidate_result": {
+    "path": "tools/claycode_wp03_residual_semantics_candidate.py",
+    "blob": "d7f4c9b475466c813ae85716e9c57d7ee9f99512",
+    "mechanism": "Preserve not-yet-lowered top-level semantic clauses as canonical frontend AST in opaque_unlowered_semantics and bind them into candidate TypedIR semantic identity without minting effect authority.",
+    "baseline_unique_reward_hashes": 1,
+    "candidate_unique_reward_hashes": 3,
+    "expected_reward_distinctions": 3,
+    "layout_comment_equivalence_preserved": true,
+    "real_ubuntu_differential_pass": true,
+    "promotion": "NONE",
+    "wp03_status": "OPEN"
+  },
+  "strongest_counterhypothesis": {
+    "claim": "Another downstream identity layer could preserve rule semantics even if typed_ir_sha256 does not.",
+    "adjudication": "NOT_SUFFICIENT_FOR_WP03_CLOSURE",
+    "reason": "Until that layer is explicitly bound, executable, provenance-checked and used by downstream lowering/evaluation, the current object named program_semantic_id cannot safely claim whole-program semantic identity."
+  },
+  "external_primary_analogues": [
+    {
+      "source": "MLIR Language Reference",
+      "url": "https://mlir.llvm.org/docs/LangRef/",
+      "transfer": "IR represents semantic operations/values/regions, supporting preservation of executable/semantic operations rather than declarations alone.",
+      "authority_for_clay": "ANALOGUE_ONLY"
+    },
+    {
+      "source": "LLVM Bitcode File Format",
+      "url": "https://llvm.org/docs/BitCodeFormat.html",
+      "transfer": "LLVM IR encoding includes function bodies/instructions/constants/metadata/types, reinforcing that type tables alone are not a whole-program IR.",
+      "authority_for_clay": "ANALOGUE_ONLY"
+    }
+  ],
+  "exactly_one_out_of_box_experiment": {
+    "name": "COMPONENT_ADDRESSED_MOVING_MAIN_CANARY",
+    "question": "Can evidence be safely inherited across concurrent main movement when component-addressed semantic blobs are unchanged?",
+    "trigger_era_typed_ir_ref": "a87d590c6419ac4cd3fb637badd5b05b9f45105c",
+    "trigger_era_typed_ir_blob": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+    "current_typed_ir_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "observed_component_change": true,
+    "verdict": "NOT_TRANSFERABLE_COMPONENT_CHANGED",
+    "rescue": "Reconstruct current exact TypedIR bytes and rerun the collision plus candidate differential; run 31368672238 supplied the current-scope receipt.",
+    "promotion": "NONE",
+    "rollback": "No production mutation was made by the canary."
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTED_NOT_PROMOTED",
+    "principle": "Unlowered admitted semantics may not disappear from the typed semantic plane. Conservative lossless preservation is preferred to false semantic equivalence until explicit lowering proves safe normalization.",
+    "next_required_gates": [
+      "Exact-provenance full G9 + Dialect FrontendArtifact -> candidate TypedIR replay",
+      "expected_surface/source/grammar/frontend-contract tamper rejection",
+      "no-silent-reparse proof on candidate path",
+      "typed identity/lower_program differential including contextual identifiers and all three V18 reward relations",
+      "WP04/05 explicit consumption/validation of opaque_unlowered_semantics before execution",
+      "authority invariant: opaque semantics cannot mint effect authority",
+      "Ubuntu receipt bound to the promoted candidate bytes"
+    ]
+  },
+  "distribution": {
+    "claycode": "BLOCKER_PLUS_SUPPORTED_CANDIDATE",
+    "clayresearch": "EXECUTABLE_NEGATIVE_RESULT_AND_PRIMARY_ANALOGUES",
+    "harness": "DOWNSTREAM_TEST_OBLIGATION_ONLY",
+    "frank": "NO_HARNESS_MUTATION",
+    "gwt": "NO_DIRECT_ARCHITECTURE_CHANGE",
+    "unifieddb": "PRESERVE_RECEIPT_AND_NEGATIVE_RESULT",
+    "claygraph": "LINK_TYPEDIR_IDENTITY_BLOCKER_TO_WP03",
+    "hyperposition": "KEEP_BASELINE_AND_RESIDUAL_CANDIDATE_ALTERNATIVES_UNTIL_GATES_CLOSE"
+  },
+  "authority": "NONE",
+  "frank_harness_mutation": false,
+  "andreas_target_acceptance": false,
+  "training_authorized": false,
+  "status": "COMMITTED_SUPPORTED_WP03_BLOCKER_AND_TESTED_REPAIR_CANDIDATE"
+}

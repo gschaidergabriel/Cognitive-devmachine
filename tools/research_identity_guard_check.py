@@ -6,16 +6,27 @@ ROOT=Path(__file__).resolve().parents[1]
 fail=[]
 
 def require(path,*needles):
+    """`needles` ist je Eintrag entweder ein Text oder ein Tupel gleichwertiger Texte.
+
+    Ein Tupel heisst: EINE der Formen muss vorkommen. Gemeldet wird die erste (die
+    kanonische), damit die Fehlermeldung eindeutig bleibt. Gebraucht wird das, weil die
+    Verfassung von der FRANK- auf die self.root-Sprache umgestellt wurde und beide
+    Formulierungen dieselbe Festlegung trafen.
+    """
     p=ROOT/path
     if not p.exists():
         fail.append(f'MISSING:{path}');return ''
     text=p.read_text(encoding='utf-8')
     for n in needles:
-        if n not in text:fail.append(f'MISSING_INVARIANT:{path}:{n}')
+        formen = n if isinstance(n,tuple) else (n,)
+        if not any(f in text for f in formen):
+            fail.append(f'MISSING_INVARIANT:{path}:{formen[0]}')
     return text
 
 inj=require('research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md',
-    'I_AM=RESEARCH_ENTITY_TEMPORARY_WORKER','I_AM_NOT=FRANK','ANDREAS_INTERFACE=FRANK_ONLY',
+    'I_AM=RESEARCH_ENTITY_TEMPORARY_WORKER',
+    ('I_AM_NOT=FRANK','I_AM_NOT=Frank'),
+    ('ANDREAS_INTERFACE=FRANK_ONLY','ANDREAS_INTERFACE=Frank_only'),
     'FRANK_ROOM_MEANS=RESEARCH_ABOUT_FRANK_NOT_ROLEPLAY_AS_FRANK','every','RESEARCH_IDENTITY_DRIFT')
 
 boot_path=ROOT/'research_entity/continuity/BOOTSTRAP_MINIMAL.json'
@@ -41,14 +52,18 @@ per=boot.get('per_turn',{})
 if 'every substantive prompt_run_id' not in per.get('identity_injection',''):
     fail.append('BOOT_PER_TURN_INJECTION_NOT_MANDATORY')
 inv='\n'.join(boot.get('mandatory_invariants',[]))
-for n in ('Research Entity != Frank','Andreas uses Frank only','every substantive prompt_run_id refreshes the Research Entity identity injection'):
-    if n not in inv:fail.append('BOOT_MANDATORY_INVARIANT_MISSING:'+n)
+for formen in (('Research Entity != Frank','Clay is not self.root/Frank','Research Entity != self.root'),
+               ('Andreas uses Frank only','Andreas uses the human surface Frank only'),
+               ('every substantive prompt_run_id refreshes the Research Entity identity injection',)):
+    if not any(f in inv for f in formen):fail.append('BOOT_MANDATORY_INVARIANT_MISSING:'+formen[0])
 
 stack=require('research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay',
     'researcher_identity_injection=@research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md',
     'before_every_substantive_prompt_run inject CURRENT.researcher_identity_injection',
-    'home_room("frank") = research_about(FRANK); never role_transition_to(FRANK)',
-    'invariant Andreas_uses_FRANK_only','invariant ResearchEntity_and_FRANK_are_separate_entities')
+    ('home_room("frank") = research_about(FRANK); never role_transition_to(FRANK)',
+     'home_room("frank") = research_about(self.root_human_surface_Frank); never role_transition_to(self.root)'),
+    ('invariant Andreas_uses_FRANK_only','rule ANDREAS.interface=FRANK_ONLY','invariant Andreas_uses_self.root_human_surface_only'),
+    ('invariant ResearchEntity_and_FRANK_are_separate_entities','invariant ResearchEntity_and_self.root_are_separate_entities'))
 if stack and not re.search(r'(?m)^epoch\s+\d+\s*$',stack):
     fail.append('STACK_EPOCH_MISSING_OR_INVALID')
 

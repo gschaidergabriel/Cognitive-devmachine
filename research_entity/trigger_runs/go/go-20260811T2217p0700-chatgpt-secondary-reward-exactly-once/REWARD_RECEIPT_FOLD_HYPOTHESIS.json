@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "HYPOTHESIS_IMPLEMENTED_TARGET_GATE_QUEUED",
+  "current_main": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+  "fresh_main_composition_commit": "88967789890f89d354bc49ccae6b348768a550d3",
+  "candidate_branch": "chatgpt/go-reward-plasticity-v1-20260811",
+  "candidate_pr": 332,
+  "fresh_main_mergeable": true,
+  "problem": "A V17 DONE terminal receipt is source-idempotent and uniquely bound, but repeated reads of that valid receipt can still drive the current mutable RewardPlasticityCandidate more than once. A separate consumption ledger would not be sufficient while reward state itself is persisted outside the same UnifiedDB transaction.",
+  "hypothesis": "Treat the unique producer-owned V17 DONE receipt set as source truth and reward state as a deterministic rebuildable projection. Canonically scan unique terminal receipts, re-adjudicate each through the non-bypassable terminal reward bridge, sort by a versioned deterministic order, and fold into a fresh RewardState. Retry/restart/cache loss then cannot accumulate duplicate learning because no mutable per-read consume operation exists.",
+  "implemented_candidate": {
+    "runtime": "runtime/reward/frank_reward_receipt_fold_v1_candidate.py",
+    "gate": "tests/frank_reward_receipt_fold_v1_gate.py",
+    "workflow": ".github/workflows/frank-reward-receipt-fold-v1-vps.yml",
+    "head_after_workflow_add": "3230701c6e4a7c627c94a20821c66cba7f4daaa2",
+    "target_run": 31507134920
+  },
+  "ordinary_discriminator": [
+    "authoritative DONE universe is scanned without caller-supplied effect list",
+    "explicit_no_learning remains visible but does not mutate material reward state",
+    "two separate Python process replays must reconstruct identical state and learned-set/order digests",
+    "raw mutable plasticity is an explicit negative control and must double-learn the same admitted evidence",
+    "process hard-exits after fsync of a derived cache; retry must rebuild identically",
+    "a deliberately corrupted derived cache must be ignored",
+    "one new unique terminal receipt must add exactly one material event",
+    "replaying after that addition must not add another event",
+    "deleting one source DONE receipt on disposable state must change the projection, exposing source-lineage rollback as a hard unresolved dependency"
+  ],
+  "strongest_counterhypothesis": "A mutable RewardConsumptionReceipt can be preferable for incremental O(1)-ish updates, but it is only correctness-sufficient if consumption metadata and the authoritative persistent reward-state mutation share one atomic transaction or if reward state is itself explicitly derived and independently verifiable. A ledger plus an external JSON reward state leaves a crash/ack split-brain window.",
+  "source_authority": {
+    "terminal_receipts": "producer-owned V17 DONE rows",
+    "fractional_credit": "UNRESOLVED_ABSTAIN",
+    "binary_credit": "EXPLICIT_EXPERIMENTAL_NOT_CALIBRATED_FRACTION",
+    "reward_dimension": "TASK_ONLY_TEST_POLICY_BOUND_IN_POLICY_IDENTITY",
+    "typed_dimension_mapping": "OPEN_PRODUCER_OWNED_POLICY_RECEIPT_REQUIRED"
+  },
+  "external_mechanism_basis": [
+    "SQLite official atomic-commit/transaction documentation: atomicity applies to changes in the same transactional database operation; it does not make a separately persisted JSON state atomic with a UnifiedDB consumption row.",
+    "Event-sourcing literature and 2026 agent event-log work motivate immutable source events plus deterministic rebuildable projections, but do not prove this Frank implementation or its performance."
+  ],
+  "hard_limits": [
+    "source-lineage rollback/replacement is not solved by the fold and remains F-V01-13/UnifiedDB authority",
+    "fractional causal credit remains unsolved",
+    "reward dimension/utility policy remains test-only TASK binary mapping",
+    "full replay cost is O(number of terminal receipts) unless a verified derived materialization/cache frontier is added",
+    "no whole F-V01-11 or Frank v0.1 promotion"
+  ],
+  "go_oob_experiment_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

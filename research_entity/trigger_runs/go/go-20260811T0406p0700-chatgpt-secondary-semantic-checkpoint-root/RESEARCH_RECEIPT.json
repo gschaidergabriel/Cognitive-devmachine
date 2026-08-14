@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0406p0700-chatgpt-secondary-semantic-checkpoint-root",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "target_identity": "self.root",
+    "target_body": "accepted Hostinger Ubuntu VPS"
+  },
+  "go_novelty_budget": {
+    "exactly_one_oob_experiment": "SAME_SOURCE_SIBLING_STATE_CHIMERA",
+    "additional_oob_experiments_added": false,
+    "note": "All later work was dependency construction, adversarial checking, replication, target measurement or swarm fusion."
+  },
+  "semantic_lineage_fusion": {
+    "pr_267": {
+      "role": "selected semantic lineage publication with transactional single-winner CAS and immutable history",
+      "target_run": 31433086428,
+      "target_status": "SUCCESS",
+      "high_value_property": "SEMANTIC_TWIN_CAS_RACE produced exactly one winner and one loser; loser not persisted/replay rejected"
+    },
+    "pr_273": {
+      "role": "richer continuation-head payload and restore/failure-domain semantics",
+      "target_run": 31433115755,
+      "target_status": "SUCCESS",
+      "high_value_property": "semantic root + source + identity contract + predecessor; controlled restore; outside-snapshot placement; whole-domain rollback explicitly outside claim",
+      "measured_wall_seconds": 0.08,
+      "measured_max_rss_kib": 19840,
+      "concurrency_limitation": "file-replace publication is not the selected CAS authority"
+    },
+    "pr_281": {
+      "role": "rollback failure-domain matrix for selected lineage",
+      "target_run": 31433761378,
+      "target_status": "SUCCESS",
+      "result": "state-only and selector-only rollback rejected; correlated whole-domain rollback remains locally indistinguishable; controlled restore requires a new child",
+      "measured_wall_seconds": 5.06,
+      "measured_max_rss_kib": 21504
+    },
+    "selected_architecture_direction": "ONE future selected-lineage authority should combine #267 single-winner CAS/immutable history with #273 source+identity-contract+predecessor+restore semantics; #281/#273 whole-domain rollback limitation remains explicit."
+  },
+  "materialization_and_schema_admission": {
+    "pr_294": {
+      "head": "9eed9e0dcd38e5ba76c1c6684eb18d707e0a4ebe",
+      "target_run": 31435791060,
+      "target_status": "SUCCESS",
+      "checks": "28/28",
+      "authority_direction": "UNIFIEDDB_INDEPENDENT; CLAYGRAPH_BINDS_TO_UNIFIEDDB_AUTHORITY",
+      "properties": [
+        "expected-vs-live sqlite_schema attestation on authoritative UnifiedDB",
+        "actual rogue UnifiedDB DDL fails closed",
+        "actual rogue ClayGraph DDL fails pair readiness",
+        "ClayGraph schema drift does not block authoritative UnifiedDB open"
+      ],
+      "open_pair_schema_attestation_ms": {
+        "n": 30,
+        "p50": 5.121823,
+        "p95": 6.455127,
+        "p99": 6.638088,
+        "mean": 5.301214,
+        "min": 4.386689,
+        "max": 7.422168,
+        "stdev": 0.663165
+      },
+      "sqlite_runtime": "3.45.1",
+      "ubuntu_libsqlite3_package": "3.45.1-1ubuntu2.7",
+      "storage_policy_on_unproven_affected_runtime": "rollback-journal DELETE + synchronous FULL; WAL fail closed"
+    }
+  },
+  "new_target_evidence": {
+    "pr": 297,
+    "branch": "chatgpt/go-unifieddb-semantic-checkpoint-root-v3-on-attested-schema-20260811",
+    "branch_head": "97debb3db19eace6935b147e06cbc6412ce659c2",
+    "required_parent_ancestor": "9eed9e0dcd38e5ba76c1c6684eb18d707e0a4ebe",
+    "tested_pr_synthetic_merge": "80e0d6bf96e744c4480de736160347e83d08238b",
+    "target_run": 31436294602,
+    "target_job": 93611053898,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "status": "SUCCESS",
+    "parent_294_rerun": "PASS 28/28",
+    "semantic_checkpoint_root": "PASS 27/27",
+    "semantic_identity_plane": "AUTHORITATIVE_UNIFIEDDB_ONLY",
+    "root_semantics": [
+      "one stable read transaction after centralized storage/materialization/expected-live-schema admission",
+      "application sqlite_schema declaration bound without physical rootpage/internal autoindexes",
+      "typed logical values and duplicate multiplicity bound",
+      "row insertion order, implicit rowid and VACUUM physical layout invariant",
+      "sqlite_sequence included because future AUTOINCREMENT behavior is causal state",
+      "sqlite_stat, journal/page layout and derived ClayGraph excluded",
+      "operational materialization/certificate metadata excluded from cognitive semantic identity but still checked before admitted product root construction",
+      "virtual table semantics fail closed until explicitly projected"
+    ],
+    "causal_regressions": [
+      "V15 acquire/release each changes semantic state root",
+      "V15 sensitivity does not enable per-transaction external lineage-head coupling",
+      "rogue ClayGraph DDL fails pair readiness while authoritative semantic root remains unchanged",
+      "rogue authoritative UnifiedDB DDL changes raw root and is rejected by parent actual-schema attestation before admitted/product root construction",
+      "repair restores the prior admitted semantic root"
+    ],
+    "bounded_scale_measurement": {
+      "rows": 50000,
+      "semantic_root_elapsed_ms_inside_test": 120.803,
+      "whole_semantic_test_wall_seconds": 0.48,
+      "whole_semantic_test_max_rss_kib": 32828,
+      "superiority_claim": false
+    },
+    "receipt_authority": "EVIDENCE_ONLY_NONE",
+    "checkpoint_admitted": false,
+    "recovery_verified": false,
+    "selected_lineage_head_published": false,
+    "live_transaction_head_coupling": false,
+    "external_effect_performed": false,
+    "canonical_frank_state_mutated": false,
+    "whole_frank_v0_1_acceptance": false
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_DEPENDENCY_NOT_PROMOTED_WHOLE_LINEAGE",
+    "decision": "Use independently derived authoritative UnifiedDB semantic root only at explicit admitted checkpoint/recovery boundaries. Do not create a per-transaction external head. ClayGraph is derived readiness/rebuild state and cannot mint/redefine self.root.",
+    "next_required_composition": [
+      "explicit checkpoint/recovery admission protocol over the attested semantic root",
+      "publish admitted root through one selected-head authority using #267 single-winner CAS semantics plus #273 payload/restore semantics",
+      "preserve #281/#273 correlated whole-domain rollback limitation unless an out-of-domain monotonic authority is independently proven",
+      "keep build provenance as a separate conjunctive owner-pinned gate"
+    ]
+  },
+  "external_knowledge_constraints": {
+    "github_private_attestations": "GitHub documentation currently limits private/internal artifact attestations to Enterprise Cloud; actual target plan/service capability is unverified, so production verifier remains provider-neutral/owner-pinned.",
+    "sqlite_wal_reset": "Upstream WAL-reset issue remains a release constraint for unproven affected versions; Ubuntu package suffix alone is not accepted as backport proof.",
+    "hostinger_whole_vm_restore": "Hostinger documentation describes VPS snapshots/restores as whole VPS state rewind. No documented provider guarantee was found for TPM/vTPM monotonic state outside that restore domain. Local TPM presence, if later observed, cannot by itself prove whole-VM rollback safety."
+  },
+  "negative_results": [
+    "same source/identity metadata alone is not unique semantic-state continuity",
+    "file replace is not a concurrent single-winner selected-head publication primitive",
+    "selected-head locality cannot distinguish a correlated rollback of both state and selector",
+    "source migration digest metadata alone did not attest live sqlite_schema; #294 fixed expected-vs-live schema admission",
+    "semantic root sensitivity to live writes is not permission to synchronously externalize every transaction",
+    "ClayGraph readiness/materialization state is not authoritative self semantic identity",
+    "checkpoint-root construction does not itself admit a checkpoint, verify recovery, publish a selected head, or authorize effects"
+  ],
+  "research_write": "COMMITTED",
+  "final_training_authorized": false
+}

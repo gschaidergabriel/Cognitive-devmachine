@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hyperposition-20260810T2357p0700-chatgpt-secondary-topology-scope",
+  "trigger": "hyperposition",
+  "actor": "chatgpt-secondary",
+  "provider_model": "OpenAI/GPT-5.6 Sol",
+  "target_program": "FRANK_V0_1",
+  "target_component": "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+  "canonical_parent": "RAE-8.8 r2 / 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "evidence_class": "VERIFIED_LOCAL_SYNTHETIC_COMPILER_CACHE_FALSIFIER",
+  "target_live_evidence": false,
+  "experiment": {
+    "id": "TOPOLOGY_SCOPE_KEY_V2",
+    "script_sha256": "97d2b39895b28685cce264d6aefa84498e9af8fa7ed64fa47e46d5672ab86f25",
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "seed": 8102355,
+    "cases": 100000,
+    "query_classes": [
+      "semantic_only",
+      "active_projection",
+      "coordination_guard",
+      "physical_layout_cost",
+      "active_coordination",
+      "full_diagnostic"
+    ],
+    "mutation_planes": ["semantic","active","coordination","physical"],
+    "ground_truth_rule": "A cached result must invalidate iff the mutated topology plane is in the query's declared dependency set; SEMANTIC is always bound.",
+    "arms": {
+      "current_v11_like": {
+        "unsafe_reuse": 33368,
+        "unnecessary_invalidation": 0,
+        "correct_hits": 41844,
+        "required_invalidations": 24788,
+        "key": "semantic_root + state_epoch + execution_generation + delivery_generation + schema_version"
+      },
+      "coarse_all_four_planes": {
+        "unsafe_reuse": 0,
+        "unnecessary_invalidation": 41844,
+        "correct_hits": 0,
+        "required_invalidations": 58156,
+        "key": "current key + all four topology fingerprints"
+      },
+      "typed_scoped_planes": {
+        "unsafe_reuse": 0,
+        "unnecessary_invalidation": 0,
+        "correct_hits": 41844,
+        "required_invalidations": 58156,
+        "key": "current key + exact declared topology-plane fingerprints"
+      }
+    }
+  },
+  "finding": "Under a deliberately stable state/execution/delivery generation, a V1.1-like cache key cannot distinguish mutations to active, coordination or physical topology. Binding all four planes is safe but over-invalidates. A typed dependency-scope key exactly separated required from irrelevant invalidations in this synthetic declared-dependency model.",
+  "hypothesis": "Compiler-visible topology read effects plus scoped plane fingerprints close a real class of stale-rewrite/cache hazards more precisely than a universal all-topology generation fence.",
+  "counterhypothesis": "In the actual Frank runtime every materially relevant topology mutation may already advance state_epoch or another single generation counter, making plane-scoped fingerprints redundant.",
+  "next_falsifier": "Run current Frank/GWT/Hyperposition traces and mutate active gating, coordination lease/invariant topology and physical placement independently while holding semantic topology fixed. Compare current epoch-only invalidation, one coarse topology generation and typed plane-scoped invalidation on semantic result, causal-use receipts, hit rate, invalidation amplification, latency, RAM and crash/restart recovery.",
+  "caveats": [
+    "The dependency ground truth is synthetic and declared by the experiment; it does not prove current Frank exposes same-epoch topology mutations.",
+    "No target-VPS runtime path, real Frank episode, GWT outcome or recovery path was executed in this experiment.",
+    "The result supports a compiler/cache safety candidate, not Hyperposition truth, causal emergence, consciousness or effect authority."
+  ],
+  "promotion": "NONE",
+  "authority": {
+    "truth_promotion": false,
+    "effect_authority_change": false,
+    "training_authorized": false,
+    "target_self_harness_mutation": false
+  }
+}

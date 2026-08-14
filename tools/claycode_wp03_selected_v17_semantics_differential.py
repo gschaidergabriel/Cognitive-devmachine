@@ -73,7 +73,6 @@ def derive_v17_typed_fn_overlay(g17: str) -> str:
     lines = g17.splitlines()
     statement_hits = 0
     cycle_hits = 0
-    name_hits = 0
     out: list[str] = []
     for line in lines:
         if line.startswith("?statement:"):
@@ -90,13 +89,11 @@ def derive_v17_typed_fn_overlay(g17: str) -> str:
             ])
             cycle_hits += 1
     text = "\n".join(out) + ("\n" if g17.endswith("\n") else "")
-    old = "|needle|cycle|if|or|iff|requires|in|subset_of|lowers|true|false)"
-    new = "|needle|cycle|fn|if|or|iff|requires|in|subset_of|lowers|true|false)"
-    if old in text:
-        text = text.replace(old, new, 1)
-        name_hits = 1
-    if (statement_hits, cycle_hits, name_hits) != (1, 1, 1):
-        raise RuntimeError({"statement_hits": statement_hits, "cycle_hits": cycle_hits, "name_hits": name_hits})
+    # Deliberately DO NOT reserve `fn` in NAME. With Lark's contextual lexer the same
+    # spelling remains a V17 identifier where an ident is expected and becomes the
+    # declaration literal only at a statement position that admits fn_decl.
+    if (statement_hits, cycle_hits) != (1, 1):
+        raise RuntimeError({"statement_hits": statement_hits, "cycle_hits": cycle_hits})
     return text
 
 
@@ -192,6 +189,9 @@ def main() -> int:
             "spaced_sub": "fn f(a:Int,b:Int)->Int=a - b\n",
             "spaced_add": "fn f(a:Int,b:Int)->Int=a + b\n",
             "hyphen_decl": "record user-profile { id:Int }\n",
+            "fn_identifier_rule": "rule fn\n",
+            "fn_identifier_record": "record fn { id:Int }\n",
+            "fn_identifier_everywhere": "fn fn(fn:Int)->Int=fn\n",
         }
         parse_matrix = {}
         if strict_ok:
@@ -232,6 +232,10 @@ def main() -> int:
             and parse_matrix.get("hyphen_decl", {}).get("composed", {}).get("accept") is False
         )
         overlay_preserves_full_selected = bool(full_source_rows) and all(x["overlay_equal_selected"] for x in full_source_rows)
+        contextual_fn_identifier_preserved = all(
+            parse_matrix.get(k, {}).get("overlay", {}).get("accept") is True
+            for k in ("fn_identifier_rule", "fn_identifier_record", "fn_identifier_everywhere")
+        )
         passed = (
             strict_ok
             and overlay_preserves_full_selected
@@ -242,6 +246,7 @@ def main() -> int:
             and compact_composed_is_sub
             and semantic_conflict
             and hyphen_decl_conflict
+            and contextual_fn_identifier_preserved
         )
 
         out = {
@@ -282,6 +287,7 @@ def main() -> int:
                 "composed_compact_minus_is_subtraction": compact_composed_is_sub,
                 "same_source_compact_semantic_conflict": semantic_conflict,
                 "hyphenated_declaration_acceptance_conflict": hyphen_decl_conflict,
+                "contextual_fn_identifier_preserved": contextual_fn_identifier_preserved,
             },
             "pass": passed,
             "classification": "CROSS_VERSION_SEMANTIC_DRIFT_PROVEN" if passed else "UNRESOLVED_OR_REFUTED",
@@ -291,7 +297,7 @@ def main() -> int:
                 "NO_PROMOTION_PENDING_DIAGNOSIS"
             ),
             "promotion": "NONE",
-            "scope_guard": "PASS proves only a bounded semantic mismatch between the selected V17 language contract and the tested V7/V17 composed WP03 research grammar while showing a minimal typed-fn overlay can preserve selected V17 on the declared frozen-source and fixture scope. It does not close WP02/03/BASE, prove evaluator/compiler equivalence, or authorize Frank Harness changes.",
+            "scope_guard": "PASS proves only a bounded semantic mismatch between the selected V17 language contract and the tested V7/V17 composed WP03 research grammar while showing a minimal contextual typed-fn overlay can preserve selected V17 on the declared frozen-source and fixture scope, including existing `fn` identifier uses. It does not close WP02/03/BASE, prove evaluator/compiler equivalence, or authorize Frank Harness changes.",
         }
         print(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True))
         return 0 if passed else 1

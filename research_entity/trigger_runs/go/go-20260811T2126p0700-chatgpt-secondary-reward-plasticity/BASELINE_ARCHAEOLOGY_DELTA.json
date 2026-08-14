@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "F-V01-11_HISTORICAL_BASELINE_ARCHAEOLOGY_DELTA",
+  "historical_source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "nucleus_accumbens": {
+      "path": "services/nucleus_accumbens.py",
+      "blob_sha": "fba076cbdcfbe5baf1acf9621fdaaba12598dda2"
+    },
+    "e_pq": {
+      "path": "personality/e_pq.py",
+      "blob_sha": "db3077d34c1567603e255e0d1b90d2aaa583a6fd"
+    }
+  },
+  "source_observations": {
+    "nacc_documentation_claim": "9 reward channels",
+    "nacc_actual_declared_and_configured_channels": 16,
+    "documentation_count_mismatch": true,
+    "self_generated_reward_channels": {
+      "genesis_self_accepted": {
+        "base_magnitude": 0.75,
+        "habituation_rate": 0.02,
+        "habituation_floor": 0.30,
+        "epq_event": "dopamine_burst"
+      },
+      "genesis_authored": {
+        "base_magnitude": 0.35,
+        "habituation_rate": 0.05,
+        "habituation_floor": 0.10,
+        "epq_event": "dopamine_burst"
+      },
+      "hypothesis_created": {
+        "base_magnitude": 0.25,
+        "habituation_rate": 0.08,
+        "habituation_floor": 0.05,
+        "epq_event": null
+      },
+      "novel_thought": {
+        "base_magnitude": 0.30,
+        "habituation_rate": 0.07,
+        "habituation_floor": 0.05,
+        "epq_event": null
+      },
+      "curiosity_spark": {
+        "base_magnitude": 0.15,
+        "direct_tonic_microboost": true,
+        "reward_api_bypassed_for_boredom_rpe_contamination_avoidance": true
+      }
+    },
+    "anhedonia_recovery": {
+      "tonic_recovery_boost": 0.15,
+      "resets_all_habituations": true,
+      "clears_rpe_and_recent_channel_windows": true
+    },
+    "boredom_rule": "low mean absolute RPE OR low channel diversity after minimum events",
+    "nacc_to_epq": {
+      "dopamine_burst_event_weight": 0.20,
+      "dopamine_burst_quality": 0.30,
+      "dopamine_dip_event_weight": 0.15,
+      "dopamine_dip_quality": 0.20,
+      "anhedonia_onset_event_weight": 0.35,
+      "anhedonia_onset_quality": 0.50,
+      "e_pq_declared_role": "persistent temperament plus transient mood adaptation"
+    },
+    "epq_self_observation_learning_quality_nonzero": {
+      "self_confident": 0.70,
+      "self_uncertain": 0.70,
+      "self_creative": 0.70,
+      "self_empathetic": 0.70,
+      "self_technical": 0.60,
+      "reflection_autonomy": 0.60,
+      "reflection_empathy": 0.60,
+      "autonomous_research": 0.60
+    }
+  },
+  "causal_interpretation": {
+    "historical_chain": "self/internal event -> NAcc configured reward or tonic boost -> phasic/tonic state -> optional E-PQ event -> mood/personality adaptation surface",
+    "status": "SOURCE_SUPPORTED_CHAIN_REQUIRES_EXECUTABLE_DIFFERENTIAL_CONFIRMATION",
+    "important_function_to_preserve": "intrinsic exploration/motivation and slow adaptive state",
+    "important_failure_mode_to_falsify": "self-authored activity can recursively reinforce itself without independent verified outcome"
+  },
+  "candidate_relation": {
+    "current_candidate_pr": 332,
+    "candidate_repair": "self proposal/activity/unverified evidence has zero material learning weight and at most 0.12 exploration nudge",
+    "disposition": "REPAIR_HYPOTHESIS_NOT_PROMOTED",
+    "reason": "historical self-reward may have useful exploration value; replacement requires matched task/behavior evidence, not only safety invariants"
+  },
+  "fresh_external_counterevidence": [
+    {
+      "source": "Farquhar et al., ICML 2025 MONA",
+      "url": "https://proceedings.mlr.press/v267/farquhar25a.html",
+      "used_for": "multi-step reward hacking remains a live failure mode when agents optimize rewards over longer horizons"
+    },
+    {
+      "source": "Forbes et al., ICML 2025 Action-Dependent Optimality-Preserving Reward Shaping",
+      "url": "https://proceedings.mlr.press/v267/forbes25a.html",
+      "used_for": "intrinsic shaping rewards can be optimized at the expense of extrinsic reward unless shaping preserves policy optimality"
+    },
+    {
+      "source": "Cagatan and Zhao, arXiv 2606.15385",
+      "url": "https://arxiv.org/abs/2606.15385",
+      "used_for": "language-agent proxy reward failure can persist despite finer credit assignment and exploration prompting"
+    }
+  ],
+  "new_test_obligation": {
+    "target_pr": 332,
+    "test": "tests/frank_historical_nacc_partial_baseline.py",
+    "workflow": ".github/workflows/frank-reward-plasticity-v1-vps.yml",
+    "target_status": "QUEUED",
+    "required_outputs": [
+      "exact historical blob identity",
+      "cold-init latency quantiles",
+      "warm reward-call latency quantiles",
+      "3000-call reliability",
+      "restart persistence",
+      "direct self-generated reward path observation",
+      "habituation/prediction update observation"
+    ]
+  },
+  "baseline_status": "PARTIAL_ARCHAEOLOGY_SOURCE_BOUND_TARGET_EXECUTION_PENDING",
+  "promotion_authority": "NONE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

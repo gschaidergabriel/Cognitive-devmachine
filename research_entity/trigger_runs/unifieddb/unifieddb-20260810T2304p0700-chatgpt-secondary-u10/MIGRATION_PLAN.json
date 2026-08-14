@@ -1,0 +1,10 @@
+{"schema_version":"1.0","strategy":"ADDITIVE_SHADOW_THEN_CUTOVER","phases":[
+{"id":"M0","action":"snapshot current DB using supported online backup path; record sha/integrity/FK checks","rollback":"restore verified pre-migration snapshot"},
+{"id":"M1","action":"apply additive U10 tables only","rollback":"drop U10 objects if no authoritative U10 writes admitted"},
+{"id":"M2","action":"backfill current semantic/world/self state as epoch-tagged genesis versions with provenance marking BACKFILL_CURRENT_ONLY where history unavailable","rollback":"ignore U10 via feature flag"},
+{"id":"M3","action":"dual-write authoritative transactions to old current projections + U10 append-only stream; differential replay","rollback":"old read path remains authority"},
+{"id":"M4","action":"shadow-read U10; compare exact/current/temporal queries and selection receipts","rollback":"old read path"},
+{"id":"M5","action":"target-VPS crash/restart/zombie lease/backup-restore/rebuild tests","rollback":"restore LKG"},
+{"id":"M6","action":"promote U10 canonical reads; old mutable tables become compatibility projections","rollback":"re-materialize old current tables from U10 head at accepted epoch"},
+{"id":"M7","action":"benchmark physical colocation of FTS/graph/vector independently","rollback":"KEEP_ISOLATED sidecars"}
+],"hard_rule":"unknown historical values remain UNKNOWN; no fabricated back-history"}

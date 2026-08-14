@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_ACCEPTED_TARGET_READONLY_OBSERVATION",
+  "recorded_at": "2026-08-12T02:24:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "protocol": "FRANK_SQLITE_PRODUCTIVE_PATH_READONLY_V1",
+  "source_repo": "gschaidergabriel/Dr.-Unterweger",
+  "source_workflow_run": 31527030989,
+  "source_artifact_id": 9115325241,
+  "source_artifact_digest": "sha256:5de65fb7425dbe64ca4119b7639fa9fe678eae300c8e640b3fac7bbcc0a255ce",
+  "source_branch_head": "f5605ffa3e44753e6e112ad5466bbb86e5306626",
+  "main_commit_registering_probe": "e1c0f27148df18169c9dad6893ab67c877d36e2d",
+  "observation": {
+    "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+    "mutation": false,
+    "whole_frank_v0_1_acceptance": false,
+    "effect_authority": "NONE",
+    "host": {
+      "hostname": "digital-retina",
+      "uid": 1000,
+      "gid": 1000,
+      "kernel": "Linux digital-retina 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May  5 19:26:24 UTC 2026 x86_64"
+    },
+    "python": {
+      "executable": "/usr/bin/python3",
+      "version": "3.12.3",
+      "sqlite3_module": "/usr/lib/python3.12/sqlite3/__init__.py",
+      "_sqlite3_extension": "/usr/lib/python3.12/lib-dynload/_sqlite3.cpython-312-x86_64-linux-gnu.so"
+    },
+    "sqlite": {
+      "module_version": "3.45.1",
+      "sql_version": "3.45.1",
+      "source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+      "library_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+      "library_uid": 0,
+      "library_gid": 0,
+      "library_mode": "0o644"
+    },
+    "packages": {
+      "libsqlite3-0": "3.45.1-1ubuntu2.7",
+      "python3.12": "3.12.3-1ubuntu0.15",
+      "python3.12-minimal": "3.12.3-1ubuntu0.15"
+    },
+    "trust_anchor": {
+      "path": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+      "exists": false,
+      "readable": false,
+      "runtime_match": false,
+      "parent_directory_exists": false,
+      "etc_uid": 0,
+      "etc_gid": 0,
+      "etc_mode": "0o755",
+      "root_uid": 0,
+      "root_gid": 0,
+      "root_mode": "0o755"
+    },
+    "sudo_nopasswd": false
+  },
+  "interpretation": {
+    "observed_reality": "The accepted target productive Python/_sqlite3 path presently resolves to Ubuntu SQLite 3.45.1 bytes, not to the proposed fixed SQLite 3.53.4 deployment lane, and the V5 OS trust anchor is absent.",
+    "release_effect": "F-V01-13 remains IN_PROGRESS and release promotion must remain fail-closed.",
+    "important_caveat": "The package/version observation alone does not prove whether Ubuntu has or has not backported every upstream WAL fix required by the acceptance contract. Exact accepted-build/backport proof or replacement with an independently attested fixed runtime is still required.",
+    "counterevidence_preserved": "The library object itself is root-owned and mode 0644, but that does not establish the missing V5 anchor, positive V5 admission, productive service wiring, restart/replay evidence, or required upstream-fix identity."
+  },
+  "next_falsifier": "Legitimately provision the accepted fixed runtime plus root-owned V5 trust anchor, then obtain exact positive V5 admission and productive service boot/restart/downgrade/library-swap rejection evidence; alternatively prove the exact current Ubuntu 3.45.1-1ubuntu2.7 build contains the required fix/backport under the current acceptance contract.",
+  "authority": {
+    "canonical_state_mutated_by_observation": false,
+    "production_state_mutated_by_observation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false
+  }
+}

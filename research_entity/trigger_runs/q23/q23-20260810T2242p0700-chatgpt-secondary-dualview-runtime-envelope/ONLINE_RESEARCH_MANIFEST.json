@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "retrieved_at": "2026-08-10T22:42:00+07:00",
+  "refresh_status": "PRIMARY_SOURCES_RETRIEVED_AFTER_TRANSIENT_WEB_503",
+  "sources": [
+    {
+      "id": "SRC-Q23-HF-QWEN35",
+      "class": "T0_CURRENT_PRIMARY_CODE",
+      "repository": "huggingface/transformers",
+      "path": "src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+      "blob_sha": "e563ad83c34494112557e88a8173e5a55b8d77f9",
+      "material_finding": "Qwen3_5VisionModel returns both pre-merger last_hidden_state and merged pooler_output from one visual forward; get_image_features exposes the merged image feature path before language decoding."
+    },
+    {
+      "id": "SRC-Q23-LLAMACPP-MTMD",
+      "class": "T0_CURRENT_PRIMARY_CODE",
+      "repository": "ggml-org/llama.cpp",
+      "path": "tools/mtmd/mtmd.h",
+      "blob_sha": "e5063d114cc9dc534951a14c57d63b699fb6d182",
+      "material_finding": "libmtmd exposes the media embedding buffer from the last encode pass through mtmd_get_output_embd and batch equivalent; public API shown does not expose pre-merger vision hidden states."
+    },
+    {
+      "id": "SRC-Q23-QWEN-VL-EMBED",
+      "class": "T0_OFFICIAL_MODEL_REPOSITORY",
+      "repository": "QwenLM/Qwen3-VL-Embedding",
+      "paths": ["README.md", "src/models/qwen3_vl_embedding.py"],
+      "blob_shas": ["273604572610ef6596c489f1a277539e8f2de81a", "a2d4a73349c4648c5d66633eccd57e02aea1279f"],
+      "material_finding": "Official retrieval architecture uses a separately trained multimodal embedding model; implementation pools the last non-padding multimodal hidden state and L2 normalizes it."
+    },
+    {
+      "id": "SRC-Q23-QWEN-EMBED-PAPER",
+      "class": "T1_PRIMARY_RESEARCH",
+      "ref": "arXiv:2601.04720",
+      "title": "Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking",
+      "material_finding": "The embedding model is trained through a multimodal retrieval-specific multi-stage pipeline, strengthening the counterhypothesis that raw generative vision features are not automatically calibrated retrieval/open-set features."
+    },
+    {
+      "id": "SRC-Q23-LLAMACPP-25717",
+      "class": "T2_CURRENT_RUNTIME_FAILURE_EVIDENCE",
+      "ref": "ggml-org/llama.cpp#25717",
+      "published": "2026-07-15",
+      "material_finding": "Qwen3.5 multimodal server crash behavior varies with Flash Attention, KV layout and text-before-image conditions."
+    },
+    {
+      "id": "SRC-Q23-LLAMACPP-19929",
+      "class": "T2_RUNTIME_SEMANTIC_FAILURE_EVIDENCE",
+      "ref": "ggml-org/llama.cpp#19929",
+      "material_finding": "Certain batch/ubatch settings produced irrelevant or blank-image Qwen3.5 vision behavior, showing that successful execution/token counts are insufficient evidence of perception correctness."
+    },
+    {
+      "id": "SRC-Q23-LLAMACPP-22785",
+      "class": "T2_RUNTIME_SEMANTIC_FAILURE_EVIDENCE",
+      "ref": "ggml-org/llama.cpp#22785",
+      "material_finding": "Reported server/MTMD fine-grained OCR regression while CLI remained correct, motivating interface differential and preprocessing/grid fidelity tests."
+    },
+    {
+      "id": "SRC-Q23-LLAMACPP-19980",
+      "class": "T2_RESOURCE_FAILURE_EVIDENCE",
+      "ref": "ggml-org/llama.cpp#19980",
+      "material_finding": "Reported auto-fit GPU-memory estimate omitted mmproj costs, motivating explicit vision runtime resource reservation tests."
+    },
+    {
+      "id": "SRC-Q23-LLAMACPP-20870",
+      "class": "T2_PREPROCESSING_FAILURE_EVIDENCE",
+      "ref": "ggml-org/llama.cpp#20870",
+      "material_finding": "Reported EXIF orientation handling mismatch motivates pixel canonicalization before identity/prototype admission."
+    }
+  ],
+  "truth_rule": "Issue reports are failure evidence and test generators, not universal claims about every current build or target host. Target-runtime measurements remain required."
+}

@@ -1,0 +1,147 @@
+module clay.research.live_fusion_mesh_transport_bridge
+version "0.1-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+
+created_at "2026-08-10T14:38:00+07:00"
+origin_actor "chatgpt-secondary"
+provider "OpenAI"
+model "GPT-5.6 Sol"
+goal "Frank v0.1 voll lauffaehig auf Andreas PC"
+
+semantic_control_plane=@research_entity/global/CLAY_LIVE_FUSION_CAUSAL_MESH_CANDIDATE.clay
+transport_contract=@research_entity/global/CLAY_LIVE_FUSION_REENTRY_PROTOCOL.clay
+durability_parent=@research_entity/runtime/live_fusion_reentry_v1.py
+reentry_candidate=@research_entity/runtime/live_fusion_reentry_v13.py
+
+// Convergence boundary: Mesh V2 decides semantic recipients/dependency repair as a candidate
+// control plane. PR156 transports/replays those decisions and closes worker re-entry. Neither
+// side becomes truth authority or effect authority, and neither silently reimplements the other.
+
+invariant RESEARCH_ENTITY != FRANK
+invariant FRANK_SELF_HARNESS_AUTHORITY = PROPOSAL_ONLY
+invariant MESH_ROUTING != TRUTH
+invariant TRANSPORT_DELIVERY != TRUTH
+invariant TRANSPORT_ACK != REPLAN
+invariant REPLAN != EFFECT_AUTHORITY
+invariant DELIVERY != RECONSTRUCTION
+invariant RECONSTRUCTION != USE
+invariant USE != VERIFIED_EFFECT
+
+law MESH_V2_IS_SEMANTIC_ROUTING_OWNER_CANDIDATE=true
+law PR156_IS_DURABLE_TRANSPORT_AND_WORKER_REENTRY_LANE=true
+law TRANSPORT_MUST_NOT_RECOMPUTE_A_VALID_MESH_ROUTE=true
+law TRANSPORT_LOCAL_SCORE_IS_DEGRADED_FALLBACK_DIAGNOSTIC_ONLY_WHEN_MESH_DECISION_ABSENT=true
+law MISSING_OR_STALE_MESH_DECISION_IS_EXPLICIT_DEGRADED_COORDINATION=true
+law SAME_EVENT_ID_WITH_CONFLICTING_CONTENT_FAILS_CLOSED_BEFORE_DELIVERY=true
+law RAW_EVENT_IDENTITY_SURVIVES_ROUTING_AND_TRANSPORT=true
+law ROUTER_VERSION_AND_TRANSPORT_VERSION_ARE_PERSISTED=true
+law DELIVERY_RECEIPT_IS_NOT_SEMANTIC_RESOLUTION=true
+law SEMANTIC_REPLAN_OR_NO_CHANGE_RECEIPT_CLOSES_REENTRY_ONLY_FOR_EXACT_EVENT_BASIS=true
+law DEFER_AND_OPEN_CONFLICT_REMAIN_UNRESOLVED=true
+law ANTI_ENTROPY_AND_CAUSAL_PREDECESSOR_READINESS_BELONG_TO_MESH_V2=true
+law TRANSPORT_REPLAY_MUST_PRESERVE_MESH_ROUTE_AND_CAUSAL_IDENTITY=true
+law GIT_WORK_EVENT_POLLING_REMAINS_ROLLBACK_BASELINE=true
+
+record MeshTransportEnvelope {
+  envelope_id:Ref
+  pulse_id:Ref
+  event_id:Ref
+  source:Ref
+  source_epoch:Ref
+  payload_hash:Hash
+  router_version:Ref
+  router_decision_ref:Ref
+  router_claygraph_epoch:Ref
+  router_unifieddb_epoch:Ref
+  target_receivers:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  causal_predecessor_refs:Set<Ref>
+  impact:Ref
+  evidence_refs:Set<Ref>
+  provenance_refs:Set<Ref>
+}
+
+record MeshTransportDeliveryLink {
+  envelope_id:Ref
+  pulse_id:Ref
+  event_id:Ref
+  receiver:Ref
+  transport_version:Ref
+  subscription_revision:Ref
+  delivery_id:Ref
+  delivery_state:ADDRESSED|DELIVERED|SEEN|REJECTED|QUARANTINED
+  transport_receipt_ref:Ref?
+}
+
+record MeshReentryClosureLink {
+  envelope_id:Ref
+  pulse_id:Ref
+  event_id:Ref
+  receiver:Ref
+  transport_delivery_id:Ref
+  mesh_ack_ref:Ref?
+  replan_receipt_ref:Ref?
+  worker_resolution_ref:Ref?
+  exact_event_basis:Set<Ref>
+  prior_plan_revision:Ref?
+  new_plan_revision:Ref?
+  plan_state_hash:Hash?
+  closure_state:OPEN|DEFERRED|CONFLICT|REPLANNED|NO_CHANGE|REJECTED
+}
+
+record BridgeHealth {
+  router_version:Ref
+  transport_version:Ref
+  router_epoch:Ref
+  transport_event_head:Ref
+  outstanding_envelopes:Int
+  missing_route_decisions:Int
+  identity_conflicts:Int
+  replay_mismatches:Int
+  state:HEALTHY|DEGRADED|FAILED|RECOVERING|QUARANTINED|UNKNOWN
+}
+
+rule SemanticDeltaPulse+RelevanceDecision -> build(MeshTransportEnvelope)
+rule envelope.target_receivers = RelevanceDecision.union_targets
+rule valid_mesh_decision -> transport_exact_target_set_without_local_reselection
+rule mesh_decision_missing_or_epoch_invalid -> mark(DEGRADED_COORDINATION)+use_bounded_fallback_only_if_policy_allows
+rule bounded_fallback -> preserve_reason+fallback_version+candidate_targets; never_claim_mesh_equivalence
+rule same_event_id+same_source_identity+different_payload_hash -> QUARANTINE_IDENTITY_CONFLICT
+rule valid_envelope -> PR156.append_and_deliver_at_least_once
+rule transport_delivery -> emit(MeshTransportDeliveryLink)
+rule transport_seen_ack -> update_delivery_only; never_close_reentry
+rule mesh_PulseAck -> record_ingest_state_only; never_imply_replan
+rule ReplanReceipt|terminal_WorkerReentryResolution -> require_exact_event_basis
+rule exact_terminal_replan_or_no_change -> emit(MeshReentryClosureLink closure_state=REPLANNED|NO_CHANGE)
+rule defer -> closure_state=DEFERRED
+rule open_conflict -> closure_state=CONFLICT
+rule unresolved_high_impact_intersection -> block_only_affected_next_effect_scope
+rule causal_predecessor_or_dependency_ordering -> delegate_to_mesh_v2_control_plane
+rule anti_entropy_digest_and_repair -> delegate_to_mesh_v2_control_plane
+rule restart -> replay_transport_log+mesh_decision_refs+reentry_closure_links
+rule replay_router_version_mismatch -> DEGRADED_COORDINATION+require_route_revalidation
+rule replay_transport_version_mismatch -> invoke_versioned_transport_migration_or_fail_closed
+rule fallback_baseline -> current_WorkEvent_or_Git_polling_without_hidden_semantic_promotion
+
+promotion_gate {
+  route_target_set_identity_roundtrip=REQUIRED
+  exact_event_and_payload_identity_roundtrip=REQUIRED
+  conflicting_event_identity_fail_closed=REQUIRED
+  duplicate_delivery_duplicate_application_zero=REQUIRED
+  delivery_seen_without_replan_remains_open=REQUIRED
+  defer_remains_open=REQUIRED
+  exact_replan_basis_closes_only_matching_event=REQUIRED
+  stale_mesh_route_becomes_explicit_DEGRADED=REQUIRED
+  anti_entropy_repair_survives_transport_replay=REQUIRED
+  router_version_mismatch_replay=REQUIRED
+  transport_version_mismatch_replay=REQUIRED
+  crash_restart=REQUIRED
+  active_worker_roundtrip=REQUIRED
+  p50_p95_p99_latency_cpu_rss_io=REQUIRED
+  Hostinger_Ubuntu_exact_head=REQUIRED
+  current_WorkEvent_Git_polling_rollback=REQUIRED
+}
+
+// This bridge is an integration contract only. It does not promote Mesh V2, PR156, UnifiedDB,
+// ClayGraph, GWT, Frank Harness changes, or any database-superiority claim.

@@ -1,0 +1,204 @@
+module clay.research.live_fusion_reentry
+version "1.3-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffaehig auf Andreas PC"
+state=UnifiedDB
+topology=ClayGraph
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+web_fabric=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+runtime_candidate=@research_entity/runtime/live_fusion_reentry_v13.py
+durability_parent=@research_entity/runtime/live_fusion_reentry_v1.py
+dual_time_feedback=@research_entity/notes/FRANK_DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE_20260810.md
+
+// Live fusion is a causal re-entry transport, not broadcast chat. The v1.3 candidate
+// separates transport receipt from semantic resolution and versions worker subscriptions
+// so a stale INDEX_ONLY decision cannot survive a material worker/work-profile change.
+// V1.3 composes over the V1 crash-safe append/replay lane instead of overwriting it.
+
+law LIVE_FUSION_IS_APPEND_ONLY_CAUSAL_REENTRY=true
+law RAW_EVENTS_ARE_PRESERVED=true
+law RAW_AUTHORITATIVE_EVENT_CURSOR_IS_REENTRY_INPUT=true
+law EFFECTIVIZED_PROJECTION_DELTA_MAY_NOT_REPLACE_RAW_EVENT_CURSOR=true
+law TARGETED_DELIVERY_NOT_BROADCAST_SPAM=true
+law DELIVERY_IS_AT_LEAST_ONCE=true
+law DELIVERY_RECEIPT_IS_IDEMPOTENT=true
+law DELIVERY_RECEIPT_IS_NOT_SEMANTIC_RESOLUTION=true
+law TERMINAL_RESOLUTION_IS_EXACTLY_ONCE_STATE_APPLICATION_CANDIDATE=true
+law EVENT_IDENTITY_OUTRANKS_PAYLOAD_EQUALITY=true
+law PAYLOAD_EQUALITY_NEVER_CANCELS_NEWER_RECORD_VERSION_PROVENANCE_IDENTITY=true
+law EVENT_ID_COLLISION_WITH_DIFFERENT_CONTENT_FAILS_CLOSED=true
+law HIGH_IMPACT_CONFLICT_REQUIRES_TERMINAL_RESOLUTION_BEFORE_AFFECTED_NEXT_EFFECT=true
+law DEFER_OR_OPEN_CONFLICT_REMAINS_BLOCKING_FOR_INTERSECTING_EFFECT=true
+law ORDINARY_RELEVANT_DELTA_REENTERS_AT_NEXT_CHECKPOINT=true
+law LOW_RELEVANCE_DELTA_IS_INDEX_ONLY=true
+law WORKER_PROFILE_CHANGE_REQUIRES_SUBSCRIPTION_REVISION=true
+law SUBSCRIPTION_REVISION_REEVALUATES_UNRESOLVED_HISTORY=true
+law DELIVERY_MAY_UPGRADE_INDEX_TO_CHECKPOINT_TO_INTERRUPT_ON_NEW_RELEVANCE=true
+law SUBSCRIBE_SNAPSHOT_CUT_PRECEDES_EVENT_TAIL=true
+law ROUTING_SCORE_IS_COORDINATION_SUPPORT_NOT_TRUTH=true
+law EXPLICIT_WORK_OR_CLAIM_DEPENDENCY_MAY_ROUTE_WITHOUT_BRANCH_OR_KEY_OVERLAP=true
+law WORKER_RECEIPT_OR_RESOLUTION_IS_NOT_AGREEMENT_AND_NOT_EVIDENCE_PROMOTION=true
+law OLD_EPOCH_DOES_NOT_IMPLY_STALE_OR_INVALID=true
+law ARRIVAL_EPOCH_NEVER_OVERWRITES_ORIGIN_EPOCH=true
+law TEMPORAL_AGE_AND_CURRENT_APPLICABILITY_ARE_SEPARATE=true
+
+record LiveFusionDelta {
+  event_id:Ref
+  source:Ref
+  source_seq:Int
+  source_epoch:Ref
+  causal_origin_epoch:Ref?
+  arrival_epoch:Ref?
+  causal_origin_refs:Set<Ref>
+  observed_at:Time
+  semantic_keys:Set<Ref>
+  affected_branches:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  novelty:NEW|REFINES|CONTRADICTS|CONFIRMS|SUPERSEDES|NO_MATERIAL_CHANGE
+  impact:Score
+  urgency:Score
+  conflict:Bool
+  payload_hash:Hash
+  provenance_refs:Set<Ref>
+  evidence_class:Ref
+  applicability:CURRENT_MATERIAL|HISTORICALLY_VALID_ONLY|UNKNOWN
+}
+
+record WorkerSubscription {
+  worker_id:Ref
+  subscription_revision:Ref
+  plan_revision:Ref
+  branches:Set<Ref>
+  active_keys:Set<Ref>
+  active_work:Set<Ref>
+  active_claims:Set<Ref>
+}
+
+record WorkerReentryDelivery {
+  delivery_id:Ref
+  event_id:Ref
+  worker_id:Ref
+  subscription_revision:Ref
+  bus_seq:Int
+  delivery_class:INTERRUPT_NEXT_SAFE_POINT|NEXT_CHECKPOINT|INDEX_ONLY
+  relevance:Score
+  semantic_reason:Clay
+  emitted_at:Time
+}
+
+record WorkerDeliveryAck {
+  ack_id:Ref
+  delivery_id:Ref
+  event_id:Ref
+  worker_id:Ref
+  subscription_revision:Ref
+  note:Clay
+  acked_at:Time
+}
+
+record WorkerReentryResolution {
+  resolution_id:Ref
+  event_id:Ref
+  worker_id:Ref
+  subscription_revision:Ref
+  decision:ACCEPT|REPLAN|NO_CHANGE|CONFLICT|DEFER
+  prior_plan_revision:Ref
+  new_plan_revision:Ref
+  basis_event_ids:Set<Ref>
+  plan_state_hash:Hash
+  note:Clay
+  resolved_at:Time
+}
+
+record WorkerSubscriptionSnapshot {
+  worker_id:Ref
+  subscription_revision:Ref
+  cut_bus_seq:Int
+  pending_delivery_ids:Set<Ref>
+}
+
+rule incoming_material_delta -> preserve_raw_event
+rule incoming_material_delta -> compare_exact_event_id_for_transport_dedupe
+rule exact_event_id_duplicate_with_identical_event -> do_not_redeliver_duplicate
+rule exact_event_id_duplicate_with_different_event -> FAIL_CLOSED_EVENT_ID_COLLISION
+rule same_payload_hash_with_new_event_id_or_epoch -> preserve_as_distinct_event
+rule same_payload_hash_with_new_record_or_version_or_provenance_identity -> preserve_as_distinct_event
+rule incoming_material_delta -> preserve(causal_origin_epoch,arrival_epoch,causal_origin_refs)
+rule late_or_out_of_order_event -> retain_and_route_by_semantic_relevance; never reject_by_age_alone
+rule historically_valid_but_currently_expired -> preserve_history_and_index; do_not_force_current_plan_mutation
+rule incoming_material_delta -> fuse_against_current_UnifiedDB+recent_receipts+open_conflicts
+rule incoming_material_delta -> ClayGraph.project(semantic_dependencies,current_work,current_claims)
+rule route_score uses semantic_overlap+branch_overlap+active_work_overlap+active_claim_overlap+impact+urgency+conflict
+rule explicit_work_or_claim_overlap -> relevant_even_without_branch_or_key_overlap
+rule high_impact_conflict+affected_worker -> INTERRUPT_NEXT_SAFE_POINT
+rule relevant_nonblocking_delta -> NEXT_CHECKPOINT
+rule no_current_overlap -> INDEX_ONLY
+rule WorkerReentryDelivery -> durable_delivery_receipt
+rule WorkerDeliveryAck -> mark_transport_seen_only; never_release_effect_guard_by_itself
+rule worker_profile_or_work_change -> require_new_subscription_revision
+rule new_subscription_revision -> reroute_all_unresolved_relevant_history
+rule reroute -> permit_monotonic_relevance_upgrade_without_erasing_event_identity
+rule subscribe_or_resume -> lock_causal_cut + materialize_snapshot_through(cut_bus_seq) + tail_events_after(cut_bus_seq)
+rule worker_before_next_material_effect -> ingest_pending_interrupts_for_effect_scope
+rule pending_interrupt_intersects(effect_keys|affected_work|affected_claims) -> BLOCK_EFFECT_UNTIL_TERMINAL_RESOLUTION
+rule resolution.DEFER -> remain_open_and_block_intersecting_effect
+rule resolution.CONFLICT -> preserve_open_conflict+counterhypothesis_lane+remain_open
+rule resolution.REPLAN -> require_event_in_basis_event_ids + require_new_plan_revision + require_plan_state_hash
+rule resolution.ACCEPT|resolution.NO_CHANGE -> require_event_in_basis_event_ids + require_plan_state_hash
+rule terminal_resolution -> release_only_the_exact_resolved_event_worker_subscription_scope
+rule worker_or_process_restart -> replay_raw_log+subscriptions+delivery_receipts+resolutions
+rule replay -> reconstruct_current_delivery_from_raw_events_and_current_subscription
+rule duplicate_redelivery -> idempotent_by(delivery_id)
+rule source_out_of_order -> retain_event+mark_late; never silently discard
+rule backpressure -> prioritize INTERRUPT then NEXT_CHECKPOINT; INDEX_ONLY may lag
+
+invariant DATABASE_PULSE_EFFECTIVIZATION != WORKER_KNOWLEDGE_REENTRY
+invariant RAW_EVENT_IDENTITY != EFFECTIVIZED_PROJECTION_IDENTITY
+invariant CONTENT_ABA_NEVER_ERASES_CAUSAL_REENTRY
+invariant DELIVERY_RECEIPT != RESOLVED_PLAN_APPLICATION
+invariant DEFER != RESOLVED
+invariant WORKER_PROFILE_REVISION != EVENT_REVISION
+invariant ARRIVAL_TIME != CAUSAL_ORIGIN
+invariant LATE != INVALID
+invariant SUBSCRIPTION_SNAPSHOT_AND_EVENT_TAIL_HAVE_NO_UNACCOUNTED_GAP
+invariant DELIVERY_ACK_DOES_NOT_MINT_TRUTH
+invariant RESOLUTION_DOES_NOT_MINT_TRUTH_OR_EFFECT_AUTHORITY
+invariant ROUTER_NEVER_MINTS_EFFECT_AUTHORITY
+invariant FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT
+invariant FRANK_NEVER_MUTATES_CLAY
+
+reference_external_patterns {
+  replayable_stream_plus_state_checkpoint = "Apache Flink stateful stream processing / checkpoints"
+  idempotent_or_transactional_stream_processing = "Apache Kafka delivery semantics"
+  ack_redelivery_and_consumer_state = "NATS JetStream durable consumers"
+  snapshot_then_ordered_event_tail = "A2A v1.0 SubscribeToTask initial Task then generated events"
+}
+
+promotion_gate {
+  deterministic_unit_tests=PASS
+  append_only_replay=PASS
+  exact_event_id_dedupe=PASS
+  event_id_collision_fail_closed=PASS
+  content_ABA_identity_preservation=PASS
+  late_valid_event_preservation=PASS
+  delivery_receipt_vs_resolution_falsifier=PASS
+  defer_remains_blocking_falsifier=PASS
+  subscription_revision_reroute=PASS
+  snapshot_tail_gap_falsifier=PASS
+  affected_work_claim_routing=PASS
+  high_impact_conflict_effect_guard=PASS
+  receipt_idempotence=PASS
+  terminal_resolution_idempotence=PASS
+  raw_event_cursor_vs_effectivized_projection_differential=REQUIRED
+  authoritative_writer_observer_backaction_p50_p95_p99_busy_wal=REQUIRED
+  crash_restart_replay=REQUIRED
+  concurrent_writer_race=REQUIRED
+  UnifiedDB_materialization=REQUIRED
+  active_worker_integration=REQUIRED
+  latency_resource_benchmark=REQUIRED
+  Hostinger_Ubuntu=REQUIRED
+}

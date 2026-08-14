@@ -1,0 +1,50 @@
+name: Live Fusion Reentry V1
+
+on:
+  push:
+    paths:
+      - 'research_entity/global/CLAY_LIVE_FUSION_REENTRY_PROTOCOL.clay'
+      - 'research_entity/runtime/live_fusion_reentry_v1.py'
+      - 'research_entity/runtime/live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_v1.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_cross_version.py'
+      - '.github/workflows/live-fusion-reentry-v1.yml'
+  pull_request:
+    paths:
+      - 'research_entity/global/CLAY_LIVE_FUSION_REENTRY_PROTOCOL.clay'
+      - 'research_entity/runtime/live_fusion_reentry_v1.py'
+      - 'research_entity/runtime/live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_v1.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_cross_version.py'
+      - '.github/workflows/live-fusion-reentry-v1.yml'
+  workflow_dispatch:
+
+jobs:
+  hosted-reference-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run live fusion durability and causal reentry tests
+        working-directory: research_entity/runtime
+        run: python -m unittest -v test_live_fusion_reentry_v1.py test_live_fusion_reentry_v13.py test_live_fusion_reentry_cross_version.py
+
+  hostinger-reference-tests:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Observe exact runtime
+        run: |
+          python3 --version
+          uname -a
+      - name: Run live fusion durability and causal reentry tests
+        working-directory: research_entity/runtime
+        run: python3 -m unittest -v test_live_fusion_reentry_v1.py test_live_fusion_reentry_v13.py test_live_fusion_reentry_cross_version.py

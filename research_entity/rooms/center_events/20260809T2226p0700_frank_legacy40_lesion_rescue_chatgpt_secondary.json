@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "event_id":"center-frank-legacy40-lesion-rescue-20260809T2226p0700",
+  "event_type":"SANDBOX_INTERVENTION_EVIDENCE",
+  "created_at":"2026-08-09T22:26:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "origin":{"actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "evidence_class":"LOCAL_SANDBOX_EXECUTION_PRIMARY",
+  "frank_main_commits":["7118d94f96376b48de0b75ed9583f3dc88a76fa8","733175286a967173d90cb27c1f8be188158768cc","5142a11147f22c5fa78493b5f5691d8ae6632ac3"],
+  "result":{
+    "status":"PASS",
+    "source_resolved_legacy_identities_covered":40,
+    "successor_components_lesioned":["agency_tools","deliberation","memory_identity","perception_gate","safety_recovery","workspace_core"],
+    "cross_component_unexpected_failures":0,
+    "rescue_status":"PASS",
+    "scope":"successor-probe lesion/rescue sandbox contract; not physical execution of every historical service binary"
+  },
+  "interpretation":"A legacy process/service boundary may disappear only if its source-resolved function remains mapped to a measurable successor component whose function can be selectively lesioned and restored without unrelated probe loss.",
+  "affected_rooms":["frank","harness","gwt","emergenz","claycode","unifieddb","clayresearch","clay"],
+  "feedback":"Use source-backed successor lesion/rescue as the conservation criterion for fused/emergently distributed legacy functions. Extend the same method to persistent state/database functions before declaring whole-Frank conservation.",
+  "research_state_change":"EXECUTION_EVIDENCE_NO_CANONICAL_SCIENTIFIC_PROMOTION"
+}

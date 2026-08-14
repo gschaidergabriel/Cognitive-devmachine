@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-20260809T161407Z-FRANK-HOSTINGER-RUNNER",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T16:14:07Z",
+  "payload": {
+    "work_id": "FRANK-V01-HOSTINGER-RUNNER-FIRST-LANE",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "PROJECT_OWNER_TOOL_PRIORITY_DIRECTIVE",
+    "title": "Use verified Hostinger self-hosted runner as first remote Frank v0.1 build/test lane",
+    "work_clay": "route Frank v0.1 remote build, test, benchmark and integration validation through resource hostinger-vps-github-runner whenever a compatible authorized GitHub Actions workflow exists; preserve local Andreas-PC acceptance as final release evidence",
+    "reason_clay": "owner confirmed connected Hostinger VPS GitHub runner; live UI observation reports hostinger-vps and GitHub Runner online; capability event marks PREFERRED_REMOTE_BUILD_TEST_PATH_FOR_FRANK_V0_1",
+    "completion_clay": "at least one current Frank v0.1 workflow executes on the self-hosted Hostinger runner and produces readable job steps/logs plus a success/failure receipt; failures become explicit bug work rather than hidden retries",
+    "evidence_need": [
+      "fresh runner online observation before effect",
+      "exact workflow revision and runner labels",
+      "job steps/log receipt",
+      "build/test result",
+      "no secret leakage"
+    ],
+    "executor_policy": "prefer hostinger-vps-github-runner for remote Frank v0.1 build/test execution; use Claude/local organ to create or repair workflow definitions when direct ChatGPT workflow dispatch is unavailable; final Frank v0.1 acceptance still requires Andreas Ubuntu developer system evidence",
+    "required_capabilities": [
+      "frank_v0_1.build_test.self_hosted_runner",
+      "github.actions.workflow_execution",
+      "github.actions.job_logs"
+    ],
+    "write_scope": [
+      "gschaidergabriel/Dr.-Unterweger",
+      "research_entity/state/work/events/",
+      "research_entity/state/system/events/"
+    ],
+    "dependencies": [
+      "runner online",
+      "authorized workflow targets self-hosted Ubuntu/Linux runner"
+    ],
+    "invalidators": [
+      "runner offline",
+      "workflow revision no longer targets verified runner",
+      "security or secret-boundary failure"
+    ],
+    "base_priority": 0.98,
+    "expected_impact": 0.96,
+    "urgency": 0.95,
+    "information_gain": 0.90,
+    "status": "READY"
+  }
+}

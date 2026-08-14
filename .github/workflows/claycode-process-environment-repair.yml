@@ -1,0 +1,35 @@
+name: ClayCode child environment authority repair
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_patch_process_environment.py'
+      - 'tools/claycode_process_environment_regression.py'
+      - '.github/workflows/claycode-process-environment-repair.yml'
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Apply deny-by-default child environment patch
+        run: python tools/claycode_patch_process_environment.py
+      - name: Verify ambient host authority cannot leak
+        run: PYTHONPATH=tools python tools/claycode_process_environment_regression.py
+      - name: Commit runtime repair and receipt
+        run: |
+          git config user.name 'claycode-process-env-gate'
+          git config user.email 'claycode-process-env-gate@users.noreply.github.com'
+          git add tools/claycode_base_runtime.py research_entity/claycode/autonomous/BASE_PROCESS_ENVIRONMENT_REGRESSION_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: deny ambient authority in child process environment'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

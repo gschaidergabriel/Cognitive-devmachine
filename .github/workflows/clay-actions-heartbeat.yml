@@ -1,0 +1,98 @@
+name: Clay Actions Heartbeat
+# GO transport probe 2026-08-10T06:34+07:00 after identity-guard repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clay-actions-heartbeat.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clay-actions-heartbeat
+  cancel-in-progress: false
+
+jobs:
+  heartbeat:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout constrained hosted lane
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Verify Clay repository token and record hosted execution
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/state/system/actions_heartbeat
+          repo_code="$(curl -sS --retry 2 --retry-delay 1 \
+            -o /tmp/clay_repo_meta.json \
+            -w '%{http_code}' \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}")"
+          python3 - "$repo_code" <<'PY' > research_entity/state/system/actions_heartbeat/LATEST.json
+          import json, os, platform, socket, sys
+          from datetime import datetime, timezone
+          code=sys.argv[1]
+          payload={
+            'schema_version':'1.0',
+            'evidence_class':'REAL_GITHUB_HOSTED_UBUNTU_EXECUTION',
+            'purpose':'Distinguish Clay-repository Actions execution from self-hosted runner availability/scope.',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'github_repository':os.environ.get('GITHUB_REPOSITORY',''),
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+            'event_name':os.environ.get('GITHUB_EVENT_NAME',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'repository_api_http_status':code,
+            'repository_token_access':code=='200',
+            'pass':code=='200',
+            'authority_invariant':'model output != execution authority',
+            'scope_guard':'A PASS proves only GitHub-hosted Actions execution and caller-repository token visibility. It does not prove Hostinger runner scope, WP02/WP06 correctness, or Andreas target acceptance.'
+          }
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+          python3 - <<'PY'
+          import json
+          p=json.load(open('research_entity/state/system/actions_heartbeat/LATEST.json',encoding='utf-8'))
+          assert p['pass'] is True,p
+          assert p['github_repository']=='gschaidergabriel/clay-global-research-entity',p
+          print('CLAY_ACTIONS_HOSTED_HEARTBEAT=PASS')
+          PY
+
+      - name: Persist immutable run receipt and latest pointer
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp research_entity/state/system/actions_heartbeat/LATEST.json \
+             "research_entity/state/system/actions_heartbeat/${GITHUB_RUN_ID}.json"
+          git config user.name 'clay-actions-heartbeat'
+          git config user.email 'clay-actions-heartbeat@users.noreply.github.com'
+          git add research_entity/state/system/actions_heartbeat/
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "evidence(actions): persist Clay hosted heartbeat ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

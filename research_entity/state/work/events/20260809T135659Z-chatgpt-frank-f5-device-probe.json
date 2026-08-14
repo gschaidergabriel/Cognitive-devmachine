@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:frank-f5-device-probe:20260809T135659Z",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T13:56:59Z",
+  "payload": {
+    "work_id": "WORK-FRANK-F5-DEVICE-BODY-PROBE-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CHATGPT_RESEARCH_ENTITY_IMPLEMENTATION_DELTA",
+    "title": "Run safe Frank device/body capability probe on Andreas Ubuntu host",
+    "work_clay": "clay{target:\"gschaidergabriel/frankv0.1:runtime/device/frank_device_probe.py\",local_actions:[\"pull latest Frank repo\",\"ensure canonical state is admitted/current\",\"run python runtime/device/frank_device_probe.py --node-id <actual-local-node-id>\",\"inspect v_current_system_possibility_space + node_sessions.device_id + latest device_body organ observation\",\"feed observed capability gaps into F5/F6/F7/F8 scheduler\"],privacy:[\"no raw secret values\",\"no IP addresses\",\"no environment values\",\"machine id only salted+hashed\"]}",
+    "reason_clay": "clay{evidence:[\"UnifiedDB V9 already provides system_resources/system_capabilities/v_current_system_possibility_space\",\"prompt capsule currently leaves device_id NULL\",\"new probe passed sandbox test and generated current possibility rows\"],why_now:\"F5 is OPEN and device reality gates local model/runtime/package decisions\"}",
+    "completion_clay": "clay{done_if:[\"fresh LOCAL_EXECUTION_PRIMARY receipt from Andreas Ubuntu host\",\"device resource current with bounded freshness\",\"tool/service capability rows reflect observed host\",\"actual local Frank node is bound to hashed device_id\",\"device_body observation is current\",\"no sensitive values persisted\"],not_done_if:[\"sandbox-only result\",\"repo code exists but target probe not executed\"]}",
+    "evidence_need": [
+      "clay{type:LOCAL_EXECUTION_RECEIPT,host:ANDREAS_PC}",
+      "clay{type:UNIFIEDDB_QUERY_RECEIPT,views:[v_current_system_possibility_space,node_sessions,v_latest_organ_observations]}",
+      "clay{type:PRIVACY_CHECK,forbidden:[raw_secret_values,ip_addresses,environment_values]}"
+    ],
+    "executor_policy": "clay{prefer:CLAUDE_CODE_LOCAL_ORGAN,why:\"only the target/local surface can establish real device state\",fallback:BLOCKED_NO_FAKE_DEVICE_STATE}",
+    "required_capabilities": ["ANDREAS_PC_ACCESS", "LOCAL_PYTHON_EXECUTION", "FRANK_CANONICAL_STATE_RW", "SQLITE_TEST_RUNTIME"],
+    "write_scope": ["gschaidergabriel/frankv0.1:state/FRANK_UNIFIED.sqlite"],
+    "dependencies": ["clay{requires:WORK-FRANK-HARNESS-CURRENT-SCHEMA-VERIFY-20260809 or equivalent current-schema verification}"],
+    "invalidators": ["clay{if:device_probe_superseded_or_schema_changes,then:REVISE_BEFORE_EFFECT}"],
+    "base_priority": 0.95,
+    "expected_impact": 0.94,
+    "urgency": 0.90,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

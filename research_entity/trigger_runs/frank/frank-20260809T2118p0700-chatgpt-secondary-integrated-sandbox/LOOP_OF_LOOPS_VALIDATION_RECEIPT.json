@@ -1,0 +1,26 @@
+{
+  "schema_version":"frank-h1-loop-of-loops-validation-0.1",
+  "run_id":"frank-20260809T2118p0700-chatgpt-secondary-integrated-sandbox",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class":"REMOTE_SANDBOX_DETERMINISTIC_TEST",
+  "owner_evidence_rule_for_this_run":"SANDBOX_SUFFICIENT_FOR_NOW",
+  "artifacts":{
+    "runtime":{"path":"research_entity/harness/reference/frank_h1_loop_of_loops.py","git_blob_sha":"861d949ec20b0518bf4b7803a46098a5a1b172c6"},
+    "tests":{"path":"research_entity/harness/reference/test_frank_h1_loop_of_loops.py","git_blob_sha":"42163e878f9f51ebfdbeda0141eeb9f5c0d5543a"}
+  },
+  "validation":{"loop_tests_passed":6,"combined_tests_passed":141,"combined_tests_failed":0,"compileall":"PASS"},
+  "mechanism":{
+    "fast_loop":"full pixel->percept->GWT/model organism cycle",
+    "slow_loop":"compact loop-control state written to the same ledger plus snapshot",
+    "slow_reentry":"next fast cycle can receive bounded ClayGraph memory support from loop_control:episode:<id>",
+    "controller":"same loop_dynamics_controller recurrence function as the integrated spine",
+    "stable_known":"HALT_CANDIDATE_CONVERGED after repeated low-delta/low-pressure behavior",
+    "stable_unknown":"ESCALATE_STALLED after repeated low-delta/high-pressure behavior",
+    "lesion":"loop_dynamics_controller lesion halts the episode as HALT_LESIONED",
+    "emergence_claim":false
+  },
+  "stress":{"episodes":100,"known_converged":50,"unknown_stalled":50,"slow_reentry_observed":100,"total_fast_cycles":200,"persisted_events":1002,"final_epoch":1002,"semantic_state_hash_replay_equal":true,"trace_root_hash_replay_equal":true,"epoch_replay_equal":true,"wall_seconds":8.9697,"episodes_per_second":11.15},
+  "negative_result_and_fix":{"finding":"Initial first fast cycle used delta=1.0 solely because no predecessor existed; recurrence interpreted this as ABORT_DIVERGING and terminated every episode immediately.","resolution":"Treat the no-predecessor first observation as neutral delta=0.5; divergence now requires observed comparative evidence rather than absence of a baseline."},
+  "release_claim":"NOT_H1_RELEASE_PASS"
+}

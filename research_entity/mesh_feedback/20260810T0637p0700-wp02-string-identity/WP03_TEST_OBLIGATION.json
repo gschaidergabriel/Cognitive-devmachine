@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "WP02-STRING-IDENTITY-TO-WP03-20260810T0637p0700",
+  "created_at": "2026-08-10T06:37:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "origin_trigger": "go",
+  "source_result": "research_entity/trigger_runs/go/go-20260810T0632p0700-wp02-cross-canonical-string/OOB_RESULT.json",
+  "source_fix_commit": "72fb8d3b2dff2c85a982035211b01d54bbe88c6e",
+  "target_branch": "claycode/WP03_TYPED_IR",
+  "kind": "TARGETED_TEST_OBLIGATION",
+  "observation": "tools/claycode_base_ir.py canonical_syntax currently serializes non-presentation Token values via raw str(node). For STRING tokens this is the same mechanism falsified in the pre-fix WP02 strict canonicalizer: different JSON escape spellings of the same decoded Unicode string can produce different semantic payloads.",
+  "hypothesis": "If WP03 semantic_ir_sha256 is intended to identify semantic IR rather than source spelling, JSON STRING tokens must be canonicalized by the same decoded validated Unicode scalar sequence contract now used by the production frontend and fixed WP02 syntax canonicalizer.",
+  "counterhypothesis": "WP03 intentionally treats escape spelling as semantic, in which case its semantic_ir_sha256 contract must explicitly differ from the production frontend and that divergence must be justified and tested rather than inherited accidentally.",
+  "cheapest_discriminator": [
+    "Lower two otherwise-identical admitted declarations/rules containing literal \"é\" versus escaped \"\\u00e9\" under the exact selected V17 grammar and compare semantic_ir_sha256.",
+    "Require composed \"é\" versus decomposed \"e\\u0301\" to remain distinct unless the ClayCode semantic contract explicitly adopts Unicode normalization.",
+    "Reject unpaired surrogate strings consistently with the production frontend before promotion."
+  ],
+  "expected_action": "Add a WP03 regression/test obligation first; patch only if the discriminator confirms accidental raw-lexeme identity. Preserve source_sha256 separately for exact source spelling.",
+  "architecture_effect": "TEST_OBLIGATION_ONLY",
+  "promotion": "NONE",
+  "authority_invariant": "model output != execution authority",
+  "scope_guard": "This routes a cross-branch falsifier; it does not claim WP03 failure, WP03 PASS, BASE PASS, or target acceptance."
+}

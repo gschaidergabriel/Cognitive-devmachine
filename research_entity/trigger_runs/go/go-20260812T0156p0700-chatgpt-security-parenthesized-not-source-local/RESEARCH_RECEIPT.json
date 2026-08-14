@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.2",
+  "trigger": "go",
+  "created_at": "2026-08-12T01:56:00+07:00",
+  "updated_at": "2026-08-12T02:11:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "fresh_state": {
+    "diagnostic_pr": 417,
+    "stale_repair_pr_closed": 419,
+    "fresh_main_integration_pr": 429,
+    "fresh_main_base": "beb895b951826f28cd0c38baba3565e7dd976fda",
+    "fresh_main_tested_head": "b8b246461e4d8889f32cb825c5ca30ab8d9fcbe4",
+    "fresh_main_tested_tree": "9b3ba3688a9bdc8e06e5298930461d37f237381c",
+    "merged_main_commit": "ab6b57741228c780f51581f8c46c49b295b8b3c5",
+    "merged_main_tree": "9b3ba3688a9bdc8e06e5298930461d37f237381c",
+    "tree_identity_tested_equals_merged": true
+  },
+  "grf": {
+    "observed_anchors": [
+      "Historical main contained two unparenthesized negated relation guards: `!target within FRANK_PRIVATE_REPO` and `!cap.value.verbs contains verb`.",
+      "PR #417 target-runner diagnostic established the repo-membership form lowers as `Compare(Not(target), within repo)` under the current grammar.",
+      "The adjacent capability-membership form has the same unary-before-relation grammar topology.",
+      "Explicit source grouping lowers both policy guards as `Not(Compare(...))` under unchanged grammar/parser bytes.",
+      "Fresh-main integration PR #429 was cut directly from main `beb895b...`, tested on self-hosted Linux/X64, and squash-merged as `ab6b577...`.",
+      "The tested PR head and merged main commit have identical Git tree `9b3ba368...`, so the tested repository bytes equal the merged repository bytes.",
+      "Current main directly contains both repaired explicit relation-negation guards."
+    ],
+    "generated_reality": "A global operator-precedence change is required so unparenthesized unary negation absorbs following relations throughout ClayCode.",
+    "strongest_counter_reality": "The grammar is coherent and the observed security predicates omitted explicit grouping; source-local parenthesization is sufficient for these policy guards and has lower semantic blast radius.",
+    "discriminating_test": "Under identical grammar bytes, parse repaired and historical forms, compare typed AST topology, rerun the operator-survival baseline, audit the real ClayCode corpus for the same bounded lexical hazard, replicate from fresh main, and compare the tested tree to the merged tree.",
+    "predicted_if_global_change_required": "At least one explicit grouping repair fails, the operator-survival baseline regresses, or the bounded corpus reveals a broader population requiring language-level semantics before safe promotion.",
+    "predicted_if_source_local_counter_reality_right": "Both explicit security forms lower as Not(Compare(...)), historical forms discriminate as Compare(Not(...), ...), the operator baseline stays PASS, and the bounded corpus has no remaining same-pattern candidates after repair.",
+    "outcome": "PROMOTE_SOURCE_LOCAL_TWO_GUARD_REPAIR_FOR_THESE_SECURITY_PREDICATES; DEFER_GLOBAL_PRECEDENCE_CHANGE",
+    "confidence": "HIGH_FOR_THESE_TWO_SECURITY_PREDICATES; NOT_A_LANGUAGE_WIDE_PRECEDENCE_PROOF"
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr": 429,
+    "merged_main_commit": "ab6b57741228c780f51581f8c46c49b295b8b3c5",
+    "product_changes": [
+      "claycode/frank_security.clay: `!target within FRANK_PRIVATE_REPO` -> `!(target within FRANK_PRIVATE_REPO)`",
+      "claycode/frank_security.clay: `!cap.value.verbs contains verb` -> `!(cap.value.verbs contains verb)`"
+    ],
+    "regression": "tests/claycode_security_parenthesized_not_regression.py",
+    "target_workflow": ".github/workflows/claycode-security-parenthesized-not-repair-vps.yml",
+    "grammar_changed": false,
+    "parser_changed": false,
+    "evaluator_changed": false,
+    "effect_authority_changed": false,
+    "harness_authority_changed": false
+  },
+  "target_evidence": {
+    "fresh_main_push_run": 31526314626,
+    "fresh_main_push_job": 93895402981,
+    "fresh_main_pr_run": 31526371062,
+    "fresh_main_pr_job": 93895590699,
+    "tested_head": "b8b246461e4d8889f32cb825c5ca30ab8d9fcbe4",
+    "tested_tree": "9b3ba3688a9bdc8e06e5298930461d37f237381c",
+    "merged_tree": "9b3ba3688a9bdc8e06e5298930461d37f237381c",
+    "runner": "clay",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "conclusion": "SUCCESS",
+    "checks": [
+      "exact candidate SHA fetched into a run-owned temporary tree",
+      "Lark 1.3.1 pinned",
+      "both negated relation guard AST regressions PASS",
+      "historical variants discriminate as unary-first Compare(Not(...), ...) under identical grammar bytes",
+      "existing ClayCode operator-survival baseline PASS",
+      "non-blocking ClayCode corpus relation-negation inventory completed",
+      "fresh-main self.root current-head v2 boundary/replay/differential-integrity gate PASS",
+      "tested repository tree equals merged main repository tree"
+    ],
+    "whole_frank_v0_1_acceptance": false
+  },
+  "corpus_audit": {
+    "id": "UNPARENTHESIZED_WORD_RELATION_NEGATION_INVENTORY_V1",
+    "scope": "claycode/**/*.clay lexical pattern for unparenthesized !/not before matches|contains|within|subset_of|no_wider_than|in",
+    "blocking": false,
+    "remaining_candidate_notices_after_two_repairs": 0,
+    "check_annotations_total": 1,
+    "only_annotation": "unrelated GitHub Actions Node 20 to Node 24 deprecation warning",
+    "absence_proof": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "PARENTHESIS_TOPOLOGY_METAMORPH",
+    "bounded": true,
+    "reversible": true,
+    "external_effect": false,
+    "intervention": "In-memory parenthesis-topology perturbations around the repo-membership predicate only.",
+    "baseline": "Repaired explicit grouping `!(target within repo)`.",
+    "result": "Double/spaced explicit relation grouping collapses to the repaired Not(Compare(...)) AST class; explicit `(!target) within repo` collapses to the historical Compare(Not(...), ...) AST class.",
+    "rollback": "No persistent mutation from the experiment itself; promoted source changes are independently covered by regression/target evidence.",
+    "production_claim": false
+  },
+  "counterevidence_and_negative_results": [
+    "This result does not define a preferred language-wide interpretation for every unparenthesized unary-plus-relation expression.",
+    "The lexical corpus audit is bounded and cannot prove absence of all precedence hazards outside its pattern.",
+    "Broad `fresh-main-integration` and `directory-anchor-repair` PR checks failed before semantic execution because their checkout step encountered a non-git workspace; existing runner-workspace forensics already owns that root-cause lane.",
+    "A separate GitHub-hosted integrity check did not start because of account billing/spending-limit state; it is not semantic counterevidence.",
+    "Whole FRANK_V0_1 acceptance remains IN_PROGRESS; storage/SQLite exact-target acceptance, effect-authority lifecycle/provider reconciliation, identity/lineage, and other workspace obligations remain independent gates."
+  ],
+  "coordination": {
+    "diagnostic_pr_retained": 417,
+    "stale_pr_closed_as_superseded": 419,
+    "fresh_pr_merged": 429,
+    "duplicate_runner_forensics_avoided": true
+  },
+  "next_discriminating_test": {
+    "priority": "P0_PROGRAM_FRONTIER",
+    "test": "Return to the highest current non-duplicate FRANK_V0_1 blocker from fresh workspace/runtime evidence; do not treat this local security repair as closure of F-V01-02 or F-V01-13.",
+    "pass_effect": "Advance the independent blocker only with exact target/runtime evidence and provenance-bound receipts.",
+    "fail_effect": "Keep the blocker OPEN/BLOCKED and preserve the negative result."
+  },
+  "training": "NOT_AUTHORIZED_NOT_STARTED"
+}

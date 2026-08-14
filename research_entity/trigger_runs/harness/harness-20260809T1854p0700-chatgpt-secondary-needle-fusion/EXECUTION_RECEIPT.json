@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.1",
+  "run_id": "harness-20260809T1854p0700-chatgpt-secondary-needle-fusion",
+  "work_package": "H-WP-04-NEEDLE-BOUNDARY",
+  "actor": "chatgpt-secondary",
+  "evidence_classes": [
+    "REMOTE_SANDBOX_DETERMINISTIC_TEST",
+    "CURRENT_UPSTREAM_SOURCE_INSPECTION",
+    "CURRENT_UPSTREAM_SOURCE_EQUIVALENCE",
+    "EXTERNAL_PRIMARY_RESEARCH_SYNTHESIS"
+  ],
+  "execution_environment": "ChatGPT isolated Linux container + GitHub/Drive/Web connected evidence surfaces",
+  "target_ubuntu_verified": false,
+  "live_frank_verified": false,
+  "official_needle_checkpoint_inference_verified": false,
+  "official_tokenizer_inference_verified": false,
+  "committed_components": [
+    "research_entity/harness/reference/needle_runtime_contract.py",
+    "research_entity/harness/reference/test_needle_runtime_contract.py",
+    "research_entity/harness/reference/needle_runtime_profiles.py",
+    "research_entity/harness/reference/test_needle_runtime_profiles.py",
+    "research_entity/harness/reference/needle_ingress_preflight.py",
+    "research_entity/harness/reference/test_needle_ingress_preflight.py",
+    "research_entity/harness/reference/fixtures/frank_needle_active_tools_20260804.json"
+  ],
+  "latest_component_versions": {
+    "needle_runtime_contract": "h1-needle-runtime-contract-0.4",
+    "needle_ingress_preflight": "h1-needle-ingress-preflight-0.1",
+    "runtime_profiles": ["JAX_PYTHON", "CACTUS_CPP"]
+  },
+  "latest_test_batch": {
+    "runtime_contract_plus_profiles_tests": 43,
+    "runtime_contract_plus_profiles_passed": 43,
+    "ingress_preflight_tests": 8,
+    "ingress_preflight_passed": 8,
+    "total_latest_unit_adversarial_tests": 51,
+    "failed": 0
+  },
+  "mutation_campaigns": {
+    "v0_3_prior_in_this_run_cases": 245000,
+    "v0_4_fresh_cases": 50000,
+    "total_generated_structural_mutation_cases_across_current_run_versions": 295000,
+    "v0_4_false_accepts": 0,
+    "v0_4_false_rejects": 0,
+    "note": "Mutation evidence covers generated structural/parser/validator domains only; it does not measure semantic tool-choice accuracy."
+  },
+  "source_counterexamples": {
+    "python_jax": [
+      "ordinary parameters.properties mismatch in current constrained.py without adapter normalization",
+      "legal JSON whitespace bypass of compact exact-marker constraint activation",
+      "multiple fail-open constraint states",
+      "blind encoder tool-token truncation",
+      "normalization collisions can silently merge tool identities",
+      "invalid-JSON reverse alias fallback can mutate argument values",
+      "contrastive retrieval excludes no-tool cases",
+      "contrastive cadence is every 1000 text-training steps",
+      "stock finetune quick/best-checkpoint metrics do not protect no-tool performance",
+      "checkpoint loader uses pickle"
+    ],
+    "cactus_cpp": [
+      "Needle JSON-Schema flattening exists but current helper extraction is whitespace/escaping sensitive",
+      "Needle constraint branch retains compact exact-marker whitespace weakness",
+      "syntax sanitizer accepts duplicate JSON keys and does not itself prove offered-tool membership",
+      "Needle required-key enforcement is not sufficient as an acceptance/authority boundary",
+      "Tool RAG failure can return all tools",
+      "BM25 lexical arm byte-tokenizes non-ASCII German destructively",
+      "generic confidence is not a calibrated Needle correctness probability",
+      "Needle query formatting uses only system/developer plus the latest user message"
+    ]
+  },
+  "quantitative_diagnostics": {
+    "active_frank_tools": 51,
+    "static_needle_parameter_count_from_source": 26315421,
+    "bf16_parameter_bytes": 52630842,
+    "official_needle_pkl_bytes": 52633098,
+    "official_needle_pkl_overhead_vs_raw_bf16_bytes": 2256,
+    "constraint_name_whitespace_variants": {"tested": 16, "constrained": 1},
+    "constraint_argument_whitespace_variants": {"tested": 64, "constrained": 1},
+    "german_registry_content_words": 945,
+    "german_non_ascii_words_altered_by_cactus_ascii_bm25": 65,
+    "bm25_handbuilt_diagnostic": {
+      "cases": 27,
+      "cactus_ascii_top1": 16,
+      "cactus_ascii_top5": 22,
+      "unicode_top1": 17,
+      "unicode_top5": 22,
+      "names_only_top1": 7,
+      "names_only_top5": 9,
+      "full_description_top1": 16,
+      "full_description_top5": 22
+    },
+    "description_compression_diagnostic": {
+      "full_text_bytes": 7207,
+      "first_statement_bytes": 5052,
+      "byte_reduction_percent": 29.9,
+      "full_top5": 22,
+      "first_statement_top5": 22,
+      "scope": "small deterministic BM25 lexical diagnostic only"
+    },
+    "historical_catalog_token_arithmetic": {
+      "catalog_tokens": 793,
+      "max_encoder_tokens": 1024,
+      "reserved_headroom": 200,
+      "tools_separator_tokens": 1,
+      "max_query_tokens_before_preflight_failure": 30
+    }
+  },
+  "provenance": {
+    "drive_checkout_commit": "6fdddb874dd6f46dabeea88d0bf239fc4a2474c4",
+    "current_needle_main_delta_from_drive_checkout": "README.md and setup.bat only; no inspected source-code delta",
+    "official_needle_pkl_sha256": "40a32e91d1d4197bf15ba559b74f6727c342dc8746918742fc7d8e2c1f18df40",
+    "official_tokenizer_path": "tokenizer/needle.model",
+    "official_tokenizer_sha256": "0823f5b9133c68a8140addc5d7a425fa9119c4c8cb4a550363b4bffa4ba1c8c7"
+  },
+  "full_model_execution_blocker": "Binary size is not the blocker. The connected Drive checkout never tracked model/tokenizer binaries and direct external download is denied by the isolated container backend. Full semantic inference waits for pinned official artifacts to be mounted into an executable environment.",
+  "result": "PASS_DEEP_COMPONENT_EVIDENCE",
+  "hwp04_status": "OPEN",
+  "promotion_limit": "This run materially hardens and falsifies the H1 Needle boundary. It does not prove German zero-shot quality, retrieval benefit, confidence calibration, official checkpoint behavior, Ubuntu integration or H1 release readiness."
+}

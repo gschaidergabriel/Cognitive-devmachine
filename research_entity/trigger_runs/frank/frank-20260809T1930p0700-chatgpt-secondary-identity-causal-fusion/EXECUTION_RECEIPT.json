@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1930p0700-chatgpt-secondary-identity-causal-fusion",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "execution_class": "HOSTED_LINUX_REFERENCE_COMPONENT_AND_REPOSITORY_CAS_VALIDATION_NOT_TARGET_UBUNTU",
+  "component": "research_entity/harness/reference/active_assembly.py",
+  "tests": "research_entity/harness/tests/test_active_assembly.py",
+  "initial_repository_writes": [
+    {"commit":"5e93e99e13aa8b544203ff795c767c5884274167","change":"fail closed on ActiveAssembly same-ID non-identical payload collisions; exact duplicates idempotent"},
+    {"commit":"605f57d6c5c20b620b9b2584e0cfca4895b8c218","change":"add collision/idempotency/identity tests including 10000 randomized mutated collisions"}
+  ],
+  "local_validation_before_concurrent_merge": {
+    "environment":"ChatGPT hosted Linux container; not Andreas Ubuntu target",
+    "command":"python3 -m unittest -v research_entity.harness.tests.test_active_assembly",
+    "tests_total":13,
+    "tests_passed":13,
+    "tests_failed":0,
+    "randomized_collision_cases":10000,
+    "silent_collision_acceptances":0,
+    "randomized_echo_trials":5000,
+    "result":"PASS_REFERENCE_COMPONENT"
+  },
+  "cross_language_probe": {
+    "environment":"hosted Linux Python plus Node/ECMAScript serialization probe",
+    "cases":["1.0","1e-7","1e20","-0.0","333333333.3333333"],
+    "finding":"Python json.dumps and ECMAScript JSON.stringify differ for multiple valid numeric values; therefore the local Python packet fingerprint must not be assumed to be a language-independent H1/H2 canonical hash without an explicit canonicalization contract.",
+    "external_reference":"RFC 8785 JSON Canonicalization Scheme",
+    "status":"NEGATIVE_RESULT_AGAINST_UNVERSIONED_CROSS_LANGUAGE_HASH_ASSUMPTION"
+  },
+  "concurrency_cas_event": {
+    "attempt":"reduce fingerprint to internal implementation detail while preserving v0 output",
+    "result":"409_CAS_REJECTED",
+    "meaning":"another worker modified active_assembly.py after this worker's reread; no overwrite performed",
+    "resolution":"re-read current main and fuse concurrent changes rather than forcing stale content"
+  },
+  "current_main_after_reread": {
+    "active_assembly_blob_sha":"cc8e5c442dd25c467dc58d8870451c1e1661a9f6",
+    "test_blob_sha":"7889996ab7e79726f873d2b26d4d77aa095a4085",
+    "preserved_this_run_identity_delta":true,
+    "additional_concurrent_delta":"same-ancestry opposite propositions may bypass duplicate-support ancestry cap for visibility, while retaining hard total budget and independent_replication_credit=false",
+    "current_schema":"frank.active-assembly.v1.1",
+    "open_issue":"packet_identity_sha256 is still exposed without a frozen language-independent canonicalization scheme; treat cross-language normativity as OPEN"
+  },
+  "concurrent_evidence_fused": [
+    {"commit":"ae5ef92513f0e2e2b1d8c4eca1b1e7c52a53f6d7","meaning":"ActiveAssembly red-team repair receipt"},
+    {"commit":"497a37917b55e0472f621e05d3c50d3d81e0a133","meaning":"receiver-causal WorkspaceEpisode implementation receipt; 17/17 hosted-container tests"},
+    {"commit":"deaadddcac6763e26f389db494434c569915febf","meaning":"Ubuntu CI workflow for mainline effect-recovery lineage probe"}
+  ],
+  "target_ubuntu_execution":"NOT_EXECUTED_BY_THIS_WORKER",
+  "target_4b_execution":"NOT_EXECUTED",
+  "h1_release_gate":"NOT_PASS",
+  "base_gate":"NOT_PASS",
+  "scientific_promotion":"NONE",
+  "research_delta":"COMMITTED"
+}

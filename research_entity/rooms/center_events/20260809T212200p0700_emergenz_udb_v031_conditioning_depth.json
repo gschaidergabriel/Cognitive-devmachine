@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T212200p0700_emergenz_udb_v031_conditioning_depth",
+  "room_id": "emergenz",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-20260809T204545p0700-udb-emergence-v03",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "none",
+  "created_at": "2026-08-09T21:22:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["emergenz", "unifieddb", "clayresearch", "harness", "gwt", "claygraph"],
+  "affects_claims": ["H-UDB-EM-014", "H-UDB-EM-015"],
+  "artifact_refs": [
+    "research_entity/trigger_runs/emergenz/20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance/V031_LIVE_REFRESH_ADDENDUM.md",
+    "research_entity/trigger_runs/emergenz/20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance/V031_BRANCH_FEEDBACK_DELTA.json"
+  ],
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "delta_type": "LIVE_SOURCE_DELTA+SYNTHETIC_DISCRIMINATOR+GATE_REVISION",
+    "summary": "A new conditioning-depth discriminator separates the tested direct lag-1 path from an apparent lag-1 edge caused by omitted lag-3 history, while retaining explicit non-identification and estimator-bias boundaries.",
+    "required_change": "Add STATE_ADEQUACY_STABILITY, ABSTAIN_STATE_INADEQUATE and auditable non-voting method support to v0.3.",
+    "immediate_reread_requested": true,
+    "live_frank_validated": false,
+    "canonical_scientific_promotion": "NONE"
+  }
+}

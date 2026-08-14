@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "LOCAL-SQLITE-FAULT-INJECTION-20260809T2340P0700",
+  "actor": "chatgpt-secondary",
+  "evidence_class": "LOCAL_SYNTHETIC_MECHANISM_TEST",
+  "promotion_scope": "RESEARCH_SUPPORT_ONLY_NOT_UBUNTU_ACCEPTANCE",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "kernel": "Linux 6.18.35",
+    "frank_repo_checkout": false,
+    "andreas_ubuntu_target": false,
+    "vps": false
+  },
+  "fault_injection": {
+    "trials": 30,
+    "database_mode": "two independent SQLite file connections, journal_mode=WAL, synchronous=FULL",
+    "initial_state": "UnifiedDB-like value=0; ClayGraph-like value=0",
+    "mutation": "begin write transactions in both; update both to value=1; COMMIT derived/graph-like DB; force process exit(99) before authoritative/unified-like COMMIT",
+    "divergent_pairs": 30,
+    "divergence_rate": 1.0,
+    "observed_pattern": {
+      "unified_like_value": 0,
+      "graph_like_value": 1,
+      "count": 30
+    },
+    "child_exit_code": 99,
+    "trial_wall_ms_p50": 436.243,
+    "trial_wall_ms_p95": 611.282,
+    "total_elapsed_s": 14.652,
+    "interpretation": "Deterministically demonstrates the known sequential multi-file crash window when the derived file commits before the authoritative file. It does not claim a Frank production crash occurred; it supports fail-closed lineage validation and recovery testing."
+  },
+  "connection_hardening_probe": {
+    "trusted_schema_default": 1,
+    "trusted_schema_after_off": 0,
+    "connection_setconfig_available": true,
+    "sqlite_dbconfig_defensive_constant_available": true,
+    "sqlite_dbconfig_trusted_schema_constant_available": true,
+    "defensive_enabled_and_read_back_true": true,
+    "interpretation": "The local Python/SQLite build exposes both hardening surfaces. Production compatibility with Frank migrations/schema/extensions is untested and remains an Ubuntu experiment requirement."
+  },
+  "negative_claims": [
+    "NOT_A_FRANK_PRODUCTION_FAILURE_RECEIPT",
+    "NOT_AN_ANDREAS_UBUNTU_ACCEPTANCE_RECEIPT",
+    "NOT_A_VPS_RECEIPT",
+    "NOT_EVIDENCE_THAT_TRUSTED_SCHEMA_OR_DEFENSIVE_IS_COMPATIBLE_WITH_FRANK"
+  ],
+  "related_work": "WORK-FRANK-HARNESS-TRUTH-GATE-UBUNTU-20260809",
+  "related_frank_pr": "gschaidergabriel/Dr.-Unterweger#25"
+}

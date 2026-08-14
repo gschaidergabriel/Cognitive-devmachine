@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1931p0700-chatgpt-secondary-log-state-three-cycle",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "hypotheses": [
+    {
+      "id": "H-FRANK-LOOP-011",
+      "status": "SUPPORTED_COMPONENT_LEVEL",
+      "claim": "Invalid/non-finite recurrence telemetry must be rejected before it can mint a recurrence decision.",
+      "counterhypothesis": "Upstream producer validation alone is sufficient, so boundary-local validation is redundant.",
+      "evidence": [
+        "Pre-fix H1 quality gate accepted negative uncertainty, negative age, NaN uncertainty and negative residual pressure into decision logic; several minted HALT_CANDIDATE_CONVERGED.",
+        "Current FRANK trajectory adapter already rejects these invalid domains, exposing cross-surface semantic drift.",
+        "H1 quality gate v0.2 rejects invalid numeric domains; 13/13 local regressions pass; 100000-case fuzz rejected all 29808 deliberately invalid samples."
+      ],
+      "falsifier": "Demonstrate on the target H1 spine that upstream-only validation gives the same rejection, replay and recovery guarantees while boundary validation adds material cost or failure modes."
+    },
+    {
+      "id": "H-FRANK-TRACE-012",
+      "status": "SUPPORTED_ARCHITECTURE_CONSTRAINT",
+      "claim": "Recurrence decision receipts should bind controller policy/threshold identity in addition to readout identity.",
+      "counterhypothesis": "A fixed immutable controller implementation makes explicit policy identity unnecessary.",
+      "evidence": [
+        "Pre-fix H1 gate could emit an identical receipt for the same readout under different thresholds when the categorical decision stayed the same.",
+        "The same readout hash persisted when a threshold change altered the decision, so policy reconstruction depended on out-of-band knowledge.",
+        "Current FRANK trajectory adapter already binds policy/thresholds into deterministic receipt identity.",
+        "H1 quality gate v0.2 adds policy_sha256 and receipt_sha256 with domain-separated strict hash inputs."
+      ],
+      "falsifier": "Show that immutable content-addressed executable identity plus exact deployment provenance reconstructs the decision policy with equal reliability and lower complexity, making a separate policy hash redundant."
+    },
+    {
+      "id": "H-FRANK-LOOP-013",
+      "status": "OPEN",
+      "claim": "Typed quality-gated adaptive recurrence will outperform tuned fixed-depth and state-delta-only stopping on real/frozen FRANK episodes under matched outcome/latency/compute/recovery cost.",
+      "counterhypothesis": "A simpler fixed-budget or event-driven baseline matches or beats typed recurrence once tuned on the same episodes.",
+      "evidence": [
+        "Earlier synthetic FRANK discriminators favored typed signals over delta-only control.",
+        "Residual-noise experiments show decision quality depends on estimator quality/freshness.",
+        "ACT and PonderNet provide primary research precedent for adaptive computation depth.",
+        "Recent recurrent-depth transformer research reports both depth benefits and overthinking under excess recurrence."
+      ],
+      "falsifier": "Matched Golden Trace benchmark where a simpler controller equals/exceeds typed recurrence on correctness, false convergence, overthinking, latency, compute and recovery."
+    },
+    {
+      "id": "H-FRANK-STATE-014",
+      "status": "OPEN",
+      "claim": "The future fused H1 recurrence receipt should bind state-ledger version/trace identity, not only state_epoch and a local readout hash, when that integration is available.",
+      "counterhypothesis": "state_epoch plus readout/policy/receipt hashes is sufficient because ledger lineage can always be recovered externally.",
+      "evidence": [
+        "H-WP-02 oracle ledger already distinguishes semantic_state_hash, state_version_hash and trace_root_hash.",
+        "OpenTelemetry/W3C provenance models preserve causal/trace identity separately from payload state.",
+        "Current quality-gate v0.2 closes local policy identity but does not yet carry H-WP-02 state-version/trace roots."
+      ],
+      "falsifier": "Replay/differential tests show no ambiguity or recovery/audit benefit from direct state-version/trace binding across stale, duplicate, crash-recovery and cross-instance cases."
+    },
+    {
+      "id": "H-FRANK-QCAL-015",
+      "status": "OPEN",
+      "claim": "Residual uncertainty/freshness and convergence thresholds should be calibrated and versioned per estimator/loop family rather than frozen globally without trace evidence.",
+      "counterhypothesis": "One global threshold set is robust enough across FRANK loop families and estimators.",
+      "evidence": [
+        "Synthetic sensitivity work showed false convergence changes materially with residual measurement noise/staleness.",
+        "Current hard thresholds are engineering defaults, not target-trace-calibrated measurements.",
+        "Adaptive-computation literature indicates useful stopping depth is task/input dependent."
+      ],
+      "falsifier": "Target/frozen H1 benchmarks show global thresholds remain calibrated across estimator versions, loop families and OOD episodes with no material loss versus per-family calibration."
+    }
+  ],
+  "promotion": "NONE"
+}

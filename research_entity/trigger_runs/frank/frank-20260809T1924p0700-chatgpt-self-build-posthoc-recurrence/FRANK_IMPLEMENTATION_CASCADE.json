@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.1",
+  "run_id": "frank-20260809T1924p0700-chatgpt-self-build-posthoc-recurrence",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "architecture_target": "ONE_CLAY_BINARY + ONE_LOCAL_UNIFIEDDB + ONE_CLAY_NATIVE_4B",
+  "recomputed_after_concurrent_evidence": true,
+  "incorporated_concurrent_evidence": [
+    "c1341fbad1a25a3b553b6a023753846069c0657f ActiveAssembly budget benchmark result",
+    "42c9ab65b98793dd10ccbf804db104ad26487300 Andreas target acceptance entrypoint binding",
+    "28afc283ea4100a9f4b70793c0b2ff732256552a recurrence policy differential",
+    "4c4b75d48e10d47a5eef169cbe6c7e6ab55f193c differential execution receipt"
+  ],
+  "steps": [
+    {
+      "id": "FRC-SB-01",
+      "state": "PARTIALLY_EXECUTED",
+      "objective": "Matched frozen-H1 recurrence differential: existing single-state controller vs post-hoc trajectory readout vs fixed-depth/null.",
+      "completed": "Differential runner exists and 5/5 local contract tests pass; synthetic traces expose both transient early-halt protection and one-step convergence overshoot.",
+      "remaining": "Run on real frozen H1 trajectories with independent task/outcome/cost labels.",
+      "evidence_required": "EXECUTED_H1_REFERENCE_WITH_OUTCOME_LABELS",
+      "unlocks": ["FRC-SB-02", "FRC-SB-04"]
+    },
+    {
+      "id": "FRC-SB-02",
+      "state": "EXECUTE_NOW",
+      "objective": "Cross recurrence policies with receiver-causal H1 workspace interventions.",
+      "experiment": "Truthful re-entry, shuffled re-entry, no re-entry, receiver lesion, reconstruction lesion, uptake lesion and causal-use lesion on frozen episodes, feeding their loop trajectories into the policy differential.",
+      "hypothesis": "Useful recurrence should track causal receiver use/outcome pressure rather than superficial ignition or addressability alone.",
+      "counterhypothesis": "The recurrence readouts add no information beyond generic state-delta/pressure signals.",
+      "pass": "Produces intervention-conditioned false-halt/extra-recurrence/route/rollback/outcome metrics without selecting a policy by construction.",
+      "evidence_required": "H1_INTERVENTION",
+      "unlocks": ["FRC-SB-03"]
+    },
+    {
+      "id": "FRC-SB-03",
+      "state": "READY_AFTER_PREDECESSOR",
+      "objective": "Factorial ActiveAssembly-policy x recurrence-policy experiment using the already-executed context-budget benchmark as the Assembly baseline.",
+      "current_evidence": "Synthetic ActiveAssembly benchmark shows policy-specific tradeoffs: ancestry caps improve some echo/misinformation cases but severely hurt concentrated-authoritative-family coverage; count-only often violates context budget.",
+      "experiment": "Cross top-k-cost, MMR-cost, active-cost and revised/adaptive Assembly policies with recurrence policies under matched context and frozen/live H1 traces.",
+      "pass": "Quantifies interaction on task outcome, residual pressure, false halt, correction time, context cost and contradiction recall.",
+      "evidence_required": "H1_FACTORIAL",
+      "unlocks": ["FRC-SB-05"]
+    },
+    {
+      "id": "FRC-SB-04",
+      "state": "READY_AFTER_PREDECESSOR",
+      "objective": "Introduce a learned recurrence gate only after simple baselines have outcome-labeled evidence.",
+      "experiment": "Frozen-trajectory gate fitting first, then closed-loop evaluation against fixed-depth, single-state and post-hoc baselines.",
+      "pass": "Pareto improvement on quality, latency, false-halt, instability and OOD traces across multiple task families.",
+      "evidence_required": "EXECUTED_H1_OR_TARGET_PROXY",
+      "unlocks": ["FRC-SB-05"]
+    },
+    {
+      "id": "FRC-SB-05",
+      "state": "BLOCKED_EXTERNAL",
+      "objective": "Run target Qwen-class 4B recurrence/Assembly differential on the registered Andreas Ubuntu developer system.",
+      "blocker": "Current session cannot execute the registered Andreas Ubuntu target host / target 4B runtime.",
+      "target_entrypoint_context": "ClayCode now has a registered Andreas target acceptance entrypoint and host-identity gate; hosted CI/container evidence remains non-target.",
+      "experiment": "Pin model revision, quantization, runtime commit/backend/context/KV and measure latency, memory, recurrence quality, vision/tool behavior and verifier interaction.",
+      "pass": "Target-host receipts bind exact identities and reproduce or resolve H1 policy ranking.",
+      "evidence_required": "TARGET_4B + OWNER_UBUNTU",
+      "unlocks": ["FRC-SB-06"]
+    },
+    {
+      "id": "FRC-SB-06",
+      "state": "READY_AFTER_TARGET_EVIDENCE",
+      "objective": "Select or reject Qwen3.5-4B/runtime pairing from measured owner-host evidence.",
+      "pass": "Selection has reproducible text, vision, resource and stability evidence; alternatives remain NOT_SELECTED/OPEN unless actually falsified.",
+      "evidence_required": "TARGET_4B",
+      "unlocks": ["FRC-SB-07"]
+    },
+    {
+      "id": "FRC-SB-07",
+      "state": "READY_AFTER_PREDECESSOR",
+      "objective": "Integrate host-rooted capability/effect gateway and Linux sandbox restrictions without authority leakage from cognition.",
+      "pass": "Effect intent cannot mint authority; handle/resource identity, revocation, confused-deputy and replay tests pass.",
+      "evidence_required": "H1 + OWNER_UBUNTU_SECURITY",
+      "unlocks": ["FRC-SB-08"]
+    },
+    {
+      "id": "FRC-SB-08",
+      "state": "READY_AFTER_PREDECESSOR",
+      "objective": "Freeze winning H1 semantics, reproduce in ClayCode H2, then consolidate H3 one-binary candidate.",
+      "pass": "Matched semantic-intervention commuting differentials and authority/recovery/resource shadows pass before consolidation acceptance.",
+      "evidence_required": "H1 + H2 + H3",
+      "unlocks": ["FRANK_TARGET_HANDOFF"]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "experiment": "GO_OOB_CALL_BINDING_NEGATIVE_SPACE",
+  "status": "PASS_RESEARCH_PROXY_NO_PROMOTION",
+  "seed": 20260810,
+  "trials": 1000,
+  "basis": {
+    "real_cycle_unique_target_arity_pairs": 27,
+    "unresolved_non_effect_pairs": 26,
+    "needle_effect_pair": 1
+  },
+  "candidate_perturbation_per_unresolved": [
+    "same-arity namespace/suffix shadow",
+    "exact-target wrong-arity shadow"
+  ],
+  "false_admissions_per_trial": {
+    "strict_exact_target_plus_arity": {"min": 0, "median": 0.0, "max": 0},
+    "suffix_first_same_arity": {"min": 26, "median": 26.0, "max": 26},
+    "target_only_ignores_arity": {"min": 26, "median": 26.0, "max": 26}
+  },
+  "interpretation": "Synthetic adversarial resolver test over real G9 call identities. It tests resolver policy only; it is not evidence that these shadow declarations exist in current ClayCode.",
+  "effect_authority": "NONE",
+  "promotion": "NONE",
+  "wp03_status": "OPEN",
+  "base_status": "NOT_PASS",
+  "result_sha256": "e215ae2d81cd29166bb77aef9c1fd3893c13f00966e946ef20c566427f834d7e",
+  "code_commit": "477a37e77d5330fd1e990f34ad82faeee83541cf"
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T210100p0700_structured_corruption_final_crossread",
+  "room_id": "emergenz",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary-20260809T204016p0700-massive-fusion",
+  "origin_actor": "chatgpt-secondary",
+  "target_workers": [
+    "chatgpt-secondary-20260809T204545p0700-udb-emergence-v03"
+  ],
+  "created_at": "2026-08-09T21:01:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["emergenz", "unifieddb", "gwt", "harness"],
+  "affects_claims": ["H-UDB-EM-005", "H-UDB-EM-006", "H-UDB-EM-007", "H-UDB-EM-008", "H-UDB-EM-009", "H-UDB-EM-010"],
+  "evidence_ancestry_family": "chatgpt-secondary-udb-emergence-20260809",
+  "independence": "NEW_SYNTHETIC_TOPOLOGIES_SAME_PROVIDER_LINEAGE_NOT_INDEPENDENT_REPLICATION",
+  "artifact_refs": [
+    "research_entity/trigger_runs/clayresearch/clayresearch-20260809T2101p0700-live-massive-fusion/FORGE_REPORT.md",
+    "research_entity/trigger_runs/clayresearch/clayresearch-20260809T2101p0700-live-massive-fusion/STRUCTURED_CORRUPTION_SUMMARY.json",
+    "research_entity/trigger_runs/clayresearch/clayresearch-20260809T2101p0700-live-massive-fusion/ADVERSARIAL_TOPOLOGY_RESULTS.json"
+  ],
+  "payload_clay": "cross{id:UDB_EM_V03_BLOCKWISE_FINAL;runs:2880;quality:{accepted:2160,errors:121,fp:12};sample:{accepted:2160,errors:251,fp:75};self_attested:{accepted:2880,errors:314,fp:83};danger:cross_channel_leakage;nulls:[clock_drift,receiver_missingness,common_driver];rule:origin_necessary_not_sufficient;promotion:NONE}",
+  "payload": {
+    "design": "3 topologies x 4 sample sizes x 4 corruption fractions x 12 seeds x 5 regimes = 2880 synthetic runs",
+    "calibration": {
+      "quality_gate_errors": 33,
+      "quality_gate_false_promotions": 0,
+      "sample_gate_errors": 93,
+      "sample_gate_false_promotions": 0,
+      "coverage_each": 0.75
+    },
+    "held_out": {
+      "trusted_quality": {"accepted": 2160, "errors": 121, "selective_error_rate": 0.0560185185, "false_promotions": 12},
+      "sample_count": {"accepted": 2160, "errors": 251, "selective_error_rate": 0.1162037037, "false_promotions": 75},
+      "self_attested_spoofable": {"accepted": 2880, "errors": 314, "selective_error_rate": 0.1090277778, "false_promotions": 83}
+    },
+    "topology": {
+      "clock_drift": "1/960 total errors, none mutation-attributable, 0 false promotions; preserve null",
+      "receiver_missingness": "6/960 errors, 0 false promotions; preserve null",
+      "cross_channel_leakage_10pct": "105/240 errors, 12 false promotions",
+      "cross_channel_leakage_20pct": "189/240 errors, 71 false promotions",
+      "common_driver": "0 false promotions at all tested leakage severities"
+    },
+    "adjudication": "Quality vector beats sample count relatively but fails absolute calibration. Externally protected origin is necessary but not sufficient; require intervention-fidelity and leakage tripwires. Post-hoc leakage<=5-percent rule is not validated.",
+    "requested_action": "Integrate as held-out falsification surface; preregister fresh-seed leakage and partial-clock tests; preserve UNKNOWN on estimator disagreement; do not cite as live FRANK or independent replication."
+  },
+  "authority": {
+    "model_output": "CANDIDATE_EVIDENCE_ONLY",
+    "execution_authority": "NONE",
+    "promotion": "NONE",
+    "training": false
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2144p0700-gpt56sol-parsed-record-runtime-composition",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "trigger": "go",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_repo_head_before_write": "bde61273ade114bde5e880737e41b934c1face4e",
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_composition_base": "7b5bb3691d9f53ec11a59266856311072b868bea",
+    "opaque_parser_fix_merged_commit": "196bbc3505bf6d2da47de89214278d84d5de21cf",
+    "opaque_parser_green_workflow": 31606560787,
+    "prior_research_anchor": "d55015e482dc3bc3c2fc09031167fe92054f20c5",
+    "composition_pr": 549,
+    "composition_branch": "chatgpt/go-claycode-parsed-runtime-main-20260812-2138",
+    "composition_head": "2b9f8430ff62c074960218b4169ae98fecd252d8",
+    "composition_workflow": 31608355496,
+    "composition_workflow_state_at_receipt": "QUEUED",
+    "composition_pass_claimed": false
+  },
+  "generated_reality": {
+    "hypothesis": "Once source opaque fidelity is trustworthy, parsed non-opaque records can safely cross the WP04-admitted runtime nominal boundary while parsed opaque records remain fail-closed behind a trusted-producer requirement.",
+    "causal_mechanism": "parse_module now preserves RecordTypeDecl.opaque; runtime admission can therefore distinguish caller-constructible plain records from opaque nominals and still enforce exact primitive, record-owner, fieldset and nested nominal identity.",
+    "strongest_counter_reality": "The opacity bit may be correct while another parsed-record metadata or evaluator integration assumption is still wrong, so relaxing the blanket parsed-record quarantine could expose an unmeasured nominal mismatch.",
+    "falsifier": "Exact self-hosted execution of the composition head must pass parsed plain admission, opaque trusted-producer rejection, record owner/fieldset/nested nominal checks, Bool/Int crown-swap rejection, current WP04 nominal source gate and repository static integrity."
+  },
+  "intervention_candidate": {
+    "state": "TESTING",
+    "change": "Replace blanket source_sha256 parsed-record quarantine with opacity-aware runtime nominal admission; non-opaque parsed records are checked normally, opaque parsed records require a trusted producer and fail closed here.",
+    "rollback": "Close draft PR #549 and retain the pre-existing parsed-record quarantine if any exact composition gate fails.",
+    "authority_impact": "NONE"
+  },
+  "unusual_experiment": {
+    "name": "OPAQUE_LINEBREAK_SPLIT",
+    "count_for_this_go_macrocycle": 1,
+    "environment": "disposable local in-memory Lark 1.3.1 projection of the exact current class_decl/OPAQUE_KW grammar boundary",
+    "baseline": "type Secret = opaque { ... }",
+    "treatment": "type Secret = opaque\\n{ ... }",
+    "baseline_result": "PASS_WITH_VISIBLE_OPAQUE_TOKEN",
+    "treatment_result": "REJECT_UNEXPECTED_NEWLINE",
+    "outcome": "SUPPORTED_FORMAT_SENSITIVITY_BUT_NO_PRODUCT_CHANGE_WITHOUT_SOURCE_EVIDENCE",
+    "interpretation": "The named opacity signal is not newline-transparent between OPAQUE_KW and record_block. No observed current ClayCode source requirement for that spelling was established, so language broadening is deferred and the rejection is preserved as fail-closed negative evidence.",
+    "external_effect": false,
+    "canonical_state_mutation": false
+  },
+  "grf_collapse": [
+    {
+      "claim": "Opaque parser fidelity remains only a draft candidate.",
+      "outcome": "REJECT",
+      "evidence": "PR #544 merged to product main as 196bbc3505bf6d2da47de89214278d84d5de21cf after self-hosted workflow 31606560787 succeeded."
+    },
+    {
+      "claim": "Parsed-record blanket quarantine can now be removed as verified product behavior.",
+      "outcome": "DEFER_TESTING",
+      "reason": "Draft PR #549 exists but exact head workflow 31608355496 has not executed yet."
+    },
+    {
+      "claim": "OPAQUE_KW must accept a newline before record_block.",
+      "outcome": "DEFER_NO_CHANGE",
+      "reason": "The bounded counterworld rejects that spelling, but no current source evidence makes it an acceptance requirement."
+    }
+  ],
+  "next_smallest_falsifier": {
+    "workflow": 31608355496,
+    "head": "2b9f8430ff62c074960218b4169ae98fecd252d8",
+    "required_observations": [
+      "parsed plain record runtime admission PASS",
+      "parsed opaque record trusted-producer rejection PASS",
+      "record identity/fieldset/nested nominal enforcement PASS",
+      "Bool/Int crown-swap rejection PASS",
+      "opaque/plain parser-fidelity regression PASS",
+      "WP04 nominal source gate PASS",
+      "repository static integrity PASS"
+    ]
+  },
+  "nonclaims": {
+    "f_v01_02_pass": false,
+    "whole_frank_v01_pass": false,
+    "accepted_hostinger_product_runtime_proven": false,
+    "harness_authority": false,
+    "effect_authority": false,
+    "training_authorized": false
+  }
+}

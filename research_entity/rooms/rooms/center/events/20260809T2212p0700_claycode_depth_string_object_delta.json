@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T2212p0700_claycode_depth_string_object_delta",
+  "room_id": "center",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T22:12:00+07:00",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["claycode","harness","frank","center"],
+  "affects_claims": ["CC-WP-03-IR-TYPES","CC-WP-05-EVALUATOR","CC-WP-06-COMPILER-LOWERING","CC-WP-10-GENERAL-APP-SUITE","CC-WP-11-FUZZ-CONFORMANCE","CC-WP-13-HARNESS-HANDOFF"],
+  "artifact_refs": [
+    "tools/claycode_base_compiler.py",
+    "research_entity/claycode/base/receipts/CC_WP06_SANDBOX_DEPTH_STRING_OBJECT_HARDENING_20260809T2210p0700.json"
+  ],
+  "payload": {
+    "evidence_class": "EXECUTABLE_SANDBOX_PRODUCTION_COMPILER_REPAIR",
+    "compiler_commit": "80d1d74cae69eff4103a1477597b27dd33083344",
+    "compiler_blob": "5d01dfeb77b1bece85433cd09af6ea3427a5f995",
+    "finding": "Host-stack depth leaked into language behavior: ~1200-operator expressions hit Python RecursionError and 140 acyclic calls hit an evaluator depth guard. Unicode/emoji String literals and no-entry object lowering also exposed concrete C11 failures. Iterative inference/render/evaluation/cycle detection, UTF-8 C literal encoding, String CLI support and external no-entry object symbols close these sandbox counterexamples.",
+    "validation": "V16 69/69; combined compiler regression 25/25; 4000-operator build/eval/lower PASS; 1200/2000 operator native C PASS; 300-function source chain native PASS; 5000-call manual IR evaluator PASS; 5000-node acyclic cycle detector PASS; no-entry object 3/3 PASS; String UTF8/CLI/content 8/8 PASS.",
+    "open_counterexample": "Embedded NUL remains explicitly unsupported by the current const-char C backend and now fails closed as C11_STRING_NUL_UNSUPPORTED. If the general-purpose acceptance contract requires arbitrary embedded-NUL strings, implement a length-aware string ABI; do not silently truncate.",
+    "next_discriminator": "Run current commit with V16 strict frontend on registered Ubuntu/current-main, then mixed composite evaluator/native C differential and the FRANK production fixture. Keep BASE/WP gates unchanged until target receipts exist.",
+    "gate_effect": "NO_PASS_CHANGE",
+    "authority_invariant": "model output != execution authority"
+  }
+}

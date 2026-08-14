@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2103p0700-chatgpt-secondary-v18-contract-mesh",
+  "result": "SUPPORTED_IMPLEMENTATION_REPAIR_NOT_PACKAGE_PASS",
+  "claim": "A V18 FrontendArtifact consumed by the production TypedIR bridge must be bound to the frontend contract_hash, not only its semantic_hash, surface and grammar hash.",
+  "counterhypothesis": "The contract_hash is redundant metadata because semantic_hash plus grammar identity already captures all interpretation-relevant state.",
+  "falsifier": "Show that contract_hash is never used as a frontend contract identity/receipt boundary or that accepting an arbitrary contract_hash cannot change downstream provenance, cache, validation or receipt interpretation.",
+  "discriminator": {
+    "before_fix": "same valid canonical AST and semantic_hash with arbitrary replacement contract_hash was accepted",
+    "after_fix": "bridge recomputes the exact frontend contract hash from frontend_schema + grammar_sha256 + semantic_hash and rejects missing or mismatched values"
+  },
+  "implementation": {
+    "path": "tools/claycode_base_typed_ir_v18_bridge.py",
+    "commit": "f90c1b0382ffc7f4845d461c9c4a27bbbf43d7d6",
+    "new_blob_sha": "0fe810465fa9a2ed07d52307aaf45bf3f30fec42"
+  },
+  "regression": {
+    "path": "tools/test_claycode_v18_bridge_contract_hash.py",
+    "commit": "3642f9a0f913255cf78664351a8c783a1fb7c129",
+    "cases": [
+      "current frontend artifact accepted",
+      "contract_hash tamper rejected",
+      "missing contract_hash rejected",
+      "semantic_hash tamper remains rejected"
+    ]
+  },
+  "mesh_repair": {
+    "finding": "Registry schema 3.0 invalidated legacy peer-kind discovery and would force the mandatory interconnect preflight to fail closed.",
+    "implementation": "tools/research_interconnect_preflight_v2.py",
+    "compat_entrypoint": "tools/research_interconnect_preflight.py",
+    "test": "tools/test_research_interconnect_preflight_frank_v01_registry.py",
+    "peer_count": 10
+  },
+  "architecture_decision": "NO_CLAYCODE_SURFACE_SEMANTIC_CHANGE",
+  "reason": "Both failures are executable contract/governance realization bugs. Existing ClayCode semantics are sufficient; the correct response is stricter compilation/receipt binding and current-registry tooling.",
+  "affected_frank_v0_1_packages": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "promotion": "NONE_UNTIL_TARGET_VPS_RECEIPT_AND_BROADER_TYPEDIR_TYPE_EFFECT_GATES_PASS"
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T0636p0700-target-liveness",
+  "trigger": "go",
+  "experiment_id": "GO-OOB-ANDREAS-REAL-BASE14-LIVENESS-PULSE-V1",
+  "class": "BOUNDED_OUT_OF_THE_BOX_TARGET_TRANSPORT_DIFFERENTIAL",
+  "created_at": "2026-08-10T06:36:17+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_head_before_materialization": "b3ea42bc064c201eec9b99029f751f416c49c986",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "hypothesis": "A semantic-noop push to the real ClayCode Andreas target autoprobe workflow on an isolated branch will be routed to one online self-hosted runner satisfying self-hosted+linux+x64+andreas+claycode+target and will materialize the fail-closed physical BASE14 target receipt if the registered target transport is live.",
+  "strongest_counterhypothesis": "No exact online+idle runner currently satisfies all required labels, or registered target identity/desktop prerequisites are unavailable; the workflow therefore remains queued/not-started and no physical target receipt is materialized.",
+  "experiment": {
+    "branch": "chatgpt-secondary/go-target-liveness-20260810-0631",
+    "commit": "8bf24da0fc596f0e6477eaafdba6e17f02d267a0",
+    "changed_path": ".github/workflows/claycode-andreas-target-autoprobe.yml",
+    "mutation": "comment-only semantic-noop liveness pulse on isolated branch",
+    "main_mutated_by_experiment": false,
+    "workflow_required_labels": ["self-hosted", "linux", "x64", "andreas", "claycode", "target"],
+    "expected_receipt": "research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json",
+    "observations": [
+      {
+        "observation": 1,
+        "receipt_present": false,
+        "github_file_result": "404_NOT_FOUND"
+      },
+      {
+        "observation": 2,
+        "receipt_present": false,
+        "github_file_result": "404_NOT_FOUND"
+      },
+      {
+        "observation": 3,
+        "receipt_present": false,
+        "github_file_result": "404_NOT_FOUND"
+      }
+    ],
+    "result": "UNKNOWN_QUEUED_OR_NOT_STARTED",
+    "pass": false,
+    "fail": false,
+    "promotion": "NONE",
+    "rollback": "Delete experiment branch; main and ClayCode semantics were not changed by this experiment."
+  },
+  "live_external_evidence": [
+    {
+      "source_class": "T0_OFFICIAL_DOCS",
+      "provider": "GitHub Actions",
+      "retrieved_at": "2026-08-10T06:30+07:00",
+      "claim": "A self-hosted job with an array of runs-on labels is eligible only on a runner matching all labels; absent an online idle match the job remains queued rather than proving a code failure."
+    },
+    {
+      "source_class": "T0_OFFICIAL_DOCS",
+      "provider": "Lark",
+      "retrieved_at": "2026-08-10T06:28+07:00",
+      "claim": "Strict LALR construction is an appropriate conflict discriminator; this supports the existing strict-WP02 acceptance design and does not justify a semantic redesign by itself."
+    }
+  ],
+  "shared_state_reconciliation": {
+    "collision_avoided": "CC-WP-02 canonicalizer lane was already claimed by another worker and later independently fixed/cancelled after live refresh; this run did not duplicate or overwrite that lane.",
+    "wp02_recent_delta": "A decoded-string canonical identity counterexample was persisted and fixed on main during this invocation; local reproduction evidence followed.",
+    "implementation_vs_acceptance": "The current Andreas target collector already executes strict-LALR, frontend, canonicalizer, typed IR, effect pipeline, pure native toolchain, integer-division regression, package linking, runtime, runtime-v0.4 hardening, compiler-to-mainline-runtime bridge, concurrency cancellation/error, fuzz, corpus and FRANK preflight. Therefore several coarse OPEN implementation-gap descriptions are stale as implementation descriptions, while their production/target acceptance gates remain legitimately OPEN.",
+    "language_counterexample_state": "No currently unresolved executable language counterexample requires changing frozen BASE semantics.",
+    "current_primary_blocker": "Verified physical Andreas Ubuntu target execution plus strict per-application/full-FRANK/WP14 receipts; transport availability is UNKNOWN in this run because no target receipt materialized."
+  },
+  "hypothesis_fusion": {
+    "supported": [
+      "Less change, more compile remains the correct BASE policy under current evidence.",
+      "Effect/type/runtime/concurrency implementation candidates exist and are already wired into the physical target collector.",
+      "Target acceptance evidence must not be inferred from hosted/proxy/local code existence."
+    ],
+    "not_supported": [
+      "ClayCode BASE release PASS",
+      "Andreas target runner currently online",
+      "All 14 work packages PASS",
+      "Ten target applications PASS"
+    ],
+    "counterevidence_preserved": "No ANDREAS_SELF_HOSTED_AUTOPROBE receipt observed on the isolated pulse branch in three bounded observations."
+  },
+  "architecture_delta": {
+    "status": "NO_CHANGE",
+    "semantics": "NO_CHANGE",
+    "reason": "No executable language counterexample requires BASE semantic mutation; existing production path already covers the candidate effect/runtime/concurrency mechanisms. The discriminating missing evidence is physical target execution/adjudication.",
+    "test_obligation": "When the exact registered Andreas runner becomes available, execute the existing fail-closed autoprobe and require identity, real mapped desktop, full FRANK, ten real applications, strict acceptance assembly and WP14 before release promotion.",
+    "authority_boundary": "model output != execution authority"
+  },
+  "next_frontier": [
+    "Observe or restore the exact registered Andreas self-hosted runner transport without weakening runner labels or identity checks.",
+    "If the real target workflow executes, inspect the first failing canonical step and repair only that falsifier, then rerun from fresh main.",
+    "Reconcile coarse implementation-gap ledgers after target receipts so implemented-but-unaccepted mechanisms are not mistaken for absent code.",
+    "Do not duplicate the active/recent WP02 canonicalizer lane; consume its latest receipts instead."
+  ],
+  "truth_class": "RESEARCH_EVIDENCE_WITH_REMOTE_TRIGGER_EFFECT; TARGET_EXECUTION_UNVERIFIED",
+  "research_center_distribution": ["claycode", "harness", "frank", "recovery", "program-stage"],
+  "generation_validity": {
+    "distinct_classes": ["FALSIFICATION", "RISK_COVERAGE_GAIN", "TOOLING_GAIN"],
+    "executable_or_remote_effect_refs": ["8bf24da0fc596f0e6477eaafdba6e17f02d267a0"],
+    "valid": true
+  }
+}

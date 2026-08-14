@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2100p0700-gpt56sol-sqlite-pid-tail-fence",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T21:00:30+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "reasoning_frame": "GRF",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_continuity_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "note": "Continuity anchor only; dynamic implementation and evidence state were refreshed from GitHub throughout this run."
+  },
+  "target": {
+    "program": "FRANK_V0_1",
+    "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "accepted_host": "Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "observed_reality": {
+    "workspace_gate": "F-V01-13 remains IN_PROGRESS; fixed SQLite presence or mechanism success is not productive release acceptance.",
+    "product_main_final_prewrite_refresh": "53d0906e5e0d5493517393164854681c2db06854",
+    "merged_parent_hardening": {
+      "commit": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+      "subject": "security(storage): fence live SQLite hash against in-place mutation (#529)",
+      "preserved_in_candidate": true
+    },
+    "fresh_candidate": {
+      "branch": "clay/go-fv01-13-pid-tail-fence-fresh-main-20260812",
+      "head": "9e0bfdb12d361b60bfa1b890bb8739131c040587",
+      "pull_request": 542,
+      "base": "53d0906e5e0d5493517393164854681c2db06854",
+      "state": "DRAFT_TESTING",
+      "changed_files": [
+        "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py",
+        "tests/test_frank_sqlite_live_process_attestor_v1.py"
+      ]
+    },
+    "superseded_candidate": {
+      "pull_request": 530,
+      "state": "CLOSED_UNMERGED",
+      "reason": "Its ancestry predated merged #529; recomposition on fresh main avoided overwriting newer FD-bound/in-place-content hardening."
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "finding": "The WAL-reset corruption bug affects releases through 3.51.2 and is fixed in 3.51.3 and later; trigger conditions involve WAL with multiple connections across threads/processes and concurrent checkpoint/write timing."
+    },
+    {
+      "source": "SQLite release 3.51.3 / current release lineage",
+      "finding": "3.51.3 introduces the WAL-reset corruption fix; later 3.53.4 is therefore on the fixed side, but version presence alone does not prove Frank's productive persistence path uses the exact fixed object."
+    }
+  ],
+  "grf": {
+    "observed_anchor_R0": "The live process attestor sampled PID generation around SQLite mapping/hash verification, but then read receipt-tail exe/cgroup/effective UID without a generation sample after those reads.",
+    "generated_reality_R2": "The prior start-time fence might be sufficient because PID reuse during the tiny receipt-tail window is unlikely.",
+    "counter_reality_R3": "If process A exits after the last start-time check and the PID is reused by process B before tail metadata reads finish, one receipt can combine A's attested SQLite/start ticks with B's exe/cgroup/effective UID.",
+    "discriminator": "Model the exact ordering, then add a final start-time sample after all receipt-tail process metadata reads and make generation mismatch fail closed.",
+    "collapse": "The prior ordering is insufficient as a strict one-generation receipt proof. Retain the narrow live-mapping mechanism, add a tail-generation fence, and keep productive binding obligations open."
+  },
+  "single_bounded_unusual_experiment": {
+    "count_for_macro_cycle": 1,
+    "name": "POST_ATTESTATION_PID_REUSE_CHIMERA",
+    "scope": "Disposable local state model only; no Hostinger/VPS, Frank state, provider, Harness, canonical runtime, or training mutation.",
+    "baseline": "Process generation A survives through the existing post-mapping start-time check.",
+    "intervention": "Replace the modeled process at the same PID before receipt-tail exe/cgroup/effective-UID observation.",
+    "observed": "A mixed-generation receipt can be constructed under the old ordering: generation A start ticks with generation B tail metadata.",
+    "outcome": "COUNTER_REALITY_SUPPORTED",
+    "live_exploit_claimed": false,
+    "rollback": "Pure local model; no persistent state to roll back."
+  },
+  "repair_candidate": {
+    "function": "_stable_process_metadata(pid, expected_start_ticks)",
+    "mechanism": [
+      "read effective UID and reject root",
+      "read /proc/<pid>/exe",
+      "read cgroup",
+      "sample process start ticks after all receipt-tail metadata",
+      "reject PID_GENERATION_CHANGED_DURING_METADATA on mismatch",
+      "construct receipt only from the fenced metadata"
+    ],
+    "preserves_529_fd_hash_fence": true,
+    "local_primitive_regression": {
+      "scope": "isolated local helper/primitive semantics",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "includes": [
+        "existing start-generation primitive",
+        "mapping dev/inode identity",
+        "path replacement rejection",
+        "multiple mapping rejection",
+        "FD-bound stable hash",
+        "same-inode in-place mutation rejection",
+        "same-generation tail metadata acceptance",
+        "post-attestation PID-generation mismatch rejection"
+      ],
+      "release_credit": "NONE"
+    }
+  },
+  "ci_evidence": {
+    "candidate_head": "9e0bfdb12d361b60bfa1b890bb8739131c040587",
+    "frank_fresh_main_effect_fence_provider_contract_vps": "SUCCESS",
+    "frank_deep_integrity_hosted": {
+      "status": "NOT_STARTED_INFRASTRUCTURE_BLOCKED",
+      "reason": "GitHub Actions annotation states recent account payments failed or spending limit must be increased.",
+      "classification": "UNKNOWN_NOT_CODE_FAILURE"
+    },
+    "frank_self_root_current_head_v2": "QUEUED_AT_RECEIPT_TIME",
+    "execution_gate_directory_anchor_repair_vps": "QUEUED_AT_RECEIPT_TIME"
+  },
+  "concurrent_research_fusion": {
+    "renamed_dso_counterworld": "A separate Clay worker showed that a second SQLite DSO renamed outside the current libsqlite3.so basename filter can evade exclusivity inference. Therefore this attestor alone cannot prove no other SQLite engine exists or that productive persistence calls use the anchored engine.",
+    "decoy_mapping_counterworld": "A separate worker showed a SQLite-like decoy name producing multiple observed identities is rejected fail-closed, retaining conservative multi-identity behavior.",
+    "productive_binding_issue": 534,
+    "duplicate_avoidance": "This run did not duplicate broader DSO exclusivity, ProductStart, semantic-lineage, or productive persistence-binding patches."
+  },
+  "negative_results_preserved": [
+    "A fixed SQLite candidate/version is not evidence that the productive Frank persistence path uses it.",
+    "One live mapped SQLite identity does not prove SQLite-engine exclusivity or productive call-site binding.",
+    "Hosted Deep Integrity red status in this run is infrastructure non-start, not a code-test failure.",
+    "Local primitive regression success is not accepted Hostinger release evidence.",
+    "F-V01-13 remains IN_PROGRESS."
+  ],
+  "next_discriminating_test": {
+    "reference_issue": 534,
+    "test": "On the accepted Hostinger target, provenance-bind host identity, selected Frank service/process generation and exact mapped fixed SQLite object; exercise the real UnifiedDB persistence path; then repeat across clean restart while rejecting rollback, downgrade and library-swap/alternate-engine cases in one durable receipt.",
+    "promotion_required": "Only productive exact-path evidence may close F-V01-13; synthetic, local, self-hosted mechanism, or generic version evidence is insufficient."
+  },
+  "outcome": {
+    "pid_tail_fence": "RETAIN_TESTING",
+    "pull_request": 542,
+    "F_V01_13": "IN_PROGRESS_NOT_PROMOTED",
+    "FRANK_V0_1": "NOT_PROMOTED",
+    "effect_authority": "NONE",
+    "canonical_state_mutated": false,
+    "final_model_training_authorized": false
+  }
+}

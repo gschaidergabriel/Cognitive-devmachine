@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CAPSEL-20260809T173745Z-CLAYCODE-WP02-HOSTINGER",
+  "kind": "CAPABILITY_SELECTION",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:37:45Z",
+  "payload": {
+    "field_or_work": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "selected_candidate": "GitHub Actions Hostinger self-hosted Ubuntu lane with ephemeral dependency isolation and separate hosted receipt persistence",
+    "provider": "Hostinger + GitHub Actions",
+    "rejected_candidates": [
+      {
+        "candidate": "ChatGPT local sandbox",
+        "reason": "Useful only for diagnostics; cannot mint target-class or Hostinger execution receipts."
+      },
+      {
+        "candidate": "arbitrary workflow_dispatch from current ChatGPT GitHub connector",
+        "reason": "Capability not exposed on the currently authorized connector surface."
+      },
+      {
+        "candidate": "direct SSH/runner credential execution",
+        "reason": "No authorized direct credentialed execution surface is available to this worker."
+      }
+    ],
+    "selection_basis": "Highest field fit and reproducibility for the current WP02/V17 exact-byte execution blocker; existing project infrastructure is already verified for real Ubuntu build/test/model execution. The selected workflow minimizes self-hosted write authority, uses isolated pinned parser dependencies and persists bounded receipts through a separate hosted writer.",
+    "evidence": [
+      "research_entity/global/HOSTINGER_GITHUB_RUNNER_RESEARCH_CAPABILITY.json",
+      "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",
+      ".github/workflows/claycode-vps-wp02-probe.yml@7c08dd9fc2912fe85493e262ed9d14d101714537",
+      "ci retrigger commit 512bf299496144160efddf41ddc1d0e7e0a6bf81",
+      "https://docs.github.com/en/actions/concepts/security/compromised-runners",
+      "https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow",
+      "https://docs.python.org/3/using/cmdline.html"
+    ],
+    "authority_scope": "Authorized repository workflow execution only. Self-hosted job remains contents:read; hosted receipt writer owns contents:write. No final Frank release authority is implied.",
+    "availability_state": "SELECTED_EXECUTION_TRIGGERED_RECEIPT_PENDING",
+    "freshness_seconds": 0
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "retrieved_at_local": "2026-08-10T22:42:00+07:00",
+  "sources": [
+    {
+      "source_class": "OFFICIAL_MODEL_REPO",
+      "ref": "QwenLM/Qwen3.6 README",
+      "finding": "Qwen3.6 current open releases are 27B and 35B-A3B; Qwen3.5 small dense 9B/4B/2B/0.8B were released 2026-03-02, so Qwen3.5-4B remains the current official Qwen <=4B multimodal lane observed in this run."
+    },
+    {
+      "source_class": "OFFICIAL_RUNTIME_CODE",
+      "ref": "huggingface/transformers src/transformers/models/qwen3_5/modular_qwen3_5.py",
+      "finding": "Qwen3.5 vision forward returns both last_hidden_state before merger and pooler_output after merger from one pass; get_image_features forwards the post-merger representation into the language model."
+    },
+    {
+      "source_class": "OFFICIAL_RUNTIME_CODE",
+      "ref": "ggml-org/llama.cpp tools/mtmd/mtmd.h + mtmd-helper.cpp",
+      "finding": "libmtmd exposes encoded media embeddings and helper decode consumes already-calculated embeddings; media IDs are intended for cache tracking; chunk save/load is metadata-only and loaded chunks cannot be encoded."
+    },
+    {
+      "source_class": "ISSUE_OR_FAILURE",
+      "ref": "ggml-org/llama.cpp issue 19466",
+      "finding": "Current reported llama-server slot save returns not-supported for multimodal; exact Frank/Qwen3.5 reproduction remains required."
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "ref": "recent GUI temporal/token pruning research cluster 2026",
+      "finding": "Recent GUI-agent work supports adaptive spatial/temporal compression while warning that background/spatial transition information can remain useful; this motivates a two-stage rather than blind crop-only policy."
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "ref": "Qwen3-VL-Embedding/Reranker 2026",
+      "finding": "Strong multimodal embeddings use explicit contrastive/adaptation objectives, preserving the counterhypothesis that raw generative Qwen3.5 visual features may be poorly calibrated for open-set familiarity."
+    }
+  ],
+  "currentness_note": "All current-version assertions were refreshed during this q23 invocation; runtime/model facts remain subject to exact target build verification.",
+  "limitations": ["No target-VPS model execution in this invocation", "Local environment lacks transformers package", "No paid/final training performed"]
+}

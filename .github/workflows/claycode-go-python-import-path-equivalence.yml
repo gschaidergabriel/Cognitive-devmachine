@@ -1,0 +1,297 @@
+name: ClayCode GO Python Import-Path Equivalence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-go-python-import-path-equivalence.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycode-go-python-import-path-equivalence
+  cancel-in-progress: false
+
+jobs:
+  import-path-vps:
+    permissions:
+      contents: read
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout tested main read-only
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Verify execution authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          extra="$(git config --local --get-all http.https://github.com/.extraheader || true)"
+          test -z "$extra"
+
+      - name: Run same bounded import-path equivalence experiment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import math
+          import os
+          import platform
+          import shutil
+          import socket
+          import statistics
+          import subprocess
+          import sys
+          import tempfile
+          import time
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          repetitions = 20
+          root = Path(tempfile.mkdtemp(prefix='clay-go-import-path-', dir=os.environ.get('RUNNER_TEMP') or '/tmp')).resolve()
+          deps = root / 'deps'
+          scripts = root / 'scripts'
+          work = root / 'work'
+          deps.mkdir(); scripts.mkdir(); work.mkdir()
+
+          (deps / 'probe_dep.py').write_text("ORIGIN='EPHEMERAL_DEPS'\n", encoding='utf-8')
+          (scripts / 'probe_dep.py').write_text("ORIGIN='SCRIPT_DIR_SHADOW'\n", encoding='utf-8')
+          probe = scripts / 'probe.py'
+          probe.write_text(
+              "import json, probe_dep, sys\n"
+              "print(json.dumps({'origin': probe_dep.ORIGIN, 'safe_path': bool(sys.flags.safe_path), 'sys_path_0': sys.path[0] if sys.path else None}, sort_keys=True))\n",
+              encoding='utf-8',
+          )
+
+          verifier_code = (
+              "import json, probe_dep, sys; "
+              "print(json.dumps({'origin': probe_dep.ORIGIN, 'safe_path': bool(sys.flags.safe_path), 'sys_path_0': sys.path[0] if sys.path else None}, sort_keys=True))"
+          )
+
+          def percentile(values, q):
+              ordered = sorted(values)
+              if not ordered:
+                  return None
+              idx = max(0, min(len(ordered)-1, math.ceil(q * len(ordered)) - 1))
+              return ordered[idx]
+
+          def run_lane(name, argv, safe):
+              rows = []
+              for index in range(repetitions):
+                  env = dict(os.environ)
+                  env['PYTHONNOUSERSITE'] = '1'
+                  env['PYTHONPATH'] = str(deps)
+                  if safe:
+                      env['PYTHONSAFEPATH'] = '1'
+                  else:
+                      env.pop('PYTHONSAFEPATH', None)
+                  start = time.monotonic_ns()
+                  proc = subprocess.run(
+                      argv,
+                      cwd=work,
+                      env=env,
+                      text=True,
+                      capture_output=True,
+                      timeout=10,
+                  )
+                  elapsed_ms = (time.monotonic_ns() - start) / 1_000_000.0
+                  parsed = None
+                  parse_error = None
+                  try:
+                      parsed = json.loads(proc.stdout.strip()) if proc.stdout.strip() else None
+                  except Exception as exc:
+                      parse_error = f'{type(exc).__name__}:{exc}'
+                  rows.append({
+                      'index': index,
+                      'returncode': proc.returncode,
+                      'elapsed_ms': elapsed_ms,
+                      'stdout': proc.stdout.strip(),
+                      'stderr': proc.stderr.strip(),
+                      'parsed': parsed,
+                      'parse_error': parse_error,
+                  })
+              elapsed = [r['elapsed_ms'] for r in rows]
+              origins = {}
+              safe_flags = {}
+              for row in rows:
+                  parsed = row.get('parsed') or {}
+                  origin = str(parsed.get('origin'))
+                  safe_flag = str(parsed.get('safe_path'))
+                  origins[origin] = origins.get(origin, 0) + 1
+                  safe_flags[safe_flag] = safe_flags.get(safe_flag, 0) + 1
+              return {
+                  'name': name,
+                  'repetitions': repetitions,
+                  'all_returncode_zero': all(r['returncode'] == 0 for r in rows),
+                  'origin_counts': origins,
+                  'safe_path_counts': safe_flags,
+                  'elapsed_ms': {
+                      'min': min(elapsed),
+                      'p50': statistics.median(elapsed),
+                      'p95': percentile(elapsed, 0.95),
+                      'max': max(elapsed),
+                  },
+                  'rows': rows,
+              }
+
+          verifier = run_lane('verifier_like', [sys.executable, '-c', verifier_code], safe=False)
+          actual_current = run_lane('actual_script_current_controls', [sys.executable, str(probe)], safe=False)
+          actual_safe = run_lane('actual_script_python_safe_path', [sys.executable, str(probe)], safe=True)
+
+          expected = {
+              'verifier_like': {'EPHEMERAL_DEPS': repetitions},
+              'actual_script_current_controls': {'SCRIPT_DIR_SHADOW': repetitions},
+              'actual_script_python_safe_path': {'EPHEMERAL_DEPS': repetitions},
+          }
+          semantic_pass = (
+              verifier['all_returncode_zero']
+              and actual_current['all_returncode_zero']
+              and actual_safe['all_returncode_zero']
+              and verifier['origin_counts'] == expected['verifier_like']
+              and actual_current['origin_counts'] == expected['actual_script_current_controls']
+              and actual_safe['origin_counts'] == expected['actual_script_python_safe_path']
+              and actual_safe['safe_path_counts'] == {'True': repetitions}
+          )
+
+          repo_shadow_absent = not Path('tools/lark.py').exists() and not Path('tools/interegular.py').exists()
+          shutil.rmtree(root)
+          cleanup_confirmed = not root.exists()
+
+          payload = {
+              'schema_version': '1.0',
+              'run_kind': 'GO_OOB_PYTHON_IMPORT_PATH_EQUIVALENCE',
+              'oob_experiment_count': 1,
+              'oob_experiment_id': 'GO-OOB-PYTHON-IMPORT-PATH-EQUIVALENCE-V1',
+              'evidence_class': 'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope': 'REMOTE_MECHANISM_REPLICATION_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'created_at': datetime.now(timezone.utc).isoformat(),
+              'github_sha': os.environ.get('GITHUB_SHA', ''),
+              'github_run_id': os.environ.get('GITHUB_RUN_ID', ''),
+              'github_run_attempt': os.environ.get('GITHUB_RUN_ATTEMPT', ''),
+              'hostname': socket.gethostname(),
+              'runner_name': os.environ.get('RUNNER_NAME', 'unknown'),
+              'runner_os': os.environ.get('RUNNER_OS', 'unknown'),
+              'runner_arch': os.environ.get('RUNNER_ARCH', 'unknown'),
+              'platform': platform.platform(),
+              'python': platform.python_version(),
+              'python_executable': sys.executable,
+              'repetitions_per_lane': repetitions,
+              'hypothesis': 'Verifier-shaped Python invocation and actual tools-script invocation are not import-path equivalent under a same-name script-directory shadow; PYTHONSAFEPATH restores the intended ephemeral dependency precedence.',
+              'counterhypothesis': 'PYTHONPATH plus PYTHONNOUSERSITE already makes both invocation shapes equivalent.',
+              'verifier_like': verifier,
+              'actual_current': actual_current,
+              'actual_safe': actual_safe,
+              'repo_lark_interegular_shadow_absent_at_tested_sha': repo_shadow_absent,
+              'temporary_fixture_cleanup_confirmed': cleanup_confirmed,
+              'semantic_pass': semantic_pass,
+              'pass': semantic_pass and cleanup_confirmed,
+              'supported_test_infrastructure_delta': 'ADD_PYTHONSAFEPATH_OR_PYTHON_MINUS_P_TO_SELF_HOSTED_PYTHON_TOOL_EXECUTION_AND_RECEIPT',
+              'architecture_delta': 'NO_CHANGE',
+              'self_hosted_repository_permission': 'contents:read',
+              'checkout_persist_credentials': False,
+              'authority_invariant': 'model output != execution authority',
+              'final_release_boundary': 'This Hostinger mechanism receipt cannot substitute for registered Andreas Ubuntu target acceptance or promote ClayCode semantics.',
+          }
+          Path('/tmp/CLAYCODE_GO_PYTHON_IMPORT_PATH.json').write_text(
+              json.dumps(payload, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps({
+              'pass': payload['pass'],
+              'runner_name': payload['runner_name'],
+              'python': payload['python'],
+              'verifier_origin_counts': verifier['origin_counts'],
+              'actual_current_origin_counts': actual_current['origin_counts'],
+              'actual_safe_origin_counts': actual_safe['origin_counts'],
+              'cleanup': cleanup_confirmed,
+          }, sort_keys=True))
+          raise SystemExit(0 if payload['pass'] else 2)
+          PY
+
+      - name: Upload bounded execution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-go-python-import-path-${{ github.run_id }}
+          path: /tmp/CLAYCODE_GO_PYTHON_IMPORT_PATH.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce single-experiment result
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/CLAYCODE_GO_PYTHON_IMPORT_PATH.json',encoding='utf-8'))
+          assert p['oob_experiment_count'] == 1, p
+          assert p['oob_experiment_id'] == 'GO-OOB-PYTHON-IMPORT-PATH-EQUIVALENCE-V1', p
+          assert p['self_hosted_repository_permission'] == 'contents:read', p
+          assert p['checkout_persist_credentials'] is False, p
+          assert p['temporary_fixture_cleanup_confirmed'] is True, p
+          assert p['pass'] is True, p
+          print('CLAYCODE_GO_PYTHON_IMPORT_PATH_EQUIVALENCE=PASS')
+          PY
+
+  persist-receipt:
+    if: always()
+    needs: import-path-vps
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout persistence lane
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Download execution receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: claycode-go-python-import-path-${{ github.run_id }}
+          path: /tmp/claycode-go-python-import-path
+
+      - name: Validate and persist constrained receipt
+        shell: bash
+        env:
+          TESTED_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          src=/tmp/claycode-go-python-import-path/CLAYCODE_GO_PYTHON_IMPORT_PATH.json
+          python3 - <<'PY'
+          import json, os
+          p=json.load(open('/tmp/claycode-go-python-import-path/CLAYCODE_GO_PYTHON_IMPORT_PATH.json',encoding='utf-8'))
+          assert p['github_sha'] == os.environ['TESTED_SHA'], (p['github_sha'], os.environ['TESTED_SHA'])
+          assert p['oob_experiment_count'] == 1
+          assert p['oob_experiment_id'] == 'GO-OOB-PYTHON-IMPORT-PATH-EQUIVALENCE-V1'
+          assert p['self_hosted_repository_permission'] == 'contents:read'
+          assert p['checkout_persist_credentials'] is False
+          assert p['authority_invariant'] == 'model output != execution authority'
+          assert p['pass'] is True
+          PY
+          mkdir -p research_entity/claycode/remote_vps/go_oob_python_import_path/runs
+          cp "$src" "research_entity/claycode/remote_vps/go_oob_python_import_path/runs/${RUN_ID}.json"
+          cp "$src" research_entity/claycode/remote_vps/go_oob_python_import_path/LATEST.json
+          git config user.name 'claycode-receipt-writer'
+          git config user.email 'claycode-receipt-writer@users.noreply.github.com'
+          git add research_entity/claycode/remote_vps/go_oob_python_import_path/
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "evidence(vps): persist GO Python import-path run ${RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

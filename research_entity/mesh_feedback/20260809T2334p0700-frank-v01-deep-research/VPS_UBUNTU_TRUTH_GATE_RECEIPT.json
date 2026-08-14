@@ -1,0 +1,200 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "FRANK-HARNESS-TRUTH-GATE-VPS-20260809T1700Z",
+  "actor": "chatgpt-secondary",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION_DISPOSABLE_CURRENT_MAIN_WORKTREE",
+  "subject_system": "Frank v0.1",
+  "research_entity_parent_at_run_start": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "transport_repository": "gschaidergabriel/Dr.-Unterweger",
+  "semantic_repository": "gschaidergabriel/frankv0.1",
+  "candidate_pr": 25,
+  "candidate_branch": "research/chatgpt-harness-truth-gate-20260809",
+  "latest_successful_main_snapshot_tested": "ed5d35e60105dc9ad12496833c219c8f0b36d3c5",
+  "runner": {
+    "name": "clay",
+    "host": "digital-retina",
+    "os": "Ubuntu 24.04.4 LTS",
+    "kernel": "6.8.0-117-generic",
+    "arch": "x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1"
+  },
+  "successful_workflow_runs": [
+    {
+      "run_id": 31325207310,
+      "job_id": 93274355157,
+      "name": "Frank Harness Truth Gate - Self Hosted Ubuntu",
+      "result": "PASS"
+    },
+    {
+      "run_id": 31325207315,
+      "job_id": 93274355243,
+      "name": "Frank Truth Gate Fault Matrix - Self Hosted Ubuntu",
+      "result": "PASS"
+    }
+  ],
+  "causal_failures_discovered_before_green": [
+    {
+      "failure": "FRESH_CHECKOUT_HAS_NO_CANONICAL_SQLITE_MATERIALIZATIONS",
+      "observed": "repo_truth_gate returned CONTINUITY_DEGRADED / exit 70 on a clean worktree because FRANK_UNIFIED.sqlite and FRANK_CLAYGRAPH.sqlite did not exist",
+      "interpretation": "expected fail-closed behavior; git checkout is not a runtime materialization and normal cognition must not invent state"
+    },
+    {
+      "failure": "AUTHORIZED_FRESH_MATERIALIZER_MISSING_GENESIS_EPOCH",
+      "observed": "first admitted repo transaction failed state_epochs parent_epoch=0 foreign key",
+      "cause": "materialization_admin stamped semantic epoch 0/root EMPTY without inserting state_epochs(0)",
+      "candidate_fix": "seed exactly one idempotent epoch-0 genesis row during separately authorized fresh install"
+    },
+    {
+      "failure": "REPO_REPLAY_DROPS_TYPED_ENTITY_PERSON_PROJECTION",
+      "observed": "ClayGraph rebuild failed endpoint foreign key for mandatory Frank -> Andreas edge",
+      "cause": "entity:frank and person:andreas-unterweger survived only in generic semantic_materialized_state, while entities table remained empty",
+      "candidate_fix": "materialize entity/person targets into typed entities projection without weakening graph FKs"
+    }
+  ],
+  "full_cycle": {
+    "guard_unit_tests": {"passed": 6, "run": 6, "elapsed_s": 0.002},
+    "genesis_regression": "PASS",
+    "typed_entity_graph_projection_regression": "PASS",
+    "authorized_materialization_admin_wall_s": 0.08,
+    "repo_semantic_materializer_wall_s": 0.10,
+    "repo_transactions_admitted": 4,
+    "repo_transactions_quarantined": 0,
+    "semantic_epoch": 4,
+    "semantic_root_hash": "705b87e7e89f4c657d9401962599e25211a3a183010bee1c846a864e28de3e17",
+    "graph_epoch": 1,
+    "typed_entities": [
+      ["entity:frank", "agent_entity", "Frank", "ACTIVE"],
+      ["person:andreas-unterweger", "person", "Dr. Andreas Unterweger", "CURRENT"]
+    ],
+    "repo_truth_gate_initial": {"status": "PASS", "wall_s": 0.51},
+    "guarded_harness_self_test": {"status": "PASS", "wall_s": 0.56},
+    "legacy_graph_stale_lesion": {
+      "semantic_epoch": 4,
+      "graph_source_epoch_injected": 3,
+      "legacy_exit": 0,
+      "legacy_mutation_rows": 1,
+      "result": "BYPASS_REPRODUCED"
+    },
+    "guarded_graph_stale_lesion": {
+      "exit": 75,
+      "truth_gate_status": "GRAPH_STALE",
+      "stale_gate": "G7_CLAYGRAPH_SOURCE_LINEAGE",
+      "mutation_rows": 0,
+      "mutation_performed": false,
+      "result": "FAIL_CLOSED_PASS"
+    },
+    "rescue_after_graph_stale": "PASS",
+    "warm_truth_gate_latency_ms": {
+      "n": 20,
+      "min": 495.011,
+      "p50": 518.775,
+      "p95": 550.845,
+      "p99": 581.755,
+      "max": 581.755
+    },
+    "sqlite_hardening_api_probe": {
+      "trusted_schema_default": 1,
+      "trusted_schema_after_off": 0,
+      "connection_setconfig": true,
+      "sqlite_dbconfig_defensive": true,
+      "defensive_readback": true,
+      "production_compatibility_claim": false
+    }
+  },
+  "real_fault_matrix": {
+    "baseline_preflight_ms": 548.248,
+    "faults": [
+      {
+        "status": "MATERIALIZATION_STALE",
+        "gate": "G6_UNIFIEDDB_SOURCE_HEAD",
+        "preflight_ms": 517.042,
+        "guarded_ms": 487.788,
+        "exit": 75,
+        "mutation_rows": 0
+      },
+      {
+        "status": "SCHEMA_MIGRATION_REQUIRED",
+        "gate": "G6_UNIFIEDDB_SCHEMA",
+        "preflight_ms": 506.098,
+        "guarded_ms": 516.410,
+        "exit": 76,
+        "mutation_rows": 0
+      },
+      {
+        "status": "CONTINUITY_DEGRADED",
+        "gate": "G6_UNIFIEDDB_SOURCE_HEAD",
+        "preflight_ms": 529.873,
+        "guarded_ms": 650.573,
+        "exit": 70,
+        "mutation_rows": 0
+      }
+    ],
+    "rescue_preflight_ms": 556.447,
+    "zero_mutation_all": true,
+    "final_truth_gate": "PASS"
+  },
+  "concurrent_mesh_evidence": {
+    "deep_integrity": {
+      "source": "runtime/vps_integrity/latest.json on Frank main",
+      "gates_passed": 21,
+      "gates_total": 21,
+      "matrix_wall_seconds": 10.469,
+      "logical_cpus": 4,
+      "memory_total_mib": 15995.934,
+      "max_gate_rss_mib": 64.715,
+      "energy_measurement": false,
+      "power_loss_durability_measurement": false
+    },
+    "sqlite_wal_runtime": {
+      "full_synchronous_commit_n": 120,
+      "full_p50_ms": 0.726155,
+      "full_p95_ms": 0.956806,
+      "full_p99_ms": 1.439229,
+      "normal_p50_ms": 0.02144,
+      "normal_p95_ms": 0.045,
+      "normal_p99_ms": 0.05688,
+      "reader_held_wal_bytes": 650992,
+      "single_writer_busy_observed": true,
+      "writer_recovered_after_release": true,
+      "cross_file_crash_atomicity_claim": false
+    }
+  },
+  "hypothesis_updates": [
+    {
+      "id": "H-FRANK-TG-2",
+      "claim": "Frank lacks repository/materialization coherence validation",
+      "status": "REFUTED",
+      "reason": "repo_truth_gate.py plus prompt capsule already enforce a strong fail-closed lineage boundary"
+    },
+    {
+      "id": "H-FRANK-TG-3",
+      "claim": "legacy Harness entry bypasses repository truth gate and can mutate on a stale pair",
+      "status": "CONFIRMED_ON_SELF_HOSTED_UBUNTU_DISPOSABLE_WORKTREE",
+      "reason": "direct legacy stale-graph invocation exited 0 and created one hyperposition; guarded equivalent created zero"
+    },
+    {
+      "id": "H-FRANK-TG-4",
+      "claim": "wrapper is sufficient final production integration",
+      "status": "OPEN",
+      "reason": "operator convention is weaker than enforcing the gate at the canonical Harness boundary or retiring the legacy entrypoint"
+    },
+    {
+      "id": "H-FRANK-TG-PERF-1",
+      "claim": "roughly 0.52 s truth-gate latency is dominated by remote repo/process checks rather than SQLite commit cost",
+      "status": "OPEN_SUPPORTED_INFERENCE",
+      "reason": "warm truth gate is ~495-582 ms while independent host-local FULL SQLite commits are sub-2 ms; component breakdown has not yet been measured"
+    }
+  ],
+  "negative_claims": [
+    "NOT_FINAL_ANDREAS_UBUNTU_ACCEPTANCE",
+    "NOT_RELEASE_ACCEPTANCE",
+    "NOT_POWER_LOSS_DURABILITY_EVIDENCE",
+    "NOT_ENERGY_MEASUREMENT",
+    "NOT_PROOF_THAT_TRUSTED_SCHEMA_OR_DEFENSIVE_IS_COMPATIBLE_WITH_ALL_FRANK_SCHEMA_AND_EXTENSION_PATHS",
+    "NOT_PERMISSION_TO_WEAKEN_OR_CACHE_THE_TRUTH_GATE_WITHOUT_A_SEPARATE_FRESHNESS_DESIGN_AND_FALSIFICATION"
+  ]
+}

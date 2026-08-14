@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "TARGET_VPS_EXECUTION_RESULT",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 332,
+  "branch": "chatgpt/go-reward-plasticity-v1-20260811",
+  "target": {
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1"
+  },
+  "branch_push_run": {
+    "workflow_run_id": 31502742856,
+    "tested_sha": "c34c1bf07a5ef668a622882ef7b5a276824ddd8f",
+    "conclusion": "SUCCESS",
+    "persisted_receipt": "runtime/vps_evidence/frank_reward_plasticity_v1/LATEST.json",
+    "persisted_receipt_sha256": "579c7e6f5e7d5ea367dd4b943e6ee2a269805b74259ec2e875368f78bd2341bc"
+  },
+  "pr_composition_run": {
+    "workflow_run_id": 31502743958,
+    "tested_sha": "d76af72044c919c4e072da3b2d3dc94720d460c9",
+    "conclusion": "SUCCESS",
+    "purpose": "fresh PR merge-composition verification after branch gate"
+  },
+  "historical_baseline": {
+    "status": "PASS_HISTORICAL_NACC_PARTIAL_EXECUTABLE_BASELINE",
+    "source_repository": "gschaidergabriel/Project-Frankenstein",
+    "source_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "source_path": "services/nucleus_accumbens.py",
+    "source_blob": "fba076cbdcfbe5baf1acf9621fdaaba12598dda2",
+    "configured_channels": 16,
+    "direct_self_generated_reward_path_observed": true,
+    "habituation_and_prediction_update_observed": true,
+    "reward_calls": 3000,
+    "reward_failures": 0,
+    "success_rate": 1.0,
+    "restart_persistence": true,
+    "branch_push_latency": {
+      "cold_init_ms": {"n": 12, "p50": 6.1942675, "p90": 9.8539815, "p95": 11.5640611, "p99": 13.15431702, "max": 13.551881, "mean": 7.3378363333},
+      "reward_call_us": {"n": 3000, "p50": 4.469, "p90": 295.65, "p95": 661.83645, "p99": 858.12909, "max": 2332.072, "mean": 72.05772}
+    },
+    "pr_composition_latency": {
+      "cold_init_ms": {"n": 12, "p50": 6.573022, "p90": 7.9242599, "p95": 8.8926504, "p99": 9.81497488, "max": 10.045556, "mean": 6.9592525833},
+      "reward_call_us": {"n": 3000, "p50": 4.555, "p90": 342.5711, "p95": 784.0701, "p99": 1479.21931, "max": 4034.903, "mean": 97.4198213333}
+    },
+    "interpretation": "The source-level <0.1 ms reward-call claim is roughly supported by mean latency in these two target samples but not as a tail-latency bound; p99 ranges from 0.858 ms to 1.479 ms and maxima exceed 2 ms. The historical unit-test average <1 ms obligation remains compatible with both target samples.",
+    "scope": "PARTIAL_EXECUTABLE_NOT_FULL_ORIGINAL_BASELINE_CONTRACT"
+  },
+  "candidate_gate": {
+    "status": "PASS_REWARD_PLASTICITY_V1_CANDIDATE_GATE",
+    "checks_passed": 10,
+    "checks_total": 10,
+    "failed_checks": [],
+    "resource_shadow_branch_push": {"elapsed_s": 0.07, "max_rss_kib": 19452},
+    "resource_shadow_pr_composition": {"elapsed_s": 0.06, "max_rss_kib": 19324},
+    "go_oob": {
+      "count": 1,
+      "name": "SELF_REWARD_LAUNDERING_CAROUSEL",
+      "result": "PASS_SELF_ACTIVITY_CANNOT_MINT_MATERIAL_REWARD",
+      "state_digest_unchanged": true,
+      "max_exploration_nudge": 0.12
+    }
+  },
+  "adjudication": {
+    "status": "TARGET_VPS_MECHANISM_PASS_CANDIDATE_NOT_PROMOTED",
+    "historical_replacement_claimed": false,
+    "typed_reward_superiority_claimed": false,
+    "scalar_counterhypothesis_refuted": false,
+    "full_original_baseline_complete": false,
+    "claycode_compiled_execution_complete": false,
+    "whole_f_v01_11_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "promotion_authorized": false
+  },
+  "next_falsifiers": [
+    "full executable E-PQ downstream baseline and NAcc->E-PQ differential replay",
+    "scalar verified-reward vs typed vs typed+multiscale matched replay",
+    "dual-channel guidance/association vs value-plasticity three-arm sparse-outcome replay",
+    "lesion/rescue of phasic/tonic/habituation/opponent mechanisms",
+    "OOD task-safety-resource conflict tests",
+    "producer-owned verified-outcome plus causal-credit integration",
+    "ClayCode parser/type/effect/evaluator/compiler execution of reward semantics",
+    "crash/restart/state-lineage composition with current recovery lane",
+    "long-run drift and resource amplification"
+  ],
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

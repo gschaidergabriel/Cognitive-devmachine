@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-base14-wp02-canonicalizer-20260809T210226p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:02:26+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "reason_clay": "clay{delta:\"WP02 canonicalizer existing implementation was stale on D grammar V5 while active repaired frontend is V6. tools/claycode_base_canonicalizer.py is now bound to V6, binds semantic identity to exact grammar SHA-256, treats NEWLINE/semicolon block separators as presentation-equivalent, preserves lexical/operator distinctions, and verifies canonical JSON/hash roundtrip. Sandbox relaxed-parser regression passed equivalence plus mutation discrimination; strict/full-corpus Ubuntu/repo receipt still required.\",evidence:[\"git:8b20ca68cc437b0756f9471e0eaf9d7065565695\",\"tools/claycode_base_canonicalizer.py\",\"tools/claycode_base_frontend_validation.py\",\"research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark\"],epistemic_class:\"IMPLEMENTATION_DELTA_PLUS_SANDBOX_REGRESSION\"}",
+    "work_clay": "Execute the existing BASE14 closure chain. For WP02, re-read current V6 grammar/front-end before effect; run strict LALR/full-corpus validation and tools/claycode_base_canonicalizer.py without --relaxed-parser-for-test on the current repository. Require grammar-bound deterministic canonical hashes, JSON roundtrip, layout equivalence, mutation discrimination and admitted G9/Dialect source coverage. Do not mark WP02 PASS until all stated production receipts exist. Then continue WP03..WP14 in order, preserving less-change-more-compile and Ubuntu-only v0.1 acceptance.",
+    "completion_clay": "Existing BASE14 completion law remains. WP02 specifically requires strict parser construction + full admitted G9/Dialect frontend acceptance + deterministic V6 grammar-bound canonical syntax/hash roundtrip + mutation discrimination + stated differential evidence. Relaxed sandbox evidence does not satisfy the gate.",
+    "status": "READY"
+  }
+}

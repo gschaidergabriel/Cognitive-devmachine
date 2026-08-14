@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1932p0700-chatgpt-secondary-live-refusion",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "hypotheses": [
+    {
+      "id": "H-FRANK-R11-01",
+      "status": "OPEN",
+      "claim": "A model-internal workspace-like representation plane and FRANK's system-level GWT should remain separately typed and separately instrumented; model-internal global availability does not establish system broadcast, receiver uptake, causal use, re-entry, or effect authority.",
+      "counterhypothesis": "A sufficiently capable local 4B can internalize enough workspace behavior that most explicit system-GWT machinery adds only overhead.",
+      "next_test": "Freeze model output and compare EVENT_BUS, explicit receiver-causal WorkspaceEpisode, and model-internal-only baselines on matched H1 traces with receiver-use/outcome/re-entry receipts."
+    },
+    {
+      "id": "H-FRANK-R11-02",
+      "status": "OPEN",
+      "claim": "Outcome/pressure-gated adaptive recurrence should outperform one fixed recurrence budget across heterogeneous FRANK tasks after accounting for latency and instability.",
+      "counterhypothesis": "Ordinary persistent event-driven orchestration or a small fixed recurrence budget is equally effective and simpler.",
+      "next_test": "Matched H1 replay: fixed depth, simple post-hoc trajectory readout, marginal-utility controller, and event-driven null under identical model outputs where technically meaningful."
+    },
+    {
+      "id": "H-FRANK-R11-03",
+      "status": "OPEN",
+      "claim": "Incrementally maintained semantic dependency closures can make most FRANK hot reads local while preserving exact state if update amplification is explicitly bounded and measured.",
+      "counterhypothesis": "High-fanout semantic hubs cause enough invalidation amplification that simpler on-demand retrieval is competitive or safer.",
+      "next_test": "Replay representative UnifiedDB/ClayGraph mutation traces and report affected-closure fraction, stale omission, false invalidation, latency, memory, and worst-hub amplification."
+    },
+    {
+      "id": "H-FRANK-R11-04",
+      "status": "OPEN",
+      "claim": "Evidence-preserving, future-utility-weighted semantic backflow from strong peers to the local 4B will preserve future local behavior better per token than naive summaries or full-state truncation.",
+      "counterhypothesis": "Retrieval-only references plus on-demand re-expansion are sufficient and materially cheaper.",
+      "next_test": "Compare the seven backflow baselines already frozen in FRANK_FINAL_BINARY_RESEARCH_CONTRACT under fixed context/token budgets and provider-loss episodes."
+    },
+    {
+      "id": "H-FRANK-R11-05",
+      "status": "OPEN_IMPLEMENTATION_INVARIANT_CANDIDATE",
+      "claim": "Frontend/semantic closure state must be bound to executable, versioned receipts; a narrative CLOSED status is insufficient when the expected current receipt is absent or an independent runtime discriminator conflicts with it.",
+      "counterhypothesis": "The missing receipt is only a publication lag and current V7 passes its pinned strict runtime unchanged.",
+      "next_test": "Run tools/claycode_strict_lalr_probe.py and tools/claycode_v7_frontend_identity_regression.py on current main with the workflow-pinned lark[interegular]==1.3.1, persist receipts, then adjudicate CC-DEFECT-P1-001/002 and CC-WP-02 from those receipts."
+    }
+  ],
+  "promotion": "NONE"
+}

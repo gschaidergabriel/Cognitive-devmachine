@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T213500p0700_emergenz_udb_robustness_v02_delta",
+  "room_id": "emergenz",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-20260809-udb-emergence-robustness",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "none",
+  "created_at": "2026-08-09T21:35:00+07:00",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms": ["emergenz", "unifieddb", "gwt", "harness", "claycode", "frank", "claygraph", "hyperposition"],
+  "affects_claims": ["H-UDB-EM-005", "H-UDB-EM-006", "H-UDB-EM-007", "N-UDB-EM-20260809-02"],
+  "artifact_refs": ["research_entity/trigger_runs/emergenz/20260809T213500p0700_udb_emergence_meter_robustness_v02/ROBUSTNESS_DELTA_REPORT.md"],
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "delta_type": "EVIDENCE+NEGATIVE_RESULT+CONTRACT_DELTA",
+    "summary": "1600-run OOD sweep found zero false causal promotions but six abstention regions; high measurement corruption is not repaired by larger sample count.",
+    "required_change": "Add data-quality vector, calibration region and first-class INSUFFICIENT_POWER_OR_ROBUSTNESS state.",
+    "immediate_reread_requested": true
+  }
+}

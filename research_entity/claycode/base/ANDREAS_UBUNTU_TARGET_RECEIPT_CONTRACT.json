@@ -1,26 +1,39 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.3",
   "contract_id": "CLAYCODE_BASE_ANDREAS_UBUNTU_TARGET_RECEIPT_V1",
   "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
-  "purpose": "Define the minimum evidence shape for host-specific ClayCode BASE acceptance. Hosted CI/proxy receipts cannot satisfy this contract.",
+  "purpose": "Define the minimum evidence shape for host-specific ClayCode BASE acceptance. Hosted CI/proxy receipts cannot satisfy this contract. The consolidated V2 target runner is an evidence collector only; a separate strict adjudication receipt must satisfy this contract before WP14 can pass.",
+  "collector_receipt_path": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_V2.json",
+  "expected_receipt_path": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
+  "wp02_parser_contract": {
+    "selected_grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "strict_receipt_path": "research_entity/claycode/target_receipts/STRICT_LALR_D_SELECTED_WP02_TARGET_RECEIPT.json",
+    "frontend_receipt_path": "research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json",
+    "canonicalizer_receipt_path": "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json",
+    "selection_reason": "V9/V10 dotted-prefix lookahead makes horizontal trivia semantically active for Needle.owns(X) versus Needle.owns (X). V17 is the minimal declarative V9 successor that excludes call-parenthesis/comment starts from the dotted-prefix RHS lookahead without importing V7/V10/V16 typed-fn or operator-surface changes.",
+    "selection_evidence": [
+      "research_entity/claycode/base/receipts/CC_WP02_V16_SANDBOX_20260809T2140p0700.json",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+      "tools/claycode_v17_declarative_trivia_discriminator.py"
+    ],
+    "required_identity_rule": "At execution time the collector, strict-LALR receipt and full-corpus frontend receipt must all embed the exact SHA-256 of selected_grammar_path, while the active production canonicalizer must identify the same selected_grammar_path. No predecessor/unified research-candidate receipt can satisfy WP02 unless this contract is explicitly versioned and changed first.",
+    "strict_promotion_rule": "Selecting a repair candidate in this contract is not CC-WP-02 PASS. The selected grammar must still pass strict interegular-enabled construction, full admitted G9+Dialect corpus, canonical identity/trivia equivalence and target-host adjudication before promotion.",
+    "executable_slice_separation": "Dedicated WP03/pure-compiler typed-fn evidence may retain its separately versioned grammar contract; it must not be relabeled as WP02 declarative strict evidence."
+  },
   "required_top_level": [
     "schema_version",
     "target_host",
     "repository_commit",
     "host_fingerprint",
     "compiler_runtime",
+    "wp02_parser_contract",
     "work_packages",
     "applications",
     "frank_handoff",
     "unresolved_language_counterexamples",
     "overall_pass"
   ],
-  "host_fingerprint_required": [
-    "uname",
-    "architecture",
-    "python_version",
-    "c_compiler_version"
-  ],
+  "host_fingerprint_required": ["uname", "architecture", "python_version", "c_compiler_version"],
   "required_work_packages": [
     "CC-WP-02-PARSER-CANON",
     "CC-WP-03-IR-TYPES",
@@ -37,47 +50,39 @@
   ],
   "work_package_receipt_rule": "Each work package row must contain pass=true, evidence paths/hashes, exact commands or executable test IDs, and no proxy-only evidence as its sole basis.",
   "required_applications": [
-    "CLI",
-    "HTTP_WEBSITE",
-    "DB_SERVICE",
-    "CONCURRENT_SERVICE",
-    "GUI_INTERACTIVE",
-    "COMPILER_TOOL",
-    "GPU_ML_NUMERICAL",
-    "SYSTEM_EFFECT_SANDBOX",
-    "FRANK_COMPONENT",
-    "FULL_FRANK_HANDOFF"
+    "CLI", "HTTP_WEBSITE", "DB_SERVICE", "CONCURRENT_SERVICE", "GUI_INTERACTIVE",
+    "COMPILER_TOOL", "GPU_ML_NUMERICAL", "SYSTEM_EFFECT_SANDBOX", "FRANK_COMPONENT", "FULL_FRANK_HANDOFF"
   ],
   "application_row_required": [
-    "pass",
-    "source_or_program_hash",
-    "semantic_or_ir_hash",
-    "compiler_runtime_version",
-    "target_artifact_hash",
-    "execution_command_or_test_id",
-    "expected",
-    "observed",
-    "negative_or_failure_path",
-    "authority_boundary_preserved"
+    "pass", "source_or_program_hash", "semantic_or_ir_hash", "compiler_runtime_version",
+    "target_artifact_hash", "execution_command_or_test_id", "expected", "observed",
+    "negative_or_failure_path", "authority_boundary_preserved"
   ],
   "frank_handoff_required": [
-    "pass",
-    "frozen_frank_source_hashes",
-    "claycode_source_hashes",
-    "production_chain_receipts",
-    "semantic_escape_hatches",
-    "h2_h3_handoff_ready"
+    "pass", "frozen_frank_source_hashes", "claycode_source_hashes", "production_chain_receipts",
+    "semantic_escape_hatches", "h2_h3_handoff_ready"
+  ],
+  "additional_required_target_discriminators": [
+    "WP02 strict/full-corpus/canonicalizer evidence is bound to wp02_parser_contract.selected_grammar_path and exact repository bytes",
+    "The selected WP02 grammar must preserve horizontal trivia identity for call syntax, including Needle.owns(X) == Needle.owns (X)",
+    "BASE_RUNTIME_V04_HARDENING_RECEIPT.json pass=true on Andreas Ubuntu",
+    "BASE_COMPILER_MAINLINE_RUNTIME_BRIDGE_RECEIPT.json pass=true on Andreas Ubuntu",
+    "real application rows must not inherit proxy acceptance flags",
+    "FULL_FRANK_HANDOFF must cover the actual frozen stateful handoff rather than a bounded score/proxy function"
   ],
   "hard_rules": [
     "target_host must equal ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+    "collector target host checks must all pass on a clean non-CI non-container checkout",
+    "CC-WP-02-PARSER-CANON must use the exact selected WP02 grammar bytes for strict-LALR and full-corpus evidence and the same selected path for the active production canonicalizer",
+    "horizontal whitespace must not change admitted call semantics into dotted-prefix relation semantics",
     "every required work package must pass",
     "all ten applications must pass through the production ClayCode chain",
     "GUI_INTERACTIVE must execute an actual Ubuntu interactive/event-loop adapter, not only a hosted headless state proxy",
     "FULL_FRANK_HANDOFF must be the actual frozen FRANK handoff, not only packet_score or another bounded proxy",
+    "runtime v0.4 hardening and compiler-to-mainline-runtime bridge must execute on target",
     "unresolved_language_counterexamples must be empty",
     "model_output never constitutes execution authority",
     "semantic/effect differential evidence outranks self-consistent hashes",
     "overall_pass may be true only when every hard rule above is satisfied"
-  ],
-  "expected_receipt_path": "research_entity/claycode/target/ANDREAS_UBUNTU_BASE_ACCEPTANCE.json"
+  ]
 }

@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-f7-local-runtime-spine-20260809T214000p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T21:40:00+07:00",
+  "origin": {
+    "class": "USER_DIRECTED_RESEARCH_ENTITY_IMPLEMENTATION_DELTA",
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger"
+  },
+  "finding": {
+    "id": "FRANK-F7-MINIMAL-LOCAL-RUNTIME-SPINE-20260809",
+    "evidence_class": "IMPLEMENTATION_DELTA",
+    "summary": "F7 had no repository-visible local doctor/boot entrypoint. A minimal fail-closed runtime spine now separates read-only readiness checks from one admitted RuntimeBoot state join. It intentionally does not start/select a model and is not a daemon/package release claim."
+  },
+  "implementation": {
+    "commits": [
+      "69c1daf4310787a5a2315e36ec6adcd09a4a3389",
+      "716feda6960c8a3bfa7f84dc8e2b831a0e37ee81"
+    ],
+    "artifacts": [
+      "runtime/local/frank_local_runtime.py",
+      "tests/local_runtime_spine_regression.py"
+    ],
+    "doctor": [
+      "repo_truth_gate must PASS",
+      "critical runtime/model/eval files are hashed/present",
+      "F6 adapter contract self-test must PASS",
+      "verified UnifiedDB/ClayGraph central state opens",
+      "current device possibility/body binding is observed read-only",
+      "no mutation is performed"
+    ],
+    "boot_once": [
+      "runs only after doctor PASS",
+      "joins Frank through the existing provider-neutral prompt/state capsule",
+      "emits RuntimeBoot state injection/session receipt",
+      "does not invoke/download/select a model"
+    ]
+  },
+  "hypothesis_resolution": {
+    "candidate": "repo_truth_gate EXPECTED_UDB_SCHEMA=12.0 conflicts with additive UNIFIEDDB_V13 migration",
+    "result": "NOT_SUPPORTED",
+    "reason": "UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql is additive and does not promote meta.schema_version to 13.0; apply_current_schema includes the additive migration while the admitted schema version remains 12.0.",
+    "state": "NOT_SELECTED"
+  },
+  "negative_result": {
+    "f7_release_pass": false,
+    "clean_install_tested": false,
+    "system_service_lifecycle_tested": false,
+    "update_recovery_tested": false,
+    "andreas_pc_boot_tested": false
+  },
+  "affected_rooms": ["frank", "harness", "unifieddb", "claygraph", "center"],
+  "next_discriminating_work": [
+    "execute tests/local_runtime_spine_regression.py in a real checkout",
+    "run runtime/local/frank_local_runtime.py doctor on Andreas PC after current materialization is admitted",
+    "after F5/F6 selection, add reproducible install/service lifecycle around the same fail-closed spine",
+    "test clean install, boot, shutdown, update and crash/recovery before any F7 PASS"
+  ],
+  "research_state_change": "IMPLEMENTATION_KNOWLEDGE_DELTA_NO_RELEASE_PROMOTION"
+}

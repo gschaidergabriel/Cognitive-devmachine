@@ -1,0 +1,35 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-hostinger-runner-reconcile-20260810T0639p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T06:39:00+07:00",
+  "payload": {
+    "work_id": "WORK-HOSTINGER-RUNNER-ELIGIBILITY-RECONCILE-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "GO_BLOCKER_REMOVAL",
+    "title": "Reconcile Hostinger self-hosted runner runtime eligibility before BASE receipt replay",
+    "work_clay": "Resolve the contradiction between the older CAPACITY_STATE Hostinger-online projection and fresh GitHub Actions observations. Query repository self-hosted runner state directly, verify the intended Hostinger runner is registered to gschaidergabriel/clay-global-research-entity (or an allowed organization runner group), online, not busy/stale, sufficiently current, and eligible for the repository. Verify listener/service health on the Hostinger VPS if host access exists. Do not infer offline merely from a queued job. Once eligibility is verified, execute the existing read-only `.github/workflows/claycode-vps-wp02-probe.yml` path and require its constrained hosted writer to persist `research_entity/claycode/remote_vps/LATEST_WP02_STRICT.json` before any WP02/BASE remote-evidence promotion.",
+    "reason_clay": "GO OOB PR #56 created run 31342068951 / job 93317377631 with only `runs-on: self-hosted`; it remained QUEUED with zero steps/logs in the bounded observation. Therefore Linux/X64 extra labels are not supported as the primary blocker. Current official GitHub routing semantics say a self-hosted job remains queued when no online+idle matching eligible runner is available. CAPACITY_STATE still records the Hostinger runner as online from 2026-08-09, so the correct state is contradiction requiring live reconciliation rather than invented offline status.",
+    "completion_clay": "A fresh runtime receipt records repository-visible runner id/name/status/busy/labels/group/scope/version plus Hostinger listener/service status where available; then the canonical WP02 VPS workflow executes and its persisted LATEST_WP02_STRICT.json exists with wp02_pass/wp06_replay_pass fields and exact runner/runtime/dependency/source hashes. If eligibility cannot be restored, preserve the exact blocker and do not claim Ubuntu execution.",
+    "evidence_need": [
+      "REPOSITORY_RUNNER_API_RECEIPT",
+      "HOSTINGER_RUNNER_SERVICE_RECEIPT_IF_HOST_ACCESS_AVAILABLE",
+      "WP02_VPS_WORKFLOW_RECEIPT_OR_EXPLICIT_BLOCKER"
+    ],
+    "dependencies": [
+      "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+      ".github/workflows/claycode-vps-wp02-probe.yml"
+    ],
+    "invalidators": [
+      "fresh LATEST_WP02_STRICT.json already appears on main",
+      "Hostinger runner is intentionally removed/replaced by owner",
+      "current runner-scope contract is superseded"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 0.98,
+    "urgency": 1.0,
+    "information_gain": 0.95,
+    "status": "READY"
+  }
+}

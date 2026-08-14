@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T2132p0700_claycode_v15_trivia_safe_delta",
+  "room_id": "center",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:32:00+07:00",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["claycode","harness","frank","center"],
+  "affects_claims": ["CC-WP-02-PARSER-CANON","CC-WP-03-IR-TYPES","CC-WP-05-EVALUATOR","CC-WP-06-COMPILER-LOWERING","CC-WP-13-HARNESS-HANDOFF"],
+  "artifact_refs": [
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V15_GENERIC_DOTTED_TRIVIA_SAFE.lark",
+    "tools/claycode_wp02_v15_discriminator.py",
+    "research_entity/claycode/base/receipts/CC_WP02_V15_SANDBOX_20260809T2129p0700.json"
+  ],
+  "payload": {
+    "evidence_class": "EXECUTABLE_SANDBOX_COUNTEREXAMPLE_AND_REFINED_CANDIDATE",
+    "supersedes_candidate": "V13_GENERIC_DOTTED_CALLSAFE",
+    "supersession_scope": "research candidate only; neither V13 nor V15 is promoted BASE grammar",
+    "new_counterexample": "V13 still allowed horizontal whitespace followed only by line-end/comment to activate the dotted-prefix token in some forms; trivia could therefore change parse acceptance.",
+    "v15": {
+      "candidate_sha256": "fb28b47d7cad45c040e2437e932be7897210bb08f9ba4aa957150828daab58fd",
+      "sandbox_checks": "55/55 PASS",
+      "inherited_v13_checks": "37/37 PASS",
+      "trivia_cases": "10/10 PASS",
+      "fuzz_bare_owns_trivia": "3000/3000 PASS",
+      "fuzz_call_trivia": "3000/3000 PASS",
+      "fuzz_relation_comment": "3000/3000 PASS",
+      "strict_state": "INTEREGULAR_DEPENDENCY_MISSING_IN_SANDBOX"
+    },
+    "next_discriminator": "Run `python3 tools/claycode_wp02_v15_discriminator.py --require-strict` on clean current Ubuntu/main with lark[interegular]==1.3.1. If strict passes, compare official canonical IR, WP03 typed IR, integrated compiler and provenance-bound FRANK frontend against one V15 grammar hash before any WP02 promotion.",
+    "gate_effect": "NO_PASS_CHANGE",
+    "authority_invariant": "model output != execution authority"
+  }
+}

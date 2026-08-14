@@ -1,0 +1,65 @@
+{
+  "schema_version":"2.0",
+  "run_id":"unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "global_inputs_required":["semantic_epoch_or_root","as_of_valid_time","query_class","authority_requirement"],
+  "routes":[
+    {
+      "query_class":"authoritative_exact_or_temporal_state",
+      "route":"UnifiedDB canonical tables through explicit epoch/root + as_of validity predicate",
+      "requirements":["storage-safe open","live schema admitted","selected semantic lineage/root admitted"],
+      "forbidden":"ambient CURRENT_TIMESTAMP as replay identity",
+      "fallback":"DEGRADED_UNKNOWN"
+    },
+    {
+      "query_class":"graph_assisted_truth_critical",
+      "route":"ClayGraph only with ADMITTED StateProjectionCertificate exact for required semantic root; validate selected refs back against UnifiedDB",
+      "requirements":["schema pair admitted","projection certificate admitted","selection receipt complete"],
+      "fallback":"canonical UnifiedDB query or explicit unsupported/degraded result"
+    },
+    {
+      "query_class":"graph_assisted_exploratory",
+      "route":"ClayGraph with explicit bounded lag policy",
+      "requirements":["projection status not RETRACTED/REBUILD_REQUIRED","lag class recorded","rank is non-authoritative"],
+      "fallback":"rebuild/bypass"
+    },
+    {
+      "query_class":"fts_or_vector_retrieval",
+      "route":"derived index -> candidate universe -> SelectionReceiptV2 -> UnifiedDB provenance/admissibility validation",
+      "requirements":["index source root/watermark","index health receipt","candidate_universe_hash","ranker/filter identity"],
+      "fallback":"bounded canonical scan/query"
+    },
+    {
+      "query_class":"model_facing_assembly",
+      "route":"one semantic root + one explicit validity-time + zero or more admitted projection receipts",
+      "requirements":["no mixed semantic roots","bounded token/context budget","assembly selection receipt"],
+      "fallback":"smaller canonical-only assembly"
+    },
+    {
+      "query_class":"state_mutation",
+      "route":"authoritative short transaction bound to exact current/recovery execution and parent semantic root",
+      "requirements":["compare-and-swap parent epoch/root","typed transaction op digests","CanonicalRootChain recomputation","external floor not ahead"],
+      "fallback":"REJECT_STALE_OR_DIVERGENT"
+    },
+    {
+      "query_class":"snapshot_create",
+      "route":"SnapshotManifestV2 using Online Backup/VACUUM INTO or explicitly complete journal-aware bundle",
+      "requirements":["consistent image method","source id/build identity","semantic root/cursor","schema/live-schema identities","restore verification plan"],
+      "fallback":"NO_SNAPSHOT_CREATED"
+    },
+    {
+      "query_class":"snapshot_restore",
+      "route":"restore candidate -> integrity/live-schema/root replay -> external-floor comparison -> projection rebuild/admission",
+      "requirements":["snapshot manifest verified","canonical root replay matches","lineage/recovery admission","external floor compatible"],
+      "fallback":"QUARANTINE"
+    },
+    {
+      "query_class":"effect_terminal_or_historical_audit",
+      "route":"canonical immutable effect/closure receipts; never ClayGraph authority",
+      "requirements":["origin + reconciler execution identity","pre-action decision ancestry","verified outcome","stable closure receipt"],
+      "fallback":"RECOVERY_REQUIRED_OR_QUARANTINE"
+    }
+  ],
+  "selection_integrity_rule":"record authenticity does not prove selector integrity; every authoritative selected set requires selection/query-plan provenance",
+  "replay_rule":"same durable state + same semantic root + same explicit as_of validity time + same admitted selector/index identities => same typed result digest",
+  "promotion":"HOLD"
+}

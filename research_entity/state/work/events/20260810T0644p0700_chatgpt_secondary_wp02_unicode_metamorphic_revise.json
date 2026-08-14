@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-wp02-unicode-metamorphic-revise-20260810T0644p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T06:44:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-WP02-STRING-IDENTITY-FIX-20260810",
+    "status": "BLOCKED_ON_CLAY_RUNNER_ELIGIBILITY",
+    "fresh_main_parent": "1f98115ca8101f5255b42f745e202887f101e11f",
+    "new_evidence": "research_entity/trigger_runs/go/go-20260810T0643p0700-chatgpt-secondary-unicode-metamorphic/UNICODE_METAMORPHIC_RECEIPT.json",
+    "result_clay": "One bounded out-of-box metamorphic Unicode falsifier stress-tested the isolated production STRING decode/validation logic. Across 50000 random escape-equivalent Unicode strings, the raw-spelling baseline split 50000/50000 while decoded scalar-sequence hashing split 0/50000; 25606 cases contained astral scalars. A deliberate NFC-over-normalization mutation falsely merged 8/8 exact-scalar counterexamples while the candidate merged 0/8. Lone surrogates were rejected 4/4.",
+    "evidence_class": "HOSTED_ANALYSIS_SANDBOX_ISOLATED_LOGIC_ONLY",
+    "promotion": "NONE",
+    "architecture_delta": "NO_CORE_LANGUAGE_CHANGE",
+    "counterhypothesis_status": "OVER_NORMALIZATION_AND_ASTRAL_ESCAPE_SPLIT_NOT_OBSERVED_IN_BOUNDED_LOGIC_TEST",
+    "blocker_clay": "Exact repository checkout / strict LALR / full-corpus / Hostinger Ubuntu acceptance remains blocked because Clay repository Actions cannot currently allocate an eligible self-hosted runner and hosted jobs reproduce a pre-step admission failure. Repository admin rights are present, but this connector does not expose authoritative runner/settings endpoints.",
+    "next_falsifier": "Inspect GitHub repository Actions General/Runners and billing/runner scope using an admin-capable settings surface; after first Clay job executes a real step, run the existing exact-SHA WP02 Ubuntu workflow and persist LATEST_WP02_STRICT.json. Do not repeat duplicate queue probes.",
+    "rollback": "No additional code mutation in this event. Existing implementation rollback remains revert 72fb8d3 if admitted target evidence falsifies the string-identity contract."
+  }
+}

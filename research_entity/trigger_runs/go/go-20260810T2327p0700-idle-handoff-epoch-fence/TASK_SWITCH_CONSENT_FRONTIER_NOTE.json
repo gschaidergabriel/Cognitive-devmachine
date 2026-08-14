@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2327p0700-idle-handoff-epoch-fence",
+  "kind": "ARCHITECTURE_TEST_OBLIGATION_NO_BUILD_YET",
+  "recorded_at": "2026-08-10T16:57:00Z",
+  "actor": "chatgpt-secondary",
+  "affected_packages": [
+    "F-V01-07-NEEDLE-TRANSLATOR",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+  ],
+  "owner_fixed_rule": "current_task_state == RUNNING && proposed_unrequested_task != current_task_id -> ASK_CURRENT_USER_BEFORE_TASK_SWITCH; accept -> explicit_task_transition_receipt; decline -> continue_current_task_or_wait",
+  "current_gap": {
+    "v16_current_task_id_exists": true,
+    "token_ingress_request_id_exists": true,
+    "typed_proposed_task_identity_at_public_ingress": false,
+    "trusted_task_equivalence_classifier_at_authority_boundary": false,
+    "explicit_task_transition_receipt_implemented": false
+  },
+  "decision": "NO_CHANGE_PENDING_TYPED_TASK_IDENTITY_CONTRACT",
+  "reason": "request_id and free text are transport/message identities, not authority-grade task identity. Guessing task changes inside token ingress could either interrupt current work incorrectly or silently accept a real task switch without consent.",
+  "candidate_integration_direction": {
+    "shape": "Needle/intent layer emits provenance-bound typed ProposedTaskIdentity before V16 task-switch gate",
+    "gate": "deterministic comparison against current_task_id/current_task_state",
+    "same_task": "continue active execution without new switch consent",
+    "different_unrequested_task": "enter WAITING_USER / ASK_CURRENT_USER_BEFORE_TASK_SWITCH without releasing global execution ownership",
+    "accept": "commit explicit task transition receipt, then update current_task_id/state",
+    "decline": "preserve old current_task_id and continue or wait",
+    "authority": "model/Needle classification is evidence only; deterministic V16 gate owns transition admission"
+  },
+  "required_discriminators": [
+    "same semantic task with new request_id must not trigger switch prompt",
+    "different task from same authenticated session must prompt before transition",
+    "different task from another client while Frank is busy remains FRANK_BUSY and cannot steal task authority",
+    "ambiguous/open-set task identity must abstain to user clarification rather than transition",
+    "accept/decline receipts survive restart and preserve lease epoch provenance",
+    "stale accept receipt from an older task-transition generation cannot apply to a newer current task"
+  ],
+  "oob_experiment_count_added": 0,
+  "build_this_run": false,
+  "whole_frank_acceptance": "NOT_CLAIMED"
+}

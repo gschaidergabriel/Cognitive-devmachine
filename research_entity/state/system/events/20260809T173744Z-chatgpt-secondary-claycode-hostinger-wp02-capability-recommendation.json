@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CAPREC-20260809T173744Z-CLAYCODE-WP02-HOSTINGER",
+  "kind": "CAPABILITY_RECOMMENDATION",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:37:44Z",
+  "payload": {
+    "recommendation_id": "REC-CLAYCODE-WP02-HOSTINGER-EPHEMERAL-DEPS-20260810",
+    "field_or_work": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "target_workers": [
+      "claycode",
+      "harness",
+      "frank-build-test"
+    ],
+    "candidate": "GitHub Actions Hostinger self-hosted Ubuntu lane with ephemeral pip --target dependencies, PYTHONNOUSERSITE=1, read-only self-hosted execution, artifact transport and separate hosted receipt writer",
+    "candidate_kind": "RUNTIME",
+    "provider": "Hostinger + GitHub Actions",
+    "field_fit": 1.0,
+    "expected_quality": 0.96,
+    "reliability": 0.9,
+    "latency_fit": 0.84,
+    "cost_fit": 0.98,
+    "privacy_fit": 0.9,
+    "security_fit": 0.95,
+    "integration_fit": 1.0,
+    "reproducibility": 0.97,
+    "execution_availability": 0.9,
+    "freshness": 1.0,
+    "evidence": [
+      "research_entity/global/HOSTINGER_GITHUB_RUNNER_RESEARCH_CAPABILITY.json",
+      "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",
+      ".github/workflows/claycode-vps-wp02-probe.yml@7c08dd9fc2912fe85493e262ed9d14d101714537",
+      "research_entity/knowledge_micro_packets/claycode/CLAYCODE_SELF_HOSTED_EPHEMERAL_DEPENDENCY_ISOLATION_20260810.md@ede3ab21c9d0d08cbaf3b04b26af8946cf93d1e8",
+      "https://docs.github.com/en/actions/concepts/security/github_token",
+      "https://docs.github.com/en/actions/concepts/security/compromised-runners",
+      "https://docs.python.org/3/using/cmdline.html"
+    ],
+    "alternatives_considered": [
+      "ChatGPT local sandbox diagnostic-only execution",
+      "arbitrary workflow_dispatch from current connector surface",
+      "direct SSH/runner credential execution"
+    ],
+    "caveats": [
+      "Remote Hostinger evidence is preliminary and cannot substitute for registered Andreas Ubuntu target acceptance.",
+      "Current connector surface does not expose arbitrary workflow dispatch, so a path-matching repository push or an existing rerunnable job is needed.",
+      "Receipt presence, exact tested SHA, dependency identity, cleanup and WP02/OOB/WP06 results must be verified before any promotion."
+    ]
+  }
+}

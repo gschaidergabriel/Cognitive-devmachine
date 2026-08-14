@@ -1,0 +1,158 @@
+// Full executable H1 ActiveAssembly algorithm expressed only through generic structured
+// ClayCode control flow and generic collection/hash primitives. No FRANK-specific host
+// primitive is used by this program.
+module frank.active_assembly.full
+
+fn packet_score(packet:Packet)->Real {
+  require packet.relevance >= 0.0 && packet.relevance <= 1.0
+  require packet.impact >= 0.0 && packet.impact <= 1.0
+  require packet.novelty >= 0.0 && packet.novelty <= 1.0
+  require packet.uncertainty >= 0.0 && packet.uncertainty <= 1.0
+  require packet.context_cost > 0
+  return round12(0.45*packet.relevance + 0.25*packet.impact + 0.15*packet.novelty + 0.15*(1.0-packet.uncertainty))
+}
+
+fn try_add(packet:Packet, selected:List, selected_ids:Set, ancestry_counts:Map, selection_roles:Map, block_reason:Map, budget:Map, max_items:Int, max_per_ancestry:Int, max_context_cost:Int?, conflict_visibility:Bool)->Bool {
+  if set_has(selected_ids,packet.packet_id) { return false }
+  if list_len(selected) >= max_items {
+    map_setdefault(block_reason,packet.packet_id,"ITEM_BUDGET")
+    return false
+  }
+  if !conflict_visibility && map_get_default(ancestry_counts,packet.ancestry_family,0) >= max_per_ancestry {
+    map_setdefault(block_reason,packet.packet_id,"ANCESTRY_CAP")
+    return false
+  }
+  if max_context_cost != null && map_get_default(budget,"used",0) + packet.context_cost > max_context_cost {
+    map_setdefault(block_reason,packet.packet_id,"CONTEXT_COST_BUDGET")
+    return false
+  }
+  list_push(selected,packet)
+  set_add(selected_ids,packet.packet_id)
+  map_inc(ancestry_counts,packet.ancestry_family,1)
+  if conflict_visibility { map_set(selection_roles,packet.packet_id,"CONFLICT_VISIBILITY") }
+  else { map_set(selection_roles,packet.packet_id,"ORDINARY") }
+  map_inc(budget,"used",packet.context_cost)
+  return true
+}
+
+fn compile_active_assembly(candidates:List, current_epoch:Int, max_items:Int, max_per_ancestry:Int, max_context_cost:Int?)->Map {
+  require max_items > 0 && max_per_ancestry > 0
+  if max_context_cost != null { require max_context_cost > 0 }
+
+  let unique = list_new()
+  let identity_by_id = map_new()
+  let omitted = list_new()
+  let telemetry = map_new()
+  map_set(telemetry,"duplicates",0)
+
+  for packet in candidates {
+    if packet.proposed_authority && (packet.kind == "model_output" || packet.kind == "peer_result" || packet.kind == "visual_model" || packet.kind == "capability") { fail(concat("AUTHORITY_MINT_ATTEMPT:",packet.packet_id)) }
+    let score = packet_score(packet)
+    let fingerprint = canonical_sha256(packet)
+    if map_has(identity_by_id,packet.packet_id) {
+      if map_get(identity_by_id,packet.packet_id) != fingerprint { fail(concat("PACKET_ID_COLLISION:",packet.packet_id)) }
+      map_inc(telemetry,"duplicates",1)
+      continue
+    }
+    map_set(identity_by_id,packet.packet_id,fingerprint)
+    list_push(unique,map_with(packet,"__score",score))
+  }
+
+  let eligible = list_new()
+  for packet in unique {
+    if packet.valid_epoch != current_epoch {
+      list_push(omitted,pair(packet,"STALE_EPOCH"))
+      continue
+    }
+    list_push(eligible,packet)
+  }
+  let ranked = sort_by(eligible,"__score","desc","packet_id","asc")
+
+  let selected = list_new()
+  let selected_ids = set_new()
+  let ancestry_counts = map_new()
+  let selection_roles = map_new()
+  let block_reason = map_new()
+  let budget = map_new()
+  map_set(budget,"used",0)
+
+  let claim_representatives = list_new()
+  let claim_value_seen = set_new()
+  for packet in ranked {
+    if packet.claim_key == null || packet.claim_value == null { continue }
+    let claim_value_key = concat(packet.claim_key,"\u001f",packet.claim_value)
+    if !set_has(claim_value_seen,claim_value_key) {
+      set_add(claim_value_seen,claim_value_key)
+      list_push(claim_representatives,packet)
+    }
+  }
+  let conflict_representatives = list_new()
+  for packet in claim_representatives {
+    for other in claim_representatives {
+      if other.packet_id != packet.packet_id && other.claim_key == packet.claim_key && other.claim_value != packet.claim_value {
+        list_push_unique_by(conflict_representatives,packet,"packet_id")
+      }
+    }
+  }
+  let conflict_ranked = sort_by(conflict_representatives,"__score","desc","packet_id","asc")
+  for packet in conflict_ranked {
+    try_add(packet,selected,selected_ids,ancestry_counts,selection_roles,block_reason,budget,max_items,max_per_ancestry,max_context_cost,true)
+  }
+
+  let seen_families = set_new()
+  for packet in ranked {
+    if !set_has(seen_families,packet.ancestry_family) {
+      try_add(packet,selected,selected_ids,ancestry_counts,selection_roles,block_reason,budget,max_items,max_per_ancestry,max_context_cost,false)
+      set_add(seen_families,packet.ancestry_family)
+    }
+  }
+  for packet in ranked {
+    try_add(packet,selected,selected_ids,ancestry_counts,selection_roles,block_reason,budget,max_items,max_per_ancestry,max_context_cost,false)
+  }
+
+  for packet in ranked {
+    if !set_has(selected_ids,packet.packet_id) {
+      list_push(omitted,pair(packet,map_get_default(block_reason,packet.packet_id,"BUDGET_OR_ANCESTRY_CAP")))
+    }
+  }
+
+  let items = list_new()
+  for packet in selected {
+    let item = map_without(packet,"__score")
+    map_set(item,"packet_identity_sha256",map_get(identity_by_id,packet.packet_id))
+    map_set(item,"score",packet.__score)
+    let role = map_get(selection_roles,packet.packet_id)
+    map_set(item,"selection_role",role)
+    if role == "CONFLICT_VISIBILITY" { map_set(item,"independent_replication_credit",false) }
+    else { map_set(item,"independent_replication_credit",null) }
+    map_set(item,"execution_authority",false)
+    list_push(items,item)
+  }
+
+  let reexpand = set_new()
+  let omitted_reasons = map_new()
+  for entry in omitted {
+    let packet = pair_first(entry)
+    let reason = pair_second(entry)
+    if packet.reexpand_ref == null { set_add(reexpand,packet.packet_id) }
+    else { set_add(reexpand,packet.reexpand_ref) }
+    map_inc(omitted_reasons,reason,1)
+  }
+
+  let assembly = map_new()
+  map_set(assembly,"schema","frank.active-assembly.v1.2")
+  map_set(assembly,"current_epoch",current_epoch)
+  map_set(assembly,"max_items",max_items)
+  map_set(assembly,"max_per_ancestry",max_per_ancestry)
+  map_set(assembly,"max_context_cost",max_context_cost)
+  map_set(assembly,"context_cost_used",map_get_default(budget,"used",0))
+  if max_context_cost == null { map_set(assembly,"context_cost_remaining",null) }
+  else { map_set(assembly,"context_cost_remaining",max_context_cost-map_get_default(budget,"used",0)) }
+  map_set(assembly,"items",items)
+  map_set(assembly,"reexpand_refs",sort_scalar(set_values(reexpand)))
+  map_set(assembly,"omitted_count",list_len(omitted))
+  map_set(assembly,"omitted_reasons",omitted_reasons)
+  map_set(assembly,"assembly_sha256",canonical_sha256(assembly))
+  map_set(assembly,"input_duplicate_count",map_get_default(telemetry,"duplicates",0))
+  return assembly
+}

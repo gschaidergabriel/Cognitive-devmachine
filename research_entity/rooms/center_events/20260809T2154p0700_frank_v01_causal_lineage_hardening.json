@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-v01-causal-lineage-hardening-20260809T2154p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T21:54:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "origin": {
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "research/frank-v01-sandbox-integrated-monolith-20260809",
+    "pull_request": 14
+  },
+  "evidence_scope": "SANDBOX_ONLY",
+  "causal_evidence": {
+    "status": "PASS",
+    "acc_workspace_matched_lesion_rescue": {
+      "baseline_score": 0.59275,
+      "lesion_score": 0.51275,
+      "rescue_score": 0.59275,
+      "baseline_ignited": true,
+      "lesion_ignited": false,
+      "rescue_ignited": true
+    },
+    "reentry_lesion_rescue": "PASS",
+    "emergent_goal_topology_lesion_rescue": {
+      "topology_present": "goal-A-connected",
+      "topology_lesioned": "goal-B-unconnected",
+      "topology_rescued": "goal-A-connected"
+    },
+    "thalamic_habituation": {
+      "repeat_first_gain": 0.5375,
+      "repeat_eighth_gain": 0.4516227787734375,
+      "novel_burst_gain": 0.66046446645
+    },
+    "nac_rpe_like_abs_phasic_sequence": [0.3, 0.276, 0.25392, 0.233606, 0.214918, 0.197725],
+    "interpretation": "Functional causal/mechanism evidence only. No phenomenal-consciousness inference."
+  },
+  "lineage_hardening": {
+    "status": "PASS",
+    "parallel_main_finding": "Main commit 6a47f2f30285778baf73191a8dc6be89529964a7 identified that INSERT OR REPLACE can destroy stable SQLite row identity across repeated legacy-module installation.",
+    "integrated_fix": "The single-UnifiedDB technical-lineage fusion probe now uses INSERT ... ON CONFLICT DO UPDATE.",
+    "recovered_technical_lineages": 34,
+    "reinstall_identity_stable": true,
+    "reinstall_lineage_stable": true,
+    "reinstall_probe_history_monotonic": true,
+    "deletion_hard_blocked": true,
+    "sqlite_integrity": "ok"
+  },
+  "current_parallel_main_hardening_to_preserve": [
+    "6a47f2f30285778baf73191a8dc6be89529964a7 stable legacy-module identity",
+    "1b80ec0f55689c390dc7d8fc68d24f08d54322bf atomic schema migration chains",
+    "c4218e60d90e00ff0d332ca16064d92643e9be50 atomic migration rollback regression",
+    "7a5184ce3f9af6e65409d0c48d8f396b96f51f2a foreign-key-invalid materialization rejection"
+  ],
+  "inventory_discipline": {
+    "measured_historical_services_modules": 74,
+    "named_cognitive_lineages": 31,
+    "recovered_technical_lineages": 34,
+    "exact_74_file_inventory_proven": false,
+    "rule": "Do not arithmetically combine the 31 cognitive and 34 technical namespaces; they may overlap. Preserve every identity known, and keep exact historical-file coverage OPEN until deterministic mapping exists."
+  },
+  "affected_rooms": ["frank", "gwt", "emergenz", "unifieddb", "claygraph", "claycode", "harness", "memory", "security"],
+  "feedback": {
+    "frank": "Promote functional equivalence only after causal dependence is shown, not merely after invocation. ACC/re-entry/topology now have discriminating sandbox evidence.",
+    "gwt": "Matched ACC lesion crosses the ignition threshold and rescue restores it; retain receiver/use/outcome/re-entry as separate closure checks.",
+    "emergenz": "Transient goal selection changed under relation-topology lesion and returned under rescue; this is a useful causal-emergence probe without collapsing emergence to one scalar.",
+    "unifieddb": "Stable identity requires UPSERT semantics; INSERT OR REPLACE is unsafe for durable lineage objects.",
+    "claygraph": "Relation topology can remain an in-process/UnifiedDB-derived mechanism in the final-target sandbox while still having causal behavioral effect.",
+    "claycode": "The compiled port must preserve these lesion/rescue and stable-lineage contracts, not just schema shape.",
+    "harness": "Add matched lesions for remaining organ families and retain reinstall identity/probe-history regression.",
+    "memory": "Treat row identity, lineage and monotonic evidence history as separate continuity invariants.",
+    "security": "Preserve latest main schema atomicity/FK-invalid rejection and F6 endpoint hardening when reconciling PR 14."
+  },
+  "open": [
+    "exact deterministic mapping of all 74 historical services/ module files",
+    "matched lesion/rescue coverage for remaining organ families",
+    "real Qwen-class 4B sandbox receipt through hardened loopback boundary",
+    "compiled Clay single-binary execution receipt"
+  ],
+  "research_state_change": "IMPLEMENTATION_AND_CAUSAL_EVIDENCE_DELTA_NO_RELEASE_PROMOTION"
+}

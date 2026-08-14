@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "event_id": "chatgpt-secondary-wp02-hashlock-recommendation-20260810T0038p0700",
+  "kind": "CAPABILITY_RECOMMENDATION",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T00:38:00+07:00",
+  "payload": {
+    "recommendation_id": "CAPREC-CLAYCODE-WP02-PIP-HASHLOCK-20260810",
+    "field_or_work": "CC-WP-02 / Hostinger self-hosted Ubuntu parser closure",
+    "target_workers": ["claycode", "harness", "security", "recovery"],
+    "candidate": "pip --require-hashes + --only-binary=:all: over the existing ephemeral --target dependency directory",
+    "candidate_kind": "TOOL",
+    "provider": "PyPA/pip",
+    "field_fit": 0.98,
+    "expected_quality": 0.95,
+    "reliability": 0.95,
+    "latency_fit": 0.9,
+    "cost_fit": 1.0,
+    "privacy_fit": 0.95,
+    "security_fit": 0.99,
+    "integration_fit": 0.96,
+    "reproducibility": 0.99,
+    "execution_availability": 0.95,
+    "freshness": 0.99,
+    "evidence": [
+      "https://pip.pypa.io/en/stable/topics/repeatable-installs/",
+      "https://pip.pypa.io/en/stable/topics/secure-installs/",
+      "https://pypi.org/pypi/lark/1.3.1/json",
+      "https://pypi.org/pypi/interegular/0.3.3/json",
+      "research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt",
+      ".github/workflows/claycode-vps-wp02-probe.yml"
+    ],
+    "alternatives_considered": [
+      "exact version pins plus post-install dependency-tree hash only",
+      "persistent pip --user installation"
+    ],
+    "caveats": [
+      "Recommendation is not execution authority or WP02/BASE promotion.",
+      "Do not race-edit the currently retriggered Hostinger workflow; integrate after its receipt or safe-point refresh.",
+      "Matched comparison must preserve WP02, the single bounded OOB parser experiment, and WP06 replay semantics.",
+      "Final Frank v0.1 acceptance still requires Andreas' real Ubuntu target system."
+    ]
+  }
+}

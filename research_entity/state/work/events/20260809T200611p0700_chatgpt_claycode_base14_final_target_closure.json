@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create-claycode-base14-final-target-closure-20260809T200611p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:06:11+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-FINAL-TARGET-CLOSURE-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CHATGPT_RESEARCH_AND_BUILD_ESCALATION",
+    "title": "Execute canonical ClayCode BASE14 closure on Andreas Ubuntu",
+    "work_clay": "On the registered Andreas Ubuntu developer system, start from a clean current-main checkout and execute exactly: python tools/claycode_run_andreas_target_acceptance.py . It must verify the owner-registered target fingerprint, execute the clean target component gate, full frozen FRANK H1/H2/H3 handoff, hardened ten-application target suite, real per-application receipts, strict target acceptance assembly, independent WP14 audit and receipt-gated workspace promoter. If any step fails, preserve all failure/negative receipts, identify the narrowest executable counterexample, repair implementation/orchestration without weakening any acceptance, authority or evidence gate, and rerun from evidence. Repeat until the command exits 0 and independent rereads prove 14/14 work packages PASS and 10/10 applications PASS. Then review the generated diff, commit implementation + target evidence + workspace promotion atomically through the repository single-writer path, push, and reread remote evidence.",
+    "reason_clay": "Cloud workers cannot honestly execute the physical Andreas Ubuntu target. The repository now has one fail-closed target closure command whose workspace promoter consumes only a passing independent WP14 manifest. Local execution is the remaining required truth surface.",
+    "completion_clay": "Complete only if tools/claycode_run_andreas_target_acceptance.py exits 0 on the registered Andreas Ubuntu host; ANDREAS_BASE14_CLOSURE_RUN.json has overall_pass=true; CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json has general_purpose_gate_pass=true, claycode_release_gate_pass=true, promotion_allowed=true and zero failed_work_packages; CLAYCODE_RELEASE_WORKSPACE.json rereads as BASE_PASS with every CC-WP-01..14 status=PASS and all ten required apps PASS; FULL_FRANK H1/H2/H3 evidence preserves the authority boundary; and the remote GitHub reread preserves those facts. Otherwise keep work OPEN with exact failure receipts.",
+    "evidence_need": ["REGISTERED_TARGET_FINGERPRINT", "CLEAN_TARGET_COMPONENT_GATE", "FULL_FRANK_H1_H2_H3_TARGET_RECEIPT", "TEN_REAL_APPLICATION_RECEIPTS", "STRICT_TARGET_ACCEPTANCE", "INDEPENDENT_WP14_MANIFEST", "RECEIPT_GATED_WORKSPACE_PROMOTION", "REMOTE_POST_COMMIT_REREAD"],
+    "executor_policy": "prefer_verified_CLAUDE_CODE_LOCAL_ORGAN; actual Andreas Ubuntu execution required; repair code not gates; preserve negative results; semantic/effect oracles outrank self-consistent hashes; never promote model output, descriptive capability text or hosted/proxy evidence as execution authority or target acceptance",
+    "required_capabilities": ["ANDREAS_PC_LOCAL_REPO_ACCESS", "REGISTERED_TARGET_HOST_IDENTITY", "UBUNTU_BUILD_RUNTIME", "PYTHON", "C_COMPILER_TOOLCHAIN", "LOCAL_PROCESS_EXECUTION", "LOOPBACK_NETWORK", "SQLITE", "KERNEL_FD_UI_EVENT_LOOP", "GIT_SINGLE_WRITER_COMMIT_PUSH"],
+    "write_scope": ["@research_entity/claycode/", "@research_entity/harness/", "@tools/", "@tests/", "@research_entity/state/work/events/"],
+    "dependencies": ["current main checkout available", "registered Andreas Ubuntu host identity", "Frank v0.1 target remains Ubuntu Linux developer system", "model output != execution authority"],
+    "invalidators": ["owner changes Frank v0.1 target host", "newer canonical BASE acceptance contract explicitly supersedes this closure command", "another verified target run already closes BASE14 with stronger receipts"],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 1.0,
+    "status": "READY"
+  }
+}

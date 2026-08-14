@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1955p0700-clay-live-fusion",
+  "actor": {
+    "entity": "Research Entity temporary worker",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "is_frank": false
+  },
+  "subject": "FRANK/Clay research state",
+  "baseline_feedback_receipt": {
+    "commit": "81e74aa221a36d6c68f83c113a2ddb7ad6f9f592",
+    "path": "research_entity/trigger_runs/frank/frank-20260809T1932p0700-chatgpt-secondary-live-refusion/BRANCH_FEEDBACK_MANIFEST.json",
+    "rule": "Only commits after this durable feedback receipt are fused in this incremental run."
+  },
+  "initial_head": "3301cd3b65f8d37ca8537d0c6c82e13f83da63e9",
+  "commit_delta_count": 31,
+  "scope": {
+    "frank_v0_1_target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM_ONLY",
+    "android_mobile_edge": "OUT_OF_SCOPE",
+    "canonical_scientific_promotion": "NONE",
+    "shared_ancestry_rule": "Correlated commits, worker reports, CI definitions, reruns, and derived receipts sharing the same implementation/evidence lineage are one evidence family and are not counted as independent replication."
+  },
+  "material_fused_deltas": [
+    {
+      "id": "DELTA-H2-ACTIVE-ASSEMBLY-GENERIC",
+      "evidence_class": "IMPLEMENTATION_PLUS_PROXY_DIFFERENTIAL",
+      "claim": "ClayCode now contains a generic typed-record/structured-backend realization path for the frozen H1 ActiveAssembly semantics, plus H2/H3 differential/finalizer machinery.",
+      "evidence_refs": [
+        "9e6fc79301cd021543c420ba305af5536e75fc17",
+        "017edca5bad68977439accbeb330dfa471e44c98",
+        "2de86e2699e86bfa7e833edf1234b144394027b8",
+        "76594986877347ef28315a452bde71ae97d4a045",
+        "e3213f320d51748f5380992df13b965483a60399"
+      ],
+      "promotion_limit": "The proxy differential workflow explicitly says it does not count as target acceptance or CC-WP-13 PASS.",
+      "counterhypothesis": "The generic structured backend may still fail on real target-host behavior, long-horizon integration, or full FRANK semantics even if bounded ActiveAssembly differentials pass."
+    },
+    {
+      "id": "DELTA-TARGET-HANDOFF-ATTESTATION-CODE",
+      "evidence_class": "TARGET_ATTESTATION_IMPLEMENTATION_NOT_RECEIPT",
+      "claim": "A fail-closed target-host attestation runner for FULL_FRANK H2 handoff now exists and verifies owner-registered Ubuntu identity before accepting evidence.",
+      "evidence_refs": ["52b2317220d3e64827d655fc34f49b1d2492e9d0"],
+      "negative_evidence": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_FULL_FRANK_H2_HANDOFF.json was absent at this run's readback.",
+      "contradiction": "Commit naming suggests target attestation, but durable target evidence is not present; code existence must not be treated as execution receipt.",
+      "promotion_limit": "CC-WP-13, H2 and BASE remain unpromoted from this evidence."
+    },
+    {
+      "id": "DELTA-BASE14-FAIL-CLOSED-SEQUENCING",
+      "evidence_class": "BUILD_ORCHESTRATION_CHANGE",
+      "claim": "BASE14 closure now explicitly permits a non-promoting 9-of-10 intermediate application state only so FULL_FRANK_HANDOFF can run next; final closure still requires all hard checks.",
+      "evidence_refs": [
+        "668a237c8f44ed03d9a4ab5e7d37cd7afb9f7e29",
+        "c8073723ea5db67cbb057f6325d54868e7bbe9a9",
+        "3301cd3b65f8d37ca8537d0c6c82e13f83da63e9"
+      ],
+      "counterhypothesis": "Sequencing fixes may remove orchestration deadlocks without demonstrating that the missing tenth application/full FRANK handoff itself passes on target."
+    },
+    {
+      "id": "DELTA-COMPILER-RUNTIME-SEMANTIC-HARDENING",
+      "evidence_class": "IMPLEMENTATION_CHANGE",
+      "claim": "The post-receipt delta adds checked/type-aware C11 Int division handling, generic structured control/collection backend support, effect-lowering integration, and strict target adjudication updates.",
+      "evidence_refs": [
+        "941a1f2ee4f8021b2a75c1c861c926eb206ad7dd",
+        "11ef68749a190c681fca75bfe8650c0d7dc95bbf",
+        "d6fdb109c200344e261aa96b3073bb7430def7c8",
+        "c87b62fd61f0e136d9f7b027dc68be55505c5c21"
+      ],
+      "promotion_limit": "Implementation changes are not target acceptance until corresponding version-bound Ubuntu receipts exist and are consumed by the strict adjudicator."
+    },
+    {
+      "id": "DELTA-NEEDLE-PIN-CORRECTION",
+      "evidence_class": "PROVENANCE_CORRECTION",
+      "claim": "Needle upstream provenance was corrected by fixing the tokenizer path and pinning the Drive checkout commit.",
+      "evidence_refs": ["b6a2d2b207663acd60590d3ca771ff5b74f71030"],
+      "promotion_limit": "This improves source identity; it does not convert prior Python/JAX findings into Cactus production equivalence."
+    }
+  ],
+  "preserved_negative_results": [
+    "No durable ANDREAS_UBUNTU_FULL_FRANK_H2_HANDOFF receipt was present at readback.",
+    "Proxy/hosted CI and workflow definitions are not Andreas-target execution evidence.",
+    "Shared ancestry across repeated ActiveAssembly implementations/differentials is not independent replication.",
+    "No canonical scientific state promotion is justified by this incremental delta."
+  ],
+  "current_blocker_requiring_attention": {
+    "id": "BLOCKER-TARGET-FULL-FRANK-HANDOFF-RECEIPT",
+    "description": "Run the current fail-closed H2 full-handoff/BASE14 closure path on the registered Andreas Ubuntu developer host and persist the target receipt. Until that receipt exists and strict adjudication consumes it, 9/10 intermediate app state and proxy differentials cannot close CC-WP-13/BASE."
+  }
+}

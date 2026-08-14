@@ -1,0 +1,127 @@
+module clay.research.live_delta_router_v1
+version "1.0-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system"
+origin_actor="chatgpt-secondary"
+created_at="2026-08-10T14:21:00+07:00"
+
+canonical_durability=GitWorkEvents+UnifiedDB
+derived_relevance=ClayGraph
+optional_fast_transport=NATS_JETSTREAM_CANDIDATE
+event_envelope_alignment=CLOUDEVENTS_1_0_INFORMATION_MODEL
+trace_alignment=W3C_TRACE_CONTEXT_PLUS_MULTIPARENT_LINKS
+telemetry_alignment=OPENTELEMETRY_MESSAGING_LINKS_CANDIDATE
+
+law FAST_TRANSPORT_NEVER_MINTS_TRUTH=true
+law FAST_TRANSPORT_NEVER_MINTS_EFFECT_AUTHORITY=true
+law GIT_UNIFIEDDB_REMAINS_DURABLE_SEMANTIC_AUTHORITY=true
+law CLAYGRAPH_RELEVANCE_NEVER_MINTS_TRUTH=true
+law FAILURE_OF_FAST_TRANSPORT_FALLS_BACK_TO_GIT_UNIFIEDDB=true
+law TARGETED_DELIVERY_DOES_NOT_CREATE_INDEPENDENT_REPLICATION=true
+law FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT=true
+
+record DeltaEnvelopeV2 {
+  specversion:String="1.0"
+  event_id:String
+  source:String
+  event_type:String
+  subject:String
+  created_at:Time
+  semantic_epoch:Int
+  work_spec_rev?:Int
+  affected_work_ids:Set<Ref>
+  affected_branches:Set<Ref>
+  invalidated_claim_ids:Set<Ref>
+  ancestry_ids:Set<Ref>
+  parent_event_ids:Set<Ref>
+  evidence_refs:Set<Ref>
+  evidence_class:Ref
+  content_hash:Hash
+  payload:Clay
+}
+
+rule event_identity=(source,event_id,content_hash)
+rule same_source_plus_event_id_plus_content_hash -> DUPLICATE_DELIVERY
+rule same_source_plus_event_id_plus_different_content_hash -> IDENTITY_CONFLICT_FAIL_CLOSED
+rule semantic_epoch < affected_current_epoch -> STALE_REJECT
+rule work_spec_rev < current_work_spec_rev -> STALE_REJECT
+rule invalidated_claim -> route_to(premise_consumers + transitive_dependents)
+rule explicit_affected_work -> route_to(affected_work + transitive_dependents)
+rule normal_delta -> route_to(semantic_dependents)
+rule branch_coverage_receipt may summarize NO_CHANGE for untouched branches
+rule live_delivery -> TARGETED_NOT_BROADCAST
+rule critical_invalidation -> priority(INTERRUPT)
+rule noncritical_delta -> priority(NORMAL)
+
+type DeliveryStage=DELIVERED|RECONSTRUCTED|USED|LOCAL_EFFECT|VERIFIED_OUTCOME|REENTRY
+rule DeliveryStage must_advance_monotonically
+rule RECONSTRUCTED requires DELIVERED
+rule USED requires RECONSTRUCTED
+rule LOCAL_EFFECT requires USED
+rule VERIFIED_OUTCOME requires LOCAL_EFFECT
+rule REENTRY requires VERIFIED_OUTCOME
+rule delivery_or_ack != evidence_promotion
+rule verified_outcome != automatic_causal_credit
+
+transport_subject(branch,event_class,priority)=
+  "clay.delta."+branch+"."+event_class+"."+priority
+
+nats_candidate {
+  mode=OPTIONAL_ACCELERATOR
+  persistence=JETSTREAM
+  consumer=durable_pull_preferred_for_reliable_horizontal_processing
+  ack=EXPLICIT
+  server_side_filter=SUBJECT_FILTERS
+  replay=SUPPORTED
+  dedupe=UNIQUE_MESSAGE_ID_PLUS_CLAY_EVENT_IDENTITY
+  fallback=GitWorkEvents+UnifiedDB
+}
+
+experiment LIVE_DELTA_ROUTER_HOSTINGER_AB {
+  baseline=CURRENT_GIT_EVENT_POLL_AND_FUSION_PATH
+  candidate=GIT_UNIFIEDDB_PLUS_DELTA_ROUTER_AND_OPTIONAL_NATS
+  matched_event_corpus=true
+  matched_dependency_graph=true
+  inject=[duplicate_delivery,out_of_order_delivery,consumer_restart,fast_transport_loss,stale_spec_rev,claim_invalidation]
+  measure=[
+    propagation_latency_p50,
+    propagation_latency_p95,
+    invalidation_to_interrupt_latency_p95,
+    missed_required_recipient_rate,
+    false_fanout_rate,
+    duplicate_effect_rate,
+    stale_effect_rate,
+    restart_recovery_success,
+    fallback_replay_equivalence,
+    cpu,
+    rss,
+    network_bytes,
+    durable_event_amplification
+  ]
+  hard_fail if missed_required_recipient_rate>0
+  hard_fail if duplicate_effect_rate>0
+  hard_fail if stale_effect_rate>0
+  hard_fail if fallback_replay_equivalence<1.0
+  promote only_if candidate_materially_reduces_latency_or_amplification_without_reliability_regression
+}
+
+external_primary_evidence {
+  CloudEvents="vendor-neutral event context; source+id duplicate identity; type/subject routing metadata"
+  W3C_Trace_Context="portable distributed trace identity and propagation"
+  OpenTelemetry_Messaging="span links support messaging fanout/batch/multiple causal inputs"
+  NATS_Subjects="interest-based hierarchical subject routing with wildcards"
+  NATS_JetStream="durable consumers, filtering, explicit ack/redelivery, replay, dedupe/exactly-once mechanisms"
+}
+
+counterhypotheses=[
+  "Git polling is already fast enough and a broker adds more failure modes than value.",
+  "Dependency metadata is too stale/incomplete for safe targeted routing.",
+  "NATS delivery guarantees can be misread as effect exactly-once; application idempotency remains required.",
+  "Branch-level all-peer ingestion may make aggressive branch routing less useful than work-item routing."
+]
+
+invariant routing_speed!=truth_strength
+invariant delivery_ack!=causal_credit
+invariant event_bus!=semantic_authority
+invariant live_fusion_preserves_negative_results_and_dissent

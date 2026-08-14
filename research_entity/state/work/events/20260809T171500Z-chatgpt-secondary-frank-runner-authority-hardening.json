@@ -1,0 +1,49 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-20260809T171500Z-FRANK-RUNNER-AUTHORITY",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:15:00Z",
+  "payload": {
+    "work_id": "FRANK-V01-SELFHOSTED-RUNNER-AUTHORITY-HARDENING",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SECURITY_WEB_RESEARCH_PLUS_WORKFLOW_INSPECTION",
+    "title": "Separate Frank self-hosted execution authority from receipt-write authority",
+    "work_clay": "design and test a least-authority Hostinger Actions topology in which build/test/model execution has read-only repository authority and emits bounded receipts, while a separate constrained persistence/adjudication path verifies and writes admitted evidence; evaluate ephemeral or JIT runner lifecycle for higher-authority jobs without breaking reproducibility",
+    "reason_clay": "current persistent self-hosted workflow requests contents write and persists checkout credentials in the same executor that runs build/test code; GitHub documents that self-hosted runners need not start clean per job and recommends ephemeral runners for clean-job isolation in autoscaling scenarios; no compromise is claimed",
+    "completion_clay": "one end-to-end proof shows read-only self-hosted execution, successful bounded receipt transport, separate constrained repository persistence, no secret/raw-environment persistence, and no regression in current 21-gate reproducibility; alternative ephemeral/JIT feasibility is documented with evidence or explicit NOT_SELECTED outcome",
+    "evidence_need": [
+      "fresh GitHub Actions permission semantics",
+      "current workflow token/credential exposure surface",
+      "successful read-only execution receipt",
+      "successful separately authorized persistence receipt",
+      "negative controls for unadmitted write attempts",
+      "rollback path"
+    ],
+    "executor_policy": "security hardening must preserve the current evidence pipeline; do not claim compromise; prefer minimal privilege and clean-job isolation where operationally justified; test before changing production workflow authority",
+    "required_capabilities": [
+      "github.actions.workflow_execution",
+      "github.repository_permissions",
+      "frank_v0_1.build_test.self_hosted_runner"
+    ],
+    "write_scope": [
+      "gschaidergabriel/Dr.-Unterweger:.github/workflows/",
+      "research_entity/state/work/events/",
+      "research_entity/knowledge_micro_packets/security/"
+    ],
+    "dependencies": [
+      "current Hostinger runner remains a research/test lane",
+      "receipt persistence requirements remain explicit"
+    ],
+    "invalidators": [
+      "GitHub permission model changes",
+      "runner lifecycle changes to already-clean ephemeral execution",
+      "separate writer would weaken evidence authenticity or make receipts unverifiable"
+    ],
+    "base_priority": 0.82,
+    "expected_impact": 0.92,
+    "urgency": 0.80,
+    "information_gain": 0.86,
+    "status": "READY"
+  }
+}

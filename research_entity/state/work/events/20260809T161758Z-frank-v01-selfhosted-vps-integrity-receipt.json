@@ -1,0 +1,47 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-EXEC-20260809T161758Z-FRANK-VPS-16OF16",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T16:17:58Z",
+  "payload": {
+    "execution_receipt_id": "exec:frank-v01-vps-integrity-2b85ec48-16of16",
+    "work_id": "FRANK-V01-HOSTINGER-RUNNER-FIRST-LANE",
+    "spec_rev": 1,
+    "executor_class": "GITHUB_ACTIONS_SELF_HOSTED_UBUNTU_RUNNER",
+    "machine_ref": "github-runner:clay@digital-retina",
+    "action": {
+      "clay": "execute current FRANK deep-integrity matrix on self-hosted Linux/X64 runner after SQLite migration and central UnifiedDB opener repairs"
+    },
+    "observed_effect": {
+      "clay": "FRANK deep-integrity matrix returned PASS for all 16 gates on real self-hosted Ubuntu execution",
+      "github_sha": "2b85ec48e04d1b1a5e18173dc960864a742c252c",
+      "host": "digital-retina",
+      "runner_name": "clay",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "python": "3.12.3",
+      "gate_count": 16,
+      "pass_count": 16,
+      "fail_count": 0,
+      "whole_frank_release_status": "NOT_CLAIMED"
+    },
+    "verification": {
+      "clay": "verified by persisted runtime/vps_integrity/latest.json receipt committed from the self-hosted run; static integrity, transaction replay, deep integrity, schema migration atomicity, causal reentry, legacy conservation, local-model boundary and session-skill gates all PASS",
+      "provider_identity_binding": "OPEN: current receipt identifies github-runner:clay@digital-retina but does not independently prove that machine_ref equals research resource hostinger-vps-github-runner"
+    },
+    "evidence_refs": [
+      "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/latest.json@26554de984b2cffb2e18980eac907341efd6f85a",
+      "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/latest.log@26554de984b2cffb2e18980eac907341efd6f85a",
+      "gschaidergabriel/Dr.-Unterweger:.github/workflows/frank-vps-deep-integrity.yml",
+      "research_entity/state/system/events/20260809T161405Z-hostinger-vps-runner-resource.json"
+    ],
+    "truth_class": "VERIFIED_REMOTE_EFFECT_RECEIPT",
+    "success": true,
+    "complete": false,
+    "open": [
+      "bind github-runner:clay@digital-retina to hostinger-vps-github-runner with direct runner/resource evidence before terminal work completion",
+      "Frank v0.1 final release still requires Andreas-PC acceptance evidence"
+    ]
+  }
+}

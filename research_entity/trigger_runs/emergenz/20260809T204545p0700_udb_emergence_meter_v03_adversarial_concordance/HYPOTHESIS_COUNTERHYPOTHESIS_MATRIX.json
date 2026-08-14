@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance",
+  "evidence_scope": "SYNTHETIC_METHOD_ONLY",
+  "live_frank_validated": false,
+  "canonical_scientific_promotion": "NONE",
+  "hypotheses": [
+    {
+      "id": "H-UDB-EM-008",
+      "hypothesis": "Inference at the true independent episode or seed unit prevents pseudoreplication-driven causal promotion.",
+      "counterhypotheses": [
+        "The experimenter may identify the wrong cluster hierarchy.",
+        "Episode sign-flip still requires symmetry/exchangeability and can be miscalibrated.",
+        "Few independent episodes can make the correct test too weak to decide."
+      ],
+      "observations": {
+        "primary_probe_tick_false_positive_rate": 0.84,
+        "primary_probe_episode_false_positive_rate": 0.06,
+        "surface_tick_null_rejection_range": [0.325, 0.9],
+        "surface_episode_null_rejection_range": [0.0, 0.125],
+        "episode_power_at_six_episodes_range": [0.15, 0.175],
+        "episode_power_at_48_episodes_range": [0.95, 0.975]
+      },
+      "adjudication": "SUPPORTED_WITH_ASSUMPTION_AND_POWER_BOUNDARIES",
+      "required_next_test": "Registered episode hierarchy plus simulation-calibrated cluster/hierarchical inference; report power without reverting to ticks."
+    },
+    {
+      "id": "H-UDB-EM-009",
+      "hypothesis": "A dependence-aware null ensemble with abstention on disagreement is safer than full tick shuffling.",
+      "counterhypotheses": [
+        "Circular shifts can be conservative and lose power.",
+        "Circular and block nulls are invalid when stationarity or their invariants fail.",
+        "Concordant unconditional nulls can still mistake a shared regime for a direct path."
+      ],
+      "observations": {
+        "full_shuffle_false_positive_rate_phi_0_95_to_0_985": [0.4666666666666667, 0.8333333333333334],
+        "circular_false_positive_rate_phi_0_95_to_0_985": [0.03333333333333333, 0.2],
+        "null_disagreement_rate_phi_0_95_to_0_985": [0.26666666666666666, 0.7],
+        "power_beta_0_15_full_vs_circular": [0.7, 0.1],
+        "power_beta_0_6_full_vs_circular": [0.9333333333333333, 0.8],
+        "shared_regime_full_vs_circular_unconditional_rejection_without_direct_path": [1.0, 0.975]
+      },
+      "adjudication": "SUPPORTED_ONLY_AS_FAIL_CLOSED_DIAGNOSTIC_POLICY",
+      "required_next_test": "Validate null invariants per regime; add context conditioning/local surrogates and abstain under unresolved common-driver risk."
+    },
+    {
+      "id": "H-UDB-EM-010",
+      "hypothesis": "Preregistered or leakage-safe cross-fit macro selection prevents the optimizer's-curse emergence artifact.",
+      "counterhypotheses": [
+        "Random folds leak temporal dependence and regimes.",
+        "A macrostate may be genuinely local to a regime and appear to fail global holdout.",
+        "Cross-fitting reduces effective sample size and can hide weak real mechanisms."
+      ],
+      "observations": {
+        "candidate_curve": [
+          {"candidates": 1, "median_train_mi_bits": 0.0025995379832103316, "median_heldout_mi_bits": 0.00004251954053990925, "false_discovery_fraction": 0.0},
+          {"candidates": 100, "median_train_mi_bits": 0.0345675262342251, "median_heldout_mi_bits": 0.00010046823087295209, "false_discovery_fraction": 0.075},
+          {"candidates": 500, "median_train_mi_bits": 0.048605747015807776, "median_heldout_mi_bits": 0.00003391321826462512, "false_discovery_fraction": 0.425},
+          {"candidates": 2500, "median_train_mi_bits": 0.062171983865119906, "median_heldout_mi_bits": 0.0000731218974932002, "false_discovery_fraction": 0.9}
+        ]
+      },
+      "adjudication": "SUPPORTED_FOR_IN_SAMPLE_SEARCH_FALSIFICATION",
+      "required_next_test": "Leave-episode, leave-context and forward-time splits with candidate-count and leakage receipts; estimate local-regime effects separately."
+    },
+    {
+      "id": "H-UDB-EM-011",
+      "hypothesis": "Estimator multiverses plus redundancy and entropy bounds prevent additive synergy overcount.",
+      "counterhypotheses": [
+        "PID estimators encode different axioms and need not converge to one privileged value.",
+        "Finite-sample estimator agreement can be shared bias.",
+        "Intervention-based PEID removes input redundancy only under its maximum-entropy intervention model."
+      ],
+      "observations": {
+        "duplicate_xor_target_entropy_bits": 1.0,
+        "synergy_x_y_bits": 1.0,
+        "synergy_duplicate_x_y_bits": 1.0,
+        "naive_pair_sum_bits": 2.0
+      },
+      "adjudication": "ADDITIVE_PAIRWISE_AGGREGATION_FALSIFIED",
+      "required_next_test": "Non-overlapping decompositions or explicit redundancy accounting; report axiom choice, calibration and disagreement as UNKNOWN."
+    },
+    {
+      "id": "H-UDB-EM-012",
+      "hypothesis": "Pathwise causal abstraction tests and excluded-variable interventions detect endpoint-valid hidden mechanisms.",
+      "counterhypotheses": [
+        "Exhaustive intervention over all hidden variables is impossible in a large system.",
+        "Flexible alignment maps can make abstraction tests vacuous.",
+        "Interventions can create unreachable or off-manifold states with ambiguous interpretation."
+      ],
+      "observations": {
+        "baseline_endpoint_equivalence": true,
+        "visible_lesion_rescue_can_pass": true,
+        "excluded_variable_intervention_mean_absolute_effect": 0.5
+      },
+      "adjudication": "ENDPOINT_ONLY_VALIDATION_FALSIFIED",
+      "required_next_test": "Constrain the alignment family, test intermediate receipts, alternative paths and sampled excluded variables, and retain a bounded hidden-path risk."
+    },
+    {
+      "id": "H-GWT-UDB-013",
+      "hypothesis": "Receiver-complete GWT receipts plus matched ablation/rescue can convert broadcast observations into bounded causal-use evidence.",
+      "counterhypotheses": [
+        "Decodable or verbalizable workspace content may not be causally used.",
+        "Ablation effects may reflect nonspecific capacity damage rather than workspace function.",
+        "Layer-depth ignition is a structural proxy, not temporal recurrence.",
+        "Functional access evidence does not establish phenomenal consciousness."
+      ],
+      "observations": {
+        "project_binding": "selection->broadcast->delivery->reconstruction->uptake->causal_use->outcome->provenance_reentry",
+        "literature_delta": "J-space uses matched causal perturbations; Ignition Index explicitly defers causal amnesic probing and disallows consciousness inference.",
+        "local_h1_adapter_status": "LOCAL_COMPONENT_ONLY_NOT_TARGET_REPLICATION"
+      },
+      "adjudication": "OPEN_METHOD_HYPOTHESIS",
+      "required_next_test": "Frozen matched baseline/lesion/rescue and truthful/shuffled/no-reentry runs on registered Andreas Ubuntu with receiver and outcome receipts."
+    }
+  ]
+}
+

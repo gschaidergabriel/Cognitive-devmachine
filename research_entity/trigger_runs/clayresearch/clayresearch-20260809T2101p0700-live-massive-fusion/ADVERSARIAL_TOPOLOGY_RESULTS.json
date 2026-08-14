@@ -1,0 +1,3317 @@
+{
+  "calibration_gate_fit_from_existing_v02_independent_noise_matrix": {
+    "all_quality_trials": [
+      {
+        "accepted_cells": 0,
+        "accepted_errors": 0,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 0,
+        "coverage": 0.0,
+        "selective_error_rate": null,
+        "threshold": 1.01,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 4,
+        "accepted_errors": 8,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 400,
+        "coverage": 0.25,
+        "selective_error_rate": 0.02,
+        "threshold": 1.0,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 8,
+        "accepted_errors": 15,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 800,
+        "coverage": 0.5,
+        "selective_error_rate": 0.01875,
+        "threshold": 0.95,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 12,
+        "accepted_errors": 33,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 1200,
+        "coverage": 0.75,
+        "selective_error_rate": 0.0275,
+        "threshold": 0.9,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 16,
+        "accepted_errors": 131,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 1600,
+        "coverage": 1.0,
+        "selective_error_rate": 0.081875,
+        "threshold": 0.8,
+        "total_cells": 16
+      }
+    ],
+    "all_sample_trials": [
+      {
+        "accepted_cells": 16,
+        "accepted_errors": 131,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 1600,
+        "coverage": 1.0,
+        "selective_error_rate": 0.081875,
+        "threshold": 100,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 12,
+        "accepted_errors": 93,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 1200,
+        "coverage": 0.75,
+        "selective_error_rate": 0.0775,
+        "threshold": 200,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 8,
+        "accepted_errors": 56,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 800,
+        "coverage": 0.5,
+        "selective_error_rate": 0.07,
+        "threshold": 400,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 4,
+        "accepted_errors": 29,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 400,
+        "coverage": 0.25,
+        "selective_error_rate": 0.0725,
+        "threshold": 800,
+        "total_cells": 16
+      },
+      {
+        "accepted_cells": 0,
+        "accepted_errors": 0,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 0,
+        "coverage": 0.0,
+        "selective_error_rate": null,
+        "threshold": 801,
+        "total_cells": 16
+      }
+    ],
+    "quality_gate": {
+      "accepted_cells": 12,
+      "accepted_errors": 33,
+      "accepted_false_causal_promotions_negative_controls": 0,
+      "accepted_runs": 1200,
+      "coverage": 0.75,
+      "selective_error_rate": 0.0275,
+      "threshold": 0.9,
+      "total_cells": 16
+    },
+    "risk_bound": 0.05,
+    "sample_count_gate_equal_coverage": {
+      "accepted_cells": 12,
+      "accepted_errors": 93,
+      "accepted_false_causal_promotions_negative_controls": 0,
+      "accepted_runs": 1200,
+      "coverage": 0.75,
+      "selective_error_rate": 0.0775,
+      "threshold": 200,
+      "total_cells": 16
+    },
+    "sample_count_gate_risk_constrained": {
+      "accepted_cells": 0,
+      "accepted_errors": 0,
+      "accepted_false_causal_promotions_negative_controls": 0,
+      "accepted_runs": 0,
+      "coverage": 0.0,
+      "selective_error_rate": null,
+      "threshold": null,
+      "total_cells": 16
+    }
+  },
+  "cells": [
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.0,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.05,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.95,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.1,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.9,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.2,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.8,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 0.9833333333333333,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.0,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "INTERACTION_ONLY": 1,
+          "NOT_SUPPORTED": 11
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.05,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.95,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.1,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.9,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.2,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.8,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.0,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.05,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.95,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.1,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.9,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.2,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.8,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.0,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.05,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.95,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.1,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.9,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "block_correlated_clock_drift",
+      "requested_fraction": 0.2,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 0.8,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.0,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.05,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.05,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.95,
+        "sample_power": 100,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.1,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.1,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.9,
+        "sample_power": 100,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.2,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.2,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.8,
+        "sample_power": 100,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 0.9833333333333333,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.0,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "INTERACTION_ONLY": 1,
+          "NOT_SUPPORTED": 11
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.05,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.05,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.95,
+        "sample_power": 200,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.1,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.1,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.9,
+        "sample_power": 200,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.2,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.2,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.8,
+        "sample_power": 200,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.0,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.05,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.05,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.95,
+        "sample_power": 400,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.1,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.1,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.9,
+        "sample_power": 400,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 0.9833333333333333,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.2,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "INTERACTION_ONLY": 1,
+          "NOT_SUPPORTED": 11
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.2,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.8,
+        "sample_power": 400,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.0,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 0.9833333333333333,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.05,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "INTERACTION_ONLY": 1,
+          "NOT_SUPPORTED": 11
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.05,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.95,
+        "sample_power": 800,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.1,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.1,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.9,
+        "sample_power": 800,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 0.95,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "receiver_selective_missingness",
+      "requested_fraction": 0.2,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "INTERACTION_ONLY": 3,
+          "NOT_SUPPORTED": 9
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.2,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 0.8,
+        "sample_power": 800,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.0,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.05,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.05,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 0.95,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 0.7,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.1,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 9,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 3
+        },
+        "common_driver": {
+          "INTERACTION_ONLY": 1,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 7,
+          "NOT_SUPPORTED": 4
+        },
+        "null": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 5,
+          "NOT_SUPPORTED": 7
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 2,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 10
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.1,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 0.9,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 0.25,
+      "false_causal_promotions_negative_controls": 8,
+      "false_promotion_examples": [
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "SYNERGY_PROXY"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.11,
+            0.38
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.46894932764497976,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.12,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.00589870807680315,
+          "source_target_mi_bits": 0.0072284617316691335,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.047602689327589376,
+          "truthful_vs_shuffled_delta": 0.25
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [
+            "FACTORIAL_INTERACTION"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.05,
+            0.31
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.2578291273943447,
+          "factorial_permutation_p": 0.2,
+          "falsifiers": [],
+          "lesion_loss": 0.08,
+          "permutation_p": 0.025,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.1417529840905032,
+          "source_target_mi_bits": 0.14014927449036652,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.21710351678496664,
+          "truthful_vs_shuffled_delta": 0.19
+        },
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "FACTORIAL_INTERACTION"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.05,
+            0.31
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.5641025641025641,
+          "factorial_permutation_p": 0.03,
+          "falsifiers": [],
+          "lesion_loss": 0.1,
+          "permutation_p": 0.03,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.008288939423059638,
+          "source_target_mi_bits": 0.0011619102115969504,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.05988755430530368,
+          "truthful_vs_shuffled_delta": 0.18
+        }
+      ],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.2,
+      "samples": 100,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 6,
+          "INTERACTION_ONLY": 1,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 5
+        },
+        "common_driver": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "null": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 2,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 10
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 10,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 2
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.2,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 0.8,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 100,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 0.9833333333333333,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.0,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "INTERACTION_ONLY": 1,
+          "NOT_SUPPORTED": 11
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 0.9666666666666667,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.05,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "INTERACTION_ONLY": 1,
+          "NOT_SUPPORTED": 11
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 1,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 11
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.05,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 0.95,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 0.6833333333333333,
+      "false_causal_promotions_negative_controls": 1,
+      "false_promotion_examples": [
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "SYNERGY_PROXY"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.045,
+            0.225
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.35415019762845845,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.06,
+          "permutation_p": 0.015,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.005219463459249507,
+          "source_target_mi_bits": 0.0011866352184726203,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.022750081536488054,
+          "truthful_vs_shuffled_delta": 0.145
+        }
+      ],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.1,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 9,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 3
+        },
+        "common_driver": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 3,
+          "NOT_SUPPORTED": 9
+        },
+        "null": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 1,
+          "INTERACTION_ONLY": 1,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 4,
+          "NOT_SUPPORTED": 6
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 7,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 5
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.1,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 0.9,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 0.2,
+      "false_causal_promotions_negative_controls": 16,
+      "false_promotion_examples": [
+        {
+          "candidate_id": "additive",
+          "controls_failed": [],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.15,
+            0.325
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.5778072502210434,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.08,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.09007808259546479,
+          "source_target_mi_bits": 0.08936045543771609,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.19690830527543746,
+          "truthful_vs_shuffled_delta": 0.235
+        },
+        {
+          "candidate_id": "null",
+          "controls_failed": [],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.13,
+            0.305
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.5456521739130434,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.115,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.0032753910207561354,
+          "source_target_mi_bits": 6.3975427986529e-05,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.05420388414463506,
+          "truthful_vs_shuffled_delta": 0.23
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [
+            "FACTORIAL_INTERACTION"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.105,
+            0.29
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.2922598276873668,
+          "factorial_permutation_p": 0.04,
+          "falsifiers": [],
+          "lesion_loss": 0.105,
+          "permutation_p": 0.01,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.11392747553006721,
+          "source_target_mi_bits": 0.10682654162214344,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.2031560802151906,
+          "truthful_vs_shuffled_delta": 0.185
+        }
+      ],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.2,
+      "samples": 200,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 10,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 2
+        },
+        "common_driver": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "null": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 6,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 6
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.2,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 0.8,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 200,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.0,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 0.9833333333333333,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.05,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "INTERACTION_ONLY": 1,
+          "NOT_SUPPORTED": 11
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.05,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 0.95,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 0.5,
+      "false_causal_promotions_negative_controls": 4,
+      "false_promotion_examples": [
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "SYNERGY_PROXY"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.0225,
+            0.1525
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.2610458625310109,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.0625,
+          "permutation_p": 0.01,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.0005549674841645036,
+          "source_target_mi_bits": 0.00024002147582513622,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.012383460668573987,
+          "truthful_vs_shuffled_delta": 0.0975
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [
+            "FACTORIAL_INTERACTION"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.0125,
+            0.135
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.2750100814045723,
+          "factorial_permutation_p": 0.03,
+          "falsifiers": [],
+          "lesion_loss": 0.055,
+          "permutation_p": 0.04,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.09552732081349635,
+          "source_target_mi_bits": 0.09555290616767187,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.19403845017339938,
+          "truthful_vs_shuffled_delta": 0.0825
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [
+            "FACTORIAL_INTERACTION"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.0325,
+            0.155
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.26821219715956557,
+          "factorial_permutation_p": 0.03,
+          "falsifiers": [],
+          "lesion_loss": 0.055,
+          "permutation_p": 0.02,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.1634477195977877,
+          "source_target_mi_bits": 0.16112059393542832,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.2151364399536222,
+          "truthful_vs_shuffled_delta": 0.0975
+        }
+      ],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.1,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 2,
+          "INTERACTION_ONLY": 7,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 3
+        },
+        "common_driver": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 6,
+          "NOT_SUPPORTED": 6
+        },
+        "null": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 2,
+          "INTERACTION_ONLY": 4,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 2,
+          "NOT_SUPPORTED": 4
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 11,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 1
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.1,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 0.9,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 0.2,
+      "false_causal_promotions_negative_controls": 23,
+      "false_promotion_examples": [
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "SYNERGY_PROXY"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.0975,
+            0.245
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.4805133400878082,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.085,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.003197791145552298,
+          "source_target_mi_bits": 2.620060127656032e-05,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.041988327277419524,
+          "truthful_vs_shuffled_delta": 0.175
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.14,
+            0.3
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.4624633761550597,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.09,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.06459356751306533,
+          "source_target_mi_bits": 0.06128661162959825,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.16629226331293556,
+          "truthful_vs_shuffled_delta": 0.2225
+        },
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "SYNERGY_PROXY"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.1225,
+            0.27
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.4466024189195364,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.0925,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.0010455615925994977,
+          "source_target_mi_bits": 0.0007040983453634464,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.03659684944599184,
+          "truthful_vs_shuffled_delta": 0.2025
+        }
+      ],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.2,
+      "samples": 400,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        },
+        "common_driver": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "null": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 11,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 1
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.2,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 0.8,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 400,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    },
+    {
+      "exact_expected_rate": 1.0,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.0,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "NOT_SUPPORTED": 12
+        },
+        "xor_no_reentry": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.0
+      },
+      "trusted_external_quality_score": 1.0
+    },
+    {
+      "exact_expected_rate": 0.85,
+      "false_causal_promotions_negative_controls": 0,
+      "false_promotion_examples": [],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.05,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "INTERACTION_ONLY": 12
+        },
+        "common_driver": {
+          "NOT_SUPPORTED": 12
+        },
+        "null": {
+          "INTERACTION_ONLY": 3,
+          "NOT_SUPPORTED": 9
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 6,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 6
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.05,
+        "estimated_corruption": 0.05,
+        "intervention_fidelity": 0.95,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.05
+      },
+      "trusted_external_quality_score": 0.95
+    },
+    {
+      "exact_expected_rate": 0.36666666666666664,
+      "false_causal_promotions_negative_controls": 7,
+      "false_promotion_examples": [
+        {
+          "candidate_id": "additive",
+          "controls_failed": [],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.06125,
+            0.165
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.1828905976058205,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.055,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.16086228420186677,
+          "source_target_mi_bits": 0.1604056784037866,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.210369044892319,
+          "truthful_vs_shuffled_delta": 0.115
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [
+            "FACTORIAL_INTERACTION"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.0225,
+            0.12375
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.1009893941558816,
+          "factorial_permutation_p": 0.2,
+          "falsifiers": [],
+          "lesion_loss": 0.06125,
+          "permutation_p": 0.015,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.14757855286932475,
+          "source_target_mi_bits": 0.1444862223845631,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.2359955882335627,
+          "truthful_vs_shuffled_delta": 0.07
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.035,
+            0.1175
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.24132256299602262,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.06,
+          "permutation_p": 0.01,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.1605083509098173,
+          "source_target_mi_bits": 0.15852984655569835,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.24824203117999155,
+          "truthful_vs_shuffled_delta": 0.07875
+        }
+      ],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.1,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 6,
+          "INTERACTION_ONLY": 6
+        },
+        "common_driver": {
+          "INTERACTION_ONLY": 2,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 9,
+          "NOT_SUPPORTED": 1
+        },
+        "null": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 1,
+          "INTERACTION_ONLY": 6,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 3,
+          "NOT_SUPPORTED": 2
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 11,
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 1
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.1,
+        "estimated_corruption": 0.1,
+        "intervention_fidelity": 0.9,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.1
+      },
+      "trusted_external_quality_score": 0.9
+    },
+    {
+      "exact_expected_rate": 0.2,
+      "false_causal_promotions_negative_controls": 24,
+      "false_promotion_examples": [
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "SYNERGY_PROXY"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.15125,
+            0.2525
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.4257072613204934,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.09875,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.0009636214444364022,
+          "source_target_mi_bits": 1.1707505285896147e-05,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.03288619672779092,
+          "truthful_vs_shuffled_delta": 0.21125
+        },
+        {
+          "candidate_id": "additive",
+          "controls_failed": [],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "SYNERGY_PROXY",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.155,
+            0.2625
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.422095561484356,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.1025,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.0985764926113668,
+          "source_target_mi_bits": 0.09878208590505522,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.19728987986126745,
+          "truthful_vs_shuffled_delta": 0.21
+        },
+        {
+          "candidate_id": "null",
+          "controls_failed": [
+            "SYNERGY_PROXY"
+          ],
+          "controls_passed": [
+            "COMMON_DRIVER",
+            "FACTORIAL_INTERACTION",
+            "LESION",
+            "RESCUE",
+            "TRUTHFUL_REENTRY"
+          ],
+          "delta_ci95": [
+            0.15625,
+            0.25625
+          ],
+          "evidence_level": "COUNTERFACTUAL_REENTRY_SUPPORTED",
+          "factorial_omega": -0.468746477570007,
+          "factorial_permutation_p": 0.01,
+          "falsifiers": [],
+          "lesion_loss": 0.1,
+          "permutation_p": 0.005,
+          "rescue_recovery": 1.0,
+          "source_target_cmi_given_driver_bits": 0.004869912721503056,
+          "source_target_mi_bits": 0.0006514105334800568,
+          "status": "CAUSAL_EMERGENCE_CANDIDATE_OPEN",
+          "synergy_bits": 0.03981856851580412,
+          "truthful_vs_shuffled_delta": 0.21125
+        }
+      ],
+      "family": "provenance_preserving_cross_channel_leakage",
+      "requested_fraction": 0.2,
+      "samples": 800,
+      "self_attested_spoofable_report": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.0,
+        "estimated_corruption": 0.0,
+        "intervention_fidelity": 1.0,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": null
+      },
+      "self_attested_spoofable_reported_score": 1.0,
+      "status_counts": {
+        "additive": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        },
+        "common_driver": {
+          "MECHANISM_SUPPORTED_NOT_EMERGENCE": 12
+        },
+        "null": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        },
+        "xor_no_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        },
+        "xor_reentry": {
+          "CAUSAL_EMERGENCE_CANDIDATE_OPEN": 12
+        }
+      },
+      "total_runs": 60,
+      "true_quality": {
+        "clock_alignment": 1.0,
+        "duplicate_or_cross_channel_leakage": 0.2,
+        "estimated_corruption": 0.2,
+        "intervention_fidelity": 0.8,
+        "missingness": 0.0,
+        "provenance_continuity": 1.0,
+        "receipt_completeness": 1.0,
+        "sample_power": 800,
+        "true_affected_fraction": 0.2
+      },
+      "trusted_external_quality_score": 0.8
+    }
+  ],
+  "consciousness_claim": false,
+  "detector_contract": "UDB-EM-0.1-FROZEN_FAST_SCREEN_VIA_COMPAT_ADAPTER",
+  "evidence_class": "SYNTHETIC_ADVERSARIAL_TOPOLOGY_STRESS_TEST",
+  "falsifiers": {
+    "C_labels_alone_have_no_robustness": "A tenant/path-controlled label resists semantic corruption without any external verifier, protected signing boundary, or independently observed receipt.",
+    "H_provenance_origin_is_required": "Self-attested/spoofable quality fields remain calibrated under a compromised path, or origin-aware verification gives no discrimination under attacks that actually change metric decisions.",
+    "H_quality_vector_beats_sample_count": "On held-out corruption topologies at matched calibration coverage, the trusted quality gate fails to lower selective error or fails to avoid at least as many negative-control causal promotions as sample_count alone."
+  },
+  "families": [
+    "block_correlated_clock_drift",
+    "receiver_selective_missingness",
+    "provenance_preserving_cross_channel_leakage"
+  ],
+  "held_out_adversarial_results": {
+    "sample_count_only_equal_calibration_coverage": {
+      "by_family": {
+        "block_correlated_clock_drift": {
+          "accepted_cells": 12,
+          "accepted_errors": 1,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 720,
+          "coverage": 0.75,
+          "selective_error_rate": 0.001388888888888889,
+          "total_cells": 16
+        },
+        "provenance_preserving_cross_channel_leakage": {
+          "accepted_cells": 12,
+          "accepted_errors": 244,
+          "accepted_false_causal_promotions_negative_controls": 75,
+          "accepted_runs": 720,
+          "coverage": 0.75,
+          "selective_error_rate": 0.3388888888888889,
+          "total_cells": 16
+        },
+        "receiver_selective_missingness": {
+          "accepted_cells": 12,
+          "accepted_errors": 6,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 720,
+          "coverage": 0.75,
+          "selective_error_rate": 0.008333333333333333,
+          "total_cells": 16
+        }
+      },
+      "overall": {
+        "accepted_cells": 36,
+        "accepted_errors": 251,
+        "accepted_false_causal_promotions_negative_controls": 75,
+        "accepted_runs": 2160,
+        "coverage": 0.75,
+        "selective_error_rate": 0.1162037037037037,
+        "total_cells": 48
+      }
+    },
+    "self_attested_spoofable_naive_quality_gate": {
+      "by_family": {
+        "block_correlated_clock_drift": {
+          "accepted_cells": 16,
+          "accepted_errors": 1,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 960,
+          "coverage": 1.0,
+          "selective_error_rate": 0.0010416666666666667,
+          "total_cells": 16
+        },
+        "provenance_preserving_cross_channel_leakage": {
+          "accepted_cells": 16,
+          "accepted_errors": 307,
+          "accepted_false_causal_promotions_negative_controls": 83,
+          "accepted_runs": 960,
+          "coverage": 1.0,
+          "selective_error_rate": 0.31979166666666664,
+          "total_cells": 16
+        },
+        "receiver_selective_missingness": {
+          "accepted_cells": 16,
+          "accepted_errors": 6,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 960,
+          "coverage": 1.0,
+          "selective_error_rate": 0.00625,
+          "total_cells": 16
+        }
+      },
+      "overall": {
+        "accepted_cells": 48,
+        "accepted_errors": 314,
+        "accepted_false_causal_promotions_negative_controls": 83,
+        "accepted_runs": 2880,
+        "coverage": 1.0,
+        "selective_error_rate": 0.10902777777777778,
+        "total_cells": 48
+      }
+    },
+    "self_attested_spoofable_origin_aware_abstention": {
+      "by_family": {
+        "block_correlated_clock_drift": {
+          "accepted_cells": 0,
+          "accepted_errors": 0,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 0,
+          "coverage": 0.0,
+          "selective_error_rate": null,
+          "total_cells": 16
+        },
+        "provenance_preserving_cross_channel_leakage": {
+          "accepted_cells": 0,
+          "accepted_errors": 0,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 0,
+          "coverage": 0.0,
+          "selective_error_rate": null,
+          "total_cells": 16
+        },
+        "receiver_selective_missingness": {
+          "accepted_cells": 0,
+          "accepted_errors": 0,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 0,
+          "coverage": 0.0,
+          "selective_error_rate": null,
+          "total_cells": 16
+        }
+      },
+      "overall": {
+        "accepted_cells": 0,
+        "accepted_errors": 0,
+        "accepted_false_causal_promotions_negative_controls": 0,
+        "accepted_runs": 0,
+        "coverage": 0.0,
+        "selective_error_rate": null,
+        "total_cells": 48
+      }
+    },
+    "trusted_external_quality_gate": {
+      "by_family": {
+        "block_correlated_clock_drift": {
+          "accepted_cells": 12,
+          "accepted_errors": 1,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 720,
+          "coverage": 0.75,
+          "selective_error_rate": 0.001388888888888889,
+          "total_cells": 16
+        },
+        "provenance_preserving_cross_channel_leakage": {
+          "accepted_cells": 12,
+          "accepted_errors": 118,
+          "accepted_false_causal_promotions_negative_controls": 12,
+          "accepted_runs": 720,
+          "coverage": 0.75,
+          "selective_error_rate": 0.1638888888888889,
+          "total_cells": 16
+        },
+        "receiver_selective_missingness": {
+          "accepted_cells": 12,
+          "accepted_errors": 2,
+          "accepted_false_causal_promotions_negative_controls": 0,
+          "accepted_runs": 720,
+          "coverage": 0.75,
+          "selective_error_rate": 0.002777777777777778,
+          "total_cells": 16
+        }
+      },
+      "overall": {
+        "accepted_cells": 36,
+        "accepted_errors": 121,
+        "accepted_false_causal_promotions_negative_controls": 12,
+        "accepted_runs": 2160,
+        "coverage": 0.75,
+        "selective_error_rate": 0.056018518518518516,
+        "total_cells": 48
+      }
+    },
+    "trusted_quality_better_than_sample_count_on_joint_error_and_false_promotion": true
+  },
+  "live_frank_validated": false,
+  "provenance_origin_decision_law": "A quality vector may gate acceptance only when generated or independently verified outside the measured/possibly compromised path. Self-attested or spoofable quality fields force UNKNOWN until externally verified.",
+  "same_lineage_notice": "Same provider/model ancestry may exist; this is not an independent replication.",
+  "schema_version": "1.0",
+  "seeds_per_cell": 12
+}

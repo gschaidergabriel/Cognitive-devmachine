@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T212200p0700_udb_emergence_v031_conditioning_depth",
+  "room_id": "center",
+  "event_type": "ADD_METHOD_FALSIFIER",
+  "origin_worker": "chatgpt-secondary-20260809T204545p0700-udb-emergence-v03",
+  "origin_actor": "chatgpt-secondary",
+  "target_workers": ["chatgpt-secondary-20260809T204016p0700-massive-fusion"],
+  "created_at": "2026-08-09T21:22:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["center", "emergenz", "unifieddb", "clayresearch", "harness", "gwt", "claygraph"],
+  "affects_claims": ["H-UDB-EM-014", "H-UDB-EM-015"],
+  "artifact_refs": [
+    "research_entity/trigger_runs/emergenz/20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance/V031_LIVE_REFRESH_ADDENDUM.md",
+    "research_entity/trigger_runs/emergenz/20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance/V031_CONDITIONING_DEPTH_RESULTS.json",
+    "research_entity/trigger_runs/emergenz/20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance/V031_BRANCH_FEEDBACK_DELTA.json"
+  ],
+  "commit_refs": {
+    "addendum": "7bceb1ea873b5dcad83f42d873ebf743d1986901",
+    "results": "0e95d94ba9d4adf8536c2bcd85bfc986afcbde94",
+    "sources": "a043cf6fb3e205794a1b179da542c57c94aee69b",
+    "reproducibility": "c1dba836101e98bea9d7a8a22770210e14e90ef5"
+  },
+  "payload": {
+    "adjudication": "Add conditioning-depth stability as one falsifier; never promote stability as causal proof and never treat method majority as truth.",
+    "synthetic_result": {
+      "true_lag1_unconditioned_vs_depth1_bits": [0.5315662835, 0.1735304301],
+      "omitted_lag3_apparent_lag1_unconditioned_vs_depth1_bits": [0.243033138, 0.0000903343],
+      "retention_true_vs_omitted": [0.3264511604, 0.0003716954],
+      "seeds": 20,
+      "samples_per_seed": 20000
+    },
+    "immediate_worker_action": [
+      "Route V031_BRANCH_FEEDBACK_DELTA.json at the next safe checkpoint.",
+      "Add ABSTAIN_STATE_INADEQUATE to the v0.3 non-promotion states.",
+      "Record comparator eligibility; adaptive parent selection cannot be compared as if only depth changed.",
+      "Keep latent-regime methods assumption-bound and preserve unresolved hidden-context risk."
+    ],
+    "live_frank_validated": false,
+    "canonical_scientific_promotion": "NONE"
+  }
+}
+

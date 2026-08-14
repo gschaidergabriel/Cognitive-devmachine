@@ -1,0 +1,29 @@
+name: WP03 residual disposition v1
+
+on:
+  pull_request:
+    paths:
+      - 'tools/claycode_wp03_residual_disposition_v1.py'
+      - 'tools/test_claycode_wp03_residual_disposition_v1.py'
+      - 'research_entity/claycode/base/WP03_RESIDUAL_DISPOSITION_V1_LOCAL_RECEIPT_20260810.json'
+      - '.github/workflows/wp03-residual-disposition-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ubuntu-disposition-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Runtime metadata
+        run: |
+          uname -a
+          python3 --version
+          cat /etc/os-release
+      - name: Execute WP03 residual disposition falsifiers
+        working-directory: tools
+        run: |
+          /usr/bin/time -v python3 test_claycode_wp03_residual_disposition_v1.py

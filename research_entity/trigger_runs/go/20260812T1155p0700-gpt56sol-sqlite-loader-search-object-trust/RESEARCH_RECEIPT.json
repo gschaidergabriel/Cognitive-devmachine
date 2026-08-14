@@ -1,0 +1,79 @@
+{
+  "protocol": "CLAY_GO_RESEARCH_RECEIPT_V1",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T11:55:10+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "entity_id": "frank-project-global-research-entity",
+  "program": "FRANK_V0_1",
+  "scope": ["F-V01-13", "sqlite-runtime-admission", "dynamic-loader-trust", "release-recovery"],
+  "canonical_continuity_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "observed_product_main": "e2dc384077c104791ccde5de082ec26d319163d7",
+  "observed_reality": [
+    "Merged PR #506 adds an additive V6 candidate that checks the anchor-matching SQLite DSO plus containing-directory ancestry before V5 intentionally sets LD_LIBRARY_PATH and re-execs Python.",
+    "PR #506 explicitly does not prove productive Hostinger service wiring, root-anchor installation, restart/recovery, or whole F-V01-13 acceptance.",
+    "Open PR #505 reports deterministic systemd-parent mechanism PASS but read-only product discovery found zero admitted product parent units and failed closed.",
+    "The current parity builder uses --disable-rpath and validates the private SQLite runtime through LD_LIBRARY_PATH=$PREFIX/lib."
+  ],
+  "exactly_one_unusual_experiment": {
+    "name": "PRE_GUARD_NON_SQLITE_LIBRARY_SHADOW",
+    "count": 1,
+    "class": "bounded_disposable_loader_selection_falsifier",
+    "setup": "Copied the host libcrypto.so.3 into a run-owned temporary lib directory; launched /usr/bin/python3 -I -S with LD_LIBRARY_PATH set to that directory; imported hashlib; inspected /proc/self/maps.",
+    "result": {
+      "python_exit": 0,
+      "mapped_libcrypto": "/tmp/frank_grf_oob_libshadow/lib/libcrypto.so.3",
+      "product_bytes_mutated": false,
+      "canonical_state_mutated": false,
+      "external_effect": false,
+      "harness_authority": "NONE"
+    },
+    "interpretation": "SUPPORTED: the intentional SQLite loader search directory can influence non-SQLite native dependency selection before the child Python admission guard. This independently replicates the loader-search mechanism class already motivating V6; it is not production exploit proof."
+  },
+  "generated_reality": {
+    "hypothesis": "V6 directory ancestry trust may be sufficient when the final release bundle guarantees every loader-visible object under the search root is deployment-owned and immutable to Frank.",
+    "counter_reality": "Directory ownership/write-mode alone does not attest every pre-existing regular file or loader-visible subpath. A pre-existing non-root-owned/owner-writable dependency can remain mutable in place without changing its root-owned non-writable parent directory; if selected as DT_NEEDED before the child guard, V6 directory-only trust is insufficient.",
+    "hidden_assumption": "All loader-visible siblings, symlink targets, glibc-hwcaps subdirectories and dependency objects inherit the same deployment trust as the directory and pinned SQLite DSO.",
+    "falsifier": "Inventory/attest the exact installed loader-visible search tree and fail closed when any selected/searchable sibling or nested object is non-root-owned, writable, special, or resolves outside the trusted tree; compare against a clean trusted release bundle.",
+    "predicted_if_hypothesis_right": "Exact productive bundle inventory shows all loader-visible objects/subpaths deployment-owned and immutable; additional runtime tree scanning is redundant.",
+    "predicted_if_counter_right": "At least one loader-visible object/subpath is independently mutable despite trusted directory ancestry, or a controlled ordinary regression can demonstrate such a bundle is admitted by V6's current directory-only check.",
+    "confidence": "MEDIUM_HIGH_MECHANISM; PRODUCT_REACHABILITY_UNKNOWN",
+    "outcome": "RETAIN_COUNTERHYPOTHESIS"
+  },
+  "primary_external_evidence": [
+    {
+      "source": "GNU C Library Manual - Dynamic Linker Hardening",
+      "supports": "Avoid LD_* runtime linker controls and non-default search-path/hwcaps complexity in hardened applications."
+    },
+    {
+      "source": "GNU C Library source/manual - glibc-hwcaps support for LD_LIBRARY_PATH",
+      "supports": "Loader search can include hardware-capability subdirectories under LD_LIBRARY_PATH."
+    },
+    {
+      "source": "SQLite official 3.53.4 release/source-id",
+      "supports": "The project-pinned 3.53.4 source identity is an upstream fixed-line release; source identity does not by itself prove productive loader topology."
+    }
+  ],
+  "coordination": {
+    "duplicate_avoidance": "An older draft PR #503 covered the writable loader-directory class but was intentionally closed/superseded. Current merged successor is #506. A temporary local rebase/replication branch was reset back to current main after adjudication; no competing V6 merge was performed.",
+    "new_work_item": "gschaidergabriel/Dr.-Unterweger#510",
+    "implementation_action": "NO_NEW_V7_PATCH_THIS_CYCLE",
+    "reason": "The project already has heavy parallel SQLite hardening. The highest-value durable delta is the explicit loader-search-object test obligation plus productive provisioning/observation frontier, not another uncomposed synthetic wrapper."
+  },
+  "release_consequence": {
+    "f_v01_13": "OPEN",
+    "frank_v0_1": "NOT_PASS",
+    "next_high_information_step": "On an authorized root-capable accepted target, bind the exact productive service/parent -> release bundle -> trust anchor -> mapped SQLite 3.53.4 -> persistence/state lineage, then capture loader-visible object inventory and replay clean start/restart plus downgrade/library-swap/rollback controls.",
+    "blocked_here_by_tools": "No SSH/root-capable Hostinger execution surface is available in this session, so productive provisioning cannot be truthfully claimed or performed."
+  },
+  "authority": {
+    "frank_harness_mutation_authority": "PROPOSAL_ONLY",
+    "effect_authority_changed": false,
+    "final_model_training_authorized": false,
+    "together_api_used": false
+  }
+}

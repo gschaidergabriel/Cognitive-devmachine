@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1145p0700-chatgpt-secondary-sqlite-preload-replication",
+  "organ": "chatgpt-secondary / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "refreshed_research_main_before_write": "3c851cced1921856e4b17c67750e91c77a5609d9",
+    "frank_main_observed": "c20a9277b95df4ad6cbcba11ed53a4f07e1745f1",
+    "overlapping_primary_receipt": "research_entity/trigger_runs/go/20260812T1137p0700-chatgpt-secondary-sqlite-v5-production-gap/RESEARCH_RECEIPT.json",
+    "existing_counterworld_discovered": "runtime/frank_storage_truth_v1/FRANK_SQLITE_PRE_GUARD_PRELOAD_COUNTERWORLD_V1.md",
+    "duplication_policy": "Do not build a second repair for an already-supported counterworld; preserve this run as an independent replication and NO_CHANGE architecture result."
+  },
+  "r0_observed": [
+    "SQLite upstream states the WAL-reset corruption bug is likely present through 3.51.2 and fixed in 3.51.3 and later.",
+    "SQLite upstream release 3.53.4 has source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and is downstream of the WAL-reset fix.",
+    "Current Frank V5 guard pins accepted version plus source-id and library/manifest digests, rejects contaminated loader variables at the Python boundary, and explicitly requires an upstream trusted execution boundary for pre-shell loader safety.",
+    "Current Frank repository already contains an accepted-target PRE_GUARD_PRELOAD_SENTINEL counterworld showing inherited LD_PRELOAD code can execute before shell V5 checks; therefore this local experiment is replication, not discovery.",
+    "No productive Hostinger service/ExecStart contract or exact productive mapped-SQLite receipt was found in the refreshed repository search used by this worker."
+  ],
+  "primary_external_evidence": [
+    {
+      "source": "https://www.sqlite.org/wal.html#the_wal_reset_bug",
+      "claim": "WAL-reset bug affected likely 3.7.0 through 3.51.2; fixed in 3.51.3 and later."
+    },
+    {
+      "source": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "claim": "SQLite 3.53.4 release date 2026-07-24 and exact SQLITE_SOURCE_ID used by Frank release policy."
+    }
+  ],
+  "r1_hypothesis": {
+    "hypothesis": "A version-only admission observation can be made inconsistent with the actually loaded SQLite object under loader interposition, so production admission must bind version to source-id and mapped object identity rather than trusting a version string alone.",
+    "predicted_if_right": "Interposition can change sqlite3_libversion() output while sqlite3_sourceid() and dladdr() still identify the underlying library.",
+    "confidence": "HIGH"
+  },
+  "r3_counter_reality": {
+    "strongest_counterhypothesis": "A reported safe sqlite3_libversion() value is sufficient evidence that the process loaded the safe release.",
+    "falsifier": "Make only sqlite3_libversion() report 3.53.4 through reversible loader interposition while observing source-id and loaded object path.",
+    "outcome": "REFUTED"
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "id": "SQLITE_VERSION_STRING_INTERPOSITION_REPLICATION",
+    "scope": "disposable local sandbox only",
+    "method": "Compile a tiny SQLite-linked probe that prints sqlite3_libversion(), sqlite3_sourceid(), and dladdr(sqlite3_open_v2); compile one harmless LD_PRELOAD library overriding only sqlite3_libversion(); compare baseline and interposed runs; delete the temporary directory.",
+    "baseline": {
+      "libversion": "3.46.1",
+      "sourceid": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1",
+      "mapped_object": "/lib/x86_64-linux-gnu/libsqlite3.so.0"
+    },
+    "treatment": {
+      "libversion": "3.53.4",
+      "sourceid": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1",
+      "mapped_object": "/lib/x86_64-linux-gnu/libsqlite3.so.0"
+    },
+    "result": "REPLICATED_EXISTING_COUNTERWORLD",
+    "interpretation": "The safe-looking version string diverged from source-id/object provenance exactly as predicted. This independently supports the existing multi-signal V5 design but does not add a new architecture delta and is weaker than the already-recorded accepted-target pre-guard preload experiment.",
+    "canonical_state_mutated": false,
+    "production_state_mutated": false,
+    "rollback": "Temporary build directory removed automatically."
+  },
+  "collapse": {
+    "outcome": "NO_CHANGE",
+    "retained": [
+      "Version-only SQLite runtime claims are insufficient.",
+      "Current V5 multi-signal object/source/digest binding is directionally justified.",
+      "Pre-shell dynamic-loader trust must be established upstream of the shell launcher."
+    ],
+    "not_promoted": [
+      "new SQLite guard repair",
+      "F-V01-13 PASS",
+      "productive Frank loads SQLite 3.53.4",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "next_discriminating_test": {
+    "target": "accepted Hostinger Ubuntu VPS productive Frank start path",
+    "requirements": [
+      "identify and attest the exact productive parent executable and service/launcher contract",
+      "prove loader-control variables cannot enter before the admitted shell/guard boundary",
+      "capture productive process maps plus exact SQLite library SHA-256, sqlite_version, sqlite_source_id, manifest hash and root-anchor hash",
+      "exercise real WAL multi-connection/checkpoint behavior",
+      "crash/restart and downgrade/library-swap negative controls must preserve admitted lineage or fail closed"
+    ],
+    "reason": "This separates strong candidate/self-hosted evidence from the remaining production reality layer with higher information gain than additional synthetic guard variants."
+  },
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "INDEPENDENT_REPLICATION_RECORDED_AS_NO_CHANGE; F-V01-13_REMAINS_IN_PROGRESS"
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1143p0700-chatgpt-secondary-v5-parent-symlink-promotion",
+  "organ": "chatgpt-secondary / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "refreshed_research_main_before_write": "6ae1f82d24da09c0fb9d46bf1d2173d059826f8d",
+    "overlapping_parent_receipt": "research_entity/trigger_runs/go/20260812T1137p0700-chatgpt-secondary-sqlite-v5-production-gap/RESEARCH_RECEIPT.json",
+    "scope": "Supplementary non-duplicate current-main promotion delta only: parent-symlink repair, post-merge exact-head regression, and ACL counterworld negative result. The broader SQLite production-gap analysis remains in the parent receipt."
+  },
+  "frank_repository": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_before_promotion": "138d6ec70a0b4fb3d2b438766481f6775ce9f495",
+    "promoted_pr": 459,
+    "promoted_pr_head": "b27ce0ccdf0a67d53ce9ce515b7f68b38629bfa5",
+    "main_after_promotion": "c20a9277b95df4ad6cbcba11ed53a4f07e1745f1",
+    "premerge_self_hosted_regression": {
+      "run_id": 31534490002,
+      "status": "COMPLETED_SUCCESS"
+    },
+    "fresh_main_recheck": {
+      "branch": "chatgpt/go-v5-parent-symlink-fence-fresh-main-20260812",
+      "head": "9017ae3744530b81dfdadf1dc176ae26eaff09aa",
+      "run_id": 31564070129,
+      "status": "COMPLETED_SUCCESS",
+      "scope": "exact candidate fetch, focused parent-symlink regression, repository static integrity"
+    }
+  },
+  "r0_observed": [
+    "Before promotion, current main V5 anchor parent traversal used Path.stat(), which follows parent symlinks and therefore did not enforce the documented no-symlink parent-chain trust invariant.",
+    "PR #459 changed the parent-chain inspection to lstat(), explicitly rejects S_ISLNK with ANCHOR_PARENT_SYMLINK_FORBIDDEN, and preserves root-owner plus group/other-write checks.",
+    "PR #459 had already passed its exact-head self-hosted regression run 31534490002 before promotion.",
+    "PR #459 was merged into current main as c20a9277b95df4ad6cbcba11ed53a4f07e1745f1.",
+    "A separate post-merge fresh-main exact-head workflow run 31564070129 completed successfully for the focused regression plus repository static integrity.",
+    "The productive root-owned /opt runtime, /etc trust anchor, service pre-exec loader boundary, exact mapped SQLite object, and crash/restart/rollback continuity remain separate unclosed F-V01-13 obligations."
+  ],
+  "r1_hypothesis": {
+    "hypothesis": "Replacing stat() with lstat() and denying symlink parent components closes the observed parent-symlink transplant path without weakening the existing ownership/writeability boundary.",
+    "mechanism": "The guard now reasons about the directory entry itself rather than the followed target for every anchor parent component; symlink presence becomes directly observable and fail-closed.",
+    "predicted_if_right": "Direct root-owned non-writable parent chains remain admitted by this sub-check, symlink parent chains are denied, writable parents remain denied.",
+    "predicted_if_wrong": "The focused regression or current-main composition/static integrity would fail, or a parent symlink would remain indistinguishable from a directory.",
+    "confidence": "HIGH_FOR_THIS_NARROW_PATH"
+  },
+  "r3_counter_reality": {
+    "strongest_counterhypothesis": "A hidden filesystem permission mechanism could still make a root-owned mode-safe parent writable by an unprivileged Frank user while evading the V5 mode-bit check.",
+    "discriminator": "POSIX ACL named-user write permission counterworld",
+    "outcome": "REFUTED_FOR_LINUX_POSIX_ACL_WRITE_MASK"
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "id": "POSIX_ACL_MODE_MASK_COUNTERWORLD",
+    "purpose": "Test whether a root-owned directory could retain apparently safe mode bits while a named-user POSIX ACL grants write permission, bypassing the V5 group/other-write check.",
+    "method": "On a disposable local Linux directory, encode a system.posix_acl_access xattr granting UID 65534 rwx while the directory is root-owned; observe resulting mode and verify the named user can create a file.",
+    "observed": {
+      "owner_uid": 0,
+      "mode_after_acl": "0775",
+      "named_user_write": true,
+      "v5_group_or_other_write_check_rejects": true
+    },
+    "result": "REFUTED",
+    "interpretation": "Linux reflects the POSIX ACL mask write permission in the group-class mode bits, so the existing V5 group-write rejection catches this named-user write ACL case. No ACL-specific patch is justified by this experiment.",
+    "canonical_state_mutated": false,
+    "production_state_mutated": false,
+    "rollback": "Disposable local directory removed."
+  },
+  "collapse": {
+    "outcome": "MERGE",
+    "promoted": [
+      "Current Frank main c20a927 contains the V5 anchor-parent symlink denial repair.",
+      "The narrow parent-symlink regression is self-hosted PASS both on the original exact PR head and on a fresh post-merge exact-head test branch rooted at current main.",
+      "The tested Linux POSIX ACL named-user-write counterworld does not bypass the existing mode-writeability fence."
+    ],
+    "not_promoted": [
+      "F-V01-13 PASS",
+      "productive Frank service loads SQLite 3.53.4",
+      "productive /etc/frank-v0.1/sqlite-runtime-anchor-v1.json exists and is accepted",
+      "service pre-exec dynamic-loader boundary is fully proven",
+      "crash/restart/rollback continuity is proven",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "next_discriminating_test": {
+    "target": "accepted Hostinger Ubuntu VPS productive Frank service path",
+    "requirements": [
+      "provision the independently pinned accepted SQLite 3.53.4 runtime under root-owned non-writable production paths",
+      "publish the root-owned V5 /etc trust anchor only after staged runtime verification",
+      "bind the production service to the exact launcher and prove a clean dynamic-loader environment before /bin/sh begins",
+      "capture exact mapped SQLite library hash, sqlite_version, sqlite_source_id, manifest hash and anchor hash from the productive Frank process",
+      "exercise real WAL multi-connection/checkpoint operation",
+      "crash/restart and rollback/downgrade controls must preserve exact admitted identity or fail closed"
+    ]
+  },
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "CURRENT_MAIN_PARENT_SYMLINK_PATH_PROMOTED_AND_RETESTED; F-V01-13_REMAINS_IN_PROGRESS"
+}

@@ -1,0 +1,23 @@
+{
+  "categories": {"COMPLETE":15284,"DUP":15255,"PROACTIVE_BUSY":15446,"PROACTIVE_IDLE":15470,"STALE_COMPLETE":15285,"STALE_EXEC":15412,"STALE_REV":15457,"STALE_TASK":15559,"SWITCH_CONSENT":15427,"SWITCH_NO_CONSENT":15301,"VALID":15253,"WITNESS_SPLICE":15501,"WRONG_TASK":15350},
+  "classification": [
+    {"accuracy":0.46146,"error_by_category":{"DUP":15255,"STALE_COMPLETE":15285,"STALE_REV":15457,"STALE_TASK":15559,"SWITCH_NO_CONSENT":15301,"WITNESS_SPLICE":15501,"WRONG_TASK":15350},"fn":0,"fp":107708,"mean_ns_per_case":355.10252,"method":"CURRENT_LEASE_ONLY","n":200000,"tn":30858,"tp":61434},
+    {"accuracy":0.768935,"error_by_category":{"DUP":15255,"STALE_REV":15457,"WITNESS_SPLICE":15501},"fn":0,"fp":46213,"mean_ns_per_case":397.1192,"method":"TASK_EPOCH_SIMPLE","n":200000,"tn":92353,"tp":61434},
+    {"accuracy":1.0,"error_by_category":{},"fn":0,"fp":0,"mean_ns_per_case":491.609135,"method":"CONVENTIONAL_STRONG","n":200000,"tn":138566,"tp":61434},
+    {"accuracy":1.0,"error_by_category":{},"fn":0,"fp":0,"mean_ns_per_case":802.43692,"method":"LICF_001","n":200000,"tn":138566,"tp":61434}
+  ],
+  "crash_replay":{"histories":1000,"stale_task_rejections":{"CONVENTIONAL_STRONG":1000,"CURRENT_LEASE_ONLY":0,"LICF_001":1000,"TASK_EPOCH_SIMPLE":1000}},
+  "environment":{"machine":"x86_64","platform":"Linux-6.18.35-x86_64-with-glibc2.41","python":"3.13.5"},
+  "experiment":"LICF-001 same-lease task-continuity discriminator",
+  "latency":{
+    "CONVENTIONAL_STRONG":{"mean_ns_per_call":1014.0225,"p50_ns_per_call":1001.89,"p95_ns_per_call":1134.69,"p99_ns_per_call":1215.4},
+    "CURRENT_LEASE_ONLY":{"mean_ns_per_call":728.82092,"p50_ns_per_call":701.24,"p95_ns_per_call":913.16,"p99_ns_per_call":1140.59},
+    "LICF_001":{"mean_ns_per_call":1504.87318,"p50_ns_per_call":1414.7,"p95_ns_per_call":1773.53,"p99_ns_per_call":4638.59},
+    "TASK_EPOCH_SIMPLE":{"mean_ns_per_call":853.83972,"p50_ns_per_call":836.15,"p95_ns_per_call":1029.83,"p99_ns_per_call":1276.1}
+  },
+  "n_cases":200000,
+  "schema_version":"1.0",
+  "seeds":[101,211,307,401,503],
+  "wire_bytes":{"CONVENTIONAL_STRONG":134,"CURRENT_LEASE_ONLY":11,"LICF_001":205,"TASK_EPOCH_SIMPLE":36},
+  "interpretation":{"licf_vs_strong_mean_classifier_cost_ratio":1.6322705686,"licf_vs_strong_batch_mean_latency_ratio":1.4840619363,"licf_vs_strong_wire_ratio":1.5298507463,"unique_defect_coverage_vs_strong":0,"task_specific_presence_surface_false_allows":"61495 across STALE_TASK + WRONG_TASK + SWITCH_NO_CONSENT + STALE_COMPLETE; this is a proxy statement about V15 presence fields only, not a claim about whole-Frank end-to-end behavior"}
+}

@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-COST-PRINCIPAL-PAYMENT-BOUNDARY-20260811T105521Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "created_at_utc": "2026-08-11T10:55:21Z",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "prior_notified_event_commit": "e4fc110b151f5217efa92df59c58c51de4d8d1bc",
+    "observed_head_before_write": "994f6c7dc147263b32ac74dd22999f886dcfd776"
+  },
+  "intended_recipients": [
+    "ClayCode free-provider runtime worker",
+    "F-V01-09 Effect Authority and EffectGate worker",
+    "F-V01-12 tool/peer/body capability worker",
+    "F-V01-13 security and observability worker",
+    "UnifiedDB/ClayGraph provenance and state worker",
+    "separate Harness/review worker; no Frank self-Harness mutation"
+  ],
+  "evidence_families": [
+    {
+      "family_id": "E-FREE-ONLY-402-CONTROL-FAMILY-20260811",
+      "classification": "CANONICAL_CONTROL_STATE_ONE_LINEAGE_NOT_SIX_CONFIRMATIONS",
+      "commits_collapsed_as_one_state_family": [
+        "19002e88381313594444ceea2885c1716884cddb",
+        "6d75a2178e742523da647af0253e6c6bce80628d",
+        "976f580ffb0769c281e598cafc72e42fffe4769c",
+        "ea90aad4249a7d92d5a77d5f38dc6f1b8ceb5b69",
+        "58128ef98bb1f3feb5496fb6a9aeca5fc2e4e2a5",
+        "994f6c7dc147263b32ac74dd22999f886dcfd776"
+      ],
+      "observed_files_only": [
+        "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json",
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"
+      ],
+      "exact_blobs_at_observed_head": {
+        "control": "73a866ff2b2cbb08794211f46c811b7c5784cd2f",
+        "supervisor_state": "4b95e26bc5e5af98d7f37850917c8b469cf1619f"
+      },
+      "substantive_state_delta": [
+        "FREE_ONLY now makes HTTP 402 a nonretryable provider hard stop for the current cycle.",
+        "The successor draft PR232 inherits the unresolved blocker: both a regular 402 response and HTTPError(402) must hard-stop and suppress a second same-cycle attempt.",
+        "No provider capability credit is admitted without exact-byte accepted-Ubuntu execution plus inspectable evidence."
+      ],
+      "critical_qualification": "These commits are repeated control/supervisor routing of one code-path defect and are not independent evidence."
+    },
+    {
+      "family_id": "E-PR232-PROVIDER-RUNTIME-CANDIDATE-20260811",
+      "classification": "OPEN_DRAFT_UNMERGED_AUTHOR_LOCAL_CANDIDATE",
+      "pull_request": {
+        "id": "gschaidergabriel/clay-global-research-entity#232",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/pull/232",
+        "head": "65d5572a722bb5e5a1d42b80d8058f8463c38b86",
+        "base": "976f580ffb0769c281e598cafc72e42fffe4769c",
+        "exact_blobs": {
+          "runtime": "106c1434feef0a9b5615abde589fe60a6f1f9aba",
+          "tests": "4114c2cf21efa3acbbafe2ece25787ce3af5e2b3",
+          "policy": "8c141e86da2368067825b63da5199ecc8e72628a"
+        },
+        "author_reported_local_tests": "20/20",
+        "combined_status_contexts_observed": 0,
+        "workflow_runs": {
+          "31483529694": "FAILURE_LOGS_UNAVAILABLE_CAUSE_UNKNOWN",
+          "31483529764": "FAILURE_LOGS_UNAVAILABLE_CAUSE_UNKNOWN"
+        },
+        "live_external_request_executed": false,
+        "accepted_ubuntu_target_receipt": null
+      },
+      "useful_candidate_progress": [
+        "Together is hard-denied; secrets are not serialized.",
+        "Credentials are bound to the selected provider origin including effective HTTPS port; authenticated redirects fail closed.",
+        "Text-chat inputs are validated before network use.",
+        "Logical request IDs are stable across retries and attempt IDs are nonce-distinct.",
+        "Non-2xx and malformed or incomplete bodies cannot reach VERIFIED or DONE."
+      ],
+      "direct_static_counterevidence": [
+        "Both non-2xx code paths classify only status 429 specially; status 402 falls into provider_error with cooldown_seconds=15.",
+        "The request identity binds provider, endpoint host and serialized body digest but not a protected credential/account/project/billing-principal identity.",
+        "Switching between allowed NVIDIA_API_KEY and NVCF_API_KEY values for the same provider, host and body can therefore preserve the same logical request_id while changing the account or cost authority.",
+        "The receipt exposes provider/model/endpoint_host/request_id/attempt_id/status/outcome/lifecycle/cooldown/duration and redaction flags, but no opaque cost-principal, account/project, entitlement scope or pricing-evidence version.",
+        "The policy candidate still states an obsolete developer-system mission goal while canonical control fixes Hostinger Ubuntu VPS as final acceptance target."
+      ],
+      "test_gap_observed": [
+        "No 402 regression was found for either regular-response or HTTPError transport shape.",
+        "No same-cycle second-attempt suppression test was found.",
+        "No credential-rotation, alternate-key-name, account, project or billing-principal identity discriminator was found."
+      ],
+      "inference_boundary": "Static code and test inspection identifies aliasing and missing gates; it does not prove a real provider charged money or that either configured key belongs to a paid account."
+    },
+    {
+      "family_id": "E-PROVIDER-AND-HTTP-PRIMARY-20260811",
+      "classification": "OFFICIAL_PRIMARY_DOCUMENTATION_NOT_ACCOUNT_ENTITLEMENT_OR_PROJECT_EXECUTION",
+      "sources": [
+        {
+          "url": "https://docs.api.nvidia.com/nim/docs/product",
+          "checked_utc": "2026-08-11T10:55:21Z",
+          "claim": "NVIDIA documents free hosted NIM API access for Developer Program prototyping, research, development and testing, while production use requires AI Enterprise."
+        },
+        {
+          "url": "https://build.nvidia.com/mistralai/mistral-nemotron",
+          "checked_utc": "2026-08-11T10:55:21Z",
+          "claim": "The current model page labels a free prototype endpoint and shows integrate.api.nvidia.com/v1."
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+          "checked_utc": "2026-08-11T10:55:21Z",
+          "claim": "HTTP 402 remains reserved for future use; universal retry or scope semantics cannot be inferred from the RFC."
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc6585.html#section-4",
+          "checked_utc": "2026-08-11T10:55:21Z",
+          "claim": "HTTP 429 specifically represents rate limiting and may carry Retry-After, distinguishing it from the project's conservative 402 payment fence."
+        },
+        {
+          "url": "https://docs.python.org/3.12/library/urllib.error.html",
+          "checked_utc": "2026-08-11T10:55:21Z",
+          "claim": "HTTPError is both an exception and a file-like HTTP response with a code, so both runtime transport shapes require explicit tests."
+        }
+      ],
+      "fusion": "Official free-prototyping documentation supports provider discovery but cannot attest the entitlement, remaining credits, billing principal or zero-cost status of a concrete credential at execution time. The nonretryable 402 rule is therefore a project safety policy, not an RFC guarantee."
+    }
+  ],
+  "concepts": [
+    {
+      "id": "H-COST-PRINCIPAL-IDENTITY-001",
+      "concept": "CostPrincipalIdentity",
+      "hypothesis": "Cost authorization and payment-state receipts must bind an opaque control-plane identity for <provider, credential/account principal, project, endpoint origin, model or product, entitlement/pricing evidence version, budget epoch>; semantic request equality alone cannot authorize a retry.",
+      "counterhypothesis": "Provider-wide identity is safer and sufficient because finer scoping can accidentally route around a paid boundary through another account, model or endpoint.",
+      "synthesis": "On an untyped or ambiguous 402, fail closed provider-wide for the current cycle. Narrow the fence only when provider-specific, verified error semantics prove a smaller cost scope. Never serialize a secret or an unsalted raw-key hash; use a host-held opaque handle or keyed pseudonym.",
+      "decisive_tests": [
+        "Execute the same provider/host/body fixture under two injected allowed credential handles; require one semantic digest but distinct cost-principal and execution lineages.",
+        "Rotate the credential/account/project binding and require the receipt lineage to change without exposing secret material.",
+        "For an unknown 402 scope, assert that every same-provider route is refused before network in the current cycle.",
+        "Permit narrower recovery only with a typed provider-specific fixture that proves model/project scope and is separately policy-reviewed."
+      ]
+    },
+    {
+      "id": "H-DUAL-RETRY-IDENTITY-001",
+      "concept": "DualRetryIdentity",
+      "hypothesis": "Receipts need separate semantic_request_id and cost_authority_id/execution_lineage_id: retries of identical content under one authority preserve the semantic ID, while authority changes create a new execution lineage and require fresh authorization.",
+      "counterhypothesis": "One request ID is operationally simpler and adequate if retries never switch credentials or accounts.",
+      "falsifier": "If every production router can prove a credential/account/project invariant from authorization through all retries and fallbacks, the second identity adds no safety information.",
+      "decisive_tests": [
+        "Same payload plus same principal: stable semantic ID, unique attempt IDs, stable cost-authority ID.",
+        "Same payload plus different principal: stable semantic ID is allowed, but cost-authority and execution-lineage IDs must differ and rerouting requires authorization.",
+        "Crash/restart replay must restore both identities without permitting a retry under a different unrecorded principal."
+      ]
+    },
+    {
+      "id": "H-COST-STATE-LATCH-001",
+      "concept": "CostStateLatch",
+      "hypothesis": "FREE_ONLY payment state must be monotonic within a budget epoch: ELIGIBLE may become PAYMENT_UNKNOWN_OR_REQUIRED and then INELIGIBLE_CURRENT_CYCLE; a cooldown timer must never silently restore eligibility after 402.",
+      "counterhypothesis": "A short cooldown is appropriate where a provider uses 402 transiently or at model scope.",
+      "synthesis": "Default to a persisted provider-wide latch because RFC 9110 leaves 402 semantics undefined; override only through typed, provider-specific evidence and an explicit policy rule.",
+      "decisive_tests": [
+        "Cover both regular-response 402 and HTTPError(402); require PAYMENT_REQUIRED_HARD_STOP, EXECUTED but never VERIFIED/DONE, zero retry permission.",
+        "Attempt the same provider twice in one cycle; after the first 402 the second opener/network call count must remain zero.",
+        "Restart the runtime within the same budget epoch and prove the latch survives.",
+        "Advance the budget epoch only through an explicit host-side authorization event, never elapsed cooldown alone."
+      ]
+    }
+  ],
+  "preserved_negative_and_null_results": [
+    "PR232 is draft/open, unmerged and has zero observed combined-status contexts.",
+    "Its two exact-head workflow runs failed; archived logs are unavailable, so cause is UNKNOWN rather than semantic failure or harmless infrastructure.",
+    "Author-reported 20/20 local tests are same-lineage candidate evidence, not independent replication or target acceptance.",
+    "No live external provider request or accepted-Ubuntu receipt exists at the inspected head.",
+    "Official NVIDIA free-prototyping material does not establish current entitlement or credits for a concrete credential.",
+    "RFC 9110 does not define universal operational semantics or retry scope for 402.",
+    "No evidence shows an actual charge, paid request, credential identity, account identity or successful provider execution.",
+    "The stale mission_goal is confined to unmerged candidate policy and does not change the canonical Hostinger VPS target.",
+    "No canonical semantic promotion, work-package completion, training, Harness mutation or live-FRANK execution occurred."
+  ],
+  "requested_reentry": [
+    "ClayCode runtime worker: implement PAYMENT_REQUIRED_HARD_STOP in both 402 paths, persist the current-cycle latch and add the two-attempt no-network discriminator.",
+    "ClayCode identity worker: split semantic request identity from opaque cost-authority/execution lineage; add alternate-key-name, credential-rotation and account/project fixtures without revealing secret values.",
+    "F-V01-09 EffectGate worker: require a fresh host authorization when cost authority changes and treat ambiguous 402 as a provider-wide fail-closed boundary.",
+    "F-V01-12 capability worker: do not infer capability from a configured key, documented prototype endpoint or one successful request; bind capability to principal, scope, budget epoch and revocation state.",
+    "F-V01-13 observability worker: add redacted cost-principal handle, budget epoch, fence scope, pricing-evidence version and policy-decision receipt fields.",
+    "UnifiedDB/ClayGraph worker: persist the monotonic cost latch and explicit supersession edges; prevent cooldown-only resurrection.",
+    "Policy/target worker: replace the candidate policy's obsolete developer-system mission_goal with the canonical Hostinger Ubuntu VPS acceptance target before merge.",
+    "Harness reviewer: independently reexecute exact repaired bytes and inspect CI/Ubuntu receipts; review only and do not mutate Frank's protected Harness."
+  ],
+  "authority_boundary": {
+    "code_executed_by_this_event": false,
+    "provider_request_executed_by_this_event": false,
+    "target_repo_mutated": false,
+    "canonical_room_event_created": true,
+    "harness_mutated": false,
+    "external_effect_beyond_canonical_event_write": false,
+    "canonical_semantics_promoted": false,
+    "work_package_promoted": false,
+    "frank_v0_1_finished": false,
+    "training_run": false,
+    "secrets_read_or_serialized": false
+  }
+}

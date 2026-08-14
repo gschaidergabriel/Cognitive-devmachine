@@ -1,0 +1,211 @@
+module self.root.research.latent_cognition_observation_plane
+version "LCOP-V0.1-research-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Research-only architecture candidate from AI cognition / synthetic psychology fusion.
+// This plane observes model-internal evidence when technically available.
+// It never replaces receipted system self-observation, never defines identity, and never grants truth/effect authority.
+
+type LatentMethod = LINEAR_PROBE | SAE | JACOBIAN_LENS | ATTRIBUTION_GRAPH | ACTIVATION_PATCH | STEERING | NLA | TRAJECTORY_STATISTIC | OTHER
+type EvidenceGrade = OBSERVATIONAL | PREDICTIVE | INTERVENTION_SUPPORTED | LESION_SUPPORTED | RESCUE_SUPPORTED | OOD_TRANSFER_SUPPORTED | BINARY_REVALIDATED
+type Identifiability = UNKNOWN | NON_IDENTIFIABLE_EQUIVALENCE_SET | PARTIALLY_IDENTIFIED | CROSS_ENV_IDENTIFIED | CROSS_LAYER_IDENTIFIED | CAUSALLY_LOCALIZED
+type StateTimescale = FORWARD_PASS | TOKEN_LOCAL | TURN_LOCAL | MULTITURN | SLOW_PERSISTENT
+type WorkspaceKind = NATIVE_MODEL_WORKSPACE | CLAY_GWT
+
+type LatentFeatureHypothesis = {
+  hypothesis_id          : Ref
+  semantic_labels        : SET<Symbol>
+  vector_or_subspace_ref : Ref
+  equivalence_set        : SET<Ref>
+  identifiability        : Identifiability
+  supporting_evidence    : SET<EvidenceRef>
+  counterevidence        : SET<EvidenceRef>
+}
+
+type LatentStateObservation = {
+  observation_id         : Ref
+  episode_id             : Ref
+  execution_id           : ExecutionId
+  model_hash             : Hash
+  model_revision         : Ref
+  runtime_hash           : Hash
+  build_hash             : Hash
+  quantization           : Symbol
+  layer_or_site          : Ref
+  token_span             : Ref
+  method                 : LatentMethod
+  method_version         : Ref
+  basis_epoch            : Epoch
+  hypotheses             : SET<LatentFeatureHypothesis>
+  timescale              : StateTimescale
+  activity               : Real
+  confidence             : Real[0,1]
+  observability_score    : Real[0,1]
+  actionability_score    : Real[0,1]
+  intervention_specificity: Real[0,1]
+  collateral_cost        : Real>=0
+  cross_context_stability: Real[0,1]
+  cross_layer_stability  : Real[0,1]
+  ood_transfer           : Real[0,1]
+  binary_revalidated     : Bool
+  evidence_grade         : EvidenceGrade
+  provenance             : SET<EvidenceRef>
+}
+
+type NativeWorkspaceObservation = {
+  observation_id         : Ref
+  episode_id             : Ref
+  model_hash             : Hash
+  method                 : LatentMethod
+  basis_epoch            : Epoch
+  capacity_proxy         : Real>=0
+  occupancy              : Real[0,1]
+  verbalizable_fraction  : Real[0,1]
+  downstream_write_access: Real[0,1]
+  downstream_read_access : Real[0,1]
+  reasoning_dependency   : Real[-1,1]
+  automatic_task_dependency: Real[-1,1]
+  clay_gwt_concordance   : Real[-1,1]
+  clay_gwt_redundancy    : Real[0,1]
+  evidence_grade         : EvidenceGrade
+  provenance             : SET<EvidenceRef>
+}
+
+type LatentTrajectoryReadout = {
+  episode_id             : Ref
+  model_hash             : Hash
+  basis_epoch            : Epoch
+  inter_token_transition : Real>=0
+  inter_layer_displacement: Real>=0
+  trajectory_stability   : Real[0,1]
+  predicted_correction_gain: Real
+  predicted_overthinking_risk: Real[0,1]
+  incremental_predictive_gain_over_loop_baseline: Real
+  measurement_cost       : Real>=0
+  evidence_grade         : EvidenceGrade
+  provenance             : SET<EvidenceRef>
+}
+
+type SyntheticPersonalityProjection = {
+  identity_ref           : Ref                // owner-fixed self.root; read-only here
+  role_persona_ref       : Ref                // contextual/reversible
+  functional_appraisal_ref: Ref               // fast functional control evidence
+  regulatory_personality_ref: Ref             // slow effect-coupled state
+  behavioral_trait_audits: SET<Ref>           // non-authoritative psychometric projections
+  state_epoch            : Epoch
+}
+
+type IntrospectionEvidence = {
+  episode_id             : Ref
+  construct              : Symbol
+  self_report_ref        : OPTION<Ref>
+  logit_report_ref       : OPTION<Ref>
+  probe_ref              : OPTION<Ref>
+  intervention_ref       : OPTION<Ref>
+  system_receipt_ref     : OPTION<Ref>
+  verified_outcome_ref   : OPTION<Ref>
+  calibration            : Real[0,1]
+  evidence_grade         : EvidenceGrade
+  provenance             : SET<EvidenceRef>
+}
+
+fn observe_latent_state(spec, episode) -> OPTION<LatentStateObservation> {
+  if !model_internal_access_available(spec.model_ref) { return NONE }
+  let obs = trusted_research_probe(spec,episode)
+  require obs.model_hash == current_model_hash_for(episode)
+  require obs.runtime_hash == current_model_runtime_hash_for(episode)
+  require obs.basis_epoch == current_latent_basis_epoch_for(spec)
+  return SOME(obs)
+}
+
+fn consider_for_control(obs:LatentStateObservation) -> Bool {
+  require obs.evidence_grade in [INTERVENTION_SUPPORTED,LESION_SUPPORTED,RESCUE_SUPPORTED,OOD_TRANSFER_SUPPORTED,BINARY_REVALIDATED]
+  require obs.observability_score >= configured_observability_floor()
+  require obs.actionability_score >= configured_actionability_floor()
+  require obs.intervention_specificity >= configured_specificity_floor()
+  require obs.collateral_cost <= configured_collateral_cost_ceiling()
+  if current_build_hash() != obs.build_hash { require obs.binary_revalidated }
+  return true
+}
+
+fn fuse_native_and_clay_workspace(native:OPTION<NativeWorkspaceObservation>, clay:WorkspaceUseReceipt) -> Ref {
+  // FUSION means joint measurement, never semantic collapse.
+  return research_only_workspace_concordance_receipt(native,clay)
+}
+
+fn introspection_receipt(report,latent,system,outcome) -> IntrospectionEvidence {
+  return calibrate_introspection_without_self_certification(report,latent,system,outcome)
+}
+
+fn latent_recurrence_advice(latent:OPTION<LatentTrajectoryReadout>, baseline:LoopRegimeReadout) -> OPTION<Ref> {
+  if latent is NONE { return NONE }
+  let l = latent.unwrap
+  require l.incremental_predictive_gain_over_loop_baseline > configured_material_gain_floor()
+  require l.measurement_cost < configured_measurement_cost_ceiling()
+  return SOME(research_only_recurrence_advice(l,baseline))
+}
+
+// Identity/persona/personality separation.
+invariant native_identity_is_owner_fixed_self_root
+invariant persona_vector_never_defines_identity
+invariant behavioral_psychometric_score_never_defines_identity
+invariant self_recognition_never_defines_identity
+invariant model_self_report_never_defines_identity
+
+// Measurement epistemics.
+invariant latent_activation_not_truth
+invariant latent_probe_not_causal_mechanism
+invariant causal_steering_vector_not_unique_representation
+invariant natural_language_feature_label_not_unique_feature_identity
+invariant NLA_text_not_internal_ground_truth
+invariant self_report_not_internal_ground_truth
+invariant chain_of_thought_not_complete_internal_trace
+invariant high_probe_accuracy_not_control_authority
+invariant observability_separate_from_actionability
+invariant unknown_internal_state_stays_UNKNOWN
+
+// Workspace separation.
+invariant native_model_workspace_not_Clay_GWT
+invariant Clay_GWT_not_native_model_workspace
+invariant workspace_concordance_not_identity
+invariant workspace_broadcast_not_truth
+invariant native_workspace_activation_not_truth
+
+// Personality timescales.
+invariant fast_functional_appraisal_not_slow_personality
+invariant role_persona_state_is_reversible_and_contextual
+invariant regulatory_personality_is_slow_effect_coupled_state
+invariant slow_personality_update_requires_verified_outcome_and_causal_credit
+invariant self_generated_persona_or_appraisal_cannot_directly_commit_slow_personality
+
+// Deployment transfer.
+invariant model_hash_change_invalidates_unrevalidated_latent_control
+invariant runtime_or_build_change_requires_transfer_check
+invariant quantization_or_compilation_requires_latent_probe_revalidation
+invariant no_binary_revalidation_no_latent_control_promotion
+
+// Authority.
+invariant latent_observation_never_grants_effect_authority
+invariant latent_observation_never_grants_harness_mutation_authority
+invariant LCOP_is_observability_evidence_plane_not_cognitive_truth_plane
+invariant self_root_self_harness_authority_proposal_only
+
+counterhypothesis H0_LCOP {
+  proposition="System receipts plus behavioral outcome and current loop dynamics provide all useful observability; model-internal probes add cost and model-specific fragility without material predictive or causal gain."
+  discriminator="matched held-out replay LCOP_OFF versus LCOP_ON with accuracy/calibration/error-early-warning/recurrence/latency/resource/recovery metrics"
+}
+
+counterhypothesis H0_DUAL_WORKSPACE {
+  proposition="A J-space-like native workspace is method/model-specific and redundant with Clay GWT for Frank-level control."
+  discriminator="native workspace intervention x Clay GWT truthful/shuffled/no-reentry factorial on automatic and complex reasoning tasks"
+}
+
+counterhypothesis H0_TIMESCALE_PERSONALITY {
+  proposition="Prompt-level persona/profile control performs as well as factorized persistent personality state at lower complexity."
+  discriminator="long-horizon multi-domain restart/OOD trial: prompt-only vs single-vector vs factorized state"
+}
+
+counterhypothesis H0_LATENT_LOOP {
+  proposition="Latent trajectory features do not improve adaptive recurrence over existing LoopDynamicsReadout under matched cost."
+  discriminator="held-out matched recurrence-budget comparison with predeclared Pareto metric vector"
+}

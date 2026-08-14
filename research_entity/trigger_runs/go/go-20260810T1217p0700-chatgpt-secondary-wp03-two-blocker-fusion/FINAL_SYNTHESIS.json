@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:17:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "frontier_before": {
+    "wp02": "V17_SELECTED_PROXY_EVIDENCE_PRESENT_FORMAL_TARGET_OPEN",
+    "wp03": "V7_STRICT_GRAMMAR_BOUNDARY_BLOCKED_AND_TYPED_IR_NOT_ACCEPTED",
+    "base": "NOT_PASS"
+  },
+  "remote_diagnostic_transport_repair": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 79,
+    "phase1_head_commit": "beb565b07554d19c28c8cde0267086807d2aa844",
+    "workflow_run_id": 31357433539,
+    "artifact_id": 9051130218,
+    "artifact_digest": "sha256:b5b18e2de7cc95203433006e3e18c9b8c639b2e95e45fe876a37144e63a75bca",
+    "diagnostic_wrapper_result": "PASS_RECEIPT_TRANSPORT",
+    "mechanism": "GitHub Actions invokes bash with errexit; a direct expected-nonzero validator command exited before rc capture. Guarding the command in an if/else preserved the validator exit code and allowed the diagnostic artifact to materialize.",
+    "source_semantics_changed": false,
+    "frank_runtime_changed": false
+  },
+  "remote_downstream_observation": {
+    "evidence_class": "SELF_HOSTED_UBUNTU_RESEARCH_PROXY",
+    "exact_source_git_blobs": {
+      "V7": "a63b7ce112fbe6acf1890fef24a204f3863a5292",
+      "frontend": "55728fd20323a364bb5e831989644b65189603d1",
+      "typed_ir": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+      "validator": "03b22c7f25dbe1d3eca9a08f6080ea9d4aa8c846",
+      "G9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+      "Dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797"
+    },
+    "validator_rc": 1,
+    "wall_ms": 927,
+    "receipt_present": false,
+    "observed_exception": "TypedIRError: field without name: ['status', ':', 'Symbol']",
+    "observed_stack_surface": "build_typed_ir -> parse_record_like -> parse_field",
+    "interpretation": "This establishes an independent downstream typed-IR failure on the frozen G9/Dialect path. It does not establish whether the preceding strict check passed, because the validator catches strict-check exceptions and continues into full_a before this uncaught typed-IR exception."
+  },
+  "concurrent_strict_grammar_evidence": {
+    "commit": "a621e943a2bfdc87f6ed317392bf86747f741ace",
+    "exact_v7_git_blob": "a63b7ce112fbe6acf1890fef24a204f3863a5292",
+    "finding": "V7 strict LALR construction has a dotted_relation optional-RHS conflict family.",
+    "current_parser_research": "V18_REFUTED_CURRENT_BYTES_V19_NEXT_FALSIFIER",
+    "v18_refutation_handoff_commit": "4adc21da148840b98c1158ef3502e33254b01a5c",
+    "formal_remote_receipt_at_fusion": "SYNC_PENDING_NOT_VISIBLE"
+  },
+  "two_blocker_fusion": {
+    "blocker_1": {
+      "name": "V7_STRICT_GRAMMAR_AMBIGUITY",
+      "order": "UPSTREAM",
+      "status": "SUPPORTED",
+      "repair_lane": "V19_OR_SUCCESSOR_GRAMMAR_RESEARCH"
+    },
+    "blocker_2": {
+      "name": "TYPED_IR_VALUE_BASED_KEYWORD_IDENTIFIER_REJECTION",
+      "order": "DOWNSTREAM",
+      "status": "SUPPORTED_BY_SELF_HOSTED_RUNTIME_EXCEPTION_AND_STATIC_GRAMMAR_IR_CONTRACT_MISMATCH",
+      "mechanism": "V7 admits reserved-word aliases such as status in ident positions, while current typed IR discards token values listed in KEYWORDS when extracting field/parameter/declaration/method names."
+    },
+    "scope_reconciliation": "The earlier statement that the initial strict red was not caused by typed IR remains valid for that upstream causal question. It must not be generalized into 'typed IR has no bug': the later full_a path exposes a separate downstream defect."
+  },
+  "typed_ir_candidate": {
+    "clay_branch": "go-wp03-keyword-ident-20260810",
+    "clay_pr": 145,
+    "candidate_commit": "189785dbd1c0c4989f9a18b79653e71617457a8d",
+    "typed_ir_git_blob": "1234ab634dff60197ea45d4a52969c5ea442746a",
+    "strategy": "Use AST context (direct NAME or ident_* child) rather than global token-value keyword filtering for declaration/field/parameter/method identifier extraction.",
+    "regression_fixture": "record/field/function/typed-param/interface/method/param all named status",
+    "production_promotion": "NONE",
+    "strongest_counterhypothesis": "A selected V19-or-successor parser may intentionally alter normalized identifier AST shape or make this extraction strategy incomplete; therefore the candidate must be replayed against the selected exact grammar/frontend bytes before merge."
+  },
+  "remote_candidate_execution": {
+    "dr_evidence_pr": 83,
+    "established_pr79_phase2_head": "97ce51102b9c6e08acd0c62ee53225fe00c4d985",
+    "candidate_workflow": ".github/workflows/clay-wp03-keyword-ident-candidate.yml",
+    "candidate_runtime_receipt": "NOT_MATERIALIZED",
+    "event_state": "NO_NEW_ACTIONS_RUN_OR_CHECK_CONTEXT_OBSERVED_AFTER_PR_OPEN_AND_SYNCHRONIZE_ATTEMPTS",
+    "classification": "CAPABILITY_OR_EVENT_BLOCKED_NOT_SCIENTIFIC_FAIL",
+    "promotion_allowed": false
+  },
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "ERREXIT_RECEIPT_SURVIVAL_METAMORPHIC",
+    "scope": "LOCAL_REVERSIBLE_DIAGNOSTIC_HARNESS_ONLY",
+    "direct_variant": "set -euo pipefail; false; rc=$?; write receipt",
+    "direct_result": "process_exit_1_receipt_missing",
+    "guarded_variant": "set -euo pipefail; if false; then rc=0; else rc=$?; fi; write receipt",
+    "guarded_result": "process_exit_0_receipt_contains_rc_1",
+    "conclusion": "Expected-failure diagnostics must place the command in an errexit-immune conditional context before capturing rc; otherwise the harness destroys the evidence it was built to collect.",
+    "architecture_promotion": "NONE",
+    "rollback": "Remove diagnostic wrapper change; no semantic state was mutated."
+  },
+  "architecture_delta": {
+    "status": "TESTING_NO_PRODUCTION_CHANGE",
+    "production_parser": "KEEP_CURRENT_SELECTED_STATE_UNTIL_V19_OR_SUCCESSOR_FALSIFICATION_COMPLETES",
+    "typed_ir": "CANDIDATE_PR145_ONLY",
+    "wp03": "GRAMMAR_BOUNDARY_FIRST_THEN_REPLAY_TYPED_IR_CANDIDATE",
+    "wp04": "DO_NOT_ADVANCE_FROM_THIS_EVIDENCE",
+    "base_pass": false,
+    "frank_harness_mutation": false
+  },
+  "next_frontier": [
+    "Complete V19-or-successor exact-byte strict and semantic differential evidence; do not select from local proxy alone.",
+    "Once a grammar candidate is selected for WP03 replay, run frozen G9+Dialect typed IR with current main and candidate PR145 under identical grammar/frontend provenance.",
+    "Require the candidate to remove the status-field crash and preserve grammar-admitted keyword identifier identity without changing authority semantics.",
+    "Materialize self-hosted Ubuntu receipt; registered Andreas Ubuntu target evidence remains the formal acceptance authority.",
+    "Only after grammar and typed-IR blockers are independently closed should WP03 promotion or WP04 work be reconsidered."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_write": "COMMITTED",
+  "authority_invariant": "model output != execution authority"
+}

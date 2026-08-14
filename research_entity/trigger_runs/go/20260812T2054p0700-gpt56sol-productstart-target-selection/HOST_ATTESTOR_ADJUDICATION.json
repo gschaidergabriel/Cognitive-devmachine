@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260812T2054p0700-gpt56sol-productstart-target-selection",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "new_unusual_experiment_count": 0,
+  "discovery": {
+    "product_repo_pr": 515,
+    "state": "MERGED",
+    "merge_commit": "9519a8fe151867d2c5a26ae43c0b63cfeb6ab6bd",
+    "title": "security(storage): bind SQLite observation to accepted host and actual Frank process",
+    "role": "existing accepted-host plus actual-product-process read-only attestor; do not duplicate"
+  },
+  "required_deployment_selectors": [
+    "FRANK_V0_1_EXPECTED_HOSTNAME",
+    "FRANK_V0_1_EXPECTED_MACHINE_ID_SHA256",
+    "FRANK_V0_1_EXPECTED_SYSTEMD_UNIT",
+    "FRANK_V0_1_EXPECTED_EXECUTABLE"
+  ],
+  "mechanism": [
+    "bind hostname and SHA-256 of /etc/machine-id to independently configured accepted-host identity",
+    "require exact loaded and active systemd unit",
+    "select exactly one expected executable inside the unit ControlGroup",
+    "bind stable PID start time and executable across observation window",
+    "bind stable mapped SQLite device/inode to one O_NOFOLLOW-opened same-FD hash",
+    "require trusted root-owned non-group/world-writable SQLite object and root runtime anchor",
+    "only then emit accepted-host selected-process SQLite-object match status"
+  ],
+  "current_evidence": {
+    "prior_pr_run": 31565850463,
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "mechanics": "PASS_4_OF_4",
+    "production_observation": "BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED",
+    "root_anchor_on_observed_machine": "ABSENT",
+    "frank_named_systemd_candidate_set_on_observed_machine": 0,
+    "hostinger_credit": "NOT_GRANTED"
+  },
+  "current_main_workflow_state": {
+    "path": ".github/workflows/frank-sqlite-actual-process-readonly-observation-v1.yml",
+    "workflow_dispatch": true,
+    "automatic_push_branch": "chatgpt/actual-frank-process-attestation-fresh-main-20260812",
+    "main_branch_runs_observed": 0,
+    "repository_actions_variables_readable_by_current_connector": false,
+    "repository_actions_secrets_readable_by_current_connector": false,
+    "note": "The existing workflow already consumes the four trusted repository variables. Current connector permissions cannot inspect or provision them, and no canonical runner label/remote accepted-host route was found in accessible repo state."
+  },
+  "grf_collapse": [
+    {
+      "claim": "a new host-attestation implementation must be built",
+      "outcome": "REJECT_DUPLICATE_EXISTING_MERGED_PR_515"
+    },
+    {
+      "claim": "the remaining problem is primarily instrumentation",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "the remaining immediate discriminator is trusted accepted-Hostinger deployment configuration/routing followed by execution of the already-merged observer",
+      "outcome": "PROMOTE_AS_NEXT_TEST_OBLIGATION"
+    }
+  ],
+  "next_test": {
+    "status": "BLOCKED_ON_DEPLOYMENT_CONFIGURATION_OR_ROUTE_AVAILABLE_TO_CURRENT_TOOLS",
+    "steps": [
+      "obtain or provision canonical accepted Hostinger hostname and machine-id digest outside the rollback failure domain appropriate to the claim",
+      "bind exact Frank systemd unit and executable names",
+      "ensure execution is routed to the accepted Hostinger runner/host rather than merely any self-hosted Linux X64 machine",
+      "run merged actual-process observer and require OBSERVED_ACCEPTED_HOST_SELECTED_FRANK_PROCESS_SQLITE_OBJECT_MATCHES_ROOT_ANCHOR",
+      "compose with ProductStart V4/V6 and current live cmdline/source-byte controls",
+      "then perform clean start/restart/recovery and rollback/downgrade/library-swap fail-closed matrix"
+    ]
+  },
+  "nonclaims": {
+    "accepted_host_values_known": false,
+    "accepted_host_routing_proven": false,
+    "productive_fixed_sqlite_mapping_proven": false,
+    "production_mutation_performed": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false
+  }
+}

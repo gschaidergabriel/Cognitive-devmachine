@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "observed_after_initial_final_report":true,
+  "fresh_commit":"3c89c9a2700953e1e6b838394d4e5862bdf6bd69",
+  "source":"UnifiedDB QUERY_ROUTING_PLAN.json",
+  "new_overlap":[
+    "model_facing_assembly already requires one semantic root, one explicit validity time, bounded context budget and assembly selection receipt",
+    "selection integrity already requires selection/query-plan provenance",
+    "replay contract already binds admitted selector/index identities"
+  ],
+  "effect_on_dca":"NARROWED",
+  "dca_components_now_absorbed_by_existing_unifieddb":["semantic-root currentness","validity-time binding","selection receipt/provenance","selector identity replay binding"],
+  "surviving_nonduplicate_delta":[
+    "query-relative completeness witness for model-visible negative closure",
+    "typed distinction between CERTIFIED_ABSENT and NOT_LOADED_OR_INCOMPLETE_UNKNOWN",
+    "STALE completeness may not lower to absent and forces refresh",
+    "translator/model/runtime must preserve UNKNOWN/ABSENT distinction",
+    "bounded selector must expose unresolved material decision distinctions rather than silently collapse them"
+  ],
+  "strongest_counterhypothesis_strength":"INCREASED",
+  "new_kill_boundary":"If existing UnifiedDB model-facing assembly + ordinary query-completeness metadata + translator/runtime checks cover the surviving rules, delete DCA entirely and retain only tests/invariants.",
+  "promotion":"NONE"
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "created_at_local": "2026-08-10T12:43:00+07:00",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "purpose": "Attempt to rebase the already Hostinger-validated PR153 four-file WP02 closure delta onto fresh main without touching unrelated parser/UnifiedDB/hypofusion work.",
+  "source_candidate": {
+    "pr": 153,
+    "tested_head": "5d2e7f904323c792cfdb2af72706391eabda7a99",
+    "validated_tool_blobs": {
+      "canonicalizer": "0e3a9f3c16991cc121f88fac1980f675b8453557",
+      "validation": "a57c00de8be2add031a69ad99bac689ad523a358",
+      "cross_parity": "84a57f03d58435e4c504b980f399c4798a46f9ff",
+      "workflow": "85c48144d5b003a4cfe9327c002e4aec4e2644f9"
+    }
+  },
+  "attempt_branch": "chatgpt/go-wp02-cross-canon-current-main-20260810",
+  "exactness_guard": {
+    "caught_non_byte_identical_intermediate_validation_port": true,
+    "intermediate_blob": "ef1f8730cc9c17e38654eea3fd501df72be8e6de",
+    "action": "Immediately replaced before PR creation with exact Hostinger-validated validation blob a57c00de8be2add031a69ad99bac689ad523a358.",
+    "final_candidate_tool_blobs_exact": true
+  },
+  "final_diff_scope": [
+    ".github/workflows/claycode-wp02-cross-canon-tripwire.yml",
+    "tools/claycode_base_canonicalizer.py",
+    "tools/claycode_base_canonicalizer_validation.py",
+    "tools/claycode_wp02_cross_canonicalizer_parity.py"
+  ],
+  "collision_result": {
+    "status": "STOPPED_STALE_BEFORE_PR",
+    "compare_status": "diverged",
+    "attempt_branch_ahead_by": 5,
+    "attempt_branch_behind_by": 16,
+    "merge_base": "29d00df9227a84b9ce39c5e147895ccafacdb334",
+    "main_observed_at_compare": "b24817c25489be4f4a01cf69400a9c29b62727b2",
+    "reason": "Main advanced by 16 commits while the exact four-file port was being assembled. Opening another already-stale PR would create duplicate merge pressure and violate stale-write/self-coordination rules."
+  },
+  "architecture_state": {
+    "hypofusion_resolution": "Direct cross-path parity is required; independent green paths are insufficient.",
+    "hostinger_support": "PASS for exact PR153 tool blobs and coupled closure.",
+    "implementation_status": "SUPPORTED_BUT_NOT_LANDED_ON_CURRENT_MAIN",
+    "formal_wp02": "OPEN",
+    "andreas_target_acceptance": false
+  },
+  "next_action": "Land the exact validated four-file delta only in a short current-main merge/freeze window or via an atomic current-main rebase mechanism that can revalidate head immediately before merge. Do not repeatedly hand-port while main is advancing faster than the port cycle.",
+  "out_of_box_experiment_count_increment": 0,
+  "authority_invariant": "model output != execution authority"
+}

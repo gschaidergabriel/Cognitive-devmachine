@@ -1,0 +1,243 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260810T2336p0700-chatgpt-secondary-execution-generation-rollback",
+  "trigger": "go",
+  "created_at": "2026-08-10T23:36:00+07:00",
+  "updated_at": "2026-08-10T23:38:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "primary_work_packages": [
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "fresh_internal_findings": [
+    {
+      "finding": "Current main EffectLifecycleRuntime remains V14 and begin_attempt/retry do not receive a transient caller execution capability.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py@main",
+        "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json"
+      ],
+      "status": "VERIFIED_CURRENT_SOURCE_PLUS_PRIOR_TARGET_VPS_NEGATIVE_EVIDENCE"
+    },
+    {
+      "finding": "V15 documents lease_epoch as monotonically increasing but stores the counter and holder state inside the same rollback-capable UnifiedDB materialization.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_presence_runtime.py@main",
+        "gschaidergabriel/Dr.-Unterweger:run/31409354943"
+      ],
+      "status": "TARGET_RUNNER_REPRODUCED_ROLLBACK_GENERATION_RESURRECTION"
+    },
+    {
+      "finding": "PR #199 Clay semantics declare an opaque trusted-runtime-issued EffectExecutionFence, but its Python EffectExecutionFenceProof is a publicly constructible frozen dataclass; from_ingress_execution() is not an enforcement boundary because callers can instantiate copied scalar fields directly.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:PR#199",
+        "gschaidergabriel/Dr.-Unterweger:review#4898940738"
+      ],
+      "status": "SOURCE_LEVEL_AUTHORITY_BOUNDARY_FALSIFIER_DISTRIBUTED"
+    }
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "Google/Chubby paper, OSDI 2006",
+      "mechanism": "destination-validated lock sequencer carries lock generation rather than relying on observation that a lock is currently held",
+      "evidence_class": "PRIMARY_RESEARCH"
+    },
+    {
+      "source": "etcd v3.7 disaster recovery documentation",
+      "mechanism": "snapshot restore can move revisions backward; revision bump is recommended so pre-restore generations do not remain plausible",
+      "evidence_class": "OFFICIAL_DOCUMENTATION"
+    },
+    {
+      "source": "AWS Builders Library idempotent API guidance",
+      "mechanism": "unknown outcomes remain an idempotency/reconciliation problem and do not imply authority transfer",
+      "evidence_class": "OFFICIAL_ENGINEERING_DOCUMENTATION"
+    },
+    {
+      "source": "SQLite Online Backup API + WAL documentation",
+      "mechanism": "backup API provides a consistent snapshot; WAL is persistent database state and must not be accidentally mixed across restore lineages",
+      "evidence_class": "OFFICIAL_DOCUMENTATION"
+    },
+    {
+      "source": "QEMU VM Generation ID specification/documentation",
+      "mechanism": "vmgenid exposes a random 128-bit VM generation identifier and management changes it for snapshot/backup restore or template re-execution so the guest can detect replay of an already-executed VM timeline",
+      "evidence_class": "OFFICIAL_PRIMARY_IMPLEMENTATION_DOCUMENTATION"
+    },
+    {
+      "source": "Linux kernel drivers/char/random.c",
+      "mechanism": "VM-fork generation input triggers add_vmfork_randomness and immediate CRNG reseed/notifier behavior when supported",
+      "evidence_class": "PRIMARY_SOURCE_CODE"
+    }
+  ],
+  "hypothesis": {
+    "id": "H-GO-ROLLBACK-GENERATION-001",
+    "statement": "DB-local lease_epoch is sufficient for in-lineage ABA fencing but is not globally monotone across rollback to an older valid UnifiedDB snapshot unless recovery adds a non-rollback incarnation/revision fence or an equivalent restore-time generation bump before execution resumes.",
+    "strongest_counterhypothesis": "Production recovery may make the state unreachable by forbidding restoration after a newer generation existed, or may already invalidate all pre-restore execution capabilities through an independent non-rollback authority before Frank runtime opens.",
+    "status": "SUPPORTED_FOR_V15_MECHANISM; PRODUCTION_REACHABILITY_UNRESOLVED"
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "id": "GO_OOB_SNAPSHOT_ROLLBACK_GENERATION_RESURRECTION",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 197,
+    "branch": "chatgpt/go-oob-snapshot-rollback-generation-20260810",
+    "head_sha": "2d1ef44ec81145cb082b443a74b86f0398da082a",
+    "tested_pr_merge_sha": "1520578fcf77ae37160cecf42465dd59c1bb8c80",
+    "fork_sha": "b59621312a135a29cc22dfc509c63280ab3e291d",
+    "origin_main_at_test": "fb8baa2dc47705e3ce59d9ceb26943c2280a43ff",
+    "method": [
+      "acquire generation A in disposable migrated state",
+      "take consistent SQLite backup while A is live",
+      "advance disposable state to generation B",
+      "restore the A snapshot",
+      "present original A session/client/lease_epoch",
+      "repeat restore with test-only generation bump beyond B and require A to be fenced"
+    ],
+    "first_self_hosted_run": {
+      "run_id": 31409091336,
+      "job_id": 93522537403,
+      "status": "INFRA_WORKFLOW_FAILURE_BEFORE_BASELINE_OR_EXPERIMENT",
+      "reason": "workflow removed checkout credentials then redundantly attempted git fetch; exit 128 before experiment"
+    },
+    "workflow_repair": {
+      "commit": "2d1ef44ec81145cb082b443a74b86f0398da082a",
+      "delta": "remove redundant unauthenticated git fetch only; experiment unchanged"
+    },
+    "authoritative_self_hosted_run": {
+      "run_id": 31409354943,
+      "job_id": 93523395754,
+      "status": "PASS_EXPECTED_NEGATIVE_EVIDENCE",
+      "result": "REPRODUCED_SNAPSHOT_ROLLBACK_GENERATION_RESURRECTION",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "kernel": "Linux 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+      "python": "3.12.3",
+      "sqlite": "3.45.1",
+      "utc": "2026-08-10T16:37:35Z",
+      "baseline_status": "PASS_FRANK_EXECUTION_GATE_V1",
+      "epoch_before_snapshot": 1,
+      "epoch_reached_after_snapshot": 2,
+      "epoch_after_restore_without_bump": 1,
+      "old_capability_resurrected_after_restore": true,
+      "old_capability_heartbeat_reason": "HEARTBEAT_RENEWED",
+      "counterfactual_restore_bump_epoch": 3,
+      "old_capability_fenced_after_restore_bump": true,
+      "counterfactual_fence_reason": "STALE_OR_NONHOLDER_HEARTBEAT",
+      "snapshot_sha256": "ec17464611f413e718cf7afb4bec122959a0d0982803b5c77a0566483599958c",
+      "sqlite_integrity_after_future": "ok",
+      "sqlite_integrity_after_restore": "ok",
+      "sqlite_integrity_final": "ok",
+      "foreign_key_violations_final": 0,
+      "oob_resources": {
+        "wall_seconds": 0.17,
+        "user_seconds": 0.08,
+        "system_seconds": 0.04,
+        "cpu_percent": 71,
+        "max_rss_kib": 25080,
+        "major_page_faults": 0,
+        "minor_page_faults": 4030,
+        "voluntary_context_switches": 176,
+        "involuntary_context_switches": 16,
+        "swaps": 0,
+        "filesystem_inputs": 0,
+        "filesystem_outputs": 13352,
+        "exit_status": 0
+      },
+      "baseline_resources": {
+        "wall_seconds": 0.20,
+        "user_seconds": 0.12,
+        "system_seconds": 0.05,
+        "cpu_percent": 83,
+        "max_rss_kib": 25600,
+        "swaps": 0,
+        "exit_status": 0
+      },
+      "artifact": {
+        "id": 9071128362,
+        "size_bytes": 3603,
+        "sha256": "34a11bd08d64be8901113872db97d36d71140541eed568cf76b8c2d777776038",
+        "retention_days": 30
+      },
+      "tested_blobs": {
+        "apply_current_schema.py": "bb9a6890e6ade1c87e4bc8391e00d99945ed625a",
+        "frank_presence_runtime.py": "b222d18e488b271a76d4387220e0cb518663da78",
+        "frank_execution_gate.py": "9b28453d6a329748f5201b18305722c0afe12871",
+        "frank_execution_gate_v1.py": "d3101b04bcd9ad657fe8ea4f6bb6898768508908",
+        "go_oob_snapshot_rollback_generation_fence.py": "f686f574e40d77b4ac30a9f25fdb3942cee4a9f9"
+      }
+    },
+    "safety": {
+      "test_mode_disposable_state_only": true,
+      "external_network_in_experiment": false,
+      "external_provider_effect": false,
+      "canonical_frank_state_mutation": false,
+      "product_runtime_schema_claycode_mutation": false
+    }
+  },
+  "swarm_coordination": {
+    "duplicate_product_patch_avoided": true,
+    "reason": "active overlapping effect-fence/recovery candidates already exist",
+    "cross_branch_reentry": [
+      {
+        "pr": 186,
+        "effect": "recovery worker explicitly records #197 as a higher-order snapshot/VM rollback blocker and limits its own claim to in-lineage crash/expiry recovery; VMGenID/external-anchor candidate distributed as review 4898971711"
+      },
+      {
+        "pr": 199,
+        "effect": "source-level opaque-vs-constructible execution-proof mismatch distributed as review 4898940738"
+      },
+      {
+        "pr": 202,
+        "effect": "independent worker is already probing copied execution tuple possession-vs-equality semantics on another candidate lane; reuse rather than duplicate"
+      },
+      {
+        "pr": 197,
+        "effect": "target-runner result and exact resource/provenance evidence published as issue comment 5243164514"
+      }
+    ]
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_TEST_OBLIGATION_NOT_PROMOTED_PRODUCT_ARCHITECTURE",
+    "proposal": "Treat execution generation as a capability/lineage relation, not a database scalar. Keep durable scalar/hash bindings as provenance, but require live possession at reserve/start/retry/provider-precommit. If rollback restore is supported, require a restore-incarnation/revision authority that cannot roll backward with UnifiedDB before restored state becomes effect-capable.",
+    "mechanism_candidates": [
+      {
+        "candidate": "TARGET_VMGENID_BOUND_RESTORE_INCARNATION",
+        "status": "UNVERIFIED_ON_HOSTINGER",
+        "rationale": "QEMU VMGenID exists specifically to signal snapshot/template timeline re-execution; target must be probed before use."
+      },
+      {
+        "candidate": "EXTERNAL_MONOTONIC_CAS_RECOVERY_GENERATION",
+        "status": "FALLBACK_CANDIDATE",
+        "rationale": "use an authority outside the rollback domain when hypervisor VMGenID is unavailable; restored DB state must fail closed until the external generation is reconciled/bumped."
+      }
+    ],
+    "non_claims": [
+      "no current live provider bypass claimed",
+      "no product architecture promoted",
+      "no main merge authorized",
+      "no paid/final training authorized"
+    ],
+    "next_falsifiers": [
+      "probe whether accepted Hostinger target exposes usable VMGenID or equivalent virtualization generation signal",
+      "test whether actual production restore procedure can activate an older UnifiedDB lineage without an external incarnation mismatch",
+      "reuse #202 possession-vs-value evidence against the selected effect-fence implementation",
+      "require final effect candidate to preserve historical V14 lifecycle/reconciliation behavior while closing caller possession and restore-generation authority gaps"
+    ]
+  },
+  "research_write": "COMMITTED",
+  "result_state": "TARGET_RUNNER_NEGATIVE_EVIDENCE_REPRODUCED_AND_DISTRIBUTED"
+}

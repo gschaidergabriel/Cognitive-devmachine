@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "research_date":"2026-08-11",
+  "queries":["rational metareasoning value of computation","adaptive LLM reasoning stopping","value-directed belief approximation POMDP","action-preserving adaptive POMDP simplification"],
+  "primary_sources":[
+    {"title":"Algorithm selection by rational metareasoning as a model of human strategy selection","venue":"NeurIPS 2014","url":"https://proceedings.neurips.cc/paper_files/paper/2014/hash/87b5e7e570f757a0b99f0a370ce2438c-Abstract.html","collision":"Value-of-computation/rational strategy selection is established; generic metareasoning is not novel."},
+    {"title":"Value-Directed Belief State Approximation for POMDPs","venue":"UAI 2000 / arXiv mirror","url":"https://arxiv.org/abs/1301.3887","collision":"Belief approximation judged by decision/utility error rather than state reconstruction is established; epistemic fidelity need not equal decision fidelity."},
+    {"title":"Value-Directed Sampling Methods for POMDPs","venue":"UAI 2001 / arXiv mirror","url":"https://arxiv.org/abs/1301.2305","collision":"Adaptive effort can be directed to distinguish policies while meeting decision-error bounds."},
+    {"title":"No Compromise in Solution Quality: Speeding Up Belief-dependent Continuous POMDPs via Adaptive Multilevel Simplification","venue":"2023 paper","url":"https://arxiv.org/abs/2310.10274","collision":"Adaptive bounds can provably return the same optimal action as the unsimplified planner; action-preserving simplification is known."},
+    {"title":"Open-loop POMDP Simplification and Safe Skipping of Replanning with Formal Performance Guarantees","venue":"2026 paper","url":"https://arxiv.org/abs/2604.01352","collision":"Safely skipping replanning while preserving action/performance is close functional prior art."},
+    {"title":"Teaching LLMs When to Stop Seeking and Start Acting","venue":"ICLR 2026 submission","url":"https://openreview.net/forum?id=K9GAwws48i","collision":"LLM-specific termination/stop-seeking is active prior art; generic stop-thinking novelty collapses."},
+    {"title":"Statistical Early Stopping for Reasoning Models","venue":"NeurIPS 2025 ER Workshop","url":"https://openreview.net/forum?id=cmi4FBheRq","collision":"Uncertainty-aware/statistically controlled early stopping is known; confidence/risk stopping is not novel."}
+  ],
+  "destruction_result":"Broad claims of adaptive stopping, value-directed uncertainty reduction, policy-preserving simplification, and stop-seeking are known. IAC may only survive as a Frank-specific exact support/action semantic contract and test law.",
+  "novelty_after_external_search":"KNOWN_NEAR_ANALOGUE / PROJECT_SPECIFIC_COMBINATION_AT_MOST"
+}

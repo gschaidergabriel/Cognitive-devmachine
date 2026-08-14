@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "run_id": "clayresearch-20260811T0445p0700-chatgpt-secondary-will-fusion",
+  "trigger": "none_user_directed_research_cycle",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / human-surface Frank v0.1",
+  "observed_at": "2026-08-11T04:45:07+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "source_observation": {
+    "source_class": "UPLOADED_SOURCE",
+    "source_ref": "user-uploaded:will-main.zip",
+    "sha256": "d257f089fba97fb6e02668edacb5adfe1b83988a6b2414c3cf9338dc4a1b9e12",
+    "package": "@mindot/will",
+    "version": "0.9.0",
+    "source_ts_files": 196,
+    "test_ts_files": 205,
+    "src_test_ts_loc": 89209,
+    "upstream_head_claimed": false
+  },
+  "fresh_external_primary_evidence": [
+    {"source":"Gaven et al. 2025 MAGELLAN","ref":"arXiv:2502.07709","use":"metacognitive competence/learning-progress prediction is a supported candidate for autotelic goal prioritization"},
+    {"source":"Ahn et al. 2022 SayCan","ref":"arXiv:2204.01691","use":"semantic high-level proposals benefit from grounding in executable skill affordances/value"},
+    {"source":"Meng and Wang 2026 Nature Communications 17:3868","ref":"doi:10.1038/s41467-026-70354-x","use":"action-conditioned prediction/mismatch learning is a plausible control abstraction; neurobiology is not copied as architecture truth"}
+  ],
+  "fusion_note": {
+    "path": "research_entity/notes/WILL_ARCHITECTURE_FUSION_TRANSFER_20260811.md",
+    "commit_sha": "45b297dae8482a9fcc51d1a60522506b8f111449"
+  },
+  "fusion_assessment": {
+    "novelty_class": "NEW_PLUS_REFINES",
+    "materiality": "HIGH_CANDIDATE",
+    "semantic_promotion_eligible": false,
+    "reason": "Uploaded implementation evidence exposes concrete action-selection/effect-learning failure modes and repair patterns directly relevant to open Frank v0.1 work packages, but no matched Frank runtime experiment has yet been executed."
+  },
+  "hypothesis_created_or_revised": [
+    "H-WILL-FRANK-01_UNIFIED_ACTION_COMPETITION_PLAN_AS_PRIOR",
+    "H-WILL-FRANK-02_TYPED_EFFECT_BOUNDARY_REAFFERENCE_FINALITY",
+    "H-WILL-FRANK-03_STAGED_COMMUNICATION_OUTCOME_RECEIPTS",
+    "H-WILL-FRANK-04_EXPLICIT_NO_EFFECT_OUTCOME",
+    "H-WILL-FRANK-05_RECONSTRUCTION_FIDELITY_SECONDARY_METRIC",
+    "H-WILL-FRANK-06_PROCEDURAL_LOW_RISK_FAST_PATH"
+  ],
+  "counterhypotheses_preserved": [
+    "single action field may overcouple heterogeneous timescales and harm committed plans",
+    "denial-finality learning may overfit transient policy or become an indirect authority channel",
+    "delivery may legitimately be terminal for explicitly one-way goals",
+    "explicit no-effect records may add state cost without measurable benefit",
+    "behavioral reconstruction fidelity may miss wrong lineage and must never mint identity",
+    "procedural fast paths may become stale under context/provider/policy drift"
+  ],
+  "negative_results": [
+    "N-WILL-01_DIRECT_UNKNOWN_DENIAL_TO_PARAMETER_TRANSFER_REJECTED",
+    "N-WILL-02_AFFECT_DERIVED_SOFT_OUTCOME_REWARD_TRANSFER_REJECTED",
+    "N-WILL-03_EVENT_BUS_OR_WORKSPACE_LABEL_NOT_GWT_CAUSAL_EVIDENCE",
+    "N-WILL-04_FIXED_SELECTION_WEIGHTS_NOT_OPERATING_WINDOW_EVIDENCE",
+    "N-WILL-05_WILL_MODULAR_TOPOLOGY_NOT_FRANK_TARGET_TOPOLOGY"
+  ],
+  "architecture_delta_candidates": ["ADC-WILL-FUSION-V1_EFFECT_REAFFERENCE_AND_SINGLE_ACTION_FIELD"],
+  "test_obligations": [
+    "PLAN_PRIOR_VS_PARALLEL_DISPATCH",
+    "EFFECT_DENIAL_FINALITY_CLASS",
+    "EFFECT_DENIAL_FINALITY_PARAMETER",
+    "EFFECT_DENIAL_FINALITY_CONTEXT_TRANSIENT",
+    "EFFECT_DENIAL_CONFIRMATION_REQUIRED",
+    "EFFECT_DENIAL_FINALITY_UNKNOWN_NO_MATERIAL_LEARNING",
+    "POLICY_CHANGE_RECOVERY_AFTER_LEARNED_DENIAL",
+    "DELIVERY_NOT_RESPONSE_NOT_TASK_SUCCESS",
+    "ONE_WAY_DELIVERY_MAY_BE_TERMINAL_WHEN_GOAL_DECLARES_IT",
+    "EXPLICIT_NO_EFFECT_REPLAY",
+    "RECONSTRUCTION_FIDELITY_STALE_SIBLING_CHIMERA_CONTROL",
+    "PROCEDURAL_FAST_PATH_OOD_POLICY_DRIFT",
+    "AFFECT_CANNOT_MINT_VERIFIED_OUTCOME_REWARD",
+    "BUS_ACTIVITY_CANNOT_MINT_GWT_CAUSAL_USE"
+  ],
+  "affected_work": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+    "F-V01-07-NEEDLE-TRANSLATOR",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-10-PROACTIVE-AGENCY-WEB",
+    "F-V01-11-MEMORY-REWARD-GOALS",
+    "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "branch_feedback_targets": ["frank","gwt","unifieddb","claygraph","claycode","harness","emergenz","clayresearch"],
+  "research_reentry": {
+    "evidence_updates": ["WILL_ARCHITECTURE_FUSION_TRANSFER_20260811"],
+    "work_created_or_revised": [],
+    "semantic_promotion": "NONE_CANDIDATE_ONLY",
+    "next_falsifier": "Implement the smallest frozen-episode shadow experiment for H-WILL-FRANK-02: compare current EffectAuthority-only denial handling against typed finality + UNKNOWN with zero competence/reward mutation, then policy-change recovery.",
+    "rollback_or_recovery_impact": "No runtime or owner-fixed contract changed. Candidate is research-only and removable. If promoted later, recovery must persist exact boundary-outcome provenance and invalidate stale learned envelopes when policy/capability version changes.",
+    "targeted_feedback_addressable": true
+  },
+  "execution_claims": {
+    "will_tests_executed_in_this_run": false,
+    "frank_runtime_modified": false,
+    "frank_runtime_tests_executed": false,
+    "target_vps_modified": false,
+    "canonical_state_directive_modified": false
+  },
+  "research_disposition": "MATERIAL_CANDIDATE_DELTA_REENTERED",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

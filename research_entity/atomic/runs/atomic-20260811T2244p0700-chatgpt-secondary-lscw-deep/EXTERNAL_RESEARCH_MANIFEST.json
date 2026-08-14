@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "run_id": "atomic-20260811T2244p0700-chatgpt-secondary-lscw-deep",
+  "retrieved_date": "2026-08-11",
+  "research_question": "What existing formal/security mechanisms already cover semantic preservation, proof-carrying history, single-use state/authority, supply-chain provenance, attestation, runtime action governance, and current SQLite recovery risk, and therefore collide with or constrain LSCW-001?",
+  "queries": [
+    "proof carrying code policy machine-checkable proof",
+    "proof carrying data all history comply property",
+    "translation validation compiler run refinement simulation",
+    "verified compiler semantic preservation CompCert 3.17",
+    "typestate context permitted operations",
+    "linear types aliased resources capability state properties",
+    "CHERI capabilities provenance formal semantics",
+    "in-toto software supply chain integrity",
+    "SLSA 1.2 build provenance trusted builder",
+    "RATS attestation evidence verifier relying party freshness",
+    "proof carrying agent actions runtime governance 2026",
+    "canonical action verification attestation 2026",
+    "runtime proof of execution governed agent actions 2026",
+    "SQLite WAL-reset bug fixed 3.51.3 3.53.4"
+  ],
+  "primary_sources": [
+    {
+      "title": "Proof-carrying code",
+      "authors": "George C. Necula",
+      "year": 1997,
+      "url": "https://doi.org/10.1145/263699.263712",
+      "collision": "A producer attaching a machine-checkable proof of policy compliance to untrusted code is established prior art. LSCW cannot claim proof-carrying safety as novel."
+    },
+    {
+      "title": "Proof-Carrying Data and Hearsay Arguments from Signature Cards",
+      "authors": "Alessandro Chiesa, Eran Tromer",
+      "year": 2010,
+      "url": "https://projects.csail.mit.edu/pcd/",
+      "collision": "Proofs attached to data/messages can attest that the data and all of its history comply with a specified property. This is a strong collision for history-carrying semantic witnesses."
+    },
+    {
+      "title": "Translation validation",
+      "authors": "Amir Pnueli, Michael Siegel, Eli Singerman",
+      "year": 1998,
+      "url": "https://weizmann.esploro.exlibrisgroup.com/esploro/outputs/conferenceProceeding/Translation-validation/993262143603596",
+      "collision": "Validating each concrete translation run against a refinement relation in a common semantic framework is established. LSCW's stage-local semantic conservation must be viewed as a generalized lifecycle application, not a new compiler-verification principle."
+    },
+    {
+      "title": "The CompCert verified compiler",
+      "authors": "Xavier Leroy et al.",
+      "version": "3.17",
+      "date": "2026-02-13",
+      "url": "https://compcert.org/doc/",
+      "collision": "Whole-compiler semantic preservation by compositional simulations is established and demonstrates that representation changes need not imply semantic changes."
+    },
+    {
+      "title": "Typestate: A Programming Language Concept for Enhancing Software Reliability",
+      "authors": "Robert E. Strom, Shaula Yemini",
+      "year": 1986,
+      "url": "https://research.ibm.com/publications/typestate-a-programming-language-concept-for-enhancing-software-reliability",
+      "collision": "Restricting legal operations according to current state is established. LSCW's transition-state legality is not novel by itself."
+    },
+    {
+      "title": "Linear types for aliased resources",
+      "authors": "Chris Hawblitzel",
+      "year": 2005,
+      "url": "https://www.microsoft.com/en-us/research/publication/linear-types-for-aliased-resources/",
+      "collision": "Linear types can track aliasing and state-dependent properties. Single-use witness semantics has strong prior art and must earn value from lifecycle composition, not linearity alone."
+    },
+    {
+      "title": "Formal Mechanised Semantics of CHERI C: Capabilities, Provenance, and Undefined Behaviour",
+      "year": 2024,
+      "url": "https://www.cl.cam.ac.uk/research/security/ctsrd/cheri/cheri-publications.html",
+      "collision": "Unforgeable capabilities and provenance have rigorous semantics. LSCW cannot claim provenance-bound capabilities as a new primitive family."
+    },
+    {
+      "title": "in-toto: Providing farm-to-table guarantees for bits and bytes",
+      "year": 2019,
+      "url": "https://www.usenix.org/conference/usenixsecurity19/presentation/torres-arias",
+      "collision": "End-to-end software supply-chain step integrity and verification are established. Build-to-deploy provenance should reuse rather than reinvent in-toto/SLSA concepts."
+    },
+    {
+      "title": "SLSA Provenance specification",
+      "version": "1.2",
+      "url": "https://slsa.dev/spec/v1.2/provenance",
+      "collision": "Verifiable where/when/how build provenance is current industry specification. Trusted-builder/artifact identity should align to SLSA/in-toto where practical."
+    },
+    {
+      "title": "in-toto Attestation Framework Specification",
+      "version": "1.2",
+      "url": "https://github.com/in-toto/attestation/blob/main/spec/README.md",
+      "collision": "Authenticated metadata is explicitly bound to immutable subjects and predicates; LSCW should not invent a competing generic build-attestation envelope."
+    },
+    {
+      "title": "Remote ATtestation procedureS (RATS) Architecture",
+      "standard": "RFC 9334",
+      "url": "https://datatracker.ietf.org/doc/rfc9334/",
+      "collision": "Evidence, verifier appraisal, attestation results, relying-party policy, and freshness are established roles. LSCW should distinguish evidence from authority and keep owner policy external."
+    },
+    {
+      "title": "Proof-Carrying Agent Actions: Model-Agnostic Runtime Governance for Heterogeneous Agent Systems",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2606.04104",
+      "collision": "Portable action certificates with pre-admissibility, open, assumptions, approval, and outcome closure strongly collide with any claim that action-level proof-carrying governance is novel."
+    },
+    {
+      "title": "CAVA: Canonical Action Verification and Attestation for Runtime Governance of Agentic AI Systems",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2607.13716",
+      "collision": "Canonical action identity, approval binding, receipt integrity and runtime-portable projection are very close prior art for the action/effect segment of LSCW."
+    },
+    {
+      "title": "Proof of Execution: Runtime Verification for Governed AI Agent Actions",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2607.05397",
+      "collision": "Contract + causal event stream + replay context and validator-checkable invariants collide with execution/replay attestation. LSCW's claim must remain lifecycle semantic conservation, not generic proof-of-execution."
+    },
+    {
+      "title": "SQLite Write-Ahead Logging - WAL-reset bug",
+      "date": "2026",
+      "url": "https://www.sqlite.org/wal.html",
+      "collision": "The accepted target's storage risk is real and version/topology dependent; current docs say the bug is fixed in 3.51.3 and later. This supports binding actual consumed runtime identity rather than inferring safety from package/source labels."
+    },
+    {
+      "title": "SQLite Release 3.53.4",
+      "date": "2026-07-24",
+      "url": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "collision": "3.53.4 includes the WAL-reset fix and is the exact current V4 private-runtime target in PR359."
+    }
+  ],
+  "destruction_result": "No component idea survives as world-new. Proof-carrying compliance, history-carrying proofs, translation validation, typestate, linear capabilities, artifact attestation, action certificates, execution proofs and provenance are all established. LSCW can survive only as a Frank-specific lifecycle composition candidate: one common typed semantic-dimension basis, explicit stage transform budgets/residuals, dual semantic/product identity, and consume/reissue lineage spanning compile->installed start->actual consumed runtime->effect->reentry->recovery.",
+  "novelty_class_after_search": "NOVEL_COMBINATION_CANDIDATE",
+  "world_first_claim": false
+}

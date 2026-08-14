@@ -1,0 +1,205 @@
+module atomic.lscw.v0_1
+version "LSCW-001"
+status CANDIDATE_NOT_PROMOTED
+
+enum TransitionStage {
+  SOURCE_TO_TYPED_IR,
+  TYPED_IR_TO_LOWERED,
+  LOWERED_TO_ARTIFACT,
+  ARTIFACT_TO_PRODUCT_START,
+  PRODUCT_START_TO_ACTION_OPEN,
+  ACTION_OPEN_TO_PROVIDER_OUTCOME,
+  OUTCOME_TO_REENTRY,
+  RESTART_TO_RECOVERED_START,
+  TRANSLATOR_SURFACE
+}
+
+enum WitnessState { CURRENT, CONSUMED, STALE, QUARANTINED, UNKNOWN }
+enum ConservationResult { CONSERVED, ALLOWED_TRANSFORM, RESIDUAL_VIOLATION, REFRESH_REQUIRED, ABSTAIN }
+
+enum SemanticDimension {
+  TARGET_IDENTITY,
+  OWNER_IDENTITY_BINDING,
+  SEMANTIC_CONTRACT,
+  STATE_LINEAGE,
+  EFFECT_AUTHORITY,
+  EFFECT_POLICY,
+  EXECUTION_GENERATION,
+  USER_INTENT_SCOPE,
+  ARTIFACT_IDENTITY,
+  RUNTIME_DEPENDENCY_IDENTITY,
+  INSTANCE_LEASE,
+  VERIFIED_OUTCOME,
+  CAUSAL_CREDIT,
+  REWARD_UTILITY_AUTHORITY,
+  TRANSLATOR_SURFACE,
+  OBSERVABILITY_METADATA
+}
+
+record SemanticProjection {
+  schema_epoch:Epoch
+  dimension_set_hash:Hash
+  target_identity:Hash
+  owner_identity_binding:Hash
+  semantic_contract:Hash
+  state_lineage:Hash
+  effect_authority:Hash
+  effect_policy:Hash
+  execution_generation:Hash
+  user_intent_scope:Hash
+  artifact_identity:Hash
+  runtime_dependency_identity:Hash
+  instance_lease:Hash
+  verified_outcome:Hash
+  causal_credit:Hash
+  reward_utility_authority:Hash
+  translator_surface:Hash
+  observability_metadata:Hash
+}
+
+record AllowedTransform {
+  stage:TransitionStage
+  from_schema_epoch:Epoch
+  to_schema_epoch:Epoch
+  mutable_dimensions:Set<SemanticDimension>
+  required_dimensions:Set<SemanticDimension>
+  rule_hash:Hash
+  evidence:Set<ProvenanceRef>
+}
+
+record LinearSemanticConservationWitness {
+  witness_id:Hash
+  parent_witness_id:Hash
+  state:WitnessState
+  stage:TransitionStage
+  semantic_epoch:Epoch
+  transition_epoch:Epoch
+  projection:SemanticProjection
+  projection_hash:Hash
+  consumed_concrete_root:Hash
+  produced_concrete_root:Hash
+  transform_rule_hash:Hash
+  evidence:Set<ProvenanceRef>
+}
+
+record ConservationReceipt {
+  parent_witness_id:Hash
+  successor_witness_id:Hash
+  stage:TransitionStage
+  conserved_dimensions:Set<SemanticDimension>
+  transformed_dimensions:Set<SemanticDimension>
+  residual_dimensions:Set<SemanticDimension>
+  result:ConservationResult
+  verifier_hash:Hash
+  evidence:Set<ProvenanceRef>
+}
+
+fn semantic_residual(
+  before:SemanticProjection,
+  after:SemanticProjection,
+  rule:AllowedTransform
+) -> Set<SemanticDimension> {
+  require before.dimension_set_hash == after.dimension_set_hash
+  require before.schema_epoch == rule.from_schema_epoch
+  require after.schema_epoch == rule.to_schema_epoch
+  require rule.required_dimensions subset_of dimensions_present(after)
+  let changed = changed_semantic_dimensions(before, after)
+  return changed minus rule.mutable_dimensions
+}
+
+fn transition_validate(
+  parent:LinearSemanticConservationWitness,
+  proposed_after:SemanticProjection,
+  consumed_concrete_root:Hash,
+  produced_concrete_root:Hash,
+  rule:AllowedTransform,
+  current_semantic_epoch:Epoch,
+  current_transition_epoch:Epoch
+) -> OPTION<ConservationReceipt> {
+  require parent.state == CURRENT
+  require parent.semantic_epoch == current_semantic_epoch
+  require parent.transition_epoch == current_transition_epoch
+  require parent.projection.dimension_set_hash == proposed_after.dimension_set_hash
+  require parent.transform_rule_hash == rule.rule_hash or rule_applies_after(parent.stage, rule.stage)
+  let residual = semantic_residual(parent.projection, proposed_after, rule)
+  if cardinality(residual) != 0 {
+    return some(conservation_failure(parent, rule, residual, RESIDUAL_VIOLATION))
+  }
+  require exact_consumed_object_identity_is_observed(consumed_concrete_root)
+  require exact_produced_object_identity_is_observed(produced_concrete_root)
+  return some(conservation_success(parent, proposed_after, rule, consumed_concrete_root, produced_concrete_root))
+}
+
+fn linear_advance(
+  parent:LinearSemanticConservationWitness,
+  receipt:ConservationReceipt
+) -> OPTION<LinearSemanticConservationWitness> {
+  require receipt.parent_witness_id == parent.witness_id
+  require parent.state == CURRENT
+  require receipt.result == CONSERVED or receipt.result == ALLOWED_TRANSFORM
+  require witness_not_previously_consumed(parent.witness_id)
+  consume parent
+  return some(issue_unique_successor_witness(receipt))
+}
+
+law semantic_conservation_is_not_byte_equality
+law exact_product_identity_may_be_stricter_than_semantic_equivalence
+law compiler_representation_change_requires_semantic_refinement_not_semantic_drift
+law translator_surface_change_may_be_allowed_while_truth_and_authority_are_conserved
+law ProductStart_requires_all_current_conjunctive_axes_and_cannot_be_minted_by_one_green_subsystem
+law runtime_dependency_identity_must_be_bound_to_the_object_actually_consumed
+law state_lineage_must_be_the_selected_admitted_recovery_lineage_not_same_epoch_label_only
+law stale_or_sibling_parent_witness_cannot_advance_current_lineage
+law a_consumed_witness_cannot_be_reused_to_open_a_second_authoritative_transition
+law witness_linearity_does_not_replace_external_effect_idempotency
+law semantic_witness_does_not_mint_truth_user_intent_effect_authority_or_harness_authority
+law model_confidence_GWT_ignition_ClayGraph_salience_cannot_modify_conserved_authority_dimensions
+law reward_utility_authority_cannot_be_created_by_reward_dimension_presence_alone
+law verified_outcome_and_causal_credit_are_required_before_material_reward_reentry
+law open_web_evidence_cannot_modify_instruction_or_effect_authority
+law schema_epoch_or_dimension_set_mismatch_requires_REFRESH_or_ABSTAIN
+law missing_required_dimension_is_not_zero_and_not_equivalent
+law unknown_dimension_is_not_implicitly_mutable
+law persisted_receipt_is_evidence_and_must_be_revalidated_at_consequential_consume_boundary
+
+observe semantic_residual_cardinality
+observe transformed_dimension_count
+observe witness_validation_latency
+observe witness_serialized_bytes
+observe stale_parent_rejection
+observe sibling_lineage_rejection
+observe replay_rejection
+observe semantically_equivalent_rebuild_acceptance
+observe consume_bound_object_mismatch
+observe ProductStart_conjunction_coverage
+observe effect_generation_binding
+observe recovery_lineage_binding
+observe authority_dimension_drift
+observe reward_utility_authority_drift
+
+ablation remove_linear_consumption
+ablation replace_semantic_conservation_with_strict_hash_chain
+ablation replace_cross_stage_witness_with_local_field_guards
+ablation remove_dimension_set_hash
+ablation remove_state_lineage_dimension
+ablation remove_effect_policy_dimension
+ablation remove_runtime_consumed_object_binding
+ablation allow_unknown_dimensions
+
+failure PARENT_ALREADY_CONSUMED -> ABSTAIN
+failure PARENT_STALE -> REFRESH
+failure PARENT_SIBLING_OR_TRANSPLANTED -> QUARANTINE
+failure DIMENSION_SET_MISMATCH -> REFRESH
+failure REQUIRED_DIMENSION_MISSING -> ABSTAIN
+failure SEMANTIC_RESIDUAL_NONZERO -> QUARANTINE
+failure CONSUMED_OBJECT_MISMATCH -> QUARANTINE
+failure EFFECT_POLICY_STALE -> REFRESH
+failure STATE_LINEAGE_STALE -> REFRESH
+failure RECOVERY_LINEAGE_UNVERIFIED -> QUARANTINE
+
+invariant Clay_is_research_entity_not_self_root
+invariant self_root_self_harness_authority_is_proposal_only
+invariant no_new_effect_authority
+invariant no_truth_promotion
+invariant no_training_authorization
+invariant candidate_is_research_only_until_target_live_matched_evidence

@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "run_id": "atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "candidate": "ATOMIC-CANDIDATE-MOLT-001",
+  "evidence_class": "LOCAL_LINUX_SQLITE_WAL_FULLSYNC_MICROBENCHMARK",
+  "sqlite_version": "3.46.1",
+  "configuration": {
+    "journal_mode": "WAL",
+    "synchronous": "FULL",
+    "wal_autocheckpoint": 0,
+    "transactions_per_run": 500,
+    "independent_runs": 5,
+    "payload": "single tiny counter update per durable transaction"
+  },
+  "molt": {
+    "bytes_per_tx_appended": 455.344,
+    "file_bytes_after_500": 231768
+  },
+  "sqlite_live_storage": {
+    "db_bytes": 4096,
+    "wal_bytes": 2068272,
+    "shm_bytes": 32768,
+    "total_live_bytes": 2105136,
+    "live_bytes_per_tx": 4210.272,
+    "important_scope_guard": "This is live WAL+SHM footprint during an intentionally uncheckpointed microbenchmark, not steady-state backup size or a semantic-equivalence result."
+  },
+  "latency_ratio_molt_over_sqlite": {
+    "mean_ratio_runs": [0.6734, 1.2280, 1.3473, 0.9598, 0.8236],
+    "mean_of_mean_ratios": 1.00644,
+    "p50_ratio_mean": 0.94074,
+    "p50_ratio_range": [0.7394, 1.1024],
+    "p95_ratio_mean": 1.08250,
+    "p95_ratio_range": [0.63896, 1.44925],
+    "p99_ratio_mean": 1.16075,
+    "p99_ratio_range": [0.86048, 1.50490]
+  },
+  "interpretation": [
+    "No robust local latency dominance is visible; fsync/storage variance is large and the average mean-latency ratio is approximately 1.0.",
+    "The earlier 16.43x byte amplification applies only against an intentionally tiny newline append-log baseline; it must not be generalized to mature transactional databases.",
+    "In this tiny-update uncheckpointed WAL microbenchmark, MOLT appended fewer live bytes per transaction than SQLite WAL, but SQLite provides a much richer database/query/transaction implementation. This is not an apples-to-apples superiority claim.",
+    "A canonical binary MOLT codec and matched semantic workload remain required before any resource promotion."
+  ],
+  "architecture_promotion": "NONE"
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2327p0700-idle-handoff-epoch-fence",
+  "source_workflow_run": 31408572649,
+  "source_artifact_id": 9071047254,
+  "source_artifact_sha256": "9d0c751ed0ebddc4168e7bfb32a325491fab6c7a07782110e5619539030d2bc5",
+  "tested_merge_sha": "a667677ed2cefd7fe374fe1b34d8f6d0ed648a4b",
+  "runner": {
+    "name": "clay",
+    "machine": "digital-retina",
+    "class": "self-hosted Linux X64 accepted target lane",
+    "runner_version": "2.336.0",
+    "git_version": "2.43.0"
+  },
+  "measurements": {
+    "normal_v16_continuity_regression": {
+      "result": "PASS",
+      "wall_seconds": 0.27,
+      "user_cpu_seconds": 0.14,
+      "system_cpu_seconds": 0.05,
+      "cpu_percent": 70,
+      "max_rss_kib": 25400,
+      "major_page_faults": 0,
+      "minor_page_faults": 4225,
+      "voluntary_context_switches": 305,
+      "involuntary_context_switches": 6,
+      "swaps": 0,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 15328,
+      "exit_status": 0
+    },
+    "aba_stale_idle_confirmation_discriminator": {
+      "result": "PASS",
+      "classification": "SOLE_GO_OOB_EXPERIMENT",
+      "wall_seconds": 0.15,
+      "user_cpu_seconds": 0.09,
+      "system_cpu_seconds": 0.03,
+      "cpu_percent": 81,
+      "max_rss_kib": 24576,
+      "major_page_faults": 0,
+      "minor_page_faults": 3570,
+      "voluntary_context_switches": 136,
+      "involuntary_context_switches": 6,
+      "swaps": 0,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 6744,
+      "exit_status": 0
+    }
+  },
+  "limits": [
+    "These are micro-gate resource measurements, not whole-Frank latency/resource benchmarks.",
+    "No p50/p90/p95/p99 distribution is supported because this artifact contains one timed execution per gate.",
+    "External network and real provider effects were disabled by the test semantics."
+  ]
+}

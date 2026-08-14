@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260812T0419p0700-gpt56sol-sqlite-copy-transplant",
+  "recorded_at": "2026-08-12T04:19:00+07:00",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "program": "FRANK_V0_1",
+  "reasoning_frame": "GRF",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_head_observed_before_write": "5b76ed1dc2526f1842a5f149b5a3abc1d995917d",
+  "frank_main_observed": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+  "focus": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-01-IDENTITY-SERVER-BINARY"
+  ],
+  "r0_observed": [
+    "Current product main rejects file-level symlink launcher transplantation before sibling guard resolution.",
+    "Current product main also rejects launcher link count != 1, closing the same-inode hardlink transplant found by a concurrent worker.",
+    "The launcher still selects fixed_sqlite_runtime_guard_v5_candidate.py from SELF_DIR derived from its invocation path and does not locally bind its own bytes/path to a release-authoritative launcher identity.",
+    "The V5 guard contract explicitly states that it is not a substitute for trusted installation of the guard/launcher themselves and that an upstream trusted launcher/service must establish the pre-shell boundary.",
+    "The externally pinned SQLite artifact-admission Hostinger workflow run 31536877295 remained QUEUED when re-read in this run, so it is UNKNOWN and not PASS.",
+    "The accepted productive SQLite/root-anchor/service chain is therefore still not established by current evidence."
+  ],
+  "grf": {
+    "generated_reality": "Symlink rejection plus link-count==1 is sufficient to prevent relocation of trusted launcher bytes before sibling guard selection.",
+    "strongest_counter_reality": "A regular byte-for-byte copy of the launcher has link count 1 and is not a symlink; if invoked from a foreign directory, SELF_DIR points to that directory and a foreign same-named sibling guard can be selected.",
+    "hidden_assumption": "The launcher-local checks can establish launcher origin without an upstream release-bound ProductStart identity.",
+    "falsifier": "Invoke a regular copied launcher from a foreign directory containing a controlled sibling guard, while keeping a symlink transplant as a control.",
+    "predicted_if_generated_reality_right": "Both regular-copy and symlink transplants are denied before foreign sibling guard execution.",
+    "predicted_if_counter_reality_right": "Symlink is denied, but a regular copied launcher reaches the foreign sibling guard.",
+    "collapse": "COUNTER_REALITY_SUPPORTED_IN_DISPOSABLE_BOUNDARY_MIRROR; PRODUCTIVE_EXPLOITABILITY_UNPROVEN"
+  },
+  "bounded_unusual_experiment": {
+    "count_this_macrocycle": 1,
+    "name": "REGULAR_COPY_SIBLING_GUARD_TRANSPLANT",
+    "classification": "BOUNDED_SYNTHETIC_START_BOUNDARY_COUNTERWORLD",
+    "scope": "Disposable local Linux sandbox only; no Frank database, VPS, canonical state, effect authority or Harness mutation.",
+    "baseline_control": "A file-level symlink transplant of the same launcher was denied with FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:SYMLINK_LAUNCHER_PATH.",
+    "intervention": "Copy the launcher as an ordinary regular file into a foreign directory, keep link count 1, place a controlled same-named V5 sibling guard there, and invoke the copied launcher as a non-root user.",
+    "observed": {
+      "regular_copy": "ATTACKER_COPY_GUARD_EXECUTED",
+      "symlink_control": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:SYMLINK_LAUNCHER_PATH"
+    },
+    "result": "REGULAR_COPY_TRANSPLANT_REACHES_FOREIGN_SIBLING_GUARD_IN_SYNTHETIC_MIRROR",
+    "rollback": "Temporary sandbox and temporary test anchor removed after the experiment.",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "analysis": {
+    "supported": [
+      "Symlink and hardlink checks are useful narrow defenses but do not by themselves prove launcher origin or release identity.",
+      "A regular copy is a distinct relocation class from hardlink transplantation because it remains a non-symlink single-link file.",
+      "The authoritative closure belongs at the upstream ProductStart/deployment boundary: exact trusted launcher/guard bundle identity must be bound before launcher-local sibling selection is trusted."
+    ],
+    "counterevidence_and_limits": [
+      "This experiment used a disposable local boundary mirror and does not prove that an attacker can replace or invoke the productive root-owned Frank service path.",
+      "A correctly installed root-owned, non-writable, exact-path and independently digest-pinned ProductStart could make this counterworld unreachable in production.",
+      "No productive Hostinger parent/service was observed or modified in this run."
+    ]
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE",
+    "proposal": [
+      "Treat V5 launcher-local symlink/hardlink checks as defense-in-depth, not origin authority.",
+      "At ProductStart, bind one canonical launcher path plus independently trusted launcher and guard artifact digests (or an equivalently strong root-owned release bundle identity) before first writable persistence open.",
+      "Fail closed on copied/stale/sibling launcher or guard artifacts even when basename, mode, link count and SQLite version/source-id look valid.",
+      "Target-test the composed productive start chain, not isolated launcher/overlay components."
+    ],
+    "affected": [
+      "F-V01-13 security/recovery/observability",
+      "F-V01-01 server-binary/start identity",
+      "productive SQLite startup trust chain"
+    ],
+    "rollback": "No product code was changed by this run; later implementation should remain reversible while preserving existing symlink/hardlink fail-closed checks."
+  },
+  "primary_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "finding": "The WAL-reset corruption race is fixed in SQLite 3.51.3 and later; productive runtime identity still must be proven separately from version semantics."
+    },
+    {
+      "source": "SQLite 3.53.4 release history",
+      "finding": "SQLite 3.53.4 is post-fix and has a concrete published source identity."
+    }
+  ],
+  "current_parallel_evidence": {
+    "hardlink_repair": "Merged product main 33bb74de9074042e3c1a186ea3f22d2ea8a572f4; dedicated target regression passed.",
+    "externally_pinned_artifact_workflow": "run 31536877295 remains QUEUED; UNKNOWN_NOT_PASS"
+  },
+  "next_falsifier": "Compose current main with an upstream ProductStart gate that pins the canonical launcher and guard bundle identity from independent root-owned release policy, then on the accepted Hostinger lane prove expected productive start PASS and regular-copy/stale/sibling/downgrade/library-swap starts DENY before any writable Frank persistence open; repeat across restart and rollback.",
+  "outcome": "RETAIN_COUNTEREVIDENCE_AND_REENTER_F_V01_13",
+  "promotion": "DEFER",
+  "nonclaims": [
+    "No productive SQLite upgrade claimed",
+    "No productive root trust-anchor provisioning claimed",
+    "No accepted ProductStart PASS claimed",
+    "No F-V01-13 closure",
+    "No whole Frank v0.1 acceptance",
+    "No effect or Harness authority change",
+    "No final model training authorization"
+  ]
+}

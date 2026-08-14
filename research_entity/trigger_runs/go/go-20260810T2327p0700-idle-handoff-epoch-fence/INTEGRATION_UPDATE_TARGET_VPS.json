@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2327p0700-idle-handoff-epoch-fence",
+  "update_kind": "TARGET_VPS_ADJUDICATION",
+  "recorded_at": "2026-08-10T16:43:00Z",
+  "actor": "chatgpt-secondary",
+  "provider_model": "OpenAI/GPT-5.6 Sol",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate": {
+    "pull_request": 195,
+    "branch": "chatgpt/go-v16-idle-handoff-epoch-fence-v2-20260810",
+    "candidate_head": "b0b48e13c514e929aea44db5c2106b5b7ff372a4",
+    "github_merge_context_tested_sha": "a667677ed2cefd7fe374fe1b34d8f6d0ed648a4b",
+    "target_workflow_run": 31408572649,
+    "target_job": 93520866763,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_version": "2.336.0",
+    "git_version": "2.43.0"
+  },
+  "results": {
+    "checkout": "PASS",
+    "normal_v16_continuity_regression": "PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY",
+    "idle_confirmation_requires_released_lease_epoch": true,
+    "same_session_followup_count": 24,
+    "durable_request_idempotency": true,
+    "raw_token_persistence": false,
+    "exactly_one_go_oob": {
+      "name": "ABA_STALE_IDLE_CONFIRMATION_FENCE",
+      "count": 1,
+      "result": "PASS_FRANK_IDLE_HANDOFF_ABA_EPOCH_FENCE",
+      "first_released_lease_epoch": 1,
+      "superseding_released_lease_epoch": 2,
+      "stale_confirmation_reason": "HANDOFF_CONFIRMATION_EPOCH_MISMATCH",
+      "stale_confirmation_rejected": true,
+      "newer_handoff_remained_pending": true,
+      "autonomous_remained_blocked_after_stale_confirmation": true,
+      "matching_newer_epoch_confirmation_cleared_handoff": true,
+      "autonomous_allowed_only_after_current_confirmation": true
+    },
+    "repo_static_integrity": "FAIL",
+    "repo_static_integrity_failures": [
+      "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
+      "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/effect_terminal_runtime_v17_candidate.py"
+    ],
+    "artifact_id": 9071047254,
+    "artifact_sha256": "9d0c751ed0ebddc4168e7bfb32a325491fab6c7a07782110e5619539030d2bc5"
+  },
+  "adjudication": {
+    "epoch_fence_mechanism": "SUPPORTED_ON_ACCEPTED_TARGET_LANE",
+    "epoch_fence_promotion": "BLOCKED_BY_REPOSITORY_INTEGRITY_AND_FRESH_MAIN_MERGE_SAFETY",
+    "static_failure_attribution": "SEPARATE_REPOSITORY_INTEGRITY_BLOCKERS; NEITHER FAILURE IS IN THE EPOCH-FENCE FILES",
+    "whole_frank_acceptance": "NOT_CLAIMED"
+  },
+  "follow_on": {
+    "path_aware_runtime_test_false_positive": "PR_192_MECHANISM_ALREADY_TARGET_DISCRIMINATED_BUT_NOT_MERGED",
+    "v17_schema_authority_repair": "PR_209_TESTING",
+    "next_action": "Validate PR 209 on accepted target lane; if repository integrity becomes green, refresh PR 195 against current main and re-evaluate promotion."
+  },
+  "external_effect_performed": false,
+  "training_authorized": false
+}

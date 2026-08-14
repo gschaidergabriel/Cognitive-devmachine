@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0420p0700-gpt56sol-sqlite-cli-false-proof",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_head_observed_before_write": "8047916b5cbadaf9bf3e52807963ecd76d712b18",
+  "observed_reality": {
+    "accepted_target_productive_path": "Recent read-only accepted-target evidence separately reports /usr/bin/python3 loading SQLite 3.45.1 from /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6 with the production V5 root anchor absent.",
+    "repo_mechanism": "Current V5 admission candidates correctly prefer loaded-object identity via /proc/self/maps plus exact source/hash policy over CLI/PATH version strings.",
+    "question": "Can a trustworthy-looking sqlite3 CLI version/source report prove the SQLite object already loaded by the Frank process?"
+  },
+  "exactly_one_bounded_unusual_experiment_this_invocation": {
+    "count": 1,
+    "name": "PATH_CLI_FALSE_PROOF_COUNTERWORLD",
+    "scope": "Disposable local sandbox only; temporary PATH directory and fake sqlite3 executable; no Frank/VPS/canonical state or external effect mutated.",
+    "baseline": {
+      "python_sqlite_runtime_version": "3.46.1",
+      "mapped_library": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6"
+    },
+    "intervention": {
+      "mechanism": "Prepend a temporary fake sqlite3 executable to PATH.",
+      "reported_cli_version": "3.53.4",
+      "reported_cli_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+    },
+    "observation": {
+      "cli_looked_accepted": true,
+      "same_python_process_runtime_changed": false,
+      "same_python_process_remained_sqlite_version": "3.46.1",
+      "same_python_process_mapped_library_changed": false
+    },
+    "cleanup": "Temporary fake CLI/PATH tree removed.",
+    "additional_unusual_experiments": 0
+  },
+  "grf": {
+    "generated_reality": "An accepted sqlite3 CLI version/source tuple is sufficient evidence for the productive SQLite runtime.",
+    "counter_reality": "PATH/CLI reporting can be independently substituted while the already-running Frank process continues executing a different mapped SQLite object.",
+    "falsifier": "Make CLI identity report the accepted release while holding the already-loaded Python SQLite mapping constant.",
+    "predicted_if_generated_reality_right": "The productive process identity should necessarily match the CLI report.",
+    "predicted_if_counter_reality_right": "CLI identity changes while the productive process mapping/version stays unchanged.",
+    "outcome": "REJECT",
+    "collapse": "CLI_PATH_VERSION_EVIDENCE_NOT_RELEASE_AUTHORITY"
+  },
+  "integration": {
+    "architecture_delta": "NO_NEW_ARCHITECTURE: retain and strengthen the existing mapped-object / inode / hash / source-id admission direction; do not add sqlite3 --version or PATH discovery as release authority.",
+    "test_obligation": "Product acceptance must attest the exact SQLite object mapped by the exact Frank process and bind it to the trusted deployment/anchor lineage across restart and downgrade/library-swap controls.",
+    "related_product_candidate": "gschaidergabriel/Dr.-Unterweger#481 implements the separate pre-existing service-filesystem-namespace identity obligation; this receipt does not claim that PR is accepted-target PASS."
+  },
+  "counterevidence_and_nonclaims": {
+    "local_sandbox_is_product_runtime": false,
+    "sqlite_35304_productively_loaded_proven": false,
+    "production_anchor_provisioned": false,
+    "f_v01_13_closed": false,
+    "frank_v0_1_complete": false,
+    "training_authorized": false,
+    "together_used": false
+  }
+}

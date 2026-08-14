@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260810T1450p0700-chatgpt-secondary-wp02-v18-evidence-rescue",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "hypothesis": "The selected current V18 parser/canonicalizer bytes remain strict-green on the self-hosted Ubuntu proxy, and the prior evidence-loss window can be removed by making evidence sealing/upload a fail-closed part of the same execution lane.",
+  "strongest_counterhypothesis": "A green replay plus durable artifact cannot by itself create package, BASE, Andreas-target, Frank-Harness, or training authority; those decisions remain separate adjudication layers.",
+  "execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 99,
+    "workflow_run_id": 31367509555,
+    "job_id": 93389001475,
+    "workflow_head": "5f767f4c029e609cc68d8c18bbf25b22001f68de",
+    "result": "PASS",
+    "evidence_class": "SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_COMMITTED_CLAY_V18_WP02_REPLAY",
+    "runner": {
+      "name": "clay",
+      "machine": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "logical_cpu_count": 4,
+      "lark": "1.3.1",
+      "interegular": "0.3.3"
+    },
+    "exact_blobs": {
+      "frontend": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+      "canonicalizer": "5605e33c83ca75eb7ede7677328df622731e0461",
+      "v18_grammar": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+      "g9_v3": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+      "dialect_v3": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+      "runner_requirements_lock": "4a361757efede020cfb288ad7beda2c4a7e6c6b5"
+    },
+    "canonicalizer_pass": true,
+    "parity_pass": true,
+    "canonical_result_sha256": "e420f956fe3d1d523a75d52c8937207378b5d6f9fb8c07296da24b8b3ab531d1",
+    "parity_result_sha256": "5d9458eccdacd3bbb5a2dac9fc2d248e06d177f65c2889e9d0cf2d069607ab91",
+    "canonicalizer_resource": {
+      "wall_seconds": 0.57,
+      "user_seconds": 0.55,
+      "system_seconds": 0.02,
+      "max_rss_kb": 29568,
+      "major_page_faults": 0,
+      "minor_page_faults": 5111,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 88,
+      "exit_status": 0
+    }
+  },
+  "durable_artifact": {
+    "artifact_id": 9054719559,
+    "artifact_name": "clay-wp02-v18-committed-31367509555",
+    "artifact_zip_bytes": 7059,
+    "artifact_zip_sha256": "6c81dc31f6cd2bb96c337e8f412eaf15a54203f5d6e060af56746da281d01def",
+    "sealed_tar_sha256": "da39d69c5950da851ea61b6d989a93b1a6a396720a05461fddd6d8ee796d5ce5",
+    "aggregate_receipt_sha256": "c5236fb3f66c1fcbf976b8be1b537dc1c0f189fbea4883ddb1d2239cd6f67470",
+    "artifact_download_and_digest_reverification": "PASS",
+    "contained_files": [
+      "AGGREGATE_RECEIPT.json",
+      "canonical.json",
+      "canonical.stdout",
+      "canonical.time",
+      "parity.json",
+      "parity_probe.py"
+    ]
+  },
+  "exactly_one_out_of_box_experiment": {
+    "name": "EVIDENCE_SINK_LESION_RESCUE",
+    "lesion_run": 31367215810,
+    "lesion_execution": "PASS",
+    "lesion_artifact_sink": "FAIL_NO_FILES_FOUND",
+    "rescue_change": "Require the three core evidence files, seal them into a visible tarball, record its SHA-256, and configure upload-artifact with if-no-files-found=error.",
+    "rescue_run": 31367509555,
+    "rescue_execution": "PASS",
+    "rescue_artifact_sink": "PASS_ARTIFACT_9054719559",
+    "selection": "SUPPORTED_FOR_EVIDENCE_TRANSPORT_ONLY",
+    "interpretation": "Scientific execution success and durable evidence availability are separable properties. A release-relevant lane should fail closed when the evidence sink is absent even if the computation itself passed.",
+    "promotion": "NONE"
+  },
+  "external_primary_evidence_effect": [
+    "Current GitHub Actions documentation treats the upload-artifact digest as the SHA-256 identity used for artifact validation on download.",
+    "Current SLSA build guidance separates provenance existence/output digest/how-produced traceability from the semantic meaning or authority of a build result."
+  ],
+  "concurrency_reconciliation": {
+    "initial_local_adjudication": "WP02_OPEN_BASED_ON_WORKSPACE_1_4",
+    "fresh_conflicting_evidence_detected": true,
+    "newer_acceptance_receipt": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+    "fresh_workspace": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json schema_version 1.5",
+    "resolution": "NEWER_VERIFIED_ACCEPTANCE_OUTRANKS_THIS_WORKERS_STALE_OPEN_CLASSIFICATION"
+  },
+  "adjudication": {
+    "wp02_execution_replication": "SUPPORTED_EXACT_CURRENT_BYTES",
+    "wp02_formal_status": "PASS",
+    "wp02_decision_effect_of_this_receipt": "NO_CHANGE_ALREADY_PASS",
+    "wp02_acceptance_authority_ref": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+    "base_pass": false,
+    "andreas_target_acceptance": false,
+    "canonical_architecture_promotion": "NONE",
+    "frank_harness_mutation": false,
+    "training_authority": false,
+    "reason": "A fresher independently written acceptance receipt and workspace v1.5 already promote the same six V18 component identities to CC-WP-02 PASS. This rescue therefore strengthens reproducibility and durable evidence transport only. BASE release, Andreas target acceptance, Frank Harness authority and training remain unchanged."
+  },
+  "architecture_delta": "NO_CLAYCODE_SEMANTIC_CHANGE. Harden evidence transport so scientific PASS cannot silently coexist with missing durable artifacts.",
+  "next_falsifier": "CC-WP-03: execute the receipt-bound V18 FrontendArtifact -> TypedIR bridge and typed identity corpus on Ubuntu without silent reparse; preserve expected_surface and grammar binding fail-closed."
+}

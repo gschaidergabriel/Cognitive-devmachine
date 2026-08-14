@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_dauerbetrieb_doku",
+  "actor": "gabriel-claude/wp5",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "systemd timer for laeufer on frank-api. restart-safe. write wissen/clay/tore-ohne-actions.md: how it works, where log, how to stop.",
+  "done_when": "timer active, survives reboot sim, doku written",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: frank-api, frank-laeufer, yml2sh",
+  "source": {
+    "lauf": "20260813-054655",
+    "paket": "wp5",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-054655-wp5/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-054655-wp5/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 540,
+  "ergebnis_kurz": "systemd timer active on frank-api (15 min, Persistent, enabled). runner bug found+fixed in first live cycle (single-quoted env -> false red check), corrected. doku in wissen/clay/tore-ohne-actions.md. no reboot test on the shared research box.",
+  "bericht": "systemd on frank-api:\n /etc/systemd/system/frank-laeufer.service: Type=oneshot, root, WorkingDirectory=/root/frank-laeufer, ExecStart=python3 laeufer.py --once --limit 4, TimeoutStartSec=3600, Nice=10.\n /etc/systemd/system/frank-laeufer.timer: OnBootSec=3min, OnUnitActiveSec=15min, Persistent=yes, AccuracySec=30s.\n enabled + active. UnitFileState=enabled, symlink in timers.target.wants/, systemd-analyze verify clean rc=0. next fire 23:52:36 UTC.\n NO real reboot done: frank-api also runs the research actions-runner service, not mine to bounce. boot path verified by unit state + wants-symlink instead. say it plain.\n\nbug found and fixed DURING first live cycle: step env values were single-quoted by yml2sh, so ${GITHUB_REPOSITORY} reached the step literally -> git clone \"https://github.com/${GITHUB_REPOSITORY}.git\" -> rc=128 in 0.3s -> laeufer posted a FALSE red check on PR 558. stopped timer, added sh_wert() (double quote + escape), regenerated all 23 script, rerun: OK 5.4s, status corrected to success. verified via API: PR 558 sha ad3807e6 now has 2 green frank-laeufer contexts.\nlesson for fehlerbuch: a translated gate that fails in under a second is not a verdict, it is a runner bug. treat sub-second failure as suspect.\n\nalso bounded for continuous run: pilot gate paths reset to its declared filter (was empty for the pilot), PR list sorted updated-desc, --limit 4 per cycle. 241 open PR, so ~16 verdict/hour, freshest first. limit reports \"vertagt N\", never silently drops.\n\ndoku written: wissen/clay/tore-ohne-actions.md (where everything lives, how to start/stop/watch, the 2-broken-YAML finding, what is still open).\n"
+}

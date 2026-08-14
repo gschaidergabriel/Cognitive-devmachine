@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "package_id": "Q23-PKG-LIGHTWEIGHT-COUNTERBASELINES",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "finding": "The strongest current separate-feature counterhypothesis should not be represented by a second 2B-scale multimodal model. MobileCLIP2-S0 and DINOv3-S/16 provide much smaller/specialized adversarial baselines: MobileCLIP2-S0 publishes an 11.4M-parameter image encoder and mobile image latency; DINOv3 exposes frozen dense patch features usable with kNN/linear probes.",
+  "direct_sources": [
+    "apple/ml-mobileclip:README.md@3cbe24526ea10909c255e14ae6783ed039181b8f",
+    "facebookresearch/dinov3:MODEL_CARD.md@2bd45fb07beab1ad5f7a734608e79d5fd8899b42",
+    "QwenLM/Qwen3-VL-Embedding:README.md@273604572610ef6596c489f1a277539e8f2de81a"
+  ],
+  "source_class": "PRIMARY_PROJECT_AND_MODEL_DOCUMENTATION",
+  "fusion_disposition": "MANDATORY_COUNTERBASELINE_NOT_ARCHITECTURE_PROMOTION",
+  "why_qwen_embedding_is_not_default_counterbaseline": "The official Qwen3-VL-Embedding family starts at 2B and is designed as a full retrieval model. It is useful evidence that retrieval geometry needs training, but it violates the intended tiny-MVC resource posture as the first duplicate encoder baseline.",
+  "affected_hypotheses": ["H-Q23-LIGHTWEIGHT-BASELINE-01","H-Q23-FEATURE-STRATA-01"],
+  "test": "T-Q23-FEATURE-LADDER-01",
+  "confidence": "HIGH_BASELINE_EXISTENCE_LOW_FRANK_TARGET_PERFORMANCE"
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "tests": [
+    {
+      "test_id": "Q23-T-VSTG-MATRIX-01",
+      "stage": "H1_THEN_H2_H3_DIFFERENTIAL",
+      "purpose": "Determine whether action-grounded visual transition memory gives end-to-end benefit over Qwen-only, direct-memory and PAR/EAP baselines.",
+      "variants": ["QWEN_ONLY","DIRECT_MEMORY","PAR_EAP","VSTG_VISUAL_ONLY","VSTG_TASK_BOUND","VSTG_HYBRID_FINGERPRINT"],
+      "experience_dose": [0,1,2,4,8,16,32,64],
+      "experience_classes": ["EXACT_RECURRENCE","STATE_VARIANT","RELATIONAL_TRANSFER","NOVEL_ENTITY","CONFLICTING_EXPERIENCE","IRRELEVANT_SHAM_EXPERIENCE"],
+      "fault_controls": ["WRONG_HIGH_CONFIDENCE_SEED","SHUFFLED_TRANSITION_EDGES","STALE_UI_LAYOUT","VISUAL_TWIN_DIFFERENT_TASK_STATE","HIDDEN_OPERATION_CHANGE","NO_OP_EFFECT","FAILED_EFFECT","STALE_EPOCH_HASH","MMPROJ_FEATURE_VERSION_SWAP","CRASH_RESTART_REPLAY"],
+      "primary_metrics": ["task_action_correctness","wrong_action_rate","decoder_calls_per_correct_action","token_cost_per_correct_action","sensor_to_correct_decision_p50_p95_p99","transition_retrieval_precision_recall","false_familiarity","stale_transition_acceptance","memory_induced_sensor_override","post_action_verification_accuracy"],
+      "promotion_rule": "No promotion unless VSTG is Pareto-competitive end-to-end, wrong/stale transition acceptance is within frozen tolerance, direct-memory does not dominate it, and wrong/shuffled controls collapse the memory advantage.",
+      "execution_status": "NOT_RUN"
+    },
+    {
+      "test_id": "Q23-T-ALIAS-01",
+      "stage": "H1_REFERENCE_HARNESS",
+      "purpose": "Measure VISUAL_ALIAS_CONFLICT detection and safe abstention.",
+      "fixtures": ["same_screen_different_subgoal","same_screen_after_failed_action","same_visual_layout_different_account_or_document","near_identical_modal_hidden_state","stale_cached_screen_after_external_change"],
+      "metrics": ["conflict_precision","conflict_recall","unsafe_fast_path_rate","escalation_rate","net_latency_cost"],
+      "execution_status": "NOT_RUN"
+    },
+    {
+      "test_id": "Q23-T-TASKSTATE-NONADVANCE-01",
+      "stage": "BASE_EXPRESSIBILITY_THEN_H1",
+      "purpose": "Prove task/progress state cannot advance from visual similarity or retrieved memory without verified outcome receipts.",
+      "assertions": ["SCREEN_SIMILARITY_DOES_NOT_ADVANCE_TASK","RETRIEVED_TRANSITION_DOES_NOT_ADVANCE_TASK","FAILED_EFFECT_DOES_NOT_ADVANCE_TASK","VERIFIED_OUTCOME_MAY_ADVANCE_TASK_WITH_CAUSAL_IDENTITY"],
+      "execution_status": "NOT_RUN"
+    },
+    {
+      "test_id": "Q23-T-HYBRID-FINGERPRINT-01",
+      "stage": "H1_REFERENCE_HARNESS",
+      "purpose": "Test whether deterministic app/window/URL/accessibility/source metadata reduces visual aliasing under equal pathway cost.",
+      "variants": ["VISUAL_ONLY","VISUAL_PLUS_TASK_STATE","HYBRID_FINGERPRINT","HYBRID_WITH_METADATA_SHUFFLED","HYBRID_WITH_METADATA_MISSING"],
+      "metrics": ["state_identity_accuracy","unknown_rejection","alias_error_rate","latency","metadata_dependency_failure_rate","cross_application_transfer"],
+      "execution_status": "NOT_RUN"
+    }
+  ]
+}

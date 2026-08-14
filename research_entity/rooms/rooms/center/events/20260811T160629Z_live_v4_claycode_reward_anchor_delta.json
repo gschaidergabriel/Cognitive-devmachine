@@ -1,0 +1,331 @@
+{
+  "schema_version": "CLAY_CENTER_LIVE_RESEARCH_DELTA_V2",
+  "event_id": "20260811T160629Z_live_v4_claycode_reward_anchor_delta",
+  "created_at_utc": "2026-08-11T16:06:29Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "provider": "OpenAI",
+    "training_performed": false,
+    "external_target_execution_performed_by_this_actor": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "comparison_cut": {
+    "previous_notified_research_head": "f605eb4f93c5c822fa7ed7b256bfc3501a754ddd",
+    "previous_center_event_commit": "6078fb1a8a7dac556871545b90416c43e50d1f67",
+    "research_head_observed_before_write": "d2d54fb688727914b392604e89f452bfb82ff9bc",
+    "target_main_previous": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "target_main_observed": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+    "change_class": "SUBSTANTIVE_MULTI_DOMAIN_DELTA"
+  },
+  "canonical": {
+    "exact": {
+      "entity_version": "RAE-8.8",
+      "revision": 2,
+      "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+      "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+      "bootstrap_blob": "bef89f19ca9bee0aafe45ac3b610ef8ee339dfc0"
+    },
+    "anomaly_and_repair": {
+      "source_receipt": "research_entity/trigger_runs/claycode/claycode-20260811T2239p0700-chatgpt-secondary-current-main-composition/RESEARCH_RECEIPT.json",
+      "bad_tuple": "RAE-9.5/rev9/c956beb10704e98d04e84e555c8e12d91133df2cc2a61f8ad573d6d0091ecf32",
+      "correction_commit": "6e0f0336b0dc75e905aac515745d5fd825f219aa",
+      "correction_class": "APPEND_ONLY_FIELD_SUPERSESSION",
+      "adjudication": "Original receipt remains historical target evidence, but its canonical_boot field has zero current authority. No canonical advancement occurred."
+    }
+  },
+  "material_deltas": [
+    {
+      "id": "D-STORAGE-V4-MERGED-WITH-PREGUARD-GAP",
+      "domain_routes": [
+        "unifieddb",
+        "claygraph",
+        "frank",
+        "harness",
+        "recovery",
+        "productstart"
+      ],
+      "support": [
+        "Target main 94bc32c65520c984f62b5aad4c5723a4d8b2c357 merged PR359 after accepted-target V4 evidence.",
+        "Run 31507571217 / job 93832964447 / artifact digest sha256:d99d4b62c9f7ce7ac23dbef81ea37cf5198eb16bb6ff0d8e7905bb5633e7835d: -I alone fails closed; -I -S passes; private SQLite 3.53.4; V17 18/18; UnifiedDB+ClayGraph 9/9."
+      ],
+      "attack": [
+        "Fresh PRE_GUARD_PATH_DIRNAME_HIJACK locally executed attacker-shadowed dirname before Python/V4 and then allowed the genuine guard to continue.",
+        "Research receipt d2d54fb688727914b392604e89f452bfb82ff9bc; PR373 head 588ee32ae01f6e97dfce06e9d7d4b32e9a08610a; target run 31510437731 still QUEUED at cutoff."
+      ],
+      "adjudication": "V4 is merged bounded storage/startup substrate, not a complete ProductStart trust boundary. The merged launcher remains product-blocked until the pre-guard repair is target-green and installed service/byte/restart evidence exists."
+    },
+    {
+      "id": "D-CLAYCODE-CANONICAL-SUBSTRATE-AND-MOVING-FRONTIER",
+      "domain_routes": [
+        "claycode",
+        "frank",
+        "gwt",
+        "harness"
+      ],
+      "support": [
+        "Target main a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3 merged executable evaluator/package substrate; target main 0b765534e693707b813dab9ff7471189ee48ef91 merged scoped unary-negation/Boolean-boundary repair.",
+        "PR357 exact head 1c0a20d3ec412724f79bd444820c526722def8b5 passed run 31508724635 / job 93837809226: namespace 7/7, decide_effect 200576/0, effect hash 56000/0, confirmation 16000/0, corpus 36/40, calls 677/677, operator survival 8/8, unresolved 429 names/464 occurrences."
+      ],
+      "attack": [
+        "PR357 has moved to c5d54903232aa2d9356af5dd16cc6c9cc34f2718 and currently has no workflow receipts for that exact head; prior PASS is not current-head promotion evidence.",
+        "Four corpus sources, 22 callable MethodChain segments and 429/464 unresolved names/occurrences remain open."
+      ],
+      "adjudication": "Scoped main improvements are real. The 90% frontier is old-head target-supported but current-head revalidation pending; no F-V01-02 completion."
+    },
+    {
+      "id": "D-LOWERING-FIRST-TARGET-PASS-BUT-TYPE-BOUNDARY-OPEN",
+      "domain_routes": [
+        "claycode",
+        "harness",
+        "frank"
+      ],
+      "support": [
+        "Python-AST lowering run 31510276958 / job 93842059040 succeeded at exact head 74bc81aaff436e1c1b96f6365818bb8d222f9f38; artifact 9108775196 digest sha256:e1f0a6b7ea64c908b3f9869ea099bb61017faffa9980f4d84486596a7db02e07.",
+        "All recorded steps, including byte binding, syntax compilation, compiler differential, unchanged-tree check and evidence upload, succeeded."
+      ],
+      "attack": [
+        "Cross-backend review found both Python and C candidates lack nominal local-call argument-type and declared return-type admission; host coercion can escape the covered closure.",
+        "PR364 advanced to 1bb229db3e212ef8426d9d817107e4c109eca152 only to request current-main replay; run 31510501416 is QUEUED. PR366 C target run pending and contains the same call/return gap. PR369 nominal typecheck run 31510187996 is QUEUED."
+      ],
+      "adjudication": "First bounded old-head target lowering evidence, not current-main compiler promotion and not general compiler credit. Nominal typecheck must dominate codegen or equivalent backend-local proof must close the gap."
+    },
+    {
+      "id": "D-CAPABILITY-BODY-FRESH-MAIN",
+      "domain_routes": [
+        "frank",
+        "claygraph",
+        "unifieddb",
+        "harness"
+      ],
+      "support": [
+        "PR335 fresh-main head d5c5a55436512e4b106f90e93f0e4c7f91a02a3d passed dedicated run 31508059904 / job 93834595036.",
+        "Artifact 9108253359 digest sha256:29ca4a51d0f880bc0237277e410ff67d3f765c7caf810385a33b3abeca733d34; steps cover normal capability/body, generation freshness/revocation, exact executable identity, legacy migration, in-flight revocation and GHOST_PEER_ROOT_CROWN."
+      ],
+      "counterevidence": "Two successful git --version probes support only that exact operation; external peer CAN_DELEGATE, calibration/OOD, sealed snapshot preference and effect/Harness authority composition remain open.",
+      "adjudication": "TARGET_MEASURED_PARTIAL; presence never becomes SELF/body/effect/Harness authority."
+    },
+    {
+      "id": "D-TRAINING-FREEZE-IDENTITY",
+      "domain_routes": [
+        "training-data",
+        "frank",
+        "harness",
+        "claycode"
+      ],
+      "support": [
+        "Exact-head F-V01-14 run 31508396616 / job 93835719489 succeeded on 4b907a9287c07b43957a2002fd2458660301dbe3; artifact 9108297609 digest sha256:c16419b2fb243361e01e7a1c8ac078bfc7d28d3c1b1e98febd5430bee32d18ec.",
+        "Earlier run 31507749378 is correctly retained only as PASS_PR_MERGE_REF_INTEGRATION because GITHUB_SHA was synthetic merge ef6aa256..., not PR head."
+      ],
+      "counterevidence": [
+        "PR347 is now behind/conflicting with main and has no current-main composition credit.",
+        "Historical v26.1 corpus must remain QUARANTINE_FOR_CURRENT_SEMANTIC_MIGRATION_REVIEW; exact bytes/audit content and current-contract compatibility are not closed.",
+        "Semantic-family receipt binding does not prove complete paraphrase/translation cleanliness."
+      ],
+      "adjudication": "Freeze mechanism exact-head supported; no real corpus frozen and no training authorized or performed."
+    },
+    {
+      "id": "D-REWARD-TERMINAL-BRIDGE-AND-FRONTIER",
+      "domain_routes": [
+        "gwt",
+        "unifieddb",
+        "claygraph",
+        "frank",
+        "emergenz"
+      ],
+      "support": [
+        "Recomposed terminal reward bridge run 31508591628 passed 10/10 on tested merge 78d9c1d313786e263b7838f95a742e427899d924; artifact 9108534007 digest sha256:76267b39965cf096ec09497cae737c3c3957a9b4a921af58026067d70514d65c.",
+        "Caller fractional credit is refused; default abstains; V17 DONE + bound reentry is required; verified bound failure can yield negative utility."
+      ],
+      "attack": [
+        "The receipt fold still exposed caller selection of TASK/SAFETY/RESOURCE, which is downstream control authority.",
+        "A stable fold can be only a valid prefix when a new DONE becomes durable during reading; source frontier/currentness was unbound.",
+        "PR368 now proposes code-owned binary TASK plus DONE-frontier revalidation, but its current head 7340adc7e994211cb1c1e75ac328b63c120f047a has no current receipt."
+      ],
+      "adjudication": "Terminal bridge interface hardening is target-supported. Fractional credit, producer-owned multidimensional valuation, source rollback/replacement and current-frontier proof remain open."
+    },
+    {
+      "id": "D-BUILD-TRUST-SUBJECT-BINDING",
+      "domain_routes": [
+        "productstart",
+        "frank",
+        "recovery",
+        "harness"
+      ],
+      "support": [
+        "Local cryptographic ATTESTATION_SUBJECT_SWAP falsifier in research commit 230c3b16322b56b32771a07d84f9dbd20387885b: signature/repository/workflow-only verifier allowed artifact B; subject-digest-bound verifier denied B.",
+        "This supports non-substitutability of exact subject digest within a conjunctive BuildTrustBundle."
+      ],
+      "counterevidence": "Synthetic ephemeral-key local result only. Current account entitlement for private GitHub attestations, owner trust/privacy policy, target verifier/root rotation and installed-byte composition remain unverified.",
+      "adjudication": "SUPPORTED_ARCHITECTURE_REFINEMENT; no production trust policy selected."
+    },
+    {
+      "id": "D-TASK-SWITCH-CONSENT",
+      "domain_routes": [
+        "frank",
+        "unifieddb",
+        "api",
+        "harness"
+      ],
+      "support": "PR370 local candidate 10/10 and stale-consent-after-task-revision OOB passed in isolated candidate logic.",
+      "counterevidence": "Target run 31509948272 is QUEUED; stable authenticated principal, producer-owned task snapshot, crash-between-consume-and-switch and concurrent double-consume remain open.",
+      "adjudication": "CANDIDATE_ONLY; no task cancellation/admission/effect executed."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-CANONICAL-ANCHOR-CAS-001",
+      "claim": "A research receipt may contribute to canonical routing/promotion only if its canonical tuple is validated against the current canonical and bootstrap tuple at write time and the validation identity is receipt-bound.",
+      "counterhypothesis": "Canonical boot metadata is advisory; target artifact/run identity alone is sufficient.",
+      "discriminator": "Replay identical valid target evidence with current, stale, future and unknown canonical tuples. Preserve all raw evidence, but only current/supersession-valid tuples may receive canonical routing credit.",
+      "falsifier": "Any stale/future tuple receives canonical promotion, or a valid target result is deleted rather than preserved as noncanonical evidence."
+    },
+    {
+      "id": "H-STARTUP-CODE-CLOSURE-001",
+      "claim": "ProductStart safety requires closure over every executable surface before the first attested runtime guard, not merely the interpreter import graph.",
+      "counterhypothesis": "Inherited shell PATH/environment is outside the ProductStart threat model because service ownership fixes it.",
+      "discriminator": "Run the installed service and launcher under controlled PATH/helper, LD_PRELOAD, Python site/.pth, working-directory and manifest substitutions. Any pre-guard marker or unbound byte aborts before state open.",
+      "falsifier": "Attacker-controlled pre-guard code executes while the downstream V4 receipt still passes."
+    },
+    {
+      "id": "H-TYPECHECK-DOMINATES-CODEGEN-001",
+      "claim": "A single nominal ClayCode admission proof over the source/typed tree should dominate every backend, preventing Python and C host coercion from becoming accidental semantics.",
+      "counterhypothesis": "Backend-local guards are simpler and sufficient; a shared checker creates correlated blind spots.",
+      "discriminator": "Cross backend matrix: Bool-to-Int/Int-to-Bool call arguments, wrong return type, ambiguous variant, non-Bool condition, multi-chain and host intrinsic. Compare shared-checker-only, backend-only and both, with lesion/sabotage.",
+      "falsifier": "Any backend executes a program rejected by the bound nominal proof, or both accept a host-coercion mutant."
+    },
+    {
+      "id": "H-PROJECTION-EXACTLY-ONCE-LINEAGE-001",
+      "claim": "Deterministic unique-receipt folding gives exactly-once derived reward only relative to a bound, revalidated source frontier and lineage.",
+      "counterhypothesis": "A mutable transactional consumption ledger is necessary for incremental scale and causal audit.",
+      "discriminator": "Concurrent new DONE during fold, source rollback/fork, policy change, cache resurrection/corruption and million-receipt scaling. Compare full deterministic rebuild, frontier-bound incremental fold and mutable ledger.",
+      "falsifier": "A projection labelled current omits/duplicates a committed source event, or source rollback silently revives/removes reward."
+    },
+    {
+      "id": "H-EVALUATION-IDENTITY-BIFURCATION-001",
+      "claim": "PR head and PR synthetic/current-main merge tree are distinct evidence identities; release integration needs both or an exact two-parent current-main receipt.",
+      "counterhypothesis": "Merge-only testing exactly models the future release and makes head-only evidence redundant.",
+      "discriminator": "Construct head-green/merge-red and head-red/merge-green controls; require receipts to state exact identity and forbid cross-identity promotion.",
+      "falsifier": "A green run on one identity is represented as proof for the other."
+    },
+    {
+      "id": "H-PRODUCTSTART-CONJUNCTION-001",
+      "claim": "Storage runtime, startup code closure, builder provenance, exact subject/install bytes, unique state lineage, owner identity, exclusive live instance and installed restart recovery are non-substitutable ProductStart axes.",
+      "counterhypothesis": "The full AND gate is overconservative; some axes are redundant under an owner-controlled deployment channel.",
+      "discriminator": "Authority Cut-Set Tomography: hold all but one axis green, remove or swap the remaining proof, and observe whether boot/effect/state admission still occurs.",
+      "falsifier": "Any missing axis can be removed without changing effective authority across fresh boot, crash restart, rollback and sibling-state transplant."
+    },
+    {
+      "id": "H-TASK-SWITCH-SNAPSHOT-CONSENT-001",
+      "claim": "Unrelated-task switching during a nonterminal task needs one-shot consent bound to stable principal, execution epoch and exact source-task revision.",
+      "counterhypothesis": "Canonical task lifecycle plus ordinary authenticated follow-up intent is sufficient; sidecar consent duplicates state.",
+      "discriminator": "Revision advance, credential rotation with stable principal, session/client swap, crash after consume, and two concurrent consumers.",
+      "falsifier": "Stale or replayed consent changes task authority, or legitimate same-task continuation is blocked."
+    }
+  ],
+  "novel_concepts": [
+    {
+      "name": "Receipt Wormhole",
+      "definition": "Valid evidence connected to an impossible/stale/future canonical anchor; evidence survives, promotion credit does not."
+    },
+    {
+      "name": "Pre-Guard Shadow Cone",
+      "definition": "The transitive set of shell helpers, loaders, environment hooks and path resolutions that can execute before the first attested runtime guard."
+    },
+    {
+      "name": "Host-Coercion Wormhole",
+      "definition": "A typed source crosses an unchecked call/return boundary and re-enters after the host silently converts its value."
+    },
+    {
+      "name": "Projection Ghost",
+      "definition": "A reward event disappears or reappears because source lineage/frontier, policy and derived cache are not jointly bound."
+    },
+    {
+      "name": "Authority Cut-Set Tomography",
+      "definition": "Lesion one proof axis at a time while all others remain green to identify which evidence actually controls boot/effect/state authority."
+    }
+  ],
+  "provenance_and_deduplication": {
+    "rules_applied": [
+      "PR310 commits, merge and research receipts count as one evaluator-substrate lineage.",
+      "PR359 V3 falsifier, V4 repair, merge and PR373 pre-guard attack count as one evolving startup/storage lineage.",
+      "PR332 reward fold, terminal bridge, NAcc replay and PR368 authority/frontier repair count as one reward lineage, not independent replications.",
+      "Supervisor/hypofusion/center summaries route evidence but do not add independent support.",
+      "Target jobs on the same runner/project/semantic bytes are correlated operational evidence.",
+      "Cancelled, queued, pending, skipped and hosted failures without diagnostic step evidence receive zero semantic credit."
+    ],
+    "independent_replication_claimed": false
+  },
+  "preserved_nulls_and_negatives": [
+    "V3 first attacker run was inconclusive because the attacker fixture had a syntax error.",
+    "Clock-drift synthetic topology had no categorical error through the tested mutation but is not evidence of safety.",
+    "PR364 earlier cancelled runs had no executed semantic steps; zero credit.",
+    "Current PR357/PR364/PR368 heads lack current exact receipts at cutoff despite older-head successes.",
+    "PR366 target is pending; hosted failure and PR357 broad-workflow failures are not diagnosed semantic counterevidence.",
+    "LCOP dual-workspace factorial is designed/queued only; no model-internal or live Frank execution.",
+    "Historical training reports and currently visible claims about exact v26.1 train bytes are not a current-contract audit.",
+    "No consciousness/emergence claim follows from GWT, LCOP, synthetic topology or self-report."
+  ],
+  "routing_impulses": [
+    {
+      "consumers": [
+        "continuity",
+        "center",
+        "all receipt writers"
+      ],
+      "action": "Implement pre-write canonical tuple CAS/supersession validation and preserve stale-anchor receipts as noncanonical evidence."
+    },
+    {
+      "consumers": [
+        "storage",
+        "ProductStart",
+        "UnifiedDB",
+        "recovery"
+      ],
+      "action": "Finish PR373 target discrimination, then bind installed service, launcher, private SQLite, manifest, state lineage and stop/start/crash-restart in one exact-byte receipt."
+    },
+    {
+      "consumers": [
+        "ClayCode WP04",
+        "Python lowering",
+        "C lowering"
+      ],
+      "action": "Compose PR369 nominal admission before codegen; add call-argument and return-type negative controls to both backends; revalidate exact current main and report backend ancestry correlation."
+    },
+    {
+      "consumers": [
+        "reward",
+        "GWT",
+        "UnifiedDB",
+        "ClayGraph"
+      ],
+      "action": "Run PR368 ordinary/source-frontier/DIMENSION_CROWN_SWAP gates; then compare code-owned binary TASK against producer-owned typed/multiscale valuation on frozen replay/OOD/resource data."
+    },
+    {
+      "consumers": [
+        "training-data",
+        "heldout",
+        "harness"
+      ],
+      "action": "Recompose PR347 on current main, require both head and merge identities, audit real corpus bytes against a current semantic-contract receipt, keep HELDOUT/ADVERSARIAL protected; do not train."
+    },
+    {
+      "consumers": [
+        "F-V01-08 API",
+        "UnifiedDB",
+        "recovery"
+      ],
+      "action": "Complete target task-switch lane, then test stable-principal rotation, consume/switch crash window and concurrent double-consume without granting effect authority."
+    }
+  ],
+  "promotion_boundary": {
+    "canonical_state_changed": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "final_training_authorized": false,
+    "training_performed": false,
+    "productstart_pass": false,
+    "frank_harness_mutation_authority_changed": false
+  }
+}

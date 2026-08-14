@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2238p0700-chatgpt-secondary-v4-fresh-main-pending",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "training_authorized": false,
+  "identity_lock": {
+    "worker_is_not_frank": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "single_new_go_oob": {
+    "count": 1,
+    "experiment": "GO_OOB_PYTHONPATH_SQLITE_MODULE_SHADOW",
+    "pr": 336,
+    "run": 31503138219,
+    "result": "SUPPORTED_FAIL_OPEN_PYTHONPATH_SQLITE_MODULE_SHADOW",
+    "note": "No second newly designed OOB was introduced after this result. V4 system-site startup evidence came from a concurrent worker and was only reused as an ordinary repair regression."
+  },
+  "fresh_swarm_adjudication": {
+    "v3_disposition": "REFUTED_AS_SUFFICIENT",
+    "reason": "Concurrent target evidence showed .pth/sitecustomize startup code can mutate the genuine stdlib sqlite3 module before a V3 -I-only guard executes.",
+    "v4_disposition": "PREFERRED_TARGET_SUPPORTED_CANDIDATE",
+    "boundary": "python3 -I -S before any import-capable Frank Python code",
+    "source_pr": 348,
+    "source_target_run": 31505915434
+  },
+  "cleanup": {
+    "pr_353": "CLOSED_SUPERSEDED_V3_ONLY",
+    "pr_341": "CLOSED_SUPERSEDED_STALE_STACK",
+    "pr_333": "CLOSED_NOT_SELECTED_DELETE_FALLBACK"
+  },
+  "fresh_main_v4_lane": {
+    "pr": 359,
+    "branch": "chatgpt/sqlite-v4-fresh-main-product-boot-20260811",
+    "head": "5466b52d13284ce325c8e26f7d0b90e7636283d9",
+    "target_main_observed_after_pr_open": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "mergeable": true,
+    "purpose": "Revalidate exact V1/V2/V3/V4 storage admission against current relevant main runtime bytes without blind-rebasing the 34-commit historical V4 stack.",
+    "current_main_relevance_binding": {
+      "v17_blob_main": "22efd92b1b92cb5b0b9ebf2442ddd055bc68aa76",
+      "v17_blob_pr359": "22efd92b1b92cb5b0b9ebf2442ddd055bc68aa76",
+      "apply_current_schema_blob_main": "cf72e1f8b0b8a80b94471d51d1664e7d3eefdbee",
+      "apply_current_schema_blob_pr359": "cf72e1f8b0b8a80b94471d51d1664e7d3eefdbee",
+      "interpretation": "The intervening main commits are ClayCode changes; the exact V17 and schema bytes composed by the storage test are identical between current main and PR359."
+    },
+    "target_workflow": {
+      "run": 31507571217,
+      "job": 93832964447,
+      "observed_status": "QUEUED",
+      "conclusion": "UNKNOWN_PENDING_EXECUTION",
+      "rule": "Do not promote queued as pass."
+    },
+    "candidate_launcher": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v4_launcher.sh",
+    "launcher_contract": "/usr/bin/python3 -I -S -> V4 guard",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "architecture_delta": {
+    "status": "PENDING_TARGET_REVALIDATION",
+    "component": "F-V01-13 security/recovery/observability storage boot",
+    "preferred_direction": "V4 pre-import admission plus immutable private SQLite identity; reject target system-SQLite WAL fallback.",
+    "strongest_remaining_counterhypothesis": "The actual installed Frank service can execute import-capable code, mutate search/import/runtime state, or fall back to system SQLite before or outside the V4 boundary.",
+    "next_gate": "Resolve the canonical installed product entrypoint, bind service/config/launcher/private-SQLite bytes, then run real runtime graph plus stop/start/crash-restart recovery on accepted target."
+  },
+  "evidence_discipline": {
+    "target_run_pending_is_not_success": true,
+    "shared_ancestry_is_not_independent_replication": true,
+    "whole_product_atomic_pass_not_inferred_from_component_passes": true,
+    "system_sqlite_wal_product_credit": "REJECTED"
+  },
+  "research_write_disposition": "COMMIT_PENDING_HANDOFF_WITHOUT_PROMOTION"
+}

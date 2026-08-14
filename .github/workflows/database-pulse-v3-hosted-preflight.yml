@@ -13,6 +13,8 @@ on:
       - 'research_entity/runtime/test_database_pulse_rank_path_v4.py'
       - 'research_entity/runtime/database_pulse_rank_path_v5.py'
       - 'research_entity/runtime/test_database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/database_pulse_runtime_v5.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v5.py'
       - 'research_entity/runtime/database_pulse_model_organ.py'
       - 'research_entity/runtime/test_database_pulse_model_replacement_identity.py'
       - 'research_entity/runtime/auth_shadow_focus_guard.py'
@@ -40,7 +42,7 @@ jobs:
           clean: true
           persist-credentials: true
 
-      - name: Compile and test Pulse rank semantics, lifecycle, identity, and focus integrity
+      - name: Compile and test Pulse rank semantics, lifecycle, full Runtime V5, identity, and focus integrity
         run: |
           set -euo pipefail
           python3 -m py_compile \
@@ -52,6 +54,8 @@ jobs:
             research_entity/runtime/test_database_pulse_rank_path_v4.py \
             research_entity/runtime/database_pulse_rank_path_v5.py \
             research_entity/runtime/test_database_pulse_rank_path_v5.py \
+            research_entity/runtime/database_pulse_runtime_v5.py \
+            research_entity/runtime/test_database_pulse_runtime_v5.py \
             research_entity/runtime/database_pulse_model_organ.py \
             research_entity/runtime/test_database_pulse_model_replacement_identity.py \
             research_entity/runtime/auth_shadow_focus_guard.py \
@@ -64,6 +68,7 @@ jobs:
             research_entity.runtime.test_database_pulse_runtime_v3 \
             research_entity.runtime.test_database_pulse_rank_path_v4 \
             research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
             research_entity.runtime.test_database_pulse_model_replacement_identity \
             research_entity.runtime.test_auth_shadow_focus_guard
 
@@ -119,7 +124,7 @@ jobs:
           assert c['rank_index_verify_initial']['pass'] is True,bench
           assert c['rank_index_verify_final']['pass'] is True,bench
           print('PULSE_RUNTIME_V3_HOSTED_PREFLIGHT=PASS')
-          print('PULSE_RANK_V4_V5_LIFECYCLE_GATE=PASS')
+          print('PULSE_RUNTIME_V5_TWO_PHASE_LIFECYCLE_GATE=PASS')
           print('PULSE_MODEL_REPLACEMENT_IDENTITY_GATE=PASS')
           print('PULSE_AUTH_SHADOW_FOCUS_USE_BOUNDARY_GATE=PASS')
           PY

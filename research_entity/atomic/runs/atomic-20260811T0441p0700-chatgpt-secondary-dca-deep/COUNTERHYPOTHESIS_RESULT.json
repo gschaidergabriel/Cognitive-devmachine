@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "strongest_counterhypothesis":"ordinary query-aware CognitiveView + safe decision-focused greedy cover + query-relative completeness metadata + existing selector/dependency hashes can reproduce DCA semantics with less complexity",
+  "local_result":"SUPPORTED_FOR_SELECTION / UNRESOLVED_FOR_TYPED_BOUNDARY",
+  "evidence":[
+    "SAFE_DECISION_COVER and DCA_SELECTION have identical 0.9743 decision certification and identical uncovered-pair rate in the 3000-case discriminator; DCA adds witness cost.",
+    "The local negative benchmark supports query-relative current completeness semantics, but it does not show that a dedicated DCA type is superior to ordinary metadata carrying the same fields.",
+    "Current G9 already contains selector_hash and dependency_hash, reducing the need for new runtime machinery."
+  ],
+  "verdict":"DCA is refuted as a distinct selector/runtime structure. Retain only the typed model-boundary candidate until a mutation/non-bypass test distinguishes it from the conventional metadata bundle.",
+  "kill_next":"If matched target/compiler mutations show the conventional metadata bundle rejects the same unsafe absence/omission/stale mutants with equal false-positive rate and lower implementation complexity, kill DCA completely."
+}

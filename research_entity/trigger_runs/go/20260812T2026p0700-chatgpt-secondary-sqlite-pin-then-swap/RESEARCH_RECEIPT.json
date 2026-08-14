@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2026p0700-chatgpt-secondary-sqlite-pin-then-swap",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:26:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "531d6615b4b9a6ed0d7ddf407ef65b65cc086d16",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "d7307539d9d30940a1761f5e567374e951a2ea48",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Current main has merged SQLite V6 source-byte pins and loader/path hardening, while productive installation, restart/recovery, rollback/downgrade/library-swap and semantic-lineage acceptance remain open. The current launcher hashes six guard source pathnames and later execs Python, which reopens those pathnames during import.",
+    "duplicate_avoidance": [
+      "PR #467 already covers mapped SQLite inode/path replacement after DSO load",
+      "PR #513 already covers stale parallel root-owned ProductStart identity and explicitly leaves anti-rollback freshness open",
+      "This run tests a distinct pre-Python source-chain coherence window: verified pathname bytes can change between shell hash and Python import during a legitimate multi-object release update"
+    ]
+  },
+  "observed_reality": {
+    "target_main": "d7307539d9d30940a1761f5e567374e951a2ea48",
+    "launcher": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v6_launcher.sh",
+    "launcher_behavior": "For each V6->V1 guard pathname, verify ownership/link shape and SHA-256 using pathname tools, then later exec /usr/bin/python3 -I -S on the V6 guard pathname. V6 and lower guards import sibling source files by pathname.",
+    "current_merged_scope": "V6-to-V1 source release bytes are pinned; productive install/root anchor/actual Frank process mapping/restart/recovery/rollback/downgrade/library-swap remain open.",
+    "sqlite_release_identity": {
+      "version": "3.53.4",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "upstream_wal_reset_fix_lineage": true
+    }
+  },
+  "hypothesis": "Exact guard SHA-256 checks performed before Python exec are sufficient to prove that Python later executes/imports those same source bytes.",
+  "strongest_counterhypothesis": "Because the launcher hashes by pathname and Python later reopens by pathname, an atomic replacement after the hash check can produce a different executable source view even though the precheck passed. Root-only path ownership blocks an unprivileged caller but does not eliminate legitimate root deployment/update races, which are release-correctness relevant during start/restart/upgrade.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "PIN_THEN_SWAP_GUARD_PATH_REOPEN",
+    "class": "release-coherence / hash-to-reopen TOCTOU counterworld",
+    "reversible": true,
+    "disposable_state": true,
+    "product_bytes_modified": false,
+    "canonical_state_mutated": false,
+    "external_effect": false,
+    "method": "In a disposable local directory, write pinned guard bytes and record their SHA-256. Baseline: hash then execute the same path unchanged. Treatment: restore pinned bytes, verify the same expected hash, atomically os.replace() a different source file over the pathname, then execute that pathname with Python.",
+    "expected_pinned_sha256": "4cf33c8385ea8d0c939d77b3899be5c89f5ca3570b3693141f0ea6405ad48c02",
+    "baseline_precheck_match": true,
+    "baseline_stdout": "PINNED_GUARD_EXECUTED",
+    "treatment_precheck_match": true,
+    "treatment_after_swap_sha256": "e2fbeff1444d953e88ddaa1526e2af4fbc9f1cc9db2f33c29839b0c11c73bfe2",
+    "treatment_stdout": "SWAPPED_GUARD_EXECUTED",
+    "result": "COUNTERWORLD_SUPPORTED",
+    "scope": "Demonstrates the generic pathname hash->reopen mechanism. It is not a claim that an unprivileged Frank caller can mutate root-owned production guards, and it does not prove that such a race has occurred on Hostinger."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "WAL-reset bug is documented through 3.51.2 and fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "3.53.4 is in the fixed lineage and exposes the exact project-pinned SQLITE_SOURCE_ID."
+    },
+    {
+      "source": "GNU C Library Dynamic Linker Hardening",
+      "url": "https://sourceware.org/glibc/manual/2.43/html_node/Dynamic-Linker-Hardening.html",
+      "finding": "glibc warns against in-place updates of active program/shared-object files and warns that multi-object updates can let concurrently starting processes observe inconsistent combinations of old and new objects."
+    }
+  ],
+  "grf_collapse": {
+    "prehash_equals_executed_source_identity": "REJECT",
+    "root_ownership_blocks_unprivileged_path_mutation": "RETAIN",
+    "source_hash_pins_are_still_useful": "RETAIN",
+    "source_hash_pins_alone_prove_atomic_multi-file_release_view": "REJECT",
+    "productive_f_v01_13_acceptance": "DEFER"
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_TEST_OBLIGATION",
+    "affected": [
+      "F-V01-13 security/recovery/observability",
+      "SQLite V6->V1 source-chain admission",
+      "ProductStart release identity",
+      "restart/upgrade/rollback continuity"
+    ],
+    "supported_change": "Final ProductStart/storage acceptance must prove an atomic or otherwise stable executable release view across the shell hash -> Python exec -> sibling import window. Exact pathname hashes are necessary but not sufficient if a privileged deployment update can replace release files between verification and import.",
+    "candidate_repair_realities": [
+      "Immutable/content-addressed release directories that are never modified in place, with atomic whole-release activation and old-release retention for already-starting processes",
+      "Stable opened-file/inode or sealed-object execution/import design for the complete guard chain",
+      "A machine-checked deployment protocol that excludes concurrent release mutation during ProductStart admission and proves rollback/downgrade behavior"
+    ],
+    "strongest_counter_reality": "If the accepted production deployment contract already proves that the root-owned guard directory is immutable for the entire admission interval and release activation is atomic, the generic counterworld may be unreachable in production; this must be demonstrated rather than inferred from root ownership.",
+    "next_discriminating_test": "On an exact-current candidate release tree, start a controlled ProductStart admission while a privileged test updater attempts an atomic whole-file replacement between source pin verification and Python import. Require either stable execution of the pinned release or deterministic fail-closed denial; never admit a mixed release.",
+    "rollback": "No product repair was merged by this research run. Preserve current V6 source pins; add the coherence gate as a new obligation rather than weakening existing checks."
+  },
+  "coordination": {
+    "open_productstart_pr": 513,
+    "productstart_run_31565066855": "CANCELLED",
+    "note": "PR #513 remains draft/open and its documented target run did not complete. Fresh-current recomposition should include this release-coherence obligation instead of treating #513 as current target PASS."
+  },
+  "nonclaims": [
+    "No whole Frank v0.1 acceptance",
+    "No accepted Hostinger production mutation",
+    "No root provisioning",
+    "No claim that SQLite 3.53.4 itself is vulnerable to the WAL-reset bug",
+    "No claim of root compromise or unprivileged privilege escalation",
+    "No Harness authority change",
+    "No effect-authority change",
+    "No final model training authorization"
+  ],
+  "next_frontier": [
+    "Recompose ProductStart identity/current source-chain work on fresh main and add a deterministic mixed-release coherence gate",
+    "Obtain productive Hostinger ProductStart/root-anchor/actual-process evidence",
+    "Then execute clean start/restart plus rollback/downgrade/library-swap and semantic-lineage recovery acceptance"
+  ]
+}

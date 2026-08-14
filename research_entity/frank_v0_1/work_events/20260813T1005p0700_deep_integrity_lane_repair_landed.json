@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "event_type": "FRANK_V0_1_GATE_INSTRUMENT_REPAIR_LANDED",
+  "status": "REPAIR_MERGED_TO_MAIN / MECHANISM_MEASURED / PROPAGATION_INCOMPLETE",
+  "created_at": "2026-08-13T10:05:00+07:00",
+  "actor": "claude-code / Anthropic / Claude Opus 5",
+  "actor_role": "PRIMARY_ARBITER / claude-code-lead",
+  "owner_program": "FRANK_V0_1",
+  "target": "gschaidergabriel/Dr.-Unterweger .github/workflows/frank-deep-integrity.yml at main@925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+  "evidence": "research_entity/frank_v0_1/evidence/20260813T1005p0700_lane_repair_merge_and_propagation_measurement.json",
+  "report": "research_entity/reports/20260813T1005p0700_DEEP_INTEGRITY_LANE_REPAIR_LANDED_AND_PROPAGATION_LAW.md",
+  "headline": "PR 565 merged: the 'integrity' gate now runs on the self-hosted lane on main (21 executed steps, runner 'clay', success). Merging alone repairs nothing on the 227 remaining red pull requests: a pull_request run executes the workflow file carried by the PR head, not by main. Measured on PR 567: close/reopen after the merge still produced ubuntu-latest with 0 steps and failure; only branch-update against main flipped the same head to self-hosted, 21 steps, success.",
+  "measured_at": "2026-08-13T03:05Z",
+  "repair": {
+    "pull_request": 565,
+    "title": "ci: restore Deep Integrity on current isolated self-hosted lane",
+    "merged_at": "2026-08-13T02:56:27Z",
+    "merge_commit": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+    "files_changed": [".github/workflows/frank-deep-integrity.yml"],
+    "diff_of_substance": {"before": "runs-on: ubuntu-latest", "after": "runs-on: [self-hosted, Linux, X64]"},
+    "post_merge_push_run": {"run": 31662361357, "branch": "main", "conclusion": "success", "runner": "clay", "labels": ["self-hosted","Linux","X64"], "steps_executed": 21}
+  },
+  "propagation_law": {
+    "claim": "For pull_request events the workflow definition in effect is the one on the pull request head lineage, so a main-only fix does not retroactively change any open pull request verdict until that branch ingests main.",
+    "controlled_test_pr": 567,
+    "head_before": "7368fec62a87dfa54b0cf597b899297d55bc3cd4",
+    "head_after_branch_update": "d89755c2ec16dce02c1fb3d6fab1f49e2c6c3abd",
+    "trials": [
+      {"intervention": "close+reopen after main merge", "run": 31662464840, "workflow_runs_on_resolved": "ubuntu-latest", "runner_name": "", "steps_executed": 0, "conclusion": "failure"},
+      {"intervention": "update-branch against main", "run": 31662607317, "workflow_runs_on_resolved": "self-hosted", "runner_name": "clay", "steps_executed": 21, "conclusion": "success"}
+    ],
+    "file_state_check": {"branch_head_before": "runs-on: ubuntu-latest (line 11)", "main": "runs-on: [self-hosted, Linux, X64] (line 18)"},
+    "single_varied_factor": "presence of main lineage in the pull request head; gate content, repository, runner pool and account state held constant"
+  },
+  "surface_state_after": {
+    "open_pull_requests": 244,
+    "red_on_integrity_before": 228,
+    "repaired_so_far": 1,
+    "remaining_red_on_integrity": 227,
+    "remaining_action_required": "branch-update each remaining head against main; no product change involved"
+  },
+  "banal_causes_excluded": [
+    "measurement error: both trials read from the Actions jobs API on the same run family",
+    "caching: two runs minutes apart on the same repository and runner pool",
+    "model change: no model participates in gate execution",
+    "context length: not applicable to CI execution",
+    "chance: outcome is deterministic across the two lanes, 0 vs 21 executed steps",
+    "memory note instead of measurement: every number here comes from a live API read at 2026-08-13T03:05Z"
+  ],
+  "significance": "The billing artifact census of 2026-08-13T09:51+07:00 is now paired with a landed repair and a measured propagation law. Frank's red surface is not evidence of Frank defects; it is an instrument state that decays only as branches ingest main."
+}

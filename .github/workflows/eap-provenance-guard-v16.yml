@@ -1,0 +1,84 @@
+name: EAP Provenance Guard v16
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/eap_dependency_provenance_guard_v16.py'
+      - 'research_entity/runtime/test_eap_dependency_provenance_guard_v16.py'
+      - 'research_entity/runtime/test_eap_dependency_provenance_receipt_v16.py'
+      - 'tools/eap_dependency_provenance_guard_v16_benchmark.py'
+      - '.github/workflows/eap-provenance-guard-v16.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eap-provenance-v16-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  provenance-guard:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Runner metadata
+        run: |
+          echo "host=$(hostname)"
+          echo "kernel=$(uname -srmo)"
+          echo "python=$(python3 --version 2>&1)"
+          echo "runner=${RUNNER_NAME:-unknown} os=${RUNNER_OS:-unknown} arch=${RUNNER_ARCH:-unknown}"
+          echo "sha=${GITHUB_SHA}"
+      - name: Compile U16 and dependencies
+        run: |
+          python3 -m py_compile \
+            research_entity/harness/reference/state_ledger.py \
+            research_entity/harness/reference/unifieddb_emergent_preprocessor.py \
+            research_entity/runtime/eap_dependency_provenance_guard_v16.py \
+            research_entity/runtime/test_eap_dependency_provenance_guard_v16.py \
+            research_entity/runtime/test_eap_dependency_provenance_receipt_v16.py \
+            tools/eap_dependency_provenance_guard_v16_benchmark.py
+      - name: Run provenance falsifiers and receipt-binding regressions
+        run: |
+          python3 -m unittest -v \
+            research_entity.runtime.test_eap_dependency_provenance_guard_v16 \
+            research_entity.runtime.test_eap_dependency_provenance_receipt_v16
+      - name: Benchmark baseline EAP vs provenance-guarded EAP
+        run: |
+          mkdir -p research_entity/benchmarks/eap_provenance_guard_v16
+          python3 tools/eap_dependency_provenance_guard_v16_benchmark.py \
+            --families 300 --poison-every 5 --repeats 1500 \
+            --output research_entity/benchmarks/eap_provenance_guard_v16/latest.json
+      - name: Attach execution metadata
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, platform, socket
+          p=pathlib.Path('research_entity/benchmarks/eap_provenance_guard_v16/latest.json')
+          x=json.loads(p.read_text())
+          x['execution_metadata']={
+            'github_sha':os.environ['GIT_SHA'],
+            'github_run_id':os.environ['RUN_ID'],
+            'github_run_attempt':os.environ['RUN_ATTEMPT'],
+            'runner_name':os.environ.get('RUNNER_NAME'),
+            'runner_os':os.environ.get('RUNNER_OS'),
+            'runner_arch':os.environ.get('RUNNER_ARCH'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'scope':'REMOTE_PRELIMINARY_EAP_PROVENANCE_GUARD_NOT_ANDREAS_TARGET_ACCEPTANCE',
+          }
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eap-provenance-guard-v16
+          path: research_entity/benchmarks/eap_provenance_guard_v16/latest.json

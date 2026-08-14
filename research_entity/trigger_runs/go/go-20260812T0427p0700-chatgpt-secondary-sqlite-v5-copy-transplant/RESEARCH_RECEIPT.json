@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0427p0700-chatgpt-secondary-sqlite-v5-copy-transplant",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_state_before_intervention": {
+    "implementation_repository": "gschaidergabriel/frankv0.1 via connector alias gschaidergabriel/Dr.-Unterweger",
+    "implementation_main": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+    "main_change": "#482 rejects SQLite V5 launcher hardlink transplant; prior main also rejects symlink transplant and inherited dynamic-loader controls",
+    "workspace_F_V01_13": "IN_PROGRESS",
+    "workspace_release_gate": "productive fixed SQLite/root anchor/service/recovery evidence still required"
+  },
+  "observed_anchors": [
+    "Frank state migration explicitly requires SQLite WAL mode.",
+    "SQLite upstream documents the WAL-reset corruption defect through 3.51.2 and its fix in 3.51.3+.",
+    "SQLite 3.53.4 has source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and contains the WAL-reset fix.",
+    "Current Frank V5 admission guard release-accepts that exact 3.53.4 version/source-id and root-anchor identity.",
+    "Merged Frank candidate evidence has already built a byte-reproducible 3.53.4 capability-parity runtime on the accepted target, but explicitly did not provision production /opt or /etc state and did not close F-V01-13.",
+    "Current main launcher rejects file symlinks and hardlinks before sibling guard resolution but selects the guard relative to the launcher's canonical directory."
+  ],
+  "generated_reality": {
+    "hypothesis": "The combined symlink and hardlink rejection is sufficient to bind V5 launcher sibling selection to the trusted deployment artifact class.",
+    "strongest_counterhypothesis": "A byte-for-byte regular-file copy preserves launcher bytes while remaining neither a symlink nor a hardlink, so a caller-controlled directory can supply a foreign sibling guard once the production root-anchor path exists.",
+    "falsifier": "A regular-file copied launcher must deny before any foreign sibling guard executes; otherwise the counterhypothesis is supported."
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "FRANK_SQLITE_V5_COPY_TRANSPLANT_OOB_20260812",
+    "environment": "bounded local sandbox, not accepted VPS",
+    "baseline": {
+      "shape": "regular-file launcher copy without sibling guard",
+      "returncode": 78,
+      "observed_denial": "V5_GUARD_MISSING"
+    },
+    "intervention": {
+      "shape": "same regular-file launcher copy with foreign sibling fixed_sqlite_runtime_guard_v5_candidate.py",
+      "copy_is_symlink": false,
+      "copy_link_count": 1,
+      "returncode": 0,
+      "harmless_marker_executed": true
+    },
+    "status": "FAIL_OPEN_COPY_TRANSPLANT",
+    "interpretation": "Current-main symlink+hardlink checks do not cover a normal copy; sibling Python selection is not intrinsically bound to a trusted deployment path.",
+    "canonical_frank_state_mutated": false,
+    "external_effect_authority": "NONE",
+    "accepted_vps_test": false,
+    "rollback": "temporary test anchor and run-owned files removed; anchor absence rechecked after cleanup"
+  },
+  "candidate_repair": {
+    "repository_branch": "chatgpt/sqlite-v5-copy-transplant-20260812",
+    "branch_head": "17a6b17f45485a41f58b88a9d0582d559f115999",
+    "draft_pr": 490,
+    "changes": [
+      "require launcher file root ownership and no group/other write",
+      "require every canonical launcher-directory ancestor through / to be root-owned and not group/other writable",
+      "require selected sibling guard to be a regular non-symlink single-link root-owned non-group/other-writable file",
+      "preserve existing loader-environment, PATH, symlink, hardlink, non-root runtime, absolute-Python and root-anchor checks",
+      "add deterministic regular-file COPY_TRANSPLANT regression"
+    ],
+    "local_validation": "POSIX dash permission-digit extraction checked for representative 755, 1777, 750 and 640 modes",
+    "target_workflow_run": 31537695696,
+    "target_workflow_status_at_receipt": "QUEUED",
+    "target_workflow_conclusion_at_receipt": null,
+    "promotion_state": "TESTING_NOT_PROMOTED"
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "claim_used": "WAL-reset corruption bug affects SQLite through 3.51.2 and is fixed in 3.51.3+ under the documented concurrent WAL topology",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "claim_used": "3.53.4 is a post-fix release and its exact source-id is available for runtime attestation",
+      "url": "https://sqlite.org/releaselog/3_53_4.html"
+    }
+  ],
+  "grf_collapse": {
+    "hypothesis": "REJECT",
+    "counterhypothesis": "SUPPORTED_IN_BOUNDED_SANDBOX",
+    "candidate_repair": "TESTING",
+    "production_fixed_sqlite_reality": "UNVERIFIED",
+    "F_V01_13": "KEEP_OPEN"
+  },
+  "workspace_delta": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "ADD_SQLITE_V5_REGULAR_COPY_TRANSPLANT_PRE_GUARD_TEST_OBLIGATION",
+      "release_disposition": "KEEP_OPEN",
+      "remaining_high_value_falsifier": "accepted-target proof that production service/root-owned deployment path/root anchor loads the exact admitted SQLite 3.53.4 runtime and rejects downgrade, library swap, path transplant and stale/recovery branches"
+    }
+  },
+  "negative_result_preserved": "Current V5 path-binding mechanism is incomplete against regular-file copy transplant even though symlink and hardlink regressions pass.",
+  "research_disposition": "SUPPORTED_SECURITY_DELTA_PLUS_TESTING_REPAIR",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

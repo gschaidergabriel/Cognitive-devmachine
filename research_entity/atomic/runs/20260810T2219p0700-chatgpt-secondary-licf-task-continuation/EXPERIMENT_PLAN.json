@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "question":"Does LICF provide unique protection for same-valid-presence-lease task continuity compared with a strong conventional nested fence?",
+  "proxy_notice":"CURRENT_LEASE_ONLY models only the verified V15 presence surface, not every current/future Frank component. False allows attributed to it mean presence fencing alone cannot discriminate the case.",
+  "baselines":[
+    "CURRENT_LEASE_ONLY: execution lease epoch plus proactive BUSY rule",
+    "TASK_EPOCH_SIMPLE: lease epoch + task id + task epoch + consent on switch",
+    "CONVENTIONAL_STRONG: TASK_EPOCH_SIMPLE + material revision + consent witness binding + idempotency nonce",
+    "LICF_001: CONVENTIONAL_STRONG semantics plus exact current fiber identity and successor-hash minting"
+  ],
+  "cases":200000,
+  "seeds":[101,211,307,401,503],
+  "controls":["stale execution","stale task","wrong task","duplicate","stale revision","witness splice","switch no consent","switch consent","proactive busy","proactive idle","completion","stale completion","1000 crash/replay stale-task histories"],
+  "metrics":["classification accuracy","false allows/denies by category","mean and batch p50/p95/p99 local validation cost","representative JSON metadata bytes","crash/replay stale-task rejection"],
+  "promotion_gate":"No promotion unless LICF beats CONVENTIONAL_STRONG on at least one material dimension without unacceptable regression elsewhere."
+}

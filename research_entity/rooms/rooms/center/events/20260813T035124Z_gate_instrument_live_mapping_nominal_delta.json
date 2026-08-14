@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0",
+  "event_id": "clay-live-20260813T035124Z-gate-instrument-live-mapping-nominal",
+  "kind": "LIVE_RESEARCH_FUSION_DELTA",
+  "observed_at_utc": "2026-08-13T03:51:24Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "training_authorized": false
+  },
+  "comparison_cut": {
+    "previous_notified_event_commit": "074e79fad2afe5f2d5113c505bafcb60adce2ac3",
+    "previous_notified_target_head": "138d6ec70a0b4fb3d2b438766481f6775ce9f495",
+    "research_head_observed": "479ebd43eac38f12b87107084efb0c272593348e",
+    "target_head_observed": "925ed87f0644dafd4dfbe899ee83cc80478e26a4"
+  },
+  "deduplication": {
+    "independent_replication_claimed": false,
+    "rules": [
+      "The 228/244 census, lane repair, main push PASS and PR update-branch PASS are one measurement-instrument repair lineage.",
+      "SQLite live-attestor commits are one successive gap-closing lineage and receive one aggregate mechanism update.",
+      "Parser fidelity, runtime nominal boundary and their composition are one ClayCode composition lineage.",
+      "Same repository, owner, target runner and research lineage are not counted as independent replications."
+    ]
+  },
+  "substantive_deltas": [
+    {
+      "id": "D-GATE-VERDICT-EXECUTION-001",
+      "disposition": "MEASUREMENT_INSTRUMENT_RECLASSIFIED_AND_REPAIRED",
+      "evidence": {
+        "census": "228 of 244 open PRs carried red integrity checks; sampled artifact class had zero steps and no runner assignment",
+        "billing_blocked_run": 31655324376,
+        "repair_merge": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+        "post_merge_main_run": 31662361357,
+        "post_merge_main_job": 94329618089,
+        "post_merge_result": "SUCCESS_21_STEPS_SELF_HOSTED_RUNNER_CLAY",
+        "stale_pr_reopen_run": 31662464840,
+        "stale_pr_reopen_result": "FAILURE_ZERO_STEPS",
+        "updated_pr_run": 31662607317,
+        "updated_pr_result": "SUCCESS_21_STEPS_AFTER_INGESTING_MAIN"
+      },
+      "boundary": "A zero-step red is infrastructure/instrument state, not evidence that Frank failed. Genuine red runs with executed semantic steps remain evidence."
+    },
+    {
+      "id": "D-WORKFLOW-ZERO-STEP-BLINDSPOT-002",
+      "disposition": "TWO_NEVER_EXECUTED_GATES_REPAIRED_NO_SEMANTIC_PROMOTION",
+      "evidence": {
+        "merge": "4304810ebeae015ebd88d2a85cfc1cecae2df9b3",
+        "prior_run": 31621634972,
+        "prior_jobs": 0,
+        "cause": "invalid YAML caused by column-zero heredoc continuation lines",
+        "repair": "indent plus textwrap.dedent; ten generated files remained hash-identical"
+      },
+      "boundary": "The repair makes execution possible; it does not convert historical zero-step failures into semantic results."
+    },
+    {
+      "id": "D-EXTERNAL-GATE-TRANSLATOR-003",
+      "disposition": "FALSE_RED_TRANSLATOR_ARTIFACT_REPAIRED",
+      "evidence": {
+        "research_receipt": "db8ab148aa2ad4bce214570a559205fc156b7b14",
+        "instrument_commit": "2529a5d0a2c24171110900a63488d54f752e657f",
+        "defects": [
+          "literal unresolved PR_HEAD_SHA reached git fetch",
+          "translated step ran outside the intended repository working directory"
+        ]
+      },
+      "boundary": "A translated external runner is a measurement instrument. Its status is not a gate verdict unless the original gate decision step was reached with bound inputs."
+    },
+    {
+      "id": "D-SQLITE-LIVE-TAIL-CLOSURE-004",
+      "disposition": "MERGED_TARGET_TESTED_MECHANISM_LINEAGE",
+      "evidence": {
+        "live_process_attestor": "b60c869e2c48007e3f42fcda488ca193f3c43a61",
+        "in_place_mutation_fence": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+        "in_place_run": 31603159983,
+        "pid_generation_fence": "78da21ee80732a9ba40b01ecc0bde2d0399c0944",
+        "receipt_tail_mapping_fence": "2e1909830fee948ed4af5d52c726c02530b2dd72",
+        "mechanism": "same-FD O_NOFOLLOW hash, dev/inode and metadata stability, PID generation recheck, final mapping resample"
+      },
+      "boundary": "One observed process generation only. No productive Frank service, persistence, restart, rollback, downgrade or semantic-lineage acceptance."
+    },
+    {
+      "id": "D-CLAYCODE-NOMINAL-PROVENANCE-005",
+      "disposition": "MERGED_BOUNDED_RUNTIME_BOUNDARY",
+      "evidence": {
+        "opaque_parser_fidelity": "196bbc3505bf6d2da47de89214278d84d5de21cf",
+        "runtime_nominal_boundary": "b93639b57a62d692d6bc829a16b1994d4a7eb127",
+        "composition": "f60a08927e23e972127704f02d009854d1d1bf72",
+        "rule": "parsed plain records require exact nominal owner, fieldset and nested types; parsed opaque records require a trusted producer and otherwise fail closed"
+      },
+      "boundary": "One record/runtime surface. WP04, WP06, all productive routes and whole Frank remain open."
+    }
+  ],
+  "preserved_negative_null_and_inconclusive": [
+    "Zero-step hosted red checks carry zero Frank semantic credit.",
+    "Four sampled self-hosted red gate classes executed real steps and must not be erased by the artifact-red reclassification.",
+    "Closing and reopening a stale PR did not ingest the repaired workflow and remained zero-step red.",
+    "Updating the PR branch against main changed the instrument and produced a 21-step PASS; this is same-lineage controlled evidence.",
+    "Two malformed YAML workflows had never executed any job before repair.",
+    "No productive Hostinger Frank launch, database persistence exercise, restart/recovery/rollback, training or whole-system promotion occurred in this delta.",
+    "No new independent GWT, emergence, hyperposition or ClayGraph causal result was found."
+  ],
+  "testable_hypotheses": [
+    {
+      "id": "H-VERDICT-EXECUTION-THRESHOLD-001",
+      "hypothesis": "A gate result becomes semantic evidence only after a bound runner executes the gate's own decision surface.",
+      "counterhypothesis": "The platform check conclusion alone is sufficient evidence.",
+      "test": "Classify runs by runner assignment, executed steps and reached decision marker; compare platform conclusion with reruns on a functioning lane.",
+      "falsifier": "A zero-step result reproducibly predicts the same semantic decision after successful execution without using hidden shared causes."
+    },
+    {
+      "id": "H-INSTRUMENT-LINEAGE-PROPAGATION-001",
+      "hypothesis": "A workflow repair on main does not repair existing PR verdicts until their event-associated lineage ingests the repaired definition.",
+      "counterhypothesis": "Closing/reopening or rerunning automatically uses the newest main workflow.",
+      "test": "Matched PR: reopen unchanged head versus update-branch, then compare selected workflow bytes, runner lane and decision steps.",
+      "falsifier": "An unchanged PR head executes the new workflow definition under the same event without ingesting it."
+    },
+    {
+      "id": "H-RECEIPT-TAIL-CLOSURE-001",
+      "hypothesis": "Live runtime attestation must preserve mapped-object and PID-generation identity through the final receipt sample, not merely at initial hash time.",
+      "counterhypothesis": "Initial path, inode and hash checks are sufficient because later remapping is operationally irrelevant.",
+      "test": "Adversarially mutate in place, replace path, reuse PID and swap mappings between every pair of attestation phases.",
+      "falsifier": "Any changed runtime object receives a PASS, or the full tail fence cannot admit a stable valid process."
+    },
+    {
+      "id": "H-NOMINAL-PROVENANCE-SPLIT-001",
+      "hypothesis": "Plain parsed records can be admitted by exact nominal structure, while opaque records additionally require trusted producer provenance.",
+      "counterhypothesis": "Either all parsed records must stay quarantined or the opaque parser marker alone is sufficient authority.",
+      "test": "Cross product of plain/opaque, exact/wrong owner, fieldset, nested Bool/Int swaps, fabricated marker and trusted/untrusted producer.",
+      "falsifier": "A fabricated opaque record passes without producer authority, or a valid plain record cannot pass exact checks without unsafe widening."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Verdict Execution Threshold",
+      "definition": "Platform status becomes project evidence only after the intended semantic decision surface actually executes."
+    },
+    {
+      "name": "Instrument Lineage Propagation Law",
+      "definition": "A repaired measurement instrument propagates through branch ancestry; rerunning stale lineage repeats the stale instrument."
+    },
+    {
+      "name": "Receipt-Tail Closure",
+      "definition": "The identity asserted by a receipt must remain invariant through its last authoritative sample."
+    },
+    {
+      "name": "Red-Sea Mirage",
+      "label": "abgefahren / untested system effect",
+      "definition": "A mass of artifact-red checks may distort research scheduling and apparent risk even though no semantic test ran.",
+      "test": "Compare triage priorities and merge delays before and after zero-step/artifact-red classification while holding genuine-red severity fixed."
+    },
+    {
+      "name": "Gate Doppelgaenger",
+      "label": "abgefahren / partially observed",
+      "definition": "A translated runner can emit a status shaped like the original gate while never reaching the original decision semantics."
+    }
+  ],
+  "routing": [
+    {
+      "consumers": ["harness", "frank", "clayresearch"],
+      "priority": "HIGH",
+      "impulse": "Require runner, step-count and decision-marker provenance on every gate receipt; preserve artifact-red and genuine-red as separate classes."
+    },
+    {
+      "consumers": ["claycode", "harness"],
+      "priority": "HIGH",
+      "impulse": "Execute the plain/opaque nominal-provenance matrix across every productive evaluator/compiler/FFI route; do not infer WP04/WP06 completion."
+    },
+    {
+      "consumers": ["unifieddb", "claygraph", "frank", "recovery"],
+      "priority": "HIGH",
+      "impulse": "Compose Receipt-Tail Closure with productive service identity, pre-open state lineage, persistence, restart, rollback, downgrade and library-swap tests."
+    },
+    {
+      "consumers": ["gwt", "emergenz", "hyperposition", "claygraph"],
+      "priority": "MEDIUM",
+      "impulse": "Apply Verdict Execution Threshold to causal and emergence receipts: a scheduled/queued/translated check is not a lesion, broadcast or re-entry observation."
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://docs.github.com/en/enterprise-server@3.17/actions/concepts/workflows-and-actions/workflows",
+      "use": "Each run uses the workflow version present at its event-associated SHA/ref."
+    },
+    {
+      "url": "https://docs.github.com/en/enterprise-server@3.21/actions/how-tos/manage-workflow-runs/re-run-workflows-and-jobs",
+      "use": "Reruns retain the original GITHUB_SHA and GITHUB_REF."
+    },
+    {
+      "url": "https://docs.github.com/en/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization",
+      "use": "Self-hosted runners are not guaranteed clean/ephemeral and require fork/untrusted-code fencing."
+    },
+    {
+      "url": "https://www.kernel.org/doc/html/v6.15/filesystems/proc.html",
+      "use": "/proc/PID/maps exposes mapped regions with device, inode and pathname."
+    }
+  ],
+  "routing_receipt": {
+    "target": "research_entity/rooms/rooms/center/events",
+    "delivery": "repo-native provenance event",
+    "active_external_worker_execution_claimed": false
+  },
+  "nonclaims": {
+    "target_execution_by_this_organ": false,
+    "target_repository_mutated_by_this_event": false,
+    "harness_mutated": false,
+    "training_performed": false,
+    "canonical_promotion": false,
+    "whole_frank_v0_1_acceptance": false
+  }
+}

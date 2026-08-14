@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0124p0700-chatgpt-secondary-v17-pidfd-frontier",
+  "trigger": "go",
+  "created_at": "2026-08-11T01:24:24+07:00",
+  "status": "COMPLETED_USEFUL_STOP",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "identity_lock": {
+    "worker_is": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "Frank v0.1",
+  "program_stage": "FRANK_V0_1",
+  "primary_work_packages": [
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "current_target_main_observed": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+  "research_head_observed_before_write": "a897b6fc4760311ad168cd00aebf63054470c0d9",
+  "coordination": {
+    "initial_effect_fence_lane": "COLLISION_DETECTED_REUSED_NOT_DUPLICATED",
+    "fork_orphan_lane": "ALREADY_TARGET_FIXED_AND_REGRESSION_TESTED",
+    "pass_fds_lane": "PR_242_TARGET_MECHANISM_REPRODUCED_FAIL_CLOSED_RECOVERY_DELAY",
+    "scm_rights_lane": "PR_253_ALREADY_MERGED_NORMAL_AUTHORITY_REGRESSION",
+    "provider_reconciliation_lane": "PR_254_TARGET_SUPPORTED_SYNTHETIC_MECHANISM_NOT_DUPLICATED",
+    "wp03_typedir_lane": "PR_245_TARGET_SUPPORTED_SIBLING_EVIDENCE_NOT_DUPLICATED",
+    "v17_reentry_lane": {
+      "pr": 206,
+      "head": "46b3220b31075e98a05b4e41829ba7743c2a69d8",
+      "state": "OPEN_MERGEABLE_STALE_ANCESTRY",
+      "review_written": 4899781979,
+      "disposition": "REUSE_EXISTING_REPAIR_LANE_AND_ADD_FRESH_MAIN_REGRESSION_OBLIGATION"
+    }
+  },
+  "strongest_current_negative_evidence": {
+    "target_commit": "626f435382a4ebc2899e89d72a357cf2484402ba",
+    "github_run_id": 31417288172,
+    "status": "CONFIRMED_V17_SUPPORT_IDENTITY_AND_EXECUTION_BINDING_GAP",
+    "observed": [
+      "V15 presence remained IDLE at epoch 0 while terminal DONE was accepted",
+      "V16 execution context remained unbound while terminal DONE was accepted",
+      "canonical GWT/causal/delta support rows were absent",
+      "fabricated episode/signal/causal/delta identifiers were accepted",
+      "candidate recovery and self-verifier still reported terminal completion"
+    ],
+    "falsified_claim": "Bare V17 candidate DONE is already provenance-bound to an actual current self.root execution and canonical GWT/causal-credit/admitted-delta support identities.",
+    "promotion": "BLOCK_V17_PROMOTION_UNTIL_CURRENT_EXECUTION_AND_CANONICAL_SUPPORT_BINDING_IS_PROVEN"
+  },
+  "existing_repair_lane_analysis": {
+    "pr": 206,
+    "candidate_family": "V17.2/V17.2.1",
+    "mechanism_classes_present": [
+      "exact V15 presence lease epoch and V16 execution-id/epoch binding",
+      "receiver receipt + attention episode causal-use checks",
+      "effect-targeted non-correlated causal credit with verified provider evidence",
+      "explicit same-chain semantic-delta source and canonical epoch admission",
+      "DONE visibility only after authoritative REENTERED plus exact execution/attempt/outcome/binding identity"
+    ],
+    "prior_target_positive_evidence": "V17.2 causal/recovery/completion workflow has successful accepted-target runs on its historical exact head",
+    "remaining_obligation": "Recompose/revalidate on exact current main and run the new V17 support-binding negative discriminator or a stronger equivalent against the V17.2 candidate before merge/promotion.",
+    "known_nonpositive_checks": [
+      "Deep Integrity failure observed on current PR head workflow set",
+      "hosted shadow failure observed",
+      "preflight failure observed; logs were unavailable through the connector and cause remains UNKNOWN"
+    ],
+    "merge_performed": false,
+    "promotion_claimed": false
+  },
+  "fresh_external_primary_mechanism_evidence": [
+    {
+      "source": "Linux pidfd_getfd(2)",
+      "url": "https://man7.org/linux/man-pages/man2/pidfd_getfd.2.html",
+      "finding": "pidfd_getfd duplicates a target process file descriptor into the caller and the duplicate refers to the same open file description; access is governed by ptrace attach real-credentials permission checks."
+    },
+    {
+      "source": "Linux unix(7) SCM_RIGHTS",
+      "url": "https://man7.org/linux/man-pages/man7/unix.7.html",
+      "finding": "SCM_RIGHTS transfers a reference to the same open file description, equivalent in semantics to duplicating a descriptor into another process."
+    }
+  ],
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "PIDFD_GETFD_GHOST_EXECUTION_ANCHOR",
+    "class": "OPEN_FILE_DESCRIPTION_LIFETIME_FALSIFIER",
+    "reason": "pass_fds and SCM_RIGHTS cover explicit application-mediated FD transfer, but pidfd_getfd can duplicate a peer descriptor without those source-level APIs when ptrace policy permits.",
+    "target_diagnostic_branch": "chatgpt/go-oob-pidfd-getfd-ghost-anchor-20260811",
+    "target_diagnostic_commit": "0785fa94827cd5b0489a983d649ace11734abbba",
+    "target_workflow_creation": "BLOCKED_BY_TOOL_SAFETY_BOUNDARY",
+    "target_execution": "NOT_EXECUTED_UNKNOWN",
+    "local_disposable_micro_replica": {
+      "environment": {
+        "kernel": "6.18.35",
+        "machine": "x86_64",
+        "python": "3.13.5",
+        "uid": 1000,
+        "euid": 1000,
+        "yama_ptrace_scope": "UNKNOWN_NOT_PRESENT"
+      },
+      "holder_anchor_fd": 63,
+      "anchor_inheritable": false,
+      "pidfd": 52,
+      "pidfd_getfd_duplicate_fd": 64,
+      "duplicate_same_device_inode": true,
+      "lock_operation_via_duplicate": "ADMITTED",
+      "fresh_contender_after_holder_kill_while_duplicate_open": "BLOCKED_EAGAIN",
+      "fresh_contender_after_duplicate_close": "ADMITTED",
+      "status": "SUPPORTED_LOCAL_MECHANISM_ONLY"
+    },
+    "interpretation": "A ptrace-authorized peer can in principle prolong a flock-backed execution anchor beyond the original holder process lifetime by duplicating the same open file description. This is recovery/liveness evidence, not a second-lease authority bypass.",
+    "strongest_counterhypothesis": "The accepted target service identity and its kernel/LSM/Yama/credential isolation prevent pidfd_getfd access, making this route unreachable in the admitted Frank deployment.",
+    "promotion": "NONE_TARGET_REPLICATION_REQUIRED",
+    "external_network_used": false,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false,
+    "product_main_mutated": false
+  },
+  "cross_branch_fusion": {
+    "effect_generation_fence": "Target-supported candidate exists, but full exact-current integration graph remains open.",
+    "provider_unknown_outcome": "Target-supported synthetic ACK-blackhole/idempotency mechanism exists; real-provider acceptance remains open.",
+    "v17_reentry_done": "Bare V17 is falsified for current execution/canonical support binding; V17.2 is the existing repair lane and must absorb the new regression witness.",
+    "compiler_typedir": "Real Frank frontend->TypedIR has target-supported sibling evidence, but sibling success cannot be silently inherited by effect-authority branches.",
+    "security_recovery": "Normal fork and SCM_RIGHTS authority-surfaces have stronger regressions; pidfd_getfd remains target reachability UNKNOWN."
+  },
+  "architecture_delta": {
+    "status": "NO_RUNTIME_PROMOTION; INTEGRATION_AND_REGRESSION_OBLIGATIONS_ADDED",
+    "laws": [
+      "NO_CURRENT_EXECUTION_BINDING -> NO_EFFECT_TERMINALIZATION_AUTHORITY",
+      "NO_CANONICAL_OR_VERIFIED_GWT_CAUSAL_DELTA_SUPPORT -> NO_PROVENANCE_BOUND_DONE",
+      "SIBLING_BRANCH_EVIDENCE != EXACT_MERGE_GRAPH_ACCEPTANCE",
+      "APPLICATION_LEVEL_FD_NONEXPORT_IS_NOT_SUFFICIENT_PROOF_AGAINST_PTRACE_AUTHORIZED_EXTERNAL_OFD_DUPLICATION"
+    ],
+    "next_tests": [
+      "Run the fresh V17 support-binding negative discriminator against PR206 V17.2/V17.2.1 on exact current main ancestry.",
+      "Classify PR206 Deep Integrity/hosted/preflight failures before promotion.",
+      "Compose effect-generation fence + accepted WP03 substrate + authoritative host contracts + WP04/lowering + V17.2 reentry in one exact merge graph.",
+      "Target-test pidfd_getfd reachability under the actual Frank service identity only if an authorized workflow path becomes available; accept REFUTED_BY_TARGET_SECURITY_POLICY as a valid result.",
+      "Obtain real reversible/idempotent provider timeout-after-acceptance/reconciliation evidence before provider uncertainty closure."
+    ],
+    "rollback": "No product-main semantic mutation occurred in this run; the only product branch contains a non-promoted diagnostic test and may be discarded independently."
+  },
+  "negative_results_and_limits": [
+    "The accepted-target V17 support-binding gap remains active negative evidence.",
+    "PR206 historical positive target runs do not constitute fresh-main acceptance.",
+    "PR254 uses a synthetic provider and cannot close real-provider semantics.",
+    "The pidfd_getfd result is local mechanism evidence only because target workflow creation was blocked; target reachability is UNKNOWN.",
+    "No final/paid training was authorized or started.",
+    "No whole Frank v0.1 acceptance is claimed."
+  ],
+  "durable_distribution": {
+    "pr206_review_id": 4899781979,
+    "research_receipt_path": "research_entity/trigger_runs/go/go-20260811T0124p0700-chatgpt-secondary-v17-pidfd-frontier/RESEARCH_RECEIPT.json"
+  },
+  "next_frontier": "Exact-current integration of caller-bound effect generation authority with V17.2 current-execution/canonical-causal reentry, accepted WP03/WP04/lowering ancestry, ordinary production effect routing, and real-provider reconciliation; target pidfd_getfd reachability remains a bounded security/recovery side obligation rather than the critical path.",
+  "authority": "NONE",
+  "execution_authority": "NONE",
+  "training_authorized": false
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812-gpt56sol-sqlite-sourceid-artifact-collision-01",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_head_observed_before_write": "de19bd2bfc5dd7e40461e82d13ee2bf3d7cf8a40",
+  "product_main_observed": "9c891aa8b076113b21903ac3db0d39a61aec6a91",
+  "observed_reality": {
+    "upstream_wal_reset_fix_floor": "SQLite 3.51.3+ or an upstream-listed backport",
+    "accepted_target_mapped_run": 31528015403,
+    "accepted_target_productive_sqlite_version": "3.45.1",
+    "accepted_target_productive_library": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "accepted_target_productive_library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "accepted_target_anchor_status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+    "accepted_target_probe_exit": 78,
+    "merged_fixed_candidate_pr": 444,
+    "merged_fixed_candidate_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "merged_fixed_candidate_library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "root_provision_pr": 440,
+    "mapped_object_attestation_pr": 435
+  },
+  "grf": {
+    "generated_reality": "SQLite version plus sqlite_source_id is sufficient to identify the exact admitted runtime artifact.",
+    "counter_reality": "Two byte-distinct loadable SQLite shared objects can report the same SQLite version and sqlite_source_id; exact runtime admission therefore needs mapped-object content identity in addition to semantic source identity.",
+    "falsifier": "Load two byte-distinct copies of the same libsqlite3 where one copy differs only by harmless trailing ELF bytes, then compare runtime version/source-id against mapped inode and SHA-256.",
+    "collapse": "GENERATED_REALITY_REFUTED_COUNTER_REALITY_SUPPORTED"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "SQLITE_SOURCE_ID_ARTIFACT_COLLISION_CONTROL",
+    "count_new_in_this_invocation": 1,
+    "environment": "local disposable Linux sandbox; not accepted Hostinger target",
+    "mutation_scope": "run-owned /tmp only; no system library, Frank state, production service, Harness, or external effect mutation",
+    "baseline": {
+      "artifact_sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71",
+      "sqlite_version": "3.46.1",
+      "sqlite_source_id": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1"
+    },
+    "treatment": {
+      "mutation": "append harmless trailing bytes to a disposable copy of the ELF shared library",
+      "artifact_sha256": "5eae6c58e551a030835450eef256838aa722125e9f6f1b19ece0e4a84c941ebe",
+      "sqlite_version": "3.46.1",
+      "sqlite_source_id": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1",
+      "mapped_inode_different": true
+    },
+    "result": "SUPPORTED_LOCAL_COUNTERWORLD",
+    "rollback": "temporary tree removed automatically"
+  },
+  "fusion": {
+    "existing_mechanism": "PR #435 already uses /proc/self/maps plus dev/inode, nofollow fd open, fstat equality and SHA-256; no duplicate product patch is justified from this worker.",
+    "new_test_value": "Adds an independent negative-control rationale that version/source-id cannot substitute for exact mapped binary identity.",
+    "artifact_authority_dependency": "PR #440 must additionally bind provisioning to a non-caller-selectable trusted release artifact identity; exact #444 manifest/library hashes are the current supported candidate pins.",
+    "coordination_write": "PR #440 comment 5258646277 records required deterministic regressions without racing the active branch."
+  },
+  "next_discriminator": "After the #440 artifact-authority repair and explicitly authorized root provisioning, execute #435-style mapped-object attestation in the exact productive Frank service across restart and deliberate downgrade/library-swap controls; require the mapped fd hash/dev/inode and SQLite semantic identity to match the root-owned anchor and trusted release policy or fail closed.",
+  "promotion": {
+    "outcome": "MERGE_WITH_EXISTING_ATTESTATION_AND_ARTIFACT_AUTHORITY_WORK",
+    "F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "authority": {
+    "production_effect": false,
+    "canonical_frank_state_mutation": false,
+    "harness_authority": "NONE",
+    "training_authorized": false
+  }
+}

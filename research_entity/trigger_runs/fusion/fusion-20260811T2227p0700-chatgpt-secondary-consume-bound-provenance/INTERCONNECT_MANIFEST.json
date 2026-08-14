@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "run_id": "fusion-20260811T2227p0700-chatgpt-secondary-consume-bound-provenance",
+  "trigger": "fusion",
+  "classification": "WHOLE_MESH_CROSS_BRANCH_SYNTHESIS",
+  "registry_scientific_branches": ["gwt", "emergenz", "hyperposition", "claygraph"],
+  "branch_priority": ["gwt", "emergenz", "hyperposition", "claygraph"],
+  "special_rules": {
+    "fusion_requires_global_coverage_manifest": true,
+    "fusion_requires_feedback_receipt_for_every_branch": true
+  },
+  "contract_note": "tools/fusion_research_contract.py currently defines scientific branches narrowly as registry triggers whose kind is exactly domain_research or integrated_research_foundry. Current registry therefore yields gwt/emergenz/hyperposition/claygraph; broader material mesh feedback is preserved separately and is not misrepresented as the executable contract set.",
+  "broader_mesh_branches": ["clayresearch", "frank", "claycode", "unifieddb"],
+  "central_candidate": {
+    "name": "CONSUME_BOUND_PROVENANCE_CONTRACT",
+    "status": "CANDIDATE_TEST_OBLIGATION_NOT_PROMOTED",
+    "statement": "For any state, artifact, identity, capability, causal receipt, authority decision, training split or provider result that can influence persistent state or an effect, recording provenance is insufficient: the exact consumer must verify that provenance and identity still bind the exact object/epoch/action being consumed, and mutation-capable consumption must be replay-safe/exactly-once."
+  },
+  "converging_mechanism_classes": [
+    "storage/boot pre-admission identity and import topology",
+    "capability executable artifact identity at probe and use",
+    "Needle provider output separated from admitted authority bindings",
+    "reward producer-owned terminal source plus exactly-once/rebuild semantics",
+    "heldout manifest identity plus independent audit validity",
+    "GWT causal identity ancestry enforcement",
+    "UnifiedDB/ClayGraph composition identity"
+  ],
+  "anti_echo": {
+    "shared_ancestry_warning": "Cross-branch convergence is not independent replication because many lanes share Frank/Clay/UnifiedDB/effect/re-entry ancestry.",
+    "promotion_rule": "Promote only after branch-specific falsifiers plus an integrated consume-bound composition discriminator on accepted target."
+  },
+  "authority_boundary": "Research/test obligations only; no Frank self-Harness authority, effect authority or training authority granted."
+}

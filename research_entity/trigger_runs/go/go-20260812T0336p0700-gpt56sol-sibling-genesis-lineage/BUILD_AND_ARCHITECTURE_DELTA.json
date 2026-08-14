@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0336p0700-gpt56sol-sibling-genesis-lineage",
+  "research_repo_observed_head_before_write": "9b27066772e0ac2ed8ee35f4a9b578ec654599f9",
+  "program": "FRANK_V0_1",
+  "trigger": "go",
+  "reasoning_frame": "GRF",
+  "build_delta": {
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "base_main_observed": "7e60eadeffe0fb6eab907023cc337ae06d7e0d7a",
+    "branch": "chatgpt/go-lineage-admission-v3-20260812",
+    "head": "adb4f68592e34bf83563848706726200e3220f92",
+    "pull_request": 458,
+    "pull_request_state": "OPEN_DRAFT",
+    "pull_request_mergeable_observed": true,
+    "candidate_files": [
+      "runtime/identity/lineage_admission_identity_v1_candidate.py",
+      "tests/lineage_admission_identity_v1_candidate_gate.py",
+      ".github/workflows/frank-lineage-admission-identity-v1-candidate-vps.yml"
+    ],
+    "local_regression": "PASS",
+    "accepted_target_workflow_run": 31534796631,
+    "accepted_target_workflow_status_at_write": "QUEUED_NO_RUNNER_ASSIGNED",
+    "accepted_target_runner_identity_at_write": "UNKNOWN",
+    "deep_integrity_run": 31534798581,
+    "deep_integrity_result": "INFRASTRUCTURE_BLOCKED_NOT_PRODUCT_FAIL",
+    "deep_integrity_annotation": "Job not started because recent account payments failed or spending limit needs increase.",
+    "whole_frank_v0_1_acceptance": false
+  },
+  "candidate_semantics": {
+    "name": "LineageAdmissionIdentity V1 candidate",
+    "purpose": "Provide a domain-separated content binding for an admission statement that was independently admitted outside clonable Frank state.",
+    "bound_fields": [
+      "admission_protocol",
+      "admission_id",
+      "target_body_id",
+      "artifact_identity_hash",
+      "anchor_epoch",
+      "external_anchor_digest"
+    ],
+    "authority": "NONE",
+    "module_verifies_external_anchor": false,
+    "module_mints_admission": false,
+    "module_authorizes_migration": false,
+    "module_authorizes_recovery": false,
+    "expected_limitation": "An exact copy of the same admission statement has the same content hash; anti-transplant therefore requires an independent boot-time trust input and freshness check."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "systemd sd_id128_get_machine documentation",
+      "url": "https://www.freedesktop.org/software/systemd/man/sd_id128_get_machine.html",
+      "finding": "machine-id and application-specific derivations provide stable local identifiers/privacy separation, not a non-clonable trust root; machine-id is read from persistent local state."
+    },
+    {
+      "source": "systemd crypttab TPM2 documentation",
+      "url": "https://www.freedesktop.org/software/systemd/man/250/crypttab.html",
+      "finding": "TPM2-backed material can be encrypted under a primary key derived from the TPM seed that is not permitted to leave the TPM, optionally PCR-bound; this is a materially stronger non-clonable-input candidate when a suitable TPM/vTPM is actually present."
+    },
+    {
+      "source": "Hostinger API Reference",
+      "url": "https://developers.hostinger.com/",
+      "finding": "Hostinger exposes account-authenticated VPS operations addressed by virtualMachineId, but this research pass found no primary documentation establishing a local cryptographic instance-attestation primitive available to the guest."
+    }
+  ],
+  "architecture_fusion": {
+    "law": "A verifier whose complete trusted input is cloned with the state cannot distinguish a perfect clone from the original when all observable inputs are equal; unique anti-transplant identity therefore needs at least one independently trusted, non-cloned input.",
+    "do_not_use_as_sole_anchor": [
+      "state-local random nonce",
+      "root-owned file copied with the filesystem",
+      "raw /etc/machine-id",
+      "DMI UUID without separate trust/attestation proof",
+      "content hash alone"
+    ],
+    "candidate_anchor_order": [
+      "TPM/vTPM-backed non-exportable secret or attested key, if present and validated on the accepted target",
+      "independent owner/provider admission service with anti-replay/freshness plus a non-cloned authentication factor",
+      "explicit operator-authorized migration/recovery receipt for legitimate body moves"
+    ],
+    "open_target_question": "Does the accepted Hostinger Ubuntu target expose a usable TPM/vTPM or another non-clonable guest-visible attestation primitive?",
+    "queued_read_only_probe": "The accepted-target candidate workflow records TPM device presence, systemd-creds TPM2 capability, virtualization type, DMI readability and machine-id presence without emitting identifier values."
+  },
+  "go_experiment_accounting": {
+    "exactly_one_unusual_experiment": "SIBLING_GENESIS_IDENTICAL_HEAD_COLLISION",
+    "additional_unusual_experiments_in_build_delta": 0,
+    "target_capability_inventory_class": "ORDINARY_READ_ONLY_CAPABILITY_PROBE"
+  },
+  "next_falsifier": "When accepted-target execution is available, read the non-secret anchor capability inventory. If TPM/vTPM is absent, reject the TPM branch and design an external admission verifier with an independently held factor; if present, build the smallest TPM-backed challenge/anchor candidate and test clone/restart/rollback/migration controls without granting effect authority.",
+  "status": "BUILD_CANDIDATE_DRAFT_TARGET_EXECUTION_PENDING_CI_INFRASTRUCTURE"
+}

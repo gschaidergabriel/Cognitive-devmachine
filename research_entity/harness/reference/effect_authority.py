@@ -60,15 +60,12 @@ class EffectRequest:
     owner_fixed_one_shot_recovery: bool = False
     security_subeffect_deny: bool = False
     physical_subeffect_deny: bool = False
-    # Untrusted cognitive/salience signals are recorded only to prove they do not confer authority.
     translator_claims_authority: bool = False
     model_confidence: float = 0.0
     gwt_ignition: bool = False
     claygraph_salience: float = 0.0
 
     def request_hash(self) -> str:
-        # Bind confirmation to every policy-relevant request field while explicitly
-        # excluding non-authoritative cognitive/salience signals.
         data = asdict(self)
         for key in ("translator_claims_authority", "model_confidence", "gwt_ignition", "claygraph_salience"):
             data.pop(key, None)
@@ -90,6 +87,21 @@ class ConfirmationReceipt:
     expiry: Optional[datetime]
     nonce: str
 
+    def receipt_hash(self) -> str:
+        data = {
+            "request_hash": self.request_hash,
+            "actor": self.actor.value,
+            "effect_class": self.effect_class.value,
+            "exact_target": self.exact_target,
+            "exact_action": self.exact_action,
+            "impact_summary": self.impact_summary,
+            "confirmed_at": self.confirmed_at.astimezone(timezone.utc).isoformat(),
+            "expiry": self.expiry.astimezone(timezone.utc).isoformat() if self.expiry else None,
+            "nonce": self.nonce,
+        }
+        material = json.dumps(data, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        return sha256(material.encode("utf-8")).hexdigest()
+
 
 @dataclass(frozen=True)
 class GateResult:
@@ -104,8 +116,6 @@ class EffectAuthorityGate:
 
     def evaluate(self, req: EffectRequest) -> GateResult:
         h = req.request_hash()
-
-        # Authority can never be minted by translator/model/GWT/ClayGraph signals.
         authenticated_user = req.actor == AuthoritySource.AUTHENTICATED_USER and req.authenticated
 
         if req.effect_class == EffectClass.READ_ONLY:
@@ -197,17 +207,27 @@ class EffectAuthorityGate:
 
         return GateResult(EffectDecision.DENY, "unknown destructive subtype fails closed", h)
 
-    def apply_confirmation(self, req: EffectRequest, receipt: ConfirmationReceipt, *, now: Optional[datetime] = None) -> GateResult:
+    def validate_confirmation(self, req: EffectRequest, receipt: ConfirmationReceipt, *, now: Optional[datetime] = None) -> GateResult:
         base = self.evaluate(req)
         h = base.request_hash
         now = now or datetime.now(timezone.utc)
 
         if base.decision != EffectDecision.REQUIRE_CONFIRMATION:
             return GateResult(base.decision, f"confirmation not applicable: {base.reason}", h)
-        if receipt.expiry is not None and now > receipt.expiry:
+        if receipt.confirmed_at.tzinfo is None or (receipt.expiry is not None and receipt.expiry.tzinfo is None):
+            return GateResult(EffectDecision.DENY, "confirmation timestamp must be timezone-aware", h)
+        if not receipt.nonce:
+            return GateResult(EffectDecision.DENY, "confirmation nonce missing", h)
+        if not receipt.impact_summary.strip():
+            return GateResult(EffectDecision.DENY, "confirmation impact summary missing", h)
+        confirmed_at = receipt.confirmed_at.astimezone(timezone.utc)
+        expiry = receipt.expiry.astimezone(timezone.utc) if receipt.expiry is not None else None
+        if confirmed_at > now:
+            return GateResult(EffectDecision.DENY, "confirmation timestamp is in the future", h)
+        if expiry is not None and expiry < confirmed_at:
+            return GateResult(EffectDecision.DENY, "confirmation expiry precedes confirmation time", h)
+        if expiry is not None and now >= expiry:
             return GateResult(EffectDecision.DENY, "stale confirmation", h)
-        if receipt.nonce in self.used_confirmation_nonces:
-            return GateResult(EffectDecision.DENY, "replayed confirmation", h)
         if (
             receipt.request_hash != h
             or receipt.effect_class != req.effect_class
@@ -217,6 +237,14 @@ class EffectAuthorityGate:
             return GateResult(EffectDecision.DENY, "mismatched confirmation", h)
         if receipt.actor != AuthoritySource.AUTHENTICATED_USER or req.actor != AuthoritySource.AUTHENTICATED_USER or not req.authenticated:
             return GateResult(EffectDecision.DENY, "confirmation actor not authenticated user", h)
+        return GateResult(EffectDecision.ALLOW, "exact confirmation validated", h)
 
+    def apply_confirmation(self, req: EffectRequest, receipt: ConfirmationReceipt, *, now: Optional[datetime] = None) -> GateResult:
+        validated = self.validate_confirmation(req, receipt, now=now)
+        h = validated.request_hash
+        if validated.decision != EffectDecision.ALLOW:
+            return validated
+        if receipt.nonce in self.used_confirmation_nonces:
+            return GateResult(EffectDecision.DENY, "replayed confirmation", h)
         self.used_confirmation_nonces.add(receipt.nonce)
         return GateResult(EffectDecision.ALLOW, "exact one-shot confirmation admitted", h)

@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2347p0700-chatgpt-secondary-hyperposition-lowering",
+  "review_class": "GOODMAN_ANTI_ECHO",
+  "shared_ancestry_warning": "Frank, Hyperposition, ClayGraph and ClayCode project documents are not independent evidence merely because they agree.",
+  "assumptions": [
+    {
+      "id": "HP-NARY-SEMANTIC-IDENTITY",
+      "claim": "Some higher-order relations require preserving explicit n-ary semantic identity rather than silently replacing them with pairwise relations over the same visible variables.",
+      "project_ancestry": ["Hyperposition contract", "ClayGraph hyperrelation schema", "G9 Hyperrelation primitive"],
+      "independent_checks": [
+        "local exhaustive XOR hard-pairwise falsifier over all 4096 pairwise models",
+        "Bacchus & van Beek 1998 non-binary/binary CSP conversion literature",
+        "Dubois 2020 formally verified non-binary-to-binary CSP transformation"
+      ],
+      "strongest_counterhypothesis": "Pairwise relations over the original visible variables are always semantically sufficient.",
+      "verdict": "REFINED",
+      "reason": "The counterhypothesis fails for the XOR fixture, while finite relations can still be physically lowered through an explicit latent factor. Preserve n-ary semantic identity, but do not require a native n-ary physical backend."
+    },
+    {
+      "id": "HP-NATIVE-NARY-PHYSICAL-MANDATORY",
+      "claim": "A semantically n-ary Hyperposition relation requires native physical hyperedge storage/execution.",
+      "independent_checks": ["1000-case Hyperposition latent-factor differential fuzz", "2000-case ClayCode TypedIR/lowering roundtrip fuzz"],
+      "strongest_counterhypothesis": "An explicit latent factor plus pairwise compatibility edges can preserve the finite relation under projection.",
+      "verdict": "REFUTED_FOR_TESTED_FINITE_RELATIONS",
+      "reason": "Zero observed projection mismatches under tested finite discrete relations; backend identity remains physically distinct from semantic identity."
+    },
+    {
+      "id": "HP-PID-UNIVERSAL-IRREDUCIBILITY-GATE",
+      "claim": "A multivariate PID/PEID scalar or decomposition can be the universal promotion gate for higher-order irreducibility.",
+      "independent_checks": ["current multivariate PID inconsistency/impossibility counterevidence", "project requirement for lesion/rescue/replay/cost controls"],
+      "strongest_counterhypothesis": "Estimator-dependent synergy is useful as one readout but cannot replace exact reduction and intervention tests.",
+      "verdict": "REFUTED_AS_UNIVERSAL_GATE",
+      "reason": "Keep PID/PEID estimator identity and uncertainty explicit; use it only as an optional diagnostic alongside exact reduction/intervention evidence."
+    },
+    {
+      "id": "G9-SEMANTIC-CHANGE-REQUIRED-FOR-HYPERPOSITION",
+      "claim": "The frozen G9 ClayCode language semantics must be reopened to represent the tested Hyperposition design.",
+      "project_ancestry": ["G9 V3", "Dialect Registry V3", "BASE semantic freeze"],
+      "independent_checks": ["executable standalone TypedIR/lowering prototype using existing Set/Ordered/hash/Hyperrelation-like semantics"],
+      "strongest_counterhypothesis": "Existing frozen primitives are sufficient and only WP03/WP04/WP06 implementation is missing.",
+      "verdict": "REFUTED_NO_CHANGE",
+      "reason": "No executable counterexample to the frozen semantics was observed. The required distinction can be implemented as typed IR plus verified lowering without changing the language contract."
+    }
+  ],
+  "overall_verdict": "REFINED_NO_SEMANTIC_FREEZE_REOPEN",
+  "promotion": "NONE",
+  "next_independent_falsifier": "Execute the exact accepted V18 FrontendArtifact -> current TypedIR -> two backend lowering paths on the accepted Ubuntu target VPS with matched fixtures, failure injection and resource shadows."
+}

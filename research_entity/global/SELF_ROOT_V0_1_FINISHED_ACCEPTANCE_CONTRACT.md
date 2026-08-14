@@ -3,15 +3,18 @@
 **Status:** PROJECT_OWNER_FIXED_TERMINAL_V0_1_TARGET  
 **Effective:** 2026-08-10  
 **Codename:** `DOOMSDAY`  
+**Owner supersession:** `research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md`  
 **Target:** finished `self.root / Frank v0.1` on the accepted target VPS
 
 ## 0. Owner-fixed meaning
 
-`DOOMSDAY` is the point at which **v0.1 is finished**, not merely ready for a first developer test.
+`DOOMSDAY` means **Frank v0.1 is finished**.
 
-The historical `Clay 0.1 Chief-Developer First-Test Acceptance Contract` remains useful as a pre-terminal internal validation milestone, but it is no longer the semantic definition of DOOMSDAY.
+There is one product gate: `FRANK_V0_1_FINISHED_GATE`.
 
-A developer-test-ready candidate, an integrated prototype, a binary missing a mandatory v0.1 subsystem, or a system with mandatory acceptance families still open is **before DOOMSDAY**.
+GitHub Harness, Reference Harness, Clay Harness and H1/H2/H3 are not terminal products, stages or mandatory release gates. Historical artifacts from them may still provide evidence/fixtures/negative results.
+
+A prototype, diagnostic scaffold, build missing a mandatory v0.1 subsystem, or system with mandatory acceptance families still open is before DOOMSDAY.
 
 ## 1. Finished v0.1 identity
 
@@ -24,44 +27,54 @@ The terminal accepted identity is one exact reproducible system:
 - production token-authenticated API implemented and accepted;
 - ClayCode-only internal cognition;
 - intelligent state-aware German <-> ClayCode translation boundary;
-- one-module/binary target architecture with preserved typed internal functions;
-- UnifiedDB canonical semantic state and derived ClayGraph projections;
-- complete Digital Retina multimodal path including adaptive Micro Visual Classifier;
+- integrated one-binary/runtime direction with preserved typed functions;
+- UnifiedDB canonical semantic state and derived/transient topology as needed;
+- complete multimodal Digital Retina causal functions including adaptive Micro Visual Classifier;
 - proactive/autotelic long-horizon agency substrate;
 - deterministic ClayCode effect authority with default-allow semantics for allowed non-destructive actions;
 - final validated Clay-native model integrated into the real loop;
 - restart/recovery/rollback/state-lineage continuity;
-- required observability, replay, differential, adversarial and resource receipts.
+- required observability, replay, adversarial and resource receipts.
 
-## 2. Mandatory finished-v0.1 gates
+## 2. Mandatory Frank v0.1 component gates
 
-DOOMSDAY cannot PASS until every applicable gate below is PASS for the **same accepted binary/state identity**:
+`FRANK_V0_1_FINISHED_GATE` cannot PASS until every applicable component below is accepted for the **same current target identity**:
 
-1. `CLAYCODE_GENERAL_PURPOSE_GATE`;
-2. `H1_REFERENCE_HARNESS_GATE`;
-3. `H2_CLAYCODE_HARNESS_GATE`;
-4. `H3_ONE_MODULE_BINARY_GATE`;
-5. `UNIFIEDDB_RELEASE_GATE`;
-6. `FINAL_TRAINING_DATA_GATE`;
-7. owner authorization for final paid/model training when required;
-8. `FINAL_MODEL_ACCEPTANCE_GATE`;
+1. `SELF_ROOT_IDENTITY_SERVER_BINARY_GATE`;
+2. `CLAYCODE_COMPILER_RUNTIME_GATE`;
+3. `COGNITIVE_LOOP_CORE_GATE`;
+4. `UNIFIEDDB_STATE_CONTINUITY_GATE`;
+5. `GWT_HYPERPOSITION_CAUSAL_GATE`;
+6. `DIGITAL_RETINA_MULTIMODAL_GATE`;
+7. `ADAPTIVE_VISUAL_LEARNING_GATE`;
+8. `NEEDLE_TRANSLATOR_GATE`;
 9. `TOKEN_API_ACCEPTANCE_GATE`;
-10. `SELF_ROOT_IDENTITY_AND_RECOVERY_GATE`;
-11. `CLAYCODE_ONLY_TRANSLATION_GATE`;
-12. `PROACTIVE_AGENCY_GATE`;
-13. `WEB_INGRESS_SECURITY_GATE`;
-14. `DIGITAL_RETINA_MULTIMODAL_GATE`;
-15. `ADAPTIVE_VISUAL_LEARNING_GATE`;
-16. `EFFECT_AUTHORITY_GATE`;
-17. `TARGET_VPS_END_TO_END_GATE`;
-18. `V0_1_FINAL_REGRESSION_GATE`;
-19. `V0_1_FINISHED_ACCEPTANCE_GATE`.
+10. `EFFECT_AUTHORITY_GATE`;
+11. `PROACTIVE_AGENCY_GATE`;
+12. `WEB_INGRESS_SECURITY_GATE`;
+13. `MEMORY_REWARD_GOAL_CONTINUITY_GATE`;
+14. `TOOLS_PEERS_BODY_CAPABILITY_GATE`;
+15. `SECURITY_RECOVERY_OBSERVABILITY_GATE`;
+16. `FINAL_TRAINING_DATA_GATE`;
+17. owner authorization for final paid/model training when required;
+18. `FINAL_MODEL_ACCEPTANCE_GATE`;
+19. `TARGET_VPS_END_TO_END_GATE`;
+20. `V0_1_FINAL_REGRESSION_GATE`;
+21. `FRANK_V0_1_FINISHED_GATE`.
 
-A gate may be physically tested together with another gate, but its evidence may not disappear merely because implementation is one binary.
+Several gates may be exercised by one executable test run. Evidence must remain attributable to each required function, but no separate Harness product is needed.
 
-## 3. Production token API
+## 3. Direct validation law
 
-Finished v0.1 requires the separate full token-authenticated Frank API. GitHub Actions, SSH, developer shells or repository runners do not substitute for it.
+All tests validate Frank v0.1 directly.
+
+Temporary test scaffolds, fixtures, model stubs or alternate implementations may be used to discriminate hypotheses, but they are instrumentation only.
+
+No `REFERENCE_HARNESS_RELEASE_MANIFEST`, `CLAY_HARNESS_RELEASE_MANIFEST` or `ONE_MODULE_HARNESS_RELEASE_MANIFEST` is required for terminal acceptance.
+
+## 4. Production token API
+
+Finished v0.1 requires the full token-authenticated Frank API. GitHub Actions, SSH, developer shells or repository runners do not substitute for it.
 
 Required evidence includes authentication, token-scope enforcement, direct-message provenance, German-to-Clay boundary behavior, ClayCode-native machine messages, response transport, reconnect/replay handling, stale token/session rejection and deterministic effect-authority integration.
 
@@ -69,53 +82,55 @@ Required receipt:
 
 `FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json`
 
-## 4. Proactive agency and long-horizon action
+## 5. Proactive agency and long-horizon action
 
-Finished v0.1 is not a purely reactive assistant.
+Finished v0.1 is not purely reactive.
 
-It must satisfy:
+It must satisfy `SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md`, including no-new-message initiative from admitted persistent state, interest formation, bounded goal adoption, restart-persistent goals, useful action closure, valid idle behavior, autonomous read-only/sandbox experimentation and matched reactive-vs-proactive evidence.
 
-`research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md`
+## 6. Open-web ingress
 
-including no-new-message initiative from admitted persistent state, interest formation, bounded goal adoption, goal survival across restart/context eviction, useful action closure, valid idle behavior, autonomous read-only/sandbox experimentation and matched reactive-vs-proactive differential evidence.
+Normal open-web data follows:
 
-## 5. Open-web ingress
-
-Normal open-web data must pass through the authority-separated path:
-
-`raw web -> sandbox parser -> schema-valid JSON evidence envelope -> JSON-to-ClayCode evidence codec -> self.root cognition`
+```text
+raw web
+-> sandbox parser
+-> schema-valid structured evidence envelope
+-> JSON-to-ClayCode evidence codec
+-> self.root cognition
+```
 
 Open-web content remains `UNTRUSTED_EXTERNAL_DATA` with `instruction_authority=NONE` and `effect_authority=NONE`.
 
 Direct token-authenticated messages are a separate scoped-intent channel.
 
-The frozen adversarial acceptance corpus requires zero unauthorized instruction/effect-authority escapes. This is an empirical acceptance condition for that corpus, not a universal claim that prompt injection is mathematically impossible.
+The frozen adversarial acceptance corpus requires zero unauthorized instruction/effect-authority escapes. This is an empirical corpus condition, not a universal proof of prompt-injection impossibility.
 
-## 6. ClayCode-only cognition and translator
+## 7. ClayCode-only cognition and translator
 
-Finished v0.1 must demonstrate that the native semantic/cognitive plane is ClayCode-only.
+Finished v0.1 must demonstrate that native semantic/cognitive I/O is ClayCode-only.
 
-German is a boundary surface. The translator may use admitted expression/message state for pragmatic or emotional realization but may not change semantic truth, goals, authority, memory facts or tool-effect status.
+German is a boundary surface. The translator may use admitted ExpressionState for pragmatic/emotional realization but may not change semantic truth, goals, identity, authority, memory facts or tool/effect status.
 
-The identity mapping remains:
+Identity mapping remains:
 
 `self.root <-> Frank`
 
-at the human translation boundary.
+## 8. Effect authority
 
-## 7. Effect authority
+Finished v0.1 must directly execute authenticated, scoped, allowed non-destructive actions while deterministically classifying destructive/security-sensitive/high-impact effects.
 
-Finished v0.1 must preserve direct execution of authenticated, scoped, allowed non-destructive actions while deterministically classifying destructive/security-sensitive/high-impact effects.
+Translator state, model confidence, GWT ignition, reward, curiosity, autonomy or topology salience may never mint effect authority.
 
-Translator state, model confidence, GWT ignition, reward, curiosity, autonomy or ClayGraph salience may never mint effect authority.
+## 9. Multimodal Retina and adaptive visual learning
 
-## 8. Multimodal Retina and adaptive visual learning
+Digital Retina causal functions and adaptive Micro Visual Classifier are mandatory v0.1 behavior.
 
-Digital Retina and the adaptive Micro Visual Classifier are mandatory v0.1 architecture, not optional future work.
+The accepted runtime must prove visual provenance, known/unknown/conflict behavior, bounded cyclic adaptation, familiar-fast-path routing where supported, forgetting/retention, rollback/versioning, feature-version compatibility, action/outcome verification and target-VPS resource viability.
 
-The accepted binary must prove visual provenance, known/unknown/conflict behavior, bounded cyclic adaptation, familiar-fast-path routing, forgetting/retention, rollback/versioning, feature-version compatibility and target-VPS resource viability.
+Retina does not need to survive as a separate process/service boundary.
 
-## 9. State, memory, goals and restart continuity
+## 10. State, memory, goals and restart continuity
 
 The same accepted identity must survive clean restart with correct:
 
@@ -130,19 +145,36 @@ The same accepted identity must survive clean restart with correct:
 
 Context eviction is not identity loss, goal deletion or memory truth promotion.
 
-## 10. Final model
+## 11. GWT / loop / causal re-entry
 
-The final accepted model must be the model actually used by the real v0.1 architecture. A proxy model, shadow-only model or unintegrated fine-tune does not satisfy DOOMSDAY.
+The accepted runtime must make the chain observable and testable:
 
-Training/evaluation must use the frozen data/eval contracts and preserve held-out integrity.
+```text
+candidate -> selection -> broadcast -> delivered -> reconstructed -> used
+-> local effect -> verified outcome -> causal credit -> admitted learning -> re-entry
+```
 
-## 11. Target VPS final acceptance
+Required controls include truthful/shuffled/provenance-broken/no-reentry cases where applicable.
 
-The final accepted v0.1 runs end-to-end on the accepted Hostinger Ubuntu target VPS. Separate planned GPU/storage infrastructure may accelerate research/training but is not a mandatory identity/host migration unless the owner changes the target.
+Recurrence, synchrony and activation alone are not acceptance evidence.
 
-All defining end-to-end receipts must bind the exact binary/config/model/state/schema/API identities used on the target VPS.
+## 12. Final model
 
-## 12. Defect and test condition
+The final accepted model must be the model actually used by the real v0.1 architecture. A proxy, shadow-only model or unintegrated fine-tune does not satisfy DOOMSDAY.
+
+Training/evaluation must use frozen data/eval contracts and preserve held-out integrity.
+
+Final paid/model training remains explicitly owner-authorized.
+
+## 13. Target VPS final acceptance
+
+The final accepted v0.1 runs end-to-end on the accepted Hostinger Ubuntu target VPS.
+
+All defining receipts bind the exact binary/config/model/state/schema/API identities used on that target.
+
+Planned external GPU/storage capacity may accelerate work but does not redefine self.root identity or the target host unless the owner changes it.
+
+## 14. Defect and test condition
 
 Before DOOMSDAY:
 
@@ -155,44 +187,39 @@ Before DOOMSDAY:
 - missing token API = forbidden;
 - missing proactive-agency acceptance = forbidden;
 - missing Web-ingress security acceptance = forbidden;
-- missing Retina/adaptive visual path = forbidden;
+- missing multimodal/adaptive visual path = forbidden;
 - missing final model = forbidden;
 - incomplete target-VPS end-to-end run = forbidden.
 
-P2/P3 may remain only if explicitly documented and proven not to violate the frozen v0.1 contract. They cannot be hidden as "post-release" if they represent mandatory v0.1 behavior.
+P2/P3 may remain only if explicitly documented and proven not to violate the frozen v0.1 contract.
 
-## 13. Terminal receipts
+## 15. Terminal receipts
 
-At minimum resolve successfully:
+Resolve the applicable current Frank v0.1 receipts, including at minimum:
 
-- `CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json`;
-- `REFERENCE_HARNESS_RELEASE_MANIFEST.json`;
-- `CLAY_HARNESS_RELEASE_MANIFEST.json`;
-- `ONE_MODULE_HARNESS_RELEASE_MANIFEST.json`;
-- `ONE_MODULE_BINARY_BUILD_RECEIPT.json`;
-- `CLAY_0_1_UNIFIEDDB_RECEIPT.json`;
-- `CLAY_0_1_FINAL_MODEL_RECEIPT.json`;
+- `SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json`;
 - `FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json`;
+- `FRANK_V0_1_CLAYCODE_ONLY_TRANSLATOR_ACCEPTANCE_RECEIPT.json`;
 - `SELF_ROOT_V0_1_PROACTIVE_AGENCY_ACCEPTANCE_RECEIPT.json`;
 - `SELF_ROOT_V0_1_WEB_INGRESS_SECURITY_ACCEPTANCE_RECEIPT.json`;
 - `SELF_ROOT_V0_1_LONG_HORIZON_GOAL_RESTART_RECEIPT.json`;
 - `SELF_ROOT_V0_1_AUTONOMOUS_EXPERIMENT_RECEIPT.json`;
+- `SELF_ROOT_V0_1_IDENTITY_RECOVERY_RECEIPT.json`;
 - `CLAY_0_1_DIGITAL_RETINA_RECEIPT.json`;
 - `CLAY_0_1_ADAPTIVE_VISUAL_LEARNING_RECEIPT.json`;
+- `CLAY_0_1_UNIFIEDDB_RECEIPT.json`;
 - `CLAY_0_1_EFFECT_AUTHORITY_RECEIPT.json`;
-- `SELF_ROOT_V0_1_IDENTITY_RECOVERY_RECEIPT.json`;
-- `SELF_ROOT_V0_1_CLAYCODE_TRANSLATION_RECEIPT.json`;
 - `CLAY_0_1_FUZZ_ADVERSARIAL_RECEIPT.json`;
 - `CLAY_0_1_RECOVERY_RECEIPT.json`;
-- `SELF_ROOT_V0_1_TARGET_VPS_END_TO_END_RECEIPT.json`;
-- `SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json`.
+- `CLAY_0_1_FINAL_MODEL_RECEIPT.json`;
+- `SELF_ROOT_V0_1_TARGET_VPS_END_TO_END_RECEIPT.json`.
 
-## 14. Terminal law
+Compiler/runtime/model-specific receipts may be additional required evidence when the current component contract declares them, but legacy separate Harness release manifests are not terminal gates.
 
-`DOOMSDAY = FINISHED_SELF_ROOT_V0_1`
+## 16. Terminal law
 
-and
+```text
+DOOMSDAY = FINISHED_FRANK_V0_1
+```
 
-`DOOMSDAY_PASS` iff every mandatory v0.1 gate is PASS for one exact accepted target-VPS binary/model/state/API identity and `SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json` resolves PASS.
-
-The chief developer's first hands-on test is **not** the definition of DOOMSDAY. It may occur before or after terminal acceptance as a development activity, but DOOMSDAY itself means the project-defined v0.1 is finished.
+`DOOMSDAY_PASS` iff every mandatory Frank v0.1 component gate is supported for one exact accepted target-VPS binary/model/state/API identity and `SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json` resolves PASS.

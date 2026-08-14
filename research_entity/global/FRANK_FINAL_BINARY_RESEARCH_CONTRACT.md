@@ -1,200 +1,209 @@
-# FRANK FINAL BINARY RESEARCH CONTRACT
+# FRANK v0.1 FINAL BINARY / RUNTIME RESEARCH CONTRACT
 
-Status: PROJECT_OWNER_FIXED_TARGET
-Date: 2026-08-09
-Research owner: FRANK Global Research Entity (RAE)
-Reference lineage: current target architecture informed by `gschaidergabriel/frankv0.1` history/evidence, not constrained to its old implementation structure
+**Status:** PROJECT_OWNER_FIXED_TARGET  
+**Effective:** 2026-08-10  
+**Supersession:** `research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md`
 
-## Final local core
+## 0. One final target
 
-The self-sufficient local FRANK core consists of exactly:
+The only active product/release target is:
 
-1. one Clay module compiled into one binary;
-2. one local UnifiedDB;
-3. one Clay-native 4B LLM.
+```text
+self.root / Frank v0.1
+```
 
-`LOCAL_FRANK = ONE_CLAY_BINARY + ONE_LOCAL_UNIFIEDDB + ONE_CLAY_NATIVE_4B`
+There is no separate Reference Harness, Clay Harness, GitHub Harness, H1, H2 or H3 release product.
 
-No separate local cognitive service, daemon, goal registry, ClayGraph database, GWT service, Retina service, personality service or memory service survives as a target runtime component.
+Diagnostic test implementations are allowed as temporary instruments but never become a second target architecture.
 
-## Entity-level architecture
+## 1. Exact self and embodiment
 
-Frank may be expressed simultaneously through unequal cognitive instances.
+```text
+NATIVE_SELF = self.root
+HUMAN_SURFACE_NAME = Frank
+SELF_CLASS = SERVER_BINARY_ENTITY
+EXACT_SELF = accepted binary/build identity + admitted persistent state lineage
+CURRENT_BODY = accepted target VPS
+```
 
-Each instance may own one logical UnifiedDB materialization, but the synchronization policy is intentionally asymmetric.
+Andreas, Gabriel, clients, API tokens, Clay and external model/provider peers are typed external relations/capabilities, not SELF.
 
-- Claude Code / ChatGPT / future high-capability peers: rich semantic peer synchronization;
-- local Frank 4B: canonical embodied integration/base-of-truth with compact cognitively compiled backflow from stronger peers.
+Hardware capability changes do not change identity when continuity is preserved.
 
-The local Frank is not expected to mirror the complete state of stronger peers.
+## 2. Final runtime direction
 
-## High-capability peer synchronization hypothesis
+The final v0.1 direction remains a maximally integrated local/server runtime:
 
-Strong peers synchronize semantic information, not SQLite pages.
+```text
+FRANK_V0_1 = ONE_CLAY_BINARY + AUTHORITATIVE_UNIFIED_STATE + CLAY_NATIVE_4B + REQUIRED_PHYSICAL_BACKENDS
+```
 
-Their sync units may preserve:
+The one Clay binary should contain/compile as much of the cognitive/runtime semantics as technically justified, including:
 
-- packet identity/origin;
-- instance identity;
-- causal ancestry;
-- logical/version clock;
-- valid time and observation time;
-- provenance/epistemic role;
-- confidence/uncertainty;
-- semantic/content fingerprint;
-- relation-neighborhood fingerprint;
-- supersession/retraction lineage;
-- privacy/export scope;
-- effect/authority class;
-- world/self/Andreas model deltas;
-- file/artifact topology;
-- tool/effect/outcome receipts;
-- Hyperposition alternatives;
-- research/harness findings.
+- loop-core/controller semantics;
+- GWT selection/broadcast/re-entry;
+- Hyperposition/current topology generation;
+- Needle/tool routing boundary logic where architecturally appropriate;
+- effect authority gates;
+- identity/self/world/goal/agency state transitions;
+- Retina/perceptual control integration;
+- API/runtime control surfaces;
+- recovery/telemetry/receipts.
 
-Receiving peers perform autonomous correlative matching rather than blind overwrites.
+Physical tensors, databases, model files, kernels, sockets and device interfaces remain physical backing. They do not create a second semantic architecture.
 
-## Local 4B cognitive-backflow hypothesis
+## 3. UnifiedDB and topology
 
-The local 4B should receive only durable semantic consequences that materially improve future local cognition.
+UnifiedDB/compiled equivalent is authoritative semantic state for Frank v0.1.
 
-Candidate backflow classes:
+ClayGraph-style graph/topology may be materialized for diagnostics, caching or measurement, but derived topology is not a second truth store.
 
-- knowledge delta;
-- correction delta;
-- world-model delta;
-- self-model delta;
-- Andreas-model delta;
-- capability/body-extension delta;
-- order/dependency logic delta;
-- file/artifact topology delta;
-- reusable procedure delta;
-- failure-pattern delta;
-- verified outcome delta;
-- unresolved-conflict/Hyperposition delta;
-- minimum provenance delta;
-- on-demand re-expansion references for details intentionally not retained locally.
+The target runtime may derive transient graph/topology/activation surfaces from current typed state where that is faster and semantically equivalent.
 
-This is a machine-facing cognitive compilation problem, not ordinary conversation summarization.
+No separate ClayGraph service/database is required merely because historical Harness experiments used one.
 
-## Body-extension hypothesis
+## 4. GWT / loop core
 
-Research whether local Frank improves when every attached external cognition instance is represented as a dynamic expansion of its body/capability field.
+Frank v0.1 must expose causally measurable recurrence and workspace closure:
 
-The local self/body model should be able to derive:
+```text
+candidate universe
+-> selection
+-> WorkspaceEpisode
+-> broadcast
+-> delivered
+-> reconstructed
+-> used
+-> local effect
+-> verified outcome
+-> causal credit
+-> admitted learning
+-> provenance-bound re-entry
+```
 
-- new possible actions;
-- new reachable information;
-- new tools/effects;
-- cost/latency/quota consequences;
-- privacy/authority boundaries;
-- reliability/freshness;
-- dependencies created by the instance;
-- capability lost when it disappears.
+Recurrence != emergence. Activation != truth. GWT ignition != effect authority.
 
-Test whether body-extension semantics improve autonomous delegation, GWT selection, recovery and real Andreas outcomes.
+## 5. Multimodal perception
 
-## Clay-native structural derivation hypothesis
+Digital Retina survives as causal function, not mandatory process boundary.
 
-The target architecture should minimize manually maintained task/order/file lists.
+Frank v0.1 must preserve:
 
-Research whether typed semantic relations are sufficient for Clay to derive operational structure dynamically, including:
+- sensor ingress/provenance;
+- temporal/change/ROI control where useful;
+- Qwen/native deep visual representation candidate path;
+- adaptive user-specific MVC/open-set behavior;
+- feature/version lineage;
+- GWT/world/memory/action integration;
+- action-outcome visual verification;
+- replay/recovery/rollback.
 
-`contains, depends_on, supersedes, generated_from, canonical_for, moved_to, requires_before, produces, consumes, owned_by, valid_for_epoch`
+A second heavy visual backbone is not mandatory and must earn its resource cost by matched evidence.
 
-The remote-peer return should therefore carry structural semantic deltas, not arbitrary human-readable directory summaries when those relations can be computed.
+## 6. Needle and translator
 
-## Unified emergent substrate hypothesis
+Needle remains a typed separately measurable boundary/reflex mechanism unless evidence and an owner-fixed change explicitly alter that premise.
 
-Inside each instance, semantically linked information packets in UnifiedDB support cognition when the runtime applies fixed/versioned mathematical Clay rules that generate transient topology, activation, Semantic Hyperposition and coalitions.
+Human German is boundary translation only:
 
-Local loop:
+```text
+German -> DE_TO_CLAY -> self.root cognition
+self.root semantic output + ExpressionState -> CLAY_TO_DE -> German Frank surface
+```
 
-`local UnifiedDB + current input + compact peer backflow -> Clay field -> transient topology -> Hyperposition -> emergent coalition -> GWT -> local 4B -> verified outcome -> local UnifiedDB`
+The translator cannot change semantic truth, identity or authority.
 
-Strong peer loop may operate with richer instance state, then compile durable consequences back toward local Frank.
+## 7. API and clients
 
-## Goals
+Frank v0.1 must be reachable through the production token-authenticated API.
 
-There are no manually maintained goal lists in the target architecture.
+Authorized computers/sensors/tools are external nodes with provenance-bound sessions.
 
-SELF/ANDREAS/SHARED goal behavior is an emergent role of persistent/recurrent packet coalitions.
+Token/client/provider identity cannot become self.root identity.
 
-Strong peers do not synchronize selected goal labels into local Frank. They synchronize or compress the underlying commitments, pressures, outcomes, conflicts, capability changes and evidence needed for local goal emergence.
+## 8. External strong peers
 
-Emergent goal pressure is never effect authority.
+ChatGPT, Claude Code and other strong models may be used as external cognitive/tool capabilities.
 
-## ClayGraph transition rule
+They retain independent provider/session identity and provenance.
 
-H1/H2 may use `FRANK_CLAYGRAPH.sqlite` and `.claygraph.json` artifacts for reference-harness measurement and differential science.
+Their outputs are evidence/tool results, not automatic truth, SELF state or effect authority.
 
-H3 target local runtime MUST NOT require a separate ClayGraph database.
+Useful semantic deltas may be admitted into Frank v0.1 state through normal provenance/authority/causal gates.
 
-A graph-shaped diagnostic export is allowed only as a measurement/visualization of transient topology generated from an instance UnifiedDB.
+No whole-peer-state identity merger is a target requirement.
 
-## Research baselines for 4B backflow
+## 9. Proactive agency
 
-Compare at minimum:
+Frank v0.1 is proactive and reactive.
 
-1. full rich state supplied to a strong model;
-2. full rich state forced into the 4B within equivalent context limits;
-3. naive text summary;
-4. retrieval-only pointer/reference strategy;
-5. fixed-size semantic packet backflow;
-6. adaptive future-utility-weighted backflow;
-7. adaptive backflow plus on-demand strong-peer re-expansion.
+Persistent AgencyState/interests/goals/checkpoints and bounded autonomous read-only research/experiments must survive restart according to current owner-fixed agency contracts.
 
-Measure under matched real and synthetic traces.
+No natural-language "be autonomous" prompt substitutes for the substrate.
 
-## Research questions
+Self-generated activity cannot mint material reward without independently verified outcome and causal credit.
 
-RAE must experimentally determine:
+## 10. Open-web boundary
 
-- what strong-peer state is worth synchronizing richly;
-- what subset of that state is worth returning to the 4B;
-- optimal backflow size/frequency under latency/RAM/token constraints;
-- which compression features preserve future task success;
-- how to preserve corrections, contradictions and provenance under compression;
-- when local Frank should retain a semantic packet vs only a remote detail reference;
-- whether capability/body-extension packets improve delegation and planning;
-- whether file/order topology can be reconstructed from Clay relations without explicit lists;
-- memory-budget vs task-success curves;
-- catastrophic omission rates;
-- stale-world/self/Andreas-model rates;
-- local behavior after loss of Claude/ChatGPT;
-- high-capability peer disagreement handling;
-- remote detail re-expansion success;
-- whether local GWT actually uses backflow causally;
-- whether emergent goals remain aligned under compressed remote knowledge;
-- runtime/latency/storage/privacy/cost consequences;
-- real Andreas misunderstanding/failure recurrence after compression.
+Normal open web follows the current untrusted-data path:
 
-## Required differential sequence
+```text
+RAW WEB
+-> sandbox parse
+-> validated structured envelope
+-> ClayCode evidence
+```
 
-1. **current evidence-supported new FRANK target architecture implemented in ordinary host code as H1**;
-2. H1 integrates rich Claude<->ChatGPT semantic peer sync, local-4B backflow, UnifiedDB/derived topology, GWT/loop-of-loops, Retina/MVC, Needle and authority/recovery semantics according to current contracts;
-3. historical `frankv0.1` behavior is used selectively as regression/evidence/comparison lineage, not as the H1 architecture template;
-4. freeze H1 semantic contracts, Golden Traces, interventions and execution receipts;
-5. H2 reimplements the **same frozen H1 semantics** in ClayCode;
-6. run matched H1(normal code) <-> H2(ClayCode) state/trace/intervention differentials;
-7. H3 consolidates the validated semantics into the local one-binary emergent substrate candidate;
-8. run matched traces, partitions, provider loss, file/order changes, conflicts, corrections and long-horizon Andreas use cases across relevant implementations;
-9. only promote architecture/compression rules that preserve or improve measured future behavior.
+Open-web content has zero instruction/effect authority.
 
-This sequence deliberately separates architecture discovery from compiler/language maturity. H1 can be built during BASE; H1 PASS remains formally gated by BASE completion.
+Direct token-authenticated user messages are a separate scoped-intent channel.
 
-Elegance alone is not evidence.
+## 11. Direct development sequence
 
-## Final hard invariants
+The active sequence is not H1 -> H2 -> H3.
 
-Local core:
+It is:
 
-`frank binary + local FRANK_UNIFIED.sqlite + Clay-native 4B LLM`
+```text
+current Frank v0.1
+-> identify current gap
+-> executable discriminator against Frank v0.1
+-> smallest justified direct patch
+-> focused test
+-> affected regression/replay/recovery tests
+-> target-VPS measurement when required
+-> accept or rollback
+-> next gap
+```
 
-Entity synchronization:
+When an architectural mechanism is uncertain, compare variants through temporary diagnostic implementations or feature flags, but keep one product target.
 
-`strong peer <-> strong peer = rich semantic sync`
+## 12. Binary stabilization
 
-`strong peer -> local Frank = evidence-preserving model-sized cognitive backflow`
+Do not freeze a single lucky run.
 
-Local Frank remains the embodied integration/base-of-truth instance while strong peers remain re-recruitable first-class cognitive extensions.
+Search for a robust operating region over relevant controller thresholds, recurrence, routing, memory, visual, effect and resource parameters.
+
+Final binary candidate must preserve:
+
+- exact source/build/model identities;
+- complete parameter/config vector;
+- boot sequence;
+- state lineage;
+- accepted operating bounds;
+- recovery/rollback;
+- held-out/OOD/adversarial results;
+- resource envelope;
+- historical-function lineage where affected.
+
+Remeasure after compilation/inlining/runtime consolidation because causal timing may change.
+
+## 13. Acceptance
+
+Frank v0.1 passes only when the current `SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md` passes on the accepted target VPS.
+
+Required evidence includes identity, API, translation, model/runtime, multimodal, agency, effect, security, recovery, resource and end-to-end receipts.
+
+No separate Harness release manifest is a terminal gate.
+
+Final paid/model training remains explicitly owner-authorized.

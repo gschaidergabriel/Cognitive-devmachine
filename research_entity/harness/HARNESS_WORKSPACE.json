@@ -1,128 +1,17 @@
 {
-  "schema_version": "1.4",
-  "workspace_id": "frank-test1-harness",
-  "status": "ACTIVE_BUILD",
-  "owner_directive": "Build the complete repository-executed FRANK simulation Harness to release quality before LoRA-1. First finish the normal Reference Harness, then rebuild the same frozen architecture in ClayCode. Every Harness must have its own diagnostic ClayGraph surface during H1/H2. Digital Retina and the adaptive user-specific Micro Visual Classifier are mandatory in H1/H2/H3. The target local FRANK must dynamically know current cognitive/tool capabilities, including direct Claude Code reachability when available, without a separate PossibilitySpace truth store.",
-  "trigger": "harness",
-  "protocol_ref": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
-  "claygraph_contract_ref": "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md",
-  "archaeology_protocol_ref": "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
-  "first_principles_lens_ref": "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",
-  "digital_retina_contract_ref": "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
-  "adaptive_visual_learning_directive_ref": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
-  "adaptive_visual_learning_research_ref": "research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md",
-  "direct_claude_code_tool_ref": "research_entity/global/FRANK_DIRECT_CLAUDE_CODE_TOOL_CONTRACT.md",
-  "instance_peer_fabric_ref": "research_entity/global/FRANK_DUAL_INSTANCE_EMBODIED_STATE_CONTRACT.md",
-  "final_binary_ref": "research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md",
-  "test_contract_ref": "research_entity/experiments/FRANK_TEST1_CLAY_NATIVE_FULL_SIMULATION_CONTRACT.md",
-  "release_gate_ref": "research_entity/global/LORA1_RELEASE_GATE.md",
-  "mesh_protocol_ref": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
-  "coverage": "ALL_REGISTERED_BRANCHES_PLUS_LIVE_WORKERS_PLUS_PROJECT_FRANKENSTEIN_ARCHAEOLOGY_PLUS_DRIVE_DIGITAL_RETINA_LINEAGE_PLUS_ADAPTIVE_VISUAL_LEARNING_PLUS_DYNAMIC_PEER_CAPABILITY_FABRIC",
-  "implementation_order": [
-    "REFERENCE_HARNESS",
-    "REFERENCE_HARNESS_CLAYGRAPH",
-    "CLAY_HARNESS",
-    "CLAY_HARNESS_CLAYGRAPH",
-    "CROSS_IMPLEMENTATION_STATE_AND_GRAPH_DIFFERENTIAL"
-  ],
-  "release_artifacts": [
-    "REFERENCE_HARNESS_RELEASE_MANIFEST.json",
-    "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json",
-    "CLAY_HARNESS_RELEASE_MANIFEST.json",
-    "CLAY_HARNESS_ARCHITECTURE.claygraph.json",
-    "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json",
-    "HARNESS_RELEASE_MANIFEST.json"
-  ],
-  "gate_status": {
-    "REFERENCE_HARNESS_RELEASE_GATE": "NOT_PASS",
-    "CLAY_HARNESS_RELEASE_GATE": "NOT_PASS"
+  "schema_version": "2.0",
+  "workspace_id": "legacy-harness-redirect",
+  "status": "SUPERSEDED_BY_FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "current_program": "FRANK_V0_1",
+  "current_workspace": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+  "current_protocol": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+  "harness_semantics": "Directly instrument, test, falsify, benchmark and repair current Frank v0.1. Harness is a method, not a product or stage.",
+  "legacy_harness_products": {
+    "status": "HISTORICAL_EVIDENCE_ONLY",
+    "names": ["GitHub Harness", "Reference Harness", "Clay Harness", "H1", "H2", "H3"],
+    "history_preservation": "Prior contents remain in Git history and referenced receipts. They may supply fixtures/baselines/golden traces/negative results but are not current work packages or release gates."
   },
-  "coordination_rule": "Every harness worker joins this workspace, reads all current branch inputs, Project-Frankenstein archaeology, Drive Digital Retina lineage, adaptive visual learning directive, current per-Harness diagnostic ClayGraphs and live claims, claims a non-overlapping highest-value package, executes code/tests, cross-reads siblings and writes completion plus affected-branch feedback receipts. Exact frank additionally regenerates whole-mesh architecture input before and after material worker/test batches.",
-  "hard_invariants": [
-    "H1/H2 Harnesses expose their own diagnostic ClayGraph for differential measurement; final H3 does not require a separate persistent ClayGraph database when topology can be derived transiently from UnifiedDB",
-    "static Harness ClayGraph must validate against executed architecture",
-    "Golden Traces must emit dynamic Run ClayGraph or deterministic graph deltas",
-    "Clay Harness must implement the same frozen architecture semantics as Reference Harness",
-    "Clay Harness PASS requires state and ClayGraph differential equivalence against Reference Harness under translated semantic interventions",
-    "Digital Retina visual perception is mandatory in Reference Harness, Clay Harness and One-Module/Binary FRANK",
-    "adaptive user-specific Micro Visual Classifier with bounded cyclic learning is mandatory in Reference Harness, Clay Harness and One-Module/Binary FRANK for v0.1",
-    "Micro Visual Classifier prediction/confidence/familiarity is never sensor truth or execution authority",
-    "adaptive learner must preserve GOLD/SILVER/BRONZE admission, open-set UNKNOWN/AMBIGUOUS/CONFLICT, candidate shadow evaluation, atomic promotion, last-known-good rollback and feature-version compatibility",
-    "adaptive learner resource use must be bounded and measured; over-budget learning pauses without disabling perception",
-    "Digital Retina semantic output into FRANK must be provenance-bound Clay-native VisualPercept/PerceptualField state; raw pixels/tensors/embeddings are physical backing only",
-    "visual perception must be traceable through gating/selection, GWT broadcast, causal use, memory/action and re-entry with stale/shuffled/lesion controls",
-    "historical Project-Frankenstein mechanisms/failures and Drive Digital Retina mechanisms/failures must be catalogued and checked before relevant module release",
-    "no standalone manually maintained PossibilitySpace becomes a second source of truth; current possibility/capability surfaces are derived from current UnifiedDB semantic/capability state and transient cognition",
-    "Claude Code and ChatGPT peer results retain independent instance/provenance identity; no whole-peer-state overwrite of local 4B state",
-    "when current capability evidence says Claude Code is reachable, the local 4B can see and invoke a typed direct Claude Code peer tool; tool visibility never implies authority"
-  ],
-  "work_packages": {
-    "H-WP-00-ARCHAEOLOGY-INGEST": {"status":"OPEN","goal":"Continuously ingest Project-Frankenstein architecture archaeology, Drive Digital Retina lineage, successes, failures, equations, papers and emergent-coupling lineage into Harness decisions."},
-    "H-WP-01-FREEZE-COMPILER": {
-      "status":"COMPLETE",
-      "goal":"Compile exact current compatible FRANK+overlay architecture freeze with hashes and module/state/transition/coupling graph, including mandatory dissolved Digital Retina visual perception and adaptive visual learning.",
-      "completed_by":"chatgpt-secondary",
-      "completed_at":"2026-08-09T18:04:00+07:00",
-      "completion_run":"harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze",
-      "freeze_ref":"research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
-      "validation_ref":"research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/VALIDATION_REPORT.json",
-      "architecture_semantic_hash":"b92521a77690fcee8e6e247597e091c1478f790d38f780381d899b1200e85a0f",
-      "exact_contract_hash":"73450c51d1ca84f63556ba3d8adad3eb663ec848b02384e744af9ebd28421540",
-      "completion_scope":"REFERENCE_ARCHITECTURE_FREEZE_COMPONENT_ONLY_H1_RELEASE_NOT_PASS"
-    },
-    "H-WP-02-STATE-LEDGER": {"status":"CLAIMED","claimed_by":"chatgpt-secondary-sol-current","goal":"Canonical event/state ledger, epochs, provenance, snapshots and deterministic hashing."},
-    "H-WP-03-CLAYCODE-ADAPTER": {"status":"BLOCKED_ON_CC_RELEASE","goal":"Integrate frozen ClayCode parser/canonicalizer/validator/evaluator and ClayReaderFrame projection, including adaptive visual learner state/update semantics."},
-    "H-WP-04-NEEDLE-BOUNDARY": {"status":"OPEN","goal":"Model unchanged translator->Needle->Clay boundary and exact Needle receipts without merging Needle into model. A deterministic component adapter exists and passed 9/9 remote sandbox tests, but the authoritative baseline Needle receipt contract and target-Ubuntu replay remain open."},
-    "H-WP-05-UNIFIEDDB": {"status":"OPEN","goal":"Typed logical query/result/selection/transaction/replay simulation with physical-placement separation, including current resource/capability observations and derived current possibility views; persist VisualPercept identity/provenance plus adaptive visual classifier/prototype versions, trusted-example lineage, calibration and rollback."},
-    "H-WP-06-CLAYGRAPH": {"status":"OPEN","goal":"H1 diagnostic/reference topology for memory-use admissibility, routing, activation, Assembly, exact bypass, quarantine/escalation and scoped credit, including visual and peer/capability causal edges; topology is derived/rebuildable and does not become final H3 truth storage."},
-    "H-WP-06B-REFERENCE-HARNESS-GRAPH": {"status":"OPEN","goal":"Generate and validate REFERENCE_HARNESS_ARCHITECTURE.claygraph.json plus dynamic run graph deltas from the executed Reference Harness."},
-    "H-WP-07-GWT": {"status":"OPEN","goal":"Competition, WorkspaceEpisode, broadcast envelope and per-receiver delivery/reconstruction/uptake/causal-use/outcome/reentry chain, including familiar-local vs novel/conflict visual escalation and peer-backflow uptake."},
-    "H-WP-07-VISION-DIGITAL-RETINA": {"status":"OPEN","goal":"Ingest historical Drive Digital Retina; implement deterministic visual fixtures plus dissolved PerceptualField/VisualPercept semantics; integrate thalamic/attention gating, GWT, memory/world/self/action; add stale/replay/shuffle/lesion/rescue tests; preserve identical semantics through H1/H2/H3."},
-    "H-WP-07-MICRO-VISUAL-LEARNER": {"status":"OPEN","goal":"Implement mandatory FRANK v0.1 adaptive visual learner: MVC-0 prototype baseline plus MVC-1 tiny frozen-backbone learned readout unless MVC-0 alone meets frozen acceptance; GOLD/SILVER/BRONZE admission; calibrated known/unknown/conflict routing; cyclic bounded updates; shadow candidate evaluation; forgetting/retention, poisoning, open-set, resource, rollback/replay and feature-version migration tests MVC-E1..E7."},
-    "H-WP-08-SELF-BODY-GOALS": {"status":"OPEN","goal":"Persistent personality/E-PQ, world/self model, DigitalBodyState, goals/commitments/reflection/drift state, including multimodal visual world-state, user-specific familiarity and dynamic cognitive/body-extension capability state."},
-    "H-WP-09-MODEL-ADAPTER": {"status":"OPEN","goal":"Narrow model interface with deterministic fixtures now and target Qwen adapter only after authorization; compile a bounded task-conditioned ActiveAssembly from current UnifiedDB/local/peer/capability state; include typed visual context and familiarity/known/unknown/conflict without granting model or learner output authority."},
-    "H-WP-09-CLAUDE-PEER-TOOL": {"status":"OPEN","goal":"Implement/test the target `claude_code_peer` tool semantics: dynamic capability visibility to the 4B, typed request/result/receipt identity, no whole-state mirroring, semantic writeback into UnifiedDB, stale/unavailable/duplicate/conflict handling, lesion/rescue and authority boundaries."},
-    "H-WP-10-EFFECT-AUTHORITY": {"status":"OPEN","goal":"Frozen proposal/intent/resource/authority/reservation/commit/outcome/reentry semantics; no model-text, peer-result, visual-model or Micro Visual Classifier output authority."},
-    "H-WP-11-TRACE-REPLAY": {"status":"OPEN","goal":"Complete per-turn trace bundles, full/checkpoint/module/counterfactual replay, dynamic Run ClayGraphs and golden traces, including peer-message identities, visual evidence plus learner example/admission/version/promotion/rollback identity."},
-    "H-WP-12-ABLATION": {"status":"OPEN","goal":"Module and graph-edge lesions, peer-channel/Claude-tool lesions, policy swaps, state perturbations and matched counterfactual runner, including Digital Retina, visual-to-GWT and adaptive-learner lesions/rescue."},
-    "H-WP-13-RECOVERY": {"status":"OPEN","goal":"Crash/restart, idempotency, stale epochs, partial-effect boundaries, peer/provider disconnect/reconnect, rebuild and rollback tests including restoration of last-known-good adaptive visual learner state."},
-    "H-WP-14-FUZZ-ADVERSARIAL": {"status":"OPEN","goal":"Property/fuzz/mutation/adversarial/race/concurrency tests across architecture and graph boundaries, including stale/forged peer capability/results, malformed visual percepts, pseudo-label poisoning, unknown lookalikes and learner-state/version corruption."},
-    "H-WP-15-PERFORMANCE": {"status":"OPEN","goal":"Latency/cost/token/RAM/state-and-graph-amplification instrumentation without semantic shortcuts, including peer/backflow context cost, direct-Claude roundtrip cost, visual pipeline cost, MVC inference/update duty cycle, routing savings and user-visible tail latency."},
-    "H-WP-16-E2E": {"status":"OPEN","goal":"Long-horizon multi-turn Test-1 simulations with deterministic model/peer/visual fixtures and later Clay-native 4B, including current capability discovery, direct Claude delegation, familiar-content learning, novel-content escalation, action verification and recovery."},
-    "H-WP-17-REFERENCE-RELEASE-AUDIT": {"status":"OPEN","goal":"Reference Harness architecture coverage including dynamic peer/capability fabric and Claude tool, Digital Retina multimodal coverage, adaptive visual learner MVC-E1..E7 coverage, diagnostic ClayGraph validation, state schemas, golden traces, replay validation, ablation matrix, tests and PASS decision."},
-    "H-WP-18-CLAY-HARNESS": {"status":"BLOCKED_ON_REFERENCE_AND_CC_RELEASE","goal":"Rebuild the identical frozen Reference Harness architecture in ClayCode, including dissolved Retina, peer/capability/Assembly semantics and adaptive visual learner admission/update/confidence/promotion/rollback/resource semantics."},
-    "H-WP-19-CLAY-HARNESS-GRAPH": {"status":"BLOCKED_ON_CLAY_HARNESS","goal":"Generate/validate CLAY_HARNESS_ARCHITECTURE.claygraph.json and dynamic run graphs from Clay Harness execution, including learner-state and peer/backflow causal/provenance edges."},
-    "H-WP-20-DIFFERENTIAL": {"status":"BLOCKED_ON_BOTH_HARNESSES","goal":"Compare Reference vs Clay Harness authoritative state transitions, peer/node handoff continuity, receipts, transient/diagnostic topology, visual semantics, adaptive-learning transitions and semantic-intervention outcomes."},
-    "H-WP-21-CLAY-RELEASE-AUDIT": {"status":"BLOCKED_ON_DIFFERENTIAL","goal":"Clay Harness PASS decision; reopen ClayCode if equivalent FRANK, peer/capability/Assembly, dissolved Retina or adaptive visual learning semantics cannot be expressed."}
-  },
-  "live_claims": [
-    {
-      "claim_id":"harness-20260809-state-ledger-chatgpt-secondary-sol-current",
-      "work_package":"H-WP-02-STATE-LEDGER",
-      "actor":"chatgpt-secondary-sol-current",
-      "status":"ACTIVE",
-      "scope":"Canonical event/state ledger, epochs, provenance, snapshots, deterministic hashing and replay foundation",
-      "started_at":"2026-08-09"
-    }
-  ],
-  "completed_receipts": [
-    {
-      "work_package":"H-WP-01-FREEZE-COMPILER",
-      "run_id":"harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze",
-      "result":"COMPLETE_COMPONENT",
-      "freeze_ref":"research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
-      "validation_ref":"research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/VALIDATION_REPORT.json",
-      "h1_release_gate":"NOT_PASS"
-    },
-    {
-      "work_package":"H-WP-04-NEEDLE-BOUNDARY",
-      "run_id":"harness-20260809T1814p0700-chatgpt-secondary-hwp04-needle",
-      "result":"COMPLETE_COMPONENT_PACKAGE_REMAINS_OPEN",
-      "evidence":"9/9 REMOTE_SANDBOX_DETERMINISTIC_TEST component tests passed",
-      "report_ref":"research_entity/trigger_runs/harness/harness-20260809T1814p0700-chatgpt-secondary-hwp04-needle/FINAL_REPORT.md",
-      "remaining":"authoritative baseline Needle receipt contract + fixture parity + Ubuntu target replay + H2 ClayCode equivalent",
-      "h1_release_gate":"NOT_PASS"
-    }
-  ],
-  "last_updated": "2026-08-09"
+  "rule": "Any worker reaching this legacy path must immediately continue from the unified Frank v0.1 workspace and apply the current harness protocol.",
+  "last_updated": "2026-08-10T20:39:00+07:00"
 }

@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "cycle": 5,
+  "topic": "F-V01-13 fixed SQLite runtime product admission boundary",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "premise_chain": [
+    "Cycle 4 target-binds the actually loaded Ubuntu SQLite 3.45.1-1ubuntu2.7 object/source lineage and classifies it vulnerable to the targeted WAL-reset defect.",
+    "PR #315 target-proves an isolated official SQLite 3.53.4 survives that targeted defect and the existing process-crash oracle.",
+    "A fixed private build is not a product solution if a Frank state process can silently resolve back to the vulnerable system object."
+  ],
+  "hypothesis": {
+    "id": "H-STORAGE-FIXED-RUNTIME-ADMISSION-001",
+    "claim": "A fresh Frank Python state process can be made fail-closed on SQLite runtime identity by hash-pinning an accepted manifest, validating candidate object bytes/version/source-id before pysqlite import, re-execing with the private library path, and validating the actually mapped child-process object before target execution."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-STORAGE-FIXED-RUNTIME-ADMISSION-001",
+    "claim": "LD_LIBRARY_PATH/re-exec is not a reliable admission mechanism for Python pysqlite: the child may still map the target system libsqlite3 object or existing V17 state semantics may regress under the private 3.53.4 runtime."
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 324,
+    "branch": "chatgpt/storage-fixed-sqlite-admission-20260811",
+    "tested_sha": "a23b79d58d9f50d34501d1894a270330111a27e6",
+    "target_receipt_commit_after_test": "d6bcdc13fd9e6ed115431ab7c956a3bb329ac04e",
+    "mechanism": "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard.py",
+    "protocol": "FRANK_FIXED_SQLITE_RUNTIME_V1",
+    "integration_test": "tests/fixed_sqlite_runtime_guard_integration.py",
+    "target_workflow": ".github/workflows/frank-fixed-sqlite-runtime-admission-vps.yml"
+  },
+  "target_execution": {
+    "workflow_run_id": 31494090226,
+    "job_id": 93787360008,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_version": "2.336.0",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "result": "SUCCESS",
+    "artifact_id": 9102325343,
+    "artifact_size_bytes": 15440,
+    "artifact_sha256": "ed6c2d055a9c67fc9a65002a2296825ed766e28f39ba782858f980f8f1cf3806"
+  },
+  "fixed_runtime_identity": {
+    "version": "3.53.4",
+    "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+    "source_archive_sha256": "0e9483900e92cd5de8fd48d16bf9200145a61f7fd5be542a5ac81d8a9516eb9c",
+    "library_sha256": "c6858e90954a45304e2c41fbcfc43615c582a05a9f2eee771f3d606044264e51",
+    "manifest_sha256": "dcc3f04ecf32fd846de193270f9e6759ab57b338c3956a2b9a80fa9b33f33140",
+    "system_install_performed": false
+  },
+  "admission_differential": {
+    "status": "PASS_FIXED_SQLITE_RUNTIME_GUARD_INTEGRATION",
+    "checks_passed": 7,
+    "checks_total": 7,
+    "failed_checks": [],
+    "positive_control": "target executes only after child process observes exactly the admitted private 3.53.4 version/source-id/mapped object",
+    "negative_controls": {
+      "wrong_manifest_hash": "DENIED_BEFORE_TARGET_EXIT_78",
+      "wrong_library_hash": "DENIED_BEFORE_TARGET_EXIT_78",
+      "wrong_source_id": "DENIED_BEFORE_TARGET_EXIT_78",
+      "system_fallback": "DENIED_BEFORE_TARGET_AND_BEFORE_RECEIPT_EXIT_78; observed /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6"
+    },
+    "resource_shadow": {
+      "elapsed_seconds": 0.41,
+      "user_seconds": 0.29,
+      "system_seconds": 0.12,
+      "cpu_percent": 100,
+      "max_rss_kb": 21836,
+      "major_page_faults": 0,
+      "minor_page_faults": 21520,
+      "voluntary_context_switches": 21,
+      "involuntary_context_switches": 3,
+      "swaps": 0,
+      "exit_status": 0
+    }
+  },
+  "v17_state_regression_behind_admission": {
+    "status": "PASS_V17_BOUND_REENTRY_DONE_CANDIDATE_DIFFERENTIAL",
+    "checks_passed": 18,
+    "checks_total": 18,
+    "candidate_only_not_canonical_migration": true,
+    "canonical_database_migrated": false,
+    "resource_shadow": {
+      "elapsed_seconds": 0.25,
+      "user_seconds": 0.14,
+      "system_seconds": 0.06,
+      "cpu_percent": 83,
+      "max_rss_kb": 25304,
+      "major_page_faults": 0,
+      "minor_page_faults": 8522,
+      "voluntary_context_switches": 107,
+      "involuntary_context_switches": 6,
+      "swaps": 0,
+      "exit_status": 0
+    }
+  },
+  "build_resource_shadow_not_runtime_overhead": {
+    "elapsed_seconds": 53.95,
+    "user_seconds": 75.76,
+    "system_seconds": 12.47,
+    "cpu_percent": 163,
+    "max_rss_kb": 417488,
+    "exit_status": 0
+  },
+  "falsification_adjudication": {
+    "H-STORAGE-FIXED-RUNTIME-ADMISSION-001": "SUPPORTED_ON_ACCEPTED_TARGET",
+    "CH-STORAGE-FIXED-RUNTIME-ADMISSION-001": "REFUTED_FOR_THE_EXACT_TESTED_STACK",
+    "architecture_status": "TARGET_SUPPORTED_PRODUCT_INTEGRATION_CANDIDATE",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_TESTED_CANDIDATE",
+    "name": "FAIL_CLOSED_SQLITE_RUNTIME_OBJECT_ADMISSION",
+    "affected_work_packages": ["F-V01-13-STORAGE-TRUTH", "F-V01-01-SELFROOT-SKELETON", "F-V01-03-COGNITIVE-LOOP-CORE", "F-V01-09-EFFECT-AUTHORITY"],
+    "rule": "Correctness-sensitive Frank Python state execution must be admitted against an independently accepted SQLite manifest and then prove the actually mapped object/version/source-id/hash before executing state logic. Accidental fallback to the target system SQLite 3.45.1 object must fail closed.",
+    "provenance_boundary": "The existing dpkg-oriented loaded-object probe remains valid only for the system baseline. Private runtime provenance uses immutable artifact/build authority plus manifest hash and child-process mapped-object evidence; do not weaken one provenance model to masquerade as the other.",
+    "rollback": "If deployment cannot reproduce immutable build/manifest provenance or the admitted runtime regresses broader state/effect/GWT suites, do not promote; retain system SQLite only for non-WAL/correctness-insensitive paths or fail closed pending a supported fixed package/runtime."
+  },
+  "remaining_gates": [
+    "Promote manifest/build provenance from ephemeral CI output into an immutable accepted deployment artifact/installation boundary.",
+    "Run broader presence/V17/GWT/effect-authority suites under the exact admitted 3.53.4 object.",
+    "Test recovery across restart while enforcing the same runtime admission.",
+    "Keep power-loss/kernel-panic durability separate; SIGKILL/process-crash success is not equivalent evidence.",
+    "Do not globally replace the host SQLite package merely from this candidate."
+  ],
+  "target_receipt": {
+    "path": "runtime/vps_storage/fixed_sqlite_runtime_admission_v1/LATEST.json",
+    "commit": "d6bcdc13fd9e6ed115431ab7c956a3bb329ac04e"
+  },
+  "go_oob_experiment": "NONE_IN_CYCLE_5; macrocycle OOB slot already consumed in Cycle 1",
+  "training_authorized": false
+}

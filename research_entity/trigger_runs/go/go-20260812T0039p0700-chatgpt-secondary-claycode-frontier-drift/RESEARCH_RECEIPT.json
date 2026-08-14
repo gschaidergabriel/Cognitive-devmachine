@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0039p0700-chatgpt-secondary-claycode-frontier-drift",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_research_repo_parent": "d2842344a80e80a2a404fa4b3980c1fc3e657cb6",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+    "claycode_frontier_pr": 357,
+    "claycode_frontier_head": "89d720950d330c6bb2ed792fb97575321cc6a1a4",
+    "adversarial_shadow_pr": 393,
+    "adversarial_shadow_head": "86b272d11ec461293d13e33d9c006e8fd4784513"
+  },
+  "selected_frontier": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "hypothesis": "Bounding an unparenthesized record-update RHS at additive precedence removes the strict-LALR ambiguity between the update value and an outer relation/boolean continuation while preserving explicit parenthesized full-expression RHS semantics.",
+  "strongest_counterhypothesis": "The strict-LALR conflict may be parser-state noise rather than a real multiple-parse ambiguity, or the add_expr repair may simply move ambiguity into another parse path.",
+  "fresh_external_evidence": [
+    {
+      "source": "Lark official How To Use",
+      "claim_used": "strict=True turns shift/reduce conflicts into errors instead of silently resolving them",
+      "url": "https://lark-parser.readthedocs.io/en/latest/how_to_use.html"
+    },
+    {
+      "source": "Lark official parsers guide",
+      "claim_used": "LALR uses one-token lookahead and grammar rules matching the same sequence should be structurally disambiguated rather than hidden by priority where possible",
+      "url": "https://lark-parser.readthedocs.io/en/latest/parsers.html"
+    },
+    {
+      "source": "Lark official grammar reference",
+      "claim_used": "rule priority can resolve LALR collisions, but is a conflict-resolution mechanism rather than evidence of structural unambiguity",
+      "url": "https://lark-parser.readthedocs.io/en/stable/grammar.html"
+    },
+    {
+      "source": "SQLite official WAL documentation",
+      "claim_used": "the WAL-reset corruption bug affects 3.7.0 through 3.51.2 under the documented concurrent topology and is fixed in 3.51.3+",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite 3.51.3 release notes",
+      "claim_used": "3.51.3 explicitly contains the WAL-reset corruption fix; the separately target-tested private 3.53.4 lane is therefore in the fixed version family",
+      "url": "https://www.sqlite.org/releaselog/3_51_3.html"
+    }
+  ],
+  "executed_target_evidence": {
+    "with_rhs_discriminator": {
+      "pr": 390,
+      "workflow_run": 31517320226,
+      "job": 93865605550,
+      "runner": "clay",
+      "machine": "digital-retina",
+      "python": "3.12.3",
+      "lark": "1.3.1",
+      "tested_merge_sha": "f53077ea4aed3bb6c0100de8e158da9bea76f482",
+      "status": "PASS_WITH_RHS_PRECEDENCE_REPAIR",
+      "selected_candidate": "RHS_ADD",
+      "baseline_strict_lalr": "FAIL_SHIFT_REDUCE_AND_KW",
+      "selected_strict_lalr": "PASS",
+      "selected_micro_ast_preserved": true,
+      "selected_real_frank_effects_parse": true,
+      "selected_corpus_parsed": 36,
+      "selected_corpus_total_at_that_revision": 40,
+      "selected_corpus_rejected": [
+        "FRANK_BINARY_TARGET.clay",
+        "frank_claygraph.clay",
+        "frank_research_sync.clay",
+        "frank_unifieddb.clay"
+      ],
+      "wall_seconds": 24.48,
+      "max_rss_kib": 35364,
+      "external_effect": false,
+      "product_grammar_mutated_by_diagnostic": false
+    },
+    "current_main_composition": {
+      "workflow_run": 31517971317,
+      "job": 93867739555,
+      "runner": "clay",
+      "machine": "digital-retina",
+      "current_main": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+      "frontier_head": "89d720950d330c6bb2ed792fb97575321cc6a1a4",
+      "merged_tree_sha": "0e334d4e32d25fde8d1ca768d7619d356d428a46",
+      "merge_clean": true,
+      "result": "FAIL_STALE_CORPUS_CARDINALITY_GATE_AFTER_CURRENT_MAIN_DRIFT",
+      "decide_effect_requests_compared": 200576,
+      "decide_effect_mismatches": 0,
+      "effect_request_hash_requests_compared": 56000,
+      "effect_request_hash_mismatches": 0,
+      "confirmation_requests_compared": 16000,
+      "confirmation_mismatches": 0,
+      "ordinary_calls_missed": 0,
+      "frank_effects_unresolved": 0,
+      "callable_method_segments_still_open": 22,
+      "unresolved_unique_names": 429,
+      "unresolved_occurrences": 464,
+      "old_expected_corpus": "36/40 = 90.0%",
+      "fresh_current_main_corpus": "36/42 = 85.7%",
+      "new_current_main_clay_sources": [
+        "claycode/frank_unifieddb_projection_outbox_v1.clay",
+        "claycode/frank_unifieddb_projection_worker_v1.clay"
+      ],
+      "adjudication": "NO_RHS_ADD_REFUTATION; CURRENT_FRONTIER_DRIFT_REQUIRES_EXPLICIT_CLASSIFICATION_OR_LANGUAGE_SUPPORT; DO_NOT_RELAX_THE_GATE_SILENTLY"
+    }
+  },
+  "product_state_observation": {
+    "frontier_head_already_contains_rhs_add_repair": true,
+    "worker_added_duplicate_product_repair": false,
+    "current_rule": "with_assign: ident = add_expr",
+    "repair_semantics": "unparenthesized update RHS bounded at additive precedence; full boolean/relational RHS remains available through explicit parentheses"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "WITH_RHS_PARSE_FOREST_SHADOW",
+    "purpose": "independently witness real ambiguity in the old expr-RHS using Earley ambiguity=explicit and require zero ambiguity in the repaired grammar",
+    "target_pr": 393,
+    "target_branch": "chatgpt/go-with-rhs-earley-shadow-20260812",
+    "target_head": "86b272d11ec461293d13e33d9c006e8fd4784513",
+    "workflow_run": 31518303121,
+    "status": "QUEUED_NOT_EXECUTED",
+    "product_grammar_mutated": false,
+    "external_effect": false,
+    "promotion": "NONE"
+  },
+  "sqlite_release_gate_refresh": {
+    "upstream_version_boundary": "3.51.3+ fixed for documented WAL-reset bug",
+    "merged_target_candidate": "PR#359 / merge 94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+    "target_private_sqlite_test_version": "3.53.4",
+    "current_launcher": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v4_launcher.sh",
+    "current_guard": "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v4_candidate.py",
+    "status": "MECHANISM_SUPPORTED_BUT_PRODUCT_SERVICE_BOOT_BINDING_OPEN",
+    "remaining_gate": "install/bind immutable private SQLite+manifest; make the real service's only supported import-capable Python entrypoint cross the V4 -I -S admission boundary; prove restart/recovery on installed bytes",
+    "whole_recovery_acceptance": false
+  },
+  "architecture_delta": {
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME": "KEEP_IN_PROGRESS; RHS_ADD mechanism supported, but #357 promotion remains blocked until fresh current-main corpus drift is explicitly adjudicated and required strict/full gates are green",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "KEEP_IN_PROGRESS; upstream SQLite version risk is mitigated by target-tested private 3.53.4 candidate lane, but installed product service boot/restart binding remains open",
+    "new_product_mutation_by_this_worker": "NONE"
+  },
+  "next_falsifiers": [
+    "Execute PR #393 Earley parse-forest shadow on accepted target; do not promote if legacy ambiguity is not witnessed or repaired grammar remains ambiguous",
+    "Classify the two new UnifiedDB projection Clay contracts against the intended ClayCode dialect/surface and replace stale 36/40 promotion arithmetic with a provenance-bound baseline-plus-drift gate only if that classification is explicit",
+    "Rerun strict structured generic/relop, full frontier, operator survival, policy/hash/confirmation differentials, call-surface and symbol census on fresh current main",
+    "After #357 becomes canonical, recompose WP04 #369 and enforce validated WP04 -> WP06 lowering",
+    "Install and service-bind the V4 fixed-SQLite boundary and prove restart/recovery on the exact installed target bytes"
+  ],
+  "research_disposition": "TESTING_DELTA_PLUS_CURRENT_FRONTIER_DRIFT_AND_DEPLOYMENT_GATE_REFRESH",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

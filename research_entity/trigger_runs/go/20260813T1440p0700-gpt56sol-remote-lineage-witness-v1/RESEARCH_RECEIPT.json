@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1440p0700-gpt56sol-remote-lineage-witness-v1",
+  "trigger": "go",
+  "timestamp_local": "2026-08-13T14:40:24+07:00",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "research_parent_observed": "9fc6312583aafe120d1fe020ac1e78db40409c5c",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_at_cycle_start": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+  "product_main_observed_after_drift": "dc31d365ee8699602f4dc2225fb767a0f12f9e2f",
+  "candidate_branch": "clay/remote-lineage-witness-v1-20260813-go",
+  "candidate_head": "25c68f0ca1ec2c711362f96180d148fed0a2064b",
+  "candidate_pr": 570,
+  "candidate_pr_state_at_receipt": {
+    "state": "OPEN",
+    "draft": true,
+    "mergeable": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "observed_anchor": {
+    "predecessor_pr": 567,
+    "predecessor_head": "d89755c2ec16dce02c1fb3d6fab1f49e2c6c3abd",
+    "predecessor_self_hosted_run": 31662607406,
+    "predecessor_result": "SUCCESS",
+    "remaining_countercase": "A rollback or clone that carries both the selected lineage state and its freshness anchor together can remain mutually consistent; an observation outside the VPS rollback domain is required to discriminate that world."
+  },
+  "grf_candidate": {
+    "generated_reality": "A policy-pinned remote witness head outside the VPS snapshot domain can distinguish a stale local lineage checkpoint when boot requires exact witness sequence/hash and lineage sequence/head equality to an independently authenticated live cache-bypassed remote observation.",
+    "causal_mechanism": "The remote witness sequence and content hash advance outside the local rollback domain. A stale local checkpoint therefore falls behind the current remote head and must fail closed rather than boot.",
+    "strongest_counter_reality": "A stale cached or replayed remote witness paired with the same stale local checkpoint satisfies equality-only checks. Provider-side rollback, compromised mutation credentials, or a reader falsely asserting a fresh authenticated read can also defeat the candidate.",
+    "hidden_assumptions": [
+      "The remote reader is independently trusted and cannot be controlled by Frank/model/GWT/Needle authority.",
+      "The remote source read is genuinely current and cache/replay resistant.",
+      "Remote witness mutation has provider-side anti-rollback semantics and protected credentials.",
+      "Local and remote checkpoint advancement can recover safely across crashes."
+    ],
+    "falsifier": "Show a permitted boot where the current trusted remote witness is ahead of, differs from, or is unavailable to the local lineage binding; or show crash recovery that cannot reconcile a partial local/remote witness advance without unsafe rollback or false acceptance.",
+    "outcome": "RETAIN_AS_TESTED_CANDIDATE"
+  },
+  "implementation": {
+    "files": [
+      "runtime/identity/remote_lineage_witness_v1_candidate.py",
+      "tests/remote_lineage_witness_v1_gate.py",
+      ".github/workflows/frank-remote-lineage-witness-v1.yml"
+    ],
+    "properties": [
+      "domain-separated SHA-256 content-addressed witness record",
+      "policy binding for remote source, namespace, target body, and artifact identity",
+      "fail closed on no observation, source substitution, freshness evidence gap, record corruption, local rollback, local-ahead state, sibling/binding mismatch, or artifact-policy mismatch",
+      "authority=NONE",
+      "remote source trust and freshness are required inputs but are explicitly not proven by this module"
+    ]
+  },
+  "tested_evidence": {
+    "push_run": {
+      "workflow": "Frank remote lineage witness V1",
+      "run": 31678290512,
+      "head": "25c68f0ca1ec2c711362f96180d148fed0a2064b",
+      "conclusion": "SUCCESS"
+    },
+    "pull_request_run": {
+      "workflow": "Frank remote lineage witness V1",
+      "run": 31678341810,
+      "head": "25c68f0ca1ec2c711362f96180d148fed0a2064b",
+      "conclusion": "SUCCESS"
+    },
+    "deep_integrity_run": {
+      "workflow": "Frank Deep Integrity",
+      "run": 31678341888,
+      "head": "25c68f0ca1ec2c711362f96180d148fed0a2064b",
+      "conclusion": "SUCCESS"
+    },
+    "regression_cases": [
+      "exact-current allow",
+      "local rollback deny",
+      "remote stale versus local-ahead deny",
+      "sibling lineage mismatch deny",
+      "remote unavailable deny",
+      "freshness-unproven deny",
+      "source substitution deny",
+      "artifact policy mismatch deny",
+      "witness corruption deny"
+    ]
+  },
+  "this_worker_unusual_experiment": {
+    "count": 1,
+    "name": "REMOTE_WITNESS_ECLIPSE",
+    "bounded": true,
+    "reversible": true,
+    "external_effects": 0,
+    "baseline": "A naive equality-only check accepts a rolled-back local checkpoint paired with its equally stale cached witness.",
+    "intervention": "Present the stale matching witness but mark the observation as not cache-bypassed and not live-confirmed.",
+    "candidate_result": "DENY_REMOTE_WITNESS_FRESHNESS_UNPROVEN",
+    "collapse": "RETAIN explicit fresh/cache-bypassed observation requirement; equality alone is insufficient.",
+    "limitation": "The module does not cryptographically establish that the reader/provider freshness claim is truthful."
+  },
+  "primary_source_research": {
+    "github_artifact_attestations": "GitHub's official documentation states that artifact attestations for private/internal repositories require GitHub Enterprise Cloud, so this private repository cannot assume GitHub-native attestations as a generally available default.",
+    "sigstore_cosign": "Official Sigstore/Cosign documentation supports blob signing/verification bundles and transparency-log verification; this remains a candidate for the separate trusted-build artifact-attestation obligation.",
+    "architecture_delta": "Keep state-lineage freshness and trusted-build artifact attestation as separate gates until both are independently evidenced and then composed."
+  },
+  "main_drift_review": {
+    "status": "NON_OVERLAPPING_DRIFT_OBSERVED",
+    "from": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+    "to": "dc31d365ee8699602f4dc2225fb767a0f12f9e2f",
+    "observed_intervening_change": "accepted self-hosted ClayCode V18 PASS receipt only",
+    "identity_candidate_paths_overlapped": false,
+    "candidate_pr_current_mergeable": false,
+    "mergeability_cause_claimed": "UNKNOWN"
+  },
+  "grf_collapse": {
+    "local_equality_as_rollback_proof": "REJECT",
+    "out_of_snapshot_remote_witness_mechanism": "SUPPORTED_ON_SELF_HOSTED_TEST_LANE",
+    "trusted_remote_reader_provider": "DEFER_UNPROVEN",
+    "provider_side_anti_rollback": "DEFER_UNPROVEN",
+    "atomic_local_remote_checkpoint_recovery": "DEFER_UNPROVEN",
+    "trusted_real_artifact_attestation": "DEFER_UNPROVEN",
+    "accepted_hostinger_end_to_end": "DEFER",
+    "F_V01_01": "NOT_PASS",
+    "F_V01_13": "NOT_PASS",
+    "whole_frank_v0_1": "NOT_PASS"
+  },
+  "next_falsifiers": [
+    "Rebase or otherwise reconcile PR570 with current main without losing parallel ancestry; do not infer why GitHub currently reports mergeable=false until the exact conflict/behind condition is measured.",
+    "Compose PR570 with the existing lineage-freshness mechanism from PR567 and crash between local checkpoint advancement and remote witness advancement; prove deterministic two-phase recovery or reject the design.",
+    "Implement or select an independently trusted remote reader/provider with explicit authentication, cache/replay resistance, protected mutation credentials, and provider-side anti-rollback semantics.",
+    "Separately establish trusted real-artifact attestation for the accepted self.root binary/build, then bind that artifact identity into the lineage witness path.",
+    "Move the composed mechanism to the accepted Hostinger productive self.root/UnifiedDB WAL path and prove restart/reopen, rollback, downgrade/library-swap rejection, and exact runtime/state/artifact identity before release promotion."
+  ],
+  "scope_preserved": {
+    "status": "CANDIDATE_MECHANISM_TEST_ONLY",
+    "frank_harness_mutated_by_frank": false,
+    "effect_authority": "NONE",
+    "productive_hostinger_mutation": false,
+    "productive_persistence_path_exercised": false,
+    "remote_provider_trust_attested": false,
+    "trusted_binary_attestation_completed": false,
+    "final_training_authorized": false,
+    "together_used": false
+  },
+  "research_delta": "A fail-closed out-of-snapshot remote lineage witness candidate is implemented and green on push, PR, and deep-integrity self-hosted lanes. It closes the synthetic equality-only rollback ambiguity at the mechanism level when a genuinely fresh authenticated remote observation exists, but it does not close F-V01-01 or F-V01-13 because remote-reader/provider trust, provider anti-rollback, crash-safe local/remote commit recovery, trusted binary attestation, and accepted-Hostinger productive evidence remain open.",
+  "research_write_state": "COMMITTED"
+}

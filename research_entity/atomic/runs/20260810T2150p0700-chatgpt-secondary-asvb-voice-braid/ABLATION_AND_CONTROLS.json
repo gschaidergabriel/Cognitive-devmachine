@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2150p0700-chatgpt-secondary-asvb-voice-braid",
+  "controls":[
+    {"name":"BEARER_ONLY","result":"HIGH_FALSE_ALLOW_IN_SYNTHETIC_MULTI_PARTY_CASES","false_allow":38919,"note":"authenticates holder but not origin of embedded semantic content"},
+    {"name":"DELEGATED_SCOPE_ONLY","result":"PARTIAL_BUT_INSUFFICIENT","false_allow":25548,"note":"resource/epoch/scope reduces failures but relay injection within delegated scope is still not bounded by per-turn user intent"},
+    {"name":"IDEAL_RFC8693_RAR_DPOP","result":"STRONGEST_BASELINE_TIES_SAFETY_IN_MODEL","false_allow":0,"false_deny":0,"note":"explicit assumption: authorization server claims exactly encode subject, actor, resource, per-turn authorization and sender constraint"},
+    {"name":"ASVB_PARENT_SEALED","result":"0_FALSE_ALLOW_0_FALSE_DENY_SYNTHETIC","false_allow":0,"false_deny":0},
+    {"name":"SELF_SIGNED_RELAY_GRANT_V0","result":"REFUTED_BEFORE_PERSISTENCE","note":"relay could broaden its own incoming grant; corrected to grantor/parent-sealed edges"},
+    {"name":"RELAY_INJECTION","result":"REJECTED_WHEN_NOT_IN_ORIGIN_TURN_INTENT"},
+    {"name":"ORIGIN_TAMPER","result":"REJECTED"},
+    {"name":"SUBJECT_SWAP","result":"REJECTED"},
+    {"name":"ACTOR_REORDER_OR_DROP","result":"REJECTED"},
+    {"name":"STALE_EPOCH","result":"REJECTED"},
+    {"name":"RESOURCE_SWAP","result":"REJECTED"},
+    {"name":"REPLAY","result":"FIRST_ALLOW_SECOND_REPLAY_REJECT"}
+  ],
+  "strongest_missing_controls":["real standard OAuth/token-exchange implementation differential","real Frank production token API path","DE_TO_CLAY voice-boundary preservation under summarization/translation","single-spawn busy/holder interaction with relayed messages","revocation/rotation/audience/sender-constraint tests"]
+}

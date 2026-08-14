@@ -248,11 +248,32 @@ SELECT o.observation_id,o.source_class,o.source_ref,o.work_id,o.work_spec_rev,
 FROM clay_omnisource_observations o
 WHERE o.work_revision_state IN ('STALE','UNKNOWN');
 
+-- Producer-declared CURRENT binding. This is only a candidate projection and must never be
+-- consumed as authoritative current-work completion credit by itself.
 CREATE VIEW IF NOT EXISTS v_clay_current_work_credit_receipts AS
 SELECT r.*
 FROM clay_research_reentry_receipts r
 WHERE r.current_work_credit_eligible=1
   AND r.work_revision_state='CURRENT';
+
+-- Authoritative cross-check against the V9 dynamic-work current revision projection.
+-- V9 remains the work-spec authority; V10 does not duplicate or replace it.
+CREATE VIEW IF NOT EXISTS v_clay_authoritative_current_work_credit_receipts AS
+SELECT r.*
+FROM clay_research_reentry_receipts r
+JOIN v_clay_current_work_specs w
+  ON w.work_id=r.work_id AND w.spec_rev=r.work_spec_rev
+WHERE r.current_work_credit_eligible=1
+  AND r.work_revision_state='CURRENT';
+
+CREATE VIEW IF NOT EXISTS v_clay_work_credit_revision_mismatches AS
+SELECT r.receipt_id,r.work_id,r.work_spec_rev AS receipt_spec_rev,
+       w.spec_rev AS current_spec_rev,r.bound_repo_head,r.bound_component_hashes_clay,
+       r.closure_state,r.created_at
+FROM clay_research_reentry_receipts r
+LEFT JOIN v_clay_current_work_specs w ON w.work_id=r.work_id
+WHERE r.current_work_credit_eligible=1
+  AND (w.work_id IS NULL OR w.spec_rev<>r.work_spec_rev);
 
 CREATE VIEW IF NOT EXISTS v_clay_reentry_branch_closure AS
 SELECT r.receipt_id,

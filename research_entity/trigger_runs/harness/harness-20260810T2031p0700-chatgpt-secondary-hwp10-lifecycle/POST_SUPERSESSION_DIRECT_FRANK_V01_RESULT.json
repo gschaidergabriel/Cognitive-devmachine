@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2031p0700-chatgpt-secondary-hwp10-lifecycle",
+  "supersession": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "supersession_observed_during_run": true,
+  "current_program": "FRANK_V0_1",
+  "legacy_interpretation": "H-WP-10/H1 local reference lifecycle component",
+  "current_interpretation": "direct Frank v0.1 F-V01-09 EFFECT-AUTHORITY code/test/architecture delta with adjacent F-V01-13 recovery evidence",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "direct_code_delta": {
+    "path": "claycode/frank_effects.clay",
+    "commit": "ee4ab848bb89b5e5081de6895d6ec0117787b37e",
+    "content_blob": "9c318ce70536ed96740da6eaf792e079af51ea10",
+    "delta": "Added COMMITTING and OUTCOME_UNKNOWN semantics, OutcomeCertainty, IdempotencyMode, RecoveryDecision, EffectAttempt, explicit begin-attempt binding, conservative recovery classification and invariants preventing uncertain outcome collapse or unsafe retry."
+  },
+  "direct_test_delta": {
+    "probe_path": "runtime/frank_effect_lifecycle_v1/target_vps_probe.py",
+    "probe_commit": "c321bc03ab836ca62e2c0388b8934d4234f205bd",
+    "workflow_path": ".github/workflows/frank-effect-lifecycle-v1-vps.yml",
+    "workflow_commit": "47a4699154498475ca16130ab8c9625e46dd6797",
+    "receipt_path": "runtime/vps_unifieddb/frank_effect_lifecycle_v1/LATEST.json",
+    "github_run_id": "31396014547",
+    "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_FRANK_V0_1_EFFECT_LIFECYCLE_V1",
+    "component_probe_pass": true
+  },
+  "target_vps_results": {
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "same_nonce_concurrency": {"attempts":64,"admitted":1,"status":"PASS"},
+    "real_process_crash": {"exit_code":17,"partial_effect_rows":0,"partial_confirmation_rows":0,"sqlite_integrity":"ok","status":"PASS"},
+    "recovery_matrix": {
+      "non_idempotent_uncertain":"RECONCILE_REQUIRED",
+      "verified_same_key_retry_safe_uncertain":"SAFE_TO_RETRY_SAME_IDEMPOTENCY_KEY",
+      "verified_outcome":"REENTRY_PENDING",
+      "status":"PASS"
+    },
+    "request_binding_mutations": {"cases":1000,"unchanged_hashes":0,"status":"PASS"},
+    "semantic_tamper": {"sqlite_integrity":"ok","trace_verified":false,"reason":"hash_mismatch","status":"PASS"},
+    "durable_reservation_ms": {"n":300,"p50":2.0613585,"p90":3.567453,"p95":4.183407,"p99":5.820777,"max":9.730872},
+    "maximum_rss_kb": 25216,
+    "elapsed_wall_seconds": 0.91,
+    "final_sqlite_integrity": "ok"
+  },
+  "epistemic_limits": {
+    "external_exactly_once_claimed": false,
+    "provider_idempotency_inferred_from_local_state": false,
+    "unknown_outcome_collapsed_to_success_or_failure": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "claycode_parser_or_compiler_acceptance_of_changed_module": "NOT_YET_PROVEN_BY_THIS_RECEIPT",
+    "real_external_provider_effect_test": "NOT_RUN"
+  },
+  "current_reentry_classes": [
+    "FRANK_V0_1_CODE_DELTA",
+    "FRANK_V0_1_TEST_DELTA",
+    "FRANK_V0_1_ARCHITECTURE_DELTA",
+    "FRANK_V0_1_NEGATIVE_RESULT"
+  ],
+  "current_component_status": "IN_PROGRESS",
+  "next_discriminators": [
+    "run changed frank_effects.clay through current frozen ClayCode parser/canonicalizer/TypedIR path rather than marker-only validation",
+    "execute full owner-fixed default-allow/destructive confirmation matrix directly on accepted target VPS",
+    "bind one real provider/tool with declared idempotency semantics and inject timeout after provider acceptance before local outcome commit",
+    "exercise reconciliation for a non-idempotent/unknown provider outcome",
+    "bind verified outcome -> provenance re-entry -> effect DONE across current UnifiedDB/state continuity",
+    "merge effect lifecycle acceptance into finished Frank v0.1 terminal receipt matrix"
+  ]
+}

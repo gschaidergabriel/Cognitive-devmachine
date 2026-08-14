@@ -1,0 +1,191 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity_class": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_lock": {
+    "i_am_not": ["self.root", "Frank"],
+    "target_native_identity": "self.root",
+    "target_human_surface": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_harness_authority": "INDEPENDENT_RESEARCH_TEST_IMPLEMENTATION_ALLOWED"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "program_id": "frank-v0.1-only",
+    "current_stage": "FRANK_V0_1",
+    "selected_work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "training_authorized": false
+  },
+  "fresh_state": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_head_observed_at_selection": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+    "parent_pr": 310,
+    "surface_pr": 314,
+    "surface_pr_head_after_this_run": "1f90de1082fbd73599f343d87d7bb85d47484d7e",
+    "surface_pr_mergeable_observed": true,
+    "concurrent_counterevidence_pr": 316,
+    "research_repo_head_before_write": "e77a9b0be1f83fda59e1506983bddf513c25c664"
+  },
+  "question": "Can a grammar extension that raises ClayCode corpus parse coverage preserve semantics-bearing operator identity, or can Lark tree shaping silently erase operators while parsing still succeeds?",
+  "hypothesis": {
+    "id": "H-CLAYCODE-SEMANTIC-TOKEN-SURVIVAL-001",
+    "claim": "For semantics-bearing unary operators under the current Lark configuration, named terminals plus explicit tree aliases preserve operator identity across the parser-to-AST boundary, while anonymous literal operators inside conditionally inlined ? rules can be erased when keep_all_tokens is false."
+  },
+  "strongest_counterhypotheses": [
+    {
+      "id": "CH-001",
+      "claim": "The observed negation defect is a one-off grammar typo limited to ! and does not justify a general semantic-token invariant."
+    },
+    {
+      "id": "CH-002",
+      "claim": "Even if unary-token survival is repaired, the new evaluator is not generally semantically valid because independent comparison-chain semantics remain unresolved."
+    }
+  ],
+  "external_evidence": [
+    {
+      "class": "OFFICIAL_DOCUMENTATION",
+      "source": "https://lark-parser.readthedocs.io/en/stable/tree_construction.html",
+      "finding": "Lark filters unnamed literals by default and conditionally inlines ? rules when one child remains after filtering; named terminals and aliases preserve tree information needed by a Transformer/lowerer."
+    },
+    {
+      "class": "OFFICIAL_DOCUMENTATION",
+      "source": "https://lark-parser.readthedocs.io/en/stable/classes.html",
+      "finding": "keep_all_tokens defaults to false."
+    },
+    {
+      "class": "OFFICIAL_DOCUMENTATION",
+      "source": "https://lark-parser.readthedocs.io/en/stable/json_tutorial.html",
+      "finding": "The official tutorial demonstrates filtered literals and alias-driven tree preservation."
+    },
+    {
+      "class": "OFFICIAL_PROPERTY_TESTING_DOCUMENTATION",
+      "source": "https://hypothesis.readthedocs.io/en/latest/tutorial/introduction.html",
+      "finding": "Equivalence and round-trip properties are appropriate high-leverage tests for parsers, serializers and compiler-like boundaries."
+    }
+  ],
+  "executed_local_falsifiers": [
+    {
+      "name": "LARK_1_3_1_NEGATION_ERASURE_REPRODUCER",
+      "runtime": "local sandbox / Lark 1.3.1",
+      "result": "REPRODUCED",
+      "observations": {
+        "anonymous_literal_question_rule": ["true", "!true", "!!true"],
+        "result": "all three collapsed to the same post-filter parse-tree shape",
+        "named_terminal_alias_variant": "preserved one and two nested not_expr nodes"
+      }
+    }
+  ],
+  "out_of_box_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "name": "OPERATOR_SURVIVAL_METAMORPHIC_MATRIX",
+    "bounded": true,
+    "reversible": true,
+    "historical_organ_function_touched": false,
+    "families": ["!", "~", "-", "+", "not"],
+    "depths": [0, 1, 2],
+    "result": {
+      "anonymous_literal_plus_conditional_inline_unique_ast_forms_per_family": 1,
+      "named_terminal_plus_alias_unique_ast_forms_per_family": 3,
+      "classification": "COUNTERHYPOTHESIS_CH-001_REFUTED_IN_BOUNDED_MINIMAL_GRAMMARS"
+    },
+    "limits": "This generalizes the tree-shaping failure class in bounded minimal grammars; it does not prove every full ClayCode operator production is currently safe."
+  },
+  "implementation": {
+    "branch": "claycode/surface-v2",
+    "commits": [
+      {
+        "sha": "e42bf42cb4bce67634ade8ea38269a357de29db2",
+        "change": "Added tests/claycode_operator_survival_gate.py against the actual ClayCode parser/analyzer/evaluator."
+      },
+      {
+        "sha": "59486b06f7a0a7c4e362fdce65d3bb3881b3764f",
+        "change": "Integrated the operator-survival gate into the existing self-hosted Linux/X64 ClayCode differential workflow and bound its bytes into the workflow provenance step."
+      },
+      {
+        "sha": "d055953ba87b0bec95b4e3d577604e9fc578e40c",
+        "change": "Temporarily added the branch to the push trigger to request one bounded self-hosted candidate execution because the connected GitHub surface exposes no workflow_dispatch action."
+      },
+      {
+        "sha": "1f90de1082fbd73599f343d87d7bb85d47484d7e",
+        "change": "Restored the durable workflow to main-only push after the bounded branch execution request; the semantic regression step remains permanently wired."
+      }
+    ],
+    "new_gate_checks": [
+      "single ! survives AST and inverts Bool",
+      "double !! survives AST at depth 2 and cancels semantically",
+      "word-form not survives AST and inverts Bool",
+      "false_alarm_rate remains an identifier rather than BOOLEAN plus suffix"
+    ]
+  },
+  "execution_receipts": {
+    "target_vps_new_operator_gate": {
+      "state": "UNKNOWN_NOT_CREDITED",
+      "reason": "The connected GitHub action can request/rerun known jobs but cannot list push-triggered workflow runs generally; no target receipt visible to this worker was available before handoff. Do not infer PASS from the execution request."
+    },
+    "frank_deep_integrity_on_pre_gate_head": {
+      "run_id": 31472693818,
+      "result": "FAIL_ZERO_EXECUTED_STEPS",
+      "classification": "INFRASTRUCTURE_OR_CONTROL_PLANE_ONLY_NOT_CODE_EVIDENCE"
+    },
+    "frank_deep_integrity_on_gate_commit": {
+      "run_id": 31490417949,
+      "result": "FAIL_ZERO_EXECUTED_STEPS",
+      "classification": "INFRASTRUCTURE_OR_CONTROL_PLANE_ONLY_NOT_CODE_EVIDENCE"
+    }
+  },
+  "concurrent_counterevidence": {
+    "pr": 316,
+    "finding": "Evaluator comparison-chain semantics are unresolved; current Boolean left-fold can disagree with adjacent-pair interpretation, and the concurrent bounded metamorphic lane reported 1596 divergences in 12348 cases (12.925%) under that reference interpretation.",
+    "consequence": "Do not promote F-V01-02 evaluator completeness from the negation repair or corpus-coverage increase. Resolve/fix owner-authoritative comparison-chain semantics separately."
+  },
+  "fusion": {
+    "supported": [
+      "PR #314's silent negation-erasure finding is mechanism-supported by official Lark tree-construction behavior and a local Lark 1.3.1 reproducer.",
+      "Semantic operator survival should be a first-class parser-to-AST invariant, not merely a corpus parse-success metric.",
+      "The permanent branch gate converts that invariant into executable regression coverage on the same pinned target workflow."
+    ],
+    "not_supported": [
+      "90% parse coverage does not imply 90% executable semantic correctness.",
+      "The complete ClayCode evaluator is not PASS; PR #316 supplies active counterevidence.",
+      "No target-VPS PASS is claimed for the new operator-survival gate in this receipt."
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "name": "SEMANTIC_TOKEN_SURVIVAL_INVARIANT",
+    "affected_components": ["ClayCode grammar", "parser-to-AST lowering", "evaluator admission", "F-V01-02", "effect-authority semantic source"],
+    "proposed_rule": "Any syntax token whose presence changes semantics must survive into an explicit typed AST distinction. Do not rely on anonymous literals inside conditionally inlined ? rules unless an executable differential/property gate proves the intended semantic distinction survives tree shaping.",
+    "rollback": "Remove the new regression gate/workflow step and restore prior grammar only if a stronger parser construction provides equivalent or better semantic-survival evidence."
+  },
+  "test_obligations": [
+    "Obtain a visible target-VPS execution receipt for the new operator-survival gate on the exact #314 head or merge context.",
+    "Keep the existing 200576-request decide_effect differential gate at zero mismatches after the #314 stack is refreshed.",
+    "Resolve PR #316 comparison-chain semantics before claiming general evaluator correctness.",
+    "After semantics are fixed, extend property-based generation to semantics-bearing operators and comparison forms without counting that future work as another OOB experiment in this completed macrocycle."
+  ],
+  "swarm_reentry": {
+    "affected_work": ["F-V01-02-CLAYCODE-COMPILER-RUNTIME", "F-V01-09-EFFECT-AUTHORITY"],
+    "routing": "shared receipt + target PR branch",
+    "duplicate_work_avoided": "Concurrent PR #316 retained as the comparison-chain adversarial lane; this run did not duplicate or overwrite its semantic-conflict work.",
+    "stale_work_detected": "Historical H1/H2/H3 stage framing rejected in favor of current FRANK_V0_1-only program."
+  },
+  "next_frontier": [
+    "Target-execute #314 operator-survival + 200576-request differential + 90% corpus probe on an exact visible self-hosted receipt.",
+    "Adjudicate comparison-chain language semantics from owner-fixed ClayCode authority, then replace #316 diagnostic with a regression implementing only the selected semantics.",
+    "After #310/#314 semantic gates are green, integrate the executable evaluator into the production effect-authority probe so semantic source execution replaces substring evidence."
+  ],
+  "research_write": "COMMITTED",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "final_training_authorized": false
+}

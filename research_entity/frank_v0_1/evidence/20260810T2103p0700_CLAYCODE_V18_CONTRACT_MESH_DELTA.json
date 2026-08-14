@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "origin_trigger": "claycode",
+  "origin_run": "20260810T2103p0700-chatgpt-secondary-v18-contract-mesh",
+  "status": "IMPLEMENTATION_AND_TEST_DELTA_NO_PROGRESS_CREDIT",
+  "findings": [
+    {
+      "id": "CC-V18-FRONTEND-CONTRACT-BINDING",
+      "result": "REPAIRED",
+      "claim": "V18 FrontendArtifact->TypedIR bridge now fail-closes on missing/mismatched frontend contract_hash in addition to surface/grammar/semantic identity.",
+      "implementation": "tools/claycode_base_typed_ir_v18_bridge.py@f90c1b0382ffc7f4845d461c9c4a27bbbf43d7d6",
+      "test": "tools/test_claycode_v18_bridge_contract_hash.py@3642f9a0f913255cf78664351a8c783a1fb7c129"
+    },
+    {
+      "id": "FRANK-V01-REGISTRY-MESH-V3",
+      "result": "REPAIRED",
+      "claim": "Research interconnect peer discovery now recognizes the current Frank-v0.1 registry-v3 operational trigger kinds while preserving exact ten-peer fail-closed governance.",
+      "implementation": "tools/research_interconnect_preflight_v2.py@b551cab75d2e4653aa10e7d8abb03f45c1cd40a0",
+      "compatibility_entrypoint": "tools/research_interconnect_preflight.py@58703c0070290de2ecc6118bc8a4b9303e2b73c8",
+      "test": "tools/test_research_interconnect_preflight_frank_v01_registry.py@05da53f89948fb488e83edf134aa1564bb0308b2"
+    }
+  ],
+  "affected_packages": {
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME": "No subcheck promotion. TypedIR/type-effect/evaluator/lowering/runtime remain open under current workspace.",
+    "F-V01-09-EFFECT-AUTHORITY": "Receipt-integrity path tightened; exact-current-source frontend/TypedIR and lifecycle/reconciliation/reentry gates remain open.",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "Adds contract-tamper and registry-governance regression obligations."
+  },
+  "semantic_change": "NONE",
+  "architecture_change": "NONE",
+  "test_delta": "PROMOTED_TO_REPO",
+  "target_vps": {
+    "workflow": ".github/workflows/claycode-frank-v01-regression.yml",
+    "workflow_commit": "e5d0a483d4122573f6e26f6511102c95cbde50f9",
+    "persisted_receipt_observed_at_reentry": false,
+    "rule": "No target-VPS PASS or package progress credit until an exact tested-SHA receipt is present."
+  },
+  "next_falsifier": "Current target frank effect/ingress ClayCode -> V18 frontend -> receipt-bound TypedIR -> production type/effect checker on target VPS with stale/revoked capability, open-web taint and direct-token scope controls."
+}

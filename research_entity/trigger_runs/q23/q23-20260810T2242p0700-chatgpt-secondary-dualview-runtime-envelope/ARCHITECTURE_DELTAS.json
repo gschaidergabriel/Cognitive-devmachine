@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "architecture_deltas": [
+    {
+      "id": "AD-Q23-QNDRF-1.1-MERGED-FIRST",
+      "status": "CANDIDATE",
+      "affected_components": [
+        "F-V01-06-DIGITAL-RETINA-MVC",
+        "Digital Retina",
+        "adaptive MVC",
+        "multimodal ingress",
+        "GWT perceptual re-entry",
+        "runtime recovery"
+      ],
+      "supersedes": "No promoted architecture; refines QNDRF-1 candidate ordering only.",
+      "proposed_path": [
+        "visual source",
+        "provenance + timestamp + source epoch",
+        "pixel/orientation/color canonicalization",
+        "cheap change/ROI/action-critical gate",
+        "ONE Qwen/libmtmd vision encode",
+        "public merged media embedding buffer",
+        "MVC-M0 deterministic pooled descriptor + calibrated prototype/open-set decision",
+        "if known and non-critical: cheap perceptual-state update without 4B semantic decode",
+        "if unknown/ambiguous/conflict/critical: reuse same encoded media tokens for full semantic decode",
+        "Clay VisualPercept/PerceptualField",
+        "GWT/loop-core",
+        "verified outcome/action observation",
+        "provenance-bound re-entry"
+      ],
+      "fallback_ladder": [
+        "MVC-M0: merged feature deterministic pooling",
+        "MVC-M1: tiny learnable projection over frozen merged features",
+        "MVC-M2: optional same-encode pre-merger + merged two-view descriptor only after M0/M1 falsification",
+        "MVC-B: separate lightweight embedding encoder counterbaseline only when measured Pareto-superior"
+      ],
+      "visual_encoder_compatibility_id": {
+        "required_fields": [
+          "visual_model_identity_or_hash",
+          "mmproj_identity_or_hash",
+          "runtime_name_and_commit_or_build",
+          "vision_preprocessor_version_or_hash",
+          "projector_geometry",
+          "backend_and_device_class",
+          "image_min_tokens",
+          "image_max_tokens",
+          "batch_and_ubatch_semantics_when_representation_affecting",
+          "canonicalizer_version",
+          "feature_pooling_version",
+          "projection_calibration_version"
+        ],
+        "law": "Prototype/model states from a different compatibility ID are STALE_INCOMPATIBLE until a differential compatibility receipt proves safe reuse.",
+        "mismatch_behavior": "Quarantine stale prototype state and fail open to semantic decode; never silently classify as familiar."
+      },
+      "expected_benefit": "Avoid a duplicate heavy visual backbone and redundant image encode while retaining adaptive familiarity as a bounded, lesionable controller around Qwen's native visual path.",
+      "strongest_counterhypothesis": "A dedicated lightweight embedding encoder can be faster overall because it can answer familiarity without invoking Qwen vision at all and may provide better calibrated geometry.",
+      "discriminating_test": "Matched target-like screenshot/camera fixtures with known, near-neighbor unknown and OOD classes comparing full-decode baseline, merged MVC-M0, merged+tiny-projection MVC-M1 and dedicated encoder MVC-B for open-set risk, routing correctness, end-to-end latency/resources and recovery.",
+      "rollback": "Disable MVC bypass and route every changed visual observation through the full Qwen semantic path using the same provenance-bound Retina ingress.",
+      "promotion_gate": "No promotion before target-compatible runtime evidence shows non-inferior safety/open-set performance and a Pareto advantage or justified complexity benefit."
+    }
+  ]
+}

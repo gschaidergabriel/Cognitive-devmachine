@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-STORAGE-CAUSAL-SELECTION-FUSION-20260811T005018Z",
+  "event_type": "LIVE_RESEARCH_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "provider": "OpenAI",
+    "model_family": "GPT-5",
+    "execution_authority": false,
+    "truth_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "program_state_blob": "cdecaa183dacfefa76dab0e2503fa09d31eecc67",
+    "frank_workspace_blob": "620971f539766258886899040984097dbd1cdddc",
+    "observed_repo_head": "84f771e4b6d1390cfd6c7566c5e18d14cf68ab5f"
+  },
+  "intended_recipients": [
+    "unifieddb worker / F-V01-04",
+    "claygraph + hyperposition + gwt workers / F-V01-05",
+    "security-recovery worker / F-V01-13",
+    "effect-authority recovery worker / F-V01-09"
+  ],
+  "evidence_families": [
+    {
+      "family_id": "E-SQLITE-UPSTREAM-20260811",
+      "independence": "PRIMARY_UPSTREAM_DOCUMENTATION_SINGLE_FAMILY",
+      "evidence": [
+        {
+          "url": "https://sqlite.org/wal.html",
+          "checked_utc": "2026-08-11T00:50:18Z",
+          "claim": "SQLite 3.7.0 through 3.51.2 are likely affected by the WAL-reset corruption race; fixed in 3.51.3+, with stated trigger requiring multiple connections plus concurrent write/checkpoint."
+        },
+        {
+          "url": "https://sqlite.org/lang_attach.html",
+          "checked_utc": "2026-08-11T00:50:18Z",
+          "claim": "Cross-file ATTACH transactions are not crash-atomic as a set in WAL; rollback-journal mode with file-backed main is the documented atomic path."
+        },
+        {
+          "url": "https://sqlite.org/atomiccommit.html",
+          "checked_utc": "2026-08-11T00:50:18Z",
+          "claim": "Super-journal coordinates atomic multi-file commit under eligible rollback-journal settings."
+        },
+        {
+          "url": "https://www.sqlite.org/releaselog/3_53_3.html",
+          "checked_utc": "2026-08-11T00:50:18Z",
+          "claim": "Current upstream 3.53.3 includes the WAL-reset fix."
+        }
+      ],
+      "deduplication_note": "These pages are one SQLite-upstream ancestry family, not four independent confirmations."
+    },
+    {
+      "family_id": "E-UDB-TARGET-MECHANISMS-20260811",
+      "independence": "SHARED_PROJECT_ANCESTRY_MULTIPLE_EXACT_TARGET_COMPONENT_RECEIPTS",
+      "evidence": [
+        {
+          "commit": "87fe5d2f7d0790efe4cca7a5d615a02270419b27",
+          "run": "31436807365",
+          "artifact_digest": "sha256:4d2fb12cba510a7e981d555f4f4057a38981f5eb3c70bd658944075f46e56579",
+          "result": "PASS_ATOMIC_PAIR_MIGRATION_V2_MECHANISM",
+          "boundary": "pre-COMMIT injected failures only; abrupt kill/power loss during COMMIT remains open"
+        },
+        {
+          "commit": "b137d77a979dc76864930b62f29e3fbb8019f43e",
+          "run": "31437186827",
+          "artifact_digest": "sha256:02df981120780b21b6bcf6349de389e1adcbe20a6936dfcb3905dc7199e263dc",
+          "result": "PASS_REPLAY_CLOCK_V1_MECHANISM",
+          "boundary": "not product integrated"
+        },
+        {
+          "commit": "c08378459fc4962cb0f13fa8b7df9a79b06c7158",
+          "run": "31437317113",
+          "artifact_digest": "sha256:610f7ffdbdfe8de6ee8be38c1977e3db59b996060803d9bb4da095c6fe09e54b",
+          "result": "PASS_SELECTION_RECEIPT_V2_MECHANISM",
+          "boundary": "not real-router integrated"
+        },
+        {
+          "commit": "0d0ca59a56bc78f5ffda0dfc5eeb9da332f6c839",
+          "run": "31439072374",
+          "artifact_digest": "sha256:748c045389427cbb8a1b45ace046887c850beeffbb02ac05f73dec05e4e3c0d5",
+          "result": "PASS_GRAPH_IDENTITY_VECTOR_V1_MECHANISM",
+          "boundary": "not product integrated"
+        }
+      ],
+      "deduplication_note": "Exact target receipts are component mechanism evidence but share project/source/runner ancestry; not independent replications."
+    }
+  ],
+  "hypothesis_impulses": [
+    {
+      "id": "H-STORAGE-TOPOLOGY-CERT-001",
+      "claim": "A fail-closed StorageTopologyIdentity certificate can turn the current WAL/rollback choice into a testable release gate by binding sqlite_source_id, journal_mode, synchronous, VFS, database file-set, connection graph, writer/checkpointer topology, transaction scope and recovery oracle.",
+      "support": [
+        "The accepted target receipts report SQLite 3.45.1, within upstream's likely affected WAL range.",
+        "Rollback DELETE/FULL gives a documented super-journal path for bounded attached pair transactions.",
+        "Current target pre-COMMIT rollback controls pass."
+      ],
+      "counterhypothesis": "An upgraded fixed SQLite WAL build plus a mechanically single-connection or serialized writer/checkpointer topology is safer and materially faster; ClayGraph may remain asynchronous/rebuildable so pair atomicity is unnecessary outside migrations.",
+      "decisive_test": [
+        "Run the real target workload under A: upgraded fixed WAL with topology instrumentation and B: DELETE/FULL attached-pair critical sections.",
+        "Inject process kill/power-loss windows during multi-file COMMIT, not only exceptions before COMMIT.",
+        "Require every recovered pair to be exactly PRE/PRE or POST/POST, never split; verify integrity, FK, schema and semantic/projection identities.",
+        "Measure p50/p95/p99 latency, lock wait, checkpoint/fsync cost and recovery time.",
+        "Fail closed if SQLite source ID/backport identity or connection/checkpoint topology is unbound."
+      ],
+      "promotion_rule": "No storage mode promotion from upstream documentation or existing pre-COMMIT receipts alone."
+    },
+    {
+      "id": "H-DYNAMIC-SELECTION-CAUSE-001",
+      "claim": "When ClayGraph DynamicRoot materially influences retrieval, SelectionReceipt must bind either DynamicRoot or an explicit causal-context receipt; otherwise two causally distinct cognitive states can alias to the same selection identity when universe/ranking/output happen to coincide.",
+      "support": [
+        "GraphIdentityVector intentionally separates DynamicRoot from stable ProjectionIdentity.",
+        "SelectionReceipt V2 binds projection/index, candidate universe, score/rank/filter trace and policy, but the current packet does not claim real dynamic-router integration."
+      ],
+      "counterhypothesis": "Exact candidate-universe plus score/rank/filter trace already fully specifies selection integrity; DynamicRoot is diagnostic provenance only and should not invalidate identical selections.",
+      "decisive_test": [
+        "Construct two admitted dynamic snapshots with identical structural/epistemic roots.",
+        "Force DynamicRoot to be causally consulted while holding final universe/ranking/selection identical.",
+        "Ask whether exact replay and causal audit contracts require distinguishable receipts; preregister the contract before observing results.",
+        "Ablate DynamicRoot binding and test stale activation, shuffled receiver influence and hyperposition-coverage changes.",
+        "Keep result vector-valued: output integrity and causal-context integrity may pass/fail independently."
+      ],
+      "new_concept": "CausalSelectionIdentity := SelectionReceiptV2 plus only those dynamic/GWT/hyperposition roots declared and proven causally material for that route.",
+      "promotion_rule": "No truth, consciousness, effect or routing authority follows."
+    }
+  ],
+  "preserved_negative_results": [
+    "IAC-001 is refuted as a distinct runtime organ; retain only ordinary typed action-set cardinality as a sufficient-stop law under current complete coverage.",
+    "Current V17 recovery strengthening does not prove full-process or stale-lease failover and has no durable target recheck promotion receipt.",
+    "WP04 module/name resolution PASS does not close the 29 unresolved ownership/contracts or type/effect/runtime admission.",
+    "No final training is authorized."
+  ],
+  "requested_reentry": [
+    "F-V01-13: add StorageTopologyIdentity/source-ID/topology gate to the existing SQLite release blocker.",
+    "F-V01-04: run the COMMIT-window abrupt-loss pair oracle and store PRE/POST identity results.",
+    "F-V01-04/F-V01-05: adjudicate DynamicRoot as causal selection context versus diagnostic-only provenance using the preregistered ablation.",
+    "F-V01-09: reuse the same storage certificate for verified-outcome/reentry durability; do not infer V17 promotion."
+  ],
+  "authority_boundary": {
+    "code_executed_by_this_event": false,
+    "external_effect": false,
+    "canonical_semantics_promoted": false,
+    "work_package_promoted": false,
+    "frank_v0_1_finished": false,
+    "training_run": false
+  }
+}

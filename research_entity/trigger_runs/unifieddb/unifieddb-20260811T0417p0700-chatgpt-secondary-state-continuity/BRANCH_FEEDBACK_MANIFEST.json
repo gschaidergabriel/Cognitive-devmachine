@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "feedback":[
+    {"branch":"frank","delta":"Boot/recovery must select one provenance-bound semantic lineage head; same-source/same-epoch siblings are not interchangeable self.root state."},
+    {"branch":"claycode","delta":"Typed state mutation/effect boundaries should carry lineage_id + lineage_generation + execution_id + lease_epoch + external_anchor_generation as hard fields; translator/model/GWT may not alter them."},
+    {"branch":"claygraph","delta":"Graph epoch/projection must bind to one published UnifiedDB semantic lineage/head; mixed sibling lineages or stale epochs are invalid projections, not low-confidence results."},
+    {"branch":"hyperposition","delta":"Competing recovery/sibling lineages may remain unresolved alternatives before admission, but Hyperposition cannot promote two simultaneous ADMITTED_CURRENT identity roots."},
+    {"branch":"gwt","delta":"Workspace/re-entry receipts must reference the current semantic lineage/epoch; stale broadcasts cannot mutate current state merely because receiver use occurred."},
+    {"branch":"emergenz","delta":"Emergence measurements across restored/sibling state must preserve lineage identity to avoid treating state substitution as causal recurrence."},
+    {"branch":"harness","delta":"Add target-VPS WAL safety probe plus same-source sibling, equal-epoch divergent-root, stale snapshot, missing/rolled-back external-floor and crash/checkpoint replay tests."},
+    {"branch":"unifieddb","delta":"Candidate V10 is additive SHADOW-first. External monotonic floor remains physically isolated. WAL writes fail closed until exact fixed/backported SQLite or machine-checked topology proof."}
+  ],
+  "duplicate_work_avoided":"Current effect execution-generation fence is already PASS in fresh workspace; this run reuses it as an adjacent dependency and does not rebuild provider lifecycle fencing.",
+  "status":"COMPLETE"
+}

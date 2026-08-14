@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "receipts": [
+    {
+      "receipt_id": "REENTRY-Q23-20260810-01",
+      "source_delta": "AD-Q23-QNDRF-1.1-MERGED-FIRST",
+      "admitted_as": "ARCHITECTURE_CANDIDATE",
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "test_created": ["TO-Q23-MVC-OPENSET-01","TO-Q23-VISUAL-COMPAT-02"],
+      "promotion": false,
+      "reason": "Target runtime benchmark absent."
+    },
+    {
+      "receipt_id": "REENTRY-Q23-20260810-02",
+      "source_delta": "H-Q23-COMPAT-ENVELOPE-04",
+      "admitted_as": "CROSS_CUTTING_TEST_AND_RECOVERY_OBLIGATION",
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC","F-V01-08-TOKEN-API-CLIENTS","F-V01-13-SECURITY-RECOVERY-OBSERVABILITY","F-V01-16-END-TO-END-ACCEPTANCE"],
+      "test_created": ["TO-Q23-VISUAL-COMPAT-02","TO-Q23-MM-RUNTIME-RECOVERY-04"],
+      "promotion": false,
+      "reason": "Current issue evidence motivates the invariant but exact target behavior remains unmeasured."
+    },
+    {
+      "receipt_id": "REENTRY-Q23-20260810-03",
+      "source_delta": "H-Q23-CANONICAL-PIXEL-GATE-05",
+      "admitted_as": "RETINA_PREPROCESSING_CANDIDATE",
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "test_created": ["TO-Q23-CANONICAL-PIXELS-03"],
+      "promotion": false
+    }
+  ],
+  "experience_dose_result": "NOT_APPLICABLE_THIS_RUN",
+  "reason": "No claim that Frank learned/remembered a target-live visual experience was made; this run produced research architecture/test deltas only.",
+  "harness_authority": "UNCHANGED",
+  "frank_self_harness_mutation": false
+}

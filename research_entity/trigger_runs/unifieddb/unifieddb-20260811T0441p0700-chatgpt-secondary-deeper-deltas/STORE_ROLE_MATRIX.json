@@ -1,0 +1,26 @@
+{
+  "schema_version":"2.0",
+  "run_id":"unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "stores":[
+    {"plane":"UnifiedDB","role":"canonical semantic/logical state and transaction/replay receipts","authority":"AUTHORITATIVE","freshness":"selected semantic root/lineage","rollback":"external independent floor required"},
+    {"plane":"ClayGraph","role":"derived topology/activation/associative projection","authority":"NON_AUTHORITATIVE","freshness":"StateProjectionCertificate + explicit lag policy","rollback":"rebuildable from admitted canonical root"},
+    {"plane":"FTS/vector indexes","role":"derived candidate generation/ranking","authority":"NON_AUTHORITATIVE","freshness":"source root + builder/index identity + health receipt","rollback":"rebuild; stale index cannot authorize selection"},
+    {"plane":"MaterializationPairCertificate","role":"code-side executable migration/schema-pair admission","authority":"LIMITED_ADMISSION","freshness":"CURRENT exact expected program","rollback":"detects migration/source divergence, not dynamic state"},
+    {"plane":"LiveSchemaAttestation","role":"actual sqlite_schema identity","authority":"LIMITED_ADMISSION","freshness":"recomputed at open/migration or cached under protected schema_version contract","rollback":"rogue/missing schema object fails admission"},
+    {"plane":"CanonicalRootChain","role":"dynamic authoritative semantic state identity","authority":"AUTHORITATIVE_IDENTITY","freshness":"exact parent/root CAS + typed tx digest","rollback":"replay and external-floor comparison"},
+    {"plane":"StateProjectionCertificate","role":"bind dynamic derived projection to canonical semantic root","authority":"ADMISSION_ONLY","freshness":"ADMITTED/STALE/REBUILD_REQUIRED","rollback":"Graph can roll back only to a state re-admitted against canonical root"},
+    {"plane":"SelectionReceiptV2","role":"selection/query-plan provenance","authority":"AUDIT_AND_ADMISSION","freshness":"bound to semantic root, projection/index identity and query inputs","rollback":"recompute or quarantine selected set"},
+    {"plane":"SnapshotManifestV2","role":"consistent recovery image + environment/head identity","authority":"RECOVERY_EVIDENCE","freshness":"created from one consistent logical point","rollback":"restore then replay/verify; manifest cannot self-authorize against newer external floor"},
+    {"plane":"ExternalRecoveryFloor","role":"rollback-domain-independent monotonic recovery admission","authority":"RECOVERY_AUTHORITY","freshness":"monotonic generation/head policy","rollback":"must remain outside protected rollback domain"},
+    {"plane":"Effect/closure receipts","role":"historical external-effect/outcome/re-entry proof","authority":"EFFECT_DOMAIN_AUTHORITATIVE","freshness":"historical validity frozen at closure","rollback":"reconcile without duplicate effect; ordinary semantic supersession cannot invalidate history"}
+  ],
+  "key_separations":[
+    "schema-source identity != live materialized schema identity",
+    "static schema pair identity != dynamic semantic/projection identity",
+    "record provenance != selection provenance",
+    "historical validity != current belief status",
+    "semantic valid-time != wall-clock execution time",
+    "recovery floor != second semantic database",
+    "physical colocation != authority promotion"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-08-12T01:57:20+07:00",
+  "parent_receipt": "research_entity/trigger_runs/go/go-20260812T0152p0700-chatgpt-secondary-trust-root-fusion/RESEARCH_RECEIPT.json",
+  "observed_after_parent_receipt": true,
+  "source": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "tested_sha": "352e2c6de3440a68b7ed63ef4e48190b7ff82d7d",
+    "workflow_run_id": "31525278195",
+    "artifact_id": "9114660606",
+    "artifact_digest": "sha256:d5f4fbe1bea76ecf7aa0e81c4ac52ee6f895158cc35025badae924971b7dbfaa"
+  },
+  "accepted_target_observation": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "os": "Ubuntu 24.04.4 LTS",
+    "kernel": "6.8.0-117-generic",
+    "runtime_user": "frankrunner",
+    "euid": 1000,
+    "etc_frank_parent_exists": false,
+    "v5_anchor_exists": false,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "v5_absent_anchor_gate": {
+    "launcher_exit_code": 78,
+    "stderr": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:ROOT_TRUST_ANCHOR_MISSING",
+    "result": "PASS_FAIL_CLOSED_ABSENT_OS_TRUST_ANCHOR",
+    "positive_fixed_sqlite_admission": false,
+    "release_promotion": false
+  },
+  "grf_collapse_delta": {
+    "observed_reality": "The accepted target currently has no deployed V5 OS trust anchor. V5 therefore cannot positively admit the fixed SQLite runtime in this environment, but it does reject execution before productive target code when the independent anchor is missing.",
+    "effect_on_binary_pinned_candidate": "RETAINS candidate value: the current deployment lane lacks the separate OS anchor in reality, so a future independently proven binary-root fusion could remove a real deployment dependency rather than a hypothetical one.",
+    "strongest_counterevidence": "Absence of the OS anchor does not prove binary-root fusion is safe; F-V01-01 trusted binary attestation remains unproven and must not inherit persistence authority yet.",
+    "next_discriminator": "Prove exact accepted binary/verifier authority independently before SQLite and build the boot dependency graph. If that proof fails or is cyclic, retain OS-owned V5 and obtain an independently authorized provisioning lane instead.",
+    "outcome": "RETAIN_V5_FAIL_CLOSED_BASELINE_AND_DEFER_BINARY_ROOT_FUSION"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "event_type": "RESEARCH_EVIDENCE_SUPERSESSION",
+  "event_id": "claycode-exact-head-validation-20260811T131411Z",
+  "created_at_utc": "2026-08-11T13:14:11.850Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_cut": {
+    "canonical_head_observed": "81c4af96eabb3e6ac91715796b744c7720b4b8f4",
+    "target_pr": 319,
+    "target_head": "17a6350111736068b1c43be31e1066b0d9f9aea0",
+    "pr_state": "open",
+    "draft": true,
+    "merged": false,
+    "mergeable": true,
+    "updated_at": "2026-08-11T13:07:17Z"
+  },
+  "supersedes": {
+    "event_commit": "0ea517212ce858a80d201c5bfc61729956760d4d",
+    "event_blob": "f72b1c97f5d98ef8eb408160eab82057467e048a",
+    "exact_observation": "ClayCode Surface Types Composed Validation queued",
+    "reason": "The exact-head accepted-target run completed successfully after that evidence cut."
+  },
+  "exact_head_target_execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 319,
+    "tested_sha": "ef541842cb7206d84e34566bce19d0184d8255cd",
+    "workflow_run": 31494397846,
+    "job": 93788718630,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "result": "SUCCESS",
+    "executable_steps": "13/13 including setup/complete",
+    "semantic_gates": {
+      "decide_effect": {
+        "checks": "6/6",
+        "requests": 200576,
+        "mismatches": 0
+      },
+      "confirmation_hash": {
+        "hash_requests": 56000,
+        "confirmation_requests": 16000,
+        "mismatches": 0
+      },
+      "corpus": {
+        "parsed": 36,
+        "total": 40,
+        "coverage_percent": 90
+      },
+      "ordinary_call_visibility": {
+        "parser_calls": 677,
+        "analyzer_visible": 677,
+        "missed": 0,
+        "status": "PASS"
+      },
+      "unresolved_ordinary_calls": 429,
+      "frank_effects_unresolved": 0,
+      "undeclared_types": [],
+      "operator_survival": "8/8"
+    },
+    "open_surface": {
+      "callable_method_segments": 22,
+      "histogram": {
+        "filter": 11,
+        "map": 10,
+        "sort_desc": 1
+      },
+      "comparison_chain_semantics": "OPEN",
+      "general_evaluator_completeness": false
+    }
+  },
+  "global_symbol_census": {
+    "github_run": {
+      "id": 31494397930,
+      "status": "failure",
+      "job": 93788383501,
+      "steps": 0,
+      "logs": "404 BlobNotFound/unavailable",
+      "classification": "UNEXECUTED_OR_UNOBSERVABLE_INFRASTRUCTURE_FAILURE"
+    },
+    "target_vps_run": {
+      "id": 31494397854,
+      "status": "cancelled",
+      "classification": "NO_CENSUS_RESULT"
+    },
+    "adjudication": "The composed semantic gates are exact-head target-supported. The broader global symbol census remains open and receives no credit."
+  },
+  "hypothesis_update": {
+    "H-CLAYCODE-ANALYSIS-EXECUTION-BISIMULATION-001": "ORDINARY_CALL STRUCTURAL INCLUSION SUPPORTED ON EXACT CURRENT HEAD; METHODCHAIN AND GLOBAL SYMBOL RESOLUTION REMAIN OPEN",
+    "counterhypothesis": "Dynamic fail-closed checks remain valuable defense-in-depth; this structural result does not establish full evaluator correctness."
+  },
+  "routed_impulses": [
+    {
+      "recipients": [
+        "F-V01-02 ClayCode",
+        "separate Harness reviewer"
+      ],
+      "priority": "P0",
+      "impulse": "Preserve the exact-head compose pass. Repair/retrigger the global symbol census with visible steps on both independent GitHub Ubuntu and accepted VPS; then compare result hashes and classify the 429 unresolved sites."
+    },
+    {
+      "recipients": [
+        "F-V01-02 ClayCode",
+        "F-V01-12 Capabilities"
+      ],
+      "priority": "P0",
+      "impulse": "Specify typed MethodChain library/effect contracts for filter/map/sort_desc and extend AdmissionExecutionBisimulation without minting host bindings or authority."
+    },
+    {
+      "recipients": [
+        "research_entity center"
+      ],
+      "priority": "P1",
+      "impulse": "Mark the queued compose witness superseded by run 31494397846; retain zero-step/cancelled census results as separate negatives."
+    }
+  ],
+  "evidence_deduplication": "This is an exact-head continuation of PR319, not an independent replication of earlier PR319 receipts.",
+  "safety_and_nonclaims": {
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "whole_frank_v0_1_accepted": false,
+    "training_authorized": false,
+    "training_performed": false,
+    "execution_performed_by_this_worker": false,
+    "code_or_harness_modified_by_this_worker": false,
+    "only_external_write": "this provenance-only event"
+  }
+}

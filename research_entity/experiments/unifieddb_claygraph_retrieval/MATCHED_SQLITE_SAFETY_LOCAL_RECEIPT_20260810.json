@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "MATCHED-SQLITE-VS-CLAY-SAFETY-LOCAL-20260810",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_class": "LOCAL_CHATGPT_PYTHON_COMPONENT_BENCHMARK_NOT_TARGET_HOST",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "machine": "x86_64"
+  },
+  "dataset": {
+    "seed": 20260810,
+    "cases": 9000,
+    "cases_per_class": 1000,
+    "fault_classes": [
+      "SAFE",
+      "STATE_EPOCH_STALE",
+      "STATE_HASH_STALE",
+      "GRAPH_LAG",
+      "GRAPH_FUTURE",
+      "AMBIGUOUS",
+      "UNVERIFIED",
+      "TAMPERED_COUNT",
+      "TAMPERED_HASH"
+    ],
+    "safe_cases": 1000,
+    "unsafe_cases": 8000
+  },
+  "correctness": {
+    "raw_sqlite_matched_contract": {
+      "correct": 9000,
+      "total": 9000,
+      "accuracy": 1.0,
+      "unsafe_false_accept_rate": 0.0
+    },
+    "clay_typed_gate": {
+      "correct": 9000,
+      "total": 9000,
+      "accuracy": 1.0,
+      "unsafe_false_accept_rate": 0.0
+    },
+    "sqlite_equals_clay_decisions": true,
+    "adjudication": "COUNTEREVIDENCE: once raw SQLite is given the same admission contract, this gate-level semantic-safety accuracy is not unique to Clay. Preserve Clay as semantic authority/typed contract and compile its rules into the simplest efficient runtime mechanism."
+  },
+  "latency_ns": {
+    "single_case_warm": {
+      "clay_typed_gate": {"p50": 350.0, "p95": 561.0, "p99": 711.0},
+      "raw_sqlite_matched_contract": {"p50": 1753.0, "p95": 2093.0, "p99": 3024.0}
+    },
+    "full_batch_9000_cases": {
+      "clay_typed_gate_p50": 1457924.0,
+      "raw_sqlite_matched_contract_p50": 3825396.0
+    }
+  },
+  "latency_interpretation": "Do not promote the latency ratio as an engine superiority result. The SQL arm crosses the Python sqlite3 API per single-case query and the batch materializes result tuples. This benchmark exists primarily to falsify the unique-accuracy claim under matched semantics.",
+  "shared_preprocessing_boundary": "Canonical row serialization and SHA-256 construction are excluded from both timed gate arms; stock SQLite has no built-in SHA-256. Both arms receive already-computed receipt fields.",
+  "architecture_delta": {
+    "status": "SUPPORTED_DIRECTION_NOT_PROMOTED",
+    "keep": [
+      "Clay/ClayCode as semantic authority for epoch, provenance, ambiguity, verification, replay and effect-boundary contracts",
+      "SQLite/B-tree/SQL predicates as valid compiled execution mechanisms when they implement those semantics exactly",
+      "typed receipts at semantic boundaries",
+      "differential tests proving compiled mechanism equivalence"
+    ],
+    "reject": [
+      "claim that the storage engine itself creates semantic safety",
+      "claim that Clay must physically replace conventional database mechanisms to be more useful for Frank/Clay",
+      "using a deliberately weak row-store baseline as sufficient proof of Clay-specific accuracy"
+    ]
+  },
+  "next_falsifiers": [
+    "self-hosted Ubuntu replication of this matched contract benchmark",
+    "same-contract concurrent writer and snapshot isolation tests",
+    "crash/restart/replay and corrupted-receipt tests",
+    "whole model-input Assembly comparison including provenance receipt construction, not gate-only microbenchmarks",
+    "real repo-native held-out retrieval episodes with independently adjudicated answer/tool-choice outcomes"
+  ]
+}

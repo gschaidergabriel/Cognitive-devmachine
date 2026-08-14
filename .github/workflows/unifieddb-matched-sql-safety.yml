@@ -1,0 +1,63 @@
+name: UnifiedDB Matched SQLite Safety
+
+on:
+  push:
+    branches:
+      - research/udb-matched-sql-safety-20260810
+    paths:
+      - '.github/workflows/unifieddb-matched-sql-safety.yml'
+      - 'research_entity/experiments/unifieddb_claygraph_retrieval/benchmark_matched_sql_safety_contract.py'
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-matched-sql-safety.yml'
+      - 'research_entity/experiments/unifieddb_claygraph_retrieval/benchmark_matched_sql_safety_contract.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-matched-safety-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  matched-safety:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Run matched contract benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 research_entity/experiments/unifieddb_claygraph_retrieval/benchmark_matched_sql_safety_contract.py \
+            --per-class 1000 --repeats 3 \
+            --output /tmp/MATCHED_SQLITE_SAFETY.json
+
+      - name: Falsification gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/MATCHED_SQLITE_SAFETY.json',encoding='utf-8'))
+          c=p['correctness']
+          assert c['sqlite_equals_clay_decisions'] is True, c
+          assert c['raw_sqlite_matched_contract']['accuracy'] == 1.0, c
+          assert c['clay_typed_gate']['accuracy'] == 1.0, c
+          assert c['raw_sqlite_matched_contract']['false_accept_rate_unsafe'] == 0.0, c
+          assert c['clay_typed_gate']['false_accept_rate_unsafe'] == 0.0, c
+          # The naive baseline should remain falsified; if not, the fixture stopped discriminating.
+          assert c['naive_admit_all']['false_accept_rate_unsafe'] == 1.0, c
+          print('MATCHED_SQLITE_SAFETY=EQUAL_CORRECTNESS_COUNTEREVIDENCE')
+          print(json.dumps({
+            'correctness':c,
+            'single_case':p['latency']['single_case_warm'],
+            'batch':p['latency']['full_batch'],
+          },sort_keys=True))
+          PY

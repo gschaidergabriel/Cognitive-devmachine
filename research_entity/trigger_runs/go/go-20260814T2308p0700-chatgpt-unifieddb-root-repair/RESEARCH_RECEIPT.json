@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260814T2308p0700-chatgpt-unifieddb-root-repair",
+  "created_at": "2026-08-14T23:08:00+07:00",
+  "organ": "gpt-5.6-sol temporary Clay worker",
+  "program": "FRANK_V0_1",
+  "target": "self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "research_head_observed_before_write": "28ae89bb2b701bf00ca7760a712934c3f1406d19",
+  "scope": [
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "observed_reality": {
+    "pr_222": {
+      "branch": "clay/unifieddb-wal-safe-opener-20260810",
+      "root_defect": "generic apply() unconditionally appended the canonical schema-fingerprint INSERT, making arbitrary/additive migration scripts depend on meta and allowing additive V17 candidate application to replace the canonical fingerprint",
+      "discriminating_failure": "synthetic generic apply without meta raised sqlite3.OperationalError: no such table: meta"
+    },
+    "pr_286": {
+      "branch": "chatgpt/unifieddb-storage-pair-fused-main-20260811",
+      "root_defect_classification": "TEST_SEAM_STALENESS",
+      "evidence": "Deep Integrity failed only after five atomicity subchecks passed, when the ordering-only sentinel test let newer post-apply materialization proof surfaces dereference fabricated schema filenames"
+    }
+  },
+  "hypotheses": [
+    {
+      "id": "H-GO-UDB-222-FP-OWNERSHIP",
+      "hypothesis": "canonical materialization fingerprint ownership belongs only to the complete current UnifiedDB/ClayGraph canonical chains; generic additive/differential apply must not own or rewrite that fingerprint",
+      "strongest_counterhypothesis": "every apply() invocation should rewrite the canonical fingerprint so all additive schemas are folded into one exact chain",
+      "falsifier": "a required normal runtime/additive schema path becomes unopenable or loses drift detection when fingerprint stamping is scoped to complete canonical chains",
+      "outcome": "RETAIN_TESTING"
+    },
+    {
+      "id": "H-GO-UDB-286-TEST-SEAM",
+      "hypothesis": "PR #286 Deep Integrity failure is a stale monkeypatch seam, not a product migration failure",
+      "strongest_counterhypothesis": "the new materialization certificate mechanism is intrinsically incompatible with migration ordering guarantees",
+      "falsifier": "Deep Integrity still fails after stubbing only post-apply proof surfaces while production pair-continuity behavior is left unchanged",
+      "outcome": "SUPPORTED_BY_TARGET_DEEP_INTEGRITY_PASS"
+    }
+  ],
+  "interventions": [
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 222,
+      "commit": "e011ccbbc8e4a8c221f5814d971e0a558eeaf291",
+      "change": "scope fingerprint stamping in _migration_program() to exact complete canonical schema chains"
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 222,
+      "commit": "7e63467627fbc9eb189c1bafa5e5ebc3324b6570",
+      "change": "align stale WAL preflight workflow with current self-hosted runner lane"
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 222,
+      "commit": "712e819a93e97888ac6bf7d62333c6eb6172f8a9",
+      "change": "keep atomicity ordering regression scoped by stubbing only post-apply fingerprint/storage proof surfaces"
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 286,
+      "commit": "26feb7b9ba12f65202992fb9291b208593dd427d",
+      "change": "repair ordering-only sentinel test seam across materialization-pair certificate proof surfaces"
+    }
+  ],
+  "measured_results": {
+    "pr_222_commit_7e634676": {
+      "sqlite_wal_preflight": "PASS",
+      "sqlite_wal_storage_vps": "PASS",
+      "effect_fence_provider_vps": "PASS",
+      "self_root_current_head": "PASS",
+      "claycode_nominal_boundary": "PASS",
+      "deep_integrity": "FAIL_ONLY_AT_STALE_ORDERING_TEST_SEAM"
+    },
+    "pr_286_commit_26feb7b9": {
+      "deep_integrity": "PASS",
+      "materialization_identity_v2_candidate_vps": "PASS",
+      "attached_atomic_pair_migration_v2_vps": "PASS",
+      "self_root_current_head": "PASS",
+      "claycode_nominal_boundary": "PASS"
+    },
+    "pr_222_commit_712e819a": {
+      "status_at_receipt_write": "TARGET_CI_RUNNING",
+      "already_completed": [
+        "sqlite_wal_preflight PASS",
+        "sqlite_wal_storage_vps PASS",
+        "effect_fence_provider_vps PASS",
+        "self_root_current_head PASS",
+        "claycode_nominal_boundary PASS"
+      ]
+    }
+  },
+  "unusual_experiment": {
+    "count_in_this_go_cycle": 1,
+    "name": "meta-surface sabotage",
+    "class": "bounded disposable tempfile intervention",
+    "intervention": "replace expected meta table surface with a VIEW before canonical fingerprint stamp",
+    "predicted_safe_result": "fingerprint stamp fails and explicit migration transaction rolls back all payload DDL",
+    "observed": {
+      "result": "REJECTED",
+      "error": "cannot modify meta because it is a view",
+      "payload_exists_after_rollback": false,
+      "meta_object_after_rollback": null
+    },
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  },
+  "external_primary_evidence": [
+    "SQLite WAL documentation: WAL-reset corruption race affects upstream 3.7.0 through 3.51.2 except fixed backports; fixed in 3.51.3",
+    "SQLite ATTACH documentation: multi-file transaction atomicity depends on journal mode and main database conditions",
+    "Python 3.12 sqlite3 documentation: executescript transaction behavior requires explicit transaction control in the script when needed"
+  ],
+  "negative_results_preserved": [
+    "first PR #222 WAL preflight after code patch failed before useful steps because the branch still requested ubuntu-latest while current repository execution lane is self-hosted",
+    "PR #286 old Deep Integrity failure was caused by a sentinel test seam dereferencing non-existent synthetic schema filenames"
+  ],
+  "promotion_state": "IMPLEMENTED_TESTING",
+  "non_claims": [
+    "No whole Frank v0.1 acceptance claim",
+    "No canonical runtime state migration performed",
+    "No paid/final model training started or authorized",
+    "No Together API/service used",
+    "No Frank self-Harness mutation authority exercised"
+  ],
+  "next_falsifier": "Require PR #222 exact-head Deep Integrity PASS after commit 712e819a; then recompose/rebase affected downstream UnifiedDB stack and remeasure the two root tests on composed current-main trees before any merge/promotion."
+}

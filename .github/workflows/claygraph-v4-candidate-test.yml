@@ -1,0 +1,29 @@
+name: ClayGraph V4 Candidate Test
+
+on:
+  push:
+    branches:
+      - chatgpt/go-claygraph-strict-heads-20260810
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'research_entity/runtime/RAE_CLAYGRAPH_V4_SEMANTIC_ACCESS_HEADS.sql'
+      - 'research_entity/runtime/test_claygraph_v4_semantic_access_heads.py'
+
+permissions:
+  contents: read
+
+jobs:
+  claygraph-v4-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Run exact ClayGraph V4 candidate regression
+        run: python research_entity/runtime/test_claygraph_v4_semantic_access_heads.py -v

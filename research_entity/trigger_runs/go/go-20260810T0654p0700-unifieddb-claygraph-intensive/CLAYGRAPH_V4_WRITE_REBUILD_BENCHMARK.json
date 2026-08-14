@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:18:00+07:00",
+  "actor": "chatgpt-secondary",
+  "evidence_class": "LOCAL_SYNTHETIC_EXECUTION",
+  "target_live_claim": false,
+  "workload": {
+    "base_rows": 57600,
+    "measured_insert_rows": 12960,
+    "batches": 27,
+    "log_rows_after": 70560,
+    "logical_heads": 14400
+  },
+  "environment": {
+    "sqlite": "3.46.1",
+    "os": "Linux x86_64",
+    "benchmark_pragmas": ["journal_mode=MEMORY", "synchronous=OFF"],
+    "note": "Relative in-process write/rebuild benchmark only; durability/Ubuntu target costs remain unmeasured."
+  },
+  "initial_v4_head_variant": {
+    "v3_insert_us_per_row": 5.3882,
+    "v4_insert_us_per_row": 14.6853,
+    "write_overhead_ratio": 2.7254,
+    "full_head_rebuild_ms": 200.754,
+    "read_context": {
+      "strict_reference_p50_us": 6709.521,
+      "head_p50_us": 21.9675,
+      "strict_to_head_speedup": 305.4294
+    }
+  },
+  "index_pruning_iteration": {
+    "change": "Remove redundant UNIQUE index on graph_semantic_access_heads.access_path_version_id; authoritative graph_semantic_access_paths already enforces global access_path_version_id primary-key uniqueness.",
+    "full_variant_measured_write_ms": 209.9478,
+    "pruned_variant_measured_write_ms": 173.0766,
+    "write_improvement_ratio": 1.2130,
+    "pruned_us_per_row": 13.3547,
+    "pruned_vs_v3_write_overhead_ratio": 2.4785,
+    "seed_lookup_p50_us_full": 7.0605,
+    "seed_lookup_p50_us_pruned": 7.1310,
+    "reverse_target_lookup_p50_us_full": 5.5080,
+    "reverse_target_lookup_p50_us_pruned": 5.4890,
+    "adjudication": "SUPPORTED_PRUNE: redundant derived uniqueness index costs writes without measured read benefit."
+  },
+  "recovery": {
+    "head_rebuild_ms_for_70560_log_rows": 200.754,
+    "head_count_before": 14400,
+    "head_count_after": 14400,
+    "promotion_requirement": "Repeat with synchronous=FULL/WAL and real corpus on Ubuntu before promotion; verify strict/full-row equivalence after rebuild."
+  },
+  "tradeoff": {
+    "read_gain": "large on strict current semantic access retrieval",
+    "accuracy_gain": "prevents observed stale resurrection under newer non-CURRENT versions",
+    "write_cost": "material, about 2.48x in the pruned synthetic in-memory write workload",
+    "decision": "KEEP_AS_CANDIDATE_TESTING; do not promote until real workload read/write mix shows positive Pareto value."
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:14:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "focus": ["UnifiedDB", "ClayGraph"],
+  "evidence_class": "LOCAL_SYNTHETIC_EXECUTION",
+  "target_live_claim": false,
+  "environment": {
+    "os": "Linux 6.18.35 x86_64 glibc 2.41",
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "target_host_equivalence": "NOT_CLAIMED",
+    "hostinger_vps_execution": "NOT_EXECUTED_IN_THIS_SUBCYCLE"
+  },
+  "hypothesis": "Frank-relevant semantic retrieval can become materially faster and more correct by keeping UnifiedDB as semantic authority while using epoch/provenance-bound ClayGraph materializations for bounded hot reads.",
+  "strongest_counterhypothesis": "Any gain is only ordinary indexing; a well-indexed normal relational database with the same semantics will match Clay, and derived heads may silently change latest/tombstone semantics.",
+  "unifieddb_query_plane": {
+    "workload_rows": 8000,
+    "queries": 120,
+    "equivalence_checks": 20,
+    "equivalence_mismatches": 0,
+    "legacy_full_materialization_p50_us": 20129.2,
+    "sql_pushdown_p50_us": 119.6,
+    "overall_speedup_p50": 168.4,
+    "narrow_key_query_speedup_p50": 365.9,
+    "adjudication": "SUPPORTED: bounded SQL pushdown preserves sampled semantics and removes full-state decode from the hot read. Concurrent worker implementation commit 8d5beaa28969c553735edfe91a09ec3e56f0c0fe matches the measured direction."
+  },
+  "strong_generic_relational_baseline": {
+    "description": "SQLite with sensible CURRENT partial indexes and ordinary source/target indexes, but without Clay-specific semantic policy/projections.",
+    "node_lookup_p50_us": 4.08,
+    "clay_candidate_node_lookup_p50_us": 4.07,
+    "adjacency_topk_p50_us": 10.4,
+    "clay_candidate_adjacency_topk_p50_us": 6.25,
+    "adjacency_speedup_p50": 1.66,
+    "accuracy_when_given_same_graph_and_policy": "IDENTICAL",
+    "adjudication": "COUNTERHYPOTHESIS PARTLY SUPPORTED: Clay is not intrinsically more accurate than a normal DB engine given identical semantic structure and ranking policy. Accuracy gain must come from semantics/provenance/projections, not branding or storage engine."
+  },
+  "synthetic_ambiguous_retrieval": {
+    "lexical_fts_ndcg_at_10": 0.0785,
+    "lexical_fts_recall_at_10": 0.0810,
+    "semantic_graph_hybrid_ndcg_at_10": 0.5986,
+    "semantic_graph_hybrid_recall_at_10": 0.4454,
+    "adjudication": "SUPPORTED ONLY FOR SYNTHETIC AMBIGUITY WORKLOAD; requires Frank-held-out/live validation before promotion."
+  },
+  "claygraph_v3_semantic_access_falsifier": {
+    "source_rows": 127584,
+    "logical_heads": 38400,
+    "partial_rebuild": true,
+    "newest_epoch_seed_fraction": "3/7",
+    "newest_epoch_target_ranks": "1..24 of 32",
+    "newest_non_current_tombstones_injected": true,
+    "v3_bug": "v_current_graph_semantic_access_paths computes MAX(graph_epoch) only over status=CURRENT, so a newer QUARANTINED/SUPERSEDED version can revive an older CURRENT path.",
+    "stale_resurrected_paths_observed": 516,
+    "targeted_example": {
+      "seed_id": "seed0",
+      "target_logical_id": "n221",
+      "v3_visible_epoch": 3,
+      "actual_latest_epoch": 4,
+      "actual_latest_status": "QUARANTINED"
+    },
+    "strict_reference_semantics": "select newest version per (seed,target) regardless status, then expose only if newest status=CURRENT",
+    "strict_query_p50_us": 6709.521,
+    "head_projection_p50_us": 21.9675,
+    "strict_to_head_speedup_p50": 305.4294,
+    "top12_queries": 400,
+    "strict_vs_head_top12_mismatches": 0,
+    "adjudication": "SUPPORTED CANDIDATE: strict heads remove observed stale resurrection and recover the performance cost of correct latest-version semantics. Promotion still requires exact repository tests, ambiguity gate, rebuild equivalence and target/Ubuntu replication."
+  },
+  "out_of_box_experiment": {
+    "name": "epoch-sealed neighbor capsule",
+    "sql_topk_p50_us": 6.58,
+    "capsule_fetch_parse_p50_us": 6.15,
+    "speedup_p50": 1.07,
+    "costs": ["extra storage", "extra build/invalidation path", "JSON decode", "additional recovery surface"],
+    "result": "NO_BENEFIT_NOT_SELECTED"
+  },
+  "web_fusion": {
+    "source_classes": ["SQLite official documentation", "PostgreSQL official documentation"],
+    "finding": "Partial/multicolumn/covering indexes are standard database mechanisms. Clay's defensible differentiation is coherent epoch/provenance/admissibility semantics plus workload-specific rebuildable projections, not generic index existence."
+  },
+  "architecture_delta": {
+    "candidate": "research_entity/runtime/RAE_CLAYGRAPH_V4_SEMANTIC_ACCESS_HEADS.sql",
+    "tests": "research_entity/runtime/test_claygraph_v4_semantic_access_heads.py",
+    "status": "CANDIDATE_TESTING",
+    "rollback": "Do not admit V4; continue V3 views. V4 adds only derived/rebuildable acceleration and strict candidate views until verified receipt exists."
+  },
+  "negative_results": [
+    "Universal claim that Clay is more accurate merely because it is Clay: REFUTED.",
+    "WITHOUT ROWID/capsule shortcut as a meaningful architecture improvement on measured workload: NO_BENEFIT.",
+    "Global latest-epoch shortcut as sufficient semantics under partial rebuild: REJECTED; strict per-key latest semantics required."
+  ],
+  "next_falsifiers": [
+    "Run repository V4 anti-resurrection tests on an exact checkout.",
+    "Full-row strict-vs-fast equivalence over real ClayGraph corpus with ambiguity_count=0.",
+    "Measure write amplification and rebuild latency of semantic access heads.",
+    "Ubuntu/Hostinger replication through an actually authorized compatible lane.",
+    "Frank held-out retrieval accuracy against lexical, normal relational same-semantics, and semantic hybrid baselines."
+  ]
+}

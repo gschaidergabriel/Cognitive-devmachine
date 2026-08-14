@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.2",
+  "evidence_id": "FV01-20260813-EXTERNAL-GATE-RUNNER-INSTRUMENT-ARTIFACT-FALSE-RED",
+  "trigger": "owner_directive",
+  "framework": "GRF",
+  "target_program": "FRANK_V0_1",
+  "actor": "claude-code-lead / Anthropic / Claude Opus 5",
+  "actor_role": "PRIMARY_ARBITER_OPERATING_AN_EXTERNAL_MEASUREMENT_INSTRUMENT",
+  "work_package": "MEASUREMENT_INSTRUMENT_NOT_A_PRODUCT_WORK_PACKAGE",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "instrument_repo": "gschaidergabriel/gabriel-claude",
+  "instrument_path": "bin/frank-laeufer/{yml2sh.py,torkonfig.py,laeufer.py}",
+  "instrument_commit": "2529a5d0a2c24171110900a63488d54f752e657f",
+  "host": {
+    "ssh_alias": "frank-api",
+    "ip": "31.97.117.141",
+    "hostname": "digital-retina",
+    "deployment": "/root/frank-laeufer (mode 700)",
+    "warning": "This is NOT the SeiMensch VPS 72.61.19.188."
+  },
+  "instrument_purpose": "Execute the same Dr.-Unterweger gate workflows outside GitHub Actions on the accepted probe machine and write the verdict back as a PR commit status, so that Actions is not the only body able to issue a gate verdict.",
+  "observed_reality": {
+    "translated_gate_scripts_on_disk": 24,
+    "armed_gates_in_runner_config": 20,
+    "symptom": "Three gates issued red verdicts across all open PRs within seconds of start, with failures located before the gate's own decision step.",
+    "symptom_1": "claycode-frontier-integration-vps and claycode-frontier-current-main-composition-vps: rc=128, 'fatal: couldn't find remote ref ${PR_HEAD_SHA}', 2 and 3 executed steps.",
+    "symptom_2": "frank-provider-fence-fresh-main-vps: rc=1 after 2.4 s, 'fatal: not a git repository', 0 of 20 PASS_ markers."
+  },
+  "generated_reality": {
+    "hypothesis": "The red verdicts are instrument artifacts, not gate verdicts: the translator's model of GitHub expression substitution and of the working directory is wrong, so the gate dies before reaching its own decision step.",
+    "strongest_counterhypothesis": "The gates genuinely reject these candidate heads, and the early exit is the gate failing closed as designed."
+  },
+  "banal_cause_screen": {
+    "note": "Cause 1 of the 13-cause boredom screen was not excluded here — it was CONFIRMED as the actual cause.",
+    "cause_1_measurement_error": "CONFIRMED_AS_CAUSE",
+    "discriminator": "Both failures occur in steps that predate any gate assertion; both are reproduced by re-running the same translated script by hand; both disappear after an instrument-only change with no product change."
+  },
+  "mechanism": {
+    "single_mapping_two_holes": "GitHub substitutes ${{ … }} TEXTUALLY into the run body before any shell sees it. The translator mapped expressions onto shell variables instead, which is a different map with a strictly smaller domain.",
+    "hole_1": "Shell expansion does not occur inside single quotes: TARGET_SHA='${PR_HEAD_SHA}' kept the literal text, so 'git fetch origin ${PR_HEAD_SHA}' asked for a ref by that name — rc=128. Affected 2 of 20 armed gates.",
+    "hole_2": "working-directory was not translated at all, neither per step nor from 'defaults: run:'. A gate that fetches its own tree to /tmp and points working-directory at it then ran every step in the empty workspace — 'fatal: not a git repository' from step 2 on. Affected 1 of 20 armed gates."
+  },
+  "repair": {
+    "status": "INSTRUMENT_REPAIR_ONLY_NO_PRODUCT_CHANGE_NO_PROMOTION",
+    "hole_1": "The translator now emits placeholders @@LAEUFER:VAR@@ into the run body; a generated bash function laeufer_einsetzen() replaces them with the value before execution — quoting-blind, exactly as GitHub does. Unknown expressions still remain visible as UNKNOWN_EXPR_… instead of vanishing silently.",
+    "hole_2": "working-directory is now honoured, per step and from 'defaults: run:', as the 5th argument of the generated schritt() function; absent it, a step runs in $GITHUB_WORKSPACE.",
+    "files": [
+      "bin/frank-laeufer/yml2sh.py"
+    ],
+    "product_files_touched": [],
+    "authority_minted": false,
+    "external_effect_executed": false
+  },
+  "execution_evidence": {
+    "measured_at": "2026-08-13T02:37Z",
+    "before_fix": {
+      "frank-provider-fence-fresh-main-vps": "rc=1 after ~2.4 s, 0 of 20 PASS_ markers, red status on 25 PRs",
+      "claycode-frontier-integration-vps @ PR 558 29c0d53c": "rc=128, 2 steps (log 2026-08-13T01:51:11Z)",
+      "claycode-frontier-current-main-composition-vps @ PR 558 29c0d53c": "rc=128, 3 steps (log 2026-08-13T01:51:09Z)"
+    },
+    "after_fix": {
+      "frank-provider-fence-fresh-main-vps @ PR 520 aa00dbdf": {
+        "rc": 0,
+        "executed_steps": 11,
+        "pass_markers": 6,
+        "pass_marker_names": [
+          "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB",
+          "PASS_CURRENT_MAIN_V17_SCHEMA_AUTHORITY_AND_ROLLBACK",
+          "PASS_FRESH_MAIN_EFFECT_GENERATION_INTEGRATION",
+          "PASS_FRESH_MAIN_PROVIDER_TO_V17_REENTRY_DONE",
+          "PASS_FRESH_MAIN_TYPED_PROVIDER_CURRENT_STRUCTURED_FRONTEND_TYPEDIR",
+          "PASS_TYPED_PROVIDER_CONTRACT_RUNTIME_MATRIX"
+        ]
+      },
+      "frank-provider-fence-fresh-main-vps @ PRs 557, 558, 560, 564, 565, 566, 567": "rc=0 each, 8.1–8.6 s per run (runner log 2026-08-13T02:36–02:37Z)",
+      "claycode-frontier-current-main-composition-vps @ PR 558 29c0d53c": "re-run started 2026-08-13T02:37:17Z, still executing at the time this record was written — verdict not yet on disk"
+    },
+    "open_verification": [
+      "claycode-frontier-integration-vps has no post-fix run on disk yet; only the pre-fix rc=128 log exists. Its post-fix verdict is pending, not claimed.",
+      "claycode-frontier-current-main-composition-vps is expected to run through and then be rejected by its own final assertion (coverage_percent == 90.0 required). That expectation is a prediction, not a measurement, until the run completes."
+    ]
+  },
+  "state_repair": {
+    "action": "The false red verdicts of the affected gates were removed from the runner's zustand.json so the gates re-judge from scratch.",
+    "backup": "/root/frank-laeufer/zustand.vor-wd-fix.json (298 entries) and /root/frank-laeufer/tore.vor-wd-fix/",
+    "current": "/root/frank-laeufer/zustand.json held 278 entries at 2026-08-13T02:37Z; the runner has been re-judging since."
+  },
+  "collapse": {
+    "red_verdict_implies_gate_verdict": "REJECT",
+    "instrument_reproduces_actions_semantics_by_construction": "REJECT",
+    "shell_variables_are_an_adequate_model_of_github_expressions": "REJECT_DOMAIN_TOO_SMALL",
+    "textual_substitution_before_shell_parse": "SUPPORTED_MECHANISM"
+  },
+  "epistemic_consequence": "A red verdict from a second instrument counts as a gate verdict only if the instrument demonstrably reached the gate's own assertion step. The runner must therefore report executed step count and PASS_ marker count alongside the exit code — the same lesson as 'a red gate is not the same as a gate that ran', now one level down: a red gate is not the same as a gate that was measured.",
+  "provenance": {
+    "recorded_by": "claude-code-lead",
+    "recorded_at": "2026-08-13T09:37:00+07:00",
+    "source_of_numbers": "read live from frank-api log files and runner state at 2026-08-13T02:37Z, not from session memory",
+    "instrument_memory_note": "German-language operating notes live in gschaidergabriel/gabriel-claude at wissen/clay/tore-ohne-actions.md"
+  }
+}

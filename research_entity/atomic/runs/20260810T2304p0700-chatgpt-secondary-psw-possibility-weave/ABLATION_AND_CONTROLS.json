@@ -1,0 +1,45 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-PSW-001",
+  "ablations":[
+    {
+      "id":"NO_SPARSE_DELTA",
+      "intervention":"materialize each branch as a full state",
+      "result":"At low divergence the wire proxy expands dramatically. In the representative F=1024,N=256 run, 0% divergence used ~3.62 MB full materialization versus ~28.4 KB ordinary overlay and ~30.3 KB PSW; at 1% divergence overlay was ~63.5 KB. Sparse representation is causally useful, but ordinary overlay already provides it."
+    },
+    {
+      "id":"NO_TRANSITION_LIFT",
+      "intervention":"execute every pure transition once per branch",
+      "result":"FULL_COPY performs N evaluations. Exact read-signature memoization and PSW both require one evaluation per unique read signature. At F=1024,N=256,read16, median sharing factor fell from 256x at 0% divergence to ~6.83x at 1%, ~1.76x at 5%, ~1.20x at 10%, ~1.01x at 25%, and 1x at 50%. Sharing is causally useful only when branches remain observationally similar for the transition."
+    },
+    {
+      "id":"INCOMPLETE_READ_SET",
+      "intervention":"transition truly reads fields a and b, but cache/signature declares only a; two branches differ only at b",
+      "result":{"unsafe_shared_output_mismatches":1,"exact_read_set_mismatches":0},
+      "interpretation":"A single omitted material read makes cross-branch computation sharing unsound. Exact or conservative read-set/effect knowledge is a safety requirement, not an optimization hint."
+    },
+    {
+      "id":"PAYLOAD_ONLY_MERGE",
+      "intervention":"two alternatives have identical materialized payload but different hypothesis_id/provenance_root",
+      "result":{"naive_payload_only_merges":true,"strict_branch_identity_merges":false},
+      "interpretation":"Physical equality is not epistemic identity. Branch payload deduplication may share storage but must not erase hypothesis/provenance distinction."
+    }
+  ],
+  "negative_controls":[
+    {"control":"stale base epoch","expected":"REJECT","observed":"REJECT"},
+    {"control":"wrong native identity Frank instead of self.root","expected":"REJECT","observed":"REJECT"},
+    {"control":"current self.root/current epoch","expected":"PASS","observed":"PASS"},
+    {"control":"PURE + exact known read set","expected":"lift permitted","observed":"permitted"},
+    {"control":"PURE + unknown read set","expected":"no lift","observed":"no lift"},
+    {"control":"EXTERNAL_READ","expected":"no unresolved multi-branch lift","observed":"no lift"},
+    {"control":"EXTERNAL_WRITE","expected":"no lift","observed":"no lift"},
+    {"control":"SECURITY_CHANGE","expected":"no lift","observed":"no lift"}
+  ],
+  "adaptive_representation_probe":{
+    "candidate_rule":"use OVERLAY_MEMO only when unique_read_signatures/branches <= threshold; otherwise materialize/execute independently",
+    "main_grid":{"cells":168,"threshold_0_8":{"mean_time_regret_over_oracle_best":1.001556,"p95_regret":1.0,"exact_best_fraction":0.964286},"note":"threshold chosen after looking at main grid; not held-out evidence"},
+    "heldout":{"cells":48,"different_seed_region":true,"threshold_0_8":{"mean_time_regret_over_oracle_best":1.000829,"p95_regret":1.0,"exact_best_fraction":0.958333}},
+    "interpretation":"A simple signature-density policy closely tracked the faster of FULL_COPY and OVERLAY_MEMO in this synthetic workload. The numerical threshold is not portable; the useful result is the existence of a measurable crossover and a plausible adaptive representation policy."
+  },
+  "causal_conclusion":"Sparse state sharing and exact-signature pure computation reuse are real mechanisms. PSW did not uniquely cause either mechanism: the strongest conventional overlay+memo baseline reproduces both."
+}

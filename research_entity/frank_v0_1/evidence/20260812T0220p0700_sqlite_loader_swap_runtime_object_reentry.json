@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_EVIDENCE_REENTRY",
+  "recorded_at": "2026-08-12T02:20:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "state": "SUPPORTED_NEGATIVE_RESULT_WITH_TESTING_REPAIR",
+  "observed_anchors": [
+    {
+      "claim": "Accepted-target V5 positive deployment path is not provisioned: /etc/frank-v0.1/sqlite-runtime-anchor-v1.json is absent and the V5 launcher fails closed with exit 78 ROOT_TRUST_ANCHOR_MISSING.",
+      "evidence": "Dr.-Unterweger accepted-target observation workflow/artifact run 31525278195 and later rerun",
+      "promotion_boundary": "BLOCKED; absence is not positive runtime admission"
+    },
+    {
+      "claim": "V4 can admit either of two byte-distinct SQLite 3.53.4 builds with the same upstream source-id when the caller supplies the matching manifest digest.",
+      "evidence": "Dr.-Unterweger workflow run 31523441341",
+      "interpretation": "caller-selected manifest/digest is consistency evidence, not independent deployment authority"
+    },
+    {
+      "claim": "A mutable SQLite candidate path can be atomically replaced after V1 candidate hash validation and the byte-distinct replacement can be mapped before V1 returns its final active-hash denial.",
+      "evidence": "Dr.-Unterweger workflow run 31526089849; artifact 9114986802",
+      "protocol": "FRANK_SQLITE_V1_POST_HASH_LOADER_SWAP_COUNTERWORLD_V1",
+      "status": "PASS_COUNTERWORLD_POST_HASH_OBJECT_LOADED_BEFORE_DENIAL"
+    }
+  ],
+  "single_bounded_unusual_experiment": {
+    "protocol": "FRANK_SQLITE_V1_POST_HASH_LOADER_SWAP_COUNTERWORLD_V1",
+    "count_for_macro_cycle": 1,
+    "additional_unusual_experiments_allowed_in_same_macro_cycle": false,
+    "scope": "runner-temporary synthetic loader path only",
+    "canonical_state_mutated": false,
+    "production_path_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "good_library_sha256": "9724178f916e54a4db1d412ddc87cdef1808fec6bb46981a34bc6078413e40e1",
+    "replacement_library_sha256": "5c96072e184594700316ebf0da45a8d6f37591d050d9c8616c930ed7d551b6a",
+    "sqlite_version": "3.53.4",
+    "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "replacement_observed_compile_option": "DQS=0",
+    "final_v1_denial": "SQLITE_RUNTIME_ACTIVE_HASH_MISMATCH",
+    "result": "The replacement runtime was active before final denial; V1 still failed closed and emitted no admission receipt."
+  },
+  "generated_reality": {
+    "hypothesis": "Hash/version/source-id checks are insufficient as the final pre-loader trust boundary when the manifest-selected runtime pathname remains writable or replaceable by the service identity.",
+    "mechanism": "V1 validates bytes at a pathname, then dynamic loading/import occurs, then mapped-object hash is checked. Mutation between candidate validation and import can therefore cross the code-loading boundary before eventual rejection.",
+    "confidence": "HIGH_FOR_MEASURED_V1_ORDERING; NOT_A_PRODUCTION_V5_BYPASS_CLAIM"
+  },
+  "counter_reality": {
+    "hypothesis": "Deployment ownership of the runtime object and ancestor directories may still be insufficient against privileged deployment replacement, mount-topology changes, or kernel-level pathname races.",
+    "status": "OPEN",
+    "next_discriminator": "After legitimate root provisioning, test exact accepted-target V5 service boot/restart/downgrade/library-swap semantics; consider FD/openat2-style binding if deployment-owned pathname policy is not strong enough."
+  },
+  "architecture_delta": {
+    "state": "TESTING",
+    "frank_repo_pr": 433,
+    "candidate_head": "59276a3d00b05174f895fbc63e5baf215998e33f",
+    "base_main": "ab6b57741228c780f51581f8c46c49b295b8b3c5",
+    "change": "V5 candidate requires manifest-selected runtime library to be absolute/resolved/regular/non-symlink, UID-0-owned and not group/other writable, with deployment-owned non-writable parent chain, before parent probe/LD_LIBRARY_PATH use and before child V1 import-capable admission.",
+    "deterministic_gate": "tests/sqlite_v5_runtime_object_trust_gate.py",
+    "exact_branch_ci": "UNVERIFIED",
+    "reason": "Creation of a new candidate-specific GitHub workflow was connector-blocked; existing PR workflows do not constitute an exact V5 runtime-object gate.",
+    "promotion": "DO_NOT_MERGE_WITHOUT_RELEVANT_EXACT_PASS"
+  },
+  "merged_related_delta": {
+    "pr": 423,
+    "merge_sha": "81ec1c571e231cfe90c4a4343150a4f4b7e99ec8",
+    "change": "V5 shell launcher no longer resolves dirname or other inherited-PATH helpers before the guard; fixed PATH and shell parameter expansion are used.",
+    "target_regression": "PASS on self-hosted Linux/X64 before merge"
+  },
+  "release_effect": {
+    "F-V01-13": "IN_PROGRESS",
+    "release_promotion": "BLOCKED",
+    "positive_v5_accepted_target_admission": "NOT_PROVEN",
+    "root_anchor_provisioned": false,
+    "training_authorized": false
+  },
+  "next_falsifier": "Legitimately provision the root-owned V5 anchor and deployment-owned fixed SQLite runtime on the accepted Ubuntu target, then obtain positive V5 admission plus service boot/restart and downgrade/library-swap rejection evidence without bypassing privilege boundaries.",
+  "rollback": "PR 433 remains draft/unmerged; current main continues to fail closed when the V5 root anchor is absent.",
+  "negative_results_preserved": [
+    "V4 caller-selected manifest/digest is not an independent authority anchor.",
+    "Current accepted target lacks the V5 root anchor.",
+    "V1 active-hash denial occurs only after a mutable replacement runtime can be loaded in the bounded counterworld.",
+    "Frank Deep Integrity is already red on pre-candidate main and is not attributed to the V5 runtime-object candidate."
+  ]
+}

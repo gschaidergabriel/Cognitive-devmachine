@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1440p0700-gpt56sol-claycode-alias-totality",
+  "observation_type": "POST_MERGE_REPLAY_COUNTEREVIDENCE",
+  "observed_research_parent_before_write": "163dc4a47c4bce91c952ac4fb7f68a098a43542b",
+  "product_main_merge": "3a69b78a344791ef111558713e0696a7818adbc6",
+  "product_main_after_receipt": "8e861c13dbf9215c3e21afa3372fb43ab35bd709",
+  "workflow": "Frank SQLite published patchset readonly v1",
+  "workflow_run": 31678678045,
+  "runner": "clay-3 / self-hosted Linux X64",
+  "github_conclusion": "failure",
+  "failed_step": "Verify DSC checksum and inspect Debian patch series",
+  "artifact": {
+    "artifact_id": 9172558445,
+    "verification_protocol": "FRANK_SQLITE_PUBLISHED_PATCHSET_READONLY_V1",
+    "source_version": "3.45.1-1ubuntu2.7",
+    "debian_tar_checksum_match": true,
+    "wal_source_touch_files": [],
+    "status": "NO_EXPLICIT_WAL_RESET_FIX_IN_PUBLISHED_UBUNTU_PATCHSET"
+  },
+  "workflow_semantics": {
+    "expected_fail_closed_exit": 78,
+    "both_semantic_observation_branches_exit_78": true,
+    "interpretation": "The red GitHub conclusion is an intentional F-V01-13 fail-closed observation sentinel. It is not evidence that the ClayCode alias-totality repair regressed SQLite behavior.",
+    "release_interpretation": "F-V01-13 remains blocked/open; this must not be reclassified as PASS."
+  },
+  "counterevidence_preserved": true,
+  "whole_frank_v0_1_acceptance_claim": false,
+  "training_authorized": false
+}

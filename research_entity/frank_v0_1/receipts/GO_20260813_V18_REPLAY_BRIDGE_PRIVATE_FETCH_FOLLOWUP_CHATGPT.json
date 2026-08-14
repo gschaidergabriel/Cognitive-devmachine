@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "trigger": "go",
+  "worker": "temporary_clay_worker_chatgpt",
+  "status": "SUPPORTED_FOLLOWUP_NO_RELEASE_PROMOTION",
+  "canonical_parent": {
+    "research_main_prewrite": "01234b38e54b304b2ea7709276c28c04740b7ae5",
+    "preceding_receipt": "research_entity/frank_v0_1/receipts/GO_20260813_CI_YAML_AND_EXACT_HEAD_EVIDENCE_INTEGRITY_CHATGPT.json",
+    "target_main_observed": "4304810ebeae015ebd88d2a85cfc1cecae2df9b3"
+  },
+  "observed_reality": {
+    "pr562": {
+      "state": "MERGED",
+      "merge_commit": "4304810ebeae015ebd88d2a85cfc1cecae2df9b3",
+      "first_repaired_v18_workflow_run": 31651948649,
+      "first_repaired_v18_workflow_conclusion": "SUCCESS"
+    },
+    "second_v18_bridge_execution": {
+      "test_pr": 563,
+      "test_pr_state_after_measurement": "CLOSED_NOT_MERGED",
+      "test_head": "a600018b9510e273c5a4dad98bbc7a886283ddb7",
+      "workflow": "Clay V18 Committed Replay PR Lane",
+      "run": 31654656025,
+      "job": 94306330488,
+      "runner_name": "clay",
+      "runner_labels": ["self-hosted", "Linux", "X64"],
+      "setup": "PASS",
+      "checkout": "PASS",
+      "materialize_exact_committed_v18_bytes": "FAIL",
+      "failure_annotation": "Process completed with exit code 128",
+      "later_build_and_full_corpus_steps": "SKIPPED",
+      "artifact_payload": "NONE"
+    },
+    "hosted_deep_integrity_zero_step_reclassification": {
+      "run": 31651948640,
+      "previous_classification": "BLOCKED_UNKNOWN_ZERO_STEP_RUNNER_ID_0",
+      "new_exact_annotation": "job was not started because recent account payments have failed or the spending limit needs to be increased",
+      "classification": "GITHUB_HOSTED_BILLING_OR_SPENDING_LIMIT_BLOCK; ZERO_PRODUCT_EVIDENCE"
+    }
+  },
+  "generated_hypothesis": {
+    "id": "H-V18-BRIDGE-PRIVATE-FETCH-AUTH",
+    "statement": "The second V18 bridge fails in its first materialization step because actions/checkout is configured with persist-credentials:false and the next command performs git fetch from the same private repository."
+  },
+  "supporting_mechanism": [
+    "The failing bridge checkout explicitly sets persist-credentials:false, then immediately executes git fetch --depth=1 origin against two pinned commits.",
+    "The sibling committed-replay workflow successfully materialized the same V18 evidence after the YAML repair and does not disable checkout credential persistence.",
+    "Official actions/checkout documentation defines persisted credentials as the mechanism allowing authenticated git commands after checkout; persist-credentials defaults true."
+  ],
+  "strongest_counterhypothesis": {
+    "id": "CH-V18-BRIDGE-PIN-OR-REMOTE-FAILURE",
+    "statement": "Exit 128 may instead be caused by a missing pinned object/ref or another remote failure independent of credentials.",
+    "weight_after_observation": "LOWER_BUT_NOT_REFUTED_WITHOUT_EXACT_JOB_LOG"
+  },
+  "smallest_next_falsifier": {
+    "change": "On a clean branch from current main, change only the bridge checkout credential policy so the read-only GITHUB_TOKEN remains available for the private git fetch (or equivalently configure explicit read-only authentication), then trigger only .clay_v18_replay_trigger and re-run the same self-hosted bridge.",
+    "prediction_if_hypothesis_right": "Materialize exact committed Clay V18 bytes advances beyond git fetch and the existing hash/parity gates execute.",
+    "prediction_if_counterhypothesis_right": "Materialization still exits 128 after authenticated fetch, requiring exact log inspection of pinned-object/remote failure."
+  },
+  "bounded_unusual_experiment": {
+    "count_in_this_macrocycle": 1,
+    "name": "LIVE_SECOND_BRIDGE_TRIGGER_WITHOUT_PRODUCT_MERGE",
+    "intervention": "Opened a draft trigger-only PR after #562 merged so the previously unexecuted repaired PR-dispatch bridge had to run on its intended self-hosted lane.",
+    "baseline": "Before the YAML repair the lane produced zero-job failures; PR #562 itself did not exercise this path because its paths filter only watches .clay_v18_replay_trigger.",
+    "observed": "The repaired workflow created and executed a real self-hosted job, proving the YAML blind spot was removed, then failed deeper at the materialization step with exit 128.",
+    "rollback": "PR #563 was closed without merge; trigger-only commit did not enter main.",
+    "outcome": "SUPPORTED_NEW_DEEPER_FAILURE"
+  },
+  "build_attempt_safety_result": {
+    "candidate_branch": "clay-go-fix-v18-private-fetch-20260813",
+    "attempted_change": "persist-credentials:false -> true",
+    "premerge_diff_guard": "FAILED",
+    "reason": "Whole-file replacement through the available connector re-encoded embedded Python escape sequences and produced 74 unintended diff changes instead of a one-line patch.",
+    "action": "ABORTED_AND_BRANCH_RESET_TO_MAIN",
+    "promotion": "NONE",
+    "lesson": "Do not merge workflow repairs unless byte/diff guard proves the intended minimal edit."
+  },
+  "collapse": {
+    "yaml_repair_allows_second_bridge_to_execute": "PROMOTE_TO_VERIFIED_FOR_THIS_WORKFLOW_PATH",
+    "second_bridge_is_healthy": "REJECT",
+    "private_fetch_auth_is_root_cause": "RETAIN_SUPPORTED_NOT_YET_VERIFIED",
+    "hosted_zero_step_failure_is_product_failure": "REJECT",
+    "whole_frank_acceptance": "NOT_CLAIMED"
+  },
+  "next_actions_ranked": [
+    "Apply an exact one-line/auth-equivalent patch with a byte-preserving patch mechanism and rerun the bridge.",
+    "Capture exact stderr for the materialization step if exit 128 persists.",
+    "Keep GitHub-hosted billing failures separated from semantic/product test failures.",
+    "After CI measurement integrity is restored, return release priority to accepted-Hostinger productive SQLite binding, semantic lineage, restart/rollback and end-to-end acceptance."
+  ],
+  "authority_and_scope": {
+    "frank_harness_mutated": false,
+    "effect_authority_mutated": false,
+    "accepted_hostinger_mutated": false,
+    "canonical_frank_state_mutated": false,
+    "final_training_authorized": false,
+    "together_used": false
+  }
+}

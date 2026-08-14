@@ -1,0 +1,135 @@
+name: UnifiedDB EAP Direct Hostinger Receipt
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-eap-direct-hostinger.yml'
+      - 'research_entity/harness/reference/unifieddb_emergent_preprocessor.py'
+      - 'research_entity/harness/reference/unifieddb_emergent_cascade.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_assembly.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_cascade.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_cascade.py'
+      - 'research_entity/runtime/semantic_entity_resolver_v12.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-eap-direct-hostinger
+  cancel-in-progress: false
+
+jobs:
+  eap-direct:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact Clay commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Run EAP regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.harness.reference.test_unifieddb_query_plane \
+            research_entity.harness.reference.test_unifieddb_emergent_assembly \
+            research_entity.harness.reference.test_unifieddb_emergent_cascade
+
+      - name: Measure model-input path
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python3 -m research_entity.harness.reference.benchmark_unifieddb_emergent_assembly > /tmp/eap-model.json
+          python3 -m research_entity.harness.reference.benchmark_unifieddb_emergent_cascade > /tmp/eap-cascade.json
+          python3 - /tmp/eap-model.json /tmp/eap-cascade.json /tmp/EAP_DIRECT_HOSTINGER.json <<'PY'
+          import json,os,platform,socket,sys,time
+          model=json.load(open(sys.argv[1],encoding='utf-8'))
+          cascade=json.load(open(sys.argv[2],encoding='utf-8'))
+          eap=model['methods']['eap_hot_assembly']
+          staged=model['methods']['recursive_sql_staged_assembly']
+          refs=model['methods']['recursive_sql_refs_only']
+          key=model['methods']['indexed_key']
+          oob=model['out_of_box_experiment']
+          by_name={row['name']:row for row in cascade['results']}
+          direct=by_name['direct_canonical_lexical_plus_eap']
+          u12=by_name['u12_fail_closed_resolver_plus_eap']
+          acceptance={
+            'retrieval_quality_exact':eap['recall_at_12']==1.0 and eap['precision_at_12']==1.0 and eap['ndcg_at_12']==1.0,
+            'faster_than_staged_sql_p50':eap['latency_us']['p50']<staged['latency_us']['p50'],
+            'negative_space_improves_precision':oob['gated_precision_at_2']>oob['ungated_precision_at_2'],
+            'u12_improves_held_out_decision_accuracy':u12['decision_accuracy']>direct['decision_accuracy'],
+            'u12_zero_false_open_on_abstention_cases':u12['false_open_rate_on_abstention_cases']==0.0,
+            'u12_exact_known_assembly':u12['known_exact_assembly_rate']==1.0,
+          }
+          payload={
+            'schema_version':'1.0',
+            'evidence_class':'VERIFIED_REMOTE_EXECUTION_EXACT_CLAY_CHECKOUT',
+            'experiment':'UNIFIEDDB_EAP_MODEL_INPUT_DIRECT_HOSTINGER',
+            'created_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
+            'source_commit':os.environ['SOURCE_SHA'],
+            'github_run_id':os.environ['RUN_ID'],
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'benchmark':model,
+            'held_out_seed_benchmark':cascade,
+            'summary':{
+              'eap_recall_at_12':eap['recall_at_12'],
+              'eap_precision_at_12':eap['precision_at_12'],
+              'eap_ndcg_at_12':eap['ndcg_at_12'],
+              'eap_p50_us':eap['latency_us']['p50'],
+              'staged_sql_p50_us':staged['latency_us']['p50'],
+              'eap_speedup_vs_staged_sql_p50':staged['latency_us']['p50']/eap['latency_us']['p50'],
+              'recursive_sql_refs_only_p50_us':refs['latency_us']['p50'],
+              'indexed_key_p50_us':key['latency_us']['p50'],
+              'negative_space_gated_precision_at_2':oob['gated_precision_at_2'],
+              'negative_space_ungated_precision_at_2':oob['ungated_precision_at_2'],
+              'u12_held_out_decision_accuracy':u12['decision_accuracy'],
+              'direct_held_out_decision_accuracy':direct['decision_accuracy'],
+              'u12_false_open_rate_on_abstention_cases':u12['false_open_rate_on_abstention_cases'],
+              'u12_known_exact_assembly_rate':u12['known_exact_assembly_rate'],
+            },
+            'acceptance':acceptance,
+            'pass':all(acceptance.values()),
+            'scope_guard':'Bounded synthetic model-input/seed evidence on self-hosted Ubuntu. Not universal DB superiority and not Andreas final target acceptance.',
+            'authority':'CONTEXT_PREPROCESSING_ONLY_NO_EFFECT_AUTHORITY',
+          }
+          open(sys.argv[3],'w',encoding='utf-8').write(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload['summary'],sort_keys=True))
+          assert payload['pass']
+          PY
+
+      - name: Persist direct Hostinger receipt
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          src=/tmp/EAP_DIRECT_HOSTINGER.json
+          dst=research_entity/unifieddb/receipts/EAP_MODEL_INPUT_DIRECT_HOSTINGER_LATEST.json
+          mkdir -p "$(dirname "$dst")"
+          cp "$src" "$dst"
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add "$dst"
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "evidence(unifieddb): record EAP model input Hostinger ${RUN_ID} [skip ci]"
+          for n in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep $((n * 2))
+          done
+          exit 1

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 from dataclasses import dataclass, asdict
 from typing import Any, Iterable
 
@@ -38,18 +39,40 @@ class UnifiedDBQueryPlane:
 
     This is deliberately not a second store. Every read is derived from the ledger at
     one semantic epoch and returns a provenance/hash-bearing receipt.
+
+    Bounded reads are pushed into SQLite so Clay does not materialize/decode the entire
+    semantic state on every query. A conservative legacy fallback preserves behavior for
+    unusually large filter sets or alternate ledger implementations.
     """
+    _FAST_PATH_MAX_BOUND_FILTER_VALUES = 800
+
     def __init__(self, ledger: StateLedger):
         self.ledger = ledger
 
-    def query(self, spec: QuerySpec) -> QueryReceipt:
-        if not spec.query_id.strip():
-            raise ValueError('query_id required')
-        if spec.limit <= 0 or spec.limit > 4096:
-            raise ValueError('invalid query limit')
-        basis = self.ledger.epoch
-        if spec.basis_epoch is not None and int(spec.basis_epoch) != basis:
-            raise StaleEpoch(f'query basis {spec.basis_epoch}!={basis}')
+    @staticmethod
+    def _add_sql_filter(column: str, values: tuple[Any, ...], where: list[str], args: list[Any]):
+        if not values:
+            return
+        if len(values) == 1:
+            where.append(f'{column}=?')
+            args.append(values[0])
+            return
+        where.append(f"{column} IN ({','.join('?' for _ in values)})")
+        args.extend(values)
+
+    @staticmethod
+    def _decode_state_row(row) -> dict[str, Any]:
+        return {
+            'domain': row['domain'],
+            'key': row['k'],
+            'value': json.loads(row['value_json']) if row['value_json'] is not None else None,
+            'epistemic': row['epistemic'],
+            'status': row['status'],
+            'domain_epoch': int(row['domain_epoch']),
+            'semantic_hash': row['semantic_hash'],
+        }
+
+    def _query_rows_legacy(self, spec: QuerySpec):
         rows = []
         domains = set(spec.domains)
         keys = set(spec.keys)
@@ -66,8 +89,54 @@ class UnifiedDBQueryPlane:
                 continue
             rows.append(row)
         rows.sort(key=lambda x: (x['domain'], x['key'], x['domain_epoch'], x['semantic_hash']))
-        truncated = len(rows) > spec.limit
-        chosen = rows[:spec.limit]
+        return rows[:spec.limit], len(rows) > spec.limit
+
+    def _query_rows_fast(self, spec: QuerySpec):
+        # These two filters are mandatory in the legacy semantics: an empty allowed set
+        # means no row is admissible, unlike empty domains/keys which mean unrestricted.
+        statuses = tuple(dict.fromkeys(x.upper() for x in spec.statuses))
+        epistemic = tuple(dict.fromkeys(x.upper() for x in spec.epistemic))
+        if not statuses or not epistemic:
+            return [], False
+
+        domains = tuple(dict.fromkeys(spec.domains))
+        keys = tuple(dict.fromkeys(spec.keys))
+        bound_values = len(domains) + len(keys) + len(statuses) + len(epistemic)
+        if bound_values > self._FAST_PATH_MAX_BOUND_FILTER_VALUES or not hasattr(self.ledger, 'conn'):
+            return self._query_rows_legacy(spec)
+
+        where: list[str] = []
+        args: list[Any] = []
+        self._add_sql_filter('domain', domains, where, args)
+        self._add_sql_filter('k', keys, where, args)
+        self._add_sql_filter('status', statuses, where, args)
+        self._add_sql_filter('epistemic', epistemic, where, args)
+
+        sql = (
+            'SELECT domain,k,value_json,epistemic,status,domain_epoch,semantic_hash '
+            'FROM state'
+        )
+        if where:
+            sql += ' WHERE ' + ' AND '.join(where)
+        sql += (
+            ' ORDER BY domain COLLATE BINARY,k COLLATE BINARY,domain_epoch,'
+            'semantic_hash COLLATE BINARY LIMIT ?'
+        )
+        args.append(spec.limit + 1)
+        raw = list(self.ledger.conn.execute(sql, args))
+        truncated = len(raw) > spec.limit
+        chosen = [self._decode_state_row(r) for r in raw[:spec.limit]]
+        return chosen, truncated
+
+    def query(self, spec: QuerySpec) -> QueryReceipt:
+        if not spec.query_id.strip():
+            raise ValueError('query_id required')
+        if spec.limit <= 0 or spec.limit > 4096:
+            raise ValueError('invalid query limit')
+        basis = self.ledger.epoch
+        if spec.basis_epoch is not None and int(spec.basis_epoch) != basis:
+            raise StaleEpoch(f'query basis {spec.basis_epoch}!={basis}')
+        chosen, truncated = self._query_rows_fast(spec)
         qbody = asdict(spec)
         qbody['basis_epoch'] = basis
         return QueryReceipt(

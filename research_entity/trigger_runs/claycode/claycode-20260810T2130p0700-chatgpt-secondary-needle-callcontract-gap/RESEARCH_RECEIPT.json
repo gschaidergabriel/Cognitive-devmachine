@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2130p0700-chatgpt-secondary-needle-callcontract-gap",
+  "trigger": "claycode",
+  "program": "FRANK_V0_1",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank"
+  },
+  "result": "SUPPORTED_SOURCE_CONTRACT_GAP_TARGET_VPS_DISCRIMINATOR_PENDING",
+  "claim": "Current G9 V3 does not expose one exact evidence-complete production contract for the effect branch it writes as EffectIntent(residual) -> Needle.execute(effect_intent). V3 separately states that Needle lowers EffectIntent to a concrete adapter plan; its direct V2 parent defines execute(EffectPlan)->EffectReceipt; owner-fixed current effect semantics additionally require deterministic EffectRequest/EffectDecision authority gating. Therefore Needle.execute/1 must remain fail-closed until an exact current contract and runtime binding are materialized or contrary evidence refutes this gap.",
+  "counterhypothesis": "A current exact Needle.execute(EffectIntent)->EffectReceipt contract, or an equivalent explicitly gated current production contract, already exists elsewhere and makes the apparent V3/V2 mismatch only a presentation shorthand.",
+  "falsifier": "Locate and verify such an exact current production contract with typed input/output, effect class, authority boundary, rollback/recovery semantics and current runtime binding, then execute it on the target VPS. If it is authoritative and compatible with the current owner directive, the gap hypothesis is refuted.",
+  "evidence": [
+    {
+      "ref": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "git_blob_sha": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+      "observed": [
+        "record EffectIntent",
+        "rule Needle.lowers EffectIntent -> concrete_adapter_plan",
+        "cycle calls Needle.execute(effect_intent)"
+      ]
+    },
+    {
+      "ref": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay",
+      "git_blob_sha": "7a4d7a9563361f00519951e9264ab1245ba0e0c6",
+      "observed": [
+        "needle compile(Intent,Affordance,Witness)->EffectPlan",
+        "needle execute(EffectPlan)->EffectReceipt"
+      ]
+    },
+    {
+      "ref": "research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay",
+      "git_blob_sha": "7bc61f7b32dbc57f1e7a4d744c138ea3d9bf3578",
+      "observed": [
+        "typed EffectRequest and EffectDecision",
+        "deterministic effect-class gates",
+        "rollback/recovery requirements",
+        "model/GWT confidence cannot mint authority"
+      ]
+    },
+    {
+      "ref": "research_entity/trigger_runs/go/20260810T2033p0700-chatgpt-secondary-callcontract-identity-review/RESULT.json",
+      "observed": [
+        "27/27 real G9 call identities remain fail-closed without invented production CallContracts",
+        "10/10 independent resolver negative controls pass"
+      ]
+    }
+  ],
+  "implemented": [
+    {
+      "path": "research_entity/trigger_runs/claycode/claycode-20260810T2130p0700-chatgpt-secondary-needle-callcontract-gap/claycode_needle_callcontract_gap_probe.py",
+      "commit": "935b81cfa38d47ba3aacb842b31a70a9ba702ce3",
+      "role": "fail-closed source-contract discriminator; no signature invention"
+    },
+    {
+      "path": ".github/workflows/claycode-needle-callcontract-gap.yml",
+      "commit": "a434cbc3a14cb11e4d9574de010d3aaf8613b304",
+      "role": "self-hosted target-VPS execution and persisted negative-evidence receipt"
+    }
+  ],
+  "target_vps": {
+    "status": "PENDING_RECEIPT_OBSERVATION",
+    "promotion_credit": false,
+    "rule": "Do not claim target-VPS execution PASS until the exact tested-SHA receipt is persisted and observed."
+  },
+  "architecture_decision": "NO_SEMANTIC_PROMOTION",
+  "architecture_delta": "TEST_OBLIGATION_AND_FAIL_CLOSED_CONTRACT_BOUNDARY",
+  "affected_packages": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-07-NEEDLE-TRANSLATOR",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "next_falsifier": "Materialize the exact current effect chain from production evidence only: EffectIntent -> lowering/runtime plan -> deterministic EffectRequest/EffectDecision gate -> sealed current binding -> Needle execution -> independently verified EffectReceipt -> provenance-bound re-entry. Compare against any discovered alternative exact contract and keep Needle.execute fail-closed until one path is executable and authority-correct.",
+  "progress_credit": "NONE"
+}

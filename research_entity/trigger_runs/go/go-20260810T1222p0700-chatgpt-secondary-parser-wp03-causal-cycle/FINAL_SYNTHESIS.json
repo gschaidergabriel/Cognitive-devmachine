@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:22:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "frontier_selected": {
+    "workstream": "CC-WP-02/CC-WP-03 parser + typed IR causal boundary",
+    "production_change_authorized": false,
+    "reason": "BASE remains NOT_PASS. WP02 V17 has positive Hostinger proxy evidence but formal Andreas target acceptance is open; WP03 has an upstream V7 strict-grammar conflict and a separately demonstrated downstream keyword-identifier typed-IR defect."
+  },
+  "fresh_external_knowledge": {
+    "retrieved_at": "2026-08-10",
+    "web_search_status": "DEGRADED_SEARCH_ENDPOINT_503",
+    "primary_fallback": "lark-parser/lark docs/grammar.md from current upstream GitHub repository",
+    "supported_points": [
+      "Lark terminal priorities are considered before match length/name during lexing.",
+      "With contextual/basic lexing, grammar authors must control literal/terminal collisions.",
+      "Lark recommends rule-level structure when terminal-regex ambiguity hides alternatives.",
+      "Explicit ignored trivia is especially important for LALR predictive behavior."
+    ]
+  },
+  "hypothesis": "Removing V17 regex lookahead with a lexical delimiter membrane can preserve the frozen Needle call/relation/qid surface while improving strict collision observability.",
+  "strongest_counterhypothesis": "Any no-lookahead lexical membrane that reserves or consumes the Needle prefix/trivia will either steal longer qids, create LALR follow conflicts, or reject V17-valid bare-qid/trailing-trivia cases; V17 may already be the simpler robust operating point.",
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "LEXICAL_BOUNDARY_CONSERVATION_SWEEP",
+    "method": "Adversarially sweep the Needle.owns/Needle.lowers namespace and trivia boundary across selected V17, whole-prefix V18, and a delimiter-consuming V19 repair while preserving canonical AST comparison and rollback.",
+    "local_runtime": {
+      "evidence_class": "LOCAL_DEBIAN_PROXY_NOT_UBUNTU_TARGET_ACCEPTANCE",
+      "os": "Debian GNU/Linux 13 (trixie)",
+      "kernel": "6.18.35",
+      "arch": "x86_64",
+      "python": "3.13.5",
+      "cpu_count": 5,
+      "lark": "1.3.1",
+      "interegular": "MISSING"
+    },
+    "v18_namespace_sweep": {
+      "deterministic_cases": 256,
+      "baseline_v17_accept": 256,
+      "v18_reject": 35,
+      "v18_accept_with_semantic_hash_drift": 220,
+      "v18_semantically_equal": 1,
+      "examples": [
+        "Needle.owns.foo: V17 qid accepted; V18 rejects at dot",
+        "Needle.ownship: V17 qid; V18 silently parses Needle.owns + hip as prefix relation",
+        "Needle.owns2: V17 qid; V18 silently parses relation + numeric RHS",
+        "Needle.owns_more: V17 qid; V18 silently parses relation + suffix qid"
+      ],
+      "verdict": "REFUTED_WHOLE_PREFIX_TOKEN_DESIGN"
+    },
+    "v19_initial_namespace_sweep": {
+      "deterministic_cases": 256,
+      "v19_reject": 0,
+      "v19_semantic_hash_drift": 0,
+      "v19_semantically_equal": 256,
+      "local_parse_plus_canonical_hash_ms": {
+        "v17_n": 5120,
+        "v17_mean": 0.032986,
+        "v17_p50": 0.031467,
+        "v17_p95": 0.037971,
+        "v17_p99": 0.066264,
+        "v19_n": 5120,
+        "v19_mean": 0.034445,
+        "v19_p50": 0.032929,
+        "v19_p95": 0.038037,
+        "v19_p99": 0.064426
+      },
+      "initial_interpretation": "Namespace shadow repaired without material bounded latency gain/loss; strict local classification reached missing-interegular gate without an observed LALR GrammarError."
+    },
+    "v19_counterevidence_fused": {
+      "commit": "bcf398f9b818c253ec93258d31cce35ee8eaeb94",
+      "finding": "V19 relation tokens consume trailing horizontal trivia after bare Needle.owns and reject V17-valid bare-qid statements before newline/comment/end-of-statement.",
+      "verdict": "REFUTED_CURRENT_DELIMITER_TOKEN_DESIGN"
+    },
+    "final_experiment_conclusion": "The attempted no-lookahead family does not dominate V17. Stop escalating V18/V19/V20 for novelty; preserve V17 and move effort to the known WP03 causal blockers.",
+    "promotion": "NONE",
+    "rollback": "Production V17 was never changed. A concurrently duplicated V19 grammar/validator/workflow created during the race was deleted after reread; the earlier canonical V19 research artifact remains only as negative evidence."
+  },
+  "concurrency_and_dedup": {
+    "parallel_v19_canonical_commit": "c5bedb5ae6792086a94eee78a57b999fec9e0e04",
+    "duplicate_created_during_race": "634b7874e444320f975d8a3cb143dad318a3592d",
+    "duplicate_cleanup_commits": [
+      "5fc949952ea3bb88f9368886844fb189701e8c28",
+      "684c1a3d6801fca5f645d63a2f019d2e40175a6c",
+      "860beee6f86bb56fd1368bad7670bb975f8ce629"
+    ],
+    "supplemental_nonduplicative_fuzzer": "88268a7466aa9025b8b6d74b1af8e415eeebf474",
+    "supplemental_ubuntu_workflow": "c3397b1b8db0ad8b53385bf1a4d89639bbc25a7b",
+    "adjudication": "One canonical V19 candidate lineage retained; supplemental fuzz is orthogonal evidence only."
+  },
+  "wp03_two_blocker_fusion": {
+    "source_receipt_commit": "9cf168cb161c30bd054a3035a8b1bbeb3c89167d",
+    "upstream": {
+      "name": "V7_STRICT_GRAMMAR_AMBIGUITY",
+      "status": "SUPPORTED",
+      "mechanism": "optional RHS in dotted_relation creates a family of LALR follow/shift-reduce conflicts"
+    },
+    "downstream": {
+      "name": "TYPED_IR_VALUE_BASED_KEYWORD_IDENTIFIER_REJECTION",
+      "status": "SUPPORTED",
+      "self_hosted_observation": "TypedIRError: field without name: ['status', ':', 'Symbol']",
+      "mechanism": "Grammar aliases reserved words into identifier positions, while current typed IR globally filters keyword token values instead of respecting AST identifier context."
+    },
+    "causal_order": "Repair/replace the V7 strict grammar boundary first, then replay current-main typed IR versus the existing AST-context candidate under identical exact grammar/frontend bytes."
+  },
+  "new_build_delta": {
+    "grammar_candidate": {
+      "path": "research_entity/claycode/base/D_LALR_GRAMMAR_RESEARCH_V7_TYPED_FN_V17_RELATION_MEMBRANE.lark",
+      "commit": "a31b92a4854f96ffe47b14aff49ec25530bd6667",
+      "strategy": "Preserve V7 typed-fn and operator aliases but replace optional dotted_relation with the already-selected V17 Needle relation membrane; preserve compact subtraction and reject bare Needle.lowers.",
+      "selection": "RESEARCH_ONLY"
+    },
+    "causal_validator": {
+      "path": "tools/claycode_wp03_v7_v17_membrane_typed_ir_differential.py",
+      "commit": "d6e5edb0f49eb007f068b64e337596b99b11bbba",
+      "tests": [
+        "strict interegular-enabled construction",
+        "full current G9 + Dialect strict parsing and determinism",
+        "Needle call/relation/bare-qid boundary",
+        "add versus compact-subtraction semantic discrimination",
+        "reproduction of current-main keyword-identifier typed-IR bug",
+        "reserved-word identifier preservation by existing PR145 candidate",
+        "full G9 + Dialect deterministic candidate typed IR"
+      ]
+    },
+    "ubuntu_workflow": {
+      "path": ".github/workflows/claycode-wp03-v7-v17-membrane-typed-ir.yml",
+      "commit": "07ab56a2fd6ee58afbe73242ebe857accba2fc8f",
+      "hosted_lane": "ubuntu-latest",
+      "hostinger_lane": "self-hosted Linux X64",
+      "typed_ir_candidate_branch": "go-wp03-keyword-ident-20260810",
+      "candidate_merge": false,
+      "expected_receipt": "research_entity/claycode/base/receipts/WP03_V7_V17_MEMBRANE_TYPED_IR_HOSTINGER_LATEST.json",
+      "receipt_state_at_synthesis": "SYNC_PENDING_NOT_VISIBLE",
+      "remote_pass_claimed": false
+    }
+  },
+  "architecture_delta": {
+    "status": "TESTING_NO_PRODUCTION_PROMOTION",
+    "wp02_parser": "KEEP_V17_SELECTED",
+    "v18": "REFUTED",
+    "v19": "REFUTED_CURRENT_DELIMITER_DESIGN",
+    "wp03_grammar": "V7_TYPED_FN_PLUS_V17_RELATION_MEMBRANE_RESEARCH_CANDIDATE",
+    "wp03_typed_ir": "PR145_CANDIDATE_ONLY_PENDING_COMPOSED_EXACT_BYTE_EXECUTION",
+    "wp04": "BLOCKED_DO_NOT_ADVANCE",
+    "base": "NOT_PASS",
+    "frank_harness_mutation": false
+  },
+  "negative_results": [
+    "Whole-prefix no-lookahead V18 is not namespace-safe and also has strict conflict counterevidence.",
+    "Delimiter-consuming V19 fixes prefix shadow but breaks V17-valid bare-qid trailing-trivia/comment semantics.",
+    "No evidence supports replacing V17 merely to remove regex lookahead.",
+    "The initial WP03 strict red is a grammar failure, but that does not imply typed IR is bug-free; a separate downstream typed-IR defect is real."
+  ],
+  "next_frontier": [
+    "Consume the composed Ubuntu/Hostinger WP03 receipt if it materializes; classify execution failure separately from Actions/orchestration failure.",
+    "If the V7+V17 membrane is strict/full-source clean, replay PR145 versus current-main typed IR under the exact same grammar/frontend provenance and retain the candidate only if keyword identifiers and all existing typed-IR invariants pass.",
+    "If the composed candidate fails, minimize the first strict/full-source/typed-IR counterexample before changing any broader ClayCode semantics.",
+    "After WP03 executable closure, replay WP06 hardening under the selected exact grammar/compiler provenance.",
+    "Keep formal WP02/BASE promotion open until the registered Andreas Ubuntu developer-system target receipts exist."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_write": "COMMITTED",
+  "authority_invariant": "model output != execution authority"
+}

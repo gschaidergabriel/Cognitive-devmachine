@@ -1,0 +1,344 @@
+module atomic.spl.semantic_parity
+version "0.1-candidate"
+status TESTED_PROXY_NOT_PROMOTED
+
+// SPL-001 — Semantic Parity Lattice
+// Purpose: conservative per-message validation of German <-> typed ClayCode hard semantics.
+// The translator is an untrusted candidate generator. Partial oracles constrain; they never translate,
+// reason long-horizon, retrieve memory, mint identity, provenance, capability or effect authority.
+
+class Direction = DE_TO_CLAY | CLAY_TO_DE
+class ObservationKind = OBSERVED | UNKNOWN | CONTRADICTION
+class Admission = ACCEPT | TRANSLATION_AMBIGUOUS | REJECT_SEMANTIC_MISMATCH | REJECT_CONTRADICTION | REJECT_STALE_WITNESS | REJECT_BINDING
+class HardField =
+  SELF_REFERENCE |
+  PERSON_ROLE |
+  NEGATION |
+  MODALITY |
+  QUANTITY |
+  UNIT |
+  TEMPORAL |
+  SPEECH_ACT |
+  EXPLICIT_PERMISSION |
+  EFFECT_INTENT |
+  UNCERTAINTY |
+  VOICE_ORIGIN_REF
+
+class Modality = MUST | MAY | MUST_NOT | UNCERTAIN | UNSPECIFIED
+class SpeechAct = ASSERT | QUESTION | REQUEST | COMMAND
+class ExplicitPermission = NONE | ALLOW | DENY
+class EffectIntentClass = NONE | READ | WRITE_REVERSIBLE | DELETE | ROTATE_CREDENTIAL | SECURITY_CHANGE
+
+record HardProjection {
+  self_reference: ResourceIdentity?
+  person_role: Symbol?
+  negated: Bool?
+  modality: Modality
+  quantity: Int?
+  unit: Symbol?
+  temporal: Symbol?
+  speech_act: SpeechAct
+  explicit_permission: ExplicitPermission
+  effect_intent: EffectIntentClass
+  uncertainty: Float?
+  voice_origin_ref: EvidenceRef?
+}
+
+record SourceEvidence {
+  source_hash: Hash
+  direction: Direction
+  session_id: SessionId
+  request_id: RequestId
+  credential_fingerprint: CredentialFingerprint?
+  source_provenance: ProvenanceSet
+  schema_epoch: Epoch
+  translator_version: Hash
+}
+
+record PartialObservation<T> {
+  field: HardField
+  kind: ObservationKind
+  value: T?
+  evidence_span_hash: Hash?
+  oracle_id: Symbol
+  oracle_version: Hash
+  source_hash: Hash
+  schema_epoch: Epoch
+  confidence_class: Symbol
+}
+
+record OracleContract {
+  oracle_id: Symbol
+  observable_fields: Set<HardField>
+  forbidden_capabilities: Set<Capability> = {
+    LONG_HORIZON_REASONING,
+    AUTONOMOUS_MEMORY_RETRIEVAL,
+    GOAL_FORMATION,
+    TOOL_AUTHORIZATION,
+    EFFECT_AUTHORIZATION,
+    IDENTITY_MINTING,
+    PROVENANCE_MINTING,
+    RESEARCH_TRUTH_PROMOTION
+  }
+  may_return_unknown: Bool = true
+  may_rewrite_candidate: Bool = false
+}
+
+record TranslationCandidate {
+  direction: Direction
+  candidate_id: CandidateId
+  source_hash: Hash
+  typed_clay: Clay?
+  german_surface: String?
+  hard_projection: HardProjection
+  expression_state_ref: EvidenceRef?
+  translator_version: Hash
+  schema_epoch: Epoch
+}
+
+record FieldCheck {
+  field: HardField
+  observed_count: Int
+  unknown_count: Int
+  contradiction_count: Int
+  destination_value_hash: Hash?
+  compatible: Bool
+  hard_required: Bool
+}
+
+record SemanticParityWitness {
+  witness_id: WitnessId
+  direction: Direction
+  source_hash: Hash
+  candidate_hash: Hash
+  request_id: RequestId
+  session_id: SessionId
+  schema_epoch: Epoch
+  translator_version: Hash
+  oracle_versions: Map<Symbol,Hash>
+  checks: Map<HardField,FieldCheck>
+  observed_fields: Set<HardField>
+  unknown_fields: Set<HardField>
+  mismatch_fields: Set<HardField>
+  contradiction_fields: Set<HardField>
+  expression_state_ref: EvidenceRef?
+  upstream_voice_origin_ref: EvidenceRef?
+  admission: Admission
+  witness_hash: Hash
+}
+
+record BoundaryAdmissionReceipt {
+  source_hash: Hash
+  candidate_hash: Hash
+  parity_witness_hash: Hash
+  direction: Direction
+  request_id: RequestId
+  session_id: SessionId
+  schema_epoch: Epoch
+  status: ACCEPT
+  canonical_semantics_hash: Hash?
+  surface_hash: Hash?
+  effect_authority: NONE
+}
+
+// ---- Identity / authority laws ----
+
+invariant translator != self.root
+invariant oracle != self.root
+invariant translator != GWT
+invariant translator != MEMORY
+invariant translator != EFFECT_AUTHORITY
+invariant oracle != EFFECT_AUTHORITY
+invariant API_TOKEN != SELF
+invariant VOICE_ORIGIN_REF != AUTHORITY
+invariant ExpressionState != CANONICAL_PROPOSITION
+
+rule translator_output is UNTRUSTED_CANDIDATE until SemanticParityWitness.admission == ACCEPT
+rule oracle may_observe_only OracleContract.observable_fields
+rule oracle.UNKNOWN never_converts_to OBSERVED without new_source_evidence
+rule oracle may_not_fill UNKNOWN from model_guess
+rule oracle may_not_rewrite TranslationCandidate
+rule oracle may_not_mint self.root | user_identity | credential_scope | capability | effect_authorization | voice_origin
+rule upstream ASVB_or_authenticated_origin evidence may_be_carried_opaque but never_synthesized_by_SPL
+
+// ---- Deterministic destination projection ----
+
+fn project_hard(typed_clay: Clay) -> HardProjection deterministic
+fn project_hard_from_source_clay(typed_clay: Clay) -> HardProjection deterministic
+
+rule project_hard consumes typed validated Clay only
+rule parser_validity != semantic_source_fidelity
+rule type_validity != semantic_source_fidelity
+
+// ---- Reduced-product-like observation combination ----
+
+fn combine(
+  evidence: SourceEvidence,
+  candidate: TranslationCandidate,
+  observations: Set<PartialObservation>
+) -> SemanticParityWitness {
+  require candidate.source_hash == evidence.source_hash
+  require candidate.schema_epoch == evidence.schema_epoch
+  require candidate.translator_version == evidence.translator_version
+  require every observation.source_hash == evidence.source_hash
+  require every observation.schema_epoch == evidence.schema_epoch
+  require every observation.oracle_version == current_registered_version(observation.oracle_id)
+
+  let destination = candidate.hard_projection
+
+  for field in HardField {
+    let obs = observations.where(field == field)
+    let observed = obs.where(kind == OBSERVED)
+    let unknown = obs.where(kind == UNKNOWN)
+    let contradictions = obs.where(kind == CONTRADICTION)
+
+    if contradictions.count > 0 -> check[field].compatible = false
+    if incompatible_values(observed) -> check[field].compatible = false
+    if any observed.value != destination[field] -> check[field].compatible = false
+
+    check[field].observed_count = observed.count
+    check[field].unknown_count = unknown.count
+    check[field].contradiction_count = contradictions.count
+    check[field].hard_required = owner_hard_field(field,candidate)
+  }
+
+  if any contradiction_count > 0 -> admission = REJECT_CONTRADICTION
+  else if any observed mismatch -> admission = REJECT_SEMANTIC_MISMATCH
+  else if any hard_required field has observed_count == 0 -> admission = TRANSLATION_AMBIGUOUS
+  else admission = ACCEPT
+}
+
+// UNKNOWN is an erasure, never a successful parity check.
+rule hard_field UNKNOWN_ONLY -> TRANSLATION_AMBIGUOUS
+rule unsupported_hard_construct -> TRANSLATION_AMBIGUOUS
+rule conflicting_partial_oracles -> REJECT_CONTRADICTION
+rule observed_source_constraint_mismatch -> REJECT_SEMANTIC_MISMATCH
+
+// ---- Directional semantics ----
+
+rule DE_TO_CLAY {
+  source = GermanEvidence
+  translator emits typed_Clay candidate
+  candidate must pass Clay parser/type validation
+  partial_oracles independently observe hard German fields
+  combine(source,candidate,observations)
+  ACCEPT -> Clay candidate may enter self.root cognition as boundary-admitted semantics
+  otherwise -> no canonical semantic admission
+}
+
+rule CLAY_TO_DE {
+  source = exact typed Clay response
+  source_hard = project_hard_from_source_clay(source)
+  translator emits German surface
+  partial_oracles observe rendered German
+  all owner-hard source coordinates must be recovered compatibly
+  UNKNOWN or mismatch -> degraded_rendering_or_retry, never silent semantic mutation
+  ACCEPT -> German may leave boundary
+}
+
+// ---- ExpressionState noninterference ----
+
+fn expression_lesion_family(source_clay, expression_states:Set<ExpressionState>) -> Set<TranslationCandidate>
+
+rule for every pair a,b in expression_lesion_family {
+  project_hard(a.typed_clay_or_source) == project_hard(b.typed_clay_or_source)
+  recovered_hard(a.german_surface) == recovered_hard(b.german_surface)
+}
+
+rule ExpressionState may_change {
+  politeness,
+  warmth,
+  emphasis,
+  rhythm,
+  lexical_soft_choice
+}
+
+rule ExpressionState may_not_change {
+  self_reference,
+  person_role,
+  negation,
+  modality,
+  quantity,
+  unit,
+  temporal,
+  speech_act,
+  explicit_permission,
+  effect_intent,
+  uncertainty,
+  voice_origin_ref
+}
+
+// ---- Persistence / replay / recovery ----
+
+rule persist witness with source_hash + candidate_hash + request_id + session_id + schema_epoch + translator_version + oracle_versions
+rule raw_api_token persistence = FORBIDDEN
+rule German source may persist only under normal provenance/privacy policy, never as canonical truth merely by surface readability
+rule canonical memory/reentry receives admitted Clay semantics + parity witness lineage, not unvalidated German
+rule stale schema_epoch -> REJECT_STALE_WITNESS
+rule stale translator_version witness cannot validate new translator candidate
+rule stale oracle_version witness cannot validate after oracle semantic contract change
+rule witness request_id/session_id/source_hash mismatch -> REJECT_BINDING
+rule replayed parity witness for different request -> REJECT_BINDING
+
+// ---- GWT / Hyperposition participation ----
+
+rule unvalidated_translation_candidate never_enters authoritative GWT_content
+rule TRANSLATION_AMBIGUOUS may enter cognition only as explicit ambiguity/alternative problem, never as collapsed fact or effect authority
+rule Hyperposition may preserve alternative Clay interpretations if produced by an authorized ambiguity representation
+rule SPL itself does_not_select truth among alternatives
+
+// ---- Effect boundary ----
+
+rule SemanticParityWitness.effect_authority = NONE
+rule BoundaryAdmissionReceipt.effect_authority = NONE
+rule translated effect intent remains proposal_only
+rule normal authenticated actor + capability + Needle typed adapter + effect policy + reservation + attempt + verification remain required
+rule no parity success may mint or widen token_scope
+
+// ---- Failure states / observability ----
+
+metric hard_field_false_accept_rate
+metric valid_message_false_reject_rate
+metric ambiguity_false_collapse_rate
+metric common_mode_roundtrip_escape_rate
+metric per_field_detection_rate
+metric oracle_ablation_delta
+metric checker_fault_containment_rate
+metric validation_latency_p50_p95_p99
+metric witness_bytes_p50_p95
+metric oracle_count
+metric observed_field_coverage
+metric unknown_field_rate
+metric ExpressionState_hard_drift_rate
+
+hook record_field_check(field,kind,compatible,latency)
+hook record_candidate_rejection(reason,fields)
+hook record_ambiguity(fields)
+hook record_expression_noninterference(expression_state_ref,hard_hash)
+
+// ---- Ablation hooks ----
+
+ablation REMOVE_NEGATION_ORACLE
+ablation REMOVE_QUANTITY_ORACLE
+ablation REMOVE_PERSON_ORACLE
+ablation REMOVE_MODALITY_ORACLE
+ablation REMOVE_TEMPORAL_ORACLE
+ablation REMOVE_SPEECH_ACT_ORACLE
+ablation REMOVE_PERMISSION_EFFECT_ORACLE
+ablation UNKNOWN_AS_PASS   // expected unsafe negative control
+ablation SAME_CODEC_ROUNDTRIP_ONLY
+ablation TYPE_ONLY
+ablation REMOVE_EXPRESSION_NONINTERFERENCE
+
+// ---- Architecture decision law ----
+
+baseline CURRENT_WEAK = Clay_parse_type_validity + ordinary_roundtrip
+baseline CONVENTIONAL_FULL_VALIDATOR = independent_full_semantic_parser + typed_Clay_comparison + explicit_unknown
+baseline CONSTRAINED_OUTBOUND = deterministic_hard_renderer + independent_recovery_check
+
+acceptance_for_architecture requires unique_benefit_over CONVENTIONAL_FULL_VALIDATOR
+fallback if no_unique_benefit -> NO_ARCHITECTURE_PROMOTION + retain hard_field_translation_validation_test_obligation
+
+// This artifact intentionally defines no new ClayCode grammar primitive.
+// If current records/sum types/maps cannot express Observation/HardProjection/Witness later,
+// open a separate language-gap proposal rather than encoding hidden prose semantics.

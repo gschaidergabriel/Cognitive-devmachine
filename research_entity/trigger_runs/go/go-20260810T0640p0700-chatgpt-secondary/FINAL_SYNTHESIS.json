@@ -1,117 +1,105 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.2",
+  "run_id": "go-20260810T0640p0700-chatgpt-secondary",
   "trigger": "go",
   "actor_id": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
-  "created_at": "2026-08-10T06:58:00+07:00",
+  "updated_at": "2026-08-10T07:29:30+07:00",
+  "identity_boundary": "RESEARCH_ENTITY_TEMPORARY_WORKER != FRANK; Frank self-Harness authority remains proposal-only",
   "canonical_boot": {
     "entity_version": "RAE-8.8",
     "revision": 2,
-    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
-    "identity_boundary": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK"
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
   },
   "program_stage": "BASE_CLAYCODE_RELEASE",
   "focus": "CC-WP-02 parser/canonicalizer exact Ubuntu closure and Hostinger execution transport",
-  "live_external_evidence": [
-    {
-      "source_class": "OFFICIAL_LARK_DOCUMENTATION",
-      "finding": "Lark strict LALR collision checking can use interegular, while regex lookaround can limit collision analysis; V17 lookahead therefore requires explicit adversarial/metamorphic evidence rather than treating strict construction alone as exhaustive collision proof."
+  "exactly_one_out_of_box_experiment": {
+    "name": "HOSTINGER_RUNNER_REGISTRATION_SCOPE_TOMOGRAPHY",
+    "status": "EXECUTED_SUCCESS",
+    "result": "The active Hostinger runner instance is repository-scoped to gschaidergabriel/Dr.-Unterweger. Safe .runner metadata confirmed gitHubUrl=https://github.com/gschaidergabriel/Dr.-Unterweger, agentName=clay and poolName=Default.",
+    "durable_receipts": [
+      "research_entity/trigger_runs/go/go-20260810T0645p0700-runner-scope-tomography/OOB_HOSTINGER_RUNNER_SCOPE_TOMOGRAPHY.json",
+      "research_entity/trigger_runs/go/go-20260810T0645p0700-runner-scope-tomography/HOSTINGER_RUNNER_SCOPE_FUSION_CONFIRMED.json"
+    ],
+    "safety": "Read-only inspection; no credentials/tokens/private keys emitted; diagnostic PR closed unmerged."
+  },
+  "aborted_unexecuted_oob_candidate": {
+    "name": "SEALED_CROSS_REPO_WP02_SOURCE_CAPSULE",
+    "result": "ABORTED_NOT_EXECUTED_NOT_SELECTED",
+    "counts_as_oob_experiment": false
+  },
+  "root_cause_fusion": {
+    "initial_cross_repo_clone_failure": "CROSS_REPOSITORY_READ_AUTHORIZATION before scientific execution; not a ClayCode failure.",
+    "frontend_failure": "Old production frontend admitted absent optional Lark placeholders and canonical_node raised on None. This affected V9 and V17 alike and was not collateral V17 semantic drift.",
+    "independent_hostinger_replication": "PASS: after absent-placeholder suppression, V9==V17 for full G9, full Dialect, neutral record and neutral needle while the intended V17 Needle.owns horizontal-trivia repair remains.",
+    "current_main_repair": "Lark(..., maybe_placeholders=False)",
+    "diagnostic_candidate_disposition": "NOT_SELECTED_REDUNDANT",
+    "durable_receipt": "research_entity/claycode/remote_vps/WP02_NONE_PLACEHOLDER_INDEPENDENT_REPLICATION_20260810T0710p0700.json"
+  },
+  "terminal_full_closure": {
+    "status": "PASS_HOSTINGER_LOCAL_STRICT_SELECTED_WP02_CLOSURE",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "draft_pr": 74,
+    "workflow_run_id": 31344470808,
+    "workflow_job_id": 93323728306,
+    "workflow_conclusion": "success",
+    "runner": "clay@digital-retina",
+    "host": "Ubuntu 24.04.4 LTS / kernel 6.8.0-117-generic / x86_64 / Python 3.12.3 / Lark 1.3.1 / interegular 0.3.3",
+    "selected_grammar": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "selected_grammar_sha256": "83abde2348e6a40204e94ed91021a6e2f79a5ad1f0d96b09437214158ac70a64",
+    "aggregate_pass": true,
+    "driver_returncode": 0,
+    "failed_components": [],
+    "component_results": {
+      "selection_discriminator": "PASS",
+      "strict_lalr": "PASS",
+      "frontend_full_corpus_and_placeholder_absence": "PASS",
+      "canonical_syntax": "PASS",
+      "decl_ir_g9": "PASS",
+      "decl_ir_dialect": "PASS",
+      "production_canonicalizer": "PASS_14_OF_14"
     },
-    {
-      "source_class": "OFFICIAL_GITHUB_ACTIONS_DOCUMENTATION",
-      "finding": "Self-hosted jobs require an eligible online runner matching labels/group access; runner groups and repository access can constrain allocation."
-    }
-  ],
-  "verified_runtime_evidence": [
-    {
-      "kind": "EXACT_SOURCE_V17_HOSTINGER_REPLICATION",
-      "clay_receipt_commit": "9624837c411f3ba5acf761f622020278329fc581",
-      "runner": "clay@digital-retina",
-      "runtime": "Linux/X64; Python 3.12.3; Lark 1.3.1; interegular 0.3.3",
-      "attempts": 1162,
-      "failures": 0,
-      "timing_ms": {"p50": 0.0625, "p95": 0.116562, "p99": 0.141311, "max": 6.553301},
-      "boundary": "Mechanism replication only; not full WP02 PASS or Andreas target acceptance."
-    },
-    {
-      "kind": "FULL_CLOSURE_BRIDGE_TRANSPORT_FAILURE",
-      "clay_receipt_commit": "7e46ed744b2479fcb2441b6e8a270073462dfa80",
-      "workflow_run_id": 31342673096,
-      "result": "BLOCKED_BEFORE_SCIENTIFIC_TEST",
-      "failure_class": "CROSS_REPOSITORY_READ_AUTHORIZATION",
-      "claycode_failure": false
-    },
-    {
-      "kind": "ACTIVE_RUNNER_SCOPE_DIRECT_CONFIRMATION",
-      "clay_receipt_commit": "6a40ba77f875fba99e9501b28434d55561e34ab1",
-      "safe_runner_config": {
-        "agentName": "clay",
-        "gitHubUrl": "https://github.com/gschaidergabriel/Dr.-Unterweger",
-        "poolName": "Default",
-        "workFolder": "digitaltransformation"
-      },
-      "adjudication": "CONFIRMED_REPOSITORY_SCOPED_TO_DR_UNTERWEGER_FOR_ACTIVE_HOSTINGER_RUNNER_INSTANCE"
-    }
-  ],
+    "nonsemantic_harness_adapter": "Only relative child --grammar paths were converted to absolute paths; the original closure implementation remained byte-identical and language/grammar semantics were not changed.",
+    "durable_receipt": "research_entity/claycode/remote_vps/WP02_SELECTED_GRAMMAR_FULL_CLOSURE_HOSTINGER_20260810T0727p0700.json",
+    "scope_guard": "This proves Hostinger/local strict selected-WP02 closure only. It does not substitute for the real Andreas Ubuntu developer-system target receipt, application suite, FULL_FRANK handoff or WP14 acceptance."
+  },
   "hypothesis_matrix": [
     {
-      "hypothesis": "The current Hostinger runner can execute the V17 WP02 mechanism correctly on Ubuntu but is not natively eligible for clay-global-research-entity Actions because its active registration is repository-scoped to Dr.-Unterweger.",
-      "status": "STRONGLY_SUPPORTED",
-      "support": ["9624837c411f3ba5acf761f622020278329fc581", "6a40ba77f875fba99e9501b28434d55561e34ab1"]
+      "hypothesis": "The active Hostinger runner can execute exact hash-bound Clay research through verified Dr.-Unterweger workflows but is not the native Clay repository runner registration.",
+      "status": "SUPPORTED"
     },
     {
-      "counterhypothesis": "V17 itself is failing on the Hostinger Ubuntu runtime.",
-      "status": "REFUTED_FOR_TESTED_LOOKAHEAD_MECHANISM",
-      "boundary": "Not refuted for the not-yet-completed full production closure."
+      "counterhypothesis": "V17 introduced collateral semantic drift beyond the intended Needle.owns trivia repair.",
+      "status": "REFUTED_ON_FULL_G9_DIALECT_AND_NEUTRAL_FIXTURES"
     },
     {
-      "counterhypothesis": "The active runner service name is stale and does not reflect registration scope.",
-      "status": "REFUTED_FOR_THIS_RUNNER_INSTANCE",
-      "support": "Direct non-secret .runner gitHubUrl independently names gschaidergabriel/Dr.-Unterweger."
-    },
-    {
-      "counterhypothesis": "The failed full closure is a ClayCode/parser failure.",
-      "status": "REFUTED_FOR_RUN_31342673096",
-      "support": "Failure occurred during private-repository clone before any scientific test."
+      "counterhypothesis": "The selected current-main WP02 closure still fails on the Hostinger Ubuntu lane after transport/reporting-path defects are removed.",
+      "status": "REFUTED"
     }
   ],
-  "exactly_one_out_of_box_experiment": {
-    "name": "SEALED_CROSS_REPO_WP02_SOURCE_CAPSULE",
-    "executor_pr": "gschaidergabriel/Dr.-Unterweger#59",
-    "result": "ABORTED_NOT_EXECUTED_NOT_SELECTED",
-    "reason": "A stronger concurrent exact-source Hostinger replication plus runner-scope tomography completed while the capsule had no observed run; continuing would duplicate work.",
-    "reversible": true,
-    "merged": false,
-    "architecture_delta": "NO_CHANGE"
-  },
-  "additional_negative_evidence": {
-    "clay_github_hosted_probe_pr": 63,
-    "result": "PRE_STEP_CONTROL_PLANE_FAILURE",
-    "scientific_test_executed": false,
-    "root_cause": "UNKNOWN",
-    "interpretation_guard": "Do not classify as ClayCode, grammar, Hostinger, or Andreas-target failure."
-  },
-  "swarm_coordination": {
-    "duplicate_work_avoided": true,
-    "active_concurrent_lane": "gschaidergabriel/Dr.-Unterweger#58",
-    "active_lane_state_at_observation": "Exact-blob full WP02 bundle constructed; full closure workflow queued/pending on self-hosted Hostinger runner.",
-    "active_lane_mutated_by_this_worker": false
-  },
-  "architecture_delta": "NO_CHANGE_PENDING_FULL_WP02_CLOSURE",
+  "negative_results_preserved": [
+    "Native Clay self-hosted admission cannot be inferred from machine availability.",
+    "Unauthenticated private cross-repository clone is not a valid research transport.",
+    "Absent optional parser placeholders can corrupt semantic comparison unless explicitly suppressed/tested.",
+    "Relative/external Path.relative_to reporting failures can occur after scientific receipts are created and must never be classified as language failures."
+  ],
   "work_impact": {
-    "CC-WP-02-PARSER-CANON": "REMAINS_OPEN",
-    "CC-WP-03-IR-TYPES": "KNOWN_RAW_STRING_SEMANTIC_IDENTITY_COUNTEREXAMPLE_REMAINS_NEXT_AFTER_WP02_GATE",
-    "runner_transport": "ROOT_CAUSE_LOCALIZED_FOR_ACTIVE_HOSTINGER_INSTANCE"
+    "CC-WP-02-PARSER-CANON": "FORMALLY_OPEN_PENDING_CONTRACT_REQUIRED_ANDREAS_UBUNTU_TARGET_RECEIPT",
+    "BASE_CLAYCODE_RELEASE": "IN_PROGRESS",
+    "native_clay_self_hosted_lane": "DEGRADED_UNVERIFIED",
+    "bounded_dr_runner_bridge": "SUPPORTED_FOR_HASH_BOUND_RESEARCH_PAYLOADS"
   },
+  "architecture_delta": "NO_CHANGE",
+  "main_semantic_change_from_this_worker": false,
+  "frank_harness_mutation": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
   "next_frontier": [
-    "Consume the already-running exact-blob Hostinger full WP02 closure result when materialized; do not duplicate the queue.",
-    "If full closure passes, preserve it as Hostinger research evidence but keep formal WP02 promotion gated by the declared acceptance contract and real Andreas Ubuntu target requirements.",
-    "If full closure fails after scientific steps start, classify the first failing component and use the smallest exact-provenance falsifier before patching.",
-    "After executable-clean WP02 closure, reproduce the current WP03 raw STRING semantic_ir_sha256 identity counterexample in the exact selected-source lineage before changing typed IR semantics.",
-    "Native Clay self-hosted execution requires a Clay-eligible runner registration/service or genuinely shared eligible scope; current connected GitHub capability does not expose a safe runner re-registration action."
+    "Execute the contract-selected WP02 grammar/canonical receipt on the real Andreas Ubuntu target system; only that target evidence may satisfy the stated WP02 package-release gate.",
+    "After target WP02 acceptance, advance to CC-WP-03 typed canonical IR/types without reopening language semantics unless an executable counterexample requires it.",
+    "Promote a tested generic closure-driver path handling repair so future relative/external paths remain durable evidence rather than harness crashes.",
+    "For native Clay Actions continuity, provision/reverify a Clay-eligible runner registration/service or genuinely shared eligible scope without replacing the working Dr.-Unterweger registration blindly."
   ],
   "promotion": "NONE",
-  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
-  "authority_invariant": "model output != execution authority"
+  "stop_reason": "The highest-value executable WP02 Hostinger closure has reached terminal PASS. The next package-release discriminator requires the real Andreas Ubuntu target system, which is a distinct acceptance boundary."
 }

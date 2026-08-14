@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_FOLLOWUP_DELTA/1.0",
+  "run_id": "GO-20260812T0044P0700-CHATGPT-SECONDARY-SELFHOSTED-WORKSPACE-ISOLATION",
+  "created_at_utc": "2026-08-11T17:45:00Z",
+  "actor_id": "chatgpt-secondary",
+  "update": "ACCEPTED_TARGET_PASS_AFTER_INITIAL_RECEIPT",
+  "target_execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 396,
+    "workflow_run_id": 31518756350,
+    "job_id": 93870326463,
+    "conclusion": "SUCCESS",
+    "tested_merge_sha": "4f27cb30169953f700f73108fe29499d8dea2844",
+    "origin_main": "f181fead56ec9336edc607c7451c46f5e7e69e8a",
+    "runner": {
+      "name": "clay",
+      "machine": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "kernel": "6.8.0-117-generic",
+      "python": "3.12.3",
+      "git": "2.43.0",
+      "runner_version": "2.336.0"
+    },
+    "checkout_mode": "ISOLATED_RUNNER_TEMP",
+    "exact_sha_assertion": "PASS",
+    "identity_source_to_replay": {
+      "status": "PASS",
+      "static_checks": 38,
+      "transactions_replayed": 5,
+      "semantic_epoch": 5,
+      "fresh_graph_self": "self.root"
+    },
+    "prompt_execution_state": {
+      "status": "PASS",
+      "cases": 6,
+      "secrets_exposed": 0,
+      "authority": "V15/V16",
+      "inform_only": true
+    },
+    "single_instance_presence": {
+      "status": "PASS_SINGLE_INSTANCE_PRESENCE_DISCRIMINATOR",
+      "race_contenders": 12,
+      "race_winners": 1,
+      "race_busy": 11,
+      "sqlite_integrity": "ok",
+      "ghost_holder_experiment": "PASS",
+      "external_effect_performed": false
+    },
+    "v16_execution_continuity_schema": {
+      "status": "PASS_FRANK_V16_EXECUTION_CONTINUITY_SCHEMA_GATE",
+      "foreign_key_violations": 0,
+      "sqlite_integrity": "ok",
+      "v15_presence_authority_preserved": true,
+      "runtime_semantics_promoted": false
+    },
+    "transaction_replay": {
+      "status": "PASS",
+      "replay_count": 5,
+      "epoch": 5
+    },
+    "static_integrity_differential": {
+      "base_rc": 1,
+      "candidate_rc": 1,
+      "new_failure_count": 0,
+      "interpretation": "candidate adds no static-integrity failures relative to current main"
+    },
+    "artifact": {
+      "id": 9112286903,
+      "files_uploaded": 12,
+      "sha256": "96ba2bedcdc0c861f35170cca78f27cae85e823f92ea349c1195ef9f6cd4d3bc"
+    },
+    "isolated_tree_cleanup": "PASS"
+  },
+  "adjudication": {
+    "runner_isolation_candidate": "SUPPORTED_ON_ACCEPTED_TARGET_FOR_THIS_BOUNDARY_WORKFLOW",
+    "global_workspace_root_cause": "OPEN",
+    "promotion_scope": "workflow continuity only; no Frank/ClayCode product semantic promotion",
+    "merge_note": "PR #396 has target evidence for its bounded workflow change; ordinary shared-workspace checkout remains contaminated until root-owned residue source is eliminated."
+  },
+  "next_falsifier": "Identify the privileged process/workflow that created root-owned runtime/claycode_eval_v1 bytecode, repair that source, clean the persistent worktree, then prove an ordinary checkout-based target gate can reset and execute cleanly."
+}

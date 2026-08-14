@@ -1,0 +1,165 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260811T0059p0700-chatgpt-secondary-effect-gate-fusion-followup-01",
+  "timestamp_local": "2026-08-11T01:31:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "trigger": "go",
+  "oob_accounting": {
+    "exactly_one_oob_in_this_worker_go_cycle": true,
+    "oob_experiment_id": "GO_OOB_SCM_RIGHTS_OPEN_FILE_DESCRIPTION_TRANSFER",
+    "additional_oob_by_this_worker": 0,
+    "note": "Other parallel workers may have their own separately accounted GO OOB experiments; they are not part of this worker's one-OOB budget."
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "promotions_completed": [
+    {
+      "pr": 209,
+      "merge_sha": "2e16c77dd95022fa1633196b2073c10af1f83ee8",
+      "delta": "isolate V17 candidate schema authority and correct path-aware repository static-integrity classification",
+      "scope": "candidate/runtime integrity only; no V17 product promotion",
+      "post_merge_target_evidence": {
+        "workflow_run": 31417384668,
+        "runner": "clay",
+        "machine": "digital-retina",
+        "authority_regressions": "3/3 PASS",
+        "repo_static_integrity": "PASS",
+        "artifact_id": 9074013370,
+        "artifact_sha256": "22da1999bc17957b2a246080a78752ad6d9a18825dd975912c281ee3cca4fe16"
+      }
+    },
+    {
+      "pr": 253,
+      "merge_sha": "0acf34879fb9cd1019ba33696552760c18d2e964",
+      "delta": "permanent SCM_RIGHTS execution-gate regression derived from the single worker OOB mechanism test",
+      "scope": "test/release gate only; no expansion of runtime authority",
+      "target_evidence": {
+        "workflow_run": 31418030484,
+        "runner": "clay",
+        "machine": "digital-retina",
+        "scm_rights": {"status": "PASS", "wall_s": 0.14, "max_rss_kib": 24960},
+        "fork_incarnation": {"status": "PASS", "wall_s": 0.13, "max_rss_kib": 24320},
+        "directory_anchor": {"status": "PASS", "wall_s": 0.21, "max_rss_kib": 25344},
+        "repo_static_integrity": {"status": "PASS", "wall_s": 0.04, "max_rss_kib": 13568},
+        "artifact_id": 9074198871,
+        "artifact_sha256": "9c0dc6b4d9d847334415e31162189297ceaea9230f83d55f193e4cc120cd613b"
+      }
+    },
+    {
+      "pr": 260,
+      "merge_sha": "c82d40a5859784a52d700c5e85c251839cc47c30",
+      "delta": "repair current WP03/V18 local materializer after authoritative workflow refactor",
+      "scope": "one-file cross-branch materialization repair; no WP03/WP04 semantic promotion",
+      "target_evidence": {
+        "workflow_run": 31419076385,
+        "runner": "clay",
+        "machine": "digital-retina",
+        "status": "SUCCESS_DIAGNOSTIC_NO_PROMOTION",
+        "frontend_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+        "grammar_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+        "typed_ir_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+        "materialization": "CURRENT_CONTENT_ADDRESSED_DELTA_EXACT_HASH_VERIFIED"
+      }
+    }
+  ],
+  "current_deep_integrity_observation": {
+    "source": "runtime/vps_integrity/latest.json on main after the schema-authority repair evidence refresh",
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "gate_count": 23,
+    "fail_count": 0,
+    "repo_static_integrity": "PASS",
+    "deep_integrity_v11": "PASS",
+    "pytest_all": "PASS_OBSERVED_IN_CURRENT_RECEIPT_STREAM",
+    "interpretation": "The earlier 22/23 repository-static-integrity blocker is closed in current persisted target evidence. This does not imply whole Frank v0.1 acceptance."
+  },
+  "not_selected_or_closed": [
+    {
+      "pr": 252,
+      "status": "CLOSED_UNMERGED",
+      "reason": "Direct retarget of the stale historically target-green effect-fence stack to modern main became genuinely conflictful; wholesale promotion falsified as an integration strategy."
+    },
+    {
+      "pr": 248,
+      "status": "CLOSED_UNMERGED_NOT_SELECTED",
+      "reason": "Useful caller-bound effect-fence mechanism evidence retained, but superior/current successor PR250 selected and shared ClayCode materialization blocker extracted separately."
+    },
+    {
+      "pr": 258,
+      "status": "CLOSED_UNMERGED_NOT_SELECTED",
+      "reason": "Contextual typed-param adapter became redundant after current content-addressed TypedIR materialization was identified as source of truth; PR260 is narrower and avoids duplicate identifier semantics."
+    }
+  ],
+  "active_effect_authority_frontier": {
+    "primary_candidate": {
+      "pr": 250,
+      "title": "GO v6: fresh-main exact V15/V16 effect authority fusion",
+      "head_sha": "95c8933cdcf14de80aebd5f918f5628db9700115",
+      "status_at_followup": "OPEN_DRAFT_MERGE_CONFLICT_AFTER_MAIN_MOVEMENT",
+      "mechanism_claim": "transient fence == immutable reservation binding == current V15 presence == exact current V16 execution/credential/admission == still-live Gate-issued process incarnation",
+      "known_positive_evidence": [
+        "B1/B2/B3 caller-bound lifecycle passes in target-executed parent matrix evidence",
+        "stale source/retry fenced with zero authoritative mutation",
+        "provider-precommit fencing passes",
+        "outcome reconciliation survives generation turnover",
+        "physical Gate baseline/process-incarnation invariants retained in historical target runs"
+      ],
+      "promotion": "BLOCKED: fresh-current-main conflict plus remaining production gates"
+    },
+    "provider_reconciliation_stack": {
+      "pr": 254,
+      "base": "PR250",
+      "status": "OPEN_DRAFT_STACKED_CANDIDATE",
+      "target_run": 31418397078,
+      "evidence": "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB plus parent normal effect matrix PASS",
+      "provider_commit_count_after_lost_ack": 1,
+      "successor_retry": "FENCED_ZERO_STATE_MUTATION",
+      "read_only_reconciliation_after_turnover": "PASS",
+      "same_key_changed_request": "FENCED_REQUEST_FINGERPRINT_MISMATCH",
+      "promotion": "NONE; synthetic provider only; real provider timeout-after-acceptance remains required"
+    }
+  },
+  "v17_reentry_done_frontier": {
+    "positive_candidate": "Target differential can bind exact effect/attempt/outcome/causal identity, reject wrong identities and duplicate DONE, preserve typed no-learning, restart recovery and terminal DONE receipt.",
+    "strong_counterevidence": "Independent target support-binding discriminator shows terminal DONE can still be accepted while V15 is IDLE, V16 is unbound, and canonical GWT/causal/admitted-delta support identities are absent/fabricated.",
+    "status": "CANDIDATE_ONLY_BLOCKED_ON_EXECUTION_AND_CANONICAL_SUPPORT_IDENTITY_BINDING"
+  },
+  "claycode_frontier_after_materializer_repair": {
+    "materializer_blocker": "CLOSED_BY_PR260",
+    "remaining_diagnostic_counterexamples": [
+      "constructor spelling divergence: SET/OPTION/ORDERED/LIST/MAP/RESULT vs title-case semantics",
+      "historical BASE declarative probe rejects structured 'use' surface in block_function/effect_boundary probes",
+      "several WP04 probes depend on target_vps_probe.current_frontend_contract which is absent in that diagnostic path"
+    ],
+    "interpretation": "These are now separable current frontend/lowering/probe integration questions rather than stale-materialization noise. No WP03/WP04 promotion claimed."
+  },
+  "external_knowledge_fusion": {
+    "effect_fence_principle": "Open-file-description lock possession is not semantic authority; generation/fencing and process-incarnation validation are required at external-effect boundaries.",
+    "retry_principle": "Idempotency identity and durable reconciliation knowledge are distinct from execution authority; uncertain provider outcomes require observation/reconciliation rather than automatic re-execution."
+  },
+  "next_frontier_ranked": [
+    "Rebase/rebuild PR250 exact V15/V16 effect-authority fusion onto current main without replacing current physical Gate architecture; rerun all target matrices including the now-main SCM_RIGHTS release gate.",
+    "Use merged PR260 to execute exact-current structured ClayCode frontend -> TypedIR -> compiler/lowering evidence on the ordinary effect-routing surface; distinguish real language gaps from obsolete diagnostic probes.",
+    "Bind V17 DONE acceptance to live execution epoch plus canonical GWT/causal/admitted-delta support identities; rerun fabricated-identity discriminator.",
+    "Run real-provider timeout-after-acceptance/idempotent reconciliation before provider contract promotion; synthetic PR254 evidence is not sufficient.",
+    "Complete verified outcome -> provenance-bound re-entry -> terminal DONE receipt end-to-end under the same accepted execution generation.",
+    "Resolve snapshot/restore generation floor and rollback semantics independently from normal execution fencing."
+  ],
+  "authority_and_scope": {
+    "external_provider_or_network_effect_performed_by_this_worker": false,
+    "canonical_frank_state_mutated_by_this_worker": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "final_training_authorized": false,
+    "whole_frank_v0_1_acceptance_claimed": false
+  },
+  "research_write": "COMMITTED_FOLLOWUP_RECEIPT"
+}

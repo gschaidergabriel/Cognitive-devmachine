@@ -1,0 +1,37 @@
+{
+  "aggregate": {
+    "latency_mean_us": 1055.3557343333334,
+    "p95_mean_us": 1543.0741166666667,
+    "top1_mean": 1.0,
+    "top1_min": 1.0
+  },
+  "benchmark": "ACTUAL_UNIFIEDDB_CLAYGRAPH_RETRIEVAL_CANDIDATE_V1",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "runs": [
+    {
+      "build": {"documents": 1000, "edges": 800},
+      "latency_us": {"max": 4567.759, "mean": 1060.170336, "p50": 1020.694, "p95": 1539.2980999999997, "p99": 1625.73334},
+      "n_queries": 1000,
+      "seed": 20260810,
+      "top1": 1.0,
+      "top1_by_class": {"DIRECT_CURRENT": 1.0, "GRAPH_1HOP": 1.0, "GRAPH_2HOP": 1.0, "HYPOTHESIS_REQUEST": 1.0, "PROVENANCE": 1.0}
+    },
+    {
+      "build": {"documents": 1000, "edges": 800},
+      "latency_us": {"max": 1990.402, "mean": 1042.788246, "p50": 1013.1885, "p95": 1532.0707, "p99": 1622.1231500000001},
+      "n_queries": 1000,
+      "seed": 20260811,
+      "top1": 1.0,
+      "top1_by_class": {"DIRECT_CURRENT": 1.0, "GRAPH_1HOP": 1.0, "GRAPH_2HOP": 1.0, "HYPOTHESIS_REQUEST": 1.0, "PROVENANCE": 1.0}
+    },
+    {
+      "build": {"documents": 1000, "edges": 800},
+      "latency_us": {"max": 2007.948, "mean": 1063.108621, "p50": 1024.4495000000002, "p95": 1557.85355, "p99": 1671.28807},
+      "n_queries": 1000,
+      "seed": 20260812,
+      "top1": 1.0,
+      "top1_by_class": {"DIRECT_CURRENT": 1.0, "GRAPH_1HOP": 1.0, "GRAPH_2HOP": 1.0, "HYPOTHESIS_REQUEST": 1.0, "PROVENANCE": 1.0}
+    }
+  ],
+  "scope_note": "Synthetic exact-ID/phrase-variant natural-language context retrieval only; no universal database superiority or target-live claim."
+}

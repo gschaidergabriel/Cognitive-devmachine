@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "WP03_OPAQUE_SEMANTIC_CLASS_INVENTORY_20260810T1527P0700",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "root_go_id": "go-root-20260810T1442p0700-chatgpt-secondary-wp03-semantic-identity",
+  "source_execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "8bfa64e723e5872a72e655148e3c6a07059d0b73",
+    "github_run_id": "31369984252",
+    "runner": "clay@digital-retina Linux X64 Python 3.12.3",
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_WP03_OPAQUE_CLASS_INVENTORY",
+    "elapsed_seconds": 0.85,
+    "max_rss_kb": 30464
+  },
+  "bound_components": {
+    "legacy_current_typed_ir_baseline": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "production_bridge_v2": "79d9474817bccae2d611940a0bee8bbac95ceee3",
+    "residual_builder": "d7f4c9b475466c813ae85716e9c57d7ee9f99512",
+    "inventory_tool": "487a98f72c04bb8c5437ee53bfe685378b58ff5a"
+  },
+  "typed_ir_sha256": "28d4a5fa00d9852c608d513ad5fe358763ca8fc6a035c0678a454eb8bb9bc661",
+  "opaque_total": 100,
+  "opaque_kind_count": 10,
+  "opaque_kind_counts": {
+    "cycle_decl": 1,
+    "dialect_decl": 9,
+    "import_decl": 2,
+    "invariant_decl": 14,
+    "module_decl": 2,
+    "parent_decl": 1,
+    "rule_decl": 67,
+    "status_decl": 1,
+    "tensor_decl": 1,
+    "version_decl": 2
+  },
+  "downstream_disposition_contract": {
+    "allowed_statuses": [
+      "LOWERED_AND_VALIDATED",
+      "EXPLICITLY_DEFERRED_FAIL_CLOSED",
+      "REJECTED_WITH_REASON"
+    ],
+    "silent_drop": "FORBIDDEN",
+    "implicit_execution": "FORBIDDEN",
+    "effect_authority_from_opaque_semantics": "FORBIDDEN",
+    "required_for_each_kind": [
+      "checker disposition",
+      "evaluator/lowering disposition",
+      "no-drop receipt",
+      "authority receipt",
+      "negative/mutation control",
+      "recovery/fail-closed behavior"
+    ]
+  },
+  "strongest_counterhypothesis": "Some listed classes may be metadata-only and require validation/preservation rather than executable lowering. The disposition matrix intentionally does not assume every class should become an evaluator operation.",
+  "next_frontier": "Assign and test one explicit downstream disposition per kind, starting with rule_decl and invariant_decl because they dominate the preserved semantic mass and already have demonstrated identity-loss risk.",
+  "promotion": "NONE",
+  "wp03_status": "OPEN",
+  "wp04_status": "OPEN",
+  "wp05_status": "OPEN",
+  "frank_harness_mutation": false,
+  "training_authorized": false,
+  "authority": "NONE"
+}

@@ -1207,6 +1207,55 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_status_property_failure_emits_fail_closed_receipt(self):
+        class Response:
+            @property
+            def status(self):
+                raise RuntimeError("broken status property")
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise AssertionError("body must not be read without status")
+
+        class BrokenStatusHTTPError(MOD.urllib.error.HTTPError):
+            @property
+            def code(self):
+                raise RuntimeError("broken status property")
+            @code.setter
+            def code(self, value):
+                self._stored_code = value
+            def __str__(self):
+                return "HTTP error with unreadable status"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                if transport == "response":
+                    opener = lambda *args, **kwargs: Response()
+                else:
+                    def opener(request, timeout):
+                        raise BrokenStatusHTTPError(
+                            request.full_url, 429, "Too Many Requests", {}, None,
+                        )
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((102.0, 102.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertIsNone(receipt["status"])
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertNotIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+
     def test_retry_after_cooldown_is_bounded_in_receipts(self):
         class Response:
             status = 429

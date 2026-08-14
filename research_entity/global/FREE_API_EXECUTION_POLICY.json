@@ -181,6 +181,16 @@
     "executable_evidence": "test_header_property_failure_preserves_received_429_receipt",
     "counterhypothesis": "Catching failures from the header mapping's get method fully contains untrusted metadata access; falsified because a property descriptor can raise before a mapping object is returned, causing regular 429 misclassification and an escaped HTTPError path."
   },
+  "response_status_property_failure": {
+    "checked_at": "2026-08-14",
+    "claim": "Status and code attributes supplied by a transport adapter are executable metadata lookups. If retrieval fails, the adapter emits invalid_provider_response with null status and without EXECUTED, rather than escaping without a receipt or inventing a status.",
+    "sources": [
+      "https://docs.python.org/3/howto/descriptor.html#properties",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-15"
+    ],
+    "executable_evidence": "test_status_property_failure_emits_fail_closed_receipt",
+    "counterhypothesis": "Status and HTTPError code attributes are passive values and cannot fail during access; falsified by response and HTTPError property descriptors whose RuntimeError escaped both receipt paths."
+  },
   "bounded_retry_after_cooldown": {
     "checked_at": "2026-08-14",
     "claim": "Retry-After cooldown metadata is bounded to 86400 seconds in receipts for both delay-seconds and HTTP-date forms; the nonretryable request requires fresh operator or scheduler evaluation beyond that horizon.",
@@ -389,6 +399,7 @@
     "Only HTTP 200 is final for this NVIDIA text-completion path; HTTP 202 remains EXECUTED as provider_result_pending, cannot reach VERIFIED/DONE, and is not blindly replayed without a requestId-bound polling adapter.",
     "Unexpected 2xx statuses remain EXECUTED as unexpected_success_status, cannot reach VERIFIED/DONE, and are nonretryable because the POST may already have been accepted.",
     "Before body consumption or EXECUTED, adapter status must be a non-boolean integer in the RFC 9110 range 100 through 599; missing or invalid values remain null and invalid_provider_response.",
+    "Failure while retrieving a transport adapter's status or code property emits invalid_provider_response with null status and without EXECUTED; it cannot escape the receipt path or invent an HTTP result.",
     "A received adapter body must be bytes before JSON parsing; text, bytearray and other body types remain EXECUTED with their valid status but cannot reach VERIFIED or DONE.",
     "Network-transmitted provider JSON must decode strictly as UTF-8 before parsing; UTF-16, UTF-32 and malformed UTF-8 remain invalid_provider_response and cannot reach VERIFIED or DONE.",
     "Provider response JSON rejects every non-finite decoded number; NaN/Infinity literals and finite-syntax exponents that overflow the runtime float range remain invalid_provider_response and never reach VERIFIED or DONE.",

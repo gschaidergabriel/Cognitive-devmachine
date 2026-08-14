@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260814T2312p0700-chatgpt-sqlite-nonmonotonic-sourceid-collapse",
+  "created_at": "2026-08-14T23:12:55+07:00",
+  "organ": "gpt-5.6-sol temporary Clay worker",
+  "program": "FRANK_V0_1",
+  "scope": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+  ],
+  "canonical_implementation_anchor": "gschaidergabriel/Dr.-Unterweger@70547109c087967d8131a58adde89fdfc0ac8c34",
+  "observed_anchors": [
+    "Official SQLite WAL documentation states the WAL-reset corruption bug is likely present through 3.51.2, fixed in 3.51.3 and later, with backports 3.44.6 and 3.50.7.",
+    "Current canonical Frank code does not rely on a monotonic minimum-version predicate for its private SQLite 3.53.4 lane: the build pins the canonical source archive SHA3-256 and exact sqlite_source_id, emits a library hash, and the runtime admission path compares version, source-id, mapped object and library hash.",
+    "Current live-process attestor further binds the expected SQLite mapping to one process generation, device/inode and FD-bound content hash and rejects receipt-tail mapping changes.",
+    "Those mechanisms remain narrower than productive Hostinger persistence-path, restart/recovery and semantic-lineage acceptance; F-V01-13 therefore remains open."
+  ],
+  "primary_sources": [
+    "https://sqlite.org/wal.html#the_wal_reset_bug",
+    "https://sqlite.org/releaselog/3_51_3.html"
+  ],
+  "grf_collapse": {
+    "generated_reality": "A naive monotonic SQLite minimum-version release gate could misclassify branch backports and vulnerable later patch lines.",
+    "strongest_counter_reality": "Frank's canonical SQLite lane already binds an exact known fixed 3.53.4 source/artifact/runtime identity, so the version-order trap does not apply to the implemented gate.",
+    "discriminator": "Compare a monotonic synthetic version predicate against official SQLite fix/backport history, then inspect current canonical build/admission/attestor code for exact source/artifact identity binding.",
+    "outcome": "NO_CHANGE_TO_CURRENT_SQLITE_IDENTITY_GATE",
+    "confidence": "HIGH_FOR_CODE_MECHANISM; UNVERIFIED_FOR_PRODUCTIVE_HOSTINGER_RUNTIME"
+  },
+  "unusual_experiment": {
+    "count_in_this_go_cycle": 1,
+    "name": "non-monotonic SQLite version trap",
+    "class": "bounded local policy-model falsifier; no repository/runtime/state mutation",
+    "baseline": "synthetic predicate accepts every version >= 3.50.4",
+    "reference": "official upstream WAL-reset fixed/backport set",
+    "versions": [
+      "3.44.6",
+      "3.45.1",
+      "3.50.4",
+      "3.50.7",
+      "3.51.0",
+      "3.51.2",
+      "3.51.3",
+      "3.53.0",
+      "3.53.4"
+    ],
+    "observed_misclassifications": 4,
+    "misclassified": {
+      "3.44.6": "false reject; fixed backport",
+      "3.50.4": "false accept; WAL-reset bug still present upstream",
+      "3.51.0": "false accept; WAL-reset bug still present upstream",
+      "3.51.2": "false accept; WAL-reset bug still present upstream"
+    },
+    "interpretation": "Version ordering alone is an unsafe abstraction for this defect history. The current canonical Frank lane survives this falsifier because it pins exact 3.53.4 source/artifact identity instead of admitting an open-ended minimum version.",
+    "rollback": "No mutation occurred."
+  },
+  "affected_components": [
+    "SQLite private runtime build provenance",
+    "SQLite runtime admission",
+    "live-process SQLite mapping attestation",
+    "UnifiedDB productive persistence release evidence",
+    "restart/recovery lineage acceptance"
+  ],
+  "code_delta": "NO_CHANGE",
+  "reason_no_code_patch": "The discriminator falsified a hypothetical naive gate but confirmed that current canonical implementation already uses the stronger exact source-id/artifact/mapping design. Patching the current gate would duplicate existing controls without new evidence of a bypass.",
+  "next_falsifier": "On the accepted Hostinger target, bind the exact productive Frank persistence process and authoritative database/WAL path to the pinned SQLite 3.53.4 source-id/library hash and semantic execution/state lineage, perform authoritative persistence, crash/restart, re-attest the same accepted runtime/lineage, and exercise rollback/downgrade or library-swap fail-closed behavior before F-V01-13 promotion.",
+  "non_claims": [
+    "No F-V01-13 closure claim",
+    "No whole Frank v0.1 acceptance claim",
+    "No accepted Hostinger shell/runtime test executed in this session",
+    "No production mutation",
+    "No model training started or authorized",
+    "No Together API/service used",
+    "No Frank self-Harness mutation authority exercised"
+  ]
+}

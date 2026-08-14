@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0351p0700-gpt56sol-sqlite-artifact-authority-repair",
+  "product_pr": 466,
+  "head_sha": "bfc2e9bdb0a869f546c6c965c98b7e37598f8f92",
+  "observed_at_local": "2026-08-12T03:51+07:00",
+  "github_actions": {
+    "deep_integrity": {
+      "run_id": 31535012226,
+      "status": "completed",
+      "conclusion": "failure",
+      "job_id": 93923934260,
+      "runner_id": 0,
+      "steps": [],
+      "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+      "adjudication": "CI_BLOCKED_BILLING_NOT_CODE_FAILURE"
+    },
+    "self_hosted_or_vps_runs_observed": [
+      {"run_id": 31535012143, "name": "Frank execution gate directory anchor repair VPS", "status": "queued", "conclusion": null},
+      {"run_id": 31535012183, "name": "Frank self.root current-head v2", "status": "queued", "conclusion": null},
+      {"run_id": 31535012304, "name": "Frank fresh-main effect fence + provider contract VPS", "status": "queued", "conclusion": null}
+    ]
+  },
+  "release_interpretation": {
+    "repair_candidate_test_status": "LOCAL_7_OF_7_PASS_REMOTE_ACCEPTANCE_UNKNOWN",
+    "promotion": "DENIED_PENDING_REMOTE_EVIDENCE_AND_MAIN_SYNC",
+    "negative_result_preserved": true,
+    "no_pass_inferred_from_queued_runs": true,
+    "no_code_regression_inferred_from_billing_failure": true
+  },
+  "authority": {
+    "production_effect": false,
+    "root_install": false,
+    "training_authorized": false
+  }
+}

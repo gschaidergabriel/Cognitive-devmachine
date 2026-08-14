@@ -1,0 +1,39 @@
+name: Clay VPS MCP CI
+
+on:
+  pull_request:
+    paths:
+      - 'infra/clay_vps_mcp/**'
+      - '.github/workflows/clay_vps_mcp_ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'infra/clay_vps_mcp/**'
+      - '.github/workflows/clay_vps_mcp_ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        working-directory: infra/clay_vps_mcp
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . pytest
+      - name: Compile
+        working-directory: infra/clay_vps_mcp
+        run: python -m compileall -q clay_vps_mcp
+      - name: Unit tests
+        working-directory: infra/clay_vps_mcp
+        run: pytest -q
+      - name: CLI import smoke
+        working-directory: infra/clay_vps_mcp
+        run: python -c 'from clay_vps_mcp.server import app, mcp; print(mcp.name)'

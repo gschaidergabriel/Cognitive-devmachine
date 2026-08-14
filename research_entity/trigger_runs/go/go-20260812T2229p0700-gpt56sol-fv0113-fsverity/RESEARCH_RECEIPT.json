@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2229p0700-gpt56sol-fv0113-fsverity",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "7c94d59cd596f38185f2a7cbe7754f5a82b89710",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "current_product_evidence_boundary": "Merged PR #545 attests one bounded live SQLite mapping observation and explicitly does not claim productive Hostinger persistence, semantic Frank identity, restart/recovery, rollback/downgrade/library-swap acceptance or whole Frank-v0.1 acceptance.",
+    "training_authorized": false,
+    "coordination": "Refreshed research main immediately before branching; searched the research repository for fs-verity/EOPNOTSUPP/SAME_INODE_REWRITE and found no matching durable delta; used a unique branch and receipt path."
+  },
+  "primary_source_support": {
+    "sqlite": {
+      "source": "https://sqlite.org/changes.html",
+      "fact": "The WAL-reset issue relevant to the current release blocker is fixed in SQLite 3.51.3; a 3.53.4 candidate is therefore beyond the upstream fixed-version threshold but still needs exact productive-runtime identity proof."
+    },
+    "linux_fs_verity": {
+      "sources": [
+        "https://docs.kernel.org/filesystems/fsverity.html",
+        "https://www.kernel.org/doc/html/latest/filesystems/fsverity.html"
+      ],
+      "fact": "fs-verity is a Linux mechanism for transparent integrity verification of read-only files after verity is enabled and exposes a kernel-mediated file digest; filesystem support is a deployment precondition."
+    }
+  },
+  "grf": {
+    "hypothesis": "Kernel-enforced fs-verity on the admitted SQLite shared object can eliminate the same-inode in-place content-rewrite reality that path/device/inode identity alone cannot exclude, strengthening the loaded-object proof.",
+    "strongest_counter_reality": "The productive filesystem or deployment topology does not support fs-verity, or enabling it conflicts with the upgrade/rollback workflow, so the mechanism cannot be relied on as a mandatory release invariant.",
+    "hidden_assumptions": [
+      "The filesystem containing the productive admitted SQLite object supports FS_IOC_ENABLE_VERITY.",
+      "Frank deployment can seal the admitted object before execution and replace it through atomic versioned deployment rather than mutating it in place.",
+      "A verity digest is bound to the exact admitted object and deployment/provenance anchor rather than treated as semantic Frank identity by itself."
+    ],
+    "falsifier": "Attempt to enable and measure fs-verity on a disposable file using Linux UAPI ioctls, with an ordinary-file same-inode rewrite control.",
+    "predicted_if_hypothesis_right": "On a supporting filesystem, verity enable succeeds, the file becomes immutable for content writes, and the kernel can return a stable digest that can be bound into the deployment/runtime receipt.",
+    "predicted_if_counter_right": "Verity enable fails with an unsupported-operation error or cannot be integrated safely into productive upgrade/rollback topology.",
+    "outcome": "DEFER; LOCAL_FILESYSTEM_PRECONDITION_FAILED; MECHANISM_REMAINS_CANDIDATE_FOR_ACCEPTED_HOST_PROBE"
+  },
+  "unusual_experiment": {
+    "name": "FS_VERITY_SAME_INODE_REWRITE_TRAP",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "environment": {
+      "kernel": "Linux 6.17.0-1019-azure x86_64 Ubuntu",
+      "header_present": "/usr/include/linux/fsverity.h",
+      "userspace_fsverity_binary_present": false,
+      "target": "disposable local temporary files only"
+    },
+    "control": {
+      "method": "Rewrite an ordinary disposable file in place and compare inode before/after.",
+      "result": "WRITE_SUCCEEDED_SAME_INODE",
+      "inode_before": 25106983,
+      "inode_after": 25106983,
+      "interpretation": "Path/device/inode identity alone does not prove content immutability against same-inode rewrite."
+    },
+    "treatment": {
+      "method": "Compile a minimal C probe using FS_IOC_ENABLE_VERITY and FS_IOC_MEASURE_VERITY with SHA-256, then attempt to enable verity on a disposable file.",
+      "result": "EOPNOTSUPP",
+      "errno": 95,
+      "error_text": "Operation not supported",
+      "probe_rc": 3,
+      "inode": 25107086,
+      "size": 28,
+      "file_unchanged_after_failed_enable": true
+    },
+    "limitations": [
+      "This was not the accepted Hostinger Ubuntu VPS and did not inspect the productive Frank SQLite object.",
+      "EOPNOTSUPP is evidence about this test filesystem stack, not evidence that Hostinger lacks fs-verity support.",
+      "No second unusual experiment was run in this GO macro-cycle.",
+      "No Frank process, persistent state, database, effect authority, Harness or training state was modified."
+    ]
+  },
+  "collapse": [
+    {
+      "claim": "SQLite version >= 3.51.3 alone closes F-V01-13.",
+      "outcome": "REJECT",
+      "reason": "The release gate still requires proof that the productive Frank persistence path loads the admitted fixed runtime and rejects downgrade/library swap or other identity substitution."
+    },
+    {
+      "claim": "Path/device/inode equality alone excludes same-inode content mutation.",
+      "outcome": "REJECT",
+      "reason": "The control rewrote a file while retaining the same inode."
+    },
+    {
+      "claim": "fs-verity should be promoted as a mandatory Frank release invariant now.",
+      "outcome": "DEFER",
+      "reason": "The local treatment failed EOPNOTSUPP and accepted-Hostinger filesystem/deployment support is unverified."
+    },
+    {
+      "claim": "Current merged live-object attestation remains useful within its stated narrow proof scope.",
+      "outcome": "RETAIN"
+    }
+  ],
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION_SHARPENED",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY"
+    ],
+    "candidate": "OPTIONAL_KERNEL_IMMUTABILITY_LAYER_FOR_ADMITTED_SQLITE_OBJECT",
+    "new_test_obligation": "On the accepted Hostinger filesystem that will contain the productive admitted SQLite object, probe fs-verity support without touching productive state. If supported, evaluate a sealed/versioned SQLite deployment where the verity digest is bound to the deployment anchor and live mapped-object receipt. If unsupported, retain the existing live-object attestation path and use another non-bypassable deployment/runtime identity mechanism; do not downgrade F-V01-13 to version-string evidence.",
+    "rollback": "No product architecture was promoted and no product code changed. Drop the candidate if Hostinger support or deployment compatibility fails; retain this negative result as environment evidence."
+  },
+  "next_falsifier": {
+    "priority": "F-V01-13_RELEASE_BLOCKER",
+    "test": "Run a read-only/disposable fs-verity capability probe on the accepted Hostinger target filesystem intended for the SQLite runtime object, then separately prove the productive Frank process maps and exercises the exact admitted fixed SQLite object across restart/recovery with downgrade/library-swap rejection.",
+    "success_condition": "Capability result is explicit; if supported, verity sealing/digest binding survives the deployment lifecycle; regardless of verity, the productive Frank persistence path is causally bound to the admitted fixed SQLite runtime and fails closed on substitution.",
+    "do_not_substitute": "local EOPNOTSUPP, SQLite version text, package-manager metadata, path/inode identity, self-hosted CI, or synthetic-only evidence for accepted Hostinger productive-runtime acceptance"
+  },
+  "nonclaims": {
+    "accepted_hostinger_fs_verity_support_proven": false,
+    "productive_sqlite_runtime_proven": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

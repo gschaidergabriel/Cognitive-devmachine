@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "stores": [
+    {"store":"UnifiedDB","role":"AUTHORITATIVE_SEMANTIC_AND_SCHEDULER_STATE","truth_authority":true,"owns":["ProjectionEvents","worker lease owner","fencing generation","lease expiry","batch receipts","backlog/lag telemetry provenance"]},
+    {"store":"ClayGraph","role":"DERIVED_REBUILDABLE_DESTINATION","truth_authority":false,"owns":["projected topology","applied-event identity","projection receipts"]},
+    {"store":"Worker process memory","role":"EPHEMERAL_EXECUTION_STATE","truth_authority":false,"rule":"loss on crash is expected; durable lease/event state controls recovery"},
+    {"store":"RecoveryFloor","role":"KEEP_ISOLATED_ROLLBACK_WITNESS","truth_authority":"RECOVERY_ADMISSION_ONLY"},
+    {"store":"External broker","role":"NOT_SELECTED_V0_1_COMPARISON","truth_authority":false,"reason":"additional availability/recovery dependency not justified before current bounded worker is falsified"}
+  ],
+  "backpressure_law": {
+    "HARD": "throttle/pause derived-dependent producers and keep consequential graph use closed",
+    "authoritative_UnifiedDB_writes": "remain allowed",
+    "reason": "derived projection availability must not demote or block authoritative truth"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "GO-20260813-FV01-13-HASMOVED-SAME-INODE-CONTENT-DRIFT",
+  "trigger": "go",
+  "framework": "GRF",
+  "target_program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "research_base_before_write": "9839faf2ffe9da24899163a798e41acd2f1b0083",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "observed_product_main": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "related_issue": 534,
+  "related_product_pr": 557,
+  "related_product_pr_head_at_observation": "6f88332971e5a96dae2cb8851f45fa47c6fb5075",
+  "observed_reality": {
+    "pr557_scope": "Connection-bound database-object topology guard using SQLITE_FCNTL_HAS_MOVED for rename/move/delete/rebind detection; productive persistence and whole state integrity are not claimed.",
+    "upstream_hasmoved_semantics": "SQLite documents SQLITE_FCNTL_HAS_MOVED as reporting whether the opened file has been renamed, moved, or deleted since first open.",
+    "upstream_application_id_layout": "SQLite documents the four-byte big-endian application_id field at database-header offset 68.",
+    "pr557_current_ci_at_cycle": "Current head workflow Frank SQLite connection guard v1 was PENDING at observation; a previous-head run was CANCELLED and is not promoted."
+  },
+  "generated_reality": {
+    "hypothesis": "A connection can continue to report HAS_MOVED=0 after same-inode database content drift because the opcode is a topology discriminator, not a content-integrity witness.",
+    "strongest_counterhypothesis": "The serving connection's HAS_MOVED/file-object binding is sufficient to treat the opened database state as unchanged for release acceptance."
+  },
+  "bounded_unusual_experiment": {
+    "name": "HAS_MOVED_SAME_INODE_CONTENT_DRIFT",
+    "count_for_this_go_macrocycle": 1,
+    "scope": "Disposable local C/SQLite WAL fixture only; no Frank/VPS/canonical/product database, provider effect, Harness authority or training state mutated.",
+    "runtime_sqlite_version": "3.46.1",
+    "control": {
+      "setup": "Open database, enable WAL, create table, insert one row, execute wal_checkpoint(FULL), then query SQLITE_FCNTL_HAS_MOVED on the live main connection.",
+      "result": {"file_control_rc": 0, "has_moved": 0}
+    },
+    "treatment": {
+      "intervention": "While the original SQLite connection stayed open, independently open the same database pathname O_RDWR, pwrite bytes 01 02 03 04 at header offset 68 (application_id), fsync, close.",
+      "inode_before": 3670894,
+      "inode_after": 3670894,
+      "same_inode": true,
+      "ctime_changed": true,
+      "mtime_changed": true,
+      "live_connection_file_control_rc": 0,
+      "live_connection_has_moved": 0,
+      "live_connection_application_id": 0,
+      "fresh_connection_application_id": 16909060
+    },
+    "outcome": "SUPPORTED_NARROW_TOPOLOGY_BOUNDARY_AND_STATE_VIEW_DIVERGENCE",
+    "authority_minted": false,
+    "external_effect_executed": false
+  },
+  "collapse": {
+    "has_moved_zero_means_no_rename_move_delete_for_tested_connection": "RETAIN_WITH_UPSTREAM_SCOPE",
+    "has_moved_zero_means_database_content_or_state_unchanged_since_open": "REJECT",
+    "pr557_connection_guard_is_invalid": "REJECT_COUNTERCLAIM_PR557_REMAINS_USEFUL_FOR_ITS_NARROW_TOPOLOGY_SCOPE",
+    "same_inode_content_drift_is_proven_reachable_by_unprivileged_product_actor": "REJECT_NOT_TESTED_OR_CLAIMED"
+  },
+  "acceptance_delta": {
+    "status": "TEST_OBLIGATION_REFINED_NO_PRODUCT_PATCH_JUSTIFIED",
+    "requirement": "Do not promote connection-bound HAS_MOVED success into content/state-integrity truth. Accepted-Hostinger evidence must independently bind productive transactional/recovery semantics and any required database-file authority/content-change expectations.",
+    "reason_no_parallel_product_pr": "PR #557 already states a narrow rename/move/delete/rebind scope; this finding refines the acceptance/non-claim boundary rather than identifying a defect requiring duplicate implementation.",
+    "durable_product_reentry": [
+      "gschaidergabriel/Dr.-Unterweger#534 comment 5269972310",
+      "gschaidergabriel/Dr.-Unterweger#557 comment 5269976040"
+    ]
+  },
+  "primary_sources": [
+    "https://www.sqlite.org/c3ref/c_fcntl_begin_atomic_write.html",
+    "https://www.sqlite.org/fileformat.html"
+  ],
+  "negative_results_and_limits": [
+    "No accepted Hostinger ProductStart or productive UnifiedDB persistence path was exercised.",
+    "The experiment does not establish malicious or ordinary product reachability of same-inode external writes.",
+    "The local runtime was SQLite 3.46.1; this experiment tests HAS_MOVED semantic scope, not the WAL-reset bug fix boundary or accepted 3.53.4 identity.",
+    "PR #557 remains DRAFT and its exact current-head CI was not PASS at this evidence point.",
+    "No whole F-V01-13 or Frank v0.1 acceptance claim is made."
+  ],
+  "next_falsifier": "On the accepted Hostinger ProductStart/self.root generation, bind exact fixed SQLite runtime + exact live connection/database object + real UnifiedDB transaction and recovery receipts, then show fail-closed behavior for the specified rollback/downgrade/library-swap/topology controls without treating HAS_MOVED as a content-integrity oracle.",
+  "harness_authority_changed": false,
+  "training_authorized": false,
+  "together_used": false
+}

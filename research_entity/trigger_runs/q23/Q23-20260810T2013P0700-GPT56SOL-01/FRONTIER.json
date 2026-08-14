@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"Q23-20260810T2013P0700-GPT56SOL-01",
+  "frontier":[
+    {"rank":1,"id":"F-Q23-PEH","question":"Can exact Qwen3.5-4B/libmtmd target runtime retain/reuse one vision output across MVC and delayed semantic decode with lower total cost and equivalent semantics?","status":"OPEN_EXECUTABLE","next_falsifier":"PEH target-VPS differential"},
+    {"rank":2,"id":"F-Q23-MVC-GEOMETRY","question":"Does raw final Qwen vision geometry support calibrated user-specific familiarity/open-set, or does a tiny learned projection/dedicated encoder dominate?","status":"OPEN_EXECUTABLE","next_falsifier":"Q0/Q1/D0 matched held-out classifier study"},
+    {"rank":3,"id":"F-Q23-PAR-DOSE","question":"At what independent Frank experience dose does direct memory or PAR/EAP improve end-to-end visual decisions, if at all?","status":"BLOCKED_ON_INDEPENDENT_EPISODE_FIXTURES","next_falsifier":"dose-response N=0..64"},
+    {"rank":4,"id":"F-Q23-RUNTIME-CONFIG","question":"Which Qwen3.5-4B runtime configuration variables affect multimodal semantic correctness or reuse on the exact target lane?","status":"OPEN_EXECUTABLE","next_falsifier":"bounded batch/ubatch/offload/backend matrix"},
+    {"rank":5,"id":"F-Q23-GUI-MEMORY","question":"Do action-grounded ROI memories plus periodic context anchors beat full screenshot history under equal token/compute budget?","status":"OPEN_AFTER_H1_FIXTURES","next_falsifier":"action-grounded vs full-history matched episodes"}
+  ],
+  "locally_closed_or_narrowed":[
+    {"route":"FREE_DEEPSTACK_FEATURE_TAP","disposition":"NARROWED","reason":"current Qwen3.5-4B config deepstack_visual_indexes=[]; intermediate taps require extra instrumentation and are not a zero-cost standard path"}
+  ]
+}

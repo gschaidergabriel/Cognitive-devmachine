@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_GR_FUSION_EVIDENCE",
+  "recorded_at": "2026-08-12T02:47:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "trigger": "go",
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "canonical_parent_observed_before_write": "bf984fabdb1384a74b46c95322456e3fca96b535",
+  "focus": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-09-EFFECT-AUTHORITY"
+  ],
+  "implementation_repo": "gschaidergabriel/Dr.-Unterweger",
+  "implementation_main": "2709ec4cb2a7606eb6ad68514182f4c4217fc6bc",
+  "observed_reality": {
+    "sqlite_release_lane": {
+      "productive_target_sqlite_line": "3.45.1",
+      "productive_v5_anchor": "MISSING in current accepted-target evidence",
+      "upstream_wal_reset_fix_threshold": "3.51.3+ or explicitly identified fixed backport",
+      "merged_release_identity_fence": "abd769d5cee835af2b1b867041e52f8a443a3060",
+      "merged_pre_shell_boundary_repair": "aa5f84c31c46ab3e3c405231cf93bddd1f7d51d8"
+    },
+    "root_provision_lane": {
+      "pr": 440,
+      "state_observed": "OPEN_DRAFT",
+      "head": "37e8ef21569c79c7c6fb539d0182c7fe43dd45ba",
+      "local_mechanism_evidence": "14/14 PASS in disposable root sandbox per canonical sibling receipt",
+      "accepted_target_root_provisioning": "BLOCKED_NO_CURRENT_ROOT_CAPABILITY",
+      "promotion": "DEFER"
+    },
+    "product_parent_inventory_lane": {
+      "merged_pr": 442,
+      "merge": "2709ec4cb2a7606eb6ad68514182f4c4217fc6bc",
+      "refined_accepted_target_run": 31529433345,
+      "run_result": "SUCCESS_INVENTORY",
+      "runner_user": "frankrunner",
+      "runner_uid": 1000,
+      "systemd_version": "255 (255.4-1ubuntu8.17)",
+      "kernel": "Linux 6.8.0-117-generic",
+      "runner_loader_keys": {
+        "LD_PRELOAD": "ABSENT",
+        "LD_AUDIT": "ABSENT",
+        "LD_LIBRARY_PATH": "ABSENT"
+      },
+      "runner_unit": "actions.runner.gschaidergabriel-Dr.-Unterweger.clay.service",
+      "runner_unit_active": true,
+      "runner_unit_user": "frankrunner",
+      "runner_unit_fragment_sha256": "ba4d797f13565476618b6273654e953a4d9ecbeca3a407df8e52b2aa5433857a",
+      "separate_frank_systemd_units_observed": 0,
+      "separate_frank_processes_observed": 0,
+      "separate_frank_service_files_observed": 0,
+      "terminal_status": "NO_SEPARATE_FRANK_PRODUCTION_PARENT_CANDIDATE_OBSERVED_FROM_RUNNER_CONTEXT",
+      "scope_limit": "This is a scoped negative observation from the self-hosted runner context. It does not prove that no Frank process can exist elsewhere, under another namespace, or at another time."
+    }
+  },
+  "measurement_repair": {
+    "initial_probe_problem": "A broad Clay-name matcher classified the GitHub Actions runner infrastructure as a Frank production-parent candidate.",
+    "repair": "Separate Actions runner units/processes from product candidates and restrict product matching to Frank/self.root/runtime-guard signals.",
+    "refined_run": 31529433345,
+    "outcome": "MEASUREMENT_ARTIFACT_REMOVED"
+  },
+  "grf": {
+    "generated_reality": "A discoverable productive Frank service parent already exists on the accepted self-hosted host and can be directly attested.",
+    "strongest_counter_reality": "Only the CI runner execution boundary is currently observable from the accepted runner context; a separate productive Frank service boundary is not installed, not running, or otherwise not observable there.",
+    "falsifier": "Inventory systemd units, standard service-file locations, and matching live process parent/cgroup metadata while explicitly excluding Actions-runner infrastructure and without emitting command-line or environment values.",
+    "predicted_if_generated_reality_right": "At least one separate Frank/self.root product unit, service file, or live process parent chain is observed.",
+    "predicted_if_counter_reality_right": "Zero separate product candidates are observed while the runner boundary remains independently visible.",
+    "observed": "Zero separate Frank systemd units, processes, and service files; Actions runner independently visible and active.",
+    "collapse": "COUNTER_REALITY_SUPPORTED_IN_RUNNER_CONTEXT; EXISTING_PRODUCT_SERVICE_PARENT_NOT_OBSERVED",
+    "confidence": "HIGH for the scoped runner-context observation; LOW for any claim about unobserved namespaces/other hosts/times"
+  },
+  "architecture_fusion": {
+    "required_composed_chain": [
+      "independently accepted fixed SQLite artifact/manifest",
+      "root-capable content-addressed runtime provision and root-owned V5 anchor",
+      "explicit productive parent/service execution boundary",
+      "clean upstream loader environment before shell exec",
+      "V5 shell admission and loader-key rejection",
+      "exact live mapped SQLite object identity",
+      "release-accepted SQLite version/source/build identity",
+      "restart/crash/replay and rollback/downgrade continuity"
+    ],
+    "systemd_candidate_mechanism": {
+      "status": "GENERATED_CANDIDATE_NOT_DEPLOYED",
+      "basis": "systemd service execution environments can construct a service environment and UnsetEnvironment is applied as the final environment-compilation step before exec; this makes a dedicated service unit a plausible upstream boundary, but no Frank product unit was observed in the accepted runner context.",
+      "required_before_promotion": [
+        "exact product unit/drop-in identity and immutable receipt",
+        "explicit loader-key removal/rejection at the pre-shell boundary",
+        "unit user and executable path attestation",
+        "negative contaminated-environment control",
+        "composition with V5 runtime anchor and mapped-object identity"
+      ]
+    }
+  },
+  "next_discriminating_falsifier": {
+    "state": "BLOCKED_BY_PRIVILEGED_DEPLOYMENT_OR_PRODUCT_START_DEFINITION",
+    "action": "On an explicitly authorized root-capable accepted Hostinger target, compose the pinned fixed-runtime provision lane with an explicit productive start boundary, then attest the resulting live process lineage.",
+    "minimum_evidence": [
+      "independently accepted SQLite manifest digest",
+      "root provision success and exact /opt runtime plus /etc anchor hashes",
+      "exact productive unit/service/drop-in hash or equivalent parent configuration receipt",
+      "proof loader-control keys cannot reach the admitted shell process through the product path",
+      "live process parent/cgroup/executable identity",
+      "live /proc mapped SQLite inode/device/hash plus release-accepted source identity",
+      "restart/crash/replay preservation",
+      "rollback, stale-anchor, downgrade and library-swap rejection"
+    ]
+  },
+  "go_cycle_accounting": {
+    "new_unusual_experiments_in_this_invocation": 1,
+    "unusual_experiment": "PRE_GUARD_PRELOAD_SENTINEL",
+    "repeated_after_initial_run": false,
+    "subsequent_parent_inventory": "NORMAL_READ_ONLY_FALSIFIER_AND_MEASUREMENT_REPAIR"
+  },
+  "promotion": {
+    "pre_guard_loader_counter_reality": "SUPPORTED_ON_TESTED_ACCEPTED_TARGET_INVOCATION",
+    "shell_loader_rejection_repair": "MERGED",
+    "product_parent_inventory_instrument": "MERGED",
+    "existing_product_parent_on_runner_host": "NOT_OBSERVED",
+    "root_provision_candidate_pr_440": "DEFER_DRAFT",
+    "productive_fixed_sqlite_runtime": "UNVERIFIED",
+    "whole_F_V01_13": "IN_PROGRESS",
+    "whole_F_V01_09": "IN_PROGRESS",
+    "whole_FRANK_V0_1": "IN_PROGRESS"
+  },
+  "authority": {
+    "canonical_frank_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false,
+    "together_api_used": false
+  },
+  "primary_references": [
+    "https://www.sqlite.org/wal.html",
+    "https://sqlite.org/releaselog/3_51_3.html",
+    "https://sqlite.org/releaselog/3_53_4.html",
+    "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker-Hardening.html",
+    "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker-Invocation.html",
+    "https://github.com/systemd/systemd/blob/main/man/systemd.exec.xml",
+    "https://github.com/systemd/systemd/blob/main/man/systemd.service.xml"
+  ]
+}

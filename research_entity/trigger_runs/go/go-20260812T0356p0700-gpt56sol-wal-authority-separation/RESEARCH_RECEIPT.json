@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0356p0700-gpt56sol-wal-authority-separation",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "research_repo_parent_observed_before_write": "3ea1bea513dfc777fa4b01598bddba5274cc2c1b",
+  "product_main_observed_before_write": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+  "observed_reality": {
+    "workspace_gate": "IN_PROGRESS",
+    "main_v5_parent_chain": "still uses Path.stat() and therefore follows parent symlinks; draft PR 459 is the focused lstat repair but its exact self-hosted run was still queued when observed",
+    "wal_policy_candidate": "draft PR 460 classifies SQLite release families by sqlite3.sqlite_version and selects WAL for fixed families, DELETE for vulnerable families",
+    "artifact_authority_candidate": "draft PR 466 binds root provisioning to the exact reproducible accepted artifact identity; local 7/7 PASS, remote acceptance not yet established",
+    "mapped_object_candidate": "parallel research receipt and draft PR 467 bind the actually mapped libsqlite object to device/inode plus same-FD hashing; remote acceptance remains pending"
+  },
+  "primary_upstream_evidence": {
+    "source": "SQLite upstream WAL/corruption/release documentation",
+    "finding": "the WAL-reset defect affects upstream releases through 3.51.2 and is fixed in 3.51.3 plus documented backports; SQLite 3.53.4 is later than that fix boundary",
+    "scope_limit": "upstream version-family safety does not attest which binary object the productive Frank process actually loaded"
+  },
+  "grf": {
+    "generated_reality": "If a runtime reports a fixed SQLite semantic version, the WAL policy gate is sufficient evidence to treat the productive runtime as release-trusted.",
+    "counter_reality": "A byte-distinct or otherwise unattested SQLite object can report the same fixed semantic version; a version-family gate can correctly classify the upstream bug boundary while still being unable to establish artifact or mapped-object authority.",
+    "discriminator": "Apply the exact PR 460 version parsing/classification semantics to an accepted-looking 3.53.4 label and to a decorated/unattested 3.53.4-counterfeit label, then compare the decision boundary with the separate V5/V6 artifact/mapped-object gates.",
+    "collapse": "VERSION_FAMILY_POLICY_RETAINED_ARTIFACT_AUTHORITY_NOT_PROMOTED",
+    "architecture_consequence": "Keep bug-family policy, artifact authority, mapped-object identity, root-secure provisioning, production start-path non-bypassability, and restart/rollback continuity as separate compositional gates. Do not let any one substitute for the others."
+  },
+  "exactly_one_bounded_unusual_experiment_this_invocation": {
+    "count": 1,
+    "name": "FIXED_VERSION_WITHOUT_ARTIFACT_ATTESTATION",
+    "scope": "disposable local logic-level reproduction of PR 460 version classifier; no production or canonical state mutation",
+    "inputs": ["3.53.4", "3.53.4-counterfeit", "3.45.1"],
+    "observed": {
+      "3.53.4": {"parsed": [3, 53, 4], "policy": "WAL"},
+      "3.53.4-counterfeit": {"parsed": [3, 53, 4], "policy": "WAL"},
+      "3.45.1": {"parsed": [3, 45, 1], "policy": "DELETE"}
+    },
+    "interpretation": "The classifier correctly separates vulnerable upstream version families, but deliberately cannot distinguish accepted artifact identity from an unattested object presenting an equivalent version label.",
+    "rollback": "none required; pure local process exited after output",
+    "additional_unusual_experiments": 0
+  },
+  "counterevidence_and_nonclaims": {
+    "not_a_pr460_bug_by_itself": true,
+    "reason": "PR 460 already states that exact runtime identity remains a separate acceptance obligation; this experiment confirms the composition boundary rather than falsifying the version-family fallback mechanism.",
+    "no_duplicate_product_patch_created": true,
+    "no_vps_pass_claimed": true,
+    "no_root_install_claimed": true,
+    "no_fv01_13_promotion": true,
+    "training_authorized": false
+  },
+  "reentry": {
+    "state": "NO_CHANGE_TEST_OBLIGATION",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-09-EFFECT-AUTHORITY"
+    ],
+    "next_falsifier": "On the accepted Hostinger Ubuntu VPS, prove the productive Frank start path is non-bypassably admitted through the trusted artifact/root-start gates and that the running process maps the exact accepted SQLite object across clean start, restart, downgrade/library-swap and rollback controls before allowing canonical WAL state.",
+    "promotion_requirement": "exact-current accepted-host receipt tying service/start identity, root trust anchor, accepted artifact digest, mapped dev+inode+hash, SQLite source-id/version, canonical state mode, restart continuity and negative downgrade/swap controls into one provenance-bound chain"
+  }
+}

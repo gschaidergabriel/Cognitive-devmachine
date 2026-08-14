@@ -1,0 +1,40 @@
+{
+  "architecture_promotion": false,
+  "authority": {
+    "architecture_promotion": false,
+    "effect_authority_minted": false,
+    "training": false
+  },
+  "candidate_id": "ATOMIC-CANDIDATE-CJC-001",
+  "central_result": "A current-state commutator can be falsely safe when later context masks upstream order dependence. CJC detects this by comparing transition orders as sparse polynomials over lesion/context variables.",
+  "counterevidence": "CJC is much slower than exhaustive replay for small context in generic Python; exact eligibility on real Frank is unknown.",
+  "name": "Counterfactual Jet Commutator",
+  "next_test": "Direct current Frank-v0.1 trace census + native matched scheduler/replay differential; no H1/H2/H3 gate.",
+  "novelty": "NOVEL_COMBINATION_CANDIDATE",
+  "primary_metrics": {
+    "all_replications_crossover_by_context_8": true,
+    "context8_reference_over_cjc": 5.2408426413405,
+    "full_local_tests_passed": 35,
+    "hidden_cases_primary": 784,
+    "pair_accuracy": 1.0,
+    "pair_cases_primary": 20000,
+    "repo_packet_tests_passed": 17,
+    "replication_cases": 25000,
+    "replication_hidden_rate_mean": 0.03684,
+    "state_only_false_safe_rate": 0.0392
+  },
+  "run_id": "20260810T2034p0700-chatgpt-secondary-cjc-runtime",
+  "schema_version": "1.0",
+  "status": "SUPPORTED_PROXY_RETEST",
+  "versioned_artifacts": [
+    "candidate/CANDIDATE_ATOMIC_CJC_001.clay",
+    "implementation/cjc_core.py",
+    "implementation/cjc_ops.py",
+    "implementation/causal_jet_commutator.py",
+    "implementation/typed_ir_cjc_adapter.py",
+    "implementation/frank_v01_cjc_gate.py",
+    "tests/test_cjc_runtime_all.py",
+    "benchmarks/benchmark_cjc_compact.py",
+    "RUN_CJC.py"
+  ]
+}

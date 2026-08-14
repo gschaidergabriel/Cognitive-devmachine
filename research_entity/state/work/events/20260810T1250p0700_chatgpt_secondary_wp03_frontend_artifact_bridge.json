@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-wp03-frontend-artifact-bridge-20260810T1250p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T12:50:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "reason_clay": "Fresh WP03 differential shows the production WP02 frontend and TypedIR public compile path can select different grammars and reinterpret the same source. Instead of racing active parser/TypedIR edits, an additive bridge now consumes already-produced frontend artifacts and binds them to exact source+grammar+frontend contract hashes before build_typed_ir. This preserves semantic TypedIR identity separately from provenance-bound compilation-artifact identity.",
+    "implementation": {
+      "bridge_commit": "138f84cfe4778cca38a747b11504526156d97b67",
+      "bridge_path": "tools/claycode_wp03_frontend_artifact_bridge.py",
+      "test_commit": "9a85d727bad32ae349d70e90cccb97ce2f544a3f",
+      "test_path": "tools/test_claycode_wp03_frontend_artifact_bridge.py"
+    },
+    "invariants_added": [
+      "silent_reparse=FORBIDDEN",
+      "implicit_frontend_dispatch=FORBIDDEN",
+      "same_source_cross_surface_ambiguity=FAIL_CLOSED_WITHOUT_EQUIVALENCE_RECEIPT",
+      "typed_semantic_identity remains separate from frontend/source provenance identity",
+      "frontend artifact never mints effect authority"
+    ],
+    "tests_defined": [
+      "bridge compiles from canonical artifact while front.compile_frontend is monkeypatched to fail if called",
+      "source tamper rejection",
+      "grammar tamper rejection",
+      "contract tamper rejection",
+      "same-source alternate-surface rejection",
+      "semantic TypedIR hash vs provenance-bound artifact-hash separation"
+    ],
+    "execution_evidence": {
+      "local_contract_equation_probe": "PASS",
+      "real_repository_bridge_test": "NOT_EXECUTED_IN_THIS_WORKER",
+      "github_hosted": "NOT_CLAIMED",
+      "hostinger": "NOT_EXECUTED_FOR_THESE_COMMITS",
+      "andreas_target": "NOT_EXECUTED"
+    },
+    "counterhypothesis": "Changing TypedIR's default grammar directly is sufficient; explicit frontend artifact binding is unnecessary.",
+    "counterhypothesis_status": "WEAKENED: direct grammar replacement does not preserve explicit multi-surface provenance or prevent future silent reparsing.",
+    "architecture_delta": "CANDIDATE_ADAPTER_INTERFACE_REPAIR",
+    "formal_wp03": "OPEN",
+    "next_action": "Execute the bridge regression on an exact pinned Ubuntu lane, then route the production Source->Frontend->TypedIR handoff through this or an equivalent receipt-bound interface. Separately resolve AST-context keyword aliases and the V17/V7 structured-surface policy; do not claim WP03 PASS until full G9+Dialect coherent-chain receipts exist.",
+    "out_of_box_experiment_count_increment": 0,
+    "authority_invariant": "model output != execution authority"
+  }
+}

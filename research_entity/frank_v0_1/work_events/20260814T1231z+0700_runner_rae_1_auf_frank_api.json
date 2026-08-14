@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_runner_rae_1_auf_frank_api",
+  "actor": "gabriel-claude/wp1",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "register 5th self-hosted runner on frank-api against gschaidergabriel/clay-global-research-entity. systemd svc. token from gh api, never print.",
+  "done_when": "gh api repos/.../actions/runners total_count >= 1 AND runner online AND one queued RAE run picked up with real steps",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: frank-api, digital-retina, clay-global-research-entity, research-entity",
+  "source": {
+    "lauf": "20260814-114226",
+    "paket": "wp1",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-114226-wp1/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-114226-wp1/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 900,
+  "ergebnis_kurz": "rae-1 online, 8 echte Schritte belegt",
+  "bericht": "runner rae-1 live on frank-api (digital-retina, 31.97.117.141).\n- /home/frankrunner/runner-rae, actions-runner 2.336.0, user frankrunner\n- bound to github.com/gschaidergabriel/clay-global-research-entity\n- labels self-hosted,Linux,X64. systemd unit actions.runner.gschaidergabriel-clay-global-research-entity.rae-1.service, enabled+active\n- proof: run 31358373038 (database-pulse-v5-pr-preflight) rerun. job on runner=rae-1 -> 8 real steps. sibling job on ubuntu-latest -> 0 steps (billing block). same run, both jobs.\n- repo runner count 0 -> 1\n"
+}

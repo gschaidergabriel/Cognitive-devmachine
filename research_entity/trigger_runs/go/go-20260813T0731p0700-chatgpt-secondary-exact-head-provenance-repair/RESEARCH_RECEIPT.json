@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T0731p0700-chatgpt-secondary-exact-head-provenance-repair",
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "worker_is_not_frank": true,
+  "frank_self_harness_authority": "PROPOSAL_ONLY",
+  "grf": {
+    "observed_reality": [
+      "PR558, PR560 and PR561 promotion workflows used github.sha/GITHUB_SHA under pull_request and therefore tested the synthetic merge commit rather than the reviewed PR head.",
+      "PR561 prior evidence explicitly recorded event_head_sha=181a2f95619faf3ac471a259573a54e78acc848a and tested_sha=fa5d087b91a4d2c5d3cf21ebaf06c8a8ec340e67.",
+      "GitHub primary documentation states that pull_request GITHUB_SHA is the merge-branch merge commit and github.event.pull_request.head.sha identifies the PR head."
+    ],
+    "generated_reality": "A shared event-to-tested-identity selector can restore promotion provenance if pull_request requires a non-empty PR head SHA, fetches exactly that SHA, and asserts tested_sha equals expected_pr_head; non-PR events may retain GITHUB_SHA.",
+    "strongest_counter_reality": "Changing the selector may still leave YAML/shell defects, runner failures, stale branch composition, or artifact omissions; a code patch alone is not evidence that the exact reviewed heads passed.",
+    "discriminating_falsifier": "Each repaired pull_request run must execute on its current PR head and persist expected_pr_head == tested_sha. Any mismatch, zero-step run, YAML failure, or missing evidence leaves exact-head promotion OPEN.",
+    "collapse": "RETAIN_TESTING"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "COUNTERFACTUAL_EVENT_IDENTITY_QUARTET",
+    "count": 1,
+    "scope": "Local synthetic selector-only event matrix; no repo/VPS/product/effect state mutation.",
+    "worlds": [
+      {
+        "name": "PR561_observed",
+        "event": "pull_request",
+        "event_sha": "fa5d087b91a4d2c5d3cf21ebaf06c8a8ec340e67",
+        "pr_head_sha": "181a2f95619faf3ac471a259573a54e78acc848a",
+        "old_selector": "merge_sha",
+        "candidate_selector": "pr_head_sha"
+      },
+      {
+        "name": "push_same_branch",
+        "event": "push",
+        "candidate_selector": "event_sha"
+      },
+      {
+        "name": "workflow_dispatch",
+        "event": "workflow_dispatch",
+        "candidate_selector": "event_sha"
+      },
+      {
+        "name": "adversarial_missing_pr_head",
+        "event": "pull_request",
+        "old_selector": "merge_sha_PASS",
+        "candidate_selector": "FAIL_CLOSED"
+      }
+    ],
+    "result": "SUPPORTED: event-name-gated selector preserves non-PR behavior while correcting observed PR identity and failing closed when PR head identity is absent.",
+    "rollback": "Revert only the three branch workflow commits if exact-head CI falsifies the selector implementation."
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "changes": [
+      {
+        "pr": 561,
+        "branch": "clay-go-fv01-02-alias-cycle-20260813",
+        "commit": "0e2eb2569b0bedadce0abebee1bfbd9fd9e95455",
+        "workflow": ".github/workflows/claycode-nominal-typecheck-v1-vps.yml"
+      },
+      {
+        "pr": 558,
+        "branch": "chatgpt/go-claycode-recursive-record-failclosed-20260813",
+        "commit": "29c0d53c18609adfb6c233e9fd4b98a36d8d6814",
+        "workflow": ".github/workflows/claycode-runtime-nominal-boundary-oob-vps.yml"
+      },
+      {
+        "pr": 560,
+        "branch": "chatgpt/go-unusual-experiment-budget-guard-20260813",
+        "commit": "8665d831bd8cceef46dda498e1f94e651e535ac9",
+        "workflow": ".github/workflows/go-unusual-experiment-budget-guard.yml"
+      }
+    ],
+    "common_behavior": [
+      "pull_request requires non-empty github.event.pull_request.head.sha",
+      "pull_request fetches the exact PR head SHA instead of GITHUB_SHA",
+      "tested_sha is asserted equal to expected_pr_head",
+      "push/workflow_dispatch retain event SHA selection",
+      "evidence records event_sha, expected_pr_head, tested_sha and evidence_context"
+    ]
+  },
+  "current_execution_evidence": {
+    "status": "QUEUED_AT_RECEIPT_WRITE",
+    "runs": [
+      {"pr": 561, "run": 31654638338, "head": "0e2eb2569b0bedadce0abebee1bfbd9fd9e95455"},
+      {"pr": 558, "run": 31654661499, "head": "29c0d53c18609adfb6c233e9fd4b98a36d8d6814"},
+      {"pr": 560, "run": 31654676919, "head": "8665d831bd8cceef46dda498e1f94e651e535ac9"}
+    ],
+    "promotion_claim": "NONE_UNTIL_RUNS_COMPLETE_AND_ARTIFACT_IDENTITY_IS_VERIFIED"
+  },
+  "affected_components": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "research evidence provenance / promotion workflow integrity"
+  ],
+  "negative_results_preserved": [
+    "Prior PR558/560/561 successful merge-context runs remain merge-composition evidence only and are not relabeled exact-head PASS.",
+    "No accepted Hostinger product-runtime acceptance is claimed.",
+    "No final-model training authorization exists."
+  ],
+  "next_falsifier": "Read runs 31654638338, 31654661499 and 31654676919 after execution. Require non-zero executed jobs, success of the intended gate, and artifact/evidence equality expected_pr_head == tested_sha before any exact-head promotion.",
+  "status": "TESTING"
+}

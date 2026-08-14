@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "evidence_class":"LOCAL_SYNTHETIC_PROXY",
+  "execution_note":"Measurements were produced by the in-memory reference implementation used to derive the persisted mcm_proxy.py. Persisted script is reproducible but was not separately target-VPS executed in this invocation.",
+  "environment":{"python":"3.13.5","implementation":"CPython","platform":"Linux-6.18.35-x86_64-with-glibc2.41","cpu_logical":5,"ram_total_bytes":6368813056},
+  "primary":{"seeds":400,"atoms_per_trace":80,"seals_per_trace":12,"total_seals":4800,
+    "wrong":{"naive":408,"global_total_order":0,"strong_causal_event":0,"mcm":0},
+    "accuracy":{"naive":0.915,"global_total_order":1.0,"strong_causal_event":1.0,"mcm":1.0},
+    "logical_seal_latency":{"naive":{"mean":0.0,"p50":0,"p95":0,"p99":0},"global_total_order":{"mean":21.3575,"p50":23,"p95":38,"p99":42},"strong_causal_event":{"mean":6.6175,"p50":0,"p95":31,"p99":38},"mcm":{"mean":6.736458333333333,"p50":0,"p95":31,"p99":38}},
+    "runtime_ms_per_trace":{"naive":{"mean":0.0233783975,"p50":0.020951,"p95":0.023585,"p99":0.096954},"global_total_order":{"mean":0.0337338975,"p50":0.031657,"p95":0.038527,"p99":0.0736},"strong_causal_event":{"mean":0.23188268,"p50":0.212956,"p95":0.417119,"p99":0.554362},"mcm":{"mean":0.2623296575,"p50":0.24295,"p95":0.454885,"p99":0.553701}},
+    "recovery":{"crash_replay_mismatch_traces":0,"traces":400},
+    "stale_control":{"stale_rejections":1,"required_seal_produced":false},
+    "geometry":{"monotone_atom_fraction":0.8695652173913043,"determination_fraction":0.13043478260869568,"mean_cut_members":9.685208333333334,"p95_cut_members":17},
+    "payload_model_bytes":{"full_state_snapshot_broadcast":571050972,"mcm_cut_receipts":7227744,"strong_causal_ref_receipts":6766944,"mcm_vs_snapshot_ratio":0.012656915677222593,"mcm_vs_strong_causal_ratio":1.0680957312488473},
+    "authority_violations":0
+  },
+  "derived":{"mcm_mean_latency_reduction_vs_total_order_percent":68.46,"mcm_mean_latency_overhead_vs_strong_causal_percent":1.80,"mcm_python_runtime_overhead_vs_strong_causal_percent":13.13,"mcm_payload_reduction_vs_full_snapshot_percent":98.73,"mcm_payload_overhead_vs_strong_causal_percent":6.81},
+  "stress_sweep_summary":{"determination_fraction_range":"2.04%..25%","mcm_correctness":"1.0 at every sweep point","strong_causal_correctness":"1.0 at every sweep point","mcm_vs_strong_causal_python_runtime_ratio_range":"1.083..1.328","mcm_vs_snapshot_payload_ratio_range":"0.0084..0.0116","interpretation":"MCM did not beat strong causal event sourcing on proxy runtime or reference payload; advantage vs total ordering is not unique to MCM."}
+}

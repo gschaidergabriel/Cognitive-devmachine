@@ -1,0 +1,180 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0030p0700-chatgpt-secondary-claycode-frontier-scope",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_after_repair": "f181fead56ec9336edc607c7451c46f5e7e69e8a",
+    "frontier_pr": 357,
+    "frontier_branch": "chatgpt/claycode-frontier-integration-20260811",
+    "frontier_head_after_repair": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1"
+  },
+  "routing": {
+    "selected_opportunity": "CLAYCODE_CURRENT_MAIN_COMPOSITION_FALSE_NEGATIVE",
+    "why_selected": "The strict-LALR product repair had already been independently applied by another worker; the next executed blocker was a current-main composition gate failing only because two newly added Clay sources changed the denominator from 40 to 42.",
+    "duplicate_work_avoided": [
+      "did not reimplement the already-landed RHS_ADD strict-LALR grammar repair",
+      "did not duplicate active UnifiedDB projection or runner-collision lanes"
+    ]
+  },
+  "hypothesis": "A composition gate can preserve the exact historical 36/40 frontier regression while also measuring an expanding current-main Clay corpus by separating source-universe identity from current-main descriptive coverage.",
+  "strongest_counterhypothesis": "Freezing the historical source universe could hide real regressions caused by current-main changes to existing frontier files or newly added sources, creating a permanently green stale gate.",
+  "live_external_evidence": [
+    {
+      "source": "Lark documentation - strict mode",
+      "claim_used": "strict=True is intended to surface parser conflicts rather than silently accepting them",
+      "url": "https://lark-parser.readthedocs.io/en/stable/how_to_use.html"
+    },
+    {
+      "source": "Lark grammar reference",
+      "claim_used": "LALR grammar conflicts are grammar-structure concerns; the repository diagnostic therefore preferred the smallest structure-preserving repair rather than weakening strictness",
+      "url": "https://lark-parser.readthedocs.io/en/stable/grammar.html"
+    }
+  ],
+  "executed_negative_evidence": {
+    "workflow_run": 31517971317,
+    "job": 93867739555,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Ubuntu Linux",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "current_main": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+    "frontier_head": "89d720950d330c6bb2ed792fb97575321cc6a1a4",
+    "merge": "CLEAN",
+    "results": {
+      "decide_effect": "200576 comparisons / 0 mismatches",
+      "effect_request_hash": "56000 comparisons / 0 mismatches",
+      "confirmation_matches": "16000 comparisons / 0 mismatches",
+      "frank_effects_unresolved": 0,
+      "ordinary_parser_call_nodes_missed": 0,
+      "callable_method_segments_open": 22,
+      "unresolved_unique_names": 429,
+      "unresolved_occurrences": 464,
+      "sources_parsed": 36,
+      "sources_total": 42,
+      "coverage_percent": 85.7
+    },
+    "failure_cause": "workflow gate hard-coded sources_total=40 and coverage_percent=90.0 while current main had added two Clay projection sources; all measured semantic/differential invariants above remained green",
+    "classification": "HARNESS_MEASUREMENT_SCOPE_DRIFT_NOT_PROVEN_COMPILER_REGRESSION"
+  },
+  "causal_source_growth_evidence": {
+    "old_main": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+    "current_main_examined": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+    "new_clay_sources": [
+      "claycode/frank_unifieddb_projection_outbox_v1.clay",
+      "claycode/frank_unifieddb_projection_worker_v1.clay"
+    ],
+    "interpretation": "The denominator changed because current main grew; this alone must not rewrite the meaning of the already established 36/40 frontier claim."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_ON_ACCEPTED_TARGET",
+    "target_pr": 357,
+    "commits": [
+      {
+        "sha": "d6fde6e7a33eb60ed6e5bbd581ee9518e0d5f963",
+        "change": "corpus count semantics gate accepts an explicit --clay-dir while retaining the exact 429/464 selected-scope regression"
+      },
+      {
+        "sha": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+        "change": "current-main composition gate freezes the PR-head Clay source universe by Git tree, composes onto current main, measures frozen frontier and current-main corpus separately, and requires current full-corpus census consistency"
+      }
+    ],
+    "anti_masking_properties": [
+      "frontier source count must still be exactly 40",
+      "frontier parsed count must still be exactly 36",
+      "frontier coverage must still be exactly 90.0 percent",
+      "frontier unresolved snapshot must still be exactly 429 unique / 464 occurrences",
+      "all frozen source names must still exist in the composed current-main tree",
+      "current-main global census must equal current-main corpus unresolved counts",
+      "existing package, operator, call-surface and semantic differential gates remain mandatory",
+      "new current-main sources are reported explicitly as parsed or rejected rather than ignored"
+    ],
+    "rollback": "revert d6fde6e7a33eb60ed6e5bbd581ee9518e0d5f963 and a2505ca8f4c7b01a727e7a3e4362544f05c42cd1 on PR #357 branch"
+  },
+  "accepted_target_validation": {
+    "workflow_run": 31518547883,
+    "job": 93869643365,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "current_main": "f181fead56ec9336edc607c7451c46f5e7e69e8a",
+    "frontier_head": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+    "merged_tree": "2f1e90fe50833f88769b91523864ea9c301ef1aa",
+    "merge": "CLEAN",
+    "status": "PASS_CURRENT_MAIN_COMPOSED_FRONTIER",
+    "frontier_scope": {
+      "sources_total": 40,
+      "sources_parsed": 36,
+      "coverage_percent": 90.0,
+      "unresolved_unique_names": 429,
+      "unresolved_occurrences": 464
+    },
+    "current_main_scope": {
+      "sources_total": 42,
+      "sources_parsed": 36,
+      "coverage_percent": 85.7,
+      "unresolved_unique_names": 429,
+      "unresolved_occurrences": 464,
+      "new_sources": [
+        "frank_unifieddb_projection_outbox_v1.clay",
+        "frank_unifieddb_projection_worker_v1.clay"
+      ],
+      "new_sources_parsed": [],
+      "new_sources_rejected": [
+        "frank_unifieddb_projection_outbox_v1.clay",
+        "frank_unifieddb_projection_worker_v1.clay"
+      ]
+    },
+    "semantic_differentials": {
+      "decide_effect": "200576 / 0 mismatches",
+      "effect_request_hash": "56000 / 0 mismatches",
+      "confirmation_matches": "16000 / 0 mismatches",
+      "frank_effects_unresolved": 0,
+      "ordinary_calls_missed": 0,
+      "callable_method_segments_open": 22
+    },
+    "external_effect_performed": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "CORPUS_GHOST_APPEND",
+    "purpose": "Metamorphic denominator falsifier: add one deliberately unsupported synthetic Clay source only inside the isolated target run and require the frozen frontier semantic counts to remain identical while the synthetic source appears as an explicit rejection.",
+    "product_source_mutated": false,
+    "external_effect": false,
+    "canonical_state_mutated": false,
+    "workflow_run": 31518547883,
+    "status": "PASS_CORPUS_GHOST_APPEND",
+    "base_sources_total": 40,
+    "ghost_sources_total": 41,
+    "base_sources_parsed": 36,
+    "ghost_sources_parsed": 36,
+    "semantic_counts_unchanged": true,
+    "promotion": "NONE_OOB_IS_FALSIFIER_ONLY"
+  },
+  "strong_counterhypothesis_test": {
+    "test": "If an existing frontier source changes incompatibly on current main, the frozen name-set still copies the composed bytes and the 36/40 plus 429/464 plus differential gates must turn red. New sources are separately visible and full-census consistency remains hard.",
+    "status": "SUPPORTED_BY_ACCEPTED_TARGET_COMPOSITION_AND_GHOST_APPEND_METAMORPHIC_CONTROL",
+    "remaining_limit": "The test demonstrates source-universe drift resistance and anti-masking invariants; it does not by itself prove every future new Clay source should remain outside the promoted frontier. New sources still require explicit parser/semantic admission work."
+  },
+  "research_disposition": "SUPPORTED_HARNESS_REPAIR_WITH_EXECUTED_NEGATIVE_RESULT_AND_ACCEPTED_TARGET_PASS",
+  "promotion": "PROMOTE_REPAIR_IN_PR_357; DO_NOT_CLAIM_WHOLE_CLAYCODE_OR_FRANK_V0_1_ACCEPTANCE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "ablations":[
+    {"name":"NO_COVERAGE_GUARD","result":"unsafe","observation":"When true rare branches are omitted, homogeneous remaining support falsely authorizes halt; coverage guard rejects."},
+    {"name":"NO_DECISION_EPOCH_GUARD","result":"unsafe","observation":"A previously invariant witness can become false after policy/decision mapping changes; epoch guard rejects stale witness."},
+    {"name":"CONFIDENCE_0_90","result":"premature_on_rare_branch","observation":"RARE_BRANCH accuracy 0.9375 with zero queries versus IAC 1.0 at 1.875 mean queries."},
+    {"name":"STATE_CERTAINTY","result":"safe_but_wasteful","observation":"COMPRESSED needs 5 queries versus IAC 1 while both are exact."},
+    {"name":"MYOPIC_VOC","result":"synergy_failure","observation":"PARITY_SYNERGY stops at zero queries and 0.5 accuracy because one-step gain is zero; IAC continues to 5 and is exact."},
+    {"name":"RESOURCE_MATCHED_FIXED","result":"adaptive_allocation_advantage","observation":"At the same expected query count, randomized fixed budget achieves 0.9375 on RARE_BRANCH and about 0.854 on DIFFUSE versus IAC 1.0 in this deterministic corpus."},
+    {"name":"PLAIN_ACTION_SET_CARDINALITY","result":"exact_semantic_tie","observation":"Predicate-equivalent to IAC on every reachable prefix in all tested seeds/regimes; kills distinct data-structure/runtime claim."}
+  ],
+  "controls":["COMPRESSED action redundancy","MODERATE action redundancy","PARITY multi-query synergy","RARE_BRANCH low-mass material disagreement","DIFFUSE randomized mapping"],
+  "interpretation":"IAC value is a typed safety/currentness/coverage contract around a simple projection predicate, not a novel selection algorithm."
+}

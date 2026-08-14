@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "observed_at": "2026-08-12T04:31:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "evidence_source": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "candidate_pr": 484,
+    "candidate_head": "55caad1901d7769d0de02c2070557566bec29ae6",
+    "workflow_run": 31537662923,
+    "workflow_conclusion": "failure",
+    "artifact_id": 9119618770,
+    "artifact_sha256": "f7d73251408a58bd1a2393f7d4cf6adaa09da5501609805791f91ea1fe2ea61a"
+  },
+  "accepted_target_observation": {
+    "kernel": "Linux 6.8.0-117-generic",
+    "systemd": "systemd 255 (255.4-1ubuntu8.17)",
+    "product_candidate_unit_count": 0,
+    "parent_observation": "NO_PRODUCT_SYSTEMD_PARENT_OBSERVED",
+    "product_v3_pass_count": 0,
+    "release_gate": "FAIL_CLOSED_NO_ADMITTED_PRODUCT_PARENT"
+  },
+  "mechanism_tests": {
+    "v1": "PASS frank_sqlite_v5_systemd_parent_gate_v1 13/13",
+    "v2": "PASS sqlite_v5_systemd_parent_gate_v2_candidate 5/5",
+    "v3": "PASS sqlite_v5_systemd_parent_gate_v3_candidate 6/6"
+  },
+  "interpretation": "The current next blocker is no longer merely parent-gate logic. The accepted target exposes zero discovered productive Frank systemd parent candidates to the read-only V3 discovery path. The gate correctly fails closed and preserves the negative receipt.",
+  "next_discriminator": "Canonically fix one ProductStart tuple and production release-bundle identity, then provision it through an authorized root path and prove read-only discovery admits exactly that unit while rejecting copied/stale/sibling/downgrade/library-swap/rollback variants across start/restart.",
+  "do_not_infer": [
+    "Do not infer that systemd itself is broken.",
+    "Do not infer that SQLite 3.53.4 production provisioning exists.",
+    "Do not infer Frank service start/restart acceptance.",
+    "Do not close F-V01-13 or whole Frank v0.1 acceptance."
+  ],
+  "additional_unusual_experiment_count": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

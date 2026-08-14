@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "fusion-20260811T2227p0700-chatgpt-secondary-consume-bound-provenance",
+  "hypotheses": [
+    {
+      "id": "H-FUSION-CBPC-001",
+      "hypothesis": "A typed consume-bound provenance contract can eliminate a class of cross-branch stale/substituted/replayed identity failures more cleanly than independent ad-hoc guards.",
+      "support": ["V4 pre-import storage admission", "artifact-bound capability trial generation", "Needle hard-field preservation", "reward exactly-once blocker", "heldout audit-receipt binding", "GWT causal splice negative result"],
+      "strongest_counterhypothesis": "The apparent commonality is superficial; forcing one abstraction across boot, capabilities, rewards and datasets may create complexity without reducing branch-specific failure probability.",
+      "falsifier": "Implement only the minimal shared typed fields/verification semantics in a test harness and compare against independent branch-local guards on stale/substitution/replay fault matrices, latency and implementation complexity.",
+      "status": "SUPPORTED_AS_CROSS_BRANCH_TEST_CANDIDATE_NOT_PROMOTED"
+    },
+    {
+      "id": "H-FUSION-CBPC-002",
+      "hypothesis": "Frank v0.1 product boot should be treated as the first consume-bound provenance boundary: exact executable, source/package root, Python flags/import graph and private SQLite identity must be attested before real token-API/runtime imports become admissible.",
+      "strongest_counterhypothesis": "The final packaged binary may not use repository-local Python imports, making source-root machinery unnecessary and potentially harmful.",
+      "falsifier": "Resolve the canonical real product entrypoint and run its exact dependency graph under V4; add no project root unless the graph proves it necessary.",
+      "status": "SUPPORTED_TEST_OBLIGATION"
+    },
+    {
+      "id": "H-FUSION-CBPC-003",
+      "hypothesis": "Exactly-once learning should be implemented as deterministic consumption of a unique producer-bound terminal-receipt identity, preferably without a second mutable persistence architecture.",
+      "strongest_counterhypothesis": "A mutable RewardConsumption ledger is simpler and safer under crash/retry than recomputing a canonical unique-set fold.",
+      "falsifier": "Crash-after-plasticity-before-ack, retry, rollback-resurrection and duplicate-delivery differential between unique-set fold and ledger under current UnifiedDB recovery semantics.",
+      "status": "OPEN_HIGH_INFORMATION"
+    },
+    {
+      "id": "H-FUSION-CBPC-004",
+      "hypothesis": "GWT causal identity must be producer/storage-bound before re-entry and learning; caller-carried episode/signal/causal IDs are insufficient.",
+      "strongest_counterhypothesis": "Additional storage enforcement duplicates V17 provenance and adds latency without incremental protection.",
+      "falsifier": "Compose the #280-style successor with exact episode/signal/causal splice controls; truthful reaches DONE while every splice fails before REENTERED.",
+      "status": "SUPPORTED_BY_TARGET_NEGATIVE_RESULT; SUCCESSOR_NOT_YET_PROVEN"
+    },
+    {
+      "id": "H-FUSION-CBPC-005",
+      "hypothesis": "Heldout integrity requires two separate authorities: deterministic manifest lineage and independently verified semantic-contamination audit; a hash binding to an unverified audit is not enough.",
+      "strongest_counterhypothesis": "Protected dynamic/OOD evaluation may provide more value than building a heavy semantic-audit authority layer for v0.1.",
+      "falsifier": "Compare static manifest+audit, protected dynamic/OOD, and combined protocols on seeded semantic leakage families and operational cost.",
+      "status": "SUPPORTED_AS_EVAL_DESIGN_CANDIDATE"
+    }
+  ]
+}

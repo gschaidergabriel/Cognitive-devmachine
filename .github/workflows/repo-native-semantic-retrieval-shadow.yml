@@ -1,0 +1,44 @@
+name: Repo Native Semantic Retrieval Shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/benchmark_repo_native_semantic_retrieval_v12.py'
+      - '.github/workflows/repo-native-semantic-retrieval-shadow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repository-native-falsifier:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Runtime metadata
+        run: |
+          set -euo pipefail
+          uname -a
+          python3 --version
+          python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('machine=', platform.machine())
+          print('sqlite=', sqlite3.sqlite_version)
+          PY
+      - name: Compile
+        run: python3 -m py_compile research_entity/runtime/benchmark_repo_native_semantic_retrieval_v12.py
+      - name: Run repository-native retrieval falsifier
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 research_entity/runtime/benchmark_repo_native_semantic_retrieval_v12.py --output artifacts/repo_native_retrieval.json
+          cat artifacts/repo_native_retrieval.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: repo-native-semantic-retrieval-${{ github.sha }}
+          path: artifacts/repo_native_retrieval.json
+          if-no-files-found: error

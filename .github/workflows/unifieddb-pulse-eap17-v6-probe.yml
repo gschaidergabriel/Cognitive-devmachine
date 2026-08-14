@@ -1,0 +1,108 @@
+name: UnifiedDB Pulse EAP17 V6 probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'chatgpt/unifieddb-pulse-query-aware-v6-20260810'
+    paths:
+      - 'research_entity/runtime/eap_query_aware_gate_v17.py'
+      - 'research_entity/runtime/test_eap_query_aware_gate_v17.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6.py'
+      - 'tools/eap_query_aware_gate_v17_benchmark.py'
+      - 'tools/run_unifieddb_pulse_eap17_v6_probe.sh'
+      - '.github/workflows/unifieddb-pulse-eap17-v6-probe.yml'
+  pull_request:
+    paths:
+      - 'research_entity/runtime/eap_query_aware_gate_v17.py'
+      - 'research_entity/runtime/test_eap_query_aware_gate_v17.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6.py'
+      - 'tools/eap_query_aware_gate_v17_benchmark.py'
+      - 'tools/run_unifieddb_pulse_eap17_v6_probe.sh'
+      - '.github/workflows/unifieddb-pulse-eap17-v6-probe.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-pulse-eap17-v6-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hosted-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: EAP17 V6 full probe
+        run: bash tools/run_unifieddb_pulse_eap17_v6_probe.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-pulse-eap17-v6-hosted
+          path: research_entity/benchmarks/database_pulse/eap_query_aware_gate_v17_*.json
+          if-no-files-found: error
+
+  hostinger-probe:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+      - name: EAP17 V6 full probe
+        run: bash tools/run_unifieddb_pulse_eap17_v6_probe.sh
+      - name: Persist exact branch receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=$(find research_entity/benchmarks/database_pulse -maxdepth 1 -name 'eap_query_aware_gate_v17_*.json' -print -quit)
+          test -n "$OUT"
+          python3 - "$OUT" <<'PY'
+          import json, os, pathlib, platform, sqlite3, sys, time
+          benchmark=json.load(open(sys.argv[1]))
+          receipt={
+              'schema':'clay.unifieddb_eap17_pulse_v6_hostinger.v1',
+              'timestamp_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
+              'repository':os.environ['GITHUB_REPOSITORY'],
+              'exact_commit':os.environ['GITHUB_SHA'],
+              'run_id':os.environ['GITHUB_RUN_ID'],
+              'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+              'environment':{
+                  'hostname':platform.node(),
+                  'platform':platform.platform(),
+                  'python':platform.python_version(),
+                  'sqlite':sqlite3.sqlite_version,
+              },
+              'tests':'PASS_BECAUSE_PREVIOUS_STEP_EXITED_ZERO',
+              'benchmark':benchmark,
+              'truth_class':'VERIFIED_REMOTE_EXECUTION_EXACT_BRANCH_BOUNDED_MECHANISM_SCOPE_ONLY',
+              'promotion':'CANDIDATE_ONLY',
+              'release_boundary':'Hostinger Ubuntu preliminary evidence only; not Andreas target acceptance.',
+          }
+          p=pathlib.Path('research_entity/unifieddb/receipts/EAP17_PULSE_V6_HOSTINGER_LATEST.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-eap17-v6-hostinger'
+          git config user.email 'clay-eap17-v6-hostinger@users.noreply.github.com'
+          git add research_entity/unifieddb/receipts/EAP17_PULSE_V6_HOSTINGER_LATEST.json
+          git commit -m "evidence(unifieddb): record EAP17 Pulse V6 Hostinger probe [skip ci]" || exit 0
+          for n in 1 2 3 4 5; do
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && exit 0
+            git rebase --abort || true
+            sleep $((n*2))
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-pulse-eap17-v6-hostinger
+          path: research_entity/benchmarks/database_pulse/eap_query_aware_gate_v17_*.json
+          if-no-files-found: error

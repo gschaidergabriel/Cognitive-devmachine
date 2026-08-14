@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2350p0700-chatgpt-secondary-effect-fence-adversarial",
+  "kind": "SWARM_REFRESH_AND_REPRIORITIZATION",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "fresh_evidence": {
+    "pr_217": {
+      "head_observed": "9d94809a34493f84b415805e4df39f1ef7f6ba34",
+      "target_run_31410890028": {
+        "classification": "PARTIAL_TARGET_EVIDENCE",
+        "gate_issued_invariant": "PASS",
+        "physical_gate_baseline": "PASS",
+        "parent_matrix": "FAIL_AT_MULTI_EFFECT_CARDINALITY",
+        "failure_signature": "second/third effect rejected because generation binding_hash was globally UNIQUE; later parent matrix reached KeyError('fx-a-retry')"
+      },
+      "current_stack_delta": [
+        "exact Gate-issued FrankExecutionLease object registry and rejection of copied/constructed same-field objects",
+        "remove incorrect global uniqueness from generation binding hash",
+        "normal regression proving multiple effect_ids may share one execution-generation identity"
+      ],
+      "promotion": "NOT_YET"
+    },
+    "independent_cardinality_stack": {
+      "pr": 224,
+      "head": "e9281b14b4542203fc72f04ad98ee489da0eebe0",
+      "disposition": "CLOSED_SUPERSEDED_DUPLICATE",
+      "reason": "After creation, swarm refresh showed PR217 had already independently reproduced the same bug on the target runner and integrated the same repair with stronger Gate-issued semantics. Duplicate product work was terminated per coordination law."
+    }
+  },
+  "remaining_high_value_blocker": {
+    "name": "FORK_SUBPROCESS_CAPABILITY_LINEAGE",
+    "evidence_source": "FORKED_CAPABILITY_GHOST from this same go invocation",
+    "applies_to_pr_217": true,
+    "mechanism": "PR217's _ISSUED_EXECUTION_LEASES WeakSet and effect-fence _LIVE_SECRETS WeakKeyDictionary are both process-memory registries. Linux fork copies that memory and inherits file descriptors/open-file descriptions. Parent-side unregister/close after fork cannot mutate the child's copied registries.",
+    "scope": "Capability-lineage/liveness counterevidence, not proof of external provider bypass; V15/V16 database checks remain additional authority.",
+    "required_architecture_decision": [
+      "If fork descendants are not effect executors: clear/reinitialize issuance and secret registries in os.register_at_fork(after_in_child=...), and prevent inherited execution descriptors from creating lingering physical authority/liveness ambiguity.",
+      "If fork descendants are admitted members of one execution generation: encode descendant lineage explicitly and require admission/provenance rather than accidental memory/FD inheritance."
+    ],
+    "required_normal_regression": "Fork child cannot derive/assert a live effect execution fence from inherited parent capability unless explicit child admission policy says otherwise.",
+    "distributed_to_pr_217_comment_id": 5243425843
+  },
+  "reprioritized_candidate": {
+    "status": "FUSION_REQUIRED",
+    "preferred_properties": [
+      "latest #204 exact V16 execution_id + credential + ADMITTED ingress semantics",
+      "#204 B1/B2/B3 immutable caller-presented fence and provider-commit serialization",
+      "#217 exact Gate-issued object provenance",
+      "#217 multi-effect cardinality repair",
+      "fork/subprocess lineage closure from this run",
+      "snapshot/restore incarnation fencing from independent rollback lane before recovery promotion"
+    ],
+    "do_not_promote_until": [
+      "fresh current-head self-hosted target run passes complete normal matrix",
+      "fork lineage discriminator passes under explicit policy",
+      "unbound legacy production effect-start paths are unreachable from ordinary ClayCode lowering/runtime",
+      "real provider unknown-outcome reconciliation and verified outcome re-entry remain preserved"
+    ]
+  },
+  "coordination_decision": "Do not create another fork-fix stack on a stale rapidly moving #204/#217 base in this invocation. The information delta is already distributed and persistent; additional parallel patching now has higher collision risk than marginal information value.",
+  "research_write_status": "COMMITTED"
+}

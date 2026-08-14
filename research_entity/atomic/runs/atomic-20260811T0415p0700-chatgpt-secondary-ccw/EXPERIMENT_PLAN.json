@@ -1,0 +1,16 @@
+{
+  "candidate":"CCW-001",
+  "architectures":[
+    {"id":"CURRENT_V17_NEGATIVE","role":"real accepted-target negative evidence already executed","note":"Do not replace target evidence with local proxy."},
+    {"id":"CONVENTIONAL_RECEIPT","role":"strongest baseline","mechanism":"same canonical closure predicate as CCW + persisted immutable DONE receipt guarded by trigger + REENTERED/DONE allowed in one transaction"},
+    {"id":"CCW_VIEW","role":"candidate","mechanism":"same canonical support rows + read-only causal closure view; no DONE receipt table"}
+  ],
+  "local_mutation_corpus":["valid","fabricated episode","wrong execution","wrong causal chain","wrong credit chain","execution invalid","execution not admitted","GWT unused","GWT invalid","causal use false","credit invalid","delta invalid","outcome unverified","not REENTERED"],
+  "fault_control":"Inject fault after REENTERED/reentry writes but before DONE insert while conventional baseline uses one explicit transaction; rollback must remove partial terminal state.",
+  "invalidation_control":"After valid conventional receipt exists, invalidate one support fact. Compare receipt existence with freshly derived closure.",
+  "writability_control":"Attempt direct INSERT into CCW SQLite view; it must fail unless an INSTEAD OF trigger is deliberately added.",
+  "scaling":[1000,5000,20000],
+  "replicated_matched_benchmark":{"N":10000,"repetitions":6,"query_samples_per_rep":3000,"architecture_order":"alternated","query_ids":"deterministic random per repetition"},
+  "metrics":["mutation acceptance/rejection","atomic rollback result","support invalidation behavior","database bytes/page count","population time","point terminal-read median/p95/p99","full closure scan proxy"],
+  "limits":["local synthetic SQLite model only","no compiled ClayCode","no accepted-target CCW execution","no real provider effect","timings are environment-specific microbenchmarks","schema is a discriminator, not current product migration"]
+}

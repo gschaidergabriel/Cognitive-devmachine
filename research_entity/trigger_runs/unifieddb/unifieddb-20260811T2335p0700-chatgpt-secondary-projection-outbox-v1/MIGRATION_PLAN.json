@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "mode": "CANDIDATE_SHADOW_BEFORE_SCHEMA_PROMOTION",
+  "stages": [
+    {
+      "stage": 0,
+      "name": "DISPOSABLE_CURRENT_SCHEMA",
+      "rule": "candidate SQL is installed only on disposable current-schema materializations; canonical migration lists unchanged"
+    },
+    {
+      "stage": 1,
+      "name": "THREE_CRASH_WINDOWS",
+      "tests": [
+        "after UnifiedDB commit before graph",
+        "inside ClayGraph transaction",
+        "after ClayGraph commit before advisory UnifiedDB ACK"
+      ]
+    },
+    {
+      "stage": 2,
+      "name": "INTEGRITY_AND_SELECTION",
+      "tests": ["projection lag fail-closed", "derived event-hash tamper fail-closed", "exact relation query equivalence"]
+    },
+    {
+      "stage": 3,
+      "name": "FULL_DERIVED_REBUILD",
+      "test": "delete derived graph state and reproduce exact event root + current relation set from retained authoritative history"
+    },
+    {
+      "stage": 4,
+      "name": "SCHEMA_PROMOTION_CANDIDATE",
+      "condition": "target gates pass and production projector/backpressure contract exists",
+      "action": "only then consider adding candidate SQL to apply_current_schema migration lists"
+    },
+    {
+      "stage": 5,
+      "name": "CANONICAL_MIGRATION",
+      "condition": "owner-authorized maintenance/recovery gate with last-known-good and selected lineage proof"
+    }
+  ],
+  "rollback": {
+    "before_stage_4": "delete/close candidate branch; current production schema unchanged",
+    "after_schema_promotion": "explicit migration rollback or rebuild ClayGraph; UnifiedDB authoritative event history remains source",
+    "canonical": "restore only an admitted provenance-bound last-known-good under independent recovery rules"
+  },
+  "non_claims": ["no canonical migration", "no power-loss proof", "no production scheduling proof", "no whole Frank acceptance"]
+}

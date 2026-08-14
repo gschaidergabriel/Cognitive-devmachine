@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "amends_receipt_id": "CLAY-GO-20260811T0436P0700-V17-CAUSAL-SUPPORT-FUSION",
+  "amendment_id": "CLAY-GO-20260811-V17-EXACT-OUTCOME-SUPPORT-V3",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "status": "BUILD_FUSED_TARGET_GATE_QUEUED",
+  "new_discriminating_finding": {
+    "class": "DIRECT_CAUSAL_CLOSURE_GAP_FROM_DIFF_AUDIT",
+    "basis": [
+      "Canonical V14 record_outcome stores outcome_hash = hash(actual verified effect evidence).",
+      "Historical V17.2 explicitly bound outcome evidence/provider evidence into prediction-outcome causal support.",
+      "Same-effect + same-cycle prediction/causal rows alone do not prove that causal credit explains the exact verified V14 effect outcome."
+    ],
+    "claim": "A V17 terminal support chain must bind causal credit to the exact effect_id + attempt_id + verified V14 outcome_hash, not merely to another verified prediction outcome concerning the same effect."
+  },
+  "candidate_v3": {
+    "pull_request": 280,
+    "head_sha": "c3b04b375fcfddd6a1d8eeb60b2b316d3b6756e2",
+    "support_marker": "V17_EXECUTION_CANONICAL_SUPPORT_V3",
+    "additive_table": "effect_causal_outcome_support_v17",
+    "semantics": [
+      "Immutable pre-terminal support receipt binds effect_id, attempt_id, verified_outcome_hash, prediction_outcome_id and causal_id.",
+      "Prediction-outcome evidence must carry exact effect_id, attempt_id and effect_outcome_hash.",
+      "Runtime and storage guard require that immutable receipt in the same GWT/prediction/causal chain.",
+      "Mutation of prediction-outcome evidence away from the V14 outcome hash invalidates re-entry/DONE/recovery support.",
+      "CORRELATED_ONLY remains rejected at causal-support and semantic-delta-admission boundaries.",
+      "Explicit no-learning waives semantic delta only."
+    ]
+  },
+  "normal_regressions": {
+    "new": "wrong_effect_outcome_hash_rejected",
+    "retained": [
+      "fabricated/unbound execution support rejected",
+      "receiver closure skip rejected",
+      "CORRELATED_ONLY rejected",
+      "cross-subject prediction rejected",
+      "independent semantic delta required for learning",
+      "valid explicit-no-learning still consumes exact execution/outcome/GWT/causal support"
+    ]
+  },
+  "go_out_of_box_experiment": {
+    "count_for_this_worker_macrocycle": 1,
+    "name": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "changed_design": "Both source chains now also carry valid immutable exact-V14-outcome support receipts before cross-cycle splicing.",
+    "target_result": "PENDING"
+  },
+  "accepted_independent_negative": {
+    "run_id": "31434009109",
+    "result": "CONFIRMED_V17_CORRELATED_ONLY_LEARNING_AUTHORITY_GAP_ON_EARLIER_BASE",
+    "fused_into_v3": true
+  },
+  "current_target_gate": {
+    "workflow": "Frank V17 execution + canonical support binding VPS",
+    "run_id": "31435157223",
+    "job_id": "93607537569",
+    "state": "QUEUED",
+    "promotion_allowed": false
+  },
+  "non_claims": [
+    "No target PASS claimed for V3 while queued.",
+    "No canonical migration promotion.",
+    "No external effect.",
+    "No final training authorization.",
+    "No whole Frank v0.1 acceptance."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2137p0700-chatgpt-secondary-selfroot-core",
+  "timestamp": "2026-08-10T21:40:00+07:00",
+  "event": "OVERLAP_DETECTED_AND_RECLASSIFIED",
+  "newer_shared_state": {
+    "target_pr": 102,
+    "head_sha": "c710f06b7f52f54d47ef92d75ea22297d696deb8",
+    "title": "Frank v0.1: repair self.root identity boundary + adversarial conformance",
+    "changed_files": [
+      ".github/workflows/frank-owner-fixed-identity-conformance.yml",
+      ".github/workflows/frank-owner-fixed-identity-metamorphic.yml",
+      "000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt",
+      "claycode/frank_entity.clay",
+      "claycode/frank_runtime.clay",
+      "claycode/frank_security.clay",
+      "harness/owner_fixed_identity_conformance.py",
+      "harness/owner_fixed_identity_metamorphic.py",
+      "harness/self_root_identity_indirection_experiment.py"
+    ],
+    "assessment": "PR 102 advanced during this GO cycle and now supersedes PR 121 as the broader implementation lane. It explicitly binds self.root, SERVER_BINARY_ENTITY, TARGET_VPS and CLAYCODE_ONLY while preserving Frank as compatibility/human surface and adding a CURRENT owner-fixed source plus stronger discriminators."
+  },
+  "local_lane_action": {
+    "pr": 121,
+    "state": "CLOSED_NOT_MERGED",
+    "classification": "INDEPENDENT_TARGET_VPS_REPLICATION_EVIDENCE",
+    "reason": "Avoid duplicate competing implementation work while preserving independently-derived execution evidence.",
+    "replication_evidence": {
+      "tested_pr_merge_sha": "6060540c3a00e0e8de12640658ada6ed6adc0b4c",
+      "github_actions_run_id": 31398528828,
+      "core": "PASS_25_OF_25",
+      "metamorphic": "PASS_7_OF_7",
+      "runner": "digital-retina self-hosted Linux/X64",
+      "artifact_digest": "sha256:d5c600f318329becaccca6c7a274851c6516cb91273f01f07b2d9d624fb6183c"
+    }
+  },
+  "distribution": {
+    "pr_102_comment_id": 5241797483,
+    "message": "Target-VPS replication evidence and remaining falsifiers were posted to the active implementation PR."
+  },
+  "important_difference": {
+    "pr_102_ci_lane": "ubuntu-latest for owner-fixed identity conformance/metamorphic workflows",
+    "independent_replication_lane": "accepted self-hosted Linux/X64 target-VPS-class runner",
+    "consequence": "PR 121 is not a source candidate but contributes non-identical execution-environment replication evidence."
+  },
+  "current_next_frontier": [
+    "Execute PR 102 exact current head/merge semantics and obtain a target-VPS receipt in addition to ubuntu-latest CI.",
+    "Add/execute boot-restart-stale-clone continuity and token/client/person/Clay separation discriminators against PR 102/current-main merge semantics.",
+    "Allow the separate worker to finish the orthogonal repo_static_integrity executescript repair lane; re-run Deep Integrity afterward.",
+    "Promote F-V01-01 only after the active PR, restart/API separation and broader integrity evidence all converge."
+  ]
+}

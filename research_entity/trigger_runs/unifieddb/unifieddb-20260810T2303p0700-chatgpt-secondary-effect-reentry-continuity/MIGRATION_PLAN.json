@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity",
+  "current_canonical":"V14 effect lifecycle + V15 presence + V16 execution continuity",
+  "candidate":"V17 provenance-bound effect completion",
+  "promotion_state":"HOLD",
+  "steps":[
+    {"order":1,"action":"Preserve current negative receipts as baseline falsifiers","gate":"DONE"},
+    {"order":2,"action":"Keep V17 out of apply_current_schema canonical migration list","gate":"DONE","evidence_commit":"6e2e26d373a291047da6d73d5617160c54af04b6"},
+    {"order":3,"action":"Require storage-level exact effect_id+attempt_id+verified outcome binding and exact REENTERED hash before DONE","gate":"BUILT_TARGET_POSITIVE_PENDING"},
+    {"order":4,"action":"Require exact current V15/V16 lease/execution-generation binding and stale-writer fencing","gate":"TESTING"},
+    {"order":5,"action":"Require relationally closed GWT receiver use -> verified same-outcome causal credit -> admitted delta/no-learning -> support snapshot chain","gate":"TESTING_CROSS_SPLICE_DISCRIMINATOR"},
+    {"order":6,"action":"Run target-VPS positive/negative differential, restart, hard-crash cutpoints, rollback, concurrency and replay tests","gate":"OPEN"},
+    {"order":7,"action":"Measure p50/p95/p99, write/read amplification, RSS/storage, lock contention and recovery time against V14/V16 baseline","gate":"OPEN"},
+    {"order":8,"action":"Only if correctness and recovery gates pass, add V17 to canonical migration chain in one reviewed change","gate":"BLOCKED_ON_PRIOR_GATES"},
+    {"order":9,"action":"Rerun exact-current end-to-end effect authority and UnifiedDB acceptance after canonical integration","gate":"BLOCKED_ON_PRIOR_GATES"}
+  ],
+  "rollback": {
+    "candidate_prototype":"DROP candidate V17 tables/triggers/meta/view objects as defined by the candidate rollback; V14/V15/V16 state remains intact",
+    "canonical_integration_if_later_promoted":"Take verified checkpoint/backup before migration, run integrity+foreign_key_check, retain previous source/schema/artifact hashes, fail closed and restore last-known-good on mismatch",
+    "provider_effects":"Never replay uncertain external effects merely because database rollback occurred; reconcile provider outcome first"
+  },
+  "sqlite_design_basis":"Prefer additive candidate objects before parent-table rebuild because SQLite ALTER capabilities are deliberately limited and parent/FK changes can increase migration blast radius; this is an engineering choice, not a universal database rule.",
+  "keep_isolated":["external provider truth/state","ClayGraph derived topology","vector/activation/ranking indexes until measured consolidation benefit exists"],
+  "no_destructive_migration_executed":true
+}

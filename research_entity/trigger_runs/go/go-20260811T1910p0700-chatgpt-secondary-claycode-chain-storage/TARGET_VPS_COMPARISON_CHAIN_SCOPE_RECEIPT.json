@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "receipt_id": "TARGET-VPS-CLAYCODE-COMPARISON-CHAIN-SCOPE-20260811T122854Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "classification": "TARGET_SELF_HOSTED_UBUNTU_NEGATIVE_SCOPE_PROBE_PASS",
+  "subject": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 316,
+    "base_pr": 310,
+    "tested_head_sha": "3a4e3d98f160b37810faf2e23538d030a6bd1f3f",
+    "workflow": "ClayCode Comparison Chain Scope VPS",
+    "workflow_run_id": 31491407144,
+    "workflow_run_number": 4,
+    "job_id": 93778546743,
+    "workflow_conclusion": "success"
+  },
+  "runner": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "machine_name": "digital-retina",
+    "runs_on_contract": ["self-hosted", "Linux", "X64"],
+    "github_token_permissions": ["contents:read", "metadata:read"],
+    "persisted_checkout_credentials": "ABSENT",
+    "provider_attestation_boundary": "The project canonical lane identifies the self-hosted Ubuntu lane as Hostinger; this workflow log itself attests runner/machine identity but does not independently attest hosting provider or full OS build metadata."
+  },
+  "exact_bytes": {
+    "probe_sha256": "5b8e43446bc7cb12d878571f10713b225bcdd9549649061fec0d7af87e7b6da7",
+    "evaluator_sha256": "814bdfe932b4c0e07793fc41fd035812bede0036618f3b674cfe0104d6ca336c",
+    "syntax_sha256": "cf8c4873aedcbc729dd265c6ec8a05a5a6e7e30b4dd1da606aea8482fce75e7c",
+    "grammar_sha256": "17c6463cf754101f25b330bafff9a1d054216193c43f7e72efb08769e3d6b80d",
+    "parsed_source_sha256": "21133e981c55da9d54b59229825bb0d3cc09c5a3e13da2ea8db15a807d3554ed",
+    "lark_version": "1.3.1"
+  },
+  "probe": {
+    "name": "CLAYCODE_COMPARISON_CHAIN_SEMANTIC_SCOPE_V1",
+    "evidence_class": "NEGATIVE_SCOPE_PROBE",
+    "status": "PASS",
+    "failed_checks": [],
+    "checks": {
+      "discriminator_really_separates_reference_semantics": true,
+      "current_evaluator_matches_boolean_left_fold": true,
+      "current_evaluator_differs_from_adjacent_pair": true,
+      "bool_numeric_ordering_is_currently_accepted": true
+    },
+    "discriminator": "5 < 10 < 8",
+    "observed": {
+      "current_evaluator": true,
+      "adjacent_pair_reference": false,
+      "boolean_left_fold_reference": true,
+      "bool_ordering_accepted": true,
+      "bool_order_expression": "true < false",
+      "bool_order_result": false,
+      "bool_order_error": null
+    },
+    "meaning_of_pass": "The current executable runtime silently selects Boolean-left-fold behavior for a multi-relation comparison and admits Bool as numeric ordering input. This reproduces the semantic conflict on the self-hosted target lane; it does not choose the correct ClayCode semantics and does not by itself confirm an evaluator bug."
+  },
+  "resource_shadow": {
+    "user_time_seconds": 0.15,
+    "system_time_seconds": 0.16,
+    "cpu_percent": 99,
+    "elapsed_wall_seconds": 0.31,
+    "max_rss_kib": 24576,
+    "major_page_faults": 0,
+    "minor_page_faults": 3844,
+    "voluntary_context_switches": 1,
+    "involuntary_context_switches": 2,
+    "swaps": 0,
+    "filesystem_inputs": 0,
+    "filesystem_outputs": 136,
+    "exit_status": 0
+  },
+  "failed_predecessor_run": {
+    "workflow_run_id": 31491147935,
+    "job_id": 93777707417,
+    "conclusion": "failure",
+    "semantic_probe_executed": false,
+    "failure_stage": "actions/checkout before repository checkout",
+    "observed_error": "fatal: --local can only be used inside a git repository",
+    "repair": "Removed actions/checkout dependency for this probe; exact PR head is now fetched into an isolated /tmp git repository with a read-only GITHUB_TOKEN and credential scrub.",
+    "repair_commit": "3a4e3d98f160b37810faf2e23538d030a6bd1f3f"
+  },
+  "parallel_gate_boundary": {
+    "frank_deep_integrity_run_on_same_head": 31491407186,
+    "observed_conclusion": "failure",
+    "cause": "NOT_ADJUDICATED_IN_THIS_RECEIPT",
+    "rule": "Do not transfer this probe's PASS to Deep Integrity and do not transfer Deep Integrity's failure to this semantic probe without exact evidence."
+  },
+  "architecture_consequence": {
+    "promotion_status": "BLOCKED_PENDING_SEMANTIC_AUTHORITY",
+    "required_next_actions": [
+      "Recover or owner-fix explicit comparison-chain semantics: adjacent-pair conjunction, Boolean left-fold, or forbidden.",
+      "Decide Bool-vs-numeric ordering boundary explicitly; if nominally distinct, reject Bool in numeric ordering.",
+      "Replace diagnostic PR #316 with a normative differential regression after semantics are fixed.",
+      "Keep parser coverage and executable semantic coverage as separate progress dimensions."
+    ]
+  },
+  "claim_boundary": {
+    "comparison_chain_semantics_selected": false,
+    "evaluator_bug_confirmed": false,
+    "whole_frank_v0_1_acceptance": false,
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "training_authorized": false
+  }
+}

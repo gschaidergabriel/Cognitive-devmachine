@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1152p0700-gpt56sol-sqlite-pycache-counterhypothesis",
+  "organ": "ChatGPT / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_refreshed_before_write": "3f8b8b8130d3019c727aea0c3b972d77a5dc4b99",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "merged_import_chain_repair": {
+      "pr": 504,
+      "main_commit": "edd253b8c00bcd408759ec6dff10f19c8ec64dec",
+      "exact_self_hosted_run": 31564201644,
+      "status": "MERGED_MECHANISM_PASS_ONLY"
+    },
+    "newer_parallel_main": {
+      "commit": "e2dc384077c104791ccde5de082ec26d319163d7",
+      "change": "SQLite V6 loader-directory trust gate (#506)",
+      "overlap_with_v5_pycache_launcher_delta": "NO_DIRECT_FILE_OVERLAP_OBSERVED_IN_MERGE_COMMIT; FRESH_COMPOSITION_STILL_REQUIRED"
+    },
+    "pycache_candidate": {
+      "pr": 508,
+      "branch": "chatgpt/sqlite-v5-pycache-trust-20260812",
+      "head": "12d5f4719cf368bbb27175c4c569908b4f32897f",
+      "dedicated_run": 31564585360,
+      "run_status_at_receipt": "QUEUED",
+      "draft": true
+    }
+  },
+  "r0_observed": [
+    "Merged PR #504 pre-attests the known Python source chain V5->V4->V3->V2->V1 before first Python exec.",
+    "The launcher executes /usr/bin/python3 -I -S and does not configure a pycache prefix.",
+    "CPython 3.12 SourceLoader.get_code computes cache_from_source(source_path), reads bytecode_path when available, validates the pyc, and can return _compile_bytecode(...) before source bytes are read/compiled.",
+    "Python documentation states the default compiled cache path is the source-tree __pycache__ path unless an alternate pycache prefix is configured.",
+    "The merged V5 launcher source-chain check does not explicitly attest or exclude a pre-existing __pycache__ tree.",
+    "F-V01-13 remains IN_PROGRESS and productive Hostinger service/root-anchor/runtime/restart/recovery evidence remains open."
+  ],
+  "primary_external_evidence": [
+    {
+      "source": "https://github.com/python/cpython/blob/v3.12.13/Lib/importlib/_bootstrap_external.py",
+      "claim": "SourceLoader.get_code attempts bytecode-cache read/validation and can execute compiled cached code before source compilation."
+    },
+    {
+      "source": "https://docs.python.org/3.12/library/importlib.html",
+      "claim": "Source loaders may support bytecode caches and cache_from_source maps source files to compiled cache paths."
+    },
+    {
+      "source": "https://docs.python.org/3.12/library/sys.html#sys.pycache_prefix",
+      "claim": "Without an alternate prefix Python reads cache files from source-tree __pycache__; a pycache prefix changes both read and write location."
+    }
+  ],
+  "r1_hypothesis": {
+    "hypothesis": "Pre-attesting only the .py source chain is not sufficient to establish all Python admission-code bytes when a valid pre-existing local .pyc cache is present.",
+    "causal_mechanism": "SourceLoader may return validated cached bytecode before reading/compiling the root-attested .py source; therefore executable bytes can originate from __pycache__ rather than the attested source inode.",
+    "predicted_if_right": "A valid local cache can be selected as the code object for an imported guard even though the matching .py file passed ownership/link-shape checks.",
+    "predicted_if_wrong": "SourceLoader always compiles the checked source under the current launcher and never reads local bytecode caches.",
+    "confidence": "HIGH_FOR_GENERIC_CPYTHON_3_12_LOADER_SEMANTICS; PRODUCTION_REACHABILITY_DEPENDS_ON_DEPLOYMENT_CACHE_STATE"
+  },
+  "r3_counter_reality": {
+    "strongest_counterhypothesis": "The productive release bundle is guaranteed source-only and contains no __pycache__, so the cache path is unreachable and explicit rejection is redundant defense-in-depth.",
+    "status": "OPEN_PRODUCT_DEPLOYMENT_PROPERTY_NOT_YET_PROVEN_BY_CURRENT_V5_LAUNCHER_GATE",
+    "falsifier": "Accepted productive release-bundle attestation proves no local cache can exist across deploy/start/restart/rollback, or an equivalent machine-checked cache-artifact identity gate is present."
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "id": "V5_WRITABLE_IMPORTED_PREDECESSOR",
+    "status": "ALREADY_COMPLETED_EARLIER_IN_THIS_MACROCYCLE_AND_MERGED_VIA_PR504",
+    "new_pycache_experiment_run": false,
+    "reason": "Exact-go law allows exactly one bounded unusual experiment; pycache finding is derived from primary CPython implementation evidence and is not experimentally escalated in this invocation."
+  },
+  "intervention_candidate": {
+    "policy": "SOURCE_ONLY_REJECT_LOCAL_PYCACHE_BEFORE_PYTHON",
+    "launcher_denial": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:PYTHON_CHAIN_CACHE_PRESENT",
+    "test": "tests/frank_sqlite_v5_pycache_source_only_gate.py",
+    "workflow": ".github/workflows/frank-sqlite-v5-pycache-source-only.yml",
+    "status": "TESTING_DRAFT_PR508",
+    "rollback": "Drop PR #508 / reset candidate branch; merged main remains unchanged.",
+    "canonical_frank_state_mutated": false,
+    "production_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE"
+  },
+  "collapse": {
+    "reality": "PR #504 source-file chain attestation necessarily binds all executable Python admission bytes",
+    "outcome": "REJECT_AS_GENERAL_CPYTHON_CLAIM",
+    "replacement": "Either make the boundary explicitly source-only with local cache exclusion or explicitly bind every allowed cache artifact to trusted release identity.",
+    "replacement_outcome": "RETAIN_TESTING_SOURCE_ONLY_VARIANT",
+    "not_promoted": [
+      "PR #508 PASS",
+      "F-V01-13 PASS",
+      "productive fixed SQLite admission",
+      "productive restart/recovery continuity",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "next_discriminating_steps": [
+    "adjudicate dedicated exact-head self-hosted run 31564585360",
+    "refresh main and revalidate candidate against any newer V6/ProductStart composition before merge",
+    "if source-only policy is accepted, prove clean-cache behavior on the exact productive launch/restart/rollback path without adding another unusual experiment to this macrocycle",
+    "continue higher-level ProductStart/release-bundle/root-anchor/mapped-SQLite and semantic-lineage acceptance"
+  ],
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "PYCACHE_TRUST_COUNTERHYPOTHESIS_SUPPORTED_BY_PRIMARY_CPYTHON_SOURCE; SOURCE_ONLY_REPAIR_TESTING; F-V01-13_REMAINS_IN_PROGRESS"
+}

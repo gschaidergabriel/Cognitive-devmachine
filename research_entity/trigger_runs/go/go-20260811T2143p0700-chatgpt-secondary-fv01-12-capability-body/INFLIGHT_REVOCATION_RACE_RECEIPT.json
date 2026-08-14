@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260811T2143p0700-chatgpt-secondary-fv01-12-capability-body",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+  "candidate_pr": 335,
+  "candidate_head": "ef28fa5892615be0a0001778bd357d2e2c0ef166",
+  "finding_class": "NORMAL_CONCURRENCY_FALSIFIER_NOT_GO_OOB",
+  "hypothesis": "Revocation must linearize against already-running local tool probes so a completion bound to an older trial_generation can remain raw evidence but cannot overwrite REVOKED or a newer generation's current capability.",
+  "pre_fix_code_path": {
+    "status": "STATICALLY_FALSIFIED",
+    "reason": "probe_local_tool captured presence/trial_generation before subprocess execution; _record_verified_probe_result later inserted the old-generation trial and unconditionally replaced capability_beliefs using that same old generation without rechecking the current generation under a write transaction",
+    "two_late_successes_possible_effect": "old generation could reconstruct CAN_DELEGATE after revocation",
+    "remote_exploit_claimed": false
+  },
+  "repair": {
+    "runtime": "runtime/capabilities/frank_capability_body_v1_candidate.py",
+    "commit": "fcd9f250242ff0cbb1668c7ada66b3dbc1309702",
+    "mechanism": "BEGIN IMMEDIATE -> read current generation -> always preserve completed probe as raw capability_trial -> update current capability only if generation still matches and current state is not REVOKED -> otherwise commit raw trial with UNKNOWN stale-completion receipt",
+    "semantic_contract_commit": "49eb90331635dc63d159d46ea95fa154397c72d4"
+  },
+  "regression_gate": {
+    "path": "tests/frank_capability_inflight_revocation_race_v1_gate.py",
+    "commit": "6722e1d2d0ddeedbc041c8bf2039da08dcd9861e",
+    "scenario": "two separate DB connections start two real slow local-tool subprocess probes; both prove execution start; third connection revokes while both are in flight; both old-generation completions must be raw-only and current capability must remain UNKNOWN; only two new-generation probes may restore CAN_DELEGATE",
+    "go_oob_experiment_added": false
+  },
+  "target_workflow": {
+    "workflow": "Frank F-V01-12 capability/body candidate VPS",
+    "run": 31505391398,
+    "head": "ef28fa5892615be0a0001778bd357d2e2c0ef166",
+    "status_at_receipt": "QUEUED",
+    "promotion_before_target_result": false
+  },
+  "adjudication": "PATCHED_TARGET_PENDING",
+  "frank_self_harness_authority_changed": false,
+  "training_authorization_changed": false
+}

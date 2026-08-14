@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2222p0700-gpt56sol-fv0113-sqlite-symbol-provider",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "9b861b37c672df41e997aebb2b55c33c2dbe4e24",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "current_live_attestor_blob": "3a317aa256f17ef316580947e9a44e43aca6fe1a",
+    "current_v6_launcher_blob": "d40ba9697cef9b4d0e05cd511684d9528e3dafe6",
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "training_authorized": false
+  },
+  "primary_source_refresh": {
+    "sqlite_latest_release": "3.53.4",
+    "sqlite_latest_release_date": "2026-07-24",
+    "sqlite_35304_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "wal_reset_bug_affected_through": "3.51.2",
+    "wal_reset_bug_fixed_from": "3.51.3",
+    "upstream_wal_doc": "https://sqlite.org/wal.html",
+    "upstream_35304_release": "https://sqlite.org/releaselog/3_53_4.html"
+  },
+  "grf": {
+    "hypothesis": "If one live process maps exactly the release-accepted libsqlite3 object and the object hash/path/device/inode are stable, the process's SQLite semantic calls necessarily use symbols from that admitted object.",
+    "strongest_counter_reality": "The accepted libsqlite3 object remains mapped while a differently named earlier-loaded DSO interposes SQLite symbols, so mapping identity is correct but semantic SQLite calls resolve elsewhere.",
+    "falsifier": "Keep the normal libsqlite3 dependency mapped, then preload a differently named DSO exporting sqlite3_libversion/sqlite3_sourceid and directly observe the provider with dladdr.",
+    "outcome": "STRONG_MAPPING_EQUALS_SYMBOL_PROVIDER_CLAIM_REFUTED"
+  },
+  "unusual_experiment": {
+    "name": "SQLITE_MAPPED_OBJECT_SYMBOL_PROVIDER_SPLIT",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "sandbox_only": true,
+    "production_effect": false,
+    "canonical_state_mutated": false,
+    "baseline": {
+      "sqlite_libversion": "3.46.1",
+      "provider": "/lib/x86_64-linux-gnu/libsqlite3.so.0",
+      "normal_libsqlite_mapping_present": true
+    },
+    "treatment": {
+      "intervention": "LD_PRELOAD disposable libshadow.so exporting sqlite3_libversion and sqlite3_sourceid while the executable remains linked to and maps normal libsqlite3",
+      "sqlite_libversion": "9.99.0-shadow",
+      "sqlite_sourceid": "SHADOW_SOURCE_ID",
+      "provider": "disposable libshadow.so",
+      "normal_libsqlite_mapping_present": true
+    },
+    "observation": "The legitimate libsqlite3 remained mapped while the observed SQLite symbol provider changed to the differently named preload DSO.",
+    "cleanup": "disposable /tmp experiment tree removed",
+    "production_exploit_claimed": false
+  },
+  "fusion": {
+    "current_attestor_scope": "The merged live-process attestor explicitly proves one observed libsqlite3 mapping identity and does not claim Frank identity, persistence-path exercise, restart/recovery, or effect authority.",
+    "current_launcher_law": "Merged V5/V6 launchers already state that the dynamic loader executes before shell guards; they reject loader-control variables but require an upstream trusted clean-environment boundary before /bin/sh is exec'd.",
+    "prior_related_evidence": "Dr.-Unterweger commit b17f67c4efa3476e39e89527c19499d767aaa1ee already demonstrated pre-guard LD_PRELOAD constructor execution. This run adds the narrower semantic consequence: a correct libsqlite3 mapping can coexist with SQLite symbol interposition from a differently named DSO.",
+    "dedup_decision": "MERGE_WITH_EXISTING_TRUST_BOUNDARY_NOT_NEW_PRODUCT_WRAPPER",
+    "code_delta": "NO_CHANGE",
+    "test_obligation_delta": [
+      "Productive acceptance must not infer active SQLite semantic provider solely from the mapped accepted libsqlite3 object.",
+      "The accepted ProductStart/restart path must establish a trusted pre-loader environment boundary or equivalent non-bypassable launch mechanism that excludes LD_PRELOAD/LD_AUDIT and other loader interposition before the interpreter/Frank process starts.",
+      "Positive productive receipt should compose ProductStart identity + clean loader environment + exact process generation + admitted mapped SQLite 3.53.4 object + exercised Frank persistence/WAL path.",
+      "Restart/rollback/downgrade/library-swap controls must re-establish this composition rather than reuse a stale point-in-time mapping receipt."
+    ]
+  },
+  "collapse": [
+    {
+      "claim": "Correct stable libsqlite3 mapping identity alone proves that SQLite calls resolve to that object.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "The existing V5/V6 trust-boundary law correctly requires a clean upstream loader environment before shell-level admission can be trusted.",
+      "outcome": "RETAIN",
+      "scope": "architecture/code-law corroboration; productive Hostinger enforcement still unverified"
+    },
+    {
+      "claim": "A new synthetic wrapper is the highest-value next step.",
+      "outcome": "REJECT",
+      "reason": "open and merged mechanisms already cover mapping and loader-environment semantics; missing evidence is productive accepted-Hostinger composition/restart"
+    },
+    {
+      "claim": "F-V01-13 or whole Frank v0.1 is complete.",
+      "outcome": "REJECT"
+    }
+  ],
+  "next_falsifier": {
+    "priority": "P0_RELEASE_EVIDENCE",
+    "test": "On the exact accepted Hostinger ProductStart, attest the trusted pre-loader service/environment boundary and exact Frank process generation, verify the loaded SQLite 3.53.4 object/source identity, exercise the actual Frank persistence/WAL path, then clean-restart and run fail-closed loader-injection plus downgrade/library-swap/rollback controls.",
+    "blocked_here": "No direct accepted-Hostinger product service invocation/control surface was available in this session; self-hosted digital-retina evidence must not be promoted to Hostinger production truth."
+  },
+  "nonclaims": {
+    "accepted_hostinger_product_runtime_proven": false,
+    "productive_persistence_path_exercised": false,
+    "restart_recovery_attested": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

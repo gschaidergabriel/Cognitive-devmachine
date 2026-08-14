@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0421p0700-gpt56sol-sqlite-parent-argv-binding",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "d3d5ccee3866fb5eb831e6ac45ca2baab5d33f0b",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "fresh_product_main_observed_before_write": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+  "observed_reality": {
+    "sqlite_fixed_runtime": "Merged product history contains accepted-target validated byte-reproducible SQLite 3.53.4 capability-parity work, but it explicitly does not provision productive /opt or /etc state and does not close F-V01-13.",
+    "launcher_hardening": "Current product main 33bb74de9074042e3c1a186ea3f22d2ea8a572f4 additionally rejects V5 launcher hardlink transplant after exact-head self-hosted regression PASS; earlier symlink transplant rejection remains present.",
+    "parent_gate_v2": "Open draft PR #479 observes ExecStartEx path and flags and rejects every non-empty ExecStartEx flag, but its decision layer does not bind the structured argv[] vector.",
+    "production_boundary": "Prior accepted-target inventory evidence did not establish a separate productive Frank/self.root systemd parent; productive fixed-runtime/root-anchor/service evidence remains open.",
+    "concurrent_counterevidence": "Fresh research main also records that byte-for-byte regular launcher copy remains a separate origin/transplant class after symlink/hardlink checks. This strengthens the need for a canonical ProductStart/release-bundle identity boundary and prevents treating local launcher checks as whole-origin proof."
+  },
+  "primary_external_evidence": [
+    {
+      "source": "SQLite official WAL documentation",
+      "claim": "The WAL-reset corruption race affects versions through 3.51.2 and is fixed in 3.51.3 and later under the documented concurrent WAL writer/checkpoint topology."
+    },
+    {
+      "source": "SQLite official 3.53.4 release history",
+      "claim": "SQLite 3.53.4 is post-fix and publishes source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc, matching the V5 release-accepted identity in the Frank candidate guard."
+    },
+    {
+      "source": "systemd D-Bus/service execution semantics",
+      "claim": "ExecStart exposes the executable path together with the command argument vector; ExecStartEx additionally exposes command flags. Therefore argv is material execution semantics, not incidental display metadata."
+    }
+  ],
+  "grf": {
+    "generated_reality": "A trusted absolute launcher path plus empty ExecStartEx flags is sufficient to identify the productive SQLite parent execution semantics.",
+    "strongest_counter_reality": "The same trusted launcher path and empty flags can carry a different prefix, manifest or post-admission target in argv[], so path-level admission can remain green while the actual product target changes.",
+    "discriminator": "Keep path and flags constant in disposable V2 systemd snapshots while changing only the V5 target argument in both ExecStart and ExecStartEx.",
+    "collapse": "PATH_AND_FLAGS_ONLY_PARENT_IDENTITY_REJECTED_ARGV_SEMANTICS_MUST_BE_BOUND"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "SYSTEMD_V5_ARGV_TARGET_BLINDSPOT",
+    "classification": "BOUNDED_UNUSUAL_DISCRIMINATING_EXPERIMENT",
+    "scope": "Disposable local decision-layer simulation only; no accepted VPS, Frank state, product service, effect authority or Harness mutation.",
+    "baseline": {
+      "launcher": "/opt/frank-v0.1/current/runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v5_launcher.sh",
+      "flags": "",
+      "target": "/opt/frank-v0.1/current/frank.py",
+      "v2_result": "PASS_PARENT_BOUNDARY_V2_CANDIDATE"
+    },
+    "treatment": {
+      "launcher": "/opt/frank-v0.1/current/runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v5_launcher.sh",
+      "flags": "",
+      "target": "/tmp/not-frank-but-fixed-sqlite.py",
+      "v2_result": "PASS_PARENT_BOUNDARY_V2_CANDIDATE"
+    },
+    "outcome": "COUNTERWORLD_SUPPORTED_PRODUCT_PATH_ARGV_IDENTITY_BLINDSPOT",
+    "interpretation": "Not a SQLite/WAL library bypass. It falsifies the stronger claim that parent path plus ExecStartEx flags alone identify the productive post-admission Frank target.",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "ordinary_repair": {
+    "candidate_pr": "gschaidergabriel/Dr.-Unterweger#484",
+    "candidate_head": "b21bcc11ac4abdce95f434b15a4de8218f6d62ec",
+    "stack_base": "gschaidergabriel/Dr.-Unterweger#479",
+    "mechanism": [
+      "require observable argv[] in ExecStart and ExecStartEx",
+      "require both vectors to be equal",
+      "require narrow LAUNCHER --prefix ABS_PREFIX --manifest ABS_MANIFEST ABS_TARGET shape",
+      "forbid trailing target arguments until product semantics explicitly pin them",
+      "require prefix, manifest and target under /opt/frank-v0.1 with parent traversal forbidden",
+      "with live filesystem checks, require target full path chain root-owned, non-group/other-writable and symlink-free"
+    ],
+    "deterministic_regression_spec": "6 cases encoded: valid baseline, /tmp target denial, ExecStart/ExecStartEx argv mismatch, trailing argument denial, argv0 mismatch, /tmp prefix denial.",
+    "accepted_target_workflow_run": 31537195188,
+    "accepted_target_status_at_receipt": "QUEUED_UNKNOWN_NOT_PASS",
+    "promotion": "TESTING_DRAFT_NOT_PROMOTABLE",
+    "fresh_composition_requirement": "Candidate branch predates product-main hardlink merge and concurrent release-bundle-origin evidence. Before promotion it must be recomposed on fresh main/stack ancestry and rerun exactly; no stale-branch PASS may substitute."
+  },
+  "counterevidence_and_limits": [
+    "A root-owned but semantically wrong target inside /opt/frank-v0.1 can still satisfy the candidate root-prefix rule.",
+    "Local launcher symlink/hardlink/argv guards do not establish canonical ProductStart/release-bundle identity.",
+    "The productive Frank systemd parent/service is still not established by this run.",
+    "Queued workflow status is UNKNOWN/BLOCKED, not target PASS.",
+    "Crash/restart/rollback/downgrade/library-swap and provenance-bound semantic-lineage recovery remain separate release obligations."
+  ],
+  "architecture_consequence": {
+    "result": "RETAIN_AND_FUSE",
+    "delta": "Treat product-start identity as a tuple/bundle rather than launcher pathname alone: trusted parent configuration + executable artifact + argv semantics + root anchor + loaded SQLite object + admitted Frank target/state lineage.",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY"
+    ],
+    "next_discriminator": "On a fresh composition over current main, obtain exact accepted Hostinger evidence for the real product unit and bind its full ProductStart/release bundle before writable persistence; then prove expected start PASS and copied/stale/sibling/downgrade/library-swap/rollback alternatives DENY across restart with exact mapped SQLite 3.53.4 and provenance-bound semantic lineage."
+  },
+  "promotion": {
+    "counterworld": "PROMOTED_TO_RESEARCH_EVIDENCE",
+    "repair": "TESTING",
+    "F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "authority": {
+    "canonical_frank_state_mutation": false,
+    "production_effect": false,
+    "harness_authority": "NONE",
+    "training_authorized": false
+  },
+  "claim_boundary": "No production /opt or /etc provisioning, no product service mutation/start/restart, no accepted-target V3 PASS, no F-V01-13 closure, no whole Frank v0.1 acceptance, no effect/Harness authority change, no final-model training authorization.",
+  "outcome": "RETAIN_COUNTEREVIDENCE_AND_DEFER_PROMOTION"
+}

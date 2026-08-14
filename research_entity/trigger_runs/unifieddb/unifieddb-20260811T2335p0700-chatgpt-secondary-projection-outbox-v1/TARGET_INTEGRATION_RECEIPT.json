@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "target_integration": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 386,
+    "tested_head": "b8858f949d4ad855bff5d682994de69bfd10b7c9",
+    "target_workflow_run": 31514757454,
+    "target_job": 93857015099,
+    "target_result": "23/23_PASS_EXACT_76_EVENT_ROOT_16_RELATIONS",
+    "merge_commit": "72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "state": "MERGED_TO_MAIN"
+  },
+  "durable_effect": "target main retains the candidate Clay contract, candidate-only projection schemas, executable idempotent outbox projector, crash/replay/lag/tamper/rebuild gate and self-hosted regression workflow",
+  "production_activation": {
+    "candidate_sql_in_apply_current_schema": false,
+    "canonical_state_migrated": false,
+    "projector_service_deployed": false
+  },
+  "evidence_promoted": [
+    "same-UnifiedDB-transaction semantic mutation + ProjectionEvent candidate on disposable current schema",
+    "three tested process-exit windows recover exact projection",
+    "lag/tamper fail-closed",
+    "full derived projection rebuild exact event root and relation set"
+  ],
+  "component_state": "F-V01-04_REMAINS_OPEN",
+  "remaining_gates": [
+    "production projector scheduling/backpressure/lag telemetry",
+    "production schema migration integration",
+    "selected-lineage LOGICAL_ROLLBACK recovery",
+    "DEPLOYMENT_BOOT non-bypass",
+    "canonical migration + last-known-good owner gate",
+    "OS_CRASH / POWER_LOSS direct evidence if required",
+    "large-corpus projection/retrieval quality + resource evidence",
+    "whole Frank v0.1 composition"
+  ],
+  "canonical_frank_state_mutated": false,
+  "external_frank_effect_performed": false,
+  "training_authorized": false,
+  "frank_self_harness_authority": "PROPOSAL_ONLY",
+  "whole_frank_v0_1_acceptance": false
+}

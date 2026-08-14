@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T012937p0700-chatgpt-secondary-v16-response-replay",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": false,
+    "frank_identity": false
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "observed_clay_head_before_write": "007ec85fa052832f74ccb1a44f7c4c8aafdc18e3"
+  },
+  "program": {
+    "stage": "FRANK_V0_1",
+    "work_package": "F-V01-08-TOKEN-API-CLIENTS",
+    "secondary_work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "mission": "self.root v0.1 server-binary on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "baseline": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "target_receipt_commit": "2bb92d0675616c468bbbc90c31a10f775ad565db",
+    "verified": {
+      "v16_durable_request_idempotency": true,
+      "v16_replay_survives_ingress_object_restart": true,
+      "response_payload_replay_available": false,
+      "response_replay_store_implemented": false,
+      "network_server_implemented": false,
+      "tls_termination_implemented": false,
+      "task_switch_consent_implemented": false,
+      "whole_token_api_complete": false
+    }
+  },
+  "coordination": {
+    "overlap_avoided": [
+      "F-V01-09 concurrent V17/effect-generation fence lanes",
+      "execution-gate fork/SCM_RIGHTS lanes",
+      "self.root identity/replay boundary lane"
+    ],
+    "selected_reason": "V16 token ingress exposed a measured response-replay gap with no observed active implementation lane; response replay is separable from effect authority and network/TLS."
+  },
+  "hypothesis": "A one-final-response-per-durable-request V16.1 sidecar bound to exact V16 request key, execution id, lease epoch, HTTP metadata and response digest can reconstruct an admitted response across ingress-process restart without minting execution, effect, SELF, truth or learning authority.",
+  "strongest_counterhypothesis": "Durable request admission is already sufficient and persisting a response adds storage/tamper complexity without reducing ambiguity; alternatively a replay store can silently splice a response across execution generations.",
+  "candidate": {
+    "target_pr": 257,
+    "target_branch": "chatgpt/go-v16-response-replay-v1-20260811",
+    "target_head_observed": "54f64ae44c8e153a8ba30c85f92c44f2886d71f2",
+    "mergeable_at_last_refresh": true,
+    "files": [
+      "runtime/state/UNIFIEDDB_V16_1_RESPONSE_REPLAY.sql",
+      "runtime/state/apply_current_schema.py",
+      "runtime/api/frank_response_replay_v1.py",
+      "claycode/frank_response_replay_v1.clay",
+      "tests/frank_token_response_replay_v1.py",
+      "tests/frank_response_replay_sql_binding_v1.py",
+      ".github/workflows/frank-token-response-replay-v1-vps.yml"
+    ],
+    "mechanism": [
+      "prior durable V16 request admission required",
+      "exact request-key + execution-id + lease-epoch binding",
+      "SQL insert trigger rejects cross-generation replay splice",
+      "one immutable response row per request key",
+      "deterministic bounded JSON payload representation",
+      "content SHA-256 plus domain-separated replay binding SHA-256",
+      "same response re-store is idempotent",
+      "conflicting response finalization fails closed",
+      "no bearer token persisted",
+      "ClayCode contract states replay cannot mint authority"
+    ],
+    "claim_limits": [
+      "deterministic JSON serializer is not claimed as full RFC 8785 JCS",
+      "digest catches uncoordinated corruption but is not authentication against a privileged writer able to replace payload and digest",
+      "core response-replay adapter is not yet integrated",
+      "network/TLS remains open",
+      "task-switch consent remains open",
+      "whole token API remains open"
+    ]
+  },
+  "external_primary_evidence": [
+    {
+      "source": "RFC 6750",
+      "url": "https://www.rfc-editor.org/rfc/rfc6750",
+      "use": "Bearer-token transport requires TLS; do not close production ingress with plaintext HTTP."
+    },
+    {
+      "source": "RFC 9110",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110",
+      "use": "Automatic retry of non-idempotent requests needs known idempotent semantics; motivates exact durable request/replay binding."
+    },
+    {
+      "source": "RFC 8785",
+      "url": "https://www.rfc-editor.org/rfc/rfc8785",
+      "use": "Canonical representations are useful for stable JSON hashing; candidate keeps a narrower deterministic-serialization claim."
+    },
+    {
+      "source": "Python 3.12 http.server documentation",
+      "url": "https://docs.python.org/3.12/library/http.server.html",
+      "use": "Builtin http.server is not recommended for production."
+    },
+    {
+      "source": "Caddy HTTPS and reverse_proxy documentation",
+      "url": "https://caddyserver.com/docs/quick-starts/https",
+      "use": "Candidate next transport architecture: mature TLS terminator/reverse proxy before a local application server."
+    },
+    {
+      "source": "Uvicorn deployment documentation",
+      "url": "https://www.uvicorn.org/deployment/",
+      "use": "Self-hosted production guidance favors a process-managed app server behind a mature proxy rather than a toy builtin HTTP server."
+    }
+  ],
+  "tests": {
+    "normal": [
+      "exact V16 admission/execution/epoch binding",
+      "same-response idempotency",
+      "different-response same-request rejection",
+      "SQL direct cross-generation insert rejection",
+      "row update/delete immutability",
+      "restart request does not spawn second execution",
+      "exact response reconstruction after restart",
+      "raw bearer token absence"
+    ],
+    "target_vps_status": "PENDING_SELF_HOSTED_BRANCH_RECEIPT",
+    "target_vps_receipt_path_expected": "runtime/vps_unifieddb/frank_token_response_replay_v16_1/LATEST.json",
+    "github_hosted_deep_integrity_signal": "FAILURE_NOT_ATTRIBUTED_TO_CANDIDATE_BECAUSE_INDEPENDENT_PARALLEL_PR_SHOWS_SAME_HOSTED_FAILURE_WHILE_ITS_TARGET_SPECIFIC_SELF_HOSTED_GATE_PASSES",
+    "current_main_self_hosted_deep_integrity": "PASS_23_GATES_FAIL_COUNT_0_AT_COMMIT_f8edbef9ceeba2282ab9b667a97f82faad61d9e6"
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "REPLAY_PALIMPSEST_BITROT",
+    "status": "IMPLEMENTED_PENDING_TARGET_EXECUTION",
+    "design": "On disposable test state only, bypass the SQL no-update trigger and alter only response JSON while leaving its stored digest/binding unchanged. SQLite structural integrity is expected to remain green; application replay must fail closed on digest mismatch.",
+    "purpose": "Discriminate structural database integrity from semantic replay integrity.",
+    "rollback": "Disposable temporary database is destroyed after the test.",
+    "authority": "NONE"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "change": "Add V16.1 response-replay continuity beneath F-V01-08, separate from V15/V16 execution authority and F-V01-09 effect authority.",
+    "next_transport_candidate": "Production TLS terminator/reverse proxy plus a local bounded application server; Caddy and Uvicorn are current primary-doc reference candidates, not yet selected or installed.",
+    "test_obligations": [
+      "target-VPS candidate receipt PASS",
+      "fresh-main merge-candidate rerun after any overlapping state migration changes",
+      "integrate replay lookup into token API response adapter without allowing replay to spawn execution",
+      "production HTTP parser/server selection with request-size/header/timeouts and loopback/UDS boundary",
+      "TLS termination and certificate lifecycle test",
+      "task-switch consent semantics",
+      "live API differential and restart/recovery measurement",
+      "resource and latency shadow"
+    ],
+    "rollback": "Do not merge PR #257; branch-only candidate can be discarded without canonical Frank state mutation."
+  },
+  "negative_results_and_unknowns": [
+    "No target-VPS PASS is claimed yet for PR #257.",
+    "No production network server/TLS is implemented by this delta.",
+    "No full RFC 8785 canonicalization claim.",
+    "No protection is claimed against a privileged writer that can rewrite both payload and digest.",
+    "No whole Frank v0.1, whole token API, or training promotion."
+  ],
+  "next_frontier": [
+    "Await/verify self-hosted branch receipt for PR #257 without inferring PASS from queue state.",
+    "If PASS, rebase/adjudicate against newest main and rerun fresh-main target evidence before merge.",
+    "Then integrate replay into the API adapter and select/test a mature TLS/reverse-proxy + local app-server transport on the actual VPS.",
+    "Keep network/TLS, task-switch consent and effect authority as distinct gates."
+  ],
+  "research_write_status": "COMMITTED_CANDIDATE_DELTA_PENDING_TARGET_EXECUTION"
+}

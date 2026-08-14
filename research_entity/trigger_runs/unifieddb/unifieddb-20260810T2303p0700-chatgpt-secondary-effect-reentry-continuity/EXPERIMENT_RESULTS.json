@@ -1,0 +1,89 @@
+{
+  "schema_version":"1.2",
+  "run_id":"unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity",
+  "experiments":[
+    {
+      "id":"E1_V14_UNBOUND_REENTRY_BASELINE",
+      "class":"DIRECT_TARGET_VPS_EXPECTED_NEGATIVE",
+      "status":"CONFIRMED_GAP",
+      "receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_provenance_gap_v1/LATEST.json",
+      "run_id":"31406627821",
+      "tested_sha":"2b3d92287249bc1b374dc9244a3fc76b6f675515",
+      "result":{"empty_unbound_reentry_payload_accepted":true,"reentered_treated_complete":true,"explicit_done_state":false,"trace_verifier":"OK"},
+      "resource_shadow":{"wall_seconds":0.12,"max_rss_kib":23936,"exit_status":0},
+      "external_effect_performed":false
+    },
+    {
+      "id":"E2_INITIAL_V17_SCHEMA_BINDING",
+      "class":"DIRECT_TARGET_VPS_EXPECTED_NEGATIVE",
+      "status":"CONFIRMED_GAP",
+      "receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_v17_schema_gap_v1/LATEST.json",
+      "run_id":"31407772002",
+      "tested_sha":"4a76a9c03e57dfd962b8ee1cff2e042d51540d26",
+      "result":{"premature_binding_on_RESERVED_accepted":true,"premature_DONE_on_RESERVED_accepted":true,"wrong_attempt_and_outcome_binding_accepted":true},
+      "resource_shadow":{"wall_seconds":0.15,"max_rss_kib":24064,"exit_status":0},
+      "external_effect_performed":false
+    },
+    {
+      "id":"E3_V17_LOCAL_BOUND_REENTRY_DONE_DIFFERENTIAL",
+      "class":"DIRECT_TARGET_VPS_CANDIDATE_DIFFERENTIAL",
+      "status":"PASS_CANDIDATE_ONLY",
+      "receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_done_v17_candidate/LATEST.json",
+      "run_id":"31408227242",
+      "tested_sha":"486f6c028c4602b3e5e806cc21b04654f9a00377",
+      "implementation_commits":["e6f683859d2e9ec5eae9c6316445fc28ebdeafd6","486f6c028c4602b3e5e806cc21b04654f9a00377"],
+      "result":{"exact_effect_attempt_outcome_and_causal_identity_required":true,"wrong_attempt_rejected":true,"wrong_verified_outcome_hash_rejected":true,"legacy_unbound_reentry_disabled":true,"reentered_not_complete_before_done":true,"restart_between_reentry_and_done_recovers_nonterminal_state":true,"terminal_done_receipt_required_for_complete":true,"duplicate_done_rejected":true,"rollback_preserved_v14_v16":true,"candidate_tables_removed_by_rollback":true},
+      "resource_shadow":{"wall_seconds":0.14,"max_rss_kib":24320,"exit_status":0},
+      "canonical_database_migrated":false,
+      "external_effect_performed":false,
+      "promotion":"CANDIDATE_PASSES_LOCAL_DIFFERENTIAL_ONLY"
+    },
+    {
+      "id":"E4_V17_SUPPORT_AND_EXECUTION_IDENTITY",
+      "class":"DIRECT_TARGET_VPS_EXPECTED_NEGATIVE",
+      "status":"CONFIRMED_GAP",
+      "receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_v17_support_binding_gap_v1/LATEST.json",
+      "run_id":"31408220117",
+      "tested_sha":"b6c75ab71feba690911f21f3341878404ca3ba8d",
+      "result":{"fabricated_support_identifiers_accepted":true,"terminal_done_accepted_with_presence_idle_epoch_0":true,"terminal_done_accepted_without_execution_context":true,"candidate_self_verifier_reports_done_valid":true,"candidate_recovery_reports_complete":true,"canonical_gwt_causal_delta_rows_absent":true},
+      "resource_shadow":{"wall_seconds":0.12,"max_rss_kib":24320,"exit_status":0},
+      "canonical_database_migrated":false,
+      "external_effect_performed":false,
+      "promotion":"BLOCKS_SIMPLE_V17_PROMOTION"
+    },
+    {
+      "id":"E5_RICH_V17_RELATIONAL_CROSS_SPLICE",
+      "class":"DIRECT_TARGET_VPS_EXPECTED_NEGATIVE",
+      "status":"CONFIRMED_GAP",
+      "receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_v17_relational_cross_splice_gap_v1/LATEST.json",
+      "run_id":"31408872635",
+      "tested_sha":"21249166f7bff4407ee17e4918358574ec8db848",
+      "test_commits":["c9b6f1fa9dd0981a6114edd1c3804e05669f3aff","7a10998e5367072fc39e03da210f2a66b46dec48"],
+      "result":{"reentry_binding_with_cross_spliced_support_accepted":true,"terminal_done_with_cross_spliced_support_accepted":true,"causal_credit_points_to_unverified_unrelated_prediction_outcome":true,"semantic_record_is_current_but_unrelated":true,"support_snapshot_hash_has_no_structural_target":true,"sqlite_integrity_still_ok":true},
+      "resource_shadow":{"wall_seconds":0.15,"max_rss_kib":24360,"exit_status":0},
+      "canonical_database_migrated":false,
+      "external_effect_performed":false,
+      "promotion":"RICH_V17_CAUSAL_CLOSURE_REFUTED"
+    }
+  ],
+  "mandatory_dimensions": {
+    "semantic_correctness":"Baseline FAIL; local V17 sublayer PASS; simple V17 support/execution closure FAIL; richer V17 relational causal closure FAIL.",
+    "exact_replay_snapshot_consistency":"PARTIAL: candidate restart between re-entry/DONE passes; hard-crash/snapshot replay still open.",
+    "temporal_provenance_correctness":"FAIL for full closure: exact attempt/outcome is insufficient without same-chain execution/GWT/credit/delta/snapshot identity.",
+    "query_result_equivalence":"NOT_MEASURED_THIS_SUBCYCLE",
+    "graph_vector_fts_retrieval_quality":"NOT_APPLICABLE_TO_EFFECT_TERMINALIZATION_SUBCYCLE",
+    "selection_integrity":"FAIL for terminal causal closure under cross-splice despite valid SQLite integrity/FKs.",
+    "transaction_effect_atomicity":"PARTIAL_CANDIDATE; full richer V17 atomic gate from parallel worker remains separate evidence.",
+    "latency_p50_p95_p99":"UNKNOWN: only single-run wall/resource shadows; distributions required before promotion.",
+    "write_read_amplification":"UNKNOWN",
+    "memory_storage_footprint":"PARTIAL: max RSS 23.9-24.4 MiB across these small discriminators; persistent amplification unknown.",
+    "concurrency_lock_contention":"NOT_MEASURED_THIS_SUBCYCLE",
+    "crash_recovery_rebuild":"PARTIAL/PENDING",
+    "migration_rollback_safety":"Simple candidate rollback PASS; canonical integration remains HOLD.",
+    "ipc_serialization_savings":"NOT_MEASURED; no physical-consolidation promotion.",
+    "common_mode_failure_radius":"QUALITATIVE: physical consolidation remains HOLD.",
+    "edge_energy_thermal":"NOT_APPLICABLE_FOR_CURRENT_V0_1_ACCEPTED_VPS_TARGET",
+    "model_token_context_cost":"NOT_MEASURED_THIS_SUBCYCLE"
+  },
+  "scientific_disposition":"KEEP ALL V17 VARIANTS NONCANONICAL. Local lifecycle repair is supported, but full cognitive causal closure is target-refuted. Next architecture must structurally bind verified provider outcome to the same GWT-use-derived verified causal-credit receipt, the exact admitted semantic delta/no-learning receipt, exact execution generation and a real snapshot/support receipt, then rerun cross-splice/crash/concurrency/latency/end-to-end gates."
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2103p0700-chatgpt-secondary-v18-contract-mesh",
+  "program_target": "FRANK_V0_1",
+  "feedback": {
+    "clayresearch": {
+      "decision": "DELTA",
+      "finding": "Registry-v3 operational roles must drive mesh peer discovery; legacy kind filtering is superseded."
+    },
+    "frank": {
+      "decision": "DELTA",
+      "finding": "Current-source effect/frontend receipts must bind contract identity end to end; unchecked contract metadata cannot be accepted as provenance-bound state."
+    },
+    "q23": {
+      "decision": "NO_CHANGE_WITH_CONSTRAINT",
+      "finding": "Visual/model familiarity and cache/feature identities remain evidence only; any model-facing frontend receipt must preserve exact contract identity but gains no authority."
+    },
+    "gwt": {
+      "decision": "NO_CHANGE",
+      "finding": "No GWT mechanism change. Contract receipt identity is orthogonal to ignition/use/causal-credit semantics."
+    },
+    "emergenz": {
+      "decision": "NO_CHANGE",
+      "finding": "No emergence promotion. Executable contract integrity is infrastructure evidence, not causal-emergence evidence."
+    },
+    "claycode": {
+      "decision": "IMPLEMENTED_DELTA",
+      "finding": "V18 FrontendArtifact->TypedIR now recomputes/validates contract_hash; registry-v3 interconnect preflight now recognizes the current ten operational peers. No surface syntax change."
+    },
+    "hyperposition": {
+      "decision": "NO_CHANGE",
+      "finding": "Alternative-state semantics unchanged; contract identity remains a hard provenance boundary rather than a ranked alternative."
+    },
+    "claygraph": {
+      "decision": "NO_CHANGE_WITH_IDENTITY_CONSTRAINT",
+      "finding": "Contract hashes may identify exact compiler/frontend contracts but must not be used to merge entity SELF identity; current lineage-topology negative evidence is preserved."
+    },
+    "unifieddb": {
+      "decision": "DELTA_CONSTRAINT",
+      "finding": "Persisted compiler/frontend receipts should bind recomputed contract identity; copied descriptive receipt fields cannot become trusted state merely by persistence. EUDI remains provisional and does not change this rule."
+    },
+    "harness": {
+      "decision": "TEST_DELTA",
+      "finding": "Add contract_hash mutation/missing controls to direct Frank v0.1 compiler/authority validation; remote workflow now exercises the exact regression on the self-hosted target-VPS lane."
+    }
+  },
+  "architecture_promotion": "NONE",
+  "training_effect": "NONE",
+  "next_cross_branch_test": "Exact current Frank effect-authority ClayCode source -> V18 frontend -> receipt-bound TypedIR -> type/effect checker on target VPS, followed by current-source lifecycle/replay."
+}

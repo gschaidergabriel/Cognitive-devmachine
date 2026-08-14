@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.1",
+  "event_id": "20260811T183011Z-chatgpt-secondary-cc-wp04-arith-constraints-receipt",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-11T18:30:11Z",
+  "payload": {
+    "work_id": "CC-WP04-ARITHMETIC-OPERATOR-CONSTRAINT-CENSUS-20260812",
+    "spec_rev": 2,
+    "execution_receipt_id": "DRU-PR415-RUN31522912523-WP04-ARITH-CONSTRAINT-CENSUS",
+    "executor_class": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "machine_ref": "clay@digital-retina / Hostinger Ubuntu self-hosted GitHub Actions runner",
+    "action": "Ran a source-context-only symbolic type-constraint census for current arithmetic. V1 was rejected as instrumentation-invalid after an AST field mismatch (`ForIn.name` versus canonical `ForIn.var`); V2 repaired only the collector and error-evidence path, then reran in the current PR merge context.",
+    "observed_effect": "V2 target run 31522912523 / job 93884170223 completed SUCCESS with test_rc=0. Across 42 current Clay sources, 36 parsed and 48 arithmetic operator applications were observed. Fully concrete operator constraints: 0. Partially symbolic constraints: 48. Therefore current declarations/context alone do not determine any complete arithmetic operator signature. Examples include Epoch + Int -> symbolic result, Score * Score -> symbolic followed by symbolic * Confidence -> symbolic, five Float * Score -> symbolic terms, and many collection/context additions with open call/member result types. No operator contract, numeric coercion, type alias, host return signature, or UNKNOWN-as-zero rule was selected.",
+    "verification": "Accepted PR_MERGE_CONTEXT tested SHA 86373df5e3c4dc6a5c8ec8e68d9179a889cf762e against base 66fb0ba1a0444dfc716798221131dd44da20b2cb; V2 test blob 54246c591f07f035e5b340ec55e76e65c6fb738f; grammar c2316dfac4d93af86822099db41eb8a44437d6d3; bounded typechecker 8b49b3b925fd834b04654dc34c70967d6e3147ed. Source-context conflicts were preserved rather than cast away, including OPTION<PlanRef> vs PlanRef, ResourceRef vs Bool under `not`, and repeated Symbol vs OrganId argument conflicts.",
+    "evidence_refs": [
+      "gschaidergabriel/Dr.-Unterweger#415",
+      "GitHubActions:31522912523",
+      "GitHubActionsJob:93884170223",
+      "gschaidergabriel/Dr.-Unterweger@06658d5070d49db71a71ae7dce8139b9573f9b54"
+    ],
+    "conclusion": "SUPPORTED BLOCKER REFINEMENT: arithmetic is not ready for an operator table. Missing typed call/member/cross-module signatures dominate the unresolved algebra. NEXT_FALSIFIER: build an import-aware, source-declaration-only cross-module function-signature census for unresolved calls; classify each unresolved target as unique imported signature, ambiguous, unimported, or absent before changing the typechecker.",
+    "truth_class": "REMOTE_EXECUTION_RECEIPT",
+    "success": true,
+    "complete": true
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2234p0700-chatgpt-secondary-claycode-executable-package-promotion",
+  "trigger": "go",
+  "created_at_local": "2026-08-11T22:34:00+07:00",
+  "created_at_utc": "2026-08-11T15:34:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_center_parent_observed": "7961afd83aac867887ad19e7b485f210c4f54ea6",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_host": {
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "accepted_target_class": "HOSTINGER_UBUNTU_VPS"
+  },
+  "hypothesis": "The executable ClayCode evaluator candidate can be promoted into target main only if package-local imports remain bound under hostile namespace precedence and the repaired bytes preserve the already-measured decide_effect semantics on the accepted VPS.",
+  "strongest_counterhypothesis": "The apparent evaluator success depends on test-only sys.path ordering or ambiguous sibling imports; package binding or semantic behaviour changes when exercised from the repository-root product import surface.",
+  "external_primary_evidence_used": [
+    {
+      "source": "Python importlib ModuleSpec documentation",
+      "claim": "ModuleSpec origin/parent are import-system provenance fields and __file__/__spec__.origin are not automatically synchronized; a durable origin gate should check both axes."
+    },
+    {
+      "source": "Python command-line documentation",
+      "claim": "-P/safe_path disables unsafe implicit path prepending, making hostile PYTHONPATH precedence an explicit falsifier."
+    }
+  ],
+  "exactly_one_go_out_of_box_experiment": {
+    "id": "PACKAGE_NAMESPACE_SHADOW_INJECTION",
+    "count_for_this_macrocycle": 1,
+    "setup": "Place deliberately failing top-level syntax.py, host.py and analyzer.py before the repository root in PYTHONPATH; execute package imports with python -P; require package-local __file__, __spec__.origin, __spec__.parent, __spec__.name and __package__ consistency while preserving the legacy CLI import surface.",
+    "reversible": true,
+    "lesionable": true,
+    "external_effect": false,
+    "result": "SUPPORTED_ON_ACCEPTED_TARGET",
+    "target_run": 31506115570,
+    "checks": "7/7 PASS"
+  },
+  "negative_results": [
+    {
+      "class": "DUPLICATE_WORK_SUPERSEDED",
+      "target_pr": 340,
+      "result": "CLOSED_NOT_MERGED",
+      "reason": "PR #310 advanced concurrently and independently implemented the same package-relative import repair; stale duplicate work was stopped instead of promoted."
+    },
+    {
+      "class": "CI_INFRASTRUCTURE_COLLISION",
+      "target_run": 31505607544,
+      "job": 93826278479,
+      "result": "FAILED_BEFORE_PRODUCT_TESTS",
+      "reason": "actions/checkout encountered a self-hosted shared-workspace state where the workspace had been removed before git config --local; ClayCode test steps were skipped, so this is not product counterevidence."
+    }
+  ],
+  "infrastructure_repair": {
+    "commit": "f16884be1eab7215001baee04d9351fd2383ba60",
+    "mechanism": "run-owned /tmp Git tree; transient read token only during fetch; exact GITHUB_REF checkout with HEAD == GITHUB_SHA assertion; no shared runner workspace dependency",
+    "semantic_change": false
+  },
+  "modulespec_followup": {
+    "source_pr": 343,
+    "branch_merge_commit": "8d4b6da76d0a35fcd15f275def5558fd9a6ebe67",
+    "delta": "Require __file__ and __spec__.origin to both remain package-local, agree with each other, and preserve parent/name/package identity under safe-path hostile shadowing.",
+    "semantic_change": false
+  },
+  "accepted_target_gate": {
+    "workflow_run": 31506115570,
+    "job": 93827996662,
+    "synthetic_merge_sha": "395e406f92fbe0b0569ae9d20a2ed00b5b22a31c",
+    "synthetic_merge_parents": {
+      "base_main": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+      "candidate_head": "8d4b6da76d0a35fcd15f275def5558fd9a6ebe67"
+    },
+    "lark_version": "1.3.1",
+    "package_namespace": {
+      "status": "PASS_CLAYCODE_PACKAGE_NAMESPACE_BINDING",
+      "checks_passed": 7,
+      "checks_total": 7,
+      "legacy_cli_top_level_import_surface_remains_available": true,
+      "safe_path_mode_active": true,
+      "module_file_and_spec_origin_agree": true,
+      "bad_metadata": {}
+    },
+    "semantic_differential": {
+      "status": "PASS_CLAYCODE_DECIDE_EFFECT_DIFFERENTIAL",
+      "checks_passed": 6,
+      "checks_total": 6,
+      "requests_compared": 200576,
+      "structured_sweep": 576,
+      "randomized_sweep": 200000,
+      "seed": 90211,
+      "mismatches": 0,
+      "decide_effect_unresolved_targets": [],
+      "unresolved_call_graph_refused": true,
+      "effectful_intrinsic_refused_in_pure_context": true,
+      "elapsed_seconds": 7.04,
+      "user_cpu_seconds": 7.02,
+      "system_cpu_seconds": 0.02,
+      "max_rss_kib": 26228,
+      "external_effect_performed": false,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    },
+    "byte_compile": "PASS",
+    "result": "SUPPORTED_FOR_SCOPED_INTEGRATION"
+  },
+  "target_integration": {
+    "pr": 310,
+    "head": "8d4b6da76d0a35fcd15f275def5558fd9a6ebe67",
+    "merged_main_commit": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "status": "MERGED_AFTER_TARGET_GATE",
+    "scope": "first executable ClayCode substrate plus package-bound decide_effect differential evidence",
+    "promotion_limits": [
+      "Does not close F-V01-02 evaluator subcheck: only decide_effect and destructive_guard_complete are executed by this acceptance gate.",
+      "Does not close typed_ir, type_effect, compiler_lowering, runtime_ffi, stdlib_sdk, concurrency_memory or real_frank_component.",
+      "Does not establish general ClayCode or whole Frank v0.1 acceptance."
+    ]
+  },
+  "normal_followup_integration": {
+    "historical_requirement": "Combine the already target-supported generic-angle/relational-token repair from PR #236 with the declaration-aware constructor-alias repair from PR #237 on a fresh current main before broad WP04/WP05 expansion.",
+    "candidate_pr": 358,
+    "candidate_head": "7e19cc64ad9765ca1c32ee2702cf47381ded241a",
+    "initial_base": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "specific_target_run": 31507347756,
+    "state_at_receipt": "QUEUED_AND_STALE_AFTER_MAIN_ADVANCED_TO_A3AD42F",
+    "rule": "Do not promote this run as fresh-current if it tests the pre-PR310 base; refresh/recombine onto current main first.",
+    "go_out_of_box_experiment_added": false
+  },
+  "architecture_delta": {
+    "status": "PROMOTED_SCOPED_IMPLEMENTATION_DELTA",
+    "affected_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "change": "Executable ClayCode parsing/analyzing/evaluation path with package-bound imports and a target-VPS semantic differential is now present on target main.",
+    "workspace_status_change": "NONE",
+    "reason_no_subcheck_pass": "The current unified F-V01-02 evaluator acceptance is broader than two executed functions and still requires general evaluator/runtime closure.",
+    "rollback": "Revert target main merge a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3 if package binding or semantic regressions are later reproduced."
+  },
+  "next_frontier": [
+    "Refresh the combined WP03 generic-angle + declaration-aware alias candidate onto current main including a3ad42f, then run the same accepted-target combined gate.",
+    "After fresh-current WP03 integration evidence, adjudicate stacked PR #313 receipt declarations/call-contract closure and PR #314 surface expansion against the now-merged executable evaluator.",
+    "Continue toward real TypedIR/type-effect/evaluator coverage and compiler/lowering rather than treating decide_effect success as general ClayCode acceptance."
+  ],
+  "research_write": "COMMITTED",
+  "frank_harness_modified_under_frank_authority": false,
+  "final_training_authorized": false
+}

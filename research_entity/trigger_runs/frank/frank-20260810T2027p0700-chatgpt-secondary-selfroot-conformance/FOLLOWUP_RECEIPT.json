@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260810T2027p0700-chatgpt-secondary-selfroot-conformance",
+  "followup_id": "selfroot-conformance-deepening-20260810T2032p0700",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "target_repo_branch": "gschaidergabriel/Dr.-Unterweger:clay/frank-identity-conformance-20260810",
+  "deepened_discriminator_commit": "f2c731cc445bb53897ebf05c026c72b05ee2ff01",
+  "observability_workflow_commit": "a4639dfb86286a9bfe51ad85071def107c6be6e0",
+  "deepened_surfaces": [
+    "000_FRANK_ANDREAS_MASTER_SOURCE.txt",
+    "claycode/frank_runtime.clay",
+    "claycode/frank_entity.clay",
+    "claycode/frank_security.clay"
+  ],
+  "direct_stale_markers": [
+    "master: provider/model instances described as temporary cognitive/execution organs of one Frank entity",
+    "runtime: invariant one_entity_across_nodes",
+    "entity: #dr_unterweger_frank_personal_entity and Andreas embedded as self human",
+    "security: security_boot requires FrankSecurity.frank == Frank.id"
+  ],
+  "ci_runs": [
+    {"run_id": 31392587842, "workflow": "Frank owner-fixed identity conformance", "run_number": 1, "conclusion": "failure"},
+    {"run_id": 31393199273, "workflow": "Frank owner-fixed identity conformance", "run_number": 2, "conclusion": "failure"},
+    {"run_id": 31393285536, "workflow": "Frank owner-fixed identity conformance", "run_number": 3, "conclusion": "failure"}
+  ],
+  "adjacent_ci": [
+    {"run_id": 31392587693, "workflow": "Frank Deep Integrity", "run_number": 671, "conclusion": "failure"},
+    {"run_id": 31393198861, "workflow": "Frank Deep Integrity", "run_number": 677, "conclusion": "failure"},
+    {"run_id": 31393285601, "workflow": "Frank Deep Integrity", "run_number": 678, "conclusion": "failure"}
+  ],
+  "observability_negative_result": {
+    "job_log_fetch": "BlobNotFound",
+    "run3_artifacts": [],
+    "interpretation": "The connector exposes workflow/job conclusions but not the exact stdout/check matrix for these runs. Do not invent per-check runtime output. Direct repository reads independently establish the listed stale markers."
+  },
+  "architecture_decision": {
+    "decision": "DO_NOT_BROADLY_MIGRATE_TARGET_RUNTIME_YET",
+    "reason": "The target frank.entity semantic root itself is stale while ClayCode BASE CC-WP-03 typed IR and CC-WP-04 type/effect are still open. A broad runtime rewrite now risks creating an unvalidated parallel identity representation.",
+    "next": "Use the conformance matrix as an acceptance oracle while introducing one canonical self.root identity primitive through the BASE typed-IR/type-effect path, then minimally repair target master/entity/runtime/security and run boot/API/restart/stale-clone differentials."
+  },
+  "external_research_refresh": {
+    "CaMeL_arxiv_2503_18813": "supports separating trusted control flow/capabilities from untrusted external data",
+    "Fides_arxiv_2505_23643": "supports deterministic integrity/confidentiality information-flow enforcement",
+    "MAGE_arxiv_2606_06090": "supports execution-state-managed long-horizon memory with revision/isolation of flawed branches",
+    "Qwen3_5_4B_official": "current config has a 24-layer vision tower, hidden size 1024, patch size 16, spatial merge 2, output hidden size 2560; Transformers exposes pooled image features before insertion into language-model embeddings, keeping QNDRF feature reuse physically plausible but unpromoted"
+  },
+  "result": "ARCHITECTURE_FIDELITY_MEASUREMENT_IMPROVED_PRODUCTION_IDENTITY_REPAIR_PENDING"
+}

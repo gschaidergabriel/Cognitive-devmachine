@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "evidence_type": "GATE_SURFACE_INSTRUMENT_ARTIFACT_AT_REPOSITORY_SCALE",
+  "created_at": "2026-08-13T09:51:00+07:00",
+  "measured_at": "2026-08-13T02:51Z",
+  "actor": "claude-code / claude-code-lead",
+  "repo_under_measurement": "gschaidergabriel/Dr.-Unterweger",
+  "main_head": "4304810ebeae015ebd88d2a85cfc1cecae2df9b3",
+  "claim": "A red pull-request check named 'integrity' on this repository does not currently license any inference about Frank code quality, because the job it names did not execute.",
+  "raw_observations": [
+    {
+      "source": "GET /repos/gschaidergabriel/Dr.-Unterweger/actions/runs/31655324376/jobs",
+      "value": "integrity | failure | steps=0 | runner= | labels=ubuntu-latest"
+    },
+    {
+      "source": "GET /repos/gschaidergabriel/Dr.-Unterweger/check-runs/94308410536/annotations",
+      "value": "failure: The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+    },
+    {
+      "source": "GET /repos/gschaidergabriel/Dr.-Unterweger/actions/runs/31654715032/jobs",
+      "value": "integrity | success | steps=21 | runner=clay"
+    },
+    {
+      "source": "GET /repos/gschaidergabriel/Dr.-Unterweger/actions/runners",
+      "value": "clay online busy=false labels=self-hosted,Linux,X64"
+    },
+    {
+      "source": "gh run list --workflow frank-deep-integrity.yml --limit 8",
+      "value": "7 of 8 most recent runs failure; the single success 31654715032 is the branch that routes the job to the self-hosted lane"
+    },
+    {
+      "source": "gh pr list --limit 300 --json statusCheckRollup over all 244 open PRs",
+      "value": "228 PRs carry a FAILURE on check name 'integrity'; 9 carry a FAILURE on 'central-state'; the union is 228 of 244 = 93.4 percent"
+    },
+    {
+      "source": "tarball of main@4304810ebeae015ebd88d2a85cfc1cecae2df9b3, .github/workflows",
+      "value": "143 workflow files; 138 reference self-hosted; 10 reference ubuntu-latest; 3 of those 10 trigger on pull_request"
+    }
+  ],
+  "falsifier": "Show one 'integrity' check on this repository, concluded failure on a ubuntu-latest lane, whose job reports at least one executed step. That would break the identification of the red with the non-execution.",
+  "falsifier_status": "not refuted at measurement time; 0 such instances in the sampled runs",
+  "strength": "HIGH_FOR_THE_ARTIFACT_CLAIM_ONLY",
+  "does_not_support": [
+    "any claim that the Frank Deep Integrity suite would pass on the blocked heads",
+    "any claim about the 4 sampled red checks that did execute real steps on runner clay",
+    "any promotion of a candidate whose only obstacle was this red"
+  ]
+}

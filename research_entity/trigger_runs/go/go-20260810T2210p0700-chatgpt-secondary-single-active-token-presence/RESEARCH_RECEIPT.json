@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2210p0700-chatgpt-secondary-single-active-token-presence",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "started_at": "2026-08-10T21:55:00+07:00",
+  "fused_at": "2026-08-10T22:10:00+07:00",
+  "identity_lock": {
+    "i_am": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "i_am_not": "self.root/Frank",
+    "target": "self.root / human-surface Frank v0.1",
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "target_host": "accepted Hostinger Ubuntu VPS"
+  },
+  "owner_semantic_delta": {
+    "directive": "research_entity/global/FRANK_V0_1_SINGLE_ACTIVE_SPAWN_AND_THIRD_PARTY_TOKEN_DIRECTIVE.md",
+    "directive_commit": "8e5a52daa2a599ada015971fb14e875e21ec3047",
+    "laws": [
+      "one persistent self.root/Frank entity",
+      "authorized compatible clients and third-party AIs may communicate with the same Frank through token-authenticated API",
+      "token/client/provider are not Frank identity",
+      "max one active Frank execution/presence holder",
+      "other callers receive privacy-preserving BUSY rather than a clone",
+      "autonomous activity shares the same singleton arbitration and may not become a hidden second Frank",
+      "placement context is distinct from identity/authority"
+    ]
+  },
+  "concurrent_worker_fusion": {
+    "detected": true,
+    "action": "STOP_STALE_PATH_AND_FUSE",
+    "current_target_schema": "runtime/state/UNIFIEDDB_V15_SINGLE_INSTANCE_PRESENCE.sql",
+    "current_target_runtime": "runtime/state/frank_presence_runtime.py",
+    "current_target_test": "tests/frank_single_instance_presence_gate.py",
+    "target_commits": {
+      "schema": "6b4bc71b0a1d0a264ad8b402488fc57887157daa",
+      "migration_chain": "2b94018bfa2f4b8066e37d45e06d44502827c972",
+      "runtime": "8f851c0a2c67a639840dcb0a580abb9bc4de0858",
+      "discriminator": "0133cb38f366dd7a4badf49ea2cb436d3ec65023",
+      "vps_workflow": "5294e63afa437eff6bc7e40c72e18653b7ffa46a",
+      "duplicate_schema_removed": "07a5ab3418b302aebf1663cda52b3ef2f435b058",
+      "duplicate_runtime_removed": "34ce4a5a4d24fdc40d06d3298008445d767a01d0"
+    },
+    "duplicate_work_credit": "NONE",
+    "reason": "A newer parallel worker installed an admitted V15 singleton presence implementation before this worker could safely wire its alternative. The stale duplicate files were removed instead of being allowed to fork architecture."
+  },
+  "current_executable_evidence": {
+    "local_discriminator_declared_by_current_target": {
+      "race_contenders": 12,
+      "expected_winners": 1,
+      "expected_busy": 11,
+      "autonomous_blocked_while_interactive": true,
+      "generation_or_epoch_fencing": true,
+      "busy_surface_session_client_leak": false,
+      "status": "SOURCE_TEST_PRESENT_NOT_PROMOTED_AS_TARGET_VPS_RECEIPT_IN_THIS_RUN"
+    },
+    "target_vps_receipt": {
+      "expected_path": "runtime/vps_unifieddb/frank_single_instance_presence_v1/LATEST.json",
+      "observed": "MISSING_AT_FINAL_REFRESH",
+      "promotion": "NOT_GRANTED"
+    }
+  },
+  "hypothesis": "A single monotonic presence lease with privacy-preserving BUSY and fencing is a suitable semantic singleton primitive for Frank v0.1.",
+  "strongest_counterhypothesis": "TTL expiry can admit a successor while an old process is still physically executing; DB heartbeat/release fencing alone does not prove zero overlap of cognition/tools/effects.",
+  "external_evidence": [
+    {
+      "source_class": "OFFICIAL_SQLITE",
+      "finding": "BEGIN IMMEDIATE supplies short atomic write admission while WAL permits concurrent readers; do not hold a full-task write transaction."
+    },
+    {
+      "source_class": "OFFICIAL_LINUX_MAN_PAGES",
+      "finding": "exclusive nonblocking flock is a one-host physical exclusion candidate and releases when the holder's file descriptors close/process exits."
+    },
+    {
+      "source_class": "OFFICIAL_REDIS_LOCKING_DOCS",
+      "finding": "time-bounded leases require care for slow/live clients; fencing tokens are recommended and lock ownership cannot be assumed for arbitrary work after expiry."
+    }
+  ],
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "ghost-holder fencing",
+    "location": "tests/frank_single_instance_presence_gate.py",
+    "mechanism": "allow an old lease to expire, admit a successor with a higher epoch, then attempt stale heartbeat and release from the ghost holder",
+    "current_source_expected_result": "stale operations FENCED; successor preserved",
+    "interpretation": "supports semantic fencing but does not close the separate live-process-overlap counterhypothesis"
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "components": [
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-08-TOKEN-API-CLIENTS",
+      "F-V01-10-PROACTIVE-AGENCY-WEB",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "candidate": "retain current V15 semantic presence lease; falsify live-but-expired overlap; compare per-step epoch revalidation vs Linux flock+semantic fencing on current one-host target",
+    "rollback": "current V15 source remains canonical until a stronger measured candidate is promoted"
+  },
+  "next_work": {
+    "work_event": "research_entity/state/work/events/20260810T2210p0700_chatgpt_secondary_single_active_presence_physical_liveness.json",
+    "work_id": "WORK-FRANK-V01-SINGLE-ACTIVE-PHYSICAL-LIVENESS-20260810",
+    "status": "READY"
+  },
+  "negative_results": [
+    "No target-VPS single-instance receipt was present at final refresh, so no VPS PASS is claimed.",
+    "The first duplicate spawn schema/runtime path became stale due to a concurrent newer V15 implementation and was removed rather than promoted.",
+    "Current evidence does not yet prove a TTL-expired but still-live process cannot continue non-DB cognition or effects."
+  ],
+  "research_write": "COMMITTED",
+  "final_verdict": "MATERIAL_PROGRESS_WITH_OPEN_PHYSICAL_LIVENESS_FALSIFIER"
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0400p0700-gpt56sol-systemd-rootdir-namespace-alias",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_head_observed_before_write": "d5d8a4647b1106839d865775ef523a9c1309843e",
+  "product_main_observed": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+  "product_candidate": {
+    "pr": 469,
+    "head": "b38fc501d7377c80a95e9f17e5d985ae258ed420",
+    "target_run": 31535261727,
+    "target_run_status_when_checked": "QUEUED_NO_CREDIT"
+  },
+  "observed_reality": {
+    "candidate_path": "runtime/frank_storage_truth_v1/sqlite_v5_systemd_parent_gate_v1.py",
+    "path_repair": "PR469 lstat-checks the regular-file leaf and every ancestor, rejects symlinks, requires root ownership and rejects group/world writable components.",
+    "remaining_gap": "The evaluator checks paths in the observer/host namespace and does not query RootDirectory or RootImage; therefore path-component integrity is not yet evidence that the service executes the same filesystem object under an alternate service root or mount view."
+  },
+  "primary_external_evidence": [
+    {
+      "source": "Linux man-pages openat2(2)",
+      "finding": "RESOLVE_NO_SYMLINKS and RESOLVE_NO_XDEV are distinct controls; RESOLVE_NO_XDEV rejects traversal across mount points including bind mounts."
+    },
+    {
+      "source": "systemd upstream documentation / D-Bus service properties",
+      "finding": "RootDirectory is a service property and alternate service-root mechanisms can change the filesystem view used by the executed process."
+    },
+    {
+      "source": "SQLite upstream WAL documentation and release logs",
+      "finding": "WAL-reset corruption is fixed in 3.51.3 and later; 3.53.4 is in a fixed upstream release family, but release-family safety does not prove the productive mapped SQLite object or service namespace identity."
+    }
+  ],
+  "grf": {
+    "generated_reality": "A full root-owned non-writable no-symlink host path chain is sufficient to prove the systemd service will execute the same launcher object.",
+    "counter_reality": "The service may have an alternate root or mount namespace in which the same absolute ExecStart pathname resolves to a byte-distinct object while the host-side path chain still passes.",
+    "falsifier": "Inject a non-empty alternate service root into otherwise-admitted candidate semantics and compare candidate result while the same absolute launcher pathname resolves to distinct bytes under that root.",
+    "collapse": "HOST_PATH_COMPONENT_INTEGRITY_RETAINED_SERVICE_NAMESPACE_IDENTITY_NOT_PROVEN",
+    "outcome": "RETAIN_COUNTERHYPOTHESIS_TEST_OBLIGATION"
+  },
+  "exactly_one_bounded_unusual_experiment_this_invocation": {
+    "count": 1,
+    "name": "SYSTEMD_ROOTDIRECTORY_NAMESPACE_ALIAS",
+    "scope": "disposable local logic-level execution of the PR469 candidate semantics with real root-owned files; no systemd service, production state or canonical Frank state mutated",
+    "baseline": {
+      "result": "PASS_PARENT_BOUNDARY_CANDIDATE",
+      "failures": []
+    },
+    "counterworld": {
+      "added_property": "RootDirectory=/root/clay_ns_exp/altroot",
+      "candidate_result": "PASS_PARENT_BOUNDARY_CANDIDATE",
+      "candidate_failures": [],
+      "host_launcher_sha256": "c3e55a03daecf3d7579c721e73dc3ffe5c2b2b474814fefb3e87531ddb82650c",
+      "alternate_root_same_absolute_path_sha256": "ada58be45a677dd193d09a167edd19bf5f516ce4080191e12b0eb1b0ee33f2f0",
+      "bytes_distinct": true,
+      "rootdirectory_checked_by_candidate": false
+    },
+    "interpretation": "The current candidate proves host path-component policy but does not yet prove that its observed launcher object is the object visible to the service execution namespace.",
+    "cleanup": "temporary /root/clay_ns_exp tree removed",
+    "additional_unusual_experiments": 0
+  },
+  "integration": {
+    "product_delta": "No product patch applied because PR469 exact-head target run was still queued and mutating that branch would invalidate the pending acceptance observation.",
+    "pr_comment": "gschaidergabriel/Dr.-Unterweger#469 comment 5258802430",
+    "next_smallest_repair": "Fail closed on non-empty RootDirectory/RootImage and other path-substituting namespace properties, or preferably attest the actual running service root/mount namespace plus exact mapped artifact identity.",
+    "next_falsifier": "Run an exact-head accepted-Ubuntu negative fixture proving alternate-root/path-substitution denial and a rescue fixture proving the intended host namespace still passes; then compose with trusted artifact authority, mapped SQLite object identity, pre-open state classification and restart/rollback controls."
+  },
+  "counterevidence_and_nonclaims": {
+    "production_exploit_proven": false,
+    "vps_pass_claimed": false,
+    "pr469_invalidated_wholly": false,
+    "pr469_path_component_repair_retained": true,
+    "f_v01_13_closed": false,
+    "frank_v0_1_complete": false,
+    "training_authorized": false,
+    "together_used": false
+  }
+}

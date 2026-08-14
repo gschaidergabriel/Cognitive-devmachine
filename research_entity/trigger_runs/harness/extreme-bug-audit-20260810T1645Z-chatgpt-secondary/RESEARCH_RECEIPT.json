@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "run_id": "extreme-bug-audit-20260810T1645Z-chatgpt-secondary",
+  "trigger": "none_freeform_extreme_deep_bug_search",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "basis": {
+    "verified_default_branch": "main",
+    "audited_anchor": "5aa8be94b5e6110001aa477b20b8b9353804a898",
+    "freshness_check": "main advanced 8 commits after anchor; compare file-set touched hyperposition/WAL/ClayCode diagnostic files, not the audited effect/presence/V16/truth-gate sources",
+    "workspace_ref": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+    "existing_overlap": "presence_execution_generation_effect_fence already OPEN; active candidate branches/PRs exist, therefore no target mutation was attempted"
+  },
+  "findings": [
+    {
+      "id": "BUG-AUDIT-P1-EFFECT-GENERATION-FENCE",
+      "severity": "P1",
+      "status": "ALREADY_REPRODUCED_AND_SOURCE_CONFIRMED",
+      "summary": "Canonical V14 EffectLifecycleRuntime begin_attempt/retry paths are not bound to the exact admitted V15/V16 execution generation and can enter COMMITTING from stale/internal callers."
+    },
+    {
+      "id": "BUG-AUDIT-P1-OUTCOME-ATTEMPT-ATTRIBUTION",
+      "severity": "P1",
+      "status": "SOURCE_PROVEN_NEW_AUDIT_DELTA",
+      "summary": "record_outcome(effect_id, ...) and reconcile_uncertain_outcome(effect_id, ...) do not require attempt_id. After a same-key retry, a delayed result from an older attempt can terminalize the currently stored attempt because outcome attribution is effect-level, not attempt-level.",
+      "falsifier": "Create attempt A, mark unknown, retry as attempt B, then deliver A outcome while B is current; runtime must reject A rather than mutate B."
+    },
+    {
+      "id": "BUG-AUDIT-P1-VERIFIED-EVIDENCE-MINTING",
+      "severity": "P1",
+      "status": "SOURCE_PROVEN_NEW_AUDIT_DELTA",
+      "summary": "record_outcome accepts caller-controlled verified=true with arbitrary/empty evidence and no provider receipt/evidence schema validation. This is weaker than Clay semantic verified-outcome requirements.",
+      "falsifier": "Attempt to record verified success with empty evidence; canonical runtime must fail closed."
+    },
+    {
+      "id": "BUG-AUDIT-P1-V16-SAME-EPOCH-EXECUTION-REBIND",
+      "severity": "P1",
+      "status": "SOURCE_PROVEN_NEW_AUDIT_DELTA",
+      "summary": "FrankExecutionContinuityRuntime.bind_execution_and_request can overwrite the singleton execution_id while the V15 lease_epoch is unchanged. Existing context is only distinguished when its epoch differs; same-epoch execution identity replacement is not rejected.",
+      "impact": "Breaks exact execution-generation identity and invalidates fence candidates that bind only lease_epoch/session/client capability but not execution_id.",
+      "falsifier": "Under one live BUSY lease epoch bind exec-A then bind exec-B; second bind must fail or be an exact idempotent replay, never replace CURRENT."
+    },
+    {
+      "id": "BUG-AUDIT-P1-TRUTH-GATE-DIRTY-RUNTIME-BLIND-SPOT",
+      "severity": "P1_POTENTIAL_P0_IF_USED_TO_AUTHORIZE_CONSEQUENTIAL_WRITES",
+      "status": "SOURCE_PROVEN_NEW_AUDIT_DELTA",
+      "summary": "repo_truth_gate checks worktree-vs-HEAD only for CRITICAL_FILES. Authoritative executable files including effect_lifecycle_runtime.py, frank_execution_gate.py, frank_execution_continuity.py and claycode/frank_effects.clay are not in that set. HEAD can equal origin/main and the gate can still PASS while dirty unadmitted runtime code executes.",
+      "falsifier": "Modify a non-CRITICAL production runtime file without committing while all critical files remain clean; preflight must not return PASS."
+    },
+    {
+      "id": "BUG-AUDIT-P1-TRUTH-GATE-SCHEMA-CONTRACT-DRIFT",
+      "severity": "P1",
+      "status": "SOURCE_PROVEN_NEW_AUDIT_DELTA",
+      "summary": "apply_current_schema canonical chain includes V13-V16, while repo_truth_gate and APPLIED_SCHEMA_MANIFEST_REQUIRED still define UnifiedDB 12.0 and omit V13-V16 feature files/tables. A truth-gate PASS therefore does not itself prove presence/effect/execution schema completeness.",
+      "falsifier": "Construct a materialization satisfying the V12 manifest/truth-gate checks but lacking a V14/V15/V16 required table; preflight must fail with schema migration required."
+    },
+    {
+      "id": "BUG-AUDIT-P1-STATIC-INTEGRITY-CURRENT",
+      "severity": "P1",
+      "status": "TARGET_VPS_REPO_STATIC_INTEGRITY_FAIL_ALREADY_OBSERVED",
+      "summary": "Newest Research Center target-VPS adjudication records repo_static_integrity FAIL for DIRECT_CANONICAL_DB_OPEN in runtime/clay_vps_mcp_v02/tests/test_stack.py and SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR in effect_terminal_runtime_v17_candidate.py."
+    },
+    {
+      "id": "BUG-AUDIT-P2-INGRESS-IDEMPOTENCY-NOT-PAYLOAD-BOUND",
+      "severity": "P2_RELEASE_BLOCKER_FOR_NETWORK_API",
+      "status": "SOURCE_PROVEN_CONTRACT_GAP",
+      "summary": "V16 request idempotency keys bind credential/session/client/request_id but no request payload/semantic hash. Reusing a request_id with changed content cannot be distinguished at this layer.",
+      "falsifier": "Same principal/session/request_id with different canonical payload hash must be rejected as idempotency conflict, not replayed."
+    },
+    {
+      "id": "BUG-AUDIT-P2-CREDENTIAL-REVOCATION-SNAPSHOT",
+      "severity": "P2_RELEASE_BLOCKER_FOR_LONG_LIVED_API",
+      "status": "SOURCE_PROVEN_CONDITIONAL",
+      "summary": "TokenCredentialStore is an immutable in-memory binding snapshot. Updating/revoking the underlying digest file after process start does not update an existing core, so hot revocation semantics require explicit reload/versioning or bounded process lifetime."
+    },
+    {
+      "id": "BUG-AUDIT-P2-PRESENCE-EXPIRY-SEMANTIC-INCONSISTENCY",
+      "severity": "P2_WITH_P1_INTERACTION",
+      "status": "SOURCE_PROVEN",
+      "summary": "Presence status reports stored BUSY/RECOVERING without expiry interpretation; acquire can take over an expired holder while heartbeat/release reject expiry. The inconsistency becomes high-risk because canonical V14 effects are not epoch-fenced."
+    },
+    {
+      "id": "BUG-AUDIT-CANDIDATE-FENCE-NOT-EXECUTION-ID-BOUND",
+      "severity": "P1_CANDIDATE_DESIGN_DEFECT",
+      "status": "ACTIVE_BRANCH_NOT_CANONICAL",
+      "summary": "Caller-bound effect fence candidate persists lease_epoch, holder session/client hashes and process capability fingerprint but no V16 execution_id. Its live validation checks V16 lease_epoch but not execution_id, so the V16 same-epoch rebind bug leaves the old fence apparently live. Candidate must bind exact execution_id/credential generation or first make same-epoch execution replacement impossible."
+    },
+    {
+      "id": "BUG-AUDIT-IDENTITY-CONFORMANCE-DRIFT",
+      "severity": "P1_ARCHITECTURE_CONFORMANCE",
+      "status": "EXISTING_EXECUTABLE_DISCRIMINATOR_FAILURE_STILL_CURRENT_BY_WORKSPACE",
+      "summary": "Owner-fixed self.root server-binary identity remains blocked by stale CURRENT-eligible identity semantics; recent main delta inspected in this audit did not touch the cited identity surfaces."
+    }
+  ],
+  "strongest_counterhypotheses": [
+    "Some low-level runtime methods may be unreachable from the eventual production transport; reachability can downgrade exploitability but does not repair the violated persistence invariant.",
+    "V12 may intentionally remain a base schema version while V13-V16 are feature schemas; even then the current truth-gate/manifest still does not prove required current feature presence and must expose a separate feature-schema contract.",
+    "Process-local flock and ingress routing reduce some stale-owner races on one host; they do not repair same-epoch V16 rebinding, attempt-outcome attribution, dirty-worktree truth, or exact execution binding.",
+    "Immutable credential snapshots can be acceptable only if process restart/reload on revocation is an explicit measured contract; no such long-lived network API acceptance is currently promoted."
+  ],
+  "recommended_order": [
+    "1 truth-gate full executable/runtime worktree admission + feature-schema completeness",
+    "2 V16 forbid same-epoch execution identity replacement and enforce live non-expired holder/credential identity",
+    "3 effect reservation/attempt/provider-precommit fence bound to exact execution_id plus lease epoch and caller identity",
+    "4 make outcomes/reconciliation attempt_id-bound and evidence-schema/provider-receipt validated",
+    "5 rebase/replay active fence candidate on fresh main; do not merge stale branch directly",
+    "6 close current repo_static_integrity failures before promotion",
+    "7 bind ingress idempotency to canonical request payload hash and define hot token revocation semantics",
+    "8 rerun exact-current target-VPS lifecycle, crash/retry/reconciliation, static integrity, ClayCode frontend/TypedIR and recovery gates"
+  ],
+  "target_mutation": "NOT_ATTEMPTED_DUE_ACTIVE_OVERLAPPING_REPAIR_LANES_AND_STALE_BRANCH_COLLISION_RISK",
+  "research_write_result": "COMMITTED_RECEIPT_ONLY"
+}

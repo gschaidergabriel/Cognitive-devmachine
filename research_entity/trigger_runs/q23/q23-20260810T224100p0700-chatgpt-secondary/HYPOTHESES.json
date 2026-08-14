@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "hypotheses": [
+    {
+      "id": "H-Q23-FEATURE-STRATA-01",
+      "parent": "H-QNDRF-01",
+      "claim": "For user-specific GUI/layout familiarity and open-set routing, a descriptor built from Qwen3.5's public LLM-facing projected visual token grid can match a private pre-merger vision tap closely enough that no Qwen-internal feature hook is justified.",
+      "why_it_matters": "If supported, Frank can reuse the exact visual representation already required for semantic decode while keeping the runtime on stable public libmtmd surfaces.",
+      "strongest_counterhypothesis": "Qwen3.5's merger/projection discards or distorts instance/layout geometry needed for calibrated familiarity, so pre-merger or independent retrieval features materially dominate.",
+      "falsifier": "Projected-grid MVC is Pareto-dominated on false-familiarity/open-set calibration and task outcome by pre-merger or lightweight-independent features under matched screenshots and resource accounting.",
+      "cheapest_test": "Frozen user-specific replay set; compare identical prototype and linear heads on projected-grid descriptors, HF-reference pre-merger descriptors, MobileCLIP2-S0 and DINOv3-S/16 descriptors.",
+      "expected_if_supported": "Projected-grid reaches frozen tolerance on AUROC/FPR95/ECE/false-familiarity while minimizing duplicate encode cost and state movement.",
+      "expected_if_counter": "Projected-grid shows systematic near-neighbor/UI-layout aliasing or calibration loss that disappears with pre-merger/independent features.",
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "status": "OPEN",
+      "confidence": "MEDIUM_IMPLEMENTABILITY_LOW_PERFORMANCE_EVIDENCE"
+    },
+    {
+      "id": "H-Q23-SPATIAL-GRID-01",
+      "parent": "H-Q23-FEATURE-STRATA-01",
+      "claim": "Using libmtmd decoder-position metadata to preserve normalized x/y token topology in a coarse spatial-pyramid descriptor materially improves recurring GUI-state discrimination over global mean pooling without requiring pre-merger access.",
+      "strongest_counterhypothesis": "Projected visual tokens are already sufficiently semantic/global that spatial binning adds dimensionality and sensitivity to window movement without useful discrimination gain.",
+      "falsifier": "No held-out open-set/layout gain after translation/resize controls, or worse calibration/resource cost than global pooling.",
+      "cheapest_test": "Compare global mean, global mean+variance, 2x2 pyramid, 3x3 pyramid and learned tiny projection under matched feature buffers and normalized decoder positions.",
+      "status": "OPEN",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "H-Q23-CACHE-LIFETIME-01",
+      "parent": "H-QNDRF-02",
+      "claim": "Separating visual state into four lifetimes prevents state amplification and stale-feature errors while retaining same-cycle zero-reencode escalation: L0 frame/delta identity; L1 persistent compact MVC descriptor/prototypes; L2 ephemeral raw mtmd embedding buffer; L3 optional version-bound llama.cpp media/slot runtime cache.",
+      "strongest_counterhypothesis": "The extra lifetime/type machinery adds complexity without measurable reliability or memory benefit compared with one versioned embedding cache.",
+      "falsifier": "Unified embedding cache matches or beats the split design on restart correctness, stale-hit rate, memory/disk amplification, latency and implementation complexity under the same fixtures.",
+      "cheapest_test": "Synthetic identity/restart matrix first; then Qwen3.5 target-runtime benchmark when target model/mmproj are available.",
+      "status": "OPEN",
+      "confidence": "MEDIUM_HIGH_ARCHITECTURE_LOW_RUNTIME_EVIDENCE"
+    },
+    {
+      "id": "H-Q23-HYBRID-STATE-01",
+      "parent": "H-Q23-CACHE-LIFETIME-01",
+      "claim": "Because Qwen3.5 mixes recurrent gated-delta layers with full attention, visual-prefix reuse/restart must bind LLM recurrent-state identity separately from raw visual embedding identity; visual embedding equality alone is insufficient to prove continuation-state equivalence.",
+      "strongest_counterhypothesis": "Existing llama.cpp context/slot state machinery already guarantees sufficient equivalence and Frank-specific state typing adds no value beyond exact model/media identity.",
+      "falsifier": "Across restart/save/restore tests, upstream state restoration is bit/behavior equivalent under all supported Frank media workflows and no additional Frank-visible state identity catches a failure.",
+      "cheapest_test": "Same image/prompt with uninterrupted vs save/restore continuation, then changed image, mmproj swap, quant/model swap and token-budget change controls.",
+      "status": "OPEN",
+      "confidence": "HIGH_MECHANISM_MEDIUM_RUNTIME"
+    },
+    {
+      "id": "H-Q23-LIGHTWEIGHT-BASELINE-01",
+      "parent": "H-QNDRF-01_COUNTER",
+      "claim": "MobileCLIP2-S0 is small enough to be a serious Frank-v0.1 counterbaseline rather than a strawman second encoder; it may beat reused Qwen projected features on familiarity/open-set while remaining operationally negligible.",
+      "strongest_counterhypothesis": "Any duplicate image encode, even a small one, loses Pareto value once Qwen vision is already needed for changed/uncertain frames and projected-grid descriptors are sufficiently accurate.",
+      "falsifier": "MobileCLIP2-S0 does not materially improve false-familiarity/calibration or safe decoder-bypass rate after total duplicate encode RAM/latency/power is counted.",
+      "cheapest_test": "Run identical MVC-0 prototypes and MVC-1 linear head on MobileCLIP2-S0 vs reused Qwen projected descriptors; no text encoder in hot path unless needed for a separate task.",
+      "status": "OPEN",
+      "confidence": "MEDIUM"
+    }
+  ]
+}

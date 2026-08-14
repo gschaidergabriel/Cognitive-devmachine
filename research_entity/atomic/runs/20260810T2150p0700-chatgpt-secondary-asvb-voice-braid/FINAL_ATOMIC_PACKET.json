@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2150p0700-chatgpt-secondary-asvb-voice-braid",
+  "candidate_id":"ATOMIC-CANDIDATE-ASVB-001",
+  "name":"Authority-Separated Voice Braid",
+  "status":"SUPPORTED_SYNTHETIC_PROXY_RETEST",
+  "novelty":"PROJECT_SPECIFIC_SEMANTIC_COMBINATION_CANDIDATE",
+  "architecture_promotion":false,
+  "authority":{"effect_authority_minted":false,"target_harness_mutation":false,"training":false},
+  "central_result":"For portable user->AI->Frank interaction, holder authentication and delegated scope are insufficient to prove which semantic payload segments are original user intent. A parent-sealed provenance braid plus per-turn intent ceiling eliminated all modeled authority-laundering attacks in the synthetic proxy, but an ideal RFC8693+RAR+sender-constrained baseline tied that safety result.",
+  "design_refutation":"Initial relay-self-signed grant design was refuted because a relay could widen its own incoming scope. Corrected proxy requires every incoming grant edge to be sealed by the parent/grantor; presenter proof is separate.",
+  "primary_metrics":{"main_cases":50000,"replication_cases":100000,"asvb_false_allow":0,"asvb_false_deny":0,"bearer_false_allow_main":38919,"delegated_scope_false_allow_main":25548,"verify_us_p50_main":14.762,"verify_us_p95_main":46.179,"wire_bytes_p50_main":1224,"hop8_verify_us_p50":79.889,"hop8_wire_bytes_p50":2937},
+  "counterevidence":"OAuth Token Exchange subject/actor semantics, Rich Authorization Requests, DPoP/resource restriction and attenuating credentials are established prior art. Under an ideal exact-claim assumption the standards baseline also has 0 false allow/deny. ASVB therefore has no support as a replacement authorization protocol.",
+  "surviving_scope":"ClayCode semantic voice provenance above standard authentication/authorization: AUTHENTICATED_ORIGIN, RELAY_ACTOR, TRANSPORT_METADATA and RELAY_ASSERTED_ORIGIN remain distinct through DE_TO_CLAY, cognition, memory/reentry and effect gating.",
+  "product_law":"If a user simply hands a bearer token to an AI, Frank can authenticate/authorize that token holder within token scope, but cannot infer that arbitrary text labeled 'the user said' is cryptographically authenticated user-origin speech without a separate origin binding.",
+  "next_test":"Implement the smallest standards-based subject/actor + rich-authorization + sender-constrained envelope on the real Frank API path. Run direct user, user->AI->Frank, multi-relay and AI-only conversations through DE_TO_CLAY; measure whether plain application provenance preserves voice boundaries and effect authority as well as ASVB. Include token rotation/revocation, audience, replay, global-busy holder continuity and translator-summary attacks. If simple standard metadata ties ASVB with less complexity, record ASVB NO_BENEFIT.",
+  "versioned_artifacts":["candidate/CANDIDATE_ATOMIC_ASVB_001.clay","implementation/asvb_reference.py","MEASUREMENTS.json","ABLATION_AND_CONTROLS.json","DESIGN_REFUTATION.md","EXTERNAL_RESEARCH_MANIFEST.json"]
+}

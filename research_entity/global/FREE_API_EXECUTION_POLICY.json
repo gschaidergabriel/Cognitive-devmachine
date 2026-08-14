@@ -302,6 +302,13 @@
     "executable_evidence": "test_request_messages_are_snapshotted_before_routing_side_effects",
     "counterhypothesis": "Validating the caller's list once is sufficient because request construction follows immediately; falsified locally by a deterministic routing-side mutation that changed validated content to blank text and added an unvalidated tool_calls field before serialization."
   },
+  "authorization_environment_snapshot": {
+    "checked_at": "2026-08-14",
+    "claim": "Execution snapshots only recognized provider-runtime environment inputs before routing and authorization; credential, endpoint, budget epoch and attestation values used by one attempt cannot change before authenticated request construction.",
+    "source": "https://cwe.mitre.org/data/definitions/367.html",
+    "executable_evidence": "test_credential_cannot_change_between_authorization_and_request",
+    "counterhypothesis": "Reading the shared environment repeatedly is safe because request construction immediately follows routing; falsified locally when a deterministic post-authorization mutation replaced the credential that was actually sent."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -318,6 +325,7 @@
     "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with user; invalid sequences are rejected before routing, credential use or network access.",
     "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
     "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
+    "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",

@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1421p0700-chatgpt-secondary-credential-hardlink-singlelink",
+  "trigger": "go",
+  "observed_at": "2026-08-14T14:21:23+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "246b68ac1256835241e38bbd6610402c8598f032",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "12eb0dd1301793298710e643da8f035a7454ba3d",
+    "parent_candidate_pr": 491,
+    "parent_candidate_head": "f9dfde649c64e13f29b48037be314b9cff6415ee",
+    "stacked_candidate_pr": 576,
+    "stacked_candidate_head": "0ab8fb894485dcf8af00a08664bb11592f14e693",
+    "stacked_base": "clay/go-fv01-08-credential-digest-path-trust",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-08-TOKEN-API-CLIENTS",
+    "reason": "Current SQLite F-V01-13 work already has multiple concurrent fresh-main and accepted-target lanes. Parent token-ingress PR #491 explicitly leaves hardlink exclusion unproven, making the credential-digest path identity seam a high-information non-duplicate frontier.",
+    "duplicate_avoidance": [
+      "Did not duplicate current F-V01-13 SQLite productive-parent/root-anchor work.",
+      "Did not mutate current Frank main.",
+      "Stacked the candidate on PR #491 rather than overwriting its active branch."
+    ]
+  },
+  "observed_reality": {
+    "parent_candidate_mechanism": "O_NOFOLLOW + fstat on the exact opened descriptor rejects a final-component symlink and validates regular-file/private-mode metadata before reading bounded strict UTF-8 JSON.",
+    "parent_candidate_nonclaim": "hardlink exclusion unproven",
+    "parent_workflow_prior_run": {
+      "run": 31537773715,
+      "conclusion": "failure",
+      "failure_stage": "Checkout exact candidate commit",
+      "candidate_steps_executed": false
+    },
+    "parent_fresh_head_run": {
+      "run": 31779425174,
+      "status_at_observation": "queued"
+    }
+  },
+  "hypothesis": "For the credential-digest deployment object, enforcing st_nlink == 1 on the same fstat result used for type/mode validation is a narrow fail-closed discriminator for a pre-existing same-filesystem hardlink alias while preserving the valid private single-link baseline.",
+  "strongest_counterhypothesis": "A strict single-link policy can be operationally brittle or incomplete: legitimate deployment tooling might use hardlinks, parent ownership/ancestry may be the stronger contract, and one st_nlink observation does not prove the complete hardlink/time-of-check attack surface.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "CREDENTIAL_DIGEST_HARDLINK_ALIAS",
+    "class": "bounded filesystem identity counterworld",
+    "location": "local disposable sandbox fixture",
+    "reversible": true,
+    "product_bytes_modified": false,
+    "intervention": "Create exactly one same-filesystem hardlink alias to an otherwise-valid mode-0600 credential JSON inode, compare the parent O_NOFOLLOW candidate with a strict st_nlink==1 candidate, then unlink the alias as rollback.",
+    "results": {
+      "baseline_direct_before_alias": "ACCEPT",
+      "same_inode_observed": true,
+      "nlink_with_alias": 2,
+      "parent_candidate_original_with_alias": "ACCEPT",
+      "parent_candidate_hardlink_alias": "ACCEPT",
+      "single_link_candidate_original_with_alias": "DENY",
+      "single_link_candidate_hardlink_alias": "DENY",
+      "single_link_candidate_original_after_alias_removed": "ACCEPT"
+    },
+    "interpretation": "O_NOFOLLOW solves the final symlink seam but cannot distinguish a hardlink alias because both names identify the same inode. st_nlink exposes the alias count and can implement a strict pre-existing-single-link fail-closed policy candidate."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Python os documentation",
+      "url": "https://docs.python.org/3/library/os.html",
+      "finding": "os.stat_result.st_nlink is the number of hard links; fstat returns metadata for the opened file descriptor."
+    },
+    {
+      "source": "Linux kernel sysctl fs documentation",
+      "url": "https://www.kernel.org/doc/html/latest/admin-guide/sysctl/fs.html",
+      "finding": "protected_hardlinks constrains hardlink creation but does not establish a universal no-hardlink invariant for all same-owner/otherwise-permitted cases."
+    }
+  ],
+  "build_delta": {
+    "branch": "clay/go-fv01-08-credential-hardlink-singlelink",
+    "base_head": "f9dfde649c64e13f29b48037be314b9cff6415ee",
+    "head": "0ab8fb894485dcf8af00a08664bb11592f14e693",
+    "pull_request": 576,
+    "draft": true,
+    "files_changed": [
+      "runtime/api/frank_credential_digest_loader_v1_candidate.py",
+      "tests/frank_credential_digest_path_trust_gate.py",
+      ".github/workflows/frank-credential-digest-path-trust-vps.yml"
+    ],
+    "mechanism": "Add explicit enforce_single_link=True and reject opened credential objects when st_nlink != 1; preserve the parent symlink regression and add deterministic hardlink alias + rollback assertions.",
+    "canonical_integration": false
+  },
+  "target_test_state": {
+    "workflow": "Frank Credential Digest Path Trust VPS",
+    "run": 31779608264,
+    "job": 94702288801,
+    "status_at_receipt": "queued",
+    "runner_assigned": false,
+    "accepted_target_pass_claimed": false
+  },
+  "grf_collapse": {
+    "o_nofollow_alone_excludes_hardlink_alias": "REJECT",
+    "st_nlink_can_detect_preexisting_multiple_link_inode": "RETAIN",
+    "strict_single_link_policy_is_ready_for_production": "DEFER",
+    "complete_hardlink_attack_surface_closed": "REJECT",
+    "architecture_delta": "CANDIDATE_STACKED_PR_576",
+    "promotion": "NONE"
+  },
+  "next_falsifiers": [
+    "Obtain accepted self-hosted Linux/X64 result for exact stacked head 0ab8fb894485dcf8af00a08664bb11592f14e693.",
+    "Decide and test the explicit deployment identity contract: unique single-link inode versus stronger trusted-parent/owner/inode manifest semantics.",
+    "Probe parent-directory replacement and ownership boundaries separately; do not infer them from st_nlink.",
+    "Only after those gates should canonical TokenCredentialStore integration be considered."
+  ],
+  "nonclaims": [
+    "No whole F-V01-08 acceptance",
+    "No Frank v0.1 acceptance",
+    "No canonical token-ingress mutation",
+    "No production credential or token read",
+    "No claim that st_nlink closes the complete hardlink attack surface",
+    "No Harness authority exercised",
+    "No final-model training authorization"
+  ],
+  "together_used": false
+}

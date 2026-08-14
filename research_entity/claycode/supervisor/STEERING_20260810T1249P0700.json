@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "created_at_local": "2026-08-10T12:49:54+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "status": "EVIDENCE_STEERING_ONLY_NO_PROMOTION",
+  "finding": "A latent WP02 acceptance blind spot was executable/review-identified: the standalone canonicalizer historically constructed Lark with default maybe_placeholders=True while the production frontend explicitly used maybe_placeholders=False. Current main now reuses the production parser constructor and rejects synthetic None children, but the currently fetched production validator and strict-local closure driver do not themselves expose an explicit cross-canonicalizer parity component. PR 153 proposes coupling that parity into BASE_CANONICALIZER_RECEIPT and the closure path.",
+  "primary_external_check": {
+    "source": "official Lark documentation",
+    "fact": "maybe_placeholders defaults to true; with true an unmatched [] optional yields None, while false makes [] behave like ? and yield no child",
+    "impact": "independently constructed parsers can produce structurally different trees from identical grammar/source bytes unless parser-constructor options are contract-bound"
+  },
+  "adjudication": {
+    "prior_hostinger_wp02_10_of_10": "POSITIVE_HISTORICAL_PROXY_EVIDENCE_BUT_NOT_SUFFICIENT_FOR_CURRENT_PROXY_CLOSURE_AFTER_ACCEPTANCE_GUARD_CHANGE",
+    "wp02_selected_grammar": "KEEP_V17_SELECTED",
+    "canonical_semantics_change": false,
+    "base_pass": false,
+    "frank_harness_mutation": false,
+    "free_only": true
+  },
+  "next_focus_ranked": [
+    "Review/land or otherwise execute the PR153-style cross-canonicalizer parity guard without changing ClayCode language semantics.",
+    "Re-run exact current-main selected-V17 WP02 Ubuntu proxy closure with Lark 1.3.1 + interegular 0.3.3 and require explicit standalone-vs-production canonical hash parity on full G9+Dialect plus absent-optionals.",
+    "Bind the new receipt to exact repository commit, grammar SHA, parser-constructor contract and PYTHONSAFEPATH/-P receipt-integrity guard; timeout remains hard negative evidence.",
+    "Only after the coupled WP02 proxy replay is clean continue the already-localized WP03 strict V7/V18 diagnostics and semantic-resolution work; do not let grammar-model consensus bypass the replay.",
+    "Formal WP02/BASE acceptance remains reserved for the registered Andreas Ubuntu target and later same-provenance BASE14 closure."
+  ],
+  "goodman_anti_echo": "PR142/PR153 and the prior Hostinger closure share project/source ancestry. Count the executable lesion/parity result as mechanism evidence, not as independent model replication; model-family agreement adds no PASS authority.",
+  "promotion": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "frank_harness_mutation": false
+}

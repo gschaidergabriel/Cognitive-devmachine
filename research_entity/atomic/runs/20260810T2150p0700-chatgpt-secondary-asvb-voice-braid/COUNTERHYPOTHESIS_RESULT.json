@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2150p0700-chatgpt-secondary-asvb-voice-braid",
+  "strongest_counterhypothesis":"A conventional standards-based authorization stack (OAuth Token Exchange subject/actor + Rich Authorization Requests + sender-constrained tokens + resource indicators) combined with ordinary application provenance metadata can preserve exactly the same user/relay boundary more simply than a special ASVB mechanism.",
+  "result":"NOT_REFUTED_AND_PARTIALLY_SUPPORTED",
+  "evidence":[
+    "In the synthetic benchmark an explicitly idealized RFC8693+RAR+DPoP baseline has the same 0 false-allow / 0 false-deny result as ASVB.",
+    "ASVB's measurable advantage appears only against bearer-only and scope-only baselines, not against the ideal standards baseline.",
+    "OAuth actor/subject, structured authorization, resource restriction and sender-constraining are established prior art."
+  ],
+  "surviving_hypothesis":"Frank may still need a dedicated ClayCode semantic representation of multiple voices after authentication: authenticated origin segments, relay-AI additions, relay-asserted origin and transport metadata. This is a cognition/translation provenance question, not an OAuth replacement.",
+  "decision":"NO_ARCHITECTURE_PROMOTION; RETEST_ONLY_AS_SEMANTIC_LAYER",
+  "next_falsifier":"Implement the smallest standards-based delegated-auth envelope and compare it with ASVB on real user->AI->Frank traces through DE_TO_CLAY. If simple metadata preserves voice boundaries and authority equally, classify ASVB NO_BENEFIT."
+}

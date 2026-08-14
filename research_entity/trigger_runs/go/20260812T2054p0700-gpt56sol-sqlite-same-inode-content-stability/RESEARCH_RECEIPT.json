@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2054p0700-gpt56sol-sqlite-same-inode-content-stability",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:54:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "d67dff9231fbc56070bef9f8c57d75faa8fca737",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "program": "FRANK_V0_1",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_after_merge": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+    "training_authorized": false
+  },
+  "duplicate_avoidance": {
+    "parallel_receipt": "research_entity/trigger_runs/go/20260812T2050p0700-gpt56sol-sqlite-live-attestor-decoy/RESEARCH_RECEIPT.json",
+    "parallel_work_item": "gschaidergabriel/Dr.-Unterweger#534",
+    "rule": "Do not duplicate the parallel decoy-mapping experiment or Hostinger ProductStart work. This receipt records only the independently observed same-inode content-stability race, its repair, exact-head test and merge."
+  },
+  "observed_reality": {
+    "baseline_attestor": "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py sampled mapped path/device/inode before and after a pathname hash but did not bind the hash to one FD or fence in-place content mutation metadata.",
+    "latest_generic_vps_receipt": {
+      "path": "runtime/vps_integrity/latest.json",
+      "hostname": "digital-retina",
+      "runner": "clay",
+      "release_claim": false,
+      "implication": "Generic self-hosted success is not accepted Hostinger production evidence."
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption defect affects releases through 3.51.2 under the documented concurrent writer/checkpoint conditions and is fixed in 3.51.3+."
+    },
+    {
+      "source": "SQLite current release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "Upstream 3.53.4 is on the fixed line; version strings alone do not prove Frank's exact productive mapped runtime."
+    }
+  ],
+  "grf": {
+    "anchor_R0": "The live-process attestor bound path/device/inode around hashing but the library file can be root-owned and writable by deployment/root operations.",
+    "generated_reality_R2": "Stable mapped device+inode may be treated as sufficient content identity during the hash window.",
+    "counter_reality_R3": "An in-place rewrite can preserve device+inode+size while changing bytes during attestation, so those identity fields alone do not prove content stability.",
+    "discriminating_test": "Modify a disposable root-owned 0644 SQLite-shaped file in place during a slow hash while recording device/inode/size/mtime/ctime and before/after hashes.",
+    "outcome": "COUNTER_REALITY_SUPPORTED_AND_REPAIRED"
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "SQLITE_SAME_INODE_CONTENT_MUTATION_DURING_HASH",
+    "scope": "Disposable local /tmp file only; no Frank/VPS/provider/Harness/canonical runtime mutation.",
+    "uid": 0,
+    "mode": "0644",
+    "size_bytes": 67108864,
+    "device_before_after": 65024,
+    "inode_before_after": 2277546,
+    "identity_stable": true,
+    "size_stable": true,
+    "mtime_changed": true,
+    "ctime_changed": true,
+    "sha256_before": "dbfaca2662cb70b69dfefd5ac95d1f54a73663092d46cefdc9609dc695a12c98",
+    "sha256_observed_after_mutation": "f43ab94307e30402d6744d1bd184fc990d5594298277c35a796468e46377c0fd",
+    "hash_equals_pre": false,
+    "hash_equals_post": true,
+    "outcome": "REJECT_DEVICE_INODE_STABILITY_AS_CONTENT_STABILITY",
+    "second_oob_created": false
+  },
+  "repair": {
+    "pull_request": 529,
+    "merged_main_sha": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+    "mechanism": [
+      "Hash the expected mapped library through one O_NOFOLLOW|O_CLOEXEC read-only FD.",
+      "Bind that FD's fstat device+inode to the selected /proc/<pid>/maps identity before hashing.",
+      "Fence device, inode, size, mtime_ns and ctime_ns across the same-FD hash.",
+      "Require the pre-hash pathname stat snapshot to equal the FD snapshot.",
+      "Retain pre/post PID-generation and mapping checks."
+    ],
+    "receipt_flags": {
+      "mapped_library_hash_fd_bound": true,
+      "mapped_library_content_metadata_stable": true
+    }
+  },
+  "deterministic_evidence": {
+    "workflow": "Frank SQLite live content stability",
+    "run_id": 31603159983,
+    "tested_head": "a858df71ce327fe4291fec056cb2100a6d3f4a4b",
+    "runner": "clay",
+    "conclusion": "success",
+    "tests": "6_OF_6_PASS",
+    "same_inode_mutation_regression": "FAIL_CLOSED_SQLITE_MAPPED_OBJECT_CHANGED_DURING_HASH",
+    "repo_static_integrity": "PASS",
+    "deep_integrity_v11": "PASS",
+    "productive_hostinger_mutation": false,
+    "frank_database_opened": false,
+    "canonical_state_mutated": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "fusion": {
+    "hypothesis": "Binding the hash to the mapped inode plus content-stability metadata closes the observed accidental/deployment same-inode rewrite race for the attestation window.",
+    "strongest_counterhypothesis": "This remains local observation integrity, not malicious-root remote attestation, and can be irrelevant to release if the observed PID is not the accepted productive Frank service.",
+    "mechanism_outcome": "SUPPORTED",
+    "package_outcome": "F-V01-13_REMAINS_IN_PROGRESS"
+  },
+  "reentry": {
+    "work_item": "gschaidergabriel/Dr.-Unterweger#534",
+    "coordination_comment_id": 5267749871,
+    "next_falsifier": "On the accepted Hostinger target bind owner-pinned host + systemd unit + executable + root SQLite anchor to the selected live Frank service PID, exercise productive UnifiedDB persistence, then prove restart and rollback/downgrade/library-swap rejection in one provenance-bound receipt.",
+    "forbidden_promotion": "Do not promote generic self-hosted runner success, mapped-library mechanism success, or a SQLite version string to productive Frank release acceptance."
+  },
+  "effect_authority": "NONE",
+  "harness_authority_changed": false,
+  "final_training_authorized": false
+}

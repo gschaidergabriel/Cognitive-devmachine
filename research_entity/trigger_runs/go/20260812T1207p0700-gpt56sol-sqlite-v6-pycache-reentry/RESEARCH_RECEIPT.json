@@ -1,0 +1,98 @@
+{
+  "protocol": "CLAY_GO_RESEARCH_RECEIPT_V1",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T12:07:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "entity_id": "frank-project-global-research-entity",
+  "program": "FRANK_V0_1",
+  "scope": ["F-V01-13", "sqlite-runtime-admission", "python-import-trust", "productstart-pre-guard", "release-recovery"],
+  "canonical_continuity_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_refreshed_before_write": "da8ddd6dc622e3c151be76c46446dae77a7bd0e1",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_before_repair": "7783c8bbeead158d1b56a44f441d15fec6614967",
+    "product_main_after_merge": "93a5a883aafe6cc174b0abc65722d52e31e7796e",
+    "superseded_pr_closed_without_merge": 509,
+    "merged_pr": 516,
+    "candidate_head": "2a61bc16a3098849225bb3c512e3990178b87580",
+    "exact_head_run": 31565182557,
+    "exact_head_run_status": "SUCCESS",
+    "exact_head_job": 94015439073,
+    "merge_method": "merge"
+  },
+  "observed_reality": [
+    "Product main independently merged V5 source-only __pycache__ exclusion in commit 88a376e26f0556598358dd4746378a245610c06c.",
+    "Product main then independently merged a new V6 launcher in commit 7783c8bbeead158d1b56a44f441d15fec6614967.",
+    "Fresh-main inspection showed the new V6 launcher preserved V6->V1 source-file trust but did not preserve the predecessor V5 __pycache__ exclusion before Python exec.",
+    "PR #509 was closed without merge after concurrent main changes made its older-base composition stale.",
+    "Fresh-main PR #516 restored the source-only cache exclusion on the actual V6 launcher after the complete imported-source trust chain and before root-anchor/Python execution.",
+    "Exact-head self-hosted run 31565182557 on candidate 2a61bc16a3098849225bb3c512e3990178b87580 completed SUCCESS; job 94015439073 reports all steps successful, including V6 re-entry/adjacent SQLite controls and the full existing Deep Integrity replay.",
+    "PR #516 merged to product main as 93a5a883aafe6cc174b0abc65722d52e31e7796e; post-merge file inspection confirms PYTHON_CHAIN_CACHE_PRESENT precedes root-anchor check and /usr/bin/python3 -I -S exec."
+  ],
+  "hypothesis": {
+    "claim": "Security invariants on a predecessor ProductStart/launcher path are not automatically preserved when a successor launcher is introduced; re-entry must explicitly compose and regression-test those invariants.",
+    "mechanism": "The V6 launcher now rejects any local source-tree __pycache__ object after launcher/directory/V6->V1 source trust and before Python can import the guard chain, preserving the source-only policy already established on V5.",
+    "confidence": "MERGED_MECHANISM_PASS_WITH_EXACT_HEAD_SELF_HOSTED_DEEP_INTEGRITY"
+  },
+  "strongest_counterhypothesis": {
+    "claim": "Productive release packaging may independently guarantee absence of local bytecode caches, making the explicit V6 cache gate redundant at deployment level.",
+    "status": "NOT_DISPROVEN_AT_PRODUCTIVE_HOSTINGER_LEVEL",
+    "consequence": "Keep the guard as conservative fail-closed defense but do not convert this mechanism PASS into productive F-V01-13 acceptance."
+  },
+  "exactly_one_unusual_experiment": {
+    "count_this_invocation": 1,
+    "id": "V5_WRITABLE_IMPORTED_PREDECESSOR",
+    "status": "COMPLETED_EARLIER_IN_THIS_INVOCATION",
+    "result": "A deliberately writable imported predecessor module executed top-level code before later V5 denial; rollback removed the effect. This bounded local mechanism result was independently addressed by merged PR #504.",
+    "new_unusual_experiment_after_that": false,
+    "note": "All V6 re-entry, pycache, suite and integration work after the single experiment used ordinary deterministic/static regression or existing-suite replay."
+  },
+  "intervention": {
+    "merged_policy": "PRESERVE_SOURCE_ONLY_PYCACHE_EXCLUSION_ON_V6_REENTRY",
+    "denial": "FRANK_V0_1_SQLITE_V6_LAUNCH_DENIED:PYTHON_CHAIN_CACHE_PRESENT",
+    "test": "tests/frank_sqlite_v6_pycache_source_only_reentry_regression.py",
+    "workflow": ".github/workflows/frank-sqlite-v6-pycache-reentry-current.yml",
+    "status": "MERGED_MECHANISM_PASS",
+    "rollback": "Revert product merge 93a5a883aafe6cc174b0abc65722d52e31e7796e if a future bytecode-enabled release explicitly binds cache artifact identity and requires a different policy.",
+    "canonical_frank_state_mutated": false,
+    "productive_service_state_mutated": false,
+    "effect_authority_changed": false,
+    "harness_authority": "NONE"
+  },
+  "primary_evidence": [
+    "SQLite upstream documents the WAL-reset corruption fix in releases >=3.51.3; 3.53.4 contains that fix, but version presence alone does not prove the productive Frank path maps the accepted runtime.",
+    "CPython import semantics permit source-module bytecode cache use from source-tree __pycache__ when no alternate pycache prefix is configured; isolated -I execution ignores PYTHON* environment controls but does not by itself attest local cache artifacts.",
+    "glibc dynamic loader behavior makes pre-first-guard loader/search/dependency trust part of ProductStart authority rather than a post-start check."
+  ],
+  "parallel_counterevidence_preserved": {
+    "research_main": "da8ddd6dc622e3c151be76c46446dae77a7bd0e1",
+    "current_productstart_frontier": [
+      "bind launcher and all executable imported guard code",
+      "bind loader search directory ancestry and transitive DT_NEEDED dependency authority",
+      "bind script/shebang interpreter identity and resolved interpreter path",
+      "independently bind owner-fixed Hostinger deployment identity rather than infer it from generic self-hosted/Linux/X64 labels",
+      "then prove exact mapped SQLite identity plus start/restart/recovery/rollback continuity"
+    ],
+    "runner_scope": "Run 31565182557 is strong exact-head self-hosted Ubuntu mechanism/integration evidence but is not independent proof that the runner is the owner-fixed accepted Hostinger product host."
+  },
+  "collapse": {
+    "predecessor_security_invariant_automatically_survives_successor_launcher": "REFUTED",
+    "source_chain_attestation_alone_binds_all_python_import_bytes": "REJECT_AS_GENERAL_CPYTHON_CLAIM",
+    "v6_source_only_pycache_reentry_gate": "PROMOTE_TO_MERGED_MECHANISM_PASS",
+    "productive_fixed_sqlite_admission": "DEFER_OPEN",
+    "productstart_complete_pre_guard_execution_trust": "DEFER_OPEN",
+    "f_v01_13": "IN_PROGRESS",
+    "frank_v0_1": "NOT_PASS"
+  },
+  "next_high_information_step": "Compose current ProductStart against the complete pre-first-guard execution trust closure already identified by Clay: launcher/imported guard chain + loader-directory ancestry + transitive DT_NEEDED authority + interpreter identity. Then, only on an independently bound authorized root-capable accepted Hostinger path, prove the exact productive service parent/environment, release bundle/root anchor, mapped SQLite 3.53.4, persistence lineage, clean restart and rollback/downgrade/library-swap controls with durable receipts.",
+  "authority": {
+    "frank_harness_mutation_authority": "PROPOSAL_ONLY",
+    "final_model_training_authorized": false,
+    "together_api_used": false
+  },
+  "final_status": "V6_PYCACHE_REENTRY_MERGED_MECHANISM_PASS; PRODUCTSTART_AND_F-V01-13_REMAIN_OPEN"
+}

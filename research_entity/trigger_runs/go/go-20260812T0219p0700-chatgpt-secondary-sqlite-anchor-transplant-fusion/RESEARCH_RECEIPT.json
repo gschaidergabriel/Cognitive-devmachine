@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0219p0700-chatgpt-secondary-sqlite-anchor-transplant-fusion",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_after_cycle": "abd769d5cee835af2b1b867041e52f8a443a3060",
+    "parallel_v5_release_identity_fence": "abd769d5cee835af2b1b867041e52f8a443a3060",
+    "parallel_v5_target_regression_run": 31528402922
+  },
+  "grf_anchor": {
+    "observed_reality": "The accepted target read-only productive Python path reported SQLite 3.45.1, Ubuntu package libsqlite3-0 3.45.1-1ubuntu2.7, and loaded libsqlite3 SHA-256 f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7. The root SQLite runtime trust anchor was absent, so the probe failed closed.",
+    "hypothesis": "A trusted root anchor that exactly matches sqlite_version, sqlite_source_id and library_sha256 is sufficient to establish SQLite WAL-reset release safety.",
+    "strongest_counterhypothesis": "A perfectly trusted and self-consistent anchor can identify an exact runtime without proving that the identified runtime contains the WAL-reset fix; release safety therefore requires a separate evidence-backed release-accepted identity policy.",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED_AND_MERGED"
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation - WAL-reset bug",
+      "claim_used": "SQLite documents the WAL-reset corruption bug for affected historical versions and the upstream fixed releases/backports; an unpatched 3.45.1 identity is within the affected range.",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite release history",
+      "claim_used": "3.51.3 contains the WAL-reset fix; later researched 3.53.4 is beyond the fixed upstream line.",
+      "url": "https://www.sqlite.org/changes.html"
+    },
+    {
+      "source": "Ubuntu Noble sqlite3 package publication",
+      "claim_used": "The accepted target package identity is 3.45.1-1ubuntu2.7; vendor version alone does not prove a WAL-reset backport.",
+      "url": "https://packages.ubuntu.com/noble/libsqlite3-0"
+    }
+  ],
+  "target_runtime_observation": {
+    "workflow_run": 31527030989,
+    "runner": "digital-retina",
+    "python": "3.12.3",
+    "sqlite_version": "3.45.1",
+    "sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "package": "libsqlite3-0=3.45.1-1ubuntu2.7",
+    "library_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "root_anchor_present": false,
+    "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+    "mutation": false
+  },
+  "vendor_patchset_observation": {
+    "workflow_run": 31527930172,
+    "package_source": "sqlite3 3.45.1-1ubuntu2.7",
+    "published_source_base": "sqlite3-3.45.1",
+    "dsc_file_hashes_verified": true,
+    "patches_touching_wal_c": [],
+    "patches_with_wal_reset_fix_markers": [],
+    "disposition": "NO_PUBLISHED_VENDOR_BACKPORT_EVIDENCE_FOR_WAL_RESET_FIX",
+    "epistemic_limit": "This proves the published Ubuntu source patchset inspected by the target workflow, not arbitrary unpublished local binary provenance."
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "BOUNDED_ANCHOR_TRANSPLANT_COUNTERFACTUAL_V1",
+    "input_basis": "Exact target observation from workflow run 31527030989",
+    "intervention": "Construct a synthetic anchor carrying the exact observed 3.45.1 runtime identity and evaluate the current V1 identity-match rule without mutating the target or repository.",
+    "synthetic_anchor_match_under_current_v1_identity_rule": true,
+    "target_mutation": false,
+    "repo_mutation": false,
+    "hypothesis_result": "REFUTED",
+    "counterhypothesis_result": "SUPPORTED",
+    "interpretation": "Identity-only anchor matching can accept an exactly identified runtime whose WAL-reset safety has not been established; identity attestation and release-safety attestation are distinct invariants."
+  },
+  "parallel_implementation_fusion": {
+    "commit": "abd769d5cee835af2b1b867041e52f8a443a3060",
+    "target_regression_run": 31528402922,
+    "mechanism": "FRANK_SQLITE_RELEASE_ACCEPTED_IDENTITY_V1 in fixed_sqlite_runtime_guard_v5_candidate.py",
+    "accepted_identity": {
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+    },
+    "negative_controls": [
+      "3.45.1 identity fails closed",
+      "3.53.4 with wrong source-id fails closed",
+      "unresearched future 3.54.0 identity fails closed"
+    ],
+    "status": "TARGET_REGRESSION_PASS_MECHANISM_ONLY",
+    "non_claims": [
+      "production fixed SQLite runtime is not provisioned by this commit",
+      "root production anchor is not provisioned by this commit",
+      "non-bypassable actual Frank service entrypoint through V5 is not yet proven here",
+      "whole Frank v0.1 acceptance is not claimed"
+    ]
+  },
+  "architecture_delta": {
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "state": "SUPPORTED",
+    "invariant": "TRUSTED_RUNTIME_IDENTITY_IS_NOT_RELEASE_SAFE_IDENTITY",
+    "required_mechanism": "A trusted runtime anchor must be combined with an independently researched fail-closed release-accepted SQLite identity policy. Unknown, vulnerable, mismatched and future-unresearched identities must not auto-promote.",
+    "fusion": "MERGE_WITH_PARALLEL_V5_RELEASE_IDENTITY_FENCE",
+    "rollback": "Remove V5 admission from productive startup and revert to V4 only if an alternative evidence-backed non-bypassable safety gate replaces the release-identity invariant; never revert to identity-only acceptance."
+  },
+  "next_discriminating_release_test": {
+    "priority": "P0",
+    "test": "On the accepted target, provision the exact fixed 3.53.4 runtime plus root-owned trust anchor, start the actual productive Frank persistence/service path through the V5 guard, attest the loaded SQLite source-id/library hash from the running process, prove downgrade/library-swap/bypass rejection, then run the exact current crash/restart/WAL recovery matrix.",
+    "pass_condition": "The actual productive process loads only the release-accepted fixed identity, adversarial downgrade/library swap and alternate entrypoints fail closed, and crash/restart recovery preserves integrity under the current Frank WAL topology.",
+    "fail_condition": "Any actual product entrypoint reaches SQLite outside V5 admission, any unaccepted identity loads, the anchor can be bypassed/replaced without rejection, or recovery integrity fails."
+  },
+  "workspace_delta": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "KEEP_IN_PROGRESS_AND_REPLACE_VENDOR_BACKPORT_UNCERTAINTY_WITH_PRODUCTIVE_V5_PROVISIONING_AND_NON_BYPASSABLE_ENTRYPOINT_PROOF",
+      "reason": "Published Ubuntu 3.45.1-1ubuntu2.7 patchset inspection found no WAL-reset backport evidence, while the V5 mechanism now independently rejects the vulnerable identity and accepts only the researched 3.53.4 identity. Production provisioning and exact service-path enforcement remain open."
+    }
+  },
+  "research_disposition": "MERGED_WITH_PARALLEL_V5_IMPLEMENTATION_NO_DUPLICATE_TARGET_CODE_CHANGE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

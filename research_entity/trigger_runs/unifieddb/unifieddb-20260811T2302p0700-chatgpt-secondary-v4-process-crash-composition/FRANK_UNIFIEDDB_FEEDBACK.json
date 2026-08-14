@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.1",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "research_subject": "self.root / Frank",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "status": "PROCESS_CRASH_EVIDENCE_SUPPORTED_COMPONENT_REMAINS_OPEN",
+  "supported_now": [
+    "private fixed SQLite 3.53.4 can be admitted behind V4 on accepted Ubuntu target",
+    "current V17 semantics and a disposable UnifiedDB+ClayGraph pair can execute behind V4",
+    "32 writer-process instances across 8 crash cycles each independently crossed V4 admission before state access",
+    "4250 application-acknowledged commits survived the tested process-crash matrix with zero lost acknowledged commits and zero unbounded phantom commits",
+    "integrity_check remained ok and the database remained writable after every tested process crash",
+    "UnifiedDB should remain authoritative semantic state while ClayGraph/retrieval remain derived projections",
+    "recovery evidence must be typed by failure class"
+  ],
+  "pending": [
+    "selected-lineage logical rollback/recovery composed with repaired runtime",
+    "installed service/systemd non-bypass boot proof",
+    "canonical migration/rollback owner gate",
+    "separate OS-crash/power-loss evidence if required by final acceptance",
+    "whole-product composition on accepted target"
+  ],
+  "state_policy_delta": {
+    "proposal": "persist recovery_evidence_class on recovery/continuity receipts and prohibit promotion across PROCESS_CRASH -> OS_CRASH -> POWER_LOSS without direct evidence",
+    "status": "SUPPORTED_DIRECTION_NOT_CANONICALLY_PROMOTED",
+    "effect_authority": "NONE"
+  },
+  "target_receipt": {
+    "pr": 371,
+    "head": "c4cf3747ee8e57c10c754b7a8898264181744777",
+    "workflow_run": 31510023573,
+    "job": 93841210700,
+    "checks": "10/10 PASS",
+    "acknowledged_commits": 4250,
+    "lost_acknowledged_commits": 0,
+    "phantom_commits": 0,
+    "evidence_class": "PROCESS_CRASH"
+  },
+  "self_harness_authority": "PROPOSAL_ONLY",
+  "canonical_state_mutated_by_this_run": false,
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": false
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "recorded_at": "2026-08-12T04:17:00+07:00",
+  "program": "FRANK_V0_1",
+  "affected_work_packages": ["F-V01-13", "F-V01-09"],
+  "worker_provenance": "GPT-5.6 Sol temporary Clay research/build worker",
+  "observed_anchors": {
+    "research_main_before_write": "4876075ad616bd16ac51f653da0e2efeaee99acb",
+    "frank_main_observed": "985f8370a6a6047d9962206f4fb6f2c049f4d370",
+    "candidate_pr": 479,
+    "candidate_base": "chatgpt/go-systemd-parent-path-integrity-20260812",
+    "candidate_head_after_repair": "d4d9308897bdaef999ce233ca1ce5b01f76301cb",
+    "dedicated_target_run": 31537031352,
+    "dedicated_target_run_state_at_recording": "QUEUED"
+  },
+  "r0_observation": {
+    "existing_v2_behavior": "The V2 systemd parent gate rejected non-empty ExecStartEx flags but extracted flags using the first raw substring occurrence of flags=.",
+    "parser_risk": "ExecStartEx is a structured systemctl rendering containing argv[] before the authoritative flags field, so an argv token containing flags= can precede and shadow the real structured field for a raw first-substring parser.",
+    "release_boundary": "SQLite 3.53.4 runtime work and multiple launcher/path hardenings exist, but productive parent/service admission remains an open F-V01-13 release obligation."
+  },
+  "grf": {
+    "generated_reality": "Checking the first flags= token is equivalent to checking systemd's authoritative ExecStartEx flags field.",
+    "counter_reality": "A non-authoritative argv token named flags= appears first and causes the observer to miss a later real flags=privileged field.",
+    "falsifier": "Keep the launcher path and all V1 fields unchanged; inject argv[] text containing flags= before a real structured flags=privileged field. A sound observer must deny privileged rather than pass."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "EXECSTARTEX_ARGV_FLAGS_SHADOW",
+    "scope": "Disposable local parser/evaluator counterworld only; no service, VPS, Frank state, Harness, persistence, effect authority, or production configuration mutated.",
+    "baseline": {
+      "exec_start_ex": "structured flags=privileged without argv shadow",
+      "parsed_flags": "privileged",
+      "status": "FAIL_CLOSED_AS_EXPECTED"
+    },
+    "intervention": {
+      "exec_start_ex": "argv[] contains an earlier flags= token; structured field later contains flags=privileged",
+      "old_parser_parsed_flags": "",
+      "old_parser_status": "PASS",
+      "result": "FAIL_OPEN_COUNTERWORLD_CONFIRMED"
+    },
+    "sensitivity_control": {
+      "exec_start_ex": "argv[] contains flags=benign; structured field later contains flags=privileged",
+      "old_parser_parsed_flags": "benign",
+      "old_parser_status": "FAIL_CLOSED_FOR_WRONG_FIELD"
+    },
+    "rollback": "Experiment used only disposable local data."
+  },
+  "repair": {
+    "state": "TESTING",
+    "branch": "chatgpt/go-systemd-execstartex-flags-20260812",
+    "commits": [
+      "2c1512ab747275498e86c8f0b0952ea190875e64",
+      "aa7e539d336166847529c8834ce0d36c1fcf9d22",
+      "d4d9308897bdaef999ce233ca1ce5b01f76301cb"
+    ],
+    "changes": [
+      "Bind flags extraction to structured systemctl field separators rather than the first raw flags= substring.",
+      "Fail closed if the structured flags field is absent or ambiguous.",
+      "Add EXECSTARTEX_ARGV_FLAGS_SHADOW deterministic regression and raise focused V2 suite expectation from 5/5 to 6/6.",
+      "Update the dedicated accepted-target workflow to require the 6/6 regression."
+    ],
+    "post_repair_local_parser_regression": {
+      "status": "PASS",
+      "checks": "5/5",
+      "cases": ["empty flags", "privileged flags", "argv shadow then privileged", "missing flags", "ambiguous duplicate structured flags"]
+    }
+  },
+  "primary_external_evidence": {
+    "sqlite": "Official SQLite release/WAL documentation was checked: fixed SQLite releases exist for the WAL-reset race; productive Frank must still prove its exact loaded runtime and topology rather than infer safety from a build artifact alone.",
+    "systemd": "Upstream systemd service documentation/source semantics and systemctl structured ExecStartEx examples support treating command flags as a distinct structured execution property rather than arbitrary argv text."
+  },
+  "counterevidence_and_limits": {
+    "accepted_target_repair_pass_claimed": false,
+    "productive_parent_observed": false,
+    "generic_workflow_failures_substituted_for_dedicated_evidence": false,
+    "f_v01_13_closed": false,
+    "whole_frank_v0_1_pass_claimed": false,
+    "effect_authority_changed": false,
+    "frank_harness_mutated": false,
+    "training_authorized": false
+  },
+  "collapse": {
+    "first_raw_flags_token_equivalence": "REJECT",
+    "argv_shadow_counter_reality": "SUPPORTED",
+    "structured_flags_binding_repair": "TESTING",
+    "confidence": "HIGH for the synthetic parser discriminator and repair behavior; UNKNOWN for accepted-target/productive runtime until the dedicated target run and real product parent are observed."
+  },
+  "next_falsifier": "Adjudicate dedicated target run 31537031352 on exact head d4d9308897bdaef999ce233ca1ce5b01f76301cb. If it passes, exercise V2 against the exact productive Hostinger systemd parent and then compose ExecStartEx semantics with launcher artifact identity, path-chain integrity, loader controls, root anchor, first-persistence-open ordering, restart/rollback, and downgrade/library-swap rejection on one current candidate.",
+  "outcome": "RETAIN_REPAIR_AND_REENTER_F_V01_13",
+  "promotion": "DEFER"
+}

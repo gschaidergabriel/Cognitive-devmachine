@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2000p0700-chatgpt-secondary-proactive-agency-selector",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+    "candidate_branch": "chatgpt/go-agency-goal-selector-v1-20260811",
+    "candidate_head": "5936d9b3fc6940f6c292aab868f2db3936501069",
+    "pull_request": 322,
+    "pull_request_state": "OPEN_DRAFT_MERGEABLE"
+  },
+  "frontier_refresh": {
+    "workspace_component": "F-V01-10-PROACTIVE-AGENCY-WEB",
+    "workspace_status_before_cycle": "OPEN",
+    "overlap_check": "NO_OTHER_OPEN_PROACTIVE_AGENCY_PR_FOUND_AFTER_CANDIDATE_CREATION",
+    "nonduplicated_active_lanes_observed": [
+      "ClayCode evaluator/surface/composition",
+      "cognitive loop-core/GWT causal binding",
+      "UnifiedDB semantic roots/replay/selection",
+      "SQLite recovery/runtime classification",
+      "token API transport/idempotency"
+    ]
+  },
+  "current_mechanism_reused": {
+    "canonical_gate": "runtime/state/frank_execution_gate.py",
+    "fact": "holder_kind=AUTONOMOUS already fails closed unless V15 presence is IDLE and V16 interactive idle handoff is CLEAR",
+    "architecture_decision": "DO_NOT_CREATE_SECOND_EXECUTION_AUTHORITY; place persistent goal selection above existing canonical gate"
+  },
+  "hypothesis": "A persistent bounded AgencyState/GoalCandidate selector can provide proactive continuation without creating a second authority system if ranking remains non-authoritative and every autonomous execution still passes the canonical V15/V16 FrankExecutionGate.",
+  "strongest_counterhypothesis": "A heuristic self-goal score creates novelty chasing/activity bias or becomes de facto execution/reward authority, making autonomous behavior unstable or unsafe.",
+  "live_external_evidence": [
+    {
+      "source": "From Curiosity to Competence: How World Models Interact with the Dynamics of Exploration",
+      "url": "https://arxiv.org/abs/2507.08210",
+      "claim_used": "adaptive exploration benefits from balancing curiosity with competence/control rather than optimizing novelty alone"
+    },
+    {
+      "source": "CURIOUS: Intrinsically Motivated Modular Multi-Goal Reinforcement Learning",
+      "url": "https://arxiv.org/abs/1810.06284",
+      "claim_used": "goal practice can be biased by learning progress and remain robust to distracting or impossible goals"
+    },
+    {
+      "source": "Intrinsically Motivated Goal Exploration Processes with Automatic Curriculum Learning",
+      "url": "https://arxiv.org/abs/1708.02190",
+      "claim_used": "autotelic learning can be represented as explicit self-generation, selection, ordering and experimentation over goals"
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "target_pr": 322,
+    "files": [
+      "runtime/state/UNIFIEDDB_AGENCY_V1_CANDIDATE.sql",
+      "runtime/agency/frank_agency_v1_candidate.py",
+      "runtime/state/apply_current_schema.py",
+      "tests/frank_agency_v1_candidate_gate.py",
+      ".github/workflows/frank-agency-v1-vps.yml",
+      "runtime/agency/README.md"
+    ],
+    "mechanisms": [
+      "persistent GoalCandidate and AgencyState rows",
+      "InitiativePulse SQL/runtime hard cap 0.12",
+      "deterministic ranking using interest, competence progress, controllability, novelty, cost and risk",
+      "goal checkpoint identity persistence",
+      "selection explicitly marked RANKING_ONLY_NOT_AUTHORITY",
+      "autonomous execution delegated to existing canonical FrankExecutionGate",
+      "durable agency admission attempt/block/acquire events"
+    ],
+    "nonclaims": [
+      "not F-V01-10 completion",
+      "no production heartbeat scheduler yet",
+      "no open-web ingress implemented here",
+      "no reward plasticity",
+      "no external effect",
+      "no whole Frank v0.1 acceptance",
+      "no training authorization",
+      "no Frank self-Harness authority"
+    ]
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "CURIOSITY_SIREN_TRAP",
+    "purpose": "falsify novelty-only self-activity by pitting maximal curiosity against learnability/controllability under maximum InitiativePulse",
+    "local_deterministic_formula_result": {
+      "initiative_pulse": 0.12,
+      "controllable_learning_score": 0.6005,
+      "curiosity_siren_score": 0.2188,
+      "margin": 0.3817,
+      "status": "PASS_LOCAL_SCORING_DISCRIMINATOR"
+    },
+    "target_execution": "PENDING_VISIBLE_TARGET_VPS_RECEIPT",
+    "epistemic_limit": "local score separation validates only the candidate ranking arithmetic; it does not validate persistence, schema composition, V15/V16 gate composition, restart behavior or accepted-target execution"
+  },
+  "target_validation_state": {
+    "candidate_workflow": ".github/workflows/frank-agency-v1-vps.yml",
+    "required_lane": "self-hosted Linux/X64 accepted target",
+    "visible_candidate_specific_receipt": "PENDING",
+    "ambient_pr_failures_adjudicated": [
+      {
+        "run": 31493794095,
+        "workflow": "Frank self.root current-head v2",
+        "classification": "INFRASTRUCTURE_ONLY",
+        "reason": "actions/checkout failed; all substantive test steps skipped"
+      },
+      {
+        "run": 31493794097,
+        "workflow": "Frank execution gate directory anchor repair VPS",
+        "classification": "INFRASTRUCTURE_ONLY",
+        "reason": "checkout failed; causal regression steps skipped"
+      },
+      {
+        "run": 31493794119,
+        "workflow": "Frank fresh-main effect fence + provider contract VPS",
+        "classification": "INFRASTRUCTURE_ONLY",
+        "reason": "checkout failed; all integration matrices skipped"
+      },
+      {
+        "run": 31493794072,
+        "workflow": "Frank Deep Integrity",
+        "classification": "UNEXECUTED_OR_UNOBSERVABLE_INFRASTRUCTURE_FAILURE",
+        "reason": "job exposed no executable steps and decoded log retrieval returned unavailable; no candidate falsification may be inferred"
+      }
+    ]
+  },
+  "workspace_delta": {
+    "F-V01-10-PROACTIVE-AGENCY-WEB": {
+      "action": "ADD_CANDIDATE_PR_AND_TARGET_GATE_OBLIGATION",
+      "promotion": "NONE_UNTIL_VISIBLE_TARGET_VPS_PASS",
+      "next_falsifier": "execute exact PR #322 candidate gate on accepted target, then attack crash window around autonomous lease release vs goal-state transition; preserve safe fail-closed recovery semantics"
+    },
+    "F-V01-11-MEMORY-REWARD-GOALS": {
+      "action": "CROSS_BRANCH_INPUT_ONLY",
+      "note": "competence progress is currently an input signal, not reward authority; later reward/causal-credit work must own how it is admitted"
+    },
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "ADD_RECOVERY_TEST_OBLIGATION_ONLY",
+      "note": "goal ACTIVE/DORMANT transition must be recovery-safe across crashes and restart"
+    }
+  },
+  "research_disposition": "CANDIDATE_IMPLEMENTED_LOCAL_OOB_SUPPORTED_TARGET_EXECUTION_PENDING",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

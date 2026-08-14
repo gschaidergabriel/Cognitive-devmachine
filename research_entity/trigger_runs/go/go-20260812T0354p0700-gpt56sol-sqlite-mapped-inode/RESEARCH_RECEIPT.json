@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0354p0700-gpt56sol-sqlite-mapped-inode",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "research_repo_parent_observed_before_write": "c0145076e1599b396e9057bde9276d1fa3a530d7",
+  "product_main_observed_before_repair": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+  "observed_reality": {
+    "workspace_gate": "IN_PROGRESS",
+    "sqlite_3_53_4_state": "candidate evidence exists but exact productive admission remains unproven",
+    "v1_mapping_check_before_repair": "reads /proc/self/maps path, then reopens/hash-checks pathname without binding maps dev+inode",
+    "v5_composition": "root-owned anchor and release identity policy delegate active loaded-object proof to V1",
+    "parallel_artifact_authority_repair": "draft PR 466; distinct complementary trust boundary"
+  },
+  "grf": {
+    "generated_reality": "Path equality plus a later SHA-256 of that pathname proves the object already mapped by the process.",
+    "counter_reality": "The process can keep executing an already mapped inode while the same pathname is atomically redirected/replaced, causing path-now hashing to attest a different object.",
+    "falsifier": "Load object A, atomically repoint the pathname to object B, then compare the live mapping identity with pathname-now device/inode/hash.",
+    "collapse": "GENERATED_REALITY_REFUTED_COUNTER_REALITY_SUPPORTED",
+    "retained_repair": "Bind /proc/self/maps dev+inode to one stable O_NOFOLLOW FD and hash that same FD before admission.",
+    "remaining_counter_reality": "Same-inode in-place mutation and productive deployment bypass/rollback require independent root-security and accepted-host evidence."
+  },
+  "exactly_one_bounded_unusual_experiment_this_invocation": {
+    "count": 1,
+    "name": "POST_START_SHARED_LIBRARY_PATH_REPOINT_COUNTERWORLD",
+    "scope": "disposable local sandbox; synthetic shared libraries; no production/canonical state mutation",
+    "baseline": "pathname current.so resolved to library A; loaded marker=111",
+    "intervention": "atomically repointed current.so to distinct library B after A was already loaded",
+    "result": {
+      "loaded_handle_marker_after_repoint": 111,
+      "mapped_inode_remained_A": true,
+      "pathname_now_inode_was_B": true,
+      "pathname_now_sha_differed_from_mapped_object": true,
+      "status": "PASS_COUNTERWORLD"
+    },
+    "rollback": "pathname restored to A",
+    "additional_unusual_experiments": 0
+  },
+  "repair_build": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "clay/go-sqlite-mapped-inode-20260812",
+    "head": "c9c77764ef91e3fe7fbd56033e343327e29ba73e",
+    "draft_pr": 467,
+    "mechanism": [
+      "parse /proc/self/maps device major/minor and inode for mapped libsqlite3",
+      "open expected mapped path once with O_NOFOLLOW/O_CLOEXEC",
+      "require opened FD dev+inode equals the mapped identity",
+      "hash the same opened FD rather than reopening by pathname",
+      "emit mapped device/inode in admission receipt",
+      "preserve legacy _mapped_sqlite_objects compatibility helper"
+    ],
+    "local_tests": {
+      "python_compile": "PASS",
+      "same_object_identity_hash": "PASS",
+      "atomic_path_replacement_denied": "PASS_SQLITE_RUNTIME_MAPPED_INODE_MISMATCH",
+      "live_linux_proc_maps_stat_identity": "PASS"
+    },
+    "github_ci_at_observation": "QUEUED_OR_IN_PROGRESS_NO_PASS_CLAIMED"
+  },
+  "primary_evidence": {
+    "sqlite_wal_reset_bug": "SQLite upstream documents the WAL-reset defect through 3.51.2 and fixes in 3.51.3 plus backports; 3.53.4 is later than the fix boundary.",
+    "promotion_limit": "SQLite version safety does not establish that Frank's productive process actually maps the intended fixed artifact."
+  },
+  "architecture_consequence": {
+    "state": "TESTING",
+    "invariant": "Runtime admission must attest the identity of the object actually mapped by the process, not merely the object currently reachable through an equal pathname.",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-09-EFFECT-AUTHORITY"
+    ],
+    "composition": "mapped-object identity, trusted artifact authority, root-secure provisioning, service non-bypassability, restart/rollback continuity are complementary gates"
+  },
+  "promotion": {
+    "mapped_inode_repair": "TESTING_DRAFT_PR_467",
+    "F_V01_13": "REMAINS_IN_PROGRESS",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "next_falsifier": "accepted Hostinger Ubuntu VPS: exact productive launcher/service admission must prove mapped dev+inode/hash equals the trusted 3.53.4 artifact across start/restart and deliberate downgrade/library-swap controls"
+  },
+  "authority": {
+    "frank_harness_authority": "PROPOSAL_ONLY",
+    "clay_independent_research_test_implementation": true,
+    "effect_authority_granted": false,
+    "training_authorized": false,
+    "together_used": false
+  }
+}

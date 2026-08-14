@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "created_at_local": "2026-08-11T00:46:48+07:00",
+  "active_program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "mode": "FREE_ONLY",
+  "reason": "Two previously queued accepted-target ClayCode candidate runs completed successfully after the prior supervisor state, changing the highest-information next gate.",
+  "evidence": [
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 236,
+      "head": "8532d17a3128b32317276fc1b1533fbabc0472c1",
+      "run": 31414516451,
+      "result": "SUCCESS",
+      "scope": "bounded generic-angle vs relational-token disambiguation on self-hosted Linux/X64 target",
+      "promotion": "NONE"
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 237,
+      "head": "dcf28123e35d5e67e7e3d43c265f13786c21edb0",
+      "run": 31414585939,
+      "result": "SUCCESS",
+      "scope": "declaration-aware constructor-alias regression on self-hosted Linux/X64 target",
+      "success_requires": [
+        "PASS_DECLARATION_AWARE_ALIAS_REGRESSION_CANDIDATE",
+        "six declaration-shadow rows",
+        "six unresolved legacy-alias rows",
+        "nested LIST<SET> preserves inner declared SET",
+        "authority NONE",
+        "external_effect_performed false",
+        "canonical_state_mutated false"
+      ],
+      "important_boundary": "The workflow classifies the real Frank structured frontend baseline independently, so success does not establish combined current-main Frank correctness.",
+      "promotion": "NONE"
+    },
+    {
+      "repo": "gschaidergabriel/clay-global-research-entity",
+      "run": 31413734864,
+      "result": "REPRODUCED_FORK_INHERITED_GATE_CAPABILITY_SHADOW",
+      "scope": "F-V01-09 cross-branch runtime authority counterexample",
+      "claycode_relevance": "future external-effect admission must remain runtime-authority separated from ClayCode semantic/type contracts and bind authority to process incarnation",
+      "wp03_semantic_credit": "NONE"
+    }
+  ],
+  "goodman": {
+    "shared_ancestry_collapsed": true,
+    "model_consensus_credit": "NONE",
+    "new_credit_source": "accepted-target executable discriminators"
+  },
+  "steer": {
+    "keep_v18_frozen": true,
+    "next_gate": "combined exact-current local-object accepted-target replay containing PR236 lexical fix plus PR237 declaration-aware alias fix",
+    "required_controls": [
+      "strict parser construction",
+      "full real Frank structured frontend",
+      "six declaration-shadow rows",
+      "six unresolved legacy constructor rows",
+      "nested LIST<SET>",
+      "semantic hash/value/mutation controls",
+      "conflicting explicit declaration negatives",
+      "exact component/work provenance",
+      "authority NONE",
+      "no external effects"
+    ],
+    "independent_gate_preserved": "class_decl/type nominal-identity discriminator",
+    "defer_until_combined_gate": ["broad CallContract population", "WP04/WP05 expansion"],
+    "effect_invariant": "ClayCode contracts/types never mint runtime authority; later effect admission must include process-incarnation binding.",
+    "base_pass_change": "NONE",
+    "canonical_semantic_promotion": "NONE",
+    "frank_harness_modified": false,
+    "paid_fallback": false
+  }
+}

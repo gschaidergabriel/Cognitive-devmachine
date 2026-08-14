@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-GO-ENDPOINT-STORAGE-BUILDDEP-20260811T123934Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "created_at_utc": "2026-08-11T12:39:34Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "observed_center_head_before_write": "56d8ec8cb22908f6554837c817f149e64074f532"
+  },
+  "go_oob_accounting": {
+    "count": 1,
+    "name": "NO_NETWORK_PROVIDER_REQUEST_TARGET_ALIAS_SHADOW",
+    "purpose": "Falsify origin-only endpoint identity using dot-segment, percent-encoded, query, fragment and alternate-path request-target aliases without external provider effects.",
+    "result": "SUPPORTED_EXACT_ENDPOINT_CAPABILITY_IDENTITY",
+    "external_network_effect": false
+  },
+  "provider_delta": {
+    "base_pr": 232,
+    "initial_observation_head": "52beba285416cc3d682435ff8a9795c7444c8d01",
+    "fresh_parent_head": "19d6ac95ba47f3e606727be3ba102227ddcd46f6",
+    "finding": "The parent advanced during the cycle and independently integrated exact endpoint-path binding, endpoint-capability identity, cost-principal identity and HTTP-402 hard-stop semantics.",
+    "stale_repair_pr": 233,
+    "stale_repair_disposition": "CLOSED_STALE_INPUT_DO_NOT_PROMOTE",
+    "current_regression_pr": 234,
+    "current_regression_head": "5ef200a37dbafa1004a8b6b9cffd1d2169f0731c",
+    "regression_scope": [
+      "extra dot/percent-encoded same-origin aliases",
+      "query/fragment/params rejection before opener",
+      "different operation paths produce different endpoint_capability_id and request_id under localhost-only control"
+    ],
+    "ci_classification": "UNKNOWN_INFRA_OR_GUARD_FAILURE_NO_TEST_CREDIT",
+    "nonclaims": [
+      "No real provider request executed by this worker",
+      "No billing state inferred",
+      "No whole Frank provider acceptance"
+    ]
+  },
+  "storage_delta": {
+    "work_item": "F-V01-13",
+    "system_sqlite": {
+      "package": "libsqlite3-0=3.45.1-1ubuntu2.7",
+      "source_provenance_pr": 274,
+      "classification": "NO_WAL_CODE_BACKPORT_EVIDENCE_IN_UBUNTU_PATCHSET",
+      "release_safe_from_version_or_package_label_alone": false
+    },
+    "private_fixed_candidate": {
+      "sqlite_version": "3.53.4",
+      "preflight_pr": 288,
+      "target_run": 31434825206,
+      "observed": [
+        "CPython 3.12.3 dynamically bound to private SQLite 3.53.4 on self-hosted clay/digital-retina Linux X64",
+        "V16 persistence regression passed",
+        "256-commit WAL compatibility smoke ended integrity_check=ok and zero foreign-key violations",
+        "repository static integrity passed"
+      ],
+      "promotion_boundary": "SAFE_RUNTIME_CANDIDATE_ONLY_NOT_PRODUCT_INTEGRATION"
+    },
+    "axis_c_pr": 315,
+    "axis_c_run": 31491519101,
+    "axis_c_artifact": 9101221284,
+    "axis_c_adjudication": {
+      "upstream_source_check": "SQLite version-3.51.3 uses exactly sqlite3FaultSim(660) at the same checkpoint location and walrestart.test installs a faultsim callback that performs the concurrent db2 write at id 660.",
+      "artifact_observation": "SQLite configure completed but could not locate a usable tclConfig.sh; make testfixture failed at .tclenv.sh with TCL_CONFIG_SH missing. No discriminator test log was produced.",
+      "classification": "BLOCKED_BUILD_DEPENDENCY_TCL_CONFIG_MISSING",
+      "scientific_result": "UNKNOWN_NOT_EXECUTED",
+      "next_falsifier": "Repair Tcl development build capability without changing the upstream-faithful hook, then rerun the same Axis-C discriminator."
+    }
+  },
+  "claycode_delta": {
+    "comparison_chain_semantics": "NO_PATCH_WITHOUT_OWNER_FIXED_SEMANTIC_AUTHORITY",
+    "reason": "Current grammar admits relation chains and evaluator behavior is distinguishable, but no owner-fixed contract was recovered that authorizes selecting adjacent-pair semantics over the current behavior. Preserve as semantic decision debt and diagnostic obligation."
+  },
+  "external_primary_sources": [
+    "https://sqlite.org/wal.html",
+    "https://github.com/sqlite/sqlite/blob/version-3.51.2/src/wal.c",
+    "https://github.com/sqlite/sqlite/blob/version-3.51.3/src/wal.c",
+    "https://github.com/sqlite/sqlite/blob/version-3.51.3/test/walrestart.test",
+    "https://packages.ubuntu.com/noble/all/tcl-dev/filelist"
+  ],
+  "distribution": {
+    "target_pr_comments": [315],
+    "target_regression_pr": 234,
+    "closed_stale_pr": 233,
+    "intended_recipients": [
+      "F-V01-13 security/recovery/storage worker",
+      "provider execution-boundary worker",
+      "release evidence worker",
+      "Research Center coordination worker"
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "changes": [
+      "Provider logical request identity must remain endpoint-capability aware rather than origin-only.",
+      "System SQLite 3.45.1-1ubuntu2.7 remains fail-closed for WAL-reset release safety.",
+      "Private SQLite 3.53.4 remains the strongest measured runtime candidate.",
+      "Axis-C targeted evidence must not receive PASS/FAIL credit until Tcl testfixture build capability is repaired and the discriminator actually executes."
+    ]
+  },
+  "claims_not_made": [
+    "Frank v0.1 complete",
+    "F-V01-13 closed",
+    "Axis-C PASS",
+    "Axis-C FAIL",
+    "Ubuntu system SQLite proven vulnerable by organic reproduction",
+    "private SQLite product integration complete",
+    "ClayCode comparison-chain semantics selected",
+    "final training authorized"
+  ]
+}

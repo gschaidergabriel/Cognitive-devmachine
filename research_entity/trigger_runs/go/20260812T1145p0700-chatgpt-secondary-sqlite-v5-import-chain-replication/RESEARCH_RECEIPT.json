@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1145p0700-chatgpt-secondary-sqlite-v5-import-chain-replication",
+  "organ": "chatgpt-secondary / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_refreshed_before_write": "3c851cced1921856e4b17c67750e91c77a5609d9",
+    "frank_main_observed": "c20a9277b95df4ad6cbcba11ed53a4f07e1745f1",
+    "overlap_detected": "PR#500 chatgpt/sqlite-v5-import-chain-trust-20260812 independently discovered and repaired the same pre-Python import-chain ownership gap",
+    "duplicate_patch_created": false,
+    "distribution": "Independent replication and negative marker observation posted as COMMENT review on PR #500, review_id=4913078541"
+  },
+  "r0_observed": [
+    "Current V5 entry guard imports V4 by spec_from_file_location/exec_module; V4 imports V3; V3 imports V2; V2 imports V1.",
+    "The current main launcher at the initial observation attested the V5 entry guard, launcher and deployment parent chain before Python, but did not attest V4/V3/V2/V1 predecessor file ownership before Python.",
+    "A root-owned non-group/other-writable directory prevents an unprivileged runtime user from creating a new sibling but does not by itself prevent that user from rewriting an already-existing file owned by that user.",
+    "PR #500 adds complete V5->V1 pre-Python chain file attestation and is mergeable but remains draft at the time of this receipt.",
+    "Exact-head self-hosted Linux/X64 run 31564079809 completed SUCCESS on PR head b7adc40ee2770c49588f50b2f79cf1593f8f4c2d.",
+    "Fresh-main integration and inherited V5 pre-guard and directory-anchor checks observed during this run completed SUCCESS.",
+    "F-V01-13 remains IN_PROGRESS; productive root-anchor/service/runtime/restart/recovery proof is not established by this narrow repair."
+  ],
+  "external_primary_evidence": {
+    "sqlite_wal_reset_bug": "SQLite upstream documents the WAL-reset bug through 3.51.2 and the fix in 3.51.3 and later.",
+    "sqlite_3_53_4": {
+      "release_date": "2026-07-24",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+    },
+    "use": "Supports the existing 3.53.4 fixed-runtime policy only; does not prove productive Frank loads that object."
+  },
+  "r1_hypothesis": {
+    "hypothesis": "Trusting only the V5 entry file plus its root-owned non-writable directory is insufficient when a transitive predecessor module already exists and is runtime-user-owned/writable.",
+    "causal_mechanism": "File-content mutation of an existing predecessor requires write permission on that inode, not write permission on the containing directory; importlib later executes that predecessor module top-level code.",
+    "predicted_if_right": "Runtime user cannot create a new sibling in the trusted directory but can rewrite its own existing predecessor file.",
+    "predicted_if_wrong": "The write to the existing predecessor fails solely because the parent directory is root-owned/non-writable.",
+    "confidence": "HIGH_FOR_FILESYSTEM_PERMISSION_PREMISE; HIGH_FOR_STATIC_IMPORT_CHAIN; PRODUCTION_APPLICABILITY_REQUIRES_DEPLOYMENT_OWNERSHIP_ATTESTATION"
+  },
+  "r3_counter_reality": {
+    "counterhypothesis": "Trusted parent-directory ownership/write bits automatically protect all existing sibling contents regardless of each file's owner/mode.",
+    "outcome": "REFUTED_BY_BOUNDED_PERMISSION_COUNTERWORLD"
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "id": "ROOT_DIR_RUNTIME_OWNED_EXISTING_PREDECESSOR",
+    "scope": "Disposable local Linux filesystem permission counterworld only; no Frank/VPS/canonical/runtime state touched.",
+    "setup": {
+      "trusted_directory_uid": 0,
+      "trusted_directory_mode": "0755",
+      "v5_loader_uid": 0,
+      "support_uid": 65534,
+      "support_mode": "0644",
+      "runtime_uid": 65534
+    },
+    "observed": {
+      "create_new_file_in_trusted_directory": "DENIED_EXPECTED",
+      "rewrite_existing_runtime_owned_support": "SUCCEEDED",
+      "import_returncode": 1,
+      "execution_marker_created": false
+    },
+    "negative_result_preserved": "The marker phase was inconclusive because the selected marker path was itself root-owned/non-writable to uid 65534; the experiment therefore proves the filesystem mutation premise but does not independently promote arbitrary-code execution. PR #500's own recorded experiment contains the stronger marker observation.",
+    "rollback": "Disposable tree removed.",
+    "canonical_state_mutated": false,
+    "production_state_mutated": false
+  },
+  "collapse": {
+    "prior_reality": "Trusted V5 entry + trusted parent directory is sufficient for transitive admission-code integrity.",
+    "prior_reality_outcome": "REFUTED",
+    "repair_reality": "Attest every known executable Python admission module V5->V1 before first Python exec.",
+    "repair_reality_outcome": "SUPPORTED_BY_INDEPENDENT_PERMISSION_REPLICATION_AND_SELF_HOSTED_REGRESSION; PR_REMAINS_DRAFT",
+    "not_promoted": [
+      "F-V01-13 PASS",
+      "production service loads SQLite 3.53.4",
+      "root-owned but wrong/stale release bundle is impossible",
+      "productive root anchor exists and is accepted",
+      "restart/rollback/downgrade continuity is proven",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "next_discriminating_test": {
+    "target": "productive accepted Hostinger Ubuntu Frank service lane",
+    "requirements": [
+      "attest the exact deployed launcher and complete V5->V1 chain as root-owned non-writable single-link regular files",
+      "bind those bytes to an independently accepted release/build identity rather than ownership alone",
+      "prove the root trust anchor, manifest and fixed SQLite 3.53.4 source-id/hash on the productive process",
+      "reject stale/wrong bundle, downgrade/library swap and rollback branches",
+      "exercise crash/restart/recovery without selecting an untrusted semantic or storage lineage"
+    ]
+  },
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "INDEPENDENT_IMPORT_CHAIN_PERMISSION_PREMISE_REPLICATED; PR500_NARROW_REPAIR_SUPPORTED; F-V01-13_REMAINS_IN_PROGRESS"
+}

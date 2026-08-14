@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0416p0700-chatgpt-secondary-provider-retention-adversarial-review",
+  "status": "OPEN_CONTRADICTION_PENDING_TARGET_DISCRIMINATOR",
+  "affected_package": "F-V01-09-EFFECT-AUTHORITY",
+  "contradiction_id": "C-FV01-09-PROVIDER-RETENTION-FIRST-ATTEMPT-SCOPE",
+  "observed_parent_pr": 265,
+  "observed_parent_head": "97631b2bda025e8422391ac44c63280950714e62",
+  "python_candidate_semantics": {
+    "new_unknown_retention_contract": "DENY_AT_RESERVATION",
+    "unknown_retention_retry": "DENY",
+    "unknown_retention_read_only_reconciliation": "ALLOW_IF_LOOKUP_SUPPORTED",
+    "integrated_matrix": "tests/frank_effect_provider_retention_runtime_matrix.py"
+  },
+  "clay_semantic_authority": {
+    "source": "claycode/frank_effects.clay",
+    "first_attempt": "begin_effect_attempt binds provider request fingerprint without provider_idempotency_contract_current retention predicate",
+    "retry": "recover_effect delegates to provider_retry_contract_valid; provider_retry_contract_valid applies provider_idempotency_contract_current",
+    "interpretation": "current Clay semantics make provider retention a retry/recovery condition rather than a first-attempt admission condition"
+  },
+  "research_judgment": "DO_NOT_AVERAGE_AWAY. The Python candidate is safer but semantically broader than current Clay authority. Either intentionally revise Clay semantics with evidence and matched capability-cost measurements, or split provider contract binding from retry-current validation in runtime.",
+  "normal_discriminator": {
+    "pr": 283,
+    "head": "812c07a9d28974227accdddea8d75db5cba8e862",
+    "workflow_run": 31433964765,
+    "state_at_write": "QUEUED_NOT_EXECUTED",
+    "expected_negative_on_pr265_parent": "CONFIRMED_RUNTIME_CLAY_RETENTION_SCOPE_DRIFT",
+    "go_oob_experiment_added": false,
+    "external_effect": false,
+    "canonical_frank_state_mutated": false
+  },
+  "adversarial_reasoning": {
+    "policy_a_advantage": "maximally fail-closed; no mutation path depends on an idempotency contract whose retention window is unknown",
+    "policy_a_cost": "can deny otherwise valid one-shot first execution for providers that do not publish a retry-retention horizon and creates Python-Clay semantic drift",
+    "policy_b_advantage": "matches current Clay semantic split and preserves one-shot capability while denying uncertain retry",
+    "policy_b_cost": "requires the provider precommit fence to distinguish initial attempt from durable retry and recheck retention immediately before an actual retry"
+  },
+  "promotion_gate": "No retention-scope architecture promotion until target discriminator executes and semantic authority is explicitly adjudicated."
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0442p0700-chatgpt-secondary-v16-wal-private-sqlite",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "program_stage_observed": "FRANK_V0_1",
+  "training_authorized": false,
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_after_v16_target_run": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+    "main_delta_after_pr270_test_base": "seven runtime/vps_unifieddb evidence-only commits; no overlap with runtime/state/frank_execution_continuity.py",
+    "effect_generation_provider_merge": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4"
+  },
+  "cycle_hypothesis": "V16 continuity events require durable event-instance identity independent of wall-clock timestamp, and the target WAL release blocker can be removed without a system package mutation if CPython can be proven to use a pinned fixed private SQLite runtime.",
+  "strongest_counterhypotheses": [
+    "Adding the persisted event sequence to V16 event hashes may collide, race, become non-reconstructible, or regress current V16 ingress continuity under dense same-instant replay.",
+    "Ubuntu 3.45.1-1ubuntu2.7 may already backport the upstream WAL-reset fix despite its semantic version.",
+    "A private SQLite 3.53.4 may fail to bind to the target CPython _sqlite3 extension or may regress Frank persistence semantics/compile assumptions."
+  ],
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation - WAL-reset bug",
+      "claim_used": "upstream affected range includes SQLite 3.45.1 and runs through 3.51.2; fixed in 3.51.3+ under the documented concurrent WAL writer/checkpoint topology",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite 3.51.3 release",
+      "claim_used": "3.51.3 contains the upstream WAL-reset fix",
+      "url": "https://www.sqlite.org/releaselog/3_51_3.html"
+    },
+    {
+      "source": "SQLite download page",
+      "claim_used": "current official release is 3.53.4 and sqlite-autoconf-3530400.tar.gz is published with SHA3-256 454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+      "url": "https://www.sqlite.org/download.html"
+    }
+  ],
+  "v16_event_identity_repair": {
+    "pr": 270,
+    "branch": "chatgpt/go-v16-event-instance-seq-repair-20260811",
+    "head": "5bfd2d49885e1b9db88328a85d7c5b2aa6e9596e",
+    "mechanism": "Under the existing BEGIN IMMEDIATE writer transaction, include the next durable frank_execution_continuity_events AUTOINCREMENT sequence in the event hash payload; created_at remains evidence rather than event-instance identity.",
+    "schema_migration_required": false,
+    "target_run": 31432822090,
+    "target_job": 93600037620,
+    "target_runner": "clay",
+    "target_machine": "digital-retina",
+    "target_os": "Linux",
+    "target_arch": "X64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "target_status": "PASS",
+    "baseline_status": "PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY",
+    "normal_regression": {
+      "same_instant_replays": 2,
+      "unique_sequences": 2,
+      "unique_hashes": 2,
+      "hash_reconstruction": "PASS",
+      "sqlite_integrity": "ok"
+    },
+    "artifact_id": 9080484422,
+    "artifact_sha256": "03e6c1733ec9718ebbd81cf930812343c198d8c02805fa0c4beb217fe42c6a57",
+    "promotion_disposition": "TARGET_MECHANISM_PASS_FRESH_BASE_MERGEABILITY_HANDLING_STILL_REQUIRED"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "GO_OOB_V16_SAME_INSTANT_REPLAY_BURST_128",
+    "parent_pr": 270,
+    "target_run": 31432822090,
+    "status": "PASS_V16_EVENT_INSTANCE_SEQUENCE_REPAIR",
+    "same_instant_replays": 128,
+    "unique_sequences": 128,
+    "unique_hashes": 128,
+    "distinct_timestamps": 1,
+    "hash_reconstruction": true,
+    "sqlite_integrity": "ok",
+    "external_network_used": false,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false,
+    "counterhypothesis_status": "REFUTED_WITHIN_BOUNDED_128_REPLAY_SAME_CLOCK_WINDOW"
+  },
+  "sqlite_wal_vendor_provenance": {
+    "pr": 274,
+    "branch": "chatgpt/sqlite-wal-reset-patch-provenance-20260811",
+    "head": "81ebce04e86e8a37db25d83e9d5eb62cb047a539",
+    "target_run": 31434276466,
+    "target_job": 93604760538,
+    "tested_merge_sha": "aa998f66c9f7998b98be7ed1b1e4ca77e6ddc408",
+    "target_status": "PASS_PROVENANCE_PROBE",
+    "installed_package": "libsqlite3-0=3.45.1-1ubuntu2.7",
+    "python_sqlite": "3.45.1",
+    "python_sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "ubuntu_patch_count": 16,
+    "ubuntu_pristine_wal_sha256": "d4a104b5f3cb807e026a9dbcdb77519358b06b66f76cb6b6ef70e3793379dd62",
+    "ubuntu_patched_wal_sha256": "d4a104b5f3cb807e026a9dbcdb77519358b06b66f76cb6b6ef70e3793379dd62",
+    "ubuntu_patch_series_changed_src_wal_c": false,
+    "ubuntu_patch_targets_wal_or_amalgamation": [],
+    "upstream_3512_wal_sha256": "a6dd4f5ac14ff09203e4cf2019c2dcf32f643e6bb56b98722e5f44de22d8c6ff",
+    "upstream_3513_wal_sha256": "100980ad092bcd2b722902b4b2f9927975cfa953d57eef521d7aed42918a39be",
+    "upstream_3512_to_3513_wal_changed": true,
+    "classification": "NO_WAL_CODE_BACKPORT_EVIDENCE_IN_UBUNTU_PATCHSET",
+    "artifact_id": 9080564690,
+    "artifact_sha256": "4687f74a9d70aa0c13c1716fe242ac7b20fad6a3e89589ad2ffee56d7bf291cd",
+    "counterhypothesis_status": "REFUTED_AT_SOURCE_PATCHSET_LEVEL_FOR_DIRECT_WAL_OR_AMALGAMATION_BACKPORT",
+    "non_claim": "This source-provenance result does not empirically induce corruption on the target machine and does not prove every conceivable distro-level runtime mitigation absent."
+  },
+  "sqlite_fixed_runtime_preflight": {
+    "pr": 288,
+    "branch": "chatgpt/sqlite-35304-private-runtime-preflight-20260811",
+    "head": "bf74203c0273ab0e99de7be9a45757b86b5bb3ff",
+    "official_version": "3.53.4",
+    "archive": "sqlite-autoconf-3530400.tar.gz",
+    "expected_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+    "expected_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "mechanism": "user-local shared-library build under disposable /tmp prefix; prove CPython _sqlite3 loader binding with ldd and sqlite_source_id, then run current V16 ingress, WAL compatibility smoke and repo static integrity",
+    "system_install_performed": false,
+    "canonical_state_mutated": false,
+    "go_oob_experiment_added": false,
+    "target_run": 31434825206,
+    "target_status_at_receipt_write": "QUEUED",
+    "local_container_probe": "CAPABILITY_UNAVAILABLE_NO_DNS_EGRESS",
+    "promotion_disposition": "PENDING_TARGET_EXECUTION"
+  },
+  "v17_swarm_coordination": {
+    "selected_product_lane": 280,
+    "discarded_parallel_local_scratch": "chatgpt/v17-support-bound-terminal-repair-20260811",
+    "scratch_pr_opened": false,
+    "review_comment_id": 4901131571,
+    "review_observation": "PR 280 now binds exact execution generation, canonical GWT receiver closure, same-cycle exact effect prediction, non-CORRELATED_ONLY causal credit and independent semantic-delta admission; residual review requested exact provider/effect outcome evidence binding, with existing PR 206 identified as prior stronger evidence source.",
+    "latest_head_observed": "e7a58d4c6bf7d11a29e6e775dc270399ed5d1ec3",
+    "latest_architecture_delta_observed": "effect_causal_outcome_support_v17 now freezes exact effect_id/attempt_id/effect_outcome_hash relation in canonical support evidence; exact provider-receipt identity remains a possible stricter discriminator rather than a separate architecture claim.",
+    "duplicate_work_avoided": true
+  },
+  "architecture_and_release_delta": {
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY": "ADD_V16_EVENT_INSTANCE_SEQUENCE_REPAIR_CANDIDATE_TARGET_PASS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "PROMOTE_SQLITE_WAL_VENDOR_BACKPORT_COUNTERHYPOTHESIS_TO_REFUTED_AT_PATCHSET_LEVEL_AND_KEEP_RELEASE_BLOCKED_ON_SYSTEM_SQLITE_3_45_1",
+    "runtime_candidate": "TEST_PRIVATE_SQLITE_3_53_4_NO_ROOT_ESCAPE_PATH",
+    "V17": "NO_PARALLEL_PRODUCT_LANE; DISTRIBUTE_RESIDUAL_CAUSAL_EVIDENCE_FALSIFIER_TO_PR_280"
+  },
+  "negative_results_and_limits": [
+    "Initial WAL provenance run failed only because target lacked unzip; stdlib zipfile rerun succeeded and is the authoritative result.",
+    "Local private-SQLite build probe could not execute because the local analysis container has no DNS egress; this is capability unavailable, not candidate failure.",
+    "No whole Frank v0.1 acceptance claimed.",
+    "No final paid/model training authorization granted.",
+    "No Frank/self.root Harness mutation authority granted."
+  ],
+  "research_disposition": "SUPPORTED_V16_REPAIR_PLUS_CONFIRMED_WAL_RELEASE_BLOCKER_PLUS_FIXED_RUNTIME_PREFLIGHT_PENDING",
+  "research_write_scope": "unique trigger receipt plus targeted PR comments/review; no canonical architecture overwrite",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """SandboxAPI remote execution adapter for FRANK/RAE.
 
-Uses RAPIDAPI_KEY only at runtime and never prints it. The primary transport is
-the RapidAPI REST gateway documented by SandboxAPI. The adapter discovers the
-RapidAPI host from the listing page when possible and probes a small bounded set
-of provider-name candidates as fallback. Executed code runs at the remote
-SandboxAPI service, not on the GitHub runner.
+Uses RAPIDAPI_KEY only at runtime and never prints it. Current SandboxAPI documentation
+uses the direct api.sandboxapi.dev REST endpoint with X-RapidAPI-Key; older deployments
+and the RapidAPI listing expose a gateway host. The adapter probes the current direct
+endpoint first and then falls back to a bounded RapidAPI-host discovery path.
+Executed code runs at the remote SandboxAPI service, not on the GitHub runner.
 """
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from rae_secret_loader import get_secret, secret_source  # noqa: E402
 
+DIRECT_BASE = "https://api.sandboxapi.dev"
 RAPIDAPI_LISTING = "https://rapidapi.com/sandboxapidev/api/sandboxapi"
 HOST_CANDIDATES = [
     "sandboxapi.p.rapidapi.com",
@@ -57,7 +58,16 @@ def _listing_hosts() -> list[str]:
     return out
 
 
-def _headers(host: str) -> dict[str, str]:
+def _direct_headers() -> dict[str, str]:
+    return {
+        "X-RapidAPI-Key": get_secret("RAPIDAPI_KEY"),
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "FRANK-RAE/8.8 sandbox research runtime",
+    }
+
+
+def _gateway_headers(host: str) -> dict[str, str]:
     return {
         "x-rapidapi-key": get_secret("RAPIDAPI_KEY"),
         "x-rapidapi-host": host,
@@ -67,21 +77,36 @@ def _headers(host: str) -> dict[str, str]:
     }
 
 
-def discover_host() -> tuple[str, list[dict[str, Any]]]:
-    candidates = _listing_hosts() + [h for h in HOST_CANDIDATES if h not in _listing_hosts()]
+def discover_endpoint() -> tuple[str, str | None, list[dict[str, Any]]]:
+    """Return (base_url, rapidapi_gateway_host_or_none, attempts)."""
     attempts: list[dict[str, Any]] = []
+
+    # Current official docs use api.sandboxapi.dev directly with X-RapidAPI-Key.
+    direct_req = urllib.request.Request(f"{DIRECT_BASE}/v1/languages", headers=_direct_headers(), method="GET")
+    status, text, _ = _http(direct_req, timeout=20)
+    attempts.append({"transport": "DIRECT", "base": DIRECT_BASE, "status": status, "body_prefix": text[:240]})
+    if status == 200:
+        return DIRECT_BASE, None, attempts
+
+    listing_hosts = _listing_hosts()
+    candidates = listing_hosts + [h for h in HOST_CANDIDATES if h not in listing_hosts]
     for host in candidates[:8]:
-        req = urllib.request.Request(f"https://{host}/v1/languages", headers=_headers(host), method="GET")
-        status, text, _ = _http(req, timeout=20)
-        attempts.append({"host": host, "status": status, "body_prefix": text[:240]})
-        if status == 200:
-            return host, attempts
-        lower = text.lower()
-        if status in {401, 403} and ("not subscribed" in lower or "invalid api key" in lower or "forbidden" in lower):
-            # This is enough to establish that the RapidAPI gateway host resolved;
-            # preserve the precise account/subscription failure instead of hiding it.
-            raise RuntimeError(f"RapidAPI gateway reached at {host} but authorization/subscription failed: HTTP {status}: {text[:500]}")
-    raise RuntimeError(f"Could not resolve a working SandboxAPI RapidAPI host; attempts={attempts}")
+        req = urllib.request.Request(f"https://{host}/v1/languages", headers=_gateway_headers(host), method="GET")
+        g_status, g_text, _ = _http(req, timeout=20)
+        attempts.append({"transport": "RAPIDAPI_GATEWAY", "host": host, "status": g_status, "body_prefix": g_text[:240]})
+        if g_status == 200:
+            return f"https://{host}", host, attempts
+
+    # Prefer the direct failure when it reached the official service and clearly classified auth.
+    lower = text.lower()
+    if status in {401, 403}:
+        raise RuntimeError(f"SandboxAPI direct endpoint reached but authorization/subscription failed: HTTP {status}: {text[:500]}; attempts={attempts}")
+    for attempt in attempts[1:]:
+        body = str(attempt.get("body_prefix") or "").lower()
+        g_status = int(attempt.get("status") or 0)
+        if g_status in {401, 403} and ("not subscribed" in body or "invalid api key" in body or "forbidden" in body):
+            raise RuntimeError(f"SandboxAPI RapidAPI gateway reached but authorization/subscription failed: attempts={attempts}")
+    raise RuntimeError(f"Could not resolve a working SandboxAPI endpoint; attempts={attempts}")
 
 
 def execute_code(code: str, *, language: str = "python3", timeout: int = 10, stdin: str = "") -> dict[str, Any]:
@@ -90,31 +115,34 @@ def execute_code(code: str, *, language: str = "python3", timeout: int = 10, std
     if not code or len(code.encode("utf-8")) > 1_000_000:
         raise ValueError("code must be 1..1000000 UTF-8 bytes")
     timeout = max(1, min(int(timeout), 300))
-    host, discovery = discover_host()
+    base_url, gateway_host, discovery = discover_endpoint()
     payload: dict[str, Any] = {"language": language, "code": code, "timeout": timeout}
     if stdin:
         payload["stdin"] = stdin
+    headers = _direct_headers() if gateway_host is None else _gateway_headers(gateway_host)
     req = urllib.request.Request(
-        f"https://{host}/v1/execute",
+        f"{base_url}/v1/execute",
         data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        headers=_headers(host),
+        headers=headers,
         method="POST",
     )
-    status, text, headers = _http(req, timeout=max(30, timeout + 15))
+    status, text, response_headers = _http(req, timeout=max(30, timeout + 15))
     if status != 200:
-        raise RuntimeError(f"SandboxAPI RapidAPI execute HTTP {status}: {text[:1000]}")
+        raise RuntimeError(f"SandboxAPI execute HTTP {status}: {text[:1000]}")
     try:
         result = json.loads(text)
     except json.JSONDecodeError as exc:
         raise RuntimeError(f"SandboxAPI returned non-JSON success body: {text[:800]}") from exc
     return {
-        "provider": "SandboxAPI via RapidAPI",
+        "provider": "SandboxAPI",
         "tool": "sandboxapi_sandbox",
         "evidence_class": "isolated_runtime_experiment",
         "language": language,
-        "rapidapi_host": host,
-        "host_discovery_attempts": discovery,
-        "rate_limit_remaining": headers.get("X-RateLimit-requests-Remaining") or headers.get("x-ratelimit-requests-remaining"),
+        "transport": "DIRECT" if gateway_host is None else "RAPIDAPI_GATEWAY",
+        "base_url": base_url,
+        "rapidapi_host": gateway_host,
+        "endpoint_discovery_attempts": discovery,
+        "rate_limit_remaining": response_headers.get("X-RateLimit-requests-Remaining") or response_headers.get("x-ratelimit-requests-remaining"),
         "result": result,
     }
 
@@ -126,14 +154,16 @@ def smoke_test() -> dict[str, Any]:
     if int(result.get("exit_code", -1)) != 0 or "RAE_SANDBOXAPI_OK:42" not in stdout:
         raise RuntimeError(f"SandboxAPI smoke sentinel mismatch: {result}")
     return {
-        "schema_version": "1.0",
-        "provider": "SandboxAPI via RapidAPI",
+        "schema_version": "1.1",
+        "provider": "SandboxAPI",
         "tool": "sandboxapi_sandbox",
         "status": "RUNTIME_VERIFIED",
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "credential_source": secret_source("RAPIDAPI_KEY"),
         "credential_value_exposed": False,
         "verification_class": "remote_gvisor_code_execution",
+        "transport": out.get("transport"),
+        "base_url": out.get("base_url"),
         "rapidapi_host": out.get("rapidapi_host"),
         "sentinel": "RAE_SANDBOXAPI_OK:42",
         "execution": {
@@ -147,7 +177,7 @@ def smoke_test() -> dict[str, Any]:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Execute code through SandboxAPI via RapidAPI")
+    ap = argparse.ArgumentParser(description="Execute code through SandboxAPI")
     ap.add_argument("--smoke-test", action="store_true")
     ap.add_argument("--language", default="python3", choices=sorted(ALLOWED_LANGUAGES))
     ap.add_argument("--timeout", type=int, default=10)

@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hyperposition-20260810T2342p0700-chatgpt-secondary-hypermath-grf-fusion",
+  "actor": "chatgpt-secondary",
+  "provider_model": "OpenAI/GPT-5.6 Sol",
+  "evidence_class": "VERIFIED_LOCAL_SYNTHETIC_EXECUTION",
+  "target_live_evidence": false,
+  "canonical_parent": "RAE-8.8 r2 / 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "factorization": {
+    "variables": 15,
+    "possible_worlds": 32768,
+    "max_abs_error": 9.947598300641403e-14,
+    "flat_median_seconds": 0.5879622649999874,
+    "variable_elimination_median_seconds": 0.0003376380000190693,
+    "speedup": 1741.3983762692,
+    "unsafe_nonlicensed_rewrite_rejected": true,
+    "interpretation": "Known sum-product variable elimination exactly matched flat enumeration on this factorable chain while an intentionally non-licensed mean-product carrier was rejected. This supports proof/law-gated optimization, not a distinct HyperMath runtime or super-Turing claim."
+  },
+  "higher_order_context_guard": {
+    "ternary_parity_best_pairwise_additive_mse": 1.0,
+    "pairwise_exact_states_out_of_8": 0,
+    "context_smuggling_case": {
+      "context_smuggling_detected": true,
+      "material_read_signature_complete": true,
+      "semantic_reduction_admissible": false,
+      "operational_reduction_may_still_be_allowed": true
+    },
+    "fully_reified_case": {
+      "context_smuggling_detected": false,
+      "material_read_signature_complete": true,
+      "semantic_reduction_admissible": true,
+      "operational_reduction_may_still_be_allowed": true
+    },
+    "interpretation": "The tested pairwise-additive family cannot represent ternary parity. H7B correctly distinguishes an operational implementation that reads hidden member c from a genuine semantic lower-order reduction."
+  },
+  "thin_net_generation_fence": {
+    "current_handle_resolves": true,
+    "stale_cases_rejected": 3,
+    "stale_reasons": [
+      "STATE_EPOCH_MISMATCH",
+      "EXECUTION_GENERATION_MISMATCH",
+      "DELIVERY_GENERATION_MISMATCH"
+    ],
+    "transport": {
+      "claims": 10000,
+      "full_bytes": 2847851,
+      "thin_bytes": 888115,
+      "thin_over_full": 0.3118544474412461,
+      "reduction_pct": 68.81455525587539
+    },
+    "interpretation": "Thin content-addressed semantic handles reduce repeated synthetic transport metadata but are safe only when bound to semantic root/state epoch and the fresh GO-derived execution/delivery generations."
+  },
+  "grf_simulation_policy": {
+    "train_cases": 20000,
+    "heldout_cases": 50000,
+    "calibration": {
+      "multiplier": 1.0,
+      "ood_discount": 0.0,
+      "train_mean_utility": 0.49602308253726796,
+      "train_simulation_rate": 0.7267
+    },
+    "heldout": {
+      "never": {"mean_utility": 0.35079322607132285, "simulation_rate": 0.0},
+      "always": {"mean_utility": 0.47999924921995984, "simulation_rate": 1.0},
+      "selective": {"mean_utility": 0.494274864465838, "simulation_rate": 0.72494},
+      "oracle_upper_bound": {"mean_utility": 0.5015797709624251, "simulation_rate": 0.74464}
+    },
+    "negative_result_first_gate": {
+      "mean_utility": 0.45753795572266337,
+      "simulation_rate": 0.32394,
+      "decision": "REFUTED_AS_TOO_CONSERVATIVE"
+    },
+    "interpretation": "The first uncertainty-heavy heuristic lost to ALWAYS_SIMULATE and was rejected. A calibrated predicted net-value gate beat ALWAYS and NEVER on separately seeded held-out synthetic cases, but real Frank replay is required before promotion."
+  },
+  "fresh_go_helper_evidence": [
+    {
+      "ref": "1ab1ed9107b73a461cbed38e3bc4eb162a2f8757",
+      "finding": "Accepted-target lane supports stale handoff epoch rejection; whole promotion remains blocked by separate repository integrity failures."
+    },
+    {
+      "ref": "13f54171a0afaf50bab862e151eb23af53ee063c",
+      "finding": "Production response/stream continuity still requires generation-bound response/chunk/replay/cancellation semantics."
+    }
+  ],
+  "counterhypotheses": [
+    "A conventional factorized query planner plus typed records reproduces all useful HyperMath behavior; HyperMath should remain compiler syntax/type/proof metadata only.",
+    "Law certificates add bookkeeping without catching real target errors beyond ordinary compiler/type tests.",
+    "GRF simulation gating does not improve real Frank outcomes because model forecasts are too weak or the existing loop already allocates cognition adequately.",
+    "Thin-net handles reduce wire bytes but cache misses, invalidation complexity and recovery latency erase end-to-end gains.",
+    "Higher-order semantics matter descriptively but not causally for Frank; pairwise/state-machine operational reductions match interventions and outcomes on target traces.",
+    "Any HyperMath acceleration is conventional factorization/variable-elimination/content-addressing and does not justify a new computational model."
+  ],
+  "authority": {
+    "architecture_promotion": false,
+    "effect_authority_change": false,
+    "training_authorized": false,
+    "target_self_harness_mutation": false
+  }
+}

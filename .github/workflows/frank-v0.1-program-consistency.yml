@@ -1,0 +1,91 @@
+name: Frank v0.1 program consistency
+
+on:
+  push:
+    paths:
+      - 'research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md'
+      - 'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json'
+      - 'research_entity/global/PROJECT_COMMAND_REGISTRY.json'
+      - 'research_entity/rooms/PROGRAM_STATE.json'
+      - 'research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json'
+      - 'research_entity/harness/HARNESS_WORKSPACE.json'
+      - 'research_entity/triggers/HARNESS_BUILD_PROTOCOL.md'
+      - 'research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md'
+      - 'research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md'
+      - 'research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md'
+      - 'research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md'
+      - 'research_entity/continuity/BOOTSTRAP_MINIMAL.json'
+      - 'research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json'
+      - 'tools/program_progress.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate unified Frank v0.1 program
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          paths = {
+              'program': root/'research_entity/rooms/PROGRAM_STATE.json',
+              'workspace': root/'research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json',
+              'triggers': root/'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json',
+              'commands': root/'research_entity/global/PROJECT_COMMAND_REGISTRY.json',
+              'legacy_harness': root/'research_entity/harness/HARNESS_WORKSPACE.json',
+              'bootstrap': root/'research_entity/continuity/BOOTSTRAP_MINIMAL.json',
+              'forecast': root/'research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json',
+          }
+          data = {k: json.loads(p.read_text()) for k,p in paths.items()}
+
+          assert data['program']['current_stage'] == 'FRANK_V0_1'
+          assert data['program']['stage_order'] == ['FRANK_V0_1']
+          assert set(data['program']['stage_gates']) == {'FRANK_V0_1'}
+          assert data['workspace']['workspace_id'] == 'frank-v0.1-unified-program'
+          assert data['legacy_harness']['status'] == 'SUPERSEDED_BY_FRANK_V0_1'
+          assert data['legacy_harness']['current_workspace'].endswith('FRANK_V0_1_WORKSPACE.json')
+
+          registered = data['triggers']['triggers']
+          required = set(data['triggers']['reserved_commands'])
+          assert required == set(registered)
+          for name, spec in registered.items():
+              assert spec.get('program_target') == 'FRANK_V0_1', (name, spec)
+              assert spec.get('must_reenter_frank_v0_1') is True, name
+          assert registered['harness'].get('harness_is_product') is False
+          assert registered['harness'].get('h1_h2_h3_active_stages') is False
+
+          for name, spec in data['commands']['commands'].items():
+              assert spec.get('program_target') == 'FRANK_V0_1', name
+          assert data['commands']['commands']['harness'].get('harness_is_product') is False
+
+          assert data['bootstrap']['program']['active_target'] == 'FRANK_V0_1'
+          assert data['forecast']['terminal_row'] == 'FRANK_V0_1'
+          assert set(data['forecast']['rows']) == {'FRANK_V0_1'}
+
+          active_blob = json.dumps({
+              'program': data['program']['stage_order'],
+              'trigger_target': data['triggers']['program_target'],
+              'legacy_harness_status': data['legacy_harness']['status'],
+          })
+          for forbidden in ('H1_REFERENCE_HARNESS','H2_CLAYCODE_HARNESS','H3_ONE_MODULE_FRANK'):
+              assert forbidden not in active_blob
+
+          print(json.dumps({
+              'status':'PASS',
+              'program':'FRANK_V0_1',
+              'registered_triggers':sorted(required),
+              'harness_is_product':False,
+              'active_stage_order':['FRANK_V0_1']
+          }, indent=2))
+          PY
+      - name: Compile progress resolver
+        run: python -m py_compile tools/program_progress.py
+      - name: Execute unified progress resolver
+        run: python tools/program_progress.py --json

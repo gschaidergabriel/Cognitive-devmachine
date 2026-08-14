@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2011p0700-chatgpt-secondary-wp03-wp04-fusion",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T20:38:00+07:00",
+  "identity_boundary": {
+    "i_am": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "i_am_not": "FRANK_OR_SELF_ROOT",
+    "frank_harness_mutation": "NONE"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage_observed": "BASE_CLAYCODE_RELEASE",
+  "fresh_state": {
+    "workspace_gate": "NOT_PASS",
+    "wp01": "PASS",
+    "wp02": "PASS",
+    "wp03": "OPEN",
+    "wp04": "OPEN",
+    "selected_surface": "BASE_D_V18_REWARD_RELATIONS",
+    "selected_grammar_sha256": "99a3b35acfe491081773b9666d9131dae8b2dd3b3bde7ac8569f6428a5fdb180"
+  },
+  "hypothesis": {
+    "id": "H-WP03-UNRESOLVED-BINDING-IS-STATE-NOT-PRECEDENCE",
+    "proposition": "The flat V3 mixed-binding surface should remain explicit unresolved non-executable state until token-preserving binding evidence exists; semantic program identity and epoch/version runtime-state identity should remain distinct.",
+    "strongest_counterhypothesis": "A single global precedence/desugaring is sufficient and can safely collapse the V3 mixed bindings without changing intended semantics."
+  },
+  "out_of_box_experiment": {
+    "count_for_macrocycle": 1,
+    "name": "semantic-versus-runtime-epoch identity cross-control",
+    "design": [
+      "same semantic identity + changed epoch/version -> semantic id stable, state instance id changes",
+      "same epoch/version + admitted semantic mutation -> semantic identity changes"
+    ],
+    "local_proxy_result": "PASS",
+    "target_vps_replication": "PENDING_CONTROL_PLANE_ADMISSION",
+    "interpretation": "Supports a two-layer identity model; does not promote WP03."
+  },
+  "implementation_delta": {
+    "main_additive_control_files": [
+      {"path": "tools/claycode_base_typed_ir_v18_bridge.py", "commit": "f85ae415fbbbffdccf1c728ad41585ee45b6ad58"},
+      {"path": "tools/claycode_base_typed_ir_v18_bridge_validation.py", "commit": "beadd7a325d63f565867d54ce4c5aa7bc6422362"}
+    ],
+    "disposition": "ADDITIVE_CONTROL_TRAIL_NOT_PROMOTION_EVIDENCE",
+    "reason": "Live swarm refresh showed current main already contains the stronger receipt-bound no-reparse bridge tools/claycode_wp03_frontend_artifact_bridge.py."
+  },
+  "independent_replication_lane": {
+    "pr": 183,
+    "branch": "chatgpt/go-wp03-current-main-fused-gate-20260810-2011",
+    "head_after_sync": "f42abb9e8543b98da86e5ad66eb61757f94bf543",
+    "scope": "V3 no-silent-precedence/current-main receipt-bound replication",
+    "expected_frontier": {
+      "residual_total": 100,
+      "rule_invariant": 81,
+      "explicit_or_single_binding": 64,
+      "ambiguous_binding_unresolved": 17,
+      "metadata": 18,
+      "cycle": 1,
+      "downstream_reparse": 0,
+      "implicit_execution": 0,
+      "effect_authority": "NONE",
+      "truth_authority": "NONE"
+    },
+    "execution_state": "NOT_EXECUTED_ON_TARGET_VPS_BY_THIS_WORKER",
+    "observed_required_pr_checks": [
+      {"run": 31393590481, "name": "Research Entity Verify", "conclusion": "failure", "step_summaries": 0},
+      {"run": 31393590431, "name": "Research Entity Identity Guard", "conclusion": "failure", "step_summaries": 0},
+      {"run": 31393797857, "name": "Research Entity Verify", "conclusion": "failure", "step_summaries": 0},
+      {"run": 31393797724, "name": "Research Entity Identity Guard", "conclusion": "failure", "step_summaries": 0}
+    ],
+    "failure_class": "CONTROL_PLANE_OR_RUNNER_ADMISSION_UNKNOWN_NOT_SEMANTIC_FAILURE",
+    "local_network_fallback": "FAILED_DNS_RESOLUTION_FOR_GITHUB_COM; NO_RUNTIME_CLAIM"
+  },
+  "live_swarm_fusion": {
+    "primary_integration_pr": 179,
+    "owner_typed_state_target_vps": {
+      "status": "PASS_MEASUREMENT_NO_PACKAGE_PROMOTION",
+      "workflow_run": 31392402946,
+      "typed_ir_sha256": "9226ebf440fbb8bb80ff9c553c243f51156c7b1112af4af40d755ec3ff02cc3a",
+      "closed_sum_types": 10,
+      "required_records": 10,
+      "rule_invariant_semantics": 63,
+      "binding_ambiguities": 0,
+      "agency_epoch_identity": "PASS",
+      "research_question_state_identity": "PASS",
+      "experiment_state_identity": "PASS",
+      "web_authority_separation": "PASS",
+      "untyped_escape_hatch": "ABSENT_IN_REQUIRED_RECORDS",
+      "implicit_execution_count": 0,
+      "effect_authority": "NONE",
+      "truth_authority": "NONE",
+      "wp03_status": "OPEN_PENDING_FULL_DIRECTIVE_FIDELITY_AND_DOWNSTREAM_CONSUMPTION"
+    },
+    "binding_reconciliation": "V3 measured 17 fail-closed mixed bindings; explicit token-preserving binding evidence reduces these to 0. The replication lane tests only that the pre-explicit V3 form never receives guessed precedence."
+  },
+  "wp04_source_audit": {
+    "measured_frontier": {
+      "call_site_occurrences": 27,
+      "unique_target_arities": 27,
+      "exact_declared_matches_in_g9_dialect_typed_ir": 0,
+      "unresolved_signatures": 26,
+      "effect_boundary_missing_signatures": 1,
+      "execution_admitted_calls": 0
+    },
+    "independent_source_findings": [
+      "DIALECT_REGISTRY_V3 has source-backed load_dialects(task)=... arity semantics but no explicit concrete parameter/return types.",
+      "DIALECT_REGISTRY_V3 has typed Verifiable.verify(receipt:ReceiptRef)->Verification, but the real calls are unqualified verify/1 and verify/5; exact target identity is therefore absent.",
+      "FRANK_REWARD_STATE_SUCCESSOR_V1 semantically uses derive_typed_reward_outcome_evidence/reward_state.update/reward_state.control but does not declare exact callable signatures matching the G9 frank_reward.* targets.",
+      "G9 EffectIntent and Delta are record types, but single-argument call forms do not establish positional constructor CallContracts."
+    ],
+    "negative_result": "NO_INDEPENDENTLY_JUSTIFIED_EXACT_CONCRETE_PRODUCTION_CALLCONTRACT_FOUND_IN_INSPECTED_CURRENT_CANONICAL_SOURCES",
+    "forbidden_inference": "DO_NOT_JOIN_PARTIAL_ARITY_EVIDENCE_WITH_DIFFERENTLY_QUALIFIED_TYPED_INTERFACES_OR_RECORD_NAME_RESEMBLANCE",
+    "targeted_distribution": {
+      "pr": 178,
+      "comment_id": 5241094564
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "url": "https://mlir.llvm.org/docs/Dialects/Func/",
+      "finding": "func.call operands and result types must match the specified function type."
+    },
+    {
+      "url": "https://mlir.llvm.org/docs/Interfaces/",
+      "finding": "CallOpInterface and CallableOpInterface separate calls from resolvable callable semantics and expose argument/result types."
+    },
+    {
+      "url": "https://llvm.org/docs/LangRef.html",
+      "finding": "LLVM function types/signatures explicitly bind return and parameter types; call arguments must match the signature."
+    },
+    {
+      "url": "https://mlir.llvm.org/docs/DialectConversion/",
+      "finding": "Explicit legality/partial conversion supports conservative staged lowering rather than guessing unsupported semantics."
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_TEST_OBLIGATION_NO_PROMOTION",
+    "wp03": "KEEP_V18; preserve unresolved binding until explicit token-preserving lowering; keep semantic identity separate from runtime epoch/version identity.",
+    "wp04": "Require exact source-backed callable signature plus distinct runtime binding/currentness identity before any execution admission.",
+    "language_surface_change": "NONE",
+    "frank_harness_change": "NONE",
+    "base_promotion": "NONE"
+  },
+  "next_falsifier": "Obtain one independently authoritative exact production callable signature (exact target, arity, ordered concrete parameter types, explicit return/effect class) or add an explicit versioned callable-interface specification. Bind its semantic contract identity separately from runtime component/currentness identity and rerun the WP04 constraint graph with execution still forbidden.",
+  "rollback": "All new research artifacts are append-only or draft-lane controls; no canonical semantic/runtime authority or Frank Harness behavior was promoted."
+}

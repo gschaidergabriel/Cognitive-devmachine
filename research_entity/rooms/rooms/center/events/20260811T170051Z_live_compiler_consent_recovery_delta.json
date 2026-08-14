@@ -1,0 +1,295 @@
+{
+  "schema_version": "CLAY_CENTER_LIVE_RESEARCH_DELTA_V2",
+  "event_id": "20260811T170051Z_live_compiler_consent_recovery_delta",
+  "created_at_utc": "2026-08-11T17:00:51Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "provider": "OpenAI",
+    "training_performed": false,
+    "external_target_execution_performed_by_this_actor": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "comparison_cut": {
+    "previous_notified_research_event_commit": "cb9097d1f4dd0823f6c07ea4cbaa5c88046639ef",
+    "previous_notified_event_blob": "773a0a37186959d07e3c627728d15c582501fc29",
+    "previous_notified_event_path": "research_entity/rooms/rooms/center/events/20260811T160629Z_live_v4_claycode_reward_anchor_delta.json",
+    "research_head_observed_before_write": "bd35e61e74ec768a550a6f57e6620dd06bb415b8",
+    "target_main_previous": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+    "target_main_observed": "72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "change_class": "SUBSTANTIVE_MULTI_DOMAIN_DELTA"
+  },
+  "canonical": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "bootstrap_blob": "bef89f19ca9bee0aafe45ac3b610ef8ee339dfc0",
+    "advanced_by_this_event": false
+  },
+  "fresh_primary_sources": [
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T16:50:00Z",
+      "url": "https://docs.python.org/3.12/using/cmdline.html",
+      "finding": "CPython documents -I as isolated startup and -S as disabling automatic site path manipulation, while explicitly stating that site.main() can trigger those manipulations later."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T16:50:00Z",
+      "url": "https://docs.python.org/3.12/library/site.html",
+      "finding": "site.main() adds standard site directories and addsitedir() processes .pth files; startup isolation is not a lifetime prohibition on trusted code invoking those APIs."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T16:50:00Z",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "SQLite 3.53.4, released 2026-07-24, includes the WAL-reset corruption fix."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T16:50:00Z",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "SQLite distinguishes application/process behavior from hard reboot/power-loss durability and documents checkpoint sync requirements and the WAL-reset bug topology."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T16:50:00Z",
+      "url": "https://sqlite.org/pragma.html#pragma_synchronous",
+      "finding": "SQLite documents distinct durability guarantees for synchronous modes; application crash, OS crash and power loss are not interchangeable evidence classes."
+    }
+  ],
+  "material_deltas": [
+    {
+      "id": "D-UDB-V4-PROCESS-CRASH-MAIN",
+      "routes": ["unifieddb", "claygraph", "frank", "recovery", "harness"],
+      "support": [
+        "Target main 9085f0b3e2be364759d5d8a9d3a08bb71ca06b44 integrated the V4 process-crash regression gate.",
+        "Accepted run 31510023573 / job 93841210700 / artifact 9109020862 digest sha256:7940c5f03d3fe865e8220386f7f0bda93c09df77da5a323e5aeac8432bd62ea3 executed 8 SIGKILL cycles, 32 independently V4-admitted writer processes and 4250 acknowledged commits with 0 lost and 0 unbounded phantoms; integrity and writability survived."
+      ],
+      "limits": [
+        "Evidence class is PROCESS_CRASH only. It does not establish OS_CRASH, POWER_LOSS, LOGICAL_ROLLBACK, PROJECTION_REBUILD or DEPLOYMENT_BOOT.",
+        "UnifiedDB is authoritative; ClayGraph/retrieval sidecars remain derived and RecoveryFloor must not share the rollback domain it is meant to witness."
+      ],
+      "adjudication": "TARGET_SUPPORTED_PROCESS_CRASH_SLICE_MERGED; F-V01-04 and whole Frank remain open."
+    },
+    {
+      "id": "D-UDB-CLAYGRAPH-TRANSACTIONAL-OUTBOX-MAIN",
+      "routes": ["unifieddb", "claygraph", "frank", "gwt", "emergenz", "hyperposition", "recovery", "harness"],
+      "support": [
+        "Fresh head b8858f949d4ad855bff5d682994de69bfd10b7c9 passed accepted run 31514757454 / job 93857015099 with 23/23 checks; artifact 9110606930 digest sha256:9ce0640a2e65b0967e01c6956bc92e211250306d17f3350eb979f51d311ff06a.",
+        "All 76 authoritative events converged to 76 applied events, exact projection root be0090b4bfbe176862fccc736d0f6abdc16a752d16769a7fe7f254005b368316 and 16 current relations. Crashes after UnifiedDB commit/before graph, inside the graph transaction and after graph commit/before advisory ACK all recovered exactly; lag and payload-hash tamper failed closed; full graph wipe rebuilt exact root/query state.",
+        "Target main 72029f838176fff5189b8c3cfd4ef5d957de6ba2 merged the candidate contract, candidate-only schemas, executable projector, tests and regression workflow. Candidate SQL is still absent from production migration lists."
+      ],
+      "limits": [
+        "This is PROCESS_CRASH projection-continuity evidence for a 76-event disposable history, not logical rollback, OS crash, power loss, production projector scheduling/backpressure or large-corpus quality evidence.",
+        "UnifiedDB remains authoritative, ClayGraph derived/rebuildable and delivery_state advisory only; no canonical Frank state migration occurred."
+      ],
+      "adjudication": "TARGET_SUPPORTED_CANDIDATE_AND_REGRESSION_PATH_MERGED; production activation and F-V01-04 remain open."
+    },
+    {
+      "id": "D-V4-LIFETIME-HERMETICITY-REFUTED-ON-TARGET",
+      "routes": ["frank", "unifieddb", "recovery", "productstart", "harness"],
+      "support": [
+        "PR376 exact head 661ecb81bfd0d25df4ced51c76efdd2de4fb7b45 completed accepted run 31510581092 / job 93843072647 SUCCESS; artifact 9109624397 digest sha256:b13fbf1afe7d93f09cbb8307cd9a15411b9cf7c0f89a0086e10244cb2aa17691.",
+        "The V4 admission receipt passed with Python 3.12.3 -I -S and private SQLite 3.53.4, then explicit site.main() added the disposable venv site-packages path and executed its .pth marker: before=null, after=EXECUTED."
+      ],
+      "counterevidence": "Current repository code search found no direct production site.main()/addsitedir reachability; the result proves a mechanism boundary, not a current exploit chain.",
+      "adjudication": "The claim that V4 startup admission implies lifetime import hermeticity is refuted on the target. V4 remains valid as an admission-time identity gate. ProductStart needs a separately verified trusted-code/dependency/import-closure invariant or a packaged runtime that removes this Python-specific surface."
+    },
+    {
+      "id": "D-WP03-DECLARATION-AWARE-ALIASES-MERGED",
+      "routes": ["claycode", "frank", "harness"],
+      "support": [
+        "Target main 5ec9955775d9bf142e327166990a2228d543c071 merged PR379 after accepted run 31512064692.",
+        "Exact scoped rule: explicit Clay declarations shadow the closed legacy constructor aliases SET, OPTION, ORDERED, LIST, MAP and RESULT; unresolved spellings alone use aliases. Six declaration shadows and six legacy aliases passed, nested LIST<SET> remained resolved, and external mentions did not become declarations."
+      ],
+      "adjudication": "SCOPED_WP03_RULE_PROMOTED; WP03 overall remains open."
+    },
+    {
+      "id": "D-CLAYCODE-BOUNDED-DUAL-BACKEND-FRONTIER",
+      "routes": ["claycode", "frank", "gwt", "harness"],
+      "support": [
+        "PR357 exact head ed2bbce76cee3d84bf5e35d1a712eb734df6bbc9 passed then-current-main composition run 31513119794 against main 5ec9955775d9bf142e327166990a2228d543c071, head-only run 31513119885, package run 31513119981 and negation run 31513119998.",
+        "PR364 merge-context SHA 92fadb60e6340665c1436a31322a427641176d34 is the exact synthetic merge of head 903cca294f09abc2a62013ee20cb7d8c370ca919 into main 5ec9955775d9bf142e327166990a2228d543c071. Accepted run 31512926832 / job 93850935935 passed reserved binding 2/2, path scope 5/5 and compiler 12/12 with 200576 comparisons and 0 mismatches; artifact 9110119971 digest sha256:31f83cff60047a50a59c4c9660b4de04e80c2b2003013165ac3b597fe60c941e.",
+        "PR366 exact head f46be8adad66148af5374d26737048ad45a25e50 passed run 31512035227 / job 93847992917: C lowering 8/8, 200576 comparisons, 0 mismatches, generated C sha256 b8bdd0da5eab025676fe91e9ca5835dc3ad5250afe032099a1e1043547183bdf and shared object sha256 4b8ff5d3af602fd5b1615a7b74f4bcac7e61c59825c7a662006b5fd4df21576e.",
+        "PR357 specialized canary run 31513119871 / job 93851569443 completed FAILURE with artifact 9110646497 digest sha256:3871fdfce5b0fa515fc302aeae6dd26b28ae755ce53ecd753ca716c5774cab35. Its result passed 13/14 checks: denied ambiguous/opaque outer calls produced authority_counter=0, runtime_effect_counter=0 and external_effect=false. The sole failed assertion expected a different diagnostic substring than the actual fail-closed message."
+      ],
+      "attacks_and_limits": [
+        "The specialized canary gives no observed nested-effect or authority escape, but the exact gate is red because its diagnostic contract did not match; this is harness/diagnostic evidence, not a semantic PASS.",
+        "Target main advanced to 72029f838176fff5189b8c3cfd4ef5d957de6ba2 after the broad and Python merge-context runs. PR357 is currently unmergeable and both PR357/PR364 require a fresh exact-main composition before promotion.",
+        "Both Python and C mechanisms share source/project/runner ancestry; they are correlated translation-validation evidence, not independent semantic replication.",
+        "The C backend currently lacks exact nominal local-call argument and declared-return checks before codegen; C implicit conversion can define malformed-program behavior outside the 200576-request positive corpus.",
+        "The prior Python-AST then-current-main success does not substitute for WP04 admission; 22 MethodChain sites, 429 unique/464 unresolved occurrences, four parser-rejected sources, comparison-chain and Bool/Int cross-nominal semantics remain open."
+      ],
+      "adjudication": "TARGET_SUPPORTED_BOUNDED_PYTHON_AND_C_MECHANISMS; no semantic authority escape was observed, but the specialized gate is red and exact-current-main evidence is stale. Promotion remains blocked on diagnostic-contract repair, fresh-main composition and WP04-before-WP06 type admission. No backend winner and no WP06 PASS."
+    },
+    {
+      "id": "D-TASK-SWITCH-V3-AUTHORITY-SEPARATION",
+      "routes": ["frank", "unifieddb", "api", "recovery", "harness"],
+      "support": [
+        "PR385 exact head 4fd0febc5033a5ecaf8db36972c091ca3a5d4036 completed accepted run 31512727612 / job 93850284043 SUCCESS with 21/21 checks and artifact 9109963610 digest sha256:d116cff68f124989b23c8982c335146c671f4e807e91d6fc3bf05efe27e9793d.",
+        "Current V16 negative baseline reproduced: unrelated follow-up returned HTTP 200 CONTINUE and continued the existing execution because the public path has no task identity.",
+        "V1's nonce-possession-as-consent design is preserved as negative evidence: the same caller could receive a challenge and self-grant, and the runtime performed DDL. V3 requires a separately authenticated stable-principal decision receipt, atomically co-commits decision+grant, rejects stale task revision/state and admits at most one consume."
+      ],
+      "limits": "Candidate base is behind current main. Product integration still lacks the real stable-principal/session/client producer, authoritative TaskSnapshot transition, token ingress binding and exact current-main replay.",
+      "adjudication": "TARGET_SUPPORTED_COMPONENT_MECHANISM_NOT_PRODUCT_PROMOTION. Nonce is anti-replay material, not consent authority."
+    },
+    {
+      "id": "D-TYPED-CHECKPOINT-IDENTITY-COMPONENT-PASSES",
+      "routes": ["unifieddb", "claygraph", "frank", "recovery", "hyperposition"],
+      "support": [
+        "PR372 head c819dcdf68a008ec5e3641322a39c27324bf3a11 passed run 31510362510: 13/13, typed root-domain crown swap fenced, identical raw digest under incompatible protocol/manifest no longer matched.",
+        "PR380 head 78d3254ad2566387dd92a58506cac30154ded92a passed run 31511274107: 22/22; user_version and operational meta changes left logical root/manifest stable, semantic data changed the root, rogue schema failed closed and restoration reproduced exact root+manifest."
+      ],
+      "counterevidence": "A content-addressed manifest can still encode the wrong ontology, and a caller-selected typed tuple merely moves the authority problem. Neither component proves producer admission, external rollback floor, boot continuity or current-main composition.",
+      "adjudication": "SUPPORTED_COMPONENT_EVIDENCE; compose independently verified producer, typed identity, selected-head CAS, isolated rollback floor and boot receipt before promotion."
+    },
+    {
+      "id": "D-LSCW-BROAD-CLAIM-REFUTED",
+      "routes": ["frank", "unifieddb", "claygraph", "hyperposition", "harness"],
+      "support": "Research commit 69525e83e2988b95daf5a2dc4d0a573695689b9c refutes broad LSCW semantic-preservation claims and retains only LSCW-R1 as a shadow hard-field lifecycle candidate.",
+      "counterevidence": "The strongest simple counterbaseline, current stage validators plus ProductStart AND plus immutable CurrentExecutionContext and exact consumed-object checks, was NOT_DEFEATED. The frozen synthetic reference catches its own declared mutants by construction and has no target execution.",
+      "adjudication": "REVISE_NOT_PROMOTED; preserve the negative and run a matched real-target lifecycle comparison before adding a new witness layer."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-ADMISSION-HORIZON-001",
+      "claim": "Every runtime receipt has an explicit validity horizon: startup admission proves the loaded identity at the handoff point, not arbitrary later imports, mutations or effects.",
+      "counterhypothesis": "A trusted fixed application/dependency graph makes the later-code horizon redundant.",
+      "discriminator": "After a green V4 receipt, attempt site.main/addsitedir, dynamic import, monkey-patch, extension reload and dependency-generated import under both current source and a packaged/frozen build. Bind the actual reachable graph and require any newly executable byte to be separately attested or unreachable.",
+      "falsifier": "A green admission receipt remains valid after unbound executable code changes consumed SQLite behavior."
+    },
+    {
+      "id": "H-RECOVERY-CLASS-TYPE-SYSTEM-001",
+      "claim": "PROCESS_CRASH, OS_CRASH, POWER_LOSS, LOGICAL_ROLLBACK, PROJECTION_REBUILD and DEPLOYMENT_BOOT are non-substitutable evidence types and promotion must require the exact classes implied by the product claim.",
+      "counterhypothesis": "V4 identity plus SQLite FULL and process-kill coverage collapses the practical recovery classes on the accepted VPS.",
+      "discriminator": "Replay the same acknowledged-operation ledger under SIGKILL, forced reboot, storage/power fault simulation, stale snapshot rewind, derived-store deletion/tamper and installed service boot. Compare loss, phantom, lineage and currentness predicates per class.",
+      "falsifier": "A claimed class passes without executing its defining failure boundary, or one class is silently credited from another."
+    },
+    {
+      "id": "H-NEGATIVE-SPACE-COMPILER-001",
+      "claim": "For ClayCode, malformed-program rejection is a first-class semantic surface; large zero-mismatch positive corpora cannot substitute for typed call/return/effect negative space.",
+      "counterhypothesis": "Backend-local conversion behavior is acceptable if the admitted production corpus is stable and differentially green.",
+      "discriminator": "Bind one WP04 proof to identical Python/C inputs, then mutate arity, Int-to-Bool arguments, Bool-to-Int returns, opaque authority constructors, rejected outer calls with nested effects, ambiguous variants and host intrinsics. Both backends must reject before codegen/evaluation side effects.",
+      "falsifier": "Either backend executes a program outside the bound WP04 admission set or a rejected outer expression performs a nested effect/authority mint."
+    },
+    {
+      "id": "H-CHECKPOINT-PASSPORT-001",
+      "claim": "A current semantic checkpoint requires a passport composed from producer-owned protocol+manifest+root, selected-lineage CAS, isolated rollback floor and boot/install identity; no single hash can replace the conjunction.",
+      "counterhypothesis": "Typed protocol+manifest+hash plus same-database CAS is sufficient; external floor and boot binding add complexity without discriminating failures.",
+      "discriminator": "Perform caller-forged tuple, same-generation sibling root, DB-only rollback, DB+same-domain-witness rollback, isolated-witness survival, protocol transition, binary swap and restart. Lesion one passport component at a time.",
+      "falsifier": "A stale/sibling/forged checkpoint becomes CURRENT after any missing component, or the external floor adds no discrimination across rollback tests."
+    },
+    {
+      "id": "H-CONSENT-AUTHORITY-SEPARATION-001",
+      "claim": "Challenge nonce, authenticated identity and explicit task-switch decision are three distinct facts; only a separately produced decision bound to the exact task snapshot may authorize abandonment.",
+      "counterhypothesis": "An authenticated same-session follow-up plus nonce continuity is sufficient and a separate decision producer duplicates the API state machine.",
+      "discriminator": "Same-caller self-grant, credential rotation under stable principal, session/client transplant, task revision advance, decision-receipt transplant, crash between grant/consume/switch and concurrent consumers.",
+      "falsifier": "Nonce possession or identity alone grants a switch, or a valid explicit decision cannot survive credential rotation under the same stable principal."
+    },
+    {
+      "id": "H-PROJECTION-OUTBOX-ROLLBACK-001",
+      "claim": "A UnifiedDB-owned outbox can make ClayGraph process-crash replay idempotent while preserving UnifiedDB truth, but logical rollback and recovery-floor divergence require separate detection.",
+      "counterhypothesis": "Full deterministic ClayGraph rebuild makes durable delivery identity and acknowledgements unnecessary.",
+      "discriminator": "The three process-exit windows, tamper and full deletion/rebuild now pass on the bounded candidate. Next execute outbox truncation, UnifiedDB rewind, graph-ahead state, isolated-floor mismatch, production scheduling/backpressure and a larger history. Compare replay cost and query/root equivalence.",
+      "falsifier": "Derived graph becomes authoritative, duplicate/missing projections survive convergence, or logical rollback appears current after a process-crash-only PASS."
+    },
+    {
+      "id": "H-LIFECYCLE-WITNESS-MINIMALITY-001",
+      "claim": "A new lifecycle witness is justified only if it rejects real lifecycle mutants that ProductStart AND plus immutable CurrentExecutionContext cannot reject at lower complexity.",
+      "counterhypothesis": "LSCW-R1's explicit dimension-set hash and linear consumption are necessary to prevent open-world and replay escapes.",
+      "discriminator": "Run both mechanisms on identical target episodes covering sibling state, mixed compiler/runtime lineages, unknown dimension, replay, valid recompile/migration, restart and rollback; measure false accept/reject, bytes, latency and recovery amplification.",
+      "falsifier": "The simpler baseline matches all rejection/acceptance and recovery behavior with lower cost."
+    }
+  ],
+  "novel_concepts": [
+    {
+      "name": "Admission Horizon",
+      "definition": "The latest transition for which a receipt still binds all executable bytes and authority-relevant state; beyond it the receipt is historical evidence, not current permission."
+    },
+    {
+      "name": "Crash-Class Type System",
+      "definition": "A promotion discipline in which process crash, OS crash, power loss, logical rollback, projection rebuild and boot receipts have distinct non-coercible types."
+    },
+    {
+      "name": "Semantic Checkpoint Passport",
+      "definition": "The conjunctive identity of semantic producer policy, manifest, root, lineage selection, rollback floor and installed boot subject."
+    },
+    {
+      "name": "Nonce Crown",
+      "definition": "The confused-authority error of treating possession of anti-replay material as proof of the human decision it was meant only to correlate."
+    },
+    {
+      "name": "Negative-Space Compiler Oracle",
+      "definition": "A bound suite of programs that must be rejected before host-language coercion, evaluation order or code generation can invent Clay semantics."
+    },
+    {
+      "name": "Projection Echo Ledger",
+      "definition": "An authoritative mutation log whose derived-store application identities are idempotent echoes; acknowledgements are advisory and never become semantic truth."
+    }
+  ],
+  "provenance_and_deduplication": {
+    "rules_applied": [
+      "PR357 broad target runs count as one then-current-frontier lineage, not four independent semantic replications.",
+      "PR364 Python and PR366 C share Clay source, project and target-runner ancestry; backend diversity is useful but correlated.",
+      "PR359/V4 admission, PR376 post-admission OOB and PR373 pre-Python repair are one evolving ProductStart/storage lineage with distinct failure surfaces.",
+      "PR372 and PR380 are complementary producer/consumer component evidence, not a composed checkpoint promotion.",
+      "Supervisor, hypofusion and center summaries route evidence but add no independent support.",
+      "Queued, pending, skipped, cancelled and generic workflow failures without executed diagnostic steps receive zero semantic credit."
+    ],
+    "independent_replication_claimed": false
+  },
+  "preserved_nulls_and_negatives": [
+    "PR357 specialized ambiguous/opaque authority canary 31513119871 completed red at 13/14 because the expected diagnostic substring differed from the actual fail-closed message. Zero authority/effect counters are preserved, but no semantic PASS is claimed.",
+    "PR373 remains open without a green dedicated repair receipt at this cutoff; its generic V4 workflow failure is not interpreted as semantic counterevidence without step diagnosis.",
+    "Superseded/cancelled outbox run 31513961274 receives zero epistemic credit; only fresh accepted run 31514757454 supports the bounded projection claim.",
+    "PR387 run 31514475691 failed before replay semantics because its fresh-main baseline expected IDLE_CONFIRMED while current main returned CLEAR/HANDOFF_CONFIRMED; this is API/harness expectation drift, not replay counterevidence.",
+    "PR387 run 31514475570 failed before the semantic gate because the V4 launcher lost its executable bit; the process-kill step was skipped and receives zero semantic credit.",
+    "Current repository search found no direct production site.main reachability; target OOB is a boundary falsifier, not exploit evidence.",
+    "The broad LSCW claim is refuted and its simple counterbaseline remains not defeated.",
+    "No emergence, consciousness, training readiness or whole-Frank inference follows from these component results."
+  ],
+  "routing_impulses": [
+    {
+      "consumers": ["ClayCode supervisor", "WP04", "Python lowering", "C lowering", "harness"],
+      "action": "Repair PR357's diagnostic assertion without weakening its zero-effect/zero-authority predicates, then rerun its exact canary and broad composition against target main 72029f838176fff5189b8c3cfd4ef5d957de6ba2. Recompose PR369 after the canonical frontier, make its admission receipt a mandatory backend input, and run identical Int->Bool call, Bool->Int return, opaque-constructor and nested-effect negatives in Python and C. Preserve shared-ancestry correlation."
+    },
+    {
+      "consumers": ["ProductStart", "storage", "UnifiedDB", "recovery"],
+      "action": "Relabel V4 as admission-time identity. Diagnose/finish PR373 pre-Python closure, then choose either a machine-checked no-site-reentry dependency invariant or packaged/frozen runtime. Compose installed systemd ExecStart, launcher, manifest, private SQLite, selected lineage and restart receipts."
+    },
+    {
+      "consumers": ["UnifiedDB", "ClayGraph", "recovery", "hyperposition"],
+      "action": "Keep UnifiedDB authoritative and ACK advisory. Before any production migration-list integration, test logical rollback/outbox truncation, graph-ahead state, isolated RecoveryFloor divergence, production scheduling/backpressure and bounded storage/latency under a substantially larger history; preserve the three passing process-exit windows as a regression."
+    },
+    {
+      "consumers": ["F-V01-08 API", "identity", "UnifiedDB", "recovery"],
+      "action": "Rebase V3 consent on current main and bind it to a real stable-principal/session/client producer plus authoritative TaskSnapshot transition and token ingress. Retain V1 self-grant/runtime-DDL negatives as permanent regressions."
+    },
+    {
+      "consumers": ["identity", "UnifiedDB", "recovery", "ProductStart"],
+      "action": "Compose PR380 producer and PR372 typed consumer only through an admission authority; add same-generation siblings, isolated rollback floor, governed protocol transition, installed binary/build subject and restart continuity."
+    },
+    {
+      "consumers": ["ATOMIC", "frank", "hyperposition", "harness"],
+      "action": "Do not promote LSCW. Run LSCW-R1 against the simpler CurrentExecutionContext/ProductStart baseline on identical real target lifecycle mutants and select only if it adds discrimination at acceptable resource/recovery cost."
+    },
+    {
+      "consumers": ["reward", "GWT", "emergenz", "UnifiedDB", "ClayGraph"],
+      "action": "Treat RewardValuationReceiptCandidateV1 as unimplemented. Compare producer-owned typed/multiscale valuation against the code-owned binary TASK baseline on frozen replay, abstention/conflict, OOD, restart, source-frontier drift and resources; do not train."
+    }
+  ],
+  "promotion_boundary": {
+    "canonical_state_changed": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "final_training_authorized": false,
+    "training_performed": false,
+    "productstart_pass": false,
+    "frank_harness_mutation_authority_changed": false,
+    "target_repo_modified_by_this_actor": false
+  }
+}

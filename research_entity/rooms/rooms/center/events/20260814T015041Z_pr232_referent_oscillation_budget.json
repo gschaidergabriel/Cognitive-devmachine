@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260814T015041Z_pr232_referent_oscillation_budget",
+  "kind": "provenance_conflict_recurrence",
+  "canonical": {
+    "rae": "RAE-8.8 revision 2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_parent": "836461e64f318a195f8727dc33fd2251a10394fc",
+    "target_main_observed": "dc2af6421355c899ee076a3e8089e8f6407a1d54"
+  },
+  "delta": {
+    "research_claimed_pr232_head": "73332a06c74931fe0c468a3596d37e7ed91041f8",
+    "research_claimed_local_evidence": [
+      "fc4538f45594c7db5f8eb22115a8a2faa00125c1",
+      "e9950a09ef4b9cc8292219badcfe3f51eff6ae8d"
+    ],
+    "connector_observation": "GitHub fetch_commit returned 422 No commit found for all three SHAs in gschaidergabriel/Dr.-Unterweger.",
+    "target_main_delta": "NONE",
+    "classification": "NEW_REFERENT_DRIFT_INSTANCE_SAME_FAILURE_FAMILY",
+    "credit": "QUARANTINED"
+  },
+  "external_primary_source": {
+    "url": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
+    "finding": "NVIDIA says the /v1/models response id is the model name to use. It does not establish whitespace rejection as provider schema semantics."
+  },
+  "hypotheses": [
+    {
+      "id": "H-REFERENT-OSCILLATION-BUDGET",
+      "claim": "After two unresolved head mismatches for one PR, automatic semantic credit must freeze until a single connector-verifiable commit object, PR head, reachability path and executed workflow receipt agree.",
+      "test": "Inject three successive unverifiable head claims and verify that all downstream clayresearch, frank, gwt, emergence, claycode, hyperposition, claygraph, unifieddb and harness consumers remain snapshot-only with zero promotion credit.",
+      "falsifier": "Any consumer mints current-head or provider credit before referent quorum closes."
+    },
+    {
+      "id": "CH-EPHEMERAL-HEAD",
+      "claim": "The SHAs may exist only in a different or transient observation plane.",
+      "test": "Require a signed/exported commit object plus repository identity and parent chain; absence preserves UNKNOWN rather than converting to FALSE_GLOBAL."
+    }
+  ],
+  "new_concepts": [
+    "Referent Oscillation Budget",
+    "Snapshot Authority Decay",
+    "Credit Circuit Breaker"
+  ],
+  "null_and_negative_results": [
+    "No target-main commit after dc2af642 was observed.",
+    "No accepted Ubuntu live-provider execution receipt was observed.",
+    "The three 422 responses do not prove global nonexistence outside the queried repository observation plane."
+  ],
+  "routing": [
+    "clayresearch",
+    "frank",
+    "gwt",
+    "emergence",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness"
+  ],
+  "constraints": {
+    "training": "NOT_PERFORMED",
+    "harness_mutation": "NOT_PERFORMED",
+    "promotion": "NOT_CLAIMED",
+    "independent_replication": "NOT_CLAIMED"
+  }
+}

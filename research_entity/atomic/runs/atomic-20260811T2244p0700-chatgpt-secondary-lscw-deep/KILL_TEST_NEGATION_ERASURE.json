@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "evidence_class": "FRESH_REAL_TARGET_DEFECT_CLASS_PLUS_LOCAL_MINIMAL_MODEL",
+  "fresh_real_target_evidence": {
+    "target_commit": "0b765534e693707b813dab9ff7471189ee48ef91",
+    "scope": "PR365 unary negation/Boolean lexical hotfix",
+    "observed_defect_class": "Anonymous unary operator token could be filtered and conditional rule inlining could silently erase negation before AST lowering.",
+    "accepted_target_evidence": "8/8 operator survival regressions; 200576 decide_effect comparisons; 0 mismatches after repair; byte compilation",
+    "claim_limit": "The post-repair pass proves the scoped candidate, not whole compiler/lowering or Frank v0.1."
+  },
+  "minimal_model": {
+    "source": "return !a",
+    "buggy_lowered": "return a",
+    "hard_field_projection_changed": false,
+    "same_frontend_derived_semantic_root_detects": false,
+    "independent_source_target_behavior_validator_detects": true,
+    "truth_table": [
+      {"a": false, "source": true, "buggy_target": false, "match": false},
+      {"a": true, "source": false, "buggy_target": true, "match": false}
+    ]
+  },
+  "verdict": "KILLS_BROAD_LSCW_SEMANTIC_PRESERVATION_CLAIM",
+  "implication": [
+    "A hard-field conservation witness cannot detect arbitrary language semantic erasure when all listed lifecycle fields remain unchanged.",
+    "A semantic root derived through the same buggy frontend is circular evidence and can preserve the wrong meaning consistently.",
+    "Compiler semantics require an independently grounded source/target semantics relation, differential oracle, metamorphic property, verified compiler theorem or equivalent validator.",
+    "Therefore LSCW may only cover explicit typed lifecycle dimensions unless a stage supplies an independent validator."
+  ],
+  "candidate_revision": "LSCW-R1 should be a lifecycle hard-field conservation/composition candidate with pluggable stage validators, not a universal semantic-preservation primitive.",
+  "stronger_null": "Keep current stage-specific semantic regression/differential tests for compiler correctness and use existing ProductStart/local guards for lifecycle hard fields. Promote no new cross-stage primitive unless real cross-stage chimera/replay tests show an escape."
+}

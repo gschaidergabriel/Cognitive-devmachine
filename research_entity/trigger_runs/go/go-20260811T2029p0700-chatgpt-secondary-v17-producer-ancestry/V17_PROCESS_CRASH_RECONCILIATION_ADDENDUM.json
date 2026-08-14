@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_FUSION_ADDENDUM",
+  "run_id": "go-20260811T2029p0700-chatgpt-secondary-v17-producer-ancestry",
+  "created_at_local": "2026-08-11T21:27:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_research_commit": "93d7d93160f2a5d7af8c1644e7ef322a64bd18d3",
+  "trigger": "go",
+  "topic": "Abrupt process death, V15 expired takeover, V16 request-ledger reconciliation, and producer-bound V17 terminal recovery",
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "worker_is_frank": false,
+    "target_native_identity": "self.root",
+    "human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "hypothesis": "After a proven V15 EXPIRED_TAKEOVER, a dead interactive V16 execution may reconcile its still-ADMITTED request rows to FAILED while preserving request keys; verified effect outcome truth must remain governed independently by V14/V17 so the old effect can recover to DONE_VALID without duplicate execution.",
+  "strongest_counterhypothesis": "Marking the request FAILED could conflate response-path failure with effect failure or weaken idempotency; therefore the candidate must preserve the exact request key, keep the old execution identity, produce REPLAY/FAILED on exact retry, and demonstrate exactly one effect attempt while V17 retains verified outcome truth.",
+  "fresh_primary_guidance": [
+    {
+      "source": "AWS Builders' Library - Making retries safe with idempotent APIs",
+      "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+      "interpretation": "A client may not know whether a mutating request succeeded when the response is lost; durable idempotency identifiers and reconciliation are required to avoid duplicate side effects."
+    },
+    {
+      "source": "AWS Well-Architected - REL04-BP04 Make mutating operations idempotent",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html",
+      "interpretation": "Retries of mutating operations must preserve idempotency semantics rather than blindly re-execute work."
+    }
+  ],
+  "diagnostic_process_crash_target_run": {
+    "workflow_run": 31500348506,
+    "job": 93808408085,
+    "result": "PASS_V17_PROCESS_CRASH_TERMINAL_RECOVERY_WITH_ORPHANED_INGRESS_ADMISSION",
+    "crash_mode": "os._exit(43)_without_close_or_release",
+    "physical_lock_released_by_process_death": true,
+    "early_semantic_takeover_blocked": true,
+    "old_lease_epoch": 1,
+    "recovery_lease_epoch": 2,
+    "expired_takeover_event_count": 1,
+    "stale_old_holder_fenced": true,
+    "v17_terminal_after_recovery": "DONE_VALID",
+    "v17_recovery_decision": "COMPLETE",
+    "old_ingress_admission_after_recovery": "ADMITTED",
+    "diagnosis": "V17 terminal support is durable across abrupt process death, but V16 leaves the old exact request bound to a dead execution as ADMITTED."
+  },
+  "candidate_repair": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_pr": 331,
+    "file": "runtime/state/frank_execution_continuity_crash_recovery_candidate.py",
+    "tested_file_sha256": "f1b26ac0fd486e6f4ae7533fac155ccd422f4503b28b4b080cba6c2253b59b20",
+    "authority_conditions": [
+      "current V15 presence is BUSY at the supplied recovery epoch and exact recovery session/client",
+      "the same recovery epoch has a durable EXPIRED_TAKEOVER event",
+      "the takeover event hashes match the recovery holder",
+      "V16 still references a strictly older execution epoch"
+    ],
+    "mutation": "Only still-ADMITTED request rows belonging to the stale execution/epoch become FAILED; request-key rows are retained; stale execution task state becomes FAILED; existing TASK_STATE_CHANGED events are appended.",
+    "effect_truth_semantics": "FAILED means the interactive owner execution/response path died; verified effect/provider outcome truth is not changed and remains governed by V14/V17.",
+    "transaction_boundary": "Reconciliation and subsequent normal V16 recovery bind are separate fail-closed transactions; a crash between them leaves no matching new V16 active execution able to authorize normal work."
+  },
+  "first_repair_run": {
+    "workflow_run": 31500907700,
+    "job": 93810337887,
+    "tested_sha": "8c67623ad5b17d1f5a6b5b089bec1606d6a65f5f",
+    "classification": "HARNESS_MEASUREMENT_FAILURE_AFTER_RECONCILIATION_AND_V17_PATH",
+    "failure": "sqlite3.OperationalError: no such table: effect_attempts",
+    "candidate_refuted": false,
+    "repair_to_test_only": "Measure the canonical V14 ATTEMPT_STARTED lifecycle event instead of nonexistent effect_attempts table.",
+    "artifact_id": 9105015272,
+    "artifact_sha256": "3ec7831a285a61ae7d70c97e9e5298baab6d8832d95289cc2895a0246bad7fbe"
+  },
+  "accepted_repair_target_run": {
+    "workflow_run": 31501186346,
+    "job": 93811287526,
+    "tested_sha": "a39d4d7eac0ed340f6e907ad216c569625ee66df",
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "system_sqlite": "3.45.1",
+    "fixed_sqlite": {
+      "version": "3.53.4",
+      "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "mapped_library_sha256": "341808c2ee319e71443b7efe0d39436b5a5d6a2937c67196ac48f985eccf8603",
+      "v2_admission": "PASS_FIXED_SQLITE_RUNTIME_V2_CANDIDATE_ADMISSION",
+      "system_install_performed": false
+    },
+    "status": "PASS_V16_EXPIRED_TAKEOVER_INGRESS_RECONCILIATION_WITH_V17_DONE_RECOVERY",
+    "observed": {
+      "child_exit": 43,
+      "early_semantic_takeover_blocked": true,
+      "old_lease_epoch": 1,
+      "recovery_lease_epoch": 2,
+      "requests_reconciled_failed": 1,
+      "old_exact_request_replay_status": "REPLAY",
+      "old_exact_request_replay_admission_state": "FAILED",
+      "old_request_key_preserved": true,
+      "old_request_will_not_spawn_duplicate_execution": true,
+      "stale_old_holder_fenced": true,
+      "v17_before_recovery": "BOUND_REENTRY_VALID_DONE_PENDING",
+      "v17_after_recovery": "DONE_VALID",
+      "v17_recovery_decision": "COMPLETE",
+      "effect_attempt_count": 1,
+      "duplicate_effect_attempt_created": false,
+      "recovery_execution_released": true,
+      "idle_handoff_clear": true,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    "resource_shadow": {
+      "reconciliation_wall_seconds": 0.39,
+      "reconciliation_user_seconds": 0.26,
+      "reconciliation_system_seconds": 0.08,
+      "reconciliation_max_rss_kib": 27816,
+      "sqlite_build_wall_seconds": 45.09,
+      "sqlite_build_user_seconds": 71.53,
+      "sqlite_build_system_seconds": 2.58,
+      "sqlite_build_max_rss_kib": 417484
+    },
+    "tested_file_sha256": {
+      "v1_sqlite_guard": "e00d5421ab12494e83d2d6d1fc4e5b05cbc1e19f3b2a6ccf4eb523b0e2d53531",
+      "v2_sqlite_guard": "3374b36db2d7b9bcd9d89ddb022956314e21cb385b427c451453c235d39157af",
+      "v16_crash_recovery_candidate": "f1b26ac0fd486e6f4ae7533fac155ccd422f4503b28b4b080cba6c2253b59b20",
+      "process_crash_probe": "a3d1818932776b65094fda4b0805a852b607886ff4cdf06f364ea960df64ca6e",
+      "repair_gate": "0fef827ae336839e913a2edf35854a4487b75a99ab141da21753551076a21cda",
+      "workflow": "f2d9bdc14f218b08232d74450202dd0aeabdf9a8371f003cc2fb282884a01042"
+    },
+    "artifact": {
+      "id": 9105131290,
+      "name": "v16-v17-crash-reconcile-31501186346",
+      "size_bytes": 7145,
+      "sha256": "c3eecfca273cf322b18871b349a2ca5a284df940cca8e803ed5d740a337a3a85",
+      "expires_at": "2026-09-10T14:24:05Z"
+    },
+    "external_effect_performed": false,
+    "canonical_database_touched": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "go_oob_accounting": {
+    "current_worker_macrocycle_distinct_oob_count": 1,
+    "current_worker_macrocycle_oob": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "process_crash_probe_added_oob": false,
+    "crash_reconciliation_added_oob": false
+  },
+  "fusion": {
+    "v17_process_crash_recovery": "SUPPORTED_ON_ONE_LINUX_HOST_FOR_ABRUPT_USER_PROCESS_EXIT_PLUS_EXPIRED_LEASE_TAKEOVER",
+    "v16_expired_takeover_ingress_reconciliation": "SUPPORTED_CANDIDATE",
+    "idempotency_invariant": "Exact request key remains durable; retry is REPLAY/FAILED and cannot create a second effect attempt.",
+    "effect_truth_invariant": "Execution/response-path FAILED does not override verified V14/V17 effect outcome truth.",
+    "known_limits": [
+      "authority-negative controls without EXPIRED_TAKEOVER still need explicit target regression",
+      "no semantically equivalent response-body replay after crash",
+      "host power loss, kernel panic, filesystem-loss, and remote-provider reconciliation remain unmeasured",
+      "production non-bypass self.root routing remains separate",
+      "whole-product acceptance remains open"
+    ],
+    "architecture_delta_status": "SUPPORTED_CANDIDATE",
+    "canonical_merge_authorized": false,
+    "training_authorized": false
+  },
+  "next_frontier": [
+    "Add ordinary authority-negative controls proving no reconciliation can occur without a matching EXPIRED_TAKEOVER and exact recovery-holder binding.",
+    "Design response-replay semantics that expose verified prior outcome without re-running the side effect.",
+    "Bind V2 + V16 crash reconciliation + producer-bound V17 into the production non-bypass self.root route and re-run lifecycle crash/replay acceptance."
+  ]
+}

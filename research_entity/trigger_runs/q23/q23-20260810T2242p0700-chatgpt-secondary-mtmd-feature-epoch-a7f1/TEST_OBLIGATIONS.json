@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "program_target": "FRANK_V0_1",
+  "work_package": "F-V01-06-DIGITAL-RETINA-MVC",
+  "obligations": [
+    {
+      "id": "T-Q23-ORIGINAL-RETINA-01",
+      "priority": "P0",
+      "purpose": "Resolve original Retina baseline conflict before any replacement claim.",
+      "matrix": ["cold first call", "preloaded warm", "screenshot fast path", "photo path", "deep path"],
+      "fixtures": "Frozen per-function corpus covering OCR, screenshot routing, open-vocabulary concepts, object localization, spatial scene features, faces/logos/color/composition/VQA/caption/GoL where recoverable.",
+      "metrics": ["per-function correctness/error taxonomy", "p50/p90/p95/p99", "cold start", "RSS/PSS", "CPU", "failure rate", "restart/recovery"],
+      "gate": "No Qwen/FUSE/EMERGENT_DISTRIBUTE promotion without matched original rows or explicit UNKNOWN fields."
+    },
+    {
+      "id": "T-Q23-MTMD-TAP-01",
+      "priority": "P0",
+      "purpose": "Verify exact real Qwen3.5-4B projected visual buffer and decoder-position geometry on target runtime.",
+      "procedure": "Instrument immediately after mtmd_batch_get_output_embd and before mtmd_helper_decode_image_chunk; synchronously reduce without retaining raw pointer.",
+      "must_record": ["model/mmproj hashes", "llama.cpp commit", "backend", "batch/ubatch", "flash-attention", "image token min/max", "n_tokens", "n_embd", "decoder positions", "encode latency", "descriptor latency", "RSS/VRAM", "source frame hash"],
+      "failure_conditions": ["null/unstable pointer", "position/token count mismatch", "unexpected n_embd", "non-replayable provenance", "descriptor derived after source identity loss"]
+    },
+    {
+      "id": "T-Q23-FEATURE-EPOCH-01",
+      "priority": "P0",
+      "purpose": "Determine which runtime/model/preprocessing fields truly invalidate persistent prototypes.",
+      "matrix": ["runtime commit", "backend/version", "batch/ubatch", "flash-attention", "mmproj", "preprocessing", "image token budget", "pooling scheme"],
+      "metrics": ["descriptor cosine drift", "nearest-neighbor rank correlation", "prototype transfer accuracy", "open-set AUROC/AUPR/FPR", "calibration error"],
+      "control": "Exact same image bytes and seeds; distinguish numerical drift from semantic preprocessing drift.",
+      "promotion": "Only remove a FeatureEpoch field after field-ablation shows invariance inside declared tolerance."
+    },
+    {
+      "id": "T-Q23-MVC-LADDER-01",
+      "priority": "P0",
+      "purpose": "Compare shared-Qwen and genuinely light dedicated visual features under total-path budget.",
+      "candidates": ["Q0 global mean projected Qwen features", "Q0S projected Qwen global+2x2 position-aware features", "Q1 tiny learned projection on frozen Qwen features", "historical DINOv2-Small INT8", "MobileCLIP2-S0 image-only", "DINOv3 ViT-S/16 if operationally available"],
+      "exclude_as_permanent_micro_default": ["Qwen3-VL-Embedding-2B"],
+      "metrics": ["known-state accuracy", "unknown/ambiguous/conflict precision-recall", "AUROC", "FPR at chosen recall", "ECE/Brier", "prototype memory", "feature compute", "full sensor-to-outcome latency", "decoder bypass savings", "recovery/version migration"],
+      "controls": ["held-out user states", "OOD GUIs/photos", "appearance drift", "adversarial near-neighbors", "repeated screenshot states"]
+    },
+    {
+      "id": "T-Q23-DECODER-BYPASS-01",
+      "priority": "P0",
+      "purpose": "Test whether familiarity fast path can skip 4B image decode without task loss.",
+      "arms": ["FULL_QWEN", "SHARED_FEATURE_MVC_THEN_OPTIONAL_DECODE", "NO_MVC_ALWAYS_DECODE"],
+      "metrics": ["verified task outcome", "visual grounding", "false bypass", "missed consequential change", "encode latency", "decode latency", "tokens/context", "CPU/RAM/VRAM"],
+      "hard_rule": "task-critical, contradiction, stale epoch, unknown or ambiguous always escalate in first accepted configuration."
+    },
+    {
+      "id": "T-Q23-GUI-DUAL-SCALE-01",
+      "priority": "P1",
+      "purpose": "Falsify ROI-only deep perception versus global-structure+ROI.",
+      "arms": ["ROI_ONLY", "GLOBAL_TILE_HASH_PLUS_ROI", "LOW_DETAIL_GLOBAL_PLUS_ROI", "FULL_FRAME"],
+      "fixtures": ["off-ROI modal change", "static background carries target relation", "window moved without target change", "animation/noise", "misleading memory prior"],
+      "metrics": ["action-grounding success", "hidden-context miss", "false trigger", "visual tokens", "latency", "state amplification"]
+    },
+    {
+      "id": "T-Q23-TEMPORAL-GATE-01",
+      "priority": "P1",
+      "purpose": "Keep deterministic temporal compression as baseline before learned pruning.",
+      "arms": ["frame hash", "tile hash+pixel delta", "learned temporal selector", "hybrid"],
+      "metrics": ["consequential-change recall", "benign-animation false trigger", "deep-vision trigger rate", "resource cost", "replay equivalence"]
+    },
+    {
+      "id": "T-Q23-MROPE-RUNTIME-01",
+      "priority": "P0",
+      "purpose": "Close transfer risk from current Qwen3.5/llama.cpp multimodal configuration failures on the exact 4B target.",
+      "matrix": ["image first", "long text before image", "supported batch/ubatch variants", "flash-attention on/off if supported", "target backend", "restart"],
+      "metrics": ["visual answer correctness", "blank/irrelevant output", "crash", "illegal-memory/error logs", "CPU fallback", "encode latency", "feature fingerprint"],
+      "rule": "External issue reports are risk hypotheses only until exact 4B reproduction or negative target result."
+    },
+    {
+      "id": "T-Q23-SLOT-COUNT-01",
+      "priority": "P1",
+      "purpose": "Test parallel=1 as simplest runtime baseline under one global Frank execution lease.",
+      "arms": ["parallel=1", "parallel=2"],
+      "workload": "Serialized Frank requests plus allowed internal maintenance/prefetch if present.",
+      "metrics": ["throughput", "p95 latency", "RSS/VRAM", "state/replay equivalence", "restart", "multimodal correctness"]
+    },
+    {
+      "id": "T-Q23-MEDIA-ID-REPLAY-01",
+      "priority": "P0",
+      "purpose": "Bind content-addressed visual identity across source evidence, mtmd media IDs, MVC and UnifiedDB replay.",
+      "checks": ["frame content hash assigned/verified", "ROI hash includes parent frame+coordinates+preprocessing", "mtmd chunk ID observed", "same content gives stable identity", "different content cannot alias", "replay has source bytes or immutable artifact reference"],
+      "negative_control": "Serialized mtmd chunk metadata without image bytes must not be treated as sufficient replay evidence."
+    },
+    {
+      "id": "T-Q23-RECOVERY-01",
+      "priority": "P0",
+      "purpose": "Test visual state continuity and fail-closed recovery.",
+      "matrix": ["model restart", "mmproj change", "runtime upgrade", "prototype DB rollback", "corrupt descriptor", "stale source epoch", "missing source artifact"],
+      "expected": ["stale prototypes quarantine/reject", "last-known-good recoverable", "no silent decoder bypass", "effects remain fail-closed", "replay receipts preserved"]
+    }
+  ],
+  "next_executable_frontier": ["T-Q23-ORIGINAL-RETINA-01", "T-Q23-MTMD-TAP-01", "T-Q23-FEATURE-EPOCH-01", "T-Q23-MVC-LADDER-01"]
+}

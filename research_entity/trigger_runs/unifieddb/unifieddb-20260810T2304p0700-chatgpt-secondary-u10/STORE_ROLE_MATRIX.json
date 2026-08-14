@@ -1,0 +1,10 @@
+{"schema_version":"1.0","stores":[
+{"object":"state_epochs + semantic_transactions","role":"AUTHORITATIVE","decision":"RETAIN_AND_STRENGTHEN","reason":"global commit identity/idempotency anchor"},
+{"object":"semantic_records","role":"AUTHORITATIVE_CANDIDATE","decision":"MIGRATE_TO_APPEND_ONLY_VERSION_STREAM","reason":"current UNIQUE(...,status) blocks arbitrary same-status history"},
+{"object":"world_state/self_state","role":"CURRENT_PROJECTION","decision":"DERIVE_FROM_VERSION_STREAM","reason":"mutable rows alone do not prove point-in-time replay"},
+{"object":"ClayGraph topology/activation","role":"DERIVED_REBUILDABLE","decision":"KEEP_LOGICALLY_UNIFIED_PHYSICALLY_SEPARABLE","reason":"truth/authority must not depend on graph activation"},
+{"object":"vector/tensor indexes","role":"DERIVED_INDEX","decision":"KEEP_ISOLATED_UNTIL_BENCHMARK","reason":"avoid extension/common-mode crash radius before target evidence"},
+{"object":"FTS","role":"DERIVED_INDEX","decision":"COLOCATE_OPTIONAL","reason":"may share SQLite if rebuildable and p99/recovery remain acceptable"},
+{"object":"execution lease","role":"AUTHORITATIVE_CONTROL_STATE","decision":"COLOCATE_WITH_CANONICAL_TX","reason":"BEGIN IMMEDIATE CAS + epoch fence must be atomic with writes"},
+{"object":"effect/outcome/reentry receipts","role":"AUTHORITATIVE_CAUSAL_HISTORY","decision":"COLOCATE_CANONICALLY","reason":"verified outcome -> causal credit -> admitted delta -> reentry must retain exact provenance"}
+]}

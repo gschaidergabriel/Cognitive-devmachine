@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "routes":[
+    {"query_class":"authoritative_self_world_goal_policy_state","route":"UnifiedDB current semantic records/state tables","truth_authority":"UnifiedDB typed current state + provenance","fallback":"DEGRADED_UNKNOWN"},
+    {"query_class":"current_semantic_lineage","route":"v_frank_current_continuity","truth_authority":"single ADMITTED_CURRENT lineage plus verified external recovery floor","fallback":"RECOVERY_REQUIRED"},
+    {"query_class":"derived_dependency_or_activation_topology","route":"ClayGraph projection for current unified epoch","truth_authority":"NONE_BY_ACTIVATION","fallback":"rebuild projection from UnifiedDB"},
+    {"query_class":"vector_or_fts_retrieval","route":"derived index -> result refs -> UnifiedDB provenance/admissibility validation","truth_authority":"rank is not truth","fallback":"bounded canonical query"},
+    {"query_class":"snapshot_restore_candidate","route":"snapshot + snapshot_lineage_binding + external floor verification","truth_authority":"recovery validator","fallback":"QUARANTINE"},
+    {"query_class":"state_mutation","route":"BEGIN IMMEDIATE short transaction -> exact execution binding -> continuity commit -> state epoch -> commit receipt","truth_authority":"exact current lease generation + current lineage + authority scope","fallback":"REJECT_STALE_EXECUTION"},
+    {"query_class":"storage_runtime_safety","route":"SQLite version/source-id/journal-mode/topology probe","truth_authority":"runtime observation + upstream fixed-version/backport evidence","fallback":"QUARANTINE_WRITES"}
+  ],
+  "bounded_model_assembly_rule":"Model-facing assembly may read only current provenance-valid bounded records for one published semantic epoch; no total-memory scan or mixed partial epoch.",
+  "status":"COMPLETE"
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2304p0700-chatgpt-secondary-psw-possibility-weave",
+  "candidate_id":"ATOMIC-CANDIDATE-PSW-001",
+  "name":"Possibility State Weave",
+  "status":"REFUTED_AS_DISTINCT_ARCHITECTURE_USEFUL_IMPLEMENTATION_ENVELOPE",
+  "novelty":"PROJECT_SPECIFIC_COMBINATION_ONLY",
+  "architecture_promotion":false,
+  "authority":{"effect_authority_minted":false,"target_harness_mutation":false,"training":false},
+  "central_result":"Sparse shared state and exact-read-signature pure computation reuse are strongly useful in low-divergence/low-signature-diversity alternative sets, but a conventional immutable-base + sparse-overlay + exact read-signature memoization baseline reproduced PSW's defining operation-sharing exactly. PSW therefore has no demonstrated unique architecture benefit.",
+  "main_scaling":{"cells":168,"state_fields":[64,256,1024],"branches_up_to":1024,"divergence":[0.0,0.01,0.05,0.10,0.25,0.50],"read_sets":[4,16],"exact_reconstruction_errors":0,"psw_output_mismatches":0,"overlay_memo_output_mismatches":0},
+  "aggregate":{"median_overlay_wire_over_full":0.177876,"median_psw_wire_over_full":0.184566,"median_psw_wire_over_overlay":1.015177,"median_overlay_memo_time_over_full":0.717381,"median_psw_time_over_full":0.720328,"median_psw_over_overlay_memo_time":1.009366,"overlay_memo_faster_cells":103,"psw_faster_cells":65,"operation_group_count_equal_in_all_cells":true},
+  "representative_regime":{"F":1024,"N":256,"read_set":16,"six_seed_medians":[
+    {"divergence":0.0,"sharing_factor":256.0,"overlay_memo_time_over_full":0.2385},
+    {"divergence":0.01,"sharing_factor":6.83,"overlay_memo_time_over_full":0.4033},
+    {"divergence":0.05,"sharing_factor":1.76,"overlay_memo_time_over_full":0.7507},
+    {"divergence":0.10,"sharing_factor":1.20,"overlay_memo_time_over_full":0.9786},
+    {"divergence":0.25,"sharing_factor":1.01,"overlay_memo_time_over_full":1.1691},
+    {"divergence":0.50,"sharing_factor":1.0,"overlay_memo_time_over_full":1.1942}
+  ]},
+  "large_branch_example":{"F":1024,"N":1024,"divergence":0.0,"read_set":16,"full_wire_bytes":14474241,"overlay_wire_bytes":71414,"psw_wire_bytes":79535,"sharing_factor":1024.0,"overlay_memo_time_over_full":0.214212,"psw_time_over_full":0.221300},
+  "hard_falsifiers":{"incomplete_read_set":"One omitted true material read produced a concrete false shared output; exact read set produced zero mismatch.","payload_only_merge":"Equal current payload with different hypothesis/provenance falsely merges under payload-only identity and correctly remains separate under strict branch identity.","effect_lifting":"Only exact PURE+known-read-set is liftable; unknown read-set and external/security-sensitive classes reject.","stale_identity":"stale base epoch and native self != self.root reject."},
+  "adaptive_positive_result":{"status":"SYNTHETIC_POLICY_SIGNAL","heldout_cells":48,"signature_density_threshold_probe":0.8,"mean_time_regret_vs_measured_oracle":1.000829,"exact_measured_winner_fraction":0.958333,"warning":"0.8 is not a production threshold; target traces must calibrate"},
+  "strongest_counterhypothesis":"Conventional sparse overlays/deltas plus exact self/epoch/provenance branch metadata and exact-read-signature memoization provide all measured useful PSW behavior; choose independent/materialized execution when signature diversity is high.",
+  "counterhypothesis_result":"SUPPORTED_IN_SYNTHETIC_PROXY",
+  "prior_art_collision":"Persistent data structures, variational execution, faceted values and self-adjusting/change-propagation techniques remove broad novelty claims.",
+  "concurrent_collision":{"candidate":"ACEF","relation":"overlapping physical branch/delta layer","effect":"PSW must not become a second branch semantics. If ACEF survives, consume this packet only as physical representation/PURE execution policy."},
+  "durable_result":{"target_issue":"gschaidergabriel/Dr.-Unterweger#194","law":"Physical representation of unresolved alternatives is adaptive/non-authoritative. Sparse state and pure computation sharing require exact identity/provenance/epoch preservation and sound exact/conservative material read/effect contracts.","preferred_first_implementation":"conventional sparse delta/overlay + exact read-signature memoization; no PSW organ","real_next_test":"current target-VPS Frank branch traces, comparing materialized vs sparse vs sparse+memo vs admitted ACEF/Hyperposition runtime with CPU/RSS/latency/wire/reconstruction/conversion measurements"},
+  "not_measured":["real Frank Hyperposition traces","target-VPS runtime/RSS for branch state","ClayCode compiler-generated material read-set completeness","actual model context/token savings","production persistent HAMT/BDD implementation","real ACEF branch runtime because ACEF remains concurrent candidate"],
+  "artifacts":["RUN_MANIFEST.json","CURRENT_STATE_CUTOFF.json","INTERCONNECT_MANIFEST.json","FUSION_1.md","HYPOTHESIS_FIELD_1.json","EXTERNAL_RESEARCH_MANIFEST.json","FUSION_2.md","HYPOTHESIS_FIELD_2.json","THINKSPACE_SEARCH.json","candidate/CANDIDATE_ATOMIC_PSW_001.clay","candidate/CANDIDATE_METADATA.json","implementation/psw_reference.py","EXPERIMENT_PLAN.json","MEASUREMENTS.json","ABLATION_AND_CONTROLS.json","ADAPTIVE_REPRESENTATION_RESULT.json","PRIOR_ART_COLLISION.json","COUNTERHYPOTHESIS_RESULT.json","DESIGN_REFUTATION.md","ARCHITECTURE_DELTA.json","ACEF_COLLISION_REFRESH.json","REPRESENTATION_POLICY_PROPOSAL.clay","RESOURCE_CROSSOVER_ANALYSIS.md","TARGET_REENTRY_PLAN.md","SWARM_REENTRY.json","TEST_EXECUTION_RECEIPT.json","tests/test_psw_reference.md"]
+}

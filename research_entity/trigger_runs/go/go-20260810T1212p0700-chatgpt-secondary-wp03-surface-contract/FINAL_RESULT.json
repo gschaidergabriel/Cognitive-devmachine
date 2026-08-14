@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1212p0700-chatgpt-secondary-wp03-surface-contract",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_invariants": {
+    "clay_is_research_entity": true,
+    "worker_is_not_frank": true,
+    "frank_is_separate_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "model_output_is_not_execution_authority": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "coordination": {
+    "workstream": "CC-WP-02 / CC-WP-03 parser-canonical-front-end-to-TypedIR boundary",
+    "duplicate_avoidance": [
+      "Did not race the active grouping-only canonical semantic-hash repair lane.",
+      "Did not merge evidence-only PR145 or PR88.",
+      "Did not credit Clay-repository self-hosted queues as Hostinger execution evidence after repository-scoped runner topology was observed.",
+      "Did not advance CC-WP-04 while WP02/WP03 remain OPEN."
+    ],
+    "frontier_refresh": "Repeated fresh-main reads showed concurrent supervisors advancing WP14 freshness and WP02/WP03 evidence; this worker narrowed to the frontend surface/provenance boundary."
+  },
+  "live_external_refresh": {
+    "performed": true,
+    "classes": ["T0_OFFICIAL", "T1_PRIMARY_TECHNICAL"],
+    "sources": [
+      "Lark official documentation: terminal priority, strict collision checking, contextual/dynamic lexers",
+      "Interegular primary documentation: regex/lookaround analysis limitations",
+      "MLIR bytecode documentation: explicit dialect identity and optional versioning",
+      "LLVM bitcode/LangRef documentation: module/version/target identity",
+      "Bazel Remote Execution API: content-addressed execution inputs"
+    ],
+    "decision_delta": "Corroborated an explicit frontend artifact identity boundary (surface + grammar identity + semantic identity) instead of silently reparsing the same source through another grammar."
+  },
+  "parser_research": {
+    "selected_baseline": "D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE",
+    "dispositions": [
+      {
+        "candidate": "V19_DELIMITER_NORMALIZABLE",
+        "status": "REFUTED_BOUNDED",
+        "reason": "Relation token consumed trailing horizontal trivia after bare Needle.owns, rejecting V17-valid bare-qid statements before newline/comment."
+      },
+      {
+        "candidate": "V20_WORD_BOUNDARY_RULE_PRIORITY",
+        "status": "REFUTED_BOUNDED",
+        "reason": "Word-boundary protection does not preserve V17-valid qid/postfix continuation through '.', '-' and '?'."
+      },
+      {
+        "candidate": "V21_MAXIMAL_QID_SHARED_EXACT",
+        "status": "RESEARCH_ONLY_NOT_PROMOTED",
+        "reason": "Potentially cleaner maximal-qid/shared-exact construction, but mission priority shifted to explicit frontend identity; no acceptance receipt warrants replacing V17."
+      }
+    ],
+    "architecture_delta": "NO_PARSER_PROMOTION_KEEP_V17_SELECTED"
+  },
+  "out_of_box_experiment": {
+    "ordinal": 1,
+    "experiment": "SCANNERLESS_EARLEY_DYNAMIC_COMPLETE_BOUNDARY_ORACLE",
+    "evidence_class": "BOUNDED_LOCAL_RESEARCH_ORACLE",
+    "result": "Needle.owns(X) and Needle.owns (X) are structurally ambiguous without a boundary discriminator (call versus prefix relation), whereas Needle.owns X and bare Needle.owns are not. Some discriminator is therefore required; removing boundary information entirely is not a valid repair.",
+    "promotion": "NONE",
+    "scope_guard": "Minimal grammar oracle only; not production language evidence."
+  },
+  "wp03_frontend_split": {
+    "finding": "The same source can acquire different AST meaning when selected V17 frontend output is silently reparsed under historical V7/default TypedIR grammar. V7 can remain an explicit structured surface; silent cross-surface reparse is forbidden.",
+    "independent_open_bug": "Current main TypedIR still uses value-based KEYWORDS/PUNCT identifier extraction and can lose grammar-admitted contextual keyword identifiers such as status. Hostinger-supported AST-context extraction exists as a candidate but was not silently promoted here."
+  },
+  "implemented_architecture_delta": {
+    "status": "IMPLEMENTED_ON_MAIN_NOT_WP03_PROMOTED",
+    "component": "tools/claycode_wp03_frontend_artifact_bridge.py",
+    "commit": "33b95976ff662ad8bf144f140d3a8e9476d6e9eb",
+    "problem": "Legacy ClayCodeBaseFrontendAST/v1 contract_hash binds frontend_schema + grammar_sha256 + semantic_hash but omits surface, so changing only artifact.surface does not invalidate that legacy hash.",
+    "change": [
+      "Manifest unit now requires expected_surface.",
+      "Artifact surface must equal independently receipt-bound expected_surface before TypedIR construction.",
+      "Frontend binding records both artifact surface and expected surface.",
+      "Unbound surface relabel is an explicit forbidden invariant.",
+      "No source reparse was added; bridge continues to consume already-produced canonical frontend AST."
+    ],
+    "compatibility_strategy": "Compensating boundary pin around legacy v1 contract; a future versioned surface-bound frontend contract may supersede it, but legacy hash semantics were not silently rewritten."
+  },
+  "tests_added_or_migrated": [
+    {
+      "path": "tools/test_claycode_wp03_frontend_bridge_surface_binding.py",
+      "purpose": "Reproduce legacy surface-hash omission, accept valid pin, reject relabel/wrong/missing expected_surface, and require provenance-bound TypedIR artifact identity."
+    },
+    {
+      "path": "tools/test_claycode_wp03_frontend_artifact_bridge.py",
+      "commit": "ea05c018af0b2ee48f26c3265466a343f54555af",
+      "purpose": "Migrate existing bridge regression to explicit single- and multi-surface expected_surface pins so ambiguity controls exercise the intended boundary."
+    },
+    {
+      "path": ".github/workflows/wp03-frontend-bridge-surface-binding.yml",
+      "purpose": "Hosted Ubuntu regression lane; repository-wide PR jobs currently fail before steps and therefore provide no semantic evidence."
+    }
+  ],
+  "remote_execution": {
+    "github_hosted_pr": {
+      "draft_pr": 162,
+      "merged": false,
+      "closed": true,
+      "result": "INFRASTRUCTURE_FAILURE_BEFORE_STEPS_NOT_CREDITED",
+      "note": "Surface regression and general Research Entity Verify/Identity Guard jobs failed before executable steps/logs; no code conclusion drawn."
+    },
+    "hostinger_executor": {
+      "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+      "hostname": "digital-retina",
+      "workflow": ".github/workflows/clay-wp03-surface-binding-exact-vps-ssh.yml",
+      "expected_clay_sha": "2a0f5f6793f43f1f2e34d98ed8e6ca3dc083de13",
+      "attempts": [
+        {
+          "run_id": 31360430740,
+          "result": "INFRASTRUCTURE_FAILURE_BEFORE_SOURCE_CHECKOUT",
+          "returncode": 128,
+          "exact_clay_sha": "UNKNOWN",
+          "failure": "git@github.com Permission denied (publickey)"
+        },
+        {
+          "run_id": 31360560571,
+          "result": "BOUNDED_RETRY_SAME_INFRASTRUCTURE_FAILURE",
+          "returncode": 128,
+          "exact_clay_sha": "UNKNOWN",
+          "failure": "git@github.com Permission denied (publickey)"
+        }
+      ],
+      "adjudication": "REMOTE_WP03_SURFACE_TEST_NOT_EXECUTED",
+      "stop_rule": "Repeated identical transport failure; no further blind retries. Repair source transport or use another exact content-addressed handoff before replay."
+    }
+  },
+  "negative_results_and_limits": [
+    "No V19/V20/V21 parser candidate was promoted over V17.",
+    "No GitHub-hosted pre-step failure was reinterpreted as a code-test failure.",
+    "No Hostinger transport failure was reinterpreted as a WP03 semantic failure.",
+    "No Hostinger evidence substitutes for registered Andreas Ubuntu target acceptance.",
+    "No WP02/WP03 package status was changed; CLAYCODE_RELEASE_GATE remains NOT_PASS.",
+    "No Frank Harness mutation or final training was authorized."
+  ],
+  "test_obligations": [
+    {
+      "id": "CC-WP03-FRONTEND-SURFACE-001",
+      "status": "IMPLEMENTED_TEST_REMOTE_EXECUTION_BLOCKED",
+      "requirement": "Execute relabel/wrong/missing expected_surface negative controls and normal bridge regression against exact current Clay bytes on a working Ubuntu executor."
+    },
+    {
+      "id": "CC-WP03-FRONTEND-SURFACE-002",
+      "status": "CANDIDATE",
+      "requirement": "Version frontend contract so surface/dialect identity is cryptographically inside the contract payload, with explicit migration/equivalence rules."
+    },
+    {
+      "id": "CC-WP03-IDENTIFIER-003",
+      "status": "OPEN",
+      "requirement": "Compose AST-context identifier extraction with the selected frontend artifact contract and replay contextual keyword identifiers plus compact hyphen/operator identity without importing historical V7 lexical semantics."
+    },
+    {
+      "id": "CC-WP03-TARGET-004",
+      "status": "OPEN",
+      "requirement": "After production/Ubuntu proxy closure, run registered Andreas Ubuntu target acceptance; Hostinger proxy evidence is insufficient."
+    }
+  ],
+  "research_center_distribution": {
+    "status": "PUBLISHED_IN_SHARED_REPOSITORY",
+    "affected_branches": [
+      "BASE_CLAYCODE_RELEASE",
+      "CC-WP-02-PARSER-CANON",
+      "CC-WP-03-IR-TYPES",
+      "CC-WP-14-BASE-AUDIT",
+      "H2_CLAYCODE_HARNESS",
+      "release/recovery provenance"
+    ]
+  },
+  "current_formal_gate_state": {
+    "CC-WP-01-SPEC-FREEZE": "PASS",
+    "CC-WP-02-PARSER-CANON": "OPEN",
+    "CC-WP-03-IR-TYPES": "OPEN",
+    "CLAYCODE_RELEASE_GATE": "NOT_PASS"
+  },
+  "next_frontier": [
+    "Repair or replace cross-repository exact-source transport to digital-retina; do not retry identical SSH failure blindly.",
+    "Replay the surface-bound bridge negative controls plus existing regression on exact fresh main.",
+    "Then compose the already-bounded AST-context identifier extraction with explicit frontend artifacts and replay V17 semantic identity.",
+    "Only after receipt-gated WP02/WP03 closure may CC-WP-04 advance."
+  ],
+  "final_disposition": "ARCHITECTURE_DELTA_PLUS_REMOTE_INFRASTRUCTURE_BLOCKER_PLUS_TEST_OBLIGATIONS",
+  "owner_training_gate_touched": false
+}

@@ -245,7 +245,9 @@ def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
     """Parse RFC Retry-After delay-seconds or HTTP-date, else use default."""
     try:
         value = headers.get("Retry-After") if headers is not None else None
-    except (AttributeError, TypeError):
+    # Header containers cross the transport-adapter boundary.  Their lookup
+    # must not suppress a status receipt that was already received.
+    except Exception:
         return default
     if not isinstance(value, str):
         return default

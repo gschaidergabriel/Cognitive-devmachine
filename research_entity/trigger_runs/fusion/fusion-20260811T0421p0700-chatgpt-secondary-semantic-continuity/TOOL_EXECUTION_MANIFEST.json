@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "fusion-20260811T0421p0700-chatgpt-secondary-semantic-continuity",
+  "executions": [
+    {
+      "tool": "GitHub connector",
+      "status": "SUCCESS",
+      "uses": ["canonical boot", "owner directive retrieval", "program/workspace retrieval", "recent commit refresh", "target effect receipt retrieval", "hypofusion and UnifiedDB live refresh", "durable fusion writes"],
+      "write_authority_observed": true,
+      "concurrency_note": "One contents write received 409 due concurrent branch movement; worker refreshed head, consumed the new UnifiedDB delta, and retried without overwriting peer work."
+    },
+    {
+      "tool": "web primary-source retrieval",
+      "status": "SUCCESS",
+      "source": "SQLite official documentation",
+      "retrieved": "2026-08-11",
+      "findings": [
+        "SQLite upstream documents a rare WAL-reset race discovered 2026-03-03.",
+        "Upstream states affected releases include 3.7.0 through 3.51.2 and the repair is in 3.51.3, with listed backports 3.44.6 and 3.50.7.",
+        "The target evidence reports SQLite 3.45.1; this version-string alone does not establish vulnerability because a distribution backport may exist.",
+        "Current project evidence records Ubuntu SQLite WAL-backport status as unresolved; recovery credit therefore remains fail-closed pending exact package/source provenance or topology exclusion."
+      ],
+      "urls": [
+        "https://www.sqlite.org/wal.html",
+        "https://www.sqlite.org/walformat.html",
+        "https://www.sqlite.org/atomiccommit.html",
+        "https://www.sqlite.org/pragma.html"
+      ]
+    },
+    {
+      "tool": "accepted Hostinger target VPS",
+      "status": "REUSED_CURRENT_RECEIPTS_NOT_REEXECUTED_BY_THIS_FUSION_WORKER",
+      "evidence": [
+        "go-20260811T0404 target run 31423170075 PR261 integration",
+        "go-20260811T0404 target run 31432856721 semantic-twin CAS",
+        "PR263 target run 31432605112 provider reconciliation after local snapshot rollback",
+        "effect-authority policy oracle run 31432535912"
+      ]
+    },
+    {
+      "tool": "tools/fusion_research_contract.py",
+      "status": "NOT_EXECUTED_CONNECTOR_ONLY_SESSION",
+      "impact": "This run must not claim protocol 100% completion or contract PASS. Required artifacts are nevertheless materialized and reread where connector access permits."
+    }
+  ],
+  "live_delta_consumed_after_write_race": "research_entity/trigger_runs/unifieddb/unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity/STORE_ROLE_MATRIX.json",
+  "external_evidence_class": "PRIMARY_OFFICIAL",
+  "runtime_evidence_class": "REAL_ACCEPTED_TARGET_VPS_REUSED_CURRENT_RECEIPTS",
+  "training_execution": "NONE_NOT_AUTHORIZED"
+}

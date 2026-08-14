@@ -1,0 +1,54 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:clay-live-fusion-reentry-v13:replay-identity-fixed:20260810T1447p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T07:47:00Z",
+  "payload": {
+    "work_id": "CLAY-LIVE-FUSION-REENTRY-V1",
+    "reason_clay": {
+      "cross_worker_falsifier": "Recorded DELIVERY_V13 and SUBSCRIPTION_SNAPSHOT_V13 were ignored during replay, allowing future routing logic to reinterpret historical delivery state.",
+      "fix_lane": "existing PR156 only; no parallel router opened",
+      "current_pr_head_at_write": "cc30ea26de3ce2b535f15fe6b0871caae8555590",
+      "runtime_fix_commit": "2deb84d277fe7b794bfb2fc031dfb7441868646f",
+      "regression_test_commit": "631d1d15955b89e515cb6b15ec708a48a82e6ccf",
+      "ci_gate_commit": "cc30ea26de3ce2b535f15fe6b0871caae8555590",
+      "local_targeted_execution": {
+        "status": "PASS_LOCAL_TARGETED_ONLY",
+        "tests": "2/2",
+        "checks": [
+          "router-B forced high relevance during replay but recorded router-A INDEX_ONLY delivery remained byte-semantically equivalent at the Delivery object level",
+          "legacy V1.3 delivery record without routing_version is deterministically bound to v1.3 after record-hash-preserving fixture rewrite"
+        ]
+      },
+      "implementation_delta": [
+        "persist routing_version on Delivery",
+        "replay and validate recorded DELIVERY_V13 instead of ignoring it",
+        "replay and preserve recorded SUBSCRIPTION_SNAPSHOT_V13 instead of retaining synthetic replay snapshots",
+        "fail closed on recorded delivery event/subscription/bus-seq/authority mismatch",
+        "preserve delivery history by delivery_id and detect conflicting repeated recorded delivery ids"
+      ],
+      "ci_observation": {
+        "live_fusion_run": 31367223229,
+        "hosted_reference_tests": "COMPLETED_FAILURE_NO_STEPS_AND_LOG_404_NOT_CLASSIFIED_AS_CODE_FAILURE",
+        "hostinger_reference_tests": "QUEUED"
+      }
+    },
+    "completion_clay": {
+      "historical_delivery_replay": "PASS_LOCAL_TARGETED_HOSTINGER_REQUIRED",
+      "routing_version_binding": "PASS_LOCAL_TARGETED_HOSTINGER_REQUIRED",
+      "explicit_migration_semantics_if_recomputed": "BOUNDARY_DEFINED_IN_MESH_TRANSPORT_BRIDGE_MIGRATION_RUNTIME_STILL_REQUIRED_FOR_VERSION_MISMATCH",
+      "hostinger_ubuntu_exact_head": "REQUIRED",
+      "active_worker_delivery_ack_roundtrip": "REQUIRED",
+      "unifieddb_materialization": "REQUIRED",
+      "mesh_v2_route_target_identity_roundtrip": "REQUIRED",
+      "latency_resource_observer_backaction": "REQUIRED",
+      "git_fallback_replay_equivalence": "REQUIRED"
+    },
+    "status": "READY",
+    "base_priority": 0.98,
+    "expected_impact": 0.98,
+    "urgency": 0.95,
+    "information_gain": 0.97
+  }
+}

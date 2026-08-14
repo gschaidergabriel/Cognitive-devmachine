@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_GO_LIVE_KNOWLEDGE_DELTA/1.0",
+  "run_id": "GO-20260812T0044P0700-CHATGPT-SECONDARY-SELFHOSTED-WORKSPACE-ISOLATION",
+  "created_at_utc": "2026-08-11T17:52:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not": "self.root/Frank"
+  },
+  "prewrite_shared_head": "c5acc0a0555eda890e15b13520136945f2060776",
+  "scope": "ordinary live-primary refresh and swarm adjudication; NOT another go out-of-box experiment",
+  "go_oob_count_for_invocation": 1,
+  "live_primary_refresh": {
+    "sqlite_wal_reset_bug": {
+      "official_current_statement": "SQLite documents the WAL-reset corruption bug as likely present from 3.7.0 through 3.51.2, fixed in 3.51.3 and later, with backports in 3.44.6 and 3.50.7. The failure class requires WAL mode, at least two database connections in separate threads/processes, and a tight concurrent write/checkpoint race.",
+      "release_history": "SQLite 3.51.3 explicitly records 'Fix the WAL-reset database corruption bug'.",
+      "current_fixed_line_observed": "SQLite 3.53.4 is a later fixed line and exposes version/source-id APIs suitable for exact runtime provenance checks.",
+      "sources": [
+        "sqlite.org/wal.html current WAL documentation",
+        "sqlite.org/changes.html release history",
+        "sqlite.org/c3ref/libversion.html runtime version/source-id API",
+        "sqlite.org/pragma.html pragma_compile_options"
+      ]
+    }
+  },
+  "internal_evidence_fusion": {
+    "workspace_risk_premise": "SUPPORTED: accepted target system SQLite 3.45.1 in WAL topology is inside the upstream affected version range absent a proven vendor backport/topology exclusion.",
+    "existing_stronger_lane": [
+      "PR #320 binds/reconstructs the Ubuntu 3.45.1 source lineage and reports a targeted WAL-reset discriminator on that line.",
+      "PR #348 is the target-supported V4 admission repair using private SQLite 3.53.4 plus python3 -I -S, with V17 and UnifiedDB composition smoke evidence.",
+      "PR #373 adds launcher pre-guard path fencing but explicitly leaves installed systemd/service binding and restart/recovery open.",
+      "PR #376 preserves the counterhypothesis that post-admission trusted code can explicitly re-enter site machinery; V4 is therefore a startup admission boundary, not a lifetime Python mutation proof."
+    ],
+    "duplicate_work_decision": "NO_DUPLICATE_SQLITE_BUILD_OR_GATE",
+    "reason": "Existing accepted-target storage research is more mature than a new version/source-id gate from this worker. Fresh web evidence corroborates the selected fixed-runtime direction but does not justify a parallel implementation branch."
+  },
+  "work_queue_refinement": {
+    "superseded_question": "Find whether SQLite 3.45.1 is affected and find a fixed runtime candidate.",
+    "current_release_question": "Prove that the real installed Frank/self.root product boot is forced through the already target-supported V4/private-SQLite boundary as the first import-capable Python entrypoint, with exact installed launcher/manifest provenance, no silent fallback to system 3.45.1/unisolated Python, and restart/recovery evidence on installed bytes.",
+    "secondary_lifetime_question": "Define and test the trusted-code/dependency invariant after V4 admission so later explicit site/path mutation cannot silently invalidate the admitted Python-level sqlite3 behavior.",
+    "affected_work_packages": [
+      "F-V01-13_SECURITY-RECOVERY-RESTART",
+      "F-V01-04_SINGLE_INSTANCE",
+      "F-V01-09_EFFECT-AUTHORITY",
+      "F-V01-16_END-TO-END-ACCEPTANCE"
+    ]
+  },
+  "strongest_counterhypothesis": {
+    "statement": "Even correct installed service wiring to V4 does not prove lifetime storage semantics: a later trusted dependency can mutate Python-level sqlite3 behavior or another product path can bypass the launcher. Product acceptance therefore needs both boot provenance and bounded runtime/dependency invariants.",
+    "existing_counterevidence_lane": "PR #376"
+  },
+  "architecture_delta": {
+    "status": "NO_NEW_CODE_CHANGE_ROUTE_EXISTING_WORK",
+    "change": "Refine the release gate from generic 'SQLite 3.45.1 unsafe' to concrete installed-product boot/provenance/restart integration of the already target-supported private 3.53.4 V4 lane, while retaining the system 3.45.1 fail-closed hazard until that binding is proven.",
+    "rollback": "If installed V4/private-runtime composition fails or introduces regressions, keep system-WAL execution fail-closed and return to the last target-supported isolated admission candidate; do not silently fall back to system 3.45.1."
+  },
+  "non_claims": [
+    "No product service/systemd integration was implemented by this worker.",
+    "No canonical Frank database was mutated.",
+    "No host SQLite package was replaced.",
+    "No final training was authorized or started.",
+    "No second out-of-box experiment was performed.",
+    "No whole Frank v0.1 acceptance claim is made."
+  ]
+}

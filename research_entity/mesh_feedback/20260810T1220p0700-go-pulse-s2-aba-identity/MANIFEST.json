@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1220p0700-pulse-s2-aba-identity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "status": "MATERIAL_COUNTEREVIDENCE_DISTRIBUTED_CURRENT_S2_PROMOTION_BLOCKED",
+  "receipt": "research_entity/unifieddb/receipts/20260810T1220p0700_CHATGPT_PULSE_S2_ABA_IDENTITY_COUNTEREVIDENCE.json",
+  "candidate_pr": 150,
+  "affected_branches": {
+    "unifieddb": {
+      "delta": "Do not erase A->B->A content chains from projection invalidation solely because fingerprints match. Preserve touched logical identities and impact seeds unless record/version/provenance identity stability is explicitly witnessed.",
+      "status": "BLOCKING_COUNTEREVIDENCE_FOR_S2_CANCELLATION_RULE"
+    },
+    "claygraph": {
+      "delta": "Projection final-state equality must include record/version/provenance-bound access identity, not only content fingerprint equality and global epoch.",
+      "status": "TEST_OBLIGATION"
+    },
+    "runtime/continuity": {
+      "delta": "The previously reported fully-cancelled metadata-only epoch gap may be a symptom of overaggressive content cancellation. Conservatively recomputing touched identities lets existing SPM publish the new epoch without a synthetic logical change.",
+      "status": "REVISE_GAP_HYPOTHESIS"
+    },
+    "harness/recovery": {
+      "delta": "Recovery/replay must test content-ABA across crash boundaries and verify that final access segments reference current record identities after raw-event replay.",
+      "status": "TEST_OBLIGATION"
+    },
+    "frank/database-pulse": {
+      "delta": "Database Pulse effectivization remains physical projection maintenance only. Any episode/provenance identity touched by raw events cannot be erased from causal semantics merely because payload content returns to a prior value.",
+      "status": "INVARIANT"
+    }
+  },
+  "performance_tradeoff": {
+    "original_proxy_recompute_reduction_fraction": 0.21375,
+    "aba_safe_proxy_recompute_reduction_fraction": 0.18,
+    "generation_map_row_reduction_fraction_preserved": 0.9,
+    "previous_10_198x_proxy_speedup_reuse_allowed": false
+  },
+  "validation": {
+    "local_counterexample": "SUPPORTED",
+    "draft_pr": 150,
+    "ubuntu_branch_shadow": "UNKNOWN",
+    "hostinger": "UNKNOWN",
+    "andreas_target": "NOT_ATTEMPTED"
+  },
+  "canonical_promotion": "NONE"
+}

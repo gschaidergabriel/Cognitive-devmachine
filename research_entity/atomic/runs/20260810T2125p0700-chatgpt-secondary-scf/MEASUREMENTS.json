@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2125p0700-chatgpt-secondary-scf",
+  "candidate_id":"SCF-001",
+  "evidence_class":"LOCAL_SYNTHETIC_PROXY",
+  "seeds":[7,19,23,47,101],
+  "n_total_traces":100000,
+  "clean_traces":49974,
+  "bugged_traces":50026,
+  "results":{
+    "surface":{"accuracy":0.563,"precision":1.0,"recall":0.12645424379322753,"f1":0.22451731970471325},
+    "scf":{"accuracy":0.93674,"precision":1.0,"recall":0.8735457562067724,"f1":0.9325053880460065},
+    "surface_plus_scf":{"accuracy":1.0,"precision":1.0,"recall":1.0,"f1":1.0},
+    "taint":{"accuracy":0.56384,"precision":0.5868469542597008,"recall":0.4329148842601847,"f1":0.4982629702059128},
+    "lattice":{"accuracy":0.55709,"precision":1.0,"recall":0.11464038699876064,"f1":0.20569932390021697}
+  },
+  "confusion":{
+    "surface":{"tp":6326,"fp":0,"tn":49974,"fn":43700},
+    "scf":{"tp":43700,"fp":0,"tn":49974,"fn":6326},
+    "surface_plus_scf":{"tp":50026,"fp":0,"tn":49974,"fn":0},
+    "taint":{"tp":21657,"fp":15247,"tn":34727,"fn":28369},
+    "lattice":{"tp":5735,"fp":0,"tn":49974,"fn":44291}
+  },
+  "per_bug_detection":{
+    "surface":{"AUTHORITY_MINT":0.0,"EVIDENCE_MINT":0.0,"CAUSAL_CREDIT_MINT":0.0,"STALE_EPOCH":0.0,"IDENTITY_MINT":0.0,"ACCEPTANCE_MINT":0.0,"WEB_TO_EFFECT":0.0,"DIRECT_REPO_RECEIPT_WRITE":1.0},
+    "scf":{"AUTHORITY_MINT":1.0,"EVIDENCE_MINT":1.0,"CAUSAL_CREDIT_MINT":1.0,"STALE_EPOCH":1.0,"IDENTITY_MINT":1.0,"ACCEPTANCE_MINT":1.0,"WEB_TO_EFFECT":1.0,"DIRECT_REPO_RECEIPT_WRITE":0.0},
+    "surface_plus_scf":{"AUTHORITY_MINT":1.0,"EVIDENCE_MINT":1.0,"CAUSAL_CREDIT_MINT":1.0,"STALE_EPOCH":1.0,"IDENTITY_MINT":1.0,"ACCEPTANCE_MINT":1.0,"WEB_TO_EFFECT":1.0,"DIRECT_REPO_RECEIPT_WRITE":1.0}
+  },
+  "timing_100k_python_p50":{
+    "surface":{"ms_p50":54.33594,"us_per_trace_p50":0.5433594},
+    "scf":{"ms_p50":883.295691,"us_per_trace_p50":8.83295691},
+    "surface_plus_scf":{"ms_p50":907.784041,"us_per_trace_p50":9.07784041},
+    "taint":{"ms_p50":614.719583,"us_per_trace_p50":6.14719583},
+    "lattice":{"ms_p50":726.761442,"us_per_trace_p50":7.26761442}
+  },
+  "memory_20k_python_peak_bytes":{"surface":504,"scf":1024,"surface_plus_scf":1000,"taint":816,"lattice":848},
+  "one_file_test":{"n":50000,"clean_fp":0,"missed":0,"status":"PASS","observed_elapsed_ms":607.819257},
+  "interpretation":"surface+SCF reached 100% detection with 0 false positives on this seeded synthetic class; this is mechanism sanity evidence only and cannot be promoted to real Frank security/correctness.",
+  "hidden_cost":"SCF reference implementation is materially slower than a direct surface predicate in Python; static compilation may change the cost but is unmeasured."
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2125p0700-eudi-e1e5-falsification",
+  "status": "DISTRIBUTED_AS_DURABLE_SHARED_FEEDBACK",
+  "shared_distribution_is_independent_replication": false,
+  "scientific_promotion": "NONE",
+  "architecture_promotion": "NONE",
+  "feedback": {
+    "frank": {
+      "effect": "MIXED_ARCHITECTURE_EVIDENCE",
+      "delta": "Detached execution is viable on the actual Hostinger body, but naive one-writable-inode EUDI weakens OS-level immutable-root isolation. Do not promote single-file identity yet.",
+      "next_test": "Require EUDI security/recovery control to match or beat split immutable-root + mutable-state layout before integration."
+    },
+    "unifieddb": {
+      "effect": "PRIMARY_COUNTEREVIDENCE_AND_MECHANISM_SUPPORT",
+      "delta": "State mutation after memfd/fexecve detachment works and survives restart, but the writable inode itself does not enforce root/state byte-range separation.",
+      "next_test": "Prototype least-authority state-writing mechanism that cannot pwrite root/model extents, then crash-cut it at every durability boundary."
+    },
+    "claycode": {
+      "effect": "CAPABILITY_MODEL_REQUIREMENT",
+      "delta": "A logical MutableStateRegion type is insufficient if lowering produces a general O_RDWR file descriptor. Runtime capabilities must preserve bounded-write semantics below ClayCode.",
+      "next_test": "Define and attack a bounded offset/range write capability whose lowered implementation cannot address immutable extents."
+    },
+    "harness": {
+      "effect": "DIRECT_TARGET_VPS_VALIDATION_DELTA",
+      "delta": "E1/E3 passed on Hostinger run 31397800061; E5 produced local counterevidence against naive same-inode isolation.",
+      "next_test": "Run E5 on target VPS and E4 kill-cut matrix. Treat a failed containment/crash test as a valid EUDI negative result."
+    },
+    "q23": {
+      "effect": "NO_MODEL_STORAGE_PROMOTION_YET",
+      "delta": "Boot mechanics no longer block EUDI, but no GGUF/mmap performance evidence exists yet.",
+      "next_test": "Run identical embedded-vs-external model bytes and collect page faults, TTFT, throughput, RSS/PSS and GPU-offload behavior."
+    },
+    "clayresearch": {
+      "effect": "HYPOTHESIS_REWEIGHTING",
+      "delta": "H-EUDI-03 gained two independent environment observations (local Linux + Hostinger target); H-EUDI-05 gained counterevidence against naive single writable inode security.",
+      "next_test": "Prioritize discriminators that can kill EUDI: range-confinement failure, crash inconsistency, corruption amplification or model-performance regression."
+    },
+    "gwt": {
+      "effect": "NO_CAUSAL_PROMOTION",
+      "delta": "Storage/boot mechanism evidence says nothing yet about cognitive causal equivalence.",
+      "next_test": "Defer H-EUDI-09 until identical Frank state/model/runtime can execute matched split-vs-EUDI traces."
+    },
+    "claygraph": {
+      "effect": "NO_TOPOLOGY_PROMOTION",
+      "delta": "No graph result. Immutable-root protection and canonical STATE_HEAD remain independent of derived topology.",
+      "next_test": "Later inject graph/index corruption inside EUDI and prove rebuild cannot alter canonical root/state identity."
+    },
+    "atomic": {
+      "effect": "DESIGN_PRESSURE",
+      "delta": "Find a one-image design that preserves physical unity without handing a general writable inode capability to the cognitive runtime.",
+      "next_test": "Explore brokered/range-bounded state writer, separate privileged writer process, kernel-enforced mappings, or reject strict one-file if the boundary cannot be recovered cleanly."
+    },
+    "emergenz": {
+      "effect": "NO_CHANGE",
+      "delta": "No emergence or consciousness evidence. This is substrate mechanics/security research only."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "ablations": ["cmx_no_coupon","cmx_no_rent","cmx_fixed_k","cmx_no_provenance"],
+  "baselines": {
+    "current_no_candidate_proxy": "similarity fixed-k",
+    "resource_shadow": "retrieved_per_turn + microbench ns/query + metadata bytes",
+    "reward_baseline": "reward-weighted fixed-k",
+    "simple_conventional": "provenance fixed-k",
+    "strongest_conventional": "latest exact verified + recency-weighted verified cluster fallback"
+  },
+  "candidate": "ATOMIC-CMX-001",
+  "controls": ["noise sweep","two concept drifts","self-echo flood","stale-memory injection","idempotent replay ledger","stale epoch rejection","authority/truth immutability"],
+  "evidence_class": "LOCAL_SYNTHETIC_EXECUTABLE_PROXY",
+  "main_matrix": {
+    "algorithms": ["similarity","provenance","reward","latest","cmx"],
+    "drift_points": ["40%","70%"],
+    "echo_rate": 0.8,
+    "memory_capacity": 120,
+    "noise_levels": [0,0.02,0.05,0.1,0.15],
+    "seeds": 6,
+    "stale_rate": 0.04,
+    "turns_per_seed": 1600
+  },
+  "promotion_rule": "Full CMX must beat strongest conventional and removal of defining coupon/rent must worsen results.",
+  "schema_version": "1.0"
+}

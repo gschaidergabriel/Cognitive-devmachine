@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2031p0700-chatgpt-secondary-hwp10-lifecycle",
+  "retrieved_date": "2026-08-10",
+  "sources": [
+    {
+      "source_class": "CURRENT_SECURITY_GUIDANCE",
+      "publisher": "OWASP",
+      "title": "AI Agent Security Cheat Sheet / Agentic AI guidance",
+      "finding_used": "High-impact effects should preserve an independent execution gate, exact action/target/parameter binding, short-lived approval artifacts, auditability and replay protection; read-only/low-risk autonomy can be treated differently from irreversible/high-impact operations.",
+      "project_effect": "Supports exact ConfirmationReceipt binding and effect-class separation; does not override owner-fixed policy."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL_RUNTIME_DOCUMENTATION",
+      "publisher": "SQLite",
+      "title": "Atomic Commit / Transactions / Isolation / PRAGMA synchronous documentation",
+      "finding_used": "SQLite transactions provide local ACID/atomic commit semantics including crash recovery; writes are serialized; durability depends on journal/synchronous configuration.",
+      "project_effect": "Supports H1 local durable reservation implementation and motivates explicit FULL durability configuration plus crash tests."
+    },
+    {
+      "source_class": "PRIMARY_ENGINEERING_GUIDANCE",
+      "publisher": "Amazon Web Services",
+      "title": "Making retries safe with idempotent APIs",
+      "finding_used": "A timeout can leave the client unable to know whether an external side effect occurred. Safe retries require service-level idempotency semantics/client tokens or reconciliation rather than assuming the failed response means no effect.",
+      "project_effect": "Directly motivated OUTCOME_UNKNOWN and the distinction SAFE_TO_RETRY_SAME_IDEMPOTENCY_KEY vs RECONCILE_REQUIRED."
+    },
+    {
+      "source_class": "HISTORICAL_STANDARDS_DRAFT_NOT_NORMATIVE",
+      "publisher": "IETF HTTPAPI working-group draft",
+      "title": "Idempotency-Key HTTP Header Field draft",
+      "status_as_of_retrieval": "expired draft; not treated as a current RFC",
+      "finding_used": "Historical design precedent for client-unique idempotency keys and request fingerprints.",
+      "project_effect": "Terminology/design precedent only; no standards claim promoted."
+    }
+  ],
+  "counterhypothesis": "Local transaction durability plus one-shot confirmation may still duplicate or lose knowledge of an external effect if the process fails after an external provider acts but before the local verified outcome is committed.",
+  "discriminator": "Model attempt-start and unknown-outcome states explicitly; permit automatic retry only with a verified downstream idempotency contract and the same key; otherwise require reconciliation.",
+  "result": "COUNTERHYPOTHESIS_SUPPORTED_AS_GENERAL_BOUNDARY; implementation changed accordingly.",
+  "promotion_boundary": "External sources support engineering patterns; H1 tests remain local implementation evidence and no universal exactly-once or prompt-injection-impossibility claim is made."
+}

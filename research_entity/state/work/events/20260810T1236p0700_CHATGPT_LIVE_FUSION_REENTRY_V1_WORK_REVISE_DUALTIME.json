@@ -1,0 +1,51 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:clay-live-fusion-reentry-v1:dualtime-hostinger:20260810T1236p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T05:36:00Z",
+  "payload": {
+    "work_id": "CLAY-LIVE-FUSION-REENTRY-V1",
+    "reason_clay": {
+      "live_delta": "During this same run, main received FRANK_DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE and its all-branch feedback manifest.",
+      "fused_rule": "OLD_EPOCH != STALE; arrival epoch never overwrites causal origin epoch; temporal age and current applicability are separate.",
+      "candidate_revision": "PR156 now preserves causal_origin_epoch, arrival_epoch and causal_origin_refs, routes late valid events by semantic relevance, and indexes HISTORICALLY_VALID_ONLY deltas without current plan churn.",
+      "ci_feedback": "GitHub-hosted PR jobs are completing failure with no executed steps/log blob unavailable; this is infrastructure evidence, not a Python test failure. PR156 now includes self-hosted Hostinger Ubuntu execution lane.",
+      "hostinger_run": {
+        "workflow_run_id": 31359116575,
+        "job_id": 93364307417,
+        "state_at_revision": "QUEUED"
+      }
+    },
+    "completion_clay": {
+      "deterministic_reference_test_cases": 7,
+      "exact_event_id_dedupe": "PASS_REQUIRED",
+      "content_ABA_identity_preservation": "PASS_REQUIRED",
+      "late_valid_event_preservation": "PASS_REQUIRED",
+      "historically_valid_only_no_plan_churn": "PASS_REQUIRED",
+      "high_impact_conflict_effect_guard": "PASS_REQUIRED",
+      "append_only_replay": "PASS_REQUIRED",
+      "hostinger_ubuntu_receipt": "PASS_REQUIRED",
+      "unifieddb_materialization": "REQUIRED",
+      "active_worker_delivery_ack_roundtrip": "REQUIRED",
+      "crash_restart_real_process": "REQUIRED",
+      "concurrent_writer_race": "REQUIRED",
+      "latency_resource_benchmark": "REQUIRED"
+    },
+    "dependencies": [
+      "PR156 head remains current and unrefuted",
+      "dual-time feedback bridge remains OPEN research delta, not canonical truth",
+      "identity lock and repeated live refresh remain satisfied"
+    ],
+    "invalidators": [
+      "Hostinger tests expose candidate defect",
+      "a simpler refresh/poll mechanism matches correctness with lower coordination cost",
+      "new causal evidence invalidates dual-time event identity handling"
+    ],
+    "base_priority": 0.95,
+    "expected_impact": 0.96,
+    "urgency": 0.90,
+    "information_gain": 0.94,
+    "status": "READY"
+  }
+}

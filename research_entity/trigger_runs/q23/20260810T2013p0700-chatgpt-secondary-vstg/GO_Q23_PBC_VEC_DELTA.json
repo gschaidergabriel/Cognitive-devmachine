@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "outbound": [
+    {
+      "envelope_id": "Q23TOGO-PBC-VEC-20260810-01",
+      "direction": "Q23_TO_GO",
+      "kind": "ARCHITECTURE_DELTA",
+      "topic_tags": ["multimodal", "retina", "active_sensing", "visual_memory", "qwen35", "llama.cpp", "mvc", "harness"],
+      "payload_ref": "research_entity/trigger_runs/q23/20260810T2013p0700-chatgpt-secondary-vstg/ACTIVE_EVIDENCE_BUDGET_CACHE_DELTA.json",
+      "summary": "Refine Retina/QNDRF into target-calibrated active sensing with explicit global coverage debt plus a versioned owned visual-evidence descriptor cache. ROI confidence alone is insufficient; no cache may preserve raw unowned libmtmd pointers or cross version mismatches.",
+      "urgency": "NEXT_SAFE_POINT",
+      "requires_reply": false
+    },
+    {
+      "envelope_id": "Q23TOGO-PBC-VEC-20260810-02",
+      "direction": "Q23_TO_GO",
+      "kind": "COUNTER_CHALLENGE",
+      "topic_tags": ["gui", "uncertainty", "grounding", "active_sensing", "calibration"],
+      "payload_ref": "research_entity/trigger_runs/q23/20260810T2013p0700-chatgpt-secondary-vstg/packages/Q23_PKG_ACTIVE_EVIDENCE_BUDGET_CACHE_20260810.json",
+      "summary": "Current GUI uncertainty evidence indicates UQ rankings/calibration do not reliably transfer across model classes/interfaces. Any PBC threshold must therefore be calibrated and revalidated on the exact target model/runtime/interface and attacked with wrong-confidence/interface-shift controls.",
+      "urgency": "NEXT_CHECKPOINT",
+      "requires_reply": false
+    }
+  ],
+  "knowledge_needs": [
+    {
+      "question_id": "Q23-KN-NATIVE-MEDIA-CACHE-20260810",
+      "question": "On the exact accepted llama.cpp target build, does native multimodal/KV/prompt caching persist a version-safe media representation across requests without a second vision encode, or only token/KV state?",
+      "reason": "If native runtime already supplies exact safe cross-request media-feature reuse, Frank-owned VEC may be redundant; if not, VEC remains a discriminating candidate.",
+      "requested_evidence": ["exact build hash", "encode invocation counter", "same-frame cross-request cache trace", "mmproj/model/preprocess version swap behavior"],
+      "urgency": 0.72,
+      "information_gain": 0.88
+    }
+  ],
+  "closure_status": "OUTBOUND_WRITTEN; EXECUTION_DEPENDENCY_RECORDED; NO_BACKGROUND_WORK_CLAIMED"
+}

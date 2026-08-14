@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T15:46:50+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "free_only": true,
+  "reason": "New executable Ubuntu evidence closes the previously pending V18 FrontendArtifact->TypedIR bridge gate on a narrow receipt-bound production bridge v2, while WP03 remains OPEN because 100 preserved residual semantic nodes across 10 classes still require explicit downstream legality/lowering/defer/reject disposition and consumption proof.",
+  "evidence": {
+    "latest_material_run_commit": "35507ecedb06e40e60fd66e443ef2bbd07087160",
+    "wp02": {
+      "status": "PASS_PACKAGE_ONLY",
+      "ubuntu_run_id": 31367208214,
+      "base_release": "NOT_PASS"
+    },
+    "wp03_baseline_counterexample": {
+      "ubuntu_run_id": 31368672238,
+      "tested_collision_pairs": 4,
+      "collisions_reproduced": 4,
+      "classification": "DECLARATION_ONLY_TYPED_IR_WHOLE_PROGRAM_IDENTITY_FALSIFIED_ON_TESTED_RULE_PROGRAMS"
+    },
+    "wp03_bridge_v2": {
+      "ubuntu_run_id": 31369677917,
+      "receipt_commit": "f3db93743532e584c69a3784ac0c338c2ea476d6",
+      "pass": true,
+      "tamper_regression_pass": true,
+      "downstream_parser_calls": 0,
+      "promotion_scope": "RECEIPT_BOUND_WP03_PRODUCTION_TYPEDIR_BRIDGE_V2_ONLY",
+      "wp03_status": "OPEN"
+    },
+    "residual_inventory": {
+      "ubuntu_run_id": 31369984252,
+      "receipt_commit": "8bfa64e723e5872a72e655148e3c6a07059d0b73",
+      "opaque_total": 100,
+      "opaque_kind_count": 10,
+      "priority": ["rule_decl", "invariant_decl", "remaining_eight_classes"],
+      "all_classes_non_authoritative": true
+    }
+  },
+  "cross_branch_constraints": {
+    "harness": "Preserve exact-byte/content-addressed execution identity; do not modify Frank Harness. Shared-lineage replay is not independent replication.",
+    "claygraph": "Synthetic dual-plane gains disappear under correlated missing-edge ancestry; ancestry diversity must be measured, not inferred from multiple projections.",
+    "unifieddb": "Durable receipt persistence is useful but per-record fsync cost is unresolved; do not make ClayCode semantic acceptance depend on unproven batching/group-commit assumptions.",
+    "goodman": "Collapse descendants sharing V18/compiler/project/model ancestry into one evidence family; executable Ubuntu counterexamples and independently different mechanisms carry the discriminating credit.",
+    "target": "Final application/FULL_FRANK/WP14 acceptance remains Andreas Ubuntu only."
+  },
+  "next_cycle": [
+    "Do not rerun the already-clean WP03 bridge unless a bound component blob changes.",
+    "Define an explicit disposition table for every residual semantic class with exactly one of LOWERED_AND_VALIDATED, EXPLICITLY_DEFERRED_FAIL_CLOSED, or REJECTED_WITH_REASON; silent drop and implicit execution are forbidden.",
+    "Execute rule_decl and invariant_decl first because they dominate the inventory and carry the highest semantic/effect risk; include positive, semantic-mutation, tamper, unsupported-class, and no-authority-minting controls.",
+    "Prove WP05 evaluator/lowering consumes only validated/lowered semantics and fails closed on deferred/unsupported residual classes; opaque payload must never mint effect authority.",
+    "After all 10 classes have executable disposition receipts on exact current V18 provenance, rerun current G9/Dialect identity/provenance/type/effect/evaluator gates and only then adjudicate whether CC-WP-03 can PASS.",
+    "Only after WP03 package closure advance to WP06 evaluator/native-C hardening; final BASE/application acceptance remains on the registered Andreas Ubuntu target."
+  ],
+  "guards": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "NO_BASE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "NO_RECEIPT_INHERITANCE_ACROSS_CHANGED_COMPONENT_HASHES",
+    "GOODMAN_ANTI_ECHO_ANCESTRY_COLLAPSE",
+    "DO_NOT_MODIFY_FRANK_HARNESS",
+    "UBUNTU_ONLY_FRANK_V0_1_FINAL_TARGET"
+  ]
+}

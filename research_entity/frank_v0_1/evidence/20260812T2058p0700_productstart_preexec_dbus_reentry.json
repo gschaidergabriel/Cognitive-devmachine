@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_EVIDENCE_REENTRY",
+  "recorded_at": "2026-08-12T20:58:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_packages": ["F-V01-13", "F-V01-01"],
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "state": "SUPPORTED_MECHANISM_PENDING_FRESH_HEAD_TARGET",
+  "canonical_boot_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "note": "Continuity anchor only; dynamic implementation truth was refreshed from product GitHub."
+  },
+  "observed_anchors": [
+    {
+      "claim": "Fresh-main ProductStart V4 successor #526 preserves the V4 deterministic mechanism but productive ProductStart discovery remains fail-closed.",
+      "evidence": "gschaidergabriel/Dr.-Unterweger PR #526; workflow run 31602737801; deterministic ProductStart V4 regressions SUCCESS; read-only accepted-target ProductStart discovery FAILURE by release gate",
+      "status": "MECHANISM_SUPPORTED_PRODUCT_UNADMITTED"
+    },
+    {
+      "claim": "Inherited V1->V4 systemd observation binds main ExecStart/configuration fields but does not bind ExecCondition, ExecStartPre or DropInPaths.",
+      "evidence": "ProductStart V4 chain inspected on #513/#526 ancestry; inherited sqlite_v5_systemd_parent_gate_v1.py read_systemd property set omits those three surfaces.",
+      "status": "OBSERVED_CODE_GAP"
+    },
+    {
+      "claim": "Upstream systemd semantics execute ExecCondition before ExecStartPre and ExecStartPre before ExecStart.",
+      "evidence": "systemd upstream man/systemd.service.xml, current main",
+      "source": "https://github.com/systemd/systemd/blob/main/man/systemd.service.xml"
+    },
+    {
+      "claim": "On self-hosted runner clay / Linux 6.8.0-117-generic / systemd 255 (255.4-1ubuntu8.17), systemctl show --all did not expose empty ExecCondition/ExecStartPre arrays, but direct systemd D-Bus properties did expose them as zero-element arrays.",
+      "evidence": "stale V5 workflow run 31602835228 negative presentation result; D-Bus probe run 31603254019 SUCCESS; artifact 9144019937",
+      "status": "TARGET_LANE_PRESENTATION_NEGATIVE_DBUS_POSITIVE",
+      "observed_values": {
+        "systemctl_show": "DropInPaths= only",
+        "dbus_Service_ExecCondition": "a(sasbttttuii) 0",
+        "dbus_Service_ExecStartPre": "a(sasbttttuii) 0",
+        "dbus_Unit_DropInPaths": "as 0"
+      }
+    }
+  ],
+  "generated_reality": {
+    "hypothesis": "Exact ProductStart identity is sufficiently bound by the main systemd ExecStart tuple plus the main FragmentPath identity, so pre-start commands and separately loaded drop-ins cannot silently change the admitted startup reality.",
+    "mechanism_if_right": "Any materially different startup semantics would necessarily alter already-bound V4 fields and be rejected.",
+    "confidence_before_test": "LOW_TO_MEDIUM"
+  },
+  "counter_reality": {
+    "hypothesis": "A unit can preserve the V4-bound main ExecStart and main fragment identity while gaining executable pre-start behavior or separately loaded drop-in configuration that V4 never observes.",
+    "predicted_observation": "Adding ExecStartPre and/or DropInPaths to the evaluator snapshot does not change V4 admission."
+  },
+  "single_bounded_unusual_experiment": {
+    "protocol": "SYSTEMD_PRESTART_UNOBSERVED_SIDE_EFFECT",
+    "count_for_macro_cycle": 1,
+    "scope": "offline/in-memory evaluator snapshot only; no systemd command executed; no service/VPS/Frank/provider/canonical state mutation",
+    "baseline": {
+      "snapshot": "otherwise V1->V4-valid ProductStart snapshot",
+      "observed": "PASS_PRODUCT_START_IDENTITY_V4_CANDIDATE"
+    },
+    "intervention": {
+      "change": "same snapshot plus non-empty ExecStartPre and DropInPaths fields",
+      "predicted_if_generated_reality_right": "V4 rejects materially changed startup surface",
+      "predicted_if_counter_reality_right": "V4 remains PASS because the fields are unobserved",
+      "observed": "PASS_PRODUCT_START_IDENTITY_V4_CANDIDATE"
+    },
+    "outcome": "SUPPORTED_OBSERVABILITY_BLINDSPOT",
+    "external_command_executed": false,
+    "effect_authority": "NONE",
+    "production_mutation": false,
+    "canonical_state_mutation": false
+  },
+  "negative_result_preserved": {
+    "claim": "systemctl show --all is a sufficient target-compatible mechanism for proving these empty arrays are observed",
+    "outcome": "REFUTED_ON_TESTED_SYSTEMD_255_RUNNER",
+    "importance": "The security predicate was retained; only its observation transport changed. A presentation mismatch was not reclassified as a semantic PASS."
+  },
+  "repair_candidate": {
+    "current_pr": 539,
+    "current_branch": "chatgpt/go-productstart-preexec-v5-fresh-main-20260812",
+    "current_head_at_record": "3633a1f1db0a5ef5b7844a795670264e2d81488b",
+    "base_pr": 526,
+    "superseded_pr": 519,
+    "superseded_state": "CLOSED_UNMERGED_STALE_ANCESTRY",
+    "mechanism": "Compose V4 and read normalized systemd D-Bus properties directly via /usr/bin/busctl: Service.ExecCondition, Service.ExecStartPre and Unit.DropInPaths. Zero-element arrays normalize to empty. Non-empty, malformed, non-array or invalid-count observations fail closed.",
+    "ordinary_regressions": "12 deterministic V5 checks plus inherited V4 11/11 and repository static integrity in dedicated target workflow.",
+    "fresh_head_target_run": "QUEUED_AT_RECORD_TIME",
+    "promotion_state": "TESTING_NOT_PROMOTED"
+  },
+  "collapse": {
+    "main_execstart_plus_main_fragment_is_complete_startup_identity": "REJECT",
+    "systemctl_show_all_empty_exec_arrays_are_reliably_observable_on_target_systemd_255": "REJECT",
+    "direct_systemd_dbus_exposes_required_zero_vs_nonzero_discriminator_on_tested_runner": "SUPPORTED",
+    "dbus_v5_mechanism_on_fresh_526_ancestry": "RETAIN_TESTING",
+    "productive_hostinger_productstart": "UNKNOWN_OPEN",
+    "F-V01-13": "IN_PROGRESS_NOT_PROMOTED",
+    "FRANK_V0_1": "NOT_PROMOTED"
+  },
+  "strongest_remaining_counter_realities": [
+    "The tested self-hosted runner is not itself proof of the accepted Hostinger production identity.",
+    "Fresh V5 ancestry may still fail exact-head composition or target execution; queued workflow cannot be treated as PASS.",
+    "ExecStartPost/ExecStop/ExecStopPost and filesystem namespace surfaces remain adjacent independent lifecycle/configuration obligations.",
+    "Root anchor content identity does not prove freshness against coordinated rollback.",
+    "ProductStart identity does not by itself prove actual Frank process identity, exact interpreter identity, mapped SQLite continuity or semantic self.root lineage.",
+    "Clean start/restart/crash recovery and rollback/downgrade/library-swap controls remain release evidence obligations."
+  ],
+  "upstream_sqlite_context": {
+    "claim": "SQLite upstream documents the WAL-reset corruption bug through 3.51.2 and the fix in 3.51.3 and later; this motivates exact fixed-runtime admission but does not itself prove Frank production identity.",
+    "sources": [
+      "https://sqlite.org/wal.html",
+      "https://sqlite.org/changes.html"
+    ]
+  },
+  "release_effect": {
+    "F-V01-13": "IN_PROGRESS_BLOCKED_BY_PRODUCTIVE_IDENTITY_AND_RECOVERY_EVIDENCE",
+    "F-V01-01": "DEPENDENCY_REMAINS_OPEN",
+    "FRANK_V0_1": "NOT_PROMOTED",
+    "training_authorized": false
+  },
+  "next_falsifiers": [
+    "Complete exact fresh-head #539 target run and inspect the exact V5 read_systemd D-Bus receipt rather than only workflow color.",
+    "Recompose surviving adjacent lifecycle/namespace/interpreter/lineage candidates on current ancestry without merging stale stacked evidence by implication.",
+    "On the exact accepted Hostinger ProductStart, provision/observe the owner-authorized product identity anchor and prove the real service/process enters the admitted V6/V5/runtime chain.",
+    "Then replay clean start/restart/crash recovery plus rollback, downgrade and library-swap controls with durable receipts and semantic self.root lineage binding."
+  ]
+}

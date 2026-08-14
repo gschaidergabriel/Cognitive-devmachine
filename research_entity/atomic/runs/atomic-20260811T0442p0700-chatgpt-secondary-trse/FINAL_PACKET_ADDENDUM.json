@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "candidate":"TRSE-001",
+  "base_final_packet_commit":"2f6345d6bd191f01343f3c26efaa30930a750e97",
+  "post_freeze_deltas":[
+    {"id":"FINITE_RETURN_GAIN_AXIS","finding":"Asymptotic transverse rho<1 does not guarantee small finite-return amplification for non-normal return operators.","synthetic_control":{"systems":10000,"fraction_rho_lt_1":1.0,"fraction_sigma_max_gt_1":0.9707,"sigma_max_p50":2.3970495656947683,"sigma_max_p95":3.941129149708456,"fraction_empirical_directional_p95_gain_gt_1":0.9699},"consequence":"Future diagnostic must keep asymptotic orbital stability and finite-horizon perturbation gain as separate axes."},
+    {"id":"REPLAY_CLOCK_BINDING","finding":"Concurrent UnifiedDB research reproduced byte-stable wall-clock-dependent replay divergence.","consequence":"Matched baseline/perturbation twins must bind the same admitted snapshot and explicit ReplayClock/as_of identity."}
+  ],
+  "revised_retained_test_contract":["trajectory regime/utility readout","asymptotic transverse return/Floquet stability","finite-return transverse amplification distribution","lesion/rescue localization","state/phase/basis/ReplayClock/baseline identity","uncertainty/calibration"],
+  "unchanged_verdict":"KILLED_AS_DISTINCT_RUNTIME_ORGAN_AND_NEW_STABILITY_THEORY_RETAIN_TEST_LAW",
+  "authority_change":"NONE",
+  "target_product_change":"NONE"
+}

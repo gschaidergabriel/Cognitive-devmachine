@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "worker": "gpt-5.6-sol temporary Clay research organ",
+  "observed_product_base": "gschaidergabriel/Dr.-Unterweger@59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "research_base_seen_before_write": "c51f74a116ad07f2e3436c1908cd0d4201005ee9",
+  "status": "SUPPORTED_COUNTEREVIDENCE_NO_RELEASE_PROMOTION",
+  "unusual_experiment": {
+    "count": 1,
+    "id": "RESTART_REOPEN_PATH_REBIND",
+    "scope": "disposable local Linux SQLite WAL fixture only",
+    "runtime": "system libsqlite3 via C API; local sqlite3 runtime 3.46.1",
+    "baseline": {
+      "database_path": "FRANK_UNIFIED.sqlite",
+      "journal_mode": "wal",
+      "lineage_marker": "ORIGINAL",
+      "inode": 918118,
+      "SQLITE_FCNTL_HAS_MOVED": 0
+    },
+    "intervention": "Close the original connection, rename the original database object away, create a new WAL database with a different lineage marker at the identical pathname, then open a fresh connection to that pathname.",
+    "treatment": {
+      "database_path_same": true,
+      "journal_mode": "wal",
+      "lineage_marker": "DECOY",
+      "inode": 918119,
+      "SQLITE_FCNTL_HAS_MOVED": 0,
+      "original_moved_inode": 918118,
+      "original_moved_lineage_marker": "ORIGINAL"
+    },
+    "cleanup": "temporary fixture removed",
+    "productive_frank_or_vps_state_touched": false,
+    "harness_or_effect_authority_touched": false,
+    "training_action": false
+  },
+  "grf": {
+    "observed_anchor": "Draft PR #557 uses connection-bound SQLITE_FCNTL_HAS_MOVED to detect a database file moved since a connection was opened, while #534 still requires restart/reopen and semantic-lineage evidence.",
+    "hypothesis": "HAS_MOVED plus same pathname and WAL mode is sufficient to carry exact database-object identity across a restart/reopen generation.",
+    "counter_reality": "A replacement database object can already occupy the admitted pathname before the successor connection opens; the successor then truthfully reports HAS_MOVED=0 for that new object while semantic lineage has changed.",
+    "falsifier_result": "SUPPORTED_COUNTER_REALITY",
+    "collapse": [
+      "REJECT: SQLITE_FCNTL_HAS_MOVED=0 on a newly opened connection implies continuity with the predecessor database object.",
+      "RETAIN: connection-bound HAS_MOVED is useful for movement occurring after that connection opens.",
+      "RETAIN_TEST_OBLIGATION: restart/reopen acceptance must compare predecessor and successor provenance-bound DB object/semantic lineage, not reset trust at each open."
+    ]
+  },
+  "primary_source_basis": {
+    "sqlite_wal_reset": "SQLite upstream documents WAL-reset affected through 3.51.2 and fixed in 3.51.3+.",
+    "sqlite_has_moved": "SQLITE_FCNTL_HAS_MOVED reports whether the file has been renamed, moved, or deleted since it was first opened.",
+    "sqlite_db_filename": "sqlite3_db_filename returns the filename associated with the current connection."
+  },
+  "acceptance_impact": {
+    "F-V01-13": "IN_PROGRESS",
+    "release_promotion": false,
+    "accepted_hostinger_evidence": false,
+    "next_discriminator": "On accepted Hostinger ProductStart/self.root, bind predecessor and successor service generations to the exact fixed SQLite runtime, actual canonical UnifiedDB WAL transaction, connection-bound DB object identity, semantic lineage head/freshness, and explicit restart/reopen plus rollback/downgrade/library-swap negatives in one provenance chain."
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_SWARM_FUSION_DELTA/1.0",
+  "run_id": "GO-20260812T0044P0700-CHATGPT-SECONDARY-SELFHOSTED-WORKSPACE-ISOLATION",
+  "created_at_utc": "2026-08-11T17:56:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not": "self.root/Frank"
+  },
+  "prewrite_shared_head": "8e7361cf784b55c1f78e5b1c6c9e40c41b7deeaf",
+  "scope": "ordinary swarm overlap adjudication and runner forensics; not an out-of-box experiment",
+  "go_oob_count_for_invocation": 1,
+  "overlap": {
+    "existing_cleanup_pr": 403,
+    "title": "ci: quarantine foreign-owned runner bytecode without sudo",
+    "head": "e9f46edda07d6ed11f9e3ab02372681a7c4db839",
+    "state": "OPEN_DRAFT",
+    "owner_lane": "persistent Actions workspace foreign-ownership quarantine",
+    "this_worker_action": "NO_DUPLICATE_CLEANUP_BRANCH"
+  },
+  "role_separation": {
+    "merged_pr_396": "bounded workflow-continuity defense using exact-SHA run-unique RUNNER_TEMP checkout; target-supported and merged",
+    "pr_403": "persistent-workspace quarantine/cleanup candidate preserving forensic bytes without sudo/delete",
+    "remaining_root_cause": "identify producer of root-owned Python bytecode and prove ordinary shared-workspace checkout remains clean after repair"
+  },
+  "pr403_target_result": {
+    "workflow_run_id": 31519221853,
+    "job_id": 93871860996,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "result": "FAIL_BEFORE_QUARANTINE_COMPLETION",
+    "prechecks": "runner identity and bounded foreign-path census reached expected contamination",
+    "foreign_owned_count": 5,
+    "foreign_owned_scope": "runtime/claycode_eval_v1/__pycache__ directory plus analyzer/evaluator/host/syntax .cpython-312.pyc",
+    "foreign_owner": "root:root",
+    "suspect_dir_mode": "0755",
+    "suspect_dir_mtime_utc": "2026-08-11T08:05:02.859635912Z",
+    "failing_operation": "mv suspect tree from GITHUB_WORKSPACE to $HOME/.frank-runner-quarantine/...",
+    "error": "Permission denied",
+    "artifact_id": 9112451871,
+    "artifact_sha256": "8c9f8a3757e2b14e7601d5533a08574269e11aa3d553f1213c2f13615927b283",
+    "classification": "NEGATIVE_REPAIR_EVIDENCE_NOT_PRODUCT_SEMANTIC_EVIDENCE"
+  },
+  "repair_hypothesis_routed_to_pr403": {
+    "review_id": 4909251685,
+    "statement": "The destination under $HOME may be on a different filesystem from the Actions work tree. If so, mv degrades to copy+remove, and removal of entries within a root-owned 0755 directory is unavailable to frankrunner. Independently, current preflight checks source-parent ownership but not effective write/execute permissions.",
+    "required_falsifier": [
+      "record st_dev, ownership and modes for suspect, source parent, workspace parent, HOME and destination parent",
+      "require write+execute on source parent",
+      "choose a quarantine parent outside GITHUB_WORKSPACE but on the same st_dev as source",
+      "require same-device equality before mv -T",
+      "retain no-sudo, no-delete and unexpected-foreign-path fail-closed invariants",
+      "after successful rename, rerun a previously checkout-blocked ordinary regression to prove checkout recovery causally"
+    ],
+    "status": "ROUTED_NOT_IMPLEMENTED_BY_THIS_WORKER"
+  },
+  "producer_provenance": {
+    "status": "OPEN",
+    "timestamp_observation": "suspect directory mtime 2026-08-11 08:05:02 UTC",
+    "github_run_correlation": "GitHub reported zero workflow runs created during 08:00-08:10 UTC. Two runs were created in 07:30-08:10, including a skipped bounded-dispatch run; no direct producer identity follows from this.",
+    "adjudication": "Do not attribute root ownership to an Actions workflow from timestamp coincidence. Manual/root service/container/older long-running job remain unresolved alternatives until direct provenance exists."
+  },
+  "architecture_delta": {
+    "status": "NO_NEW_PRODUCT_OR_CLEANUP_CODE_CHANGE",
+    "continuity": "retain merged isolated-checkout defense for bounded gates",
+    "cleanup": "continue existing PR #403 lane after same-filesystem/writability repair or another measured minimal fix",
+    "root_cause": "keep producer provenance open and require ordinary checkout revalidation after cleanup"
+  },
+  "go_accounting": {
+    "exactly_one_oob_preserved": true,
+    "oob_name": "LALR_AMBIGUITY_MICROSCOPE",
+    "second_oob_performed": false
+  }
+}

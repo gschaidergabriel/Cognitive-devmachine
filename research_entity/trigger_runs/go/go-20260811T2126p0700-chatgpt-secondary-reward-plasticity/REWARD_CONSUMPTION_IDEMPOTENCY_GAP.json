@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "CROSS_BRANCH_CONTINUITY_GAP",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "OPEN_BLOCKER_BEFORE_END_TO_END_PLASTICITY_COMPOSITION",
+  "observed_state": {
+    "v17_terminal_chain": "exact verified outcome + bound episode/signal/causal/provenance + DONE can be verified repeatedly",
+    "terminal_reward_bridge": "target-proven read-only admission extraction; caller fractional credit forbidden; default abstain; binary arm explicit only",
+    "reward_plasticity_candidate": "material state mutates when admitted evidence is applied",
+    "reward_consumption_ledger_found_in_current_repo_search": false
+  },
+  "gap": "A valid terminal receipt is source-idempotent but not consumption-idempotent. Re-reading the same DONE receipt is currently possible. If reward plasticity is directly applied on every read/retry/restart, one real outcome could be learned multiple times unless material plasticity consumption is atomically fenced.",
+  "risk": [
+    "retry/restart can amplify one outcome into repeated long-term reward",
+    "duplicate learning can distort tonic/prediction/personality state while every upstream receipt remains individually valid",
+    "a replay attacker or accidental loop can exploit a valid historical terminal receipt without forging outcome provenance",
+    "exactly-once external effect semantics do not imply exactly-once learning semantics"
+  ],
+  "required_candidate_contract": {
+    "name": "RewardConsumptionReceiptV1_or_equivalent",
+    "key_candidates": [
+      "terminal_receipt_hash",
+      "effect_id + verified_outcome_hash + admitted_delta_hash + reward_policy_version"
+    ],
+    "must_bind": [
+      "terminal receipt identity",
+      "reward policy/config version",
+      "dimension/mapping identity",
+      "pre-state semantic identity",
+      "post-state semantic identity",
+      "plasticity receipt hash",
+      "state epoch/revision",
+      "consumer implementation/version"
+    ],
+    "hard_properties": [
+      "atomic compare-and-set / unique consumption key",
+      "duplicate consumption returns REPLAY/ALREADY_CONSUMED without second state mutation",
+      "crash before commit => zero consumption or safely retryable transaction",
+      "crash after commit before acknowledgement => durable replay receipt, no second plasticity",
+      "rollback/recovery must not resurrect an already-consumed terminal receipt without explicit lineage fencing",
+      "consumer receipt cannot mint outcome truth, effect authority or causal credit"
+    ]
+  },
+  "strongest_counterhypothesis": "A separately persisted exactly-once consumption ledger may be unnecessary if all persistent learning is redesigned as an idempotent pure function of a canonical set of unique terminal receipts and a versioned deterministic fold/rebuild. That design could eliminate per-event consume mutations but must prove deterministic replay cost, ordering semantics, snapshot/recovery and incremental performance.",
+  "required_discriminator": {
+    "name": "REWARD_ACK_LOSS_AND_REPLAY_EXACTLY_ONCE",
+    "arms": [
+      "normal first consume",
+      "same receipt immediate duplicate",
+      "process crash after plasticity commit before caller acknowledgement",
+      "restart and retry same terminal receipt",
+      "semantic state rollback with surviving consumption authority",
+      "alternative deterministic-set-fold design"
+    ],
+    "acceptance": "one terminal outcome causes exactly one admitted persistent state transition under all tested retry/crash/restart paths; duplicate reads remain evidence-only"
+  },
+  "coordination_reason_for_no_immediate_schema_patch": "Current repository has many active UnifiedDB/V17/recovery lanes. Introducing a new persistent table without composing their identity, migration, rollback and selected-lineage contracts risks a second state architecture. This GO records the blocker and test obligation first.",
+  "architecture_delta": "DO_NOT_CONNECT_TERMINAL_REWARD_BRIDGE_DIRECTLY_TO_MUTATING_PLASTICITY_UNTIL EXACTLY-ONCE CONSUMPTION OR DETERMINISTIC-IDEMPOTENT-FOLD SEMANTICS ARE TARGET-PROVEN",
+  "promotion": "NONE",
+  "go_oob_count_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

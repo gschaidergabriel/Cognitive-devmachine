@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2125p0700-chatgpt-secondary-package-import-storage-integration",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / human-surface Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "identity_lock": {
+    "worker_is_clay_temporary_worker": true,
+    "worker_is_not_self_root": true,
+    "worker_is_not_frank": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "fresh_state": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "target_repo_alias_gap": "Workspace names gschaidergabriel/frankv0.1 as target_repository, but connected GitHub returns 404 for that repository while gschaidergabriel/Dr.-Unterweger is VERIFIED_RW and is the active executable repository.",
+    "target_main_before": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+    "target_main_after_storage_merge": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "research_repo_head_observed_before_receipt": "b97116ae58331bdaa926ea7a1b94169a92d40ffa"
+  },
+  "swarm_telemetry": {
+    "observed_open_pr_frontier": "Many target-green and diagnostic candidates are stacked while main remained at 2bdeb35 before this cycle.",
+    "coordination_bottleneck_hypothesis": "Integration backlog is currently a material bottleneck; adding another parallel feature branch has lower expected value than adjudicating and integrating safe foundations.",
+    "strongest_counterhypothesis": "Open stacks remain draft or semantically blocked for valid reasons, so premature integration could destroy useful isolation or import unresolved assumptions.",
+    "decision": "Integrate only independently target-measured diagnostic foundation #311; do not merge ClayCode #310 after a new runtime integration falsifier."
+  },
+  "live_external_evidence": [
+    {
+      "source": "Python import system reference",
+      "url": "https://docs.python.org/3/reference/import.html",
+      "claim_used": "Package-relative imports use explicit leading dots; bare sibling names are absolute/top-level resolution unless search-path manipulation makes them visible."
+    },
+    {
+      "source": "Python comparison reference",
+      "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
+      "claim_used": "Python chained comparisons use adjacent-pair short-circuit semantics; this is competing-language evidence only and does not define ClayCode semantics."
+    },
+    {
+      "source": "Rust operator expression reference",
+      "url": "https://doc.rust-lang.org/reference/expressions/operator-expr.html",
+      "claim_used": "Rust requires parentheses when chaining comparison operators, demonstrating that competing languages legitimately choose different semantics and external analogy cannot settle ClayCode's open comparison contract."
+    },
+    {
+      "source": "Lark LALR contextual lexer documentation",
+      "url": "https://lark-parser.readthedocs.io/en/stable/examples/advanced/conf_lalr.html",
+      "claim_used": "LALR contextual lexing resolves token overlap from parser state; this supports keeping parser-version/grammar behavior pinned and measured rather than assuming tokenizer behavior."
+    },
+    {
+      "source": "SQLite WAL documentation - WAL-reset bug",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+      "claim_used": "SQLite documents the WAL-reset corruption bug through 3.51.2 and fixes it in 3.51.3+, with constrained concurrent writer/checkpoint trigger conditions."
+    },
+    {
+      "source": "SQLite release history",
+      "url": "https://sqlite.org/changes.html",
+      "claim_used": "SQLite 3.51.3 release explicitly records the WAL-reset database corruption fix."
+    },
+    {
+      "source": "Ubuntu Noble libsqlite3-0 package index",
+      "url": "https://packages.ubuntu.com/noble/amd64/libsqlite3-0",
+      "claim_used": "Noble amd64 currently exposes libsqlite3-0 3.45.1-1ubuntu2.7, so exact downstream object/backport evidence remains necessary rather than version-only inference."
+    }
+  ],
+  "hypothesis": "The first executable ClayCode evaluator candidate #310 is semantically useful but not yet a package-safe runtime substrate because its sibling imports depend on test-controlled sys.path ordering.",
+  "strongest_counterhypothesis": "The evaluator is intentionally CLI/script-only, so package import is outside its supported surface and bare sibling imports are harmless.",
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "PACKAGE_IMPORT_NAMESPACE_TRAP",
+    "class": "reversible isolated Python import-semantics falsifier",
+    "target_candidate": "gschaidergabriel/Dr.-Unterweger PR #310 head 83754cfdb8839fdc839a0b524cc0f6a755b1c421",
+    "observed_candidate_import_shapes": [
+      "runtime/claycode_eval_v1/analyzer.py: from syntax import ...",
+      "runtime/claycode_eval_v1/evaluator.py: from analyzer import ...; from host import ...; from syntax import ...",
+      "tests/claycode_decide_effect_differential_gate.py inserts runtime/claycode_eval_v1 into sys.path before top-level imports"
+    ],
+    "isolated_reproduction": "A package with the same sibling-import shape was imported from repository root without injecting the package directory itself into sys.path.",
+    "result": "ModuleNotFoundError: No module named 'syntax'",
+    "status": "SUPPORTED_RUNTIME_INTEGRATION_BLOCKER",
+    "scope": "Package importability and namespace binding only; measured decide_effect differential semantics are not refuted.",
+    "repair_obligation": [
+      "Use package-stable sibling imports or an explicit package/CLI dual entry strategy.",
+      "Add repository-root package import regression without evaluator-directory sys.path insertion.",
+      "Add namespace-collision control with unrelated earlier syntax.py/host.py path entries.",
+      "Keep existing differential, purity, fail-closed and sabotage sensitivity gates green."
+    ]
+  },
+  "target_repo_actions": [
+    {
+      "action": "PR_COMMENT",
+      "pr": 310,
+      "comment_id": 5254443778,
+      "result": "Persisted package-import blocker and requested repair; GitHub rejected REQUEST_CHANGES review because the authenticated user owns the PR."
+    },
+    {
+      "action": "MERGE",
+      "pr": 311,
+      "head": "bb9cc037ce6497d9979bfdc6003ede49b27824a4",
+      "merge_commit": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+      "result": "Merged target-measured SQLite loaded-object identity probe and SIGKILL process-crash/restart oracle into main."
+    },
+    {
+      "action": "RETARGET_BASE",
+      "pr": 315,
+      "old_base": "storage/fixpresence-axisb-and-crash-oracle",
+      "new_base": "main",
+      "result": "PR remains draft; compare shows only sqlite-wal-reset-axis-c workflow + wal_reset_fault_harness.c as branch delta, 7 ahead / 1 behind after merge-commit topology. No merge claimed."
+    }
+  ],
+  "architecture_delta": {
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME": "Add PACKAGE_SAFE_IMPORT_AND_NAMESPACE_BINDING test obligation before evaluator runtime substrate promotion; keep #310 semantic evidence but block merge/promotion until repaired.",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "Storage diagnostic foundation #311 is now integrated on main; continue fixed-SQLite Axis-C/product admission chain using exact downstream/runtime evidence, not version inference."
+  },
+  "negative_results": [
+    "PR #310 is mergeable at GitHub level but not accepted by this cycle as runtime-integration complete due PACKAGE_IMPORT_NAMESPACE_TRAP.",
+    "Attempted REQUEST_CHANGES review on own PR returned GitHub 422; durable PR comment used instead.",
+    "Connected workspace target_repository value gschaidergabriel/frankv0.1 is not currently resolvable by GitHub connector (404); Dr.-Unterweger is the verified RW executable repository."
+  ],
+  "next_frontier": [
+    "Repair #310 package-safe sibling imports and run existing + package import/collision regressions.",
+    "Re-evaluate #315 mergeability after retarget/rebase-equivalent synchronization; preserve its target Axis-C evidence.",
+    "Continue #320/#324/#327/#331 storage chain only after parent/current-main ancestry is revalidated; do not collapse V1 and V2 loader-admission evidence.",
+    "Recompute current open PR dependency graph after each parent integration rather than spawning duplicate lanes."
+  ],
+  "research_disposition": "SUPPORTED_NEGATIVE_RUNTIME_DELTA_PLUS_INTEGRATED_STORAGE_FOUNDATION",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

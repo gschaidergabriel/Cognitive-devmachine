@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_FUSION_ADDENDUM",
+  "run_id": "go-20260811T2029p0700-chatgpt-secondary-v17-producer-ancestry",
+  "created_at_local": "2026-08-11T21:46:30+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_research_commit": "558b68bbba16971bbdf4aec2385b606548d63f0d",
+  "trigger": "go",
+  "topic": "Exact request-to-effect ancestry prerequisite for safe idempotent response replay",
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "worker_is_frank": false,
+    "target_native_identity": "self.root",
+    "human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "source_derived_current_state": {
+    "v16_request_ledger": "frank_ingress_request_admissions stores request_key_hash/request_id_hash plus execution/epoch/credential/session/client and admission state; no completed response receipt exists.",
+    "token_ingress": "One live execution can admit multiple distinct follow-up request IDs; durable replay currently reports response_replay_available=false.",
+    "effect_execution_fence": "effect_execution_generation_fences binds effect to execution_id, lease_epoch, credential_fingerprint, session/client hashes and capability fingerprint, but no exact request_key_hash.",
+    "v17_terminal_guard": "V17 requires existence of an ingress admission matching the effect execution generation, but does not require one exact request key and effect_reentry_bindings_v17 has no request key.",
+    "consequence": "Execution-generation identity is necessary but insufficient to identify which request owns an effect when multiple requests share one execution."
+  },
+  "fresh_external_evidence": [
+    {
+      "source": "AWS Builders' Library - Making retries safe with idempotent APIs",
+      "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+      "use": "Supports durable client request identifiers and returning a semantically equivalent response for an already-completed idempotent request rather than re-executing the side effect."
+    },
+    {
+      "source": "Stripe API - Idempotent requests",
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "use": "Concrete production pattern: save the first request result and return it for later retries of the same idempotency key."
+    },
+    {
+      "source": "IETF HTTPAPI draft-ietf-httpapi-idempotency-key-header-07",
+      "url": "https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/",
+      "status_as_of_run": "EXPIRED_WORK_IN_PROGRESS_NOT_NORMATIVE",
+      "use": "Reinforces the design distinction that an idempotency key identifies retries of one request and must not be reused for a different payload; not used as normative authority because the draft expired 2026-04-18."
+    }
+  ],
+  "hypothesis": "Current V17 execution-generation ancestry is ambiguous at request granularity: two different V16 request admissions inside one execution can both satisfy the current effect/V17 generation join for one effect, so safe response replay cannot infer exact request ownership from existing durable state.",
+  "strongest_counterhypothesis": "Execution identity may implicitly correspond to one request in all real paths even though V16 exposes follow-up admissions, making an explicit request-effect edge redundant.",
+  "target_falsifier": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_pr": 331,
+    "workflow_run": 31502734782,
+    "job": 93816597675,
+    "tested_sha": "64100c6d3673ac6d12cb38434c5e603f2288e35f",
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "system_sqlite": "3.45.1",
+    "fixed_sqlite": {
+      "v2_admission": "PASS_FIXED_SQLITE_RUNTIME_V2_CANDIDATE_ADMISSION",
+      "version": "3.53.4",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "mapped_library_sha256": "e8b4439f69e67c2e5aa8756b6a667f5a0ef7b004635e3b388e757b3a2d02567b",
+      "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338"
+    },
+    "test_file_sha256": "7d9b11bce52cef16e00aee343e71aa6d7d1d0aab90027a7c3990961fbbf67d3d",
+    "workflow_sha256": "16cd5cb6fde3e87321142be39614c0a081ce2191c6c1924f70f05a55762358f1",
+    "status": "PASS_CURRENT_V17_REQUEST_EFFECT_ANCESTRY_AMBIGUITY_REPRODUCED",
+    "setup": {
+      "same_execution_id": "exec:v17-request-effect-gap:1",
+      "lease_epoch": 1,
+      "distinct_request_admissions": 2,
+      "request_a_key_hash": "2a6abced9faa9900229cfc15a766a65001fe7af9bbaa1cc9eaac18963c2a7734",
+      "request_b_key_hash": "c08cbc078e8c9b157d4b6c6212d162f2594babb5c868eaa6657224f98d5585ce",
+      "effects_created": 1,
+      "external_effect_performed": false
+    },
+    "observed": {
+      "distinct_requests_same_execution": true,
+      "v17_execution_guard_matching_request_rows": 2,
+      "matching_request_key_hashes": [
+        "2a6abced9faa9900229cfc15a766a65001fe7af9bbaa1cc9eaac18963c2a7734",
+        "c08cbc078e8c9b157d4b6c6212d162f2594babb5c868eaa6657224f98d5585ce"
+      ],
+      "effect_fence_has_exact_request_key": false,
+      "v17_reentry_binding_has_exact_request_key": false,
+      "durable_request_effect_binding_table_present": false,
+      "effect_terminal_chain": "DONE_VALID",
+      "effect_reaches_done_despite_request_owner_ambiguity": true,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    "resource_shadow": {
+      "wall_seconds": 0.23,
+      "user_seconds": 0.16,
+      "system_seconds": 0.04,
+      "max_rss_kib": 29240
+    },
+    "artifact": {
+      "id": 9105958810,
+      "name": "v16-v17-crash-reconcile-31502734782",
+      "size_bytes": 11960,
+      "sha256": "adbb92e0df8ab30b6746c94a41e8751aa1a21e058fa82385ec7e73ab291a1b4a",
+      "expires_at": "2026-09-10T14:45:46Z"
+    },
+    "canonical_database_touched": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "fusion": {
+    "counterhypothesis_result": "REFUTED_FOR_CURRENT_V16_V17_RUNTIME_MODEL",
+    "request_effect_ancestry_gap": "TARGET_REPRODUCED",
+    "response_replay_status": "BLOCKED_UNTIL_EXACT_REQUEST_EFFECT_ANCESTRY_EXISTS",
+    "architecture_invariant": "Never infer request ownership from execution-generation match when more than one request may inhabit the execution.",
+    "authority_invariant": "Do not repair this by letting the effect caller supply a raw request id/key; exact request ancestry must be minted by the trusted ingress/request capability that already owns the durable V16 admission.",
+    "candidate_direction": "Introduce a sealed request-scoped ingress capability derived from a newly ADMITTED V16 request, bind interactive effect reservation/attempt to that capability, and persist an immutable request_key_hash <-> effect_id edge plus execution-generation identity before provider execution. Then response receipts may consume that relation and V17 terminal truth.",
+    "noninteractive_effects": "Do not globally require a human/token request edge for autonomous/internal effects; distinguish interactive request-bound effects from autonomous provenance paths.",
+    "architecture_delta_status": "MEASURED_GAP_REPAIR_CANDIDATE_REQUIRED",
+    "canonical_merge_authorized": false,
+    "training_authorized": false
+  },
+  "go_oob_accounting": {
+    "current_worker_macrocycle_distinct_oob_count": 1,
+    "current_worker_macrocycle_oob": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "request_effect_gap_probe_added_oob": false
+  },
+  "next_frontier": [
+    "Build request-scoped ingress capability and durable request-effect binding as an ordinary provenance repair candidate.",
+    "Negative controls: wrong request from same execution, replay admission without live request capability, cross-execution request key, stale request capability after lease release, caller-fabricated request labels.",
+    "Only after exact request-effect binding is target-green, add immutable response/result receipts and crash replay without duplicate provider/effect execution."
+  ]
+}

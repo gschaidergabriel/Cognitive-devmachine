@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "cycle": 3,
+  "classification": "TARGET_NEGATIVE_GWT_CAUSAL_IDENTITY_SPLICE_REPRODUCED",
+  "target_execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 317,
+    "base_pr": 312,
+    "workflow": "Frank Loop-Core GWT Causal Splice VPS",
+    "run_id": 31492032862,
+    "job_id": 93780573541,
+    "tested_sha": "963c3d2caf6464b20160d28d100a70f4c7de096c",
+    "base_sha": "746640bda388aebf240c965afee744ce332f6a9a",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "lark": "1.3.1",
+    "repository_permission": "contents:read",
+    "credentials_removed_before_execution": true,
+    "status": "SUCCESS",
+    "test_status": "PASS_NEGATIVE_GWT_CAUSAL_IDENTITY_SPLICE_REPRODUCED",
+    "checks_passed": 5,
+    "checks_total": 5,
+    "exit_status": 0
+  },
+  "results": {
+    "truthful_baseline": {
+      "receiver_use": "3/3",
+      "reentered": true,
+      "terminal_done": true,
+      "learning_admitted": true,
+      "recovery": "COMPLETE",
+      "terminal_verifier": "DONE_VALID"
+    },
+    "episode_id_splice": {
+      "persisted": true,
+      "receiver_use": "3/3",
+      "terminal_done": true,
+      "learning_admitted": true,
+      "recovery": "COMPLETE",
+      "terminal_verifier": "DONE_VALID"
+    },
+    "signal_id_splice": {
+      "persisted": true,
+      "receiver_use": "3/3",
+      "terminal_done": true,
+      "learning_admitted": true,
+      "recovery": "COMPLETE",
+      "terminal_verifier": "DONE_VALID"
+    },
+    "causal_id_splice": {
+      "persisted": true,
+      "receiver_use": "3/3",
+      "terminal_done": true,
+      "learning_admitted": true,
+      "recovery": "COMPLETE",
+      "terminal_verifier": "DONE_VALID"
+    }
+  },
+  "resource_shadow": {
+    "elapsed_seconds": 0.75,
+    "user_seconds": 0.57,
+    "system_seconds": 0.08,
+    "cpu_percent": 86,
+    "max_rss_kb": 30692,
+    "major_page_faults": 0,
+    "minor_page_faults": 5469,
+    "voluntary_context_switches": 387,
+    "involuntary_context_switches": 8,
+    "swaps": 0,
+    "socket_messages_sent": 0,
+    "socket_messages_received": 0
+  },
+  "falsification_adjudication": {
+    "H-GWT-CALLER-ID-SPLICE-001": "SUPPORTED_ON_ACCEPTED_TARGET",
+    "CH-GWT-CALLER-ID-SPLICE-001": "REFUTED_ON_EXACT_TESTED_STACK",
+    "pr312_supported_scope": "end-to-end/control smoke discriminator with identifiable broken-arm behavior",
+    "pr312_stronger_claim_status": "REFUTED_FOR_DATABASE_ENFORCED_COMPLETE_GWT_CAUSAL_ANCESTRY",
+    "pr280_status": "SEPARATE_SUCCESSOR_CANDIDATE_NOT_PROMOTED"
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_TEST_OBLIGATION",
+    "name": "GWT_CAUSAL_IDENTITY_ANCESTRY_MUST_BE_STORAGE_OR_RECEIPT_ENFORCED",
+    "required_successor_gate": "The exact episode/signal/causal splice discriminator must fail closed before REENTERED after #280-like support is composed, while the truthful control remains able to reach DONE/COMPLETE.",
+    "affected_work_packages": ["F-V01-03-COGNITIVE-LOOP-CORE", "F-V01-05-GWT-HYPERPOSITION"]
+  },
+  "target_receipt": {
+    "path": "runtime/vps_loop_core/gwt_causal_identity_splice_v1/LATEST.json",
+    "branch_commit": "1eae919dd7b0f02a2af469247f106f2898ec82cc"
+  },
+  "distribution": {
+    "pr312_review_id": 4906290443,
+    "pr280_review_id": 4906293157,
+    "message": "Keep #312 smoke evidence; use #317 as a differential regression obligation against the #280-style storage-bound successor rather than creating a third GWT mechanism."
+  },
+  "go_oob": "NONE_IN_CYCLE_3_ALREADY_CONSUMED_IN_CYCLE_1",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "training_authorized": false
+}

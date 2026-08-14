@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2229p0700-gpt56sol-fv0113-sqlite-symbol-origin",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "7c94d59cd596f38185f2a7cbe7754f5a82b89710",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "current_blocker_issue": 534,
+    "current_attestor_scope": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY",
+    "current_attestor_productive_persistence_path_exercised": false,
+    "training_authorized": false
+  },
+  "grf": {
+    "hypothesis": "A same-process runtime lookup of SQLite's sqlite3_libversion symbol through the loaded CPython _sqlite3 extension can provide a stronger object-binding discriminator than merely observing a libsqlite3-shaped mapping.",
+    "strongest_counter_reality": "A mapped SQLite DSO may be inert or unused, and dlsym(handle, name) searches the handle/dependency graph rather than proving that every already-bound ELF relocation or productive persistence operation resolves to the returned object.",
+    "falsifier": "Resolve sqlite3_libversion through the loaded _sqlite3 handle, map the returned address to a DSO with dladdr, bind path/device/inode/hash and executable mapping, then preserve the dlsym dependency-resolution limitation rather than promoting it to productive-call proof.",
+    "outcome": "SUPPORTED_AT_SELF_HOSTED_MECHANISM_LEVEL; PRODUCTIVE_CALL_AND_PERSISTENCE_BINDING_REMAIN_OPEN"
+  },
+  "unusual_experiment": {
+    "name": "INPROCESS_SQLITE_SYMBOL_ORIGIN",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "environment": "disposable local ChatGPT Linux Python process",
+    "observations": {
+      "python_version": "3.13.5",
+      "python_sqlite_version": "3.46.1",
+      "resolved_symbol": "sqlite3_libversion",
+      "resolved_symbol_version": "3.46.1",
+      "dladdr_origin": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "mapping_rows": 5,
+      "sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71",
+      "device_major": 254,
+      "device_minor": 0,
+      "inode": 262825
+    },
+    "limitations": [
+      "Local SQLite 3.46.1 is not the accepted Hostinger 3.53.4 candidate and is not release evidence.",
+      "The experiment demonstrates runtime symbol-origin mechanism feasibility only.",
+      "dlsym handle/dependency resolution does not prove every existing ELF relocation or productive persistence call uses the returned object.",
+      "No Frank process, accepted Hostinger service, persistent state, database, effect authority or Harness was modified."
+    ]
+  },
+  "product_delta": {
+    "pull_request": 555,
+    "state": "DRAFT",
+    "head_sha": "f3763a2823b5f7cf768ee4cbdd51bb23d5d3c520",
+    "files": [
+      "runtime/frank_storage_truth_v1/frank_sqlite_symbol_origin_v1_candidate.py",
+      "tests/test_frank_sqlite_symbol_origin_v1_candidate.py",
+      ".github/workflows/frank-sqlite-inprocess-symbol-origin-v1.yml"
+    ],
+    "local_gate": "PASS_4_OF_4",
+    "self_hosted_run": {
+      "run_id": 31612267637,
+      "runner": "clay",
+      "head_sha": "f3763a2823b5f7cf768ee4cbdd51bb23d5d3c520",
+      "status": "SUCCESS",
+      "exact_sha_fetch": "PASS",
+      "compile_and_regression": "PASS",
+      "repository_static_integrity": "PASS",
+      "bounded_scope_receipt": "PASS"
+    },
+    "negative_ci_preserved": {
+      "run_id": 31611984588,
+      "classification": "CI_HARNESS_FETCH_FAILURE_BEFORE_CANDIDATE_EXECUTION",
+      "cause": "Private repository exact-SHA fetch was unauthenticated.",
+      "repair": "Use repository-standard GITHUB_TOKEN authenticated immutable-SHA fetch without weakening the candidate predicate."
+    },
+    "hosted_deep_integrity": {
+      "classification": "INFRASTRUCTURE_BLOCKED_UNKNOWN",
+      "reason": "GitHub hosted job did not start because of account billing/spending-limit condition; not product evidence."
+    }
+  },
+  "collapse": [
+    {
+      "claim": "Exact libsqlite3 mapping identity proves actual SQLite call binding.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "Extension-handle runtime symbol origin plus exact object identity is a stronger discriminator than mapping presence alone.",
+      "outcome": "RETAIN",
+      "evidence_level": "SELF_HOSTED_MECHANISM"
+    },
+    {
+      "claim": "The symbol-origin candidate proves productive UnifiedDB persistence.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "F-V01-13 or Frank v0.1 is complete.",
+      "outcome": "REJECT"
+    }
+  ],
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION_SHARPENED",
+    "affected_components": [
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "new_test_obligation": "The final accepted-Hostinger persistence receipt should bind the actual Frank ProductStart/process identity, exact admitted SQLite 3.53.4 object, an in-process runtime symbol-origin observation, and a real UnifiedDB transaction/outcome. Symbol-origin alone remains insufficient.",
+    "rollback": "PR #555 remains draft and can be closed without product impact if a stronger direct persistence-call binding mechanism supersedes it."
+  },
+  "next_falsifier": {
+    "priority": "F-V01-13_RELEASE_BLOCKER",
+    "test": "Inside the exact accepted Hostinger Frank persistence process, execute the symbol-origin discriminator against the owner-pinned 3.53.4 object while performing a real UnifiedDB write/checkpoint/readback transaction, then repeat clean restart and bounded rollback/downgrade/library-swap controls under the same ProductStart and semantic-lineage receipt.",
+    "success_condition": "One provenance-bound receipt proves accepted host + ProductStart/process identity + exact fixed SQLite object + real persistence outcome, and rejects stale/downgraded/swapped runtime branches fail-closed.",
+    "do_not_substitute": "mapping presence, CLI sqlite version, synthetic/self-hosted mechanism PASS, extension-handle symbol origin alone, or Deep Integrity for accepted Hostinger productive evidence"
+  },
+  "acceptance_impact": "NO_CHANGE_F_V01_13_REMAINS_IN_PROGRESS",
+  "nonclaims": {
+    "productive_hostinger_persistence_proven": false,
+    "frank_identity_attested": false,
+    "restart_recovery_attested": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "harness_authority_minted": false,
+    "effect_authority_minted": false,
+    "canonical_frank_state_mutated": false,
+    "training_authorized": false
+  }
+}

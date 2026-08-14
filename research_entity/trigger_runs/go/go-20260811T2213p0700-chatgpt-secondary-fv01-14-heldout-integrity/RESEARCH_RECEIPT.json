@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260811T2213p0700-chatgpt-secondary-fv01-14-heldout-integrity",
+  "trigger": "go",
+  "status": "CANDIDATE_LOCAL_PASS_TARGET_QUEUED",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_lock": {
+    "actor": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "actor_is_not": ["self.root", "Frank"],
+    "research_entity": "Clay",
+    "research_subject_native": "self.root",
+    "research_subject_human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "workspace_blob_sha": "620971f539766258886899040984097dbd1cdddc",
+    "program_stage": "FRANK_V0_1",
+    "training_authorized": false
+  },
+  "selected_work": {
+    "package": "F-V01-14-TRAINING-DATA-HELDOUT",
+    "reason": "Mandatory DOOMSDAY component gate with no overlapping open heldout/training-data implementation PR discovered after refreshing current target work.",
+    "historical_organ_replacement_claim": false,
+    "original_baseline_gate": "NEW_BOUNDARY_WITH_RELEVANT_HISTORICAL_TRAINING_ANCESTRY; no organ replacement is claimed, but PF-SOMA-004 training/evaluate/deploy/rollback ancestry must be reconstructed and differentially tested before promotion"
+  },
+  "historical_training_baseline": {
+    "source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "research_mapping": "PF-SOMA-004 / HEW-PF-SOMA-006",
+    "source_files_inspected": [
+      "services/soma/interaction_buffer.py",
+      "services/soma/micro_trainer.py"
+    ],
+    "preserved_functions": [
+      "conversation quality scoring and qualification",
+      "fresh-unused training-pool selection",
+      "LoRA train lifecycle",
+      "before/after behavioral probes",
+      "adapter safety/deploy/rollback lineage"
+    ],
+    "observed_gap": "The inspected historical selection/trainer path exposes a qualified training pool and before/after probes, but no explicit TRAIN/DEV/HELDOUT partition or contamination-resistant heldout gate was found in those files.",
+    "repository_reported_baseline": {
+      "conversations_scored": 104,
+      "qualified": 80,
+      "cpu_cycle_minutes": 18.7,
+      "safety_check": "REPORTED_PASS",
+      "adapter_deployed": "REPORTED_TRUE",
+      "epistemic_class": "REPOSITORY_REPORTED_MEASUREMENT_NOT_INDEPENDENTLY_REPRODUCED"
+    },
+    "transfer_rule": "Reuse lifecycle/rollback/scoring ancestry only where current Clay-native interfaces preserve provenance and differential tests support transfer; the new heldout boundary supplements rather than erases ancestry."
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "title": "AntiLeakBench: Preventing Data Contamination by Automatically Constructing Benchmarks with Updated Real-World Knowledge",
+      "venue": "ACL 2025",
+      "doi": "10.18653/v1/2025.acl-long.901",
+      "use": "Newly collected data alone is not a sufficient anti-contamination argument; motivates explicit freshness/novel-knowledge and dynamic update obligations."
+    },
+    {
+      "title": "MMLU-CF: A Contamination-free Multi-task Language Understanding Benchmark",
+      "venue": "ACL 2025",
+      "doi": "10.18653/v1/2025.acl-long.656",
+      "use": "Public validation plus closed-source test separation motivates sealed heldout evaluation rather than publishing final test bytes."
+    },
+    {
+      "title": "ThinkBench: Dynamic Out-of-Distribution Evaluation for Robust LLM Reasoning",
+      "venue": "2025 preprint",
+      "arxiv": "2502.16268",
+      "use": "Dynamic OOD construction motivates an independent dynamic evaluation successor to static frozen heldout manifests."
+    }
+  ],
+  "hypothesis": "A deterministic provenance-bound dataset manifest can make known TRAIN/DEV -> HELDOUT leakage fail closed while remaining completely separate from model-training authority.",
+  "strongest_counterhypothesis": "Explicit family identity can be incomplete, incorrect or adversarially supplied; therefore this candidate cannot prove semantic non-contamination and requires independent family/near-duplicate evidence plus dynamic/OOD and sealed final evaluation before promotion.",
+  "target_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "base_sha": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "branch": "chatgpt/go-fv01-14-heldout-integrity-v1-20260811",
+    "head_sha": "da783bdab719c1d930144201043076dbfcd96c3a",
+    "pull_request": 345,
+    "draft": true,
+    "files": [
+      "claycode/frank_training_data_gate.clay",
+      "runtime/training/frank_training_data_contract_v1_candidate.py",
+      "tests/frank_training_data_contract_v1_gate.py",
+      "tests/frank_training_data_semantic_twin_canary_oob.py",
+      ".github/workflows/frank-fv01-14-heldout-integrity-v1-vps.yml"
+    ],
+    "semantic_rules": [
+      "TRAIN/DEV/HELDOUT identities are explicit",
+      "raw and conservative normalized content hashes are domain-bound into deterministic split/manifest roots",
+      "source snapshot, family evidence, label identity and cutoff metadata are carried",
+      "cross-split exact and normalized duplicates fail closed",
+      "HELDOUT sharing an explicitly evidenced family with TRAIN or DEV fails closed",
+      "family identity/evidence remains evidence, not semantic truth",
+      "TRAINING_AUTHORIZED remains false",
+      "candidate exposes no training action surface"
+    ]
+  },
+  "local_execution": {
+    "runtime": "container local Linux/Python3",
+    "python_compile": "PASS",
+    "normal_gate": {
+      "status": "PASS_FV01_14_TRAINING_DATA_CONTRACT_CANDIDATE",
+      "checks_passed": 8,
+      "checks_total": 8,
+      "manifest_root": "5024aa6caa9152c83fed5659fda10c6f96425886377a73daf2ec80722b266387",
+      "training_authorized": false,
+      "semantic_family_truth_proven": false,
+      "final_training_action_surface": false
+    }
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "experiment": "SEMANTIC_TWIN_CANARY",
+    "baseline": "byte + conservative normalized-hash-only leakage gate",
+    "intervention": "TRAIN and HELDOUT paraphrases with different byte/normalized hashes but one explicitly evidenced semantic family",
+    "result": "PASS_SEMANTIC_TWIN_CANARY_FENCED",
+    "baseline_would_admit": true,
+    "candidate_rejection": "CROSS_SPLIT_SEMANTIC_FAMILY_LEAK",
+    "claim_boundary": "Demonstrates a falsifier for exact-only decontamination; does not establish correctness of the family relation or global semantic contamination freedom."
+  },
+  "target_vps_execution": {
+    "workflow": "Frank F-V01-14 heldout integrity candidate VPS",
+    "run_id": 31505817541,
+    "status_at_receipt_write": "QUEUED",
+    "conclusion": "NOT_YET_AVAILABLE",
+    "claim": "No target-VPS PASS is claimed until the run actually completes successfully."
+  },
+  "negative_results_and_nonclaims": [
+    "No real final corpus has been frozen.",
+    "No closed heldout bytes have been created or published.",
+    "No semantic detector superiority is claimed.",
+    "No contamination-free guarantee is claimed.",
+    "No final/paid training is authorized or started.",
+    "No final model or whole Frank v0.1 acceptance is claimed."
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "candidate": "PROVENANCE_BOUND_SEALED_HELDOUT_INTEGRITY_BOUNDARY",
+    "expected_effect": "Known split leakage becomes observable/fail-closed and frozen dataset identity becomes reproducible without granting training authority.",
+    "rollback": "Close/revert PR #345; no main-branch target semantics or training authority changed by this draft candidate."
+  },
+  "next_falsifiers": [
+    "Complete accepted-target VPS run for exact head and inspect evidence/resource metadata.",
+    "Add sealed heldout commitment/export semantics that never require final test plaintext in the public repository.",
+    "Independently infer/verify near-duplicate semantic families rather than trusting caller-supplied family identifiers.",
+    "After any future model training, compare frozen heldout performance against matched rephrased/synthetic or dynamic/OOD reference evaluations to detect contamination-like inflation rather than trusting the manifest gate alone.",
+    "Differentially compose the historical SOMA scoring/train/deploy/rollback lifecycle with the current Clay-native heldout boundary and preserve lineage/negative-result tests.",
+    "Freeze a real corpus only after provenance/cutoff/dedup/licensing/eval contracts are complete.",
+    "Keep final training blocked until explicit project-owner authorization."
+  ]
+}

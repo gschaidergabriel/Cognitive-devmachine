@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.1",
+  "event_id": "20260811T180200Z-chatgpt-secondary-cc-wp04-opaque-receipt",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-11T18:02:00Z",
+  "payload": {
+    "work_id": "CC-WP04-NOMINAL-ADMISSION-OPAQUE-20260812",
+    "spec_rev": 1,
+    "execution_receipt_id": "DRU-PR401-AAC7458B-WP04-BOUNDARY-RECEIPT",
+    "executor_class": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "machine_ref": "clay@digital-retina / Hostinger Ubuntu self-hosted GitHub Actions runner",
+    "action": "Reproduced the WP04 opaque-constructor layer gap, applied the minimal checker-local fail-closed repair, recomposed the four-file candidate directly on current main, validated the PR merge context, and merged PR #401.",
+    "observed_effect": "Initial target falsifier run 31519056335 passed 13/14 and failed only opaque_record_constructor_rejected_by_wp04. The repair added only the explicit record.opaque -> OPAQUE_RECORD_CONSTRUCTOR_FORBIDDEN branch. Fresh current-main target run 31520137614 / job 93874886275 then passed 14/14 in PR_MERGE_CONTEXT against base 0ed593daaa2da072d13d15fbf658fe2f7312b930 and merge SHA b3512ec8d487f7682ba7bc27c33c179754628cff. Real frank.effects::decide_effect retained exact reachable closure decide_effect + destructive_guard_complete with no diagnostics/effects; Bool/Int cross-nominal equality, comparison chains, ambiguous sum variants and untyped host intrinsic signatures remained fail-closed; plain record construction remained admitted; direct opaque construction was rejected.",
+    "verification": "PR #401 merged to Dr.-Unterweger main as aac7458b24965f41678ac83a2a9813e280419d52 after main remained exactly the tested base. Evidence reported truth_authority=NONE, effect_authority=NONE, external_effect=false, wp04_pass_claim=false and whole_frank_v0_1_acceptance=false.",
+    "evidence_refs": [
+      "gschaidergabriel/Dr.-Unterweger#401",
+      "gschaidergabriel/Dr.-Unterweger@aac7458b24965f41678ac83a2a9813e280419d52",
+      "GitHubActions:31519056335",
+      "GitHubActions:31519727424",
+      "GitHubActions:31520137614"
+    ],
+    "truth_class": "REMOTE_EXECUTION_RECEIPT",
+    "success": true,
+    "complete": true
+  }
+}

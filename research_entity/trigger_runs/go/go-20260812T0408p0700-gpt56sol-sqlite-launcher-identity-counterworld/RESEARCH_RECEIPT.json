@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "recorded_at": "2026-08-12T04:08:00+07:00",
+  "program": "FRANK_V0_1",
+  "affected_work_packages": ["F-V01-13", "F-V01-01", "F-V01-09"],
+  "worker_provenance": "GPT-5.6 Sol temporary Clay research/build worker",
+  "observed_anchors": {
+    "research_main_before_write": "50b45c71c816233ad99ac087b98bbf1ef41a108f",
+    "frank_main_observed": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "parent_candidate_pr": 473,
+    "parent_candidate_head": "9ca1c8147c0d697df391931bb9f790d8fcc278f7",
+    "parent_gate_blob": "4a1ea086f0f6270c90a94f572865c37681522331"
+  },
+  "r0_observation": {
+    "parent_gate_exec_identity_rule": "absolute ExecStart plus launcher basename frank_v0_1_sqlite_v5_launcher.sh; no exact canonical launcher path or release-artifact identity comparison is present in the observed PR #473 gate",
+    "parallel_candidate_fragmentation": {
+      "pr469": "full root-owned/non-writable no-symlink path-chain hardening on a separate parent-boundary branch",
+      "pr472": "LD_DEBUG and LD_DEBUG_OUTPUT pre-exec hardening stacked on PR #468",
+      "pr473": "/etc/ld.so.preload masking stacked independently on PR #468",
+      "pr470": "direct V5 guard loader hardening from main"
+    },
+    "composition_status": "No single observed open parent candidate in this cycle was shown to contain all of these independent hardening deltas."
+  },
+  "grf": {
+    "generated_reality": "Root ownership, non-writable path components and a matching launcher basename are sufficient to bind the productive systemd parent to the intended current Frank SQLite launcher.",
+    "counter_reality": "A stale, sibling or alternate root-owned launcher at another absolute path can keep the accepted basename and path-integrity properties while executing different release bytes.",
+    "falsifier": "Change only ExecStart from the expected release path to a distinct absolute sibling path with the same launcher basename while preserving all other offline parent-gate evidence; admission must fail if launcher identity is truly bound."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "STALE_ROOT_OWNED_SAME_BASENAME_LAUNCHER_REPOINT",
+    "scope": "Disposable local decision-layer replica of the exact observed PR #473 ExecStart/admission predicates; filesystem checks excluded as permitted by the candidate's offline fixture mode. No Frank/VPS/canonical state mutation.",
+    "baseline": {
+      "exec_start": "/opt/frank-v0.1/frank_v0_1_sqlite_v5_launcher.sh",
+      "status": "PASS_PARENT_BOUNDARY_CANDIDATE",
+      "failures": []
+    },
+    "intervention": {
+      "exec_start": "/opt/frank-v0.1-old/frank_v0_1_sqlite_v5_launcher.sh",
+      "status": "PASS_PARENT_BOUNDARY_CANDIDATE",
+      "failures": []
+    },
+    "result": "COUNTERWORLD_ADMITTED",
+    "rollback": "Run-owned /tmp script only; no repository or product mutation from the experiment itself."
+  },
+  "collapse": {
+    "preferred_reality": "REJECT",
+    "counter_reality": "RETAIN",
+    "reason": "The current predicate recognizes the launcher by basename rather than a release-bound canonical path/artifact identity, so a same-basename sibling path is not discriminated at the decision layer.",
+    "confidence": "HIGH for the observed candidate predicate; UNKNOWN for productive runtime because no productive systemd parent was observed in the accepted-target receipt."
+  },
+  "candidate_architecture_delta": {
+    "state": "CANDIDATE",
+    "proposal": [
+      "Bind ProductStart to one repository/release-policy-owned canonical launcher identity, not basename alone.",
+      "Prefer exact path plus independently trusted artifact digest/inode identity; exact path alone is not sufficient against byte replacement or rollback.",
+      "Compose the non-symlink path-chain, loader-environment, global-preload-mask and release-artifact controls into one candidate before product acceptance testing.",
+      "Require accepted-target evidence that the actual productive parent executes that exact composed launcher before the first writable persistence open."
+    ],
+    "strongest_counterhypothesis": "A deployment contract outside the observed gate may already guarantee the exact launcher path and bytes. That would reduce this to defense-in-depth, but such a productive binding was not observed and therefore cannot be credited.",
+    "rollback": "No product change implemented by this receipt; any later implementation should be reversible to the current candidate while preserving fail-closed admission."
+  },
+  "negative_and_boundary_evidence": {
+    "productive_parent_observed": false,
+    "accepted_vps_productstart_pass_claimed": false,
+    "f_v01_13_closed": false,
+    "whole_frank_v0_1_pass_claimed": false,
+    "frank_harness_mutated": false,
+    "effect_authority_changed": false,
+    "training_authorized": false
+  },
+  "next_falsifier": "On one freshly composed current-main candidate, require an exact release-bound launcher identity; then run ordinary regression showing expected path PASS and stale/sibling same-basename path DENY. Only after that discover and attest the actual productive parent on the accepted Hostinger Ubuntu target and repeat across restart plus rollback/downgrade/library-swap controls.",
+  "outcome": "RETAIN_CANDIDATE_AND_REENTER_F_V01_13",
+  "promotion": "DEFER"
+}

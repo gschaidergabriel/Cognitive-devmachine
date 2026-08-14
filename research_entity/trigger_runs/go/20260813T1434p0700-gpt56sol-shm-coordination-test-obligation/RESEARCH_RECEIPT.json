@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1434p0700-gpt56sol-shm-coordination-test-obligation",
+  "trigger": "go",
+  "timestamp_local": "2026-08-13T14:34:00+07:00",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "research_parent_observed": "b47e371ec7c46ed03bef2c06b0de9b2a97e9a845",
+  "product_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+    "candidate_pr": 557,
+    "candidate_head": "819e84a5853a244e84352f206371ccf51d52a1a5",
+    "candidate_exact_head_run": 31678111965,
+    "candidate_exact_head_run_conclusion": "success"
+  },
+  "observed_reality": [
+    "Current PR557 connection guard binds the main database object point-in-time and the connection-specific open WAL object to the canonical -wal path under an exact SQLite 3.53.4/Linux/x64/private-Unix-VFS probe.",
+    "The same candidate explicitly leaves productive persistence and restart/recovery unproven.",
+    "SQLite upstream documents the -shm wal-index as mmap-backed shared memory used by database clients for coordination and WAL frame lookup; it is transient and rebuildable from the WAL after crash.",
+    "No open product PR matching the searched terms 'shm wal-index' was found during this cycle."
+  ],
+  "macrocycle_unusual_experiment": {
+    "count": 1,
+    "name": "WAL_SIDECAR_PATH_REBIND_VS_MAIN_HAS_MOVED",
+    "scope": "disposable local SQLite 3.46.1 fixture only",
+    "result": "main SQLITE_FCNTL_HAS_MOVED remained 0 after only the live WAL pathname was rebound while existing connections retained the renamed original WAL inode; main-DB rebind sensitivity control produced HAS_MOVED=1",
+    "promotion_credit": "REPLICATION_ONLY_NO_INDEPENDENCE_CLAIM",
+    "duplicate_handling": "No duplicate product patch or duplicate durable WAL repair receipt was created because concurrent PR557 work already contains the WAL fd-identity repair and ordinary WAL-rebind regression."
+  },
+  "generated_reality": {
+    "hypothesis": "For productive multi-connection WAL acceptance, binding the main database object and active WAL object may still be insufficient if live clients can coordinate through a different -shm/wal-index object than a newly opened client.",
+    "strongest_counterhypothesis": "Because the wal-index is transient and controlled by SQLite's VFS/shared-memory locking semantics, an SHM pathname substitution may be unreachable, automatically rejected, or safely reconstructed without any split-coordination state; explicit SHM object pinning may therefore add complexity without safety value.",
+    "status": "UNRESOLVED"
+  },
+  "next_discriminating_test": {
+    "id": "SHM_PATH_REBIND_SPLIT_COORDINATION",
+    "execute_in_this_macrocycle": false,
+    "reason_not_executed_now": "The exact-go unusual-experiment budget was already consumed once; a second unusual experiment is forbidden in this macrocycle.",
+    "required_fixture": "disposable exact SQLite 3.53.4 WAL fixture with at least two live connections plus a newly opened third connection after controlled -shm pathname/object rebinding",
+    "measure": [
+      "exact dev/inode or equivalent object identity of every live wal-index mapping where observable",
+      "whether old and new clients converge on one coordination object or split",
+      "read/write/checkpoint behavior and SQLite error outcomes",
+      "database and WAL integrity after controlled close/reopen/recovery",
+      "baseline without SHM intervention"
+    ],
+    "promotion_rule": "Only if the counter-reality is reproduced should a minimal SHM connection/object admission mechanism be proposed. If SQLite fails closed or safely reconverges, record the negative result and do not add a needless guard."
+  },
+  "grf_outcome": "RETAIN_TEST_OBLIGATION",
+  "architecture_delta": "NO_PRODUCT_CODE_CHANGE_YET",
+  "effect_authority_change": false,
+  "frank_harness_authority_change": false,
+  "canonical_frank_state_mutated": false,
+  "training_authorization_change": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "sources": [
+    "https://sqlite.org/walformat.html",
+    "https://sqlite.org/fileformat.html",
+    "https://sqlite.org/c3ref/file_control.html",
+    "gschaidergabriel/Dr.-Unterweger#557"
+  ]
+}

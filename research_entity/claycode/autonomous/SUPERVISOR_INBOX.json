@@ -1,37 +1,31 @@
 {
-  "schema_version": "3.2",
-  "latest_cycle": "ccauto-20260809T105416Z",
-  "cycle_path": "research_entity/claycode/autonomous/cycles/ccauto-20260809T105416Z.json",
-  "needs_review": false,
+  "schema_version": "5.2",
+  "latest_cycle": "go-20260814T1143p0700-gpt56sol-pr232-environment-snapshot-boundary",
+  "cycle_path": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
+  "needs_review": true,
   "active_program": "FRANK_V0_1",
   "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "next_focus": "Do not repeat the fresh-main provider frontend replay: self-hosted Ubuntu run 31423170075 is now completed SUCCESS for exact current local-object V18 frontend/grammar/current-TypedIR reconstruction and deterministic Structured-Frank preservation of the stronger provider/Fence declaration surface. Treat it only as bounded component/regression evidence: the run itself explicitly denies WP04 type/effect acceptance and runtime execution acceptance, and WP03 remains OPEN. Keep V18 frozen. Continue with the existing highest-information frontier: resolve current frank.hive and frank.memory imported names/types/functions from exact current Clay source and blob provenance, then recompute which external-call candidates become locally source-resolvable. Keep runtime_effect, trusted_runtime_effect_authorization, final_security_gate and any other genuinely absent host primitives unresolved/fail-closed until explicit owner-reviewed host contracts exist. While doing WP04 resolution, preserve the run-31423170075 provider functions/types/invariants and ExecutionGenerationFence=OPAQUE_DECLARED as exact regression obligations, with execution=false and authority NONE. Do not let compiler/type contracts satisfy the separate F-V01-09 ordinary production-routing non-bypassability obligation. Preserve the independent type/class nominal-identity negative gate unless identical-byte exact evidence subsumes it. FREE_ONLY, no paid fallback, no legacy BASE or Frank-v0.1 PASS from component/workflow/model consensus, no canonical semantics promotion without executable counterevidence plus review, no receipt inheritance across changed hashes/work revisions, and no Frank-Harness modification.",
-  "errors": [],
-  "provider_discovery": {
-    "mistral": {"status": "CREDENTIAL_NOT_CONFIGURED"},
-    "nvidia": {"status": "AVAILABLE", "models": 100},
-    "nvidia_executable_pool": {"families": ["deepseek", "glm", "gpt-oss", "nemotron"]}
-  },
+  "next_focus": "Fresh PR232 exact head is 5af19130821e5ce189e8ec602b03462ba1037d94, three commits ahead of prior d6c14f0c. New source-local provider-security work adds 4f99324f credential-authorization TOCTOU falsifier, a6af97cd private recognized runtime-environment snapshot repair, and 5af19130 policy record binding credentials, endpoint, budget epoch and zero-cost attestation to one snapshot. Current-head Verify run 31767848256/job 94667309835 and Identity Guard run 31767848163/job 94667308952 executed zero steps with runner_id 0, so the repair has no accepted workflow/provider capability credit yet. Highest-value provider follow-up is one safe zero-cost exact-head execution that reaches both the existing caller-message snapshot mutation assertions and the new environment mutation assertions; live capability still requires a redacted accepted-Ubuntu external network/effect receipt. ClayCode semantic priority remains parameterized TypeRef totality, 429/464 unresolved Calls, 22 MethodChain segments and productive WP04 admission/private-state closure. BASE remains WP01/WP02 PASS only; WP03-WP14 OPEN. Preserve FREE_ONLY, Goodman ancestry collapse, no paid fallback/Together, and zero Frank Harness changes.",
+  "errors": [
+    {"kind": "PR232_REFERENT_ADVANCED", "classification": "CURRENT_HEAD_5AF19130_IS_THREE_COMMITS_AHEAD_OF_D6C14F0C"},
+    {"kind": "PR232_ENVIRONMENT_SNAPSHOT_COUNTEREXAMPLE", "classification": "4F99324F_CREDENTIAL_AUTHORIZATION_TO_USE_MUTATION_FALSIFIER_A6AF97CD_PRIVATE_RECOGNIZED_ENVIRONMENT_SNAPSHOT_REPAIR_5AF19130_POLICY_BOUNDARY_PENDING_EXECUTED_EXACT_HEAD_RECEIPT"},
+    {"kind": "PR232_CURRENT_HEAD_VERIFY_ZERO_STEP", "classification": "RUN_31767848256_JOB_94667309835_ZERO_STEPS_RUNNER_ID_0_NO_PROVIDER_OR_CODE_VERDICT"},
+    {"kind": "PR232_CURRENT_HEAD_IDENTITY_GUARD_ZERO_STEP", "classification": "RUN_31767848163_JOB_94667308952_ZERO_STEPS_RUNNER_ID_0_NO_GUARD_VERDICT"},
+    {"kind": "PR232_LIVE_PROVIDER_CAPABILITY_UNPROVEN", "classification": "NO_ACCEPTED_UBUNTU_LIVE_NETWORK_AND_EFFECT_RECEIPT"},
+    {"kind": "GOODMAN_CORRELATION", "classification": "SAME_PROJECT_EXECUTION_ANCESTRY_NOT_INDEPENDENT_SEMANTIC_REPLICATION"},
+    {"kind": "WP04_HOST_STACK_TOTALITY", "classification": "PARAMETERIZED_TYPEREF_REMAINS_OPEN_AFTER_PR572"}
+  ],
   "receipt_gaps": {
-    "wp02": "CLOSED_FOR_CURRENT_V18_COMPONENT_BYTES_ONLY; invalidate on bound frontend/grammar/canonicalizer change.",
-    "wp03_fresh_main_integration": "TARGET_SUPPORTED_NOT_PACKAGE_PASS: run 31418150523 SUCCESS on clay@digital-retina for strict current real-Frank structured frontend -> TypedIR; no WP03 promotion.",
-    "wp03_provider_fence_structured_typed_ir": "TARGET_SUPPORTED_NOT_PACKAGE_PASS: PR261 run 31423170075 SUCCESS on clay@digital-retina, tested merge 10018046ca74e0cf4fc7002a3a0d62779efef855; exact V18/current-TypedIR local-object materialization, deterministic recompile, malformed-source rejection, provider functions/types/invariants complete, ExecutionGenerationFence OPAQUE_DECLARED; type_effect_acceptance_claim=false and runtime_execution_acceptance_claim=false.",
-    "wp03_nominal_identity": "OPEN_UNLESS_EXACT_SUBSUMPTION_PROVEN: prior dedicated class_decl/type nominal mutation/duplicate/local-name gate may not inherit PASS from other fresh-main receipts.",
-    "wp04_module_resolution": "PARTIALLY_RESOLVABLE: current main contains explicit frank.hive and frank.memory Clay modules. Resolve exact declarations from source before classifying remaining targets external.",
-    "wp04_host_contracts": "OPEN_FAIL_CLOSED: no explicit current definitions found for runtime_effect, trusted_runtime_effect_authorization and final_security_gate; require owner-reviewed explicit contracts, not caller-derived signatures.",
-    "wp04_type_effect_contracts": "OPEN; run 31423170075 is declaration-preservation evidence, not type/effect acceptance.",
-    "wp05_runtime_binding": "OPEN; external-effect admission must bind exact semantic contract, runtime/binary/lease identity, execution generation and process incarnation; contract itself grants NONE authority.",
-    "effect_routing_non_bypassability": "OPEN_SEPARATE_F_V01_09: latest routing-audit checkpoint explicitly claims non_bypassable_routing_claim=false; do not collapse this runtime obligation into ClayCode contracts.",
-    "frank_v0_1_target": "Final finished-v0.1 acceptance remains Ubuntu-only on the owner-fixed Hostinger target VPS."
+    "pr232_current_head_executable_gate": "OPEN_REQUIRE_REAL_EXECUTED_ZERO_COST_SAFE_GATE_ON_THEN_CURRENT_EXACT_HEAD",
+    "pr232_request_snapshot_falsifier": "OPEN_REQUIRE_EXECUTED_LESION_REPAIR_RECEIPT_BEFORE_MECHANISM_UPGRADE",
+    "pr232_environment_snapshot_falsifier": "OPEN_REQUIRE_EXECUTED_CREDENTIAL_ENDPOINT_BUDGET_ATTESTATION_MUTATION_LESION_REPAIR_RECEIPT_BEFORE_MECHANISM_UPGRADE",
+    "provider_target_receipt": "OPEN_ACCEPTED_UBUNTU_LIVE_NETWORK_AND_EFFECT_REQUIRED",
+    "persistent_runner_residue": "OPEN_DISPOSABLE_REPLICA_ONLY_REQUIRE_CLEAN_NEXT_JOB_AND_IMAGE_GENERATION_ATTESTATION",
+    "python_import_artifact_authority": "OPEN_BIND_ORIGIN_HASH_MANIFEST_SYMLINK_SITE_PYTHONPATH_AND_LOADED_MODULE_PROVENANCE",
+    "wp04_parameterized_typeref_totality": "OPEN_HIGH_INFORMATION",
+    "wp04_corpus_unresolved": "OPEN_HIGH_PRIORITY_429_UNIQUE_464_OCCURRENCES",
+    "wp04_member_library": "OPEN_SEMANTIC_AUTHORITY_22_METHODCHAIN_SEGMENTS",
+    "productstart_runtime_identity": "OPEN"
   },
-  "new_material_evidence": {
-    "fresh_main_wp03": "Dr.-Unterweger PR245 target run 31418150523 SUCCESS: current real Frank reaches TypedIR; promotion NONE.",
-    "fresh_main_provider_fence": "Dr.-Unterweger PR261 run 31423170075 SUCCESS on self-hosted Linux/X64 clay@digital-retina. Exact frontend blob 31598f85a27ade2d98466606af6bdf5a8473cc8d, grammar blob b27a4da99c9eff68302d550aad78c4e64cabe5c3, TypedIR blob e8525ee10f5fe4b8d40db79f0d8264a5231eea63; output TypedIR sha256 528519a4fb23a03e3647bb5027aed7ebf608573f7a019c13336afb2f551cfd7a. Provider functions begin_effect_attempt/provider_retry_contract_valid/reconcile_provider_observation/recover_effect present, four provider types present, eight provider invariants present, fence OPAQUE_DECLARED, no missing declared surface, malformed source rejected, source_rewritten=false, authority_claim=NONE.",
-    "runtime_cross_package": "The same PR261 target run also passed execution-generation fencing, typed-provider normal differential, provider->V17 reentry/DONE, the single synthetic ACK-blackhole reconciliation OOB, and V17 schema authority/rollback on disposable/no-external-effect state. These are F-V01-09/runtime mechanism constraints for later ClayCode lowering, not WP03/WP04 acceptance.",
-    "ordinary_effect_route_audit": "Latest research checkpoint classifies the production-runtime route inventory as NORMAL_STATIC_ROUTING_AUDIT_NOT_OOB with authority_claim=NONE, non_bypassable_routing_claim=false and promotion=NONE. End-to-end bypass closure remains separate.",
-    "harness_sovereignty": "Latest accepted-target component receipt keeps Harness source/security policy/workflow/test/acceptance receipt/Clay-repo writes DENY_HARD under Frank authority; production classifier wiring remains unproven. No Harness mutation is authorized.",
-    "module_frontier_correction": "Current main explicitly contains frank.hive and frank.memory; earlier blanket module-absence premise remains stale. Truly absent runtime primitives stay unresolved.",
-    "goodman": "PR261, current Clay/Frank source and GPT-5.6-Sol research artifacts share project/model ancestry. Exact self-hosted execution is evidence; repeated model agreement is not independent replication."
-  },
-  "instruction": "Advance with exact frank.hive/frank.memory module/name resolution and external-call repartition. Preserve PR261 provider/Fence TypedIR surface as a regression set, but do not infer WP04 acceptance or runtime authority. Keep absent host primitives fail-closed, retain independent nominal negatives, separate F-V01-09 routing non-bypassability, FREE_ONLY, Ubuntu-only final target, Goodman ancestry collapse and zero Frank-Harness mutation."
+  "instruction": "Refetch PR232 exact head before attribution. Execute both provider private-snapshot falsifiers only on a safe verified zero-cost exact-head lane before upgrading mechanism credit: caller-message mutation and recognized runtime-environment mutation. Require routing, credential, endpoint, budget epoch and zero-cost attestation to derive from the same private environment snapshot used for the execution; zero-step hosted checks remain instrument state. Keep ClayCode semantic priority on parameterized TypeRef and unresolved Call/MethodChain falsification, preserve WP04 admission/private-state closure, FREE_ONLY, Goodman collapse, and never modify Frank Harness."
 }

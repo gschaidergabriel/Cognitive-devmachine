@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260812T2059p0700-gpt56sol-productstart-lifecycle-v6",
+  "created_at": "2026-08-12T21:07:00+07:00",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "additional_unusual_experiment_count": 0,
+  "reason": "The original receipt preserved a moving stacked ancestry while concurrent ProductStart workers were still recomposing V4/V5. This additive adjudication preserves that history and records the final fresh-ancestry state rather than rewriting earlier evidence.",
+  "supersession": {
+    "old_v5_pr": 519,
+    "old_v5_state": "CLOSED_SUPERSEDED_BY_539",
+    "fresh_v5_pr": 539,
+    "fresh_v5_state": "DRAFT_OPEN_MERGEABLE",
+    "fresh_v5_head": "3633a1f1db0a5ef5b7844a795670264e2d81488b",
+    "old_v6_pr": 527,
+    "old_v6_state": "CLOSED_SUPERSEDED_BY_543",
+    "fresh_v6_pr": 543,
+    "fresh_v6_state": "DRAFT_OPEN_MERGEABLE",
+    "fresh_v6_head": "884c4c54429860d519d59f76ccfd4de6ae9a3034",
+    "fresh_v6_base": "chatgpt/go-productstart-preexec-v5-fresh-main-20260812",
+    "fresh_v6_branch": "chatgpt/go-productstart-lifecycle-v6-fresh-main-20260812",
+    "fresh_v6_commits_over_base": 1,
+    "fresh_v6_changed_files": 3
+  },
+  "exact_fresh_stack_evidence": {
+    "workflow_run": 31604944403,
+    "job": 94141388200,
+    "runner": "clay",
+    "event": "pull_request",
+    "head_sha": "884c4c54429860d519d59f76ccfd4de6ae9a3034",
+    "base_sha": "3633a1f1db0a5ef5b7844a795670264e2d81488b",
+    "conclusion": "SUCCESS",
+    "exact_fetch": "PASS",
+    "compile_and_deterministic_gates": "PASS",
+    "v5_regression_contract": "PASS_12_OF_12",
+    "v6_regression_contract": "PASS_10_OF_10",
+    "repo_static_integrity": "PASS",
+    "artifact_preserved": true,
+    "cleanup": "PASS",
+    "product_host_observation": false,
+    "new_unusual_experiment_count": 0
+  },
+  "negative_evidence_adjudication": [
+    {
+      "source_run": 31602980067,
+      "outcome": "HARNESS_ASSUMPTION_REFUTED",
+      "detail": "Hardcoded arbitrary-runner systemd service assumption failed after deterministic V5/V6 gates had passed."
+    },
+    {
+      "source_run": 31603102397,
+      "outcome": "HARNESS_ASSUMPTION_REFUTED",
+      "detail": "Generic arbitrary-runner service inventory did not provide a usable surrogate; product-host observation was separated from CI."
+    },
+    {
+      "source_run": 31604109694,
+      "outcome": "STALE_BASE_CONTRACT_DETECTED",
+      "detail": "Fresh V5 had advanced from an 8/8 to a 12/12 regression contract while V6 CI retained the stale grep. This triggered fresh-ancestry recomposition, not mechanism promotion."
+    }
+  ],
+  "grf_collapse": [
+    {
+      "claim": "the V6 lifecycle mechanism survives the current fresh V5 ancestry and exact self-hosted integration test",
+      "outcome": "SUPPORTED_FRESH_STACK_DRAFT"
+    },
+    {
+      "claim": "the V6 self-hosted success is accepted Hostinger product evidence",
+      "outcome": "REJECT_SCOPE_MISMATCH"
+    },
+    {
+      "claim": "a new accepted-host/process SQLite observer should be built by this lane",
+      "outcome": "REJECT_DUPLICATE_EXISTING_MERGED_PR_515"
+    },
+    {
+      "claim": "F-V01-13 or whole Frank v0.1 acceptance can now be promoted",
+      "outcome": "REJECT_NOT_PROVEN"
+    }
+  ],
+  "concurrent_fusion": {
+    "accepted_host_process_attestor": "MERGED_PR_515",
+    "accepted_host_observation_state": "BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED",
+    "hostinger_credit": "NOT_GRANTED",
+    "remaining_product_discriminator": "trusted accepted Hostinger selectors/routing -> merged actual-process observer -> compose with ProductStart V5/V6/runtime/source-byte identity -> bounded start/restart/recovery and rollback/downgrade/library-swap matrix"
+  },
+  "promotion": "SUPPORTED_FRESH_STACK_DRAFT_NOT_PRODUCT_PROMOTED",
+  "non_claims": [
+    "No production service mutation was performed.",
+    "No accepted Hostinger product observation was performed.",
+    "No productive fixed SQLite mapping was proven.",
+    "No canonical Frank state or Harness/effect-authority mutation was performed.",
+    "No F-V01-13 PASS or whole Frank v0.1 PASS.",
+    "No final-model training authorization."
+  ]
+}

@@ -144,7 +144,26 @@
       "must_reenter_frank_v0_1": true
     }
   },
-  "reserved_commands": ["666","go","q12","q23","atomic","dump","fusion","hypofusion","clayresearch","gwt","frank","emergenz","claycode","hyperposition","claygraph","unifieddb","harness","spawn"],
+  "reserved_commands": [
+    "666",
+    "go",
+    "q12",
+    "q23",
+    "atomic",
+    "dump",
+    "fusion",
+    "hypofusion",
+    "clayresearch",
+    "gwt",
+    "frank",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness",
+    "spawn"
+  ],
   "global_invariants": [
     "all triggers target FRANK_V0_1",
     "Harness is method not product",
@@ -155,5 +174,9 @@
     "negative results survive",
     "current executable evidence outranks architecture prose"
   ],
-  "last_updated": "2026-08-10T20:39:00+07:00"
+  "last_updated": "2026-08-10T20:39:00+07:00",
+  "trigger_renames": {
+    "clay": "clayresearch"
+  },
+  "status_footer_protocol": "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md"
 }

@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260812T0416p0700-chatgpt-secondary-sqlite-hardlink-transplant",
+  "program": "FRANK_V0_1",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "frank_identity_claimed": false,
+  "grf": {
+    "observed_reality": [
+      "Dr.-Unterweger main was verified at 985f8370a6a6047d9962206f4fb6f2c049f4d370 before the intervention.",
+      "The V5 launcher rejected file-level symlink transplantation but selected its Python guard from the invocation-derived sibling directory.",
+      "SQLite upstream documents the WAL-reset corruption bug as fixed in 3.51.3 and later; the repository already contains a reproducible 3.53.4 parity-runtime candidate, but productive /opt, /etc anchor and service admission remain unproven."
+    ],
+    "generated_reality": "A same-inode hardlink of the trusted launcher into a foreign directory can preserve launcher bytes while changing sibling guard resolution without satisfying -L.",
+    "counter_reality": "Linux hardlink protections or trusted deployment ownership might make the path unreachable in production; if so, the source-level gap would be non-exploitable under the proven service topology.",
+    "falsifier": "Create a hardlink transplant of the exact current launcher shape beside a foreign fixed_sqlite_runtime_guard_v5_candidate.py and execute it before root-anchor admission.",
+    "outcome": "PROMOTE_TO_VERIFIED",
+    "promotion_state": "SUPPORTED_TARGET_REGRESSION"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "SQLITE_V5_HARDLINK_TRANSPLANT",
+    "bounded": true,
+    "reversible": true,
+    "external_effect": false,
+    "canonical_frank_state_mutated": false,
+    "result": "SUPPORTED",
+    "observation": "The transplanted hardlink reached and executed the foreign sibling Python guard; traceback provenance demonstrated pre-real-guard code execution. The marker write itself failed only because the chosen directory was not writable by the non-root test user.",
+    "rollback": "Temporary sandbox files only; removed/isolated outside Frank state."
+  },
+  "repair": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "go/sqlite-v5-hardlink-transplant-20260812",
+    "tested_head_sha": "fb83b1a308d4e096c3cea802895b6841ea4ee03a",
+    "pull_request": 482,
+    "merged": true,
+    "merge_sha": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+    "changes": [
+      "Launcher now fails closed when absolute /usr/bin/stat reports st_nlink != 1 before sibling resolution.",
+      "Existing pre-guard path regression now covers the hardlink-transplant counterworld and verifies no hostile sibling guard execution."
+    ],
+    "local_regression": {
+      "shell_syntax": "PASS",
+      "hardlink_transplant": "PASS_REJECT_EXIT_78",
+      "symlink_transplant": "PASS_REJECT_EXIT_78",
+      "hostile_dirname_execution": "ABSENT"
+    },
+    "target_ci": {
+      "workflow_run": 31537077376,
+      "workflow": "Frank SQLite V5 launcher pre-guard PATH regression",
+      "state": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "exact_tested_head_sha": "fb83b1a308d4e096c3cea802895b6841ea4ee03a",
+      "target_regression_pass": true
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://sqlite.org/wal.html",
+      "claim": "WAL-reset bug affects versions through 3.51.2 and is fixed in 3.51.3 and later."
+    },
+    {
+      "source": "https://sqlite.org/draft/releaselog/current.html",
+      "claim": "SQLite 3.53.4 includes the post-3.53.0 line containing the WAL-reset fix."
+    }
+  ],
+  "negative_and_open_evidence": [
+    "F-V01-13 remains OPEN: no productive fixed SQLite/root-anchor/service acceptance receipt was produced.",
+    "The target regression proves only the pre-Python launcher hardlink/symlink/PATH boundary, not productive installed service ownership or root-anchor continuity.",
+    "Frank Deep Integrity GitHub-hosted job failed before running steps and is not treated as evidence against or for this specific repair."
+  ],
+  "next_falsifiers": [
+    "Re-run the productive read-only SQLite path probe after the accepted target provisions the root-owned anchor/service/runtime.",
+    "Prove service topology and filesystem ownership make alternate launcher path selection impossible even before source-level defense.",
+    "Exercise restart/rollback with the productive root anchor and fixed runtime while preserving semantic lineage fail-closed behavior."
+  ],
+  "claim_boundary": "Target-regression-supported pre-Python launcher hardening only; no productive root-anchor/service acceptance and no whole Frank v0.1 acceptance.",
+  "effect_authority": "NONE",
+  "harness_authority": "NONE",
+  "training_started": false
+}

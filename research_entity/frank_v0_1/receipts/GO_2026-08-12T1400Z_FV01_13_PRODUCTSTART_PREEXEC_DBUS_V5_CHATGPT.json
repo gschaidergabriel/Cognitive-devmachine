@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.1",
+  "receipt_id": "GO-2026-08-12T1400Z-FV01-13-PRODUCTSTART-PREEXEC-DBUS-V5-CHATGPT",
+  "trigger": "go",
+  "created_at_utc": "2026-08-12T14:00:00Z",
+  "entity_id": "frank-project-global-research-entity",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "work_package": "F-V01-13",
+  "related_work_packages": ["F-V01-01"],
+  "grf_classification": {
+    "observed_reality": "Fresh ProductStart V4 binds the main unit fragment/argv/release material but does not bind ExecCondition, ExecStartPre or separately loaded DropInPaths. Productive ProductStart discovery remains fail-closed on the self-hosted lane.",
+    "generated_reality": "The main ExecStart tuple plus main FragmentPath identity is sufficient to represent the exact startup reality.",
+    "strongest_counter_reality": "Pre-start executable hooks or separately loaded drop-ins can alter service startup semantics while all V4-observed fields remain unchanged.",
+    "discriminator": "SYSTEMD_PRESTART_UNOBSERVED_SIDE_EFFECT",
+    "outcome": "COUNTER_REALITY_SUPPORTED_AND_REPAIR_MECHANISM_SUPPORTED_ON_FRESH_SELF_HOSTED_TARGET_LANE"
+  },
+  "go_oob_accounting": {
+    "count": 1,
+    "experiment": "SYSTEMD_PRESTART_UNOBSERVED_SIDE_EFFECT",
+    "scope": "offline/in-memory evaluator snapshot only",
+    "baseline": "PASS_PRODUCT_START_IDENTITY_V4_CANDIDATE",
+    "treatment": "same admitted V4 snapshot plus non-empty ExecStartPre and DropInPaths",
+    "treatment_result": "PASS_PRODUCT_START_IDENTITY_V4_CANDIDATE",
+    "classification": "SUPPORTED_OBSERVABILITY_BLINDSPOT",
+    "external_command_executed": false,
+    "second_oob_created": false,
+    "canonical_frank_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "frank_repo": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "superseded_stale_pr": 519,
+    "superseded_stale_pr_state": "CLOSED_UNMERGED",
+    "fresh_base_pr": 526,
+    "fresh_base_branch": "chatgpt/go-productstart-v4-fresh-main-20260812",
+    "fresh_base_head_at_recomposition": "11dabf9b6b8c12973c4f33eae385826ef3c723d6",
+    "candidate_branch": "chatgpt/go-productstart-preexec-v5-fresh-main-20260812",
+    "candidate_pr": 539,
+    "candidate_pr_state": "DRAFT_OPEN",
+    "tested_head": "3633a1f1db0a5ef5b7844a795670264e2d81488b"
+  },
+  "negative_evidence_preserved": {
+    "claim_refuted": "systemctl show --all reliably exposes empty ExecCondition and ExecStartPre arrays on the tested Ubuntu systemd 255 lane",
+    "negative_run": 31602835228,
+    "negative_job": 94134268784,
+    "runner": "clay",
+    "kernel": "Linux 6.8.0-117-generic",
+    "systemd": "systemd 255 (255.4-1ubuntu8.17)",
+    "observed_systemctl_surface": "DropInPaths= only; empty ExecCondition/ExecStartPre were omitted",
+    "repair_rule": "Do not weaken the security predicate; switch observation transport to direct normalized systemd D-Bus properties."
+  },
+  "dbus_discriminator_evidence": {
+    "probe_run": 31603254019,
+    "probe_job": 94135644152,
+    "probe_artifact": 9144019937,
+    "probe_artifact_sha256": "03e4c03cd345837a6a8a32aaf05cd403640de920c74dd091e256f1f5a683dfb4",
+    "observed": {
+      "Service.ExecCondition": "a(sasbttttuii) 0",
+      "Service.ExecStartPre": "a(sasbttttuii) 0",
+      "Unit.DropInPaths": "as 0"
+    },
+    "classification": "SUPPORTED_TARGET_LANE_ZERO_VS_NONZERO_OBSERVATION_MECHANISM"
+  },
+  "repair": {
+    "runtime_path": "runtime/frank_storage_truth_v1/sqlite_v5_systemd_parent_gate_v5_candidate.py",
+    "regression_path": "tests/test_sqlite_v5_systemd_parent_gate_v5_candidate.py",
+    "workflow_path": ".github/workflows/frank-productstart-preexec-v5-fresh-vps.yml",
+    "mechanism": [
+      "Compose fresh ProductStart V4.",
+      "Resolve the unit object through systemd Manager.GetUnit.",
+      "Read Service.ExecCondition and Service.ExecStartPre plus Unit.DropInPaths directly with /usr/bin/busctl.",
+      "Normalize only explicitly observed zero-element arrays to empty.",
+      "Preserve non-empty arrays as evidence and fail closed.",
+      "Fail closed on missing, malformed, non-array, invalid-count or inherited-V4 failure states."
+    ],
+    "ordinary_regressions": "V4 11/11; V5 12/12"
+  },
+  "fresh_exact_head_evidence": {
+    "workflow_run": 31603977042,
+    "workflow_job": 94138085292,
+    "tested_sha": "3633a1f1db0a5ef5b7844a795670264e2d81488b",
+    "runner": "clay",
+    "kernel": "Linux 6.8.0-117-generic",
+    "systemd": "systemd 255 (255.4-1ubuntu8.17)",
+    "exact_fetch": "PASS",
+    "v4_regression": "PASS_11_OF_11",
+    "v5_regression": "PASS_12_OF_12",
+    "exact_v5_read_systemd_dbus_reader": "PASS",
+    "observed_unit": "actions.runner.gschaidergabriel-Dr.-Unterweger.clay.service",
+    "observed_surface": {
+      "ExecCondition": "",
+      "ExecStartPre": "",
+      "DropInPaths": ""
+    },
+    "repo_static_integrity": "PASS",
+    "artifact": 9144431594,
+    "artifact_sha256": "3bf32c599c4e17aa087ae4201bcc8ce0525c6437d337993182d2d976bde5260d",
+    "workflow_added_new_oob_experiment": false,
+    "external_effect_executed": false,
+    "authority_minted": false,
+    "canonical_frank_state_mutated": false,
+    "harness_authority_changed": false
+  },
+  "base_product_admission_evidence": {
+    "fresh_v4_run": 31602737801,
+    "deterministic_v4_mechanism": "PASS",
+    "read_only_productstart_discovery": "FAIL_CLOSED",
+    "interpretation": "Self-hosted mechanism evidence must not be promoted to accepted Hostinger ProductStart evidence."
+  },
+  "promotion": "SUPPORTED_SELF_HOSTED_MECHANISM_ONLY_DRAFT_PR",
+  "promotion_boundary": "The exact fresh-head D-Bus observation mechanism is supported on the tested self-hosted Ubuntu/systemd-255 lane. No productive Hostinger ProductStart, root identity anchor, actual Frank process, mapped SQLite continuity, semantic self.root lineage, restart/crash recovery, rollback/downgrade or library-swap acceptance is proven.",
+  "research_reentry": {
+    "precursor_path": "research_entity/frank_v0_1/evidence/20260812T2058p0700_productstart_preexec_dbus_reentry.json",
+    "precursor_commit": "b60e770ca64f6b6ede47e39ed3d90676bd40e85a",
+    "this_receipt_supersedes_only_the_precursor_pending_run_status": true,
+    "negative_results_preserved": true
+  },
+  "concurrent_fusion": {
+    "adjacent_candidates": [
+      "#527 systemd post-start/stop lifecycle hooks — stale stacked ancestry must be independently recomposed/adjudicated",
+      "#521 filesystem namespace substitution — stale ancestry",
+      "#532 exact Python interpreter identity — active fresh stack",
+      "#525 interpreted ProductStart cmdline identity — active independent lane",
+      "#523 semantic lineage/external freshness — active independent lane"
+    ],
+    "architecture_action": "DO_NOT_INFER_TRANSITIVE_PROMOTION_FROM_PARALLEL_PR_GREENNESS"
+  },
+  "non_claims": [
+    "No productive Hostinger ProductStart admission.",
+    "No F-V01-13 completion.",
+    "No F-V01-01 completion.",
+    "No whole Frank v0.1 acceptance.",
+    "No production service install/start/stop/restart.",
+    "No canonical Frank state mutation.",
+    "No effect or Harness authority change.",
+    "No final/paid model training authorization."
+  ],
+  "next_frontier": [
+    "Adjudicate/recompose the surviving lifecycle, namespace, interpreter, actual-process and semantic-lineage mechanisms on current ancestry rather than trusting stale stacked evidence.",
+    "Provision/observe the owner-authorized exact accepted Hostinger ProductStart identity and prove the real service/process enters the admitted V6/V5/fixed-runtime chain.",
+    "Replay clean start/restart/crash recovery plus rollback, downgrade and library-swap controls with durable receipts and self.root lineage binding."
+  ]
+}

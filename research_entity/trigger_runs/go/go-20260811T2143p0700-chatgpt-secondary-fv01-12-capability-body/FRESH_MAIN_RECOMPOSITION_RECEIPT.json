@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260811T2143p0700-chatgpt-secondary-fv01-12-capability-body",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+  "event": "STALE_WORK_RECOMPOSITION",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "pr": 335,
+  "pre_recomposition": {
+    "head": "b8d66258bff71a5f61e49956b8a5e8376b455b19",
+    "mergeable": false,
+    "fresh_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "compare_status": "diverged",
+    "ahead_by": 26,
+    "behind_by": 12,
+    "merge_base": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "candidate_changed_paths": 9,
+    "candidate_path_relation_to_main": "ALL_NINE_REPORTED_AS_ADDED_NO_OVERLAPPING_CANDIDATE_PATH_CONFLICT"
+  },
+  "recomposition": {
+    "strategy": "FRESH_MAIN_PARENT_PLUS_EXACT_CANDIDATE_BLOBS",
+    "base_parent": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "tree": "6a46a043c38586135136e5089a09a2476ceddc42",
+    "synthetic_commit": "d5c5a55436512e4b106f90e93f0e4c7f91a02a3d",
+    "branch": "chatgpt/go-fv01-12-capability-body-v1-20260811",
+    "force_ref_update": true,
+    "stale_branch_commits_carried_forward": false,
+    "candidate_files_carried_forward": 9,
+    "exact_candidate_blobs": {
+      ".github/workflows/frank-fv01-12-capability-body-v1-vps.yml": "8f9bfda6687ffe532c4e2a6698b993eabe2df086",
+      "claycode/frank_capability_body.clay": "fde1314ea0c4161fd74120282f8bea936e9db413",
+      "runtime/capabilities/frank_capability_body_v1_candidate.py": "c6841d3b44dd1eeb6ae61a5102888eb8e34dba56",
+      "tests/frank_capability_body_v1_candidate_gate.py": "5e9eb9248247d01f02bd714d8b91ecb8016b2da0",
+      "tests/frank_capability_freshness_revocation_v1_gate.py": "9aa2dfef26098c74c3cd363fbcdc810f3026cdce",
+      "tests/frank_capability_tool_artifact_identity_v1_gate.py": "5ec6d870f48947bc2d36aa5c20b11d27332877d3",
+      "tests/frank_capability_legacy_artifact_migration_v1_gate.py": "9f1a419f0c7ef92924ef30fc8ed6cf9ab39bf8a7",
+      "tests/frank_capability_inflight_revocation_race_v1_gate.py": "9a84cc97e76b6fbe771a334d4afa39eb025b62a3",
+      "tests/frank_capability_ghost_peer_root_crown_oob.py": "a097e57f498527836b49d635904c923ba9b5bc90"
+    }
+  },
+  "post_recomposition": {
+    "pr_mergeable": true,
+    "pr_commits": 1,
+    "pr_changed_files": 9,
+    "base_sha": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "head_sha": "d5c5a55436512e4b106f90e93f0e4c7f91a02a3d",
+    "target_workflow_run": 31508059904,
+    "target_job": 93834595036,
+    "target_status_at_receipt": "QUEUED",
+    "fresh_main_target_pass_claimed": false
+  },
+  "evidence_adjudication": {
+    "prior_target_green_runs": "VALID_FOR_THE_EXACT_OLDER_HEADS_ONLY",
+    "newest_artifact_identity_migration_race_changes": "REQUIRE_EXACT_FRESH_MAIN_TARGET_EXECUTION",
+    "promotion": "BLOCKED_WHILE_TARGET_RUN_QUEUED",
+    "exact_go_oob_count": 1,
+    "exact_go_oob_name": "GHOST_PEER_ROOT_CROWN"
+  },
+  "active_counterhypotheses": [
+    "two successful git --version probes demonstrate only that bounded operation, not arbitrary git execution competence",
+    "open-fd artifact hashing/execution protects pathname replacement but a stronger immutable snapshot may still be needed against in-place mutation between hash and exec",
+    "external peer CAN_DELEGATE remains UNKNOWN because no current independently verified strong-peer producer was found",
+    "capability evidence must never launder into effect or Harness authority"
+  ],
+  "adjudication": "FRESH_MAIN_RECOMPOSED_TARGET_PENDING",
+  "frank_self_harness_authority_changed": false,
+  "training_authorization_changed": false
+}

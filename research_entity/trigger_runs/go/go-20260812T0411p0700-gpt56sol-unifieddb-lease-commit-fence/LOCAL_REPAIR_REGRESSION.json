@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-12T04:22:18+07:00",
+  "classification": "ORDINARY_REPAIR_REGRESSION_NOT_OOB",
+  "candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 483,
+    "head": "5f18571f6b67371a255fe61f36d7042aa087e9a8",
+    "candidate_path": "runtime/state/projection_worker_lease_commit_fence_v3_candidate.py",
+    "candidate_git_blob": "a553c0d7cb41e79db00ac8cc9bf1620f7473231a",
+    "candidate_local_sha256": "67a1c1735fb41931e84771bd6c9e0fad18bd07cf8aa6c35afe2902eb325119fe",
+    "test_path": "tests/unifieddb_projection_lease_commit_fence_v3_gate.py",
+    "test_git_blob": "6e40c6b0a30863f07ff13de2e3c426d2a384a641",
+    "test_local_sha256": "651af9233943784d55d274987314ddef470558b2a9716ab60019a3f7a5e9113a"
+  },
+  "exact_blob_checks": {
+    "candidate_local_git_blob_matches_github": true,
+    "test_local_git_blob_matches_github": true,
+    "candidate_py_compile": "PASS",
+    "test_py_compile": "PASS"
+  },
+  "standalone_lock_mechanism_regression": {
+    "scope": "Disposable local SQLite database; same BEGIN IMMEDIATE fencing mechanism as candidate, without claiming full repository import/integration execution.",
+    "checks_passed": 5,
+    "checks_total": 5,
+    "checks": {
+      "initial_generation_is_one": true,
+      "successor_takeover_blocked_during_protected_operation": true,
+      "protected_operation_and_ack_commit": true,
+      "successor_admitted_after_fence_commit": true,
+      "stale_generation_rejected_before_callback": true
+    },
+    "result": "PASS_MECHANISM_ONLY"
+  },
+  "target_evidence": {
+    "workflow_run": 31537165602,
+    "status_at_receipt": "QUEUED",
+    "runner_id": 0,
+    "steps_started": false,
+    "accepted_target_pass_claimed": false
+  },
+  "promotion": "NONE",
+  "remaining_falsifier": "Execute exact repository candidate/test on the accepted target, then integrate the fence into the actual projection apply/ack path and replay crash/takeover/load regressions.",
+  "research_repo_head_observed_before_write": "23f7cdedaa4c91e391a0ccabc3b5eb15d7f8997c"
+}

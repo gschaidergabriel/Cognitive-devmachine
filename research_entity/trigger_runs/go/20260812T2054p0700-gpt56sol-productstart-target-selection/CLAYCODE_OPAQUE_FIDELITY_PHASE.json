@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260812T2054p0700-gpt56sol-productstart-target-selection",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "research_main_observed_before_write": "81cdf3cbcd69c3397257392980c4a8337be5dd2c",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "observed_negative_evidence": {
+    "source": "draft PR #536",
+    "fact": "FRANK_STRUCTURED_V1 accepted source opaque but parse_module lowered the record with RecordTypeDecl.opaque=false",
+    "mechanism": "class_rhs used anonymous optional literal [\"opaque\"] under keep_all_tokens=false, while the existing lowerer searches surviving class_rhs children for a token whose value is opaque",
+    "classification": "PARSER_TYPED_SYNTAX_FIDELITY_GAP"
+  },
+  "repair_candidate": {
+    "branch": "chatgpt/go-claycode-opaque-fidelity-20260812",
+    "base_sha_at_branch_creation": "53d0906e5e0d5493517393164854681c2db06854",
+    "head_sha_at_pr_creation": "16f0bca94827eeed19e3959ba03946458d27cfec",
+    "draft_pr": 544,
+    "changes": [
+      "replace class_rhs anonymous [opaque literal] with named [OPAQUE_KW]",
+      "define OPAQUE_KW as exact opaque spelling",
+      "leave the existing typed-syntax lowerer unchanged",
+      "add deterministic plain-vs-opaque parser fidelity regression",
+      "add exact-SHA CI gate with pinned lark/interegular dependencies"
+    ],
+    "diff_audit": "grammar file changed only 5 lines: 4 additions and 1 deletion; no accidental full-grammar drift observed",
+    "state": "TESTING"
+  },
+  "expected_discriminator": {
+    "positive": "Plain lowers opaque=false, otherwise-identical Secret lowers opaque=true, Alias remains Int; existing WP04 nominal source gate and static integrity remain green",
+    "negative": "named terminal perturbs contextual lexing/lowering or existing WP04/static baseline",
+    "workflow_run": 31605599016,
+    "workflow_state_at_receipt_write": "QUEUED",
+    "pass_claimed": false
+  },
+  "grf_collapse": [
+    {
+      "claim": "opaque fidelity requires a second runtime-side semantic workaround",
+      "outcome": "REJECT_CANDIDATE",
+      "reason": "the existing lowerer already has an opaque bit and token detection path; preserve the source signal at the grammar boundary first"
+    },
+    {
+      "claim": "naming opaque is sufficient to promote F-V01-02",
+      "outcome": "REJECT",
+      "reason": "even a green parser fidelity gate only repairs one typed-syntax invariant; runtime/evaluator/compiler/FFI and real Frank component gates remain separate"
+    },
+    {
+      "claim": "minimal named-token repair is the cheapest discriminator for the observed failure",
+      "outcome": "RETAIN_TESTING"
+    }
+  ],
+  "unusual_experiment_budget": {
+    "new_unusual_experiment_count_in_this_phase": 0,
+    "whole_go_macrocycle_exactly_one_unusual_experiment_already_consumed": "FUTURE_TEST_GHOST",
+    "do_not_add_second_unusual_experiment": true
+  },
+  "next_if_green": "compose the parser-fidelity fix with PR #536 host-runtime nominal boundary and re-run parsed-source plain/opaque runtime admission before relaxing RUNTIME_PARSED_RECORD_OPAQUE_FIDELITY_UNPROVEN quarantine",
+  "authority_nonclaims": {
+    "external_effect": false,
+    "harness_authority": false,
+    "effect_authority": false,
+    "canonical_frank_state_mutated": false,
+    "f_v01_02_pass": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false
+  }
+}

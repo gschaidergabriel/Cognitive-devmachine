@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "roles":[
+    {"object":"UnifiedDB semantic state + state_epochs + semantic_transactions","role":"AUTHORITATIVE","decision":"KEEP_CANONICAL","reason":"Typed state, transaction, epoch, provenance and replay authority."},
+    {"object":"ClayGraph topology/activation","role":"DERIVED_REBUILDABLE","decision":"KEEP_DERIVED","reason":"Projection and diagnostic topology must never mint truth or effect authority."},
+    {"object":"vector/FTS indexes","role":"INDEX_DERIVED","decision":"KEEP_LOGICALLY_UNIFIED_PHYSICALLY_OPTIONAL","reason":"Can be rebuilt/reranked; correctness requires provenance/result receipts rather than storage merger."},
+    {"object":"large tensor/model/KV backing","role":"MODEL_STATE_PHYSICAL","decision":"KEEP_ISOLATED","reason":"Physical consolidation adds contention/amplification without semantic benefit."},
+    {"object":"global execution lease generation","role":"AUTHORITATIVE_CONTROL_STATE","decision":"BIND_TO_UNIFIEDDB_WITH_EXTERNAL_FLOOR","reason":"State/effect mutation must present exact admitted execution generation; external floor prevents DB-snapshot rollback from reviving stale generations."},
+    {"object":"semantic lineage head","role":"AUTHORITATIVE_IDENTITY_CONTINUITY","decision":"ADD_SINGLE_ADMITTED_HEAD","reason":"Same-source/same-epoch sibling state must not both be accepted as current."},
+    {"object":"external monotonic recovery anchor","role":"EXTERNAL_ISOLATED_AUTHORITY_INPUT","decision":"KEEP_ISOLATED","reason":"If stored only in the same rollback domain as UnifiedDB it cannot detect whole-DB snapshot rewind."},
+    {"object":"SQLite WAL/checkpoint machinery","role":"PHYSICAL_STORAGE_RUNTIME","decision":"FAIL_CLOSED_UNTIL_SAFE_BUILD_OR_PROVEN_TOPOLOGY","reason":"Target evidence reports SQLite 3.45.1 + WAL; upstream WAL-reset corruption bug affects versions through 3.51.2 absent verified backport/topology exclusion."},
+    {"object":"snapshots/checkpoints","role":"RECOVERY_STATE","decision":"BIND_TO_LINEAGE_AND_EXTERNAL_FLOOR","reason":"A snapshot is admissible only when its lineage head and external generation remain current/recovery-valid."}
+  ],
+  "physical_unification_law":"Semantic/logical unification does not require one physical engine. KEEP_ISOLATED is promoted where rollback-domain independence or resource behavior requires it.",
+  "status":"COMPLETE"
+}

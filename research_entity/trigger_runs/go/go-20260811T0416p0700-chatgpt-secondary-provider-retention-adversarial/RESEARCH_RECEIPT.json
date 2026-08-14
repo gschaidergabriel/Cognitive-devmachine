@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0416p0700-chatgpt-secondary-provider-retention-adversarial",
+  "trigger": "go",
+  "created_at": "2026-08-11T04:16:18+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "identity_lock": {
+    "research_entity": "Clay",
+    "target_native_self": "self.root",
+    "target_human_surface": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "fresh_state": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "merged_effect_generation_provider_integration": {
+      "pr": 261,
+      "main_merge_sha": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+      "target_workflow_run": 31423170075,
+      "status": "SUCCESS",
+      "artifact_id": 9076164663,
+      "artifact_digest": "sha256:b2e6cf7fc59b66b8aa2ba6d90738ce6b7587f6bf743e095c7f8468648351cb3d",
+      "bounded_claim": "exact execution-generation fence + typed provider contract + synthetic ACK-loss reconciliation + V17 provenance re-entry/DONE + current WP03 frontend/TypedIR preservation",
+      "nonclaims": [
+        "no real provider timeout-after-acceptance closure",
+        "no WP04 type/effect/compiler/runtime acceptance",
+        "no ordinary production routing non-bypassability closure",
+        "no whole Frank v0.1 acceptance"
+      ]
+    },
+    "effect_policy_receipt_refresh": {
+      "main_evidence_commit": "40cd96f70a1dc378bdb7ba41f3faa0d3c5c776d1",
+      "target_run": 31432535912,
+      "status": "PASS_DIRECT_FRANK_V0_1_EFFECT_AUTHORITY_POLICY_MATRIX",
+      "promotion": "COMPONENT_TARGET_VPS_EVIDENCE_ONLY"
+    }
+  },
+  "selected_question": "May ProviderIdempotencyContract.valid_until=None authorize retry of an uncertain mutating provider effect, or must unknown provider retention fail closed for retry while preserving read-only reconciliation?",
+  "hypothesis": "UNKNOWN provider idempotency retention must not mint unbounded retry authority. A mutating uncertain outcome may be retried only when the exact provider contract binds a known still-live retention horizon; otherwise only evidence-only reconciliation may proceed.",
+  "strongest_counterhypothesis": "Every production provider adapter will independently guarantee a conservative finite retention horizon or a provider-side idempotency key that never expires, making valid_until=None unreachable in an authorized effect path.",
+  "counterhypothesis_adjudication": "NOT_ENCODED_BY_GENERIC_CONTRACT. The current generic ProviderIdempotencyContract accepts valid_until=None and therefore cannot rely on a provider-specific invariant that is absent from its typed authority surface.",
+  "current_main_negative": {
+    "base_sha": "d55b452776295153576011988b0befce7f13b238",
+    "file": "runtime/state/provider_idempotency_types.py",
+    "git_blob": "32287d861049595784eae9e4f24c190f370010a1",
+    "observed_semantics": {
+      "semantic_hash_none_label": "UNBOUNDED_UNKNOWN",
+      "known_expired_retention": "PROVIDER_IDEMPOTENCY_RETENTION_EXPIRED",
+      "unknown_retention_retry": "ALLOWED_NO_TIME_FENCE"
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Google AIP-155 Request Identification",
+      "finding": "request IDs support idempotency but services may honor them for a bounded reasonable timeframe; no generic infinite-retention guarantee"
+    },
+    {
+      "source": "Stripe Idempotent requests documentation",
+      "finding": "idempotency keys may be pruned after a retention interval; reuse after pruning can be treated as a new request"
+    },
+    {
+      "source": "RFC 9110 HTTP Semantics",
+      "finding": "automatic retry of a non-idempotent request requires independent knowledge that retry is idempotent or that the original request was not applied"
+    }
+  ],
+  "exactly_one_go_oob": {
+    "experiment": "UNKNOWN_RETENTION_TTL_RESURRECTION_INDEPENDENT_MICROREPLICA",
+    "novelty_count_for_this_invocation": 1,
+    "source_predicate_blob": "32287d861049595784eae9e4f24c190f370010a1",
+    "matched_control": {
+      "finite_expired_retention": "PROVIDER_IDEMPOTENCY_RETENTION_EXPIRED"
+    },
+    "discriminator": {
+      "unknown_retention_retry": "RETRY_AUTHORIZED",
+      "provider_original_business_effect_count": 1,
+      "provider_idempotency_record_present_before_retry": false,
+      "provider_business_effect_count_after_retry": 2
+    },
+    "result": "SUPPORTED_UNKNOWN_RETENTION_RETRY_DUPLICATION_RISK",
+    "scope": "independent source-predicate micro-replica; synthetic provider; no external network/effect; not whole-target acceptance"
+  },
+  "architecture_delta_candidate": {
+    "status": "TESTING",
+    "rule": "valid_until=None -> PROVIDER_IDEMPOTENCY_RETENTION_UNKNOWN for retry; known expired -> RETENTION_EXPIRED; known live may pass the retention gate; read-only reconciliation remains separately admissible when supported",
+    "authority_invariant": "provider contract/reconciliation evidence does not mint execution generation or EffectAuthorization",
+    "repair_pr": 265,
+    "repair_head_sha": "bd805dacdc29f82a30174d880d2deac3541994cc",
+    "fixed_source_blob": "7f4f5ce1fed5170db7007ca90631b66b299c8381",
+    "normal_regressions": [
+      "unknown retention retry DENY",
+      "expired retention retry DENY",
+      "known live retention retry ALLOW",
+      "unknown retention read-only reconciliation ALLOW while retry DENY",
+      "existing typed-provider differential remains required",
+      "repository static authority audit remains required"
+    ]
+  },
+  "build_delta_by_this_worker": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 265,
+    "commit": "bd805dacdc29f82a30174d880d2deac3541994cc",
+    "file": ".github/workflows/frank-provider-retention-failclosed-vps.yml",
+    "purpose": "bind the fail-closed repair to a dedicated self-hosted Linux/X64 target regression instead of relying on local PASS or hosted Deep Integrity",
+    "target_workflow_run": 31432786222,
+    "target_workflow_status_at_receipt": "QUEUED"
+  },
+  "deep_integrity_lane": {
+    "classification": "NON_EVIDENTIARY_PRE_STEP_FAILURE_FOR_THIS_CANDIDATE",
+    "observation": "repeated hosted Deep Integrity jobs exposed no executed steps and unavailable job logs; this is not counted as candidate PASS or FAIL",
+    "root_cause": "UNKNOWN"
+  },
+  "promotion": "TESTING_NOT_PROMOTED",
+  "remaining_obligations": [
+    "dedicated self-hosted target regression for PR265 must execute and pass before merge/promotion",
+    "refresh current main and PR head/mergeability before any write/merge",
+    "real provider timeout-after-acceptance and provider-side reconciliation evidence remains open",
+    "ordinary production effect routing non-bypassability remains open",
+    "current-source lifecycle crash/replay and broader recovery lineage obligations remain separate",
+    "final paid/model training remains owner-authorized only"
+  ],
+  "safety": {
+    "external_provider_used": false,
+    "external_network_effect_performed": false,
+    "canonical_frank_database_mutated": false,
+    "final_training_started": false,
+    "frank_self_harness_authority": false
+  },
+  "next_frontier": "If PR265 target regression passes on fresh ancestry, promote only the unknown-retention fail-closed retry rule and then return to real-provider reconciliation plus ordinary-route non-bypassability; if it fails, preserve the failure as evidence and patch the smallest falsified predicate without adding another OOB in this invocation."
+}

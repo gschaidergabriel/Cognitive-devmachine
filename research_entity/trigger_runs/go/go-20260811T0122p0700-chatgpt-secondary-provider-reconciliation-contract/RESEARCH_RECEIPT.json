@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0122p0700-chatgpt-secondary-provider-reconciliation-contract",
+  "trigger": "go",
+  "created_at": "2026-08-11T01:22:24+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "selected_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "selected_question": "After a provider may have committed but its acknowledgement is lost, can Frank preserve exactly one external effect while separating new execution authority from read-only outcome reconciliation, and is the historical downstream_retry_safe boolean strong enough to encode provider retry semantics?",
+  "hypothesis": "Provider retry safety requires a typed, provenance-bound provider idempotency contract: stable provider request identity + exact semantic request fingerprint + scope/retention + mismatch behavior + duplicate-result semantics + read-only reconciliation. A bare downstream_retry_safe boolean is insufficient.",
+  "strongest_counterhypothesis": "The existing stable idempotency key plus downstream_retry_safe boolean and V14 reconciliation are sufficient; additional typed provider semantics add complexity without changing safety.",
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Google AIP-155 Request identification",
+      "url": "https://google.aip.dev/155",
+      "relevant_delta": "Request identity is the mechanism for retry idempotency; duplicate detection should suppress repeated effects and return the prior/current equivalent successful result; honoring timeframe is provider-defined."
+    },
+    {
+      "source": "Stripe API idempotent requests and error handling",
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "relevant_delta": "Stable keys replay stored results, parameter drift under the same key is rejected, retention is finite, and transport/server failures can leave outcome indeterminate and require outcome observation."
+    },
+    {
+      "source": "Amazon EC2 API idempotency",
+      "url": "https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html",
+      "relevant_delta": "Client-token idempotency is parameter- and scope-sensitive; same token with changed parameters fails IdempotentParameterMismatch."
+    },
+    {
+      "source": "Lee et al. 2015, Implementing Linearizability at Large Scale and Low Latency (RIFL)",
+      "doi": "10.1145/2815400.2815416",
+      "relevant_delta": "Exactly-once retry semantics require stable RPC identity and durable completion knowledge rather than retry intent alone."
+    }
+  ],
+  "coordination": {
+    "duplicate_check": "No current open PR found for provider contract/idempotency/reconciliation before branch creation.",
+    "parent_candidate": {
+      "pr": 250,
+      "head_branch": "chatgpt/go-effect-fence-v6-fresh-main-20260811",
+      "current_observed_head": "b677591f649dafe69fc8ba1aa4d92136f7d23b9d",
+      "role": "caller-bound exact V15/V16 B1/B2/B3 execution-generation authority candidate"
+    },
+    "new_candidate": {
+      "pr": 254,
+      "branch": "chatgpt/go-provider-reconciliation-contract-20260811",
+      "head_at_first_target_pass": "15d3bfae3afa645027316c660ad2651e543913df",
+      "stacked_on": "PR 250",
+      "status": "DRAFT_CANDIDATE_NOT_PROMOTED"
+    }
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_AS_CANDIDATE_NOT_PROMOTED",
+    "name": "TYPED_PROVIDER_IDEMPOTENCY_AND_RECONCILIATION_CONTRACT",
+    "files": [
+      "runtime/state/provider_idempotency_contract.py",
+      "tests/frank_effect_provider_reconciliation_oob.py",
+      ".github/workflows/frank-provider-reconciliation-contract-vps.yml"
+    ],
+    "rules": [
+      "Effect execution still requires the exact live caller-bound execution-generation fence; provider idempotency never mints effect authority.",
+      "Provider retry identity binds a stable idempotency key to one exact semantic request fingerprint plus provider/operation/scope and an explicit validity window.",
+      "Same key with different semantic request fingerprint is fail-closed.",
+      "A timeout/connection loss after B3 is OUTCOME_UNKNOWN unless independent provider evidence resolves it.",
+      "Read-only provider reconciliation is evidence, not a new effect; it therefore does not require the old ExecutionGenerationFence.",
+      "Generation turnover does not transfer uncertain-effect retry authority to a successor; successor may reconcile evidence but may not adopt the old effect execution."
+    ],
+    "rollback": "Drop the three additive candidate files/PR; parent #250 remains unchanged."
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "experiment": "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT",
+    "design": "A physically separate disposable SQLite provider ledger durably commits exactly once under a stable idempotency key and then raises TimeoutError before Frank receives the acknowledgement. Frank must persist OUTCOME_UNKNOWN; after A->B execution-generation turnover B must be fenced from retry/adoption; a read-only lookup by key+request fingerprint must reconcile the existing provider result without a second write.",
+    "classification": "SYNTHETIC_PROVIDER_CAUSAL_DISCRIMINATOR",
+    "external_network_used": false,
+    "external_provider_used": false,
+    "canonical_frank_state_mutated": false
+  },
+  "target_execution": {
+    "workflow_run_id": 31418397078,
+    "job_id": 93552879117,
+    "tested_pr_merge_sha": "ad1f15e5f96e6c4eaa2e6eaa3d612a48828210b8",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "status": "PASS",
+    "artifact_id": 9074364789,
+    "artifact_sha256": "b67066a7561b9f7b8911d85257bf8096dc0cb0fd4bfcce104af91650623c2d25",
+    "parent_normal_matrix": {
+      "status": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+      "blob": "f584a9c58545fc9d9af21b8fbaaf1b3560913cdc",
+      "current_parent_head_blob_match_verified": true,
+      "same_epoch_v16_rebind": "FENCED_ZERO_STATE_MUTATION",
+      "uncertain_retry_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+      "outcome_reconciliation_after_turnover": "PASS",
+      "immutable_binding_update": "BLOCKED",
+      "immutable_binding_delete": "BLOCKED",
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0
+    },
+    "oob_result": {
+      "status": "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB",
+      "provider_commits_after_timeout": 1,
+      "provider_rows_after_reconciliation": 1,
+      "frank_state_after_timeout": "OUTCOME_UNKNOWN",
+      "successor_retry": "FENCED_ZERO_STATE_MUTATION",
+      "same_key_different_intent": "PROVIDER_IDEMPOTENCY_REQUEST_FINGERPRINT_MISMATCH",
+      "reconciliation_without_execution_fence": true,
+      "final_effect_state": "OUTCOME_SUCCEEDED",
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0
+    }
+  },
+  "adjudication": {
+    "hypothesis": "SUPPORTED_AS_MECHANISM_CANDIDATE",
+    "counterhypothesis": "REFUTED_FOR_THE_ACK_BLACKHOLE_CLASS: a boolean does not encode the provider-specific identity/fingerprint/scope/retention/mismatch/replay contract needed to justify retry decisions.",
+    "not_promoted_because": [
+      "The provider was synthetic; F-V01-09 still requires a real provider timeout-after-acceptance/reconciliation receipt.",
+      "The historical downstream_retry_safe boolean has not yet been replaced in canonical schema/ClayCode.",
+      "Non-bypassable ordinary effect routing/lowering and exact current compiler/lowering evidence remain separate gates.",
+      "Verified provider outcome -> provenance-bound re-entry -> DONE/terminal receipt remains open.",
+      "Recovery generation/snapshot rollback remains an orthogonal open safety boundary."
+    ]
+  },
+  "work_impact": {
+    "F-V01-09-EFFECT-AUTHORITY": "Adds target-VPS supported synthetic mechanism evidence for the currently OPEN real_provider_unknown_outcome_reconciliation subcheck; status remains OPEN until real-provider evidence and canonical integration exist.",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "Preserves the distinction between effect authority and post-failure evidence/reconciliation across generation turnover."
+  },
+  "training_authorized": false,
+  "frank_self_harness_authority": "PROPOSAL_ONLY",
+  "next_falsifiers": [
+    "Execute the same timeout-after-provider-acceptance class against one real reversible/idempotent provider sandbox or equivalent officially supported test endpoint and prove provider-side exactly-once identity plus read-only reconciliation.",
+    "Replace or shadow the historical downstream_retry_safe boolean with a ClayCode-typed provider contract and run differential compatibility tests.",
+    "Bind the provider contract through exact current ClayCode frontend -> TypedIR -> type/effect -> compiler/lowering and ordinary non-bypassable effect route.",
+    "Close verified provider outcome -> provenance-bound re-entry -> DONE/terminal receipt."
+  ]
+}

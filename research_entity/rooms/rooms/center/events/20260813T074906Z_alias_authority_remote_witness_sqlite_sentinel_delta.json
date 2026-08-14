@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0",
+  "event_id": "clay-live-20260813T074906Z-alias-authority-remote-witness-sqlite-sentinel",
+  "kind": "LIVE_RESEARCH_FUSION_DELTA",
+  "observed_at_utc": "2026-08-13T07:49:06Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "training_authorized": false
+  },
+  "comparison_cut": {
+    "previous_research_head": "b2154e7be21c62ec4d09423bbb4911ec0cd86955",
+    "previous_target_head": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+    "research_head_observed": "30df46b46df34d3583373d6ae384a30cf23bbb11",
+    "target_head_observed": "8e861c13dbf9215c3e21afa3372fb43ab35bd709"
+  },
+  "deduplication": {
+    "independent_replication_claimed": false,
+    "rules": [
+      "Corpus-authority merge and its Deep Integrity receipt are one target lineage.",
+      "Alias-totality merge, its exact-head lane and post-merge Deep Integrity receipt are one target lineage.",
+      "PR557 and stacked PR571 are a moving parent/child SQLite candidate lineage; superseded green compositions receive no current-parent credit.",
+      "PR570 remote witness runs share candidate bytes and project ancestry and are not independent replications.",
+      "Runner clay-* and digital-retina receipts are correlated target surfaces."
+      ,"Supervisor synchronization commit 30df46b46df34d3583373d6ae384a30cf23bbb11 repeats the alias-totality lineage and receives no independent credit."
+    ]
+  },
+  "substantive_deltas": [
+    {
+      "id": "D-CLAYCODE-CORPUS-AUTHORITY-MERGED-001",
+      "disposition": "MERGED_BOUNDED_AUTHORITY_SELECTION",
+      "evidence": {
+        "target_merge": "ecf81f398b91d83f5a43dab0c5b297e96e515260",
+        "authority": "40 explicitly authorized ClayCode sources bound to reference commit 5ec9955775d9bf142e327166990a2228d543c071",
+        "observed": "36 parsed, 4 rejected, 2 discovered-but-excluded, 0 unclassified; 429 unique and 464 occurrence unresolved Calls preserved",
+        "lane": "exact-head self-hosted corpus-authority gate plus post-merge Deep Integrity receipt dc31d365ee8699602f4dc2225fb767a0f12f9e2f"
+      },
+      "boundary": "Filesystem discovery and parser acceptance no longer silently define semantic corpus authority. This does not select new language semantics or close WP03-WP06."
+    },
+    {
+      "id": "D-CLAYCODE-ALIAS-TOTALITY-MERGED-002",
+      "disposition": "MERGED_HOST_STACK_DEPENDENCE_REMOVED_FOR_NONPARAMETRIC_ALIAS_CHAINS",
+      "evidence": {
+        "target_merge": "3a69b78a344791ef111558713e0696a7818adbc6",
+        "post_merge_receipt": "8e861c13dbf9215c3e21afa3372fb43ab35bd709",
+        "counterexample": "A finite acyclic 4096-alias chain crossed the Python recursion limit under recursive canonicalization.",
+        "repair": "Iterative non-parametric alias traversal; typed self/two-node/unused-boundary cycles deny fail-closed.",
+        "regression": "5/5 exact-head checks plus post-merge Deep Integrity PASS"
+      },
+      "boundary": "Only the observed alias-canonicalization surface is closed. Parameterized aliases and full WP04/runtime/compiler routes remain open."
+    },
+    {
+      "id": "D-SQLITE-EXACT-HEAD-AND-HISTORY-003",
+      "disposition": "EXACT_HEAD_INSTRUMENT_CLOSED_HISTORY_BOUNDARY_STILL_CANDIDATE",
+      "evidence": {
+        "pr557_head": "b722001510f63ee186ba2f9546dd5e944aa7546b",
+        "pr557_run": 31678451468,
+        "pr557_job": 94378180823,
+        "pr557_artifact": 9172500633,
+        "pr557_result": "9/9 exact-head SQLite 3.53.4 regression PASS on self-hosted clay-3",
+        "pr571_latest_tested_parent": "b722001510f63ee186ba2f9546dd5e944aa7546b",
+        "pr571_run": 31678643697,
+        "pr571_state": "SYNC_PENDING because parent advanced again to cf9227927f756b759c1294f647ca89c39378f20f"
+      },
+      "boundary": "Point-in-time DB/WAL identity does not prove prior exclusive bootstrap, no-move history, productive persistence, restart or recovery. Superseded greens do not promote."
+    },
+    {
+      "id": "D-REMOTE-LINEAGE-WITNESS-CANDIDATE-004",
+      "disposition": "TESTED_CANDIDATE_NOT_TRUST_ROOT",
+      "evidence": {
+        "target_pr": 570,
+        "candidate_head": "25c68f0ca1ec2c711362f96180d148fed0a2064b",
+        "push_run": 31678290512,
+        "pull_request_run": 31678341810,
+        "deep_integrity_run": 31678341888,
+        "tested_denials": [
+          "local rollback",
+          "local-ahead/stale-remote",
+          "sibling lineage mismatch",
+          "remote unavailable",
+          "freshness unproven",
+          "source substitution",
+          "artifact policy mismatch",
+          "witness corruption"
+        ]
+      },
+      "boundary": "The module consumes a truthful fresh authenticated remote observation but does not establish reader/provider trust, cache/replay resistance, provider anti-rollback, protected mutation credentials or crash-atomic local/remote advancement. PR remained draft and non-mergeable at receipt time."
+    },
+    {
+      "id": "D-SQLITE-PUBLISHED-PATCHSET-SENTINEL-005",
+      "disposition": "EXECUTED_FAIL_CLOSED_COUNTEREVIDENCE",
+      "evidence": {
+        "run": 31678678045,
+        "artifact": 9172558445,
+        "runner": "clay-3",
+        "source_version": "3.45.1-1ubuntu2.7",
+        "debian_tar_checksum_match": true,
+        "wal_source_touch_files": [],
+        "semantic_exit": 78
+      },
+      "boundary": "This executed red is an intentional observation sentinel: no explicit WAL-reset fix was found in the published patch series. It keeps F-V01-13 blocked and is not a ClayCode alias regression. Absence in the patch series does not prove absence from every possible binary build path."
+    }
+  ],
+  "preserved_negative_null_and_inconclusive": [
+    "Canonical remains RAE-8.8 revision 2; no canonical promotion occurred.",
+    "PR571 has no current-parent PASS after cf9227927f756b759c1294f647ca89c39378f20f advanced; two earlier green compositions are superseded.",
+    "Remote witness equality without independently proven freshness remains replayable and receives no trust-root credit.",
+    "The SQLite published-patchset red executed its semantic sentinel and must not be grouped with zero-step infrastructure reds.",
+    "No productive Hostinger Frank service, database persistence, restart, rollback, recovery, provider effect or final training occurred.",
+    "No new independent live GWT, emergence, hyperposition or ClayGraph causal observation was found."
+  ],
+  "testable_hypotheses": [
+    {
+      "id": "H-SEMANTIC-DOMAIN-TOTALITY-001",
+      "hypothesis": "Every finite valid ClayCode type structure must terminate independently of host interpreter stack limits; cycles must return a typed denial rather than host failure.",
+      "counterhypothesis": "Raising the Python recursion limit is an equivalent semantic repair.",
+      "test": "Generate bounded acyclic and cyclic alias graphs across depths, branching and parameter nesting on multiple Python recursion limits and compare ClayCode verdicts.",
+      "falsifier": "Any finite admitted graph changes verdict solely with host recursion limit, or any cycle escapes typed denial."
+    },
+    {
+      "id": "H-CORPUS-AUTHORITY-SEPARATION-001",
+      "hypothesis": "Semantic frontier measurements remain stable only when corpus membership is explicit, byte-bound and separate from discovery/parser acceptance.",
+      "counterhypothesis": "All discovered .clay files that parse can safely join the frontier automatically.",
+      "test": "Add parseable and unparseable unauthorized sources, rename authorized sources and mutate the reference tree; require separate discovered/authorized/excluded/unclassified accounting and fail-closed drift.",
+      "falsifier": "An unauthorized discovered file changes semantic frontier counts without an authority event, or an authorized byte disappears without gate failure."
+    },
+    {
+      "id": "H-REMOTE-WITNESS-TWO-PHASE-CLOSURE-001",
+      "hypothesis": "A rollback-resistant lineage witness requires authenticated live read, provider-side monotonicity and recoverable two-phase advancement between local checkpoint and remote witness.",
+      "counterhypothesis": "Signed equality between local and remote records is sufficient.",
+      "test": "Crash before/after each local and remote write; replay caches, roll back provider state, steal mutation credentials and partition reads; require deterministic recovery or fail-closed boot.",
+      "falsifier": "A stale mutually consistent pair boots, or a valid partial advance cannot recover without unsafe rollback."
+    },
+    {
+      "id": "H-EXECUTED-RED-TYPING-001",
+      "hypothesis": "Red checks require typed interpretation: zero-step red is instrument state, while an executed expected-denial sentinel is valid counterevidence about an open release obligation.",
+      "counterhypothesis": "All red conclusions are equivalent failures.",
+      "test": "Bind runner, steps, decision marker, expected exit and artifact payload; compare classification with the actual semantic contract.",
+      "falsifier": "A typed sentinel classification predicts the wrong gate state after replaying the same decision surface."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Host-Stack Semantic Leak",
+      "definition": "A domain-valid finite structure inherits failure from the implementation language's call-stack limit."
+    },
+    {
+      "name": "Authority-Discovery Membrane",
+      "definition": "Discovery reports candidates; a separately bound authority membrane decides which artifacts may alter semantic measurements."
+    },
+    {
+      "name": "Witness Eclipse",
+      "definition": "A stale local checkpoint and stale cached remote witness agree perfectly while jointly hiding a newer lineage head."
+    },
+    {
+      "name": "Red Verdict Type System",
+      "definition": "Red outcomes are partitioned into no-execution instrument state, unexpected executed failure and expected fail-closed observation sentinel."
+    },
+    {
+      "name": "Moving-Parent Green Mirage",
+      "label": "abgefahren / observed",
+      "definition": "A stacked candidate repeatedly turns green on exact compositions that become obsolete before the parent settles, creating an apparent stream of current passes without a current-parent receipt."
+    }
+  ],
+  "routing": [
+    {
+      "consumers": ["claycode", "harness", "frank"],
+      "priority": "HIGH",
+      "impulse": "Property-test semantic domain totality across deep/branching/parameterized aliases and every recursive canonicalizer; vary host recursion limits and require invariant ClayCode verdicts."
+    },
+    {
+      "consumers": ["claycode", "clayresearch", "unifieddb"],
+      "priority": "HIGH",
+      "impulse": "Make authority manifests append-only/provenance-bound and report discovery, authorization, exclusion and unclassified states separately; never promote parser success to corpus authority."
+    },
+    {
+      "consumers": ["unifieddb", "claygraph", "frank", "recovery"],
+      "priority": "HIGH",
+      "impulse": "Compose remote witness with local lineage and trusted artifact identity; execute crash matrices around both writes plus cache replay/provider rollback before any F-V01-01/F-V01-13 credit."
+    },
+    {
+      "consumers": ["gwt", "emergenz", "hyperposition", "harness"],
+      "priority": "MEDIUM",
+      "impulse": "Adopt the Red Verdict Type System for lesions, broadcasts and re-entry tests: require executed decision depth and preserve expected-denial counterevidence separately from zero-step artifacts."
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://docs.python.org/3.12/library/sys.html",
+      "use": "Python's recursion limit is a host-stack safety limit and is platform-dependent; domain semantics should not depend on raising it."
+    },
+    {
+      "url": "https://docs.sigstore.dev/cosign/verifying/verify/",
+      "use": "Signed blob verification can bind artifact digest and signer identity, but it is a separate artifact-attestation obligation from live state-lineage freshness."
+    },
+    {
+      "url": "https://docs.sigstore.dev/cosign/signing/signing_with_blobs/",
+      "use": "Cosign bundles contain signature, certificate and transparency-log inclusion proof; bundle existence alone does not provide provider-side state anti-rollback."
+    }
+  ],
+  "routing_receipt": {
+    "target": "research_entity/rooms/rooms/center/events",
+    "delivery": "repo-native provenance event",
+    "active_external_worker_execution_claimed": false
+  },
+  "nonclaims": {
+    "target_execution_by_this_organ": false,
+    "target_repository_mutated_by_this_event": false,
+    "harness_mutated": false,
+    "training_performed": false,
+    "canonical_promotion": false,
+    "whole_frank_v0_1_acceptance": false
+  }
+}

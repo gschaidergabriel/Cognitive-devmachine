@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1219p0700-chatgpt-secondary-wp02-identity-layer",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "status": "MATERIAL_TEST_OBLIGATION_DISTRIBUTED_NOT_PROMOTED",
+  "receipt": "research_entity/trigger_runs/go/go-20260810T1219p0700-chatgpt-secondary-wp02-identity-layer/FINAL_SYNTHESIS.json",
+  "affected_branches": {
+    "claycode": {
+      "delta": "Production frontend already separates grammar-independent semantic_hash from grammar-bound contract_hash, while standalone WP02 canonicalizer currently labels a grammar-bound hash semantic_hash and independently constructs Lark. Add explicit cross-layer parity after the selected grammar lane stabilizes.",
+      "status": "TEST_OBLIGATION"
+    },
+    "unifieddb": {
+      "delta": "Trace every persisted syntax/semantic/contract hash consumer in cache identity, replay equality, deduplication, provenance and promotion before any hash rename or migration.",
+      "status": "TRACE_OBLIGATION"
+    },
+    "harness": {
+      "delta": "Parser/grammar contract drift must remain provenance/version drift and must not be interpreted as a Frank cognitive semantic delta without a semantic/effect differential.",
+      "status": "INVARIANT"
+    }
+  },
+  "counterevidence_preserved": [
+    "The bounded experiment executed extracted hash formulas only; no Lark parse was executed.",
+    "Debian shadow evidence is not Ubuntu or Andreas-target acceptance evidence.",
+    "Downstream harm from the identity-layer divergence is not yet established.",
+    "The open optional-placeholder repair PR remains candidate-only because its CI execution was blocked before visible steps and direct merge was not executed."
+  ],
+  "next_falsifier": "Current exact checkout: one shared production parser constructor; parse admitted G9+Dialect through both identity paths; compare semantic identity separately from grammar-bound contract identity; then trace all persisted consumers.",
+  "canonical_promotion": "NONE",
+  "authority_invariant": "model output != execution authority"
+}

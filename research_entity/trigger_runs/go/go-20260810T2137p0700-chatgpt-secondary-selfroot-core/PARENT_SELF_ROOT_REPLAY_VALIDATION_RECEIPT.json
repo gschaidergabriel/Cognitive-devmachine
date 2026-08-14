@@ -1,0 +1,51 @@
+{
+  "schema_version":"1.0",
+  "run_id":"go-20260810T2137p0700-chatgpt-secondary-selfroot-core",
+  "receipt_id":"parent-pr124-self-root-replay-validation-20260810",
+  "created_at":"2026-08-10T22:52:00+07:00",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","identity":"RESEARCH_ENTITY_TEMPORARY_WORKER"},
+  "target_repository":"gschaidergabriel/Dr.-Unterweger",
+  "parent_pr":124,
+  "parent_head_sha":"568db24c979b49d8d69e850bda18b30ac716c4b8",
+  "tested_pr_merge_sha":"16f0e8c65d4054641b344850654b3aad03cb26d1",
+  "github_actions":{
+    "run_id":31405499909,
+    "job_id":93510681702,
+    "workflow":"GO self.root current-main validation",
+    "conclusion":"success",
+    "runner_name":"clay",
+    "runner_host":"digital-retina",
+    "runner_os":"Linux",
+    "runner_arch":"X64",
+    "kernel":"Linux 6.8.0-117-generic x86_64",
+    "python":"3.12.3",
+    "git":"2.43.0",
+    "artifact_id":9069522370,
+    "artifact_digest":"sha256:705ff0ae82adb7ac309439ba6d1921e171d50ffc7da094f21c8c19a42ecd81b7",
+    "artifact_size_bytes":5120
+  },
+  "evidence":{
+    "owner_fixed_identity_conformance":"PASS",
+    "metamorphic_contamination":{"status":"PASS","detected":12,"total":12,"sensitivity":1.0,"false_negatives":[]},
+    "replay_materializer":{"status":"PASS","entity_id":"self.root","human_surface_name":"Frank","external_human_name":"Dr. Andreas Unterweger","materializer":"repo_semantic_materializer.v2.1","semantic_epoch":5,"transactions_replayed":5,"legacy_transactions_preserved":2,"identity_contract_hash":"88a5181904ae4a1f3d75d238d889c011eb72930baf31f7b2d4c6c6aa5c2b9a32","public_materializer_rebuild_bound":true,"public_state_runtime_entrypoint_bound":true},
+    "binary_digest":{"status":"NEXT_FALSIFIER_NOT_YET_MEASURED","verified":false},
+    "go_oob_parent_experiment":"SUPPORTED_WITH_EXPANDED_CLAY_AND_REPLAY_BOUNDARY"
+  },
+  "negative_history":{
+    "prior_parent_run_31403308924":"FAILED_TEST_SCHEMA_MISMATCH",
+    "cause":"tests/self_root_materializer_identity_regression.py queried nonexistent entities.display_name",
+    "repair":"query actual entities.label column",
+    "interpretation":"test defect repaired; not evidence against self.root semantics"
+  },
+  "orthogonal_blocker":{
+    "frank_deep_integrity":"still separately failing repo_static_integrity executescript policy",
+    "identity_files_newly_implicated":0,
+    "lane":"separate worker / do not duplicate"
+  },
+  "promotion_interpretation":{
+    "supported":"Current owner-fixed self.root source + ClayCode boundary + repo replay/materializer/public runtime indirection are consistent on the accepted self-hosted Ubuntu PR merge revision.",
+    "not_supported":["real final binary digest","cryptographically verified trusted builder provenance","exclusive production instance lease","restart/stale-clone final continuation","whole Frank v0.1 acceptance"],
+    "next_hard_falsifier":"binary digest + verified builder/source provenance + admitted state lineage + exclusive instance/lease + restart/stale-clone discrimination"
+  },
+  "research_write_result":"COMMITTED"
+}

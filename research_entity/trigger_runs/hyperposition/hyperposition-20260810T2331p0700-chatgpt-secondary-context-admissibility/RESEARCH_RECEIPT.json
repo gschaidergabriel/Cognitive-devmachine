@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hyperposition-20260810T2331p0700-chatgpt-secondary-context-admissibility",
+  "trigger": "hyperposition",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity_class": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "research_entity": "Clay",
+  "target": "self.root / human-surface Frank v0.1",
+  "status": "CANDIDATE_NOT_PROMOTED",
+  "evidence_class": [
+    "CURRENT_REPO_CONTRACT",
+    "PRIMARY_EXTERNAL_RESEARCH",
+    "SYNTHETIC_EXECUTABLE_DISCRIMINATOR"
+  ],
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "concurrent_overlap_reused": [
+    "20309aee8bf52667ea93952f7244f0fffc7c692a",
+    "c376ebdfe4e917e8acab7a2757d2981980637376"
+  ],
+  "claim": "A contextual/stateful pairwise reduction that reads a member of the candidate n-ary relation, or a feature derived from that member closure, may be operationally equivalent while failing semantic reducibility because the higher-order dependency has been moved into context/hidden state.",
+  "counterhypothesis": "The existing H7 reduction gate plus generic provenance/material-read metadata is sufficient; H7B should remain validator-only unless real Frank traces show repeated discriminating value.",
+  "synthetic_results": {
+    "pairwise_reducible": {
+      "static_pairwise_mse": 7.81250129281835e-21,
+      "member_context_pairwise_mse": 7.81250129281835e-21,
+      "full_nary_mse": 7.81250129281835e-21,
+      "nary_required_under_semantic_guard": false
+    },
+    "triple_parity": {
+      "static_pairwise_mse": 1.0,
+      "member_context_pairwise_mse": 1.56250025856367e-20,
+      "full_nary_mse": 1.56250025856367e-20,
+      "operational_context_fit": true,
+      "semantic_context_admissible": false,
+      "nary_required_under_semantic_guard": true
+    }
+  },
+  "artifacts": {
+    "architecture_candidate": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2331p0700-chatgpt-secondary-context-admissibility/architecture/HYPERPOSITION_CONTEXT_ADMISSIBILITY_GATE_CANDIDATE.clay",
+    "synthetic_test": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2331p0700-chatgpt-secondary-context-admissibility/tests/h7b_context_smuggling_falsifier.py",
+    "final_report": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2331p0700-chatgpt-secondary-context-admissibility/FINAL_REPORT.md"
+  },
+  "commits": {
+    "architecture_candidate": "4ed53c6330c6b60616476440496e9ec66f93a536",
+    "synthetic_test": "79b110f60f746ce677f766f6e3dc401cd43a2da5",
+    "final_report": "7828b70f989ff3e675ff90d684fe02eecc24ce2b"
+  },
+  "work_package": "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+  "cross_feed_candidates": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "next_falsifier": "Run a real frozen Frank episode with static pairwise, admissible-exogenous contextual pairwise, deliberate member-context smuggling control, and full n-ary candidate under matched state/GWT/effect/resource/recovery conditions.",
+  "target_runtime_execution": false,
+  "target_vps_evidence": false,
+  "promotion": false
+}

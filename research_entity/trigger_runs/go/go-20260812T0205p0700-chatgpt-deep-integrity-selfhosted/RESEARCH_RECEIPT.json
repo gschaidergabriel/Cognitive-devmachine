@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:05:54+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-01-IDENTITY-SERVER-BINARY"
+  ],
+  "fresh_state": {
+    "research_main_seen_before_write": "51210d8f33c2238a4afda8b0940a51b893929046",
+    "frank_main_base_for_repair": "beb895b951826f28cd0c38baba3565e7dd976fda",
+    "overlap_search": "no open PR matching deep-integrity self-hosted billing repair",
+    "training_authorized": false
+  },
+  "grf": {
+    "observed_anchors": [
+      "Frank Deep Integrity run 31525549588 on main@81ec1c571e231cfe90c4a4343150a4f4b7e99ec8 concluded FAILURE before any job step executed.",
+      "Check annotation states the hosted ubuntu-latest job did not start because account payments failed or the spending limit must be increased; this is infrastructure/billing evidence, not semantic test failure.",
+      "The repository has an active self-hosted Linux/X64 lane used by current Frank target work.",
+      "Current main Deep Integrity depends on ubuntu-latest plus setup-python 3.11, so the billing state suppresses the entire integrity suite."
+    ],
+    "generated_reality": "Move Deep Integrity onto the existing self-hosted Linux/X64 lane, fence fork PRs, pin checkout, and execute with the target lane's absolute /usr/bin/python3 so billing cannot silently remove executable integrity coverage.",
+    "strongest_counter_reality": "The suite may have an undeclared Python-3.11/toolcache dependency or self-hosted-environment dependency; moving it can reveal genuine compatibility failures. A persistent runner would also be unsafe for untrusted fork PR code without an explicit trust fence.",
+    "discriminator": "Execute the unchanged semantic test inventory through the repaired workflow on a same-repository PR and inspect the exact self-hosted result; do not infer PASS from queue/start state.",
+    "outcome": "IMPLEMENT_REPAIR_AS_DRAFT_AND_KEEP_TEST_RESULT_UNKNOWN_UNTIL_EXECUTION",
+    "confidence": "HIGH_FOR_BILLING_ROOT_CAUSE; HIGH_FOR_SECURITY_NEED_TO_FENCE_FORKS; UNKNOWN_FOR_SUITE_RESULT_UNTIL_RUN_COMPLETES"
+  },
+  "implementation_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/deep-integrity-selfhosted-billing-fence-20260812",
+    "commit": "8941abbb7702b131756e74cca4093f52ceff648a",
+    "pull_request": 427,
+    "pull_request_state": "OPEN_DRAFT",
+    "base": "beb895b951826f28cd0c38baba3565e7dd976fda",
+    "changed_file": ".github/workflows/frank-deep-integrity.yml",
+    "changes": [
+      "runs-on changed from ubuntu-latest to [self-hosted, Linux, X64]",
+      "fork pull requests are excluded from the persistent self-hosted runner",
+      "contents permission is read-only",
+      "actions/checkout is pinned to 11d5960a326750d5838078e36cf38b85af677262 with clean checkout and persist-credentials=false",
+      "target SHA and runtime metadata are captured before tests",
+      "setup-python hosted dependency removed; all tests use /usr/bin/python3",
+      "existing semantic integrity test inventory and ten-minute timeout preserved"
+    ],
+    "effect_authority": "NONE",
+    "harness_authority_changed": false,
+    "canonical_frank_state_mutated": false,
+    "release_promotion": false
+  },
+  "execution_state": {
+    "workflow_run_id": 31526032869,
+    "job_id": 93894456895,
+    "status_at_receipt": "QUEUED",
+    "conclusion_at_receipt": null,
+    "interpretation": "Execution has been scheduled on the self-hosted lane. Queue state proves the hosted billing blocker has been bypassed for dispatch only; it does not prove any integrity test passed."
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "id": "ANCHOR_INVERSION_REPLAY",
+    "scope": "LOCAL_REPLAY_OF_PRESERVED_ACCEPTED-LANE_V4_EVIDENCE",
+    "intervention": "Replay the preserved two-runtime V4 counterworld and invert the caller-selected trust root from manifest/build A to manifest/build B while keeping each root internally consistent.",
+    "baseline": "A fixed manifest-A trust root does not authorize manifest B.",
+    "observed": "Both historical V4 admissions were PASS when the caller selected each matching root; A and B had distinct library and manifest hashes, different compile options, and the same upstream sqlite_source_id.",
+    "result": "RETAIN_CALLER_SELECTED_TRUST_ROOT_GAP_FOR_V4; SUPERSEDED_ARCHITECTURALLY_BY_CURRENT_V5_OS-OWNED-ANCHOR_BASELINE",
+    "production_claim": false,
+    "rollback": "Temporary replay extraction removed; no production or canonical runtime state mutated."
+  },
+  "research_fusion": {
+    "sqlite": "Current V5 work correctly treats caller-selected V4 manifest identity as insufficient authority and fails closed when the independent OS anchor is absent. Official SQLite evidence keeps 3.45.1 inside the documented WAL-reset affected range unless a backport is proven, while 3.53.4 is above the fixed floor.",
+    "ci": "A workflow conclusion of FAILURE with zero executed steps and a billing annotation must remain typed as infrastructure-blocked, not semantic FAIL. Conversely, dispatching to self-hosted is not semantic PASS until the suite executes.",
+    "next_falsifier": "Read run 31526032869 when executable capacity reaches it. If it fails, distinguish target-runtime incompatibility from repository defects. If it passes, retain PR as candidate and still require review before merge; separately continue F-V01-01 trusted builder/unique lineage and F-V01-13 V5 provisioning/positive admission blockers."
+  },
+  "release_adjudication": {
+    "F-V01-13": "IN_PROGRESS_RELEASE_BLOCKING",
+    "F-V01-01": "IN_PROGRESS_DEPENDENCY",
+    "deep_integrity_repair": "DRAFT_CANDIDATE_EXECUTION_QUEUED",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "training": "NOT_AUTHORIZED_NOT_STARTED"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2336p0700-chatgpt-secondary-task-switch-consent-v3",
+  "trigger": "go",
+  "created_at_local": "2026-08-11T23:36:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "research_center_parent_observed": "989c8323d552ba20044fc39b0551c0414565a2e7",
+  "component": "F-V01-08-TOKEN-API-CLIENTS / unfinished-task switch consent",
+  "owner_fixed_requirement": "An unfinished current user task may not be silently abandoned for unrelated work; unrelated task switching requires explicit current-user consent and a verified task transition.",
+  "baseline": {
+    "current_v16_classification": "SUPPORTED_CURRENT_V16_CANNOT_DISTINGUISH_UNRELATED_FOLLOWUP_TASK",
+    "mechanism": "same-holder same-session follow-up admission binds execution/request continuity but not unrelated task identity/switch consent",
+    "current_task_projection_exists": true,
+    "current_task_identity_used_by_same_holder_ingress": false
+  },
+  "parallel_coordination": {
+    "existing_lane_found": 370,
+    "duplicate_implementation_aborted": true,
+    "role_taken": "ADVERSARIAL_REVIEW_THEN_FRESH_SUCCESSOR",
+    "single_macrocycle_oob_reused": "CONSENT_REPLAY_AFTER_TASK_ADVANCE"
+  },
+  "v1_target_evidence": {
+    "pr": 370,
+    "tested_head": "5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba",
+    "workflow_run": 31510821479,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "candidate_matrix": "PASS_TASK_SWITCH_CONSENT_V1_CANDIDATE",
+    "go_oob": "PASS_STALE_CONSENT_INVALIDATED",
+    "workflow_overall": "FAIL",
+    "workflow_failure_class": "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR",
+    "failing_source": "runtime/api/frank_task_switch_consent_v1_candidate.py",
+    "artifact_id": 9109154898,
+    "artifact_digest": "15796ae254ae83054334ec61a8bac3657f0c1d9ca148391a4da9b8acb3503c8f",
+    "interpretation": "mechanism tests passed on accepted target, but candidate is not promotable because runtime owns DDL"
+  },
+  "adversarial_falsification": {
+    "class": "NONCE_POSSESSION_IS_NOT_USER_CONSENT_AUTHORITY",
+    "problem": "V1 request returns challenge_id and raw consent_nonce to the same caller; V1 grant accepts that nonce as sufficient grant evidence with caller-presented snapshot. A buggy or overprivileged integration caller can request then self-grant without a separately authenticated user decision.",
+    "restart_variant": "Persisting GRANTED without durable identity of the independently verified user-decision receipt prevents a later consumer from distinguishing legitimate consent from legacy/self-granted state.",
+    "result": "V1_FRESHNESS_AND_ONE_SHOT_SUPPORTED_BUT_EXPLICIT_USER_CONSENT_AUTHORITY_NOT_SUPPORTED"
+  },
+  "superseded_local_successors": [
+    {
+      "pr": 375,
+      "disposition": "CLOSED_SUPERSEDED_STALE_PARENT"
+    },
+    {
+      "pr": 381,
+      "disposition": "CLOSED_SUPERSEDED_RUNTIME_DDL_ANCESTRY"
+    }
+  ],
+  "v3_candidate": {
+    "pr": 385,
+    "branch": "chatgpt/go-task-switch-consent-v3-main-20260811",
+    "base": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44",
+    "head_at_receipt": "4fd0febc5033a5ecaf8db36972c091ca3a5d4036",
+    "status": "TESTING",
+    "properties": [
+      "normal runtime opens only already-materialized schema and contains no DDL/executescript path",
+      "schema materialization is explicit Research-Entity/installer migrator authority",
+      "challenge nonce is anti-replay material only",
+      "grant requires external authenticated stable-principal ACCEPT_TASK_SWITCH receipt",
+      "decision receipt binds actor/session/client/execution/epoch/source task/state/revision/target/challenge",
+      "external verifier failure denies",
+      "verified decision evidence and GRANTED transition commit atomically in one BEGIN IMMEDIATE transaction",
+      "decision_receipt_id is UNIQUE and one challenge only",
+      "consume requires durable decision evidence and is one-shot under concurrent writers",
+      "plain INSERT collision handling cannot resurrect consumed authority state",
+      "lower task revisions and equivocal same-revision drift fail closed",
+      "task revision/state/execution drift invalidates pending/granted switch consent",
+      "no canonical task-state mutation and no execution/effect/truth/learning/Harness authority"
+    ],
+    "first_target_attempt": {
+      "run": 31512503473,
+      "classification": "PRE_EXECUTION_CHECKOUT_HARNESS_FAILURE",
+      "cause": "actions/checkout attempted local config cleanup after workspace deletion on self-hosted runner",
+      "candidate_code_executed": false
+    },
+    "checkout_repair": "isolated git init + authenticated fetch exact candidate SHA + detached checkout",
+    "current_target_run": 31512727612,
+    "current_target_run_state_at_receipt": "QUEUED",
+    "promotion": "NOT_ALLOWED_UNTIL_DEDICATED_TARGET_GATE_AND_REPO_STATIC_INTEGRITY_PASS"
+  },
+  "single_go_oob": {
+    "count": 1,
+    "name": "CONSENT_REPLAY_AFTER_TASK_ADVANCE",
+    "discriminator": "grant task A revision 9 -> task D, then authoritative task A advances to revision 10 before consume; stale grant must deny",
+    "no_second_oob_added": true
+  },
+  "external_primary_mechanism_evidence": [
+    {
+      "source": "https://sqlite.org/lang_transaction.html",
+      "finding": "BEGIN IMMEDIATE starts a write transaction immediately and serializes against another active writer"
+    },
+    {
+      "source": "https://sqlite.org/atomiccommit.html",
+      "finding": "changes in one SQLite transaction have all-or-nothing atomic commit semantics"
+    },
+    {
+      "source": "https://sqlite.org/lang_conflict.html",
+      "finding": "default uniqueness conflict is ABORT while REPLACE can delete the pre-existing conflicting row; authority IDs therefore use plain INSERT/fail-closed"
+    },
+    {
+      "source": "https://docs.python.org/3/library/asyncio-task.html",
+      "finding": "Task.cancel requests cancellation and does not itself prove terminal cancellation"
+    },
+    {
+      "source": "https://grpc.io/docs/guides/cancellation/",
+      "finding": "transport cancellation requires application coordination to stop local work"
+    },
+    {
+      "source": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+      "finding": "long-running work is separated from stateless request transport through explicit durable task semantics"
+    }
+  ],
+  "cross_branch_fusion": {
+    "stable_identity_source_candidate": 329,
+    "request_response_lineage": 377,
+    "usable_identity_shape": "producer-owned principal_id + stable session_ref + stable client_ref; concrete credential remains provenance",
+    "non_equivalence": "stable identity is not explicit user-decision authority",
+    "current_v16_credential_decorated_session_ref_is_not_sufficient_for_rotation-stable_consent": true
+  },
+  "counterhypotheses": [
+    "A valid bearer credential or same-session continuation could be treated as consent. Rejected: authentication/continuity does not encode the explicit decision to abandon/switch the unfinished task.",
+    "Nonce possession could stand in for consent. Refuted by same-caller request->grant path.",
+    "A two-commit verified-decision then GRANTED sequence is adequate. Weakened: it creates a crash provenance gap; V3 co-commits decision evidence and GRANTED.",
+    "Runtime-owned schema can be whitelisted because the candidate is small. Rejected: would weaken the repo-wide semantic/schema authority invariant instead of repairing the candidate.",
+    "Current V16 credential-decorated session identity can be reused as stable consent identity. Rejected for token-rotation robustness by #329/#377 lineage."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "delta": "Replace nonce-authority task-switch prototype with Clay-semantic producer-bound V3 guard plus explicit migrator; compose only with stable principal/session/client producer, explicit current-user decision producer, authoritative TaskSnapshot source, token ingress and canonical task transition/cancellation producer.",
+    "rollback": "Do not expose V3 in production; keep current behavior unchanged until all integration and target gates pass.",
+    "negative_results_preserved": true
+  },
+  "fresh_main_drift": {
+    "main_after_v3_branch": "5ec9955775d9bf142e327166990a2228d543c071",
+    "compare_from_v3_base": "5 commits ahead",
+    "overlap_with_v3_files": false,
+    "changed_area": "ClayCode constructor alias compatibility only",
+    "promotion_requirement": "fresh-current-main integration/revalidation remains required even if V3 head target gate passes"
+  },
+  "next": [
+    "Obtain dedicated accepted-target V3 result with candidate matrix plus hard repo_static_integrity gate.",
+    "If V3 fails, repair the smallest falsifier without adding a second GO OOB.",
+    "If V3 passes, revalidate against then-current main before any promotion.",
+    "Reuse stable identity from #329/#377 lineage rather than credential-decorated V16 identity.",
+    "Implement/identify a separate authenticated current-user decision producer bound to the exact V3 challenge.",
+    "Compose canonical task cancel/suspend/transition and token ingress only after producer boundaries are verified.",
+    "Preserve cancellation-request != terminal CANCELLED semantics.",
+    "Do not claim whole F-V01-08 or Frank v0.1 acceptance from this bounded candidate."
+  ],
+  "training_authorized": false,
+  "whole_frank_v0_1": "NOT_ACCEPTED"
+}

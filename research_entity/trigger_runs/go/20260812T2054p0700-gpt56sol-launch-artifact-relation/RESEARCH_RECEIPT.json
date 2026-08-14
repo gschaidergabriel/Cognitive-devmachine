@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2054p0700-gpt56sol-launch-artifact-relation",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:54:00+07:00",
+  "actor": {
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "d67dff9231fbc56070bef9f8c57d75faa8fca737",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target": {
+    "program": "FRANK_V0_1",
+    "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "53d0906e5e0d5493517393164854681c2db06854",
+    "candidate_pr": 528,
+    "candidate_head": "78d1534bccf4c5da954bb69bcee252ffcb6fd464",
+    "candidate_state": "OPEN_NON_DRAFT_BUT_STALE_NON_MERGEABLE_AT_REFRESH",
+    "training_authorized": false
+  },
+  "duplicate_avoidance": {
+    "checked_current_recent_prs": true,
+    "checked_research_repo_for_exact_experiment_name": true,
+    "exact_experiment_search_hits": 0,
+    "related_existing_receipt": "research_entity/trigger_runs/go/20260812T2050p0700-gpt56sol-sqlite-live-attestor-decoy/RESEARCH_RECEIPT.json",
+    "relation_to_existing": "ORTHOGONAL: existing receipt tests multiple SQLite mapping identities; this receipt tests whether a pinned launch artifact is semantically related to the observed launch at all."
+  },
+  "observed_reality": {
+    "current_main_delta": "Main advanced through #529 live SQLite in-place mutation fencing and a fresh deep-integrity receipt; productive Hostinger identity, productive persistence exercise, restart/recovery, rollback/downgrade/library-swap and semantic lineage remain open.",
+    "pr528_positive_scope": [
+      "exact target executable path",
+      "membership of expected ancestor executables in observed ancestry",
+      "LD_PRELOAD and LD_AUDIT absent",
+      "LD_LIBRARY_PATH equals mapped SQLite library directory",
+      "independently pinned root-owned non-group/world-writable launch artifact bytes with opened-inode stability"
+    ],
+    "pr528_explicit_nonclaim": "launch_contract_semantics_verified_by_this_tool=false"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "finding": "The WAL-reset corruption bug is fixed in 3.51.3 and later; the documented race requires WAL mode plus concurrent connections/write-or-checkpoint timing."
+    },
+    {
+      "source": "SQLite current release log",
+      "finding": "Current upstream release observed is 3.53.4 dated 2026-07-24 with source ID bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "grf": {
+    "anchor_R0": "PR #528 attests each supplied launch artifact independently but does not consume an explicit relation proving that the artifact participates in the observed process launch semantics.",
+    "generated_reality_R2": "A correctly pinned, trusted but launch-unrelated artifact could satisfy the artifact subpredicate while the observed process is launched through different configuration bytes.",
+    "strongest_counter_reality_R3": "The artifact list may be supplied only by a stronger upstream ProductStart identity contract, making this relation an integration responsibility rather than an attestor defect.",
+    "discriminator": "Toggle only an unconsumed launch-artifact semantic-reachability fact while keeping all fields consumed by the PR #528 predicate valid.",
+    "falsifier": "If PR #528 consumes or derives an exact relation from supplied artifact identity to observed cmdline/systemd/ProductStart semantics, treatment must deny."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "ORPHAN_LAUNCH_ARTIFACT_RELATION",
+    "scope": "Disposable semantic model of the exact consumed predicate classes visible in PR #528; no Frank/VPS/provider/Harness/canonical state mutation and no claim of executing PR code.",
+    "baseline": "All consumed predicates true; pinned artifact is semantically part of the observed launch.",
+    "treatment": "All consumed predicates remain true; only launch_artifact_is_semantically_reachable_from_observed_launch=false.",
+    "baseline_admitted": true,
+    "treatment_admitted": true,
+    "changed_field_consumed_by_candidate_predicate": false,
+    "outcome": "SUPPORTED_SCOPE_GAP",
+    "production_bypass_proven": false
+  },
+  "collapse": {
+    "pr528_as_narrow_positive_snapshot_instrument": "RETAIN",
+    "pr528_as_complete_launch_semantics_proof": "REJECT",
+    "need_new_parallel_patch_now": "REJECT",
+    "reason": "Concurrent ProductStart/cmdline/interpreter/lifecycle/lineage candidates already exist; another parallel wrapper would increase ancestry noise before adjudication.",
+    "promotion": "NONE"
+  },
+  "reentry": {
+    "next_high_information_step": "Adjudicate/recompose surviving ProductStart identity candidates onto fresh main, then bind the admitted ProductStart identity itself to the positive launch snapshot and live fixed SQLite receipt. The final release receipt must additionally exercise the productive persistence path and clean restart/recovery plus rollback/downgrade/library-swap controls.",
+    "merge_action_this_run": "NONE",
+    "product_code_mutated": false,
+    "canonical_frank_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority_changed": false
+  }
+}

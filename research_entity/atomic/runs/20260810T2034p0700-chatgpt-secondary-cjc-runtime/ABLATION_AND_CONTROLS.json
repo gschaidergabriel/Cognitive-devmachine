@@ -1,0 +1,26 @@
+{
+  "candidate": "ATOMIC-CANDIDATE-CJC-001",
+  "interpretation": "CJC adds a real discriminator relative to state-only CCF, but exhaustive replay remains simpler/faster at small N and conventional compiler commutativity remains unresolved.",
+  "results": {
+    "CURRENT_STATE_ONLY": {
+      "failure": "misses hidden masked-order class",
+      "primary_false_safe_count": 784,
+      "primary_false_safe_rate": 0.0392
+    },
+    "EXHAUSTIVE_COUNTERFACTUAL": {
+      "role": "exact reference",
+      "cost_shape": "2^N lesion contexts",
+      "small_context_advantage": true
+    },
+    "RW_CONFLICT": {
+      "role": "safe conservative baseline in generated class",
+      "false_conflicts": 1016,
+      "unsafe_commute": 0
+    },
+    "STALE_EPOCH": {"result":"PASS_FAIL_CLOSED"},
+    "OPAQUE_BOUNDARY": {"result":"PASS_FAIL_CLOSED"},
+    "DEGREE_TERM_OVERFLOW": {"result":"PASS_NOT_EXACT"},
+    "EXTERNAL_EFFECT": {"result":"ROUTE_TO_EFFECT_GATE_NO_AUTHORITY_MINT"}
+  },
+  "schema_version": "1.0"
+}

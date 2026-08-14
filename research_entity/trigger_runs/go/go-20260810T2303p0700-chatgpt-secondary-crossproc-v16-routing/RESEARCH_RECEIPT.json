@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2303p0700-chatgpt-secondary-crossproc-v16-routing",
+  "trigger": "go",
+  "status": "COMPLETED_WITH_ARCHITECTURE_DELTA_CANDIDATE",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_identity": ["self.root", "Frank"]
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "id": "FRANK_V0_1",
+    "native_target": "self.root",
+    "human_surface": "Frank",
+    "target_host": "accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "self_coordination": {
+    "duplicate_lanes_avoided": [
+      "PR 124 self.root identity/current-main conformance",
+      "PR 143 pre-emit generation fence",
+      "PR 156 effect-attempt current-presence fence"
+    ],
+    "replan_event": "Initial pre-V16 cross-process hypothesis branch became stale while queued because target main landed V16 ingress integration commit 306d4217e506289901d08196db73fc680c136075. Stale PR 170 was closed without merge and the same OOB experiment was rebuilt from current main."
+  },
+  "internal_evidence": {
+    "target_repository_connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "current_ingress_semantics_source": "runtime/api/frank_token_ingress_core.py",
+    "v16_continuity_source": "runtime/state/frank_execution_continuity.py",
+    "physical_gate_source": "runtime/state/frank_execution_gate.py",
+    "v16_ingress_integration_commit": "306d4217e506289901d08196db73fc680c136075",
+    "diagnostic_pr": 173,
+    "diagnostic_branch": "chatgpt/go-crossproc-v16-current-20260810",
+    "branch_head_sha": "0dca3645bb59c6302a7859284b6086021d65fc65",
+    "tested_pr_merge_sha": "aadd1f90cac77d120f02724d2337bb25aac61f0d",
+    "test_blob": "dcdac565561e770afb221806c59c5eac97ab6963"
+  },
+  "live_external_research": [
+    {
+      "source_class": "OFFICIAL_DOCS",
+      "source": "https://www.uvicorn.org/deployment/",
+      "retrieved_date": "2026-08-10",
+      "relevant_delta": "Uvicorn workers default to WEB_CONCURRENCY when set or otherwise 1; self-hosted deployment commonly uses nginx; UDS is supported."
+    },
+    {
+      "source_class": "OFFICIAL_DOCS",
+      "source": "https://www.uvicorn.org/settings/",
+      "retrieved_date": "2026-08-10",
+      "relevant_delta": "--workers is an explicit production setting and --uds is intended for reverse-proxy binding."
+    }
+  ],
+  "hypothesis": {
+    "id": "H-GO-CROSSPROC-ACTIVE-SESSION-001",
+    "statement": "After V16 ingress integration, exact duplicate requests can replay durably across processes, but a genuinely new request for the same active authenticated session cannot continue from a second process because active execution routing remains process-local and physical acquisition correctly fails BUSY."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-GO-CROSSPROC-ACTIVE-SESSION-001",
+    "statement": "No v0.1 correctness defect exists if the production Frank interaction transport is explicitly constrained to one interaction server process, so every new message for the active session reaches the process that owns the physical lease."
+  },
+  "out_of_box_experiment": {
+    "count_for_go": 1,
+    "name": "CROSS_PROCESS_SAME_SESSION_FORK",
+    "classification": "BOUNDED_REVERSIBLE_CAUSAL_ROUTING_FALSIFIER",
+    "baseline_ancestry": {
+      "stale_pre_v16_pr": 170,
+      "disposition": "CLOSED_STALE_NO_MERGE_AFTER_LIVE_REPLAN"
+    },
+    "current_execution": {
+      "workflow_run_id": 31406720906,
+      "target_job_id": 93514754288,
+      "runner_name": "clay",
+      "machine_name": "digital-retina",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "result": "PASS_CROSS_PROCESS_SAME_SESSION_FORK_OOB_V16",
+      "same_process_duplicate": "CONTINUE_IDEMPOTENT",
+      "cross_process_duplicate": "IDEMPOTENT_REPLAY_FROM_V16",
+      "cross_process_new_same_session_followup": "FRANK_BUSY",
+      "same_process_new_same_session_followup": "CONTINUE",
+      "raw_token_persisted": false,
+      "external_network_used": false,
+      "external_effect_performed": false,
+      "exit_status": 0,
+      "wall_seconds": 0.34,
+      "user_seconds": 0.25,
+      "system_seconds": 0.07,
+      "cpu_percent": 94,
+      "max_rss_kib": 26588,
+      "major_page_faults": 0,
+      "minor_page_faults": 10414,
+      "voluntary_context_switches": 114,
+      "involuntary_context_switches": 4,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 6592,
+      "artifact_id": 9069913568,
+      "artifact_sha256": "4a7049e0fdf949b7856ee482eb6a0a1f07cf2898117c644cd037b5d590cb0650"
+    },
+    "independent_replication": {
+      "lane": "github-hosted ubuntu-latest",
+      "result": "INFRA_FAILURE_UNKNOWN",
+      "reason": "Job completed failure before any recorded step/log; not classified as experiment failure."
+    }
+  },
+  "result": {
+    "hypothesis_status": "SUPPORTED_ON_TARGET_VPS_FOR_TESTED_REVISION",
+    "counterhypothesis_status": "SUPPORTED_AS_MINIMAL_V0_1_DEPLOYMENT_OPTION",
+    "key_finding": "V16 makes duplicate-request idempotency durable across processes but does not make a genuinely new same-session active follow-up cross-process routable.",
+    "not_claimed": [
+      "whole token API acceptance",
+      "production HTTP/TLS acceptance",
+      "multi-worker active-session support",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "architecture_delta_candidate": {
+    "status": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
+    "affected_work_packages": [
+      "F-V01-08-TOKEN-API-CLIENTS",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-16-END-TO-END-ACCEPTANCE"
+    ],
+    "change": "Until a measured cross-process active-execution router exists, production Frank v0.1 interaction transport must run exactly one interaction server process. If Uvicorn is selected, pin workers=1 explicitly rather than relying on ambient WEB_CONCURRENCY; nginx/UDS remains a compatible reverse-proxy topology candidate.",
+    "why": "This preserves current process-local active-execution continuation semantics while retaining V15/V16 and FrankExecutionGate as durable/physical authority, and avoids falsely returning FRANK_BUSY to a new message from the already-active session due only to process scheduling.",
+    "rollback": "Remove the single-process constraint only after a current-main multi-process discriminator shows a new same-session follow-up is routed to the existing execution without duplicate execution, lease bypass, authority drift, or stale-epoch write/effect admission.",
+    "test_obligations": [
+      "Production service configuration asserts exactly one Frank interaction worker/process.",
+      "Environment/service startup fails closed if a conflicting worker-count setting would create multiple interaction workers.",
+      "Actual HTTP/reverse-proxy E2E repeats same-session duplicate and new-followup cases.",
+      "Any future multi-process router must rerun CROSS_PROCESS_SAME_SESSION_FORK and stale-epoch/effect fencing tests."
+    ]
+  },
+  "negative_results": [
+    {
+      "id": "N-GO-PORTABLE-RUNNER-20260810",
+      "statement": "GitHub-hosted portable replication did not provide test evidence because the job failed before recorded steps/logs.",
+      "classification": "INFRA_FAILURE_UNKNOWN"
+    }
+  ],
+  "research_reentry": {
+    "durable_result_written": true,
+    "production_target_repo_mutated": false,
+    "diagnostic_branch_only": true,
+    "shared_relevance": "TOKEN_API_SECURITY_RECOVERY_E2E",
+    "next_falsifier": "Run the same routing matrix through the actual production HTTP/reverse-proxy transport with one explicitly pinned interaction process; if a multi-process transport is later proposed, require current-main cross-process new-followup continuation without creating a second execution."
+  }
+}

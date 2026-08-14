@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0220p0700-chatgpt-secondary-sqlite-anchor-schema",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T02:20:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "69a21725c13f994042abe937ed823e04a2d84e0a",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_after_repair": "a8be7badce573044587ef30bc747a053969d4c7d",
+    "accepted_target_runner": "clay / digital-retina / self-hosted Linux X64",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Accepted target productive Python/_sqlite3 path remained SQLite 3.45.1 in WAL-relevant release scope; a published Ubuntu patchset probe had just eliminated the unproven-backport escape for package 3.45.1-1ubuntu2.7. The read-only root-anchor verifier was then found to enforce filesystem trust metadata but not the already-defined V5 semantic anchor schema.",
+    "duplicate_avoidance": [
+      "Existing V5 guard already defines FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1 and validates manifest/runtime fields",
+      "Existing package-provenance and published-patchset workflows already cover backport discovery"
+    ]
+  },
+  "observed_reality": {
+    "productive_python": "/usr/bin/python3",
+    "productive_sqlite_version": "3.45.1",
+    "productive_sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "productive_libsqlite": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "productive_libsqlite_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "installed_package": "libsqlite3-0 3.45.1-1ubuntu2.7",
+    "root_anchor": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+    "root_anchor_present": false,
+    "sudo_nopasswd": false,
+    "published_patchset_result": "NO_EXPLICIT_WAL_RESET_FIX_IN_PUBLISHED_UBUNTU_PATCHSET",
+    "published_patchset_run": 31527930172
+  },
+  "hypothesis": "The read-only productive-path verifier could report OBSERVED_PRODUCTIVE_RUNTIME_MATCHES_ROOT_ANCHOR for a root-owned anchor with the correct runtime triplet even when the anchor protocol/manifest identity was invalid, because anchor_match compared only sqlite_version, sqlite_source_id and library_sha256.",
+  "strongest_counterhypothesis": "Filesystem root ownership plus the three exact runtime fields might be sufficient because protocol/manifest validation occurs elsewhere in the V5 launcher, making the read-only probe merely a narrower runtime observation rather than a trust decision.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "ANCHOR_SCHEMA_CONFUSION",
+    "class": "semantic trust-boundary substitution",
+    "reversible": true,
+    "disposable_state": true,
+    "product_bytes_modified": false,
+    "description": "Replicate the current three-field anchor_match logic locally with correct runtime triplet but protocol=WRONG_PROTOCOL and manifest_sha256=null.",
+    "result": "NEGATIVE_MECHANISM_REPRODUCED",
+    "observed_status_before_repair": "OBSERVED_PRODUCTIVE_RUNTIME_MATCHES_ROOT_ANCHOR",
+    "interpretation": "The read-only verifier's semantic anchor match was fail-open with respect to anchor schema identity."
+  },
+  "counterevidence_and_scope": {
+    "existing_v5_guard": "fixed_sqlite_runtime_guard_v5_candidate.py already validates protocol FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1, all five required non-empty string fields, SHA-256 syntax, and binds trusted manifest_sha256 to the actual manifest.",
+    "scope_limit": "The read-only workflow does not itself load the V5 manifest, so this repair validates schema identity and runtime triplet but does not claim full launcher/manifest execution-chain acceptance.",
+    "root_anchor_absence": "The accepted target still lacks the OS-owned anchor, so repaired target execution must remain blocked."
+  },
+  "repair": {
+    "commit": "a8be7badce573044587ef30bc747a053969d4c7d",
+    "file": ".github/workflows/frank-sqlite-productive-path-readonly-v1.yml",
+    "change": [
+      "Require protocol FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1",
+      "Require protocol, manifest_sha256, library_sha256, sqlite_version and sqlite_source_id as non-empty strings",
+      "Require manifest_sha256 and library_sha256 to be 64-hex SHA-256 text",
+      "Gate anchor_runtime_match on anchor_schema_trusted",
+      "Emit BLOCKED_PRODUCTION_TRUST_ANCHOR_SCHEMA_INVALID for schema failure",
+      "Expose anchor_schema_trusted and schema_errors in observation/annotation"
+    ],
+    "effect_authority_change": false,
+    "harness_self_authority_change": false,
+    "training_authorization_change": false
+  },
+  "accepted_target_test": {
+    "workflow": "frank-sqlite-productive-path-readonly-v1.yml",
+    "run": 31528284132,
+    "job": 93901853443,
+    "tested_sha": "a8be7badce573044587ef30bc747a053969d4c7d",
+    "script_executed": true,
+    "observation_artifact_id": 9115813481,
+    "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+    "exit_code": 78,
+    "anchor_schema_trusted": false,
+    "anchor_runtime_match": false,
+    "productive_sqlite_version": "3.45.1",
+    "interpretation": "Expected fail-closed target result. This validates that the repaired workflow executes on the accepted target; it does not exercise the schema-invalid branch because the root anchor is absent."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation, section 11",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "WAL-reset bug is documented through 3.51.2 and fixed in 3.51.3 and later; known backports listed there are 3.44.6 and 3.50.7."
+    },
+    {
+      "source": "SQLite release history",
+      "url": "https://sqlite.org/changes.html",
+      "finding": "3.51.3 release explicitly fixes the WAL-reset database corruption bug."
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_REPAIR_NOT_RELEASE_PROMOTION",
+    "affected": [
+      "F-V01-13 security/recovery/observability",
+      "productive SQLite runtime attestation",
+      "root trust-anchor semantic provenance"
+    ],
+    "supported_change": "A productive runtime trust-anchor observation must bind semantic anchor protocol/schema as well as root-owned filesystem metadata and exact runtime bytes; root ownership alone does not make arbitrary JSON a valid Frank SQLite anchor.",
+    "rollback": "Revert a8be7badce573044587ef30bc747a053969d4c7d if the existing V5 anchor contract is superseded; do not weaken fail-closed behavior.",
+    "promotion_blockers": [
+      "Accepted target still loads SQLite 3.45.1 and lacks the OS-owned anchor",
+      "Published Ubuntu 3.45.1-1ubuntu2.7 patchset contains no explicit WAL-reset fix evidence",
+      "Need fixed productive SQLite runtime or machine-checked proof that WAL-reset trigger topology is unreachable",
+      "Need root/admin provisioning of a valid anchor bound to the actual V5 manifest/runtime chain",
+      "Need exact crash/restart/replay and recovery acceptance after storage runtime is fixed"
+    ]
+  },
+  "nonclaims": [
+    "No whole Frank v0.1 acceptance",
+    "No claim that SQLite 3.45.1 is safe for Frank's production WAL topology",
+    "No root provisioning or package upgrade was performed",
+    "No production effect authority was exercised",
+    "No final training authorization"
+  ],
+  "next_frontier": [
+    "Upgrade/provision the accepted production runtime to a SQLite release containing the WAL-reset fix, or prove the trigger topology unreachable with machine-checked evidence",
+    "Provision FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1 under root with manifest/runtime digests and rerun V5 launcher plus read-only probe",
+    "Then execute exact-current storage crash/restart/replay and downgrade/library-swap rejection before F-V01-13 promotion"
+  ]
+}

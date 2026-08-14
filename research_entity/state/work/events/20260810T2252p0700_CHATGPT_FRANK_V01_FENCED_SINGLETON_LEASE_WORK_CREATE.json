@@ -1,0 +1,52 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:frank-v01-fenced-singleton-lease-v1:20260810T2252p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T15:52:00Z",
+  "payload": {
+    "work_id": "FRANK-V01-FENCED-SINGLETON-LEASE-V1",
+    "goal_ref": "FRANK_V0_1",
+    "origin_class": "RECOVERY_SAFETY_TEST",
+    "title": "Prove singleton BUSY/task lease with generation fencing",
+    "work_clay": {
+      "purpose": "Turn the owner-fixed single-spawn/BUSY rule into stale-holder-safe execution semantics by binding a monotonically advancing lease_generation/task_epoch to every consequential effect, durable task transition and terminal completion receipt.",
+      "affected_work_packages": ["F-V01-01-IDENTITY-SERVER-BINARY","F-V01-08-TOKEN-API-CLIENTS","F-V01-09-EFFECT-AUTHORITY","F-V01-10-PROACTIVE-AGENCY-WEB","F-V01-13-SECURITY-RECOVERY-OBSERVABILITY","F-V01-16-END-TO-END-ACCEPTANCE"],
+      "minimum_semantics": [
+        "at most one current lease generation may authorize the active task",
+        "lease transfer/interrupt increments or otherwise invalidates the prior generation",
+        "effect gateway checks request/session/task/lease generation before consequential attempt",
+        "durable state transition and terminal completion receipt bind the same current generation",
+        "late/stale holder request is rejected even if its token/session was previously valid",
+        "crash/restart reconstructs the current generation without resurrecting prior holder authority",
+        "duplicate/replayed completion cannot terminate or overwrite a newer task"
+      ],
+      "non_goals": ["token is not SELF identity","lease generation is not standalone effect authority","read-only observation is not blocked unless owner policy requires it"]
+    },
+    "reason_clay": {
+      "current_gap": "Fresh target-VPS self.root evidence explicitly lists exclusive instance lease as not yet proven while current owner semantics require singleton BUSY/handoff behavior.",
+      "strongest_conventional_baseline": "Chubby-style lock sequencer/generation checked by the protected service + current Frank session/task epochs + ordinary idempotency/request identity.",
+      "external_primary_evidence": ["Burrows, Chubby OSDI 2006 sequencer with lock generation and recipient validity check","RIFL-style request identity/completion-record family","IETF OAuth delegation/scope patterns remain credential layer, distinct from execution lease"],
+      "internal_evidence": ["go-20260810T2242p0700 self.root replay receipt: exclusive instance lease not proven","recent BUSY-to-interrupt and explicit interactive idle-handoff deltas","manual-hypofusion-20260810T2244p0700-chatgpt-secondary"]
+    },
+    "strongest_counterhypothesis": "Existing authenticated session/task epoch plus atomic server-side BUSY compare-and-set already prevents every realistic stale-holder effect; an added generation field provides no unique protection and only increases coordination state.",
+    "completion_clay": {
+      "baseline": "current BUSY/session/task mechanism without additional generation fencing",
+      "candidate": "generation-fenced singleton lease integrated at effect/persistence/completion boundaries",
+      "faults": ["late prior-holder packet after transfer","old holder wakes after timeout/restart","duplicate completion after newer task begins","interrupt races with effect proposal","effect accepted before crash but completion delayed","clock jump/timeout ambiguity","replayed API request with stale task generation","concurrent spawn/claim CAS"],
+      "required_metrics": ["stale_effect_accept_rate","duplicate_effect_rate","false_busy_reject_rate","handoff_latency_p50_p95_p99","crash_restart_recovery_success","lease_state_corruption_rate","CPU_RAM_storage_DB_overhead","effect_gateway_added_latency"],
+      "target_vps_receipt": "REQUIRED",
+      "crash_restart_receipt": "REQUIRED",
+      "current_source_binding": "REQUIRED",
+      "promotion": "Only if the candidate eliminates a stale-holder/ABA class not already eliminated by the simpler baseline without unacceptable latency/resource/recovery cost"
+    },
+    "executor_policy": {"avoid_duplicate_active_work": true,"refresh_current_main_and_active_workers_before_claim": true,"prefer": "worker touching token API/effect authority/recovery with accepted-target VPS capability","safe_write": "append-only evidence first; target code only under normal repo/PR authority"},
+    "dependencies": ["owner-fixed singleton/BUSY semantics remain current","effect authority remains externally gated","target VPS test lane remains available"],
+    "invalidators": ["new current-source receipt proves equivalent generation/fencing semantics and passes listed faults","owner changes singleton/BUSY contract","another active worker already claimed the exact same work revision"],
+    "base_priority": 0.96,
+    "expected_impact": 0.98,
+    "urgency": 0.93,
+    "information_gain": 0.94,
+    "status": "READY"
+  }
+}

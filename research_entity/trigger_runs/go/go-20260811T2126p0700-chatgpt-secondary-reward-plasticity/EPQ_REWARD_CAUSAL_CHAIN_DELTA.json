@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "HISTORICAL_CAUSAL_CHAIN_SOURCE_EVIDENCE",
+  "historical_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "source": "personality/e_pq.py",
+  "blob_sha": "db3077d34c1567603e255e0d1b90d2aaa583a6fd",
+  "observed_chain": {
+    "process_event": "refresh state -> derive event weight and quality-modulated learning rate -> calculate vector changes -> homeostatic/guardrail transforms -> apply persistent personality vectors + mood -> save state",
+    "dopamine_burst": {
+      "mood": "positive delta proportional to burst intensity",
+      "risk": "positive persistent delta",
+      "autonomy": "positive persistent delta",
+      "state_persisted": true
+    },
+    "dopamine_dip": {
+      "mood": "negative delta proportional to intensity",
+      "vigilance": "negative persistent delta",
+      "risk": "negative persistent delta",
+      "state_persisted": true
+    },
+    "anhedonia_onset": {
+      "mood": "negative delta proportional to intensity",
+      "empathy": "negative persistent delta",
+      "vigilance": "positive persistent delta",
+      "state_persisted": true
+    }
+  },
+  "interpretation": "At this exact source commit, NAcc-generated E-PQ reward events are capable of changing persistent personality state, not only transient display mood. Therefore any v0.1 reward successor must preserve useful motivation/personality adaptation while separately falsifying recursive self-reinforcement without independently verified outcomes.",
+  "candidate_implication": "The zero-material-learning rule for SELF_PROPOSAL/ACTIVITY_ONLY/UNVERIFIED in PR #332 is a safety repair hypothesis, not a license to delete historical intrinsic-motivation effects. Matched differential tests must compare exploration, goal persistence, recovery, personality stability and external task outcomes.",
+  "promotion": "NONE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

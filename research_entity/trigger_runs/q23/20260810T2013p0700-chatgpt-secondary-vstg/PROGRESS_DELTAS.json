@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "deltas": [
+    {
+      "delta_id": "Q23-PD-VSTG-01",
+      "cycle_id": "CYCLE-1-PROJECT-ECOLOGY",
+      "kind": "NEW_HYPOTHESIS",
+      "description": "Opened a nonduplicate Visual State Transition Graph lane from fresh 2026 GUI state-transition/state-machine/task-state research and grounded it as UnifiedDB canonical transition records plus derived ClayGraph topology rather than a second GUI semantic architecture.",
+      "evidence_refs": ["E-STP-2026","E-ACTIONENGINE-2026","E-EAM-2026","E-TSR-2026"],
+      "affected_hypotheses": ["Q23-H-VSTG-01"],
+      "affected_components": ["UnifiedDB","ClayGraph","DigitalRetina","Harness","FrankLoopCore"],
+      "information_gain": 0.91,
+      "uncertainty_reduction": 0.34,
+      "architecture_impact": 0.84
+    },
+    {
+      "delta_id": "Q23-PD-ALIAS-01",
+      "cycle_id": "CYCLE-2-FAILURE-ECOLOGY",
+      "kind": "NEW_COUNTERHYPOTHESIS",
+      "description": "Converted partial observability/hidden-operation blindness into an explicit VISUAL_ALIAS_CONFLICT falsifier and abstention gate instead of treating high visual similarity as sufficient state identity.",
+      "evidence_refs": ["E-AGMEM-2026","E-TSR-2026"],
+      "affected_hypotheses": ["Q23-H-VISUAL-ALIAS-GATE-01","Q23-H-VSTG-01"],
+      "affected_components": ["MVC","TaskState","EAP","GWT"],
+      "information_gain": 0.86,
+      "uncertainty_reduction": 0.29,
+      "architecture_impact": 0.79
+    },
+    {
+      "delta_id": "Q23-PD-TASKSTATE-01",
+      "cycle_id": "CYCLE-3-FRANK-GROUNDING",
+      "kind": "TEST_DELTA",
+      "description": "Added a concrete invariant that task/progress state cannot advance from visual similarity or retrieved memory; advancement requires verified effect/outcome identity. This maps external TSR evidence into Frank's existing authority/re-entry architecture without adding a parallel state model.",
+      "evidence_refs": ["E-TSR-2026","research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay"],
+      "affected_hypotheses": ["Q23-H-TASK-PERCEPT-SEPARATION-01"],
+      "affected_components": ["TaskState","PerceptualField","CausalCredit","Harness"],
+      "information_gain": 0.72,
+      "uncertainty_reduction": 0.22,
+      "architecture_impact": 0.61
+    },
+    {
+      "delta_id": "Q23-PD-CONCURRENCY-01",
+      "cycle_id": "CYCLE-4-LIVE-MESH-REFRESH",
+      "kind": "SOURCE_NETWORK_EXPANSION",
+      "description": "Detected and reread concurrent q23 runtime/feature-tap work at commit a34fa5e8b08c80e2e9e4b527384dc0bc6bd57236; kept VSTG lane non-overlapping and bound it to the feature-tap work as parent runtime evidence.",
+      "evidence_refs": ["commit:a34fa5e8b08c80e2e9e4b527384dc0bc6bd57236"],
+      "affected_hypotheses": ["Q23-H-VSTG-01"],
+      "affected_components": ["QwenRuntime","DigitalRetina","MVC","Harness"],
+      "information_gain": 0.67,
+      "uncertainty_reduction": 0.18,
+      "architecture_impact": 0.44
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0419p0700-gpt56sol-lineage-coherent-rollback-replication",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T04:19:37+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_anchor": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_state_before_write": {
+    "research_main_observed": "8047916b5cbadaf9bf3e52807963ecd76d712b18",
+    "implementation_main_observed": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+    "workspace_gate": "FRANK_V0_1",
+    "focus": [
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "training_authorized": false
+  },
+  "duplicate_avoidance": {
+    "sqlite_loader_path_work": "NOT_REPEATED",
+    "unifieddb_lease_commit_fence_pr_483": "NOT_DUPLICATED",
+    "selected_lineage_sibling_race_pr_267": "NOT_REEXECUTED",
+    "external_generation_floor_pr_240": "USED_AS_EXISTING_COUNTEREVIDENCE_BOUNDARY"
+  },
+  "observed_anchors": [
+    "Current acceptance contract requires restart/recovery/rollback/state-lineage continuity for the same accepted target identity.",
+    "PR #267 selected-head CAS candidate explicitly protects sibling selection only while its selected-head store survives and explicitly does not claim joint rollback safety.",
+    "PR #240 external generation floor explicitly protects DB snapshot rollback only if the anchor survives outside the protected snapshot root and explicitly does not claim whole-VM/filesystem rollback safety.",
+    "Current implementation main has SQLite 3.53.4 parity/runtime hardening work, but F-V01-13 remains open pending productive fixed-runtime/root-anchor/service plus recovery evidence."
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "finding": "WAL-reset corruption affects 3.7.0 through 3.51.2 and is fixed in 3.51.3 and later; current 3.53.4 is on the fixed side."
+    },
+    {
+      "source": "RFC 9162",
+      "finding": "Append-only consistency proofs detect rollback/fork relative to a previously known external tree head; an independently retained prior commitment is the critical comparison point."
+    }
+  ],
+  "grf": {
+    "generated_reality": "A locally persisted selected lineage head plus semantic-root match is sufficient to make rollback continuity self-verifying.",
+    "strongest_counter_reality": "If both the selected-head authority and protected semantic state are restored to one older mutually consistent snapshot, all in-band checks can remain green while temporal continuity has regressed.",
+    "falsifier": "Advance a synthetic selected-head/state pair from generation 0 to 1, then restore both authority and protected state from the same generation-0 snapshot and run only in-band integrity/head-state consistency checks.",
+    "predicted_if_generated_reality_right": "The coherent rollback is detected despite both restored artifacts agreeing.",
+    "predicted_if_counter_reality_right": "SQLite integrity and restored head-state consistency pass and rollback is invisible without a surviving external commitment.",
+    "outcome": "COUNTER_REALITY_REPLICATED",
+    "confidence": "HIGH for the mechanism property; this is synthetic local replication, not target-VPS production evidence"
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "COHERENT_SELECTED_HEAD_AND_STATE_ROLLBACK",
+    "class": "coherent rollback counterworld replication",
+    "scope": "local disposable Python/SQLite mechanism mirror",
+    "reversible": true,
+    "product_bytes_modified": false,
+    "canonical_frank_state_mutated": false,
+    "vps_state_mutated": false,
+    "external_effect": false,
+    "baseline": {
+      "gen0_integrity": "ok",
+      "gen0_head_state_match": true,
+      "gen1_integrity_after_advance": "ok",
+      "gen1_head_state_match": true
+    },
+    "intervention": "Restore both selected-head DB and protected semantic-state file from the same generation-0 snapshot after generation 1 had been reached.",
+    "result": {
+      "restored_integrity": "ok",
+      "restored_head_state_match": true,
+      "rollback_detected_by_in_band_checks": false
+    },
+    "interpretation": "Replication confirms the already documented PR #240/#267 limitation. It does not establish a new product defect beyond that declared boundary and does not justify a duplicate local counter patch."
+  },
+  "fusion": {
+    "selected_head_cas": "RETAIN for sibling/semantic-twin selection",
+    "external_generation_floor": "RETAIN for rollback of a narrower snapshot domain when its anchor survives",
+    "whole_failure_domain_invariant": "For any rollback domain claimed by v0.1, at least one comparison commitment used for admission must survive outside that same rollback domain; otherwise normal execution must fail closed or that rollback domain must be explicitly excluded by owner-fixed acceptance semantics.",
+    "append_only_witness_candidate": "GENERATED_DESIGN_OPTION_ONLY; an externally retained signed/append-only commitment can provide the prior head needed for rollback detection, but provider/trust/availability semantics require separate design and testing.",
+    "tpm_monotonic_candidate": "GENERATED_DESIGN_OPTION_ONLY; only usable if the accepted Hostinger target actually exposes a suitable non-rollback hardware/provider primitive, which is currently unverified.",
+    "code_patch": "NOT_JUSTIFIED_THIS_CYCLE",
+    "reason": "The counterworld replicates an already explicit boundary. The unresolved decision is the actual accepted target rollback failure domain and available out-of-domain monotonic authority, not another in-band counter."
+  },
+  "next_discriminating_falsifier": {
+    "priority": "HIGH",
+    "action": "Inventory the accepted Hostinger production/recovery boundary for an out-of-snapshot monotonic or externally witnessed commitment source, then compose it with selected semantic-lineage head admission and run rollback/restart/restore controls on the exact productive path.",
+    "required_controls": [
+      "normal restart with surviving witness",
+      "protected-state-only rollback rejected",
+      "selected-head-only rollback rejected",
+      "coherent in-VM rollback rejected by surviving out-of-domain witness",
+      "missing/unreachable witness fails closed or enters bounded recovery rather than silently self-healing",
+      "witness-ahead and local-state-ahead mismatches both fail closed",
+      "controlled restore mints/selects a new monotonic continuation above all admitted prior heads",
+      "same-source sibling semantic lineage remains uniquely selected"
+    ],
+    "promotion_boundary": "No whole F-V01-01/F-V01-13 PASS until the exact accepted target binary/state/service path demonstrates these properties with reproducible receipts."
+  },
+  "authority": {
+    "research_write_allowed": true,
+    "canonical_frank_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false,
+    "together_api_used": false
+  }
+}

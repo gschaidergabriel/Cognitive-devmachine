@@ -1,0 +1,72 @@
+name: ClayCode target receipt replay guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-target-receipt-replay-probe.yml'
+      - 'tools/claycode_target_receipt_replay_probe.py'
+      - 'tools/claycode_promote_release_workspace.py'
+      - 'tools/claycode_base_wp14_strict_audit.py'
+      - 'tools/test_claycode_wp14_release_freshness.py'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-target-receipt-replay-probe.yml'
+      - 'tools/claycode_target_receipt_replay_probe.py'
+      - 'tools/claycode_promote_release_workspace.py'
+      - 'tools/claycode_base_wp14_strict_audit.py'
+      - 'tools/test_claycode_wp14_release_freshness.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stale-target-receipt-negative-control:
+    runs-on: self-hosted
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify WP14 exact-checkout freshness primitive
+        run: python3 tools/test_claycode_wp14_release_freshness.py
+      - name: Execute replay matched control and persist receipt on push
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set +e
+          python3 tools/claycode_target_receipt_replay_probe.py > /tmp/clay_target_replay.json
+          rc=$?
+          set -e
+          cat /tmp/clay_target_replay.json
+          python3 - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path('/tmp/clay_target_replay.json')
+          d = json.loads(p.read_text())
+          d['github_run_id'] = os.environ['GITHUB_RUN_ID']
+          d['github_sha'] = os.environ['GITHUB_SHA']
+          d['runner_os'] = os.environ.get('RUNNER_OS', 'UNKNOWN')
+          d['truth_class'] = 'VERIFIED_SELF_HOSTED_UBUNTU_MATCHED_CONTROL'
+          out = pathlib.Path('research_entity/claycode/base/receipts') / f"STALE_TARGET_RECEIPT_REPLAY_{os.environ['GITHUB_RUN_ID']}.json"
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps(d, indent=2, sort_keys=True) + '\n')
+          print(out)
+          PY
+          git config user.name 'clay-self-hosted-replay-probe'
+          git config user.email 'clay-self-hosted-replay-probe@users.noreply.github.com'
+          git add research_entity/claycode/base/receipts/STALE_TARGET_RECEIPT_REPLAY_*.json
+          git commit -m "evidence(claycode): record stale target receipt replay ${GITHUB_RUN_ID}"
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then
+              exit "$rc"
+            fi
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 2
+      - name: Execute replay matched control on PR
+        if: github.event_name == 'pull_request'
+        run: python3 tools/claycode_target_receipt_replay_probe.py

@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "20260810T0759p0700-chatgpt-spm-s1-integrity-vps",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_subject": "UNIFIEDDB_SEGMENTED_PULSE_MAINTENANCE_S1",
+  "claim_class": "EQUIVALENT_MECHANISM_VPS_ENGINEERING_EVIDENCE",
+  "status": "SUPPORTED_WITH_OPEN_GATES",
+  "canonical_promotion": "NONE",
+  "source_branch": "chatgpt/spm-s1-integrity-tripwire-20260810",
+  "source_pr": 119,
+  "exact_clay_repo_workflow_run": {
+    "run_id": 31345383685,
+    "status_at_receipt": "QUEUED",
+    "evidence_class": "NOT_EXECUTED",
+    "note": "The self-hosted runner currently executes in gschaidergabriel/Dr.-Unterweger; the clay-global-research-entity exact-branch job has no matching executable runner receipt yet. Do not promote this receipt into an exact Clay SHA test claim."
+  },
+  "vps_equivalent_mechanism": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "probe_commit": "d3699759907da00142c14de9257cd82729fe0d5c",
+    "receipt_commit": "076d6630046fcc20287dc5ea51735d3db572f755",
+    "workflow_run_id": 31345756232,
+    "workflow_job_id": 93327253512,
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "journal_mode": "wal",
+    "fixture": {
+      "seeds": 1000,
+      "paths_per_seed": 8,
+      "reads_per_arm": 3000
+    },
+    "result": "PASS",
+    "falsifiers_passed": [
+      "bootstrap deep audit",
+      "same-transaction DIRTY plus rollback restores CLEAN and dependency",
+      "second-connection WAL committed reverse-dependency delete persists DIRTY",
+      "DIRTY model-facing read fails closed",
+      "full authoritative rebuild plus deep audit before CLEAN",
+      "post-publication path update tripwire",
+      "CURRENT generation-map update tripwire",
+      "OLD-side dependency key move away from CURRENT tripwire",
+      "final foreign_key_check zero violations",
+      "final quick_check ok"
+    ],
+    "read_latency_ms": {
+      "raw_p50": 0.0167955,
+      "raw_p95": 0.02943,
+      "guarded_p50": 0.021825,
+      "guarded_p95": 0.038379,
+      "guard_over_raw_p50_ratio": 1.2994552112172906,
+      "guard_p50_delta": 0.0050295
+    },
+    "full_repair_ms": 1289.507415,
+    "process": {
+      "wall_seconds": 1.60,
+      "user_seconds": 1.51,
+      "system_seconds": 0.06,
+      "cpu_percent": 98,
+      "max_rss_kib": 23680,
+      "major_page_faults": 0,
+      "minor_page_faults": 3302,
+      "voluntary_context_switches": 134,
+      "involuntary_context_switches": 4
+    }
+  },
+  "supported_finding": "A persistent SQLite AFTER-trigger health tripwire can close the SPM-S1 between-audit mutation window with fail-closed reads and rollback-coupled health state on the bounded Ubuntu VPS mechanism fixture. The measured hot-read cost is positive but small in absolute terms (+0.00503 ms median in this fixture), so safety is not free and must remain benchmarked.",
+  "negative_evidence": [
+    "Guarded p50 read latency was about 1.30x raw p50 in the VPS fixture; do not claim a latency win from the integrity guard.",
+    "Full recovery rebuild cost about 1289.5 ms on the bounded 1000-seed fixture; recovery cost is material.",
+    "SQLite 3.45.1 on the Hostinger runner is not in the documented fixed family for the 2026 WAL-reset corruption bug; serial two-connection PASS does not authorize concurrent writer+checkpoint WAL stress promotion.",
+    "The exact clay-global-research-entity branch has not executed on the self-hosted runner yet.",
+    "PR 119 was created against an older rapidly-moving main and must not be merged without fresh overlap/rebase and retest."
+  ],
+  "counterhypotheses": [
+    "Periodic deep audit alone may be sufficient if the probability/cost of between-audit mutation is lower than the extra read lookup cost.",
+    "A conventional database permission/immutable-table design may prevent the mutations more cheaply than a persistent DIRTY tripwire.",
+    "Real Frank dependency fan-out, WAL concurrency, checkpoint behavior and multi-process contention may change both failure rate and overhead."
+  ],
+  "external_primary_constraints": [
+    "SQLite documentation recommends AFTER rather than BEFORE triggers for mutation-sensitive behavior; candidate uses AFTER triggers.",
+    "Concurrent WAL stress must run only on a SQLite family containing the documented WAL-reset fix (>=3.51.3 or documented backports) or be explicitly classified as known-vulnerable-environment evidence."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "change": "Add an O(1) persistent CLEAN/DIRTY tripwire around CURRENT SPM-S1 projection mutations; DIRTY blocks reads and incremental maintenance, forces authoritative FULL_FALLBACK plus V16/SPM-S1 deep audit, quarantines corrupted rollback generations where applicable, then returns CLEAN.",
+    "rollback": "Remove/disable the additive integrity guard and continue using existing SPM-S1 deterministic deep audit; no StateLedger semantic truth is changed.",
+    "next_falsifiers": [
+      "execute exact current Clay integration SHA on an authorized Ubuntu runner",
+      "upgrade/isolate SQLite and run concurrent multi-process writer+checkpoint WAL stress",
+      "run real Frank snapshot dependency-fanout differential",
+      "measure guard lookup overhead under real query distribution and connection pooling",
+      "fresh-main overlap/rebase before any merge"
+    ]
+  },
+  "distribution": [
+    "unifieddb",
+    "claygraph",
+    "harness/recovery",
+    "runtime/continuity"
+  ]
+}

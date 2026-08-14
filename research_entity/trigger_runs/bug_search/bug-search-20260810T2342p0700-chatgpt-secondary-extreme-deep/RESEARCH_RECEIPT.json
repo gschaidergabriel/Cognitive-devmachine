@@ -1,0 +1,332 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "BUG-SEARCH-20260810T2342P0700-CHATGPT-SECONDARY-EXTREME-DEEP",
+  "timestamp_local": "2026-08-10T23:42:45+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "program": "FRANK_V0_1",
+  "native_target": "self.root",
+  "human_surface": "Frank",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "moving_head_observation": {
+    "note": "Repository advanced during the audit; findings are bound to exact fetched blobs/commits where cited below. Shared workspace files were intentionally not rewritten by this audit.",
+    "latest_product_commit_observed_before_write": "6681c0752af500732506ff0cd7b55d09ceb9bec2",
+    "latest_research_commit_observed_before_write": "dba25ad4d35abc4e84fb9591e79300fb83bff814"
+  },
+  "scope": [
+    "identity/self.root continuity",
+    "V14 effect lifecycle",
+    "V15 single-instance presence",
+    "V16 execution continuity/token ingress",
+    "V17/V17.1 causal effect completion",
+    "SQLite/WAL state safety",
+    "prompt/repo-truth gates",
+    "ClayCode effect/type-effect semantics",
+    "physical flock recovery",
+    "Hyperposition validation",
+    "visual/MVC epoch and spatial descriptor evidence"
+  ],
+  "summary": {
+    "release_recommendation": "BLOCK_FRANK_V0_1_ACCEPTANCE_WHILE_P0_P1_ITEMS_REMAIN_OPEN",
+    "dominant_failure_pattern": "identity/generation/attempt/provenance facts are often represented as ordinary values or hashes but are not closed into one immutable causal execution capability from ingress through provider precommit, verified outcome, re-entry and terminal DONE",
+    "no_external_effect_performed": true,
+    "frank_harness_mutated": false
+  },
+  "findings": [
+    {
+      "id": "BUG-EFFECT-GENERATION-FENCE",
+      "severity": "P0_P1",
+      "status": "CONFIRMED_CURRENT_MAIN_AND_REPRODUCED",
+      "claim": "V14 reservation/begin/retry is not bound to the caller-presented current V15/V16 execution generation; stale generations can reach COMMITTING.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py blob 76006f10397f9419d52f3d893514294e9edd6521",
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V14_EFFECT_LIFECYCLE.sql",
+        "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json"
+      ],
+      "repair_obligation": "immutable caller-bound execution-generation capability at reservation, begin/retry and provider-precommit; turnover routes uncertain attempts to reconciliation"
+    },
+    {
+      "id": "BUG-PRESENCE-EXPIRED-DIRECT-TAKEOVER",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "Expired BUSY/RECOVERING presence can be directly replaced by a new BUSY holder without a validated recovery receipt.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/state/frank_presence_runtime.py"],
+      "repair_obligation": "expired holder -> RECOVERING -> validated recovery proof -> new generation, never direct takeover"
+    },
+    {
+      "id": "BUG-RECOVERING-NOT-HARD-BARRIER",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "Same holder can renew RECOVERING and release RECOVERING directly to IDLE; recovery is therefore not a strict fail-closed phase.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/state/frank_presence_runtime.py"]
+    },
+    {
+      "id": "BUG-PRESENCE-EVENT-HASH-ALIAS",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN_WITH_DIAGNOSTIC_REPRODUCTION",
+      "claim": "V15 event hash omits operation identity; distinct operations with equal semantic projection and injected timestamp can collide against UNIQUE(event_hash).",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_presence_runtime.py",
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V15_SINGLE_INSTANCE_PRESENCE.sql"
+      ],
+      "repair_obligation": "include immutable operation/event identity or sequence in event hash domain"
+    },
+    {
+      "id": "BUG-IDLE-HANDOFF-ABA",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "confirm_idle_handoff binds only session_ref+client_ref and not released_lease_epoch, so stale confirmation can clear a newer handoff generation for the same holder.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_execution_continuity.py",
+        "gschaidergabriel/Dr.-Unterweger:runtime/api/frank_token_ingress_core.py blob 9e0c563206302d412d8d397283e542749cf54b93"
+      ]
+    },
+    {
+      "id": "BUG-REQUEST-IDEMPOTENCY-NO-PAYLOAD-BINDING",
+      "severity": "P1",
+      "status": "CONFIRMED_STRUCTURAL_GAP",
+      "claim": "V16 request_key_hash binds credential/session/client/request_id but no request payload/input digest; same request_id with changed semantic content is indistinguishable at admission.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_execution_continuity.py",
+        "gschaidergabriel/Dr.-Unterweger:runtime/api/frank_token_ingress_core.py"
+      ],
+      "counterhypothesis": "an outer HTTP/API layer may separately reject payload drift, but no such binding is present in the inspected durable admission core"
+    },
+    {
+      "id": "BUG-DURABLE-GHOST-REPLAY",
+      "severity": "P1",
+      "status": "CANDIDATE_NEEDS_CRASH_FALSIFIER",
+      "claim": "A prior V16 admission can cause HTTP 200 IDEMPOTENT_REPLAY after restart even when there is no active execution and response_replay_available=false, risking a permanently lost request after crash-before-response.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/api/frank_token_ingress_core.py"],
+      "next_falsifier": "admit request -> crash before response/terminal task state -> restart -> replay exact request and require either stored response or explicit recover/resume path, not empty-success replay"
+    },
+    {
+      "id": "BUG-CROSS-ATTEMPT-OUTCOME-ATTRIBUTION",
+      "severity": "P0_P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "record_outcome and reconcile_uncertain_outcome accept no attempt_id; a late outcome from attempt A can be recorded after retry B replaced the row attempt_id, attributing A evidence to B.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py blob 76006f10397f9419d52f3d893514294e9edd6521"],
+      "repair_obligation": "every outcome/reconciliation receipt must bind exact attempt_id + provider operation/idempotency identity"
+    },
+    {
+      "id": "BUG-RECONCILIATION-ASSERTED-AS-VERIFIED",
+      "severity": "P0_P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "reconcile_uncertain_outcome accepts any non-empty evidence dict plus success bool and writes outcome_verified=1 without a trusted provider receipt verifier.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py"],
+      "repair_obligation": "trusted provider-specific reconciliation verifier producing an opaque receipt bound to attempt and provider object identity"
+    },
+    {
+      "id": "BUG-V14-ARBITRARY-REENTRY-PREMATURE-COMPLETE",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "V14 record_reentry accepts an arbitrary reentry dict after verified outcome and recovery_decision maps REENTERED directly to COMPLETE despite the current terminal-DONE requirement.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py",
+        "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json"
+      ]
+    },
+    {
+      "id": "BUG-INTEGRITYERROR-MASKED-AS-BUSINESS-CANCEL",
+      "severity": "P2",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "atomic effect reservation converts every sqlite3.IntegrityError into CANCELLED/INTEGRITY_CONFLICT, potentially masking schema/event/constraint defects as normal reservation conflict.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py"]
+    },
+    {
+      "id": "BUG-V17-CAUSAL-CROSS-SPLICE",
+      "severity": "P0_P1",
+      "status": "REPRODUCED_TARGET_VPS",
+      "claim": "Individually valid but causally unrelated prediction outcome, credit, semantic record and free support snapshot symbol can be cross-spliced into a V17 terminal DONE chain while SQLite integrity remains OK.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger@bc0e754758d72b65b46b6938290861887cfe133a"],
+      "repair_obligation": "relationally close verified provider outcome -> same-cycle causal use -> prediction outcome -> non-correlated effect credit -> admitted semantic delta -> reentry authority -> DONE"
+    },
+    {
+      "id": "BUG-V17_1-SCHEMA-RUNTIME-MISMATCH",
+      "severity": "P1",
+      "status": "CONFIRMED_STATIC_MISMATCH",
+      "claim": "V17.1 trigger reads effect_reservations.outcome_evidence_clay, but inspected V14 schema does not define it and current V14 runtime stores only the evidence hash.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V17_1_CAUSAL_ADMISSION_CLOSURE_CANDIDATE.sql blob 2d32260cff109a68be3d37a010131e6827073847",
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V14_EFFECT_LIFECYCLE.sql",
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py"
+      ],
+      "repair_obligation": "persist authoritative provider evidence/receipt relation before promoting V17.1; do not rely on a nonexistent column"
+    },
+    {
+      "id": "BUG-V17_1-PROVIDER-RECEIPT-SELF-CONSISTENCY",
+      "severity": "P1",
+      "status": "CANDIDATE_NEEDS-FORGERY-FALSIFIER",
+      "claim": "V17.1 compares provider_receipt_hash strings extracted from JSON but the inspected candidate does not FK those hashes to an independently trusted provider-receipt authority table.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V17_1_CAUSAL_ADMISSION_CLOSURE_CANDIDATE.sql"],
+      "next_falsifier": "construct self-consistent forged provider_receipt_hash across effect/prediction rows; candidate must reject unless a trusted writer/attestation exists"
+    },
+    {
+      "id": "BUG-SCHEMA-TRUTH-GATE-STALE",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "repo_truth_gate still accepts schema 12.0/table subset while current runtime requires V14/V15/V16 features; a V12-only DB can therefore pass the global gate yet fail later runtime assumptions.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/repo_truth_gate.py",
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/apply_current_schema.py"
+      ]
+    },
+    {
+      "id": "BUG-PROMPT-IDENTITY-DRIFT",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "frank_prompt_capsule still hardcodes entity:frank / dr-unterweger-frank-personal-entity while owner-fixed native identity is self.root server-binary on target VPS.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_prompt_capsule.py",
+        "gschaidergabriel/Dr.-Unterweger:claycode/frank_entity.clay blob e90e88ac85fe77a3d7358594505121b3d9cf23ee",
+        "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json"
+      ]
+    },
+    {
+      "id": "BUG-PROMPT-CROSSDB-TOCTOU",
+      "severity": "P1_P2",
+      "status": "CANDIDATE_NEEDS_CONCURRENCY_FALSIFIER",
+      "claim": "Prompt capsule validates UnifiedDB/ClayGraph lineage, performs writes/commits, then reads both databases without one consistent cross-DB snapshot or post-read lineage revalidation.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_prompt_capsule.py",
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/apply_current_schema.py"
+      ],
+      "next_falsifier": "concurrent materializer advances one projection between validation and capsule assembly; capsule must reject mixed epoch"
+    },
+    {
+      "id": "BUG-CLAY-EFFECT-FINISH-CONTRADICTS-REENTRY-LAW",
+      "severity": "P1",
+      "status": "CONFIRMED_SEMANTIC_SOURCE",
+      "claim": "frank.effects finish(VerifiedEffectReceipt) immediately returns DONE although the same source declares verified_outcome_requires_provenance_bound_reentry_before_done; recover_effect also sends EXECUTED directly to REENTRY_PENDING.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:claycode/frank_effects.clay blob 8679542da4f31b99ae4a171f86554ed894eb6e34"]
+    },
+    {
+      "id": "BUG-EFFECT-REQUEST-AUTHORITY-PROVENANCE",
+      "severity": "P0_P1",
+      "status": "REPRODUCED_PRE_WP04_BOUNDARY",
+      "claim": "A directly constructed structural EffectRequest with authenticated/scoped facts is indistinguishable to the value-level policy oracle from the intended trusted request and can receive ALLOW for reversible write.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger@15f3a56d876bfda7fc30a6fb5ded54e62ab437de"],
+      "epistemic_limit": "not a production exploit claim; a complete WP04 module/type/effect boundary could make construction/call unreachable"
+    },
+    {
+      "id": "BUG-WP04-V1-UNKNOWN-CALL-IMPLICIT-GAP",
+      "severity": "P1_P2",
+      "status": "CONFIRMED_BOUNDED_CHECKER_V1_AND_PARTIALLY_MITIGATED_BY_V2",
+      "claim": "WP04 checker v1 silently leaves unknown unqualified calls without an effect classification. v2 adds explicit UNCLASSIFIED_EXTERNAL_CALL, but is still a wrapper over v1 rather than the promoted general checker.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/clay_wp04_type_effect_v1/effect_checker.py blob fac1989b5be7a8f7a918d51409c327334514c9ba",
+        "gschaidergabriel/Dr.-Unterweger@760e6b0337d63db669997e96e46c1852d3a83ec7"
+      ]
+    },
+    {
+      "id": "BUG-WP04-V2-GLOBAL-MONKEYPATCH-RACE",
+      "severity": "P2",
+      "status": "CANDIDATE_NEEDS_CONCURRENCY_FALSIFIER",
+      "claim": "effect_checker_v2 temporarily monkey-patches v1.resolve_function_call globally; concurrent v1/v2 checks in one process can race and observe the wrong resolution policy.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger@760e6b0337d63db669997e96e46c1852d3a83ec7"],
+      "next_falsifier": "parallelize v1 and v2 infer_effects with deterministic unknown-call corpus and assert policy isolation"
+    },
+    {
+      "id": "BUG-INGRESS-RELEASE-FINALLY-ORPHAN",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "IngressExecutionLease.release marks the wrapper released and clears the active route in finally even when semantic release/clear raises; retry heartbeat/release through that object becomes impossible.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/api/frank_token_ingress_core.py blob 9e0c563206302d412d8d397283e542749cf54b93"]
+    },
+    {
+      "id": "BUG-PHYSICAL-LOCK-RELEASED-ON-SEMANTIC-RELEASE-FAILURE",
+      "severity": "P1",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "claim": "FrankExecutionLease.release always closes/unlocks flock in finally even if V15 semantic release raises, allowing physical exclusion to disappear while semantic release did not complete cleanly.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:runtime/state/frank_execution_gate.py blob 9b28453d6a329748f5201b18305722c0afe12871"]
+    },
+    {
+      "id": "BUG-FLOCK-FORK-INHERITANCE-RECOVERY-STALL",
+      "severity": "P1_P2",
+      "status": "REPRODUCED_DIAGNOSTIC",
+      "claim": "A fork child inheriting the flock open-file-description can keep physical exclusion alive after parent crash and semantic TTL expiry; recovery is blocked until the last inherited descriptor closes.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger@c777862c8d29147589b2dddb888220c346e1c00c"],
+      "interpretation": "safety exclusion holds, but liveness/recovery can stall indefinitely if a descendant leaks the inherited descriptor"
+    },
+    {
+      "id": "BUG-HIVE-STALE-CAPABILITY-RESURRECTION",
+      "severity": "P1_P2",
+      "status": "CANDIDATE_NEEDS-SET-SEMANTICS-FALSIFIER",
+      "claim": "Hive.join appends ExecutionNode records while route derives liveness by node.id; if SET equality is structural rather than keyed by id, an older same-id record with broader capabilities can become routable again when fresh evidence marks that id active.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger:claycode/frank_hive.clay blob a28e10bd95124eedf066ffbeb583ab9995bf65cd"],
+      "counterhypothesis": "ClayCode SET may enforce identity-key uniqueness, but that is not explicit in the inspected semantic source"
+    },
+    {
+      "id": "BUG-VISUAL-TOKEN-ORDER-SPATIAL-COLLISION",
+      "severity": "P1_P2",
+      "status": "REPRODUCED_SYNTHETIC_TARGET_VPS_ORACLE",
+      "claim": "The old global/token-order bucket visual descriptor can collide for left/right layout swaps; a geometry-bound 2D spatial pyramid separates the control.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger@79a19dcbdcbb2e19bfa77a3e9b92cea27349fe3d"],
+      "epistemic_limit": "real mtmd grid metadata and real Qwen embeddings were not measured in that receipt"
+    },
+    {
+      "id": "BUG-HYPERPOSITION-CONTEXT-SMUGGLING",
+      "severity": "P2",
+      "status": "REPRODUCED_SYNTHETIC_VALIDATOR_GAP_CLASS",
+      "claim": "A nominal pairwise+context model can exactly fit a third-order relation by smuggling a relation member through context; reduction validity therefore requires material-read closure excluding relation members/derived members.",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger@fb8baa2dc47705e3ce59d9ceb26943c2280a43ff"],
+      "epistemic_limit": "validator semantics; not evidence that production Hyperposition already performs this smuggling"
+    },
+    {
+      "id": "BUG-SQLITE-WAL-RESET-EXPOSURE",
+      "severity": "P1",
+      "status": "UNRESOLVED_RELEASE_EXPOSURE",
+      "claim": "Canonical state opener forces WAL. Project guard correctly treats upstream affected SQLite versions as blocked until exact distro/backport provenance or a machine-checked topology exclusion proves safety.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/apply_current_schema.py",
+        "gschaidergabriel/Dr.-Unterweger@1b8349a040768aecb5713fac06bb7ca2e66e169d",
+        "gschaidergabriel/Dr.-Unterweger@9ada10c8c85b467e38c97efe6b045e96f33a799e"
+      ],
+      "epistemic_limit": "do not claim target corruption without exact Ubuntu SQLite package/backport evidence"
+    }
+  ],
+  "priority_repair_order": [
+    "close execution-generation + exact-attempt + provider-precommit/outcome fence as one capability chain",
+    "make RECOVERING a hard barrier and make handoff confirmation generation-bound",
+    "repair ingress/physical release exception semantics so physical lock is not dropped on failed semantic transition",
+    "replace asserted reconciliation/provider hash strings with trusted provider receipts",
+    "align V17.1 schema/runtime and close causal admission relationally",
+    "upgrade repo truth/schema feature gate to current required V14-V16+ semantics",
+    "finish self.root prompt/identity migration and cross-DB epoch consistency",
+    "make ClayCode semantic finish/recovery paths obey provenance-bound reentry-before-DONE",
+    "promote closed-world WP04 effect checking without process-global monkey-patching",
+    "resolve WAL package/topology safety before release",
+    "run snapshot rollback generation-resurrection and crash/restart replay gates",
+    "apply geometry-bound visual descriptors and context-admissible Hyperposition validators only after real target evidence"
+  ],
+  "strongest_counterhypothesis": "Several current-main Python paths may remain scaffolding that production ClayCode/type-effect/runtime boundaries never expose; if exact end-to-end target-VPS compilation proves those paths unreachable and the compiled boundary enforces immutable generation/attempt/provider capabilities, some static findings downgrade from exploitable runtime defects to dead-code or migration debt.",
+  "next_discriminating_suite": [
+    "stale generation A -> takeover B -> reserve/begin/provider-precommit from A must all fail",
+    "retry B -> delayed provider receipt from attempt A must fail attribution",
+    "crash-after-admission-before-response -> restart -> exact request must resume/replay response or explicitly reconcile, never ghost-success",
+    "release DB failure injection -> physical flock remains held or recovery proof is atomically committed before unlock",
+    "V17.1 forged self-consistent provider hash chain must fail without trusted provider receipt",
+    "V12-only DB must fail current feature gate before runtime opens",
+    "parallel WP04 v1/v2 checks must be policy-isolated",
+    "snapshot rollback must advance non-rollback incarnation and reject pre-restore capabilities",
+    "real mtmd/Qwen held-out spatial collision/epoch bridge test",
+    "Hyperposition context dependency closure test on real candidate features"
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "name": "EXECUTION_CAUSAL_CAPABILITY_SPINE",
+    "proposal": "Represent one opaque immutable chain from authenticated ingress request digest + execution incarnation/lease epoch + exact attempt + effect authorization/reservation + provider operation receipt + verified outcome + causal-use/admitted-delta receipt + terminal DONE. All mutable/global-current observations become validation inputs, never substitute for the caller-presented chain.",
+    "rollback": "retain current V14-V16/V17 candidate schemas and run new spine in shadow until differential crash/replay/provider tests pass"
+  },
+  "research_write_scope": "receipt only; no Frank code, harness, workspace status, canonical state or owner directive modified"
+}

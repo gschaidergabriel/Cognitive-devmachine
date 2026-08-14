@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:go-root-oob-slot-identity:20260810T1518p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T08:18:00Z",
+  "payload": {
+    "work_id": "GO-ROOT-OOB-SLOT-IDENTITY",
+    "status": "READY",
+    "reason_clay": {
+      "owner_fixed_law": "Each exact go macro-cycle includes exactly one bounded out-of-the-box experiment.",
+      "observed_ambiguity": "Concurrent durable state contains more than one distinct artifact described as the one OOB experiment, while the relevant receipts do not share a machine-checkable root_go_id. Therefore current evidence cannot distinguish a same-root duplicate from separate concurrent root go cycles.",
+      "evidence": [
+        "research_entity/trigger_runs/go/go-20260810T1441p0700-chatgpt-secondary-wp03-semantics/FINAL_RUN_RECEIPT.json",
+        "research_entity/state/work/events/20260810T1432p0700_CHATGPT_LIVE_FUSION_REENTRY_V1_WORK_REVISE_IDENTITY_FALSIFIER_ABSORBED.json"
+      ],
+      "classification": "COORDINATION_IDENTITY_GAP_NOT_SCIENTIFIC_RESULT"
+    },
+    "candidate_contract": {
+      "root_go_id": "required immutable identity minted once per user/root go invocation",
+      "oob_slot": "single atomic/CAS claim keyed by root_go_id",
+      "worker_fields": ["root_go_id", "oob_claim_id", "origin_actor", "claimed_at", "experiment_ref", "status"],
+      "duplicate_behavior": "FAIL_CLOSED_OR_RECLASSIFY_AS_NORMAL_EXPERIMENT_BEFORE_EXECUTION",
+      "recovery": "abandoned lease may be reclaimed only by explicit expiry/recovery receipt; completed slot is immutable",
+      "distributed_rule": "child workers inherit root_go_id; they do not mint independent OOB allowance unless they are demonstrably a separate root invocation"
+    },
+    "strongest_counterhypothesis": "The two observed OOB labels may belong to genuinely separate root go invocations. Without root identity this cannot be adjudicated, which is why the proposed change is identity/coordination instrumentation rather than a claim that the scientific experiments were invalid.",
+    "discriminating_test": "Spawn two concurrent child workers under one synthetic root_go_id and prove exactly one CAS claim executes as OOB while the loser is fail-closed/reclassified; then run two distinct root_go_id values and prove both may independently claim one slot.",
+    "architecture_delta": "CANDIDATE_TEST_OBLIGATION_ONLY",
+    "frank_harness_mutation": false,
+    "training_authorized": false,
+    "authority": "NONE"
+  }
+}

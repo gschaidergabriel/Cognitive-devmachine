@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1427p0700-chatgpt-secondary-sqlite-symlink-pre-resolve",
+  "trigger": "go",
+  "timestamp_local": "2026-08-13T14:27:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "b2154e7be21c62ec4d09423bbb4911ec0cd86955",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+    "pr": 557,
+    "branch": "chatgpt/go-sqlite-connection-hasmoved-20260812-2235",
+    "target_pr_head_after_repair": "819e84a5853a244e84352f206371ccf51d52a1a5",
+    "accepted_target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Fresh workspace still keeps production SQLite/WAL storage trust and recovery open. Current research supervisor additionally steered PR557 exact-head acquisition, but fresh GitHub evidence showed that older PR head 0c7dc1d47ba2de017cdab01867878ce1fec03e37 already had a real executed connection-guard PASS. Duplicate exact-head repair was therefore avoided and the candidate itself was inspected for a new fail-closed discriminator.",
+    "duplicate_avoidance": [
+      "Did not repeat the already-passed exact-head 3.53.4 connection-guard execution on 0c7dc1d47ba2de017cdab01867878ce1fec03e37 as if still missing",
+      "Preserved PR557 draft/mechanism scope and did not claim accepted Hostinger production persistence"
+    ]
+  },
+  "observed_reality": {
+    "workspace_blocker": "F-V01-13 remains IN_PROGRESS; production must bind the actual fixed SQLite runtime, canonical DB/WAL objects, recovery/restart and semantic lineage on accepted Hostinger ProductStart/self.root.",
+    "sqlite_primary_source_result": "SQLite documents the WAL-reset corruption bug through 3.51.2 and fixed in 3.51.3 and later; SQLite 3.53.4 is on the fixed side.",
+    "pr557_old_head": "0c7dc1d47ba2de017cdab01867878ce1fec03e37",
+    "pr557_old_head_connection_guard_run": 31663751899,
+    "pr557_old_head_connection_guard_job": 94333864491,
+    "pr557_old_head_connection_guard_status": "SUCCESS_EXECUTED",
+    "candidate_bug": "attest_connection() performed Path(expected_db).resolve(strict=True) before os.lstat(expected_db), so a final-component caller-supplied symlink was erased before the intended S_ISLNK fail-closed check."
+  },
+  "hypothesis": "A caller-supplied canonical DB path that is itself a symlink can bypass the candidate's intended symlink rejection because Path.resolve() replaces the symlink path with its regular-file target before lstat()/S_ISLNK runs.",
+  "strongest_counterhypothesis": "SQLite filename normalization or later HAS_MOVED/WAL identity checks might independently reject all such symlink inputs, making the pre-resolve symlink check redundant rather than security-relevant.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "CANONICAL_DB_SYMLINK_PRE_RESOLVE",
+    "class": "path-identity counter-reality",
+    "reversible": true,
+    "disposable_state": true,
+    "product_bytes_modified_during_experiment": false,
+    "description": "Create a disposable regular file and a FRANK_UNIFIED.sqlite symlink to it, then execute the exact candidate ordering resolve(strict=True) -> lstat(resolved).",
+    "observed": {
+      "alias_is_symlink": true,
+      "post_resolve_lstat_is_symlink": false,
+      "post_resolve_lstat_is_regular": true,
+      "candidate_symlink_check_reachable_after_resolve": false
+    },
+    "result": "HYPOTHESIS_SUPPORTED",
+    "interpretation": "The candidate's intended final-component symlink rejection was structurally bypassed by its own canonicalization order."
+  },
+  "repair": {
+    "candidate_commit": "2aabbe6744389a396c59cbfcca05045812cbc203",
+    "test_commit": "819e84a5853a244e84352f206371ccf51d52a1a5",
+    "files": [
+      "runtime/frank_storage_truth_v1/frank_sqlite_connection_guard_v1_candidate.py",
+      "tests/test_frank_sqlite_connection_guard_v1_candidate.py"
+    ],
+    "changes": [
+      "lstat the caller-supplied DB pathname before resolve and reject DATABASE_PATH_SYMLINK",
+      "require the supplied path object to be a regular single-link file before canonicalization",
+      "after resolve, bind supplied and resolved objects by st_dev + st_ino before continuing",
+      "add a symlink regression inside the existing 8-test matrix without altering workflow test-count contract"
+    ],
+    "ordinary_local_regression": "Patched precheck returns DATABASE_PATH_SYMLINK for the same disposable alias world.",
+    "effect_authority_change": false,
+    "harness_self_authority_change": false,
+    "training_authorization_change": false
+  },
+  "exact_head_test": {
+    "workflow": "Frank SQLite connection guard v1",
+    "run": 31678111965,
+    "job": 94377104622,
+    "tested_sha": "819e84a5853a244e84352f206371ccf51d52a1a5",
+    "runner_name": "clay",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 2,
+    "all_reported_job_steps_executed": true,
+    "connection_guard_status": "PASS",
+    "conclusion": "success",
+    "scope": "self-hosted exact-head mechanism/regression evidence; not accepted Hostinger ProductStart identity or productive persistence acceptance"
+  },
+  "pr_reentry": {
+    "pr": 557,
+    "comment_id": 5277405140,
+    "content": "Experiment, two repair commits, exact-head successful run, primary SQLite version-side evidence and nonclaims recorded on the PR conversation."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite Write-Ahead Logging documentation, WAL-Reset Bug",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "Bug is documented for versions through 3.51.2 and fixed in 3.51.3 and later; trigger requires WAL plus multiple connections with concurrent write/checkpoint timing."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "3.53.4 inherits the WAL-reset fix from 3.53.0 and reports SQLITE_SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "grf_collapse": {
+    "generated_reality": "Pre-resolve canonicalization can hide a path-type fact the guard later claims to verify.",
+    "counter_reality": "Later SQLite connection identity checks make input-path symlink rejection irrelevant.",
+    "discriminator": "Observe path type before and after candidate canonicalization order, then add exact-head fail-closed regression.",
+    "outcome": "RETAIN_REPAIR",
+    "confidence": "HIGH for the ordering bug and regression repair; LOW for any production-release implication"
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_REPAIR_NOT_RELEASE_PROMOTION",
+    "affected": [
+      "F-V01-13 security/recovery/observability",
+      "SQLite canonical path/object attestation",
+      "accepted storage boundary fail-closed semantics"
+    ],
+    "supported_change": "At a security-sensitive storage boundary, path-type/identity checks that depend on the caller-supplied pathname must execute before lossy canonicalization; canonicalization may follow only after the supplied object is fail-closed bound.",
+    "rollback": "Revert commits 819e84a5853a244e84352f206371ccf51d52a1a5 and 2aabbe6744389a396c59cbfcca05045812cbc203 if a stronger canonical directory/object-open design supersedes this candidate; do not restore resolve-before-lstat semantics.",
+    "promotion_blockers": [
+      "PR557 remains draft and not merged to target main",
+      "Self-hosted runner clay is mechanism evidence, not accepted Hostinger ProductStart identity",
+      "Need root-authorized production extension/runtime chain or a stronger no-dynamic-extension design",
+      "Need productive Hostinger canonical UnifiedDB WAL execution on exact fixed SQLite runtime",
+      "Need restart/reopen, downgrade/library-swap, rollback and semantic-lineage acceptance evidence"
+    ]
+  },
+  "control_plane_observation": {
+    "stale_research_supervisor_field": "pr557_storage_exact_head=OPEN_RUN_31655138751_TESTED_SYNTHETIC_MERGE_7FD5704_NOT_PR_HEAD_517883F",
+    "fresh_evidence": "PR557 old head 0c7dc1d47ba2de017cdab01867878ce1fec03e37 already had executed connection-guard success run 31663751899 before this GO; repaired new head 819e84a... also has executed success run 31678111965.",
+    "action": "Preserve as a synchronization delta; do not infer whole-program progress from supervisor staleness."
+  },
+  "nonclaims": [
+    "No whole Frank v0.1 acceptance",
+    "No accepted Hostinger ProductStart/self.root persistence receipt",
+    "No claim that self-hosted runner clay equals the owner-fixed final acceptance host",
+    "No production effect authority exercised",
+    "No Harness self-mutation",
+    "No final/paid model training authorization"
+  ],
+  "next_frontier": [
+    "Review/merge PR557 only after normal review and current-main composition checks; keep draft until production boundary obligations are satisfied",
+    "Bind accepted Hostinger ProductStart productive /usr/bin/python3/_sqlite3/libsqlite to exact fixed SQLite source/build and canonical UnifiedDB/WAL object identity",
+    "Prefer eliminating runtime dynamic-extension authority from production acceptance if the same connection-bound evidence can be obtained through a statically linked or built-in trusted boundary",
+    "Then run exact-current crash/restart/reopen, downgrade/library-swap, rollback and semantic-lineage recovery matrix"
+  ]
+}

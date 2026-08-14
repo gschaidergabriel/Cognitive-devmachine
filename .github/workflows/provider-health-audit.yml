@@ -8,6 +8,7 @@ on:
       - 'research_entity/private/GROQ_API.env'
       - 'tools/rae_secret_loader.py'
       - 'tools/provider_health_audit.py'
+      - 'tools/reconcile_execution_capabilities.py'
       - 'tools/groq_health_merge.py'
       - 'tools/groq_inference.py'
       - 'tools/openalex_search.py'
@@ -20,6 +21,7 @@ on:
       - 'tools/e2b_sandbox.py'
       - 'tools/judge0_execute.py'
       - 'tools/piston_execute.py'
+      - 'tools/sandboxapi_sandbox.py'
       - 'tools/huggingface_inference.py'
       - '.github/workflows/provider-health-audit.yml'
 
@@ -45,8 +47,14 @@ jobs:
       - name: Install optional provider SDKs
         run: python -m pip install --disable-pip-version-check --quiet ddgs e2b
 
+      - name: Validate capability audit tooling
+        run: python -m py_compile tools/provider_health_audit.py tools/reconcile_execution_capabilities.py tools/sandboxapi_sandbox.py tools/e2b_sandbox.py tools/judge0_execute.py tools/piston_execute.py
+
       - name: Run sanitized provider audit
         run: python tools/provider_health_audit.py --write > /tmp/provider-health-output.json
+
+      - name: Reconcile execution capability registry
+        run: python tools/reconcile_execution_capabilities.py --write > /tmp/execution-capability-reconcile.json
 
       - name: Merge Groq small-model health
         run: python tools/groq_health_merge.py > /tmp/groq-health-output.json

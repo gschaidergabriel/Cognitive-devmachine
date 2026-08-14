@@ -1,0 +1,225 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0130p0700-chatgpt-secondary-effect-fence-pareto-materializer",
+  "trigger": "go",
+  "started_from_canonical": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_lock": {
+    "i_am_not": "FRANK/self.root",
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "program": "FRANK_V0_1",
+  "goal": "Frank v0.1 fully operational on the accepted Ubuntu target",
+  "primary_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "initial_problem": "Fresh-main V14 lifecycle could admit stale first attempts, stale same-key retries and internal callers without a caller-presented execution-generation capability into COMMITTING.",
+  "hypothesis": "Executable effect authority must require a caller-presented, current, immutable execution-generation capability at reservation, first attempt/retry and provider precommit; generation turnover revokes start/retry/commit authority but not outcome observation/reconciliation.",
+  "strongest_counterhypothesis": "A global current presence/lease epoch plus singleton process checks are sufficient, so a separate caller-bound generation proof adds complexity without causal value.",
+  "external_primary_evidence": [
+    {
+      "source": "The Chubby lock service paper",
+      "finding": "Delayed/stale lock operations are fenced using a caller-presented opaque sequencer carrying lock generation that the recipient validates."
+    },
+    {
+      "source": "etcd official locking/transaction documentation",
+      "finding": "Ownership is represented by concrete lock/session revision state that downstream operations can validate rather than by observing a global epoch alone."
+    },
+    {
+      "source": "SQLite official CREATE TRIGGER / RAISE documentation",
+      "finding": "Immutable provenance rows can fail closed on forbidden UPDATE/DELETE with RAISE(ABORT,...)."
+    },
+    {
+      "source": "seL4 official capability and IPC documentation",
+      "finding": "Authority is represented by held capabilities to protected objects and may be transferred between execution contexts; transport identity is not the authority primitive itself."
+    }
+  ],
+  "executed_effect_fence_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 248,
+    "final_disposition": "NOT_SELECTED_SUPERSEDED",
+    "reason": "A newer parallel candidate, PR #250, became the stronger integrated successor. Keeping #248 would create a competing second effect-fence architecture.",
+    "target_run": 31418327399,
+    "target_job": 93552646980,
+    "target_runner": {
+      "runner_name": "clay",
+      "machine": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "python": "3.12.3",
+      "sqlite": "3.45.1"
+    },
+    "mechanism_results": {
+      "status": "PASS_CALLER_BOUND_EXECUTION_GENERATION_FENCE_V17",
+      "missing_execution_capability": "FENCED_WITH_ZERO_AUTHORITATIVE_EVENT_DELTA",
+      "same_epoch_fabricated_object": "FENCED_NOT_GATE_ISSUED_WITH_ZERO_AUTHORITATIVE_EVENT_DELTA",
+      "stale_first_attempt_after_turnover": "FENCED_STATE_REMAINS_RESERVED_RECOVERY_REAUTHORIZATION_REQUIRED",
+      "current_generation_first_attempt": "PASS_COMMITTING",
+      "provider_precommit_current_generation": "PASS",
+      "stale_uncertain_retry": "FENCED_RECOVERY_RECONCILE_REQUIRED_WITH_ZERO_AUTHORITATIVE_EVENT_DELTA",
+      "post_turnover_outcome_reconciliation": "PASS_OUTCOME_SUCCEEDED",
+      "immutable_binding_update_delete": "PASS_BLOCKED",
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0,
+      "external_network_used": false,
+      "external_effect_performed": false,
+      "canonical_frank_state_mutated": false
+    },
+    "resource_measurement": {
+      "wall_seconds": 0.094792,
+      "user_seconds": 0.040515,
+      "system_seconds": 0.022841,
+      "max_rss_kib": 25472
+    },
+    "historical_v14_baseline_same_target_run": {
+      "status": "PASS_V14_EFFECT_LIFECYCLE_TEST_MODE",
+      "same_confirmation_concurrency_attempts": 64,
+      "same_confirmation_admitted": 1,
+      "in_process_fault_atomic_rollback": "PASS",
+      "real_process_death_atomic_rollback": "PASS",
+      "recovery_matrix": "PASS",
+      "semantic_tamper_detection": "PASS_EVENT_HASH_MISMATCH",
+      "foreign_key_check": "PASS"
+    }
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "FORKED_EXECUTION_CAPABILITY_DOPPELGANGER",
+    "design": "Fork a process after acquiring the real execution capability so the child inherits the Python object and kernel descriptors, then attempt effect reservation from the child.",
+    "result": "PASS_REJECTED",
+    "causal_interpretation": "Inherited object/FD presence is not sufficient effect authority when process-incarnation fencing is enforced.",
+    "external_effect": false,
+    "rollback": "Disposable test database/state only."
+  },
+  "worker_frontier_adjudication": {
+    "pr_199": "Earlier migration-free execution-fence candidate; core differential mechanism passed, workflow redness included a stale wrapper assertion rather than mechanism refutation.",
+    "pr_250": {
+      "status": "PREFERRED_CURRENT_SUCCESSOR_TESTING",
+      "head_observed": "95c8933cdcf14de80aebd5f918f5628db9700115",
+      "properties": [
+        "exact V15 presence binding",
+        "exact V16 execution/credential/admission binding",
+        "still-live Gate-issued process-incarnation capability",
+        "immutable reservation sidecar binding",
+        "B1 reservation + B2 begin/retry + B3 provider-precommit fencing",
+        "additional TOCTOU rechecks before durable mutation/provider call",
+        "ClayCode semantic contract"
+      ],
+      "draft": true,
+      "current_target_effect_v6_run_at_receipt": "QUEUED",
+      "already_green_related_runs": [
+        "self.root current-head v2",
+        "SCM_RIGHTS authority regression"
+      ],
+      "not_closure": true
+    },
+    "pr_254": {
+      "status": "STACKED_TARGET_SUPPORTED_DISCRIMINATOR",
+      "target_run": 31418397078,
+      "findings": [
+        "parent #250 normal matrix PASS on the target lane",
+        "same-epoch V16 rebind fenced with zero lifecycle mutation",
+        "uncertain retry after turnover fenced",
+        "immutable binding blocked update/delete",
+        "reconciliation after turnover remained admissible"
+      ]
+    },
+    "pr_255": "Additional stacked crash/reconciliation discriminator exists; avoid duplicate work.",
+    "pareto_decision": "Close PR #248 as NOT_SELECTED rather than merge a duplicate architecture. Preserve its measurements as evidence."
+  },
+  "separate_terminal_gap": {
+    "status": "OPEN_BLOCKER_FOR_V17_TOTAL_PROMOTION",
+    "evidence_commit": "626f435382a4ebc2899e89d72a357cf2484402ba",
+    "finding": "A separate terminal/DONE candidate can still accept terminalization without exact V15/V16 execution binding and with fabricated support identities. Effect start/retry fencing is therefore only a part-fix; terminalization must bind to the exact execution generation and canonical GWT/causal/delta identities."
+  },
+  "claycode_materializer_blocker": {
+    "initial_negative_results": [
+      "Clean checkout removed untracked exact-bundle frontend/grammar expected by a legacy probe.",
+      "The tracked WP04 diagnostic then failed before semantic testing because materialize_v18_local.py searched a superseded WP03 workflow step.",
+      "After exact V18 materialization, the tracked base TypedIR exposed an old parameter-keyword issue; the current WP03 workflow already carried a content-addressed repaired TypedIR, so no new compiler semantics were invented."
+    ],
+    "selected_fix": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 260,
+      "merged_commit": "c82d40a5859784a52d700c5e85c251839cc47c30",
+      "changed_files": 1,
+      "path": "runtime/clay_wp04_type_effect_v1/materialize_v18_local.py",
+      "mechanism": "Consume the current replay-bridge V18 materialization/locked-env blocks plus the current WP03 content-addressed TypedIR reconstruction block, replacing only the historical credentialed fetch with full-history local-object assertions.",
+      "verified_blobs": {
+        "frontend": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+        "grammar": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+        "typed_ir": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63"
+      },
+      "locked_dependencies": {
+        "lark": "1.3.1",
+        "interegular": "0.3.3"
+      },
+      "target_validation": {
+        "workflow": "ClayCode WP04 PR Diagnostic V2",
+        "run": 31419076385,
+        "runner": "clay/digital-retina",
+        "conclusion": "SUCCESS",
+        "materialization": "PASS_EXACT_HASH_VERIFIED",
+        "promotion": "MATERIALIZER_FIX_ONLY"
+      }
+    },
+    "newly_reachable_real_counterexamples": [
+      "constructor spelling lowering gap remains supported",
+      "block-function/effect-boundary probe reaches a real `use` parsing gap",
+      "indirect dependency/nominal-universe/effect-completeness/function-linker probes expose missing current_frontend_contract linkage"
+    ],
+    "wp03_promotion": "NONE",
+    "wp04_promotion": "NONE"
+  },
+  "cross_package_architecture_delta_candidate": {
+    "status": "TEST_OBLIGATION_NOT_IMPLEMENTED_DUE_ACTIVE_OVERLAP",
+    "packages": ["F-V01-09-EFFECT-AUTHORITY", "F-V01-10-PROACTIVE-AGENCY-WEB"],
+    "finding": "The current #250 concrete execution fence is derived from IngressExecutionLease and frank_ingress_request_admissions. That is appropriate for interactive token/API effects but must not become the universal semantic definition of execution authority if Frank later performs authorized proactive actions.",
+    "proposed_semantic_generalization": "Represent the authority primitive as an AdmittedExecutionCapability (or equivalent typed provenance class) whose current concrete source may be authenticated token ingress, and later allow a separately authorized autonomous scheduler admission to mint the same bounded execution capability without simulating HTTP ingress.",
+    "required_controls": [
+      "same B1/B2/B3 caller-bound generation checks",
+      "exact V15/V16 execution identity",
+      "Gate-issued live process incarnation",
+      "no effect authority from scheduler presence alone",
+      "proactive action policy remains separately bounded",
+      "lesion/adversarial test proving HTTP transport is not semantically required while authority provenance remains non-forgeable"
+    ]
+  },
+  "negative_results_preserved": [
+    "Global Deep Integrity failures were observed on multiple candidate heads but connector logs/steps were unavailable for attribution; they are UNKNOWN evidence, not silently classified as unrelated.",
+    "No current exact-source effect-fence candidate is promoted as full F-V01-09 closure.",
+    "No real provider timeout-after-acceptance/reconciliation receipt was produced in this run.",
+    "No terminal verified-outcome -> provenance re-entry -> DONE acceptance was promoted.",
+    "No WP03/WP04 compiler promotion was made from diagnostic workflow success."
+  ],
+  "architecture_effect": {
+    "effect_fence": "NO_DUPLICATE_MERGE; route to stronger #250/#254 lineage and keep gate open",
+    "claycode": "MERGED_BLOCKER_REMOVAL_PR_260",
+    "terminal_effect_completion": "OPEN_TEST_OBLIGATION",
+    "proactive_effect_authority": "NEW_CROSS_PACKAGE_TEST_OBLIGATION",
+    "training": "NO_CHANGE_NOT_AUTHORIZED"
+  },
+  "next_frontier_ranked": [
+    "Let the active #250/#254/#255 worker lineage finish exact-current target evidence; do not duplicate it.",
+    "Bind terminal effect completion/DONE to exact V15/V16 execution generation plus canonical GWT/causal/delta support identities.",
+    "Use the repaired materializer to attack the now-visible real WP03/WP04 `use` parsing and current_frontend_contract/linker gaps.",
+    "Close F-V01-09 only after real provider unknown-outcome reconciliation and verified outcome -> provenance re-entry -> DONE receipt are target-verified.",
+    "Before proactive writable agency is enabled, discriminate transport-specific IngressExecutionLease from a general provenance-bound admitted execution capability."
+  ],
+  "authority_and_safety": {
+    "external_provider_write_performed": false,
+    "canonical_frank_db_mutated": false,
+    "paid_or_final_training_started": false,
+    "training_authorized": false,
+    "frank_harness_mutation_authority_granted": false
+  },
+  "completed_at": "2026-08-11T01:30:00+07:00"
+}

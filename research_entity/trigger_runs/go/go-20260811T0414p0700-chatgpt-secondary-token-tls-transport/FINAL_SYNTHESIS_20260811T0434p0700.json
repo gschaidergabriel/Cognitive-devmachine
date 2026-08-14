@@ -1,0 +1,213 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0414p0700-chatgpt-secondary-token-tls-transport",
+  "synthesis_at": "2026-08-11T04:34:35+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-08-TOKEN-API-CLIENTS",
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "research_subject_native": "self.root",
+    "research_subject_human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "fresh_current_baseline": {
+    "target_receipt": "runtime/vps_unifieddb/frank_token_ingress_core_v16/LATEST.json",
+    "receipt_id": "FRANK-V01-TOKEN-INGRESS-CORE-V16-31432535930",
+    "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_TOKEN_AUTH_V16_DURABLE_EXECUTION_IDEMPOTENCY_IDLE_HANDOFF_USER_PRIORITY_AND_LOST_HOLDER_RECOVERY_TEST",
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "tested_sha": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+    "status": "PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY",
+    "measured_open_gaps": {
+      "network_server_implemented": false,
+      "tls_termination_implemented": false,
+      "response_replay_store_implemented": false,
+      "task_switch_consent_implemented": false,
+      "whole_token_api_complete": false
+    },
+    "resource_shadow": {
+      "elapsed_seconds": 0.25,
+      "maximum_rss_kib": 25540,
+      "exit_status": 0
+    }
+  },
+  "coordination": {
+    "fresh_open_pr_overlap_checked": true,
+    "selected_transport_overlap": "NONE_OTHER_THAN_THIS_PR",
+    "other_open_search_hit": {
+      "pr": 275,
+      "topic": "German human projection identity/authority fence",
+      "classification": "NON_OVERLAPPING"
+    },
+    "existing_adjacent_api_candidates": {
+      "257": "durable response replay substrate; explicitly no network/TLS",
+      "259": "request-content/idempotency binding; explicitly no production network/TLS"
+    },
+    "main_advanced_during_cycle": true,
+    "fresh_main_compare": {
+      "branch_head": "2e4c08483dfe274ef9ca42c2f254843dacd01dbf",
+      "merge_base": "f649ce7ab8249c9dbc61ad7018804204ade53cb5",
+      "main_only_changes_at_final_compare": "new target-VPS evidence/receipt projections for V17 re-entry, physical liveness, single-instance presence, V16 token ingress and V16 continuity; no candidate transport source path overlap observed",
+      "promotion_after_stale_base": "FORBIDDEN_WITHOUT_FRESH_TARGET_RETEST"
+    }
+  },
+  "hypothesis": "A bounded TLS>=1.2 strict HTTP/1.1 admission transport can close the measured network/TLS substrate gap while canonical FrankTokenIngressCore remains the sole bearer-authentication and V15/V16 execution-admission authority.",
+  "strongest_counterhypothesis": "A mature reverse-proxy/HTTP server stack may dominate the custom bounded parser on protocol breadth, maintenance and adversarial robustness; the current custom transport is therefore a measured candidate/baseline, not a production architecture promotion.",
+  "primary_external_evidence": [
+    {
+      "source": "RFC 6750",
+      "finding": "Bearer-token protected-resource transport requires TLS and uses WWW-Authenticate Bearer challenge semantics for authentication failures."
+    },
+    {
+      "source": "RFC 8996",
+      "finding": "TLS 1.0 and 1.1 are deprecated; candidate minimum is TLS 1.2."
+    },
+    {
+      "source": "RFC 9112",
+      "finding": "ambiguous HTTP/1.1 Content-Length/Transfer-Encoding framing is request-smuggling relevant; fail-closed close behavior is required for invalid framing classes."
+    }
+  ],
+  "candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 276,
+    "draft": true,
+    "mergeable_at_final_refresh": true,
+    "branch": "chatgpt/go-token-tls-transport-20260811",
+    "head_sha": "2e4c08483dfe274ef9ca42c2f254843dacd01dbf",
+    "files": [
+      "runtime/api/frank_token_tls_transport_candidate.py",
+      "tests/frank_token_tls_transport_candidate.py",
+      "claycode/frank_token_tls_transport_candidate.clay",
+      ".github/workflows/go-frank-token-tls-transport-vps.yml"
+    ],
+    "mechanism": {
+      "real_tls_listener": true,
+      "minimum_tls": "TLSv1.2",
+      "alpn": "http/1.1",
+      "one_request_per_connection": true,
+      "connection_close_response": true,
+      "max_header_bytes": 32768,
+      "max_body_bytes": 1048576,
+      "header_timeout_seconds": 5.0,
+      "body_timeout_seconds": 10.0,
+      "default_max_concurrent_connections": 64,
+      "requires_single_decimal_content_length": true,
+      "transfer_encoding_allowed": false,
+      "duplicate_authorization_allowed": false,
+      "missing_bearer_delegated_to_canonical_auth": true,
+      "rfc6750_www_authenticate_semantics": true,
+      "raw_authorization_removed_from_general_request_headers": true,
+      "internal_credential_fingerprint_removed_from_public_response": true,
+      "raw_secret_spellings_removed_from_public_response": true,
+      "canonical_core_authority_duplicated": false,
+      "transport_mints_execution_authority": false,
+      "transport_mints_effect_authority": false,
+      "transport_mints_self_identity": false
+    }
+  },
+  "local_execution": {
+    "status": "PASS_FRANK_TOKEN_TLS_TRANSPORT_CANDIDATE",
+    "classification": "F_V01_08_TLS_HTTP_TRANSPORT_CANDIDATE_NOT_WHOLE_API",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "openssl": "OpenSSL 3.5.5 27 Jan 2026",
+    "configured_minimum_tls": "TLSv1.2",
+    "negotiated_tls": "TLSv1.3",
+    "normal_matrix": {
+      "valid_tls_json_request": true,
+      "internal_credential_fingerprint_redacted": true,
+      "raw_bearer_token_not_reflected": true,
+      "authorization_removed_from_general_request_headers": true,
+      "duplicate_authorization_rejected_before_adapter": true,
+      "invalid_content_length_rejected_before_adapter": true,
+      "missing_bearer_gets_401_challenge": true,
+      "invalid_bearer_gets_invalid_token_challenge": true,
+      "insufficient_scope_gets_403_scope_challenge": true,
+      "connection_budget_exhaustion_gets_503_before_adapter": true,
+      "connection_budget_releases_after_clients_complete": true
+    },
+    "external_network_used": false,
+    "loopback_tls_used": true,
+    "real_external_effect_performed": false,
+    "canonical_state_mutated": false
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "CL_TE_REQUEST_SMUGGLE_SHADOW",
+    "input": "TLS HTTP/1.1 request with Content-Length: 2 plus Transfer-Encoding: chunked, declared body {}, then a hidden second HTTP request",
+    "local_result": {
+      "status": "PASS_FAIL_CLOSED_LOCAL_MECHANISM",
+      "http_status": 400,
+      "semantic_code": "TRANSFER_ENCODING_NOT_SUPPORTED",
+      "connection_policy": "CLOSE",
+      "adapter_preauthorize_delta": 0,
+      "adapter_handle_delta": 0
+    },
+    "target_result": "NOT_EXECUTED_YET_AT_FINAL_SYNTHESIS"
+  },
+  "target_vps_candidate_execution": {
+    "workflow_run_id": 31434346535,
+    "job_id": 93604984202,
+    "status_at_final_synthesis": "QUEUED",
+    "target_pass_claimed": false,
+    "reason": "self-hosted target runner occupied by concurrent Clay/Frank validation jobs",
+    "policy": "QUEUE_IS_NOT_EVIDENCE; NO TARGET PASS OR PROMOTION CLAIM"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_LOCAL_PASS_TARGET_PENDING",
+    "impact": "closes a concrete implementation gap at the transport substrate on a branch, but does not close F-V01-08 or TOKEN_API_ACCEPTANCE_GATE",
+    "promotion": "NONE",
+    "no_change_to": [
+      "canonical FrankTokenIngressCore authentication authority",
+      "V15/V16 execution authority",
+      "V17/effect authority",
+      "canonical persistent self.root state",
+      "Frank/self.root Harness mutation authority"
+    ]
+  },
+  "negative_and_corrective_results": [
+    {
+      "finding": "initial candidate classified a missing Authorization header as framing 400",
+      "disposition": "REPAIRED",
+      "repair": "delegate missing bearer to canonical authentication; emit RFC 6750 401 WWW-Authenticate Bearer challenge"
+    },
+    {
+      "finding": "initial adapter copied Authorization into general ParsedRequest headers",
+      "disposition": "REPAIRED",
+      "repair": "remove Authorization from general request metadata and pass only as explicit sensitive authentication parameter"
+    },
+    {
+      "finding": "initial transport had no total concurrent-client cap",
+      "disposition": "REPAIRED",
+      "repair": "hard bounded concurrent TLS connection budget with 503 fail-closed before auth/admission"
+    }
+  ],
+  "non_claims": [
+    "no accepted target-VPS execution of PR #276 yet",
+    "no whole production token API completion",
+    "no cognition/message execution integration",
+    "no durable response replay integration",
+    "no request-content-binding promotion",
+    "no task-switch consent/cancellation integration",
+    "no multimodal ingress integration",
+    "no production certificate/public routing/firewall deployment",
+    "no whole Frank v0.1 acceptance",
+    "no final training authorization"
+  ],
+  "next_frontier": [
+    "execute exact PR #276 head on accepted Hostinger self-hosted Linux/X64 lane and preserve result, resource shadow and installed transport-stack inventory",
+    "if target PASS, compare custom strict transport against actually available mature server/reverse-proxy stack using matched TLS/framing/auth/slow-client corpus before promotion",
+    "refresh and integrate adjacent #257 response replay and #259 request-content binding without duplicating their semantics",
+    "close task-switch consent/cancellation and direct token message -> ClayCode cognition -> response transport end-to-end while retaining one canonical execution/effect authority",
+    "prove production certificate, public routing/firewall, reconnect/replay and target-VPS recovery before TOKEN_API_ACCEPTANCE_GATE can pass"
+  ]
+}

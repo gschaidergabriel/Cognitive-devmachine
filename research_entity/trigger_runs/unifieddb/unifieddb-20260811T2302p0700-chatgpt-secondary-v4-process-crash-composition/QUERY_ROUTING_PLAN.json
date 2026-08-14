@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.1",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "rule": "models request typed semantic operations; storage routing is deterministic infrastructure",
+  "routes": [
+    {
+      "query_class": "AUTHORITATIVE_STATE_READ",
+      "primary": "UnifiedDB",
+      "requirements": ["current schema", "accepted epoch", "provenance", "lineage"]
+    },
+    {
+      "query_class": "AUTHORITATIVE_STATE_WRITE",
+      "primary": "UnifiedDB",
+      "requirements": ["transaction", "current execution generation", "current lease epoch", "current lineage head", "effect authority if consequential"]
+    },
+    {
+      "query_class": "TOPOLOGY_DEPENDENCY_QUERY",
+      "primary": "ClayGraph",
+      "requirements": ["projection epoch/root receipt", "resolve authoritative ids back through UnifiedDB before consequential use"],
+      "fallback": "rebuild projection or query authoritative semantic relation surface"
+    },
+    {
+      "query_class": "SEMANTIC_OR_VECTOR_RETRIEVAL",
+      "primary": "RetrievalSidecar",
+      "requirements": ["bounded candidate list", "index/version receipt", "authoritative id resolution", "staleness check"],
+      "authority": "CANDIDATE_ONLY"
+    },
+    {
+      "query_class": "REPLAY_AT_TIME_OR_EPOCH",
+      "primary": "UnifiedDB ReplayClock/SelectionReceipt",
+      "requirements": ["explicit replay clock", "snapshot/root identity", "no wall-clock guessing"]
+    },
+    {
+      "query_class": "RECOVERY_ADMISSION",
+      "primary": "UnifiedDB + independent RecoveryFloor",
+      "requirements": ["current DB lineage not below floor", "exact failure-class receipt", "integrity and replay checks"]
+    },
+    {
+      "query_class": "MODEL_FACING_ASSEMBLY",
+      "primary": "typed assembler",
+      "requirements": ["bounded context", "source identities", "selection universe", "selection receipt", "freshness/authority separation"],
+      "forbidden": ["raw SQL chosen by model", "graph activation treated as truth", "retrieval score treated as authority"]
+    }
+  ],
+  "fail_closed": [
+    "unknown schema/epoch",
+    "projection newer/older without compatible receipt",
+    "missing authoritative id",
+    "recovery class mismatch",
+    "stale lineage",
+    "missing provenance for consequential state"
+  ]
+}

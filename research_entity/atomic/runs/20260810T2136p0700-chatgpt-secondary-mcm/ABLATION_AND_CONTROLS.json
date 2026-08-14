@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-MCM-001",
+  "controls":[
+    {"name":"ARRIVAL_MUTABLE","result":"REFUTED","measurement":"408 of 4800 determinations differed from canonical reference"},
+    {"name":"GLOBAL_TOTAL_ORDER","result":"CORRECT_HIGH_DELAY","measurement":"0 wrong; mean logical seal latency 21.3575"},
+    {"name":"STRONG_CAUSAL_EVENT_SOURCING","result":"CORRECT_COMPETITIVE","measurement":"0 wrong; mean latency 6.6175; lower Python runtime and reference payload than MCM"},
+    {"name":"MCM","result":"CORRECT_PROXY_MIXED","measurement":"0 wrong; mean latency 6.736458333333333; 0 of 400 crash replay mismatches"},
+    {"name":"STALE_EPOCH_REQUIRED_ATOM","result":"REJECTED_AS_REQUIRED","measurement":"one stale atom rejected; dependent seal not emitted"},
+    {"name":"DUPLICATE_DELIVERY","result":"IDEMPOTENT","measurement":"no correctness delta"},
+    {"name":"MIDTRACE_CRASH_REPLAY","result":"EQUIVALENT","measurement":"0 of 400 result/cut mismatches"},
+    {"name":"DETERMINATION_RATE_SWEEP","result":"MIXED","measurement":"correct from about 2 percent to 25 percent determination fraction; MCM remained 1.083x to 1.328x Python runtime of strong causal baseline"}
+  ],
+  "ablations":["MCM_OFF -> strong causal event sourcing","CAUSAL_CLOSURE_OFF -> arrival mutable","PARTIAL_ORDER_OFF -> global total order","EPOCH_BINDING_OFF -> stale control","PROVENANCE_BINDING_OFF -> unresolved control","FULL_SNAPSHOT_BROADCAST -> payload comparator","GWT_MEMBRANE_MAPPING_OFF -> generic causal event sourcing"],
+  "conclusion":"Proxy supports causal closure and rejects total ordering as necessary. It does not establish MCM runtime superiority over strong causal event sourcing."
+}

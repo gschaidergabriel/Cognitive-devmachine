@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2055p0700-gpt56sol-productstart-working-directory",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "accepted_release_host_contract": "Hostinger Ubuntu VPS",
+  "training_authorized": false,
+  "source_basis": {
+    "fast_project_source": "000_CLAY_FRANK_PROJECT_SOURCE_FAST_CURRENT_2026-08-12_GRF_v2(1).txt",
+    "research_main_observed_before_write": "ff2f97ef71ce0a216d82fc8fd162ba6a0e8de1d8",
+    "canonical_entity_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "product_repo_recent_head_observed": "53d0906e5e0d5493517393164854681c2db06854"
+  },
+  "observed_reality": {
+    "productstart_v4": {
+      "candidate_pr": 524,
+      "head": "a1f892043e1e1f8e656bb313ef3f9d508ff94af8",
+      "identity_surfaces": [
+        "unit",
+        "main unit fragment path and SHA-256",
+        "launcher path and SHA-256",
+        "argv-derived prefix/manifest/target paths",
+        "V6-to-V1 guard chain hashes",
+        "SQLite manifest/runtime anchor hashes",
+        "Frank target hash"
+      ],
+      "working_directory_bound": false
+    },
+    "v5_guard_execution_semantics": {
+      "source": "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v5_candidate.py",
+      "target_path_resolution": "absolute Path(args.target).resolve(strict=True)",
+      "execution": "runpy.run_path(str(target), run_name='__main__')",
+      "cwd_changed_or_bound_before_target": false
+    },
+    "parallel_overlap": {
+      "cmdline_identity": "PR#525",
+      "python_interpreter_identity": "PR#532",
+      "pre_exec_dropins": "PR#519",
+      "post_start_stop_lifecycle": "PR#527",
+      "filesystem_namespace_substitution": "PR#521",
+      "lineage_external_freshness": "PR#523",
+      "live_sqlite_process_identity": "merged/current work including #529",
+      "working_directory_candidate_found": false
+    },
+    "host_credit_boundary": {
+      "latest_deep_integrity_hostname": "digital-retina",
+      "latest_runner_name": "clay",
+      "accepted_hostinger_productstart_credit": "NOT_GRANTED",
+      "reason": "current self-hosted mechanism evidence is not independently bound to the accepted Hostinger Ubuntu VPS"
+    },
+    "external_primary_evidence": {
+      "systemd": "WorkingDirectory is an independently observable execution property and is not implied by ExecStart or target-file identity"
+    }
+  },
+  "generated_reality": {
+    "hypothesis": "ProductStart executable/argv/release-file identity is sufficient to preserve the persistence/state identity.",
+    "strongest_counter_reality": "The same interpreter, argv and target bytes execute under another service working directory; any consequential relative persistence path resolves to a different object while the currently bound identity surfaces stay equal.",
+    "hidden_assumption": "All consequential productive Frank persistence paths are absolute or otherwise cwd-independent.",
+    "falsifier": "Hold interpreter, argv and target bytes fixed, change only OS cwd, then observe the resolved SQLite persistence object."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "WORKING_DIRECTORY_STATE_FORK",
+    "type": "disposable_local_state-identity_counterworld",
+    "scope": "local /mnt/data only; no accepted VPS/service/Frank canonical database/provider/Harness/effect/training mutation",
+    "shared": {
+      "interpreter": "/usr/bin/python3",
+      "argv": [
+        "/mnt/data/frank_workdir_counterworld_v1/target.py",
+        "probe"
+      ],
+      "target_sha256": "f02c54eac15556dff48196a16d128777bd894f98a4a0e718f79d8cefc45a732d",
+      "target_behavior": "sqlite3.connect('frank_state.sqlite')"
+    },
+    "baseline": {
+      "cwd": "/mnt/data/frank_workdir_counterworld_v1/a",
+      "resolved_database": "/mnt/data/frank_workdir_counterworld_v1/a/frank_state.sqlite",
+      "database_device": 65024,
+      "database_inode": 2359984,
+      "row_count_after_probe": 1
+    },
+    "treatment": {
+      "cwd": "/mnt/data/frank_workdir_counterworld_v1/b",
+      "resolved_database": "/mnt/data/frank_workdir_counterworld_v1/b/frank_state.sqlite",
+      "database_device": 65024,
+      "database_inode": 2359985,
+      "row_count_after_probe": 1
+    },
+    "outcome": "SUPPORTED_GENERAL_CWD_STATE_IDENTITY_BLINDSPOT",
+    "rollback": "disposable local directory; no canonical/product state touched",
+    "production_reachability_proven": false,
+    "frank_uses_relative_productive_persistence_path_proven": false
+  },
+  "grf_collapse": [
+    {
+      "claim": "same interpreter + argv + target bytes imply the same relative persistence object",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "the active ProductStart candidate stack already binds WorkingDirectory",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "productive Frank currently uses a cwd-relative consequential persistence path",
+      "outcome": "DEFER_NOT_PROVEN"
+    },
+    {
+      "claim": "WorkingDirectory should be added unconditionally before observing productive persistence semantics",
+      "outcome": "DEFER"
+    }
+  ],
+  "architecture_delta": {
+    "state": "RETAIN_TEST_OBLIGATION",
+    "invariant_candidate": "PRODUCTSTART_STATE_IDENTITY_MUST_ACCOUNT_FOR_CWD_WHEN_CONSEQUENTIAL",
+    "rule": "Observe the exact productive persistence paths first. If any consequential path is cwd-relative after configuration/environment resolution, bind exact WorkingDirectory into ProductStart identity and live observation; otherwise preserve the negative bridge result and avoid unnecessary coupling.",
+    "schema_collision_warning": "Do not independently reuse FRANK_PRODUCT_START_IDENTITY_V2; active PR #532 already uses that schema version for interpreter identity.",
+    "affected_components": [
+      "F-V01-13 SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04 UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-01 IDENTITY-SERVER-BINARY"
+    ],
+    "promotion_evidence_needed": [
+      "accepted-Hostinger ProductStart host binding",
+      "exact productive Frank persistence-path observation",
+      "absolute-vs-relative path classification after runtime config resolution",
+      "if consequential: exact WorkingDirectory anchor + live systemd observation",
+      "clean start/restart and alternate-cwd control without weakening fail-closed behavior"
+    ]
+  },
+  "durable_reentry": {
+    "product_repo_issue": 538,
+    "product_repo_issue_title": "F-V01-13: bind ProductStart WorkingDirectory to persistence/state identity",
+    "research_receipt_committed": true
+  },
+  "negative_and_unknown_evidence_preserved": [
+    "The local counterworld proves only the general semantic channel, not a productive Frank bypass.",
+    "Current self-hosted evidence is on digital-retina and is not accepted-Hostinger product evidence.",
+    "No productive persistence path was opened or mutated in this cycle.",
+    "No second unusual experiment was performed."
+  ],
+  "next_discriminator": "On exact accepted Hostinger ProductStart, observe the resolved persistence/database paths and service WorkingDirectory read-only; only then decide whether cwd belongs in the release identity.",
+  "whole_frank_release_status": "OPEN_NOT_CLAIMED",
+  "effect_authority": "NONE",
+  "canonical_frank_state_mutated": false,
+  "harness_mutated_by_frank": false,
+  "final_model_training_authorized": false
+}

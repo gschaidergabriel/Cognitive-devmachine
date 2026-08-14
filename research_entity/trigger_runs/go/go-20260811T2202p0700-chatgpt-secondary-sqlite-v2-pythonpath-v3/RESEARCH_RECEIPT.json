@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2202p0700-chatgpt-secondary-sqlite-v2-pythonpath-v3",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "ingested_by": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_subject": "self.root / human-surface Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_head": "285d8b3de5bb928f807d2571e1ae5d25ebff0bcb",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "identity_lock": {
+    "worker_is_clay_temporary_worker": true,
+    "worker_is_not_frank": true,
+    "worker_is_not_self_root": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "training_authorized": false
+  },
+  "fresh_state_and_coordination": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "critical_lane": "F-V01-13 security/recovery/observability storage runtime admission",
+    "initial_candidate_pr_333": "NOT_SELECTED_AND_CLOSED",
+    "initial_delete_fallback_reason_rejected": "Fresh swarm evidence advanced to a hash/source-id/mapped-object-bound private fixed SQLite runtime. The DELETE fallback was therefore lower-value and its proposed SIGKILL OOB never executed.",
+    "pr_333_original_run": 31501807277,
+    "pr_333_original_run_outcome": "FAIL_AT_CHECKOUT; bind/test/OOB/artifact steps skipped",
+    "fresh_parent_evidence": [
+      "Target system SQLite 3.45.1 is deterministically vulnerable to the documented WAL-reset corruption class on accepted target bytes.",
+      "Private pinned SQLite 3.53.4 target differential is green for the reproduced WAL-reset class.",
+      "V1 private-runtime admission was previously refuted as sufficient by same-source-id LD_PRELOAD interposition; V2 repaired that exact native-loader class.",
+      "Clay supervisor independently incorporated PR336 negative evidence as NR-SQLITE-PYTHON-MODULE-ORIGIN-057 and storage_runtime_admission_v2=REFUTED_AS_SUFFICIENT."
+    ]
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+      "claim_used": "SQLite documents the WAL-reset corruption defect through 3.51.2 and the fixed line beginning at 3.51.3, under constrained multi-connection writer/checkpoint conditions."
+    },
+    {
+      "source": "SQLite 3.51.3 release / change history",
+      "url": "https://sqlite.org/changes.html",
+      "claim_used": "The 3.51.3 release records the WAL-reset database corruption fix."
+    },
+    {
+      "source": "Python command-line and environment documentation",
+      "url": "https://docs.python.org/3/using/cmdline.html",
+      "claim_used": "PYTHONPATH can add module-search directories; -I isolated mode implies environment/path isolation controls needed for the repair boundary."
+    }
+  ],
+  "hypothesis_counterhypothesis": {
+    "hypothesis": "SQLite V2 native-object admission remains fail-open if the high-level Python sqlite3 module is substituted through PYTHONPATH after the correct private _sqlite3/libsqlite object is admitted.",
+    "strongest_counterhypothesis": "Python import resolution or V2/V1 admission already prevents a PYTHONPATH sqlite3.py shadow before the admission receipt or target execution.",
+    "falsifier": "V2 exits fail-closed before receipt/target, or the admitted target cannot observe the disposable shadow module."
+  },
+  "go_oob_experiment": {
+    "count_new_deliberately_unusual_experiments_in_this_chatgpt_invocation": 1,
+    "experiment": "GO_OOB_PYTHONPATH_SQLITE_MODULE_SHADOW",
+    "target_pr": 336,
+    "target_branch": "chatgpt/go-sqlite-v2-pythonpath-shadow-20260811",
+    "tested_sha": "6a0f0747d242aa95497223bbcb03aef1057f2647",
+    "run_id": 31503138219,
+    "job_id": 93817951790,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "intervention": "Only PYTHONPATH points to a disposable sqlite3.py. LD_PRELOAD and LD_AUDIT are absent; no system package, canonical Frank DB, provider, network effect or Harness authority is modified.",
+    "private_sqlite": {
+      "version": "3.53.4",
+      "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+      "library_sha256": "3ae85a2138bb4925276a0139591318d6c6e644338d6ecb19b1e441faf60c4a63",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+    },
+    "clean_baseline": {
+      "v2_returncode": 0,
+      "receipt_status": "PASS_FIXED_SQLITE_RUNTIME_V2_CANDIDATE_ADMISSION",
+      "python_sqlite3_module": "/usr/lib/python3.12/sqlite3/__init__.py",
+      "sqlite_version": "3.53.4",
+      "pragma_synchronous": 2
+    },
+    "attack_result": {
+      "v2_returncode": 0,
+      "receipt_status": "PASS_FIXED_SQLITE_RUNTIME_V2_CANDIDATE_ADMISSION",
+      "target_executed": true,
+      "shadow_marker": "PYTHONPATH_SQLITE_SHADOW",
+      "pragma_synchronous": 0,
+      "classification": "SUPPORTED_FAIL_OPEN_PYTHONPATH_SQLITE_MODULE_SHADOW"
+    },
+    "artifact": {
+      "id": 9106005734,
+      "digest": "d20c724a07342e450b2e442826032e986940435cea5e929bf9c6f5b380a85c2e"
+    },
+    "canonical_database_touched": false,
+    "system_sqlite_replaced": false,
+    "external_effect_performed": false
+  },
+  "analysis_after_oob": {
+    "result": "V2 is REFUTED_AS_SUFFICIENT for product SQLite admission because native shared-object identity and high-level Python module provenance are separable trust surfaces.",
+    "architecture_delta": "Storage runtime admission requires both pinned native libsqlite/_sqlite3 provenance and controlled/attested Python sqlite3 module/import-environment provenance.",
+    "counterevidence_preserved": "V2 remains useful evidence for the previously reproduced LD_PRELOAD/native-loader class; this result does not erase that narrower repair value."
+  },
+  "repair_candidate": {
+    "pr": 337,
+    "branch": "chatgpt/sqlite-v3-python-isolated-repair-20260811",
+    "tested_sha": "279b555bb16052a0b20ab2fb71312d14c7137905",
+    "design": [
+      "Require Python isolated mode -I and fail closed when sys.flags do not prove isolated/ignore_environment/safe_path.",
+      "Preserve -I across the V3 child execve.",
+      "Remove LD_PRELOAD, LD_AUDIT, PYTHONPATH, PYTHONHOME, PYTHONUSERBASE and PYTHONSAFEPATH from the admitted child environment.",
+      "Retain V2 ELF-loader checks and V1 private SQLite object/version/source-id/hash checks.",
+      "Attest sqlite3.__file__ under the interpreter stdlib sqlite3 package and receipt the exact module origin."
+    ],
+    "classification": "ORDINARY_REPAIR_AFTER_SINGLE_GO_OOB"
+  },
+  "target_v3_repair_receipt": {
+    "run_id": 31503879257,
+    "job_id": 93820442350,
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Ubuntu/Linux target; kernel 6.8.0-90-generic",
+    "python": "3.12.3",
+    "system_libsqlite3_package": "3.45.1-1ubuntu2.7",
+    "private_sqlite_version": "3.53.4",
+    "private_library_sha256": "3ae85a2138bb4925276a0139591318d6c6e644338d6ecb19b1e441faf60c4a63",
+    "repair_status": "PASS_V3_REPAIR_AND_COMPOSITION",
+    "repair_gate": {
+      "status": "PASS_V3_REPAIRS_CONSUMED_PYTHONPATH_SHADOW",
+      "checks_passed": 6,
+      "checks_total": 6,
+      "nonisolated_launch": "FAIL_CLOSED_RC_78_PYTHON_INTERPRETER_NOT_ISOLATED_USE_DASH_I",
+      "isolated_baseline_module": "/usr/lib/python3.12/sqlite3/__init__.py",
+      "isolated_baseline_synchronous": 2,
+      "consumed_shadow_regression_shadow_marker": null,
+      "consumed_shadow_regression_module": "/usr/lib/python3.12/sqlite3/__init__.py",
+      "consumed_shadow_regression_synchronous": 2,
+      "wall_seconds": 0.13,
+      "max_rss_kb": 17500
+    },
+    "v17_composition": {
+      "status": "PASS_V17_BOUND_REENTRY_DONE_CANDIDATE_DIFFERENTIAL",
+      "wall_seconds": 22.58,
+      "max_rss_kb": 20060
+    },
+    "unifieddb_claygraph_pair_composition": {
+      "status": "PASS_FIXED_SQLITE_UNIFIEDDB_PAIR_SMOKE",
+      "journal_mode_unified": "wal",
+      "journal_mode_graph": "wal",
+      "migrated_integrity_unified": "ok",
+      "migrated_integrity_graph": "ok",
+      "reopened_integrity_unified": "ok",
+      "reopened_integrity_graph": "ok",
+      "wall_seconds": 0.20,
+      "max_rss_kb": 18216
+    },
+    "private_sqlite_build": {
+      "wall_seconds": 315.67,
+      "max_rss_kb": 159052
+    },
+    "artifact": {
+      "name": "sqlite-v3-repair-31503879257",
+      "id": 9110506945,
+      "digest": "0e983116594709902304860766386db69811ad57bf8dd67cb999188390acd898"
+    },
+    "canonical_database_touched": false,
+    "system_sqlite_replaced": false,
+    "external_effect_performed": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "automatic_inherited_workflows": {
+    "note": "Broad existing PR path filters also replayed pre-existing storage diagnostics. These are not additional newly designed OOB experiments by this worker.",
+    "axis_c_run_31503879209": "SUCCESS; inherited known deterministic WAL-reset fault-hook regression",
+    "axis_d_run_31503879596": "FAIL during exact-source Axis-D falsifier/build; adjudication skipped; kept separate from V3 result"
+  },
+  "negative_results": [
+    "V2 native-object admission is insufficient when high-level Python sqlite3 module provenance is not bound.",
+    "PR #333 DELETE-journal fallback is NOT_SELECTED as the preferred architecture after fixed-runtime evidence advanced; its proposed OOB never ran.",
+    "Component V3 success is not whole Frank v0.1 acceptance and does not prove the final service cannot bypass the isolated interpreter launcher."
+  ],
+  "targeted_distribution": [
+    "PR #327 received the V2 invalidator and V3 target-success follow-up.",
+    "PR #337 records exact target V3 repair/composition metrics.",
+    "Clay supervisor independently fused PR336 as NR-SQLITE-PYTHON-MODULE-ORIGIN-057 and added native-library-versus-Python-module provenance as separate runtime evidence axes."
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE_NOT_PRODUCT_PROMOTED",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "change": "Use fixed SQLite 3.53.4 admission only behind a non-bypassable isolated Python product-launch boundary, preserving V1 native object/hash/source-id evidence, V2 loader hardening and V3 stdlib sqlite3 module-origin attestation.",
+    "strongest_counterhypothesis_remaining": "A final product launcher/service integration can bypass or precede the -I boundary, or another pre-admission Python startup/import surface can substitute trusted code despite the current regression passing.",
+    "rollback": "Do not promote V3 into product boot until the service/launcher boundary is target-proven; V2 remains rejected as sufficient and current system SQLite remains forbidden for correctness-sensitive multi-connection WAL product credit."
+  },
+  "test_obligations_created": [
+    "Product systemd/service launcher must establish python3 -I before any import-capable Frank Python code and prove the boundary cannot be bypassed through the supported product entrypoint.",
+    "Final target boot must receipt native SQLite object/hash/source-id plus Python sqlite3 module origin before state execution.",
+    "Re-run current recovery/re-entry/UnifiedDB composition on exact product boot bytes after integration rather than extrapolating from the candidate workflow."
+  ],
+  "next_falsifier_not_executed_in_this_go": {
+    "hypothesis": "Additional Python startup/package mechanisms may remain a pre-admission trust surface even with -I.",
+    "status": "UNTESTED_FUTURE_WORK",
+    "rule": "Do not execute another deliberately unusual intervention in this macrocycle; the single GO OOB budget was consumed by run 31503138219."
+  },
+  "research_disposition": "SUPPORTED_NEGATIVE_V2_DELTA_PLUS_TARGET_GREEN_V3_REPAIR_CANDIDATE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hypofusion-20260811T2258p0700-chatgpt-secondary",
+  "counterhypotheses": [
+    {
+      "cluster": "HF-C1-CONSUME_BOUND_SEMANTIC_CONTINUITY",
+      "counterhypothesis": "A universal consume-bound provenance primitive overgeneralizes heterogeneous boundaries; branch-local typed guards are simpler and equally safe.",
+      "supporting_evidence": "No external source in this run establishes that one universal contract is superior; SLSA only supports consumer-side verification as a pattern.",
+      "discriminator": "Matched common fault matrix: universal CBPC vs branch-local guards; compare fail-closed coverage, false rejects, recovery equivalence, latency, complexity and implementation defects.",
+      "status": "OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C2-REWARD_FRONTIER_AND_EXACTLY_ONCE",
+      "counterhypothesis": "If reward folds can only execute at machine-enforced frozen checkpoints with terminal writers excluded, explicit source-frontier identity adds no safety value.",
+      "supporting_evidence": "Internal current gap is a concurrency gap, not evidence that concurrency must exist; external transaction systems show multiple ways to coordinate position/output.",
+      "discriminator": "Prove writer exclusion/topology mechanically, then run concurrent-DONE attempts; if impossible by construction, compare simpler frozen-checkpoint fold against explicit frontier design.",
+      "status": "OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C3-LATENT_OBSERVABILITY_VS_ACTIONABILITY",
+      "counterhypothesis": "System receipts, behavior, explicit Clay state and LoopDynamicsReadout already contain all useful control information; LCOP adds model-specific fragility and cost.",
+      "supporting_evidence": "2025-2026 causal probing work shows completeness/selectivity tradeoffs, task-format confounds and large knowledge-action gaps.",
+      "discriminator": "Incremental-value benchmark: existing readouts vs existing+LCOP on held-out/OOD prediction, intervention utility, calibration, latency and resource cost.",
+      "status": "STRONG_OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C4-DUAL_WORKSPACE",
+      "counterhypothesis": "Putative model-native workspace signatures are method/model-specific and redundant with explicit ClayGWT; adding a dual-workspace control layer causes overcoupling without outcome gain.",
+      "supporting_evidence": "External workspace evidence is architecture/model specific; no source proves complementarity with an explicit external GWT controller.",
+      "discriminator": "Native workspace intact/lesion/steer x ClayGWT truthful/shuffled/no-reentry factorial with additive/common-driver controls and overcoupling readouts.",
+      "status": "STRONG_OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C5-PERSONA_APPRAISAL_IDENTITY_TIMESCALES",
+      "counterhypothesis": "Prompt-only persona plus explicit immutable identity rules is enough; persistent factorized personality creates unnecessary drift surfaces.",
+      "supporting_evidence": "Personality measurements are unstable, but that instability could argue against persistent personality state rather than for factorization.",
+      "discriminator": "Long-horizon restart/OOD comparison: prompt-only persona vs one vector vs factorized state on warranted adaptation, unwanted drift, continuity, calibration, resources and outcome quality.",
+      "status": "OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C6-BINARY_LATENT_REVALIDATION",
+      "counterhypothesis": "For selected probes/interventions, latent control survives quantization/build changes within practical tolerance, so full revalidation after every build is wasteful.",
+      "supporting_evidence": "Some quantization methods preserve task performance well and some representation features transfer across model scales; direct Frank-relevant latent-transfer evidence is missing.",
+      "discriminator": "Pre/post exact-build matched probe calibration, causal selectivity, steering efficacy and OOD transfer. Promote per-probe transfer certificates only when supported.",
+      "status": "OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C7-ADAPTIVE_RECURRENCE",
+      "counterhypothesis": "Fixed or event-driven recurrence thresholds capture nearly all utility with lower instability and observability cost.",
+      "supporting_evidence": "Current project evidence does not establish universal benefit; additional compute can mimic mechanism improvement.",
+      "discriminator": "Cost-matched fixed vs event-driven vs adaptive recurrence on automatic/complex/OOD tasks with residual-pressure and false-halt/overthinking metrics.",
+      "status": "OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C8-CONDITIONAL_HYPERPOSITION",
+      "counterhypothesis": "Pairwise/factorized alternatives preserve all decision-relevant uncertainty; hypergraph/higher-order state adds complexity without causal gain.",
+      "supporting_evidence": "Prior hypofusion already found classes with exact pairwise reductions; no new evidence overturns that bound.",
+      "discriminator": "Pairwise baseline vs Hyperposition on higher-order synthetic + real ambiguous latent/route cases, matched for memory/latency, using decision regret and calibration.",
+      "status": "OPEN_ALTERNATIVE"
+    },
+    {
+      "cluster": "HF-C9-SQLITE_SOURCE_TOPOLOGY_GATE",
+      "counterhypothesis": "The installed Ubuntu SQLite build contains a relevant backport or Frank topology makes WAL-reset trigger conditions unreachable.",
+      "supporting_evidence": "Upstream documents backports for some old branches, so version number alone cannot rule a fix in or out.",
+      "discriminator": "Exact loaded-object/source provenance plus targeted topology/fault test or machine-checked single-connection/no-concurrent-checkpoint proof.",
+      "status": "OPEN_ALTERNATIVE"
+    }
+  ]
+}

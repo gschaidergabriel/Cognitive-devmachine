@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-PSW-001",
+  "strongest_counterhypothesis":"A conventional immutable base + sparse branch overlays + exact self/epoch/revision/hypothesis/provenance metadata + memoization keyed by transition identity and exact pure read signature reproduces PSW's useful state and computation sharing with less architecture. Materialized worlds should be used when signature diversity becomes high.",
+  "result":"SUPPORTED_IN_SYNTHETIC_PROXY",
+  "evidence":[
+    "Across all 168 scaling cells, SPARSE_OVERLAY_MEMO and PSW used exactly the same number of distinct pure-transition evaluations because both partitioned branches by the same exact read signature.",
+    "Median PSW time / OVERLAY_MEMO time was 1.00937; overlay memo was faster in 103 cells and PSW in 65, consistent with implementation-level constant factors rather than a distinct algorithmic advantage.",
+    "PSW wire metadata was a median 1.01518x the ordinary overlay representation in the benchmark.",
+    "Low-divergence sharing is highly valuable relative to FULL_COPY, but ordinary overlay+memo captures it.",
+    "At F=1024,N=256,read16, median sharing factor falls from 256x at 0% divergence to 6.83x at 1%, 1.76x at 5%, 1.20x at 10%, 1.01x at 25%, and 1x at 50%; overlay memo becomes slower than FULL_COPY in the high-divergence regime.",
+    "An exact-read-set lesion shows that any memo/lifting implementation becomes unsound if a material read is omitted, so the real hard requirement lies in ClayCode pure/read-effect completeness rather than a PSW-specific state object.",
+    "Concurrent ACEF candidate already models hypothesis branches as epoch/identity/lease-bound SemanticDelta sets, increasing duplication risk for any new PSW branch-state organ."
+  ],
+  "candidate_unique_benefit":"NOT_DEMONSTRATED",
+  "architecture_decision":"NO_PROMOTION",
+  "durable_result":"Preserve a measured representation/runtime envelope: sparse overlay/delta state + exact read-signature pure memoization in low-signature-diversity regimes; independent/materialized execution when signature diversity is high; maintain exact branch identity/provenance/epoch semantics throughout. Treat this as an implementation policy consumable by Hyperposition/ACEF, not a second branch semantics.",
+  "reopen_condition":"Reopen PSW only if current ClayCode/Frank implementation evidence shows a safety/static-completeness/resource benefit not reproducible by the conventional overlay+memo representation, or if real Hyperposition traces expose a branch topology that overlays/ACEF deltas cannot represent exactly."
+}

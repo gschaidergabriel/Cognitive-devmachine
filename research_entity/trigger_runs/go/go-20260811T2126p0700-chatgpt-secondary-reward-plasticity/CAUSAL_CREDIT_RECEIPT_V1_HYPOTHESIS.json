@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "INTERFACE_HYPOTHESIS",
+  "hypothesis_id": "F-V01-11-H-CAUSAL-CREDIT-RECEIPT-V1",
+  "status": "CANDIDATE_UNIMPLEMENTED",
+  "problem": "V17 currently proves a verified terminal causal identity chain but not a calibrated fractional contribution. Reward plasticity must not trust caller-supplied numeric credit or silently reinterpret binary attribution as calibrated fractional credit.",
+  "proposed_receipt": {
+    "name": "CausalCreditReceiptV1",
+    "producer_authority": "producer-owned causal-analysis path; consumer cannot self-assert or rewrite receipt fields",
+    "required_identity_fields": [
+      "effect_id",
+      "attempt_id",
+      "verified_outcome_hash",
+      "episode_id",
+      "signal_id",
+      "causal_id",
+      "reentry_hash",
+      "terminal_receipt_hash",
+      "state_epoch",
+      "method_version"
+    ],
+    "required_credit_fields": [
+      "credit_class: BINARY_BOUND_ATTRIBUTION | FRACTIONAL_COUNTERFACTUAL | ABSTAIN",
+      "credit_score in [0,1] only for an admitted credit class",
+      "uncertainty_or_interval",
+      "intervention_family",
+      "reference_policy_or_baseline",
+      "counterfactual_sample_count",
+      "overlap_or_support_diagnostic",
+      "identification_assumptions",
+      "confounders_or_invalidators",
+      "counterfactual_outcome_summary"
+    ],
+    "provenance_fields": [
+      "producer_actor",
+      "producer_model_or_algorithm",
+      "source_receipt_hashes",
+      "created_at",
+      "receipt_hash"
+    ],
+    "fail_closed_rules": [
+      "caller-supplied fractional credit is forbidden",
+      "missing or mismatched terminal identity => ABSTAIN",
+      "missing counterfactual validity/support for fractional method => ABSTAIN",
+      "binary attribution may be represented as 1 only with credit_class=BINARY_BOUND_ATTRIBUTION and must never be relabeled calibrated_fraction",
+      "fractional score must retain method/uncertainty/intervention semantics",
+      "receipt never mints truth, effect authority, confirmation or Harness authority"
+    ]
+  },
+  "primary_research_basis": [
+    {
+      "source": "Mesnard et al., ICML 2021, Counterfactual Credit Assignment in Model-Free Reinforcement Learning",
+      "url": "https://proceedings.mlr.press/v139/mesnard21a.html",
+      "use": "credit assignment measures action influence on future reward and must separate skill from luck/external factors"
+    },
+    {
+      "source": "Meulemans et al., NeurIPS 2023, Counterfactual Contribution Analysis",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/d8bd445c2abe1343cce0e14b361b2fb3-Abstract-Conference.html",
+      "use": "counterfactual contribution asks whether reward would still occur under another action and shows spurious contribution estimates can arise under weaker conditioning"
+    },
+    {
+      "source": "Meng, arXiv 2606.05263, Policy-Conditioned Counterfactual Credit for Verifiable RL of Long-Horizon Language Agents",
+      "url": "https://arxiv.org/abs/2606.05263",
+      "use": "language-agent credit should bind controlled interventions, validity gating, reference-policy semantics and diagnostics to verifiable outcomes"
+    },
+    {
+      "source": "Li et al., arXiv 2607.16999, Counterfactual Shapley Credit Assignment",
+      "url": "https://arxiv.org/abs/2607.16999",
+      "use": "recent causal credit work explicitly separates policy contribution from environmental stochasticity and uses counterfactual attribution"
+    }
+  ],
+  "strongest_counterhypothesis": "The full fractional receipt is excessive for Frank v0.1. An explicit binary verified bound-attribution receipt may provide enough safe learning signal with materially lower compute, complexity and calibration risk; fractional credit should be added only if matched replay demonstrates incremental value.",
+  "required_discriminator": "BINARY_VS_FRACTIONAL_CAUSAL_CREDIT_REPLAY",
+  "architecture_delta": "ADD_RECEIPT_SCHEMA_HYPOTHESIS_AND_DEFAULT_ABSTAIN; DO_NOT PROMOTE FRACTIONAL CREDIT YET",
+  "go_oob_count_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.1",
+  "event_type": "FRANK_V0_1_WORK_FRONTIER_DELTA",
+  "status": "LIVE_SQLITE_IDENTITY_HARDENED / SELF_HOSTED_MATRIX_RECOVERED / PRODUCTIVE_HOSTINGER_GATE_OPEN",
+  "created_at": "2026-08-12T20:52:00+07:00",
+  "actor": "OpenAI / GPT-5.6 Sol",
+  "actor_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "owner_program": "FRANK_V0_1",
+  "work_package_reentry": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "duplicate_avoidance": {
+    "shared_head_checked_before_write": "85d7244ba54241fefb50e6bb23887ab0f361d808",
+    "parallel_receipt_already_present": "research_entity/trigger_runs/go/20260812T2050p0700-gpt56sol-sqlite-live-attestor-decoy/RESEARCH_RECEIPT.json",
+    "delta_preserved_here": "Different bounded falsifier: atomically replace the pathname of an already mapped SQLite-like shared object and compare live mapping identity with current pathname identity. Also records the already-executed checkout-isolation counter-run and later parallel hardening of the attestor."
+  },
+  "observed_anchors": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "live_attestor_commit": "b60c869e2c48007e3f42fcda488ca193f3c43a61",
+    "live_attestor_tests_commit": "1d104517f2fd03c82a5154edd0df7f6f2f3aa215",
+    "vps_checkout_isolation_commit": "dc81f6697b787e0bee7d391daf91008276280106",
+    "self_hosted_counter_run": 31603077894,
+    "self_hosted_counter_run_result": "SUCCESS",
+    "self_hosted_matrix": "23_PASS_0_FAIL",
+    "self_hosted_receipt_commit": "e711a114d282a921f13d0ae2b1d1898a461d4cc4",
+    "parallel_attestor_hardening_commit": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+    "latest_product_main_observed_before_reentry": "53d0906e5e0d5493517393164854681c2db06854",
+    "open_productive_binding_work_item": "gschaidergabriel/Dr.-Unterweger#534"
+  },
+  "implementation_delta": {
+    "live_process_attestor": {
+      "path": "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py",
+      "scope": "One live PID-generation SQLite mapping identity only; explicitly no Frank identity, productive persistence-path, restart/recovery or effect-authority claim.",
+      "initial_mechanisms": [
+        "V5/V6 root-anchor and manifest composition",
+        "non-root target process check",
+        "PID start-tick generation fence",
+        "stable /proc/<pid>/maps sampling",
+        "deleted mapping rejection",
+        "single mapping identity requirement",
+        "mapped pathname plus device/inode binding",
+        "anchor library SHA-256 equality"
+      ],
+      "parallel_current_main_hardening": "Commit b4868cb58de5279c5c772c8f9cb0c88b6191afc8 further binds hashing to the same O_NOFOLLOW FD/device/inode and fences size/mtime/ctime stability against in-place mutation."
+    },
+    "regressions": {
+      "initial_added": 4,
+      "initial_local_result": "PASS",
+      "parallel_current_main_regression_count": 6,
+      "parallel_exact_head_run": 31603159983,
+      "parallel_exact_head_result": "PASS"
+    },
+    "runner_hygiene_repair": {
+      "cause": "Self-hosted checkout could fail before tests when stale runner-workspace files were not removable by frankrunner.",
+      "repair": "Checkout deep-integrity into a run-id/run-attempt-owned subtree and execute/persist evidence from that tree.",
+      "counter_run": 31603077894,
+      "counter_run_result": "SUCCESS",
+      "release_claim": false
+    }
+  },
+  "grf": {
+    "observed_R0": "Path-based file identity can diverge from code already mapped into a running process; current guards also contain deleted-mapping rejection and later current-main same-FD hashing/stability fencing.",
+    "generated_R2": "An atomic pathname replacement might cause an external live attestor to hash the new path while the target process continues executing the old mapped inode, yielding false identity agreement or ambiguous evidence.",
+    "counter_R3": "The live mapping identity should expose the old inode/deleted mapping and current fail-closed guards should deny rather than accept.",
+    "falsifier": "Map a disposable harmless shared object named libsqlite3.so.0, atomically replace the same filesystem pathname with different bytes/inode, then compare execution marker, /proc mapping and pathname stat identity.",
+    "outcome": "COUNTER_REALITY_SUPPORTED_NO_FALSE_PASS",
+    "promotion": "Preserve dev+inode plus stable resampling/same-FD content identity as required live-observation semantics; do not promote to productive release acceptance."
+  },
+  "go_unusual_experiment": {
+    "count": 1,
+    "name": "MAPPED_SQLITE_PATH_REPLACEMENT_INODE_SPLIT",
+    "scope": "Disposable local sandbox process only; no accepted Hostinger service, Frank database/state, provider, Harness authority or canonical runtime mutation.",
+    "baseline": {
+      "mapped_inode": 2490987,
+      "execution_marker": 111
+    },
+    "treatment": {
+      "same_path_replacement_inode": 2490989,
+      "replacement_marker": 222
+    },
+    "observed_after_replacement": {
+      "running_process_marker": 111,
+      "mapping_inode_remained": 2490987,
+      "pathname_inode_became": 2490989,
+      "proc_maps_deleted_marker": true
+    },
+    "result": "RUNNING_CODE_REMAINS_OLD_MAPPING_AND_CURRENT_GUARD_FAILS_CLOSED",
+    "false_pass_observed": false,
+    "outcome": "RETAIN_NEGATIVE_RESULT_AND_IDENTITY_FENCE"
+  },
+  "validation": {
+    "local": [
+      "python py_compile PASS",
+      "4/4 initial live-attestor primitive regressions PASS",
+      "real local SQLite mapping path/device/inode/PID-generation sanity PASS"
+    ],
+    "self_hosted": {
+      "run": 31603077894,
+      "runner": "clay",
+      "machine": "digital-retina",
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "gate_count": 23,
+      "pass_count": 23,
+      "fail_count": 0,
+      "whole_frank_release_status": "NOT_CLAIMED"
+    },
+    "external_ci_note": "Some GitHub-hosted jobs were not started because the account billing/spending-limit gate blocked them. Treat as CI availability, not code/product failure."
+  },
+  "provenance_correction": {
+    "digital_retina_default_python_sqlite_3_45_1": "Observed on the self-hosted digital-retina/default-interpreter lane only.",
+    "accepted_hostinger_product_runtime_sqlite": "UNVERIFIED",
+    "rule": "Do not attribute the digital-retina 3.45.1 observation to accepted Hostinger without independently bound host plus ProductStart/process identity and live mapped-object evidence."
+  },
+  "remaining_release_gate": [
+    "Independently bind the accepted Hostinger hostname and machine-id hash.",
+    "Bind canonical Frank ProductStart systemd unit, executable/interpreter and complete launch identity.",
+    "Provision the release-accepted fixed SQLite object plus root-owned trust anchor on the accepted host.",
+    "Observe the selected live Frank process mapping that exact anchored SQLite object.",
+    "Exercise the real UnifiedDB/productive persistence path in that admitted process.",
+    "Prove start/restart/recovery plus rollback, downgrade and library-swap rejection in provenance-bound receipts.",
+    "Keep semantic-lineage selection/recovery-generation obligations independently fail-closed."
+  ],
+  "current_parallel_frontier": {
+    "actual_process_observer_pr_515": "MERGED",
+    "python_interpreter_identity_pr_532": "OPEN_DRAFT_STACKED_CANDIDATE",
+    "productive_binding_issue_534": "OPEN",
+    "decision": "DEFER additional local guard proliferation; next high-information acceptance evidence requires the accepted Hostinger ProductStart/persistence/recovery lane."
+  },
+  "authority": {
+    "frank_self_harness_mutation": false,
+    "effect_authority": "NONE",
+    "training_authorized": false
+  },
+  "outcome": "PROMOTE_LIVE_ATTESTOR_AND_RUNNER_CHECKOUT_ISOLATION_MECHANISMS; RETAIN_F_V01_13_IN_PROGRESS; PRODUCTIVE_HOSTINGER_GATE_OPEN"
+}

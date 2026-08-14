@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1212p0700-chatgpt-secondary-v7-conflict-tomography",
+  "trigger": "go",
+  "created_at": "2026-08-10T12:12:06+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "observed_repo_head_before_write": "509406796afd2424a41a209298498dfc071df393",
+  "subject": "CC-WP-03 strict typed-IR frontend blocker classification",
+  "source": {
+    "grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark",
+    "git_blob_sha": "a63b7ce112fbe6acf1890fef24a204f3863a5292",
+    "local_reconstruction_git_blob_sha": "a63b7ce112fbe6acf1890fef24a204f3863a5292",
+    "local_sha256": "3a7e6f94be4a940bbe02a2edf5596e88e41498de0c4cbee20028432bb7d3e885",
+    "exact_byte_match_verified": true,
+    "production_patch_context": "c42ddaa347556fa2a8bdea27e4e7db98cfeb6b8d",
+    "prior_remote_failure_context": "60e4fcad3909a24240c2250c6ae27dbbe068c558"
+  },
+  "hypothesis": "The pending WP03 red run is explained by a strict LALR ambiguity already present in the exact V7 grammar before typed-IR lowering.",
+  "strongest_counterhypothesis": "The red run reflects a typed-IR regression, transport failure, or a single isolated OR conflict rather than a structural V7 grammar ambiguity.",
+  "runtime": {
+    "evidence_class": "LOCAL_CONTAINER_EXACT_GRAMMAR_REPRODUCTION_NOT_UBUNTU_TARGET_ACCEPTANCE",
+    "os": "Linux",
+    "kernel": "6.18.35",
+    "machine": "x86_64",
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "cpu_count_visible": 5,
+    "memory_total": "6219544 kB",
+    "python": "3.13.5",
+    "python_implementation": "CPython",
+    "lark": "1.3.1",
+    "interegular": "NOT_INSTALLED",
+    "max_rss_kb_observed": 126820
+  },
+  "result": {
+    "classification": "V7_STRICT_CONTRACT_BLOCKED",
+    "typed_ir_implicated": false,
+    "strict_first_observed_error": "GrammarError: Shift/Reduce conflict for terminal REQUIRES. [strict-mode] * <dotted_relation : qid DOT_REL>",
+    "debug_complete_unique_shift_reduce_terminals": [
+      "REQUIRES",
+      "SUBSET_OF",
+      "OR",
+      "IN",
+      "IFF",
+      "LBRACE"
+    ],
+    "unique_shift_reduce_conflict_count": 6,
+    "shared_reduce_item": "<dotted_relation : qid DOT_REL>",
+    "causal_interpretation": "The optional primary in dotted_relation makes the parser choose between reducing a bare dotted relation and shifting a token that can begin the optional RHS. Five word operators are also admitted as ident/qid, and LBRACE can begin a set primary while also serving as a following cycle-block opener. The ambiguity exists before typed-IR lowering."
+  },
+  "functional_falsifiers": [
+    {
+      "source": "rule Needle.owns requires X\\n",
+      "expected_intent_under_bare_relation_plus_operator": "bare Needle.owns followed by requires operator and X",
+      "nonstrict_lalr_result": "FAIL_UNEXPECTED_TOKEN_X_AFTER_SHIFT",
+      "meaning": "Lark's default shift resolution is observably harmful for an otherwise structurally intended bare-dotted-relation plus word-operator sequence."
+    },
+    {
+      "source": "rule Needle.owns X requires Y\\n",
+      "nonstrict_lalr_result": "PASS",
+      "meaning": "When the dotted relation has an explicit RHS, the same word operator is unambiguous."
+    },
+    {
+      "source": "rule Needle.owns\\n",
+      "nonstrict_lalr_result": "PASS",
+      "meaning": "Bare dotted relation itself is admitted, confirming that optionality is intentional in V7 and participates in the conflict."
+    }
+  ],
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "PARSER_CONFLICT_EXCISION_TOMOGRAPHY",
+    "purpose": "Treat the grammar as a lesionable mechanism: excise one ambiguity dimension at a time and count the remaining parser-state conflicts instead of immediately proposing a new grammar version.",
+    "rows": [
+      {
+        "intervention": "BASELINE_EXACT_V7",
+        "unique_shift_reduce_conflicts": 6,
+        "terminals": ["REQUIRES", "SUBSET_OF", "OR", "IN", "IFF", "LBRACE"],
+        "lalr_construction_ms": 159.393
+      },
+      {
+        "intervention": "REMOVE_WORD_OPERATOR_IDENT_ALIASES_ONLY",
+        "unique_shift_reduce_conflicts": 1,
+        "terminals": ["LBRACE"],
+        "lalr_construction_ms": 86.346,
+        "interpretation": "Keyword dual-role explains five of six conflicts but not the block/set ambiguity."
+      },
+      {
+        "intervention": "REQUIRE_DOTTED_RELATION_RHS",
+        "unique_shift_reduce_conflicts": 0,
+        "terminals": [],
+        "lalr_construction_ms": 93.056,
+        "interpretation": "Removing optionality eliminates the structural LALR conflict family; this is a falsifier, not an authorized semantic change."
+      },
+      {
+        "intervention": "FORBID_DOTTED_RELATION_RHS",
+        "unique_shift_reduce_conflicts": 0,
+        "terminals": [],
+        "lalr_construction_ms": 93.926,
+        "interpretation": "Either side of the optionality split is structurally conflict-free; the ambiguity is specifically caused by admitting both under one LALR state."
+      }
+    ],
+    "promotion": "NONE"
+  },
+  "fresh_external_primary_evidence": {
+    "source_repository": "lark-parser/lark",
+    "path": "docs/how_to_use.md",
+    "blob_sha": "7ba5acf8e695426bd1d270a05dcada89c6026207",
+    "retrieved_on": "2026-08-10",
+    "supported_points": [
+      "Default LALR resolves Shift/Reduce conflicts as shift.",
+      "debug=True surfaces Shift/Reduce conflicts as warnings.",
+      "strict=True raises on Shift/Reduce or regex collisions.",
+      "interegular is required for strict regex-collision checking; its absence does not create the measured Shift/Reduce conflict family."
+    ],
+    "web_search_status": "HTTP_503_ON_TWO_ATTEMPTS_BUT_CURRENT_PRIMARY_GITHUB_SOURCE_RETRIEVED"
+  },
+  "concurrent_evidence_fusion": {
+    "v18_counterevidence_commit": "ebcd52153793733dfb71b5a02a184fad5322bbce",
+    "v18_probe_commit": "509406796afd2424a41a209298498dfc071df393",
+    "joint_interpretation": "V18 whole-dotted-token tokenization removes a lookahead mechanism but retains the deeper bare-atom versus operator/identifier ambiguity. V7 tomography independently localizes the broader conflict family and adds the LBRACE block/set branch."
+  },
+  "architecture_effect": {
+    "status": "NEGATIVE_RESULT_PLUS_BLOCKER_CLASSIFICATION",
+    "decision": "Do not classify the pending WP03 failure as typed-IR regression. Preserve V7 as strict-contract-blocked evidence. Keep V17 production selection unchanged. Any future repair must separately resolve word-operator/identifier role ambiguity and bare-dotted-relation/block-set ambiguity, then pass exact-byte strict + full-corpus + semantic-hash differential validation.",
+    "canonical_semantics_changed": false,
+    "grammar_promoted": false,
+    "frank_harness_modified": false,
+    "rollback": "No code or grammar change was made; rollback is not required."
+  },
+  "next_falsifiers": [
+    "Run an interegular-enabled exact-V7 diagnostic on an Ubuntu repository lane and confirm the same parser-state conflict family before any regex-collision phase.",
+    "Mine frozen G9/Dialect and real Clay source for intended bare Needle.owns/lowers followed by word operators or cycle blocks to quantify compatibility pressure.",
+    "Test a bounded relation membrane that distinguishes bare relation, relation-with-RHS, call and block boundary without allowing descriptive identifier aliases to mint parser ambiguity; compare against V17 and current V18 under semantic hashes.",
+    "Do not mutate WP04 until WP03 source admission is executable-clean under reviewed provenance."
+  ],
+  "gate_impact": {
+    "CC_WP_03": "REMAINS_OPEN_BUT_FAILURE_CLASSIFIED",
+    "BASE_CLAYCODE_RELEASE": "REMAINS_NOT_PASS",
+    "counts_as_andreas_target_acceptance": false,
+    "promotion_allowed": false
+  },
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

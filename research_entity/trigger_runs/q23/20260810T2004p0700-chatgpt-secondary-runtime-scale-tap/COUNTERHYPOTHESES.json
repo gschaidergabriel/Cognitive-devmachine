@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "counterhypotheses": [
+    {
+      "counter_id": "Q23-CH-RAW-FEATURE-01",
+      "attacks": ["H-QNDRF-01","Q23-H-FEATURE-TAP-01"],
+      "claim": "Raw generative VLM media-token embeddings are not a calibrated user-specific identity/open-set space. Strong multimodal embedding systems derived from VLMs use explicit contrastive/multi-stage adaptation, so a dedicated lightweight embedding baseline may remain Pareto-superior for MVC even if a second heavy semantic stack is unnecessary.",
+      "test": "Compare raw pooled Qwen mmproj descriptors, tiny projected Qwen descriptors and a dedicated lightweight frozen embedding baseline with identical prototype/open-set readout and complete pathway resource accounting."
+    },
+    {
+      "counter_id": "Q23-CH-ENCODE-DOMINANCE-01",
+      "attacks": ["H-QNDRF-02","Q23-H-VISION-SCALE-01"],
+      "claim": "Decoder bypass may save less than expected if the 24-layer Qwen vision tower dominates sensor-to-state cost on the 4-CPU target VPS. In that case deterministic change gates and a truly smaller vision path matter more than 4B->2B decoder downsizing.",
+      "test": "Decompose capture/preprocess, vision encode, MVC, prompt processing and decode at fixed token budgets for 0.8B/2B/4B."
+    },
+    {
+      "counter_id": "Q23-CH-MEMORY-PRIMING-01",
+      "attacks": ["H-PAR-01","H-PAR-04","H-PAR-05"],
+      "claim": "Perceptual EAP/ActiveAssembly can create confirmation loops: wrong high-confidence visual seeds may improve apparent contextual coherence while worsening sensor-grounded correctness.",
+      "test": "Wrong-seed, shuffled-topology, stale-layout, near-neighbor unknown and no-EAP controls; current sensor evidence must remain epistemically dominant."
+    },
+    {
+      "counter_id": "Q23-CH-ROI-CONTEXT-01",
+      "attacks": ["H-QNDRF-03"],
+      "claim": "Aggressive changed-region cropping can remove background/layout state that recent GUI research finds useful for state-transition reasoning and grounding.",
+      "test": "ROI-only vs ROI+context vs adaptive quadtree vs full-frame under matched visual-token budgets, including hidden modal/notification fixtures."
+    }
+  ]
+}

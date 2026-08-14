@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "baseline_id": "ORIGINAL-DIGITAL-RETINA-MAY2026-ARCHAEOLOGY",
+  "status": "BASELINE_PARTIAL_ARCHAEOLOGY",
+  "replacement_claim_allowed": false,
+  "hard_law": "NO_ORIGINAL_BASELINE -> NO_REPLACEMENT_CLAIM",
+  "sources": [
+    "Drive:digital-retina/retina/core.py modified 2026-05-26",
+    "Drive:digital-retina/retina/vision/frank_eye.py modified 2026-05-27",
+    "research_entity/archive_assimilation/receipts/666_20260809T0441p0700_chatgpt_secondary_drive_g8_g9_retina_code_shard.json",
+    "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md"
+  ],
+  "observed_architecture": {
+    "public_api": "path|URL|bytes -> structured dict",
+    "structured_surface": [
+      "description",
+      "concepts",
+      "objects",
+      "ocr_text",
+      "faces",
+      "logos",
+      "screenshot",
+      "image_dimensions",
+      "elapsed_ms",
+      "deep",
+      "ai_detection",
+      "scene_tags",
+      "captions",
+      "region_captions",
+      "vqa",
+      "relational_caption",
+      "painting_text",
+      "dominant_colors",
+      "places",
+      "fine_objects",
+      "region_attrs",
+      "caption_grounded",
+      "composition",
+      "gol_patterns",
+      "gol_complexity",
+      "gol_library_outputs"
+    ],
+    "conditional_fast_path": "OCR+faces run first; screenshot heuristic may skip YOLO/DINO and retain lighter CLIP/color/screenshot description path",
+    "photo_path": "CLIP + YOLO + DINO run in parallel after OCR/faces; downstream specialized modules refine faces/logos/scene/fine objects/regions/captions/composition/GoL",
+    "historical_physical_backbones": ["legacy CNN", "CLIP", "YOLO", "DINOv2 ONNX INT8", "OCR", "face/emotion", "caption/VQA", "specialized rule/feature modules"]
+  },
+  "conflicting_historical_performance_anchors": [
+    {
+      "source": "core.py API docstring",
+      "claim": "about 1.5 GB model RAM; subsequent singleton calls about 900 ms p50 on a 4-vCPU server",
+      "status": "HISTORICAL_SOURCE_COMMENT_NOT_CURRENT_REEXECUTION"
+    },
+    {
+      "source": "frank_eye.py header",
+      "claim": "Fast mode about 100 ms; deep mode about 300 ms; DINO about 47 ms parallel with OCR about 100 ms",
+      "status": "HISTORICAL_SOURCE_COMMENT_NOT_CURRENT_REEXECUTION"
+    },
+    {
+      "source": "historical working paper via Level-0 receipt",
+      "claim": "about 1.5-2.0 s/image on 4-vCPU CPU-only hardware",
+      "status": "HISTORICAL_WORKING_PAPER_MEASUREMENT"
+    }
+  ],
+  "cold_start_evidence": {
+    "core_source_comment": "vision singletons about 10-15 s plus about 2.5k scene-phrase text embeddings about 25 s; without preload worker first-use path may approach about 60 s",
+    "status": "HISTORICAL_SOURCE_COMMENT_NOT_CURRENT_REEXECUTION"
+  },
+  "historical_quality_anchor": {
+    "heldout_phrase_coverage": 0.824,
+    "heldout_images": 47,
+    "phrases": 1196,
+    "realistic_negative_false_positive_rate_at_threshold_0_22": 0.136,
+    "status": "MEASUREMENT_FOUNDATION_NOT_ACCEPTANCE_THRESHOLD"
+  },
+  "functional_lineage": [
+    {
+      "function": "sensor materialization/source handling",
+      "candidate_disposition": "FUSE",
+      "qn_target": "in-module token/API/screen/camera ingress with epoch/provenance binding",
+      "baseline_needed": "source acceptance/rejection, size cap, stale/replay behavior, latency"
+    },
+    {
+      "function": "early screenshot/text-structure routing",
+      "candidate_disposition": "RETAIN",
+      "qn_target": "cheap deterministic/typed route before buying unnecessary deep vision",
+      "baseline_needed": "screenshot false-positive/false-negative and route-cost matrix"
+    },
+    {
+      "function": "OCR/small-text perception",
+      "candidate_disposition": "CLAY_REDESIGN_CANDIDATE",
+      "qn_target": "compare dedicated OCR versus Qwen visual decode versus hybrid selective OCR",
+      "baseline_needed": "small/dense/UI text correctness, latency and resource profile"
+    },
+    {
+      "function": "open-vocabulary concept recognition (CLIP)",
+      "candidate_disposition": "CLAY_REDESIGN_CANDIDATE",
+      "qn_target": "Qwen projected features + optional decode; dedicated embedding remains counterbaseline",
+      "baseline_needed": "known/open-set/novel class and calibration"
+    },
+    {
+      "function": "object localization (YOLO) and region reasoning",
+      "candidate_disposition": "CLAY_REDESIGN_CANDIDATE",
+      "qn_target": "Qwen grounding/crop reasoning or retained detector if localization wins",
+      "baseline_needed": "box/action-grounding accuracy, small-object failure, latency"
+    },
+    {
+      "function": "DINO spatial/scene feature and attention-crop support",
+      "candidate_disposition": "CLAY_REDESIGN_CANDIDATE",
+      "qn_target": "projected Qwen visual-token geometry or deeper tap if available",
+      "baseline_needed": "salient-region/scene-layout stability, descriptor geometry, resource cost"
+    },
+    {
+      "function": "faces/emotion/logos/places/fine objects/color/composition/AI-art/VQA/caption-grounded refiners",
+      "candidate_disposition": "EMERGENT_DISTRIBUTE",
+      "qn_target": "may disappear as separate modules only if frozen differential fixtures show causal function is reproduced by integrated Qwen/typed state",
+      "baseline_needed": "per-function fixture coverage and lesion/rescue, not aggregate caption quality"
+    },
+    {
+      "function": "GoL/pattern dynamics",
+      "candidate_disposition": "CLAY_REDESIGN_CANDIDATE",
+      "qn_target": "retain only if matched tests show unique causal value to Frank v0.1 perceptual/control outcomes",
+      "baseline_needed": "lesion/rescue and equal-budget outcome benefit"
+    },
+    {
+      "function": "conditional computation/parallel stages/cold preload",
+      "candidate_disposition": "RETAIN",
+      "qn_target": "one-encode/zero-or-one-decode, change/anchor routes, bounded concurrency and explicit warm state",
+      "baseline_needed": "cold/warm p50/p95/p99, queueing, RSS, CPU, restart"
+    }
+  ],
+  "blocking_unknowns": [
+    "Exact historical model/weight bundle has not been re-executed in this q23 invocation.",
+    "The conflicting historical latency anchors have not been normalized to identical version/mode/fixtures.",
+    "Per-function accuracy for several specialized modules is not yet frozen on a shared current fixture corpus.",
+    "Current Qwen/shared-buffer candidate has not yet been compared against historical Retina on matched inputs."
+  ],
+  "next_baseline_action": "Recover exact runnable historical bundle plus weights/fixtures where available, freeze a compact differential corpus spanning each surviving function, then execute cold/warm baseline on accepted target lane before any replacement claim."
+}

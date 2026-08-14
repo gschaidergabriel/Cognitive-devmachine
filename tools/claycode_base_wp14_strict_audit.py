@@ -9,10 +9,11 @@ independently rechecks per-app receipts, full FRANK and the P0/P1 defect ledger.
 Cross-receipt coherence law:
 - the strict target adjudication defines the exact release repository commit;
 - every real per-application receipt and the full-FRANK receipt must carry the same git_head;
-- mixed-commit green receipts fail closed even when every individual receipt is otherwise PASS.
+- that release commit must also equal the checkout HEAD executing WP14;
+- mixed-commit or stale-but-internally-coherent green receipts fail closed.
 """
 from __future__ import annotations
-import argparse, hashlib, json
+import argparse, hashlib, json, subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -56,6 +57,17 @@ def find_wp(strict: dict[str, Any], prefix: str):
 
 def receipt_head(data: dict[str, Any] | None) -> str:
     return str((data or {}).get('git_head') or '').strip()
+
+
+def current_checkout_head() -> str:
+    cp = subprocess.run(
+        ['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True, capture_output=True, check=False
+    )
+    return cp.stdout.strip() if cp.returncode == 0 else ''
+
+
+def release_commit_is_current(release_commit: str, checkout_head: str) -> bool:
+    return bool(release_commit and checkout_head and release_commit == checkout_head)
 
 
 def real_app(app: str, expected_head: str):
@@ -169,6 +181,8 @@ def main() -> int:
     spec, spec_error = load(SPEC)
     wp: dict[str, dict[str, Any]] = {}
     strict_commit = str((strict or {}).get('repository_commit') or '').strip()
+    checkout_head = current_checkout_head()
+    strict_commit_fresh = release_commit_is_current(strict_commit, checkout_head)
 
     wp1 = bool(
         spec
@@ -191,7 +205,7 @@ def main() -> int:
         and strict_error is None
         and strict.get('overall_pass') is True
         and strict.get('target_host') == TARGET
-        and strict_commit
+        and strict_commit_fresh
         and isinstance(strict.get('host_fingerprint'), dict)
         and all(strict['host_fingerprint'].get(k) for k in ('uname', 'architecture', 'python_version', 'c_compiler_version'))
         and strict.get('collector_clean_target_attestation_pass') is True
@@ -222,6 +236,8 @@ def main() -> int:
     wp['CC-WP-10-GENERAL-APP-SUITE'] = {
         'pass': wp10_ok,
         'repository_commit': strict_commit or None,
+        'checkout_head': checkout_head or None,
+        'release_commit_freshness_pass': strict_commit_fresh,
         'cross_receipt_commit_coherence_pass': app_commit_coherence,
         'applications': [row for _, row in app_rows],
     }
@@ -232,6 +248,8 @@ def main() -> int:
     wp['CC-WP-13-HARNESS-HANDOFF'] = {
         'pass': wp13_ok,
         'repository_commit': strict_commit or None,
+        'checkout_head': checkout_head or None,
+        'release_commit_freshness_pass': strict_commit_fresh,
         'cross_receipt_commit_coherence_pass': frank_row.get('git_head_match') is True,
         'strict_work_package': strict_wp13,
         'full_frank': frank_row,
@@ -247,13 +265,15 @@ def main() -> int:
         and app_commit_coherence
         and frank_row.get('git_head_match') is True
     )
-    wp14_ok = prior_ok and defects_ok and cross_receipt_commit_coherence
+    wp14_ok = prior_ok and defects_ok and cross_receipt_commit_coherence and strict_commit_fresh
     wp['CC-WP-14-BASE-AUDIT'] = {
         'pass': wp14_ok,
         'wp01_13_all_pass': prior_ok,
         'zero_open_p0_p1': defects_ok,
         'cross_receipt_commit_coherence_pass': cross_receipt_commit_coherence,
+        'release_commit_freshness_pass': strict_commit_fresh,
         'repository_commit': strict_commit or None,
+        'checkout_head': checkout_head or None,
         'defect_ledger': defect_row,
     }
 
@@ -265,11 +285,13 @@ def main() -> int:
     }
     failed = [name for name, row in wp.items() if row.get('pass') is not True]
     manifest = {
-        'schema_version': '1.3',
+        'schema_version': '1.4',
         'manifest': 'CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST',
         'created_at': datetime.now(timezone.utc).isoformat(),
         'target_host': TARGET,
         'repository_commit': strict_commit or None,
+        'checkout_head': checkout_head or None,
+        'release_commit_freshness_pass': strict_commit_fresh,
         'cross_receipt_commit_coherence_pass': cross_receipt_commit_coherence,
         'authority_invariant': 'model output != execution authority',
         'strict_target_receipt': str(STRICT.relative_to(ROOT)),
@@ -283,8 +305,8 @@ def main() -> int:
         'promotion_allowed': not failed,
         'scope_guard': (
             'One clean target collector -> strict target adjudication -> independent per-app/full-FRANK/P0-P1 WP14 audit. '
-            'Every target application and full-FRANK receipt must bind the exact strict target repository commit. '
-            'Hosted/proxy or mixed-commit evidence cannot promote BASE.'
+            'Every target application and full-FRANK receipt must bind the exact strict target repository commit, and that '
+            'commit must equal the checkout HEAD executing WP14. Hosted/proxy, mixed-commit, or stale release evidence cannot promote BASE.'
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -292,6 +314,8 @@ def main() -> int:
     print(json.dumps({
         'pass': not failed,
         'repository_commit': strict_commit or None,
+        'checkout_head': checkout_head or None,
+        'release_commit_freshness_pass': strict_commit_fresh,
         'cross_receipt_commit_coherence_pass': cross_receipt_commit_coherence,
         'failed_work_packages': failed,
         'output': str(args.output.relative_to(ROOT)) if args.output.is_relative_to(ROOT) else str(args.output),

@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.1",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "trigger": "q23",
+  "trigger_protocol": "research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_identity_excluded": ["self.root", "Frank"]
+  },
+  "observed_local_time": "2026-08-10T22:42:00+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "target": "FRANK_V0_1",
+    "stage": "FRANK_V0_1",
+    "work_package": "F-V01-06-DIGITAL-RETINA-MVC",
+    "work_package_observed_status": "OPEN",
+    "historical_h1_h2_h3_active_stages": false,
+    "training_authorized": false
+  },
+  "research_question": "Can the exact Qwen3.5/libmtmd projected visual-token buffer be reused as the tiny user-specific MVC/open-set substrate before optional 4B decoder insertion, with exact feature-epoch guards and no second heavy vision encoder?",
+  "strongest_counterquestion": "Are projected generative-VLM visual embeddings too runtime-sensitive or insufficiently metric-calibrated for persistent user-specific familiarity/open-set prototypes, making a dedicated lightweight embedding path or deeper pre-projection tap Pareto-superior?",
+  "target_repo_deltas": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "79379f85cae698e9fe396bc45b5e4c2a61582d45",
+      "path": "runtime/q23_visual_embedding_gate_v1/target_vps_probe.py",
+      "kind": "EXECUTABLE_REFERENCE_ORACLE_V1_1_POSITION_AWARE"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "fa2ec9d7e3b76f8b67d45c8c972fe5e2cfa42808",
+      "path": "claycode/frank_visual_embedding_gate.clay",
+      "kind": "CLAYCODE_SEMANTIC_CONTRACT_POSITION_AND_FEATURE_EPOCH_BOUND"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "533b321d6921d5c5bcb755bf87f7c24615accd53",
+      "path": ".github/workflows/q23-visual-embedding-gate-v1.yml",
+      "kind": "TARGET_VPS_PROBE_WORKFLOW"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "2abd25753d8f4e9b561c71e9b2a46dce914b63b6",
+      "path": "runtime/q23_visual_embedding_gate_v1/PROBE_REVISION.json",
+      "kind": "PROBE_REVISION_BINDING"
+    }
+  ],
+  "executed_evidence": {
+    "local_reference_oracle": {
+      "version": "1.1",
+      "status": "PASS",
+      "passed": 14,
+      "total": 14,
+      "gate_decisions_measured": 20000,
+      "position_aware_pooling_tested": true,
+      "token_order_spatial_authority_refuted": true,
+      "epistemic_class": "LOCAL_SYNTHETIC_ONLY",
+      "real_qwen_embeddings": false,
+      "real_mtmd_buffer": false,
+      "target_vps": false
+    },
+    "local_cpp_resource_shadow": {
+      "status": "MEASURED",
+      "epistemic_class": "LOCAL_SYNTHETIC_CPP_NOT_TARGET",
+      "artifact": "LOCAL_MICROBENCH_RECEIPT.json"
+    },
+    "target_vps_workflow": {
+      "status": "RECEIPT_NOT_OBSERVED_AFTER_MULTIPLE_CHECKS",
+      "expected_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/q23_visual_embedding_gate_v1/LATEST.json",
+      "promotion": "NONE_UNTIL_RECEIPT"
+    },
+    "original_retina_baseline": {
+      "status": "BASELINE_PARTIAL_ARCHAEOLOGY",
+      "replacement_claim_allowed": false,
+      "artifact": "BASELINE_STATUS.json"
+    }
+  },
+  "main_progress": [
+    "Verified current libmtmd public output is n_tokens x llama_model_n_embd_inp float embeddings and current llama-server feeds that same buffer directly into mtmd_helper_decode_image_chunk.",
+    "Verified libmtmd exposes per-media-token decoder positions (t,x,y), enabling a position-aware Qwen feature descriptor instead of token-order spatial assumptions.",
+    "Converted feature-version migration from a generic encoder/mmproj concern into an explicit fail-closed FeatureEpoch contract binding model, mmproj, runtime/backend/config, preprocessing, token policy, pooling/projection and temporal policy until invariance is measured.",
+    "Added a fail-closed MVC route oracle: exact feature epoch plus calibrated similarity and margin required for decoder bypass; task-critical, contradiction, unknown/ambiguous and stale epoch escalate or reject.",
+    "Reconstructed additional original-Retina conditional execution/function lineage from core.py and frank_eye.py and preserved conflicting historical latency anchors instead of averaging them.",
+    "Replaced an unfair second-billion-parameter embedding counterbaseline with a measured ladder containing historical DINOv2-Small INT8, MobileCLIP2-S0 image encoder and optional DINOv3 ViT-S/16.",
+    "Added content-addressed frame/ROI provenance, GUI dual-scale, deterministic temporal-gate, exact 4B M-RoPE/runtime, slot-count and recovery falsification obligations.",
+    "Rebased current q23 promotion semantics onto the single FRANK_V0_1 program while preserving H1/H2/H3 only as historical evidence labels."
+  ],
+  "durable_run_artifacts": [
+    "HYPOTHESES.json",
+    "COUNTERHYPOTHESES.json",
+    "ONLINE_RESEARCH_MANIFEST.json",
+    "BASELINE_STATUS.json",
+    "COUNTERBASELINE_SELECTION.json",
+    "LOCAL_MICROBENCH_RECEIPT.json",
+    "TEST_OBLIGATIONS.json",
+    "ARCHITECTURE_DELTAS.json",
+    "SOURCE_GRAPH.json",
+    "FUSION_GRAPH.json",
+    "PROGRESS_DELTAS.json",
+    "RESEARCH_REENTRY_RECEIPTS.json",
+    "GO_Q23_EXCHANGE.json",
+    "FINAL_SYNTHESIS.md"
+  ],
+  "authority_limits": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "architecture_promoted": false,
+    "final_model_training_started": false,
+    "whole_frank_acceptance_claimed": false
+  },
+  "next_executable_frontier": [
+    "T-Q23-ORIGINAL-RETINA-01",
+    "T-Q23-MTMD-TAP-01",
+    "T-Q23-FEATURE-EPOCH-01",
+    "T-Q23-MVC-LADDER-01"
+  ]
+}

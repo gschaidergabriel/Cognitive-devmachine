@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-GO-SQLITE-AXIS-C-TARGET-PASS-20260811T124103Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_SUPPORTED_DELTA_NO_PRODUCT_PROMOTION",
+  "created_at_utc": "2026-08-11T12:41:03Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "observed_center_head_before_write": "c794e14d82ad171009c38fd04d230dab3f568746"
+  },
+  "supersedes_local_status_from_event": "CLAY-GO-ENDPOINT-STORAGE-BUILDDEP-20260811T123934Z",
+  "target": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 315,
+    "head": "97402de22cb6e066e823ce09b96afb5572ed8837",
+    "workflow_run": 31491984225,
+    "job": 93780418171,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3"
+  },
+  "result": {
+    "status": "PASS_SQLITE_WAL_RESET_AXIS_C",
+    "evidence_class": "TARGET_VPS_DIFFERENTIAL_TARGETED_FAULT_REGRESSION_PLUS_PROCESS_CRASH",
+    "official_sources_sha3_bound": true,
+    "vulnerable_control": {
+      "sqlite_version": "3.51.2",
+      "fault_660_seen": true,
+      "fault_update_rc": 0,
+      "result": "FAIL_INTEGRITY_CORRUPTION",
+      "example_integrity_error": "row 18 missing from index i1",
+      "expected_discriminator_behavior": true
+    },
+    "fixed_candidate": {
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "fault_660_seen": true,
+      "fault_update_rc": 0,
+      "integrity_check": "ok",
+      "result": "PASS_INTEGRITY"
+    },
+    "process_crash_oracle": {
+      "status": "PASS_WAL_CRASH_RESTART_ORACLE",
+      "cycles": 20,
+      "writers_per_cycle": 6,
+      "acknowledged_commits": 27911,
+      "lost_acknowledged_commits": 0,
+      "phantom_commits": 0,
+      "checks_passed": 6,
+      "checks_total": 6,
+      "synchronous_levels": ["NORMAL", "FULL"]
+    }
+  },
+  "adjudication": {
+    "f_v01_13_delta": "The private SQLite 3.53.4 candidate now has a target-run discriminator that separates known vulnerable pre-fix semantics from the fixed candidate, plus a successful 20-cycle process-crash oracle on the same accepted runner.",
+    "system_sqlite": "3.45.1-1ubuntu2.7 remains unsuitable as the release-safe claim because exact Ubuntu source provenance showed no WAL-code backport evidence; this target PASS selects the isolated 3.53.4 candidate, not the system package.",
+    "remaining_product_gate": "Integrate and attest the private 3.53.4 object in the actual Frank product/runtime path, then rerun selected-head integration/E2E and recovery evidence. Power-loss/kernel-panic durability remains outside this evidence class."
+  },
+  "claim_boundary": {
+    "proves": "On the accepted Ubuntu runner, cryptographically bound SQLite 3.53.4 survives the exact WAL-reset fault sequence that corrupts the instrumented 3.51.2 control, and the isolated 3.53.4 runtime passes the current process-crash oracle.",
+    "does_not_prove": [
+      "power-loss durability",
+      "system-package upgrade safety",
+      "private SQLite product-runtime integration",
+      "whole Frank v0.1 acceptance",
+      "final training authorization"
+    ]
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_TEST_OBLIGATION",
+    "changes": [
+      "Promote private SQLite 3.53.4 from preflight-only to target-supported storage runtime candidate for F-V01-13.",
+      "Do not promote the Ubuntu system SQLite package for WAL-reset safety.",
+      "Next storage work should move from bug-presence discrimination to actual product binding, provenance attestation, selected-head integration and recovery reruns."
+    ]
+  },
+  "source_refs": [
+    "Dr.-Unterweger PR #315 head 97402de22cb6e066e823ce09b96afb5572ed8837",
+    "GitHub Actions run 31491984225 / job 93780418171",
+    "SQLite official WAL-reset documentation",
+    "SQLite official version-3.51.2 and version-3.51.3 sources"
+  ],
+  "claims_not_made": [
+    "Frank v0.1 complete",
+    "F-V01-13 fully closed",
+    "system SQLite safe",
+    "power-loss durability proven",
+    "product runtime uses private SQLite 3.53.4",
+    "training authorized"
+  ]
+}

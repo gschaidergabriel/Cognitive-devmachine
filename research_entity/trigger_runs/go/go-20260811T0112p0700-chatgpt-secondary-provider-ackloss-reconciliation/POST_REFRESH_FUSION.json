@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0112p0700-chatgpt-secondary-provider-ackloss-reconciliation",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "event": "POST_REFRESH_CONCURRENT_EVIDENCE_FUSION",
+  "refresh_time_local": "2026-08-11T01:30:00+07:00",
+  "reason": "Recursive post-experiment refresh discovered a concurrently developed, conceptually overlapping provider uncertainty/reconciliation lane that was not returned by the initial overlap search at work selection time.",
+  "our_lane": {
+    "pr": 255,
+    "base_lineage": "PR#250 exact-generation effect fence",
+    "target_run": 31418684572,
+    "experiment": "GO_OOB_PROVIDER_ACK_LOSS_CRASH_RECONCILIATION",
+    "distinctive_observations": [
+      "provider ledger durably accepted exactly once before child hard process exit",
+      "Frank remained COMMITTING with no fabricated local outcome",
+      "durable execution-fence binding bytes could not reconstruct live authority",
+      "evidence-only reconciliation succeeded after process/generation death",
+      "provenance-bound re-entry reached COMPLETE"
+    ]
+  },
+  "concurrent_lane": {
+    "pr": 254,
+    "base_lineage": "PR#250 exact-generation effect fence",
+    "target_run": 31418397078,
+    "experiment": "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT",
+    "distinctive_observations": [
+      "explicit ProviderIdempotencyContract binds provider/operation/scope/stable key/request fingerprint/retention/mismatch semantics",
+      "lost acknowledgement after provider commit is durably represented as OUTCOME_UNKNOWN",
+      "successor retry/adoption of old effect is fenced",
+      "same key with changed semantic request fingerprint fails closed",
+      "read-only provider lookup can reconcile without an old execution fence"
+    ]
+  },
+  "independence_adjudication": {
+    "classification": "CONVERGENT_SHARED_ANCESTRY_EVIDENCE_NOT_INDEPENDENT_REPLICATION",
+    "why": "Both lanes inherit the same PR#250 v6 execution-fence mechanism and use synthetic SQLite-backed provider state. They were developed by separate concurrent workers but share architecture/code ancestry and closely related intervention logic, so worker separation alone does not qualify as independent scientific replication.",
+    "novelty_correction": "The hard-exit/non-resurrection/re-entry-to-COMPLETE result remains a distinct tested facet, but the general provider-ack-loss reconciliation conclusion is convergent rather than uniquely discovered by PR#255."
+  },
+  "fusion": {
+    "supported_jointly": [
+      "Effect execution authority and outcome evidence/reconciliation should remain distinct capabilities.",
+      "A provider-bound attempt whose acknowledgement is lost must remain uncertain rather than be guessed successful or failed.",
+      "Generation turnover must destroy start/retry authority for the old effect while preserving admissibility of independently verified outcome evidence.",
+      "Stable provider request identity plus exact semantic request fingerprint/mismatch semantics is stronger than a bare downstream_retry_safe boolean.",
+      "Durable effect/fence rows are provenance/state, not transferable execution authority."
+    ],
+    "preferred_architecture_delta": "FUSE the PR#254 explicit ProviderIdempotencyContract semantics with PR#250 caller-bound B1/B2/B3 exact-generation authority and preserve PR#255 hard-process-death + non-resurrection + provenance-reentry regression as a normal acceptance test. Do not add a second parallel provider-reconciliation architecture.",
+    "no_change": [
+      "No reason from these synthetic results to introduce general distributed two-phase commit across arbitrary providers.",
+      "No reason to resurrect stale execution authority for retries.",
+      "No real-provider acceptance claim."
+    ]
+  },
+  "freshness_delta": {
+    "pr250_tested_by_our_oob_base": "b677591f649dafe69fc8ba1aa4d92136f7d23b9d",
+    "pr250_later_head_observed": "95c8933cdcf14de80aebd5f918f5628db9700115",
+    "later_delta_from_tested_base": {
+      "ahead_by": 5,
+      "runtime_semantic_change": "UNIFIEDDB_EFFECT_EXECUTION_FENCE_V1.sql gained COMMITTING-time V16 rebind and terminal-release triggers",
+      "other_changes": "normal tests/workflows/hosted shadow",
+      "effect_on_old_oob_claim": "The earlier target PASS remains valid mechanism evidence for the exact tested b677 lineage, but is not exact-current-source acceptance for the later PR#250 head until rerun. The new SQL appears directionally strengthening, not logically contradicting the ack-loss/reconciliation split."
+    },
+    "current_main_observed": "c82d40a5859784a52d700c5e85c251839cc47c30"
+  },
+  "remaining_gates": [
+    "fresh-current target rerun after PR#250 movement",
+    "non-bypassable ordinary production effect routing/lowering",
+    "actual configured real-provider timeout-after-acceptance/reconciliation evidence",
+    "exact ClayCode frontend/TypedIR/compiler/lowering/runtime binding evidence",
+    "recovery generation/snapshot rollback composition",
+    "terminal verified outcome -> provenance re-entry -> DONE receipt for the integrated production path"
+  ],
+  "authority": "EVIDENCE_ONLY_NO_PRODUCT_PROMOTION",
+  "go_oob_experiment_added": false
+}

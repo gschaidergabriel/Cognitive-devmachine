@@ -1,0 +1,192 @@
+module clay.research.live_fusion_causal_mesh_candidate
+version "0.1"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+created_at "2026-08-10T14:20:00+07:00"
+origin_actor "chatgpt-secondary"
+provider "OpenAI"
+model "GPT-5.6 Sol"
+goal "Frank v0.1 voll lauffähig auf Andreas PC"
+
+// Identity/authority boundary
+invariant RESEARCH_ENTITY != FRANK
+invariant FRANK_SELF_HARNESS_AUTHORITY = PROPOSAL_ONLY
+invariant mesh_delivery_or_activation != truth
+invariant mesh_delivery_or_activation != effect_authority
+
+// Motivation
+// Existing mesh guarantees cross-branch discoverability and targeted distribution, but current
+// WorkEvent v2.0 does not explicitly close the delivery -> ingest -> replan loop. Stronger
+// networking should increase causal closure and recovery, not raw broadcast volume.
+
+hypothesis H_LIVE_FUSION_MESH {
+  statement="A dual-projection targeted causal pulse fabric using ClayGraph + UnifiedDB dependency views, explicit ack/dedupe, replan receipts, and periodic anti-entropy reconciliation can preserve materially affected-branch closure while reducing irrelevant fanout versus unconditional nine-branch broadcast."
+}
+
+counterhypothesis H_BROADCAST_ROBUSTNESS {
+  statement="Full broadcast is safer because stale/incomplete relevance topology causes targeted routing to miss affected workers; added routing/ack/reconciliation complexity may cost more than it saves."
+}
+
+// Companion transport: do not silently replace CLAY_WORK_EVENT_PROTOCOL v1.0 / WorkEvent v2.0.
+// This candidate may be implemented as a versioned extension only after executable tests.
+
+type PulseImpact = NORMAL|HIGH_IMPACT|CRITICAL_INVALIDATOR
+type PulseEvidence = VERIFIED_RUNTIME|REMOTE_EXECUTION_RECEIPT|RESEARCH_EVIDENCE|SIMULATION_ONLY|UNVERIFIED
+
+type DeliveryState = ADDRESSED|DELIVERED|INGESTED|DEDUPED|REPLANNED|NO_CHANGE|REJECTED|EXPIRED
+
+record SemanticDeltaPulse {
+  pulse_id:String
+  event_id:String
+  parent_state_hash:String
+  semantic_epoch:String
+  origin_actor:String
+  origin_branch:String
+  ancestry_family:String
+  evidence_class:PulseEvidence
+  evidence_refs:Set<Ref>
+  semantic_topics:Set<String>
+  affected_claims:Set<Ref>
+  affected_work:Set<Ref>
+  dependencies:Set<Ref>
+  invalidators:Set<Ref>
+  impact:PulseImpact
+  expires_at?:Time
+  idempotency_key:String
+}
+
+record RelevanceDecision {
+  pulse_id:String
+  claygraph_epoch:String
+  unifieddb_epoch:String
+  claygraph_targets:Set<Ref>
+  unifieddb_targets:Set<Ref>
+  union_targets:Set<Ref>
+  topology_disagreement:Bool
+  uncertainty:Real
+  reason:Clay
+}
+
+record PulseAck {
+  pulse_id:String
+  receiver:String
+  receiver_epoch:String
+  state:DeliveryState
+  applied_event_ids:Set<String>
+  duplicate:Bool
+  current_work_revisions:Set<Ref>
+  reason:Clay
+  acked_at:Time
+}
+
+record ReplanReceipt {
+  pulse_id:String
+  receiver:String
+  affected_work:Set<Ref>
+  decision:REVISE|CANCEL|DEFER|CONTINUE|NO_CHANGE
+  old_revision_refs:Set<Ref>
+  new_revision_refs:Set<Ref>
+  invalidator_result:Clay
+  evidence:Set<Ref>
+  completed_at:Time
+}
+
+record FusionDigest {
+  receiver:String
+  semantic_epoch:String
+  dependency_watermarks:Map<String,String>
+  applied_event_digest:String
+  outstanding_pulse_ids:Set<String>
+  created_at:Time
+}
+
+record FusionRepairReceipt {
+  digest_a:Ref
+  digest_b:Ref
+  missing_pulses:Set<String>
+  replayed_pulses:Set<String>
+  still_missing:Set<String>
+  converged:Bool
+  evidence:Set<Ref>
+}
+
+// Hot path: stronger connectivity is dual relevance, not everyone-to-everyone spam.
+rule material_delta -> build(SemanticDeltaPulse)
+rule route.hot.claygraph = ClayGraph.current_semantic_dependents(pulse)
+rule route.hot.unifieddb = UnifiedDB.current_declared_dependencies_invalidators(pulse)
+rule route.hot.targets = union(route.hot.claygraph,route.hot.unifieddb)
+rule route.hot.targets includes origin_branch
+rule high_uncertainty_or_missing_epoch -> expand_targets_conservatively
+rule CRITICAL_INVALIDATOR -> immediate_priority_delivery_to_all_explicitly_affected_work_owners
+rule no_known_target -> CLAY_RESEARCH_CENTER + affected_branch_fallback_not_silent_drop
+
+// Reliability: delivery is not use; ack is not replan.
+rule publish -> unique idempotency_key
+rule receiver -> dedupe(idempotency_key)
+rule receiver -> emit PulseAck state=INGESTED|DEDUPED|REJECTED
+rule materially_affected_receiver -> revalidate latest work revision + lease + dependencies + authority
+rule materially_affected_receiver -> emit ReplanReceipt
+rule pulse_without_required_ack -> bounded_redelivery
+rule ack_timeout_or_negative_ack -> retry_or_quarantine
+rule stale_receiver_epoch -> REJECTED + request_refresh
+
+// Anti-echo: repeated ancestry does not create confidence.
+rule same_ancestry_family_repetition -> no_independent_evidence_credit
+rule routing_overlap != scientific_replication
+rule branch_count != evidence_strength
+
+// Periodic anti-entropy live-fusion pulse. This is a reconciliation mechanism, not a truth vote.
+rule reconciliation.period = adaptive_from(change_rate,miss_rate,cost,criticality)
+rule reconciliation -> exchange FusionDigest between semantically coupled peers
+rule digest_difference -> replay_only_missing_or_stale_pulses
+rule repair -> emit FusionRepairReceipt
+rule repair.converged=false -> DEGRADED_COORDINATION + block_global_nonoverlap_claim
+
+// High-impact promotion barrier is selective, never a global stop-the-world barrier.
+rule high_impact_claim_or_architecture_delta -> require_replan_receipts_from_explicitly_affected_critical_work_before_PROMOTION
+rule ordinary_low_impact_delta -> no_global_barrier
+rule barrier_timeout -> preserve candidate + mark coordination incomplete; never fake closure
+
+// Metrics required before promotion.
+record LiveFusionMeshMetrics {
+  pulses:Int
+  addressed_per_pulse:Distribution
+  send_attempts_per_pulse:Distribution
+  affected_receiver_recall:Distribution
+  irrelevant_delivery_rate:Distribution
+  ack_latency_ms:Distribution
+  replan_latency_ms:Distribution
+  duplicate_delivery_rate:Distribution
+  duplicate_application_rate:Distribution
+  missing_after_reconciliation:Int
+  reconciliation_bandwidth:Distribution
+  stale_epoch_rejects:Int
+  invalidated_work_interrupted_before_effect:Int
+  false_interrupts:Int
+  recovery_success_rate:Real
+  cpu_ms:Distribution
+  memory_bytes:Distribution
+}
+
+promotion_gate {
+  candidate_vs_baselines=[FULL_NINE_BRANCH_BROADCAST,SINGLE_PROJECTION_TARGETING]
+  require=matched_replay+failure_injection+stale_topology+duplicate_delivery+restart_recovery+resource_shadow
+  require affected_receiver_recall >= baseline_minus_declared_tolerance
+  require duplicate_application_rate == 0
+  require missing_after_reconciliation == 0 on frozen test corpus
+  require no_critical_invalidator_executes_stale_effect_after_confirmed_delivery
+  require bounded_reconciliation_cost
+  require rollback_to_current_WorkEvent_transport
+}
+
+// External live-knowledge inspirations, not implementation dependencies or promoted authority.
+external_evidence {
+  nats_jetstream="durable consumers, explicit ack/redelivery, message-id deduplication, double-ack semantics; official NATS docs; retrieved 2026-08-10"
+  apache_kafka="idempotent producer and transactional delivery semantics; official Apache Kafka docs; retrieved 2026-08-10"
+  amazon_dynamo="versioning plus anti-entropy repair as background convergence pattern; Amazon Science / Dynamo paper; retrieved 2026-08-10"
+  adaptive_multiagent_topology="task/state-adaptive sparse communication topology can reduce communication overhead; OpenReview primary submissions/papers; retrieved 2026-08-10"
+}
+
+// Current evidence is only the synthetic experiment receipt written alongside this candidate.
+rule SIMULATION_ONLY != runtime_pass
+rule candidate != promotion
+rule executable_counterexample_may_refine_or_refute

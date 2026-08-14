@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260811T0059p0700-chatgpt-secondary-effect-gate-fusion-followup-03-self-harness-adjudication",
+  "timestamp_local": "2026-08-11T01:37:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "trigger": "go",
+  "oob_accounting": {
+    "worker_oob_total_unchanged": 1,
+    "this_followup_adds_oob": false
+  },
+  "observed_target_main_head": "3a7ca32266fbebec57777673515b9ec988b19c66",
+  "fresh_evidence": {
+    "commit": "3a7ca32266fbebec57777673515b9ec988b19c66",
+    "receipt_id": "FRANK-V01-HARNESS-SOVEREIGNTY-V1-31418347156",
+    "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_FRANK_V0_1_SELF_HARNESS_SOVEREIGNTY_V1",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "tested_sha": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+    "probe_pass": true,
+    "promotion": "COMPONENT_TARGET_VPS_EVIDENCE_ONLY",
+    "production_classifier_wiring_proven": false,
+    "elapsed_s": 0.12,
+    "max_rss_kib": 20596,
+    "socket_messages_sent": 0,
+    "socket_messages_received": 0
+  },
+  "authority_matrix_adjudication": {
+    "self_proposal": "ALLOW",
+    "harness_source": "DENY_HARD",
+    "security_policy": "DENY_HARD",
+    "workflow": "DENY_HARD",
+    "test": "DENY_HARD",
+    "acceptance_receipt": "DENY_HARD",
+    "clay_repo_write": "DENY_HARD",
+    "unknown": "DENY_FAIL_CLOSED",
+    "outside_repo_write": "DENY_FAIL_CLOSED",
+    "effect_queue": "ALLOW_BOUNDED_OPERATIONAL_SURFACE",
+    "operational_state": "ALLOW_BOUNDED_OPERATIONAL_SURFACE",
+    "telemetry": "ALLOW_BOUNDED_OPERATIONAL_SURFACE"
+  },
+  "analysis": {
+    "owner_fixed_boundary": "SUPPORTED: Frank/self.root may propose Harness changes but may not authorize/mutate Harness, security policy, tests, workflows, acceptance receipts or Clay research authority under Frank authority.",
+    "alarm": "NONE",
+    "remaining_gate": "Production classifier/wiring and stronger writer-isolation remain unproven; component evidence must not be promoted to whole-system Harness sovereignty acceptance."
+  },
+  "authority_and_scope": {
+    "external_effect_performed": false,
+    "canonical_frank_state_mutated": false,
+    "training_authorized": false,
+    "whole_frank_v0_1_acceptance_claimed": false
+  },
+  "research_write": "COMMITTED_ADJUDICATION"
+}

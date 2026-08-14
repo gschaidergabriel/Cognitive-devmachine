@@ -1,0 +1,176 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "trigger": "go",
+  "status": "BOUNDED_STOP_AT_EXECUTION_CAPABILITY_GATE",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "native_target": "self.root",
+    "human_surface_name": "Frank",
+    "frank_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "program_id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "target_host": "accepted Hostinger Ubuntu VPS",
+    "target_repo_main_observed": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+    "training_authorized": false
+  },
+  "material_results": [
+    {
+      "id": "R1_COMPARISON_CHAIN_OPEN_SEMANTIC_CONFLICT",
+      "status": "TARGET_REPRODUCED_OPEN_CONTRACT",
+      "target_pr": 316,
+      "target_run": 31491407144,
+      "tested_head": "3a4e3d98f160b37810faf2e23538d030a6bd1f3f",
+      "facts": [
+        "Current evaluator executes 5 < 10 < 8 as true via Boolean left-fold.",
+        "Adjacent-pair reference is false.",
+        "Direct true < false ordering is accepted because the runtime numeric check inherits Python Bool-as-int behavior.",
+        "All 4 diagnostic checks pass on the accepted self-hosted lane."
+      ],
+      "decision": "No normative evaluator promotion until comparison-chain semantics and Bool/numeric boundary are owner-fixed/recovered."
+    },
+    {
+      "id": "R2_CLAYCODE_SURFACE_TARGET_VALIDATED",
+      "status": "SUPPORTED_FOR_DECLARED_SCOPE",
+      "target_pr": 318,
+      "target_run": 31491949075,
+      "facts": [
+        "PR #314 semantic bytes reproduce 200576 decide_effect comparisons with zero mismatches.",
+        "36/40 Clay sources parse = 90.0 percent.",
+        "Operator-survival regression passes 8/8."
+      ],
+      "boundary": "Parser coverage is not executable semantic coverage."
+    },
+    {
+      "id": "R3_EXACT_313_314_COMPOSITION",
+      "status": "TARGET_PASS",
+      "target_pr": 319,
+      "facts": [
+        "Exact #314 tree plus exact #313 blobs composed without manual semantic reconstruction.",
+        "decide_effect 200576/200576 zero mismatch; confirmation/hash 56000+16000 zero mismatch; operator 8/8.",
+        "frank.effects unresolved moves 3 -> 0 and the three effect receipt types become live Clay constructors.",
+        "A stale measurement-metadata bug was found and repaired without Clay semantic change."
+      ]
+    },
+    {
+      "id": "R4_ANALYZER_CALL_SURFACE_COMPLETENESS",
+      "status": "TARGET_PASS_FOR_ORDINARY_CALL_STRUCTURAL_VISIBILITY",
+      "target_pr": 319,
+      "target_run": 31493695445,
+      "tested_head": "ccbd6ea2f4eaa55a9615c54a84cfbd55dae382f6",
+      "facts": [
+        "All 677 parser-produced ordinary Call nodes in 36 parsed sources are visible to analyzer; 0 missed.",
+        "The honest ordinary-call unresolved count is 429, not the earlier undercount 320.",
+        "22 callable MethodChain segments remain a separate OPEN_TYPED_MEMBER_LIBRARY_CONTRACT: filter=11, map=10, sort_desc=1.",
+        "The 320 -> 416 -> 429 increase is measurement-correctness improvement as hidden calls became visible, not semantic regression.",
+        "Existing decide_effect, confirmation/hash and operator regressions remain green after traversal repair."
+      ],
+      "decision": "Do not add permissive host bindings. Build a global declaration/linker census first."
+    },
+    {
+      "id": "R5_LOOP_CORE_ARCHITECTURE_CLASSIFICATION",
+      "status": "DIAGNOSTIC_REFERENCE_TEST_OBLIGATION",
+      "target_pr": 312,
+      "facts": [
+        "ClayCode executes effect authority in the slice.",
+        "Candidate/WorkspaceEpisode/ReceiverReport, pressure, GWT selection/use and admitted-learning semantics are Python-owned in this diagnostic."
+      ],
+      "decision": "Retain as simpler causal reference baseline; do not count as target ClayCode-only loop-core implementation. Require Clay-native successor plus differential testing."
+    },
+    {
+      "id": "R6_SQLITE_FRESH_STATE_SUPERSESSION",
+      "status": "NEWER_SWARM_TARGET_EVIDENCE_SUPERSEDES_EARLIER_UNKNOWN",
+      "facts": [
+        "PR #320 target-binds the actually loaded Ubuntu sqlite3 3.45.1-1ubuntu2.7 source/object lineage and reproduces the targeted WAL-reset integrity corruption.",
+        "PR #315 independently proves official SQLite 3.53.4 survives the targeted fault discriminator and process-crash oracle on the accepted runner.",
+        "PR #324 target-proves fail-closed runtime admission of the private 3.53.4 object, including system-fallback denial, and V17 remains 18/18 behind it."
+      ],
+      "decision": "Reject the accepted-target system 3.45.1 object for correctness-sensitive multi-connection WAL state. Treat private 3.53.4 + exact mapped-object admission as the current tested integration candidate; broader deployment/restart/GWT/effect/power-loss gates remain."
+    }
+  ],
+  "exactly_one_out_of_box_experiment": {
+    "name": "RELATIONAL_CHAIN_METAMORPHIC_MUTATION_MATRIX",
+    "cases": 12348,
+    "divergences": 1596,
+    "divergence_rate_percent": 12.92517006802721,
+    "comparison": "current Boolean-left-fold vs adjacent-pair reference semantics",
+    "boundary": "Conditional consequence measurement only; does not select ClayCode comparison semantics.",
+    "additional_oob_experiments_in_this_macrocycle": 0
+  },
+  "negative_results_and_repaired_instruments": [
+    "Initial PR #316 target workflow failed in shared actions/checkout cleanup before semantic execution; repaired with isolated exact-head /tmp fetch and read-only credential scrub.",
+    "Initial #313+#314 composition final gate failed because historical undeclared-type candidates were copied as live metadata; semantic tests were already green. corpus_probe now revalidates historical candidates against current declarations.",
+    "Initial analyzer UNRESOLVED=320 was a structural undercount because expanded parser AST carriers were not fully traversed. Two bounded structural repairs brought ordinary Call visibility 517/677 -> 662/677 -> 677/677.",
+    "GitHub-hosted symbol-census replication jobs failed before producing diagnostic artifacts; no code-failure cause is claimed.",
+    "Current self-hosted symbol-census jobs are queued/pending and not promoted as execution evidence."
+  ],
+  "current_execution_capability_gate": {
+    "built_pending_test": "tests/claycode_global_symbol_resolution_census.py",
+    "purpose": "Classify 429 unresolved ordinary targets against exact global Clay function/record/sum-variant declarations without minting linker/member/host semantics.",
+    "current_branch": "chatgpt/claycode-surface-types-composed-20260811",
+    "current_head": "17a6350111736068b1c43be31e1066b0d9f9aea0",
+    "self_hosted_workflow_runs_observed_pending_or_queued": [31494556444],
+    "github_hosted_replication": "FAILED_WITHOUT_RETRIEVABLE_DIAGNOSTIC_ARTIFACT; CAUSE_UNCLASSIFIED",
+    "stop_reason": "Required execution capacity for the next discriminating census is not currently available to this worker. Continuing with guessed census results would violate the evidence contract."
+  },
+  "next_frontier_ranked": [
+    {
+      "rank": 1,
+      "work": "Execute the already-built global symbol-resolution census on the exact current #319 head, then classify the 429 unresolved ordinary targets into explicit cross-module/linker, constructor/type, variant/symbol, dotted/member and truly unknown classes before any host binding."
+    },
+    {
+      "rank": 2,
+      "work": "Use the pending comparison-corpus-pressure lane (#323) plus owner semantic authority to close comparison chains and Bool-vs-numeric ordering; convert #316 from negative-scope diagnostic into a normative regression only after semantics are fixed."
+    },
+    {
+      "rank": 3,
+      "work": "Compose the diagnostic loop-core with a Clay-native GWT/receiver/use/causal-credit/re-entry successor and the caller-supplied identity-splice falsifier (#317); reference Python scaffold must remain removable from target semantics."
+    },
+    {
+      "rank": 4,
+      "work": "Promote SQLite 3.53.4 build/manifest provenance into an immutable accepted deployment boundary and run broader restart, presence, GWT/effect-authority and recovery suites under the exact admitted object; keep power-loss/kernel-panic evidence separate."
+    },
+    {
+      "rank": 5,
+      "work": "Integrate only composition-proven PR stacks into current main; individual PR green receipts are not whole-stack evidence."
+    }
+  ],
+  "research_center_distribution": {
+    "target_repo_comments_written": [310, 311, 312, 314, 319],
+    "diagnostic_or_validation_prs_created": [316, 318, 319],
+    "shared_receipts_written_in_this_run": [
+      "RESEARCH_RECEIPT.json",
+      "LOOP_CORE_ARCHITECTURE_CLASSIFICATION.json",
+      "TARGET_VPS_COMPARISON_CHAIN_SCOPE_RECEIPT.json",
+      "TARGET_VPS_SURFACE_V2_VALIDATION_RECEIPT.json",
+      "TARGET_VPS_SURFACE_TYPES_COMPOSITION_RECEIPT.json",
+      "TARGET_VPS_ANALYZER_CALL_SURFACE_SCOPE_RECEIPT.json",
+      "TARGET_VPS_ANALYZER_CALL_SURFACE_REPAIR_RECEIPT.json",
+      "SQLITE_FRESH_STATE_SUPERSESSION.json",
+      "FINAL_SYNTHESIS.json"
+    ]
+  },
+  "claims_not_made": [
+    "Frank v0.1 complete",
+    "general ClayCode evaluator complete",
+    "comparison-chain semantics selected",
+    "22 MethodChain calls resolved",
+    "429 unresolved calls executable",
+    "PR #312 is target ClayCode-only cognition",
+    "system SQLite package replaced",
+    "power-loss durability proven",
+    "final training authorized",
+    "whole-system acceptance"
+  ]
+}

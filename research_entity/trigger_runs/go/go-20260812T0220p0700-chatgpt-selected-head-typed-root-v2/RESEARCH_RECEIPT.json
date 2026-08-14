@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:27:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "boot": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_repo_main_observed_before_write": "a26920e22e6ff63c37ab4e56b468018cf7e58780",
+    "frank_repo_alias": "gschaidergabriel/Dr.-Unterweger",
+    "frank_main_observed": "e1c0f27148df18169c9dad6893ab67c877d36e2d"
+  },
+  "frontier_selection": {
+    "sqlite_lane": "DEFERRED_AS_DUPLICATE_AND_ADMIN_BLOCKED",
+    "reason": "Fresh parallel GO evidence already established productive SQLite 3.45.1, missing root-owned V5 anchor, no passwordless sudo and trusted-admin provisioning requirement. Additional same-lane work had low marginal information value.",
+    "selected_frontier": "typed semantic checkpoint identity for uniquely selected state-lineage head"
+  },
+  "observed_reality": {
+    "v1_source": "gschaidergabriel/Dr.-Unterweger PR#267 runtime/identity/state_lineage_head_candidate.py",
+    "negative_probe": "gschaidergabriel/Dr.-Unterweger PR#307 tests/unifieddb_selected_head_root_domain_scope_probe.py",
+    "gap": "V1 stores and compares only semantic_root_hash bytes. The #307 discriminator presents identical digest bytes under incompatible root protocol/manifest domains and demonstrates that the V1 selected-head relation cannot distinguish those semantic statements.",
+    "new_candidate_pr": 436,
+    "new_candidate_head": "bbc00b0c44b0c0d05f115f144df536cbe0e0598d",
+    "new_candidate_branch": "chatgpt/selected-head-typed-root-v2-20260812",
+    "new_files": [
+      "runtime/identity/state_lineage_head_v2_candidate.py",
+      "tests/state_lineage_head_v2_typed_root_gate.py"
+    ]
+  },
+  "grf": {
+    "generated_reality": "A selected lineage head becomes semantically unique only if the selected root identity binds root protocol, manifest identity and root digest, rather than treating a digest as self-describing.",
+    "strongest_counter_reality": "Typing the tuple can still fail if field framing is ambiguous or if a V1 store is silently reinterpreted during protocol migration; atomic CAS alone does not solve semantic-domain ambiguity.",
+    "discriminating_test": "Reject same digest bytes under an incompatible protocol/manifest identity; refuse implicit V1->V2 schema reinterpretation; verify structured hash framing against one adversarial delimiter-alias pair.",
+    "collapse": "RETAIN_AS_CANDIDATE_LOCAL_PASS_TARGET_UNVERIFIED",
+    "confidence": "MEDIUM"
+  },
+  "candidate_delta": {
+    "schema_version": "SELF_ROOT_SELECTED_LINEAGE_HEAD_CANDIDATE_V2",
+    "semantic_checkpoint_identity": "root_protocol + semantic_root_manifest_id + semantic_root_hash + derived identity_hash",
+    "head_hash": "binds full typed SemanticCheckpointIdentity",
+    "selected_matches": "requires exact typed identity equality",
+    "readback": "re-derives semantic checkpoint identity hash and head hash before admitting a row",
+    "migration": "existing non-V2 selected_lineage_meta schema fails closed with EXPLICIT_MIGRATION_REQUIRED",
+    "authority": "NONE"
+  },
+  "local_execution": {
+    "status": "PASS",
+    "checks_total": 7,
+    "checks_passed": 7,
+    "checks": {
+      "typed_match_true": true,
+      "same_bytes_wrong_domain_rejected": true,
+      "typed_columns_present": true,
+      "integrity_clean": true,
+      "legacy_requires_explicit_migration": true,
+      "oob_naive_alias_constructed": true,
+      "oob_typed_identity_separates_alias": true
+    },
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "TYPED_ROOT_DELIMITER_ALIAS_SHADOW",
+    "intervention": "Construct two protocol/manifest field pairs that produce exactly the same naive pipe-delimited string with the same root digest, then compare the candidate's structured domain-separated identity hashes.",
+    "baseline": "naive delimiter framing aliases the two semantic tuples",
+    "result": "PASS: naive alias reproduced while candidate typed identity hashes remained distinct",
+    "rollback": "disposable local SQLite/temp state only; no canonical mutation"
+  },
+  "external_primary_evidence": {
+    "RFC8785": "Canonicalization is relevant because cryptographic hashes require invariant representations for repeatable producer/consumer results.",
+    "RFC9162": "Certificate Transparency V2 explicitly separates hash domains for leaves and internal nodes; supports treating semantic classes/domains as explicit hash inputs.",
+    "TUF": "Rollback and mix-and-match defenses keep trusted version/hash relations explicit; mechanism analogy only, not Frank authority."
+  },
+  "ci_evidence": {
+    "run": 31527771646,
+    "head_sha": "bbc00b0c44b0c0d05f115f144df536cbe0e0598d",
+    "workflow": "Frank Deep Integrity",
+    "status": "COMPLETED_FAILURE_INFRASTRUCTURE_NO_STEPS",
+    "job": 93900176398,
+    "runner_label": "ubuntu-latest",
+    "steps_executed": 0,
+    "interpretation": "NOT semantic/test evidence; accepted Hostinger target remains UNVERIFIED for this candidate"
+  },
+  "promotion_boundary": {
+    "candidate_state": "TESTING",
+    "merge_to_main": false,
+    "accepted_target_vps_pass": false,
+    "canonical_state_migration": false,
+    "whole_frank_v0_1_acceptance": false,
+    "training_authorized": false
+  },
+  "next_falsifiers": [
+    "run exact PR#436 bytes on accepted self-hosted Linux/X64 target and execute state_lineage_head_v2_typed_root_gate.py",
+    "replay #267 SEMANTIC_TWIN_CAS_RACE through V2 typed identities to prove sibling selection is preserved",
+    "compose V2 with semantic checkpoint root producer (#297/#304 lineage) and verify exact protocol/manifest provenance",
+    "design separately authorized explicit V1->V2 migration/bridge receipt and prove rollback/replay failure behavior",
+    "compose selected typed head with external generation/recovery floor and self.root boot admission before promotion"
+  ],
+  "negative_results": [
+    "Generic hosted Deep Integrity did not execute any test steps and is not a candidate failure or PASS.",
+    "No accepted-target VPS result exists for V2 in this cycle.",
+    "No production migration or canonical state mutation occurred.",
+    "No effect authority or self-Harness authority was granted.",
+    "SQLite F-V01-13 production anchor remains separately blocked by trusted-admin provisioning evidence."
+  ]
+}

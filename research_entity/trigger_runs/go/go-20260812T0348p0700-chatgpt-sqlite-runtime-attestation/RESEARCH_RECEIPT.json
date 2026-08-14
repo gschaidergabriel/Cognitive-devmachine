@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "started_at": "2026-08-12T03:48:00+07:00",
+  "worker_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER/chatgpt-gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "grf": {
+    "observed_reality": [
+      "Current FRANK_V0_1_WORKSPACE keeps F-V01-13 IN_PROGRESS and records accepted-target SQLite 3.45.1 while Frank uses WAL.",
+      "Current repository search found no durable sqlite_source_id attestation and no canonical 3.53.4 occurrence tied to the productive Frank persistence path.",
+      "No accepted-VPS runtime execution was available to this worker in this invocation."
+    ],
+    "generated_realities": [
+      {
+        "id": "H1",
+        "claim": "The productive Frank persistence process has actually moved to SQLite 3.53.4 or another fixed build, making the old 3.45.1 observation stale."
+      },
+      {
+        "id": "H2",
+        "claim": "A 3.53.4 observation belongs to a CLI, sibling interpreter, build environment or non-productive path while the productive Frank DB connection remains affected or otherwise unattested."
+      },
+      {
+        "id": "H3",
+        "claim": "A fixed SQLite can be observed transiently but restart/library resolution can downgrade or swap the loaded implementation, so lifecycle identity continuity remains unproven."
+      }
+    ],
+    "strongest_counter_reality": "A true shell-level or sibling-process version observation can coexist with an affected SQLite library in the actual Frank service; therefore version-only evidence cannot close the release gate.",
+    "collapse": "RETAIN_H1_UNVERIFIED; RETAIN_H2; RETAIN_H3. No production promotion."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://sqlite.org/wal.html",
+      "finding": "SQLite documents the WAL-reset bug through 3.51.2, fixed in 3.51.3 and later, with trigger conditions involving WAL plus concurrent connections writing/checkpointing."
+    },
+    {
+      "source": "https://sqlite.org/releaselog/3_51_3.html",
+      "finding": "SQLite 3.51.3 explicitly fixes the WAL-reset corruption bug and publishes its SQLITE_SOURCE_ID."
+    },
+    {
+      "source": "https://sqlite.org/lang_corefunc.html",
+      "finding": "sqlite_source_id() identifies the specific source-code revision used to build the running SQLite library; sqlite_version() returns the running library version string."
+    }
+  ],
+  "discriminating_test_obligation": {
+    "status": "NOT_EXECUTED_ON_ACCEPTED_VPS",
+    "same_connection_queries": [
+      "SELECT sqlite_version(), sqlite_source_id();",
+      "PRAGMA journal_mode;"
+    ],
+    "required_bindings": [
+      "accepted VPS identity",
+      "productive Frank service PID/process identity",
+      "Frank binary/source artifact identity",
+      "exact productive DB path",
+      "SQLite source id",
+      "loaded SQLite library/module path and hash where applicable",
+      "execution generation/epoch"
+    ],
+    "lifecycle_requirement": "Restart the productive service and repeat the same-path attestation; fail closed on version/source/library/binary/DB-path/generation mismatch or downgrade.",
+    "promotion_rule": "A fixed path-bound SQLite receipt may retire only the SQLite sub-blocker. It does not by itself close F-V01-13."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "UE-SQLITE-RECEIPT-TRANSPLANT-MATRIX",
+    "class": "bounded synthetic adversarial receipt-transplant/downgrade-sentinel matrix",
+    "baseline": "genuine fixed-runtime receipt",
+    "variants": [
+      "version_only_clone",
+      "same_version_source_swap",
+      "stale_pre_restart_receipt"
+    ],
+    "naive_gate": "sqlite_version >= 3.51.3",
+    "hardened_gate": "fixed version plus exact host, Frank binary, productive DB path, sqlite_source_id, SQLite library hash and execution-generation bindings",
+    "measured_result": {
+      "baseline_naive": "PASS",
+      "baseline_hardened": "PASS",
+      "adversarial_variants_naive": "3/3 FALSE_ACCEPT",
+      "adversarial_variants_hardened": "0/3 ACCEPT; 3/3 REJECT"
+    },
+    "interpretation": "Version-only gating is insufficient under plausible receipt transplantation/library-swap/restart-staleness worlds. Path-bound identity materially improves discrimination in this synthetic matrix.",
+    "scope_limit": "Synthetic gate-logic evidence only; not production/VPS/runtime acceptance.",
+    "rollback": "No persistent system intervention; experiment data was in-memory and disposable."
+  },
+  "result": {
+    "architecture_delta": "CANDIDATE_TEST_OBLIGATION",
+    "release_effect": "NO_PROMOTION",
+    "F-V01-13": "IN_PROGRESS",
+    "next_high_information_action": "Execute path-bound SQLite attestation on the accepted productive Frank service before and after restart."
+  }
+}

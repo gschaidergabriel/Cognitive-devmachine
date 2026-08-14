@@ -1,0 +1,37 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "repository":"gschaidergabriel/Dr.-Unterweger",
+  "pr":286,
+  "candidate_head":"d615d91b1a6688cef0c69141a945733c4a64fbb9",
+  "tested_merge_sha":"e5297e8534885799eeff69504c5c8b5f4a1df62e",
+  "github_run_id":31436105499,
+  "job_id":93610466325,
+  "workflow":"Frank UnifiedDB deep negative delta probes VPS",
+  "executor":{"runner":"clay","machine":"digital-retina","platform":"Linux-6.8.0-117-generic-x86_64-with-glibc2.39","python":"3.12.3","sqlite":"3.45.1","contents_permission":"read","checkout_persist_credentials":false},
+  "classification":"NEGATIVE_ARCHITECTURE_EVIDENCE_NOT_PRODUCT_PASS",
+  "gaps_reproduced":{
+    "live_schema_attestation":"PAIR_SOURCE_CERTIFICATE_DOES_NOT_ATTEST_LIVE_SQLITE_SCHEMA",
+    "authority_direction":"SYMMETRIC_PAIR_CERTIFICATE_MAKES_DERIVED_GRAPH_AN_AVAILABILITY_DEPENDENCY_OF_AUTHORITY",
+    "graph_freshness":"R1C_GAP_GLOBAL_STALE_NOT_READ_GATED_AND_SOURCE_ROOT_NOT_BOUND",
+    "temporal_replay":"TEMPORAL_TEXT_ORDER_FALSE_CURRENT_PLUS_AMBIENT_CLOCK_REPLAY_INPUT",
+    "snapshot_consistency":"SNAPSHOT_RECEIPT_HASHES_LIVE_MUTABLE_FILES_WITHOUT_PAIR_BARRIER",
+    "repo_head_overcoupling":"REPO_HEAD_IS_BROADER_THAN_SEMANTIC_MATERIALIZATION_DEPENDENCY_SET"
+  },
+  "selected_measurements":{
+    "live_schema_digest_us_n":200,
+    "live_schema_digest_us_p50":91.17,
+    "live_schema_digest_us_p95":126.77,
+    "live_schema_digest_us_p99":148.112,
+    "graph_current_counts_after_global_stale":{"nodes":2,"edges":1,"couplings":1,"alternatives":1},
+    "temporal_explicit_as_of_columns":0,
+    "temporal_mixed_format_false_future":true,
+    "snapshot_unified_hash_invalidated_by_own_receipt_commit":true,
+    "snapshot_graph_epoch_and_hash_from_different_logical_instants":true,
+    "repo_head_probe_state_unchanged":true
+  },
+  "safety":{"canonical_state_mutated":false,"external_effect_performed":false,"whole_frank_v0_1_acceptance":"NOT_CLAIMED"},
+  "sibling_current_head_results":{"storage_pair_run":31436105503,"storage_pair":"SUCCESS","effect_provider_run":31436105530,"effect_provider":"SUCCESS","selfroot_current_head_run":31436105450,"selfroot_current_head":"SUCCESS","execution_anchor_run":31436105461,"execution_anchor":"SUCCESS"},
+  "promotion":"HOLD_AND_SPLIT_PROOF_SURFACES",
+  "artifact":{"github_artifact_id":9081037150,"archive_sha256":"b8a83d19c38f3d80ac5f58f8cb0a2cfe1a6e90a7c80b63dcbb2ae115418c44e8"}
+}

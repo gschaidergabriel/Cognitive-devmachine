@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-provider-endpoint-payment",
+  "trigger": "go",
+  "timestamp_local": "2026-08-11T19:10:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": ["self.root", "Frank"],
+    "target_native_identity": "self.root",
+    "target_human_surface_name": "Frank",
+    "target_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "observed_research_repo_head_before_reentry": "c2c584393bae6d08ef1d4abdbf16d4e931f0f53f"
+  },
+  "program": {
+    "id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "component_lanes": [
+      "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ]
+  },
+  "fresh_state": {
+    "provider_pr": "gschaidergabriel/clay-global-research-entity#232",
+    "pr_head_before_patch": "52beba285416cc3d682435ff8a9795c7444c8d01",
+    "pr_head_after_patch": "19d6ac95ba47f3e606727be3ba102227ddcd46f6",
+    "runtime_blob_before_patch": "051d34e7c763b3a62f82744ba6ca0c0629540400",
+    "runtime_commit": "1df91e7dd4d96ffedb72fa8248ff699bdfebe84f",
+    "focused_test_commit": "19d6ac95ba47f3e606727be3ba102227ddcd46f6",
+    "pr_state": "OPEN_DRAFT_NOT_MERGED"
+  },
+  "live_external_research": {
+    "nvidia_endpoint": {
+      "source": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+      "observed": "NVIDIA documents hosted LLM API URL https://integrate.api.nvidia.com and operation POST /v1/chat/completions."
+    },
+    "python_url_components": {
+      "source": "https://docs.python.org/3/library/urllib.parse.html",
+      "observed": "urlparse exposes scheme, netloc, path, query, fragment, username, password, hostname and port separately; invalid port access raises ValueError."
+    },
+    "python_request_selector": {
+      "source": "https://github.com/python/cpython/blob/main/Lib/urllib/request.py",
+      "observed": "Request preserves full_url/fragment separately and derives selector from the request target, so fragment/query/path differences must not be collapsed by provider identity bookkeeping."
+    },
+    "http_402": {
+      "source": "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.3",
+      "observed": "HTTP 402 Payment Required remains reserved for future use; nonretryable FREE_ONLY treatment is therefore a local cost-safety policy, not generic RFC semantics."
+    }
+  },
+  "hypothesis": {
+    "id": "H-ENDPOINT-CAPABILITY-PAYMENT-EPOCH-002",
+    "statement": "A FREE_ONLY provider execution must bind an exact provider-owned operation capability plus a budget-epoch cost-policy principal before credentials are attached, and any observed HTTP 402 must latch that provider out of the same budget epoch as a nonretryable hard stop.",
+    "strongest_counterhypothesis": "Origin-level scheme/host/port binding plus transient cooldown is sufficient because same-origin alternate paths either fail harmlessly and 402 has no standard retry semantics.",
+    "discriminator": "Same-origin path/query/fragment aliases must be denied before opener invocation; regular-response and HTTPError 402 paths must both set a latch, emit retryable=false and prevent a second request in the same budget epoch while allowing a separately identified new epoch."
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_macro_cycle": 1,
+    "name": "URL_ENDPOINT_METAMORPHIC_IDENTITY_MATRIX",
+    "class": "BOUNDED_REVERSIBLE_LOCAL_NO_NETWORK_FALSIFIER",
+    "method": "Compare raw and current-rstrip URL parsing plus urllib Request full_url/selector across canonical, trailing-slash, repeated-slash, uppercase-host, explicit-443, dot-segment, percent-encoded-path, query, fragment and double-slash variants.",
+    "cases": 10,
+    "material_findings": [
+      "Current pre-parse rstrip('/') collapses /v1/// into canonical /v1 before identity inspection.",
+      "Query and fragment variants produce materially different full_url/selector behavior while the prior request_id bound only provider hostname plus body digest.",
+      "Uppercase host and explicit default port are semantically equivalent after parsed hostname/effective-port normalization and can safely canonicalize to the provider-owned target after equivalence is established."
+    ],
+    "network_performed": false
+  },
+  "implementation_delta": {
+    "status": "CANDIDATE_ON_OPEN_PR",
+    "changes": [
+      "Parse raw provider base URL before trailing-slash normalization.",
+      "For remote execution require canonical provider scheme/hostname/effective-port/path and empty params/query/fragment before credential attachment.",
+      "Construct remote request from provider-owned canonical base after equivalence validation.",
+      "Bind endpoint_capability_id, cost_policy_principal_id and budget_epoch_id into redacted receipts and logical request identity.",
+      "Introduce injectable/shared budget-epoch payment latch state; default process-local state remains available without creating a second persistent semantic store.",
+      "Classify HTTP 402 in both ordinary-response and HTTPError paths as payment_required_hard_stop with retryable=false and cooldown_seconds=0.",
+      "Prevent subsequent provider selection inside the same budget epoch after a 402 latch."
+    ],
+    "tests_added": "tests/test_free_api_provider_endpoint_payment_hardstop.py",
+    "local_validation": {
+      "targeted_endpoint_alias_matrix": "PASS",
+      "canonical_equivalent_endpoint_forms": "PASS",
+      "regular_402_hard_stop": "PASS",
+      "httperror_402_hard_stop": "PASS",
+      "same_epoch_second_attempt_blocked": "PASS",
+      "new_epoch_unblocked": "PASS",
+      "py_compile_semantically_matching_local_candidate": "PASS"
+    },
+    "important_boundary": "The new latch supports externally persisted/shared latch state but its default is process-local. Durable cross-restart same-budget-epoch enforcement still requires UnifiedDB/runtime integration evidence before release credit."
+  },
+  "ci_and_runtime": {
+    "pr_head": "19d6ac95ba47f3e606727be3ba102227ddcd46f6",
+    "workflow_runs": {
+      "31490545795": "Research Entity Identity Guard: FAILURE",
+      "31490545744": "Research Entity Verify: FAILURE"
+    },
+    "job_log_fetch": "FAILED_BLOB_404",
+    "ci_failure_cause": "UNKNOWN",
+    "accepted_target_vps_execution": "NOT_EXECUTED_IN_THIS_WORKER",
+    "live_external_provider_request": false,
+    "promotion_credit": "NONE"
+  },
+  "counterevidence_and_surviving_blockers": [
+    "RFC 9110 does not standardize 402 retry or payment semantics; the hard stop is project policy and needs its own acceptance evidence.",
+    "cost_policy_principal_id binds provider/key-name/evidence-class/budget-epoch but does not prove an external provider account/billing principal; account identity remains unresolved.",
+    "Default payment latch lifetime is process-local; durable UnifiedDB/restart continuity is not yet proven.",
+    "PR #232 remains draft/unmerged and repository CI failure cause is UNKNOWN because job logs are unavailable through the current API path.",
+    "No accepted-target Hostinger execution receipt was produced in this subcycle."
+  ],
+  "architecture_delta": {
+    "status": "TESTING_CANDIDATE_NOT_PROMOTED",
+    "affected_components": [
+      "free provider capability routing",
+      "effect/cost authority",
+      "execution lineage receipts",
+      "UnifiedDB budget-epoch continuity",
+      "security/recovery observability"
+    ],
+    "required_next_actions": [
+      "Run exact PR #232 head on the accepted Hostinger Ubuntu lane and require all old plus new provider tests to pass on exact bytes.",
+      "Make repository CI failure cause inspectable; do not classify the current failures without logs.",
+      "Bind budget-epoch payment latches into authoritative UnifiedDB state with restart/recovery tests so 402 cannot be forgotten by process restart inside the same epoch.",
+      "Resolve external provider cost/account principal identity or preserve it as UNKNOWN rather than treating credential-variable identity as billing identity.",
+      "Rebase/revalidate PR #232 against the then-current research-repo head before merge or capability credit.",
+      "Preserve Together hard-denial and no paid fallback."
+    ],
+    "rollback": "PR #232 remains draft; revert commits 1df91e7dd4d96ffedb72fa8248ff699bdfebe84f and 19d6ac95ba47f3e606727be3ba102227ddcd46f6 if exact-head tests or target evidence falsify the candidate."
+  },
+  "swarm_coordination": {
+    "concurrent_nonduplicate_go_observed": "c2c584393bae6d08ef1d4abdbf16d4e931f0f53f",
+    "concurrent_scope": "ClayCode comparison-chain semantics + SQLite provenance",
+    "collision_assessment": "LOW; this subcycle operates provider endpoint/cost identity and reuses the concurrent receipt as fresh shared state without overwriting it.",
+    "targeted_recipients": [
+      "ClayCode/free-provider runtime worker",
+      "F-V01-09 effect authority worker",
+      "F-V01-12 capability worker",
+      "F-V01-13 security/recovery worker",
+      "UnifiedDB budget/state continuity worker"
+    ]
+  },
+  "claims_not_made": [
+    "PR #232 accepted",
+    "repository CI semantically failed",
+    "repository CI infra failed",
+    "Hostinger target pass",
+    "durable restart-safe payment latch complete",
+    "provider account identity resolved",
+    "Frank v0.1 complete",
+    "final training authorized"
+  ]
+}

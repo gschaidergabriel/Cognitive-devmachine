@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CLAY-GO-V17-RECOVERY-STRENGTHENING-HANDOFF-20260811",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "pull_request": 280,
+  "branch": "chatgpt/go-v17-execution-support-binding-20260811",
+  "status": "RECOVERY_STRENGTHENED_TARGET_RECHECK_NOT_PROMOTED",
+  "already_bound_target_evidence": {
+    "run_id": "31436039081",
+    "tested_merge_sha": "bc4e26c8789cf747543c72468a7a32acd25e70ce",
+    "candidate_branch_head_sha": "62664b20c2392057a9a23fb9847b44716906cf32",
+    "conclusion": "success",
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "artifact_id": "9081006878",
+    "artifact_digest": "sha256:a00ae2e0c388bddc0b8f47e8a008b67c6a4ed7e3d4517cd0593424370454deaf",
+    "scope": "bounded target differential before strengthened execution-release recovery"
+  },
+  "new_normal_recovery_falsifier": {
+    "path": "tests/effect_reentry_v17_terminal_restart_recovery.py",
+    "classification": "NORMAL_RECOVERY_GATE_NOT_OOB",
+    "sequence": [
+      "create execution-bound verified effect outcome",
+      "create canonical GWT/prediction/causal rows",
+      "separate producer admits exact-outcome causal support",
+      "terminal consumer records durable REENTERED",
+      "close V17 consumer/admission/effect DB handles",
+      "fresh terminal consumer must reconstruct BOUND_REENTRY_VALID_DONE_PENDING and REENTRY_PENDING without regenerating support",
+      "fresh consumer commits DONE",
+      "close consumer",
+      "cleanly release the original execution",
+      "third fresh terminal consumer must reconstruct DONE_VALID and COMPLETE from durable V16/effect/GWT/causal ancestry",
+      "support hash, reentry hash and terminal receipt hash must remain unchanged",
+      "SQLite integrity must be ok and foreign-key violations zero"
+    ],
+    "declared_scope": "V17_TERMINAL_COMPONENT_RESTART_PLUS_EXECUTION_RELEASE_NOT_FULL_PROCESS_FAILOVER",
+    "external_effect_performed": false,
+    "external_network_used_by_test": false,
+    "canonical_state_mutated": false
+  },
+  "workflow_delta": {
+    "path": ".github/workflows/frank-v17-execution-support-binding-vps.yml",
+    "requires_execution_release_before_second_reopen": true,
+    "requires_done_valid_after_second_reopen": true,
+    "requires_complete_after_second_reopen": true,
+    "requires_all_three_durable_hashes_preserved": true,
+    "sole_go_oob_remains": "CROSS_CHAIN_SUPPORT_SPLICE"
+  },
+  "local_differential": {
+    "current_branch_recovery_test_executed": true,
+    "classification": "LOCAL_EXECUTION_RECEIPT_ONLY",
+    "does_not_replace_target_vps": true
+  },
+  "target_recheck": {
+    "state_for_promotion": "PENDING_DURABLE_RUN_ARTIFACT_BINDING",
+    "promotion_allowed": false,
+    "reason": "Do not convert an observed/checking current-head run into a durable scientific receipt until exact current run/job/artifact metadata is bound in Clay. The earlier exact target pass remains valid only for its exact tested bytes."
+  },
+  "remaining_recovery_gap": {
+    "class": "FULL_PROCESS_OR_STALE_LEASE_FAILOVER_NOT_CLAIMED_BY_THIS_TEST",
+    "meaning": "The strengthened test proves terminal-component close/reopen plus end of the originating execution. It does not by itself prove whole-process crash, stale-presence takeover, or all-process state reconstruction.",
+    "next_decision": "Resolve whether existing V15/V16 stale-lease and provider crash-reconciliation target evidence closes this gap. If not, add a normal full-process failover gate before canonical V17 promotion."
+  },
+  "go_out_of_box": {
+    "count_for_this_worker_macrocycle": 1,
+    "name": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "no_additional_oob_added": true
+  },
+  "non_claims": [
+    "No canonical V17 migration promotion.",
+    "No main merge.",
+    "No whole Frank v0.1 acceptance.",
+    "No final training authorization.",
+    "No external provider effect.",
+    "No Frank/self.root Harness mutation authority."
+  ]
+}

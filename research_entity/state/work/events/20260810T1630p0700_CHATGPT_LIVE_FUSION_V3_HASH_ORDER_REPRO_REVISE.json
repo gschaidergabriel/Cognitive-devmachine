@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:live-fusion-v3:hash-order-repro-repair:20260810T1630p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T16:30:03+07:00",
+  "payload": {
+    "work_id": "WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810",
+    "reason_clay": {
+      "new_evidence": "The V3 correlated-blind-spot simulator assigned RNG draws to an unsorted set-derived edge stream, making numeric results PYTHONHASHSEED-dependent. A six-seed local semantic reproduction varied correlated recall from 0.9706910459801021 to 0.9863538585641302 while preserving V3==V2. Sorting the edge stream made all six tested hash seeds identical.",
+      "receipt_ref": "research_entity/mesh_feedback/20260810T1630p0700-live-fusion-v3-reproducibility/HASH_ORDER_ROOT_CAUSE_RECEIPT.json",
+      "repair_commit": "66ddc6b1fa8c9c4864b8b93cee3c418ce83ee436",
+      "repaired_source_blob": "a5ba80f15ae0395f0c05a9b42dbbce0bbc0ff10c"
+    },
+    "completion_clay": {
+      "exact_source_local_reexecution": "REQUIRED",
+      "varied_pythonhashseed_reexecution": "REQUIRED",
+      "ubuntu_exact_source_reexecution": "REQUIRED",
+      "stdout_sha256_binding": "REQUIRED",
+      "python_version_and_command_binding": "REQUIRED",
+      "historical_correlated_numeric_adjudication": "REQUIRED",
+      "qualitative_same_ancestry_no_v3_gain": "RETAIN_AS_SUPPORTED_NEGATIVE_RESULT_PENDING_REAL_REPLAY"
+    },
+    "affected_branches": ["clayresearch","harness","claygraph","unifieddb"],
+    "status": "READY",
+    "base_priority": 0.99,
+    "expected_impact": 0.95,
+    "urgency": 0.95,
+    "information_gain": 0.99
+  }
+}

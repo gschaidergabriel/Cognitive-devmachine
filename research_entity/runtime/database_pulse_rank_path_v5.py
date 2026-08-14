@@ -11,7 +11,9 @@ ONLINE. V5 makes the lifecycle explicit:
 
   maintenance phase: against the same authoritative ledger epoch, build/drop the disposable
   expression index outside the cognition read. A stale maintenance plan is rejected and must be
-  recomputed. Build/drop failure cannot change semantic correctness of the online path.
+  recomputed. Material build/drop is protected by semantic + physical compare-and-swap and is
+  committed atomically with a non-authoritative physical maintenance receipt. A receipt-write
+  failure therefore rolls the schema change back as well.
 
 This controller has performance-routing authority only. StateLedger remains semantic authority.
 """
@@ -30,6 +32,11 @@ from research_entity.runtime.semantic_compile_horizon_estimator_v16 import (
 
 IMPLEMENTATION_ID="PULSE_TWO_PHASE_AUTHORITATIVE_RANK_PATH_V5"
 FORBIDDEN_SOURCE_DOMAINS={"pulse","pulse_control"}
+MAINTENANCE_LOG_TABLE="pulse_rank_maintenance_receipts_v5"
+
+
+class RankPhysicalStateStale(RuntimeError):
+    """The disposable physical index changed after a lifecycle plan was made."""
 
 
 @dataclass(frozen=True)
@@ -60,6 +67,8 @@ class RankMaintenanceReceipt:
     trace_root_hash_after:str
     plan_hash:str
     authority:str="PHYSICAL_INDEX_MAINTENANCE_ONLY_NO_SEMANTIC_AUTHORITY"
+    receipt_id:str|None=None
+    persisted:bool=False
 
 
 @dataclass(frozen=True)
@@ -126,33 +135,126 @@ class AdaptiveAuthoritativeRankPathV5:
             compile_reason=decision.reason,guarded_break_even_reads=decision.guarded_break_even_reads,
             plan_hash=h(body))
 
+    def _maintenance_log_exists(self)->bool:
+        return self.con.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",(MAINTENANCE_LOG_TABLE,)
+        ).fetchone() is not None
+
+    def _create_maintenance_log_no_commit(self)->None:
+        self.con.execute(f"""CREATE TABLE IF NOT EXISTS {MAINTENANCE_LOG_TABLE}(
+            receipt_id TEXT PRIMARY KEY,
+            plan_hash TEXT NOT NULL UNIQUE,
+            basis_epoch INTEGER NOT NULL,
+            action TEXT NOT NULL,
+            status TEXT NOT NULL,
+            index_present_before INTEGER NOT NULL,
+            index_present_after INTEGER NOT NULL,
+            semantic_state_hash_before TEXT NOT NULL,
+            semantic_state_hash_after TEXT NOT NULL,
+            trace_root_hash_before TEXT NOT NULL,
+            trace_root_hash_after TEXT NOT NULL,
+            executed_at TEXT NOT NULL,
+            authority TEXT NOT NULL
+        )""")
+
+    def _create_index_no_commit(self)->None:
+        self.con.execute(f"""CREATE INDEX IF NOT EXISTS {INDEX_NAME}
+            ON state(
+              {SCORE_EXPR} DESC,
+              domain COLLATE BINARY,
+              k COLLATE BINARY,
+              semantic_hash COLLATE BINARY
+            )
+            WHERE status='CURRENT' AND epistemic='KNOWN'""")
+
+    def _drop_index_no_commit(self)->None:
+        self.con.execute(f"DROP INDEX IF EXISTS {INDEX_NAME}")
+
+    def maintenance_receipts(self)->list[dict[str,Any]]:
+        if not self._maintenance_log_exists():return []
+        rows=self.con.execute(
+            f"SELECT * FROM {MAINTENANCE_LOG_TABLE} ORDER BY rowid"
+        ).fetchall()
+        return [dict(r) for r in rows]
+
     def apply_maintenance(self,plan:RankLifecyclePlan)->RankMaintenanceReceipt:
         if plan.basis_epoch!=self.ledger.epoch or plan.semantic_state_hash!=self.ledger.semantic_state_hash:
             raise StaleEpoch("rank maintenance plan no longer matches authoritative ledger")
         before=self.index_exists()
+        if before!=plan.actual_index_present:
+            raise RankPhysicalStateStale(
+                f"rank maintenance physical precondition changed: planned={plan.actual_index_present} actual={before}"
+            )
         state_before=self.ledger.semantic_state_hash; trace_before=self.ledger.trace_root_hash
         action=plan.maintenance_action
-        status="NO_CHANGE"
+        if action=="NONE":
+            return RankMaintenanceReceipt(
+                basis_epoch=plan.basis_epoch,action=action,status="NO_CHANGE",
+                index_present_before=before,index_present_after=before,
+                semantic_state_hash_before=state_before,semantic_state_hash_after=state_before,
+                trace_root_hash_before=trace_before,trace_root_hash_after=trace_before,
+                plan_hash=plan.plan_hash)
+        if action not in {"BUILD_INDEX","DROP_INDEX"}:
+            raise ValueError(f"unsupported maintenance action: {action}")
+
+        # SQLite DDL participates in transactions. Material schema mutation and its durable
+        # physical receipt therefore either commit together or roll back together.
         try:
-            if action=="BUILD_INDEX":
-                self.v3.ensure_index(); status="BUILT"
-            elif action=="DROP_INDEX":
-                self.v3.drop_index(); status="DROPPED"
-            elif action!="NONE":
-                raise ValueError(f"unsupported maintenance action: {action}")
+            self.con.execute("BEGIN IMMEDIATE")
+            if plan.basis_epoch!=self.ledger.epoch or plan.semantic_state_hash!=self.ledger.semantic_state_hash:
+                raise StaleEpoch("rank maintenance plan became stale before physical commit")
+            tx_before=self.index_exists()
+            if tx_before!=plan.actual_index_present:
+                raise RankPhysicalStateStale(
+                    f"rank maintenance physical CAS failed: planned={plan.actual_index_present} actual={tx_before}"
+                )
+            self._create_maintenance_log_no_commit()
+            if action=="BUILD_INDEX":self._create_index_no_commit();status="BUILT"
+            else:self._drop_index_no_commit();status="DROPPED"
+            after=self.index_exists()
+            state_after=self.ledger.semantic_state_hash; trace_after=self.ledger.trace_root_hash
+            if (state_before,trace_before)!=(state_after,trace_after):
+                raise AssertionError("physical rank-index maintenance mutated semantic/trace roots")
+            receipt_body={
+                "basis_epoch":plan.basis_epoch,"action":action,"status":status,
+                "index_present_before":tx_before,"index_present_after":after,
+                "semantic_state_hash_before":state_before,"semantic_state_hash_after":state_after,
+                "trace_root_hash_before":trace_before,"trace_root_hash_after":trace_after,
+                "plan_hash":plan.plan_hash,
+                "authority":"PHYSICAL_INDEX_MAINTENANCE_ONLY_NO_SEMANTIC_AUTHORITY",
+            }
+            receipt_id=h(receipt_body)
+            self.con.execute(f"""INSERT INTO {MAINTENANCE_LOG_TABLE}(
+                receipt_id,plan_hash,basis_epoch,action,status,index_present_before,index_present_after,
+                semantic_state_hash_before,semantic_state_hash_after,trace_root_hash_before,
+                trace_root_hash_after,executed_at,authority
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)""",
+                (receipt_id,plan.plan_hash,plan.basis_epoch,action,status,int(tx_before),int(after),
+                 state_before,state_after,trace_before,trace_after,
+                 "PHYSICAL_INDEX_MAINTENANCE_ONLY_NO_SEMANTIC_AUTHORITY"))
+            self.con.commit()
+            return RankMaintenanceReceipt(
+                basis_epoch=plan.basis_epoch,action=action,status=status,
+                index_present_before=tx_before,index_present_after=after,
+                semantic_state_hash_before=state_before,semantic_state_hash_after=state_after,
+                trace_root_hash_before=trace_before,trace_root_hash_after=trace_after,
+                plan_hash=plan.plan_hash,receipt_id=receipt_id,persisted=True)
+        except (StaleEpoch,RankPhysicalStateStale):
+            self.con.rollback();raise
         except Exception:
-            # Semantic state is still authoritative/correct; caller may retry maintenance later.
-            status="FAILED_RETRYABLE_PHYSICAL_MAINTENANCE"
-        after=self.index_exists()
-        state_after=self.ledger.semantic_state_hash; trace_after=self.ledger.trace_root_hash
-        if (state_before,trace_before)!=(state_after,trace_after):
-            raise AssertionError("physical rank-index maintenance mutated semantic/trace roots")
-        return RankMaintenanceReceipt(
-            basis_epoch=plan.basis_epoch,action=action,status=status,
-            index_present_before=before,index_present_after=after,
-            semantic_state_hash_before=state_before,semantic_state_hash_after=state_after,
-            trace_root_hash_before=trace_before,trace_root_hash_after=trace_after,
-            plan_hash=plan.plan_hash)
+            self.con.rollback()
+            # The transaction rollback is itself the safety result: build/drop and receipt
+            # cannot diverge. A retry must replan and reobserve the physical state.
+            after=self.index_exists()
+            state_after=self.ledger.semantic_state_hash; trace_after=self.ledger.trace_root_hash
+            if (state_before,trace_before)!=(state_after,trace_after):
+                raise AssertionError("failed physical maintenance changed semantic/trace roots")
+            return RankMaintenanceReceipt(
+                basis_epoch=plan.basis_epoch,action=action,status="FAILED_RETRYABLE_PHYSICAL_MAINTENANCE",
+                index_present_before=before,index_present_after=after,
+                semantic_state_hash_before=state_before,semantic_state_hash_after=state_after,
+                trace_root_hash_before=trace_before,trace_root_hash_after=trace_after,
+                plan_hash=plan.plan_hash,persisted=False)
 
     def _rows(self,domains:tuple[str,...],limit:int,*,use_index:bool):
         clause,args=self._domain_clause(domains)
@@ -164,8 +266,8 @@ class AdaptiveAuthoritativeRankPathV5:
                          domain COLLATE BINARY,k COLLATE BINARY,semantic_hash COLLATE BINARY
                 LIMIT ?"""
         final=[*args,limit]
-        plan=tuple(str(r[3]) for r in self.con.execute("EXPLAIN QUERY PLAN "+sql,final))
-        return list(self.con.execute(sql,final)),plan
+        query_plan=tuple(str(r[3]) for r in self.con.execute("EXPLAIN QUERY PLAN "+sql,final))
+        return list(self.con.execute(sql,final)),query_plan
 
     def _row_by_ref(self,ref:str):
         if ":" not in ref:return None

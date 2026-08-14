@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2054p0700-gpt56sol-productstart-target-selection",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "accepted_release_host_contract": "Hostinger Ubuntu VPS",
+  "training_authorized": false,
+  "source_basis": {
+    "fast_project_source": "000_CLAY_FRANK_PROJECT_SOURCE_FAST_CURRENT_2026-08-12_GRF_v2(1).txt",
+    "research_main_observed_before_write": "85d7244ba54241fefb50e6bb23887ab0f361d808",
+    "canonical_entity_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "observed_reality": {
+    "sqlite_upstream": {
+      "wal_reset_bug_affected_versions": "3.7.0 through 3.51.2 per upstream WAL documentation",
+      "fixed_line": "3.51.3 and later",
+      "candidate_fixed_version_seen_in_project": "3.53.4",
+      "promotion_rule": "version availability alone does not prove the productive Frank process loaded the fixed SQLite runtime"
+    },
+    "stale_pr_513": {
+      "head": "ff37db3cc9414c2ff252278aeb7be3a25ebd262d",
+      "run": 31565489962,
+      "failure": "workflow py_compile referenced tests/frank_sqlite_v6_launcher_wiring_regression.py that did not exist on the exact stacked head",
+      "classification": "STALE_COMPOSITION_TEST_HARNESS_FAILURE_NOT_SQLITE_MECHANISM_FAILURE"
+    },
+    "worker_candidate_pr_526": {
+      "head": "11dabf9b6b8c12973c4f33eae385826ef3c723d6",
+      "run": 31602980848,
+      "runner_name": "clay",
+      "hostname": "digital-retina",
+      "mechanism_checks": [
+        "ProductStart V4 unit PASS 11/11",
+        "V6 parent binding PASS 3/3",
+        "V6 launcher wiring PASS 31/31",
+        "V6 loader-directory trust PASS 8/8",
+        "V6 pycache source-only reentry PASS 3/3",
+        "repository static integrity PASS"
+      ],
+      "product_discovery": {
+        "product_identity_anchor_observed": false,
+        "product_candidate_unit_count": 0,
+        "product_v4_pass_count": 0,
+        "release_gate": "FAIL_CLOSED_NO_ADMITTED_PRODUCT_START_V4"
+      },
+      "hostinger_credit": "NOT_GRANTED",
+      "reason": "the generic self-hosted Linux X64 selector executed on digital-retina; no independent evidence bound this run to the accepted Hostinger Ubuntu VPS"
+    },
+    "historical_vps_naming_check": {
+      "workflow": ".github/workflows/clay-pulse-v5-provenance-exact-vps-ssh.yml",
+      "selector": "self-hosted, Linux, X64",
+      "ssh_role": "GitHub repository clone over runner SSH identity, not a remote Hostinger execution hop",
+      "conclusion": "workflow/file naming containing VPS or SSH is not host attestation"
+    },
+    "latest_deep_integrity_observation": {
+      "product_repo_commit": "53d0906e5e0d5493517393164854681c2db06854",
+      "under_test_source_sha": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+      "hostname": "digital-retina",
+      "interpretation": "strong mechanism/deep-integrity evidence on that self-hosted machine, not automatically accepted-Hostinger evidence"
+    },
+    "parallel_fusion": {
+      "productstart_fresh_main_candidate": "PR#524",
+      "live_interpreted_product_cmdline_candidate": "PR#525",
+      "research_receipt_already_present": "research_entity/trigger_runs/go/20260812T2046p0700-gpt56sol-productstart-v4-fresh-main/RESEARCH_RECEIPT.json"
+    }
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "FUTURE_TEST_GHOST",
+    "type": "read_only_repository_counterfactual_discriminator",
+    "baseline": "exact stale PR #513 head ff37db3cc9414c2ff252278aeb7be3a25ebd262d",
+    "treatment": "current main containing the merged V6 wiring regression",
+    "observation": {
+      "stale_head_path": "tests/frank_sqlite_v6_launcher_wiring_regression.py -> absent/404",
+      "current_main_path": "tests/frank_sqlite_v6_launcher_wiring_regression.py -> present"
+    },
+    "outcome": "SUPPORTED",
+    "meaning": "the red stacked run was caused by ancestry/workflow-test mismatch rather than evidence that ProductStart V4 itself failed",
+    "production_mutation": false,
+    "frank_state_mutation": false,
+    "rollback": "not required; read-only observation"
+  },
+  "duplicate_avoidance_and_cleanup": {
+    "worker_pr": 526,
+    "action": "CLOSED_UNMERGED_AS_DUPLICATE",
+    "successor": 524,
+    "reason": "parallel worker had already produced and durably fused the equivalent fresh-main ProductStart V4 candidate with stronger current-main merge-SHA evidence",
+    "preserved_unique_delta": "actual runner identity / host-credit boundary and FUTURE_TEST_GHOST stale-composition evidence were recorded before closure"
+  },
+  "grf_collapse": [
+    {
+      "claim": "SQLite 3.53.4 availability alone closes the productive WAL safety gate",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "PR #513 red run demonstrates a ProductStart V4 mechanism defect",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "fresh-main ProductStart V4 composes with merged V6 deterministic controls on the tested self-hosted lane",
+      "outcome": "RETAIN_SUPPORTED_MECHANISM"
+    },
+    {
+      "claim": "a workflow named accepted-target/VPS and scheduled with generic self-hosted Linux X64 is automatically accepted Hostinger evidence",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "run 31602980848 proves the accepted Hostinger host has no ProductStart anchor/unit",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "exact accepted Hostinger ProductStart, live fixed SQLite mapping, restart/recovery and rollback/downgrade/library-swap are closed",
+      "outcome": "DEFER_OPEN"
+    }
+  ],
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+    "invariant": "HOST_CREDIT_REQUIRES_EXACT_HOST_BINDING",
+    "rule": "Do not promote self-hosted or VPS-named CI receipts to accepted Hostinger runtime evidence unless the exact execution host is independently bound to the canonical accepted Hostinger identity. Mechanism PASS and host acceptance are separate dimensions.",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-09-EFFECT-AUTHORITY"
+    ],
+    "strongest_counterhypothesis": "digital-retina may itself be the accepted Hostinger host despite its hostname, in which case current receipts could deserve Hostinger credit",
+    "falsifier": "produce a canonical owner-pinned host identity/fingerprint/selector proving digital-retina maps to the accepted Hostinger target, or execute the same gates through an independently authenticated Hostinger route",
+    "rollback": "no runtime rollback; research constraint can be relaxed only by exact host identity evidence"
+  },
+  "next_discriminator": {
+    "priority": "P0_RELEASE_EVIDENCE",
+    "test": "bind execution to the exact accepted Hostinger host identity, then run the surviving ProductStart V4 + V6 release identity + live interpreted product/cmdline + live mapped SQLite object attestation on that host; follow with clean restart/recovery and rollback/downgrade/library-swap fail-closed matrix",
+    "current_status": "BLOCKED_ON_CANONICAL_ACCEPTED_HOST_ROUTING_OR_ATTESTATION",
+    "do_not": [
+      "invent a Hostinger runner label",
+      "treat hostname or workflow name as sufficient host identity",
+      "weaken fail-closed ProductStart discovery",
+      "start final paid model training"
+    ]
+  },
+  "authority_and_nonclaims": {
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "production_service_mutated": false,
+    "canonical_frank_state_mutated": false,
+    "final_training_authorized": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "primary_sources":[
+    {"source":"Automatically Adaptive Conformal Risk Control, AISTATS 2025","finding":"black-box risk control can adapt to input difficulty approximately conditionally"},
+    {"source":"Online conformal prediction with decaying step sizes, ICML 2024","finding":"online conformal methods can maintain retrospective sequence-level coverage and adapt in stable populations"},
+    {"source":"Selective Conformal Risk Control, arXiv 2512.12844","finding":"selection + conformal risk control formalizes predict-vs-abstain with finite-sample/PAC-style guarantees"},
+    {"source":"High Probability Risk Control Under Covariate Shift, PMLR 2025","finding":"distribution shift requires explicit risk-control treatment; ordinary calibration does not automatically transfer"}
+  ],
+  "local_result":"A 99%-confidence zero-error binomial certificate met a 0.5% target on IID calibration and IID heldout, but failed catastrophically on a constructed same-index tail shift (22/22 routed errors).",
+  "architecture_consequence":"Validity certificates must carry scope and be revocable; continuous shadow reference checks and drift/hash/epoch invalidation are required."
+}

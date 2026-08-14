@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "classification": "NEGATIVE_RESULT_TEST_HARNESS",
+  "accepted_target_run": 31537165602,
+  "tested_head": "5f18571f6b67371a255fe61f36d7042aa087e9a8",
+  "result": "FAIL",
+  "runner": "clay",
+  "failed_step": "Execute exact candidate regression",
+  "observed_annotation": "Process completed with exit code 1 at workflow script line corresponding to result parsing/execution block.",
+  "causal_diagnosis": {
+    "status": "HIGH_CONFIDENCE_INFERENCE_PENDING_RERUN",
+    "mechanism": "The new test executed as python tests/unifieddb_projection_lease_commit_fence_v3_gate.py but did not insert the repository root into sys.path before importing runtime.state. A local path probe reproduces ModuleNotFoundError for this launch shape, while the predecessor V2 gate explicitly inserts ROOT before runtime imports.",
+    "counterhypothesis": "The actual candidate semantics, rather than import resolution, caused the first target failure.",
+    "discriminator": "Rerun the exact target gate after adding the same explicit ROOT sys.path insertion used by the predecessor V2 gate."
+  },
+  "repair": {
+    "workflow_diagnostics_commit": "2a46873313270878c9a9733fc3584fd310263bed",
+    "test_import_fix_commit": "eb6bfdd011068cefff1e21e165426c3bd494f0ba",
+    "change": "tests/unifieddb_projection_lease_commit_fence_v3_gate.py now inserts Path(__file__).resolve().parents[1] into sys.path before runtime imports; workflow also captures stderr and emits a diagnostic annotation on future failure."
+  },
+  "promotion": "NONE",
+  "unusual_experiment_count_delta": 0,
+  "research_repo_head_observed_before_write": "aa1063edd9cb1482992b822c6c6608aa7de85ddd"
+}

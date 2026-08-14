@@ -7,6 +7,7 @@ on:
     paths:
       - 'research_entity/runtime/database_pulse_rank_path_v5.py'
       - 'research_entity/runtime/test_database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5_atomic.py'
       - 'research_entity/runtime/database_pulse_runtime_v5.py'
       - 'research_entity/runtime/test_database_pulse_runtime_v5.py'
       - 'research_entity/runtime/test_database_pulse_runtime_v5_adversarial.py'
@@ -33,15 +34,17 @@ jobs:
           python3 -m py_compile \
             research_entity/runtime/database_pulse_rank_path_v5.py \
             research_entity/runtime/test_database_pulse_rank_path_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5_atomic.py \
             research_entity/runtime/database_pulse_runtime_v5.py \
             research_entity/runtime/test_database_pulse_runtime_v5.py \
             research_entity/runtime/test_database_pulse_runtime_v5_adversarial.py \
             tools/database_pulse_rank_path_v5_benchmark.py
-      - name: Run V5 lifecycle and Runtime falsifiers
+      - name: Run V5 lifecycle, atomic-maintenance and Runtime falsifiers
         run: |
           set -euo pipefail
           python3 -m unittest -v \
             research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
             research_entity.runtime.test_database_pulse_runtime_v5 \
             research_entity.runtime.test_database_pulse_runtime_v5_adversarial
       - name: Benchmark V4 inline versus V5 two-phase lifecycle
@@ -69,15 +72,17 @@ jobs:
           python3 -m py_compile \
             research_entity/runtime/database_pulse_rank_path_v5.py \
             research_entity/runtime/test_database_pulse_rank_path_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5_atomic.py \
             research_entity/runtime/database_pulse_runtime_v5.py \
             research_entity/runtime/test_database_pulse_runtime_v5.py \
             research_entity/runtime/test_database_pulse_runtime_v5_adversarial.py \
             tools/database_pulse_rank_path_v5_benchmark.py
-      - name: Run V5 lifecycle and Runtime falsifiers
+      - name: Run V5 lifecycle, atomic-maintenance and Runtime falsifiers
         run: |
           set -euo pipefail
           python3 -m unittest -v \
             research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
             research_entity.runtime.test_database_pulse_runtime_v5 \
             research_entity.runtime.test_database_pulse_runtime_v5_adversarial
       - name: Benchmark V4 inline versus V5 two-phase lifecycle

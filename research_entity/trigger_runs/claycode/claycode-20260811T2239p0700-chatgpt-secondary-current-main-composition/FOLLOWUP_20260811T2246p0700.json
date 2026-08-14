@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "followup_id": "claycode-20260811T2246p0700-current-main-composition-followup",
+  "parent_run_id": "claycode-20260811T2239p0700-chatgpt-secondary-current-main-composition",
+  "created_at_local": "2026-08-11T22:46:00+07:00",
+  "created_at_utc": "2026-08-11T15:46:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "provenance_correction": {
+    "status": "CORRECTED_BY_APPEND_ONLY_FOLLOWUP",
+    "superseded_parent_field": "canonical_boot",
+    "incorrect_parent_value": {
+      "entity_version": "RAE-9.5",
+      "revision": 9,
+      "state_hash": "c956beb10704e98d04e84e555c8e12d91133df2cc2a61f8ad573d6d0091ecf32"
+    },
+    "verified_current_value": {
+      "entity_version": "RAE-8.8",
+      "revision": 2,
+      "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+    },
+    "evidence": [
+      "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+    ],
+    "rule": "The parent receipt remains historical evidence, but its canonical_boot field must not be used after this correction."
+  },
+  "fresh_target_state": {
+    "target_pr": 357,
+    "base_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "head_before_package_workflow_repair": "a5d13ee2f3b9f9bd5696102ff99d8f7cb75b3b28",
+    "head_after_package_workflow_repair": "1c0a20d3ec412724f79bd444820c526722def8b5",
+    "github_mergeable": true
+  },
+  "package_import_target_negative": {
+    "workflow_run": 31508117810,
+    "job": 93834787657,
+    "accepted_target_runner": "clay / digital-retina",
+    "package_namespace_gate": "7/7 PASS",
+    "semantic_differential_executed": false,
+    "failure": "ModuleNotFoundError: No module named 'runtime'",
+    "failure_stage": "Re-run semantic differential on repaired bytes",
+    "classification": "HARNESS_IMPORT_COMPOSITION_BUG",
+    "semantic_counterevidence": false,
+    "resource_shadow_before_failure": {
+      "elapsed_seconds": 0.04,
+      "max_rss_kib": 12672
+    }
+  },
+  "package_import_repair": {
+    "commit": "1c0a20d3ec412724f79bd444820c526722def8b5",
+    "workflow": ".github/workflows/claycode-package-import-vps.yml",
+    "change": "Run the package differential with explicit PYTHONPATH equal to the isolated repository root and python -P safe-path mode.",
+    "claycode_semantic_change": false,
+    "authority_change": false,
+    "fresh_target_revalidation_required": true
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION_REFINED",
+    "change": "All target workflows that execute package-oriented ClayCode tests from tests/*.py must bind repository-root package resolution explicitly rather than rely on script-directory insertion.",
+    "promotion_gate": "No evaluator/frontier promotion until the exact repaired head passes the accepted-target composed integration and package semantic differential."
+  },
+  "whole_f_v01_02_promotion": "NOT_CLAIMED",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "final_training_authorized": false,
+  "research_write": "COMMITTED"
+}

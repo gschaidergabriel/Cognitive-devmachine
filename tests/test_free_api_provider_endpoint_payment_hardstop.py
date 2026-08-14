@@ -3,7 +3,7 @@ import sys
 import threading
 import unittest
 import urllib.error
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from pathlib import Path
 
 
@@ -258,6 +258,58 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
         self.assertIsInstance(second_result, RuntimeError)
         self.assertEqual(str(second_result), "payment_required_hard_stop_active")
         self.assertEqual(opener_calls, 1)
+
+    def test_busy_execution_lock_times_out_before_network(self):
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        opener_called = False
+
+        def opener(*args, **kwargs):
+            nonlocal opener_called
+            opener_called = True
+            return Response()
+
+        def attempt():
+            try:
+                return MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="x",
+                    environ=env,
+                    opener=opener,
+                )
+            except Exception as exc:
+                return exc
+
+        MOD.PROCESS_EXECUTION_LOCK.acquire()
+        original_timeout = getattr(MOD, "EXECUTION_LOCK_TIMEOUT_SECONDS", None)
+        MOD.EXECUTION_LOCK_TIMEOUT_SECONDS = 0.05
+        completed_while_busy = True
+        try:
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                future = pool.submit(attempt)
+                try:
+                    result = future.result(timeout=0.2)
+                except FutureTimeout:
+                    completed_while_busy = False
+                    MOD.PROCESS_EXECUTION_LOCK.release()
+                    result = future.result(timeout=2)
+                else:
+                    MOD.PROCESS_EXECUTION_LOCK.release()
+        finally:
+            if MOD.PROCESS_EXECUTION_LOCK.locked():
+                MOD.PROCESS_EXECUTION_LOCK.release()
+            if original_timeout is None:
+                del MOD.EXECUTION_LOCK_TIMEOUT_SECONDS
+            else:
+                MOD.EXECUTION_LOCK_TIMEOUT_SECONDS = original_timeout
+
+        self.assertTrue(completed_while_busy)
+        self.assertIsInstance(result, RuntimeError)
+        self.assertEqual(str(result), "execution_busy")
+        self.assertFalse(opener_called)
 
 
 if __name__ == "__main__":

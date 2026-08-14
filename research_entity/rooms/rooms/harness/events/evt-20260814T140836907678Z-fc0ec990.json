@@ -1,0 +1,35 @@
+{
+  "affects_claims": [],
+  "affects_rooms": [],
+  "ancestry_family": "UNKNOWN",
+  "artifact_refs": [],
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "created_at": "2026-08-14T14:08:36.907701Z",
+  "delivery": "NEXT_CHECKPOINT",
+  "dependencies": [],
+  "event_id": "evt-20260814T140836907678Z-fc0ec990",
+  "event_type": "WORK_ORDER_OPEN_LANES",
+  "origin_actor": "claude-code-lead",
+  "origin_worker": "master-clay-auftrag",
+  "payload": {
+    "abschlusstest": "File research_entity/frank_v0_1/decomposition/F-V01-16_DECOMPOSITION.json exists and contains 3 to 8 sub-tasks. Every sub-task carries: title, goal_clay and completion_test_clay as ClayCode records conforming to records.task in research_entity/rooms/ROOM_DB_SCHEMA.json, dependencies listing at least one repository path that EXISTS at the tested commit, and the target room_id. At least one sub-task is a falsifiable first experiment stating what result would refute it. Each sub-task is then materialized as a claimable task file under research_entity/rooms/rooms/<room_id>/tasks/ with status exactly OPEN (the schema allows only OPEN|CLAIMED|BLOCKED|COMPLETE|CLOSED|STALE). Verification: a script re-reads every written task file and asserts all ten required fields are present and status is in the allowed set.",
+    "art": "ARBEITSAUFTRAG",
+    "aufgegeben_am": "2026-08-14T21:08:36+0700",
+    "aufgegeben_von": "master-clay (gabriel-claude)",
+    "dateien": [
+      "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+      "research_entity/rooms/ROOM_DB_SCHEMA.json",
+      "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md"
+    ],
+    "harte_regel": "Derive everything from the stated goal and the EXISTING repository surface. Invent nothing: no capability Frank v0.1 does not have, no path that does not exist. If the goal cannot be decomposed without a decision only the owner can make, write that blocker into the file and stop — a stated blocker is a valid result, a plausible-sounding decomposition is not.",
+    "hinweis_an_den_worker": "Diese Aufgabe kommt von Master Clay, Gabriels Arbeitsgefaehrte — NICHT von der Forschungsentitaet selbst und nicht von self.root/Frank. Sie ist eine Bitte, keine Weisung: Evidenz schlaegt Rang.",
+    "titel": "F-V01-16: bounded decomposition into claimable sub-tasks",
+    "warum": "MEASURED 2026-08-14 on frank-api. The center holds 34 claimable tasks; 29 of them are file-counting over node_modules and Next.js build output. Work package F-V01-16 has status OPEN and NO open PR, and no room holds a single task for it — so a go worker cannot work on it even if it wanted to. Its goal, quoted verbatim from FRANK_V0_1_WORKSPACE.json: 'Exact finished Frank v0.1 on target VPS passes full identity/API/translation/agency/multimodal/effect/security/recovery/resource/adversarial acceptance and has no open P0/P1 release blockers.' This task creates the missing entry point. It does not decide the research."
+  },
+  "room_id": "harness",
+  "schema_version": "1.0",
+  "trigger": "go"
+}

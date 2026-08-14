@@ -1,0 +1,78 @@
+name: Entity Copy Birth Pulse V1
+
+on:
+  push:
+    branches: ['research/entity-copy-birth-pulse-v1-20260810']
+    paths:
+      - 'research_entity/frank/ENTITY_COPY_BIRTH_PULSE_CONTRACT.md'
+      - 'research_entity/harness/reference/entity_copy_birth.py'
+      - 'research_entity/harness/reference/test_entity_copy_birth.py'
+      - '.github/workflows/entity-copy-birth-v1.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/frank/ENTITY_COPY_BIRTH_PULSE_CONTRACT.md'
+      - 'research_entity/harness/reference/entity_copy_birth.py'
+      - 'research_entity/harness/reference/test_entity_copy_birth.py'
+      - '.github/workflows/entity-copy-birth-v1.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: entity-copy-birth-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact tested SHA
+        run: test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+      - name: Compile identity preflight
+        run: python -m py_compile research_entity/harness/reference/entity_copy_birth.py research_entity/harness/reference/test_entity_copy_birth.py
+      - name: Run copy-birth falsifiers
+        run: python -m unittest -v research_entity.harness.reference.test_entity_copy_birth
+      - name: Emit receipt
+        run: |
+          python - <<'PY'
+          import json, os, platform
+          from datetime import datetime, timezone
+          receipt = {
+            'schema_version': '1.0',
+            'test': 'ENTITY_COPY_BIRTH_PULSE_V1',
+            'status': 'PASS',
+            'github_sha': os.environ['GITHUB_SHA'],
+            'github_run_id': os.environ['GITHUB_RUN_ID'],
+            'runner_os': os.environ.get('RUNNER_OS'),
+            'runner_arch': os.environ.get('RUNNER_ARCH'),
+            'python': platform.python_version(),
+            'created_at': datetime.now(timezone.utc).isoformat(),
+            'assertions': [
+              'fresh_package_births_at_pulse_1',
+              'restart_preserves_identity',
+              'copy_births_distinct_child',
+              'same_name_copy_births_distinct_child',
+              'move_preserves_identity',
+              'post_birth_rename_preserves_identity',
+              'explicit_replica_attach_preserves_identity',
+              'copied_certificate_without_registry_binding_cannot_continue_parent',
+              'retired_ids_not_reused',
+              'copied_state_fails_closed_without_rekey',
+              'birth_event_precedes_normal_cognition_surface'
+            ],
+            'scope_guard': 'Research/H3 identity-preflight evidence. Does not mutate current production Frank identity semantics.'
+          }
+          open('/tmp/entity-copy-birth-v1.json','w').write(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(receipt,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: entity-copy-birth-v1-${{ github.run_id }}
+          path: /tmp/entity-copy-birth-v1.json
+          if-no-files-found: error

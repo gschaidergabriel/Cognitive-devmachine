@@ -1,0 +1,66 @@
+{
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "model": "GPT-5.6 Sol",
+    "provider": "OpenAI"
+  },
+  "artifact": {
+    "path": "tools/frank_canonical_hash_abi_probe.py",
+    "local_source_sha256": "2ea808c644aa7b9b273b1eb7ae5d560c8ea6aaa08c580c3230788e2dda95f52f",
+    "repository_commit": "44dde06b7bc6c58139d0ea588ead717a50f9a294"
+  },
+  "cases": [
+    {
+      "diverges": true,
+      "id": "utf16_property_order",
+      "python": ["U+E000", "U+1F600"],
+      "rfc8785_expected": ["U+1F600", "U+E000"]
+    },
+    {
+      "diverges": true,
+      "id": "minus_zero",
+      "python": "-0.0",
+      "rfc8785_expected": "0"
+    },
+    {
+      "diverges": true,
+      "id": "one_e_minus_six",
+      "python": "1e-06",
+      "rfc8785_expected": "0.000001"
+    }
+  ],
+  "environment": {
+    "implementation": "CPython",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5"
+  },
+  "execution": {
+    "commands": [
+      "python3 -m py_compile /tmp/frank_canonical_hash_abi_probe.py",
+      "python3 /tmp/frank_canonical_hash_abi_probe.py"
+    ],
+    "exit_code": 0,
+    "result": "PASS_NEGATIVE_RESULT_REPRODUCED",
+    "evidence_class": "EXECUTED_LOCAL_REFERENCE_PORTABILITY_PROBE",
+    "target_host_executed": false,
+    "target_4b_executed": false
+  },
+  "positive_control": {
+    "python_allow_nan_false_rejects_nonfinite": {
+      "nan": true,
+      "neg_inf": true,
+      "pos_inf": true
+    }
+  },
+  "reference": "RFC 8785 JSON Canonicalization Scheme",
+  "schema": "frank-canonical-hash-abi-probe-receipt-1",
+  "synthesis": {
+    "architecture_implication": "version a canonical hash ABI before Python-to-Clay/native state-hash interoperability",
+    "divergence_count": 3,
+    "finding": "PYTHON_JSON_SORT_KEYS_NOT_JCS_HASH_ABI",
+    "promotion": "NONE",
+    "scope": "specific normative edge cases only; not a full JCS conformance suite"
+  },
+  "local_stdout_receipt_sha256": "2a22056c9e1697bbb2ac01896537f76c43ce3cf65cfb095038831a42f896d2ce",
+  "local_internal_receipt_sha256": "4a6a45bc68d5042811d5dc3885a93740ad10bbeb99563a0dd8338db3a04f0b57"
+}

@@ -1,0 +1,38 @@
+name: ClayCode WP06 V16 strict falsifier
+
+on:
+  pull_request:
+    paths:
+      - 'tools/claycode_wp06_v16_strict_falsifier.py'
+      - 'tools/claycode_base_compiler.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V16_GENERIC_DOTTED_LINEAR_LOOKAHEAD.lark'
+      - 'research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json'
+      - '.github/workflows/claycode-wp06-v16-strict-falsifier.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  strict-falsifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact parser dependencies
+        run: python -m pip install 'lark==1.3.1' 'interegular==0.3.3'
+      - name: Run bounded strict-mode intervention
+        run: |
+          mkdir -p /tmp/claycode-wp06-v16-strict
+          python tools/claycode_wp06_v16_strict_falsifier.py \
+            --output /tmp/claycode-wp06-v16-strict/receipt.json
+      - name: Upload falsifier receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-wp06-v16-strict-${{ github.run_id }}
+          path: /tmp/claycode-wp06-v16-strict/receipt.json
+          if-no-files-found: error

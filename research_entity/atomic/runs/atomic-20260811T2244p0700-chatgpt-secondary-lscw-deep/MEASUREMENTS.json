@@ -1,0 +1,95 @@
+{
+  "candidate": "LSCW-001",
+  "corpus": {
+    "case_names": [
+      "valid_exact_build",
+      "valid_semantic_recompile",
+      "valid_observability_metadata_change",
+      "valid_translator_surface_only",
+      "compiler_drops_effect_authority_dimension",
+      "lowering_changes_self_identity_mapping",
+      "sibling_binary_wrong_admitted_artifact",
+      "service_bypasses_storage_guard",
+      "runtime_consumes_wrong_sqlite_object",
+      "state_root_swapped_after_valid_start",
+      "stale_execution_generation",
+      "replay_same_transition_witness",
+      "provider_outcome_wrong_effect_policy_epoch",
+      "recovery_restores_sibling_state_same_epoch",
+      "gwt_salience_escalates_effect_authority",
+      "reward_dimension_without_utility_authority",
+      "parent_witness_from_other_semantic_epoch",
+      "mixed_compiler_and_runtime_lineages"
+    ],
+    "cases": 18,
+    "unsafe_mutants": 14,
+    "valid": 4
+  },
+  "evidence_class": "LOCAL_SYNTHETIC_REFERENCE_MODEL_ONLY",
+  "limitations": [
+    "No current Frank target code was executed.",
+    "B0/B1/B2 are explicit proxy baselines, not measured claims about complete current Frank.",
+    "The candidate detector is obligation-complete by construction on the frozen mutation corpus; production completeness is unproven.",
+    "Unknown semantic dimensions outside the declared schema remain an open-world risk; schema/dimension-set changes must fail closed.",
+    "Linear witness consumption does not replace external provider idempotency, cryptographic build attestation, or effect authority."
+  ],
+  "matrix": {
+    "B0_TERMINAL_ONLY": {
+      "unsafe_detection_rate": 0.21428571428571427,
+      "unsafe_rejected": 3,
+      "unsafe_total": 14,
+      "valid_acceptance_rate": 1.0,
+      "valid_accepted": 4,
+      "valid_total": 4
+    },
+    "B1_LOCAL_GUARDS_PROXY": {
+      "unsafe_detection_rate": 0.5,
+      "unsafe_rejected": 7,
+      "unsafe_total": 14,
+      "valid_acceptance_rate": 1.0,
+      "valid_accepted": 4,
+      "valid_total": 4
+    },
+    "B2_STRICT_ARTIFACT_HASH_CHAIN": {
+      "unsafe_detection_rate": 0.8571428571428571,
+      "unsafe_rejected": 12,
+      "unsafe_total": 14,
+      "valid_acceptance_rate": 0.75,
+      "valid_accepted": 3,
+      "valid_total": 4
+    },
+    "LSCW_001_REFERENCE": {
+      "unsafe_detection_rate": 1.0,
+      "unsafe_rejected": 14,
+      "unsafe_total": 14,
+      "valid_acceptance_rate": 1.0,
+      "valid_accepted": 4,
+      "valid_total": 4
+    }
+  },
+  "microbenchmark": {
+    "environment": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]"
+    },
+    "json_witness_bytes": 640,
+    "local_field_validator": {
+      "batches": 300,
+      "inner": 1000,
+      "mean_ns_per_op": 172.06178666666668,
+      "p50_ns_per_op": 160.559,
+      "p95_ns_per_op": 223.412,
+      "p99_ns_per_op": 383.079
+    },
+    "lscw_reference_validator": {
+      "batches": 300,
+      "inner": 1000,
+      "mean_ns_per_op": 9280.265493333334,
+      "p50_ns_per_op": 8176.437,
+      "p95_ns_per_op": 15456.151,
+      "p99_ns_per_op": 24198.575
+    },
+    "note": "Python reference overhead only; not ClayCode/target-VPS overhead and not a production wire format."
+  },
+  "schema_version": "1.0"
+}

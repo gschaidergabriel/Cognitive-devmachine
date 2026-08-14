@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2232p0700-gpt56sol-fv0113-open-connection-path-rebind",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "87add5e7b9b78743b4e8099cb8364e15122560c0",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "training_authorized": false,
+    "coordination": [
+      "Refreshed product and research main before write.",
+      "Reviewed issue #534, temporal ABA receipt, persistence-FD-split receipt and draft PR #555 before selecting the discriminator.",
+      "This result is complementary to SAME_PROCESS_SQLITE_DATABASE_FD_SPLIT: it keeps one SQLite connection open while only the visible pathname is rebound."
+    ]
+  },
+  "primary_source_support": {
+    "sqlite_wal_doc": "https://sqlite.org/wal.html",
+    "verified_fact": "SQLite WAL-reset corruption affects releases through 3.51.2 and is fixed in 3.51.3 and later. Runtime suitability and productive database-object identity remain separate obligations."
+  },
+  "grf": {
+    "hypothesis": "For a productive already-open SQLite connection, PRAGMA database_list plus a later stat of its returned path is sufficient to identify the exact database object serving the connection.",
+    "strongest_counter_reality": "The connection can remain bound to the original inode while the visible pathname is renamed and replaced by a decoy inode; PRAGMA database_list may retain the original pathname string.",
+    "falsifier": "Keep one WAL connection open, atomically rebind its visible database pathname to a fresh decoy database, then compare connection read/write behavior, PRAGMA database_list, current path inode and the process file descriptor identity.",
+    "outcome": "COUNTER_REALITY_OBSERVED; PATHNAME_PLUS_LATER_STAT_INFERENCE_REJECTED"
+  },
+  "unusual_experiment": {
+    "name": "OPEN_CONNECTION_PATH_REBIND",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "environment": "local disposable Linux temporary directory",
+    "runtime": {
+      "python": "3.13.5",
+      "sqlite": "3.46.1",
+      "journal_mode": "wal"
+    },
+    "baseline": {
+      "database_name": "FRANK_UNIFIED.sqlite",
+      "device": "254:0",
+      "inode": 2229146,
+      "open_fd": 64,
+      "baseline_row": ["baseline", "A"]
+    },
+    "intervention": "With the original SQLite connection still open, rename FRANK_UNIFIED.sqlite to FRANK_UNIFIED.original.sqlite and create a fresh SQLite decoy at the original pathname, then commit/read through the original still-open connection.",
+    "observations": {
+      "visible_decoy_inode": 2229148,
+      "moved_original_inode": 2229146,
+      "database_list_path_unchanged": true,
+      "existing_connection_stayed_on_original_inode": true,
+      "existing_connection_readback": [["after_rebind", "C"], ["baseline", "A"]],
+      "new_connection_visible_path_readback": [["decoy", "B"]],
+      "open_fd_after_rebind": 64,
+      "open_fd_after_target": "FRANK_UNIFIED.original.sqlite",
+      "path_stat_after_rebind_points_to_decoy": true
+    },
+    "limitations": [
+      "This is a local mechanism discriminator, not evidence that productive Hostinger Frank permits pathname rebinding.",
+      "No accepted Hostinger service, Frank database, canonical state, WAL, Harness/effect authority or training action was touched.",
+      "The experiment does not by itself prescribe a portable way to extract the SQLite connection file descriptor from Python sqlite3.Connection."
+    ]
+  },
+  "collapse": [
+    {
+      "claim": "PRAGMA database_list path plus later filesystem stat identifies the exact object serving an already-open connection under pathname rebinding.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "Connection-bound sqlite_version()/sqlite_source_id() and write/read remain necessary productive-call evidence.",
+      "outcome": "RETAIN"
+    },
+    {
+      "claim": "Those SQL observations plus pathname stat alone prove canonical UnifiedDB object identity.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "A new point-attestor pathname patch should be promoted immediately.",
+      "outcome": "REJECT",
+      "reason": "The gap is object/causal binding, not another endpoint pathname predicate. A product patch without a true connection/object binding primitive would optimize a proxy."
+    },
+    {
+      "claim": "F-V01-13 or Frank v0.1 is complete.",
+      "outcome": "REJECT"
+    }
+  ],
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION_SHARPENED_NO_PRODUCT_PATCH",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY"
+    ],
+    "new_invariant": "A productive persistence receipt must not identify the exact UnifiedDB object solely by the pathname string returned from an already-open SQLite connection plus a later stat of that pathname. Bind the operation to the actual opened database object/FD when implementation permits, or prove an equivalently strong topology preventing pathname rebinding across the measured operation.",
+    "product_issue_reentry": "gschaidergabriel/Dr.-Unterweger#534 comment 5268934544",
+    "rollback": "No product code changed. Supersede this test obligation only if an accepted-host mechanism proves equivalent or stronger causal database-object binding."
+  },
+  "next_falsifier": {
+    "priority": "P0_RELEASE_BLOCKER",
+    "test": "On the accepted Hostinger ProductStart/service generation, execute a real canonical UnifiedDB WAL write/read while binding connection-reported SQLite version/source-id, exact fixed runtime identity, and the actual opened database object or an equivalent non-rebindable topology; repeat after restart/reopen and run decoy-path, downgrade/library-swap and rollback controls with semantic-lineage recovery.",
+    "success_condition": "One provenance-bound receipt proves the productive operation used the admitted fixed SQLite runtime and the intended canonical UnifiedDB object, and stale/decoy/downgraded/swapped/rollback alternatives fail closed or enter explicit recovery.",
+    "do_not_substitute": "PRAGMA database_list pathname plus later stat, library mapping alone, symbol-origin alone, self-hosted digital-retina CI or synthetic fixtures for accepted Hostinger productive persistence evidence"
+  },
+  "nonclaims": {
+    "production_bypass_proven": false,
+    "accepted_hostinger_product_runtime_proven": false,
+    "productive_persistence_path_exercised": false,
+    "restart_recovery_attested": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "record_type": "GO_FINAL_INTEGRATION_ADDENDUM",
+  "run_id": "go-20260812T2100p0700-gpt56sol-sqlite-pid-tail-fence",
+  "recorded_at_local": "2026-08-12T21:09:40+07:00",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "is_frank": false
+  },
+  "go_unusual_experiment_accounting": {
+    "count": 1,
+    "experiment": "POST_ATTESTATION_PID_REUSE_CHIMERA",
+    "second_unusual_experiment_created": false
+  },
+  "product_integration": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 542,
+    "superseded_pull_request": 530,
+    "merge_method": "squash",
+    "merged_main_commit": "78da21ee80732a9ba40b01ecc0bde2d0399c0944",
+    "merged_commit_verified_signature": true,
+    "merged_parent": "53d0906e5e0d5493517393164854681c2db06854",
+    "merged_files": {
+      "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py": "182b9df0eedc0ee80091f16aeb27d5d785d7d7ab",
+      "tests/test_frank_sqlite_live_process_attestor_v1.py": "d46970002ae558c484f94e96087d1760b594954d"
+    },
+    "mechanism": "Receipt-tail effective UID/exe/cgroup observations are followed by a final process-start-ticks sample; generation mismatch and final root UID fail closed. The receipt is constructed only from fenced metadata. Merged code preserves #529 FD-bound mapped SQLite hash and in-place content-mutation fencing."
+  },
+  "exact_self_hosted_validation": {
+    "runner": "clay",
+    "machine": "digital-retina",
+    "passing_run": 31604824061,
+    "tested_commit": "eec051eef3e23df4ca605fc6191207d168678c60",
+    "exact_sha_fetch": "PASS",
+    "compile_attestor_and_test": "PASS",
+    "live_attestor_regressions": "PASS_8_OF_8",
+    "repo_static_integrity": "PASS",
+    "final_merged_code_bytes_match_tested_candidate": true,
+    "byte_identity_basis": {
+      "attestor_blob": "182b9df0eedc0ee80091f16aeb27d5d785d7d7ab",
+      "test_blob": "d46970002ae558c484f94e96087d1760b594954d"
+    }
+  },
+  "negative_ci_evidence_preserved": {
+    "first_temporary_exact_run": 31604687233,
+    "classification": "INFRASTRUCTURE_CHECKOUT_FAILURE_BEFORE_TESTS",
+    "observed": "actions/checkout failed on the stale self-hosted workspace with git errors indicating the working directory was not a repository; compile/test/static-integrity steps were skipped.",
+    "repair": "The temporary validation workflow switched to an isolated run-owned git init plus exact-SHA fetch. The rerun then passed all intended gates.",
+    "code_failure_in_first_run": false
+  },
+  "final_pr_head_broad_gates": {
+    "head": "5615f48f80ffbb352aa3c6363286b780530f5da4",
+    "frank_self_root_current_head_v2": {
+      "run": 31605012572,
+      "status": "SUCCESS"
+    },
+    "execution_gate_directory_anchor_repair_vps": {
+      "run": 31605013262,
+      "status": "SUCCESS"
+    },
+    "fresh_main_effect_fence_provider_contract_vps": {
+      "run": 31605013261,
+      "status": "SUCCESS"
+    },
+    "hosted_deep_integrity": {
+      "run": 31605012850,
+      "status": "NOT_STARTED_INFRASTRUCTURE_BLOCKED",
+      "annotation": "Recent account payments failed or spending limit must be increased.",
+      "classification": "UNKNOWN_NOT_CODE_FAILURE"
+    }
+  },
+  "promotion_boundary": {
+    "pid_tail_fence_mechanism": "SUPPORTED_AND_MERGED",
+    "accepted_hostinger_productive_persistence_path": "UNKNOWN_OPEN",
+    "sqlite_engine_exclusivity": "UNKNOWN_OPEN",
+    "restart_recovery_rollback_downgrade_library_swap": "OPEN",
+    "semantic_lineage": "OPEN",
+    "F_V01_13": "IN_PROGRESS_NOT_PROMOTED",
+    "FRANK_V0_1": "NOT_PROMOTED",
+    "final_model_training_authorized": false,
+    "effect_authority_changed": false,
+    "harness_authority_changed": false
+  },
+  "concurrent_research_fusion": {
+    "renamed_dso_counterworld": "Retained: current basename-oriented mapping observer cannot prove SQLite-engine exclusivity when a second SQLite engine is loaded under another filename.",
+    "decoy_sqlite_like_mapping": "Retained: multiple SQLite-like observed identities fail closed rather than false-pass.",
+    "productive_binding_issue": 534,
+    "next_discriminator": "On the accepted Hostinger target, bind host + Frank service/process generation + root SQLite anchor + exact mapped fixed library to a real UnifiedDB DB open/write/read path, then prove clean restart and fail-closed rollback/downgrade/library-swap or alternate-engine cases in one provenance-bound receipt."
+  },
+  "final_outcome": "MERGED_NARROW_SECURITY_HARDENING_WITH_RELEASE_GATE_OPEN"
+}

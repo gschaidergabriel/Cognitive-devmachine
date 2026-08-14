@@ -7,7 +7,8 @@
     "Concurrent shared-state refresh revealed PR #338 and repair successor #348 after PR #342 had already been built and target-tested.",
     "PR #338 is causally stronger than the marker-only #342 OOB: on target runner digital-retina / Python 3.12.3 it obtained a PASS_FIXED_SQLITE_RUNTIME_V3_CANDIDATE_ADMISSION receipt while an executable site hook had already replaced high-level sqlite3.connect behavior; the genuine stdlib sqlite3 origin remained /usr/lib/python3.12/sqlite3/__init__.py and the target observed synchronous=0.",
     "PR #338 cleanly separates the consumed OOB from its ordinary repair successor #348, improving experimental lineage and avoiding mixing discriminator plus repair in one candidate PR.",
-    "PR #342 independently reproduced the same architectural startup gap and its target workflow run 31505610504 completed success including V4 regression, exact pinned SQLite 3.53.4 build, V17 composition, and disposable UnifiedDB+ClayGraph pair composition. It remains replication evidence, not selected implementation ownership."
+    "PR #342 independently reproduced the same architectural startup gap and its target workflow run 31505610504 completed success including V4 regression, exact pinned SQLite 3.53.4 build, V17 composition, and disposable UnifiedDB+ClayGraph pair composition. It remains replication evidence, not selected implementation ownership.",
+    "After adjudication, the exact #348 head itself completed its dedicated target workflow successfully, so the preferred repair lineage is now target-supported rather than selected on design/lineage grounds alone."
   ],
   "preferred_evidence": {
     "oob_pr": 338,
@@ -30,8 +31,20 @@
   "preferred_repair": {
     "pr": 348,
     "head_sha": "70c90e38f1301e99367ed6aa300796524bf9f56d",
-    "status_at_adjudication": "DRAFT_OPEN_TARGET_WORKFLOW_QUEUED",
+    "target_workflow_run": 31505915434,
+    "target_job": 93827324670,
+    "target_job_status": "completed",
+    "target_job_conclusion": "success",
+    "successful_steps": [
+      "Fetch exact PR head",
+      "Capture target and candidate metadata",
+      "Build pinned private SQLite 3.53.4",
+      "Ordinary V4 regression of consumed OOB class",
+      "Compose V17 and UnifiedDB pair under V4",
+      "Preserve bounded evidence"
+    ],
     "architecture": "Trusted product launch must establish python -I -S before any import-capable Frank Python code; preserve -I -S through child exec; retain V1/V2/V3 SQLite, ELF-loader and stdlib sqlite3-origin controls.",
+    "evidence_status": "TARGET_SUPPORTED_CANDIDATE",
     "promotion": "NOT_YET_PROMOTED"
   },
   "redundant_replication": {
@@ -48,15 +61,15 @@
     "message": "Independent #342 target evidence and #338-vs-#342 causal comparison were routed to the preferred repair lane."
   },
   "next_frontier": {
-    "status": "BLOCKED_ON_CONCRETE_PRODUCT_ENTRYPOINT_AND_CURRENT_REPAIR_ADJUDICATION",
+    "status": "BLOCKED_ON_CONCRETE_PRODUCT_ENTRYPOINT_AND_REAL_DEPENDENCY_GRAPH",
     "search_result": "No stable current systemd/Type=exec/ExecStart or FastAPI/uvicorn product entrypoint was resolved by repository search in this cycle.",
-    "action": "Do not invent speculative service wiring. After #348 exact-head target adjudication and once the current product entrypoint is canonical, bind exact Python executable + -I -S + source/binary/private-SQLite manifest identities and fail closed on service drift; validate real production dependency compatibility under -S.",
+    "action": "Do not invent speculative service wiring. Once the current product entrypoint is canonical, bind exact Python executable + -I -S + source/binary/private-SQLite manifest identities and fail closed on service drift; validate real production dependency compatibility under -S and explicitly attest any required project import root after admission rather than restoring ambient site/CWD imports.",
     "second_oob_allowed_this_run": false
   },
   "non_claims": [
     "No whole Frank v0.1 acceptance",
     "No production systemd/deployment launch acceptance",
-    "No promotion of #348 while its exact-head target workflow remains unresolved",
+    "No merge/promotion claim for #348 solely from component target tests",
     "No final/paid training authorization",
     "No self.root/Frank Harness mutation authority"
   ]

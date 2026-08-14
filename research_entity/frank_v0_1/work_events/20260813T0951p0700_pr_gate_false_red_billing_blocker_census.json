@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "event_type": "FRANK_V0_1_GATE_INFRASTRUCTURE_BLOCKER_CENSUS",
+  "status": "BLOCKER_LOCALIZED_AND_MEASURED / NO_PRODUCT_CHANGE / REPAIR_PROPOSED_NOT_MERGED",
+  "created_at": "2026-08-13T09:51:00+07:00",
+  "actor": "claude-code / Anthropic / Claude Opus 5",
+  "actor_role": "PRIMARY_ARBITER / claude-code-lead",
+  "owner_program": "FRANK_V0_1",
+  "target": "gschaidergabriel/Dr.-Unterweger pull-request gate surface at main@4304810ebeae015ebd88d2a85cfc1cecae2df9b3",
+  "evidence": "research_entity/frank_v0_1/evidence/20260813T0951p0700_hosted_actions_zero_step_billing_artifact.json",
+  "report": "research_entity/reports/20260813T0951p0700_HOSTED_ACTIONS_BILLING_BLOCKER_AND_SELF_HOSTED_RESOLUTION.md",
+  "headline": "228 of 244 open pull requests (93.4 percent) carry a red 'integrity' verdict produced by a job that never executed. GitHub blocked the hosted ubuntu-latest job for account billing state; the check reports zero steps and no runner. This is an instrument artifact of the same class as the external-runner defects of 2026-08-13T09:37+07:00, at repository scale.",
+  "measured_at": "2026-08-13T02:51Z",
+  "census": {
+    "open_pull_requests": 244,
+    "drafts_in_first_200_sampled": 187,
+    "prs_red_on_integrity": 228,
+    "prs_red_on_central_state": 9,
+    "union_blocked_by_zero_step_jobs": 228,
+    "share_of_open_prs": 0.934,
+    "distinct_red_check_names_in_sample": 70
+  },
+  "mechanism": {
+    "failing_instance": {
+      "run": 31655324376,
+      "job": 94308410536,
+      "name": "integrity",
+      "workflow": "Frank Deep Integrity",
+      "labels": ["ubuntu-latest"],
+      "runner_name": null,
+      "steps_executed": 0,
+      "conclusion": "failure",
+      "github_annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+    },
+    "passing_instance": {
+      "run": 31654715032,
+      "name": "integrity",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runner_name": "clay",
+      "steps_executed": 21,
+      "conclusion": "success",
+      "head_branch": "clay/go-deep-integrity-current-main-20260813",
+      "pull_request": 565
+    },
+    "inference": "Identical gate, identical head class. The only varied factor is the runner lane. A hosted lane yields zero-step failure, the self-hosted lane yields 21 executed steps and success. The red verdict carries no Frank evidence."
+  },
+  "discrimination_control": {
+    "note": "Not every red check on the surface is an artifact. Four sampled red checks executed real steps on the self-hosted runner 'clay' and are genuine evidence.",
+    "genuine_red_samples": [
+      {"name": "fresh-main-integration", "job": 93935101803, "steps": 14, "runner": "clay"},
+      {"name": "boundary", "job": 93935102335, "steps": 15, "runner": "clay"},
+      {"name": "directory-anchor-repair", "job": 93900444504, "steps": 9, "runner": "clay"},
+      {"name": "gate", "job": 94133684292, "steps": 7, "runner": "clay"}
+    ],
+    "artifact_red_samples": [
+      {"name": "integrity", "job": 94308410536, "steps": 0, "runner": null},
+      {"name": "central-state", "job": 93844104659, "steps": 0, "runner": null}
+    ]
+  },
+  "surface_scan": {
+    "workflows_on_main": 143,
+    "workflows_using_self_hosted": 138,
+    "workflows_still_using_ubuntu_latest": 10,
+    "of_those_triggered_on_pull_request": 3,
+    "hosted_pull_request_workflows": [
+      "frank-deep-integrity.yml",
+      "frank-bounded-issue-dispatch-bridge.yml",
+      "claycode-wp04-pr-hosted-shadow.yml"
+    ],
+    "hosted_push_or_dispatch_workflows": [
+      "frank-vps-runner-cross-repo-scope-probe.yml",
+      "clay-go-python-import-path-equivalence.yml",
+      "clay-v18-push-dispatch-bridge.yml",
+      "frank-central-state.yml",
+      "frank-v71-hardening.yml",
+      "frank-effect-authority-provenance-gap.yml",
+      "frank-sqlite-v5-evidence-gate-v1.yml"
+    ],
+    "reading": "The bulk migration to the self-hosted lane already happened. The residue is 10 files, and one of them - frank-deep-integrity.yml - produces 93.4 percent of the blocked surface."
+  },
+  "existing_repair_candidates": [
+    {"pr": 565, "title": "ci: restore Deep Integrity on current isolated self-hosted lane", "draft": true, "integrity_check": "success with 21 executed steps on runner clay"},
+    {"pr": 564, "title": "fix(ci): run Frank Deep Integrity on self-hosted Linux runner", "draft": true, "note": "competing edit of the same file; 564 and 565 must not both land"}
+  ],
+  "counter_explanations_excluded": [
+    "measurement error: the zero-step count and the billing annotation are read from the GitHub jobs and check-runs APIs, not from a log summary",
+    "caching: no cache layer can produce a job with no runner assignment",
+    "test regression on main: the same workflow on the same head class passes with 21 steps on the self-hosted lane",
+    "runner exhaustion: runner 'clay' was online and busy=false at measurement time",
+    "memory note instead of measurement: every number in this event was read live at 2026-08-13T02:51Z"
+  ],
+  "open_account_action": "GitHub Actions hosted minutes are blocked by account payment or spending-limit state. Restoring hosted capacity is an account-owner action and is not available to the research entity.",
+  "next_actions_ranked": [
+    "land exactly one of PR 565 / PR 564 so frank-deep-integrity.yml executes on the self-hosted lane",
+    "re-run integrity across the blocked surface and re-measure the artifact share",
+    "route or explicitly quarantine the remaining 9 hosted workflows, distinguishing accidental hosted residue from the intentional hosted-shadow comparison lane",
+    "record the account-level hosted-minutes state as an external dependency of the FRANK v0.1 gate surface"
+  ],
+  "promotion_requested": false
+}

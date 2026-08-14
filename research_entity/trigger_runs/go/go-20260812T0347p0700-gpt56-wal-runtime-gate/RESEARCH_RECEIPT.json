@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0347p0700-gpt56-wal-runtime-gate",
+  "trigger": "go",
+  "origin_actor": "GPT-5.6-Sol temporary Clay worker",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent": "aa5b8bbd90f38bac9eb6e33146cdb06436bf8120",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "grf": {
+    "observed_reality": [
+      "Current main 7e60eadeffe0fb6eab907023cc337ae06d7e0d7a still unconditionally forced WAL in runtime/state/apply_current_schema.py and accepted writable persisted WAL state without a WAL-reset-fix gate.",
+      "Merged #444 adds target-validated byte-reproducible SQLite 3.53.4 capability-parity build/probes but explicitly does not provision production /opt or /etc state and does not close F-V01-13.",
+      "Merged #456 rejects inherited GLIBC_TUNABLES at the SQLite V5 launcher but explicitly leaves production parent/start attestation and mapped productive SQLite identity open.",
+      "Historical accepted-target evidence records Python SQLite 3.45.1 with WAL active."
+    ],
+    "generated_hypothesis": "A fail-closed storage boundary that routes vulnerable or unattested SQLite semantic families to DELETE+FULL and refuses persisted WAL on those runtimes prevents the known WAL-reset risk without blocking WAL when a fixed runtime such as 3.53.4 is actually attached.",
+    "strongest_counter_reality": "A distributor may backport the WAL-reset fix while retaining a vulnerable-looking semantic version, and semantic version alone cannot detect a spoofed, downgraded or substituted mapped library. Therefore version gating can be a conservative safety policy but not final runtime attestation.",
+    "discriminating_predictions": {
+      "hypothesis_right": "3.45.1 routes to DELETE+FULL and rejects pre-existing WAL; 3.53.4 retains WAL+FULL; full current schema migration remains integrity/FK clean.",
+      "counter_reality_right": "Exact downstream/source/loader attestation may prove a 3.45.1 build fixed despite semantic version; a library swap can preserve misleading high-level assumptions unless the mapped object/source identity is bound."
+    },
+    "outcome": "RETAIN_CANDIDATE_TARGET_RECEIPT_PENDING"
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "claim_used": "WAL-reset corruption bug likely affects 3.7.0 through 3.51.2 and is fixed in 3.51.3+, with explicit 3.44.6 and 3.50.7 backports.",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite release history",
+      "claim_used": "SQLite 3.53.4 released 2026-07-24.",
+      "url": "https://www.sqlite.org/changes.html"
+    },
+    {
+      "source": "Ubuntu Noble package/USN evidence",
+      "claim_used": "Noble currently publishes 3.45.1-1ubuntu2.7; that package version alone does not establish a WAL-reset backport.",
+      "url": "https://packages.ubuntu.com/noble/sqlite3"
+    }
+  ],
+  "implementation": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "base_main": "7e60eadeffe0fb6eab907023cc337ae06d7e0d7a",
+    "branch": "chatgpt/go-wal-runtime-gate-head-20260812",
+    "candidate_head": "da8a8d977b5cc96fb1d47c32cdee5394ab5bd70e",
+    "draft_pr": 460,
+    "superseded_pr": 451,
+    "changed_paths": [
+      "runtime/state/apply_current_schema.py",
+      "tests/unifieddb_migration_storage_policy_regression.py",
+      ".github/workflows/go_wal_runtime_gate_head_vps.yml"
+    ],
+    "policy": {
+      "fixed_mainline_floor": "3.51.3",
+      "fixed_backports": ["3.44.6+ within 3.44", "3.50.7+ within 3.50"],
+      "vulnerable_or_unattested_migration_journal": "DELETE",
+      "fixed_migration_journal": "WAL",
+      "synchronous": "FULL",
+      "persisted_vulnerable_wal_open": "FAIL_CLOSED_CONTINUITY_DEGRADED"
+    }
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "GO_OOB_RUNTIME_IDENTITY_TRIANGULATION",
+    "local_sandbox": {
+      "python_sqlite_version": "3.46.1",
+      "sql_sqlite_version": "3.46.1",
+      "sqlite_source_id": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1",
+      "mapped_library": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "mapped_library_sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71",
+      "version_channels_agree": true,
+      "authority": "SANDBOX_MECHANISM_ONLY"
+    },
+    "target_replication": {
+      "workflow_run": 31534628678,
+      "job": 93922671485,
+      "candidate_head": "da8a8d977b5cc96fb1d47c32cdee5394ab5bd70e",
+      "status": "QUEUED_UNASSIGNED",
+      "runner_id": null,
+      "runner_name": null,
+      "acceptance_claim": false
+    },
+    "interpretation": "Semantic version, sqlite_source_id and the SHA-256 of the actually mapped libsqlite3 form a stronger runtime identity vector than semantic version alone. Target promotion requires the self-hosted receipt."
+  },
+  "negative_and_boundary_evidence": {
+    "github_hosted_ci": "A prior hosted regression on superseded PR #451 was blocked before any step by GitHub account billing/spending-limit state; this is infrastructure evidence, not a product test failure.",
+    "target_current_candidate": "QUEUED_UNASSIGNED; no PASS or FAIL claimed.",
+    "ubuntu_backport_status": "UNKNOWN_PENDING_PR_274_SEMANTIC_PROVENANCE",
+    "production_3534_provisioning": "NOT_PROVEN",
+    "productive_loader_mapping": "NOT_PROVEN",
+    "restart_downgrade_swap_rejection": "NOT_PROVEN",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "workspace_delta": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "ADD_EXACT_CURRENT_FAIL_CLOSED_WAL_STORAGE_BOUNDARY_CANDIDATE",
+      "status": "KEEP_IN_PROGRESS",
+      "new_candidate_pr": 460,
+      "next_falsifier": "Obtain self-hosted target receipt for PR #460, then on the accepted productive start lane bind the exact mapped SQLite 3.53.4 source/object identity across restart and controlled downgrade/library-swap attempts before any canonical persistence write."
+    }
+  },
+  "research_disposition": "IMPLEMENTED_CANDIDATE_PLUS_TARGET_TEST_QUEUED",
+  "training_authorization_changed": false,
+  "training_authorized": false,
+  "frank_self_harness_authority_changed": false,
+  "effect_authority": "NONE"
+}

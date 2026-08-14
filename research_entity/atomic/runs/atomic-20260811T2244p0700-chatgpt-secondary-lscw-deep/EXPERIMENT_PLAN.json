@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "candidate": "LSCW-R1",
+  "status": "PLANNED_NOT_EXECUTED_ON_TARGET",
+  "purpose": "Determine whether a cross-stage linear hard-field conservation witness adds material detection over the strongest conventional context/local-guard baseline on real Frank v0.1 lifecycle episodes.",
+  "safety": {
+    "mode": "SHADOW_ONLY_NO_AUTHORITY",
+    "external_effects": false,
+    "canonical_state_mutation": false,
+    "training": false,
+    "candidate_may_not_authorize": ["truth", "user intent", "effects", "retry", "Harness mutation", "reward update"]
+  },
+  "frozen_units": [
+    "exact source/grammar/evaluator/lowering identities",
+    "exact artifact and runtime dependency identities",
+    "exact selected state lineage and semantic epochs",
+    "exact effect-policy and execution-generation inputs",
+    "exact outcome/reentry/recovery fixtures",
+    "matched seeds and mutation order"
+  ],
+  "methods": [
+    {
+      "id": "M0_CURRENT_ACTUAL",
+      "description": "Current accepted/current-candidate stage-specific guards only."
+    },
+    {
+      "id": "M1_CURRENT_CONTEXT",
+      "description": "M0 plus one immutable conventional CurrentExecutionContext carrying the exact same material hard fields, without linear consume/reissue."
+    },
+    {
+      "id": "M2_LSCW_R1_SHADOW",
+      "description": "M1-equivalent fields plus stage transform mask/residual and single-use parent->successor witness lineage. Existing stage-specific semantic validators remain authoritative for language/compiler meaning."
+    },
+    {
+      "id": "M3_STRICT_HASH_CHAIN",
+      "description": "Exact-byte ancestry baseline wherever possible; expected to be strong on identity but over-strict on permitted semantic-preserving transformations."
+    }
+  ],
+  "mutations": [
+    "stale_state_epoch",
+    "same_epoch_sibling_selected_state_root",
+    "same_source_different_unadmitted_artifact",
+    "correct_artifact_wrong_consumed_runtime_dependency",
+    "pre_guard_PATH_helper_hijack",
+    "stale_execution_generation",
+    "duplicate_parent_transition_replay",
+    "wrong_effect_policy_epoch",
+    "ProductStart_one_missing_axis_each",
+    "installed_restart_into_sibling_state",
+    "compiler_semantic_erasure_with_equal_lifecycle_hard_fields",
+    "compiler_backend_capability_graft",
+    "reward_dimension_present_without_utility_authority",
+    "verified_outcome_wrong_causal_credit_parent",
+    "schema_adds_unknown_material_dimension",
+    "required_material_dimension_removed",
+    "cross_stage_chimera_compiler_lineage_A_runtime_lineage_B"
+  ],
+  "valid_controls": [
+    "exact unchanged transition",
+    "declared semantic-preserving backend rebuild with independent source/target differential PASS",
+    "observability-only metadata change",
+    "translator-surface-only change preserving hard semantics",
+    "declared schema migration whose independent validator and transform mask both PASS",
+    "legitimate restart of the selected lineage with current lease/recovery evidence"
+  ],
+  "semantic_validator_rule": "Compiler/language meaning is never inferred from LSCW hard fields alone. Source-vs-target behavior/refinement/differential/metamorphic/verified-compiler evidence is a separate required stage validator and its identity/result becomes an input dimension.",
+  "primary_metrics": [
+    "unsafe mutation rejection rate by class",
+    "valid acceptance rate",
+    "false reject rate",
+    "false accept rate",
+    "diagnostic localization precision",
+    "validation p50/p95/p99 latency",
+    "serialized/persisted bytes per transition",
+    "DB writes and state amplification",
+    "CPU and RAM",
+    "restart/recovery latency",
+    "TCB/code-size delta",
+    "replay/sibling/chimera unique catches over M1"
+  ],
+  "causal_ablations": [
+    "remove_linear_consumption",
+    "remove_state_lineage_dimension",
+    "remove_runtime_consumed_object_binding",
+    "remove_effect_policy_dimension",
+    "remove_validator_identity/result_binding",
+    "remove_dimension_set/schema_hash",
+    "allow_unknown_dimensions"
+  ],
+  "acceptance": [
+    "M2 uniquely rejects at least one material real cross-stage mutation that M1 accepts",
+    "M2 accepts all declared valid controls accepted by correct current semantics",
+    "compiler-semantic mutants are rejected only with independent stage validator evidence, proving no circular semantic-root claim",
+    "no new authority is minted",
+    "resource/state amplification remains within a declared budget and no simpler equivalent encoding dominates",
+    "crash/restart does not permit consumed-parent replay or sibling lineage advance"
+  ],
+  "kill": [
+    "M1 matches all M2 decisions on real target episodes with lower complexity/resource cost",
+    "M2 causes material false rejects on legitimate transformation/recovery",
+    "linear witness persistence creates a new recovery/availability failure larger than the threat removed",
+    "current existing lineage/generation/consume-bound mechanisms already prove the same property without a new cross-stage primitive"
+  ],
+  "rollback": "Shadow-only experiment artifacts can be deleted without changing target behavior. Any later production candidate must remain separately reversible and last-known-good protected."
+}

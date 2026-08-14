@@ -1,0 +1,130 @@
+name: Real Claim Coalition V2
+
+on:
+  push:
+    branches: ['research/unifieddb-real-claims-preprocessor-20260810']
+    paths:
+      - 'research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1.py'
+      - 'research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1_1.py'
+      - 'research_entity/harness/reference/benchmark_real_claim_evidence_coalition_v2.py'
+      - 'research_entity/ledgers/CLAIMS.jsonl'
+      - 'research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl'
+      - '.github/workflows/real-claim-coalition-v2.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: real-claim-coalition-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hosted-ubuntu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile benchmark
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1.py \
+            research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1_1.py \
+            research_entity/harness/reference/benchmark_real_claim_evidence_coalition_v2.py
+      - name: Execute V2
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/real-claims-v2
+          python -m research_entity.harness.reference.benchmark_real_claim_evidence_coalition_v2 \
+            --iterations 5000 \
+            --output /tmp/real-claims-v2/RESULT.json > /tmp/real-claims-v2/stdout.json
+      - name: Enforce gate and attach hosted metadata
+        run: |
+          python - <<'PY'
+          import json,os,platform,sqlite3,sys
+          from datetime import datetime,timezone
+          from pathlib import Path
+          p=Path('/tmp/real-claims-v2/RESULT.json'); x=json.loads(p.read_text())
+          x['execution_metadata']['runner_evidence_class']='REAL_GITHUB_HOSTED_UBUNTU_NOT_HOSTINGER_NOT_TARGET'
+          x['execution_metadata']['github_sha']=os.environ['GITHUB_SHA']
+          x['execution_metadata']['github_run_id']=os.environ['GITHUB_RUN_ID']
+          x['execution_metadata']['created_at']=datetime.now(timezone.utc).isoformat()
+          x['execution_metadata']['runner_platform']=platform.platform()
+          x['execution_metadata']['runner_python']=sys.version
+          x['execution_metadata']['runner_sqlite']=sqlite3.sqlite_version
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(x['candidate_gate'],indent=2,sort_keys=True))
+          if not x['candidate_gate']['advance_to_larger_real_corpus']:
+              raise SystemExit('V2 scientific gate failed')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-claim-coalition-v2-hosted-${{ github.run_id }}
+          path: /tmp/real-claims-v2/RESULT.json
+          if-no-files-found: error
+      - name: Persist hosted receipt
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/experiments/unifieddb_real_claim_coalition_v2
+          cp /tmp/real-claims-v2/RESULT.json research_entity/experiments/unifieddb_real_claim_coalition_v2/LATEST_HOSTED_UBUNTU.json
+          git config user.name 'clay-real-claims-benchmark'
+          git config user.email 'clay-real-claims-benchmark@users.noreply.github.com'
+          git add research_entity/experiments/unifieddb_real_claim_coalition_v2/
+          git commit -m 'evidence(unifieddb): persist real-claims V2 hosted receipt [skip ci]' || exit 0
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1
+
+  self-hosted-ubuntu:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+      - name: Execute same V2 on Hostinger lane
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/real-claims-v2-self
+          python3 -m py_compile \
+            research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1.py \
+            research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1_1.py \
+            research_entity/harness/reference/benchmark_real_claim_evidence_coalition_v2.py
+          python3 -m research_entity.harness.reference.benchmark_real_claim_evidence_coalition_v2 \
+            --iterations 5000 \
+            --output /tmp/real-claims-v2-self/RESULT.json > /tmp/real-claims-v2-self/stdout.json
+          python3 - <<'PY'
+          import json,os,platform,sqlite3,sys
+          from pathlib import Path
+          p=Path('/tmp/real-claims-v2-self/RESULT.json'); x=json.loads(p.read_text())
+          x['execution_metadata']['runner_evidence_class']='REAL_SELF_HOSTED_UBUNTU'
+          x['execution_metadata']['github_sha']=os.environ['GITHUB_SHA']
+          x['execution_metadata']['github_run_id']=os.environ['GITHUB_RUN_ID']
+          x['execution_metadata']['runner_platform']=platform.platform()
+          x['execution_metadata']['runner_python']=sys.version
+          x['execution_metadata']['runner_sqlite']=sqlite3.sqlite_version
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          if not x['candidate_gate']['advance_to_larger_real_corpus']:
+              raise SystemExit('V2 scientific gate failed on self-hosted lane')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-claim-coalition-v2-self-${{ github.run_id }}
+          path: /tmp/real-claims-v2-self/RESULT.json
+          if-no-files-found: error

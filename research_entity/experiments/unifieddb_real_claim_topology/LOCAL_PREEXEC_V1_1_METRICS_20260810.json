@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "execution_class": "LOCAL_LINUX_CORRELATED_PREEXEC_NOT_HOSTINGER_NOT_TARGET",
+  "corpus_claims": 17,
+  "queries": 8,
+  "k": 3,
+  "timing_iterations": 2000,
+  "schedule_seed": 42,
+  "runtime": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux x86_64"
+  },
+  "sqlite_fts_flat": {
+    "precision_at_3": 0.5,
+    "recall_at_3": 0.9375,
+    "mrr": 1.0,
+    "ndcg_at_3": 0.9516433990956823,
+    "p50_us": 94.911,
+    "p95_us": 126.57905
+  },
+  "compiled_lexical_flat": {
+    "precision_at_3": 0.5416666666666666,
+    "recall_at_3": 1.0,
+    "mrr": 1.0,
+    "ndcg_at_3": 0.9899650986435234,
+    "p50_us": 20.611,
+    "p95_us": 21.823
+  },
+  "sqlite_topology_matched": {
+    "precision_at_3": 0.5416666666666666,
+    "recall_at_3": 1.0,
+    "mrr": 1.0,
+    "ndcg_at_3": 1.0,
+    "p50_us": 169.187,
+    "p95_us": 202.9296
+  },
+  "compiled_topology": {
+    "precision_at_3": 0.5416666666666666,
+    "recall_at_3": 1.0,
+    "mrr": 1.0,
+    "ndcg_at_3": 1.0,
+    "p50_us": 33.3845,
+    "p95_us": 36.18805
+  },
+  "ordered_top3_equivalent_sqlite_vs_compiled_topology_all_queries": true,
+  "compiled_topology_p50_speedup_vs_matched_sqlite": 5.067830879599814,
+  "scope": "Real Clay claim ledger but tiny correlated model-authored query set. No universal database claim. Exact committed-script and remote replication still required."
+}

@@ -241,6 +241,14 @@ def _is_unicode_scalar_text(value) -> bool:
     )
 
 
+def _response_headers_or_none(response):
+    """Treat transport-provided header properties as untrusted metadata."""
+    try:
+        return getattr(response, "headers", None)
+    except Exception:
+        return None
+
+
 def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
     """Parse RFC Retry-After delay-seconds or HTTP-date, else use default."""
     try:
@@ -554,7 +562,7 @@ def _execute_chat_locked(
                 raise ValueError("response_status_must_be_http_integer")
             status = candidate_status
             response_started = True
-            response_headers = getattr(response, "headers", None)
+            response_headers = _response_headers_or_none(response)
             lifecycle.append("EXECUTED")
             if status == 200:
                 response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
@@ -641,7 +649,9 @@ def _execute_chat_locked(
             status = exc.code
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
-            cooldown_seconds = _retry_after_seconds(exc.headers, wall_time())
+            cooldown_seconds = _retry_after_seconds(
+                _response_headers_or_none(exc), wall_time()
+            )
             retryable = False
         else:
             status = exc.code

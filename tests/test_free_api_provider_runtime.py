@@ -1256,6 +1256,52 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_unexpected_transport_adapter_failures_emit_receipts(self):
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise RuntimeError("custom adapter body failure")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        cases = (
+            (
+                "before_response",
+                lambda *args, **kwargs: (_ for _ in ()).throw(
+                    RuntimeError("custom adapter open failure")
+                ),
+                None,
+                "unreachable_provider",
+                False,
+            ),
+            (
+                "during_body",
+                lambda *args, **kwargs: Response(),
+                200,
+                "incomplete_provider_response",
+                True,
+            ),
+        )
+        for name, opener, expected_status, expected_outcome, executed in cases:
+            with self.subTest(name=name):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((103.0, 103.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], expected_status)
+                self.assertEqual(receipt["outcome"], expected_outcome)
+                self.assertEqual("EXECUTED" in receipt["lifecycle"], executed)
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+
     def test_retry_after_cooldown_is_bounded_in_receipts(self):
         class Response:
             status = 429

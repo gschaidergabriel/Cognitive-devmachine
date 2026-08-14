@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "entity": "Clay",
+    "worker_is_frank": false,
+    "frank_is_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "wp02": {
+    "status": "HOSTINGER_PROXY_CLOSED_FORMAL_TARGET_OPEN",
+    "v17_grammar_blob": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "production_frontend_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "canonicalizer_blob": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+    "discriminator_blob": "8f2f9c317aa1f43488d20c05bc915f2ca60dfd74",
+    "immutable_hostinger_closure": {
+      "workflow_run_id": 31343808739,
+      "job_id": 93322026642,
+      "result": "PASS",
+      "discriminator_wall_s": 5.705,
+      "strict_lalr_wall_s": 1.014,
+      "full_frontend_wall_s": 0.794,
+      "canonicalizer_wall_s": 0.599
+    },
+    "latest_validator_replay": {
+      "workflow_run_id": 31344368852,
+      "job_id": 93323452194,
+      "result": "PASS",
+      "validator_schema": "1.7",
+      "checks": "10/10",
+      "wall_ms": 584,
+      "max_rss_kb": 31456,
+      "major_page_faults": 0,
+      "receipt_sha256": "720083a1702ae4a9f635d8990676b9debb07b58a92815dc169069570c02d713b"
+    },
+    "falsified_interpretation": "Broad V9-to-V17 semantic drift was a comparator/placeholder artifact, not supported language drift on matched G9/Dialect/record/needle cases.",
+    "production_fix": "Lark parser construction uses maybe_placeholders=False so absent [] optionals do not create synthetic None semantic children.",
+    "formal_pass": false,
+    "remaining_hard_gate": "Registered Andreas Ubuntu developer-system target receipt"
+  },
+  "wp03": {
+    "status": "STRICT_VALIDATOR_HARDENED_REMOTE_RESULT_UNCLASSIFIED",
+    "production_patch_commit": "c42ddaa347556fa2a8bdea27e4e7db98cfeb6b8d",
+    "v7_grammar_blob": "a63b7ce112fbe6acf1890fef24a204f3863a5292",
+    "production_frontend_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "typed_ir_blob": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+    "strict_validator_blob": "03b22c7f25dbe1d3eca9a08f6080ea9d4aa8c846",
+    "validator_delta": [
+      "Every positive typed-IR fixture first passes the production frontend with strict=True.",
+      "The exact V7 grammar parses the complete frozen G9 and Dialect sources through the production parser constructor in strict mode.",
+      "Strict frontend semantic hashes are compared with the frontend semantic hashes actually consumed by typed-IR lowering.",
+      "No automatic promotion is permitted."
+    ],
+    "remote_evidence": {
+      "evidence_pr": 79,
+      "initial_workflow_run_id": 31345233640,
+      "initial_job_id": 93325819310,
+      "initial_result": "FAILURE",
+      "classification": "UNKNOWN_PENDING_DIAGNOSTIC_RECEIPT",
+      "diagnostic_workflow": "clay-wp03-strict-ir-failure-diagnostic.yml",
+      "diagnostic_source_blobs_unchanged": true
+    },
+    "fail_closed_rule": "Do not patch V7 grammar, typed IR, WP04, or promote WP03 until the first failing diagnostic is materialized. A red wrapper without a readable scientific failure is not sufficient evidence for a semantic mutation.",
+    "formal_pass": false
+  },
+  "live_primary_knowledge": {
+    "lark_strict": "Official Lark documentation supports strict=True as a conflict/collision error gate; regex collision analysis uses interegular and unsupported regex features may limit that analysis.",
+    "decision_effect": "Self-contained strict V7 validation is methodologically justified; it is not treated as a proof beyond its declared parser/collision scope."
+  },
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "experiment": "Unicode metamorphic STRING canonical identity",
+    "seed": 212923543062544,
+    "valid_non_ascii_cases": 50000,
+    "candidate_mismatches": 0,
+    "raw_spelling_baseline_mismatches": 50000,
+    "nfc_false_merges": "8/8",
+    "candidate_false_merges": "0/8",
+    "lone_surrogate_rejections": "4/4",
+    "promotion": "NONE"
+  },
+  "next_frontier": [
+    "Consume/materialize the PR79 WP03 diagnostic result before any WP03 semantic repair.",
+    "If the diagnostic is a strict V7 conflict, preserve negative evidence and localize the exact conflict before changing grammar semantics.",
+    "If the diagnostic is only harness/path/receipt failure, repair only the harness and replay the same exact seven source blobs.",
+    "Do not mutate dependent WP04 until WP03 evidence is classified.",
+    "When the real Andreas Ubuntu organ is available, run the existing fail-closed target gate; Hostinger evidence does not substitute for that target receipt."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "promotion": "NONE",
+  "authority_invariant": "model output != execution authority"
+}

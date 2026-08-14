@@ -1,0 +1,66 @@
+module claycode.hyperposition.backend.v1
+version "0.1-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Candidate implementation layer over frozen G9 semantics.
+// Hyperrelation keeps semantic identity; physical lowering may vary only with verified projection equivalence.
+
+record HyperpositionAlternativeSet {
+  id:Ref
+  members:Set<Ref>
+  context:Set<Ref>
+  compatibility:Set<HyperRef>
+  exclusion:Set<HyperRef>
+  epoch:Epoch
+  e:Set<EvidenceRef>
+}
+
+record HyperpositionRelation {
+  id:HyperRef
+  roles:Ordered<Symbol>
+  members:Set<Ref>
+  semantic_hash:Hash
+  e:Set<EvidenceRef>
+}
+
+record HyperpositionLoweringPlan {
+  relation:HyperRef
+  backend:Symbol
+  visible:Set<Ref>
+  latent:Set<Ref>
+  semantic_hash:Hash
+  physical_hash:Hash
+  pairwise_reduction_error:Int
+  verification:ReceiptRef
+  rollback:RecoveryRef
+}
+
+record HyperpositionReadout {
+  relation:HyperRef
+  alternative_count:Int
+  pairwise_reduction_error:Int
+  semantic_topology_hash:Hash
+  active_topology_hash:Hash
+  physical_topology_hash:Hash
+  intervention:Set<Ref>
+  outcome:Set<OutcomeRef>
+  uncertainty:Epi
+  e:Set<EvidenceRef>
+}
+
+rule hyperposition.semantic_identity = HyperpositionRelation.semantic_hash
+rule hyperposition.semantic_identity != HyperpositionLoweringPlan.physical_hash
+rule backend.PAIRWISE_ONLY eligible iff pairwise_reduction_error=0
+rule backend.LATENT_FACTOR_STAR eligible iff projection_equivalence_verified
+rule backend.NATIVE_NARY eligible iff runtime_supports_nary
+rule lowering never_changes HyperpositionRelation.semantic_hash
+rule lowering never_mints truth
+rule lowering never_mints authority
+rule context_clamp narrows HyperpositionAlternativeSet.members
+rule lesion(HyperpositionRelation) must_emit HyperpositionReadout
+rule rescue(HyperpositionRelation) must_emit HyperpositionReadout
+rule gwt_crosslink requires shared_epoch + WorkspaceEpisode
+rule physical_backend_selection uses latency + memory + contention + recovery + equivalence
+rule pairwise_reduction_error>0 => preserve_nary_semantic_identity
+rule HyperpositionReadout != truth
+rule HyperpositionReadout != effect_authority

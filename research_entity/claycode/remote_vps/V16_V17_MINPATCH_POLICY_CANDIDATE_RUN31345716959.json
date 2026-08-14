@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "V16_V17_MINPATCH_POLICY_CANDIDATE_RUN31345716959",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity": "Clay",
+  "research_subject": "Frank",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "experiment": "CC_BASE_V16_TWO_LINE_SURFACE_PATCH_POLICY_DISCRIMINATOR",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_IN_MEMORY_MINIMAL_REPAIR_CANDIDATE",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "executor_branch": "clay-v16-v17-minpatch-policy-20260810",
+  "executor_commit": "e3b09a82180a088e6a810d580eff2f7f7a79d322",
+  "workflow": "Clay V16 V17 Minimal Patch Policy",
+  "workflow_run_id": 31345716959,
+  "raw_executor_receipt": "runtime/vps_integrity/clay_wp02_probe/receipts/v16-v17-minpatch-policy/RECEIPT.json",
+  "raw_resource_receipt": "runtime/vps_integrity/clay_wp02_probe/receipts/v16-v17-minpatch-policy/TIME.txt",
+  "raw_packages_receipt": "runtime/vps_integrity/clay_wp02_probe/receipts/v16-v17-minpatch-policy/PACKAGES.txt",
+  "baseline_blobs": {
+    "v16": "97edbe25defdc6f7641e5e1ecf3f29558a58abfa",
+    "v17": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "frontend": "55728fd20323a364bb5e831989644b65189603d1"
+  },
+  "candidate_derivation": {
+    "materialized_as_new_grammar_version": false,
+    "base": "exact V16 bytes",
+    "change_1": "Replace only the V16 NAME terminal line with the exact V17 NAME terminal line so admitted hyphenated symbolic names remain single identifiers.",
+    "change_2": "Replace only the V16 DOTTED_PREFIX_REL.11 terminal line with the exact V17 line so declarative dotted-prefix scope returns to the current Needle-only contract.",
+    "everything_else": "unchanged V16 typed-fn/operator machinery",
+    "derivation_guard": "Both replacement lines are extracted from the exact verified V17 file at runtime; no remembered/manual regex is authoritative."
+  },
+  "adjudication": "SUPPORTED_CANDIDATE_ON_HOSTINGER_NOT_PROMOTED",
+  "checks": {
+    "candidate_strict": true,
+    "candidate_corpora_normalized_equal_v17": true,
+    "candidate_hyphen_name_matches_v17": true,
+    "candidate_generic_dotted_scope_matches_v17": true,
+    "candidate_needle_relation_matches_v17": true,
+    "candidate_spaced_minus_matches_v16_compact_minus": true,
+    "candidate_compact_minus_is_distinct_from_spaced_minus": true,
+    "candidate_accepts_typed_fn_spaced_minus": true,
+    "candidate_accepts_typed_fn_add": true
+  },
+  "policy_observation": {
+    "hyphenated_identifiers": "preserved like V17",
+    "binary_minus": "preserved when lexically separated, e.g. x - y",
+    "compact_x_minus_y": "intentionally parses as a hyphenated identifier under the unified candidate and is therefore not equivalent to spaced subtraction",
+    "generic_dotted_prefix": "restricted back to current V17 Needle contract",
+    "operator_alias_wrappers": "known V16 representation difference; guarded semantic normalization only maps exactly recoverable operator wrappers"
+  },
+  "local_exact_source_typed_ir_preflight": {
+    "status": "SUPPORTED_PRELIMINARY_NOT_REMOTE_PROMOTED",
+    "method": "Exact current Clay tools/claycode_base_frontend.py + tools/claycode_base_typed_ir.py with exact V16/V17/G9/Dialect bytes were executed locally against the same in-memory two-line candidate.",
+    "observations": [
+      "V16 compact subtraction and candidate spaced subtraction converge to the same active typed-IR identity on the minimal typed-fn fixture.",
+      "Candidate compact x-y remains distinct from candidate spaced x - y in active typed IR.",
+      "Candidate and V17 remain typed-IR equivalent on the admitted G9/Dialect units in the preflight."
+    ],
+    "scope_guard": "Local exact-source preflight is cheaper falsification evidence only; it does not replace Hostinger/Andreas downstream compiler/type-effect/evaluator receipts."
+  },
+  "strongest_counterhypothesis": "The whitespace-required-minus policy breaks real typed/compiler source or creates unacceptable source-style fragility; split grammar contracts remain safer until current-source usage and downstream active compiler/type-effect/evaluator differential are measured.",
+  "architecture_delta": "CANDIDATE_ONLY",
+  "promotion_allowed": false,
+  "counts_as_wp02_pass": false,
+  "counts_as_wp03_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "training_authorized": false,
+  "next_falsifiers": [
+    "Measure current repository usage of hyphenated symbolic identifiers versus compact binary minus in typed/compiler fixtures and real Clay sources.",
+    "Run the active typed-IR/compiler/type-effect differential with the candidate and spaced-minus fixture before any grammar materialization.",
+    "Preserve the split grammar contracts if real source migration cost or downstream semantic drift is material.",
+    "Do not materialize V18 solely because this candidate passed; language versioning remains gated by downstream evidence."
+  ],
+  "go_oob_budget": {
+    "exactly_one_experiment_already_consumed": true,
+    "this_candidate_test_is_oob": false,
+    "no_additional_oob_experiment_added": true
+  },
+  "scope_guard": "Candidate evidence only. No grammar version, parser switch, WP promotion, Andreas target acceptance, Frank Harness mutation, release/freeze or training authorization.",
+  "authority_invariant": "model output != execution authority"
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T1137p0700-chatgpt-secondary-sqlite-parent-adjudication",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "focus": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "fresh_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_final": "e2dc384077c104791ccde5de082ec26d319163d7",
+    "main_change": "security(storage): add SQLite V6 loader-directory trust gate (#506)",
+    "v6_run": 31564493406,
+    "v6_run_conclusion": "success",
+    "open_product_parent_pr": 505,
+    "product_parent_head": "643e492c19b457c624435a1bf0fbe2f99d1c9cc1",
+    "product_parent_run": 31564418342
+  },
+  "observed_evidence": [
+    "Current main merged V6 loader-directory trust after exact-head self-hosted success; merge explicitly preserves productive Hostinger service/root-anchor/runtime/restart/recovery as required.",
+    "PR #505 recomposes the already-tested systemd parent-boundary stack on fresh main and passes deterministic V1/V2/V3 mechanism checks 13/13 + 5/5 + 6/6.",
+    "PR #505 accepted-target discovery observes product_candidate_unit_count=0, product_v3_pass_count=0 and fails closed with FAIL_CLOSED_NO_ADMITTED_PRODUCT_PARENT.",
+    "No matching systemd/ExecStart artifact was found in the current-main recursive tree/static search used in this cycle; this is supporting search evidence, not a proof of absolute repository absence."
+  ],
+  "live_external_evidence": [
+    {
+      "source": "GNU C Library manual - Dynamic Linker Hardening",
+      "url": "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker-Hardening.html",
+      "claim_used": "For higher-integrity runtime environments, avoid LD_* variables such as LD_PRELOAD/LD_LIBRARY_PATH and GLIBC_TUNABLES for changing dynamic-linker behavior."
+    },
+    {
+      "source": "systemd upstream source - manager_default_environment",
+      "url": "https://github.com/systemd/systemd/blob/main/src/core/manager.c",
+      "claim_used": "The system service manager constructs a clean default environment for children rather than importing the parent's exported environment; exact unit/environment policy still requires product-specific attestation."
+    }
+  ],
+  "hypothesis": "The highest-information remaining SQLite safety discriminator is productive startup-parent/service and exact runtime/recovery attestation, not another synthetic shell/path guard.",
+  "strongest_counterhypothesis": "The merged V5/V6 mechanisms and fixed SQLite identity may already be sufficient even without observing the productive service parent.",
+  "counterhypothesis_disposition": "REJECT_FOR_RELEASE_PROMOTION: the fresh accepted-target product-parent discovery found zero admitted product parents and intentionally failed closed.",
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "LOCAL_PRE_GUARD_LD_PRELOAD_SENTINEL_REPLICATION",
+    "scope": "local mechanism replication only",
+    "clean": {"rc": 0, "sentinel": false, "result": "SCRIPT_BODY_REACHED"},
+    "hostile_direct": {"rc": 78, "sentinel": true, "result": "guard denied only after preload constructor executed"},
+    "hostile_static_clean_env_boundary": {"rc": 0, "sentinel": false, "result": "SCRIPT_BODY_REACHED"},
+    "adjudication": "REPLICATION_ONLY_NO_NEW_RELEASE_DELTA",
+    "reason": "The repository already contains accepted-target pre-guard preload counterworld evidence with the same mechanism; no second unusual experiment was performed."
+  },
+  "grf_collapse": {
+    "sqlite_version_alone_closes_f_v01_13": "REJECT",
+    "post_shell_v5_guard_alone_proves_loader_boundary": "REJECT",
+    "v6_loader_directory_trust_mechanism": "RETAIN_MERGED_MECHANISM_PASS",
+    "systemd_parent_gate_mechanism": "RETAIN_MECHANISM_PASS",
+    "productive_parent_currently_proven": "REJECT_NOT_PROVEN",
+    "f_v01_13": "KEEP_IN_PROGRESS"
+  },
+  "next_discriminator": [
+    "Provision or identify the exact accepted productive Frank system service/root parent without weakening owner/effect authority boundaries.",
+    "Bind exact service -> V5/V6 launcher -> root anchor/release bundle -> mapped accepted SQLite object -> exact Frank persistence target and provenance-bound semantic lineage.",
+    "Capture clean-start and restart/crash/replay receipts plus downgrade/library-swap/rollback and missing/stale-lineage fail-closed controls.",
+    "Do not promote F-V01-13 until productive evidence exists."
+  ],
+  "workspace_delta": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "status": "KEEP_IN_PROGRESS",
+      "add_evidence": [
+        "gschaidergabriel/Dr.-Unterweger@e2dc384077c104791ccde5de082ec26d319163d7",
+        "gschaidergabriel/Dr.-Unterweger:run/31564493406",
+        "gschaidergabriel/Dr.-Unterweger:PR#505",
+        "gschaidergabriel/Dr.-Unterweger:run/31564418342"
+      ],
+      "blocker_refinement": "Merged V6 and parent-gate mechanism evidence narrow the release blocker to productive service/root-anchor/runtime mapping and restart/recovery/rollback/downgrade/lineage acceptance."
+    }
+  },
+  "research_disposition": "DURABLE_ADJUDICATION_DELTA_NO_RELEASE_PROMOTION",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

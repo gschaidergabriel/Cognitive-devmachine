@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260810T1431p0700-chatgpt-secondary-r5",
+  "late_arrival_commit":"a896ce5b1b61de5f0e4058c972dd6a4e08c0fbc0",
+  "arrival_class":"POST_INITIAL_CLOSE_MATERIAL_LATE_ARRIVAL_INGESTED_BEFORE_USER_FINAL",
+  "source_work":"CLAY-LIVE-FUSION-REENTRY-V1",
+  "finding":"Historical DELIVERY_V13 and SUBSCRIPTION_SNAPSHOT_V13 had been ignored during replay, allowing future routing logic to reinterpret historical delivery state. The existing PR156 lane now persists/binds routing_version, replays and validates recorded delivery/subscription identity, fails closed on identity/authority mismatch, and preserves delivery history by delivery_id.",
+  "local_evidence":{"status":"PASS_LOCAL_TARGETED_ONLY","tests":"2/2","hostinger_ubuntu":"REQUIRED"},
+  "hypothesis_effects":{
+    "H-HF5-01":"STRENGTHENED: evidence identity includes policy/runtime version identity when historical semantics depend on the producing router version.",
+    "H-HF5-04":"STRENGTHENED: replay must preserve recorded origin/delivery/projection semantics rather than recompute history under future routing policy; explicit migration is required when reinterpretation is intentional.",
+    "H-HF5-03":"REFINED: adaptive routing must version RoutePlan/Delivery semantics so later routing improvements cannot silently rewrite historical causal closure."
+  },
+  "new_hypothesis":false,
+  "scientific_promotion":"NONE",
+  "branch_feedback":{
+    "clayresearch":"DELTA: add policy-version identity to the cross-cutting identity/replay gate.",
+    "frank":"DELTA: Frank-related historical coordination receipts must not be reinterpreted by future router policy; no authority change.",
+    "gwt":"DELTA: causal-use history must remain bound to the delivery semantics actually used in the origin episode.",
+    "emergenz":"NO_CHANGE: version-safe replay is a control prerequisite, not emergence evidence.",
+    "claycode":"DELTA: typed route/delivery records must carry enough version identity for deterministic replay/migration without changing BASE semantics unless executable lowering fails.",
+    "hyperposition":"NO_CHANGE: unresolved route alternatives remain separate from historical selected-route identity.",
+    "claygraph":"DELTA: derived topology replay must respect recorded routing/projection epoch/version and explicit migration boundaries.",
+    "unifieddb":"DELTA: persist immutable delivery/subscription/version identity and reject conflicting repeated delivery IDs; raw history remains authoritative.",
+    "harness":"DELTA: add cross-router-version replay, legacy-version binding, mismatch fail-closed and explicit migration controls to the real Ubuntu fault matrix."
+  },
+  "anti_echo":"This late arrival shares Clay/PR156 ancestry and is not independent replication.",
+  "next_falsifier":"Exact current PR156 head on Hostinger Ubuntu plus active-worker roundtrip, UnifiedDB materialization, mesh-v2 route-target identity roundtrip, Git fallback equivalence, latency/resources and observer-backaction.",
+  "run_status_after_ingest":"COMPLETE_THROUGH_LATE_ARRIVAL_NO_PROMOTION"
+}

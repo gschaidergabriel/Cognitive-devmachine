@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_sqlite_productive_path_rot",
+  "actor": "gabriel-claude/wp3",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "read fail log run 31723833128. find first real error line. say cause class: missing file / assert fail / real finding.",
+  "done_when": "cause named + log line quoted",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: frank-v0.1, digital-retina",
+  "source": {
+    "lauf": "20260814-000716",
+    "paket": "wp3",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-000716-wp3/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-000716-wp3/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 120,
+  "ergebnis_kurz": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING: /etc/frank-v0.1/sqlite-runtime-anchor-v1.json fehlt auf digital-retina",
+  "bericht": "# wp3 sqlite productive path rot\n\nrun 31723833128, exit 78, step \"Observe productive Python SQLite path without mutation\".\n\ncause: MISSING TRUST ANCHOR ON RUNNER. host precondition, not code, not verdict.\n\n- status=BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING\n- missing: /etc/frank-v0.1/sqlite-runtime-anchor-v1.json (FileNotFoundError)\n- parent /etc/frank-v0.1 also missing (FileNotFoundError); /etc and / exist\n- host: digital-retina, uid 1000, sudo_nopasswd false, mutation false\n- runtime WAS read fine: libsqlite3 3.45.1 at /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6,\n  sha256 f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7,\n  python 3.12.3, source_id 2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1\n\nfix = place signed anchor json at /etc/frank-v0.1/ on digital-retina. needs root, sudo_nopasswd false.\n"
+}

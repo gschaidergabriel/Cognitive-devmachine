@@ -3,6 +3,7 @@
   "trigger": "go",
   "run_id": "go-20260814T2308p0700-chatgpt-unifieddb-root-repair",
   "created_at": "2026-08-14T23:08:00+07:00",
+  "finalized_at": "2026-08-14T23:09:00+07:00",
   "organ": "gpt-5.6-sol temporary Clay worker",
   "program": "FRANK_V0_1",
   "target": "self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
@@ -30,7 +31,7 @@
       "hypothesis": "canonical materialization fingerprint ownership belongs only to the complete current UnifiedDB/ClayGraph canonical chains; generic additive/differential apply must not own or rewrite that fingerprint",
       "strongest_counterhypothesis": "every apply() invocation should rewrite the canonical fingerprint so all additive schemas are folded into one exact chain",
       "falsifier": "a required normal runtime/additive schema path becomes unopenable or loses drift detection when fingerprint stamping is scoped to complete canonical chains",
-      "outcome": "RETAIN_TESTING"
+      "outcome": "SUPPORTED_BY_EXACT_HEAD_TARGET_CI"
     },
     {
       "id": "H-GO-UDB-286-TEST-SEAM",
@@ -75,22 +76,22 @@
       "claycode_nominal_boundary": "PASS",
       "deep_integrity": "FAIL_ONLY_AT_STALE_ORDERING_TEST_SEAM"
     },
+    "pr_222_commit_712e819a": {
+      "sqlite_wal_preflight": "PASS",
+      "sqlite_wal_storage_vps": "PASS",
+      "effect_fence_provider_vps": "PASS",
+      "self_root_current_head": "PASS",
+      "claycode_nominal_boundary": "PASS",
+      "claycode_opaque_parser_fidelity": "PASS",
+      "execution_gate_directory_anchor": "PASS",
+      "deep_integrity": "PASS"
+    },
     "pr_286_commit_26feb7b9": {
       "deep_integrity": "PASS",
       "materialization_identity_v2_candidate_vps": "PASS",
       "attached_atomic_pair_migration_v2_vps": "PASS",
       "self_root_current_head": "PASS",
       "claycode_nominal_boundary": "PASS"
-    },
-    "pr_222_commit_712e819a": {
-      "status_at_receipt_write": "TARGET_CI_RUNNING",
-      "already_completed": [
-        "sqlite_wal_preflight PASS",
-        "sqlite_wal_storage_vps PASS",
-        "effect_fence_provider_vps PASS",
-        "self_root_current_head PASS",
-        "claycode_nominal_boundary PASS"
-      ]
     }
   },
   "unusual_experiment": {
@@ -117,7 +118,7 @@
     "first PR #222 WAL preflight after code patch failed before useful steps because the branch still requested ubuntu-latest while current repository execution lane is self-hosted",
     "PR #286 old Deep Integrity failure was caused by a sentinel test seam dereferencing non-existent synthetic schema filenames"
   ],
-  "promotion_state": "IMPLEMENTED_TESTING",
+  "promotion_state": "SUPPORTED_ROOT_REPAIRS_PENDING_STACK_RECOMPOSITION",
   "non_claims": [
     "No whole Frank v0.1 acceptance claim",
     "No canonical runtime state migration performed",
@@ -125,5 +126,5 @@
     "No Together API/service used",
     "No Frank self-Harness mutation authority exercised"
   ],
-  "next_falsifier": "Require PR #222 exact-head Deep Integrity PASS after commit 712e819a; then recompose/rebase affected downstream UnifiedDB stack and remeasure the two root tests on composed current-main trees before any merge/promotion."
+  "next_falsifier": "Recompose/rebase the downstream UnifiedDB PR stack onto the repaired roots and rerun schema_migration_atomicity_regression.py plus frank_effect_provider_v17_terminal_integration.py on composed current-main trees; preserve any residual downstream-specific failures instead of attributing them to the roots."
 }

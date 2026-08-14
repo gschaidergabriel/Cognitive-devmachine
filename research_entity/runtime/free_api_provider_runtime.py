@@ -13,6 +13,7 @@ import json
 import math
 import os
 import secrets
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -31,6 +32,7 @@ TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
 TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
 PROCESS_PAYMENT_LATCHES: set[str] = set()
+PROCESS_EXECUTION_LOCK = threading.Lock()
 
 
 @dataclass(frozen=True)
@@ -449,6 +451,29 @@ def _reject_duplicate_json_names(
 
 
 def execute_chat(
+    messages: list[dict[str, str]],
+    *,
+    model: str,
+    environ: dict[str, str] | None = None,
+    opener=None,
+    now=time.time,
+    nonce_factory=None,
+    payment_latches: set[str] | None = None,
+) -> dict:
+    """Serialize authorization through receipt so payment latches are atomic."""
+    with PROCESS_EXECUTION_LOCK:
+        return _execute_chat_locked(
+            messages,
+            model=model,
+            environ=environ,
+            opener=opener,
+            now=now,
+            nonce_factory=nonce_factory,
+            payment_latches=payment_latches,
+        )
+
+
+def _execute_chat_locked(
     messages: list[dict[str, str]],
     *,
     model: str,

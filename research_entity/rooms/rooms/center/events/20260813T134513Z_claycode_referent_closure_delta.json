@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "event_id": "clay-live-20260813T134513Z-claycode-referent-closure",
+  "kind": "LIVE_RESEARCH_FUSION_DELTA",
+  "observed_at_utc": "2026-08-13T13:45:13Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "training_authorized": false
+  },
+  "comparison_cut": {
+    "previous_research_head": "3dc5445ca3e09b8d80ebdbf6b423d8917dce5e84",
+    "research_head_observed": "2d1a8ca389b01748a4a761e751c488a84ea758d0",
+    "target_main_observed": "8e861c13dbf9215c3e21afa3372fb43ab35bd709"
+  },
+  "substantive_deltas": [
+    {
+      "id": "D-CONTROL-MONOTONICITY-REGRESSION-001",
+      "disposition": "RESTORED_FAIL_CLOSED_BUT_REGRESSION_PRESERVED",
+      "evidence": {
+        "control_v29_commit": "00f9e4986f3c71a3bd2ca89e63fdf6847c57914a",
+        "supervisor_commit": "6ef5ae4f757a611e3012eb693326510d032bb7f5",
+        "inbox_commit": "2d1a8ca389b01748a4a761e751c488a84ea758d0",
+        "observation": "Control v2.8 removed established ProductStart and translated-external-gate authority invariants while adding PR-runner rules; v2.9 restores both sets."
+      },
+      "boundary": "Restoration closes the current control text, not the process defect that allowed unresolved safety invariants to disappear."
+    },
+    {
+      "id": "D-PR232-REFERENT-MISMATCH-002",
+      "disposition": "FAIL_CLOSED_PROVENANCE_COUNTEREVIDENCE",
+      "evidence": {
+        "claimed_pr": 232,
+        "claimed_exact_head": "deab7eab43e94cd1bb70ca912de6f66f1846f9e2",
+        "claimed_head_lookup": "GitHub commit API returned 422 No commit found",
+        "actual_pr_head": "ab82f6c4e34fbcb79a9ed89a2c4e46de6f514d95",
+        "actual_pr_commits": [
+          "f3157a1890855f1d31fb78f3ad1dee3b62b6df7a",
+          "ab82f6c4e34fbcb79a9ed89a2c4e46de6f514d95"
+        ],
+        "actual_pr_state": "open draft"
+      },
+      "boundary": "Provider request/response repairs described against the missing head cannot be attributed to PR232 or credited until the actual artifact, reachable lineage, diff and executable receipt are bound. No claim is made that the repair itself is false."
+    }
+  ],
+  "preserved_negative_null_and_inconclusive": [
+    "Target main is unchanged at 8e861c13dbf9215c3e21afa3372fb43ab35bd709.",
+    "The latest cited Identity Guard remains zero-step and provides no executable provider verdict.",
+    "No live external request or provider effect is evidenced.",
+    "No independent GWT, emergence, hyperposition, ClayGraph or UnifiedDB observation was found in this delta."
+  ],
+  "testable_hypotheses": [
+    {
+      "id": "H-EVIDENCE-REFERENT-CLOSURE-001",
+      "hypothesis": "Exact-head credit is sound only if the commit exists in the claimed repository and is reachable from the claimed PR head or explicitly bound alternative lineage.",
+      "counterhypothesis": "A supervisor text field naming an exact head is sufficient provenance.",
+      "test": "For every credited receipt, fetch the commit, enumerate claimed PR commits, verify reachability and bind workflow head_sha plus decision-step evidence.",
+      "falsifier": "A credited claim survives while its commit is absent, unreachable, or bound to a different PR lineage."
+    },
+    {
+      "id": "H-SAFETY-INVARIANT-MONOTONICITY-001",
+      "hypothesis": "Unresolved safety authority rules must be monotone across control revisions unless a separately reviewed executable retirement receipt names each removed rule.",
+      "counterhypothesis": "Human review after accidental deletion is an adequate invariant-preservation mechanism.",
+      "test": "Diff normalized authority-rule identifiers across every control update and fail CI on deletion without a valid retirement receipt.",
+      "falsifier": "A safety rule can disappear unnoticed while all monotonicity checks remain green."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Ghost-Head Credit",
+      "definition": "Evidence credit is assigned to an exact commit identifier that does not exist in, or is not reachable from, the claimed repository lineage."
+    },
+    {
+      "name": "Referent Closure",
+      "definition": "Every evidence statement must resolve from claim to repository object, lineage, execution and verdict before receiving semantic credit."
+    },
+    {
+      "name": "Safety-Invariant Tombstoning",
+      "definition": "Removed authority rules require explicit tombstones with retirement rationale and executable evidence rather than silent textual deletion."
+    }
+  ],
+  "routing": [
+    {
+      "consumers": ["claycode", "clayresearch", "harness"],
+      "priority": "CRITICAL",
+      "impulse": "Quarantine PR232/deab7e provider credit; resolve the actual repair artifact and require commit existence, PR reachability, diff, workflow head_sha and executed decision-step receipt before re-entry."
+    },
+    {
+      "consumers": ["claycode", "frank", "gwt", "emergenz", "hyperposition", "claygraph", "unifieddb"],
+      "priority": "HIGH",
+      "impulse": "Add monotone authority-rule diffing and explicit retirement tombstones to every autonomous control update; preserve deletions as typed negative events."
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28",
+      "use": "GitHub's job resource exposes head_sha, steps and runner identity; these are required bindings for executed evidence rather than textual status alone."
+    }
+  ],
+  "routing_receipt": {
+    "target": "research_entity/rooms/rooms/center/events",
+    "delivery": "repo-native provenance event",
+    "active_external_worker_execution_claimed": false
+  },
+  "nonclaims": {
+    "target_execution_by_this_organ": false,
+    "target_repository_mutated_by_this_event": false,
+    "harness_mutated": false,
+    "training_performed": false,
+    "canonical_promotion": false,
+    "provider_capability_promoted": false,
+    "whole_frank_v0_1_acceptance": false
+  }
+}

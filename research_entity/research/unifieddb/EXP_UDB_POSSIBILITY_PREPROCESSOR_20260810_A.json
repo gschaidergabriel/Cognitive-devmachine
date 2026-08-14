@@ -1,0 +1,77 @@
+{
+  "actor": {"actor_id": "chatgpt-secondary", "model": "GPT-5.6 Sol", "provider": "OpenAI"},
+  "aggregate": {
+    "all_selection_equivalent": true,
+    "fts5_document_retrieval": {"accuracy_at_1_mean": 0.2732905879919215, "p50_ms_median": 0.640499, "p95_ms_median": 1.438383, "p99_ms_median": 1.871108},
+    "full_rebuild_ms_median": 151.594827,
+    "initial_compile_ms_median": 106.583754,
+    "possibility_packet_hot_read": {"accuracy_at_1_mean": 1.0, "p50_ms_median": 0.023885, "p95_ms_median": 0.032037, "p99_ms_median": 0.097025},
+    "relational_query_time_derivation": {"accuracy_at_1_mean": 1.0, "p50_ms_median": 4.084586, "p95_ms_median": 4.466795, "p99_ms_median": 5.219542},
+    "retired_candidate_fraction_median": 0.003821656050955414,
+    "runs": 5,
+    "seeds": [20260810, 20260811, 20260812, 20260813, 20260814],
+    "speedup_full_rebuild_over_targeted": 51.26582099975145,
+    "speedup_relational_p50_over_packet": 171.01050868746074,
+    "targeted_refresh_ms_median": 2.957035
+  },
+  "architecture_delta": {
+    "authority": "UnifiedDB remains canonical truth; ClayGraph remains derived relevance; packet selection never grants effect authority; Hyperposition alternatives remain explicit",
+    "migration": "research_entity/runtime/RAE_UNIFIEDDB_V10_POSSIBILITY_PREPROCESSOR.sql",
+    "policy": "adaptive STANDING/HYBRID/LAZY materialization based on observed read savings vs update+storage cost",
+    "runtime": "research_entity/runtime/possibility_preprocessor_v1.py"
+  },
+  "branch": "chatgpt/unifieddb-possibility-preprocessor-20260810",
+  "canonical_parent": {"entity_version": "RAE-8.8", "revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "counterhypothesis": "For cold or high-update contexts, standing materialization can cost more than lazy query-time derivation; some query shapes cannot be maintained at constant update cost.",
+  "created_at_utc": "2026-08-10T00:10:03.183630+00:00",
+  "experiment_id": "EXP-UDB-POSSIBILITY-PREPROCESSOR-20260810-A",
+  "external_evidence_refs": [
+    "https://arxiv.org/abs/2203.16684",
+    "https://timelydataflow.github.io/differential-dataflow/chapter_5/chapter_5.html",
+    "https://arxiv.org/abs/2404.16130",
+    "https://arxiv.org/abs/2502.14802",
+    "https://www.microsoft.com/en-us/research/blog/lazygraphrag-setting-a-new-standard-for-quality-and-cost/",
+    "https://arxiv.org/abs/2606.07795"
+  ],
+  "hypothesis": "Standing provenance-bound possibility packets can preserve exact structured selection while moving expensive relational/graph composition off the hot cognitive path.",
+  "limitations": ["synthetic workload", "single local KVM host for aggregate runs", "SQLite physical backend only", "no concurrent writers/readers yet", "no crash/restart test yet", "no real Frank v0.1 interaction replay yet", "no Andreas target-PC evidence", "no Hostinger self-hosted runner evidence yet at receipt creation time"],
+  "local_environment": {
+    "captured_at_utc": "2026-08-10T00:09:02.362185+00:00",
+    "container_or_vm": "UNKNOWN",
+    "cpu_count_logical": 5,
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "filesystem": "/dev/vda       ext4  65478188 22502212  39604152  37% /",
+    "hostname": "cdb18a0de9df",
+    "hypervisor_vendor": "KVM",
+    "kernel": "6.18.35",
+    "machine": "x86_64",
+    "mem_total_kib": 6219544,
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "sqlite": "3.46.1"
+  },
+  "methods": {
+    "capabilities_per_main_run": 10000,
+    "ground_truth": "exact relational derivation using identical deterministic selector semantics",
+    "packet_path": "canonical context signature -> v_current_possibility_packets -> pre-ranked top-3 packet",
+    "query_contexts_per_run": "102-115 valid goal/constraint signatures depending on seed",
+    "resources_per_main_run": 2500,
+    "rules_per_main_run": 420,
+    "runs": 5,
+    "seeds": [20260810, 20260811, 20260812, 20260813, 20260814],
+    "text_baseline": "SQLite FTS5 rule/document retrieval followed by first valid resource binding; baseline is intentionally text-retrieval, not a claim about all databases",
+    "update_test": "mutate one high-fanout capability reliability, invalidate dependency closure, retire affected candidate versions, regenerate affected resource candidates, recompile affected signatures, compare selection to independent full rebuild"
+  },
+  "negative_results": [
+    "A separate top-k frontier table followed by a hot-path join was semantically correct but slower than direct prepared-index lookup on the first prototype; it was rejected.",
+    "Packet JSON parsing adds a small overhead relative to direct prepared-row lookup, but remains far below query-time relational derivation and reduces the model-facing payload to top-3."
+  ],
+  "promotion_gate": "Do not promote from synthetic evidence. Next gate requires Ubuntu self-hosted runner parity, concurrent epoch/invalidation tests, recovery/rebuild tests, and replay on real project/Frank semantic workloads.",
+  "scaling_runs": [
+    {"capabilities": 4000, "contexts": 102, "full_rebuild_ms": 44.359252, "packet_p50_ms": 0.021983, "prepared_candidates": 310, "relational_p50_ms": 1.5729735, "resources": 1000, "retired_candidate_fraction": 0.00967741935483871, "selection_equivalent": true, "targeted_refresh_ms": 2.310532},
+    {"capabilities": 20000, "contexts": 111, "full_rebuild_ms": 195.930586, "packet_p50_ms": 0.028478, "prepared_candidates": 1583, "relational_p50_ms": 8.203838000000001, "resources": 5000, "retired_candidate_fraction": 0.0018951358180669614, "selection_equivalent": true, "targeted_refresh_ms": 3.501147},
+    {"capabilities": 80000, "contexts": 114, "full_rebuild_ms": 860.250459, "packet_p50_ms": 0.0419475, "prepared_candidates": 6410, "relational_p50_ms": 34.2095155, "resources": 20000, "retired_candidate_fraction": 0.0006240249609984399, "selection_equivalent": true, "targeted_refresh_ms": 10.920521}
+  ],
+  "schema_version": "1.0",
+  "status": "SUPPORTED_LOCAL_SYNTHETIC_NOT_PROMOTED"
+}

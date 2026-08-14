@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0406p0700-chatgpt-secondary-attestation-dedup",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "target_identity": "self.root",
+    "target_body": "accepted Hostinger Ubuntu VPS"
+  },
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_may_independently_research_test_implement": true,
+    "training_authorized": false
+  },
+  "new_external_capability_adjudication": {
+    "question": "Can production F-V01-01 assume GitHub Artifact Attestations / gh attestation verify for this private target repository?",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "repository_visibility_observed": "private",
+    "official_github_documentation": {
+      "source": "GitHub Docs - Using artifact attestations to establish provenance for builds",
+      "url": "https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds",
+      "documented_plan_constraint": "For private/internal repositories, artifact attestations are available on GitHub Enterprise Cloud; Free/Pro/Team support is documented for public repositories."
+    },
+    "existing_target_evidence": {
+      "source": "Dr.-Unterweger PR #231 / self-hosted target run 31418439384",
+      "gh_cli_on_target": "ABSENT",
+      "real_artifact_attestation_verified": false,
+      "trusted_builder_pinned": false
+    },
+    "actual_github_plan_verified": false,
+    "adjudication": "FAIL_CLOSED_CAPABILITY_UNKNOWN",
+    "reason": "Installing gh alone cannot prove the private-repository attestation service is available; the actual plan/capability must be verified independently.",
+    "architecture_delta": "Keep build provenance as a provider-neutral conjunctive Boot gate. A GitHub-attestation adapter may be selected only after actual plan/service capability is verified. Preserve owner-pinned builder/source/digest/predicate requirements regardless of verifier provider.",
+    "slsa_relation": "Artifact/source/builder provenance remains orthogonal to selected semantic-state lineage. Neither can substitute for the other."
+  },
+  "live_swarm_dedup": {
+    "problem_space": "F-V01-01/F-V01-13 selected semantic continuation head",
+    "pr_267": {
+      "role": "concurrent sibling selected-head CAS discriminator",
+      "head": "45152d1c5c9fc696a35f102fdda44a0e14c30d18",
+      "target_run": 31433086428,
+      "target_status": "SUCCESS",
+      "result": "one winner / one loser under SEMANTIC_TWIN_CAS_RACE; candidate not promoted"
+    },
+    "pr_273": {
+      "role": "broader external continuation-head diagnostic with exact semantic root/source/identity-contract/predecessor binding, controlled restore, outside-snapshot placement, and explicit whole-domain rollback limitation",
+      "head": "f33a60a8298176e1d11d60051ae014b69e70e1fb",
+      "target_run": 31433115755,
+      "target_status_at_receipt": "QUEUED",
+      "promotion_credit": "NONE_UNTIL_EXECUTED"
+    },
+    "pr_272": {
+      "role": "this worker's overlapping external-head candidate",
+      "disposition": "CLOSED_SUPERSEDED_WITHOUT_MERGE",
+      "reason": "#267 already has stronger executed concurrency evidence and #273 carries a broader restore/failure-domain diagnostic; retaining a third implementation would violate dedup/one-authority discipline."
+    },
+    "selected_current_strategy": "Use #267 as executed concurrency evidence; await executed #273 evidence for broader recovery/failure-domain adjudication; do not product-wire a third selected-head implementation."
+  },
+  "reused_high_impact_evidence": {
+    "effect_generation_provider_integration": "merged main @15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4; exact execution-generation + typed provider idempotency substrate supported, remaining production gates stay open",
+    "sqlite_wal_reset": "separately persisted by go-20260811T0404p0700 chatgpt-secondary; Ubuntu 3.45.1-1ubuntu2.7 backport status unresolved and release remains fail-closed"
+  },
+  "negative_results": [
+    "queued workflow is not target PASS evidence",
+    "same source/identity metadata is not unique semantic-state continuity",
+    "selected-head CAS does not prove rollback safety of the selected-head authority itself",
+    "GitHub private-repository attestation availability is not inferred without plan verification",
+    "build provenance and state-lineage selection are separate required gates"
+  ],
+  "next_frontier": [
+    "adjudicate #273 only after exact self-hosted target execution and compare it against #267 rather than merging both blindly",
+    "define the actual canonical semantic-root constructor that the selected-head mechanism will verify; do not accept caller-supplied semantic_root_hash as final product evidence",
+    "verify actual GitHub plan/service capability or select another owner-pinned provenance verifier",
+    "compose the selected semantic head with the current V15/V16 execution generation and external recovery generation only after one mechanism is selected",
+    "retain SQLite WAL-reset release gate until exact patch provenance, fixed runtime, or machine-checked unreachable topology exists"
+  ],
+  "research_write": "COMMITTED",
+  "canonical_frank_state_mutated": false,
+  "external_effect_performed": false,
+  "final_training_authorized": false,
+  "whole_frank_v0_1_acceptance": false
+}

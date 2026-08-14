@@ -19,8 +19,13 @@
       "status": "IN_PROGRESS",
       "weight": 1.0,
       "goal": "Canonical self.root server-binary/state-lineage identity, external Andreas/Gabriel/client/token/Clay/peer relations, stale-clone rejection and restart/migration continuity.",
-      "current_evidence": ["research_entity/trigger_runs/frank/frank-20260810T2027p0700-chatgpt-secondary-selfroot-conformance/RESEARCH_RECEIPT.json"],
-      "blocker": "Current frankv0.1 main still contains stale pre-self.root identity semantics; direct conformance discriminator fails."
+      "current_evidence": [
+        "research_entity/trigger_runs/frank/frank-20260810T2027p0700-chatgpt-secondary-selfroot-conformance/RESEARCH_RECEIPT.json",
+        "research_entity/trigger_runs/go/go-20260811T0111p0700-chatgpt-secondary-selfroot-continuity/RESEARCH_RECEIPT.json",
+        "gschaidergabriel/Dr.-Unterweger@e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+        "gschaidergabriel/Dr.-Unterweger:run/31418439384"
+      ],
+      "blocker": "The stale pre-self.root source/replay blocker is resolved on current main by merged PR #227. Remaining finished-identity gate is now narrower: production must verify the real binary artifact against an owner-pinned trusted builder/source policy on the accepted target, bind boot to a uniquely selected admitted/recovery-verified semantic state lineage (not merely same source/epoch labels), reject sibling/transplanted/stale clones, and prove restart/move continuity. Fresh-main PR #231 is target-VPS 37/37 mechanism PASS but remains draft because SAME_SOURCE_SIBLING_STATE_CHIMERA locally falsified unique lineage enforcement in the evaluator and target /usr/bin/gh is absent; real artifact attestation is not yet verified."
     },
     "F-V01-02-CLAYCODE-COMPILER-RUNTIME": {
       "status": "IN_PROGRESS",
@@ -89,21 +94,47 @@
             "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json"
           ]
         },
+        "presence_execution_generation_effect_fence": {
+          "status": "PASS",
+          "evidence": [
+            "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json",
+            "gschaidergabriel/Dr.-Unterweger@15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+            "gschaidergabriel/Dr.-Unterweger:run/31423170075",
+            "research_entity/trigger_runs/go/go-20260811T0404p0700-chatgpt-secondary-provider-rollback-wal-gate/RESEARCH_RECEIPT.json"
+          ],
+          "note": "Current-main target-VPS integration passes exact caller-bound V15/V16 execution-generation reservation/attempt/provider fencing: stale aliases and successor adoption are fenced with zero authoritative mutation, COMMITTING blocks execution rebind/release, and provider B3 is bound to the exact admitted generation."
+        },
         "current_source_lifecycle_crash_replay": {
           "status": "OPEN",
-          "note": "Prior target-VPS lifecycle substrate passed on blob 9c318ce7; exact current effect-authority blob a28d47f0 still requires lifecycle rerun before current-source credit."
+          "note": "Exact current effect-authority source still requires a dedicated crash/restart replay matrix across lifecycle transitions; the fresh-main provider integration proves current execution-generation and reconciliation mechanisms but is not a full current-source crash/replay acceptance receipt."
         },
         "current_claycode_frontend_typed_ir": {
-          "status": "OPEN",
-          "note": "Frontend/TypedIR discriminator was extended to the new authority declarations in target commit 0f51bced; current exact-source receipt pending."
+          "status": "PASS",
+          "evidence": [
+            "gschaidergabriel/Dr.-Unterweger@15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+            "gschaidergabriel/Dr.-Unterweger:run/31423170075",
+            "research_entity/trigger_runs/go/go-20260811T0404p0700-chatgpt-secondary-provider-rollback-wal-gate/RESEARCH_RECEIPT.json"
+          ],
+          "note": "Exact current WP03 frontend/grammar/TypedIR materialization and provider semantic probe pass deterministically on the target lane. Scope is frontend + TypedIR only; WP04 type/effect and compiled runtime execution acceptance remain explicitly unclaimed."
         },
         "real_provider_unknown_outcome_reconciliation": {
           "status": "OPEN",
-          "note": "Google effect bridge now carries uncertainty/idempotency rules, but no real provider write timeout-after-acceptance/reconciliation receipt is promoted."
+          "evidence": [
+            "gschaidergabriel/Dr.-Unterweger@15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+            "gschaidergabriel/Dr.-Unterweger:PR#263",
+            "gschaidergabriel/Dr.-Unterweger:run/31432605112",
+            "research_entity/trigger_runs/go/go-20260811T0404p0700-chatgpt-secondary-provider-rollback-wal-gate/RESEARCH_RECEIPT.json"
+          ],
+          "note": "Synthetic provider ACK-loss and provider-commit/local-snapshot-rollback reconciliation now pass on the accepted target lane with provider commit count exactly 1. Production gate stays OPEN until a real provider supplies timeout-after-acceptance plus durable idempotent read-only reconciliation evidence."
         },
         "verified_outcome_reentry_done_and_terminal_receipt": {
           "status": "OPEN",
-          "note": "Still requires verified provider outcome -> provenance-bound UnifiedDB re-entry -> DONE and final CLAY_0_1_EFFECT_AUTHORITY_RECEIPT integration."
+          "evidence": [
+            "gschaidergabriel/Dr.-Unterweger@15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+            "gschaidergabriel/Dr.-Unterweger:run/31423170075",
+            "research_entity/trigger_runs/go/go-20260811T0404p0700-chatgpt-secondary-provider-rollback-wal-gate/RESEARCH_RECEIPT.json"
+          ],
+          "note": "Synthetic exact-current provider outcome -> OUTCOME_SUCCEEDED_VERIFIED -> provenance-bound V17 re-entry -> DONE_COMMITTED is target-VPS PASS. Keep the package subcheck OPEN until this evidence is integrated into the final current CLAY_0_1_EFFECT_AUTHORITY_RECEIPT and remaining production provider/routing obligations are closed."
         }
       },
       "current_evidence": [
@@ -111,9 +142,13 @@
         "gschaidergabriel/Dr.-Unterweger@b53420100cfeefef0f6135ce1ccb0ee28f2c5e9f",
         "gschaidergabriel/Dr.-Unterweger@af4eab1754539df31e98505bcdfdac2950daf970",
         "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
-        "gschaidergabriel/Dr.-Unterweger@dc2568ff863c4d7c4696c2d14c62db406f9fecb4"
+        "gschaidergabriel/Dr.-Unterweger@15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+        "gschaidergabriel/Dr.-Unterweger:run/31423170075",
+        "gschaidergabriel/Dr.-Unterweger:PR#263",
+        "gschaidergabriel/Dr.-Unterweger:run/31432605112",
+        "research_entity/trigger_runs/go/go-20260811T0404p0700-chatgpt-secondary-provider-rollback-wal-gate/RESEARCH_RECEIPT.json"
       ],
-      "blocker": "Owner-fixed policy matrix is target-VPS PASS, but finished gate still needs exact-current-source lifecycle/frontend/TypedIR evidence, a real provider uncertainty/reconciliation path, and verified outcome -> provenance re-entry -> DONE/terminal receipt."
+      "blocker": "Exact execution-generation fencing and current frontend/TypedIR are now target-VPS PASS on merged current main; synthetic verified provider outcome -> provenance re-entry -> DONE and two reconciliation failure-window probes are also PASS. Finished gate is narrower: dedicated exact-current lifecycle crash/restart replay, real-provider timeout-after-acceptance plus durable reconciliation evidence, production non-bypassable effect routing, final component receipt integration, and any dependency on F-V01-13 recovery/storage release gates."
     },
     "F-V01-10-PROACTIVE-AGENCY-WEB": {
       "status": "OPEN",
@@ -131,9 +166,17 @@
       "goal": "Current capability/body model including connected clients/tools and external strong-peer routes as typed capabilities, never SELF or authority by presence."
     },
     "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
-      "status": "OPEN",
+      "status": "IN_PROGRESS",
       "weight": 1.0,
-      "goal": "Crash/restart/rollback/quarantine/rebuild, identity continuity, stale-state rejection, prompt/tool-result injection resistance, telemetry and complete reproducible receipts."
+      "goal": "Crash/restart/rollback/quarantine/rebuild, identity continuity, stale-state rejection, prompt/tool-result injection resistance, telemetry and complete reproducible receipts.",
+      "current_evidence": [
+        "research_entity/trigger_runs/go/go-20260811T0111p0700-chatgpt-secondary-selfroot-continuity/RESEARCH_RECEIPT.json",
+        "gschaidergabriel/Dr.-Unterweger:PR#240",
+        "gschaidergabriel/Dr.-Unterweger:run/31415678604",
+        "gschaidergabriel/Dr.-Unterweger@d55b452776295153576011988b0befce7f13b238",
+        "research_entity/trigger_runs/go/go-20260811T0404p0700-chatgpt-secondary-provider-rollback-wal-gate/RESEARCH_RECEIPT.json"
+      ],
+      "blocker": "External execution-generation floor candidate #240 is target-VPS PASS for DB-snapshot rollback when its external anchor survives, but it is not product-integrated and does not prove semantic-root identity for equal-generation divergent/sibling states. In addition, the accepted target currently reports SQLite 3.45.1 while Frank uses WAL; upstream SQLite documents the WAL-reset corruption race for versions through 3.51.2 under concurrent writer/checkpoint topology. Release must therefore fail closed until the exact Ubuntu build is proven to contain the upstream fix/backport, the runtime is upgraded to a fixed SQLite build, or a machine-checked Frank topology proves the trigger conditions unreachable. Recovery/boot continuity must still select one provenance-bound semantic lineage head and remain fail-closed when external anchors are absent or rolled back."
     },
     "F-V01-14-TRAINING-DATA-HELDOUT": {
       "status": "OPEN",
@@ -154,5 +197,5 @@
   },
   "completion_contract": "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md",
   "terminal_receipt": "SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json",
-  "last_updated": "2026-08-10T21:18:00+07:00"
+  "last_updated": "2026-08-11T04:16:51+07:00"
 }

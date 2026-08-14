@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_GO_RESULT/1.0",
+  "trigger": "go",
+  "worker": "GPT-5.6-Sol temporary Clay worker",
+  "grf": {
+    "observed_anchor": "Frank SQLite V5 launcher on current main rejected LD_PRELOAD, LD_AUDIT and LD_LIBRARY_PATH but did not reject GLIBC_TUNABLES; launcher itself already states that the dynamic loader executes before shell guard logic.",
+    "generated_hypothesis": "Non-empty inherited GLIBC_TUNABLES is another pre-shell dynamic-linker control surface that the V5 admission path should fail closed on, while still refusing to claim shell-level sanitization of already-consumed loader state.",
+    "counter_reality": "Rejecting GLIBC_TUNABLES might be redundant or could falsely classify clean production starts; the discriminating control must show the old launcher does not emit the loader-env denial, the candidate does, and a clean candidate invocation is not rejected for that reason.",
+    "outcome": "SUPPORTED"
+  },
+  "primary_evidence": {
+    "glibc_tunables_manual": "https://sourceware.org/glibc/manual/latest/html_node/Tunables.html",
+    "glibc_dynamic_linker_hardening": "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker-Hardening.html",
+    "sqlite_release": "3.53.4",
+    "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+  },
+  "implementation": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr": 456,
+    "merge_sha": "7e60eadeffe0fb6eab907023cc337ae06d7e0d7a",
+    "tested_candidate_sha": "00ee1514bb53e53dc85479099b91d56b912b130f",
+    "integrated_candidate_sha": "16d6bb55dc81fdc9248da6bdc7c278e3964091bd",
+    "input_launcher_blob": "427fa60a0e36cfceb86d64329145b45a509676a1",
+    "output_launcher_blob": "90248ae34aef0df6e7534862426ced355c8d1034",
+    "change": "Fail closed on non-empty inherited GLIBC_TUNABLES and unset it with existing loader-control variables."
+  },
+  "experiment": {
+    "count": 1,
+    "name": "GLIBC_TUNABLES_SHADOW_WORLD",
+    "workflow_run": 31534160136,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "treatment": "GLIBC_TUNABLES=glibc.rtld.dynamic_sort=1",
+    "baseline_loader_env_denial": false,
+    "candidate_loader_env_denial": true,
+    "candidate_exit_code": 78,
+    "clean_control_loader_env_denial": false,
+    "repo_static_integrity": "PASS",
+    "artifact_id": 9118105037,
+    "artifact_sha256": "93550d629abeb4fc30103358a3549a8c13794c68605b0d77fc0b67ce50fd68bd"
+  },
+  "negative_and_boundary_evidence": {
+    "F-V01-13": "IN_PROGRESS",
+    "not_proven": [
+      "trusted production parent/start environment before dynamic-loader execution",
+      "authorized root provisioning of production runtime and trust anchor",
+      "productive Python/_sqlite3/libsqlite3 attachment to the exact accepted SQLite identity",
+      "restart persistence of the mapped accepted object and downgrade/library-swap rejection",
+      "whole Frank v0.1 acceptance"
+    ],
+    "effect_authority": "NONE",
+    "harness_authority_change": false,
+    "training_authorized": false
+  },
+  "next_discriminating_falsifier": "On the accepted Hostinger Ubuntu production start lane, attest the trusted service-parent environment before exec, then prove the productive Frank persistence process maps the pinned SQLite 3.53.4 source identity; restart and deliberately attempt a controlled downgrade/library swap and require fail-closed rejection before any canonical persistence write.",
+  "promotion": "MERGED_SECURITY_DELTA_NOT_RELEASE_GATE_CLOSURE"
+}

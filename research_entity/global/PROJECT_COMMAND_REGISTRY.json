@@ -12,27 +12,104 @@
   "status_footer_protocol": "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
   "program_progress_tool": "tools/program_progress.py",
   "commands": {
-    "666": {"protocol":"research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "go": {"protocol":"research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "q12": {"protocol":"research_entity/triggers/Q12_CREATOR_ADVISOR_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "q23": {"protocol":"research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "atomic": {"protocol":"research_entity/triggers/ATOMIC_RADICAL_INVENTION_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "dump": {"protocol":"research_entity/global/DUMP_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "fusion": {"protocol":"research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "hypofusion": {"protocol":"research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "clayresearch": {"protocol":"research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "gwt": {"protocol":"research_entity/triggers/GWT_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "frank": {"protocol":"research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "emergenz": {"protocol":"research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "claycode": {"protocol":"research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "hyperposition": {"protocol":"research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "claygraph": {"protocol":"research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "unifieddb": {"protocol":"research_entity/triggers/UNIFIED_DATABASE_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"},
-    "harness": {"protocol":"research_entity/triggers/HARNESS_BUILD_PROTOCOL.md","program_target":"FRANK_V0_1","harness_is_product":false},
-    "spawn": {"protocol":"research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md","program_target":"FRANK_V0_1"}
+    "666": {
+      "protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "go": {
+      "protocol": "research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "q12": {
+      "protocol": "research_entity/triggers/Q12_CREATOR_ADVISOR_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "q23": {
+      "protocol": "research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "atomic": {
+      "protocol": "research_entity/triggers/ATOMIC_RADICAL_INVENTION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "dump": {
+      "protocol": "research_entity/global/DUMP_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "fusion": {
+      "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "hypofusion": {
+      "protocol": "research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "clayresearch": {
+      "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "gwt": {
+      "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "frank": {
+      "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "emergenz": {
+      "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "claycode": {
+      "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "hyperposition": {
+      "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "claygraph": {
+      "protocol": "research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "unifieddb": {
+      "protocol": "research_entity/triggers/UNIFIED_DATABASE_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "harness": {
+      "protocol": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "harness_is_product": false
+    },
+    "spawn": {
+      "protocol": "research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    }
   },
-  "reserved_commands": ["666","go","q12","q23","atomic","dump","fusion","hypofusion","clayresearch","gwt","frank","emergenz","claycode","hyperposition","claygraph","unifieddb","harness","spawn"],
+  "reserved_commands": [
+    "666",
+    "go",
+    "q12",
+    "q23",
+    "atomic",
+    "dump",
+    "fusion",
+    "hypofusion",
+    "clayresearch",
+    "gwt",
+    "frank",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness",
+    "spawn"
+  ],
   "rule": "All reserved commands operate on the same Frank v0.1 program. Domain specialization changes method and evidence sought, never the product target. Legacy GitHub/Reference/Clay Harness and H1/H2/H3 are not active products or stages.",
   "training_auto_start_forbidden": true,
-  "last_updated": "2026-08-10T20:39:00+07:00"
+  "last_updated": "2026-08-10T20:39:00+07:00",
+  "trigger_renames": {
+    "clay": "clayresearch"
+  }
 }

@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "late_convergent_deltas":[
+    {
+      "id":"U13_SNAPSHOT_PAIR_BARRIER_AND_SELF_REFERENCE",
+      "source":"Dr.-Unterweger PR #286 current probe unifieddb_snapshot_receipt_consistency_probe.py",
+      "status":"CURRENT_CANDIDATE_NEGATIVE_PROBE_PRESENT_TARGET_NOT_YET_PROMOTED",
+      "gap":"Current checkpoint logic can hash live UnifiedDB before inserting the receipt that records that hash, and can capture graph epoch before a later graph-file hash. The receipt may therefore refer to mutually different logical instants and its own insert can invalidate the recorded UnifiedDB file hash.",
+      "architecture_delta":[
+        "materialize immutable consistent backup artifact first",
+        "hash immutable artifact rather than live mutable DB",
+        "persist receipt outside the artifact or define an explicit canonical exclusion scheme",
+        "do not claim UnifiedDB+ClayGraph pair snapshot without an atomic barrier/validated snapshot protocol",
+        "authoritative recovery may omit ClayGraph artifact and rebuild derived Graph from admitted UnifiedDB"
+      ],
+      "falsifier":"inject valid Graph advancement between serial capture steps; snapshot receipt must either serialize/barrier the state or explicitly classify Graph as independently rebuildable"
+    },
+    {
+      "id":"U13_SEMANTIC_DEPENDENCY_MANIFEST_V1",
+      "source":"Dr.-Unterweger PR #286 current probe unifieddb_repo_head_semantic_overcoupling_probe.py",
+      "status":"CURRENT_CANDIDATE_NEGATIVE_PROBE_PRESENT_TARGET_NOT_YET_PROMOTED",
+      "gap":"Exact Git HEAD equality is broader than the semantic/runtime dependency set. An unrelated/evidence-only commit can change HEAD and invalidate otherwise identical UnifiedDB/ClayGraph verification.",
+      "architecture_delta":{
+        "audit_provenance":"retain source_repo_head as provenance",
+        "authority_identity":"bind boot/materialization validity to a content-addressed semantic dependency manifest of relevant migration/runtime/materializer blobs + canonical semantic root/contract",
+        "graph_identity":"bind Graph to canonical UnifiedDB materialization/root plus its own relevant materializer dependencies",
+        "non_dependency_repo_changes":"do not invalidate canonical DB authority"
+      },
+      "falsifier":"change only observed repo HEAD while DB bytes, schema, semantic root and dependency-manifest digests remain unchanged; authoritative open must remain valid while provenance records the newer unrelated HEAD"
+    }
+  ],
+  "derived_law":"provenance may record a superset of context, but authority validity must depend only on the minimal content-addressed semantic dependency set plus dynamic canonical state identity",
+  "promotion":"HOLD"
+}

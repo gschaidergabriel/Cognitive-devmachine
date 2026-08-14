@@ -1,0 +1,40 @@
+{
+  "type": "evidence",
+  "timestamp": "2026-08-13T16:54:00+07:00",
+  "observation": "3 commit-status gate labelled red by wp1 (claycode-opaque-parser-fidelity-v1, claycode-runtime-nominal-boundary-oob-vps, frank-provider-fence-fresh-main-vps) turn out, in their most recent fail log, to fail at an environment/bind step, not at the gate's own assertion step.",
+  "hypothesis": "the runner script /home/ai-core-node/gabriel-claude/bin/frank-laeufer/laeufer.py, on these fail-runs, worked against pinned commit sha b0f215179da4ff2584da95e36264317f15d7a371 (PR #3) whose tree is missing files the step needs (sha256sum target path, git show target path), so the step 'Bind changed bytes and compile' / 'Bind bytes and compile' / 'Bind exact bytes and environment' aborts with ENDE(1) before the gate's own check logic runs.",
+  "strongest_counter_hypothesis": "the fail could be a real assertion (gate correctly rejecting an old/incompatible commit tree on purpose) instead of an infra bug.",
+  "counter_hypothesis_check": "quoted line is a shell-level 'No such file or directory' (sha256sum) or git 'fatal: could not open ... for reading' error, not a status:FAIL_* JSON payload from the gate's own logic. compare same-run PASS steps in a later log (PR 571, sha dcd06ec6), which DO emit structured JSON like status:PASS_CLAYCODE_OPAQUE_PARSER_FIDELITY_GATE. the missing-file pattern matches known frank-central-state bug shape (state/*.sqlite missing, wrong branch) from prior package. counter-hypothesis rejected: this is infra/ENV, not a real research verdict.",
+  "banal_cause_sieve": "not permission (sudo cat worked). not stale view (all 3 separate gate scripts miss files in the same minute, same PR/sha). not single-log corruption (same missing-file pattern recurs across many older PR numbers, and is absent for newer PR numbers e.g. PR 571 sha dcd06ec6 = clean pass).",
+  "collapse": "3 of 3 inspected fail-log = ENV class error, same shape as frank-central-state bug. 0 of 3 = real research-content verdict.",
+  "measured_numbers_live": {
+    "log_dir_total_log_files": 2058,
+    "oldest_log_mtime_utc": "2026-08-12T23:35:20Z file=clay-wp02-v18-committed-replay-561-181a2f95.log",
+    "newest_log_mtime_utc": "2026-08-13T09:42:56Z file=laeufer.log",
+    "claycode-opaque-parser-fidelity-v1_total_logs": 305,
+    "claycode-opaque-parser-fidelity-v1_fail_logs_tor_rc1": 142,
+    "claycode-runtime-nominal-boundary-oob-vps_total_logs": 305,
+    "claycode-runtime-nominal-boundary-oob-vps_fail_logs_tor_rc1": 142,
+    "frank-provider-fence-fresh-main-vps_total_logs": 305,
+    "frank-provider-fence-fresh-main-vps_fail_logs_tor_rc1": 108
+  },
+  "quoted_fail_lines": {
+    "claycode-opaque-parser-fidelity-v1": {
+      "file": "claycode-opaque-parser-fidelity-v1-3-b0f21517.log",
+      "mtime_utc": "2026-08-13T06:27:32Z",
+      "line": "sha256sum: runtime/clay_wp04_type_effect_v1/FRANK_STRUCTURED_V1.lark: No such file or directory"
+    },
+    "claycode-runtime-nominal-boundary-oob-vps": {
+      "file": "claycode-runtime-nominal-boundary-oob-vps-3-b0f21517.log",
+      "mtime_utc": "2026-08-13T06:27:38Z",
+      "line": "sha256sum: runtime/claycode_eval_v1/admitted_evaluator.py: No such file or directory"
+    },
+    "frank-provider-fence-fresh-main-vps": {
+      "file": "frank-provider-fence-fresh-main-vps-3-b0f21517.log",
+      "mtime_utc": "2026-08-13T06:27:27Z",
+      "line": "fatal: could not open 'runtime/state/effect_execution_fence.py' for reading: No such file or directory"
+    }
+  },
+  "reparatur": "PENDING - not attempted, wp4 scope is read-only. candidate fix: pin gate runner checkout to a commit sha that actually contains these files, or make laeufer.py fetch the full tree (not a sparse/shallow checkout) before hashing/reading target files.",
+  "open_verification": "PENDING: confirm whether laeufer.py always fails ENV on old/superseded PR shas and only passes cleanly on fresh HEAD shas (would explain fail/pass split correlating with PR age), or whether it is intermittent regardless of sha age. not checked in this package."
+}

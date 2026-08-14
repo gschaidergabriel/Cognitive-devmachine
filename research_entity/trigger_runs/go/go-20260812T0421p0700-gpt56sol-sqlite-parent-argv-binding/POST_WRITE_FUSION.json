@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0421p0700-gpt56sol-sqlite-parent-argv-binding",
+  "trigger": "go",
+  "fusion_kind": "POST_WRITE_TARGET_AND_CONCURRENT_EVIDENCE_ADJUDICATION",
+  "original_receipt_commit": "b6ca0e4e99688c6aab9880d72c21211b581cc08d",
+  "research_head_observed_before_write": "557756cd573008524fef896a3a6e19369b6bcc25",
+  "product_main_observed": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+  "target_run": {
+    "workflow_run": 31537195188,
+    "exact_head": "b21bcc11ac4abdce95f434b15a4de8218f6d62ec",
+    "runner": "self-hosted Linux X64 / clay",
+    "job_status": "COMPLETED_SUCCESS",
+    "deterministic_gate_step": "SUCCESS",
+    "product_parent_discovery_step": "SUCCESS",
+    "artifact_count": 0,
+    "connector_log_payload": "UNAVAILABLE_EMPTY",
+    "adjudication": "MECHANISM_TARGET_RUN_PASS_PRODUCT_PARENT_OBSERVATION_UNKNOWN"
+  },
+  "why_not_product_pass": "The workflow source intentionally returns success when product_candidate_unit_count is zero, and the connector exposed no discovery stdout or uploaded artifact. Therefore the green job proves the exact-head V1/V2/V3 test/discovery program executed successfully on the accepted self-hosted lane, but it does not prove that a productive Frank/self.root systemd parent was observed or admitted.",
+  "concurrent_evidence": [
+    {
+      "product_commit": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+      "finding": "V5 hardlink-transplant rejection merged after exact-head self-hosted regression PASS; retain as defense in depth."
+    },
+    {
+      "research_commit": "557756cd573008524fef896a3a6e19369b6bcc25",
+      "finding": "Independent root-provisioning work found a precheck symlink side-effect defect and created PR #486; productive root provisioning remains unverified."
+    },
+    {
+      "research_fusion_before_this_write": "d3d5ccee3866fb5eb831e6ac45ca2baab5d33f0b",
+      "finding": "Regular byte-copy launcher transplant remains stronger counterevidence against treating local launcher pathname/link checks as canonical release-bundle identity."
+    }
+  ],
+  "grf_collapse": {
+    "argv_blindspot": "SUPPORTED",
+    "v3_repair_mechanism": "TARGET_RUN_PASS_ON_EXACT_HEAD",
+    "v3_product_parent_acceptance": "UNKNOWN",
+    "local_launcher_origin_as_whole_product_identity": "REJECT",
+    "canonical_productstart_release_bundle_identity": "RETAIN_HIGH_PRIORITY",
+    "F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "promotion_boundary": "Do not merge/promote PR #484 solely from run 31537195188. First recompose over fresh current product ancestry including merged hardlink hardening and relevant parent/root-provision candidates, then require a receipt that preserves product-parent discovery output and fails the workflow if the expected productive unit is absent or its full ProductStart/release-bundle admission is not PASS.",
+  "next_falsifier": "Fresh-current accepted Hostinger ProductStart gate that makes absence of the exact product unit a failing outcome and binds unit/ExecStartEx flags/full argv/launcher+guard bundle hashes/root anchor/mapped SQLite 3.53.4/Frank target before writable persistence; replay start/restart plus copied-stale-sibling-downgrade-library-swap-rollback controls and provenance-bound lineage recovery.",
+  "authority": {
+    "new_unusual_experiment_in_post_write": false,
+    "additional_unusual_experiment_count": 0,
+    "canonical_frank_state_mutated": false,
+    "production_effect": false,
+    "harness_authority": "NONE",
+    "training_authorized": false
+  },
+  "outcome": "RETAIN_MECHANISM_PASS_DEFER_PRODUCT_PROMOTION"
+}

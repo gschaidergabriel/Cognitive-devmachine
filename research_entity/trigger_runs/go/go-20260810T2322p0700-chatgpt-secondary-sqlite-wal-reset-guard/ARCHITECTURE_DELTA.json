@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "AD-FV01-SQLITE-WAL-RESET-2026-001",
+  "status": "CANDIDATE_SUPPORTED_AS_RELEASE_OBLIGATION_NOT_RUNTIME_PROMOTION",
+  "actor_id": "chatgpt-secondary",
+  "program": "FRANK_V0_1",
+  "affected_components": [
+    "UnifiedDB physical SQLite backing",
+    "state continuity/recovery",
+    "target VPS release gate"
+  ],
+  "source_evidence": [
+    "gschaidergabriel/Dr.-Unterweger@39ab05470efedd792048b0611a01fbbb67b41040",
+    "gschaidergabriel/Dr.-Unterweger@295cd5d101318c66b66b157677d094617b6d8bde",
+    "runtime/state/apply_current_schema.py",
+    "https://www.sqlite.org/wal.html#the_wal_reset_bug",
+    "https://www.sqlite.org/releaselog/3_51_3.html"
+  ],
+  "proposed_architecture_change": "Introduce a physical-state substrate capability gate below Clay semantic authority. The authoritative SQLite WAL backing may enter release acceptance only when the exact runtime is upstream-fixed, carries independently verified downstream provenance for the exact fix, or an adversarially verified production topology makes the documented concurrent write/checkpoint precondition unreachable.",
+  "semantic_boundary": "This is a physical persistence/recovery safety constraint. It does not create a second semantic architecture and does not move truth authority from Clay/UnifiedDB into SQLite.",
+  "current_target_state": {
+    "upstream_sqlite_semantic_version": "3.45.1",
+    "wal": true,
+    "upstream_documented_range": "3.7.0..3.51.2",
+    "vendor_backport_status": "UNKNOWN",
+    "release_disposition": "BLOCK_PENDING_PATCH_OR_TOPOLOGY_PROOF"
+  },
+  "strongest_counterhypothesis": "Existing global execution serialization or Ubuntu downstream patching already removes the practical race without a runtime upgrade.",
+  "discriminating_tests": [
+    "Target build-provenance receipt: dpkg version, _sqlite3 extension path, dynamic linked libsqlite3, CLI source/version and exact vendor patch evidence.",
+    "UnifiedDB topology discriminator: independently opened canonical-style connections, WAL mode, per-connection wal_autocheckpoint setting and production-equivalence review.",
+    "After any substrate mitigation, rerun WAL latency/contention/integrity, crash/recovery and UnifiedDB replay/effect atomicity tests."
+  ],
+  "implementation_refs": [
+    "gschaidergabriel/Dr.-Unterweger@1b8349a040768aecb5713fac06bb7ca2e66e169d",
+    "gschaidergabriel/Dr.-Unterweger@67f8fbcf9b1ff6dae0e40213ea75a0ff14688098",
+    "gschaidergabriel/Dr.-Unterweger@280b3f107a2691fc3a50414d25310a8978244c6d",
+    "gschaidergabriel/Dr.-Unterweger@9ada10c8c85b467e38c97efe6b045e96f33a799e"
+  ],
+  "rollback": "All committed changes are additive diagnostics/workflow gates using disposable databases. Revert these commits if a superior accepted physical-state safety gate replaces them.",
+  "promotion_rule": "Do not promote a clean race-canary result. Promotion requires positive patch provenance or positive topology exclusion plus matched target-VPS acceptance evidence."
+}

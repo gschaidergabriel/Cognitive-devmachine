@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "receipt_id": "TARGET-VPS-CLAYCODE-SURFACE-TYPES-COMPOSITION-20260811T124448Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "classification": "TARGET_SELF_HOSTED_UBUNTU_EXACT_COMPOSITION_PASS",
+  "subject": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "surface_pr": 314,
+    "surface_parent": "1f90de1082fbd73599f343d87d7bb85d47484d7e",
+    "types_intrinsics_pr": 313,
+    "types_intrinsics_parent": "7cc5258ddcabea279756399490f5f3eebbbf41d8",
+    "compose_commit": "6c180ab540731ef1319ec0daf45ad021bba8347d",
+    "validation_pr": 319,
+    "tested_head": "ef9cbd9d68ebe7edc00ac4c34296420de6b86daf",
+    "workflow_run_id": 31492666162,
+    "job_id": 93782647917,
+    "conclusion": "success"
+  },
+  "composition_method": {
+    "base_tree": "exact #314 tree",
+    "overlaid_exact_git_blobs_from_313": {
+      "claycode/frank_effects.clay": "737054972bc8cdeaa006949d962fce8091f9f53e",
+      "runtime/claycode_eval_v1/pure_intrinsics_reference.py": "539fd7def3072c8577285de7a5d57e62ae3491c7",
+      "tests/claycode_confirmation_differential_gate.py": "5878e572e295f2bd7402309bfaa4678b3dd5fbe2"
+    },
+    "manual_semantic_reconstruction": false,
+    "additional_integration_fix": "corpus_probe metadata revalidation only; no ClayCode semantic change"
+  },
+  "runner": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "machine_name": "digital-retina",
+    "runs_on": ["self-hosted", "Linux", "X64"],
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "lark": "1.3.1",
+    "token_permissions": ["contents:read", "metadata:read"],
+    "persisted_checkout_credentials": "ABSENT"
+  },
+  "exact_semantic_bytes_sha256": {
+    "claycode/frank_effects.clay": "37a636f7cc2fce7dc9336adc54eef699bd8ccf0e3c9a885b126906783493992a",
+    "runtime/clay_wp04_type_effect_v1/FRANK_STRUCTURED_V1.lark": "dcca9d62a8e2f7cc7aa8529c531a6398595800f42aead9c87076b245998c5d54",
+    "runtime/claycode_eval_v1/evaluator.py": "814bdfe932b4c0e07793fc41fd035812bede0036618f3b674cfe0104d6ca336c",
+    "runtime/claycode_eval_v1/syntax.py": "c683fe466c6c61d495f37859a774312e074d28998b79585f42d9275432133c3d",
+    "runtime/claycode_eval_v1/pure_intrinsics_reference.py": "d9d8c704535c9c1f8d42b48094dce5ceaf5e99d050aaa45c81cafe66319e78a8",
+    "tests/claycode_decide_effect_differential_gate.py": "c40af23cd9fc03bf554b1853811ba058469d2bc4f444827796d81c20967233a1",
+    "tests/claycode_confirmation_differential_gate.py": "898247d8f885cebfbb7ebbb1fd27eac1c3926986fbeee7d2ce4233e82a3040c3",
+    "tests/claycode_operator_survival_gate.py": "2dbb60b4254e6cf981102191181b2cdeeee768147a5e7204a2bab4811d7cb3c7"
+  },
+  "gates": {
+    "decide_effect": {
+      "status": "PASS_CLAYCODE_DECIDE_EFFECT_DIFFERENTIAL",
+      "checks": "6/6",
+      "requests": 200576,
+      "mismatches": 0,
+      "seed": 90211,
+      "wall_seconds": 7.43,
+      "max_rss_kib": 31436
+    },
+    "confirmation_and_hash": {
+      "status": "PASS_CLAYCODE_CONFIRMATION_DIFFERENTIAL",
+      "checks": "9/9",
+      "effect_request_hash_requests": 56000,
+      "effect_request_hash_mismatches": 0,
+      "confirmation_requests": 16000,
+      "confirmation_mismatches": 0,
+      "seeds": [41821, 41822],
+      "wall_seconds": 5.75,
+      "max_rss_kib": 31872,
+      "cognitive_hint_fields_rejected": [
+        "claygraph_salience",
+        "gwt_ignition",
+        "model_confidence",
+        "translator_effect_hint"
+      ]
+    },
+    "corpus": {
+      "schema_version": "1.1",
+      "coverage_percent": 90.0,
+      "sources_parsed": 36,
+      "sources_total": 40,
+      "call_target_totals": {
+        "CLAY_FN": 17,
+        "CONSTRUCTOR": 10,
+        "INTRINSIC": 26,
+        "UNRESOLVED": 320
+      },
+      "frank_effects": {
+        "CLAY_FN": 5,
+        "CONSTRUCTOR": 5,
+        "INTRINSIC": 26,
+        "UNRESOLVED": 0
+      },
+      "current_undeclared_types_requiring_clay_declaration": [],
+      "historical_undeclared_type_candidates_preserved": [
+        "EffectReceipt",
+        "VerifiedEffectReceipt",
+        "DoneReceipt"
+      ],
+      "wall_seconds": 8.37,
+      "max_rss_kib": 33276
+    },
+    "operator_survival": {
+      "status": "PASS_CLAYCODE_OPERATOR_SURVIVAL",
+      "checks": "8/8",
+      "wall_seconds": 0.30,
+      "max_rss_kib": 30208
+    }
+  },
+  "failed_predecessor_and_repair": {
+    "workflow_run_id": 31492397911,
+    "job_id": 93781776934,
+    "semantic_test_blocks": "ALL_PASS",
+    "final_gate": "FAIL",
+    "cause": "stale measurement metadata: host.py preserved historical undeclared-type candidates and corpus_probe copied them into the live receipt without checking current Clay declarations",
+    "repair_commit": "ef9cbd9d68ebe7edc00ac4c34296420de6b86daf",
+    "repair": "corpus_probe now preserves historical candidates separately and dynamically filters the live undeclared list against record/sum-type declarations in the current successfully parsed corpus",
+    "semantic_change": false,
+    "lesson": "measurement metadata must be state-derived or revalidated; a repaired semantic dependency can otherwise remain a phantom blocker"
+  },
+  "delta_vs_surface_only_314": {
+    "UNRESOLVED_before": 323,
+    "UNRESOLVED_after": 320,
+    "CONSTRUCTOR_before": 7,
+    "CONSTRUCTOR_after": 10,
+    "frank_effects_UNRESOLVED_before": 3,
+    "frank_effects_UNRESOLVED_after": 0,
+    "parse_coverage_before_percent": 90.0,
+    "parse_coverage_after_percent": 90.0
+  },
+  "current_largest_unresolved_modules_observed": [
+    {"module": "frank.runtime", "unresolved": 50},
+    {"module": "frank.instance_memory", "unresolved": 49},
+    {"module": "frank.causal_reentry", "unresolved": 23},
+    {"module": "frank.memory", "unresolved": 21},
+    {"module": "frank.self_model", "unresolved": 19},
+    {"module": "frank.hyperposition", "unresolved": 18}
+  ],
+  "fusion": {
+    "supported": [
+      "#313 and #314 are compatible under the executed composition gates on the self-hosted target lane.",
+      "The three effect receipt types are now live Clay declarations and resolve as constructors in frank.effects.",
+      "frank.effects reaches zero unresolved call targets on the composed stack.",
+      "The next F-V01-02 bottleneck is no longer those three effect types; 320 unresolved call-target occurrences remain elsewhere."
+    ],
+    "not_supported": [
+      "general ClayCode evaluator completeness",
+      "comparison-chain semantics or Bool/numeric ordering",
+      "all 320 unresolved names being true missing host intrinsics",
+      "whole Frank v0.1 acceptance"
+    ],
+    "next_discriminator": "Classify the 320 unresolved call targets by semantic kind (cross-module Clay function, record/sum constructor, enum/symbol literal, collection/member operator, trusted runtime/host intrinsic, or truly unknown) before adding host bindings. Never turn unresolved names into permissive defaults."
+  },
+  "oob_accounting": {
+    "new_oob_experiment": false,
+    "macrocycle_oob_slot": "already consumed by RELATIONAL_CHAIN_METAMORPHIC_MUTATION_MATRIX"
+  },
+  "claim_boundary": {
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "training_authorized": false,
+    "whole_frank_v0_1_acceptance": false
+  }
+}

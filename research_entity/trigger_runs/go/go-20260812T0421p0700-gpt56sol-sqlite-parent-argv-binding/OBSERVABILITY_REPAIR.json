@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0421p0700-gpt56sol-sqlite-parent-argv-binding",
+  "trigger": "go",
+  "delta_kind": "ORDINARY_EVIDENCE_OBSERVABILITY_REPAIR",
+  "research_head_observed_before_write": "eb334c7e267924b3e1f25e44f2d380318f5b475c",
+  "product_candidate_pr": 484,
+  "product_candidate_head": "55caad1901d7769d0de02c2070557566bec29ae6",
+  "problem": "The first exact-head target workflow could complete green even when product_candidate_unit_count was zero, and its discovery stdout was not retained as a downloadable artifact. This made CI success strictly weaker than productive parent admission evidence.",
+  "repair": [
+    "Track product candidate count and V3 admitted-parent count separately.",
+    "Fail closed with release_gate=FAIL_CLOSED_NO_ADMITTED_PRODUCT_PARENT when no V3-admitted product parent exists.",
+    "Upload the complete non-secret OUT directory as a 14-day GitHub Actions artifact even on failure.",
+    "Cleanup run-owned state only after artifact upload."
+  ],
+  "new_target_run": 31537662923,
+  "new_target_run_status_at_write": "QUEUED_UNKNOWN_NOT_PASS",
+  "expected_discrimination": {
+    "no_product_unit_or_no_v3_pass": "WORKFLOW_FAIL_WITH_PRESERVED_DISCOVERY_RECEIPT",
+    "at_least_one_v3_pass": "WORKFLOW_CAN_PASS_WITH_PRESERVED_DISCOVERY_RECEIPT"
+  },
+  "scope": "CI/evidence semantics only; no new unusual experiment and no production mutation.",
+  "additional_unusual_experiment_count": 0,
+  "promotion_boundary": "Even a future green run remains a candidate-parent mechanism receipt until the exact canonical ProductStart unit/bundle identity is fixed and fresh-current composition includes root provisioning, release-bundle identity, mapped SQLite, exact Frank target/state lineage and recovery controls.",
+  "F_V01_13": "IN_PROGRESS",
+  "training_authorized": false
+}

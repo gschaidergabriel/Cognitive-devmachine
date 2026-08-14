@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "correction_for": "research_entity/trigger_runs/go/go-20260812T0350p0700-gpt56-claycode-admission-precedence/RESEARCH_RECEIPT.json",
+  "reason": "The original receipt used PR head SHA as shorthand for tested identity. The workflow explicitly fetched GITHUB_SHA under a pull_request event, which is the PR merge-branch commit rather than the head commit.",
+  "authoritative_correction": {
+    "workflow_run": 31534758453,
+    "job": 93923103261,
+    "pr": 462,
+    "pr_head_sha": "ceb9e6eb449f7a7932b881e6b1fa3068800613bc",
+    "pr_base_sha": "7e60eadeffe0fb6eab907023cc337ae06d7e0d7a",
+    "pull_request_merge_sha_at_test": "5ec10ef11fe2de45f9cf04bc8c86169e44cdc21b",
+    "pull_request_merge_parents": [
+      "7e60eadeffe0fb6eab907023cc337ae06d7e0d7a",
+      "ceb9e6eb449f7a7932b881e6b1fa3068800613bc"
+    ],
+    "tested_tree_sha": "46972581857a38a12f2ad24062a43e77700bd894",
+    "final_squash_main_commit": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "final_squash_tree_sha": "46972581857a38a12f2ad24062a43e77700bd894",
+    "tree_identity_matches": true
+  },
+  "evidence": [
+    "GitHub Actions official documentation: for open mergeable pull_request workflows, GITHUB_REF is refs/pull/<n>/merge and GITHUB_SHA is the merge-branch merge commit.",
+    "The #462 workflow fetches and checks out GITHUB_SHA into its run-owned tree.",
+    "GitHub commit 5ec10ef11fe2de45f9cf04bc8c86169e44cdc21b is the verified merge of base 7e60eade... and head ceb9e6eb... and has tree 46972581857a38a12f2ad24062a43e77700bd894.",
+    "Final merged main commit 96aada947b8389f6aa4783c1ce3b5ad065c67435 has the identical tree SHA 46972581857a38a12f2ad24062a43e77700bd894."
+  ],
+  "corrected_claim": "The successful Accepted self-hosted #462 barrier run tested the PR synthetic merged source tree, and that tree is byte-identical at the Git tree level to final main@96aada947b8389f6aa4783c1ce3b5ad065c67435. This is stronger than a head-only PASS for this source-tree slice, but it still does not establish whole-Frank runtime acceptance.",
+  "superseded_claim": "Exact candidate-head ceb9e6eb... was the tested checkout identity.",
+  "effect_on_disposition": "STRENGTHENS_SOURCE_TREE_INTEGRATION_EVIDENCE; NO_PACKAGE_COMPLETION_CHANGE",
+  "training_authorization_changed": false,
+  "effect_authority": "NONE"
+}

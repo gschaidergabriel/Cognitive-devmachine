@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:07:05+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "research_repo_parent_main": "f84bc69381c514215b790fe0cc1a6b737df33ec7",
+  "supersedes_reproduction_state_in": "research_entity/trigger_runs/go/go-20260812T0205p0700-chatgpt-secondary-loop-needle-composition/RESEARCH_RECEIPT.json",
+  "work_packages": [
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+    "F-V01-07-NEEDLE-TRANSLATOR",
+    "F-V01-09-EFFECT-AUTHORITY"
+  ],
+  "grf_collapse": {
+    "prior_counterevidence": "First target run 31525563179 was red solely because negative metadata go_oob_experiment_added=false was mistakenly counted as a boolean PASS check, while all 10 material mechanism assertions were true.",
+    "repair": "Corrected test head 3defec3e8882406592d05443c345eff0d3498a25 removed only the metadata field from the PASS dictionary and kept go_oob_experiment_added=false as explicit output metadata.",
+    "reproduction": "Exact corrected head executed on accepted self-hosted Linux target run 31525974456 and completed SUCCESS.",
+    "outcome": "PROMOTE_TO_TARGET_SUPPORTED_COMPOSITION_CANDIDATE",
+    "confidence": "HIGH_FOR_EXACT_TESTED_COMPOSITION; LOW_FOR_PRODUCTION_BINDING_PRODUCERS_AND_EXTERNAL_EFFECTS"
+  },
+  "target_evidence": {
+    "workflow_run_id": 31525974456,
+    "job_id": 93894266127,
+    "conclusion": "SUCCESS",
+    "tested_sha": "3defec3e8882406592d05443c345eff0d3498a25",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "exact_ancestry": {
+      "needle_v2_parent": "27b301bebe848627c0b65b11d81a8fba3fe8e3f0",
+      "loop_core_parent": "746640bda388aebf240c965afee744ce332f6a9a",
+      "both_proven_ancestors": true
+    },
+    "exact_blobs": {
+      "loop_core_slice.py": "971a4a595cc86f9b35f245a15ca3b0ba05fba05f",
+      "frank_needle_v1_candidate.py": "25d62fc09674593b897e21b73dc1a35de27b92d4",
+      "frank_needle_v2_phase_split_candidate.py": "c0a902e66afc749e3a3794163cbf79e765772448",
+      "frank_loop_core_needle_v2_composition_gate.py": "0e0afbcefd1dba47a17f78e5e3a9f860036fd65b"
+    },
+    "result": {
+      "status": "PASS_LOOP_CORE_NEEDLE_V2_COMPOSITION",
+      "checks": "10/10",
+      "failed_checks": [],
+      "original_loop_core_status": "PASS_LOOP_CORE_CAUSAL_SLICE",
+      "original_loop_core_checks": "7/7",
+      "needle_preview_count": 6,
+      "needle_adapter_invocation_count": 6,
+      "all_composed_plans_preserve_external_hard_fields": true,
+      "needle_output_never_self_labels_verified": true,
+      "shuffled_breaks_before_any_needle_preview": true,
+      "provenance_broken_still_refuses_at_reentry": true,
+      "no_reentry_still_never_admits_learning": true,
+      "truthful_arm_still_completes": true,
+      "external_effect": false,
+      "canonical_state_mutation": false,
+      "go_oob_experiment_added": false,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    },
+    "artifact": {
+      "id": 9114993853,
+      "zip_sha256": "abea6cd660e9acf88106ef67cdd2c69393d67be2b88174097eeac8003da20b4d",
+      "size_bytes": 2770,
+      "composition_json_sha256": "10129616ad4450be03375e63c011ba7085bc36e5b736858752dc40a820c64e38"
+    }
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_NOT_PROMOTED_TO_PRODUCTION",
+    "mechanism": "GWT receiver use -> Needle V2 non-authoritative preview -> ClayCode effect authority -> reservation -> COMMITTING attempt fence -> exact post-authority Needle bind -> adapter RETURNED -> independent verified outcome -> provenance-bound re-entry -> DONE -> admitted learning",
+    "why_supported": "The exact composed candidate preserved the original four-arm loop discriminator and all external hard-field/verified-outcome separations on the target runtime.",
+    "strongest_remaining_counterhypothesis": "Test-derived capability/reservation/execution-generation bindings may hide integration faults that appear when canonical production producers, real adapters/providers, timeout/retry/idempotency, crash/restart and recovery are wired.",
+    "next_falsifier": "Replace test-derived hard-binding producers with canonical production capability/reservation/execution-generation producers and run the same TRUTHFUL/SHUFFLED/PROVENANCE_BROKEN/NO_REENTRY composition controls plus crash/restart and provider-uncertainty reconciliation. Do not add another unusual experiment to this completed GO macrocycle."
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "needle_v2_draft_pr": 421,
+    "composition_draft_pr": 426,
+    "composition_branch": "chatgpt/go-loop-needle-composition-20260812",
+    "state": "DRAFT_TARGET_SUPPORTED_NOT_MAIN"
+  },
+  "unusual_experiment": {
+    "count_for_macrocycle": 1,
+    "id": "PREVIEW_CROWN_SWAP_AFTER_AUTHORITY_GAP",
+    "result": "PASS_PREVIEW_CROWN_SWAP_FENCED",
+    "additional_oob_in_composition": false
+  },
+  "nonclaims": [
+    "No production hard-binding producers are claimed by the composition test.",
+    "No real external provider/tool effect was executed.",
+    "No canonical Frank database was mutated.",
+    "No F-V01 package status or workspace completion state is changed by this receipt.",
+    "No whole Frank v0.1 acceptance is claimed.",
+    "No final/paid model training is authorized or started.",
+    "Frank/self.root receives no Harness mutation authority."
+  ]
+}

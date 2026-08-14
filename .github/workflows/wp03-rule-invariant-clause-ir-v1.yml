@@ -1,0 +1,50 @@
+name: WP03 Rule Invariant ClauseIR V1
+
+on:
+  push:
+    branches:
+      - chatgpt/claycode-wp03-rule-invariant-clause-ir-20260810
+    paths:
+      - 'tools/claycode_wp03_rule_invariant_clause_ir_v1.py'
+      - 'tools/test_claycode_wp03_rule_invariant_clause_ir_v1.py'
+      - 'tools/claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'research_entity/claycode/autonomous/SUPERVISOR_STATE.json'
+      - '.github/workflows/wp03-rule-invariant-clause-ir-v1.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/claycode_wp03_rule_invariant_clause_ir_v1.py'
+      - 'tools/test_claycode_wp03_rule_invariant_clause_ir_v1.py'
+      - 'tools/claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'research_entity/claycode/autonomous/SUPERVISOR_STATE.json'
+      - '.github/workflows/wp03-rule-invariant-clause-ir-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  clause-ir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Install exact parser dependency
+        run: python -m pip install 'lark==1.2.2'
+      - name: Compile Python
+        run: python -m py_compile tools/claycode_wp03_rule_invariant_clause_ir_v1.py tools/test_claycode_wp03_rule_invariant_clause_ir_v1.py
+      - name: Execute real G9 V18 ClauseIR gate
+        run: python tools/test_claycode_wp03_rule_invariant_clause_ir_v1.py

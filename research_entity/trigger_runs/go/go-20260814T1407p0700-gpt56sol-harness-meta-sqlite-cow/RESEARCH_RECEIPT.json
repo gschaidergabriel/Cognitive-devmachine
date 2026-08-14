@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1407p0700-gpt56sol-harness-meta-sqlite-cow",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "research_repo_parent_before_write": "9f7d951b41ad56842c9bfe5b067a2b662ae3b1f9",
+  "target_repo_observed_main": "dc2af6421355c899ee076a3e8089e8f6407a1d54",
+  "center_dispatch": {
+    "interrupt_event": "research_entity/rooms/rooms/harness/events/evt-20260814T071016513317Z-3326771d.json",
+    "work_order": "RAE_META_BACKFILL",
+    "selected_room": "harness",
+    "selected_lane": "harness",
+    "lane_size": 1,
+    "selected_role": "SOLO_RESEARCHER",
+    "target_file": "research_entity/knowledge_micro_packets/harness/KMP-HYPOTHESIS-TEST-ADEQUACY-20260809.md",
+    "completion_test": "No missing RAE_META remains in the selected harness knowledge_micro_packets folder.",
+    "result": "PASS_FOLDER_LOCAL",
+    "commit": "9f7d951b41ad56842c9bfe5b067a2b662ae3b1f9",
+    "content_sha": "46843f50b6f9ad4f8bca8a46560cd0386d4fff94",
+    "evidence_boundary": "The harness folder contains exactly one Markdown packet at the observed main state and that packet now contains a JSON RAE_META block with packet_id. The repository-wide materializer was not executed because other advertised lanes remain independently open."
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite Write-Ahead Logging documentation",
+      "claim_used": "The WAL-reset corruption bug affects SQLite 3.7.0 through 3.51.2 and is fixed in 3.51.3 and later, with listed backports.",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite release history",
+      "claim_used": "SQLite 3.51.3 explicitly fixes the WAL-reset database corruption bug; 3.53.x is therefore in a fixed upstream line.",
+      "url": "https://www.sqlite.org/changes.html"
+    }
+  ],
+  "highest_value_security_question": {
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "observed_anchor": "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py on target repo main",
+    "source_blob_sha": "3a317aa256f17ef316580947e9a44e43aca6fe1a",
+    "hypothesis": "Backing-file path/device/inode identity plus stable backing-file hash is sufficient to prove the SQLite code bytes actually resident in the observed process.",
+    "strongest_counterhypothesis": "A MAP_PRIVATE/COW process mapping can diverge in resident bytes while path/device/inode and backing-file hash remain unchanged, so file-identity attestation alone cannot prove process-memory byte identity.",
+    "current_attestor_scope": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "PRIVATE_COW_MAPPED_SQLITE_MEMORY_COUNTERWORLD",
+    "reversible": true,
+    "productive_hostinger_mutation": false,
+    "canonical_state_mutated": false,
+    "target_repo_branch": "chatgpt/go-sqlite-cow-memory-counterworld-20260814",
+    "test_commit": "16eb2484eef682805fc9db7812b6f475232147f9",
+    "workflow_commit": "ed6eb8e9d478832c8065ac570a6eb5072085c899",
+    "actions_run_created": false,
+    "local_discriminator": {
+      "execution_class": "LOCAL_EXACT_RELEVANT_LOGIC_MIRROR",
+      "status": "PASS_COUNTERWORLD",
+      "file_sha256_unchanged": true,
+      "mapping_identity_unchanged": true,
+      "private_mapped_bytes_diverge": true,
+      "interpretation": "The counterworld survives the backing-file identity primitives. This is not an exact repository import test and not target-VPS evidence."
+    },
+    "hypothesis_status": "REFUTED_FOR_PROCESS_MEMORY_BYTE_IDENTITY_CLAIM",
+    "counterhypothesis_status": "SUPPORTED_SYNTHETICALLY",
+    "narrow_attestor_claim_status": "UNCHANGED_NOT_REFUTED",
+    "reason": "The current attestor explicitly claims mapped backing-object identity for one observed process generation, not full process-memory byte integrity."
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "affected_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "delta": "Before any final release claim equates mapped SQLite backing-object identity with actual executed in-memory code identity, either add a measured process-memory/tamper boundary or keep the higher-level receipt explicitly scoped to backing-object identity.",
+    "strongest_counterargument": "Private COW modification requires a write-capable in-process or process-tampering capability and may be outside the intended threat model; adding memory-byte attestation could add complexity without protecting a declared trust boundary.",
+    "next_falsifier": "On the accepted target lane, test the real Frank service against a controlled private-page/code-tamper attempt and measure whether the actual service hardening prevents the intervention or whether a stronger executable-memory integrity receipt is needed.",
+    "rollback": "Do not merge the experiment branch or change release semantics unless an exact target test demonstrates material relevance."
+  },
+  "negative_results_preserved": [
+    "No GitHub Actions run was created for the connector-authored experiment workflow commit; therefore no CI, self-hosted runner, or Hostinger PASS is claimed.",
+    "The private-COW result does not invalidate the current attestor's deliberately narrow backing-object identity scope."
+  ],
+  "research_disposition": "CENTER_LANE_COMPLETE_PLUS_SECURITY_COUNTERWORLD_CANDIDATE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "together_api_used": false
+}

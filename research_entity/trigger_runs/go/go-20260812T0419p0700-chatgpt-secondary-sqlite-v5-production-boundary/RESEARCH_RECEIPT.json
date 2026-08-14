@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0419p0700-chatgpt-secondary-sqlite-v5-production-boundary",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+    "latest_relevant_commit_message": "security(storage): reject SQLite V5 launcher hardlink transplant (#482)",
+    "latest_relevant_target_run": 31537077376
+  },
+  "observed_reality": [
+    "Canonical FRANK_V0_1 workspace still records F-V01-13 IN_PROGRESS and the older accepted-target SQLite 3.45.1 WAL release gate.",
+    "Current target repository has advanced beyond that workspace text: merged SQLite 3.53.4 capability-parity runtime, V5 release identity fence, root-anchored V5 guard/launcher candidate, pre-shell loader-boundary hardening, symlink-transplant rejection and hardlink-transplant rejection are present in recent main history.",
+    "Latest main explicitly keeps F-V01-13 open pending productive fixed runtime/root anchor/service and recovery evidence.",
+    "The read-only production-parent inventory evidence states that test-runner infrastructure must not be confused with a productive Frank parent and does not establish that such a production parent exists."
+  ],
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation - WAL-reset bug",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug",
+      "claim_used": "The WAL-reset corruption race affects SQLite 3.7.0 through 3.51.2 and is fixed in 3.51.3 and later, with listed older backports."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "claim_used": "SQLite 3.53.4 contains the WAL-reset fix and publishes SQLITE_SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "hypothesis": "The WAL-specific version defect can be removed by the already-built 3.53.4 runtime, but F-V01-13 can only advance to production release evidence when the productive Frank service path is forced through the accepted V5 launcher/root anchor and the exact loaded SQLite identity survives restart/recovery checks.",
+  "strongest_counterhypothesis": "The V5 launcher/guard machinery may remain a parallel candidate path while the productive process starts through another parent or environment boundary, so candidate correctness and target-run tests would not prove productive WAL safety.",
+  "discriminating_test": {
+    "name": "PRODUCTIVE_SERVICE_FIXED_SQLITE_V5_END_TO_END_ATTESTATION",
+    "required_observations": [
+      "identify the actual non-runner Frank production systemd unit/process parent",
+      "prove its ExecStart/parent boundary reaches the accepted V5 launcher from trusted OS-owned deployment paths",
+      "prove /etc/frank-v0.1/sqlite-runtime-anchor-v1.json exists with required owner/mode/inode semantics",
+      "prove child admission reports accepted SQLite 3.53.4 version/source-id plus anchor/manifest/library hashes",
+      "prove /proc/self/maps loaded libsqlite object hash matches the anchored library",
+      "restart the productive service and prove the same admitted identity and semantic-state lineage are selected",
+      "fail closed on an absent/mismatched anchor or unaccepted runtime identity"
+    ],
+    "promotion_rule": "Do not close F-V01-13 from builder, candidate, synthetic-merge or Actions-runner evidence alone."
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "FORGED_PWD_RELATIVE_LAUNCH_COUNTERWORLD",
+    "purpose": "Probe whether a caller can forge inherited PWD during relative /bin/sh launcher execution so SELF_PATH=$PWD/$0 resolves sibling guard state in an attacker-selected directory.",
+    "environment": {
+      "sandbox_kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+      "shell": "/usr/bin/dash",
+      "uid": 0,
+      "target_vps": false
+    },
+    "intervention": "Run a relative shell probe from a real directory while injecting PWD pointing at a separate fake directory containing a same-named probe.",
+    "baseline_expected": "SELF_PATH follows the real current working directory.",
+    "counterworld_expected": "If inherited PWD is trusted, SELF_PATH follows the fake directory and resolves the wrong inode.",
+    "observed": {
+      "direct_exec_shell_pwd": "real working directory",
+      "explicit_bin_sh_shell_pwd": "real working directory",
+      "resolved_inode": "real probe inode in both cases"
+    },
+    "status": "REFUTED_IN_LOCAL_DASH_SANDBOX",
+    "rollback": "temporary directories deleted",
+    "canonical_state_mutated": false,
+    "limitations": [
+      "not executed on accepted target VPS",
+      "does not prove all shell implementations normalize PWD identically",
+      "does not close the productive service/root-anchor gate"
+    ]
+  },
+  "collapse": {
+    "sqlite_3_53_4_contains_required_wal_reset_fix": "VERIFIED_UPSTREAM",
+    "current_main_contains_v5_candidate_identity_and_transplant_hardening": "VERIFIED_REPOSITORY",
+    "forged_pwd_counterworld": "REJECT_FOR_LOCAL_DASH_ENVIRONMENT",
+    "productive_fixed_runtime_is_active": "UNKNOWN_NOT_PROVEN",
+    "F-V01-13": "KEEP_IN_PROGRESS"
+  },
+  "architecture_delta": "NO_CHANGE_TO_V5_MECHANISM_FROM_THIS_CYCLE; REPRIORITIZE_TO_PRODUCTIVE_SERVICE_ROOT_ANCHOR_END_TO_END_RECEIPT",
+  "next_falsifier": "Read-only productive service inventory followed, only if an actual production parent is identified and authority permits, by exact V5 end-to-end admission/restart receipt. If no production parent/anchor exists, remain fail closed and treat provisioning as the blocker rather than adding more candidate guards.",
+  "research_disposition": "SUPPORTED_REPRIORITIZATION_PLUS_NEGATIVE_OOB_RESULT",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

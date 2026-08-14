@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "event_type": "FRANK_V0_1_CODE_DELTA",
+  "status": "EXECUTED_ON_TARGET_VPS / PULL_REQUEST_OPEN / NO_PROMOTION_REQUESTED",
+  "created_at": "2026-08-11T14:25:00+07:00",
+  "actor": "claude-code / Anthropic / Claude Opus 5 (1M)",
+  "actor_role": "EXTERNAL_CONTRIBUTOR_NOT_A_BOOTED_CLAY_ORGAN",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "report": "research_entity/reports/20260811T1425p0700_STORAGE_TRUTH_AXIS_B_AND_PROCESS_CRASH_ORACLE.md",
+  "pull_request_branch": "gschaidergabriel/Dr.-Unterweger : storage/fixpresence-axisb-and-crash-oracle",
+  "work_package_reentry": ["F-V01-13-SECURITY-RECOVERY-OBSERVABILITY", "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"],
+  "discriminators_addressed": [
+    "#2 FixPresenceVector axis B - bind live process to exact loaded libsqlite",
+    "#3 crash/restart/concurrency storage oracle against the exact selected runtime"
+  ],
+  "headline": "The loaded SQLite object is now uniquely bound, and process-crash durability is measured rather than assumed: 12,807 acknowledged commits across 10 SIGKILL cycles, 0 lost, 0 phantom.",
+  "code_delta": [
+    "runtime/frank_storage_truth_v1/loaded_sqlite_identity_probe.py",
+    "runtime/frank_storage_truth_v1/wal_crash_restart_oracle.py"
+  ],
+  "why_this_first": "The single-instance presence PASS rests entirely on SQLite BEGIN IMMEDIATE and epoch fencing, and the V17 invariant rests on six schema RAISE(ABORT) triggers. Both were resting on an unverified storage foundation while F-V01-13 listed exactly that as open.",
+  "axis_b_result": {
+    "checks": "6/6",
+    "realpath": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "build_id": "92f59a77085057d1b9de43e943ba6231dc7ae452",
+    "sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "size_bytes": 1468440,
+    "owning_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+    "linkage": "SHARED_LIBSQLITE_MAPPED",
+    "method_note": "reads /proc/self/maps, not ldd - ldd reports what a fresh link would resolve, not what is currently mapped",
+    "provenance_finding": "runtime SQLITE_SOURCE_ID ends '...257ccalt1', which is not an upstream 3.45.1 digest. The running binary cannot be mapped to an upstream source tree by source id alone.",
+    "concludes": "NEITHER_FIXED_NOR_VULNERABLE - identity only. Version equality is not fix presence; package provenance is not object identity."
+  },
+  "crash_oracle_result": {
+    "checks": "6/6",
+    "cycles": 10,
+    "writers_per_cycle": 6,
+    "synchronous_levels": ["NORMAL", "FULL"],
+    "acknowledged_commits": 12807,
+    "lost_acknowledged_commits": 0,
+    "phantom_commits": 0,
+    "committed_but_unlogged_in_flight": 9,
+    "integrity_ok_after_every_kill": true,
+    "writable_after_every_kill": true,
+    "throughput_note": "NORMAL sustained ~1500-2800 commits/cycle, FULL ~415-743 - roughly 3-4x cost of durability on this host",
+    "claim_boundary": "SIGKILL does not discard the OS page cache. Proves PROCESS-crash durability, concurrency safety and recoverability. Does NOT prove power-loss or kernel-panic durability, and is not a targeted discriminator for the upstream WAL-reset defect."
+  },
+  "instrument_bugs_found_and_fixed": [
+    "WAL capability probed on an in-memory database, which legitimately refuses WAL - a healthy build read as a false negative. Capability probes must run on the storage class they make claims about.",
+    "Post-crash writability probed through pysqlite's implicit transaction management - the explicit BEGIN IMMEDIATE collided with pysqlite's own BEGIN and read as 'not writable after crash' in all 10 cycles. A storage claim measured through a driver's convenience layer measures the driver.",
+    "The phantom check was unsound: a transaction that COMMITs and is killed before its log fsync is present-but-unacknowledged by design. 6 false positives. An oracle must model its own observation window or it reports the window as a defect."
+  ],
+  "instrument_bug_note": "All three were defects of the measuring instrument, not of the system under test. Had they not been chased down, this event would have reported a SQLite durability failure that does not exist. Recorded per messgeraet-vor-glauben discipline.",
+  "still_open_under_f_v01_13": [
+    "power-loss / kernel-panic durability - needs device-level fault injection, not SIGKILL",
+    "axis C: a TARGETED behavioural discriminator for the upstream WAL-reset defect. Neither axis A nor axis B substitutes for it. This remains the honest gap.",
+    "the selection decision on private SQLite 3.53.4, still CANDIDATE_CAPABILITY_ONLY"
+  ],
+  "recommended_next": "Run the crash oracle against the private 3.53.4 build and compare, so the selection decision rests on differential durability evidence on this exact host rather than on a version number and a bounded smoke test.",
+  "ledger_entries": {
+    "CLAIMS.jsonl": ["C-STORAGE-001", "C-STORAGE-002", "C-STORAGE-003", "C-STORAGE-004"],
+    "NEGATIVE_RESULTS.jsonl": ["N-STORAGE-001", "N-STORAGE-002", "N-STORAGE-003"],
+    "EVIDENCE_GRAPH.jsonl": ["E-STORAGE-001", "E-STORAGE-002"]
+  },
+  "scope_limits": [
+    "Both probes ran in a disposable /tmp copy. Runner working tree not modified, no canonical database touched, no external effect performed.",
+    "Results are specific to the object identified above on this host and filesystem. They do not transfer to another build or mount by version equality.",
+    "whole_frank_v0_1_acceptance: NOT_CLAIMED. Disposition belongs to Clay and the project owner."
+  ]
+}

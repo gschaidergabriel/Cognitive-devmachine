@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_ARCHITECTURE_DELTA_V1",
+  "run_id": "go-20260811T2306p0700-chatgpt-secondary-typed-lineage-root",
+  "status": "CANDIDATE_TESTING",
+  "created_after_refresh": {
+    "clay_head_observed": "7065667f0d21d2a69ff4ab3e92b481d893e36324",
+    "target_main_observed": "94bc32c65520c984f62b5aad4c5723a4d8b2c357"
+  },
+  "affected_work": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "source_negative_evidence": {
+    "pr": 304,
+    "head": "48264aa64ab2fc315b044d1e3575012564a3ad89",
+    "target_run": 31438521066,
+    "result": "Target probe reproduced that V1 semantic root changes for user_version-only and unclassified runtime meta bookkeeping changes while ordinary application state remains unchanged."
+  },
+  "repair": {
+    "pr": 380,
+    "branch": "chatgpt/go-semantic-root-manifest-v2-repair-20260811",
+    "head": "78d3254ad2566387dd92a58506cac30154ded92a",
+    "target_run": 31511274107,
+    "target_status": "QUEUED",
+    "go_oob_experiment_added": false,
+    "mechanism": [
+      "semantic_root_protocol is explicit",
+      "semantic_root_manifest_id is content-addressed over exact expected materialized UnifiedDB schema digest plus explicit inclusion policy",
+      "actual schema must equal manifest expected schema before root return",
+      "application schema and ordinary typed table rows remain semantic",
+      "meta row values are explicitly operational/materialization provenance and excluded",
+      "sqlite_sequence remains semantic because AUTOINCREMENT future state is causal",
+      "sqlite_stat remains non-semantic planner state",
+      "user_version/application_id/encoding are observed but excluded from logical semantic root",
+      "ClayGraph remains excluded derived topology"
+    ]
+  },
+  "hypothesis": "Binding root scope to a content-addressed schema+policy manifest removes accidental SQLite-header/meta bookkeeping sensitivity while preserving semantic-data and schema sensitivity, and supplies a typed producer identity for the selected-lineage consumer.",
+  "strongest_counterhypothesis": "The manifest can still encode a wrong ontology. Excluding all meta rows is valid only while semantic state remains in typed application tables; any intentional semantic use of meta must force an explicit policy/manifest transition. The manifest prevents silent scope drift, not semantic truth by decree.",
+  "composition": {
+    "producer": "PR#380 semantic_root_protocol + semantic_root_manifest_id + semantic_root_hash",
+    "consumer": "PR#372 typed selected lineage head",
+    "single_winner": "PR#267 CAS/immutable history",
+    "external_rollback_floor": "PR#240 and diagnostic PR#273 class of external selector",
+    "boot_continuity": "PR#231 successor required",
+    "artifact_provenance": "separate trusted-builder/build-attestation gate",
+    "rule": "Do not merge these authority domains into one hash; compose independently verified receipts."
+  },
+  "fresh_parallel_evidence": {
+    "target_main_storage": "PR#359 merged as 94bc32c65520c984f62b5aad4c5723a4d8b2c357 after these stacked semantic branches were cut",
+    "clay_unifieddb_recovery": "7065667f0d21d2a69ff4ab3e92b481d893e36324 records target-supported V4 process-crash recovery slice",
+    "implication": "If semantic V2 candidates pass, rebase/compose onto fresh main and rerun exact target gates; do not treat stacked-parent target evidence as final current-main product evidence."
+  },
+  "next_gate": "Both PR#372 and PR#380 must execute exact-head target workflows, then a fresh-main composition candidate may consume an admitted/recovery-verified producer receipt and prove restart/rollback continuity without granting effect/Harness authority.",
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

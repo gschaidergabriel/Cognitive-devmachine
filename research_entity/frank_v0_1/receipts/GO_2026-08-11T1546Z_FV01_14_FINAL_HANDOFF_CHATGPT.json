@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-2026-08-11T1546Z-FV01-14-FINAL-HANDOFF-CHATGPT",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T15:46:38Z",
+  "created_at_local": "2026-08-11T22:46:38+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "work_package": "F-V01-14-TRAINING-DATA-HELDOUT",
+  "status": "OPEN_HANDOFF_AFTER_MATERIAL_DELTA",
+  "current_target_repo_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+  "active_parent": {
+    "pr": 347,
+    "state": "OPEN_DRAFT_MERGEABLE",
+    "head": "4b907a9287c07b43957a2002fd2458660301dbe3",
+    "original_base": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "head_fix": "exact PR-head checkout is now integrated directly into parent branch",
+    "current_main_gap": {
+      "ahead_commits_since_original_base": 10,
+      "path_overlap_with_parent_fv01_14_files": false,
+      "observed_main_delta_family": "ClayCode evaluator/package substrate",
+      "required_action": "refresh/rebase/integrate against current main and rerun before promotion"
+    }
+  },
+  "target_evidence": {
+    "prior_merge_integration_run": {
+      "run_id": 31507749378,
+      "tested_sha": "ef6aa2561f6682beaec6e5e3de16ca6ab9daa5a4",
+      "identity_class": "PULL_REQUEST_SYNTHETIC_MERGE_SHA_NOT_EXACT_HEAD",
+      "runner": "clay / digital-retina / Linux X64",
+      "candidate_gate": "20/20 PASS",
+      "training_export_gate": "5/5 PASS",
+      "oob": "SEMANTIC_TWIN_SPLIT_LEAK PASS",
+      "zero_width_cross_worker_regression": "PASS_FUSED_LEAKAGE_SURFACE_FENCE",
+      "credit": "MERGE_INTEGRATION_EVIDENCE_ONLY"
+    },
+    "current_exact_head_run": {
+      "run_id": 31508396616,
+      "workflow": "Frank training data freeze V1 VPS",
+      "expected_head": "4b907a9287c07b43957a2002fd2458660301dbe3",
+      "status_at_handoff": "QUEUED",
+      "conclusion": "UNKNOWN",
+      "exact_head_target_pass_claimed": false
+    }
+  },
+  "single_oob_for_this_worker_invocation": {
+    "count": 1,
+    "experiment": "UNICODE_FORMAT_CONTROL_GHOST_LEAK",
+    "intervention": "U+200B ZERO WIDTH SPACE inserted in TRAIN alias of HELDOUT content",
+    "local_duplicate_lane_result": "FENCED",
+    "parent_adjudication": "NO_BENEFIT_PARENT_ALREADY_FENCES_CLASS",
+    "parent_mechanism": "leakage surface removes Unicode Cf before cross-split hashing",
+    "architecture_action": "NO_NEW_MECHANISM",
+    "second_oob_created": false
+  },
+  "historical_corpus_archaeology": {
+    "family": "frank-v26.1",
+    "master_examples": 4113,
+    "train_examples": 2039,
+    "dev_examples": 203,
+    "test_examples": 207,
+    "leakage_clusters": 1858,
+    "historical_reported_split_cluster_overlap": 0,
+    "adversarial_cases": 49,
+    "disposition": "QUARANTINE_FOR_CURRENT_SEMANTIC_MIGRATION_REVIEW",
+    "reason": "Historical validation does not prove compatibility with current owner-fixed ClayCode-native Frank v0.1 semantics."
+  },
+  "unique_fusion_into_parent": {
+    "review_id": 4907984455,
+    "decision": "Reuse parent semantic_audit_receipt_hash as the extension point rather than introduce a competing freeze architecture.",
+    "required_external_audit_content": [
+      "current owner-fixed training semantic contract identity/version/hash",
+      "migration/compatibility disposition PASS|FAIL|UNKNOWN",
+      "provenance-complete semantic-family assignment evidence",
+      "independent contamination review including paraphrase/translation risks"
+    ],
+    "fail_closed_rule": "UNKNOWN semantic compatibility or contamination review blocks actual final corpus freeze."
+  },
+  "external_research_synthesis": {
+    "supported": "Exact/near-duplicate and provenance controls are useful but surface overlap alone is insufficient to prove semantic decontamination under rephrasing or cross-language transfer.",
+    "architecture_consequence": "Keep hard deterministic freeze/isolation checks separate from independent semantic contamination and current-generation compatibility audits."
+  },
+  "authority": {
+    "training_authorized": false,
+    "training_started": false,
+    "real_final_corpus_frozen": false,
+    "final_training_data_gate_promoted": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "stop_reason": "The implementation lane is owned by active parent PR #347, the current exact-head target run is queued on the shared self-hosted runner, and further duplicate implementation would violate coordination law. Next useful evidence depends on that runner result and current-main integration.",
+  "next_frontier": [
+    "Inspect run 31508396616 when it executes and require tested SHA == parent head.",
+    "Refresh/rebase parent #347 against current main a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3 and rerun target gates.",
+    "Define/hash the current owner-fixed training semantic contract inside the external semantic audit receipt.",
+    "Migrate/adjudicate historical v26.1 rows/clusters against that contract; preserve rejected contradictions and ancestry.",
+    "Bind the actual intended train/dev/heldout/adversarial artifacts byte-for-byte and perform independent semantic contamination review.",
+    "Keep final/paid training blocked until explicit owner authorization."
+  ],
+  "result": "MATERIAL_RESEARCH_DELTA_COMMITTED_AND_TARGETED_TO_ACTIVE_PARENT",
+  "promotion": "NOT_PROMOTED"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "candidate":"TRSE-001",
+  "refresh_head_observed":"eb58403674e37e9a99bdd035bad33f5d1b73cfe0",
+  "late_material_delta":[
+    {"source":"UnifiedDB deeper replay/projection selection experiments","finding":"Identical durable bytes can yield different current-result sets solely because ambient wall clock advances; current work therefore introduces an explicit replay/as-of clock obligation.","trse_consequence":"Matched baseline/perturbation twin runs must bind the same admitted state snapshot AND the same ReplayClock/as_of identity. Otherwise time-dependent view drift can alias as perturbation amplification."},
+    {"source":"DCA-001 final run","finding":"DCA selector architecture was refuted; only typed currentness/completeness boundary remains as a possible interface experiment.","trse_consequence":"No architecture collision. A future TRSE readout may consume bounded current views only if their currentness is independently valid; TRSE itself does not solve context completeness."}
+  ],
+  "candidate_invalidated":false,
+  "reason":"Late evidence strengthens experimental controls and temporal identity but does not overturn the retained full-return/transverse stability law. Distinct-organ verdict remains killed.",
+  "new_required_binding":["state_snapshot_or_semantic_head","cycle_id","reference_phase","perturbation_basis","ReplayClock/as_of","estimator_id","baseline_refs"],
+  "packet_status_after_refresh":"DISTINCT_ORGAN_KILLED_TEST_LAW_RETAINED",
+  "target_product_change":"NONE"
+}

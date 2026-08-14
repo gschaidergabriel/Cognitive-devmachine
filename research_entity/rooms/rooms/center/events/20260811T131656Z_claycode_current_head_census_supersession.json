@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "event_type": "RESEARCH_EVIDENCE_SUPERSESSION",
+  "event_id": "claycode-current-head-census-20260811T131656Z",
+  "created_at_utc": "2026-08-11T13:16:56.784Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_cut": {
+    "canonical_head_observed": "6e25db625fd80a84a7bea7b106ee92e6bce8ec9b",
+    "target_pr": 319,
+    "target_head": "17a6350111736068b1c43be31e1066b0d9f9aea0",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "mergeable": true,
+    "updated_at": "2026-08-11T13:07:17Z"
+  },
+  "supersedes": {
+    "event_commit": "4e1ade6831fb0d47eae34fb3f8f3d6f1592fcc11",
+    "event_blob": "c7f1078c2094840a62e70f17463c4cd218b4ddf1",
+    "event_path": "research_entity/rooms/rooms/center/events/20260811T131411Z_claycode_exact_head_validation_delta.json",
+    "correction": "Run 31494397846 was a real accepted-target pass for tested SHA ef541842, but PR319 head had already advanced to 17a635 when the event was written. Therefore exact-current-head wording for ef541842 is superseded, not the test result itself."
+  },
+  "current_head_delta": {
+    "base_tested_sha": "ef541842cb7206d84e34566bce19d0184d8255cd",
+    "current_head": "17a6350111736068b1c43be31e1066b0d9f9aea0",
+    "commits_ahead": 1,
+    "changed_file": ".github/workflows/claycode-global-symbol-census-gh-hosted.yml",
+    "semantic_runtime_or_clay_files_changed": false,
+    "head_commit_message": "ci(replicate): preserve symbol census diagnostics as artifact"
+  },
+  "current_head_target_receipts": [
+    {
+      "workflow": "ClayCode Surface Types Composed Validation",
+      "run": 31494556210,
+      "job": 93789613444,
+      "result": "SUCCESS",
+      "runner": "clay/digital-retina",
+      "tested_sha": "17a6350111736068b1c43be31e1066b0d9f9aea0",
+      "executable_steps": "13/13",
+      "results": {
+        "decide_effect_requests": 200576,
+        "decide_effect_mismatches": 0,
+        "confirmation_hash_requests": 56000,
+        "confirmation_requests": 16000,
+        "confirmation_hash_mismatches": 0,
+        "corpus": "36/40 (90%)",
+        "ordinary_call_nodes": "677/677 visible; 0 missed",
+        "ordinary_unresolved_in_composed_corpus": 429,
+        "frank_effects_unresolved": 0,
+        "undeclared_types": 0,
+        "operator_survival": "8/8",
+        "methodchain_open": 22
+      }
+    },
+    {
+      "workflow": "ClayCode Global Symbol Census VPS",
+      "run": 31494556444,
+      "job": 93789011824,
+      "result": "SUCCESS",
+      "runner": "clay/digital-retina",
+      "tested_sha": "17a6350111736068b1c43be31e1066b0d9f9aea0",
+      "executable_steps": "7/7",
+      "results": {
+        "status": "PASS_MEASUREMENT_ONLY",
+        "unresolved_target_occurrences": 464,
+        "exact_global_declaration_candidate_occurrences": 44,
+        "dotted_terminal_global_declaration_candidate_occurrences": 1,
+        "remaining_occurrences_without_even_a_global_name_candidate": 419,
+        "unknown_calls_defaulted": false,
+        "declared_functions_unique_names": 130,
+        "declared_records_unique_names": 83,
+        "declared_sum_variants_unique_names": 317
+      },
+      "boundary": "Candidate counts guide linker/type-resolution work only. They do not make cross-module lookup, dotted members, constructors, variants or host intrinsics executable."
+    }
+  ],
+  "independent_environment_negative": {
+    "workflow": "ClayCode Global Symbol Census GH Ubuntu",
+    "run": 31494556366,
+    "job": 93788908549,
+    "result": "FAILURE",
+    "steps_visible": 0,
+    "logs": "404 BlobNotFound/unavailable",
+    "classification": "UNEXECUTED_OR_UNOBSERVABLE_INFRASTRUCTURE_FAILURE",
+    "consequence": "No independent GitHub-hosted census replication receives credit."
+  },
+  "metric_noncollapse": "The 429 ordinary unresolved occurrences in the successfully parsed 36/40 composed corpus and the 464 global-census unresolved occurrences are different measurement universes. Preserve both; do not add, average or silently replace one with the other.",
+  "hypothesis": {
+    "id": "H-CLAYCODE-RESOLUTION-CANDIDATE-NOT-BINDING-001",
+    "concept": "ResolutionCandidateNotBinding",
+    "claim": "The 45 declaration-name candidates can reduce resolution search only after module qualification, callable/constructor/variant kind, signature, type and effect compatibility are proven; the remaining 419 require explicit declarations, member semantics, intrinsics or fail-closed exclusion.",
+    "counterhypothesis": "Terminal-name matching is sufficient to bind unresolved calls globally.",
+    "falsifier": "For all 464 occurrences, generate module-qualified candidate sets and reject ambiguity, member-path conflation, wrong callable kind, arity/type mismatch and effect escalation. Compare two independent census implementations and require identical hashes on GitHub Ubuntu and accepted VPS before semantic credit."
+  },
+  "adjudication": {
+    "H-CLAYCODE-ANALYSIS-EXECUTION-BISIMULATION-001": "ORDINARY CALL STRUCTURAL VISIBILITY SUPPORTED ON EXACT CURRENT HEAD",
+    "H-CLAYCODE-RESOLUTION-CANDIDATE-NOT-BINDING-001": "OPEN WITH TARGET MEASUREMENT",
+    "methodchain_semantics": "OPEN",
+    "comparison_chain_semantics": "OPEN",
+    "general_evaluator_completeness": "NOT_PROMOTED",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "routed_impulses": [
+    {
+      "recipients": [
+        "F-V01-02 ClayCode",
+        "F-V01-12 Capabilities"
+      ],
+      "priority": "P0",
+      "impulse": "Classify all 464 census occurrences under ResolutionCandidateNotBinding. Resolve the 45 name candidates only through qualified signature/type/effect proofs; keep the 419 no-candidate occurrences fail-closed and separately typed."
+    },
+    {
+      "recipients": [
+        "separate Harness reviewer",
+        "F-V01-02 ClayCode"
+      ],
+      "priority": "P0",
+      "impulse": "Repair the GitHub-hosted workflow so executable steps and artifacts are visible, rerun exact head independently, and compare result JSON hashes with accepted VPS output."
+    },
+    {
+      "recipients": [
+        "research_entity center"
+      ],
+      "priority": "P1",
+      "impulse": "Supersede only the incorrect exact-current-head label on ef541842. Preserve both ancestor pass and new exact-head passes with their SHA/run/job witnesses."
+    }
+  ],
+  "evidence_deduplication": "Runs 31494556210 and 31494556444 share exact branch, target runner and code lineage; treat them as complementary gates, not independent replication. The zero-step GitHub run contributes no semantic evidence.",
+  "safety_and_nonclaims": {
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "training_authorized": false,
+    "training_performed": false,
+    "promotion_granted": false,
+    "execution_performed_by_this_worker": false,
+    "code_or_harness_modified_by_this_worker": false,
+    "only_external_write": "this provenance-only correction event"
+  }
+}

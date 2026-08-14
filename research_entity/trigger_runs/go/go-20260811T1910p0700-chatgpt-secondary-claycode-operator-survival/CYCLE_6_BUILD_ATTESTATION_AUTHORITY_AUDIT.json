@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "cycle": 6,
+  "topic": "F-V01 release/build provenance authority for fixed SQLite runtime admission",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity_class": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "trigger_context": {
+    "go_oob_experiment": "NONE; macrocycle OOB slot already consumed in Cycle 1",
+    "reason_for_cycle": "Cycle 5 target-proved runtime object admission but explicitly left manifest/build trust external. This cycle asks whether an existing owner-fixed trust authority can consume that manifest/artifact without inventing a second trust architecture."
+  },
+  "repository_state": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "visibility": "private",
+    "current_candidate_pr": 324,
+    "existing_boot_continuity_pr": 231,
+    "private_sqlite_preflight_pr": 288
+  },
+  "internal_authority_evidence": [
+    {
+      "source": "PR #231 claycode/frank_boot_continuity.clay",
+      "finding": "BootContinuityPolicy already defines the intended provenance consumer: canonical repository, refs/heads/main, SLSA v1 predicate, exact artifact digest, exact source digest/ref and a pinned signer workflow. Missing trusted builder is explicitly fail-closed."
+    },
+    {
+      "source": "PR #231 runtime/identity/self_root_boot_continuity.py",
+      "finding": "verify_github_attestation() is designed to call gh attestation verify under owner policy, bind the local SHA256 as the verified subject, require source digest/ref and signer workflow, and refuse production caller overrides."
+    },
+    {
+      "source": "PR #231 current owner policy",
+      "finding": "trusted_signer_workflow = none; comment states this is intentionally unresolved until the owner-fixed final v0.1 binary builder exists. evaluate_boot_continuity therefore returns BLOCKED_NO_TRUSTED_BUILDER before build provenance can authorize continuation."
+    },
+    {
+      "source": "PR #231 accepted target evidence",
+      "finding": "Its earlier target run correctly remained BLOCKED_NO_TRUSTED_BUILDER and also observed /usr/bin/gh absent; no attestation receipt was invented."
+    },
+    {
+      "source": "PR #288",
+      "finding": "Existing private SQLite 3.53.4 lane proves source pinning/private build/runtime compatibility but does not establish an owner-fixed trusted signer workflow or cryptographic artifact attestation authority."
+    }
+  ],
+  "fresh_external_primary_evidence": [
+    {
+      "source": "GitHub official artifact attestation documentation",
+      "finding": "Artifact attestations establish build provenance only when verified; gh attestation verify can constrain the signer to a specific workflow."
+    },
+    {
+      "source": "GitHub official reusable-workflow/SLSA guidance",
+      "finding": "Attestation generation requires attestations:write, contents:read and id-token:write; verification can require --signer-workflow."
+    },
+    {
+      "source": "GitHub official availability documentation",
+      "finding": "For private/internal repositories, artifact attestations are plan-dependent and documented as requiring GitHub Enterprise Cloud. The current repository is private; this worker has not verified an eligible subscription/capability and therefore does not assume availability."
+    },
+    {
+      "source": "GitHub official offline verification documentation",
+      "finding": "Offline verification is possible with an attestation bundle plus trusted-root material and GitHub CLI, but this does not solve the separate owner-policy problem of which workflow is trusted to sign."
+    }
+  ],
+  "hypothesis": {
+    "id": "H-BUILD-ATTESTATION-COMPOSE-001",
+    "claim": "Cycle 5's fixed-SQLite runtime manifest should compose into the existing #231 boot/build provenance consumer rather than gain a storage-specific trust root; once an owner-fixed signer workflow and verifier capability exist, the runtime manifest/artifact can be treated as an attested build subject and then consumed by #324's mapped-object admission."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-BUILD-ATTESTATION-COMPOSE-001",
+    "claim": "Because #324 already validates manifest/object hashes locally, the CI-generated manifest itself is sufficient trust authority and no independent attestation/trusted builder is necessary."
+  },
+  "adjudication": {
+    "H-BUILD-ATTESTATION-COMPOSE-001": "SUPPORTED_AS_ARCHITECTURE_DIRECTION",
+    "CH-BUILD-ATTESTATION-COMPOSE-001": "REFUTED_BY_TRUST_MODEL",
+    "reason": "Local hash consistency proves identity relative to the supplied manifest but cannot prove who was authorized to create that manifest/build. Allowing the same workflow/run to create both candidate bytes and its own trust root would collapse provenance into self-assertion. Existing #231 deliberately separates build verification from identity/state/effect authority.",
+    "execution_status": "BLOCKED_OWNER_TRUST_ANCHOR_AND_CAPABILITY",
+    "build_decision": "NO_TRUSTED_SIGNER_WORKFLOW_SELECTED_OR_PINNED_BY_THIS_WORKER",
+    "owner_gate": "Owner-fixed final v0.1 builder/signer workflow remains explicitly unresolved by current policy.",
+    "capability_gate": "Product repository is private; GitHub artifact-attestation eligibility for the account/plan was not independently established. Do not assume the private-repository attestation service is usable merely because workflow artifacts work."
+  },
+  "architecture_delta": {
+    "status": "BLOCKED_OWNER_GATE_WITH_COMPOSITION_SPEC",
+    "name": "ONE_BUILD_PROVENANCE_AUTHORITY_FOR_BOOT_AND_RUNTIME_ARTIFACTS",
+    "rule": "Do not introduce a storage-specific trusted-builder authority. The accepted fixed-SQLite artifact/manifest must eventually be cryptographically bound by the same owner-fixed build-provenance policy consumed by self.root boot continuity. #324 remains the runtime object admission layer after provenance succeeds, not the provenance root itself.",
+    "composition_chain": [
+      "owner-fixed trusted builder/signer workflow",
+      "immutable build artifact + manifest",
+      "cryptographic attestation subject digest",
+      "repository + source digest/ref + signer-workflow verification",
+      "verified artifact/manifest hash admitted into FRANK_FIXED_SQLITE_RUNTIME_V1",
+      "fresh child-process mapped-object/version/source-id/hash verification",
+      "state execution"
+    ],
+    "fail_closed_states": [
+      "BLOCKED_NO_TRUSTED_BUILDER",
+      "BLOCKED_NO_ATTESTATION_VERIFIER",
+      "DENY_ARTIFACT_DIGEST",
+      "DENY_BUILD_PROVENANCE",
+      "SQLITE_RUNTIME_MANIFEST_HASH_MISMATCH",
+      "SQLITE_RUNTIME_LIBRARY_HASH_MISMATCH",
+      "SQLITE_RUNTIME_MAPPED_OBJECT_MISMATCH"
+    ]
+  },
+  "next_test_after_owner_gate": {
+    "prerequisites": [
+      "owner selects/pins final or candidate trusted signer workflow under explicit policy",
+      "verify repository/account capability for private artifact attestations or select an owner-approved equivalent provenance mechanism",
+      "provide verification executable/bundle path on accepted Ubuntu target without relaxing signer/source constraints"
+    ],
+    "test": "Attest the immutable fixed-SQLite artifact/manifest from the selected builder, verify it against exact repository/source/ref/signer policy, then run #324 admission. Tampered artifact, wrong source digest, wrong signer workflow and system-library fallback must each fail before Frank state execution.",
+    "promotion_rule": "A green local hash/admission test without independent provenance remains insufficient."
+  },
+  "no_change_or_write": {
+    "product_code_change": "NO_CHANGE_DUE_OWNER_AUTHORITY_GATE",
+    "research_delta": "COMMITTED",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "training_authorized": false
+  }
+}

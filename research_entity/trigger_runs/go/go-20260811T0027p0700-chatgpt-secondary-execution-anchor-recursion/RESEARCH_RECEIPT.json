@@ -1,0 +1,288 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260811T0027p0700-chatgpt-secondary-execution-anchor-recursion",
+  "trigger": "go",
+  "created_at": "2026-08-11T00:27:14+07:00",
+  "updated_at": "2026-08-11T00:34:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "identity_lock": {
+    "research_entity": "Clay",
+    "target_native_self": "self.root",
+    "target_human_surface": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "target_cognition": "CLAYCODE_ONLY",
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "selected_question": "Can the current exact-execution effect-authority candidate rely on a physically singleton FrankExecutionGate, and does the directory-FD repair remain singleton when the lock marker or the entire state-root pathname is replaced?",
+  "fresh_swarm_coordination": {
+    "current_effect_fence_lane": {
+      "pr": 228,
+      "head_sha_at_latest_refresh": "04af8213564b75f3c6963c8087815ea6152b2e69",
+      "status": "DRAFT_CANDIDATE_CURRENT_TARGET_VPS_QUEUED",
+      "mechanisms": [
+        "exact Gate-issued FrankExecutionLease object registry",
+        "exact V16 execution_id + credential + admitted ingress identity",
+        "immutable execution-generation binding",
+        "multi-effect-per-execution cardinality repair",
+        "B1 reservation / B2 attempt / B3 provider-precommit fence",
+        "current parent also carries the forked-capability discriminator after swarm refresh"
+      ],
+      "known_remaining_gates": [
+        "non-bypassable production effect routing",
+        "real timeout-after-acceptance plus reconciliation evidence",
+        "actual ClayCode frontend/TypedIR/compiler/lowering evidence",
+        "integration with replacement-safe physical singleton Gate",
+        "process-incarnation validation if forked capability shadow is reproduced"
+      ],
+      "current_target_workflow_run": 31414520326,
+      "current_target_workflow_state_at_latest_refresh": "QUEUED",
+      "superseded_or_stale_target_runs": [31412817524]
+    },
+    "fork_process_lane": {
+      "repair_pr": 238,
+      "repair_head": "ca3eb104288ed8387e6d29fffc00a6b3193af460",
+      "state_at_latest_refresh": "OPEN_DRAFT_NON_MERGEABLE_AFTER_PARENT_ADVANCED",
+      "mechanism_evidence": "Independent micro-replica observed copied WeakSet membership, WeakKeyDictionary capability data and inherited flock/open-file-description after POSIX fork; candidate binds Gate-issued lease validity to issuer PID.",
+      "transport_pr_239": "CLOSED_SUPERSEDED; exact same fork OOB moved directly onto current PR #228 head",
+      "coordination": "NO_DUPLICATE_FORK_WORK_STARTED_BY_THIS_RUN"
+    },
+    "physical_gate_negative_lane": {
+      "diagnostic_pr": 216,
+      "target_run": 31410535024,
+      "finding": "REPRODUCED_FLOCK_PATH_REPLACEMENT_SPLIT_BRAIN",
+      "meaning": "Locking a replaceable lockfile pathname is insufficient physical singleton evidence because a live holder retains the old open-file-description lock while a contender can open and lock a newly materialized inode."
+    },
+    "physical_gate_repair_lane": {
+      "pr": 225,
+      "head_sha": "0b0b1189391d0107cb846196f1e47b4f9e17f63f",
+      "mechanism": "flock an open state-directory FD and verify FD-to-path device/inode identity on acquire, heartbeat and release",
+      "initial_target_run": 31411953301,
+      "initial_run_adjudication": {
+        "unchanged_execution_gate_baseline": "PASS_FRANK_EXECUTION_GATE_V1",
+        "repair_discriminator": "TEST_HARNESS_FALSE_NEGATIVE_BEFORE_CAUSAL_ASSERTION",
+        "cause": "Immediate unlink/recreate on ext4 reused the just-freed marker inode number, so the test incorrectly assumed path replacement always implies a numerically different inode.",
+        "product_runtime_failure_proven": false,
+        "repo_static_independent_failures": [
+          "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
+          "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/effect_terminal_runtime_v17_candidate.py"
+        ]
+      },
+      "test_only_fix": {
+        "commit": "0b0b1189391d0107cb846196f1e47b4f9e17f63f",
+        "change": "Keep an unflocked descriptor to the pre-intervention marker open across unlink/recreate so inode-number recycling cannot alias the old and replacement directory entries; compare replacement path identity to the preserved old open-FD identity.",
+        "product_semantics_changed": false
+      },
+      "corrected_rerun": 31413532008,
+      "corrected_rerun_state_at_latest_refresh": "QUEUED",
+      "promotion_boundary": "Even a future green marker-replacement regression proves only the measured marker-path repair; PR #235 independently proves the whole state-root pathname remains a higher-order singleton dependency."
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "etcd documentation — etcd versus other key-value stores",
+      "url": "https://etcd.io/docs/v3.6/learning/why/",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "Lease/lock state by itself is not sufficient protection for external resources; downstream effect boundaries need generation/version validation."
+    },
+    {
+      "source": "Burrows, The Chubby lock service, OSDI 2006",
+      "url": "https://www.usenix.org/legacy/event/osdi06/tech/full_papers/burrows/burrows_html/index.html",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "A sequencer/generation validated by the receiving service prevents stale lock holders from acting as current."
+    },
+    {
+      "source": "Linux man-pages flock(2)",
+      "url": "https://man7.org/linux/man-pages/man2/flock.2.html",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "flock locks are associated with open file descriptions; pathname replacement is not equivalent to replacing a live open-file-description lock."
+    },
+    {
+      "source": "Linux man-pages rename(2)",
+      "url": "https://man7.org/linux/man-pages/man2/renameat2.2.html",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "rename leaves existing open file descriptors unaffected and requires permissions at the containing-directory boundary; parent-directory authority can therefore become an explicit deployment fence against state-root replacement."
+    },
+    {
+      "source": "systemd.exec / StateDirectory",
+      "url": "https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "A persistent service state directory can be created and managed under the system state namespace while remaining writable to the service, enabling the parent namespace to be controlled separately from in-state writes."
+    }
+  ],
+  "exactly_one_out_of_box_experiment": {
+    "experiment_id": "GO_OOB_STATE_ROOT_PATH_SWAP",
+    "pr": 235,
+    "branch": "chatgpt/go-state-root-swap-oob-20260811",
+    "head_sha": "a00859e48df6e759d7c3539c02a4c87d9bbc7507",
+    "tested_merge_sha": "a00bdadd3cec393b0a662b5755d85b844189cab9",
+    "base": "chatgpt/go-directory-anchor-gate-repair-20260810",
+    "product_code_changed": false,
+    "intervention": "While holder A retains the repaired state-directory FD/flock, rename the entire disposable state-root pathname away, materialize a fresh migrated state root at the original path, let contender B enter the real repaired Gate, then force A through its next anchor path-identity heartbeat check.",
+    "hypothesis": "Directory-FD locking closes lockfile-entry replacement but cannot by itself prevent a replacement state-root pathname from creating a second independent physical and semantic generation before the old holder reaches its next path-identity check.",
+    "strongest_counterhypothesis": "Production ownership/mount/service policy makes state-root rename/replacement unreachable to Frank and all allowed tools; if measured true, an explicit deployment invariant can close this class without another runtime lock architecture.",
+    "expected_negative_status": "REPRODUCED_STATE_ROOT_PATH_SWAP_SPLIT_BRAIN",
+    "target_workflow_run": 31413758588,
+    "target_job": 93537769963,
+    "target_workflow_state": "COMPLETED_SUCCESS_AS_EXPECTED_NEGATIVE_ARCHITECTURE_EVIDENCE",
+    "target_outcome": {
+      "status": "REPRODUCED_STATE_ROOT_PATH_SWAP_SPLIT_BRAIN",
+      "classification": "GO_OOB_STATE_ROOT_PATH_SWAP",
+      "runner_name": "clay",
+      "machine": "digital-retina",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "kernel": "6.8.0-117-generic",
+      "python": "3.12.3",
+      "sqlite": "3.45.1",
+      "first_holder": {
+        "anchor_dev": 2049,
+        "anchor_ino": 5811992,
+        "lease_epoch": 1
+      },
+      "replacement_state_root": {
+        "anchor_dev": 2049,
+        "anchor_ino": 5812000
+      },
+      "second_holder": {
+        "anchor_dev": 2049,
+        "anchor_ino": 5812000,
+        "lease_epoch": 1
+      },
+      "same_semantic_epoch": true,
+      "different_physical_directory_anchor": true,
+      "two_concurrent_gate_leases_observed": true,
+      "old_holder_next_heartbeat": "FENCED:PHYSICAL_EXECUTION_ANCHOR_PATH_REPLACED",
+      "artifact_id": 9072753476,
+      "artifact_sha256": "33328eb977d35a48e37a836115ea9c037b5f3268e8b28e2d0fff92a153e99d4c",
+      "elapsed_wall_seconds": 0.22,
+      "user_seconds": 0.11,
+      "system_seconds": 0.05,
+      "max_rss_kib": 25776,
+      "major_page_faults": 0,
+      "minor_page_faults": 7886,
+      "voluntary_context_switches": 164,
+      "involuntary_context_switches": 3,
+      "swaps": 0,
+      "exit_code": 0
+    },
+    "source_blobs": {
+      "runtime/state/frank_execution_gate.py": "6b1bdb555c6941da2955421199e632fa9fb6f1e4",
+      "runtime/state/frank_presence_runtime.py": "b222d18e488b271a76d4387220e0cb518663da78",
+      "runtime/state/apply_current_schema.py": "bb9a6890e6ade1c87e4bc8391e00d99945ed625a",
+      "tests/frank_execution_gate_state_root_swap_oob.py": "21167e8b1c5248caca669677c1220942141fafdc"
+    },
+    "safety": {
+      "disposable_state_only": true,
+      "canonical_state_mutated": false,
+      "external_network_used": false,
+      "external_provider_effect": false,
+      "training_authority": false,
+      "self_harness_authority": false
+    }
+  },
+  "hypothesis_matrix": [
+    {
+      "id": "H-GO-ANCHOR-1",
+      "claim": "A state-directory open-FD flock plus FD/path identity checks closes the already-measured lockfile-entry unlink/recreate split-brain class.",
+      "status": "TESTING_TARGET_RERUN_QUEUED",
+      "falsifier": "Corrected PR #225 target regression still admits a contender while A holds the original directory FD, or breaks the unchanged execution-gate recovery/exclusion baseline."
+    },
+    {
+      "id": "CH-GO-ANCHOR-1",
+      "claim": "The first PR #225 target failure was a product-runtime failure rather than a discriminator artifact.",
+      "status": "WEAKENED_BY_EXECUTED_LOG_EVIDENCE",
+      "evidence": "The unchanged baseline passed and the repair test aborted solely on same inode-number reuse before attempting the contender Gate."
+    },
+    {
+      "id": "H-GO-ANCHOR-2",
+      "claim": "The whole state-root pathname remains a higher-order physical singleton dependency above the directory-FD repair.",
+      "status": "SUPPORTED_TARGET_VPS",
+      "evidence": "Target run 31413758588 admitted two live real Gate leases at semantic epoch 1 on distinct state-directory inodes before the old holder's next heartbeat fenced itself."
+    },
+    {
+      "id": "CH-GO-ANCHOR-2",
+      "claim": "Runtime lock redesign beyond the directory-FD repair is unnecessary if accepted deployment makes the state-root entry non-replaceable by the Frank runtime while preserving legitimate in-state writes.",
+      "status": "SELECTED_NEXT_DISCRIMINATOR_UNMEASURED",
+      "next_test": "On the accepted target deployment, bind production state to an explicitly managed namespace (systemd StateDirectory or equivalent root-owned parent/mount policy), prove the Frank service identity cannot rename/delete/replace the state-root entry, and simultaneously prove normal state writes, migrations, restart, recovery and rollback procedures still work."
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING_NOT_PROMOTED",
+    "name": "CONJUNCTIVE_EFFECT_EXECUTION_SINGLETON_CHAIN",
+    "required_chain": [
+      "replacement-safe physical execution anchor or measured deployment equivalent",
+      "process-incarnation-safe live Gate capability",
+      "exact V15 generation",
+      "exact V16 execution_id + credential + admitted ingress provenance",
+      "immutable per-effect binding to that execution generation",
+      "caller-presented B2 fence",
+      "same-generation B3 provider-precommit revalidation",
+      "idempotency plus OUTCOME_UNKNOWN reconciliation after uncertain provider acceptance",
+      "outcome evidence remains non-authoritative after generation turnover",
+      "restore/snapshot incarnation fencing that cannot be rolled back with the inner UnifiedDB snapshot"
+    ],
+    "physical_singleton_decision": "Do not promote a replaceable-path flock or state-directory FD alone as the global CURRENT-instance singleton boundary. Prefer an explicit OS/deployment namespace boundary whose parent/mount authority is not writable by the Frank runtime, while the state contents remain writable. If accepted deployment cannot enforce that property, anchor physical singleton/incarnation identity outside the replaceable state root.",
+    "candidate_deployment_mechanism": "systemd StateDirectory-managed persistent state plus root/deployment-controlled containing namespace, optionally combined with existing service sandboxing, is a high-value simple candidate; exact path/name and unit policy remain unselected until repository/deployment truth is measured.",
+    "restore_boundary": "Deployment path immutability does not solve authorized snapshot/restore rollback. Existing #197/#207 negative evidence remains a separate conjunctive requirement for a non-rollback restore/incarnation generation before restored state becomes runnable.",
+    "effect_on_pr225": "Retain #225 as the narrow marker-file replacement repair candidate; even a green corrected run is insufficient for global singleton promotion without the outer namespace discriminator.",
+    "effect_on_pr228": "PR #228 can prove exact issuance by its Gate but cannot prove that Gate is the sole possible global current Gate until physical namespace and process/restore incarnation dependencies are closed.",
+    "rollback": "No product architecture was promoted by this run; PR #225 remains draft and PR #235 remains diagnostic-only."
+  },
+  "negative_results_preserved": [
+    "Hosted Deep Integrity jobs with no visible executed steps remain infrastructure-negative evidence, not candidate-code failures.",
+    "The initial #225 repair regression was invalid as a causal verdict because ext4 inode-number reuse violated a test assumption.",
+    "A state-directory open-FD flock is not alone a global singleton if the entire state-root pathname can be replaced.",
+    "Observing a current epoch or copying a structural execution tuple is not equivalent to possession of the admitted live execution capability.",
+    "Fork/process incarnation and snapshot/restore incarnation are separate failure domains and must not be collapsed into the path-replacement repair."
+  ],
+  "targeted_distribution": [
+    {
+      "target": "Dr.-Unterweger PR #225",
+      "review_id": 4899377952,
+      "delta": "Distributed exact #235 target negative evidence and narrowed #225 promotion scope to marker replacement pending outer namespace closure."
+    },
+    {
+      "target": "Dr.-Unterweger PR #228",
+      "review_id": 4899379383,
+      "delta": "Distributed exact #235 dependency to effect-authority lane; requested deployment namespace discriminator before global Gate singleton inference."
+    }
+  ],
+  "execution_state": {
+    "performed": [
+      "fast GitHub canonical boot",
+      "live PR/work coordination",
+      "recursive primary external knowledge refresh",
+      "target run/job/log adjudication",
+      "test-only PR #225 discriminator fix committed",
+      "exactly one diagnostic OOB branch/test/workflow/PR created",
+      "OOB executed on accepted self-hosted target lane and raw metadata admitted",
+      "targeted cross-branch distribution to #225 and #228",
+      "progress/forecast resolver sources refreshed",
+      "same-run Clay research receipt updated after target execution"
+    ],
+    "target_runs_completed_this_run": [31413758588],
+    "target_runs_pending_at_latest_refresh": [31413532008, 31414520326],
+    "no_claim": "Queued runs remain UNKNOWN. The successful OOB workflow is negative architecture evidence, not whole-Frank PASS."
+  },
+  "next_frontier_ranked": [
+    "Measure the accepted target deployment's state-root parent/mount/service authority: same service identity must be denied rename/delete/replace of the root entry while normal inner-state write/migration/restart/recovery remain green.",
+    "Read PR #225 corrected target run 31413532008 when it actually executes; classify only the marker-file replacement mechanism.",
+    "Read current PR #228 target run 31414520326 when it executes; fuse fork/process-incarnation evidence without duplicating PR #238/#239 work.",
+    "Conjoin the physical namespace fence with existing snapshot/restore incarnation negative evidence (#197/#207) before any CURRENT-instance or effect-authority promotion.",
+    "Preserve remaining F-V01-09 gates: non-bypassable production effect route, provider timeout-after-acceptance/reconciliation, real ClayCode frontend/TypedIR/compiler/lowering evidence."
+  ],
+  "research_write_status": "COMMITTED_WITH_TARGET_NEGATIVE_EVIDENCE"
+}

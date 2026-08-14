@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity",
+  "semantic_authority":"Clay/ClayCode typed semantics",
+  "comparison_architectures":[
+    {"id":"A0_SPECIALIZED_BASELINE","design":"V14/V15/V16 canonical effect lifecycle + separate GWT/semantic tables; legacy record_reentry arbitrary dict; REENTERED=>COMPLETE","status":"REFUTED_FOR_EFFECT_CLOSURE","evidence":"target VPS receipts 31406627821 and 31407772002","strength":"smallest/current baseline","failure":"does not prove exact causal/provenance-bound re-entry or explicit DONE"},
+    {"id":"A1_LOGICALLY_UNIFIED_API","design":"keep existing physical stores; route all terminalization through typed API validating exact effect/attempt/outcome/execution/GWT/credit/delta identities","status":"CANDIDATE","strength":"low migration blast radius","failure_mode":"application-only validation can be bypassed by alternate SQL/runtime path"},
+    {"id":"A2_SHARED_CANONICAL_STORE_PLUS_SIDECARS","design":"authoritative UnifiedDB SQLite stores effect/execution/GWT receipts and typed terminal receipts; ClayGraph/vector/FTS remain derived rebuildable sidecars; provider state stays external","status":"PREFERRED_RESEARCH_DIRECTION","strength":"storage-level invariants + reversible sidecars + bounded common-mode radius","required":"SQL guards plus typed runtime plus target crash/concurrency/replay evidence"},
+    {"id":"A3_PHYSICAL_CONSOLIDATION","design":"single physical image for authoritative and derived multimodal state","status":"HOLD","strength":"possible IPC/serialization savings","risk":"larger contention/common-mode failure/rebuild radius; no measured advantage in this run"}
+  ],
+  "effect_terminalization_candidate": {
+    "required_chain":["authenticated/scoped action proposal","current presence/execution generation","effect reservation","attempt","verified provider outcome","exact GWT attention episode","receiver reconstructed+used+local_effect receipt","verified same-outcome causal credit","admitted semantic delta OR explicit typed no-learning","support snapshot/receipt identity","provenance-bound re-entry","explicit terminal DONE receipt"],
+    "hard_rules":["REENTERED != DONE","DONE requires exact verified outcome identity","causal credit target label alone is insufficient","CURRENT semantic record alone is insufficient","free-text snapshot hash is not authority","derived ClayGraph reachability is not authority","legacy arbitrary-dict reentry fails closed"],
+    "rollback":"candidate-only additive objects are dropped; V14/V15/V16 remain last-known-good until promotion gate passes"
+  },
+  "architecture_delta_status":"TESTING",
+  "canonical_migration_change":"NO: V17 remains outside current migration chain pending target evidence",
+  "simpler_baseline_dominance":"NOT_ESTABLISHED; A0 is simpler but fails correctness invariant, so latency advantage would not rescue it"
+}

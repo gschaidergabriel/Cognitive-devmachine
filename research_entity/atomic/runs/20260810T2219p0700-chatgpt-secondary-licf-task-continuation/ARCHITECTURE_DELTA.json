@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-LICF-001",
+  "status":"NO_CHANGE_CANDIDATE_REFUTED_TEST_OBLIGATION_CREATED",
+  "architecture_promotion":"NONE",
+  "reason":"LICF has zero measured unique semantic coverage versus the strongest conventional nested task fence and costs more in the local proxy.",
+  "durable_delta":{"type":"TEST_AND_IMPLEMENTATION_OBLIGATION","target_issue":"gschaidergabriel/Dr.-Unterweger#150","requirement":"Prove same-valid-execution-lease task continuity at every material boundary and bind unrelated task switches to current-user consent.","preferred_first_implementation":"smallest conventional task fence: execution/lease epoch + task_id + task_epoch + material revision + consent witness + idempotency, composed under canonical V15 authority","must_cover":["GWT causal use","state writes","provenance-bound reentry","memory admission","reward/causal-credit admission","effect attempts","task completion","crash/replay"]},
+  "rollback":"If the task fence creates regressions or duplicates an already-proven upstream serializer, keep V15 unchanged and preserve the issue/test as evidence; never introduce a second global BUSY authority.",
+  "future_reopen_condition":"Reconsider LICF only if ClayCode typed IR/type-effect can demonstrate static material-boundary completeness or architecture compression that the conventional runtime fence cannot match."
+}

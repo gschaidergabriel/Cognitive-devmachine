@@ -1,0 +1,49 @@
+{
+  "schema_version":"1.1",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "research_subject":"self.root / Frank",
+  "component":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "status":"PROJECTION_WORKER_CANDIDATE_SUPPORTED_COMPONENT_REMAINS_OPEN",
+  "supported_now":[
+    "projection worker scheduling state can be durably lease-fenced in UnifiedDB on the accepted single-host target lane",
+    "every tested batch remained bounded and persisted backlog/lag/pressure receipts",
+    "HARD derived backlog did not block or demote authoritative UnifiedDB writes",
+    "consequential ClayGraph use remained fail-closed until exact-current projection returned",
+    "a crashed worker lease expired and was taken over by a newer generation",
+    "the stale crashed generation was fenced after takeover",
+    "25/25 target checks restored exact 176/176 projection with zero lag and HEALTHY/NONE state"
+  ],
+  "target_receipt":{
+    "pr":391,
+    "head":"6fe47f9672a997f784ac168314f8bc0c65afcd65",
+    "workflow_run":31515873771,
+    "job":93860745062,
+    "checks":"25/25 PASS",
+    "crash_applied":7,
+    "pending_after_crash":89,
+    "final_source_epoch":176,
+    "final_applied_epoch":176,
+    "final_pending":0,
+    "final_lag":0,
+    "merge_commit":"7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5"
+  },
+  "pending":[
+    "sustained shadow-load/backpressure operating-window evidence",
+    "production schema integration and reversible migration",
+    "installed service/systemd V4 non-bypass proof",
+    "selected-lineage logical rollback recovery",
+    "canonical migration/rollback owner gate",
+    "direct OS-crash/power-loss evidence if required",
+    "large-corpus projection/retrieval quality and resources",
+    "whole-product accepted-target composition"
+  ],
+  "state_policy_delta":{
+    "proposal":"use a durable single-host lease generation and bounded projection batches; keep graph-dependent consequential paths closed whenever exact-current projection admission fails",
+    "status":"SUPPORTED_DIRECTION_CANDIDATE_PATH_MERGED_NOT_PRODUCTION_ACTIVATED",
+    "effect_authority":"NONE"
+  },
+  "self_harness_authority":"PROPOSAL_ONLY",
+  "canonical_state_mutated":false,
+  "training_authorized":false,
+  "whole_frank_v0_1_acceptance":false
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "stores": [
+    {
+      "store": "UnifiedDB",
+      "role": "AUTHORITATIVE_SEMANTIC_STATE",
+      "truth_authority": true,
+      "new_candidate_object": "claygraph_projection_outbox_v1",
+      "rule": "authoritative mutation and projection event are committed in one UnifiedDB transaction"
+    },
+    {
+      "store": "ClayGraph",
+      "role": "DERIVED_REBUILDABLE_TOPOLOGY",
+      "truth_authority": false,
+      "new_candidate_object": "projection_applied_events_v1",
+      "rule": "durable event identity enables idempotent projection and rebuild"
+    },
+    {
+      "store": "UnifiedDB delivery_state",
+      "role": "ADVISORY_DELIVERY_HINT",
+      "truth_authority": false,
+      "rule": "PENDING/APPLIED is not a cross-file transaction proof; exact destination event set/root decides currentness"
+    },
+    {
+      "store": "RecoveryFloor",
+      "role": "KEEP_ISOLATED_ROLLBACK_WITNESS",
+      "truth_authority": "RECOVERY_ADMISSION_ONLY"
+    },
+    {
+      "store": "retrieval/vector/FTS sidecars",
+      "role": "DERIVED_CANDIDATE_INDEX",
+      "truth_authority": false,
+      "rule": "candidate ids resolve through current UnifiedDB authority"
+    }
+  ],
+  "forbidden": [
+    "cross-file WAL atomicity assumption",
+    "ClayGraph activation -> truth",
+    "delivery ACK -> semantic authority",
+    "stale graph -> consequential selection",
+    "derived hash mismatch -> best-effort continuation"
+  ]
+}

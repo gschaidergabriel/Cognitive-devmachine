@@ -1,0 +1,322 @@
+module clay.atomic.cjc.at_cjc_001_v1
+version "AT-CJC-001-v1"
+status SUPPORTED_PROXY_RETEST
+run_id atomic-20260810T2034p0700-chatgpt-secondary-causal-jet
+outer_thinkspace GENERATIVE_REALITY_THEORY
+
+// COUNTERFACTUAL JET COMMUTATOR (CJC)
+//
+// Lift only explicit, deterministic, epoch-bound ClayCode internal transitions into a
+// sparse multilinear Boolean polynomial over UseRef-presence variables.
+//
+// For two transition orders embedded in the same prefix/suffix context:
+//
+//   J_left(z)  = lift(prefix ; A ; B ; suffix)
+//   J_right(z) = lift(prefix ; B ; A ; suffix)
+//   K(z)       = J_left(z) - J_right(z)
+//
+// z is the vector of admitted UseRef presence/lesion variables.
+//
+// K(1,...,1) != 0:
+//     observed STATE_NONCOMMUTE (ordinary CCF-like order effect)
+//
+// K(1,...,1) == 0 AND K is not the zero polynomial:
+//     HIDDEN_CAUSAL_NONCOMMUTE
+//     Current state hides an order effect that appears in at least one lesion/context.
+//
+// K is the zero polynomial:
+//     FULL_COMMUTE for the represented counterfactual domain.
+//
+// The same jet coefficients also expose single-use and higher-order causal interaction
+// structure (CPD-like) without a separate shadow-execution mechanism for exact-eligible
+// segments.
+//
+// None of these receipts are truth authority, effect authority, or Harness authority.
+
+class JetExactness = EXACT | TRUNCATED | UNKNOWN
+class JetPairClass = FULL_COMMUTE | HIDDEN_CAUSAL_NONCOMMUTE | STATE_NONCOMMUTE | UNKNOWN
+class JetEffect = PURE | INTERNAL_STATE | READ_ONLY | EXTERNAL_EFFECT | STOCHASTIC | OPAQUE
+
+record CounterfactualUse {
+  use_ref:UseRef
+  episode:WorkspaceEpisodeRef?
+  signal:SignalRef?
+  receiver:ReceiverRef?
+  state_epoch:Epoch
+  provenance:Set<EvidenceRef>
+}
+
+record JetMonomial {
+  uses:Set<UseRef>
+  coefficient:Int
+}
+
+record BooleanJet {
+  terms:Set<JetMonomial>
+  exactness:JetExactness
+  max_degree:Int
+  dropped_abs_mass:Int
+  derivation_hash:Hash
+}
+
+record JetStateIdentity {
+  program_semantic_id:SemanticId
+  state_epoch:Epoch
+  state_version:Version
+  state_instance_id:StateInstanceId
+}
+
+record JetState {
+  identity:JetStateIdentity
+  fields:Map<FieldRef,BooleanJet>
+}
+
+record JetPolicy {
+  max_degree:Int
+  max_terms:Int
+  overflow_policy:TRUNCATE_WITH_RECEIPT | UNKNOWN_FAIL_CLOSED
+}
+
+record JetTransitionContract {
+  transition_id:Ref
+  use_ref:UseRef
+  version:Version
+  state_epoch:Epoch
+  effect_class:JetEffect
+  reads:Set<FieldRef>
+  writes:Set<FieldRef>
+  deterministic:Bool
+  reversible_internal:Bool
+  explicit_operator_semantics:Ref
+  evidence_refs:Set<EvidenceRef>
+  runtime_binding:RuntimeBindingRef?
+  call_contract_hash:Hash?
+}
+
+record JetOverflowReceipt {
+  state_instance_id:StateInstanceId
+  transition:Ref
+  attempted_degree:Int
+  max_degree:Int
+  attempted_terms:Int
+  max_terms:Int
+  dropped_abs_mass:Int
+  exactness:JetExactness
+}
+
+record JetCommutatorReceipt {
+  left_order:Ordered<Ref>
+  right_order:Ordered<Ref>
+  pair:[Ref,Ref]
+  context_prefix:Ordered<Ref>
+  context_suffix:Ordered<Ref>
+  state_instance_id:StateInstanceId
+  transition_hashes:Set<Hash>
+  exactness:JetExactness
+  classification:JetPairClass
+  observed_full_state_delta:Map<FieldRef,Int>
+  hidden_counterfactual_support:Set<FieldRef>
+  commutator_terms:Int
+  max_degree:Int
+  derivation_hash:Hash
+  authority_minted:Bool=false
+  architecture_promoted:Bool=false
+}
+
+record JetCreditReceipt {
+  state_instance_id:StateInstanceId
+  outcome:OutcomeRef?
+  use_ref:UseRef
+  field:FieldRef
+  full_minus_lesion:Int
+  interaction_terms:Set<JetMonomial>
+  exactness:JetExactness
+  derivation_hash:Hash
+  effect_authority:NONE
+}
+
+record JetUnknownBoundaryReceipt {
+  state_instance_id:StateInstanceId
+  transition:Ref
+  reason:STALE_EPOCH | OPAQUE_OPERATOR | STOCHASTIC_OPERATOR | EXTERNAL_EFFECT |
+         MISSING_EXPLICIT_SEMANTICS | MISSING_CALL_CONTRACT | MISSING_RUNTIME_BINDING |
+         DEGREE_OVERFLOW | TERM_OVERFLOW | PROVENANCE_GAP
+  fallback:GWT_OR_EXISTING_COORDINATION | REPLAY | ABSTAIN
+}
+
+law BOOLEAN_USE variable u satisfies u*u = u
+law exact_multilinear_lift represents finite lesion truth_table when no overflow_or_unknown
+law jet_polynomial_zero is semantic_statement_only_for represented exact domain
+law observed_current_point = evaluate(jet, all_admitted_uses_present)
+
+fn exact_eligible(c:JetTransitionContract, s:JetStateIdentity) -> Bool {
+  return c.state_epoch == s.state_epoch
+      && c.deterministic
+      && c.reversible_internal
+      && c.effect_class in {PURE,INTERNAL_STATE}
+      && c.explicit_operator_semantics != none
+      && size(c.evidence_refs) > 0
+      && call_binding_valid_if_required(c)
+}
+
+rule exact_eligible=false -> UNKNOWN + emit JetUnknownBoundaryReceipt
+rule READ_ONLY with no state_write may be carried as evidence but not invent transition_effect
+rule EXTERNAL_EFFECT|STOCHASTIC|OPAQUE -> UNKNOWN for exact jet lifting
+rule missing_call_contract|missing_runtime_binding -> UNKNOWN
+rule operator_name_similarity != explicit_operator_semantics
+rule caller_constraints != callee_transition_semantics
+rule model_output != transition_semantics
+rule read_write_overlap != exact_commutativity
+rule GWT_ignition != exact_commutativity
+rule ClayGraph_salience != exact_commutativity
+
+fn jet_var(u:UseRef) -> BooleanJet
+fn jet_const(x:Int) -> BooleanJet
+fn jet_add(a:BooleanJet,b:BooleanJet,p:JetPolicy) -> BooleanJet
+fn jet_mul(a:BooleanJet,b:BooleanJet,p:JetPolicy) -> BooleanJet {
+  // Multilinear Boolean product: monomial supports combine by set union.
+  // If degree/term budget is exceeded, exactness degrades and an overflow receipt is emitted.
+}
+
+fn lift_ADD(old:BooleanJet, amount:Int, u:UseRef, p:JetPolicy) -> BooleanJet {
+  return old + jet_var(u)*amount
+}
+
+fn lift_SET(old:BooleanJet, value:Int, u:UseRef, p:JetPolicy) -> BooleanJet {
+  z=jet_var(u)
+  return old*(1-z) + value*z
+}
+
+fn lift_SCALE(old:BooleanJet, factor:Int, u:UseRef, p:JetPolicy) -> BooleanJet {
+  z=jet_var(u)
+  return old*(1 + (factor-1)*z)
+}
+
+fn lift_COPY_ADD(src:BooleanJet,dst:BooleanJet,factor:Int,u:UseRef,p:JetPolicy) -> BooleanJet {
+  return dst + factor*src*jet_var(u)
+}
+
+fn lift_SWAP(left:BooleanJet,right:BooleanJet,u:UseRef,p:JetPolicy) -> [BooleanJet,BooleanJet] {
+  z=jet_var(u)
+  return [left*(1-z)+right*z, right*(1-z)+left*z]
+}
+
+rule supported_operator_set_v1 = {ADD,SET,SCALE,COPY_ADD,SWAP}
+rule unsupported_operator -> UNKNOWN not guessed_extension
+rule new_operator_semantics requires versioned JetTransitionContract + tests + replay_falsifier
+
+fn contextual_commutator(
+  state:JetState,
+  prefix:Ordered<JetTransitionContract>,
+  a:JetTransitionContract,
+  b:JetTransitionContract,
+  suffix:Ordered<JetTransitionContract>,
+  policy:JetPolicy
+) -> JetCommutatorReceipt {
+  require same_state_instance_for_both_orders(state.identity)
+  left = lift(state,prefix+[a,b]+suffix,policy)
+  right = lift(state,prefix+[b,a]+suffix,policy)
+
+  if left.exactness!=EXACT || right.exactness!=EXACT {
+    return unknown_receipt(left,right)
+  }
+
+  K = left-right
+  current_delta = evaluate(K,all_use_refs(prefix+[a,b]+suffix))
+
+  class =
+    if current_delta != zero then STATE_NONCOMMUTE
+    else if polynomial_nonzero(K) then HIDDEN_CAUSAL_NONCOMMUTE
+    else FULL_COMMUTE
+
+  return receipt(K,current_delta,class)
+}
+
+fn exact_lesion_credit(j:JetState,u:UseRef) -> Map<FieldRef,Int> {
+  require j.exactness==EXACT
+  full=evaluate(j,all_support(j))
+  lesion=evaluate(j,all_support(j)-{u})
+  return full-lesion
+}
+
+fn interaction_support(j:JetState,u:UseRef) -> Set<JetMonomial> {
+  return {m in all_terms(j) where u in m.uses && size(m.uses)>1}
+}
+
+law HIDDEN_CAUSAL_NONCOMMUTE means current all-present state masks some exact represented
+    lesion/context order effect
+law HIDDEN_CAUSAL_NONCOMMUTE != harmful
+law HIDDEN_CAUSAL_NONCOMMUTE != truth
+law HIDDEN_CAUSAL_NONCOMMUTE != effect_authority
+law HIDDEN_CAUSAL_NONCOMMUTE may create coordination_or_measurement_candidate only
+
+rule FULL_COMMUTE exact receipt may support local independence candidate
+rule STATE_NONCOMMUTE exact receipt supports coordination edge candidate
+rule HIDDEN_CAUSAL_NONCOMMUTE exact receipt supports contextual coordination hyperedge candidate
+rule UNKNOWN -> existing GWT/coordination/replay/abstention fallback
+rule no CJC class directly authorizes external action
+
+// WP03 / WP04 binding
+rule JetStateIdentity.state_instance_id = exact_current WP03 state_instance_id
+rule semantic_id equality without state_instance equality != current_receipt_validity
+rule stale state_version -> reject receipt
+rule stale state_epoch -> reject receipt
+rule CallContract exact target+arity+types+hash+runtime binding required when transition is call-backed
+rule diagnostic call alternatives are never exact semantics
+rule effect resolver may_not mint authority
+
+// Recovery / persistence
+rule persist JetCommutatorReceipt when used for scheduling|credit|learning decision
+rule persist contract hashes + state_instance_id + policy + derivation_hash
+rule restart -> revalidate state_instance + contract versions before receipt reuse
+rule contract_change -> invalidate dependent exact receipts
+rule overflow -> preserve negative evidence + fallback
+rule no last_known_good semantics -> UNKNOWN not guessed_reconstruction
+
+// Ablations / controls
+ablate CURRENT_POINT_ONLY -> state_commutator_without_counterfactual_polynomial
+ablate CJC_OFF -> existing GWT/CCF/CPD baselines
+ablate PROVENANCE_TERMS_OFF -> state_only_order_test
+ablate CONTEXT_TERMS_OFF -> pair_only_test
+ablate EPOCH_BINDING_OFF -> forbidden stale-control
+ablate EXPLICIT_OPERATOR_CONTRACT_OFF -> forbidden inference-control
+ablate TERM_BUDGET_LOW -> truncation/fallback test
+ablate SHUFFLE_USE_REFS -> provenance-broken control
+
+compare EXHAUSTIVE_COUNTERFACTUAL_REPLAY -> exact truth_table reference on small fixtures
+compare CCF_CURRENT_STATE -> ordinary all-present state-order baseline
+compare CPD_LEAVE_ONE_OUT -> causal credit baseline
+compare RW_CONFLICT -> simple conservative dependency baseline
+
+observe [
+  exact_classification_accuracy,
+  hidden_causal_noncommute_rate,
+  state_only_false_safe_rate,
+  rw_false_conflict_rate,
+  commutator_term_count,
+  max_degree,
+  exact_coverage,
+  truncation_rate,
+  unknown_rate,
+  wall_time,
+  memory,
+  context_size,
+  exhaustive_truth_table_points,
+  crossover_context_size,
+  stale_epoch_rejection,
+  opaque_boundary_rejection,
+  effect_authority_violations
+]
+
+invariant GRT_CONSISTENT_IMPLIES_THINKABLE_NOT_TRUE
+invariant activation_not_truth
+invariant recurrence_not_emergence
+invariant candidate_not_promotion
+invariant state_commutation_not_causal_commutation
+invariant causal_credit_not_effect_authority
+invariant external_effects_remain_under_deterministic_ClayCode_effect_gate
+invariant self_root_self_harness_authority_is_proposal_only
+invariant measured_candidate_is_immutable
+invariant exactness_never_crosses_unknown_or_truncated_boundary
+invariant stale_epoch_never_reuses_exact_receipt
+invariant diagnostic_similarity_never_becomes_semantic_authority

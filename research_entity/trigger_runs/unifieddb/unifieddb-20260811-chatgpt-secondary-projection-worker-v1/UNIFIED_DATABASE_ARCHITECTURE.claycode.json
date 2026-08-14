@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.1",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "architectures":[
+    {"id":"A_SYNC_PROJECT_ON_AUTHORITATIVE_WRITE","shape":"authoritative writer also updates ClayGraph before returning","status":"REJECTED_CANDIDATE","reason":"couples truth availability/latency to derived projection and recreates cross-store failure pressure"},
+    {"id":"B_MULTIWORKER_OPTIMISTIC_IDEMPOTENT","shape":"multiple workers race over pending events and rely only on destination idempotency","status":"HOLD_NOT_SELECTED","reason":"current apply path has avoidable duplicate/race/lock pressure and no scheduling ownership evidence"},
+    {"id":"C_SINGLE_ACTIVE_LEASE_FENCED_BOUNDED_WORKER","shape":"UnifiedDB durable lease+generation, bounded batches, lag/backlog telemetry, expiry takeover","status":"TARGET_SUPPORTED_SINGLE_HOST_CANDIDATE"},
+    {"id":"D_EXTERNAL_DURABLE_BROKER","shape":"Kafka/NATS-class durable queue between UnifiedDB and ClayGraph","status":"KEEP_ISOLATED_FUTURE_COMPARISON","reason":"adds a new durability/operations dependency before the simpler target-host worker is falsified under sustained load"}
+  ],
+  "preferred":"C_SINGLE_ACTIVE_LEASE_FENCED_BOUNDED_WORKER",
+  "invariants":[
+    "ClayCode defines scheduler/backpressure semantics",
+    "UnifiedDB remains authoritative truth and worker-scheduler state",
+    "ClayGraph remains derived/rebuildable",
+    "one live lease generation at a time on the single-host v0.1 lane",
+    "stale generation cannot project after takeover",
+    "every batch bounded",
+    "HARD pressure never demotes authoritative truth",
+    "consequential graph use closed until exact-current",
+    "worker receipts preserve before/after backlog lag pressure and generation",
+    "multi-host clock-skew safety is explicitly not claimed"
+  ],
+  "target_result":{
+    "repo":"gschaidergabriel/Dr.-Unterweger",
+    "pr":391,
+    "head":"6fe47f9672a997f784ac168314f8bc0c65afcd65",
+    "workflow_run":31515873771,
+    "job":93860745062,
+    "checks":"25/25 PASS",
+    "merge_commit":"7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5"
+  },
+  "promotion":"CANDIDATE_AND_REGRESSION_PATH_MERGED_PRODUCTION_ACTIVATION_HELD",
+  "next_discriminator":"sustained shadow load plus reversible production-schema/service integration"
+}

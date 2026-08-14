@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "event_id": "clay-live-20260811T215352Z-repro-artifact-snapshot-productstart",
+  "observed_at": "2026-08-11T21:53:52Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "comparison_cut": {
+    "prior_research_event_commit": "56de877630c19505588c8aae2cc88bd17a66bf1e",
+    "prior_target_head": "0f0ea1e03c869167783d111a29b241424dfce111",
+    "observed_research_head_before_write": "7d975756de10fef312768ae1789fb6860202c465",
+    "observed_target_head": "138d6ec70a0b4fb3d2b438766481f6775ce9f495"
+  },
+  "substantive_delta": [
+    {
+      "claim": "SQLite 3.53.4 capability-parity runtime is now merged as a reproducible build mechanism, but is not provisioned as the productive runtime.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger@9c891aa8b076113b21903ac3db0d39a61aec6a91",
+        "accepted-target prior-pin reproduction run 31538571452; artifact 9119774779; digest sha256:55283e70864d3e24684913aebf1daae4708bac1d92828c3c03012f3d9221a0ff",
+        "library sha256 8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9; wrong-hash control rejected"
+      ],
+      "scope": "MECHANISM_SUPPORTED_ONLY"
+    },
+    {
+      "claim": "SQLite V5 now rejects symlink, hardlink and regular-copy sibling-guard transplantation on tested paths.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger@985f8370a6a6047d9962206f4fb6f2c049f4d370",
+        "gschaidergabriel/Dr.-Unterweger@33bb74de9074042e3c1a186ea3f22d2ea8a572f4; run 31537077376 PASS; job 93930612744",
+        "gschaidergabriel/Dr.-Unterweger@138d6ec70a0b4fb3d2b438766481f6775ce9f495; run 31537695696 PASS; job 93932652410"
+      ],
+      "scope": "PRE_PYTHON_PATH_INTEGRITY_ONLY"
+    },
+    {
+      "claim": "One CPython-AST lowering route now snapshots caller AST state across WP04 admission and rejects the tested post-admission mutation.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger@96aada947b8389f6aa4783c1ce3b5ad065c67435",
+        "gschaidergabriel/Dr.-Unterweger@e31f9d6142d2a4a94a66a6301dc8c381468a47b3",
+        "accepted-target run 31536332096 PASS"
+      ],
+      "scope": "ONE_ADMITTED_PROJECTION_ROUTE_ONLY"
+    },
+    {
+      "claim": "GLIBC_TUNABLES is rejected at the V5 shell boundary, while upstream pre-shell trust remains required.",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger@7e60eadeffe0fb6eab907023cc337ae06d7e0d7a",
+        "GNU C Library documents glibc.rtld tunables as dynamic-linker behavior controls"
+      ],
+      "scope": "DOWNSTREAM_REJECTION_NOT_PRE_EXEC_CONTAINMENT"
+    }
+  ],
+  "preserved_negative_and_null_results": [
+    "Run 31536877295 failed during checkout before SQLite admission and receives zero mechanism credit.",
+    "Run 31537581176 showed same SQLite version/source-id but a different rebuilt binary hash; source identity is not binary identity.",
+    "PR466 run 31535012143 was cancelled and receives zero target credit.",
+    "No productive Frank systemd parent, /opt or /etc provisioning, productive root anchor, Frank database open, restart/recovery/rollback acceptance, F-V01-13 closure or whole Frank v0.1 acceptance is evidenced.",
+    "No new independent GWT, emergence, hyperposition or claygraph evidence was found in this delta; shared project ancestry is not independent replication."
+  ],
+  "hypotheses": [
+    {
+      "id": "H-ANTECEDENT-ARTIFACT-AUTHORITY-001",
+      "claim": "ProductStart is safe against same-source rebuild substitution only when exact runtime hashes are fixed by an antecedent authority and checked against the actually mapped object.",
+      "test": "Provision a root-owned current-main release bundle using the prior independent library+manifest pins; require positive start, then reject generic same-source rebuild, one-nibble hash, library swap and post-check remap before any writable DB open.",
+      "falsifier": "Any substituted or remapped binary reaches writable persistence, or the antecedently pinned exact artifact cannot start reproducibly."
+    },
+    {
+      "id": "H-ADMISSION-SNAPSHOT-CLOSURE-001",
+      "claim": "A ClayCode admission decision remains valid only if all later analysis/lowering routes consume a private immutable admitted snapshot.",
+      "test": "Enumerate every productive compiler/lowering/FFI route and mutate nested AST/IR state after admission but before consumption under deterministic barriers.",
+      "falsifier": "Any route consumes caller-mutable post-admission state or bypasses WP04."
+    },
+    {
+      "id": "H-PRODUCTSTART-CONJUNCTION-001",
+      "claim": "No individual storage gate is sufficient; release safety requires the conjunction of artifact authority, full parent-path/pre-exec authority, pre-open state classification, mapped-object identity and restart/rollback/downgrade controls.",
+      "test": "Recompose all supported candidates on fresh current main and run lesion/rescue tests removing exactly one conjunct per cell.",
+      "falsifier": "A removed conjunct cannot create an accepted unsafe start in adversarial variants, suggesting redundancy; or the full conjunction still accepts one."
+    }
+  ],
+  "counterhypotheses": [
+    "Version plus SQLITE_SOURCE_ID is sufficient artifact authority; currently attacked by run 31537581176.",
+    "Root ownership of only the launcher leaf is sufficient; attacked by symlink/ancestor/copy transplant counterworlds.",
+    "Admission-before-lowering alone prevents semantic TOCTOU; attacked by the post-admission caller-mutation regression.",
+    "Shell-level environment rejection eliminates loader risk; false for variables that act before the shell executes."
+  ],
+  "new_concepts": [
+    {
+      "name": "Antecedent Artifact Authority",
+      "definition": "Binary identity is admissible only when its expected digest exists before and outside the candidate execution that is being judged."
+    },
+    {
+      "name": "Admission Snapshot Closure",
+      "definition": "Every downstream consumer must be reachable only from the immutable state actually admitted, not from a mutable caller alias."
+    },
+    {
+      "name": "ProductStart Conjunctive Proof",
+      "definition": "A productive start receipt is a conjunction over independent trust boundaries; partial PASS results remain component evidence."
+    }
+  ],
+  "routing": [
+    {
+      "target": "claycode",
+      "impulse": "Audit all compiler/lowering/FFI entry routes for WP04 mandatory admission plus private-snapshot handoff; preserve route-level negatives."
+    },
+    {
+      "target": "unifieddb+frank+harness",
+      "impulse": "Build a fresh-main ProductStart lesion/rescue matrix composing antecedent runtime pin, full root parent path, pre-open WAL/state gate, actual mapped-object check and restart/rollback/downgrade controls. No writable Frank DB before all conjuncts pass."
+    },
+    {
+      "target": "gwt+emergenz+hyperposition+claygraph",
+      "impulse": "Use Admission Snapshot Closure as a provenance invariant for re-entry/episode graphs; do not count this storage/compiler delta as new causal or emergence evidence."
+    }
+  ],
+  "primary_sources": [
+    "https://www3.sqlite.org/releaselog/3_53_4.html",
+    "https://www2.sqlite.org/c3ref/c_scm_branch.html",
+    "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linking-Tunables.html"
+  ],
+  "promotion": "NO_WHOLE_SYSTEM_PROMOTION",
+  "training_performed": false
+}

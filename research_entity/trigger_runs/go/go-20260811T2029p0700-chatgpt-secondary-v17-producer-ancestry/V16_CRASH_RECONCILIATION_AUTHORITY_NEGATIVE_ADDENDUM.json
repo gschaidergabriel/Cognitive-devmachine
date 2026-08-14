@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_FUSION_ADDENDUM",
+  "run_id": "go-20260811T2029p0700-chatgpt-secondary-v17-producer-ancestry",
+  "created_at_local": "2026-08-11T21:34:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_research_commit": "072a2e35f47698406791544297e594abafd24573",
+  "trigger": "go",
+  "topic": "Authority-negative validation of expired-takeover V16 crash reconciliation",
+  "positive_parent_fusion": "3783bd2f94caba2431d91f3b7fcf2c6d7bdd210b",
+  "hypothesis": "The crash-reconciliation candidate has no generic stale-ledger mutation authority: it must require a durable EXPIRED_TAKEOVER and exact current recovery-holder binding before changing any old ADMITTED request.",
+  "counterhypothesis": "Because V16 bind permits a newer epoch to supersede stale execution context, the repair could accidentally mutate any older ADMITTED row after ordinary RELEASE->ACQUIRED or could trust attacker-supplied recovery session/client labels.",
+  "target_run": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_pr": 331,
+    "workflow_run": 31501836858,
+    "job": 93813642495,
+    "tested_sha": "476ec1719fc7c2bc9267c7cd7b9eeec3d94a5598",
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "system_sqlite": "3.45.1",
+    "fixed_sqlite": {
+      "version": "3.53.4",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+      "mapped_library_sha256": "e1e321b28042ba59915cdd9555ce8439f6fa8eb8504e5d1093713c13fb955feb",
+      "v2_guard": "PASS"
+    },
+    "positive_repair_regression": {
+      "status": "PASS_V16_EXPIRED_TAKEOVER_INGRESS_RECONCILIATION_WITH_V17_DONE_RECOVERY",
+      "requests_reconciled_failed": 1,
+      "old_exact_request_replay": "REPLAY/FAILED",
+      "effect_attempt_count": 1,
+      "v17_terminal": "DONE_VALID",
+      "v17_recovery": "COMPLETE",
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "wall_seconds": 0.41,
+      "max_rss_kib": 27816
+    },
+    "authority_negative_regression": {
+      "status": "PASS_V16_CRASH_RECONCILIATION_AUTHORITY_NEGATIVES",
+      "normal_release_reacquire_without_takeover": {
+        "new_epoch_event_types": ["ACQUIRED"],
+        "denied_reason": "CRASH_RECONCILE_REQUIRES_EXPIRED_TAKEOVER_PROOF",
+        "old_request_before": "ADMITTED",
+        "old_request_after": "ADMITTED",
+        "mutation_blocked": true,
+        "integrity_check": "ok",
+        "foreign_key_violations": 0
+      },
+      "real_expired_takeover_wrong_holder": {
+        "expired_takeover_event_count": 1,
+        "wrong_session_denied_reason": "CRASH_RECONCILE_REQUIRES_MATCHING_CURRENT_RECOVERY_HOLDER",
+        "wrong_client_denied_reason": "CRASH_RECONCILE_REQUIRES_MATCHING_CURRENT_RECOVERY_HOLDER",
+        "old_request_before": "ADMITTED",
+        "old_request_after_wrong_session": "ADMITTED",
+        "old_request_after_wrong_client": "ADMITTED",
+        "mutation_blocked": true,
+        "integrity_check": "ok",
+        "foreign_key_violations": 0
+      },
+      "wall_seconds": 0.45,
+      "user_seconds": 0.27,
+      "system_seconds": 0.10,
+      "max_rss_kib": 27924
+    },
+    "tested_file_sha256": {
+      "v1_sqlite_guard": "e00d5421ab12494e83d2d6d1fc4e5b05cbc1e19f3b2a6ccf4eb523b0e2d53531",
+      "v2_sqlite_guard": "3374b36db2d7b9bcd9d89ddb022956314e21cb385b427c451453c235d39157af",
+      "v16_crash_recovery_candidate": "f1b26ac0fd486e6f4ae7533fac155ccd422f4503b28b4b080cba6c2253b59b20",
+      "process_crash_probe": "a3d1818932776b65094fda4b0805a852b607886ff4cdf06f364ea960df64ca6e",
+      "positive_repair_gate": "0fef827ae336839e913a2edf35854a4487b75a99ab141da21753551076a21cda",
+      "authority_negative_gate": "bf11be0cdbb8d081be0d77833483de3902fa2d6b560f6e9117180d014f4970e6",
+      "workflow": "bbd29ed0362e1739f2f440e2c71da0be3f524308ed40420785737a90b03df9ae"
+    },
+    "artifact": {
+      "id": 9105477631,
+      "name": "v16-v17-crash-reconcile-31501836858",
+      "size_bytes": 9483,
+      "sha256": "13d60cb51aaec791fd55349defda719bc87d8c139e7cdd9ecdf8b6918474a464",
+      "expires_at": "2026-09-10T14:32:59Z"
+    }
+  },
+  "fusion": {
+    "authority_status": "SUPPORTED_CANDIDATE_WITH_POSITIVE_AND_NEGATIVE_TARGET_EVIDENCE",
+    "allowed_case": "Only exact current holder at newer V15 epoch proven by matching durable EXPIRED_TAKEOVER may reconcile stale V16 ADMITTED rows.",
+    "forbidden_cases_target_proven": [
+      "newer normal ACQUIRED epoch without EXPIRED_TAKEOVER",
+      "real EXPIRED_TAKEOVER but mismatched recovery session",
+      "real EXPIRED_TAKEOVER but mismatched recovery client"
+    ],
+    "remaining_response_gap": "V16 still stores admission state only; it does not store an immutable completed response/result receipt, so a safely deduplicated crashed request can expose FAILED but cannot yet replay a semantically equivalent verified response.",
+    "architecture_delta_status": "SUPPORTED_CANDIDATE",
+    "canonical_merge_authorized": false,
+    "training_authorized": false
+  },
+  "go_oob_accounting": {
+    "current_worker_macrocycle_distinct_oob_count": 1,
+    "current_worker_macrocycle_oob": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "authority_negative_added_oob": false
+  },
+  "next_frontier": [
+    "Add provenance-bound response/result receipts so completed idempotent requests can replay verified outcomes without duplicate effects.",
+    "For crashes before any response receipt exists, distinguish recoverable verified V17 outcome from ambiguous provider outcome instead of inventing historical response bytes.",
+    "Bind V2 + V16 crash reconciliation + V17 producer-bound terminal recovery into production non-bypass self.root routing."
+  ]
+}

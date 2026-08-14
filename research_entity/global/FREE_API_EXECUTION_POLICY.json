@@ -52,6 +52,13 @@
     "executable_evidence": "test_concurrent_attempt_waits_for_payment_hard_stop_result",
     "counterhypothesis": "Independent preflight checks are sufficient for concurrent attempts; falsified locally because a second attempt reached the network while the first payment response was pending, before the shared hard-stop latch could be published."
   },
+  "execution_busy_timeout": {
+    "checked_at": "2026-08-14",
+    "claim": "A caller waiting for the single-instance execution lock fails closed as execution_busy after 35 seconds and cannot reach credential use or network access.",
+    "source": "https://docs.python.org/3/library/threading.html#threading.Lock.acquire",
+    "executable_evidence": "test_busy_execution_lock_times_out_before_network",
+    "counterhypothesis": "An unbounded lock wait is acceptable because the active transport has its own timeout; falsified locally because a held execution lock blocked a waiting call indefinitely outside the transport timeout boundary."
+  },
   "text_message_roles": {
     "allowed": ["system", "user", "assistant"],
     "checked_at": "2026-08-11",
@@ -337,6 +344,7 @@
     "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
     "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
     "The v0.1 execution path is process-serialized from routing through receipt publication so a payment-required latch from one attempt is visible before another attempt can route or reach the network.",
+    "Waiting for the v0.1 single-instance execution lock is bounded to 35 seconds; timeout raises execution_busy before routing, credential use or network access.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",

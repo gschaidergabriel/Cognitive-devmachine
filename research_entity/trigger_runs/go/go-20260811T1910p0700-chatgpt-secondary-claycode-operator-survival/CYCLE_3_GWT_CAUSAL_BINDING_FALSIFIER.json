@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "cycle": 3,
+  "topic": "F-V01-03/F-V01-05 loop-core GWT causal-completion evidence scope",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "fresh_target": {
+    "pr": 312,
+    "head_sha": "746640bda388aebf240c965afee744ce332f6a9a",
+    "branch": "loop-core/causal-slice-v1",
+    "reported_target_result": "7/7 controls PASS on clay@digital-retina; accepted as author-reported evidence pending independent scope audit, not re-executed by this receipt"
+  },
+  "finding": {
+    "classification": "EVIDENCE_SCOPE_NARROWING_CANDIDATE",
+    "claim": "PR #312 is an executable end-to-end loop/control smoke slice, but its current V17 base does not durably prove that caller-supplied episode_id, signal_id and causal_id originate from the selected/delivered/reconstructed/used/causally-credited GWT chain.",
+    "mechanism_evidence": [
+      "runtime/frank_loop_core_v1/loop_core_slice.py keeps WorkspaceEpisode and ReceiverReport as local Python objects; receiver delivery/reconstruction/use does not persist canonical receipts in this slice.",
+      "the slice marks causal_credit as a local TurnTrace label and derives admitted delta identity locally before invoking V17 re-entry.",
+      "runtime/state/effect_terminal_runtime_v17_candidate.py on #312 validates effect/attempt/verified-outcome identity but only requires episode_id/signal_id/causal_id to be non-empty before persisting them.",
+      "verify_terminal_chain() re-hashes those persisted identities for internal consistency but does not recover their ancestry from persistent GWT selection/receiver-use/causal-credit tables."
+    ]
+  },
+  "hypothesis": {
+    "id": "H-GWT-CALLER-ID-SPLICE-001",
+    "claim": "On the exact #312 stack, independently replacing a non-empty episode_id, signal_id or causal_id immediately before durable re-entry will still permit REENTERED -> DONE -> COMPLETE and admitted learning because the durable path validates internal identity consistency rather than canonical GWT ancestry."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-GWT-CALLER-ID-SPLICE-001",
+    "claim": "A hidden DB constraint or terminal verifier relation on the #312 stack already binds the three supplied identifiers to canonical GWT/causal evidence, so at least one independent splice will fail closed."
+  },
+  "ordinary_adversarial_test": {
+    "go_oob": false,
+    "reason": "The single OOB slot for this go macrocycle was already consumed by OPERATOR_SURVIVAL_METAMORPHIC_MATRIX in cycle 1.",
+    "branch": "chatgpt/loop-core-gwt-causal-splice-falsifier-20260811",
+    "initial_test_commit": "37b2b155102acc7c20447d9f680305fa7af3f22d",
+    "workflow_commit_current": "963c3d2caf6464b20160d28d100a70f4c7de096c",
+    "pr": 317,
+    "base_pr": 312,
+    "test": "tests/loop_core_gwt_causal_identity_splice_falsifier.py",
+    "interventions": ["episode_id splice", "signal_id splice", "causal_id splice"],
+    "expected_negative_signature": "local receiver_use remains 3/3; substituted identity is persisted; terminal_done=true; learning_admitted=true; recovery=COMPLETE; verify_terminal_chain remains valid",
+    "execution_state": "TARGET_RUN_QUEUED_OR_PENDING_RESULT",
+    "target_workflow": "Frank Loop-Core GWT Causal Splice VPS",
+    "latest_target_run_id": 31492032862,
+    "previous_infrastructure_only_runs": [
+      {
+        "run_id": 31491863749,
+        "result": "CHECKOUT_FAILED_BEFORE_TEST",
+        "cause": "actions/checkout stale/emptied workspace cleanup failure"
+      },
+      {
+        "run_id": 31491949261,
+        "result": "FETCH_FAILED_BEFORE_TEST",
+        "cause": "private repository required authenticated read; workflow revised to use ephemeral contents:read token and remove it before execution"
+      }
+    ]
+  },
+  "successor_composition_audit": {
+    "pr": 280,
+    "status": "SEPARATE_DRAFT_CANDIDATE",
+    "finding": "PR #280 already moves in the required direction: episode/signal/causal identifiers become foreign-key-bound to attention_episodes/receiver_receipts/causal_credit_receipts; support admission requires exact verified effect outcome, receiver closure, same-cycle prediction and non-CORRELATED_ONLY causal credit; terminal storage guard revalidates the chain.",
+    "decision": "Do not invent a third GWT causal-support architecture. Use #317 as a regression obligation for eventual #312/#280 composition."
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "name": "GWT_CAUSAL_IDENTITY_ANCESTRY_MUST_BE_STORAGE_OR_RECEIPT_ENFORCED",
+    "affected_work_packages": ["F-V01-03-COGNITIVE-LOOP-CORE", "F-V01-05-GWT-HYPERPOSITION"],
+    "rule": "Terminal re-entry and DONE may consume GWT/causal identity only when selection, delivery, reconstruction, use, exact local/verified effect outcome and admissible causal credit have independently persisted evidence bound into one coherent chain. Non-empty caller strings and local trace labels are insufficient.",
+    "rollback": "If exact target execution refutes all three splice paths because a previously missed durable constraint already exists, withdraw this delta and preserve the negative result."
+  },
+  "evidence_boundary": {
+    "pr312_not_invalidated": true,
+    "pr312_supported_scope": "executable causal-loop/control smoke discriminator with broken-arm behavior",
+    "pr312_not_yet_supported_scope": "database-enforced complete GWT causal ancestry",
+    "pr280_not_promoted": true,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "next_falsifier": "Read exact target #317 result. If splice reproduced, retain #312 as smoke evidence and require #317 to turn red after composing #280-like storage-bound support. If not reproduced, identify the hidden durable relation and update the causal model rather than preserving this hypothesis."
+}

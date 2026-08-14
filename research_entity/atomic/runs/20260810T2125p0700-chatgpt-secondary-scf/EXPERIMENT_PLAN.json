@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2125p0700-chatgpt-secondary-scf",
+  "candidate_id": "SCF-001",
+  "hypothesis": "SCF + existing hard surface gates detects cross-boundary semantic minting classes missed by either layer alone without rejecting clean generated traces.",
+  "counterhypothesis": "Conventional integrity labels/effect types achieve equivalent real coverage with lower complexity.",
+  "baseline_matrix": [
+    "current explicit repo-surface hard gate",
+    "SCF alone",
+    "surface+SCF",
+    "simplified path-taint baseline",
+    "simplified 2-level integrity lattice"
+  ],
+  "controls": [
+    "50% clean traces",
+    "randomized bug insertion",
+    "5 independent seeds",
+    "stale-epoch control",
+    "direct forbidden-receipt write control"
+  ],
+  "metrics": ["accuracy","precision","recall","F1","per-bug detection","wall time","peak Python traced memory"],
+  "evidence_scope": "SYNTHETIC_PROXY_ONLY",
+  "next_real_test": "Extract current Frank v0.1 semantic transition census from target source/runtime traces and run matched surface+SCF vs conventional multi-label effect checker."
+}

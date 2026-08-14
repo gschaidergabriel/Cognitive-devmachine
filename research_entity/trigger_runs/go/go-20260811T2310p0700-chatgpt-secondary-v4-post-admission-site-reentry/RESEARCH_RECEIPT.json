@@ -1,0 +1,166 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/1.0",
+  "run_id": "go-20260811T2310p0700-chatgpt-secondary-v4-post-admission-site-reentry",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T16:10:59Z",
+  "created_at_local": "2026-08-11T23:10:59+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not": "self.root/Frank"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "primary_work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "cross_impacts": [
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "coordination": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_before_storage_merge": "0b765534e693707b813dab9ff7471189ee48ef91",
+    "storage_parent_pr": 359,
+    "storage_parent_head": "5466b52d13284ce325c8e26f7d0b90e7636283d9",
+    "storage_parent_merge": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+    "stale_base_adjudication": "15 newer main commits touched only ClayCode evaluator/grammar/CI files while PR #359 added only eight storage files; zero filename overlap and GitHub mergeable=true, so the already target-proven exact storage bytes were promoted without overwriting newer ClayCode work.",
+    "parallel_lane": {
+      "pull_request": 373,
+      "head": "d7aaa4f1b27dec16bcd22f63b08dab38e41b0e39",
+      "class": "PRE_PYTHON_PATH_DIRNAME_HIJACK",
+      "relationship": "DISTINCT_NON_DUPLICATE_BUT_SHARED_WORKFLOW_FILE",
+      "note": "PR #373 repairs shell execution before Python starts. This receipt tests explicit site re-entry after V4 admission. Do not merge the two draft workflow edits independently without fresh composition."
+    }
+  },
+  "fresh_external_evidence": [
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption bug affects SQLite versions through 3.51.2 under concurrent WAL writer/checkpoint topology; fixed lines are documented upstream."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "SQLite 3.53.4 release notes",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "3.53.4 includes the WAL-reset corruption fix and is the pinned private runtime used by the accepted storage lane."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "Ubuntu USN-8565-1",
+      "url": "https://ubuntu.com/security/notices/USN-8565-1",
+      "finding": "Ubuntu 24.04 currently publishes sqlite3/libsqlite3 3.45.1-1ubuntu2.7 for listed security fixes, but this notice does not document a WAL-reset backport; therefore the fixed-status inference for the distro build remains unsupported by that notice."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "Python command-line documentation",
+      "url": "https://docs.python.org/3/using/cmdline.html",
+      "finding": "-I supplies isolated mode and -S disables automatic site import/path manipulation; Python explicitly documents that site.main() can later trigger the site manipulations."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "source": "Python site module documentation",
+      "url": "https://docs.python.org/3/library/site.html",
+      "finding": "site.main() adds standard site-specific directories and site.addsitedir() processes .pth files."
+    }
+  ],
+  "build_and_promotion": {
+    "pr_359": {
+      "status": "MERGED",
+      "merge_sha": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+      "promoted_mechanism": "fixed private SQLite V4 no-site admission plus launcher candidate and existing V4/V17/UnifiedDB tests",
+      "prior_exact_target_run": 31507571217,
+      "prior_target_result": "PASS_FOR_STORAGE_V4_LANE",
+      "limits": "No installed systemd/service binding or restart/recovery acceptance is implied by merge."
+    }
+  },
+  "hypothesis": "A process admitted by V4 under python -I -S remains a lifetime no-site/import-path invariant during target execution.",
+  "strongest_counterhypothesis": "After the PASS admission receipt, trusted target code can explicitly call site.main(), re-add site-packages and execute .pth code, mutating already-imported Python sqlite3 behavior without changing the pinned ELF identity that V4 attested at admission time.",
+  "single_go_oob_experiment": {
+    "count": 1,
+    "name": "POST_ADMISSION_EXPLICIT_SITE_MAIN_REENTRY",
+    "intervention": "Create a disposable venv with an executable .pth marker, start Python with -I -S, observe a clean pre-site state, then explicitly call site.main() after admission-equivalent startup isolation.",
+    "reversibility": "temporary directory/venv only; deleted after probe",
+    "local_mechanism_replication": {
+      "host_class": "LOCAL_CONTAINER",
+      "python_version": "3.13.5",
+      "python_isolated": true,
+      "python_no_site": true,
+      "marker_before_site_main": null,
+      "marker_after_site_main": "EXECUTED",
+      "sys_path_before": [
+        "/usr/lib/python313.zip",
+        "/usr/lib/python3.13",
+        "/usr/lib/python3.13/lib-dynload"
+      ],
+      "sys_path_after_added": "/tmp/<disposable>/venv/lib/python3.13/site-packages",
+      "result": "COUNTERHYPOTHESIS_SUPPORTED_LOCALLY"
+    },
+    "exact_v4_target_implementation": {
+      "pull_request": 376,
+      "base": "main@94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+      "head": "661ecb81bfd0d25df4ced51c76efdd2de4fb7b45",
+      "test": "tests/fixed_sqlite_runtime_guard_v4_post_admission_site_oob.py",
+      "accepted_target_workflow_run": 31510581092,
+      "state_at_receipt": "QUEUED",
+      "target_result": "UNKNOWN_PENDING_EXECUTION"
+    }
+  },
+  "current_repo_reachability_check": {
+    "queries": [
+      "site.main(",
+      "addsitedir(",
+      "import site",
+      "sitecustomize"
+    ],
+    "result": "NO_MATCHES_IN_CURRENT_GITHUB_CODE_SEARCH",
+    "interpretation": "No current production reachability is demonstrated for the explicit site.main() class. Code search is evidence against present reachability, not a proof that future dependencies/generated code cannot introduce it."
+  },
+  "analysis": {
+    "supported": [
+      "V4 remains a valid pre-target runtime-identity and startup-site admission gate under its measured scope.",
+      "The stronger lifetime-hermetic interpretation is false as a general CPython property: explicit site.main() can reintroduce site/.pth processing after -S startup.",
+      "The current Frank repository does not presently expose direct source evidence for that explicit re-entry path."
+    ],
+    "not_supported": [
+      "A production exploit is reachable in current Frank.",
+      "V4 should be removed or rolled back.",
+      "The accepted target has reproduced the new OOB yet.",
+      "Installed service/systemd ownership, immutable deployment identity, restart/recovery or whole Frank v0.1 acceptance."
+    ]
+  },
+  "architecture_delta": {
+    "status": "NEW_TEST_OBLIGATION; NO_ROLLBACK_OF_V4",
+    "obligation_id": "V4_TRUSTED_TARGET_NO_SITE_REENTRY",
+    "proposal": "Treat V4 receipt semantics as admission-time identity, not lifetime import hermeticity. Before product promotion, freeze the actual Python target/dependency graph and machine-check that admitted production code does not explicitly re-enable site/.pth roots unless those roots are separately attested. Compose this with PR #373's pre-Python launcher fence and the eventual real service/systemd boot proof.",
+    "strongest_counterproposal": "If final self.root eliminates repository-local Python target execution or uses a packaged/embedded runtime with an independently fixed module path, retire this Python-specific obligation and validate the final executable's actual import/runtime boundary instead.",
+    "rollback": "PR #376 is draft-only OOB instrumentation; dropping it changes no canonical Frank runtime. Merged V4 parent remains rollback-able by reverting merge 94bc32c65520c984f62b5aad4c5723a4d8b2c357 if independent evidence later requires it."
+  },
+  "negative_results_and_limits": [
+    "The claim 'python -I -S makes the admitted target lifetime-hermetic against explicit site.main()' is locally falsified.",
+    "No current repo source hit shows this explicit site re-entry is used by Frank; do not promote the local mechanism to a current production vulnerability claim.",
+    "PR #376 and PR #373 both edit the same V4 workflow file; their draft branches must be composed on a fresh main rather than blindly merged independently.",
+    "Accepted-target execution for PR #376 remains queued, so target-specific result is UNKNOWN."
+  ],
+  "claim_boundary": {
+    "external_effect_performed": false,
+    "canonical_frank_database_mutated": false,
+    "system_package_modified": false,
+    "self_root_harness_authority_granted": false,
+    "final_training_authorized": false,
+    "whole_frank_v0_1_acceptance": false,
+    "production_token_api_acceptance": false
+  },
+  "next_frontier": [
+    "Read the exact PR #376 accepted-target result when runner capacity executes run 31510581092; update this receipt instead of inferring target behavior.",
+    "Adjudicate PR #373 pre-Python launcher target run independently; if green, compose its launcher fence with any retained post-admission invariant test on fresh main.",
+    "Resolve the real production token API/server entrypoint and installed service/systemd boot identity before attempting release acceptance.",
+    "Run restart/recovery on installed immutable SQLite/manifest/launcher bytes after real service binding."
+  ]
+}

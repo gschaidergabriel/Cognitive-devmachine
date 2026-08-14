@@ -1,0 +1,240 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/1.0",
+  "run_id": "GO-20260811T135335Z-CHATGPT-SECONDARY-FV01-08-TOKEN-IDENTITY",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T13:53:35Z",
+  "created_at_local": "2026-08-11T20:53:35+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not": "self.root/Frank"
+  },
+  "identity_and_authority": {
+    "clay_is_research_entity": true,
+    "self_root_frank_is_separate_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_may_independently_research_test_implement_harness_changes": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "primary_work_package": "F-V01-08_TOKEN-API-CLIENTS",
+  "cross_impacts": [
+    "F-V01-09_EFFECT-AUTHORITY-TOOLS",
+    "F-V01-13_SECURITY-RECOVERY-RESTART",
+    "F-V01-16_END-TO-END-ACCEPTANCE",
+    "V16_EXECUTION_CONTINUITY"
+  ],
+  "coordination": {
+    "fresh_main_base": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+    "candidate_branch": "chatgpt/go-token-rotation-request-identity-20260811",
+    "current_candidate_head_at_receipt": "0c28fbb5b9127c6f00767f60b3e2f5dde7d2d6e4",
+    "current_open_draft_pr": 329,
+    "infra_superseded_pr": 326,
+    "branch_vs_main_at_last_check": {
+      "behind_by": 0,
+      "ahead_by": 11
+    },
+    "overlap_check": {
+      "sqlite_recovery_lane": "occupied_by_315_320_324",
+      "claycode_lane": "occupied_by_319_323_325",
+      "proactive_agency_lane": "occupied_by_322",
+      "gwt_causal_closure_lane": "occupied_by_280_317",
+      "token_principal_rotation_lane": "no_preexisting_open_pr_found"
+    }
+  },
+  "internal_evidence": {
+    "owner_api_contract": "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
+    "current_v16_runtime": "gschaidergabriel/Dr.-Unterweger@main:runtime/state/frank_execution_continuity.py",
+    "current_v16_schema": "gschaidergabriel/Dr.-Unterweger@main:runtime/state/UNIFIEDDB_V16_EXECUTION_CONTINUITY.sql",
+    "current_v16_request_key_definition": "SHA256(JSON([credential_fingerprint, session_ref, client_ref, request_id]))",
+    "owner_fixed_constraints": [
+      "API token is credential, never identity",
+      "rotation/revocation without identity change",
+      "request/session/client provenance",
+      "replay/idempotency protection for consequential operations",
+      "no raw production token in GitHub/logs/UnifiedDB/ClayGraph artifacts"
+    ]
+  },
+  "finding": {
+    "classification": "SUPPORTED_SOURCE_LEVEL_ARCHITECTURE_GAP_TARGET_RUNTIME_EXECUTION_PENDING",
+    "summary": "V16 currently includes credential_fingerprint in durable request identity. Rotating credential A to replacement credential B for the same admitted caller/session/client/request changes the request key. This conflicts with the owner-fixed separation between token credential and stable identity and can make cross-rotation replay recognition miss unless a higher layer compensates.",
+    "important_boundary": "Different request-key hashes alone prove the identity-domain split, not a duplicate external effect. Full V15/V16/effect composition must still reproduce the second admission/effect risk on target before product severity is promoted."
+  },
+  "hypothesis": {
+    "id": "H-FV01-08-ROTATION-STABLE-REQUEST-IDENTITY",
+    "statement": "Stable request/idempotency identity should bind admitted principal_id + session_ref + client_ref + request_id, while concrete credential_id/fingerprint remains separate authentication provenance and current authorization is revalidated on every attempt/replay disclosure."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-FV01-08-CREDENTIAL-SCOPED-IDEMPOTENCY-INTENTIONAL",
+    "statement": "V16 credential-scoped request identity may be intentional if every token rotation semantically starts a new request-id namespace and clients are contractually required to mint new request IDs. No current owner-fixed contract supporting that rule was found; it would also weaken replay protection across replacement credentials for consequential operations."
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "name": "ROTATION_REPLAY_ALIAS",
+    "intervention": "Hold admitted principal/session/client/logical request constant while replacing credential A with rotated credential B.",
+    "baseline": "same credential A lookup is REPLAY",
+    "negative_current_expectation": "credential B misses A because request_key_hash changes, then can be bound as a new V16 request after a clean release",
+    "rescue": "principal-stable request identity plus separate credential provenance",
+    "status": "TARGET_FULL_RUNTIME_PENDING; LOCAL_SOURCE_LEVEL_DIFFERENTIAL_PASS"
+  },
+  "local_measurement": {
+    "evidence_class": "LOCAL_SOURCE_LEVEL_DIFFERENTIAL",
+    "result": "PASS",
+    "wall_seconds": 0.68,
+    "max_rss_kib": 110248,
+    "checks": {
+      "current_v16_key_changes_on_rotation": true,
+      "candidate_key_stable_same_principal": true,
+      "candidate_key_isolates_principal": true
+    },
+    "hash_observations": {
+      "v16_credential_a": "d9c1f305fa138ad538d39713504707d5238561a73c37a62d00993f0f130e43c5",
+      "v16_credential_b": "50b455cfc58e9ba34208c6b57307c21b6fb96de6cfcb2f6cf22056a265cf93b2",
+      "candidate_same_principal": "1931611fdfd9f1ffda0ee5d91401c685d4ba08d7e5f5f214087cc3925853b8cb",
+      "candidate_other_principal": "6279356399bdc033cefc8f43888ce19cd059b5fc8ce05bf43a99b0f0ab641ef5"
+    },
+    "limitations": [
+      "not a full current UnifiedDB/V15/V16 runtime execution",
+      "not accepted-target VPS evidence",
+      "not an external-effect reproduction"
+    ]
+  },
+  "built_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-token-rotation-request-identity-20260811",
+    "files": [
+      "runtime/api/frank_token_request_identity_v1_candidate.py",
+      "runtime/api/frank_token_registry_v1_candidate.py",
+      "runtime/state/UNIFIEDDB_TOKEN_API_IDENTITY_V1_CANDIDATE.sql",
+      "tests/frank_token_rotation_request_identity_probe.py",
+      "tests/frank_token_registry_v1_candidate_gate.py",
+      ".github/workflows/frank-token-rotation-request-identity-vps.yml"
+    ],
+    "schema_status": "CANDIDATE_NOT_PRODUCT; intentionally absent from apply_current_schema.py",
+    "typed_split": [
+      "PrincipalIdentity",
+      "CredentialInstance",
+      "RequestIdentity",
+      "CurrentAuthorization"
+    ],
+    "security_properties_attempted": [
+      "raw token not persisted",
+      "externally supplied >=32-byte lookup pepper",
+      "HMAC-SHA256 token lookup hash",
+      "SHA-256 credential fingerprint retained only as provenance identifier",
+      "atomic credential rotation/revocation transaction",
+      "stable principal request identity across credential rotation",
+      "different principal isolation",
+      "request semantic hash conflict detection",
+      "current scope checked before replay disclosure",
+      "stale/revoked credential and disabled principal fail closed",
+      "expiry rejection",
+      "SQLite integrity/foreign-key regression"
+    ]
+  },
+  "target_execution": {
+    "accepted_target_family": "self-hosted Linux/X64 runner clay on digital-retina / Hostinger lane as project-configured",
+    "first_targeted_run": {
+      "workflow_run_id": 31497017666,
+      "job_id": 93797178723,
+      "result": "INFRA_FAILURE_BEFORE_TEST",
+      "failure": "private Git clone failed: could not read Username for https://github.com",
+      "scientific_credit": "NONE"
+    },
+    "checkout_repair": "switched to project-proven isolated git init + x-access-token fetch pattern",
+    "subsequent_target_state_at_receipt": "NO_PASS_RECEIPT_VISIBLE; connector did not expose the new push workflow and PR workflow discovery remained inconsistent",
+    "target_pass_claim": false
+  },
+  "negative_infrastructure_evidence": [
+    "Generic repository workflows repeatedly failed on diagnostic heads before useful candidate execution.",
+    "Initial targeted workflow failed at checkout before discriminator execution.",
+    "Container cannot resolve github.com, so private target repo cannot be cloned locally.",
+    "Missing/failed CI is classified as infrastructure evidence, not candidate failure or success."
+  ],
+  "fresh_external_primary_evidence": [
+    {
+      "source": "RFC 6750 OAuth 2.0 Bearer Token Usage",
+      "url": "https://www.rfc-editor.org/rfc/rfc6750.html",
+      "use": "bearer-token secrecy/TLS and credential protection"
+    },
+    {
+      "source": "RFC 9700 Best Current Practice for OAuth 2.0 Security",
+      "url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+      "use": "sender-constrained tokens recommended for replay resistance in applicable deployments"
+    },
+    {
+      "source": "RFC 9449 OAuth 2.0 Demonstrating Proof of Possession (DPoP)",
+      "url": "https://www.rfc-editor.org/rfc/rfc9449.html",
+      "use": "proof-of-possession / request-bound anti-replay design evidence"
+    },
+    {
+      "source": "RFC 7009 OAuth 2.0 Token Revocation",
+      "url": "https://www.rfc-editor.org/rfc/rfc7009.html",
+      "use": "revocation invalidates concrete token/grant state"
+    },
+    {
+      "source": "RFC 7662 OAuth 2.0 Token Introspection",
+      "url": "https://www.rfc-editor.org/rfc/rfc7662.html",
+      "use": "token active state and authorization context/client identity are separate metadata dimensions"
+    },
+    {
+      "source": "IETF HTTPAPI Idempotency-Key draft",
+      "url": "https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/",
+      "use": "design evidence only; draft was expired by this run and is not treated as normative RFC"
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "proposal": [
+      "Introduce stable admitted PrincipalIdentity independent of credential instance.",
+      "Represent API token as rotatable/revocable CredentialInstance linked to principal.",
+      "Derive durable RequestIdentity from principal + session + client + request_id, not credential fingerprint.",
+      "Retain credential ID/fingerprint on auth/use receipts for provenance.",
+      "Bind request identity to request semantic hash; same key with different semantics must conflict.",
+      "Revalidate current credential/principal status and scopes before replay result disclosure or any consequential action.",
+      "Do not promote candidate schema into canonical migration chain until exact target composition passes."
+    ],
+    "rollback": "candidate files are additive and absent from canonical apply_current_schema.py; delete/close branch without product schema mutation"
+  },
+  "next_falsifiers_ranked": [
+    "Obtain exact accepted-target composite PASS/FAIL for ROTATION_REPLAY_ALIAS plus ordinary credential lifecycle gate on current fresh main.",
+    "Compose PrincipalIdentity/RequestIdentity with V15 FrankExecutionGate and V16 execution continuity without creating a second execution authority.",
+    "Prove same principal + rotated credential + same request cannot create a second consequential effect through V17/effect-provider idempotency.",
+    "Concurrency test: two simultaneous rotations of one credential; at most one source rotation succeeds and no split credential lineage appears.",
+    "Crash test around atomic rotate/revoke commit and restart authentication state.",
+    "Scope downgrade/upgrade replay matrix: stable idempotency recognition must not bypass current authorization.",
+    "Semantic payload mismatch under same request ID must fail closed across restart and credential rotation.",
+    "Production token API decision for bearer-only versus sender-constrained credential mode (e.g. DPoP/mTLS) based on target threat model and measured cost.",
+    "Network/TLS health-readiness, cancellation, concurrency and multimodal provenance acceptance required for F-V01-08 completion."
+  ],
+  "distribution": {
+    "primary": ["F-V01-08_TOKEN-API-CLIENTS"],
+    "secondary": [
+      "F-V01-09_EFFECT-AUTHORITY-TOOLS",
+      "F-V01-13_SECURITY-RECOVERY-RESTART",
+      "F-V01-16_END-TO-END-ACCEPTANCE",
+      "V16_EXECUTION_CONTINUITY"
+    ],
+    "do_not_broadcast_as": [
+      "whole Frank v0.1 acceptance",
+      "target VPS PASS",
+      "OAuth implementation",
+      "DPoP implementation",
+      "effect exploit proof"
+    ]
+  },
+  "claim_boundary": {
+    "external_effect_performed": false,
+    "canonical_frank_database_mutated": false,
+    "canonical_migration_chain_changed": false,
+    "self_root_harness_authority_granted": false,
+    "final_training_authorized": false,
+    "whole_frank_v0_1_acceptance": false
+  }
+}

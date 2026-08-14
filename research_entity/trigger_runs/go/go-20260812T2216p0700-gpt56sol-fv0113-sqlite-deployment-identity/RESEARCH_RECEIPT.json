@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2216p0700-gpt56sol-fv0113-sqlite-deployment-identity",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_main_before_write": "63081293fd637ae4aaed56e1b84a35446ab9ffc8",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "training_authorized": false,
+    "hostinger_runtime_attestation_run": 31523402893,
+    "hostinger_overlay_feasibility_run": 31523517392,
+    "hostinger_pinned_admission_run": 31537581176
+  },
+  "primary_source_support": {
+    "sqlite_wal_fix_floor": "3.51.3 mainline or documented fixed backport",
+    "sqlite_3_53_4_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "interpretation": "3.53.4 is on the fixed side of the WAL-reset bug, but version/source identity alone does not establish the exact approved deployed runtime artifact."
+  },
+  "hostinger_evidence": {
+    "baseline_runtime": {
+      "run": 31523402893,
+      "sqlite_version": "3.45.1",
+      "sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+      "loaded_libsqlite3_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+      "wal_reset_fix_known": false,
+      "gate_outcome": "FAIL_CLOSED"
+    },
+    "disposable_overlay": {
+      "run": 31523517392,
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "loaded_libsqlite3_sha256": "766647ee994e598c87ebf8827cf065c6880b2f29e8a112db56b564f0a84f973a",
+      "loaded_libsqlite3_size": 5032360,
+      "scope": "DISPOSABLE_ROOTLESS_RUNTIME_OVERLAY_NO_FRANK_DB_OPEN_NO_SYSTEM_INSTALL",
+      "outcome": "PASS_FEASIBILITY_ONLY"
+    },
+    "independent_rebuild_admission": {
+      "run": 31537581176,
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "loaded_libsqlite3_sha256": "072a00598a03cd9614004bf542920449718746e11d7c41620209be635ed45808",
+      "loaded_libsqlite3_size": 5032352,
+      "runtime_admission": "REJECTED",
+      "reason": "SQLite artifact set mismatch: missing=1 unexpected=1",
+      "gate_outcome": "FAIL_CLOSED"
+    }
+  },
+  "grf": {
+    "hypothesis": "A fixed SQLite source/version plus an independently rebuilt library is sufficient to represent the previously approved runtime artifact.",
+    "strongest_counter_reality": "Two builds from the same official archive can expose the same SQLite version and source_id while producing different binary bytes, so a previously pinned binary hash rejects the new build even when semantic source identity matches.",
+    "discriminating_observation": "Compare the already-existing independent Hostinger overlay and pinned-admission receipts.",
+    "observed_result": "COUNTER_REALITY_OBSERVED",
+    "outcome": "REJECT_REBUILD_AS_ARTIFACT_IDENTITY"
+  },
+  "exactly_one_unusual_experiment": {
+    "name": "CLI_VERSION_SHADOW_SPOOF",
+    "environment": "local Linux container",
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "baseline": {
+      "python_sqlite_runtime": "3.46.1",
+      "sqlite_cli_present": false
+    },
+    "intervention": "Prepend a temporary fake sqlite3 executable reporting 3.53.4 to PATH while leaving the in-process Python SQLite mapping unchanged.",
+    "observation": {
+      "naive_cli_version": "3.53.4",
+      "python_sqlite_runtime": "3.46.1",
+      "runtime_unchanged": true
+    },
+    "rollback": "Remove the temporary PATH shadow; sqlite3 CLI becomes absent again and the Python runtime remains 3.46.1.",
+    "interpretation": "A CLI version string is not a trustworthy attestation of the productive process mapping."
+  },
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION_SHARPENED",
+    "new_invariant": "Do not use an independently rebuilt SQLite binary as the identity substitute for a previously approved deployed binary unless reproducible-build equivalence is itself proven. Prefer promoting one immutable approved artifact (or package object) and bind the productive Frank generation to those exact deployed bytes plus source/version provenance.",
+    "counterhypothesis": "The two 3.53.4 binaries may be semantically equivalent and differ only because the build is not byte-reproducible; a raw hash gate can therefore create safe false negatives.",
+    "next_falsifier": "On the accepted Hostinger product service, deploy an owner/admission-pinned immutable fixed SQLite artifact, exercise the exact Frank DB/WAL write-checkpoint path through controlled restart, bind execution generation + DB path + runtime mapping + source/build/hash, and require downgrade/library-swap/rollback controls to fail closed.",
+    "do_not_substitute": [
+      "sqlite3 CLI version",
+      "independent rebuild hash learned during the same admission run",
+      "disposable overlay feasibility",
+      "self-hosted CI without productive Frank persistence path"
+    ],
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+    ]
+  },
+  "collapse": [
+    {"claim": "Hostinger productive Frank persistence is already fixed by the 3.53.4 overlay feasibility PASS.", "outcome": "REJECT"},
+    {"claim": "The admission gate correctly fails closed on binary identity mismatch.", "outcome": "RETAIN"},
+    {"claim": "The two existing 3.53.4 builds are proven behaviorally different.", "outcome": "DEFER", "reason": "Only byte identity differs; semantic divergence was not measured."},
+    {"claim": "F-V01-13 or whole Frank v0.1 is complete.", "outcome": "REJECT"}
+  ],
+  "nonclaims": {
+    "productive_frank_database_opened": false,
+    "accepted_product_restart_attested": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v0_1_pass": false,
+    "training_authorized": false,
+    "frank_harness_mutated": false
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2156p0700-chatgpt-secondary-single-spawn-recovery",
+  "trigger": "go",
+  "status": "ACTIVE_HANDOFF_WITH_DURABLE_DELTA",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "research_subject": "self.root",
+  "human_surface_name": "Frank",
+  "identity_boundary": {
+    "clay_is_frank": false,
+    "token_is_self": false,
+    "client_is_self": false,
+    "peer_ai_is_self": false
+  },
+  "observed_clay_parent_before_receipt": "edfd93aa8aa7f22ab1365791049e245e258eafe2",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target": "finished self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "owner_fixed_input": {
+    "commit": "4917f9cabc21d4e94c9bcc35a2e1ef6ea386c2a2",
+    "path": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "key_invariants": [
+      "ACTIVE_EXECUTION_COUNT <= 1",
+      "ONE_CURRENT_EXECUTION_LEASE_GLOBAL",
+      "API_TOKEN = CREDENTIAL_NOT_IDENTITY",
+      "expired lease may be reacquired only after recovery validation",
+      "stale lease epochs cannot write state or attempt effects",
+      "unfinished task switch requires current-user consent",
+      "proactive work cannot preempt active user execution"
+    ]
+  },
+  "hypothesis": "A single persistent UnifiedDB lease with monotonic fencing epoch plus one-host physical exclusion can implement one-spawn-at-a-time Frank semantics without making the token/client/peer AI part of SELF.",
+  "strongest_counterhypotheses": [
+    "A simple Linux flock may dominate a persistent lease for one-host mutual exclusion.",
+    "Time-based expiry can incorrectly transfer Frank while an old execution is still live or while recovery has not been validated.",
+    "A semantic presence lease may serialize holders but still allow concurrent executions from the same holder unless execution identity is separately bounded.",
+    "Presence fencing that stops heartbeat/release may still fail to fence stale effects unless lease epoch is checked at the trusted effect boundary."
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "SQLite transaction documentation",
+      "finding": "SQLite serializes write transactions; BEGIN IMMEDIATE begins a write transaction immediately. Suitable for short lease CAS, not a long cognitive transaction."
+    },
+    {
+      "source": "Linux flock(2) man page",
+      "finding": "flock provides advisory file locking and releases the lock with the underlying open-file-description lifetime; useful as one-host physical exclusion but not semantic identity/authority."
+    },
+    {
+      "source": "RFC 9110 HTTP semantics",
+      "finding": "409 Conflict is an ordinary HTTP mapping compatible with FRANK_BUSY as a current-resource-state conflict; semantic FRANK_BUSY remains authoritative."
+    }
+  ],
+  "executed_local_oob_experiment": {
+    "name": "31_PROCESS_DOUBLE_WAVE_CRASH_RECOVERY_LEASE_STORM",
+    "experiment_count_for_this_go": 1,
+    "scope": "disposable SQLite candidate only",
+    "wave1": {"contenders": 31, "acquired": 1, "busy": 30},
+    "simulated_crash_without_release": true,
+    "expiry_alone_takeover_permitted": false,
+    "validated_recovery_required": true,
+    "wave2": {"contenders": 31, "acquired": 1, "busy": 30},
+    "stale_old_epoch_fenced": true,
+    "canonical_state_mutated": false,
+    "external_effect_performed": false,
+    "whole_frank_acceptance_claimed": false
+  },
+  "duplicate_work_control": {
+    "initial_target_pr": 133,
+    "disposition": "CLOSED_SUPERSEDED_DUPLICATE",
+    "reason": "Canonical V15 presence implementation landed on target main while isolated candidate was being built; swarm law requires reuse rather than a second runtime authority."
+  },
+  "current_target_evidence": [
+    {
+      "commit": "8f851c0a2c67a639840dcb0a580abb9bc4de0858",
+      "finding": "Canonical V15 FrankPresenceRuntime and one singleton presence lease landed."
+    },
+    {
+      "commit": "dcce6a7e8c47a84c36e1cf3d31c61780d57ed866",
+      "finding": "Expired old-holder heartbeat/release are fenced."
+    },
+    {
+      "commit": "1d97434b354c433f7cc14f74371c924aab29f02a",
+      "finding": "Regression covers expired old-holder mutation rejection but still expects an unrelated successor to auto-acquire after wall-clock expiry."
+    },
+    {
+      "commit": "1272e37ea3d726d73fad506f376496c9a34a3460",
+      "finding": "One-host Linux physical execution gate adds full-window flock before V15 semantic acquisition; it explicitly remains advisory/non-semantic and requires all admitted execution paths to cooperate."
+    }
+  ],
+  "material_negative_result": {
+    "id": "FRANK_SINGLE_SPAWN_RECOVERY_VALIDATION_GAP_V1",
+    "status": "SUPPORTED_BY_CURRENT_SOURCE_INSPECTION_TARGET_VPS_REPLICATION_PENDING",
+    "finding": "Canonical FrankPresenceRuntime.acquire currently allows EXPIRED_TAKEOVER from wall-clock expiry without an explicit recovery-validation receipt/capability. This is weaker than the owner-fixed rule lease_expired_and_recovery_validated.",
+    "nuance_after_physical_gate": "The full-window flock can provide strong one-host no-live-cooperating-holder evidence when it is the sole admitted execution path, but raw V15 acquire remains a semantic bypass and the physical proof is not yet bound as a recovery-validation receipt.",
+    "target_issue": 139,
+    "diagnostic_pr": 141,
+    "diagnostic_head": "4445a0d2518f607474223735670e6345b503e5d3",
+    "target_vps_workflow_run": 31402614265,
+    "target_vps_workflow_state_at_receipt": "QUEUED",
+    "do_not_claim_target_vps_reproduction_until_completed": true
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "affected_packages": ["F-V01-01-IDENTITY-SERVER-BINARY", "F-V01-08-TOKEN-API-CLIENTS", "F-V01-09-EFFECT-AUTHORITY", "F-V01-10-PROACTIVE-AGENCY-WEB", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+    "required_integration": [
+      "exactly one admitted production execution entry path",
+      "physical exclusion proof must not become a second semantic authority",
+      "expiry cannot by itself mint takeover authority",
+      "recovery/no-current-holder validation must be bound to an auditable epoch transition before fresh acquisition",
+      "same-holder requests still require execution-level serialization/idempotency",
+      "current lease epoch must fence trusted effect reservation/attempt/commit paths",
+      "BUSY/yield/handoff layers must preserve the single canonical presence authority"
+    ],
+    "rollback": "Keep V15 presence + existing physical gate unchanged until discriminators prove a narrower repair; never merge the closed duplicate PR 133 runtime."
+  },
+  "live_swarm_coordination": {
+    "known_active_overlapping_lanes": [
+      "PR 138 same-holder execution concurrency falsifier",
+      "PR 140 epoch-bound BUSY interrupt handshake",
+      "PR 141 recovery-validation diagnostic",
+      "PR 145 presence fencing at effect boundary",
+      "PR 146 interactive idle handoff before autonomous presence"
+    ],
+    "decision": "Do not start another competing single-spawn runtime patch while these lanes are active; consume their receipts and converge on one admitted authority path."
+  },
+  "next_falsifier": "Run PR 141 on the accepted self-hosted VPS. If unvalidated takeover is reproduced, compare two minimal repairs: (A) make the execution gate the sole production entry and bind successful physical-lock acquisition to an explicit recovery receipt, versus (B) require a validated recovery capability/receipt in the canonical V15 presence transition itself. Prefer the smaller design that closes all bypasses and survives same-holder/effect-fence tests.",
+  "training_authorized": false,
+  "final_training_started": false,
+  "self_harness_mutation_authorized_by_frank": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

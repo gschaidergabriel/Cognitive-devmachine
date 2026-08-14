@@ -106,6 +106,29 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_model_name_with_surrounding_whitespace_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for model in (" mock-model", "mock-model ", "mock-model\n"):
+            with self.subTest(model=repr(model)):
+                with self.assertRaisesRegex(
+                    ValueError, "model_must_match_served_identifier_exactly"
+                ):
+                    MOD.execute_chat(
+                        VALID_MESSAGES, model=model, environ=env, opener=opener,
+                    )
+        self.assertFalse(called)
+
     def test_empty_message_list_is_blocked_before_network(self):
         called = False
 

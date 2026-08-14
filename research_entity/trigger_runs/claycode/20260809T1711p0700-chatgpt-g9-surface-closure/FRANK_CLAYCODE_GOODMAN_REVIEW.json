@@ -1,0 +1,58 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1711p0700-chatgpt-g9-surface-closure",
+  "latest_frank_run":null,
+  "latest_frank_claycode_architecture_artifact":null,
+  "discovery_note":"A direct read of research_entity/frank/FRANK_ARCHITECTURE.claycode.json returned 404 and connector code search returned no indexed result. This run does not claim repository-wide absence; it therefore uses current FRANK directives/Harness state as provisional requirements and records the architecture artifact as unresolved/null for this run.",
+  "items":[
+    {
+      "claim_id":"GOODMAN-CC-20260809-01",
+      "frank_statement":"External effects must remain outside model authority and require explicit valid capability/commit evidence.",
+      "frank_source_refs":["research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md","research_entity/harness/HARNESS_WORKSPACE.json","research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"],
+      "ancestry_families":["RAE_FRANK_CLAY_EFFECT_AUTHORITY_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Ubuntu process isolation, ordinary ACLs and narrow host APIs are sufficient; a language-level capability token/witness layer adds complexity without material safety benefit.",
+      "falsifier":"Matched ClayCode application/Harness tests show no security/recovery advantage from explicit capability semantics or show unacceptable overhead/semantic friction relative to simpler host isolation.",
+      "independent_checks":[
+        {"source":"https://github.com/WebAssembly/WASI/blob/main/docs/Capabilities.md","class":"PRIMARY_OFFICIAL_SPEC","result":"WASI independently models host interaction through link-time and runtime capabilities/resources."},
+        {"source":"https://docs.wasmtime.dev/api/wasmtime/component/struct.Resource.html","class":"PRIMARY_IMPLEMENTATION_DOC","result":"Wasmtime component resources are host-defined typed resources with non-forgeability guarantees for guest-visible handles."},
+        {"source":"https://github.com/bytecodealliance/wasmtime/blob/master/docs/WASI-tutorial.md","class":"PRIMARY_IMPLEMENTATION_DOC","result":"Ungranting filesystem capability causes access failure; preopening explicitly grants scoped filesystem access."}
+      ],
+      "adversarial_checks":["Kept exact ClayCode CapabilityToken/Witness semantics unpromoted; external evidence supports the architecture class, not the project-specific token schema.","Retained native Ubuntu ABI/FFI as a competing backend rather than mandating WASI."],
+      "verdict":"REFINED",
+      "reason":"Independent capability-system evidence supports an explicit host authority boundary, but not the exact FRANK/ClayCode witness/token representation.",
+      "claycode_action":"Retain effect-authority separation and typed capability interfaces; test WIT/WASI and native Ubuntu lowering before freezing exact ABI/token semantics.",
+      "affected_claycode_artifacts":["CLAYCODE_G9_FUSION_SPEC_V3.clay","future compiler/runtime ABI"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-20260809-02",
+      "frank_statement":"FRANK should be modeled as a hierarchical multiscale recurrent loop-of-loops and ClayCode should represent loop identity, timescale, recurrence budget and dynamics readouts.",
+      "frank_source_refs":["research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md"],
+      "ancestry_families":["FRANK_LOOP_OF_LOOPS_OWNER_DISTRIBUTED_OPEN_HYPOTHESIS"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Ordinary persistent event-driven orchestration explains the useful behavior; recurrent-dynamics framing adds little implementation value.",
+      "falsifier":"Harness replay shows loop-specific state/readouts/controllers do not improve prediction, stability, correction time or resource allocation relative to simpler event-driven controls.",
+      "independent_checks":[],
+      "adversarial_checks":["No branch repetition counted as replication.","No new loop-specific syntax proposed; generic records/rules remain the default until an executable fixture fails."],
+      "verdict":"UNRESOLVED",
+      "reason":"This run produced no independent loop-dynamics experiment. Representability requirement may be satisfied by generic ClayCode data types without accepting the scientific mechanism claim.",
+      "claycode_action":"Add regression fixtures for LoopDynamicsReadout after parser closure; do not add branch-specific language primitives yet.",
+      "affected_claycode_artifacts":["future parser/typechecker fixture corpus"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-20260809-03",
+      "frank_statement":"GWT/Hyperposition/Emergenz/ClayGraph/UnifiedDB readouts must be first-class representable in ClayCode and must preserve provenance/authority distinctions.",
+      "frank_source_refs":["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md","research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json","research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],
+      "ancestry_families":["RAE_SHARED_SEMANTIC_FABRIC_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A smaller general-purpose core plus typed library schemas is sufficient; making these domain readouts language-level primitives would overfit ClayCode to FRANK research infrastructure.",
+      "falsifier":"Executable representative fixtures cannot preserve required temporal/provenance/uncertainty/role semantics using current generic records/collections/interfaces plus libraries.",
+      "independent_checks":[{"source":"https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md","class":"PRIMARY_OFFICIAL_SPEC","result":"Typed interface definitions can cleanly separate host/library contracts from core language semantics, supporting a smaller core plus domain libraries."}],
+      "adversarial_checks":["Explicitly searched for missing semantic primitive; current run found parser surface defects instead.","Kept H-CC-G9-005 OPEN pending executable branch fixtures."],
+      "verdict":"REFINED",
+      "reason":"The requirement for representability survives, but current evidence favors generic typed core + domain schemas/interfaces over branch-specific syntax.",
+      "claycode_action":"Freeze generic core first; compile representative domain fixtures and only promote new primitives on a concrete semantic-preservation failure.",
+      "affected_claycode_artifacts":["grammar.ebnf","DIALECT_REGISTRY_V3.clay","future stdlib/domain schema packages"]
+    }
+  ]
+}

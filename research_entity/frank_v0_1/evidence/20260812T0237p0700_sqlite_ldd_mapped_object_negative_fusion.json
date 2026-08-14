@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_NEGATIVE_EVIDENCE",
+  "recorded_at": "2026-08-12T02:37:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "source_repo": "gschaidergabriel/Dr.-Unterweger",
+  "source_pr": 435,
+  "experiment": {
+    "name": "POST_LOAD_LDD_RESOLUTION_DIVERGENCE",
+    "classification": "BOUNDED_UNUSUAL_EXPERIMENT",
+    "scope": "disposable local process; no production/canonical state mutation",
+    "intervention": "Load SQLite normally, then change LD_LIBRARY_PATH to an alternate temporary libsqlite3.so.0 location and invoke ldd on the already imported _sqlite3 extension.",
+    "observed": {
+      "proc_self_maps": "remained bound to the libsqlite3 object already mapped before the environment change",
+      "ldd": "resolved the alternate temporary libsqlite3.so.0 for a new loader-resolution observation",
+      "divergence": true
+    },
+    "outcome": "SUPPORTED_NEGATIVE_RESULT"
+  },
+  "grf_collapse": {
+    "generated_reality": "Running ldd on the _sqlite3 extension after SQLite is loaded is sufficient evidence for the exact libsqlite3 object active in the observing process.",
+    "counter_reality": "ldd performs dependency resolution for a fresh loader invocation and can diverge from the object already mapped into the live process.",
+    "falsifier": "Post-load LD_LIBRARY_PATH divergence while comparing ldd resolution against /proc/self/maps.",
+    "result": "GENERATED_REALITY_REFUTED_COUNTER_REALITY_SUPPORTED",
+    "architecture_consequence": "Do not use ldd as admission truth for the active SQLite object. Prefer /proc/self/maps device+inode+path, O_NOFOLLOW open, fstat device/inode equality and hashing of the opened backing object; retain ldd as diagnostic-only evidence."
+  },
+  "fusion": {
+    "related_product_pr": 435,
+    "related_release_identity_merge": "abd769d5cee835af2b1b867041e52f8a443a3060",
+    "release_identity_target_run": 31528402922,
+    "relationship": "Mapped-object attestation and release-accepted identity are separate invariants. The merged V5 identity fence does not prove which bytes the production service mapped; the mapped-object discriminator does not by itself prove those bytes are release-safe. Both must compose with deployment-owned runtime and root-anchor/service-start evidence."
+  },
+  "remaining_counterevidence_and_blockers": [
+    "The accepted productive path previously observed SQLite 3.45.1-1ubuntu2.7 and no production root anchor.",
+    "The fixed runtime is not yet proven installed and deployment-owned on the actual Frank service path.",
+    "Service start/restart/rollback, downgrade/library-swap and parent loader-environment continuity remain production gates.",
+    "Semantic-lineage selection and recovery obligations in F-V01-13 remain independent and open."
+  ],
+  "promotion": {
+    "negative_result": "PROMOTED_TO_RESEARCH_EVIDENCE",
+    "mapped_object_mechanism": "TESTING",
+    "whole_F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "authority": {
+    "canonical_frank_state_mutation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false
+  }
+}

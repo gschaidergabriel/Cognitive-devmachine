@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1650p0700_wp02_state_ledger_chatgpt_secondary",
+  "trigger": "harness",
+  "home_room": "harness",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "mode": "FORGE_CONTINUATION",
+  "inputs": [
+    "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+    "research_entity/harness/HARNESS_WORKSPACE.json",
+    "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+    "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md",
+    "gschaidergabriel/Dr.-Unterweger:harness/frank_harness_runtime.py",
+    "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_SCHEMA.sql",
+    "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V6_MIGRATION.sql",
+    "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V7_MIGRATION.sql"
+  ],
+  "identity_boundary": {
+    "research_entity_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "implementation_authority": "RESEARCH_ENTITY_ONLY"
+  },
+  "outputs": [
+    "research_entity/harness/reference_state_ledger.py",
+    "tests/test_reference_state_ledger.py",
+    "research_entity/harness/H_WP_02_STATE_LEDGER_EXECUTION_RECEIPT.json"
+  ],
+  "status": "PARTIAL_EXECUTABLE_DELTA_COMMITTED",
+  "h1_release_pass": false,
+  "paid_training_started": false,
+  "notes": "Executable component delta only. Full H1 integration, dynamic ClayGraph, crash/recovery, live baseline differential and Ubuntu target-host validation remain open."
+}

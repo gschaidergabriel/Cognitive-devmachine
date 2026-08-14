@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1741p0700-clayresearch-foreign-effect-closure",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "evidence_scope": "HOSTED_CHATGPT_CONTAINER_PLUS_ABSTRACT_SIMULATION_NOT_ANDREAS_UBUNTU_TARGET",
+  "probe_code_commit": "977e924dcd7cf09e99455b5d9ec2da74937c8e3c",
+  "environment_observation": {
+    "observed_kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "gcc": "14.2.0",
+    "landlock_probe": {
+      "result": "UNAVAILABLE_IN_THIS_HOSTED_ENVIRONMENT",
+      "syscall_result": "errno=38 ENOSYS",
+      "interpretation": "Runtime enforcement must probe actual host support; this hosted result is not evidence about Andreas' Ubuntu developer host."
+    }
+  },
+  "experiments": [
+    {
+      "id": "EXP-SPAWN-C1-INHERITED-FD",
+      "class": "LOCAL_EXECUTION_PRIMARY_FOR_HOSTED_CONTAINER_ONLY",
+      "setup": "Parent opened a mode-0600 temporary file, then launched a uid/gid-65534 child. Direct path open was denied but the writable file descriptor was deliberately inherited with pass_fds.",
+      "observed": {
+        "direct_path_open": false,
+        "direct_path_error": "PermissionError",
+        "write_via_inherited_fd": true,
+        "file_marker": "inherited-fd-write"
+      },
+      "result": "IMPLEMENTATION_COUNTEREXAMPLE",
+      "supports": "Path-access restrictions alone do not define effective child authority when pre-opened handles exist."
+    },
+    {
+      "id": "EXP-SPAWN-C1-NO-FD-CONTROL",
+      "class": "LOCAL_EXECUTION_PRIMARY_FOR_HOSTED_CONTAINER_ONLY",
+      "setup": "Same privilege-drop control without passing the protected file descriptor.",
+      "observed": {
+        "write_via_numeric_fd": false,
+        "protected_file_modified_by_child": false
+      },
+      "result": "CONTROL_PASS",
+      "supports": "The successful inherited-FD write depended on the authority carrier, not on path access."
+    },
+    {
+      "id": "EXP-SPAWN-C1-SCM-RIGHTS",
+      "class": "LOCAL_EXECUTION_PRIMARY_FOR_HOSTED_CONTAINER_ONLY",
+      "setup": "Parent launched a uid/gid-65534 child with a Unix socket and sent the already-open protected file descriptor after launch via SCM_RIGHTS.",
+      "observed": {
+        "received_fd": true,
+        "write_via_received_fd": true,
+        "file_marker": "scm-rights-write"
+      },
+      "result": "IMPLEMENTATION_COUNTEREXAMPLE",
+      "supports": "Post-launch IPC can transfer effective authority even when pathname access is unavailable."
+    },
+    {
+      "id": "EXP-SPAWN-C1-ABSTRACT-FUZZ",
+      "class": "SIMULATION_ONLY",
+      "seed": 202608091741,
+      "cases": 200000,
+      "model": "Random parent grants, child requests and ambient authority carriers over path, carrier, kernel and resource effect atoms.",
+      "naive_path_only": {
+        "accepted": 68862,
+        "escapes": 15703,
+        "escape_rate_among_accepted": 0.22803578170834424,
+        "top_escape_channels": [
+          ["scm_rights_receive", 4380],
+          ["fd_protected_rw", 4313],
+          ["secret_env", 4274],
+          ["ambient_capability", 4251]
+        ]
+      },
+      "carrier_aware_subset_model": {
+        "accepted": 14013,
+        "escapes": 0
+      },
+      "result": "MECHANISM_DISCRIMINATION_ONLY",
+      "boundary": "Zero escapes in this abstract model is not proof of Linux enforcement completeness or end-to-end safety."
+    }
+  ],
+  "negative_results": [
+    "Landlock could not be exercised in the hosted execution environment because the direct availability probe returned ENOSYS.",
+    "No end-to-end enforcement stack was executed on Andreas' Ubuntu developer system in this run.",
+    "The carrier-aware abstract model does not model kernel bugs, TOCTOU, all IPC types, all FFI, side channels, broker defects or every Linux object class."
+  ]
+}

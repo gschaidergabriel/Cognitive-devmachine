@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T174614p0700_harness_lowering_semantics",
+  "trigger": "spawn",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "distribution_source": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json@f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+  "branch_draw": {
+    "rng": "OS_CSPRNG via Python secrets.randbelow executed in current runtime",
+    "seed_recorded": false,
+    "draw_domain": "integer 0..9999 mapped to cumulative percentages",
+    "draw_int": 5750,
+    "draw_percent": 57.5,
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "selected_origin_branch": "harness"
+  },
+  "recent_spawn_novelty_check": {
+    "indexed_receipts_found": 0,
+    "method": "GitHub repository search for SPAWN_RECEIPT.json and selected_origin_branch",
+    "limitation": "GitHub code-search indexing may lag recent writes; no indexed prior receipt was available to compare."
+  },
+  "candidate_microdirections": [
+    "authority-receipt replay completeness across effect commit/re-entry boundaries",
+    "adaptive visual learner atomic promotion + rollback under replay/crash",
+    "GWT receiver-chain causal identifiability under counterfactual replay",
+    "ClayCode lowering preservation of authority/provenance/epistemic fields",
+    "Reference-vs-Clay Harness ClayGraph differential equivalence",
+    "stale-epoch and TOCTOU race detection across state/effect boundaries"
+  ],
+  "microdirection_draw": {
+    "rng": "OS_CSPRNG via Python secrets.randbelow executed in current runtime",
+    "candidate_count": 6,
+    "draw_index_zero_based": 3,
+    "selected_microdirection": "ClayCode lowering preservation of authority/provenance/epistemic fields"
+  },
+  "why_now": [
+    "PROGRAM_STATE current stage is BASE_CLAYCODE_RELEASE.",
+    "ClayCode BASE requires lowering/foreign-runtime translation-validation receipts.",
+    "H-WP-03 CLAYCODE-ADAPTER is blocked on ClayCode release, so a lowering-preservation contract can de-risk H2 without bypassing the stage gate.",
+    "H-WP-02 STATE-LEDGER is already actively claimed; the selected microdirection avoids duplicating that live work."
+  ],
+  "status": "COMPLETED_RESEARCH_RUN"
+}

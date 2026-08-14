@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "spawn-cc-loop-prod-diff-20260809T1742p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:42:00+07:00",
+  "payload": {
+    "work_id": "WORK-SPAWN-CC-LOOP-PROD-DIFF-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_NEXT_DISCRIMINATOR",
+    "title": "Run production ClayCode FRANK-loop differential on Ubuntu",
+    "work_clay": "Compile the frozen LoopDynamicsReadout/RecurrenceDecision fixture through the production ClayCode parser, canonical typed IR, type/effect checker, evaluator and selected Ubuntu backend; execute on the Ubuntu developer host and compare exact decisions/receipts against the frozen oracle corpus.",
+    "reason_clay": "Local proxy evaluator/Python/native-GCC shadows showed 0 mismatches across 300000 randomized cases but bypassed the production ClayCode frontend/compiler and target host, so production integration is now the highest-information discriminator.",
+    "completion_clay": "Exact source/program/backend hashes; production parser+IR+type/effect+evaluator+backend receipts; mixed-epoch negative; retry/replay identity checks; optional effect revoke/regrant check; at least one frozen FRANK loop fixture; differential mismatches accounted for; no opaque host semantic escape.",
+    "evidence_need": ["TARGET_UBUNTU_EXECUTION_RECEIPT", "PRODUCTION_CLAYCODE_COMPILER_RECEIPT", "DIFFERENTIAL_GOLDEN_TRACE", "NEGATIVE_TEST_RECEIPTS"],
+    "executor_policy": "Prefer local Claude Code / build organ with repository checkout and Ubuntu developer-host execution. Do not claim PASS from hosted proxy results.",
+    "required_capabilities": ["REPOSITORY_CHECKOUT", "PRODUCTION_CLAYCODE_TOOLCHAIN", "UBUNTU_DEVELOPER_HOST_EXECUTION"],
+    "write_scope": ["research_entity/claycode/", "research_entity/trigger_runs/claycode/", "research_entity/trigger_runs/spawn/", "research_entity/state/work/events/"],
+    "dependencies": ["spawn:spawn-20260809T1742p0700-claycode-loop-eval-lowering", "BASE_CLAYCODE_RELEASE", "current parser/canonical-IR candidate"],
+    "invalidators": ["production frontend semantics materially change", "FRANK recurrence fixture is superseded before execution"],
+    "base_priority": 0.9,
+    "expected_impact": 0.95,
+    "urgency": 0.9,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

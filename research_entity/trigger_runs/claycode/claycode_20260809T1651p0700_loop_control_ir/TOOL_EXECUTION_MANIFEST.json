@@ -1,0 +1,66 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1651p0700_loop_control_ir",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "tools":[
+    {
+      "class":"GITHUB_CONNECTOR_READ",
+      "status":"PASS",
+      "purpose":"canonical boot, trigger routing, current ClayCode/FRANK/ClayGraph/UnifiedDB/program grounding",
+      "key_inputs":["RESEARCH_ENTITY_CANONICAL.json","BOOTSTRAP_MINIMAL.json","RESEARCH_ACTOR_REGISTRY.json","PROJECT_COMMAND_REGISTRY.json","CLAYCODE_RESEARCH_PROTOCOL.md","RAE_LATEST_COGNITIVE_STACK.clay","PROGRAM_STATE.json","CLAYCODE_RELEASE_WORKSPACE.json","CLAYCODE_G9_FUSION_SPEC_V3.clay","grammar.ebnf","FRANK C9 architecture/mapping","FRANK loop-of-loops note","ClayGraph V2 SQL","UnifiedDB V9 SQL","latest fusion and prior ClayCode final report"]
+    },
+    {
+      "class":"WEB_PRIMARY_RESEARCH",
+      "status":"PASS",
+      "purpose":"independent recurrent-control and generic structured-control triangulation",
+      "sources":[
+        {"title":"Loop, Think, & Generalize: Implicit Reasoning in Recurrent-Depth Transformers","ref":"arXiv:2604.07822","class":"PRIMARY_PAPER"},
+        {"title":"A Mechanistic Analysis of Looped Reasoning Language Models","ref":"arXiv:2604.11791","class":"PRIMARY_PAPER"},
+        {"title":"Parcae: Scaling Laws For Stable Looped Language Models","ref":"arXiv:2604.12946 / SandyResearch project+code","class":"PRIMARY_PAPER_IMPLEMENTATION"},
+        {"title":"Mixture-of-Recursions: Learning Dynamic Recursive Depths for Adaptive Token-Level Computation","ref":"arXiv:2507.10524","class":"PRIMARY_PAPER"},
+        {"title":"Adaptive Computation Time for Recurrent Neural Networks","ref":"arXiv:1603.08983","class":"PRIMARY_PAPER"},
+        {"title":"Deep Equilibrium Models","ref":"arXiv:1909.01377","class":"PRIMARY_PAPER"},
+        {"title":"MLIR scf Dialect","ref":"https://mlir.llvm.org/docs/Dialects/SCFDialect/","class":"PRIMARY_OFFICIAL_DOCUMENTATION"}
+      ]
+    },
+    {
+      "class":"LOCAL_PYTHON_EXECUTION",
+      "status":"PASS_WITH_REPAIR",
+      "purpose":"parser/canonical-IR/lowering/differential structured recurrence experiment",
+      "receipt":"EXECUTABLE_RESEARCH_RECEIPT.json",
+      "details":"2,000 randomized differential cases with zero mismatches; 4/4 malformed/unsafe subset cases rejected; generated host program executed in separate /usr/bin/python3 process.",
+      "initial_failure":"First separate-process attempt using /opt/pyvenv/bin/python timed out; rerun via /usr/bin/python3 passed. Failure preserved in receipt."
+    },
+    {
+      "class":"E2B_SANDBOX",
+      "status":"UNAVAILABLE",
+      "purpose":"preferred external executable ClayCode surface per protocol",
+      "claim":"No E2B evidence claimed."
+    },
+    {
+      "class":"SANDBOXAPI_SANDBOX",
+      "status":"NOT_USED",
+      "claim":"No SandboxAPI evidence claimed."
+    },
+    {
+      "class":"REPO_LOCAL_INTERCONNECT_PREFLIGHT",
+      "status":"UNAVAILABLE_ON_CONNECTOR_SURFACE",
+      "command":"python tools/research_interconnect_preflight.py --trigger claycode --run-id claycode_20260809T1651p0700_loop_control_ir",
+      "fallback":"manual connector assembly materialized in INTERCONNECT_MANIFEST.json",
+      "official_pass_claimed":false
+    },
+    {
+      "class":"REPO_LOCAL_GOODMAN_VALIDATOR",
+      "status":"UNAVAILABLE_ON_CONNECTOR_SURFACE",
+      "command":"python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/claycode_20260809T1651p0700_loop_control_ir",
+      "fallback":"manual protocol-complete review materialized in FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+      "official_pass_claimed":false
+    },
+    {
+      "class":"GITHUB_CONNECTOR_WRITE",
+      "status":"PASS",
+      "purpose":"durable run artifacts",
+      "write_capability_verified":true
+    }
+  ]
+}

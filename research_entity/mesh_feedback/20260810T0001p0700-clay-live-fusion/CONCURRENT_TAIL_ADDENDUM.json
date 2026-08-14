@@ -1,0 +1,41 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-live-fusion-20260810T0001p0700",
+  "refresh_after_branch_writes":true,
+  "tail_material":true,
+  "source_commits":[
+    "2e0a6902e8afbfccbd60b690a1df3adc05ad97ca",
+    "c11ceca087d73032462133bc53571a4ce5637279",
+    "c2f1b3d96b3eab75cdd9e0e6a18caf7aef652ec0"
+  ],
+  "ancestry_adjudication":"2e0a6902 and c11ceca describe the same Ubuntu Harness truth-gate/fault research lineage at different summary depth and therefore count as one evidence family, not two independent replications.",
+  "new_evidence_families":[
+    {
+      "id":"LF-TAIL-HARNESS-TRUTH-GATE",
+      "class":"REAL_SELF_HOSTED_UBUNTU_EXECUTION_DISPOSABLE_CURRENT_MAIN_WORKTREE",
+      "finding":"On Ubuntu 24.04.4, the current repository truth gate plus guarded Harness path passed after preserving three pre-green failures: missing canonical materializations on fresh checkout (expected fail-closed), missing epoch-0 genesis row in authorized fresh materializer, and missing typed entity/person projection causing Frank->Andreas ClayGraph FK failure. A stale ClayGraph lineage lesion reproduced a direct legacy Harness mutation (exit 0, one hyperposition row) while the guarded path rejected it with GRAPH_STALE/exit 75 and zero mutation; restoration rescued the pair to PASS. Additional MATERIALIZATION_STALE, SCHEMA_MIGRATION_REQUIRED and CONTINUITY_DEGRADED faults also produced expected fail-closed exits and zero mutation.",
+      "metrics":{"warm_truth_gate_p50_ms":518.775,"warm_truth_gate_p95_ms":550.845,"deep_integrity_gates":"21/21","deep_integrity_matrix_wall_s":10.469,"max_gate_rss_mib":64.715},
+      "counterhypothesis":"A wrapper-only guard remains operationally bypassable unless the canonical Harness boundary itself enforces the truth gate or the legacy entrypoint is retired.",
+      "promotion_limit":"Not final Andreas Ubuntu acceptance, not release acceptance, not power-loss durability evidence."
+    },
+    {
+      "id":"LF-TAIL-COPY-BIRTH-LAW",
+      "class":"PROJECT_OWNER_FIXED_ARCHITECTURE_BOUNDARY",
+      "finding":"Every instantiated copy/fork is defined as a new FRANK with a new immutable frank_id/soul_id and independent mutable state lineage; same-lineage restore may preserve identity only with provenance receipts. Parent/child synchronization is explicit inter-entity exchange, never identity merge.",
+      "counterhypothesis":"Not applicable as scientific hypothesis; downstream implementation can still falsify whether proposed storage/runtime design actually enforces the owner-fixed law.",
+      "promotion_limit":"Owner-fixed identity semantics, not consciousness/sentience evidence."
+    }
+  ],
+  "branch_routes":[
+    {"branch":"frank","status":"TAIL_DELTA","feedback":"Enforce truth gate at the canonical mutating Harness boundary rather than relying on wrapper convention; preserve genesis and typed Frank/Andreas projection regressions. Add copy-birth InstanceIdentity/CopyLineage with new identity for instantiated copies and provenance-bound same-lineage restore."},
+    {"branch":"harness","status":"TAIL_DELTA","feedback":"Admit the stale-graph direct-vs-guarded lesion/rescue and full fault matrix as Ubuntu H1 safety evidence. Make canonical Harness entrypoints fail closed before mutation and retain zero-mutation receipts for stale/schema/degraded states."},
+    {"branch":"unifieddb","status":"TAIL_DELTA","feedback":"Fresh materialization must seed exactly one idempotent epoch-0 genesis row and preserve typed entity/person projections used by ClayGraph. Copy birth must never silently share one mutable current UnifiedDB across distinct FRANK identities."},
+    {"branch":"claygraph","status":"TAIL_DELTA_REFINEMENT","feedback":"Stale source-epoch ClayGraph can be mutably consumed by the legacy bypass; preserve source-lineage validation as a mandatory pre-mutation boundary and keep endpoint FKs rather than weakening them when typed entity projection is missing."},
+    {"branch":"claycode","status":"NO_CHANGE","feedback":"No new ClayCode execution evidence in this tail; future H2 semantics must express truth-gate status, genesis/typed projection and copy-lineage identity without weakening V17 receipt requirements."},
+    {"branch":"gwt","status":"NO_CHANGE","feedback":"Truth-gate and copy-lineage tail does not change GWT mechanism evidence; state/graph provenance must simply remain valid before cognitive mutation."},
+    {"branch":"hyperposition","status":"NO_CHANGE","feedback":"The stale-graph lesion used open-hyperposition to expose a boundary bypass, but it does not independently change Hyperposition semantics. Preserve provenance/freshness gates before mutation."},
+    {"branch":"emergenz","status":"NO_CHANGE","feedback":"No emergence promotion; fail-closed state integrity and copy identity are infrastructure/identity semantics only."},
+    {"branch":"clayresearch","status":"TAIL_DELTA","feedback":"Highest-information follow-up: integrate truth gate into canonical Harness boundary, test bypass removal on Ubuntu, then repeat on Andreas target; add copy/fork/restore identity differential tests and state-isolation lesions."}
+  ],
+  "canonical_promotion":"NONE"
+}

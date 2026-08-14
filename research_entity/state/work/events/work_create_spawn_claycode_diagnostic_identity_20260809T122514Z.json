@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "event_type": "WORK_CREATE",
+  "work_id": "WORK-SPAWN-CLAYCODE-DIAGNOSTIC-IDENTITY-20260809",
+  "title": "Production ClayCode stable diagnostic identity differential on Ubuntu",
+  "created_by": "chatgpt-secondary",
+  "created_at": "2026-08-09T12:25:14Z",
+  "origin_run": "research_entity/trigger_runs/spawn/spawn_20260809T122514Z_chatgpt_secondary_claycode_diagnostic_identity",
+  "stage": "BASE_CLAYCODE_RELEASE",
+  "status": "READY_FOR_PRODUCTION_INTEGRATION_AND_TARGET_HOST_DIFFERENTIAL",
+  "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "dependencies": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-11-FUZZ-CONFORMANCE", "CC-WP-12-CORPUS-HELDOUT"],
+  "goal": "Wrap current production ClayCode parser/checker/runtime failures in the candidate structured diagnostic envelope and falsify its invariance/separation claims using real Ubuntu toolchain cases before any BASE credit.",
+  "required_tests": [
+    "Emit stable rule_id/rule_revision/stage plus structured cause fields for current negative type/effect/parser/runtime cases.",
+    "Apply path relocation, whitespace/comment-only source shifts and rendering/message-template changes; occurrence fingerprint must remain stable when the diagnosed semantic cause is unchanged.",
+    "Create two distinct failures of one rule at different semantic anchors; fingerprints must differ.",
+    "Hold rule+anchor fixed and mutate a rule-declared semantic cause; fingerprints must differ.",
+    "Refactor checker/lowering implementation without changing predicate meaning; rule identity should remain stable while implementation provenance changes.",
+    "Change rule predicate/decision boundary intentionally and increment rule_revision; old/new fingerprints must not compare as the same diagnostic occurrence.",
+    "Run WP11 fuzz and WP12 corpus generator using structured identity; measure duplicate collapse, false-new rate, false-same rate and mutation localization versus text/span and rule-only baselines.",
+    "For effect/runtime failures, verify diagnostic records never serialize or confer bearer authority and cannot authorize an effect."
+  ],
+  "required_receipts": ["source/compiler/runtime hashes", "diagnostic schema/version", "rule registry hash", "fingerprint algorithm version", "perturbation corpus hash", "false-new/false-same metrics", "mutation-localization metrics", "Ubuntu execution receipt"],
+  "acceptance_verdicts": ["CANDIDATE_SURVIVES_PRODUCTION_DIFFERENTIAL", "CANDIDATE_NEEDS_SCHEMA_REVISION", "DIAGNOSTIC_IDENTITY_NOT_NEEDED_FOR_BASE"],
+  "scientific_promotion": "NONE_UNTIL_EXECUTED_ON_PRODUCTION_CURRENT_TOOLCHAIN",
+  "training_authorized": false
+}

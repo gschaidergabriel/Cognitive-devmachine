@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.1",
+  "protocol":"research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id":"claycode_20260809T1705p0700_chatgpt_numcanon",
+  "latest_frank_run":"20260809T0130p0700-chatgpt-secondary-r5",
+  "latest_frank_architecture_artifact":"FRANK C9 Typed Causal Admission & Effect Fabric / FRANK_ARCHITECTURE.claycode.json",
+  "shared_ancestry_is_not_replication":true,
+  "reviews":[
+    {
+      "claim_id":"FRANK_NUMERIC_REPLAY_IDENTITY_20260809",
+      "frank_statement":"FRANK recurrent/state/readout measurements must remain replayable without conflating semantic state, selection, or authority.",
+      "frank_source_refs":["20260809T0130p0700-chatgpt-secondary-r5","research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md"],
+      "ancestry_families":["FRANK_LOOP_OF_LOOPS_SHARED_DIRECTIVE","CLAYCODE_HARNESS_TYPED_IDENTITY_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Host-native numeric serialization is already sufficiently invariant for ClayCode semantic hashes and replay identities.",
+      "falsifier":"A production ClayCode canonicalizer demonstrates target-independent numeric semantic identity and exact backend roundtrip over the admitted numeric domain without explicit type-directed numeric rules.",
+      "independent_checks":["CC-NUMCANON-LOCAL-20260809-01 Python 3.13.5 vs Node v22.16.0 differential","RFC 8785 canonical-number constraints","WebAssembly 3.0 NaN behavior"],
+      "adversarial_checks":["signed zero presentation","non-finite JSON handling","2^53+1 integer lowering","int64 maximum lowering","random raw f64 bit-pattern corpus"],
+      "verdict":"REFINED",
+      "reason":"The new executable differential shows semantic replay identity cannot safely depend on host numeric/JSON presentation. The result refines representation requirements but does not validate FRANK loop-of-loops itself.",
+      "claycode_action":"implement_typed_numeric_canonicalization_and_target_exactness_checks",
+      "affected_claycode_artifacts":["CC-WP-03-IR-TYPES","CC-WP-04-TYPE-EFFECT","CC-WP-06-COMPILER-LOWERING","CC-WP-11-FUZZ-CONFORMANCE"]
+    },
+    {
+      "claim_id":"FRANK_NUMERIC_AUTHORITY_SEPARATION_20260809",
+      "frank_statement":"FRANK C9 separates semantic presence/admissibility/selection from host-minted effect authority; a numeric score or readout is not a permit.",
+      "frank_source_refs":["20260809T0130p0700-chatgpt-secondary-r5"],
+      "ancestry_families":["FRANK_C9_TCAEF","CLAY_SAFE_EFFECT_SHARED_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Canonicalizing a numeric confidence/readout could safely elevate it into execution authority.",
+      "falsifier":"An independently validated capability system proves a numeric readout alone carries non-forgeable, scope-bound, revocable host authority without a separate permit/commit mechanism.",
+      "independent_checks":[],
+      "adversarial_checks":["model-controlled confidence increase","graph-weight increase","NaN/null coercion","stale numeric readout replay"],
+      "verdict":"UNRESOLVED",
+      "reason":"This run did not independently retest the full authority architecture; it preserves the existing separation and found no evidence that numeric canonicalization changes authority semantics.",
+      "claycode_action":"keep_open_preserve_authority_boundary",
+      "affected_claycode_artifacts":["EffectIntent","CapabilityToken","CC-WP-04-TYPE-EFFECT","CC-WP-07-RUNTIME-ABI-FFI"]
+    }
+  ]
+}

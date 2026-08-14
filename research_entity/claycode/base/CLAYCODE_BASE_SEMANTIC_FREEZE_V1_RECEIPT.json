@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.1",
+  "receipt_id": "CLAYCODE-BASE-SEMANTIC-FREEZE-V1-RECEIPT-20260809",
+  "work_package": "CC-WP-01-SPEC-FREEZE",
+  "result": "SUPERSEDED_NOT_COUNTED",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "superseded_receipt_for": "research_entity/claycode/base/CLAYCODE_BASE_SEMANTIC_FREEZE_V1.json",
+  "authoritative_freeze": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+  "authoritative_workspace": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+  "reason": "Concurrent repository progress produced a newer G9 semantic-core blob and a separate freeze that was already bound into the release workspace. This earlier receipt's PASS claim is withdrawn to preserve CAS/concurrency correctness and avoid double-counting.",
+  "historical_snapshot_only": {
+    "semantic_core_git_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "manifest_git_blob_sha_before_supersession": "4f493e7278c9cbed22e0b2355593e28635cb71e4"
+  },
+  "current_disposition": "WP01 remains PASS only through the authoritative concurrent BASE_SEMANTIC_FREEZE_V1.json already referenced by CLAYCODE_RELEASE_WORKSPACE.json.",
+  "scope_guard": "This receipt contributes zero additional completion credit."
+}

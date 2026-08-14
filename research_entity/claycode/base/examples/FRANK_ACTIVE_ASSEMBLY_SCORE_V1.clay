@@ -1,0 +1,6 @@
+module frank.active_assembly.score
+
+fn mul(a:Real,b:Real)->Real=a*b
+fn add(a:Real,b:Real)->Real=a+b
+fn inv(a:Real)->Real=1.0-a
+fn score(relevance:Real,impact:Real,novelty:Real,uncertainty:Real)->Real=add(add(mul(relevance,0.45),mul(impact,0.25)),add(mul(novelty,0.15),mul(inv(uncertainty),0.15)))

@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1813p0700-claycode-bootstrap-tool-staging",
+  "origin_branch": "claycode",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-BOOT-01",
+      "status": "OPEN_SUPPORTED_WORKING_HYPOTHESIS",
+      "claim": "ClayCode BASE APP-06 can be satisfied without full compiler self-hosting: a host-built production ClayCode compiler may compile and execute a small parser/compiler/interpreter authored in ClayCode, while full self-hosting remains a later strengthening step.",
+      "support": [
+        "The BASE acceptance contract requires a small compiler/tool implemented using ClayCode facilities, not a self-hosted ClayCode compiler.",
+        "GCC and Rust use staged bootstrap chains rather than requiring the newest compiler to preexist before its first build.",
+        "Current ClayCode frontend remains unfrozen, so demanding full self-hosting now would add circular scope before parser/type/effect/lowering closure."
+      ],
+      "falsifier": "The accepted APP-06 contract or an executable ClayCode application counterexample demonstrates that only a fully self-hosted compiler can exercise the required language/runtime semantics."
+    },
+    {
+      "id": "H-SPAWN-BOOT-02",
+      "status": "OPEN_SUPPORTED_WORKING_HYPOTHESIS",
+      "claim": "A staged ClayCode bootstrap should separate semantic correctness, deterministic reproducibility, and diverse compiler/toolchain verification into distinct receipts because none implies the other.",
+      "support": [
+        "Local probe: same source + same GCC under two directories produced identical stripped binaries.",
+        "Local probe: embedding __FILE__ made otherwise identical builds differ; path normalization restored binary identity.",
+        "Local probe: GCC and Clang produced different binaries but 0/5000 semantic output mismatches on the tested microtool corpus.",
+        "Reproducible Builds guidance separately requires deterministic source transformation and recorded build environment; DDC separately addresses trusting-trust under explicit assumptions."
+      ],
+      "falsifier": "A rigorous single receipt can be shown to entail all three properties under ClayCode's actual build model without hidden assumptions or loss of diagnostic resolution."
+    },
+    {
+      "id": "H-SPAWN-BOOT-03",
+      "status": "OPEN",
+      "claim": "The lowest-risk ClayCode bootstrap architecture is Seed/Stage0 host toolchain -> Stage1 production ClayCode compiler/runtime -> Stage1C Clay-authored APP-06 microtool -> Stage2 partial/full ClayCode compiler self-host -> Stage3 same-source rebuild check, with DDC/diverse-backend hardening later.",
+      "falsifier": "Target-host implementation shows that a materially simpler staging graph provides equivalent semantic, provenance, reproducibility and recovery guarantees, or that one proposed stage introduces irreducible complexity with no discriminating value."
+    },
+    {
+      "id": "H-SPAWN-BOOT-04",
+      "status": "NEGATIVE_RESULT_CURRENT_FRONTEND",
+      "claim": "The current leading-not-selected D grammar is not ready to serve as a self-hosting surface.",
+      "support": [
+        "Current D grammar lacks a general function-definition statement.",
+        "Recent typed-fn integration is still OPEN and strict LALR construction is a preserved negative result.",
+        "Current D surface does not yet expose the full ordinary control/data/string/collection/error facilities needed for a practical source parser/compiler tool."
+      ],
+      "boundary": "This is not evidence that ClayCode needs new FRANK-specific semantics; prior universal-core research already points to generic compiler/runtime closure work."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SPAWN-BOOT-01",
+      "status": "OPEN",
+      "claim": "Full self-hosting should be a BASE gate because otherwise ClayCode has not proven itself general-purpose.",
+      "response": "Current acceptance text only requires an executable compiler/tool written using ClayCode facilities plus a production compiler/runtime; self-hosting is stronger but not textually mandatory. Keep open only if the owner/release contract is explicitly strengthened."
+    },
+    {
+      "id": "CH-SPAWN-BOOT-02",
+      "status": "REFINED",
+      "claim": "Byte-identical Stage2/Stage3 output alone is enough to trust the compiler.",
+      "response": "Rejected as too strong. Reproducibility detects nondeterminism/build drift but does not by itself establish source-to-binary semantic correctness or defeat a common compromised compiler lineage."
+    },
+    {
+      "id": "CH-SPAWN-BOOT-03",
+      "status": "OPEN",
+      "claim": "Diverse compiler semantic agreement is unnecessary once deterministic builds are achieved.",
+      "response": "The local probe showed binary reproducibility and cross-compiler semantic agreement are separable; later security hardening should retain independent/diverse verification where cost-effective."
+    }
+  ],
+  "highest_information_next_test": "After strict parser closure and generic function/control/data facilities exist, implement a tiny Clay-authored parser/compiler/interpreter as APP-06, compile it with the production Stage1 compiler on Andreas' Ubuntu target, run a deterministic corpus, rebuild under normalized environment variation, then attempt Stage2/Stage3 self-host only after the APP-06 slice is stable."
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "CLAYCODE-BASE-SEMANTIC-FREEZE-20260809",
+  "status": "FROZEN_FOR_BASE_IMPLEMENTATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "purpose": "Freeze the ClayCode BASE semantic input so parser/compiler/runtime implementation can proceed without continuing semantic redesign. The freeze is hash-bound and reversible only through a new executable counterexample plus an explicit superseding manifest.",
+  "selected_semantic_sources": [
+    {
+      "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "github_blob_sha": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+      "selection": "BASE_SEMANTIC_CORE",
+      "note": "Includes the explicit semantic-preserving Claude_only relation-chain normalization required by the executable frontend."
+    },
+    {
+      "path": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+      "github_blob_sha": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+      "selection": "BASE_DIALECT_CONTRACT"
+    }
+  ],
+  "frontend_binding_at_freeze": {
+    "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark",
+    "github_blob_sha": "eec6e756809af47ccbeda71530794c12658eb1da",
+    "status": "ACTIVE_IMPLEMENTATION_CANDIDATE_NOT_PART_OF_SEMANTIC_TRUTH",
+    "reason": "V5 structurally represents admitted dotted relations and relation-assignment syntax; parser conformance remains CC-WP-02 and does not reopen semantic freeze."
+  },
+  "hard_invariants_preserved": [
+    "omission_never_invented",
+    "conflict_unknown_revocation_preserved",
+    "provenance_and_authority_separate",
+    "state_truth_and_graph_relevance_separate",
+    "model_intent_and_effect_authority_separate",
+    "goal_coalition_not_goal_list",
+    "latent_never_sole_critical_control_channel",
+    "hidden_provider_cot_not_persisted",
+    "candidate_language_semantics_reversible_until_validated"
+  ],
+  "selection_decisions": [
+    {
+      "artifact": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay",
+      "state": "SUPERSEDED_FOR_BASE_SELECTION",
+      "reason": "V3 is its explicit successor and is the selected BASE semantic source. Historical V2 remains preserved."
+    },
+    {
+      "artifact": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark",
+      "state": "NOT_SELECTED_AS_ACTIVE_FRONTEND",
+      "reason": "V5 is the narrower structural successor for dotted relations/relation assignment. V4 remains preserved as lineage and negative-result evidence."
+    }
+  ],
+  "unresolved_semantic_counterexamples": [],
+  "implementation_blockers_not_allowed_to_reopen_semantics_without_counterexample": [
+    "strict LALR/interegular receipt and deterministic parser canonicalization",
+    "typed canonical IR integration",
+    "type/effect checker integration",
+    "production evaluator and lowering",
+    "Ubuntu runtime/ABI/FFI and stdlib",
+    "concurrency/memory implementation",
+    "mandatory Ubuntu application suite",
+    "fuzz/conformance and held-out corpus",
+    "FRANK production handoff and final BASE audit"
+  ],
+  "change_rule": "A semantic change after this freeze requires a reproducible executable ClayCode/application/FRANK counterexample showing the frozen semantics cannot express or lower the required behavior. Parser/compiler implementation defects are repaired below the semantic layer by default.",
+  "wp01_acceptance": {
+    "work_package": "CC-WP-01-SPEC-FREEZE",
+    "frozen_manifest_present": true,
+    "source_hashes_present": true,
+    "unresolved_counterexample_list_present": true,
+    "verdict": "PASS"
+  }
+}

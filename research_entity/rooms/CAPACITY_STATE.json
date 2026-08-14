@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.4",
   "status": "ACTIVE",
-  "effective_from": "2026-08-09",
+  "effective_from": "2026-08-10",
   "next_expected_change": "2026-08-11",
   "ai_workers": {
     "chatgpt": {
@@ -22,15 +22,46 @@
   },
   "compute": {
     "available_now": [
-      "Minisforum 790 Pro",
+      "Hostinger target VPS / machine digital-retina; Ubuntu Linux x86_64; connected GitHub Actions self-hosted runner; owner-fixed operative Frank v0.1 server-binary build/integration/benchmark/runtime/final-acceptance host",
+      "Minisforum 790 Pro; available project capacity but not the mandatory Frank v0.1 release host",
       "additional computer connected through Tailscale; capabilities require verification before scheduling specialized workloads"
     ],
+    "frank_v0_1_target_host": "hostinger-vps-github-runner",
+    "frank_v0_1_target_host_directive": "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
+    "frank_v0_1_identity_api_directive": "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
+    "frank_v0_1_target_machine_observed": "digital-retina",
+    "target_os_for_frank_v0_1": "Ubuntu Linux x86_64 on target VPS",
+    "target_host_verified_evidence": {
+      "runner_online_observed": true,
+      "real_qwen4b_execution_observed": true,
+      "logical_cpus_observed": 4,
+      "kernel_observed": "6.8.0-117-generic",
+      "glibc_observed": "2.39",
+      "python_observed": "3.12.3",
+      "runner_name": "clay",
+      "runner_scope_observed": "repository-scoped to gschaidergabriel/Dr.-Unterweger",
+      "full_frank_token_api_acceptance_observed": false,
+      "evidence_refs": [
+        "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",
+        "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/real_qwen4b_shadow_latest.json",
+        "research_entity/trigger_runs/go/go-20260810T0645p0700-runner-scope-tomography/OOB_HOSTINGER_RUNNER_SCOPE_TOMOGRAPHY.json"
+      ]
+    },
     "expected_not_yet_available": [
-      "VPS expected around 2026-08-16 with RTX 3090, 24 GB VRAM and about 5 TB storage; verify before use"
+      "separate GPU/storage VPS expected around 2026-08-16 with RTX 3090, 24 GB VRAM and about 5 TB storage; verify before use; optional future accelerator/research capacity and NOT automatically the Frank v0.1 target"
     ]
   },
-  "routing_rule": "Dispatch only against verified currently available capacity. Planned resources and temporarily unavailable AI workers may receive future queues but not current execution assignments.",
-  "handoff_rule": "When Claude research capacity returns, first ingest canonical deltas/tests/artifacts produced during the ChatGPT-first window, plus the completion receipt/status of the Andreas Harness lane, before assigning new work.",
-  "forecast_rule": "DOOMSDAY forecasting must distinguish AI-worker availability dates from hardware availability dates. The 2026-08-11 next_expected_change refers to Claude research capacity; the expected RTX 3090 VPS date is separately encoded in compute.expected_not_yet_available and must not be conflated with it.",
-  "source": "PROJECT_OWNER_STATEMENT_2026-08-09"
+  "runtime_acceptance": {
+    "identity_class": "SERVER_BINARY_ENTITY",
+    "required_api": "FULL_TOKEN_AUTHENTICATED_API",
+    "required_api_receipt": "FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json",
+    "api_acceptance_state": "NOT_OBSERVED",
+    "developer_runner_or_ssh_counts_as_api": false,
+    "raw_production_api_tokens_may_be_persisted_in_repo": false,
+    "target_vps_runtime_baseline_work": "WORK-TARGET-VPS-RUNTIME-BASELINE-20260810"
+  },
+  "routing_rule": "Dispatch Frank v0.1 build/integration/benchmark/runtime work to the verified Hostinger target VPS whenever compatible and authorized. Target-VPS execution is final-target evidence, not proxy evidence. Runner repository scope is a build/test transport property; use hash-bound bridge execution or a Clay-eligible runner registration as needed. Final v0.1 communication must use the separate full token-authenticated Frank API and satisfy its acceptance receipt. Andreas-local-PC execution is not a mandatory v0.1 release gate unless explicitly reopened by the project owner.",
+  "handoff_rule": "When Claude research capacity returns, first ingest current server-binary/API directive, target-VPS host/runner/Qwen/API receipts, canonical deltas, current q23/GO deltas and the completion status of active non-overlap lanes before assigning overlapping work.",
+  "forecast_rule": "DOOMSDAY forecasting must treat the already-online Hostinger target VPS as the current release host, include the mandatory server-binary token-API gate, and must not delay v0.1 waiting for separately planned GPU/storage hardware. Planned accelerator availability may change throughput only after verified availability and explicit architecture/target decision.",
+  "source": "PROJECT_OWNER_SERVER_BINARY_TARGET_VPS_API_SUPERSESSION_2026-08-10_PLUS_EXISTING_TARGET_VPS_RECEIPTS"
 }

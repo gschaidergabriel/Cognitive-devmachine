@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.1",
+  "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id": "20260809T1724p0700-chatgpt-secondary-parser-closure",
+  "latest_frank_run": "research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FINAL_REPORT.md",
+  "latest_frank_architecture_artifact": "research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json",
+  "shared_ancestry_is_not_replication": true,
+  "reviews": [
+    {
+      "claim_id": "FRANK-CC-AUTHORITY-BOUNDARY",
+      "frank_statement": "Model/cognitive output and recurrence decisions do not themselves confer external effect authority; effectful host access requires an external capability/effect boundary with revalidation.",
+      "frank_source_refs": ["research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json", "research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FINAL_REPORT.md"],
+      "ancestry_families": ["FRANK_CLAY_SHARED_AUTHORITY_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Ambient host FFI plus process sandboxing is sufficient; a typed capability gateway adds complexity without material safety gain.",
+      "falsifier": "Representative FFI/system-effect tests show the explicit capability boundary can be bypassed as easily as ambient access, or provides no measurable containment/audit advantage.",
+      "independent_checks": ["Wasmtime/WASI primary documentation independently exposes capability-scoped/preopened host resources and filesystem permissions rather than unrestricted default filesystem access."],
+      "adversarial_checks": ["APP-08 must attempt file/process/network access without grants, including FFI/child-process equivalents and delayed/recurrent permit revalidation."],
+      "verdict": "SUPPORTED",
+      "reason": "Independent implementation architecture supports capability-scoped host interfaces as a valid safety mechanism. This does not prove the final ClayCode gateway API or implementation correct.",
+      "claycode_action": "Retain explicit capability/effect boundary and validate it at ABI/FFI/runtime level rather than encode authority in model-readable text.",
+      "affected_claycode_artifacts": ["CC-WP-04-TYPE-EFFECT", "CC-WP-07-RUNTIME-ABI-FFI", "APP-08"]
+    },
+    {
+      "claim_id": "FRANK-CC-LOOP-OF-LOOPS",
+      "frank_statement": "The latest FRANK loop/base bridge represents loop identity, timescale, residual pressure, recurrence budget, decisions, intervention and rollback as typed candidate state while explicitly requiring the existing ClayCode compiler chain rather than new loop syntax.",
+      "frank_source_refs": ["research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FINAL_REPORT.md", "research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json"],
+      "ancestry_families": ["FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Ordinary persistent event-driven orchestration explains the useful behavior; loop-specific dynamical state adds no predictive/control value.",
+      "falsifier": "Matched H1/H2 replay shows loop-specific readouts/interventions do not improve prediction, diagnosis, control or recovery over simpler event-driven state.",
+      "independent_checks": [],
+      "adversarial_checks": ["Current parser experiment and concurrent parser/effect runs only establish representability/compiler constraints; they do not independently validate FRANK loop dynamics."],
+      "verdict": "UNRESOLVED",
+      "reason": "The latest FRANK artifact is now cross-read, but this worker still produced no independent live loop-dynamics evidence. Representability is warranted; causal truth is not.",
+      "claycode_action": "Keep loop semantics as typed research-candidate data/control contracts and attempt the existing compiler pipeline before adding any dedicated core syntax.",
+      "affected_claycode_artifacts": ["CC-WP-03-IR-TYPES", "CC-WP-05-EVALUATOR", "CC-WP-13-HARNESS-HANDOFF"]
+    },
+    {
+      "claim_id": "FRANK-CC-WASM-WASI-FIRST-BACKEND",
+      "frank_statement": "A useful Ubuntu lowering path may use native code and/or WASM/WASI with typed host interop, but the current FRANK artifact only requires the ClayCode BASE compiler/runtime on Ubuntu.",
+      "frank_source_refs": ["research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json", "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],
+      "ancestry_families": ["CLAYCODE_BASE_RELEASE_DESIGN"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Direct native Ubuntu lowering/FFI is simpler, faster and easier to debug; WASM/WASI adds an unnecessary boundary for the first release.",
+      "falsifier": "Ubuntu application-suite benchmarks show WASM/WASI materially worsens latency, FFI coverage, debugging or resource control without compensating isolation/audit benefits.",
+      "independent_checks": ["WebAssembly Component Model WIT primary documentation defines typed imports/exports and component contracts.", "Wasmtime/WASI primary documentation exposes capability-scoped filesystem resources and permissions."],
+      "adversarial_checks": ["Do not infer target suitability from interface elegance; require matched Ubuntu APP-01..APP-10 execution and cost receipts."],
+      "verdict": "REFINED",
+      "reason": "WASM/WASI is independently supported as a viable typed host-boundary pattern, but evidence does not establish it as the mandatory or best first backend for FRANK v0.1.",
+      "claycode_action": "Keep native and WASM/WASI as competing lowering candidates and choose by Ubuntu execution evidence.",
+      "affected_claycode_artifacts": ["CC-WP-06-COMPILER-LOWERING", "CC-WP-07-RUNTIME-ABI-FFI", "CC-WP-10-GENERAL-APP-SUITE"]
+    },
+    {
+      "claim_id": "FRANK-CC-ADAPTIVE-VISION-STATE",
+      "frank_statement": "FRANK v0.1 requires representable/replayable adaptive visual learner version, provenance tier, confidence/open-set, candidate promotion/rollback and resource-budget state.",
+      "frank_source_refs": ["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
+      "ancestry_families": ["PROJECT_OWNER_FIXED_FRANK_V0_1_REQUIREMENT"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Some required learner state may be implementable entirely in generic existing typed records/runtime state without dedicated ClayCode semantics.",
+      "falsifier": "H1-to-H2 differential implementation demonstrates the required replay/provenance/rollback behavior cannot be represented with the existing generic typed state and requires a new semantic primitive.",
+      "independent_checks": [],
+      "adversarial_checks": ["Treat this as a release contract, not independent scientific evidence for any classifier architecture or dedicated language feature."],
+      "verdict": "UNRESOLVED",
+      "reason": "The requirement is owner-fixed for the product, while the minimal language representation and optimal learner mechanism remain research-gated.",
+      "claycode_action": "First express the required learner state/transitions using generic typed records, version/provenance and rollback receipts; add syntax only after an executable counterexample.",
+      "affected_claycode_artifacts": ["CC-WP-03-IR-TYPES", "CC-WP-13-HARNESS-HANDOFF"]
+    }
+  ]
+}

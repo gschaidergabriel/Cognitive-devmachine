@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.1",
+  "captured_at": "2026-08-09T18:54:00+07:00",
+  "upstream_source_repo": "cactus-compute/needle",
+  "upstream_model_repo": "Cactus-Compute/needle",
+  "drive_checkout": {
+    "remote_origin": "https://github.com/cactus-compute/needle.git",
+    "branch": "main",
+    "commit": "6fdddb874dd6f46dabeea88d0bf239fc4a2474c4",
+    "git_index_contains_model_or_tokenizer_binary": false,
+    "git_index_binary_note": "Drive .git index lists source/docs/assets/UI only; no needle.pkl, model.safetensors, CQ4 bundle, tokenizer/needle.model or tokenizer/needle.vocab.",
+    "current_main_compare": {
+      "ahead_by": 1,
+      "changed_files_since_drive_commit": ["README.md", "setup.bat"],
+      "source_code_changes": 0
+    }
+  },
+  "source_blobs_git_sha1": {
+    "needle/model/constrained.py": "b6afbd7a06378d0d146caba881dac92be5d00cd9",
+    "needle/model/run.py": "954022e5b96dcf3aee30a3537c3a2cd2ac1c0e67",
+    "needle/dataset/dataset.py": "3d4a1ea4150d455ee598f2e66c656bbda5f82ea7",
+    "needle/dataset/tokenizer.py": "efa2cc8bc3d83fbf9ef1e22ca8700c0a5bb13d23",
+    "needle/training/train.py": "657559ffbc13a2ce81d7e306b7c270b32d997ad2",
+    "needle/training/finetune.py": "3f0264534bfb10e665654e8fb65c8d3cd081b567",
+    "needle/training/eval.py": "1b0d1dcd229d3ae81838ccf16037c47306cbc8a1"
+  },
+  "official_model_artifacts": {
+    "needle.pkl": {
+      "size_bytes": 52633098,
+      "sha256": "40a32e91d1d4197bf15ba559b74f6727c342dc8746918742fc7d8e2c1f18df40",
+      "loader_risk": "CURRENT_UPSTREAM_PYTHON_PATH_USES_PICKLE_LOAD",
+      "sandbox_present": false
+    },
+    "model.safetensors": {
+      "size_bytes_approx": 60900000,
+      "sha256": "c5f9a3016e4537e492c362da5cb8ba05107d8595bec0d5ea5d8a65801db46531",
+      "sandbox_present": false
+    },
+    "needle-cq4.zip": {
+      "size_bytes_approx": 16200000,
+      "sandbox_present": false
+    },
+    "tokenizer/needle.model": {
+      "size_bytes": 124960,
+      "sha256": "0823f5b9133c68a8140addc5d7a425fa9119c4c8cb4a550363b4bffa4ba1c8c7",
+      "downloaded_by_current_python_source": true,
+      "sandbox_present": false
+    }
+  },
+  "drive_source_equivalence": {
+    "status": "BYTE_IDENTICAL_FOR_INSPECTED_SOURCE_FILES",
+    "method": "computed Git blob SHA-1 of connected Drive bytes and compared with current upstream GitHub blob SHA",
+    "files_confirmed": [
+      "needle/model/constrained.py",
+      "needle/model/run.py",
+      "needle/dataset/dataset.py",
+      "needle/dataset/tokenizer.py",
+      "needle/training/train.py",
+      "needle/training/finetune.py",
+      "needle/training/eval.py"
+    ]
+  },
+  "runtime_rule": "H1 must not identify Needle merely by display name. Any executable model receipt must bind a verified checkpoint hash, tokenizer hash, source/runtime profile and exact offered-toolset hash. Arbitrary unverified pickle is not admissible.",
+  "current_execution_limit": "Source-level execution is verified. Full model/tokenizer inference is blocked only because model/tokenizer binary blobs are not mounted into the isolated sandbox through current connectors; direct external download was also denied by the container backend."
+}

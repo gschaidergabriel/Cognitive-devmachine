@@ -1,187 +1,115 @@
 {
-  "schema_version": "3.7",
+  "schema_version": "5.0",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "entity_display_name": "Clay",
-  "legacy_internal_namespace": "RAE",
-  "trigger_renames": {"clay": "clayresearch"},
-  "entity_name_rule": "Exact clay refers to the Clay researcher entity itself, not a reserved scientific command.",
+  "entity_name_rule": "Exact clay addresses the Clay research entity and is not a scientific command.",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
-  "research_center_protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
-  "program_narrative": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+  "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
-  "program_throughput": "research_entity/rooms/PROGRAM_THROUGHPUT.json",
+  "program_target": "FRANK_V0_1",
+  "program_workspace": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+  "status_footer_protocol": "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
   "program_progress_tool": "tools/program_progress.py",
-  "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "status_footer_checker": "tools/status_footer_check.py",
-  "research_tool_orchestration_policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
-  "research_tool_router": "tools/research_provider_router.py",
-  "interconnection_protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
-  "interconnection_preflight": "tools/research_interconnect_preflight.py",
-  "frank_clay_native_contract": "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
-  "frank_clay_native_contract_status": "PROJECT_OWNER_FIXED_TARGET_NOT_HYPOTHESIS",
-  "frank_sole_intentional_non_clay_semantic_subsystem": "Needle",
-  "clay_safe_effect_geometry_research_foundation": "research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md",
-  "clay_safe_effect_geometry_status": "PROJECT_OWNER_MANDATED_PERMANENT_RESEARCH_AXIS_HYPOTHESES_REMAIN_FALSIFIABLE",
-  "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
-  "goodman_filter_checker": "tools/goodman_filter_check.py",
-  "frank_architecture_contract": "tools/frank_architecture_contract.py",
-  "fusion_research_contract": "tools/fusion_research_contract.py",
   "commands": {
     "666": {
       "protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
-      "level0_protocol": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
-      "post_level0_protocol": "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
-      "kind": "phase_sensitive_autonomous_research_genesis",
-      "requires_program_state": true,
-      "requires_center_discovery": true,
-      "must_act_immediately": true,
-      "level0_exact_archive_progress": true,
-      "post_level0_stochastic_field_spawn": true,
-      "paid_training_auto_start_forbidden": true
+      "program_target": "FRANK_V0_1"
+    },
+    "go": {
+      "protocol": "research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
     },
     "q12": {
       "protocol": "research_entity/triggers/Q12_CREATOR_ADVISOR_PROTOCOL.md",
-      "profile": "research_entity/advisor/Q12_CREATOR_MODEL_PROFILE.json",
-      "kind": "creator_advisor_meta",
-      "requires_program_state": true,
-      "requires_current_repo_refresh": true,
-      "requires_dynamic_progress_eta": true,
-      "management_only_when_delegated": true,
-      "literal_human_identity_claim_forbidden": true,
-      "paid_training_auto_start_forbidden": true
+      "program_target": "FRANK_V0_1"
+    },
+    "q23": {
+      "protocol": "research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
+    "atomic": {
+      "protocol": "research_entity/triggers/ATOMIC_RADICAL_INVENTION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
     },
     "dump": {
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
-      "tool_orchestration_addendum": "research_entity/global/DUMP_TOOL_ORCHESTRATION_ADDENDUM.md",
-      "kind": "research_intake",
-      "requires_independent_support_for_promotion": true,
-      "requires_tool_execution_manifest": true,
-      "mesh_role": "intake_to_shared_mesh"
+      "program_target": "FRANK_V0_1"
     },
     "fusion": {
       "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
-      "kind": "global_mesh_meta_research",
-      "requires_interconnect_manifest": true,
-      "requires_global_coverage_manifest": true,
-      "requires_branch_feedback_manifest": true,
-      "requires_program_state": true,
-      "feedback_targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
-      "completion_validator": "tools/fusion_research_contract.py",
-      "completion_command": "python tools/fusion_research_contract.py research_entity/trigger_runs/fusion/<run_id>"
+      "program_target": "FRANK_V0_1"
     },
     "hypofusion": {
       "protocol": "research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md",
-      "kind": "hypothesis_screening_global_meta_research",
-      "requires_interconnect_manifest": true,
-      "requires_global_hypothesis_coverage": true,
-      "requires_counterhypothesis_search": true,
-      "requires_external_source_class_diversity": true,
-      "requires_live_worker_reread": true,
-      "requires_branch_feedback_manifest": true,
-      "requires_program_state": true,
-      "feedback_targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"]
+      "program_target": "FRANK_V0_1"
     },
     "clayresearch": {
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
-      "kind": "integrated_research_foundry",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "must_treat_frank_clay_native_contract_as_fixed": true,
-      "permanent_research_foundations": ["research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"],
-      "requires_safe_effect_geometry_research": true,
-      "required_safe_effect_artifact": "SAFE_EFFECT_GEOMETRY_DELTA.md"
+      "program_target": "FRANK_V0_1"
     },
     "gwt": {
       "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "measurement_contract": "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
-      "must_treat_frank_clay_native_contract_as_fixed": true
+      "program_target": "FRANK_V0_1"
     },
     "frank": {
       "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "fixed_target_contract": "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
-      "clay_native_target_is_open_hypothesis": false,
-      "sole_intentional_non_clay_semantic_subsystem": "Needle",
-      "primary_foundation": "clayresearch",
-      "primary_architecture_language": "ClayCode semantic IR",
-      "deep_secondary_foundation": "claycode",
-      "deep_substrate_foundation": "claygraph",
-      "deep_persistence_foundation": "unifieddb",
-      "execution_validation_foundation": "harness",
-      "required_architecture_artifact": "FRANK_ARCHITECTURE.claycode.json",
-      "required_human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md",
-      "architecture_validator": "tools/frank_architecture_contract.py"
+      "program_target": "FRANK_V0_1"
     },
     "emergenz": {
       "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "gwt_measurement_contract": "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
-      "hyperposition_measurement_contract": "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md",
-      "must_treat_frank_clay_native_contract_as_fixed": true
+      "program_target": "FRANK_V0_1"
     },
     "claycode": {
       "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "must_treat_frank_clay_native_contract_as_fixed": true,
-      "primary_feedback_foundation": "frank",
-      "execution_feedback_foundation": "harness",
-      "requires_latest_frank_architecture_if_available": true,
-      "requires_goodman_anti_echo_review": true,
-      "required_goodman_artifact": "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
-      "goodman_validator": "tools/goodman_filter_check.py",
-      "goodman_completion_mode": "validate-run",
-      "completion_command": "python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/<run_id>"
+      "program_target": "FRANK_V0_1"
     },
     "hyperposition": {
       "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "measurement_contract": "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md",
-      "must_treat_frank_clay_native_contract_as_fixed": true
+      "program_target": "FRANK_V0_1"
     },
     "claygraph": {
       "protocol": "research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md",
-      "foundation": "research_entity/global/CLAYGRAPH_RESEARCH_FOUNDATION.md",
-      "evolution_protocol": "research_entity/claygraph/CLAYGRAPH_EVOLUTION_PROTOCOL.md",
-      "harness_graph_contract": "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "must_treat_frank_clay_native_contract_as_fixed": true,
-      "coverage_mode": "ALL_DISCOVERED_INDEXED_DOMAIN_FOCUSED",
-      "primary_feedback_target": "frank"
+      "program_target": "FRANK_V0_1"
     },
     "unifieddb": {
       "protocol": "research_entity/triggers/UNIFIED_DATABASE_RESEARCH_PROTOCOL.md",
-      "foundation": "research_entity/global/UNIFIED_DATABASE_RESEARCH_FOUNDATION.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "must_treat_frank_clay_native_contract_as_fixed": true,
-      "coverage_mode": "ALL_DISCOVERED_INDEXED_DOMAIN_FOCUSED",
-      "primary_feedback_targets": ["frank", "claycode", "claygraph", "harness"]
+      "program_target": "FRANK_V0_1"
     },
     "harness": {
       "protocol": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
-      "kind": "domain_research",
-      "requires_interconnect_manifest": true,
-      "requires_program_state": true,
-      "must_treat_frank_clay_native_contract_as_fixed": true,
-      "coverage_mode": "ALL_REGISTERED_BRANCHES_PLUS_LIVE_WORKERS_PLUS_ARCHAEOLOGY",
-      "requires_live_worker_reread": true,
-      "must_build_and_execute": true,
-      "harness_graph_contract": "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"
+      "program_target": "FRANK_V0_1",
+      "harness_is_product": false
+    },
+    "spawn": {
+      "protocol": "research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Exact clay names the Clay research entity and is not a command. The old clay foundry command is clayresearch. Every scientific/research-center trigger reads the dynamic staged program and live center while remaining loyal to its own domain. 666 is the sole autonomous meta-trigger: archive assimilation before Level-0 PASS, emergent stochastic research-field spawning after Level-0 PASS. q12 is the creator-advisor meta-role. Every substantive visible response ends with the dynamic status footer generated from the next unpassed milestone in PROGRAM_STATE.json, including all registered short commands."
+  "reserved_commands": [
+    "666",
+    "go",
+    "q12",
+    "q23",
+    "atomic",
+    "dump",
+    "fusion",
+    "hypofusion",
+    "clayresearch",
+    "gwt",
+    "frank",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness",
+    "spawn"
+  ],
+  "rule": "All reserved commands operate on the same Frank v0.1 program. Domain specialization changes method and evidence sought, never the product target. Legacy GitHub/Reference/Clay Harness and H1/H2/H3 are not active products or stages.",
+  "training_auto_start_forbidden": true,
+  "last_updated": "2026-08-10T20:39:00+07:00",
+  "trigger_renames": {
+    "clay": "clayresearch"
+  }
 }

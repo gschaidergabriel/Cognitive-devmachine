@@ -1,0 +1,46 @@
+{
+  "run_id": "CLAYRESEARCH-20260809T1723p0700-chatgpt-secondary",
+  "evidence_class": "SYNTHETIC_INSTRUMENT_SANITY_CHECKS_NOT_FRANK_RUNTIME_EVIDENCE",
+  "experiments": [
+    {
+      "id": "SYN-LOOP-HALT-001",
+      "seed": 42,
+      "description": "Noisy scalar recurrent convergence across mixed contraction difficulty; compare fixed depth with local adaptive halt (2 consecutive |delta|<0.018 after step 3, max 32).",
+      "results": {
+        "fixed_mse": {"4": 0.10108157507800082, "8": 0.03550719141811134, "12": 0.016233011217017177, "16": 0.008342633297116297, "24": 0.002724731288162875, "32": 0.0011155579842161466},
+        "adaptive_mse": 0.005443687338670737,
+        "adaptive_mean_steps": 9.14835,
+        "adaptive_p95_steps": 19.0
+      },
+      "interpretation": "Adaptive stopping occupied a different accuracy/compute point: lower MSE than fixed 16 while using about 9.15 mean steps, but fixed 24/32 achieved lower MSE at higher compute. This validates measuring a frontier, not declaring adaptive halting universally superior."
+    },
+    {
+      "id": "SYN-MULTISCALE-002",
+      "seed": 7,
+      "description": "Forecast a latent process with slow AR(0.995) + fast AR(0.35) components. Compare best single EMA state against a two-timescale state with linear readout.",
+      "results": {
+        "single_best_mse": 0.10278894022910952,
+        "single_alpha": 0.41,
+        "dual_best_mse": 0.09598435154793958,
+        "dual_slow_alpha": 0.05,
+        "dual_fast_alpha": 0.9,
+        "relative_mse_improvement": 0.06619961900573133
+      },
+      "interpretation": "On this deliberately heterogeneous process, two-timescale state improved test MSE by about 6.62%. This is a positive-control for the measurement idea, not evidence that FRANK gains 6.62%."
+    },
+    {
+      "id": "SYN-INCREMENTAL-DAG-003",
+      "seed": 11,
+      "description": "Sparse 10,000-node DAG; sample 1,000 changed source nodes and count descendants requiring recomputation.",
+      "results": {"full_nodes": 10000, "mean_affected": 30.25, "median_affected": 2.0, "p95_affected": 64.05, "full_to_mean_affected_operation_ratio": 330.57851239669424},
+      "interpretation": "Sparse dependency structure can make incremental recomputation dramatically cheaper in operation count. Real FRANK affected-set density and maintenance overhead must be measured before claiming speedup."
+    },
+    {
+      "id": "SYN-SAFE-EFFECT-004",
+      "seed": 19,
+      "description": "100,000 random child effect requests against explicit parent grants; compare ambient requested effects with a broker that intersects child effects with parent grant.",
+      "results": {"trials": 100000, "ambient_nonamplification_violation_rate": 0.934, "mediated_nonamplification_violations": 0, "broker_rejection_rate": 0.934},
+      "interpretation": "The set-inclusion invariant is internally testable and the toy broker enforces it by construction. This is a contract sanity test only; it does not establish FFI/OS mediation completeness."
+    }
+  ]
+}

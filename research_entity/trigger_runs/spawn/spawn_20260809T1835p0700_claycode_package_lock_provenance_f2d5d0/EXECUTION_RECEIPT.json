@@ -1,0 +1,109 @@
+{
+  "evidence_class": "HOSTED_SYNTHETIC_PROXY_NOT_PRODUCTION_CLAYCODE",
+  "experiment_id": "EXP-SPAWN-CLAYCODE-PACKAGE-IDENTITY-001",
+  "interpretation_limits": [
+    "Constructed discrimination suite; pass/fail frequencies are designed falsification counts, not prevalence estimates for real package ecosystems.",
+    "The source field in semantic graph tests means logical source namespace/authority, not a mutable mirror/fetch URL; fetch locator is tested separately as nonsemantic provenance.",
+    "No production ClayCode parser/compiler/runtime/package manager was executed.",
+    "No Andreas Ubuntu target-host evidence was produced.",
+    "No supply-chain security guarantee is established by this proxy."
+  ],
+  "results": {
+    "A_resolver_policy": {
+      "different_exact_selection": 10000,
+      "same": 0
+    },
+    "B_registry_growth": {
+      "locked_selection_drift": 0,
+      "unlocked_selection_drift": 10000
+    },
+    "C_same_version_payload_mutation": {
+      "digest_guard_detected": 10000,
+      "version_only_identity_collision": 10000
+    },
+    "D_canonical_order": {
+      "hash_mismatches_after_shuffle": 0
+    },
+    "E_target_projection": {
+      "naive_graph_identity_collisions": 10000,
+      "projection_identity_detected_change": 10000
+    },
+    "F_freshness_policy": {
+      "semantic_graph_stable": 10000,
+      "trust_receipt_changed": 10000
+    },
+    "G_authority": {
+      "bad_dependency_implies_authority_allows": 10000,
+      "explicit_grant_allows": 10000,
+      "guard_denied_without_external_grant": 10000
+    },
+    "H_resolver_provenance": {
+      "same_graph_distinct_resolver_receipts": 10000
+    },
+    "I_identity_boundary_factorial": {
+      "candidate": {
+        "by_kind": {
+          "builder": {"changed": 0, "total": 5000},
+          "edge": {"changed": 5000, "total": 5000},
+          "features": {"changed": 5000, "total": 5000},
+          "fetch_locator": {"changed": 0, "total": 5000},
+          "manifest_range": {"changed": 0, "total": 5000},
+          "payload": {"changed": 5000, "total": 5000},
+          "resolver": {"changed": 0, "total": 5000},
+          "source": {"changed": 5000, "total": 5000},
+          "target": {"changed": 5000, "total": 5000},
+          "trust": {"changed": 0, "total": 5000},
+          "version": {"changed": 5000, "total": 5000}
+        },
+        "nonsemantic_stable": 25000,
+        "nonsemantic_total": 25000,
+        "semantic_detect": 30000,
+        "semantic_total": 30000
+      },
+      "giant": {
+        "by_kind": {
+          "builder": {"changed": 5000, "total": 5000},
+          "edge": {"changed": 5000, "total": 5000},
+          "features": {"changed": 5000, "total": 5000},
+          "fetch_locator": {"changed": 5000, "total": 5000},
+          "manifest_range": {"changed": 5000, "total": 5000},
+          "payload": {"changed": 5000, "total": 5000},
+          "resolver": {"changed": 5000, "total": 5000},
+          "source": {"changed": 5000, "total": 5000},
+          "target": {"changed": 5000, "total": 5000},
+          "trust": {"changed": 5000, "total": 5000},
+          "version": {"changed": 5000, "total": 5000}
+        },
+        "nonsemantic_stable": 0,
+        "nonsemantic_total": 25000,
+        "semantic_detect": 30000,
+        "semantic_total": 30000
+      },
+      "version_only": {
+        "by_kind": {
+          "builder": {"changed": 0, "total": 5000},
+          "edge": {"changed": 0, "total": 5000},
+          "features": {"changed": 0, "total": 5000},
+          "fetch_locator": {"changed": 0, "total": 5000},
+          "manifest_range": {"changed": 0, "total": 5000},
+          "payload": {"changed": 0, "total": 5000},
+          "resolver": {"changed": 0, "total": 5000},
+          "source": {"changed": 0, "total": 5000},
+          "target": {"changed": 0, "total": 5000},
+          "trust": {"changed": 0, "total": 5000},
+          "version": {"changed": 5000, "total": 5000}
+        },
+        "nonsemantic_stable": 25000,
+        "nonsemantic_total": 25000,
+        "semantic_detect": 5000,
+        "semantic_total": 30000
+      }
+    },
+    "evidence_class": "HOSTED_SYNTHETIC_PROXY_NOT_PRODUCTION_CLAYCODE",
+    "seed": 202608091831,
+    "trials_per_test": 10000
+  },
+  "script_sha256": "b0afc8241ce7932b564d6768f24e648812142e3f734c003e01c31e4b367d2ba8",
+  "seed_factorial": 202608091832,
+  "seed_primary": 202608091831
+}

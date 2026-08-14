@@ -1,0 +1,62 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1713p0700-chatgpt-secondary",
+  "packets":[
+    {
+      "packet_id":"MP-CR-20260809-001",
+      "domains":["clayresearch","claycode","harness"],
+      "atomic_claim":"The currently admitted G9 V3 research surface contains operators and conditional/coalescing forms not represented by the currently admitted grammar.",
+      "epistemic_class":"STATIC_CONFORMANCE_RESEARCH_EVIDENCE",
+      "status_hint":"OPEN",
+      "source_refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/g9/grammar.ebnf"],
+      "confidence":0.98,
+      "verification_requirement":"Real current parser executes complete admitted G9 corpus on Ubuntu.",
+      "falsifier":"Authoritative executable surface is a different corpus/grammar or parser already supports these forms via admitted semantics not reflected in grammar."
+    },
+    {
+      "packet_id":"MP-CR-20260809-002",
+      "domains":["unifieddb","claygraph","clayresearch"],
+      "atomic_claim":"Sparse dependency-closure incremental recomputation can preserve exact synthetic results at far lower operation count than full recomputation.",
+      "epistemic_class":"SIMULATION_ONLY",
+      "status_hint":"OPEN",
+      "source_refs":["EXP-CR-002"],
+      "confidence":0.95,
+      "verification_requirement":"Replay real Clay/UnifiedDB dependency graphs with bookkeeping cost included.",
+      "falsifier":"Real affected closures are dense or overhead erases the gain."
+    },
+    {
+      "packet_id":"MP-CR-20260809-003",
+      "domains":["clayresearch","claycode","frank","harness"],
+      "atomic_claim":"Set-intersection capability attenuation satisfies authority non-amplification in a simplified randomized verb-set model; runtime containment remains unproven.",
+      "epistemic_class":"SIMULATION_ONLY",
+      "status_hint":"OPEN",
+      "source_refs":["EXP-CR-003","research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"],
+      "confidence":0.99,
+      "verification_requirement":"Nested host/FFI/subprocess capability fuzz on Ubuntu with resource identity, revocation and ambient handles.",
+      "falsifier":"Any child obtains undeclared authority/effect absent an external grant."
+    },
+    {
+      "packet_id":"MP-CR-20260809-004",
+      "domains":["claycode","harness","clayresearch"],
+      "atomic_claim":"WASM/WASI capability sandboxing should be treated as defense-in-depth rather than Clay's sole authority root because sandbox/runtime implementation defects can violate intended host restrictions.",
+      "epistemic_class":"EXTERNAL_PRIMARY_IMPLEMENTATION_EVIDENCE_PLUS_INFERENCE",
+      "status_hint":"OPEN_ARCHITECTURE_CONSTRAINT",
+      "source_refs":["Wasmtime/WASI official capability documentation","Wasmtime 2026 WASI path_open(TRUNCATE) security advisory"],
+      "confidence":0.95,
+      "verification_requirement":"Clay broker + WASI/native adapter escape regression suite.",
+      "falsifier":"A formally complete and verified backend mediation layer independently proves all relevant effect closure properties."
+    },
+    {
+      "packet_id":"MP-CR-20260809-005",
+      "domains":["frank","gwt","emergenz","clayresearch"],
+      "atomic_claim":"Adaptive recurrent depth should be tested for both useful refinement and overthinking; recurrence count alone is not a quality or emergence measure.",
+      "epistemic_class":"EXTERNAL_PRIMARY_RESEARCH_PLUS_PROJECT_HYPOTHESIS",
+      "status_hint":"OPEN",
+      "source_refs":["arXiv:2604.07822","arXiv:2604.21215","research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md"],
+      "confidence":0.85,
+      "verification_requirement":"Matched FRANK frozen-episode fixed-vs-adaptive recurrence experiment with outcome/cost/stability metrics.",
+      "falsifier":"Fixed-depth/event-driven control Pareto-dominates adaptive recurrence across representative episodes."
+    }
+  ],
+  "promotion":"NONE"
+}

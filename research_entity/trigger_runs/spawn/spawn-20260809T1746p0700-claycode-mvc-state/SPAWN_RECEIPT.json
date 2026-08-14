@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1746p0700-claycode-mvc-state",
+  "trigger": "spawn",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "branch_draw": {
+    "rng": "OS_CSPRNG_/dev/urandom",
+    "raw_uint32": 3452589924,
+    "draw_1_to_100": 25,
+    "weights_version": "SPAWN_RESEARCH_WEIGHTS.json schema 1.0",
+    "weights_blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+    "selected_origin_branch": "claycode",
+    "bucket": "1..50"
+  },
+  "candidate_microdirections": [
+    {
+      "id": "C1",
+      "direction": "typed semantic identity for Set/Ordered/duplicate normalization and deterministic semantic hashes",
+      "status": "REROLLED_DUPLICATE",
+      "reason": "fresh ClayCode parser work already reports 50,000 randomized collection-identity cases and semantic-hash separation; replication value exists but novelty is low"
+    },
+    {
+      "id": "C2",
+      "direction": "capability delegation/effect-closure safety through typed FFI lowering",
+      "status": "REROLLED_DUPLICATE",
+      "reason": "fresh control/effect closure work already reports 50,000 randomized control cases and 20,000 transitive effect-graph mutations"
+    },
+    {
+      "id": "C3",
+      "direction": "HTTP server typed-host-adapter lowering without semantic leakage",
+      "status": "ELIGIBLE_NOT_SELECTED"
+    },
+    {
+      "id": "C4",
+      "direction": "async cancellation/error ordering with deterministic receipt semantics",
+      "status": "ELIGIBLE_NOT_SELECTED"
+    },
+    {
+      "id": "C5",
+      "direction": "adaptive visual learner state/version/provenance/open-set/promotion/rollback semantics in ClayCode",
+      "status": "SELECTED"
+    },
+    {
+      "id": "C6",
+      "direction": "FRANK loop-of-loops typed dynamical state and productive-cycle classification",
+      "status": "ELIGIBLE_NOT_SELECTED"
+    }
+  ],
+  "microdirection_draws": [
+    {
+      "raw_uint32": 1373393214,
+      "draw": 1,
+      "candidate": "C1",
+      "action": "REROLL_MICRODIRECTION_ONLY"
+    },
+    {
+      "raw_uint32": 3383141235,
+      "draw": 2,
+      "candidate": "C2",
+      "action": "REROLL_MICRODIRECTION_ONLY"
+    },
+    {
+      "raw_uint32": 1782243406,
+      "draw": 5,
+      "candidate": "C5",
+      "action": "ACCEPT"
+    }
+  ],
+  "recent_spawn_receipt_check": {
+    "result": "NO_PRIOR_SPAWN_RUN_RECEIPTS_FOUND_VIA_CURRENT_COMMIT_SEARCH",
+    "note": "spawn was newly registered; duplication checks therefore also used fresh ClayCode branch commits and run reports"
+  },
+  "selected_microdirection": "C5",
+  "selection_probability_is_not_evidence": true,
+  "training_auto_start_forbidden": true
+}

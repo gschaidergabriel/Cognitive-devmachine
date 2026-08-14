@@ -1,0 +1,37 @@
+{
+  "schema_version":"2.0",
+  "event_id":"WORK_CREATE_SPAWN_HARNESS_VISUAL_ACTION_CLOSURE_20260809T1821P0700",
+  "kind":"WORK_CREATE",
+  "actor":"chatgpt-secondary",
+  "created_at":"2026-08-09T18:21:46+07:00",
+  "payload":{
+    "work_id":"WORK-HARNESS-VISUAL-ACTION-CLOSURE-001",
+    "goal_ref":"FRANK_V0_1_ANDREAS_PC",
+    "origin_class":"SPAWN_HARNESS_RESEARCH",
+    "title":"Action-risk evidence closure for adaptive visual familiarity",
+    "work_clay":"Implement an architecture-generic Harness discriminator that holds effect capability constant while varying visual epistemic basis: fresh sensor confirmation, familiarity-only KNOWN_HIGH, stale classifier/calibration, BRONZE support, open-set false familiarity, and familiarity-vs-sensor contradiction. For HIGH-risk/protected effects require fresh action-specific observation or an equivalent deterministic precondition before commit; preserve LOW-risk familiar fast paths. Emit perceptual-basis, risk/evidence-floor, proposal, authority, commit/outcome and replay receipts. Do not let Frank authorize or mutate its own Harness.",
+    "reason_clay":"Spawn run spawn-20260809T1821p0700-harness-visual-action-closure found a 720-state synthetic counterexample: the current-contract proxy allowed 3 HIGH-risk familiarity-only effects despite valid independent capability gating, while a risk-sensitive evidence floor reduced the modeled class to 0 without removing modeled LOW-risk utility. Current BASE stage explicitly permits Harness architecture-generic foundations that expose language/runtime gaps, but H1 cannot PASS before BASE.",
+    "completion_clay":"Executable local/Ubuntu receipt demonstrates: zero HIGH-risk commits whose sole decisive perceptual basis is familiarity/prior support; valid independently confirmed HIGH-risk effects still commit; LOW-risk GOLD/SILVER familiar fast-path controls remain operational; stale/BRONZE/open-set/contradictory cases escalate; replay identifies exact perceptual basis and classifier/calibration version; capability authority root remains unchanged. If production ClayCode cannot carry/enforce the needed typed metadata, publish the concrete executable counterexample back to CC-WP-04/07 instead of inventing syntax preemptively.",
+    "evidence_need":[
+      "research_entity/trigger_runs/spawn/spawn-20260809T1821p0700-harness-visual-action-closure/FINAL_REPORT.md",
+      "research_entity/trigger_runs/spawn/spawn-20260809T1821p0700-harness-visual-action-closure/EXECUTION_RECEIPT.json",
+      "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+      "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
+      "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json"
+    ],
+    "executor_policy":"Prefer verified CLAUDE_CODE_LOCAL_ORGAN for real repository build/test on the Ubuntu developer-system surface; ChatGPT may independently refine the oracle/research but must not claim local execution it did not perform.",
+    "required_capabilities":["github_read_write","local_repository_execution","python_or_harness_test_runtime"],
+    "write_scope":["research_entity/harness/*","research_entity/trigger_runs/harness/*","research_entity/state/work/events/*"],
+    "dependencies":["H-WP-07-MICRO-VISUAL-LEARNER","H-WP-10-EFFECT-AUTHORITY","H-WP-14-FUZZ-ADVERSARIAL"],
+    "invalidators":[
+      "a newer executable Harness already proves an equivalent risk-sensitive perceptual evidence-floor property with exact receipts",
+      "the owner-fixed adaptive visual learner requirement is explicitly superseded",
+      "a production architecture contract proves every high-consequence effect already requires fresh action-specific observation or deterministic precondition evidence, making this work redundant"
+    ],
+    "base_priority":0.94,
+    "expected_impact":0.94,
+    "urgency":0.88,
+    "information_gain":0.97,
+    "status":"READY"
+  }
+}

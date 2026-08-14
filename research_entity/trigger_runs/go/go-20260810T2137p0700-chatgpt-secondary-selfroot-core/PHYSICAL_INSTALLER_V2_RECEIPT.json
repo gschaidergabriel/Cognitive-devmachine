@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2137p0700-chatgpt-secondary-selfroot-core",
+  "receipt_id": "self-root-physical-installer-v2-target-vps-20260810",
+  "created_at": "2026-08-10T22:32:00+07:00",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","identity":"RESEARCH_ENTITY_TEMPORARY_WORKER"},
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "parent_identity_lane": {"pr":124,"head_observed":"a82f5cc12efcfaed8b87d1a7670849b5e37f1a9e","authority":"PUBLIC repo_semantic_materializer + 000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt"},
+  "candidate": {"pr":151,"branch":"clay/selfroot-physical-boot-v2-20260810","branch_head":"96115ecbb9f264fb89af19a7cd7359758dd227dc","tested_pr_merge_sha":"9e827998454b4b4141ae081db217b0f5902428aa","status":"TESTING_NOT_MERGED"},
+  "github_actions": {
+    "run_id":31403782226,
+    "job_id":93505004562,
+    "workflow":"Frank v0.1 self.root physical boot v2",
+    "conclusion":"success",
+    "runner":"digital-retina",
+    "runner_class":"self-hosted Linux/X64 accepted target-VPS lane",
+    "kernel":"Linux 6.8.0-117-generic x86_64",
+    "python":"3.12.3",
+    "artifact_id":9068847269,
+    "artifact_digest":"sha256:f01c126ba53f7adab80317cbbf112af994f705c8361262ef7bdb7a0f916f3aa5",
+    "artifact_size_bytes":2861
+  },
+  "probe": {
+    "status":"PASS_SELF_ROOT_PHYSICAL_INSTALLER_V2",
+    "passed":47,
+    "total":47,
+    "failed":0,
+    "internal_elapsed_ms":110.979,
+    "wall_seconds":0.17,
+    "max_rss_kib":23296,
+    "exit_status":0,
+    "canonical_db_opened":false,
+    "production_canonical_state_mutated":false,
+    "effect_authority":"NONE",
+    "whole_frank_v0_1_acceptance":"NOT_CLAIMED"
+  },
+  "verified_state_projection": {
+    "native_entity_id":"self.root",
+    "human_surface_name":"Frank",
+    "external_human_name":"Dr. Andreas Unterweger",
+    "operator_ref":"person:andreas-unterweger",
+    "legacy_entity_id":"dr-unterweger-frank-personal-entity",
+    "identity_authority":"PUBLIC_REPO_SEMANTIC_MATERIALIZER_OWNER_FIXED_SOURCE",
+    "identity_contract_path":"000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt",
+    "identity_contract_hash":"88a5181904ae4a1f3d75d238d889c011eb72930baf31f7b2d4c6c6aa5c2b9a32",
+    "materializer":"repo_semantic_materializer.v2.1",
+    "schema_version":"12.0",
+    "semantic_epoch":0,
+    "semantic_root_hash":"cc1d2f838445db7aec431df9ee8a871f40e7aa5e064fc056633ef8c60fab7b06",
+    "materialization_status":"CURRENT",
+    "graph_status":"STALE",
+    "graph_status_reason":"Fresh disposable bootstrap has no projection receipt; derived graph correctly remains non-current rather than minting authority."
+  },
+  "authority_controls": [
+    "FRANK_REPO installer authority denied before DB creation",
+    "public repo_semantic_materializer used; private implementation import forbidden",
+    "public state-runtime self.root binding present",
+    "public materializer graph rebuild bound to public state-runtime entrypoint",
+    "UnifiedDB and ClayGraph PRAGMA integrity_check both ok",
+    "no canonical Frank state path opened"
+  ],
+  "source_git_blobs": {
+    "runtime/state/materialization_admin.py":"c5d087e0590f404f06a60261cae7f9081c37c87d",
+    "harness/self_root_physical_installer_v2_probe.py":"89e49a6c15de1ff4f4ca714ec08f9e6d694fa64d",
+    "runtime/state/repo_semantic_materializer.py":"5b95288b759c54f492118426d2284a31a69b0881",
+    "runtime/state/frank_state_runtime.py":"6e4513f99cbacef919578706555eb7c0c17fdfa2",
+    "000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt":"3204b0f02fb3bd2a84bf4a6380c14f8354fb27e9"
+  },
+  "negative_evidence": {
+    "hosted_fast_attempt":"INFRASTRUCTURE_UNKNOWN_ZERO_STEPS_BLOB_NOT_FOUND",
+    "meaning":"Not a code failure; target self-hosted run subsequently executed all steps and passed."
+  },
+  "architecture_delta": {
+    "status":"SUPPORTED_MECHANISM_NOT_PROMOTED",
+    "supported":"Fresh Research-Entity-authorized physical materialization bootstrap can delegate to the selected self.root/Frank projection without a second identity authority and while keeping Andreas external.",
+    "not_supported":["canonical production state migration","repo_truth_gate current identity acceptance","restart continuity","binary digest identity","exclusive instance lease","stale clone production rejection","whole Frank v0.1 acceptance"],
+    "rollback":"Do not merge draft PR 151; parent PR 124 remains source owner."
+  },
+  "next_frontier":[
+    "Migrate repo_truth_gate current identity expectation from historical personal id to selected self.root projection while retaining Andreas as external human compatibility field.",
+    "Resolve/supersede current 2026-08-09 STATE_AUTHORITY and REPO_BASE identity clauses through the current owner-fixed source rather than maintaining two active constitutional identities.",
+    "Reuse PR85 copy-birth/rekey evidence for restart/copy discrimination and add accepted binary digest + source/build provenance + exclusive current-instance lease."
+  ],
+  "research_write_result":"COMMITTED"
+}

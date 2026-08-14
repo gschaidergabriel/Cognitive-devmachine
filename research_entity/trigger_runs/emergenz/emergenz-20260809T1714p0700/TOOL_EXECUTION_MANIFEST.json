@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "emergenz-20260809T1714p0700",
+  "actor": "chatgpt-secondary",
+  "task_classes": ["scholarly","bibliographic","current_web","implementation","executable"],
+  "attempts": [
+    {
+      "class": "scholarly",
+      "tool": "native_web_primary_source_search",
+      "status": "SUCCESS",
+      "sources": [
+        "Hoel, Albantakis & Tononi 2013, PNAS, doi:10.1073/pnas.1314922110",
+        "Barnett & Seth, Dynamical independence, arXiv:2106.06511 (updated 2026-03-22)",
+        "Rosas et al., Reconciling emergences, arXiv:2004.08220",
+        "Mediano et al., Integrated Information Decomposition, arXiv:2109.13186 / later journal version",
+        "Yang et al., Partial Effective Information Decomposition for Synergistic Causality, arXiv:2605.03267 (2026-05-05)",
+        "Yang et al., Finding emergence in data by maximizing effective information, National Science Review 12(1), 2025, nwae279"
+      ]
+    },
+    {
+      "class": "implementation",
+      "tool": "native_web_GitHub_discovery",
+      "status": "SUCCESS_LIMITED",
+      "sources": [
+        "robince/partial-info-decomp",
+        "pietromarchesi/pidpy",
+        "pliang279/PID"
+      ],
+      "note": "Implementation evidence used only to establish available decomposition tooling patterns, not to validate PEID itself."
+    },
+    {
+      "class": "executable",
+      "tool": "local_python_reasoning_sandbox",
+      "status": "SUCCESS",
+      "artifact": "EXPERIMENT_SYNTHETIC_CAUSAL_GATES.json",
+      "note": "20 seeds x 50,000 samples; synthetic only; no FRANK/Harness target replication."
+    },
+    {
+      "class": "repository",
+      "tool": "connected_GitHub",
+      "status": "SUCCESS_RW",
+      "note": "Canonical state reread unchanged at r2/04234efd...9346 before durable run writes; run artifacts committed."
+    }
+  ],
+  "provider_router": {
+    "tools_research_provider_router_plan": "NOT_EXECUTED_ON_CURRENT_SURFACE",
+    "reason": "Current ChatGPT connector surface exposes GitHub file operations and native web, but not direct execution of repository CLI scripts in the checked-out repo. Asynchronous repo-runner requests were not used because this turn must complete synchronously.",
+    "consequence": "No strong scientific promotion; all new scientific propositions remain OPEN and the executable evidence remains SYNTHETIC_SIMULATION."
+  },
+  "source_class_discipline": "Preprints, peer-reviewed papers, GitHub implementations and synthetic simulation are retained as distinct evidence classes."
+}

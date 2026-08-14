@@ -1,0 +1,57 @@
+{
+  "schema_version":"1.0",
+  "claycode_run_id":"claycode-20260809T0951Z-chatgpt-sol",
+  "latest_frank_run":null,
+  "latest_frank_claycode_architecture_artifact":null,
+  "artifact_lookup_note":"Expected canonical paths research_entity/frank/FRANK_ARCHITECTURE.claycode.json and research_entity/frank/CLAYCODE_ARCHITECTURE_MAPPING.md were not present at checked paths. Review therefore uses current FRANK owner directives, Harness workspace and historical Project-Frankenstein evidence rather than inventing a missing architecture file.",
+  "reviews":[
+    {
+      "claim_id":"GOODMAN-CC-001",
+      "frank_statement":"Model output/semantic intent must not itself confer execution authority; effects cross an independently enforced capability/commit boundary.",
+      "frank_source_refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/harness/HARNESS_WORKSPACE.json"],
+      "ancestry_families":["FRANK_CLAY_G9_SHARED","PROJECT_FRANKENSTEIN_SAFETY_HISTORY","EXTERNAL_WASI_COMPONENT_MODEL"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A simpler trusted local runtime could safely treat validated model-emitted tool calls as sufficient authority, making capability tokens redundant overhead.",
+      "falsifier":"Adversarial Harness testing demonstrates no authority escalation, destructive-equivalent bypass or resource-scope violation under direct validated model-call authority across the required system-effect suite.",
+      "independent_checks":[
+        "Project-Frankenstein historical safety/authority failure lineage contains approval-bypass and capability-scoping negative evidence mapped into current BASE/Harness acceptance.",
+        "WASI/Component Model independently separates imported host interfaces/resources from component code and uses typed boundary contracts rather than text naming as authority."
+      ],
+      "adversarial_checks":["Treat textual capability/resource names as forged authority; attempt scope widening and destructive-equivalent host paths."],
+      "verdict":"SUPPORTED",
+      "reason":"Survives independent project-history negative evidence and an external typed-capability architecture analogue. This supports the separation principle, not any particular token format as uniquely optimal.",
+      "claycode_action":"Retain model_intent_and_effect_authority_separate and capability-bearing effect lowering; do not let parser convenience collapse authority into syntax.",
+      "affected_claycode_artifacts":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-002",
+      "frank_statement":"Adaptive user-specific visual learner state must be representable/replayable in ClayCode without becoming semantic truth or execution authority.",
+      "frank_source_refs":["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md","research_entity/harness/HARNESS_WORKSPACE.json"],
+      "ancestry_families":["OWNER_FIXED_FRANK_V0_1_REQUIREMENT","CLAYCODE_G9_GENERIC_STATE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Generic G9 records/deltas are insufficient for calibrated open-set online-learning lifecycle semantics, requiring a new dedicated language primitive.",
+      "falsifier":"An executable H1 learner transition cannot be represented with deterministic version/provenance/admission/promotion/rollback semantics using the current generic IR.",
+      "independent_checks":["Current G9 generic records include Delta, evidence/provenance refs, epochs, statuses, budgets and RecoveryRef-compatible rollback hooks; this is representability analysis, not live learner evidence."],
+      "adversarial_checks":["Feature-version migration, rejected pseudo-labels, candidate rollback, UNKNOWN/CONFLICT routing and over-budget pause."],
+      "verdict":"UNRESOLVED",
+      "reason":"No executable H1 Micro Visual Classifier state machine was available in this run, so generic representability remains a working hypothesis rather than independently validated FRANK-to-ClayCode adequacy.",
+      "claycode_action":"Do not add visual-learning syntax now; require a concrete H1 counterexample before semantic change.",
+      "affected_claycode_artifacts":["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-003",
+      "frank_statement":"ClayCode must carry semantic dependency/coupling information sufficient for automatic incremental UnifiedDB/ClayGraph maintenance instead of forcing full hot-path search/reconstruction.",
+      "frank_source_refs":["research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md"],
+      "ancestry_families":["OWNER_SEMANTIC_FABRIC_DIRECTIVE","CLAYGRAPH_UNIFIEDDB_RUNTIME_SCHEMAS","MLIR_EXTERNAL_ANALOGUE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Runtime observation alone can maintain the needed graph/database dependencies; compiler-emitted signatures are unnecessary duplication.",
+      "falsifier":"Matched incremental-service tests show no correctness, latency, invalidation or drift advantage from compiler-derived signatures over runtime-only dependency tracking.",
+      "independent_checks":["Current UnifiedDB/ClayGraph schemas already contain epochs, deltas, projection receipts and invalidation structures independent of ClayCode prose.","MLIR independently demonstrates extensible typed dialect/interface IR with explicit parsers/verifiers/canonicalization, supporting separation of semantic IR from surface syntax."],
+      "adversarial_checks":["Dynamic dispatch/FFI dependency absent statically; stale compiler signature; runtime-only dependency discovered after canonicalization."],
+      "verdict":"REFINED",
+      "reason":"Compiler-derived signatures are justified as one source, but must be fused with runtime receipts rather than treated as complete dependency truth.",
+      "claycode_action":"Design signatures as compiler products plus runtime reconciliation/invalidation, not a second authoritative hand-written graph.",
+      "affected_claycode_artifacts":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"]
+    }
+  ]
+}

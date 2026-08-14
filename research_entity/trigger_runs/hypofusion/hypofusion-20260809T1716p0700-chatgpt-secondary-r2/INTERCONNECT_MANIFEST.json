@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hypofusion-20260809T1716p0700-chatgpt-secondary-r2",
+  "trigger": "hypofusion",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "branches": ["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "baseline_hypofusion": {"run":"hypofusion-20260808T2152p0700-chatgpt-secondary-r1","screened_records":99,"inheritance_rule":"baseline records remain addressable by their original ids; shared ancestry is not independent replication"},
+  "initial_live_cutoff": {"commit":"61dbf9006eeca2d979e89deaa9d39be23a88b731","observed_commit_time":"2026-08-09T10:13:57Z"},
+  "late_arrival_cutoff_before_fusion2": {"commit":"7ba860f8a921020279e5c7a0c7ed3185be7565cf","observed_commit_time":"2026-08-09T10:16:26Z"},
+  "high_value_delta_inputs": [
+    "clayresearch CTK 60-hypothesis matrix H-CR-001..060",
+    "ClayCode numeric canonicalization and exact-int lowering probes",
+    "ClayCode compiler provenance-chain / semantic-validation matrix",
+    "ClayCode resource-handle ABA probe",
+    "ClayCode G9 grammar self-consistency counterexample",
+    "ClayCode ambiguous semantic-freeze matrix",
+    "Harness TurnTrace/replay matrix",
+    "Harness effect-authority freshness foundation",
+    "ClayCode/Harness idempotency-concurrency probe stream"
+  ],
+  "access_boundary": {
+    "recursive_repository_tree_listing": "INACCESSIBLE_VIA_CURRENT_CONNECTOR",
+    "directory_fetch": "REJECTED_BY_CONNECTOR",
+    "mitigation": "inherit prior complete Hypofusion record map, enumerate current integrated matrices and recent commit deltas, mark unseen historical hypotheses inaccessible rather than inventing them"
+  },
+  "promotion": "NONE"
+}

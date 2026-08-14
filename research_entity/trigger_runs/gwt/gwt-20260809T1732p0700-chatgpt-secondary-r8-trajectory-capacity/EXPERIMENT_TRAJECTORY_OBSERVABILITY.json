@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-GWT-R8-TRAJECTORY-OBSERVABILITY-001",
+  "run_id": "gwt-20260809T1732p0700-chatgpt-secondary-r8-trajectory-capacity",
+  "epistemic_class": "SIMULATION_FORMAL_PROXY",
+  "status": "PASS_FOR_REPRESENTATIONAL_COUNTEREXAMPLE_ONLY",
+  "claim_scope": "Tests whether one final first-order state-step magnitude is sufficient to identify coarse trajectory regime in a finite deterministic toy state system. It is not evidence that FRANK or Qwen exhibits these exact dynamics.",
+  "setup": {
+    "state_space": [-2, -1, 0, 1, 2],
+    "trajectory_length": 3,
+    "enumerated_trajectories": 125,
+    "regime_labels": ["FIXED", "TWO_CYCLE", "CONVERGING", "DIVERGING", "OTHER"],
+    "first_order_feature": "abs(x2-x1)",
+    "trajectory_feature": ["abs(x2-x1)", "abs(x1-x0)", "sign((x1-x0)*(x2-x1))", "abs((x2-x1)-(x1-x0))"]
+  },
+  "results": {
+    "first_order_feature_buckets": 5,
+    "first_order_ambiguous_buckets": 5,
+    "trajectories_in_first_order_ambiguous_buckets": 125,
+    "trajectory_feature_buckets": 31,
+    "trajectory_feature_ambiguous_buckets": 3,
+    "trajectories_in_trajectory_feature_ambiguous_buckets": 14
+  },
+  "interpretation": "The same final step magnitude can arise from qualitatively different recent trajectories; adding a previous-step and second-order/direction-sensitive feature set sharply reduces but does not eliminate ambiguity in this toy system. Therefore a single state_delta scalar is not a generally sufficient trajectory-regime representation.",
+  "does_not_establish": [
+    "that these toy regimes map directly to cognition",
+    "that trajectory-aware control improves FRANK outcomes",
+    "that second-order features are the optimal estimator",
+    "that recurrence implies emergence or consciousness"
+  ],
+  "next_test": "H1 frozen-output trajectory/regime replay after BASE, with task utility and cost as the actual target rather than toy regime labels.",
+  "promotion": "NONE"
+}

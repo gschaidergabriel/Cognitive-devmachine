@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1746p0700-claycode-mvc-state",
+  "experiment_id": "EXP-SPAWN-MVC-STATE-001",
+  "actor_id": "chatgpt-secondary",
+  "evidence_class": "LOCAL_SEMANTIC_PROXY_EXECUTION",
+  "target_truth_scope": "ClayCode semantic-state expressibility proxy only; not normative ClayCode compiler, not H1/H2, not live FRANK, not Ubuntu target-host evidence",
+  "source": {
+    "path": "adaptive_visual_learner_semantic_proxy.py",
+    "sha256": "87e1d258fdc286813c88a0614033bd7c998ae453f063987fee789513e1bc1091"
+  },
+  "candidate_contract": "CLAYCODE_MVC_STATE_CANDIDATE.clay",
+  "runtime": {
+    "executor": "current hosted container",
+    "language": "Python 3",
+    "target_host_claim": false,
+    "ubuntu_developer_system_claim": false
+  },
+  "test_corpus": {
+    "deterministic_streams": 1000,
+    "transitions_per_stream": 100,
+    "total_replayed_transitions": 100000,
+    "event_classes": ["observe", "budget", "candidate", "promote", "rollback", "backbone"],
+    "trust_tiers": ["GOLD", "SILVER", "BRONZE"],
+    "familiarity_states": ["KNOWN_HIGH_CONFIDENCE", "KNOWN_NEEDS_CONFIRMATION", "AMBIGUOUS", "UNKNOWN", "CONFLICT"],
+    "mutation_controls": 4
+  },
+  "observed": {
+    "result": "PASS_AFTER_ORACLE_REPAIR",
+    "deterministic_replay": "PASS",
+    "bronze_autotraining_guard": "PASS",
+    "stale_backbone_guard": "PASS",
+    "open_set_unknown_ambiguous_conflict_preservation": "PASS",
+    "budget_pause_preserves_perception": "PASS",
+    "atomic_promotion_preserves_last_known_good": "PASS",
+    "rollback": "PASS",
+    "mutation_controls_killed": "4/4"
+  },
+  "method_negative_result": {
+    "id": "N-SPAWN-MVC-ORACLE-001",
+    "status": "NEGATIVE_RESULT",
+    "description": "The first reproducibility run used an over-strong stale-candidate oracle that required candidate state to be None after a rejected stale request. Random streams exposed a valid prior-candidate case, causing the oracle itself to fail. The invariant was narrowed to the intended law: a rejected stale or over-budget candidate request must leave the prior candidate state unchanged.",
+    "impact": "Test oracle corrected; no ClayCode semantic claim was promoted from the failed run.",
+    "preserved": true
+  },
+  "inference": {
+    "supported": "The currently required MVC control-state laws can be represented as ordinary typed/versioned state transitions without demonstrating a need for a new dedicated ClayCode language primitive.",
+    "not_supported": [
+      "normative ClayCode parser acceptance",
+      "normative typed IR/type-effect correctness",
+      "compiler/lowering correctness",
+      "H1/H2 semantic parity",
+      "live FRANK behavior",
+      "project-hardware resource invisibility",
+      "classifier accuracy or personalization gain"
+    ]
+  },
+  "next_discriminating_test": "Compile the MVC state corpus through the normative ClayCode parser -> canonical typed IR -> type/effect -> evaluator/lowering pipeline, then execute the same transition and mutation corpus; after BASE release, run H1-vs-H2 differential replay on Ubuntu with real learner state receipts."
+}

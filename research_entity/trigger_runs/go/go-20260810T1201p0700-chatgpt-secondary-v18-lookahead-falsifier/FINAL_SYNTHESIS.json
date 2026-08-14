@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:15:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "frontier_selected": {
+    "workstream": "CC-WP-02/CC-WP-03 parser boundary",
+    "reason": "Current BASE release remains gate-blocked; current production frontend uses V17 lookahead membrane and concurrent WP03 V7 diagnostics localized a strict grammar ambiguity rather than a typed-IR regression.",
+    "production_change_authorized": false
+  },
+  "fresh_external_knowledge": {
+    "retrieved_at": "2026-08-10",
+    "primary_sources": [
+      "https://lark-parser.readthedocs.io/en/latest/how_to_use.html",
+      "https://lark-parser.readthedocs.io/en/stable/classes.html",
+      "https://lark-parser.readthedocs.io/en/latest/parsers.html"
+    ],
+    "useful_delta": [
+      "Lark strict LALR reports shift/reduce conflicts.",
+      "Regex collision checking requires interegular.",
+      "Regex lookaround can make collision analysis incomplete, so V17 requires explicit metamorphic lexical-boundary guards in addition to strict construction."
+    ]
+  },
+  "hypothesis": "The V17 Needle.owns/Needle.lowers lookahead membrane can be replaced by whole exact dotted terminals plus LALR context, removing regex lookahead while preserving frozen semantic behavior.",
+  "strongest_counterhypothesis": "Frozen support for both bare Needle.owns and Needle.owns <rhs> creates an intrinsic LALR ambiguity without a lexical delimiter membrane; a no-lookahead exact-prefix terminal may also shadow longer valid qids.",
+  "out_of_box_experiment": {
+    "count_this_run": 1,
+    "name": "LOOKAHEAD_FREE_NEEDLE_MEMBRANE",
+    "candidate": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_NO_LOOKAHEAD.lark",
+    "candidate_commits": [
+      "e005557a6a9381bff39465c42f33930b54b48807",
+      "3cf17c3fbe53242c54d53e34bdb5da6435e56448"
+    ],
+    "shadow_validator_commit": "cf7f66b356168137908a279d4135fde845799591",
+    "causal_refutation_probe_commit": "509406796afd2424a41a209298498dfc071df393",
+    "local_result": {
+      "v17_strict_state": "BLOCKED_MISSING_INTEREGULAR_AFTER_NO_OBSERVED_GRAMMAR_CONFLICT",
+      "v18_strict_state": "FAIL_GRAMMAR_CONFLICT",
+      "v18_conflict_surface": "needle_owns_atom : NEEDLE_OWNS with expression follow/operator terminals",
+      "bare_owns_lesion": "REMOVES_OBSERVED_CONFLICT_FAMILY_BEFORE_INTEREGULAR_GATE",
+      "semantic_cost": "BREAKS_FROZEN_G9 rule 4B_need_not_learn Needle.owns",
+      "relation_call_boundary": "PRESERVED_IN_BOUNDED_NONSTRICT_DISCRIMINATORS",
+      "verdict": "REFUTED"
+    },
+    "promotion": "NONE",
+    "rollback": "Production V17 frontend was not changed. V18 remains research/negative-evidence only."
+  },
+  "concurrent_evidence_fused": [
+    {
+      "commit": "a621e943a2bfdc87f6ed317392bf86747f741ace",
+      "finding": "WP03 V7 strict red localized to optional dotted-relation grammar ambiguity, not typed-IR regression."
+    },
+    {
+      "commit": "031d0e82ffdf4d0f49b18b19029ed15fa156e46e",
+      "finding": "Supervisor keeps V17 selected for WP02, rejects current V18 selection and forbids typed-IR/WP04 mutation from this evidence."
+    },
+    {
+      "commit": "c5bedb5ae6792086a94eee78a57b999fec9e0e04",
+      "finding": "Concurrent V19 delimiter-normalizable candidate directly incorporates V18 negative evidence and becomes the next parser research falsifier, without promotion."
+    }
+  ],
+  "ubuntu_remote_lane": {
+    "workflow_commit": "5eb4ab7c366ee0102a6fd4a8397db6b670903603",
+    "workflow": ".github/workflows/claycode-v18-refutation-hostinger.yml",
+    "hosted_lane": "ubuntu-latest",
+    "hostinger_lane": "self-hosted Linux X64",
+    "expected_receipt": "research_entity/claycode/base/receipts/V18_NO_LOOKAHEAD_REFUTATION_HOSTINGER_LATEST.json",
+    "receipt_state_at_handoff": "SYNC_PENDING_NOT_VISIBLE_IN_REPOSITORY",
+    "remote_pass_claimed": false,
+    "formal_andreas_target_acceptance": false
+  },
+  "architecture_delta": {
+    "status": "NO_CHANGE_WITH_NEGATIVE_EVIDENCE",
+    "production_wp02": "KEEP_V17_SELECTED_NOT_FORMALLY_PROMOTED",
+    "v18": "REFUTED_CURRENT_BYTES",
+    "wp03": "GRAMMAR_BOUNDARY_REPAIR_FIRST; NO_TYPED_IR_MUTATION_FROM_CURRENT_RED",
+    "frank_harness_mutation": false,
+    "base_pass": false
+  },
+  "next_frontier": [
+    "Falsify V19 on exact bytes with interegular-enabled strict LALR plus prefix-shadow negatives and horizontal-trivia metamorphics.",
+    "Require normalized ClayCodeBaseFrontendAST/v1 semantic-hash equality against V17 on full frozen G9 + Dialect before any V19 selection.",
+    "Replay typed-fn/WP03 fixtures and hyphenated-identifier versus compact-subtraction discriminators under one exact grammar/compiler provenance.",
+    "Materialize Hostinger Ubuntu receipts; keep registered Andreas Ubuntu target receipt as the formal BASE acceptance authority.",
+    "Do not promote CC-WP-02/03/BASE from research or proxy evidence alone."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_write": "COMMITTED",
+  "authority_invariant": "model output != execution authority"
+}

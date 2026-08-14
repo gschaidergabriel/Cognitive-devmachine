@@ -1,0 +1,21 @@
+{
+  "effect_in_binding_phase_cycle": true,
+  "functions_per_graph": 20,
+  "graphs": 2000,
+  "interpretation": {
+    "binding": "module/scope + exact symbol identity only",
+    "declared_effect_contract": "may be part of callable contract/type if known before body effect closure",
+    "inferred_effect_summary": "analysis output checked against declared contract; never runtime authority and never lexical binding key",
+    "runtime_capability": "fresh invocation context, separate from all static IDs",
+    "value_type": "params + result"
+  },
+  "layered_phase_cycle": false,
+  "observations": {
+    "bad_effect_binding_churn": 3061,
+    "binding_stable": 40000,
+    "declared_contract_type_stable": 40000,
+    "mutated_effect_exceeds_declared_bound_reject": 2397,
+    "mutated_effect_within_declared_bound": 37603
+  },
+  "seed": 202608091
+}

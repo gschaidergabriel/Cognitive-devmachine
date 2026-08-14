@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1711p0700-chatgpt-secondary-fn-closure",
+  "tools": [
+    {
+      "tool": "GitHub connector",
+      "status": "PASS",
+      "use": "T0 canonical boot, current stack/branch evidence reads, prior-run anti-duplication reads, durable run writes"
+    },
+    {
+      "tool": "web.run",
+      "status": "PASS",
+      "use": "independent primary-source compiler/IR comparison",
+      "sources": [
+        {
+          "class": "OFFICIAL_SPECIFICATION",
+          "title": "WebAssembly Core Specification 3.0 — Modules / Functions",
+          "url": "https://webassembly.github.io/spec/core/syntax/modules.html",
+          "observation": "Modules contain explicit function definitions; function signatures/bodies and call/control instructions are explicit semantic objects."
+        },
+        {
+          "class": "OFFICIAL_COMPILER_DOCUMENTATION",
+          "title": "LLVM Language Reference Manual — Functions / call",
+          "url": "https://llvm.org/docs/LangRef.html",
+          "observation": "LLVM represents function definitions/basic blocks and typed calls explicitly; call transfers control to a specified function with bound arguments."
+        }
+      ]
+    },
+    {
+      "tool": "local container execution",
+      "status": "PASS",
+      "runtime": "Debian 13 / Python 3.13.5 / x86_64",
+      "use": "typed function-definition bridge parser/checker/evaluator; 20000-case randomized differential"
+    },
+    {
+      "tool": "E2B",
+      "status": "NOT_EXPOSED_IN_SESSION",
+      "use": "not attempted because no E2B tool was available to this worker"
+    },
+    {
+      "tool": "repository-local interconnect/goodman validators",
+      "status": "PARTIAL",
+      "use": "goodman_filter_check.py source fetched from GitHub; connector-equivalent interconnect manifest constructed; exact repository-local command execution was not exposed"
+    }
+  ],
+  "source_class_rule": "GitHub project evidence, official external specifications/documentation, and local executable proxies remain separate evidence classes.",
+  "hidden_chain_of_thought_persisted": false
+}

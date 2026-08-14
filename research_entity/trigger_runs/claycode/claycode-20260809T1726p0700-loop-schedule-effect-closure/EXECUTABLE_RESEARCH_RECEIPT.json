@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1726p0700-loop-schedule-effect-closure",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "candidate": "generic records/functions + explicit SchedulePolicy + Ordered schedule + transitive effect closure; no new first-class loop primitive",
+  "artifact": "EXPERIMENT_LOOP_SCHEDULE_SEMANTICS.py",
+  "runtime": {"surface": "OpenAI hosted Linux container", "language": "Python", "target_host_evidence": false, "e2b_evidence": false},
+  "seed": 202608091726,
+  "results": {
+    "schedule_cases": 30000,
+    "sequential_order_changed_output": 27007,
+    "sequential_change_rate": 0.9002333333333333,
+    "synchronous_order_changed_output": 0,
+    "unsafe_setlike_semantic_hash_collisions_on_changed_outputs": 27007,
+    "safe_sequential_hash_changed_on_reorder": 30000,
+    "safe_sync_hash_preserved_on_reorder": 30000,
+    "effect_cases": 50000,
+    "effect_checker_oracle_mismatches": 0,
+    "effect_widening_rejected": 23502,
+    "effect_valid_accepted": 26498,
+    "capability_cases": 30000,
+    "forged_capability_accepts": 0,
+    "authorized_accepts": 13342,
+    "unauthorized_rejects": 16658
+  },
+  "expected_vs_observed": "Matched: ordered sequential updates are order-sensitive; synchronous snapshot aggregation is order-invariant in the tested model; transitive effect closure and capability gateway fail closed.",
+  "failure_classification": "COUNTEREXAMPLE_TO_SETLIKE_SCHEDULE_NORMALIZATION",
+  "affected_hypotheses": ["H-CC-LOOP-001", "H-CC-LOOP-002", "H-CC-LOOP-003"],
+  "scientific_scope": "synthetic mechanism proxy only; not Ubuntu target execution and not production G9 compiler evidence",
+  "learning": {
+    "claycode": "Schedule/update policy is semantic identity. ORDERED_SEQUENTIAL must hash ordered schedule; SYNC_SNAPSHOT may normalize schedule only when aggregation semantics are order-independent. Effect closure is transitive; capability authority remains external.",
+    "frank": "Loop-of-loops does not by itself justify a new language primitive; runtime must expose schedule/update policy explicitly.",
+    "claygraph": "Loop topology may be set-like while executable schedule is not necessarily set-like.",
+    "unifieddb": "Replay state must persist schedule/update policy and ordered schedule where applicable.",
+    "gwt": "No change.",
+    "hyperposition": "Alternative schedules can remain candidates; selected executable schedule must be explicit.",
+    "emergenz": "No emergence promotion; recurrence ordering is control semantics only."
+  }
+}

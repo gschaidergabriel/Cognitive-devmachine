@@ -1,0 +1,28 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-receipt:chatgpt-secondary:20260809T143857Z:frank-v01-whole-system-sandbox",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "payload": {
+    "work_id": "FRANK-V01-WHOLE-SYSTEM-SANDBOX-INTEGRATE-20260809",
+    "spec_rev": 1,
+    "execution_receipt_id": "sandbox:chatgpt-secondary:frank-v01:20260809T143857Z",
+    "executor_class": "CHATGPT_HOSTED_SANDBOX",
+    "machine_ref": "chatgpt-sandbox-local-ephemeral",
+    "action": "Built a NEW CLAY-FRANK integration candidate over explicit empirical ancestry contracts and executed whole-system acceptance plus fault/stress tests. Also mirrored current F6 adapter/eval regression. No target-machine or external effects were claimed.",
+    "observed_effect": "Whole-system acceptance: 15/15 PASS; 31/31 named ancestor organs registered and functionally exercised; 74 historical services/module lineage slots hard-preserved; 43 identities remain unresolved in this worker's source assembly and are retained as mandatory unknown slots; UnifiedDB and ClayGraph integrity_check=ok and foreign_key_check empty; cross-node durable re-entry and restart continuity PASS. Fault/stress: 10/10 PASS; 1000 stateful cycles; 1000 organ stimulations; 3 restarts; 40 verified outcome->causal-credit closures; 100 graph edges; 20 intentionally denied Clay writes; 40-thread/200-write WAL burst PASS; transaction rollback and invalid receiver/credit paths fail closed. F6 local adapter regression: self-test PASS and 7/7 mock cases PASS.",
+    "verification": "Local Python/SQLite command execution in /mnt/data/frank_v01_sandbox. Artifact SHA256: runtime/frank_whole_system.py=d779a8653674996f2a99de207bccee27e9e61a657403104fc9d4649e7d0a4ebe; tests/whole_system_acceptance.py=1dccc4fa8f110d5e21bd1011eae8655e46cc713e42a421e08c415bc8cf7bf2be; tests/fault_stress_acceptance.py=c5f900805d11d9edc657c62215b8cbd85826ca91068361014611052cd104616f; whole receipt=618734f2b99da5547265818560f5a4a35c059048c7939198be4d0ff8a81155cd; stress receipt=50ada5866be5f1ab448853b89f71d3ac99426db4c650129ef0f633d79212a9e4. Limitation: container could not clone GitHub directly; files were assembled from connected GitHub/file evidence, so full-current-checkout reproduction remains required by the work item.",
+    "evidence_refs": [
+      "sandbox-sha256:618734f2b99da5547265818560f5a4a35c059048c7939198be4d0ff8a81155cd",
+      "sandbox-sha256:50ada5866be5f1ab448853b89f71d3ac99426db4c650129ef0f633d79212a9e4",
+      "frank-repo:runtime/model/frank_local_model_adapter.py",
+      "frank-repo:tests/local_model_adapter_regression.py",
+      "frank-repo:runtime/local/frank_local_runtime.py",
+      "frank-repo:tests/local_runtime_spine_regression.py"
+    ],
+    "truth_class": "LOCAL_EXECUTION_PRIMARY",
+    "success": true,
+    "complete": false
+  },
+  "created_at": "2026-08-09T14:38:57Z"
+}

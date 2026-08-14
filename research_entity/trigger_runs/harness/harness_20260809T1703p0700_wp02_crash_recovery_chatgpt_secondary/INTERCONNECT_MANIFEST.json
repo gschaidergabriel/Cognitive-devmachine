@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1703p0700_wp02_crash_recovery_chatgpt_secondary",
+  "coverage_mode": "ALL_REGISTERED_BRANCHES_TASK_SPECIFIC_DEPTH",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "branches": {
+    "clayresearch": {"status":"CHECKED_CURRENT_STACK","feedback":"NO_CHANGE; crash atomicity is consistent with safe rollback/recovery requirements"},
+    "frank": {"status":"DIRECT_BASELINE_CHECK","refs":["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md","gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V6_MIGRATION.sql","gschaidergabriel/Dr.-Unterweger:harness/frank_harness_runtime.py"],"feedback":"PARTIAL_SUPPORT: H1 ledger crash atomicity works synthetically; live baseline differential remains required"},
+    "gwt": {"status":"RELEVANCE_CHECKED","feedback":"NO_CHANGE; future WorkspaceEpisode/re-entry traces must bind to committed epochs only"},
+    "emergenz": {"status":"RELEVANCE_CHECKED","feedback":"NO_CHANGE; interventions must never observe uncommitted partial state"},
+    "claycode": {"status":"PROGRAM_STAGE_CHECKED","feedback":"NO_LANGUAGE_CHANGE; H2 remains blocked on BASE release"},
+    "hyperposition": {"status":"RELEVANCE_CHECKED","feedback":"NO_CHANGE; alternative/coupling readouts must be epoch-consistent after restart"},
+    "claygraph": {"status":"DIRECT_CONTRACT_CHECK","refs":["research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"],"feedback":"REFINEMENT: dynamic Run ClayGraph should emit only committed epoch transitions and represent crash rollback as no published semantic-state delta"},
+    "unifieddb": {"status":"DIRECT_SCHEMA_CHECK","refs":["gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V6_MIGRATION.sql"],"feedback":"PARTIAL_SUPPORT: SQLite transactional rollback protects tested state/event/epoch writes; power-loss/project-host and live-schema differential still open"},
+    "harness": {"status":"EXECUTED_AND_COMMITTED","feedback":"H-WP-02 crash/retry subproblem advanced; package remains ACTIVE"}
+  },
+  "loop_of_loops_feedback": "Crash/restart boundaries preserve coherent recurrence epochs in this reference ledger test; no evidence yet about loop-controller quality or emergence.",
+  "shared_ancestry_warning": "The test derives from current FRANK/Harness contracts and is implementation evidence, not independent replication of inherited scientific assumptions.",
+  "release_scope": "No branch claim promoted beyond synthetic/local Harness component evidence."
+}

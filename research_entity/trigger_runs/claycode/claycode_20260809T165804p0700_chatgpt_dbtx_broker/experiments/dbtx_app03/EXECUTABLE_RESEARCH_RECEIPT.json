@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-CC-DBTX-BROKER-20260809",
+  "run_id":"claycode_20260809T165804p0700_chatgpt_dbtx_broker",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "candidate":"CC-G9-DBTX-HOST-RESOURCE-LOWERING-PROXY-v0.1",
+  "source_hash":"b2a5e1a7fa66a0b7a02f1d6a63414d477fa47b2d8372a8e2564200906fc040b4",
+  "semantic_hash":"f3aea74512ea3182e7b2f1bdca172027c0c42fd83d65d33d5b167f219b09fb68",
+  "contract_hash":"bffbe69ccd747976b805e0dde8e3b35f681a037101c73c82cff7a79815ed3406",
+  "lowering_target":"Python 3 generated guest -> inherited Unix socket resource -> host SQLite broker",
+  "generated_code_hash":"69622e0e6795b12807c0bac7d498d4975780c6d4d578440636f4cd13c0ea49dc",
+  "execution_surface":{"provider":"OpenAI local Python sandbox","host_python":"3.13.5","guest_python":"/usr/bin/python3 3.13.5","sqlite":"3.46.1","os":"linux proxy","target_ubuntu_developer_host":false,"e2b":"UNAVAILABLE_ON_THIS_TOOL_SURFACE"},
+  "corpus":{"positive_separate_process":1,"repeated_positive_runs":30,"runtime_handle_variation_runs":10,"compile_negative_cases":6,"broker_mutation_cases":1000,"randomized_differential_cases":2000,"crash_recovery_cases":1},
+  "observations":{
+    "main_case":{"exit":0,"initial_balances":{"alice":100,"bob":50},"final_balances":{"alice":70,"bob":80},"durable_idempotency_keys":["k1"],"requests":15,"commit_effect":"alice 100->70, bob 50->80","rollback_effect":"second transfer of 20 not durable","replay_effect":"repeat key k1 did not apply twice"},
+    "missing_handle":{"exit":77,"state_unchanged":true},
+    "forged_handle":{"exit":77,"state_unchanged":true},
+    "wrong_logical_resource":{"exit":78,"denial":"RESOURCE_MISMATCH","state_unchanged":true},
+    "compile_negatives":{"unknown_op":"REJECTED","nested_begin":"REJECTED","commit_without_tx":"REJECTED","write_without_tx":"REJECTED","negative_amount":"REJECTED","unclosed_tx":"REJECTED"},
+    "broker_mutation":{"cases":1000,"denied":1000,"unexpected":0,"state_unchanged":true},
+    "differential":{"cases":2000,"mismatches":0,"oracle":"independent pure state-machine model"},
+    "crash_recovery":{"guest_exit":91,"state_after_crash":{"alice":100,"bob":50},"durable_keys":[],"rollback_preserved_initial_state":true},
+    "runtime_handle_variation":{"observed_fds":[65,66,67,68,69,70,71,72,73,74],"all_passed":true,"generated_code_hash_constant":true},
+    "timing_30_runs_ms":{"n":30,"median_ms":24.17967700000645,"p95_ms":35.536191999995026,"min_ms":21.01278100002446,"max_ms":44.031941000014285}
+  },
+  "expected_vs_observed":"All bounded commit/rollback/idempotency/resource-denial/crash-recovery expectations matched; 2000 randomized differential cases produced 0 mismatches.",
+  "failure_counterexample_classification":["No production sandbox proof: unrestricted Python remains ambient-capable outside tested broker path.","Nested BEGIN is backend-limited; savepoint/multi-resource semantics untested.","Production parser and target Ubuntu host not exercised."],
+  "scientific_result":"Bounded transactional DB semantics can be lowered from generic typed ClayCode-like IR through a host-owned resource broker without adding a DB-specific core semantic primitive. This is local proxy support only; it advances implementation knowledge, not the BASE or DB_SERVICE gate.",
+  "affected_domains":["claycode","unifieddb","frank","harness","claygraph","gwt","hyperposition","emergenz","clayresearch"]
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1655p0700_chatgpt_lexical_closure",
+  "results": [
+    {
+      "negative_result_id": "NR-CC-REF-LEXICAL-CLOSURE-20260809",
+      "status": "NEGATIVE_RESULT",
+      "proposition_tested": "The admitted grammar rule ref = @ followed by a non-whitespace resource path is lexically closed and sufficient for delimiter-adjacent reference lists under a conventional maximal-munch implementation.",
+      "result": "FAILED_FOR_TESTED_CLASS",
+      "evidence": "10000/10000 generated two-reference list cases were overconsumed by the literal non-whitespace matcher; a delimiter-aware candidate had 0/10000 failures in the same family.",
+      "scope": "Grammar/lexer self-conformance for adjacent list refs. This does not prove a separately implemented canonical parser cannot already special-case delimiters.",
+      "falsifier": "Locate and execute the admitted canonical parser showing that the published grammar's ref production is interpreted delimiter-safely, with deterministic roundtrip across the admitted source corpus.",
+      "next_test": "Run parser/canonical-printer roundtrip across all admitted G9, dialect, Dynamic Binding Lattice and generated application sources."
+    },
+    {
+      "negative_result_id": "NR-CC-HYPHEN-MINUS-AMBIGUITY-20260809",
+      "status": "NEGATIVE_RESULT",
+      "proposition_tested": "The admitted bare identifier class containing hyphen and the minus operator are unambiguously distinguishable without an explicit lexer policy or whitespace requirement.",
+      "result": "FAILED_UNDER_LONGEST_MATCH_INTERPRETATION",
+      "evidence": "10000/10000 generated unspaced subtraction forms a-b were also valid single current identifiers. Excluding hyphen resolved those test cases but rejected 10000/10000 generated hyphenated names accepted by the current grammar.",
+      "scope": "Negative result against the grammar being self-sufficiently unambiguous. A production lexer could resolve the conflict via contextual rules, precedence, quoting/sigils or a whitespace contract.",
+      "falsifier": "An admitted lexer/parser plus corpus-wide differential test proves deterministic a-b interpretation and lossless roundtrip while preserving required hyphenated identifiers without hidden context-dependent ambiguity.",
+      "next_test": "Repository-wide identifier inventory and full parser differential before any grammar change."
+    }
+  ],
+  "promotion_effect": "NONE"
+}

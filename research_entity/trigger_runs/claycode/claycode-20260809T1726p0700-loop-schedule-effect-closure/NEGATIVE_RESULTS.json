@@ -1,0 +1,29 @@
+{
+  "run_id": "claycode-20260809T1726p0700-loop-schedule-effect-closure",
+  "negative_results": [
+    {
+      "id": "N-CC-LOOP-001",
+      "status": "NEGATIVE_RESULT",
+      "claim_refuted": "Executable loop schedules can be normalized as unordered set-like identity regardless of update policy.",
+      "result": "REFUTED_IN_SYNTHETIC_PROXY",
+      "evidence": "27,007/30,000 sequential coupled schedule permutations changed outputs while an unsafe set-like schedule hash collided in all 27,007 changed-output cases.",
+      "scope": "Synthetic deterministic coupled-loop proxy; production FRANK runtime still requires target replication."
+    },
+    {
+      "id": "N-CC-LOOP-002",
+      "status": "NEGATIVE_RESULT",
+      "claim_refuted": "FRANK loop-of-loops currently forces a new first-class ClayCode loop primitive.",
+      "result": "NOT_SUPPORTED",
+      "evidence": "Current needs are representable as typed loop state + explicit schedule/update policy + generic control-flow/effect machinery; no executable counterexample requiring new loop syntax was found.",
+      "scope": "Absence of current evidence is not proof of impossibility; keep falsifier open."
+    },
+    {
+      "id": "N-CC-LOOP-003",
+      "status": "NEGATIVE_RESULT",
+      "claim_refuted": "Textual or declared effect intent can confer external execution authority.",
+      "result": "REFUTED_IN_PROXY_AND_INDEPENDENT_CAPABILITY_DESIGNS",
+      "evidence": "30,000 capability trials produced 0 forged accepts when authority required a valid capability token; independent WASI capability design likewise separates granted capability from ordinary text/syntax.",
+      "scope": "Mechanism-level support; production ClayCode gateway still requires target validation."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+module claycode.base.ffi.resource_identity_candidate
+version "0.1-research-candidate"
+status OPEN_EXECUTABLE_HYPOTHESIS
+
+record FFIResourceHandle {
+  resource_type:Symbol
+  instance:Ref
+  slot:Int
+  generation:Int
+  mode:OWN|BORROW
+}
+
+record HostImport {
+  name:Symbol
+  resource:FFIResourceHandle?
+  capability:CapabilityRef
+  effects:Set<Symbol>
+}
+
+rule host.import_call requires capability.designates == resource_identity(resource)
+rule own_handle.drop -> invalidate(resource.slot,resource.generation)
+rule borrow_handle valid_only_during call_extent
+rule borrow_handle cannot_drop
+rule slot_reuse requires generation_change
+rule textual_slot_or_name never_confers authority
+rule lowering preserves [resource_type,instance,slot,generation,mode]
+
+invariant FFI_RESOURCE_IDENTITY_NEVER_ALIASES_REUSED_SLOT
+invariant BORROW_NEVER_OUTLIVES_CALL_EXTENT
+invariant RESOURCE_HANDLE_NEVER_MINTS_AUTHORITY

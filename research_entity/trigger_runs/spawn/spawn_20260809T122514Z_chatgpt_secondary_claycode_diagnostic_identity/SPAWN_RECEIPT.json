@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T122514Z_chatgpt_secondary_claycode_diagnostic_identity",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "distribution": {"claycode": 50, "harness": 10, "frank": 10, "gwt": 6, "emergenz": 6, "hyperposition": 5, "claygraph": 5, "unifieddb": 4, "clayresearch": 4},
+  "branch_rng": {"algorithm": "OS_CSPRNG via Python secrets.SystemRandom", "seed": null, "draw_scale": "[0,100)", "draw_observed": 32.8759, "selected_origin_branch": "claycode"},
+  "recent_spawn_duplicate_filter": ["package-lock/provenance", "HTTP+SQLite", "atomic CAS/ABA", "keyword partition", "Unicode canonical boundary", "bootstrap-tool staging", "module initialization", "async replay", "foreign effect closure", "FRANK loop evaluator/lowering"],
+  "eligible_candidates": [
+    {"id": "ffi_abi_layout_identity", "question": "stable semantic ABI/resource identity across FFI layout changes"},
+    {"id": "ffi_exception_cancel_rollback", "question": "exception/cancellation rollback closure across typed FFI"},
+    {"id": "numeric_edge_semantics", "question": "numeric edge semantics and canonical identity across lowering backends"},
+    {"id": "diagnostic_identity_corpus", "question": "stable diagnostic identity linking checker, fuzz/conformance and held-out corpus"}
+  ],
+  "microdirection_rng": {"algorithm": "OS_CSPRNG via Python secrets.SystemRandom.randrange", "seed": null, "eligible_count": 4, "draw_index_zero_based": 3, "selected_microdirection": "diagnostic_identity_corpus"},
+  "selection_is_evidence": false,
+  "scientific_promotion": "NONE_AUTOMATIC"
+}

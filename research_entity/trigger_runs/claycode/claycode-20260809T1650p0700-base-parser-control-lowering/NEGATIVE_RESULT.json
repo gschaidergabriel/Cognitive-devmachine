@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "NR-CC-20260809-G9-SELF-CONFORMANCE",
+  "run_id": "claycode-20260809T1650p0700-base-parser-control-lowering",
+  "status": "NEGATIVE_RESULT",
+  "proposition_tested": "The currently admitted ClayCode G9 V3 source is parsable under the currently admitted grammar.ebnf without repair.",
+  "result": "FAILED_FOR_SAMPLED_REQUIRED_CONSTRUCTS",
+  "evidence": [
+    "G9 V3 uses > in diff>0; grammar operator production omits >",
+    "G9 V3 uses >= in valid_generation condition; grammar operator production omits >=",
+    "G9 V3 main cycle uses if; grammar defines no if_stmt"
+  ],
+  "scope": "Direct grammar/source self-conformance for sampled constructs; not a claim that no other unpublished or differently located parser surface exists.",
+  "falsifier": "Locate and execute the current canonical parser/grammar that accepts G9 V3 unchanged and yields the accepted canonical IR.",
+  "next_action": "Integrate the minimal candidate repair into a real parser branch only after canonical IR/semantic-hash preservation tests are in place.",
+  "promotion_effect": "NONE"
+}

@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-f6-engine-neutral-adapter-eval-20260809T213100p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T21:31:00+07:00",
+  "origin": {
+    "class": "USER_DIRECTED_RESEARCH_ENTITY_IMPLEMENTATION_DELTA",
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger"
+  },
+  "authority": {
+    "research_entity_work": true,
+    "frank_model_execution_authority": "NONE",
+    "model_output_execution_authority": "FORBIDDEN"
+  },
+  "finding": {
+    "id": "FRANK-F6-ENGINE-NEUTRAL-BASELINE-CONTRACT-20260809",
+    "evidence_class": "IMPLEMENTATION_DELTA_PLUS_SANDBOX_REGRESSION_PLUS_PRIMARY_SOURCE_RESEARCH",
+    "summary": "F6 lacked a committed engine-neutral local inference/evaluation boundary. A loopback-default OpenAI-compatible adapter plus seven Frank-specific behavioral baseline cases and regression test are now committed in the Frank repository. This establishes the measurement contract without selecting a model, quantization or inference engine."
+  },
+  "external_research": [
+    {
+      "source_class": "OFFICIAL_MODEL_DOCUMENTATION",
+      "ref": "https://huggingface.co/Qwen/Qwen3.5-4B",
+      "finding": "Official Qwen3.5-4B supports current serving paths including OpenAI-compatible local service interfaces; exact target-host runtime/quantization must still be measured."
+    },
+    {
+      "source_class": "OFFICIAL_MODEL_DOCUMENTATION",
+      "ref": "https://huggingface.co/Qwen/Qwen3-4B",
+      "finding": "Qwen3-4B remains a useful mature 4B-class text baseline/fallback for comparative Frank evaluation."
+    },
+    {
+      "source_class": "UPSTREAM_IMPLEMENTATION_ISSUE",
+      "ref": "https://github.com/ggml-org/llama.cpp/issues/24737",
+      "finding": "Current Qwen3.5-4B/GGUF compatibility has live upstream issue evidence; llama.cpp must therefore be benchmarked/verified rather than assumed as the production engine."
+    }
+  ],
+  "implementation": {
+    "commits": [
+      "93ee725d5069bdf64e87f87e2391641f0963fd4d",
+      "a2e221423a4fa0bfc408b4aae9986ac333b07784",
+      "ef8a739e16113c393f7f5fb0f8ffb846eec13bdc",
+      "f83ba6881474b98dc64b56b6ffbd772abf6a2b4a"
+    ],
+    "artifacts": [
+      "runtime/model/frank_local_model_adapter.py",
+      "runtime/model/frank_local_model_eval.py",
+      "research/model/FRANK_F6_BASELINE_EVAL_V1.json",
+      "tests/local_model_adapter_regression.py"
+    ],
+    "adapter_contract": [
+      "engine-neutral OpenAI-compatible local request/response boundary",
+      "loopback endpoint allowed by default; remote endpoint requires explicit allow",
+      "no environment/API-key/secret-store reads in baseline adapter",
+      "durable receipt contains visible answer/tool calls/usage only; no separate hidden reasoning field",
+      "stable request/response hashes"
+    ],
+    "eval_cases": [
+      "identity grounding",
+      "UnifiedDB injected-state nonce re-entry",
+      "proposal-only execution authority",
+      "Hyperposition alternative preservation",
+      "secret boundary",
+      "grounded first-person capability claims",
+      "German identity continuity"
+    ]
+  },
+  "sandbox_regression": {
+    "adapter_self_test": "PASS",
+    "mock_eval": "7/7 PASS",
+    "meaning": "The adapter/evaluator contract is internally coherent. No real Qwen inference, target-host memory/latency measurement or model quality claim follows from the mock receipt."
+  },
+  "negative_result": {
+    "f6_release_pass": false,
+    "production_model_selected": false,
+    "production_engine_selected": false,
+    "production_quantization_selected": false,
+    "andreas_pc_model_execution": false
+  },
+  "affected_rooms": ["frank", "claycode", "harness", "unifieddb", "claygraph", "center"],
+  "feedback": {
+    "frank": "Use the committed F6 suite as the minimum baseline before any model/fine-tune promotion.",
+    "harness": "Keep model behavior measurable through externally visible outputs and state/effect receipts; never make hidden reasoning a release dependency.",
+    "unifieddb": "Injected current-state use must be tested by nonce/state facts and later real state capsules, not by self-report.",
+    "claycode": "Structured Clay-native output and proposal-only authority remain explicit eval obligations independent of engine.",
+    "clay": "Preserve engine neutrality until target-device measurements discriminate model/runtime choices."
+  },
+  "next_discriminating_work": [
+    "obtain fresh F5 target-device/body receipts under repo_truth_gate PASS",
+    "run Qwen3.5-4B through a current compatible local OpenAI-compatible serving path when target hardware permits",
+    "run Qwen3-4B as a stable 4B-class comparison where feasible",
+    "measure latency, tokens/s, peak RAM/VRAM, context scaling, restart behavior and all seven Frank cases",
+    "record engine/model/quantization selection or explicit NO_SELECTION",
+    "do not fine-tune before baseline runtime/model evidence exists"
+  ],
+  "research_state_change": "IMPLEMENTATION_KNOWLEDGE_DELTA_NO_RELEASE_PROMOTION"
+}

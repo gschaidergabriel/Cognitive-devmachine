@@ -1,0 +1,46 @@
+name: ClayCode WP11 fuzz conformance
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_wp11_fuzz_conformance.py'
+      - 'tools/claycode_base_pure_toolchain.py'
+      - 'tools/claycode_base_runtime.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
+      - '.github/workflows/claycode-wp11-fuzz-conformance.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: claycode-wp11-fuzz-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fuzz-conformance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned parser dependency
+        run: python -m pip install --disable-pip-version-check --quiet 'lark[interegular]==1.3.1'
+      - name: Run deterministic differential fuzz suite
+        run: python tools/claycode_wp11_fuzz_conformance.py
+      - name: Commit conformance receipt
+        run: |
+          git config user.name 'claycode-wp11-fuzz'
+          git config user.email 'claycode-wp11-fuzz@users.noreply.github.com'
+          git add research_entity/claycode/autonomous/WP11_FUZZ_CONFORMANCE_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record WP11 fuzz conformance receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

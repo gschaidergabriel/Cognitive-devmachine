@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1709p0700-effect-recovery-abi",
+  "negative_results":[
+    {
+      "id":"NR-CC-LOCAL-PREPARED-NOT-EXACTLY-ONCE-20260809",
+      "status":"NEGATIVE_RESULT",
+      "proposition":"A durable local PREPARED state plus deterministic local recovery policy is sufficient to guarantee exactly-once for an uncoordinated external side effect.",
+      "result":"REFUTED_IN_MINIMAL_CRASH_WINDOW_MODEL",
+      "evidence":"RETRY succeeds before-effect but duplicates after-effect; ABSTAIN loses before-effect but is safe after-effect. Each fixed local policy passes only 1/2 indistinguishable worlds."
+    },
+    {
+      "id":"NR-CC-LIFECYCLE-DONE-CANNOT-BE-INFERRED-20260809",
+      "status":"NEGATIVE_RESULT",
+      "proposition":"ClayCode external_effect lifecycle REQUESTED/AUTHORIZED/CLAIMED/EXECUTED/VERIFIED/DONE can always be reconstructed to DONE from local state after crash.",
+      "result":"NOT_SUPPORTED",
+      "evidence":"After crash between external mutation and local durable receipt, local state alone cannot distinguish effect-not-run from effect-already-run."
+    }
+  ]
+}

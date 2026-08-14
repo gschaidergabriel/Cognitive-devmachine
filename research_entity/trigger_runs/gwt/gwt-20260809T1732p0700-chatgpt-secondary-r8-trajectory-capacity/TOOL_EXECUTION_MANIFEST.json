@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "gwt-20260809T1732p0700-chatgpt-secondary-r8-trajectory-capacity",
+  "actor": "chatgpt-secondary",
+  "tools": [
+    {
+      "class": "canonical_repo",
+      "tool": "GitHub connector",
+      "status": "EXECUTED",
+      "evidence": "canonical r2/hash verified; current trigger/protocol/program/readout/R7 and post-R7 branch deltas read; repository push permission verified"
+    },
+    {
+      "class": "scholarly_primary",
+      "tool": "web search",
+      "status": "EXECUTED",
+      "sources": [
+        "arXiv:2509.23314 Two-Scale Latent Dynamics for Recurrent-Depth Transformers",
+        "arXiv:2604.21999 Universal Transformers Need Memory: Depth-State Trade-offs in Adaptive Recursive Reasoning",
+        "arXiv:2409.08295 Towards Definition of Higher Order Causality in Complex Systems",
+        "Nature 2025 DOI 10.1038/s41586-025-08888-1",
+        "arXiv:2602.08597 An Attention Mechanism for Robust Multimodal Integration in a Global Workspace Architecture",
+        "arXiv:2607.15495 Verbalizable Representations Form a Global Workspace in Language Models"
+      ]
+    },
+    {
+      "class": "executable",
+      "tool": "local Python reasoning sandbox",
+      "status": "EXECUTED",
+      "evidence": "exact enumeration of 125 finite toy trajectories for first-order versus multi-step trajectory observability"
+    },
+    {
+      "class": "repo_preflight",
+      "tool": "tools/research_interconnect_preflight.py",
+      "status": "NOT_EXECUTED",
+      "reason": "hosted connector exposes repository reads/writes but not checkout command execution"
+    },
+    {
+      "class": "room_pulse",
+      "tool": "repo-native room state",
+      "status": "UNAVAILABLE",
+      "reason": "research_entity/rooms/rooms/gwt/ROOM.json returned 404 on current repository surface"
+    },
+    {
+      "class": "target_model_experiment",
+      "tool": "target Qwen-class 4B",
+      "status": "UNAVAILABLE",
+      "reason": "no callable target-model intervention surface exposed to this worker"
+    },
+    {
+      "class": "target_host",
+      "tool": "Andreas Ubuntu developer system",
+      "status": "UNAVAILABLE",
+      "reason": "not connected to this hosted worker; no target acceptance evidence claimed"
+    }
+  ],
+  "fallback_policy": "Hosted GitHub + primary-source web + formal proxy used; all unavailable promotion-critical surfaces are explicitly retained as blockers.",
+  "strong_promotion": "FORBIDDEN"
+}

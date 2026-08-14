@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-emergenz-d77-m2",
+  "origin_branch": "emergenz",
+  "selected_microdirection": "semantic_intervention_equivalence",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-EM-SIE-001",
+      "status": "OPEN",
+      "claim": "Observational/differential equivalence of H1/H2/H3 is insufficient for causal-emergence comparison unless each declared semantic intervention is shown to commute with implementation-specific lowering/projection.",
+      "mechanism": "Physical/module fusion can mix semantic variables. A low-level clamp that was a one-variable lesion in H1 may alter several semantic variables in H3 even when unlesioned trajectories are equivalent.",
+      "prediction": "There exist semantically equivalent implementations with near-zero baseline divergence but materially different lesion/rescue effects under naive coordinate-level interventions.",
+      "support": ["EXP-SPAWN-EM-INTERVENTION-EQUIV-001", "causal abstraction literature"],
+      "falsifier": "Across a broad corpus of representation changes and H1/H2/H3 interventions, naive implementation-local lesions yield the same semantic counterfactual trajectories/effects as explicitly mapped semantic interventions within preregistered tolerance."
+    },
+    {
+      "id": "H-SPAWN-EM-SIE-002",
+      "status": "OPEN",
+      "claim": "A versioned semantic-intervention lowering receipt can turn cross-implementation lesion/rescue into a translation-validation problem rather than an informal module-name match.",
+      "mechanism": "Bind semantic intervention identity to a lowering map, implementation hash, semantic projection, expected collateral write set and counterfactual commutation error.",
+      "prediction": "Correctly mapped interventions preserve semantic counterfactual traces/effect estimates across equivalent implementations while malformed mappings fail the commutation check.",
+      "falsifier": "The receipt/check cannot distinguish deliberately wrong low-level targets from correct targets, or its false-negative/false-positive rate is unacceptable on seeded benchmark transformations."
+    },
+    {
+      "id": "H-SPAWN-EM-SIE-003",
+      "status": "OPEN",
+      "claim": "H3 one-module/fused lowering is the highest-risk stage for intervention aliasing because logical causal variables may cease to correspond to physical process/module coordinates.",
+      "mechanism": "Consolidation preserves logical planes while changing physical topology; one semantic lesion may require a distributed low-level mechanism transformation rather than zeroing one component.",
+      "prediction": "Intervention maps that are trivial in H1 become multi-target or transformed operations in at least some H3 candidates while semantic effect remains invariant under the correct map.",
+      "falsifier": "The actual H3 representation preserves a stable one-to-one intervention address for every mandatory H1 causal handle without hidden collateral effects."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SPAWN-EM-SIE-001",
+      "status": "OPEN",
+      "claim": "Existing ClayCode typed intervention/state semantics plus ordinary H1/H2/H3 differential replay are already sufficient; no new semantic primitive is required.",
+      "discriminator": "Compile a representative SemanticIntervention + LoweringReceipt fixture through the current BASE parser/IR/type-effect/evaluator. A language change is warranted only on an executable representability/lowering failure."
+    },
+    {
+      "id": "CH-SPAWN-EM-SIE-002",
+      "status": "OPEN",
+      "claim": "End-to-end semantic trace equivalence under the mandatory intervention corpus is sufficient even without an explicit abstraction/lowering map.",
+      "discriminator": "Seed malformed low-level interventions that accidentally match selected output metrics but alter hidden semantic state; test whether trace-only validation catches them reliably."
+    },
+    {
+      "id": "CH-SPAWN-EM-SIE-003",
+      "status": "OPEN",
+      "claim": "Actual H3 consolidation will retain logical typed substates strongly enough that intervention aliasing is negligible in practice.",
+      "discriminator": "When H3 exists, enumerate all mandatory intervention handles and measure target multiplicity, collateral semantic writes and commutation error against H1 Golden counterfactual traces."
+    }
+  ],
+  "promotion": "NONE"
+}

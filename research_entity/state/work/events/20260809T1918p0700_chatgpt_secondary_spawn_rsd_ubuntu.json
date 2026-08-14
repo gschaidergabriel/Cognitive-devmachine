@@ -1,0 +1,23 @@
+{
+  "schema_version":"2.0",
+  "event_id":"chatgpt-secondary-spawn-rsd-ubuntu-20260809T1918p0700",
+  "kind":"WORK_CREATE",
+  "actor":"chatgpt-secondary",
+  "created_at":"2026-08-09T19:18:00+07:00",
+  "payload":{
+    "work_id":"WORK-SPAWN-RSD-UBUNTU-20260809",
+    "goal_ref":"FRANK_V0_1_ANDREAS_PC",
+    "origin_class":"SPAWN_HARNESS_DISCRIMINATING_FOLLOWUP",
+    "title":"Integrate receipt-sealed replay oracle into ClayCode BASE and H1 handoff",
+    "work_clay":"Use research_entity/trigger_runs/spawn/spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd as the research input. Without advancing blocked H1 prematurely, implement the smallest production ClayCode/runtime receipt primitives needed by current BASE WP04/06/07/09/11/13 and a host-code oracle reusable by H1. Classify semantically relevant nondeterministic inputs (clock/random/model/peer/tool/visual/capability/scheduler/effect outcome), bind them into a receipt bundle, separate semantic transition identity from execution-trace identity, and implement external-effect recovery states including COMMIT_UNKNOWN when an adapter cannot prove outcome. Run omission-mutation, dual-hash, crash-window, real multithread/race and overhead tests on the Ubuntu developer target. Once BASE permits H1 execution, reuse the same receipt bundle for H1/H2 differential Golden Traces.",
+    "reason_clay":"Synthetic discrimination found 0/5000 divergence with complete receipt sealing but 4990-5000/5000 divergence when one semantic nondeterminism dimension was left live. 10000/10000 execution-metadata variants would falsely diverge under a full-trace semantic hash. A two-world crash counterexample shows local retry-or-skip cannot guarantee exactly-once for a non-idempotent, non-queryable external effect across the commit-before-outcome-receipt window.",
+    "completion_clay":"Production/Ubuntu receipts prove: (1) receipt omission mutations are detected; (2) same frozen receipt bundle plus initial semantic state reproduces identical authoritative post-state; (3) execution-only retry/latency metadata can differ without false semantic mismatch; (4) any execution field excluded from semantic identity is proven non-semantic for frozen fixtures; (5) external adapters are classified by dedupe/query/transaction semantics and ambiguous commit yields COMMIT_UNKNOWN rather than invented success/failure; (6) crash injection covers reserve/commit/outcome/re-entry boundaries; (7) deterministic replay tests and real multithread/race tests both run; (8) p50/p95/p99 overhead is recorded; (9) results feed BASE and later H1/H2 Golden Trace differential without granting a stage PASS from proxy evidence.",
+    "evidence_need":["UBUNTU_RECEIPT_CLOSURE_MUTATION_RECEIPT","SEMANTIC_VS_EXECUTION_HASH_RECEIPT","CRASH_WINDOW_EFFECT_RECOVERY_RECEIPT","REAL_MULTITHREAD_RACE_RECEIPT","REPLAY_OVERHEAD_RECEIPT","H1_H2_DIFFERENTIAL_REUSE_PLAN"],
+    "executor_policy":"Prefer the local repository/build organ with Ubuntu developer-host execution. Re-read newest main and live claims before writes; avoid H-WP-02 duplication; do not mark H1 complete while BASE is blocked; append receipts and use CAS-safe state updates. No paid training.",
+    "required_capabilities":["REPOSITORY_CHECKOUT","UBUNTU_DEVELOPER_HOST_EXECUTION","PRODUCTION_CLAYCODE_TOOLCHAIN","NATIVE_COMPILER_EXECUTION","MULTITHREAD_TEST_EXECUTION","GITHUB_READ_WRITE"],
+    "write_scope":["research_entity/claycode/","research_entity/harness/","research_entity/trigger_runs/claycode/","research_entity/trigger_runs/harness/","research_entity/state/work/events/","tools/",".github/workflows/"],
+    "dependencies":["BASE_CLAYCODE_RELEASE","WORK-CLAYCODE-BASE14-CLOSE-20260809"],
+    "invalidators":["Receipt model falsified by target-host counterexample","Current BASE/H1 contracts superseded by explicit owner directive"],
+    "base_priority":0.95,"expected_impact":0.95,"urgency":0.9,"information_gain":0.98,"status":"READY"
+  }
+}

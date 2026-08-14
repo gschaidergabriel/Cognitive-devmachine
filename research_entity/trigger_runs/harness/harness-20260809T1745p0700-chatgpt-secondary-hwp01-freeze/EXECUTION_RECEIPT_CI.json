@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze",
+  "execution_class": "GITHUB_ACTIONS_UBUNTU_REPO_CHECKOUT",
+  "source_commit": "4f3ff9675e0b4fd0fb59d1a0a295c32d8da8a08a",
+  "runner_os": "Linux",
+  "python": "3.12.13",
+  "checks": {
+    "py_compile": "PASS",
+    "unit_regressions": {
+      "result": "PASS",
+      "count": 4
+    },
+    "source_locked_build": {
+      "ok": true,
+      "output": "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
+      "architecture_semantic_hash": "b92521a77690fcee8e6e247597e091c1478f790d38f780381d899b1200e85a0f",
+      "exact_contract_hash": "73450c51d1ca84f63556ba3d8adad3eb663ec848b02384e744af9ebd28421540",
+      "modules": 15,
+      "planes": 13
+    },
+    "freeze_verify": {
+      "ok": true,
+      "violations": []
+    }
+  },
+  "evidence_boundary": "Repository checkout CI component evidence; not Andreas target-host H1 release evidence and not live FRANK evidence.",
+  "h1_release_gate": "NOT_PASS",
+  "canonical_promotion": "NONE"
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1651p0700_loop_control_ir",
+  "latest_frank_run":"20260809T0130p0700-chatgpt-secondary-r5",
+  "latest_frank_claycode_architecture":"research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+  "latest_frank_mapping":"research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/CLAYCODE_ARCHITECTURE_MAPPING.md",
+  "newer_frank_input":"research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md",
+  "validator":{"command":"python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/claycode_20260809T1651p0700_loop_control_ir","executed":false,"reason":"repo-local validator unavailable on this connector-only ChatGPT execution surface"},
+  "reviews":[
+    {
+      "claim_id":"FRANK-LOOPS-BOUND-ADAPT-001",
+      "frank_statement":"FRANK is better modeled as a heterogeneous loop-of-loops whose material recurrent paths need explicit recurrence budgets, continuation/exit reasons, state deltas and adaptive regulation.",
+      "frank_source_refs":["research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md"],
+      "ancestry_families":["FRANK-loop-of-loops-owner/research-note family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"FRANK's behavior can be represented adequately as event-driven orchestration and generic state machines without any explicit recurrent control representation in ClayCode.",
+      "falsifier":"A current general-purpose ClayCode lowering can express and verify the relevant nested recurrence, budgets and exits entirely through existing checked grammar and IR, with no new structured-control representation and no loss of replay semantics.",
+      "independent_checks":[
+        "Current-run local executable differential experiment: 2,000 randomized nested-loop cases, 0 mismatches against an independent AST interpreter; 4/4 negative cases rejected.",
+        "MLIR SCF primary documentation independently represents while/for loops with explicit continuation conditions and loop-carried values.",
+        "Kohli et al. arXiv:2604.07822 independently reports inference-time recurrence benefits plus overthinking failure under excessive recurrence.",
+        "Bae et al. arXiv:2507.10524 independently demonstrates adaptive recursion depth as a generic computation-allocation mechanism."
+      ],
+      "adversarial_checks":[
+        "Current checked G9 grammar was compared against the G9 V3 source and lacks general while/for/break/return productions despite a cycle construct and an if use in the spec.",
+        "The experiment required mandatory finite budgets and explicit halt reasons; unbounded/invalid budget input was rejected.",
+        "No FRANK runtime execution was treated as established by the local proxy."
+      ],
+      "verdict":"REFINED",
+      "reason":"The need for explicit recurrent control survives, but it is refined into a generic structured-control/loop-carried-state compiler/IR requirement rather than a FRANK-specific cognitive primitive or biological organ.",
+      "claycode_action":"Add/test a generic bounded structured recurrence/control-flow IR and lowering path; do not add a FRANK-only loop primitive solely from the architecture analogy.",
+      "affected_claycode_artifacts":["research_entity/claycode/g9/grammar.ebnf","research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"]
+    },
+    {
+      "claim_id":"FRANK-LOOP-DYNAMICS-READOUT-002",
+      "frank_statement":"Spectral-radius proxies, attractor classes, overthinking/stagnation indices and cross-loop coupling should become part of FRANK loop-dynamics observability.",
+      "frank_source_refs":["research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md"],
+      "ancestry_families":["FRANK-loop-of-loops research-note family","recurrent-depth literature family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"These diagnostics may be useful only for specific numerical recurrent models and may not predict useful behavior in heterogeneous event-driven FRANK loops.",
+      "falsifier":"On frozen H1 replay episodes, the proposed readouts fail to predict or discriminate useful convergence, productive cycles, stalls and unstable overthinking better than simpler residual-error/cost baselines, or interventions based on them do not improve outcomes.",
+      "independent_checks":[
+        "Parcae primary project/paper evidence links recurrent stability to constrained recurrent dynamics in looped language models.",
+        "Blayney et al. arXiv:2604.11791 reports cyclic fixed-point behavior in looped reasoning models.",
+        "Current-run compiler experiment proves only representability of loop state/budgets/exits, not predictive validity of spectral or attractor diagnostics."
+      ],
+      "adversarial_checks":[
+        "Bounded periodic behavior was explicitly kept separate from divergence in the newer FRANK note.",
+        "No scalar dynamics metric was allowed to become truth, emergence or effect authority.",
+        "No H1/FRANK runtime trace was available in this run to validate predictive utility."
+      ],
+      "verdict":"UNRESOLVED",
+      "reason":"ClayCode can represent these metrics as typed observations, but their causal usefulness for FRANK remains unvalidated until H1 replay/intervention evidence exists.",
+      "claycode_action":"Represent metrics as ordinary typed data/receipts, not privileged language semantics; defer controller-specific promotion.",
+      "affected_claycode_artifacts":["future loop-observability schema candidate only"]
+    },
+    {
+      "claim_id":"FRANK-NEW-LOOP-ORGAN-003",
+      "frank_statement":"The loop-of-loops architecture would require a new FRANK-specific semantic organ/primitive in ClayCode.",
+      "frank_source_refs":["implicit design alternative derived from research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md"],
+      "ancestry_families":["FRANK-loop-of-loops design alternative"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Nested recurrence is generic control flow plus typed state/receipts and does not require a FRANK-specific semantic primitive.",
+      "falsifier":"A real FRANK recurrence requirement cannot be represented or lowered with generic bounded loop/control-flow, state, provenance, budget and effect constructs without semantic loss.",
+      "independent_checks":[
+        "Current-run nested-loop differential compiler proxy succeeded with 0/2,000 semantic mismatches.",
+        "MLIR SCF demonstrates a generic structured-control representation independent of FRANK semantics."
+      ],
+      "adversarial_checks":[
+        "The current G9 grammar gap was treated as a compiler/control-flow deficiency rather than evidence for a cognitive organ.",
+        "Effect authority remained outside loop source representation."
+      ],
+      "verdict":"REFUTED",
+      "reason":"No executable counterexample currently requires a FRANK-specific loop organ. The evidence supports generic structured recurrence/control-flow semantics instead.",
+      "claycode_action":"Do not add a FRANK-specific loop organ primitive; reopen only on a concrete semantic counterexample.",
+      "affected_claycode_artifacts":[]
+    }
+  ]
+}

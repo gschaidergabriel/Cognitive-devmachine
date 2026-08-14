@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T165804p0700_chatgpt_dbtx_broker",
+  "trigger": "claycode",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "research_question": "Can existing ClayCode G9 typed IR/effect semantics realize a DB-backed transactional service through host-owned resource authority, including commit/rollback/idempotency/crash recovery, without a DB-specific core primitive?",
+  "primary_work_packages": ["CC-WP-04-TYPE-EFFECT","CC-WP-06-COMPILER-LOWERING","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-08-STDLIB-SDK","CC-WP-10-GENERAL-APP-SUITE","CC-WP-11-FUZZ-CONFORMANCE"],
+  "application_target": "DB_SERVICE research precursor; not acceptance PASS",
+  "target_host_scope": "Ubuntu developer system for Frank v0.1; this run is local Linux proxy only",
+  "promotion": "NONE",
+  "gate_advancement": "NONE"
+}

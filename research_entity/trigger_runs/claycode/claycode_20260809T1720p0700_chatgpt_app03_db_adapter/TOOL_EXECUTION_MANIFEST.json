@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1720p0700_chatgpt_app03_db_adapter",
+  "executions":[
+    {"tool":"GitHub connector","class":"canonical/mesh read + durable research write","result":"PASS","details":"T0 canonical r2 verified; current protocols/FRANK/ClayGraph/UnifiedDB/ClayCode material read; run artifacts committed to main."},
+    {"tool":"OpenAI local container","class":"compiler/runtime experiment","result":"PASS","runtime":"Python 3.13.5 / Lark 1.3.1 / SQLite 3.46.1","details":"focused parse; canonical IR; deterministic lowering; real SQLite adapter; positive/negative transaction tests; 500-case differential fuzz."},
+    {"tool":"web primary-source research","class":"external evidence","result":"PASS","sources":["https://sqlite.org/lang_transaction.html","https://www.sqlite.org/c3ref/bind_blob.html"],"details":"SQLite transaction and prepared-statement parameter-binding semantics used only as independent mechanism evidence, not as ClayCode proof."},
+    {"tool":"e2b_sandbox","class":"preferred external execution surface","result":"NOT_INVOKABLE","details":"Repository protocol registers E2B as runtime-verified, but no E2B invocation tool is exposed in this ChatGPT session; no E2B evidence claimed."},
+    {"tool":"sandboxapi_sandbox","class":"secondary execution surface","result":"NOT_INVOKABLE","details":"No SandboxAPI invocation tool exposed; no evidence claimed."},
+    {"tool":"research_interconnect_preflight.py","class":"required mesh preflight","result":"BLOCKED_BEFORE_VALID_RUN","details":"Fetched current source still hard-codes legacy clay in PRIORITY while registry scientific branch is clayresearch; its import-time branch-set equality is fail-closed. Existing governance negative preserved."},
+    {"tool":"goodman_filter_check.py validate-run","class":"Goodman gate","result":"FAIL_EXPECTED_GOVERNANCE_DRIFT","details":"A local reconstruction of the fetched validator semantics over the committed manifest/review returned only the priority-prefix violation: expected ['frank','harness','claygraph','unifieddb'] under current checker logic. Exact repository filesystem execution was unavailable in this session, so this is not claimed as an exact repo-command receipt."}
+  ],
+  "timing_note":"Local experiment timing was not used for target performance claims.",
+  "promotion_gate":"BLOCKED; no strong promotion or BASE application PASS claimed"
+}

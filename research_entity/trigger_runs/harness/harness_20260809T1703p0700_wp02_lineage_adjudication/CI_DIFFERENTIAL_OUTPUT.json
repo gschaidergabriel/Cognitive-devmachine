@@ -1,0 +1,28 @@
+{
+  "capability_surface": {
+    "A_domain_epochs": false,
+    "A_full_verify": true,
+    "A_snapshot_restore": true,
+    "B_domain_epochs": true,
+    "B_full_verify": false,
+    "B_snapshot_restore": false
+  },
+  "cases": {
+    "idempotency_payload_collision": {
+      "A_second_status": "IDEMPOTENT_REPLAY",
+      "A_value_after_second": 1,
+      "B_conflict_rejected": true,
+      "B_value_after_second": 1
+    },
+    "same_final_state_different_history": {
+      "A_root_equal": true,
+      "B_semantic_state_hash_equal": false
+    },
+    "typed_set_permutation": {
+      "A_root_equal": false,
+      "B_semantic_state_hash_equal": true
+    }
+  },
+  "probe": "H-WP-02-LINEAGE-DIFFERENTIAL",
+  "schema_version": "1.0"
+}

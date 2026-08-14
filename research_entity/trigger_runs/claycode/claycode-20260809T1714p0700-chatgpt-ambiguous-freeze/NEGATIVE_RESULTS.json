@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1714p0700-chatgpt-ambiguous-freeze",
+  "negative_results":[
+    {
+      "id":"NR-CC-AF-01",
+      "status":"NEGATIVE_RESULT",
+      "proposition":"The three remaining ambiguous G9 legacy rules cannot be safely auto-normalized from source syntax alone.",
+      "evidence":"Each legacy line admits at least two materially distinct plausible ASTs with distinct semantic hashes; selecting one would add semantics not established by the text."
+    },
+    {
+      "id":"NR-CC-AF-02",
+      "status":"NEGATIVE_RESULT",
+      "proposition":"A fail-open relation surface accepting arbitrary unregistered relation identifiers is not justified for BASE.",
+      "evidence":"The registry-gated probe rejected 10000/10000 unknown relation mutations and 10000/10000 wrong-arity mutations; earlier permissive rule-surface work accepted generated nonsense relations 5000/5000."
+    }
+  ],
+  "promotion":"NONE"
+}

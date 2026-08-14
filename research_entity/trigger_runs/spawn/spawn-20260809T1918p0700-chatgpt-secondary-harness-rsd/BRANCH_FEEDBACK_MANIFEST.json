@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd",
+  "feedback":{
+    "clayresearch":{"kind":"NEW_CONSTRAINT","delta":"Safe-effect geometry should treat replay/recovery receipt completeness as part of protected auditability, while retaining real concurrency tests outside the deterministic oracle."},
+    "frank":{"kind":"NEW_CONSTRAINT","delta":"Add a logical Receipt-Sealed Determinism Envelope to trace_replay_recovery: every semantically relevant clock/random/model/peer/tool/sensor/capability/scheduler/effect outcome is either deterministic from frozen state or bound as an explicit receipt. This is a logical contract, not necessarily a new deploy-time module."},
+    "gwt":{"kind":"NEW_CONSTRAINT","delta":"Workspace/receiver MeasurementReceipts must bind state epoch, episode/intervention identity and every nondeterministic input that can change competition, reconstruction, uptake, causal use or re-entry; replay success remains distinct from causal support."},
+    "emergenz":{"kind":"SUPPORTING_EVIDENCE","delta":"Matched counterfactuals require receipt closure so non-intervention exogenous differences cannot masquerade as lesion/rescue/re-entry effects. Deterministic replay is a prerequisite/oracle, not emergence evidence itself."},
+    "claycode":{"kind":"NEW_CONSTRAINT","delta":"BASE effect/runtime semantics should support semantic receipt identity distinct from execution trace identity; external effects need typed idempotency/queryability classification and an explicit COMMIT_UNKNOWN/reconciliation path when commit status is ambiguous."},
+    "hyperposition":{"kind":"NEW_CONSTRAINT","delta":"Timing/order/schedule belongs in semantic identity only when it changes non-commuting state transitions or declared program-observable behavior; otherwise preserve it in trace/provenance identity to avoid false semantic divergence."},
+    "claygraph":{"kind":"NEW_CONSTRAINT","delta":"Dynamic Run ClayGraph should carry causal edge order plus receipt references and semantic pre/post hashes; latency/retry metadata may remain trace-only unless contractually semantic. Graph differential should compare normalized semantic causality, not byte-identical execution logs."},
+    "unifieddb":{"kind":"NEW_CONSTRAINT","delta":"Persist effect-id/reservation/commit/outcome/re-entry lineage with explicit ambiguous commit status; use canonical semantic snapshots/epochs while treating derived execution telemetry as separately hashed evidence. Never infer external success from local intent/reservation alone."},
+    "harness":{"kind":"IMPLEMENTATION_COUNTEREXAMPLE","delta":"A coarse event log is insufficient in the synthetic discriminator: omitting any one semantically relevant nondeterminism source produced near-universal replay divergence. Golden Traces need a receipt-closure matrix and H1/H2 differential must distinguish semantic hashes from execution-trace hashes."}
+  },
+  "cross_branch_negative_results":[
+    "Do not globally serialize/determinize the entire production runtime merely to make replay easy.",
+    "Do not count deterministic simulation as coverage for real thread/race failures.",
+    "Do not equate successful replay with causal emergence evidence.",
+    "Do not claim exactly-once for arbitrary non-idempotent external effects without dedupe/query/transactional coupling or explicit ambiguity handling."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T06:49:00+07:00",
+  "subject": "Hostinger self-hosted GitHub Actions runner registration scope",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "workflow_run_id": 31342664415,
+  "workflow_job_id": 93318894946,
+  "evidence_class": "READ_ONLY_HOST_SELF_HOSTED_RUNNER_SCOPE_TOMOGRAPHY",
+  "observed": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group_log_header": "Default",
+    "hostname": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "runner_service_unit": "actions.runner.gschaidergabriel-Dr.-Unterweger.clay.service",
+    "runner_service_load": "loaded",
+    "runner_service_active": "active",
+    "runner_service_sub": "running",
+    "runner_config_path": "actions-runner/.runner",
+    "runner_config_parse_result": "JSONDecodeError",
+    "credential_or_secret_content_read": false
+  },
+  "hypothesis": {
+    "statement": "The active Hostinger runner service is repository-scoped to gschaidergabriel/Dr.-Unterweger rather than registered for clay-global-research-entity, explaining the paired observation that Dr.-Unterweger self-hosted jobs execute while Clay repository self-hosted jobs remain queued.",
+    "status": "STRONGLY_SUPPORTED_NOT_ABSOLUTELY_PROVEN",
+    "support": [
+      "The systemd unit name itself embeds gschaidergabriel-Dr.-Unterweger and runner name clay.",
+      "The same host successfully executed Dr.-Unterweger self-hosted jobs while a Clay repository self-hosted job had zero allocated steps in the paired evidence window.",
+      "The exact-source V17 replication later executed successfully on the same runner through Dr.-Unterweger, excluding Ubuntu/Lark/V17 mechanism unavailability on that host."
+    ]
+  },
+  "strongest_counterhypothesis": {
+    "statement": "The service unit name could be stale or not faithfully represent current GitHub control-plane eligibility, while a separate Actions policy or runner-group restriction independently prevents Clay allocation.",
+    "status": "LIVE_BUT_WEAKENED",
+    "next_falsifier": "Authoritative GitHub runner list/settings or runner registration metadata proving repository/org scope and allowed repositories."
+  },
+  "adjudication": {
+    "root_cause_class": "RUNNER_REGISTRATION_OR_ACCESS_SCOPE_MISMATCH",
+    "confidence": "HIGH",
+    "claycode_language_failure": false,
+    "hostinger_machine_failure": false,
+    "frank_harness_failure": false,
+    "counts_as_wp02_pass": false,
+    "counts_as_clay_repo_runner_repair": false
+  },
+  "safe_next_action": [
+    "Do not repeat generic queued self-hosted probes in the Clay repository.",
+    "Repair or add runner registration so clay-global-research-entity is explicitly eligible, preserving the working Dr.-Unterweger lane unless an owner-approved migration is chosen.",
+    "If runner re-registration cannot be performed with current connected capabilities, keep exact-source Hostinger bridge evidence bounded and continue BASE work that does not falsely depend on Clay-repo runner allocation.",
+    "For full WP02 closure through Dr.-Unterweger, cross-repository private read authorization remains a separate transport blocker unless an owner-authorized credential or exact bounded source bundle is used."
+  ],
+  "out_of_box_cycle_note": {
+    "local_worker_attempt": "sealed exact-source capsule PR #59",
+    "result": "ABORTED_NOT_EXECUTED_NOT_SELECTED",
+    "reason": "A stronger concurrent exact-source replication and runner-scope experiment completed; continuing would duplicate work.",
+    "no_merge": true,
+    "architecture_delta": "NO_CHANGE"
+  },
+  "authority_invariant": "model output != execution authority",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.2",
+  "run_id":"hypofusion-20260809T1716p0700-chatgpt-secondary-r2",
+  "trigger":"hypofusion",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "hard_close_cutoff":{"timestamp":"2026-08-09T10:22:35Z","local":"2026-08-09T17:22:35+07:00","head_evidence_commit":"9022209585e1180d172a467f496e6cd7c844a6b4","rule":"completed scientific deltas after this timestamp belong to the next run; run-artifact maintenance commits may occur later"},
+  "live_cutoffs":{"initial":"61dbf9006eeca2d979e89deaa9d39be23a88b731","first_late":"7ba860f8a921020279e5c7a0c7ed3185be7565cf","fusion_refresh5":"8da3fa9de3c82cce26c074f2acce52d54b3074e2","hard_close":"9022209585e1180d172a467f496e6cd7c844a6b4"},
+  "hard_close_deltas_integrated":["second ClayResearch matrix: 54 falsifiable hypotheses/counterhypotheses, run-qualified because H-CR ids overlap earlier matrix","EXP-CR-001 grammar/spec surface conformance","EXP-CR-002 incremental dependency-closure proxy","EXP-CR-003 capability attenuation proxy","GWT R7 dual-gate recurrence hypotheses","ClayCode APP-03 DB adapter hypotheses/negatives","ClayCode typed function definition/call closure hypotheses","Harness transaction-safe semantic-idempotency hardening","Emergenz H-EM-20260809-01..06 causal triangulation","N-CC-20260809-001 grammar surface-closure negative","Fusion Refresh 5 branch closure"],
+  "required_outputs":["INTERCONNECT_MANIFEST.json","HYPOTHESIS_COVERAGE_MATRIX.json","EXTERNAL_EVIDENCE_LEDGER.md","COUNTERHYPOTHESIS_MATRIX.json","FUSION2_HYPOTHESES.json","CONTRADICTION_MAP.md","BRANCH_FEEDBACK_MANIFEST.json","RUN_MANIFEST.json","FINAL_REPORT.md"],
+  "external_lanes_used":["peer-reviewed/conference papers","arXiv/preprints where current mechanisms required it","authoritative RFC/specifications","official runtime/database documentation","implementation/reliability engineering sources"],
+  "source_independence_rule":"shared Clay/FRANK ancestry never counts as independent replication",
+  "experiments_executed_by_this_hypofusion":"NONE_NEW; the run screened/integrated worker experiments and external evidence",
+  "promotion":"NONE",
+  "completion_percent":98,
+  "known_limitations":["GitHub connector cannot recursively enumerate the repository tree; otherwise-unreachable historical hypotheses are explicitly INACCESSIBLE","hard cutoff is required because the mesh is continuously writing; later completed deltas are intentionally deferred","no target-host H1/H2/H3 experiment executed by Hypofusion itself","canonical remains r2; no scientific promotion attempted"],
+  "highest_information_next_actions":["production BASE cross-branch executable witness suite","full admitted grammar/surface closure and parser/canonicalization differential","generic typed function-definition closure validation","compiler wrong-lowering mutation + independent semantic oracle","numeric RFC8785/exact-Int corpus","Ubuntu FFI lifetime/ABA suite","GWT fixed-budget vs one-gate vs dual-gate recurrence replay","emergence Golden fixtures: common-driver, XOR, false rescue","deterministic staged replay + outside-in fault lane","UnifiedDB sparse/dense crossover","DB SQLite vs PostgreSQL/DuckDB differential","external-effect crash/reconciliation/idempotency matrix","global/run-qualified hypothesis identity validator"],
+  "research_write":"COMMITTED_HARD_CUTOFF_FROZEN"
+}

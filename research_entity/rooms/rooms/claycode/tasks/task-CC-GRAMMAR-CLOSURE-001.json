@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.1",
+  "task_id":"task-CC-GRAMMAR-CLOSURE-001",
+  "room_id":"claycode",
+  "title":"Close G9 frontend over admitted current surface",
+  "goal_clay":"record Goal {stage:BASE_CLAYCODE_RELEASE;work_package:CC_WP_02_PARSER;action:PARSE_CANONICALIZE_CURRENT_G9;preserve_semantics:true}",
+  "status":"OPEN",
+  "dependencies":[
+    "research_entity/claycode/g9/grammar.ebnf",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+    "research_entity/trigger_runs/claycode/claycode-20260809T0951Z-chatgpt-sol/EXECUTABLE_RESEARCH_RECEIPT.json"
+  ],
+  "completion_test_clay":"record Completion {admitted_corpus_parse:true;canonical_roundtrip:true;deterministic_hash:true;comparisons:true;conditional:true;typed_interface_methods:true;meta_surface_decision:TESTED;no_authority_semantic_drift:true}",
+  "created_by":"worker-20260809T095109Z-chatgpt-sol",
+  "stack_epoch":16,
+  "created_at":"2026-08-09T10:06:30Z"
+}

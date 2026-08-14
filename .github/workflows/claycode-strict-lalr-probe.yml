@@ -1,0 +1,89 @@
+name: ClayCode strict LALR repair validation
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_strict_lalr_probe.py'
+      - 'tools/claycode_base_frontend_validation.py'
+      - 'tools/claycode_base_grammar_differential.py'
+      - 'tools/claycode_v5_frontend_regression.py'
+      - 'tools/claycode_base_canonicalizer.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark'
+      - 'research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - '.github/workflows/claycode-strict-lalr-probe.yml'
+
+concurrency:
+  group: claycode-strict-lalr-probe-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned parser dependency with strict regex-collision support
+        run: python -m pip install --disable-pip-version-check --quiet 'lark[interegular]==1.3.1'
+      - name: Run strict active repaired-grammar probe
+        run: |
+          python tools/claycode_strict_lalr_probe.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark \
+            --output research_entity/claycode/autonomous/STRICT_LALR_D_REPAIR_RECEIPT.json
+      - name: Require strict construction success
+        run: |
+          python - <<'PY'
+          import json
+          p='research_entity/claycode/autonomous/STRICT_LALR_D_REPAIR_RECEIPT.json'
+          d=json.load(open(p,encoding='utf-8'))
+          if not d.get('strict_build_ok'):
+              raise SystemExit('strict repaired grammar still fails: '+str(d.get('strict_error')))
+          if d.get('conflict_diagnostics'):
+              raise SystemExit('strict repaired grammar still reports conflicts: '+str(d['conflict_diagnostics']))
+          print('STRICT_REPAIR_PASS')
+          PY
+      - name: Run focused V5 grammar regressions
+        run: python tools/claycode_v5_frontend_regression.py
+      - name: Run full current G9 + Dialect repaired frontend validation
+        run: |
+          python tools/claycode_base_frontend_validation.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark \
+            --output research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json
+      - name: Differential baseline D against repaired D on full admitted corpus
+        run: |
+          python tools/claycode_base_grammar_differential.py \
+            --baseline research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark \
+            --repair research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark \
+            --output research_entity/claycode/autonomous/BASE_GRAMMAR_DIFFERENTIAL_RECEIPT.json
+      - name: Prove literal-safe deterministic syntax canonicalization
+        run: |
+          python tools/claycode_base_canonicalizer.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark \
+            --output research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_RECEIPT.json
+      - name: Commit validation receipts
+        run: |
+          git config user.name 'claycode-lalr-probe'
+          git config user.email 'claycode-lalr-probe@users.noreply.github.com'
+          git add \
+            research_entity/claycode/autonomous/STRICT_LALR_D_REPAIR_RECEIPT.json \
+            research_entity/claycode/autonomous/V5_FRONTEND_REGRESSION_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_GRAMMAR_DIFFERENTIAL_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record V5 repaired frontend validation receipts'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

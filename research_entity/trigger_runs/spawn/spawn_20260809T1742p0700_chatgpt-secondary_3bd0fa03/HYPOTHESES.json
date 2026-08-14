@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1742p0700_chatgpt-secondary_3bd0fa03",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-DELTA-001",
+      "status": "SUPPORTED_SYNTHETIC_OPEN",
+      "claim": "ClayCode's signed integer Delta<T>.diff representation is sufficient for exact incremental maintenance of bag/Z-set style monotone algebraic operators when lowering preserves multiplicity and the complete differential rule.",
+      "support": ["EXP-SPAWN-DELTA-001: 20,000 randomized signed-diff self-join steps with zero mismatch against full recomputation", "Differential Dataflow and DBSP signed-change models"],
+      "falsifier": "Any valid operator/program where the same signed-diff representation plus correct operator differential semantics cannot reproduce full recomputation at a sealed epoch."
+    },
+    {
+      "id": "H-SPAWN-DELTA-002",
+      "status": "SUPPORTED_SYNTHETIC_OPEN",
+      "claim": "A dependency closure that follows only positive current support is insufficient for non-monotone selectors such as argmax/top-k/competition; correctness requires negative/competitive/domain dependencies or an equivalent indexed invalidation mechanism.",
+      "support": ["EXP-SPAWN-DELTA-003 selector deletion counterexample", "ClayCode G9 carries selector_hash but does not yet specify selector-change invalidation semantics"],
+      "falsifier": "A support-only invalidation algorithm that is proven observationally equivalent to full recomputation for all admitted non-monotone selector programs without implicitly encoding competitor/domain dependence."
+    },
+    {
+      "id": "H-SPAWN-DELTA-003",
+      "status": "SUPPORTED_SYNTHETIC_OPEN",
+      "claim": "Multiplicity/support count must survive retractions or be recoverable from equivalent derivation state; set-only deletion on any negative diff is unsound when multiple supports exist.",
+      "support": ["EXP-SPAWN-DELTA-002 multi-support counterexample: weight 2 plus diff -1 must remain present with weight 1"],
+      "falsifier": "A set-only representation with no multiplicity/derivation state that correctly handles all duplicate-support retractions."
+    },
+    {
+      "id": "H-SPAWN-DELTA-004",
+      "status": "SUPPORTED_BY_EXTERNAL_MECHANISM_OPEN",
+      "claim": "Stable publication of incrementally maintained Clay views requires an explicit progress/frontier or equivalent sealed-epoch contract whenever updates may arrive out of logical-time order.",
+      "support": ["Differential Dataflow progress/frontier semantics", "Clay G9 source_epoch/output_epoch fields"],
+      "falsifier": "A deterministic admitted Clay execution model allowing out-of-order changes that can publish final epoch state without any equivalent progress/sealing knowledge and still remain observationally equivalent under all reorderings."
+    },
+    {
+      "id": "H-SPAWN-DELTA-005",
+      "status": "SUPPORTED_SYNTHETIC_OPEN",
+      "claim": "Selector/plan identity is a semantic dependency: a selector_hash/plan change must invalidate affected materialized state even when data diff is zero.",
+      "support": ["EXP-SPAWN-DELTA-004: unchanged data with selector max->min changes result"],
+      "falsifier": "A materialization contract where selector semantics can change while the result remains correct without invalidation/recompute or equivalent versioned state transition."
+    },
+    {
+      "id": "H-SPAWN-DELTA-006",
+      "status": "SUPPORTED_SYNTHETIC_OPEN",
+      "claim": "Incremental correctness and incremental cost are inseparable from maintained operator/index state for global selectors; closure cardinality alone is not a sufficient hot-path performance predictor.",
+      "support": ["EXP-SPAWN-DELTA-005 synthetic 100k-element global selector benchmark: indexed median update approximately 0.000147 ms versus naive full max scan approximately 1.768707 ms"],
+      "falsifier": "Real BASE/H1 traces showing operator-state/index maintenance never materially changes latency/memory/recovery tradeoffs relative to closure size alone."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SPAWN-DELTA-001",
+      "status": "OPEN",
+      "claim": "The Clay runtime can simplify correctness by selectively dropping/rebuilding non-monotone views instead of maintaining rich negative dependencies; incremental maintenance need only cover operator classes with proven locality/correctness benefit.",
+      "discriminating_test": "Compare incremental, partition rebuild and full rebuild on identical real BASE/H1 traces for correctness, p50/p95 latency, memory, index write amplification and crash recovery."
+    },
+    {
+      "id": "CH-SPAWN-DELTA-002",
+      "status": "OPEN",
+      "claim": "Selector-domain invalidation can be compiled into operator-local index state and need not become a new language-level primitive.",
+      "discriminating_test": "Implement current G9 ViewDelta/selector_hash with compiler/runtime metadata only; if all required programs pass the differential oracle, reject language-level semantic expansion."
+    },
+    {
+      "id": "CH-SPAWN-DELTA-003",
+      "status": "OPEN",
+      "claim": "Strict serialized epoch execution on the first Ubuntu runtime may make a general frontier abstraction unnecessary for BASE, while retaining a future-compatible receipt field.",
+      "discriminating_test": "Demonstrate BASE scheduler forbids late updates by construction and deterministic replay preserves that invariant under async/FFI boundaries."
+    }
+  ],
+  "recommended_invariant": "For every admitted query/operator Q and sealed semantic epoch e: materialize_full(Q, apply(S, Delta), e) == apply_view_delta(materialize_full(Q, S, prior_e), incrementalize(Q, S, Delta), e), with selector/plan identity and progress state included in the semantic comparison.",
+  "promotion": "NONE"
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "benchmark":"V14_COMPILED_INTENT_ENTITY_ACCESS_VS_ONLINE_SQL_V1",
+  "execution_class":"LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "origin_actor":"chatgpt-secondary",
+  "scope":"Synthetic intent/entity/1-2 hop retrieval. Both strategies share the same deterministic intent classification and entity extraction. This is not universal database superiority.",
+  "fixture":{"seeds":[20260810,20260811,20260812],"entity_families_per_seed":200,"queries_per_seed_per_mode":1000,"query_modes":["internal_logical_id_present","alias_only"],"total_queries_across_modes_and_seeds":6000,"compiled_rows_per_seed":800},
+  "aggregate":[
+    {"alias_mode":false,"strategy":"ONLINE_SQL","top1_mean":1.0,"mean_latency_us":60.76010636666667,"p50_mean_us":23.438,"p95_mean_us":151.49866666666665},
+    {"alias_mode":false,"strategy":"V14_COMPILED","top1_mean":1.0,"mean_latency_us":4.294575966666667,"p50_mean_us":4.103,"p95_mean_us":4.399666666666667},
+    {"alias_mode":true,"strategy":"ONLINE_SQL","top1_mean":1.0,"mean_latency_us":60.96073368333333,"p50_mean_us":24.164666666666665,"p95_mean_us":152.891},
+    {"alias_mode":true,"strategy":"V14_COMPILED","top1_mean":1.0,"mean_latency_us":4.824339183333334,"p50_mean_us":4.647,"p95_mean_us":5.000666666666667}
+  ],
+  "candidate_vs_online_sql":{"mean_latency_speedup_no_alias":14.14810375652221,"mean_latency_speedup_alias_mode":12.636079547212322,"quality_delta_top1":0.0},
+  "compile_cost":{"mean_build_us_no_alias_fixture":72295.54633333333,"mean_build_us_alias_fixture":62061.835666666666,"note":"Build cost is paid per derived field generation and must be amortized over reads; high-churn workloads may favor online SQL."},
+  "causal_interpretation":{"supported":["For this repeated semantic intent/entity/graph workload, moving deterministic 1-2 hop relation resolution from query-time SQL joins into an epoch-bound compiled access field preserves 100% Top-1 and materially lowers hot-read latency.","Alias-only text does not remove the compiled-field advantage once the same entity identity is available to both strategies."],"not_supported":["Faster than a trivial exact-key B-tree lookup; separate current evidence shows plain SQLite wins that class.","Universal superiority over every relational/vector/graph/search database.","Real Clay/Frank OOD answer-quality improvement or target-host equivalence."]},
+  "architecture_consequence":"Use adaptive V14 routing: ordinary indexed lookup for trivial resolved keys; verified semantic sufficiency fields for stable semantic families; compiled intent/entity/graph fields or compositional Pareto frontiers for repeated multi-hop queries; fail-closed entity-resolved graph/NL fallback for misses.",
+  "next_falsifiers":["real current Clay graph intent/entity families","stale/conflicting edge injections","concurrent generation swap","write-rate amortization break-even","PostgreSQL/pgvector or graph-engine matched-budget baseline","Hostinger Ubuntu replication"]
+}

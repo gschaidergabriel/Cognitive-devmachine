@@ -1,0 +1,28 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work_revise_cc_base_unicode_canon_20260809T1824p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T18:24:00+07:00",
+  "payload": {
+    "work_id": "WORK-CC-BASE-G9-PARSER-FREEZE-001",
+    "reason_clay": "Spawn run spawn-20260809T1813p0700-claycode-unicode-canon isolated an untested Unicode canonicalization boundary. Current grammar keeps NAME/REF ASCII, but generic String payload identity remains vulnerable to an accidental global normalization choice. A hosted Unicode 15.1 proxy tested 12665 canonical-equivalence pairs and 2411 compatibility-only pairs with zero failures under an exact-vs-explicit-NFC typed policy, reproduced 4 normalization-after-concat counterexamples, and rejected 4/4 lone-surrogate samples. Primary Unicode 17.0 UAX #15 and RFC 8785 support treating normalization as an explicit semantic/wire policy rather than an invisible serializer side effect. No language redesign is justified.",
+    "work_clay": "During normative parser/canonicalizer freeze, define generic String semantic identity as exact Unicode scalar sequence after escape decoding unless the typed semantics explicitly request normalization. Do not apply implicit NFKC. Domain-separate any future normalized-text semantic identity by type/policy; normalize after final value construction/concat or use a normalization-aware concat algorithm. Reject non-scalar/lone-surrogate values. Add conformance cases for canonical-equivalent, compatibility-only, concat-boundary and invalid-scalar strings. Keep NAME/REF ASCII for BASE unless a real executable application counterexample requires Unicode identifiers.",
+    "completion_clay": "Normative ClayCode parser -> typed canonical IR -> evaluator/compiler passes the Unicode corpus with deterministic semantic/contract hashes; exact String observables remain exact; any explicit normalized-text value has pinned normalization semantics; invalid scalars fail deterministically; Ubuntu target replay matches the reference receipt. No BASE gate credit from the hosted proxy alone.",
+    "evidence_need": [
+      "research_entity/trigger_runs/spawn/spawn-20260809T1813p0700-claycode-unicode-canon/EXECUTABLE_RESEARCH_RECEIPT.json",
+      "research_entity/trigger_runs/spawn/spawn-20260809T1813p0700-claycode-unicode-canon/HYPOTHESES.json",
+      "research_entity/trigger_runs/spawn/spawn-20260809T1813p0700-claycode-unicode-canon/EVIDENCE_MANIFEST.json"
+    ],
+    "invalidators": [
+      "normative ClayCode String semantics are explicitly frozen as canonical-equivalence semantics and global NFC is proven semantics-preserving across complete conformance corpus",
+      "a newer normative Unicode contract supersedes this candidate with stronger executable evidence",
+      "current BASE application requirements force Unicode identifiers and an identifier profile is separately frozen"
+    ],
+    "base_priority": 0.92,
+    "expected_impact": 0.84,
+    "urgency": 0.90,
+    "information_gain": 0.88,
+    "status": "READY"
+  }
+}

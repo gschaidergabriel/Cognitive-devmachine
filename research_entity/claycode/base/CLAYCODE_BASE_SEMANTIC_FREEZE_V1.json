@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.1",
+  "freeze_id": "CLAYCODE-BASE-SEMANTIC-FREEZE-V1-20260809",
+  "status": "SUPERSEDED_CONCURRENT_FREEZE",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "superseded_by": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+  "supersession_reason": "A concurrent worker committed and bound a newer BASE semantic freeze into CLAYCODE_RELEASE_WORKSPACE.json using a newer current G9 semantic-core blob. This duplicate is preserved for provenance but is not authoritative and must not be counted as a second WP01 PASS.",
+  "original_source_snapshot": {
+    "semantic_core_git_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "dialect_git_blob_sha": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "grammar_git_blob_sha": "ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "acceptance_contract_git_blob_sha": "86d8ec3e3d72261d42b9e017f546bdfe41cffe66",
+    "d_repair_git_blob_sha": "507126993797f8f52c69467410978712e6d495cd"
+  },
+  "preserved_counterexamples": [
+    "CC-CE-FUNCTION-DEFINITION-001",
+    "CC-CE-LALR-CONFLICT-001",
+    "CC-CE-CANONICAL-IR-001"
+  ],
+  "decision": "NOT_SELECTED_AS_AUTHORITATIVE_FREEZE",
+  "note": "Historical snapshot only. Use BASE_SEMANTIC_FREEZE_V1.json and the current CLAYCODE_RELEASE_WORKSPACE.json for WP01 state."
+}

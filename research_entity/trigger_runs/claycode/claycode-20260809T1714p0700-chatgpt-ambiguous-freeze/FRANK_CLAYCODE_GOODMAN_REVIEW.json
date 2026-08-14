@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1714p0700-chatgpt-ambiguous-freeze",
+  "review_subject":"FRANK/ClayCode assumption that declarative architecture relations can share a typed semantic IR with executable ClayCode without allowing representation to become authority or allowing ambiguous legacy syntax to choose semantics silently",
+  "shared_ancestry_collapsed":true,
+  "independent_inputs":[
+    {"class":"LOCAL_EXECUTABLE_ADVERSARIAL_PROXY","source":"ambiguous semantic freeze probe","finding":"all three residual legacy rules admit multiple plausible ASTs; registry-gated n-ary IR rejects unknown relations and wrong arities 10000/10000 each"},
+    {"class":"PRIMARY_EXTERNAL_TECHNICAL_SPEC","source":"Tree-sitter grammar documentation","finding":"ambiguous expression grammars require explicit precedence/associativity; grammar mechanics do not by themselves establish domain intent"},
+    {"class":"PRIMARY_EXTERNAL_TECHNICAL_SPEC","source":"MLIR Operation Definition Specification / constraints","finding":"declarative IR can use explicit operation definitions, traits and constraints rather than unconstrained free-form operator vocabulary"}
+  ],
+  "counterhypotheses_tested":[
+    "operator precedence alone can safely choose the intended meaning of the three remaining legacy rules",
+    "arbitrary identifiers as relations are safe because later checking can repair ambiguity",
+    "FRANK architectural agreement is sufficient evidence for a ClayCode source rewrite"
+  ],
+  "verdict":"REFINED",
+  "refinement":"The safest current BASE interpretation is a three-way separation: executable expression operators with explicit precedence/associativity; typed declarative PredicateIR/ConstraintIR with declared relation signatures; and a fail-closed semantic-freeze gate for legacy clauses whose source text admits multiple materially different ASTs. FRANK requirements remain input to the freeze decision, not independent proof and not effect authority.",
+  "not_supported":[
+    "the exact intended AST of any of the three ambiguous legacy lines",
+    "automatic rewrite of current G9 source",
+    "production parser completeness",
+    "Ubuntu target equivalence",
+    "BASE release gate advancement",
+    "any expansion of model or FRANK execution authority"
+  ],
+  "next_falsifier":"Locate authoritative prior IR/parser lineage for the three legacy clauses or explicitly freeze their intended typed IR, then run them through the production parser/canonicalizer/type-effect checker and roundtrip semantic-hash tests on the Ubuntu target."
+}

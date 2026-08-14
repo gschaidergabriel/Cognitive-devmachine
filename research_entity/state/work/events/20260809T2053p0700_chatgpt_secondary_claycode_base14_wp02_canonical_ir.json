@@ -1,0 +1,63 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-base14-wp02-canonical-ir-20260809T2053p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:53:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "title": "Close ClayCode BASE critical path starting with strict WP02 canonical IR receipt",
+    "work_clay": "Re-read newest main. Preserve CC-WP-01 PASS and all non-PASS gates. Immediate discriminator: run tools/claycode_base_frontend_validation.py and tools/claycode_base_canonical_ir_validation.py on a real repository checkout using default strict mode, current D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark, CLAYCODE_G9_FUSION_SPEC_V3.clay and DIALECT_REGISTRY_V3.clay. Install/enable the normal strict-Lark dependency set on the Ubuntu developer host if needed; do not use --proxy-nonstrict for acceptance. Persist exact grammar/source/tool hashes, strict construction result, deterministic parse result, canonical JSON IR byte-roundtrip, repeat-parse identity, presentation-equivalence and mutation-discrimination receipt. Then compare the BASE frontend surface against the real frozen FRANK ClayCode subsystem(s) selected for WP13 and record syntax/semantic gaps as executable counterexamples rather than silently widening the language. Only after WP02 evidence is complete move to WP03 typed IR/types. Preserve model-output != execution-authority and Ubuntu-only Frank v0.1 scope.",
+    "reason_clay": "ChatGPT authored and proxy-tested a deterministic canonical syntax-IR validator at commit 655747796c44f3ec4ab6fbca279aae6f29830c0d. Hosted proxy passed canonical serialize/deserialize/re-serialize identity, repeat parse identity, one presentation-equivalence case and 8/8 mutation discriminators, but strict=True could not run because interegular is absent and the proxy used only a minimal grammar fixture. Therefore the highest-information next action is one strict current-corpus repository/Ubuntu receipt, not further semantic redesign. FRANK's current canonical goal independently reports compiler/local materialization as open, so closing this receipt directly unblocks the FRANK v0.1 path.",
+    "completion_clay": "Immediate revision is complete when (1) strict LALR current V5 construction succeeds or yields an exact reproducible counterexample; (2) full current G9 V3 + Dialect V3 sources parse; (3) canonical syntax-IR serialize->deserialize->serialize is byte-identical and repeated parse is byte-identical; (4) ignored presentation equivalence remains hash-stable; (5) all listed operator/literal/order/relation mutations remain hash-distinguishable; (6) exact Ubuntu/repository receipt is committed; (7) no CC-WP-02 PASS is issued unless all existing WP02 acceptance evidence including canonicalization is satisfied; (8) the next production step is WP03 typed IR/types or a concrete parser counterexample. The parent BASE work remains incomplete until CC-WP-01..14 all satisfy their original acceptance contract.",
+    "evidence_need": [
+      "STRICT_LALR_REPAIR_RECEIPT",
+      "FULL_CORPUS_FRONTEND_RECEIPT",
+      "CANONICAL_IR_ROUNDTRIP_HASH_RECEIPT",
+      "FRANK_FRONTEND_GAP_COUNTEREXAMPLE_OR_COMPATIBILITY_RECEIPT",
+      "TYPE_EFFECT_NEGATIVE_CORPUS_RECEIPT",
+      "EVALUATOR_DIFFERENTIAL_RECEIPT",
+      "TRANSLATION_VALIDATION_RECEIPT",
+      "UBUNTU_RUNTIME_ABI_FFI_RECEIPT",
+      "AUTHORITY_CLOSURE_RECEIPT",
+      "ATOMIC_ASYNC_REPLAY_RECEIPT",
+      "ALL_GENERAL_APPLICATION_UBUNTU_RECEIPTS",
+      "FUZZ_CONFORMANCE_RECEIPT",
+      "HELDOUT_CORPUS_LEAK_AUDIT",
+      "FRANK_PRODUCTION_HANDOFF_RECEIPT",
+      "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST"
+    ],
+    "executor_policy": "Immediate local-build priority: prefer verified Claude Code/local Ubuntu build organ with repository checkout. ChatGPT remains research/synthesis/adjudication organ. Do not duplicate already-running parser edits; re-read newest main before edits and consume existing V5/frontend work. Proxy/container success never becomes Ubuntu PASS. No paid training/API work and no Android/mobile/edge portability for Frank v0.1.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "PRODUCTION_CLAYCODE_TOOLCHAIN",
+      "UBUNTU_DEVELOPER_HOST_EXECUTION",
+      "GITHUB_READ_WRITE",
+      "LOCAL_TEST_EXECUTION"
+    ],
+    "write_scope": [
+      "research_entity/claycode/",
+      "research_entity/trigger_runs/claycode/",
+      "research_entity/runtime/",
+      "research_entity/state/work/events/",
+      "tools/",
+      "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json"
+    ],
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE",
+      "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark",
+      "tools/claycode_base_frontend_validation.py",
+      "tools/claycode_base_canonical_ir_validation.py"
+    ],
+    "invalidators": [
+      "BASE acceptance contract is superseded by explicit project-owner directive",
+      "Ubuntu developer system ceases to be Frank v0.1 target host"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 1.0,
+    "status": "READY"
+  }
+}

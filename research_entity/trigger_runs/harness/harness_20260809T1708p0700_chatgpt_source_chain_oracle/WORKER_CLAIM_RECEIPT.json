@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness_20260809T1708p0700_chatgpt_source_chain_oracle",
+  "actor":"chatgpt-secondary",
+  "selected_lane":"H-WP-11-TRACE-REPLAY / BASE_SOURCE_CHAIN_EVIDENCE_EXTENSION",
+  "selection_basis":[
+    "H-WP-02 state ledger already had an active live claim",
+    "H-WP-04 Needle boundary was claimed by a sibling before durable write-back",
+    "fresh TurnTraceEnvelope work already covered general trace/replay semantics",
+    "live Fusion introduced a newer uncovered requirement: full source->parse->typed-IR->lowering->execution->replay differential evidence"
+  ],
+  "duplication_policy":"NON_DUPLICATIVE_EXTENSION",
+  "durable_claim_timing_note":"Scope was selected before implementation after live-worker cross-read; this durable claim receipt was written after local execution because the hosted worker could not atomically claim and edit a local checkout.",
+  "status":"COMPLETED_WITH_HANDOFF"
+}

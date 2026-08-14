@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1703p0700_wp02_crash_recovery_chatgpt_secondary",
+  "trigger": "harness",
+  "home_room": "harness",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "mode": "FORGE_CONTINUATION_CRASH_RECOVERY",
+  "parent_harness_run": "research_entity/trigger_runs/harness/harness_20260809T1650p0700_wp02_state_ledger_chatgpt_secondary/RUN_MANIFEST.json",
+  "identity_boundary": {
+    "research_entity_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "implementation_authority": "RESEARCH_ENTITY_ONLY"
+  },
+  "outputs": [
+    "research_entity/harness/reference_state_ledger_crash_probe.py",
+    "tests/test_reference_state_ledger_crash_recovery.py",
+    "research_entity/harness/H_WP_02_CRASH_RECOVERY_EXECUTION_RECEIPT.json"
+  ],
+  "execution_result": "11 passed in 5.27s",
+  "status": "PARTIAL_EXECUTABLE_DELTA_COMMITTED",
+  "wp02_complete": false,
+  "h1_release_pass": false,
+  "paid_training_started": false
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.1",
+  "tool_name": "mistral_inference",
+  "provider": "Mistral AI",
+  "script": "tools/mistral_inference.py",
+  "runner": ".github/workflows/mistral-research.yml",
+  "request_dir": "research_entity/runtime/mistral_requests",
+  "result_dir": "research_entity/runtime/tool_results",
+  "autonomous_consumer": "tools/claycode_autonomous_cycle.py",
+  "class": "reasoning_coding_embedding_multimodal_model_api",
+  "requires_secret": ["MISTRAL_API_KEY"],
+  "credential_required": true,
+  "status": "ADAPTER_AND_RUNNER_READY_RUNTIME_VERIFICATION_PENDING",
+  "free_policy": "FREE_ONLY; Mistral Free Mode only; HTTP 402 hard-stops provider and no paid fallback; HTTP 429 is cooldown/fallback.",
+  "preferred_for": [
+    "ClayCode compiler architecture",
+    "adjustable reasoning",
+    "coding and counterhypothesis generation",
+    "structured JSON research outputs",
+    "multi-completion hypothesis diversity",
+    "prompt-cache reuse on stable ClayCode prefixes",
+    "fill-in-the-middle code candidates",
+    "text/code embeddings",
+    "model and capability discovery"
+  ],
+  "implemented_modes": ["models", "chat_reasoning", "structured_json", "multi_completion", "prompt_cache", "fim", "embeddings"],
+  "capabilities_to_harvest": [
+    "GET /v1/models per-model capability metadata",
+    "adjustable reasoning_effort",
+    "JSON/schema structured output",
+    "parallel tool-call semantics",
+    "n completions",
+    "prompt caching",
+    "FIM/code completion",
+    "embeddings",
+    "batch/OCR/vision/classification/conversations/hosted tools only after active-account free eligibility is verified"
+  ],
+  "reasoning_trace_policy": "Reasoning may improve provider output but provider CoT/thinking chunks are not persisted by Clay.",
+  "doomsday_forecast": {"relevant_rows":["BASE_CLAYCODE_RELEASE"],"impacts":[]}
+}

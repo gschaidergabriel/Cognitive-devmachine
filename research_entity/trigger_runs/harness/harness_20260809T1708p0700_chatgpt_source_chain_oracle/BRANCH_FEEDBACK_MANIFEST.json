@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness_20260809T1708p0700_chatgpt_source_chain_oracle",
+  "evidence_class":"LOCAL_SYNTHETIC_EXECUTION_NOT_TARGET_UBUNTU",
+  "feedback":{
+    "clayresearch":{"effect":"REVISE","delta":"Cross-branch conformance should bind source, parse, typed IR, lowering, execution and replay as one content-addressed evidence chain; final behavior alone is insufficient."},
+    "frank":{"effect":"NO_CHANGE","delta":"No FRANK architecture change. This is future H2 evidence infrastructure only."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT claim change. ClayCode GWT witnesses should later carry full source-chain receipts."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"No emergence claim change; source-chain correctness is not emergence evidence."},
+    "claycode":{"effect":"REVISE","delta":"Preserve N-CC-SOURCE-CHAIN-BYPASS-007 and N-CC-EMIT-RETURN-SEMANTIC-LEAK-008 as mandatory regressions. Production BASE receipts need grammar/type-effect/lowering contract hashes and explicit typed numeric canonicalization before semantic hashing."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"Future compiled Hyperposition witnesses inherit source-chain evidence requirements."},
+    "claygraph":{"effect":"NO_CHANGE","delta":"Future compiled graph witnesses must derive from admitted parsed identity; no graph semantics changed here."},
+    "unifieddb":{"effect":"NO_CHANGE","delta":"Future compiled transaction/ViewDelta witnesses must derive from admitted parsed identity; no storage decision changed here."},
+    "harness":{"effect":"REVISE","delta":"Add SourceChainEvidence validation beside TurnTraceEnvelope. H2 differential oracle must fail when compiler-chain contracts differ even if final state matches."}
+  },
+  "promotion":"NONE",
+  "stage_progress_credit":"NONE"
+}

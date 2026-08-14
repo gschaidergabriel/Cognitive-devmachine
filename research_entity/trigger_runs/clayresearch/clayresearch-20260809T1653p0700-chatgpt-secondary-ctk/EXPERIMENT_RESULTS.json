@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "clayresearch-20260809T1653p0700-chatgpt-secondary-ctk",
+  "evidence_class": "SYNTHETIC_LOCAL_SIMULATION_ONLY",
+  "promotion_allowed_without_target_replication": false,
+  "experiments": [
+    {
+      "experiment_id": "EXP-CR-GWT-REENTRY-TOY-001",
+      "question": "Does provenance/order-correct re-entry outperform shuffled re-entry when compute structure is matched in a noisy recurrent tracking toy model?",
+      "method": "200 seeded trials, latent AR(1) target, three noisy specialist observations, same recurrent gain alpha=0.65. Arms: no re-entry; truthful previous estimate; temporally shuffled previous estimates.",
+      "results": {
+        "mean_mse_no_reentry": 0.3317440446,
+        "mean_mse_truthful_reentry": 0.1043996193,
+        "mean_mse_shuffled_reentry": 0.3004946813,
+        "truthful_vs_no_reentry_improvement_percent": 68.5301,
+        "truthful_vs_shuffled_improvement_percent": 65.2574,
+        "paired_mse_gain_truthful_over_shuffled_mean": 0.1960950620,
+        "paired_gain_95pct_ci": [0.1870919191, 0.2050982050],
+        "truthful_better_than_shuffled_seeds": "200/200"
+      },
+      "interpretation": "Supports H-CR-009 only in the toy dynamical model: ordered/provenance-correct recurrent state can carry useful information beyond generic extra recurrent context.",
+      "falsification_boundary": "Not evidence that FRANK's concrete GWT/re-entry implementation has this effect; H1 frozen replay with truthful/shuffled/no-reentry is still required."
+    },
+    {
+      "experiment_id": "EXP-CR-NARY-ROLE-REDUCTION-002",
+      "question": "Can an unlabeled pairwise clique preserve role-labelled ternary relation identity?",
+      "method": "Enumerated all 3! role assignments over the same three members; reduced each assignment to the same unordered pairwise clique.",
+      "results": {
+        "role_assignments": 6,
+        "distinct_unlabeled_pairwise_reductions": 1,
+        "collision_multiplicity": 6,
+        "role_information_lost_bits": 2.5849625007
+      },
+      "interpretation": "Constructive counterexample: unlabeled pairwise reduction is not semantics-preserving for role-bearing n-ary identity. Typed/labeled pairwise encodings may still preserve semantics and remain a live simpler alternative.",
+      "falsification_boundary": "Does not prove a native hyperedge representation is always superior; the required comparison is native n-ary vs typed pairwise state-machine reduction under matched replay/intervention cost."
+    },
+    {
+      "experiment_id": "EXP-CR-INCREMENTAL-CLOSURE-003",
+      "question": "When does dependency-directed incremental recomputation stop being cheaper than full recomputation?",
+      "method": "Synthetic 3000-node DAGs, 5 changed early nodes, 30 seeds per density; measure fraction of dependency closure touched. Mean parent counts 1,2,4,8.",
+      "results": {
+        "mean_parents_1": {"mean_touched_fraction": 0.0942, "median": 0.0342, "p90": 0.17, "max": 1.0},
+        "mean_parents_2": {"mean_touched_fraction": 0.3764, "median": 0.3585, "p90": 0.7918, "max": 1.0},
+        "mean_parents_4": {"mean_touched_fraction": 0.7992, "median": 0.8620, "p90": 0.9721, "max": 1.0},
+        "mean_parents_8": {"mean_touched_fraction": 0.9229, "median": 0.9452, "p90": 0.9913, "max": 1.0}
+      },
+      "interpretation": "Negative/qualifying result for unconditional incrementalism: sparse/local dependencies can make Delta propagation cheap, but dense/high-fanout dependency closure approaches full recomputation. Supports an adaptive cost threshold rather than an invariant 'incremental is always faster'.",
+      "falsification_boundary": "Node-touch count is only a proxy; real UnifiedDB/ClayGraph operators, cache behavior and fixed overhead can shift the crossover."
+    },
+    {
+      "experiment_id": "EXP-CR-CAPABILITY-COMPOSITION-004",
+      "question": "Can two individually authorized operations compose into an unauthorized information-flow effect?",
+      "method": "2x2 factorial toy: A=secret-read capability, B=public-network-send capability. Local per-operation authorization vs provenance/taint-sensitive send gate.",
+      "results": {
+        "local_policy": {"00":0,"10":0,"01":0,"11":1},
+        "factorial_interaction_omega": 1,
+        "provenance_sensitive_policy": {"00":0,"10":0,"01":0,"11":0},
+        "omega_after_flow_gate": 0
+      },
+      "interpretation": "Constructive counterexample to the claim that per-operation capability validity alone implies safe composition. It supports coupling CapabilityToken authority with protected information-flow provenance at assembly/effect commit boundaries.",
+      "falsification_boundary": "Does not demonstrate a vulnerability in the current unbuilt BASE compiler/runtime; it defines a conformance test that the implementation must pass."
+    },
+    {
+      "experiment_id": "EXP-CR-EPOCH-COHERENCE-005",
+      "question": "Does atomic epoch publication prevent mixed-state reads across logically coupled fields?",
+      "method": "Synthetic two-field invariant b=2a. Writer updates a then b; reader samples uniformly before/between/after writes. Compare naive visibility with atomic old-or-new epoch publication.",
+      "results": {
+        "naive_two_step_mean_mixed_snapshot_rate": 0.33374,
+        "atomic_epoch_publication_mixed_snapshot_rate": 0.0
+      },
+      "interpretation": "Supports shared semantic epoch/snapshot publication as a correctness mechanism for coupled views, consistent with WAL/snapshot-isolation design patterns.",
+      "falsification_boundary": "Toy interleaving assumes atomic epoch switch and two-field invariant; real implementation must benchmark contention, publication cost and cross-store boundaries."
+    }
+  ],
+  "global_result": "Five feasible synthetic discriminating tests completed. Three support existing architecture directions, one supplies a concrete Safe-Effect composition counterexample, and one qualifies the 'always incremental' intuition with a density-dependent negative result.",
+  "next_required_replication": "Implement equivalent tests in the BASE compiler proof suite where possible, then repeat GWT/Hyperposition/state tests in H1 frozen replay before any strong mechanism promotion."
+}

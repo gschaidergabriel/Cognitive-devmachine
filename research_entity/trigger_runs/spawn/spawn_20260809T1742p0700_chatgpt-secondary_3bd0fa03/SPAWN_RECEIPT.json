@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1742p0700_chatgpt-secondary_3bd0fa03",
+  "trigger": "spawn",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "distribution_source": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json@f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+  "branch_draw": {
+    "procedure": "Python secrets.SystemRandom().randrange(1000000) executed in current runtime",
+    "draw_integer": 356163,
+    "draw_domain": "0..999999",
+    "unit_interval": 0.356163,
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "selected_origin_branch": "claycode",
+    "seed_recorded": false
+  },
+  "candidate_microdirections": [
+    {"id":"C1","direction":"authority-preserving lowering across FFI/effect boundaries","test":"differential brokered-vs-ambient lowering with capability forgery and child-process escape cases"},
+    {"id":"C2","direction":"deterministic canonical semantic hashing under collection/order normalization","test":"permutation/duplication/property corpus plus ordered-field counterexamples"},
+    {"id":"C3","direction":"incremental Delta equivalence under retractions, non-monotone selectors and epoch boundaries","test":"full-recompute differential oracle across signed diffs, duplicate support, selector changes, competition and logical-time sealing","selected":true},
+    {"id":"C4","direction":"async cancellation and capability lifetime semantics","test":"schedule perturbation plus cancellation/revocation replay"},
+    {"id":"C5","direction":"translation validation for effect-bearing lowering","test":"source-vs-lowered state/effect receipt equivalence with mutation tests"},
+    {"id":"C6","direction":"provenance retraction algebra under invalidated support","test":"multi-support derivation/retraction property tests and explanation-vs-truth separation"}
+  ],
+  "microdirection_draw": {
+    "procedure": "Python secrets.SystemRandom().randrange(6) executed in current runtime",
+    "draw_index_zero_based": 2,
+    "candidate_count": 6,
+    "selected_microdirection": "C3_incremental_delta_equivalence",
+    "seed_recorded": false
+  },
+  "late_novelty_check": {
+    "performed_after_parallel_spawn_commits_appeared": true,
+    "reviewed_recent_spawn_runs": [
+      "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+      "spawn-20260809T1746p0700-claycode-mvc-state",
+      "spawn_20260809T174614p0700_harness_lowering_semantics"
+    ],
+    "duplicate_found": false,
+    "relation_to_existing_incremental_work": "This run extends EXP-INCR-001/KMP-CR-20260809-INCREMENTAL-LOCALITY from locality/performance into semantic correctness, retractions, non-monotone selectors and epoch/frontier sealing; it is not a replication of the same question."
+  },
+  "selected_microdirection": "Incremental Delta equivalence and invalidation semantics for ClayCode G9",
+  "selection_probability_is_not_evidence": true,
+  "training_auto_start_forbidden": true,
+  "status": "COMPLETED_CURRENT_ORGAN_RESEARCH_SCOPE"
+}

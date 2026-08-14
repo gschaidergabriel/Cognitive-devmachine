@@ -1,0 +1,201 @@
+{
+  "schema_version": "1.3",
+  "manifest": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST",
+  "created_at": "2026-08-09T20:05:00+07:00",
+  "last_updated_at": "2026-08-09T21:47:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "authority_invariant": "model_output != execution_authority",
+  "GENERAL_PURPOSE_GATE": "FAIL",
+  "general_purpose_gate_pass": false,
+  "claycode_release_gate_pass": false,
+  "formal_pass_count": 1,
+  "implementation_closure_ready_count": 11,
+  "wp02_selected_grammar_contract": {
+    "contract_path": "research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json",
+    "selected_grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "selection_status": "IMPLEMENTATION_SELECTED_STRICT_PROMOTION_PENDING",
+    "selection_reason": "V9/V10 dotted-prefix tokenization made horizontal trivia semantically active for Needle.owns(X) versus Needle.owns (X). V17 applies only the minimal declarative lookahead repair and does not import the broader V7/V10/V15/V16 typed-function/operator unification surface.",
+    "strict_local_runner": "tools/claycode_wp02_strict_local_closure_v2.py",
+    "strict_target_receipt": "research_entity/claycode/target_receipts/STRICT_LALR_D_SELECTED_WP02_TARGET_RECEIPT.json",
+    "promotion_allowed_without_strict_receipts": false
+  },
+  "work_packages": {
+    "CC-WP-01-SPEC-FREEZE": {
+      "formal_status": "PASS",
+      "implementation_status": "CLOSED",
+      "evidence": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"
+    },
+    "CC-WP-02-PARSER-CANON": {
+      "formal_status": "OPEN_STRICT_SELECTED_GRAMMAR_RECEIPT",
+      "implementation_status": "V17_TRIVIA_REPAIR_SELECTED_CONTRACT_DRIVEN_LOCAL_CI_TARGET_CHAIN_READY",
+      "evidence": [
+        "research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json",
+        "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+        "tools/claycode_v17_declarative_trivia_discriminator.py",
+        "tools/claycode_base_frontend.py",
+        "tools/claycode_base_frontend_validation.py",
+        "tools/claycode_base_canonicalizer.py",
+        "tools/claycode_base_canonicalizer_validation.py",
+        "tools/claycode_wp02_strict_local_closure_v2.py",
+        "tools/claycode_base_andreas_target_runner_v2.py",
+        "tools/claycode_andreas_ubuntu_acceptance_assembler.py",
+        ".github/workflows/claycode-base-frontend-ci.yml",
+        ".github/workflows/claycode-andreas-target-autoprobe.yml"
+      ],
+      "blocker": "The V9 horizontal-trivia counterexample is repaired in the selected V17 implementation path, but formal WP02 PASS still requires strict interegular-enabled V17 selection/full-corpus/canonical receipts and target-host adjudication bound to the exact contract-selected grammar bytes. No such strict aggregate/target receipt is present on main yet."
+    },
+    "CC-WP-03-IR-TYPES": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY_EXPLICIT_GRAMMAR_BINDING_IN_WP02_PATH",
+      "evidence": ["tools/claycode_base_ir.py", "tools/claycode_base_compiler.py", "tools/claycode_wp03_typed_ir_validation.py"],
+      "note": "The declarative WP02 closure invokes base_ir with the contract-selected grammar explicitly. The separately versioned executable typed-fn slice remains WP03/pure-compiler evidence and must not be relabeled as WP02."
+    },
+    "CC-WP-04-TYPE-EFFECT": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_effect_pipeline.py", "tools/claycode_effect_runtime_bridge_validation.py"]
+    },
+    "CC-WP-05-EVALUATOR": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain_validation.py"]
+    },
+    "CC-WP-06-COMPILER-LOWERING": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain.py", "tools/claycode_structured_backend.py"]
+    },
+    "CC-WP-07-RUNTIME-ABI-FFI": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_gateway.py", "tools/claycode_base_package_compiler.py"]
+    },
+    "CC-WP-08-STDLIB-SDK": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_stdlib_extensions.py", "tools/claycode_base_package_compiler.py"]
+    },
+    "CC-WP-09-CONCURRENCY-MEMORY": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_gateway.py", "tools/claycode_base_resource_lifetime_validation.py"]
+    },
+    "CC-WP-10-GENERAL-APP-SUITE": {
+      "formal_status": "BLOCKED_TARGET_EVIDENCE",
+      "implementation_status": "TARGET_CHAIN_READY_FULL_FRANK_GENERATION_INCLUDED",
+      "evidence": [
+        "tools/claycode_base_target_application_suite_v2_runner.py",
+        "tools/claycode_full_frank_active_assembly_validation.py",
+        "tools/claycode_andreas_application_acceptance.py",
+        "tools/claycode_base_application_proxy_suite_v2.py"
+      ],
+      "blocker": "No physical Andreas Ubuntu ten-application production receipt exists on main yet. Proxy/hosted evidence is forbidden from satisfying APP-01..10."
+    },
+    "CC-WP-11-FUZZ-CONFORMANCE": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_fuzz_conformance.py"]
+    },
+    "CC-WP-12-CORPUS-HELDOUT": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_corpus_generator.py"]
+    },
+    "CC-WP-13-HARNESS-HANDOFF": {
+      "formal_status": "BLOCKED_TARGET_EVIDENCE",
+      "implementation_status": "FIVE_PATH_FULL_FRANK_TARGET_FINALIZER_READY",
+      "evidence": [
+        "tools/claycode_full_frank_target_finalizer.py",
+        "tools/claycode_full_frank_active_assembly_validation.py",
+        "tools/claycode_full_frank_target_finalizer_runner.py",
+        "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay",
+        "research_entity/claycode/base/FRANK_ROOT_SURFACE_CLASSIFICATION_V1.json"
+      ],
+      "blocker": "The five-path production FULL_FRANK_HANDOFF receipt is absent because the physical registered Andreas Ubuntu target has not yet completed the target differential. The separate frank_runtime.clay semantic-contract surface is not a selected production executable and does not independently block WP13."
+    },
+    "CC-WP-14-BASE-AUDIT": {
+      "formal_status": "BLOCKED_BY_02_TARGET_13",
+      "implementation_status": "AUDITOR_READY",
+      "evidence": ["tools/claycode_base_wp14_audit.py", "research_entity/claycode/BASE_DEFECT_LEDGER.json", "tools/claycode_andreas_base14_closure.py"]
+    }
+  },
+  "closed_critical_defects": [
+    "CC-DEFECT-P0-001",
+    "CC-DEFECT-P0-002",
+    "CC-DEFECT-P1-001",
+    "CC-DEFECT-P1-002",
+    "CC-DEFECT-P1-003",
+    "CC-DEFECT-P1-004"
+  ],
+  "open_p0": 0,
+  "open_p1": 0,
+  "parser_counterexamples": [
+    {
+      "id": "CC-WP02-V9-HORIZONTAL-TRIVIA-CALL-IDENTITY",
+      "status": "SUPERSEDED_BY_SELECTED_REPAIR_PENDING_STRICT_VALIDATION",
+      "affected_predecessors": ["V9", "V10"],
+      "counterexample": "Needle.owns(X) versus Needle.owns (X) can acquire different parse/canonical semantics under the predecessor dotted-prefix lookahead.",
+      "selected_repair": "D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+      "strict_validation_pending": true
+    }
+  ],
+  "unresolved_language_counterexamples": [
+    {
+      "id": "CC-COVERAGE-FRANK-ROOT-CONTRACT-SURFACE",
+      "status": "CONTEXT_ONLY_NON_GATE",
+      "source": "frank_reference/claycode/frank_runtime.clay",
+      "provenance": "frank_reference/claycode/frank_runtime.provenance.json",
+      "classification": "research_entity/claycode/base/FRANK_ROOT_SURFACE_CLASSIFICATION_V1.json",
+      "already_generic_in_structured_backend": ["fn block", "let", "require", "return", "if", "for", "qualified field access", "generic calls"],
+      "remaining_unclassified_surface": ["use/import wildcard", "mixed rich type/record declarations", "symbol literals", "method/chained call sugar", "lambda/map sugar", "named-argument/constructor sugar"],
+      "current_gap": "Coverage research remains useful, but this exact semantic-contract source is not selected by the current receipt-gated APP10/FULL_FRANK finalizer. It therefore cannot justify BASE language widening or independently block the current release.",
+      "reactivation_rule": "Becomes gate-relevant immediately if this source or a byte-identical descendant is selected as a production WP13/APP10 executable."
+    },
+    {
+      "id": "CC-TARGET-FULL-FRANK-EVIDENCE",
+      "status": "OPEN_TARGET_EVIDENCE",
+      "current_gap": "The five-path fail-closed FULL_FRANK target finalizer exists, but no physical target production receipt is present on main.",
+      "language_change_allowed": "NO. Missing target execution is an evidence/transport blocker, not language insufficiency."
+    }
+  ],
+  "non_promoted_candidates": [
+    {
+      "id": "CC_V10_UNIFIED_FRONTEND",
+      "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark",
+      "status": "NOT_SELECTED_AFTER_TRIVIA_COUNTEREXAMPLE",
+      "promotion_allowed_without_new_strict_evidence": false
+    },
+    {
+      "id": "CC_V15_GENERIC_DOTTED",
+      "status": "RESEARCH_ONLY_NON_PROMOTED",
+      "promotion_allowed_without_strict_integrated_evidence": false
+    },
+    {
+      "id": "CC_V16_GENERIC_DOTTED_LINEAR_LOOKAHEAD",
+      "status": "EVIDENCE_SOURCE_FOR_V17_REPAIR_NON_PROMOTED_AS_RELEASE_GRAMMAR",
+      "promotion_allowed_without_strict_integrated_evidence": false
+    }
+  ],
+  "hosted_ci_status": {
+    "status": "NEGATIVE_RESULT_PRE_STEP_INFRASTRUCTURE_FAILURE",
+    "evidence": "research_entity/claycode/base/receipts/CI_STRICT_V9_GITHUB_ACTIONS_INFRA_NEGATIVE_20260809.json",
+    "language_failure_inferred": false,
+    "current_workflow_is_contract_driven": true
+  },
+  "next_local_strict_command": "python3 tools/claycode_wp02_strict_local_closure_v2.py",
+  "next_command_on_target": "python3 tools/claycode_run_andreas_target_acceptance.py",
+  "promotion_allowed": false,
+  "promotion_blockers": [
+    "WP02_STRICT_SELECTED_GRAMMAR_V17_RECEIPT_NOT_PRESENT",
+    "ANDREAS_TARGET_RECEIPTS_NOT_PRESENT",
+    "FULL_FRANK_TARGET_RECEIPT_NOT_PRESENT",
+    "WP14_AUDIT_NOT_PASS"
+  ]
+}

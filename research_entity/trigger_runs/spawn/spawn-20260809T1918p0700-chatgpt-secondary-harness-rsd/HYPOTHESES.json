@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd",
+  "hypotheses":[
+    {"id":"H-RSD-1","status":"SUPPORTED_IN_SYNTHETIC_MODEL","claim":"A deterministic semantic transition kernel plus sealed receipts for every semantically relevant nondeterministic input can reproduce exact post-state across replay while allowing the physical runtime itself to remain nondeterministic.","falsifier":"A controlled H1/H2 trace with identical pre-state, intervention and complete receipt bundle yields unexplained authoritative semantic divergence."},
+    {"id":"H-RSD-2","status":"SUPPORTED_IN_SYNTHETIC_MODEL","claim":"Semantic identity and execution-trace identity must be separate: retry counts, latency and worker identity should not cause semantic mismatch unless the contract explicitly makes them program-observable.","falsifier":"An execution-only field excluded from semantic identity changes an authoritative state/result under the frozen contract."},
+    {"id":"H-RSD-3","status":"SUPPORTED_BY_EXHAUSTIVE_TWO_WORLD_COUNTEREXAMPLE","claim":"Across a crash after an external non-idempotent effect may have committed but before durable local outcome recording, a local runtime without remote deduplication/status query cannot guarantee exactly-once by retry-or-skip alone; it needs a query/dedupe protocol or an explicit COMMIT_UNKNOWN reconciliation state.","falsifier":"A protocol using no external idempotency, no remote status query and no stronger transactional coupling guarantees exactly one externally visible effect in both indistinguishable local post-crash worlds."},
+    {"id":"H-RSD-4","status":"SUPPORTED_BY_EXTERNAL_ENGINEERING_PRECEDENT","claim":"Deterministic replay/simulation and real multithreaded race testing are complementary rather than substitutes.","falsifier":"Target-runtime evidence shows all concurrency semantics are fully represented by the deterministic scheduler model and real concurrency adds no distinct failure surface."},
+    {"id":"H-RSD-5","status":"OPEN_TARGET_HYPOTHESIS","claim":"A receipt-closure matrix can become a reusable H1-to-H2 differential oracle spanning GWT, peer/tool calls, capability observations, visual inputs, effect outcomes and recovery without requiring every execution detail in the semantic hash.","falsifier":"Receipt capture overhead or unresolved hidden nondeterminism makes exact differential replay impractical on the Ubuntu target, or semantic equivalence cannot be defined without including unstable execution metadata."}
+  ],
+  "counterhypotheses":[
+    {"id":"CH-RSD-A","claim":"The runtime should instead force a single deterministic scheduler globally; receipts are unnecessary complexity.","discriminator":"Compare utility/latency/concurrency coverage and real race detection against selective receipt sealing."},
+    {"id":"CH-RSD-B","claim":"A full byte-identical trace hash is the safest H1/H2 oracle.","discriminator":"Vary retry/latency/worker metadata while holding semantic state/outcomes fixed; measure false divergence."},
+    {"id":"CH-RSD-C","claim":"Effect retries alone can provide exactly-once recovery.","discriminator":"Crash after remote apply and before local durable outcome with a non-idempotent, non-queryable adapter."},
+    {"id":"CH-RSD-D","claim":"Successful deterministic replay establishes causal validity of a GWT/emergence mechanism.","discriminator":"Matched lesion/shuffle/rescue intervention can fail even when baseline replay is perfect; causal promotion therefore remains separate."}
+  ]
+}

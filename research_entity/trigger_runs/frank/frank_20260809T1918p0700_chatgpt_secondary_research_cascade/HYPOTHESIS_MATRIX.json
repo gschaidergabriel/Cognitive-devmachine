@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank_20260809T1918p0700_chatgpt_secondary_research_cascade",
+  "epistemic_rule": "Hypotheses remain OPEN unless discriminating execution evidence supports promotion. External papers/docs establish mechanism feasibility or precedent, not FRANK-specific truth.",
+  "hypotheses": [
+    {
+      "id":"H-FRANK-1918-01",
+      "status":"OPEN",
+      "claim":"One logical local UnifiedDB with serialized write authority, concurrent read snapshots and explicit epoch/replay semantics can support H1 state persistence without semantic service splitting.",
+      "support":"Official SQLite WAL/isolation behavior makes the physical mechanism plausible; current FRANK contracts require one logical semantic world.",
+      "counterhypothesis":"Workload-specific write contention, checkpoint stalls or recovery domains require multiple physical stores/processes while preserving one logical identity plane.",
+      "falsifier":"Target-Ubuntu workload exceeds frozen p99 latency/recovery budgets or produces stale/busy/replay anomalies that a split physical design eliminates without semantic drift."
+    },
+    {
+      "id":"H-FRANK-1918-02",
+      "status":"OPEN",
+      "claim":"Dependency-prepared bounded ActiveAssembly will beat broad prompt-time state reconstruction at matched outcome quality while reducing context/KV cost and preserving conflict/provenance.",
+      "support":"Long-horizon memory benchmarks show retrieval, event linkage, selective forgetting and test-time memory remain difficult; current architecture already separates rich persistent state from current model context.",
+      "counterhypothesis":"Broad retrieval/full-state context is simpler and equal or better for the actual FRANK task distribution.",
+      "falsifier":"Matched H1 trials show no quality/correction advantage and no material token/latency savings, or broad reconstruction wins."
+    },
+    {
+      "id":"H-FRANK-1918-03",
+      "status":"OPEN",
+      "claim":"Explicit GWT competition/broadcast with receiver delivery, reconstruction, uptake, causal-use, outcome and re-entry receipts improves cross-organ coordination beyond an ordinary shared event bus at matched compute.",
+      "support":"Global-workspace research provides a mechanism precedent for bandwidth-limited competition/broadcast; FRANK already needs causal receipts to distinguish availability from use.",
+      "counterhypothesis":"A conventional event-driven state machine plus compact retrieval provides the same useful behavior with less machinery.",
+      "falsifier":"Matched event-bus H1 baseline equals or exceeds task outcome, correction, recovery and latency while maintaining the same causal traceability."
+    },
+    {
+      "id":"H-FRANK-1918-04",
+      "status":"OPEN",
+      "claim":"Adaptive recurrence using unresolved pressure, multi-step progress/marginal gain, cost, instability, budget and typed regime identity improves verified outcome per compute over fixed recurrence.",
+      "support":"Current project synthetic proxy found similar task success with substantially fewer recurrence steps for this controller shape, but it is not H1 evidence.",
+      "counterhypothesis":"Controller overhead, miscalibration or distribution shift makes fixed/event-driven scheduling better.",
+      "falsifier":"Factorized H1 tests show no Pareto improvement after controller overhead, or conventional scheduling dominates across held-out regimes."
+    },
+    {
+      "id":"H-FRANK-1918-05",
+      "status":"OPEN",
+      "claim":"Provenance-family/context/version-aware slow topology promotion reduces false durable coupling from repeated re-entry or correlated source echo better than repetition-weighted activation alone.",
+      "support":"Current reversal-aware binding synthetic experiments expose duplicate-source echo as a real constructed failure mode.",
+      "counterhypothesis":"A simpler context-aware source-weight baseline matches the benefit with less complexity and adapts faster under genuine reversal.",
+      "falsifier":"Simpler baseline matches or beats false-binding, true-reversal, OOD, spoof and cost metrics."
+    },
+    {
+      "id":"H-FRANK-1918-06",
+      "status":"OPEN_ARCHITECTURE_CONSTRAINT",
+      "claim":"Separating proposal from bearer authority at a deterministic host/runtime capability gateway preserves useful model/tool behavior while preventing authority escalation.",
+      "support":"Current Needle tests and capability-oriented sandbox designs provide implementation precedent; historical project failures make the boundary high-value.",
+      "counterhypothesis":"The separation becomes too restrictive or complex and causes unacceptable task failure/retry cost relative to a simpler permission model.",
+      "falsifier":"Adversarial H1 tests find an escalation path, or a simpler equally safe authority design dominates usability/latency/recovery."
+    },
+    {
+      "id":"H-FRANK-1918-07",
+      "status":"OPEN",
+      "claim":"WIT-like typed interface contracts can improve deterministic FFI/resource identity without making WASI 0.3 itself a v0.1 runtime dependency.",
+      "support":"Current component/WASI interfaces self-describe imports and support explicit capability provisioning, while the 0.3 native-async toolchain remains immature for a hard v0.1 lock-in.",
+      "counterhypothesis":"A direct native Ubuntu ABI is simpler, equally replayable and safer for the current scope.",
+      "falsifier":"WIT/interface indirection adds material tooling/runtime complexity without reducing FFI ambiguity, mutation failures or authority errors."
+    },
+    {
+      "id":"H-FRANK-1918-08",
+      "status":"OPEN",
+      "claim":"A Qwen-class 4B can serve as the local FRANK cognition core if retrieval, tool schemas, capability state and peer results are compiled into a bounded ActiveAssembly and heavy external work remains outside the model.",
+      "support":"Official Qwen3-4B specifications and local-runtime support make deployment technically plausible; no target-host FRANK benchmark exists yet.",
+      "counterhypothesis":"The 4B capacity/quantization envelope is insufficient for frozen long-horizon cognition and requires a different local model or more frequent strong-peer escalation.",
+      "falsifier":"Ubuntu target benchmark fails frozen latency/RAM/outcome/robustness thresholds or an alternative model dominates under identical architecture/context."
+    },
+    {
+      "id":"H-FRANK-1918-09",
+      "status":"OPEN",
+      "claim":"Observer-calibrated tracing can provide sufficient causal evidence while keeping semantic/action perturbation below a preregistered tolerance.",
+      "support":"Current Emergenz proxy shows logical read-only status does not guarantee timing noninterference, making calibration necessary.",
+      "counterhypothesis":"Required trace detail inevitably perturbs sensitive trajectories too strongly for valid paired causal interpretation.",
+      "falsifier":"Common-snapshot no/low/high instrumentation experiments exceed paired trajectory/outcome perturbation threshold."
+    },
+    {
+      "id":"H-FRANK-1918-10",
+      "status":"OPEN",
+      "claim":"Building the newest FRANK architecture first as a clear ordinary-code H1 executable oracle will reduce architecture/compiler confounding and make H2 ClayCode transfer faster and more falsifiable than waiting for BASE completion.",
+      "support":"Current owner-fixed H1 directive explicitly selects normal-code-first parallel implementation and requires H2 differential transfer rather than redesign.",
+      "counterhypothesis":"Duplicate implementation effort creates semantic drift and rework greater than the information gained.",
+      "falsifier":"H2 transfer shows large ambiguous divergence/reimplementation overhead not attributable to ClayCode gaps, and a direct ClayCode-first path would have required less verified work."
+    }
+  ],
+  "null_baseline":"Conventional persistent event-driven orchestration + bounded retrieval + deterministic capability gateway, without adaptive recurrence or durable higher-order topology, remains a required non-strawman baseline."
+}

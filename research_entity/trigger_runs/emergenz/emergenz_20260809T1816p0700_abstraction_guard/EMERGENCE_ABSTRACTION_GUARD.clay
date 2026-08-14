@@ -1,0 +1,60 @@
+module emergenz.abstraction_guard
+version "0.1-research-candidate"
+status OPEN_SYNTHETIC_SUPPORTED
+
+record MacroDefinition {
+  id:Ref
+  semantic_hash:Hash
+  source_epoch:Epoch
+  discovery_data_hash:Hash?
+  discovery_method:Ref
+  complexity_cost:Cost?
+  selected_before_evaluation:Bool
+}
+
+record EmergenceEvaluationSplit {
+  macro:Ref
+  discovery_partition:Hash?
+  evaluation_partition:Hash
+  intervention_partition:Hash?
+  ood_partition:Hash?
+  null_family:Ref
+  candidate_count:Int?
+  multiplicity_control:Ref?
+}
+
+record EmergenceClaimReceipt {
+  episode_or_family:Ref
+  macro:Ref
+  split:Ref
+  micro_baseline:Ref
+  pairwise_baseline:Ref?
+  intervention_spec:Ref
+  metrics:Set<Ref>
+  lesion_receipt:ReceiptRef?
+  rescue_receipt:ReceiptRef?
+  reentry_control:ReceiptRef?
+  ood_receipt:ReceiptRef?
+  implementation_transfer:ReceiptRef?
+  cost_shadow:Ref
+  evidence:Set<EvidenceRef>
+  status:Symbol
+}
+
+rule macro.discovery may_use ClayGraph + Hyperposition + GWT + state
+rule macro.discovery != emergence_evidence
+rule emergence.evaluate requires MacroDefinition.selected_before_evaluation==true
+rule same_trace_discovery_and_scoring requires explicit_selection_bias_control
+rule macro_causal_gain requires matched_micro_baseline + matched_intervention
+rule higher_order_claim requires best_pairwise_or_state_machine_reduction
+rule observational_flow requires common_driver_or_intervention_control_before_causal_promotion
+rule synergy_metric != causal_emergence
+rule recurrence != emergence
+rule lesion_without_rescue != strong_mechanism_confirmation
+rule scalar_score never_hides failed_required_dimension
+rule synthetic_result != live_frank_evidence
+rule EmergenceClaimReceipt != truth
+rule EmergenceClaimReceipt != EffectAuthority
+
+// BASE recommendation: implement as library/schema contract first.
+// Core ClayCode semantic change requires an executable compiler/runtime counterexample.

@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.1",
+  "run_id": "spawn_20260809T111551Z",
+  "trigger": "spawn",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage_at_selection": "BASE_CLAYCODE_RELEASE",
+  "branch_draw": {
+    "rng": "python.secrets.SystemRandom",
+    "draw_convention": "one_based_equivalent_of_canonical_selector",
+    "ticket_one_based_1_100": 33,
+    "ticket_zero_based_equivalent_0_99": 32,
+    "selected_origin_branch": "claycode",
+    "selected_interval_zero_based": [0, 49],
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "note": "Routing probability is not evidence weight. The branch was drawn once; no branch reroll occurred."
+  },
+  "microdirection_candidates": [
+    {
+      "id": "CC-SPAWN-C1-NUMERIC-SEMANTICS",
+      "question": "Can cross-backend deterministic numeric semantics be preserved without expanding ClayCode surface syntax?",
+      "eligible": true
+    },
+    {
+      "id": "CC-SPAWN-C2-EPISTEMIC-CONTROL",
+      "question": "Can UNKNOWN/CONFLICT/REVOKED control flow survive lowering without accidental truth or authority promotion?",
+      "eligible": false,
+      "reason": "reduced novelty: adjacent to very recent control/effect validation"
+    },
+    {
+      "id": "CC-SPAWN-C3-ATOMIC-CAS",
+      "question": "What atomic CAS, memory-order and semantic-identity contract is required for ClayCode concurrency so linearizable host execution does not admit stale versioned-state transitions?",
+      "eligible": true
+    },
+    {
+      "id": "CC-SPAWN-C4-SNAPSHOT-HANDLES",
+      "question": "Can typed snapshot/transaction handles make stale UnifiedDB reads mechanically rejectable across lowering boundaries?",
+      "eligible": true
+    },
+    {
+      "id": "CC-SPAWN-C5-ERROR-ABI",
+      "question": "Can typed result/error identity survive FFI lowering without collapsing host exceptions into ambiguous Clay state?",
+      "eligible": true
+    }
+  ],
+  "microdirection_draw": {
+    "rng": "python.secrets.SystemRandom",
+    "eligible_draw_ticket_zero_based": 2,
+    "selected": "CC-SPAWN-C3-ATOMIC-CAS",
+    "rerolls": 0
+  },
+  "novelty_check": {
+    "recent_spawn_directions_excluded": [
+      "ClayCode async replay/cancellation/choice receipts",
+      "ClayCode FRANK loop evaluator/lowering",
+      "ClayCode callable identity",
+      "ClayCode adaptive learner state",
+      "ClayCode affine capability revocation",
+      "ClayCode delta equivalence",
+      "ClayCode effect-authority and foreign effect closure",
+      "GWT adaptive recurrence",
+      "Emergenz adaptive lesion/rescue",
+      "ClayGraph reversal-aware binding"
+    ],
+    "live_work_excluded": [
+      "strict ClayCode LALR conflict localization and repair"
+    ],
+    "adjacent_prior_evidence": "Earlier atomic authority-budget work showed the need for atomic reservation under concurrency but did not define general CAS identity, ABA handling or memory-order semantics. The immediately prior async-replay spawn explicitly left synchronization/atomics open.",
+    "duplicate": false
+  },
+  "selected_research_question": "Can ClayCode safely lower atomic compare-exchange across heterogeneous backends using a minimal portable contract that separates semantic operation identity from physical retry attempts and binds version/epoch identity where equality is not identity?",
+  "promotion_requested": false
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.2",
+  "run_id":"hypofusion-20260809T1716p0700-chatgpt-secondary-r2",
+  "hard_close_cutoff":"2026-08-09T10:22:35Z",
+  "coverage_basis":{"inherited_prior_hypofusion_records":99,"matrix_A":{"run":"clayresearch-20260809T1653p0700-chatgpt-secondary-ctk","ids":"H-CR-001..H-CR-060","count":60},"matrix_B":{"run":"20260809T1713p0700-chatgpt-secondary","ids":"H-CR-001..H-CR-054","count":54},"identity_warning":"Matrix A and B reuse H-CR local ids for different statements; references are run-qualified, never conflated.","late_completed_sets":["H-EM-20260809-01..06","GWT-R7-H1..H8","H-CC-DB-001..005","H-CC-FN-01..05","H-TR-001..006","H-CC-AF-01..03","numeric/provenance/resource-lifetime matrices","Harness effect-authority/idempotency deltas","N-CC-20260809-001"]},
+  "clusters":[
+    {"id":"HF2-C1-COMPILER-SEMANTICS","coverage":["matrixA compiler/runtime/integration","matrixB H-CR-001..016","H-CC-FN-01..05","N-CC-20260809-001","provenance/ambiguous-freeze deltas"],"verdict":"STRENGTHENED_AND_NARROWED","discriminator":"full admitted parser/IR closure + independent semantic oracle + mutation testing"},
+    {"id":"HF2-C2-NUMERIC-IDENTITY","coverage":["numeric identity matrix"],"verdict":"STANDARD_FIRST","discriminator":"RFC8785-compatible domain vs typed extensions"},
+    {"id":"HF2-C3-RESOURCE-LIFETIME","coverage":["matrixA identity/runtime","resource lifetime/ABA matrix"],"verdict":"OPAQUE_LIFETIME_REQUIRED_MECHANISM_OPEN","discriminator":"actual Ubuntu FFI stale/ABA tests"},
+    {"id":"HF2-C4-GWT-FRANK-LOOPS","coverage":["matrixA GWT/FRANK","matrixB H-CR-017..028","GWT-R7-H1..H8"],"verdict":"RECURRENCE_RETAINED_DUAL_GATE_STABILITY_BOUND","discriminator":"fixed vs one-gate vs dual-gate H1 replay with lesions/re-entry"},
+    {"id":"HF2-C5-HIGHER-ORDER-HYPERPOSITION","coverage":["matrixA ClayGraph/Hyperposition","matrixB higher-order/topology","H-EM-20260809-02"],"verdict":"REDUCER_FIRST_WITH_PAIRWISE_FALSE_NEGATIVE_CONTROL","discriminator":"typed reduction vs native n-ary under intervention/replay/joint-information tests"},
+    {"id":"HF2-C6-UNIFIEDDB-INCREMENTAL","coverage":["matrixA UDB","matrixB H-CR-029..038","EXP-CR-002"],"verdict":"LOGICAL_UNITY_AND_ADAPTIVE_INCREMENTAL_CROSSOVER","discriminator":"real sparse-to-dense trace sweep + recovery"},
+    {"id":"HF2-C7-SAFE-EFFECT","coverage":["matrixA safe-effect","matrixB H-CR-039..052","Harness effect-authority/idempotency"],"verdict":"SCOPED_AUTHORITY_FRESHNESS_AND_COMPOSITION_CONTROLS","discriminator":"ambient/FFI/delegation/revocation/idempotency/irreversible-effect matrix"},
+    {"id":"HF2-C8-REPLAY-TRACE","coverage":["H-TR-001..006","matrixA recovery/transfer","Harness ledger deltas"],"verdict":"DUAL_LANE_REPLAY","discriminator":"staged deterministic replay vs outside-in faulting"},
+    {"id":"HF2-C9-RETINA-CONTINUAL","coverage":["matrixA Retina"],"verdict":"PARTIAL_EXTERNAL_ANALOGUE_ONLY","discriminator":"target concept-drift/OOD/backbone/rollback stream"},
+    {"id":"HF2-C10-EMERGENCE","coverage":["matrixA emergence","matrixB H-CR-053","H-EM-20260809-01..06"],"verdict":"CAUSAL_TRIANGULATION_REQUIRED_NO_PROMOTION","discriminator":"common-driver + XOR + rescue + OOD/transfer fixtures"},
+    {"id":"HF2-C11-BASE-APPLICATION-CLOSURE","coverage":["matrixA H-CR-057..060","matrixB H-CR-001..016","H-CC-DB-001..005","H-CC-FN-01..05","EXP-CR-001"],"verdict":"EXECUTION_FIRST_WITH_MINIMAL_GENERIC_REPAIRS","discriminator":"real acceptance-app/cross-branch witness suite"}
+  ],
+  "close_rule":"Commits completed after the hard cutoff are deferred to the next run so the live mesh has a finite reproducible snapshot.",
+  "explicit_inaccessible_scope":"Historical hypotheses not reachable through inherited mapping, direct known paths or bounded commit search remain INACCESSIBLE because the connector cannot recursively enumerate the repository tree.",
+  "promotion":"NONE"
+}

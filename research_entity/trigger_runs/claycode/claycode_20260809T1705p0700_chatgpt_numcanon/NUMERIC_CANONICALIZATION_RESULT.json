@@ -1,0 +1,44 @@
+{
+  "schema_version":"1.0",
+  "experiment":"CC-NUMCANON-LOCAL-20260809-01",
+  "seed":20260809,
+  "runtime":{"python":"3.13.5","node":"v22.16.0"},
+  "corpus":{"float64_raw_bit_patterns":10000,"float_special_cases":10,"integer_edge_cases":9},
+  "observed":{
+    "host_native_json_float_string_mismatches_python_vs_node":204,
+    "candidate_float_token_mismatches_python_vs_node":0,
+    "candidate_integer_token_mismatches_python_vs_node":0
+  },
+  "representative_mismatches":[
+    {"bits":"0000000000000000","python":"0.0","node":"0","candidate":"f64:0000000000000000"},
+    {"bits":"8000000000000000","python":"-0.0","node":"0","candidate":"f64:8000000000000000"},
+    {"bits":"3e7ad7f29abcaf48","python":"1e-07","node":"1e-7","candidate":"f64:3e7ad7f29abcaf48"},
+    {"bits":"4415af1d78b58c40","python":"1e+20","node":"100000000000000000000","candidate":"f64:4415af1d78b58c40"},
+    {"bits":"7ff0000000000000","python":"Infinity","node":"null","candidate":"f64:+inf"},
+    {"bits":"fff0000000000000","python":"-Infinity","node":"null","candidate":"f64:-inf"},
+    {"bits":"7ff8000000000000","python":"NaN","node":"null","candidate":"f64:nan"}
+  ],
+  "integer_counterexamples":[
+    {"value":"9007199254740993","python_json":"9007199254740993","node_number_json":"9007199254740992","node_bigint_json":"ERR:TypeError","candidate":"int:9007199254740993"},
+    {"value":"9223372036854775807","python_json":"9223372036854775807","node_number_json":"9223372036854776000","node_bigint_json":"ERR:TypeError","candidate":"int:9223372036854775807"},
+    {"value":"1000000000000000000000000000123","python_json":"1000000000000000000000000000123","node_number_json":"1e+30","node_bigint_json":"ERR:TypeError","candidate":"int:1000000000000000000000000000123"}
+  ],
+  "candidate_contract":{
+    "contract_hash":"c3167752449b8848ad2f78e9573f8dfbc1108c837ba8754f94e657e8a528f0da",
+    "int":"int:<base10>; exact arbitrary-precision semantic token; lower only to a target integer representation proven exact for the value/range",
+    "f64_finite":"f64:<16-lowerhex-ieee754-bits>",
+    "f64_nan":"f64:nan at semantic-identity boundary",
+    "f64_inf":["f64:+inf","f64:-inf"],
+    "signed_zero":"preserve raw f64 bits",
+    "wire_rule":"host-native JSON number formatting is not semantic-hash material"
+  },
+  "script_sha256":"fcded33ee460d83d34ccf69f400fe68fefe8f98cb49d67231513fa5faf0577d5",
+  "result_sha256":"40af33c7d7980fac12b079a4015033bd49770ad31b06303fff5982141af9499e",
+  "evidence_class":"LOCAL_CROSS_RUNTIME_COMPONENT_EXPERIMENT",
+  "limitations":[
+    "No production G9 parser/compiler was executed.",
+    "No Ubuntu developer-host execution receipt was produced.",
+    "The candidate encoding tests representation identity, not cross-backend floating arithmetic equivalence.",
+    "NaN canonicalization policy remains a semantic decision for executable numeric domains and must not silently erase payloads where payload identity is intentionally observable."
+  ]
+}

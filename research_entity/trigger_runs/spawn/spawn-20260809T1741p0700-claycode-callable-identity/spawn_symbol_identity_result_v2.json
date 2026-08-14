@@ -1,0 +1,72 @@
+{
+  "effect_mutation_binding_stability": {
+    "cases": 50000,
+    "effect_in_binding_stable": 0,
+    "layered_stable": 50000
+  },
+  "hash_sanity": {
+    "repeated_same_preimage": 80471,
+    "true_collisions_observed": 0,
+    "unique_hash_slots": 319529
+  },
+  "method_negative_result": "FIRST_COLLISION_COUNTER_WAS_INVALID_BECAUSE_IT_COUNTED_REPEAT_IDENTICAL_PREIMAGES_AS_COLLISIONS; corrected by retaining hash->preimage map.",
+  "mutation_cases": 50000,
+  "mutation_partition_counts": {
+    "abi:bad_effect_binding:stable": 8388,
+    "abi:binding:stable": 8388,
+    "abi:contract:changed": 8388,
+    "abi:definition:stable": 8388,
+    "abi:type:stable": 8388,
+    "body:bad_effect_binding:stable": 8220,
+    "body:binding:stable": 8220,
+    "body:contract:changed": 8220,
+    "body:definition:changed": 8220,
+    "body:type:stable": 8220,
+    "effects:bad_effect_binding:changed": 8259,
+    "effects:binding:stable": 8259,
+    "effects:contract:stable": 8259,
+    "effects:definition:stable": 8259,
+    "effects:type:stable": 8259,
+    "provenance:bad_effect_binding:stable": 8301,
+    "provenance:binding:stable": 8301,
+    "provenance:contract:changed": 8301,
+    "provenance:definition:stable": 8301,
+    "provenance:type:stable": 8301,
+    "rename:bad_effect_binding:changed": 8407,
+    "rename:binding:changed": 8407,
+    "rename:contract:changed": 8407,
+    "rename:definition:changed": 8407,
+    "rename:type:stable": 8407,
+    "signature:bad_effect_binding:changed": 8425,
+    "signature:binding:stable": 8425,
+    "signature:contract:changed": 8425,
+    "signature:definition:changed": 8425,
+    "signature:type:changed": 8425
+  },
+  "phase_dependency": {
+    "bad_extra_edge": "EffectClosure -> BindingKey",
+    "effect_in_binding_has_cycle": true,
+    "layered_edges": {
+      "BindingKey": ["Resolve"],
+      "CallGraph": ["EffectClosure"],
+      "EffectClosure": ["Lowering"],
+      "Lowering": ["RuntimeInvoke"],
+      "Parse": ["BindingKey", "TypeId"],
+      "Resolve": ["CallGraph", "TypeCheck"],
+      "RuntimeCapabilityContext": ["RuntimeInvoke"],
+      "TypeCheck": ["EffectClosure"],
+      "TypeId": ["TypeCheck"]
+    },
+    "layered_has_cycle": false
+  },
+  "resolver_cases": 20000,
+  "resolver_counts": {
+    "over_add1_OK": 20000,
+    "over_add2_OK": 20000,
+    "over_exact_resolve_ok": 20000,
+    "over_partial_AMBIGUOUS": 20000,
+    "unique_add1_OK": 20000,
+    "unique_add2_DUPLICATE_NAME": 20000
+  },
+  "seed": 20260809
+}

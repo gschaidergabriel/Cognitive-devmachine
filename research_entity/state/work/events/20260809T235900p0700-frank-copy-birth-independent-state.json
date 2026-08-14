@@ -1,0 +1,41 @@
+{
+  "schema_version": "2.0",
+  "event_id": "wev-20260809T235900p0700-frank-copy-birth-independent-state",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T23:59:00+07:00",
+  "payload": {
+    "work_id": "frank-copy-birth-independent-state-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "PROJECT_OWNER_FIXED_ARCHITECTURE_BOUNDARY",
+    "title": "FRANK copy birth: every instantiated copy becomes a new Frank",
+    "contract": "research_entity/global/FRANK_DATABASE_PULSE_CONTRACT.md",
+    "goal": "Implement immutable frank_id/soul_id birth on copy instantiation, preserve parent ancestry and inherited birth snapshot, then force fully independent UnifiedDB/state/Pulse history from first independent Pulse.",
+    "hard_invariants": [
+      "copy_parent_frank_id_differs_from_child_frank_id",
+      "child_has_independent_mutable_state",
+      "parent_and_child_never_share_one_current_authoritative_state",
+      "byte_identical_binary_does_not_imply_same_frank",
+      "byte_identical_birth_snapshot_does_not_imply_same_frank",
+      "copy_knows_parent_and_birth_provenance_when_available",
+      "inter_frank_exchange_is_message_or_explicit_transfer_not_identity_merge",
+      "same_lineage_restore_must_be_receipt-distinguished_from_copy_birth",
+      "identity_uncertain_fails_safe"
+    ],
+    "mandatory_tests": [
+      "instantiate_copy_mints_new_frank_id",
+      "parent_child_initial_state_hash_can_match_at_birth",
+      "first_independent_pulse_diverges_state_epoch",
+      "parent_mutation_does_not_mutate_child",
+      "child_mutation_does_not_mutate_parent",
+      "sibling_isolation",
+      "copy_reports_parent_frank_id_birth_event_source_hash_and_own_current_hash",
+      "self_binary_metadata_is_observed_without_becoming_identity_authority",
+      "restore_same_lineage_vs_copy_birth_discriminator",
+      "copy_delete_does_not_delete_parent_or_sibling"
+    ],
+    "feedback_targets": ["frank","harness","unifieddb","claygraph","claycode","gwt","hyperposition","emergenz"],
+    "authority": "proposal_and_test_until_stage_gate",
+    "status": "READY"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:WORK-SPAWN-C1-UBUNTU-EFFECT-CLOSURE-20260809:capacity-block:20260809T1741p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:41:00+07:00",
+  "payload": {
+    "work_id": "WORK-SPAWN-C1-UBUNTU-EFFECT-CLOSURE-20260809",
+    "reason_clay": {
+      "reason": "Current CAPACITY_STATE marks claude-code-lead research capacity TEMPORARILY_UNAVAILABLE_TOKEN_LIMIT with expected research return 2026-08-11 and an ACTIVE_SEPARATE_LANE to finish Claude Code Harness for Andreas. Current routing rule forbids overlapping assignment until that lane is complete and/or research capacity returns.",
+      "source": "research_entity/rooms/CAPACITY_STATE.json",
+      "rule": "Preserve the target-host experiment as durable next discriminating work, but do not claim or dispatch it as currently executable."
+    },
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE active",
+      "claude-code-lead local research capacity becomes available and non-overlapping lane constraint clears",
+      "latest work specification must be revalidated before effect"
+    ],
+    "invalidators": [
+      "An equal-or-stronger Ubuntu target-host effect-closure execution receipt already completes the same matrix",
+      "Owner changes the Frank v0.1 target host or cancels BASE work"
+    ],
+    "status": "BLOCKED"
+  }
+}

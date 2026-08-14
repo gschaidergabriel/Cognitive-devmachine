@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1743p0700_gwt_adaptive_recurrence",
+  "origin_branch": "gwt",
+  "actor_id": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "registry_ref": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "peer_branches_current": [
+    "clayresearch",
+    "frank",
+    "gwt",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness"
+  ],
+  "coverage": {
+    "clayresearch": {
+      "status": "COVERED_SHARED_MESH_CONTEXT",
+      "refs": [
+        "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+        "research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md",
+        "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"
+      ]
+    },
+    "frank": {
+      "status": "COVERED_DEEP",
+      "refs": [
+        "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+        "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"
+      ]
+    },
+    "gwt": {
+      "status": "COVERED_DEEP",
+      "refs": [
+        "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
+        "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+        "research_entity/global/RAE_GWT_MICROKERNEL.clay",
+        "research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md"
+      ]
+    },
+    "emergenz": {
+      "status": "COVERED_SHARED_MESH_CONTEXT",
+      "refs": [
+        "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+        "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+        "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"
+      ]
+    },
+    "claycode": {
+      "status": "COVERED_DEEP",
+      "refs": [
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      ]
+    },
+    "hyperposition": {
+      "status": "COVERED_SHARED_MESH_CONTEXT",
+      "refs": [
+        "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+        "research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md",
+        "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"
+      ]
+    },
+    "claygraph": {
+      "status": "COVERED_SHARED_MESH_CONTEXT",
+      "refs": [
+        "research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md",
+        "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+        "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"
+      ]
+    },
+    "unifieddb": {
+      "status": "COVERED_SHARED_MESH_CONTEXT",
+      "refs": [
+        "research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md",
+        "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+        "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"
+      ]
+    },
+    "harness": {
+      "status": "COVERED_DEEP",
+      "refs": [
+        "research_entity/harness/HARNESS_WORKSPACE.json",
+        "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+        "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md"
+      ]
+    }
+  },
+  "live_room_check": {
+    "expected_room_state": "research_entity/rooms/rooms/gwt/state/ROOM_STATE.json",
+    "expected_room_descriptor": "research_entity/rooms/rooms/gwt/ROOM.json",
+    "fetch_results": "404_NOT_FOUND_FOR_BOTH",
+    "same_room_worker_assumed": false,
+    "interpretation": "No materialized GWT room state was available at the documented paths during this hosted run; no peer activity was invented."
+  },
+  "preflight": {
+    "required_tool": "tools/research_interconnect_preflight.py",
+    "execution_status": "BLOCKED_GOVERNANCE_DRIFT",
+    "reason": "The current RESEARCH_TRIGGER_REGISTRY names the integrated foundry branch clayresearch, while the preflight PRIORITY tables and related older room/mesh mappings still use legacy clay. The tool explicitly fail-closes when priority branch sets differ from the registry-derived branch set.",
+    "scientific_effect": "Does not invalidate the local GWT hypothesis/synthetic experiment, but prevents claiming a successful canonical interconnect-preflight execution for this run until the governance alias drift is repaired.",
+    "required_repair": "Update interconnect/room governance from legacy clay branch key to current clayresearch semantics, preserving exact 'clay' as entity address, then execute the preflight and attach its generated manifest/receipt."
+  },
+  "cross_branch_dependencies": [
+    "ClayCode must express the typed loop/readout/decision semantics without a semantic redesign unless compilation yields a counterexample.",
+    "Harness H1 is the first admissible live executable discriminator for fixed versus adaptive recurrence on Ubuntu.",
+    "Emergenz must treat loop-regime/readout variables as controls/covariates; recurrence itself is not emergence.",
+    "UnifiedDB/ClayGraph must preserve episode, epoch, topology, decision and replay lineage without turning activation or router decisions into truth/authority."
+  ],
+  "manifest_strength": "MANUAL_CURRENT_MESH_ASSEMBLY_WITH_EXPLICIT_PREFLIGHT_BLOCKER",
+  "promotion_allowed": false
+}

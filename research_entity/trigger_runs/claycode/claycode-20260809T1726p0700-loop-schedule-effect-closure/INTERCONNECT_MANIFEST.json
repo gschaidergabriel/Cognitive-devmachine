@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode-20260809T1726p0700-loop-schedule-effect-closure",
+  "trigger": "claycode",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "registry_scientific_branches": ["clayresearch", "gwt", "frank", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "branch_priority": ["frank", "harness", "claygraph", "unifieddb", "clayresearch", "gwt", "hyperposition", "emergenz", "claycode"],
+  "special_rules": {
+    "claycode_requires_latest_frank_research_as_primary_feedback": true,
+    "claycode_requires_deep_claygraph_input": true,
+    "claycode_requires_deep_unifieddb_input": true,
+    "claycode_requires_goodman_anti_echo_review": true,
+    "claycode_latest_frank_architecture_artifact": null
+  },
+  "branches": [
+    {"branch": "frank", "latest_run": "research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md", "input": "FRANK loop-of-loops research note + mesh feedback", "result": "REFINED: loop-of-loops does not imply first-class loop syntax; schedule/update policy must be explicit"},
+    {"branch": "harness", "input": "current BASE/H1 staged contract + loop mesh feedback", "result": "NEXT TEST: Ubuntu H1/H2 replay should compare synchronous snapshot vs ordered sequential semantics and preserve receipts"},
+    {"branch": "claygraph", "input": "moving-stack ClayGraph base+migration+frontier and loop mesh feedback", "result": "REFINED: topology membership may be set-like but executable schedule order is separate derived/execution semantics"},
+    {"branch": "unifieddb", "input": "moving-stack UnifiedDB V4-V9 + loop mesh feedback", "result": "REFINED: deterministic replay must persist schedule/update policy and ordered schedule where sequential"},
+    {"branch": "clayresearch", "input": "current moving stack epoch 17 + loop-of-loops shared mission", "result": "NO_CORE_CHANGE; explicit scheduling semantics supports shared semantic fabric"},
+    {"branch": "gwt", "input": "current GWT readout contract via moving stack", "result": "NO_CHANGE; recurrence schedule semantics remains distinct from ignition/emergence"},
+    {"branch": "hyperposition", "input": "current Hyperposition readout via moving stack + loop mesh feedback", "result": "REFINED: alternative schedules may coexist as candidates, selected executable schedule must remain explicit"},
+    {"branch": "emergenz", "input": "current emergence controls via moving stack + loop mesh feedback", "result": "NO_CHANGE; recurrence/order sensitivity is not emergence evidence"},
+    {"branch": "claycode", "input": "G9 V3, grammar, release workspace, parser/function-closure runs", "result": "DELTA: ORDERED_SEQUENTIAL schedule identity + transitive effect closure prioritized before new loop syntax"}
+  ],
+  "coverage": "ALL_9_REGISTERED_BRANCHES",
+  "independent_replication_created_by_mesh_reuse": false,
+  "preflight_note": "The current tools/research_interconnect_preflight.py priority table still names legacy branch 'clay' while RESEARCH_TRIGGER_REGISTRY.json now registers 'clayresearch'. The script therefore has governance-drift risk until updated; this manifest is materialized against the current registry names and checker schema."
+}

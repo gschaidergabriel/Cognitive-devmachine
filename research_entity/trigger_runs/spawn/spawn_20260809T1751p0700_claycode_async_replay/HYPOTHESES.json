@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn_20260809T1751p0700_claycode_async_replay",
+  "hypotheses":[
+    {
+      "id":"H-SPAWN-ASYNC-001",
+      "status":"OPEN_PROXY_SUPPORTED",
+      "claim":"ClayCode concurrency should be deterministic-by-default for race-free semantic effects, while intentional schedule-dependent choices are explicit typed nondeterminism captured by replayable ChoiceReceipts rather than hidden scheduler behavior.",
+      "mechanism":["type/effect checker proves noninterference or requires explicit synchronization/nondeterminism","stable semantic task identity is independent of physical worker/schedule","race/select winner becomes a typed ChoiceReceipt consumed during replay"],
+      "prediction":"Schedule perturbation cannot change semantic state for statically noninterfering tasks; intentional races replay identically when their ChoiceReceipts are supplied.",
+      "falsifier":"A production ClayCode program with noninterfering declared effects changes semantic output solely due to schedule, or a complete valid ChoiceReceipt fails to reproduce the selected semantic branch under the production runtime."
+    },
+    {
+      "id":"H-SPAWN-ASYNC-002",
+      "status":"OPEN_PROXY_SUPPORTED",
+      "claim":"Cancellation must be a first-class state transition with explicit cancellation points/safety metadata; implicit future/task drop is insufficient for replayable effect semantics.",
+      "mechanism":["ACTIVE->CANCEL_REQUESTED->CANCEL_ACK|COMPLETED_BEFORE_ACK->TERMINAL","cancel-safe operations may restart without semantic loss","cancel-unsafe regions require rollback/transaction/cleanup or an explicit boundary"],
+      "prediction":"Cancel/retry tests around effect boundaries remain replay-equivalent only when cancellation state and effect commitment are separately receipted.",
+      "falsifier":"Production cancel/retry across all required APP-04 and FRANK operations is replay-equivalent and effect-safe without any explicit cancellation state/safety contract."
+    },
+    {
+      "id":"H-SPAWN-ASYNC-003",
+      "status":"OPEN_PROXY_SUPPORTED",
+      "claim":"External effects require stable semantic EffectIntent identity and idempotency/deduplication at the authority gateway; execution-attempt identity must remain separate.",
+      "mechanism":["EffectIntent carries task/resource/capability/base-epoch/idempotency identity","authority is checked at commit/effect time","EffectOutcome records committed result/epoch","retries reuse semantic intent identity but receive new attempt identity"],
+      "prediction":"A retry after an uncertain prior commit cannot duplicate a gateway-deduplicable effect when the semantic intent id is stable.",
+      "falsifier":"A production gateway with stable semantic intent identity and compliant adapter still duplicates a supposedly deduplicable effect, or the identity scheme conflates distinct intended effects."
+    },
+    {
+      "id":"H-SPAWN-ASYNC-004",
+      "status":"OPEN",
+      "claim":"A globally fixed deterministic polling/scheduler order should be a test/debug mode, not ClayCode's sole production concurrency semantics, because it can alter fairness/liveness while still appearing replay-stable.",
+      "prediction":"Fairness-sensitive workloads show starvation/liveness degradation under fixed biased ordering that is absent under fair/randomized or host scheduling with receipts.",
+      "falsifier":"The production workload suite demonstrates fixed deterministic ordering preserves all required fairness/liveness properties without special-case branch ordering."
+    }
+  ],
+  "counterhypotheses":[
+    {"id":"CH-1","claim":"A globally deterministic scheduler alone is sufficient; ChoiceReceipts are unnecessary.","result":"WEAKENED_BY_PROXY_AND_EXTERNAL_SYSTEMS","reason":"Fixed order can starve fairness-sensitive branches; external completion order still exists on real hosts. Deterministic simulation remains useful as a test mode."},
+    {"id":"CH-2","claim":"Event history replay alone is sufficient; static effect/noninterference restrictions are unnecessary.","result":"WEAKENED","reason":"History can reproduce a selected order but does not prevent unintended race-sensitive semantics. Effect checking can reject or surface those races before execution."},
+    {"id":"CH-3","claim":"All race-dependent constructs should be forbidden.","result":"WEAKENED","reason":"Timeouts, first-response wins, cancellation and external readiness require intentional nondeterminism; explicit safe nondeterminism is more expressive."},
+    {"id":"CH-4","claim":"Runtime cancellation can remain an implementation detail.","result":"WEAKENED","reason":"Cancellation can occur after partial progress/effects, so replay and retries need explicit semantics."},
+    {"id":"CH-5","claim":"The runtime can promise universal exactly-once external effects.","result":"NOT_SELECTED","reason":"Arbitrary external systems may not support transactional/idempotent effects. The safer contract is explicit intent identity, dedup where supported, outcome receipts, and no universal exactly-once claim."}
+  ],
+  "semantic_change_decision":"NO_NEW_SURFACE_SYNTAX_JUSTIFIED_YET",
+  "implementation_direction":"First encode TaskSpawn, ChoiceReceipt, CancelTransition, EffectIntent and EffectOutcome as canonical IR/runtime contracts and compiler metadata. Add surface syntax only if production application counterexamples require it."
+}

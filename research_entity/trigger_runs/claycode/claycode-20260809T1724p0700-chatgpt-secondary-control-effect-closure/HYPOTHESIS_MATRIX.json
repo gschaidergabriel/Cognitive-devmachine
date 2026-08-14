@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure",
+  "hypotheses":[
+    {"id":"H-CC-CF-20260809-01","status":"OPEN","claim":"Existing G9 surface plus canonical typed IR nodes for conditional control, recursive call, Result-like structured failure and pattern match can close the next general-purpose control-flow gap without a FRANK-specific primitive.","support":"50,000 local randomized differential cases, 0 mismatches in a pure bounded subset.","falsifier":"Production parser/IR/lowering needs a new primitive to express a required app/FRANK control-flow case."},
+    {"id":"H-CC-EFF-20260809-02","status":"OPEN","claim":"Function effects should be a transitive fixed-point summary over the call graph and undeclared transitive effects should fail type/effect checking.","support":"20,000 randomized effect-graph mutation cases, 0 false accepts.","falsifier":"A sound production effect system achieves equal or better safety/repair cost without transitive function summaries."},
+    {"id":"H-CC-AUTH-20260809-03","status":"OPEN","claim":"Potential-effect summaries must not mint execution authority; runtime EffectPermit/capability validation remains external and fail-closed, including across recursion/re-entry.","support":"Effectful wrapper statically valid but runtime call without permit rejected; with matching permit succeeded.","falsifier":"Target-host sandbox/FFI proof demonstrates safe authority closure with no distinct runtime authorization identity."},
+    {"id":"H-CC-ID-20260809-04","status":"OPEN","claim":"Control/effect meaning belongs in program semantic identity, while runtime permit/attempt identity belongs outside the program semantic hash and inside contract/execution receipts.","support":"Candidate canonical hash stable for set-order-equivalent effect declarations and changed for control/effect semantic mutations; Harness independently distinguishes semantic/version/trace identities within shared project ancestry.","falsifier":"Production differential replay requires authority-instance identity inside program semantic hash to preserve meaning."}
+  ]
+}

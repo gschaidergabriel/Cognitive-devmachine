@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-CC-G9-GRAMMAR-REPAIR-20260809",
+  "hypothesis_ref": "H-CC-BASE-GRAMMAR-001",
+  "source": "cycle(input,node){\n  residual=cognitive_choice(input)\n  if residual.effect {receipt=Needle.execute(residual)}\n}",
+  "source_sha256": "dcbeef52a2e2521eb4932bac141ef830368bec70b73fbc5b8dae6587f9f91fe9",
+  "base_grammar_ref": "research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3 structural subset",
+  "candidate": "CC-G9-GRAMMAR-REPAIR-CANDIDATE-v0.1",
+  "runtime": {"python":"3.13.5","platform":"Linux-6.18.35-x86_64-with-glibc2.41","parser":"lark"},
+  "base_parse": {"accepted":false,"error_class":"UnexpectedToken","message":"Unexpected token LBRACE at the conditional block."},
+  "repaired_parse": {"accepted":true,"canonical_tree_sha256":"6fc4d95f286d498885d0e464da675bd4068158cf0734d6876162161fbfea86f0"},
+  "lowering": {
+    "target":"Python 3 host proxy on Linux",
+    "generated_sha256":"9b414a7f0858bc15c10706868d04aad3d907fea5b5b23f11d6300ead3496b01f",
+    "negative_case":{"effect":false,"receipt":null},
+    "positive_case":{"effect":true,"receipt":{"executed":true,"payload":"POS"}},
+    "effect_calls":["POS"],
+    "semantic_oracle":{"negative_must_not_execute":true,"positive_executes_once":true},
+    "pass":true
+  },
+  "failure_classification":"CURRENT_EBNF_COVERAGE_GAP",
+  "interpretation":"A minimal conditional grammar/parser repair is sufficient for this tested fragment; no new semantic authority primitive is required by the fragment.",
+  "scope":"Only cycle/assignment/if/call subset. This does not prove full ClayCode compiler, type/effect system, ABI, FFI or authority model completeness."
+}

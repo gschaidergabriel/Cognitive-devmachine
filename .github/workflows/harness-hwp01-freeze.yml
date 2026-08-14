@@ -1,0 +1,101 @@
+name: Harness H-WP-01 Architecture Freeze
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/harness-hwp01-freeze.yml'
+      - 'research_entity/harness/reference/hwp01_freeze_compiler.py'
+      - 'research_entity/harness/tests/test_hwp01_freeze_compiler.py'
+      - 'research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/SOURCE_LOCK.json'
+      - 'research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FINAL_REPORT.md'
+      - 'research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json'
+      - 'research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md'
+      - 'research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md'
+      - 'research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md'
+      - 'research_entity/trigger_runs/gwt/gwt-20260809T1732p0700-chatgpt-secondary-r8-trajectory-capacity/FINAL_REPORT.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile component
+        run: |
+          python -m py_compile \
+            research_entity/harness/reference/hwp01_freeze_compiler.py \
+            research_entity/harness/tests/test_hwp01_freeze_compiler.py
+
+      - name: Run regression tests
+        run: |
+          python -m unittest discover \
+            -s research_entity/harness/tests \
+            -p 'test_hwp01_freeze_compiler.py' \
+            -v |& tee /tmp/hwp01-tests.log
+
+      - name: Build exact source-locked freeze
+        run: |
+          RUN_DIR=research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze
+          python research_entity/harness/reference/hwp01_freeze_compiler.py build \
+            --root . \
+            --source-lock "$RUN_DIR/SOURCE_LOCK.json" \
+            --output "$RUN_DIR/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json" \
+            | tee /tmp/hwp01-build.json
+          python research_entity/harness/reference/hwp01_freeze_compiler.py verify \
+            --root . \
+            "$RUN_DIR/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json" \
+            | tee /tmp/hwp01-verify.json
+
+      - name: Write execution receipt
+        env:
+          RUN_ID: harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze
+        run: |
+          python - <<'PY'
+          import json, os, platform
+          from pathlib import Path
+          run_dir=Path('research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze')
+          build=json.loads(Path('/tmp/hwp01-build.json').read_text())
+          verify=json.loads(Path('/tmp/hwp01-verify.json').read_text())
+          receipt={
+            'schema_version':'1.0',
+            'run_id':os.environ['RUN_ID'],
+            'execution_class':'GITHUB_ACTIONS_UBUNTU_REPO_CHECKOUT',
+            'source_commit':os.environ.get('GITHUB_SHA'),
+            'runner_os':os.environ.get('RUNNER_OS'),
+            'python':platform.python_version(),
+            'checks':{
+              'py_compile':'PASS',
+              'unit_regressions':{'result':'PASS','count':4},
+              'source_locked_build':build,
+              'freeze_verify':verify,
+            },
+            'evidence_boundary':'Repository checkout CI component evidence; not Andreas target-host H1 release evidence and not live FRANK evidence.',
+            'h1_release_gate':'NOT_PASS',
+            'canonical_promotion':'NONE'
+          }
+          (run_dir/'EXECUTION_RECEIPT_CI.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+
+      - name: Persist generated freeze and receipt
+        run: |
+          RUN_DIR=research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$RUN_DIR/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json" "$RUN_DIR/EXECUTION_RECEIPT_CI.json"
+          if git diff --cached --quiet; then
+            echo 'No generated changes.'
+          else
+            git commit -m 'harness: materialize H-WP-01 repo-native architecture freeze'
+            git push
+          fi

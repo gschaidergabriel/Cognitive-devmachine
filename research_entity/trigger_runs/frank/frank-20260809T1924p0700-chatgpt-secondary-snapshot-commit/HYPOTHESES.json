@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1924p0700-chatgpt-secondary-snapshot-commit",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "hypotheses": [
+    {
+      "id":"H-FRANK-1924-A",
+      "claim":"Separating cognition snapshot lifetime from the effect commit transaction and revalidating in a fresh commit transaction reduces stale-effect and lock-upgrade failure risk versus attempting to upgrade a long-lived cognition read snapshot.",
+      "status":"SUPPORTED_BY_SQLITE_RUNTIME_PROXY_NOT_TARGET_VALIDATED",
+      "falsifier":"Matched Ubuntu H1 workloads show no stale-snapshot/lock benefit or show materially worse correctness/latency/recovery than a simpler transaction design."
+    },
+    {
+      "id":"H-FRANK-1924-B",
+      "claim":"Effect-relevant dependency-closure revalidation can reduce false aborts versus whole-global-epoch invalidation while preserving rejection when state used by the effect has changed.",
+      "status":"SUPPORTED_BY_CONSTRUCTED_WORKLOAD_OPEN_FOR_H1",
+      "falsifier":"Real H1 traces show relevant dependency discovery is incomplete, closure maintenance costs dominate, or whole-epoch invalidation has equivalent user-visible cost."
+    },
+    {
+      "id":"H-FRANK-1924-C",
+      "claim":"FRANK recurrence experiments should separate loop trajectory formation from halt/readout selection, using fixed/external budget trajectories and post-hoc readouts as a mandatory baseline before selecting an end-to-end learned halt controller.",
+      "status":"EXTERNAL_LITERATURE_SUPPORTED_GENERAL_MECHANISM_FRANK_OPEN",
+      "falsifier":"Matched H1 experiments show an end-to-end learned halt gate improves verified outcome per compute without trajectory distortion or shallow-halt failure relative to decoupled baselines."
+    },
+    {
+      "id":"H-FRANK-1924-D",
+      "claim":"A bounded ActiveAssembly with provenance/conflict preservation and re-expansion references can deliver better local-4B future-task utility per context/KV cost than naive summaries, full-context forcing, or retrieval-only baselines.",
+      "status":"EXECUTABLE_REFERENCE_SLICE_EXISTS_OUTCOME_BENCHMARK_OPEN",
+      "falsifier":"Matched long-horizon H1/4B traces show catastrophic omission, higher correction recurrence, or no cost-adjusted utility advantage versus simpler context strategies."
+    },
+    {
+      "id":"H-FRANK-1924-E",
+      "claim":"Needle should be evaluated as a staged proposal boundary: no-tool/necessity gate -> tool-positive candidate retrieval -> generative tool/arg proposal -> structural validation -> deterministic capability/effect gateway. The current contrastive head must not be treated as the no-tool oracle.",
+      "status":"SUPPORTED_BY_CURRENT_NEEDLE_CODE_ANALYSIS_COMPONENT_OPEN",
+      "falsifier":"A retrained unified selector with an explicit no-tool representation beats the staged design on calibrated no-tool/tool accuracy, latency, adversarial robustness and abstention without weakening authority boundaries."
+    },
+    {
+      "id":"H-FRANK-1924-F",
+      "claim":"Timing-sensitive causal tests need observation configuration in execution identity when probe overhead is non-negligible relative to decision/re-entry slack.",
+      "status":"SYNTHETIC_AND_EXTERNAL_SYSTEMS_SUPPORTED_H1_OPEN",
+      "falsifier":"Matched Ubuntu H1 low/no/full instrumentation arms show paired semantic trajectories and causal readouts remain within preregistered equivalence tolerances."
+    },
+    {
+      "id":"H-FRANK-1924-G",
+      "claim":"Slow semantic/topology promotion should distinguish independent ancestry from repeated source/re-entry echo, but provenance-diversity gating must be compared against simpler robust source weighting because it can slow genuine reversal.",
+      "status":"SYNTHETIC_RAB_SUPPORTED_OPEN_HOLD",
+      "falsifier":"Simpler source weighting matches echo resistance with lower reversal lag, or provenance-family identity is too noisy/spoofable to improve real H1 outcomes."
+    },
+    {
+      "id":"H-FRANK-1924-H",
+      "claim":"H3 can collapse H1 diagnostic modules into one binary without collapsing authority semantics if a logical cognitive proposal barrier and a deterministic runtime capability/commit barrier remain non-bypassable and differential-tested.",
+      "status":"ARCHITECTURE_HYPOTHESIS_OPEN",
+      "falsifier":"One-binary consolidation introduces bypass, fault-containment, recovery or tail-latency regressions that are prevented by a physically isolated boundary."
+    }
+  ],
+  "counterhypotheses": [
+    "A conventional persistent event-driven architecture with bounded retrieval and a deterministic effect gateway is sufficient; FRANK-specific GWT/loop machinery adds no net value.",
+    "Whole-epoch invalidation is operationally simpler and cheap enough that dependency-closure revalidation complexity is not justified.",
+    "End-to-end learned halting outperforms trajectory/readout decoupling once trained on real FRANK data.",
+    "Raw retrieval/reranking with larger context beats ActiveAssembly because assembly compression omits future-critical information.",
+    "A retrained unified Needle no-tool/tool selector is better than staged routing.",
+    "Observer effect is negligible on the target Ubuntu runtime and requires only a one-time NO_CHANGE calibration receipt.",
+    "Provenance-family metadata is too noisy or gameable; context-aware scalar weighting is sufficient.",
+    "A one-binary authority barrier is too weak against implementation bugs and effect execution must remain physically isolated."
+  ],
+  "promotion":"NONE"
+}

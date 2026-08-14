@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "request_mode": "explicit_spawn_extreme_deep_and_long",
+  "rng": {
+    "procedure": "OS CSPRNG via Python secrets.SystemRandom.random() in current worker sandbox",
+    "draw": 0.539641,
+    "distribution": [
+      ["claycode",0.50],["harness",0.10],["frank",0.10],["gwt",0.06],["emergenz",0.06],["hyperposition",0.05],["claygraph",0.05],["unifieddb",0.04],["clayresearch",0.04]
+    ],
+    "selected_origin_branch": "harness",
+    "selection_interval": "[0.50,0.60)"
+  },
+  "recent_duplicate_check": {
+    "method": "current workspace/live claim + recent repository commit reread",
+    "avoid": "H-WP-02 STATE-LEDGER already actively claimed; do not duplicate it",
+    "newest_material_noted": ["typed ClayCode IR/native differential", "integrated BASE effect pipeline", "current-target H1 refreeze candidate", "Needle strict validator work"]
+  },
+  "candidate_microdirections": [
+    {"id":"C1","name":"Receipt-Sealed Determinism Boundary","prediction":"H1/H2 semantic replay can remain exact if every semantic nondeterministic input is sealed while execution-only metadata is separated.","affected":["harness","claycode","frank","unifieddb","gwt","claygraph","emergenz"]},
+    {"id":"C2","name":"Mixed-Epoch ActiveAssembly Barrier","prediction":"Rejecting mixed partial epochs eliminates a class of replay/context coherence failures.","affected":["harness","unifieddb","claygraph","frank"]},
+    {"id":"C3","name":"Observer-Effect Trace Budget","prediction":"Low-intrusion receipts preserve causal trajectories better than full synchronous instrumentation at lower p99 cost.","affected":["harness","gwt","emergenz"]},
+    {"id":"C4","name":"Semantic-vs-Execution Identity Split","prediction":"Separate hashes prevent false H1/H2 divergence from retries/latency without hiding semantic change.","affected":["harness","claycode","unifieddb"]},
+    {"id":"C5","name":"External Commit Ambiguity Fence","prediction":"Exactly-once recovery requires dedupe/queryable outcomes or an explicit COMMIT_UNKNOWN state across the commit/receipt crash window.","affected":["harness","claycode","frank","unifieddb"]},
+    {"id":"C6","name":"Derived-Topology Replay Commutation","prediction":"H3 can omit persistent ClayGraph if equivalent dynamic topology is deterministically derivable from identical canonical state/receipt inputs.","affected":["harness","claygraph","unifieddb","hyperposition"]}
+  ],
+  "selected_microdirection": "C1",
+  "selection_reason": "Highest immediate information gain across active BASE ClayCode and current H1 refreeze without duplicating the active H-WP-02 ledger claim; directly executable with synthetic discrimination and external systems precedents.",
+  "status": "RESEARCH_EXECUTED"
+}

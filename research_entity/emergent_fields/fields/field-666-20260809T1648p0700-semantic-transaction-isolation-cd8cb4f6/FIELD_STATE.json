@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0",
+  "field_id": "field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6",
+  "name": "Semantic Transaction Isolation for Cognitive State",
+  "spawn_seed": 14811412243250910653,
+  "spawn_seed_material_sha256": "cd8cb4f604d795bd715552f374e91d7c0df5b54b1f82a39b609519b8d760d630",
+  "created_at": "2026-08-09T16:48:00+07:00",
+  "spawning_run_id": "666-20260809T1648p0700-chatgpt-secondary-sti",
+  "trigger": "666",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "milestone_at_spawn": "BASE_CLAYCODE_RELEASE",
+  "role": "SOLO_RESEARCHER",
+  "lens": [
+    "database/transaction theory",
+    "event sourcing",
+    "programming-language effect systems",
+    "multi-agent concurrency"
+  ],
+  "lifecycle_state": "INTEGRATED",
+  "recent_field_duplication_check": [
+    "proof-carrying adaptive state",
+    "perceptual cache coherence",
+    "re-entry causal identifiability",
+    "memory reconsolidation shock",
+    "conformal familiarity metrology"
+  ],
+  "research_question": "Can authoritative FRANK/Clay multi-field state remain replay-safe under concurrent learning, correction, rollback and effect paths using only per-field atomics, or is snapshot/transaction isolation required at invariant boundaries?",
+  "hypotheses": [
+    {
+      "id": "H-STI-01",
+      "status": "SUPPORTED_WORKING_HYPOTHESIS",
+      "claim": "Authoritative multi-field cognitive state that participates in one invariant must be observed/committed through a snapshot-consistent or equivalent serializable boundary; per-field atomics alone admit fractured states.",
+      "evidence": [
+        "EXP-STI-01"
+      ],
+      "falsifier": "Show an implementation using only per-field atomic operations that preserves the same cross-field invariants and deterministic replay under exhaustive concurrency schedules without global serialization."
+    },
+    {
+      "id": "H-STI-02",
+      "status": "OPEN",
+      "claim": "The current ClayCode language likely does not require a new transaction syntax primitive; a typed runtime/ABI/stdlib transaction contract may satisfy the need while preserving the less-change-more-compile rule.",
+      "evidence": [
+        "current ClayCode acceptance contract already requires concurrency/atomics, FFI, capability/effect gateway and DB service execution"
+      ],
+      "falsifier": "Produce a real ClayCode/FRANK program that cannot express or safely lower the required transaction semantics through existing semantic/effect primitives plus typed runtime ABI."
+    },
+    {
+      "id": "H-STI-03",
+      "status": "OPEN",
+      "claim": "Consequential effect commits should bind to a state transaction/snapshot receipt so an effect cannot commit against stale authoritative state after concurrent cognitive-state mutation.",
+      "evidence": [
+        "EXP-STI-02 lost-update mechanism + Harness effect/outcome/re-entry authority boundary"
+      ],
+      "falsifier": "Demonstrate a target harness protocol that prevents all stale-state effect commits under concurrency without binding commit to an equivalent state version/read-set guard."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-STI-01",
+      "status": "OPEN",
+      "claim": "A single-threaded deterministic scheduler around all authoritative cognitive state can eliminate the need for transaction isolation.",
+      "next_test": "Benchmark semantic correctness and latency/throughput against snapshot transactions on H1/H2 workloads."
+    },
+    {
+      "id": "CH-STI-02",
+      "status": "OPEN",
+      "claim": "Actor-style ownership/partitioning can make most state updates conflict-free, requiring transactions only for small invariant groups.",
+      "next_test": "Classify FRANK state by ownership and enumerate cross-owner invariants."
+    },
+    {
+      "id": "CH-STI-03",
+      "status": "OPEN",
+      "claim": "Derived non-authoritative state such as caches/activation can remain eventually consistent if epoch-tagged and excluded from authority decisions.",
+      "next_test": "Lesion delayed derived-state refresh and verify authoritative outcomes/replay remain invariant."
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "EXP-STI-01",
+      "evidence_class": "EXACT_SYNTHETIC_MECHANISM_EXPERIMENT",
+      "method": "Exhaustively enumerate all 20 order-preserving interleavings of a 3-step writer upgrading prototype_version, calibration_version and active_version from 5 to 6 and a 3-step reader observing the same fields.",
+      "result": {
+        "total_interleavings": 20,
+        "serially_consistent_snapshots": 10,
+        "fractured_snapshots": 10,
+        "fractured_rate": 0.5
+      },
+      "interpretation": "Per-field atomicity does not imply invariant-level snapshot consistency."
+    },
+    {
+      "experiment_id": "EXP-STI-02",
+      "evidence_class": "EXACT_SYNTHETIC_MECHANISM_EXPERIMENT",
+      "method": "Exhaustively enumerate all 6 order-preserving interleavings of two read-then-write transactions on one versioned object. Compare naive last-write-wins with compare-and-swap commit guard.",
+      "result": {
+        "total_interleavings": 6,
+        "overlapping_read_interleavings": 4,
+        "naive_lost_update_interleavings": 4,
+        "cas_conflicts_detected": 4,
+        "serial_interleavings": 2
+      },
+      "interpretation": "Version-guarded commit converts overlapping stale writes into explicit conflicts rather than silent lineage loss."
+    }
+  ],
+  "external_evidence": [
+    {
+      "source": "Berenson et al., A Critique of ANSI SQL Isolation Levels, MSR-TR-95-51 (1995)",
+      "class": "PRIMARY_RESEARCH",
+      "relevance": "Defines snapshot isolation and documents that weaker isolation descriptions miss important anomalies."
+    },
+    {
+      "source": "PostgreSQL 16 transaction isolation documentation",
+      "class": "PRIMARY_IMPLEMENTATION_DOCUMENTATION",
+      "relevance": "Serializable isolation aims to make committed concurrent executions equivalent to some serial order and surfaces serialization failures requiring retry."
+    }
+  ],
+  "cross_connections": [
+    {
+      "branch": "claycode",
+      "delta": "Add transaction/snapshot receipt requirements to CC-WP-07 runtime ABI/FFI and CC-WP-09 concurrency-memory tests; do not add new language syntax unless an executable counterexample proves runtime/stdlib lowering insufficient."
+    },
+    {
+      "branch": "unifieddb",
+      "delta": "Prioritize invariant-group transaction/effect atomicity, exact snapshots, conflict receipts and replay under concurrent updates; distinguish authoritative transactional state from epoch-tagged rebuildable derivatives."
+    },
+    {
+      "branch": "harness",
+      "delta": "Add exhaustive/minimized race tests for fractured snapshots, lost updates, stale snapshot effect commit, retry/serialization failure, crash between state commit and effect/outcome/re-entry."
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "N-STI-01",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Per-field atomics alone are insufficient for the tested three-field invariant: exactly half of legal reader/writer interleavings produced a state tuple impossible as a single committed version."
+    },
+    {
+      "id": "N-STI-02",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Naive last-write-wins on versioned concurrent read-modify-write is not lineage-safe: 4/6 legal interleavings silently lose one update."
+    }
+  ],
+  "implementation_recommendation": {
+    "decision": "ROUTE_AS_RUNTIME_ABI_AND_TEST_OBLIGATION_NOT_LANGUAGE_REDESIGN",
+    "minimal_contract": [
+      "txn_id/attempt",
+      "snapshot_epoch or read-set object versions",
+      "write-set",
+      "invariant group identity",
+      "capability/effect intents",
+      "commit guard",
+      "outcome COMMITTED|SERIALIZATION_CONFLICT|ABORTED",
+      "pre/post canonical state hashes",
+      "retry/replay receipt"
+    ],
+    "authority_rule": "Transaction expressibility does not grant effect authority; external effects still require the existing capability/commit gateway."
+  },
+  "result": "SUPPORTED_WORKING_HYPOTHESIS_WITH_EXACT_SYNTHETIC_COUNTEREXAMPLE_ROUTED_TO_MESH_NOT_PROMOTED",
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "hidden_chain_of_thought_stored": false
+  },
+  "report_ref": "research_entity/trigger_runs/666/666-20260809T1648p0700-chatgpt-secondary-sti/FINAL_REPORT.md",
+  "experiment_ref": "research_entity/emergent_fields/fields/field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6/EXPERIMENT_RESULTS.json",
+  "cross_room_event_ref": "research_entity/rooms/rooms/center/events/delta-666-20260809T1648p0700-semantic-transaction-isolation.json"
+}

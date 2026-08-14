@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T111551Z",
+  "review_scope": "ClayCode atomic CAS semantic identity / ABA / retry identity",
+  "frank_derived_semantic_assumption_promoted": false,
+  "shared_ancestry_collapsed": true,
+  "items": [
+    {
+      "assumption": "Frank/UnifiedDB/Harness need stable versioned semantic identity across concurrent state transitions.",
+      "origin": "shared Frank-ClayCode-Harness-UnifiedDB architecture lineage",
+      "verdict": "INDEPENDENTLY_REFINED",
+      "independent_discriminator": "Rust official compare_exchange ABA warning plus deterministic 200000-case ABA executable discriminator",
+      "result": "The stronger mechanism-level statement is narrower: value equality is insufficient identity when the state contract allows A->B->A; version/epoch binding or an equivalent anti-ABA mechanism is required for that class."
+    },
+    {
+      "assumption": "Replay requires deterministic treatment of atomic concurrency.",
+      "origin": "recent ClayCode async-replay lineage",
+      "verdict": "INDEPENDENTLY_REFINED",
+      "independent_discriminator": "weak-CAS retry identity fuzz plus C11 and ECMAScript concurrent CAS execution",
+      "result": "Stable semantic op/outcome identity can coexist with backend- and contention-dependent physical retry traces; retry count is not default semantic state."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "counterhypothesis": "Atomicity alone prevents stale state transitions.",
+      "result": "COUNTEREXAMPLE_FOUND",
+      "detail": "A->B->A restores the compared value and lets a stale value-only CAS succeed."
+    },
+    {
+      "counterhypothesis": "Every weak-CAS physical attempt must enter semantic hash identity.",
+      "result": "COUNTEREXAMPLE_FOUND",
+      "detail": "The same intended semantic operation retained one semantic hash across 16 valid retry-count variants; real C11 and Node runs reached identical exact totals with differing retry counts."
+    },
+    {
+      "counterhypothesis": "SeqCst-only should be promoted as permanent ClayCode law now.",
+      "result": "NOT_ESTABLISHED",
+      "detail": "SeqCst is retained only as an OPEN BASE-portable default candidate. No multi-architecture production benchmark yet justifies forbidding weaker explicit orderings permanently."
+    }
+  ],
+  "concurrent_head_assimilation": {
+    "material_new_work_seen": [
+      "ClayCode Unicode canonical-boundary spawn",
+      "ClayCode keyword-partition spawn",
+      "ClayCode HTTP/SQLite spawn",
+      "Harness visual-action closure spawn",
+      "Emergenz observer/probe-effect spawn",
+      "hypofusion r3 late-arrival synthesis"
+    ],
+    "duplicate_atomic_cas_aba_run_found": false,
+    "contradiction_with_atomic_cas_finding": "NONE_FOUND"
+  },
+  "overall_verdict": "REFINED_NO_PROMOTION",
+  "authority_boundary": "Frank remains a separate research subject; this review creates no Frank self-Harness authority."
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "event_id": "work-create-frank-bug-feedback-deploy-20260809",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:20:00+07:00",
+  "payload": {
+    "work_id": "work:deploy-frank-bug-feedback-ubuntu",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "PROJECT_OWNER_DIRECTIVE",
+    "title": "Deploy exact bug feedback channel on Andreas Ubuntu Frank",
+    "work_clay": {
+      "task": "On the real Ubuntu developer host, update both Frank and Clay checkouts; apply Frank UnifiedDB V13 under Research-Entity/installer authority; configure and enable the Clay-owned frank bug ingest watcher; execute an end-to-end test Andreas-question -> Frank-answer -> exact bug -> Frank DB/export -> Clay DB READY work item; preserve Frank self-Harness proposal-only boundary.",
+      "frank_repo": "gschaidergabriel/frankv0.1",
+      "clay_repo": "gschaidergabriel/clay-global-research-entity"
+    },
+    "reason_clay": {
+      "owner_directive": "Andreas exact bug must automatically send the preceding Frank exchange to research.",
+      "repo_implementation_committed": true,
+      "live_host_receipt_missing": true
+    },
+    "completion_clay": {
+      "required": [
+        "Frank V13 migration PASS on actual canonical state",
+        "bug prompt hook active",
+        "last valid Frank output capture active",
+        "Clay watcher active",
+        "end-to-end bug id visible in both DBs",
+        "READY Clay work item created",
+        "restart persistence PASS",
+        "no Frank write to Clay",
+        "no Frank self-Harness effect"
+      ]
+    },
+    "evidence_need": ["LOCAL_EXECUTION_PRIMARY", "restart receipt", "DB row hashes", "systemd/service status"],
+    "executor_policy": {"prefer": "claude-code-lead", "host": "Andreas Ubuntu developer system"},
+    "required_capabilities": ["tool:python3", "tool:git"],
+    "write_scope": ["gschaidergabriel/frankv0.1", "gschaidergabriel/clay-global-research-entity", "Andreas Ubuntu local systemd/user config"],
+    "dependencies": [],
+    "invalidators": ["newer owner directive supersedes exact bug semantics"],
+    "base_priority": 0.95,
+    "expected_impact": 0.95,
+    "urgency": 0.85,
+    "information_gain": 0.65,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-CC-G9-SURFACE-CLOSURE-20260809",
+  "run_id":"20260809T1711p0700-chatgpt-g9-surface-closure",
+  "candidate_version":"ClayCode G9 V3 0.4-g9-fusion-candidate",
+  "source_hashes": {
+    "grammar_git_blob_sha":"ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "spec_v3_git_blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "dialect_registry_v3_git_blob_sha":"dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "audit_script_sha256":"6b52240567003140de43b8fd1181dec679df38d376dbd311917b63af06c22324",
+    "audit_script_git_blob_sha":"9475dfc1f409d82db54348e3eb3164c4fef2a0cc",
+    "result_semantic_sha256":"cc2a3deae91a5249b14839e9637fe49717ffb2fbef2f73d901d0d633645f5e0b"
+  },
+  "canonical_ir_hash":"NOT_APPLICABLE_TARGETED_SURFACE_AUDIT",
+  "contract_instance_hash":"NOT_APPLICABLE_TARGETED_SURFACE_AUDIT",
+  "lowering_target":"Python audit executable",
+  "generated_code_hash":"6b52240567003140de43b8fd1181dec679df38d376dbd311917b63af06c22324",
+  "runtime":{"provider":"ChatGPT local container fallback","language":"Python 3.13.5","platform":"Linux 6.18.35 x86_64 glibc 2.41"},
+  "preferred_provider_status":{"e2b_sandbox":"PROJECT_RUNTIME_VERIFIED_BUT_NOT_EXPOSED_IN_CURRENT_CHATGPT_TOOL_SURFACE","fallback_used":"local_sandbox"},
+  "test_corpus":{"targeted_cases":5,"positive_controls":2,"identity":"current G9 V3 spec + dialect constructs checked against current grammar declarations"},
+  "observed": {
+    "baseline_failure_count":5,
+    "positive_control_failures":0,
+    "failure_classes":["RELATIONAL_OPERATOR_NOT_IN_GRAMMAR","IF_STATEMENT_NOT_IN_GRAMMAR","TYPED_INTERFACE_METHOD_SIGNATURE_NOT_IN_GRAMMAR"],
+    "candidate_minimal_repair_failure_count":0,
+    "remaining_open_issue":"operator precedence/associativity is not specified and requires a separate deterministic-parser/canonical-IR experiment"
+  },
+  "expected":"Admitted CURRENT ClayCode artifacts should be syntactically representable by the admitted CURRENT grammar before BASE parser freeze.",
+  "result":"EXPECTATION_VIOLATED_BASELINE; TARGETED_MINIMAL_GRAMMAR_REPAIR_CLOSES_TESTED_CASES",
+  "failure_classification":"NEGATIVE_RESULT_CURRENT_GRAMMAR_NOT_SURFACE_CLOSED",
+  "repair_change_applied":"Audit-only candidate additions: > < >= <= operators; if_stmt; typed method_signature. No canonical grammar file changed in this run.",
+  "affected_hypotheses":["H-CC-G9-001","H-CC-G9-002","H-CC-G9-003"],
+  "affected_branches":["claycode","frank","harness","claygraph","unifieddb","gwt","hyperposition","emergenz","clayresearch"],
+  "evidence_class":"LOCAL_EXECUTION_PRIMARY_FOR_AUDIT_ONLY",
+  "not_proven":["full grammar conformance","full parser correctness","canonical AST determinism","type/effect correctness","Ubuntu target-host release behavior","E2B equivalence"]
+}

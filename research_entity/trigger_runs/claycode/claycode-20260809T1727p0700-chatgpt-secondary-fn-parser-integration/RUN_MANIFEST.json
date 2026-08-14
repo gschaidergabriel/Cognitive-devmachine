@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration",
+  "trigger":"claycode",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "candidate":"D parser + minimal typed fn definition/call integration",
+  "candidate_status":"OPEN_NOT_SELECTED",
+  "research_delta":"COMMITTED",
+  "promotion":"NONE",
+  "canonical_mutation":false,
+  "key_results":["20,000 lowering differential cases with 0 mismatches","1,000 formatting variants preserved semantic_hash and changed contract_hash","500 semantic mutations changed semantic_hash","8/8 negative binding/type classes rejected","baseline D and D+fn both fail strict-LALR construction under tested Lark toolchain"],
+  "late_live_ingested":["GWT R7 validation cf90df1f","ClayCode grammar-closure negative 54e4b3bd","ClayCode control/effect closure packet 940c2b1d"],
+  "required_artifacts":["INTERCONNECT_MANIFEST.json","TOOL_EXECUTION_MANIFEST.json","FRANK_CLAYCODE_GOODMAN_REVIEW.json","HYPOTHESIS_MATRIX.json","NEGATIVE_RESULTS.json","EXECUTABLE_RESEARCH_RECEIPT.json","BRANCH_FEEDBACK_MANIFEST.json","MICRO_PACKETS.json","VALIDATION_REPORT.json","FINAL_REPORT.md"],
+  "release_effect":"CC-WP-02 OPEN; GENERAL_PURPOSE_GATE NOT_PASS; BASE remains IN_PROGRESS",
+  "highest_next":"Resolve/characterize parser conflicts, integrate exact canonical symbol/signature tables, compare D+fn with alternative frontends and execute the production lowering on the target Ubuntu developer host."
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1813p0700-claycode-bootstrap-tool-staging",
+  "evidence": [
+    {
+      "id": "E-INT-01",
+      "class": "VERIFIED_REPOSITORY_CURRENT_STATE",
+      "source": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "finding": "BASE is ACTIVE_BUILD/NOT_PASS; all 14 listed ClayCode work packages are OPEN and no mandatory application proof is recorded as passed."
+    },
+    {
+      "id": "E-INT-02",
+      "class": "VERIFIED_REPOSITORY_CURRENT_CONTRACT",
+      "source": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "finding": "APP-06 requires a small parser/compiler/interpreter implemented using ClayCode facilities; the contract does not state that the production ClayCode compiler itself must already be self-hosted."
+    },
+    {
+      "id": "E-INT-03",
+      "class": "VERIFIED_REPOSITORY_NEGATIVE_RESULT",
+      "source": "research_entity/trigger_runs/claycode/claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration/FINAL_REPORT.md",
+      "finding": "D plus typed-fn locally closes a pure definition/call slice, but strict LALR construction remains negative and CC-WP-02 remains OPEN."
+    },
+    {
+      "id": "E-INT-04",
+      "class": "VERIFIED_REPOSITORY_CURRENT_CANDIDATE",
+      "source": "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark",
+      "finding": "The leading-not-selected D grammar lacks a general function-definition statement and does not yet expose a complete practical compiler-tool programming surface."
+    },
+    {
+      "id": "E-RECENT-01",
+      "class": "VERIFIED_REPOSITORY_RECENT_RUN",
+      "source": "commit 903cda18856936a1485d5d47945d9fa9ea7e24ef",
+      "finding": "Foreign effect closure was already deeply researched; this spawn avoided duplicating it."
+    },
+    {
+      "id": "E-RECENT-02",
+      "class": "VERIFIED_REPOSITORY_RECENT_RUN",
+      "source": "commit 26ce6c22086ad748464dee01579f1739ea40e2ec",
+      "finding": "Loop lowering already has a local executable discriminator; this spawn avoided duplicating it."
+    },
+    {
+      "id": "E-EXT-01",
+      "class": "PRIMARY_OFFICIAL_DOCUMENTATION",
+      "source": "GCC official install/build documentation",
+      "url": "https://gcc.gnu.org/install/build.html",
+      "finding": "GCC performs a three-stage bootstrap and compares stage2/stage3 compilers."
+    },
+    {
+      "id": "E-EXT-02",
+      "class": "PRIMARY_OFFICIAL_DOCUMENTATION",
+      "source": "Rust Compiler Development Guide",
+      "url": "https://rustc-dev-guide.rust-lang.org/building/bootstrapping/what-bootstrapping-does.html",
+      "finding": "Rust uses a precompiled stage0 compiler, builds stage1 from current source, builds stage2 with the in-tree compiler, and describes an optional stage3 same-result test."
+    },
+    {
+      "id": "E-EXT-03",
+      "class": "PRIMARY_PROJECT_DOCUMENTATION",
+      "source": "Bootstrappable Builds",
+      "url": "https://www.bootstrappable.org/",
+      "finding": "Compiler bootstrapping and reduction of opaque binary seed dependencies are explicit supply-chain/trust concerns separable from ordinary language semantics."
+    },
+    {
+      "id": "E-EXT-04",
+      "class": "PRIMARY_PROJECT_DOCUMENTATION",
+      "source": "Reproducible Builds deterministic build systems guidance",
+      "url": "https://reproducible-builds.org/docs/deterministic-build-systems/",
+      "finding": "Reproducibility requires deterministic transformation and a defined/recorded build environment; path/time/order variation can invalidate byte identity."
+    },
+    {
+      "id": "E-EXT-05",
+      "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+      "source": "David A. Wheeler, Countering Trusting Trust through Diverse Double-Compiling, ACSAC 2005",
+      "url": "https://www.acsac.org/2005/abstracts/47.html",
+      "finding": "Diverse double-compiling is a separate method for detecting trusting-trust under explicit assumptions; ordinary rebuild identity is not equivalent to DDC."
+    },
+    {
+      "id": "E-EXEC-01",
+      "class": "LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_UBUNTU_ACCEPTANCE",
+      "source": "bootstrap_stage_probe.py / EXECUTION_RECEIPT.json",
+      "finding": "Same C source compiled by GCC in two different directories produced identical stripped binaries; path-sensitive __FILE__ builds differed; -ffile-prefix-map normalization restored identity; GCC vs Clang binaries differed while 5000 tested semantic cases had 0 output mismatches."
+    }
+  ],
+  "evidence_boundaries": [
+    "Local hosted Linux execution is not Andreas' Ubuntu developer-system acceptance evidence.",
+    "GCC/Rust/Bootstrappable patterns are external analogues, not proof that the same staging is optimal for ClayCode.",
+    "0/5000 semantic mismatches is bounded test evidence only, not compiler correctness proof.",
+    "Byte-identical rebuilds do not establish source-to-binary semantic correctness by themselves.",
+    "Cross-branch project agreement is shared-ancestry evidence unless an independent discriminator is added."
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1741p0700-clayresearch-foreign-effect-closure",
+  "evidence_policy": "Source class and execution scope are preserved. Shared ancestry and simulation do not become independent or live-target evidence through reuse.",
+  "internal_repository_evidence": [
+    {"path":"research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json","blob_sha":"becb82e826cc5cfa70daf82e862528d0b136c208","class":"CANONICAL_STATE","use":"T0 parent revision/hash"},
+    {"path":"research_entity/continuity/BOOTSTRAP_MINIMAL.json","blob_sha":"2f4a1857fdb6fb5edb070ce3be1b440ddccd3047","class":"DERIVED_BOOT_INDEX","use":"current mission/stage/commands/target-host context"},
+    {"path":"research_entity/global/RESEARCH_ACTOR_REGISTRY.json","blob_sha":"ab52c68dfcfbd6e7a1a197decce8e8065196c72f","class":"GOVERNANCE","use":"actor/provenance and evidence precedence"},
+    {"path":"research_entity/global/RESEARCH_TRIGGER_REGISTRY.json","blob_sha":"961a08ee4e3004c378ecb7785dce8cad46d61048","class":"GOVERNANCE","use":"spawn registration and current branch mesh"},
+    {"path":"research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md","blob_sha":"e8f29b007ceb492a9733d4b24f087466c7e1ce17","class":"PROTOCOL","use":"spawn execution and required outputs"},
+    {"path":"research_entity/global/SPAWN_RESEARCH_WEIGHTS.json","blob_sha":"f2bdc70efc852e8da7e416cdefc39db8aee7f73b","class":"PROTOCOL_DATA","use":"weighted CSPRNG branch distribution"},
+    {"path":"research_entity/global/PROJECT_COMMAND_REGISTRY.json","blob_sha":"7955428345ce564119089cc4ab366fe9169121a8","class":"GOVERNANCE","use":"authoritative command set"},
+    {"path":"research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md","blob_sha":"f38c653cc083173b0c2a9a469ac48f5e3250d54c","class":"PROTOCOL","use":"cross-branch coverage and anti-echo boundary"},
+    {"path":"research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay","blob_sha":"2bb50fc08677aa235033950123ef9ab350f53863","class":"CURRENT_STACK_POINTER","use":"current ClayCode/UnifiedDB/ClayGraph/work/Ubuntu-target pointers"},
+    {"path":"research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","blob_sha":"9c478ba087176286d5622925d80330be113e61cb","class":"CURRENT_WORK_STATE","use":"BASE runtime/ABI/FFI/system-effect/fuzz gaps"},
+    {"path":"research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md","blob_sha":"86d8ec3e3d72261d42b9e017f546bdfe41cffe66","class":"OWNER_FIXED_ACCEPTANCE_CONTRACT","use":"authority-not-expressibility and executable-app gate"},
+    {"path":"research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md","blob_sha":"ee9e50aacfacb67f4143d12911919ec16beae6da","class":"OWNER_MANDATED_OPEN_RESEARCH_AXIS","use":"foreign-code closure hypothesis and required falsifiers"},
+    {"path":"research_entity/harness/HARNESS_WORKSPACE.json","blob_sha":"00d57dc1fee917a25ade1b7a614ea1de0c585854","class":"CURRENT_WORK_STATE","use":"future effect-authority/adversarial/recovery executable feedback"},
+    {"path":"research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay","blob_sha":"e2b2d1ae9e702eb19f9b532ba4ba56a269be23d9","class":"CURRENT_WORK_CONTRACT","use":"target-host work handoff semantics"},
+    {"path":"research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay","blob_sha":"406c0ffe21304cb2c3c44fe58d8995b30ae83b3c","class":"CURRENT_WORK_EVENT_CONTRACT","use":"durable local-experiment work creation"}
+  ],
+  "external_primary_and_authoritative_sources": [
+    {
+      "source":"Linux Kernel documentation: Landlock: unprivileged access control",
+      "url":"https://docs.kernel.org/userspace-api/landlock.html",
+      "class":"PRIMARY_TECHNICAL_DOCUMENTATION",
+      "used_for":["runtime ABI probing","policy inheritance","pre-opened descriptor limitation","network/IPC scope","descriptor-associated rights"],
+      "key_boundary":"Files opened before sandboxing are not retroactively constrained in the same way as new path opens; passed descriptors can preserve descriptor-associated authority."
+    },
+    {
+      "source":"Linux Kernel documentation: No New Privileges Flag",
+      "url":"https://docs.kernel.org/next/userspace-api/no_new_privs.html",
+      "class":"PRIMARY_TECHNICAL_DOCUMENTATION",
+      "used_for":["exec privilege non-amplification","inheritance semantics"],
+      "key_boundary":"no_new_privs prevents execve-based privilege gain but is not a complete sandbox or general authority-carrier scrubber."
+    },
+    {
+      "source":"Linux Kernel documentation: Seccomp BPF",
+      "url":"https://docs.kernel.org/6.15/userspace-api/seccomp_filter.html",
+      "class":"PRIMARY_TECHNICAL_DOCUMENTATION",
+      "used_for":["syscall-surface restriction","filter inheritance","sandbox limitation"],
+      "key_boundary":"Kernel documentation explicitly warns that syscall filtering by itself is not a sandbox."
+    },
+    {
+      "source":"Linux Kernel documentation: Control Group v2",
+      "url":"https://docs.kernel.org/admin-guide/cgroup-v2.html",
+      "class":"PRIMARY_TECHNICAL_DOCUMENTATION",
+      "used_for":["CPU/memory/PID/IO resource budgets"]
+    },
+    {
+      "source":"Linux man-pages: close_range(2)",
+      "url":"https://www.man7.org/linux/man-pages/man2/close_range.2.html",
+      "class":"AUTHORITATIVE_OS_INTERFACE_DOCUMENTATION",
+      "used_for":["bulk descriptor close/unshare before exec","descriptor hygiene"]
+    },
+    {
+      "source":"Linux man-pages: capabilities(7)",
+      "url":"https://www.man7.org/linux/man-pages/man7/capabilities.7.html",
+      "class":"AUTHORITATIVE_OS_INTERFACE_DOCUMENTATION",
+      "used_for":["permitted/inheritable/effective/ambient/bounding capability sets","exec inheritance"]
+    },
+    {
+      "source":"Linux man-pages: unix(7)",
+      "url":"https://www.man7.org/linux/man-pages/man7/unix.7.html",
+      "class":"AUTHORITATIVE_OS_INTERFACE_DOCUMENTATION",
+      "used_for":["SCM_RIGHTS descriptor transfer"]
+    },
+    {
+      "source":"WASI.dev introduction",
+      "url":"https://wasi.dev/",
+      "class":"PRIMARY_PROJECT_DOCUMENTATION",
+      "used_for":["capability-oriented WASI execution model"]
+    },
+    {
+      "source":"Wasmtime WasiCtxBuilder API documentation",
+      "url":"https://docs.wasmtime.dev/api/wasmtime_wasi/struct.WasiCtxBuilder.html",
+      "class":"PRIMARY_RUNTIME_DOCUMENTATION",
+      "used_for":["explicit preopens/network/host capability configuration"]
+    }
+  ],
+  "new_execution_evidence": [
+    {
+      "ref":"EXPERIMENT_RECEIPT.json#EXP-SPAWN-C1-INHERITED-FD",
+      "class":"LOCAL_EXECUTION_PRIMARY_FOR_HOSTED_CONTAINER_ONLY",
+      "independent_of_architecture_assumption":true,
+      "target_host":false
+    },
+    {
+      "ref":"EXPERIMENT_RECEIPT.json#EXP-SPAWN-C1-SCM-RIGHTS",
+      "class":"LOCAL_EXECUTION_PRIMARY_FOR_HOSTED_CONTAINER_ONLY",
+      "independent_of_architecture_assumption":true,
+      "target_host":false
+    },
+    {
+      "ref":"EXPERIMENT_RECEIPT.json#EXP-SPAWN-C1-ABSTRACT-FUZZ",
+      "class":"SIMULATION_ONLY",
+      "independent_of_architecture_assumption":false,
+      "target_host":false
+    }
+  ],
+  "unavailable_or_unestablished": [
+    "No execution receipt from Andreas' Ubuntu developer system was available in this hosted run.",
+    "Landlock enforcement itself was not executable in the hosted environment; availability probe returned ENOSYS.",
+    "No claim of complete Linux mediation or universal zero-damage safety is supported."
+  ]
+}

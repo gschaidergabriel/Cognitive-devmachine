@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1717p0700-all-workers-production-parser",
+  "experiment_id": "EXP-CC-20260809-NSD-PRODUCTION-PARSER-SATURATION",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "target_host_requirement": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "evidence_class": "LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_UBUNTU_ACCEPTANCE",
+  "repo_inputs": {
+    "g9_v3": {"path":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","git_blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e"},
+    "dialect_registry": {"path":"research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay","git_blob_sha":"dbb72460bc5a049c784d1acd1aaef152fa37f797"},
+    "published_grammar": {"path":"research_entity/claycode/g9/grammar.ebnf","git_blob_sha":"ec2f17077333955cfdabe6c64868d597e7e734e3"}
+  },
+  "runtime": {"system":"Linux","kernel":"6.18.35","machine":"x86_64","python":"3.13.5","lark":"1.3.1"},
+  "candidates": {
+    "N":"strict normalization to closed calls/punctuation/qualified fields",
+    "S":"explicit @relation surface plus typed resolver and @Ref lexical disambiguation",
+    "D":"finite declared bare relation words plus typed resolver"
+  },
+  "shared_parser_repairs": ["typed declaration-specific blocks","newline/semicolon statement separators","interface method_sig","if statement","postfix optional value","comparisons > < >= <=","or operator","contextual identifier handling for keyword-like field names"],
+  "published_grammar_new_dialect_counterexample": {
+    "current_proxy":"22/25",
+    "failed_method_signatures":["projection(reader:ReaderId)->Ref","verify(receipt:ReceiptRef)->Verification","delta(input:Delta)->Delta"],
+    "with_method_sig":"25/25"
+  },
+  "production_lalr_full_corpus": {
+    "N":{"g9":true,"dialect":true},
+    "S":{"g9":true,"dialect":true},
+    "D":{"g9":true,"dialect":true}
+  },
+  "S_ref_compatibility": [
+    {"src":"rule @some_ref","ok":true},
+    {"src":"rule @some_ref + x","ok":true},
+    {"src":"parent [@research_entity/claycode/g9/A.clay,@x]","ok":true},
+    {"src":"rule @4B_emits EffectIntent","ok":true},
+    {"src":"rule Delta @never_implies epistemic_upgrade","ok":true}
+  ],
+  "matched_relation_oracle": {
+    "N": {
+      "relation_cases":20,"intended_ast_pass":20,"roundtrip_pass":20,
+      "migration":{"changed_lines":20,"levenshtein_total":485,"net_char_delta":58,"source_chars":1281,"original_chars":1223},
+      "unknown_relation_fuzz":{"cases":100000,"semantic_false_accepts":0},
+      "whitespace_fuzz":{"cases":20000,"semantic_hash_preserved":20000},
+      "hash_mutation":{"cases":20000,"relation_mutation_changed":20000,"operand_swap_changed":20000},
+      "semantic_alias_burden":{"aliases":{"model4B.emits":"4B_emits","model4B.need_not_learn":"4B_need_not_learn"},"count":2,"risk":"alias map must be provenance/versioned or semantic identity can drift during migration"}
+    },
+    "S": {
+      "relation_cases":20,"intended_ast_pass":20,"roundtrip_pass":20,
+      "migration":{"changed_lines":20,"levenshtein_total":202,"net_char_delta":48,"source_chars":1271,"original_chars":1223},
+      "unknown_relation_fuzz":{"cases":100000,"semantic_false_accepts":0},
+      "whitespace_fuzz":{"cases":20000,"semantic_hash_preserved":20000},
+      "hash_mutation":{"cases":20000,"relation_mutation_changed":20000,"operand_swap_changed":20000}
+    },
+    "D": {
+      "relation_cases":20,"intended_ast_pass":20,"roundtrip_pass":20,
+      "migration":{"changed_lines":5,"levenshtein_total":31,"net_char_delta":26,"source_chars":1249,"original_chars":1223},
+      "unknown_relation_fuzz":{"cases":100000,"semantic_false_accepts":0},
+      "whitespace_fuzz":{"cases":20000,"semantic_hash_preserved":20000},
+      "hash_mutation":{"cases":20000,"relation_mutation_changed":20000,"operand_swap_changed":20000}
+    }
+  },
+  "semantic_identity": {
+    "base_hashes":{"N":"7e51322e2bfd54ce2b190738382e7be20bc05e2f327a7b5a81af73a46566993b","S":"7e51322e2bfd54ce2b190738382e7be20bc05e2f327a7b5a81af73a46566993b","D":"7e51322e2bfd54ce2b190738382e7be20bc05e2f327a7b5a81af73a46566993b"},
+    "cross_candidate_equal":true,
+    "format_fuzz":{"N":{"variants":200,"parse_and_hash_pass":200,"parse_fail":0,"hash_fail":0},"S":{"variants":200,"parse_and_hash_pass":200,"parse_fail":0,"hash_fail":0},"D":{"variants":200,"parse_and_hash_pass":200,"parse_fail":0,"hash_fail":0}},
+    "semantic_mutations_all_hash_changed":{"N":true,"S":true,"D":true},
+    "typed_collection_semantics":{"cases":50000,"set_permutation_duplicate_semantic_hash_preserved":50000,"exact_contract_hash_changed_on_instance_change":49831,"ordered_sequence_reversal_semantic_hash_changed":50000}
+  },
+  "fail_closed_diagnostics": {
+    "N":{"invalid_cases":11,"invalid_rejected":11,"valid_accepted":1,"line_column_diagnostics":10,"unknown_relation_fuzz":{"cases":20000,"rejected":20000,"parser_rejected":0,"resolver_rejected":20000,"false_accepts":0}},
+    "S":{"invalid_cases":11,"invalid_rejected":11,"valid_accepted":1,"line_column_diagnostics":10,"unknown_relation_fuzz":{"cases":20000,"rejected":20000,"parser_rejected":0,"resolver_rejected":20000,"false_accepts":0}},
+    "D":{"invalid_cases":11,"invalid_rejected":11,"valid_accepted":1,"line_column_diagnostics":11,"unknown_relation_fuzz":{"cases":20000,"rejected":20000,"parser_rejected":20000,"resolver_rejected":0,"false_accepts":0}}
+  },
+  "local_benchmark": {
+    "N":{"build_ms":{"median":101.6272,"p95":150.2661},"combined_g9_dialect_parse_ms":{"median":11.7152,"p95":18.8334},"g9_source_chars":8592,"grammar_chars":2727},
+    "S":{"build_ms":{"median":102.9420,"p95":159.6440},"combined_g9_dialect_parse_ms":{"median":11.8757,"p95":15.6100},"g9_source_chars":8583,"grammar_chars":2881},
+    "D":{"build_ms":{"median":106.7828,"p95":165.5783},"combined_g9_dialect_parse_ms":{"median":11.5558,"p95":14.3413},"g9_source_chars":8561,"grammar_chars":3420}
+  },
+  "current_measured_leader": {
+    "candidate":"D",
+    "status":"LEADING_NOT_SELECTED",
+    "basis":["5 changed relation lines vs 20 for N/S","Levenshtein migration cost 31 vs 485 N / 202 S","shortest transformed G9 source in local proxy","marginally lowest median and p95 combined parse time","unknown relation fuzz fails closed"],
+    "selection_blockers":["target Qwen-class 4B reader/repair benchmark missing","normative repository parser/compiler integration missing","target Ubuntu acceptance execution missing","E2B not callable in this hosted session"]
+  },
+  "tool_blockers": {"E2B":"PROJECT_RUNTIME_VERIFIED_BUT_NOT_CALLABLE_HERE","SandboxAPI":"BLOCKED_NOT_SUBSCRIBED","target_Ubuntu":"NOT_CONNECTED_TO_THIS_WORKER","Qwen4B_reader":"NO_CALLABLE_TARGET_MODEL_TOOL"},
+  "result":"N/S/D all remain viable after production-like LALR and semantic/fail-closed testing. D is the current local measured leader, not a frozen language choice.",
+  "promotion":"NONE",
+  "release_effect":"CC-WP-02 stays OPEN; GENERAL_PURPOSE_GATE stays NOT_PASS."
+}

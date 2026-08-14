@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-WP02-SANDBOX-V9-CANONICAL-FRANK-GAP-20260809T2112p0700",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:12:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "environment": {
+    "class": "HOSTED_SANDBOX_PROXY",
+    "python": "3.13",
+    "lark": "1.3.1",
+    "interegular": "UNAVAILABLE",
+    "network": "GITHUB_DNS_UNAVAILABLE_IN_CONTAINER",
+    "github_source_transport": "VERIFIED_GITHUB_CONNECTOR_PLUS_LOCAL_MIRROR",
+    "ubuntu_release_acceptance": false
+  },
+  "tests": {
+    "v5_strict_regression": {
+      "result": "FAIL_EXPECTED",
+      "error_class": "GrammarError",
+      "finding": "V5 strict construction raises Shift/Reduce conflict for terminal IN at dotted_relation optional-RHS ambiguity."
+    },
+    "v9_strict_construction": {
+      "result": "ENVIRONMENT_BLOCKED_AFTER_GRAMMAR_ANALYSIS",
+      "error_class": "LexError",
+      "finding": "V9 no longer reproduces the V5 strict GrammarError in this sandbox; construction advances until Lark requests interegular for strict lexer collision analysis.",
+      "promotion_guard": "This is not a strict PASS because interegular is absent."
+    },
+    "v9_full_current_corpus_canonical_ir_proxy": {
+      "result": "PASS",
+      "strict": false,
+      "sources": [
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay"
+      ],
+      "source_count_passed": "2/2",
+      "roundtrip_byte_identity": "2/2",
+      "repeat_parse_byte_identity": "2/2",
+      "presentation_equivalence": "1/1",
+      "mutation_discrimination": "9/9",
+      "canonical_validator_fix_commit": "6871ee04a3cc301d96caa9365301821c043d7f76",
+      "validator_bug_fixed": "Old validator defaulted to V5 and crashed on Lark optional None placeholders; active tool now defaults to V9 with maybe_placeholders=False."
+    },
+    "v9_frontend_boundary_proxy": {
+      "result": "PASS",
+      "cases": "16/16",
+      "includes": [
+        "reserved if/invariant rejection",
+        "implicit English noun phrase rejection",
+        "bare Needle.lowers rejection",
+        "bare 4B_need_not_learn Needle.owns acceptance",
+        "dotted lowers/owns acceptance",
+        "newline boundaries",
+        "relation assignment"
+      ]
+    },
+    "frank_raw_frontend_proxy": {
+      "result": "COUNTEREXAMPLE_REPRODUCED",
+      "accepted": false,
+      "first_failure": "Unexpected token NAME(use) at first use declaration",
+      "observed_surface_counts_in_local_mirror": {
+        "use": 29,
+        "fn": 1,
+        "let": 32,
+        "require": 3,
+        "return": 1
+      },
+      "exact_snapshot_provenance": {
+        "repo_path": "frank_reference/claycode/frank_runtime.provenance.json",
+        "source_git_blob_sha": "8e2a3814c67540d7e83fd6aa4e14928928785822"
+      },
+      "scope_guard": "The executed sandbox source was a connector-derived local mirror sufficient to reproduce the first use failure; the exact provenance-bound snapshot was not mounted byte-for-byte into the no-network container, so exact-source execution remains required on repository checkout."
+    },
+    "frank_prelowering_syntax_discriminator_proxy": {
+      "result": "SYNTACTIC_FEASIBILITY_PASS_WITH_SEMANTIC_RISK",
+      "staged_normalizations_until_parse": [
+        "drop use declarations",
+        "normalize type-record surface",
+        "fn cycle to BASE cycle surface",
+        "normalize let binding surface",
+        "normalize require surface",
+        "normalize return surface",
+        "normalize #symbol tag surface",
+        "normalize juxtaposed broadcast call",
+        "normalize postfix flatten_some call"
+      ],
+      "final_parse": "PASS",
+      "canonical_roundtrip": true,
+      "repeat_parse": true,
+      "mutation_discrimination": "9/9",
+      "decision": "This supports explicit versioned dialect/pre-lowering as a plausible architecture candidate, but the current proxy transformations are not admissible production lowering because dropping/stripping use, require or return can erase semantics. Production selection requires semantics-preserving translation receipts and comparison against minimal grammar/IR extension."
+    }
+  },
+  "conclusions": [
+    "V9 resolves the specific V5 strict grammar conflict class observed in sandbox, but strict acceptance remains unverified here because interegular is unavailable.",
+    "The canonical syntax-IR validator had a real implementation bug and stale V5 default; both are fixed on main.",
+    "V9 current G9/Dialect corpus canonicalization is stable in hosted proxy testing.",
+    "Real FRANK frontend coverage remains open: raw FRANK syntax still exceeds BASE V9 surface.",
+    "Explicit dialect/pre-lowering is syntactically plausible and should be tested against direct grammar/IR extension with semantic-preservation and authority/type-effect invariants."
+  ],
+  "gate_effect": "NO_PASS_CHANGE",
+  "next_required_tests": [
+    "Run tools/claycode_base_frontend_validation.py on Ubuntu/repository checkout with interegular installed and V9 default.",
+    "Run updated tools/claycode_base_canonical_ir_validation.py in strict mode on exact current corpus.",
+    "Run tools/claycode_frank_frontend_gap_probe.py against the byte-identical provenance-bound FRANK snapshot.",
+    "Implement two non-lossy candidates: minimal V9-compatible grammar/IR bridge versus explicit versioned dialect/pre-lowering, then compare canonical identity, type/effect preservation, authority closure and regression surface."
+  ]
+}

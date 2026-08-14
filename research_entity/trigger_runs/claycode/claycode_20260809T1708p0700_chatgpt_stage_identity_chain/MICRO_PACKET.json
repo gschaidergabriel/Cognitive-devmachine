@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "packet_id":"MP-CC-STAGE-IDENTITY-20260809-01",
+  "domains":["claycode","harness","unifieddb","claygraph"],
+  "epistemic_class":"LOCAL_SYNTHETIC_EXECUTION_SUPPORTED_BOUNDED_CLASS",
+  "status_hint":"OPEN",
+  "claim":"ClayCode BASE should keep source/contract identity, canonical ProgramSemanticId, lowering identity, executable artifact identity and replay identity distinct; semantic derivation authority should begin at a verified canonical semantic stage rather than raw source spelling.",
+  "evidence_refs":["research_entity/trigger_runs/claycode/claycode_20260809T1708p0700_chatgpt_stage_identity_chain/EXECUTABLE_RESEARCH_RECEIPT.json","research_entity/trigger_runs/claycode/claycode_20260809T1655p0700_chatgpt_lexical_closure/FINAL_REPORT.md","research_entity/harness/source_chain_oracle_v1.py"],
+  "negative_refs":["N-CC-SOURCE-CHAIN-BYPASS-007","N-CC-EMIT-RETURN-SEMANTIC-LEAK-008"],
+  "origin_actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "confidence":"MEDIUM_FOR_BOUNDED_IDENTITY_INVALIDATION_BEHAVIOR_LOW_FOR_PRODUCTION_GENERALIZATION",
+  "verification_requirement":"Production parser/type-effect/lowering/replay run on Andreas Ubuntu developer host",
+  "falsifier":"Layered identity provides no replay/cache/diagnostic benefit or creates material correctness/complexity regressions under production differential tests.",
+  "promotion_allowed_without_independent_support":false
+}

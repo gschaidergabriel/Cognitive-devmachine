@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T174614p0700_harness_lowering_semantics",
+  "origin_branch": "harness",
+  "microdirection": "ClayCode lowering preservation of authority/provenance/epistemic fields",
+  "hypotheses": [
+    {
+      "id": "SP-H-LWR-001",
+      "statement": "ClayCode critical control semantics cannot safely be represented only as generic target metadata across compiler optimization; authority, epistemic state and effect-relevant resource semantics must remain first-class target semantics or be protected by an explicit translation-validation obligation.",
+      "status": "SUPPORTED_WITH_SYNTHETIC_AND_EXTERNAL_ENGINEERING_EVIDENCE",
+      "confidence": 0.91,
+      "falsifier": "A complete target pipeline showing generic metadata-only encoding preserves all critical semantics under every admitted transformation and rejects all field-loss/broadening mutations without adding first-class semantics or an external validator."
+    },
+    {
+      "id": "SP-H-LWR-002",
+      "statement": "Authority preservation across lowering should be a monotone attenuation relation rather than byte-for-byte equality: target authority may become narrower but must never broaden resource, verbs, delegation, validity or constraints.",
+      "status": "SUPPORTED_MECHANISM_HYPOTHESIS",
+      "confidence": 0.9,
+      "falsifier": "An admitted ClayCode program requires semantics-preserving lowering that legitimately broadens authority without an explicit new authorization event."
+    },
+    {
+      "id": "SP-H-LWR-003",
+      "statement": "Epistemic status is not lowering metadata. UNKNOWN/CONFLICT/REVOKED and related states must be preserved exactly across a pure lowering step; any change must be represented as an explicit inference/state transition outside lowering.",
+      "status": "SUPPORTED_BY_CURRENT_CLAYCODE_INVARIANTS_AND_MECHANISM_TEST",
+      "confidence": 0.94,
+      "falsifier": "A concrete executable counterexample where changing epistemic status during lowering is required for semantics and cannot be modeled as an explicit semantic operation."
+    },
+    {
+      "id": "SP-H-LWR-004",
+      "statement": "Provenance may be externalized from low-level target IR to a canonical ledger/sidecar if the target artifact carries a deterministic binding to the exact derivation hash and source epoch; provenance must remain non-authoritative.",
+      "status": "OPEN_SUPPORTED_DESIGN",
+      "confidence": 0.82,
+      "falsifier": "Replay or differential tests show hash/epoch-bound externalization cannot reconstruct the required causal/provenance identity after optimization, crash or artifact movement."
+    },
+    {
+      "id": "SP-H-LWR-005",
+      "statement": "A field-classified LoweringWitness can be added as compiler/runtime validation work under the existing ClayCode semantics, satisfying the current 'less change, more compile' policy without reopening language semantics.",
+      "status": "SUPPORTED_ARCHITECTURE_RECOMMENDATION",
+      "confidence": 0.9,
+      "falsifier": "Implementation demonstrates that the current ClayCode semantic model lacks a necessary concept that cannot be expressed by typed IR, effect interfaces, capability handles, provenance bindings or validation receipts."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "SP-CH-LWR-001",
+      "statement": "All authority/provenance/epistemic checks can occur before lowering, so low-level code need not preserve them.",
+      "status": "NOT_SELECTED",
+      "reason": "FRANK requires delayed effects, replay, re-entry, recovery and differential H1/H2 verification. Those later stages still need identity and semantic obligations after lowering."
+    },
+    {
+      "id": "SP-CH-LWR-002",
+      "statement": "Custom LLVM/MLIR metadata is sufficient if every current pass happens to preserve it.",
+      "status": "COUNTEREVIDENCE_FOUND",
+      "reason": "LLVM explicitly permits/forces dropping metadata that a transform cannot preserve; a local -O2 constant-fold test eliminated the instruction and its custom metadata entirely."
+    },
+    {
+      "id": "SP-CH-LWR-003",
+      "statement": "Require exact equality for every critical field across lowering.",
+      "status": "NOT_SELECTED",
+      "reason": "Capability lowering may legitimately attenuate authority and provenance may legitimately externalize; the correct contract is field-specific refinement, not one universal equality relation."
+    },
+    {
+      "id": "SP-CH-LWR-004",
+      "statement": "The LoweringWitness itself can grant execution authority because it proves semantic preservation.",
+      "status": "REFUTED_BY_ARCHITECTURE_CONSTRAINT",
+      "reason": "Translation validation proves a transformation relation; it does not mint capabilities, authorization or external effect permission."
+    }
+  ],
+  "proposed_lowering_field_classes": [
+    {
+      "class": "AUTHORITY",
+      "mode": "MONOTONE_ATTENUATION",
+      "target_form": "first-class capability/resource handle or checked runtime object",
+      "droppable": false
+    },
+    {
+      "class": "EFFECT_RESOURCE",
+      "mode": "SEMANTIC_EFFECT_PRESERVATION",
+      "target_form": "operation/effect interface or host gateway semantics visible to optimizer/runtime",
+      "droppable": false
+    },
+    {
+      "class": "EPISTEMIC_STATE",
+      "mode": "EXACT_UNLESS_EXPLICIT_SEMANTIC_TRANSITION",
+      "target_form": "tagged value/state",
+      "droppable": false
+    },
+    {
+      "class": "PROVENANCE",
+      "mode": "EXACT_OR_HASH_BOUND_EXTERNALIZATION",
+      "target_form": "first-class value where causally used, otherwise ledger ref + derivation hash + epoch",
+      "droppable": false
+    },
+    {
+      "class": "TRACE_DEBUG_ONLY",
+      "mode": "DROPPABLE_IF_NON_SEMANTIC",
+      "target_form": "metadata/sidecar",
+      "droppable": true
+    }
+  ],
+  "next_discriminating_experiment": {
+    "id": "SP-EXP-LWR-002",
+    "description": "Implement the LoweringWitness in the real ClayCode compiler path and run mutation/differential tests across source -> canonical IR -> optimized target -> execution receipt on Ubuntu. Intentionally erase/broaden each critical field and require fail-closed validation before CC-WP-06/11/13 handoff.",
+    "required_evidence_class": "TARGET_COMPILER_EXECUTION_ON_UBUNTU",
+    "promotion_gate": "No BASE or H2 semantic-preservation claim from the synthetic reference checker alone."
+  }
+}

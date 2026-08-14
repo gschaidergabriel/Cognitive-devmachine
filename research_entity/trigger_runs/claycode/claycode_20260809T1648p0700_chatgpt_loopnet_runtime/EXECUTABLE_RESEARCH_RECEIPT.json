@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-LOCAL-20260809-LOOPNET-01",
+  "run_id": "claycode_20260809T1648p0700_chatgpt_loopnet_runtime",
+  "actor_id": "chatgpt-secondary",
+  "candidate_version": "CC-LOOPNET-PROXY-0.1",
+  "claycode_source_hash": "aaa77aac9e6ab22108810db58c5439a833904715a84bd455ac1096e65d93c32e",
+  "typed_loop_network_semantic_hash": "25b2966c16197c6b7b58c3599fab493f82bdaf9d12e5aa9c86f0cfd09171083f",
+  "generated_target_hash": "02b644943101a652a2029b7c8b235ceb6abd14503882d1b368603d3639d3f920",
+  "lowering_target": "Python 3.13.5 local host proxy",
+  "sandbox_provider": "ChatGPT local execution sandbox",
+  "runtime_identity": {
+    "language": "Python",
+    "version": "3.13.5",
+    "parser_library": "Lark 1.3.1",
+    "parser_mode": "LALR subset proxy aligned to relevant G9 grammar forms"
+  },
+  "e2b_status": "NOT_EXPOSED_TO_THIS_SESSION_NO_EVIDENCE_CLAIMED",
+  "test_corpus": {
+    "candidate_parse_runs": 1000,
+    "set_order_semantic_hash_variants": 10000,
+    "typed_semantic_mutations": 10000,
+    "authority_edge_mutations": 1000,
+    "runtime_regimes": ["CONVERGING_FIXED_POINT", "STALLED", "DIVERGING", "PRODUCTIVE_LIMIT_CYCLE"],
+    "multirate_schedule": "fast:mid:slow = 1:2:4 over 16 ticks"
+  },
+  "observations": {
+    "candidate_parse_success": "1000/1000",
+    "candidate_parse_mean_ms": 0.7108,
+    "set_order_semantic_hash_equal": "10000/10000",
+    "typed_semantic_mutations_changed_hash": "10000/10000",
+    "unsafe_readout_to_effect_authority_mutations_rejected": "1000/1000",
+    "separate_generated_process_exit_status": 0,
+    "multirate_fire_counts_16_ticks": {"fast": 16, "mid": 8, "slow": 4},
+    "converging": {"halt_tick": 18, "decision": "HALT", "residual": 0.00010155995666838447},
+    "stalled": {"halt_tick": 1, "decision": "HALT_ESCALATE", "residual": 1.0},
+    "diverging": {"halt_tick": 13, "decision": "HALT_ROLLBACK", "residual": 9.513936421275138},
+    "productive_cycle": {"detected": true, "final_tick": 12, "decision": "HALT", "reason": "recurrence_budget_exhausted"}
+  },
+  "expected_vs_observed": {
+    "typed_multirate_loop_network_expressible_without_new_frank_specific_core_primitive": "OBSERVED_IN_PROXY",
+    "stagnation_distinct_from_successful_convergence": "OBSERVED",
+    "bounded_productive_cycle_not_misclassified_as_divergence": "OBSERVED",
+    "unstable_loop_can_trigger_rollback_decision": "OBSERVED",
+    "loop_observability_does_not_mint_effect_authority": "OBSERVED_IN_RUN_LOCAL_EFFECT_CHECKER"
+  },
+  "failure_counterexample_classification": {
+    "new_frank_specific_loop_syntax_required": "NOT_SUPPORTED_BY_THIS_RUN",
+    "generic_structured_control_flow_runtime_semantics_needed": "ALREADY_KNOWN_BLOCKER_REINFORCED",
+    "production_g9_parser_compiler_proof": "NOT_ESTABLISHED",
+    "h1_h2_runtime_equivalence": "NOT_TESTED"
+  },
+  "affected_hypotheses": ["H-CC-LOOPNET-014", "H-CC-LOOPCTRL-015"],
+  "affected_negative_results": [],
+  "branch_impact": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "claygraph", "unifieddb", "harness", "clayresearch"],
+  "evidence_class": "LOCAL_EXECUTABLE_PROXY",
+  "promotion_allowed": false
+}

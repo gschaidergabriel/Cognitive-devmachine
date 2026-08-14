@@ -1,0 +1,123 @@
+{
+  "actor": {
+    "id": "chatgpt-secondary",
+    "model": "GPT-5.6 Sol",
+    "provider": "OpenAI"
+  },
+  "candidate_microdirections": [
+    {
+      "eligible": true,
+      "id": "semantic_content_addressed_incremental_build_cache",
+      "index": 1
+    },
+    {
+      "eligible": true,
+      "id": "cross_backend_numeric_semantics",
+      "index": 2
+    },
+    {
+      "eligible": true,
+      "id": "stable_diagnostic_identity",
+      "index": 3
+    },
+    {
+      "eligible": true,
+      "id": "effect_preserving_optimization_barriers",
+      "index": 4
+    },
+    {
+      "eligible": true,
+      "id": "package_resolution_lock_provenance",
+      "index": 5
+    },
+    {
+      "eligible": true,
+      "id": "incremental_vs_full_rebuild_equivalence",
+      "index": 6
+    }
+  ],
+  "canonical": {
+    "revision": "r2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "novelty_audit": {
+    "mode": "RECENT_COMMIT_LINKED_AUDIT",
+    "note": "Bootstrap/reproducible-build work overlaps at the build level but not at dependency-resolution identity/trust/authority plane separation.",
+    "recent_topics": [
+      {
+        "commit": "e183455d5889881b9be016eb9272c4b4216a9238",
+        "topic": "ClayCode HTTP + SQLite vertical slice"
+      },
+      {
+        "commit": "141f25f9e4d38fda445d39a00fdd417988d05ac3",
+        "topic": "ClayCode bootstrap compiler/tool staging"
+      },
+      {
+        "commit": "493d3c672584c5636ee89eaa33ae21d25a3e6d8f",
+        "topic": "ClayCode deterministic module linking/init"
+      },
+      {
+        "commit": "c05b406f5f9ba68384eae87d2369cc39f1a8b937",
+        "topic": "Harness visual familiarity action closure"
+      },
+      {
+        "commit": "7606cb2586db5027e7427f4a7b9a80896a6588de",
+        "topic": "Emergenz observer/probe effect"
+      },
+      {
+        "commit": "8df7d1710ec91dc578ba2d2303f81ea493dfac0e",
+        "topic": "GWT adaptive recurrence"
+      },
+      {
+        "commit": "e4c381118d3aba4f267dba3a858d98a69cee6a73",
+        "topic": "ClayGraph reversal-aware binding"
+      },
+      {
+        "commit": "02225987d906ae2550b4525eaa0de13811906038",
+        "topic": "ClayCode FRANK loop evaluator/lowering"
+      },
+      {
+        "commit": "5cdce3712b90834137291a7f355f91ba967247c0",
+        "topic": "queued FRANK-loop Ubuntu differential"
+      },
+      {
+        "commit": "dbd91adecfdfdd3890177e2a910ea06819ed1b82",
+        "topic": "ClayCode parser closure assimilation"
+      }
+    ],
+    "verdict": "NOVEL_ENOUGH"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "requested_depth": "EXTREMELY_LONG_DEEP_WITH_WEB_SEARCH_AND_HYPOTHESIS_FORMATION",
+  "rng": {
+    "branch": {
+      "domain": "1..100",
+      "draw": 29,
+      "method": "OS_CSPRNG",
+      "selected": "claycode",
+      "weights": {
+        "claycode": 50,
+        "claygraph": 5,
+        "clayresearch": 4,
+        "emergenz": 6,
+        "frank": 10,
+        "gwt": 6,
+        "harness": 10,
+        "hyperposition": 5,
+        "unifieddb": 4
+      }
+    },
+    "microdirection": {
+      "domain": "1..6",
+      "draw": 5,
+      "method": "OS_CSPRNG",
+      "selected": "package_resolution_lock_provenance"
+    }
+  },
+  "run_id": "spawn_20260809T1835p0700_claycode_package_lock_provenance_f2d5d0",
+  "scientific_promotion": "NONE",
+  "schema_version": "1.0",
+  "selected_question": "How should ClayCode resolve, lock, authenticate, canonicalize and receipt module/package dependencies so the same declared program cannot silently drift across time, registry state, resolver implementation, target/features or source mutation, while keeping semantic identity, supply-chain trust, build provenance and execution authority distinct?",
+  "training_authorized": false,
+  "trigger": "spawn"
+}

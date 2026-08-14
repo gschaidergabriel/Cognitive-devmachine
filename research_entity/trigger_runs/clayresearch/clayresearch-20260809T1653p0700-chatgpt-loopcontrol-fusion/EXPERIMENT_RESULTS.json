@@ -1,0 +1,16 @@
+{
+  "experiment_id":"EXP-CLAYRESEARCH-LOOP-DYNAMICS-TRIAXIS-20260809",
+  "evidence_class":"SYNTHETIC_MECHANISM_SANITY_CHECK_ONLY",
+  "target_claim_boundary":"Not FRANK runtime evidence. Tests whether candidate observables can distinguish recurrent regimes in controlled traces.",
+  "axes":["state_dynamics","residual_error_or_pressure","task_utility_slope"],
+  "synthetic_traces":{
+    "CONVERGING_FIXED_POINT":{"last_delta":0.0000117864,"last_residual":0.0000218890,"utility_tail_slope":0.00005605,"classifier":"CONVERGING_FIXED_POINT","delta_only_halt":true,"residual_aware_halt":true,"adaptive_decision":{"step":14,"reason":"HALT_SUCCESS"}},
+    "STALLED":{"last_delta":0.00141421,"last_residual":3.60582889,"utility_tail_slope":-0.00001322,"classifier":"STALLED","delta_only_halt":true,"residual_aware_halt":false,"adaptive_decision":{"step":4,"reason":"ESCALATE_STALLED"}},
+    "PRODUCTIVE_LIMIT_CYCLE":{"last_delta":1.41421356,"last_residual":0.15,"periodicity_error":4.297e-15,"utility_last":1.0,"classifier":"PRODUCTIVE_LIMIT_CYCLE","delta_only_halt":false,"residual_aware_halt":false,"adaptive_decision":{"step":29,"reason":"BUDGET_END"}},
+    "DIVERGING":{"delta_ratio":16.95928,"residual_ratio":19.43833,"utility_tail_slope":-0.605739,"classifier":"DIVERGING_OR_OVERTHINKING","adaptive_decision":{"step":9,"reason":"HALT_OVERTHINKING"}},
+    "OVERTHINKING_STABLE":{"last_delta":0.000865037,"last_residual":0.00346015,"utility_tail_slope":-0.546875,"utility_peak_step":8,"classifier":"DIVERGING_OR_OVERTHINKING","delta_only_halt":true,"residual_aware_halt":true,"adaptive_decision":{"step":12,"reason":"HALT_OVERTHINKING"}}
+  },
+  "result":"A two-axis delta+residual rule fixes the stalled-vs-converged confusion but still mislabels numerically stable overthinking as successful convergence. A third task-utility/marginal-value axis is therefore required to distinguish HALT_SUCCESS from HALT_OVERTHINKING in this controlled example.",
+  "research_delta":"LoopDynamicsReadout should not be reduced to spectral/Jacobian stability plus residual pressure. It also needs outcome/marginal-utility evidence. Numerical stability != cognitive usefulness.",
+  "next_live_test":"Ubuntu H1 frozen episodes with real state deltas, unresolved pressures, verified outcome utility and fixed-vs-adaptive recurrence controls."
+}

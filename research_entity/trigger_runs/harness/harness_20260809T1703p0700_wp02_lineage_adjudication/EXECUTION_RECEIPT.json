@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "harness-wp02-lineage-adjudication-20260809T1703p0700",
+  "run_id": "harness_20260809T1703p0700_wp02_lineage_adjudication",
+  "trigger": "harness",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class": "SOURCE_MIRROR_SYNTHETIC_MECHANISM_TEST_PLUS_STATIC_CURRENT_REPO_AUDIT",
+  "exact_repository_module_execution_in_this_worker": false,
+  "hosted_execution_limitation": "The hosted worker has GitHub connector access but no repository checkout/networked local repo. Exact current-module execution is therefore left to the Ubuntu/repo executor; no PASS is claimed from the mirror probe.",
+  "source_lineages": {
+    "A": {"path": "research_entity/harness/reference_state_ledger.py", "blob_sha": "1d0c5a5c39a17abe825e757bbfe77b78912f5f39"},
+    "B": {"path": "research_entity/harness/reference/state_ledger.py", "blob_sha": "821f023ea166e45975045b29ff2b120770573c3e"}
+  },
+  "repo_differential_test": {
+    "path": "research_entity/harness/tests/wp02_lineage_differential.py",
+    "create_commit": "1d391c10fbbce7fe7115326b61d18654639fbdd3",
+    "execution_status": "PENDING_EXACT_REPO_EXECUTION"
+  },
+  "source_mirror_probe": {
+    "execution_status": "PASS",
+    "cases": {
+      "same_final_semantic_state_different_event_history": {"A_equal": true, "B_equal": false},
+      "typed_set_permutation_and_dedup": {"A_equal": false, "B_equal": true},
+      "ordered_sequence_permutation": {"A_detects_change": true, "B_detects_change": true}
+    }
+  },
+  "static_differential": {
+    "A_strengths": [
+      "semantic root excludes event ids/timestamps/writer/provenance and therefore represents current semantic content independently of history",
+      "full event-chain verify surface",
+      "explicit snapshot export/restore with provenance-bound recovery event"
+    ],
+    "A_defects_or_gaps": [
+      "typed $kind=set semantics are not canonicalized as sets",
+      "no domain epochs",
+      "no explicit CURRENT/RETRACTED/SUPERSEDED/QUARANTINED status surface",
+      "idempotent replay checks only idempotency key plus event_id, so a changed semantic payload with the same pair can be silently treated as replay"
+    ],
+    "B_strengths": [
+      "typed set versus ordered collection canonicalization",
+      "domain epochs",
+      "separate semantic event, semantic chain, execution chain and trace-root identities",
+      "idempotency fingerprint rejects changed semantic/provenance/source payload",
+      "explicit retract/supersede status semantics"
+    ],
+    "B_defects_or_gaps": [
+      "semantic_state_hash includes global epoch, domain epochs and semantic history chain, so identical current semantic content reached through different event groupings hashes differently",
+      "no full verify method over event/state chains",
+      "no snapshot restore method",
+      "execution metadata is outside the idempotency fingerprint and needs an explicit retry/attempt receipt contract"
+    ]
+  },
+  "baseline_compatibility_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "observed_head": "d916b98fb65dc62fbf3275d6a48dc52c2bfc2612",
+    "current_materializer_behavior": "The live reference materializer maintains a transaction/epoch root derived from previous root + source head + source content hash + idempotency + operations. H1 must preserve this observable baseline or record a tested intentional divergence.",
+    "evidence_refs": ["tests/repo_transaction_replay.py", "runtime/state/repo_semantic_materializer_impl.py"]
+  },
+  "adjudication": {
+    "status": "MERGE_REQUIRED_NO_LINEAGE_SELECTED",
+    "recommended_identity_stack": [
+      "baseline_transaction_root_hash: preserve current frankv0.1 compatibility identity during H1 import",
+      "semantic_content_hash: canonical current semantic content only; independent of provenance/execution/history",
+      "state_version_hash: semantic_content_hash + explicit global/domain epochs + semantic history/version identity",
+      "trace_root_hash: state_version_hash + provenance/source/execution/attempt chain"
+    ],
+    "required_merge_features": [
+      "B typed canonicalization and domain epochs",
+      "B semantic/provenance/execution identity separation",
+      "A full verification and snapshot restore",
+      "strict idempotency payload conflict rejection",
+      "explicit read-set/invariant-group epoch guards for consequential commits",
+      "timing/schedule/retry/recurrence receipts remain observational and never widen authority"
+    ]
+  },
+  "scientific_boundary": {
+    "live_frank_evidence": false,
+    "ubuntu_target_execution": false,
+    "synthetic_component_evidence": true,
+    "h_wp_02_complete": false,
+    "h1_release_pass": false,
+    "canonical_promotion": false
+  },
+  "next_discriminating_test": "Execute research_entity/harness/tests/wp02_lineage_differential.py against current repo on the Ubuntu developer host, then run a larger golden transaction corpus plus crash injection and live frankv0.1 baseline replay before freezing the H1 oracle ledger contract."
+}

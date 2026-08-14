@@ -1,0 +1,27 @@
+{
+  "schema_version":"2.0",
+  "run_id":"claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure",
+  "trigger":"claycode",
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "registry_scientific_branches":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "branch_priority":["frank","harness","claygraph","unifieddb","clayresearch","gwt","hyperposition","emergenz","claycode"],
+  "special_rules":{
+    "claycode_requires_latest_frank_research_as_primary_feedback":true,
+    "claycode_requires_deep_claygraph_input":true,
+    "claycode_requires_deep_unifieddb_input":true,
+    "claycode_requires_goodman_anti_echo_review":true
+  },
+  "branches":[
+    {"branch":"frank","latest_run":"frank-20260809T1726p0700-loop-base-bridge","source_ref":"commit:56920faa53f9231946e0b331431c2bae1b24c93b","use":"latest FRANK loop/base bridge; bounded recurrence readout/decision; no new ClayCode semantics; external effect gateway remains mandatory"},
+    {"branch":"harness","latest_run":"harness_20260809T1725p0700_hwp02_oracle_merge","source_ref":"commit:89dfb8bf08d9082cfa85bb5f48cf3fac0c3a02fa","use":"semantic_state_hash vs state_version_hash vs trace_root_hash; idempotent replay and stale-epoch fail-closed"},
+    {"branch":"claygraph","latest_run":"live-fusion-20260809T1703p0700-refresh6","source_ref":"commit:352eaa2c149ca211f4d2449ca85178dcbd5138f4","use":"activation cannot resolve compiled symbol/effect authority; exact typed identity required"},
+    {"branch":"unifieddb","latest_run":"live-fusion-20260809T1703p0700-refresh6","source_ref":"commit:352eaa2c149ca211f4d2449ca85178dcbd5138f4","use":"logical identity separate from physical representation and external-effect certainty"},
+    {"branch":"clayresearch","latest_run":"clayresearch_20260809T1716p0700_chatgpt-secondary","source_ref":"commit:71b8209297e3318aa99fc9732070b2288b6f10d0","use":"capability-intersection non-amplification proxy and implementation-first BASE direction"},
+    {"branch":"gwt","latest_run":"gwt-20260809T1720p0700-chatgpt-secondary-r7-dual-gate","source_ref":"commit:3a586b594be73e06a01e5f1efdd975df9c7c89e4","use":"admission != continuation; reentry carries no authority; typed recurrence receipts"},
+    {"branch":"hyperposition","latest_run":"live-fusion-20260809T1703p0700-refresh6","source_ref":"commit:352eaa2c149ca211f4d2449ca85178dcbd5138f4","use":"alternative candidates do not authorize concrete compiled effect selection"},
+    {"branch":"emergenz","latest_run":"live-fusion-20260809T1703p0700-refresh6","source_ref":"commit:352eaa2c149ca211f4d2449ca85178dcbd5138f4","use":"compiler completeness/recursion/effect closure are not emergence evidence"},
+    {"branch":"claycode","latest_run":"claycode-20260809T1717p0700-all-workers-production-parser + claycode-20260809T1711p0700-chatgpt-secondary-fn-closure","source_ref":"commits:b5d3059ba49c1dcaf8483414fd41fb89736384bd,2c1ee0df4fb10080b28e3475052d15a675dcd384","use":"parser repairs executable but D not selected; definition-call closure proxy passed; control/effect closure is next unresolved compiler boundary"}
+  ],
+  "finding":"Control-flow semantics and transitive effect summaries can be tested as canonical typed IR closure without introducing a FRANK-specific primitive. Effect summaries describe potential effects; they do not mint runtime authority.",
+  "ancestry_warning":"Project branch agreement is shared-ancestry coherence, not independent replication."
+}

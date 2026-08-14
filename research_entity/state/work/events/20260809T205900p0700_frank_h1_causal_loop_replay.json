@@ -1,0 +1,51 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create-frank-h1-causal-loop-replay-20260809T205900p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:59:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-H1-CAUSAL-LOOP-REPLAY-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "FRANK_H1_CAUSAL_DISCRIMINATOR",
+    "title": "Run matched FRANK H1 lesion/rescue and recurrence-policy replay on Andreas Ubuntu",
+    "work_clay": "On the owner-registered Andreas Ubuntu target, use current Frank main plus draft PR #5. First run the 14-case tests/test_loop_causal_replay.py and adapter self-test. For regulator causality, run frozen accepted H1 episodes through BASELINE -> LESION -> RESCUE with identical frozen_input_sha256, loop_id, loop_family, state_epoch, graph_epoch, controller_policy_hash, residual_estimator_id, residual_estimator_version and regulator. LESION/RESCUE require real intervention refs; successful RESCUE requires a real rollback ref. For policy causality, compare FIXED_BUDGET, ADAPTIVE_TREND_SAFE, ADAPTIVE_PROXY_SAFE and ADAPTIVE_CALIBRATED_NEXT_STEP on the same frozen episode/state basis while allowing controller_policy_hash to differ because policy is the treatment. For truthful re-entry vs shuffled/no-reentry, require the stricter same regulator configuration. Preserve target-runtime receipts for every arm. Record actual next-step utility outcomes; HISTORY_PROXY must never be relabeled VALIDATED_NEXT_STEP_ESTIMATE. Store provenance_origin separately from attestation_layer; SELF_ATTESTED/UNVERIFIED are not strong causal evidence. Reuse the admitted central UnifiedDB causal spine only; no new migration or node-local DB. Preserve negative results and benign one-axis-growth cases. Analyzer receipts are proposal-only and never execution authority.",
+    "reason_clay": "Trajectory classification is now proxy-safe and quality-gated but does not establish causal regulator or recurrence-policy value. Matched lesion/rescue plus treatment-correct policy comparison is the highest-information discriminator for the FRANK loop-of-loops hypothesis without collapsing recurrence into emergence.",
+    "completion_clay": "Implementation integration PASS only when the 14-case suite passes on the registered Andreas Ubuntu target, at least one fully matched regulator baseline/lesion/rescue triple has target-runtime receipts with reversible intervention/rollback semantics, policy-arm comparisons preserve identical frozen episode/state basis while treating policy identity as the intended intervention, negative outcomes are preserved, and deterministic analysis receipts project through the admitted central Frank runtime without new schema or effect authority. Scientific promotion remains separate and requires repeated/independent evidence. Explicitly mark unavailable arms rather than synthesizing them.",
+    "evidence_need": [
+      "ANDREAS_TARGET_RUNTIME_RECEIPTS",
+      "FROZEN_H1_EPISODE_HASHES",
+      "SEMANTIC_AND_GRAPH_EPOCH_MATCH",
+      "CONTROLLER_POLICY_HASHES",
+      "RESIDUAL_ESTIMATOR_IDENTITY_AND_QUALITY",
+      "BASELINE_LESION_RESCUE_MATCH_RECEIPT",
+      "FIXED_TREND_PROXY_CALIBRATED_POLICY_RECEIPTS",
+      "OBSERVED_NEXT_STEP_UTILITY",
+      "PROVENANCE_ORIGIN_AND_ATTESTATION",
+      "INTERVENTION_AND_ROLLBACK_RECEIPTS",
+      "NEGATIVE_RESULT_RECEIPTS"
+    ],
+    "dependencies": [
+      "Dr.-Unterweger PR #5",
+      "current H1 loop dynamics probe v1.4 proxy-safe",
+      "GitHub CI pre-step failure is unresolved; direct verified local target execution may proceed independently",
+      "WORK-CLAYCODE-RESTORE-RUNNER-CLOSE-BASE14-20260809 for full release transport"
+    ],
+    "required_capabilities": [
+      "ANDREAS_PC_LOCAL_REPO_ACCESS",
+      "REGISTERED_TARGET_HOST_IDENTITY",
+      "FROZEN_H1_REPLAY_INPUTS",
+      "REVERSIBLE_LOOP_REGULATOR_INTERVENTION",
+      "CENTRAL_FRANK_STATE_RUNTIME",
+      "TARGET_RUNTIME_ATTESTATION",
+      "GIT_READ_WRITE_FOR_RECEIPTS"
+    ],
+    "executor_policy": "prefer_verified_CLAUDE_CODE_LOCAL_ORGAN; Research Entity owns Harness research changes; Frank self-Harness authority is proposal-only; no evidence gate weakening; no fake target receipts",
+    "affected_rooms": ["frank","harness","gwt","emergenz","unifieddb","claycode","claygraph","hyperposition","center"],
+    "base_priority": 0.99,
+    "expected_impact": 0.97,
+    "urgency": 0.95,
+    "information_gain": 0.99,
+    "status": "READY"
+  }
+}

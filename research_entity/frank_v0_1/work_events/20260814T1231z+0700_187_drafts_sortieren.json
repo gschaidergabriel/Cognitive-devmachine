@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_187_drafts_sortieren",
+  "actor": "gabriel-claude/wp2",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "count open draft PR, split by base main vs stacked, by gate colour",
+  "done_when": "table draft class + count, measured from gh",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: claycode, dr.-unterweger, unifieddb",
+  "source": {
+    "lauf": "20260813-164423",
+    "paket": "wp2",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-164423-wp2/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-164423-wp2/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 90,
+  "ergebnis_kurz": "total 246 open PR, 224 draft, 22 ready. draft base=main 140, draft base=other PR (stacked) 84. draft mergeable MERGEABLE 189, CONFLICTING 35, UNKNOWN 0. draft base=main+MERGEABLE 112, of those zero failing check 23: #263 #440 #458 #460 #466 #467 #468 #470 #475 #486 #491 #507 #514 #520 #525 #537 #555 #566 #567 #568 #570 #573 #574. oldest draft 2026-08-09T13:56:47Z, newest draft 2026-08-13T07:43:01Z. full detail in ergebnis.md.",
+  "bericht": "# wp2 result: sort 187 drafts\n\nsource: `gh pr list --repo gschaidergabriel/Dr.-Unterweger --state open --limit 300 --json number,isDraft,baseRefName,mergeable,statusCheckRollup,createdAt,title` -> /tmp/prs.json, then python3 analyse.\n\n## count table (measured, live)\n\n| metric | value |\n|---|---|\n| total open PR | 246 |\n| draft PR | 224 |\n| ready (non-draft) PR | 22 |\n| draft, base = main | 140 |\n| draft, base = other PR branch (stacked) | 84 |\n| draft, mergeable = MERGEABLE | 189 |\n| draft, mergeable = CONFLICTING | 35 |\n| draft, mergeable = UNKNOWN | 0 |\n| draft + base main + MERGEABLE | 112 |\n| of those, ZERO failing check | 23 |\n\nnote: task text say \"~187 draft\", but live count is 224 draft (source: /tmp/prs.json, field isDraft=true count). value from real gh call, not guess.\n\nstacked base top branch (source /tmp/prs.json baseRefName group, not main): claycode/surface-v2 (4), chatgpt/go-selfroot-current-main-20260810 (4), chatgpt/go-systemd-execstartex-flags-20260812 (3), chatgpt/unifieddb-storage-pair-fused-main-20260811 (3), chatgpt/go-wp04-nested-path-vps-20260810 (3), plus many more single/double branch.\n\n## why draft\ntwo reason group found in data:\n1. base = other open PR (84 draft) -> stacked on top of unmerged PR, can not go ready til base PR merge into main.\n2. base = main but mergeable = CONFLICTING (35 of the 140 base-main draft) -> merge conflict block ready.\nUNKNOWN: exact per-PR human reason (WIP label, author choice) not in this data set, gh json field give no draft-reason text.\n\n## draft that could go ready NOW\ncondition: base=main AND mergeable=MERGEABLE AND zero failing check (source: statusCheckRollup conclusion/state field, none of FAILURE/ERROR/CANCELLED/TIMED_OUT).\ncount: 23 PR match.\nlist (all 23, under 20 limit not hit so full list given): #263, #440, #458, #460, #466, #467, #468, #470, #475, #486, #491, #507, #514, #520, #525, #537, #555, #566, #567, #568, #570, #573, #574\n\n## date range of draft\noldest draft createdAt: 2026-08-09T13:56:47Z\nnewest draft createdAt: 2026-08-13T07:43:01Z\n(source: /tmp/prs.json createdAt field, min/max over isDraft=true set)\n"
+}

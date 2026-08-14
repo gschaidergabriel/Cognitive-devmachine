@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T05:45:00+07:00",
+  "actor": "chatgpt-secondary",
+  "scope": "ClayCode FREE_ONLY autonomous supervisor steering",
+  "authority": {
+    "canonical_semantics_changed": false,
+    "base_workpackage_promoted": false,
+    "frank_harness_modified": false,
+    "paid_fallback_allowed": false
+  },
+  "observations": [
+    {
+      "kind": "EXECUTION_TRANSPORT_NEGATIVE",
+      "source": "PR#45",
+      "detail": "The bounded dual-lane probe created a workflow; hosted-control failed before exposing steps/logs while the self-hosted lane remained queued during the bounded observation window.",
+      "allowed_conclusion": "NO_ACCESSIBLE_MATCHING_SELF_HOSTED_RUNNER_IN_OBSERVATION_WINDOW",
+      "forbidden_conclusion": "Do not infer permanent repository-scope runner misconfiguration from this observation alone."
+    },
+    {
+      "kind": "EXECUTION_TRANSPORT_NEGATIVE",
+      "source": "PR#52",
+      "detail": "A separate GitHub-hosted transport workflow failed twice before any visible step/log, including one API-accepted rerun; therefore it never dispatched the canonical WP02 workflow and created no WP02 authority/evidence.",
+      "allowed_conclusion": "Repository/account/policy/scheduling-local failure is more plausible than a contemporaneous public GitHub-wide Actions outage, but root cause remains unresolved.",
+      "forbidden_conclusion": "Do not classify this as a ClayCode parser/compiler/runtime failure."
+    },
+    {
+      "kind": "CROSS_BRANCH_ANTI_ECHO_NEGATIVE",
+      "source": "FRANK PR#54 admitted real-Qwen V2/calibration audit",
+      "detail": "Raw verbalized model confidence was 100% mean at 75% accuracy with an overconfident wrong case; calibration gate failed.",
+      "allowed_conclusion": "ClayCode autonomous research must not use model self-confidence, answer stability, or family consensus as execution/correctness authority. They may rank hypotheses only when separated from executable evidence.",
+      "forbidden_conclusion": "Do not convert verbalized confidence into BASE PASS, semantic promotion, or autonomous halt authority."
+    }
+  ],
+  "next_cycle_priority": [
+    "1. Resolve execution transport before interpreting absence of WP02 receipts as a code failure. Prefer the smallest semantics-free GitHub-hosted no-op/identity diagnostic that can prove at least one step executed on the current repository state; avoid repeated duplicate probes once a negative is preserved.",
+    "2. Treat self-hosted runner accessibility as UNKNOWN/BOUNDED_NEGATIVE until repository-scoped execution is directly observed or an authoritative runner API proves eligibility. Do not claim permanent scope misconfiguration from queued jobs alone.",
+    "3. While Actions transport is unresolved, continue only local/connector/sandbox research that can materially falsify V17 or receipt-integrity assumptions; do not spend FREE_ONLY provider quota merely to repeat model opinions.",
+    "4. Once execution transport is proven, resume the established critical path: V17 exact grammar bytes -> strict lark[interegular] bounded construction -> full G9+dialect/canonical/IR differential -> replay WP06 hardening under the same V17/current-main provenance -> composed evaluator/native-C differentials -> genuine Andreas Ubuntu BASE14 acceptance.",
+    "5. Any model-family outputs remain hypothesis-generation evidence. Executable counterexamples, exact-byte provenance, single-commit coherence, and genuine target receipts dominate model consensus."
+  ],
+  "free_only_policy": {
+    "required": true,
+    "paid_fallback": "FORBIDDEN",
+    "quota_exhaustion": "record_and_fallback_or_pause",
+    "provider_402": "hard_stop_for_provider",
+    "provider_429": "cooldown_only"
+  },
+  "promotion_policy": {
+    "base_pass_from_model_consensus": false,
+    "canonical_promotion_without_executable_counterevidence_review": false,
+    "cross_version_receipt_inheritance_without_exact_provenance": false,
+    "hosted_proxy_counts_as_andreas_target": false
+  }
+}

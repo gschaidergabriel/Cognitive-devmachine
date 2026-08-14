@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1709p0700_chatgpt_resource_lifetime_epoch",
+  "review_subject":"FRANK/ClayCode assumption that computational expressibility remains separate from external effect/resource authority and that typed host adapters should be preferred over new domain syntax when sufficient",
+  "shared_ancestry_collapsed":true,
+  "independent_inputs":[
+    {"class":"PRIMARY_EXTERNAL_SPEC","source":"WebAssembly Component Model MVP handle/resource semantics","finding":"own/borrow handles are opaque, table-mediated, type-classified and dynamically lifetime-checked"},
+    {"class":"PRIMARY_EXTERNAL_SPEC","source":"WIT resource semantics","finding":"resources are abstract lifetime-bearing entities passed indirectly by handles; own and borrow differ semantically"},
+    {"class":"LOCAL_EXECUTABLE_PROXY","source":"EXP-CC-RESOURCE-LIFETIME-EPOCH-BORROW-TYPE","finding":"20,000 randomized operations matched an independent oracle; removing freshness, borrow-close or type checks created concrete counterexamples"}
+  ],
+  "counterhypotheses_tested":[
+    "opaque handle identity alone is enough",
+    "borrow tracking can be omitted dynamically without replacement proof",
+    "resource type identity can be erased safely"
+  ],
+  "verdict":"REFINED",
+  "refinement":"The external authority boundary is supported for this slice, but the strongest evidence supports a backend-neutral typed ResourceHandle/FFI lowering contract with explicit lifetime/freshness/type rules rather than new DB-specific ClayCode syntax. Capability epoch and resource lifetime epoch must remain conceptually separable until target evidence shows when they should couple.",
+  "not_supported":[
+    "production no-ambient-authority sandboxing",
+    "Ubuntu target equivalence",
+    "full FRANK resource safety",
+    "claim that runtime checks must duplicate guarantees already proven by a target backend"
+  ],
+  "next_falsifier":"Compile the same frozen resource contract to the selected Ubuntu-native and/or WASM/WASI backend, then differential-test generativity, stale/ABA reuse, own/borrow transfer, cancellation/drop and capability revocation with target receipts."
+}

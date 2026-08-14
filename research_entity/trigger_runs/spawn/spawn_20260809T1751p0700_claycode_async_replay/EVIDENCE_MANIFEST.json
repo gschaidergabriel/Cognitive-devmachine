@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn_20260809T1751p0700_claycode_async_replay",
+  "evidence":[
+    {"id":"E-REPO-CC-EFFECT-CLOSURE","class":"CURRENT_REPOSITORY_EXECUTABLE_PROXY","ref":"research_entity/trigger_runs/claycode/claycode-20260809T1728p0700-effect-closure-lowering/FINAL_REPORT.md","finding":"20,000 effect-closure graphs and 5,000 generated-Python differential executions supported compositional effect requirements while preserving authority separation; async/control/resource closure remained open.","ancestry":"shared ClayCode repository lineage"},
+    {"id":"E-REPO-HARNESS-LEDGER","class":"CURRENT_REPOSITORY_EXECUTABLE_IMPLEMENTATION","ref":"research_entity/harness/reference/state_ledger.py + H-WP-02 stress commits","finding":"Current ledger serializes commits with epochs/idempotency and can replay an already fixed event order; its stress test does not establish interleaving-independent concurrency semantics.","ancestry":"shared FRANK Harness repository lineage"},
+    {"id":"E-LOCAL-ASYNC-PROXY","class":"HOSTED_LOCAL_EXECUTABLE_PROXY","ref":"EXPERIMENT_ASYNC_REPLAY_CONTRACT.py","finding":"43,823 disjoint write pairs had 0 schedule divergences; all 6,177 conflicting pairs diverged under reversed order; 100,000 intentional races produced 66,583 replay mismatches without ChoiceReceipt and 0 with ChoiceReceipt; 100,000 invalid receipts were rejected; 100,000 cancel/retry trials produced 50,094 naive duplicate-effect failures and 0 idempotent-intent failures; stable task IDs had 0/20,000 schedule failures; fixed biased fairness gave shutdown 0/10,000 wins vs 4,967/10,000 randomized wins.","scope":"synthetic hosted proxy, not production ClayCode/Ubuntu"},
+    {"id":"E-EXT-DPJ","class":"PRIMARY_ACADEMIC_PROJECT_AND_PUBLICATION","url":"https://dpj.cs.illinois.edu/","finding":"DPJ develops deterministic-by-default concurrency using compile-time effect reasoning while allowing explicit safe nondeterminism."},
+    {"id":"E-EXT-TOKIO","class":"PRIMARY_IMPLEMENTATION_DOCUMENTATION","url":"https://docs.rs/tokio/latest/tokio/macro.select.html","finding":"select returns first completion and cancels remaining branches; default branch checking is randomized for fairness, biased order transfers fairness responsibility to the programmer; cancellation safety is operation-dependent."},
+    {"id":"E-EXT-FOUNDATIONDB","class":"PRIMARY_PROJECT_DOCUMENTATION","url":"https://apple.github.io/foundationdb/testing.html","finding":"FoundationDB uses deterministic single-threaded simulation for repeatability; deterministic testing is powerful but real multithreading introduces additional nondeterminism."},
+    {"id":"E-EXT-TEMPORAL","class":"PRIMARY_PROJECT_ARCHITECTURE","url":"https://github.com/temporalio/temporal/blob/main/docs/architecture/README.md","finding":"Temporal rebuilds workflow state from append-only event history; workflow logic is deterministic/side-effect constrained while external activities must be idempotent or non-retryable."},
+    {"id":"E-EXT-RR","class":"PRIMARY_PROJECT_DOCUMENTATION","url":"https://rr-project.org/","finding":"rr records nondeterministic execution inputs/effects and deterministically replays the same execution, demonstrating record/replay as an alternative to requiring live execution itself to be globally deterministic."}
+  ],
+  "negative_results":[
+    {"id":"N-SPAWN-ASYNC-001","result":"GLOBAL_FIXED_SCHEDULER_NOT_SUFFICIENT_AS_SOLE_SEMANTICS","evidence":"fairness counterexample: fixed biased order starved always-ready shutdown 10,000/10,000 trials"},
+    {"id":"N-SPAWN-ASYNC-002","result":"EVENT_ORDER_REPLAY_DOES_NOT_PROVE_CONCURRENCY_DETERMINISM","evidence":"current Harness stress exercises deterministic serial replay/stale-writer rejection but not alternate interleavings"},
+    {"id":"N-SPAWN-ASYNC-003","result":"UNIVERSAL_EXACTLY_ONCE_EXTERNAL_EFFECT_PROMISE_REJECTED","evidence":"idempotent semantic intent solves tested dedup case, but arbitrary external systems may lack dedup/transactions"},
+    {"id":"N-SPAWN-INFRA-001","result":"INTERCONNECT_PREFLIGHT_TOOLING_DRIFT_PRESERVED","evidence":"fresh ClayCode run reports registry clayresearch vs preflight hard-coded clay mismatch; explicit nine-branch manifest used instead"}
+  ],
+  "promotion":"NONE",
+  "evidence_boundary":"Proxy-supported implementation hypothesis only. No production ClayCode compiler/runtime execution, no APP-04 acceptance receipt, no Andreas Ubuntu target execution, and no live-FRANK causal evidence."
+}

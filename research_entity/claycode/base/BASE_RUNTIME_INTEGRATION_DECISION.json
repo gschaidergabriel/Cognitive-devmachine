@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "CLAYCODE-BASE-RUNTIME-INTEGRATION-20260809",
+  "actor": "chatgpt-secondary",
+  "status": "CURRENT_IMPLEMENTATION_DECISION",
+  "decision": "SELECT_EXISTING_LINUX_RUNTIME_GATEWAY_AS_BASELINE_AND_USE_CONTEXT_BOUND_BROKER_AS_ADVERSARIAL_ORACLE",
+  "selected_runtime": {
+    "path": "tools/claycode_base_runtime_gateway.py",
+    "commit": "b5f9599834a724ad69fcaacbb916acb133949805",
+    "reason": "It already realizes scoped Linux file effects, SQLite/process adapters, opaque object-identity capability validation, generation-bound resources, reserve/commit/rollback receipts and versioned CAS. These are direct WP07/WP08/WP09 implementation mechanisms rather than a second synthetic broker surface."
+  },
+  "compiler_effect_bridge": {
+    "path": "tools/claycode_base_effect_pipeline.py",
+    "commit": "fc3b653be380cd7a28fac9f24e3508458f6aea30",
+    "role": "V7 source and typed IR to effect manifest, reference evaluation and translation-validation bridge"
+  },
+  "adversarial_authority_oracle": {
+    "path": "tools/claycode_base_authority_runtime.py",
+    "commit": "50cff31d5d9fae4c809bbfb7a1b65ca9bdead6b3",
+    "role": "NOT_A_SECOND_PRODUCTION_RUNTIME; test oracle for copied/forged/serialized/stale/revoked handles, origin/basis/selection/closure binding and monotone aggregate budget",
+    "merge_requirements_into_selected_runtime_before_wp07_pass": [
+      "origin binding",
+      "basis epoch binding",
+      "selection identity binding",
+      "closure identity binding",
+      "monotone aggregate budget or equivalent cumulative authority accounting"
+    ]
+  },
+  "application_proxy": {
+    "path": "tools/claycode_base_application_proxy_suite.py",
+    "commit": "de7d85ad2e3caeb3572394a389a69b969e710162",
+    "role": "hosted-Linux integration preflight across all ten required app classes; never target acceptance"
+  },
+  "architecture_invariants": [
+    "model output != execution authority",
+    "descriptive capability data != bearer possession",
+    "foreign lowering receives no ambient authority by default",
+    "resource identity is generation/version bound where slot/value reuse can occur",
+    "effect reserve/commit/rollback state is receipt-visible",
+    "semantic identity excludes execution-only nonce/retry identity where not program-observable"
+  ],
+  "anti_fork_rule": "Do not evolve tools/claycode_base_authority_runtime.py into an independent production runtime. Port discriminating invariants/tests into tools/claycode_base_runtime_gateway.py and its validation suite.",
+  "release_effect": "NO_AUTOMATIC_PASS",
+  "counts_as_wp07_pass": false,
+  "counts_as_target_acceptance": false,
+  "next_discriminator": "Execute compiler effect intents through the selected Linux runtime gateway under adversarial copied/forged/stale/revoked/budget/context cases, then repeat on Andreas Ubuntu with real filesystem/process/network/SQLite effects and child-process authority closure."
+}

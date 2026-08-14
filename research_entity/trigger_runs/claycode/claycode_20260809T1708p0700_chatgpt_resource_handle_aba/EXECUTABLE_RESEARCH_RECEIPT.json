@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1708p0700_chatgpt_resource_handle_aba",
+  "experiment_id":"EXP-CC-RESOURCE-HANDLE-ABA-20260809-01",
+  "candidate":"CC-WP-07 opaque lifetime-checked resource handle ABI",
+  "source_path":"experiments/resource_handle_aba_probe.py",
+  "source_sha256":"689eb6b5ec2cbee8b3fd1d906852de78823b5e065a8793f5650d87e4206f3ce3",
+  "runtime":{"provider":"ChatGPT local container","os":"Linux 6.18.35 x86_64","python":"3.13.5"},
+  "seed":20260809,
+  "tests":{"exhaustive_cases":16,"fuzz_cases":100000},
+  "observed":{"naive_integer_handle":{"unsafe_exhaustive":16,"unsafe_fuzz":100000},"slot_plus_generation":{"unsafe_exhaustive":0,"unsafe_fuzz":0}},
+  "example":{"old_handle":{"slot":0,"generation":1},"new_handle":{"slot":0,"generation":2},"naive_stale_read":"B","generation_checked_stale_read":null},
+  "expected_semantic_property":"After drop/close and slot reuse, a stale resource handle must fail closed and must not resolve to the newly allocated resource.",
+  "result":"PROPERTY_VIOLATED_BY_RAW_REUSABLE_SLOT_HANDLE_AND_PRESERVED_BY_TESTED_GENERATION_CHECK",
+  "evidence_class":"LOCAL_SYNTHETIC_RUNTIME_ABI_COMPONENT_EVIDENCE",
+  "limitations":["forced-reuse allocator model","no production ClayCode compiler","no E2B execution","no Andreas Ubuntu target execution","generation tag is one candidate mechanism, not uniquely selected"],
+  "affected_work_packages":["CC-WP-07-RUNTIME-ABI-FFI","CC-WP-11-FUZZ-CONFORMANCE"],
+  "language_change_required":false,
+  "promotion":"NONE"
+}

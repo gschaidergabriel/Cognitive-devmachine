@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1712p0700_chatgpt_idempotency_concurrency",
+  "tools": [
+    {
+      "tool": "GitHub connector",
+      "class": "repository",
+      "status": "SUCCESS",
+      "result": "Canonical r2/hash verified; current ClayCode/program/mesh inputs read; durable unique-path run writes available."
+    },
+    {
+      "tool": "web primary-source research",
+      "class": "current_web/implementation",
+      "status": "SUCCESS",
+      "result": "Primary SQLite transaction semantics checked. IETF Idempotency-Key draft found only as expired work-in-progress context, not treated as normative authority."
+    },
+    {
+      "tool": "local container Python/sqlite3",
+      "class": "executable",
+      "status": "SUCCESS",
+      "runtime": "Python 3.13.5 / SQLite 3.46.1",
+      "result": "80 pre-lock duplicate-writer races, 80 post-lock same-payload races, 80 post-lock different-payload races plus uniqueness-only different-payload control executed."
+    },
+    {
+      "tool": "E2B",
+      "class": "executable",
+      "status": "NOT_EXPOSED_IN_THIS_SESSION",
+      "fallback": "LOCAL_CONTAINER"
+    },
+    {
+      "tool": "research_interconnect_preflight.py",
+      "class": "repo_local_validator",
+      "status": "NOT_EXECUTED",
+      "reason": "No repository checkout/runtime surface exposed to this hosted connector worker; equivalent manifest materialized from verified remote state."
+    },
+    {
+      "tool": "goodman_filter_check.py",
+      "class": "repo_local_validator",
+      "status": "NOT_EXECUTED",
+      "reason": "No repository checkout/runtime surface exposed; manual evidence-ancestry/adversarial review recorded."
+    },
+    {
+      "tool": "GitHub Project-Frankenstein code search",
+      "class": "historical_archaeology",
+      "status": "NO_RELEVANT_RESULT",
+      "result": "No idempotency/transaction/retry ledger mechanism located by available query; no historical originality claim made."
+    }
+  ],
+  "provider_gate_complete": true,
+  "limitations": [
+    "Not executed on Andreas' Ubuntu target host",
+    "No production G9 parser/compiler in this experiment",
+    "No E2B execution",
+    "No independent second DB/backend"
+  ]
+}

@@ -1,0 +1,56 @@
+name: ClayCode BASE typed-FFI effect applications v2
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_base_effect_apps_v2.py'
+      - 'tools/claycode_base_effect_pipeline.py'
+      - 'tools/claycode_base_runtime.py'
+      - 'tools/claycode_base_stdlib_extensions.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
+      - '.github/workflows/claycode-base-effect-apps-v2.yml'
+permissions:
+  contents: write
+concurrency:
+  group: claycode-effect-apps-v2-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  effect-apps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned parser dependency
+        run: python -m pip install --disable-pip-version-check --quiet 'lark[interegular]==1.3.1'
+      - name: Execute six Clay-source effectful app classes
+        run: python tools/claycode_base_effect_apps_v2.py
+      - name: Require semantic runtime and authority agreement
+        run: |
+          python - <<'PY'
+          import json
+          p='research_entity/claycode/autonomous/BASE_EFFECT_APPLICATIONS_V2_RECEIPT.json'
+          d=json.load(open(p,encoding='utf-8'))
+          assert d['pass'] is True, d['failures']
+          assert d['passed']==6 and d['total']==6
+          assert d['textual_capability_without_bearer_denied'] is True
+          assert d['counts_as_target_acceptance'] is False
+          for row in d['rows']:
+              assert row['authority_boundary_preserved'] is True
+              assert row['runtime_adapters']
+          print('BASE_EFFECT_APPLICATIONS_V2_PROXY_PASS')
+          PY
+      - name: Commit evidence receipt
+        run: |
+          git config user.name 'claycode-effect-apps-v2'
+          git config user.email 'claycode-effect-apps-v2@users.noreply.github.com'
+          git add research_entity/claycode/autonomous/BASE_EFFECT_APPLICATIONS_V2_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record typed-FFI effect application receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1

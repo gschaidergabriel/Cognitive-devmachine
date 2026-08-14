@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-CC-SOURCE-CHAIN-INTEGRITY-20260809-01",
+  "run_id": "claycode_20260809T1702p0700_chatgpt_source_chain_integrity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "epistemic_class": "LOCAL_SYNTHETIC_EXECUTION_PLUS_REPO_SOURCE_DIFF_NOT_TARGET_UBUNTU_RECEIPT",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "inputs": {
+    "current_grammar": "research_entity/claycode/g9/grammar.ebnf",
+    "g9_source": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "prior_probe": "research_entity/trigger_runs/claycode/claycode-20260809T1650p0700-base-parser-control-lowering/LOOP_DYNAMICS_PROBE.clay",
+    "prior_lowering": "research_entity/trigger_runs/claycode/claycode-20260809T1650p0700-base-parser-control-lowering/LOWERED_PROBE.py",
+    "prior_grammar_repair": "research_entity/trigger_runs/claycode/claycode-20260809T1650p0700-base-parser-control-lowering/GRAMMAR_REPAIR_CANDIDATE.ebnf"
+  },
+  "probe": {"path": "research_entity/trigger_runs/claycode/claycode_20260809T1702p0700_chatgpt_source_chain_integrity/SOURCE_CHAIN_PROBE.py", "sha256": "c0b2dafb9ce7a8db4bc929cbc90682bb66894b3d91ba15926c882661fd267eb1"},
+  "runtime": {"system": "Linux", "kernel": "6.18.35", "machine": "x86_64", "python": "3.13.5", "lark_used_for_adversarial_parse_check": "1.3.1"},
+  "observations": [
+    {
+      "id": "OBS-CYCLE-HEADER",
+      "expected_from_current_grammar": "cycle '(' [params] ')' block",
+      "observed_prior_fixture": "cycle classify(x:LoopInput) {...}",
+      "current_grammar_accepts_named_header": false,
+      "minimal_if_relop_repair_changes_cycle_decl": false,
+      "classification": "SOURCE_FIXTURE_NOT_ADMITTED_BY_CURRENT_OR_MINIMAL_REPAIR_CYCLE_DECL"
+    },
+    {
+      "id": "OBS-EMIT-RETURN",
+      "source_behavior_surface": "emit calls inside conditional blocks plus final emit",
+      "prior_generated_behavior": "Python return from each selected branch",
+      "current_g9_explicit_emit_terminator_semantics_found": false,
+      "classification": "LOWERING_ADDS_UNDECLARED_TERMINATION_SEMANTICS"
+    }
+  ],
+  "executable_discriminator": {
+    "seed": 20260809,
+    "cases": 20000,
+    "return_lowering_vs_nonterminating_emit_trace_differences": 17693,
+    "same_traces": 2307,
+    "prior_return_lowering_categories": {"PRODUCTIVE_LIMIT_CYCLE": 13204, "DIVERGING_OR_OVERTHINKING": 4097, "CONVERGING_FIXED_POINT": 2307, "STALLED": 392},
+    "interpretation": "Semantic ambiguity/materiality only; neither arm is promoted as ClayCode semantics."
+  },
+  "identity_discriminator": {
+    "candidate_fixture_semantic_hash": "a94f94c46e7eb89f5ff38497778bf91f28e9a20bdd93811a756ae174d366cbf9",
+    "fixture_label_mutations": 10000,
+    "distinct_candidate_semantic_hashes": 1,
+    "distinct_contract_hashes": 10000,
+    "scope": "Only supports treating an unreferenced research-fixture label as provenance metadata; does not authorize stripping names from callable/exported program entities."
+  },
+  "scientific_result": "The prior loop-dynamics run is valid as a manually lowered Python behavior fixture but does not establish end-to-end ClayCode parser-to-target semantic preservation. Gate evidence needs an unbroken source/parse/typed-IR/lowering/execution chain.",
+  "negative_results": ["N-CC-SOURCE-CHAIN-BYPASS-007", "N-CC-EMIT-RETURN-SEMANTIC-LEAK-008"],
+  "limits": ["Not Andreas' exact Ubuntu developer system", "No E2B tool was exposed in this ChatGPT session; no fresh E2B evidence claimed", "The executable parser was a bounded research proxy, not the production ClayCode parser", "No ClayCode semantic change or BASE gate promotion is claimed"]
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version":"1.0",
+  "refresh_id":"live-fusion-20260809T1703p0700-refresh1",
+  "created_at":"2026-08-09T17:04:00+07:00",
+  "parent_feedback":"research_entity/mesh_feedback/20260809T1703p0700-live-fusion/BRANCH_FEEDBACK_MANIFEST.json",
+  "parent_commit":"3fb538e46ae8342a7a724553ebd2d604918389d5",
+  "observed_concurrent_head":"3e22db2847e7c8ff0c4a88c4d027b31d5c3490e9",
+  "scientific_promotion":"NONE",
+  "material_refresh":{
+    "R1_DEPENDENCY_SCOPED_EFFECT_ENVELOPE":{
+      "effect":"REVISE",
+      "source_ref":"research_entity/trigger_runs/clayresearch/clayresearch-20260809T1655p0700-loop-txn-effect-envelope/EXECUTABLE_RESEARCH_RECEIPT.json",
+      "evidence_class":"EXACT_SYNTHETIC_MECHANISM_EXPERIMENT",
+      "result":"Across 16 exhaustive one-shot schedules and 100000 fuzz cases / 350618 recurrent commit attempts, stale permit reuse was unsafe; a whole-state epoch guard eliminated unsafe commits but produced false aborts from unrelated churn; an exact decision read-set + current capability epoch/validity envelope produced zero unsafe commits and zero false aborts in the constructed model.",
+      "revision_to_parent":"Refine generic snapshot/transaction guidance: for effect commit, prefer the smallest dependency-complete read-set/invariant envelope plus capability freshness, not automatically one global state epoch. Whole-ledger CAS remains a valid simpler countercandidate if target Ubuntu H1 cost is acceptable.",
+      "counterhypothesis":"Single-threaded H1 or whole-ledger CAS may be cheap and simpler enough to dominate dependency-scoped validation in the real target runtime.",
+      "next_test":"Frozen Ubuntu H1 effect-bearing replay comparing whole-ledger CAS vs per-domain/object dependency envelopes under unrelated churn, revoke/regrant, queue delay, crash/restart and child-code effects."
+    },
+    "R2_CLAYCODE_LEXICAL_CLOSURE_BLOCKER":{
+      "effect":"CHALLENGE",
+      "source_refs":[
+        "research_entity/trigger_runs/claycode/claycode_20260809T1655p0700_chatgpt_lexical_closure/EXECUTABLE_RESEARCH_RECEIPT.json",
+        "research_entity/rooms/rooms/claycode/events/evt-20260809T100710Z-crossroom-grammar-blocker.json"
+      ],
+      "evidence_class":"LOCAL_EXECUTABLE_LEXER_MECHANISM_TEST",
+      "result":"Current G9 lexical surface is not closed under its admitted uses: REF matching overconsumed structural delimiter + following ref in 10000/10000 generated adjacent-ref cases; unspaced subtraction collided with hyphenated bare identifiers in 10000/10000 cases. A delimiter-aware REF candidate fixed the tested REF family, while simply removing hyphens fixes subtraction but breaks 10000/10000 admitted hyphenated-name cases.",
+      "blocker":"BASE_CLAYCODE_RELEASE frontend closure must be resolved before parser/canonical semantic identity can be trusted for the affected source families.",
+      "constraint":"Do not solve by broad semantic redesign. Preserve compatibility through an explicit escaped/sigil/quoted symbol route or another tested lexical design, then run roundtrip/canonical-hash regression.",
+      "promotion":"NONE"
+    },
+    "R3_CTK_COMPILER_INTERNAL_CONVERGENCE":{
+      "effect":"SUPPORT",
+      "source_ref":"research_entity/trigger_runs/clayresearch/clayresearch-20260809T1653p0700-chatgpt-secondary-ctk/TOPIC_PACKET_DELTA.md",
+      "evidence_class":"OPEN_CROSS_BRANCH_SYNTHESIS",
+      "result":"Current evidence increasingly supports compiling the existing G9 surface into a canonical typed Causal Transition Kernel for evaluator/verifier/lowering/instrumentation instead of creating another surface-language generation. The strongest next artifact is a BASE cross-branch semantic conformance suite through parse -> canonicalize -> semantic hash -> typed IR -> type/effect/flow check -> evaluator -> lowering -> runtime receipt -> replay.",
+      "counterhypothesis":"A unified CTK may become a giant tagged IR whose complexity exceeds a smaller family of typed IR layers.",
+      "promotion":"NONE"
+    }
+  },
+  "branch_receipts":{
+    "clayresearch":{"effect":"REVISE","delta":"Adopt dependency-complete effect envelopes as the leading candidate over blanket global epochs, while retaining whole-ledger CAS as a target-cost countercandidate; use CTK only as compiler-internal hypothesis until conformance evidence."},
+    "frank":{"effect":"REVISE","delta":"Consequential recurrence should revalidate only its complete causal decision dependencies plus capability freshness; unrelated state churn should not force abort unless part of the invariant. No architecture claim advances until target replay."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT claim-state promotion. Future effect-bearing GWT routes must expose the exact decision dependency/read-set identity used at commit."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"No emergence promotion. Dependency-scoped commit improves intervention hygiene but does not itself evidence emergence."},
+    "claycode":{"effect":"CHALLENGE","delta":"Frontend lexical closure is now a concrete BASE blocker. Fix REF delimiters and identifier-minus ambiguity compatibly; then make the cross-branch conformance suite the primary integration test. No new FRANK/DB-specific core syntax is justified."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No claim-state change; alternative routes participating in an effect must make dependency/read-set membership explicit."},
+    "claygraph":{"effect":"REVISE","delta":"Represent exact effect dependency envelope/read-set and capability epoch in dynamic trace topology; unrelated graph churn should not invalidate an effect unless dependency closure says it should."},
+    "unifieddb":{"effect":"REVISE","delta":"Support dependency-scoped snapshot/read-set validation in addition to coarse global epochs; benchmark both. Preserve semantic-vs-execution identity separation."},
+    "harness":{"effect":"NEW_EXPERIMENT","delta":"Add whole-ledger-CAS vs dependency-envelope differential to H1 replay. Also add ClayCode lexer/roundtrip fixtures so H2 cannot falsely pass on ambiguous source identity."}
+  },
+  "global_controls":[
+    "Research Entity != Frank",
+    "Frank self-Harness authority remains proposal-only",
+    "Ubuntu-only Frank v0.1 target",
+    "shared ancestry != independent replication",
+    "no canonical promotion from synthetic/local proxy evidence",
+    "BASE blocker does not imply a surface-language redesign"
+  ],
+  "research_write_result":"MATERIAL_LIVE_REFRESH_WRITTEN_TO_ALL_9_BRANCHES"
+}

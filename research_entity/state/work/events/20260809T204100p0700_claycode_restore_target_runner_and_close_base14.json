@@ -1,0 +1,33 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create-claycode-restore-runner-close-base14-20260809T204100p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:41:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-RESTORE-RUNNER-CLOSE-BASE14-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "TARGET_EXECUTION_INFRASTRUCTURE_REPAIR",
+    "title": "Restore Andreas self-hosted runner and finish ClayCode BASE14",
+    "work_clay": "On the owner-registered Andreas Ubuntu target, pull current main into a clean checkout. Run: bash tools/claycode_bootstrap_andreas_self_hosted_runner.sh . This script must first verify the registered machine fingerprint, Ubuntu/x86_64/non-container status and authenticated gh access; then it may provision/start the repository-scoped GitHub Actions runner. Do not bypass those guards. Once the runner is online, the already queued self-hosted jobs should be consumed automatically. If not, execute directly from the clean checkout with GitHub Actions transport variables absent: python3 tools/claycode_run_andreas_target_acceptance.py . Preserve all failing receipts. Repair only concrete implementation/orchestration defects; never weaken target identity, real desktop, Full-FRANK, authority, real-app, WP14 or P0/P1 gates. Finish only after remote GitHub reread shows the independent WP14 manifest PASS, 14/14 ClayCode work packages PASS and 10/10 real apps PASS.",
+    "reason_clay": "Observable PR diagnostics proved hosted GitHub jobs currently fail before step 1, while a self-hosted [linux,x64] availability job remains queued. The remaining release blocker is therefore physical runner availability/target execution transport, not a known unresolved ClayCode language counterexample.",
+    "completion_clay": "PASS only when a matching repository self-hosted runner is online, the canonical target acceptance exits 0 on the registered Andreas Ubuntu host, APP05 real Ubuntu desktop is mapped and independently audited, Full-FRANK H1/H2/H3 passes, ten per-app target receipts pass, ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT overall_pass=true, CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST general_purpose_gate_pass=true and claycode_release_gate_pass=true with failed_work_packages=[], and CLAYCODE_RELEASE_WORKSPACE is BASE_PASS with every CC-WP-01..14 status=PASS.",
+    "required_commands": [
+      "git pull --ff-only origin main",
+      "bash tools/claycode_bootstrap_andreas_self_hosted_runner.sh",
+      "python3 tools/claycode_run_andreas_target_acceptance.py"
+    ],
+    "executor_policy": "prefer_verified_CLAUDE_CODE_LOCAL_ORGAN; actual Andreas Ubuntu execution required; repair implementation not evidence gates; preserve negative receipts; model output != execution authority",
+    "required_capabilities": [
+      "ANDREAS_PC_LOCAL_REPO_ACCESS",
+      "REGISTERED_TARGET_HOST_IDENTITY",
+      "AUTHENTICATED_GH_CLI_WITH_REPO_ADMIN_ACTIONS_PERMISSION",
+      "UBUNTU_X86_64_NON_CONTAINER",
+      "SYSTEMD_USER_SERVICE",
+      "REAL_DESKTOP_SESSION_FOR_APP05",
+      "GIT_WRITE_PUSH"
+    ],
+    "status": "READY",
+    "priority": 1.0
+  }
+}

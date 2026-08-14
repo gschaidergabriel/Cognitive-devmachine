@@ -1,0 +1,126 @@
+name: Repair Research Interconnect Preflight Governance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/harness-preflight-governance-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Apply clayresearch registry migration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tools/research_interconnect_preflight.py')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('"clay"', '"clayresearch"')
+          s=s.replace(
+              '"clayresearch": ["clayresearch", "synthetic-clay", "synthetic_clay"],',
+              '"clayresearch": ["clay", "clayresearch", "synthetic-clay", "synthetic_clay"],'
+          )
+          s=s.replace(
+              'base = TRIGGER_RUNS / branch',
+              'base = TRIGGER_RUNS / ("clay" if branch == "clayresearch" else branch)'
+          )
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Execute diagnostic preflight
+        id: diagnostic
+        shell: bash
+        run: |
+          set +e
+          python -m py_compile tools/research_interconnect_preflight.py >/tmp/hwp01-compile.log 2>&1
+          COMPILE_RC=$?
+          if [ "$COMPILE_RC" -eq 0 ]; then
+            python tools/research_interconnect_preflight.py \
+              --trigger harness \
+              --run-id ci-hwp01-preflight \
+              --history-per-branch 1 \
+              --output /tmp/hwp01-preflight.json \
+              >/tmp/hwp01-preflight.stdout 2>/tmp/hwp01-preflight.stderr
+            PREFLIGHT_RC=$?
+          else
+            PREFLIGHT_RC=99
+          fi
+          echo "compile_rc=$COMPILE_RC" >> "$GITHUB_OUTPUT"
+          echo "preflight_rc=$PREFLIGHT_RC" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Validate manifest and write receipt/diagnostic
+        env:
+          COMPILE_RC: ${{ steps.diagnostic.outputs.compile_rc }}
+          PREFLIGHT_RC: ${{ steps.diagnostic.outputs.preflight_rc }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          run_dir=Path('research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze')
+          compile_rc=int(os.environ['COMPILE_RC'])
+          preflight_rc=int(os.environ['PREFLIGHT_RC'])
+          def txt(path):
+              p=Path(path)
+              return p.read_text(errors='replace')[-12000:] if p.exists() else ''
+          base={
+            'schema_version':'1.0',
+            'run_id':'harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze',
+            'execution_class':'GITHUB_ACTIONS_UBUNTU_REPO_CHECKOUT',
+            'source_commit':os.environ.get('GITHUB_SHA'),
+            'repair':'research_interconnect_preflight registry branch migration clay -> clayresearch with historical trigger_runs/clay path compatibility',
+            'compile_rc':compile_rc,
+            'preflight_rc':preflight_rc,
+            'canonical_promotion':'NONE',
+            'frank_harness_modified':False
+          }
+          if compile_rc==0 and preflight_rc==0:
+              d=json.loads(Path('/tmp/hwp01-preflight.json').read_text())
+              expected={'clayresearch','gwt','frank','emergenz','claycode','hyperposition','claygraph','unifieddb','harness'}
+              registered=set(d.get('registry_scientific_branches') or [])
+              branches={x.get('branch') for x in d.get('branches',[]) if isinstance(x,dict)}
+              priority=d.get('branch_priority') or []
+              violations=[]
+              if registered != expected: violations.append(f'registered={sorted(registered)}')
+              if branches != expected: violations.append(f'branches={sorted(branches)}')
+              if set(priority) != expected or len(priority)!=len(expected): violations.append(f'priority={priority}')
+              if 'clayresearch' not in priority or 'clay' in priority: violations.append(f'legacy_priority={priority}')
+              base.update({'py_compile':'PASS','harness_preflight':'PASS' if not violations else 'FAIL_SCHEMA','registered_branches':sorted(registered),'branch_priority':priority,'violations':violations})
+              name='PREFLIGHT_RECEIPT_CI.json' if not violations else 'PREFLIGHT_DIAGNOSTIC_CI.json'
+          else:
+              base.update({'py_compile':'PASS' if compile_rc==0 else 'FAIL','harness_preflight':'FAIL','compile_log':txt('/tmp/hwp01-compile.log'),'stdout':txt('/tmp/hwp01-preflight.stdout'),'stderr':txt('/tmp/hwp01-preflight.stderr')})
+              name='PREFLIGHT_DIAGNOSTIC_CI.json'
+          (run_dir/name).write_text(json.dumps(base,indent=2)+'\n')
+          Path('/tmp/hwp01-result-name').write_text(name)
+          PY
+
+      - name: Persist result
+        run: |
+          NAME=$(cat /tmp/hwp01-result-name)
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ "$NAME" = 'PREFLIGHT_RECEIPT_CI.json' ]; then
+            git add tools/research_interconnect_preflight.py
+          fi
+          git add "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/$NAME"
+          git commit -m "research: persist H-WP-01 interconnect preflight result"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Fail workflow if preflight failed
+        run: |
+          NAME=$(cat /tmp/hwp01-result-name)
+          test "$NAME" = 'PREFLIGHT_RECEIPT_CI.json'

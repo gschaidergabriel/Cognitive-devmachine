@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1710p0700_chatgpt_chain_semantic_gate",
+  "trigger": "claycode",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "target_host": "Ubuntu Linux developer system only for Frank v0.1",
+  "inputs": [
+    "research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay@1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay@dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+  ],
+  "artifacts": ["INTERCONNECT_MANIFEST.json","TOOL_EXECUTION_MANIFEST.json","FRANK_CLAYCODE_GOODMAN_REVIEW.json","SOURCE_CHAIN_VALIDATOR.py","EXECUTABLE_RESEARCH_RECEIPT.json","HYPOTHESIS_MATRIX.json","NEGATIVE_RESULTS.json","FINAL_REPORT.md"],
+  "external_sources": [
+    "in-toto stable specification/getting started: continuous signed link metadata over materials/products",
+    "SLSA build provenance/requirements: artifact digests and build-production provenance",
+    "CompCert official semantic-preservation specification",
+    "Translation validation primary literature: per-translation correctness validation"
+  ],
+  "interconnect_manifest": "INTERCONNECT_MANIFEST.json",
+  "goodman_review": "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+  "scientific_promotion": "NONE",
+  "stage_progress_credit": "NONE",
+  "general_purpose_gate": "NOT_PASS"
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "status": "OPEN_HIGH_PRIORITY_IMPLEMENTATION_BOUNDARY",
+  "observation": "The current runtime candidate exposes ClayRuntime.mint_capability(kind) as a directly callable method. Its handle validation is strongly fail-closed after minting, but post-mint unforgeability alone does not prove that untrusted/model/guest code cannot reach the mint root.",
+  "source_ref": "tools/claycode_base_runtime.py@d20d858202cd84e2c575a47f8fb6d2131b678cfd",
+  "non_claim": "This run does NOT claim an exploitable production vulnerability. Exposure of the ClayRuntime object/mint method to model or guest code was not established from current evidence.",
+  "hypothesis": {
+    "id": "H7_MINT_ROOT_ISOLATION",
+    "claim": "Capability minting must be controlled by a trust root that is not reachable through the model-generated ClayCode/guest adapter surface. Model code may request/propose a capability, but only an external policy/authority path may cause issuance.",
+    "prediction": "A guest-facing API inventory contains invoke/use/attenuate operations as allowed but no unrestricted mint/grant root. Attempts by model/guest code to call or synthesize the mint path fail before a live capability is created.",
+    "falsifier": "The actual runtime/lowering architecture already proves mint_capability is unreachable from all untrusted/model-generated paths, or an alternative issuer design provides equivalent root isolation and this is covered by executable negative tests."
+  },
+  "counterhypothesis": "Keeping mint_capability on ClayRuntime is safe if ClayRuntime is a trusted host object never exposed to guest/model code; naming/public visibility in Python is not itself a security boundary failure.",
+  "discriminating_tests": [
+    "Inventory the exact model-facing and compiled-Clay runtime ABI. Prove no route exposes ClayRuntime or a mint/grant callable.",
+    "Add a negative test whose guest/model surface attempts capability minting by name/reflection/adapter lookup and receives no live handle.",
+    "Pass pre-authorized capabilities into execution from a separate trusted bootstrap/issuer and show normal effects still work.",
+    "Revoke/rotate the issuer epoch and prove stale handles fail without making the issuer object reachable.",
+    "If cross-process FFI exists, prove the receiver can only use transferred/attenuated broker handles, not mint new authority."
+  ],
+  "implementation_candidates": [
+    {
+      "id": "A_SPLIT_ISSUER",
+      "shape": "Separate CapabilityIssuer/Broker from ClayRuntime. Trusted bootstrap owns issuer; guest-facing runtime receives only a validation/use facade and selected handles.",
+      "advantages": ["clear root-of-authority boundary", "easy guest-surface audit", "maps naturally to broker/table capability models"],
+      "risk": "more plumbing; avoid unnecessary process split if one-module runtime can keep issuer in the same process but inaccessible to guest semantics"
+    },
+    {
+      "id": "B_ROOT_TOKEN",
+      "shape": "Require an unexported root authority object/token to mint; runtime API without that object cannot issue capabilities.",
+      "advantages": ["small implementation delta", "keeps one-process runtime"],
+      "risk": "Python-level privacy is not a security boundary if arbitrary Python objects/reflection are exposed; must rely on the actual guest/lowering isolation model"
+    },
+    {
+      "id": "C_PREAUTHORIZED_HANDLE_TABLE",
+      "shape": "Bootstrap creates/installs attenuated capability handles in an instance-local table. Guest receives only opaque indices/handles and may never access the issuer root.",
+      "advantages": ["strong correspondence to component/resource-handle systems", "good for native/WASM lowering"],
+      "risk": "table lifetime/ownership/revocation semantics must be specified and fuzzed"
+    }
+  ],
+  "external_precedent": "WASI distinguishes host/link-time provision of capabilities from runtime unforgeable handles. This supports testing issuer separation but does not dictate ClayCode's exact implementation.",
+  "semantic_change_required": false,
+  "next_owner": "WORK-CLAYCODE-CAPFFI-ATTESTED-GATE-20260809",
+  "promotion_guard": "Do not promote until the actual production guest/model surface is inventoried and executable negative mint-root tests pass."
+}

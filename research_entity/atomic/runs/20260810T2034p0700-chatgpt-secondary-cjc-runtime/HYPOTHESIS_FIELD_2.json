@@ -1,0 +1,33 @@
+{
+  "hypotheses": [
+    {
+      "id": "CJC-SELECTED",
+      "mechanism": "Counterfactual Jet Commutator + direct Frank-v0.1 coordination gate",
+      "remaining_falsifier": "real Frank transition exact-eligibility and matched native resource comparison",
+      "status": "SELECTED_FOR_EXECUTABLE_PROXY",
+      "why": "detects a class state-only CCF provably misses in generated fixtures; composes with CPD; exactness can be fail-closed under current TypedIR/CallContract identity rules"
+    },
+    {
+      "id": "CCF-STATE-ONLY",
+      "reason": "misses every hidden masked-order case by construction",
+      "status": "DOMINATED_FOR_MASKED_ORDER_CLASS"
+    },
+    {
+      "id": "CPD-STANDALONE",
+      "reason": "credit semantics valuable; CJC integration must prove it does not add unjustified complexity",
+      "status": "COMPLEMENTARY_NOT_REPLACED"
+    },
+    {
+      "id": "EXHAUSTIVE-REPLAY",
+      "reason": "exact and simpler for small context; becomes exponential in represented use count",
+      "status": "STRONG_BASELINE"
+    },
+    {
+      "id": "COMPILER-COMMUTATIVITY",
+      "reason": "may subsume CJC's practical benefit in exact compiled regions",
+      "status": "STRONGEST_CONVENTIONAL_ALTERNATIVE"
+    }
+  ],
+  "run_id": "20260810T2034p0700-chatgpt-secondary-cjc-runtime",
+  "schema_version": "1.0"
+}

@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-chatgpt-secondary-claygraph-rab",
+  "trigger": "spawn",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "distribution": {
+    "source": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "schema_version": "1.0",
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "total": 100
+  },
+  "branch_draw": {
+    "rng": "Python secrets.SystemRandom / OS CSPRNG",
+    "procedure": "randrange(1,101), cumulative integer intervals in registry order",
+    "seed_recorded": false,
+    "seed_note": "No seed exists/is claimed for OS CSPRNG draw.",
+    "draw": 88,
+    "intervals": {
+      "claycode": "1-50",
+      "harness": "51-60",
+      "frank": "61-70",
+      "gwt": "71-76",
+      "emergenz": "77-82",
+      "hyperposition": "83-87",
+      "claygraph": "88-92",
+      "unifieddb": "93-96",
+      "clayresearch": "97-100"
+    },
+    "selected_origin_branch": "claygraph"
+  },
+  "recent_duplicate_review": {
+    "exact_spawn_receipts_found": 0,
+    "method": "GitHub repository search/commit scan for SPAWN_RECEIPT and spawn runs",
+    "note": "The exact spawn trigger was registered only minutes before this run; older 666 stochastic fields are not counted as exact spawn receipts."
+  },
+  "candidate_microdirections": [
+    {
+      "id": "CG-SP1",
+      "name": "Reversal-aware fast/slow binding",
+      "test": "True relation reversal versus correlated source-echo false reversal; measure adaptation lag, false reversal and rollback."
+    },
+    {
+      "id": "CG-SP2",
+      "name": "N-ary hyperbinding synergy",
+      "test": "Pairwise-only versus n-ary candidate under XOR-like joint support, lesion/rescue and shuffled controls."
+    },
+    {
+      "id": "CG-SP3",
+      "name": "Loop-topology causal credit",
+      "test": "ITEM/PATH/ASSEMBLY/ROUTE credit scopes under recurrence and topology interventions."
+    },
+    {
+      "id": "CG-SP4",
+      "name": "Provenance-echo resistance",
+      "test": "Independent ancestry versus duplicated/correlated ancestry under repeated coactivation."
+    },
+    {
+      "id": "CG-SP5",
+      "name": "Semantic-epoch invalidation",
+      "test": "Incremental dependency invalidation versus stale mixed-epoch activation under out-of-order updates."
+    }
+  ],
+  "microdirection_draw": {
+    "rng": "Python secrets.SystemRandom / OS CSPRNG",
+    "procedure": "randrange(5) after novelty filtering",
+    "draw_index_zero_based": 0,
+    "selected_id": "CG-SP1",
+    "selected_microdirection": "Reversal-aware fast/slow binding",
+    "rerolls": 0
+  },
+  "research_question": "Can ClayGraph rapidly adapt to a genuine relation reversal while refusing a false reversal created by correlated/duplicated source echo, without deleting the prior valid relation or turning activation into truth?",
+  "status": "EXECUTED_OPEN_RESEARCH_DELTA",
+  "canonical_promotion": false
+}

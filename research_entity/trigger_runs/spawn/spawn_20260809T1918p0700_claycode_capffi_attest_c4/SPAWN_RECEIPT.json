@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "invocation_mode": "USER_REQUESTED_SPAWN_STYLE_NONEXACT_RESERVED_TRIGGER",
+  "user_request": "spawn extreme deep und lang",
+  "exact_reserved_trigger_fired": false,
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "branch_draw": {
+    "rng": "secrets.SystemRandom / OS CSPRNG",
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "draw_integer_0_99": 35,
+    "selected_origin_branch": "claycode",
+    "selection_probability_percent": 50,
+    "randomness_is_evidence": false
+  },
+  "candidate_microdirections": [
+    {
+      "id": "C1",
+      "name": "receipt_bound_gate_admission",
+      "question": "Can gate state be made proof-carrying so workflow definition, execution, receipt verification and admission cannot collapse into one status?",
+      "falsifier": "A current production gate already binds executed run, exact subject/material digests, scope and verified receipt strongly enough to reject all stale/missing/mismatched cases."
+    },
+    {
+      "id": "C2",
+      "name": "semantic_hash_domain_separation",
+      "question": "Are source, grammar, frontend, typed-IR and runtime identities sufficiently domain-separated across current V4/V6/V7 evolution?",
+      "falsifier": "All current admissions prove explicit hash-domain separation and no mixed-version acceptance is possible."
+    },
+    {
+      "id": "C3",
+      "name": "grammar_upgrade_semantic_stability",
+      "question": "Do syntax-preserving grammar upgrades keep canonical semantic identity stable while meaning-changing mutations diverge?",
+      "falsifier": "A production differential already proves this across all currently admitted grammar generations."
+    },
+    {
+      "id": "C4",
+      "name": "capability_ffi_attested_authority_closure",
+      "question": "Can ClayCode bind fail-closed runtime capability/FFI authority tests to exact executed code, test harness, runner scope and admission evidence without allowing the attestation itself to mint authority?",
+      "falsifier": "The current WP07 runtime gate already produces and verifies an execution-bound, scope-bound, exact-digest receipt for the production runtime and negative authority controls."
+    },
+    {
+      "id": "C5",
+      "name": "workflow_receipt_stale_head_race",
+      "question": "Can a successful ancestor-run receipt be accidentally admitted against a newer branch head or changed runtime/test harness?",
+      "falsifier": "Current gate admission is CAS/head-bound and rejects stale successful receipts by construction."
+    }
+  ],
+  "microdirection_draw": {
+    "rng": "secrets.SystemRandom.choice / OS CSPRNG",
+    "eligible_candidates": ["C1", "C2", "C3", "C4", "C5"],
+    "selected": "C4",
+    "time_unix_ns": 1786278267293399386
+  },
+  "novelty_check": {
+    "recent_spawn_topics_reviewed": [
+      "ClayCode package-lock provenance",
+      "ClayCode HTTP plus SQLite",
+      "ClayCode atomic CAS and ABA",
+      "ClayCode keyword partition",
+      "ClayCode Unicode canonical boundary",
+      "Emergenz observer/probe effect",
+      "Harness visual familiarity action closure"
+    ],
+    "duplicate": false,
+    "reason": "The selected direction is not dependency-lock provenance or capability semantics alone; it targets the missing proof-carrying join between capability/FFI execution evidence and release/work-package gate admission."
+  },
+  "selection_has_truth_authority": false
+}

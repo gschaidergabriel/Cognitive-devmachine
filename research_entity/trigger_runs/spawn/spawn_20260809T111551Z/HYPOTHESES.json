@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T111551Z",
+  "origin_branch": "claycode",
+  "hypotheses": [
+    {
+      "id": "SPAWN-CC-CAS-H1",
+      "statement": "Value-only compare-exchange is insufficient as the semantic identity test for versioned Clay/UnifiedDB/Frank state because an A->B->A transition can make a stale observer's expected value equal again while the state identity has changed.",
+      "status": "SUPPORTED_PROXY",
+      "evidence": ["EXP-ABA-200K", "Rust std atomic compare_exchange ABA warning"],
+      "falsifier": "Demonstrate a value-only CAS contract that rejects all stale A->...->A transitions without adding version/identity information or a stronger external serialization invariant."
+    },
+    {
+      "id": "SPAWN-CC-CAS-H2",
+      "statement": "For Clay semantic state where equality is not identity, compare-exchange should bind an explicit version/epoch/identity token in addition to the value; raw value-only CAS may remain available only for types/resources whose contract proves equality is sufficient identity.",
+      "status": "SUPPORTED_PROXY",
+      "evidence": ["EXP-ABA-200K", "RAE latest stack semantic epoch rules", "Harness semantic-vs-exact identity separation"],
+      "falsifier": "Find a required Clay workload where version binding changes correct semantics or cannot be lowered while an independently safe non-versioned identity contract exists."
+    },
+    {
+      "id": "SPAWN-CC-CAS-H3",
+      "statement": "Weak-CAS retry/spurious-failure count belongs to execution trace identity, not semantic operation identity; one stable semantic CAS intent/outcome may have multiple physical attempt traces.",
+      "status": "SUPPORTED_PROXY",
+      "evidence": ["EXP-RETRY-100K", "C11/Node cross-backend CAS counter", "LLVM/Rust weak compare-exchange semantics"],
+      "falsifier": "Produce a Clay program whose intended semantic result necessarily depends on the number of weak-CAS physical retries rather than on an explicit observable retry-budget/timing construct."
+    },
+    {
+      "id": "SPAWN-CC-CAS-H4",
+      "statement": "For BASE, SeqCst is the safest portable default atomic ordering while weaker Relaxed/Acquire/Release/AcqRel orderings should remain explicit typed opt-ins rather than host-default behavior.",
+      "status": "OPEN",
+      "evidence": ["ECMAScript 2026 atomics are sequentially consistent", "Rust/LLVM expose weaker explicit orderings"],
+      "falsifier": "Show that a weaker fixed default preserves all accepted ClayCode application and FRANK semantics across target backends with a materially better measured cost and no additional repair/verification burden."
+    },
+    {
+      "id": "SPAWN-CC-CAS-H5",
+      "statement": "The ClayCode type/effect checker should validate success and failure memory-order combinations rather than passing arbitrary host orderings through FFI; failure-order semantics are load-only and must reject release-style orderings where the target model forbids them.",
+      "status": "OPEN_HIGH_PRIORITY",
+      "evidence": ["LLVM cmpxchg ordering contract", "Rust compare_exchange failure-order contract"],
+      "falsifier": "A backend-neutral lowering proof shows arbitrary order pairs can be normalized safely without source-visible or IR-visible validation."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "SPAWN-CC-CAS-CH1",
+      "statement": "Raw value-only CAS is sufficient for all Clay state because atomicity already prevents stale writes.",
+      "status": "REFUTED_FOR_VERSIONED_IDENTITY_CLASS",
+      "result": "The deterministic ABA experiment produced stale success in 200000/200000 constructed A->...->A cases."
+    },
+    {
+      "id": "SPAWN-CC-CAS-CH2",
+      "statement": "Every weak-CAS retry should be part of the semantic hash/event sequence.",
+      "status": "REFUTED_FOR_DEFAULT_SEMANTIC_IDENTITY",
+      "result": "100000 identical semantic operations produced one semantic hash but 16 valid physical retry-trace hashes; C11 and Node reached the same exact result with different retry counts."
+    },
+    {
+      "id": "SPAWN-CC-CAS-CH3",
+      "statement": "ClayCode should expose only SeqCst atomics permanently.",
+      "status": "OPEN_NOT_SELECTED",
+      "reason": "Safe first-release simplification is plausible, but target-specific performance/algorithm requirements have not been measured deeply enough to forbid weaker explicit orderings forever."
+    },
+    {
+      "id": "SPAWN-CC-CAS-CH4",
+      "statement": "ClayCode can leave memory ordering entirely to the host backend as an implementation detail.",
+      "status": "NOT_SELECTED",
+      "reason": "Current primary specifications expose materially different ordering contracts, so silent host inheritance would make cross-backend semantics under-specified."
+    }
+  ],
+  "language_change_rule": "No surface-syntax change is proposed. First express the candidate in canonical IR/runtime metadata and require executable lowering counterexamples before changing the language surface."
+}

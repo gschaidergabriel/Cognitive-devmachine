@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1708p0700_chatgpt_resource_handle_aba",
+  "hypotheses":[
+    {
+      "id":"H-CC-RESOURCE-LIFETIME-021",
+      "status":"OPEN_SUPPORTED_FOR_TESTED_CLASS",
+      "mechanism":"A live FFI/runtime resource reference carries lifetime identity in addition to a reusable storage slot or backend index.",
+      "expected":"After close/drop and slot reuse, stale references fail closed rather than resolving to the new resource.",
+      "counterhypothesis":"A raw reusable integer index is sufficient because another runtime layer always prevents stale reuse.",
+      "falsifier":"Production Ubuntu ClayCode runtime passes exhaustive and fuzzed close/reopen/stale-use tests with raw reusable integer handles and no hidden lifetime guard.",
+      "next_test":"Implement two runtime ABI arms: generation/lifetime-checked table and backend-native opaque handle; compare stale-use safety, false rejection, latency and recovery.",
+      "affected":["claycode","harness","frank"]
+    },
+    {
+      "id":"H-CC-RESOURCE-ID-SPLIT-022",
+      "status":"OPEN_REFINED",
+      "mechanism":"Program semantic identity, capability-grant identity, physical resource-instance identity and handle-lifetime identity remain separate dimensions.",
+      "expected":"Recreating the same resource type/name in the same slot creates a new live instance/lifetime and does not revive old authority-bearing references.",
+      "counterhypothesis":"Semantic resource type plus capability identity uniquely determines the live resource instance.",
+      "falsifier":"Cross-backend replay demonstrates safe exact identity/recovery without a distinct resource-instance/lifetime identity.",
+      "next_test":"Persist/recover descriptors while forcing process/file/socket handle reuse and verify reacquisition creates fresh lifetime identity.",
+      "affected":["claycode","unifieddb","claygraph","harness"]
+    },
+    {
+      "id":"H-CC-RESOURCE-ABI-NOSYNTAX-023",
+      "status":"OPEN_SUPPORTED_BY_CURRENT_EVIDENCE",
+      "mechanism":"The stale-handle requirement can be implemented in typed Runtime ABI/FFI metadata and broker checks without adding a new ClayCode core syntax primitive.",
+      "expected":"Existing typed resource/capability forms lower to a lifetime-safe host adapter with no semantic escape hatch.",
+      "counterhypothesis":"Current ClayCode cannot express ownership/borrowing/drop/reacquisition semantics without a core language addition.",
+      "falsifier":"A minimized real application or FRANK component cannot be safely lowered through existing typed forms even with an explicit runtime resource adapter.",
+      "next_test":"Compile a grammar-conformant resource fixture end-to-end once the production frontend chain is available.",
+      "affected":["claycode","frank"]
+    }
+  ]
+}

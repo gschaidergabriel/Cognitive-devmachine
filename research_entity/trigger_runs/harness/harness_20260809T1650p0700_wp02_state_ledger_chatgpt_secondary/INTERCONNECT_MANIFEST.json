@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1650p0700_wp02_state_ledger_chatgpt_secondary",
+  "coverage_mode": "TASK_SPECIFIC_FULL_MESH_GROUNDING",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "branches": {
+    "clayresearch": {"status":"CHECKED_VIA_CURRENT_STACK_AND_FIXED_INVARIANTS","impact":"NO_SEMANTIC_CHANGE"},
+    "frank": {"status":"DIRECTLY_READ","refs":["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md","gschaidergabriel/Dr.-Unterweger:harness/frank_harness_runtime.py"],"impact":"H1 state/replay compatibility surface added; live differential still pending"},
+    "gwt": {"status":"RELEVANCE_CHECKED","impact":"NO_CHANGE; later dynamic Run ClayGraph must expose pre/post state hashes through receiver/use/reentry traces"},
+    "emergenz": {"status":"RELEVANCE_CHECKED","impact":"NO_CHANGE; deterministic state identity improves future intervention/replay control"},
+    "claycode": {"status":"CURRENT_WORKSPACE_READ","refs":["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"],"impact":"NO_LANGUAGE_CHANGE; H2 adapter remains blocked on BASE release"},
+    "hyperposition": {"status":"RELEVANCE_CHECKED_AGAINST_V7_STATE_SURFACE","impact":"NO_CHANGE"},
+    "claygraph": {"status":"DIRECTLY_READ","refs":["research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"],"impact":"NEXT_INTEGRATION: dynamic graph deltas should carry semantic root hashes separately from event/provenance receipt hashes"},
+    "unifieddb": {"status":"DIRECTLY_READ","refs":["gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_SCHEMA.sql","gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V6_MIGRATION.sql","gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V7_MIGRATION.sql"],"impact":"REFINEMENT: explicit tested separation of semantic state root identity from provenance/event hash chain; no migration proposed yet"},
+    "harness": {"status":"DIRECTLY_READ_AND_MODIFIED","refs":["research_entity/harness/HARNESS_WORKSPACE.json","research_entity/triggers/HARNESS_BUILD_PROTOCOL.md"],"impact":"H-WP-02 executable partial delta committed"}
+  },
+  "shared_ancestry_warning": "This implementation is derived from current FRANK/RAE contracts and therefore is not independent scientific replication of those contracts.",
+  "release_scope": "Partial component evidence only; no Harness release gate promoted."
+}

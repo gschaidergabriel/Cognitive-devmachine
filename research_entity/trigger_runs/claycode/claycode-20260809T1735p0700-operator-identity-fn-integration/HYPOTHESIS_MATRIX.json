@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1735p0700-operator-identity-fn-integration",
+  "hypotheses":[
+    {"id":"H-CC-D-LEX-001","status":"SUPPORTED_LOCAL_CANDIDATE","claim":"Removing hyphen from ordinary identifier lexing is sufficient to eliminate the observed tight-vs-spaced subtraction/arrow ambiguity in the current D candidate without changing G9 semantic concepts.","evidence":"20,000 matched spacing cases: current D 2,480 differences, repaired candidate 0; repaired G9/Dialect proxy parses.","falsifier":"A larger normative corpus reveals required hyphenated identifiers that cannot be migrated reversibly or a new lexical ambiguity remains."},
+    {"id":"H-CC-OP-ID-002","status":"SUPPORTED_LOCAL_CANDIDATE","claim":"Operator alternative aliases are a lower-risk way to preserve operator identity in canonicalizer input than a single high-priority OPERATOR terminal.","evidence":"16/16 symbolic operators distinct after aliasing; single high-priority OPERATOR negative control steals declaration '=' and rejects import syntax.","falsifier":"Normative parser/AST construction retains exact operator identity with a simpler representation and no declaration-token collision."},
+    {"id":"H-CC-FN-003","status":"OPEN_SUPPORTED_LOCAL","claim":"A contextual typed expression-bodied fn_decl can expose prior definition-to-call semantics without perturbing the admitted repaired G9/Dialect corpus.","evidence":"Legacy repaired tree hashes unchanged by fn extension; 5,000 formatting variants stable; 5,000 valid composed bindings resolved and 3,000 invalid cases rejected.","falsifier":"Production parser/type-effect/compiler or Qwen-reader benchmark finds ambiguity, semantic drift, unacceptable repair burden, or existing constructs provide equivalent closure."},
+    {"id":"H-CC-CANON-004","status":"OPEN","claim":"CC-WP-02 should require whitespace-robust lexical equivalence and explicit operator identity before ProgramSemanticId is minted.","evidence":"Default parse-tree hashing can collapse distinct operators and lexical spacing can change current D tree meaning.","falsifier":"A normative canonicalizer proves those source distinctions are recovered deterministically from a lower layer before semantic identity without parser changes."}
+  ],
+  "counterhypotheses":[
+    {"id":"CH-CC-D-001","claim":"Hyphenated ordinary identifiers are valuable enough that lexer restriction is worse than requiring separator rules or escaping.","test":"Run full corpus/archives and target-reader migration benchmark over strict identifiers versus an explicit escape/raw-identifier design."},
+    {"id":"CH-CC-FN-002","claim":"No source-level fn declaration is needed because existing rule/cycle/Needle constructs already lower to reusable typed calls without escape hatches.","test":"Compile reusable functions through the normative production pipeline before adopting fn_decl."}
+  ],
+  "promotion":"NONE"
+}

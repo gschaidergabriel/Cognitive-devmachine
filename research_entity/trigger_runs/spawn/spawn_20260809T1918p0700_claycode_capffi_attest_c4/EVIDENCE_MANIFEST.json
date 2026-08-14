@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "internal_evidence": [
+    {
+      "id": "E1",
+      "class": "CURRENT_REPO_CONTRACT",
+      "ref": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "supports": ["model output is not authority", "effect commit requires possession of a valid capability", "Needle lowers effect intent but does not own authority"]
+    },
+    {
+      "id": "E2",
+      "class": "CURRENT_IMPLEMENTATION_CANDIDATE",
+      "ref": "tools/claycode_base_runtime.py",
+      "commit": "d20d858202cd84e2c575a47f8fb6d2131b678cfd",
+      "supports": ["runtime-minted opaque handles", "runtime binding", "epoch invalidation", "revocation", "kind checking", "non-serializable capability intent", "typed adapter boundary"]
+    },
+    {
+      "id": "E3",
+      "class": "CURRENT_EXECUTABLE_TEST_CANDIDATE",
+      "ref": "tools/claycode_base_runtime_validation.py",
+      "commit": "4585745025e5767ef362aaec0c149213e84ee918",
+      "supports": ["negative authority controls exist", "textual capability name rejected by candidate", "revoked/stale/cross-runtime handles rejected by candidate", "hosted execution explicitly not target acceptance"]
+    },
+    {
+      "id": "E4",
+      "class": "CURRENT_REPO_NEGATIVE_RESULT",
+      "ref": ".github/workflows/claycode-base-runtime-gate.yml",
+      "commit": "cb5ee1bdfe85604db7abfa170088944515692666",
+      "observation": "The commit creates a workflow intended to execute validation and commit BASE_RUNTIME_CAPABILITY_RECEIPT.json. At inspection time the expected receipt path was absent on the default branch.",
+      "interpretation": "Workflow definition/optimistic commit wording is insufficient to claim successful execution. This does not prove the workflow never ran in any environment; it proves the inspected canonical branch lacked the declared receipt evidence."
+    },
+    {
+      "id": "E5",
+      "class": "CURRENT_REPO_NEGATIVE_RESULT_REPLICATION_SHARED_ANCESTRY",
+      "ref": ".github/workflows/claycode-wp03-typed-ir.yml",
+      "commit": "e364f9fc66c95e3ef802bc14be390159710b26a2",
+      "observation": "The workflow-definition commit exists while the expected WP03_STRICT_V7_DEPENDENCY_RECEIPT.json was absent and no matching receipt commit was found at inspection time.",
+      "interpretation": "The same state-collapse risk recurs across another current gate. This is not independent scientific replication because it shares repository/workflow ancestry."
+    },
+    {
+      "id": "E6",
+      "class": "CURRENT_REPO_DRIFT_OBSERVATION",
+      "refs": [
+        "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+        "tools/claycode_base_frontend_validation.py",
+        "tools/claycode_base_typed_ir.py"
+      ],
+      "observation": "The BASE freeze records V4 as active syntax candidate, a frontend validator observed during the run points to V5, autonomous steering references V6, and the current typed-IR builder commit points to V7_OPERATOR_FN.",
+      "interpretation": "This does not itself prove semantic inconsistency; it raises the value of exact grammar/source/material digest binding in every gate receipt."
+    }
+  ],
+  "external_primary_sources": [
+    {
+      "id": "X1",
+      "class": "OFFICIAL_SPECIFICATION",
+      "title": "WASI Capabilities",
+      "url": "https://github.com/WebAssembly/WASI/blob/main/docs/Capabilities.md",
+      "supports": "Runtime capabilities as unforgeable handles granting resource access; useful precedent for separating descriptive requests from live bearer authority."
+    },
+    {
+      "id": "X2",
+      "class": "OFFICIAL_STANDARDIZATION_REPOSITORY",
+      "title": "WebAssembly Component Model Explainer / Canonical ABI",
+      "url": "https://github.com/WebAssembly/component-model/blob/main/design/mvp/Explainer.md",
+      "supports": "Opaque resource handles, per-instance tables, generative resource types and typed lift/lower across component boundaries."
+    },
+    {
+      "id": "X3",
+      "class": "OFFICIAL_ATTESTATION_SPECIFICATION",
+      "title": "in-toto Statement v1",
+      "url": "https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md",
+      "supports": "Attestation statements bind claims to immutable subjects via digest and identify predicate type explicitly."
+    },
+    {
+      "id": "X4",
+      "class": "OFFICIAL_ATTESTATION_SPECIFICATION",
+      "title": "in-toto Link predicate",
+      "url": "https://github.com/in-toto/attestation/blob/main/spec/predicates/link.md",
+      "supports": "Supply-chain step evidence can record subject/products, materials, command, environment and byproducts."
+    },
+    {
+      "id": "X5",
+      "class": "OFFICIAL_PLATFORM_DOCUMENTATION",
+      "title": "GitHub Artifact Attestations",
+      "url": "https://docs.github.com/en/actions/concepts/security/artifact-attestations",
+      "supports": "Build attestations bind provenance information including workflow, repository, environment, commit SHA and triggering event."
+    },
+    {
+      "id": "X6",
+      "class": "OFFICIAL_PLATFORM_DOCUMENTATION",
+      "title": "GitHub Using Artifact Attestations",
+      "url": "https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations",
+      "supports": "Generating attestations requires explicit workflow permissions and an attest action; consumers verify attestations rather than infer provenance from workflow presence."
+    },
+    {
+      "id": "X7",
+      "class": "OFFICIAL_SUPPLY_CHAIN_SPECIFICATION",
+      "title": "SLSA Build Provenance v1.2",
+      "url": "https://slsa.dev/spec/v1.2/build-provenance",
+      "supports": "Separates buildDefinition from runDetails, records resolved dependencies and builder/invocation identity, and treats provenance as verifiable information about an actual build execution."
+    }
+  ],
+  "negative_results": [
+    "No evidence found in the inspected default-branch paths that the two newly defined CI gates had already materialized their declared receipt files.",
+    "No executable counterexample was found that forces new ClayCode core syntax for capability/attestation closure.",
+    "External attestation standards do not prove ClayCode's proposed schema; they support decomposition and verification boundaries only.",
+    "The synthetic discriminator does not establish real-world failure prevalence and cannot count as Ubuntu target acceptance."
+  ]
+}

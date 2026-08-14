@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1821p0700_claycode_keyword_partition",
+  "origin_branch": "claycode",
+  "feedback": {
+    "claycode": {
+      "classification": ["IMPLEMENTATION_COUNTEREXAMPLE", "NEW_CONSTRAINT", "SUPPORTING_EVIDENCE"],
+      "delta": "The exact D grammar's observed strict-LALR parser-table conflict is causally partitioned: ident aliases for invariant and if generate 12/13 shift/reduce diagnostics; nested NEWLINE repetition generates the last. A combined minimal repair removes all captured parser-table conflicts in local Lark 1.3.1 execution, but strict certification then fails because interegular is absent.",
+      "required_next_discriminator": [
+        "Install/pin Lark strict regex-collision dependency (interegular) in the strict CI surface.",
+        "Modify the probe to distinguish dependency/infrastructure LexError from grammar conflict failure.",
+        "Run strict construction and preserve any regex-collision diagnostics.",
+        "Run full current G9 + Dialect + relevant repository corpus typed-AST/canonical semantic-hash differential before selecting/promoting the repair."
+      ],
+      "gate_effect": "NO_BASE_PROGRESS_AWARDED"
+    },
+    "harness": {
+      "classification": ["IMPLEMENTATION_COUNTEREXAMPLE", "NEW_CONSTRAINT"],
+      "delta": "Validation infrastructure must not classify a missing strict-parser optional dependency as a grammar failure or allow it to prevent proof of a repaired grammar. The existing workflow dependency set is insufficient to certify strict regex-collision closure after parser-table conflicts are removed.",
+      "required_next_discriminator": "Re-run the strict probe in CI with the exact dependency closure and receipt that distinguishes parser conflict, regex collision and infrastructure/dependency failure.",
+      "gate_effect": "NO_HARNESS_STAGE_ADVANCEMENT"
+    },
+    "frank": {
+      "classification": ["NO_CHANGE"],
+      "delta": "No FRANK architecture mechanism is changed. ClayCode parser repair must preserve all FRANK-required state/loop/effect expressions and cannot simplify FRANK to make the parser pass."
+    },
+    "clayresearch": {
+      "classification": ["NO_CHANGE"],
+      "delta": "No integrated cognitive mechanism change. Parser determinism is implementation infrastructure, not evidence for Synthetic Clay emergence or cognition."
+    },
+    "gwt": {
+      "classification": ["NO_CHANGE"],
+      "delta": "No GWT mechanism/readout change. Current GWT expressions remain mandatory regression surfaces for any parser repair."
+    },
+    "emergenz": {
+      "classification": ["NO_CHANGE"],
+      "delta": "No emergence claim changes. Parser/CI success or failure has no direct evidential weight for causal emergence."
+    },
+    "hyperposition": {
+      "classification": ["NO_CHANGE"],
+      "delta": "No higher-order topology mechanism change. Hyperposition expressions remain regression inputs for full corpus equivalence."
+    },
+    "claygraph": {
+      "classification": ["NO_CHANGE"],
+      "delta": "No graph mechanism change. Parser acceptance/canonicalization cannot mint graph truth; graph syntax remains a semantic-regression surface."
+    },
+    "unifieddb": {
+      "classification": ["NO_CHANGE"],
+      "delta": "No persistence/query architecture change. Parser source identity, typed semantic identity and persisted state identity remain distinct."
+    }
+  },
+  "all_registered_peer_branches_addressed": true,
+  "promotion": "NONE",
+  "negative_results_preserved": true,
+  "shared_ancestry_warning": "The repair evidence derives from the current ClayCode D grammar; cross-branch compatibility does not constitute independent replication."
+}

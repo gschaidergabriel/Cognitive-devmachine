@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T174614p0700_harness_lowering_semantics",
+  "execution_scope": "CURRENT_HOSTED_CHATGPT_RUNTIME_NOT_TARGET_UBUNTU_FRANK_HOST",
+  "tests": [
+    {
+      "test_id": "SP-EXP-LWR-001A",
+      "artifact": "lowering_witness_reference_test.py",
+      "artifact_commit": "f5b620c9ec954dace3111cea77442e426f0a8546",
+      "executed_local_artifact_sha256": "d19c0ab6a9eeeb6e7bef11df28fe7ec1b671bc93c18c481e0b59d3c357b6902b",
+      "command": "python /tmp/lowering_witness_reference_test.py",
+      "observed": {
+        "baseline_errors": [],
+        "mutations_total": 12,
+        "mutations_rejected": 12,
+        "permission_cases": 64,
+        "authority_oracle_mismatches": 0
+      },
+      "result": "PASS_SYNTHETIC_MECHANISM",
+      "claim_limit": "Validates the candidate checker logic on bounded synthetic cases only; not the real ClayCode compiler."
+    },
+    {
+      "test_id": "SP-EXP-LWR-001B",
+      "artifact": "clay_metadata_test.ll",
+      "artifact_commit": "dee0260c41a207a9081190c768f874f77c1b2fe1",
+      "input_sha256": "84673b92ea08f38c4ed933454075dac7f115afbc34f8e6058960478dc8302980",
+      "compiler": "clang version 17.0.0 (swiftlang LLVM commit 10999b6d034fe318f3d56c83bddb6572593a8bb0)",
+      "command": "clang -O2 -S -emit-llvm /tmp/clay_metadata_test.ll -o /tmp/clay_metadata_test.opt.ll",
+      "optimized_output_sha256": "3383ea3496dbfc489a6ca156fc2c3f10e9d39a527444988c131a9a5b523b4c23",
+      "observed": "The add instruction constant-folded to ret i32 2 and grep found no clay.auth, epistemic or provenance custom metadata in optimized IR.",
+      "result": "PASS_COUNTEREXAMPLE_TO_METADATA_ONLY_ASSUMPTION",
+      "claim_limit": "Shows one legal ordinary optimization can erase instruction-bound custom metadata; does not claim all metadata is always erased."
+    }
+  ],
+  "next_required_test": {
+    "test_id": "SP-EXP-LWR-002",
+    "scope": "REAL_CLAYCODE_COMPILER_ON_UBUNTU_TARGET",
+    "requirement": "Run source -> canonical IR -> optimized target -> execution receipt with intentional loss/broadening mutations for authority, epistemic state, provenance binding and effect/resource semantics; validator must fail closed."
+  }
+}

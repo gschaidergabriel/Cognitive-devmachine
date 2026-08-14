@@ -1,0 +1,50 @@
+module claycode.research.loop_dynamics_encoding
+version "0.1-proxy-candidate"
+status OPEN_RESEARCH_CANDIDATE
+
+class SchedulePolicy = SYNC_SNAPSHOT | ORDERED_SEQUENTIAL
+
+record LoopSpec {
+  id:LoopRef
+  family:Symbol
+  timescale:Duration
+  recurrence_budget:Int
+  step:FunctionRef
+  declared_effects:Set<Effect>
+  rollback:RecoveryRef?
+}
+
+record LoopNetwork {
+  loops:Map<LoopRef,LoopSpec>
+  policy:SchedulePolicy
+  schedule:Ordered<LoopRef>
+  state_epoch:Epoch
+}
+
+record LoopDynamicsReadout {
+  loop_id:LoopRef
+  state_epoch:Epoch
+  state_delta_norm:Float
+  unresolved_pressure:Float
+  recurrence_count:Int
+  recurrence_budget:Int
+  convergence_rate:Float?
+  overthinking_index:Float?
+  stagnation_index:Float?
+  intervention:Ref?
+  rollback:RecoveryRef?
+  evidence:Set<EvidenceRef>
+}
+
+rule ORDERED_SEQUENTIAL requires semantic_hash_includes(schedule)
+rule SYNC_SNAPSHOT requires all_steps_read_same_state_epoch
+rule schedule_set_normalization only_if policy=SYNC_SNAPSHOT && aggregation_order_independent
+rule function_effect_summary = transitive_union(direct_effects,callee_effect_summaries)
+rule effect_intent != capability_authority
+rule external_effect_commit requires valid_capability + commit_gateway + receipt
+rule recurrence != emergence
+rule loop_topology_membership != executable_schedule_identity
+
+// Research interpretation: no first-class loop primitive is promoted here.
+// This sketch uses existing records, Ordered<T>, rules, capability/effect separation,
+// plus the already-open generic function/control-flow closure work.

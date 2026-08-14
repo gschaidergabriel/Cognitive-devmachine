@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1705p0700_chatgpt_numcanon",
+  "tools":[
+    {"surface":"GitHub connector","state":"VERIFIED_RW","evidence":"canonical reads succeeded and unique-path run files were created successfully"},
+    {"surface":"local container","state":"EXECUTED","runtime":{"python":"3.13.5","node":"v22.16.0"},"purpose":"cross-runtime numeric serialization/canonicalization differential probe"},
+    {"surface":"E2B","state":"NOT_EXPOSED_IN_THIS_CHATGPT_SESSION","claim":"NO_E2B_EXECUTION_CLAIMED"},
+    {"surface":"SandboxAPI","state":"NOT_USED","claim":"NO_RUNTIME_EVIDENCE_CLAIMED"},
+    {"surface":"web primary-source research","state":"USED","sources":["RFC 8785 JSON Canonicalization Scheme","ECMAScript numeric semantics","WebAssembly Core Specification numeric/NaN semantics","Python json documentation"]}
+  ],
+  "fallback_rule":"Because the preferred E2B execution tool is not exposed to this hosted session, the protocol fallback used the local executable container. Results are LOCAL_COMPONENT_EVIDENCE, not Ubuntu developer-host or live-FRANK evidence.",
+  "status":"COMPLETE"
+}

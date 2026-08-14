@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T1911p0700_owner_normal_code_first_h1",
+  "room_id":"frank",
+  "event_type":"DELTA",
+  "origin_worker":"project-owner-directive-via-chatgpt-secondary",
+  "origin_actor":"PROJECT_OWNER",
+  "trigger":"frank",
+  "created_at":"2026-08-09T19:11:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["frank","harness","claycode"],
+  "affects_claims":["H1_REFERENCE_SEMANTICS","FRANK_TARGET_IMPLEMENTATION_ORDER","CLAYCODE_WAIT_BEHAVIOR"],
+  "dependencies":[
+    "research_entity/global/FRANK_NORMAL_CODE_FIRST_PARALLEL_H1_DIRECTIVE.md",
+    "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+    "research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md",
+    "research_entity/global/FRANK_WORKER_RESEARCH_CENTER_MESH_PROTOCOL.md"
+  ],
+  "artifact_refs":["research_entity/global/FRANK_NORMAL_CODE_FIRST_PARALLEL_H1_DIRECTIVE.md"],
+  "ancestry_family":"PROJECT_OWNER_OPERATING_DIRECTIVE_20260809_NORMAL_CODE_FIRST_CURRENT_TARGET_H1",
+  "delivery":"INTERRUPT_NEXT_SAFE_POINT",
+  "payload":{
+    "directive":"Do not wait for ClayCode when useful work exists. Build the same current new FRANK target architecture first in ordinary executable code, research/test/refine it there, freeze semantics, then transfer those same semantics into ClayCode H2.",
+    "not_requested":"Do not rebuild the old frankv0.1 architecture as the new H1 target.",
+    "frankv0_1_role":"archaeology + regression + live-user evidence + reusable mechanisms only",
+    "parallel_lanes":{
+      "frank_harness":"normal-code H1 current target architecture build/test/refinement",
+      "claycode":"BASE compiler/runtime/toolchain closure",
+      "bridge":"convert validated H1 behavior into explicit ClayCode requirements and later differential H2 tests"
+    },
+    "gate_rule":"H1 may build during BASE; H1 PASS remains formally gated. Parallel work does not bypass release gates.",
+    "worker_rule":"No Frank worker should report waiting for ClayCode while non-ClayCode-dependent target-architecture H1 work remains executable."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode_20260809T160924p0700_ffi_abi",
+  "trigger": "claycode",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "preflight_tool": "tools/research_interconnect_preflight.py",
+  "preflight_status": "FAIL_GOVERNANCE_DRIFT",
+  "preflight_blocker": "Tool priority sets still use branch name 'clay' while current registry uses integrated branch 'clayresearch'; fail-closed equality guard is therefore stale.",
+  "materialization_mode": "MANUAL_EQUIVALENT_FROM_VERIFIED_CURRENT_GITHUB_INPUTS",
+  "registered_foundation_coverage": {
+    "frank": {"depth": "DEEP", "inputs": ["latest fused FRANK target overlay P10/P12"]},
+    "clayresearch": {"depth": "CURRENT_STACK", "inputs": ["RAE_LATEST_COGNITIVE_STACK.clay", "current program stage"]},
+    "claygraph": {"depth": "DEEP", "inputs": ["RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"]},
+    "unifieddb": {"depth": "DEEP", "inputs": ["RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"]},
+    "gwt": {"depth": "RELEVANT", "inputs": ["GWT_EMERGENCE_READOUT_CONTRACT.md"]},
+    "hyperposition": {"depth": "RELEVANT", "inputs": ["HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"]},
+    "emergenz": {"depth": "RELEVANT", "inputs": ["GWT/Hyperposition causal-measurement boundaries"]},
+    "harness": {"depth": "DEEP", "inputs": ["HARNESS_WORKSPACE.json", "H-WP-10 effect authority"]},
+    "claycode": {"depth": "DEEP", "inputs": ["CLAYCODE_G9_FUSION_SPEC_V3.clay", "grammar.ebnf", "CLAYCODE_RELEASE_WORKSPACE.json", "recent federated worker results"]}
+  },
+  "anti_duplication": {
+    "active_overlaps_reused": ["parser conformance", "strict relation surface", "control-flow", "ClayGraph/UnifiedDB semantic boundary", "existing capability forgery/scope fuzz"],
+    "selected_partition": "CC-WP-07 FFI/ABI resource identity and lifetime"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1648p0700-loop-runtime",
+  "canonical_parent": "r2/04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "shared_ancestry_note": "FRANK loop-of-loops note/directive and other branch restatements are one evidence family and are not counted as independent replication.",
+  "reviews": [
+    {
+      "claim_id": "FRANK-LOOP-GENERIC-REPRESENTATION",
+      "frank_statement": "FRANK should be represented as heterogeneous interacting loops with typed budgets, state and halt/continue/escalate semantics.",
+      "frank_source_refs": ["research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md", "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md"],
+      "ancestry_families": ["FRANK-loop-of-loops-family"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Ordinary event-driven orchestration plus existing generic control flow is sufficient and explicit loop representation adds no semantic value.",
+      "falsifier": "H1/H2 differential replay shows loop identity/budget/halt receipts add no recoverable semantic or diagnostic information over ordinary scheduling.",
+      "independent_checks": ["Current local epoch/scheduler mutation experiment", "Concurrent independent structured-recurrence differential compiler proxy", "Primary recurrent-depth/control-flow literature reviewed in the companion ClayCode run"],
+      "adversarial_checks": ["In-place scheduling mutation", "budget exhaustion with high residual pressure", "capability forgery attempts"],
+      "verdict": "REFINED",
+      "reason": "The requirement survives as generic structured recurrence plus explicit scheduling/epoch semantics; no FRANK-specific loop primitive is justified.",
+      "claycode_action": "Implement generic structured control and typed scheduling semantics; keep dynamics readouts ordinary typed data.",
+      "affected_claycode_artifacts": ["research_entity/claycode/g9/grammar.ebnf", "compiler/lowering runtime", "scheduler/epoch contracts"]
+    },
+    {
+      "claim_id": "FRANK-LOOP-SNAPSHOT-SEMANTICS",
+      "frank_statement": "Coupled loops can be lowered without explicitly declaring within-epoch read/order semantics.",
+      "frank_source_refs": ["implicit implementation alternative"],
+      "ancestry_families": ["current-run implementation discriminator"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Scheduler iteration order is harmless implementation detail.",
+      "falsifier": "Permutation testing of an unordered/set-like loop family remains semantically equivalent under in-place lowering.",
+      "independent_checks": ["All loop-spec permutations under snapshot lowering were equivalent"],
+      "adversarial_checks": ["Replacing snapshot reads with in-place reads caused schedule-order dependence"],
+      "verdict": "REFUTED",
+      "reason": "For the tested unordered/set-like coupled loop class, in-place reads changed semantics with iteration order.",
+      "claycode_action": "Require explicit scheduling class: snapshot/set-like vs ordered/sequential/asynchronous; do not silently infer one from container iteration order.",
+      "affected_claycode_artifacts": ["compiler/lowering runtime", "concurrency/scheduling contract"]
+    },
+    {
+      "claim_id": "FRANK-LOOP-BUDGET-HALT",
+      "frank_statement": "Exhausting a recurrence budget is sufficient to classify a loop as successfully complete.",
+      "frank_source_refs": ["implementation alternative, not an accepted FRANK claim"],
+      "ancestry_families": ["current-run implementation discriminator"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Budget exhaustion is a resource event and may occur while unresolved pressure remains high.",
+      "falsifier": "Across representative H1 traces, budget exhaustion always coincides with low residual pressure/error and correct completion.",
+      "independent_checks": ["Current proxy exhausted all budgets with delta=0.0 but residual=0.5690308937228293"],
+      "adversarial_checks": ["forced finite budgets before residual convergence"],
+      "verdict": "REFUTED",
+      "reason": "The executable counterexample is STALLED, not converged; the runtime must distinguish budget exhaustion from semantic completion.",
+      "claycode_action": "Encode typed exit/halt reason and permit ESCALATE/ROUTE on exhausted budget with material residual pressure.",
+      "affected_claycode_artifacts": ["generic structured-control IR", "runtime halt policy", "receipts"]
+    }
+  ],
+  "validator": {"executed": false, "reason": "repo-local Goodman validator unavailable because the local execution sandbox had no repository checkout/network; official validator PASS not claimed"}
+}

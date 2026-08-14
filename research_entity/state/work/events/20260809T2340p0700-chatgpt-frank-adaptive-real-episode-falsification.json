@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0",
+  "event_id": "wev-20260809T234000p0700-chatgpt-frank-adaptive-real-episode-falsification",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T23:40:00+07:00",
+  "payload": {
+    "work_id": "frank-adaptive-real-episode-falsification-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SYNTHETIC_DIFFERENTIAL_PLUS_REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "title": "FRANK adaptive recurrence: frozen runtime + real local-4B falsification",
+    "work_clay": "clay{target:'FRANK H1 Ubuntu reference';candidate:'temporal_multi_signal_w4';candidate_status:'HIGH_PRIORITY_FALSIFICATION_CANDIDATE_NOT_SELECTED';compare:['fixed_budget','single_signal','temporal_w2','temporal_w3','temporal_w4','temporal_w5','temporal_w6'];evidence_layers:['frozen_historical_runtime_episodes','matched_real_local_4B_episodes'];controls:['same_episode_or_prompt','same_seed_where_feasible','truthful_reentry','shuffled_reentry','no_reentry','lesion','rescue'];measures:['accuracy','task_outcome','regret','false_halt','correct_to_wrong_drift','recurrence_count','latency','compute','memory','route_cost','route_benefit','recovery','OOD_seed_robustness'];authority:'proposal_only_until promotion gate';release_scope:'Ubuntu_v0.1'}",
+    "reason_clay": "clay{synthetic_receipt:{episodes:8,w4_accuracy:0.75,w4_recurrences:38,w4_cost:1.63,w4_mean_utility:0.5125,w4_regret:0.64,w4_false_halts:2,w4_drift:0,fixed_accuracy:0.625,fixed_recurrences:52,fixed_cost:2.21,fixed_regret:1.38};latest_vps:{class:'REAL_SELF_HOSTED_UBUNTU_EXECUTION',commit:'02e19765b6784d1ebb6203ce7897073b72b6d18d',pass:20,fail:0};boundary:'synthetic winner is not production selection; two false halts are promotion blockers'}",
+    "completion_clay": "clay{done_when:['frozen runtime corpus provenance frozen','policy family replayed without access to evaluation oracle','real local-4B matched episodes executed where feasible','route benefit/cost measured','false-halt causes adjudicated','OOD/seed robustness reported','truthful/shuffled/no-reentry and lesion/rescue receipts exist','all runs bind estimator identity uncertainty freshness policy hash and source commit','result reenters research mesh'];promotion_requires:'Pareto-competitive robust operating window with no known simpler dominating configuration and Ubuntu reproducibility'}",
+    "evidence_need": [
+      "clay{ref:'research_entity/mesh_feedback/20260809T2339p0700-frank-adaptive-recurrence-vps-fusion/FINAL_REPORT.md';class:'RAE_FUSED_RUN_REPORT'}",
+      "clay{ref:'gschaidergabriel/Dr.-Unterweger@02e19765b6784d1ebb6203ce7897073b72b6d18d';class:'REAL_SELF_HOSTED_UBUNTU_EXECUTION_20_OF_20'}",
+      "clay{ref:'https://aclanthology.org/2026.findings-acl.651/';class:'PEER_REVIEWED_PRIMARY_LITERATURE'}",
+      "clay{ref:'https://aclanthology.org/2026.acl-long.1256/';class:'PEER_REVIEWED_PRIMARY_LITERATURE'}",
+      "clay{ref:'https://aclanthology.org/2026.findings-acl.1199/';class:'PEER_REVIEWED_PRIMARY_LITERATURE'}",
+      "clay{ref:'https://arxiv.org/abs/2607.20519';class:'PREPRINT_PRIMARY_RESEARCH'}",
+      "clay{ref:'research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md';class:'PROJECT_OPEN_RESEARCH_DIRECTIVE'}"
+    ],
+    "executor_policy": "clay{preferred:'claude-code-lead or verified Ubuntu-capable worker';may_parallelize:['harness','frank','gwt','unifieddb','claygraph','emergenz'];must_refresh_before_effect:true;deduplicate_live_work:true;hidden_provider_chain_of_thought_forbidden:true;use_only_observable_runtime_state:true}",
+    "required_capabilities": [
+      "github-read-write",
+      "ubuntu-python-execution",
+      "self-hosted-vps-runner",
+      "local-model-endpoint",
+      "experiment-receipt-persistence",
+      "frozen-episode-replay"
+    ],
+    "write_scope": [
+      "gschaidergabriel/Dr.-Unterweger:harness/**",
+      "gschaidergabriel/Dr.-Unterweger:tests/**",
+      "gschaidergabriel/Dr.-Unterweger:runtime/**",
+      "gschaidergabriel/Dr.-Unterweger:research/**",
+      "gschaidergabriel/clay-global-research-entity:research_entity/mesh_feedback/**",
+      "gschaidergabriel/clay-global-research-entity:research_entity/state/work/events/**"
+    ],
+    "dependencies": [
+      "clay{require:'current FRANK deep-integrity matrix green or regression triaged first'}",
+      "clay{require:'residual estimator identity uncertainty and freshness observable'}",
+      "clay{require:'evaluation oracle excluded from policy inputs'}"
+    ],
+    "invalidators": [
+      "clay{if:'newer worker already completes equivalent real-episode/4B experiment';then:'deduplicate and ingest newer receipt'}",
+      "clay{if:'w4 loses on held-out/runtime evidence';then:'preserve negative result and reopen Pareto operating-window search'}",
+      "clay{if:'route benefit/cost reverses synthetic ranking';then:'do not rationalize; update candidate ordering'}",
+      "clay{if:'real-model signals require hidden chain-of-thought';then:'replace with observable outputs/state/logits/receipts or mark unavailable'}"
+    ],
+    "base_priority": 0.97,
+    "expected_impact": 0.95,
+    "urgency": 0.86,
+    "information_gain": 0.99,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1821p0700_claycode_keyword_partition",
+  "experiment": "Exact ClayCode D strict-LALR conflict causal partition",
+  "executed_by": "chatgpt-secondary",
+  "execution_scope": "LOCAL_ISOLATED_LINUX_PROXY",
+  "target_host_truth": false,
+  "environment": {
+    "os": "Linux",
+    "kernel": "6.18.35",
+    "arch": "x86_64",
+    "python": "3.13.5",
+    "lark": "1.3.1",
+    "interegular": "NOT_INSTALLED"
+  },
+  "input": {
+    "repo_path": "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark",
+    "git_blob_sha1": "1d2a62053ffdd2fc008cbd33aecedf71b6387bce",
+    "sha256": "ef39d1460c0cea719422680e5c2037082b36c6e7fb3cd3c3c2c71dd131de6537",
+    "exact_blob_verified": true
+  },
+  "variants": [
+    {
+      "id": "BASELINE",
+      "change": "none",
+      "nonstrict_lalr_contextual_build": "PASS_WITH_CONFLICT_DIAGNOSTICS",
+      "shift_reduce_conflict_count": 13,
+      "conflict_partition": {
+        "ident_if": 6,
+        "ident_invariant": 6,
+        "nested_newline_separator": 1
+      },
+      "strict_result": "GrammarError on parser-table conflict"
+    },
+    {
+      "id": "REMOVE_IF_INVARIANT_IDENT_ALIASES",
+      "change": [
+        "remove | \"invariant\" -> ident_invariant from ident",
+        "remove | \"if\" -> ident_if from ident"
+      ],
+      "nonstrict_lalr_contextual_build": "PASS_WITH_ONE_CONFLICT",
+      "shift_reduce_conflict_count": 1,
+      "remaining_conflict": "_bsep NEWLINE inner repetition"
+    },
+    {
+      "id": "OPERATOR_ALIAS_REMOVAL_ONLY",
+      "change": "remove operator-word generic ident aliases while leaving if/invariant aliases",
+      "result": "CONFLICTS_PERSIST",
+      "interpretation": "operator aliases participate as lookaheads but are not the root reducible-symbol ambiguity"
+    },
+    {
+      "id": "RULE_PRIORITY_ATTEMPTS",
+      "change": "apply rule/identifier priorities",
+      "result": "CONFLICTS_PERSIST",
+      "interpretation": "priority annotation is not a causal fix for the current ambiguity"
+    },
+    {
+      "id": "COMBINED_MINIMAL_REPAIR",
+      "change": [
+        "remove ident_invariant alias",
+        "remove ident_if alias",
+        "replace _bsep: ';' | NEWLINE+ with _bsep: ';' | NEWLINE"
+      ],
+      "candidate_sha256": "2e51fd87c8eefc206170eaad47993f780374e6202fa361ff4bb56f2f06187dec",
+      "nonstrict_lalr_contextual_build": "PASS",
+      "captured_shift_reduce_or_collision_diagnostics": 0,
+      "strict_result": "LexError: interegular must be installed for strict mode",
+      "strict_interpretation": "Parser-table conflict closure reached far enough to expose a separate optional-dependency blocker; strict regex-collision closure remains untested."
+    }
+  ],
+  "representative_parse_differential": [
+    {
+      "case": "dialect invariant declaration",
+      "baseline_and_repair_parse": true,
+      "same_tree": true,
+      "tree_sha256": "cce561248d691a18d045de95b719ce29474182332f7b8b0f9b91c4c517472e56"
+    },
+    {
+      "case": "cycle if control block",
+      "baseline_and_repair_parse": true,
+      "same_tree": true,
+      "tree_sha256": "3e0043874c98060d5d0585f80a6e9f7d61d5ea2e8a8685eeb70f8a81e18a9aac"
+    },
+    {
+      "case": "keyword-like record fields status/dialect/version/requires",
+      "baseline_and_repair_parse": true,
+      "same_tree": true,
+      "tree_sha256": "94951d4c46553ed7fc546a972007c5e4e673a7b1c019bff58f37b7cc4255917c"
+    },
+    {
+      "case": "requires expression operator",
+      "baseline_and_repair_parse": true,
+      "same_tree": true,
+      "tree_sha256": "d0f5686f3960e9628838a2e0ee86a21cf6d701dde2ee4c09191216ff496dc1a5"
+    }
+  ],
+  "representative_differential_summary": {
+    "cases": 4,
+    "both_parse": 4,
+    "identical_parse_tree_hash": 4,
+    "scope_warning": "Representative regression only; not full-corpus semantic equivalence."
+  },
+  "ci_counterexample": {
+    "workflow_commit": "2a9902ce861a1bc4cdae3d77ded300efa4af69b5",
+    "declared_parser_install": "lark==1.3.1",
+    "missing_for_strict_regex_collision_check": "interegular",
+    "effect": "A conflict-free candidate may fail the strict probe with dependency/infrastructure LexError instead of proving strict PASS.",
+    "recommended_discriminator": "Pin/install Lark with interegular support, classify dependency LexError separately from grammar failure, then rerun strict construction."
+  },
+  "result_class": "IMPLEMENTATION_COUNTEREXAMPLE_PLUS_PARTIAL_REPAIR_EVIDENCE",
+  "promotion": "NONE",
+  "next_test": "interegular-enabled strict build + full current G9/Dialect typed-AST and semantic-hash differential"
+}

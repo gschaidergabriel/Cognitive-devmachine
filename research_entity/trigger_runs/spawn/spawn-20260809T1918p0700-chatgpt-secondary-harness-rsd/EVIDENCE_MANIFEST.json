@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd",
+  "evidence_classes":[
+    {"class":"VERIFIED_CURRENT_REPOSITORY_STATE","strength":"PRIMARY_FOR_CURRENT_PROJECT_STATE","refs":["research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json","research_entity/rooms/PROGRAM_STATE.json","research_entity/harness/HARNESS_WORKSPACE.json","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","research_entity/claycode/base/CC_BASE_14_BLOCKER_BURNDOWN_20260809T1904p0700.md","research_entity/trigger_runs/frank/frank-20260809T1916p0700-chatgpt-secondary-refreeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE_V2_CANDIDATE.json"]},
+    {"class":"CURRENT_EXECUTABLE_REPO_EVIDENCE","strength":"IMPLEMENTATION_EVIDENCE_WITH_SCOPE_GUARDS","refs":["commit 8c680a3a450e88851fb1554393967562cea2514b — typed core native differential validation","commit dced76edf3e70091d71b5729fb2bf237e59b3f58 — integrated BASE effect pipeline gate","tools/claycode_base_effect_pipeline.py"],"scope":"Current repository integration/proxy evidence; not full BASE/H1 target acceptance unless separately receipted."},
+    {"class":"PRIMARY_EXTERNAL_ENGINEERING_PRECEDENT","strength":"DESIGN_PRECEDENT_NOT_FRANK_VALIDATION","refs":["Temporal durable workflow/replay and recorded nondeterminism","FoundationDB deterministic simulation plus separate multithread/race testing","rr record/replay of nondeterministic inputs","SQLite atomic commit/recovery/WAL","WASI capability/resource boundaries"]},
+    {"class":"LOCAL_SYNTHETIC_MECHANISM_EXPERIMENT","strength":"DISCRIMINATING_FOR_TOY_CONTRACT_ONLY","ref":"EXPERIMENT_RECEIPT.json","scope":"5000 replay traces, 10000 dual-hash pairs, exhaustive toy crash worlds; not live FRANK or Ubuntu target evidence."}
+  ],
+  "ancestry_warning":"Repository architecture contracts and Harness/ClayCode execution share project ancestry; agreement is not independent replication. External systems are analogous engineering precedent, not implementation transfer proof.",
+  "open_evidence_needed":["Ubuntu target execution of receipt contract in ordinary-code H1","H1/H2 same-receipt differential replay after ClayCode handoff","real multithread/race tests outside deterministic simulation","effect adapters classified by idempotency/queryability/transactional coupling","p50/p95/p99 receipt capture/replay overhead","observer-effect paired traces with low/full instrumentation"]
+}

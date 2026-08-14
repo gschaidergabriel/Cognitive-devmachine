@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1821p0700_claycode_keyword_partition",
+  "trigger": "spawn",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T18:21:31+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "rng": {
+    "engine": "Python secrets.SystemRandom backed by OS CSPRNG",
+    "selection_seed_recorded": false,
+    "seed_policy": "No seed invented or persisted",
+    "branch_draw_domain": "integer [0,1000000000)",
+    "branch_draw": 132229831,
+    "distribution_schema_version": "1.0",
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "selected_interval": "[0,500000000)",
+    "selected_origin_branch": "claycode"
+  },
+  "candidate_microdirections": [
+    {
+      "id": "M1",
+      "topic": "separator normalization: remove nested NEWLINE repetition while preserving block semantics",
+      "status": "ELIGIBLE_NOT_SELECTED",
+      "falsifier": "Strict-LALR diagnostics persist after repetition normalization or current corpus differential shows changed canonical meaning."
+    },
+    {
+      "id": "M2",
+      "topic": "keyword-as-ident partition: isolate which explicit keyword identifier aliases create strict-LALR ambiguity and whether they are semantically necessary",
+      "status": "ELIGIBLE_SELECTED_REPLICATION_WITH_NEW_DISCRIMINATOR",
+      "falsifier": "Conflict diagnostics remain after removing only the causally implicated aliases, or current-source evidence requires those aliases in the ambiguous contexts."
+    },
+    {
+      "id": "M3",
+      "topic": "operator/token lexical partition for deterministic contextual lexing",
+      "status": "ELIGIBLE_NOT_SELECTED",
+      "falsifier": "Current diagnostics localize entirely above lexical token partition or strict collision analysis shows no relevant lexical overlap."
+    },
+    {
+      "id": "M4",
+      "topic": "differential parse-tree/semantic-hash preservation harness for minimal grammar repair",
+      "status": "ELIGIBLE_NOT_SELECTED",
+      "falsifier": "A minimal repair cannot preserve current accepted-source canonical meaning."
+    }
+  ],
+  "microdirection_draw": {
+    "eligible_order": ["M1", "M2", "M3", "M4"],
+    "engine": "Python secrets.SystemRandom backed by OS CSPRNG",
+    "choice_index_zero_based": 1,
+    "selected": "M2"
+  },
+  "novelty_review": {
+    "recent_window_reference": "research_entity/trigger_runs/spawn/spawn_20260809T1813p0700_claycode_module_init/INTERCONNECT_MANIFEST.json",
+    "recent_receipt_commit_window": [
+      "60d48f20d1fd31afb07411b13d6a9670ab6a5634",
+      "105d05139363050d61e30c0e00daa42816872d16",
+      "8df7d1710ec91dc578ba2d2303f81ea493dfac0e",
+      "e4c381118d3aba4f267dba3a858d98a69cee6a73",
+      "903cda18856936a1485d5d47945d9fa9ea7e24ef",
+      "02225987d906ae2550b4525eaa0de13811906038",
+      "202c3a9fe92e92028c0f7aa7c299e701049e3fed",
+      "08254edda8df161e0c9042975c279ce9416d2c82",
+      "71ef964d9261415bf52081cb43a05dd137678d0d",
+      "9e7c6b59f4de344a575dfa20afa02aefe9f9562e"
+    ],
+    "known_recent_topics": [
+      "ClayCode async replay/cancellation",
+      "ClayCode FRANK loop evaluator-lowering",
+      "ClayCode callable identity",
+      "ClayCode adaptive learner state",
+      "ClayCode affine capability revocation",
+      "ClayCode delta equivalence",
+      "ClayCode effect authority",
+      "ClayCode foreign effect closure",
+      "ClayGraph reversal-aware binding",
+      "GWT adaptive recurrence",
+      "Emergenz adaptive lesion/rescue",
+      "ClayCode module/package initialization",
+      "ClayCode bootstrap-tool staging"
+    ],
+    "active_overlap": "Strict-LALR conflict localization was already active in ClayCode.",
+    "replication_exception": "Allowed because this run independently reproduces the exact grammar blob, causally partitions conflict roots, and exposes a new strict-CI dependency/certification failure not established by the prior active work."
+  },
+  "completion_artifacts": [
+    "INTERCONNECT_MANIFEST.json",
+    "HYPOTHESES.json",
+    "EVIDENCE_MANIFEST.json",
+    "KEYWORD_PARTITION_EXECUTION_RECEIPT.json",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "FINAL_REPORT.md"
+  ],
+  "completion_result": "Two causal parser-table conflict surfaces isolated; representative semantic preservation observed; current strict CI dependency closure found insufficient; no promotion.",
+  "selection_probability_is_not_evidence": true,
+  "training_auto_start_forbidden": true,
+  "status": "COMPLETED"
+}

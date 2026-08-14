@@ -1,0 +1,11 @@
+(* Non-promoted ClayCode G9 grammar repair candidate derived from executable counterexample. *)
+
+(* Existing program/statement productions remain unchanged except block gains if_stmt. *)
+block = "{", { field | statement | if_stmt | action_stmt }, "}" ;
+if_stmt = "if", expr, block ;
+
+(* Preserve existing operators and add comparisons already used by G9 V3 source. *)
+operator = "="|"!="|"=="|"->"|"|"|"+"|"-"|"*"|"/"|"&&"|"||"|"iff"|"requires"|"in"|"subset_of"|"=>"|"<"|">"|"<="|">=" ;
+
+(* Parser implementation requirement: longest-match tokenization for <= >= == != => -> && ||. *)
+(* This candidate does not define else/while/return/function semantics and is not sufficient for the BASE general-purpose gate. *)

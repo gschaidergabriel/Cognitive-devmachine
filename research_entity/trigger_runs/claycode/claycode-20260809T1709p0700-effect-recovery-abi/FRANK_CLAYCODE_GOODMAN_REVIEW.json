@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1709p0700-effect-recovery-abi",
+  "reviews":[
+    {
+      "assumption":"FRANK/Harness effect retries can be modeled as deterministic local lifecycle transitions with idempotency handled only by local ledger state.",
+      "ancestry":"FRANK/Harness-derived requirement; not independent evidence by itself.",
+      "verdict":"REFINED",
+      "independent_support":["local two-world crash-window executable probe","AWS idempotent API architecture","Apache Kafka delivery/transaction semantics","IETF HTTPAPI Idempotency-Key draft architecture"],
+      "counterhypothesis":"A local durable lifecycle is sufficient without remote operation identity or reconciliation.",
+      "adversarial_result":"Counterhypothesis fails in the minimal indistinguishable PREPARED worlds: RETRY duplicates one world; ABSTAIN loses the other.",
+      "refinement":"Preserve local lifecycle, but add stable effect identity/fingerprint and an explicit delivery/recovery contract. When remote coordination/reconciliation is absent, expose UNCERTAIN instead of inventing DONE."
+    },
+    {
+      "assumption":"The finding requires a new ClayCode surface primitive.",
+      "verdict":"UNRESOLVED",
+      "counterhypothesis":"Existing EffectIntent constraints/type-effect metadata plus runtime ABI can represent the mechanism without syntax change.",
+      "next_test":"Compile a real effectful application/FRANK component through parser->typed IR->lowering with the recovery contract; change language semantics only if that executable path cannot express it."
+    }
+  ],
+  "promotion":"NONE"
+}

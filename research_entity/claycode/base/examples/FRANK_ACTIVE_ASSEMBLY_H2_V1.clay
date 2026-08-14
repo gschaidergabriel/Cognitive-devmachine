@@ -1,0 +1,6 @@
+// H2 candidate: ActiveAssembly through the general-purpose typed record-selection FFI.
+// The host call is domain-neutral and its sealed runtime capability pins the exact
+// declarative selection policy hash. The returned String is canonical JSON data, never
+// an execution-authority bearer.
+module frank.active_assembly_h2
+fn compile(request:String)->String=host.records_select_json(request)

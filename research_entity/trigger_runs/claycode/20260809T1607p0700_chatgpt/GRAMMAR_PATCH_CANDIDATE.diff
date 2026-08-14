@@ -1,0 +1,14 @@
+--- research_entity/claycode/g9/grammar.ebnf
++++ research_entity/claycode/g9/grammar.ebnf.candidate
+@@
+-block = "{", { field | statement | action_stmt }, "}" ;
++block = "{", { field | statement | if_stmt | action_stmt }, "}" ;
++if_stmt = "if", expr, block, ["else", block] ;
+@@
+-operator = "="|"!="|"=="|"->"|"|"|"+"|"-"|"*"|"/"|"&&"|"||"|"iff"|"requires"|"in"|"subset_of"|"!="|"=>" ;
++operator = ">="|"<="|">"|"<"|"="|"!="|"=="|"->"|"|"|"+"|"-"|"*"|"/"|"&&"|"||"|"iff"|"requires"|"in"|"subset_of"|"=>" ;
+
+# RUN-LOCAL CANDIDATE ONLY
+# Motivation: CURRENT G9 V3 already uses >, < and if-block syntax.
+# This patch is intentionally minimal and does NOT claim full-file conformance.
+# Before merging: parse complete CURRENT G9 V3, parent V2, dialect registry and frozen FRANK/Harness fixtures; fuzz and roundtrip canonicalization.

@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1743p0700_gwt_adaptive_recurrence",
+  "experiment_id": "EXP-SPAWN-GWT-ADAPTIVE-RECURRENCE-PROXY-01",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_scope": "HOSTED_SYNTHETIC_PROXY_ONLY_NOT_FRANK_RUNTIME",
+  "executed": true,
+  "execution_environment": "ChatGPT hosted Linux container; Python 3 standard library",
+  "command": "python3 /tmp/spawn_gwt_sim.py > /tmp/spawn_gwt_sim_results.json",
+  "code_sha256": "13934e9413d65901eaaf1916810301988b10c982d41e8ccf60368653a93bac13",
+  "result_sha256": "79db9467ecf793ff1f5a9aff36aff426b39300eaa2885f3b6edadf4b23e74a52",
+  "code_git_commit": "3671105c19d7b1cd1bd3267caa6a3485cc9057e9",
+  "design": {
+    "matched_seeds": 20,
+    "episodes_per_seed": 3000,
+    "total_episode_draws_per_policy": 60000,
+    "regimes": {
+      "easy": 0.28,
+      "hard": 0.30,
+      "productive_cycle": 0.18,
+      "stalled": 0.14,
+      "diverging": 0.10
+    },
+    "policies": ["fixed4", "fixed8", "fixed12", "delta_only", "pressure_trend"],
+    "success_pressure_threshold": 0.15,
+    "max_steps": 12,
+    "per_step_cost": 0.025,
+    "purpose": "Mechanism sanity-check: can residual-pressure plus multi-step trend distinguish useful recurrence from stall/divergence while preserving productive cycles better than low-delta halting?"
+  },
+  "aggregate_results": {
+    "fixed4": {"success_rate": 0.278400, "success_ci95": 0.003588, "mean_steps": 4.000000, "mean_pressure": 0.476997, "mean_utility": 0.390281},
+    "fixed8": {"success_rate": 0.426517, "success_ci95": 0.004518, "mean_steps": 8.000000, "mean_pressure": 0.375693, "mean_utility": 0.413010},
+    "fixed12": {"success_rate": 0.606617, "success_ci95": 0.003862, "mean_steps": 12.000000, "mean_pressure": 0.329224, "mean_utility": 0.392932},
+    "delta_only": {"success_rate": 0.459233, "success_ci95": 0.003877, "mean_steps": 5.810467, "mean_pressure": 0.406577, "mean_utility": 0.452693},
+    "pressure_trend": {"success_rate": 0.606733, "success_ci95": 0.003843, "mean_steps": 6.345833, "mean_steps_ci95": 0.023760, "mean_pressure": 0.336648, "mean_utility": 0.500407, "utility_ci95": 0.002599}
+  },
+  "derived_comparisons": {
+    "pressure_trend_vs_fixed12_success_delta": 0.0001167,
+    "pressure_trend_vs_fixed12_step_reduction_fraction": 0.4711806,
+    "pressure_trend_vs_fixed12_utility_delta": 0.1074743,
+    "pressure_trend_vs_delta_only_success_delta": 0.1475000
+  },
+  "pressure_trend_by_regime": {
+    "easy": {"success_rate": 1.0, "mean_steps": 2.996, "mean_pressure": 0.100},
+    "hard": {"success_rate": 0.9981, "mean_steps": 8.577, "mean_pressure": 0.130},
+    "productive_cycle": {"success_rate": 0.1521, "mean_steps": 11.991, "mean_pressure": 0.179},
+    "stalled": {"success_rate": 0.0, "mean_steps": 4.036, "mean_pressure": 0.899},
+    "diverging": {"success_rate": 0.0, "mean_steps": 2.000, "mean_pressure": 1.118}
+  },
+  "delta_only_by_regime": {
+    "easy": {"success_rate": 1.0, "mean_steps": 2.996, "mean_pressure": 0.100},
+    "hard": {"success_rate": 0.5654, "mean_steps": 7.755, "mean_pressure": 0.161},
+    "productive_cycle": {"success_rate": 0.0578, "mean_steps": 9.680, "mean_pressure": 0.302},
+    "stalled": {"success_rate": 0.0, "mean_steps": 2.000, "mean_pressure": 0.899},
+    "diverging": {"success_rate": 0.0, "mean_steps": 6.115, "mean_pressure": 1.500}
+  },
+  "interpretation": [
+    "Within this synthetic generator, a residual-pressure + multi-step-trend policy matched the fixed-12 success rate while using about 47.1% fewer recurrence steps.",
+    "A low-delta-only halt rule substantially underperformed on hard-converging and productive-cycle regimes, supporting the project law that low state delta with high residual pressure must not be called convergence.",
+    "The result is not live FRANK evidence and cannot promote the controller. The dynamics were authored for this test, so this is mechanism/proxy evidence only."
+  ],
+  "falsification_next": "Run matched frozen H1 FRANK episodes on Ubuntu with fixed recurrence budgets versus the candidate adaptive controller; lesion residual-pressure, trend/patience and GWT focus signals separately; include shuffled-focus and no-reentry controls; measure task outcome, false halt, overthinking, latency, compute, instability and recovery."
+}

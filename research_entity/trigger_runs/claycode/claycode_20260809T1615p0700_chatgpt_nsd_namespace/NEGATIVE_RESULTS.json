@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1615p0700_chatgpt_nsd_namespace",
+  "negative_results": [
+    {
+      "id": "NR-CC-D-FINITE-TERMINAL-IDENTIFIER-COLLISION-20260809",
+      "status": "NEGATIVE_RESULT",
+      "proposition": "A finite declared bare-relation lexer can reserve current relation words without interfering with the ordinary identifier namespace.",
+      "result": "REFUTED_FOR_TESTED_IMPLEMENTATION",
+      "evidence": "0/15 ordinary identifier controls using legal current relation spellings parsed under D, versus 15/15 under S and N.",
+      "scope": "local Lark LALR finite-terminal proxy only",
+      "not_refuted": "D as a whole; contextual soft-keyword/declaration or escaping may rescue it",
+      "falsifier": "A production D parser demonstrates full-corpus closure and 100% intended identifier/relation disambiguation under shadowing/mutation tests without unacceptable diagnostics or complexity."
+    },
+    {
+      "id": "NR-CC-D-DIGIT-LEADING-RELATION-ID-20260809",
+      "status": "NEGATIVE_RESULT",
+      "proposition": "All current G9 relation spellings can be represented directly as current bare ident tokens.",
+      "result": "REFUTED",
+      "evidence": "4B_emits and 4B_need_not_learn are digit-leading while current grammar ident begins with letter or underscore.",
+      "scope": "CURRENT G9 V3 source versus CURRENT grammar.ebnf",
+      "possible_repairs": ["source normalization", "quoted relation identity", "explicit alternate token class"],
+      "falsifier": "A newer admitted grammar/source pair removes the mismatch."
+    }
+  ],
+  "assimilated_not_reauthored": [
+    {
+      "source": "concurrent full-G9 relation namespace closeout",
+      "finding": "Current @relation S is backend-sensitive when mixed with existing @ref; it remains challenged/not-selected rather than universally refuted."
+    }
+  ]
+}

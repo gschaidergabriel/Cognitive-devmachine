@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1728p0700-effect-closure-lowering",
+  "experiment_id": "EXP-CC-G9-EFFECT-CLOSURE-LOWERING-001",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "candidate_version": "cc-lab-effect-closure-0.1",
+  "source_hash": "92773edfa70e6313685a30bb6d1052d9069c369c99312a830176a1a4fdc7710c",
+  "semantic_hash": "ad53c6863dbe1fb462476107988387b4a0d5264dda34d5166ca17a2359df7d14",
+  "contract_hash": "3a2fc86b62c9a40eaad54ec4667ebac376d0995cbfc29d61fb774a36168add30",
+  "lowering": {
+    "target": "generated Python semantic shadow",
+    "generated_code_hash": "f674fdc28d0946f187e63af24a3a6e5229126009d934247e629a85f35b9d4a65",
+    "execution_mode": "same hosted Linux process via exec; not a production backend"
+  },
+  "runtime": {
+    "surface": "OpenAI hosted local Linux container",
+    "e2b_used": false,
+    "ubuntu_target_used": false
+  },
+  "test_corpus": {
+    "seed": 202608091728,
+    "random_call_graphs": 20000,
+    "lowered_execution_cases": 5000
+  },
+  "results": {
+    "graph_closure_mismatches": 0,
+    "graph_max_lfp_rounds": 9,
+    "recursive_cycle_effect_closure": true,
+    "interpreter_vs_lowered_output_mismatches": 0,
+    "interpreter_vs_lowered_trace_mismatches": 0,
+    "main_effect_summary": ["DB_WRITE", "FS_READ", "HTTP"],
+    "main_required_capabilities": ["cap.db.write", "cap.fs.read", "cap.http"],
+    "summary_matches_observed_unconditional_effect_classes": true,
+    "format_variant": {
+      "source_hash": "9253241e5e43a2fbf4ce44fc75c4baae775445d65b3eb0287081819e93e8557e",
+      "semantic_hash": "ad53c6863dbe1fb462476107988387b4a0d5264dda34d5166ca17a2359df7d14",
+      "contract_hash": "d68daefb515eb4a98026d2d7686cc1353565b0ce6ec3c9ba83a7c5529933c3ff",
+      "lowered_hash": "f674fdc28d0946f187e63af24a3a6e5229126009d934247e629a85f35b9d4a65",
+      "semantic_equal": true,
+      "contract_distinct": true,
+      "lowered_equal": true
+    },
+    "probe_output": 3051,
+    "probe_trace_root": "d6620b0d4a0888253d270cde32fa4d7322f1f94148764f7ded9f2f231f074e24",
+    "negative_tests": {
+      "arity_mismatch": "REJECT:arity",
+      "missing_http_capability": "REJECT:missing cap.http",
+      "reserved_host_shadow": "REJECT:reserved host namespace",
+      "textual_capability_name": "REJECT:missing cap.fs.read",
+      "undefined_function": "REJECT:undefined function missing"
+    },
+    "elapsed_seconds": 1.537683
+  },
+  "expected_vs_observed": "PASS for the tested proxy: exact call-graph least-fixed-point effects equal reference closure; lowered shadow equals interpreter output+effect trace; textual capability names do not authorize effects.",
+  "failure_classification": "NO_MISMATCH_IN_TESTED_PROXY",
+  "repair_change_applied": "No ClayCode semantic change. Candidate compiler/type-effect implementation law only.",
+  "affected_hypotheses": [
+    "H-CC-EFFECT-CLOSURE-001",
+    "H-CC-CAPREQ-AUTH-SEP-001",
+    "H-CC-ID-LAYERS-001"
+  ],
+  "mesh_impact": {
+    "claycode": "REFINED implementation requirement",
+    "frank": "NO_SEMANTIC_CHANGE",
+    "harness": "supports layered identity/source-chain oracle handoff",
+    "claygraph": "NO_CHANGE",
+    "unifieddb": "NO_CHANGE",
+    "gwt": "NO_CHANGE",
+    "hyperposition": "NO_CHANGE",
+    "emergenz": "NO_CHANGE",
+    "clayresearch": "infrastructure preflight drift discovered"
+  },
+  "limitations": [
+    "not production G9 parser/canonical IR",
+    "not E2B",
+    "not Andreas Ubuntu developer host",
+    "not native/WASM/WASI backend",
+    "not APP-01..APP-10 acceptance",
+    "generated Python executed in same process rather than isolated child process"
+  ]
+}

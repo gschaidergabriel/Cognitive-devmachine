@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1717p0700-all-workers-production-parser",
+  "executed":[
+    {"tool":"GitHub connector","class":"canonical_read_write","result":"SUCCESS","evidence":"current canonical/source reads plus durable run/directive/work-event writes"},
+    {"tool":"local isolated Linux container","class":"executable","runtime":"Linux 6.18.35 x86_64 / Python 3.13.5 / Lark 1.3.1","result":"SUCCESS","uses":["full-corpus LALR parsing","N/S/D relation oracle","roundtrip/hash fuzz","diagnostics/fail-closed fuzz","benchmark","ambiguity localization","lexical identity repair"]}
+  ],
+  "attempted_but_not_counted_as_execution":[
+    {"tool":"whole-program Earley dynamic_complete ambiguity run","result":"RESOURCE_TERMINATED","fallback":"top-level 86+25 ambiguity execution"}
+  ],
+  "not_callable_or_blocked":[
+    {"tool":"E2B","project_state":"RUNTIME_VERIFIED","this_worker":"NOT_EXPOSED_AS_CALLABLE_TOOL","evidence_claimed":false},
+    {"tool":"SandboxAPI","project_state":"BLOCKED_NOT_SUBSCRIBED","evidence_claimed":false},
+    {"tool":"Andreas Ubuntu developer target","this_worker":"NOT_CONNECTED","evidence_claimed":false},
+    {"tool":"Qwen-class 4B target reader","this_worker":"NO_CALLABLE_TARGET_MODEL_SURFACE","evidence_claimed":false}
+  ],
+  "provider_rule":"Unavailable capability state is never converted into runtime evidence."
+}

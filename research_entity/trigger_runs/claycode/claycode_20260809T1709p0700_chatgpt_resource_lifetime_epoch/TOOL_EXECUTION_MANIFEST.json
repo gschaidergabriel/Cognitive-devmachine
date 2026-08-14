@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1709p0700_chatgpt_resource_lifetime_epoch",
+  "tools":[
+    {"surface":"GitHub connector","state":"VERIFIED_RW","evidence":"canonical reads succeeded and unique run files were created successfully"},
+    {"surface":"local container","state":"EXECUTED","runtime":"Python 3.13.5","purpose":"separate-process host-broker resource-lifetime differential probe plus safety ablations"},
+    {"surface":"E2B","state":"NOT_EXPOSED_IN_THIS_CHATGPT_SESSION","claim":"NO_E2B_EXECUTION_CLAIMED"},
+    {"surface":"SandboxAPI","state":"NOT_USED","claim":"NO_RUNTIME_EVIDENCE_CLAIMED"},
+    {"surface":"web primary-source research","state":"USED","sources":["WebAssembly Component Model design/specification repository","Component Model MVP Explainer handle/resource semantics","WIT resource semantics","Component Model concurrency borrow enforcement"]}
+  ],
+  "fallback_rule":"Preferred E2B execution surface was not exposed, so the protocol fallback used a local hosted container. Evidence is LOCAL_COMPONENT_EVIDENCE, not Ubuntu developer-host, H1, or live-FRANK evidence.",
+  "status":"COMPLETE"
+}

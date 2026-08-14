@@ -1,0 +1,37 @@
+{
+  "run_id": "CLAYRESEARCH-20260809T1723p0700-chatgpt-secondary",
+  "provider_gate_status": "PARTIAL_WITH_NATIVE_CAPABILITY_FALLBACK",
+  "classes": {
+    "scholarly": {
+      "attempted": true,
+      "method": "native web search to primary arXiv/original research sources",
+      "sources": ["arXiv:2510.25741", "arXiv:2604.07822", "arXiv:2607.20519", "arXiv:2605.26733"]
+    },
+    "implementation": {
+      "attempted": true,
+      "method": "original GitHub/official docs",
+      "sources": ["google-deepmind/recurrentgemma", "egraphs-good/egg", "Wasmtime official docs"]
+    },
+    "current_web": {
+      "attempted": true,
+      "method": "native web search",
+      "sources": ["Google DeepMind RecurrentGemma official", "Wasmtime official docs"]
+    },
+    "community": {
+      "attempted": true,
+      "method": "Reddit search",
+      "result": "NO_STRONG_ACTIONABLE_EVIDENCE; results were anecdotal/low relevance and not used for promotion"
+    },
+    "executable": {
+      "attempted": true,
+      "method": "local Python synthetic instrument tests",
+      "result_ref": "EXPERIMENT_RESULTS.json"
+    },
+    "model_experiment": {
+      "attempted": false,
+      "reason": "No target Qwen-class 4B live reader/model run was available on this hosted surface; no proxy promoted as target evidence."
+    }
+  },
+  "repo_provider_router": "NOT_EXECUTED_ON_HOSTED_SURFACE",
+  "limitation": "The repository provider-router/bridge was not executed in this run. Native web/GitHub and local synthetic execution were used directly; this run therefore does not claim full provider-orchestration compliance."
+}

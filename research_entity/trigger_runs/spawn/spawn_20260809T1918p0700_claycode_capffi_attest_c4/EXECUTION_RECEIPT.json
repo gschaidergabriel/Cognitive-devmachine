@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.1",
+  "experiment": "capability+attested-gate synthetic discriminator",
+  "evidence_class": "HOSTED_SYNTHETIC_PROXY_NOT_PRODUCTION_NOT_ANDREAS_TARGET_ACCEPTANCE",
+  "probe": {
+    "path": "research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py",
+    "sha256_at_execution": "f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653"
+  },
+  "execution_environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "execution_class": "ChatGPT hosted analysis sandbox"
+  },
+  "seed": "0xc1a7c0de",
+  "n_per_suite": 300000,
+  "capability": {
+    "cases": 300000,
+    "naive_false_accept": 257350,
+    "naive_false_reject": 0,
+    "strict_false_accept": 0,
+    "strict_false_reject": 0
+  },
+  "gate": {
+    "cases": 300000,
+    "naive_false_accept": 253818,
+    "naive_false_reject": 0,
+    "strict_false_accept": 0,
+    "strict_false_reject": 0
+  },
+  "guard": "Constructed adversarial distribution; counts are discrimination sensitivity, not prevalence.",
+  "scope_limits": [
+    "Does not execute current production ClayCode runtime candidate.",
+    "Does not prove real-world failure frequency.",
+    "Does not count as Andreas Ubuntu developer-host acceptance.",
+    "Does not prove that cryptographic build attestation is mandatory; it proves that proof-bound admission discriminates stale/missing/mis-scoped state in the constructed model."
+  ]
+}

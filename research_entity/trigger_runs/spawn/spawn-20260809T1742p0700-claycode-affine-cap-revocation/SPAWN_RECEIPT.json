@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-affine-cap-revocation",
+  "trigger": "spawn",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "distribution": {
+    "ref": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    }
+  },
+  "branch_draw": {
+    "rng": "OS_CSPRNG_/dev/urandom",
+    "raw_u32": 543122072,
+    "mapping": "raw_u32 % 10000 interpreted on [0,100)",
+    "bucket": 2072,
+    "selected_origin_branch": "claycode",
+    "seed": null
+  },
+  "recent_spawn_receipts": {
+    "count_found": 0,
+    "search_result": "No prior research_entity/trigger_runs/spawn directory or SPAWN_RECEIPT search hit was found through the current GitHub surface.",
+    "duplicate_rerolls": 0
+  },
+  "candidate_microdirections": [
+    {
+      "index": 0,
+      "topic": "Revocation-safe affine resource/capability identity across async and FFI",
+      "test": "Delay an effect across revoke/regrant/transfer and attempt FFI host-handle reuse; compare fresh effect-time authority checks against cached task-start authority."
+    },
+    {
+      "index": 1,
+      "topic": "Cancellation-aware effect receipts plus retry/idempotency boundary",
+      "test": "Cancel and retry effectful tasks around commit boundaries and test whether semantic idempotency and execution-attempt identity remain distinct."
+    },
+    {
+      "index": 2,
+      "topic": "Typed FFI provenance sealing for host values and secrets",
+      "test": "Attempt host-value/secret materialization and confused-deputy flows across typed FFI adapters."
+    },
+    {
+      "index": 3,
+      "topic": "Resource/effect polymorphism necessity from real application corpus",
+      "test": "Measure whether monomorphic summaries cause an executable expressibility or repair-cost counterexample before adding polymorphism."
+    },
+    {
+      "index": 4,
+      "topic": "APP-01 to APP-02 capability lowering path",
+      "test": "Compile CLI then HTTP host effects through the same capability gateway and search for semantic escape hatches."
+    },
+    {
+      "index": 5,
+      "topic": "Adaptive visual learner promotion/rollback state in typed IR",
+      "test": "Represent candidate promotion, provenance tiers and rollback without introducing hidden authority or persistence ambiguity."
+    }
+  ],
+  "microdirection_draw": {
+    "rng": "OS_CSPRNG_/dev/urandom",
+    "raw_u32": 3994176852,
+    "mapping": "raw_u32 % 6",
+    "selected_index": 0,
+    "selected_microdirection": "Revocation-safe affine resource/capability identity across async and FFI",
+    "seed": null,
+    "rerolls": 0
+  },
+  "novelty_check": "This is a direct follow-on to the immediately preceding ClayCode effect-closure work, which explicitly left revoke/regrant during delayed calls and FFI/subprocess/ambient-host escape fixtures open. The spawn does not repeat the already-executed static effect-closure tests.",
+  "random_selection_is_truth_authority": false
+}

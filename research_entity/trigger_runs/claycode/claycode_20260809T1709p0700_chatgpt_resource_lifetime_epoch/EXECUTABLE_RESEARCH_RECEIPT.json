@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1709p0700_chatgpt_resource_lifetime_epoch",
+  "experiment_id":"EXP-CC-RESOURCE-LIFETIME-EPOCH-BORROW-TYPE",
+  "candidate":"BASE_GENERIC_RESOURCE_IR_v0 proxy over current G9 CapabilityToken/ResourceRef/effect semantics",
+  "source_hash":"8170cf06dfdb8a2204eb5f653e09aa22d04d029d990a310cd02be332c895daf6",
+  "generated_code_hash":"5698e4fa10a6688c58aae5664f76dc87b73a1427fb38a6043bf590891dab8e3a",
+  "lowering_target":"generated Python guest in a separate process connected to a host-owned broker over inherited Unix socket",
+  "runtime":{"provider":"local hosted container","language":"Python","version":"3.13.5","target_host_equivalence":false},
+  "authority_model":"guest/model cannot create authority; broker issues opaque handles and validates type, current epoch, ownership/borrow state and close state",
+  "test_corpus":{"seed":202608091706,"randomized_operations":20000,"oracle":"independent pure state-machine model"},
+  "observed":{"mismatches":0,"guest_exit_status":0,"stderr":"","notable_rejections":{"UNKNOWN_HANDLE":1913,"TYPE_MISMATCH":2918,"STALE_EPOCH":6747,"DOUBLE_CLOSE":80,"BORROW_ACTIVE":3,"INVALID_BORROW":4092}},
+  "ablations":[
+    {"check":"capability/resource epoch freshness","with_check":"stale use rejected","without_check":"stale use accepted","safety_delta":true},
+    {"check":"active borrow prevents owner close","with_check":"close rejected","without_check":"close accepted","safety_delta":true},
+    {"check":"resource type identity","with_check":"cross-kind use rejected","without_check":"cross-kind use accepted","safety_delta":true}
+  ],
+  "expected_vs_observed":"MATCH",
+  "failure_class":"NO_ORACLE_MISMATCH; weakened-design ablations produced intended safety counterexamples",
+  "repair_or_language_change":"NO_CORE_LANGUAGE_CHANGE. Route requirements to CC-WP-07 runtime ABI/FFI and CC-WP-11 conformance/fuzzing.",
+  "affected_hypotheses":["H-CC-RL-01","H-CC-RL-02","H-CC-RL-03","H-CC-RL-04"],
+  "affected_domains":{"claycode":"REFINED_RUNTIME_CONTRACT","unifieddb":"NO_SCHEMA_PROMOTION","claygraph":"NO_CHANGE","frank":"NO_TARGET_RUNTIME_PROMOTION","harness":"FUTURE_DIFFERENTIAL_REQUIREMENT","gwt":"NO_CHANGE","hyperposition":"NO_CHANGE","emergenz":"NO_CHANGE","clayresearch":"SUPPORTS_LESS_CHANGE_MORE_COMPILE"},
+  "hard_boundary":"Guest Python was not a production sandbox and local hosted execution is not Ubuntu developer-host evidence. No no-ambient-authority or live-FRANK claim is made."
+}

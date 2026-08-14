@@ -1,0 +1,53 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn-20260809T1821p0700-harness-visual-action-closure",
+  "origin_branch":"harness",
+  "hypotheses":[
+    {
+      "id":"H-SPAWN-HARNESS-VAC-001",
+      "status":"OPEN_SUPPORTED_BY_SYNTHETIC_COUNTEREXAMPLE",
+      "claim":"Direct capability separation is necessary but insufficient for high-consequence visually conditioned effects if a learned familiarity fast path may suppress fresh action-specific perception; high-risk commit should require a risk-sensitive perceptual evidence floor in addition to valid execution authority.",
+      "prediction":"Under a policy that allows KNOWN_HIGH_CONFIDENCE familiarity to bypass broad recognition independently of action risk, there exist states where a valid capability plus false/stale familiarity permits a high-risk effect without fresh confirmation.",
+      "falsifier":"An executable H1/ClayCode policy can prove that every high-consequence effect already requires fresh action-specific observation or deterministic precondition evidence, making the proposed extra closure redundant."
+    },
+    {
+      "id":"H-SPAWN-HARNESS-VAC-002",
+      "status":"OPEN",
+      "claim":"A risk-sensitive evidence floor can preserve low-risk familiarity routing utility while eliminating familiarity-only high-risk commits.",
+      "prediction":"Low-risk GOLD/SILVER KNOWN_HIGH cases remain fast-path eligible, while high-risk cases require CONFIRMED action-specific evidence.",
+      "falsifier":"Real visual/action workloads show unacceptable latency/utility loss or no safety gain versus the existing policy."
+    },
+    {
+      "id":"H-SPAWN-HARNESS-VAC-003",
+      "status":"OPEN",
+      "claim":"The closure can initially be represented as typed runtime/effect metadata without a new ClayCode surface primitive.",
+      "prediction":"Existing typed records/effect contracts can carry perceptual_basis_ref, risk_class and required_evidence_floor through parser/IR/runtime/effect gateway.",
+      "falsifier":"A production compiler/Harness counterexample proves the existing generic typed/effect basis cannot express or enforce the boundary."
+    }
+  ],
+  "counterhypotheses":[
+    {
+      "id":"CH-SPAWN-HARNESS-VAC-001",
+      "status":"OPEN",
+      "claim":"Capability gating alone is sufficient because wrong perception is ordinary task error rather than an authority failure.",
+      "discriminator":"Compare action error and protected-state consequence rates with/without risk-sensitive perceptual evidence floor while capability policy is held constant."
+    },
+    {
+      "id":"CH-SPAWN-HARNESS-VAC-002",
+      "status":"OPEN",
+      "claim":"Existing UNKNOWN/CONFLICT/open-set escalation already makes a separate action-risk evidence floor redundant.",
+      "discriminator":"Inject false KNOWN_HIGH outputs that evade UNKNOWN/CONFLICT; test whether high-risk action commit still requires independent fresh evidence."
+    },
+    {
+      "id":"CH-SPAWN-HARNESS-VAC-003",
+      "status":"OPEN",
+      "claim":"Always forcing deep perception before every effect is simpler and safer.",
+      "discriminator":"Measure low-risk routing latency/compute utility versus risk-sensitive gating; reject risk-sensitive design if it adds complexity without preserving material fast-path benefit."
+    }
+  ],
+  "candidate_laws":[
+    "FamiliaritySupport != ObservationEvidence",
+    "HighRiskEffectCommit -> capability_valid AND fresh_action_specific_observation_or_deterministic_precondition AND no_unresolved_conflict",
+    "FamiliarityFastPathAllowed -> risk_below_evidence_threshold OR required_evidence_floor_satisfied"
+  ]
+}

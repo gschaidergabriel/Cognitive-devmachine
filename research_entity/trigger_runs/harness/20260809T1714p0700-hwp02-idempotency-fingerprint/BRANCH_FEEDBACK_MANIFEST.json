@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1714p0700-hwp02-idempotency-fingerprint",
+  "source_trigger": "harness",
+  "evidence_class": "CURRENT_CODE_REVIEW_PLUS_LOCAL_DETERMINISTIC_SYNTHETIC_MECHANISM_PROBE",
+  "scientific_promotion": "NONE",
+  "feedback": {
+    "clayresearch": {
+      "effect": "MATERIAL_CONSTRAINT",
+      "delta": "Idempotent state transitions must bind semantic request identity; identifier equality alone is insufficient for replay-safe loop/state execution."
+    },
+    "frank": {
+      "effect": "MATERIAL_CONSTRAINT",
+      "delta": "FRANK replay/recovery contracts must distinguish identical retry from same-ID changed semantic intent; no live-FRANK claim advances."
+    },
+    "gwt": {
+      "effect": "NO_CHANGE",
+      "delta": "No GWT claim-state change; later WorkspaceEpisode/re-entry replay should consume adjudicated ledger identities."
+    },
+    "emergenz": {
+      "effect": "NO_CHANGE",
+      "delta": "No emergence inference; this is a persistence/replay correctness counterexample only."
+    },
+    "claycode": {
+      "effect": "MATERIAL_CONSTRAINT",
+      "delta": "ClayCode transaction/replay semantics need a canonical semantic request identity distinct from execution-local metadata; stage semantic-ID work is directionally compatible but does not itself fix H-WP-02."
+    },
+    "hyperposition": {
+      "effect": "NO_CHANGE",
+      "delta": "No topology/coupling claim-state change."
+    },
+    "claygraph": {
+      "effect": "NO_CHANGE",
+      "delta": "No graph claim-state change; graph/run identities must not be used as a substitute for ledger request equivalence."
+    },
+    "unifieddb": {
+      "effect": "MATERIAL_CONSTRAINT",
+      "delta": "Unified transaction/idempotency semantics must compare canonical request identity before returning replay; same key/event ID with changed semantics is a conflict, not a replay hit."
+    },
+    "harness": {
+      "effect": "NEGATIVE_RESULT_AND_NEW_REGRESSION",
+      "delta": "H-WP-02 current visible replay decision is under-specified. Red probe and local fix work have been added; H-WP-02 remains incomplete and H1 remains blocked on BASE."
+    }
+  },
+  "shared_ancestry": "All feedback derives from the same repo/current-code lineage plus one synthetic mechanism probe; it is not independent replication.",
+  "status": "WRITTEN"
+}

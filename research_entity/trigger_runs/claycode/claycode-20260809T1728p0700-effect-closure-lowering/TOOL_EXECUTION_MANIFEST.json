@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1728p0700-effect-closure-lowering",
+  "tools": [
+    {
+      "tool": "GitHub connector",
+      "status": "VERIFIED_RW",
+      "evidence": "canonical/current sources read; run artifacts written and will be reread"
+    },
+    {
+      "tool": "local Python/Linux container",
+      "status": "EXECUTED",
+      "evidence": "effect-closure/lowering proxy executed"
+    },
+    {
+      "tool": "E2B",
+      "status": "PROJECT_RUNTIME_VERIFIED_BUT_NOT_EXPOSED_TO_THIS_WORKER",
+      "evidence_ref": "research_entity/global/E2B_RESEARCH_CAPABILITY.json",
+      "used": false
+    },
+    {
+      "tool": "SandboxAPI",
+      "status": "BLOCKED_NOT_SUBSCRIBED",
+      "used": false
+    },
+    {
+      "tool": "Andreas Ubuntu developer host",
+      "status": "NOT_CONNECTED_TO_THIS_WORKER",
+      "used": false
+    },
+    {
+      "tool": "research_interconnect_preflight.py",
+      "status": "NOT_EXECUTABLE_AS_CURRENT_WITH_REGISTRY",
+      "evidence": "clay->clayresearch registry drift trips import-time branch-set guard; manual equivalent manifest written"
+    }
+  ],
+  "claim_boundary": "No E2B, target-Ubuntu, production compiler, or application-suite evidence is claimed."
+}

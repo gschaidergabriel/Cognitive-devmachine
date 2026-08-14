@@ -1,0 +1,55 @@
+name: ClayCode full FRANK ActiveAssembly structured differential
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_structured_backend.py'
+      - 'tools/claycode_full_frank_active_assembly_validation.py'
+      - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay'
+      - 'research_entity/harness/reference/active_assembly.py'
+      - '.github/workflows/claycode-full-frank-active-assembly.yml'
+permissions:
+  contents: write
+concurrency:
+  group: claycode-full-frank-active-assembly-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  differential:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --disable-pip-version-check --quiet 'lark==1.3.1'
+      - name: Compile and differential-test full frozen ActiveAssembly
+        run: python tools/claycode_full_frank_active_assembly_validation.py
+      - name: Enforce no semantic escape hatch
+        run: |
+          python - <<'PY'
+          import json
+          p='research_entity/claycode/autonomous/FULL_FRANK_ACTIVE_ASSEMBLY_STRUCTURED_RECEIPT.json'
+          d=json.load(open(p,encoding='utf-8'))
+          assert d['pass'] is True
+          assert d['semantic_escape_hatches'] == []
+          assert d['authority_boundary_preserved'] is True
+          assert d['counts_as_target_acceptance'] is False
+          assert d['counts_as_wp13_pass'] is False
+          assert len(d['positive_differentials']) >= 5
+          assert len(d['negative_differentials']) >= 2
+          print('FULL_ACTIVE_ASSEMBLY_PROXY_DIFFERENTIAL=PASS')
+          PY
+      - name: Preserve proxy receipt
+        run: |
+          git config user.name 'claycode-full-frank-gate'
+          git config user.email 'claycode-full-frank-gate@users.noreply.github.com'
+          git add research_entity/claycode/autonomous/FULL_FRANK_ACTIVE_ASSEMBLY_STRUCTURED_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record full ActiveAssembly structured differential receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1
+# gate-generation: 2

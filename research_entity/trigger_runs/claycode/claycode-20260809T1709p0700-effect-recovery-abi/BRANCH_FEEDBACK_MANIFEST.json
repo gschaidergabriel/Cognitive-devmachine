@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1709p0700-effect-recovery-abi",
+  "feedback":[
+    {"branch":"frank","result":"REFINEMENT","feedback":"Action->outcome->reentry must preserve stable effect identity and unresolved crash-window outcomes; do not infer DONE from local state alone."},
+    {"branch":"clayresearch","result":"REFINEMENT","feedback":"Supports less-change-more-compile: implement effect recovery contract in type/effect/runtime ABI before considering syntax change."},
+    {"branch":"harness","result":"NEW_TEST_REQUIREMENT","feedback":"Add crash-before-send, crash-after-send-before-DONE, duplicate concurrent writer, and same-operation-id/different-semantic-fingerprint regressions. Reconcile or expose UNCERTAIN when remote state cannot be determined."},
+    {"branch":"claygraph","result":"REFINEMENT","feedback":"Keep effect_ref/outcome_ref as projections of authoritative receipt identity; graph association never resolves UNCERTAIN into truth or authority."},
+    {"branch":"unifieddb","result":"REFINEMENT","feedback":"Execution/effect persistence should relate stable effect_operation_id, semantic fingerprint, delivery/recovery class, observed remote receipt and reconciliation/uncertainty without requiring physical store monolith."},
+    {"branch":"gwt","result":"NO_CHANGE_SEMANTICS","feedback":"Selection/broadcast unchanged. Causal credit/reentry must consume verified outcome or explicit uncertainty, never fabricated DONE."},
+    {"branch":"hyperposition","result":"REFINEMENT","feedback":"When crash evidence leaves effect-happened/effect-not-happened unresolved, preserve the alternatives until remote reconciliation resolves them."},
+    {"branch":"emergenz","result":"NO_CHANGE","feedback":"Recovery correctness is infrastructure evidence only; no emergence claim follows."},
+    {"branch":"claycode","result":"NEW_RUNTIME_ABI_CANDIDATE","feedback":"Bind stable effect_operation_id to semantic_fingerprint and explicit delivery/recovery guarantees. Candidate uncertainty state is required when no dedupe/transaction/reconciliation mechanism can disambiguate."}
+  ],
+  "promotion":"NONE"
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "h1-reference-freeze-v2-candidate-0.1",
+  "run_id": "frank-20260809T1916p0700-chatgpt-secondary-refreeze",
+  "status": "CANDIDATE_READY_FOR_EXECUTABLE_REALIZATION",
+  "release_status": "NOT_H1_RELEASE_PASS",
+  "hwp01_status_effect": "DO_NOT_RECOUNT_COMPLETE_UNTIL_EXECUTABLE_REFERENCE_AND_VALIDATION",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "identity_boundary": "Research Entity worker authored this candidate; Frank did not authorize or mutate its own Harness.",
+  "reference_law": "H1_REFERENCE_HARNESS = current evidence-supported FRANK target architecture implemented in ordinary host code; historical frankv0.1 is evidence/regression lineage, not the architecture template.",
+  "final_local_target": "ONE_CLAY_BINARY + ONE_LOCAL_UNIFIEDDB + ONE_CLAY_NATIVE_4B",
+  "h1_physical_realization_rule": "H1 may use explicit diagnostic modules/stores/processes for observability, but every boundary must map to H2/H3 semantics and must not become an accidental target invariant.",
+  "semantic_slices": [
+    {"id":"instance_ingress","responsibility":["current input/percepts","local instance identity","current resource/capability observations"],"authority":"OBSERVATION_ONLY"},
+    {"id":"unified_semantic_state","responsibility":["canonical semantic identities","event/state lineage","self/world/body/user/value/commitment state","provenance/conflict/validity","exact transaction identity"],"h1_backing":"SQLite/logical UnifiedDB reference","h3_mapping":"single local UnifiedDB"},
+    {"id":"semantic_dependency_fabric","responsibility":["typed forward/reverse dependencies","affected-closure invalidation","epoch publication","prepared semantic neighborhoods","rebuild recipes"],"hot_path_rule":"no full-memory/repository scan when prepared current state suffices"},
+    {"id":"transient_topology_hyperposition","responsibility":["derived sparse topology","higher-order relations","alternative facets","conflict/exclusion","activation/assembly candidates"],"h1_backing":"diagnostic ClayGraph/export permitted","h3_mapping":"transient topology from UnifiedDB; no mandatory persistent ClayGraph DB","authority":"RELEVANCE_NOT_TRUTH_NOT_EFFECT_AUTHORITY"},
+    {"id":"active_assembly_compiler","responsibility":["bounded task-conditioned ActiveAssembly","dependency closure","peer backflow","capability visibility","visual state","remote re-expansion references"],"invariant":"rich persistent state != model-facing active slice"},
+    {"id":"gwt_loop_controller","responsibility":["competition","ignition","broadcast","receiver reconstruction/uptake/causal-use","re-entry","typed multi-timescale recurrence readouts","halt/continue/route/escalate proposals"],"required_regimes":["CONVERGING_FIXED_POINT","PRODUCTIVE_LIMIT_CYCLE","STALLED","DIVERGING_OR_OVERTHINKING","CHAOTIC_OR_UNCLASSIFIED"],"counterbaseline":"ordinary event-driven orchestration plus fixed compute budgets","authority":"COMPUTE_ROUTING_PROPOSAL_ONLY"},
+    {"id":"local_4b_model_adapter","responsibility":["Clay-native Qwen-class 4B slot","deterministic fixture mode","bounded Assembly input","structured proposal output"],"target_model_selection":"OPEN_TARGET_HOST_BENCHMARK","authority":"MODEL_OUTPUT_IS_PROPOSAL_NOT_EXECUTION_AUTHORITY"},
+    {"id":"peer_cognitive_fabric","responsibility":["independent strong-peer identity","rich peer-peer semantic sync","compact evidence-preserving strong-peer-to-local backflow","stale/duplicate/conflict handling","direct Claude Code capability when reachable"],"invariants":["no whole-state overwrite","peer agreement is not independent evidence","tool visibility != authority"]},
+    {"id":"needle_boundary","responsibility":["fast classifier/router translation","offered-tool normalization","alias/tamper/unknown-tool rejection","no-tool metadata path"],"semantic_boundary":"SOLE_INTENTIONAL_NON_CLAY_SEMANTIC_SUBSYSTEM","authority":"NEEDLE_NEVER_MINTS_EXECUTION_AUTHORITY"},
+    {"id":"digital_retina_mvc","responsibility":["VisualPercept/PerceptualField","MVC-0 prototype/kNN baseline","optional MVC-1 frozen-backbone readout","GOLD/SILVER/BRONZE admission","open-set UNKNOWN/AMBIGUOUS/CONFLICT","shadow promotion","rollback","feature-version compatibility"],"authority":"FAMILIARITY_OR_CLASSIFIER_OUTPUT_IS_NOT_SENSOR_TRUTH_OR_EFFECT_AUTHORITY"},
+    {"id":"effect_authority_gateway","responsibility":["EffectIntent","fresh preconditions/evidence floor","resource/capability checks","sealed authority handle","reserve/commit","idempotency","OutcomeReceipt","re-entry"],"invariants":["expressibility != authority","reachable effect != authorized effect","capability-safe != epistemically-safe"],"authority":"SOLE_EXTERNAL_EFFECT_COMMIT_BOUNDARY"},
+    {"id":"trace_replay_recovery","responsibility":["per-turn trace bundle","semantic/version/trace identity separation","snapshots","crash/restart","rollback","paired intervention identity","lesion/rescue/shuffle","observation perturbation receipt","Golden Traces"]}
+  ],
+  "mandatory_cross_slice_invariants": [
+    "per-instance transient state remains distinguishable",
+    "same semantic epoch != same physical process/store",
+    "mixed partial semantic epochs cannot be exposed as coherent current state",
+    "activation/relevance/association do not promote truth",
+    "selection != receiver uptake != causal use != emergence",
+    "recurrence != convergence != emergence",
+    "low state delta + high residual pressure = stall candidate, not successful convergence",
+    "model/peer/Needle/Retina/MVC output never mints external-effect authority",
+    "strong-peer backflow preserves provenance, conflict and re-expansion identity",
+    "no standalone manually maintained PossibilitySpace truth store",
+    "H3 removes mandatory persistent ClayGraph but preserves equivalent transient topology semantics",
+    "Frank self-Harness mutation remains proposal-only; Research Entity owns implementation/adjudication"
+  ],
+  "required_h1_golden_trace_families": [
+    "bounded assembly vs broad-retrieval matched trace",
+    "peer sync/backflow stale duplicate conflict disconnect reconnect",
+    "direct Claude peer availability/unavailability and causal-use lesion",
+    "Needle offered/unoffered/alias/tamper/no-tool cases",
+    "loop convergence/stall/productive-cycle/divergence and fixed-budget baseline",
+    "GWT broadcast reconstruction uptake causal-use re-entry",
+    "effect intent authority reserve commit outcome re-entry including wrong-but-authorized epistemic negatives",
+    "UnifiedDB epoch publication stale snapshot crash/restart/idempotency",
+    "Digital Retina/MVC E1-E7 plus poisoning/open-set/rollback/feature-version migration",
+    "observation no/low/full instrumentation paired-trajectory comparison",
+    "H3-style derived-topology commutation from identical canonical semantic state"
+  ],
+  "transfer_to_h2_contract": {
+    "rule": "Freeze behavior + Golden Traces + interventions, then implement equivalent semantics in ClayCode.",
+    "divergence_classes": ["H2_IMPLEMENTATION_BUG","H1_REFERENCE_BUG","AMBIGUOUS_CONTRACT","CLAYCODE_EXPRESSIBILITY_GAP","INTENTIONAL_VERSIONED_DIVERGENCE"],
+    "language_gap_rule": "If ClayCode cannot express validated H1 semantics, reopen BASE; do not simplify H1 to fit the language."
+  },
+  "source_refs": [
+    "research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md",
+    "research_entity/global/FRANK_DUAL_INSTANCE_EMBODIED_STATE_CONTRACT.md",
+    "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+    "research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md",
+    "research_entity/global/FRANK_NORMAL_CODE_FIRST_PARALLEL_H1_DIRECTIVE.md",
+    "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+    "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+    "research_entity/global/FRANK_DIRECT_CLAUDE_CODE_TOOL_CONTRACT.md",
+    "research_entity/harness/HARNESS_WORKSPACE.json",
+    "research_entity/trigger_runs/frank/frank_20260809T1914p0700_chatgpt_secondary_dynamic_fusion/FINAL_REPORT.md"
+  ],
+  "open_selection_points": ["exact H1 host-language/module layout","exact 4B model/quantization/runtime after target-host benchmark","recurrence policy versus event-driven/fixed-budget baseline","physical UnifiedDB layout","MVC-0 versus MVC-1","peer-backflow compression policy","transient topology algorithm"],
+  "freeze_decision": "CANDIDATE_ONLY",
+  "completion_falsifier": "Any current fixed target contract omitted, any semantic slice lacking executable trace/intervention mapping, or any hidden host-language state/effect path that cannot be represented in H2."
+}

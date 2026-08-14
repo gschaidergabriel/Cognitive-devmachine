@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1648p0700_chatgpt_loopnet_runtime",
+  "hypotheses": [
+    {
+      "id": "H-CC-LOOPNET-014",
+      "claim": "FRANK's heterogeneous loop-of-loops can be represented in ClayCode as typed loop/coupling/readout state over the existing G9 semantic core, with execution supplied by generic structured control-flow/runtime lowering rather than a FRANK-specific core syntax primitive.",
+      "status": "OPEN_SUPPORTED_BY_LOCAL_PROXY",
+      "evidence": ["CC-LOCAL-20260809-LOOPNET-01"],
+      "falsifier": "A production FRANK/ClayCode program whose recurrent semantics cannot be expressed or safely lowered without adding a new core semantic primitive."
+    },
+    {
+      "id": "H-CC-LOOPCTRL-015",
+      "claim": "Outcome/pressure-gated adaptive recurrence with explicit convergence, productive-cycle, stall and divergence classes will outperform or reduce cost versus fixed recurrence budgets on frozen FRANK replay episodes without increasing unsafe halts or authority leakage.",
+      "status": "OPEN_UNTESTED_ON_FRANK",
+      "evidence": ["local proxy demonstrates representability and class separation only"],
+      "falsifier": "Matched H1/H2 replay shows no verified task/cost/recovery benefit or unacceptable false halt/rollback behavior."
+    },
+    {
+      "id": "H0-CC-NEW-FRANK-LOOP-PRIMITIVE-001",
+      "claim": "A new FRANK-specific ClayCode core loop syntax/semantic primitive is necessary to represent the loop-of-loops architecture.",
+      "status": "NEGATIVE_RESULT_IN_TESTED_PROXY",
+      "evidence": ["candidate parsed and executed via existing typed IR/runtime forms without such a primitive"],
+      "scope_limit": "Does not prove production compiler completeness."
+    },
+    {
+      "id": "H0-CC-ALL-HEALTHY-LOOPS-CONTRACTIVE-002",
+      "claim": "Every healthy FRANK recurrent process should converge to a fixed point.",
+      "status": "REFUTED_BY_EXECUTABLE_COUNTEREXAMPLE",
+      "evidence": ["bounded 2D period-4 orbit retained positive utility and was correctly classified PRODUCTIVE_LIMIT_CYCLE"],
+      "scope_limit": "The counterexample establishes that fixed-point convergence cannot be a universal health criterion; it does not prove any specific live FRANK cycle is useful."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-EMERG-20260809-COMMONDRIVER-SYNERGY",
+  "run_id": "emergenz-20260809T1714p0700",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "evidence_class": "SYNTHETIC_SIMULATION",
+  "status": "COMPLETED_SYNTHETIC_NOT_TARGET_REPLICATED",
+  "design": {
+    "seeds": 20,
+    "samples_per_seed": 50000,
+    "common_driver_case": "Binary Markov environment E; X and Y are independently noisy observations of E. Estimate TE proxy I(X[t-1];Y[t]|Y[t-1]) and condition additionally on E[t-1].",
+    "synergy_case": "Independent binary X and E; Y[t]=X[t-1] XOR E[t-1] XOR Bernoulli(0.05). Compare pairwise and conditioned directed information, joint synergy proxy, factorial lesion interaction, lesion/rescue and shuffled co-source control."
+  },
+  "results_mean_sd": {
+    "common_driver_TE_bits": {"mean": 0.0500163, "sd": 0.00198809},
+    "common_driver_TE_conditioned_on_E_bits": {"mean": 0.0000550141, "sd": 0.0000318652},
+    "synergy_pairwise_TE_X_to_Y_bits": {"mean": 0.0000275363, "sd": 0.0000240958},
+    "synergy_TE_X_to_Y_conditioned_on_E_bits": {"mean": 0.7136943, "sd": 0.00385181},
+    "synergy_pairwise_MI_X_Y_bits": {"mean": 0.0000131115, "sd": 0.0000170759},
+    "synergy_pairwise_MI_E_Y_bits": {"mean": 0.0000166267, "sd": 0.0000189999},
+    "synergy_joint_MI_XE_Y_bits": {"mean": 0.7136864, "sd": 0.00383881},
+    "simple_synergy_proxy_bits": {"mean": 0.7136567, "sd": 0.00384659},
+    "full_predictor_accuracy": {"mean": 0.9500090, "sd": 0.000902448},
+    "X_only_accuracy": {"mean": 0.4993480, "sd": 0.00208155},
+    "E_only_accuracy": {"mean": 0.5003750, "sd": 0.00243160},
+    "neither_accuracy": {"mean": 0.5016910, "sd": 0.00116407},
+    "factorial_interaction_omega_accuracy": {"mean": 0.4519770, "sd": 0.00326726},
+    "shuffled_E_accuracy": {"mean": 0.4997760, "sd": 0.00261546}
+  },
+  "interpretation": [
+    "Unconditioned directed-information proxies can look nonzero under a common temporal driver; conditioning on the measured driver collapses the signal by roughly three orders of magnitude.",
+    "Pairwise directed information can miss XOR-like higher-order causal structure; conditioning on the co-source reveals roughly 0.714 bits of directed predictive information.",
+    "Higher-order joint information plus a nonzero factorial interaction is still not sufficient alone; matched lesion, rescue and shuffled-source controls provide the causal specificity.",
+    "These results support a measurement bundle rather than any single emergence scalar."
+  ],
+  "limitations": [
+    "Synthetic binary toy dynamics only.",
+    "The simple synergy proxy is not a formal PID/PEID estimator.",
+    "No FRANK/Harness target-substrate replication occurred.",
+    "No claim about phenomenal consciousness is supported."
+  ],
+  "next_target_test": "Implement the same four-way control bundle on frozen H1 WorkspaceEpisodes: baseline, mechanism lesion, truthful rescue, shuffled/provenance-broken rescue; report conditioned directed flow and higher-order decomposition with estimator/version/sample/provenance receipts."
+}

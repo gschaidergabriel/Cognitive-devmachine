@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "CLAYCODE-LARGE-INT-DIVISION-REPAIR-CROSSCHECK-20260809",
+  "actor": "chatgpt-secondary",
+  "evidence_class": "LOCAL_ISOLATED_LINUX_NATIVE_C_CROSSCHECK_NOT_ANDREAS_TARGET_ACCEPTANCE",
+  "mainline_repairs": {
+    "tools/claycode_base_compiler.py": "d4dbdf92f48ea64882bdc63292a54bf7a8ae88b6",
+    "tools/claycode_base_effect_pipeline.py": "18e535c0586b11afe6632ab00ce473c179e8731e"
+  },
+  "mechanism": "Float-free abs(a)//abs(b) with sign restoration implements truncation toward zero for valid signed integer division pairs; division by zero raises a structured compiler error in the reference evaluator.",
+  "native_oracle": "C signed int64_t division using local cc for non-overflowing/nonzero pairs",
+  "cases": [
+    {"a": 9007199254740993, "b": 7, "expected": 1286742750677284, "native": 1286742750677284, "match": true},
+    {"a": -9007199254740993, "b": 7, "expected": -1286742750677284, "native": -1286742750677284, "match": true},
+    {"a": 9007199254740993, "b": -7, "expected": -1286742750677284, "native": -1286742750677284, "match": true},
+    {"a": -9007199254740993, "b": -7, "expected": 1286742750677284, "native": 1286742750677284, "match": true},
+    {"a": 4611686018427387903, "b": 3, "expected": 1537228672809129301, "native": 1537228672809129301, "match": true},
+    {"a": -4611686018427387903, "b": 3, "expected": -1537228672809129301, "native": -1537228672809129301, "match": true},
+    {"a": 1234567890123456789, "b": 97, "expected": 12727504021891307, "native": 12727504021891307, "match": true},
+    {"a": -1234567890123456789, "b": 97, "expected": -12727504021891307, "native": -12727504021891307, "match": true}
+  ],
+  "matches": 8,
+  "cases_total": 8,
+  "pass": true,
+  "negative_result_preserved": "The previous int(left / right) reference evaluator path was semantically wrong above binary64 exact-integer range and is superseded by the two mainline repair commits.",
+  "open_boundary": "INT64_MIN / -1 is excluded from this PASS because C int64_t division overflows there. It requires an explicit checked overflow/error lowering contract rather than relying on undefined behavior.",
+  "counts_as_work_package_pass": false,
+  "counts_as_target_acceptance": false
+}

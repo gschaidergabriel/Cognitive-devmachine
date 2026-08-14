@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1712p0700_chatgpt_idempotency_concurrency",
+  "negative_results": [
+    {
+      "id": "NR-CC-IDEMP-PRELOCK-RACE-20260809",
+      "status": "NEGATIVE_RESULT",
+      "claim_under_test": "A pre-lock idempotency lookup is sufficient for concurrent duplicate writers.",
+      "result": "REFUTED_IN_LOCAL_SQLITE_MECHANISM_PROBE",
+      "evidence": "80/80 deterministic two-writer same-payload rounds produced one applied write plus one IntegrityError after both writers observed the key absent before serialization.",
+      "scope": "Tested SQLite/Python interleaving only; does not refute single-writer idempotency or all backend strategies.",
+      "preserve": true
+    },
+    {
+      "id": "NR-CC-IDEMP-UNIQUE-ONLY-20260809",
+      "status": "NEGATIVE_RESULT",
+      "claim_under_test": "A UNIQUE idempotency key or INSERT OR IGNORE alone is sufficient to classify semantic replay equivalence.",
+      "result": "NOT_SUPPORTED_BY_CONTROL",
+      "evidence": "Different payload under the same key was silently ignored while the original row remained; no explicit payload mismatch/conflict classification was produced.",
+      "scope": "Shows absence of semantic classification in the tested uniqueness-only path; a stronger key construction that binds full semantic operation identity could change the result.",
+      "preserve": true
+    }
+  ]
+}

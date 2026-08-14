@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1650p0700-base-parser-control-lowering",
+  "trigger": "claycode",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "outputs": [
+    "INTERCONNECT_MANIFEST.json",
+    "TOOL_EXECUTION_MANIFEST.json",
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+    "HYPOTHESIS_MATRIX.json",
+    "NEGATIVE_RESULT.json",
+    "EXECUTABLE_RESEARCH_RECEIPT.json",
+    "GRAMMAR_REPAIR_CANDIDATE.ebnf",
+    "LOOP_DYNAMICS_PROBE.clay",
+    "LOWERED_PROBE.py",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "FINAL_REPORT.md"
+  ],
+  "research_delta": "Current G9 V3 source/EBNF self-conformance gap identified and reproduced; minimal non-promoted grammar/control repair plus local executable lowering probe recorded.",
+  "canonical_promotion": "NONE",
+  "stage_advancement": "NONE",
+  "general_purpose_gate": "NOT_PASS",
+  "validation_limits": [
+    "no target Ubuntu host execution",
+    "no E2B tool exposed",
+    "no repository-local validation scripts executed",
+    "no native/WASM backend artifact"
+  ]
+}

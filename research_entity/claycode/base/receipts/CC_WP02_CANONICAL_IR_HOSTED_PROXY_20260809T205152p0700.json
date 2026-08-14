@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-WP02-CANONICAL-IR-HOSTED-PROXY-20260809T205152p0700",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:51:52+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_work_package": "CC-WP-02-PARSER-CANON",
+  "artifact": "tools/claycode_base_canonical_ir_validation.py",
+  "artifact_commit": "655747796c44f3ec4ab6fbca279aae6f29830c0d",
+  "test_environment": {
+    "class": "HOSTED_PROXY",
+    "python": "3.13",
+    "lark": "1.3.1",
+    "strict_mode": false,
+    "strict_mode_blocker": "interegular unavailable in hosted container",
+    "target_ubuntu_acceptance": false
+  },
+  "test_scope": {
+    "grammar": "minimal fixture structurally covering WP02 canonicalization cases",
+    "source_fixture": "two rule statements including dotted relation",
+    "checks": [
+      "python syntax compilation",
+      "canonical JSON IR serialize-deserialize-serialize byte identity",
+      "repeat parse byte identity",
+      "ignored whitespace/comment equivalence",
+      "8 operator/literal/order/relation mutation discriminators"
+    ]
+  },
+  "result": {
+    "pass": true,
+    "roundtrip_byte_identical": true,
+    "repeat_parse_byte_identical": true,
+    "equivalence_cases_passed": "1/1",
+    "mutation_discrimination_cases_passed": "8/8"
+  },
+  "negative_result": {
+    "id": "CC-WP02-HOSTED-STRICT-BLOCKED-INTEREGULAR",
+    "status": "NEGATIVE_RESULT",
+    "finding": "Hosted proxy cannot establish Lark strict=True because interegular is unavailable; this is an environment limitation, not evidence that the V5 grammar fails strict construction."
+  },
+  "scope_guard": "This receipt validates the newly authored canonical syntax-IR machinery only. It does not prove full current G9/Dialect corpus parsing, strict LALR construction, typed semantic equivalence, Ubuntu acceptance, or CC-WP-02 PASS.",
+  "next_required_receipt": "Run tools/claycode_base_canonical_ir_validation.py on newest main with default strict mode and current V5 grammar/G9 sources on a repository checkout; preserve exact grammar/source hashes and output receipt."
+}

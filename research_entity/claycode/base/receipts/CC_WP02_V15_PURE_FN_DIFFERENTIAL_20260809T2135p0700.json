@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC_WP02_V15_PURE_FN_DIFFERENTIAL_20260809T2135p0700",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T21:35:00+07:00",
+  "evidence_class": "SANDBOX_PARSER_CANONICAL_DIFFERENTIAL",
+  "candidate": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V15_GENERIC_DOTTED_TRIVIA_SAFE.lark",
+  "candidate_sha256": "fb28b47d7cad45c040e2437e932be7897210bb08f9ba4aa957150828daab58fd",
+  "baseline": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark",
+  "baseline_sha256": "6dae07c77926ff8d0e2651a1dc5d9280f4b482cd0e14f10123e45eb4327654be",
+  "tests": {
+    "generated_typed_function_operator_programs": {"cases":12000,"semantic_hash_mismatches":0,"accept_reject_class_mismatches":0,"pass":true},
+    "targeted_typed_function_patterns": {"cases":64,"semantic_hash_mismatches":0,"pass":true},
+    "call_horizontal_whitespace": {"forms":["id(a)","id (a)","id    (a)"],"v10_semantically_equal":true,"v15_semantically_equal":true,"pass":true}
+  },
+  "result": "PASS",
+  "interpretation": "Within the tested pure-function/operator parser surface consumed by the integrated BASE compiler, V15 introduces no observed parser-canonical semantic drift relative to V10. This does not prove full compiler equivalence and does not substitute for running the production compiler against V15 on current Ubuntu/main.",
+  "counts_as_wp02_pass": false,
+  "counts_as_compiler_pass": false,
+  "counts_as_target_acceptance": false,
+  "promotion_allowed": false,
+  "next_falsifier": "Run the integrated production compiler/typechecker/evaluator/C-lowering differential on V15 plus the strict interegular-enabled frontend gate and provenance-bound FRANK frontend corpus.",
+  "authority_invariant": "model output != execution authority"
+}

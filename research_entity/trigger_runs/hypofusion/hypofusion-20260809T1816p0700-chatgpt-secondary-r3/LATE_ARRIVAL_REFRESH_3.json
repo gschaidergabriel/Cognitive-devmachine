@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260809T1816p0700-chatgpt-secondary-r3",
+  "refresh":"LIVE_REREAD_3_HARD_CLOSE",
+  "material_delta":{
+    "id":"R-HF3-12-HTTP-SQLITE-VERTICAL-PROXY",
+    "source_run":"spawn-20260809T1814p0700-claycode-http-sqlite-0a7066",
+    "source_commit":"20b261770937061b1792cfa2af30d8074b8713d9",
+    "evidence_class":"LOCAL_HOST_PROXY_NOT_PRODUCTION_CLAYCODE",
+    "finding":"A narrow semantic-spec-to-Python proxy executed a real loopback HTTP service plus SQLite and passed 17/17 base tests. Four deliberately injected semantic drifts were each detected: commit-before-failure, dropped UNIQUE constraint, update-commit-before-failure and wrong create status.",
+    "effect_on_hypothesis_space":"SUPPORTS witness-first vertical conformance and mutation-oracle methodology. It does not establish production ClayCode parser/typed-IR/lowering/runtime correctness, Ubuntu target readiness, or BASE application acceptance.",
+    "counterhypothesis":"A hand-authored/narrow proxy lowerer can overestimate production compiler correctness because it bypasses the actual ClayCode source->parser->typed IR->type/effect->lowering->runtime chain and ABI/FFI/concurrency behavior.",
+    "next_test":"Run the same HTTP+SQLite semantic witness through the normative ClayCode production chain on Andreas' Ubuntu developer target; reuse the four mutation classes plus parser/source-chain and transaction/error differential checks.",
+    "promotion":"NONE",
+    "stage_gate_change":"NONE"
+  },
+  "branch_feedback":{
+    "clayresearch":{"effect":"SUPPORT","delta":"Vertical executable witnesses plus mutation oracles remain the right BASE direction; proxy evidence is method support, not compiler proof."},
+    "frank":{"effect":"NO_CHANGE","delta":"No FRANK architecture claim changes; production ClayCode/Ubuntu execution is still required before handoff."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT claim-state change."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"No emergence claim-state change."},
+    "claycode":{"effect":"REVISE_SUPPORT","delta":"Promote the 17-test HTTP+SQLite corpus and four mutation classes to a future production acceptance oracle; do not count the proxy as CC-WP-10/application PASS."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No higher-order claim-state change."},
+    "claygraph":{"effect":"NO_CHANGE","delta":"No graph claim-state change."},
+    "unifieddb":{"effect":"REVISE_SUPPORT","delta":"Reuse the SQLite transaction/error/constraint witness in production cross-backend and recovery differentials; current result is local proxy only."},
+    "harness":{"effect":"REVISE_SUPPORT","delta":"Carry this exact vertical test/mutation corpus into H2 production-chain differential testing; no H1/H2 gate advancement follows now."}
+  },
+  "hard_close_source_head":"aa893dfe5a0e9596c8c4e7219cb9f3b9643631cb",
+  "hard_close_rule":"Scientific commits completed after hard_close_source_head are deferred to the next Hypofusion/Fusion run so this run has a finite reproducible evidence snapshot.",
+  "scientific_promotion":"NONE"
+}

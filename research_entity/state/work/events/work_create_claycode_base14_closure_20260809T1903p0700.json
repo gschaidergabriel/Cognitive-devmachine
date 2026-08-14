@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "event_type": "WORK_CREATE",
+  "work_id": "WORK-CC-BASE-14-BLOCKER-CLOSURE-20260809",
+  "title": "Close all 14 ClayCode BASE work packages by one evidence-gated Ubuntu cascade",
+  "created_by": "chatgpt-secondary",
+  "created_at": "2026-08-09T19:03:00+07:00",
+  "stage": "BASE_CLAYCODE_RELEASE",
+  "status": "READY",
+  "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "goal": "Drive CC-WP-01 through CC-WP-14 to PASS only through executable production-chain evidence, minimizing semantic redesign and reusing current G9/D candidate evidence where it survives strict tests.",
+  "execution_law": "test -> receipt -> learn -> repair lowest failing layer -> rerun -> next dependent gate; never skip a failed predecessor and never convert proxy/model agreement into PASS",
+  "critical_path": [
+    "CC-WP-02-PARSER-CANON",
+    "CC-WP-01-SPEC-FREEZE",
+    "CC-WP-03-IR-TYPES",
+    "CC-WP-04-TYPE-EFFECT",
+    "CC-WP-05-EVALUATOR",
+    "CC-WP-06-COMPILER-LOWERING",
+    "CC-WP-07-RUNTIME-ABI-FFI",
+    "CC-WP-09-CONCURRENCY-MEMORY",
+    "CC-WP-08-STDLIB-SDK",
+    "CC-WP-10-GENERAL-APP-SUITE",
+    "CC-WP-11-FUZZ-CONFORMANCE",
+    "CC-WP-12-CORPUS-HELDOUT",
+    "CC-WP-13-HARNESS-HANDOFF",
+    "CC-WP-14-BASE-AUDIT"
+  ],
+  "closure_tests": {
+    "CC-WP-02-PARSER-CANON": [
+      "Strict-build research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark with lark[interegular]==1.3.1 and require zero parser-table conflicts and zero regex collisions.",
+      "Parse full current CLAYCODE_G9_FUSION_SPEC_V3.clay plus DIALECT_REGISTRY_V3.clay and negative keyword/newline corpus.",
+      "Produce canonical typed-AST/semantic-hash equivalence receipts for preserved source meaning and reject lexical-identity loss."
+    ],
+    "CC-WP-01-SPEC-FREEZE": [
+      "Freeze only the semantic subset that survives WP02 and current executable counterexamples; preserve unresolved provx/reader experimental status separately.",
+      "Hash frozen semantic spec, grammar, dialect registry and authority invariants."
+    ],
+    "CC-WP-03-IR-TYPES": [
+      "Re-integrate typed function signatures/calls, records, unions/optional, Set/Ordered/Map, semantic_hash versus contract_hash, epochs and provenance identities.",
+      "Property-test canonical identity under set permutation/duplication and ordered-sequence mutation."
+    ],
+    "CC-WP-04-TYPE-EFFECT": [
+      "Check compositional function signatures/effects and require model output != execution authority.",
+      "Fuzz capability forgery, revoke/regrant, stale epoch and invalid FFI/resource identities fail closed."
+    ],
+    "CC-WP-05-EVALUATOR": [
+      "Run reference evaluator against frozen recurrence-decision and pure-computation fixtures; differential against independent oracle with zero unexplained mismatches."
+    ],
+    "CC-WP-06-COMPILER-LOWERING": [
+      "Lower same fixtures through production ClayCode path to Ubuntu-native and/or WASM/WASI backend.",
+      "Record source/IR/backend hashes and differential semantic receipts."
+    ],
+    "CC-WP-07-RUNTIME-ABI-FFI": [
+      "Implement typed Ubuntu ABI/FFI, module/package/resource identity and external capability/effect gateway; no ambient authority.",
+      "Run package-lock/provenance and resource-lifetime/TOCTOU discriminators already queued in RAE."
+    ],
+    "CC-WP-09-CONCURRENCY-MEMORY": [
+      "Implement cancellation/error/retry, async tasks, atomics/resource lifetime and deterministic receipt identity sufficient for APP-04.",
+      "Stress with randomized schedules and stale-resource/replay cases."
+    ],
+    "CC-WP-08-STDLIB-SDK": [
+      "Provide minimal files/process, HTTP, DB, async, GUI/event-loop and numerical/GPU host adapters on Ubuntu with typed capability boundaries."
+    ],
+    "CC-WP-10-GENERAL-APP-SUITE": [
+      "Execute APP-01 CLI, APP-02 HTTP website, APP-03 DB service, APP-04 concurrent service, APP-05 GUI/interactive, APP-06 compiler/tool, APP-07 GPU/ML/numerical, APP-08 sandboxed system effect, APP-09 real FRANK component and APP-10 full FRANK handoff readiness.",
+      "No application counts as passed without actual Ubuntu execution receipt."
+    ],
+    "CC-WP-11-FUZZ-CONFORMANCE": [
+      "Run unit/property/fuzz/mutation/roundtrip/conformance/differential suites across parser through runtime/FFI/apps; preserve every minimized counterexample."
+    ],
+    "CC-WP-12-CORPUS-HELDOUT": [
+      "Generate semantics-derived positive/negative corpus from frozen compiler contracts and create leak-resistant held-out suite after compiler semantics stabilize."
+    ],
+    "CC-WP-13-HARNESS-HANDOFF": [
+      "Compile at least one frozen real FRANK subsystem through production path, then prove H2/H3-required semantics have no escape hatch; reopen earliest failing ClayCode WP on counterexample."
+    ],
+    "CC-WP-14-BASE-AUDIT": [
+      "Build CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json with exact hashes and all APP receipts.",
+      "Require all 14 WPs PASS, unresolved-language-counterexample ledger empty of P0/P1 blockers, GENERAL_PURPOSE_GATE PASS and target Ubuntu receipts before BASE PASS."
+    ]
+  },
+  "current_committed_fix": {
+    "grammar_repair": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark",
+    "commit": "3594fba4b7b85daaecd6c2838aa9ccdba3173310",
+    "ci_workflow": ".github/workflows/claycode-strict-lalr-probe.yml",
+    "ci_commit": "962b78c34a99f455d5709c04ef349a4a8b77ad4b",
+    "receipt_expected": "research_entity/claycode/autonomous/STRICT_LALR_D_REPAIR_RECEIPT.json",
+    "receipt_state_at_creation": "NOT_YET_PRESENT"
+  },
+  "repair_policy": "Fix the lowest layer that explains a failing executable counterexample. Prefer compiler/runtime/stdlib/FFI repair over ClayCode semantic change. Semantic change requires a minimized executable language counterexample plus supervisor review.",
+  "blocked_external_surfaces": [
+    "Hosted ChatGPT is not connected to Andreas Ubuntu developer target",
+    "No callable target Qwen-class 4B reader surface in this worker",
+    "E2B is project-state runtime-verified but not exposed as a callable tool to this worker",
+    "SandboxAPI remains blocked/not subscribed"
+  ],
+  "scientific_promotion": "NONE_AT_CREATION",
+  "training_authorized": false
+}

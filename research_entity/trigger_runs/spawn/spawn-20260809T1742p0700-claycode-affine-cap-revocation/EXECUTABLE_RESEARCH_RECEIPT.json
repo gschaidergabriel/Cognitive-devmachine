@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-affine-cap-revocation",
+  "actor": "chatgpt-secondary",
+  "evidence_class": "HOSTED_LOCAL_LINUX_EXECUTION_PLUS_SYNTHETIC_RUNTIME_PROXY_NOT_TARGET_UBUNTU_ACCEPTANCE",
+  "reproducer": {
+    "path": "research_entity/trigger_runs/spawn/spawn-20260809T1742p0700-claycode-affine-cap-revocation/EXPERIMENT_AFFINE_CAPABILITY_REVOCATION.py",
+    "sha256": "112f0e126fe148758fe2b07ec70e8c8fc614282b4c430ab2481ef6573c1f1726",
+    "seed": 202608091742,
+    "runtime": "Python 3.13.5",
+    "host": "Linux x86_64 kernel 6.18.35 hosted container"
+  },
+  "tests": {
+    "delayed_authority_cases": 100000,
+    "event_counts": {
+      "no_change": 20018,
+      "regrant": 19845,
+      "revoke": 19909,
+      "transfer": 19993,
+      "wrong_right": 20235
+    },
+    "generation_bound_effect_time_check_oracle_mismatches": 0,
+    "cached_task_start_snapshot_false_accepts_total": 79982,
+    "cached_task_start_snapshot_false_accepts_stale_revocation_regrant_transfer": 59747,
+    "stale_after_revoke_accepts": 0,
+    "stale_after_regrant_accepts": 0,
+    "stale_borrow_after_transfer_accepts": 0,
+    "forgery_cases": 50000,
+    "forgery_accepts": 0,
+    "double_transfer_cases": 20000,
+    "double_transfer_accepts": 0
+  },
+  "linux_fd_reuse_fixture": {
+    "old_fd": 3,
+    "new_fd": 3,
+    "fd_number_reused": true,
+    "stale_integer_write_succeeded": true,
+    "file_a_content": "",
+    "file_b_content": "B-MUTATED",
+    "interpretation": "The raw integer descriptor was rebound by the OS to a different resource after close/reopen; therefore raw fd numeric identity is not a safe durable Clay semantic resource identity across an FFI boundary."
+  },
+  "expected_vs_observed": {
+    "safe_candidate": "Expected all stale/wrong/forged/double-owner cases to fail closed; observed zero oracle mismatches/accepts.",
+    "unsafe_snapshot_comparator": "Expected cached task-start authority to become stale under delayed state change; observed 79982 unauthorized accepts, of which 59747 were revoke/regrant/transfer stale-authority cases.",
+    "raw_fd_identity": "Expected a reusable process-local integer to be unsafe as semantic identity; observed immediate fd-number reuse and redirected stale write."
+  },
+  "limitations": [
+    "Not executed on Andreas' Ubuntu developer target.",
+    "Not production ClayCode parser/typechecker/lowering/runtime evidence.",
+    "No E2B or WASM/WASI backend execution in this run.",
+    "No live FRANK execution and no APP-01..APP-10 acceptance proof.",
+    "Generation bump on ownership transfer is a deliberately strict proxy candidate, not a frozen ClayCode rule."
+  ],
+  "base_gate_effect": "NONE",
+  "scientific_promotion": "NONE"
+}

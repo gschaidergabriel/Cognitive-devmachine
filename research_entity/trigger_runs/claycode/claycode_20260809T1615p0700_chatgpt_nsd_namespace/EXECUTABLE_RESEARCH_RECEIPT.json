@@ -1,0 +1,45 @@
+{
+  "schema": "CLAYCODE_EXECUTABLE_RESEARCH_RECEIPT_LOCAL_V1",
+  "run_id": "claycode_20260809T1615p0700_chatgpt_nsd_namespace",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "experiment_id": "EXP-CC-G9-NSD-IDENTIFIER-NAMESPACE-20260809",
+  "execution_surface": "local_python_sandbox",
+  "runtime": {"python": "3.13.5", "parser_library": "Lark 1.3.1", "parser_mode": "LALR contextual proxy"},
+  "e2b_status": "UNAVAILABLE_IN_CURRENT_TOOL_SURFACE",
+  "candidate_family": "matched relation-surface N/S/D over one typed RelationId oracle",
+  "source_corpus": "17 manually extracted unambiguous relation-bearing forms from CURRENT CLAYCODE_G9_FUSION_SPEC_V3.clay",
+  "source_corpus_hash": "f281c9cc4d92e6b3bbe6be338ad9193ed887f7373638c2c85cac9060774c85ce",
+  "corpus_shape": {"total": 17, "binary": 12, "prefix": 2, "postfix": 3, "distinct_relation_ids": 17},
+  "arms": {
+    "N": "strict generic relation(quoted_id, operands...) canonical surface",
+    "S": "explicit sigil relation surface with quoted fallback",
+    "D": "finite declared bare relation words"
+  },
+  "observations": {
+    "valid_parse_and_typed_relation_identity": {"N": "17/17", "S": "17/17", "D": "17/17"},
+    "current_ident_legal_relation_ids": {"legal": 15, "illegal": ["4B_emits", "4B_need_not_learn"]},
+    "ordinary_identifier_namespace_controls": {"D": "0/15 accepted", "S": "15/15 accepted", "N": "15/15 accepted", "meaning": "the tested finite-terminal D implementation reserves/collides with every tested legal relation word when that spelling is used as an ordinary bare identifier"},
+    "surface_bytes_total": {"D": 766, "S": 787, "N": 970},
+    "mean_extra_bytes_vs_D": {"S": 1.2352941176470589, "N": 12.0},
+    "unknown_relation_mutations": {"cases": 50000, "D_syntax_accepts": 0, "D_semantic_admits": 0, "S_syntax_accepts": 50000, "S_semantic_admits": 0, "N_syntax_accepts": 50000, "N_semantic_admits": 0},
+    "whitespace_roundtrip_semantic_identity": {"cases_per_arm": 20000, "N": "20000/20000", "S": "20000/20000", "D": "20000/20000"},
+    "same_kind_relation_substitution_changes_semantic_hash": "17/17",
+    "binary_operand_swap_changes_semantic_hash": "12/12",
+    "valid_parse_throughput_proxy_per_second": {"D": 70401, "S": 71301, "N": 99426}
+  },
+  "concurrent_evidence_assimilated_after_execution": {
+    "full_g9_surface_closure": "86/86 under N proxy; current checked grammar 61/86; N not selected solely from closure",
+    "sigil_namespace": "current @relation form challenged by mixed @ref namespace: 5/7 LALR contextual, 3/7 LALR basic, 7/7 Earley dynamic",
+    "typed_canonical_hash_lane": "concurrent worker started; this run does not duplicate its Set/Ordered/role canonicalization work"
+  },
+  "failure_classification": [
+    "NR-CC-D-FINITE-TERMINAL-IDENTIFIER-COLLISION-20260809",
+    "NR-CC-D-DIGIT-LEADING-RELATION-ID-20260809"
+  ],
+  "interpretation": "All three surfaces can feed one typed relation IR in this bounded proxy. The tested finite-keyword D implementation is not namespace-transparent: relation spellings collide with ordinary identifiers. D remains viable only if a production implementation proves scoped soft-keyword/contextual declaration or escape semantics without ambiguity. Current S is independently challenged by @ref overlap. N is the strongest current full-corpus closure fallback but is not selected without matched diagnostics/migration/reader-cost evidence.",
+  "claim_boundary": "This is a local relation-surface microbenchmark, not the production parser, not the full 86-chunk G9 corpus, not an E2B receipt, and not a ClayCode BASE or semantic promotion.",
+  "promotion": "NONE"
+}

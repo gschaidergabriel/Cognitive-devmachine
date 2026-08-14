@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1813p0700_claycode_module_init",
+  "origin_branch": "claycode",
+  "internal_evidence": [
+    {
+      "class": "CURRENT_PROJECT_STATE",
+      "ref": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "claim_scope": "BASE remains NOT_PASS; modules/packages/runtime ABI are required and open."
+    },
+    {
+      "class": "PROJECT_OWNER_FIXED_ACCEPTANCE_CONTRACT",
+      "ref": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "claim_scope": "Module/package format and deterministic semantic hashes/receipts are required; preserve semantics unless executable counterexample forces change."
+    },
+    {
+      "class": "CURRENT_RESEARCH_RUN",
+      "ref": "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/FINAL_REPORT.md",
+      "claim_scope": "Parser work has narrowed source/typed semantic identity but production integration remains open."
+    },
+    {
+      "class": "CURRENT_GRAMMAR_CANDIDATE_NOT_PROMOTED",
+      "ref": "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark",
+      "claim_scope": "Current candidate contains module/import surface forms but does not establish executable package initialization semantics."
+    },
+    {
+      "class": "HOSTED_SYNTHETIC_PROXY",
+      "ref": "research_entity/trigger_runs/spawn/spawn_20260809T1813p0700_claycode_module_init/EXECUTION_RECEIPT.json",
+      "claim_scope": "Generated graph discrimination only; not production/Ubuntu/live-FRANK evidence."
+    }
+  ],
+  "external_primary_sources": [
+    {
+      "class": "LANGUAGE_SPECIFICATION",
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "used_for": "Comparison: import cycles are illegal; package-level value initialization is dependency-driven and unresolved initialization cycles are invalid; reproducibility considerations are explicit."
+    },
+    {
+      "class": "LANGUAGE_SPECIFICATION",
+      "title": "ECMAScript Language Specification - Cyclic Module Records",
+      "url": "https://tc39.es/ecma262/2026/multipage/ecmascript-language-scripts-and-modules.html",
+      "used_for": "Comparison: cyclic module records are explicitly modeled; linking/evaluation tracks strongly connected components and cycle roots."
+    },
+    {
+      "class": "LANGUAGE_VM_SPECIFICATION",
+      "title": "Java Language Specification SE 25 - Detailed Initialization Procedure",
+      "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-12.html",
+      "used_for": "Comparison: recursive class/interface initialization is explicitly synchronized and stateful rather than treated as a simple topological package DAG."
+    }
+  ],
+  "evidence_boundaries": [
+    "External designs demonstrate feasible design points, not ClayCode correctness.",
+    "Synthetic proxy support cannot promote the proposed contract to production truth.",
+    "Shared Clay/FRANK branch ancestry is not independent replication.",
+    "No target Ubuntu receipt was available to this hosted worker."
+  ],
+  "promotion": "NONE"
+}

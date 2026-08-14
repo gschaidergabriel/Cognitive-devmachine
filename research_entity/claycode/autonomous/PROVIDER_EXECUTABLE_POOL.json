@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "mode": "FREE_ONLY",
+  "nvidia": {
+    "verified": [
+      {
+        "model": "nvidia/nemotron-mini-4b-instruct",
+        "family": "nemotron",
+        "evidence_ref": "research_entity/global/NVIDIA_RESEARCH_CAPABILITY.json",
+        "status": "RUNTIME_VERIFIED_HISTORICAL"
+      },
+      {
+        "model": "z-ai/glm-5.2",
+        "family": "glm",
+        "evidence_ref": "research_entity/claycode/autonomous/cycles/ccauto-20260809T104300Z.json",
+        "status": "RUNTIME_VERIFIED_CURRENT_ACCOUNT_2026-08-09"
+      },
+      {
+        "model": "nvidia/nemotron-3-super-120b-a12b",
+        "family": "nemotron",
+        "status": "RUNTIME_VERIFIED_PROBE",
+        "evidence_ref": "cycle:ccauto-20260809T105416Z",
+        "observed_at": "2026-08-09T10:54:18.547488+00:00"
+      },
+      {
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "family": "nemotron",
+        "status": "RUNTIME_VERIFIED_PROBE",
+        "evidence_ref": "cycle:ccauto-20260809T105416Z",
+        "observed_at": "2026-08-09T10:54:19.295090+00:00"
+      },
+      {
+        "model": "deepseek-ai/deepseek-v4-flash-0731",
+        "family": "deepseek",
+        "status": "RUNTIME_VERIFIED_PROBE",
+        "evidence_ref": "cycle:ccauto-20260809T105416Z",
+        "observed_at": "2026-08-09T10:54:23.629963+00:00"
+      },
+      {
+        "model": "openai/gpt-oss-120b",
+        "family": "gpt-oss",
+        "status": "RUNTIME_VERIFIED_PROBE",
+        "evidence_ref": "cycle:ccauto-20260809T105416Z",
+        "observed_at": "2026-08-09T10:54:24.216111+00:00"
+      }
+    ],
+    "failed_or_blocked": []
+  },
+  "mistral": {
+    "verified": [],
+    "status": "CREDENTIAL_NOT_CONFIGURED"
+  },
+  "rule": "Catalog visibility is not execution entitlement. Only models with a successful account-specific call may be assigned a research role. 402 is a permanent FREE_ONLY exclusion until a later free re-verification; 404/function-not-found is account/model blocked; 429 is temporary cooldown.",
+  "last_cycle": "ccauto-20260809T105416Z",
+  "last_probe_results": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "status": "SUCCESS",
+      "usage": {
+        "prompt_tokens": 21,
+        "completion_tokens": 16,
+        "total_tokens": 37
+      }
+    },
+    {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": "SUCCESS",
+      "usage": {
+        "prompt_tokens": 21,
+        "completion_tokens": 14,
+        "total_tokens": 35
+      }
+    },
+    {
+      "model": "deepseek-ai/deepseek-v4-flash-0731",
+      "status": "SUCCESS",
+      "usage": {
+        "prompt_tokens": 9,
+        "completion_tokens": 3,
+        "total_tokens": 12
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "status": "SUCCESS",
+      "usage": {
+        "prompt_tokens": 70,
+        "total_tokens": 86,
+        "completion_tokens": 16,
+        "prompt_tokens_details": null
+      }
+    }
+  ]
+}

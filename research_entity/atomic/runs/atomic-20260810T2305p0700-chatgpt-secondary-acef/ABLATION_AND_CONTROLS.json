@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "candidate": "ACEF-V0.1",
+  "ablations": [
+    {"id":"A1","remove":"monotone_fast_admission","prediction":"same safety but lower evidence retention and/or more commit barriers"},
+    {"id":"A2","remove":"branch_local_visibility","prediction":"more premature belief/goal exposure under failure"},
+    {"id":"A3","remove":"lease_epoch_fencing_from_semantic_commit","prediction":"zombie/stale worker can publish after reacquire"},
+    {"id":"A4","remove":"schema_epoch_fencing","prediction":"mixed-schema state may publish"},
+    {"id":"A5","remove":"identity_lineage_binding","prediction":"stale clone may commit against current identity"},
+    {"id":"A6","remove":"effect_link_and_verified_outcome_gate","prediction":"outcome-dependent state can commit under UNKNOWN"},
+    {"id":"A7","remove":"causal_use_receipt","prediction":"learning credit becomes broadcast correlation rather than causal use"},
+    {"id":"A8","remove":"differential_retraction","prediction":"same correctness but higher repair/rebuild cost"},
+    {"id":"A9","remove":"consistent_cut_recovery","prediction":"more ambiguous component-local restart combinations"},
+    {"id":"A10","remove":"delta_only_writer_law","prediction":"replay lineage incomplete and split semantic mutation surfaces reappear"}
+  ],
+  "controls": [
+    "truthful causal parents",
+    "shuffled causal parents",
+    "provenance-broken parent",
+    "no-reentry",
+    "stale lease epoch",
+    "stale schema epoch",
+    "stale identity lineage",
+    "provider timeout after acceptance",
+    "provider timeout before effect",
+    "duplicate same-idempotency retry",
+    "non-idempotent unknown outcome",
+    "branch contradiction",
+    "branch dominance without contradiction",
+    "crash before monotone admission",
+    "crash after monotone admission before cognitive commit",
+    "crash during effect reservation",
+    "crash after external effect before observation",
+    "crash after verification before re-entry",
+    "crash after re-entry before DONE",
+    "graph projection one epoch behind canonical state"
+  ],
+  "required_negative_result_handling": "Ablation or baseline dominance is preserved as active architecture knowledge; ACEF is not rescued by redefining the metric after failure."
+}

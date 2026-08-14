@@ -1,0 +1,107 @@
+module spawn.claygraph.rab
+version "0.1-shadow-candidate"
+status OPEN_HOLD
+
+// Reversal-Aware Binding (RAB) is a derived ClayGraph mechanism candidate.
+// It does not mint semantic truth, evidence status, user intent or execution authority.
+
+law canonical_truth = UnifiedDB
+law activation != truth
+law binding_promotion != evidence_promotion
+law repeated_coactivation != causal_support
+law duplicated_ancestry != independent_support
+law exact_high_confidence_query may BYPASS dynamic_graph_propagation
+
+record BindingIdentity {
+  logical_binding_id: Symbol
+  members: Set<SemanticRef>
+  relation_type: Symbol
+  context_ref: ContextRef
+}
+
+record BindingObservation {
+  identity: BindingIdentity
+  observed_relation: Score
+  source_ref: SourceRef
+  provenance_family_ref: ProvenanceFamilyRef
+  source_epoch: Epoch
+  event_ref: EventRef
+  evidence_class: Symbol
+}
+
+record FastBindingState {
+  identity: BindingIdentity
+  score: Score
+  window_ref: Ref
+  updated_epoch: Epoch
+}
+
+record DurableBindingVersion {
+  identity: BindingIdentity
+  version_id: Ref
+  relation_state: Score
+  valid_from_epoch: Epoch
+  valid_to_epoch: Epoch|UNKNOWN
+  status: SHADOW|CURRENT|SUPPRESSED|RETRACTED|CONFLICT|UNKNOWN
+  predecessor_ref: Ref|UNKNOWN
+  promotion_receipt_ref: Ref|UNKNOWN
+  rollback_ref: Ref
+}
+
+record ReversalCandidate {
+  identity: BindingIdentity
+  current_version_ref: Ref|UNKNOWN
+  candidate_relation: Score
+  contradiction_fraction: Score
+  provenance_family_count: Int
+  fast_agreement: Bool
+  source_epoch: Epoch
+  status: SHADOW|ADMIT|SUPPRESS|ESCALATE|UNKNOWN
+}
+
+record ReversalPromotionReceipt {
+  candidate_ref: Ref
+  source_epoch: Epoch
+  distinct_provenance_families: Set<ProvenanceFamilyRef>
+  observation_refs: Set<EventRef>
+  exact_authoritative_update_ref: Ref|UNKNOWN
+  selected_action: PROMOTE|HOLD|SUPPRESS|ESCALATE
+  previous_version_ref: Ref|UNKNOWN
+  new_version_ref: Ref|UNKNOWN
+  replay_hash: Hash
+  rollback_ref: Ref
+}
+
+rule context_difference may fork BindingIdentity rather_than global_reverse
+rule fast_binding may react_without durable_promotion
+rule generic_reversal_candidate requires bounded_contradiction_window + fast_agreement
+rule generic_reversal_promotion requires provenance_diversity_gate + replayable_receipt + rollback
+rule duplicate_provenance cannot increase independent_family_count
+rule unresolved_conflict -> SHADOW|CONFLICT|UNKNOWN; never forced winner
+rule promotion archives_or_suppresses predecessor; never silent_delete
+rule stale_or_out_of_order observation requires source_epoch_admissibility
+
+// A separately typed exact authoritative update may establish a reversal without pretending
+// one source is many independent families. It remains outside generic associative promotion.
+rule single_authoritative_exact_update uses exact_authoritative_update_ref; never duplicate_to_satisfy_diversity
+
+experiment RAB_E1 = true_reversal vs duplicate_source_echo
+experiment RAB_E2 = context_bifurcation vs global_overwrite
+experiment RAB_E3 = independent_sources vs duplicated_ancestry
+experiment RAB_E4 = provenance_family_spoof vs verified_ancestry
+experiment RAB_E5 = exact_authoritative_single_source_update vs generic_associative_gate
+experiment RAB_E6 = in_order vs out_of_order_replay
+experiment RAB_E7 = reversal_gate_intact vs lesion vs rescue
+experiment RAB_E8 = noise_source_sparsity_OOD sweep
+
+metric true_reversal_adaptation_lag
+metric false_reversal_rate
+metric verified_task_gain
+metric context_preservation
+metric provenance_echo_sensitivity
+metric replay_equivalence
+metric rollback_success
+metric update_amplification
+metric latency_cost
+
+rule runtime_promotion_requires target_or_frozen_harness_evidence + simpler_baseline_gain + spoof_control + lesion_rescue + replay_rollback + matched_cost

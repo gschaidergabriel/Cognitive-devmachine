@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1650p0700-base-parser-control-lowering",
+  "hypotheses": [
+    {
+      "id": "H-CC-BASE-001",
+      "status": "SUPPORTED_LOCAL_SYNTHETIC",
+      "mechanism": "The admitted G9 V3 source and admitted EBNF are not self-conformant because G9 uses relational operators and an if-form absent from grammar.ebnf.",
+      "expected": "A grammar-conformant parser rejects at least the >, >= and if examples taken from G9 V3.",
+      "counterhypothesis": "Those forms are intentionally outside the grammar and another canonical parser surface owns them.",
+      "falsifier": "A current canonical parser/grammar accepted by the stack parses G9 V3 unchanged and produces the canonical IR.",
+      "test": "Executable grammar/control probe",
+      "result": "Current grammar cannot admit the sampled constructs; minimal repair candidate parses/lowers the tested subset.",
+      "stage_implication": "CC-WP-01/02 need a self-conformance fixture before parser freeze."
+    },
+    {
+      "id": "H-CC-BASE-002",
+      "status": "OPEN",
+      "mechanism": "Treating relational/control completion as surface grammar only can preserve canonical semantic identity for equivalent programs.",
+      "expected": "Pre/post repair programs that encode the same tested predicate produce identical canonical semantic hashes after canonicalization.",
+      "counterhypothesis": "Adding control syntax changes evaluation order or effect semantics and therefore semantic identity.",
+      "falsifier": "Roundtrip/canonicalization yields divergent IR or observable behavior for equivalent intended programs.",
+      "next_test": "Implement the real parser/canonicalizer and semantic-hash oracle; compare repaired surface forms against explicit predicate/branch IR."
+    },
+    {
+      "id": "H-CC-BASE-003",
+      "status": "OPEN_SUPPORTED_BY_EXTERNAL_ANALOGUE",
+      "mechanism": "Progressive lowering with explicit legality targets and translation validation will expose semantic escape hatches earlier than direct source-to-host transpilation.",
+      "expected": "Each lowering stage can reject illegal residual Clay operations and emit a semantic-preservation receipt.",
+      "counterhypothesis": "A direct compiler is simpler and equally testable for BASE.",
+      "falsifier": "Matched implementation shows staged lowering adds repair/latency complexity without finding additional semantic failures.",
+      "external_basis": "MLIR DialectConversion uses explicit conversion targets, rewrite patterns and optional type conversion; full conversion succeeds only when all illegal operations are legalized.",
+      "next_test": "Build Clay AST -> typed Clay IR -> host/WASI IR with a full-conversion legality check."
+    },
+    {
+      "id": "H-CC-BASE-004",
+      "status": "OPEN",
+      "mechanism": "WASI 0.3 Component Model can cover a large fraction of ClayCode BASE host-boundary needs through typed WIT resources, capability-scoped imports and native async primitives.",
+      "expected": "APP-01 CLI, APP-02 HTTP, APP-03 DB adapter, APP-04 async service and APP-08 sandboxed effect can be lowered without ambient authority or bespoke untyped wire formats.",
+      "counterhypothesis": "Direct Ubuntu native/LLVM FFI is materially simpler/faster and can preserve the same authority contract.",
+      "falsifier": "Target-host benchmark shows WASI requires larger escape hatches, lacks required APIs or imposes unacceptable implementation/runtime cost.",
+      "next_test": "Native-vs-WASI matched exemplar on Andreas Ubuntu host."
+    },
+    {
+      "id": "H-CC-BASE-005",
+      "status": "OPEN_NO_LANGUAGE_CHANGE_REQUIRED_YET",
+      "mechanism": "Current G9 typed Delta/provenance/effect/state/graph structures are sufficient to encode the currently loaded ClayGraph and UnifiedDB identity/epoch/receipt semantics; missing work is compiler/runtime realization rather than a new semantic primitive.",
+      "expected": "Representative graph epoch, hyperrelation, selection receipt, semantic transaction, query receipt and dynamic work revision structures lower without an untyped semantic escape hatch.",
+      "counterhypothesis": "At least one current substrate invariant requires a new ClayCode primitive rather than a record/interface composition.",
+      "falsifier": "Executable substrate exemplar cannot be typed or replayed without erasing provenance, epoch identity, authority or rollback semantics.",
+      "next_test": "Compile one ClayGraph projection/selection receipt and one UnifiedDB semantic transaction/replay exemplar using frozen G9 records."
+    },
+    {
+      "id": "H-CC-BASE-006",
+      "status": "OPEN",
+      "mechanism": "The current research grammar is not yet a complete general-purpose executable surface even after the minimal repair; BASE therefore needs either a small explicit computational control core or a verified lowering from another existing ClayCode program representation.",
+      "expected": "General-purpose APP suite exposes missing function/result/iteration/error/concurrency constructs unless they already exist in another current executable dialect/runtime artifact.",
+      "counterhypothesis": "Existing universal-core/direct dialect artifacts already supply all computational control and grammar.ebnf is only the architecture-spec surface.",
+      "falsifier": "Current repository contains and target-executes a canonical parser/runtime path covering APP-01..10 without adding control semantics to the admitted language basis.",
+      "next_test": "Inventory the 20k universal-core proxy artifact and bind it to the current G9 parser/IR identity; do not reinvent what already exists."
+    }
+  ],
+  "strongest_current_delta": "H-CC-BASE-001: self-conformance gap is directly evidenced; repair remains candidate-only until integrated into the real parser/canonical IR pipeline.",
+  "promotion": "NONE"
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1746p0700-claycode-mvc-state",
+  "evidence": [
+    {
+      "id": "E-SPAWN-001",
+      "class": "VERIFIED_REPOSITORY_CANONICAL_STATE",
+      "ref": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+      "observed": "revision 2; state_hash 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+    },
+    {
+      "id": "E-SPAWN-002",
+      "class": "PROJECT_OWNER_FIXED_REQUIREMENT",
+      "ref": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+      "observed": "BASE must express versioned classifier/prototype state, training evidence tier, confidence/open-set result, candidate promotion/rollback, resource budgets and deterministic replay hooks."
+    },
+    {
+      "id": "E-SPAWN-003",
+      "class": "CURRENT_RESEARCH_CANDIDATE_SPEC",
+      "ref": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "observed": "Existing G9 semantic surface includes typed records, sets, ordered collections, epochs/deltas, provenance, hashes, explicit effect/authority separation and replay-oriented state concepts."
+    },
+    {
+      "id": "E-SPAWN-004",
+      "class": "CURRENT_COMPILER_FRONTIER_NEGATIVE_AND_POSITIVE_EVIDENCE",
+      "ref": "commit 0b46803febf6937c5f892b737af1d4ebf2d26a4c",
+      "observed": "Broad parser work reports strong contextual parse/identity/fuzz results but a strict-LALR blocker remains; no frontend is freeze-ready and CC-WP-02 remains open."
+    },
+    {
+      "id": "E-SPAWN-005",
+      "class": "CURRENT_EXECUTABLE_COUNTEREXAMPLE",
+      "ref": "commit b2d70233b6b233a831edbae7036a99b7c1a35af2",
+      "observed": "Operator/identifier lexical identity issue was found and repaired in a local proxy; normative parser/canonicalizer integration remains required."
+    },
+    {
+      "id": "E-SPAWN-006",
+      "class": "CURRENT_HARNESS_REQUIREMENT_STATE",
+      "ref": "commit 3448d92c1216a0f5446b31fb1b17426e8e77ba63",
+      "observed": "Adaptive visual learner is mandatory in H1/H2/H3 with explicit trust-tier, open-set, promotion, rollback, version compatibility and budget constraints."
+    },
+    {
+      "id": "E-SPAWN-007",
+      "class": "LOCAL_SEMANTIC_PROXY_EXECUTION",
+      "ref": "EXECUTABLE_RESEARCH_RECEIPT.json",
+      "observed": "1000 deterministic streams x 100 transitions; trust/open-set/budget/promotion/rollback guards passed; 4/4 deliberate guard mutations killed after one preserved oracle-repair negative result."
+    },
+    {
+      "id": "E-SPAWN-008",
+      "class": "PRIMARY_PEER_REVIEWED_EXTERNAL_RESEARCH",
+      "ref": "CVPR 2024: Frozen Feature Augmentation for Few-Shot Image Classification",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Bar_Frozen_Feature_Augmentation_for_Few-Shot_Image_Classification_CVPR_2024_paper.html",
+      "use": "Supports frozen-feature + lightweight-classifier mechanism class only; not Frank-specific performance."
+    },
+    {
+      "id": "E-SPAWN-009",
+      "class": "PRIMARY_PEER_REVIEWED_EXTERNAL_RESEARCH",
+      "ref": "CVPR 2024: LP++: A Surprisingly Strong Linear Probe for Few-Shot CLIP",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Huang_LP_A_Surprisingly_Strong_Linear_Probe_for_Few-Shot_CLIP_CVPR_2024_paper.html",
+      "use": "Supports efficient linear-probe adaptation as a serious baseline; not Frank-specific evidence."
+    },
+    {
+      "id": "E-SPAWN-010",
+      "class": "PRIMARY_PEER_REVIEWED_EXTERNAL_RESEARCH",
+      "ref": "CVPR 2026: HyCal: A Training-Free Prototype Calibration Method for Cross-Discipline Few-Shot Class-Incremental Learning",
+      "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Lee_HyCal_A_Training-Free_Prototype_Calibration_Method_for_Cross-Discipline_Few-Shot_Class-Incremental_CVPR_2026_paper.html",
+      "use": "Supports prototype-calibration/retention-adaptation research direction on frozen embeddings; not Frank-specific evidence."
+    },
+    {
+      "id": "E-SPAWN-011",
+      "class": "PRIMARY_PEER_REVIEWED_EXTERNAL_RESEARCH",
+      "ref": "CVPR 2024: DeIL: Direct-and-Inverse CLIP for Open-World Few-Shot Learning",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Shao_DeIL_Direct-and-Inverse_CLIP_for_Open-World_Few-Shot_Learning_CVPR_2024_paper.html",
+      "use": "Supports treating open-world/unknown handling as an explicit research problem; does not validate this run's specific routing policy."
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "N-SPAWN-MVC-ORACLE-001",
+      "class": "METHOD_NEGATIVE_RESULT",
+      "ref": "EXECUTABLE_RESEARCH_RECEIPT.json",
+      "preserved": true
+    },
+    {
+      "id": "N-SPAWN-MVC-COMPILER-001",
+      "class": "UNRESOLVED_BLOCKER",
+      "ref": "current ClayCode parser frontier",
+      "description": "This run cannot convert semantic-proxy success into normative compiler evidence because the current parser/canonicalizer frontend is not freeze-ready and no Ubuntu target execution occurred."
+    }
+  ],
+  "ancestry": {
+    "shared_project_ancestry": ["FRANK adaptive visual directive", "Retina MVC proposal", "Harness integration requirement", "ClayCode G9"],
+    "independent_external_support": ["CVPR 2024 FroFA", "CVPR 2024 LP++", "CVPR 2026 HyCal", "CVPR 2024 DeIL"],
+    "rule": "External mechanism analogies do not promote Frank-specific claims; local proxy execution does not become live/Harness evidence."
+  }
+}

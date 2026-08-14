@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1710p0700_chatgpt_chain_semantic_gate",
+  "results":[
+    {"negative_result_id":"NR-CC-HASH-CHAIN-SUFFICIENCY-20260809","status":"NEGATIVE_RESULT","proposition_tested":"A consistent stage-hash/provenance chain is sufficient to establish semantic-preserving compilation.","result":"FAILED_FOR_TESTED_CLASS","evidence":"10,000/10,000 self-consistent wrong lowerings passed chain integrity. A separately executed witness produced 2 where source semantics expected 12.","scope":"Constructed tiny unambiguous ClayCode-like subset; does not estimate production compiler defect rates.","next_test":"Integrate joined chain receipt plus per-translation evaluator/differential oracle into actual CC-WP-02/03/05/06 pipeline."},
+    {"negative_result_id":"NR-CC-PROBE-PROCESS-FANOUT-20260809","status":"NEGATIVE_TOOL_RESULT","proposition_tested":"Per-case subprocess execution is an appropriate fuzz harness strategy for this chain validator.","result":"FAILED_OPERATIONALLY","evidence":"Initial run exceeded the 45 s tool window. Revised harness executed concrete artifacts only and completed 50k tamper + 10k clean + 10k wrong-lowering cases.","scope":"Research harness engineering only, not ClayCode semantics."}
+  ]
+}

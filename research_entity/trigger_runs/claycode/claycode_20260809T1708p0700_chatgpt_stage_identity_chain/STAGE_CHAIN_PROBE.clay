@@ -1,0 +1,7 @@
+module claycode.lab.stage_chain
+version "0.1"
+record LoopGate {
+  recurrence_count:Int;
+  recurrence_budget:Int;
+}
+rule recurrence_count==recurrence_budget => HALT

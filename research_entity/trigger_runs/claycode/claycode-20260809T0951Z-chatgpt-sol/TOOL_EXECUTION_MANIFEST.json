@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0951Z-chatgpt-sol",
+  "provider_classes": {
+    "implementation": ["GitHub"],
+    "executable": ["local_linux_container", "e2b_sandbox"],
+    "current_web": ["primary official documentation"],
+    "scholarly": [],
+    "model_experiment": []
+  },
+  "executions": [
+    {"tool":"GitHub","status":"SUCCESS_RW","purpose":"canonical boot, stack/protocol/substrate reads, room coordination and durable writes"},
+    {"tool":"local_linux_container","status":"SUCCESS","purpose":"grammar coverage probe plus parser/repair/lowering fragment","artifacts":["GRAMMAR_COVERAGE_PROBE.json","EXECUTABLE_RESEARCH_RECEIPT.json"]},
+    {"tool":"e2b_sandbox","status":"SUCCESS","request_ref":"research_entity/runtime/tool_requests/claycode-g9-grammar-e2b-20260809T0956Z.json","result_ref":"research_entity/runtime/tool_results/claycode-g9-grammar-e2b-20260809T0956Z.json","observed":{"exit_code":0,"sentinel":"CLAYCODE_GRAMMAR_PROBE_OK:7"},"evidence_class":"runtime_experiment","interpretation":"Independent isolated-Linux replication of the bounded grammar coverage probe; not proof of full compiler correctness."},
+    {"tool":"web_primary_docs","status":"SUCCESS","sources":["MLIR official dialect/interface/parser documentation","WebAssembly Component Model/WIT Canonical ABI documentation","WASI 0.3 official documentation"],"interpretation":"Independent implementation analogues support a small semantic core plus explicit dialect/interface parsers and typed ABI boundaries; analogy does not establish ClayCode semantics."},
+    {"tool":"sandboxapi_sandbox","status":"NOT_ATTEMPTED_BLOCKED_NOT_SUBSCRIBED","reason":"Current capability state records BLOCKED_NOT_SUBSCRIBED."},
+    {"tool":"judge0_execute","status":"NOT_ATTEMPTED_NO_INCREMENTAL_INFORMATION_AFTER_E2B_SUCCESS","reason":"Local Linux plus preferred E2B both reproduced the bounded finding; a third Python runtime would not discriminate the current hypothesis."}
+  ]
+}

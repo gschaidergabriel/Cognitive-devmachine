@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1706p0700-needle-boundary-v1",
+  "work_package":"H-WP-04-NEEDLE-BOUNDARY",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "evidence_class":"LOCAL_DETERMINISTIC_TEST_PLUS_SYNTHETIC_MUTATION_STRESS",
+  "code_artifact":"research_entity/harness/reference/needle_boundary_v1.py",
+  "test_artifact":"research_entity/harness/tests/test_needle_boundary_v1.py",
+  "execution_environment":"isolated Python stdlib test environment; repo-layout import simulated locally; not target Ubuntu FRANK runtime",
+  "unit_results":{"tests":12,"passed":12,"failed":0,"errors":0},
+  "stress_results":{
+    "semantic_registry_order_permutations":10000,
+    "order_invariance_failures":0,
+    "malicious_or_invalid_routes":5000,
+    "unexpected_accepts":0,
+    "valid_route_authority":"NONE",
+    "valid_route_effect_commit_allowed":false,
+    "valid_route_effect_permit":null
+  },
+  "validated_oracles":[
+    "locked/unavailable capabilities omitted before Needle inference",
+    "normalization collisions reject projection before inference",
+    "duplicate JSON keys reject post-decode route",
+    "unknown tools/arguments reject",
+    "missing required fields reject",
+    "type/enum/range mismatches reject",
+    "constraint exhaustion and off-trie receipts fail closed to rejection/ABSTAIN path",
+    "source/model/tokenizer/registry/projection/input/language provenance is bound and checked",
+    "semantically identical JSON order produces identical route semantic hash",
+    "Needle result cannot mint EffectPermit or effect commit authority"
+  ],
+  "negative_results":[],
+  "limitations":[
+    "historical exact Needle tokenizer/model bundle was not executed in this run",
+    "real-tokenizer reachability of NSO-001 remains open",
+    "51-tool exact token-budget/truncation measurement remains open",
+    "German-direct versus translated route accuracy remains open",
+    "translator ingress itself is not yet implemented here",
+    "Safe-Effect commit gate is referenced as the next authority boundary but not implemented by this package",
+    "this execution is not live FRANK evidence and does not advance H1"
+  ],
+  "pass_scope":"NeedleBoundaryV1 deterministic post-decode/projection safety kernel only",
+  "h1_release_effect":"NO_STAGE_ADVANCE"
+}

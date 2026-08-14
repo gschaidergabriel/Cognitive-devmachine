@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1751p0700_claycode_async_replay",
+  "trigger": "spawn",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "distribution_source": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json@f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+  "branch_draw": {
+    "rng": "OS_CSPRNG_/dev/urandom via od unsigned 32-bit integer",
+    "raw_u32": 238253034,
+    "mapping": "raw_u32 / 2^32 * 100 into cumulative percent intervals",
+    "draw_percent_approx": 5.5474,
+    "weights_percent": {"claycode":50,"harness":10,"frank":10,"gwt":6,"emergenz":6,"hyperposition":5,"claygraph":5,"unifieddb":4,"clayresearch":4},
+    "selected_origin_branch": "claycode",
+    "seed": null
+  },
+  "candidate_microdirections": [
+    {"index":0,"direction":"effect/capability gateway resource identity, revocation, replay and idempotency","test":"delay/revoke/retry effects and compare requirement metadata with effect-time authority"},
+    {"index":1,"direction":"canonical semantic identity under provenance, epistemic states and cyclic structures","test":"permutation/round-trip/property corpus with ordered-field counterexamples"},
+    {"index":2,"direction":"deterministic replay semantics for async concurrency, cancellation, choice and effect receipts","test":"schedule perturbation, select/race replay, cancel/retry and stable task identity","selected":true},
+    {"index":3,"direction":"translation validation for native/WASM lowering preserving semantic identity and effects","test":"source-vs-lowered differential state/effect trace"},
+    {"index":4,"direction":"versioned adaptive visual learner promotion/rollback state in ClayCode IR","test":"candidate shadow/promotion/rollback and provenance-tier replay"}
+  ],
+  "microdirection_draw": {
+    "rng": "OS_CSPRNG_/dev/urandom via od unsigned 32-bit integer",
+    "raw_u32": 2542952372,
+    "mapping": "raw_u32 % 5",
+    "selected_index_zero_based": 2,
+    "selected_microdirection": "deterministic replay semantics for async concurrency, cancellation, choice and effect receipts",
+    "seed": null,
+    "rerolls": 0
+  },
+  "late_novelty_check": {
+    "performed_after_parallel_spawn_commits_appeared": true,
+    "reviewed_recent_spawn_runs": [
+      "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+      "spawn-20260809T1746p0700-claycode-mvc-state",
+      "spawn_20260809T174614p0700_harness_lowering_semantics",
+      "spawn_20260809T1742p0700_chatgpt-secondary_3bd0fa03",
+      "spawn-20260809T1742p0700-claycode-affine-cap-revocation"
+    ],
+    "duplicate_found": false,
+    "note": "Two recent ClayCode spawn candidate sets mentioned async/cancellation but selected incremental delta equivalence and affine capability revocation respectively. This run selects the previously unselected async/replay direction."
+  },
+  "selection_probability_is_not_evidence": true,
+  "training_auto_start_forbidden": true,
+  "status": "COMPLETED_RESEARCH_RUN"
+}

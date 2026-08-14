@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1728p0700-effect-closure-lowering",
+  "hypotheses": [
+    {
+      "id": "H-CC-EFFECT-CLOSURE-001",
+      "status": "OPEN_SUPPORTED_PROXY",
+      "statement": "For a finite exact call graph with declared host intrinsic effects, function effect summaries can be computed compositionally by monotone least-fixed-point closure without new ClayCode surface syntax.",
+      "evidence": ["20,000 random cyclic call graphs, 0 reference mismatches; max 9 LFP rounds"],
+      "falsifier": "production parser/IR call graphs require non-monotone/context-sensitive semantics that make this summary unsound or prohibitively imprecise"
+    },
+    {
+      "id": "H-CC-CAPREQ-AUTH-SEP-001",
+      "status": "OPEN_SUPPORTED_PROXY",
+      "statement": "Required-capability propagation can remain static metadata while execution authority is supplied only by the runtime gateway, preserving expressibility != authority.",
+      "evidence": ["missing capability and textual-name forgery tests fail closed"],
+      "falsifier": "production FFI requires metadata to mint/attenuate authority implicitly to remain usable, with no safer explicit token path"
+    },
+    {
+      "id": "H-CC-ID-LAYERS-001",
+      "status": "OPEN_SUPPORTED_PROXY",
+      "statement": "Source/contract identity, semantic program identity, lowered-artifact identity, and execution-trace identity should remain distinct and linked rather than collapsed.",
+      "evidence": ["format variant: different source+contract hash, same semantic+lowered hash; Harness H-WP-02 layered-identity result"],
+      "falsifier": "a single identity can preserve all required provenance, equivalence, cache, replay, and execution distinctions without false equality/inequality"
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "H-CC-EFFECT-LOCAL-ONLY-NULL",
+      "statement": "Per-function local annotations are sufficient; transitive closure across calls adds complexity without practical benefit.",
+      "discriminator": "compile multi-layer APP-01/02/FRANK call graphs and compare false-negative/false-positive capability/effect diagnostics"
+    },
+    {
+      "id": "H-CC-CAP-AS-AUTH-NULL",
+      "statement": "Capability requirement metadata can double as authority safely.",
+      "discriminator": "forgery/revocation/delegation/replay matrix against opaque external tokens"
+    }
+  ]
+}

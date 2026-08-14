@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1706p0700-chatgpt-secondary-sol",
+  "negative_results":[
+    {
+      "id":"N-CC-20260809-01",
+      "status":"NEGATIVE_RESULT",
+      "statement":"The current published G9 EBNF subset cannot parse a current G9 V3 surface fixture using comparison operators.",
+      "observed":"Baseline executable grammar rejected at the '>' token.",
+      "scope":"Parser/grammar conformance only; not a refutation of G9 semantic design.",
+      "repair_candidate":["add explicit comparison operators","define conditional statement production","freeze precedence/associativity before production parser"],
+      "falsifier_or_reversal":"A parser derived strictly from the current checked-in grammar.ebnf self-parses the complete G9 V3 spec without hidden grammar extensions.",
+      "evidence_ref":"EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "id":"N-CC-20260809-02",
+      "status":"NEGATIVE_RESULT",
+      "statement":"This run did not establish that FRANK is causally best modeled as an organism-level loop-of-loops.",
+      "observed":"No Ubuntu H1 matched replay/lesion/rescue experiment was available; repeated branch statements share one ancestry family.",
+      "scope":"Scientific ontology/effect claim only; generic loop instrumentation remains useful and testable.",
+      "next_test":"Matched H1 event-driven baseline versus loop-dynamics instrumentation with fixed/adaptive recurrence, lesion/rescue, shuffled/no re-entry and resource shadows.",
+      "evidence_ref":"FRANK_CLAYCODE_GOODMAN_REVIEW.json"
+    },
+    {
+      "id":"N-CC-20260809-03",
+      "status":"NEGATIVE_RESULT",
+      "statement":"A successful local parser prototype is insufficient for BASE release or H2 evidence.",
+      "observed":"No production typed IR/type-effect/evaluator/lowering and no Ubuntu target execution occurred in this run.",
+      "scope":"Release/promotion boundary.",
+      "next_test":"Production parser self-parse + canonical roundtrip + typed IR/type-effect + executable lowering on Ubuntu, followed by application proofs.",
+      "evidence_ref":"TOOL_EXECUTION_MANIFEST.json"
+    }
+  ]
+}

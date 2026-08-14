@@ -1,0 +1,66 @@
+{
+  "evidence_independence_note": "External language/compiler sources are comparison anchors, not proof of ClayCode design. Concurrent ClayCode runs share project ancestry and are not counted as independent replication.",
+  "external_primary_sources": [
+    {
+      "name": "MLIR Symbols and Symbol Tables",
+      "url": "https://mlir.llvm.org/docs/SymbolsAndSymbolTables/",
+      "use": "independent comparison for exact symbol-table uniqueness and explicit symbolic refs"
+    },
+    {
+      "name": "LLVM Language Reference",
+      "url": "https://llvm.org/docs/LangRef.html",
+      "use": "independent comparison for call target + function signature semantics"
+    },
+    {
+      "name": "WebAssembly Core Specification",
+      "url": "https://webassembly.github.io/spec/core/",
+      "use": "independent comparison for validated function instances/types"
+    },
+    {
+      "name": "Rust Reference — Names and Scopes / Function item types",
+      "url": "https://doc.rust-lang.org/reference/",
+      "use": "independent comparison for namespace resolution and distinct function item/type identity"
+    },
+    {
+      "name": "Koka row-polymorphic effect types paper",
+      "url": "https://arxiv.org/abs/1406.2061",
+      "use": "independent comparison showing effect information can live in static function types without becoming runtime authority"
+    }
+  ],
+  "internal_repo_evidence": [
+    {
+      "class": "CURRENT_NON_PROMOTED_FRONTEND_CANDIDATE",
+      "finding": "D is local measured leader but not selected/frozen; strict conflict debt exists.",
+      "ref": "D_LALR_GRAMMAR_CANDIDATE_V3.lark"
+    },
+    {
+      "class": "NON_PROMOTED_FUNCTION_SURFACE",
+      "finding": "Current binding law already demands exactly one module/symbol/signature target and fail-closed ambiguity.",
+      "ref": "CANDIDATE_FUNCTION_SURFACE.ebnf"
+    },
+    {
+      "class": "EXECUTABLE_PROXY_SUPPORTED_HYPOTHESIS",
+      "finding": "Potential effect summary is distinct from runtime effect authority.",
+      "ref": "KMP-CC-CONTROL-EFFECT-CLOSURE-20260809"
+    },
+    {
+      "class": "CURRENT_RESEARCH_CANDIDATE",
+      "finding": "Method signatures and effectful interfaces make callable identity a current compiler dependency.",
+      "ref": "DIALECT_REGISTRY_V3.clay"
+    }
+  ],
+  "local_execution": [
+    {
+      "cases": "50k mutation matrix + 20k resolver pairs + 2k recursive graphs/40k functions",
+      "class": "LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_UBUNTU_ACCEPTANCE",
+      "ref": "EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "class": "NEGATIVE_RESULT",
+      "finding": "Initial collision counter was invalid because repeat identical preimages were miscounted as hash collisions; corrected result observed 0 true collisions over 319,529 unique hash slots and 80,471 repeated identical preimages.",
+      "ref": "method_negative"
+    }
+  ],
+  "run_id": "spawn-20260809T1741p0700-claycode-callable-identity",
+  "schema_version": "1.0"
+}

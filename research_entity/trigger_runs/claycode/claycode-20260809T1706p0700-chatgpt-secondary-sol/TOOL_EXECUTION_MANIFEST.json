@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1706p0700-chatgpt-secondary-sol",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "providers": [
+    {"class": "canonical_repo", "provider": "GitHub connector", "status": "USED", "evidence": "Canonical RAE-8.8 revision 2/hash verified; ClayCode moving stack, grammar, stage workspace and branch contracts read."},
+    {"class": "executable", "provider": "local container / Python 3 / Lark 1.3.1", "status": "USED_FALLBACK", "reason": "The current ChatGPT tool surface did not expose e2b_sandbox or sandboxapi_sandbox; protocol fallback used local execution.", "artifacts": ["claycode_g9_loop_parser_experiment.py", "claycode_g9_loop_parser_experiment_results.json"]},
+    {"class": "scholarly_implementation_primary", "provider": "LLVM MLIR official documentation", "status": "USED", "sources": ["https://mlir.llvm.org/docs/DefiningDialects/", "https://mlir.llvm.org/docs/Canonicalization/", "https://mlir.llvm.org/docs/TargetLLVMIR/"]},
+    {"class": "parser_implementation_primary", "provider": "Tree-sitter official documentation", "status": "USED", "sources": ["https://tree-sitter.github.io/tree-sitter/creating-parsers/2-the-grammar-dsl.html"]},
+    {"class": "abi_capability_primary", "provider": "WebAssembly Component Model / WASI official repositories", "status": "USED", "sources": ["https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md", "https://github.com/WebAssembly/WASI/blob/main/docs/Capabilities.md"]}
+  ],
+  "limitations": [
+    "No Ubuntu target-host execution was available in this ChatGPT session; local parser evidence is not H1/H2 target-runtime evidence.",
+    "No E2B execution surface was exposed, so no E2B receipt is claimed.",
+    "No full production ClayCode evaluator/compiler exists in this run; experiment is a parser/canonicalization/effect-boundary prototype."
+  ]
+}

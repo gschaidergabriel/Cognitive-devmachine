@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-sandbox-integration-followup-20260809T2146p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T21:46:20+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "origin": {
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "task": "User-directed Frank v0.1 sandbox integration, organ/module conservation, runtime hardening and live-research feedback"
+  },
+  "evidence_policy": {
+    "current_build_gate": "SANDBOX_SUFFICIENT_FOR_NOW_BY_USER_DIRECTION",
+    "formal_target_machine_release_claim": false,
+    "hidden_chain_of_thought_persisted": false
+  },
+  "verified_remote_state": {
+    "frank_repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_commits_added_or_verified": [
+      "2c8ec51806d301e574a3160582c224446461305f",
+      "cab9dd3cac4013de24ac8d62128efcbe568382fd",
+      "678a8e80f6c6e0cd0ab21677a0feb04c9ab7c702",
+      "bf9c1fa03efe3d5bb216bdb70ecdd591646a1897",
+      "1b80ec0f55689c390dc7d8fc68d24f08d54322bf",
+      "c4218e60d90e00ff0d332ca16064d92643e9be50",
+      "d6b798f45ac1b6e1c2c0e4be381724bee02e7c15"
+    ]
+  },
+  "sandbox_results": {
+    "composite_groups": "7/7 PASS",
+    "f6_baseline": "PASS",
+    "system_integration": "8/8 PASS",
+    "self_acceptance_simulation": "SELF-01..SELF-32 = 32/32 PASS",
+    "f7_runtime_spine": "PASS: stale state fails closed before central open; doctor read-only; boot-once state join only/no model",
+    "migration_atomicity_base_regression": "PASS",
+    "migration_atomicity_fuzz": {
+      "cases": 100,
+      "late_failure_partial_schema_leaks": 0,
+      "preexisting_state_preserved": true
+    },
+    "migration_crash_recovery": {
+      "DELETE_journal": "PASS",
+      "WAL_journal": "PASS",
+      "forced_process_kill_inside_open_transaction": true,
+      "post_reopen_integrity": "ok"
+    },
+    "f6_endpoint_security": {
+      "redirect_policy": "FAIL_CLOSED",
+      "redirect_destination_received_request": false,
+      "schemes": "HTTP_HTTPS_ONLY",
+      "endpoint_userinfo": "FORBIDDEN",
+      "response_body": "BOUNDED"
+    },
+    "legacy_technical_module_conservation": {
+      "recovered_named_surfaces": 34,
+      "conservation_test": "2/2 PASS",
+      "delete_guard": "PASS",
+      "all_recovered_surfaces_have_successor_lineage": true
+    }
+  },
+  "new_negative_result": {
+    "id": "FRANK-TEST-PY313-DYNAMIC-DATACLASS-IMPORT-20260809",
+    "status": "FIXED_ON_MAIN",
+    "finding": "The newly added F6 endpoint-boundary regression dynamically loaded a dataclass-bearing adapter without first registering the module in sys.modules. Python 3.13 failed during @dataclass processing before the security regression executed.",
+    "sandbox_reproduction": "FAIL_BEFORE_SECURITY_TEST",
+    "repair": "Register dynamic module in sys.modules before exec_module and remove it on failed import.",
+    "main_fix_commit": "cab9dd3cac4013de24ac8d62128efcbe568382fd",
+    "post_fix_redirect_regression": "PASS"
+  },
+  "architecture_delta": {
+    "organ_conservation": "No historical function is deletable merely because its old process/service boundary disappears. RETAIN/FUSE/EMERGENT_DISTRIBUTE/REPLACED_WITH_LINEAGE remain implementation transformations, not permission to erase function or evidence.",
+    "technical_module_plane": "34 named legacy service/module surfaces now have an executable sandbox conservation overlay on Frank main.",
+    "runtime_migration": "Schema chains are now atomic per physical SQLite DB on Frank main; ClayGraph migrates before authoritative UnifiedDB; pair-wide crash atomicity is not claimed and divergent materialization must fail closed.",
+    "local_model_boundary": "F6 local endpoint admission now remains fail-closed across redirects and malformed endpoint forms.",
+    "f7": "Minimal doctor + boot-once runtime spine exists and is sandbox-regression compatible. It is not a complete daemon/package."
+  },
+  "open_gap": {
+    "measured_historical_services_modules": 74,
+    "currently_named_technical_surfaces": 34,
+    "explicit_cognitive_organ_lineages": 31,
+    "status": "OPEN_INVENTORY_RECONSTRUCTION",
+    "rule": "Do not fabricate unnamed legacy module identities to reach 74/74. Recover them from primary archive/process/code evidence and attach function/state/measurement/rollback lineage before declaring complete coverage."
+  },
+  "live_research_feedback": {
+    "sqlite": "Use integrity_check together with foreign_key_check; WAL is part of persistent state while active and must be handled by backup/recovery correctly.",
+    "model_serving": "Keep Frank engine-neutral behind an OpenAI-compatible local boundary; llama.cpp and vLLM currently provide compatible local serving surfaces, but engine choice remains measurement-driven."
+  },
+  "affected_rooms": [
+    "frank",
+    "harness",
+    "unifieddb",
+    "claygraph",
+    "gwt",
+    "hyperposition",
+    "emergenz",
+    "claycode",
+    "clayresearch",
+    "clay"
+  ],
+  "feedback": {
+    "frank": "Continue composing the current main runtime into one executable sandbox product. Preserve the 74-measured/34-named gap as a blocker for full legacy inventory claims, not as a blocker to fusing already-recovered functions.",
+    "harness": "Use both cognitive-organ lineage and technical-module lineage. Any fused/emergent successor must remain lesionable/readable/reconstructable in tests.",
+    "unifieddb": "Retain per-DB atomic migration and add foreign_key_check plus interruption/recovery cases to acceptance evidence.",
+    "claygraph": "Keep derived-state rebuildability and authority separation while testing whether physical collapse remains possible without losing diagnostic graph semantics.",
+    "gwt": "Count receiver use/re-entry, not broadcast presence alone. Preserve current-prompt priority and lesion/rescue handles inside a collapsed implementation.",
+    "hyperposition": "Preserve unresolved alternatives and prevent proposal state from becoming effect authority during module collapse.",
+    "emergenz": "Do not call implementation collapse emergence. Require causal lesion/rescue/re-entry and null comparisons.",
+    "claycode": "Represent successor lineage and rollback handles as typed transition contracts so old module names can disappear physically without losing testability.",
+    "clayresearch": "Propagate the Python 3.13 dynamic-import test failure as implementation-negative evidence and keep sandbox receipts separate from target-host release evidence.",
+    "clay": "Use the 7/7 composite sandbox result as a current integration gate, then continue collapsing boundaries only behind matched before/after tests."
+  },
+  "research_state_change": "IMPLEMENTATION_DELTA_AND_NEGATIVE_RESULT_NO_CANONICAL_SCIENTIFIC_PROMOTION"
+}

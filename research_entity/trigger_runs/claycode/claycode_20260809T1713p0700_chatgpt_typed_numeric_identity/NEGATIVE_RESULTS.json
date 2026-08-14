@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1713p0700_chatgpt_typed_numeric_identity",
+  "negative_results":[
+    {"id":"N-CC-NUMID-001","status":"NEGATIVE_RESULT","result":"Naive general ClayCode Int lowering through JavaScript Number is not exact.","evidence":"15676/20013 exactness mismatches in the run-local corpus."},
+    {"id":"N-CC-NUMID-002","status":"NEGATIVE_RESULT","result":"Host-native JSON float text is not stable cross-runtime semantic-hash material.","evidence":"2427/50010 Python-vs-Node text mismatches for equal parsed finite F64 bit values."},
+    {"id":"N-CC-NUMID-003","status":"NEGATIVE_RESULT","result":"JSON text can erase the sign distinction of negative zero.","evidence":"Probe parsed -0 identically as F64 bits 0x8000000000000000 in both runtimes while Node JSON.stringify emitted 0 and Python json.dumps emitted -0.0."},
+    {"id":"N-CC-NUMID-004","status":"NEGATIVE_RESULT_BOUNDARY","result":"0 F64 literal bit mismatches do not prove cross-backend floating arithmetic determinism or NaN-payload preservation.","evidence":"The experiment compared finite decimal parsing only; WebAssembly arithmetic permits some NaN nondeterminism."},
+    {"id":"N-CC-NUMID-005","status":"NOT_SELECTED","result":"No new ClayCode surface numeric primitive is justified by this run.","evidence":"The observed counterexamples are repairable at typed canonical IR and lowering boundaries in the tested domain."},
+    {"id":"N-CC-NUMID-006","status":"NEGATIVE_RESULT_BOUNDARY","result":"No BASE application acceptance item is passed.","evidence":"No production ClayCode compiler/runtime and no Andreas-target Ubuntu application was executed."},
+    {"id":"N-CC-NUMID-007","status":"COORDINATION_NEGATIVE_RESULT","result":"Two direct main-branch contents writes returned HTTP 409 during concurrent worker advancement and were not forced.","evidence":"The first experiment-source write was retried after head reread and succeeded; remaining artifacts were moved to an isolated research branch for atomic PR integration."}
+  ],
+  "preservation_rule":"These negatives remain discoverable even if a later production numeric canonicalizer resolves the implementation blocker."
+}

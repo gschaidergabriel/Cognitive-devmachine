@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "frank-bugsearch-repro-20260809T1941p0700-chatgpt-secondary",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "executed_at": "2026-08-09T19:41:00+07:00",
+  "evidence_class": "LOCAL_SYNTHETIC_REPRODUCTION_NOT_TARGET_HOST",
+  "source_report": "research_entity/research/frank/FRANK_BUGSEARCH_20260809T1941p0700.md",
+  "source_refs": [
+    "gschaidergabriel/frankv0.1:runtime/state/UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql",
+    "gschaidergabriel/frankv0.1:runtime/skills/frank_session_skill_impl.py",
+    "gschaidergabriel/frankv0.1:runtime/bridge/frank_bug_feedback.py"
+  ],
+  "experiments": [
+    {
+      "finding": "FB-05",
+      "test": "Seed an in-memory v12-shaped SQLite skill schema with a valid pre-existing custom skill whose trigger_word and normalized_trigger are both literal bug; enable foreign_keys; execute the current V13 skill/trigger insertion sequence.",
+      "result": "REPRODUCED",
+      "observed_exception": "sqlite3.IntegrityError: FOREIGN KEY constraint failed",
+      "mechanism": "INSERT OR IGNORE of skill:bug-research-feedback is skipped by the existing UNIQUE trigger_word collision, then skill_revisions attempts to reference the absent skill_id under foreign_keys=ON.",
+      "target_host_claim": false
+    },
+    {
+      "finding": "FB-02",
+      "test": "Hash two canonical FRANK_RESEARCH_BUG_REPORT payloads with the same stable bug case identity and identical captured pair/provenance except captured_at differs by one second, following current capture_pair payload/hash semantics.",
+      "result": "REPRODUCED",
+      "payload_hash_a": "2338592a37e677515f3bfde7b5c6f1ee15b6466197fe1ba0abc7722b53c442c9",
+      "payload_hash_b": "12941bd3554acd64a4098b519405816ce116c0575fe680a67fbff67f7bd9f5c9",
+      "hashes_equal": false,
+      "mechanism": "captured_at is inside the hashed payload but outside stable bug_id derivation, so repeat capture can mutate content/hash under the same bug_id.",
+      "target_host_claim": false
+    }
+  ],
+  "next_falsifiers": [
+    "Run exact current Frank migration against a disposable full v12 database carrying a pre-existing bug skill and verify the same failure or a newer repair.",
+    "Run current capture_last twice across different timestamps and assert either immutable bytes/hash or explicit revision identity.",
+    "Repeat both on Andreas Ubuntu target after repair before release PASS."
+  ]
+}

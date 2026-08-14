@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-chatgpt-secondary-claygraph-rab",
+  "internal_evidence": [
+    {
+      "class": "CURRENT_CANONICAL",
+      "ref": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+      "finding": "RAE-8.8 r2 / 04234efd... remained canonical parent during run."
+    },
+    {
+      "class": "ACCEPTED_GRAPH_BASELINE",
+      "ref": "research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json",
+      "finding": "Accepted ClayGraph remains G0 seed; fixed two-hop activation and future research list include time decay, conflict preservation and learned weighting."
+    },
+    {
+      "class": "OPEN_CLAYGRAPH_RESEARCH",
+      "ref": "claygraph G3 IBCA, commit af0f57a4d2c96f75faa594bf8b004001e25f1af5",
+      "finding": "Naive salience can become a self-confirming attractor; exact lookups can be harmed by graph propagation, motivating BYPASS/capped propagation."
+    },
+    {
+      "class": "OPEN_CLAYCODE_CANDIDATE",
+      "ref": "research_entity/claycode/g9/CLAYCODE_G9_DYNAMIC_BINDING_LATTICE_CANDIDATE.clay",
+      "finding": "Fast/slow bindings, provenance diversity, conflict/inhibition, source-echo penalties and reversible promotion are already candidate semantics; not production validated."
+    },
+    {
+      "class": "CURRENT_RUNTIME_SCHEMA",
+      "ref": "research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql",
+      "finding": "Current graph edge schema has scalar weight/confidence/provenance/admissibility but no explicit context-bound fast/slow version interval or reversal-promotion receipt."
+    },
+    {
+      "class": "CURRENT_RUNTIME_OVERLAY",
+      "ref": "research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql",
+      "finding": "Hyperrelations and projection/selection/receiver receipts exist; derived topology remains non-authoritative."
+    },
+    {
+      "class": "OPEN_FRANK_RESEARCH",
+      "ref": "frank-20260809T1726p0700-loop-base-bridge / commit 4e4484a10a6face62cf75d3dd7c8a7e5fbe22c10",
+      "finding": "Loop topology should be epoch-bound and intervention-observable; repeated loop use never promotes truth."
+    },
+    {
+      "class": "OPEN_GWT_RESEARCH",
+      "ref": "gwt R8 / commit 631c126f30331b8f9e682da8d778ebd0623c9d59",
+      "finding": "Recurrence state requires trajectory/residual/capacity context; recurrence/re-entry do not imply authority or emergence."
+    },
+    {
+      "class": "OPEN_EMERGENZ_RESEARCH",
+      "ref": "emergenz-20260809T1714p0700 / commit 526b0205d40b5c431aa541e422d302f9e0d518a2",
+      "finding": "Common-driver/source confounds and higher-order failure modes require conditioned controls, lesion/rescue, shuffle and OOD before causal promotion."
+    },
+    {
+      "class": "OPEN_HYPERPOSITION_RESEARCH",
+      "ref": "HYP-RC6 CARTS / commit 5a6f828d356c697fc6440825135b47ab6c34c42e",
+      "finding": "Fast routing is separated from slower learning-credit and live-topology promotion; candidate/intent/permit/live-ref identities remain distinct."
+    },
+    {
+      "class": "OPEN_UNIFIEDDB_RESEARCH",
+      "ref": "UD-RC2 CPPF / commit 93a87f377ade0e466674b2c7080e1575b87cc3b8",
+      "finding": "Replay integrity and selection integrity are separate; derivation/version identity and UNKNOWN dependency closure must be explicit."
+    }
+  ],
+  "external_evidence": [
+    {
+      "class": "PRIMARY_PREPRINT",
+      "ref": "Temporal Graph Networks for Deep Learning on Dynamic Graphs, arXiv:2006.10637",
+      "use": "Supports event-time-aware dynamic graph state as a technical baseline; does not validate RAB."
+    },
+    {
+      "class": "PRIMARY_RESEARCH",
+      "ref": "Continual Learning, Fast and Slow, DualNets, 2022",
+      "use": "Supports separating fast adaptation from slower consolidated knowledge as a general continual-learning design family; target transfer remains unproven."
+    },
+    {
+      "class": "PRIMARY_PREPRINT",
+      "ref": "Adaptive Memory Realignment under Concept Drift, arXiv:2507.02310",
+      "use": "Supports selective memory realignment under changing distributions rather than indiscriminate retention; not ClayGraph evidence."
+    },
+    {
+      "class": "PRIMARY_PREPRINT",
+      "ref": "Bayesian Online Change Point Prediction, arXiv:1902.04524",
+      "use": "Provides a change-point family counterbaseline for online reversal detection; RAB is not claimed superior without target comparison."
+    },
+    {
+      "class": "PRIMARY_PREPRINT",
+      "ref": "Knowledge Poisoning Attacks to Graph-Based Retrieval-Augmented Generation, arXiv:2508.04276",
+      "use": "Motivates explicit adversarial/source-corruption controls; graph connectivity and repetition are not self-authenticating."
+    },
+    {
+      "class": "PRIMARY_PREPRINT",
+      "ref": "AuthentiCity: provenance-aware multi-source knowledge graphs, 2026",
+      "use": "Supports preserving source-level provenance in multi-source graph construction; does not establish the selected diversity threshold."
+    }
+  ],
+  "synthetic_evidence": [
+    {
+      "experiment": "EXP-SPAWN-CG-RAB-001",
+      "class": "CONSTRUCTED_LOCAL_MECHANISM_TEST",
+      "replicates_per_scenario_noise": 200,
+      "finding": "RAB strongly reduced false reversal under a single correlated echo family while retaining near-EMA true reversal lag at 5-10% noise; at 20% noise a small adaptation/accuracy cost appeared."
+    },
+    {
+      "experiment": "EXP-SPAWN-CG-RAB-002",
+      "class": "CONSTRUCTED_PARAMETER_ABLATION",
+      "replicates_per_cell": 500,
+      "finding": "Minimum provenance-family diversity k=3-4 produced most echo robustness with little true-reversal lag cost in this constructed setting; k=5 began measurable adaptation penalty. Threshold is not production-calibrated."
+    }
+  ],
+  "negative_results": [
+    "RAB did not outperform a simple context-aware EMA on ordinary context bifurcation; context identity explains most of that task.",
+    "At 20% observation noise RAB had lower true-reversal accuracy and slightly greater lag than context-aware EMA.",
+    "The mechanism benchmark is hand-constructed and uses synthetic source-family identities; it is not live FRANK or target-Qwen evidence.",
+    "No claim that k=3 or k=4 is globally optimal is supported.",
+    "No accepted ClayGraph generation or canonical scientific revision is justified."
+  ],
+  "evidence_decision": "OPEN_HOLD_WITH_SYNTHETIC_MECHANISM_SUPPORT"
+}

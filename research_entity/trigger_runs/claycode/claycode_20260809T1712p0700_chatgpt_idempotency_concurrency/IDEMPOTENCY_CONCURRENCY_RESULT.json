@@ -1,0 +1,35 @@
+{
+  "probe": "ClayCode runtime-lowering idempotency transaction probe",
+  "runtime": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1"
+  },
+  "prelock_same_payload": {
+    "rounds": 80,
+    "patterns": [{"results": ["IntegrityError", "applied"], "rows": 1, "count": 80}],
+    "elapsed_s": 0.8524825439999972
+  },
+  "postlock_same_payload": {
+    "rounds": 80,
+    "patterns": [{"results": ["applied", "replay"], "rows": 1, "count": 80}],
+    "elapsed_s": 0.8263523349999957
+  },
+  "postlock_different_payload": {
+    "rounds": 80,
+    "patterns": [{"results": ["applied", "conflict"], "rows": 1, "count": 80}],
+    "elapsed_s": 0.7982618580000036
+  },
+  "uniqueness_only_different_payload": {
+    "insert_or_ignore_rowcount": 0,
+    "stored_payload_is_original": true,
+    "payload_mismatch_explicitly_classified": false
+  },
+  "interpretation": {
+    "prelock_only": "FAILS_CONCURRENT_REPLAY_CLASSIFICATION_IN_TESTED_INTERLEAVING",
+    "postlock_same_payload": "DETERMINISTIC_IDEMPOTENT_REPLAY_IN_TESTED_SQLITE_SLICE",
+    "postlock_different_payload": "DETERMINISTIC_KEY_REUSE_CONFLICT_IN_TESTED_SQLITE_SLICE",
+    "unique_constraint_alone": "INSUFFICIENT_FOR_SEMANTIC_REPLAY_CLASSIFICATION"
+  },
+  "source_sha256": "a13dce4d208f445ee90c88b254a9293117a266b0f67700aec183dd06b8db396a",
+  "result_sha256": "8ec9469b76ba11998821c699003107610337e28f55b668841dbd5534d546cae2"
+}

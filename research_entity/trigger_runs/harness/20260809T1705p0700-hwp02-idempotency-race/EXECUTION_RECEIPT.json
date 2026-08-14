@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "harness-20260809T1705p0700-hwp02-idempotency-race-probe",
+  "run_id": "20260809T1705p0700-hwp02-idempotency-race",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "artifact": "research_entity/harness/probes/hwp02_idempotency_prelock_race_probe.py",
+  "artifact_commit": "b1edeb87218703d82657c3ed3da50868a3da8881",
+  "execution_surface": "ChatGPT Python sandbox",
+  "evidence_class": "LOCAL_DETERMINISTIC_SYNTHETIC_MECHANISM_PROBE",
+  "target_implementation_executed": false,
+  "project_host_executed": false,
+  "result": {
+    "probe_pass": true,
+    "vulnerable": {
+      "both_preflight_missed": true,
+      "second_status": "ERROR",
+      "second_error_type": "IntegrityError",
+      "second_error": "UNIQUE constraint failed: events.idem",
+      "final_row_count": 1
+    },
+    "guarded": {
+      "post_lock_recheck_status": "IDEMPOTENT_REPLAY",
+      "event_id": "e1",
+      "final_row_count": 1
+    }
+  },
+  "mechanism_interpretation": "A pre-lock idempotency SELECT is not sufficient under concurrent writers. Rechecking the idempotency key after BEGIN IMMEDIATE converts the losing writer from a UNIQUE failure into deterministic replay handling.",
+  "source_code_basis": [
+    "commit:3c551698dcdcfa7a7dce01d9ea1cc3625354b9a7",
+    "commit:8ac51973ad4fe719f19ed5636f6fded6312ee0b1"
+  ],
+  "limitations": [
+    "Probe reproduces the transaction ordering, not the complete StateLedger module.",
+    "No real concurrent Ubuntu frankv0.1/H1 process execution was performed in this ChatGPT surface.",
+    "No H1 gate or live-FRANK claim is advanced."
+  ],
+  "next_required_test": "Patch/restructure the actual H1 reference StateLedger to perform idempotency validation inside the write transaction, add a two-connection/process regression, execute on the Ubuntu project host, then rerun snapshot/replay/tamper/stress suites."
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1710p0700-chatgpt-rule-surface-partition",
+  "negative_results":[
+    {"id":"NR-CC-RSP-MINIMAL-PATCH-001","status":"NEGATIVE_RESULT","proposition":"Adding relational comparison operators to the current expr grammar is sufficient to make the admitted G9 rule surface parser-closed.","result":"FALSE_IN_LOCAL_PROXY","evidence":"coverage rises only from 29/53 to 33/53 rule lines."},
+    {"id":"NR-CC-RSP-ARBITRARY-RELATION-002","status":"NEGATIVE_RESULT","proposition":"Any bare identifier may safely be accepted as a semantic relation operator without a declaration/signature gate.","result":"FAIL_OPEN_IN_ADVERSARIAL_PROXY","evidence":"5000/5000 generated nonsense relation triples are accepted by the permissive arm."},
+    {"id":"NR-CC-RSP-AUTO-NORMALIZE-003","status":"NEGATIVE_RESULT","proposition":"Every current G9 rule can be losslessly normalized to executable expression or declared PredicateIR without a semantic choice.","result":"FALSE_FOR_3_OF_53","evidence":["Needle.lowers EffectIntent -> concrete_adapter_plan","Claude_only consumes latest stack + writes task receipts","training_data personalizes_for_Andreas_when_FRANK_target && preserves_general_transfer_variants"],"implication":"These clauses must be explicitly frozen/rephrased or tied to an authoritative legacy AST before parser freeze."},
+    {"id":"NR-CC-RSP-BASE-PASS-004","status":"NEGATIVE_RESULT","proposition":"High deterministic rule-surface coverage is sufficient for CC-WP-01/02 or BASE PASS.","result":"NOT_SUPPORTED","reason":"No production parser, full-file grammar closure, type/effect checker, lowering, Ubuntu target runtime or application proof suite was completed."}
+  ]
+}

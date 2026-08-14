@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1813p0700-claycode-bootstrap-tool-staging",
+  "trigger": "spawn",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "branch_draw": {
+    "distribution_path": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "distribution_blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "rng": "Python secrets.SystemRandom / OS CSPRNG",
+    "procedure": "randrange(10000), cumulative integer intervals preserving exact percentages",
+    "raw_draw": 3703,
+    "selected_interval": [0, 4999],
+    "selected_origin_branch": "claycode"
+  },
+  "novelty_filter": {
+    "method": "recent repository commit scan plus direct reads of materially overlapping spawn reports",
+    "recent_themes_seen": [
+      "ClayCode async replay",
+      "FRANK loop evaluator/lowering",
+      "generic loop lowering reproducer",
+      "Ubuntu foreign-code effect closure",
+      "GWT adaptive recurrence",
+      "Emergenz adaptive lesion/rescue",
+      "ClayGraph reversal-aware binding"
+    ],
+    "explicitly_rejected_as_recent_duplicate": [
+      "foreign effect/authority closure",
+      "async replay semantics",
+      "FRANK loop lowering",
+      "strict LALR conflict localization"
+    ],
+    "limitation": "GitHub content search did not enumerate SPAWN_RECEIPT files directly; novelty filtering therefore used the recent commit stream plus fetched recent run reports."
+  },
+  "candidate_microdirections": [
+    {
+      "id": "C1_CANONICAL_BUILD_GRAPH_CONTENT_HASHING",
+      "question": "Can ClayCode build/package identity become deterministic under source-order and environment variation without semantic redesign?",
+      "status": "ELIGIBLE"
+    },
+    {
+      "id": "C2_TYPED_FFI_OWNERSHIP_CANCELLATION",
+      "question": "Can typed resource ownership/lifetime survive FFI plus cancellation without widening ClayCode semantics?",
+      "status": "ELIGIBLE_BUT_ADJACENT_TO_RECENT_EFFECT_AND_ASYNC_WORK"
+    },
+    {
+      "id": "C3_HTTP_ADAPTER_MINIMAL_EXECUTION_CONTRACT",
+      "question": "What is the smallest typed-host adapter contract needed for APP-02 without a semantic escape hatch?",
+      "status": "ELIGIBLE"
+    },
+    {
+      "id": "C4_BOOTSTRAP_COMPILER_TOOL_STAGING",
+      "question": "Can APP-06 and later compiler self-hosting use a staged seed->compiler->Clay tool->partial/full self-host path with reproducibility receipts, avoiding premature self-host scope and new language semantics?",
+      "status": "SELECTED"
+    }
+  ],
+  "microdirection_draw": {
+    "rng": "Python secrets.SystemRandom / OS CSPRNG",
+    "procedure": "SystemRandom.choice over the eligible candidate list after duplicate filtering",
+    "selected": "C4_BOOTSTRAP_COMPILER_TOOL_STAGING",
+    "seed_recorded": false,
+    "note": "No synthetic seed was invented; OS random state is intentionally not recoverable."
+  },
+  "random_selection_evidence_rule": "Selection probability is provenance only and does not increase evidence weight."
+}

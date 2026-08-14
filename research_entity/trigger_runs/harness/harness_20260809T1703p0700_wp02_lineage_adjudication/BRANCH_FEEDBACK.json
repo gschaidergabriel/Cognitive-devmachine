@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1703p0700_wp02_lineage_adjudication",
+  "evidence_class": "SOURCE_MIRROR_SYNTHETIC_MECHANISM_TEST_PLUS_STATIC_CURRENT_REPO_AUDIT",
+  "shared_ancestry_is_independent_replication": false,
+  "feedback": {
+    "harness": {
+      "effect": "CHALLENGE_AND_MERGE",
+      "message": "Do not mark H-WP-02 complete and do not select either current ledger lineage unchanged. Execute the new exact differential probe, then merge content identity, version identity and trace identity as distinct surfaces. Preserve A verification/recovery and B typed/domain-epoch semantics."
+    },
+    "frank": {
+      "effect": "COMPATIBILITY_CONSTRAINT",
+      "message": "H1 must preserve the live frankv0.1 transaction/epoch root as a compatibility identity or record an intentional tested divergence. Additive semantic-content and trace hashes are preferable to silently redefining the existing root."
+    },
+    "claycode": {
+      "effect": "REQUIRE_TYPED_IDENTITY_CONTRACT",
+      "message": "ClayCode/H2 needs explicit typed collection canonicalization and distinct semantic-content, state-version and execution-trace identities. One overloaded semantic_state_hash is insufficient."
+    },
+    "unifieddb": {
+      "effect": "REQUIRE_MULTI_IDENTITY_PERSISTENCE",
+      "message": "Persist semantic content identity separately from epoch/history version identity and execution/provenance trace identity. Domain epochs/read-set conflict guards should not be conflated with content equality."
+    },
+    "claygraph": {
+      "effect": "REQUIRE_IDENTITY_BINDINGS",
+      "message": "Dynamic Run ClayGraph edges should bind pre/post semantic-content hash, state-version hash and trace root separately so graph replay can distinguish same-content/different-history from true semantic divergence."
+    }
+  }
+}

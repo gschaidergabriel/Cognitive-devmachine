@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1726p0700-loop-base-bridge",
+  "negative_results": [
+    {
+      "id": "N-FRANK-LOOP-001",
+      "status": "NEGATIVE_RESULT_SYNTHETIC",
+      "result": "State-delta alone is insufficient as a convergence criterion in the constructed proxy: stalled trajectories with high residual pressure were falsely accepted as converged.",
+      "scope": "synthetic only",
+      "architectural_implication": "Residual pressure/error must remain a separate typed observable in the proposed LoopDynamicsReadout."
+    },
+    {
+      "id": "N-FRANK-BASE-002",
+      "status": "NEGATIVE_RESULT_OPERATIONAL",
+      "result": "Current ClayCode parser saturation evidence does not close CC-WP-02 because normative repository parser/canonicalizer integration, real type/effect handoff, Ubuntu execution and target-reader comparison remain absent.",
+      "scope": "current BASE gate",
+      "architectural_implication": "Do not mark parser/canonicalizer PASS from hosted proxy closure."
+    },
+    {
+      "id": "N-FRANK-LIVE-003",
+      "status": "NEGATIVE_RESULT_CAPABILITY_BOUNDARY",
+      "result": "This worker had no live Ubuntu target-machine, target Qwen-class 4B reader or H1 frozen replay execution surface.",
+      "scope": "this run",
+      "architectural_implication": "No live FRANK causal, performance, energy, memory or regulator claims can be promoted from this run."
+    },
+    {
+      "id": "N-FRANK-EMERG-004",
+      "status": "NEGATIVE_RESULT_INFERENCE_BOUNDARY",
+      "result": "Recurrence, stable cycling, GWT routing and loop integration are not by themselves evidence of causal emergence or phenomenal consciousness.",
+      "scope": "interpretation boundary",
+      "architectural_implication": "Emergence remains intervention/lesion/rescue/multiscale evidence, not a loop score."
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1813p0700_claycode_module_init",
+  "trigger": "spawn",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T18:13:00+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "rng": {
+    "engine": "Python secrets.SystemRandom backed by OS CSPRNG",
+    "selection_seed_recorded": false,
+    "seed_policy": "No seed invented or persisted for stochastic selection",
+    "branch_draw_1_to_100": 35,
+    "distribution_schema_version": "1.0",
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "selected_origin_branch": "claycode"
+  },
+  "candidate_microdirections": [
+    {
+      "id": "M1",
+      "topic": "deterministic module/package dependency-cycle semantics and initialization ordering",
+      "status": "ELIGIBLE_SELECTED",
+      "why_now": "CC-WP-07 requires modules/packages and runtime ABI; BASE requires deterministic receipts; current grammar exposes module/import syntax but not executable initialization semantics.",
+      "falsifier": "Production or proxy evidence that harmless structural import cycles cannot be separated from eager-value cycles, or that the proposed linker/init split changes valid program meaning."
+    },
+    {
+      "id": "M2",
+      "topic": "deterministic numeric canonicalization and hash stability across evaluator/lowering",
+      "status": "ELIGIBLE_NOT_SELECTED",
+      "falsifier": "Cross-backend exact numeric/hash tests show no material ambiguity under current numeric contract."
+    },
+    {
+      "id": "M3",
+      "topic": "UNKNOWN/CONFLICT/error propagation across async joins and transaction rollback",
+      "status": "FILTERED_RECENT_OVERLAP",
+      "duplicate_reason": "Too close to the fresh async replay/cancellation spawn direction."
+    },
+    {
+      "id": "M4",
+      "topic": "FFI ABI layout/version negotiation and semantic identity",
+      "status": "FILTERED_RECENT_OVERLAP",
+      "duplicate_reason": "Too close to recent foreign-effect/effect-authority closure work."
+    },
+    {
+      "id": "M5",
+      "topic": "semantic-hash/build-cache invalidation across module dependency graphs",
+      "status": "ELIGIBLE_NOT_SELECTED",
+      "falsifier": "Cache-key experiments show current artifact identity already closes all dependency invalidation cases."
+    }
+  ],
+  "novelty_review": {
+    "recent_window_checked": true,
+    "recent_topics_seen": [
+      "ClayCode async replay/cancellation",
+      "ClayCode FRANK loop evaluator-lowering",
+      "ClayCode callable identity",
+      "ClayCode adaptive learner state",
+      "ClayCode affine capability revocation",
+      "ClayCode delta equivalence",
+      "ClayCode effect authority",
+      "ClayCode foreign effect closure",
+      "ClayGraph reversal-aware binding",
+      "GWT adaptive recurrence",
+      "Emergenz adaptive lesion/rescue"
+    ],
+    "active_parser_duplicate_avoided": "Strict LALR conflict localization is already active and was not selected as a spawn microdirection."
+  },
+  "microdirection_draw": {
+    "eligible_order": ["M1", "M2", "M5"],
+    "engine": "Python secrets.SystemRandom backed by OS CSPRNG",
+    "choice_index_zero_based": 0,
+    "selected": "M1"
+  },
+  "durable_outputs": {
+    "interconnect_manifest": "6357048374d8049cfc3f26fc667f5a82607691f6",
+    "hypotheses": "28f39de4b64a0af0a83dea0233bb42f9316874ea",
+    "experiment_source": "ad6f71da5820578144e3c422c708bb79bf777589",
+    "execution_receipt": "5a4ec9a06319d26bacdb5a575fa9b2d1468fe909",
+    "evidence_manifest": "2947a7dfc60063c6c9b4e6476b4b142863f39bcd",
+    "branch_feedback": "d7eeea47651a6da218f783e670df98afbec19761",
+    "next_discriminator_work": "67d9af95bc459be7d5e29cb32970eb31cc058d49",
+    "final_report": "493d3c672584c5636ee89eaa33ae21d25a3e6d8f"
+  },
+  "selection_probability_is_not_evidence": true,
+  "training_auto_start_forbidden": true,
+  "scientific_promotion": "NONE",
+  "base_gate": "NOT_PASS",
+  "status": "COMPLETED_RESEARCH_RUN"
+}

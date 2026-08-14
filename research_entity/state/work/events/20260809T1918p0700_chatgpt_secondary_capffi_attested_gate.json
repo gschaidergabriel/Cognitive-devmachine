@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-capffi-attested-gate-20260809T1918p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T19:18:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-CAPFFI-ATTESTED-GATE-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_DISCRIMINATOR",
+    "title": "Bind ClayCode runtime capability gate to executed evidence",
+    "work_clay": "Re-read newest main before effects. For the current production ClayCode runtime/ABI/FFI candidate and validation suite, implement the smallest proof-carrying GateExecutionReceipt/admission path consistent with research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/GATE_ATTESTATION_CONTRACT_CANDIDATE_V1.json. Bind exact runtime source/artifact digest, validation-suite digest, workflow/invocation digest, semantic contract/material identities, run identity, conclusion, positive+negative check results and explicit execution scope. Prove that workflow-definition-only, queued/running, missing-receipt, stale-head, changed-runtime, changed-test, changed-workflow, failed-negative-control and hosted-CI-as-target mutations all fail closed. Keep build/test attestation strictly separate from CapabilityHandle authority. First run hosted Ubuntu as proxy regression; then run the identical digest-bound suite on Andreas' Ubuntu developer system for target-host acceptance. If GitHub artifact attestations are usable for the repository, they may augment builder provenance but must not replace the project receipt or runtime authority checks. Do not change ClayCode core syntax unless a concrete executable counterexample forces it.",
+    "reason_clay": "Current repo inspection found two same-day workflow-definition commits whose declared result receipts were absent at inspection time, including the runtime capability gate. The current runtime candidate has strong fail-closed bearer checks, but the release evidence path does not yet visibly bind successful execution to exact code/test/scope identity. The spawn synthetic discriminator produced 0 strict false accepts/rejects across 300k capability and 300k gate adversarial cases while weak name/status controls admitted large constructed-invalid classes. This subtask closes the evidence/admission boundary without reopening ClayCode semantics.",
+    "completion_clay": "A verified hosted proxy receipt exists for the exact current runtime and test blobs; a gate-admission validator rejects every stale/missing/mis-scoped mutation; a valid attestation/evidence object is explicitly rejected wherever a CapabilityHandle is required; the same exact digest-bound suite is executed on ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM; the target receipt is independently verified and only then may the relevant runtime/ABI/FFI acceptance evidence advance. No PASS is inferred from workflow existence, commit title, queued work or hosted CI alone.",
+    "evidence_need": [
+      "RUNTIME_SOURCE_OR_ARTIFACT_SHA256",
+      "VALIDATION_SUITE_SHA256",
+      "WORKFLOW_OR_INVOCATION_SHA256",
+      "EXACT_COMMIT_OR_SUBJECT_ID",
+      "EXECUTION_RUN_ID_AND_CONCLUSION",
+      "POSITIVE_AND_NEGATIVE_AUTHORITY_CHECKS",
+      "HOSTED_UBUNTU_PROXY_RECEIPT",
+      "STALE_RECEIPT_MUTATION_NEGATIVE_RESULTS",
+      "ATTESTATION_IS_NOT_CAPABILITY_NEGATIVE_TEST",
+      "ANDREAS_UBUNTU_TARGET_RECEIPT"
+    ],
+    "executor_policy": "Use the local ClayCode/build organ with repository checkout and Andreas Ubuntu developer-host access. Preserve concurrent work by append-only artifacts and reread main before writes. Do not replace current runtime capability semantics unless executable tests falsify them. Do not spend paid training/API budget. Hosted CI is proxy only. Emit WORK_EXECUTION_RECEIPT with exact evidence refs after each real execution class.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "GITHUB_READ_WRITE",
+      "LOCAL_TEST_EXECUTION",
+      "UBUNTU_DEVELOPER_HOST_EXECUTION",
+      "PRODUCTION_CLAYCODE_TOOLCHAIN"
+    ],
+    "write_scope": [
+      "tools/",
+      ".github/workflows/",
+      "research_entity/claycode/autonomous/",
+      "research_entity/claycode/base/",
+      "research_entity/state/work/events/",
+      "research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/"
+    ],
+    "dependencies": [
+      "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+      "BASE_CLAYCODE_RELEASE",
+      "research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/GATE_ATTESTATION_CONTRACT_CANDIDATE_V1.json"
+    ],
+    "invalidators": [
+      "Project owner changes Frank v0.1 target-host acceptance policy",
+      "Current runtime/ABI/FFI candidate is superseded before execution; if so rebind the work to the new exact candidate rather than executing stale blobs"
+    ],
+    "base_priority": 0.98,
+    "expected_impact": 0.94,
+    "urgency": 0.98,
+    "information_gain": 0.97,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-claycode-unicode-canon",
+  "tools": [
+    {
+      "tool": "GitHub connector",
+      "purpose": "T0 canonical boot, trigger/protocol resolution, current BASE/ClayCode state reads, recent-spawn duplicate detection, peer-branch commit scans, append-only durable run writes and remote rereads",
+      "result": "SUCCESS_WITH_ONE_CONCURRENCY_409_RECOVERED_BY_REREAD",
+      "evidence_class": "CURRENT_REPOSITORY_AND_WRITE_RECEIPTS"
+    },
+    {
+      "tool": "Python hosted execution",
+      "purpose": "Execute Unicode exact/NFC/NFKC semantic-hash proxy across generated BMP normalization corpus and explicit concatenation/surrogate counterexamples",
+      "result": "PASS_TYPED_POLICY_PROXY",
+      "evidence_class": "HOSTED_LOCAL_PROXY_NOT_NORMATIVE_CLAYCODE_OR_UBUNTU"
+    },
+    {
+      "tool": "web primary-source retrieval",
+      "purpose": "Verify current Unicode UAX #15/UAX #31 and IETF RFC 8785 normalization/canonicalization behavior",
+      "result": "SUCCESS",
+      "evidence_class": "EXTERNAL_PRIMARY_STANDARDS"
+    }
+  ],
+  "not_executed": [
+    {
+      "tool": "tools/research_interconnect_preflight.py",
+      "reason": "No repository shell/checkout exposed to this organ; manual GitHub coverage recorded and not mislabeled as official preflight PASS."
+    },
+    {
+      "tool": "normative ClayCode compiler/runtime",
+      "reason": "Current BASE parser/canonicalizer stack remains under active strict-LALR repair; no finished normative executable stack was available to this worker."
+    },
+    {
+      "tool": "Ubuntu developer-system execution",
+      "reason": "No direct project-host execution surface exposed to this ChatGPT worker."
+    }
+  ]
+}

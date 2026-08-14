@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1813p0700-claycode-bootstrap-tool-staging",
+  "origin_branch": "claycode",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "coverage_mode": "COMPACT_CURRENT_STACK_PLUS_MATERIAL_DEEP_READS",
+  "global_inputs": [
+    "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/global/RESEARCH_ACTOR_REGISTRY.json",
+    "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "research_entity/global/PROJECT_COMMAND_REGISTRY.json",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+    "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+  ],
+  "deep_reads": [
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration/FINAL_REPORT.md",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark",
+    "recent commit: 903cda18856936a1485d5d47945d9fa9ea7e24ef (foreign effect closure)",
+    "recent commit: 26ce6c22086ad748464dee01579f1739ea40e2ec (loop lowering reproducer)",
+    "recent commit: 2a9902ce861a1bc4cdae3d77ded300efa4af69b5 (strict LALR localization)",
+    "recent commit: ad1c75048f13c21061296c0c8e6dc1dfe8d46728 (current autonomous ClayCode focus)"
+  ],
+  "peer_branches": {
+    "clayresearch": {
+      "coverage": "CURRENT_STACK_PLUS_PROGRAM_NARRATIVE",
+      "relevance": "bootstrap staging is a compile/realize and supply-chain concern inside the integrated BASE target",
+      "feedback_expected": "NEW_CONSTRAINT"
+    },
+    "frank": {
+      "coverage": "CURRENT_STACK",
+      "relevance": "Frank is the later full application/handoff target; bootstrap staging must not add Frank-specific compiler semantics",
+      "feedback_expected": "NO_CHANGE"
+    },
+    "gwt": {
+      "coverage": "CURRENT_STACK",
+      "relevance": "compiler bootstrap provenance is orthogonal to workspace selection/broadcast semantics",
+      "feedback_expected": "NO_CHANGE"
+    },
+    "emergenz": {
+      "coverage": "CURRENT_STACK",
+      "relevance": "bootstrap/reproducibility evidence is not emergence evidence",
+      "feedback_expected": "NO_CHANGE"
+    },
+    "claycode": {
+      "coverage": "DEEP",
+      "relevance": "origin branch; directly touches CC-WP-06, CC-WP-10, CC-WP-11, CC-WP-14 and later self-host hardening",
+      "feedback_expected": "NEW_CONSTRAINT"
+    },
+    "hyperposition": {
+      "coverage": "CURRENT_STACK",
+      "relevance": "alternative compiler/backends may remain open but each released stage needs explicit artifact identity",
+      "feedback_expected": "NO_CHANGE"
+    },
+    "claygraph": {
+      "coverage": "CURRENT_STACK",
+      "relevance": "build/bootstrap dependency lineage may be graph-projected but graph activation cannot establish build trust",
+      "feedback_expected": "NO_CHANGE"
+    },
+    "unifieddb": {
+      "coverage": "CURRENT_STACK",
+      "relevance": "bootstrap/build receipts need durable provenance identities but no physical database decision follows",
+      "feedback_expected": "NEW_HYPOTHESIS"
+    },
+    "harness": {
+      "coverage": "RECENT_COMMIT_STREAM_PLUS_PROGRAM_NARRATIVE",
+      "relevance": "later H2/H3 differential execution depends on exact compiler/runtime identity and must distinguish source semantics from build artifact provenance",
+      "feedback_expected": "NEW_CONSTRAINT"
+    }
+  },
+  "anti_echo": {
+    "shared_ancestry_warning": "ClayCode, Frank and Harness requirements share project ancestry; cross-branch agreement is not independent scientific replication.",
+    "promotion_limit": "This run creates implementation constraints and hypotheses only; no scientific or BASE gate promotion."
+  },
+  "limitations": [
+    "No claim requiring strong peer-branch scientific promotion is made from compact CURRENT_STACK coverage alone.",
+    "Hosted local execution is not Andreas' Ubuntu developer-system target evidence."
+  ]
+}

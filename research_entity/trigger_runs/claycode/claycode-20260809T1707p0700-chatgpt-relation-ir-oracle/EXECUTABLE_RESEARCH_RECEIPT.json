@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "experiment":"typed-canonical-relation-ir-discriminator",
+  "run_id":"claycode-20260809T1707p0700-chatgpt-relation-ir-oracle",
+  "actor":"chatgpt-secondary",
+  "runtime":{"kernel":"Linux 6.18.35 x86_64","python":"3.13.5","lark":"1.3.1","execution_surface":"local container fallback"},
+  "artifact_sha256":"f32e1685382d8b2dc485e4805d85b78addd32126037322e072f5b1b99a7947c0",
+  "stdout_sha256":"280c331b6a7062bbedfb97921701301744c1d6eb4477bbd24f69ba3f7571b213",
+  "oracle":"surface -> typed canonical Relation IR -> semantic_hash",
+  "results":{
+    "semantic_equivalence":"4/4 cases hash-identical across declared_bare, disjoint_sigil and generic_call",
+    "unknown_relation_fail_closed":"3/3 candidate surfaces rejected",
+    "existing_at_ref_operand_preserved":"3/3 candidate surfaces",
+    "whitespace_semantic_hash_preservation":{"declared_bare":"3000/3000","disjoint_sigil":"3000/3000","generic_call":"3000/3000"},
+    "surface_bytes":{"declared_bare":11,"disjoint_sigil":12,"generic_call":23},
+    "local_mean_parse_lower_us":{"declared_bare":17.307635,"disjoint_sigil":17.438345,"generic_call":25.200721}
+  },
+  "semantic_boundary":"The canonical Relation node explicitly carries authority=NONE. Semantic relation resolution is not capability/effect authority.",
+  "evidence_class":"LOCAL_EXECUTABLE_PROXY",
+  "e2b":"NOT_EXECUTED_THIS_SESSION; repository capability is runtime-verified but the E2B credential/tool is not exposed on this worker surface",
+  "limitations":["not full 86-chunk N/S/D corpus","not production BASE parser","not Ubuntu developer-system target receipt","not Qwen-4B reader-cost test","micro latency is not a release benchmark"],
+  "promotion":"NONE"
+}

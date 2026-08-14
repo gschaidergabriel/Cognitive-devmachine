@@ -2,11 +2,23 @@
 
 Substantive research runs must plan and record use of applicable registered research tools. If a provider is unavailable, rate-limited, out of quota, or lacks credentials, continue automatically with the best available legacy fallback and record the reason.
 
+## Global live-refresh law
+
+`research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md` is mandatory for every research operation and every material sub-operation inside a research run.
+
+A research run may not satisfy freshness by doing one search at the beginning. Every material hypothesis round, counterhypothesis round, source-fusion round, experiment round, interpretation round, implementation round and durable feedback write must begin from a fresh current view.
+
+Required recursive research pattern:
+
+`refresh current repo/state/workers/receipts -> refresh applicable live external primary sources -> hypothesize -> search/test -> fuse -> counterhypothesis -> refresh again -> targeted search/test -> experiment -> refresh again -> analyze -> refresh again -> implement/feed back`
+
+Cache-only continuation is insufficient. For every material research operation there must be at least one fresh read/query/observation. If external knowledge is applicable, a fresh external retrieval is mandatory. If external retrieval is impossible, record `DEGRADED_LIVE_REFRESH`, use the best independent fallback, preserve the limitation, and do not promote the result as fully current.
+
 Executable enforcement:
 - `tools/research_provider_router.py plan` creates the required provider plan for the task classes.
 - `TOOL_EXECUTION_MANIFEST.json` records actual attempts, outcomes, sanitized usage/cost metadata and fallback reasons.
 - `tools/research_provider_router.py validate-manifest` detects missing required attempts.
-- `research_entity/runtime/TOOL_QUOTA_STATE.json` caches exhaustion/cooldown state to avoid repeated failed calls.
+- `research_entity/runtime/TOOL_QUOTA_STATE.json` caches exhaustion/cooldown state to avoid repeated failed calls. This quota cache may optimize routing but never substitutes for the mandatory fresh knowledge observation for the operation itself.
 
 Default research bundles:
 - scholarly: OpenAlex + arXiv; Semantic Scholar when operational;
@@ -32,7 +44,7 @@ For ClayCode specifically, an executable research loop is part of the scientific
 
 The first verified E2B ClayCode loop established a concrete research pattern:
 `language hypothesis -> executable compiler -> remote failure/counterexample -> tooling/compiler repair -> remote rerun -> semantic/provenance learning -> durable packet/branch feedback`.
-This loop is now preferred over purely synthetic compiler reasoning whenever the hypothesis can be made executable.
+This loop is now preferred over purely synthetic compiler reasoning whenever the hypothesis can be made executable. Under the live-refresh law, every arrow that begins a new material operation refreshes current repo/evidence and applicable live external knowledge again before proceeding.
 
 For experiments whose variable is local target model identity, tokenizer/runtime implementation, hidden-state/KV access, local memory, latency, energy/thermal behavior, LoRA/full-model internalization or live-FRANK integration, hosted inference does not close the local/runtime experiment. Hosted inference can close only the matching model-behavior arm. Every model result must preserve exact provider/model slug, requested target class, executed model class where known, and evidence role.
 

@@ -1,0 +1,62 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"harness-wp02-typed-identity-refinement-20260809T1659p0700",
+  "run_id":"harness_20260809T1659p0700_wp02_identity_refinement",
+  "trigger":"harness",
+  "work_package":"H-WP-02-STATE-LEDGER",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "concurrent_base_run":"research_entity/trigger_runs/harness/harness_20260809T1650p0700_wp02_state_ledger_chatgpt_secondary/FINAL_REPORT.md",
+  "status":"PASS_LOCAL_COMPONENT_REFINEMENT_NOT_H1_RELEASE",
+  "artifacts":[
+    "research_entity/harness/reference/state_ledger.py",
+    "research_entity/harness/tests/test_state_ledger.py",
+    "research_entity/harness/tests/stress_state_ledger.py"
+  ],
+  "executed_commands":[
+    "python tests/test_state_ledger.py in exact repo-layout fixture",
+    "PYTHONPATH=research_entity/harness/reference python research_entity/harness/tests/stress_state_ledger.py"
+  ],
+  "unit_tests":{"passed":15,"failed":0,"elapsed_s":0.036},
+  "stress_tests":{
+    "typed_set_permutations":5000,
+    "ordered_mutations_detected":5000,
+    "long_replay_events":1000,
+    "stale_writer_rejected":true,
+    "snapshot_tamper_detected":true,
+    "domain_epochs":{"authority":200,"gwt":200,"loop_dynamics":200,"memory":200,"world":200},
+    "semantic_state_hash":"48059484f089e9279e8d1072e299502118c9e92903638b3a786df4982cb8b393",
+    "trace_root_hash":"f8b18207ab54b754dd58c54c1342520ab0c56ea244d7c031ab95f421e90a41b5"
+  },
+  "refinement":{
+    "typed_canonicalization":"ordinary sequences remain ordered; explicit $kind=set sorts/deduplicates; explicit $kind=ordered preserves order",
+    "identity_split":["semantic_event_hash","semantic_state_hash","source/provenance binding","execution binding","trace_root_hash"],
+    "domain_epochs":true,
+    "epistemic_states":["KNOWN","UNKNOWN","CONFLICT","REVOKED"],
+    "cas_base_epoch":true,
+    "idempotency":true,
+    "deterministic_replay":true
+  },
+  "concurrency_negative_result":{
+    "observed":true,
+    "system":"GitHub contents CAS",
+    "result":"Two stale concurrent update attempts were rejected with HTTP 409; no force overwrite was performed.",
+    "interpretation":"External concurrency receipt supports fail-closed update discipline but is not evidence that the local StateLedger itself handled a GitHub race."
+  },
+  "scientific_boundary":{
+    "live_frank_evidence":false,
+    "ubuntu_target_execution":false,
+    "synthetic_component_evidence":true,
+    "shared_ancestry_with_current_claycode_and_harness_contracts":true,
+    "h_wp_02_complete":false,
+    "h1_release_pass":false,
+    "training_authorized":false
+  },
+  "next_tests":[
+    "Map semantic_state_hash and trace_root_hash onto the frozen frankv0.1 state_epochs/semantic_transactions/snapshot surface.",
+    "Run exact golden-trace differential replay against live-baseline transitions on the Ubuntu developer host.",
+    "Crash-inject between state write, receipt publication and epoch advance.",
+    "Bind pre/post semantic hashes plus exact provenance/execution receipts into dynamic Run ClayGraphs.",
+    "Use the same typed identity contract in H2 and reject false equality for ordered/effect semantics."
+  ]
+}

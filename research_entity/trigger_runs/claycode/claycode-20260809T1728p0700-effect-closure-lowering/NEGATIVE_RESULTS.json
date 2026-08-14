@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1728p0700-effect-closure-lowering",
+  "negative_results": [
+    {
+      "id": "N-CC-PREFLIGHT-CLAYRESEARCH-DRIFT-001",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Current research_interconnect_preflight.py enumerates `clay` while current trigger registry uses `clayresearch`; its fail-closed registry-set invariant is stale.",
+      "scope": "research infrastructure only; not ClayCode semantic evidence",
+      "action": "repair preflight priority/alias tables or derive priorities from renamed current registry"
+    },
+    {
+      "id": "N-CC-PRODUCTION-EVIDENCE-ABSENT-001",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Hosted proxy evidence does not satisfy production parser/canonical IR, E2B, target Ubuntu, native/WASM lowering, or mandatory APP proof gates.",
+      "action": "keep all BASE WPs OPEN and GENERAL_PURPOSE_GATE NOT_PASS"
+    },
+    {
+      "id": "N-CC-AUTHORITY-FROM-TEXT-001",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Textual capability naming did not authorize the tested host effect; runtime token absence failed closed.",
+      "action": "preserve external authority boundary"
+    }
+  ]
+}

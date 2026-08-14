@@ -1,0 +1,55 @@
+{
+  "schema_version":"1.0",
+  "created_at":"2026-08-10T07:13:00+07:00",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"go",
+  "entity_role":"RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "fresh_main_before_write":"492a75bcb105fb0f4470c2d8c4d7f4448bde189d",
+  "affected_work_packages":["CC-WP-05-EVALUATOR","CC-WP-06-COMPILER-LOWERING"],
+  "source_refs":[
+    {"path":"tools/claycode_base_compiler.py","git_blob":"5d01dfeb77b1bece85433cd09af6ea3427a5f995"},
+    {"path":"tools/claycode_base_compiler_validation.py","git_blob":"afdd61599629b4a4e06ae8e8db7f01959ff828f8"},
+    {"path":"research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark","git_blob":"a63b7ce112fbe6acf1890fef24a204f3863a5292"}
+  ],
+  "leading_hypothesis":"The current reference evaluator and native C lowering are observationally equivalent for the pure typed Boolean subset, including runtime-error behavior of nested numeric expressions.",
+  "strongest_counterhypothesis":"The evaluator eagerly evaluates both operands while generated C uses native &&/|| short-circuiting, allowing a right-hand runtime error to disappear when the left operand decides the Boolean result.",
+  "source_observation":{
+    "reference_evaluator":"eval_function schedules right and left operand evaluation before _eval_binary for every binary node",
+    "c_lowering":"_render_c_expr maps &&/|| to native C &&/|| expression operators",
+    "current_validation_gap":"the existing 1000-case native differential exercises mix(Int,Int) arithmetic and does not include Boolean error-shadow operands"
+  },
+  "experiment":{
+    "class":"BOUNDED_OUT_OF_BOX_ERROR_SHADOW_TRANSLATION_DIFFERENTIAL",
+    "method":"Use the current evaluator order and exact current C integer-division guard semantics in a minimal C11/GCC differential harness; poison only the right Boolean operand with division-by-zero.",
+    "cases":[
+      {"case":"true || (1/0>0)","reference":"DIVISION_BY_ZERO","native_c":"true / exit 0","equivalent":false},
+      {"case":"false || (1/0>0)","reference":"DIVISION_BY_ZERO","native_c":"CC_INT_DIV_ZERO / exit 65","equivalent":true},
+      {"case":"false && (1/0>0)","reference":"DIVISION_BY_ZERO","native_c":"false / exit 0","equivalent":false},
+      {"case":"true && (1/0>0)","reference":"DIVISION_BY_ZERO","native_c":"CC_INT_DIV_ZERO / exit 65","equivalent":true}
+    ],
+    "mismatch_count":2,
+    "case_count":4,
+    "result":"CURRENT_REFERENCE_AND_C_BACKEND_NOT_OBSERVATIONALLY_EQUIVALENT_ON_BOOLEAN_ERROR_SEMANTICS"
+  },
+  "adjudication":"SUPPORTED_COMPILER_TRANSLATION_COUNTEREXAMPLE",
+  "semantic_freeze_interpretation":"Do not silently change ClayCode language semantics. The WP01 freeze says implementation defects should be repaired below the semantic layer by default and semantic reopening requires an executable counterexample plus explicit superseding manifest. This counterexample is sufficient to block equivalence claims, but the selected evaluation-order oracle must be explicitly bound before production patching.",
+  "architecture_delta":"CANDIDATE: move C lowering toward sequencing/A-normal form so operand evaluation and runtime-error order can be preserved deterministically instead of relying on host-language short-circuit/evaluation-order behavior.",
+  "test_delta":[
+    "Add Boolean error-shadow cases to native differential validation.",
+    "Test both error suppression and error precedence when both operands can fail.",
+    "Require evaluator/native equality on value, error class, and observable exit/error boundary before WP05/WP06 promotion.",
+    "Do not count the existing 1000 arithmetic random cases as coverage for evaluation-order semantics."
+  ],
+  "promotion":"NONE",
+  "counts_as_wp05_pass":false,
+  "counts_as_wp06_pass":false,
+  "counts_as_andreas_target_acceptance":false,
+  "out_of_box_experiment_count_for_this_go_cycle":1,
+  "rollback":"Receipt-only research delta; no frozen semantics, compiler source, Frank Harness or effect authority changed.",
+  "training":"NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant":"model output != execution authority"
+}

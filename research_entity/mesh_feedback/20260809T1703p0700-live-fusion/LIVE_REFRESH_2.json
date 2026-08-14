@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "refresh_id":"live-fusion-20260809T1703p0700-refresh2",
+  "created_at":"2026-08-09T17:05:00+07:00",
+  "parent_feedback":"research_entity/mesh_feedback/20260809T1703p0700-live-fusion/LIVE_REFRESH_1.json",
+  "parent_commit":"ef0eb699556e4e3cc5f75deda99f7244f6f852ae",
+  "observed_head":"73ae2483c9567e2737f2293da96ce8380e7d67ed",
+  "scientific_promotion":"NONE",
+  "material_refresh":{
+    "R4_SOURCE_PARSE_IR_LOWERING_CHAIN_BREAK":{
+      "effect":"CHALLENGE",
+      "source_ref":"research_entity/trigger_runs/claycode/claycode_20260809T1702p0700_chatgpt_source_chain_integrity/EXECUTABLE_RESEARCH_RECEIPT.json",
+      "evidence_class":"LOCAL_SYNTHETIC_EXECUTION_PLUS_REPO_SOURCE_DIFF_NOT_TARGET_UBUNTU",
+      "negative_results":["N-CC-SOURCE-CHAIN-BYPASS-007","N-CC-EMIT-RETURN-SEMANTIC-LEAK-008"],
+      "finding":"The prior loop-dynamics lowering fixture was not admitted end-to-end by the current grammar: the fixture used a named cycle header not accepted by current/minimal-repair grammar, and its Python lowering treated emit as terminating return although no such explicit G9 emit-terminator semantics was established.",
+      "materiality":"In a 20000-case discriminator, return-lowering versus nonterminating-emit behavior differed in 17693 cases. Therefore prior loop-dynamics results remain useful as manually constructed behavior/mechanism fixtures, but they do not establish ClayCode source-to-target semantic preservation.",
+      "evidence_downgrade":"Any fused statement treating those loop-dynamics proxy runs as compiler-chain evidence is superseded. Only their controlled dynamics/mechanism observations survive at the narrower fixture evidence class.",
+      "new_gate_rule":"BASE evidence requires an unbroken, content-addressed source -> production parse -> canonical typed IR -> checked lowering -> executable target -> replay receipt chain. Manual/generated target equivalence is insufficient when the source is not admitted or lowering adds semantics.",
+      "counterhypothesis":"The observed source/fixture differences could be limited to research fixture syntax and not affect the eventual frozen production grammar/lowering after frontend closure.",
+      "falsifier":"After frontend closure, the same representative programs pass production parse/type/effect/lowering and differential execution with no unexplained semantic divergence."
+    },
+    "R5_SECOND_GENERATION_HYPOTHESES":{
+      "effect":"NO_CHANGE",
+      "reason":"New transformed ClayResearch hypotheses are hypothesis generation, not independent evidence. They remain candidates for later discrimination and do not modify scientific claim status in this refresh."
+    }
+  },
+  "branch_receipts":{
+    "clayresearch":{"effect":"REVISE","delta":"Treat CTK/conformance-suite direction as strengthened by the source-chain failure: the suite must prove every stage, not merely compare handwritten source and generated behavior. No second-generation hypothesis counts as replication."},
+    "frank":{"effect":"NO_CHANGE","delta":"No FRANK architecture claim changes. Loop-dynamics mechanism remains OPEN; compiler evidence is downgraded until an admitted end-to-end ClayCode chain exists."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT claim status change; any future ClayCode GWT receipt must be traceable through the full admitted compiler chain."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"No emergence claim status change; do not use the downgraded loop-dynamics lowering as independent implementation evidence."},
+    "claycode":{"effect":"CHALLENGE","delta":"BASE frontend/source-chain integrity is a hard evidence requirement. Resolve grammar closure and emit/control semantics, then require production parser-to-runtime differential receipts. Preserve the current negative results as regression oracles."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No hypothesis promotion; future Hyperposition ClayCode witnesses need full source-chain receipts."},
+    "claygraph":{"effect":"NO_CHANGE","delta":"No graph claim change; GraphDelta/Ref witnesses in BASE conformance must derive from admitted parsed identity rather than handwritten lowering assumptions."},
+    "unifieddb":{"effect":"NO_CHANGE","delta":"No persistence claim change; ViewDelta/transaction witnesses in BASE conformance must carry full source-chain identity."},
+    "harness":{"effect":"REVISE","delta":"H2 differential oracle must compare full source/parse/typed-IR/lowering/execution trace, not only final behavior/state. Add the named-cycle and emit-termination failures to regression fixtures."}
+  },
+  "global_controls":[
+    "Research Entity != Frank",
+    "Ubuntu-only Frank v0.1 target",
+    "Frank self-Harness authority = PROPOSAL_ONLY",
+    "shared ancestry != independent replication",
+    "negative evidence is preserved and can downgrade earlier proxy claims",
+    "canonical revision remains unchanged"
+  ],
+  "research_write_result":"MATERIAL_NEGATIVE_EVIDENCE_DOWNGRADE_WRITTEN_TO_ALL_9_BRANCHES"
+}

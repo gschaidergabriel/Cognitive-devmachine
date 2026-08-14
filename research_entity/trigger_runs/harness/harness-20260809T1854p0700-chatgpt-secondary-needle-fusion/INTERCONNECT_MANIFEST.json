@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.1",
+  "run_id": "harness-20260809T1854p0700-chatgpt-secondary-needle-fusion",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "work_package": "H-WP-04-NEEDLE-BOUNDARY",
+  "coverage_mode": "ALL_REGISTERED_BRANCHES_PLUS_LIVE_WORKERS_PLUS_ARCHAEOLOGY_PLUS_CURRENT_UPSTREAM_RUNTIME",
+  "program_stage_at_final_mesh_read": "BASE_CLAYCODE_RELEASE",
+  "branch_coverage": [
+    {
+      "branch": "clayresearch",
+      "status": "CURRENT_STACK_INDEXED",
+      "refs": [
+        "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+        "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"
+      ],
+      "decision": "Needle remains the sole intentional non-Clay semantic subsystem; no semantic-authority expansion."
+    },
+    {
+      "branch": "frank",
+      "status": "DEEP_CURRENT_PLUS_ARCHAEOLOGY",
+      "refs": [
+        "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
+        "Google Drive: Needle-Gesamtkonzept.txt",
+        "Google Drive: KONZEPT-ZEROSHOT.md",
+        "Google Drive: UEBERGABE-P3-2026-08-04.txt",
+        "Google Drive: registry.json"
+      ],
+      "decision": "Preserve later zero-shot directive; retain historical single-shot/reflex/fallback semantics while treating obsolete finetune/registry-in-weights sections as superseded."
+    },
+    {
+      "branch": "gwt",
+      "status": "CURRENT_STACK_INDEXED",
+      "refs": ["research_entity/global/RAE_GWT_MICROKERNEL.clay", "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+      "decision": "Needle route remains pre-workspace proposal data. Rejections/fallback are observable trace outcomes, not workspace truth."
+    },
+    {
+      "branch": "emergenz",
+      "status": "CURRENT_STACK_INDEXED",
+      "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md", "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "decision": "No emergence claim is promoted from routing, confidence or retrieval behavior."
+    },
+    {
+      "branch": "claycode",
+      "status": "CURRENT_WORKSPACE_REREAD",
+      "refs": ["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json", "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"],
+      "decision": "CC-WP-01 is now PASS; H2 will need typed equivalents for ingress preflight, runtime identity, decision receipt, fallback and zero-authority effect boundary."
+    },
+    {
+      "branch": "hyperposition",
+      "status": "CURRENT_STACK_INDEXED",
+      "refs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "decision": "Retriever candidates and confidence surfaces remain alternatives until matched interventions select one; no early collapse."
+    },
+    {
+      "branch": "claygraph",
+      "status": "CURRENT_STACK_INDEXED",
+      "refs": ["research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"],
+      "decision": "Represent runtime/toolset/retrieval/fallback provenance as diagnostic edges only; never convert graph activation into authority."
+    },
+    {
+      "branch": "unifieddb",
+      "status": "CURRENT_STACK_INDEXED",
+      "refs": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],
+      "decision": "Persist provenance needed for replay: runtime/checkpoint/tokenizer/toolset identities, preflight, retrieval candidates/scores, raw-output hash, validator outcome/reasons and gold-set version."
+    },
+    {
+      "branch": "harness",
+      "status": "DEEP_CURRENT_LIVE_WORKER_REREAD",
+      "refs": ["research_entity/harness/HARNESS_WORKSPACE.json", "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md"],
+      "decision": "H-WP-02 remains actively claimed by another worker and was not duplicated. H-WP-04 remains OPEN while this run extends its executable component evidence."
+    }
+  ],
+  "external_runtime_coverage": {
+    "needle_source_repo": "cactus-compute/needle",
+    "needle_drive_checkout_commit": "6fdddb874dd6f46dabeea88d0bf239fc4a2474c4",
+    "needle_current_main_delta": "one commit; README.md + setup.bat only; no inspected model/training/tokenizer/constraint source changes",
+    "cactus_repo": "cactus-compute/cactus",
+    "areas_inspected": [
+      "Needle constraints",
+      "tool JSON parsing/serialization",
+      "Needle response parsing/sanitization",
+      "Tool RAG/BM25/RRF",
+      "generic confidence/handoff",
+      "Needle prompt/history formatting"
+    ]
+  },
+  "anti_echo": "Executable wrapper/source results remain shared-ancestry component evidence unless the intervention adds a discriminating counterexample. External literature and independent runtime implementations remain separately labeled.",
+  "identity_lock": "Research Entity researches/builds/tests Frank; Research Entity != Frank; Frank self-harness authority remains proposal-only.",
+  "result": "PREFLIGHT_AND_FINAL_MESH_REREAD_COMPLETE"
+}

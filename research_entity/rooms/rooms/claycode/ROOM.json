@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "room_id": "claycode",
+  "created_at": "2026-08-09T09:51:09Z",
+  "config": {
+    "trigger": "claycode",
+    "kind": "domain_research",
+    "trigger_loyalty": "PINNED",
+    "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"
+  },
+  "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+  "mandatory_worker_directives": [
+    "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+  ],
+  "worker_execution_rule": "Every substantive ClayCode-room worker must load and obey all mandatory_worker_directives before material hypothesis freeze, experiment planning, durable write and completion. When materially relevant executable tests are accessible, the worker executes them, records receipts/counterexamples, recomputes the next highest-information test and continues until experimentally saturated or genuinely blocked.",
+  "persistent_chief": false
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "tools":[
+    {
+      "tool":"GitHub connector",
+      "status":"SUCCESS_RW",
+      "uses":["canonical boot","peer-branch reads","Frank baseline inspection","recent-commit/live-worker cross-read","append-only run artifacts","reference validator commit"],
+      "limits":"No direct target-host process execution through GitHub connector."
+    },
+    {
+      "tool":"local Linux container",
+      "status":"SUCCESS",
+      "uses":["Python 3.13.5 self-test","py_compile","targeted mutation/property sweep","64-level recurrence stress","cross-implementation normalization test"],
+      "evidence_class":"LOCAL_SYNTHETIC_EXECUTION",
+      "limits":"Not Andreas' Ubuntu developer host and not live Frank."
+    },
+    {
+      "tool":"web search",
+      "status":"SUCCESS",
+      "source_policy":"Primary/official technical sources only for technical claims",
+      "sources":[
+        {
+          "class":"PRIMARY_PROJECT_DOCUMENTATION",
+          "title":"FoundationDB Debugging in FDB",
+          "url":"https://github.com/apple/foundationdb/wiki/Debugging-in-FDB",
+          "use":"deterministic simulation reproducibility may depend on OS/build environment"
+        },
+        {
+          "class":"PRIMARY_PROJECT_ENGINEERING_DOCUMENTATION",
+          "title":"TigerBeetle Simulation Testing For Liveness",
+          "url":"https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/",
+          "use":"distinct safety/liveness simulation modes and fault-state design"
+        },
+        {
+          "class":"PRIMARY_PROJECT_ENGINEERING_DOCUMENTATION",
+          "title":"TigerBeetle A Descent Into the Vortex",
+          "url":"https://tigerbeetle.com/blog/2025-02-13-a-descent-into-the-vortex/",
+          "use":"deterministic simulation paired with intentionally nondeterministic full-system testing"
+        },
+        {
+          "class":"PRIMARY_SPECIFICATION",
+          "title":"OpenTelemetry Tracing API / Propagators API",
+          "url":"https://opentelemetry.io/docs/specs/otel/trace/api/",
+          "use":"immutable trace/span context, parent/link identities and cross-process propagation as observability analogue"
+        }
+      ]
+    }
+  ],
+  "unavailable_or_not_used":[
+    {"tool":"repository-local research_interconnect_preflight.py","reason":"no checked-out Clay repository execution surface in hosted worker"},
+    {"tool":"Andreas Ubuntu target execution","reason":"not exposed to current worker"},
+    {"tool":"paid model inference/training","reason":"not needed and not authorized"}
+  ],
+  "secret_handling":"No credentials or secrets written to artifacts.",
+  "status":"COMPLETE_FOR_CURRENT_RUN_EVIDENCE"
+}

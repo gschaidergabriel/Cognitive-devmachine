@@ -1,0 +1,9 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1657p0700-g9-self-conformance",
+  "negative_results":[
+    {"id":"NR-CC-20260809-MINIMAL-REPAIR-INCOMPLETE","status":"NEGATIVE_RESULT","proposition":"Adding only relational operators and if_stmt is insufficient for current G9+dialect self-conformance.","evidence":"58 rule corpus: 38 pass / 20 fail after previous minimal repair; interface corpus: 6/9 pass."},
+    {"id":"NR-CC-20260809-OPTIONAL-FALLBACK-UNDEFINED","status":"NEGATIVE_RESULT","proposition":"receipt? or residual cannot currently be accepted as a canonical executable construct from grammar alone.","evidence":"Expression parse failure plus observable eager/lazy fallback divergence."},
+    {"id":"NR-CC-20260809-PRECEDENCE-UNSPECIFIED","status":"NEGATIVE_RESULT","proposition":"Current flat expression grammar does not uniquely determine precedence/associativity for general-purpose execution.","evidence":"1+2*3 yields 9 under flat left fold and 7 under multiplication precedence; current G9 contains mixed comparison/boolean operators."}
+  ]
+}

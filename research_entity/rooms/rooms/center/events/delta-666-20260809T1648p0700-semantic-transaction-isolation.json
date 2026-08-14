@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "event_type": "CROSS_ROOM_DELTA",
+  "event_id": "delta-666-20260809T1648p0700-semantic-transaction-isolation",
+  "created_at": "2026-08-09T16:48:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "origin_trigger": "666",
+  "field_id": "field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "targets": [
+    "claycode",
+    "unifieddb",
+    "harness"
+  ],
+  "priority": "HIGH",
+  "summary": "Exact concurrency enumeration found fractured snapshots in 10/20 legal 3-field schedules and silent lost updates in 4/6 read-modify-write schedules; version/snapshot guarded transactions eliminate the tested anomalies.",
+  "actionable_deltas": {
+    "claycode": "Treat snapshot/read-set/write-set/commit-conflict/retry receipts as CC-WP-07/09 runtime ABI and conformance obligations. Preserve language semantics unless implementation yields a real counterexample.",
+    "unifieddb": "Test transaction/effect atomicity, snapshot consistency and replay under concurrent authoritative updates; keep derived epoch-tagged state separable.",
+    "harness": "Add race/replay tests for fractured snapshots, lost updates, stale-state effect commit, serialization retry and crash boundaries."
+  },
+  "evidence_refs": [
+    "research_entity/emergent_fields/fields/field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6/EXPERIMENT_RESULTS.json",
+    "research_entity/emergent_fields/fields/field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6/FIELD_STATE.json"
+  ],
+  "report_ref": "research_entity/trigger_runs/666/666-20260809T1648p0700-chatgpt-secondary-sti/FINAL_REPORT.md",
+  "epistemic_status": "OPEN_SUPPORTED_WORKING_HYPOTHESIS",
+  "promotion": "NOT_PROMOTED"
+}

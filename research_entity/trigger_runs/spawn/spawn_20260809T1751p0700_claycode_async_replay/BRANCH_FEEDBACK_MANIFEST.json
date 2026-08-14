@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn_20260809T1751p0700_claycode_async_replay",
+  "feedback":[
+    {"branch":"claycode","type":["NEW_CONSTRAINT","NEW_HYPOTHESIS"],"delta":"For WP-09/APP-04 implement deterministic-by-default effect noninterference plus explicit TaskSpawn/ChoiceReceipt/CancelTransition/EffectIntent/EffectOutcome IR/runtime contracts. Do not add surface syntax absent a production counterexample."},
+    {"branch":"harness","type":["NEW_CONSTRAINT","IMPLEMENTATION_COUNTEREXAMPLE"],"delta":"H-WP-11/13/14 should perturb actual interleavings, not only replay a fixed event order. Add choice/cancel/effect-intent receipts and compare alternate scheduling against semantic hashes. Existing stale-epoch rejection remains useful but does not prove concurrency determinism."},
+    {"branch":"frank","type":["NEW_CONSTRAINT"],"delta":"Frank runtime task/effect/re-entry behavior needs stable semantic task and effect-intent identity distinct from physical thread/attempt identity. Frank itself receives no Harness mutation authority; this is Research Entity feedback."},
+    {"branch":"gwt","type":["NEW_CONSTRAINT"],"delta":"Workspace/re-entry traces that involve concurrent readiness should carry scheduler/choice receipts so timing/order artifacts are not silently interpreted as GWT mechanism. No GWT mechanism claim changed."},
+    {"branch":"emergenz","type":["NEW_CONSTRAINT"],"delta":"Causal intervention/replay experiments should control or record scheduler choices; otherwise race-order variation can confound lesion/rescue and interaction estimates. No emergence promotion follows from replayability."},
+    {"branch":"hyperposition","type":["NEW_CONSTRAINT"],"delta":"Preserve semantic task/choice identity while physical schedules/topologies vary. Schedule nondeterminism is not itself Hyperposition evidence."},
+    {"branch":"claygraph","type":["NO_CHANGE","NEW_CONSTRAINT"],"delta":"No graph truth/activation change. Dynamic run graphs should distinguish semantic task/choice/effect edges from physical worker/schedule trace edges."},
+    {"branch":"unifieddb","type":["NEW_CONSTRAINT"],"delta":"Persistence/query schemas should keep semantic task ID, choice receipt, cancellation transition, effect intent, execution attempt and effect outcome as linked but non-conflated identities; dedup decisions must use semantic intent identity where supported."},
+    {"branch":"clayresearch","type":["NEW_HYPOTHESIS"],"delta":"System-level integration should prefer deterministic-by-default semantic regions plus explicit receipted nondeterminism over universal deterministic scheduling. This reduces hidden scheduler state without forcing one physical scheduling policy."}
+  ],
+  "cross_spawn_feedback":[
+    {"target":"spawn_20260809T174614p0700_harness_lowering_semantics","delta":"Lowering-preservation tests should include TaskSpawn/ChoiceReceipt/CancelTransition/EffectIntent/EffectOutcome fields once represented in ClayCode IR."},
+    {"target":"spawn-20260809T1742p0700-claycode-affine-cap-revocation","delta":"EffectIntent should reference fresh effect-time capability binding/revocation state; cancellation/retry must not reuse stale authority merely because semantic intent identity is stable."},
+    {"target":"spawn_20260809T1742p0700_chatgpt-secondary_3bd0fa03","delta":"Incremental delta/frontier semantics should not erase or reorder explicit ChoiceReceipts across replay epochs."}
+  ],
+  "promotion":"NONE",
+  "base_gate":"NOT_PASS"
+}

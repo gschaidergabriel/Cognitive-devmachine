@@ -1,0 +1,44 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WE-20260809T1653p0700-BASE-CROSS-BRANCH-CONFORMANCE",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T16:53:00+07:00",
+  "payload": {
+    "work_id": "WORK-BASE-CROSS-BRANCH-SEMANTIC-CONFORMANCE-001",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CLAYRESEARCH_EVIDENCE_GATED_HANDOFF",
+    "title": "Build BASE cross-branch semantic conformance suite",
+    "work_clay": "Implement an executable ClayCode BASE conformance suite against the current admitted G9 semantics. Include one minimal semantic witness for clayresearch, Frank, GWT, Emergenz, Hyperposition, ClayGraph, UnifiedDB, Harness, and the adaptive visual state contract. Exercise parse -> canonicalize -> semantic hash -> typed IR -> type/effect/protected-flow check -> reference evaluator -> lowering -> runtime receipt -> replay. Compare separate existing IR lowering against a candidate small normalized Causal Transition header plus typed domain payloads. Do not add or change user-facing ClayCode semantics unless an executable witness proves current G9 cannot represent/lower the required behavior without an opaque host escape hatch.",
+    "reason_clay": "Current BASE gate has all 14 work packages OPEN. clayresearch run clayresearch-20260809T1653p0700-chatgpt-secondary-ctk produced 60 first-generation hypotheses, 12 transformed hypotheses and five synthetic discriminating tests. Highest-information next step is executable semantic convergence rather than another architecture memo. The run also found a composition-sensitive Safe-Effect counterexample and a density-dependent incremental recomputation qualifier that should become conformance cases.",
+    "completion_clay": "Complete when the suite runs on the Ubuntu-targeted BASE toolchain, every witness has a reproducible receipt, failures are localized to parser/canonical IR/type-effect-flow/evaluator/lowering/runtime layers, CTK-vs-separate-IR comparison has measured correctness/cost evidence, and any proposed surface semantic change is backed by an executable counterexample. This work event itself does not grant CLAYCODE_RELEASE_GATE PASS.",
+    "evidence_need": [
+      "research_entity/trigger_runs/clayresearch/clayresearch-20260809T1653p0700-chatgpt-secondary-ctk/FINAL_REPORT.md",
+      "research_entity/trigger_runs/clayresearch/clayresearch-20260809T1653p0700-chatgpt-secondary-ctk/HYPOTHESIS_MATRIX.md",
+      "research_entity/trigger_runs/clayresearch/clayresearch-20260809T1653p0700-chatgpt-secondary-ctk/HYPOTHESIS_GENERATION_2.md",
+      "research_entity/trigger_runs/clayresearch/clayresearch-20260809T1653p0700-chatgpt-secondary-ctk/EXPERIMENT_RESULTS.json",
+      "research_entity/trigger_runs/clayresearch/clayresearch-20260809T1653p0700-chatgpt-secondary-ctk/SAFE_EFFECT_GEOMETRY_DELTA.md",
+      "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"
+    ],
+    "executor_policy": "Prefer claude-code-lead/local repository execution because compiler/runtime construction and Ubuntu execution receipts require local build/test capability. Re-read latest work revision, BASE workspace and ClayCode stack before effects. Preserve existing G9 semantics by default. A fresh verified local execution receipt outranks this research hypothesis for exact implementation effects.",
+    "required_capabilities": ["repository_read","repository_write","compiler_build","test_execution","ubuntu_runtime"],
+    "write_scope": ["research_entity/claycode","research_entity/state/work","research_entity/trigger_runs/claycode","tests"],
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE active",
+      "current admitted ClayCode stack remains G9 V3 or successor is explicitly reconciled",
+      "no newer execution receipt already closes equivalent conformance work"
+    ],
+    "invalidators": [
+      "CLAYCODE_RELEASE_GATE becomes PASS with equivalent receipts",
+      "a newer ClayCode generation supersedes G9 and explicitly resolves these witnesses",
+      "a verified local worker already owns/finishes an equivalent non-replication task",
+      "an executable counterexample proves the proposed CTK comparison is irrelevant or malformed"
+    ],
+    "base_priority": 0.92,
+    "expected_impact": 0.95,
+    "urgency": 0.90,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

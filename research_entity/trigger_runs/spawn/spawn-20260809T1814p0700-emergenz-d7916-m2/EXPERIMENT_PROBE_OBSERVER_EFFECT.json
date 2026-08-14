@@ -1,0 +1,31 @@
+{
+  "experiment_id":"EXP-SPAWN-EM-PROBE-EFFECT-001",
+  "seed":202608091814,
+  "evidence_class":"CHATGPT_HOSTED_SYNTHETIC_PROOF_ONLY",
+  "target_host_claim":false,
+  "case_a_reentry_deadline":{
+    "N":200000,"deadline_ms":3.0,"arrival_mean_ms":2.72,"arrival_sd_ms":0.34,"uninstrumented_success":0.794885,
+    "overheads_ms":{
+      "0.00":{"success":0.794885,"relative_loss":0.0},
+      "0.03":{"success":0.76852,"relative_loss":0.03316831994565248},
+      "0.08":{"success":0.721445,"relative_loss":0.09239072318637281},
+      "0.15":{"success":0.64963,"relative_loss":0.18273712549614085},
+      "0.30":{"success":0.47542,"relative_loss":0.4019009039043383},
+      "0.45":{"success":0.30916,"relative_loss":0.611063235562377}
+    },
+    "mode_proxies":{"uninstrumented":0.794885,"sampling_proxy":0.76852,"armed_no_emit_proxy":0.721445,"inline_enabled_proxy":0.47542}
+  },
+  "case_b_competition_order":{
+    "N":200000,"base_latency_mean_ms":10.0,"base_latency_sd_ms":0.2,"probe_delay_mean_ms":0.06,"probe_delay_sd_ms":0.015,
+    "baseline_a_win_rate":0.499605,"asymmetric_a_win_rate":0.33527,"asymmetric_winner_flip_rate":0.164335,"symmetric_a_win_rate":0.499415,"symmetric_winner_flip_rate":0.03368
+  },
+  "case_c_effect_estimate":{"no_reentry_success_proxy":0.18,"unobserved_truthful_reentry_effect":0.6148849999999999,"inline_observed_truthful_reentry_effect":0.29542,"observed_to_unobserved_effect_ratio":0.4804475633655075},
+  "sensitivity_grid":{
+    "2.2":{"uninstrumented_success":0.9902,"relative_loss":{"0.03":0.0021409816198747836,"0.08":0.007846899616239087,"0.15":0.018703292264189035,"0.30":0.06114926277519692}},
+    "2.4":{"uninstrumented_success":0.96168,"relative_loss":{"0.03":0.008641128025954506,"0.08":0.025517843773396564,"0.15":0.05635970385159307,"0.30":0.15624740038266363}},
+    "2.6":{"uninstrumented_success":0.87839,"relative_loss":{"0.03":0.021186488917223575,"0.08":0.06176072131968718,"0.15":0.12832568676783665,"0.30":0.3030089140359066}},
+    "2.8":{"uninstrumented_success":0.72066,"relative_loss":{"0.03":0.042086420780950755,"0.08":0.11517220325812445,"0.15":0.22434990147919953,"0.30":0.46465739738572975}},
+    "3.0":{"uninstrumented_success":0.49994,"relative_loss":{"0.03":0.07026843221186542,"0.08":0.18746249549945987,"0.15":0.34026083129975593,"0.30":0.6242549105892706}}
+  },
+  "interpretation_boundary":"Synthetic timing model only. Probe overhead values are illustrative parameters, not measured FRANK, Linux ftrace, eBPF, DTrace, or Ubuntu target-host overheads."
+}

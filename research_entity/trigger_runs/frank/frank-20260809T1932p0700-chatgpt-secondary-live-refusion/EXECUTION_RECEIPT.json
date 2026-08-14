@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1932p0700-chatgpt-secondary-live-refusion",
+  "actor": "chatgpt-secondary",
+  "evidence_class": "LOCAL_SANDBOX_PROXY_PLUS_REPOSITORY_READBACK",
+  "target_ubuntu_acceptance": false,
+  "experiments": [
+    {
+      "id": "incremental-semantic-fabric-proxy",
+      "design": "Deterministic sparse 5000-node dependency DAG; 200 single-source mutations; incremental affected-closure recomputation compared with full recomputation.",
+      "result": {"exact_matches":200,"trials":200,"median_affected_fraction":0.0004,"p95_affected_fraction":0.011,"max_random_affected_fraction":0.526,"worst_early_hub_affected_fraction":0.5772},
+      "interpretation": "Supports incremental semantics under sparse locality while falsifying any unconditional claim that incremental updates are always cheap. Update-amplification tripwires are required.",
+      "scope_guard": "Synthetic Python proxy; not UnifiedDB/ClayGraph production performance evidence."
+    },
+    {
+      "id": "loop-controller-safety-fuzz",
+      "design": "200000 randomized normalized states over state delta, unresolved pressure, marginal utility, cost, instability and recurrence budget; checked safety invariants only.",
+      "result": {"trials":200000,"stalled_called_converged_violations":0,"budget_overrun_violations":0,"high_instability_continue_violations":0},
+      "interpretation": "The typed regime split can be implemented without confusing low-delta/high-pressure stagnation with convergence in this proxy. This does not show task-quality superiority.",
+      "scope_guard": "Policy sanity proxy, not H1 utility evidence."
+    },
+    {
+      "id": "v7-strict-frontend-recheck",
+      "design": "Independent strict LALR construction attempt against the fetched V7 grammar using Lark 1.3.1 semantics, followed by repository readback of the expected V7 receipt path and the pinned CI workflow.",
+      "result": {"local_strict_build":"FAIL_PROXY","local_error_class":"GrammarError_SHIFT_REDUCE_terminal_IN_after_dotted_relation","expected_receipt_path":"research_entity/claycode/autonomous/V7_FRONTEND_IDENTITY_RECEIPT.json","expected_receipt_readback":"NOT_FOUND","workflow_runtime_pin":"lark[interegular]==1.3.1"},
+      "interpretation": "Creates a current adjudication requirement: do not rely on the CLOSED narrative alone. Reproduce on current main with the repository-native probe before grammar mutation or package promotion.",
+      "scope_guard": "Independent local proxy reconstructed from fetched UTF-8 source; not an Andreas-Ubuntu receipt and not sufficient by itself to reopen a production defect as confirmed."
+    }
+  ],
+  "negative_results": [
+    "No fixed recurrence policy was promoted.",
+    "No claim that incremental semantic maintenance is universally low-cost survived the hub-amplification test.",
+    "No ClayCode core semantic redesign was justified by this run.",
+    "No target Ubuntu execution was performed by this worker.",
+    "No H1, H2, H3, BASE, emergence or consciousness promotion is claimed."
+  ]
+}

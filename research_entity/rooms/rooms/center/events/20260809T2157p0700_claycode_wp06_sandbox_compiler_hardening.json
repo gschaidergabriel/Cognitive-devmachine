@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T2157p0700_claycode_wp06_sandbox_compiler_hardening",
+  "room_id": "center",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:57:00+07:00",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["claycode","harness","frank","center"],
+  "affects_claims": ["CC-WP-03-IR-TYPES","CC-WP-05-EVALUATOR","CC-WP-06-COMPILER-LOWERING","CC-WP-10-GENERAL-APP-SUITE","CC-WP-11-FUZZ-CONFORMANCE","CC-WP-13-HARNESS-HANDOFF"],
+  "artifact_refs": [
+    "tools/claycode_base_compiler.py",
+    "research_entity/claycode/base/receipts/CC_WP06_SANDBOX_C11_SEMANTIC_HARDENING_20260809T2155p0700.json",
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V16_GENERIC_DOTTED_LINEAR_LOOKAHEAD.lark",
+    "research_entity/claycode/base/receipts/CC_WP02_V16_SANDBOX_20260809T2140p0700.json"
+  ],
+  "payload": {
+    "evidence_class": "EXECUTABLE_SANDBOX_PRODUCTION_COMPILER_REPAIR",
+    "compiler_final_commit": "c86763969b157c797eb66a07644f43172676dd6b",
+    "compiler_final_blob": "959e6b1832f9e351a29cadbd8e86bb62c18faa15",
+    "finding": "Sandbox execution against the byte-exact current production compiler exposed multiple concrete C11/evaluator semantic and -Werror counterexamples. Fixes now cover demand-driven helpers, entry call-closure lowering, warning-clean parameters, checked Int64 arithmetic, recursive-cycle rejection, strict typed CLI decoding, literal bounds, String content equality and deterministic Real divide-by-zero.",
+    "validation": "37/37 combined targeted checks + 20000/20000 random checked-Int64 evaluator cases + 180/180 native C int64 boundary cases PASS under -std=c11 -O2 -Wall -Wextra -Werror.",
+    "negative_results_preserved": [
+      "original unconditional cc_int_div helper failed 8/9 representative non-div programs under -Werror",
+      "unreachable static functions and zero-arg argv produced -Werror failures",
+      "unbounded Python Int diverged from int64_t native arithmetic",
+      "String == used pointer rather than content semantics in C",
+      "CLI silently clamped/accepted invalid typed inputs",
+      "INT64_MIN and nonfinite Real literals had invalid C-lowering paths"
+    ],
+    "next_discriminator": "Do not mark packages PASS. On clean registered Ubuntu/current-main, run V16 strict frontend with interegular, then production compiler/evaluator/C11 composite differential and FRANK provenance-bound fixture. Route any target counterexample to the smallest responsible WP instead of weakening acceptance.",
+    "gate_effect": "NO_PASS_CHANGE",
+    "authority_invariant": "model output != execution authority"
+  }
+}

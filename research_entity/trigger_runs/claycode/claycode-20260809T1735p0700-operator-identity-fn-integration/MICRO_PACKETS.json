@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1735p0700-operator-identity-fn-integration",
+  "packets":[
+    {"packet_id":"MP-CC-D-LEX-HYPHEN-20260809","domains":["claycode","harness"],"epistemic_class":"EXECUTABLE_NEGATIVE_RESULT","status_hint":"NEGATIVE_RESULT","claim":"The current D candidate ordinary NAME class admits hyphen, so tight subtraction/arrow text can tokenize differently from spaced equivalents.","evidence_refs":["EXECUTABLE_RESEARCH_RECEIPT.json"],"confidence":"HIGH_LOCAL","verification_requirement":"production parser + complete corpus","falsifier":"normative canonicalizer proves spacing-invariant typed IR without lexer/operator repair"},
+    {"packet_id":"MP-CC-OPERATOR-TREE-ID-20260809","domains":["claycode","harness"],"epistemic_class":"EXECUTABLE_MECHANISM_RESULT","status_hint":"OPEN_SUPPORTED","claim":"Default Lark tree construction filters unnamed literal operators; ClayCode must explicitly retain operator identity before canonical semantic hashing.","evidence_refs":["EXECUTABLE_RESEARCH_RECEIPT.json","https://lark-parser.readthedocs.io/en/stable/tree_construction.html"],"confidence":"HIGH_FOR_LARK_MECHANISM_MEDIUM_FOR_FINAL_DESIGN","verification_requirement":"normative AST/canonicalizer implementation","falsifier":"production AST retains exact operators via another deterministic mechanism"},
+    {"packet_id":"MP-CC-FN-CONTEXTUAL-INTEGRATION-20260809","domains":["claycode","frank","harness"],"epistemic_class":"EXECUTABLE_RESEARCH_CANDIDATE","status_hint":"OPEN","claim":"A contextual typed expression-bodied fn declaration can be added to the repaired D proxy without perturbing tested legacy G9/Dialect tree identity while preserving exact static call binding.","evidence_refs":["EXECUTABLE_RESEARCH_RECEIPT.json","FRANK_CLAYCODE_GOODMAN_REVIEW.json"],"confidence":"MEDIUM_LOCAL","verification_requirement":"production parser/type-effect/compiler/Qwen-reader/Ubuntu","falsifier":"production integration causes ambiguity/drift or existing constructs provide equivalent closure"}
+  ],
+  "promotion":"NONE"
+}

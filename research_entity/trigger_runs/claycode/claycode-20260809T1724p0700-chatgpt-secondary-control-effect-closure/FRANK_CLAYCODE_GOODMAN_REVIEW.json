@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.1",
+  "protocol":"research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id":"claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure",
+  "latest_frank_run":"frank-20260809T1726p0700-loop-base-bridge",
+  "latest_frank_architecture_artifact":null,
+  "shared_ancestry_is_not_replication":true,
+  "reviews":[
+    {
+      "claim_id":"FRANK-CC-CONTROL-EFFECT-AUTHORITY-SEPARATION-20260809",
+      "frank_statement":"FRANK's recurrent loop-of-loops requires bounded executable control flow while all optional effects remain behind an external capability/effect gateway; recurrence decisions never become effect authority.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FINAL_REPORT.md","commit:56920faa53f9231946e0b331431c2bae1b24c93b"],
+      "ancestry_families":["FRANK_C9_and_loop_base_bridge","GWT_R7","Harness_H-WP-02","ClayCode_G9_function_parser_lineage","ClayResearch_SafeEffect"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Static ClayCode effect declarations/transitive effect summaries can themselves serve as runtime execution authority, so a distinct fresh permit/capability identity is unnecessary.",
+      "falsifier":"A production ClayCode compiler/runtime on the Ubuntu target safely executes the mandatory app/FRANK suite, including delayed recurrence and revoke/regrant/FFI escape tests, with no false allow/deny while collapsing effect summary and runtime authority into one mechanism.",
+      "independent_checks":[
+        {"source_class":"PRIMARY_SPEC","source":"WebAssembly Core Specification 3.0","finding":"structured block/loop/if/call control is explicit validated execution semantics rather than model interpretation"},
+        {"source_class":"PRIMARY_COMPILER_SPEC","source":"LLVM Language Reference","finding":"call/control and memory-effect information are explicit compiler/IR properties and call-site information can refine function effects"},
+        {"source_class":"PRIMARY_RESEARCH","source":"Daan Leijen 2014 Koka row-polymorphic effect types","finding":"potential side effects can be represented in function types and inferred compositionally"}
+      ],
+      "adversarial_checks":[
+        {"check":"STATIC_VALID_WITHOUT_RUNTIME_PERMIT","setup":"effectful wrapper has correct transitive static effect closure; runtime permit is empty","result":"REJECTED EffectDenied"},
+        {"check":"STATIC_VALID_WITH_MATCHING_RUNTIME_PERMIT","setup":"same wrapper; runtime permit contains log.write","result":"EXECUTED result=7"},
+        {"check":"OMIT_TRANSITIVE_EFFECT","setup":"delete one actually inferred effect from caller declaration across 20,000 randomized graphs","result":"0 false accepts"}
+      ],
+      "verdict":"REFINED",
+      "reason":"Independent language/compiler sources support explicit structured control and compositional potential-effect semantics, while the executable adversarial proxy rejects the stronger FRANK-derived assumption that static effect meaning may double as execution authority. The reusable result is therefore a generic ClayCode IR/type-effect contract with a separate fresh runtime permit boundary, not a FRANK-specific primitive.",
+      "claycode_action":"integrate_as_open_candidate",
+      "affected_claycode_artifacts":["CC-WP-03-IR-TYPES","CC-WP-04-TYPE-EFFECT","CC-WP-05-EVALUATOR","CC-WP-06-COMPILER-LOWERING","CC-WP-07-RUNTIME-ABI-FFI"]
+    }
+  ]
+}

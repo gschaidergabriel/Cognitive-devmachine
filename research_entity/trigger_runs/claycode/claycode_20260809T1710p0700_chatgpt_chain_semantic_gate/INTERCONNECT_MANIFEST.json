@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1710p0700_chatgpt_chain_semantic_gate",
+  "actor":"chatgpt-secondary",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "registry_basis":"research_entity/global/RESEARCH_TRIGGER_REGISTRY.json current boot",
+  "coverage_complete":true,
+  "branches":[
+    {"branch":"clayresearch","latest_used":["092ecdb7af624f3c751adbaa0fbb6680b7d8705a","dab56dd342fdb27527af5472bf3bbdd6b3a091d1"],"effect":"REVISE","delta":"CTK convergence asks for parse->canonicalize->semantic hash->typed IR->checker->lowering->runtime receipt->replay. Current run refines this to joined ancestry plus independent semantic validation."},
+    {"branch":"frank","latest_used":["ba0ab9ebadf62596b54bcd3f7e6c262ed3ca39dc"],"effect":"REFINE","delta":"C9 typed causal admission remains compatible; current run supports semantic identity != execution/contract identity but does not independently validate all authority assumptions."},
+    {"branch":"harness","latest_used":["7177a1ef1dd9bed449e0c9b64ae2a5553bbcfd11"],"effect":"NEW_INTERFACE","delta":"TurnTraceEnvelope runtime validator is complementary to compiler provenance chain. Do not collapse compiler/build ancestry receipts into runtime causal trace receipts."},
+    {"branch":"claygraph","latest_used":["af0f57a4d2c96f75faa594bf8b004001e25f1af5"],"effect":"SUPPORT","delta":"Stable parsed Ref identity and provenance/selection lineage depend on deterministic frontend identity; graph activation remains non-authoritative."},
+    {"branch":"unifieddb","latest_used":["193b18851090ba5bd6df36f520a599c64c26ca91"],"effect":"SUPPORT","delta":"Typed semantic identity remains distinct from concrete representation/provenance identity. Compiler receipts should expose both."},
+    {"branch":"gwt","latest_used":["04f260bba372600821fcd972d3eeee66d59a8314","de4c4e9855cb479d573d1eced72201d524211322"],"effect":"NO_CHANGE","delta":"Future lowering receipts must preserve addressability/delivery/reconstruction/uptake/use/outcome/re-entry identities; no new GWT syntax follows from this run."},
+    {"branch":"hyperposition","latest_used":["5a6f828d356c697fc6440825135b47ab6c34c42e","de4c4e9855cb479d573d1eced72201d524211322"],"effect":"NO_CHANGE","delta":"No new topology primitive. Stable canonical semantics are prerequisite for meaningful topology/trace comparison."},
+    {"branch":"emergenz","latest_used":["c3f9dda83ae3ed8fa3b24b636245a2cfcb6e3d10","de4c4e9855cb479d573d1eced72201d524211322"],"effect":"NO_CHANGE","delta":"Compiler receipt integrity is instrumentation/provenance, not emergence or consciousness evidence."},
+    {"branch":"claycode","latest_used":["ec2f17077333955cfdabe6c64868d597e7e734e3","1a17bba3c835520baff2ac8fa432749ba2165d8e","93530b2e1bcba06d1ea1fc93bad794e3414708b7","97c7e78c54b269741ba27e369f78709f41ed4bbf","9c4edcff309d8f4cbbe52a940a0a3c6762c423df","5044f1fbf32db64110566207c15f2d4b7e85d76e"],"effect":"REVISE","delta":"Frontend closure remains blocker. Linked stage hashes are audit evidence but cannot substitute for translation/semantic validation."}
+  ],
+  "cross_branch_contradictions":[{"id":"CC-CHAIN-VS-SEMANTICS","statement":"A fully self-consistent provenance chain can attest a semantically wrong compiler result.","resolution":"Keep provenance integrity and semantic preservation as orthogonal gates."}],
+  "evidence_boundary":"Repo-native/shared-ancestry material is not counted as independent replication. Local synthetic execution is not target Ubuntu evidence."
+}

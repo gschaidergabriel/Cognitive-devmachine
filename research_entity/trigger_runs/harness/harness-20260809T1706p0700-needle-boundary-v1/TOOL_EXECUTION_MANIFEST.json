@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1706p0700-needle-boundary-v1",
+  "actor_id":"chatgpt-secondary",
+  "tools_used":[
+    {"tool":"GitHub fetch/search/commit inspection","purpose":"canonical boot, live-worker reread, architecture/Needle evidence assembly","result":"PASS"},
+    {"tool":"isolated Python execution","purpose":"unit/regression execution for NeedleBoundaryV1","result":"PASS_12_OF_12"},
+    {"tool":"isolated Python mutation stress","purpose":"10k registry-order permutations plus 5k invalid/malicious route attempts","result":"PASS_ZERO_UNEXPECTED_ACCEPTS"},
+    {"tool":"GitHub create_file","purpose":"claim, code, tests, manifests and receipts","result":"PASS"}
+  ],
+  "unavailable_or_not_used":[
+    {"capability":"target Ubuntu FRANK runtime execution","reason":"not exposed to this hosted worker"},
+    {"capability":"exact historical Needle tokenizer/model bundle","reason":"not present in the execution environment"},
+    {"capability":"paid model training","reason":"forbidden and unnecessary for this gate"}
+  ],
+  "authority_note":"Repository writes are Research Entity changes about Frank; they are not Frank self-Harness changes and do not grant Frank Harness authority."
+}

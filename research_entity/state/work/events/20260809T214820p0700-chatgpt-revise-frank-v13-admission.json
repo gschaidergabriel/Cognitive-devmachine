@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-event:20260809T214820p0700:chatgpt:revise-frank-v13-admission",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:48:20+07:00",
+  "payload": {
+    "work_id": "work:frank-v01-v13-schema-admission-reconcile",
+    "reason_clay": "clay{new_evidence:{migration_chain_atomicity_commits:[1b80ec0f55689c390dc7d8fc68d24f08d54322bf,c4218e60d90e00ff0d332ca16064d92643e9be50,d6b798f45ac1b6e1c2c0e4be381724bee02e7c15]}; do_not_duplicate:atomicity_fix_and_test; remaining_conflict:{loader_includes:V13,manifest_version:12.0,truth_gate_expected:12.0,harness_requires:research_bug_reports}; freshness_head:d6b798f45ac1b6e1c2c0e4be381724bee02e7c15}",
+    "work_clay": "clay{remaining_work:[determine_intended_admitted_UnifiedDB_version,make_V13_update_or_explicit_patch_semantics_consistent,reconcile_APPLIED_SCHEMA_MANIFEST_REQUIRED,reconcile_repo_truth_gate_required_schema_and_tables,run_full_disposable_migration+harness+self-tests+truth_gate_mismatch_controls]; preserve_existing_atomicity:true; canonical_migration:FORBIDDEN_WITHOUT_RESEARCH_ENTITY_AUTHORIZATION}",
+    "completion_clay": "clay{done_if:[one_consistent_admission_contract,full_disposable_chain_PASS,harness_research_bug_reports_PASS,truth_gate_accepts_only_intended_current_schema,atomicity_regression_still_PASS]; not_done_if:[reimplements_already_completed_atomicity_work]}",
+    "status": "READY"
+  }
+}

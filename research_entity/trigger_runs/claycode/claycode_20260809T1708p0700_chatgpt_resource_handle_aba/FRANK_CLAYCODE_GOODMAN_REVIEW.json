@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1708p0700_chatgpt_resource_handle_aba",
+  "assumptions":[
+    {
+      "assumption":"Physical resource identity must remain distinct from semantic program/decision/capability identities and stale handles must fail closed after resource drop/reallocation.",
+      "ancestry":"Prior Clay/FRANK/ClayCode foundry work already proposed distinct physical resource identity; this shared project ancestry is not counted as independent replication.",
+      "independent_evidence":["local ABA executable discriminator","POSIX descriptor deallocation/reuse semantics","WebAssembly Component Model runtime-managed typed resource handles with own/borrow lifetime rules"],
+      "verdict":"REFINED",
+      "refinement":"Require opaque lifetime-checked resource identity at the Runtime ABI/FFI boundary; do not mandate generation tags in ClayCode source or core syntax.",
+      "counterhypothesis":"Backend-native opaque handles or non-reusing handle tables can satisfy the same stale-use invariant without explicit generation tags.",
+      "falsifier":"Production Ubuntu backend demonstrates that raw integer resource handles cannot resolve stale references after drop/reuse under exhaustive and fuzzed lifetime transitions, without hidden ambient authority or aliasing."
+    }
+  ],
+  "anti_echo_status":"PASS_MANUAL_EVIDENCE_REVIEW_TOOL_NOT_EXECUTED",
+  "promotion":"NONE"
+}

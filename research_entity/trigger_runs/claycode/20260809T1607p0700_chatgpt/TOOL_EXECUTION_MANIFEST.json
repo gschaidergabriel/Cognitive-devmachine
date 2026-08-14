@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1607p0700_chatgpt",
+  "actor": "chatgpt-secondary",
+  "tools": [
+    {
+      "surface": "GitHub connector",
+      "uses": ["T0 canonical verification","trigger/protocol resolution","current ClayCode/mesh grounding","run-artifact writes","post-write reread"],
+      "status": "SUCCESS"
+    },
+    {
+      "surface": "OpenAI local Python sandbox",
+      "uses": ["grammar self-conformance experiment","patched grammar parse experiment","capability checker seed experiment"],
+      "status": "SUCCESS"
+    },
+    {
+      "surface": "web search",
+      "uses": ["current primary-source WebAssembly Component Model/WIT/WASI/Wasmtime backend research"],
+      "status": "SUCCESS",
+      "source_class_policy": "PRIMARY_TECHNICAL_SOURCES_ONLY"
+    },
+    {
+      "surface": "E2B",
+      "uses": ["preferred executable ClayCode runtime experiment surface per protocol"],
+      "status": "NOT_EXPOSED_TO_CURRENT_CHATGPT_WORKER",
+      "counted_as_runtime_evidence": false
+    },
+    {
+      "surface": "SandboxAPI",
+      "status": "NOT_EXPOSED_TO_CURRENT_CHATGPT_WORKER",
+      "counted_as_runtime_evidence": false
+    }
+  ],
+  "external_primary_sources": [
+    {
+      "source": "WASI.dev WASI 0.3 release overview",
+      "url": "https://wasi.dev/releases/wasi-p3",
+      "finding": "WASI 0.3.0 released 2026-06-11 and moves async into the Component Model with async func, stream<T>, future<T>."
+    },
+    {
+      "source": "WASI.dev roadmap",
+      "url": "https://wasi.dev/roadmap",
+      "finding": "WASI 0.3 support is documented for Wasmtime 43+."
+    },
+    {
+      "source": "WebAssembly/WASI releases",
+      "url": "https://github.com/WebAssembly/WASI/releases",
+      "finding": "WASI 0.3 changes network authority representation from a threaded network resource in 0.2 to world imports and reorganizes HTTP worlds."
+    },
+    {
+      "source": "WebAssembly Component Model WIT specification",
+      "url": "https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md",
+      "finding": "WIT defines versionable packages/interfaces/worlds/imports/exports suitable for a typed component ABI."
+    },
+    {
+      "source": "Bytecode Alliance Wasmtime",
+      "url": "https://github.com/bytecodealliance/wasmtime",
+      "finding": "Wasmtime is an actively maintained standards-oriented WebAssembly runtime with WASI support."
+    }
+  ]
+}

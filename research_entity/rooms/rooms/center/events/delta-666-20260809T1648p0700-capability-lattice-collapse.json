@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "event_id": "delta-666-20260809T1648p0700-capability-lattice-collapse",
+  "created_at": "2026-08-09T16:48:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "origin_field": "EF-20260809-003-CAPABILITY-LATTICE-COLLAPSE",
+  "run_id": "666-20260809T1648p0700-chatgpt-secondary-clc",
+  "event_type": "CROSS_BRANCH_RESEARCH_DELTA",
+  "targets": ["claycode", "gwt", "emergenz", "harness", "clayresearch"],
+  "summary": "Synthetic 2x2 counterexample shows individually authorized source-read and sink-send effects can compose into an unauthorized end-to-end flow if Assembly provenance is lost. Existing Safe-Effect Geometry already contains authority non-amplification and information-flow confinement, so the delta is a concrete composition test/receipt obligation rather than a new semantic layer.",
+  "actionable": [
+    "ClayCode CC-WP-04: preserve protected-source labels and capability provenance through composition",
+    "ClayCode CC-WP-07: validate effective end-to-end authority at external commit boundary",
+    "ClayCode CC-WP-09: define provenance/label behavior across async queues/shared Assembly state",
+    "ClayCode CC-WP-11: fuzz pairs/chains of locally authorized effects for composite violations",
+    "Harness: add confused-deputy and source-to-sink composition matrix across FFI/subprocess/tools/generated code",
+    "GWT/Emergenz: retain factorial interaction and matched replay as non-authoritative observability for composite effect paths"
+  ],
+  "evidence": {
+    "class": ["CURRENT_REPO_CONTRACT", "SYNTHETIC_EXECUTABLE_TEST"],
+    "experiment": "EXP-CLC-001",
+    "local_gate_omega": 1,
+    "joint_gate_omega": 0
+  },
+  "claim_promotion": "NONE",
+  "negative_result": "No evidence supports a new permanent branch or broad ClayCode semantic redesign; current Safe-Effect foundation already expresses the target invariants.",
+  "report_ref": "research_entity/trigger_runs/666/666-20260809T1648p0700-chatgpt-secondary-clc/FINAL_REPORT.md"
+}

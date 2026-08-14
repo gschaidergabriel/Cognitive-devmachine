@@ -1,0 +1,37 @@
+{
+  "event_id": "work-create:hwp02-idempotency-race-local-fix:20260809T1705p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:05:00+07:00",
+  "payload": {
+    "work_id": "HWP02-IDEMPOTENCY-RACE-LOCAL-FIX",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "HARNESS_NEGATIVE_RESULT",
+    "title": "Fix H-WP-02 concurrent idempotency race on Ubuntu",
+    "work_clay": {
+      "target": "research_entity/harness/reference_state_ledger.py",
+      "task": "Revalidate latest H-WP-02 lineage, then move or repeat idempotency identity/fingerprint validation inside the BEGIN IMMEDIATE write transaction so a losing concurrent duplicate writer returns deterministic idempotent replay instead of a storage UNIQUE failure. Add a real two-connection/process regression and preserve stale-epoch, tamper, snapshot/restore and deterministic-hash behavior.",
+      "do_not": ["Do not mark H1 PASS.","Do not weaken UNIQUE constraints to hide the race.","Do not treat synthetic ChatGPT probe evidence as project-host execution.","Do not change Frank from inside Frank authority; this is Research Entity implementation work."]
+    },
+    "reason_clay": {
+      "negative_result": "research_entity/trigger_runs/harness/20260809T1705p0700-hwp02-idempotency-race/NEGATIVE_RESULT.json",
+      "probe": "research_entity/harness/probes/hwp02_idempotency_prelock_race_probe.py",
+      "current_tested_lineage": "commit:3c551698dcdcfa7a7dce01d9ea1cc3625354b9a7",
+      "existing_execution_receipt": "research_entity/harness/H_WP_02_STATE_LEDGER_EXECUTION_RECEIPT.json"
+    },
+    "completion_clay": {
+      "required": ["Patch actual latest H-WP-02 implementation after rereading current head.","Add concurrent same-idempotency regression against actual StateLedger.","Return deterministic replay/conflict semantics inside transaction boundary.","Run existing H-WP-02 tests plus new concurrency test on Ubuntu project host.","Rerun stress/snapshot/tamper suites.","Write exact local execution receipt with commit, host, commands and results."]
+    },
+    "evidence_need": ["VERIFIED_LOCAL_EXECUTION_RECEIPT","actual implementation diff","test output","concurrency regression output"],
+    "executor_policy": {"prefer":"CLAUDE_CODE_LOCAL_ORGAN","reason":"Local Ubuntu build/test/debug is the discriminating next step."},
+    "required_capabilities": ["tool:git","tool:python3"],
+    "write_scope": ["research_entity/harness/reference_state_ledger.py","tests/test_reference_state_ledger.py","tests/test_reference_state_ledger_concurrency.py","research_entity/harness/","research_entity/trigger_runs/harness/20260809T1705p0700-hwp02-idempotency-race/"],
+    "dependencies": [],
+    "invalidators": ["A newer verified commit already fixes the exact race and passes equivalent project-host regression before claim.","The current H-WP-02 lineage is superseded by a different adjudicated implementation."],
+    "base_priority": 0.92,
+    "expected_impact": 0.9,
+    "urgency": 0.8,
+    "information_gain": 0.9,
+    "status": "READY"
+  }
+}

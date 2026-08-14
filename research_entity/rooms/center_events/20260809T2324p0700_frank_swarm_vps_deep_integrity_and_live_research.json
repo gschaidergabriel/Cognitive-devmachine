@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "event_id": "frank-swarm-vps-deep-integrity-live-research-20260809T2324p0700",
+  "created_at": "2026-08-09T23:24:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "project": "FRANK v0.1",
+  "owner_directive": "Default to swarm operation for substantive FRANK work: fresh web research, Research Center exchange, parallel build, sandbox tests, real VPS tests, bug repair, retest, and cross-worker fusion; distribute material new evidence to other workers dynamically.",
+  "routing": ["frank", "claycode", "gwt", "emergenz", "harness", "unifieddb", "hyperposition", "claygraph"],
+  "real_vps_evidence": {
+    "host": "digital-retina",
+    "runner": "clay",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "python": "3.12.3",
+    "receipt_path": "runtime/vps_integrity/latest.json",
+    "receipt_observed": "2026-08-09T16:22:44.724936+00:00",
+    "gate_count": 18,
+    "pass_count": 18,
+    "fail_count": 0,
+    "status": "PASS",
+    "release_claim": false,
+    "tested_commit": "de0cc12105e9439d94e19abb729929efd5fdf51c"
+  },
+  "bugs_closed_in_real_vps_loop": [
+    {
+      "id": "VPS-SQLITE-TRANSACTION-PRAGMA",
+      "symptom": "SQLite OperationalError: Safety level may not be changed inside a transaction",
+      "root_cause": "journal_mode/synchronous storage PRAGMAs from base schema were executed inside BEGIN IMMEDIATE",
+      "repair": "apply transaction-unsafe storage PRAGMAs before the atomic DDL chain; retain per-physical-DB all-or-nothing schema transaction",
+      "verification": "transaction replay, deep integrity, session skill/status, migration atomicity all PASS on VPS"
+    },
+    {
+      "id": "VPS-DIRECT-CANONICAL-DB-OPEN",
+      "symptom": "repo static integrity rejected runtime/bridge/frank_bug_feedback.py",
+      "root_cause": "bridge directly opened canonical SQLite instead of admitted central state gateway",
+      "repair": "route bug feedback through apply_current_schema.open_unified authority/path gate",
+      "verification": "repo_static_integrity PASS on VPS"
+    },
+    {
+      "id": "VPS-MIGRATION-TEST-SOURCE-FORMAT-COUPLING",
+      "symptom": "atomicity regression failed after harmless source reformatting",
+      "root_cause": "test asserted minified source-string spelling rather than migration semantics",
+      "repair": "assert generated BEGIN/COMMIT program and observed graph-before-UnifiedDB call order",
+      "verification": "schema_migration_atomicity PASS on VPS"
+    },
+    {
+      "id": "VPS-LOCAL-MODEL-STREAM-RESET",
+      "symptom": "ConnectionResetError during MAX+1 response-boundary test on Linux/Python 3.12",
+      "root_cause": "single large response read exposed platform-specific connection-close/reset behavior",
+      "repair": "bounded chunk reads + deterministic fail-closed transport normalization; standards-framed chunked oversize regression added",
+      "verification": "local_model_endpoint_boundary PASS on VPS"
+    },
+    {
+      "id": "VPS-PYTEST-MISSING",
+      "symptom": "python3 -m pytest unavailable on runner",
+      "root_cause": "pytest not part of Ubuntu base environment",
+      "repair": "pin pytest 9.1.1 and provision into per-run RUNNER_TEMP target without mutating system/user site-packages",
+      "verification": "pytest_bootstrap and pytest_all PASS on VPS"
+    }
+  ],
+  "security_hardening": {
+    "private_repo_runner": true,
+    "untrusted_pr_trigger": false,
+    "checkout_pin": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+    "raw_secrets_in_runner_research_packets": "FORBIDDEN",
+    "note": "Self-hosted runners are persistent machines; keep workflow inputs trusted and token permissions minimal."
+  },
+  "live_external_research": [
+    {
+      "class": "PRIMARY_LITERATURE",
+      "locator": "arXiv:2605.22721",
+      "title": "Self-Evolving Multi-Agent Systems via Decentralized Memory",
+      "observed_at": "2026-08-09",
+      "frank_use": "Evaluate decentralized worker candidate/exploration memory for diversity and token efficiency, while keeping UnifiedDB as the only shared truth authority."
+    },
+    {
+      "class": "PRIMARY_LITERATURE",
+      "locator": "arXiv:2606.24535",
+      "title": "Governed Shared Memory for Multi-Agent LLM Systems",
+      "observed_at": "2026-08-09",
+      "frank_use": "Strengthen scoped retrieval, supersession, provenance and propagation policy; explicitly test direct-GET/scope bypass and pipeline-ordering conflicts."
+    },
+    {
+      "class": "PRIMARY_LITERATURE",
+      "locator": "arXiv:2603.10062",
+      "title": "Multi-Agent Memory from a Computer Architecture Perspective: Visions and Challenges Ahead",
+      "observed_at": "2026-08-09",
+      "frank_use": "Treat swarm knowledge exchange as a memory-consistency protocol problem; separate cache/candidate layers from authoritative memory."
+    },
+    {
+      "class": "PRIMARY_LITERATURE",
+      "locator": "arXiv:2604.08206",
+      "title": "Theater of Mind for LLMs: A Cognitive Architecture Based on Global Workspace Theory",
+      "observed_at": "2026-08-09",
+      "frank_use": "Use active event-driven workspace cycles and diversity/deadlock signals as falsifiable engineering hypotheses, not consciousness claims."
+    },
+    {
+      "class": "PRIMARY_LITERATURE",
+      "locator": "arXiv:2602.07845",
+      "title": "Recurrent-Depth VLA",
+      "observed_at": "2026-08-09",
+      "frank_use": "Adaptive recurrent depth and convergence-based stopping support Frank loop-budget experiments; measure utility against overcoupling and runaway recurrence."
+    },
+    {
+      "class": "AUTHORITATIVE_DOCUMENTATION",
+      "locator": "docs.github.com/actions/reference/security/secure-use",
+      "observed_at": "2026-08-09",
+      "frank_use": "Pin actions by full commit SHA; constrain self-hosted runner workflows and token exposure."
+    },
+    {
+      "class": "AUTHORITATIVE_PACKAGE_INDEX",
+      "locator": "pypi.org/project/pytest/9.1.1",
+      "observed_at": "2026-08-09",
+      "frank_use": "Pinned ephemeral VPS test dependency; release 9.1.1 dated 2026-06-19."
+    }
+  ],
+  "swarm_fusion_rules": {
+    "central_truth": "FRANK UnifiedDB only",
+    "worker_candidate_memory": "ephemeral/branch-local allowed with provenance",
+    "cross_worker_packet_minimum": ["claim", "evidence", "source_time", "code_sha", "test_receipt", "negative_result", "falsifier", "blocker", "next_probe"],
+    "contradictions": "preserve until evidence-guided resolution; never silently overwrite",
+    "no_change_receipts": true,
+    "secrets": "never broadcast raw values",
+    "release_promotion": "forbidden from this event"
+  },
+  "current_open_blockers": [
+    "Exact time-aligned 2026-08-05 historical services/ 74-module ledger still HOLD",
+    "Historical payload semantics migration remains incomplete despite 71/71 identity conservation",
+    "Real local 4B model release acceptance remains incomplete",
+    "Final Andreas target-PC acceptance remains incomplete"
+  ]
+}

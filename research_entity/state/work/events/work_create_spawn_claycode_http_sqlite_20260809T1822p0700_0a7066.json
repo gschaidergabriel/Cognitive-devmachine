@@ -1,0 +1,50 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-EVENT-SPAWN-CLAYCODE-HTTP-SQLITE-UBUNTU-20260809-0a7066",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "payload": {
+    "work_id": "WORK-SPAWN-CLAYCODE-HTTP-SQLITE-UBUNTU-20260809-0a7066",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_FALSIFIER",
+    "title": "Run real ClayCode HTTP+SQLite vertical slice on Ubuntu",
+    "work_clay": "Using the current admitted ClayCode stack, compile and execute the same CRUD + transaction/rollback vertical slice through parser -> canonical IR -> type/effect -> compiler/lowering -> runtime/FFI on the Ubuntu developer target.",
+    "reason_clay": "The local proxy passed, but only production ClayCode execution can distinguish an implementation/stdlib gap from a real language-semantic gap.",
+    "completion_clay": "Produce source/IR/compiler/target/runtime hashes, HTTP+SQLite execution receipts, pre-commit fault injection, semantic mutation results, and an explicit verdict: EXISTING_SEMANTICS_SUFFICIENT or EXECUTABLE_SEMANTIC_COUNTEREXAMPLE. Do not pass BASE unless the official acceptance gates are satisfied.",
+    "evidence_need": [
+      "production ClayCode source and canonical IR hashes",
+      "type/effect acceptance or exact compiler diagnostic",
+      "generated target hash and runtime identity",
+      "HTTP create/read/update/delete outcomes",
+      "SQLite commit/rollback/partial-effect receipts",
+      "mutation/fault-injection discriminator",
+      "authority/capability boundary receipt"
+    ],
+    "executor_policy": "Use local Ubuntu execution organ and free/local tooling only; re-read current ClayCode release workspace before execution; semantic redesign only after a concrete executable counterexample.",
+    "required_capabilities": [
+      "UBUNTU_LOCAL_EXECUTION",
+      "CLAYCODE_COMPILER_RUNTIME",
+      "LOOPBACK_HTTP",
+      "SQLITE"
+    ],
+    "write_scope": [
+      "research_entity/trigger_runs/spawn/spawn-20260809T1814p0700-claycode-http-sqlite-0a7066",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE active",
+      "current ClayCode stack admitted",
+      "no conflicting newer production semantic contract"
+    ],
+    "invalidators": [
+      "ClayCode admitted stack changes materially before execution",
+      "official APP-02/APP-03 proof already completed by another worker"
+    ],
+    "base_priority": 0.88,
+    "expected_impact": 0.86,
+    "urgency": 0.76,
+    "information_gain": 0.95,
+    "status": "READY"
+  },
+  "created_at": "2026-08-09T18:22:55+07:00"
+}

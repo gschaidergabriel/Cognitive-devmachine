@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1607p0700_chatgpt_secondary_resource_lifetime",
+  "negative_results":[
+    {
+      "id":"N-CC-RL-001",
+      "status":"NEGATIVE_RESULT",
+      "statement":"A deliberately naive generic ResourceRef lowering proxy with no ownership/borrow/drop state accepts five unsafe lifetime traces: double-drop, drop while borrowed, borrow escape, use-after-move by old owner, and nominal resource-kind mismatch.",
+      "scope_guard":"This is a constructed proxy baseline, not a claim that the unfinished current ClayCode compiler behaves this way.",
+      "evidence_ref":"EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "id":"N-CC-RL-002",
+      "status":"NEGATIVE_RESULT",
+      "statement":"Current evidence does not establish that first-class surface syntax such as own<T>/borrow<T> is necessary. The supported result is narrower: explicit lifetime semantics are needed somewhere in canonical IR/runtime/lowering.",
+      "evidence_ref":"HYPOTHESIS_MATRIX.json"
+    },
+    {
+      "id":"N-CC-RL-003",
+      "status":"NEGATIVE_RESULT",
+      "statement":"No Ubuntu developer-system execution occurred in this run, so no target-host runtime or performance claim is supported.",
+      "evidence_ref":"TOOL_EXECUTION_MANIFEST.json"
+    },
+    {
+      "id":"N-CC-RL-004",
+      "status":"NEGATIVE_RESULT",
+      "statement":"The official repository interconnect and Goodman checker scripts were not executable from this tool surface; manual artifacts do not substitute for official PASS and therefore semantic promotion remains forbidden.",
+      "evidence_ref":"TOOL_EXECUTION_MANIFEST.json"
+    }
+  ]
+}

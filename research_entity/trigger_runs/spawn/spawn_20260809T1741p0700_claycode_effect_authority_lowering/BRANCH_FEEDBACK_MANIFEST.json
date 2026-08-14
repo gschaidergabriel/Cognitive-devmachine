@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+  "origin_branch": "claycode",
+  "feedback": [
+    {"branch":"claycode","kind":"NEW_CONSTRAINT","delta":"Make textual_capability_name never_confers authority executable: bearer possession must be host-verifiable and non-structurally-forgeable. Prefer descriptor/ref in Clay plus opaque/sealed runtime handle or equivalently strong signed-token mechanism. No syntax change yet."},
+    {"branch":"harness","kind":"NEW_CONSTRAINT","delta":"H-WP-10/APP-08 should include broker-vs-ambient differential, structural-token forgery, child-process/FFI authority-closure, revocation and confused-deputy tests."},
+    {"branch":"frank","kind":"SUPPORTING_EVIDENCE","delta":"Supports existing fixed boundary that Needle/model outputs propose effects but do not mint authority; no FRANK architecture target change."},
+    {"branch":"clayresearch","kind":"SUPPORTING_EVIDENCE","delta":"Safe-Effect H-SYSTEM gains a concrete negative control: ambient foreign-code authority falsifies semantic action-space containment even when effect intent is typed."},
+    {"branch":"unifieddb","kind":"NEW_CONSTRAINT","delta":"Persist descriptors, scopes, issuer/revocation metadata and receipts; do not treat serialized capability IDs/records in semantic tables as bearer authority unless an independently protected runtime validation root exists."},
+    {"branch":"hyperposition","kind":"SUPPORTING_EVIDENCE","delta":"Proposal/activation/authority typed firebreak should terminate in an opaque/sealed broker capability root; topology/activation cannot synthesize possession."},
+    {"branch":"claygraph","kind":"NO_CHANGE","delta":"Existing rule derived graph relation cannot authorize effect remains sufficient for this run; no graph primitive change supported."},
+    {"branch":"gwt","kind":"NO_CHANGE","delta":"Existing no-authority-from-selection/broadcast rule remains sufficient; effect selection must flow to external broker."},
+    {"branch":"emergenz","kind":"NO_CHANGE","delta":"No emergence-measurement semantic change; preserve rule that emergent/causal readouts never mint authority."}
+  ],
+  "shared_ancestry_warning": "ClayCode/FRANK/Harness/Safe-Effect agreement is not independent replication; proxy test adds a discriminating implementation counterexample but remains synthetic."
+}

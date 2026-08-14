@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-loop-eval-lowering",
+  "hypotheses": [
+    {"id": "H-SPAWN-CC-LOOP-001", "status": "OPEN", "claim": "The current recurrence-decision slice can be represented by ordinary typed control/data IR without a FRANK-specific ClayCode primitive.", "support": ["EXP-SPAWN-CC-LOOP-EVAL-LOWER-20260809", "EXP-SPAWN-CC-LOOP-NATIVE-LOWER-20260809"], "falsifier": "Production parser/canonical IR/type/effect/evaluator integration requires an opaque host semantic escape or cannot represent a required frozen field/control distinction."},
+    {"id": "H-SPAWN-CC-LOOP-002", "status": "OPEN", "claim": "Program semantic identity should include recurrence decision/control meaning while semantic-state, state-version and trace-root witnesses remain runtime input/receipt identities rather than one program hash.", "support": ["local semantic-hash mutation test", "Harness layered-identity evidence"], "falsifier": "A production replay/compiler counterexample requires runtime witness identity to change program meaning or shows separation breaks deterministic replay."},
+    {"id": "H-SPAWN-CC-LOOP-003", "status": "OPEN", "claim": "Mixed semantic epochs must fail/route closed before recurrence continuation.", "support": ["mutation discriminator detected loss of epoch guard", "current FRANK/Harness epoch invariants"], "falsifier": "A verified production design safely composes mixed epochs with an explicit typed reconciliation semantics and no stale-state hazard."},
+    {"id": "H-SPAWN-CC-LOOP-004", "status": "OPEN", "claim": "A backend-neutral recurrence decision IR can preserve decision semantics across interpreter and native lowerings.", "support": ["200000 interpreter/Python parity cases", "100000 native GCC parity cases"], "falsifier": "Production backend differential tests produce architecture-relevant mismatches under the same canonical IR and inputs."}
+  ],
+  "counterhypotheses": [
+    {"id": "H0-SPAWN-CC-LOOP-A", "status": "OPEN", "claim": "Current frontend/parser debt prevents the semantic slice from being expressible end-to-end despite proxy IR closure."},
+    {"id": "H0-SPAWN-CC-LOOP-B", "status": "OPEN", "claim": "R8 trajectory/capacity fields expose missing numeric/record/type semantics when integrated with production ClayCode."},
+    {"id": "H0-SPAWN-CC-LOOP-C", "status": "OPEN", "claim": "The recurrence policy itself is scientifically wrong even if ClayCode compiles it perfectly."}
+  ]
+}

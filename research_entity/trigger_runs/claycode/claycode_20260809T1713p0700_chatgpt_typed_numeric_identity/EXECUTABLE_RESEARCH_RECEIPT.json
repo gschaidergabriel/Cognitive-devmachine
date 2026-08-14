@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1713p0700_chatgpt_typed_numeric_identity",
+  "experiment_id": "EXP-CC-TYPED-NUMERIC-CANON-20260809-01",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "classification": "LOCAL_CROSS_RUNTIME_PROXY_NOT_TARGET_UBUNTU",
+  "source": {
+    "path": "research_entity/trigger_runs/claycode/claycode_20260809T1713p0700_chatgpt_typed_numeric_identity/experiments/typed_numeric_canonicalization_probe.py",
+    "github_blob_sha": "b34fdfffe0f8c553b85813b8c245c7db214355ab",
+    "executed_source_sha256": "0e6da84a63b9cb511aeb09dfb81ce4a71d225521992e02a0273f07598871f331",
+    "candidate_version": "typed-numeric-identity-v0.1",
+    "production_compiler_version": null
+  },
+  "canonical_ir_semantic_identity": {
+    "candidate_int_token": "I:<canonical base10 integer>",
+    "candidate_f64_token": "F64:<IEEE-754 binary64 big-endian bits>",
+    "corpus_payload_sha256": "2370f1abe4c32d4a8643fc7d3b0c0e7c7951f435c9e9a8414f25e899a4591a43",
+    "contract_instance_hash": null,
+    "note": "Run-local candidate identity encoding only; not promoted into canonical ClayCode IR."
+  },
+  "execution": {
+    "sandbox_provider": "hosted_local_linux_container",
+    "preferred_e2b_status": "DECLARED_BY_RAE_BUT_NOT_EXPOSED_AS_INVOKABLE_TOOL_IN_THIS_CHATGPT_SESSION",
+    "fallback_rule": "local Linux execution used; no E2B evidence claimed",
+    "runtime": {"python":"3.13.5","node":"v22.16.0","platform":"Linux-6.18.35-x86_64-with-glibc2.41"},
+    "lowering_target": "cross-runtime Python-int/float versus Node-BigInt/Number identity probe",
+    "generated_code_hash": "embedded Node helper is bound by executed_source_sha256",
+    "test_corpus": {"int_cases":20013,"float_cases":50010,"seed":202608091713},
+    "exit_status": 0,
+    "stderr": "",
+    "elapsed_seconds": 0.2735952459999851,
+    "memory_data": null
+  },
+  "observations": {
+    "typed_int_cross_runtime_mismatches": 0,
+    "typed_f64_parse_bit_mismatches": 0,
+    "naive_int_to_js_number_exactness_mismatches": 15676,
+    "naive_int_to_js_number_cases": 20013,
+    "naive_int_to_js_number_mismatch_rate": 0.7832908609403888,
+    "host_json_float_text_mismatches": 2427,
+    "host_json_float_cases": 50010,
+    "host_json_float_text_mismatch_rate": 0.048530293941211756,
+    "negative_zero": "Python/Node parse to identical f64 sign-bit 0x8000000000000000 while JSON text differed (-0.0 versus 0)."
+  },
+  "expected_vs_observed": {
+    "expected": "Typed numeric identity should eliminate text-presentation drift for tested exact Int and parsed finite F64 values; naive host-number/JSON paths should expose counterexamples.",
+    "observed": "0 typed-token cross-runtime mismatches; large-Int Number lowering and host JSON text produced frequent counterexamples."
+  },
+  "failure_counterexample_classification": [
+    "HOST_JSON_PRESENTATION_IS_NOT_CLAY_NUMERIC_SEMANTIC_IDENTITY",
+    "NAIVE_INT_TO_JS_NUMBER_IS_NOT_EXACT_FOR_GENERAL_INT",
+    "F64_LITERAL_BIT_IDENTITY_DOES_NOT_PROVE_ARITHMETIC_OR_NAN_PAYLOAD_DETERMINISM"
+  ],
+  "repair_or_change_applied": "No G9 surface or canonical production semantics changed. Candidate repair is typed-IR numeric canonicalization plus backend-checked lowering.",
+  "affected_hypotheses": ["H-CC-NUMID-001","H-CC-NUMID-002","H-CC-NUMID-003","H-CC-NUMID-004"],
+  "learning_changed": {
+    "ClayCode": "REFINED candidate canonical-IR requirement",
+    "Harness": "REFINED source-chain semantic-hash requirement",
+    "FRANK": "NO_DIRECT_ARCHITECTURE_CHANGE",
+    "ClayGraph": "NO_CHANGE",
+    "UnifiedDB": "REFINED numeric identity boundary for hashable exact state",
+    "GWT": "NO_CHANGE",
+    "Hyperposition": "NO_CHANGE",
+    "Emergenz": "NO_CHANGE",
+    "ClayResearch": "REFINED CTK typed-payload identity requirement"
+  },
+  "evidence_boundaries": [
+    "No production ClayCode parser, canonicalizer, compiler, evaluator or runtime was executed.",
+    "No execution occurred on Andreas' exact Ubuntu developer system.",
+    "Python and Node ran on the same hosted Linux machine, so this is cross-runtime rather than independent-host replication.",
+    "Only finite decimal-literal F64 parsing was compared; exact NaN payload and arithmetic determinism remain open.",
+    "No BASE application acceptance item is passed by this receipt."
+  ]
+}

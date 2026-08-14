@@ -1,0 +1,33 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-wp02-queue-amplification-repair-20260810T0700p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T07:00:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "canonical_parent": "ae8c31519cdd9d278422cf7f1f186a8cc602e9dd",
+    "trigger": "go",
+    "reason_clay": "Fresh swarm refresh found Dr.-Unterweger PR #58 had advanced to an exact-Git-blob Hostinger WP02 full-closure workflow, but repeated branch commits had produced many stale full-closure runs because the workflow concurrency group used cancel-in-progress:false. This is queue/resource amplification, not scientific evidence. On the isolated unmerged executor PR only, changed that concurrency setting to true at executor commit dc65a2a9c22bc3a71e5ed4ef5dbf16821fdf554b so obsolete same-group full-closure runs are displaced by the newest exact-blob state. No ClayCode semantics, Frank Harness, target acceptance or effect authority changed.",
+    "work_clay": "Consume only a terminal full-closure receipt from the newest exact-blob PR #58 state. Do not classify queued/pending/cancelled stale jobs as tests. If the newest run executes, preserve exact Git blobs, pinned dependency versions, host metadata, strict/full-corpus/canonical measurements and first scientific failure if any. Keep counts_as_wp02_pass=false and counts_as_andreas_target_acceptance=false until the formal acceptance contract is satisfied.",
+    "observed_executor": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 58,
+      "executor_commit": "dc65a2a9c22bc3a71e5ed4ef5dbf16821fdf554b",
+      "workflow": "Clay WP02 Full Closure Bridge",
+      "workflow_run_id": 31343233638,
+      "workflow_job_id": 93320347639,
+      "state_at_record": "queued",
+      "scientific_steps_executed": false,
+      "concurrency_group": "clay-wp02-full-closure-bridge",
+      "cancel_in_progress": true
+    },
+    "evidence_status": "TRANSPORT_QUEUE_REPAIR_EXECUTED_FULL_CLOSURE_NOT_YET_EXECUTED",
+    "architecture_delta": "NO_CHANGE",
+    "test_delta": "STALE_RUN_SUPPRESSION_ONLY",
+    "promotion": "NONE",
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+    "next_falsifier": "Newest exact-blob Hostinger full-closure job executes scientific steps and yields terminal pass/fail receipt; if fail, isolate the first semantic component rather than retrying the whole queue blindly.",
+    "status": "READY"
+  }
+}

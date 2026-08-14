@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1607p0700_chatgpt",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "latest_frank_run": null,
+  "latest_frank_architecture_artifact": null,
+  "artifact_resolution_note": "Exact repository search for FRANK_ARCHITECTURE.claycode.json returned no indexed result in this worker. This is a run-local resolution result, not a global proof of absence.",
+  "reviews": [
+    {
+      "claim_id": "GOODMAN-CC-20260809-01",
+      "frank_statement": "Model output and learned visual familiarity must not become execution authority; effects cross an external capability/commit boundary.",
+      "frank_source_refs": [
+        "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
+        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+      ],
+      "ancestry_families": ["FRANK_CLAYCODE_SHARED_AUTHORITY_BOUNDARY"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Backend-native authority mechanisms are sufficient, so ClayCode need not retain its own backend-neutral authority semantics.",
+      "falsifier": "A target backend mapping showing equivalent authority, revocation, delegation, freshness, replay and audit semantics without a Clay-level authority contract, with no semantic loss across backend/version changes.",
+      "independent_checks": [
+        "Current-run deterministic capability checker: 6/6 oracle matches; textual capability/model identity alone rejected.",
+        "WebAssembly/WASI primary-source comparison: WASI 0.2 and 0.3 represent network access differently, so backend representation is not semantically stable enough to be ClayCode's authority identity."
+      ],
+      "adversarial_checks": [
+        "expired capability",
+        "wrong verb",
+        "wrong actor",
+        "revoked capability",
+        "textual capability name without possession"
+      ],
+      "verdict": "SUPPORTED",
+      "reason": "Independent executable checking supports the boundary, while current WASI evolution demonstrates why backend authority representation must remain a lowering detail rather than the Clay semantic source of authority.",
+      "claycode_action": "Retain CapabilityToken/effect authority separation; make backend lowering version-parametric and never infer authority from WIT/WASI import presence alone.",
+      "affected_claycode_artifacts": ["CLAYCODE_G9_FUSION_SPEC_V3.clay","future type/effect checker","future runtime ABI/FFI"]
+    },
+    {
+      "claim_id": "GOODMAN-CC-20260809-02",
+      "frank_statement": "Current ClayCode semantics should be preserved where adequate and realized as an executable compiler/runtime rather than repeatedly redesigned.",
+      "frank_source_refs": [
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      ],
+      "ancestry_families": ["PROJECT_OWNER_BASE_COMPILE_PHASE","CLAYCODE_G9_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "The CURRENT G9 language surface is already internally executable enough that parser work can proceed without grammar changes.",
+      "falsifier": "A conforming parser generated from the published grammar successfully parses the CURRENT G9 V3 constructs without grammar extension or special cases.",
+      "independent_checks": [
+        "Current-run Lark grammar self-conformance experiment failed on CURRENT-spec comparison syntax and control-flow syntax.",
+        "Minimal grammar-only repair parsed the same specimen without changing Clay semantic records or authority rules."
+      ],
+      "adversarial_checks": [
+        "tested both comparison operators and nested conditional block syntax already present in CURRENT G9 source",
+        "repair restricted to syntax already used by the spec instead of inventing new semantic primitives"
+      ],
+      "verdict": "REFINED",
+      "reason": "The compile-first strategy survives, but the published grammar itself is not yet self-conformant. Fixing parser grammar is required implementation work and does not justify broad semantic redesign.",
+      "claycode_action": "Prioritize CC-WP-02 parser/canonicalizer self-conformance; add a full CURRENT-spec grammar regression test before semantic freeze.",
+      "affected_claycode_artifacts": ["grammar.ebnf","parser","conformance suite","CLAYCODE_RELEASE_WORKSPACE.json"]
+    },
+    {
+      "claim_id": "GOODMAN-CC-20260809-03",
+      "frank_statement": "ClayCode BASE can express all adaptive Micro Visual Classifier state/update semantics required for H1/H2/H3 without a semantic escape hatch.",
+      "frank_source_refs": [
+        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+        "research_entity/harness/HARNESS_WORKSPACE.json"
+      ],
+      "ancestry_families": ["OWNER_FIXED_ADAPTIVE_VISUAL_REQUIREMENT"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "One or more learner semantics such as candidate promotion, provenance-tier admission, feature-version invalidation, open-set conflict, or resource-budget replay require a missing ClayCode primitive.",
+      "falsifier": "Compile and differential-execute the frozen H1 learner transitions in ClayCode; any unrepresentable authoritative transition or replay mismatch falsifies adequacy.",
+      "independent_checks": [
+        "Current run verified relevant generic version/provenance/transaction/authority structures exist across G9, UnifiedDB and ClayGraph, but did not execute the full learner state machine."
+      ],
+      "adversarial_checks": [
+        "pseudo-label poisoning boundary reviewed",
+        "UNKNOWN/AMBIGUOUS/CONFLICT must not collapse to familiarity",
+        "rollback and feature-version invalidation remain explicit required cases"
+      ],
+      "verdict": "UNRESOLVED",
+      "reason": "Representational ingredients exist, but no end-to-end H1→ClayCode differential learner execution was performed in this run.",
+      "claycode_action": "Do not add learner-specific syntax now; require an executable H1 learner transition corpus as a BASE/H2 counterexample oracle.",
+      "affected_claycode_artifacts": ["type/effect checker","state/transaction IR","H2 differential fixtures"]
+    }
+  ]
+}

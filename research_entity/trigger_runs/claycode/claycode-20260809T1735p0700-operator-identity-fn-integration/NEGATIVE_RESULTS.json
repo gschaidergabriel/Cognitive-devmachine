@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1735p0700-operator-identity-fn-integration",
+  "negative_results":[
+    {"id":"N-CC-D-LEX-001","class":"EXECUTABLE_COUNTEREXAMPLE","result":"Current D NAME permits '-', so tight x-y and x->y are not guaranteed to produce the same parse-tree meaning as spaced forms.","measurement":{"spacing_cases":20000,"differences":2480,"minus":1239,"arrow":1241},"status":"NEGATIVE_RESULT"},
+    {"id":"N-CC-D-TREE-002","class":"EXECUTABLE_COUNTEREXAMPLE","result":"Default Lark tree construction for the current literal operator rule loses the literal operator spelling; 16 symbolic operators with identical operands produced one raw tree hash.","status":"NEGATIVE_RESULT","scope":"default parse tree only; does not refute the prior custom typed semantic oracle"},
+    {"id":"N-CC-OPTERM-003","class":"FAILED_REPAIR","result":"Replacing operator alternatives with one high-priority named OPERATOR terminal is not a valid drop-in repair; it steals declaration '=' and rejects an import declaration.","status":"NEGATIVE_RESULT"},
+    {"id":"N-CC-TARGET-004","class":"EVIDENCE_GAP","result":"No target Ubuntu, E2B, SandboxAPI or Qwen-class 4B execution occurred in this run.","status":"OPEN_LIMITATION"}
+  ],
+  "preservation_rule":"Do not erase these if a later production parser repair succeeds; they are regression tests for the source surface and canonicalizer boundary."
+}

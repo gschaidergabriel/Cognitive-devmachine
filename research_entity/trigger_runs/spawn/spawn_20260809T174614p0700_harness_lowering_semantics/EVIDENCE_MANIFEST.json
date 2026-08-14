@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T174614p0700_harness_lowering_semantics",
+  "origin_branch": "harness",
+  "microdirection": "ClayCode lowering preservation of authority/provenance/epistemic fields",
+  "evidence": [
+    {
+      "id": "EV-INTERNAL-001",
+      "class": "VERIFIED_CURRENT_REPOSITORY_STATE",
+      "source": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "supports": ["provenance_and_authority_separate", "conflict_unknown_revocation_preserved", "capability delegation narrower_or_equal", "effect authority is separate from model intent"]
+    },
+    {
+      "id": "EV-INTERNAL-002",
+      "class": "VERIFIED_CURRENT_PROGRAM_CONTRACT",
+      "source": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "supports": ["BASE requires real lowering/runtime/FFI", "translation-validation receipts", "no hidden authority escalation", "less change more compile"]
+    },
+    {
+      "id": "EV-INTERNAL-003",
+      "class": "VERIFIED_CURRENT_WORKSPACE_STATE",
+      "sources": [
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "research_entity/harness/HARNESS_WORKSPACE.json"
+      ],
+      "supports": ["CC-WP-06/11/13 are open", "H-WP-03 waits on ClayCode release", "H-WP-02 is actively claimed and was not duplicated"]
+    },
+    {
+      "id": "EV-EXT-LLVM-001",
+      "class": "EXTERNAL_PRIMARY_ENGINEERING_DOCUMENTATION",
+      "source": "LLVM Language Reference Manual",
+      "url": "https://llvm.org/docs/LangRef.html",
+      "finding": "LLVM transformations may need to drop metadata they cannot preserve; metadata is not automatically program semantics.",
+      "supports": ["generic metadata-only encoding is unsafe for required Clay semantics"]
+    },
+    {
+      "id": "EV-EXT-LLVM-002",
+      "class": "EXTERNAL_PRIMARY_ENGINEERING_DOCUMENTATION",
+      "source": "LLVM Code Transformation Metadata",
+      "url": "https://llvm.org/docs/TransformMetadata.html",
+      "finding": "Transformation-control metadata is designed so dropping it must not change program semantics.",
+      "supports": ["semantic-critical Clay state should not rely on optional transformation metadata"]
+    },
+    {
+      "id": "EV-EXT-MLIR-001",
+      "class": "EXTERNAL_PRIMARY_ENGINEERING_DOCUMENTATION",
+      "source": "MLIR Language Reference / Dialect Conversion",
+      "urls": [
+        "https://mlir.llvm.org/docs/LangRef/",
+        "https://mlir.llvm.org/docs/DialectConversion/"
+      ],
+      "finding": "MLIR distinguishes operation semantics/inherent attributes from discardable attributes and provides explicit type/materialization conversion machinery; Clay-specific semantic preservation still requires a declared conversion contract.",
+      "supports": ["field-specific lowering obligations", "first-class semantics for critical fields"]
+    },
+    {
+      "id": "EV-EXT-MLIR-002",
+      "class": "EXTERNAL_PRIMARY_ENGINEERING_DOCUMENTATION",
+      "source": "MLIR Side Effects and Speculation rationale",
+      "url": "https://mlir.llvm.org/docs/Rationale/SideEffectsAndSpeculation/",
+      "finding": "Implicit effects not represented in SSA require explicit side-effect/resource modeling to keep transformations sound.",
+      "supports": ["effect/resource semantics must remain visible to optimizer/runtime"]
+    },
+    {
+      "id": "EV-EXT-WASI-001",
+      "class": "EXTERNAL_PRIMARY_ENGINEERING_DOCUMENTATION",
+      "source": "WebAssembly WASI capability model",
+      "url": "https://github.com/WebAssembly/WASI/blob/main/docs/Capabilities.md",
+      "finding": "Capability-based interfaces use concrete handles/resources rather than textual names as ambient authority.",
+      "supports": ["first-class checked authority handles"]
+    },
+    {
+      "id": "EV-EXT-CHERI-001",
+      "class": "EXTERNAL_PRIMARY_RESEARCH_ENGINEERING",
+      "source": "Cambridge CHERI capability research",
+      "url": "https://www.repository.cam.ac.uk/items/8f4e4461-4eb4-4993-9393-82621e0f5b45",
+      "finding": "Capability integrity/provenance and monotonicity are established design patterns for preventing authority broadening.",
+      "supports": ["authority monotone attenuation relation"]
+    },
+    {
+      "id": "EV-EXT-ALIVE2-001",
+      "class": "EXTERNAL_PRIMARY_TOOL_IMPLEMENTATION",
+      "source": "Alive2 translation validator",
+      "url": "https://github.com/AliveToolkit/alive2",
+      "finding": "Per-transformation refinement checking is an established compiler-validation pattern.",
+      "supports": ["LoweringWitness/translation-validation architecture"]
+    },
+    {
+      "id": "EV-LOCAL-001",
+      "class": "LOCAL_DETERMINISTIC_SYNTHETIC_MECHANISM_TEST",
+      "environment": "current ChatGPT hosted Python runtime",
+      "test": "field-classified LoweringWitness reference checker",
+      "baseline": "0 validation errors",
+      "mutations": 12,
+      "mutations_rejected": 12,
+      "mutation_families": [
+        "drop authority",
+        "broaden permits",
+        "relax constraints",
+        "broaden delegation",
+        "change resource",
+        "drop/change revocation",
+        "epistemic upgrade",
+        "drop epistemic state",
+        "drop provenance binding",
+        "forge provenance hash",
+        "tamper semantic envelope",
+        "invalid attenuation/rebinding"
+      ],
+      "epistemic_scope": "SYNTHETIC_MECHANISM_EVIDENCE_ONLY"
+    },
+    {
+      "id": "EV-LOCAL-002",
+      "class": "LOCAL_EXHAUSTIVE_SMALL_STATE_TEST",
+      "environment": "current ChatGPT hosted Python runtime",
+      "test": "authority permission monotonicity over three verbs",
+      "cases": 64,
+      "oracle_mismatches": 0,
+      "epistemic_scope": "SYNTHETIC_MECHANISM_EVIDENCE_ONLY"
+    },
+    {
+      "id": "EV-LOCAL-003",
+      "class": "LOCAL_TOOLCHAIN_OBSERVATION",
+      "environment": "current hosted compiler toolchain",
+      "test": "LLVM IR custom metadata attached to a constant-foldable instruction, compiled with clang -O2 -S -emit-llvm",
+      "observation": "The optimized-away instruction and its custom !clay.auth metadata disappeared; the function reduced to a constant return.",
+      "interpretation": "At least one ordinary legal optimization can erase instruction-bound custom metadata. This falsifies the assumption that such metadata is a sufficient semantic-preservation channel.",
+      "scope_limit": "Does not claim all metadata is always dropped."
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "NR-SPAWN-LWR-001",
+      "statement": "Generic custom LLVM metadata alone is not a sufficient carrier for critical Clay authority/epistemic semantics across optimization.",
+      "basis": ["EV-EXT-LLVM-001", "EV-EXT-LLVM-002", "EV-LOCAL-003"],
+      "status": "NEGATIVE_RESULT"
+    }
+  ],
+  "ancestry_and_promotion": {
+    "shared_ancestry_warning": "Harness execution of ClayCode-derived invariants is not independent replication merely because it executes code.",
+    "promotion_limit": "No live-FRANK, target-Ubuntu or final-compiler claim is promoted from these tests.",
+    "next_required_evidence": "Real ClayCode source -> canonical IR -> optimized target -> execution receipt on the Ubuntu developer-system target, with intentional critical-field mutations and differential validation."
+  },
+  "limitations": [
+    "The final ClayCode compiler/lowering implementation does not yet exist at the BASE release gate.",
+    "No target Ubuntu ClayCode compiler execution was established in this hosted run.",
+    "No live FRANK runtime evidence was generated.",
+    "No full SMT proof of the preservation relation was produced.",
+    "GitHub code search returned no indexed prior SPAWN_RECEIPT files; indexing lag remains possible."
+  ]
+}

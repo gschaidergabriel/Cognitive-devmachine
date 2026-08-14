@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1706p0700-needle-boundary-v1",
+  "reread_phase":"PRE_FINAL_RESPONSE",
+  "status":"INTEGRATED",
+  "late_deltas":[
+    {
+      "source_commit":"e597960f2fd3dca284247522f2697678d60366d6",
+      "finding":"H2 differential release evidence must compose TurnTrace runtime-semantic equivalence with source->parse->typed-IR->lowering->execution evidence and separated ledger identity layers.",
+      "decision":"COMPATIBLE_RETAIN",
+      "impact_on_hwp04":"NeedleBoundaryV1 route_semantic_hash/provenance is a boundary identity only; H2 must additionally bind this boundary to compiler/source-chain and TurnTrace evidence rather than treating route output equality as total equivalence."
+    },
+    {
+      "source_commit":"00320ab84a5905ef4f7c017b14c29bd106517d24",
+      "finding":"H-WP-02 pre-lock-only idempotency lookup has a deterministic concurrent-writer counterexample; guarded post-lock recheck is the repair hypothesis pending Ubuntu target execution.",
+      "decision":"NO_CONTRADICTION_SEPARATE_NEGATIVE_RESULT",
+      "impact_on_hwp04":"No change to deterministic Needle projection/postdecode semantics. Future persistence of Needle route/proposal receipts must inherit corrected transactional/idempotency semantics rather than assume current H-WP-02 concurrent safety."
+    },
+    {
+      "source_commit":"c6efcbc9d6a4672805456dbf6f9e689df2a33928",
+      "finding":"Concurrent ClayCode typed-relation IR work continued after this run started.",
+      "decision":"DEFER_TO_BASE_CLAYCODE_GATE",
+      "impact_on_hwp04":"H2 representation remains blocked on current BASE release; no host-language boundary semantic redesign is justified by this commit alone."
+    }
+  ],
+  "contradictions_found":false,
+  "code_revision_required":false,
+  "gate_effect":"NONE",
+  "promotion":"NONE",
+  "h1_status":"BLOCKED_ON_BASE"
+}

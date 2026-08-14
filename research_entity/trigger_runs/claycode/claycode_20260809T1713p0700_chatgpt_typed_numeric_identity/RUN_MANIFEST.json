@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1713p0700_chatgpt_typed_numeric_identity",
+  "trigger":"claycode",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "selected_lane":"TYPED_NUMERIC_SEMANTIC_IDENTITY",
+  "decision":"OPEN_REFINED_NO_PROMOTION",
+  "experiment":"EXP-CC-TYPED-NUMERIC-CANON-20260809-01",
+  "summary":{"int_cases":20013,"float_cases":50010,"typed_int_mismatches":0,"typed_f64_literal_bit_mismatches":0,"naive_js_number_int_mismatches":15676,"host_json_float_text_mismatches":2427},
+  "required_outputs":{"INTERCONNECT_MANIFEST.json":"present","TOOL_EXECUTION_MANIFEST.json":"present","FRANK_CLAYCODE_GOODMAN_REVIEW.json":"present","EXECUTABLE_RESEARCH_RECEIPT.json":"present","HYPOTHESES.json":"present","NEGATIVE_RESULTS.json":"present","BRANCH_FEEDBACK_MANIFEST.json":"present","FINAL_REPORT.md":"present"},
+  "coverage":{"registered_scientific_branches":9,"covered":9,"fresh_parallel_workers_checked":true},
+  "external_primary_sources":["RFC 8785","RFC 8949","WebAssembly 3.0 binary values","WebAssembly numeric semantics"],
+  "main_conclusion":"Keep numeric semantic identity typed and explicit in canonical IR; do not hash host-native JSON numeric text; do not add new ClayCode numeric surface syntax without a production executable counterexample.",
+  "promotion":"NONE",
+  "stage_progress_credit":"NONE",
+  "canonical_state_changed":false,
+  "base_gate_changed":false,
+  "integration":{"pull_request":16,"merge_commit":"76853d19eb5714a8fbd8599f8c0e4cf616b315eb","final_report_remote_reread":true,"canonical_remote_reread":true,"canonical_revision_after_merge":2,"canonical_hash_after_merge":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status":"COMPLETE_VERIFIED_MAIN_REREAD"
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1821p0700_claycode_keyword_partition",
+  "origin_branch": "claycode",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-KW-001",
+      "status": "SUPPORTED_LOCAL_PROXY",
+      "claim": "In the exact current D_LALR_GRAMMAR_CANDIDATE_V3.lark blob, the explicit generic-identifier aliases for the reserved words invariant and if are the causal root of 12 of the 13 observed non-strict LALR shift/reduce conflict diagnostics.",
+      "mechanism": "Each alias makes the reserved token reducible both as a declaration/control keyword and as generic ident/qid in expression states; the conflict lookaheads are LPAR, IN, SUBSET_OF, IFF, OR and REQUIRES.",
+      "prediction": "Removing only ident_invariant and ident_if eliminates those 12 diagnostics while leaving the separator conflict.",
+      "observed": "Exactly observed under Python 3.13.5 + Lark 1.3.1 on the exact Git blob.",
+      "falsifier": "A reproducible strict/non-strict parser build of the same blob where removing only those aliases does not eliminate the 12 keyword conflicts, or a current accepted source requiring invariant/if as generic identifiers in a context that cannot be expressed without the aliases.",
+      "confidence": 0.94,
+      "promotion_allowed": false
+    },
+    {
+      "id": "H-SPAWN-KW-002",
+      "status": "SUPPORTED_LOCAL_PROXY",
+      "claim": "After removing the two causally implicated keyword aliases, the sole remaining observed shift/reduce conflict is caused by nested NEWLINE repetition in _bsep: NEWLINE+ combined with outer separator repetition.",
+      "mechanism": "The parser can either reduce one-or-more NEWLINE into _bsep or shift another NEWLINE into the same inner repetition while the surrounding grammar also repeats separators.",
+      "prediction": "Changing only _bsep from ';' | NEWLINE+ to ';' | NEWLINE removes the final observed shift/reduce conflict because outer productions already provide repetition.",
+      "observed": "The combined minimal variant produces zero captured LALR shift/reduce/collision diagnostics in non-strict construction.",
+      "falsifier": "The exact variant still emits a shift/reduce conflict in an independently reproduced pinned environment, or full-corpus parsing shows that the single-NEWLINE primitive changes required separator semantics.",
+      "confidence": 0.91,
+      "promotion_allowed": false
+    },
+    {
+      "id": "H-SPAWN-KW-003",
+      "status": "OPEN_PARTIALLY_SUPPORTED",
+      "claim": "The combined minimal grammar repair can preserve current accepted-source parse meaning while removing the known LALR shift/reduce conflicts.",
+      "mechanism": "The repair removes only unreachable/ambiguous generic-identifier roles for two control/declaration keywords and normalizes a redundant separator repetition; declaration/control productions remain unchanged.",
+      "prediction": "Current G9 and Dialect accepted corpora retain equivalent typed/canonical meaning under the repaired grammar.",
+      "observed": "Four representative current-source regression snippets covering dialect invariant, cycle if, keyword-like fields and requires expressions parse under baseline and repair with identical parse-tree hashes (4/4).",
+      "falsifier": "Any accepted current corpus item changes typed AST/canonical semantic hash, or a legitimate use of invariant/if as a generic identifier is discovered.",
+      "confidence": 0.68,
+      "promotion_allowed": false
+    },
+    {
+      "id": "H-SPAWN-CI-004",
+      "status": "SUPPORTED_CURRENT_IMPLEMENTATION_CONSTRAINT",
+      "claim": "The current ClayCode strict-LALR GitHub Actions workflow cannot certify a repaired grammar as strict PASS because it installs lark==1.3.1 without the interegular optional dependency required for strict regex-collision checking with contextual/basic lexers.",
+      "mechanism": "Once parser-table conflicts are absent, Lark strict construction advances to regex-collision validation and raises LexError when interegular is unavailable.",
+      "prediction": "The repaired candidate reaches a dependency/infrastructure error rather than strict_build_ok=true in an environment matching the workflow dependency set.",
+      "observed": "Local exact reproduction reaches LexError: interegular must be installed for strict mode after the shift/reduce conflicts are removed; the committed workflow installs only lark==1.3.1.",
+      "falsifier": "A workflow run using only the declared dependency set reaches strict_build_ok=true on the repaired grammar, or Lark 1.3.1 documentation/runtime demonstrates strict contextual regex checking does not require interegular.",
+      "confidence": 0.97,
+      "promotion_allowed": false
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SPAWN-KW-001",
+      "claim": "Removing invariant/if generic identifier aliases is semantically unsafe because current or required ClayCode legitimately uses those words as identifiers outside declaration/control positions.",
+      "status": "OPEN",
+      "next_test": "Full current G9 + Dialect + repository source corpus parse/typed-AST differential plus identifier-use inventory."
+    },
+    {
+      "id": "CH-SPAWN-KW-002",
+      "claim": "After installing interegular, strict mode will expose regex collisions that require additional lexical changes; zero shift/reduce diagnostics is not strict closure.",
+      "status": "OPEN_HIGH_VALUE",
+      "next_test": "Run the repaired grammar under Lark 1.3.1 with interegular present and preserve every regex-collision diagnostic."
+    },
+    {
+      "id": "CH-SPAWN-KW-003",
+      "claim": "A different production parser/backend could make this Lark-specific repair unnecessary.",
+      "status": "OPEN_BUT_NOT_CURRENT_DISCRIMINATOR",
+      "next_test": "Only compare alternative parser backends after the current D candidate is correctly certified; do not use backend switching to bypass an executable counterexample."
+    }
+  ],
+  "decision_trace": {
+    "evidence_used": [
+      "exact Git grammar blob",
+      "current ClayCode production-parser report",
+      "current strict probe and CI workflow",
+      "local pinned Lark execution",
+      "official Lark strict-mode documentation"
+    ],
+    "alternatives_tested": [
+      "remove only invariant/if aliases",
+      "remove operator-keyword aliases",
+      "rule/identifier priority annotations",
+      "normalize nested NEWLINE separator",
+      "combined minimal alias+separator repair"
+    ],
+    "result": "Two causal parser-conflict surfaces isolated; a separate strict-certification dependency failure exposed.",
+    "uncertainty": "No full current-source semantic differential and no interegular-enabled strict regex-collision run yet.",
+    "next_falsifier": "Install/pin interegular in the strict CI surface, execute repaired strict construction, then run full G9+Dialect typed/canonical differential."
+  }
+}

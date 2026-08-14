@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:03:44+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "experiment": "CC_WP02_NONE_PLACEHOLDER_CANDIDATE_FALSIFIER",
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 58,
+    "workflow_run_id": 31343396007,
+    "job_id": 93320770356,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3"
+  },
+  "baseline_frontend_git_blob": "f7ac0d63c0d1f1fe3b8753c8246859340aba02ca",
+  "candidate": {
+    "delta": "canonical_node(None) -> {\"literal\": null}",
+    "candidate_sha256": "fb9c1a35aa500c41416e108adc813a7844cd0b33bec6f2e363109b4da6e43c49",
+    "test_only": true
+  },
+  "observed": {
+    "baseline_none_error_reproduced": true,
+    "candidate_all_v17_cases_compile": true,
+    "v9_v17_expected_equal": {
+      "g9": true,
+      "dialect": true,
+      "ordinary_module": true,
+      "ordinary_record": true,
+      "ordinary_needle": true,
+      "ordinary_lifecycle": true,
+      "owns_tight": true,
+      "owns_prefix": true
+    },
+    "intended_owns_spaced_delta_preserved": true,
+    "overall_candidate_falsifier": "PASS"
+  },
+  "selected_production_alternative_at_write_time": {
+    "commit": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+    "frontend_git_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "delta": "Lark maybe_placeholders=False",
+    "status": "CURRENT_MAIN_PENDING_REMOTE_CLOSURE"
+  },
+  "adjudication": "SUPPORTED_ALTERNATIVE_NOT_SELECTED",
+  "reason_not_selected": "A concurrent worker landed the smaller parser-configuration repair before this worker's CAS write. Do not overwrite it while its stronger optional-slot discrimination and repaired full-closure run are pending.",
+  "architecture_delta": "NO_CHANGE_FROM_THIS_RECEIPT",
+  "promotion": "NONE",
+  "counts_as_wp02_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "next_falsifier": "Adjudicate current main blob 55728fd20323a364bb5e831989644b65189603d1 on Hostinger for optional semantic discrimination, V9/V17 corpus equivalence, strict construction, full current frontend and canonicalizer; only then retain or replace the production repair.",
+  "out_of_box_experiment_status": "NOT_THIS_EXPERIMENT",
+  "authority_invariant": "model output != execution authority"
+}

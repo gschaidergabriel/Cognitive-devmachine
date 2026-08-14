@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1702p0700_chatgpt_source_chain_integrity",
+  "origin_actor": "chatgpt-secondary",
+  "epistemic_status": "RESEARCH_DELTA_NO_CANONICAL_PROMOTION",
+  "branches": {
+    "claycode": {"receipt": "PRIMARY_DELTA", "delta": "Require joined source->parse->typedIR->lowering->execution ancestry for compiler/gate evidence. Prior loop fixture is lowering-only until reparsed; emit->return needs explicit semantic justification."},
+    "frank": {"receipt": "FEEDBACK", "delta": "No new FRANK-specific loop syntax. H1/H2 recurrent fixtures must carry parser/IR/lowering ancestry and explicit halt/yield/emit semantics."},
+    "harness": {"receipt": "FEEDBACK", "delta": "Golden-trace/differential receipts should bind source/semantic/artifact hashes so a manually synthesized IR cannot masquerade as H2 source compilation."},
+    "claygraph": {"receipt": "NO_PRIMITIVE_CHANGE", "delta": "Use existing projection/receiver receipt ancestry to preserve compiler-evidence links; activation/topology never upgrades compiler truth."},
+    "unifieddb": {"receipt": "NO_PRIMITIVE_CHANGE", "delta": "Persist compiler-stage identities/receipts in existing provenance/execution planes; runtime authority and semantic identity remain separate."},
+    "gwt": {"receipt": "NO_CHANGE", "delta": "Loop classifier instrumentation remains distinct from broadcast/use/effect/outcome/reentry evidence."},
+    "hyperposition": {"receipt": "NO_CHANGE", "delta": "No topology semantic change; typed order/role identity still must survive canonicalization."},
+    "emergenz": {"receipt": "NO_CHANGE", "delta": "Parser or loop-runtime success remains non-evidence for emergence."},
+    "clayresearch": {"receipt": "FEEDBACK", "delta": "Add source-chain integrity as a cross-cutting anti-Goodhart acceptance invariant for executable research."}
+  },
+  "global_next_test": "Production bounded frontend: parse a grammar-conformant generic control fixture into typed IR with explicit terminator/result semantics, compute linked stage hashes, lower to two backends where feasible, and differential-execute before crediting CC-WP-02/03/06/11."
+}

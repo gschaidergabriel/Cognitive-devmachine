@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1825p0700-chatgpt-secondary-needle-drive-probe",
+  "trigger": "harness",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "work_package": "H-WP-04-NEEDLE-BOUNDARY",
+  "evidence_class": "DRIVE_SOURCE_PLUS_REMOTE_SANDBOX_EXECUTION",
+  "execution_environment": "ChatGPT isolated Linux sandbox",
+  "drive_inputs": {
+    "constrained_py": "Google Drive file 1ovn0RCFLLouUT-DhKlDgYjeNWsQowQ3J",
+    "tokenizer_py": "Google Drive file 1bWZ_9i2tRbpT04aNwuJf5HCdjNJ5czIS",
+    "registry_json": "Google Drive file 19qSTLoHoABT6zNahJnbx6CVFtOo8lKuo",
+    "zero_shot_contract": "Google Drive file 1f7GyPtFdzaLSSxrEjdIIlzMxiWf6byPE"
+  },
+  "sandbox_result": {
+    "status": "PASS_WITH_ADAPTER_FINDING",
+    "active_frank_tools": 51,
+    "constructed_tool_json_chars": 10923,
+    "name_trie_exact_match": true,
+    "first_character_mask_exact": true,
+    "known_tool_terminal_quote_allowed": true,
+    "invented_tool_prefix_rejected": true,
+    "calc_parameter_alias": ["expression"],
+    "nested_openai_schema_probe_result": ["properties"]
+  },
+  "findings": [
+    "The real Drive Needle constrained decoder builds its allowed tool-name trie from the runtime-provided tool list, so constrained decoding can structurally reject tool names not offered to Needle.",
+    "Argument-key constraints in this Drive snapshot expect Needle's direct parameter-map form. Feeding a standard nested OpenAI parameters.properties schema directly causes the constrained key set to contain 'properties' rather than the intended argument names.",
+    "The Frank wrapper must therefore flatten/normalize nested tool schemas before Needle constraints, or supply Needle-native direct parameter maps.",
+    "The current full-description 51-tool JSON constructed from the Drive registry is 10923 characters; the previously documented 2317-character compact estimate is not representative of this uncompressed serialization. Exact 1024-token encoder fit remains to be measured with the real tokenizer model.",
+    "Full model inference was not executed because the accessible Drive repository snapshot contains source/registry but no checkpoint/weights folder or needle.pkl/needle-cq4 artifact. This is a transport/input availability limit, not a sandbox-size limit."
+  ],
+  "not_yet_tested": [
+    "0a exact query+tool-list token count with official tokenizer.model",
+    "0b German zero-shot routing with official Needle weights",
+    "end-to-end Needle output through the H1 Clay ingress adapter"
+  ],
+  "status": "COMPLETE_EXECUTABLE_PROBE_HWP04_REMAINS_OPEN"
+}

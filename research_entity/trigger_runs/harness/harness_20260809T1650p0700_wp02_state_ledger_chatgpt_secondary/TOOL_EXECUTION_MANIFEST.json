@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1650p0700_wp02_state_ledger_chatgpt_secondary",
+  "execution_classes": {
+    "repository": {"provider":"GitHub connector","status":"EXECUTED_RW_AND_REREAD"},
+    "executable": {"provider":"local Python/pytest sandbox","status":"EXECUTED","result":"7 passed; 250-commit synthetic stress PASS"},
+    "implementation": {"provider":"current FRANK repository","status":"READ_PRIMARY_RUNTIME_AND_SQL"},
+    "scholarly": {"status":"NOT_REQUIRED_FOR_THIS_COMPONENT_DELTA","reason":"No literature novelty/general scientific claim promoted."},
+    "current_web": {"status":"NOT_REQUIRED_FOR_THIS_COMPONENT_DELTA","reason":"Decision depended on current repository/runtime contracts, not external current facts."},
+    "model_experiment": {"status":"NOT_RUN","reason":"H-WP-02 deterministic ledger behavior does not require target-model output to falsify current implementation invariants."}
+  },
+  "negative_result_preserved": "Initial ledger implementation failed all seven tests due commit-order/FK coupling and was repaired before final PASS.",
+  "promotion_boundary": "No live-FRANK, H1-release or scientific-generalization promotion."
+}

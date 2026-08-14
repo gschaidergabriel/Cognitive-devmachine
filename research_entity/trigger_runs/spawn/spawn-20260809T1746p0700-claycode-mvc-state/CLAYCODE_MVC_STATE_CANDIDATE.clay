@@ -1,0 +1,85 @@
+module claycode.spawn.mvc_state_candidate
+version "0.1-research-candidate"
+status OPEN_NOT_PROMOTED
+
+// Semantic test-corpus candidate for FRANK v0.1 adaptive visual learning.
+// It intentionally reuses existing G9 typed records, sets, epochs and rules.
+// This artifact does not claim normative parser/compiler acceptance.
+
+type EvidenceTier = GOLD|SILVER|BRONZE
+type FamiliarityResult = KNOWN_HIGH_CONFIDENCE|KNOWN_NEEDS_CONFIRMATION|AMBIGUOUS|UNKNOWN|CONFLICT
+
+type LearnerStage = CURRENT|CANDIDATE|LAST_KNOWN_GOOD|REJECTED|ROLLED_BACK
+
+record VisualTrainingExample {
+  example_id:Ref
+  feature_ref:Ref
+  feature_backbone_version:Version
+  label_ref:Ref?
+  tier:EvidenceTier
+  evidence:Set<EvidenceRef>
+  observed_epoch:Epoch
+}
+
+record VisualClassifierVersion {
+  version:Version
+  feature_backbone_version:Version
+  stage:LearnerStage
+  prototype_state_ref:Ref?
+  readout_state_ref:Ref?
+  calibration_ref:Ref
+  training_examples:Set<Ref>
+  evaluation_receipts:Set<ReceiptRef>
+  parent_version:Version?
+  semantic_hash:Hash
+}
+
+record VisualFamiliarityResult {
+  result:FamiliarityResult
+  candidate_entity:Ref?
+  score:Number?
+  margin:Number?
+  prototype_distance:Number?
+  support_count:Int
+  open_set_score:Number?
+  classifier_version:Version
+  feature_backbone_version:Version
+  evidence_tier:EvidenceTier?
+  sensor_evidence:Set<EvidenceRef>
+}
+
+record LearnerBudgetState {
+  budget_ms:Int
+  used_ms:Int
+  learning_paused:Bool
+  perception_enabled:Bool
+  epoch:Epoch
+}
+
+record VisualLearnerState {
+  current:VisualClassifierVersion
+  candidate:VisualClassifierVersion?
+  last_known_good:VisualClassifierVersion
+  budget:LearnerBudgetState
+  replay_epoch:Epoch
+}
+
+rule VisualTrainingExample.tier=BRONZE => not autonomous_training_truth
+rule candidate.feature_backbone_version!=current.feature_backbone_version => reject(candidate)
+rule budget.used_ms>budget.budget_ms => budget.learning_paused=true
+rule budget.learning_paused=true => budget.perception_enabled=true
+rule VisualFamiliarityResult.result in {UNKNOWN,AMBIGUOUS,CONFLICT} => deeper_perception
+rule VisualFamiliarityResult.result=KNOWN_HIGH_CONFIDENCE requires calibration_ref+sensor_evidence
+rule familiarity_prediction!=sensor_truth
+rule confidence!=authority
+rule promote(candidate) requires evaluation_receipts+feature_backbone_compatibility
+rule promote(candidate) -> last_known_good=current + current=candidate
+rule rollback -> current=last_known_good
+rule replay requires exact_version_identity+feature_backbone_version+replay_epoch
+
+invariant BRONZE_never_autonomously_becomes_training_truth
+invariant learning_budget_failure_never_disables_perception
+invariant stale_feature_backbone_candidate_never_promotes
+invariant unknown_ambiguous_conflict_never_forced_to_familiarity
+invariant promotion_preserves_last_known_good
+invariant model_or_classifier_output_never_mints_authority

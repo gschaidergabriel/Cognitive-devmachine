@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1650p0700_chatgpt_loopdynamics_runtime",
+  "experiment_id":"EXP-CC-LOOPDYNAMICS-READOUT-20260809-01",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "execution_surface":{"class":"LOCAL_PYTHON_SANDBOX_FALLBACK","python":"3.13.5","e2b":"NOT_EXPOSED_TO_THIS_SESSION","target_release_host":"UBUNTU_LINUX_DEVELOPER_SYSTEM","fresh_ubuntu_host_execution":"NOT_CLAIMED"},
+  "artifacts":{"source":"LOOP_DYNAMICS_READOUT_CANDIDATE.clay","compiler":"loopdynamics_compiler_oracle.py","generated_runtime":"generated_runtime.py","experiment":"loopdynamics_experiment.py"},
+  "hashes":{"source_sha256":"4eb39e1cef9649ca1fe4ea946300b62ededadb5f204674e9dddaab25b94ba248","run_local_canonical_ir_sha256":"5432c0e5d8187e423a1e7c0031ba9155d3db5beb4480ec84c79487fa992dac8e","generated_runtime_sha256":"1a524e2716c23993e060e76539cc8c25705772ee874d3a305a681ff6f1a35b73","compiler_sha256":"f17db72163002121e640074b778b066900c8e8badc7fd4f74828381002987092","experiment_sha256":"a93ca2fe5a32aaefc4a532641bcb7bbbd29b315e1075c7c78975fcc2fc000941"},
+  "compile":{"exit_code":0,"records":2,"rules":7,"typecheck":"PASS","effectcheck":"PASS","separate_generated_runtime_smoke":{"input":"low_delta_high_pressure","observed":["STALLED","ESCALATE","low_delta_high_pressure"],"status":"PASS"}},
+  "negative_compile_mutations":[{"mutation":"authority field of type CapabilityRef inside LoopDynamicsReadout","exit_code":1,"stderr":"effect_error:authority_in_readout","status":"EXPECTED_REJECTION"},{"mutation":"unknown field type UnknownLoopType","exit_code":1,"stderr":"type_error:[[\"LoopDynamicsReadout\", \"mystery\", \"UnknownLoopType\"]]","status":"EXPECTED_REJECTION"}],
+  "synthetic_regime_experiment":{"seed":90210,"cases":100000,"cases_per_regime":20000,"typed_regime_accuracy":0.96037,"typed_action_accuracy":0.96151,"fixed_point_cycle_biased_baseline_regime_accuracy":0.39848,"fixed_point_cycle_biased_baseline_action_accuracy":0.19848,"interpretation":"CONSTRUCTED_DISCRIMINATOR_ONLY_NOT_LIVE_FRANK_EVIDENCE"},
+  "property_tests":{"assertions":150000,"stalled_false_convergence_failures":0,"productive_cycle_false_failure_failures":0,"negative_utility_continued_failures":0},
+  "expected":"Existing generic G9-aligned typed structures can represent a LoopDynamicsReadout/control contract, reject authority/type contamination, and preserve stalled/productive-cycle distinctions that a delta-only fixed-point shortcut loses.",
+  "observed":"Run-local parser/type/effect/lowering proxy passed the candidate, rejected both negative mutations, and the generated runtime passed the constructed discriminators.",
+  "failure_boundary":"This is not the production ClayCode parser/compiler, not Ubuntu-host evidence, not H1/H2 differential replay, and not evidence that FRANK's loop-of-loops hypothesis is causally correct.",
+  "promotion":"NONE"
+}

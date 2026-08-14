@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1707p0700-chatgpt-relation-ir-oracle",
+  "negative_results":[
+    {
+      "negative_result_id":"NR-CC-REL-SEMANTIC-HASH-NOT-SURFACE-WINNER-20260809",
+      "status":"NEGATIVE_RESULT",
+      "statement":"Typed-IR semantic equivalence alone cannot select the ClayCode relation surface: declared-bare, disjoint-sigil and generic-call arms all satisfied the tested canonical Relation IR/hash oracle.",
+      "evidence":"4/4 matched cases hash-identical across all three arms; 3000/3000 whitespace variants per arm stable; unknown relation rejected in all arms.",
+      "implication":"Surface freeze must use additional production measurements: full-corpus closure, diagnostics, mutation survival, migration edits, token/context cost, reader repair, parser/compiler complexity and latency.",
+      "scope":"local executable proxy only"
+    },
+    {
+      "negative_result_id":"NR-CC-REL-ORACLE-NOT-BASE-PASS-20260809",
+      "status":"NEGATIVE_RESULT",
+      "statement":"A successful micro surface->typed-IR oracle is insufficient to claim CC-WP-02, CC-WP-03, BASE, or general-purpose gate PASS.",
+      "evidence":"The experiment does not cover the complete 86-chunk G9+dialect corpus, the production-bound parser, target Ubuntu runtime, type/effect checking, lowering or application acceptance suite.",
+      "implication":"Keep all release workspace work packages and application acceptance states unchanged."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.1",
+  "event_id":"20260809T161636p0700_DELTA_chatgpt-secondary-ffi-abi",
+  "room_id":"claycode",
+  "event_type":"DELTA",
+  "origin_worker":"chatgpt-secondary-20260809T160924-ffi-abi",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"claycode",
+  "created_at":"2026-08-09T16:16:36+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "work_id":"WORK-CC-BASE-FFI-RESOURCE-LIFETIME-001",
+  "work_package":"CC-WP-07-RUNTIME-ABI-FFI",
+  "state":"COMPLETE_RESEARCH_DELTA_PACKAGE_OPEN",
+  "material_delta":[
+    "NR-CC-FFI-001: slot-only FFI resource identity fails deliberate drop+reuse model",
+    "H-CC-FFI-001 supported locally: stale capability can retarget reused slot",
+    "H-CC-FFI-002 supported locally plus external analogue: temporary resource loans need lifetime enforcement or equivalent",
+    "H-CC-FFI-003 remains OPEN: exact handle representation not canonicalized",
+    "GOODMAN-CC-FFI-001 verdict REFINED: preserve external authority boundary; strengthen FFI resource designation",
+    "NR-CC-PREFLIGHT-001: interconnect preflight tool is stale after clay->clayresearch rename"
+  ],
+  "evidence":[
+    "research_entity/trigger_runs/claycode/claycode_20260809T160924p0700_ffi_abi/EXECUTABLE_RESEARCH_RECEIPT.json",
+    "research_entity/trigger_runs/claycode/claycode_20260809T160924p0700_ffi_abi/FINAL_REPORT.md"
+  ],
+  "affected_branches":["claycode","frank","harness","unifieddb","claygraph","gwt","hyperposition","emergenz","clayresearch"],
+  "next":[
+    "real Ubuntu native FFI lowering discriminator",
+    "independent WASM/WASI or equivalent backend lowering",
+    "repair research_interconnect_preflight.py branch rename then rerun preflight"
+  ],
+  "stage_effect":"NO_STAGE_PROGRESS; CC-WP-07 remains OPEN",
+  "delivery":"NEXT_CHECKPOINT"
+}

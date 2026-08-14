@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "event_id": "ACTIONS-HOSTED-PRERUN-LOCALIZATION-20260809T175300Z",
+  "kind": "NEGATIVE_EXECUTION_EVIDENCE_DELTA",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T17:53:00Z",
+  "parent_event": "research_entity/state/system/events/20260809T175100Z-chatgpt-secondary-github-actions-prerun-blocker.json",
+  "trigger": "go",
+  "new_evidence": {
+    "source_commit": "gschaidergabriel/Dr.-Unterweger@d1d00477f7e241f0f5c7ccc505474d0409354809",
+    "workflow": "Frank Deep Integrity",
+    "workflow_path": ".github/workflows/frank-deep-integrity.yml",
+    "runner_selector": "ubuntu-latest",
+    "pull_request_run_id": 31327346592,
+    "job_id": 93279714989,
+    "observed_status": "completed",
+    "observed_conclusion": "failure",
+    "observable_steps": null,
+    "interpretation": "The independent control workflow that failed before any observable step is GitHub-hosted. The bounded dispatch bridge is also GitHub-hosted. Therefore the reproduced PR falsifier did not test or reach the Hostinger self-hosted runner."
+  },
+  "updated_hypothesis_ranking": [
+    {
+      "hypothesis": "GitHub-hosted private-repository runner usage blocked by billing/quota/budget/payment state.",
+      "status": "LEADING_PLAUSIBLE_NOT_VERIFIED",
+      "reason": "Two independent ubuntu-latest PR jobs failed before Step 1. Official GitHub docs state private-repository hosted jobs consume account quota, usage can be blocked after quota exhaustion without valid payment, and stop-usage budgets can block hosted runners. Current connector cannot inspect the account billing dashboard."
+    },
+    {
+      "hypothesis": "Repository/account Actions policy prevents hosted job admission.",
+      "status": "PLAUSIBLE_NOT_VERIFIED",
+      "reason": "A policy can limit Actions/components; exact repo/account policy is not exposed by the currently available connector."
+    },
+    {
+      "hypothesis": "Hostinger self-hosted runner is currently broken or offline.",
+      "status": "NOT_TESTED_BY_THIS_PR_FALSIFIER",
+      "reason": "Neither reproduced failing PR job used self-hosted labels. Separate Clay runner-allocation uncertainty remains active and must be tested independently."
+    }
+  ],
+  "operational_consequence": [
+    "Do not classify the Hostinger runner as failed from these two PR jobs.",
+    "Do not weaken receipt gates or grant repository write authority to model-execution jobs to bypass a hosted writer outage.",
+    "Owner/operator should inspect GitHub personal Billing & licensing -> Actions usage/budgets/payment and repository Settings -> Actions -> General; those account/UI surfaces are not available to the current connector.",
+    "After any billing/policy repair, rerun one minimal ubuntu-latest heartbeat first, then explicit dispatch, then receipt writer, before spending another real-model or WP02 cycle."
+  ],
+  "architecture_delta": "NO_CHANGE",
+  "test_obligation": "MINIMAL_HOSTED_HEARTBEAT_BEFORE_HIGH_COST_RERUN",
+  "promotion": "NONE",
+  "out_of_box_accounting": "NO_NEW_OOB_EXPERIMENT; infrastructure localization only",
+  "authority_invariant": "model output != execution authority",
+  "paid_training_started": false
+}

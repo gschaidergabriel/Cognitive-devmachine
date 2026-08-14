@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1924p0700-chatgpt-self-build-posthoc-recurrence",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "self_build_floor": "SATISFIED",
+  "built_artifacts": [
+    {
+      "path": "research_entity/harness/reference/posthoc_recurrence_readout.py",
+      "commit": "9aa3c5439974ba365287dea4e1e9c3a174eaebde",
+      "role": "deterministic non-trained frozen-trajectory recurrence exit/readout baseline"
+    },
+    {
+      "path": "research_entity/harness/reference/test_posthoc_recurrence_readout.py",
+      "commit": "f46d72e3fd6db31a58c19797f15948eae1b8d66b",
+      "role": "regression and negative tests"
+    },
+    {
+      "path": ".github/workflows/frank-posthoc-recurrence-readout.yml",
+      "commit": "92ece39388ec32cdb9ede01e0ada701c3ad451e2",
+      "role": "Ubuntu GitHub Actions regression gate"
+    },
+    {
+      "path": "research_entity/global/FRANK_CHATGPT_SELF_BUILD_FLOOR_DIRECTIVE.md",
+      "commit": "e9ddd75d1429ce377014c756c8115ac65fc4552c",
+      "role": "durable owner-directed ChatGPT self-build floor"
+    },
+    {
+      "path": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
+      "commit": "8f09362c04cfc289fa1b1fab6f7a76dbbf3fab8b",
+      "role": "bind exact frank trigger to self-build floor"
+    }
+  ],
+  "execution": {
+    "surface": "current ChatGPT sandbox/container",
+    "command": "python -m unittest -v test_posthoc_recurrence_readout.py",
+    "tests_passed": 9,
+    "tests_total": 9,
+    "failures": [],
+    "result": "PASS",
+    "evidence_class": "EXECUTED_LOCAL_REFERENCE_H1_PROXY",
+    "target_upgrade_forbidden": true,
+    "target_host_executed": false,
+    "target_4b_executed": false
+  },
+  "covered_properties": [
+    "minimum trajectory evidence before halt",
+    "windowed convergence",
+    "low-delta/high-residual false-halt rejection",
+    "positive recent marginal-utility continuation",
+    "divergence with rollback",
+    "recurrence-budget routing",
+    "deterministic receipt hashing",
+    "PROPOSAL_ONLY authority",
+    "mixed-loop identity rejection",
+    "out-of-order epoch rejection"
+  ],
+  "small_scenario_observations": {
+    "easy_convergence": "HALT_CANDIDATE_CONVERGED",
+    "transient_low_delta_high_pressure": "CONTINUE",
+    "divergence_with_rollback": "ROLLBACK",
+    "productive_margin": "CONTINUE"
+  },
+  "negative_result": "The run does not establish that the post-hoc baseline is superior to the existing single-state controller or to a learned gate; only its deterministic behavior and safety/identity invariants were executed here.",
+  "required_next_test": "Matched frozen H1 and target-4B trajectory differential against single-state, fixed-depth and learned-gate candidates with quality/latency/false-halt metrics.",
+  "authority": "PROPOSAL_ONLY"
+}

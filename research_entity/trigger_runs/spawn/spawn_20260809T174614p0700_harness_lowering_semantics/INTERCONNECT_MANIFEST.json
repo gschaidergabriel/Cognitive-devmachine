@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T174614p0700_harness_lowering_semantics",
+  "origin_branch": "harness",
+  "home_room": "center",
+  "canonical_revision": 2,
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "center_inputs": [
+    "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/global/RESEARCH_ACTOR_REGISTRY.json",
+    "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "research_entity/global/PROJECT_COMMAND_REGISTRY.json",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+    "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+    "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+    "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
+  ],
+  "deep_inputs": [
+    "research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md",
+    "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+    "research_entity/harness/HARNESS_WORKSPACE.json",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"
+  ],
+  "live_worker_check": {
+    "harness_workspace_reread_before_write": true,
+    "active_claims_seen": [
+      {
+        "work_package": "H-WP-02-STATE-LEDGER",
+        "actor": "chatgpt-secondary-sol-current",
+        "status": "ACTIVE"
+      }
+    ],
+    "duplication_decision": "Do not claim or duplicate H-WP-02. Research lowering-preservation as an orthogonal BASE-stage constraint feeding CC-WP-06/11/13 and later H-WP-03/20."
+  },
+  "branch_coverage": {
+    "clayresearch": {
+      "depth": "relevance_check_via_current_stack_program_mesh",
+      "result": "NEW_CONSTRAINT",
+      "note": "Integrated architecture must classify which semantics are first-class across lowering versus externally bound provenance/trace data."
+    },
+    "frank": {
+      "depth": "target_requirement_check_via_harness_program_current_stack",
+      "result": "NEW_CONSTRAINT",
+      "note": "FRANK effect authority, UNKNOWN/CONFLICT/REVOKED epistemic states and provenance must survive ClayCode implementation without semantic escape hatches."
+    },
+    "gwt": {
+      "depth": "relevance_check",
+      "result": "NO_CHANGE",
+      "note": "No new workspace mechanism; lowering validator must preserve existing receiver/use/effect/reentry observability fields when present."
+    },
+    "emergenz": {
+      "depth": "relevance_check",
+      "result": "NO_CHANGE",
+      "note": "No emergence claim; validator only protects intervention/measurement semantics from compiler erasure."
+    },
+    "claycode": {
+      "depth": "deep",
+      "result": "NEW_CONSTRAINT",
+      "note": "Add a field-classified lowering witness/translation validator as compiler/runtime work, not a language semantic redesign."
+    },
+    "hyperposition": {
+      "depth": "relevance_check",
+      "result": "NO_CHANGE",
+      "note": "No topology claim; any set-valued conflict/alternative semantics used by a program must remain first-class or verified equivalent through lowering."
+    },
+    "claygraph": {
+      "depth": "relevance_check",
+      "result": "NEW_CONSTRAINT",
+      "note": "Graph activation/relevance metadata must never be allowed to become authority during lowering; graph provenance remains separate from capability authority."
+    },
+    "unifieddb": {
+      "depth": "relevance_check",
+      "result": "NEW_CONSTRAINT",
+      "note": "Provenance may be externalized into the canonical ledger only with exact hash/epoch binding; externalization is not permission to drop semantic values needed at runtime."
+    },
+    "harness": {
+      "depth": "deep",
+      "result": "NEW_HYPOTHESIS",
+      "note": "H2 differential testing should include semantic-lowering mutation cases that intentionally drop/broaden critical fields and must fail closed."
+    }
+  },
+  "identity_boundary": {
+    "research_entity_is_not_frank": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_authority_for_this_run": "research/test/write research artifacts; no claim of live Frank modification"
+  },
+  "coverage_limitations": [
+    "No indexed prior spawn receipts were discoverable through repository code search.",
+    "No materialized harness ROOM_STATE.json was found at the expected room-state path; HARNESS_WORKSPACE.json live_claims was used as the current live-worker surface.",
+    "This run does not claim latest full final-report ingestion for every peer branch; it performed full mesh relevance coverage and deep reads for the materially coupled harness/claycode path."
+  ]
+}

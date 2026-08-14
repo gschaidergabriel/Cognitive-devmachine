@@ -1,0 +1,61 @@
+name: ClayCode WP12 post-commit heldout corpus
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_base_pure_toolchain.py'
+      - 'tools/claycode_wp12_heldout.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
+      - '.github/workflows/claycode-wp12-heldout.yml'
+
+concurrency:
+  group: claycode-wp12-heldout-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  heldout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned parser dependency
+        run: python -m pip install --disable-pip-version-check --quiet 'lark[interegular]==1.3.1'
+      - name: Require native C compiler
+        run: cc --version
+      - name: Generate unseen corpus after checkout and execute
+        run: python tools/claycode_wp12_heldout.py || true
+      - name: Commit revealed heldout receipt
+        if: always()
+        run: |
+          test -f research_entity/claycode/autonomous/WP12_HELDOUT_CORPUS_RECEIPT.json
+          git config user.name 'claycode-wp12-heldout'
+          git config user.email 'claycode-wp12-heldout@users.noreply.github.com'
+          git add research_entity/claycode/autonomous/WP12_HELDOUT_CORPUS_RECEIPT.json
+          git diff --cached --quiet || git commit -m 'ClayCode: record post-commit heldout corpus receipt'
+          if git log -1 --pretty=%B | grep -q 'record post-commit heldout corpus receipt'; then
+            for attempt in 1 2 3; do
+              git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+              sleep $((attempt * 2))
+            done
+          fi
+      - name: Enforce heldout verdict
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          p='research_entity/claycode/autonomous/WP12_HELDOUT_CORPUS_RECEIPT.json'
+          d=json.load(open(p, encoding='utf-8'))
+          assert d['summary']['pass'], d['summary']['failures']
+          assert d['counts_as_work_package_pass'] is False
+          assert d['counts_as_target_acceptance'] is False
+          print('WP12_HELDOUT_HOSTED_EVIDENCE_PASS')
+          PY

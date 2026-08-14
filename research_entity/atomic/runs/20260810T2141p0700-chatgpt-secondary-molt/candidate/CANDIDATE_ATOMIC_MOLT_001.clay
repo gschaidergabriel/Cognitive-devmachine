@@ -1,0 +1,260 @@
+module clay.atomic.molt.at_molt_001_v1
+version "AT-MOLT-001-v1"
+status TESTED_LOCAL_PROXY
+run_id atomic-20260810T2141p0700-chatgpt-secondary-molt
+outer_thinkspace GENERATIVE_REALITY_THEORY
+
+// MOLT — MONOTONIC ONE-INODE LINEAGE TAIL
+// Replace spatial in-place mutability inside self.root.udb with a temporal write geometry.
+// Accepted root/model prefix bytes are never modified by ordinary target cognition.
+// State is a provenance-bound append frame chain. Cognition receives no writable image fd.
+// A minimal broker may only append under a verified target-host append-only inode binding.
+
+class MOLTAdmission = ADMITTED | REJECTED_SEMANTIC | REJECTED_CHAIN | REJECTED_EPOCH |
+                      REJECTED_ROOT | REJECTED_AUTHORITY | UNKNOWN_HOST_BINDING | QUARANTINED
+class MOLTRegion = IMMUTABLE_PREFIX | STATE_TAIL | DERIVED_REBUILDABLE
+class MOLTRecovery = CLEAN | ROLLED_BACK_PARTIAL_TAIL | QUARANTINED_CORRUPTION | ROOT_FAILURE
+class MOLTBrokerHealth = HEALTHY | DEGRADED | FAILED | QUARANTINED | UNKNOWN
+
+record MOLTImageIdentity {
+  native_self:SelfRef = self.root
+  root_id:Hash
+  accepted_binary_id:Hash
+  model_id:Hash
+  schema_id:Hash
+  immutable_prefix_end:Offset
+  state_origin_head:Hash
+  image_instance:Ref
+}
+
+record MOLTStateHead {
+  root_id:Hash
+  epoch:Epoch
+  head_hash:Hash
+  prior_head_hash:Hash
+  last_tx:TxRef?
+}
+
+record MOLTStateDeltaEnvelope {
+  tx_id:TxRef
+  root_id:Hash
+  expected_epoch:Epoch
+  expected_prior_head:Hash
+  semantic_delta:TypedStateDelta
+  provenance:Set<EvidenceRef>
+  causal_receipts:Set<CausalReceiptRef>
+  effect_receipts:Set<EffectReceiptRef>
+  schema_id:Hash
+  request_identity:Hash
+}
+
+record MOLTFrameHeader {
+  frame_version:Version
+  root_id:Hash
+  epoch:Epoch
+  prior_head:Hash
+  tx_id:TxRef
+  payload_hash:Hash
+  provenance_root:Hash
+  schema_id:Hash
+  body_length:Int
+}
+
+record MOLTCommitFrame {
+  header:MOLTFrameHeader
+  body:Bytes
+  frame_hash:Hash
+  commit_marker:Hash
+}
+
+record MOLTHostBindingReceipt {
+  image:Ref
+  inode_identity:Ref
+  filesystem:Ref
+  kernel:Version
+  append_inode_flag_verified:Bool
+  broker_open_mode:O_WRONLY_APPEND
+  broker_has_cap_linux_immutable:Bool=false
+  cognitive_runtime_has_image_write_fd:Bool=false
+  prohibited_syscalls:Set<SyscallRef>
+  seccomp_or_equivalent_profile_hash:Hash?
+  landlock_or_equivalent_profile_hash:Hash?
+  test_receipt:EvidenceRef
+}
+
+record MOLTAppendCapability {
+  capability_id:CapabilityRef
+  image_identity:MOLTImageIdentity
+  host_binding:MOLTHostBindingReceipt
+  max_frame_bytes:Int
+  max_tx_rate:Int
+  max_uncheckpointed_bytes:Int
+  authority:STATE_APPEND_ONLY
+}
+
+record MOLTRecoveryReceipt {
+  image_identity:MOLTImageIdentity
+  accepted_head:MOLTStateHead
+  recovery:MOLTRecovery
+  scanned_frames:Int
+  discarded_suffix_bytes:Int
+  first_failure_offset:Offset?
+  fabricated_state:Bool=false
+  immutable_prefix_hash_valid:Bool
+}
+
+record MOLTRepackProposal {
+  source_image:MOLTImageIdentity
+  source_head:MOLTStateHead
+  candidate_root_id:Hash
+  candidate_image_hash:Hash
+  reason:COMPACTION | ROOT_UPGRADE | MODEL_UPGRADE | SCHEMA_MIGRATION
+  target_self_authority:PROPOSAL_ONLY
+  required_external_authority:CLAY_OR_OWNER_AUTHORIZED_RELEASE_PATH
+}
+
+law PHYSICAL_ONE_INODE != SEMANTIC_ONE_REGION
+law STATE_EVOLUTION = MONOTONIC_APPEND_OF_ADMITTED_EPOCHS
+law ORDINARY_STATE_UPDATE never rewrites existing accepted bytes
+law ROOT_OR_MODEL_CHANGE != STATE_UPDATE
+law append_frame cannot mint truth | effect_authority | instruction_authority | harness_authority
+law state_head identity binds exact root_id + prior_head + epoch + tx_id + payload_hash + schema_id
+law derived indexes may be rebuilt and never become semantic truth by persistence location
+
+fn validate_delta(img:MOLTImageIdentity, head:MOLTStateHead, d:MOLTStateDeltaEnvelope) -> MOLTAdmission {
+  if d.root_id != img.root_id return REJECTED_ROOT
+  if d.expected_epoch != head.epoch return REJECTED_EPOCH
+  if d.expected_prior_head != head.head_hash return REJECTED_CHAIN
+  if d.schema_id != img.schema_id return REJECTED_SEMANTIC
+  if semantic_delta_targets_immutable_root_or_model(d.semantic_delta) return REJECTED_SEMANTIC
+  if semantic_delta_attempts_authority_mint(d.semantic_delta) return REJECTED_AUTHORITY
+  if provenance_invalid(d.provenance) return REJECTED_SEMANTIC
+  return ADMITTED
+}
+
+fn make_frame(img:MOLTImageIdentity, head:MOLTStateHead, d:MOLTStateDeltaEnvelope) -> MOLTCommitFrame {
+  require validate_delta(img,head,d) == ADMITTED
+  next_epoch = head.epoch + 1
+  payload = canonical_typed_encode(d.semantic_delta,d.provenance,d.causal_receipts,d.effect_receipts)
+  payload_hash = H(payload)
+  header = MOLTFrameHeader(
+    frame_version="1", root_id=img.root_id, epoch=next_epoch,
+    prior_head=head.head_hash, tx_id=d.tx_id, payload_hash=payload_hash,
+    provenance_root=H(d.provenance), schema_id=img.schema_id, body_length=size(payload))
+  frame_hash = H(canonical_typed_encode(header) + payload)
+  commit_marker = H("MOLT-COMMIT" + frame_hash)
+  return MOLTCommitFrame(header,payload,frame_hash,commit_marker)
+}
+
+fn derive_next_head(img:MOLTImageIdentity, old:MOLTStateHead, f:MOLTCommitFrame) -> MOLTStateHead {
+  require f.header.root_id == img.root_id
+  require f.header.epoch == old.epoch + 1
+  require f.header.prior_head == old.head_hash
+  require H(f.body) == f.header.payload_hash
+  require H(canonical_typed_encode(f.header) + f.body) == f.frame_hash
+  require H("MOLT-COMMIT" + f.frame_hash) == f.commit_marker
+  next_hash = H(old.head_hash + f.header.payload_hash + f.header.tx_id + f.header.epoch + img.root_id + f.header.schema_id)
+  return MOLTStateHead(img.root_id,f.header.epoch,next_hash,old.head_hash,f.header.tx_id)
+}
+
+fn broker_accept(cap:MOLTAppendCapability, head:MOLTStateHead, d:MOLTStateDeltaEnvelope) -> MOLTStateHead {
+  require cap.host_binding.append_inode_flag_verified
+  require cap.host_binding.broker_has_cap_linux_immutable == false
+  require cap.host_binding.cognitive_runtime_has_image_write_fd == false
+  require cap.host_binding.broker_open_mode == O_WRONLY_APPEND
+  require validate_delta(cap.image_identity,head,d) == ADMITTED
+  frame = make_frame(cap.image_identity,head,d)
+  require size(frame) <= cap.max_frame_bytes
+  append_exact_frame_and_durability_barrier(cap,frame)
+  verify_tail_frame(cap,frame)
+  return derive_next_head(cap.image_identity,head,frame)
+}
+
+fn recover(img:MOLTImageIdentity, bytes:ReadOnlyBytes) -> MOLTRecoveryReceipt {
+  require verify_immutable_prefix(img,bytes)
+  head = MOLTStateHead(img.root_id,0,img.state_origin_head,zero_hash,none)
+  for candidate_frame in scan_tail_frames(bytes,img.immutable_prefix_end) {
+    if incomplete_suffix(candidate_frame) {
+      return receipt(head,ROLLED_BACK_PARTIAL_TAIL,discard_suffix=true)
+    }
+    if !frame_structurally_valid(candidate_frame) {
+      return receipt(head,QUARANTINED_CORRUPTION,discard_suffix=false)
+    }
+    if !semantic_frame_valid(candidate_frame,img,head) {
+      return receipt(head,QUARANTINED_CORRUPTION,discard_suffix=false)
+    }
+    head = derive_next_head(img,head,candidate_frame)
+  }
+  return receipt(head,CLEAN,discard_suffix=false)
+}
+
+rule MOLTHostBindingReceipt is mandatory runtime evidence, not inferred from ClayCode declaration
+rule O_APPEND alone is insufficient host security evidence
+rule kernel_or_filesystem_without_verified_append_inode_semantics -> UNKNOWN_HOST_BINDING
+rule broker_with CAP_LINUX_IMMUTABLE -> REJECTED_HOST_BINDING
+rule cognitive_runtime_with writable self.root.udb fd -> REJECTED_HOST_BINDING
+rule broker syscall surface containing truncate|ftruncate|fallocate|rename|unlink|ioctl_setflags -> REJECTED_HOST_BINDING
+rule unknown positioned_write_semantics -> adversarial_target_test before promotion
+rule append broker cannot clear inode append-only state
+rule append broker cannot create executable memfd from mutable state
+rule append broker cannot select root/model executable bytes
+rule state frame may contain evidence about root but never root mutation authority
+
+rule root_upgrade|model_upgrade|schema_migration -> MOLTRepackProposal
+rule MOLTRepackProposal.target_self_authority = PROPOSAL_ONLY
+rule accepted_repack requires external release authority + complete new-image verification + atomic promotion + rollback
+rule compaction never runs as ordinary target cognition effect
+rule old accepted image remains last_known_good until candidate promotion receipt
+
+rule GWT_selection|broadcast|reentry may generate StateDeltaEnvelope only after normal causal/provenance rules
+rule GWT_ignition cannot bypass MOLT validation
+rule MOLT persistence cannot mint GWT salience or causal credit
+rule recovery replay must preserve exact episode/signal/causal identity for reentry-sensitive state
+
+compare NAIVE_EUDI_ODRDW -> same_inode general writable fd
+compare SPLIT_LAYOUT -> immutable root/model file(s) + mutable state.udb
+compare LOOP_SUBRANGE -> kernel loop offset/sizelimit mutable-range projection
+compare SIMPLE_APPEND_LOG -> resource-matched append+fsync without lineage/semantic checks
+compare IMMUTABLE_DB_LOG -> known append-only cryptographic database/log analogue
+ablate INODE_APPEND_FLAG -> O_APPEND_ONLY_NEGATIVE_CONTROL
+ablate BROKER_PROCESS -> cognitive_runtime_direct_append_fd
+ablate HASH_CHAIN -> unchained append log
+ablate SEMANTIC_GATE -> structurally valid forbidden-root frame
+ablate EPOCH_CHAIN -> replay/duplicate frame control
+ablate COMMIT_MARKER -> torn suffix ambiguity control
+ablate ROOT_BINDING -> cross-root replay control
+ablate DURABILITY_BARRIER -> crash semantics unknown
+
+observe [
+  immutable_prefix_modification_attempts,
+  append_flag_bypass_attempts,
+  positioned_write_bypass_attempts,
+  truncate_bypass_attempts,
+  fabricated_state_after_crash,
+  accepted_epoch,
+  replay_rejection,
+  semantic_root_override_rejection,
+  crash_cut_rollback_rate,
+  corruption_fail_closed_rate,
+  tx_latency_p50,
+  tx_latency_p95,
+  tx_latency_p99,
+  recovery_latency,
+  bytes_per_tx,
+  fsync_count,
+  rss_pss,
+  cpu_time,
+  backup_delta_bytes,
+  compaction_cost,
+  authority_violations
+]
+
+invariant GRT_CONSISTENT_IMPLIES_THINKABLE_NOT_TRUE
+invariant measured_candidate_is_possibility_not_canonical_architecture
+invariant self_root_self_harness_authority_is_proposal_only
+invariant mutable_state_never_mints_root_or_effect_authority
+invariant no_runtime_image_write_fd_without_verified_append_only_host_binding
+invariant stale_epoch_never_admitted
+invariant partial_tail_never_fabricates_committed_state
+invariant corruption_never_silently_promotes_new_state_head
+invariant root_model_prefix_change_never_occurs_under_ordinary_state_authority

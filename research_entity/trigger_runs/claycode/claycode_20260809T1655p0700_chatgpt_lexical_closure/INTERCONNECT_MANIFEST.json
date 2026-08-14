@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1655p0700_chatgpt_lexical_closure",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "official_preflight_executed": false,
+  "preflight_status": "MANUAL_FAIL_CLOSED_HOSTED_SESSION_NO_REPO_CHECKOUT",
+  "registered_scientific_branches": [
+    "clayresearch",
+    "frank",
+    "gwt",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness"
+  ],
+  "inputs": {
+    "clayresearch": [
+      "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+      "research_entity/rooms/PROGRAM_STATE.json",
+      "research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md"
+    ],
+    "frank": [
+      "research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md",
+      "research_entity/trigger_runs/claycode/claycode_20260809T1655p0700_transactional_loop_trace_identity/BRANCH_FEEDBACK_MANIFEST.json"
+    ],
+    "gwt": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+    "emergenz": ["research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md"],
+    "claycode": [
+      "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "research_entity/claycode/g9/grammar.ebnf",
+      "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+    ],
+    "hyperposition": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+    "claygraph": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],
+    "unifieddb": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],
+    "harness": ["research_entity/harness/HARNESS_WORKSPACE.json"]
+  },
+  "concurrent_inputs_assimilated": [
+    "research_entity/trigger_runs/claycode/claycode_20260809T1654p0700_chatgpt_loop_scheduler_identity/FINAL_REPORT.md",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1650p0700-base-parser-control-lowering/NEGATIVE_RESULT.json",
+    "research_entity/trigger_runs/claycode/claycode-20260809T0951Z-chatgpt-sol/GRAMMAR_COVERAGE_PROBE.json",
+    "research_entity/trigger_runs/claycode/claycode_20260809T1655p0700_transactional_loop_trace_identity/BRANCH_FEEDBACK_MANIFEST.json"
+  ],
+  "deep_inputs": ["frank", "claygraph", "unifieddb"],
+  "cross_branch_result": "No broad ClayCode semantic redesign is justified. A new executable lexical counterexample shows that the current ref token rule is not delimiter-closed and that bare identifiers containing hyphen collide with unspaced subtraction under longest-match lexing. The ref issue admits a local parser/grammar repair. Hyphen removal is not promoted until compatibility is measured or an escaped/sigil identifier form is defined. Canonical semantic identity remains post-parse; lexer/compiler provenance remains separately receipted.",
+  "promotion": "NONE"
+}

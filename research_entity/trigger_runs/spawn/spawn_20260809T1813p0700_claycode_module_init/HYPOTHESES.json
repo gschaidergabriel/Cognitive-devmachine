@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1813p0700_claycode_module_init",
+  "origin_branch": "claycode",
+  "epistemic_status": "OPEN_RESEARCH_CANDIDATES",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-CC-MODINIT-01",
+      "status": "SUPPORTED_BY_SYNTHETIC_PROXY_NOT_PROMOTED",
+      "claim": "ClayCode can permit cyclic structural module/link graphs while retaining deterministic startup if linking is separated from eager value initialization and only the eager value-dependency graph is required to be acyclic.",
+      "prediction": "Programs with import/link SCCs but acyclic eager value dependencies compile/link and produce identical semantic results under module discovery/import-order perturbation.",
+      "falsifier": "A production ClayCode case where structural cyclic linking necessarily induces order-sensitive eager state, or a valid program whose semantics differ under the proposed split."
+    },
+    {
+      "id": "H-SPAWN-CC-MODINIT-02",
+      "status": "SUPPORTED_BY_SYNTHETIC_PROXY_NOT_PROMOTED",
+      "claim": "Eager initialization cycles should fail closed with a canonical SCC-based cycle receipt rather than exposing partially initialized default state.",
+      "prediction": "The same eager dependency cycle yields the same normalized cycle membership/internal-edge receipt and hash despite parser/import/discovery ordering.",
+      "falsifier": "Canonical cycle receipts cannot be made stable without discarding semantically relevant dependency distinctions, or production semantics require a valid eager recursive initialization case."
+    },
+    {
+      "id": "H-SPAWN-CC-MODINIT-03",
+      "status": "OPEN",
+      "claim": "No new ClayCode surface syntax is needed for BASE module-cycle semantics; canonical IR/linker/runtime metadata can express the distinction between structural references and eager initialization dependencies.",
+      "prediction": "A production implementation can realize the module/link/init plan using existing module/import/value/function/type constructs plus compiler metadata.",
+      "falsifier": "An executable application or FRANK component requires explicit user-visible lazy/phase/init semantics that cannot be represented or inferred safely."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SPAWN-CC-MODINIT-01",
+      "claim": "Ban all direct and indirect module import cycles.",
+      "status": "WEAKENED_BY_PROXY",
+      "reason": "Simpler but rejects generated structural-cycle cases whose eager value-dependency graph is acyclic and deterministic."
+    },
+    {
+      "id": "CH-SPAWN-CC-MODINIT-02",
+      "claim": "Allow recursive initialization by exposing partial/default module state.",
+      "status": "WEAKENED_BY_PROXY",
+      "reason": "Naive partial initialization generated order-sensitive final results and uninitialized reads; production JVM-style guarded semantics remain a comparison, not refuted in full."
+    },
+    {
+      "id": "CH-SPAWN-CC-MODINIT-03",
+      "claim": "Use one fixed source/import traversal order and treat that as sufficient determinism.",
+      "status": "WEAKENED",
+      "reason": "A fixed traversal can hide semantic dependence on arbitrary presentation order; the proposed contract instead derives readiness from semantic eager dependencies."
+    },
+    {
+      "id": "CH-SPAWN-CC-MODINIT-04",
+      "claim": "Adopt full live-binding/TDZ cyclic evaluation semantics immediately.",
+      "status": "NOT_SELECTED",
+      "reason": "ECMAScript demonstrates that cyclic module SCCs are implementable, but ClayCode has no executable counterexample yet requiring the additional runtime complexity."
+    },
+    {
+      "id": "CH-SPAWN-CC-MODINIT-05",
+      "claim": "Add explicit lazy initialization syntax now.",
+      "status": "NOT_SELECTED",
+      "reason": "Violates the current less-change-more-compile policy absent a concrete application/compiler counterexample."
+    }
+  ],
+  "proposed_minimal_contract": {
+    "phase_1_link": "Resolve all module semantic identities and structural type/function/symbol bindings across SCCs without executing eager values.",
+    "phase_2_init_graph": "Derive eager initialization dependency edges from canonical typed IR, not textual import order.",
+    "phase_3_execute": "Initialize ready eager values in deterministic order keyed by stable semantic identity when multiple nodes are simultaneously ready.",
+    "phase_4_cycle": "If eager nodes remain in SCCs, fail closed before exposing module-ready state and emit a canonical ModuleInitCycleReceipt.",
+    "receipt_shape_candidate": {
+      "module_graph_semantic_hash": "Hash",
+      "eager_dependency_graph_hash": "Hash",
+      "cycle_scc_members": "sorted<ModuleSemanticId>",
+      "cycle_internal_edges": "sorted<(ModuleSemanticId,ModuleSemanticId)>",
+      "cycle_receipt_hash": "Hash",
+      "phase": "LINK|INIT_PLAN|INIT_EXECUTE",
+      "status": "READY|FAILED_CYCLE|FAILED_INIT"
+    },
+    "surface_syntax_change": "NONE_JUSTIFIED_YET"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "field_id": "field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6",
+  "experiments": [
+    {
+      "experiment_id": "EXP-STI-01",
+      "evidence_class": "EXACT_SYNTHETIC_MECHANISM_EXPERIMENT",
+      "method": "Exhaustively enumerate all 20 order-preserving interleavings of a 3-step writer upgrading prototype_version, calibration_version and active_version from 5 to 6 and a 3-step reader observing the same fields.",
+      "result": {
+        "total_interleavings": 20,
+        "serially_consistent_snapshots": 10,
+        "fractured_snapshots": 10,
+        "fractured_rate": 0.5
+      },
+      "interpretation": "Per-field atomicity does not imply invariant-level snapshot consistency."
+    },
+    {
+      "experiment_id": "EXP-STI-02",
+      "evidence_class": "EXACT_SYNTHETIC_MECHANISM_EXPERIMENT",
+      "method": "Exhaustively enumerate all 6 order-preserving interleavings of two read-then-write transactions on one versioned object. Compare naive last-write-wins with compare-and-swap commit guard.",
+      "result": {
+        "total_interleavings": 6,
+        "overlapping_read_interleavings": 4,
+        "naive_lost_update_interleavings": 4,
+        "cas_conflicts_detected": 4,
+        "serial_interleavings": 2
+      },
+      "interpretation": "Version-guarded commit converts overlapping stale writes into explicit conflicts rather than silent lineage loss."
+    }
+  ],
+  "note": "Exact combinatorial synthetic experiments executed by the ChatGPT organ during this 666 invocation; not live FRANK evidence."
+}

@@ -1,0 +1,10 @@
+module frank.active_assembly_score
+fn mul45(x:Real)->Real=x*0.45
+fn mul25(x:Real)->Real=x*0.25
+fn mul15(x:Real)->Real=x*0.15
+fn inv_uncertainty(x:Real)->Real=1.0-x
+fn uncertainty_part(x:Real)->Real=mul15(inv_uncertainty(x))
+fn sum2(a:Real,b:Real)->Real=a+b
+fn left_score(relevance:Real,impact:Real)->Real=sum2(mul45(relevance),mul25(impact))
+fn right_score(novelty:Real,uncertainty:Real)->Real=sum2(mul15(novelty),uncertainty_part(uncertainty))
+fn packet_score(relevance:Real,impact:Real,novelty:Real,uncertainty:Real)->Real=sum2(left_score(relevance,impact),right_score(novelty,uncertainty))

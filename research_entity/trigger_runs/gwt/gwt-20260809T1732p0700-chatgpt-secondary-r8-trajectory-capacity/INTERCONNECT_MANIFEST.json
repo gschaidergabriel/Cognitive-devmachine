@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.1",
+  "run_id": "gwt-20260809T1732p0700-chatgpt-secondary-r8-trajectory-capacity",
+  "trigger": "gwt",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "official_repo_checkout_preflight": "NOT_RUN_HOSTED_CONNECTOR_SURFACE",
+  "room_pulse": "GWT_ROOM_PATH_404_ON_HOSTED_CONNECTOR",
+  "promotion_allowed": false,
+  "registered_scientific_branches": [
+    "clayresearch",
+    "harness",
+    "claygraph",
+    "unifieddb",
+    "frank",
+    "emergenz",
+    "hyperposition",
+    "claycode",
+    "gwt"
+  ],
+  "baseline": "gwt-20260809T1720p0700-chatgpt-secondary-r7-dual-gate",
+  "post_r7_material": [
+    {
+      "branch": "harness",
+      "ref": "research_entity/trigger_runs/harness/harness_20260809T1725p0700_hwp02_oracle_merge/FINAL_REPORT.md",
+      "used": "semantic_state_hash, state_version_hash and trace_root_hash are experimentally separable; recurrence progress/readout should not collapse them"
+    },
+    {
+      "branch": "frank",
+      "ref": "research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json",
+      "used": "fresh LoopDynamicsReadout and RecurrenceDecision provide the exact BASE semantic surface to refine"
+    },
+    {
+      "branch": "claycode",
+      "ref": "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/FINAL_REPORT.md",
+      "used": "current G9 record/tensor/rule machinery is sufficient candidate representation; no GWT-specific syntax change is justified without a compile counterexample"
+    },
+    {
+      "branch": "emergenz",
+      "ref": "research_entity/trigger_runs/hypofusion/hypofusion-20260809T1716p0700-chatgpt-secondary-r2/CONTRADICTION_MAP.md",
+      "used": "pairwise directed-flow measures can have common-driver false positives and XOR-like higher-order false negatives; multivariate controls remain conditional"
+    },
+    {
+      "branch": "clayresearch",
+      "ref": "research_entity/trigger_runs/clay/20260809T1713p0700-chatgpt-secondary/FINAL_REPORT.md",
+      "used": "adaptive recurrence remains outcome-gated and must not expand BASE beyond representability"
+    },
+    {
+      "branch": "gwt",
+      "ref": "research_entity/trigger_runs/gwt/gwt-20260809T1720p0700-chatgpt-secondary-r7-dual-gate/FINAL_REPORT.md",
+      "used": "retain dual admission/continuation gates and receiver-causal closure; R8 enriches continuation observability rather than replacing R7"
+    }
+  ],
+  "unchanged_foundations": {
+    "claygraph": "activation/reachability remain distinct from workspace causal use and truth",
+    "unifieddb": "persist/replay exact episode, epoch, intervention and identity layers without forcing physical monolith",
+    "hyperposition": "preserve alternatives and higher-order codependencies rather than scalar-collapse them"
+  },
+  "shared_ancestry_warning": true,
+  "strong_promotion_allowed": false,
+  "promotion": "NONE_OPEN_RESEARCH_DELTA"
+}

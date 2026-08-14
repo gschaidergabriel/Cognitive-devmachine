@@ -1,0 +1,43 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK_CREATE-20260809T1713p0700-CC-G9-SPEC-GRAMMAR-CONFORMANCE",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:13:00+07:00",
+  "payload": {
+    "work_id": "CC-WORK-G9-SPEC-GRAMMAR-CONFORMANCE-001",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CLAYRESEARCH_EXECUTABLE_COUNTEREXAMPLE",
+    "title": "Close G9 spec-to-grammar conformance before parser freeze",
+    "work_clay": "On the Ubuntu FRANK v0.1 target, make the admitted ClayCode G9 V3 surface/spec parseable by the admitted grammar and parser without semantic escape hatches. Current concrete counterexamples include comparison operators used by the spec but absent from grammar (> < >=), conditional blocks used by the main cycle but absent from statement grammar, and receipt? or residual syntax not represented by current operator/primary rules. Prefer the smallest grammar/surface correction or canonical-spec rewrite that preserves existing semantics; do not redesign semantics unless an executable counterexample forces it.",
+    "reason_clay": "BASE_CLAYCODE_RELEASE is the first unpassed gate. The current G9 V3 spec and grammar are internally inconsistent, so CC-WP-01 SPEC-FREEZE and CC-WP-02 PARSER-CANON cannot truthfully close until a full spec->parser conformance test passes. Evidence refs: research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay and research_entity/claycode/g9/grammar.ebnf.",
+    "completion_clay": "A repository test enumerates every admitted G9 V3 construct and parses the full current G9 V3 spec with zero unsupported syntax; parser->canonical IR->pretty/roundtrip preserves semantic hash; negative grammar tests reject malformed constructs; any semantic change is linked to a failing executable counterexample. Ubuntu test receipt and exact hashes are recorded.",
+    "evidence_need": [
+      "full G9 V3 parse receipt",
+      "grammar coverage matrix",
+      "roundtrip/canonical semantic-hash receipt",
+      "negative syntax tests",
+      "Ubuntu execution receipt"
+    ],
+    "executor_policy": "Research Entity local execution authority only. Prefer Claude/local repo build organ when capacity returns or another verified local executor. ChatGPT connector writes are coordination/research state, not proof that compiler/parser execution occurred.",
+    "required_capabilities": ["local_repo_checkout", "ubuntu_linux", "parser_build", "test_runner", "git"],
+    "write_scope": [
+      "research_entity/claycode/g9/",
+      "research_entity/claycode/tests/",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE",
+      "RAE_LATEST_COGNITIVE_STACK.clay admits CLAYCODE_G9_FUSION_SPEC_V3.clay"
+    ],
+    "invalidators": [
+      "A newer admitted ClayCode stack pointer supersedes G9 V3 before execution",
+      "A verified existing parser receipt already proves full admitted-spec conformance"
+    ],
+    "base_priority": 0.98,
+    "expected_impact": 0.95,
+    "urgency": 0.95,
+    "information_gain": 0.90,
+    "status": "READY"
+  }
+}

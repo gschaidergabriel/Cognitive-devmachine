@@ -1,0 +1,9 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration",
+  "negative_results":[
+    {"id":"NEG-CC-FN-STRICT-001","status":"NEGATIVE_RESULT","result":"Unmodified D candidate fails Lark strict-LALR construction; D+fn also fails strict-LALR construction.","scope":"current local Lark 1.3.1 toolchain","interpretation":"Do not claim conflict-free parser freeze. Successful non-strict parse/differential execution does not erase parser conflict debt.","next_test":"Generate/inspect production parser conflict table or refactor separator/contextual-keyword grammar, then rerun full corpus + ambiguity/fuzz + target reader."},
+    {"id":"NEG-CC-FN-PROMOTION-001","status":"NEGATIVE_RESULT","result":"No target Ubuntu, E2B, Qwen-class reader, production compiler/runtime/FFI or mandatory application proof was executed.","interpretation":"No BASE work package or general-purpose gate can PASS from this run."}
+  ],
+  "scope_note":"The minimal fn experiment rejects recursion because that surface did not define it. Concurrent control/effect closure evidence separately tests recursion/control/effects; this run does not infer recursion is undesirable or unavailable in the future production IR."
+}

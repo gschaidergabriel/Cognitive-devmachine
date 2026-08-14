@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1814p0700-emergenz-d7916-m2",
+  "trigger": "spawn",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "rng": {
+    "class": "OS_CSPRNG",
+    "python_api": "secrets.randbelow",
+    "seed_recorded": false,
+    "branch_draw_raw_0_9999": 7916,
+    "branch_draw_percent": 79.16,
+    "weights_source": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "weights_blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+    "weights_percent": {"claycode":50,"harness":10,"frank":10,"gwt":6,"emergenz":6,"hyperposition":5,"claygraph":5,"unifieddb":4,"clayresearch":4},
+    "selected_origin_branch": "emergenz",
+    "microdirection_draw_raw_0_4": 1,
+    "microdirection_draw_human": "2/5"
+  },
+  "candidate_microdirections": [
+    {"id":"multiscale_aliasing","question":"Can estimator window/lag choice create or erase directed-flow/synergy across fast/slow loops?"},
+    {"id":"probe_observer_effect","question":"Can instrumentation/replay probes perturb latency/order enough to alter recurrent dynamics and emergence readouts?"},
+    {"id":"context_mixture_reversal","question":"Can pooled contexts create or reverse emergence readouts via mixture effects?"},
+    {"id":"selection_bias_many_candidates","question":"Does searching many assemblies/edges inflate emergence discoveries?"},
+    {"id":"causal_mediation_split","question":"Do current readouts double-count direct and mediated causal-use paths?"}
+  ],
+  "selected_microdirection": "probe_observer_effect",
+  "novelty_audit": {
+    "recent_spawn_history_scanned": true,
+    "recent_receipt_enumeration_exhaustive": false,
+    "reason": "GitHub connector code search did not enumerate SPAWN_RECEIPT files; recent commit history and known final reports were scanned instead.",
+    "nearest_recent_direction": "spawn-20260809T1741p0700-emergenz-d79-m4 adaptive compensation confounds lesion/rescue",
+    "live_concurrent_reread": "commit 8b4b1bfaa64e6dfe7035ca97af9b9a30d9016f82 abstraction-selection guard",
+    "duplication_assessment": "NON_DUPLICATE: current direction tests instrumentation-induced perturbation, not adaptation during intervention or macro-selection bias."
+  },
+  "selection_probability_is_evidence": false
+}

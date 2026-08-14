@@ -1,0 +1,50 @@
+{
+  "schema_version": "2.0",
+  "event_id": "spawn-cc-module-init-prod-diff-20260809T1813p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T18:13:00+07:00",
+  "payload": {
+    "work_id": "WORK-SPAWN-CC-MODULE-INIT-PROD-DIFF-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_NEXT_DISCRIMINATOR",
+    "title": "Run production ClayCode module-cycle initialization differential",
+    "work_clay": "Implement the minimal module linker/init planner in the current production ClayCode canonical IR/compiler/runtime without adding surface syntax unless forced. Distinguish structural link/import edges from eager value-dependency edges; link symbols/types/functions across structural SCCs; initialize eager values by stable semantic dependency order; reject remaining eager cycles with a canonical SCC receipt. Execute differential fixtures through the production pipeline and on the Ubuntu developer target.",
+    "reason_clay": "Hosted proxy evidence found 14993/50000 generated cases with structural import cycles but acyclic eager value graphs; the stable dependency planner had 0/43380 order-perturbation failures, while unsafe partial initialization diverged in 5625 cases. Production ClayCode/Ubuntu evidence is still absent.",
+    "completion_clay": "Receipts for: (1) type/function-only cyclic modules link and execute; (2) cyclic structural graph with acyclic eager values initializes identically under import/discovery-order perturbation; (3) true eager value cycle fails before module-ready exposure with stable cycle receipt/hash; (4) parser/canonical IR/type-effect/compiler/runtime hashes recorded; (5) Ubuntu developer-host execution receipt; (6) no hidden host semantic escape or ambient authority; all mismatches accounted for.",
+    "evidence_need": [
+      "PRODUCTION_CLAYCODE_COMPILER_RECEIPT",
+      "MODULE_LINK_INIT_DIFFERENTIAL_RECEIPT",
+      "TARGET_UBUNTU_EXECUTION_RECEIPT",
+      "ORDER_PERTURBATION_RECEIPT",
+      "EAGER_CYCLE_NEGATIVE_RECEIPT"
+    ],
+    "executor_policy": "Prefer the local Claude Code/build-execution organ with repository checkout and Ubuntu developer-host access. Hosted proxy results must not pass BASE.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "PRODUCTION_CLAYCODE_TOOLCHAIN",
+      "UBUNTU_DEVELOPER_HOST_EXECUTION"
+    ],
+    "write_scope": [
+      "research_entity/claycode/",
+      "research_entity/trigger_runs/claycode/",
+      "research_entity/trigger_runs/spawn/",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "spawn:spawn_20260809T1813p0700_claycode_module_init",
+      "BASE_CLAYCODE_RELEASE",
+      "CC-WP-07-RUNTIME-ABI-FFI",
+      "current parser/canonical-IR candidate"
+    ],
+    "invalidators": [
+      "production module/package semantics materially change before execution",
+      "a newer executable counterexample proves all cyclic structural linking invalid"
+    ],
+    "base_priority": 0.91,
+    "expected_impact": 0.92,
+    "urgency": 0.87,
+    "information_gain": 0.97,
+    "status": "READY"
+  }
+}

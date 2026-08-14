@@ -1,0 +1,52 @@
+{
+  "schema_version":"1.0",
+  "run_id":"emergenz_20260809T1816p0700_abstraction_guard",
+  "evidence_class":"HOSTED_SYNTHETIC_MECHANISM_TEST",
+  "promotion_allowed":false,
+  "experiments":[
+    {
+      "id":"E-EM-ABSTRACT-OVERFIT-001",
+      "question":"Can unconstrained macro discovery manufacture apparent emergence on causally null data?",
+      "method":"500 repetitions; X uniform over 8 microstates; Y independent binary; search all 254 nonconstant binary macro mappings on N=64 training samples for maximum MI(M;Y); evaluate frozen selected mapping on N=5000 independent samples.",
+      "results":{"mean_best_train_mi_bits":0.0655501,"median_best_train_mi_bits":0.0597315,"train_p95_bits":0.1279378,"mean_heldout_mi_bits":0.00014738,"heldout_p95_bits":0.00051670},
+      "interpretation":"Same-data macro selection produces nontrivial false apparent macro information under a null; held-out evaluation collapses it toward zero.",
+      "scope":"synthetic statistical selection-bias demonstration"
+    },
+    {
+      "id":"E-EM-ABSTRACT-SIGNAL-002",
+      "question":"Does held-out evaluation preserve a real stable macro relation?",
+      "method":"Same search procedure but Y generated from a fixed true binary macro partition of 8 microstates with 10% label noise.",
+      "results":{"mean_best_train_mi_bits":0.547553,"mean_heldout_mi_bits":0.513611,"true_mapping_or_complement_recovery_fraction":0.918},
+      "interpretation":"A stable macro relation survives held-out evaluation while the null overfit does not in this authored test.",
+      "scope":"synthetic positive control"
+    },
+    {
+      "id":"E-EM-SYNERGY-003",
+      "question":"Can joint interventional information distinguish higher-order synergy from single-source causation?",
+      "results":{
+        "XOR":{"factorial_omega":-2,"joint_mi_bits":1.0,"A_mi_bits":0.0,"B_mi_bits":0.0,"joint_over_best_single_bits":1.0},
+        "AND":{"factorial_omega":1,"joint_mi_bits":0.8112781,"A_mi_bits":0.3112781,"B_mi_bits":0.3112781,"joint_over_best_single_bits":0.5},
+        "A_ONLY":{"factorial_omega":0,"joint_mi_bits":1.0,"A_mi_bits":1.0,"B_mi_bits":0.0,"joint_over_best_single_bits":0.0}
+      },
+      "interpretation":"A joint-over-best-single interventional information control cleanly distinguishes authored XOR synergy from a pure single-source mechanism; it is a heuristic control, not a substitute for PID/PEID.",
+      "scope":"exact enumerated toy mechanisms"
+    },
+    {
+      "id":"E-EM-CONFOUNDER-004",
+      "question":"Can observational dependence be separated from intervention-sensitive causal influence?",
+      "method":"Latent binary common driver C causes A,B,Y; A/B each have 10% noise; compare observational MI((A,B);Y) with randomized do(A,B) while Y remains caused only by C.",
+      "results":{"observational_joint_mi_bits":0.739927,"interventional_joint_mi_bits":0.00002485},
+      "interpretation":"Large observational dependence vanishes under intervention in the authored common-driver system.",
+      "scope":"100000-sample synthetic control"
+    },
+    {
+      "id":"E-EM-REENTRY-005",
+      "question":"Does truthful re-entry outperform shuffled/no re-entry when the downstream task genuinely requires the re-entered information?",
+      "results":{"truthful_success":1.0,"shuffled_success":0.50049,"no_reentry_success":0.50276},
+      "interpretation":"The intervention detects a deliberately causal re-entry path; it does not prove FRANK re-entry is causal.",
+      "scope":"100000-sample synthetic mechanism sanity check"
+    }
+  ],
+  "negative_result":"No synthetic test establishes live FRANK emergence, consciousness, or that any particular macro abstraction is privileged.",
+  "next_discriminator":"Frozen H1 Ubuntu episodes with preregistered macro definitions, held-out intervention evaluation, matched pairwise/micro controls, lesion/rescue, truthful/shuffled/no re-entry, OOD transfer and cost/recovery shadows."
+}

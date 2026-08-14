@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260809T1538p0700-frank-architecture-lineage",
+  "validator_contract":"tools/fusion_research_contract.py @ blob 0ec3ea4442c0d881f3e5673e9c32072db91849ed",
+  "validation_method":"Reread current validator, current RESEARCH_TRIGGER_REGISTRY.json and current run manifests from GitHub; replay validator predicates over the fetched branch/coverage/feedback state. This receipt does not claim local target-host execution of the repository script.",
+  "required_files":{"INTERCONNECT_MANIFEST.json":true,"GLOBAL_COVERAGE_MANIFEST.json":true,"TOOL_EXECUTION_MANIFEST.json":true,"BRANCH_FEEDBACK_MANIFEST.json":true,"RUN_MANIFEST.json":true,"FINAL_REPORT.md":true},
+  "authoritative_scientific_branches":["clayresearch","gwt","frank","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "checks":{
+    "interconnect_trigger_is_fusion":true,
+    "interconnect_registry_branch_set_exact":true,
+    "branch_priority_covers_every_registered_branch_once":true,
+    "global_coverage_required":true,
+    "feedback_every_branch_required":true,
+    "coverage_9_of_9":true,
+    "feedback_9_of_9":true,
+    "all_feedback_effects_allowed":true,
+    "all_non_NO_CHANGE_feedback_has_durable_writeback_refs":true,
+    "coverage_has_no_unknown_branch":true,
+    "feedback_has_no_unknown_branch":true,
+    "shared_ancestry_scanned":true,
+    "contradictions_scanned":true,
+    "organ_module_evolution_gate_pass":true,
+    "service_surface_disposition_pass":true,
+    "canonical_promotion_none":true,
+    "stage_advance_none":true
+  },
+  "violations":[],
+  "result":"PASS_ZERO_CONTRACT_VIOLATIONS_ON_REREAD_PREDICATE_REPLAY"
+}

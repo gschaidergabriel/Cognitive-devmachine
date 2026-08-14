@@ -1,25 +1,29 @@
 {
-  "schema_version":"1.1",
+  "schema_version":"1.3",
   "tool_name":"nvidia_nim",
   "provider":"NVIDIA Hosted NIM / API Catalog",
   "base_url":"https://integrate.api.nvidia.com/v1",
   "script":"tools/nvidia_nim.py",
+  "free_only_facade":"tools/nvidia_inference.py",
   "runner":".github/workflows/nvidia-research.yml",
+  "autonomous_consumer":"tools/claycode_autonomous_cycle.py",
   "request_dir":"research_entity/runtime/nvidia_requests",
   "result_dir":"research_entity/runtime/tool_results",
   "requires_secret":["NVIDIA_API_KEY"],
   "credential_required":true,
   "credential_store":"research_entity/private/API_TOKENS.env",
   "credential_value_must_not_appear_in_artifacts":true,
+  "free_policy":"Hosted development/free endpoints only for autonomous ClayCode cycles. HTTP 402/payment-required is a hard stop; no paid fallback or automatic upgrade. HTTP 429 is cooldown/fallback.",
   "functions":[
     {"name":"models","mode":"list_models","endpoint":"GET /v1/models","status":"RUNTIME_VERIFIED","verification_receipt":"research_entity/runtime/tool_results/nvidia-catalog-20260808T1950p0700.json","observed_model_count":100,"evidence_class":"provider_model_catalog"},
-    {"name":"chat","mode":"chat","endpoint":"POST /v1/chat/completions","status":"RUNTIME_VERIFIED","verified_model":"nvidia/nemotron-mini-4b-instruct","evidence_class":"external_model_runtime","note":"Catalog membership and account-executable function availability are distinct; google/gemma-3-4b-it was catalog-visible but returned function-not-found for this account."},
+    {"name":"chat","mode":"chat","endpoint":"POST /v1/chat/completions","status":"RUNTIME_VERIFIED","verified_models":["nvidia/nemotron-mini-4b-instruct","z-ai/glm-5.2"],"evidence_class":"external_model_runtime","note":"Catalog membership and account-executable function availability are distinct. Autonomous role assignment now uses an account-specific executable pool and bounded probes."},
     {"name":"embeddings","mode":"embeddings","endpoint":"POST /v1/embeddings","status":"RUNTIME_VERIFIED","verified_model":"nvidia/nv-embedqa-e5-v5","dimensions":1024,"verification_receipt":"research_entity/runtime/tool_results/nvidia-embed-smoke-20260808T1950p0700.json","evidence_class":"external_embedding_runtime"},
+    {"name":"code_embeddings","mode":"embeddings","endpoint":"POST /v1/embeddings","status":"RUNTIME_VERIFIED_IN_AUTONOMOUS_CYCLE","verified_model":"nvidia/nv-embedcode-7b-v1","evidence_ref":"research_entity/claycode/autonomous/cycles/ccauto-20260809T105143Z.json","evidence_class":"external_code_retrieval_runtime"},
     {"name":"embedding_similarity","mode":"embedding_similarity","endpoint":"derived from POST /v1/embeddings","status":"RUNTIME_VERIFIED","verified_model":"nvidia/nv-embedqa-e5-v5","verification_receipt":"research_entity/runtime/tool_results/nvidia-role-class-embedding-similarity-20260808T2010p0700.json","evidence_class":"external_embedding_runtime_proxy_for_semantic_geometry","boundary":"Similarity is not canonical relation identity, role identity, authority, causal identity or hidden-state equivalence."},
-    {"name":"rerank","mode":"rerank","endpoint":"provider/model-specific hosted reranking route or /v1/ranking on deployed NIM","status":"HOSTED_ROUTE_UNRESOLVED","attempt_receipts":["research_entity/runtime/tool_results/nvidia-rerank-smoke-20260808T1950p0700.json","research_entity/runtime/tool_results/nvidia-rerank-mistral4b-smoke-20260808T1954p0700.json"],"evidence_class":"external_reranker_runtime","note":"Two hosted-route attempts returned HTTP 404. Do not claim reranking runtime availability until a credential-valid hosted function route is verified."}
+    {"name":"rerank","mode":"rerank","endpoint":"https://ai.api.nvidia.com/v1/retrieval/nvidia/llama-nemotron-rerank-vl-1b-v2/reranking","model":"nvidia/llama-nemotron-rerank-vl-1b-v2","status":"CURRENT_FREE_ROUTE_RUNTIME_VERIFICATION_QUEUED","request":"research_entity/runtime/nvidia_requests/nvidia-rerank-current-free-20260809T1755p0700.json","negative_receipt":"research_entity/claycode/autonomous/cycles/ccauto-20260809T104300Z.json","negative_result":"previous llama-3.2-nv-rerankqa-1b-v2 hosted route returned HTTP 410 EOL dated 2026-05-18","evidence_class":"external_reranker_runtime"}
   ],
-  "model_routing":{"verified_real_4b":"nvidia/nemotron-mini-4b-instruct","catalog_visible_but_not_executable_in_test":"google/gemma-3-4b-it","qwen3_4b":"NOT_EXPOSED_IN_NVIDIA_CATALOG_OBSERVED_2026-08-08"},
-  "status":"RUNTIME_VERIFIED_PARTIAL",
-  "security_rule":"Load NVIDIA_API_KEY only at runtime through rae_secret_loader; never copy credential values into requests, results, logs, packets, claims or reports.",
-  "routing_rule":"Use model catalog before selecting a named hosted model, then verify actual execution because catalog visibility does not guarantee account function entitlement. Prefer the verified Nemotron-Mini-4B for direct generic-4B model-behavior experiments, NVIDIA embeddings for ClayGraph/semantic-geometry experiments, and keep reranking blocked until its hosted route is verified. Hosted NVIDIA results do not substitute for Qwen-specific, local hardware, latency, memory, energy, thermal, LoRA/full-model adaptation or live-FRANK evidence."
+  "model_routing":{"verified_pool":"research_entity/claycode/autonomous/PROVIDER_EXECUTABLE_POOL.json","dynamic_catalog_required":true,"probe_before_role_assignment":true,"autonomous_family_diversity":["nemotron","deepseek","qwen","glm","gpt-oss","kimi","poolside","granite","llama","gemma","mistral","other catalog families"],"same_family_across_providers_counts_as_correlated":true},
+  "status":"RUNTIME_VERIFIED_PARTIAL_AUTONOMOUS_FREE_ONLY_ENABLED",
+  "security_rule":"Load NVIDIA_API_KEY only at runtime through rae_secret_loader; never copy credential values into requests, results, logs, packets, claims or reports. Do not persist provider reasoning traces.",
+  "routing_rule":"Discover catalog first, verify actual execution per selected model, prefer different model families for architect/falsifier/judge, use code embeddings/current reranking for evidence selection, and fall back to other free capabilities on 402/429/entitlement failure. Hosted NVIDIA results never substitute for executable Ubuntu ClayCode evidence or target-Qwen/live-FRANK evidence."
 }

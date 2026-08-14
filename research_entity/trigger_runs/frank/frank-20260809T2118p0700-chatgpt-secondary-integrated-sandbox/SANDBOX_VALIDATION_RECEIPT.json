@@ -1,0 +1,109 @@
+{
+  "schema_version": "frank-sandbox-validation-0.1",
+  "run_id": "frank-20260809T2118p0700-chatgpt-secondary-integrated-sandbox",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_class": "REMOTE_SANDBOX_DETERMINISTIC_TEST",
+  "owner_evidence_rule_for_this_run": "SANDBOX_SUFFICIENT_FOR_NOW",
+  "artifacts": {
+    "integrated_spine": {
+      "path": "research_entity/harness/reference/frank_integrated_spine.py",
+      "git_blob_sha": "2ae526e5c33b7804246957cda0bec52ed2715a59",
+      "commit_sha": "e75bb95ea55fcd38143ea7e1b8db730ac728d919",
+      "sandbox_sha256": "98e14f8cad6b88a87dc2ac5eb17a1dfb0a5ed8c1c06fdf72868defc7cdbc50bf"
+    },
+    "integrated_spine_tests": {
+      "path": "research_entity/harness/reference/test_frank_integrated_spine.py",
+      "git_blob_sha": "1cff91346f902dfdc7491ed401beb11e219c237c",
+      "commit_sha": "7dc375f923fa4c904a7c2c5c071ff993df7be136",
+      "sandbox_sha256": "b7d9a11e25c8be2821b6813a088cfce9441de2e569c09dd077b77cb31502c22f"
+    },
+    "state_ledger_dependency": {
+      "path": "research_entity/harness/reference/state_ledger.py",
+      "git_blob_sha": "821f023ea166e45975045b29ff2b120770573c3e",
+      "sandbox_git_blob_sha": "821f023ea166e45975045b29ff2b120770573c3e",
+      "byte_identity": true
+    },
+    "needle_dependency": {
+      "path": "research_entity/harness/reference/needle_boundary.py",
+      "git_blob_sha": "ecfbeb0fae6ff3acbf36f264fe66d64dab621943",
+      "sandbox_git_blob_sha": "ecfbeb0fae6ff3acbf36f264fe66d64dab621943",
+      "byte_identity": true
+    }
+  },
+  "architecture_coverage": {
+    "current_modules_total": 15,
+    "current_modules_exercised": 15,
+    "all_current_modules_exercised": true,
+    "historical_lineage_families_mapped": 29,
+    "historical_lineage_families_omitted": 0,
+    "lineage_coverage_pass": true
+  },
+  "executed_validation": {
+    "compact_repo_spine_unittest": {"passed": 14, "failed": 0},
+    "detailed_integration_unittest": {"passed": 27, "failed": 0},
+    "compileall": "PASS",
+    "stress": {
+      "cycles": 100,
+      "events": 300,
+      "final_epoch": 300,
+      "wall_seconds": 1.6891,
+      "cycles_per_second": 59.2,
+      "semantic_state_hash_replay_equal": true,
+      "trace_root_hash_replay_equal": true,
+      "epoch_replay_equal": true,
+      "wal_checkpoint_passive": [0, 170, 170]
+    }
+  },
+  "tested_invariants": [
+    "all 15 frozen target modules participate in one executable cycle",
+    "no catalogued historical organ/module family is omitted",
+    "Needle/model/familiarity/selection never mint external effect authority",
+    "effect commit requires a capability-bound permit at the current epoch",
+    "low state delta with high residual pressure is not convergence",
+    "recurrence is not labelled emergence",
+    "visual conflict overrides familiarity fast-path",
+    "BRONZE adaptive labels cannot self-promote to truth",
+    "poison-risk and non-improving candidates are rejected",
+    "ClayGraph projection is derived and non-authoritative",
+    "GWT candidate/ignition/delivery/uptake/causal-use/reentry remain distinct",
+    "instruct/thinking are model ABI modes, not identity",
+    "SQLite WAL/FULL plus stale-epoch rejection enforces the single-writer semantic contract",
+    "snapshot verification survives later commits",
+    "event replay reproduces semantic-state and trace-root hashes"
+  ],
+  "negative_results_fixed_during_run": [
+    {
+      "finding": "prototype Needle integration returned serialized receipt where typed ClayIngressEnvelope was required",
+      "classification": "RUNTIME_CONTRACT_BUG",
+      "resolution": "record serialized form but return typed envelope; rerun passed"
+    },
+    {
+      "finding": "compact stress test expected four persisted events per cycle although compact spine intentionally persists three",
+      "classification": "TEST_ASSUMPTION_BUG",
+      "resolution": "corrected oracle to three events/cycle; rerun passed"
+    },
+    {
+      "finding": "initial local StateLedger/Needle copies were not byte-identical to current GitHub dependencies",
+      "classification": "EVIDENCE_INTEGRITY_GAP",
+      "resolution": "replaced with exact current GitHub blob content; verified blob SHA equality; reran tests and stress"
+    }
+  ],
+  "architecture_fidelity": "IMPROVED",
+  "release_claim": "NOT_H1_RELEASE_PASS",
+  "limitations": [
+    "not Andreas target-Ubuntu execution",
+    "not live Clay-native Qwen-class 4B execution",
+    "not full H1 work-package closure",
+    "Digital Retina/MVC uses deterministic fixtures rather than real vision model measurements",
+    "direct Claude Code peer-tool and provider failure fabric are not yet integrated in this spine",
+    "H2 ClayCode differential execution remains gated by BASE ClayCode release"
+  ]
+}

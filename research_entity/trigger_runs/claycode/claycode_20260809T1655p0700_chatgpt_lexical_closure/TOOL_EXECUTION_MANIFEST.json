@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1655p0700_chatgpt_lexical_closure",
+  "actor": "chatgpt-secondary",
+  "executions": [
+    {
+      "tool_class": "GitHub connector",
+      "purpose": "T0 canonical boot, protocol/stack/program grounding, concurrent run assimilation, durable run writes",
+      "status": "SUCCESS",
+      "write_capability": "VERIFIED_BY_CREATE_FILE_COMMITS"
+    },
+    {
+      "tool_class": "ChatGPT local container",
+      "purpose": "Executable ClayCode lexical closure/tokenization probe",
+      "status": "SUCCESS",
+      "runtime": "Python 3",
+      "artifact": "LEXICAL_CLOSURE_PROBE.py",
+      "artifact_sha256": "d62977c934bee3cbfe3b90c380c1407c52aa1048c2c656086fb666db1b8d5345",
+      "seed": 20260809,
+      "cases_per_family": 10000
+    },
+    {
+      "tool_class": "web primary-source research",
+      "purpose": "Independent parser/IR/typed-interface architecture triangulation",
+      "status": "SUCCESS",
+      "sources": [
+        "Tree-sitter official Writing the Grammar / Grammar DSL documentation",
+        "MLIR official Language Reference / Defining Dialects / ODS documentation",
+        "Bytecode Alliance Component Model WIT and Wasmtime security documentation"
+      ]
+    },
+    {
+      "tool_class": "E2B",
+      "purpose": "preferred external ClayCode execution surface",
+      "status": "NOT_EXPOSED_TO_THIS_SESSION",
+      "evidence_claimed": false,
+      "note": "A concurrent repository run contains an E2B grammar coverage replication reference; it is assimilated as project evidence, not falsely attributed to this execution."
+    },
+    {
+      "tool_class": "repository local validation scripts",
+      "purpose": "research_interconnect_preflight.py and goodman_filter_check.py",
+      "status": "NOT_EXECUTED_HOSTED_SESSION_NO_REPO_CHECKOUT",
+      "handling": "manual fail-closed manifests; no claim that official validators passed"
+    }
+  ],
+  "tooling_failures": [],
+  "promotion": "NONE"
+}

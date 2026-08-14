@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-IDEMP-CONC-LOCAL-20260809-01",
+  "run_id": "claycode_20260809T1712p0700_chatgpt_idempotency_concurrency",
+  "source": {
+    "path": "IDEMPOTENCY_CONCURRENCY_PROBE.py",
+    "sha256": "a13dce4d208f445ee90c88b254a9293117a266b0f67700aec183dd06b8db396a"
+  },
+  "candidate_contract": "typed commit envelope with idempotency key + semantic payload/operation fingerprint checked inside the backend serialization domain before effect commit/replay classification",
+  "candidate_version": "research-only-0.1",
+  "canonical_ir_hash": null,
+  "contract_instance_hash": null,
+  "lowering_target": "Python sqlite3 host-runtime mechanism probe",
+  "generated_code_hash": null,
+  "runtime": {
+    "provider": "local hosted container",
+    "language": "Python 3.13.5",
+    "database": "SQLite 3.46.1",
+    "target_host": "NOT_ANDREAS_UBUNTU_TARGET"
+  },
+  "corpus": {
+    "prelock_same_payload_rounds": 80,
+    "postlock_same_payload_rounds": 80,
+    "postlock_different_payload_rounds": 80,
+    "uniqueness_only_different_payload_controls": 1
+  },
+  "observed": {
+    "prelock_same_payload": "80/80 produced one applied effect plus one IntegrityError",
+    "postlock_same_payload": "80/80 produced one applied effect plus one replay classification",
+    "postlock_different_payload": "80/80 produced one applied effect plus one conflict classification",
+    "uniqueness_only_control": "INSERT OR IGNORE suppressed duplicate insertion but did not classify payload mismatch"
+  },
+  "expected_vs_observed": "MATCHED_DISCRIMINATING_PREDICTION",
+  "failure_classification": [
+    "PRELOCK_CHECK_TOCTOU_RACE",
+    "UNIQUE_CONSTRAINT_NOT_SEMANTIC_REPLAY_ORACLE"
+  ],
+  "repair_candidate": "For SQLite, acquire the write serialization domain first (tested with BEGIN IMMEDIATE), then lookup idempotency key and compare semantic operation/payload fingerprint before applying or classifying replay/conflict. Generalize as backend legality contract rather than SQLite syntax.",
+  "affected_hypotheses": [
+    "H-CC-IDEMP-CONC-01",
+    "H-CC-IDEMP-CONC-02",
+    "H-CC-IDEMP-CONC-03"
+  ],
+  "affected_negative_results": [
+    "NR-CC-IDEMP-PRELOCK-RACE-20260809",
+    "NR-CC-IDEMP-UNIQUE-ONLY-20260809"
+  ],
+  "learning_changed": ["claycode", "harness", "unifieddb", "clayresearch"],
+  "learning_did_not_promote": ["frank", "gwt", "hyperposition", "emergenz", "claygraph"],
+  "limitations": [
+    "No production G9 parser/canonicalizer/compiler executed",
+    "No E2B surface exposed",
+    "No second backend",
+    "No Andreas Ubuntu target-host replication",
+    "No distributed/multi-resource atomicity test"
+  ],
+  "result_file_sha256": "8ec9469b76ba11998821c699003107610337e28f55b668841dbd5534d546cae2",
+  "exit_status": 0
+}

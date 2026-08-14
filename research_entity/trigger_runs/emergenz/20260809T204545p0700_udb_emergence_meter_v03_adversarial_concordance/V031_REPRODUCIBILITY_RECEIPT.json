@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance",
+  "addendum": "V03.1_CONDITIONING_DEPTH_LIVE_REFRESH",
+  "runtime": {
+    "python": "3.12.13",
+    "kernel": "Linux 6.18.35",
+    "architecture": "x86_64",
+    "dependencies": "Python standard library plus imports from the committed v0.3 scripts"
+  },
+  "commands": [
+    "python v031_conditioning_depth_addendum.py --out V031_CONDITIONING_DEPTH_RESULTS.json",
+    "python -m unittest -v test_v03_adversarial_probe.py test_v03_parameter_sweep.py test_v031_conditioning_depth_addendum.py"
+  ],
+  "tests": {
+    "total_suite_count": 12,
+    "passed": 12,
+    "failed": 0,
+    "status": "PASS"
+  },
+  "sha256": {
+    "v031_conditioning_depth_addendum.py": "b63ae6cfed6ed01605e9ce8ca7d5ba26206af30e09b0b63dfc691684f155fe91",
+    "test_v031_conditioning_depth_addendum.py": "29346072e47f8a1abb8212b3d55772fd229155640db02a68923ff676461249e5",
+    "V031_CONDITIONING_DEPTH_RESULTS.json": "cce347f3d1e08fd328dd91fa041bfc40d0920f01e81dd9a61b8fc00dcdd9224f"
+  },
+  "evidence_scope": "SYNTHETIC_METHOD_ONLY",
+  "live_frank_validated": false
+}

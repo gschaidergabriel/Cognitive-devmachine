@@ -1,0 +1,70 @@
+{
+  "event_id": "work-create:hwp02-idempotency-fingerprint-local-fix:20260809T1714p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:14:00+07:00",
+  "payload": {
+    "work_id": "HWP02-IDEMPOTENCY-FINGERPRINT-LOCAL-FIX",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "HARNESS_NEGATIVE_RESULT",
+    "title": "Bind H-WP-02 idempotency replay to semantic request identity",
+    "work_clay": {
+      "target": "research_entity/harness/reference_state_ledger.py",
+      "task": "Reread the latest H-WP-02 implementation and existing HWP02-IDEMPOTENCY-RACE-LOCAL-FIX work. Coalesce with that patch if possible. Ensure an idempotent replay is returned only when the existing committed event is semantically equivalent to the retry. Reject same idempotency key/event_id with changed event_type, normalized mutations or provenance as a deterministic idempotency conflict. Keep retry-local execution metadata separate from semantic identity. Execute the committed red probe and add a permanent regression against the actual module.",
+      "do_not": [
+        "Do not create a second competing StateLedger lineage if the current reference ledger can be repaired.",
+        "Do not mark H-WP-02 or H1 PASS from this component fix alone.",
+        "Do not weaken idempotency uniqueness constraints.",
+        "Do not treat writer/timestamp changes alone as semantic event changes unless the adjudicated contract says they are semantic.",
+        "Do not treat ChatGPT synthetic mechanism evidence as Ubuntu project-host execution."
+      ]
+    },
+    "reason_clay": {
+      "negative_result": "research_entity/trigger_runs/harness/20260809T1714p0700-hwp02-idempotency-fingerprint/NEGATIVE_RESULT.json",
+      "red_probe": "research_entity/harness/probes/hwp02_idempotency_payload_fingerprint_probe.py",
+      "execution_receipt": "research_entity/trigger_runs/harness/20260809T1714p0700-hwp02-idempotency-fingerprint/EXECUTION_RECEIPT.json",
+      "related_work": "HWP02-IDEMPOTENCY-RACE-LOCAL-FIX"
+    },
+    "completion_clay": {
+      "required": [
+        "Reread current head and coalesce with HWP02-IDEMPOTENCY-RACE-LOCAL-FIX when it touches the same transaction boundary.",
+        "Identical retry remains IDEMPOTENT_REPLAY without epoch/state mutation.",
+        "Changed semantic retry using the same key/event_id is rejected deterministically.",
+        "Committed state, root identity and epoch remain unchanged after rejected changed retry.",
+        "Run hwp02_idempotency_payload_fingerprint_probe.py against the actual module on Ubuntu.",
+        "Run the concurrent race regression plus existing H-WP-02 regression/stress/crash/snapshot/tamper suites.",
+        "Write an exact local execution receipt with commit, commands, host and results."
+      ]
+    },
+    "evidence_need": [
+      "VERIFIED_LOCAL_EXECUTION_RECEIPT",
+      "actual implementation diff",
+      "semantic retry regression output",
+      "concurrency regression output",
+      "full H-WP-02 suite output"
+    ],
+    "executor_policy": {
+      "prefer": "CLAUDE_CODE_LOCAL_ORGAN",
+      "reason": "Ubuntu project-host execution against the actual repository module is the discriminating next step."
+    },
+    "required_capabilities": ["tool:git", "tool:python3"],
+    "write_scope": [
+      "research_entity/harness/reference_state_ledger.py",
+      "tests/test_reference_state_ledger.py",
+      "tests/test_reference_state_ledger_concurrency.py",
+      "research_entity/harness/probes/hwp02_idempotency_payload_fingerprint_probe.py",
+      "research_entity/harness/",
+      "research_entity/trigger_runs/harness/20260809T1714p0700-hwp02-idempotency-fingerprint/"
+    ],
+    "dependencies": [],
+    "invalidators": [
+      "A newer verified local commit for HWP02-IDEMPOTENCY-RACE-LOCAL-FIX already adds equivalent semantic fingerprint validation and passes this red probe plus full H-WP-02 regressions.",
+      "The current H-WP-02 lineage is superseded by a different adjudicated implementation."
+    ],
+    "base_priority": 0.93,
+    "expected_impact": 0.9,
+    "urgency": 0.82,
+    "information_gain": 0.92,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank_20260809T1921p0700_chatgpt_secondary_runtime_lineage",
+  "actor": "chatgpt-secondary",
+  "hypotheses": [
+    {
+      "id": "H-FRANK-4BOUNDARY-001",
+      "status": "OPEN_SUPPORTED",
+      "hypothesis": "FRANK effect safety requires four semantically distinct stages: cognition consistency, effect-time freshness, execution authority, and outcome certainty/recoverability.",
+      "counterhypothesis": "Fresh revalidation plus valid capability authority is sufficient; outcome recovery needs no first-class semantic state.",
+      "falsifier": "Crash/retry experiments across all supported external adapters show that fresh revalidation plus valid authority always reconstructs the truthful outcome without duplication, loss, or ambiguous retry decisions."
+    },
+    {
+      "id": "H-FRANK-EFFECT-OPID-002",
+      "status": "OPEN_SUPPORTED_BY_PRIOR_NEGATIVE_RESULT_AND_CURRENT_GAP",
+      "hypothesis": "Stable effect_operation_id bound to a semantic request fingerprint is required for generic retry/reconciliation across FRANK runtime restart boundaries.",
+      "counterhypothesis": "Runtime-local trace sequence plus adapter arguments are sufficient identity.",
+      "falsifier": "A simpler identity scheme survives post-apply/pre-receipt crash, retry, semantic payload drift, duplicate delivery, stale replay and concurrent recovery without false dedupe or duplicate effect."
+    },
+    {
+      "id": "H-FRANK-UNCERTAIN-003",
+      "status": "OPEN_SUPPORTED",
+      "hypothesis": "UNCERTAIN must be a first-class effect outcome when a non-idempotent/non-queryable external sink cannot be reconciled after an ambiguous crash.",
+      "counterhypothesis": "Every ambiguous case can safely collapse to RETRY or FAILED.",
+      "falsifier": "For every production adapter class, a deterministic retry/failed policy can be shown to avoid both duplicates and lost effects under all preregistered crash windows."
+    },
+    {
+      "id": "H-FRANK-NR-LINEAGE-GATE-004",
+      "status": "OPEN_SUPPORTED_BY_CARRY_FORWARD_COUNTEREXAMPLE",
+      "hypothesis": "Current implementation candidates need an executable negative-result lineage gate so still-applicable historical falsifiers cannot disappear during candidate replacement.",
+      "counterhypothesis": "Conventional current-component tests and review provide equivalent protection at lower cost.",
+      "falsifier": "Seeded-regression trials show ordinary tests detect the same relevant semantic regressions with equal or lower false-pass rate, detection latency and maintenance cost than explicit lineage closure."
+    },
+    {
+      "id": "H-FRANK-SNAPSHOT-CLOSURE-005",
+      "status": "OPEN_SUPPORTED_COMPONENT",
+      "hypothesis": "Effect-relevant dependency revalidation can preserve freshness with fewer false aborts than invalidating every proposal on any global epoch change.",
+      "counterhypothesis": "Dependency discovery cost/omission risk outweighs false-abort savings; global epoch invalidation is safer and cheaper overall.",
+      "falsifier": "Target traces show relevant-closure bookkeeping plus omission-induced stale actions has worse utility/safety/cost than global epoch invalidation at matched workload."
+    },
+    {
+      "id": "H-FRANK-ACTIVEASSEMBLY-006",
+      "status": "OPEN",
+      "hypothesis": "A bounded evidence-preserving ActiveAssembly with conflict/provenance controls and re-expansion yields better local-4B task utility per token/KV/latency cost than broad retrieval, full-context forcing or naive summaries.",
+      "counterhypothesis": "The assembly compiler discards useful evidence and spends budget on bookkeeping; simpler retrieval is superior.",
+      "falsifier": "Matched local-4B trials show no utility/correction advantage or a dominated cost-quality Pareto frontier across representative tasks and OOD/conflict regimes."
+    },
+    {
+      "id": "H-FRANK-RECURRENCE-007",
+      "status": "OPEN",
+      "hypothesis": "FRANK should expose heterogeneous typed loop trajectories and evaluate halting with controller-independent/post-hoc baselines before selecting an adaptive recurrence controller.",
+      "counterhypothesis": "A single learned or heuristic recurrence controller is sufficient and post-hoc/fixed-prior baselines add little information.",
+      "falsifier": "Matched recurrence experiments show controller conclusions and task outcomes are invariant to trajectory/readout decoupling across difficulty, noise, stalls and overthinking regimes."
+    },
+    {
+      "id": "H-FRANK-NEEDLE-STAGED-008",
+      "status": "OPEN",
+      "hypothesis": "At the current checkpoint, Needle should remain staged as no-tool necessity gate -> tool-positive retrieval -> proposal -> structural validation -> authority, rather than treating the contrastive retrieval head as a unified selector.",
+      "counterhypothesis": "A retrained unified selector with explicit no-tool representation can dominate the staged design at matched cost and calibration.",
+      "falsifier": "A unified selector demonstrates superior calibrated no-tool/tool selection, correct tool/args routing and OOD behavior without erasing authority separation."
+    },
+    {
+      "id": "H-FRANK-OBSERVATION-009",
+      "status": "OPEN_SUPPORTED_SYNTHETIC",
+      "hypothesis": "Timing-sensitive FRANK causal tests must bind observer/probe configuration into execution identity until paired-trajectory noninterference is demonstrated.",
+      "counterhypothesis": "Logical read-only instrumentation is sufficiently noninterfering for causal comparisons.",
+      "falsifier": "Matched target-host no/disabled/armed/sampled/inline probe modes show preregistered equivalence in paired ordering, semantic outcomes and emergence readouts near timing margins."
+    },
+    {
+      "id": "H-FRANK-H3-BARRIER-010",
+      "status": "OPEN_ARCHITECTURE_CONSTRAINT",
+      "hypothesis": "The final one-binary H3 can physically collapse services only if snapshot, freshness, authority, operation identity, outcome uncertainty and reconciliation remain non-bypassable semantic distinctions.",
+      "counterhypothesis": "Physical consolidation can safely merge some of these stages without explicit semantic identities.",
+      "falsifier": "H3 differential tests show merged semantics preserve H1/H2 interventions, crash recovery, stale-state rejection and authority invariants with no observational or causal divergence."
+    }
+  ],
+  "required_null": "Conventional persistent event-driven local architecture with bounded retrieval, explicit typed state/versioning, deterministic capability gateway, ordinary retry/reconciliation patterns and no claim of GWT/emergence advantage.",
+  "promotion": "NONE"
+}

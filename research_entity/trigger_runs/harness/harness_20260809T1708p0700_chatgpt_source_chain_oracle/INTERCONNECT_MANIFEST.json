@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1708p0700_chatgpt_source_chain_oracle",
+  "trigger": "harness",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "full_mesh_baseline": {
+    "path": "research_entity/mesh_feedback/20260809T1703p0700-live-fusion/LIVE_REFRESH_2.json",
+    "commit": "24866ac95c58c5a2ea05c471b85c892accedd094",
+    "coverage": ["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+    "reason": "Newest compact whole-mesh refresh explicitly contains a feedback receipt for every registered scientific branch and records the source-chain evidence downgrade."
+  },
+  "post_baseline_overlays": [
+    {"branch":"harness","commit":"7177a1ef1dd9bed449e0c9b64ae2a5553bbcfd11","artifact":"research_entity/harness/trace_replay_v1.py","effect":"EXTEND","note":"Fresh TurnTraceEnvelope validator covers trace/replay/GWT/memory but did not contain source_chain evidence."},
+    {"branch":"harness","commit":"56a53be9952b94b3c906d7dbd5226cae28afe038","artifact":"research_entity/trigger_runs/harness/harness-20260809T1656p0700-trace-replay-v1/EXECUTION_RECEIPT.json","effect":"CROSS_READ","note":"13/13 self-tests plus mutation and recurrence stress are local synthetic evidence only, not target-Ubuntu/H1 evidence."},
+    {"branch":"claycode","commit":"5e34d72f67e82e2fcde5e820e0a7607c7f858215","effect":"REVISE","note":"Cross-runtime numeric canonicalization probe strengthens the requirement that semantic hashes use explicit typed canonicalization rather than host-native JSON formatting."},
+    {"branch":"clayresearch","commit":"092ecdb7af624f3c751adbaa0fbb6680b7d8705a","effect":"REVISE","note":"CTK convergence report requires an executable chain parse->canonicalize->semantic hash->typed IR->checks->lowering->runtime receipt->replay across BASE witnesses."},
+    {"branch":"harness","commit":"21418accdbf42c656f18b01b1a0c87a534151d25","effect":"NO_CONFLICT","note":"A sibling worker claimed H-WP-04 Needle boundary; this run remains in a distinct BASE source-chain evidence sublane."}
+  ],
+  "branch_relevance": {
+    "clayresearch":"REVISE: source-chain oracle operationalizes the cross-branch conformance chain without changing CTK semantics.",
+    "frank":"NO_CHANGE: no FRANK architecture claim promoted; future H2 evidence must carry full compiler-chain identity.",
+    "gwt":"NO_CHANGE: future ClayCode GWT witnesses must preserve admitted source-to-runtime identity.",
+    "emergenz":"NO_CHANGE: no emergence claim changes; compiler-chain validity is evidence hygiene, not emergence evidence.",
+    "claycode":"CHALLENGE/ASSIST: named-cycle and emit-return negative results become executable regression oracles; numeric canonicalization remains a separate required semantic-hash concern.",
+    "hyperposition":"NO_CHANGE: future witnesses inherit the same source-chain requirement.",
+    "claygraph":"NO_CHANGE: GraphDelta/Ref witnesses must derive from admitted parsed identity.",
+    "unifieddb":"NO_CHANGE: ViewDelta/transaction witnesses must derive from admitted parsed identity.",
+    "harness":"REVISE: H2 differential evidence must compare source/parse/typed-IR/lowering/execution/replay contracts, not merely final state."
+  },
+  "ancestry_rule": "This is shared-ancestry project evidence. Executing validators derived from current project constraints is not independent external replication.",
+  "completion": "PREFLIGHT_COMPLETE_FOR_THIS_NARROW_BASE_HARNESS_DELTA"
+}

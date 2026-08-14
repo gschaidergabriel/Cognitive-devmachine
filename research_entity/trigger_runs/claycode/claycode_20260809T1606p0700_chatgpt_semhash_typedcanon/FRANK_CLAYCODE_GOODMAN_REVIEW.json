@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.1",
+  "protocol":"research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id":"claycode_20260809T1606p0700_chatgpt_semhash_typedcanon",
+  "latest_frank_run":"fusion-20260809T1538p0700-frank-architecture-lineage",
+  "latest_frank_architecture_artifact":"research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+  "shared_ancestry_is_not_replication":true,
+  "reviews":[{
+    "claim_id":"GOODMAN-CC-TYPED-CANON-001",
+    "frank_statement":"FRANK must preserve causal/semantic/authority distinctions, replay identity, atomic semantic publication and ordered lifecycle/role semantics across representation changes.",
+    "frank_source_refs":["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"],
+    "ancestry_families":["FRANK_C9_LINEAGE","CLAYCODE_G9_SHARED_SEMANTIC_FABRIC"],
+    "shared_ancestry_collapsed":true,
+    "counterhypothesis":"A schema-blind deterministic serializer is enough; collection type and runtime authority-instance placement do not need to affect canonical identity.",
+    "falsifier":"Production compiler/replay evidence shows order changes and per-run authority embedding cannot change executable/replay meaning or artifact reproducibility.",
+    "independent_checks":["run-local executable Set-vs-Ordered hash oracle","run-local 10,000-instance authority/artifact hash discriminator","concurrent HTTP compiler counterexample","RFC 8949 and MLIR used as external design triangulation only"],
+    "adversarial_checks":["reverse ordered lifecycle","swap ClayGraph-style role members","permute and duplicate Set members","mutate semantic RHS 50,000 times","mint 10,000 fresh runtime capability instances"],
+    "verdict":"REFINED",
+    "reason":"Independent executable evidence supports type-directed canonical identity and runtime-authority separation, but production parser/typed-IR/Ubuntu replay remains required.",
+    "claycode_action":"keep_open_and_require_typed_canonicalizer_and_deployment_identity_tests",
+    "affected_claycode_artifacts":["CC-WP-02-PARSER-CANON","CC-WP-03-IR-TYPES","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-11-FUZZ-CONFORMANCE"]
+  }]
+}

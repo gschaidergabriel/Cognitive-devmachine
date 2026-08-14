@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "CLAYCODE-BASE-RUNTIME-INTEGRATION-20260809-V2",
+  "actor": "chatgpt-secondary",
+  "status": "CURRENT_IMPLEMENTATION_DECISION",
+  "supersedes": "research_entity/claycode/base/BASE_RUNTIME_INTEGRATION_DECISION.json",
+  "supersession_reason": "Independent executable crosscheck showed the shared mainline runtime already subsumes the initially selected gateway and adds rollback, epoch rotation, cross-runtime authority-laundering rejection, sealed process policy, numerical adapter and deterministic async publication.",
+  "selected_mainline_runtime": {
+    "path": "tools/claycode_base_runtime.py",
+    "current_runtime_version": "claycode-base-runtime/0.3",
+    "role": "BASE Ubuntu runtime/ABI/FFI/stdlib/concurrency mainline candidate"
+  },
+  "crosschecks_only": [
+    {
+      "path": "tools/claycode_base_runtime_gateway.py",
+      "role": "independent Linux runtime crosscheck; KEEP_CROSSCHECK_NOT_MAINLINE",
+      "evidence": "research_entity/claycode/autonomous/CHATGPT_RUNTIME_GATEWAY_CROSSCHECK_20260809.json"
+    },
+    {
+      "path": "tools/claycode_base_authority_runtime.py",
+      "role": "adversarial authority oracle for copied/forged/serialized/stale/revoked/context/budget cases; MUST_NOT evolve as a second production runtime"
+    }
+  ],
+  "compiler_bridge": {
+    "path": "tools/claycode_base_effect_pipeline.py",
+    "role": "V7 typed effect manifest/reference evaluation/translation differential bridge"
+  },
+  "required_mainline_invariants": [
+    "model output != execution authority",
+    "descriptive capability data != bearer possession",
+    "runtime-minted handle identity and policy hash are required",
+    "revocation and epoch rotation invalidate prior authority",
+    "foreign runtime capabilities are rejected",
+    "process authority is bound to canonical absolute executable identity rather than basename",
+    "async boundary does not accept arbitrary caller host callables",
+    "resource/CAS identity is generation/version bound",
+    "target-host promotion remains receipt-gated"
+  ],
+  "open_discriminators_before_wp07_pass": [
+    "compiler-generated effect calls must enter the selected runtime rather than a proxy gateway",
+    "foreign child/subprocess authority closure must be tested on the target host",
+    "origin/basis/selection/closure binding or an evidence-backed equivalent must be tested where FRANK effect commitments require it",
+    "cumulative authority/resource budgets must fail closed where required by the frozen effect contract",
+    "same-path executable replacement/TOCTOU must be either prevented, detected, or explicitly bounded by the target threat model"
+  ],
+  "counts_as_work_package_pass": false,
+  "counts_as_target_acceptance": false
+}

@@ -1,0 +1,70 @@
+module spawn.claycode.atomic_cas_candidate
+version "0.1-open"
+status OPEN_RESEARCH_CANDIDATE
+
+// No surface-syntax claim. This is a canonical IR/runtime candidate only.
+
+enum AtomicOrdering { RELAXED, ACQUIRE, RELEASE, ACQ_REL, SEQ_CST }
+enum AtomicIdentityMode { VALUE_ONLY, VERSION_BOUND }
+enum CasStrength { STRONG, WEAK }
+
+record AtomicCell<T> {
+  cell_id:ResourceRef
+  value_type:TypeRef
+  identity_mode:AtomicIdentityMode
+  equality_is_identity_proof:ProofRef?
+  capability:CapabilityRef?
+}
+
+record VersionedExpected<T> {
+  value:T
+  version:Epoch
+}
+
+record CompareExchangeIntent<T> {
+  op_id:IntentRef
+  cell:AtomicCell<T>
+  expected:T|VersionedExpected<T>
+  desired:T
+  strength:CasStrength
+  success_order:AtomicOrdering=SEQ_CST
+  failure_order:AtomicOrdering=SEQ_CST
+}
+
+record CompareExchangeOutcome<T> {
+  op_id:IntentRef
+  cell_id:ResourceRef
+  success:Bool
+  observed_value:T
+  observed_version:Epoch?
+  resulting_version:Epoch?
+  semantic_receipt:ReceiptRef
+  execution_trace:TraceRef
+}
+
+rule failure_order notin [RELEASE,ACQ_REL]
+rule identity_mode=VERSION_BOUND -> expected has version
+rule semantic_state_cell && !equality_is_identity_proof -> identity_mode=VERSION_BOUND
+rule successful_VERSION_BOUND_CAS increments_or_rebinds version_identity
+rule failed_CAS never_commits desired
+rule WEAK_CAS may_spuriously_fail
+rule physical_retry_attempt belongs_to execution_trace
+rule physical_retry_attempt notin semantic_hash unless retry_observable_is_explicit_program_semantics
+rule semantic_hash includes [op_id,cell_id,expected,desired,strength,success_order,failure_order,semantic_outcome]
+rule execution_hash may_include [worker,thread,physical_attempt,retry_count,timing,backend_trace]
+rule AtomicCell.capability may_constrain authority
+rule atomic_operation never_mints capability_or_effect_authority
+
+profile BASE_PORTABLE {
+  default_order=SEQ_CST
+  weaker_order requires explicit_ordering + checker_acceptance + backend_support
+  raw_VALUE_ONLY requires equality_is_identity_proof for semantic_state_cell
+}
+
+// Falsifier obligations before promotion:
+// 1. Production parser/canonical IR/typechecker accepts valid order pairs and rejects invalid failure order.
+// 2. ABA corpus: raw value-only guard stale-accepts; VERSION_BOUND rejects stale epochs.
+// 3. Weak-CAS retry perturbation leaves semantic hash invariant while execution trace changes.
+// 4. At least two backends preserve accepted semantic outcomes.
+// 5. Ubuntu developer-target execution receipt exists.
+// 6. No ambient authority is gained by atomic lowering.

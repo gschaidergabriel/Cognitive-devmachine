@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-CC-G9-STRUCTURED-RECURRENCE-20260809",
+  "run_id": "claycode_20260809T1651p0700_loop_control_ir",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "candidate": "CC-G9-STRUCTURED-RECURRENCE-CONTROL-IR-PROXY-v0.1",
+  "source_hash": "53fa6a205e6d6a4dc0687b1a13e1a89fa4d96c81cda9cfd6ff5d2b83a76f424b",
+  "semantic_hash": "200b50362fced38fd3dca5276152b29f0f3915bce12200394af878abd25a04a4",
+  "contract_hash": "4d712b0f7055dd075d9a20aebca82e32a580094e162938cf1b23b8429947765c",
+  "lowering_target": "Python 3 structured for/if control-flow",
+  "generated_code_hash": "8ce138a4b9362d5cd15d612a71e283fdded8e79cce2d8b6a974287d6803d785b",
+  "execution_surface": {
+    "provider": "OpenAI local python sandbox",
+    "runtime_inprocess": "Python 3.13.5",
+    "runtime_subprocess": "/usr/bin/python3",
+    "e2b": "UNAVAILABLE_ON_THIS_CHATGPT_TOOL_SURFACE",
+    "sandboxapi": "NOT_USED"
+  },
+  "corpus": {
+    "base_positive_cases": 1,
+    "randomized_differential_cases": 2000,
+    "negative_cases": 4,
+    "seed": 7,
+    "oracle": "separate AST interpreter"
+  },
+  "observations": {
+    "differential_mismatches": 0,
+    "negative_rejections": 4,
+    "base_result": {"pressure":0.09150625000000004,"inner_pressure":0.14400000000000002,"utility":4.5},
+    "loop_iterations_total": {"outer":4,"inner":2},
+    "loop_invocations": {"outer":1,"inner":4},
+    "halt_reasons": {"outer":"CONDITION_FALSE","inner":"CONDITION_FALSE"},
+    "separate_process_exit_status": 0,
+    "separate_process_stderr": "",
+    "separate_process_wall_seconds": 0.024922681999996144,
+    "median_inprocess_compile_execute_ns_proxy": 191610
+  },
+  "negative_cases": {
+    "zero_budget": "REJECTED",
+    "unknown_function": "REJECTED",
+    "unclosed_block": "REJECTED",
+    "unsupported_comparator": "REJECTED"
+  },
+  "semantic_result": "Nested bounded recurrence with explicit loop-carried state and halt reasons can lower deterministically without a FRANK-specific cognitive primitive. Current checked G9 grammar still lacks general structured control-flow productions, so this supports a generic compiler/IR control-flow addition rather than a FRANK-specific semantic organ.",
+  "failure_classification": {
+    "initial_subprocess_attempt": "TOOL_BRIDGE_TIMEOUT_USING_/opt/pyvenv/bin/python",
+    "repair": "reran generated program via /usr/bin/python3",
+    "repaired_result": "PASS"
+  },
+  "claim_scope": "LOCAL_PROXY_EXECUTABLE_RESEARCH; NOT production parser, not E2B, not FRANK runtime evidence",
+  "affected_domains": ["claycode","frank","harness","gwt","emergenz","hyperposition","claygraph","unifieddb","clayresearch"]
+}

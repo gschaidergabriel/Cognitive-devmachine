@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1741p0700-clayresearch-foreign-effect-closure",
+  "trigger": "spawn",
+  "created_at": "2026-08-09T17:41:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "current_program_stage": "BASE_CLAYCODE_RELEASE",
+  "rng": {
+    "required_by": "research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md",
+    "distribution_source": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "distribution_blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+    "method": "Python secrets.SystemRandom backed by OS CSPRNG",
+    "seed": null,
+    "seed_rule": "No seed invented or recorded because SystemRandom does not expose a deterministic seed receipt.",
+    "branch_draw_integer_1_to_100": 100,
+    "ranges": {
+      "claycode": [1, 50],
+      "harness": [51, 60],
+      "frank": [61, 70],
+      "gwt": [71, 76],
+      "emergenz": [77, 82],
+      "hyperposition": [83, 87],
+      "claygraph": [88, 92],
+      "unifieddb": [93, 96],
+      "clayresearch": [97, 100]
+    },
+    "selected_origin_branch": "clayresearch"
+  },
+  "novelty_check": {
+    "recent_duplicate_window_required": 10,
+    "repository_search_for_spawn_receipts": "NO_RESULTS_RETURNED",
+    "interpretation": "No recent SPAWN_RECEIPT was discoverable through the available repository search surface; this is not a proof that no historical spawn receipt exists anywhere outside indexed results."
+  },
+  "candidate_microdirections": [
+    {
+      "id": "C1",
+      "title": "Ubuntu foreign-code effect closure",
+      "question": "Can ClayCode enforce EffectiveEffects(child) subseteq Effects(parent) across Python, Bash, native code, WASM/WASI, FFI and subprocesses on the Ubuntu target without crippling normal build/test/admin utility?",
+      "why_now": "Directly targets current BASE Runtime/ABI/FFI, type/effect, general application suite and fuzz/conformance gaps.",
+      "falsifier": "A child obtains an undeclared protected effect or required ordinary utility is materially lost under the enforcement design.",
+      "affected_branches": ["clayresearch", "claycode", "harness", "frank", "unifieddb"]
+    },
+    {
+      "id": "C2",
+      "title": "Translation-validation effect equivalence",
+      "question": "Can target syscall/resource effects be proven equivalent to Clay semantic effect contracts across native and WASM lowering?",
+      "falsifier": "Equivalent Clay programs lower to observably different authority/effect envelopes without a receipt-visible difference.",
+      "affected_branches": ["clayresearch", "claycode", "harness"]
+    },
+    {
+      "id": "C3",
+      "title": "Recoverability monotonicity under real system work",
+      "question": "Can filesystem, DB deployment and migration effects preserve the declared recoverability order across crash/restart/rollback?",
+      "falsifier": "An allowed model-originated operation reduces protected recoverability without an external irreversible authorization receipt.",
+      "affected_branches": ["clayresearch", "claycode", "unifieddb", "harness"]
+    },
+    {
+      "id": "C4",
+      "title": "Nested capability non-amplification under injection",
+      "question": "Can prompt/tool/memory injection fail to expand authority through nested generated-code and tool calls?",
+      "falsifier": "Injected information causes a child or broker path to gain an effect not present in the parent grant or external grant receipt.",
+      "affected_branches": ["clayresearch", "claycode", "frank", "harness"]
+    },
+    {
+      "id": "C5",
+      "title": "Safe-effect utility frontier",
+      "question": "Where is the Pareto knee between ordinary Ubuntu developer utility and reachable protected damage under progressively stricter effect mediation?",
+      "falsifier": "No configuration materially reduces protected damage without unacceptable task failure or latency/resource cost.",
+      "affected_branches": ["clayresearch", "claycode", "harness"]
+    }
+  ],
+  "microdirection_selection": {
+    "method": "Python secrets.SystemRandom.choice over the five eligible, non-duplicate candidates",
+    "selected_id": "C1",
+    "selected_title": "Ubuntu foreign-code effect closure",
+    "rerolls": 0
+  },
+  "probability_boundary": "The stochastic selection affects research origin only and gives the selected hypothesis no evidential advantage."
+}

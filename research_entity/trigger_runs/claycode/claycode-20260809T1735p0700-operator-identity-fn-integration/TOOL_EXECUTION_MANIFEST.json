@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1735p0700-operator-identity-fn-integration",
+  "tools":[
+    {"tool":"GitHub connector","status":"EXECUTED","uses":["canonical boot","trigger/protocol read","current G9/Dialect/D parser read","recent run/history read","durable run artifact writes"]},
+    {"tool":"OpenAI local Python sandbox","status":"EXECUTED","runtime":"Linux 6.18.35 x86_64 / Python 3.13.5 / Lark","uses":["LALR parser construction","counterexample execution","20k spacing fuzz","operator identity checks","5k function-format fuzz","8k exact binding controls","local timing"]},
+    {"tool":"web primary-source search","status":"EXECUTED","sources":["Lark official grammar/tree-construction documentation","Rust Reference identifiers","WebAssembly Core 3.0 lexical format"]},
+    {"tool":"E2B","status":"NOT_CALLABLE_IN_THIS_SESSION","project_state":"RUNTIME_VERIFIED elsewhere; no callable E2B tool exposed here"},
+    {"tool":"SandboxAPI","status":"BLOCKED_NOT_SUBSCRIBED"},
+    {"tool":"Andreas Ubuntu developer target","status":"NOT_CONNECTED_TO_THIS_WORKER"},
+    {"tool":"Qwen-class 4B target reader","status":"NO_CALLABLE_TARGET_MODEL_TOOL"},
+    {"tool":"tools/research_interconnect_preflight.py","status":"NOT_RUN","reason":"repository is connector-backed, not mounted into the local Python execution environment"},
+    {"tool":"tools/goodman_filter_check.py","status":"NOT_RUN","reason":"repository is connector-backed, not mounted into the local Python execution environment; manual Goodman artifact was materialized without claiming checker execution"}
+  ],
+  "no_fake_execution":true
+}

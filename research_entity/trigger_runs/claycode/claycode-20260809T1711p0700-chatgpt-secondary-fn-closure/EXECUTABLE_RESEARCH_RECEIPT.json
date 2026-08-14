@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1711p0700-chatgpt-secondary-fn-closure",
+  "experiment": "G9_FUNCTION_DEFINITION_CALL_CLOSURE_BRIDGE",
+  "evidence_class": "LOCAL_EXECUTABLE_PROXY",
+  "runtime_identity": {
+    "host": "OpenAI hosted container",
+    "os": "Debian GNU/Linux 13 (trixie)",
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "target_class": "NON_TARGET_HOSTED_LINUX",
+    "andreas_ubuntu_target": false
+  },
+  "inputs": {
+    "grammar_blob": "ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "g9_spec_blob": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "dialect_blob": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "prior_universal_core_evidence": "EXP-CC14-UNIVERSAL-CORE-001",
+    "prior_universal_core_handoff": "research_entity/trigger_runs/claycode/claycode-multiworker-20260809T0128p0700/HANDOFF_A_to_B_minimal_core.json"
+  },
+  "current_surface_observation": {
+    "call_expression_present": true,
+    "general_function_definition_present_in_statement_grammar": false,
+    "first_candidate_declaration_rejected_by_current_surface": "fn",
+    "classification": "DEFINITION_CALL_CLOSURE_GAP"
+  },
+  "candidate_bridge": {
+    "new_surface_only": ["typed expression-bodied fn declaration"],
+    "reuses_existing_concepts": ["module", "version", "typed parameters", "type_expr", "expr", "call"],
+    "semantic_intent": "Expose the already-researched general-purpose function/call contract; do not introduce a new cognitive primitive.",
+    "authority_rule": "Function definition/call resolution never mints capability or effect authority.",
+    "resolution_rule": "Call target must resolve by explicit module/symbol/signature identity; no associative or nearest-neighbor fallback."
+  },
+  "source_sha256": "a612b1361820cdc2b827079da069eb075b9986bb7642cb8c9c8f369f1cbd3f2e",
+  "experiment_script_sha256": "a7ddc4883ddad3b4ad1911e3b047c62058ade4f618c2aac1571be8094f2cbba0",
+  "receipt_stdout_sha256": "8bf85a63b274167c2a1b99beb5a4d7a6069f95650d15c884cffc36146442f961",
+  "candidate_semantic_hash": "409b8f2902bf3dbb12ce490c1d6b47ebd23b0fcba24e324c5a9ffc13a53cc1d2",
+  "corpus": {
+    "program": "three typed composed expression-bodied functions: add, mul_add, twice_mix",
+    "seed": 202608091711,
+    "randomized_calls": 20000,
+    "input_range_each_integer": [-100000, 100000]
+  },
+  "observed": {
+    "candidate_parse": "PASS",
+    "candidate_typecheck": "PASS",
+    "randomized_differential_mismatches": 0,
+    "undefined_function": "REJECT",
+    "arity_mismatch": "REJECT",
+    "undefined_variable": "REJECT",
+    "process_exit": 0
+  },
+  "expected": {
+    "randomized_differential_mismatches": 0,
+    "negative_cases": "REJECT"
+  },
+  "failure_classification": "CURRENT_G9_FRONTEND_INTEGRATION_GAP_NOT_CORE_SEMANTIC_COUNTEREXAMPLE",
+  "repair_candidate": "Materialize the previously researched function/call contract in the BASE canonical frontend/IR, beginning with an explicit typed function-definition production and exact signature binding. Keep branching/recursion/pattern matching/errors/concurrency as separate closure gates.",
+  "limitations": [
+    "The experiment parser/checker is a deliberately small proxy, not the production G9 parser.",
+    "It proves only typed function-definition/call closure for the tested pure integer subset.",
+    "It does not test branching, recursion, pattern matching, structured error values, memory, async/concurrency, FFI, effects, native/WASM lowering or the mandatory application suite.",
+    "It ran on a hosted Debian Linux container, not the Andreas Ubuntu developer target.",
+    "No BASE work package or application proof is completed by this receipt."
+  ],
+  "promotion": "NONE",
+  "base_gate_effect": "NONE"
+}

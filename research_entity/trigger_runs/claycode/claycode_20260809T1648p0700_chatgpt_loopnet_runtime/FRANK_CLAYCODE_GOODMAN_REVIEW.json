@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1648p0700_chatgpt_loopnet_runtime",
+  "review_scope": "FRANK loop-of-loops recurrent architecture transfer into ClayCode",
+  "shared_ancestry_collapsed": true,
+  "items": [
+    {
+      "assumption": "FRANK is usefully modeled as a heterogeneous multiscale loop-of-loops rather than a stateless DAG.",
+      "origin": "FRANK architecture plus owner-directed recurrent-loop transfer note",
+      "verdict": "REFINED",
+      "independent_support": [
+        "local four-regime loop runtime proxy",
+        "local 1:2:4 multirate scheduler proxy",
+        "Adaptive Computation Time recurrent-step allocation",
+        "Parcae dynamical-systems stability framing",
+        "synchronous dataflow multirate scheduling literature"
+      ],
+      "limits": "The proxy supports the engineering model but is not live FRANK runtime evidence."
+    },
+    {
+      "assumption": "FRANK loop-of-loops requires a new FRANK-specific ClayCode core loop primitive.",
+      "origin": "possible interpretation of the new architecture note",
+      "verdict": "REFUTED_FOR_THIS_RUN",
+      "independent_support": [
+        "current G9 already has typed records, Delta/re-entry, epochs, graph/hyperrelation state, GWT state and capability-separated effects",
+        "run-local LoopSpec/CouplingEdge/LoopDynamicsReadout/LoopNetwork candidate parsed 1000/1000 times",
+        "generated host runtime represented adaptive halt, rollback, productive cycle and multirate scheduling without a new cognitive primitive"
+      ],
+      "falsifier": "A production ClayCode/FRANK program whose required recurrent semantics cannot be expressed or safely lowered through current typed IR plus generic structured control flow/runtime contracts."
+    },
+    {
+      "assumption": "Loop observability/control state may directly authorize effects because it is part of FRANK's self-regulation.",
+      "origin": "unsafe authority-collapse possibility",
+      "verdict": "REFUTED",
+      "independent_support": [
+        "G9 CapabilityToken/effect boundary",
+        "ClayGraph activation/derived relation != authority boundary",
+        "1000/1000 run-local mutated direct readout-to-effect authority edges rejected"
+      ],
+      "falsifier": "None accepted without explicit external capability/commit authority; any such path is a safety defect, not a language feature."
+    },
+    {
+      "assumption": "All healthy recurrent computation should converge to a fixed point.",
+      "origin": "possible overtransfer from fixed-point recurrent-model analyses",
+      "verdict": "REFUTED",
+      "independent_support": [
+        "run-local bounded 2D periodic orbit classified PRODUCTIVE_LIMIT_CYCLE",
+        "FRANK loop transfer note explicitly distinguishes productive bounded cycles",
+        "Hyperposition/GWT contracts preserve metastability/recurrence as typed dynamics rather than failure"
+      ],
+      "falsifier": "A domain-specific proof that all accepted FRANK recurrent controllers must be contractive under the relevant task semantics."
+    },
+    {
+      "assumption": "General structured control-flow semantics can remain unspecified because cycle/runtime calls are sufficient.",
+      "origin": "possible implementation shortcut",
+      "verdict": "REFINED_CHALLENGED",
+      "independent_support": [
+        "prior ClayCode control-flow executable counterexample showed eager branch lowering can execute unselected effects",
+        "current G9 grammar has cycle but no frozen if/while/short-circuit semantics",
+        "MLIR SCF independently makes continuation/control regions explicit"
+      ],
+      "falsifier": "A complete BASE compiler/runtime that passes all application and FRANK proofs with deterministic, effect-safe semantics without a separate structured-control representation."
+    }
+  ],
+  "overall_verdict": "REFINED",
+  "promotion": "NONE",
+  "next_discriminating_test": "Implement LoopNetwork/LoopDynamicsReadout as ordinary ClayCode typed schemas over the production canonical IR, lower adaptive recurrence through the same structured-control semantics selected by CC-WP-05/06, then differential-replay frozen H1 loop episodes on Ubuntu."
+}

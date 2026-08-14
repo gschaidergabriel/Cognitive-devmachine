@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze",
+  "trigger": "harness",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "work_package": "H-WP-01-FREEZE-COMPILER",
+  "status": "COMPLETED_COMPONENT",
+  "promotion": "NONE",
+  "h1_release_gate": "NOT_PASS",
+  "base_claycode_gate": "STILL_CURRENT_NOT_BYPASSED",
+  "workspace_write": {
+    "result": "PASS",
+    "commit": "a768be0dae5820acc54641ff78200e08941bf922",
+    "hwp01_status": "COMPLETE",
+    "hwp02_preserved": "CLAIMED_BY_chatgpt-secondary-sol-current"
+  },
+  "freeze": {
+    "artifact":"REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
+    "architecture_semantic_hash":"b92521a77690fcee8e6e247597e091c1478f790d38f780381d899b1200e85a0f",
+    "exact_contract_hash":"73450c51d1ca84f63556ba3d8adad3eb663ec848b02384e744af9ebd28421540",
+    "modules":15,
+    "logical_planes":13,
+    "ubuntu_repo_checkout_verify":"PASS"
+  },
+  "mesh_preflight": {"registered_branches":9,"result":"PASS","violations":0},
+  "required_artifacts": [
+    "WORKER_CLAIM.json",
+    "INTERCONNECT_MANIFEST.json",
+    "SOURCE_LOCK.json",
+    "REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
+    "EXECUTION_RECEIPT_CI.json",
+    "PREFLIGHT_RECEIPT_CI.json",
+    "LIVE_DELTA_REVIEW.json",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "TOOL_EXECUTION_MANIFEST.json",
+    "VALIDATION_REPORT.json",
+    "FINAL_REPORT.md",
+    "WORKSPACE_COMPLETION_RECEIPT.json"
+  ],
+  "next_action": "Continue with a non-overlapping open H1 implementation package while H-WP-02 remains owned by its active sibling; do not claim H1 PASS before the complete Reference Harness release contract is satisfied."
+}

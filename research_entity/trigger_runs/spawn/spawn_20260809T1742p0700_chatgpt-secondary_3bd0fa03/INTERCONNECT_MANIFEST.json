@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1742p0700_chatgpt-secondary_3bd0fa03",
+  "origin_branch": "claycode",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "canonical_parent": "r2/04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "internal_grounding": [
+    "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/global/RESEARCH_ACTOR_REGISTRY.json",
+    "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "research_entity/global/PROJECT_COMMAND_REGISTRY.json",
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+    "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+    "research_entity/trigger_runs/clay/clayresearch_20260809T1716p0700_chatgpt-secondary/EXPERIMENTS.md",
+    "research_entity/knowledge_micro_packets/claygraph/KMP-CR-20260809-INCREMENTAL-LOCALITY.md"
+  ],
+  "peer_coverage": [
+    {"branch":"clayresearch","depth":"deep","feedback":"SUPPORTING_EVIDENCE","finding":"Earlier incremental-locality result is retained but must be guarded by correctness, operator-state and invalidation costs."},
+    {"branch":"frank","depth":"targeted","feedback":"NEW_CONSTRAINT","finding":"Current cognitive views/AnswerCapsules must bind to a coherent semantic epoch when incremental updates can arrive out of order."},
+    {"branch":"gwt","depth":"deep","feedback":"NEW_CONSTRAINT","finding":"Workspace/candidate selection is a non-monotone selector class; invalidation must include competitors/selection domain, not only positive support edges."},
+    {"branch":"emergenz","depth":"targeted","feedback":"NO_CHANGE","finding":"No new emergence claim; measurement consumers should nevertheless read coherent sealed epochs."},
+    {"branch":"claycode","depth":"deep","feedback":"NEW_CONSTRAINT","finding":"Keep signed Delta<T>.diff semantics; specify full-recompute equivalence, negative/competitive dependency closure, selector/plan invalidation and epoch/frontier sealing."},
+    {"branch":"hyperposition","depth":"targeted","feedback":"NO_CHANGE","finding":"No new higher-order topology mechanism was established; dynamic alternative sets inherit the same coherent-epoch requirement when materialized incrementally."},
+    {"branch":"claygraph","depth":"deep","feedback":"NEW_CONSTRAINT","finding":"Derived graph selections/activations require retraction-aware support and competitor/partition invalidation plus graph-epoch receipts."},
+    {"branch":"unifieddb","depth":"deep","feedback":"NEW_CONSTRAINT","finding":"Persist/replay signed multiplicity, operator/index state, selector/plan identity and frontier/sealed-epoch metadata where needed for deterministic recovery."},
+    {"branch":"harness","depth":"deep","feedback":"NEW_HYPOTHESIS","finding":"Add differential full-recompute oracle versus incremental execution for BASE/H1/H2 traces, including selector changes and out-of-order logical time."}
+  ],
+  "coverage_complete_for_registered_scientific_branches": true,
+  "live_worker_reread": {
+    "performed": true,
+    "parallel_spawn_runs_observed": [
+      "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+      "spawn-20260809T1746p0700-claycode-mvc-state",
+      "spawn_20260809T174614p0700_harness_lowering_semantics"
+    ],
+    "selected_direction_duplicate": false
+  },
+  "evidence_boundary": "Internal current candidate + primary external research + executed synthetic mechanism tests. No live Frank, Ubuntu ClayCode compiler, H1/H2 Harness or target-model execution evidence was produced.",
+  "promotion": "NONE"
+}

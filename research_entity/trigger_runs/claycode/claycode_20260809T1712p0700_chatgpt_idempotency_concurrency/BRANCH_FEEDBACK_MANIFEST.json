@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1712p0700_chatgpt_idempotency_concurrency",
+  "promotion": "NONE",
+  "branches": {
+    "claycode": {
+      "receipt": "FEEDBACK",
+      "delta": "CC-WP-04/06/07/08/11 should enforce a typed commit-envelope legality rule: idempotency key plus semantic operation/payload fingerprint, relevant base/dependency epoch and capability validity are revalidated inside the backend serialization/commit domain. UNIQUE conflict alone is not semantic replay proof. No new core syntax is justified by this test."
+    },
+    "harness": {
+      "receipt": "FEEDBACK",
+      "delta": "Independent local replication supports NR-HARNESS-HWP02-IDEMPOTENCY-PRELOCK-RACE-20260809. Patch the actual H-WP-02 ledger to recheck key+event fingerprint after acquiring serialization and run real concurrent project-host regressions before completion."
+    },
+    "unifieddb": {
+      "receipt": "FEEDBACK",
+      "delta": "Transaction/replay materialization should bind idempotency identity to semantic operation/payload fingerprint and classify IDEMPOTENT_REPLAY versus KEY_REUSE_CONFLICT explicitly. Physical UNIQUE/index behavior must not define logical semantic equivalence."
+    },
+    "clayresearch": {
+      "receipt": "FEEDBACK",
+      "delta": "Refine the transaction-effect envelope with concurrency: dependency/capability revalidation and idempotency fingerprint check must occur within the relevant commit serialization domain. This converges with the existing envelope direction and requests no new syntax."
+    },
+    "frank": {
+      "receipt": "FEEDBACK",
+      "delta": "FRANK effect/recovery receipts should consume the stronger replay/conflict classification, but this is Research-Entity runtime infrastructure evidence only. It does not grant Frank self-Harness authority or validate loop-of-loops cognition."
+    },
+    "claygraph": {
+      "receipt": "NO_CLAIM_PROMOTION",
+      "delta": "Replay identity/conflict state may be projected for retrieval/diagnostics with provenance, but graph activation/salience cannot authorize replay or effect commit."
+    },
+    "gwt": {
+      "receipt": "NO_CLAIM_PROMOTION",
+      "delta": "A deterministic effect receipt improves effect/outcome/re-entry observability only; it is not workspace ignition, causal-use or emergence evidence."
+    },
+    "hyperposition": {
+      "receipt": "NO_CLAIM_PROMOTION",
+      "delta": "Commit serialization and replay identity are execution-plane invariants, not evidence that semantic/active/physical topologies are equivalent or causally coupled."
+    },
+    "emergenz": {
+      "receipt": "NO_CLAIM_PROMOTION",
+      "delta": "Concurrency correctness and deterministic replay remove a measurement confound but do not support emergence, synergy or macro-causal claims."
+    }
+  },
+  "next_cross_branch_test": "Actual H-WP-02 patched concurrent regression -> frozen ClayCode DB semantic IR -> two backend lowerings -> Ubuntu target replay/crash/cancellation differential."
+}

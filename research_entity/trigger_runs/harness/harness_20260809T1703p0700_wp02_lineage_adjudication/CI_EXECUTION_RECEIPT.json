@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "harness-wp02-lineage-exact-ci-20260809T1714p0700",
+  "run_id": "harness_20260809T1703p0700_wp02_lineage_adjudication",
+  "trigger": "harness",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "executor": "GitHub Actions ubuntu-latest / Python 3.12",
+  "workflow": ".github/workflows/harness-wp02-lineage-differential.yml",
+  "test": "research_entity/harness/tests/wp02_lineage_differential.py",
+  "output": "research_entity/trigger_runs/harness/harness_20260809T1703p0700_wp02_lineage_adjudication/CI_DIFFERENTIAL_OUTPUT.json",
+  "result_commit": "4ef7f64e6e66f815ab1e13528484203ec49e160c",
+  "status": "PASS_EXACT_REPOSITORY_DIFFERENTIAL",
+  "results": {
+    "same_final_state_different_history": {"A_root_equal": true, "B_semantic_state_hash_equal": false},
+    "typed_set_permutation": {"A_root_equal": false, "B_semantic_state_hash_equal": true},
+    "idempotency_payload_collision": {
+      "A_second_status": "IDEMPOTENT_REPLAY",
+      "A_value_after_second": 1,
+      "B_conflict_rejected": true,
+      "B_value_after_second": 1
+    },
+    "capability_surface": {
+      "A_full_verify": true,
+      "A_snapshot_restore": true,
+      "A_domain_epochs": false,
+      "B_full_verify": false,
+      "B_snapshot_restore": false,
+      "B_domain_epochs": true
+    }
+  },
+  "adjudication": "MERGE_REQUIRED_NO_LINEAGE_SELECTED",
+  "interpretation": "The exact current repository implementations confirm complementary strengths and incompatible identity semantics. Neither lineage should be frozen unchanged. A supplies history-independent content identity plus verification/recovery; B supplies typed set semantics, domain epochs and strict semantic/provenance/source idempotency conflict rejection. The H1 contract should split semantic-content, version/history and execution-trace identities instead of overloading one state hash.",
+  "scientific_boundary": {
+    "exact_repo_execution": true,
+    "github_ubuntu_execution": true,
+    "target_developer_host_execution": false,
+    "live_frank_baseline_differential": false,
+    "crash_recovery_matrix": false,
+    "h_wp_02_complete": false,
+    "h1_release_pass": false,
+    "canonical_promotion": false
+  },
+  "next_tests": [
+    "Merge the evidenced invariants into one candidate H1 oracle ledger without deleting either predecessor lineage.",
+    "Differential-replay captured frankv0.1 baseline transactions against the candidate ledger.",
+    "Crash-inject between state write, receipt publication and epoch advance.",
+    "Test domain/read-set conflicts, snapshot restore and dynamic Run ClayGraph bindings.",
+    "Execute the resulting candidate on the actual Ubuntu developer host before H-WP-02 completion."
+  ]
+}

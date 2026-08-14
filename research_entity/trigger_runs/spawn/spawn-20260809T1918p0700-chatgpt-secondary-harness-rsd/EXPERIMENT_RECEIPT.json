@@ -1,0 +1,50 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd",
+  "execution_environment":"OpenAI ChatGPT Python sandbox; synthetic mechanism experiment; NOT Ubuntu target and NOT live FRANK",
+  "promotion_guard":"Results discriminate contract shapes only. They do not count as H1/H2/BASE target acceptance.",
+  "experiments":{
+    "RSD_E1_nondeterminism_omission":{
+      "traces":5000,
+      "steps_per_trace":12,
+      "semantic_nondeterminism_dimensions":["clock_bucket","rng_bit","peer_delta","tool_value","schedule"],
+      "sealed_all":{"divergent_traces":0,"total":5000},
+      "omit_one_receipt_dimension":{
+        "clock_bucket":{"divergent":4999,"total":5000},
+        "rng_bit":{"divergent":4999,"total":5000},
+        "peer_delta":{"divergent":5000,"total":5000},
+        "tool_value":{"divergent":5000,"total":5000},
+        "schedule":{"divergent":4990,"total":5000}
+      },
+      "omit_all":{"divergent":5000,"total":5000},
+      "interpretation":"In this deliberately sensitivity-rich toy transition system, complete sealing gives exact replay; leaving any semantically relevant source live almost always breaks replay. This falsifies coarse-log sufficiency inside the model, not in live FRANK."
+    },
+    "RSD_E2_dual_identity":{
+      "pairs":10000,
+      "construction":"same semantic state/outcome; different retry_count/latency/worker execution metadata",
+      "semantic_hash_divergences":0,
+      "full_trace_hash_divergences":10000,
+      "interpretation":"Byte/full-trace identity is too strict as the semantic equivalence oracle when execution-only metadata is allowed to vary."
+    },
+    "RSD_E3_crash_effect_idempotency":{
+      "crash_points":["before_external","after_external_before_outcome","after_outcome_before_reentry"],
+      "idempotent_effect_id_dedupe":{"all_cases_final_external_effect_count":1,"all_cases_reentered":true},
+      "interpretation":"An idempotency key/dedupe-capable external boundary makes retry recovery well-defined in the toy state machine."
+    },
+    "RSD_E4_nonidempotent_commit_ambiguity":{
+      "local_post_crash_state":"RESERVED in both worlds",
+      "world_A":"external effect not applied",
+      "world_B":"external effect already applied before crash",
+      "strategy_retry":"correct in A, duplicates effect in B",
+      "strategy_skip":"loses effect in A, correct in B",
+      "result":"NO_LOCAL_RETRY_OR_SKIP_STRATEGY_GUARANTEES_EXACTLY_ONCE",
+      "required_resolution_family":["external idempotency/deduplication","queryable commit/outcome status","transactional coupling strong enough to remove ambiguity","explicit COMMIT_UNKNOWN plus reconciliation/escalation"]
+    }
+  },
+  "negative_results":[
+    "Do not require the entire physical runtime to be deterministic; real concurrency needs separate testing.",
+    "Do not use one all-inclusive trace hash as the H1/H2 semantic oracle.",
+    "Do not claim exactly-once for arbitrary external side effects from local journaling alone.",
+    "Successful replay is not causal/emergence proof without matched interventions."
+  ]
+}

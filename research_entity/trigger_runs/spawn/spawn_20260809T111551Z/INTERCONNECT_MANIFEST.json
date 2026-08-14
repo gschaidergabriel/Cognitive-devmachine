@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T111551Z",
+  "origin_branch": "claycode",
+  "coverage": "ALL_NINE_REGISTERED_RESEARCH_BRANCHES",
+  "preflight_mode": "CONNECTOR_NATIVE_EXPLICIT_CROSSREAD",
+  "branches": {
+    "claycode": {"priority":"PRIMARY","inputs":["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md","research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/autonomous/SUPERVISOR_STATE.json","recent spawn async-replay and atomic-authority evidence"],"current_constraint":"BASE requires executable async/concurrency/atomics/resource semantics; live parser work is separately occupied by strict LALR conflict localization."},
+    "harness": {"priority":"DEEP","latest_material_ref":"commit 1428ed8887406d6ce45b0048b31819a4bdc33383","current_constraint":"H-WP-01 architecture freeze separates semantic architecture identity from exact source-contract identity and exposes a deterministic target for future H2/compiler handoff."},
+    "frank": {"priority":"DEEP","latest_material_refs":["commit 56920faa53f9231946e0b331431c2bae1b24c93b","commit 4e4484a10a6face62cf75d3dd7c8a7e5fbe22c10"],"current_constraint":"Frank is a separate research subject; semantic state/transition identity must remain stable across lowering and physical scheduling. Frank self-Harness authority remains PROPOSAL_ONLY."},
+    "clayresearch": {"priority":"MESH","latest_material_refs":["commit ffada30fcf4e9b891b5dfb232f62eddbef31bc07","commit 78cca84abf39bd81f070e8522a7783d237b713c0"],"current_constraint":"Integrated loop-of-loops and Safe-Effect work makes resource/effect identity important, but recurrence or structure is not evidence for atomic correctness."},
+    "gwt": {"priority":"MESH","latest_material_refs":["commit 8df7d1710ec91dc578ba2d2303f81ea493dfac0e","commit 631c126f30331b8f9e682da8d778ebd0623c9d59"],"current_constraint":"Adaptive recurrence/trajectory measurements require scheduler and state-version effects not to masquerade as causal workspace effects."},
+    "emergenz": {"priority":"MESH","latest_material_ref":"commit 105d05139363050d61e30c0e00daa42816872d16","current_constraint":"Recent lesion/rescue work requires concurrency/version confounds to remain controlled rather than promoted as emergence evidence."},
+    "hyperposition": {"priority":"MESH","latest_material_refs":["commit 79d724958bdfadf2178cbe717c8ae15ed2e52234","commit 048c43ab48131d9380eb72ff4c874134c1e262bd"],"current_constraint":"Higher-order topology and alternatives require stable semantic identity across concurrent topology/state changes."},
+    "claygraph": {"priority":"DEEP","latest_material_refs":["commit e4c381118d3aba4f267dba3a858d98a69cee6a73","commit bed3ba897952e075dc02b89a47ba9225fe264eca"],"current_constraint":"Graph epochs and reversal-aware bindings make value equality insufficient as a universal identity predicate for mutable graph/state references."},
+    "unifieddb": {"priority":"DEEP","latest_material_refs":["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay epoch 17","commit 7d66c3e67f11ab423317480b5381d180f2748b6a"],"current_constraint":"Current stack uses semantic epochs and dynamic work/state fabric; stale-write rejection and exact semantic identity must survive physical storage/backend differences."}
+  },
+  "cross_branch_contradiction_scan": {
+    "duplicate_live_work": false,
+    "shared_ancestry_warning": "Prior ClayCode/FRANK/Harness agreement is not independent replication. The ABA result is supported separately by an executable discriminator and independent language/runtime specifications.",
+    "representation_vs_mechanism": "A typed CAS record is only a candidate representation until lowering/runtime tests preserve its behavioral invariants.",
+    "authority_boundary": "Atomic expressibility never grants capability/effect authority."
+  },
+  "mesh_status": "COMPLETE_FOR_THIS_SPAWN_RUN"
+}

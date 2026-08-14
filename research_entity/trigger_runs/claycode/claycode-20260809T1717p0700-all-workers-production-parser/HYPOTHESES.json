@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1717p0700-all-workers-production-parser",
+  "hypotheses":[
+    {
+      "id":"H-CC-NSD-PRODUCTION-VIABLE-20260809",
+      "status":"SUPPORTED_LOCAL_EXECUTION",
+      "claim":"N, S and D can each parse the complete current G9 V3 plus Dialect corpus under a production-like deterministic LALR design after the same structural and lexical-identity repairs.",
+      "falsifier":"Normative parser integration exposes a current admitted construct that one candidate cannot map to the intended typed IR without a semantic escape hatch."
+    },
+    {
+      "id":"H-CC-LEXICAL-IDENTITY-REPAIR-20260809",
+      "status":"SUPPORTED_LOCAL_EXECUTION",
+      "claim":"Reserved-keyword exclusion from generic NAME plus explicit keyword-identifier aliases removes observed lexical ambiguity while preserving reconstructible keyword-field identity and BOOLEAN identity.",
+      "falsifier":"Production parser/canonicalizer finds a current legal identifier that cannot be represented or a keyword alias whose canonical identity differs across roundtrip."
+    },
+    {
+      "id":"H-CC-D-LOCAL-LEADER-20260809",
+      "status":"OPEN_LEADING_NOT_SELECTED",
+      "claim":"Finite declared bare relation words are currently the best source-surface candidate because they minimize migration edits while retaining fail-closed typed relation resolution and competitive parse cost.",
+      "counterhypothesis":"N or S yields lower target-reader repair cost, smaller maintenance burden or safer compiler evolution despite higher current migration cost.",
+      "falsifier":"Matched target-reader/compiler/Ubuntu tests show D materially worse on repair accuracy, semantic mistakes, parser maintenance, latency or evolution cost."
+    },
+    {
+      "id":"H-CC-TARGET-READER-DISCRIMINATOR-20260809",
+      "status":"OPEN",
+      "claim":"The remaining high-information N/S/D discriminator is target-reader plus normative compiler integration rather than more local parser closure testing.",
+      "falsifier":"A new local executable counterexample differentiates N/S/D on semantic correctness before target-reader execution."
+    }
+  ]
+}

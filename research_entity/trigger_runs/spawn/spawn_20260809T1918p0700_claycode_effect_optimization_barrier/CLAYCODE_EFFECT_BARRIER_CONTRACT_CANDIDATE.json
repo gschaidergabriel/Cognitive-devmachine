@@ -1,0 +1,26 @@
+{
+  "schema_version":"0.1-candidate",
+  "name":"ClayCodeEffectTransformationContract",
+  "status":"RESEARCH_CANDIDATE_NOT_FROZEN_LANGUAGE_SEMANTICS",
+  "principles":[
+    "effect ordering/dependency is not capability authority",
+    "unknown effect/resource/speculatability fails conservative",
+    "no non-pure erase/duplicate/speculate by default",
+    "reordering is allowed only when the declared conflict relation proves commutation and observable outcomes are preserved",
+    "BASE may use exact total traces first; partial-order equivalence is a later optimization permission, never an authority relaxation"
+  ],
+  "effect_event_fields":["effect_kind","resource_identity_or_order_domain","capability_requirement","phase","payload_or_input_identity","outcome_identity","replay_or_transaction_identity"],
+  "phase_candidates":["intent","reserve","execute","commit","rollback","outcome","reentry"],
+  "transformation_rules":{
+    "erase":"only proven pure/non-observable operations",
+    "duplicate":"only proven pure operations; effectful duplication forbidden in BASE",
+    "reorder":"only nonconflicting effects with data/control/transaction dependencies preserved",
+    "speculate":"only explicitly speculatable operations; authority/commit/rollback/error boundaries default NO",
+    "cse":"effectful CSE forbidden by default",
+    "hoist_sink":"requires preserved conflict order, authority-decision timing and error/reentry semantics"
+  },
+  "candidate_observation":"Obs=<return_or_error,durable_state,effect_partial_order,authority_decisions,transaction_phases,externally_visible_events,reentry_outcome_receipts>",
+  "candidate_equivalence":"Source ~= Target iff Obs is equivalent for all admitted inputs/capability states; effect order may quotient only explicitly commuting/disjoint events.",
+  "translation_receipt_bindings":["source_semantic_hash","typed_effect_ir_hash","optimizer_pass_sequence_and_versions","optimized_ir_hash","backend_identity","generated_artifact_hash","capability_effect_ABI_identity","validation_vector_set_hash","observational_equivalence_receipt"],
+  "language_change_policy":"No core syntax change proposed. Implement in typed effect/lowering/runtime/validation layers first; only an executable counterexample may force a frozen semantic amendment."
+}

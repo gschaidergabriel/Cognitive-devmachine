@@ -1,0 +1,12 @@
+{
+  "experiment_id":"EXP-CC-CHAIN-SEMANTIC-GATE-20260809-01",
+  "seed":20260809,
+  "versions":{"grammar_sha":"ec2f17077333955cfdabe6c64868d597e7e734e3","parser":"cc-chain-probe-parser-v0.1","typecheck":"cc-chain-probe-type-v0.1","lowering":"cc-chain-probe-lower-v0.1"},
+  "base":{"source_hash":"1d5d4fe6d916c7f51ac1662c630b80a233ae4c7eb37ce7ff7601191be819da87","ast_hash":"23d332182e07842dfefeea039776841913317d2dc6c51ef6657aa03ad92f7d55","typed_ir_hash":"d526a8a3f18af81b9f8839bcc72fe9decb28e5d04fc36390321a10c5c91579b1","semantic_hash":"d526a8a3f18af81b9f8839bcc72fe9decb28e5d04fc36390321a10c5c91579b1","artifact_hash":"33ce0751eae266cd511329d605cf538be2af957932a61ac26e9d126718791f33","contract_hash":"7bc4c4c788dc47450ced9b1d6e14dab4b96488c1b8d3791a7a2991b2a778c889","stdout":"12","exit_code":0},
+  "identity_whitespace_variant":{"source_hash_equal":false,"ast_hash_equal":true,"typed_ir_hash_equal":true,"semantic_hash_equal":true,"artifact_hash_equal":true,"contract_hash_equal":false},
+  "tamper_fuzz":{"cases":50000,"detected":50000,"missed":0},
+  "clean_variants":{"cases":10000,"false_rejects":0},
+  "self_consistent_wrong_lowering":{"cases":10000,"chain_integrity_passed":10000,"semantic_oracle_catches":9996,"semantic_oracle_misses":4,"executed_sample":{"chain_errors":[],"observed":2,"expected":12,"artifact_hash":"1cd98c1b5c6a44d3b82a039b6e031eb060b8922c092f724934a0d84953ec028c","exit_code":0}},
+  "interpretation":"Joined provenance/hash continuity detects inconsistent tampering in this constructed probe, but a self-consistent wrong lowering can satisfy the chain. Chain integrity is necessary audit evidence, not semantic-preservation proof; translation/oracle checks remain required.",
+  "scope":"Local synthetic mechanism test on a deliberately tiny unambiguous ClayCode-like subset; not the production parser/compiler and not Andreas target-host evidence."
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1717p0700-all-workers-production-parser",
+  "review_type":"FRANK_CLAYCODE_GOODMAN_ANTI_ECHO",
+  "items":[
+    {
+      "assumption":"ClayCode surface/compiler must preserve distinct state, provenance, semantic identity and effect-authority boundaries required by FRANK.",
+      "ancestry":"FRANK/ClayCode shared project ancestry",
+      "independent_check":"Executed parser/canonical-hash/fail-closed mutations directly against current ClayCode source/dialect rather than treating FRANK agreement as replication.",
+      "verdict":"REFINED",
+      "result":"The boundary requirement survives, but parser success alone is insufficient: boolean identity and keyword-field identity produced concrete counterexamples until the lexical repair."
+    },
+    {
+      "assumption":"A readable bare-relation source surface is safe enough for FRANK architecture authoring.",
+      "ancestry":"Not accepted by FRANK authority; treated as ClayCode candidate only.",
+      "independent_check":"D rejected 100000/100000 unknown relations in the matched relation oracle and 20000/20000 unknowns in the diagnostics probe while preserving full current corpus parse.",
+      "verdict":"REFINED",
+      "result":"D is locally viable and leading on migration cost, but target-reader/compiler evidence is required before selection."
+    },
+    {
+      "assumption":"Current G9/Dialect semantics need a new cognitive primitive to become executable.",
+      "independent_check":"N/S/D reached full current G9+Dialect LALR parse with shared structural/lexical grammar repairs only.",
+      "verdict":"REFUTED_FOR_TESTED_FRONTEND_GAPS",
+      "result":"Observed frontend gaps are parser/lexical/control-contract gaps, not evidence for a new cognitive semantic primitive."
+    }
+  ],
+  "overall":"PASS_WITH_OPEN_TARGET_READER_DISCRIMINATOR",
+  "promotion":"NONE"
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1711p0700-chatgpt-secondary-fn-closure",
+  "hypotheses": [
+    {
+      "id": "H-CC-FN-01",
+      "statement": "The current admitted G9 surface has a definition-call closure gap: it can denote call expressions but cannot define a reusable general executable function body through the published statement grammar.",
+      "status": "SUPPORTED_BY_CURRENT_SOURCE_AND_LOCAL_PROXY",
+      "evidence": ["grammar.ebnf blob ec2f17077333955cfdabe6c64868d597e7e734e3", "EXECUTABLE_RESEARCH_RECEIPT.json"],
+      "falsifier": "Production current-G9 parser/compiler compiles a reusable typed function definition and call without any additional declaration/lowering contract."
+    },
+    {
+      "id": "H-CC-FN-02",
+      "statement": "A minimal typed function-definition surface can expose the prior universal-core function/call contract without introducing a new cognitive or FRANK-specific semantic primitive.",
+      "status": "OPEN_SUPPORTED_IN_BOUNDED_PROXY",
+      "evidence": ["prior CC14 minimal universal core handoff", "20000-case zero-mismatch local bridge"],
+      "falsifier": "Canonical typed-IR or target lowering requires a semantic distinction that cannot be represented by the prior universal-core function/call contract."
+    },
+    {
+      "id": "H-CC-FN-03",
+      "statement": "Exact module/symbol/signature binding should be the default function-call resolution law; ClayGraph activation, UnifiedDB semantic proximity, GWT selection and model text must not substitute for definition identity.",
+      "status": "OPEN_STRONGLY_CONSTRAINED_BY_BRANCH_BOUNDARIES",
+      "evidence": ["ClayGraph G3 exact-query bypass negative", "UnifiedDB U9 identity/authority separation", "Harness SourceChainEvidenceV1", "LLVM/WebAssembly explicit function identity"],
+      "falsifier": "A verified alternative resolution mechanism provides equivalent deterministic/replayable binding and fail-closed ambiguity handling without hidden authority or semantic drift."
+    },
+    {
+      "id": "H-CC-FN-04",
+      "statement": "The lowest-risk BASE repair is to materialize function-definition/signature semantics in the production frontend/canonical IR before adding new high-level sugar or FRANK-specific syntax.",
+      "status": "OPEN_ARCHITECTURE_RECOMMENDATION",
+      "evidence": ["less-change-more-compile stage policy", "current function/call gap", "official IR comparisons"],
+      "falsifier": "An alternative smaller implementation path closes the mandatory application suite while preserving semantic identity, type/effect checking and lowering receipts with less semantic surface."
+    },
+    {
+      "id": "H-CC-FN-05",
+      "statement": "Function definition/call closure is necessary but not sufficient for BASE: branching, recursion/iteration, pattern matching, structured errors, memory/resource semantics, concurrency, FFI and real application lowering remain independent gates.",
+      "status": "CURRENT_CONSTRAINT",
+      "evidence": ["CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md", "HANDOFF_A_to_B_minimal_core.json"],
+      "falsifier": "The acceptance contract is formally revised or an equivalent smaller universal/system profile is proven and accepted with real application evidence."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-CC-FN-A",
+      "statement": "All reusable computation can remain in host/Needle adapters and G9 need only declare cognitive state/rules.",
+      "discriminating_test": "Attempt APP-01..APP-10 with current G9 while requiring semantic-hash-preserving cross-backend portability and no hidden host semantics."
+    },
+    {
+      "id": "CH-CC-FN-B",
+      "statement": "Generic `rule` declarations already constitute executable functions and no function-definition surface is missing.",
+      "discriminating_test": "Specify and execute a production rule-to-call lowering with typed arguments, return values, recursion/iteration behavior, error semantics and deterministic canonical identity."
+    },
+    {
+      "id": "CH-CC-FN-C",
+      "statement": "Function definitions should exist only in canonical IR and need no source-level G9 syntax.",
+      "discriminating_test": "Compile real applications from existing source constructs into function-bearing IR without adding source syntax and compare complexity, semantic traceability and toolability against a minimal explicit function surface."
+    }
+  ]
+}

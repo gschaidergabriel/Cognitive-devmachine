@@ -1,0 +1,46 @@
+name: ClayCode autonomous FREE_ONLY research
+
+# FREE_ONLY fail-closed pause (2026-08-12): GitHub-hosted ubuntu-latest jobs are
+# currently rejected before runner allocation by an account billing/spending-limit
+# block (runs 31548258330 and 31555133561). Do not buy capacity or raise limits.
+# Keep explicit dispatch available for a future verified zero-cost execution surface;
+# restore schedule/push only after supervisor evidence shows the selected runner path
+# is currently available without paid fallback.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: claycode-autonomous-free-only-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  research-cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run one bounded FREE_ONLY research cycle
+        run: python tools/claycode_autonomous_cycle.py | tee /tmp/claycode-cycle.json
+
+      - name: Commit cycle receipts, supervisor inbox and bounded requests
+        run: |
+          git config user.name 'claycode-autonomous-research'
+          git config user.email 'claycode-autonomous-research@users.noreply.github.com'
+          git add research_entity/claycode/autonomous/ research_entity/runtime/tool_requests/ || true
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode autonomous FREE_ONLY research cycle'
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

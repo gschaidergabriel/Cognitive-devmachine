@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1615p0700_chatgpt_nsd_namespace",
+  "hypotheses": [
+    {
+      "id": "H-CC-RELIR-SURFACE-INDEPENDENCE-011",
+      "status": "OPEN_SUPPORTED_LOCAL_PROXY",
+      "hypothesis": "N, S and D source surfaces can lower to one deterministic typed RelationId IR without changing relation identity.",
+      "support": ["17/17 matched current relation specimens lowered to the same typed relation tuples in each local arm", "whitespace variants preserved canonical identity in 20000/20000 cases per arm"],
+      "counterhypothesis": "Full current G9, dialect, higher-order relation or control-flow contexts expose surface-dependent semantic structure.",
+      "falsifier_next_test": "Production parser full-corpus surface->typed-IR differential with identical semantic oracle."
+    },
+    {
+      "id": "H-CC-D-SOFTKEYWORD-012",
+      "status": "OPEN_REFINED_BY_NEGATIVE_RESULT",
+      "hypothesis": "Readable declared bare relations D remain viable only if the parser implements scoped soft-keyword/contextual declaration or explicit escaping that preserves the ordinary identifier namespace.",
+      "support": ["Finite resolver can reject unknown relation meaning", "current relation spellings remain compact"],
+      "counterevidence": ["finite-terminal D proxy accepted 0/15 ordinary identifier controls using declared relation spellings", "4B_emits and 4B_need_not_learn are not legal current identifiers"],
+      "counterhypothesis": "The namespace/escape machinery costs more complexity and repair burden than N or a lexically disjoint S.",
+      "falsifier_next_test": "Production D parser passes full G9 plus identifier-shadowing/escape corpus with deterministic AST, zero accidental operator capture and acceptable diagnostics/latency."
+    },
+    {
+      "id": "H-CC-S-LEXNAMESPACE-013",
+      "status": "OPEN_CHALLENGED",
+      "hypothesis": "A lexically disjoint sigil/custom surface could preserve compact readable relations while lowering to the same canonical IR.",
+      "support": ["bounded relation-only S proxy is compact and typed resolver fails unknown semantic IDs closed"],
+      "counterevidence": ["concurrent mixed @ref test challenged current @relation spelling across LALR modes"],
+      "counterhypothesis": "A redesigned disjoint sigil or quoted form removes the collision without losing compactness.",
+      "falsifier_next_test": "Run redesigned S in the production parser against full G9+dialects and mixed ref/relation lexical stress corpus."
+    },
+    {
+      "id": "H-CC-N-GENERIC-FALLBACK-014",
+      "status": "OPEN_SUPPORTED_NOT_SELECTED",
+      "hypothesis": "Strict normalization/generic relation form N is a robust canonical fallback for BASE parser closure.",
+      "support": ["concurrent whole-current-G9 proxy closed 86/86 chunks under N", "this run found no identifier-namespace collision under N"],
+      "counterevidence": ["relation sample cost averaged +12 bytes versus D", "full migration edit count, diagnostics and target-reader repair cost are not yet matched against alternatives"],
+      "counterhypothesis": "A softer custom surface yields equal correctness with materially lower reader/migration cost.",
+      "falsifier_next_test": "Matched production N/S/D corpus benchmark including diagnostics, edits, token/context and Qwen-class reader repair."
+    },
+    {
+      "id": "H-CC-PARSER-FREEZE-015",
+      "status": "OPEN",
+      "hypothesis": "BASE should freeze typed canonical IR semantics before freezing a preferred human/machine reader surface, provided every accepted surface roundtrips to the same semantic hash and authority/type invariants.",
+      "support": ["current N/S/D evidence converges on semantic admission being separate from surface recognition", "independent MLIR architecture supports generic plus custom textual forms over one IR as an analogue"],
+      "counterhypothesis": "Multiple source surfaces create unacceptable ambiguity, implementation complexity or migration burden and one strict source syntax should be frozen immediately.",
+      "falsifier_next_test": "Production parser/canonicalizer benchmark plus target-reader study and compiler complexity measurement."
+    }
+  ],
+  "promotion": "NONE"
+}

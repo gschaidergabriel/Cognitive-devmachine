@@ -1,0 +1,42 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-hostinger-runner-paired-revise-20260810T0641p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T06:41:00+07:00",
+  "payload": {
+    "work_id": "WORK-HOSTINGER-RUNNER-ELIGIBILITY-RECONCILE-20260810",
+    "reason_clay": "Fresh paired discriminator materially strengthens the blocker diagnosis. The existing successful Dr.-Unterweger self-hosted Harness job 93274355157 was explicitly rerun through the GitHub connector; GitHub accepted the rerun and the new job 93317523079 subsequently completed SUCCESS with all 13 named execution steps. Immediately after that success, Clay minimal-label run 31342068951 / job 93317377631 was re-read and remained QUEUED with zero steps. Thus the same current Hostinger/self-hosted execution capacity is demonstrably alive for gschaidergabriel/Dr.-Unterweger while the Clay repository still receives no allocation even with runs-on:self-hosted only. This falsifies transient machine-offline/busy as the leading explanation in the paired observation window. The supported blocker is now repository-specific runner eligibility/registration/access-policy (or repository Actions policy), not ClayCode code failure and not Linux/X64 label spelling. Exact root cause still requires authoritative runner/settings API or host registration inspection.",
+    "work_clay": "Prioritize authoritative repository runner visibility/access inspection for gschaidergabriel/clay-global-research-entity. Verify whether the Hostinger runner is repository-scoped only to Dr.-Unterweger or, if organization/enterprise-scoped, whether its runner group grants Clay repository access. Verify repository Actions policy. Do not create further duplicate queue probes. Once Clay can allocate an eligible runner, execute the existing canonical WP02 VPS workflow and persist exact-SHA strict/full-corpus/canonical receipts before WP02 promotion.",
+    "completion_clay": "Repository-visible runner/settings evidence identifies the exact access/registration/policy state; Clay self-hosted job executes at least one real step; then canonical WP02 Ubuntu workflow persists LATEST_WP02_STRICT.json with exact provenance. If admin/settings capability is unavailable, preserve BLOCKED_EXTERNAL_ADMIN_CAPABILITY rather than retrying duplicate probes.",
+    "evidence_need": [
+      "CLAY_REPOSITORY_RUNNER_LIST_OR_SETTINGS_RECEIPT",
+      "RUNNER_SCOPE_OR_GROUP_ACCESS_RECEIPT",
+      "FIRST_CLAY_SELF_HOSTED_STEP_EXECUTION_RECEIPT",
+      "WP02_VPS_STRICT_RECEIPT"
+    ],
+    "paired_observation": {
+      "frank_repo": {
+        "repository": "gschaidergabriel/Dr.-Unterweger",
+        "workflow_run": 31325207310,
+        "rerun_job": 93317523079,
+        "status": "completed",
+        "conclusion": "success",
+        "named_steps_completed": 13
+      },
+      "clay_repo": {
+        "repository": "gschaidergabriel/clay-global-research-entity",
+        "workflow_run": 31342068951,
+        "job": 93317377631,
+        "status": "queued",
+        "conclusion": null,
+        "steps": 0,
+        "required_labels": ["self-hosted"]
+      }
+    },
+    "hypothesis_status": "SUPPORTED_STRONGER_PAIRED_OPERATIONAL_EVIDENCE",
+    "architecture_delta": "NO_CHANGE",
+    "duplicate_probe_policy": "DO_NOT_REPEAT",
+    "status": "READY"
+  }
+}

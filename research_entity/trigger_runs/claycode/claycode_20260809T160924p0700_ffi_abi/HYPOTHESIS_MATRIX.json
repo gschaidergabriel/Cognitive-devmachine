@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T160924p0700_ffi_abi",
+  "hypotheses": [
+    {
+      "id": "H-CC-FFI-001",
+      "status": "SUPPORTED_LOCAL_SYNTHETIC",
+      "statement": "If a ClayCode FFI capability designates only a reusable host slot/resource number, drop+reuse can retarget an old capability/handle to a different live resource.",
+      "counterhypothesis": "The runtime never reuses identities or independently version-checks every lookup, so slot-like values remain globally unique within the relevant lifetime.",
+      "falsifier": "A concrete slot-reusing lowerer that preserves stale-handle rejection without any equivalent lifetime/version identity.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json"],
+      "promotion": "NO_CANONICAL_PROMOTION"
+    },
+    {
+      "id": "H-CC-FFI-002",
+      "status": "SUPPORTED_LOCAL_PLUS_EXTERNAL_ANALOGUE",
+      "statement": "FFI resources that can be lent temporarily need a machine-checkable lifetime/ownership distinction or an equivalent runtime mechanism; otherwise a borrow can escape the call boundary.",
+      "counterhypothesis": "The ABI never exposes borrowed resources or the host language/runtime statically proves non-escape before lowering.",
+      "falsifier": "A supported host ABI with temporary borrows that passes borrow-escape adversarial tests without an explicit or equivalent lifetime mechanism.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json", "WebAssembly Component Model WIT resource own/borrow semantics"],
+      "promotion": "NO_CANONICAL_PROMOTION"
+    },
+    {
+      "id": "H-CC-FFI-003",
+      "status": "OPEN",
+      "statement": "The abstract ClayCode requirement should be lifetime-bound typed resource identity, not a prematurely fixed representation of {instance,slot,generation,mode}.",
+      "counterhypothesis": "The explicit five-field representation is sufficiently portable and should be canonicalized now.",
+      "falsifier": "Production lowerings across at least two host backends show the explicit representation is both necessary and lower-cost than alternative opaque globally-unique handles while preserving replay and authority invariants.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json", "current G9 CapabilityToken design", "WIT resource semantics"],
+      "promotion": "KEEP_OPEN"
+    }
+  ]
+}

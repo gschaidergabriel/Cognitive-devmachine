@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "refresh_id": "live-fusion-20260809T1703p0700-refresh4",
+  "created_at": "2026-08-09T17:18:32+07:00",
+  "parent_feedback": "research_entity/mesh_feedback/20260809T1703p0700-live-fusion/LIVE_REFRESH_3.json",
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "delta_window": {
+    "base_observed_head": "55262ea82a1cc9dfa72a62841a56169bc22d065a",
+    "cutoff_observed_head": "0ef077eaca4868b412a2adb65d539d47768e77a3",
+    "initial_compare_commits_through_62bf": 201,
+    "mode": "LIVE_DELTA_FUSION_WITH_LATE_ARRIVAL_REREAD"
+  },
+  "scientific_promotion": "NONE",
+  "stage_advancement": "NONE",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "material_refresh": {
+    "R9_HWP02_STATE_IDENTITY_LINEAGE": {
+      "effect": "REVISE",
+      "finding": "Two incompatible H-WP-02 StateLedger lineages require merge, not selection. Separate baseline transaction compatibility identity, semantic-content identity, state-version/history identity and execution-trace identity; combine typed canonicalization/domain epochs/idempotency conflict discipline with full verification/snapshot restore.",
+      "boundary": "H-WP-02 incomplete; H1 blocked; target Ubuntu and frozen frankv0.1 differential pending.",
+      "source_refs": ["research_entity/trigger_runs/harness/harness_20260809T1703p0700_wp02_lineage_adjudication/FINAL_REPORT.md","commit:13edc0bc9c6181d122670aa9f5bf1b44d60d3615"]
+    },
+    "R10_IDEMPOTENCY_CONCURRENCY_AND_FINGERPRINT": {
+      "effect": "CHALLENGE",
+      "finding": "Two distinct idempotency defects are now explicit: pre-lock TOCTOU race and insufficient semantic identity. In 80/80 SQLite rounds, pre-lock same-payload duplicates yielded apply+IntegrityError, while serialize-first lookup yielded apply+replay; different payload yielded apply+conflict. Current visible H1 replay logic can also return replay for same key/event-id with changed event type/mutations/provenance. Repair must compare a canonical semantic fingerprint inside the transaction serialization domain.",
+      "boundary": "Local/synthetic plus current-code review only; second backend and actual Ubuntu project-host execution still required.",
+      "source_refs": ["commit:7aad4b2ca0ec8ebb08d057422c6000e6047b92ce","commit:9f41ff30b18f31c269b42e4305c409b83e2efcee"]
+    },
+    "R11_EFFECT_AUTHORITY_SCOPED_FRESHNESS": {
+      "effect": "SUPPORT",
+      "finding": "Constructed exhaustive/fuzz discriminators favor dependency-scoped commit freshness over retained decision-time permits and global epoch CAS: scoped dependency/capability/resource/budget validation had zero unsafe and zero false-abort cases in the tested model; retained permits were unsafe and global epochs over-aborted unrelated churn.",
+      "boundary": "Reference discriminator only; exactly-once external effect remains unproven and ambiguous remote outcomes stay UNCERTAIN without remote dedupe/transactional coupling/reconciliation.",
+      "source_ref": "research_entity/trigger_runs/harness/harness-20260809T1710p0700-effect-authority-v1/EXECUTION_RECEIPT.json"
+    },
+    "R12_HWP02_CRASH_RECOVERY": {
+      "effect": "SUPPORT",
+      "finding": "SQLite WAL+synchronous FULL process-death probes observed atomic rollback at AFTER_STATE/AFTER_EVENT/AFTER_EPOCH, successful restart verification and single later commit with duplicate replay.",
+      "boundary": "No power-loss, live frankv0.1 or Andreas project-host proof.",
+      "source_ref": "research_entity/harness/H_WP_02_CRASH_RECOVERY_EXECUTION_RECEIPT.json"
+    },
+    "R13_CLAYCODE_G9_FRONTEND_CLOSURE": {
+      "effect": "REVISE",
+      "finding": "BASE frontend closure is a real blocker, not a reason to redesign ClayCode. Current G9 self-conformance found 34/58 sampled rules parsing; a targeted current-source audit independently falsified grammar closure for relational operators, if statements and typed interface methods while showing a minimal surface repair can close those targeted cases without new semantic primitives. Precedence/associativity and fallback evaluation remain separately undefined; ambiguous legacy rules require semantic freeze rather than guessed normalization.",
+      "boundary": "No broad word-operator ecology, no FRANK-specific relation syntax, no gate advancement.",
+      "source_refs": ["research_entity/trigger_runs/claycode/claycode-20260809T1657p0700-g9-self-conformance/FINAL_REPORT.md","commit:d0d787d041821942b331ead1870b884cca69d41a","commit:34c5ecc94c1a98374386aa155c58515160ea3bf2","commit:358ede1807415821b771841fd17f77aeec6c40c6"]
+    },
+    "R14_EMERGENCE_CAUSAL_CONTROL_BUNDLE": {
+      "effect": "NEW_EXPERIMENT",
+      "finding": "Emergence measurement should add null-normalized information-decomposition, explicit screening-vs-confirmatory estimator roles and macro-construction provenance. A 20-seed synthetic common-driver/XOR experiment further showed unconditioned directed information can be a common-driver artifact, pairwise flow can miss higher-order XOR structure, and lesion/rescue/shuffle controls are needed alongside higher-order information measures.",
+      "boundary": "Synthetic toy dynamics only; no live FRANK emergence and no phenomenal-consciousness inference.",
+      "source_refs": ["commit:9cfdfa6891e1d65dde81f61fbf78d7f0425e33da","commit:164e4a90c3a1406045d5d8d612aef13e7a920be0"]
+    },
+    "R15_HYPOFUSION_LIVE_JOIN": {
+      "effect": "SUPPORT",
+      "finding": "Hypofusion r2 selected the same live high-value delta family: G9 closure, numeric/source-chain/resource identity, Harness trace/effect-authority, and idempotency concurrency. Treat this as shared-ancestry coherence, not independent replication.",
+      "source_refs": ["commit:9b7e8c7336eeec05661063eda6f694943c5cef8a","commit:0ef077eaca4868b412a2adb65d539d47768e77a3"]
+    }
+  },
+  "branch_receipts": {
+    "clayresearch": {"effect":"REVISE","delta":"Strengthen loop/transaction/effect envelope with dependency read-set, capability/resource generation identity, semantic payload fingerprint inside backend serialization legality, and separated semantic/version/trace identities."},
+    "frank": {"effect":"NO_CHANGE","delta":"No target-runtime claim advances. Frank self-Harness authority remains PROPOSAL_ONLY; current evidence only sharpens later implementation contracts."},
+    "gwt": {"effect":"NO_CHANGE","delta":"Keep competition/broadcast/delivery/use/effect/outcome/re-entry identities separate; transaction correctness and hashing are not GWT/emergence evidence."},
+    "emergenz": {"effect":"NEW_EXPERIMENT","delta":"Use conditioned directed flow, higher-order decomposition, matched common-driver nulls, lesion/rescue/shuffle controls, null normalization and macro-construction provenance; never one scalar."},
+    "claycode": {"effect":"REVISE","delta":"Immediate BASE blockers are frontend semantic closure plus runtime transaction legality: admitted unit, precedence, typed signatures, explicit fallback, typed RelationIR comparator, and serialize-first semantic idempotency fingerprinting. Less change, more compile."},
+    "hyperposition": {"effect":"NO_CHANGE","delta":"Typed n-ary relation identity stays compatible with higher-order topology; serialization/colocation does not prove coupling or emergence."},
+    "claygraph": {"effect":"SUPPORT","delta":"Bind graph/replay receipts to semantic-content, state-version and trace identities separately; graph activation remains non-authoritative."},
+    "unifieddb": {"effect":"REVISE","delta":"Persist semantic identity, version identity, trace identity, idempotency fingerprint and backend serialization receipt separately; logical unification still does not imply physical merge."},
+    "harness": {"effect":"REVISE","delta":"Merge H-WP-02 lineages, close both race and semantic-fingerprint idempotency defects, preserve crash-recovery wins, and keep H-WP-10 scoped-freshness as synthetic foundation only. H1 remains blocked by BASE."}
+  },
+  "global_priority_after_fusion": [
+    "Finish G9 BASE frontend closure on Ubuntu target: admitted unit, precedence, typed signatures, explicit fallback, typed canonical IR/type-effect.",
+    "Merge H-WP-02 identity stack and coalesce concurrency + semantic-fingerprint fixes; run full differential/crash/replay suite.",
+    "Generalize serialize-first idempotency legality and test a second backend plus target Ubuntu.",
+    "Bind scoped effect freshness and separated state/trace identities into TurnTrace and Run ClayGraph without widening authority.",
+    "Encode null-model/estimator/macro-construction provenance for emergence as BASE representational requirements, not emergence proof."
+  ],
+  "live_controls": ["Research Entity != Frank","Frank self-Harness authority = PROPOSAL_ONLY","Frank v0.1 target = Ubuntu Linux developer system only","shared ancestry != independent replication","implementation presence != package completion","synthetic/local evidence != target-host/live evidence","canonical revision remains r2"],
+  "research_write_result": "LIVE_REFRESH_COMMITTED_WITH_ALL_NINE_BRANCH_RECEIPTS_AND_NO_PROMOTION"
+}

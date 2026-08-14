@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "event_id": "frank-live-refusion-vps-telemetry-20260809T2344p0700",
+  "created_at": "2026-08-09T23:44:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "project": "FRANK v0.1",
+  "routing": ["frank", "harness", "gwt", "emergenz", "claycode", "claygraph", "unifieddb", "hyperposition"],
+  "report_ref": "research_entity/trigger_runs/frank/frank-20260809T2325p0700-chatgpt-f6-tool-contract-vps/LIVE_REFUSION_ADDENDUM.md",
+  "live_refusion": {
+    "f6_tool_transport_commit": "37fea7876e7a7d967b0a2a8e1db26547782dfaea",
+    "f6_tool_transport_regression": "d1727c1d7f385553c0102c682660d25cb8cffd95",
+    "f6_backend_metrics_sibling_commit": "02e19765b6784d1ebb6203ce7897073b72b6d18d",
+    "h1_recurrence_policy_sibling_commit": "568c3528463ae9b1c61d1981845b9d1a4f2fafc2",
+    "h1_policy_differential_sibling_commit": "3ee149ab44cd544c18ded02d24b41b9b29fcf2d1",
+    "h1_policy_pytest_gate_commit": "f0f2820fa3ea81a89bfcfb31bfdf779e6796028d",
+    "vps_telemetry_commit": "36643a720d2416e79b447bc55ef629eed40d3578",
+    "rule": "Sibling deltas were reread and fused before final handoff; no stale-head overwrite."
+  },
+  "h1_synthetic_differential": {
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION_SYNTHETIC_WORKLOAD",
+    "episodes": 8,
+    "raw_diagnostic": {"accuracy": 0.75, "false_halts": 2, "correct_to_wrong_drift": 0, "total_regret": 0.64, "total_cost": 1.63, "total_recurrences": 38},
+    "separated_policy": {"accuracy": 0.75, "false_halts": 0, "correct_to_wrong_drift": 0, "total_regret": 0.52, "total_cost": 1.91, "total_recurrences": 45},
+    "fixed_budget": {"accuracy": 0.625, "false_halts": 0, "correct_to_wrong_drift": 1, "total_regret": 1.38, "total_cost": 2.21, "total_recurrences": 52},
+    "interpretation": "Separated proposal-only observation policy fixes the two frozen early-route false halts with lower regret while preserving accuracy and drift, at modest extra cost versus raw diagnostic exit; it remains synthetic and needs real-model falsification.",
+    "real_model_acceptance": false
+  },
+  "vps_measurement": {
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "tested_commit": "f0f2820fa3ea81a89bfcfb31bfdf779e6796028d",
+    "hostname": "digital-retina",
+    "runner": "clay",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "cpu_logical": 4,
+    "memory_total_kib": 16376020,
+    "disk_total_bytes": 206900281344,
+    "disk_used_bytes": 36643241984,
+    "disk_free_bytes": 170240262144,
+    "loadavg_1_5_15": [0.4927, 0.2471, 0.1333],
+    "matrix_elapsed_ms": 8290,
+    "gate_elapsed_ms_sum": 8082,
+    "gate_count": 20,
+    "pass_count": 20,
+    "fail_count": 0,
+    "slowest_gates_ms": {
+      "local_model_endpoint_boundary": 2111,
+      "pytest_bootstrap": 1989,
+      "local_model_baseline": 863,
+      "deep_integrity_v11": 711,
+      "local_model_tool_metrics": 609
+    },
+    "measurement_scope": "HOST_BASELINE_AND_GATE_WALL_TIME_NOT_PROCESS_PEAK_RSS_OR_ENERGY",
+    "release_claim": false,
+    "whole_frank_release_status": "NOT_CLAIMED"
+  },
+  "cross_branch_implication": {
+    "diagnostic_plane": "observation/readout only",
+    "policy_plane": "proposal-only recurrence/routing policy",
+    "model_plane": "typed context/tools -> non-authoritative proposal/tool calls + bounded metrics",
+    "effect_plane": "external capability/authority/effect receipt/reentry",
+    "anti_conflations": ["observation != decision", "decision proposal != execution authority", "backend metric != cognitive truth"]
+  },
+  "open_falsifiers": [
+    "real Qwen-class 4B tool-call acceptance with pinned weights/quantization/runtime/template",
+    "real-task separated recurrence policy vs raw diagnostic matched differential",
+    "per-process peak memory plus GPU/VRAM/energy/thermal measurement",
+    "Andreas-PC final target acceptance"
+  ],
+  "research_promotion": "NONE",
+  "frank_release_promotion": "NONE"
+}

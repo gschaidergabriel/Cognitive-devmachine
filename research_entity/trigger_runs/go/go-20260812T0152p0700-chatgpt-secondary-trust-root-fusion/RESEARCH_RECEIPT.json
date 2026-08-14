@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T01:52:29+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "fresh_state": {
+    "research_main_seen": "7a536fbadaba37da89a1d145cf5332ae551a84eb",
+    "frank_main_seen": "6f200ca443d2a354b4a0a3e5a27bd7057f09a5c6",
+    "overlap_search": "no existing signed sqlite runtime manifest / public-key trust-anchor candidate found",
+    "existing_v5_state": "main V5 uses OS-owned /etc trust anchor; positive root-owned anchor path remains blocked on current self-hosted lane because sudo_nopasswd=false"
+  },
+  "grf": {
+    "observed_anchors": [
+      "Accepted self-hosted baseline /usr/bin/python3 is measured with SQLite 3.45.1 and is not release-safe for the documented WAL-reset race without a proven backport.",
+      "Main V5 removes caller-selected runtime identity and prefers an independently authorized OS/deployment trust anchor.",
+      "The current target runner cannot positively provision the root-owned V5 anchor noninteractively, so positive admission remains unproved.",
+      "F-V01-01 independently requires exact accepted Frank binary artifact attestation against owner-pinned builder/source policy before finished release acceptance."
+    ],
+    "generated_reality": {
+      "id": "CANDIDATE-BINARY-PINNED-SQLITE-RUNTIME-AUTHORITY-V1",
+      "claim": "If exact accepted Frank binary/launcher identity is independently attested before any persistence access, the same accepted immutable release identity can authorize the exact SQLite runtime digest/source-id, eliminating the need for a second privileged local trust root solely for SQLite identity.",
+      "mechanism": [
+        "F-V01-01 authenticates the exact accepted verifier/binary without consulting mutable Frank SQLite state.",
+        "The accepted verifier contains or authenticates a fixed SQLite policy: exact library digest plus sqlite_version/source_id, or an exact signed manifest digest bound to an owner/release key already anchored by the accepted binary identity.",
+        "The persistence launcher checks the actually loaded SQLite artifact and runtime/source identity before any canonical WAL database opens.",
+        "Caller/model/Frank inputs cannot select the digest, manifest, public key, trust path, or downgrade floor.",
+        "Product service/bootstrap is non-bypassably routed through the same accepted verifier and fails closed on mismatch."
+      ]
+    },
+    "strongest_counter_reality": "Binary-pinning only relocates the trust problem if the verifier/binary can be swapped by the caller, if F-V01-01 itself depends on the SQLite state it is meant to authorize, or if an older still-valid signed SQLite bundle can be replayed without an exact digest/generation floor.",
+    "hidden_assumptions": [
+      "F-V01-01 can authenticate the verifier/binary independently of UnifiedDB/SQLite.",
+      "The final product bootstrap cannot bypass the accepted verifier.",
+      "The runtime policy pins an exact artifact/digest or a monotonic generation floor, not merely a signing key that would accept older signed bundles.",
+      "The owner/release trust key or expected digest is itself part of the accepted binary/source policy and is not caller-selectable."
+    ],
+    "falsifier": "Construct the finished boot dependency graph and prove either (a) verifier identity is established before and independently of any SQLite state, or (b) a cycle exists. Then on the accepted target attempt verifier swap, SQLite library swap, signed-old-runtime replay/downgrade, target bypass, and restart/recovery before canonical WAL open.",
+    "predicted_if_right": "A rootless process can reject all unapproved SQLite artifacts using authority inherited from the already accepted binary identity, with no separate /etc provisioning privilege required for SQLite authorization itself.",
+    "predicted_if_counter_right": "At least one caller-controlled verifier/policy substitution, circular boot dependency, downgrade replay, or bypass path admits an unauthorized SQLite runtime or prevents independent release proof.",
+    "outcome": "MERGE_AS_CROSS_GATE_CANDIDATE_DEFER_PROMOTION",
+    "confidence": "MEDIUM_MECHANISM; ZERO_PRODUCTION_PROMOTION_UNTIL_F-V01-01_AND_TARGET_BOOT_TESTS_CLOSE"
+  },
+  "deterministic_local_test": {
+    "kind": "ED25519_SIGNED_RUNTIME_MANIFEST_MECHANISM_PROBE",
+    "environment": "OpenSSL 3.5.5, ephemeral test keys only",
+    "valid_owner_signature": "PASS",
+    "tampered_manifest_rejected": "PASS",
+    "attacker_key_signature_rejected_against_owner_public_key": "PASS",
+    "interpretation": "Authenticated artifact metadata is mechanically viable, but signature validity alone is not authority unless the verifier key and anti-downgrade policy are independently anchored."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "GO-OOB-SQLITE-CLI-RUNTIME-SPLIT-BRAIN-LOCAL-REPLICATION-V1",
+    "bounded": true,
+    "reversible": true,
+    "intervention": "Temporary PATH-shadow sqlite3 CLI reported 3.53.4 while the same environment's Python process continued to load SQLite 3.46.1 from libsqlite3.so.0.8.6; decoy was removed after measurement.",
+    "baseline": "sqlite3 CLI absent; Python sqlite runtime 3.46.1",
+    "intervention_result": "fake CLI 3.53.4 visible while Python runtime remained 3.46.1",
+    "rollback": "temporary CLI removed; Python runtime remained 3.46.1",
+    "result": "PASS_AS_INDEPENDENT_REPLICATION_OF_CLI_NOT_RUNTIME_FALSIFIER",
+    "production_claim": false
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "claim": "WAL-reset bug is documented for 3.7.0 through 3.51.2, fixed in 3.51.3 and later, with backports 3.44.6 and 3.50.7."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "claim": "3.53.4 is later than the documented fix floor and carries source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    },
+    {
+      "source": "Linux kernel fs-verity documentation",
+      "claim": "fs-verity can enforce read-time integrity for read-only files, but authenticity still requires an independently trusted digest/signature policy."
+    },
+    {
+      "source": "in-toto Attestation Framework v1",
+      "claim": "artifact subjects are bound by digest and attestation envelopes provide authentication/signatures; verifier policy remains the authority boundary."
+    }
+  ],
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "title": "Fuse SQLite runtime authorization into accepted self.root binary identity when boot-order independence is proven",
+    "affected_components": [
+      "F-V01-01 exact binary artifact attestation",
+      "F-V01-13 SQLite/WAL release gate",
+      "service/bootstrap non-bypassability",
+      "restart/recovery acceptance"
+    ],
+    "expected_benefit": "One independently authenticated release trust root instead of two partially redundant local trust roots; removes current sudo provisioning dependency for SQLite authorization if the binary root is proven first.",
+    "strongest_risk": "Trust-root fusion creates a hidden circular dependency or makes a compromised/swappable verifier authoritative for both binary and persistence runtime.",
+    "rollback": "Retain current main V5 OS-owned /etc anchor as baseline; do not weaken or remove it until binary-pinned candidate passes accepted-target adversarial and boot-order tests.",
+    "promotion_gate": [
+      "F-V01-01 exact accepted binary identity independently proven before SQLite",
+      "no boot dependency cycle through mutable SQLite/UnifiedDB state",
+      "exact SQLite loaded-artifact/version/source-id verification before canonical WAL open",
+      "downgrade/replay/library-swap/verifier-swap/bypass tests fail closed",
+      "restart/move/recovery retains the same authority semantics"
+    ]
+  },
+  "release_adjudication": {
+    "F-V01-13": "OPEN_RELEASE_BLOCKING",
+    "F-V01-01": "IN_PROGRESS_DEPENDENCY",
+    "main_v5": "RETAIN_AS_CURRENT_BASELINE",
+    "candidate": "DEFER_UNTIL_CROSS_GATE_BOOT_FALSIFIER",
+    "training": "NOT_AUTHORIZED_NOT_STARTED"
+  }
+}

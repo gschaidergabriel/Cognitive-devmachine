@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1711p0700-chatgpt-secondary-fn-closure",
+  "status": "PASS_WITH_BASE_GATE_OPEN",
+  "checks": [
+    {
+      "check": "canonical_identity_remote_reread",
+      "result": "PASS",
+      "detail": "RAE-8.8 r2 state hash 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346 unchanged after run writes"
+    },
+    {
+      "check": "final_report_remote_reread",
+      "result": "PASS",
+      "detail": "FINAL_REPORT.md blob b4cd4214751f0bf1327607aaa57b3f5d84a22d02"
+    },
+    {
+      "check": "goodman_review_remote_reread",
+      "result": "PASS",
+      "detail": "FRANK_CLAYCODE_GOODMAN_REVIEW.json blob 96a1cf03441df00470bb34c0d99fafac6e859152"
+    },
+    {
+      "check": "interconnect_remote_reread",
+      "result": "PASS",
+      "detail": "INTERCONNECT_MANIFEST.json blob 738c97d26247c94e366b136a3c279ddb26311124"
+    },
+    {
+      "check": "goodman_filter_contract_semantics",
+      "result": "PASS",
+      "detail": "Fetched tools/goodman_filter_check.py rules were applied to the remote-reread manifest/review fields: trigger claycode; exact 9-branch coverage; required priority prefix; FRANK primary feedback; deep ClayGraph/UnifiedDB; Goodman required; run id and latest FRANK run/artifact agree; REFINED review includes independent/adversarial checks and non-promotional action. Exact repository-local validator process was not invoked through the connector."
+    },
+    {
+      "check": "executable_proxy",
+      "result": "PASS",
+      "detail": "Archived reproducer executed on hosted Debian/Python with 20000 randomized calls, zero differential mismatches, and three fail-closed negative cases."
+    },
+    {
+      "check": "target_ubuntu_execution",
+      "result": "OPEN",
+      "detail": "No execution occurred on Andreas' Ubuntu developer target."
+    },
+    {
+      "check": "base_general_purpose_gate",
+      "result": "NOT_PASS",
+      "detail": "No CC work package or mandatory APP proof is marked complete by this research run."
+    },
+    {
+      "check": "scientific_promotion",
+      "result": "NONE",
+      "detail": "Candidate function surface remains non-promoted research/implementation guidance."
+    }
+  ],
+  "open_blockers": [
+    "production parser and canonical typed IR definition/call closure",
+    "branching/recursion/pattern-match/structured-error closure",
+    "typed effect summaries across calls",
+    "native Ubuntu lowering and source-chain receipts",
+    "mandatory real application proof suite"
+  ],
+  "promotion": "NONE"
+}

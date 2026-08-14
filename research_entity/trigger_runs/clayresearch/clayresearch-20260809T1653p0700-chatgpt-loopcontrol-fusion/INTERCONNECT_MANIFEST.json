@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clayresearch-20260809T1653p0700-chatgpt-loopcontrol-fusion",
+  "trigger":"clayresearch",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "moving_stack_epoch":17,
+  "registry_sha":"e4c44a99b6f141096fd77e15efcb7506358b4aaa",
+  "branches":["clayresearch","frank","claycode","claygraph","unifieddb","gwt","emergenz","hyperposition","harness"],
+  "mandatory_shared_inputs":[
+    "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+    "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json",
+    "research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md",
+    "research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md",
+    "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
+    "research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"
+  ],
+  "official_preflight_status":"FAIL_CLOSED_GOVERNANCE_DRIFT",
+  "official_preflight_reason":"tools/research_interconnect_preflight.py derives registry branches dynamically but its explicit PRIORITY/BASE_PACKET_BUDGETS/ALIASES still use clay rather than renamed clayresearch, so its startup guard cannot pass the current registry.",
+  "manual_manifest_mode":"VERIFIED_GITHUB_READS_FAIL_CLOSED",
+  "strong_promotion_allowed":false,
+  "epistemic_rule":"cross-branch distribution of the same loop-of-loops source does not create independent replication",
+  "target_host":"Ubuntu Linux developer system only; Android/mobile/edge excluded for Frank v0.1"
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1615p0700_chatgpt_nsd_namespace",
+  "tools": [
+    {"surface":"GitHub connector","status":"VERIFIED_RW","uses":["canonical boot/reread","protocol and branch reads","concurrency reread","durable run artifacts"]},
+    {"surface":"local Python sandbox","status":"EXECUTED","uses":["matched N/S/D Lark parser/resolver microbenchmark","mutation, whitespace and namespace controls"]},
+    {"surface":"web primary-source research","status":"EXECUTED","uses":["MLIR Language Reference/ODS/Rationale","Tree-sitter grammar and lexer/keyword documentation"]},
+    {"surface":"E2B","status":"UNAVAILABLE_IN_CURRENT_TOOL_SURFACE","uses":[]},
+    {"surface":"SandboxAPI","status":"NOT_INVOKABLE_IN_CURRENT_TOOL_SURFACE","uses":[]},
+    {"surface":"repo-local research_interconnect_preflight.py","status":"NOT_EXECUTED_NO_REPOSITORY_CHECKOUT","uses":[]},
+    {"surface":"repo-local goodman_filter_check.py","status":"NOT_EXECUTED_NO_REPOSITORY_CHECKOUT","uses":[]}
+  ],
+  "external_primary_sources": [
+    {"name":"MLIR Language Reference","url":"https://mlir.llvm.org/docs/LangRef/","use":"generic and custom assembly forms over one extensible IR; roundtrip-oriented grammar"},
+    {"name":"MLIR Operation Definition Specification","url":"https://mlir.llvm.org/docs/DefiningDialects/Operations/","use":"registered operation definitions, assembly parsing/printing and verification"},
+    {"name":"MLIR Rationale","url":"https://mlir.llvm.org/docs/Rationale/Rationale/","use":"generic form as safe fallback plus optional readable custom forms"},
+    {"name":"Tree-sitter Writing the Grammar","url":"https://tree-sitter.github.io/tree-sitter/creating-parsers/3-writing-the-grammar.html","use":"context-aware lexing, keyword/identifier conflicts and keyword extraction"}
+  ],
+  "limitations": [
+    "No fresh E2B evidence is claimed.",
+    "No official repo-local preflight or Goodman validator PASS is claimed.",
+    "Local parser throughput is a toy proxy and not production compiler performance."
+  ]
+}

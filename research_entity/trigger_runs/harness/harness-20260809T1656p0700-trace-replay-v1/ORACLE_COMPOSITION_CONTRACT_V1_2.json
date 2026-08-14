@@ -1,0 +1,53 @@
+{
+  "schema_version":"1.2",
+  "contract_id":"harness-oracle-composition-v1.2",
+  "supersedes":"ORACLE_COMPOSITION_CONTRACT_V1_1.json",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "status":"OPEN_REFINED_COMPOSITION_CONTRACT_NOT_H1_H2_PASS",
+  "runtime_oracle":{"artifact":"research_entity/harness/trace_replay_v1.py","status":"EXECUTED_LOCAL_SYNTHETIC_FOUNDATION"},
+  "source_chain_oracle":{
+    "base_artifact":"research_entity/harness/source_chain_oracle_v1.py",
+    "base_status":"EXECUTED_LOCAL_SYNTHETIC_CANDIDATE",
+    "latest_extension":"research_entity/harness/source_chain_oracle_v1_1.py",
+    "latest_extension_commit":"9dc587e2a0b7da9b3e1519dae1c36cc81d0debae",
+    "latest_extension_status":"CODE_PRESENT_LATE_DELTA_EXECUTION_RECEIPT_NOT_YET_ASSIMILATED",
+    "added_identity":"parser_semantics_hash",
+    "open_semantic_mint_boundary":"Canonical ProgramSemanticId should be derived at deterministic canonical typed IR or equivalently verified canonical semantic stage; Source/Parse stages must not independently mint semantic authority."
+  },
+  "identity_layers_required":[
+    "baseline_transaction_root_hash",
+    "semantic_content_hash",
+    "state_version_hash",
+    "trace_root_hash",
+    "source_artifact_hash",
+    "grammar_contract_hash",
+    "parser_semantics_hash",
+    "canonical_program_semantic_id",
+    "type_effect_contract_hash",
+    "lowering_contract_hash",
+    "executable_artifact_hash",
+    "source_chain_evidence_hash"
+  ],
+  "conditional_live_resource_layers":[
+    "capability_authorization_epoch",
+    "resource_type_identity",
+    "resource_generation_or_lifetime_epoch",
+    "opaque_handle_instance_identity",
+    "borrow_or_ownership_state"
+  ],
+  "resource_aba_rule":"A reusable backend slot/index is never sufficient live-resource identity after close/drop/reuse. A stale handle must fail closed through generation/lifetime identity or an equivalently verified backend-native mechanism.",
+  "parser_rule":"Grammar syntax identity and parser operational semantics identity are separate. Differential equivalence fails when parser_semantics_hash differs even if final runtime state matches.",
+  "semantic_id_rule":"Pre-canonical stages carry source/parse/expected-semantic evidence. Canonical ProgramSemanticId authority belongs to deterministic canonical typed IR or an equivalently verified canonical semantic stage and must be derivation-bound to prior artifacts/contracts.",
+  "release_equivalence_requires":[
+    "TurnTrace runtime semantic equivalence",
+    "SourceChain source/grammar/parser-semantics/type-effect/lowering/artifact/replay equivalence",
+    "baseline transaction compatibility or explicit tested divergence",
+    "semantic content/version/trace identities not conflated",
+    "conditional live resource lifetime/type/ownership identity equivalence",
+    "dynamic Run ClayGraph delta equivalence",
+    "no unexplained identity binding gap"
+  ],
+  "authority_rule":"No trace, parser, semantic id, model output, graph activation, GWT state, resource descriptor or replay result grants effect authority by representation alone.",
+  "gate_effect":"NONE",
+  "promotion":"NONE"
+}

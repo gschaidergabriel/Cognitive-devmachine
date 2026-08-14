@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1706p0700-chatgpt-secondary-sol",
+  "trigger": "claycode",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "branches": {
+    "claycode": {"depth": "DEEP", "refs": ["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "research_entity/claycode/g9/grammar.ebnf", "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"], "finding": "G9 V3 semantics are richer than the published EBNF: comparisons and if-blocks used by the current candidate are not represented by grammar.ebnf."},
+    "frank": {"depth": "DEEP_TARGET_FEEDBACK", "refs": ["research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md", "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"], "finding": "Current FRANK feedback asks ClayCode to compile a typed LoopDynamicsReadout/controller/intervention contract; loop-of-loops remains OPEN, not truth."},
+    "clayresearch": {"depth": "STACK_GROUNDING", "refs": ["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"], "finding": "Moving stack pins G9 V3 and mandates implementation over semantic change absent an executable counterexample."},
+    "claygraph": {"depth": "DEEP_SUBSTRATE", "refs": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"], "finding": "Typed hyperrelations, epoch-bound projection and distinct selection/provenance receipts can carry loop topology/readout references without granting truth or effect authority."},
+    "unifieddb": {"depth": "DEEP_SUBSTRATE", "refs": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"], "finding": "Revisioned work/effect receipts and semantic state can persist loop-readout identities; no physical monolith requirement follows."},
+    "gwt": {"depth": "MEASUREMENT_CONTRACT", "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"], "finding": "Loop dynamics must remain separate from selection/broadcast/use/outcome/re-entry and from emergence claims."},
+    "hyperposition": {"depth": "MEASUREMENT_CONTRACT", "refs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"], "finding": "Alternatives, higher-order relations, gain/delay/timescale and intervention semantics already map onto generic ClayCode records/relations; no new syntax was required in the tested loop contract."},
+    "emergenz": {"depth": "CAUSAL_CONTROL", "refs": ["research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md", "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"], "finding": "Recurrence is not emergence; loop readouts are instrumentation inputs for lesion/rescue/counterfactual tests, not an emergence scalar."},
+    "harness": {"depth": "EXECUTION_FEEDBACK", "refs": ["research_entity/harness/HARNESS_WORKSPACE.json"], "finding": "H2 Clay Harness remains blocked on ClayCode BASE; a grammar/parser conformance gate directly reduces the blocker for H-WP-03 and later H2 differential work."}
+  },
+  "coverage": "ALL_CURRENT_REGISTERED_SCIENTIFIC_BRANCHES_RELEVANT_TO_CLAYCODE",
+  "promotion_note": "Cross-branch agreement was treated as shared ancestry unless independently tested."
+}

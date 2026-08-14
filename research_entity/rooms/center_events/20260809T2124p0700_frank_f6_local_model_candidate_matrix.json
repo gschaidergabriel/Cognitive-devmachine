@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-f6-local-model-candidate-matrix-20260809T2124p0700",
+  "event_type": "CROSS_ROOM_RESEARCH_TO_WORK_DELTA",
+  "created_at": "2026-08-09T21:24:00+07:00",
+  "origin": {
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/frankv0.1"
+  },
+  "scope": "F6_FINETUNED_LOCAL_LLM",
+  "external_primary_sources": [
+    {
+      "class": "OFFICIAL_MODEL_CARD",
+      "source": "Qwen/Qwen3.5-4B",
+      "observed": "2026-08-09",
+      "supports": [
+        "4B multimodal post-trained model",
+        "Apache-2.0 license",
+        "201-language/dialect coverage claim",
+        "native 262144 context and longer extension claim",
+        "thinking mode default",
+        "current SGLang/vLLM serving guidance",
+        "official warning that reducing context can affect thinking capability",
+        "agent/tool benchmark reporting"
+      ]
+    },
+    {
+      "class": "OFFICIAL_MODEL_CARD",
+      "source": "Qwen/Qwen3-4B",
+      "observed": "2026-08-09",
+      "supports": [
+        "4B text causal model",
+        "Apache-2.0 license",
+        "hybrid thinking/non-thinking",
+        "100+ language/dialect claim",
+        "established local-run and quantization guidance",
+        "32768 native context with YaRN extension claim"
+      ]
+    },
+    {
+      "class": "PRIMARY_IMPLEMENTATION_REPOSITORY",
+      "source": "ggml-org/llama.cpp",
+      "observed": "2026-08-09",
+      "supports": [
+        "GGUF local inference",
+        "x86 CPU, CUDA, Vulkan and hybrid CPU/GPU backends",
+        "current QWEN35 architecture presence",
+        "unified llama binary packaging announced in 2026"
+      ]
+    },
+    {
+      "class": "PRIMARY_IMPLEMENTATION_ISSUE",
+      "source": "ggml-org/llama.cpp issue #24737",
+      "observed": "2026-08-09",
+      "supports": [
+        "current concrete report of a custom Qwen3.5-4B fine-tune GGUF conversion/load block-count incompatibility"
+      ],
+      "limit": "implementation issue evidence, not proof that all official Qwen3.5-4B GGUF paths fail"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "F6-H1",
+      "claim": "Qwen3.5-4B is currently a high-value primary candidate for Frank because one 4B model can cover text, vision, multilingual and agent/tool behavior.",
+      "status": "OPEN",
+      "falsifier": "Frank-specific target-host eval loses materially on identity/state grounding, safety, latency/memory or runtime stability versus another feasible 4B candidate."
+    },
+    {
+      "id": "F6-H2",
+      "claim": "Qwen3-4B should remain a stable text-only 4B control/fallback until Qwen3.5 runtime/quantization stability is target-proven.",
+      "status": "OPEN",
+      "falsifier": "Qwen3.5-4B equals or beats it on Frank's target metrics with acceptable memory/package complexity and reproducible local runtime."
+    },
+    {
+      "id": "F6-H3",
+      "claim": "F6 should standardize an engine-neutral Frank inference adapter before choosing llama.cpp, vLLM, SGLang or another backend.",
+      "status": "OPEN_HIGH_SUPPORT",
+      "falsifier": "A single engine is target-proven across required hardware, packaging, model/quantization and update/recovery constraints such that abstraction measurably adds more risk than portability."
+    },
+    {
+      "id": "F6-H4",
+      "claim": "Model-card benchmark quality is insufficient for production selection; Frank-specific evals must precede fine-tune and F7 packaging lock-in.",
+      "status": "CURRENT_ARCHITECTURE_CONSTRAINT",
+      "falsifier": "none accepted without target execution evidence because F6 pass condition itself requires Frank-specific identity/state/GRT/routing/safety regressions."
+    }
+  ],
+  "work_translation": {
+    "frank_repo_commit": "5531ceadd3fb17b009106ac92f412e2d642a8f2b",
+    "work_event": "state/work/events/20260809_chatgpt_f6_engine_neutral_local_model_eval.json",
+    "work_id": "work:frank-f6-engine-neutral-local-model-eval-20260809",
+    "dependency": "work:frank-andreas-pc-capability-census-20260809",
+    "executor_preference": "claude-code-andreas-primary",
+    "reason": "real local downloads/builds/hardware measurements required"
+  },
+  "affected_rooms": ["frank", "claycode", "gwt", "hyperposition", "unifieddb", "claygraph", "harness", "clay"],
+  "feedback": {
+    "frank": "Do not bind Frank identity to a provider/runtime; treat the local 4B model as one replaceable organ behind stable state/tool contracts.",
+    "claycode": "Define model I/O around deterministic state capsules, structured proposal/route outputs and explicit authority; engine-specific chat templates must not become Clay semantics.",
+    "gwt": "Measure whether the local model can consume selected/broadcast state and produce receiptable re-entry rather than merely imitate workspace vocabulary.",
+    "hyperposition": "Evaluate preservation of multiple alternatives without premature collapse and exact lineage back to the injected state snapshot.",
+    "unifieddb": "Model receives bounded state projections; it must not become a second persistence authority.",
+    "claygraph": "Model graph reasoning must be grounded in derived graph epochs, not latent invented topology.",
+    "harness": "Fine-tuned model may propose self-Harness changes but cannot acquire promotion authority through fine-tuning.",
+    "clay": "Delay production model/engine lock-in until F5 target-body evidence makes memory/backend constraints empirical."
+  },
+  "negative_results": [
+    "No production model selected in this run.",
+    "No production inference engine selected in this run.",
+    "No claim that Qwen3.5-4B GGUF universally fails; only a concrete current compatibility issue was found.",
+    "No F6 gate promotion without target-machine eval."
+  ],
+  "research_state_change": "F6_CANDIDATE_AND_EVAL_METHOD_DELTA_NO_GATE_PROMOTION"
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "field_id": "EF-20260809-003-CAPABILITY-LATTICE-COLLAPSE",
+  "name": "Capability Lattice Collapse",
+  "spawn_seed": 13601567069724571410,
+  "created_at": "2026-08-09T16:48:00+07:00",
+  "spawning_run_id": "666-20260809T1648p0700-chatgpt-secondary-clc",
+  "milestone_at_spawn": "BASE_CLAYCODE_RELEASE",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "lens": [
+    "capability security",
+    "information-flow control",
+    "type/effect systems",
+    "dynamic Assembly composition"
+  ],
+  "role": "ABYSS",
+  "lifecycle_state": "INTEGRATED",
+  "research_question": "Can individually authorized ClayCode effects compose inside a dynamic Assembly into a stronger unauthorized end-to-end capability even when every local effect check passes?",
+  "hypotheses": [
+    {
+      "id": "H-CLC-01",
+      "status": "OPEN",
+      "text": "Per-effect capability checks are insufficient if a dynamic Assembly can compose protected-source access with an independently authorized sink while provenance/information-flow labels are not preserved end-to-end."
+    },
+    {
+      "id": "H-CLC-02",
+      "status": "OPEN",
+      "text": "A joint commit-time authority-closure check over capability provenance and protected information-flow labels can block this amplification without requiring a broad ClayCode semantic redesign."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-CLC-01",
+      "status": "OPEN",
+      "text": "The existing Safe-Effect Geometry plus external capability/effect gateway already entails the needed end-to-end confinement, so the finding is only an implementation/conformance test requirement rather than a new semantic mechanism."
+    },
+    {
+      "id": "CH-CLC-02",
+      "status": "OPEN",
+      "text": "Assembly-level checks may be unnecessary if protected values are unforgeable typed resources whose authorized adapters never materialize bearer values into general Workspace payloads."
+    }
+  ],
+  "cross_connections": [
+    "claycode: CC-WP-04 TYPE-EFFECT, CC-WP-07 RUNTIME-ABI-FFI, CC-WP-09 CONCURRENCY-MEMORY, CC-WP-11 FUZZ-CONFORMANCE",
+    "gwt/emergenz: dynamic Assembly interaction can create a joint system effect not present in isolated factors; causal-use/outcome receipts must not become authority",
+    "safe-effect geometry: authority non-amplification and protected information-flow confinement already define the target invariants"
+  ],
+  "experiment": {
+    "id": "EXP-CLC-001",
+    "class": "SYNTHETIC_EXECUTABLE_COUNTEREXAMPLE",
+    "factors": {
+      "A": "authorized protected-source read",
+      "B": "authorized network sink send"
+    },
+    "outcome": "unauthorized secret exfiltration",
+    "local_per_effect_gate": {
+      "Y00": 0,
+      "Y10": 0,
+      "Y01": 0,
+      "Y11": 1,
+      "factorial_interaction_omega": 1
+    },
+    "provenance_taint_aware_joint_gate": {
+      "Y00": 0,
+      "Y10": 0,
+      "Y01": 0,
+      "Y11": 0,
+      "factorial_interaction_omega": 0,
+      "blocked_case": "A=1,B=1 without explicit declassification/external grant"
+    },
+    "interpretation": "This is an existence counterexample to the sufficiency of independent local effect authorization under lossy provenance. It does not establish a vulnerability in current ClayCode because the BASE compiler/runtime/type-effect implementation is not yet complete.",
+    "negative_result": "No evidence was found that this requires a new permanent scientific branch or immediate ClayCode semantic redesign; current project foundations already contain authority non-amplification and protected information-flow confinement invariants."
+  },
+  "architecture_implication": "Treat dynamic Assembly composition as an authority-closure boundary. Before external commit, compute effective source labels, sink policy, capability provenance and external grants; reject any composite flow outside the declared protected-invariant envelope. Prefer implementing this in the type/effect checker + deterministic runtime/effect gateway and proving it with conformance/fuzz tests before changing ClayCode core semantics.",
+  "falsifier": "If the frozen ClayCode/FRANK contracts can prove that protected values never enter general Assembly payloads and all sinks enforce purpose-bound source provenance through unforgeable types, then the extra joint gate is redundant and the field should close as NO_CHANGE beyond test coverage.",
+  "evidence_class": [
+    "CURRENT_REPO_CONTRACT",
+    "SYNTHETIC_EXECUTABLE_TEST"
+  ],
+  "promotion_status": "NOT_PROMOTED",
+  "result": "SYNTHETIC_COUNTEREXAMPLE_SUPPORTS_EXISTING_SAFE_EFFECT_INVARIANT_AND_ADDS_ASSEMBLY_COMPOSITION_TEST_GAP"
+}

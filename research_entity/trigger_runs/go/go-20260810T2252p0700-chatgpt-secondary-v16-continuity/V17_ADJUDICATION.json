@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2252p0700-chatgpt-secondary-v16-continuity",
+  "adjudication_id": "V17-EFFECT-TERMINALIZATION-20260810-2326-P0700",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "question": "Which V17 direction best closes verified effect outcome -> causally valid provenance re-entry -> terminal DONE without weakening self.root execution fencing?",
+  "baseline_negative_evidence": [
+    {
+      "receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_provenance_gap_v1/LATEST.json",
+      "receipt_id": "FRANK-V01-EFFECT-REENTRY-GAP-31406627821",
+      "finding": "V14 accepts empty/unbound reentry, trace OK, REENTERED treated as COMPLETE, no explicit DONE."
+    },
+    {
+      "commit": "cc5ab4feb5dd4435e2685d756e6289099197e131",
+      "finding": "Target-VPS negative evidence persisted for early V17 schema binding gap before storage guards."
+    }
+  ],
+  "candidates": [
+    {
+      "id": "V17_TEXT_BOUND_TWO_PHASE",
+      "files": [
+        "runtime/state/UNIFIEDDB_V17_EFFECT_REENTRY_DONE_CANDIDATE.sql",
+        "runtime/state/effect_terminal_runtime_v17_candidate.py",
+        "runtime/state/effect_terminal_runtime_v17_guarded_candidate.py"
+      ],
+      "strengths": [
+        "exact V14 effect/attempt/verified-outcome binding after later storage guards",
+        "legacy arbitrary-dict reentry disabled on guarded public candidate surface",
+        "explicit no-learning alternative is typed",
+        "separate REENTERED then DONE recovery surface",
+        "additive rollback surface"
+      ],
+      "fatal_or_material_gaps": [
+        "candidate stores episode/signal/causal/delta identifiers as text and does not require actual current V15/V16 execution ownership",
+        "fabricated support identifiers can therefore satisfy its self-verifier and reach DONE in the pre-fix candidate",
+        "two-phase REENTERED -> DONE introduces a durable intermediate crash window that must be justified rather than assumed useful"
+      ],
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger@46f3986f301786a21f465b46647fcbe73b31369c",
+        "gschaidergabriel/Dr.-Unterweger@b6c75ab71feba690911f21f3341878404ca3ba8d"
+      ],
+      "decision": "NOT_SELECTED_AS_TERMINAL_ARCHITECTURE_COMPONENT_DONOR_ONLY",
+      "donor_features": ["explicit typed no-learning path", "rollback/restart test shape"]
+    },
+    {
+      "id": "V17_EXECUTION_GWT_CAUSAL_ATOMIC",
+      "file": "runtime/state/UNIFIEDDB_V17_PROVENANCE_BOUND_EFFECT_COMPLETION.sql",
+      "strengths": [
+        "effect bound while RESERVED to exact execution_id + V15 lease_epoch",
+        "requires current V15 BUSY/RECOVERING and matching V16 RUNNING execution plus EXECUTION_BOUND event",
+        "stale execution epoch rejected",
+        "requires matching verified effect attempt/outcome",
+        "requires actual attention episode + receiver used=1 + local_effect=1",
+        "requires actual causal-credit and CURRENT semantic-record identities",
+        "REENTRY + terminal DONE can be committed atomically in one transaction",
+        "legacy REENTERED update fails closed unless matching binding + terminal DONE already exist"
+      ],
+      "newly_falsified_gap": {
+        "commit": "c9b6f1fa9dd0981a6114edd1c3804e05669f3aff",
+        "target_workflow_commit": "21249166f7bff4407ee17e4918358574ec8db848",
+        "finding": "Existing foreign keys prove referenced rows exist but do not prove they form the same causal chain. An unrelated UNVERIFIED prediction outcome can supply causal credit if target_key names the effect; an unrelated CURRENT semantic record can be spliced in; support_snapshot_hash is free text. The candidate can still reach effective DONE."
+      },
+      "decision": "SELECTED_BASIS_BUT_NOT_PROMOTABLE",
+      "why_selected_basis": "It dominates the text-only candidate on execution fencing, canonical GWT use and transactional terminalization, but current relational closure is insufficient for promotion."
+    }
+  ],
+  "required_fusion_before_promotion": [
+    "Introduce an explicit verified-effect-outcome -> causal-credit receipt binding, not merely target_key=effect_id.",
+    "Require the causal-credit source outcome to be verified and structurally linked to the same effect/GWT causal episode.",
+    "Introduce an explicit causal-credit -> admitted semantic delta admission receipt, or an equally strong typed relation.",
+    "Replace free support_snapshot_hash authority with a receipt/FK-backed support snapshot identity or remove it from authority-bearing checks.",
+    "Preserve an explicit typed no-learning terminal path without fabricating a semantic delta.",
+    "Keep execution_id + lease_epoch fencing and same-transaction terminal DONE.",
+    "Run target-VPS negative cross-splice tests, valid-chain tests, transaction abort, hard process/power cutpoints, stale epoch, concurrency, rollback and resource shadows before canonical migration."
+  ],
+  "additional_test_committed_this_run": {
+    "test_commit": "079a1a23695297fee69c8362a242bef533a1656e",
+    "workflow_commit": "f5af67b94f13d6b516bac088b92b5e7469db6c26",
+    "purpose": "Read-only full-causal/atomic schema discriminator against current V15/V16/GWT/causal/semantic tables.",
+    "execution_receipt": "NOT_OBSERVED_DURING_THIS_INVOCATION"
+  },
+  "canonical_migration": "NO",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "training_authorized": false,
+  "out_of_box_experiment_count_for_go_run": 1,
+  "timestamp_local": "2026-08-10T23:26:30+07:00"
+}

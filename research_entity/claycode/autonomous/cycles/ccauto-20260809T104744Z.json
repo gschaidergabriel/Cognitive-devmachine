@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "cycle_id": "ccauto-20260809T104744Z",
+  "created_at": "2026-08-09T10:47:44.983752+00:00",
+  "mode": "FREE_ONLY",
+  "target_stage": "BASE_CLAYCODE_RELEASE",
+  "focus": "strict LALR conflict localization and minimum deterministic grammar repair for current D baseline; only after baseline strict construction succeeds, re-integrate typed function definition/call binding and prove parser -> canonical typed symbol/signature identity -> type/effect -> lowering with executable differentials",
+  "gate_snapshot": {
+    "gate_status": "NOT_PASS",
+    "general_purpose_gate_status": "NOT_PASS",
+    "passed_apps": []
+  },
+  "provider_discovery": {
+    "mistral": {
+      "status": "CREDENTIAL_NOT_CONFIGURED"
+    },
+    "nvidia": {
+      "status": "AVAILABLE",
+      "models": 100
+    }
+  },
+  "selected_context_refs": [
+    "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=5000-10000",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=0-5000",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=10000-13239",
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay#chars=5000-10000",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md#chars=0-5000",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json#chars=0-5000",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay#chars=0-5000",
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay#chars=0-5000"
+  ],
+  "rerank_error": "RuntimeError:NVIDIA HTTP 410: {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"This endpoint has reached its end of life on 2026-05-18T00:00:00Z and is no longer available.\"}\n",
+  "model_calls": [
+    {
+      "provider": "NVIDIA",
+      "model": "mistralai/mistral-nemotron",
+      "family": "nemotron",
+      "usage": {
+        "prompt_tokens": 5497,
+        "total_tokens": 5773,
+        "completion_tokens": 276,
+        "prompt_tokens_details": null
+      }
+    },
+    {
+      "provider": "NVIDIA",
+      "model": "z-ai/glm-5.2",
+      "family": "glm",
+      "usage": {
+        "prompt_tokens": 5124,
+        "completion_tokens": 1525,
+        "total_tokens": 6649
+      }
+    }
+  ],
+  "candidate_roles": {
+    "architect": {
+      "claim": "The current admitted G9 V3 stack does not close the general-purpose definition→call contract at the executable source surface due to missing function-definition production.",
+      "counterhypothesis": "Existing `rule`/Needle/host semantics can already compile the full mandatory application suite without explicit source-level function definitions.",
+      "minimal_delta": "Extend the production parser and canonical typed IR with the smallest function-definition contract that reuses existing `module`, `type_expr`, `expr`, and `call` concepts.",
+      "executable_discriminator": "Implement the production parser/IR on the current BASE branch and attempt reusable typed function compilation with full source-chain receipts. If existing constructs already provide equivalent deterministic semantics, reject this surface candidate.",
+      "affected_work_packages": [
+        "CC-WP-01-SPEC-FREEZE",
+        "CC-WP-02-PARSER-CANON",
+        "CC-WP-03-IR-TYPES"
+      ],
+      "semantic_change_required": false,
+      "next_focus": "Production frontend closure — extend/build the real parser and canonical typed IR with the smallest function-definition contract; self-host/roundtrip canonical hashes.",
+      "external_queries": [],
+      "bounded_python_test": ""
+    },
+    "alternative": {
+      "claim": "The current G9 V3 grammar has concrete LALR shift/reduce conflicts (specifically around comparison operators, if-expressions, and rule productions) that prevent strict deterministic parser construction, and these must be localized and repaired with minimum grammar surgery before any function-definition production can be integrated.",
+      "counterhypothesis": "The grammar is already LALR(1)-clean or the conflicts are benign/default-resolvable, and the real blocker is purely the missing function-definition production — parser construction would succeed today if that production were added.",
+      "minimal_delta": "Run the actual grammar.ebnf through a strict LALR(1) parser generator (e.g., PLY, lark, or elk) on the current BASE branch; collect the exact conflict states and productions; apply the smallest grammar refactor (operator-precedence declarations, dangling-else disambiguation, or rule-vs-expression factoring) to achieve zero conflicts; then layer the minimal typed function-definition production onto the now-clean grammar.",
+      "executable_discriminator": "Attempt strict LALR(1) table construction from the current grammar.ebnf without any function-definition production. If construction succeeds with zero conflicts, the counterhypothesis holds and the blocker is only the missing production. If construction fails, record the exact conflict states/productions as negative evidence, apply minimum repair, re-verify zero conflicts, then add the function-definition production and re-verify. Publish canonical hash of the conflict-free grammar before and after function-definition integration.",
+      "affected_work_packages": [
+        "CC-WP-02-PARSER-CANON",
+        "CC-WP-01-SPEC-FREEZE",
+        "CC-WP-03-IR-TYPES"
+      ],
+      "semantic_change_required": false,
+      "next_focus": "Strict LALR conflict localization and minimum deterministic grammar repair on current D baseline; then re-integrate typed function definition/call binding and prove parser → canonical typed symbol/signature identity → type/effect → lowering with executable differentials",
+      "external_queries": [],
+      "bounded_python_test": "import subprocess, sys, json, hashlib, os, tempfile, textwrap\n\ndef run_strict_lalr(grammar_text, grammar_name='claycode_g9'):\n    \"\"\"Attempt strict LALR(1) construction via lark; return conflicts or success.\"\"\"\n    try:\n        from lark import Lark\n        from lark.grammar import Grammar\n    except ImportError:\n        return {'status': 'SKIP', 'reason': 'lark not installed', 'conflicts': []}\n    conflicts = []\n    try:\n        parser = Lark(grammar_text, parser='lalr', start='start', debug=True)\n        return {'status': 'PASS', 'conflicts': [], 'parser': 'constructed'}\n    except Exception as e:\n        err_str = str(e)\n        # Extract conflict info\n        if 'conflict' in err_str.lower() or 'reduce' in err_str.lower() or 'shift' in err_str.lower():\n            conflicts.append({'error': err_str[:500], 'type': 'LALR_CONFLICT'})\n        else:\n            conflicts.append({'error': err_str[:500], 'type': 'OTHER'})\n        return {'status': 'FAIL', 'conflicts': conflicts}\n\ndef grammar_hash(grammar_text):\n    return hashlib.sha256(grammar_text.encode()).hexdigest()\n\n# Minimal G9 grammar fragment based on known conflict areas (comparison, if, rule)\n# This is a proxy: the real test uses the actual grammar.ebnf file\nminimal_g9_fragment = \"\"\"\nstart: program\nprogram: (toplevel)*\ntoplevel: module_decl | rule_decl | record_decl | import_decl\nmodule_decl: \"module\" IDENT \"version\" STRING (\"parent\" \"[\" ref_list \"]\")? toplevel*\nimport_decl: \"import\" IDENT \"=\" ref\nrecord_decl: \"record\" IDENT (\"<\" type_args \">\")? \"{\" field_list \"}\"\nfield_list: (field \",\")* field?\nfield: IDENT \":\" type_expr\nrule_decl: \"rule\" rule_body\ncall: IDENT \"(\" arg_list? \")\"\narg_list: expr (\",\" expr)*\nexpr: call\n     | IDENT\n     | INT\n     | STRING\n     | if_expr\n     | comparison\nif_expr: \"if\" expr \"then\" expr \"else\" expr\ncomparison: expr (\"==\" | \"!=\" | \">\" | \"<\" | \">=\" | \"<=\") expr\ntype_expr: IDENT (\"<\" type_args \">\")?\ntype_args: type_expr (\",\" type_expr)*\nref: \"@\" STRING\nref_list: ref (\",\" ref)*\nIDENT: /[a-zA-Z_][a-zA-Z0-9_]*/\nINT: /[0-9]+/\nSTRING: /\"[^\"]*\"/\n%import common.WS\n%ignore WS\n\"\"\"\n\n# Known conflict: comparison is left-recursive AND expr contains comparison AND if_expr contains expr\n# This creates ambiguity: expr -> comparison -> expr -> comparison (cycle) and shift/reduce on \">\" etc.\n\nresult = run_strict_lalr(minimal_g9_fragment)\nghash = grammar_hash(minimal_g9_fragment)\n\noutput = {\n    'test': 'strict_lalr_conflict_localization',\n    'grammar_hash': ghash,\n    'result': result,\n    'negative_evidence_preserved': True,\n    'note': 'If FAIL with LALR_CONFLICT, conflicts are real and must be repaired before function-definition integration. If PASS, counterhypothesis gains support.'\n}\nprint(json.dumps(output, indent=2))\n\n# Also test: does adding a function-definition production introduce NEW conflicts?\nfunc_def_grammar = minimal_g9_fragment.replace(\n    'toplevel: module_decl | rule_decl | record_decl | import_decl',\n    'toplevel: module_decl | rule_decl | record_decl | import_decl | func_decl\\n'\n    'func_decl: \"func\" IDENT \"(\" param_list? \")\" \"->\" type_expr \"=\" expr'\n).replace(\n    'param_list: param (\",\" param)*',\n    'param_list: param (\",\" param)*\\nparam: IDENT \":\" type_expr'\n)\n\nresult_with_func = run_strict_lalr(func_def_grammar)\noutput2 = {\n    'test': 'lalr_with_function_definition',\n    'grammar_hash': grammar_hash(func_def_grammar),\n    'result': result_with_func,\n    'delta_conflicts': len(result_with_func.get('conflicts', [])) - len(result.get('conflicts', [])),\n    'note': 'If baseline already has conflicts, function-definition may add more. Repair baseline first.'\n}\nprint(json.dumps(output2, indent=2))"
+    }
+  },
+  "cross_model_diversity": {
+    "status": "OK",
+    "pairwise_cosine": [
+      0.4885
+    ],
+    "mean_cosine": 0.4885,
+    "model": "nvidia/nv-embedcode-7b-v1"
+  },
+  "queued_safe_requests": [],
+  "errors": [
+    "falsifier:RuntimeError:NVIDIA HTTP 404: {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function 'e503b15c-62b0-4d69-b532-a88f0bfa2656': Not found for account 'lqEaewE7DO8HuEcPoSDzIGQS8easeRdrpi4xN5GmrV8'\"}",
+    "judge:RuntimeError:NVIDIA HTTP 404: {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function 'e503b15c-62b0-4d69-b532-a88f0bfa2656': Not found for account 'lqEaewE7DO8HuEcPoSDzIGQS8easeRdrpi4xN5GmrV8'\"}"
+  ],
+  "authority": {
+    "research_only": true,
+    "may_mark_work_package_pass": false,
+    "may_promote_semantics": false,
+    "may_modify_frank_harness": false
+  },
+  "next_focus": "Production frontend closure — extend/build the real parser and canonical typed IR with the smallest function-definition contract; self-host/roundtrip canonical hashes.",
+  "supervisor_attention": true
+}

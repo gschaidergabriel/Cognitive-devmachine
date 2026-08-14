@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1930p0700-chatgpt-secondary-identity-causal-fusion",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "generation": "SECOND_GENERATION_AFTER_EXECUTION_AND_CONCURRENT_FUSION",
+  "hypotheses": [
+    {
+      "id": "FRANK-AA-ID-01",
+      "status": "SUPPORTED_COMPONENT_NOT_PROMOTED",
+      "claim": "Within the H1 ActiveAssembly boundary, a packet_id must be bound to one complete semantic/provenance payload: exact duplicate delivery is idempotent, while the same packet_id with non-identical payload must fail closed before ranking/selection.",
+      "counterhypothesis": "Upstream UnifiedDB/transport uniqueness is sufficient and the ActiveAssembly compiler does not need a defensive identity check.",
+      "evidence": ["research_entity/harness/reference/active_assembly.py", "research_entity/harness/tests/test_active_assembly.py", "local hosted Python: 13/13 pre-merge tests PASS including 10000 mutated collision cases with zero silent acceptances"],
+      "falsifier": "A matched integrated H1 replay demonstrates that defensive collision checking creates unacceptable valid-input rejection or semantic drift while upstream identity guarantees are independently complete and replay-verifiable."
+    },
+    {
+      "id": "FRANK-AA-ID-02",
+      "status": "OPEN_HIGH_PRIORITY",
+      "claim": "Packet-content fingerprints used for cross-implementation identity must have an explicit language-independent canonicalization contract or remain non-normative implementation diagnostics.",
+      "counterhypothesis": "Python json.dumps(sort_keys=True) is sufficiently stable to serve as the H1/H2 normative packet hash contract.",
+      "evidence": ["RFC 8785 JSON Canonicalization Scheme", "hosted Python-vs-ECMAScript serialization probe: 1.0/1e-7/1e20/-0.0 serialize differently"],
+      "falsifier": "A frozen cross-language canonicalization test corpus proves identical byte serialization and hashes for all allowed packet values across H1 Python and H2 ClayCode without an additional canonicalization rule."
+    },
+    {
+      "id": "FRANK-AA-CONFLICT-01",
+      "status": "SUPPORTED_COMPONENT_NOT_PROMOTED",
+      "claim": "An ancestry cap intended to suppress duplicated support must not hide an explicit opposite proposition when total context budget permits; conflict visibility and independent replication credit are separate dimensions.",
+      "counterhypothesis": "A strict ancestry cap should apply uniformly, even to opposite propositions, to preserve the simplest context budget rule.",
+      "evidence": ["concurrent ActiveAssembly red-team repair receipt: same-ancestry opposites visible with independent_replication_credit=false; hard total budget retained"],
+      "falsifier": "Matched task replays show that conflict-cap bypass materially increases distraction/latency/error without improving correction or contradiction handling."
+    },
+    {
+      "id": "FRANK-GWT-CAUSAL-01",
+      "status": "OPEN_WITH_EXECUTABLE_COMPONENT",
+      "claim": "Keeping broadcast addressability, delivery, reconstruction, uptake, local causal use, outcome and re-entry as separate executable stages enables discriminating GWT tests that an undifferentiated event-bus trace cannot provide.",
+      "counterhypothesis": "A conventional event bus with equivalent receipts and instrumentation matches FRANK coordination/outcome performance with lower complexity.",
+      "evidence": ["workspace_episode.py component and 17/17 hosted-container tests", "FRANK H1 V2 architecture freeze"],
+      "falsifier": "Matched H1 EVENT_BUS baseline reproduces the same causal/intervention discrimination and task outcomes at lower cost/complexity."
+    },
+    {
+      "id": "FRANK-LOOP-READOUT-02",
+      "status": "OPEN_SUPPORTED_PROXY",
+      "claim": "Adaptive recurrence should be conditioned on residual-estimator identity, uncertainty and freshness; state-delta-only halting is unsafe in stalled regimes.",
+      "counterhypothesis": "Fixed recurrence budgets or ordinary event-driven scheduling dominate once measurement overhead/noise is included.",
+      "evidence": ["existing 50000-episode synthetic loop-quality experiment", "9/9 quality-gate tests + 100000 property fuzz", "Adaptive Depth in Looped Transformers (arXiv:2607.20519) separates trajectory formation from exit readout"],
+      "falsifier": "Real/frozen H1 Golden Traces show no outcome-per-compute advantage over fixed/event-driven controls or measurement noise causes unacceptable false halts/routes."
+    },
+    {
+      "id": "FRANK-EFFECT-RECOVERY-01",
+      "status": "OPEN_EXECUTION_IN_PROGRESS",
+      "claim": "External-effect safety requires recovery lineage spanning reserve/commit/outcome/re-entry; a crash after effect but before durable receipt is a distinct ambiguity that capability validity alone does not solve.",
+      "counterhypothesis": "Current capability gateway plus ordinary process restart/idempotency is sufficient without a dedicated effect-recovery lineage contract.",
+      "evidence": ["current mainline effect-recovery lineage probe and Ubuntu CI workflow", "ClayCode opaque policy-bound capability runtime candidates"],
+      "falsifier": "Crash-fault injection over all effect boundary cut points proves unambiguous replay/recovery with existing semantics and no additional lineage state."
+    },
+    {
+      "id": "FRANK-UDB-PHYS-01",
+      "status": "OPEN",
+      "claim": "One logical UnifiedDB can preserve FRANK semantic identity while physical placement/checkpointing remains an evidence-driven deployment choice.",
+      "counterhypothesis": "A physically split store is required for contention/fault isolation or a physically monolithic SQLite layout is always superior on the target host.",
+      "evidence": ["FRANK final binary contract", "SQLite WAL/snapshot documentation: concurrent readers, one writer, reader end marks, checkpoint starvation and WAL persistent-state requirements"],
+      "falsifier": "Target-Ubuntu workload/recovery benchmarks show one physical arrangement strictly dominates across latency, consistency, recovery and resource budgets."
+    },
+    {
+      "id": "FRANK-4B-ROLE-02",
+      "status": "OPEN_TARGET_BENCHMARK_REQUIRED",
+      "claim": "A current dense Qwen-class 4B can remain the local cognitive model if bounded ActiveAssembly plus typed peer escalation preserves task quality within target-host latency/memory budgets.",
+      "counterhypothesis": "The 4B role is insufficient or unnecessarily expensive and should be replaced by a different size/runtime split.",
+      "evidence": ["official Qwen3-4B-Instruct-2507/Thinking-2507 availability; 4.0B class and local inference paths", "community implementation reports retained only as anecdotal context"],
+      "falsifier": "Frozen target task suite on Andreas Ubuntu host fails quality/latency/memory thresholds versus alternative model-role baselines."
+    },
+    {
+      "id": "FRANK-H1-H2-IDENTITY-01",
+      "status": "OPEN_HIGHEST_INFORMATION_NEXT_TEST",
+      "claim": "The next major information gain comes from binding ActiveAssembly, WorkspaceEpisode, loop-readout, effect/recovery and StateLedger receipts to a shared explicit semantic/basis/version/trace identity and replay contract before adding more conceptual organs.",
+      "counterhypothesis": "Independent component validation is enough; integration can be deferred until after ClayCode BASE or H2.",
+      "evidence": ["multiple newly executable H1 slices now exist independently", "V2 architecture requires mixed partial semantic epochs never appear as coherent current state", "current H1 release remains NOT_PASS"],
+      "falsifier": "Independent component traces transfer to H2 and target Ubuntu without integration-specific defects, mixed-epoch ambiguity or replay mismatch."
+    }
+  ],
+  "promotion": "NONE",
+  "next_test": "Create one integrated ordinary-code Golden Trace that binds semantic_epoch/basis/version/trace identities across StateLedger -> ActiveAssembly -> WorkspaceEpisode -> loop decision -> EffectIntent/outcome/re-entry, with EVENT_BUS/fixed-budget/no-reentry controls and crash cut points."
+}

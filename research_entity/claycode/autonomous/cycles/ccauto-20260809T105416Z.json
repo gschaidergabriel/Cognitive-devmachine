@@ -1,0 +1,219 @@
+{
+  "schema_version": "1.1",
+  "cycle_id": "ccauto-20260809T105416Z",
+  "created_at": "2026-08-09T10:54:16.261942+00:00",
+  "mode": "FREE_ONLY",
+  "target_stage": "BASE_CLAYCODE_RELEASE",
+  "focus": "strict LALR conflict localization and minimum deterministic grammar repair for current D baseline; only after baseline strict construction succeeds, re-integrate typed function definition/call binding and prove parser -> canonical typed symbol/signature identity -> type/effect -> lowering with executable differentials",
+  "gate_snapshot": {
+    "gate_status": "NOT_PASS",
+    "general_purpose_gate_status": "NOT_PASS",
+    "passed_apps": []
+  },
+  "provider_discovery": {
+    "mistral": {
+      "status": "CREDENTIAL_NOT_CONFIGURED"
+    },
+    "nvidia": {
+      "status": "AVAILABLE",
+      "models": 100
+    },
+    "nvidia_executable_pool": {
+      "verified_models": [
+        "nvidia/nemotron-mini-4b-instruct",
+        "z-ai/glm-5.2",
+        "nvidia/nemotron-3-super-120b-a12b",
+        "nvidia/nemotron-3-ultra-550b-a55b",
+        "deepseek-ai/deepseek-v4-flash-0731",
+        "openai/gpt-oss-120b"
+      ],
+      "families": [
+        "deepseek",
+        "glm",
+        "gpt-oss",
+        "nemotron"
+      ],
+      "probes": [
+        {
+          "model": "nvidia/nemotron-3-super-120b-a12b",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 21,
+            "completion_tokens": 16,
+            "total_tokens": 37
+          }
+        },
+        {
+          "model": "nvidia/nemotron-3-ultra-550b-a55b",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 21,
+            "completion_tokens": 14,
+            "total_tokens": 35
+          }
+        },
+        {
+          "model": "deepseek-ai/deepseek-v4-flash-0731",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 9,
+            "completion_tokens": 3,
+            "total_tokens": 12
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 70,
+            "total_tokens": 86,
+            "completion_tokens": 16,
+            "prompt_tokens_details": null
+          }
+        }
+      ]
+    }
+  },
+  "retrieval": {
+    "selected_context_refs": [
+      "research_entity/claycode/autonomous/SUPERVISOR_STATE.json#chars=0-2915",
+      "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json#chars=0-5000",
+      "research_entity/trigger_runs/claycode/claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration/FINAL_REPORT.md#chars=5000-10000",
+      "research_entity/trigger_runs/claycode/claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration/FINAL_REPORT.md#chars=0-5000",
+      "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json#chars=5000-5920",
+      "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=0-5000",
+      "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=10000-13239",
+      "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=5000-10000"
+    ],
+    "rerank": {
+      "status": "SUCCESS",
+      "model": "nvidia/llama-nemotron-rerank-vl-1b-v2",
+      "route": "model_bound_function_endpoint"
+    }
+  },
+  "llm_call_budget": {
+    "max": 8,
+    "used": 8
+  },
+  "model_calls": [
+    {
+      "provider": "NVIDIA",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "family": "nemotron",
+      "usage": {
+        "prompt_tokens": 5092,
+        "completion_tokens": 1322,
+        "total_tokens": 6414
+      },
+      "reasoning_trace_persisted": false
+    },
+    {
+      "provider": "NVIDIA",
+      "model": "deepseek-ai/deepseek-v4-flash-0731",
+      "family": "deepseek",
+      "usage": {
+        "prompt_tokens": 5446,
+        "completion_tokens": 638,
+        "total_tokens": 6084
+      },
+      "reasoning_trace_persisted": false
+    },
+    {
+      "provider": "NVIDIA",
+      "model": "z-ai/glm-5.2",
+      "family": "glm",
+      "usage": {
+        "prompt_tokens": 5095,
+        "completion_tokens": 1191,
+        "total_tokens": 6286
+      },
+      "reasoning_trace_persisted": false
+    },
+    {
+      "provider": "NVIDIA",
+      "model": "openai/gpt-oss-120b",
+      "family": "gpt-oss",
+      "usage": {
+        "prompt_tokens": 7024,
+        "total_tokens": 8259,
+        "completion_tokens": 1235,
+        "prompt_tokens_details": null
+      },
+      "reasoning_trace_persisted": false
+    }
+  ],
+  "candidate_roles": {
+    "architect": {
+      "claim": "Localizing and minimally repairing the strict LALR conflict in the current D baseline enables a conflict-free parser without altering language semantics.",
+      "counterhypothesis": "The LALR conflict in the D baseline is intrinsic to the language's expression/statement overlap and cannot be resolved without semantic changes or prior typed-function integration.",
+      "minimal_delta": "Add precedence declarations or refactor the ambiguous production in D.bnf (e.g., separate expression and statement levels) to eliminate the LALR conflict while preserving the existing parse trees for all valid D programs.",
+      "executable_discriminator": "Run Lark's LALR parser in strict mode on the revised D.bnf; confirm zero conflicts. Then parse the existing D test corpus (used in prior 20k-call experiments) and verify that the semantic hashes (or AST structures) match those produced by the original non-strict parser, ensuring no semantic regression.",
+      "affected_work_packages": [
+        "CC-WP-02"
+      ],
+      "semantic_change_required": false,
+      "next_focus": "Re-integrate typed function definition/call binding into the now-conflict-free D baseline and establish the end-to-end chain: parser → canonical typed symbol/signature identity → type/effect summary → lowering with executable differential validation.",
+      "external_queries": [],
+      "bounded_python_test": "from lark import Lark, GrammarError\nimport hashlib\n\ngrammar = open('D.bnf').read()\ntry:\n    parser = Lark(grammar, parser='lalr', strict=True)\nexcept GrammarError as e:\n    raise AssertionError(f'Strict LALR construction failed: {e}')\n\n# Sample D programs from the test corpus\nsamples = [\n    'let x = 1;',\n    'if x { y = 2; } else { y = 3; }',\n    'fn f(a: int) -> int { return a + 1; }',\n]\nfor src in samples:\n    tree = parser.parse(src)\n    # Compute a deterministic hash of the tree (e.g., via pretty print)\n    tree_str = tree.pretty()\n    h = hashlib.sha256(tree_str.encode()).hexdigest()\n    # In practice, compare against a pre‑computed hash from the non‑strict parser\n    # Here we just ensure parsing succeeds without exception.\nprint('Strict LALR parser built and parsed sample inputs successfully.')\n"
+    },
+    "falsifier": {
+      "claim": "The strict LALR conflict in the current D baseline can be localized and minimally repaired via precedence declarations or production refactoring without changing language semantics.",
+      "counterhypothesis": "The conflict is intrinsic to D's expression/statement overlap (e.g., ambiguous prefix/postfix or if/else dangling-else) and cannot be resolved by local precedence/refactoring without altering parse trees for some valid programs, or the conflict is not localizable to a single production but requires a semantic lookahead (e.g., typed-function integration) to disambiguate.",
+      "minimal_delta": "Run Lark's LALR conflict report on the exact D.bnf to identify the conflicting productions and tokens; then add the minimal precedence declarations (e.g., for binary operators) or refactor only the ambiguous production(s) (e.g., split expression into statement-expression vs. value-expression) while preserving the original parse tree shape via tree-transforming actions.",
+      "executable_discriminator": "Construct strict LALR parser from the revised D.bnf; if zero conflicts, parse the full existing D test corpus (including all 20k-call variants and edge cases) and compare semantic hashes (or AST pretty-print hashes) against the original non-strict parser's outputs. Any mismatch or any conflict remaining falsifies the claim.",
+      "affected_work_packages": [
+        "CC-WP-02"
+      ],
+      "semantic_change_required": false,
+      "next_focus": "After strict baseline construction succeeds, re-integrate typed function definition/call binding and prove the end-to-end chain: parser → canonical typed symbol/signature identity → type/effect summary → lowering with executable differential validation.",
+      "external_queries": [],
+      "bounded_python_test": "from lark import Lark, GrammarError\nimport hashlib\n\ngrammar = open('D.bnf').read()\ntry:\n    parser = Lark(grammar, parser='lalr', strict=True)\nexcept GrammarError as e:\n    raise AssertionError(f'Strict LALR construction failed: {e}')\n\n# Sample D programs from the test corpus\nsamples = [\n    'let x = 1;',\n    'if x { y = 2; } else { y = 3; }',\n    'fn f(a: int) -> int { return a + 1; }',\n]\nfor src in samples:\n    tree = parser.parse(src)\n    # Compute a deterministic hash of the tree (e.g., via pretty print)\n    tree_str = tree.pretty()\n    h = hashlib.sha256(tree_str.encode()).hexdigest()\n    # In practice, compare against a pre‑computed hash from the non‑strict parser\n    # Here we just ensure parsing succeeds without exception.\nprint('Strict LALR parser built and parsed sample inputs successfully.')"
+    },
+    "alternative": {
+      "claim": "The D baseline LALR conflict is caused by a specific grammar production structure (likely dangling-else or expression/statement ambiguity in block bodies) that can be eliminated by introducing a single intermediate nonterminal with explicit precedence, without altering the set of accepted programs or their parse trees.",
+      "counterhypothesis": "The conflict is a fundamental LALR ambiguity in D's grammar design—multiple viable productions share a common prefix that LALR(1) lookahead cannot disambiguate regardless of precedence or minor refactoring, requiring either a semantic predicate, a parser-context mechanism, or a grammar redesign that changes the language's production structure.",
+      "minimal_delta": "Extract the exact conflict state and production from Lark's strict-mode error output on the current D.bnf, then introduce the minimal disambiguating nonterminal or precedence annotation at that exact production site. No other grammar rules change.",
+      "executable_discriminator": "1) Run Lark strict LALR on current D.bnf, capture the exact conflict report (state, productions, lookahead sets). 2) Apply the minimal repair. 3) Re-run strict LALR: must report zero conflicts. 4) Parse the full D test corpus with both original non-strict and repaired strict parsers; compare AST structure (tree.pretty() equality) for every input. Any structural mismatch is a semantic regression and falsifies the claim. 5) Parse a set of adversarial inputs designed to trigger the ambiguous production (nested if-else, expression statements in blocks, chained calls) and confirm identical trees.",
+      "affected_work_packages": [
+        "CC-WP-02"
+      ],
+      "semantic_change_required": false,
+      "next_focus": "Obtain the exact Lark strict-LALR conflict diagnostic for the current D.bnf to identify the precise production and lookahead causing the conflict, then apply and verify the minimal repair before any typed-function reintegration.",
+      "external_queries": [],
+      "bounded_python_test": "from lark import Lark, GrammarError, UnexpectedInput\nimport hashlib, json, sys, traceback\n\n# --- Step 1: Capture exact conflict from current D.bnf ---\ngrammar_text = open('D.bnf').read()\n\nconflict_info = None\ntry:\n    Lark(grammar_text, parser='lalr', strict=True)\n    print(json.dumps({'status': 'already_conflict_free', 'conflict': None}))\n    sys.exit(0)\nexcept GrammarError as e:\n    conflict_info = str(e)\n    print(json.dumps({'status': 'conflict_captured', 'conflict': conflict_info[:2000]}))\n\n# --- Step 2: Attempt minimal repair (placeholder: apply known fix patterns) ---\n# In practice, the repair is grammar-specific. Here we test the verification harness.\nrepaired_grammar = grammar_text  # Would contain the actual fix\n\ntry:\n    strict_parser = Lark(repaired_grammar, parser='lalr', strict=True)\nexcept GrammarError as e:\n    print(json.dumps({'status': 'repair_failed', 'error': str(e)[:1000]}))\n    sys.exit(1)\n\n# --- Step 3: Build non-strict parser for comparison ---\ntry:\n    nonstrict_parser = Lark(grammar_text, parser='lalr', strict=False)\nexcept Exception as e:\n    print(json.dumps({'status': 'nonstrict_build_failed', 'error': str(e)[:1000]}))\n    sys.exit(1)\n\n# --- Step 4: Parse corpus and compare trees ---\ncorpus = [\n    'let x = 1;',\n    'let y = x + 2 * 3;',\n    'if x { y = 1; } else { y = 2; }',\n    'if x { if y { z = 1; } else { z = 2; } } else { z = 3; }',\n    'fn f(a: int) -> int { return a + 1; }',\n    'let r = f(5);',\n    'if x { y = 1; }',\n    'let a = 1; let b = 2; let c = a + b;',\n]\n\nmismatches = []\nfor i, src in enumerate(corpus):\n    try:\n        tree_strict = strict_parser.parse(src)\n        tree_nonstrict = nonstrict_parser.parse(src)\n        h_strict = hashlib.sha256(tree_strict.pretty().encode()).hexdigest()\n        h_nonstrict = hashlib.sha256(tree_nonstrict.pretty().encode()).hexdigest()\n        if h_strict != h_nonstrict:\n            mismatches.append({'idx': i, 'src': src[:80], 'hash_strict': h_strict[:16], 'hash_nonstrict': h_nonstrict[:16]})\n    except Exception as e:\n        mismatches.append({'idx': i, 'src': src[:80], 'error': str(e)[:200]})\n\nresult = {\n    'strict_lalr_built': True,\n    'corpus_size': len(corpus),\n    'mismatches': mismatches,\n    'semantic_regression': len(mismatches) > 0,\n    'verdict': 'PASS' if len(mismatches) == 0 else 'FAIL_SEMANTIC_REGRESSION'\n}\nprint(json.dumps(result, indent=2))\n"
+    },
+    "judge": {
+      "claim": "The strict LALR conflict in the current D baseline can be precisely localized and eliminated with a minimal deterministic grammar modification that does not alter the language's semantics.",
+      "counterhypothesis": "The conflict stems from an inherent expression/statement ambiguity in D and cannot be resolved without changing parse trees for some valid programs or requiring semantic look‑ahead such as typed‑function integration.",
+      "minimal_delta": "Insert a single precedence declaration or introduce an intermediate nonterminal exactly at the production(s) reported by Lark's conflict diagnostic (e.g., split the ambiguous expr/stmt production) while preserving the original tree shape via a trivial tree‑transform.",
+      "executable_discriminator": "1. Run Lark in strict LALR mode on the current D.bnf and capture the conflict report. 2. Apply the minimal_delta identified in step 1. 3. Re‑run strict LALR; assert zero conflicts. 4. Parse the full D test corpus with both the original non‑strict parser and the repaired strict parser. 5. For each source, compute a deterministic hash of the pretty‑printed AST; assert all hashes match. Any remaining conflict or hash mismatch falsifies the claim.",
+      "affected_work_packages": [
+        "CC-WP-02"
+      ],
+      "semantic_change_required": false,
+      "next_focus": "Obtain the exact Lark conflict diagnostic for D.bnf, apply the pinpointed minimal repair, verify strict‑parser conflict‑free construction, then re‑integrate typed‑function definition/call binding.",
+      "external_queries": [],
+      "bounded_python_test": "from lark import Lark, GrammarError\nimport hashlib, json, sys\n\ndef build_strict(grammar_text):\n    try:\n        return Lark(grammar_text, parser='lalr', strict=True)\n    except GrammarError as e:\n        raise AssertionError(f'Strict LALR failed: {e}')\n\ndef hash_tree(tree):\n    return hashlib.sha256(tree.pretty().encode()).hexdigest()\n\n# 1. Load current grammar and capture conflict\norig_grammar = open('D.bnf').read()\ntry:\n    Lark(orig_grammar, parser='lalr', strict=True)\nexcept GrammarError as e:\n    conflict_report = str(e)\n    print(json.dumps({'status':'conflict_captured','conflict':conflict_report[:2000]}))\n    # 2. Apply minimal delta (placeholder – user inserts actual fix)\n    repaired_grammar = orig_grammar.replace('/*PLACEHOLDER_FOR_FIX*/','%precedence left PLUS')\n    # 3. Build strict parser on repaired grammar\n    strict_parser = build_strict(repaired_grammar)\n    # 4. Build original non‑strict parser for reference\n    nonstrict_parser = Lark(orig_grammar, parser='lalr', strict=False)\n    # 5. Load a representative corpus (could be expanded to full suite)\n    corpus = [\n        'let x = 1;',\n        'if x { y = 2; } else { y = 3; }',\n        'fn f(a: int) -> int { return a + 1; }',\n        'let r = f(5);',\n        'if x { if y { z = 1; } else { z = 2; } } else { z = 3; }'\n    ]\n    mismatches = []\n    for src in corpus:\n        t_strict = strict_parser.parse(src)\n        t_nonstrict = nonstrict_parser.parse(src)\n        if hash_tree(t_strict) != hash_tree(t_nonstrict):\n            mismatches.append(src)\n    result = {\n        'strict_parser_built': True,\n        'conflict_resolved': True,\n        'corpus_size': len(corpus),\n        'mismatches': mismatches,\n        'verdict': 'PASS' if not mismatches else 'FAIL_SEMANTIC_REGRESSION'\n    }\n    print(json.dumps(result, indent=2))\n    sys.exit(0)\n\nprint(json.dumps({'status':'no_conflict_initially'}))"
+    }
+  },
+  "cross_model_diversity": {
+    "status": "OK",
+    "pairwise_cosine": [
+      0.9176,
+      0.7279,
+      0.7626
+    ],
+    "mean_cosine": 0.8027,
+    "model": "nvidia/nv-embedcode-7b-v1"
+  },
+  "queued_safe_requests": [],
+  "errors": [],
+  "authority": {
+    "research_only": true,
+    "may_mark_work_package_pass": false,
+    "may_promote_semantics": false,
+    "may_modify_frank_harness": false
+  },
+  "next_focus": "Obtain the exact Lark conflict diagnostic for D.bnf, apply the pinpointed minimal repair, verify strict‑parser conflict‑free construction, then re‑integrate typed‑function definition/call binding.",
+  "supervisor_attention": false
+}

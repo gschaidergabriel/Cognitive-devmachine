@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1821p0700-harness-visual-action-closure",
+  "trigger": "spawn",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "rng": {
+    "source":"Python secrets.SystemRandom backed by OS CSPRNG",
+    "seed_recorded":false,
+    "branch_draw_procedure":"randrange(100), zero-based weighted intervals",
+    "branch_draw":50,
+    "selected_origin_branch":"harness"
+  },
+  "distribution": {"source":"research_entity/global/SPAWN_RESEARCH_WEIGHTS.json","schema_version":"1.0","weights_percent":{"claycode":50,"harness":10,"frank":10,"gwt":6,"emergenz":6,"hyperposition":5,"claygraph":5,"unifieddb":4,"clayresearch":4}},
+  "candidate_microdirections": [
+    {"id":"HSP-1","direction":"Needle foreign-to-Clay boundary receipt integrity under stale, replayed and contradictory route observations","packages":["H-WP-04-NEEDLE-BOUNDARY","H-WP-11-TRACE-REPLAY","H-WP-14-FUZZ-ADVERSARIAL"]},
+    {"id":"HSP-2","direction":"Effect reservation/commit replay idempotency under duplicate and reordered receipts","packages":["H-WP-10-EFFECT-AUTHORITY","H-WP-11-TRACE-REPLAY","H-WP-13-RECOVERY"]},
+    {"id":"HSP-3","direction":"Dynamic Run ClayGraph causal-edge completeness across replay, crash recovery and intervention","packages":["H-WP-06B-REFERENCE-HARNESS-GRAPH","H-WP-11-TRACE-REPLAY","H-WP-13-RECOVERY"]},
+    {"id":"HSP-4","direction":"Visual familiar-local versus GWT escalation boundary under novelty, conflict and action consequence","packages":["H-WP-07-GWT","H-WP-07-VISION-DIGITAL-RETINA","H-WP-12-ABLATION"]},
+    {"id":"HSP-5","direction":"Prevent learned visual familiarity from becoming the sole epistemic basis of a high-consequence authorized effect","packages":["H-WP-07-MICRO-VISUAL-LEARNER","H-WP-10-EFFECT-AUTHORITY","H-WP-14-FUZZ-ADVERSARIAL"]}
+  ],
+  "microdirection_selection": {
+    "first_draw_procedure":"SystemRandom().randrange(5)","first_selected_index":1,"first_selected":"HSP-2","rerolled":true,
+    "reroll_reason":"Recent spawn_20260809T1751p0700_claycode_async_replay already tested stable EffectIntent identity, idempotent retry and receipt-aware replay; replication value was insufficient for this invocation.",
+    "reroll_scope":"microdirection_only","eligible_after_duplicate_filter":["HSP-4","HSP-5"],"second_draw_procedure":"SystemRandom().randrange(2)","second_selected_index":1,"selected_microdirection":"HSP-5"
+  },
+  "recent_spawn_novelty_review": ["GWT adaptive recurrence","ClayCode async replay","ClayGraph reversal-aware binding","foreign effect closure","ClayCode FRANK loop evaluator-lowering","ClayCode callable identity","ClayCode adaptive visual learner state","Harness lowering semantics","ClayCode affine capability revocation","ClayCode effect-authority lowering"],
+  "novelty_decision":"HSP-5 asks a distinct cross-boundary question: whether already-valid authority plus familiarity-driven perception bypass can create a wrong high-risk effect without literal capability escalation.",
+  "random_selection_is_evidence": false
+}

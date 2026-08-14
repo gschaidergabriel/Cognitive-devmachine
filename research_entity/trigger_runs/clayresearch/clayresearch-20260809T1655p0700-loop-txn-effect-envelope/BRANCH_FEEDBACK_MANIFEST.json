@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "feedback_id":"clayresearch-ltee-20260809T1655p0700",
+  "source_run":"research_entity/trigger_runs/clayresearch/clayresearch-20260809T1655p0700-loop-txn-effect-envelope",
+  "evidence_class":"EXACT_SYNTHETIC_MECHANISM_EXPERIMENT_PLUS_CROSS_DOMAIN_RESEARCH",
+  "shared_ancestry_warning":true,
+  "promotion":"NONE",
+  "branches":{
+    "clayresearch":{"receipt":"FEEDBACK","delta":"Safe-Effect and loop-of-loops converge on a dependency-scoped commit envelope: decision read-set + capability epoch/validity. Global epoch is safe but over-conservative in the synthetic model."},
+    "frank":{"receipt":"FEEDBACK","delta":"Effect-bearing recurrent decisions should carry proposal/decision identity and be revalidated before commit. This is Research-Entity research about Frank, not a Frank self-harness change."},
+    "claycode":{"receipt":"FEEDBACK","delta":"Candidate work for WP04/07/09/11: compiler-emitted dependency metadata, runtime commit envelope, capability epoch, retry/abort receipts. No new syntax requested."},
+    "claygraph":{"receipt":"FEEDBACK","delta":"Represent dependency/capability/loop topology as epoch-bound derived observability only; graph activation never authorizes commit."},
+    "unifieddb":{"receipt":"FEEDBACK","delta":"Persist distinct semantic-state versions, authority epochs, decision snapshots, commit results and retry/recovery receipts. Compare whole-ledger CAS vs object/invariant-group versions."},
+    "gwt":{"receipt":"FEEDBACK","delta":"Ignition/selection can route compute, but permit lifetime does not follow GWT recurrence. Add stale-authority/decision-freshness negative controls to effect-path replays."},
+    "emergenz":{"receipt":"NO_CLAIM_PROMOTION","delta":"Safe/stale commit differences are systems-security/transaction evidence, not emergence evidence. If used in emergence studies, treat as controlled intervention metadata only."},
+    "hyperposition":{"receipt":"FEEDBACK","delta":"Effect-distinct alternatives must preserve separate dependency identities until selection/commit; topology/alternative collapse must not erase authority-flow distinctions."},
+    "harness":{"receipt":"FEEDBACK","delta":"Highest-information H1 test: replay effect-bearing episodes under current whole-ledger base_epoch CAS and dependency-scoped versions with unrelated churn, revoke/regrant, delayed queues and crash/restart; compare safety, false aborts, latency and recovery."}
+  },
+  "global_invariants":[
+    "effect_intent != permit != commit",
+    "semantic_state_epoch != capability_epoch",
+    "decision_snapshot_identity != authority_grant_identity",
+    "recurrence != authority",
+    "graph_activation != authority",
+    "shared ancestry != independent replication",
+    "safe utility includes false-abort/recompute cost"
+  ]
+}

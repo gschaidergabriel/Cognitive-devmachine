@@ -1,0 +1,35 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-update-andreas-runner-label-deadlock-repair-20260809T2058p0700",
+  "kind": "WORK_UPDATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:58:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-RESTORE-RUNNER-CLOSE-BASE14-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "status": "READY",
+    "delta_clay": "runner_transport.repair{target=ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM; defect=EXISTING_RUNNER_CAN_PREDATE_SCOPED_CUSTOM_LABELS_WHILE_WORKFLOW_REQUIRES(andreas,claycode,target); fix=bind_exact_local_runner(agentId,agentName)+restart_with_real_desktop_env+add_only_missing_custom_labels_via_repository_runner_label_REST+reread_exact_online_label_set; gates_preserved=[fingerprint,ubuntu,x86_64,non_container,real_desktop,BASE14,WP14,authority]}",
+    "evidence": [
+      "commit:78d6582ba502e0faba338a1bb2e24db8db382160",
+      "tools/claycode_bootstrap_andreas_self_hosted_runner.sh",
+      ".github/workflows/claycode-andreas-target-autoprobe.yml",
+      "GitHub REST API: self-hosted runner labels",
+      "GitHub Actions docs: using labels with self-hosted runners"
+    ],
+    "decision_trace": {
+      "observed": "The scoped target workflow requires self-hosted/linux/x64/andreas/claycode/target. Existing .runner state bypasses fresh config.sh, so an older registered runner can remain unable to match the scoped job. A concurrent worker independently improved token reuse and desktop service-environment propagation while this repair was being prepared.",
+      "alternatives": [
+        "relax workflow back to generic self-hosted/linux/x64 labels",
+        "destroy and re-register every existing runner",
+        "add missing scoped custom labels to the exact verified existing runner"
+      ],
+      "selected": "add missing scoped custom labels to the exact verified existing runner",
+      "reason": "Preserves the scoped workflow, avoids destructive re-registration, preserves unrelated labels, and keeps all physical-target and release gates fail-closed.",
+      "falsifier": "A fresh Andreas-target execution receipt showing the patch cannot bring the exact local runner online with the required label set, or GitHub rejects the repository runner-label mutation under the authenticated target account."
+    },
+    "next_clay": "local_build_organ.pull(current_main)->run(tools/claycode_bootstrap_andreas_self_hosted_runner.sh)->consume(scoped_autoprobe)->run(canonical_BASE14_acceptance_if_needed)->persist(all_negative_or_PASS_receipts)->promote_only_if(14_of_14_packages && 10_of_10_apps && desktop_audit && WP14 && both_release_gates)",
+    "research_promotion": "NONE",
+    "base_gate_claim": "NOT_PASS_UNTIL_TARGET_RECEIPTS",
+    "authority_invariant": "model output != execution authority"
+  }
+}

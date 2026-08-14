@@ -1,0 +1,15 @@
+[Unit]
+Description=Clay-owned Frank bug feedback ingest
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/clay/frank-bug-ingest.env
+ExecStart=/usr/bin/python3 ${CLAY_REPO_ROOT}/research_entity/runtime/ingest_frank_bug_feedback.py --frank-root ${FRANK_REPO_ROOT} --watch --interval 1
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=default.target

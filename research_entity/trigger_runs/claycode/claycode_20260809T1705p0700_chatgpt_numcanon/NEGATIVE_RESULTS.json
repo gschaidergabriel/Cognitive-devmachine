@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1705p0700_chatgpt_numcanon",
+  "negative_results":[
+    {"id":"N-CC-NUMCANON-001","result":"Host-native JSON numeric text is not stable cross-runtime semantic-hash material.","evidence":"204/10000 Python-vs-Node float serialization mismatches.","status":"NEGATIVE_RESULT"},
+    {"id":"N-CC-NUMCANON-002","result":"Naive ClayCode Int -> JavaScript Number lowering is not exact over the tested large-integer domain.","evidence":"2^53+1 and 64-bit/large decimal values changed under Number conversion.","status":"NEGATIVE_RESULT"},
+    {"id":"N-CC-NUMCANON-003","result":"Native JSON handling cannot be assumed to preserve non-finite floating values or signed zero distinctions.","evidence":"Python permissive NaN/Infinity tokens vs Node null; Node JSON presentation erased -0.","status":"NEGATIVE_RESULT"},
+    {"id":"N-CC-NUMCANON-004","result":"A stable representation token does not prove cross-backend floating arithmetic determinism.","evidence":"This experiment did not execute arithmetic differential tests.","status":"NEGATIVE_RESULT_BOUNDARY"},
+    {"id":"N-CC-NUMCANON-005","result":"This experiment does not justify a new FRANK-specific numeric primitive or ClayCode syntax generation.","evidence":"The bounded mismatch is addressable at typed IR/canonicalization/lowering boundaries.","status":"NOT_SELECTED"},
+    {"id":"N-CC-NUMCANON-006","result":"No BASE application acceptance item is passed by this run.","evidence":"No production G9 compiler and no Ubuntu application proof was executed.","status":"NEGATIVE_RESULT_BOUNDARY"},
+    {"id":"N-CC-NUMCANON-007","result":"A concurrent GitHub write encountered HTTP 409 and was not forced.","evidence":"Branch advanced between sequential unique-path writes; current remote head was reread and the write retried successfully.","status":"COORDINATION_NEGATIVE_RESULT"}
+  ],
+  "preservation_rule":"These negatives remain discoverable even if a later production canonicalizer resolves the implementation blocker."
+}

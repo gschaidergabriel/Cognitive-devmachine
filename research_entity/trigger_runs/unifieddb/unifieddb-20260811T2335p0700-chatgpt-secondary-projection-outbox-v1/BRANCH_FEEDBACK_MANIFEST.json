@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "feedback": [
+    {"branch": "unifieddb", "delta": "authoritative semantic change + projection event must share the UnifiedDB transaction; destination ACK is advisory"},
+    {"branch": "claygraph", "delta": "durable applied-event identity, exact source-event root and deterministic rebuild become projection continuity requirements"},
+    {"branch": "claycode", "delta": "projection currentness and authority separation are typed semantic invariants, not storage-engine heuristics"},
+    {"branch": "gwt", "delta": "consequential graph use must fail closed when projection event set/root is stale or divergent"},
+    {"branch": "hyperposition", "delta": "alternative graph candidates remain projections; event replay must preserve source epoch/provenance"},
+    {"branch": "emergenz", "delta": "emergent retrieval/activation may rank candidates only after projection-current admission"},
+    {"branch": "security-recovery", "delta": "three cross-store process-exit windows become explicit recovery falsifiers"},
+    {"branch": "effect-authority", "delta": "no effect decision may inherit authority from graph data whose source projection is not exact-current"},
+    {"branch": "frank", "delta": "model-visible bounded assemblies require current source event identity/root, not only graph epoch labels"}
+  ],
+  "architecture_delta": "CANDIDATE_PENDING_TARGET",
+  "rollback": "candidate schema is not active in production migration lists"
+}

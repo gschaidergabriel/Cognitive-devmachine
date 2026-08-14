@@ -1,0 +1,55 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1706p0700-chatgpt-secondary-sol",
+  "hypotheses":[
+    {
+      "id":"H-CC-GRAMMAR-01",
+      "statement":"The published G9 grammar is not executable-conformant with the current G9 V3 moving-stack specification.",
+      "mechanism":"Current spec uses surface constructs absent from grammar.ebnf, including comparison operators and conditional blocks.",
+      "prediction":"A parser faithful to the published operator/block subset rejects a current-spec fixture; a minimal grammar repair accepts it.",
+      "counterhypothesis":"The apparent discrepancy is only informal notation and the published grammar can parse the current spec unchanged.",
+      "falsifier":"A production parser generated strictly from current grammar.ebnf successfully self-parses the complete unmodified G9 V3 spec with deterministic roundtrip semantics.",
+      "test":"Local Lark baseline vs patched grammar on current G9 comparison/if fixture.",
+      "result":"SUPPORTED",
+      "evidence_class":"LOCAL_EXECUTABLE_PARSER_EXPERIMENT",
+      "affected_work":["CC-WP-01-SPEC-FREEZE","CC-WP-02-PARSER-CANON","CC-WP-11-FUZZ-CONFORMANCE"]
+    },
+    {
+      "id":"H-CC-LOOP-01",
+      "statement":"The tested FRANK LoopDynamicsReadout/RecurrenceDecision contract can be represented using existing G9 semantic forms without adding a new ClayCode primitive.",
+      "mechanism":"Existing record, union, Set, optional Ref, rule and capability-separation forms cover the tested loop state/readout/controller vocabulary once comparison parsing is repaired.",
+      "prediction":"A minimally repaired executable grammar accepts the typed loop contract without adding a new semantic category.",
+      "counterhypothesis":"Loop-of-loops instrumentation requires a novel primitive or bespoke loop syntax to preserve semantics safely.",
+      "falsifier":"Production typed IR/type-effect/lowering cannot preserve at least one required loop behavior using existing forms and no typed host adapter can close the gap.",
+      "test":"Local parser experiment on typed LoopDynamicsReadout + RecurrenceDecision fixture.",
+      "result":"SUPPORTED_NARROWLY",
+      "evidence_class":"LOCAL_EXECUTABLE_PARSER_EXPERIMENT_ONLY",
+      "limitations":["No production type checker","No evaluator/lowering","No Ubuntu target execution"],
+      "affected_work":["CC-WP-02-PARSER-CANON","CC-WP-03-IR-TYPES","CC-WP-04-TYPE-EFFECT","CC-WP-05-EVALUATOR"]
+    },
+    {
+      "id":"H-CC-IDENTITY-01",
+      "statement":"Separating semantic_hash from contract_hash preserves set-like semantic equivalence while retaining exact provenance-bound contract identity.",
+      "mechanism":"Only explicitly set-typed fields are deduplicated/sorted for semantic identity; exact instance structure remains in contract identity; ordered fields remain order-sensitive.",
+      "prediction":"Duplicate/reordered set-like permits produce equal semantic hashes but distinct contract hashes; reordered ordered steps change semantic hash.",
+      "counterhypothesis":"Canonicalization erases provenance-significant or order-significant differences.",
+      "falsifier":"Property/fuzz tests find two semantically distinct typed values with the same semantic hash or semantically equal set values with unstable hashes under permitted normalization.",
+      "test":"Deterministic microtest in local experiment.",
+      "result":"SUPPORTED_NARROWLY",
+      "evidence_class":"SIMULATION_ONLY",
+      "affected_work":["CC-WP-02-PARSER-CANON","CC-WP-03-IR-TYPES","CC-WP-11-FUZZ-CONFORMANCE"]
+    },
+    {
+      "id":"H-CC-AUTHORITY-01",
+      "statement":"A typed capability boundary can preserve expressibility without allowing textual/model output to mint execution authority.",
+      "mechanism":"Commit eligibility depends on a valid non-revoked authority-issued capability token rather than a textual capability name.",
+      "prediction":"Text-only, revoked and forged-issuer cases are rejected while valid authority-issued token is accepted.",
+      "counterhypothesis":"The source/runtime boundary leaks authority through symbolic capability references or unvalidated host adapters.",
+      "falsifier":"Production FFI/effect fuzzing finds any path where model/source text alone causes an effect commit without an external valid capability/commit witness.",
+      "test":"Minimal local authority checker microtest.",
+      "result":"SUPPORTED_NARROWLY_SIMULATION_ONLY",
+      "evidence_class":"SIMULATION_ONLY",
+      "affected_work":["CC-WP-04-TYPE-EFFECT","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-11-FUZZ-CONFORMANCE"]
+    }
+  ]
+}

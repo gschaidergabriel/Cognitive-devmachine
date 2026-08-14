@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_NEGATIVE_EVIDENCE",
+  "recorded_at": "2026-08-12T02:25:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "protocol": "FRANK_SQLITE_PACKAGE_PROVENANCE_READONLY_V1",
+  "source_repo": "gschaidergabriel/Dr.-Unterweger",
+  "source_main_sha": "14c643ad455fb76da05a0f2a606c97c977b43ae1",
+  "source_workflow_run": 31527682462,
+  "source_artifact_id": 9115578271,
+  "source_artifact_digest": "sha256:7416198e6a9ae33e2570d9ef87bbc90223958a639d3cd81cb4b2641c12606b80",
+  "observed": {
+    "runner": "clay",
+    "host": "digital-retina",
+    "installed_libsqlite3_package": "3.45.1-1ubuntu2.7",
+    "python_version": "3.12.3",
+    "runtime_sqlite_version": "3.45.1",
+    "runtime_sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "runtime_library_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "runtime_library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "installed_changelog_path": "/usr/share/doc/libsqlite3-0/changelog.Debian.gz",
+    "installed_changelog_sha256": "5ed82415c44696d24e1c895cb9f18dd688a61eada7036be6e44beaa299b79672",
+    "provenance_status": "NO_EXPLICIT_WAL_RESET_FIX_EVIDENCE_IN_INSTALLED_CHANGELOG"
+  },
+  "changelog_relevant_observation": {
+    "current_package_entry": "3.45.1-1ubuntu2.7 noble-security",
+    "current_entry_mentions": [
+      "CVE-2026-50812 Session Extension NULL pointer dereference fix",
+      "CVE-2026-50813 Session Extension buffer overread fix"
+    ],
+    "explicit_wal_reset_or_reset_database_corruption_fix_reference_found": false,
+    "generic_historical_backport_mentions_found": true
+  },
+  "interpretation": {
+    "result": "NEGATIVE_EVIDENCE_ONLY",
+    "supported_claim": "The installed package changelog inspected on the accepted target does not explicitly establish the required WAL-reset corruption fix/backport for the exact productive SQLite 3.45.1 build.",
+    "unsupported_claim": "This observation does NOT prove that Ubuntu failed to backport the fix elsewhere or that the binary is definitely vulnerable.",
+    "release_effect": "Keep F-V01-13 fail-closed until exact patch/source/build provenance or a separately attested fixed runtime proves the required semantics."
+  },
+  "next_falsifier": "Inspect exact Ubuntu source package/patch set or binary-level source/build provenance for 3.45.1-1ubuntu2.7 against the required upstream WAL-reset fix; otherwise deploy and attest the fixed SQLite lane and obtain positive V5 accepted-target evidence.",
+  "authority": {
+    "mutation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false
+  }
+}

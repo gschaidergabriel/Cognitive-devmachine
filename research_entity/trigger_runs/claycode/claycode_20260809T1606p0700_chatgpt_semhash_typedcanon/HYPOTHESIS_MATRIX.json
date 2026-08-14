@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1606p0700_chatgpt_semhash_typedcanon",
+  "hypotheses":[
+    {"id":"H-CC-TYPED-CANON-011","status":"OPEN_SUPPORTED_BY_MICRO_ORACLE","claim":"ClayCode canonicalization must be type-directed so Set fields normalize order/duplicates while Ordered/list/role semantics preserve order.","counterhypothesis":"One schema-blind structural canonicalizer is sufficient for all collections.","falsifier":"Production typed IR proves all order-sensitive fields are separately represented before hashing and schema-blind canonicalization cannot collapse distinct executable/replay behavior."},
+    {"id":"H-CC-DUAL-SURFACE-HASH-012","status":"OPEN_SUPPORTED_BY_MICRO_ORACLE","claim":"Equivalent declared-infix and generic relation surfaces can share semantic_hash while retaining distinct contract_hash/provenance instances.","counterhypothesis":"Surface form must be part of executable semantic identity.","falsifier":"Matched production parser/IR shows equivalent surfaces lower to meaningfully different typed IR, effect traces or replay requiring semantic identity separation."},
+    {"id":"H-CC-AUTHORITY-INSTANCE-SEPARATION-013","status":"OPEN_SUPPORTED_BY_MICRO_ORACLE_AND_CONCURRENT_HTTP_COUNTEREXAMPLE","claim":"Stable generated artifact identity should exclude per-run capability instances; runtime authority should bind through distinct deployment/execution receipt identity.","counterhypothesis":"Deployment-instance-specific generated-code identity is acceptable.","falsifier":"Production build/replay shows embedding per-run authority improves security/correctness without harming reproducibility, cacheability or differential validation."}
+  ],
+  "negative_results":[
+    {"id":"N-CC-SCHEMABLIND-CANON-003","status":"NEGATIVE_RESULT","claim":"Schema-blind sorting/deduplicating all collection-like syntax is unsafe for ClayCode semantic hashing.","evidence":"Blind canonicalizer hash-collided forward and reversed external_effect lifecycle; typed Ordered canonicalizer distinguished them."},
+    {"id":"N-CC-RUNTIME-AUTHORITY-ARTIFACT-HASH-004","status":"NEGATIVE_RESULT","claim":"Embedding per-run capability identity in generated code contaminates stable artifact identity.","evidence":"Concurrent HTTP v1 produced different fresh target hashes; run-local 10,000-token discriminator produced 10,000 embedded-token artifact hashes versus one runtime-handle artifact hash and 10,000 deployment hashes."}
+  ]
+}

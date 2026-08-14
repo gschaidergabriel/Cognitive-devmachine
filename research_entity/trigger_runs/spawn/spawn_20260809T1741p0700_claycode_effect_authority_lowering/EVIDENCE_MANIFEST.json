@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+  "internal": [
+    {"class":"CANONICAL_PROJECT_SPEC","ref":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","use":"CapabilityToken/EffectIntent/Needle/effect lifecycle and authority invariants"},
+    {"class":"CANONICAL_PROJECT_CONTRACT","ref":"research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md","use":"BASE compiler/FFI/gateway/APP-08 acceptance"},
+    {"class":"CANONICAL_PROJECT_FOUNDATION","ref":"research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md","use":"authority non-amplification and foreign-code closure hypotheses"},
+    {"class":"CANONICAL_PROJECT_CONTRACT","ref":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","use":"Needle/model output does not mint authority"},
+    {"class":"CURRENT_WORKSPACE","ref":"research_entity/harness/HARNESS_WORKSPACE.json","use":"H-WP-10 effect-authority implementation target"},
+    {"class":"CURRENT_WORKSPACE","ref":"research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","use":"BASE work still open; no compiler receipt available"},
+    {"class":"CURRENT_SCHEMA","ref":"research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql","use":"authority metadata/scopes are serializable state; distinguishes metadata persistence from bearer authority"}
+  ],
+  "external_primary": [
+    {"source":"WebAssembly/WASI docs/Capabilities.md","class":"PRIMARY_PROJECT_DOCUMENTATION","finding":"runtime capability handles are first-class and unforgeable; link-time imports can also define granted authority"},
+    {"source":"seL4 Capabilities documentation","class":"PRIMARY_SYSTEM_DOCUMENTATION","finding":"capabilities are unforgeable tokens/pointers with access rights; operations require invoking the capability"},
+    {"source":"Koka language book v3.2.3","class":"PRIMARY_LANGUAGE_DOCUMENTATION","finding":"effect types track effects in function types and handlers interpret effects; effect typing is distinct from OS authority"},
+    {"source":"Capsicum: Practical Capabilities for UNIX, USENIX Security 2010","class":"PRIMARY_RESEARCH_PAPER","finding":"capability mode/rights confine ambient UNIX authority and support least-privilege compartmentalization"}
+  ],
+  "executed": [
+    {"class":"LOCAL_SYNTHETIC_PROXY_EXECUTION","ref":"research_entity/trigger_runs/spawn/spawn_20260809T1741p0700_claycode_effect_authority_lowering/effect_authority_proxy_experiment.py","receipt":"research_entity/trigger_runs/spawn/spawn_20260809T1741p0700_claycode_effect_authority_lowering/EXECUTABLE_RESEARCH_RECEIPT.json","status":"COMPLETE"}
+  ],
+  "negative_results": [
+    {"id":"NEG-EA-STRUCTURAL-TOKEN","result":"structural field-only token validation is forgeable in proxy: 20,000/20,000 accepts"},
+    {"id":"NEG-EA-AMBIENT-BACKEND","result":"ambient host lowering defeats broker contract in proxy: 10,000/10,000 bypasses"}
+  ],
+  "ancestry_rule": "Project specs and this proxy share design ancestry; external capability systems are analogical/independent mechanisms, not direct replication of ClayCode."
+}

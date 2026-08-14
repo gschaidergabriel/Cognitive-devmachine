@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure",
+  "negative_results":[
+    {"id":"NR-CC-STATIC-EFFECT-IS-AUTHORITY-20260809","status":"NEGATIVE_RESULT","claim":"A statically valid effect summary is sufficient runtime authority.","result":"REFUTED_IN_TESTED_PROXY","evidence":"The effectful wrapper was statically closed but failed with EffectDenied when runtime permit was absent; it succeeded only with log.write explicitly present."},
+    {"id":"NR-CC-DIRECT-EFFECTS-ONLY-20260809","status":"NEGATIVE_RESULT","claim":"Checking only direct effects of each function is sufficient for compositional safety.","result":"REFUTED_IN_TESTED_PROXY","evidence":"Deleting an actually inferred transitive effect from a caller declaration was rejected across 20,000 randomized graph mutations with zero false accepts."},
+    {"id":"NR-CC-RECURSION-WITHOUT-BOUND-20260809","status":"NEGATIVE_RESULT","claim":"Recursive control can execute safely without an explicit resource/step bound at this stage.","result":"REFUTED_IN_TESTED_PROXY","evidence":"Deliberate runaway recursion was stopped only by the explicit step budget; candidate therefore keeps recursion resource-bounded."},
+    {"id":"NR-CC-CONTROL-EFFECT-PROXY-IS-BASE-PASS-20260809","status":"NEGATIVE_RESULT","claim":"Successful local control/effect closure is sufficient to pass any ClayCode BASE work package or release gate.","result":"REFUTED","evidence":"No target Ubuntu execution, production compiler integration, lowering, target-reader benchmark or mandatory application proof was executed."}
+  ],
+  "promotion":"NONE"
+}

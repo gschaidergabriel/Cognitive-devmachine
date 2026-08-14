@@ -86,6 +86,45 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("never-serialize-this", repr(result))
         self.assertNotIn("together", captured["url"])
 
+    def test_credential_cannot_change_between_authorization_and_request(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {"role": "assistant", "content": "ok"},
+                    }]
+                }).encode()
+
+        captured = {}
+        env = {
+            "NVIDIA_API_KEY": "authorized-secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def mutate_after_authorization():
+            env["NVIDIA_API_KEY"] = "swapped-secret"
+            return "fixed-attempt-nonce"
+
+        def opener(request, timeout):
+            captured["authorization"] = request.headers["Authorization"]
+            return Response()
+
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
+            nonce_factory=mutate_after_authorization,
+            now=iter((15.0, 15.01)).__next__,
+        )
+
+        self.assertEqual(result["content"], "ok")
+        self.assertEqual(
+            captured["authorization"], "Bearer authorized-secret"
+        )
+
     def test_invalid_text_request_schema_is_blocked_before_network(self):
         called = False
 

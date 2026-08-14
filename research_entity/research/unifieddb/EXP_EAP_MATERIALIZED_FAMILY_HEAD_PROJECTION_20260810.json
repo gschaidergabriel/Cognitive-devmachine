@@ -1,0 +1,52 @@
+{
+  "experiment_id": "EXP-EAP-MATERIALIZED-FAMILY-HEAD-PROJECTION-20260810",
+  "status": "EXECUTED_LOCAL_SYNTHETIC_STRONG_COUNTERBASELINE",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "hypothesis": "A semantic family-head projection maintained before the cognitive hot read can retain grouped possibility accuracy while making the hot read equivalent to an ordinary indexed Top-K lookup.",
+  "counterhypothesis": "The gain is only hidden query work; build/update costs or a conventional database query can dominate once the same family semantics are implemented honestly.",
+  "scope_guard": "Same SQLite engine is used for all physical baselines. This is a synthetic possibility-family workload, not proof of universal superiority over every database or real Frank task accuracy.",
+  "environment": {"platform": "Linux-6.18.35-x86_64-with-glibc2.41", "python": "3.13.5", "sqlite": "3.46.1", "logical_cpu_count": 5, "cpu_model": "AMD EPYC 9V74 80-Core Processor", "mem_total_kib": 6219544, "evidence_scope": "LOCAL_KVM_NOT_HOSTINGER_NOT_ANDREAS_PC"},
+  "semantics": {
+    "k": 12,
+    "bindings_per_family": 8,
+    "flat_baseline": "candidate ORDER BY score DESC LIMIT K",
+    "correct_query_time_sql": "ROW_NUMBER() OVER(PARTITION BY family ORDER BY score DESC,binding) then rn=1 then global Top-K",
+    "preprocessor_projection": "one current best binding per explicit family in family_head, indexed by global score; hot read is family_head ORDER BY score DESC LIMIT K",
+    "targeted_update": "recompute only changed family head using family-local index, UPSERT family_head, then read indexed Top-K"
+  },
+  "scaling_results": [
+    {"families":1000,"rows":8000,"build_projection_ms":5.801103,"flat_topk":{"family_recall_at_12":0.16666666666666666,"p50_ms":0.005779,"p95_ms":0.00643005},"query_time_group_window":{"family_recall_at_12":1.0,"p50_ms":4.116088,"p95_ms":4.3812577},"materialized_family_head_hot":{"family_recall_at_12":1.0,"p50_ms":0.005779,"p95_ms":0.0067565},"targeted_update_ms":0.032279,"full_projection_rebuild_ms":4.59723,"targeted_topk_equiv_full":true},
+    {"families":5000,"rows":40000,"build_projection_ms":23.737598,"flat_topk":{"family_recall_at_12":0.16666666666666666,"p50_ms":0.005829,"p95_ms":0.00689},"query_time_group_window":{"family_recall_at_12":1.0,"p50_ms":19.8206765,"p95_ms":22.82192955},"materialized_family_head_hot":{"family_recall_at_12":1.0,"p50_ms":0.005829,"p95_ms":0.00686605},"targeted_update_ms":0.032328,"full_projection_rebuild_ms":23.622066,"targeted_topk_equiv_full":true},
+    {"families":20000,"rows":160000,"build_projection_ms":96.198551,"flat_topk":{"family_recall_at_12":0.16666666666666666,"p50_ms":0.005829,"p95_ms":0.00695005},"query_time_group_window":{"family_recall_at_12":1.0,"p50_ms":81.046194,"p95_ms":84.31989225},"materialized_family_head_hot":{"family_recall_at_12":1.0,"p50_ms":0.005828,"p95_ms":0.00685655},"targeted_update_ms":0.034341,"full_projection_rebuild_ms":95.997,"targeted_topk_equiv_full":true},
+    {"families":100000,"rows":800000,"build_projection_ms":515.302572,"flat_topk":{"family_recall_at_12":0.16666666666666666,"p50_ms":0.005828,"p95_ms":0.006896},"query_time_group_window":{"family_recall_at_12":1.0,"p50_ms":400.862207,"p95_ms":407.0317107},"materialized_family_head_hot":{"family_recall_at_12":1.0,"p50_ms":0.005949,"p95_ms":0.00699},"targeted_update_ms":0.038297,"full_projection_rebuild_ms":509.119008,"targeted_topk_equiv_full":true}
+  ],
+  "five_seed_160k_row_aggregate": {
+    "seeds": [20260820,20260821,20260822,20260823,20260824],
+    "flat_family_recall_at_12_mean": 0.16666666666666666,
+    "query_time_group_family_recall_at_12_mean": 1.0,
+    "preprocessor_family_recall_at_12_mean": 1.0,
+    "query_time_group_p50_ms_median": 79.8131675,
+    "preprocessor_hot_p50_ms_median": 0.005939,
+    "preprocessor_build_ms_median": 98.41326,
+    "targeted_update_ms_median": 0.03403,
+    "full_rebuild_ms_median": 96.899074,
+    "targeted_equivalent_to_full_all_seeds": true,
+    "hot_speedup_vs_query_time_group_p50": 13438.822613234554,
+    "full_rebuild_over_targeted_update_ratio": 2847.4602997355278,
+    "break_even_reads_for_initial_build_vs_query_time_group_savings": 1.2331371712776618
+  },
+  "interpretation": [
+    "Flat Top-K is a latency floor but spends most of a bounded model-context budget on duplicate bindings and therefore has poor family coverage in this fixture.",
+    "Correct SQL grouping restores family coverage but repeats grouping/window work at query time.",
+    "Materialized family heads move that semantic work to compile/update time and make the hot read as simple as the flat index read while preserving grouped accuracy.",
+    "The physical implementation can still be SQLite: the architectural distinction is semantic preprocessing, not rejection of database storage engines.",
+    "At 160k rows the local median initial build amortizes after about 1.23 grouped reads under this stable fixture; real EAP must use measured lifetime/read-update economics rather than assuming this rate universally."
+  ],
+  "promotion_gate": [
+    "Integrate explicit family-head semantics with current EAP/ClayGraph provenance and negative-space gates rather than a parallel standalone store.",
+    "Run exact current-main EAP F1/F2/F3 mechanisms on the verified self-hosted Ubuntu target runner.",
+    "Measure storage/write amplification and concurrent epoch publication/recovery.",
+    "Compare against current simpler authoritative SQLite rank-index baseline and exact-key bypass.",
+    "Measure downstream fixed-context model/task/tool-route accuracy, not only family retrieval coverage."
+  ]
+}

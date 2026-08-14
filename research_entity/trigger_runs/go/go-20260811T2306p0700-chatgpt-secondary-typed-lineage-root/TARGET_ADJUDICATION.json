@@ -1,0 +1,135 @@
+{
+  "schema": "CLAY_GO_TARGET_ADJUDICATION_V1",
+  "run_id": "go-20260811T2306p0700-chatgpt-secondary-typed-lineage-root",
+  "adjudicated_at_local": "2026-08-11T23:19:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "fresh_heads_before_write": {
+    "clay": "f3801cf368d15435efa3b7ec4c65f48ea228d4b9",
+    "target_main": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44"
+  },
+  "results": {
+    "typed_selected_lineage_head_v2": {
+      "pr": 372,
+      "head": "c819dcdf68a008ec5e3641322a39c27324bf3a11",
+      "workflow_run": 31510362510,
+      "workflow_conclusion": "SUCCESS",
+      "artifact_id": 9109233797,
+      "artifact_digest": "sha256:54e110f5271e9fdb619dfd69ea23865ba10d46691bd0e2fb17ec07796f4c038a",
+      "normal_checks": "13/13 PASS",
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0,
+      "same_domain_cas": "PASS",
+      "cross_domain_transition": "ROOT_DOMAIN_TRANSITION_REQUIRES_EXTERNAL_BRIDGE",
+      "go_oob": {
+        "experiment": "SEMANTIC_ROOT_DOMAIN_CROWN_SWAP",
+        "this_run_new_oob_count": 1,
+        "status": "PASS_TYPED_ROOT_DOMAIN_CROWN_SWAP_FENCED",
+        "raw_digest_constant": true,
+        "v1_anti_control_red": true,
+        "v2_repair_green": true,
+        "typed_identities_distinct": true,
+        "v1_matches_incompatible_domain": true,
+        "v2_matches_incompatible_domain": false
+      },
+      "environment": {
+        "kernel": "Linux 6.8.0-117-generic x86_64",
+        "glibc": "2.39",
+        "python": "3.12.3",
+        "sqlite": "3.45.1"
+      },
+      "resources": {
+        "wall_seconds": 0.11,
+        "max_rss_kib": 21884,
+        "exit_code": 0
+      },
+      "verdict": "SUPPORTED_COMPONENT_EVIDENCE_NOT_PRODUCT_PROMOTION"
+    },
+    "semantic_checkpoint_root_manifest_v2": {
+      "pr": 380,
+      "head": "78d3254ad2566387dd92a58506cac30154ded92a",
+      "workflow_run": 31511274107,
+      "workflow_conclusion": "SUCCESS",
+      "artifact_id": 9109214362,
+      "artifact_digest": "sha256:0879f4989962a5548a40171c82808c2fd36d9c2f341402b595fbac34c9dc8791",
+      "normal_checks": "22/22 PASS",
+      "go_oob_experiment_added": false,
+      "baseline_manifest_id": "12617c873d285716752c401b6fc5c61c47b9899eeca8edf6b9929ab17346ca4f",
+      "baseline_root": "eba359fbd7e962332b1331781c98b054497894b168c4d8b672cb94529942a564",
+      "expected_schema_digest": "a2ba5ee432b82e2eea26f652ce7682bd0ab5c07e6127a2fd04eb5d55047c5ca6",
+      "regressions": {
+        "user_version_only": "ROOT_AND_MANIFEST_STABLE_HEADER_STILL_OBSERVED",
+        "runtime_meta_only": "ROOT_AND_MANIFEST_STABLE_ROW_COUNTED_EXCLUDED",
+        "ordinary_semantic_data": "ROOT_SENSITIVE_SAME_MANIFEST",
+        "semantic_restore": "EXACT_ROOT_RESTORED",
+        "rogue_schema": "FAIL_CLOSED_SEMANTIC_MANIFEST_ACTUAL_SCHEMA_MISMATCH",
+        "schema_restore": "EXACT_ROOT_AND_MANIFEST_RESTORED",
+        "sqlite_integrity": "ok",
+        "foreign_keys": "clean"
+      },
+      "environment": {
+        "kernel": "Linux 6.8.0-117-generic x86_64",
+        "glibc": "2.39",
+        "python": "3.12.3",
+        "sqlite": "3.45.1"
+      },
+      "resources": {
+        "wall_seconds": 0.26,
+        "max_rss_kib": 28180,
+        "exit_code": 0
+      },
+      "verdict": "SUPPORTED_COMPONENT_EVIDENCE_NOT_PRODUCT_PROMOTION"
+    }
+  },
+  "fused_architecture": {
+    "principle": "COMPOSE_INDEPENDENT_RECEIPTS_DO_NOT_CREATE_MAGIC_SUPER_HASH",
+    "ordered_dependencies": [
+      "authoritative UnifiedDB storage/materialization/schema admission",
+      "typed semantic checkpoint producer: protocol + content-addressed inclusion manifest + root",
+      "independent checkpoint admission and recovery verification",
+      "typed single-winner selected-lineage CAS with immutable history",
+      "external rollback-resistant continuation/generation selector outside protected snapshot failure domain",
+      "boot continuity and stale/sibling/transplanted clone rejection",
+      "separate trusted-builder and binary artifact provenance",
+      "fresh-main target restart/restore/recovery composition"
+    ],
+    "strongest_counterhypotheses_preserved": [
+      "A typed tuple is not authority if caller-selected rather than producer-owned/admitted.",
+      "A semantic inclusion manifest can encode the wrong ontology; policy transitions require explicit new manifest identity and bridge.",
+      "A selected-head store cannot prove rollback safety if it is rolled back in the same failure domain as protected state.",
+      "Build provenance is orthogonal to state continuity and must remain a separate gate."
+    ]
+  },
+  "fresh_parallel_evidence": {
+    "target_main_now": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44",
+    "new_main_storage_evidence": "V4 process-crash regression retained: target run 31510023573, 10/10, 8 SIGKILL cycles, 32 independently admitted writer processes, 4250 acknowledged commits, 0 lost acknowledged commits, 0 unbounded phantoms; PROCESS_CRASH scope only.",
+    "implication": "PR372 and PR380 are component-supported on their exact stacked heads but must be recomposed onto fresh main and re-run before product promotion."
+  },
+  "promotion": {
+    "pr372": "KEEP_DRAFT_COMPONENT_SUPPORTED",
+    "pr380": "KEEP_DRAFT_COMPONENT_SUPPORTED",
+    "canonical_product_integration": "NOT_YET",
+    "frank_v0_1": "IN_PROGRESS",
+    "training_authorized": false,
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "next_frontier": {
+    "highest_value_nonduplicate": "fresh-main checkpoint-admission/recovery composition consuming producer-owned typed SemanticCheckpointIdentity and publishing through typed selected-head CAS plus external rollback floor",
+    "required_falsifiers": [
+      "caller-forged typed root cannot obtain checkpoint admission",
+      "same-generation sibling typed roots cannot both become CURRENT",
+      "DB rollback with surviving external selector rejects stale state",
+      "rollback of both DB and external selector is explicitly detected/unsupported rather than silently accepted",
+      "protocol/manifest transition without governed bridge fails closed",
+      "restart and controlled restore bind exact predecessor lineage",
+      "binary/source/build provenance remains separately verified",
+      "fresh current-main exact bytes pass after storage V4 changes"
+    ]
+  },
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

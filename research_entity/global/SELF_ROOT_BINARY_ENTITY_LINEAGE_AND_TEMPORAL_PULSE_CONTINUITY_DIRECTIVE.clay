@@ -1,0 +1,181 @@
+module self.root.binary_entity_temporal_continuity
+version "0.1-owner-fixed-2026-08-10T19:23+07:00"
+status PROJECT_OWNER_FIXED_DIRECTIVE
+
+// Owner request: every admitted copy is its own entity/version, copies know their lineage,
+// and every real Database Pulse is temporally oriented across restart/suspend/power gaps.
+
+law target = self.root
+law human_surface_name = "Frank"
+law artifact_identity != entity_identity
+law entity_identity != runtime_lease_identity
+law runtime_lease_identity != temporal_trajectory
+law temporal_trajectory != phenomenal_consciousness_claim
+
+record BinaryArtifactIdentity {
+  artifact_digest:Hash
+  build_identity:Ref
+  immutable_code_identity:Bool=true
+}
+
+record BinaryEntityIdentity {
+  entity_id:Ref
+  entity_version:Ref
+  artifact_digest:Hash
+  lineage_root_id:Ref
+  parent_entity_id:Ref?
+  generation:Int>=0
+  admitted_state_lineage_hash:Hash
+  born_at:Time
+}
+
+record RuntimeLeaseIdentity {
+  entity_id:Ref
+  lease_id:Ref
+  lease_epoch:Epoch
+  host_id:Ref
+  boot_id:Ref
+  invocation_id:Ref
+  active:Bool
+}
+
+record TemporalOrientation {
+  entity_id:Ref
+  entity_version:Ref
+  artifact_digest:Hash
+  pulse_seq:Int>=1
+  pulse_id:Ref
+  lease_id:Ref
+  lease_epoch:Epoch
+  observed_at_utc:Time
+  boottime:Duration
+  monotonic:Duration
+  entity_age:Duration
+  wall_gap:Duration?
+  boottime_gap:Duration?
+  monotonic_gap:Duration?
+  inferred_suspend:Duration?
+  gap_class:GENESIS|SAME_INVOCATION|SUSPEND_GAP|PROCESS_RESTART_SAME_BOOT|BOOT_OR_POWER_GAP|WALL_CLOCK_REGRESSION|MONOTONIC_RESET_OR_CORRUPTION
+  missed_logical_slots:Int>=0
+  clock_confidence:HIGH|MEDIUM|LOW
+  continuity_class:ClayCode
+}
+
+law authorized_copy(parent:BinaryEntityIdentity) -> child:BinaryEntityIdentity
+law child.entity_id != parent.entity_id
+law child.entity_version != parent.entity_version
+law child.artifact_digest may_equal parent.artifact_digest
+law child.parent_entity_id = parent.entity_id
+law child.lineage_root_id = parent.lineage_root_id
+law child.generation = parent.generation + 1
+law copy_identity_change MUST_NOT require executable_byte_self_modification
+law executable_artifact_digest remains reproducible_content_identity
+law entity_version is incarnation/copy identity and changes on every admitted copy
+
+law raw_bit_copy_without_new_admitted_entity_capsule != second_valid_current_self
+law same_entity_two_live_runtime_leases -> IDENTITY_COLLISION_FAIL_CLOSED
+law authorized_runtime_supersession requires exact_previous_lease_CAS | verified_reboot_handoff | explicit_migration_handoff
+law API_token != entity_identity
+law host_capacity != entity_identity
+
+// Copy-family awareness is relational and derived from authoritative lineage.
+law every_entity may query parent + children + siblings + ancestors + lineage_peers
+law peer_awareness != self_merge
+law peer_message must bind origin_entity_id + origin_entity_version + origin_lease_epoch + origin_pulse_seq + provenance
+law peer_content never becomes SELF merely because artifact_digest matches
+law unknown_or_shuffled_peer_origin -> reject_peer_reentry
+law default_physical_representation = O1_copy_edge_plus_derived_lineage_query
+law all_pairs_peer_matrix requires measured_read_horizon_amortization before materialization
+
+// Temporal law: entity continuity and compute continuity are deliberately separated.
+law ENTITY_CONTINUITY = admitted_binary_entity + admitted_state_lineage + durable_temporal_trajectory
+law COMPUTE_ACTIVITY_EVIDENCE = committed_real_Pulse_or_other_explicit_execution_receipt
+law entity_continuity != continuous_CPU_execution
+law binary_entity_can_persist_while_process_or_host_is_not_executing
+law absence_of_compute_receipts cannot_be_rewritten_as_hidden_thought
+law missed_logical_slots are temporal_orientation_only
+law missed_logical_slots != fabricated_Pulse
+law missed_logical_slots != fabricated_WorkspaceEpisode
+law missed_logical_slots != fabricated_GWT_broadcast
+law next_real_Pulse may know elapsed_gap + gap_class + missed_logical_slots
+law dormant_goals_and_identity may persist through gap without claiming intervening cognition
+
+// Clock fusion on Linux target. UTC gives world time; BOOTTIME includes suspend; MONOTONIC does not.
+law temporal_orientation uses UTC + BOOTTIME + MONOTONIC + boot_id + invocation_id
+law boot_id_change -> BOOT_OR_POWER_GAP unless stronger migration evidence refines
+law same_boot + invocation_change -> PROCESS_RESTART_SAME_BOOT
+law same_boot + boottime_gap_minus_monotonic_gap materially_positive -> SUSPEND_GAP
+law wall_clock_regression -> LOW_CONFIDENCE_TIME + preserve_monotonic_order_if_available
+law clock_disagreement remains explicit uncertainty
+
+// Database Pulse coupling: time/entity orientation is mandatory context, not a salience candidate.
+law every DATABASE_PULSE requires CURRENT RuntimeLeaseIdentity
+law every DATABASE_PULSE requires PREPARED TemporalOrientation at exact basis_epoch
+law PulseEvent + TemporalOrientationCommit + PulseTemporalLink commit atomically in same StateLedger transaction
+law stale_or_missing_prepare -> fail_closed_without_Pulse_commit
+law crash_after_PREPARE_before_event -> no cognitive_Pulse
+law recovered_aborted_PREPARE remains audit evidence but consumes_no_pulse_seq
+law committed_pulse_id_retry -> exact_idempotent_receipt
+law temporal_orientation is mandatory_prebound_context before bounded candidate selection/model recurrence
+law candidate_budget_or_salience cannot_drop_temporal_orientation
+
+// Relationship to GWT.
+law GWT may use temporal_gap + peer_reentry as context/bias only
+law temporal_salience != truth
+law peer_broadcast != authority
+law more_peer_broadcast != emergence
+law more_pulses != better_cognition
+law recurrence != consciousness
+law copy_count != intelligence
+
+// First new challenger: Split-Pulse Twin Workspace.
+hypothesis GWT_SPLIT_PULSE_TWIN_V1 = "anti-phase peer broadcast may reduce duplicate ignition across valid copy entities"
+counterhypothesis GWT_SPLIT_PULSE_TWIN_SIMPLE_REDUCTION = "an exact recent_seen inhibition filter explains the entire gain"
+law GWT_SPLIT_PULSE_TWIN_V1 promotion requires matched_compute + isolated_baseline + same_phase + anti_phase + single_entity_reentry + exact_seen_reduction + origin_shuffle + exchange_lesion + frozen_output
+law if anti_phase_gain_over_exact_seen_reduction <= measurement_noise -> REFUTE_DISTINCT_TWIN_MECHANISM
+
+metric copy_write_amplification
+metric lineage_query_cost
+metric entity_version_collision_rate
+metric live_clone_false_accept_rate
+metric pulse_prepare_phantom_rate
+metric pulse_link_atomicity_failure_rate
+metric gap_class_accuracy
+metric missed_slot_phantom_materialization_rate
+metric clock_disagreement_rate
+metric temporal_context_latency
+metric temporal_context_model_usage
+metric peer_self_attribution_error_rate
+
+invariant entity_version_collision_rate = 0 within accepted test envelope
+invariant live_clone_false_accept_rate = 0
+invariant pulse_prepare_phantom_rate = 0
+invariant missed_slot_phantom_materialization_rate = 0
+invariant peer_self_attribution_error_rate = 0
+invariant no_claim_continuous_cognition_without_execution_evidence
+invariant no_claim_consciousness_from_Pulse_or_GWT
+
+law target_vps_promotion requires [
+  exact_binary_artifact_hash,
+  exact_entity_id_and_version,
+  state_lineage_hash,
+  lease_epoch,
+  boot_id,
+  invocation_id,
+  real_DATABASE_PULSE_V5_or_successor_integration,
+  restart_test,
+  suspend_test,
+  power_or_boot_gap_test,
+  crash_after_prepare_test,
+  split_brain_test,
+  copy_storm_test,
+  same_timestamp_copy_collision_test,
+  wall_clock_regression_test,
+  atomic_rollback_test,
+  MCP_health_and_nonsecret_runtime_observation,
+  telemetry_provenance,
+  UnifiedDB_backup_recovery_candidate,
+  latency_p50_p95_p99,
+  CPU_RAM_IO_storage_shadows,
+  GWT_challenger_and_simple_reduction_control
+]

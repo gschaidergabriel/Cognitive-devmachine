@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_FUSION",
+  "run_id": "go-20260811T2029p0700-chatgpt-secondary-v17-producer-ancestry",
+  "created_at_local": "2026-08-11T20:41:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_research_commit": "3be357ab29a6a9d30e7f0e126c59c1ec3ffc0735",
+  "trigger": "go",
+  "topic": "V17 producer-bound exact execution/outcome/GWT causal support and restart recovery",
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "worker_role": "temporary research worker",
+    "worker_is_frank": false,
+    "target_native_identity": "self.root",
+    "human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "baseline_negative": {
+    "pr": 317,
+    "status": "RETAIN_AS_REQUIRED_NEGATIVE_REGRESSION",
+    "claim": "Caller-supplied non-empty episode_id/signal_id/causal_id are correlation labels, not sufficient durable causal ancestry."
+  },
+  "hypothesis": "V17 terminalization is admissible only when it consumes producer-admitted immutable support derived from a coherent pre-existing execution, exact verified effect outcome, GWT receiver-use, prediction and direct causal-credit history; the terminal consumer must not mint the support it proves.",
+  "strongest_counterhypothesis": "Full causal closure could be too strict for legitimate crash reconciliation when exact execution/outcome evidence survives but historical GWT/prediction support is unavailable; full-process failover remains required before promotion beyond candidate status.",
+  "fresh_primary_evidence": [
+    {
+      "source": "W3C PROV Constraints",
+      "url": "https://www.w3.org/TR/prov-constraints/",
+      "relevance": "Valid provenance is constrained by uniqueness, event ordering and impossible histories; identifier presence alone is not a sufficient valid provenance history."
+    },
+    {
+      "source": "W3C Trace Context",
+      "url": "https://www.w3.org/TR/trace-context/",
+      "relevance": "trace-id and parent-id identify propagated trace/request context and caller-supplied flags are not strict authority; this supports treating caller identifiers as correlation context rather than causal authorization."
+    },
+    {
+      "source": "SQLite 3.53.4 release",
+      "url": "https://www3.sqlite.org/releaselog/3_53_4.html",
+      "relevance": "Current fixed lineage includes the WAL-reset corruption fix; target V17 run below still used system SQLite 3.45.1 and therefore does not clear the separate production storage blocker."
+    }
+  ],
+  "ordinary_repairs_before_target_execution": [
+    {
+      "target_repo_commit": "a183ed266d3f0d664ccd010120ab9748159d3af4",
+      "change": "Align stale workflow scope assertion with executed restart test scope.",
+      "result": "NEXT_RUN_BLOCKED_BEFORE_TESTS_BY_ACTIONS_CHECKOUT_PERSISTENT_WORKSPACE_FAILURE"
+    },
+    {
+      "target_repo_commit": "634502ff5c3c8cd655face69f199f6569d307e14",
+      "change": "Replace actions/checkout with manual exact-SHA checkout attempt in persistent GITHUB_WORKSPACE.",
+      "result": "FAILED_BEFORE_TESTS_BECAUSE_FOREIGN_OWNED_PYC_FILES_PREVENTED_WORKSPACE_CLEANUP"
+    },
+    {
+      "target_repo_commit": "930c83e4cf18cb73ce86d8e5fb6aceff5861c89f",
+      "change": "Move exact-SHA checkout and all execution into isolated /tmp repository, remove remote after fetch, assert exact head and no residual remote.",
+      "result": "TARGET_WORKFLOW_GREEN"
+    }
+  ],
+  "accepted_target_execution": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 280,
+    "candidate_head": "930c83e4cf18cb73ce86d8e5fb6aceff5861c89f",
+    "workflow_run": 31497278804,
+    "job": 93798064016,
+    "conclusion": "SUCCESS",
+    "runner_name": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "tested_at_utc": "2026-08-11T13:40:34Z",
+    "artifact": {
+      "id": 9103537693,
+      "name": "frank-v17-support-31497278804",
+      "size_bytes": 12148,
+      "sha256": "a69f75d120ba938eb7753bc14c0c724842b20f247d4c42881cda04269ad1c3b9"
+    },
+    "normal_gates": {
+      "repo_static_integrity": "PASS",
+      "execution_generation_baseline": "PASS_FRESH_MAIN_EFFECT_GENERATION_INTEGRATION",
+      "terminal_consumer_support_producer_authority_and_rollback": "PASS",
+      "fabricated_support_gap": "PASS_V17_SUPPORT_IDENTITY_AND_EXECUTION_BINDING_REPAIR_REGRESSION",
+      "provider_to_separate_support_to_done": "PASS_FRESH_MAIN_PROVIDER_TO_V17_SEPARATELY_ADMITTED_EXACT_OUTCOME_SUPPORT_DONE",
+      "learning_support": "PASS_V17_SEPARATE_EXACT_OUTCOME_AND_DELTA_ADMISSION_MATRIX",
+      "causal_regressions": "PASS_V17_PRODUCER_ADMITTED_EXACT_OUTCOME_CAUSAL_SUPPORT_REGRESSIONS",
+      "terminal_restart": "PASS_V17_TERMINAL_CLOSE_REOPEN_RECOVERY"
+    },
+    "observed_closure": {
+      "fabricated_ids_rejected": true,
+      "correlated_only_credit_rejected": true,
+      "cross_subject_prediction_rejected": true,
+      "receiver_delivery_reconstruction_gap_rejected": true,
+      "wrong_effect_outcome_hash_rejected": true,
+      "missing_semantic_delta_admission_rejected": true,
+      "valid_provider_chain_reaches_done_valid": true,
+      "restart_reentry_pending_then_complete": true,
+      "execution_released_before_second_reopen": true,
+      "support_hash_preserved": true,
+      "reentry_hash_preserved": true,
+      "terminal_receipt_hash_preserved": true,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    "resource_shadow": {
+      "repo_static": {"wall_seconds": 0.05, "max_rss_kib": 13568},
+      "effect_generation": {"wall_seconds": 0.22, "max_rss_kib": 26420},
+      "schema_authority": {"wall_seconds": 0.19, "max_rss_kib": 23936},
+      "fabricated_gap": {"wall_seconds": 0.18, "max_rss_kib": 24596},
+      "provider_terminal": {"wall_seconds": 0.40, "max_rss_kib": 27808},
+      "learning_support": {"wall_seconds": 0.21, "max_rss_kib": 27652},
+      "causal_regressions": {"wall_seconds": 0.26, "max_rss_kib": 27916},
+      "terminal_restart": {"wall_seconds": 0.28, "max_rss_kib": 26076}
+    },
+    "external_effect_performed": false,
+    "external_network_effect_performed_by_test": false,
+    "canonical_target_database_mutated": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "go_oob_experiment": {
+    "name": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "classification": "GO_OUT_OF_BOX_EXPERIMENT",
+    "executed_count_for_distinct_oob_design_this_macrocycle": 1,
+    "setup": "Two independently producer-admitted exact-outcome support chains target the same verified V14 effect/outcome but belong to different workspace cycles; the intervention splices GWT/use from chain A with causal credit from chain B.",
+    "result": "PASS_CROSS_CHAIN_SUPPORT_SPLICE_FENCED",
+    "rejection_reason": "BOUND_REENTRY_CANONICAL_SUPPORT_REQUIRED",
+    "exact_outcome_support_rows": 2,
+    "workspace_cycles_distinct": true,
+    "binding_rows_after_intervention": 0,
+    "done_rows_after_intervention": 0,
+    "effect_state_after_intervention": "OUTCOME_SUCCEEDED",
+    "integrity_check": "ok",
+    "foreign_key_violations": 0,
+    "wall_seconds": 0.27,
+    "max_rss_kib": 27860,
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  },
+  "fusion": {
+    "pr317_negative_remains_active": true,
+    "pr280_candidate_status": "TARGET_GREEN_ADDITIVE_CANDIDATE_STRONGLY_SUPPORTED_NOT_YET_PROMOTED",
+    "causal_model_delta": "Promote producer-bound relational ancestry as the preferred V17 re-entry mechanism candidate; reject caller-provided IDs, correlated-only credit, broken receiver closure, wrong-subject prediction and cross-cycle chain splices.",
+    "storage_interaction": "NO_CONTRADICTION_WITH_SQLITE_BLOCKER: this V17 run used system SQLite 3.45.1 but did not execute the high-contention WAL-reset falsifier. Its per-test integrity checks passing do not establish production storage safety. Compose/re-run V17 on the admitted private fixed SQLite 3.53.4 runtime before production promotion.",
+    "recovery_interaction": "Component close/reopen plus release of original execution is supported; full-process failover/crash recovery remains unmeasured for this V17 candidate.",
+    "architecture_delta_status": "SUPPORTED_CANDIDATE",
+    "canonical_merge_authorized": false,
+    "training_authorized": false
+  },
+  "next_frontier": [
+    "Run PR280 V17 candidate through the admitted hash-pinned private SQLite 3.53.4 path and preserve exact runtime provenance.",
+    "Add full-process crash/failover recovery around producer-admitted support, not merely component close/reopen.",
+    "Bind the producer/terminal path into the production non-bypass self.root effect path before canonical promotion.",
+    "Retain PR317 as a permanent negative regression so caller-supplied causal labels cannot regain authority."
+  ]
+}

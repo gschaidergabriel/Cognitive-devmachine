@@ -1,0 +1,7 @@
+{"schema_version":"1.0","routes":[
+{"class":"exact_identity_state","source":"canonical U10 versions/heads","consistency":"exact state_epoch","fallback":"FAIL_CLOSED_OR_EXPLICIT_UNKNOWN"},
+{"class":"temporal_replay","source":"u10_record_versions","consistency":"max(version_epoch <= requested_epoch)","fallback":"NO_SYNTHETIC_HISTORY"},
+{"class":"graph_association","source":"ClayGraph projection","consistency":"projection_source_epoch recorded","fallback":"canonical relation scan or explicit LAGGING"},
+{"class":"vector_similarity","source":"derived vector sidecar","consistency":"selection receipt binds candidate set + source epoch","fallback":"lexical/typed canonical retrieval"},
+{"class":"gwt_candidate_selection","source":"bounded assembly over canonical+eligible projections","consistency":"state+projection epochs in selection receipt","fallback":"rebuild assembly"}
+],"normal_hot_path":"bounded prepared assembly; no total-memory scan when current projection exists"}

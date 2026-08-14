@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-live-fusion-causal-mesh-20260810T1420p0700",
+  "created_at": "2026-08-10T14:20:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "subject": "Live Fusion causal worker mesh: dual relevance routing + ack/replan + anti-entropy repair",
+  "status": "OPEN_CROSS_BRANCH_RESEARCH_CANDIDATE",
+  "evidence_class": "MIXED_RESEARCH_PLUS_SIMULATION_ONLY_NO_RUNTIME_PROMOTION",
+  "source_refs": [
+    "research_entity/global/CLAY_LIVE_FUSION_CAUSAL_MESH_CANDIDATE.clay",
+    "research_entity/experiments/CLAY_LIVE_FUSION_MESH_SYNTHETIC_20260810.json",
+    "research_entity/runtime/live_fusion_mesh_runtime.py",
+    "research_entity/runtime/tests/test_live_fusion_mesh_runtime.py",
+    "research_entity/state/work/events/20260810T1420p0700_chatgpt_secondary_live_fusion_mesh_runtime.json"
+  ],
+  "global_delta": "Strengthen cross-worker coupling by closing material-delta delivery into explicit ingest/dedupe/replan receipts and periodic reconciliation. Use the union of ClayGraph relevance and UnifiedDB declared dependency/invalidation views as the hot-path target set. Do not increase evidential confidence from repeated branch exposure. Keep full broadcast as baseline/fallback, not default proof of connectivity.",
+  "synthetic_result_summary": {
+    "single_projection_ack_affected_recall_mean": 0.9523758307,
+    "dual_projection_ack_hot_affected_recall_mean": 0.9970346228,
+    "dual_projection_ack_plus_reconciliation_eventual_recall_mean": 1.0,
+    "dual_projection_ack_plus_reconciliation_send_attempts_per_event_mean": 8.0341533333,
+    "full_broadcast_send_attempts_per_event": 9.0,
+    "send_attempt_reduction_vs_broadcast_percent": 10.7316296296,
+    "evidence_limit": "SIMULATION_ONLY; no live runtime promotion"
+  },
+  "branches": {
+    "clay": {
+      "delta": "Treat stronger networking as causal closure, not message volume. Add pulse delivery/use/replan/reconciliation observability to system-level synthesis and preserve anti-echo ancestry.",
+      "next_test": "Adjudicate whether selective promotion barriers improve consistency without global stop-the-world coupling."
+    },
+    "frank": {
+      "delta": "Any material Frank Harness research delta that invalidates active work should carry explicit affected-work identity and require a replan receipt before the stale effect proceeds when delivery is confirmed.",
+      "next_test": "Replay a real Frank Harness invalidator through current work revisions and verify stale execution is interrupted without granting Frank self-harness authority."
+    },
+    "gwt": {
+      "delta": "Reuse the same distinction addressable->delivered->ingested->used/replanned for worker coordination; do not conflate exposure with causal uptake. Mesh pulse closure is analogous observability, not GWT truth.",
+      "next_test": "Measure whether work-replan receipts correlate with actual downstream changed behavior rather than mere delivery."
+    },
+    "emergenz": {
+      "delta": "Denser worker communication is not emergence. Treat adaptive sparse topology and reconciliation as intervention surfaces; test whether performance gains survive topology lesions/shuffles.",
+      "next_test": "Lesion ClayGraph or UnifiedDB relevance view separately and together; compare miss rate and recovery."
+    },
+    "claycode": {
+      "delta": "Do not redesign BASE semantics yet. Ensure existing typed records/effects can encode Pulse, Ack, ReplanReceipt and RepairReceipt; only open a semantic change if executable lowering fails.",
+      "next_test": "Compile minimal pulse/ack/replan records after current parser/IR packages are executable and confirm no semantic escape hatch is required."
+    },
+    "hyperposition": {
+      "delta": "Preserve competing recipient sets from ClayGraph and UnifiedDB until routing time; disagreement is uncertainty evidence and should not be collapsed early.",
+      "next_test": "Use topology disagreement as a bounded exploration/fallback signal and test whether it improves miss-cost Pareto frontier."
+    },
+    "claygraph": {
+      "delta": "Expose current semantic dependents plus epoch/provenance as one independent routing view. Graph activation must not authorize recipient truth or effect authority.",
+      "next_test": "Measure stale/missing edge behavior and route recall against UnifiedDB dependency projection on frozen work events."
+    },
+    "unifieddb": {
+      "delta": "Persist pulse identity, target state, ack/dedupe, replan and repair receipts with epochs/provenance; provide declared dependency/invalidation routing view independent enough to catch ClayGraph misses without becoming a duplicate graph authority.",
+      "next_test": "Integrate companion tables/projections against V9 and measure transaction/replay/restart/DB amplification."
+    },
+    "harness": {
+      "delta": "Use the executable companion as the falsification lane. Baseline remains current WorkEvent/broadcast behavior; candidate must survive stale epoch, duplicate, missed sync, ack loss, revision conflict, crash/restart and rollback tests on Ubuntu.",
+      "next_test": "Execute WORK-LIVE-FUSION-MESH-RUNTIME-20260810 and return exact receipts to affected branches."
+    }
+  },
+  "global_controls": [
+    "targeted distribution != evidence amplification",
+    "same ancestry across branches != independent replication",
+    "delivery != ingest != replan != effect",
+    "ack/redelivery requires idempotent application",
+    "stale epoch fails closed or requests refresh",
+    "critical invalidator may interrupt affected work but never expands execution authority",
+    "periodic reconciliation repairs connectivity and never votes on truth",
+    "full broadcast remains matched baseline/fallback",
+    "candidate remains rollbackable and not promoted from simulation"
+  ],
+  "research_write_result": "EXPLICIT_FEEDBACK_TO_ALL_9_REGISTERED_BRANCHES"
+}

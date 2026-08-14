@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "counterhypotheses": [
+    {
+      "id": "CH-Q23-RAW-GEOMETRY-01",
+      "attacks": ["H-Q23-FEATURE-STRATA-01", "H-Q23-SPATIAL-GRID-01"],
+      "claim": "LLM-facing multimodal projector outputs are optimized to condition generation, not to make cosine/prototype distances calibrated for instance identity or OOD rejection. A stable spatial pyramid cannot repair a fundamentally unsuitable metric geometry.",
+      "support": [
+        "Qwen's dedicated Qwen3-VL-Embedding line uses separate retrieval-oriented training and final semantic-vector extraction rather than claiming raw generative visual features are retrieval embeddings.",
+        "Existing QNDRF-1 already preserved this concern; this run strengthens the test by splitting projected vs pre-merger Qwen feature strata."
+      ],
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CH-Q23-MERGER-LOSS-01",
+      "attacks": ["H-Q23-FEATURE-STRATA-01"],
+      "claim": "Spatial merge/projection may erase fine UI/text/layout cues that survive in Qwen3.5 pre-merger vision hidden states; public mtmd output may therefore be convenient but causally inferior for familiarity.",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CH-Q23-DUPLICATE-ENCODER-WINS-01",
+      "attacks": ["H-Q23-LIGHTWEIGHT-BASELINE-01"],
+      "claim": "A tiny specialized image encoder can be so cheap that duplicate encoding is rational if it enables large reductions in 4B semantic-decode frequency and false-familiarity risk.",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CH-Q23-SLOT-CACHE-TOO-COUPLED-01",
+      "attacks": ["H-Q23-CACHE-LIFETIME-01", "H-Q23-HYBRID-STATE-01"],
+      "claim": "llama.cpp media/slot state is an implementation-local acceleration surface with experimental API churn and version coupling. Treating it as durable Frank state would create a brittle hidden architecture and recovery burden.",
+      "status": "ACTIVE",
+      "architectural_consequence": "Keep server/media cache optional and rebuildable; semantic truth remains typed Clay state plus provenance-bound observations/descriptors."
+    },
+    {
+      "id": "CH-Q23-SPATIAL-INVARIANCE-01",
+      "attacks": ["H-Q23-SPATIAL-GRID-01"],
+      "claim": "Absolute/coarse token-grid topology may overfit window position and fail under harmless resize/move/theme changes. A descriptor that wins same-layout accuracy but loses transformation robustness is not a valid Frank familiarity improvement.",
+      "status": "ACTIVE"
+    }
+  ]
+}

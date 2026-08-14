@@ -1,0 +1,84 @@
+name: WP03 V18 Full Residual Bridge Snapshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/wp03-v18-full-residual-bridge-snapshot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wp03-v18-full-residual-bridge-snapshot
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+      - name: Build locked parser environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/clay-wp03-full
+          /tmp/clay-wp03-full/bin/pip install --disable-pip-version-check --no-input --require-hashes --only-binary=:all: -r research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+      - name: Execute and persist bounded receipt
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          PYTHONPATH=tools PYTHONSAFEPATH=1 /usr/bin/time -v /tmp/clay-wp03-full/bin/python tools/test_claycode_wp03_residual_bridge.py > /tmp/wp03-full.json 2> /tmp/wp03-full.time
+          python3 - <<'PY'
+          import json, os, pathlib, platform, subprocess, sys
+          report=json.load(open('/tmp/wp03-full.json'))
+          if not report.get('pass'):
+              raise SystemExit('full residual bridge test did not PASS')
+          paths=[
+            'tools/test_claycode_wp03_residual_bridge.py',
+            'tools/claycode_wp03_residual_semantics_candidate.py',
+            'tools/claycode_wp03_frontend_artifact_bridge.py',
+            'tools/claycode_base_frontend.py',
+            'tools/claycode_base_typed_ir.py',
+            'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark',
+            'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt',
+            'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay',
+            'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay',
+          ]
+          blobs={p:subprocess.check_output(['git','rev-parse',f'HEAD:{p}'],text=True).strip() for p in paths}
+          receipt={
+            'schema_version':'1.0',
+            'receipt_id':f"WP03-V18-FULL-RESIDUAL-BRIDGE-{os.environ['RUN_ID']}",
+            'evidence_class':'GITHUB_HOSTED_UBUNTU_EXACT_CHECKOUT_BOUNDED_CANDIDATE_TEST',
+            'tested_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            'github_run_id':os.environ['RUN_ID'],
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'python':sys.version,
+            'component_blobs':blobs,
+            'test_report':report,
+            'resource_time_v':pathlib.Path('/tmp/wp03-full.time').read_text(errors='replace'),
+            'result':'PASS',
+            'promotion':'NONE',
+            'wp03_status':'OPEN',
+            'scope_guard':'GitHub-hosted Ubuntu candidate evidence only. Does not replace self-hosted/Andreas target evidence, close WP03, mutate Frank Harness, authorize effects or authorize training.'
+          }
+          out=pathlib.Path('research_entity/claycode/base/receipts/WP03_V18_FULL_RESIDUAL_BRIDGE_HOSTED_UBUNTU_LATEST.json')
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-wp03-gate'
+          git config user.email 'clay-wp03-gate@users.noreply.github.com'
+          git add research_entity/claycode/base/receipts/WP03_V18_FULL_RESIDUAL_BRIDGE_HOSTED_UBUNTU_LATEST.json
+          git commit -m "evidence(wp03): persist full residual bridge hosted Ubuntu receipt [skip ci]"
+          for n in 1 2 3 4 5 6; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep $((n*2)); done
+          exit 1

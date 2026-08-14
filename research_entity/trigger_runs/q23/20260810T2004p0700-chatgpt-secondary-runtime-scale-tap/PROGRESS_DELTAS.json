@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "deltas": [
+    {
+      "delta_id": "Q23-PD-01",
+      "kind": "IMPLEMENTATION_FACT",
+      "description": "Current Transformers and llama.cpp paths expose a real pre-decoder Qwen media-feature boundary; libmtmd server code forwards encoded media embeddings into decoder processing, making one-encode feature reuse physically testable.",
+      "information_gain": 0.88,
+      "uncertainty_reduction": 0.42,
+      "architecture_impact": 0.9
+    },
+    {
+      "delta_id": "Q23-PD-02",
+      "kind": "NEW_HYPOTHESIS",
+      "description": "Qwen3.5 2B and 4B share the same core 24x1024 vision tower while 0.8B uses a 12x768 tower, so visual encode cost must be benchmarked independently from total model size. Standard ViT-block arithmetic from official configs predicts the 0.8B vision core at roughly 29-30% of 2B/4B block compute at equal visual token counts, excluding preprocessing/projector/backend overhead; this is a hypothesis, not a runtime measurement.",
+      "information_gain": 0.93,
+      "uncertainty_reduction": 0.38,
+      "architecture_impact": 0.84
+    },
+    {
+      "delta_id": "Q23-PD-03",
+      "kind": "NEW_COUNTERHYPOTHESIS",
+      "description": "Raw Qwen mmproj features may be poor open-set/familiarity embeddings; primary embedding research uses explicit contrastive/multi-stage adaptation, keeping a dedicated lightweight embedding baseline alive.",
+      "information_gain": 0.76,
+      "uncertainty_reduction": 0.24,
+      "architecture_impact": 0.72
+    },
+    {
+      "delta_id": "Q23-PD-04",
+      "kind": "TEST_DELTA",
+      "description": "Recent llama.cpp Qwen3.5 multimodal issue evidence makes build/runtime flags a required causal control before interpreting visual model quality. Added runtime sanity gate and crash/recovery matrix.",
+      "information_gain": 0.91,
+      "uncertainty_reduction": 0.51,
+      "architecture_impact": 0.79
+    },
+    {
+      "delta_id": "Q23-PD-05",
+      "kind": "ARCHITECTURE_DELTA",
+      "description": "Defined VisionFeatureTap as a typed physical interception point at libmtmd that preserves dissolved-Retina semantics while enabling measured decoder bypass; no new semantic service is introduced.",
+      "information_gain": 0.86,
+      "uncertainty_reduction": 0.33,
+      "architecture_impact": 0.95
+    }
+  ],
+  "progress_valid": true,
+  "stage_credit": 0
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "seed":20260811,
+  "evidence_class":"LOCAL_SYNTHETIC_DISCRIMINATOR",
+  "decision_assembly_3000_cases":{
+    "FULL":{"certification_rate":1.0,"mean_cost":165.99,"median_cost":153.0,"p95_cost":279.95,"mean_cost_vs_full":1.0,"mean_uncovered_pairs":0.0},
+    "TOPK_SAFE":{"certification_rate":0.9153,"mean_cost":27.84,"median_cost":25.0,"p95_cost":53.0,"mean_cost_vs_full":0.1657,"mean_uncovered_pairs":0.3013},
+    "SAFE_DECISION_COVER":{"certification_rate":0.9743,"mean_cost":13.35,"median_cost":13.0,"p95_cost":20.0,"mean_cost_vs_full":0.0892,"mean_uncovered_pairs":0.0853},
+    "DCA_SELECTION":{"certification_rate":0.9743,"mean_cost":15.35,"median_cost":15.0,"p95_cost":22.0,"mean_cost_vs_full":0.1029,"mean_uncovered_pairs":0.0853}
+  },
+  "negative_completeness_8000_cases":{
+    "TOPK_NAIVE":{"accuracy_total":0.6840,"coverage":1.0,"selective_accuracy":0.6840,"overclosure_rate":0.3160,"stale_overclosure_rate":0.0999,"unknown_rate":0.0},
+    "QUERY_AWARE_NO_CERT":{"accuracy_total":0.8506,"coverage":1.0,"selective_accuracy":0.8506,"overclosure_rate":0.1494,"stale_overclosure_rate":0.0999,"unknown_rate":0.0},
+    "GLOBAL_CERT":{"accuracy_total":0.6188,"coverage":0.6531,"selective_accuracy":0.9474,"overclosure_rate":0.0344,"stale_overclosure_rate":0.0344,"unknown_rate":0.3469},
+    "DCA_QR_CURRENT":{"accuracy_total":0.7090,"coverage":0.7090,"selective_accuracy":1.0,"overclosure_rate":0.0,"stale_overclosure_rate":0.0,"unknown_rate":0.2910},
+    "QR_STALE_UNFENCED":{"accuracy_total":0.7090,"coverage":0.8089,"selective_accuracy":0.8765,"overclosure_rate":0.0999,"stale_overclosure_rate":0.0999,"unknown_rate":0.1911}
+  },
+  "interpretation":[
+    "DCA selection itself is not better than the strong conventional safe decision-cover baseline; witness overhead makes it slightly more expensive.",
+    "Query-relative current completeness removes synthetic overclosure but intentionally trades unsupported binary answers for UNKNOWN/EXPAND.",
+    "Query-relative completeness without epoch/currentness fencing is unsafe under stale-context mutation.",
+    "These synthetic numbers are not evidence of real Frank reasoning quality or production latency."
+  ],
+  "raw_row_status":"deterministic generator source persisted; aggregate measurement table persisted; per-case raw rows not persisted in this packet",
+  "promotion_gate":"NOT_PROMOTION_QUALITY_WITHOUT_TARGET_MATCHED_RUN_AND_RAW_ROWS"
+}

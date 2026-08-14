@@ -1,0 +1,59 @@
+{
+  "schema": "CLAY_SUPPLEMENTAL_FALSIFIER/1.0",
+  "trigger": "go",
+  "project_date": "2026-08-12",
+  "organ": "GPT-5.6-Sol temporary Clay worker",
+  "program": "FRANK_V0_1",
+  "grf_layer": "R4_INTERVENTION_LOCAL_SYNTHETIC",
+  "counted_as_go_unusual_experiment": false,
+  "coordination_note": "A sibling Clay worker had already committed the canonical GO receipt with the trigger-run's exactly-one unusual experiment. This result is retained only as a supplemental ordinary discriminating falsifier and does not alter that count.",
+  "question": "Can two byte-distinct ELF shared libraries with the same SONAME be collapsed by ctypes.CDLL absolute-path loading onto the first loaded handle, undermining a staged runtime identity probe?",
+  "hypothesis": "Absolute-path loading distinguishes byte-distinct shared objects even when their SONAME matches.",
+  "counterhypothesis": "The loader may reuse the first handle based on SONAME identity alone, causing the second absolute-path probe to observe the wrong mapped object.",
+  "environment": {
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "libc": "Debian GLIBC 2.41-12+deb13u3",
+    "accepted_frank_vps": false
+  },
+  "intervention": {
+    "objects": "Two temporary minimal C shared libraries in distinct directories, identical SONAME libfrank_probe.so.0, distinct function return values and distinct bytes.",
+    "load_order": [
+      "object A by absolute path",
+      "symlink alias to object A",
+      "object B by distinct absolute path"
+    ],
+    "mode": "ctypes.CDLL(..., RTLD_LOCAL)"
+  },
+  "observations": {
+    "a_value": 111,
+    "a_handle": 94168866293056,
+    "a_sha256": "a11bf2a4a475e6b1e2f583e16f98fe4933c0885425720fa69d8408f3321e2f00",
+    "alias_value": 111,
+    "alias_handle": 94168866293056,
+    "alias_same_handle_as_a": true,
+    "b_value": 222,
+    "b_handle": 94168866296880,
+    "b_same_handle_as_a": false,
+    "b_sha256": "6149d60cebcc02d60cb01d44d7975d62f77437263365187251658ae39ce69816",
+    "byte_distinct": true
+  },
+  "prediction_if_hypothesis_right": "B returns 222 and receives a handle distinct from A; alias of A may reuse A's handle.",
+  "prediction_if_counterhypothesis_right": "B returns 111 and/or receives A's handle solely because the SONAME matches.",
+  "outcome": "RETAIN_HYPOTHESIS_LOCAL_ONLY",
+  "interpretation": "The same-SONAME-only aliasing counterhypothesis was not observed. The symlink alias to the same object reused A's handle, while byte-distinct B loaded separately and returned its own value. This supports absolute-path discrimination in this local glibc environment.",
+  "primary_reference": {
+    "source": "Linux dlopen(3) manual",
+    "relevance": "A path containing a slash is interpreted as a pathname; reopening the same shared object returns the same handle."
+  },
+  "limitations": [
+    "Not executed on the accepted Hostinger Ubuntu VPS.",
+    "Not executed against SQLite 3.53.4 or Frank's productive process.",
+    "Does not prove mapped-object identity after service start/restart.",
+    "Does not close root provisioning, service binding, downgrade/library-swap, restart, rollback, or F-V01-13 release obligations."
+  ],
+  "affected_components": ["F-V01-13", "F-V01-04"],
+  "architecture_delta": "NO_CHANGE",
+  "next_falsifier": "After authorized root-capable provisioning on the accepted VPS, attest the exact productive Frank process mapped SQLite object by path plus file identity/hash/source-id across restart, and reject downgrade/library-swap controls.",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

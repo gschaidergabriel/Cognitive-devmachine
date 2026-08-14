@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "evidence_class": "LOCAL_SYNTHETIC_REFERENCE_MODEL_ONLY",
+  "corpus": {"unsafe_mutants": 16, "valid_cases": 5},
+  "results": {
+    "LSCW_FULL_REFERENCE": {"unsafe_detection_rate": 1.0, "valid_acceptance_rate": 1.0, "unsafe_escapes": [], "valid_false_rejects": []},
+    "ABLATE_LINEAR_CONSUMPTION": {"unsafe_detection_rate": 0.9375, "valid_acceptance_rate": 1.0, "unsafe_escapes": ["replay_same_transition_witness"]},
+    "ABLATE_DIMENSION_SET_HASH": {"unsafe_detection_rate": 0.9375, "valid_acceptance_rate": 1.0, "unsafe_escapes": ["unknown_dimension_set_in_successor"]},
+    "ABLATE_STATE_LINEAGE_DIMENSION": {"unsafe_detection_rate": 0.8125, "valid_acceptance_rate": 1.0, "unsafe_escapes": ["state_root_swapped_after_valid_start", "recovery_restores_sibling_state_same_epoch", "mixed_compiler_and_runtime_lineages"]},
+    "ABLATE_EFFECT_POLICY_DIMENSION": {"unsafe_detection_rate": 0.9375, "valid_acceptance_rate": 1.0, "unsafe_escapes": ["provider_outcome_wrong_effect_policy_epoch"]},
+    "ABLATE_RUNTIME_CONSUMED_OBJECT_BINDING": {"unsafe_detection_rate": 0.9375, "valid_acceptance_rate": 1.0, "unsafe_escapes": ["runtime_consumes_wrong_sqlite_object"]},
+    "ALLOW_UNKNOWN_DIMENSIONS": {"unsafe_detection_rate": 0.875, "valid_acceptance_rate": 1.0, "unsafe_escapes": ["unknown_dimension_set_in_successor", "required_material_dimension_missing"]},
+    "STRICT_HASH_CHAIN": {"unsafe_detection_rate": 0.625, "valid_acceptance_rate": 0.6, "unsafe_escapes": ["compiler_drops_effect_authority_dimension", "replay_same_transition_witness", "provider_outcome_wrong_effect_policy_epoch", "gwt_salience_escalates_effect_authority", "reward_dimension_without_utility_authority", "required_material_dimension_missing"], "valid_false_rejects": ["valid_semantic_recompile", "valid_declared_schema_migration"]},
+    "CURRENT_EXECUTION_CONTEXT_PROXY": {"unsafe_detection_rate": 0.8125, "valid_acceptance_rate": 1.0, "unsafe_escapes": ["replay_same_transition_witness", "parent_witness_from_other_semantic_epoch", "mixed_compiler_and_runtime_lineages"]}
+  },
+  "interpretation": [
+    "On the frozen synthetic corpus, linear consumption is causally necessary for the explicit replay mutant.",
+    "State-lineage binding is the highest-impact single lesion in this corpus, exposing three cross-lineage mutants.",
+    "Dimension-set/schema currentness is necessary to fail closed rather than treating unknown or missing material dimensions as zero.",
+    "A strict artifact hash chain is too weak semantically in this model and too strict representationally: it misses authority/policy/reward mutants while rejecting declared semantic-preserving transformations.",
+    "The stronger ordinary CurrentExecutionContext proxy remains the critical counterbaseline: it accepts all valid cases but misses only the explicitly cross-stage/linear lineage mutants in this synthetic model. Real target tests are required to learn whether current Frank guards already close those cases."
+  ],
+  "promotion_boundary": "NO_TARGET_PROMOTION_FROM_SYNTHETIC_RESULTS"
+}

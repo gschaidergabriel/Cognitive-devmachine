@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0414p0700-chatgpt-secondary-token-tls-transport",
+  "recorded_at": "2026-08-11T04:22:45+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-08-TOKEN-API-CLIENTS",
+  "identity_lock": {
+    "research_entity": "Clay",
+    "target_native_self": "self.root",
+    "target_human_surface_name": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "coordination": {
+    "active_overlap_refreshed": true,
+    "avoided_active_lanes": [263, 264, 265, 266, 267, 268, 270],
+    "api_related_existing_candidates": [257, 259],
+    "selected_non_overlapping_frontier": "production TLS/network HTTP transport in front of canonical framework-independent token ingress",
+    "overlap_search_result": "no open PR matched TLS/HTTP transport/request-smuggling implementation before branch creation"
+  },
+  "baseline": {
+    "canonical_target_file": "runtime/api/frank_token_ingress_core.py",
+    "finding": "canonical core owns bearer authentication and V15/V16 execution admission but is framework-independent and not itself a network/TLS listener",
+    "existing_api_candidate_evidence": "PR #257 and #259 explicitly keep production HTTP/TLS server open; PR #257 reports response replay candidate only",
+    "finished_contract": "production token-authenticated API remains mandatory for finished Frank v0.1"
+  },
+  "hypothesis": "A deliberately small TLS>=1.2 + strict HTTP/1.1 one-request-per-connection boundary can add a real network transport while delegating authentication/execution authority to the canonical FrankTokenIngressCore and failing closed on ambiguous framing.",
+  "strongest_counterhypothesis": "A hand-rolled HTTP parser may be less robust and maintainable than an established reverse-proxy/ASGI stack; target capability evidence and adversarial comparison must decide promotion rather than novelty or local PASS.",
+  "fresh_external_primary_evidence": [
+    {
+      "source": "RFC 6750 - The OAuth 2.0 Authorization Framework: Bearer Token Usage",
+      "url": "https://www.rfc-editor.org/rfc/rfc6750",
+      "relevance": "Bearer-token transport requires TLS and Authorization Bearer semantics."
+    },
+    {
+      "source": "RFC 8996 - Deprecating TLS 1.0 and TLS 1.1",
+      "url": "https://www.rfc-editor.org/rfc/rfc8996",
+      "relevance": "TLS 1.0/1.1 are not acceptable; candidate minimum is TLS 1.2."
+    },
+    {
+      "source": "RFC 9112 - HTTP/1.1",
+      "url": "https://www.rfc-editor.org/rfc/rfc9112",
+      "relevance": "Ambiguous Content-Length/Transfer-Encoding framing is request-smuggling-relevant and must be handled fail-closed."
+    },
+    {
+      "source": "Python asyncio streams / ssl official documentation",
+      "url": "https://docs.python.org/3/library/asyncio-stream.html",
+      "relevance": "asyncio.start_server supports TLS server contexts and bounded stream handling."
+    }
+  ],
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-token-tls-transport-20260811",
+    "pr": 276,
+    "head_sha": "36b37011f940c98a89db9ef4059c5cd67a85c5d3",
+    "branch_merge_base": "f649ce7ab8249c9dbc61ad7018804204ade53cb5",
+    "files": [
+      "runtime/api/frank_token_tls_transport_candidate.py",
+      "tests/frank_token_tls_transport_candidate.py",
+      "claycode/frank_token_tls_transport_candidate.clay",
+      ".github/workflows/go-frank-token-tls-transport-vps.yml"
+    ],
+    "semantic_delta": [
+      "TLS server context minimum TLS 1.2",
+      "strict bounded HTTP/1.1 admission endpoint",
+      "exactly one request per connection; response always Connection: close",
+      "Transfer-Encoding rejected entirely; Content-Length required and singular",
+      "duplicate Authorization rejected before adapter authentication",
+      "auth/scope preauthorization precedes JSON semantic parsing",
+      "internal credential fingerprint/raw-secret spellings stripped from public response",
+      "FrankCoreAdmissionAdapter delegates to canonical FrankTokenIngressCore; transport mints no execution/effect/identity authority"
+    ]
+  },
+  "measurements": {
+    "local_mechanism": {
+      "status": "PASS_FRANK_TOKEN_TLS_TRANSPORT_CANDIDATE",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5",
+      "openssl_python": "OpenSSL 3.5.5 27 Jan 2026",
+      "openssl_cli": "OpenSSL 3.5.5 27 Jan 2026",
+      "valid_tls_json_request": "PASS",
+      "configured_minimum_tls": "TLSv1.2",
+      "negotiated_tls": "TLSv1.3",
+      "raw_bearer_token_reflected": false,
+      "credential_fingerprint_reflected": false,
+      "external_network_used": false,
+      "loopback_tls_used": true,
+      "canonical_state_mutated": false,
+      "promotion": "NONE"
+    },
+    "target_vps": {
+      "workflow_run": 31433508596,
+      "job": 93602281645,
+      "status_at_checkpoint": "QUEUED",
+      "pass_claimed": false
+    },
+    "fresh_main_overlap": {
+      "status": "NO_SELECTED_PATH_OVERLAP_OBSERVED",
+      "main_delta_after_branch_cut": "presence evidence/receipt paths only at comparison checkpoint",
+      "candidate_rebase_or_merge_credit": "NONE_UNTIL_FRESH_TARGET_EXECUTION"
+    }
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "CL_TE_REQUEST_SMUGGLE_SHADOW",
+    "class": "bounded loopback TLS adversarial framing discriminator",
+    "input": "Content-Length plus Transfer-Encoding: chunked followed by declared body and hidden shadow HTTP request",
+    "local_result": {
+      "http_status": 400,
+      "semantic_code": "TRANSFER_ENCODING_NOT_SUPPORTED",
+      "connection_policy": "CLOSE",
+      "adapter_preauthorize_delta": 0,
+      "adapter_handle_delta": 0,
+      "classification": "PASS_FAIL_CLOSED_LOCAL_MECHANISM"
+    },
+    "target_result": "QUEUED_NOT_EXECUTED_AT_CHECKPOINT"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "claim": "Real TLS/network transport substrate exists on branch and passes bounded local mechanism tests; whole token API remains false until target execution plus cognition/replay/task-switch/multimodal/deployment obligations close.",
+    "no_change_to": [
+      "canonical authentication authority",
+      "V15/V16 execution authority",
+      "effect authority",
+      "canonical Frank state",
+      "self.root Harness authority"
+    ]
+  },
+  "non_claims": [
+    "no target-VPS PASS yet",
+    "no whole token API completion",
+    "no cognition/message execution integration",
+    "no durable response replay integration",
+    "no task-switch consent/cancellation integration",
+    "no multimodal ingress integration",
+    "no production certificate/public routing/firewall deployment",
+    "no whole Frank v0.1 acceptance",
+    "no final training authorization"
+  ],
+  "next_falsifiers": [
+    "Execute PR #276 exact candidate on accepted self-hosted Hostinger Linux/X64 and preserve result/resources/available server stack.",
+    "If target PASS, compare this parser against any actually available Caddy/nginx/ASGI stack under the same smuggling/duplicate-header/timeout corpus before promotion.",
+    "Integrate the selected transport with durable response replay and request-content binding only after current PR #257/#259 ancestry and semantics are refreshed.",
+    "Run end-to-end direct token message -> translator/ClayCode cognition -> response transport without allowing the transport to mint execution/effect authority."
+  ]
+}

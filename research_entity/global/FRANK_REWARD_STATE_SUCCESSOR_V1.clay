@@ -1,0 +1,219 @@
+module frank.reward_state.successor.v1
+version "0.1-research-candidate"
+status RESEARCH_CANDIDATE_BASELINE_GATED
+
+// Historical lineage
+historical_nacc=@gschaidergabriel/Project-Frankenstein/services/nucleus_accumbens.py@abba90a5767d85abc8a1ac340bae92842dab35c1
+historical_epq=@gschaidergabriel/Project-Frankenstein/personality/e_pq.py@abba90a5767d85abc8a1ac340bae92842dab35c1
+baseline_contract=@research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md
+loop_contract=@research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md
+architecture_gap_issue="github:clay-global-research-entity#149"
+
+// Research evidence informing the candidate, not authority to promote it.
+evidence FEATURE_SPECIFIC_RPE_2024 {
+  source="Lee et al., Nature Neuroscience 2024, doi:10.1038/s41593-024-01689-1"
+  supports="scalar homogeneous RPE is an insufficient default hypothesis; preserve feature-specific errors"
+}
+evidence DISTRIBUTIONAL_PFC_2024 {
+  source="Nature Neuroscience 2024, doi:10.1038/s41593-023-01535-w"
+  supports="distributional value representations are a live candidate beyond mean-only prediction"
+}
+evidence MULTIDIMENSIONAL_REWARD_2025 {
+  source="Sousa et al., Nature 2025, doi:10.1038/s41586-025-09089-6"
+  supports="future reward may require joint time/magnitude structure"
+}
+evidence MULTITIMESCALE_RL_2025 {
+  source="Masset et al., Nature 2025, PMID:40468072"
+  supports="multiple discount/learning timescales are a plausible functional basis"
+}
+evidence HOMEOSTATIC_RL_2025 {
+  source="Yoshida, Sprekeler, Gutkin 2025, arXiv:2507.04998"
+  supports="internal-state regulation should be tested as part of reward/control rather than only external event labels"
+}
+
+symbol RewardDimension = TASK|EPISTEMIC|SOCIAL|SAFETY|RESOURCE|HOMEOSTATIC|NOVELTY
+symbol EvidenceClass = VERIFIED_OUTCOME|VERIFIED_USER_FEEDBACK|VERIFIED_EPISTEMIC|SELF_PROPOSAL|ACTIVITY_ONLY|UNVERIFIED
+symbol ValueHorizon = FAST|MEDIUM|SLOW
+
+record RewardOutcomeEvidence {
+  episode_id:Ref
+  outcome_id:Ref
+  dimension:RewardDimension
+  utility:Real[-1,1]
+  confidence:Real[0,1]
+  causal_credit:Real[0,1]
+  evidence_class:EvidenceClass
+  verified:Bool
+  source_ref:Ref
+  novelty:Real[0,1]
+  state_epoch:Epoch
+  graph_epoch:Epoch?
+}
+
+record HorizonPrediction {
+  mean:Real[-1,1]
+  variance:Real>=0
+  horizon:ValueHorizon
+  update_rate:Real[0,1]
+}
+
+record TypedValueState {
+  dimension:RewardDimension
+  predictions:Map<ValueHorizon,HorizonPrediction>
+  habituation:Real[0,1]
+  tonic:Real[-1,1]
+  opponent:Real[0,1]
+  last_phasic:Real[-1,1]
+  admitted_events:Int>=0
+  state_epoch:Epoch
+}
+
+record RewardPlasticityReceipt {
+  episode_id:Ref
+  outcome_id:Ref
+  dimension:RewardDimension
+  admitted:Bool
+  material_learning_weight:Real[0,1]
+  exploration_nudge:Real[0,0.12]
+  observed_value:Real[-1,1]
+  prediction_before:Map<ValueHorizon,Real>
+  phasic_by_horizon:Map<ValueHorizon,Real>
+  phasic_aggregate:Real[-1,1]
+  tonic_after:Real[-1,1]
+  habituation_after:Real[0,1]
+  provenance:Set<Ref>
+  reason:Symbol
+}
+
+record RewardControlReadout {
+  typed_tonic:Map<RewardDimension,Real>
+  persistence_bias:Real[-1,1]
+  disengagement_bias:Real[0,1]
+  exploration_nudge:Real[0,0.12]
+  stagnation_candidate:Bool
+  safety_veto:Bool
+  resource_brake:Bool
+  evidence:Set<Ref>
+}
+
+// Admission: reward is downstream of verified outcome and causal credit.
+rule material_reward_admitted(e:RewardOutcomeEvidence) iff
+  e.verified
+  && e.evidence_class in [VERIFIED_OUTCOME,VERIFIED_USER_FEEDBACK,VERIFIED_EPISTEMIC]
+  && e.causal_credit>0
+  && e.confidence>0
+
+rule material_learning_weight(e)=
+  if material_reward_admitted(e) then clamp01(e.confidence*e.causal_credit) else 0
+
+// Self/activity novelty may alter exploration pressure only. It does not change predictions,
+// tonic motivation, personality or long-term memory until independently outcome-verified.
+rule e.evidence_class in [SELF_PROPOSAL,ACTIVITY_ONLY,UNVERIFIED]
+  -> material_learning_weight(e)=0
+  -> exploration_nudge(e)<=0.12
+  -> no_reward_plasticity
+
+rule model_self_report != RewardOutcomeEvidence.verified
+rule proposal_authorship != verified_outcome
+rule self_acceptance != independent_causal_credit
+rule salience != reward
+rule activation != reward
+rule GWT_ignition != reward
+
+// Feature-specific and multi-timescale prediction error.
+rule for each admitted e.dimension d and horizon h:
+  delta[d,h] = observed_value(e,d) - prediction[d,h].mean
+  prediction[d,h] <- bounded_update(prediction[d,h],observed_value,rate[h])
+  variance[d,h] <- bounded_distribution_update(variance[d,h],delta[d,h])
+
+parameter rate[FAST]=0.30
+parameter rate[MEDIUM]=0.09
+parameter rate[SLOW]=0.02
+parameter phasic_mix=[FAST:0.55,MEDIUM:0.30,SLOW:0.15]
+
+rule phasic[d] = robust_mix(normalize_by_prediction_uncertainty(delta[d,*]),phasic_mix)
+rule phasic != truth
+rule phasic != effect_authority
+rule phasic != epistemic_promotion
+
+// Preserve old habituation/opponent-process functions as lesionable candidates,
+// but weaken them because prediction learning already handles expected repetition.
+rule habituation is LESIONABLE_CANDIDATE
+rule opponent_process is LESIONABLE_CANDIDATE
+rule habituation cannot suppress sensitivity below configured_floor_without_rescue
+rule habituation recovers_with_time
+rule opponent_process damps persistence; never creates reward
+
+// Critical repair of historical boredom semantics.
+rule low_prediction_error + low_residual_pressure -> STABLE_OR_CONVERGED_CANDIDATE; not_boredom_by_default
+rule low_prediction_error + high_residual_pressure + low_route_diversity -> STAGNATION_CANDIDATE
+rule stagnation_candidate -> bounded_reseed_or_route_change; never synthetic_positive_reward
+rule anhedonia_recovery -> recovery_control_mode; never mint fictitious outcome_reward
+
+// Typed control prevents positive task value from silently averaging away critical safety/resource harm.
+rule safety_tonic below veto_threshold -> RewardControlReadout.safety_veto=true
+rule resource_tonic below brake_threshold -> RewardControlReadout.resource_brake=true
+rule safety_veto -> no persistence increase that would continue the unsafe effect path
+
+// Historical-channel migration hypotheses.
+map historical.goal_completed -> TASK only_after verified_outcome
+map historical.action_success -> TASK only_after verified_effect_receipt
+map historical.hypothesis_confirmed -> EPISTEMIC only_after verified_evidence
+map historical.hypothesis_refuted -> EPISTEMIC information_gain may_be_positive
+map historical.hypothesis_created -> NOVELTY exploration_only_until_verified_outcome
+map historical.novel_thought -> NOVELTY exploration_only_until_verified_outcome
+map historical.curiosity_spark -> NOVELTY exploration_only
+map historical.curiosity_fulfilled -> EPISTEMIC only_after verified_resolution
+map historical.good_conversation -> SOCIAL with explicit_user_or_behavior_evidence
+map historical.entity_positive -> SOCIAL with provenance+confidence
+map historical.room_positive -> HOMEOSTATIC with before_after evidence
+map historical.room_negative -> HOMEOSTATIC with before_after evidence
+map historical.genesis_authored -> NOVELTY exploration_only
+map historical.genesis_self_accepted -> NOVELTY exploration_only_until independent_acceptance+verified_downstream_outcome
+map historical.prediction_error -> computation_readout; NOT_recursive_reward_channel
+
+// Loop-core placement.
+cycle reward_successor(outcome,workspace,state){
+  verified=verify(outcome)
+  credit=causal_credit(verified,workspace)
+  evidence=derive_typed_reward_outcome_evidence(verified,credit,state)
+  plasticity=reward_state.update(evidence)
+  control=reward_state.control(state.unresolved_pressure,state.loop_dynamics)
+  slow=admit_slow_plasticity(plasticity,control,personality,memory,goals)
+  return provenance_bound_reentry(outcome+credit+plasticity+control+slow)
+}
+
+rule slow_personality_update requires RewardPlasticityReceipt.admitted
+rule slow_memory_value_update requires RewardPlasticityReceipt.admitted
+rule effect_commit never depends solely on RewardControlReadout
+
+// Compatibility bridge for H1<->H2 differential replay.
+record HistoricalNAccCompatibilityProjection {
+  phasic:Real
+  tonic:Real
+  mean_habituation:Real
+  typed_dimensions:Map<RewardDimension,TypedValueState>
+  equivalence_status="COMPATIBILITY_VIEW_NOT_SEMANTIC_IDENTITY"
+}
+
+rule H1_reference preserves exact historical NAcc state/readouts where executable
+rule H2_candidate emits HistoricalNAccCompatibilityProjection for matched replay
+rule no_successor_promotion_without baseline+matched_replay+lesion_rescue+OOD+restart+resource_receipts
+
+counterhypothesis H0_NACC {
+  proposition="After verified outcome-gated causal credit, typed homeostatic damping and novelty pressure, historical NAcc-specific phasic/tonic/habituation/opponent mechanisms add no incremental causal value."
+  discriminator="matched long-horizon factorial with NAcc components lesioned/rescued versus simpler outcome-credit+homeostasis baseline"
+}
+
+counterhypothesis H0_TYPED_REWARD {
+  proposition="Typed/multitimescale reward state adds complexity without improving control versus a scalar causal outcome value."
+  discriminator="matched scalar vs typed vs typed+multitimescale replay under conflicting task/safety/resource outcomes and distribution shift"
+}
+
+invariant REWARD_IS_DOWNSTREAM_OF_VERIFIED_OUTCOME_AND_CAUSAL_CREDIT
+invariant SELF_GENERATED_ACTIVITY_CANNOT_MINT_MATERIAL_REWARD
+invariant VERIFIED_REFUTATION_MAY_HAVE_POSITIVE_EPISTEMIC_VALUE
+invariant LOW_RPE_ALONE_DOES_NOT_MEAN_BOREDOM_OR_STAGNATION
+invariant SAFETY_AND_RESOURCE_DIMENSIONS_REMAIN_TYPED_NOT_SILENTLY_AVERAGED_AWAY
+invariant REWARD_CONTROL_NEVER_MINTS_TRUTH_OR_EXECUTION_AUTHORITY
+invariant HISTORICAL_LINEAGE_REMAINS_LESIONABLE_REPLAYABLE_AND_ROLLBACKABLE

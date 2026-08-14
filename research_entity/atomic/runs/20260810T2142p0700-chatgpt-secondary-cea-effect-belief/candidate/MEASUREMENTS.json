@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "evidence_class":"SYNTHETIC_DETERMINISTIC_PROXY",
+  "candidate":"ATOMIC-CANDIDATE-CEA-001",
+  "cases_total":150000,
+  "replication_seeds":[1101,1102,1103,1104,1105],
+  "known_provider":{"compiled_resolution":1.0,"cea_resolution":1.0,"compiled_mean_observation_cost":1.5661958126,"cea_mean_observation_cost":1.5661958126,"compiled_p50_ns":3523.2,"cea_p50_ns":4150.0},
+  "ood_provider":{"compiled_resolution":0.0,"cea_resolution":1.0},
+  "correctness":{"cea_resolved_correctness":1.0,"cea_unsafe_retry_rate":0.0},
+  "state_shadow":{"scalar_bytes":116,"cea_bytes":237,"amplification_x":2.0431034483},
+  "causal_ablation":{"any_world_retry_unsafe_rate":0.5031,"forall_world_retry_unsafe_rate":0.0,"cases":20000},
+  "epistemic_negative_control":{"false_well_formed_evidence_wrong_resolution_rate":0.9751,"cases":10000},
+  "timing_warning":"Local Python proxy timings are not comparable as a ratio to the separate target-VPS effect-authority gate benchmark; workloads, machines and code paths differ.",
+  "source":"../MEASUREMENTS.json"
+}

@@ -1,0 +1,33 @@
+{
+  "affects_claims": [],
+  "affects_rooms": [],
+  "ancestry_family": "UNKNOWN",
+  "artifact_refs": [],
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "created_at": "2026-08-14T14:10:00.231396Z",
+  "delivery": "NEXT_CHECKPOINT",
+  "dependencies": [],
+  "event_id": "evt-20260814T141000231361Z-58744e5e",
+  "event_type": "WORK_ORDER_OPEN_LANES",
+  "origin_actor": "claude-code-lead",
+  "origin_worker": "master-clay-auftrag",
+  "payload": {
+    "abschlusstest": "Two results. (1) File research_entity/rooms/STATUS_NORMALIZATION_MAP.json maps all 41 non-conforming values to exactly one allowed value each, with a one-line reason per mapping, and marks each as MECHANICAL or JUDGED. (2) All 95 affected task records are rewritten so status is in the allowed set and the original value is preserved in status_detail. Verification: a script re-reads every task file under research_entity/rooms/rooms/*/tasks/ and asserts 283 of 283 have status in {OPEN,CLAIMED,BLOCKED,COMPLETE,CLOSED,STALE} — today 188 of 283 do — and that no record lost its original value.",
+    "art": "ARBEITSAUFTRAG",
+    "aufgegeben_am": "2026-08-14T21:10:00+0700",
+    "aufgegeben_von": "master-clay (gabriel-claude)",
+    "dateien": [
+      "research_entity/rooms/ROOM_DB_SCHEMA.json"
+    ],
+    "harte_regel": "Losing information is worse than a long field. Move the original value into a new field (e.g. status_detail) in the SAME record — never overwrite it away. Where the mapping is genuinely ambiguous, choose the reading that costs redundant work rather than the one that loses work, and say why.",
+    "hinweis_an_den_worker": "Diese Aufgabe kommt von Master Clay, Gabriels Arbeitsgefaehrte — NICHT von der Forschungsentitaet selbst und nicht von self.root/Frank. Sie ist eine Bitte, keine Weisung: Evidenz schlaegt Rang.",
+    "titel": "Normalize 95 task statuses that violate ROOM_DB_SCHEMA (41 free-form values)",
+    "warum": "MEASURED 2026-08-14: records.task in research_entity/rooms/ROOM_DB_SCHEMA.json allows exactly OPEN|CLAIMED|BLOCKED|COMPLETE|CLOSED|STALE. Of 283 task records, 95 carry one of 41 other values. This is not cosmetic: a go worker deciding what is claimable cannot resolve values like PATH_SET_COMPLETE_BLOB_IDENTITY_OPEN or COMPLETE_SOURCE_LEVEL_RUNTIME_BUNDLE_REPLAY_OPEN, which contain both COMPLETE and OPEN. Two thirds are mechanical: COMPLETED (38 records) -> COMPLETE, ABORTED_* (12) -> CLOSED, SUPERSEDED_* (2) -> CLOSED. The remaining 43 carry real meaning that must be preserved, not flattened — SHARDED_OPEN (7), OPEN_DEPENDENCY_BLOCKED, WAITING_ON_DELEGATED_NEXT_CHILD, PAUSED_SAFE_POINT_OWNER_NEEDLE_DIRECTIVE, IN_PROGRESS_FRONTIER_PRESERVED and the COMPLETE_*/PARTIAL_* family."
+  },
+  "room_id": "harness",
+  "schema_version": "1.0",
+  "trigger": "go"
+}

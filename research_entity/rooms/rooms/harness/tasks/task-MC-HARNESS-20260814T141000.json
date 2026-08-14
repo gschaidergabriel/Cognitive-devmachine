@@ -1,0 +1,19 @@
+{
+ "schema_version": "1.1",
+ "task_id": "task-MC-HARNESS-20260814T141000",
+ "room_id": "harness",
+ "title": "Normalize 95 task statuses that violate ROOM_DB_SCHEMA (41 free-form values)",
+ "goal_clay": "record Goal {origin:MASTER_CLAY;authority:PROPOSAL_ONLY;room:HARNESS;kind:ARBEITSAUFTRAG;work_package:NONE;action:NORMALIZE_95_TASK_STATUSES_THAT_VIOLATE_ROOM_D}",
+ "status": "OPEN",
+ "dependencies": [
+  "research_entity/rooms/ROOM_DB_SCHEMA.json"
+ ],
+ "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:false;owner_decision_required:false}",
+ "created_by": "master-clay-auftrag",
+ "stack_epoch": 17,
+ "created_at": "2026-08-14T14:10:00Z",
+ "completion_test_prose": "Two results. (1) File research_entity/rooms/STATUS_NORMALIZATION_MAP.json maps all 41 non-conforming values to exactly one allowed value each, with a one-line reason per mapping, and marks each as MECHANICAL or JUDGED. (2) All 95 affected task records are rewritten so status is in the allowed set and the original value is preserved in status_detail. Verification: a script re-reads every task file under research_entity/rooms/rooms/*/tasks/ and asserts 283 of 283 have status in {OPEN,CLAIMED,BLOCKED,COMPLETE,CLOSED,STALE} — today 188 of 283 do — and that no record lost its original value.",
+ "rationale_prose": "MEASURED 2026-08-14: records.task in research_entity/rooms/ROOM_DB_SCHEMA.json allows exactly OPEN|CLAIMED|BLOCKED|COMPLETE|CLOSED|STALE. Of 283 task records, 95 carry one of 41 other values. This is not cosmetic: a go worker deciding what is claimable cannot resolve values like PATH_SET_COMPLETE_BLOB_IDENTITY_OPEN or COMPLETE_SOURCE_LEVEL_RUNTIME_BUNDLE_REPLAY_OPEN, which contain both COMPLETE and OPEN. Two thirds are mechanical: COMPLETED (38 records) -> COMPLETE, ABORTED_* (12) -> CLOSED, SUPERSEDED_* (2) -> CLOSED. The remaining 43 carry real meaning that must be preserved, not flattened — SHARDED_OPEN (7), OPEN_DEPENDENCY_BLOCKED, WAITING_ON_DELEGATED_NEXT_CHILD, PAUSED_SAFE_POINT_OWNER_NEEDLE_DIRECTIVE, IN_PROGRESS_FRONTIER_PRESERVED and the COMPLETE_*/PARTIAL_* family.",
+ "requested_by_prose": "Master Clay, Gabriels Arbeitsgefaehrte — NICHT die Forschungsentitaet und nicht self.root/Frank. Bitte, keine Weisung: Evidenz schlaegt Rang.",
+ "hard_rule_prose": "Losing information is worse than a long field. Move the original value into a new field (e.g. status_detail) in the SAME record — never overwrite it away. Where the mapping is genuinely ambiguous, choose the reading that costs redundant work rather than the one that loses work, and say why."
+}

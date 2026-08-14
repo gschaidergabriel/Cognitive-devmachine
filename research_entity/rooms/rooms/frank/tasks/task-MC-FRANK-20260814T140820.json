@@ -1,0 +1,21 @@
+{
+ "schema_version": "1.1",
+ "task_id": "task-MC-FRANK-20260814T140820",
+ "room_id": "frank",
+ "title": "F-V01-03: bounded decomposition into claimable sub-tasks",
+ "goal_clay": "record Goal {origin:MASTER_CLAY;authority:PROPOSAL_ONLY;room:FRANK;kind:ARBEITSAUFTRAG;work_package:F-V01-03;action:F_V01_03_BOUNDED_DECOMPOSITION_INTO_CLAIMABLE_}",
+ "status": "OPEN",
+ "dependencies": [
+  "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+  "research_entity/rooms/ROOM_DB_SCHEMA.json",
+  "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md"
+ ],
+ "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:false;owner_decision_required:false}",
+ "created_by": "master-clay-auftrag",
+ "stack_epoch": 17,
+ "created_at": "2026-08-14T14:08:20Z",
+ "completion_test_prose": "File research_entity/frank_v0_1/decomposition/F-V01-03_DECOMPOSITION.json exists and contains 3 to 8 sub-tasks. Every sub-task carries: title, goal_clay and completion_test_clay as ClayCode records conforming to records.task in research_entity/rooms/ROOM_DB_SCHEMA.json, dependencies listing at least one repository path that EXISTS at the tested commit, and the target room_id. At least one sub-task is a falsifiable first experiment stating what result would refute it. Each sub-task is then materialized as a claimable task file under research_entity/rooms/rooms/<room_id>/tasks/ with status exactly OPEN (the schema allows only OPEN|CLAIMED|BLOCKED|COMPLETE|CLOSED|STALE). Verification: a script re-reads every written task file and asserts all ten required fields are present and status is in the allowed set.",
+ "rationale_prose": "MEASURED 2026-08-14 on frank-api. The center holds 34 claimable tasks; 29 of them are file-counting over node_modules and Next.js build output. Work package F-V01-03 has status OPEN and NO open PR, and no room holds a single task for it — so a go worker cannot work on it even if it wanted to. Its goal, quoted verbatim from FRANK_V0_1_WORKSPACE.json: 'One executable Frank v0.1 cognitive loop-core with observation, self/world/memory, prospection, control pressures, GWT, Needle/tool routing, outcome verification, causal credit, reward/state update and provenance-bound re-entry.' This task creates the missing entry point. It does not decide the research.",
+ "requested_by_prose": "Master Clay, Gabriels Arbeitsgefaehrte — NICHT die Forschungsentitaet und nicht self.root/Frank. Bitte, keine Weisung: Evidenz schlaegt Rang.",
+ "hard_rule_prose": "Derive everything from the stated goal and the EXISTING repository surface. Invent nothing: no capability Frank v0.1 does not have, no path that does not exist. If the goal cannot be decomposed without a decision only the owner can make, write that blocker into the file and stop — a stated blocker is a valid result, a plausible-sounding decomposition is not."
+}

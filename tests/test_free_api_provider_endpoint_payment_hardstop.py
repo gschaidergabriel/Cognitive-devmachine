@@ -1,7 +1,9 @@
 import importlib.util
 import sys
+import threading
 import unittest
 import urllib.error
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 
@@ -198,6 +200,64 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
         )
         self.assertIsNone(MOD.route(env_a, payment_latches=latches)["selected"])
         self.assertEqual(MOD.route(env_b, payment_latches=latches)["selected"], "nvidia")
+
+    def test_concurrent_attempt_waits_for_payment_hard_stop_result(self):
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "concurrent-402-epoch",
+        }
+        latches = set()
+        first_opened = threading.Event()
+        release_first = threading.Event()
+        second_opened = threading.Event()
+        opener_lock = threading.Lock()
+        opener_calls = 0
+
+        def opener(*args, **kwargs):
+            nonlocal opener_calls
+            with opener_lock:
+                opener_calls += 1
+                call_number = opener_calls
+            if call_number == 1:
+                first_opened.set()
+                self.assertTrue(release_first.wait(2))
+                return Response(status=402, body=b"{}")
+            second_opened.set()
+            return Response()
+
+        def attempt(clock_start, nonce):
+            try:
+                return MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="x",
+                    environ=env,
+                    opener=opener,
+                    now=iter((clock_start, clock_start + 0.01)).__next__,
+                    nonce_factory=lambda: nonce,
+                    payment_latches=latches,
+                )
+            except Exception as exc:
+                return exc
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            first = pool.submit(attempt, 4.0, "first")
+            self.assertTrue(first_opened.wait(2))
+            second = pool.submit(attempt, 5.0, "second")
+            second_reached_network_while_first_pending = second_opened.wait(0.5)
+            release_first.set()
+            first_result = first.result(timeout=2)
+            second_result = second.result(timeout=2)
+
+        self.assertFalse(second_reached_network_while_first_pending)
+        self.assertEqual(
+            first_result["receipt"]["outcome"],
+            "payment_required_hard_stop",
+        )
+        self.assertIsInstance(second_result, RuntimeError)
+        self.assertEqual(str(second_result), "payment_required_hard_stop_active")
+        self.assertEqual(opener_calls, 1)
 
 
 if __name__ == "__main__":

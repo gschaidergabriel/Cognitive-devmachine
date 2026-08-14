@@ -1,0 +1,154 @@
+{
+  "schema_version": "0.1-candidate",
+  "status": "CANDIDATE_NOT_IMPLEMENTED",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "name": "RewardValuationReceiptCandidateV1",
+  "purpose": "Define how typed or multi-timescale reward value could become material-learning evidence without reopening caller authority over dimension, utility, confidence or causal contribution.",
+  "non_go_oob": true,
+  "authority_law": {
+    "caller_may_supply": [
+      "valuation_request_intent",
+      "non_authoritative_context_refs"
+    ],
+    "caller_may_not_supply_as_material_authority": [
+      "reward_dimension",
+      "utility",
+      "confidence",
+      "fractional_causal_credit",
+      "valuation_policy_identity",
+      "verified_terminal_identity"
+    ],
+    "material_valuation_must_be_produced_by": "versioned bounded valuation producer whose exact code/model/config/calibration identity is receipt-bound",
+    "material_learning_consumer_rule": "verify exact terminal binding, source frontier, producer identity, policy identity, evidence digest, calibration identity and receipt integrity before any material update",
+    "effect_authority": "NONE",
+    "harness_authority": "NONE"
+  },
+  "required_inputs_bound_by_receipt": [
+    "terminal_receipt_hash",
+    "effect_id_or_outcome_id",
+    "verified_outcome_hash",
+    "episode_id",
+    "signal_id",
+    "causal_id",
+    "admitted_delta_hash",
+    "reward_source_frontier_identity",
+    "reward_source_frontier_digest",
+    "evidence_bundle_digest",
+    "producer_identity",
+    "producer_code_or_model_hash",
+    "valuation_policy_identity",
+    "valuation_policy_version",
+    "calibration_identity",
+    "timestamp_and_state_epoch"
+  ],
+  "candidate_output": {
+    "valuation_entries": [
+      {
+        "dimension": "RewardDimension",
+        "utility": "bounded Real with declared scale semantics",
+        "confidence": "calibrated probability-like or explicitly non-probabilistic typed confidence",
+        "horizon": "FAST|MEDIUM|SLOW or future versioned horizon set",
+        "evidence_ref": "provenance-bound evidence identity",
+        "method": "rule|model|human_feedback|epistemic_verifier|other versioned producer class"
+      }
+    ],
+    "abstention": "explicit supported result when producer lacks sufficient evidence",
+    "conflict_state": "preserve incompatible valuation entries/producer disagreements rather than silently averaging them",
+    "receipt_hash": "canonical hash over complete bound input/output/policy identity"
+  },
+  "invariants": [
+    "same exact terminal receipt plus same frontier/evidence/producer/policy/calibration must replay to the same deterministic receipt when producer class is declared deterministic",
+    "caller mutation of dimension/utility/confidence/credit after production invalidates receipt",
+    "terminal-receipt swap invalidates receipt",
+    "verified-outcome-hash mismatch invalidates receipt",
+    "source-frontier drift invalidates currentness until revaluation or explicit policy-approved reuse is proven",
+    "policy-version drift changes receipt identity even if numeric outputs happen to match",
+    "calibration-version drift changes receipt identity",
+    "unknown or unsupported reward dimension fails closed or abstains",
+    "abstention produces no material plasticity",
+    "conflicting typed valuations remain observable and cannot be collapsed by caller choice",
+    "valuation never creates EffectAuthorization, tool authority, truth authority or Frank Harness authority",
+    "binary TASK policy from PR 368 remains a simpler baseline, not a semantic prior that multi-dimensional candidates must imitate"
+  ],
+  "mandatory_discriminators": [
+    {
+      "id": "RV-01_CALLER_DIMENSION_SWAP",
+      "test": "mutate TASK to SAFETY after receipt production",
+      "expected": "REJECT_RECEIPT_INTEGRITY_OR_BINDING_MISMATCH"
+    },
+    {
+      "id": "RV-02_CALLER_UTILITY_SCALE",
+      "test": "mutate utility magnitude after receipt production",
+      "expected": "REJECT_RECEIPT_INTEGRITY_OR_BINDING_MISMATCH"
+    },
+    {
+      "id": "RV-03_TERMINAL_SWAP",
+      "test": "attach a valid valuation receipt to a different terminal receipt/effect",
+      "expected": "REJECT_TERMINAL_BINDING_MISMATCH"
+    },
+    {
+      "id": "RV-04_FRONTIER_DRIFT",
+      "test": "new authoritative DONE changes reward source frontier after valuation",
+      "expected": "NOT_CURRENT_UNTIL_REVALIDATED_OR_REVALUED"
+    },
+    {
+      "id": "RV-05_POLICY_IDENTITY_DRIFT",
+      "test": "same values under a different producer/policy version",
+      "expected": "DISTINCT_RECEIPT_IDENTITY_NO_SILENT_EQUIVALENCE"
+    },
+    {
+      "id": "RV-06_ABSTENTION",
+      "test": "insufficient evidence for typed valuation",
+      "expected": "VALID_ABSTENTION_ZERO_MATERIAL_UPDATE"
+    },
+    {
+      "id": "RV-07_CONFLICT_PRESERVATION",
+      "test": "two admissible producers/evidence classes disagree on typed value",
+      "expected": "EXPLICIT_CONFLICT_OR_HYPERPOSITION_NO_CALLER_SELECTED_WINNER"
+    },
+    {
+      "id": "RV-08_RESTART_REPLAY",
+      "test": "rebuild from exact terminal/frontier/evidence/policy after restart",
+      "expected": "EXACT_RECEIPT_REPLAY_FOR_DETERMINISTIC_PRODUCER"
+    },
+    {
+      "id": "RV-09_BINARY_BASELINE",
+      "test": "matched frozen episodes compare producer-owned typed/multiscale candidate to code-owned binary TASK baseline",
+      "expected": "NO_PROMOTION_UNLESS_TYPED_CANDIDATE_ADDS_OUTCOME_OR_CONTROL_VALUE_WITH_ACCEPTABLE_RESOURCE_CALIBRATION_AND_RECOVERY_COST"
+    },
+    {
+      "id": "RV-10_HISTORICAL_SUCCESSOR_GATE",
+      "test": "NAcc/E-PQ original-baseline matched replay plus lesion/rescue/OOD/restart/resource comparison",
+      "expected": "NO_SUCCESSOR_OR_FUSION_CLAIM_WITHOUT_ORIGINAL_BASELINE"
+    }
+  ],
+  "strongest_counterhypothesis": "A simpler scalar/binary outcome-derived reward with separate non-material salience/control channels may dominate typed material valuation once authority, calibration, resource, OOD and recovery costs are included. Multi-dimensional reward is therefore a candidate to beat the simpler baseline, not the assumed destination.",
+  "promotion_gate": [
+    "producer identity is machine-verifiable and not caller-selected",
+    "all RV-01 through RV-08 authority/currentness/replay gates pass",
+    "RV-09 matched binary-vs-typed comparison demonstrates non-dominated benefit on frozen replay and held-out/OOD episodes",
+    "calibration/error taxonomy is dimension-appropriate",
+    "conflict/abstention behavior is explicit",
+    "latency CPU RAM token/model-call and persistence amplification are measured",
+    "crash restart rollback and stale-frontier recovery pass",
+    "historical NAcc/E-PQ baseline plus lesion/rescue obligations are satisfied before replacement/fusion claims",
+    "ClayCode semantic execution is demonstrated on accepted target rather than inferred from Python-only reference behavior"
+  ],
+  "explicitly_open": [
+    "which reward dimensions deserve material status",
+    "utility scale and calibration semantics per dimension",
+    "whether fractional causal credit provides net benefit",
+    "whether multiple horizons should be explicit material state",
+    "which producer classes are sufficiently independent/trustworthy",
+    "whether scalar reward plus typed non-material control dominates multi-dimensional material reward"
+  ],
+  "claims_not_made": [
+    "multi-dimensional reward is better",
+    "any concrete dimension semantics are correct",
+    "fractional causal credit is solved",
+    "historical NAcc/E-PQ successor is justified",
+    "F-V01-11 is complete",
+    "Frank v0.1 is accepted",
+    "training is authorized"
+  ]
+}

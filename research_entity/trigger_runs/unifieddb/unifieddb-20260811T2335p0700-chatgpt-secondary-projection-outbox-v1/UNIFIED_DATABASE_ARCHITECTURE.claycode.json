@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.1",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "architectures": [
+    {
+      "id": "A_DIRECT_DUAL_WRITE",
+      "shape": "application writes UnifiedDB then ClayGraph directly",
+      "status": "REJECTED_CANDIDATE",
+      "reason": "cross-file crash window can leave authoritative and derived planes divergent without durable replay identity"
+    },
+    {
+      "id": "B_ATTACHED_MULTI_DB_TRANSACTION",
+      "shape": "attempt one SQLite transaction across separate files",
+      "status": "REJECTED_AS_POWER_LOSS_ATOMICITY_ASSUMPTION",
+      "reason": "WAL must not be treated as one atomic power-loss transaction across separate DB files"
+    },
+    {
+      "id": "C_AUTHORITATIVE_TRANSACTIONAL_OUTBOX",
+      "shape": "authoritative mutation + projection event in UnifiedDB transaction; idempotent derived projection",
+      "status": "PREFERRED_TEST_CANDIDATE"
+    },
+    {
+      "id": "D_PHYSICAL_GRAPH_COLOCATION",
+      "shape": "put graph projection into authoritative physical DB",
+      "status": "HOLD_FOR_MEASURED_COMPARISON",
+      "reason": "may reduce cross-file mechanics but expands write churn/common-mode rollback radius and removes clean derived isolation"
+    }
+  ],
+  "preferred": "C_AUTHORITATIVE_TRANSACTIONAL_OUTBOX",
+  "invariants": [
+    "Clay/ClayCode semantic authority",
+    "UnifiedDB truth authority",
+    "ClayGraph derived/rebuildable",
+    "same-UnifiedDB transaction for semantic mutation + ProjectionEvent",
+    "stable event identity + payload hash",
+    "idempotent graph apply",
+    "exact event-set/root gate before consequential graph use",
+    "lag/divergence/tamper fail closed",
+    "delivery_state advisory only",
+    "full graph rebuild reproduces projection root"
+  ],
+  "freshness_rebase": {
+    "old_candidate_head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd",
+    "fresh_main": "5ec9955775d9bf142e327166990a2228d543c071",
+    "fresh_candidate_head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
+    "method": "new git tree from fresh main plus exact six candidate blobs",
+    "candidate_files": 6,
+    "unrelated_main_deltas_preserved": true
+  },
+  "target_candidate": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 386,
+    "head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
+    "base": "5ec9955775d9bf142e327166990a2228d543c071",
+    "workflow_run": 31513961274,
+    "state": "PENDING_AT_ARTIFACT_WRITE"
+  },
+  "promotion": "PENDING_TARGET_EVIDENCE"
+}

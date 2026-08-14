@@ -1,0 +1,70 @@
+module claycode.g9.topology_read_effect.v1
+version "CC-TOPOLOGY-READ-EFFECT-V1-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Additive TypedIR/type-effect candidate. No V18 grammar change.
+// Consumes HP-TOPOLOGY-SCOPE-CERTIFICATE-V1 as compiler-visible semantics.
+
+type TopologyPlane = SEMANTIC|ACTIVE|COORDINATION|PHYSICAL
+
+type ReadClosure = EXACT_DECLARED|CONSERVATIVE_ALL|UNKNOWN
+
+record TopologyReadEffect {
+  planes:Set<TopologyPlane>
+  material_reads:Set<Ref>|UNKNOWN
+  closure:ReadClosure
+  evidence:Set<EvidenceRef>
+}
+
+record CompiledTopologyScope {
+  program_semantic_hash:Hash
+  contract_hash:Hash
+  read_effect:TopologyReadEffect
+  plane_fingerprints:Map<TopologyPlane,Hash>
+  state_epoch:Epoch
+  execution_generation:Int
+  delivery_generation:Int
+  compiler_version:Version
+  law_refs:Set<LawCertificateRef>
+  provenance:Set<EvidenceRef>
+}
+
+rule TopologyReadEffect.planes always_includes SEMANTIC
+rule static_dependency_analysis(program) -> observed_topology_reads(program)
+rule declared_reads missing observed_topology_reads -> TYPE_EFFECT_ERROR_UNDECLARED_TOPOLOGY_READ
+rule unresolved_dynamic_topology_read -> closure=CONSERVATIVE_ALL
+rule closure=CONSERVATIVE_ALL -> planes={SEMANTIC,ACTIVE,COORDINATION,PHYSICAL}
+rule closure=UNKNOWN -> rewrite_exactness=UNKNOWN
+
+rule compile(program,topology_read_effect,current) -> CompiledTopologyScope {
+  require topology_read_effect.closure != UNKNOWN
+  require observed_topology_reads(program) subset_of topology_read_effect.planes
+  bind fingerprint(current,plane) for plane in topology_read_effect.planes
+  preserve semantic_hash_set_normalization(topology_read_effect.planes)
+  preserve provenance_sensitive_contract_hash
+}
+
+rule cache_or_rewrite_reuse(scope,current) requires
+  current.state_epoch=scope.state_epoch +
+  current.execution_generation=scope.execution_generation +
+  current.delivery_generation=scope.delivery_generation +
+  forall plane in scope.read_effect.planes: fingerprint(current,plane)=scope.plane_fingerprints[plane]
+
+rule changed_unread_topology_plane alone -> preserve_cached_result
+rule changed_read_topology_plane -> invalidate_cached_result_and_rewrite_plan
+rule unknown_or_incomplete_read_closure -> conservative_invalidation
+
+rule semantic_hash ignores order_or_duplicates only_for typed Set<TopologyPlane>
+rule contract_hash retains source/provenance/closure/compiler ancestry
+rule semantic_hash != contract_hash
+
+rule effect_class in [EXTERNAL,SECURITY_SENSITIVE,UNKNOWN] -> no_speculative_cross_alternative_execution
+rule CompiledTopologyScope != truth
+rule CompiledTopologyScope != effect_authority
+rule compiler_acceptance != semantic_adequacy
+rule local_selftest_pass != target_vps_promotion
+
+invariant V18_grammar_unchanged
+invariant four_topology_planes_distinct
+invariant unknown_dependency_scope_fails_conservative
+invariant model_graph_gwt_hyperposition_cannot_mint_authority

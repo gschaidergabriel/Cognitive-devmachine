@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2252p0700-chatgpt-secondary-v16-continuity",
+  "retrieved_local_date": "2026-08-10",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "sources": [
+    {
+      "source_class": "PRIMARY_OS_DOCUMENTATION",
+      "title": "flock(2) — Linux manual page",
+      "url": "https://man7.org/linux/man-pages/man2/flock.2.html",
+      "claim": "flock locks are advisory and associated with an open file description; descriptors duplicated by fork/dup share the same lock; the lock is released only by explicit unlock or after all duplicates close.",
+      "architecture_impact": "Add a crash/recovery discriminator in which a forked child survives the parent and retains Frank's physical execution lock. Treat resulting residual BUSY as an availability/recovery failure, not proof of two-active overlap."
+    },
+    {
+      "source_class": "PRIMARY_OS_DOCUMENTATION",
+      "title": "fork(2) — Linux manual page",
+      "url": "https://man7.org/linux/man-pages/man2/fork.2.html",
+      "claim": "Linux fork children inherit copies of the parent's file descriptors and inherit flock locks/open-file-description locks.",
+      "architecture_impact": "Physical-exclusion recovery tests must include fork inheritance; parent death alone is insufficient to prove lock release."
+    },
+    {
+      "source_class": "PRIMARY_RUNTIME_DOCUMENTATION",
+      "title": "Python 3.14 os documentation",
+      "url": "https://docs.python.org/3/library/os.html",
+      "claim": "Python file descriptors are non-inheritable for exec by default, but non-inheritable descriptors are still inherited by os.fork().",
+      "architecture_impact": "Do not assume Python's default non-inheritable flag eliminates fork-retained flock risk."
+    },
+    {
+      "source_class": "PRIMARY_PROVIDER_DOCUMENTATION",
+      "title": "Google Calendar — Create events",
+      "url": "https://developers.google.com/workspace/calendar/api/guides/create-events",
+      "claim": "Calendar permits a caller-selected event ID and documents that doing so prevents duplicate event creation when an operation fails after successful backend execution.",
+      "architecture_impact": "Calendar create is a candidate for SAME_KEY_RETRY_SAFE semantics only when Frank deliberately binds a stable provider-valid event ID to the effect attempt and verifies provider behavior."
+    },
+    {
+      "source_class": "PRIMARY_PROVIDER_DOCUMENTATION",
+      "title": "Gmail API — users.messages.send",
+      "url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send",
+      "claim": "The send method is POST with userId plus a Message request body; the method reference exposes no client idempotency-key parameter analogous to Calendar's caller-selected event ID.",
+      "architecture_impact": "Do not mark Gmail send SAME_KEY_RETRY_SAFE from API shape alone. Timeout/transport loss after possible acceptance remains RECONCILE_REQUIRED unless a separately validated reconciliation strategy is available. This is a conservative inference from the primary method contract, not a proof that duplicates are universally unavoidable."
+    }
+  ],
+  "counterevidence_or_limits": [
+    "flock is advisory, so correctness still depends on every Frank execution entry path cooperating with the gate.",
+    "Calendar caller-supplied IDs prevent duplicate create for that API pattern but do not generalize to all providers/actions.",
+    "Absence of a Gmail idempotency-key parameter in the method reference is not a universal impossibility proof; it just forbids promoting same-key retry safety without additional evidence."
+  ],
+  "external_effects_performed": false,
+  "provider_writes_performed": false
+}

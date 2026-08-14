@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0052p0700-chatgpt-secondary-projection-lease-expired-owner",
+  "artifact_type": "REPAIR_CANDIDATE_FUSION",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "go_oob_count_total": 1,
+  "go_oob_name": "EXPIRED_OWNER_SELF_RESURRECTION",
+  "no_additional_oob_in_fusion": true,
+  "parent_receipt": "research_entity/trigger_runs/go/2026-08-12T0052p0700-chatgpt-secondary-projection-lease-expired-owner/RESEARCH_RECEIPT.json",
+  "target_main_observed": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+  "candidate_404": {
+    "pr": 404,
+    "head_observed": "f1283362a1b04005f09f9c6fcb72ff969706343d",
+    "role": "INTEGRATED_PROJECTION_WORKER_SUCCESSOR",
+    "architecture": "Preserves V1 lease_owner + lease_generation authority and adds a boot_id/CLOCK_BOOTTIME clock sidecar; realtime remains telemetry.",
+    "target_regression": {
+      "run": 31520056201,
+      "job": 93874603570,
+      "runner": "clay Linux X64",
+      "result": "PASS",
+      "scope": "Frozen V1 25-check process-crash/backpressure corpus through V2 lease; private hash-pinned SQLite 3.53.4."
+    },
+    "strength": "Strongest current composition candidate because it executes the repaired lease semantics through the actual projection-worker successor and preserves the frozen V1 recovery corpus.",
+    "open_risks": [
+      "boot_id + CLOCK_BOOTTIME does not by itself name the Linux time-namespace clock domain",
+      "assert-before-apply window can permit an old generation to enter a separately committed derived-graph apply before takeover becomes visible",
+      "large-corpus concurrent V2 shadow-load equivalent to PR#392 remains required"
+    ],
+    "reviews": [4909200085, 4909281029]
+  },
+  "candidate_407": {
+    "pr": 407,
+    "head_observed": "520c0cd772a04a060a5e5c344022943af9650d88",
+    "role": "ISOLATED_CLOCK_DOMAIN_LEASE_CANDIDATE",
+    "architecture": "Binds application-specific host tag + boot_id + Linux time namespace + CLOCK_BOOTTIME deadline + generation and rejects expired renewal under BEGIN IMMEDIATE.",
+    "target_gate": {
+      "run": 31519973754,
+      "job": 93874333408,
+      "runner": "clay Linux X64",
+      "result": "PASS_BOOT_SCOPED_BOOTTIME_LEASE_V2_CANDIDATE",
+      "checks": "15/15",
+      "artifact_id": 9112655880,
+      "artifact_sha256": "a02de22bfe5062cbdff186483d8625e505e0611493c35946804e05b1b4875f40",
+      "target_time_namespace": "time:[4026531834]",
+      "target_boot_id": "8fab241d-868e-447d-b802-01d403c22e88",
+      "max_rss_kib": 20608,
+      "wall_s": 0.05
+    },
+    "strength": "Strongest current clock-domain candidate because it explicitly fences same-boot different-time-namespace comparisons and independently rejects expired-generation resurrection.",
+    "limitations": [
+      "isolated lease candidate; not yet composed through the projection-worker crash/backpressure/shadow-load path",
+      "host tag is deployment-domain evidence, not hardware attestation",
+      "host identity can complicate legitimate state migration and should not be promoted into semantic identity without separate continuity adjudication"
+    ],
+    "review": 4909282437
+  },
+  "fresh_primary_mechanism_evidence": [
+    {
+      "source": "Linux time_namespaces(7) / kernel time namespace documentation",
+      "claim": "CLOCK_MONOTONIC and CLOCK_BOOTTIME are virtualized with per-time-namespace offsets; therefore equal boot_id does not guarantee comparable persisted BOOTTIME values across different time namespaces."
+    },
+    {
+      "source": "Linux clock_gettime(3) / Python time CLOCK_BOOTTIME semantics",
+      "claim": "CLOCK_BOOTTIME is monotonic/nonsettable for elapsed-duration purposes and includes suspend time, avoiding CLOCK_REALTIME discontinuities."
+    },
+    {
+      "source": "Linux kernel boot_id documentation",
+      "claim": "boot_id is stable for the running boot and can scope a monotonic clock epoch to that boot."
+    },
+    {
+      "source": "machine-id(5)",
+      "claim": "machine-id is stable deployment identity, confidential in raw form, and application-specific identifiers should be derived via cryptographic keyed hashing; it is not hardware attestation."
+    }
+  ],
+  "fusion_decision": {
+    "status": "CANDIDATE_TESTING_NOT_PROMOTED",
+    "preferred_base": "PR#404 integrated worker/authority shape",
+    "import_from_407": "Explicit Linux time-namespace clock-domain binding or an executable proof that the production worker is fixed to one namespace and fails closed otherwise.",
+    "host_identity_disposition": "KEEP_AS_SEPARATE_CANDIDATE / higher continuity or movable-DB threat-model decision; do not equate with hardware identity.",
+    "reason": "The minimum new correctness requirement is BOOTTIME-domain identity. #404 already has stronger end-to-end worker composition evidence, whereas #407 provides the missing domain discriminator."
+  },
+  "promotion_blockers": [
+    "Executable takeover-during-apply regression around the assert -> derived graph commit window",
+    "Accepted-target large-corpus concurrent V2 shadow-load no-regression against PR#392 880-event baseline",
+    "Explicit time-namespace domain invariant or fixed-namespace deployment proof",
+    "Preserve exact-current consequential-use gate and idempotent/rebuildable ClayGraph semantics"
+  ],
+  "architecture_consequence": "Do not promote either V2 candidate wholesale. Fuse #404 integration with the minimum #407 clock-domain invariant, keep generation authority singular, then require takeover-race and shadow-load evidence before production activation.",
+  "claim_boundary": [
+    "No production migration or service activation",
+    "No multi-host/shared-storage lease proof",
+    "No hardware attestation claim from machine-id",
+    "No whole Frank v0.1 acceptance",
+    "No final training authorization",
+    "No second GO out-of-box experiment"
+  ]
+}

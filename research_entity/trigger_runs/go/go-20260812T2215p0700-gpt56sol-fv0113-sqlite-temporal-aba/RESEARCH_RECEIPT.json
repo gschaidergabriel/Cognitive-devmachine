@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2215p0700-gpt56sol-fv0113-sqlite-temporal-aba",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "9b861b37c672df41e997aebb2b55c33c2dbe4e24",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "live_attestor_blob_sha": "3a317aa256f17ef316580947e9a44e43aca6fe1a",
+    "live_attestor_scope": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY",
+    "latest_deep_integrity_receipt": {
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "gate_count": 23,
+      "fail_count": 0
+    },
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "training_authorized": false
+  },
+  "primary_source_support": {
+    "sqlite_wal_doc": "https://sqlite.org/wal.html",
+    "sqlite_3_53_4_release": "https://sqlite.org/releaselog/3_53_4.html",
+    "verified_fact": "The WAL-reset corruption bug affects WAL-mode releases through 3.51.2 and is fixed in 3.51.3 and later; 3.53.4 is on the fixed side. Productive runtime identity still must be proven rather than inferred from a version string."
+  },
+  "grf": {
+    "hypothesis": "The strengthened endpoint mapping checks could be interpreted as continuous SQLite mapping identity across a surrounding productive persistence operation.",
+    "strongest_counter_reality": "A same-PID process can leave the expected SQLite mapping, transiently add another SQLite mapping identity, and return to the exact original mapping before the next endpoint sample.",
+    "falsifier": "Perform a real Linux same-process mapping ABA cycle and compare mapping identity before, during, and after.",
+    "outcome": "COUNTER_REALITY_OBSERVED; CURRENT_POINT_ATTESTOR_RETAINED; CONTINUOUS_PROTECTION_INTERPRETATION_REJECTED"
+  },
+  "unusual_experiment": {
+    "name": "LIVE_SQLITE_MAPPING_TEMPORAL_ABA",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "environment": "local Linux container",
+    "method": "Load the process system libsqlite3, snapshot /proc/self/maps, load a temporary copied libsqlite3.so.0 into the same PID, snapshot again, dlclose the temporary mapping, then snapshot once more.",
+    "baseline": {
+      "mapping_identity_count": 1,
+      "path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "device": "fe:00",
+      "inode": 3670697
+    },
+    "intervention_observation": {
+      "mapping_identity_count": 2,
+      "temporary_path": "/tmp/frank-aba-l4yt6ren/libsqlite3.so.0",
+      "temporary_device": "fe:00",
+      "temporary_inode": 1449097
+    },
+    "recovery_observation": {
+      "mapping_identity_count": 1,
+      "endpoint_equal_to_baseline": true,
+      "transient_change_observed": true
+    },
+    "limitations": [
+      "The temporary object was a byte copy of the same local SQLite library, not an older or malicious SQLite build.",
+      "This demonstrates a temporal observability/ABA gap between samples, not a production exploit and not a failure of the attestor's explicitly narrow final-observation claim.",
+      "No Frank process, database, WAL, accepted Hostinger service, canonical state, or effect authority was touched."
+    ]
+  },
+  "collapse": [
+    {
+      "claim": "Equal SQLite mapping identities at two sampled endpoints prove that no different SQLite mapping existed between those endpoints.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "The current live-process attestor is useful as a fail-closed point observation for one process generation.",
+      "outcome": "RETAIN",
+      "reason": "Its code and receipt already state the narrow scope and re-sample the mapping after receipt-tail metadata."
+    },
+    {
+      "claim": "The ABA observation alone justifies another attestor patch.",
+      "outcome": "REJECT",
+      "reason": "No finite endpoint sampler proves continuous absence of transient remapping; changing point-sampling code would Goodhart the wrong proxy."
+    },
+    {
+      "claim": "F-V01-13 or Frank v0.1 is complete.",
+      "outcome": "REJECT",
+      "reason": "Accepted productive Hostinger persistence/restart/rollback binding, semantic lineage and terminal acceptance evidence remain open."
+    }
+  ],
+  "architecture_delta": {
+    "state": "NO_CHANGE_TO_POINT_ATTESTOR__TEST_OBLIGATION_SHARPENED",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+    ],
+    "new_invariant": "Do not promote a sampled SQLite mapping receipt into a claim of continuous productive persistence identity unless the productive operation itself is causally bound to the observed fixed runtime or an explicit continuous anti-remap threat-control is measured.",
+    "rollback": "No product code changed; remove only this research interpretation if a stronger accepted-host causal binding makes the temporal counterworld irrelevant under the canonical threat model."
+  },
+  "next_falsifier": {
+    "priority": "P0_RELEASE_BLOCKER",
+    "test": "On the accepted Hostinger product service, exercise the exact Frank database/WAL persistence path across a controlled write/checkpoint plus restart, bind the executing Frank generation, database path, trust anchor, SQLite source/build/hash and actual mapped object, then run downgrade/library-swap and rollback controls. Record whether the canonical threat model requires continuous same-generation anti-remap protection or only trusted deployment/restart identity.",
+    "success_condition": "Productive persistence and restart evidence is causally bound to the accepted fixed SQLite object and all stale/downgraded/swapped/rollback controls fail closed.",
+    "do_not_substitute": "self-hosted CI, endpoint-only mapping receipt, version string, or synthetic process for accepted productive Hostinger persistence evidence"
+  },
+  "nonclaims": {
+    "production_exploit_proven": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "accepted_hostinger_product_runtime_proven": false,
+    "productive_persistence_path_exercised": false,
+    "restart_recovery_attested": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

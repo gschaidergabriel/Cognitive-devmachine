@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0350p0700-gpt56-claycode-admission-precedence",
+  "trigger": "go",
+  "origin_actor": "GPT-5.6-Sol temporary Clay worker",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "9b27066772e0ac2ed8ee35f4a9b578ec654599f9",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "grf": {
+    "observed_reality": [
+      "PR #448 was exact-head Accepted-target validated and was merged during this GO; main became 1a424c5319b4c55d12506f292be8f90728141d10 with the WP04 structural-field AST lowering repair.",
+      "Current frank_security.clay already parenthesizes both previously security-sensitive NOT/relation forms explicitly: !(target within FRANK_PRIVATE_REPO) and !(cap.value.verbs contains verb).",
+      "PR #428 proposes a global logical-NOT precedence change and remained DRAFT; its previous focused Accepted-run failure was a real product-test failure before a subsequent test correction/retrigger, but current explicit security parentheses reduce the urgency for a global grammar change.",
+      "Parallel main advanced from 1a424c53 to 7e60eade through 11 commits whose compare surface was storage-only: SQLite workflow/builder/probe/launcher paths; no overlap with the four-file WP04->WP06 Python barrier slice.",
+      "Fresh-main replay PR #462 transplanted only admitted_python_backend.py, python_ast_lowering.py, the normal WP04->WP06 admission-barrier gate and its Accepted-VPS workflow. The historical lowering gate containing ADVERSARIAL_AST_HOST_CAPABILITY_GRAFT was deliberately excluded so this GO executed exactly one unusual experiment.",
+      "PR #462 exact candidate ceb9e6eb449f7a7932b881e6b1fa3068800613bc passed self-hosted Linux/X64 run 31534758453, job 93923103261, runner clay. The workflow's canonical WP04 14/14 assertion and admission-barrier 8/8 assertion therefore survived; the only check annotation was an upload-artifact Node.js deprecation warning.",
+      "PR #462 was then squash-merged with expected-head fencing; Frank repository main became 96aada947b8389f6aa4783c1ce3b5ad065c67435."
+    ],
+    "generated_hypotheses": [
+      {
+        "id": "H-WP04-WP06-ADMISSION-BARRIER",
+        "claim": "A CPython-AST backend can be admitted as a bounded projection if canonical WP04 type admission executes first and rejected WP04 programs cannot obtain a generated Python program.",
+        "mechanism": "compile_admitted_entry invokes canonical check_entry before the raw backend and only calls compile_entry after admission succeeds.",
+        "prediction": "Real admitted policy preserves raw generated-AST identity while wrong call-argument and wrong-return-type programs fail before Python-program admission.",
+        "outcome": "PROMOTED_BOUNDED_MECHANISM",
+        "confidence": "HIGH_FOR_TESTED_SLICE_ONLY"
+      },
+      {
+        "id": "H-NOT-RELATION-GLOBAL-PRECEDENCE",
+        "claim": "Moving logical NOT outside the relation layer may make unparenthesized security expressions intuitive, but could silently reinterpret a much broader expression surface.",
+        "mechanism": "Lark rule nesting determines parse-tree structure; moving NOT across relation/arithmetic grammar layers changes structural grouping even when the accepted token language is unchanged.",
+        "prediction": "A differential precedence corpus can show zero acceptance changes while many AST shapes change.",
+        "outcome": "DEFER_GLOBAL_CHANGE_PENDING_LANGUAGE_SEMANTICS_DECISION",
+        "confidence": "MODERATE_SYNTHETIC_COUNTEREVIDENCE"
+      }
+    ],
+    "strongest_counter_realities": [
+      "For the admission barrier, a later backend path or FFI could bypass compile_admitted_entry, so this bounded PASS is not proof that all future/product execution routes are non-bypassable.",
+      "For NOT precedence, current explicit parentheses may be the safer local policy; a global grammar change can reinterpret expressions such as !a + b == c outside the two original security examples.",
+      "The successful #462 job validates the exact candidate head and tested workflow, not whole Frank v0.1, general ClayCode compiler completeness, or every future merged dependency."
+    ],
+    "collapse": {
+      "wp04_wp06_python_admission_barrier": "PROMOTE_TO_MAIN_BOUNDED_SLICE",
+      "global_not_relation_precedence": "DEFER_AND_KEEP_DRAFT",
+      "F-V01-02": "KEEP_IN_PROGRESS"
+    }
+  },
+  "live_external_evidence": [
+    {
+      "source": "Lark Grammar Reference",
+      "url": "https://lark-parser.readthedocs.io/en/stable/grammar.html",
+      "claim_used": "Rule location and nesting determine resulting parse-tree structure; LALR predictive behavior uses lookahead 1."
+    },
+    {
+      "source": "Lark Parsers documentation",
+      "url": "https://lark-parser.readthedocs.io/en/latest/parsers.html",
+      "claim_used": "LALR is a deterministic parser family; grammar structure rather than lexer priority should own language precedence semantics."
+    }
+  ],
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "PRECEDENCE_SHADOW_METAMORPH_SWEEP",
+    "authority": "SYNTHETIC_METHOD_EVIDENCE_ONLY",
+    "design": "Compare production-shaped baseline and candidate precedence shadows across NOT/relation/arithmetic/boolean metamorphic expressions; reversible, no product mutation.",
+    "cases": 88,
+    "acceptance_deltas": 0,
+    "ast_shape_deltas": 80,
+    "unchanged": 8,
+    "category_shape_deltas": {
+      "boolean_chain": "20/20",
+      "arithmetic_relation": "32/32",
+      "relation": "28/28",
+      "plain_not_control": "0/8"
+    },
+    "representative_counterexample": "!a + b == c changes structural grouping from a baseline equivalent to ((!a)+b)==c toward a candidate equivalent to !(a+b==c).",
+    "limitation": "Local strict-LALR setup could not run because optional interegular was absent; the same experiment was completed with Lark LALR strict=false. This is not production-grammar proof.",
+    "result": "BROAD_AST_DRIFT_WITHOUT_ACCEPTANCE_DRIFT",
+    "rollback": "No product mutation was made by the experiment."
+  },
+  "implementation": {
+    "frank_repo": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr_448": {
+      "merge_commit": "1a424c5319b4c55d12506f292be8f90728141d10",
+      "scope": "WP04 TaggedIR structural-field AST lowering"
+    },
+    "not_precedence_pr_428": {
+      "state": "DRAFT_RETAINED",
+      "durable_feedback": "GO/GRF review comment added with current explicit-parentheses evidence and 88-case counterevidence",
+      "promotion": false
+    },
+    "wp04_wp06_pr_462": {
+      "tested_head": "ceb9e6eb449f7a7932b881e6b1fa3068800613bc",
+      "workflow_run": 31534758453,
+      "job": 93923103261,
+      "runner": "clay",
+      "runner_labels": ["self-hosted", "Linux", "X64"],
+      "result": "PASS",
+      "merged_commit": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+      "authority": "WP04_TYPE_AUTHORITY; PYTHON_TYPE_AUTHORITY_NONE",
+      "whole_frank_acceptance": false
+    }
+  },
+  "negative_and_boundary_evidence": {
+    "main_deep_integrity_failure_after_448": "Observed infrastructure/billing pre-start failure, not promoted as product FAIL or PASS.",
+    "not_precedence_strict_local_validation": "UNAVAILABLE_INTEREGULAR; synthetic non-strict LALR result retained with limitation.",
+    "compiler_general_completion": "NOT_PROVEN",
+    "runtime_ffi_stdlib_concurrency": "NOT_PROVEN",
+    "non_bypassable_all_backend_routes": "NOT_PROVEN",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "workspace_delta": {
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME": {
+      "action": "ADD_MERGED_WP04_GATED_CPYTHON_AST_PROJECTION_MECHANISM",
+      "status": "KEEP_IN_PROGRESS",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger@96aada947b8389f6aa4783c1ce3b5ad065c67435",
+        "gschaidergabriel/Dr.-Unterweger:run/31534758453",
+        "gschaidergabriel/Dr.-Unterweger:job/93923103261"
+      ],
+      "next_falsifier": "On a later GO, replay the full normal compiler differential/property corpus on current main without adding a new authority path, then prove all production compiler/FFI entrypoints consume canonical WP04 admission or fail closed; keep the global NOT precedence change separate until explicit language semantics and production differential corpus evidence exist."
+    }
+  },
+  "research_disposition": "MERGED_BOUNDED_CLAYCODE_SLICE_PLUS_COUNTEREVIDENCE_REENTERED",
+  "training_authorization_changed": false,
+  "training_authorized": false,
+  "frank_self_harness_authority_changed": false,
+  "effect_authority": "NONE"
+}

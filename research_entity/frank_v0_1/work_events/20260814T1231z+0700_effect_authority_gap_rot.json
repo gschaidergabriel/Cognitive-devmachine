@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_effect_authority_gap_rot",
+  "actor": "gabriel-claude/wp1",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "read fail log run 31723833112. find first real error line. say cause class: missing file / assert fail / real finding.",
+  "done_when": "cause named + log line quoted",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: digital-retina, claycode",
+  "source": {
+    "lauf": "20260814-000716",
+    "paket": "wp1",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-000716-wp1/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-000716-wp1/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 180,
+  "ergebnis_kurz": "semantic source drift: probe pin 10fbc45d vs main 37a636f7 on claycode/frank_effects.clay; fail-closed guard, stderr hidden in .time file",
+  "bericht": "# wp1 effect-authority-provenance-gap rot\n\nrun 31723833112, exit 1, step \"Reproduce authority-provenance indistinguishability\".\n\ncause: SEMANTIC SOURCE DRIFT. fail-closed guard in probe, not infra, not gate verdict.\n\n- probe: runtime/frank_effect_authority_v1/authority_provenance_gap_probe.py (exists on main, 6256 byte)\n- probe pin: EXPECTED_SEMANTIC_SHA256 = 10fbc45dca45fe09322b4ab7c0b6621547918dd6fa8e1d37be5817b26ab59544\n- claycode/frank_effects.clay on main sha256 = 37a636f7cc2fce7dc9336adc54eef699bd8ccf0e3c9a885b126906783493992a\n- mismatch -> RuntimeError(\"semantic source drift: ... re-adjudicate rather than inheriting this gap result\")\n\nwhy log empty: step runs `/usr/bin/time -v python3 ... 2> /tmp/FRANK_V01_EFFECT_AUTHORITY_PROVENANCE_GAP.time`.\nstderr (traceback) goes to .time file, never to CI log. only \"exit code 1\" visible.\n\nnot cause: /usr/bin/time present on digital-retina, python3 3.12.3 present, script present.\n\nfix = re-adjudicate gap against current frank_effects.clay, then re-pin sha. NOT just bump the constant.\n"
+}

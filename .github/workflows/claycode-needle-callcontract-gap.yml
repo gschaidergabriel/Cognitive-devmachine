@@ -1,0 +1,133 @@
+name: ClayCode Needle CallContract Gap Probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-needle-callcontract-gap.yml'
+      - 'research_entity/trigger_runs/claycode/claycode-20260810T2130p0700-chatgpt-secondary-needle-callcontract-gap/claycode_needle_callcontract_gap_probe.py'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycode-needle-callcontract-gap
+  cancel-in-progress: false
+
+jobs:
+  target-vps-gap-discriminator:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact current main read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Execute exact source-contract discriminator
+        shell: bash
+        run: |
+          set -euo pipefail
+          probe='research_entity/trigger_runs/claycode/claycode-20260810T2130p0700-chatgpt-secondary-needle-callcontract-gap/claycode_needle_callcontract_gap_probe.py'
+          python3 "$probe" > /tmp/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP.json
+          python3 - <<'PY'
+          import json, os, platform, socket
+          from datetime import datetime, timezone
+          from pathlib import Path
+          p = Path('/tmp/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP.json')
+          data = json.loads(p.read_text(encoding='utf-8'))
+          assert data['pass'] is True
+          assert data['gap_detected'] is True
+          data['evidence_class'] = 'REAL_SELF_HOSTED_TARGET_VPS_SOURCE_CONTRACT_DISCRIMINATOR'
+          data['execution_environment'] = {
+              'github_sha': os.environ.get('GITHUB_SHA',''),
+              'github_run_id': os.environ.get('GITHUB_RUN_ID',''),
+              'github_run_attempt': os.environ.get('GITHUB_RUN_ATTEMPT',''),
+              'hostname': socket.gethostname(),
+              'runner_name': os.environ.get('RUNNER_NAME','unknown'),
+              'runner_os': os.environ.get('RUNNER_OS','unknown'),
+              'runner_arch': os.environ.get('RUNNER_ARCH','unknown'),
+              'platform': platform.platform(),
+              'python': platform.python_version(),
+              'observed_at': datetime.now(timezone.utc).isoformat(),
+              'target_vps': True,
+          }
+          data['scope_guard'] = (
+              'Diagnostic negative evidence only. Detecting the gap does not select a replacement '
+              'Needle signature, mint effect authority, close F-V01-02/F-V01-09, or promote G9 semantics.'
+          )
+          p.write_text(json.dumps(data, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          print(json.dumps({'gap_detected': True, 'github_sha': data['execution_environment']['github_sha']}, sort_keys=True))
+          PY
+
+      - name: Upload target-VPS gap receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-needle-callcontract-gap-${{ github.run_id }}
+          path: /tmp/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP.json
+          if-no-files-found: error
+          retention-days: 30
+
+  persist-gap-receipt:
+    if: always()
+    needs: target-vps-gap-discriminator
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout persistence lane
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Download exact target receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: claycode-needle-callcontract-gap-${{ github.run_id }}
+          path: /tmp/claycode-needle-callcontract-gap
+
+      - name: Validate and persist negative evidence
+        shell: bash
+        env:
+          TESTED_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          src=/tmp/claycode-needle-callcontract-gap/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP.json
+          python3 - "$src" "$TESTED_SHA" <<'PY'
+          import json, sys
+          p=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert p['schema_version']=='1.0'
+          assert p['test']=='CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP_DISCRIMINATOR'
+          assert p['pass'] is True
+          assert p['gap_detected'] is True
+          assert p['promotion']=='NONE'
+          assert p['execution_environment']['github_sha']==sys.argv[2]
+          assert p['execution_environment']['target_vps'] is True
+          PY
+          mkdir -p research_entity/claycode/base/receipts
+          cp "$src" "research_entity/claycode/base/receipts/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP_${RUN_ID}.json"
+          cp "$src" research_entity/claycode/base/receipts/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP_LATEST.json
+
+          git config user.name 'clay-ci-receipt-writer'
+          git config user.email 'clay-ci-receipt-writer@users.noreply.github.com'
+          git add "research_entity/claycode/base/receipts/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP_${RUN_ID}.json" \
+                  research_entity/claycode/base/receipts/CC_V18_NEEDLE_EFFECT_CALLCONTRACT_GAP_LATEST.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "ci(claycode): persist Needle CallContract gap receipt ${RUN_ID}"
+          git pull --rebase origin main
+          git push origin HEAD:main

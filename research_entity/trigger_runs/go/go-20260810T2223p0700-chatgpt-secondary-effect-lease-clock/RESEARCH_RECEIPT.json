@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2223p0700-chatgpt-secondary-effect-lease-clock",
+  "trigger": "go",
+  "timestamp_local": "2026-08-10T22:23:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "entity": "Clay",
+    "worker_is_frank": false,
+    "target_native_self": "self.root",
+    "human_surface_name": "Frank",
+    "target_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "stage": "FRANK_V0_1",
+    "target": "self.root / human-surface Frank v0.1 fully operational on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "fresh_target_observations": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "rapid_concurrency_observed": true,
+    "identity_pr_124_head_observed": "e1266cf4de30b65980d670ddaf3120950cc81c5d",
+    "identity_pr_124_changed_files_observed": 17,
+    "identity_pr_124_validation_head_status": "CANCELLED_BY_CONCURRENCY_NO_PASS_CLAIM",
+    "stale_replication_branch": "chatgpt/go-selfroot-fresh-main-20260810",
+    "stale_replication_branch_action": "STOPPED_NO_PR_AFTER_MAIN_ADVANCED",
+    "target_issue_created": 149
+  },
+  "hypotheses": [
+    {
+      "id": "H_EFFECT_LEASE_FENCE_REQUIRED",
+      "claim": "Presence fencing is insufficient unless each consequential effect attempt is bound to and revalidated against the current global execution lease epoch.",
+      "status": "SUPPORTED_BY_CURRENT_SOURCE_GAP",
+      "evidence": [
+        "gschaidergabriel/Dr.-Unterweger:claycode/frank_effects.clay",
+        "gschaidergabriel/Dr.-Unterweger:runtime/state/effect_lifecycle_runtime.py",
+        "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+        "gschaidergabriel/Dr.-Unterweger#149"
+      ]
+    },
+    {
+      "id": "C_PHYSICAL_GATE_MAY_MAKE_EFFECT_FENCE_REDUNDANT",
+      "claim": "The sole production physical execution gate may make stale effect attempts unreachable, making an extra effect-layer lease check redundant.",
+      "status": "UNRESOLVED_COUNTERHYPOTHESIS",
+      "falsifier": "Zombie attempt built under epoch A wakes after epoch B is admitted and reaches any consequential effect transition without stale-epoch rejection."
+    }
+  ],
+  "source_gap": {
+    "effect_attempt_has_execution_lease_epoch": false,
+    "begin_effect_attempt_requires_current_execution_lease_epoch": false,
+    "execute_requires_current_execution_lease_epoch": false,
+    "effect_lifecycle_runtime_exposes_execution_lease_epoch_in_observed_api": false,
+    "interpretation": "CURRENT_GAP_NOT_RELEASE_PASS"
+  },
+  "out_of_box_experiment": {
+    "count": 1,
+    "id": "CLOCK_WARP_UTC_LEASE_INDEPENDENT_MINIMAL_SEMANTIC_REPLICATION",
+    "basis": "current V15 acquire expiry rule plus current repository clock-warp falsifier",
+    "execution_environment": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5",
+      "target_vps": false,
+      "external_network_used": false,
+      "real_external_effect_performed": false
+    },
+    "results": {
+      "forward_wall_jump_plus_3600s_after_modeled_1s_premature_takeover": true,
+      "backward_wall_jump_minus_3600s_after_modeled_11s_delayed_recovery": true,
+      "candidate_same_boot_forward_jump_expired": false,
+      "candidate_same_boot_after_ttl_expired": true,
+      "candidate_boot_change_invalidates_old_deadline": true,
+      "clock_monotonic": true,
+      "clock_adjustable": false,
+      "clock_resolution_seconds": 1e-09
+    },
+    "status": "COUNTEREXAMPLE_CONFIRMED_UTC_ONLY_LEASE_CLOCK_WARP",
+    "evidence_class": "LOCAL_INDEPENDENT_MINIMAL_SEMANTIC_REPLICATION_NOT_TARGET_VPS",
+    "candidate": "Use Linux CLOCK_BOOTTIME/monotone deadline for same-boot lease TTL, retain UTC for audit, treat boot-id change as explicit recovery boundary.",
+    "counterhypothesis": "UTC may remain operationally adequate if accepted target wall clock never performs material discontinuous steps; target clock discipline and recovery behavior still require measurement.",
+    "promotion": "CANDIDATE_ONLY"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Python time documentation",
+      "finding": "monotonic clock is not affected by system clock updates; CLOCK_BOOTTIME includes suspend time on Linux"
+    },
+    {
+      "source": "Linux clock_gettime manual",
+      "finding": "CLOCK_BOOTTIME is monotonic, suspend-aware, and avoids CLOCK_REALTIME discontinuities"
+    },
+    {
+      "source": "etcd concurrency API",
+      "finding": "lease-backed locks/fencing can gate transactional updates while ownership remains current"
+    },
+    {
+      "source": "SPIFFE/SVID and SLSA provenance",
+      "finding": "stable workload/self identity, credential/identity document, invocation/instance identity and build provenance are separable dimensions"
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "affected_packages": [
+      "F-V01-08-TOKEN-API-CLIENTS",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "required_changes": [
+      "Bind execution_id and execution_lease_epoch into EffectReservationReceipt and EffectAttempt.",
+      "Revalidate current canonical execution lease immediately before every consequential effect transition/external attempt.",
+      "Reject missing/stale execution epochs before COMMITTING/EXECUTED side effects.",
+      "Preserve uncertain-outcome reconciliation semantics so fencing never incorrectly makes an already-executed external effect safe to retry.",
+      "Measure a same-boot CLOCK_BOOTTIME/boot-id lease candidate against V15 UTC baseline and physical flock gate before schema promotion."
+    ],
+    "rollback": "No target implementation or schema promotion performed by this run; close issue/reject candidate if end-to-end call-path proof demonstrates current gate makes stale effect attempts unreachable and target clock discipline removes the measured failure mode."
+  },
+  "negative_results": [
+    "Fresh identity repair branch became stale during the run because target main and PR #124 advanced concurrently; duplicate implementation was stopped and no PR was opened.",
+    "PR #124 current-head validation was cancelled by concurrency and therefore is not accepted as PASS evidence.",
+    "No target-VPS receipt exists from this worker for the clock-warp replication.",
+    "No claim that physical flock alone closes effect-layer fencing.",
+    "No final Frank v0.1 acceptance or training authorization claim."
+  ],
+  "next_falsifiers": [
+    "Run issue #149 epoch-A -> epoch-B zombie effect attempt discriminator before any external effect.",
+    "Run current identity conformance on a fresh-main integrated revision after concurrent #124 work settles; require current materializer/identity transaction coverage.",
+    "Execute clock-warp/boot-boundary candidate on accepted Hostinger Ubuntu VPS with raw timing/resource metadata.",
+    "Rerun exact-current-source effect lifecycle and TypedIR gates after lease fencing is integrated."
+  ],
+  "research_write": "COMMITTED",
+  "effect_authority": "NO_REAL_EXTERNAL_EFFECT",
+  "training_started": false
+}

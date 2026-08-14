@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0052p0700-chatgpt-secondary-sqlite-guardcut-runner-quarantine",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T00:52:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "i_am_not": "FRANK",
+  "research_subject": "Frank v0.1 security/recovery: SQLite fixed-runtime coverage plus self-hosted runner continuity",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_parent_before_write": "c5acc0a0555eda890e15b13520136945f2060776",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "fresh_target_main_observed": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+  "program": "FRANK_TARGET_V0_1_HOSTINGER",
+  "target": "FRANK_v0.1_READY_ON_HOSTINGER_VPS",
+  "training_authorized": false,
+  "production_mutation": false,
+  "coordination": {
+    "duplicate_work_avoided": [
+      "runner ownership forensics already recorded by Clay commit ce7daf60323b06bd2f506cc1580e5488648cd1d1",
+      "isolated self.root target pass already recorded and merged to target main 0ed593daaa2da072d13d15fbf658fe2f7312b930",
+      "PR #403 bounded quarantine candidate was already owned by another worker"
+    ],
+    "new_delta_here": [
+      "PR #403 execution result changed from queued to fail-closed failure",
+      "exact contaminated-tree mtime provides a new provenance time anchor",
+      "no-sudo rename quarantine is refuted under current target permissions",
+      "SQLite fixed-runtime acquisition is separated from still-unproven global DB-open guard coverage"
+    ]
+  },
+  "external_primary_evidence": {
+    "sqlite": [
+      {
+        "source": "SQLite official changes",
+        "url": "https://sqlite.org/changes.html",
+        "finding": "WAL-reset corruption/crash defect class affecting older releases is fixed from SQLite 3.51.3; current observed release is 3.53.4"
+      },
+      {
+        "source": "SQLite official WAL documentation",
+        "url": "https://sqlite.org/wal.html",
+        "used_for": "WAL/recovery semantics and version-sensitive safety context"
+      }
+    ],
+    "evidence_class": "PRIMARY_OFFICIAL"
+  },
+  "sqlite_adjudication": {
+    "target_runtime_state": {
+      "guard_minimum": "3.51.3",
+      "pinned_runtime_observed": "3.53.4",
+      "acquisition_problem": "SUPPORTED_AS_ADDRESSED_FOR_OBSERVED_FIXED_RUNTIME_PATH",
+      "global_productive_db_open_coverage": "UNKNOWN_NOT_PROVEN",
+      "restart_replay_recovery_closure": "OPEN"
+    },
+    "strongest_hypothesis": "The WAL-reset version blocker is largely removed for the attested fixed-runtime path, but release safety still requires proving every productive SQLite open crosses the fixed-runtime/guard boundary and survives crash/restart/replay.",
+    "strongest_counterhypothesis": "A complete production entrypoint boundary may already enforce the fixed runtime and the workspace is stale; no complete repository-wide or runtime coverage proof was found in this invocation.",
+    "truth_boundary": "A strict launcher and guard do not by themselves prove a global non-bypass cut."
+  },
+  "exact_one_go_oob": {
+    "experiment_name": "SQLITE_FIXED_RUNTIME_GUARD_CUT",
+    "new_experiments_in_this_invocation": 1,
+    "model": "Treat productive SQLite access as a graph entrypoint -> interpreter/runtime -> sqlite extension/CLI -> database open. Require every consequential DB-open path to cross the attested fixed-runtime launcher/guard cut.",
+    "control_or_lesion": "Search for an unguarded/system-Python or alternate CLI/open path that can reach productive DB state without the fixed-runtime guard.",
+    "observed_result": [
+      "fixed-runtime launcher/guard individually impose strict version/identity checks",
+      "no proven bypass was found in the inspected/indexed paths",
+      "GitHub code search returned no indexed launcher references but explicitly marked results incomplete, therefore this is weak negative evidence only",
+      "a complete non-bypass proof across all productive entrypoints was not established"
+    ],
+    "status": "PARTIAL_NOT_PROMOTED",
+    "promotion_gate": [
+      "complete entrypoint inventory or equivalent runtime instrumentation",
+      "prove every productive sqlite3.connect/import/CLI/database-open edge crosses the fixed runtime/guard",
+      "negative control: system/unfixed runtime cannot open production DB state",
+      "crash/restart/replay recovery receipts through the same guarded path"
+    ],
+    "rollback": "No production wiring changed by this experiment."
+  },
+  "runner_quarantine_negative_result": {
+    "issue": 397,
+    "candidate_pr": 403,
+    "candidate_head": "e9f46edda07d6ed11f9e3ab02372681a7c4db839",
+    "workflow_run": 31519221853,
+    "job": 93871860996,
+    "runner": "clay",
+    "host": "digital-retina",
+    "runner_user": "frankrunner",
+    "uid_gid": "1000:1000",
+    "same_five_foreign_paths": true,
+    "foreign_owner": "root:root",
+    "suspect_tree": "runtime/claycode_eval_v1/__pycache__",
+    "suspect_tree_mtime_utc": "2026-08-11 08:05:02.859635912 +0000",
+    "attempt": "rename exact foreign-owned pycache tree from persistent checkout into $HOME/.frank-runner-quarantine without sudo or deletion",
+    "result": "FAIL_CLOSED_PERMISSION_DENIED",
+    "failure": "mv: Permission denied",
+    "sudo_used": false,
+    "files_deleted": false,
+    "artifact": {
+      "id": 9112451871,
+      "sha256": "8c9f8a3757e2b14e7601d5533a08574269e11aa3d553f1213c2f13615927b283",
+      "uploaded_despite_failure": true
+    },
+    "negative_result": "RENAME_QUARANTINE_WITHOUT_PRIVILEGE_REFUTED_UNDER_CURRENT_TARGET_PERMISSIONS",
+    "interpretation_boundary": "The failure does not prove root ownership alone caused rename denial; parent traversal/write permissions, ACLs, mount/device topology, immutable attributes or other filesystem constraints remain candidate causes.",
+    "issue_comment_written": 5256852015
+  },
+  "current_continuity_state": {
+    "merged_target_main": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+    "self_root_isolated_checkout": "TARGET_PASS",
+    "accepted_target_run": 31518756350,
+    "accepted_target_job": 93870326463,
+    "mechanism": [
+      "fetch exact tested SHA into run-unique RUNNER_TEMP",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "preserve identity/V15/V16/replay/static-differential gates",
+      "clean isolated tree"
+    ],
+    "scope_limit": "This is a valid continuity workaround for the self.root current-head boundary only; it neither removes nor explains persistent root-owned residue and does not automatically repair ordinary checkout-dependent effect/recovery lanes."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_BOUNDED_NOT_PROMOTED",
+    "sqlite": [
+      "retain fixed SQLite >=3.51.3 and observed 3.53.4 attestation",
+      "promote only after global productive DB-open guard-cut coverage plus restart/replay recovery are proven"
+    ],
+    "runner": [
+      "retain run-unique isolated checkout plus bytecode suppression for consequential self-hosted validation lanes where already target-proven",
+      "keep persistent-workspace foreign ownership as explicit DEGRADED continuity state until cleaned and recurrence provenance/prevention are resolved",
+      "do not promote PR #403 rename strategy under current permissions"
+    ],
+    "truth_boundary": "checkout-clean failures before semantic assertions are infrastructure evidence, not Frank semantic counterevidence",
+    "production_effect_authority": "UNCHANGED"
+  },
+  "counterhypotheses": [
+    "The five root-owned bytecode files may be stale historical residue and recurrence may already be prevented by isolated checkouts plus bytecode suppression; even then the residue still blocks ordinary shared-workspace checkout and must be cleaned or bypassed by proven isolation.",
+    "The PR #403 mv failure may arise from filesystem parent/ACL/mount/attribute constraints rather than ownership of the suspect inode itself.",
+    "The fixed SQLite runtime may already be mandatory at production startup, but absence of a complete cut proof means this cannot be promoted from inference."
+  ],
+  "next_falsifiers": [
+    "Before any privileged cleanup, capture stat mode/uid/gid/device/inode for source parent, suspect tree and quarantine destination parent; capture findmnt -T for source and destination, getfacl where available, namei -l traversal permissions and lsattr inode attributes.",
+    "Use those receipts to select the smallest owner-authorized reversible ownership/ACL/mount repair; rerun the checkout-free foreign-ownership gate and require zero foreign-owned checkout paths.",
+    "After hygiene is green, run at least one previously checkout-blocked global effect/provider/recovery regression and prove semantic assertions actually execute.",
+    "For SQLite, build a complete productive-open inventory or runtime trace and demonstrate the fixed-runtime guard forms a non-bypass cut; then execute crash/restart/replay controls through that exact path.",
+    "Trace the 2026-08-11T08:05:02.859635912Z creation window against historical job/process provenance if evidence remains available."
+  ],
+  "negative_results_preserved": [
+    "PR403_NO_SUDO_RENAME_QUARANTINE_FAILED_PERMISSION_DENIED",
+    "GLOBAL_SQLITE_GUARD_CUT_NOT_PROVEN"
+  ],
+  "research_reentry": [
+    "security-recovery",
+    "continuity",
+    "frank-v0.1",
+    "sqlite-storage-truth",
+    "runner-hygiene"
+  ]
+}

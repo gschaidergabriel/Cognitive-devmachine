@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "architecture_deltas":[
+    {
+      "delta_id":"AD-Q23-QNDRF-1.1-ZC",
+      "parent_candidate":"QNDRF-1",
+      "status":"CANDIDATE_NOT_PROMOTED",
+      "target_components":["F-V01-06-DIGITAL-RETINA-MVC","llama.cpp/libmtmd","Qwen3.5-4B vision path","ClayCode VisualPercept/PerceptualField","UnifiedDB/EAP","GWT"],
+      "proposed_change":"Insert a synchronous zero-copy familiarity/open-set readout immediately after mtmd media encode and before llama_decode. Pool directly from the current projected embedding buffer; do not copy or persist the full projected token tensor. If KNOWN_HIGH_CONFIDENCE and task/contradiction/action-critical gates allow, emit a provenance-bound compact visual seed/PerceptualField delta and bypass full 4B semantic decode. Otherwise pass the same unchanged buffer into semantic decode. Persist only compact descriptor/prototype/evidence/version metadata unless a later experiment proves full embedding persistence necessary.",
+      "preserved_historical_functions":["sensor ingress/provenance","temporal continuity","change detection","ROI/token budgeting","familiarity/open-set routing","active sensing","action verification","uncertainty preservation","GWT causal observability","recovery/replay lineage"],
+      "expected_benefit":"Avoid duplicate heavy visual inference and avoid memory-copy/persistence cost on the shared Qwen feature path while retaining semantic decode on uncertainty or task-critical cases.",
+      "strongest_counterhypothesis":"A dedicated lightweight embedding encoder or learned projection produces sufficiently better calibration/open-set behavior that its added model/runtime cost is Pareto-superior; alternatively, the Qwen vision scan cost dominates so decoder bypass has little value.",
+      "matched_baselines":["FULL_QWEN","CURRENT_DISSOLVED_BASELINE_DEDICATED_EMBEDDER","QNDRF_RAW_GLOBAL_POOL","QNDRF_ZERO_COPY_SPATIAL_POOL","QNDRF_TINY_PROJECTION","PAR_DIRECT_MEMORY","PAR_EAP"],
+      "resource_rule":"Count sensor transport, change gate, mmproj encode, MVC gate, copies/serialization, semantic prefill/decode, EAP, RAM/VRAM, cache state and recovery cost end-to-end.",
+      "rollback":"Disable zero-copy gate and route all changed visual inputs through existing semantic decode; preserve exact model/mmproj/prototype versions and last-known-good MVC state.",
+      "authority":"Visual familiarity and retrieved memory remain evidence/context only; neither mints semantic truth or effect authority."
+    },
+    {
+      "delta_id":"AD-Q23-PAR-1.1-COMPACT-SEED",
+      "parent_candidate":"PAR-1",
+      "status":"REFINED_NOT_PROMOTED",
+      "proposed_change":"When a zero-copy MVC gate yields an admissible high-confidence identity, serialize only a compact PerceptualMemorySeed plus descriptor/prototype support and exact frame/model/mmproj/projection/epoch hashes into the EAP path. Never persist or treat the raw Qwen token tensor as canonical memory. Wrong/stale/ambiguous seeds remain alternatives or trigger deeper perception.",
+      "strongest_counterhypothesis":"Any pre-decode memory seeding amplifies false familiarity/confirmation bias enough that post-decode exact retrieval is safer and equally efficient.",
+      "rollback":"Disable visual-seed EAP coupling and retain EAP as general bounded ActiveAssembly preprocessor."
+    }
+  ]
+}

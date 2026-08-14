@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "status": "SUPPLEMENT_TO_TEST_OBLIGATIONS",
+  "evidence_ref": "ggml-org/llama.cpp:tools/mtmd/mtmd.cpp@82b73d5cd126720cb087fb8191a6226c5ffd4beb",
+  "test_obligations": [
+    {
+      "id": "TO-Q23-PEH-LIFETIME-05",
+      "priority": "P0_FOR_SAME_ENCODE_REUSE",
+      "purpose": "Prove that a Frank-owned PerceptualEmbeddingHandle cannot alias mutable/freed libmtmd storage.",
+      "cases": [
+        "context output pointer followed by same-context encode with different media token geometry",
+        "batch chunk embedding view followed by batch free/reset",
+        "concurrent MVC read versus next media encode",
+        "slot/session reset while a perceptual consumer still holds a handle",
+        "runtime restart/replay",
+        "model/mmproj/preprocessor/runtime compatibility change"
+      ],
+      "reference_variant": "COPY_ON_CAPTURE immutable Frank-owned embedding buffer with content hash and compatibility identity",
+      "optimization_variant": "PINNED_RUNTIME_BUFFER only behind explicit ownership fence and exact runtime-version lifetime receipt",
+      "hard_failures": [
+        "torn read",
+        "cross-frame misattribution",
+        "stale handle accepted after owner destruction or next encode",
+        "process pointer serialized as durable evidence",
+        "prototype or re-entry use after compatibility invalidation"
+      ],
+      "metrics": [
+        "copy latency p50/p95/p99",
+        "bytes copied per changed observation",
+        "additional RAM high-water mark",
+        "zero-copy speedup if any",
+        "stale-handle rejection correctness",
+        "race failure rate",
+        "restart/replay equivalence"
+      ]
+    },
+    {
+      "id": "TO-Q23-MVC-ORDERED-GEOMETRY-06",
+      "priority": "P0_FOR_ENCODER_SELECTION",
+      "purpose": "Test the cheapest calibrated geometry ladder before adding a second heavy encoder.",
+      "variants": [
+        "Q0_MERGED_RAW",
+        "Q1_TINY_ADAPTER",
+        "D0_LIGHT_ENCODER",
+        "D1_LIGHT_ENCODER_ADAPTED",
+        "Q2_DUALVIEW only if Q0/Q1 miss the preregistered gate"
+      ],
+      "controls": [
+        "same admission/calibration protocol",
+        "same known/near-neighbor-unknown/OOD/alias fixture split",
+        "same runtime and sensor inputs where applicable",
+        "no-decoder-bypass safety control",
+        "compatibility-version swap",
+        "shuffled-label negative control"
+      ],
+      "decision_rule": "Select by end-to-end selective-risk plus latency/resource Pareto frontier. Raw-feature failure alone does not justify a heavy second backbone; Q1 and light-encoder baselines must be measured."
+    }
+  ],
+  "promotion": "NONE_FROM_THIS_DOCUMENT"
+}

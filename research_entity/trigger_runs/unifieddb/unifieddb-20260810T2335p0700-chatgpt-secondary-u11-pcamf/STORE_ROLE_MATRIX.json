@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0","architecture":"U11_PCAMF","stores":[
+    {"name":"Canonical Truth Spine","role":"AUTHORITATIVE","physical_candidate":"SQLite/WAL append-only epoch versions","human_readability_required":false,"learned":false,"decision":"RETAIN_STRENGTHEN"},
+    {"name":"Receipt Lattice","role":"AUTHORITATIVE_CAUSAL_PROOF","physical_candidate":"typed relational DAG + deterministic validator","human_readability_required":false,"learned":false,"decision":"ADD"},
+    {"name":"Product-Key Associative Field","role":"DERIVED_ACCELERATOR","physical_candidate":"learned/structured key banks + values","human_readability_required":false,"learned":true,"decision":"SHADOW_TEST"},
+    {"name":"ANN Field","role":"DERIVED_ACCELERATOR","physical_candidate":"HNSW/DiskANN/other benchmark winner","human_readability_required":false,"learned":true,"decision":"BENCHMARK_GATED"},
+    {"name":"HDC/VSA Field","role":"EXPLORATORY_ASSOCIATION","physical_candidate":"high-dimensional superposition","human_readability_required":false,"learned":true,"decision":"NOT_PRIMARY_EXACT"},
+    {"name":"ClayGraph","role":"DERIVED_TOPOLOGY","physical_candidate":"incremental projection","human_readability_required":false,"learned":false,"decision":"DELTA_MAINTAIN"},
+    {"name":"FTS/vector/tensor","role":"DERIVED_INDEX","physical_candidate":"sidecars or colocated only if measured","human_readability_required":false,"learned":"OPTIONAL","decision":"KEEP_PHYSICAL_OPTIONALITY"},
+    {"name":"Merkle Epoch Checkpoints","role":"AUTHENTICATED_HISTORY_PROJECTION","physical_candidate":"periodic segment roots/proofs","human_readability_required":false,"learned":false,"decision":"CANDIDATE"}
+  ]
+}

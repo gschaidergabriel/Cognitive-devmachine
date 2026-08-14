@@ -1,0 +1,79 @@
+name: UnifiedDB EAP family hosted preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'chatgpt/eap-family-factorization-20260810'
+    paths:
+      - 'research_entity/harness/reference/unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py'
+      - '.github/workflows/unifieddb-eap-family-hosted-preflight.yml'
+  pull_request:
+    paths:
+      - 'research_entity/harness/reference/unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py'
+      - '.github/workflows/unifieddb-eap-family-hosted-preflight.yml'
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Compile exact branch files
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git rev-parse HEAD
+          python3 --version
+          python3 -m py_compile \
+            research_entity/harness/reference/unifieddb_emergent_family_factorized.py \
+            research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py \
+            research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py
+
+  boundary-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Run family-factorization boundaries
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git rev-parse HEAD
+          python3 -m research_entity.harness.reference.test_unifieddb_emergent_family_factorized
+
+  multiplicity-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Run multiplicity evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git rev-parse HEAD
+          python3 -m research_entity.harness.reference.benchmark_unifieddb_emergent_family_factorized | tee /tmp/eap-family.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/eap-family.json'))
+          rows={r['bindings_per_family']:r for r in d['results']}
+          for n,r in sorted(rows.items()):
+              print('ROW',n,json.dumps(r,sort_keys=True))
+              assert r['top1_invariant'] is True
+          assert rows[1]['factorized_eap_f1']['family_recall_at_12']==1.0
+          assert rows[3]['factorized_eap_f1']['family_recall_at_12']==1.0
+          assert rows[3]['factorized_eap_f1']['family_recall_at_12']>rows[3]['baseline_eap']['family_recall_at_12']
+          assert rows[4]['factorized_eap_f1']['family_recall_at_12']==1.0
+          print('HOSTED_F1_CORE_PASS')
+          print('HOSTED_F1_HIGH_MULTIPLICITY', {n:rows[n]['factorized_eap_f1']['family_recall_at_12'] for n in (6,8)})
+          PY

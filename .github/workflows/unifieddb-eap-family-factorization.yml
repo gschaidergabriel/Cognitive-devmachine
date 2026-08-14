@@ -1,0 +1,83 @@
+name: UnifiedDB EAP family-factorization falsifier
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'chatgpt/eap-family-factorization-20260810'
+    paths:
+      - 'research_entity/harness/reference/unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py'
+      - '.github/workflows/unifieddb-eap-family-factorization.yml'
+  pull_request:
+    paths:
+      - 'research_entity/harness/reference/unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py'
+      - '.github/workflows/unifieddb-eap-family-factorization.yml'
+
+concurrency:
+  group: unifieddb-eap-family-factor-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eap-family-target:
+    runs-on: [self-hosted, linux, x64, andreas, claycode, target]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+      - name: Environment receipt
+        shell: bash
+        run: |
+          set -euxo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ'
+          git rev-parse HEAD
+          uname -a
+          cat /etc/os-release || true
+          lscpu || true
+          free -h || true
+          python3 --version
+          python3 - <<'PY'
+          import sqlite3, platform, os
+          print('sqlite', sqlite3.sqlite_version)
+          print('platform', platform.platform())
+          print('cpu_count', os.cpu_count())
+          PY
+      - name: Family-factorization invariants
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 -m py_compile \
+            research_entity/harness/reference/unifieddb_emergent_family_factorized.py \
+            research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py \
+            research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py
+          python3 -m research_entity.harness.reference.test_unifieddb_emergent_family_factorized
+      - name: Multiplicity benchmark
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 -m research_entity.harness.reference.benchmark_unifieddb_emergent_family_factorized | tee /tmp/eap-family.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/eap-family.json'))
+          rows={r['bindings_per_family']:r for r in d['results']}
+          for n,r in sorted(rows.items()):
+              print(n, 'base_recall=',r['baseline_eap']['family_recall_at_12'],
+                    'factor_recall=',r['factorized_eap_f1']['family_recall_at_12'],
+                    'base_p50_us=',r['baseline_eap']['latency_us']['p50'],
+                    'factor_p50_us=',r['factorized_eap_f1']['latency_us']['p50'],
+                    'sql_p50_us=',r['sqlite_family_window_baseline']['latency_us']['p50'])
+              assert r['top1_invariant'] is True
+          assert rows[1]['factorized_eap_f1']['family_recall_at_12'] == rows[1]['baseline_eap']['family_recall_at_12'] == 1.0
+          assert rows[3]['factorized_eap_f1']['family_recall_at_12'] == 1.0
+          assert rows[3]['factorized_eap_f1']['family_recall_at_12'] > rows[3]['baseline_eap']['family_recall_at_12']
+          assert rows[4]['factorized_eap_f1']['family_recall_at_12'] == 1.0
+          print('EAP_FAMILY_CORE_GATE_PASS')
+          print('HIGH_MULTIPLICITY_FALSIFIER', json.dumps({
+              n: rows[n]['factorized_eap_f1']['family_recall_at_12'] for n in (6,8)
+          }, sort_keys=True))
+          PY

@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "ADC-GO-20260810-V16-CONTINUITY-EFFECT-REENTRY",
+  "status": "CANDIDATE_TESTING",
+  "origin_actor": "chatgpt-secondary",
+  "ingested_by": "chatgpt-secondary",
+  "target": "self.root / Frank v0.1",
+  "affected_components": [
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-10-PROACTIVE-AGENCY-WEB",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "evidence": {
+    "owner_contract": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "out_of_box_model_falsifier": "research_entity/trigger_runs/go/go-20260810T2252p0700-chatgpt-secondary-v16-continuity/OUT_OF_BOX_EXPERIMENT.json",
+    "target_v16_schema_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_v16_execution_continuity_schema_v1/LATEST.json",
+    "effect_policy_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
+    "effect_reentry_falsifier_commit": "gschaidergabriel/Dr.-Unterweger@0167a4915c8400e2c5218c59c8b75321743a61ae",
+    "effect_reentry_vps_workflow_commit": "gschaidergabriel/Dr.-Unterweger@2b3d92287249bc1b374dc9244a3fc76b6f675515"
+  },
+  "hypotheses": [
+    {
+      "id": "H1_V16_IDLE_HANDOFF_REQUIRED",
+      "claim": "A separate durable post-interactive handoff state is required because semantic IDLE alone cannot encode user consent for autonomous continuation.",
+      "support": "The V15 abstraction admits interactive acquire -> release -> autonomous acquire, while the owner-fixed V16 model blocks it until matching confirmation. Current target runtime now implements the V16 handoff gate.",
+      "counterhypothesis": "V15 IDLE plus lease expiry/release is sufficient and a separate handoff state only adds complexity.",
+      "counterhypothesis_status": "REFUTED_BY_OWNER_CONTRACT_AND_BOUNDED_DISCRIMINATOR_FOR_THE_DECLARED_SEMANTICS"
+    },
+    {
+      "id": "H2_REENTRY_HASH_ALONE_NOT_PROVENANCE_BOUND",
+      "claim": "Hashing arbitrary reentry JSON is insufficient to prove provenance-bound causal re-entry or terminal DONE.",
+      "support": "Current runtime accepts arbitrary reentry dicts after verified outcome, current V14 schema stores only reentry_hash/reentry_at, trace validator treats REENTERED as terminal, and recovery maps REENTERED to COMPLETE.",
+      "counterhypothesis": "A generic reentry hash is sufficient because upstream code guarantees the payload is correct.",
+      "counterhypothesis_status": "NOT_ACCEPTABLE_FOR_TERMINAL_GATE_WITHOUT_STRUCTURAL_OR_EXECUTABLE_UPSTREAM_PROOF"
+    }
+  ],
+  "proposed_change": {
+    "continuity": "Keep V16 durable execution/request/idle-handoff semantics and require exact target-VPS runtime receipt before component promotion. Add fork-retained-flock recovery coverage.",
+    "effect_reentry": "Introduce the smallest versioned migration/runtime change that binds reentry to effect_id + attempt_id + verified outcome hash + typed causal/provenance identity + admitted semantic delta (or explicit no-learning outcome), rejects empty/mismatch, then performs an explicit REENTERED -> DONE transition. Recovery COMPLETE must require DONE, not REENTERED."
+  },
+  "simpler_baseline": "Current V14 reentry_hash-only lifecycle plus V15/V16 presence substrate as applicable.",
+  "discriminating_tests": [
+    "empty reentry rejected",
+    "wrong effect/attempt/outcome hash rejected",
+    "correct typed provenance admitted exactly once",
+    "REENTERED remains non-terminal until DONE receipt",
+    "DONE requires verified reentry and trace integrity",
+    "crash between REENTERED and DONE resumes deterministically without duplicate effect",
+    "migration rollback and last-known-good",
+    "fork-retained flock recovery does not permit overlap"
+  ],
+  "rollback": "Do not replace V14/V16 evidence; additive migration with last-known-good schema/runtime and differential tests. If candidate fails, retain current runtime and keep terminal gate open.",
+  "promotion_rule": "No promotion until direct target-VPS negative discriminator is observed, candidate passes matched regression/recovery tests, and final provider-outcome/reentry path is verified.",
+  "training_impact": "NONE; final paid/model training remains unauthorized.",
+  "external_effects_performed": false
+}

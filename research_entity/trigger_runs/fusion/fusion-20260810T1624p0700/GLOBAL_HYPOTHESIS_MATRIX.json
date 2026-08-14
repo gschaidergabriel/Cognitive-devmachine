@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "fusion-20260810T1624p0700",
+  "hypotheses": [
+    {
+      "id":"H-FUSION-OBS-001",
+      "status":"SUPPORTED_AS_TEST_OBLIGATION",
+      "synthesis":"Adaptive dependency-aware routing cannot be scientifically adjudicated from repository outcomes unless the pre-route dependency projection, route decision, causal predecessor state and receiver closure are persisted per delta.",
+      "upstream":["live-fusion mesh v2 candidate","16:25 continuous-reentry receipt","15:56 branch feedback"],
+      "counterhypothesis":"Retrospective repository reconstruction is sufficient to recover all routing inputs and outcomes without new instrumentation.",
+      "falsifier":"Reconstruct the 15:56 event deterministically from durable repo state and reproduce candidate route decisions, receiver closure and resource costs without hidden or unstored state.",
+      "highest_information_experiment":"Instrument one exact-current fusion delta end to end, then replay it under broadcast, tag-only and adaptive routing with matched inputs and faults."
+    },
+    {
+      "id":"H-FUSION-ADAPT-002",
+      "status":"SUPPORTED_BY_EXTERNAL_ANALOGY_NOT_PROMOTED",
+      "synthesis":"Route strategy should remain adaptive among targeted, dense and digest/full-recompute modes because change locality and cost vary by workload.",
+      "upstream":["Enzyme 2026","Graphsurge","Differential Dataflow/Naiad","RIPPLE++ 2026"],
+      "counterhypothesis":"A fixed targeted policy with anti-entropy is simpler and Pareto-dominant for Clay workloads.",
+      "falsifier":"Matched real-repo replay shows fixed-targeted has equal or better recall, latency, resource cost and recovery across sparse and dense invalidations.",
+      "highest_information_experiment":"Stratified sparse/local versus high-centrality/global invalidation replay with exact cost shadows."
+    },
+    {
+      "id":"H-FUSION-SHADOW-003",
+      "status":"OPEN",
+      "synthesis":"A bounded approximate priority shadow may reduce routing and triage cost without weakening exact research-state truth if authority is typed and fail-closed.",
+      "upstream":["16:25 continuous-reentry dual-lane proposal"],
+      "counterhypothesis":"Approximate priority inevitably leaks into canonical mutation through scheduling and suppresses important evidence.",
+      "falsifier":"Shadow lesion or perturbation changes canonical truth/effect decisions beyond explicitly permitted scheduling order, or misses high-impact invalidations.",
+      "highest_information_experiment":"Exact-vs-shadow authority-boundary differential with contradictory and high-centrality events."
+    },
+    {
+      "id":"H-CC-WP03-004",
+      "status":"INHERITED_SUPPORTED_NARROWLY",
+      "synthesis":"WP03 residual semantic identity preservation is necessary but not sufficient; WP04/WP05 require an explicit disposition matrix so preserved rule/invariant classes do not become stranded meaning.",
+      "upstream":["15:56 claycode delta","15:56 harness delta"],
+      "counterhypothesis":"Residual classes are purely preservation metadata and need no downstream semantic disposition.",
+      "falsifier":"Per-class mutation and no-drop tests show no behavioral, validation, authority or recovery consequence for every residual class.",
+      "highest_information_experiment":"WP04/WP05 per-class disposition matrix prioritizing rule_decl and invariant_decl."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260810T1431p0700-chatgpt-secondary-r5",
+  "bounded_live_cutoff":"a0be86497f4ff7e4dcf2eff080d0b0dd54164e99",
+  "arrival_class":"MATERIAL_LIVE_ARRIVALS_INGESTED_BEFORE_FINAL_USER_RESPONSE",
+  "arrivals":[
+    {
+      "commit":"4c594fcd2a71370aa7c8ce7dbfeb4009a53f267c",
+      "effect":"H-HF5-01 discriminator fired positively for CC-WP-02: exact-byte self-hosted Ubuntu strict/full-corpus/canonical/mutation/parity evidence promoted parser/canonicalizer package to PASS. BASE and Andreas-target release remain NOT_PASS.",
+      "hypothesis_update":"H-HF5-01 moves from pending exact-current component receipt to SUPPORTED_FOR_WP02_COMPONENT_ONLY; the multi-layer evidence identity rule is retained because the promotion occurred only after the exact-byte/provenance-bound target-lane receipt existed.",
+      "promotion":"CC-WP-02_PACKAGE_PASS_ONLY"
+    },
+    {
+      "commit":"8c6075425440e17d537d386adeb25975ba505483",
+      "effect":"H-HF5-04 shadow falsifier materially favors observer isolation in the tested workload: same-file observer p50/p95/p99 receipt latency ratios vs no-observer were ~3.42x/~3.80x/~3.81x and WAL bytes ~50.07x; isolated observer ratios were ~1.10x/~1.25x/~2.37x with primary WAL bytes ~1.0x. All integrity/reentry checks passed and busy count was zero.",
+      "evidence_limit":"LOCAL_SHADOW_NON_PROMOTIONAL. Environment SQLite 3.46.1 is within the WAL-reset-bug vulnerable range; official SQLite says the bug is likely in 3.7.0..3.51.2 and fixed in 3.51.3+, with listed backports. Repeat on fixed SQLite before promotion.",
+      "hypothesis_update":"H-HF5-04 failure mode is strongly direction-supported locally, but SAME_FILE vs ISOLATED architecture choice remains OPEN pending fixed-version Hostinger matched evidence.",
+      "promotion":"NONE"
+    },
+    {
+      "commit":"a0be86497f4ff7e4dcf2eff080d0b0dd54164e99",
+      "effect":"H-HF5-03 gains a V3 dual-plane candidate: compact beacons to all branches plus sparse full-payload routing and branch-local impact acknowledgement. In matched synthetic independent-shadow conditions V3 recall=0.996230, perfect-event recall=0.988800, missed=56 vs V2 missed=549, weighted cost=3.175708 vs broadcast 9.0 and V2 2.8610.",
+      "counterevidence":"When central and branch-local missing-edge ancestry was forced fully correlated, V3 recall and misses were identical to V2 (0.976203, 354 misses) while V3 still paid beacon overhead. A second projection/control plane is useful only if its failure ancestry is meaningfully diverse.",
+      "hypothesis_update":"H-HF5-03 refined to provenance-diverse completeness-gated dual-plane/adaptive routing; correlated-blind-spot measurement becomes a hard promotion gate.",
+      "promotion":"SUPPORTED_AS_RESEARCH_CANDIDATE_NOT_PROMOTED"
+    }
+  ],
+  "fresh_external_verification":[
+    "SQLite official WAL page: WAL-reset bug likely affects 3.7.0 through 3.51.2; fixed in 3.51.3+; backports listed for 3.44.6 and 3.50.7.",
+    "USENIX OSDI 2025 Picsou: quorum acknowledgements and targeted resend provide an independent systems precedent for compact acknowledgement/control state, not Clay validation.",
+    "USENIX OSDI 2025 T2C: runtime semantic checkers detected 15/20 reproduced silent failures with small overhead; supports semantic checking as failure-mode precedent, not Clay validation.",
+    "Enzyme arXiv 2603.27775: cost-based incremental refresh strategy selection supports adaptive incrementalization as an analogue, not a Frank/Clay promotion."
+  ],
+  "branch_feedback":{
+    "clayresearch":"DELTA: one R5 discriminator (WP02 exact-byte receipt) is now resolved positively; observer placement and V3 routing remain evidence-gated. Add correlated-ancestry as an explicit independence dimension.",
+    "frank":"DELTA: no authority change; future Frank coordination benefits only if branch-local checks are provenance-diverse and replay/version identity is preserved.",
+    "gwt":"DELTA: compact beacons/impact ACKs are routing/control receipts only; keep reconstruction/use/effect/outcome causal closure distinct.",
+    "emergenz":"DELTA: dual-plane coupling must be lesion-tested for correlated blindness and overcoupling; extra acknowledgements are not emergence evidence.",
+    "claycode":"DELTA: CC-WP-02 is PASS from exact Ubuntu receipt; move BASE critical path to WP03 without reopening parser semantics absent an executable counterexample.",
+    "hyperposition":"DELTA: preserve V2/V3/broadcast alternatives and projection-ancestry uncertainty until real matched cost/correctness evidence selects an operating policy.",
+    "claygraph":"DELTA: second-view usefulness requires provenance-diverse failure ancestry; expose projection origin/epoch/ancestry, not merely multiple derived views.",
+    "unifieddb":"DELTA: fixed-version SQLite observer factorial becomes a direct promotion gate; raw events remain authoritative and observer placement stays rollbackable.",
+    "harness":"DELTA: add fixed-SQLite observer placement, correlated projection blindness and dual-plane ACK/drop/restart controls to the real Ubuntu fault matrix; record WP02 package PASS as upstream BASE progress only."
+  },
+  "general_research_delta":"Multi-view or multi-agent redundancy is not independence unless failure ancestry differs. This joins R5 evidence-identity, routing-completeness and causal-replay laws into one stronger rule: diversity claims require provenance-diverse failure modes, not merely separate names/processes/views.",
+  "new_scientific_promotion":"NONE",
+  "run_status_after_ingest":"COMPLETE_THROUGH_BOUNDED_LIVE_CUTOFF_NO_SCIENTIFIC_PROMOTION"
+}

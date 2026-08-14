@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "parent_receipt": "RESEARCH_RECEIPT.json",
+  "recorded_local": "2026-08-11T04:25:00+07:00",
+  "actor": "chatgpt-secondary",
+  "purpose": "append-only replication/resource/swarm-handoff evidence after parent receipt",
+  "semantic_lineage_replication": {
+    "pull_request": 267,
+    "branch_head": "45152d1c5c9fc696a35f102fdda44a0e14c30d18",
+    "tested_synthetic_merge": "843915f7e0ceb82744fda0a1a753870d6a8d5533",
+    "target_run": 31433086428,
+    "target_job": 93600892797,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "module_blob": "71a44af7851b0c28fd3538e84859a0eb4895e66a",
+    "test_blob": "4fca0a43e165426c6a830b364b3916259edf89ea",
+    "workflow_blob": "570fd7a9e1527ad58c8412d235093e22504be5dc",
+    "status": "PASS_SINGLE_SELECTED_LINEAGE_HEAD_CAS_RACE",
+    "repo_static_integrity": "PASS",
+    "contenders": 2,
+    "winners": 1,
+    "losers": 1,
+    "loser_persisted": false,
+    "loser_replay": "SELECTED_LINEAGE_HEAD_MOVED",
+    "integrity_check": "ok",
+    "foreign_key_violations": 0,
+    "resources": {
+      "elapsed_wall_seconds": 0.10,
+      "user_seconds": 0.06,
+      "system_seconds": 0.03,
+      "cpu_percent": 90,
+      "max_rss_kib": 22528,
+      "major_page_faults": 0,
+      "minor_page_faults": 6925,
+      "voluntary_context_switches": 62,
+      "involuntary_context_switches": 1,
+      "swaps": 0,
+      "filesystem_inputs": 0,
+      "filesystem_outputs_blocks": 632,
+      "socket_messages_sent": 0,
+      "socket_messages_received": 0,
+      "exit_status": 0
+    },
+    "artifact": {
+      "id": 9079953574,
+      "sha256": "4cde6a7f24239ff0251b1c772cd5bafd1872e226d75957e821bfac8df343ec13",
+      "retention_days": 30
+    },
+    "interpretation": "independent replication of the narrow concurrent selected-head mechanism on a later synthetic merge; still CANDIDATE_NOT_PROMOTED"
+  },
+  "fresh_swarm_coordination": {
+    "preferred_identity_integration_lane": {
+      "pull_request": 273,
+      "reason": "composes exact semantic root/source/identity-contract/predecessor with write-ahead continuation, controlled restore and explicit rollback-domain limitation",
+      "our_distribution_comment_id": 5246202824
+    },
+    "local_replication_lane": {
+      "pull_request": 267,
+      "disposition": "KEEP_DRAFT_INDEPENDENT_REPLICATION_NOT_PREFERRED_INTEGRATION",
+      "comment_id": 5246204306
+    },
+    "sqlite_wal_provenance_lane": {
+      "pull_request": 274,
+      "disposition": "DO_NOT_DUPLICATE",
+      "question": "whether Ubuntu sqlite3/libsqlite3 3.45.1-1ubuntu2.7 contains the upstream WAL-reset fix/backport"
+    },
+    "other_observed_nonoverlap": [
+      "PR#265 provider idempotency retention fail-closed",
+      "PR#266 WP04 exact module/symbol resolution",
+      "PR#276 production TLS token transport candidate",
+      "PR#277 UnifiedDB pair-migration crash recovery diagnostic"
+    ]
+  },
+  "external_wal_refresh": {
+    "upstream_sqlite": {
+      "status": "CONFIRMED_AFFECTED_BY_SEMANTIC_VERSION_ABSENT_BACKPORT_PROOF",
+      "fact": "SQLite upstream documents WAL-reset bug likely present in 3.7.0 through 3.51.2, fixed in 3.51.3+, with explicit backports listed for 3.44.6 and 3.50.7; trigger requires WAL mode plus two or more connections in separate threads/processes writing/checkpointing concurrently."
+    },
+    "ubuntu_noble": {
+      "published_package": "3.45.1-1ubuntu2.7",
+      "backport_status": "UNKNOWN_PENDING_PR_274_SOURCE_PATCH_ADJUDICATION",
+      "reason": "version string alone cannot distinguish downstream backport; do not infer safe or vulnerable until exact Ubuntu patchset is inspected"
+    },
+    "release_disposition": "KEEP_F_V01_13_WAL_GATE_FAIL_CLOSED_PENDING_PR_274_OR_TOPOLOGY_PROOF"
+  },
+  "workspace_write": {
+    "first_attempt": "CAS_REJECTED_409_DUE_CONCURRENT_UPDATE",
+    "fresh_workspace_sha": "620971f539766258886899040984097dbd1cdddc",
+    "decision": "NO_RISKY_FULL_FILE_OVERWRITE",
+    "reason": "parallel worker already promoted effect-authority evidence and added SQLite WAL release gate; append-only receipt/addendum plus targeted PR comments preserve our non-conflicting lineage evidence without erasing newer facts"
+  },
+  "training_authorized": false,
+  "frank_self_harness_authority_changed": false
+}

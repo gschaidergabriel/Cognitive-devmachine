@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Fast matched promotion-screen for current Huihui/Frank Qwen3.5-4B versus capability-preserving weight-abliterated Qwen3.5-4B on the Hostinger VPS. This is a screen, not final model promotion evidence.",
+  "generation": {"temperature": 0.0, "seed": 42, "max_tokens": 96, "enable_thinking": false},
+  "cases": [
+    {"id":"route-memory","prompt":"Antworte exakt nur mit MEMORY. Aufgabe: Eine dauerhaft relevante Nutzerpräferenz soll gespeichert und später wiedergefunden werden. Welcher Pfad?","expect_exact":"MEMORY"},
+    {"id":"route-vision","prompt":"Antworte exakt nur mit VISION. Aufgabe: Ein unbekannter Dialog ist auf einem neuen Screenshot sichtbar und muss interpretiert werden. Welcher Pfad?","expect_exact":"VISION"},
+    {"id":"route-tool","prompt":"Antworte exakt nur mit TOOL. Aufgabe: Für die Antwort werden aktuelle externe Wetterdaten benötigt, aber es liegen keine aktuellen Wetterdaten im Kontext vor. Welcher Pfad?","expect_exact":"TOOL"},
+    {"id":"route-direct","prompt":"Antworte exakt nur mit DIRECT. Aufgabe: Berechne 2+2. Welcher Pfad reicht?","expect_exact":"DIRECT"},
+    {"id":"missing-evidence","prompt":"Eine Datei soll gelöscht werden. Ob ein aktuelles Backup existiert, ist unbekannt. Antworte exakt nur mit CLARIFY oder ACT. Wähle ohne Annahmen.","expect_exact":"CLARIFY"},
+    {"id":"unknown-state","prompt":"Du hast keine Sensordaten darüber, ob das Fenster offen oder geschlossen ist. Antworte exakt nur mit UNKNOWN oder OPEN oder CLOSED. Keine Annahmen.","expect_exact":"UNKNOWN"},
+    {"id":"counterevidence","prompt":"Hypothese H: Alle beobachteten roten Symbole bedeuten Fehler. Neue Evidenz: Ein rotes Symbol ist laut verifizierter Dokumentation ein normaler Aufnahmeindikator. Antworte exakt nur mit REVISE oder CONFIRM.","expect_exact":"REVISE"},
+    {"id":"provenance","prompt":"Zwei Aussagen widersprechen sich: A stammt aus einem aktuellen verifizierten Laufzeit-Receipt, B aus einer alten Notiz ohne Test. Antworte exakt nur mit A oder B, welche Evidenz hat Vorrang?","expect_exact":"A"},
+    {"id":"arith-1","prompt":"Antworte exakt nur mit der Zahl. 37 * 14 = ?","expect_exact":"518"},
+    {"id":"arith-2","prompt":"Antworte exakt nur mit der Zahl. Folge: 2, 6, 12, 20, ? Die Differenzen steigen jeweils um 2.","expect_exact":"30"},
+    {"id":"logic-1","prompt":"Alle R sind S. Kein S ist T. Folgt: Kein R ist T. Antworte exakt nur TRUE oder FALSE.","expect_exact":"TRUE"},
+    {"id":"state-transition","prompt":"Zustand: A=2, B=3. Führe sequenziell aus: A=A+B; danach B=A*2. Antworte exakt im Format A=<zahl>,B=<zahl>.","expect_exact":"A=5,B=10"},
+    {"id":"german-1","prompt":"Antworte exakt mit einem grammatisch korrekten deutschen Satz aus genau vier Wörtern, der sagt, dass Frank den Zustand prüft.","expect_regex":"(?i)^Frank prüft den Zustand[.!]?$"},
+    {"id":"structured-1","prompt":"Gib exakt ein JSON-Objekt ohne Markdown aus: status muss 'unknown' sein und confidence muss 0 sein. Keine weiteren Felder.","expect_json":{"status":"unknown","confidence":0}},
+    {"id":"structured-2","prompt":"Gib exakt ein JSON-Objekt ohne Markdown aus: action='verify', target='screen', next='reentry'. Keine weiteren Felder.","expect_json":{"action":"verify","target":"screen","next":"reentry"}},
+    {"id":"structured-3","prompt":"Gib exakt ein JSON-Objekt ohne Markdown aus: known=false, ambiguous=true. Keine weiteren Felder.","expect_json":{"known":false,"ambiguous":true}},
+    {"id":"anti-hallucination","prompt":"Im Kontext steht kein Modellname. Frage: Welches Modell läuft gerade? Antworte exakt nur UNKNOWN, wenn es nicht aus dem Kontext belegbar ist.","expect_exact":"UNKNOWN"},
+    {"id":"reentry","prompt":"Eine Aktion wurde ausgeführt, aber der visuelle Erfolg ist noch nicht beobachtet. Antworte exakt nur mit VERIFY oder DONE.","expect_exact":"VERIFY"},
+    {"id":"conflict","prompt":"Sensor A sagt OPEN, Sensor B gleicher Vertrauensstufe sagt CLOSED, keine weitere Evidenz. Antworte exakt nur CONFLICT, OPEN oder CLOSED.","expect_exact":"CONFLICT"},
+    {"id":"no-echo","prompt":"Drei Agenten wiederholen dieselbe unbelegte Behauptung aus derselben Quelle. Ist das drei unabhängige Evidenz? Antworte exakt nur YES oder NO.","expect_exact":"NO"}
+  ],
+  "vision_cases": [
+    {"id":"vision-red","image":"generated:red","prompt":"Welche dominante Farbe hat das Bild? Antworte exakt nur RED, GREEN oder BLUE.","expect_exact":"RED"},
+    {"id":"vision-green","image":"generated:green","prompt":"Welche dominante Farbe hat das Bild? Antworte exakt nur RED, GREEN oder BLUE.","expect_exact":"GREEN"},
+    {"id":"vision-blue","image":"generated:blue","prompt":"Welche dominante Farbe hat das Bild? Antworte exakt nur RED, GREEN oder BLUE.","expect_exact":"BLUE"}
+  ]
+}

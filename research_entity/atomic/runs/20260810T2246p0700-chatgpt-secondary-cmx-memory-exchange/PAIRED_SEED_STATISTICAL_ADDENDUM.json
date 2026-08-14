@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2246p0700-chatgpt-secondary-cmx-memory-exchange",
+  "method": "paired six-seed differences on deterministic synthetic scenarios; two-sided one-sample t interval/test on per-seed accuracy differences; exploratory due n=6",
+  "difference_definition": "CMX accuracy minus newest-valid baseline accuracy; for ablations, ablation accuracy minus full CMX accuracy",
+  "noise_comparison": {
+    "0.00": {"mean_difference_pp":-6.1666666667,"ci95_pp":[-7.8200829632,-4.5132503701],"p_two_sided":0.0002091557,"cmx_seed_wins":0,"n":6},
+    "0.02": {"mean_difference_pp":-4.5729166667,"ci95_pp":[-5.9866251015,-3.1592082319],"p_two_sided":0.0004110824,"cmx_seed_wins":0,"n":6},
+    "0.05": {"mean_difference_pp":-2.1875,"ci95_pp":[-3.5997368522,-0.7752631478],"p_two_sided":0.0105125921,"cmx_seed_wins":0,"n":6},
+    "0.10": {"mean_difference_pp":-1.4583333333,"ci95_pp":[-3.1513446830,0.2346780164],"p_two_sided":0.0776871292,"cmx_seed_wins":0,"n":6},
+    "0.15": {"mean_difference_pp":1.2916666667,"ci95_pp":[-1.3216265066,3.9049598399],"p_two_sided":0.2597944836,"cmx_seed_wins":5,"n":6}
+  },
+  "defining_ablations_at_noise_0_10": {
+    "no_coupon": {"mean_difference_pp":0.6770833333,"ci95_pp":[-0.5460669010,1.9002335677],"p_two_sided":0.2140290950,"ablation_seed_wins":4,"n":6},
+    "no_rent": {"mean_difference_pp":0.96875,"ci95_pp":[-0.4402846698,2.3777846698],"p_two_sided":0.1374167062,"ablation_seed_wins":4,"n":6},
+    "fixed_k": {"mean_difference_pp":-5.25,"ci95_pp":[-7.9090952414,-2.5909047586],"p_two_sided":0.0038499194,"ablation_seed_wins":0,"n":6},
+    "no_provenance": {"mean_difference_pp":0.2395833333,"ci95_pp":[-1.2706429904,1.7498096571],"p_two_sided":0.7002958262,"ablation_seed_wins":3,"n":6}
+  },
+  "interpretation": [
+    "The clean/low-noise superiority of newest-valid is robust in this proxy.",
+    "The 15% CMX crossover is exploratory and not statistically resolved at six seeds.",
+    "The defining coupon/rent components fail the predeclared positive-ablation criterion; the data do not establish that either component is beneficial.",
+    "Adaptive budget is the only clearly supported component in this matrix, but it is a conventional cost-sensitive retrieval optimization and not unique evidence for CMX."
+  ],
+  "promotion_effect": "UNCHANGED_NO_ARCHITECTURE_PROMOTION"
+}

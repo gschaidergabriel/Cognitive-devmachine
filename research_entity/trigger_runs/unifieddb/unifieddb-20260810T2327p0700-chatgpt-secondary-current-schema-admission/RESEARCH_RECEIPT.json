@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2327p0700-chatgpt-secondary-current-schema-admission",
+  "trigger": "unifieddb",
+  "trigger_input": "unifiedb",
+  "trigger_resolution": "ROUTED_AS_OBVIOUS_TYPO_AFTER_REGISTRY_VERIFICATION",
+  "created_at": "2026-08-10T23:27:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "work_package_disposition": "REMAINS_OPEN_COMPONENT_REPAIR_ONLY",
+  "selected_question": "Can current Frank v0.1 repository truth and schema admission claim UnifiedDB CURRENT while additive V13-V16 runtime surfaces or their declared migration manifest are stale or missing?",
+  "hypothesis": "The current V12 base identity is insufficient by itself: current additive feature tables/markers/singletons and executable-loader-to-manifest parity must be checked fail-closed before UnifiedDB can be treated as CURRENT.",
+  "counterhypothesis": "Local V14/V16 runtime _require_* checks make a global additive feature gate redundant.",
+  "counterhypothesis_result": "REJECTED_FOR_GLOBAL_PREFLIGHT_SCOPE",
+  "counterhypothesis_reason": "Repo-truth consumers can trust preflight without instantiating specialized V14/V16 runtimes, so a false global PASS remains causally relevant.",
+  "current_main_findings": [
+    {
+      "id": "UDB-FINDING-20260810-01",
+      "severity": "P1_INTEGRATION",
+      "status": "REPRODUCED_AND_PATCHED_IN_PR",
+      "finding": "repo_truth_gate.py admitted the V12 base schema/table set without requiring current additive V13 bug-feedback, V14 effect-lifecycle, V15 presence or V16 execution-continuity surfaces.",
+      "risk": "V12-only or partially migrated state can be misclassified as current by the global preflight."
+    },
+    {
+      "id": "UDB-FINDING-20260810-02",
+      "severity": "P1_INTEGRATION",
+      "status": "REPRODUCED_AND_PATCHED_IN_PR",
+      "finding": "APPLIED_SCHEMA_MANIFEST_REQUIRED stopped at V12 while apply_current_schema.py canonically loads through V16.",
+      "risk": "Declared migration admission can drift behind executable loader semantics."
+    }
+  ],
+  "selected_architecture": {
+    "base_schema_identity": "12.0",
+    "additive_current_migrations": ["V13", "V14", "V15", "V16"],
+    "v17_canonical_migration": false,
+    "reason": "Current main explicitly keeps V17 outside canonical migration pending evidence; active negative discriminators falsify the candidate support/execution binding.",
+    "no_second_storage_architecture": true
+  },
+  "implementation": {
+    "repository_transport": "gschaidergabriel/Dr.-Unterweger",
+    "canonical_semantic_repository": "gschaidergabriel/frankv0.1",
+    "branch": "chatgpt/unifieddb-v16-feature-gate-current-main-20260810",
+    "pull_request": 188,
+    "head_sha": "5b1e8861e9e29458d80d6b3aeb16cb1cb4fb3db7",
+    "changes": [
+      "add runtime/state/unifieddb_current_schema_gate.py",
+      "add G6_UNIFIEDDB_CURRENT_FEATURE_SCHEMA to repo_truth_gate.py",
+      "missing current additive surface => SCHEMA_MIGRATION_REQUIRED",
+      "keep EXPECTED_UDB_SCHEMA=12.0",
+      "admit V13-V16 files and required feature surfaces in APPLIED_SCHEMA_MANIFEST_REQUIRED",
+      "add current-feature regression",
+      "add manifest-loader parity regression",
+      "add read-only self-hosted Linux/X64 discriminator"
+    ],
+    "merge_status": "OPEN_UNMERGED_GLOBAL_DEEP_INTEGRITY_RED"
+  },
+  "target_vps_evidence": {
+    "workflow": "UnifiedDB Current Feature Gate VPS",
+    "workflow_run_id": 31408829491,
+    "job_id": 93521691223,
+    "conclusion": "success",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "tested_merge_sha": "38a8266024f8b980505e71bbc8ff5c5df55d0492",
+    "tested_head_sha": "5b1e8861e9e29458d80d6b3aeb16cb1cb4fb3db7",
+    "tested_base_sha": "7a10998e5367072fc39e03da210f2a66b46dec48",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "permissions": "contents:read",
+    "persist_credentials": false,
+    "tests": {
+      "current_feature_schema": {
+        "status": "PASS",
+        "discriminator": "V12_BASE_WITHOUT_CURRENT_V13_V16_FEATURES_FAILS_CLOSED",
+        "wall_seconds": 0.04,
+        "max_rss_kib": 18304,
+        "exit_status": 0
+      },
+      "manifest_loader_parity": {
+        "status": "PASS",
+        "loader_manifest_match": true,
+        "v17_canonical_migration": false,
+        "wall_seconds": 0.04,
+        "max_rss_kib": 14080,
+        "exit_status": 0
+      }
+    },
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  },
+  "negative_evidence": {
+    "global_workflow": "Frank Deep Integrity",
+    "workflow_run_id": 31408834236,
+    "job_id": 93521701519,
+    "conclusion": "failure",
+    "step_list": null,
+    "interpretation": "GLOBAL_GATE_RED_PRE_STEP; DO_NOT_MERGE. Targeted component PASS does not override whole-repository acceptance.",
+    "known_parallel_control": "Independent contemporaneous UnifiedDB PRs showed the same pre-step hosted failure class."
+  },
+  "lineage": {
+    "prior_pr_3": "Ancestor V13 truth-gate/bug-feedback mismatch correctly identified; unrelated bug-feedback repairs remain independent.",
+    "prior_pr_24": "Ancestor V13 manifest-loader mismatch correctly identified; stale top-level version-13.0 choice not reused.",
+    "current_adaptation": "V12 remains base schema identity while V13-V16 are explicitly admitted additive current feature migrations."
+  },
+  "parallel_nonduplicate_lanes": [
+    "PR189 migration journal/WAL safety on vulnerable SQLite families",
+    "PR182 epoch-sealed continuity/crash-recovery discriminator",
+    "effect/presence/execution generation fencing lanes",
+    "V17 negative causal/support discriminators"
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "claim": "CURRENT UnifiedDB admission is the conjunction of admitted V12 base materialization plus required current additive feature surface plus loader-manifest parity, with V17 excluded until promoted by evidence.",
+    "rollback": "Close PR188 / revert branch commits; no canonical DB migration was performed by this run.",
+    "promotion_gate": "Do not merge while whole-repository Deep Integrity is red; revalidate against fresh current main and accepted target VPS merge context."
+  },
+  "next_falsifiers": [
+    "Run full Deep Integrity successfully on the exact PR merge context when the hosted pre-step infrastructure fault is resolved or via an admitted equivalent whole-repository lane.",
+    "Revalidate after any main change to apply_current_schema.UNIFIED_FILES or APPLIED_SCHEMA_MANIFEST_REQUIRED.",
+    "Inject a partial V13/V14/V15/V16 materialization and prove global preflight returns SCHEMA_MIGRATION_REQUIRED without mutating state.",
+    "Integrate with epoch-sealed crash/restart recovery evidence and migration journal safety without creating a second authority plane.",
+    "Keep V17 outside canonical migration until causal support, exact execution binding and target evidence survive adversarial discriminators."
+  ],
+  "claims_not_made": [
+    "F-V01-04 complete",
+    "whole Frank v0.1 acceptance",
+    "V17 promotion",
+    "physical storage engine unification",
+    "canonical live database mutation",
+    "final training authorization",
+    "Frank/self.root Harness authority"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "REENTRY-CC-WP03-20260810T2014P0700",
+  "run_id": "20260810T2014p0700-chatgpt-secondary-wp03-irnorm",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "material_delta": "Typed canonical IR normalization is the current supported implementation direction after V18 parsing; no grammar or BASE semantic-freeze amendment is supported by this run.",
+  "evidence_refs": [
+    "EXECUTABLE_RESEARCH_RECEIPT.json",
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+    "HYPOTHESES.json",
+    "FINAL_REPORT.md"
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "pipeline": "V18 source -> parser/canonical frontend AST -> typed canonical IR -> type/effect checker -> evaluator/lowering",
+    "rollback": "Remove candidate typed normalization layer and retain current V18 frontend behavior; no frozen grammar or gate status was mutated by this run."
+  },
+  "test_delta": [
+    "unordered record-field semantic-hash metamorphic test",
+    "Set element permutation/dedup semantic-hash test",
+    "ordered/list/effect non-normalization negative test",
+    "semantic identity versus runtime-version/state-epoch stale identity test",
+    "open-web authority non-escalation mutation corpus",
+    "opaque capability runtime-bearer forgery/replay test",
+    "GWT MeasurementReceipt and Hyperposition HyperRelation typed fixtures"
+  ],
+  "work_impact": {
+    "existing_work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "focus": "CC-WP-03-IR-TYPES",
+    "status_change": "NONE",
+    "next_falsifier": "Production typed-IR implementation fails a mandatory self.root/GWT/Hyperposition/UnifiedDB/ClayGraph fixture without an untyped escape hatch."
+  },
+  "distribution": "BRANCH_FEEDBACK_MANIFEST.json",
+  "reentry_state": "COMPLETE_FOR_RESEARCH_DELTA",
+  "release_effect": "NONE",
+  "wp03_status": "OPEN",
+  "base_gate": "NOT_PASS"
+}

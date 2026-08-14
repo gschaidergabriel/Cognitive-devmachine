@@ -1,3 +1,7 @@
+<!-- RAE_META
+{"packet_id":"KMP-G7-RESOLUTION-RECURRENCE-MEMORY","title":"KMP-G7 — Resolution- and Recurrence-Aware Memory","domains":["model_runtime"],"claim_status_hint":"OPEN","origin_actor":"chatgpt-secondary","source_refs":["EXP-G7-RESOLUTION-MEMORY-004","EXP-G7-RECURRENCE-MEMORY-005","SeKV","LazyEviction","HiKV","ForesightKV","K-VEC"]}
+RAE_META -->
+
 # KMP-G7 — Resolution- and Recurrence-Aware Memory
 
 - **packet_id:** KMP-G7-RESOLUTION-RECURRENCE-MEMORY

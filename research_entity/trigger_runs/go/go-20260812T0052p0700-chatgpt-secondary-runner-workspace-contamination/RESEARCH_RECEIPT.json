@@ -1,0 +1,195 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0052p0700-chatgpt-secondary-runner-workspace-contamination",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T00:52:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_subject": "Frank v0.1 / self-hosted target CI continuity",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_parent_observed": "c5acc0a0555eda890e15b13520136945f2060776",
+  "program_stage": "FRANK_V0_1",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "target_head_at_cycle_start": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+  "fresh_target_main_after_parallel_coordination": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+  "problem_statement": "Multiple accepted-target self-hosted workflows failed before Frank semantic tests during actions/checkout cleanup. Determine whether this is a semantic regression, concurrent runner/workfolder collision, or persistent runner-workspace contamination, then test the cheapest reversible mitigation.",
+  "observed_failure_chain": [
+    {
+      "workflow_run": 31517421619,
+      "job": 93865949412,
+      "runner": "clay",
+      "machine": "digital-retina",
+      "phase": "actions/checkout cleanup before semantic tests",
+      "failure": "EACCES unlink of runtime/claycode_eval_v1/__pycache__/analyzer.cpython-312.pyc in the persistent workspace",
+      "semantic_tests_executed": false
+    },
+    {
+      "workflow_run": 31517421634,
+      "job": 93865949796,
+      "runner": "clay",
+      "phase": "subsequent checkout",
+      "failure": "repository state no longer had a usable .git directory during checkout cleanup",
+      "semantic_tests_executed": false,
+      "causal_interpretation": "consistent with a prior partial cleanup leaving a malformed persistent checkout; not independently sufficient to prove the exact deletion sequence"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H_RUNNER_MULTI_LISTENER_SHARED_WORKFOLDER",
+      "claim": "multiple active Runner.Listener instances sharing a work folder are mutating the same checkout",
+      "status": "REFUTED_FOR_OBSERVED_CANARY_STATE",
+      "evidence": "checkout-free canary observed exactly one Runner.Listener, exactly one Runner.Worker, and no shared resolved workFolder"
+    },
+    {
+      "id": "H_PERSISTENT_WORKSPACE_OWNERSHIP_CONTAMINATION",
+      "claim": "non-runner-owned artifacts in the persistent self-hosted workspace make checkout cleanup fail and poison following jobs",
+      "status": "SUPPORTED_CAUSALLY_FOR_CHECKOUT_FAILURE_CLASS",
+      "evidence": "canary directly observed five root:root paths under runtime/claycode_eval_v1/__pycache__, including analyzer.cpython-312.pyc, the exact path named by the earlier EACCES failure; isolated per-run checkout then passed the same self.root gate content"
+    },
+    {
+      "id": "H_SPECIFIC_ROOT_WRITER",
+      "claim": "a particular current workflow or process can be identified as the producer of the root-owned cache",
+      "status": "UNKNOWN",
+      "evidence": "bounded current repository/workflow search did not establish a producer; do not infer one from the cache location alone"
+    }
+  ],
+  "exact_one_go_oob": {
+    "name": "CHECKOUT_FREE_RUNNER_WORKSPACE_FORENSICS_CANARY",
+    "count": 1,
+    "diagnostic_pr": 394,
+    "merged_diagnostic_commit": "f181fead56ec9336edc607c7451c46f5e7e69e8a",
+    "workflow_run": 31518421180,
+    "job": 93869217872,
+    "runner": "clay",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "machine": "digital-retina",
+    "runner_user": "frankrunner",
+    "runner_uid": 1001,
+    "runner_gid": 1001,
+    "runner_workspace": "/home/frankrunner/actions-runner/digitaltransformation/Dr.-Unterweger",
+    "github_workspace": "/home/frankrunner/actions-runner/digitaltransformation/Dr.-Unterweger/Dr.-Unterweger",
+    "listener_count": 1,
+    "worker_count_observed": 1,
+    "runner_agent_name": "clay",
+    "runner_configured_work_folder": "digitaltransformation",
+    "resolved_work_folder": "/home/frankrunner/actions-runner/digitaltransformation",
+    "shared_resolved_workfolders": {},
+    "foreign_owned_count": 5,
+    "foreign_owned_paths": [
+      "runtime/claycode_eval_v1/__pycache__",
+      "runtime/claycode_eval_v1/__pycache__/analyzer.cpython-312.pyc",
+      "runtime/claycode_eval_v1/__pycache__/contracts.cpython-312.pyc",
+      "runtime/claycode_eval_v1/__pycache__/diagnosis.cpython-312.pyc",
+      "runtime/claycode_eval_v1/__pycache__/__init__.cpython-312.pyc"
+    ],
+    "ownership": "root:root",
+    "verdict": "WORKSPACE_OWNERSHIP_CONTAMINATION",
+    "workflow_conclusion": "FAILURE_BY_DESIGN_ON_OBSERVED_HAZARD",
+    "diagnostic_limitation": "the explicit known-failing-path stat in the canary accidentally duplicated one Dr.-Unterweger path segment and printed absent; the independent bounded ownership walk still discovered the exact analyzer path and four sibling root-owned paths, so the ownership finding does not depend on the buggy stat"
+  },
+  "mitigation_replication": {
+    "candidate_pr": 402,
+    "candidate_head": "0f699918375adba719d8f6331c818d1e35295ce0",
+    "design": "fetch exact candidate SHA into unique RUNNER_TEMP repository and execute all pre-existing self.root semantic and differential gates there",
+    "accepted_target_run": 31519173962,
+    "accepted_target_job": 93871700240,
+    "runner": "clay",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "machine": "digital-retina",
+    "os_kernel": "Ubuntu Linux 6.8.0-117-generic",
+    "python": "3.12.3",
+    "git": "2.43.0",
+    "result": "PASS",
+    "passed_checks": [
+      "exact candidate fetch in isolated runner temp",
+      "identity and continuity compile",
+      "self.root source-to-replay regression",
+      "model-visible self.root V15/V16 state regression",
+      "single-instance presence gate",
+      "V16 execution-continuity schema gate",
+      "repository transaction replay",
+      "differential repository static-integrity audit",
+      "no new identity-lane static regression"
+    ],
+    "identity_receipt": {
+      "status": "PASS",
+      "semantic_epoch": 5,
+      "static_checks": 38,
+      "transactions_replayed": 5
+    },
+    "prompt_state_receipt": {
+      "status": "PASS",
+      "cases": 6,
+      "secrets_exposed": 0,
+      "v15_v16_authority": "inform_only=true"
+    },
+    "single_instance_receipt": "PASS_SINGLE_INSTANCE_PRESENCE_DISCRIMINATOR",
+    "v16_schema_receipt": "PASS_FRANK_V16_EXECUTION_CONTINUITY_SCHEMA_GATE",
+    "new_static_failure_count": 0,
+    "artifact_id": 9112321032,
+    "artifact_digest": "84e1478c5e61497a16abbffdb7bb9d0696daa5562968bbe95e5e280dfe79208b"
+  },
+  "swarm_coordination": {
+    "parallel_worker_result": {
+      "main_commit": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+      "change": "independently merged stronger self.root checkout isolation with RUNNER_TEMP, PYTHONDONTWRITEBYTECODE and cleanup",
+      "target_pass_run": 31518756350,
+      "relationship_to_this_lane": "independent same-direction implementation; supersedes duplicate merge need"
+    },
+    "duplicate_avoidance": "PR #402 was closed after fresh-main refresh showed the stronger independently merged fix; no stale duplicate was forced onto main",
+    "unifieddb_lane": "existing PR #392 and its successful specialized target workflow were observed and not duplicated"
+  },
+  "primary_source_basis": [
+    {
+      "source": "GitHub Docs - Self-hosted runners / ephemeral runners",
+      "url": "https://docs.github.com/actions/hosting-your-own-runners/managing-self-hosted-runners",
+      "used_for": "runner isolation guidance and ephemeral-runner context"
+    },
+    {
+      "source": "actions/checkout official repository documentation",
+      "url": "https://github.com/actions/checkout",
+      "used_for": "checkout clean semantics in GITHUB_WORKSPACE"
+    },
+    {
+      "source": "actions/checkout issue 1552",
+      "url": "https://github.com/actions/checkout/issues/1552",
+      "used_for": "independent self-hosted EACCES precedent involving root-owned workspace files; discovery/support only, not sole evidence"
+    }
+  ],
+  "negative_and_unknown_results": [
+    "multiple-listener/shared-workfolder hypothesis was not supported by the checkout-free canary",
+    "specific root-writing producer remains UNKNOWN",
+    "GitHub actions/runners enumeration through the connected app returned 403, so no unsupported external runner-registration claim is made",
+    "a separate Deep Integrity portable job failure was not diagnosed and is not attributed to workspace contamination without evidence",
+    "pre-existing static-integrity failures remained in the differential audit, but candidate introduced zero new failures"
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_MITIGATION_ROOT_CAUSE_PARTIAL",
+    "scope": "accepted-target self-hosted CI continuity only; no Frank cognitive semantics change",
+    "supported_change": "critical self-hosted gates that must survive persistent workspace residue should use exact per-run isolated checkout state, preferably under RUNNER_TEMP, until the root-writing source is identified and eliminated",
+    "continuity_requirement": "persistent workspace ownership contamination becomes an explicit health/test obligation; checkout failure before semantic execution must be classified as infrastructure evidence, not semantic failure",
+    "strongest_counterhypothesis": "isolated checkout can mask but does not eliminate the unknown root writer; persistent runner directories may still accumulate contamination outside isolated job trees",
+    "promotion_boundary": "do not claim root cause fully closed until the producing process is identified or the persistent workspace is proven clean across repeated accepted-target jobs",
+    "rollback": "workflow-only isolation is reversible; no runtime state, model, training, authority, database, or Frank Harness semantics were changed"
+  },
+  "next_frontier": [
+    "trace the root-owned claycode_eval_v1 cache producer using existing logs/provenance if available, without inventing attribution",
+    "coordinate any remaining critical self-hosted checkout migrations against fresh main to avoid duplicate edits",
+    "retain the checkout-free ownership canary or equivalent bounded health signal until contamination source is closed",
+    "continue FRANK_V0_1 semantic work only after infrastructure-vs-semantic failure classification is preserved"
+  ],
+  "authority_and_safety": {
+    "frank_self_harness_mutation": false,
+    "training_started": false,
+    "model_changed": false,
+    "effect_authority_changed": false,
+    "production_runtime_mutated": false,
+    "research_entity_independent_ci_change_only": true
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "target_integration":{
+    "repo":"gschaidergabriel/Dr.-Unterweger",
+    "pull_request":391,
+    "tested_head":"6fe47f9672a997f784ac168314f8bc0c65afcd65",
+    "base":"72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "workflow_run":31515873771,
+    "job":93860745062,
+    "target_result":"25/25_PASS_LEASE_BACKPRESSURE_CRASH_TAKEOVER",
+    "merge_commit":"7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+    "state":"MERGED_TO_MAIN"
+  },
+  "durable_effect":"target main retains the Clay worker contract, candidate lease/telemetry schema, lease-fenced bounded worker, target gate and regression workflow",
+  "production_activation":{
+    "candidate_worker_sql_in_apply_current_schema":false,
+    "candidate_outbox_sql_in_apply_current_schema":false,
+    "systemd_service_deployed":false,
+    "canonical_state_migrated":false
+  },
+  "evidence_promoted":[
+    "single-host live-lease collision refusal",
+    "process-crash lease expiry takeover with newer generation",
+    "stale generation fencing",
+    "bounded batch and HARD/SOFT/NONE backpressure transitions",
+    "authoritative-write independence from derived backlog",
+    "exact-current graph re-admission after recovery"
+  ],
+  "component_state":"F-V01-04_REMAINS_OPEN",
+  "remaining_gates":[
+    "sustained shadow load and operating-window evidence",
+    "reversible production-schema integration",
+    "DEPLOYMENT_BOOT systemd/service V4 non-bypass",
+    "selected-lineage LOGICAL_ROLLBACK recovery",
+    "canonical migration + last-known-good owner gate",
+    "OS_CRASH/POWER_LOSS direct evidence if required",
+    "large-corpus projection/retrieval quality + resources",
+    "whole Frank v0.1 composition"
+  ],
+  "canonical_frank_state_mutated":false,
+  "external_frank_effect_performed":false,
+  "training_authorized":false,
+  "frank_self_harness_authority":"PROPOSAL_ONLY",
+  "whole_frank_v0_1_acceptance":false
+}

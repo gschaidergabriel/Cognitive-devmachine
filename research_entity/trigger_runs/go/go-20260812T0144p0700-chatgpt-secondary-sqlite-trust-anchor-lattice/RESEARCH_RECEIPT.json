@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T01:44:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-01-IDENTITY-SERVER-BINARY"
+  ],
+  "canonical_parent_seen": "31a0e1debe8342e62beb918f2d2e3d412ba27cce",
+  "frank_repo": {
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "tested_main_sha": "a4f11b7ecb185a8e9e1e86818c4662b7a90fb133",
+    "accepted_target_workflow_run": 31523441341,
+    "accepted_target_workflow_conclusion": "success",
+    "artifact_id": 9113989856,
+    "artifact_digest": "sha256:a4f821160257deae540a9ab2512d43257f1f802ba95fa4053c0423cc30a7c36d"
+  },
+  "grf": {
+    "observed_reality": [
+      "Accepted-target run 31523441341 built two distinct SQLite 3.53.4 shared-library realities from the same official upstream source archive/source-id.",
+      "Build A library SHA-256 is 9791a0b0b1f7a60f1e6a93e7b9532e72ea16b0059ade057b3f6995aa4d496cbc.",
+      "Build B library SHA-256 is d6fa0b1168e8edb9eda1f125dbba7c734af90b49327ac209588d758befd1191e and differs by SQLITE_DQS=0 compile policy.",
+      "Both realities report SQLite 3.53.4 and identical sqlite_source_id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc.",
+      "The current V4 candidate admitted both realities when each caller supplied its own internally consistent manifest and manifest digest."
+    ],
+    "hypothesis": "Release-safe SQLite admission requires an independently authorized build-specific trust anchor; version and upstream source-id are necessary but not sufficient to identify the authorized productive runtime.",
+    "strongest_counterhypothesis": "SQLite version plus sqlite_source_id is sufficient because identical upstream source implies equivalent release-safety identity.",
+    "falsifier": "Construct two compile-time-divergent binaries from identical upstream 3.53.4 source, then compare admission under progressively stronger anchor field sets.",
+    "outcome": "RETAIN_AND_NARROW",
+    "confidence": "HIGH_FOR_IDENTITY_DISCRIMINATION; TRUST-ANCHOR-CONTROL-PLANE_NOT_YET_PROVEN"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "SQLITE_TRUST_ANCHOR_DISCRIMINATION_LATTICE_V1",
+    "bounded": true,
+    "reversible": true,
+    "effect_authority": "NONE",
+    "input": "Downloaded immutable artifact from accepted-target workflow run 31523441341; no Frank database was opened or mutated.",
+    "matrix": [
+      {
+        "policy": "P0_VERSION",
+        "fields": ["version"],
+        "A_admitted": true,
+        "B_admitted": true
+      },
+      {
+        "policy": "P1_VERSION_SOURCE_ID",
+        "fields": ["version", "source_id"],
+        "A_admitted": true,
+        "B_admitted": true
+      },
+      {
+        "policy": "P2_PLUS_COMPILE_OPTIONS",
+        "fields": ["version", "source_id", "compile_options_sha256"],
+        "A_admitted": true,
+        "B_admitted": false
+      },
+      {
+        "policy": "P3_PLUS_LIBRARY_HASH",
+        "fields": ["version", "source_id", "library_sha256"],
+        "A_admitted": true,
+        "B_admitted": false
+      },
+      {
+        "policy": "P4_FULL_BUILD_MANIFEST",
+        "fields": ["version", "source_id", "compile_options_sha256", "library_sha256", "manifest_sha256"],
+        "A_admitted": true,
+        "B_admitted": false
+      }
+    ],
+    "result": "VERSION_AND_SOURCE_ID_REFUTED_AS_SUFFICIENT_BUILD_IDENTITY",
+    "interpretation": "A build-specific fingerprint discriminates the observed counterworlds, but this experiment does not establish who controls the trusted fingerprint. A caller-supplied digest is consistency evidence, not independent authorization.",
+    "promotion": "NO_RELEASE_PROMOTION"
+  },
+  "upstream_primary_evidence": {
+    "sqlite_wal_reset_fix_floor": "3.51.3 and later",
+    "sqlite_3_53_4_contains_fix": true,
+    "sqlite_3_53_4_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "sources": [
+      "https://sqlite.org/wal.html",
+      "https://www.sqlite.org/releaselog/3_53_4.html"
+    ]
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "statement": "Bind Frank's accepted productive SQLite runtime to an independent build/artifact trust anchor that the caller cannot choose. Runtime admission must prove the loaded library matches that anchor before any canonical WAL DB open. Version and sqlite_source_id remain corroborating fields, not the authorization root.",
+    "cross_gate_dependency": "F-V01-13 cannot be cleanly closed by a caller-selected runtime manifest alone. The trust anchor should derive from the same owner-pinned trusted builder/artifact identity chain needed by F-V01-01, or from an equivalently independent deployment authority boundary.",
+    "strongest_counterhypothesis": "A separately anchored compile-options policy is enough without exact library/artifact identity.",
+    "next_discriminating_test": "On the accepted target, provision one owner/deployment-authorized fixed SQLite artifact and one equally self-consistent unauthorized sibling build; prove boot admits only the authorized artifact, rejects sibling/downgrade/library-swap before canonical state open, and preserves crash/restart continuity.",
+    "rollback": "Keep current V4 mechanisms as research candidates; do not promote product wiring until independent anchor authority and accepted-target boot integration are demonstrated."
+  },
+  "negative_results": [
+    {
+      "id": "NEG-SQLITE-VERSION-SOURCEID-AS-AUTHORITY-V1",
+      "result": "SQLite version plus sqlite_source_id cannot distinguish compile-time-divergent binaries built from the same upstream source."
+    },
+    {
+      "id": "NEG-SQLITE-CALLER-MANIFEST-DIGEST-AS-TRUST-ANCHOR-V1",
+      "result": "A manifest digest supplied by the same caller selecting the manifest proves self-consistency but not independent authorization."
+    }
+  ],
+  "release_adjudication": {
+    "F-V01-13": "OPEN_RELEASE_BLOCKING",
+    "F-V01-01": "OPEN_DEPENDENCY_REINFORCED",
+    "reason": "SQLite 3.53.4 itself is on the fixed side of the upstream WAL-reset boundary, but exact authorized productive runtime identity remains unproven.",
+    "next_smallest_falsifier": "Owner/deployment-pinned artifact trust anchor + accepted-target authorized-vs-sibling boot rejection matrix before any canonical WAL state open."
+  }
+}

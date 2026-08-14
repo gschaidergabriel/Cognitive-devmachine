@@ -1,0 +1,106 @@
+module claycode.base.wp03
+version "0.1"
+status RESEARCH_CANDIDATE
+
+type GoalOrigin = AUTHENTICATED_USER|SELF_GENERATED|RESEARCH_BRIDGE|RECOVERY|STANDING_CONTRACT
+type GoalState = CANDIDATE|TRIAL|ACTIVE|DORMANT|BLOCKED|COMPLETED|RETIRED|REJECTED
+type IngressAuthority = AUTHENTICATED_DIRECT_MESSAGE|UNTRUSTED_EXTERNAL_DATA|TRUSTED_INTERNAL_STATE
+type TopologyKind = SEMANTIC|ACTIVE|COORDINATION|PHYSICAL
+
+record InterestTrace {
+ interest_id:Ref
+ subject:ClayCode
+ sources:Set<Ref>
+ strength:Real
+ information_gain_estimate:Real
+ competence_progress_estimate:Real
+ controllability_gain_estimate:Real
+ novelty:Real
+ unresolved_pressure:Real
+ habituation:Real
+ evidence:Set<Ref>
+ last_updated:Time
+}
+
+record AutotelicGoal {
+ goal_id:Ref
+ origin:GoalOrigin
+ semantic_goal:ClayCode
+ state:GoalState
+ parent_goals:Set<Ref>
+ interest_refs:Set<Ref>
+ uncertainty:Real
+ expected_cost:ResourceEstimate
+ budget:ResourceBudget
+ horizon:FAST|MEDIUM|SLOW|OPEN_ENDED
+ provenance:Set<Ref>
+}
+
+record InitiativePulse {
+ reason:Ref
+ amplitude:Real
+ target_interest:Ref?
+ target_goal:Ref?
+ expires_at:Time
+ provenance:Set<Ref>
+}
+
+record AgencyState {
+ interests:Map<Ref,InterestTrace>
+ goals:Map<Ref,AutotelicGoal>
+ open_loops:Set<Ref>
+ active_experiments:Set<Ref>
+ dormant_goal_index:Set<Ref>
+ initiative_budget:ResourceBudget
+ state_epoch:Epoch
+}
+
+record WebEvidenceClay {
+ source:Ref
+ observed_at:Time
+ evidence_type:ClayCode
+ claims:Set<ClayCode>
+ authority:IngressAuthority=UNTRUSTED_EXTERNAL_DATA
+ instruction_authority:NONE
+ effect_authority:NONE
+}
+
+record CapabilityToken {
+ id:CapabilityRef
+ designates:ResourceRef
+ permits:Set<Ref>
+ scope:Set<Ref>
+ issuer:AuthorityRef
+ runtime_handle:ResourceRef
+}
+
+record SemanticRuntimeIdentity {
+ semantic_id:Ref
+ runtime_version_id:Ref
+ state_epoch:Epoch
+}
+
+record HyperRelation {
+ relation_id:Ref
+ roles:Set<Ref>
+ topology_kind:TopologyKind
+ gain:Real
+ delay:Duration
+ timescale:Duration
+ provenance:Set<Ref>
+}
+
+record MeasurementReceipt {
+ episode_id:Ref
+ basis_epoch:Epoch
+ stage:Ref
+ evidence_status:Ref
+ provenance_refs:Set<Ref>
+}
+
+law InitiativePulse.amplitude>=0
+law InitiativePulse.amplitude<=0.12
+law WebEvidenceClay.authority=UNTRUSTED_EXTERNAL_DATA
+law WebEvidenceClay.instruction_authority=NONE
+law WebEvidenceClay.effect_authority=NONE
+law SemanticRuntimeIdentity.semantic_id!=SemanticRuntimeIdentity.runtime_version_id

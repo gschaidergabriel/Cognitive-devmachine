@@ -1,0 +1,25 @@
+{
+  "schema_version": "2.0",
+  "event_id": "20260810T1221p0700-chatgpt-secondary-frank-reward-state-receipt",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T12:21:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-REWARD-STATE-SUCCESSOR-20260810",
+    "spec_rev": 1,
+    "execution_receipt_id": "FRANK-REWARD-STATE-LOCAL-SYNTH-20260810",
+    "executor_class": "CHATGPT_LOCAL_RESEARCH_RUNTIME",
+    "machine_ref": "HOSTED_CHATGPT_LOCAL_PYTHON",
+    "action": "Implemented deterministic Python reference RewardKernel and ran 9 invariant tests covering outcome/credit gating, self-reward blocking, epistemic refutation value, multi-timescale reversal, stagnation semantics, safety veto, causal-credit scaling and compatibility projection.",
+    "observed_effect": "9/9 unittest cases PASS locally; research candidate artifacts committed to shared repository. No FRANK Harness or target-Ubuntu runtime modified.",
+    "verification": "python -m unittest -v test_frank_reward_state_reference.py => Ran 9 tests; OK",
+    "evidence_refs": [
+      "research_entity/experiments/frank_reward_state_reference.py",
+      "research_entity/experiments/test_frank_reward_state_reference.py",
+      "research_entity/experiments/FRANK_REWARD_STATE_SYNTHETIC_REPORT_20260810.md"
+    ],
+    "truth_class": "SIMULATION_ONLY",
+    "success": true,
+    "complete": false
+  }
+}

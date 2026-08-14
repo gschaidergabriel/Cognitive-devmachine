@@ -1,0 +1,237 @@
+{
+  "schema_version": "CLAY_CENTER_LIVE_RESEARCH_DELTA_V2",
+  "event_id": "20260811T175400Z_live_projection_clock_parser_runner_delta",
+  "created_at_utc": "2026-08-11T17:54:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "provider": "OpenAI",
+    "training_performed": false,
+    "external_target_execution_performed_by_this_actor": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "comparison_cut": {
+    "previous_notified_research_event_commit": "e20783b5ac9eaf914a510277ab846b31d9755f12",
+    "previous_notified_event_blob": "6fdffef93624938795da5527af55c43850bc4f97",
+    "previous_notified_event_path": "research_entity/rooms/rooms/center/events/20260811T170051Z_live_compiler_consent_recovery_delta.json",
+    "research_head_observed_before_write": "d8ca9b3f39a46153561c43fc0f7dd86d09e1bb8b",
+    "target_main_previous": "72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "target_main_observed": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+    "change_class": "SUBSTANTIVE_PROJECTION_PARSER_AND_RUNNER_DELTA"
+  },
+  "canonical": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "bootstrap_blob": "bef89f19ca9bee0aafe45ac3b610ef8ee339dfc0",
+    "advanced_by_this_event": false
+  },
+  "fresh_primary_sources": [
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T17:47:00Z",
+      "url": "https://docs.python.org/3.12/library/time.html",
+      "finding": "Python documents the wall-time clock as adjustable and distinct from monotonic clocks that are not affected by system clock updates. Lease expiry and stale-generation fencing are therefore separate properties."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T17:47:00Z",
+      "url": "https://lark-parser.readthedocs.io/en/latest/how_to_use.html",
+      "finding": "Lark strict mode converts shift/reduce warnings into errors; retaining strict=True is an executable ambiguity boundary rather than a cosmetic test choice."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T17:47:00Z",
+      "url": "https://lark-parser.readthedocs.io/en/latest/parsers.html",
+      "finding": "Lark's LALR parser uses one-token lookahead; structural grammar factoring is the preferred evidence-bearing discriminator for the observed WithUpdate ownership conflict."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T17:47:00Z",
+      "url": "https://docs.github.com/en/actions/reference/variables-reference",
+      "finding": "GitHub documents separate RUNNER_TEMP and GITHUB_WORKSPACE paths and notes that temporary cleanup can fail when the runner account lacks deletion permission. This matches the observed ownership-contamination mechanism without proving its privileged source."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T17:47:00Z",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "SQLite 3.53.4 was released 2026-07-24 and is in the fixed WAL-reset lineage used by the accepted target projection lanes."
+    }
+  ],
+  "material_deltas": [
+    {
+      "id": "D-PROJECTION-WORKER-LEASE-BACKPRESSURE-MAIN",
+      "routes": ["unifieddb", "claygraph", "frank", "gwt", "emergenz", "hyperposition", "recovery", "harness"],
+      "support": [
+        "Target main 7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5 merged the single-host lease-fenced bounded projection-worker candidate/regression path without production schema or service activation.",
+        "Accepted run 31515873771 / job 93860745062 / artifact 9111199960 digest sha256:4fe49d40f8acc1540d5a66d81b96bbcbc6b9f10087e9ff47e0bad24ff0fb51ee passed 25/25. A crash after 7 projections left 89 pending; live contention was refused, expiry takeover acquired a newer generation, the stale generation was fenced and exact 176/176 projection recovered.",
+        "Draft shadow-load run 31517421729 / job 93865950348 / artifact 9111667017 digest sha256:9b91466e0d34b12421ced359cc4ae70dcd2fb9ad0c42aff0b7f450f1603e9eef passed 22/22 on 880 events. Authoritative writes remained available through maximum backlog 339 / lag 338; final projection was exact and healthy. Producer commit latency was p50 1.206 ms, p95 8.600 ms, p99 14.297 ms, max 431.424 ms; drain after producer stop was 1.067 s."
+      ],
+      "counterevidence_and_limits": [
+        "The 25/25 and 22/22 runs are one evolving implementation/runner lineage, not independent replications.",
+        "An offline lesion over 52 captured samples found 15 false consequential-use windows among 51 lagged samples when SOFT pressure was treated as fresh. Pressure/health cannot replace exact event-set/root currentness.",
+        "No production migration, systemd service, logical rollback, OS/power failure, multi-host safety, 24-hour operating window or large-corpus quality claim follows."
+      ],
+      "adjudication": "TARGET_SUPPORTED_SINGLE_HOST_CANDIDATE_AND_SHADOW_LOAD; PRODUCTION_ACTIVATION_HELD."
+    },
+    {
+      "id": "D-PROJECTION-LEASE-REALTIME-DISCONTINUITY-GAP",
+      "routes": ["unifieddb", "claygraph", "recovery", "service", "harness"],
+      "support": [
+        "The current candidate derives lease expiry from time.time_ns()/CLOCK_REALTIME milliseconds.",
+        "Accepted-target diagnostic successor run 31519078808 / job 93871399369 reproduced the negative mechanism with a 5000 ms lease, only 10 ms logical elapsed time and a simulated +10000 ms realtime step. Control refused contender B; the V1 intervention let B acquire generation 2 while only 10 ms elapsed, after which generation fencing correctly rejected generation 1.",
+        "A separate accepted-target diagnostic run 31519027176 / job 93871231482 / artifact 9112383042 digest sha256:6a4420298a56ce5454f5f40dd50aaa9264252d57b79e2ea6ebb34bb485b5d3c6 reproduced expired-owner self-resurrection: generation 1 renewed 1000 ms after its deadline without a generation bump and then blocked the recovery contender.",
+        "Draft V2 repair head e3776a4c39b0efbb0857eab2cd3d44be16f8786c passed accepted-target run 31519419410 / job 93872507853 with 13 checks. It retained owner/generation authority, added Linux boot_id + CLOCK_BOOTTIME expiry sidecar state, made realtime telemetry-only for expiry, resisted the forward step, preserved normal same-boot expiry/takeover, rejected expired-holder self-renewal and permitted liveness takeover on boot identity change."
+      ],
+      "limits": [
+        "The host clock was not changed and disposable state was used; the result target-supports the injected failure class, not a claim that a real production clock step occurred.",
+        "V2 remains draft and has not replayed the full 25/25 crash/backpressure or 22/22 880-event shadow-load paths. Installed service binding, in-flight apply around takeover, realtime projection-age telemetry, power loss and logical rollback remain open."
+      ],
+      "adjudication": "V1 FORWARD-STEP SAFETY AND EXPIRED-OWNER RENEWAL FENCE REFUTED ON ACCEPTED TARGET; V2 BOOT-ID/CLOCK_BOOTTIME REPAIR TARGET-SUPPORTED BOUNDED AND NOT PROMOTED."
+    },
+    {
+      "id": "D-CLAYCODE-STRICT-RHS-AND-SCOPE-REPAIR",
+      "routes": ["claycode", "frank", "gwt", "unifieddb", "harness"],
+      "support": [
+        "PR357 authority canary successor run 31515536228 / job 93859621634 passed 14/14 on tested merge d9f094263bc34fd54c9e620ab4c125aa97d8c78a: opaque construction and denied outer calls failed closed before nested evaluation; authority and runtime-effect counters remained zero. This supersedes the prior 13/14 wording mismatch within the same lineage.",
+        "Strict-LALR discriminator run 31517320226 / job 93865605550 selected structural rule with_assign: ident = add_expr. The old full-expression RHS reproduced a strict conflict; RHS_ADD built strict, preserved 36/40 frontier parsing and real frank_effects parsing.",
+        "Adversarial With-RHS crown-swap run 31518337418 / job 93868937243 passed: parenthesized relational/boolean field expressions stayed inside WithUpdate while unparenthesized relation/AND remained outside; artifact 9112029145 digest sha256:be736df236a4b70f92c058f5464f297eeeee6f6e2d99d94015ffb46773e0b1e8.",
+        "Earley parse-forest shadow run 31518303121 / job 93868828101 witnessed two ambiguity nodes / six alternatives in the legacy full-expression RHS and zero ambiguity in the repaired bounded witnesses; artifact 9112166176 digest sha256:09f66cdc3c60480f2a27057989cdf34b608427074817cebffe75e6322273e8ca.",
+        "Exact-current-main composition run 31518547883 / job 93869643365 passed against main f181fead56ec9336edc607c7451c46f5e7e69e8a and frontier head a2505ca8f4c7b01a727e7a3e4362544f05c42cd1. Frozen frontier remained 36/40, 429 unique / 464 unresolved occurrences; current main was reported separately as 36/42. Differentials remained 200576/0, 56000/0 and 16000/0. CORPUS_GHOST_APPEND preserved the frozen counts while explicitly reporting the synthetic rejection.",
+        "The bounded executable frontier merged to target main as a5e79b2a1835e500e78b0373166b3437133c6f43. Current target main 0ed593daaa2da072d13d15fbf658fe2f7312b930 adds only the later runner-isolation workflow change."
+      ],
+      "counterevidence_and_limits": [
+        "The two new projection-contract sources are rejected by Structured-V1 and use a distinct declaration/transition surface; current-main parser coverage is 36/42 = 85.7%, not 90%.",
+        "Freezing the frontier prevents denominator drift but can hide nothing only if existing frozen filenames bind composed current bytes and every new source remains explicitly reported and separately admitted.",
+        "The merge is a bounded executable-frontier promotion, not WP04/WP06 or whole ClayCode completion. WP04 typing, WP06 lowering, 22 MethodChain sites, comparison chains, Bool/Int cross-nominal rules, six total current rejects and general runtime/ABI breadth remain open."
+      ],
+      "adjudication": "TARGET_SUPPORTED_BOUNDED_GRAMMAR_AND_MEASUREMENT-SCOPE FRONTIER MERGED; WP04/WP06 AND WHOLE CLAYCODE REMAIN OPEN."
+    },
+    {
+      "id": "D-SELF-HOSTED-WORKSPACE-OWNERSHIP-BOUNDARY",
+      "routes": ["harness", "claycode", "frank", "security", "recovery"],
+      "support": [
+        "Checkout-free accepted-target forensics run 31518421180 / job 93869217872 observed one listener, one worker and five root:root-owned objects under runtime/claycode_eval_v1/__pycache__. Multiple-runner hypotheses were not observed; workspace ownership contamination was.",
+        "Target main f181fead56ec9336edc607c7451c46f5e7e69e8a added only the read-only forensic workflow; it did not change Frank semantics.",
+        "PR396 isolated-tree run 31518756350 / job 93870326463 passed from a run-unique RUNNER_TEMP checkout at tested merge 4f27cb30169953f700f73108fe29499d8dea2844. It executed identity/source-to-replay, 38 static checks, five transaction replays, V15/V16 state, 12-contender single-instance and cleanup; artifact 9112286903 digest sha256:96ba2bedcdc0c861f35170cca78f27cae85e823f92ea349c1195ef9f6cd4d3bc.",
+        "The scoped workflow repair merged to target main as 0ed593daaa2da072d13d15fbf658fe2f7312b930; product semantics and Frank self-Harness authority were unchanged."
+      ],
+      "counterevidence_and_limits": [
+        "Run-unique isolation restores this bounded workflow but does not identify or remove the privileged process that created root-owned bytecode in the persistent workspace.",
+        "The first PR396 head produced an invalid workflow with zero jobs because runner context was used before runner assignment; that head receives zero execution credit.",
+        "Prior EACCES/.git-loss runs failed before semantic assertions and remain infrastructure evidence only."
+      ],
+      "adjudication": "TARGET_SUPPORTED_SCOPED_WORKFLOW_ISOLATION; GLOBAL RUNNER OWNERSHIP ROOT CAUSE OPEN."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-LEASE-CLOCK-BOOT-PASSPORT-001",
+      "claim": "A durable single-host lease needs three separately bound facts: monotonic or boottime interval validity within one boot, explicit boot identity across restart, and generation fencing after takeover; wall time may be audit data but must not alone mint expiry authority.",
+      "counterhypothesis": "Generation fencing plus ordinary CLOCK_REALTIME expiry is sufficient because a newer generation immediately fences the old worker and host clock jumps are operationally negligible.",
+      "discriminator": "Run forward/backward realtime discontinuities, suspend, reboot/boot-id change, expiry-boundary renewal, expired-owner self-resurrection, concurrent takeover and stale-generation projection. Preserve liveness as well as single-active safety.",
+      "falsifier": "A contender acquires before the lease's accepted interval elapsed, an expired owner renews without fresh generation, or a pre-reboot lease is accepted under a new boot identity."
+    },
+    {
+      "id": "H-PROJECTION-FRESHNESS-NOT-PRESSURE-001",
+      "claim": "Backlog pressure and worker health are operational signals, not semantic freshness; consequential ClayGraph use requires exact authoritative event-set/root currentness.",
+      "counterhypothesis": "SOFT pressure is sufficiently fresh for low-risk graph use and exact-current gating unnecessarily sacrifices availability.",
+      "discriminator": "Replay captured and fresh load while lesioning exact-current admission at NONE/SOFT/HARD thresholds; measure stale consequential reads, decisions and recovery amplification by risk class.",
+      "falsifier": "Any non-exact graph state influences a consequential result without an explicit bounded-staleness contract and producer-owned risk authorization."
+    },
+    {
+      "id": "H-EVIDENCE-UNIVERSE-SPLIT-001",
+      "claim": "Parser evidence must bind both a frozen regression universe and a separately enumerated expanding source universe; a single rolling percentage either rewrites history or hides new unsupported surfaces.",
+      "counterhypothesis": "One current-main coverage percentage is simpler and sufficient if every run is exact-head bound.",
+      "discriminator": "Append unsupported, supported and modified-existing sources. Require historical metrics to remain identity-stable, existing-source regressions to turn red, and every new source to appear with explicit syntax-family/admission status.",
+      "falsifier": "A newly rejected source disappears from reporting, or an incompatible change to a frozen source leaves the frontier gate green."
+    },
+    {
+      "id": "H-SEMANTIC-FRONTEND-CONFLUENCE-001",
+      "claim": "Projection-contract syntax may use a separate composable frontend only if it converges into the same typed IR, WP04 effect/authority admission and evaluator semantics as Structured-V1.",
+      "counterhypothesis": "Extending the single Structured-V1 grammar is cheaper and avoids frontend divergence.",
+      "discriminator": "Inventory the two projection sources, implement diagnostic-only unified-grammar and separate-frontend variants, then compare strict conflicts, AST/IR equivalence, rejection behavior, complexity and identical WP04/effect gates.",
+      "falsifier": "The separate frontend creates a second authority/effect semantics, or the unified grammar passes all strict/adversarial gates with lower cost and identical IR."
+    },
+    {
+      "id": "H-RUNNER-RESIDUE-SOURCE-ELIMINATION-001",
+      "claim": "Run-unique checkout is a scoped continuity repair, but reproducible ordinary checkout requires eliminating privileged residue creation and restoring runner-user ownership at the source.",
+      "counterhypothesis": "Permanent RUNNER_TEMP isolation is sufficient; persistent workspace cleanliness has no semantic value once exact SHA and cleanup are asserted.",
+      "discriminator": "Trace root-owned inode creation to workflow/process identity, remove that privilege path, clean the persistent tree, then execute repeated ordinary checkouts and isolated controls with bytecode creation, cancellation and crash injection.",
+      "falsifier": "Ordinary runner-user checkout remains clean across repeated adversarial runs without removing the privileged source, or isolated trees acquire undeletable foreign-owned residue."
+    }
+  ],
+  "novel_concepts": [
+    {
+      "name": "Lease Clock-Boot Passport",
+      "definition": "The conjunction of within-boot interval clock, boot identity and fencing generation required before a durable lease is current."
+    },
+    {
+      "name": "Pressure-Freshness Category Error",
+      "definition": "Treating a queue-health class such as SOFT as proof that derived semantic state is causally current."
+    },
+    {
+      "name": "Evidence Universe Split",
+      "definition": "Separate identity-bound historical regression scope from the explicitly enumerated growing source universe."
+    },
+    {
+      "name": "Semantic Frontend Confluence",
+      "definition": "Multiple syntax families are allowed only when they converge before type, effect, authority and evaluator truth is assigned."
+    },
+    {
+      "name": "Runner Root-Residue Shadow",
+      "definition": "A privileged artifact in a persistent test workspace that prevents tests from executing and can masquerade as product counterevidence."
+    }
+  ],
+  "provenance_and_deduplication": {
+    "rules_applied": [
+      "Projection worker 25/25 and shadow-load 22/22 are one evolving candidate lineage; the latter extends workload evidence rather than independently replicating the former.",
+      "V1 forward-step and expired-owner diagnostics attack distinct temporal invariants in the same lease implementation; they are not independent architecture replications.",
+      "PR357 13/14 and successor 14/14 are one authority-canary lineage; the later semantic-wording repair supersedes rather than adds an independent vote.",
+      "RHS_ADD strict discriminator, crown-swap and current-main composition are complementary parser-boundary tests sharing grammar/runner ancestry.",
+      "Workspace forensics and isolated-tree pass describe one runner-contamination lineage with distinct diagnosis and mitigation roles.",
+      "Cancelled, invalid-zero-job and pre-assertion checkout failures receive zero semantic credit."
+    ],
+    "independent_replication_claimed": false
+  },
+  "preserved_nulls_and_negatives": [
+    "Initial CLOCK_REALTIME forward-step run 31518618721 was cancelled and produced no artifact; it receives zero credit. Successor run 31519078808 is the credited accepted-target negative reproduction.",
+    "The V2 portable job 93872507715 never started because of an account payment/spending-limit infrastructure block; it supplies no semantic counterevidence.",
+    "The first expired-owner diagnostic run 31518490204 failed before assertions because its standalone test lacked repository-root import binding; only repaired run 31519027176 receives mechanism credit.",
+    "PR396 first workflow head was invalid and created zero jobs; only corrected run 31518756350 is credited.",
+    "Runs 31517421619 and 31517421634 failed before assertions because of persistent-workspace EACCES/.git loss; they are infrastructure negatives, not Frank/UnifiedDB semantic failures.",
+    "Current-main Structured-V1 coverage is 36/42 = 85.7%; the two projection-contract sources remain explicit rejects rather than being silently excluded.",
+    "SOFT-pressure lesion produced 15 false-use windows among 51 lagged samples; pressure-only consequential admission remains rejected.",
+    "No real clock step, production schema/service, logical rollback, power loss, external effect, training, emergence, consciousness or whole-Frank acceptance is claimed."
+  ],
+  "routing_impulses": [
+    {
+      "consumers": ["UnifiedDB", "ClayGraph", "recovery", "service/deployment", "harness"],
+      "action": "Hold production activation. Carry the target-supported V2 boot_id/CLOCK_BOOTTIME repair through the full 25/25 crash/backpressure and 22/22 880-event shadow-load regressions, then attack in-flight apply around takeover, backward steps, suspend, reboot, realtime age telemetry and installed service ownership. Retain generation fencing as an independent stale-worker fence."
+    },
+    {
+      "consumers": ["GWT", "emergenz", "hyperposition", "ClayGraph", "effect authority"],
+      "action": "Keep consequential graph use closed until exact event-set/root currentness. Treat pressure and health as resource routing signals only; test any bounded-staleness exception as an explicit producer-owned risk capability."
+    },
+    {
+      "consumers": ["ClayCode supervisor", "parser", "WP04", "WP06", "UnifiedDB language surface"],
+      "action": "Retain RHS_ADD and frozen/current universe split, but do not merge from coverage arithmetic alone. Classify the two projection-contract sources by syntax family, compare unified versus composable frontend paths into one typed IR, then rerun strict parser, 14/14 authority, WP04 nominal negatives and Python/C lowering gates on the exact current head."
+    },
+    {
+      "consumers": ["self-hosted runner", "security/recovery", "harness", "ClayCode"],
+      "action": "Use isolated checkout only as scoped mitigation. Trace and eliminate the root-owned pyc producer, clean the persistent workspace, and prove repeated ordinary checkout/cancel/crash recovery under runner-user ownership before calling the runner globally repaired."
+    }
+  ],
+  "promotion_boundary": {
+    "canonical_state_changed": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "final_training_authorized": false,
+    "training_performed": false,
+    "productstart_pass": false,
+    "frank_harness_mutation_authority_changed": false,
+    "target_repo_modified_by_this_actor": false
+  }
+}

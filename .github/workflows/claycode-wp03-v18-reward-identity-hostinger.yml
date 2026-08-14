@@ -1,0 +1,55 @@
+name: ClayCode WP03 V18 Reward Identity Falsifier
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-wp03-v18-reward-identity-hostinger.yml'
+      - 'tools/claycode_wp03_reward_relation_identity_falsifier.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hostinger-falsifier:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Verify current WP03 falsifier component blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:tools/claycode_base_frontend.py)" = 31598f85a27ade2d98466606af6bdf5a8473cc8d
+          test "$(git rev-parse HEAD:tools/claycode_base_typed_ir.py)" = e8525ee10f5fe4b8d40db79f0d8264a5231eea63
+          test "$(git rev-parse HEAD:research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark)" = b27a4da99c9eff68302d550aad78c4e64cabe5c3
+          test "$(git rev-parse HEAD:research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt)" = 4a361757efede020cfb288ad7beda2c4a7e6c6b5
+      - name: Build hash-locked parser environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV=/tmp/clay-wp03-reward-${GITHUB_RUN_ID}
+          python3 -m venv "$VENV"
+          "$VENV/bin/pip" install --disable-pip-version-check --no-input --require-hashes --only-binary=:all: -r research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+      - name: Execute discriminator
+        shell: bash
+        run: |
+          set -uo pipefail
+          VENV=/tmp/clay-wp03-reward-${GITHUB_RUN_ID}
+          set +e
+          PYTHONPATH=tools PYTHONSAFEPATH=1 /usr/bin/time -v "$VENV/bin/python" tools/claycode_wp03_reward_relation_identity_falsifier.py > /tmp/wp03_reward_${GITHUB_RUN_ID}.json 2> /tmp/wp03_reward_${GITHUB_RUN_ID}.time
+          rc=$?
+          set -e
+          cat /tmp/wp03_reward_${GITHUB_RUN_ID}.json
+          cat /tmp/wp03_reward_${GITHUB_RUN_ID}.time
+          exit "$rc"
+      - name: Cleanup
+        if: always()
+        run: rm -rf "/tmp/clay-wp03-reward-${GITHUB_RUN_ID}" /tmp/wp03_reward_${GITHUB_RUN_ID}.json /tmp/wp03_reward_${GITHUB_RUN_ID}.time

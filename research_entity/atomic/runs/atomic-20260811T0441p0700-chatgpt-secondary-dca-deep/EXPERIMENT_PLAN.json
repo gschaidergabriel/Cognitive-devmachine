@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "experiment":"DCA_LOCAL_REFERENCE_DISCRIMINATOR",
+  "seed":20260811,
+  "benchmarks":[
+    {"name":"decision_assembly","cases":3000,"goal":"preserve material action/hypothesis distinctions under token budget","baselines":["FULL","TOPK_SAFE","SAFE_DECISION_COVER","DCA_SELECTION"],"metrics":["decision certification rate","token-cost proxy","uncovered material pairs"]},
+    {"name":"negative_completeness","cases":8000,"goal":"distinguish absence from omission/incomplete/stale context","baselines":["TOPK_NAIVE","QUERY_AWARE_NO_CERT","GLOBAL_CERT","QR_STALE_UNFENCED","DCA_QR_CURRENT"],"metrics":["overclosure","stale overclosure","selective accuracy","coverage","unknown rate"]}
+  ],
+  "mandatory_controls":["full context","no-candidate ablation","simplest conventional alternative","randomized deterministic corpus","stale-state control","resource-matched selector","strongest known analogue: decision-focused set cover + query completeness metadata"],
+  "promotion_scope":"local synthetic discriminator only; no target-runtime or cognitive-quality claim",
+  "next_target_test":"matched current Frank CognitiveView/AnswerCapsule shadow integration on accepted Hostinger target"
+}

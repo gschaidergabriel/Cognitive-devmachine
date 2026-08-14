@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-WP03-V18-BINDING-FALSIFIER-20260810",
+  "run_id": "claycode-20260810T2350p0700-chatgpt-secondary-hp-wp03-binding",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "artifact": "WP03_FRONTEND_BINDING_FALSIFIER.py",
+  "status": "EXECUTABLE_ARTIFACT_COMMITTED_EXECUTION_BLOCKED_TRANSPORT",
+  "current_source_observation": {
+    "production_frontend_default": "D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark",
+    "typed_ir_default": "D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark",
+    "typed_ir_compile_sources_behavior": "reparses source through front.compile_frontend(source, grammar) using its selected grammar",
+    "typed_ir_build_behavior": "can consume a prebuilt SourceUnit.frontend artifact directly through build_typed_ir",
+    "class_decl_behavior": "current build_typed_ir declaration collector handles record_decl, interface_decl and fn_decl; class_decl is not added to declaration identity"
+  },
+  "acceptance_contract_binding": {
+    "wp02_receipt": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+    "wp02_decision": "PASS",
+    "required_next_falsifier": "receipt-bound V18 FrontendArtifact -> TypedIR without silent reparse; expected_surface and grammar binding fail-closed"
+  },
+  "execution_attempt": {
+    "surface": "local container",
+    "command_class": "fresh repo clone + python discriminator",
+    "result": "BLOCKED_TRANSPORT",
+    "error_class": "DNS_NO_GITHUB",
+    "counts_as_test_failure": false,
+    "counts_as_test_pass": false
+  },
+  "adjudication": {
+    "wp03_status_change": "NONE",
+    "claycode_release_status_change": "NONE",
+    "f_v01_02_status_change": "NONE",
+    "finding": "CURRENT_SOURCE_BINDING_MISMATCH_REQUIRES_TARGET_EXECUTION_AND_REPAIR",
+    "severity": "BLOCKER_CANDIDATE_WP03"
+  },
+  "minimal_repair_direction": [
+    "Production TypedIR entrypoint consumes the already receipt-bound FrontendArtifact instead of silently reparsing source with an independent grammar default.",
+    "Validate expected surface, grammar_sha256 and frontend semantic hash before TypedIR construction; mismatch fails closed.",
+    "Preserve class/type declaration identity in TypedIR or produce an explicit independently tested reason why it is intentionally outside TypedIR declaration identity.",
+    "Do not amend frozen ClayCode semantics for this repair."
+  ],
+  "next_falsifier": "Execute WP03_FRONTEND_BINDING_FALSIFIER.py on fresh current main on accepted Hostinger Ubuntu VPS; then implement the smallest repair and rerun the same discriminator plus WP03 identity corpus."
+}

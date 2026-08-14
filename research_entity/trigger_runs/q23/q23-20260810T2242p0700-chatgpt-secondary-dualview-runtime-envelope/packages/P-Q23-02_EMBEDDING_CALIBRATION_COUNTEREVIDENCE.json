@@ -1,0 +1,12 @@
+{
+  "package_id": "P-Q23-02_EMBEDDING_CALIBRATION_COUNTEREVIDENCE",
+  "status": "MATERIAL_COUNTEREVIDENCE",
+  "finding": "Official Qwen3-VL-Embedding uses retrieval-specific multimodal training and normalized last-hidden-state pooling, so raw generative vision/mmproj output must be benchmarked rather than presumed to be a calibrated familiarity/open-set space.",
+  "evidence_refs": [
+    "QwenLM/Qwen3-VL-Embedding@README:273604572610ef6596c489f1a277539e8f2de81a",
+    "QwenLM/Qwen3-VL-Embedding@src/models/qwen3_vl_embedding.py:a2d4a73349c4648c5d66633eccd57e02aea1279f",
+    "arXiv:2601.04720"
+  ],
+  "effect": "Prevents premature promotion of raw mmproj prototypes and requires a dedicated embedding counterbaseline plus explicit calibration metrics.",
+  "feeds": ["CH-Q23-RAW-NOT-EMBEDDING-01","TO-Q23-MVC-OPENSET-01"]
+}

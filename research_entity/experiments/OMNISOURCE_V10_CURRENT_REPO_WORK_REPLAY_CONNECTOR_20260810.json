@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810-current-repo-work-revision-connector-replay",
+  "evidence_class": "CONNECTOR_VERIFIED_CURRENT_REPO_EVENT_REPLAY",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_id": "WORK-OMNISOURCE-LIVE-FUSION-REENTRY-V1-20260810",
+  "method": "Read the authoritative current-main WORK_CREATE, all four known execution receipts for this work, and the later WORK_REVISE through the GitHub connector; replay by event created_at under CLAY_WORK_EVENT_PROTOCOL semantics. This is a semantic current-repo replay, not a local SQLite execution receipt. The separately added hosted replay workflow did not return its expected report during this invocation and therefore receives no PASS credit.",
+  "sequence": [
+    {
+      "created_at": "2026-08-10T16:25:00+07:00",
+      "kind": "WORK_CREATE",
+      "event_id": "chatgpt-secondary-omnisource-live-fusion-reentry-20260810T1625p0700",
+      "spec_rev_after": 1,
+      "source_ref": "research_entity/state/work/events/20260810T1625p0700_chatgpt_secondary_omnisource_live_fusion_reentry.json",
+      "blob_sha": "724e00b92204bd2458b10969aaccb343658eabd0"
+    },
+    {
+      "created_at": "2026-08-10T16:36:00+07:00",
+      "kind": "WORK_EXECUTION_RECEIPT",
+      "event_id": "chatgpt-secondary-omnisource-v10-local-execution-20260810T1636p0700",
+      "payload_spec_rev": 1,
+      "success": true,
+      "complete": false,
+      "source_ref": "research_entity/state/work/events/20260810T1636p0700_chatgpt_secondary_omnisource_v10_local_execution.json",
+      "blob_sha": "4adde68b830699d34fb68806e822d62708509dfa"
+    },
+    {
+      "created_at": "2026-08-10T16:50:00+07:00",
+      "kind": "WORK_EXECUTION_RECEIPT",
+      "event_id": "chatgpt-secondary-omnisource-v10-workrev-execution-20260810T1650p0700",
+      "payload_spec_rev": 1,
+      "success": true,
+      "complete": false,
+      "source_ref": "research_entity/state/work/events/20260810T1650p0700_chatgpt_secondary_omnisource_v10_workrev_execution.json",
+      "blob_sha": "70671772f1f46af7cf64d06d1ad1b6b3a9b9e0b2"
+    },
+    {
+      "created_at": "2026-08-10T17:00:00+07:00",
+      "kind": "WORK_EXECUTION_RECEIPT",
+      "event_id": "chatgpt-secondary-omnisource-v10-selfhosted-execution-20260810T1700p0700",
+      "payload_spec_rev": 1,
+      "success": true,
+      "complete": false,
+      "source_ref": "research_entity/state/work/events/20260810T1700p0700_chatgpt_secondary_omnisource_v10_selfhosted_execution.json",
+      "blob_sha": "756d57280dc4edfd02c2f72db45e7d0e1770a6d8"
+    },
+    {
+      "created_at": "2026-08-10T17:06:22+07:00",
+      "kind": "WORK_EXECUTION_RECEIPT",
+      "event_id": "chatgpt-secondary-omnisource-v10-current-remote-execution-20260810T1706p0700",
+      "payload_spec_rev": 1,
+      "success": true,
+      "complete": false,
+      "source_ref": "research_entity/state/work/events/20260810T1706p0700_chatgpt_secondary_omnisource_v10_current_remote_execution.json",
+      "blob_sha": "91339196f9bacccf17cd0bb962b2c062354424e0"
+    },
+    {
+      "created_at": "2026-08-10T17:10:00+07:00",
+      "kind": "WORK_REVISE",
+      "event_id": "chatgpt-secondary-omnisource-v10-revise-after-remote-20260810T1710p0700",
+      "spec_rev_after": 2,
+      "source_ref": "research_entity/state/work/events/20260810T1710p0700_chatgpt_secondary_omnisource_v10_revise_after_remote.json",
+      "blob_sha": "3bda27fc6f980ed39243e4160afa2dc1bccb0028"
+    }
+  ],
+  "result": {
+    "current_spec_rev": 2,
+    "execution_receipts_observed": 4,
+    "current_spec_execution_receipts": 0,
+    "stale_spec_execution_receipts": 4,
+    "stale_success_receipts_preserved_as_diagnostic_evidence": 4,
+    "stale_complete_true_receipts": 0,
+    "current_completion_credit": 0,
+    "pass_fail_closed_revision_semantics": true
+  },
+  "interpretation": "All four successful Rev-1 receipts remain valid evidence for the mechanisms they actually tested. The later WORK_REVISE makes Rev 2 current, so none can satisfy current Rev-2 completion. This demonstrates current-repo work-revision churn and fail-closed credit behavior without deleting ancestry.",
+  "limits": [
+    "This replay covers the current work-revision/event-credit dimension only, not the full branch dependency routing replay.",
+    "The hosted ubuntu-latest replay workflow produced no report observed during this invocation and is not credited.",
+    "No claim is made that these six reads exhaust unrelated repository events; they are the authoritative event files observed for this exact work sequence in the run."
+  ],
+  "next_falsifier": "Produce a current Rev-2 execution receipt only after revalidating current main head, V9 current spec, exact V10 component hashes and current dependency projection; then replay missing/stale dependency edges and compare V10 against simpler V9/manual routing baselines.",
+  "promotion_effect": "NONE; V10 and adaptive live-fusion mesh remain unpromoted"
+}

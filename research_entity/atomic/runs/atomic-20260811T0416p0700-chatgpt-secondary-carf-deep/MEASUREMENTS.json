@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CARF-001",
+  "seed":20260811,
+  "scope":"deterministic synthetic internal-dependency discriminator; not target Frank runtime evidence",
+  "correctness_cases":1000,
+  "data_quality_flags":["PER_CASE_RAW_ROWS_NOT_PERSISTED_IN_THIS_PACKET; deterministic generator+seed preserved for reproduction","TIMINGS_ARE_LOCAL_PYTHON_PROXY_ONLY"],
+  "correctness":{
+    "BROADCAST_ALL":{"precision_mean":0.6535717172,"recall_mean":1.0,"f1_mean":0.7682301625,"fp_total":2193,"fn_total":0},
+    "FIRST_PATH":{"precision_mean":0.9765833333,"recall_mean":0.7291544733,"f1_mean":0.8043839216,"fp_total":85,"fn_total":1505},
+    "SATISFIED_ANCESTOR_DAG":{"precision_mean":0.9534468254,"recall_mean":1.0,"f1_mean":0.9713944955,"fp_total":213,"fn_total":0},
+    "EXPLICIT_RESPONSIBILITY":{"precision_mean":1.0,"recall_mean":1.0,"f1_mean":1.0,"fp_total":0,"fn_total":0},
+    "CARF":{"precision_mean":1.0,"recall_mean":1.0,"f1_mean":1.0,"fp_total":0,"fn_total":0},
+    "PROVENANCE_BROKEN_CONTROL":{"precision_mean":0.4693714286,"recall_mean":0.4693714286,"f1_mean":0.4693714286,"fp_total":1831,"fn_total":1831}
+  },
+  "responsibility_scaling":[
+    {"active_variable_cap":6,"cases":200,"p50_ms":0.031682,"p95_ms":0.151224,"p99_ms":0.224574,"max_ms":0.350001,"mean_ms":0.04818927},
+    {"active_variable_cap":8,"cases":200,"p50_ms":0.1194175,"p95_ms":0.388527,"p99_ms":0.541615,"max_ms":0.626171,"mean_ms":0.14821001},
+    {"active_variable_cap":10,"cases":150,"p50_ms":0.289235,"p95_ms":1.693898,"p99_ms":2.240722,"max_ms":5.60919,"mean_ms":0.4969225533},
+    {"active_variable_cap":12,"cases":100,"p50_ms":1.2742545,"p95_ms":5.585255,"p99_ms":9.783677,"max_ms":9.996267,"mean_ms":1.87402542},
+    {"active_variable_cap":14,"cases":60,"p50_ms":2.5277935,"p95_ms":15.193471,"p99_ms":24.923047,"max_ms":24.923047,"mean_ms":4.2160043833}
+  ],
+  "factorization":[
+    {"groups":4,"alternatives_per_group":4,"explicit_derivation_paths":256,"carf_factor_circuit_nodes":21,"strong_conventional_factor_dag_nodes":21,"path_to_carf_node_ratio":12.19047619,"carf_vs_strong_dag_node_ratio":1.0},
+    {"groups":5,"alternatives_per_group":4,"explicit_derivation_paths":1024,"carf_factor_circuit_nodes":26,"strong_conventional_factor_dag_nodes":26,"path_to_carf_node_ratio":39.38461538,"carf_vs_strong_dag_node_ratio":1.0},
+    {"groups":6,"alternatives_per_group":4,"explicit_derivation_paths":4096,"carf_factor_circuit_nodes":31,"strong_conventional_factor_dag_nodes":31,"path_to_carf_node_ratio":132.12903226,"carf_vs_strong_dag_node_ratio":1.0},
+    {"groups":7,"alternatives_per_group":4,"explicit_derivation_paths":16384,"carf_factor_circuit_nodes":36,"strong_conventional_factor_dag_nodes":36,"path_to_carf_node_ratio":455.11111111,"carf_vs_strong_dag_node_ratio":1.0},
+    {"groups":8,"alternatives_per_group":4,"explicit_derivation_paths":65536,"carf_factor_circuit_nodes":41,"strong_conventional_factor_dag_nodes":41,"path_to_carf_node_ratio":1598.43902439,"carf_vs_strong_dag_node_ratio":1.0}
+  ],
+  "epoch_controls":[{"circuit_epoch":17,"current_epoch":17,"accepted":true},{"circuit_epoch":16,"current_epoch":17,"accepted":false},{"circuit_epoch":15,"current_epoch":17,"accepted":false},{"circuit_epoch":0,"current_epoch":17,"accepted":false},{"circuit_epoch":18,"current_epoch":17,"accepted":false}],
+  "redundancy_example":{"formula":"(a AND b) OR (c AND d)","assignment":{"a":true,"b":true,"c":true,"d":true},"broad_credit":{"a":1,"b":1,"c":1,"d":1},"first_path_credit":{"a":1,"b":1},"ancestor_dag_credit":{"a":1,"b":1,"c":1,"d":1},"carf_responsibility":{"a":0.5,"b":0.5,"c":0.5,"d":0.5}},
+  "strong_counterbaseline_result":"A strong conventional factorized dependency DAG has the same node count as CARF on every factorization cell. CARF is not established as a distinct runtime data structure.",
+  "limitations":["exact responsibility search is exponential in worst case","synthetic Boolean lineage is not real-world causal truth","probability/confidence cannot be inferred by naive semiring multiplication under unknown evidence dependence","CARF cannot mint truth/self identity/user intent/effect authority/training authority","no ClayCode compiler/runtime execution claimed"]
+}

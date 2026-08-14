@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "deltas": [
+    {
+      "delta_id": "Q23-DELTA-20260810-01",
+      "kind": "IMPLEMENTATION_FACT",
+      "description": "Current Transformers Qwen3.5 vision forward returns pre-merger last_hidden_state and post-merger pooler_output from the same visual pass; the latter is inserted into the language model. This creates a no-second-encoder MVC feature-tap A/B axis.",
+      "information_gain": 0.91,
+      "architecture_impact": 0.86
+    },
+    {
+      "delta_id": "Q23-DELTA-20260810-02",
+      "kind": "NEGATIVE_RESULT",
+      "description": "Multimodal recovery cannot currently assume llama-server visual slot/KV save support; libmtmd chunk serialization stores metadata only and restored chunks are placeholders. Treat visual runtime cache as ephemeral until exact target-VPS proof.",
+      "information_gain": 0.88,
+      "architecture_impact": 0.9
+    },
+    {
+      "delta_id": "Q23-DELTA-20260810-03",
+      "kind": "ARCHITECTURE_DELTA",
+      "description": "Separate mtmd cache/media ID from Frank cryptographic visual evidence identity and semantic epoch; FNV-based helper IDs are cache hints, not provenance authority.",
+      "information_gain": 0.73,
+      "architecture_impact": 0.79
+    },
+    {
+      "delta_id": "Q23-DELTA-20260810-04",
+      "kind": "REVISED_HYPOTHESIS",
+      "description": "Refine temporal perception into two stages: cheap pre-encoder unchanged-frame suppression plus optional post-encoder structured temporal/history pruning for changed frames.",
+      "information_gain": 0.66,
+      "architecture_impact": 0.72
+    },
+    {
+      "delta_id": "Q23-DELTA-20260810-05",
+      "kind": "WORK_DELTA",
+      "description": "Map q23 results to active Frank-v0.1 work package F-V01-06 and recovery cross-cut F-V01-13; H1/H2/H3 are retained only as historical comparison methods under current program law.",
+      "information_gain": 0.61,
+      "architecture_impact": 0.77
+    }
+  ]
+}

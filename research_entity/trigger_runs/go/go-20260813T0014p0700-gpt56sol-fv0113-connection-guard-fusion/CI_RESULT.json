@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "recorded_after_receipt": true,
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 557,
+  "candidate_head_branch": "chatgpt/go-sqlite-connection-hasmoved-20260812-2235",
+  "workflow_run": 31621529325,
+  "job": 94197302812,
+  "result": "SUCCESS",
+  "runner": "clay",
+  "host": "digital-retina",
+  "tested_pull_request_merge_sha": "43d73c56edede4078e4ed2c968f5571eae56e66e",
+  "sqlite": {
+    "version": "3.53.4",
+    "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "runtime_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "canonical_source_sha3_256": "b834d474b9b393d85a9e3ee4cc11f1329e007e9376a424ee740796f5c4bda3a8"
+  },
+  "tests": {
+    "unit_count": 7,
+    "unit_result": "PASS",
+    "includes_temporal_aba_regression": true,
+    "includes_hardlink_alias_rejection": true,
+    "repo_static_integrity": "PASS"
+  },
+  "scope": {
+    "status": "MECHANISM_TEST_ONLY",
+    "productive_hostinger_mutation": false,
+    "productive_persistence_path_exercised": false,
+    "active_wal_or_journal_object_bound": false,
+    "wal_sidecar_identity_attested": false,
+    "exclusive_connection_bootstrap_attested": false,
+    "production_safe_dynamic_extension_loading_attested": false,
+    "temporal_no_move_history_attested": false,
+    "receipt_reuse_as_durable_capability": false,
+    "restart_recovery_attested": false,
+    "frank_identity_attested": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "release_effect": "NO_F_V01_13_PROMOTION",
+  "next_discriminator": "Accepted Hostinger ProductStart/self.root must bind exact fixed runtime plus canonical main DB and active WAL/journal object across real persistence/checkpoint, with exclusive or non-loadable diagnostic semantics and restart/reopen, rollback, downgrade/library-swap and semantic-lineage controls."
+}

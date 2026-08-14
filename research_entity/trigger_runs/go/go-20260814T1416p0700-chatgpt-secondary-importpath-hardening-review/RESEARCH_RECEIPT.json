@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1416p0700-chatgpt-secondary-importpath-hardening-review",
+  "trigger": "go",
+  "created_at": "2026-08-14T14:16:20+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "9e5baa67490ef993a4795388cc8c47713ac6fa55",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "12eb0dd1301793298710e643da8f035a7454ba3d",
+    "tested_productive_path_parent_sha": "ee0d3765701df9f793043563dc30dccd282310f4",
+    "productive_path_run": 31778957663,
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "A concurrent main commit added PYTHONSAFEPATH=1 to the Clay GO import-path receipt workflow. Review was needed to distinguish narrow script-path hardening from full Python import provenance and to check whether the SQLite V6 admission boundary already uses the stronger isolation primitive.",
+    "duplicate_avoidance": [
+      "Did not duplicate the concurrent SQLite productive-process identity experiment recorded at research main 9e5baa67490ef993a4795388cc8c47713ac6fa55.",
+      "Did not modify Frank main because another worker changed the same import-path workflow during this cycle."
+    ]
+  },
+  "observed_reality": {
+    "import_path_hardening_commit": "ee0d3765701df9f793043563dc30dccd282310f4",
+    "import_path_hardening_change": "workflow-level PYTHONSAFEPATH=1",
+    "replication_receipt_commit": "12eb0dd1301793298710e643da8f035a7454ba3d",
+    "replication_run": 31778957750,
+    "replication_scope": "temporary fixtures on self-hosted Ubuntu; not 20 distinct production scripts",
+    "sqlite_v6_launcher": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v6_launcher.sh",
+    "sqlite_v6_python_exec": "/usr/bin/python3 -I -S",
+    "productive_path_current_observation": {
+      "run": 31778957663,
+      "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+      "sqlite_version": "3.45.1",
+      "sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+      "root_anchor_present": false,
+      "failure_cause_attributed_to_python_safepath": false
+    }
+  },
+  "hypothesis": "PYTHONSAFEPATH/-P is useful against implicit script-directory prepend but is not a complete import-provenance boundary because caller-controlled PYTHONPATH remains effective.",
+  "strongest_counterhypothesis": "Setting PYTHONSAFEPATH=1 globally is sufficient for the relevant Frank admission paths because no attacker-controlled PYTHONPATH can reach them or because stronger isolation is already used at those boundaries.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "PYTHONPATH_SHADOW_AFTER_SAFE_PATH",
+    "class": "bounded import-precedence counterworld",
+    "location": "local disposable sandbox fixture only",
+    "reversible": true,
+    "product_bytes_modified": false,
+    "description": "Use three same-named modules: script-directory shadow, intended dependency, and an adversarial PYTHONPATH shadow. Compare ordinary script execution, -P execution with intended PYTHONPATH, -P execution with adversarial PYTHONPATH prepended, and isolated -I control.",
+    "results": {
+      "ordinary_script": "SCRIPT_DIR_SHADOW",
+      "minus_P_with_intended_path": "INTENDED_DEP",
+      "minus_P_with_adversarial_pythonpath": "PYTHONPATH_SHADOW",
+      "minus_I_with_external_paths": "external dependency import rejected as expected"
+    },
+    "interpretation": "-P removes the unsafe implicit prefix but does not ignore PYTHONPATH; -I additionally ignores PYTHON* environment variables. This is a negative result against treating safe-path alone as a full provenance boundary."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Python command-line documentation",
+      "url": "https://docs.python.org/3/using/cmdline.html",
+      "finding": "-P / PYTHONSAFEPATH prevents prepending a potentially unsafe path to sys.path; isolated mode -I implies -E and -P and therefore ignores PYTHON* environment variables."
+    }
+  ],
+  "counterevidence_and_scope": {
+    "sqlite_v6_boundary": "The current V6 SQLite launcher already executes its guard as /usr/bin/python3 -I -S, so the adversarial PYTHONPATH counterworld does not establish a new defect in that admission boundary.",
+    "workflow_patch": "The new PYTHONSAFEPATH=1 remains useful defense-in-depth for non-isolated workflow helper Python, but it must not be promoted as equivalent to isolated execution.",
+    "replication_correction": "The 20/20 import-path counts are repetitions of one temporary fixture lane, not evidence that 20 distinct Frank production scripts are vulnerable."
+  },
+  "grf_collapse": {
+    "safe_path_reduces_script_dir_injection": "RETAIN",
+    "safe_path_is_complete_import_provenance_boundary": "REJECT",
+    "sqlite_v6_needs_change_for_pythonpath_from_this_result": "REJECT",
+    "architecture_delta": "NO_CHANGE",
+    "test_delta": "When Python invocation itself is security-sensitive, distinguish safe-path hardening from environment isolation and test explicit PYTHONPATH countercontrols."
+  },
+  "current_release_effect": {
+    "F-V01-13": "REMAINS_IN_PROGRESS",
+    "reason": "Fresh productive-path run remains fail-closed because the root trust anchor is missing and the observed productive Python runtime still reports SQLite 3.45.1. Upstream SQLite documents the WAL-reset bug through 3.51.2 and fixes it in 3.51.3 and later.",
+    "promotion": "NONE"
+  },
+  "next_falsifier": "Provision/bind the accepted fixed SQLite runtime and valid root trust anchor to the productive Frank persistence process, then execute the composed productive process-identity + actual DB I/O + mapping/source-id/hash + restart/rollback/downgrade/library-swap acceptance receipt already identified by the concurrent F-V01-13 research lane.",
+  "nonclaims": [
+    "No whole Frank v0.1 acceptance",
+    "No claim that the 20 repetitions represent 20 production call sites",
+    "No claim that -P is equivalent to -I",
+    "No target root provisioning or package upgrade was performed",
+    "No Harness authority was exercised",
+    "No final training authorization"
+  ],
+  "together_used": false
+}

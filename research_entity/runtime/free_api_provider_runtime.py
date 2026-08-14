@@ -280,6 +280,21 @@ def _validate_text_chat_request(messages, model) -> None:
         expected_role = "assistant" if expected_role == "user" else "user"
 
 
+def _snapshot_text_chat_request(messages, model) -> list[dict[str, str]]:
+    """Copy mutable caller input once, then validate and use only that copy."""
+    if not isinstance(messages, list):
+        _validate_text_chat_request(messages, model)
+    try:
+        snapshot = [
+            dict(message) if isinstance(message, dict) else message
+            for message in tuple(messages)
+        ]
+    except (RuntimeError, TypeError, ValueError) as exc:
+        raise ValueError("messages_could_not_be_snapshotted") from exc
+    _validate_text_chat_request(snapshot, model)
+    return snapshot
+
+
 class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
     """Reject redirects so bearer credentials cannot cross an origin boundary."""
 
@@ -415,7 +430,7 @@ def execute_chat(
     payment_latches: set[str] | None = None,
 ) -> dict:
     """Execute one bounded chat request and return output plus a redacted receipt."""
-    _validate_text_chat_request(messages, model)
+    request_messages = _snapshot_text_chat_request(messages, model)
     env = os.environ if environ is None else environ
     latches = PROCESS_PAYMENT_LATCHES if payment_latches is None else payment_latches
     route_state = route(env, payment_latches=latches)
@@ -447,7 +462,7 @@ def execute_chat(
     started = now()
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
     body = json.dumps(
-        {"model": model, "messages": messages, "stream": False}
+        {"model": model, "messages": request_messages, "stream": False}
     ).encode()
     request = urllib.request.Request(
         request_url,

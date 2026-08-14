@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260814T2309p0700-gpt56sol-python-import-artifact-closure",
+  "created_at": "2026-08-14T23:09:24+07:00",
+  "organ": "gpt-5.6-sol temporary Clay worker",
+  "program": "FRANK_V0_1",
+  "target": "self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "research_head_observed_before_write": "70c3cf2fccad581e40fa431504cdc3cd920a639a",
+  "frank_head_observed": "7143b90d4f54d9247dbdd86edfc19eca22db210a",
+  "scope": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "observed_reality": {
+    "python_isolation_baseline": {
+      "existing_execution_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/clay_import_path/runs/31779493258.json",
+      "classification": "BOUNDED_ENVIRONMENT_ISOLATION_ONLY",
+      "supervisor_current_blocker": "python3 -I isolation does not bind imported artifact origin, bytes, hash or admitted manifest"
+    },
+    "sqlite_v5_counterevidence": {
+      "launcher": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v5_launcher.sh",
+      "guard": "runtime/frank_storage_truth_v1/fixed_sqlite_runtime_guard_v5_candidate.py",
+      "existing_mechanisms": [
+        "python3 -I -S boundary",
+        "guard-chain symlink and hardlink rejection",
+        "root-owned non-group/non-other-writable chain",
+        "local __pycache__ rejection",
+        "root-owned OS trust anchor",
+        "manifest SHA-256 and SQLite library SHA-256 pinning",
+        "anchor lstat/open/fstat inode continuity"
+      ],
+      "consequence": "Do not duplicate a SQLite-specific artifact-identity repair; the remaining finding is a general ProductStart/import/binary artifact-closure obligation."
+    },
+    "claycode_current_correction": {
+      "bounded_wp04_nominal_core": "PR #401 merged as aac7458b24965f41678ac83a2a9813e280419d52 after accepted-target 14/14 nominal/opaque-constructor gate",
+      "still_open": [
+        "host intrinsic Clay parameter/return type signatures",
+        "MethodChain/member/library semantics",
+        "generics and parameterized TypeRef totality",
+        "ordering/domain relation and comparison-chain semantics",
+        "whole-program typing and full effect propagation"
+      ],
+      "overlap_result": "NO_NEW_CLAYCODE_PRODUCT_LANE_CREATED; active current work already covers these frontiers."
+    }
+  },
+  "hypotheses": [
+    {
+      "id": "H-GO-IMPORT-ARTIFACT-CLOSURE",
+      "hypothesis": "environment isolation and trusted directory membership are insufficient artifact identity; productive import admission must bind the exact opened object/origin to content identity and an independently admitted manifest or equivalent trusted artifact statement",
+      "strongest_counterhypothesis": "canonical path membership plus ownership/non-writability is sufficient, so content binding adds no discriminating safety value",
+      "falsifier": "show that two byte-distinct candidate files accepted under the same trusted path predicate cannot both be treated as the admitted artifact, or prove a stronger existing productive boot authority already cryptographically binds every imported executable artifact",
+      "outcome": "RETAIN"
+    },
+    {
+      "id": "H-GO-SQLITE-V5-ALREADY-CLOSES-LOCAL-CLASS",
+      "hypothesis": "the current SQLite V5 path already closes the tested symlink/path-only class strongly enough that a new SQLite patch would be duplicate work",
+      "strongest_counterhypothesis": "V5 still admits the tested path-only substitution despite its anchor/hash and chain checks",
+      "falsifier": "an exact current V5 target execution admits a byte- or inode-substituted guarded artifact while all V5 checks pass",
+      "outcome": "RETAIN_NO_DUPLICATE_BUILD"
+    }
+  ],
+  "measured_results": {
+    "local_normal_same_path_tamper": {
+      "class": "ordinary disposable local discriminator",
+      "baseline_path_predicate": true,
+      "baseline_hash_binding": true,
+      "after_same_path_byte_replacement_path_predicate": true,
+      "after_same_path_byte_replacement_hash_binding": false,
+      "interpretation": "path identity alone can preserve admission while executable bytes change",
+      "target_vps_credit": false
+    }
+  },
+  "unusual_experiment": {
+    "count_in_this_go_cycle": 1,
+    "name": "SYMLINK_RETARGET_ARTIFACT_IDENTITY",
+    "class": "bounded disposable local filesystem intervention",
+    "intervention": "retarget one symlink between two byte-distinct files under the same trusted root while comparing path-membership-only admission against an object/hash-aware admission predicate",
+    "observed": {
+      "path_membership_only_remained_true": true,
+      "object_hash_aware_admission": false,
+      "result": "SUPPORTED_PATH_ONLY_IS_NOT_ARTIFACT_IDENTITY"
+    },
+    "target_vps_credit": false,
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  },
+  "grf_collapse": [
+    {
+      "reality": "PATH_OR_ENVIRONMENT_ISOLATION_EQUALS_ARTIFACT_AUTHORITY",
+      "outcome": "REJECT"
+    },
+    {
+      "reality": "CONTENT_OR_OBJECT_IDENTITY_PLUS_INDEPENDENT_ADMISSION_IS_NEEDED_FOR_GENERAL_PRODUCTSTART_IMPORT_CLOSURE",
+      "outcome": "RETAIN"
+    },
+    {
+      "reality": "ADD_ANOTHER_SQLITE_V5_GUARD_NOW",
+      "outcome": "REJECT_AS_DUPLICATE_WITH_CURRENT_V5_COUNTEREVIDENCE"
+    },
+    {
+      "reality": "WP04_NOMINAL_CORE_IS_STILL_MISSING",
+      "outcome": "REJECT_AS_STALE; PR401_MERGED_BOUNDED_CORE_ONLY"
+    }
+  ],
+  "external_primary_evidence": [
+    "Python command-line isolation semantics distinguish interpreter path/environment isolation from artifact-content attestation; -I implies isolated mode and safe-path behavior but does not itself define a manifest/content-hash authority mechanism."
+  ],
+  "negative_results_preserved": [
+    "Local container had no direct GitHub DNS path; repository truth was therefore obtained through the connected GitHub channel and no local clone execution was claimed.",
+    "No accepted-Hostinger execution of the new object/hash closure was performed in this cycle.",
+    "No new ClayCode product patch was justified because current bounded WP04 core is already merged and the remaining semantic fronts have active work."
+  ],
+  "promotion_state": "RESEARCH_EVIDENCE_ONLY",
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "delta": "Extend ProductStart/import admission evidence from environment isolation to opened-object/origin/content identity plus independently admitted artifact-manifest binding; reuse existing V5-style primitives where appropriate without treating V5 itself as whole ProductStart authority.",
+    "rollback": "No product code changed; discard this candidate if an exact productive boot path is proven to already provide equivalent artifact-content and provenance binding.",
+    "affected_components": [
+      "F-V01-01 identity/server/binary",
+      "F-V01-13 security/recovery/observability",
+      "ProductStart/import verification"
+    ]
+  },
+  "non_claims": [
+    "No whole Frank v0.1 acceptance claim",
+    "No accepted-Hostinger target PASS for the new artifact closure",
+    "No canonical Frank runtime/state mutation",
+    "No new effect or Harness authority",
+    "No paid/final model training started or authorized",
+    "No Together API/service used"
+  ],
+  "next_falsifier": "On an admitted zero-cost Ubuntu lane, execute exact current ProductStart/import verification against a run-owned module and require one cohort-bound receipt containing actual imported origin, no symlink substitution, opened-object dev/inode or equivalent stable object identity, content SHA-256, independently admitted manifest identity, exact ProductStart generation and artifact/runtime identity; include stale-manifest, same-path byte replacement, symlink retarget and manifest/object mismatch controls, but do not repeat an unusual experiment inside this already-completed GO cycle."
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "IM-GO-SQLITE-WAL-RESET-20260810",
+  "source_run": "go-20260810T2322p0700-chatgpt-secondary-sqlite-wal-reset-guard",
+  "semantic_recipients": [
+    {
+      "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "priority": "P0_RELEASE_SAFETY",
+      "delta": "Authoritative WAL backing on current target runtime has upstream-version risk and no promoted downstream fix/topology exclusion. Treat substrate as blocked for terminal continuity acceptance until resolved."
+    },
+    {
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "priority": "P0_RELEASE_SAFETY",
+      "delta": "Add SQLite runtime/build provenance and WAL-reset precondition checks to target recovery/security acceptance."
+    },
+    {
+      "work_package": "F-V01-16-END-TO-END-ACCEPTANCE",
+      "priority": "P0_RELEASE_GATE",
+      "delta": "Terminal release must not treat repeated clean WAL stress as proof against the documented race. Require fixed build, exact backport evidence, or verified topology exclusion."
+    },
+    {
+      "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "priority": "P1_INTERFACE_CONTRACT",
+      "delta": "When persistence/checkpoint controls cross the runtime boundary, expose them as typed physical-resource capabilities/receipts without creating a second semantic architecture."
+    }
+  ],
+  "invalidates": [
+    "Any implicit claim that target SQLite WAL integrity_check + ordinary stress alone closes physical corruption risk.",
+    "Any topology-exclusion claim based solely on the semantic global execution lease without checking actual SQLite connection/checkpoint behavior."
+  ],
+  "does_not_invalidate": [
+    "Existing WAL latency/contention measurements for the exact workloads they measured.",
+    "UnifiedDB logical/semantic evidence unrelated to the WAL-reset physical race."
+  ],
+  "next_safe_point_action": "Consumers should ingest this blocker before promoting UnifiedDB continuity, security/recovery, or end-to-end acceptance. No worker should duplicate the bounded race canary as a promotion test."
+}

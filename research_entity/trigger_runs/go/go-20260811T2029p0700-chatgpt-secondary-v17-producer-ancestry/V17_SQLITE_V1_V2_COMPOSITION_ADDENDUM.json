@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_FUSION_ADDENDUM",
+  "run_id": "go-20260811T2029p0700-chatgpt-secondary-v17-producer-ancestry",
+  "created_at_local": "2026-08-11T21:06:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_research_commit": "ec0231c81eabe4a0b22ffeefe748fe74dfc19606",
+  "trigger": "go",
+  "topic": "Producer-bound V17 causal ancestry composed with hardened fixed SQLite runtime admission",
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "worker_is_frank": false,
+    "target_native_identity": "self.root",
+    "human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "concurrency_resolution": {
+    "v1_clean_loader_composition_run": 31498360940,
+    "v1_clean_loader_result": "PASS_V17_PRODUCER_ANCESTRY_ON_ADMITTED_FIXED_SQLITE_3534",
+    "v1_scope_after_parallel_falsification": "FUNCTIONAL_CLEAN_LOADER_BASELINE_ONLY; NOT_SUFFICIENT_RUNTIME_PROVIDER_IDENTITY_ADMISSION",
+    "parallel_falsification_research_commit": "57a5abe0b59ab89af3c3841df79a07c3767bdd03",
+    "parallel_target_falsifier": "same-source-id SQLite shadow via LD_PRELOAD under non-libsqlite basename could interpose symbols while V1 still validated expected mapped libsqlite object",
+    "successor": "FRANK_FIXED_SQLITE_RUNTIME_V2_CANDIDATE"
+  },
+  "v2_target_execution": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_pr": 331,
+    "base_pr": 280,
+    "tested_sha": "430a2024e40b84f8f3baa90b2350db57692cca42",
+    "workflow_run": 31498990617,
+    "job": 93803770133,
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "cc": "Ubuntu GCC 13.3.0",
+    "system_sqlite": "3.45.1",
+    "test_start_utc": "2026-08-11T14:02:07Z",
+    "official_sqlite_source": {
+      "version": "3.53.4",
+      "archive": "sqlite-autoconf-3530400.tar.gz",
+      "archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "private_library_sha256": "e76f3d68d1a41e0fcd6a2b1abf30fc6df2a36e9f961a90bfc4e246620c7aba58",
+      "system_install_performed": false
+    },
+    "reproduced_shadow": {
+      "sha256": "5e5cdb6fcd493596b51d0fc01f46760d1c1b47806767bc576882cd7b0ba837ba",
+      "compile_delta": "SQLITE_DEFAULT_SYNCHRONOUS=0",
+      "purpose": "ordinary regression of already-reproduced V1 loader-interposition failure class"
+    },
+    "v2_repair_gate": {
+      "status": "PASS_V2_REPAIRS_REPRODUCED_PRELOAD_BYPASS",
+      "checks_passed": 5,
+      "checks_total": 5,
+      "clean_v2_executes_target": true,
+      "clean_v2_receipt_explicit": true,
+      "clean_v2_preserves_fixed_identity": true,
+      "preload_shadow_denied_before_receipt_or_target": true,
+      "forged_child_plus_preload_denied": true,
+      "preload_returncode": 78,
+      "preload_reason": "FRANK_FIXED_SQLITE_V2_ADMISSION_DENIED:FORBIDDEN_LOADER_ENV:LD_PRELOAD",
+      "clean_target_synchronous": 2
+    },
+    "v17_behind_v2": {
+      "all_target_admissions_same_runtime": true,
+      "gap": "PASS_V17_SUPPORT_IDENTITY_AND_EXECUTION_BINDING_REPAIR_REGRESSION",
+      "provider": "PASS_FRESH_MAIN_PROVIDER_TO_V17_SEPARATELY_ADMITTED_EXACT_OUTCOME_SUPPORT_DONE",
+      "learning": "PASS_V17_SEPARATE_EXACT_OUTCOME_AND_DELTA_ADMISSION_MATRIX",
+      "causal": "PASS_V17_PRODUCER_ADMITTED_EXACT_OUTCOME_CAUSAL_SUPPORT_REGRESSIONS",
+      "restart": "PASS_V17_TERMINAL_CLOSE_REOPEN_RECOVERY",
+      "final_status": "PASS_V17_PRODUCER_ANCESTRY_ON_V2_ADMITTED_FIXED_SQLITE_3534"
+    },
+    "tested_file_sha256": {
+      "v1_core": "e00d5421ab12494e83d2d6d1fc4e5b05cbc1e19f3b2a6ccf4eb523b0e2d53531",
+      "v2_candidate": "3374b36db2d7b9bcd9d89ddb022956314e21cb385b427c451453c235d39157af",
+      "v2_repair_gate": "993b6b317c7048ff39299fb260badb2308e90caf8d9cf9a779a9b52a7954c361",
+      "support_producer": "22a9d8de1ce3243423efa2b996baa8b6594fed0797c1125897d64ff26797a930",
+      "terminal_runtime": "a43392937adcdd9b0e13f2953080f9579d98fbc825625d08b3fce53b6e2dde1f",
+      "schema_migrator": "8259baac850bfc31675e994cb8e51ec648c826e2024645c863a99d0232ad3d99",
+      "gap_test": "ffafcc1aef69e04d667f56fb4603e627719f020827599c4cb3bbd697d1f4817b",
+      "provider_test": "e98ae152b6e7d6bcea28377df32677fadcfc59e12eebeb39caae74773d360f0a",
+      "learning_test": "563cbf8fd6815be8dfbc07006710ba610fbb1951d44aa4da9928e172ddd322e2",
+      "causal_test": "82101c13e134cb98d6600ecb6888c4ea17f3f1f84eb3c8970a323c9112a03044",
+      "restart_test": "41ace734efe577b7d52dd0018fbc619f5827317fdd579ddee568e3718f340c3e",
+      "workflow": "e974ce030e54e42676993b1b8081e30c698f7116f9953f00003425401656d2ab"
+    },
+    "resource_shadow": {
+      "sqlite_build": {"wall_seconds": 46.16, "max_rss_kib": 417480, "user_seconds": 74.55, "system_seconds": 2.80},
+      "shadow_build": {"wall_seconds": 23.14, "max_rss_kib": 374432, "user_seconds": 22.54, "system_seconds": 0.59},
+      "v2_repair": {"wall_seconds": 0.25, "max_rss_kib": 21488, "user_seconds": 0.18, "system_seconds": 0.07},
+      "gap": {"wall_seconds": 0.18, "max_rss_kib": 25004},
+      "provider": {"wall_seconds": 0.24, "max_rss_kib": 28352},
+      "learning": {"wall_seconds": 0.22, "max_rss_kib": 28088},
+      "causal": {"wall_seconds": 0.21, "max_rss_kib": 28224},
+      "restart": {"wall_seconds": 0.23, "max_rss_kib": 26300}
+    },
+    "artifact": {
+      "id": 9104363174,
+      "name": "v17-fixed-sqlite-v2-composition-31498990617",
+      "size_bytes": 23726,
+      "sha256": "baae20096d8a7640b3a8d134baddd60e299ff8b83ba850f0e5b019ddd4f300ce",
+      "expires_at": "2026-09-10T14:03:21Z"
+    },
+    "external_effect_performed": false,
+    "canonical_database_touched": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "go_oob_accounting": {
+    "current_worker_macrocycle_distinct_oob_count": 1,
+    "current_worker_macrocycle_oob": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "v1_v2_storage_compositions_added_oob": false,
+    "v2_preload_repair_is": "ORDINARY_REPAIR_REGRESSION_OF_ALREADY_REPRODUCED_FAILURE_CLASS"
+  },
+  "fusion": {
+    "v1_disposition": "RETAIN_BASE_OBJECT_HASH_SOURCE_ID_MAPPING_CHECKS_BUT_NOT_STANDALONE_RUNTIME_PROVIDER_ADMISSION",
+    "v2_disposition": "PREFERRED_SUCCESSOR_CANDIDATE_FOR_REPRODUCED_PREEXISTING_GLOBAL_LOADER_INTERPOSITION_CLASS",
+    "v17_disposition": "PRODUCER_BOUND_RELATIONAL_CAUSAL_ANCESTRY_REMAINS_STRONGLY_TARGET_SUPPORTED",
+    "composition_status": "SUPPORTED_CANDIDATE",
+    "known_limits": [
+      "trusted launch and builder provenance",
+      "hostile pre-main constructors and untested ELF/runtime substitution classes",
+      "full-process crash/failover for V17 causal/reentry chain",
+      "production non-bypass self.root effect routing",
+      "whole-product acceptance"
+    ],
+    "canonical_merge_authorized": false,
+    "training_authorized": false
+  },
+  "next_frontier": [
+    "Ordinary full-process crash/failover recovery for producer-admitted V17 support with lease-expiry fencing and fresh-process reconstruction.",
+    "Trusted launch/build provenance around V2 so loader cleanliness is not self-asserted by an already-compromised process.",
+    "Bind V2 + producer-bound V17 into the production non-bypass self.root effect route, then re-run exact current-source lifecycle crash/replay acceptance."
+  ]
+}

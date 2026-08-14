@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "artifact_id": "FRANK-NACC-CALLER-COVERAGE-20260810",
+  "status": "STATIC_ARCHAEOLOGY_PARTIAL_RUNTIME_UNKNOWN",
+  "created_at": "2026-08-10T12:20:00+07:00",
+  "actor": "chatgpt-secondary",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "frozen_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "nacc_path": "services/nucleus_accumbens.py",
+  "method": "GitHub code-search over frozen indexed tree using channel-name searches plus exact reward-call searches. Static absence is not runtime proof; dynamic/indirect calls remain UNKNOWN until H1 instrumentation.",
+  "historical_definition_observation": {
+    "documentation_claimed_channel_count": 9,
+    "defined_channel_name_count": 16,
+    "semantic_drift": "CONFIRMED_STATIC",
+    "note": "The module docstring/comments retain '9 reward channels' while CHANNEL_NAMES/REWARD_CHANNELS contain 16 named channels."
+  },
+  "global_call_surface": {
+    "query": "nac.reward(",
+    "files_found": [
+      "core/app.py",
+      "services/nucleus_accumbens.py",
+      "tests/test_nucleus_accumbens.py"
+    ],
+    "interpretation": "Only core/app.py is a non-NAcc, non-test runtime candidate in this exact-call surface. This does not exclude aliases, wrappers or dynamic channel variables."
+  },
+  "channels": {
+    "hypothesis_confirmed": {"static_status": "NO_RUNTIME_CALLER_FOUND_IN_EXACT_SEARCH", "observed_files": ["services/nucleus_accumbens.py", "tests/test_nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "hypothesis_refuted": {"static_status": "NO_EXACT_REWARD_CALL_FOUND", "observed_files": ["services/nucleus_accumbens.py", "tests/test_nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "hypothesis_created": {"static_status": "TEST_ONLY_EXACT_REWARD_CALL", "observed_files": ["services/nucleus_accumbens.py", "tests/test_nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "goal_completed": {"static_status": "TEST_ONLY_EXACT_REWARD_CALL", "observed_files": ["services/nucleus_accumbens.py", "tests/test_nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "good_conversation": {"static_status": "STRING_OUTSIDE_NACC_BUT_NO_EXACT_NACC_REWARD_CALL_FOUND", "observed_files": ["services/sanctum_rl/rewards.py", "core/app.py", "services/nucleus_accumbens.py", "ui/webui/static/js/pages/manual.js"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "action_success": {"static_status": "RUNTIME_EXACT_NACC_REWARD_CALL_CANDIDATE", "observed_files": ["core/app.py", "services/nucleus_accumbens.py"], "runtime_status": "STATIC_WIRING_FOUND_H1_EXECUTION_PENDING"},
+    "novel_thought": {"static_status": "TEST_EXACT_CALL_AND_STRING_IN_CORE_BUT_NO_RUNTIME_EXACT_NACC_REWARD_CALL_CONFIRMED", "observed_files": ["core/app.py", "services/nucleus_accumbens.py", "tests/test_nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "entity_positive": {"static_status": "NO_RUNTIME_CALLER_FOUND_IN_CHANNEL_SEARCH", "observed_files": ["services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "genesis_accepted": {"static_status": "NO_EXACT_REWARD_CALL_FOUND", "observed_files": ["services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "genesis_authored": {"static_status": "STRING_VISIBLE_IN_UI_BUT_NO_EXACT_NACC_REWARD_CALL_FOUND", "observed_files": ["ui/webui/app.py", "services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "genesis_self_accepted": {"static_status": "NO_RUNTIME_CALLER_FOUND_IN_CHANNEL_SEARCH", "observed_files": ["services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "curiosity_spark": {"static_status": "NACC_INTERNAL_DEFINITION_OR_INTERNAL_PATH_ONLY_IN_CHANNEL_SEARCH", "observed_files": ["services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "curiosity_fulfilled": {"static_status": "NO_EXACT_EXTERNAL_REWARD_CALL_FOUND", "observed_files": ["services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "room_positive": {"static_status": "NO_EXACT_EXTERNAL_REWARD_CALL_FOUND", "observed_files": ["services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "room_negative": {"static_status": "NO_EXACT_EXTERNAL_REWARD_CALL_FOUND", "observed_files": ["services/nucleus_accumbens.py"], "runtime_status": "UNKNOWN_UNTIL_H1"},
+    "prediction_error": {"static_status": "RUNTIME_EXACT_REWARD_CALL_CANDIDATE", "observed_files": ["core/app.py", "services/thalamus.py", "personality/e_pq.py", "services/nucleus_accumbens.py", "personality/self_knowledge.py", "services/genesis/sensors/hypothesis_sensor.py", "tests/live_consciousness_benchmark.py"], "runtime_status": "STATIC_WIRING_FOUND_H1_EXECUTION_PENDING"}
+  },
+  "architectural_conclusion": "Do not equate the 16-channel definition table with 16 historically active causal loops. H1 must instrument actual reward() invocations, source caller, channel, outcome provenance, downstream E-PQ effect and re-entry before baseline credit. Successor equivalence is judged against observed causal function plus explicitly preserved design intent, not dead labels.",
+  "required_h1_instrumentation": [
+    "wrap NucleusAccumbens.reward with append-only invocation receipt",
+    "record caller/module/function and channel",
+    "bind source_data/outcome/effect/episode identity",
+    "record phasic/tonic/habituation before-after",
+    "record E-PQ event emission and resulting state delta",
+    "record whether changed state re-entered later cognition/action",
+    "exercise frozen golden traces plus long-running autonomous/idle paths",
+    "mark never-fired channels as OBSERVED_DEAD_UNDER_SUITE, not globally dead"
+  ],
+  "limitations": [
+    "GitHub static search can miss indirect calls, aliases, dynamic channel variables, reflection/import mechanisms or unindexed historical paths.",
+    "This artifact is not target-Ubuntu runtime evidence.",
+    "No absence claim is promoted beyond the exact frozen static search scope."
+  ]
+}

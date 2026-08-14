@@ -33,7 +33,9 @@ jobs:
           fetch-depth: 0
       - name: Resolve exact current progress
         run: |
-          python3 tools/program_progress.py --json --as-of 2026-08-10 > /tmp/clay_program_progress.json
+          AS_OF=$(TZ=Asia/Phnom_Penh date +%F)
+          export AS_OF
+          python3 tools/program_progress.py --json --as-of "$AS_OF" > /tmp/clay_program_progress.json
           python3 - <<'PY'
           import json, os, pathlib
           p=pathlib.Path('/tmp/clay_program_progress.json')
@@ -43,7 +45,7 @@ jobs:
             'commit':os.environ['GITHUB_SHA'],
             'run_id':os.environ['GITHUB_RUN_ID'],
             'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
-            'as_of':'2026-08-10'
+            'as_of':os.environ['AS_OF']
           }
           out=pathlib.Path('research_entity/rooms/PROGRAM_PROGRESS_LATEST.json')
           out.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')

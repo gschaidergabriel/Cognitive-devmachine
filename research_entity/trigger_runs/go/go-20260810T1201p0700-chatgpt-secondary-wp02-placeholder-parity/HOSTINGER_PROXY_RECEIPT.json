@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:29:00+07:00",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "parent_run": "go-20260810T1201p0700-chatgpt-secondary-wp02-placeholder-parity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_class": "REAL_SELF_HOSTED_LINUX_HOSTINGER_PROXY_EXACT_HASH_VERIFIED_RELEVANT_BLOBS",
+  "workflow": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 84,
+    "workflow_run_id": 31358477338,
+    "job_id": 93362504040,
+    "head_branch": "clay-wp02-placeholder-parity-hostinger-20260810",
+    "head_sha": "9b4640f0e7844b4b6292a224b8ec3877bde66374",
+    "conclusion": "success",
+    "all_material_steps_pass": true,
+    "artifact_id": 9051480177,
+    "artifact_digest": "sha256:7e9c5d175c1c2db7f33ec0302b538e969a1fe2b6c40ee023d0cd934500cf741b",
+    "artifact_expiry": "2026-09-09T05:25:17Z"
+  },
+  "runner": {
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "python": "3.12.3",
+    "git": "2.43.0",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "cpu_model": "AMD EPYC 9354P 32-Core Processor",
+    "cpu_threads_available_to_job": 4,
+    "mem_total_kb": 16376020,
+    "virtualization": "kvm",
+    "boot_id": "8fab241d-868e-447d-b802-01d403c22e88",
+    "receipt_utc": "2026-08-10T05:25:05Z"
+  },
+  "source_transport": {
+    "mode": "SAME_REPO_HASH_VERIFIED_IMMUTABLE_WP02_BUNDLE_PLUS_ONE_EXACT_CANONICALIZER_BLOB_OVERLAY",
+    "base_clay_revision": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+    "original_candidate_commit": "4b5d969923ba348b71d228f108c04eccfacc135f",
+    "patched_canonicalizer_blob": "0e3a9f3c16991cc121f88fac1980f675b8453557",
+    "v17_grammar_blob": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "frontend_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "g9_blob": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "dialect_blob": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "relevant_blobs_reverified_equal_to_current_main_before_distribution": true
+  },
+  "checks": {
+    "v17_discriminator": {
+      "pass": true,
+      "strict": true,
+      "v9_counterexample_confirmed": true,
+      "failed_checks": 0
+    },
+    "strict_v17_construction": {
+      "pass": true,
+      "strict_build_ok": true,
+      "strict_evidence_state": "PASS_STRICT_CONSTRUCTION",
+      "conflict_diagnostics": 0,
+      "grammar_sha256": "83abde2348e6a40204e94ed91021a6e2f79a5ad1f0d96b09437214158ac70a64"
+    },
+    "production_frontend_validation": {
+      "pass": true,
+      "strict": true,
+      "full_admitted_sources": 2
+    },
+    "standalone_canonicalizer": {
+      "pass": true,
+      "strict": true,
+      "production_parser_constructor": "claycode_base_frontend.build_parser",
+      "maybe_placeholders": false,
+      "semantic_surface_discrimination": "13/13 PASS",
+      "layout_equivalence": "6/6 PASS",
+      "optional_placeholder_absence": "4/4 PASS",
+      "invalid_semantic_values": "1/1 PASS"
+    },
+    "cross_payload_parity": {
+      "pass": true,
+      "targeted_optional_fixtures": [
+        {"case": "record_without_typeparams_or_default", "none_placeholder_count": 0, "canonical_payload_equal": true},
+        {"case": "needle_without_params", "none_placeholder_count": 0, "canonical_payload_equal": true},
+        {"case": "record_two_fields_no_defaults", "none_placeholder_count": 0, "canonical_payload_equal": true},
+        {"case": "module_no_optional_elements", "none_placeholder_count": 0, "canonical_payload_equal": true}
+      ],
+      "full_corpus": [
+        {"path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "none_placeholder_count": 0, "canonical_payload_equal": true, "pass": true},
+        {"path": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay", "none_placeholder_count": 0, "canonical_payload_equal": true, "pass": true}
+      ]
+    }
+  },
+  "resource_measurements_raw_time_v": {
+    "discriminator": {"user_s": 4.93, "system_s": 0.04, "wall_s": 4.98, "max_rss_kb": 36448, "exit_status": 0},
+    "strict": {"user_s": 0.76, "system_s": 0.03, "wall_s": 0.80, "max_rss_kb": 31380, "exit_status": 0},
+    "frontend": {"user_s": 0.54, "system_s": 0.03, "wall_s": 0.57, "max_rss_kb": 31616, "exit_status": 0},
+    "canonicalizer": {"user_s": 0.54, "system_s": 0.03, "wall_s": 0.57, "max_rss_kb": 29440, "exit_status": 0}
+  },
+  "instrumentation_negative_result": {
+    "summary_measurement_fields": "UNKNOWN",
+    "cause": "temporary workflow regex anchored at column zero while GNU time -v labels were tab-indented",
+    "raw_measurements_preserved": true,
+    "scientific_effect": "NONE_ON_PASS; metadata aggregation defect only",
+    "action": "Persisted raw values here instead of discarding available metadata"
+  },
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "OPTIONAL_PLACEHOLDER_SENSITIVITY_AS_SEMANTIC_DIFF_FALSIFIER",
+    "hostinger_run_is_additional_out_of_box_experiment": false,
+    "note": "Hostinger work is confirmatory execution/measurement of the already selected hypothesis, not a second unusual experiment."
+  },
+  "coordination": {
+    "original_pull_request": 142,
+    "original_pull_request_state": "CLOSED_UNMERGED_SUPERSEDED",
+    "superseding_pull_request": 153,
+    "superseding_title": "fix(wp02): couple standalone and production canonicalizer contracts",
+    "why_superseded": "PR153 contains the same canonicalizer parser-contract repair plus an executable cross-canonicalizer parity tripwire and couples it into the production canonicalizer closure receipt, preventing two independently green paths from hiding parser-construction drift.",
+    "hostinger_evidence_distributed_to_pr153_comment_id": 5236256332,
+    "duplicate_merge_pressure_removed": true
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_COMPONENT_REPAIR_SUPERSEDED_BY_STRONGER_CLOSURE_CANDIDATE",
+    "supported": "Standalone canonical syntax generation must share the production parser absence semantics; absent [] optionals are absence, not synthetic semantic children.",
+    "not_proven": [
+      "That standalone grammar-bound hash should be renamed or migrated to production semantic_hash",
+      "Downstream harm for every persisted hash consumer",
+      "Formal WP02 PASS",
+      "Andreas target acceptance"
+    ],
+    "strongest_remaining_counterhypothesis": "Even after parser-construction parity, the standalone grammar-bound identity and production semantic/contract identity are intentionally distinct layers; migration/renaming is unnecessary unless downstream consumers conflate them.",
+    "next_falsifier": "Execute PR153's new cross-canonicalizer closure coupling on an admitted Ubuntu lane, then trace persisted syntax/semantic/contract hash consumers; retain the registered Andreas Ubuntu target receipt as the formal gate."
+  },
+  "gate_impact": {
+    "CC-WP-02-PARSER-CANON": "REMAINS_OPEN",
+    "BASE_CLAYCODE_RELEASE": "REMAINS_IN_PROGRESS",
+    "counts_as_wp02_pass": false,
+    "counts_as_andreas_target_acceptance": false,
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+  },
+  "authority_invariant": "model output != execution authority"
+}

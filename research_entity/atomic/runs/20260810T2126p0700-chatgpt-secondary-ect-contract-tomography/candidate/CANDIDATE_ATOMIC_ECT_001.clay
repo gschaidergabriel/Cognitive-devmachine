@@ -1,0 +1,117 @@
+module atomic.ect.v1
+version "0.1-atomic-candidate"
+status RADICAL_CANDIDATE_NOT_PROMOTED
+
+// Executable Contract Tomography (ECT)
+// Project-specific composition of finite-domain oracle-guided synthesis with ClayCode
+// identity/epoch/effect-authority boundaries. Generic CEGIS/OGIS is prior art.
+
+record ContractDomain {
+  obligation: Ref
+  target: Ref
+  arity: Int
+  candidates: FiniteSet<CallContract>
+  domain_hash: Hash
+  source_epoch: Epoch
+  completeness_witness: EvidenceRef?
+}
+
+record ProbeEnvelope {
+  obligation: Ref
+  proposed: CallContract
+  native_self: SelfIdentity
+  state_epoch: Epoch
+  runtime_identity: RuntimeIdentity
+  mode: SANDBOX_DRY_RUN|STATIC_VALIDATE
+  effect_authority: NONE
+  budget: Cost
+}
+
+record DistinguishingWitness {
+  obligation: Ref
+  query_hash: Hash
+  status: PASS|MISMATCH|UNKNOWN|REJECT_STALE|REJECT_IDENTITY|QUARANTINED
+  field: ContractField?
+  observed_value: Symbol?
+  verifier_identity: RuntimeIdentity
+  verifier_semantics_hash: Hash
+  state_epoch: Epoch
+  trace_hash: Hash
+  authority_minted: Bool=false
+}
+
+record ContractHyperposition {
+  obligation: Ref
+  domain_hash: Hash
+  survivors: FiniteSet<CallContract>
+  rejected: Set<CallContractRef>
+  witness_chain: Ordered<DistinguishingWitnessRef>
+  epoch: Epoch
+  status: UNRESOLVED|SINGLETON_PENDING_VERIFY|ADMITTED|UNKNOWN|QUARANTINED
+}
+
+record CallContractWitness {
+  obligation: Ref
+  exact_contract: CallContract
+  domain_hash: Hash
+  completeness_witness: EvidenceRef
+  verifier_identity: RuntimeIdentity
+  verifier_semantics_hash: Hash
+  final_pass: DistinguishingWitnessRef
+  chain_hash: Hash
+  epoch: Epoch
+  effect_authority: NONE
+}
+
+rule authenticated_exact_static_metadata -> prefer_direct_CallContract; ECT_not_needed
+rule missing_exact_metadata + finite_complete_domain + trusted_verifier -> ECT_may_probe
+rule missing(domain.completeness_witness) -> UNKNOWN
+rule probe.effect_authority = NONE
+rule non_sandbox_external_effect_probe -> UNKNOWN
+rule stale(ProbeEnvelope.state_epoch) -> REJECT_STALE
+rule ProbeEnvelope.native_self != self.root -> REJECT_IDENTITY
+rule verifier_identity_or_semantics_hash_changed -> QUARANTINED
+rule name_similarity|path_similarity|type_name_resemblance|historical_role_similarity never_eliminates_contract
+rule DistinguishingWitness may_eliminate only candidates inconsistent_with authenticated verifier semantics
+rule BOOL_ONLY_MISMATCH never_implies missing semantic field value
+rule contradictory_witness_same_field -> QUARANTINED
+rule count(survivors)>1 -> UNRESOLVED
+rule count(survivors)=1 -> SINGLETON_PENDING_VERIFY
+rule final_exact_verifier_PASS + finite_domain_complete + singleton_current_epoch -> emit(CallContractWitness)
+rule CallContractWitness.effect_authority = NONE
+rule CallContractWitness != execution_authority
+rule admitted_CallContract still_subject_to normal ClayCode type/effect + capability + effect gates
+rule target self.root identity is witness-bound; never inferred from human surface name "Frank"
+
+cycle tomography(domain,state) {
+  verify(domain.finite,domain.completeness_witness,state.self.root,state.epoch)
+  hp=ContractHyperposition(survivors=domain.candidates,epoch=state.epoch,status=UNRESOLVED)
+  while count(hp.survivors)>1 && budget_remaining {
+    probe=choose_safe_distinguishing_probe(hp)
+    witness=sandbox_or_static_verifier(probe)
+    hp=eliminate_only_by_verified_witness(hp,witness)
+    if witness.status in [UNKNOWN,REJECT_STALE,REJECT_IDENTITY,QUARANTINED] { return hp }
+  }
+  if count(hp.survivors)==1 {
+    final=exact_verify(single(hp.survivors),state)
+    if final.status==PASS { return admit_witness(hp,final) }
+  }
+  return UNKNOWN
+}
+
+metric tomography_exact_admission_rate
+metric tomography_false_admission_rate
+metric tomography_query_count
+metric tomography_unknown_rate
+metric tomography_stale_reject_rate
+metric tomography_authority_mint_count
+metric tomography_latency
+metric tomography_domain_compression
+
+invariant THINKABLE_WITHIN_GRT != TRUE
+invariant generic_CEGIS_OGIS_is_prior_art
+invariant test_observations_alone_do_not_prove_open_ended_contract
+invariant exact_admission_requires_finite_complete_domain + trusted_verifier + final_exact_pass
+invariant no_contract_guessing_from_names
+invariant no_effect_authority_minting
+invariant no_target_harness_mutation_authority

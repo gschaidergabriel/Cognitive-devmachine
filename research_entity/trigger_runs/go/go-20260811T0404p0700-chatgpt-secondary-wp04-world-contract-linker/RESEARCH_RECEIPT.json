@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0404p0700-chatgpt-secondary-wp04-world-contract-linker",
+  "recorded_at": "2026-08-11T04:23:03+07:00",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "program": {
+    "id": "FRANK_V0_1",
+    "native_target": "self.root",
+    "human_surface": "Frank",
+    "target_host": "accepted Hostinger Ubuntu VPS",
+    "cognition": "ClayCode-only",
+    "training_authorized": false
+  },
+  "canonical_boot": {
+    "entity_id": "frank-project-global-research-entity",
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "question": "What is the next non-duplicated exact boundary between current real frank.effects TypedIR and WP04 type/effect/runtime binding?",
+  "initial_hypothesis": "Every unresolved external bare symbol should pass an explicit unique provider-ownership gate before exact callable signatures and runtime bindings are admitted.",
+  "strongest_counterhypothesis": "A separate world-ownership layer is redundant when exact imported Clay module resolution plus fully-qualified explicit callable contracts already provide unique provider identity and ambiguity rejection.",
+  "initial_evidence": {
+    "historical_target_run": "gschaidergabriel/Dr.-Unterweger:run/31418150523",
+    "historical_frontier_scope": "Real frank.effects structured frontend -> TypedIR external frontier; resolution_claimed=false; signature_inference_used=false.",
+    "reuse_not_duplicate": [
+      "gschaidergabriel/Dr.-Unterweger:PR#113 exact static callable-signature admission",
+      "gschaidergabriel/Dr.-Unterweger:PR#111 exact contract -> runtime/binary/lease/effect binding",
+      "gschaidergabriel/Dr.-Unterweger:PR#118 explicit hidden receiver-state contract"
+    ]
+  },
+  "fresh_external_mechanism_context": [
+    {
+      "source": "WebAssembly Component Model / WIT official documentation",
+      "retrieved_at": "2026-08-11T04:04-04:23+07:00",
+      "relevance": "Worlds make imports/exports explicit and name collisions require explicit handling; design comparison only, not Clay authority."
+    },
+    {
+      "source": "Wasmtime official component Linker documentation",
+      "retrieved_at": "2026-08-11T04:04-04:23+07:00",
+      "relevance": "Imports are resolved before instantiation; duplicate, missing or type-mismatched bindings fail; design comparison only, not Frank evidence."
+    }
+  ],
+  "concurrency_and_staleness": {
+    "target_main_observed_during_run": [
+      "3a7ca32266fbebec57777673515b9ec988b19c66",
+      "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+      "d55b452776295153576011988b0befce7f13b238",
+      "f649ce7ab8249c9dbc61ad7018804204ade53cb5",
+      "c8b41f3cb423a6ef5406b7111979f415c00bec2c"
+    ],
+    "material_main_change": "PR #261 merged exact execution-generation/provider-idempotency work and changed frank.effects during this run, so old frontier evidence was not treated as current.",
+    "fresh_overlap_discovery": "PR #266 was discovered after PR #271 creation and owns the exact-current imported-module/symbol-resolution frontier.",
+    "search_index_negative_result": "GitHub code-search returned zero results for module frank.hive and module frank.memory, but direct current-main fetches of claycode/frank_hive.clay and claycode/frank_memory.clay proved both module declarations exist. Zero-result code search is therefore not admissible module-absence evidence."
+  },
+  "implementation_attempt": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-wp04-world-contract-linker-v2-20260811",
+    "pull_request": 271,
+    "final_pr_state": "CLOSED_UNMERGED_SUPERSEDED_NOT_SELECTED",
+    "head_sha": "3a65d3afeeefae0161e7d73c27bcd0f14fdc26af",
+    "product_source_merged": false,
+    "target_candidate_workflow": "ClayCode WP04 World Contract Linker VPS",
+    "target_candidate_result": "NOT_EXECUTED_AS_ACCEPTANCE_EVIDENCE; lane cancelled after overlap invalidation",
+    "reason_not_promoted": "Current PR #266 already implements exact source module resolution, cross-import ambiguity classification and fail-closed unresolved host boundaries. This candidate duplicated that layer and contained a stale module-count-zero CI premise."
+  },
+  "fresh_current_direct_source_evidence": {
+    "frank_hive": {
+      "path": "claycode/frank_hive.clay",
+      "module": "frank.hive",
+      "git_blob_sha": "bf427fdfc9409fb93c87af7d2453c491eadd15be"
+    },
+    "frank_memory": {
+      "path": "claycode/frank_memory.clay",
+      "module": "frank.memory",
+      "git_blob_sha": "7206577ab67213ba7393c51e0e49e264995455c6"
+    }
+  },
+  "current_competing_lane": {
+    "pull_request": 266,
+    "title": "GO fresh-main: exact ClayCode module/symbol frontier for WP04",
+    "head_sha": "95d580ba46736dc6d865bf7a7a0c48a7542fda38",
+    "scope": "Exact imported current Clay module declarations and source/blob provenance; genuine host/runtime primitives remain unresolved; no call-site signature inference.",
+    "target_workflow_run": 31432811773,
+    "target_workflow_state_at_receipt": "PENDING",
+    "promotion_claimed_here": false
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "WILDCARD_IMPORT_NAMESPACE_COLLISION",
+    "scope": "LOCAL_MICRO_REPLICA_ONLY",
+    "baseline": "One imported provider owns bare semantic_hash.",
+    "intervention": "frank.hive and frank.memory both claim the same bare semantic_hash.",
+    "observed": "Two candidates -> AMBIGUOUS_FAIL_CLOSED; no silent first/last-wins selection.",
+    "execution_admitted": false,
+    "effect_authority": "NONE",
+    "target_result": "NOT_RUN_AS_TARGET_ACCEPTANCE",
+    "interpretation": "Mechanism supports fail-closed namespace collision handling but adds no discriminating value over PR #266, which already marks cross-import duplicate names ambiguous."
+  },
+  "result": {
+    "classification": "NEGATIVE_RESULT_NOT_SELECTED_DUPLICATE_AFTER_FRESHER_SWARM_EVIDENCE",
+    "architecture_delta": "NO_PRODUCT_CHANGE",
+    "research_value": [
+      "Prevented duplicate F-V01-02 implementation from being promoted.",
+      "Recorded GitHub code-search zero-result as insufficient absence evidence.",
+      "Narrowed the next distinct WP04 frontier to genuine unresolved HOST/runtime contracts after exact module resolution."
+    ],
+    "work_event_create": "research_entity/state/work/events/20260811T041923p0700-chatgpt-secondary-wp04-world-ownership-create.json",
+    "work_event_cancel": "research_entity/state/work/events/20260811T042303p0700-chatgpt-secondary-wp04-world-ownership-cancel.json"
+  },
+  "next_frontier": {
+    "dependency": "Wait for actual PR #266 accepted-target module-resolution receipt; PENDING is not PASS.",
+    "if_supported": "Take only the remaining genuine HOST/runtime unresolved symbols, require explicit provider + exact callable contracts, feed them into existing PR #113 exact-signature admission and then PR #111 runtime/binary/lease/effect binding.",
+    "forbidden_shortcuts": [
+      "No provider inference from call-site names",
+      "No signature inference from arity/use constraints",
+      "No repo-global or suffix/fuzzy resolution",
+      "No execution/effect authority from a resolved name"
+    ]
+  },
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "clay_research_authority": "INDEPENDENT_RESEARCH_BUILD_TEST_ONLY",
+    "external_effect_performed": false,
+    "canonical_frank_state_mutated": false,
+    "training_authorized": false
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0112p0700-chatgpt-secondary-provider-ackloss-reconciliation",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity_not_target": true,
+  "target_subject": "self.root / Frank v0.1",
+  "program": "FRANK_V0_1",
+  "research_question": "If a downstream provider durably accepts an effect inside the exact V15/V16 guarded provider-commit window but the Frank process hard-exits before the provider call returns and before local outcome recording, does current v6+V14 state preserve uncertainty and later reconcile/re-enter without resurrecting the dead execution capability?",
+  "hypothesis": "Provider acceptance followed by caller ack-loss/process death leaves the durable Frank effect at COMMITTING with no fabricated outcome; persistent execution-binding bytes remain provenance only; independent outcome evidence may reconcile and re-enter without reviving effect authority.",
+  "strongest_counterhypothesis": "Hard process death inside the provider commit critical section either corrupts/strands the lifecycle so it cannot reconcile cleanly, or causes downstream acceptance to be promoted to local success without independent evidence.",
+  "selected_opportunity": {
+    "class": "DISCRIMINATING_EXPERIMENT",
+    "work_package": "F-V01-09",
+    "secondary_work_package": "F-V01-13",
+    "reason": "Fresh target-v6 evidence had already closed the exact-generation B1/B2/B3 mechanism discriminator; the highest-value remaining bounded uncertainty was timeout/ack-loss after provider acceptance and before local outcome recording."
+  },
+  "fresh_internal_state": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_base_pr": 250,
+    "stacked_base_head": "b677591f649dafe69fc8ba1aa4d92136f7d23b9d",
+    "diagnostic_pr": 255,
+    "diagnostic_head": "6568bb6792d37f2e2b7f33ae3a3c518c05759be1",
+    "tested_merge_sha": "57cdef2f1449f3e8f3d1d613fd776e46d2549c5b",
+    "workflow_run": 31418684572,
+    "workflow_job": 93553854059,
+    "artifact_id": 9074453915,
+    "artifact_sha256": "7b4b321e89fc70a5b08f57fa5bd3ba9897890d0af990ed0ff294485abd2d23d9"
+  },
+  "exactly_one_out_of_box_experiment": {
+    "name": "GO_OOB_PROVIDER_ACK_LOSS_CRASH_RECONCILIATION",
+    "count_in_this_go_invocation": 1,
+    "classification": "BOUNDED_SYNTHETIC_PROVIDER_MECHANISM_DISCRIMINATOR",
+    "causal_intervention": "Real Gate + admitted V16 + caller-bound fence -> B1 reserve -> B2 COMMITTING -> guarded B3 -> separate FULL-synchronous SQLite provider ledger commit/fsync -> os._exit(73) before local outcome recording -> independent observation/reconciliation -> provenance re-entry.",
+    "real_external_provider_used": false,
+    "external_network_used": false,
+    "canonical_frank_state_mutated": false,
+    "reversible_disposable_state": true
+  },
+  "target_environment": {
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "measurement_utc": "2026-08-10T18:22:33Z"
+  },
+  "source_blob_hashes": {
+    "runtime/state/frank_execution_gate.py": "725a0c18899d646eebe3761c5e4308868fa78b4e",
+    "runtime/state/effect_execution_fence.py": "96843ee20bccafec1726ee62932865b704e76472",
+    "runtime/state/caller_bound_effect_lifecycle.py": "83f09f484bd63a9c946f085e217549ab1901661a",
+    "runtime/state/effect_provider_commit.py": "dd863fd9f3a2fada5428f4472059f890bd9b586c",
+    "runtime/state/effect_lifecycle_runtime.py": "76006f10397f9419d52f3d893514294e9edd6521",
+    "tests/frank_effect_v6_fresh_main_matrix.py": "f584a9c58545fc9d9af21b8fbaaf1b3560913cdc",
+    "tests/frank_effect_provider_ackloss_crash_reconciliation_oob.py": "887bcfcd39647d0f22409cef54adf1d77ab3809c"
+  },
+  "baseline_and_controls": {
+    "frank_execution_gate_v1": "PASS_FRANK_EXECUTION_GATE_V1",
+    "fresh_main_v6_matrix": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+    "same_epoch_v16_rebind": "FENCED_ZERO_STATE_MUTATION",
+    "stale_source": "FENCED_ZERO_STATE_MUTATION",
+    "successor_cross_splice": "FENCED_ZERO_STATE_MUTATION",
+    "uncertain_retry_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+    "outcome_reconciliation_after_turnover": "PASS",
+    "immutable_binding_update": "BLOCKED",
+    "immutable_binding_delete": "BLOCKED",
+    "database_integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "oob_result": {
+    "status": "PASS_PROVIDER_ACK_LOSS_CRASH_RECONCILIATION_OOB",
+    "child_exit": 73,
+    "provider_accept_count": 1,
+    "provider_integrity": "ok",
+    "frank_state_after_crash": "COMMITTING",
+    "local_outcome_fabricated": false,
+    "recovery_decision_after_crash": "SAFE_TO_RETRY_SAME_IDEMPOTENCY_KEY",
+    "durable_binding_resurrection": "EXECUTION_FENCE_TRUSTED_RUNTIME_ONLY",
+    "reconciliation": "UNCERTAIN_OUTCOME_RECONCILED",
+    "reentry": "REENTRY_DURABLY_RECORDED",
+    "final_recovery_decision": "COMPLETE",
+    "trace": "OK",
+    "frank_integrity": "ok",
+    "foreign_key_violations": 0,
+    "provider_exactly_once_general_claim": false
+  },
+  "resource_measurements": {
+    "oob": {
+      "wall_seconds": 0.23,
+      "user_seconds": 0.15,
+      "system_seconds": 0.05,
+      "cpu_percent": 87,
+      "max_rss_kib": 25576,
+      "major_page_faults": 0,
+      "minor_page_faults": 7285,
+      "voluntary_context_switches": 114,
+      "involuntary_context_switches": 10,
+      "swaps": 0,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 6664,
+      "socket_messages_sent": 0,
+      "socket_messages_received": 0,
+      "exit_status": 0
+    },
+    "v6_normal_matrix": {
+      "wall_seconds": 0.17,
+      "user_seconds": 0.10,
+      "system_seconds": 0.03,
+      "cpu_percent": 81,
+      "max_rss_kib": 26600,
+      "swaps": 0,
+      "exit_status": 0
+    },
+    "execution_gate_baseline": {
+      "wall_seconds": 0.20,
+      "user_seconds": 0.12,
+      "system_seconds": 0.05,
+      "cpu_percent": 86,
+      "max_rss_kib": 25784,
+      "swaps": 0,
+      "exit_status": 0
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Stripe official error handling / idempotency documentation",
+      "retrieved": "2026-08-11",
+      "supports": "Connection/API failure may leave result indeterminate; same idempotency key can make retries safe where provider semantics support it; independent outcome observation/webhooks are used for reconciliation.",
+      "url": "https://docs.stripe.com/error-handling"
+    },
+    {
+      "source": "Stripe official advanced error handling",
+      "retrieved": "2026-08-11",
+      "supports": "After intermittent failure the client may not know whether the server received the request; retry with the same key is provider-specific and server-error outcomes can remain indeterminate.",
+      "url": "https://docs.stripe.com/error-low-level"
+    },
+    {
+      "source": "etcd official API guarantees",
+      "retrieved": "2026-08-11",
+      "supports": "A client may be uncertain whether an operation completed after timeout or network disruption; durable revision/ownership primitives do not eliminate outcome uncertainty at a remote boundary.",
+      "url": "https://etcd.io/docs/v3.5/learning/api_guarantees/"
+    },
+    {
+      "source": "etcd v3.7 official API/concurrency docs",
+      "retrieved": "2026-08-11",
+      "supports": "Revisions and lock ownership keys provide compareable/fenceable ownership identity and atomic transaction guards.",
+      "url": "https://etcd.io/docs/v3.7/learning/api/"
+    }
+  ],
+  "analysis": {
+    "supported": [
+      "The current v6 exact-generation fence and V14 lifecycle can represent the provider-accepted/caller-died gap without fabricating a local success/failure.",
+      "Persistent execution-generation binding is provenance only; it cannot reconstruct the transient execution capability after process death.",
+      "Outcome observation/reconciliation is correctly separable from effect authority and can survive generation death.",
+      "Provenance-bound re-entry can close the reconciled lifecycle to COMPLETE after independently observed success."
+    ],
+    "not_supported_or_not_claimed": [
+      "No claim that arbitrary providers are exactly-once.",
+      "No claim that every real provider supports idempotency keys or outcome lookup/webhooks.",
+      "No closure of the real-provider timeout-after-acceptance acceptance gate.",
+      "No promotion of PR 250/255 into main from this receipt.",
+      "No training authorization.",
+      "No self.root/Frank Harness mutation authority."
+    ],
+    "counterhypothesis_outcome": "REFUTED_FOR_THIS_SYNTHETIC_MECHANISM: the hard exit did not corrupt or prematurely resolve the lifecycle; the strongest remaining counterhypothesis moves to real provider semantics and production routing/lowering rather than the local uncertainty/reconciliation state machine."
+  },
+  "architecture_delta": {
+    "status": "NO_RUNTIME_CHANGE_SUPPORTED_BY_THIS_EXPERIMENT",
+    "decision": "Preserve the v6 design split: transient exact execution capability gates start/retry/provider commit; durable effect state records uncertainty; reconciliation accepts evidence after generation turnover without granting effect authority.",
+    "promotion_impact": "Strengthens F-V01-09/F-V01-13 evidence but does not itself close real-provider or production-routing gates."
+  },
+  "test_obligations": [
+    "Run an actual configured provider connector/test-mode equivalent that can produce acceptance followed by lost/indeterminate acknowledgement, with same-key replay semantics verified from that provider's contract.",
+    "Prove ordinary production effect routing/lowering cannot bypass CallerBoundEffectLifecycleRuntime + guarded_provider_commit.",
+    "Carry exact ClayCode frontend/TypedIR/compiler/lowering receipts for the production effect path, not semantic-source markers alone.",
+    "Exercise recovery generation/rollback with provider-uncertain effects and verify outcome observation survives while effect authority does not."
+  ],
+  "negative_results_preserved": [
+    "The experiment does not demonstrate a need for a new two-phase commit protocol across arbitrary providers.",
+    "The experiment does not justify reviving stale execution authority for retry; reconciliation succeeded without it."
+  ],
+  "research_write": "COMMITTED",
+  "next_frontier": [
+    "F-V01-09 non-bypassable production effect routing/lowering",
+    "F-V01-09 real-provider timeout-after-acceptance reconciliation",
+    "F-V01-09 exact ClayCode compiler/lowering evidence",
+    "F-V01-13 recovery generation/rollback around uncertain external effects"
+  ]
+}

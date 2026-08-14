@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1257p0700-chatgpt-secondary-release-evidence-replay",
+  "recursion": 2,
+  "actor": "chatgpt-secondary",
+  "trigger": "go",
+  "new_out_of_box_experiment": false,
+  "inherits_exact_single_oob_experiment": "STALE_ANDREAS_TARGET_RECEIPT_REPLAY_NEGATIVE_CONTROL",
+  "question": "Should exact target-receipt freshness fail closed already inside WP14, and what identity should preserve durable release validity after unrelated monorepo churn?",
+  "result": {
+    "wp14_freshness": {
+      "status": "IMPLEMENTED_LOCAL_PRIMITIVE_TEST_ONLY_REMOTE_PENDING",
+      "commit": "dc4bd7a8aa6e691fe8d4fea8ecaf60559a8ac61e",
+      "path": "tools/claycode_base_wp14_strict_audit.py",
+      "rule": "strict repository_commit must equal checkout HEAD executing WP14",
+      "manifest_schema": "1.4",
+      "new_fields": [
+        "checkout_head",
+        "release_commit_freshness_pass"
+      ],
+      "effect": "Stale-but-internally-coherent target evidence now fails before a green WP14 manifest can be emitted."
+    },
+    "wp14_unit_regression": {
+      "path": "tools/test_claycode_wp14_release_freshness.py",
+      "commit": "19f5a9bc9186cbf9f9fd56db5476b289ed06b96d",
+      "cases": 5,
+      "local_logic_result": "5/5 expected truth values",
+      "remote_execution": "UNKNOWN_SELF_HOSTED_LANE_UNASSIGNED"
+    },
+    "workflow": {
+      "status": "UPDATED_ON_MAIN",
+      "commit": "3539b86c91dc0f60350d83d317f40f556b0ae357",
+      "runner": "self-hosted",
+      "steps": [
+        "WP14 exact-checkout primitive regression",
+        "matched stale-vs-fresh promoter control"
+      ],
+      "reason_for_self_hosted": "Three independent GitHub-hosted PR workflows failed before steps in the observed verification PR, while Hostinger self-hosted is the registered project remote build/test lane."
+    }
+  },
+  "counterhypothesis_update": {
+    "finding": "Using global git HEAD as the only durable post-release equivalence identity would be overly conservative in a high-churn monorepo because unrelated research/receipt commits can advance HEAD without changing ClayCode build inputs.",
+    "decision": "Keep exact-HEAD equality as the contemporaneous collection/WP14/promoter anti-replay invariant. Do not yet use it as the sole long-lived equivalence rule for downstream release reuse."
+  },
+  "live_primary_research": [
+    {
+      "source": "Bazel official Remote Caching documentation",
+      "mechanism": "Explicit action inputs plus content/action hashes support reuse based on actual build inputs."
+    },
+    {
+      "source": "SLSA v1.2 provenance/source requirements",
+      "mechanism": "Source revision plus cryptographic content/material digests are first-class provenance identity."
+    },
+    {
+      "source": "Nix reference manual content-addressing",
+      "mechanism": "Content-derived identity can remain stable independent of unrelated external metadata."
+    }
+  ],
+  "architecture_candidate": {
+    "status": "CANDIDATE_NOT_PROMOTED",
+    "ref": "research_entity/claycode/base/CC_RELEASE_INPUT_CLOSURE_CANDIDATE_20260810.json",
+    "name": "ReleaseInputClosureDigest",
+    "strongest_risk": "An incomplete declared closure can hide a dependency and falsely reuse stale evidence; therefore conservative exact-HEAD remains authoritative until hidden-input falsifiers pass."
+  },
+  "remote_lane_cleanup": {
+    "draft_pr": 161,
+    "state": "CLOSED_UNMERGED",
+    "reason": "Self-hosted verification remained queued/unassigned; no remote PASS was claimed and the temporary lane was cleaned to avoid stale duplicate work."
+  },
+  "next_falsifiers": [
+    "Enumerate the complete release-relevant input closure before any durable equivalence implementation.",
+    "Unrelated-monorepo-churn differential: global commit changes but closure digest must remain stable.",
+    "Release-source/toolchain/dependency mutation differentials: closure digest must change.",
+    "Hidden-input mutation: any semantic/artifact change with stable closure digest refutes the candidate closure.",
+    "Execute current WP14 + promoter regression on an actually assigned Hostinger lane and later the registered Andreas Ubuntu target before BASE PASS."
+  ],
+  "disposition": "IMPLEMENTED_WP14_DEFENSE_IN_DEPTH_PLUS_UNPROMOTED_DURABLE_IDENTITY_CANDIDATE",
+  "training_gate_touched": false
+}

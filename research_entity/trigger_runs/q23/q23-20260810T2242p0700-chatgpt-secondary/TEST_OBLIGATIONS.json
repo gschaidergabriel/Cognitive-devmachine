@@ -1,0 +1,49 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "test_obligations":[
+    {
+      "test_id":"T-Q23-ZC-001",
+      "priority":"P0_Q23",
+      "question":"Does zero-copy Qwen feature gating beat full decode and a dedicated embedding baseline end-to-end?",
+      "variants":["FULL_QWEN","DEDICATED_EMBEDDER_MVC","RAW_QWEN_GLOBAL_POOL","ZERO_COPY_QWEN_SPATIAL_POOL","ZERO_COPY_QWEN_TINY_PROJECTION"],
+      "fixtures":["recurring known GUI state","near-neighbor unknown UI","small-text/OCR","layout-shift","modal outside ROI","post-action state change"],
+      "metrics":["task_success","visual_state_correctness","false_familiar","unknown_recall","ECE_or_calibration","sensor_to_state_p50_p95_p99","sensor_to_action_p50_p95_p99","mmproj_ms","mvc_gate_ms","4B_prefill_ms","decode_ms","bytes_copied","RSS_peak","VRAM_peak","visual_tokens","decoder_bypass_rate"],
+      "promotion_law":"No promotion unless accuracy/open-set/recovery remain within frozen tolerance and total pathway resource cost is Pareto-superior."
+    },
+    {
+      "test_id":"T-Q23-RECOVERY-002",
+      "priority":"P0_Q23",
+      "question":"Does the exact current multimodal runtime recover correctly across image-containing restart/cache/replay paths?",
+      "cases":["cold restart after known image","restart after unknown image","same image hash after restart","changed bytes same semantic object","stale mmproj hash","stale MVC projection/prototype version","slot save/restore with image when supported","unsupported save/restore must fail observably","backend crash/restart","duplicate request/idempotency"],
+      "required_receipts":["model_hash","mmproj_hash","llama.cpp_commit","backend","frame_hash","media_id","prototype_version","semantic_epoch","restart_epoch","result_equivalence_or_explicit_degradation"],
+      "fail_rule":"No silent reuse of stale media/prototype state; unavailable runtime cache features degrade explicitly rather than claiming recovery."
+    },
+    {
+      "test_id":"T-Q23-ROI-003",
+      "priority":"P1_Q23",
+      "question":"Which spatial/temporal policy minimizes visual tokens without hiding task-relevant static/background state?",
+      "variants":["FULL_FRAME","CHANGED_TILES_ONLY","ROI_ONLY","ROI_PLUS_CONTEXT","ROI_PLUS_CONTEXT_PERIODIC_ANCHOR","ADAPTIVE_TOKEN_BUDGET"],
+      "controls":["notification outside ROI","hidden operation","static background state transition cue","slow drift","no-change","rapid transient modal"],
+      "metrics":["task_success","grounding_error","missed_modal","visual_tokens_per_verified_action","mmproj_ms","end_to_end_latency","false_no_change"]
+    },
+    {
+      "test_id":"T-Q23-PAR-004",
+      "priority":"P1_Q23",
+      "question":"Does compact visual-seed EAP improve reasoning or compute without confirmation-bias amplification?",
+      "variants":["QWEN_ONLY","DIRECT_MEMORY","PAR_COMPACT_SEED","PAR_ACTIVE_SENSING","PAR_WRONG_SEED"],
+      "controls":["shuffled_seed","wrong_high_confidence_seed","stale_layout","changed_identity_similar_appearance","stale_EAP_epoch","no_EAP","query_blind_fanout"],
+      "metrics":["memory_precision_recall","stale_memory_override_rate","memory_induced_error","task_success","EAP_full_overhead","prompt_tokens","sensor_to_decision","GWT_false_ignition"],
+      "experience_dose":"If benefit is attributed to Frank experience, execute N={0,1,2,4,8,16,32,64} plus SHAM_N and direct-memory controls under the existing q23 experience-dose contract."
+    },
+    {
+      "test_id":"T-Q23-MODEL-005",
+      "priority":"P2_Q23",
+      "question":"Can any current small multimodal challenger dominate Qwen3.5-4B under the exact target-VPS resource envelope?",
+      "candidates":["Qwen3.5-4B current baseline","Gemma4-E4B challenger only if declared model-size/resource budget permits"],
+      "excluded_for_now":["Qwen3.6-27B","Qwen3.6-35B-A3B"],
+      "metrics":["exact total/effective parameters","resident memory","vision encode","task success","GUI/OCR accuracy","tool/agent behavior","latency","recovery","runtime support"],
+      "rule":"Model newness or benchmark rank never promotes a model."
+    }
+  ]
+}

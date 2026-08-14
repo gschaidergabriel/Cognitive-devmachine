@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2142p0700-gpt56sol-fv0113-sqlite-receipt-tail-fence",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "8570ad23b6bbb2a16095b0b4d5d988739447a68c",
+    "parallel_f_v01_13_receipt_observed": "research_entity/trigger_runs/go/go-20260812T2137p0700-gpt56sol-fv0113-sqlite-runtime-binding/RESEARCH_RECEIPT.json",
+    "parallel_result_relation": "COMPLEMENTARY_NOT_OVERWRITE: prior result falsified version-only admission; this result falsifies a later same-PID receipt-tail mapping-stability assumption in the live-process attestor",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_merge_sha": "2e1909830fee948ed4af5d52c726c02530b2dd72",
+    "product_pr": 545,
+    "workspace_status": "F-V01-13 IN_PROGRESS",
+    "training_authorized": false
+  },
+  "grf": {
+    "hypothesis": "The post-hash mapping sample plus stable PID start-time check was sufficient to bind the SQLite mapping through receipt emission.",
+    "strongest_counter_reality": "The same process generation can retain its PID start-time while the SQLite mapping changes during receipt-tail metadata reads, leaving the receipt bound to an earlier mapping.",
+    "falsifier": "Hold PID generation constant and swap the modeled SQLite mapping during receipt-tail metadata.",
+    "outcome": "HYPOTHESIS_REFUTED_COUNTER_REALITY_RETAINED_AND_REPAIRED"
+  },
+  "unusual_experiment": {
+    "name": "RECEIPT_TAIL_MAPPING_SWAP",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "external_effect": false,
+    "production_exploit_claimed": false,
+    "baseline": "pre-repair control flow",
+    "intervention": "same PID generation; modeled SQLite mapping changes only inside receipt-tail metadata phase",
+    "observed": "pre-repair modeled flow could still return PASS_SQLITE_LIVE_PROCESS_IDENTITY while the modeled final mapping differed",
+    "interpretation": "control-flow falsifier only; not proof that a production attacker can force the race"
+  },
+  "repair": {
+    "pr": "gschaidergabriel/Dr.-Unterweger#545",
+    "merged_main_sha": "2e1909830fee948ed4af5d52c726c02530b2dd72",
+    "changes": [
+      "re-sample /proc/<pid>/maps after receipt-tail process metadata",
+      "re-bind resolved path/device/inode/stat identity to the expected anchored SQLite object",
+      "re-check PID start-time after the final mapping sample",
+      "fail closed on SQLITE_MAPPING_CHANGED_DURING_RECEIPT_TAIL or PID_GENERATION_CHANGED_DURING_RECEIPT_TAIL",
+      "add deterministic same-generation mapping-swap regression"
+    ],
+    "receipt_scope_preserved": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY"
+  },
+  "verification": {
+    "self_hosted_workflow": "Frank SQLite receipt-tail mapping fence",
+    "run_id": 31607632624,
+    "tested_head": "301af8dff45fe342a9b8f2bc0503e031ad77e969",
+    "runner": "clay",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "result": "PASS",
+    "steps": {
+      "exact_candidate_fetch": "PASS",
+      "live_attestor_regression_9_tests": "PASS",
+      "repository_static_integrity": "PASS",
+      "deep_integrity_v11": "PASS",
+      "evidence_upload": "PASS"
+    }
+  },
+  "primary_source_support": {
+    "linux_proc_docs": "https://docs.kernel.org/6.12/filesystems/proc.html",
+    "linux_proc_next_docs": "https://docs.kernel.org/next/filesystems/proc.html",
+    "supporting_fact": "/proc/PID/maps reports current mappings with device/inode/path and is inherently racy while mappings change; process start_time identifies process generation but does not itself prove mapping stability"
+  },
+  "collapse": [
+    {
+      "claim": "A stable PID generation alone proves SQLite mapping stability through receipt-tail metadata.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "The merged attestor now re-observes mapping identity after receipt-tail metadata and rejects the modeled same-generation swap.",
+      "outcome": "PROMOTE_TO_VERIFIED",
+      "scope": "merged code plus self-hosted deterministic verification only"
+    },
+    {
+      "claim": "F-V01-13 or Frank v0.1 is complete.",
+      "outcome": "REJECT",
+      "reason": "productive Frank persistence-path binding, accepted-host runtime identity, downgrade/library-swap controls, restart/recovery, semantic lineage, and terminal receipts remain open"
+    }
+  ],
+  "next_falsifier": {
+    "priority": "HIGH",
+    "test": "On the accepted productive Hostinger Frank persistence path, bind the actual loaded SQLite source/build/object to the exact Frank execution generation and database/WAL path, then prove fail-closed downgrade/library-swap and restart/recovery behavior.",
+    "do_not_substitute": "version string or synthetic process proof for productive persistence-path evidence"
+  },
+  "nonclaims": {
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false,
+    "accepted_hostinger_product_runtime_proven": false,
+    "productive_persistence_path_exercised": false,
+    "restart_recovery_attested": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

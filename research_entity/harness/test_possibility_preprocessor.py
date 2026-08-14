@@ -37,7 +37,17 @@ def fixture():
         nodes.append({"id": candidate_id, "text": candidate_id.replace("_", " "), "epistemic": "KNOWN", "lineage_root": candidate_id})
         affordances.append({"id": candidate_id, "requirements": requirements})
         for requirement in requirements:
-            edges.append({"source": candidate_id, "target": requirement, "weight": 1.0, "relation_type": "requires", "proof_eligible": True})
+            edges.append({
+                "source": candidate_id,
+                "target": requirement,
+                "weight": 1.0,
+                "relation_type": "requires",
+                "proof_eligible": True,
+                "source_epoch": 9,
+                "graph_epoch": 9,
+                "evidence_class": "VERIFIED",
+                "provenance_verified": True,
+            })
     return cases, nodes, edges, affordances
 
 
@@ -112,9 +122,80 @@ def test_untrusted_high_weight_edges_can_activate_but_cannot_mint_proof():
             "weight": 5.0,
             "relation_type": "requires",
             "proof_eligible": False,
+            "source_epoch": 9,
+            "graph_epoch": 9,
+            "evidence_class": "VERIFIED",
+            "provenance_verified": True,
         })
     pp = PossibilityPreprocessor(source_epoch=9, graph_epoch=9, nodes=nodes, edges=edges, affordances=affordances)
     receipt = pp.compile(PossibilityQuery("adversarial-edge", query, 9, 9))
     assert receipt["selected_ref"] == correct_candidate
     wrong = next(c for c in receipt["candidates"] if c["candidate_id"] == wrong_candidate)
     assert wrong["completeness"] < 1.0
+
+
+def _inject_wrong_edges(edges, source_ref, wrong_requirements, **overrides):
+    base = {
+        "weight": 5.0,
+        "relation_type": "requires",
+        "proof_eligible": True,
+        "source_epoch": 9,
+        "graph_epoch": 9,
+        "evidence_class": "VERIFIED",
+        "provenance_verified": True,
+    }
+    base.update(overrides)
+    for requirement in wrong_requirements:
+        edges.append({"source": source_ref, "target": requirement, **base})
+
+
+def test_declared_but_stale_proof_edges_are_rejected():
+    cases, nodes, edges, affordances = fixture()
+    query, correct_requirements, correct_candidate = cases[0]
+    wrong_candidate = "aff:cpu_benchmark"
+    wrong_requirements = next(a["requirements"] for a in affordances if a["id"] == wrong_candidate)
+    _inject_wrong_edges(edges, correct_requirements[0], wrong_requirements, source_epoch=8)
+    pp = PossibilityPreprocessor(source_epoch=9, graph_epoch=9, nodes=nodes, edges=edges, affordances=affordances)
+    receipt = pp.compile(PossibilityQuery("stale-edge-poison", query, 9, 9))
+    assert receipt["selected_ref"] == correct_candidate
+    wrong = next(c for c in receipt["candidates"] if c["candidate_id"] == wrong_candidate)
+    assert wrong["completeness"] < 1.0
+    assert receipt["proof_edge_audit"]["STALE_SOURCE_EPOCH"] == len(wrong_requirements)
+
+
+def test_declared_current_but_unverified_provenance_cannot_mint_proof():
+    cases, nodes, edges, affordances = fixture()
+    query, correct_requirements, correct_candidate = cases[0]
+    wrong_candidate = "aff:cpu_benchmark"
+    wrong_requirements = next(a["requirements"] for a in affordances if a["id"] == wrong_candidate)
+    _inject_wrong_edges(edges, correct_requirements[0], wrong_requirements, provenance_verified=False)
+    pp = PossibilityPreprocessor(source_epoch=9, graph_epoch=9, nodes=nodes, edges=edges, affordances=affordances)
+    receipt = pp.compile(PossibilityQuery("spoof-edge-poison", query, 9, 9))
+    assert receipt["selected_ref"] == correct_candidate
+    wrong = next(c for c in receipt["candidates"] if c["candidate_id"] == wrong_candidate)
+    assert wrong["completeness"] < 1.0
+    assert receipt["proof_edge_audit"]["PROVENANCE_UNVERIFIED"] == len(wrong_requirements)
+
+
+def test_no_expand_is_valid_when_frontier_has_no_marginal_value():
+    pp = PossibilityPreprocessor(
+        source_epoch=1,
+        graph_epoch=1,
+        nodes=[
+            {"id":"cap:a","text":"alpha capability","epistemic":"KNOWN","lineage_root":"L1"},
+            {"id":"rule:a","text":"alpha rule","epistemic":"KNOWN","lineage_root":"L2"},
+        ],
+        edges=[],
+        affordances=[{"id":"aff:a","requirements":["cap:a","rule:a"]}],
+    )
+    receipt = pp.compile(PossibilityQuery("no-expand", "alpha capability rule", 1, 1))
+    assert receipt["selected_ref"] == "aff:a"
+    assert receipt["expansion_trace"] == [{
+        "hop": 1,
+        "action": "STOP",
+        "reason": "NO_FRONTIER",
+        "activation_frontier": 0,
+        "proof_frontier": 0,
+        "activation_gain": 0.0,
+        "proof_gain": 0.0,
+    }]

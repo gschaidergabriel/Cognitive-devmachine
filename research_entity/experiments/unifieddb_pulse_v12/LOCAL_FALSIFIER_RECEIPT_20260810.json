@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "candidate": "UNIFIEDDB_PULSE_POSSIBILITY_PREPROCESSOR_V12",
+  "branch_head_at_test": "17fb82648433eeb067cc185800000be7cb3ebb15",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "code_basis": {
+    "candidate_source_blob": "4022b151dacfa22107f1f47f2f73809dafdb8246",
+    "test_source_blob": "3eb1088b2e4ddcd965b7a8d870c0321322dbe922",
+    "note": "Executed logic mirrored from the fetched branch source/test blobs; GitHub-hosted PR jobs failed before exposing job steps and are not counted as candidate passes."
+  },
+  "falsifiers": {
+    "test_count": 6,
+    "status": "PASS",
+    "flat_fixture_mean_recall": 0.8833333333333333,
+    "flat_fixture_top1": 0.3,
+    "candidate_mean_recall": 1.0,
+    "candidate_top1": 1.0,
+    "untrusted_edge_rejections": 4,
+    "stale_source_epoch_rejections": 4,
+    "provenance_unverified_rejections": 4,
+    "no_expand_action": "STOP"
+  },
+  "multi_seed_proxy": {
+    "seeds": [20260810, 20260811, 20260812],
+    "queries_per_seed": 1000,
+    "top1_min": 1.0,
+    "mean_latency_us": 2506.623613,
+    "mean_p50_us": 2505.106333333333,
+    "mean_p95_us": 2970.57,
+    "mean_p99_us": 3469.949,
+    "adaptive_stop_rate": 0.3,
+    "runs": [
+      {"seed": 20260810, "n": 1000, "top1": 1.0, "p50_us": 2507.112, "p95_us": 3005.679, "p99_us": 3738.328, "mean_us": 2526.972329, "adaptive_stop_rate": 0.3},
+      {"seed": 20260811, "n": 1000, "top1": 1.0, "p50_us": 2500.959, "p95_us": 2915.855, "p99_us": 3146.748, "mean_us": 2472.075273, "adaptive_stop_rate": 0.3},
+      {"seed": 20260812, "n": 1000, "top1": 1.0, "p50_us": 2507.248, "p95_us": 2990.176, "p99_us": 3524.771, "mean_us": 2520.823237, "adaptive_stop_rate": 0.3}
+    ]
+  },
+  "environment": {
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "machine": "x86_64",
+    "processor": ""
+  },
+  "limitations": [
+    "Local tool-container evidence only; not Hostinger or Andreas target hardware.",
+    "Synthetic 10-query/400-distractor fixture; not real Clay corpus.",
+    "The local runner mirrors the fetched branch logic rather than executing a Git checkout because the private GitHub repo is not network-resolvable from the local container.",
+    "No universal database or retrieval superiority claim."
+  ],
+  "negative_infrastructure_evidence": {
+    "github_actions_runs": [31344096897, 31344178377],
+    "conclusion": "FAILURE_BEFORE_EXPOSED_STEPS",
+    "candidate_pass_from_actions": false
+  },
+  "created_at": "2026-08-10T00:22:19.262887+00:00"
+}

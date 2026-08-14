@@ -5,13 +5,24 @@ on:
     branches: [main]
     paths:
       - 'rae_core/possibility_preprocessor.py'
+      - 'research_entity/harness/reference/possibility_preprocessor.py'
+      - 'research_entity/harness/test_possibility_preprocessor.py'
+      - 'tools/possibility_preprocessor_benchmark.py'
+      - 'benchmarks/possibility_preprocessor/**'
+      - '.github/workflows/possibility-preprocessor-benchmark.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'rae_core/possibility_preprocessor.py'
+      - 'research_entity/harness/reference/possibility_preprocessor.py'
+      - 'research_entity/harness/test_possibility_preprocessor.py'
       - 'tools/possibility_preprocessor_benchmark.py'
       - 'benchmarks/possibility_preprocessor/**'
       - '.github/workflows/possibility-preprocessor-benchmark.yml'
   workflow_dispatch:
 
 concurrency:
-  group: possibility-preprocessor-benchmark-main
+  group: possibility-preprocessor-benchmark-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -27,8 +38,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile candidate
-        run: python -m py_compile rae_core/possibility_preprocessor.py tools/possibility_preprocessor_benchmark.py tools/claygraph_query.py tools/claygraph_build.py
+      - name: Compile candidates
+        run: |
+          python -m py_compile \
+            rae_core/possibility_preprocessor.py \
+            research_entity/harness/reference/possibility_preprocessor.py \
+            research_entity/harness/test_possibility_preprocessor.py \
+            tools/possibility_preprocessor_benchmark.py \
+            tools/claygraph_query.py tools/claygraph_build.py
+      - name: Run proof/stale/adaptive-stop falsifiers
+        run: |
+          python - <<'PY'
+          from research_entity.harness import test_possibility_preprocessor as t
+          tests = [(name, fn) for name, fn in sorted(vars(t).items()) if name.startswith('test_') and callable(fn)]
+          if not tests:
+              raise SystemExit('no possibility-preprocessor tests discovered')
+          for name, fn in tests:
+              fn()
+              print(f'PASS {name}')
+          print(f'TEST_COUNT={len(tests)}')
+          PY
       - name: Build fair SQLite source plane
         run: python tools/build_source_db.py --db research_sources/sources.db
       - name: Run possibility benchmark
@@ -62,6 +91,7 @@ jobs:
           p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
           PY
       - name: Persist benchmark receipt
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config user.name 'clay-benchmark-bot'
           git config user.email 'clay-benchmark-bot@users.noreply.github.com'

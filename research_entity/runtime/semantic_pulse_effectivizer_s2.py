@@ -7,9 +7,14 @@ It may combine multiple authoritative Pulse notifications only when the caller p
 there is no intermediate observation requirement and each event is explicitly safe for
 final-state projection maintenance. Raw authoritative events must remain preserved elsewhere.
 
-The effectivizer composes per-logical-id before/after fingerprints, cancels exact net-zero
-chains, unions impact seeds for remaining changes, and exposes an adapter to the existing
-SPM-S1 PulsePlan. It never grants truth, GWT, model, tool, or effect authority.
+Important identity rule: content-fingerprint A->B->A is not assumed to be a projection
+identity no-op. SPM-S1 segments can contain versioned target_record_id values, so a logical
+identity touched during a read-free batch remains an invalidation/recompute input unless a
+future explicit identity-stability witness proves otherwise. Net-zero chains are still
+reported as content cancellations, but their logical ids and impact seeds are conservatively
+preserved for the one final coherent projection generation.
+
+The module never grants truth, GWT, model, tool, or effect authority.
 """
 
 from dataclasses import dataclass
@@ -54,14 +59,23 @@ class EffectivizedPulsePlan:
     to_source_epoch: int
     from_graph_epoch: int
     to_graph_epoch: int
+    # Projection invalidation identities: every logical id touched by the raw batch.
+    # This intentionally includes content-fingerprint net-zero / ABA chains.
     changed_logical_ids: tuple[str, ...]
+    # Conservative projection impact closure across every raw event in the batch.
     impact_seed_ids: tuple[str, ...]
+    # Content-level net-zero chains. This is diagnostic/compression information only;
+    # it is not permission to erase identity/provenance invalidation.
     cancelled_logical_ids: tuple[str, ...]
     raw_event_count: int
+    # Number of logical ids whose final content fingerprint differs from batch entry.
     effective_change_count: int
     raw_impact_mentions: int
+    # Number of distinct seeds that must be considered for the final projection.
     effective_impact_count: int
     impact_complete: bool
+    # Retained for receipt compatibility. With identity-touch preservation, a non-empty
+    # event batch always has at least one changed logical identity for SPM-S1 publication.
     metadata_only_epoch_advance_required: bool
     authority: str = AUTHORITY
 
@@ -88,6 +102,12 @@ def effectivize_pulse_batch(
 
     Strictness is intentional. Any uncertainty falls back to sequential SPM-S1 outside this
     helper. The function does not mutate UnifiedDB and does not delete raw event history.
+
+    Fingerprint cancellation is content-level only. Every touched logical id and every
+    declared impact seed remains in the projection plan because current SPM-S1 segments may
+    encode versioned record identity/provenance even when final content bytes return to the
+    same fingerprint. This avoids an ABA-style stale-segment reuse bug while still allowing
+    one coherent generation-map publication for the whole read-free batch.
     """
     events = tuple(events)
     if not batch_id:
@@ -149,16 +169,19 @@ def effectivize_pulse_batch(
             chain[1] = event.after_fingerprint
             chain[2].update(seeds)  # type: ignore[union-attr]
 
-    effective_ids: list[str] = []
+    touched_ids = sorted(chains)
+    net_changed_ids: list[str] = []
     cancelled_ids: list[str] = []
-    effective_seeds: set[str] = set()
+    projection_seeds: set[str] = set()
     for logical_id, chain in sorted(chains.items()):
         before, after, seeds = chain
+        # Always preserve the seed invalidation footprint of a touched identity. Content
+        # equality does not prove target_record_id / provenance / version identity equality.
+        projection_seeds.update(seeds)  # type: ignore[arg-type]
         if before == after:
             cancelled_ids.append(logical_id)
         else:
-            effective_ids.append(logical_id)
-            effective_seeds.update(seeds)  # type: ignore[arg-type]
+            net_changed_ids.append(logical_id)
 
     return EffectivizedPulsePlan(
         batch_id=batch_id,
@@ -167,28 +190,32 @@ def effectivize_pulse_batch(
         to_source_epoch=events[-1].to_source_epoch,
         from_graph_epoch=events[0].from_graph_epoch,
         to_graph_epoch=events[-1].to_graph_epoch,
-        changed_logical_ids=tuple(effective_ids),
-        impact_seed_ids=tuple(sorted(effective_seeds)),
+        changed_logical_ids=tuple(touched_ids),
+        impact_seed_ids=tuple(sorted(projection_seeds)),
         cancelled_logical_ids=tuple(cancelled_ids),
         raw_event_count=len(events),
-        effective_change_count=len(effective_ids),
+        effective_change_count=len(net_changed_ids),
         raw_impact_mentions=raw_impact_mentions,
-        effective_impact_count=len(effective_seeds),
+        effective_impact_count=len(projection_seeds),
         impact_complete=impact_complete,
-        metadata_only_epoch_advance_required=not effective_ids,
+        metadata_only_epoch_advance_required=False,
     )
 
 
 def to_spm_s1_plan(plan: EffectivizedPulsePlan):
-    """Translate a non-empty effectivized batch into the existing SPM-S1 PulsePlan.
+    """Translate an effectivized batch into the existing SPM-S1 PulsePlan.
 
-    A fully cancelled batch cannot be adapted safely yet because SPM-S1 has no metadata-only
-    epoch-advance primitive. That gap is intentionally surfaced instead of minting a fake change.
+    Net-zero content chains remain changed logical identities for projection invalidation,
+    so the current SPM-S1 API can publish the final epoch without inventing a fake change or
+    silently reusing an ABA-stale versioned segment.
     """
     if plan.metadata_only_epoch_advance_required:
         raise PulseEffectivizationError(
-            "SPM-S1 lacks metadata-only epoch advance for a fully cancelled batch"
+            "identity-safe effectivization unexpectedly produced metadata-only publication"
         )
+    if not plan.changed_logical_ids:
+        raise PulseEffectivizationError("effectivized batch lost all logical identity touches")
+
     from semantic_access_pulse_v12 import PulsePlan
 
     return PulsePlan(

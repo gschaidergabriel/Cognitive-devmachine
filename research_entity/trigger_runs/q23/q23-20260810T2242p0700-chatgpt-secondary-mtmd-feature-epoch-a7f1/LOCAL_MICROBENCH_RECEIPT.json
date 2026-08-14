@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "evidence_class": "LOCAL_SYNTHETIC_CPP_RESOURCE_SHADOW_NOT_TARGET",
+  "promotion": "NONE",
+  "environment": {
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "compiler": "g++",
+    "flags": "-O3 -std=c++17 -march=native",
+    "target_vps": false,
+    "real_qwen_buffer": false
+  },
+  "pooling_benchmark": {
+    "algorithm": "one-pass float32 global mean + decoder-position-aware 2x2 spatial means + L2 normalization",
+    "embedding_dims": 2560,
+    "descriptor_dims": 12800,
+    "runs_per_shape": 50,
+    "rows": [
+      {"visual_tokens":64,"input_buffer_mib":0.625,"descriptor_kib":50.0,"p50_us":26.38,"p95_us":26.73,"p99_us":27.351},
+      {"visual_tokens":256,"input_buffer_mib":2.5,"descriptor_kib":50.0,"p50_us":94.591,"p95_us":108.993,"p99_us":120.049},
+      {"visual_tokens":1024,"input_buffer_mib":10.0,"descriptor_kib":50.0,"p50_us":349.25,"p95_us":423.451,"p99_us":509.049},
+      {"visual_tokens":2048,"input_buffer_mib":20.0,"descriptor_kib":50.0,"p50_us":1246.12,"p95_us":1960.81,"p99_us":2608.39}
+    ]
+  },
+  "prototype_search_benchmark": {
+    "algorithm": "brute-force float32 dot/cosine on pre-normalized descriptors with top1/top2 tracking",
+    "runs_per_shape": 30,
+    "rows": [
+      {"descriptor_dims":2560,"prototypes":10,"prototype_mib":0.0976562,"p50_us":20.421,"p95_us":20.54,"p99_us":20.541},
+      {"descriptor_dims":2560,"prototypes":100,"prototype_mib":0.976562,"p50_us":204.014,"p95_us":223.253,"p99_us":224.615},
+      {"descriptor_dims":2560,"prototypes":1000,"prototype_mib":9.76562,"p50_us":2063.41,"p95_us":2144.36,"p99_us":2152.38},
+      {"descriptor_dims":12800,"prototypes":10,"prototype_mib":0.488281,"p50_us":103.814,"p95_us":103.945,"p99_us":104.015},
+      {"descriptor_dims":12800,"prototypes":100,"prototype_mib":4.88281,"p50_us":1049.15,"p95_us":1079.19,"p99_us":1239.18},
+      {"descriptor_dims":12800,"prototypes":1000,"prototype_mib":48.8281,"p50_us":11025.8,"p95_us":11401.6,"p99_us":11779.0}
+    ]
+  },
+  "interpretation": [
+    "The shared-buffer descriptor path is plausibly memory-bandwidth scale rather than model-inference scale, but target hardware may differ materially.",
+    "Avoid copying or persisting the raw n_tokens x 2560 float buffer; consume synchronously and persist a bounded descriptor plus provenance.",
+    "Global-only 2560-d and global+2x2 12800-d should both remain measured candidates because prototype-search cost and memory scale linearly with descriptor dimension and prototype count.",
+    "Do not optimize descriptor dimension before real Frank fixture accuracy/open-set measurements."
+  ],
+  "next_falsifier": "Repeat this benchmark inside the exact target llama.cpp hook using real mtmd buffers and target CPU/backend, measuring encode time, descriptor time, prototype search, decoder bypass rate, RSS and end-to-end task outcomes."
+}

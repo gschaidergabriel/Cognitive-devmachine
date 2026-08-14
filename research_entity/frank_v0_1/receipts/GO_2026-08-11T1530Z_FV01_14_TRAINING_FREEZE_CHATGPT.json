@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-2026-08-11T1530Z-FV01-14-CHATGPT",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T15:30:00Z",
+  "created_at_local": "2026-08-11T22:30:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "entity_display_name": "Clay",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "frank-v0.1-only",
+  "work_package": "F-V01-14",
+  "work_package_name": "TRAINING-DATA-HELDOUT",
+  "authority": {
+    "final_training_authorized": false,
+    "training_started": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "coordination": {
+    "selected_reason": "F-V01-14 was OPEN and non-overlapping while current workers already covered storage/recovery, API, web ingress, agency, reward, Retina, capability body, GWT/loop-core and ClayCode lanes.",
+    "initial_target_main": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "stale_main_detected": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "stale_pr_closed": 346,
+    "fresh_target_base": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "candidate_pr": 349,
+    "candidate_head": "a14c88172e85e10ff2ab2e317692ac4aacbd8ef7",
+    "candidate_branch": "chatgpt/go-fv01-14-training-corpus-freeze-v2-20260811"
+  },
+  "hypothesis": "A provenance-bound typed freeze receipt with deterministic split-bound roots, hard cross-split alias rejection, protected-payload exclusion and an independent semantic-contamination review gate can provide a reproducible final-data substrate without claiming universal decontamination.",
+  "strongest_counterhypothesis": "Exact hashes, NFC and lexical/format projections cannot establish semantic cleanliness against paraphrase, translation or other meaning-preserving contamination; therefore semantic review must remain independently blocking.",
+  "fresh_external_evidence": [
+    {
+      "source": "Google Research deduplicate-text-datasets / Deduplicating Training Data Makes Language Models Better",
+      "class": "PRIMARY_IMPLEMENTATION_RESEARCH",
+      "delta": "Exact/near-duplicate controls are useful for contamination and memorization reduction."
+    },
+    {
+      "source": "ACL 2024 Data Contamination Can Cross Language Barriers",
+      "class": "PRIMARY_RESEARCH",
+      "delta": "Cross-language contamination can evade superficial overlap checks."
+    },
+    {
+      "source": "arXiv Rethinking Benchmark and Contamination for Language Models with Rephrased Samples",
+      "class": "PRIMARY_RESEARCH",
+      "delta": "String/n-gram checks are insufficient against rephrased contamination."
+    },
+    {
+      "source": "Unicode Standard 17 / UAX #31",
+      "class": "PRIMARY_STANDARD",
+      "delta": "Invisible/default-ignorable format controls require comparison-aware handling; detection normalization must not silently replace source training text."
+    }
+  ],
+  "implementation_delta": {
+    "claycode_contract": "claycode/frank_training_corpus.clay",
+    "reference_runtime": "runtime/training/frank_training_corpus_freeze_v1_candidate.py",
+    "normal_gate": "tests/frank_training_corpus_freeze_v1_gate.py",
+    "oob_gate": "tests/frank_training_unicode_format_control_oob.py",
+    "target_workflow": ".github/workflows/frank-fv01-14-training-corpus-freeze-v1-vps.yml",
+    "training_authorized": false,
+    "training_started": false
+  },
+  "deterministic_local_evidence": {
+    "normal_checks_passed": 9,
+    "normal_checks_total": 9,
+    "oob_checks_passed": 6,
+    "oob_checks_total": 6,
+    "clean_corpus_root": "eba0e10eb7082cd9eea06e793ad66ee22d671f704c5406b4d95f8dcfbd148b5e",
+    "clean_training_root": "6e9a859c781311882e08e83a1cbeaf5d409ebfdbebddb323930be331ccada13e",
+    "clean_heldout_root": "b57a168de995ddb011a35583d44834e1839d987a6633b07dc519bdf99387859d",
+    "hard_collision_count_clean": 0,
+    "nfc_collision_fixture_detected": true,
+    "semantic_leak_detection_claim": "NOT_PROVEN_BY_THIS_GATE"
+  },
+  "bug_found_and_repaired": {
+    "bug": "Initial cross-split collision scan was pairwise O(n^2).",
+    "repair": "Protected-split hash index across RAW/NFC/format-control-skeleton domains; expected O(n + emitted-collisions) matching after identity construction.",
+    "differential_test": "Indexed output equals an independent naive pairwise oracle on mixed collision fixtures.",
+    "status": "LOCAL_DETERMINISTIC_PASS"
+  },
+  "go_oob_experiment": {
+    "count": 1,
+    "experiment_id": "UNICODE_FORMAT_CONTROL_GHOST_LEAK",
+    "intervention": "Insert U+200B ZERO WIDTH SPACE into TRAIN copy of an otherwise identical HELDOUT sentence.",
+    "raw_sha_equal": false,
+    "nfc_sha_equal": false,
+    "format_control_detection_skeleton_equal": true,
+    "candidate_rejects_freeze": true,
+    "claim_boundary": "Proves only detection of this bounded invisible-format exact-content alias class; does not prove paraphrase/translation semantic decontamination."
+  },
+  "historical_training_corpus_archaeology": {
+    "sources": [
+      "File Library: Frank-LoRA-Training.pdf",
+      "File Library: frank-v26.1-training-master.txt",
+      "File Library: frank-v26.1-train.jsonl",
+      "File Library: frank-v26.1-validation-report.md",
+      "File Library: README-frank-v26.1.md",
+      "File Library: RUNBOOK-frank-v26.1.md"
+    ],
+    "historical_master_examples": 4113,
+    "historical_train_examples": 2039,
+    "historical_dev_examples": 203,
+    "historical_test_examples": 207,
+    "historical_leakage_clusters": 1858,
+    "historical_reported_split_cluster_overlap": 0,
+    "historical_adversarial_cases": 49,
+    "historical_adversarial_categories": 11,
+    "historical_master_sha256": "ecd8412601ae517f0ad32bc4f7e318323f0427d84f5aa9264f42e54da7413726",
+    "historical_baseline_sha256": "87c05fae3542becfdcf73ca36fc7ae284e6223ffa04cc3d5b41f785ebe0a433f",
+    "current_disposition": "QUARANTINE_FOR_CURRENT_SEMANTIC_MIGRATION_REVIEW",
+    "reason": "Visible v26.1 examples encode pre-current Linux-mini-PC/body, old tool vocabulary and STATE/tool-routing semantics. Current owner-fixed Frank v0.1 contracts require ClayCode-native cognition and newer authority/runtime semantics. Historical corpus is baseline/provenance evidence, not automatically current training truth."
+  },
+  "target_execution": {
+    "workflow_run_id": 31506553269,
+    "workflow": "Frank F-V01-14 training corpus freeze candidate VPS",
+    "status_at_receipt": "QUEUED",
+    "conclusion": "UNKNOWN",
+    "vps_pass_claimed": false,
+    "generic_deep_integrity_run": 31506553262,
+    "generic_deep_integrity_classification": "UNKNOWN_INFRASTRUCTURE_START_EVIDENCE",
+    "generic_deep_integrity_reason": "Observed failed workflow produced no substantive test steps/log evidence during inspection, so it is not promoted to a semantic F-V01-14 failure."
+  },
+  "negative_results_and_nonclaims": [
+    "Historical v23 data was explicitly documented as containing deprecated fictional/world and English-idle content; it is not admissible as-is.",
+    "Historical v26.1 is not current-semantic-final merely because its old validation passed.",
+    "No byte-bound current final corpus has been frozen in the target repository.",
+    "No semantic/paraphrase/translation decontamination proof exists.",
+    "No FINAL_TRAINING_DATA_GATE PASS.",
+    "No final/paid training authorization and no training start.",
+    "No whole Frank v0.1 acceptance."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "change": "Add deterministic current-corpus freeze/provenance boundary before owner-authorized final training; historical training corpora require explicit semantic migration/admission instead of silent reuse.",
+    "rollback": "Close PR #349 and retain existing historical corpora/evidence unchanged.",
+    "affected": ["F-V01-14", "F-V01-15", "final training gate", "held-out/eval provenance", "ClayCode training corpus contract"]
+  },
+  "next_falsifiers": [
+    "Bind actual intended current train/dev/heldout/adversarial artifacts byte-for-byte and reproduce roots.",
+    "Migrate/adjudicate historical v26.1 rows against current owner-fixed ClayCode/runtime/authority semantics; quarantine contradictions.",
+    "Run independent semantic-contamination review including paraphrase/translation leakage checks on protected eval.",
+    "Preserve a truly closed final test set and never feed adversarial/test outcomes back before final archived evaluation.",
+    "Obtain self-hosted accepted-target workflow evidence for PR #349 and inspect exact environment/resource receipts.",
+    "Compose data freeze receipt with final-model, regression, recovery and release gates only after owner training authorization."
+  ],
+  "result": "MATERIAL_RESEARCH_DELTA_WITH_CODE_CANDIDATE_AND_NEGATIVE_EVIDENCE",
+  "promotion": "NOT_PROMOTED"
+}

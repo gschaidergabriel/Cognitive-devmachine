@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CLAY-GO-V17-TARGET-PASS-31436039081",
+  "amends": [
+    "CLAY-GO-20260811T0436P0700-V17-CAUSAL-SUPPORT-FUSION",
+    "CLAY-GO-20260811-V17-EXACT-OUTCOME-SUPPORT-V3"
+  ],
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "trigger": "go",
+  "status": "TARGET_DIFFERENTIAL_PASS_RECOVERY_GATE_STILL_OPEN",
+  "observed_at_local": "2026-08-11T04:56:12+07:00",
+  "target_repository": "gschaidergabriel/frankv0.1",
+  "connector_alias": "gschaidergabriel/Dr.-Unterweger",
+  "pull_request": 280,
+  "candidate_branch_head_sha": "62664b20c2392057a9a23fb9847b44716906cf32",
+  "tested_pull_request_merge_sha": "bc4e26c8789cf747543c72468a7a32acd25e70ce",
+  "workflow": {
+    "name": "Frank V17 execution + canonical support binding VPS",
+    "run_id": "31436039081",
+    "job_id": "93610260886",
+    "conclusion": "success",
+    "artifact_id": "9081006878",
+    "artifact_name": "frank-v17-support-31436039081",
+    "artifact_digest": "sha256:a00ae2e0c388bddc0b8f47e8a008b67c6a4ed7e3d4517cd0593424370454deaf"
+  },
+  "environment": {
+    "runner_name": "clay",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "hostname": "digital-retina",
+    "kernel": "Linux 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "test_started_environment_timestamp_utc": "2026-08-10T21:55:27Z"
+  },
+  "passes": {
+    "repo_static_integrity": "PASS",
+    "current_effect_generation_baseline": "PASS_FRESH_MAIN_EFFECT_GENERATION_INTEGRATION",
+    "terminal_consumer_only_support_producer_and_rollback": "PASS_V17_TERMINAL_CONSUMER_ONLY_SUPPORT_PRODUCER_AND_ROLLBACK",
+    "historical_fabricated_support_gap": "PASS_V17_SUPPORT_IDENTITY_AND_EXECUTION_BINDING_REPAIR_REGRESSION",
+    "provider_to_terminal": "PASS_FRESH_MAIN_PROVIDER_TO_V17_SEPARATELY_ADMITTED_EXACT_OUTCOME_SUPPORT_DONE",
+    "learning": "PASS_V17_SEPARATE_EXACT_OUTCOME_AND_DELTA_ADMISSION_MATRIX",
+    "causal_regressions": "PASS_V17_PRODUCER_ADMITTED_EXACT_OUTCOME_CAUSAL_SUPPORT_REGRESSIONS",
+    "sole_go_oob": "PASS_CROSS_CHAIN_SUPPORT_SPLICE_FENCED"
+  },
+  "key_measured_results": {
+    "provider_verified_outcome": true,
+    "support_admission_separate_from_terminal": true,
+    "terminal_recovery_decision_same_process": "COMPLETE",
+    "learning_without_delta_admission_rejected": true,
+    "independent_delta_admission_consumed": true,
+    "correlated_only_rejected": "BOUND_REENTRY_CANONICAL_SUPPORT_REQUIRED",
+    "receiver_delivery_reconstruction_skip_rejected": "BOUND_REENTRY_CANONICAL_SUPPORT_REQUIRED",
+    "cross_subject_prediction_rejected": "BOUND_REENTRY_CANONICAL_SUPPORT_REQUIRED",
+    "wrong_effect_outcome_hash_rejected": "BOUND_REENTRY_CANONICAL_SUPPORT_REQUIRED",
+    "cross_chain_splice_rejected": "BOUND_REENTRY_CANONICAL_SUPPORT_REQUIRED",
+    "cross_chain_binding_rows_after_intervention": 0,
+    "cross_chain_done_rows_after_intervention": 0,
+    "cross_chain_effect_state_after_intervention": "OUTCOME_SUCCEEDED",
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "external_effect_performed": false,
+    "external_network_used": false,
+    "canonical_state_mutated": false
+  },
+  "resource_samples": {
+    "repo_static": {"elapsed_seconds": 0.05, "max_rss_kb": 13568},
+    "effect_generation": {"elapsed_seconds": 0.19, "max_rss_kb": 26436},
+    "schema_authority": {"elapsed_seconds": 0.13, "max_rss_kb": 24064},
+    "historical_gap_regression": {"elapsed_seconds": 0.12, "max_rss_kb": 24472},
+    "provider_terminal": {"elapsed_seconds": 0.15, "max_rss_kb": 27964},
+    "learning_support": {"elapsed_seconds": 0.15, "max_rss_kb": 27972},
+    "causal_regressions": {"elapsed_seconds": 0.15, "max_rss_kb": 27760},
+    "cross_chain_oob": {"elapsed_seconds": 0.14, "max_rss_kb": 27660}
+  },
+  "artifact_sha256": {
+    "provider-terminal.json": "933d31cb697831519ef65f0694575b78957cac9f52e997e2f7547bf886a1a749",
+    "learning-support.json": "a4cf179af6692b2d89199145bd6870d42328c35a1b40fe3ecdb39341197bbaa3",
+    "causal-regressions.json": "5cd0a76e68cbdd975f47531e871d2aedf624e06605c098fd3c95dd706c8a9178",
+    "cross-chain-oob.json": "c51c39a4a134e9831c9feeeae31d4d93ee216c4b412775a9e6f8695e2da2765d",
+    "gap-repair.json": "bf86cff9aeaa3d77891de5f70fab61e865377ce731eec595305f79a0b1d44845"
+  },
+  "interpretation": "The producer-separated V17 exact execution/outcome/GWT/causal support candidate passes the current bounded self-hosted target differential and fences both previously measured authority gaps plus the sole cross-chain OOB intervention. This is not yet a release or canonical-migration pass because restart/recovery across a closed and reopened runtime has not yet been directly measured for this candidate.",
+  "promotion": {
+    "canonical_migration": false,
+    "main_merge": false,
+    "draft_pr_retained": true,
+    "reason": "Recovery continuity contract still requires explicit close/reopen/restart evidence before promotion."
+  },
+  "next_falsifier": "Normal (non-OOB) close/reopen recovery matrix: persist verified outcome + exact support + REENTERED, close runtime connections, reopen from the same UnifiedDB, require REENTRY_PENDING, finish DONE, close/reopen again, require DONE_VALID and COMPLETE with unchanged support hashes and clean SQLite integrity/FKs.",
+  "go_oob_experiment_count_for_worker_macrocycle": 1,
+  "go_oob_experiment_name": "CROSS_CHAIN_SUPPORT_SPLICE",
+  "non_claims": [
+    "No whole Frank v0.1 acceptance.",
+    "No canonical V17 migration promotion.",
+    "No final training authorization.",
+    "No external provider effect.",
+    "No Frank/self.root Harness mutation authority."
+  ]
+}

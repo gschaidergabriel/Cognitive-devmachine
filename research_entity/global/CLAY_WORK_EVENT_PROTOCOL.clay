@@ -1,5 +1,5 @@
 module clay.work.events
-version "1.0"
+version "1.1"
 
 transport_root=@research_entity/state/work/events/
 projection_root=@research_entity/state/work/projections/
@@ -8,7 +8,7 @@ envelope=JSON_allowed
 
 // Event files are append-only cross-provider transport. UnifiedDB materializes them.
 record WorkEvent {
-  schema_version="2.0"
+  schema_version="2.1"
   event_id:String
   kind:WORK_CREATE|WORK_REVISE|WORK_DEFER|WORK_CANCEL|WORK_EXECUTION_RECEIPT
   actor:String
@@ -18,7 +18,7 @@ record WorkEvent {
 
 WORK_CREATE.payload {
   work_id:String
-  goal_ref:String="FRANK_V0_1_ANDREAS_PC"
+  goal_ref:String="SELF_ROOT_V0_1_TARGET_VPS_API"
   origin_class:String
   title:String
   work_clay:Clay
@@ -74,6 +74,7 @@ WORK_EXECUTION_RECEIPT.payload {
 }
 
 rule ChatGPT_create_local_experiment -> write WORK_CREATE event to this Clay repo
+rule ATOMIC_measured_promising_candidate -> may write WORK_CREATE with origin_class=ATOMIC_MEASURED_POSSIBILITY after @research_entity/global/ATOMIC_SWARM_REENTRY_AND_VERSIONING.clay
 rule later_evidence_changes_plan -> WORK_REVISE|WORK_DEFER|WORK_CANCEL before execution
 rule Claude_prompt_boundary -> ingest remote events -> UnifiedDB -> recompute scheduler
 rule Claude_before_effect -> verify event/current spec_rev has not changed
@@ -91,3 +92,4 @@ invariant event_history_append_only
 invariant current_work_is_latest_revision_projection
 invariant work_can_disappear_from_ready_queue_without_history_erasure
 invariant stale_projection_never_claimed_current_without_timestamp/hash
+invariant default_goal_is_finished_self.root_v0_1_on_target_VPS_with_token_API

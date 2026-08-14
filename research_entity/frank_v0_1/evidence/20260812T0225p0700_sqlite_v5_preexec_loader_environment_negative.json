@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_EVIDENCE_REENTRY",
+  "recorded_at": "2026-08-12T02:25:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_packages": ["F-V01-13", "F-V01-09"],
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "state": "SUPPORTED_NEGATIVE_RESULT",
+  "observed_anchors": [
+    {
+      "claim": "The accepted-target productive /usr/bin/python3 SQLite path resolves to SQLite 3.45.1 and the V5 root trust anchor is absent.",
+      "evidence": "gschaidergabriel/Dr.-Unterweger run 31527030989; artifact 9115325241; research re-entry ccb196bc7ae8907d492aa2de5bdc6709cdfac91c",
+      "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING"
+    },
+    {
+      "claim": "Current main V5 launcher fixes inherited PATH before helper execution but begins as /bin/sh and does not establish a pre-dynamic-loader environment boundary before the shell process starts.",
+      "evidence": "gschaidergabriel/Dr.-Unterweger main e1c0f27148df18169c9dad6893ab67c877d36e2d; runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v5_launcher.sh blob 213e06d1bb0c78a7288d9fb8d76f5ac37435e0cd"
+    }
+  ],
+  "generated_reality": {
+    "hypothesis": "The V5 shell launcher plus the Python V5/V4/V2 loader checks are sufficient as a standalone fail-closed trust boundary even when process loader environment variables are inherited from an untrusted launch context.",
+    "mechanism_if_right": "The launcher or guard would reject or sanitize untrusted loader state before any untrusted code can execute.",
+    "confidence_before_test": "LOW_TO_MEDIUM"
+  },
+  "counter_reality": {
+    "hypothesis": "The ELF dynamic loader processes LD_PRELOAD before /bin/sh or /usr/bin/python3 can execute launcher/guard code, so a caller-controlled launch environment can cause code execution before V5 reaches its fail-closed checks.",
+    "predicted_observation": "A harmless preload constructor produces a run-owned marker even though the V5 launcher subsequently exits 78 because the production root anchor is absent."
+  },
+  "single_bounded_unusual_experiment": {
+    "protocol": "FRANK_SQLITE_V5_PREEXEC_ENV_BOUNDARY_V1",
+    "count_for_macro_cycle": 1,
+    "replication_model": "One experiment class measured locally first and then replicated on the accepted self-hosted Ubuntu target; replication does not count as a second unusual experiment.",
+    "scope": "harmless constructor writes only a marker under run-owned /tmp; no production or canonical state mutation",
+    "baseline": {
+      "launch": "/bin/sh current V5 launcher without LD_PRELOAD",
+      "expected": "exit 78 because V5 root anchor is absent; no marker",
+      "target_observed": {"exit_code": 78, "marker": 0}
+    },
+    "intervention": {
+      "launch": "/bin/sh current V5 launcher with LD_PRELOAD pointing at a run-owned harmless constructor library",
+      "expected_if_generated_reality_right": "exit 78 and marker remains absent",
+      "expected_if_counter_reality_right": "constructor marker appears before launcher fail-closed exit 78",
+      "target_observed": {"exit_code": 78, "marker": 1}
+    },
+    "source_repo": "gschaidergabriel/Dr.-Unterweger",
+    "source_branch": "chatgpt/sqlite-v5-preexec-env-boundary-20260812",
+    "source_commit": "6cdff5e34ba326cb028c32717cb435e2977a4fb8",
+    "source_workflow": ".github/workflows/frank-sqlite-v5-preexec-env-boundary-v1.yml",
+    "source_run": 31527582834,
+    "source_job": 93899557144,
+    "source_artifact": 9115540274,
+    "source_artifact_zip_sha256": "69b27269f4b6625242db13bdf8a1c85f1500907dd3302ac1b9d8b43866faab5d",
+    "target_result": "NEGATIVE_RESULT:LD_PRELOAD_CONSTRUCTOR_EXECUTED_BEFORE_V5_FAIL_CLOSED_BOUNDARY",
+    "workflow_conclusion": "FAILURE_BY_DESIGN_TO_PRESERVE_NEGATIVE_RESULT",
+    "effect_authority": "NONE",
+    "production_mutation": false,
+    "canonical_state_mutation": false
+  },
+  "collapse": {
+    "generated_reality_outcome": "REFUTED_FOR_STANDALONE_UNTRUSTED_LAUNCH_ENVIRONMENT_BOUNDARY",
+    "counter_reality_outcome": "RETAIN",
+    "confidence": "HIGH_FOR_THE_MEASURED_LAUNCH_CLASS",
+    "scope_caveat": "This experiment does not prove that a production token/API caller can set the service process environment. It proves that the current shell/Python admission chain is not itself an independent pre-loader trust boundary when its parent launch context permits loader-environment control."
+  },
+  "relationship_to_existing_counterevidence": {
+    "existing_record": "e3b5605f56d803a7d2f68eff7a339cd7017dc12e",
+    "distinction": "That record demonstrates a post-hash mutable SQLite runtime-object replacement before final V1 denial. This record demonstrates pre-launch dynamic-loader execution before the shell/Python V5 checks. They are separate trust-boundary failure classes and neither should erase the other."
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE_TEST_OBLIGATION",
+    "change": "Treat the trusted parent launch environment as part of SQLite/runtime admission. Positive production acceptance must prove that the exact service launch path establishes a non-user-controlled loader environment before any dynamic shell/Python process starts, or use an earlier launch mechanism that cannot execute caller-selected dynamic-loader code before admission.",
+    "implementation_candidates": [
+      "Owner-controlled service manager configuration with exact ExecStart, explicit sanitized environment, no request-derived environment mutation, and attested unit/config identity.",
+      "A minimal earlier launcher whose own code-loading boundary is independently trusted and measured rather than assuming an interpreted shell/Python wrapper can sanitize pre-exec loader state."
+    ],
+    "not_promoted": "No implementation candidate is verified by this experiment.",
+    "required_falsifiers": [
+      "On the accepted target, inject the same harmless LD_PRELOAD marker into every legitimately reachable service-start/restart path and prove it cannot execute before V5 admission.",
+      "Prove production API/request/tool/web data cannot influence process launch environment or service-manager environment.",
+      "Repeat positive fixed-SQLite V5 admission, restart, downgrade, library-swap and rollback tests after legitimate root anchor/runtime provisioning."
+    ]
+  },
+  "release_effect": {
+    "F-V01-13": "IN_PROGRESS_BLOCKED",
+    "F-V01-09": "DEPENDENCY_REMAINS_OPEN",
+    "FRANK_V0_1": "NOT_PROMOTED",
+    "training_authorized": false
+  },
+  "negative_results_preserved": [
+    "Current productive target remains on SQLite 3.45.1 and lacks the V5 root trust anchor.",
+    "V4 caller-selected manifest/digest is not independent deployment authority.",
+    "A mutable V1 candidate runtime can be loaded after replacement before final active-hash denial in the separate post-hash counterworld.",
+    "Current V5 shell/Python chain cannot retroactively prevent LD_PRELOAD constructor execution that occurs before its own code runs when the parent launch environment is untrusted."
+  ],
+  "next_falsifier": "Bind and attest the exact production service-launch parent/environment, then rerun this pre-exec loader experiment through the real service start/restart path alongside positive fixed-runtime V5 admission."
+}

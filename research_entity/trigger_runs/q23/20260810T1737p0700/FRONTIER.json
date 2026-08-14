@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T1737p0700",
+  "frontier": [
+    {"id":"F-Q23-01","question":"Can current libmtmd/Qwen3.5 media embeddings be tapped once and reused for both MVC and LLM escalation without duplicate visual encoding?","class":"IMPLEMENTATION","priority":0.99,"status":"OPEN_WORK_QUEUED","next":"WORK-QNDRF-H1-DIFFERENTIAL-20260810"},
+    {"id":"F-Q23-02","question":"What pooling/projection over Qwen3.5 patch/media features gives the best known-vs-unknown user-specific familiarity geometry under negligible overhead?","class":"EXPERIMENT","priority":0.97,"status":"OPEN"},
+    {"id":"F-Q23-03","question":"Does binding GOLD user labels as textual anchors to visual prototypes improve sample efficiency without semantic-similarity false familiarity?","class":"CROSS_DOMAIN","priority":0.91,"status":"OPEN"},
+    {"id":"F-Q23-04","question":"Can temporal Qwen feature distance safely distinguish semantically meaningful GUI changes from irrelevant rendering changes after deterministic pixel gating?","class":"TEMPORAL_REPRESENTATION","priority":0.90,"status":"OPEN"},
+    {"id":"F-Q23-05","question":"What adaptive ROI+context+anchor policy minimizes visual tokens per verified action while preserving off-ROI modal and small-text correctness?","class":"ACTIVE_PERCEPTION","priority":0.95,"status":"OPEN"},
+    {"id":"F-Q23-06","question":"Can action-grounded crop memory plus compact Clay state replace most full-screenshot history without losing long-range spatial dependencies?","class":"MEMORY","priority":0.89,"status":"OPEN"},
+    {"id":"F-Q23-07","question":"How stable are Qwen/mmproj representations across quantization, abliteration, runtime export and model revision, and what exact feature-version invalidation contract is required?","class":"RECOVERY_VERSIONING","priority":0.94,"status":"OPEN"},
+    {"id":"F-Q23-08","question":"Which <=4B abliterated multimodal challenger can beat the current Qwen3.5 lane under identical Frank task/resource/authority constraints?","class":"MODEL_SELECTION","priority":0.88,"status":"OPEN_DEPENDS_ON_MATCHED_BENCH"},
+    {"id":"F-Q23-09","question":"Can native Qwen visual grounding/OCR make historical standalone Retina OCR/object modules causally redundant, and which temporal/provenance functions must remain outside the model?","class":"HISTORICAL_FUNCTION_DISPOSITION","priority":0.93,"status":"OPEN"},
+    {"id":"F-Q23-10","question":"How should visual uncertainty, familiarity, temporal delta and action-criticality jointly control GWT ignition and active sensing without turning confidence into truth?","class":"GWT_CONTROL","priority":0.86,"status":"OPEN"}
+  ],
+  "route_change_policy": "When a frontier branch stops producing valid progress deltas, switch source class/abstraction/countermechanism and only then mark it locally saturated.",
+  "selection_rule": "maximize information_gain + mission_impact + falsification_value + dependency_unblock + novelty - cost - collision_risk - saturation"
+}

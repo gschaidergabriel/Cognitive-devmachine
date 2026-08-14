@@ -1,0 +1,205 @@
+module atomic.psw.v1
+version "0.1-candidate"
+status TESTED_PROXY_NOT_PROMOTED
+
+// Possibility State Weave (PSW)
+// Physical/shared representation candidate for unresolved epistemic alternatives.
+// It does not redefine truth, SELF, goal authority, effect authority or Hyperposition semantics.
+
+class BranchState = ACTIVE | COLLAPSED | REJECTED | HISTORICAL
+class TransitionEffect = PURE | INTERNAL_READ | INTERNAL_WRITE | EXTERNAL_READ | EXTERNAL_WRITE | SECURITY_SENSITIVE | UNKNOWN_EFFECT
+class CollapseReason = ADMITTED_EVIDENCE | POLICY_DECISION | EXPLICIT_SELECTION | NONE
+
+record BranchIdentity {
+  native_self: ResourceIdentity = self.root
+  hypothesis_id: Ref
+  base_state_epoch: Epoch
+  branch_revision: Revision
+  semantic_epoch: Epoch
+  provenance_root: Hash
+  entity_version: VersionRef
+}
+
+record SparseDelta {
+  field: FieldRef
+  value: ClayValue
+  source_evidence: ProvenanceSet
+  written_at_revision: Revision
+}
+
+record PossibilityBranch {
+  branch_id: Ref
+  identity: BranchIdentity
+  state: BranchState
+  deltas: Map<FieldRef,SparseDelta>
+  guard: ClayPredicate
+  evidence: ProvenanceSet
+}
+
+record PossibilityStateWeave {
+  weave_id: Ref
+  native_self: ResourceIdentity = self.root
+  base_state: Ref
+  base_state_hash: Hash
+  base_state_epoch: Epoch
+  branches: Map<Ref,PossibilityBranch>
+  current_semantic_epoch: Epoch
+  created_from: ProvenanceSet
+}
+
+record PureTransitionContract {
+  transition_id: Ref
+  implementation_hash: Hash
+  effect: TransitionEffect = PURE
+  exact_read_set: Set<FieldRef>
+  exact_write_set: Set<FieldRef>
+  deterministic_under_read_signature: Bool
+  contract_epoch: Epoch
+}
+
+record ReadSignature {
+  transition_id: Ref
+  implementation_hash: Hash
+  branch_ids: Set<Ref>
+  fields: Map<FieldRef,ClayValue>
+  base_state_epoch: Epoch
+  semantic_epoch: Epoch
+}
+
+record LiftWitness {
+  transition: Ref
+  contract_epoch: Epoch
+  signature_hash: Hash
+  branch_ids: Set<Ref>
+  result_hash: Hash
+  exact_read_set: Set<FieldRef>
+  exact_write_set: Set<FieldRef>
+  provenance: ProvenanceSet
+  effect_authority: NONE
+}
+
+record CollapseWitness {
+  weave_id: Ref
+  survivor_branches: Set<Ref>
+  discarded_branches: Set<Ref>
+  reason: CollapseReason
+  evidence: ProvenanceSet
+  base_state_epoch: Epoch
+  semantic_epoch: Epoch
+}
+
+// -----------------------------------------------------------------------------
+// Branch semantics
+// -----------------------------------------------------------------------------
+
+rule PossibilityBranch != SELF
+rule PossibilityBranch != TRUTH
+rule PossibilityBranch != USER_INTENT
+rule PossibilityBranch != EFFECT_AUTHORITY
+rule branch_weight_or_salience never_mints_truth_or_authority
+
+fn read(w:PossibilityStateWeave,b:PossibilityBranch,f:FieldRef)->ClayValue {
+  require b.identity.native_self == self.root
+  require b.identity.base_state_epoch == w.base_state_epoch
+  require b.identity.semantic_epoch == w.current_semantic_epoch
+  if b.deltas.contains(f) { return b.deltas[f].value }
+  return immutable_base_read(w.base_state,f)
+}
+
+rule equal_materialized_payload != sufficient_branch_identity_equivalence
+rule branch_identity_equivalence requires exact hypothesis_id + base_state_epoch + branch_revision + semantic_epoch + provenance_root + entity_version
+rule provenance_distinct alternatives remain_distinct unless admitted equivalence policy explicitly proves interchangeability
+
+// -----------------------------------------------------------------------------
+// Shared pure execution
+// -----------------------------------------------------------------------------
+
+fn may_lift(c:PureTransitionContract)->Bool {
+  require c.effect == PURE
+  require c.deterministic_under_read_signature
+  require exact_and_current(c.exact_read_set)
+  require exact_and_current(c.exact_write_set)
+  require current_contract_epoch(c.contract_epoch)
+  return true
+}
+
+rule unknown_or_dynamic_read_set -> DO_NOT_LIFT
+rule unknown_effect -> DO_NOT_LIFT
+rule INTERNAL_READ|INTERNAL_WRITE -> DO_NOT_LIFT unless separately proven PURE under exact ClayCode effect semantics
+rule EXTERNAL_READ|EXTERNAL_WRITE|SECURITY_SENSITIVE -> NEVER_MULTI_BRANCH_EXECUTE
+
+fn read_signature(w,b,c)->ReadSignature {
+  require may_lift(c)
+  vals = map(c.exact_read_set, f => read(w,b,f))
+  return signature(c.transition_id,c.implementation_hash,vals,w.base_state_epoch,w.current_semantic_epoch)
+}
+
+rule branches with exact_equal ReadSignature for current transition may_share_one PURE evaluation
+rule one_shared_evaluation may_lift result to group only when transition contract is exact current and deterministic_under_read_signature
+rule differing ReadSignature -> execute PURE transition separately
+rule hidden_or_undeclared_material_read -> contract_violation + quarantine_transition_from_lifting
+rule shared evaluation never implies branches have equal truth/provenance/identity
+
+// Effect boundary: branch simulation may form proposals but cannot execute unresolved alternatives externally.
+rule effectful_transition over more_than_one unresolved branch -> PROPOSALS_ONLY
+rule external_effect_execution requires one current admitted semantic intent + ordinary authenticated actor/capability/policy/reservation/attempt/verification path
+rule LiftWitness.effect_authority = NONE
+
+// -----------------------------------------------------------------------------
+// Updates, persistence and recovery
+// -----------------------------------------------------------------------------
+
+rule branch_update writes sparse delta + increments branch_revision
+rule base_state is immutable for lifetime of weave
+rule new_authoritative_base_epoch requires explicit rebase or retire old weave
+rule stale_base_state_epoch -> reject_read_or_collapse
+rule stale_branch_revision -> reject_material_change
+rule wrong native_self -> reject
+rule stale semantic_epoch -> reject
+rule branch replay with already_applied revision -> idempotent_no_duplicate
+rule restart restores only persisted base + branches + revisions + provenance
+rule downtime never synthesizes transitions_or_branches_that_were_not_persisted
+
+// -----------------------------------------------------------------------------
+// Collapse and merge
+// -----------------------------------------------------------------------------
+
+rule salience != collapse_evidence
+rule repetition != collapse_evidence
+rule GWT_ignition != collapse_evidence
+rule model_confidence != collapse_evidence
+rule collapse requires CollapseReason != NONE + admitted evidence/policy
+rule collapse does_not_rewrite discarded alternatives as never_existing
+rule discarded branch may become HISTORICAL with exact provenance
+rule payload_equal branches with materially_distinct provenance are not auto_merged
+
+// -----------------------------------------------------------------------------
+// Measurement hooks / ablations
+// -----------------------------------------------------------------------------
+
+metric exact_branch_reconstruction_error
+metric false_semantic_merge_rate
+metric stale_epoch_false_allow_rate
+metric provenance_collision_merge_rate
+metric state_wire_bytes
+metric bytes_per_branch
+metric read_latency_p50_p95_p99
+metric update_latency_p50_p95_p99
+metric pure_transition_evaluations
+metric sharing_factor
+metric collapse_latency
+metric effectful_lift_attempt_rejection_rate
+
+ablation NO_SPARSE_DELTA = materialize_each_branch
+ablation NO_TRANSITION_LIFT = evaluate_each_branch_separately
+ablation INCOMPLETE_READ_SET = deliberately_unsound_negative_control
+ablation PAYLOAD_ONLY_MERGE = deliberately_unsound_negative_control
+
+baseline FULL_COPY
+baseline SPARSE_OVERLAY
+baseline SPARSE_OVERLAY_MEMO
+baseline PERSISTENT_PATH_COPY
+baseline GUARDED_VALUE
+
+acceptance requires unique_Pareto_or_safety_benefit_over SPARSE_OVERLAY_MEMO
+fallback if_no_unique_benefit = NO_ARCHITECTURE_PROMOTION + preserve measured representation envelope + exact PURE/read-set lifting obligation

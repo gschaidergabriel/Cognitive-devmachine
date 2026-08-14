@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2038p0700-gpt56sol-sqlite-process-release-identity",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:38:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "054c7510e820108b1d83ef38292886ccd62cdab1",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "program": "FRANK_V0_1",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main": "d7307539d9d30940a1761f5e567374e951a2ea48",
+    "candidate_branch": "chatgpt/go-sqlite-observer-release-identity-20260812",
+    "candidate_head": "aa00dbdfdb587554c3af279c054c4cee72613598",
+    "draft_pr": 520,
+    "accepted_release_host_contract": "Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "reason": "Merged actual-process observer V1 binds the selected stable process SQLite object hash to a trusted root anchor but its positive terminal status does not itself require that anchor to name the release-accepted fixed SQLite version/source identity.",
+    "duplicate_avoidance": [
+      "Existing 20260812T0220 receipt already repaired anchor protocol/schema validation in a productive-path workflow; this delta is narrower and different: actual-process observer positive release-identity adjudication.",
+      "Open product PR scan found active V6/provision/systemd/loader lanes but no open PR closing this exact observer-to-release-policy gap."
+    ]
+  },
+  "observed_reality": {
+    "v1_positive_status": "OBSERVED_ACCEPTED_HOST_SELECTED_FRANK_PROCESS_SQLITE_OBJECT_MATCHES_ROOT_ANCHOR",
+    "v1_positive_predicate": "stable selected process + exactly one SQLite mapping + inode/same-FD hash + root-owned/nonwritable object + trusted root anchor + mapped hash equals anchor library_sha256",
+    "missing_positive_predicate": "release-accepted sqlite_version + sqlite_source_id",
+    "existing_v5_release_identity": {
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+    },
+    "latest_parallel_provenance_delta": "Self-hosted runner clay/digital-retina is mechanism evidence only and does not independently prove the owner-fixed Hostinger acceptance host; productive credit still requires independent host/unit/process selectors."
+  },
+  "hypothesis": "Mapped-object hash equality to a root-owned anchor is sufficient for the actual-process observer's positive terminal truth.",
+  "strongest_counterhypothesis": "A root-owned but misprovisioned anchor can be internally byte-consistent while naming an unaccepted/vulnerable SQLite runtime, so positive process observation must compose byte identity with release-policy identity.",
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption race is documented through 3.51.2 and fixed in 3.51.3 and later; organic reproduction is difficult."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "Current 3.53.4 release identity uses SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and is in the fixed lineage."
+    }
+  ],
+  "go_out_of_box": {
+    "count": 1,
+    "name": "WAL_RESET_COLLISION_STRESS_NEGATIVE",
+    "scope": "Disposable local SQLite 3.46.1 database only; no Frank/canonical state",
+    "baseline": {
+      "writes": 2500,
+      "errors_or_busy": 0,
+      "integrity_check": "ok",
+      "rows": 2500
+    },
+    "treatment": {
+      "shape": "separate writer plus separate process issuing PRAGMA wal_checkpoint(RESTART)",
+      "writes_success": 2499,
+      "writer_busy": 1,
+      "checkpoint_attempts": 2500,
+      "checkpoint_busy": 76,
+      "integrity_check": "ok",
+      "rows": 2499
+    },
+    "result": "NO_CORRUPTION_REPRODUCED_NO_EXONERATION",
+    "interpretation": "Negative stress reproduction is too weak for release safety; exact productive process/library release identity remains the higher-information discriminator.",
+    "product_state_mutated": false,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "repair": {
+    "draft_pr": 520,
+    "candidate_head": "aa00dbdfdb587554c3af279c054c4cee72613598",
+    "files": [
+      "tests/frank_sqlite_actual_process_readonly_observation_v2.py",
+      "tests/frank_sqlite_actual_process_observer_release_identity_v2_gate.py",
+      ".github/workflows/frank-sqlite-actual-process-release-identity-v2.yml"
+    ],
+    "behavior": [
+      "Preserve every V1 BLOCKED result unchanged.",
+      "Adjudicate only V1 positive terminal status.",
+      "Require FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1 protocol.",
+      "Require valid manifest/library SHA-256 fields.",
+      "Require exact release-accepted SQLite 3.53.4 + official source-id.",
+      "Recheck observed mapped-library hash equals anchor hash before V2 positive status.",
+      "No effect/Harness authority or product/canonical mutation."
+    ]
+  },
+  "execution_evidence": {
+    "workflow_run": 31602051728,
+    "job": 94131655669,
+    "tested_sha": "aa00dbdfdb587554c3af279c054c4cee72613598",
+    "runner": "clay / self-hosted Linux X64",
+    "conclusion": "SUCCESS",
+    "ordinary_regressions": "6/6 workflow step PASS",
+    "actual_process_v2_step": "EXECUTED_SUCCESSFULLY_WITH_TYPED_POSITIVE_OR_BLOCKED_ASSERTION",
+    "static_integrity": "PASS",
+    "hostinger_credit": "NOT_GRANTED_FROM_RUNNER_LABEL_OR_SELF_HOSTED_ROUTE"
+  },
+  "grf_collapse": {
+    "root_anchor_hash_match_is_complete_positive_truth": "REJECT",
+    "release_policy_identity_needed_at_positive_observer_boundary": "RETAIN_SUPPORTED_MECHANISM",
+    "stress_nonreproduction_proves_old_runtime_safe": "REJECT",
+    "self_hosted_runner_success_proves_hostinger_productive_runtime": "REJECT",
+    "candidate_status": "SUPPORTED_MECHANISM_DRAFT_NOT_RELEASE_PROMOTION"
+  },
+  "reentry": {
+    "architecture_delta": "Actual-process SQLite attestation positive status must compose selected-process mapped-byte identity with release-accepted version/source identity, not merely trust-anchor byte consistency.",
+    "test_obligation": "On the independently bound accepted Hostinger ProductStart path, require positive V2 process observation, then start/restart and downgrade/library-swap/rollback controls before F-V01-13 promotion.",
+    "negative_result": "Bounded collision stress on a vulnerable-lineage local runtime did not reproduce corruption and therefore cannot substitute for release identity evidence.",
+    "product_delta": "Draft PR #520",
+    "do_not_repeat": "Do not repeat WAL_RESET_COLLISION_STRESS_NEGATIVE in this macrocycle; exactly one unusual experiment was consumed."
+  },
+  "nonclaims": [
+    "No accepted Hostinger productive runtime PASS",
+    "No production root anchor provisioning or service mutation",
+    "No F-V01-13 completion",
+    "No whole Frank v0.1 acceptance",
+    "No effect/Harness authority change",
+    "No final model training authorization"
+  ]
+}

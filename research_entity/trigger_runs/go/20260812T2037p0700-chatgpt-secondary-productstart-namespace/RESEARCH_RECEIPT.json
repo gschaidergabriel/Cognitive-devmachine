@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2037p0700-chatgpt-secondary-productstart-namespace",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:37:45+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "framework": "GENERATIVE_REALITY_FRAMEWORK",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "054c7510e820108b1d83ef38292886ccd62cdab1",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "verified_product_main": "d7307539d9d30940a1761f5e567374e951a2ea48",
+    "product_main_latest_scope": "V6-to-V1 SQLite source-byte identity and loader-chain mechanism merged; productive Hostinger installation, ProductStart/root anchor, actual process mapping, restart/recovery, rollback/downgrade/library-swap and semantic lineage remain open",
+    "stacked_productstart_v4_pr": 513,
+    "repair_pr": 521,
+    "repair_head": "fac5f5a0489f09de455c46c918899e5f76725bb8",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Current main had substantially narrowed SQLite runtime identity, while stacked ProductStart V4 still attested host-visible paths and argv without explicitly binding the service filesystem namespace. This leaves a high-information exact-identity seam before productive Hostinger acceptance.",
+    "duplicate_avoidance": [
+      "Did not repeat SQLite fixed-version/source-id research beyond revalidation against official SQLite primary sources",
+      "Did not repeat PR #513 root-owned parallel-deployment sibling experiment",
+      "Did not alter existing V6 loader-directory/source-byte mechanisms",
+      "Repair was stacked above PR #513 instead of overwriting concurrent ProductStart work"
+    ]
+  },
+  "observed_reality": {
+    "sqlite_fixed_identity": "3.53.4 / source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "sqlite_upstream_wal_reset_fix_boundary": "fixed in 3.51.3 and later; 3.53.4 includes the fix lineage",
+    "productstart_v4_behavior": "binds unit/fragment, launcher, V6-to-V1 guards, manifest, SQLite root anchor, target and argv by root-owned path/hash identity",
+    "systemd_semantics": "RootDirectory/RootImage and bind/mount/extension path settings can establish or modify the service filesystem namespace",
+    "gap": "host-visible hash identity does not by itself prove that the same absolute path resolves to the same object inside a modified service filesystem namespace"
+  },
+  "hypothesis": "ProductStart V4 can report PASS for an otherwise identical snapshot that adds a service RootDirectory because V2/V3/V4 do not observe or constrain that namespace semantic.",
+  "strongest_counterhypothesis": "The existing unit fragment hash and argv binding may already be sufficient because a namespace-changing setting would necessarily alter the hashed unit fragment and therefore be represented by the ProductStart identity anchor.",
+  "counterhypothesis_analysis": "A fragment hash binds the configured unit bytes only after the owner chooses and provisions that identity. V4 does not impose a semantic invariant that alternate service roots/path substitutions are forbidden, so an owner-pinned but semantically unsafe unit could still satisfy the hash relation. The repair therefore constrains semantics in addition to bytes.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "SYSTEMD_ROOTDIRECTORY_PRODUCTSTART_COUNTERWORLD",
+    "class": "service-filesystem-namespace substitution",
+    "reversible": true,
+    "disposable_state": true,
+    "filesystem_mutated": false,
+    "service_mutated": false,
+    "canonical_state_mutated": false,
+    "branch": "chatgpt/go-systemd-namespace-counterworld-20260812",
+    "head": "8405ea957b3da43ea3798f21b7f10cd8010c5a5a",
+    "self_hosted_run": 31601911444,
+    "runner": "clay / self-hosted Linux X64",
+    "baseline": "V4 candidate snapshot with correct FragmentPath and inherited V3 PASS",
+    "treatment": "same candidate snapshot plus RootDirectory=/srv/frank-stale-root",
+    "result": "COUNTERWORLD_SUPPORTED_V4_SERVICE_ROOT_NAMESPACE_BLINDSPOT",
+    "scope_limit": "candidate evaluator semantic blindspot only; no live production namespace bypass was executed or claimed"
+  },
+  "repair": {
+    "status": "SUPPORTED_MECHANISM_STACKED_CANDIDATE",
+    "branch": "chatgpt/repair-productstart-namespace-gate-20260812",
+    "pull_request": 521,
+    "head": "fac5f5a0489f09de455c46c918899e5f76725bb8",
+    "file": "runtime/frank_storage_truth_v1/sqlite_v5_systemd_parent_gate_v5_namespace_candidate.py",
+    "change": [
+      "Compose ProductStart V4 without weakening inherited identity/hash checks",
+      "Require host-path equals service-path semantics for the current Frank ProductStart",
+      "Fail closed on non-empty RootDirectory, RootImage, BindPaths, BindReadOnlyPaths, TemporaryFileSystem, MountImages, ExtensionImages or ExtensionDirectories",
+      "Require all namespace properties to be observable from systemctl show; missing observation fails closed",
+      "Keep the gate observational with no service/state/effect/Harness mutation"
+    ],
+    "ordinary_test_file": "tests/test_sqlite_v5_systemd_parent_gate_v5_namespace_candidate.py",
+    "ordinary_test_cases": 10,
+    "self_hosted_run": 31602145865,
+    "runner": "clay / self-hosted Linux X64",
+    "tested_head": "fac5f5a0489f09de455c46c918899e5f76725bb8",
+    "steps": {
+      "v4_baseline_regression": "PASS",
+      "v5_namespace_repair_regression": "PASS",
+      "compile_and_repo_static_integrity": "PASS",
+      "cleanup": "PASS"
+    },
+    "second_unusual_experiment": false,
+    "effect_authority_change": false,
+    "harness_self_authority_change": false,
+    "training_authorization_change": false
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite 3.53.4 release",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "SQLite 3.53.4 was released 2026-07-24, identifies the exact pinned source-id, and includes the WAL-reset fix lineage."
+    },
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption race affected versions through 3.51.2 and is fixed in 3.51.3 and later under the documented concurrent writer/checkpoint conditions."
+    },
+    {
+      "source": "systemd.exec / systemd execution source",
+      "url": "https://github.com/systemd/systemd/blob/main/src/core/execute.c",
+      "finding": "RootDirectory/RootImage and bind/mount/extension settings require or alter a mount namespace, so host-visible absolute-path identity is not automatically equivalent to service-visible path identity."
+    }
+  ],
+  "grf_collapse": [
+    {
+      "claim": "SQLite 3.53.4 fixed-version identity alone closes F-V01-13",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "host file hash identity plus argv identity necessarily equals service-visible path identity",
+      "outcome": "REJECT_AT_CANDIDATE_SEMANTICS"
+    },
+    {
+      "claim": "fail closed on currently unnecessary service filesystem namespace substitutions",
+      "outcome": "RETAIN_TESTING"
+    },
+    {
+      "claim": "productive Hostinger ProductStart is currently admitted",
+      "outcome": "DEFER_NOT_PROVEN"
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_REPAIR_NOT_RELEASE_PROMOTION",
+    "affected": [
+      "F-V01-13 security/recovery/observability",
+      "F-V01-01 identity/server-binary continuity",
+      "productive ProductStart / SQLite runtime attestation"
+    ],
+    "supported_change": "Release identity attestation must bind service-visible filesystem-path semantics, not only host-visible bytes and argv. If the current Frank contract does not require a namespace substitution, the admission boundary should reject it until it is explicitly modeled and attested.",
+    "rollback": "Revert PR #521 if the accepted ProductStart contract later explicitly models a supported namespace setting; replace the deny-list with an exact semantic identity field rather than weakening path equivalence silently.",
+    "promotion_blockers": [
+      "PR #521 is stacked on draft ProductStart V4 rather than fresh current main",
+      "Productive accepted Hostinger service/root provisioning and actual Frank process admission remain unproven",
+      "Semantic self.root state-lineage binding remains open",
+      "Clean start/restart and crash/recovery receipts remain open",
+      "Rollback/downgrade/library-swap rejection remains open",
+      "Whole F-V01-13 and Frank v0.1 acceptance remain open"
+    ]
+  },
+  "nonclaims": [
+    "No live production namespace bypass was executed",
+    "No productive Hostinger service was installed, started, stopped or modified",
+    "No F-V01-13 closure",
+    "No whole Frank v0.1 acceptance",
+    "No Harness or effect-authority mutation",
+    "No final/paid model training authorization"
+  ],
+  "next_frontier": [
+    "Recompose ProductStart V4 + namespace V5 onto fresh verified product main",
+    "Provision/observe the exact productive accepted Hostinger ProductStart and root anchors",
+    "Bind admitted release identity to one provenance-bound semantic self.root state lineage",
+    "Run clean start/restart plus rollback/downgrade/library-swap and crash/recovery acceptance before promotion"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "package_id": "Q23-PKG-REPRESENTATION-STRATA",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "observed_at": "2026-08-10T22:41:00+07:00",
+  "finding": "Qwen3.5's visual path is not equivalent to Qwen3-VL's DeepStack path. Qwen3.5 deletes DeepStack helper structures and returns pre-merger last_hidden_state plus merged pooler_output. For Frank MVC this opens a concrete feature-strata question: public LLM-facing projected/merged token embeddings versus pre-merger vision features.",
+  "direct_sources": [
+    "huggingface/transformers:src/transformers/models/qwen3_5/modular_qwen3_5.py@6e4f37cc7ec74cbaac2cdbcbf2c8219914e1088d",
+    "huggingface/transformers:src/transformers/models/qwen3_vl/modular_qwen3_vl.py@4803adbfce2f9f685b7b36ea727564bb13f3e462",
+    "ggml-org/llama.cpp:tools/mtmd/mtmd-helper.cpp@d77c93966471b27709c2c9fa7ffcf933ba02c930"
+  ],
+  "source_class": "PRIMARY_RUNTIME_REFERENCE_AND_IMPLEMENTATION",
+  "ancestry": "independent upstream implementations but related model family; not independent scientific replication",
+  "internal_comparison": "Existing QNDRF-1 already proposed raw Qwen/mmproj prototypes and coarse spatial pooling. This package does not repeat that claim; it adds explicit representation-layer discrimination and validates a public precomputed-embedding decode path.",
+  "hypothesis_effect": ["H-Q23-FEATURE-STRATA-01","H-Q23-SPATIAL-GRID-01"],
+  "counterhypothesis_effect": ["CH-Q23-RAW-GEOMETRY-01","CH-Q23-MERGER-LOSS-01"],
+  "architecture_effect": "AD-Q23-QNDRF-1.1-REPRESENTATION-LIFETIMES",
+  "test_effect": ["T-Q23-FEATURE-LADDER-01","T-Q23-ZERO-REENCODE-01"],
+  "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+  "confidence": "HIGH_CODE_FACT_LOW_FRANK_PERFORMANCE_EVIDENCE",
+  "uncertainty": "No target-model feature-quality benchmark was executable in this worker environment."
+}

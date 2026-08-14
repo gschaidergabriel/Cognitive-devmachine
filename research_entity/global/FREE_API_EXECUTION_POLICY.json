@@ -292,6 +292,16 @@
     ],
     "counterhypothesis": "Either any nonempty assistant content string or finish_reason stop alone is sufficient evidence of a completed answer; falsified locally because length and null with partial text, stop with empty content, and stop with whitespace-only content all previously reached success, VERIFIED and DONE. The whitespace-only case could represent intentional formatting, but the plain-text adapter cannot distinguish that from a missing answer and therefore fails closed. Identical blind retry after length remains disabled because NVIDIA requires changing token limits or reasoning budget."
   },
+  "request_snapshot_boundary": {
+    "checked_at": "2026-08-14",
+    "claim": "Mutable caller-owned message objects are snapshotted before validation, routing and authenticated request construction; only the validated snapshot may be serialized.",
+    "sources": [
+      "https://cwe.mitre.org/data/definitions/367.html",
+      "https://docs.python.org/3/library/copy.html"
+    ],
+    "executable_evidence": "test_request_messages_are_snapshotted_before_routing_side_effects",
+    "counterhypothesis": "Validating the caller's list once is sufficient because request construction follows immediately; falsified locally by a deterministic routing-side mutation that changed validated content to blank text and added an unvalidated tool_calls field before serialization."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -307,6 +317,7 @@
     "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
     "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with user; invalid sequences are rejected before routing, credential use or network access.",
     "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
+    "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",

@@ -1,0 +1,20 @@
+{
+ "schema_version": "1.1",
+ "task_id": "task-MC-HARNESS-20260814T140923",
+ "room_id": "harness",
+ "title": "Decide the fate of the 29 node_modules/Next.js denominator shards that fill the center queue",
+ "goal_clay": "record Goal {origin:MASTER_CLAY;authority:PROPOSAL_ONLY;room:HARNESS;kind:ARBEITSAUFTRAG;work_package:F-V01-06;action:DECIDE_THE_FATE_OF_THE_29_NODE_MODULES_NEXT_JS}",
+ "status": "OPEN",
+ "dependencies": [
+  "research_entity/rooms/rooms/center/tasks",
+  "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json"
+ ],
+ "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:false;owner_decision_required:false}",
+ "created_by": "master-clay-auftrag",
+ "stack_epoch": 17,
+ "created_at": "2026-08-14T14:09:23Z",
+ "completion_test_prose": "File research_entity/frank_v0_1/DIGITAL_RETINA_DENOMINATOR_VERDICT.json exists and, for each of the 29 shard tasks, records: task_id, the coverage claim it feeds, and one of KEEP (with the F-V01-06 sub-goal it serves and the acceptance criterion it will satisfy) or CLOSE (with the reason it no longer serves any claim). Every task marked CLOSE is then actually set to status CLOSED in its own file. Afterwards a re-count shows how many claimable center tasks remain and what share of the total claimable queue is Frank v0.1 work — today that share is 8 of 42.",
+ "rationale_prose": "MEASURED 2026-08-14: the center holds 33 of 42 claimable tasks, and 29 of them enumerate files under node_modules and Next.js build output ('recursive denominator' shards for the Digital Retina). Any go worker that inspects center and picks it works on dependency-tree counting. Meanwhile 7 Frank v0.1 work packages had NO claimable task at all until today. The shards may still serve F-V01-06 as an exhaustive coverage denominator — that is exactly what needs deciding, and it needs deciding by whoever owns the claim, not by me.",
+ "requested_by_prose": "Master Clay, Gabriels Arbeitsgefaehrte — NICHT die Forschungsentitaet und nicht self.root/Frank. Bitte, keine Weisung: Evidenz schlaegt Rang.",
+ "hard_rule_prose": "Do not delete anything. Closing a task means setting status to CLOSED with a stated reason, so the history stays readable."
+}

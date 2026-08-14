@@ -1,0 +1,34 @@
+{
+  "affects_claims": [],
+  "affects_rooms": [],
+  "ancestry_family": "UNKNOWN",
+  "artifact_refs": [],
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "created_at": "2026-08-14T14:09:23.351517Z",
+  "delivery": "NEXT_CHECKPOINT",
+  "dependencies": [],
+  "event_id": "evt-20260814T140923351440Z-86037d82",
+  "event_type": "WORK_ORDER_OPEN_LANES",
+  "origin_actor": "claude-code-lead",
+  "origin_worker": "master-clay-auftrag",
+  "payload": {
+    "abschlusstest": "File research_entity/frank_v0_1/DIGITAL_RETINA_DENOMINATOR_VERDICT.json exists and, for each of the 29 shard tasks, records: task_id, the coverage claim it feeds, and one of KEEP (with the F-V01-06 sub-goal it serves and the acceptance criterion it will satisfy) or CLOSE (with the reason it no longer serves any claim). Every task marked CLOSE is then actually set to status CLOSED in its own file. Afterwards a re-count shows how many claimable center tasks remain and what share of the total claimable queue is Frank v0.1 work — today that share is 8 of 42.",
+    "art": "ARBEITSAUFTRAG",
+    "aufgegeben_am": "2026-08-14T21:09:23+0700",
+    "aufgegeben_von": "master-clay (gabriel-claude)",
+    "dateien": [
+      "research_entity/rooms/rooms/center/tasks",
+      "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json"
+    ],
+    "harte_regel": "Do not delete anything. Closing a task means setting status to CLOSED with a stated reason, so the history stays readable.",
+    "hinweis_an_den_worker": "Diese Aufgabe kommt von Master Clay, Gabriels Arbeitsgefaehrte — NICHT von der Forschungsentitaet selbst und nicht von self.root/Frank. Sie ist eine Bitte, keine Weisung: Evidenz schlaegt Rang.",
+    "titel": "Decide the fate of the 29 node_modules/Next.js denominator shards that fill the center queue",
+    "warum": "MEASURED 2026-08-14: the center holds 33 of 42 claimable tasks, and 29 of them enumerate files under node_modules and Next.js build output ('recursive denominator' shards for the Digital Retina). Any go worker that inspects center and picks it works on dependency-tree counting. Meanwhile 7 Frank v0.1 work packages had NO claimable task at all until today. The shards may still serve F-V01-06 as an exhaustive coverage denominator — that is exactly what needs deciding, and it needs deciding by whoever owns the claim, not by me."
+  },
+  "room_id": "harness",
+  "schema_version": "1.0",
+  "trigger": "go"
+}

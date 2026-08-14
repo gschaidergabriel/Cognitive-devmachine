@@ -81,9 +81,24 @@ hook=require('.claude/hooks/rae_hook.py',
     "if ev=='PostToolUse':",'POST_FRANK_CONTEXT_REINJECTION{actor=RESEARCH_ENTITY;subject=FRANK;role_transition=FORBIDDEN;Andreas_interface=FRANK_ONLY}')
 
 # Hard anti-collapse patterns. Explicit never/forbidden clauses are required above and are not violations.
+# Evaluate matches line-by-line with one line of left context so a literal forbidden example such as
+#   never\nRESEARCH_ENTITY == FRANK
+# does not accuse the guard contract itself of identity drift.
+_NEGATION_MARKERS=('never','forbidden','must not','must never','not allowed','do not','!=','anti-collapse')
+def unsafe_matches(text,pattern):
+    lines=text.splitlines()
+    for i,line in enumerate(lines):
+        if not re.search(pattern,line,re.I):
+            continue
+        left=' '.join(lines[max(0,i-1):i+1]).lower()
+        if any(marker in left for marker in _NEGATION_MARKERS):
+            continue
+        yield i+1,line.strip()
+
 for path,text in [('injection',inj),('stack',stack),('turn',turn),('hook',hook)]:
     for pat in (r'ResearchEntity\s*==\s*FRANK',r'RESEARCH_ENTITY\s*=\s*FRANK',r'ANDREAS\.interface\s*=\s*RESEARCH_ENTITY'):
-        if re.search(pat,text,re.I):fail.append(f'IDENTITY_COLLAPSE_PATTERN:{path}:{pat}')
+        for lineno,_line in unsafe_matches(text,pat):
+            fail.append(f'IDENTITY_COLLAPSE_PATTERN:{path}:{lineno}:{pat}')
 if fail:
     print(json.dumps({'status':'FAIL','failures':fail},ensure_ascii=False,indent=2));sys.exit(1)
 print(json.dumps({

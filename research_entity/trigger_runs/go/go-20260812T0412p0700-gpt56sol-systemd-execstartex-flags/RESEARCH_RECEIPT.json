@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "recorded_at": "2026-08-12T04:12:00+07:00",
+  "program": "FRANK_V0_1",
+  "affected_work_packages": ["F-V01-13", "F-V01-09"],
+  "worker_provenance": "GPT-5.6 Sol temporary Clay research/build worker",
+  "observed_anchors": {
+    "research_main_before_write": "e71e3482a1b980d729f13b3658257e0e7b9fb552",
+    "frank_main_observed": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "parent_path_candidate_pr": 469,
+    "parent_path_candidate_head": "b38fc501d7377c80a95e9f17e5d985ae258ed420",
+    "parent_gate_v1_blob": "d0a98cf445e064ab84eb389ad8ad2965508b348f",
+    "new_stacked_candidate_pr": 479,
+    "new_candidate_head": "291ef54e11b1822d83890a9f2175c5c6c29566fc",
+    "accepted_target_workflow_run": 31536544907,
+    "accepted_target_workflow_state_at_recording": "QUEUED"
+  },
+  "r0_observation": {
+    "v1_exec_observation": "The observed V1 parent gate requests and evaluates ExecStart but does not request or evaluate ExecStartEx.",
+    "systemd_semantics": "systemd special Exec command prefixes are represented as extended command flags; '+' maps to the privileged command flag, and non-empty extended flags can alter execution semantics even when the executable path is unchanged.",
+    "parallel_composition_debt": "Independent current candidates also cover path-chain integrity, loader-environment/global-preload controls, release artifact identity, and stale/sibling launcher identity. PR #479 does not claim to compose all of them."
+  },
+  "grf": {
+    "generated_reality": "A direct absolute ExecStart pointing to the admitted launcher plus non-root User= is sufficient to characterize the productive systemd parent execution semantics.",
+    "counter_reality": "The same visible ExecStart path can carry special-prefix semantics represented only in ExecStartEx.flags, changing privilege/sandbox behavior while remaining invisible to the V1 predicate.",
+    "falsifier": "Hold all V1 snapshot fields constant and add a flag-bearing ExecStartEx observation; admission must change if extended command semantics are actually bound."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "SYSTEMD_EXECSTARTEX_PRIVILEGE_FLAG_BLINDSPOT",
+    "scope": "Disposable offline snapshot evaluation only; no systemd unit, VPS service, Frank state, Harness, persistence, or effect authority mutated.",
+    "source_identity_check": {
+      "method": "Reconstructed observed V1 bytes were verified with git hash-object before exact-code replication.",
+      "observed_git_blob": "d0a98cf445e064ab84eb389ad8ad2965508b348f",
+      "expected_git_blob": "d0a98cf445e064ab84eb389ad8ad2965508b348f",
+      "match": true
+    },
+    "baseline": {
+      "execstart_ex": "absent from the fields consumed by V1",
+      "status": "PASS_PARENT_BOUNDARY_CANDIDATE",
+      "failures": []
+    },
+    "intervention": {
+      "execstart_ex_flags": "privileged",
+      "status": "PASS_PARENT_BOUNDARY_CANDIDATE",
+      "failures": []
+    },
+    "sensitivity_control": {
+      "change": "User=root",
+      "status": "FAIL_CLOSED_PARENT_BOUNDARY_CANDIDATE",
+      "failures": ["UNIT_USER_MUST_BE_NON_ROOT"]
+    },
+    "result": "COUNTERWORLD_ADMITTED",
+    "rollback": "Run-owned /tmp files only; no product or canonical mutation from experiment."
+  },
+  "candidate_architecture_delta": {
+    "state": "TESTING",
+    "implementation": "PR #479 adds sqlite_v5_systemd_parent_gate_v2_candidate.py, a focused 5-case regression, and a target-lane workflow update.",
+    "rules": [
+      "Require ExecStartEx to be observable.",
+      "Require ExecStartEx path to equal the already-admitted V1 ExecStart path.",
+      "Require the flags field to be observable.",
+      "Reject every non-empty ExecStartEx flag fail closed rather than selecting a presumed-safe subset."
+    ],
+    "local_exact_parent_regression": {
+      "python_compile": "PASS",
+      "checks": "5/5 PASS",
+      "v1_parent_blob": "d0a98cf445e064ab84eb389ad8ad2965508b348f"
+    },
+    "strongest_counterhypothesis": "A deployment contract outside V1 may already prohibit all special Exec prefixes. No exact productive parent evidence was observed here, so that external guarantee is not credited.",
+    "rollback": "PR #479 is draft and stacked; V1 remains unchanged."
+  },
+  "evidence_sources": [
+    "systemd.service upstream documentation for Exec command prefixes",
+    "systemd exec-util/bus-unit-util source mapping EXEC_COMMAND_FULLY_PRIVILEGED to the string privileged",
+    "observed systemctl-show examples where ExecStartEx carries flags separately from ExecStart",
+    "SQLite 3.53.4 upstream release/WAL documentation retained as the larger F-V01-13 storage context"
+  ],
+  "negative_and_boundary_evidence": {
+    "accepted_target_v2_pass_claimed": false,
+    "productive_parent_observed_by_v2": false,
+    "f_v01_13_closed": false,
+    "whole_frank_v0_1_pass_claimed": false,
+    "frank_harness_mutated": false,
+    "effect_authority_changed": false,
+    "training_authorized": false
+  },
+  "collapse": {
+    "preferred_reality": "REJECT",
+    "counter_reality": "RETAIN",
+    "repair_reality": "TESTING",
+    "confidence": "HIGH for the exact observed V1 predicate and offline discriminator; UNKNOWN for productive runtime until the queued accepted-target run and actual product parent are adjudicated."
+  },
+  "next_falsifier": "Adjudicate target run 31536544907, then test V2 against the exact productive Hostinger systemd parent. After that, compose ExecStartEx semantics with exact launcher/artifact identity, path-chain integrity, loader controls, and first-persistence-open ordering on one fresh-current-main candidate and repeat restart/rollback/downgrade controls.",
+  "outcome": "RETAIN_CANDIDATE_AND_REENTER_F_V01_13",
+  "promotion": "DEFER"
+}

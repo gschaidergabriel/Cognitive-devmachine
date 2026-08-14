@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "started_from": {
+    "research_repo_head_before_write": "d8e0e2ed8ed7f6aa7b19c06add26e6e9210fe57e",
+    "product_main": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "overlap_pr": 557,
+    "overlap_pr_head_refreshed": "ea3d3a28f1f4beaf0bca40ccf90913a4010f1208",
+    "work_item": 534
+  },
+  "grf_summary": {
+    "observed_reality": "Current accepted product evidence still lacks productive Hostinger SQLite/UnifiedDB object binding. PR #557 proposes same-connection SQLITE_FCNTL_HAS_MOVED after path-rebind counterevidence.",
+    "generated_hypothesis": "HAS_MOVED can act as a durable since-open movement-history witness.",
+    "counter_reality": "Unix HAS_MOVED is a point-in-time path-to-open-inode comparison, so same-object move-away/move-back ABA before the query returns 0.",
+    "discriminator": "One disposable WAL connection, one move-away/move-back ABA, same-connection HAS_MOVED query and write/readback.",
+    "collapse": "COUNTER_REALITY_SUPPORTED; present-state guard retained, historical-continuity claim rejected."
+  },
+  "external_primary_evidence": [
+    "https://www.sqlite.org/wal.html",
+    "https://www.sqlite.org/c3ref/c_fcntl_begin_atomic_write.html",
+    "https://sqlite.org/src/artifact/410185df49",
+    "https://sqlite.org/releaselog/current.html"
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "id": "SQLITE_HAS_MOVED_TEMPORAL_ABA",
+    "environment": "local disposable /tmp; Python sqlite3 3.46.1; WAL; not Frank; not Hostinger",
+    "baseline_has_moved": 0,
+    "after_move_away_and_same_object_move_back_has_moved": 0,
+    "same_inode": true,
+    "post_aba_write_readback": "PASS",
+    "production_or_authority_effect": false
+  },
+  "ordinary_followup": {
+    "repo_or_product_patch": "NO_CHANGE",
+    "reason": "Active overlapping draft #557 already owns the current-state guard; new evidence narrows claim semantics and adds a regression/test obligation rather than justifying an overlapping implementation.",
+    "research_evidence_commit": "26accebc2fcd4d3e52645d8a8f842c1e26a0ca53",
+    "issue_534_comment_id": 5269960154,
+    "pr_557_comment_id": 5269962442
+  },
+  "ci_refresh": {
+    "pr557_prior_guard_run": 31613664992,
+    "prior_guard_run_status": "FAILED_BUILD_EXACT_DIAGNOSTIC_EXTENSION",
+    "pr557_current_head": "ea3d3a28f1f4beaf0bca40ccf90913a4010f1208",
+    "current_guard_run": 31620949596,
+    "current_guard_run_status_at_observation": "QUEUED_UNKNOWN_ZERO_PASS_CREDIT",
+    "other_current_head_mechanism_runs": "self.root/effect-fence/execution-gate PASS are scoped and do not promote F-V01-13"
+  },
+  "acceptance_impact": {
+    "F-V01-13": "IN_PROGRESS_NO_CHANGE",
+    "product_release": "NOT_PASS",
+    "required_next_evidence": "accepted Hostinger ProductStart/self.root generation + admitted fixed SQLite artifact + actual canonical UnifiedDB WAL operation and database-object/runtime binding across the critical interval + restart/reopen + downgrade/library-swap/rollback + semantic-lineage recovery",
+    "training_authorized": false,
+    "harness_authority_changed": false
+  },
+  "status": "COMPLETED_WITH_RESEARCH_DELTA"
+}

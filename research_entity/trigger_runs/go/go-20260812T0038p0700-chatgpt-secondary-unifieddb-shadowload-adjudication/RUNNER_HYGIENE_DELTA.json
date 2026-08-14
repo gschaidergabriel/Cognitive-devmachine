@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0038p0700-chatgpt-secondary-unifieddb-shadowload-adjudication",
+  "object": "RUNNER_HYGIENE_DELTA",
+  "observed_at_local": "2026-08-12T00:49:30+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_parent_before_write": "80e2b9098c019b343f573eba594bf15244337161",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "fresh_target_main": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+  "root_cause_class": "PERSISTENT_SELF_HOSTED_WORKSPACE_OWNERSHIP_CONTAMINATION",
+  "forensics": {
+    "workflow_run": 31518421180,
+    "runner_name": "clay",
+    "listener_count_observed": 1,
+    "worker_count_observed": 1,
+    "multi_listener_collision_observed": false,
+    "foreign_owned_paths_count": 5,
+    "foreign_owner": "root:root",
+    "foreign_paths": [
+      "runtime/claycode_eval_v1/__pycache__",
+      "runtime/claycode_eval_v1/__pycache__/host.cpython-312.pyc",
+      "runtime/claycode_eval_v1/__pycache__/analyzer.cpython-312.pyc",
+      "runtime/claycode_eval_v1/__pycache__/syntax.cpython-312.pyc",
+      "runtime/claycode_eval_v1/__pycache__/evaluator.cpython-312.pyc"
+    ],
+    "checkout_failure": "actions/checkout@v4 clean cannot unlink root-owned analyzer.cpython-312.pyc as frankrunner",
+    "provenance_of_root_owned_bytecode": "UNKNOWN",
+    "diagnostic_note": "The specific known-failing-path probe in the forensic workflow duplicated a Dr.-Unterweger path segment and therefore reported absent; the generic foreign-ownership scan is the valid detector."
+  },
+  "independent_swarm_convergence": {
+    "merged_main_commit": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+    "title": "ci: isolate self-hosted current-head checkout",
+    "accepted_target_run": 31518756350,
+    "accepted_target_job": 93870326463,
+    "status": "PASS_FOR_SELF_ROOT_CURRENT_HEAD_BOUNDARY",
+    "mechanism": [
+      "exact tested SHA fetched into run-unique RUNNER_TEMP tree",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "isolated tree cleanup",
+      "existing identity/V15/V16/replay/static-differential gates preserved"
+    ],
+    "scope_boundary": "This bypasses persistent-workspace contamination for the self.root current-head boundary workflow; it does not remove or explain the root-owned persistent residue and does not automatically repair other checkout-dependent workflows."
+  },
+  "bounded_cleanup_candidate": {
+    "pr": 403,
+    "head": "e9f46edda07d6ed11f9e3ab02372681a7c4db839",
+    "status_at_observation": "DRAFT_RUN_QUEUED",
+    "workflow_run": 31519221853,
+    "design": "checkout-free fail-closed quarantine of the exact contaminated pycache tree",
+    "safety": [
+      "no sudo",
+      "no file deletion",
+      "refuse mutation if any foreign-owned path exists outside exact suspect tree",
+      "atomic rename out of checkout",
+      "require zero foreign-owned checkout paths after mutation",
+      "preserve rollback evidence"
+    ]
+  },
+  "external_primary_guidance": {
+    "sources": [
+      "https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/autoscaling-with-self-hosted-runners",
+      "https://docs.github.com/en/rest/actions/self-hosted-runners#create-configuration-for-a-just-in-time-runner-for-an-organization"
+    ],
+    "finding": "Persistent self-hosted runners do not provide a guaranteed clean environment per job. GitHub recommends ephemeral/JIT runner patterns for clean per-job provisioning in autoscaled setups.",
+    "architecture_candidate": "Evaluate run-isolated or ephemeral/JIT execution as the default for consequential reproducibility lanes after the acute contamination is cleared; do not conflate this with the immediate cleanup repair."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_BOUNDED",
+    "continuity": "Prefer run-unique isolated checkouts plus bytecode suppression for critical self-hosted validation lanes.",
+    "recovery": "Keep persistent-workspace foreign ownership as an explicit health/continuity failure until cleaned and provenance/prevention are resolved.",
+    "truth_boundary": "A red checkout-clean failure before assertions is infrastructure evidence, not semantic Frank/UnifiedDB counterevidence.",
+    "production": "No Frank production state or effect authority changed."
+  },
+  "next_falsifiers": [
+    "execute PR #403 quarantine gate and verify pre/post foreign-ownership counts plus artifact receipt",
+    "after cleanup, execute at least one previously checkout-blocked generic effect/provider regression and verify its assertions actually run",
+    "trace the creator of root-owned bytecode or enforce a mechanism that makes recurrence impossible",
+    "evaluate isolated/ephemeral runner operation against reproducibility, cleanup, secret exposure, queue latency and cost before broader promotion"
+  ],
+  "go_oob_experiment": {
+    "new_experiments_in_this_delta": 0,
+    "note": "The exact-one OOB requirement for this go invocation was already satisfied by the pressure-only consequential-use gate lesion recorded in RESEARCH_RECEIPT.json; no second OOB experiment was introduced here."
+  },
+  "training_authorized": false,
+  "production_mutation": false
+}

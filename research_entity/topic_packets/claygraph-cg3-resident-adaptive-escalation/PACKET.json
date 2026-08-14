@@ -1,17 +1,52 @@
 {
-  "packet_id":"claygraph-cg3-resident-adaptive-escalation",
-  "title":"ClayGraph CG3 Resident Adaptive Escalation",
-  "status":"OPEN_HOLD_CANDIDATE",
-  "domains":["claygraph","frank","memory","retrieval","graph-rag","small-model-runtime","database-migration"],
-  "summary":"Cycle 3 imports hosted Groq 8B self-use showing current ClayGraph activation is not hot-path ready (~84-87ms runner retrieval vs SQLite FTS ~0.8-0.9ms, larger contexts, activation not consistently better than graph lexical) while preserving evidence that graph modes can surface relational facts FTS misses. A synthetic 10k-node implementation benchmark shows reload+scan 20.499ms median, resident scan 8.349ms and resident inverted seeding 0.106ms, motivating G1c: exact/packet/FTS baseline first, resident semantic index, adaptive graph escalation only for relation/scatter/uncertainty need, reranking and exact-anchor validation. Accepted ClayGraph remains G0; G1c is HOLD.",
-  "core_invariants":["graph/activation is not truth","exact anchors validate current claims","graph retrieval is optional/budgeted","resident index is derived/rebuildable","shared ancestry is not replication","GWT selection remains distinct","capability authority remains external","physical migration remains evidence-driven"],
-  "negative_results":["current always-on activation hot path unsupported","activation not consistently better than graph lexical","8B does not establish 4B","synthetic resident speedup is not target latency","retrieval win does not authorize database merge"],
-  "next_tests":["implement current-corpus resident index","G1c vs FTS/packet/G0/G1b >=50 query benchmark","target Qwen4B factorial","stale assembly vs CognitiveFrame exact anchors","resident update/memory/rebuild crossover","71-store parity/p99/crash/privacy"],
-  "origin_actor":"chatgpt-secondary",
-  "provider":"OpenAI",
-  "model":"GPT-5.6 Sol",
-  "canonical_parent_revision":2,
-  "canonical_parent_state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
-  "run_id":"claygraph-20260808T1701p0700-chatgpt-secondary-r2",
-  "predecessor_packet_ids":["claygraph-cg1-temporal-qualified-hybrid-substrate","claygraph-cg2-query-planned-evidence-bounded-activation"]
+  "packet_id": "claygraph-cg3-resident-adaptive-escalation",
+  "title": "ClayGraph CG3 Resident Adaptive Escalation",
+  "status": "OPEN",
+  "domains": [
+    "claygraph",
+    "frank",
+    "memory",
+    "retrieval",
+    "graph-rag",
+    "small-model-runtime",
+    "database-migration"
+  ],
+  "summary": "Cycle 3 imports hosted Groq 8B self-use showing current ClayGraph activation is not hot-path ready (~84-87ms runner retrieval vs SQLite FTS ~0.8-0.9ms, larger contexts, activation not consistently better than graph lexical) while preserving evidence that graph modes can surface relational facts FTS misses. A synthetic 10k-node implementation benchmark shows reload+scan 20.499ms median, resident scan 8.349ms and resident inverted seeding 0.106ms, motivating G1c: exact/packet/FTS baseline first, resident semantic index, adaptive graph escalation only for relation/scatter/uncertainty need, reranking and exact-anchor validation. Accepted ClayGraph remains G0; G1c is HOLD.",
+  "core_invariants": [
+    "graph/activation is not truth",
+    "exact anchors validate current claims",
+    "graph retrieval is optional/budgeted",
+    "resident index is derived/rebuildable",
+    "shared ancestry is not replication",
+    "GWT selection remains distinct",
+    "capability authority remains external",
+    "physical migration remains evidence-driven"
+  ],
+  "negative_results": [
+    "current always-on activation hot path unsupported",
+    "activation not consistently better than graph lexical",
+    "8B does not establish 4B",
+    "synthetic resident speedup is not target latency",
+    "retrieval win does not authorize database merge"
+  ],
+  "next_tests": [
+    "implement current-corpus resident index",
+    "G1c vs FTS/packet/G0/G1b >=50 query benchmark",
+    "target Qwen4B factorial",
+    "stale assembly vs CognitiveFrame exact anchors",
+    "resident update/memory/rebuild crossover",
+    "71-store parity/p99/crash/privacy"
+  ],
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "run_id": "claygraph-20260808T1701p0700-chatgpt-secondary-r2",
+  "predecessor_packet_ids": [
+    "claygraph-cg1-temporal-qualified-hybrid-substrate",
+    "claygraph-cg2-query-planned-evidence-bounded-activation"
+  ],
+  "status_original": "OPEN_HOLD_CANDIDATE",
+  "status_mapping_note": "'OPEN_HOLD_CANDIDATE' steht nicht im Schema. Auf OPEN abgebildet — alle vorgefundenen Varianten sind Spielarten von 'offen'; der Zusatz bleibt in status_original erhalten."
 }

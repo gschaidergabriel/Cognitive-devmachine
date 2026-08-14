@@ -1,0 +1,129 @@
+{
+  "schema_version": "research-center-event/1.0",
+  "event_id": "20260814T085046Z_receipt_finality_anchor_execution_delta",
+  "created_at": "2026-08-14T08:50:46Z",
+  "event_type": "evidence_state_transition",
+  "supersedes_status_only_from_event": "20260814T075333Z_import_process_wal_semantic_closure",
+  "promotion_status": "CANDIDATE_ONLY",
+  "training_performed": false,
+  "harness_mutated": false,
+  "canonical_context": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_parent_commit": "e4ecf56fb535940c19340dfa0b88fbb75720bb30",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_before": "1243bd31606df1d52e1865fd7f1cf5d563c499d8",
+    "target_main_now": "4e463f9495d304de4e833f6e9e8609baddaf79b2",
+    "rae_version": "RAE-8.8 revision 2",
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "frank_status": "IN_PROGRESS 4.8%"
+  },
+  "state_transitions": [
+    {
+      "id": "T-IMPORT-RECEIPT-FINALITY-001",
+      "previous_state": "replicate job SUCCESS; persist job QUEUED_ZERO_STEP",
+      "current_state": "both jobs SUCCESS and receipt committed to target main",
+      "run_id": 31779493258,
+      "tested_head": "1243bd31606df1d52e1865fd7f1cf5d563c499d8",
+      "jobs": [
+        {"job_id": 94701947231, "name": "replicate-on-hostinger", "conclusion": "success", "executed_steps": 5},
+        {"job_id": 94705254800, "name": "persist-receipt", "conclusion": "success", "executed_steps": 6}
+      ],
+      "durable_receipt": {
+        "commit": "4e463f9495d304de4e833f6e9e8609baddaf79b2",
+        "path": "runtime/vps_integrity/clay_import_path/runs/31779493258.json",
+        "blob_sha": "d16a71d533ea810cec0f66b99a9b3c49d642b658",
+        "receipt_pass": true,
+        "runner": "clay",
+        "hostname": "digital-retina",
+        "temporary_fixture_cleanup_confirmed": true,
+        "unsafe_script_origin_20_of_20": "SCRIPT_DIR_SHADOW",
+        "safe_path_origin_20_of_20": "EPHEMERAL_DEPS"
+      },
+      "credit": "DURABLE_BOUNDED_SELF_HOSTED_MECHANISM_RECEIPT",
+      "nonclaim": "Receipt scope explicitly excludes Clay repository execution and Andreas target acceptance; this is not Frank release evidence."
+    },
+    {
+      "id": "T-SQLITE-ANCHOR-COHORT-001",
+      "previous_state": "PR577 run QUEUED_ZERO_STEP",
+      "current_state": "exact-candidate gate SUCCESS with nine executed steps",
+      "run_id": 31779867376,
+      "head_sha": "fd740fe4f0e85fde64ef53cdd22d87579a96e100",
+      "job_id": 94703072639,
+      "executed_steps": 9,
+      "candidate_mechanism": "Require sqlite_trust_anchor_sha256 in the domain-separated product-receipt cohort and reject same-library/different-anchor composition.",
+      "credit": "BOUNDED_EXACT_HEAD_ANCHOR_COHORT_MECHANISM",
+      "nonclaim": "No production trust anchor, ProductStart binding, accepted Hostinger database operation, semantic restart witness, or coherent rollback defense was established."
+    }
+  ],
+  "primary_source_refresh": [
+    {
+      "title": "Python 3.13 command-line and environment documentation",
+      "url": "https://docs.python.org/3.13/using/cmdline.html",
+      "finding": "Isolated mode implies -E, -P and -s and ignores PYTHON* variables; this supports environment isolation but not artifact identity."
+    },
+    {
+      "title": "GitHub REST workflow jobs",
+      "url": "https://docs.github.com/en/rest/actions/workflow-jobs",
+      "finding": "Job conclusion and step state are distinct observable fields; durable project credit additionally requires binding them to head SHA and persisted receipt."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-EVIDENCE-FINALITY-JOIN-001",
+      "claim": "Durable mechanism credit requires a join of tested head, completed execution steps, successful semantic verdict, receipt bytes, and a repository commit that persists those exact bytes; compute success alone is provisional.",
+      "test": "Interrupt or delay the persistence lane after successful computation and require the ledger to remain provisional; then complete persistence and verify exactly one state transition without double-counting the compute evidence.",
+      "falsifier": "A compute-only result provides equivalent durable auditability and replay after artifacts expire, without any persisted receipt or content binding."
+    },
+    {
+      "id": "H-ANCHOR-INSTANCE-DISCRIMINATION-001",
+      "claim": "Binding sqlite_trust_anchor_sha256 prevents same-library receipts authorized by byte-distinct anchor instances from collapsing into one cohort, but does not prevent coherent rollback of the entire cohort.",
+      "test": "Hold library/runtime fields constant while varying only anchor bytes; require rejection. Then replay a fully coherent stale cohort to show that independent freshness and semantic restart evidence remain necessary.",
+      "falsifier": "Different anchor bytes remain safely indistinguishable under the declared deployment trust contract, or the added field alone rejects coherent whole-cohort rollback."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-JOB-SUCCESS-EQUALS-DURABLE-EVIDENCE-001",
+      "status": "REFUTED_BY_TEMPORAL_SPLIT",
+      "counterevidence": "The replication job was already successful while its persistence job still had zero executed steps; durable bytes appeared only later in target commit 4e463f9495d304de4e833f6e9e8609baddaf79b2."
+    },
+    {
+      "id": "CH-ANCHOR-HASH-EQUALS-PRODUCTION-IDENTITY-001",
+      "status": "OPEN_BUT_UNSUPPORTED",
+      "attack": "A synthetically consistent anchor hash can pass a candidate cohort gate without proving root ownership, accepted host, exact service process, real database file descriptors, or restart continuity."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Evidence Finality Join",
+      "definition": "The authenticated join from execution and semantic verdict to durable receipt bytes and their repository commit."
+    },
+    {
+      "name": "Temporal Credit Transition",
+      "definition": "An append-only change from provisional to durable evidence that preserves the earlier queued/null state without counting the underlying experiment twice."
+    },
+    {
+      "name": "Anchor Instance Discriminator",
+      "definition": "A trust-anchor byte hash used to distinguish authorization instances that select an otherwise identical runtime artifact."
+    }
+  ],
+  "routing": [
+    {
+      "targets": ["clayresearch", "frank", "gwt", "emergenz", "claygraph", "unifieddb"],
+      "impulse": "Update only receipt finality: replace provisional import status with durable bounded mechanism credit, retain the earlier queued state as history, and do not count the experiment twice."
+    },
+    {
+      "targets": ["claycode", "hyperposition", "harness"],
+      "impulse": "Grant PR577 bounded anchor-cohort mechanism credit only; next falsify coherent rollback and require accepted ProductStart plus semantic UnifiedDB restart witness before any release claim."
+    }
+  ],
+  "negative_and_null_results": [
+    "No new independent replication: compute and persistence jobs are two stages of the same run and receipt lineage.",
+    "No evidence that digital-retina is the owner-fixed accepted Hostinger ProductStart target merely because the runner receipt says HOSTINGER_MECHANISM_REPLICATION.",
+    "No production SQLite trust anchor was provisioned or observed by this event.",
+    "No Frank database mutation, training, productive Harness mutation, canonical promotion, or Frank v0.1 acceptance occurred."
+  ],
+  "deduplication": {
+    "policy": "State transitions supersede only prior status fields; all measurements from event e4ecf56fb535940c19340dfa0b88fbb75720bb30 remain a single evidence lineage."
+  }
+}

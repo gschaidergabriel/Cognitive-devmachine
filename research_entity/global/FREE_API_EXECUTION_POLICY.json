@@ -42,6 +42,16 @@
     "executable_evidence": "test_http_402_latches_before_response_body_is_read",
     "counterhypothesis": "Reading an error body before classifying its already received status is harmless; falsified because a stalled 402 body changed the outcome to incomplete_provider_response and suppressed the payment latch."
   },
+  "payment_hard_stop_atomicity": {
+    "checked_at": "2026-08-14",
+    "claim": "For the single-instance v0.1 runtime, routing, authenticated execution and payment-latch publication form one process-serialized critical section; a waiting attempt re-evaluates the latch after the preceding receipt completes.",
+    "sources": [
+      "https://cwe.mitre.org/data/definitions/362.html",
+      "https://docs.python.org/3/library/threading.html#lock-objects"
+    ],
+    "executable_evidence": "test_concurrent_attempt_waits_for_payment_hard_stop_result",
+    "counterhypothesis": "Independent preflight checks are sufficient for concurrent attempts; falsified locally because a second attempt reached the network while the first payment response was pending, before the shared hard-stop latch could be published."
+  },
   "text_message_roles": {
     "allowed": ["system", "user", "assistant"],
     "checked_at": "2026-08-11",
@@ -326,6 +336,7 @@
     "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
     "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
     "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
+    "The v0.1 execution path is process-serialized from routing through receipt publication so a payment-required latch from one attempt is visible before another attempt can route or reach the network.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",

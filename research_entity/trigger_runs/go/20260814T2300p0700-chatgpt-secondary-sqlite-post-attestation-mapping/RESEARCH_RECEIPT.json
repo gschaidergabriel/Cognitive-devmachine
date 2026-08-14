@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T2300p0700-chatgpt-secondary-sqlite-post-attestation-mapping",
+  "trigger": "go",
+  "timestamp_local": "2026-08-14T23:00:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "1746679dcc8a351f97e0e676b257246f98df6dd7",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "4e463f9495d304de4e833f6e9e8609baddaf79b2",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Current main contains an accepted-target validated reproducible SQLite 3.53.4 parity runtime and a live-process SQLite mapping attestor, while productive Hostinger provisioning/persistence/restart remains explicitly open. PR #577 also completed its self-hosted trust-anchor cohort-binding mechanism gate successfully during this run.",
+    "duplicate_avoidance": [
+      "Existing SQLite runtime work covers build reproducibility, loader/path trust, mapped library identity and receipt-tail resampling",
+      "Existing receipt-cohort work covers cross-generation and cross-anchor receipt composition",
+      "No current research hit was found for a post-attestation late dynamic SQLite mapping discriminator"
+    ]
+  },
+  "observed_reality": {
+    "sqlite_upstream_wal_reset_fix": "Fixed in SQLite 3.51.3 and later; SQLite 3.53.4 includes the fix",
+    "target_repo_sqlite_35304_parity_merge": "9c891aa8b076113b21903ac3db0d39a61aec6a91",
+    "target_repo_live_attestor_path": "runtime/frank_storage_truth_v1/frank_sqlite_live_process_attestor_v1.py",
+    "live_attestor_declared_scope": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY",
+    "productive_persistence_still_unclaimed": true,
+    "pr_577_head": "fd740fe4f0e85fde64ef53cdd22d87579a96e100",
+    "pr_577_workflow_run": 31779867376,
+    "pr_577_workflow_status": "SUCCESS",
+    "pr_577_scope": "PASS_MECHANISM_ONLY"
+  },
+  "hypothesis": "A one-shot live SQLite mapping attestation can become stale within the same process generation if a second byte-distinct SQLite shared object is dynamically loaded after the final mapping sample but before later persistence/effect evidence is composed.",
+  "strongest_counterhypothesis": "Frank's admitted productive process surface may structurally forbid any post-attestation dlopen/dlmopen or equivalent native-library loading, or the final ProductStart/persistence gate may resample mapping identity immediately before every consequential use, making the observed temporal gap unreachable in production.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "POST_ATTESTATION_LATE_SECOND_SQLITE_MAPPING",
+    "class": "temporal mapping / late dynamic-loader substitution",
+    "reversible": true,
+    "disposable_state": true,
+    "product_bytes_modified": false,
+    "canonical_state_modified": false,
+    "description": "A disposable Linux subprocess first loaded the system libsqlite3 and was observed through /proc/<pid>/maps. After the baseline observation, the same still-live process dynamically loaded a temporary byte-copy of libsqlite3 with a distinct inode/path. The child then exited and the temporary copy was removed.",
+    "baseline_unique_sqlite_mapping_identities": 1,
+    "treatment_unique_sqlite_mapping_identities": 2,
+    "baseline_mapping": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "treatment_added_mapping": "/tmp/<disposable>/libsqlite3.so.0.latecopy",
+    "result": "TEMPORAL_STALENESS_MECHANISM_REPRODUCED",
+    "interpretation": "A mapping receipt is exact for its observed instant, not a proof that the process cannot acquire a second SQLite mapping later. Re-running the current attestor after the added mapping should fail closed because it rejects multiple SQLite mapping identities; this experiment did not rerun the product attestor and therefore does not claim a Frank bypass."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption bug affected releases through 3.51.2 and is fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "SQLite 3.53.4 includes the WAL-reset corruption fix."
+    },
+    {
+      "source": "Linux dlopen(3)",
+      "url": "https://man7.org/linux/man-pages/man3/dlopen.3.html",
+      "finding": "dlopen loads a named dynamic shared object into a running process."
+    },
+    {
+      "source": "Linux proc_pid_maps(5)",
+      "url": "https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html",
+      "finding": "/proc/<pid>/maps reports the process's currently mapped memory regions, including pathname/device/inode for file-backed mappings."
+    }
+  ],
+  "grf_collapse": {
+    "reality_r0": "Current live attestor samples and fences mapping identity through its receipt tail and explicitly limits proof to one observed process generation.",
+    "reality_r2": "The same generation remains trustworthy after the final mapping sample because executable-library topology is stable.",
+    "counter_reality_r3": "A late dynamic loader introduces an additional SQLite mapping after attestation while PID/start-ticks remain unchanged.",
+    "intervention_r4": "Disposable late-load experiment changed mapping count from 1 to 2 without changing process generation.",
+    "collapse": "Reject lifetime-stability inference from one-shot mapping evidence. Retain the current attestor as exact instantaneous evidence. Promote only a new test obligation, not a product defect claim."
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "affected": [
+      "F-V01-13 security/recovery/observability",
+      "ProductStart/live SQLite admission",
+      "cross-component release receipt cohort"
+    ],
+    "candidate": "Before productive persistence/restart acceptance, prove one of two mutually sufficient closures: (A) the admitted self.root process cannot dynamically add/replace SQLite/native database-library mappings after the trusted SQLite attestation boundary; or (B) a fresh mapping/anchor/database-object observation is causally bound immediately to the productive canonical SQLite connection/persistence witness and again to restart/readback evidence so stale mapping receipts cannot be spliced forward in time.",
+    "falsifier": "If exact ProductStart/runtime code already makes native-library topology immutable after admission and an executable regression proves dlopen/dlmopen/plugin/subprocess-extension paths cannot alter the serving SQLite mapping, this candidate adds no new product mechanism.",
+    "rollback": "No product change made. Close this test obligation if exact-current product evidence proves the counterhypothesis."
+  },
+  "nonclaims": [
+    "No Frank exploit or effect-authority bypass was demonstrated",
+    "No accepted Hostinger production process was mutated",
+    "No canonical Frank database was opened or changed",
+    "No whole Frank v0.1 acceptance",
+    "No Harness mutation authority",
+    "No final/paid model training authorization"
+  ],
+  "next_frontier": [
+    "Integrate the now-green PR #577 trust-anchor cohort mechanism only after fresh-main overlap/review; do not treat it as production acceptance",
+    "Run one accepted ProductStart/self.root generation with the real V5/V6 root anchor and fixed SQLite 3.53.4 runtime, real canonical UnifiedDB WAL persistence, connection-bound DB-object evidence and semantic-lineage/freshness cohort binding",
+    "Add an ordinary post-attestation mapping-stability regression or prove native-library topology immutable after ProductStart admission",
+    "Perform clean restart/readback plus bounded stale-anchor/downgrade/library-swap/rollback controls before F-V01-13 promotion"
+  ]
+}

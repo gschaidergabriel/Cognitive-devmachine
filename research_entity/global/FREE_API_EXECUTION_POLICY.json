@@ -160,6 +160,16 @@
     "executable_evidence": "test_oversized_retry_after_emits_receipt_with_safe_fallback",
     "counterhypothesis": "Checking that every character is an ASCII digit makes int conversion total; falsified because CPython limits decimal integer-string conversion and raises ValueError for the 5000-digit header on the default configuration."
   },
+  "retry_after_header_access_failure": {
+    "checked_at": "2026-08-14",
+    "claim": "Failure while reading Retry-After metadata from a transport adapter cannot suppress or reclassify an already received HTTP 429; regular-response and HTTPError paths retain rate_limited plus EXECUTED and use the conservative 60-second fallback.",
+    "sources": [
+      "https://docs.python.org/3/library/urllib.error.html#urllib.error.HTTPError",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_retry_after_header_access_failure_preserves_rate_limit_receipt",
+    "counterhypothesis": "Header lookup is total once an adapter exposes a headers object; falsified by an injected mapping-compatible adapter whose get operation raises ValueError: the regular-response path changed 429 to invalid_provider_response and the HTTPError path escaped without a receipt."
+  },
   "bounded_retry_after_cooldown": {
     "checked_at": "2026-08-14",
     "claim": "Retry-After cooldown metadata is bounded to 86400 seconds in receipts for both delay-seconds and HTTP-date forms; the nonretryable request requires fresh operator or scheduler evaluation beyond that horizon.",
@@ -388,6 +398,7 @@
     "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
     "Receipt duration is measured on a monotonic clock, while absolute Retry-After HTTP-date cooldown uses the wall-clock UTC instant at response receipt.",
     "Oversized Retry-After decimal values that exceed runtime integer-conversion limits use the 60-second fallback and cannot escape or suppress the execution receipt.",
+    "Failure to access Retry-After metadata uses the 60-second fallback and cannot suppress or reclassify an already received HTTP 429 execution receipt.",
     "Retry-After receipt cooldown metadata is capped at 86400 seconds for both delay-seconds and HTTP-date forms; the request remains nonretryable and requires fresh evaluation after the bounded horizon.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
   ],

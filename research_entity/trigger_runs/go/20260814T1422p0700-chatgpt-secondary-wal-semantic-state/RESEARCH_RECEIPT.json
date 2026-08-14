@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1422p0700-chatgpt-secondary-wal-semantic-state",
+  "trigger": "go",
+  "timestamp_local": "2026-08-14T14:22:28+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "246b68ac1256835241e38bbd6610402c8598f032",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "implementation_snapshot": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "1243bd31606df1d52e1865fd7f1cf5d563c499d8",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "coordination": {
+    "overlap_checked": [
+      "PR #557 OPEN_CONNECTION_PATH_REBIND binds an already-open main DB object against pathname rebinding.",
+      "PR #573 UNIFIED_COMMIT_BEFORE_GRAPH_PROJECTION_CRASH tests UnifiedDB-vs-derived-ClayGraph semantic split and recovery.",
+      "PR #574 CROSS_GENERATION_RECEIPT_SPLICE binds normalized release receipts to one observation cohort.",
+      "concurrent research receipt 20260814T1421p0700 tests mapped SQLite library identity stability across WAL activity."
+    ],
+    "novel_delta": "This cycle isolates a different boundary: committed semantic state can reside in the WAL while the main UnifiedDB database file device, inode, size and SHA-256 remain unchanged. Therefore main-file identity is not a sufficient semantic commit witness for release/restart composition."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite Write-Ahead Logging documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "SQLite states that a COMMIT can occur by appending a commit record to the WAL without writing the original database, and that the WAL file is part of persistent database state and must accompany the database when copied or moved."
+    },
+    {
+      "source": "SQLite current release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "Current upstream release is SQLite 3.53.4 (2026-07-24), SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "grf": {
+    "observed_anchor": "Open PR cohort composition binds UnifiedDB device/inode among other product-generation fields, while productive transaction+restart/readback remains explicitly open.",
+    "generated_reality": "If a committed transaction is still resident only in WAL, a release observer that treats main DB object identity as the persistence-state witness can compose a coherent-looking cohort without proving the semantic commit that restart must recover.",
+    "strongest_counter_reality": "Existing semantic-lineage digest and later restart receipt may already make WAL-file identity unnecessary; pinning a transient WAL byte hash could also create false denials across legitimate checkpoints.",
+    "falsifier": "Execute one nonce-bearing canonical UnifiedDB WAL transaction inside the exact admitted ProductStart process, bind its transaction/semantic epoch to the same cohort, then cleanly restart/reopen and require the exact nonce/epoch to be read back under a newly admitted process generation. Repeat bounded downgrade/library-swap/rollback controls. Success should be independent of whether the transaction was checkpointed before observation."
+  },
+  "go_unusual_experiment": {
+    "count": 1,
+    "id": "GO-OOB-WAL-SIDECAR-SEMANTIC-STATE-V1",
+    "scope": "LOCAL_DISPOSABLE_SQLITE_FIXTURE_ONLY",
+    "reversible": true,
+    "canonical_state_mutated": false,
+    "accepted_vps_mutated": false,
+    "external_effect": false,
+    "sqlite_version": "3.46.1",
+    "note": "The local SQLite version is not release-safe for Frank; the experiment tests WAL state semantics only, not WAL-reset safety.",
+    "setup": {
+      "journal_mode": "wal",
+      "wal_autocheckpoint": 0,
+      "baseline_rows": 1,
+      "baseline_checkpoint": [0, 0, 0]
+    },
+    "baseline_main_file": {
+      "device": 65024,
+      "inode": 787045,
+      "size": 12288,
+      "sha256": "903998fae7da29963bf546be2df26a9497a78d76d8126bdcedb7a44bc2e9cd48"
+    },
+    "treatment": {
+      "action": "Commit a second marker row with automatic checkpointing disabled while keeping the WAL-mode connection open.",
+      "live_rows": 2,
+      "second_connection_rows": 2,
+      "marker_visible_to_both_live_connections": true,
+      "main_device": 65024,
+      "main_inode": 787045,
+      "main_size": 12288,
+      "main_sha256": "903998fae7da29963bf546be2df26a9497a78d76d8126bdcedb7a44bc2e9cd48",
+      "main_identity_and_bytes_unchanged": true,
+      "wal_exists": true,
+      "wal_size": 8272,
+      "wal_sha256": "747f85facaad4beaa57293fdf500190e6b2cb04a45da7fd0d7822e8abd5e6f05",
+      "shm_exists": true
+    },
+    "counterworld": {
+      "action": "Copy only the unchanged main database file, intentionally omitting -wal/-shm, then open the copy.",
+      "rows_observed": 1,
+      "committed_marker_present": false,
+      "result": "PREVIOUSLY_COMMITTED_SEMANTIC_STATE_LOST_FROM_MAIN_FILE_ONLY_SNAPSHOT"
+    },
+    "checkpoint_control": {
+      "rows_after_checkpoint": 2,
+      "marker_present": true,
+      "main_inode": 787045,
+      "main_sha256": "a0824f4f3d4e9ce3f831806ee6c6446fd0c335a5b8b0ee96ea2ba3d789d4a1c3",
+      "main_hash_changed_after_checkpoint": true
+    },
+    "outcome": "SUPPORTED_WAL_SEMANTIC_STATE_BOUNDARY"
+  },
+  "collapse": {
+    "reject": [
+      "same UnifiedDB main-file device/inode/hash => same currently committed semantic database state",
+      "main DB object identity alone => sufficient restart persistence witness"
+    ],
+    "retain": [
+      "connection-bound main DB object guards remain valuable against pathname/object rebinding",
+      "cohort binding remains valuable for preventing cross-generation receipt splicing"
+    ],
+    "do_not_promote": "Do not add a naive stable WAL SHA-256 to the long-lived identity contract; WAL bytes and inode lifecycle can legitimately change at checkpoint/reset boundaries.",
+    "architecture_delta": "Require a cohort-bound semantic commit witness: nonce/semantic epoch written through the exact admitted canonical UnifiedDB connection and read back after restart/reopen under the next admitted ProductStart generation. Treat WAL file identity as supporting transient evidence, not canonical long-lived identity.",
+    "affected": [
+      "F-V01-04 UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-13 SECURITY-RECOVERY-OBSERVABILITY",
+      "PR #574 product receipt cohort composition",
+      "accepted Hostinger restart/readback release gate"
+    ],
+    "promotion_status": "RETAIN_BLOCKER_AND_SHARPEN_TEST_OBLIGATION"
+  },
+  "next_falsifier_sequence": [
+    "On the exact accepted Hostinger ProductStart generation, execute one canonical UnifiedDB WAL transaction carrying a run-owned nonce and semantic epoch.",
+    "Bind ProductStart/runtime/SQLite/DB-object/lineage/freshness observations and the semantic commit witness into one authenticated cohort.",
+    "Restart/reopen through the authorized product lifecycle and require nonce+epoch readback under the successor admitted generation.",
+    "Verify the test passes whether a checkpoint happened before restart and fails closed for rollback/stale DB/WAL separation/downgrade/library-swap controls.",
+    "Only after this productive evidence reconsider F-V01-04/F-V01-13 promotion."
+  ],
+  "nonclaims": [
+    "No accepted Hostinger runtime PASS.",
+    "No production Frank database was opened or mutated.",
+    "No claim that a persistent WAL hash should become a canonical identity field.",
+    "No F-V01-04 or F-V01-13 completion.",
+    "No whole Frank v0.1 acceptance.",
+    "No Harness/effect-authority mutation.",
+    "No final/paid model training authorization."
+  ]
+}

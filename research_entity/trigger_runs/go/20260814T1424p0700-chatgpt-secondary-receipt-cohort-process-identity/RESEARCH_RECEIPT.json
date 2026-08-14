@@ -1,0 +1,172 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1424p0700-chatgpt-secondary-receipt-cohort-process-identity",
+  "trigger": "go",
+  "timestamp_local": "2026-08-14T14:24:12+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "c48af6190bda2db86078e7c634597c35460b7faf",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "implementation_snapshot": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "12eb0dd1301793298710e643da8f035a7454ba3d",
+    "pull_request": 574,
+    "pull_request_state": "OPEN_DRAFT",
+    "candidate_branch": "chatgpt/go-receipt-cohort-20260813",
+    "candidate_head_after_repair": "2c7939ee57fa1ff593ac2d0d94cc48db6acd67cc",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "coordination": {
+    "overlap_checked": [
+      "PR #574 already supplies a cross-generation release-receipt cohort discriminator.",
+      "Concurrent 20260814T1421 production-binding research isolates accepted-host/service/fixed-SQLite deployment identity.",
+      "Concurrent 20260814T1422 WAL-semantic-state research isolates semantic commit evidence beyond main-file identity."
+    ],
+    "novel_delta": "This cycle isolates process-generation aliasing inside PR #574 itself: Linux /proc starttime is tick-granular and is not unique across concurrently created processes. Cohort equality must not rely on process_start_ticks alone as process identity."
+  },
+  "observed_reality": {
+    "candidate_before_repair": {
+      "protocol": "FRANK_PRODUCT_RECEIPT_COHORT_V1_CANDIDATE",
+      "process_binding_fields": [
+        "product_start_generation",
+        "process_start_ticks"
+      ],
+      "missing_discriminators": [
+        "process_pid",
+        "host_boot_id"
+      ],
+      "receipt_authentication_performed": false,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    },
+    "kernel_semantics": {
+      "source": "Linux proc_pid_stat(5) / kernel proc documentation",
+      "field": 22,
+      "meaning": "process start time after system boot",
+      "unit": "clock ticks",
+      "identity_consequence": "tick value alone is not guaranteed unique among processes"
+    },
+    "candidate_repair_commits": [
+      "75dc5fa0ed15c78c06a145550fceb7844c08dbe0",
+      "e5c430a3a2bcdc2a08efa37461d1387594a1d224",
+      "2c7939ee57fa1ff593ac2d0d94cc48db6acd67cc"
+    ],
+    "candidate_after_repair": {
+      "process_binding_fields": [
+        "host_boot_id",
+        "product_start_generation",
+        "process_pid",
+        "process_start_ticks"
+      ],
+      "host_boot_id_validation": "canonical UUID",
+      "process_pid_validation": "positive integer",
+      "ordinary_regression_count_expected": 11,
+      "python_import_path_hardening": "workflow-level PYTHONSAFEPATH=1"
+    },
+    "exact_head_self_hosted_run": {
+      "run_id": 31779646651,
+      "head_sha": "2c7939ee57fa1ff593ac2d0d94cc48db6acd67cc",
+      "status_at_reentry": "QUEUED",
+      "conclusion_at_reentry": null,
+      "classification": "UNKNOWN_PENDING_NOT_PASS"
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Linux man-pages proc_pid_stat(5)",
+      "finding": "starttime is field 22 and is expressed in clock ticks since boot; it is not a globally unique process identifier."
+    },
+    {
+      "source": "Linux kernel proc filesystem documentation",
+      "finding": "start_time records when the process started after system boot."
+    },
+    {
+      "source": "Python command-line security documentation",
+      "finding": "-P / PYTHONSAFEPATH prevents prepending potentially unsafe script/current-directory import paths."
+    },
+    {
+      "source": "GitHub Actions workflow syntax documentation",
+      "finding": "workflow-level env applies to steps unless overridden by a more specific scope."
+    }
+  ],
+  "grf": {
+    "observed_anchor": "PR #574's cohort mechanism already prevents many cross-generation splices but originally used process_start_ticks without PID or boot generation.",
+    "generated_reality": "Two distinct processes can share one start tick, allowing normalized receipts from different processes to retain equal process_start_ticks. If other cohort fields are copied or generation-scoped rather than process-scoped, tick-only process identity can contribute to false composition.",
+    "strongest_counter_reality": "product_start_generation may already be globally unique per process and therefore make PID plus boot ID redundant. The candidate and current receipt schema do not independently prove that uniqueness, so the stronger inference is not admitted.",
+    "falsifier": "Require upstream ProductStart/runtime/persistence/restart observers to independently emit the same admitted host_boot_id, PID and /proc start tick from one observed process generation, then compose them and exercise same-tick/different-PID plus same-PID/start-tick/different-boot controls. Product acceptance still additionally requires accepted-Hostinger productive persistence and restart/readback evidence."
+  },
+  "go_unusual_experiment": {
+    "count": 1,
+    "id": "PROCESS_START_TICK_COLLISION",
+    "scope": "LOCAL_DISPOSABLE_PROCESS_BURST_ONLY",
+    "reversible": true,
+    "canonical_state_mutated": false,
+    "accepted_vps_mutated": false,
+    "frank_database_opened": false,
+    "external_effect": false,
+    "harness_authority": "NONE",
+    "training_authority": "NONE",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "clk_tck": 100,
+    "spawned_processes": 256,
+    "observed_processes": 256,
+    "unique_start_ticks": 8,
+    "collision_tick_count": 8,
+    "max_distinct_pids_same_start_tick": 44,
+    "outcome": "COLLISION_OBSERVED",
+    "interpretation": "process_start_ticks alone is empirically non-unique on the tested Linux lane"
+  },
+  "architecture_delta": {
+    "state": "TESTING",
+    "affected_work_packages": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-01-IDENTITY-SERVER-BINARY"
+    ],
+    "candidate": "Bind normalized release observation cohorts to host_boot_id + process_pid + process_start_ticks in addition to ProductStart generation and existing artifact/database/lineage/freshness fields.",
+    "import_path_delta": "Add PYTHONSAFEPATH=1 to the dedicated self-hosted cohort gate as defense in depth.",
+    "rollback": "Revert the three branch commits; no main merge or productive Hostinger mutation occurred."
+  },
+  "collapse": {
+    "reject": [
+      "process_start_ticks alone uniquely identifies a Linux process generation",
+      "cohort equality proves upstream receipt authenticity",
+      "this candidate closes productive Hostinger persistence/restart acceptance",
+      "F-V01-13 is complete"
+    ],
+    "retain": [
+      "explicit cohort binding is useful against cross-generation evidence splicing",
+      "PID + start ticks + boot ID is a stronger process-generation discriminator than start ticks alone"
+    ],
+    "outcome": "RETAIN_TESTING"
+  },
+  "test_evidence": {
+    "unusual_experiment": "SUPPORTED_COUNTERREALITY",
+    "ordinary_candidate_regressions": "COMMITTED_NOT_YET_EXECUTION_VERIFIED_AT_REENTRY",
+    "self_hosted_exact_head": "QUEUED_UNKNOWN_PENDING",
+    "production_hostinger": "NOT_EXECUTED_THIS_CYCLE"
+  },
+  "reentry": {
+    "status": "RESEARCH_DELTA",
+    "next_falsifier": "Obtain exact-head self-hosted 11/11 regression evidence; then require real upstream normalized receipts to carry independently observed boot_id/PID/start-tick provenance and test accepted-Hostinger ProductStart -> productive UnifiedDB semantic commit -> restart/readback composition.",
+    "promotion_rule": "Do not promote from queued CI, candidate code, synthetic receipt equality or local process-collision evidence alone."
+  },
+  "authority_invariants": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "effect_authority_mutated": false,
+    "canonical_state_mutated": false,
+    "final_paid_training_authorized": false,
+    "together_api_used": false
+  }
+}

@@ -1,23 +1,35 @@
 module clay.research.autonomous_swarm_coordination
-version "1.1"
+version "2.0"
 status PROJECT_OWNER_FIXED_GLOBAL_OPERATION_LAW
 
 goal="Frank v0.1 voll lauffähig auf Andreas PC"
 center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
 work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
 live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+live_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+omnisource=@research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay
+go_q23_bridge=@research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay
 state=UnifiedDB
 relevance_topology=ClayGraph
 coordination_language=latest_ClayCode
 
 law UNIVERSAL_SELF_COORDINATION=MANDATORY
-law NO_WORKER_WORKS_IN_ISOLATION=true
+law NO_WORKER_WORKS_IN_ISOLATION_FROM_SHARED_MATERIAL_STATE=true
+law EXPLORATORY_LOCAL_MEMORY_MAY_REMAIN_PRIVATE_UNTIL_MATERIAL=true
 law NO_PERMANENT_CHIEF=true
+law NO_PERMANENT_TOPIC_OWNER=true
 law MANUAL_CENTRAL_DISPATCH=OPTIONAL
 law EVIDENCE_OUTRANKS_COORDINATION_ROLE=true
 law DUPLICATE_WORK_REQUIRES_EXPLICIT_REPLICATION=true
 law FIELD_MATCHED_TOOL_API_EXCHANGE=MANDATORY
 law TOOL_API_RECOMMENDATION_IS_PROPOSAL_NOT_AUTHORITY=true
+law HISTORICAL_WORKER_PERFORMANCE_IS_ROUTING_PRIOR_NOT_CASTE=true
+law COMMUNICATION_TOPOLOGY_IS_ADAPTIVE_AND_MEASURABLE=true
+law PUSH_ONLY_COORDINATION_IS_INSUFFICIENT=true
+law QUESTION_REQUEST_PULL_AND_ACK_SEMANTICS_ARE_FIRST_CLASS=true
+law OBSERVER_AND_COORDINATION_BACKACTION_MUST_BE_MEASURED=true
+law SHARED_MEMORY_IS_SELECTIVE_NOT_RAW_FULL_HISTORY=true
 law TOGETHER_TOGETHER_AI_PROVIDER_IS_FORBIDDEN=true
 law TOGETHER_TABOO_CAN_ONLY_BE_REMOVED_BY_EXPLICIT_PROJECT_OWNER_OVERRIDE=true
 
@@ -25,9 +37,11 @@ record SwarmBlackboardView {
   canonical_parent:Ref
   mission_stage:Ref
   active_workers:Set<Ref>
+  worker_profiles:Set<Ref>
   capabilities:Set<Ref>
   active_work:Set<Ref>
   ready_work:Set<Ref>
+  leases:Set<Ref>
   blockers:Set<Ref>
   hypotheses:Set<Ref>
   counterhypotheses:Set<Ref>
@@ -35,16 +49,86 @@ record SwarmBlackboardView {
   negative_results:Set<Ref>
   recent_receipts:Set<Ref>
   cross_branch_deltas:Set<Ref>
+  knowledge_needs:Set<Ref>
+  open_counter_challenges:Set<Ref>
+  subscriptions:Set<Ref>
+  q23_exchange:Set<Ref>
   possibility_frontier:Set<Ref>
+  swarm_telemetry:Ref?
+}
+
+record SwarmTelemetrySnapshot {
+  snapshot_id:Ref
+  observed_at:Time
+  repo_head:Ref
+  mission_stage:Ref
+  active_worker_count:Int
+  active_work_count:Int
+  completed_material_delta_count:Int
+  executed_receipt_count:Int
+  stale_execution_count:Int
+  work_revision_drift_count:Int
+  duplicate_work_avoided:Int
+  duplicate_work_created:Int
+  duplicate_distribution_avoided:Int
+  lease_expiry_or_worker_stale_count:Int
+  hypothesis_created_or_revised:Int
+  counterhypothesis_created_or_revised:Int
+  hypothesis_closed_or_refuted:Int
+  negative_result_count:Int
+  contradiction_open_count:Int
+  contradiction_resolved_count:Int
+  material_reentry_pending:Int
+  material_reentry_closed:Int
+  affected_branch_recall:Score?
+  false_interrupt_rate:Score?
+  source_lineage_diversity:Score?
+  shared_ancestry_pseudo_replication_count:Int
+  coordination_latency:Duration?
+  observer_backaction_cost:Score?
+  token_context_cost:Score?
+  CPU_RAM_IO_network_cost:Score?
+  go_q23_open_questions:Int
+  go_q23_closed_questions:Int
+  notes:Clay?
+}
+
+record WorkerCapabilityProfile {
+  profile_id:Ref
+  worker:Ref
+  provider:Ref
+  model:Ref
+  observed_capabilities:Set<Ref>
+  execution_surfaces:Set<Ref>
+  domain_evidence:Map<Ref,Ref>
+  completed_material_work:Int
+  executed_work:Int
+  direct_measurement_rate:Score?
+  current_work_credit_rate:Score?
+  stale_result_rate:Score?
+  duplicate_or_collision_rate:Score?
+  falsifier_yield:Score?
+  negative_result_yield:Score?
+  recovery_quality:Score?
+  cross_branch_reuse:Score?
+  source_diversity:Score?
+  mean_resource_cost:Score?
+  sample_count:Int
+  last_updated:Time
+  uncertainty:Score
 }
 
 rule every_worker.before_material_work -> live_refresh.refresh
 rule every_worker.before_material_work -> read(SwarmBlackboardView)
-rule every_worker.before_material_work -> detect(overlap,reuse,dependencies,invalidators,blockers,replication_need)
+rule every_worker.before_material_work -> detect(overlap,reuse,dependencies,invalidators,blockers,replication_need,knowledge_needs,q23_relevance)
 rule worker_without_fresh_blackboard -> DEGRADED_COORDINATION
 rule DEGRADED_COORDINATION -> no_claim_of_global_priority_or_nonoverlap
+rule low_sample_worker_profile -> keep_high_uncertainty
+rule worker_profile -> decision_support_only
+rule strong_recent_direct_evidence_updates_profile -> recompute bids
+rule profile_history_never_blocks_exploration_by_itself
 
-type OpportunityClass = CRITICAL_PATH_BUILD|BLOCKER_REMOVAL|BUG_REPAIR|DISCRIMINATING_EXPERIMENT|COUNTERHYPOTHESIS_TEST|INDEPENDENT_REPLICATION|CROSS_BRANCH_INTEGRATION|ARCHITECTURE_SIMPLIFICATION|PERFORMANCE_MEASUREMENT|RECOVERY_SAFETY_TEST|EXPLORATORY_RESEARCH
+type OpportunityClass = CRITICAL_PATH_BUILD|BLOCKER_REMOVAL|BUG_REPAIR|DISCRIMINATING_EXPERIMENT|COUNTERHYPOTHESIS_TEST|INDEPENDENT_REPLICATION|CROSS_BRANCH_INTEGRATION|ARCHITECTURE_SIMPLIFICATION|PERFORMANCE_MEASUREMENT|RECOVERY_SAFETY_TEST|EXPLORATORY_RESEARCH|KNOWLEDGE_NEED_RESPONSE|Q23_CROSS_TRIGGER_RESPONSE|COORDINATION_REPAIR
 
 record SwarmOpportunity {
   id:Ref
@@ -57,13 +141,18 @@ record SwarmOpportunity {
   falsification_value:Score
   cross_branch_reuse:Score
   capability_fit:Score
+  historical_worker_fit:Score?
   execution_availability:Score
   reversibility:Score
   reproducibility:Score
   urgency:Score
+  source_diversity_gain:Score?
+  q23_bridge_value:Score?
   collision_risk:Score
   shared_ancestry_risk:Score
   resource_cost:Score
+  coordination_cost:Score?
+  observer_backaction_risk:Score?
   authority_risk:Score
   staleness:Score
   dependencies:Set<Ref>
@@ -71,37 +160,169 @@ record SwarmOpportunity {
   completion_test:Clay
 }
 
-swarm_score(o)=o.goal_fit+o.expected_impact+o.dependency_unblock_value+o.information_gain+o.uncertainty_reduction+o.falsification_value+o.cross_branch_reuse+o.capability_fit+o.execution_availability+o.reversibility+o.reproducibility+o.urgency-o.collision_risk-o.shared_ancestry_risk-o.resource_cost-o.authority_risk-o.staleness
+swarm_score(o)=o.goal_fit+o.expected_impact+o.dependency_unblock_value+o.information_gain+o.uncertainty_reduction+o.falsification_value+o.cross_branch_reuse+o.capability_fit+coalesce(o.historical_worker_fit,0)+o.execution_availability+o.reversibility+o.reproducibility+o.urgency+coalesce(o.source_diversity_gain,0)+coalesce(o.q23_bridge_value,0)-o.collision_risk-o.shared_ancestry_risk-o.resource_cost-coalesce(o.coordination_cost,0)-coalesce(o.observer_backaction_risk,0)-o.authority_risk-o.staleness
 
-rule opportunity_frontier includes ready_work+open_blockers+unresolved_conflicts+high_value_missing_tests+materially_useful_exploration
+rule opportunity_frontier includes ready_work+open_blockers+unresolved_conflicts+high_value_missing_tests+knowledge_needs+q23_bridge_requests+materially_useful_exploration+coordination_repairs
 rule impossible_or_unauthorized -> filter_out
 rule already_completed -> reuse_not_repeat
 rule blocked_without_unblock_path -> defer
+rule repeated_same_ancestry_local_optimum -> increase diversity_gain_for_alternative_source_or_worker
 
 record WorkBid {
   worker:Ref
   opportunity:Ref
   score:Score
   capability_evidence:Set<Ref>
+  historical_profile_ref:Ref?
   transfer_cost:Score
   collision_risk:Score
   partition:Clay
   replication_intent:Bool
+  ancestry_difference:Clay?
   completion_test:Clay
 }
 
 rule available_worker -> bid_on(best_nonoverlapping_opportunities)
 rule bid_value=swarm_score(opportunity)-transfer_cost-collision_risk
 rule valid_highest_bid -> lease(work)
-rule tie -> prefer lower_cost+higher_reversibility+stronger_direct_measurement
+rule tie -> prefer lower_cost+higher_reversibility+stronger_direct_measurement+more_independent_ancestry
 rule lease_expired_or_worker_stale -> return_to_frontier
 rule materially_new_evidence -> recompute_frontier_and_bids
 rule worker_capability_change -> recompute_frontier_and_bids
 rule blocker_removed -> recompute_frontier_and_bids
 rule mission_stage_change -> recompute_frontier_and_bids
+rule current_work_spec_revision_change -> revalidate_active_worker_before_next_effect
 rule worker_may_abandon_or_handoff_when_new_work_dominates_expected_value
 
-// Field-matched capability exchange: workers actively help each other discover better tools/APIs.
+// Heartbeat and high-churn work protection.
+record WorkerHeartbeat {
+  worker:Ref
+  active_work:Ref?
+  work_spec_rev:Ref?
+  repo_head_seen:Ref
+  current_phase:RESEARCH|BUILD|TEST|WAIT_EXTERNAL|ANALYZE|FUSE|HANDOFF
+  last_material_progress:Time?
+  blocker:Ref?
+  lease_valid_until:Time?
+  observed_at:Time
+}
+
+rule active_worker -> publish_or_make_observable_heartbeat_at_safe_checkpoints
+rule high_churn_work -> shorter_revalidation_interval
+rule heartbeat_stale -> mark_worker_stale + protect_work_from_duplicate_effect + allow_rebid_after_lease_rule
+rule work_rev_changed_since_execution_start -> result_is_diagnostic_until_current_spec_adopts_or_reexecutes
+
+// Selective memory: local exploration vs shared institutional state.
+record LocalExplorationMemory {
+  worker:Ref
+  private_hypotheses:Set<Ref>
+  partial_searches:Set<Ref>
+  speculative_alternatives:Set<Ref>
+  scratch_failures:Set<Ref>
+}
+
+record SharedInstitutionalDelta {
+  delta:Ref
+  provenance:Set<Ref>
+  evidence_class:Ref
+  affected_work:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  materiality:Score
+  payload_ref:Ref
+}
+
+rule speculative_nonmaterial_local_state -> keep_local_or_ephemeral
+rule local_state_becomes_material_to_other_work -> canonicalize_provenance + publish SharedInstitutionalDelta
+rule executed_receipt|material_negative_result|high_value_hypothesis|counterhypothesis|architecture_delta|test_obligation|blocker|invalidator -> shared_institutional_state
+rule raw_chain_of_thought|full_conversation_history -> NOT_SHARED_INSTITUTIONAL_EVIDENCE
+rule receiving_worker -> retrieve_task_conditioned_subgraph_not_full_history_dump
+
+// Communication v2.
+type SwarmMessageKind = KNOWLEDGE_NEED|DISCOVERY_BEACON|MATERIAL_DELTA|COUNTER_CHALLENGE|PULL_REQUEST|REENTRY_ACK|SATURATION_NOTICE|ANTI_ENTROPY_REPAIR
+
+record SwarmMessage {
+  message_id:Ref
+  kind:SwarmMessageKind
+  from_worker:Ref
+  to_workers:Set<Ref>?
+  semantic_tags:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  question_or_summary:Clay?
+  payload_ref:Ref?
+  source_refs:Set<Ref>
+  content_hash:Hash
+  provenance_hash:Hash
+  semantic_epoch:Ref
+  work_spec_rev:Ref?
+  urgency:INDEX_ONLY|NEXT_CHECKPOINT|NEXT_SAFE_POINT|CRITICAL_INTERRUPT
+  requires_reply:Bool
+  created_at:Time
+}
+
+record ReentryAckState {
+  message:Ref
+  worker:Ref
+  delivered:Bool
+  reconstructed:Bool
+  plan_revalidated:Bool
+  used:Bool
+  local_effect:Bool
+  causal_credit_supported:Bool
+  ack_epoch:Ref
+  observed_at:Time
+}
+
+rule worker_missing_material_fact -> publish KNOWLEDGE_NEED
+rule worker_finds_potentially_material_external_or_internal_finding -> publish DISCOVERY_BEACON compactly
+rule material_semantic_or_work_change -> publish MATERIAL_DELTA by relevance
+rule high_impact_claim -> publish_or_reuse COUNTER_CHALLENGE lane
+rule digest_or_beacon_relevant_but_payload_not_present -> receiver may PULL_REQUEST
+rule branch_locally_saturated_after_route_changes -> publish SATURATION_NOTICE with attempted_routes
+rule delivery -> track ReentryAckState
+rule network_delivery != reconstructed
+rule reconstructed != plan_revalidated
+rule plan_revalidated != used
+rule used != local_effect
+rule local_effect != causal_credit
+
+// Adaptive communication topology.
+type RouteMode = TARGETED_FULL_REF|TARGETED_DIGEST|SUBSCRIPTION_PULL|DENSE_FANOUT|ANTI_ENTROPY_REPAIR|INDEX_ONLY
+
+record SwarmSubscription {
+  worker_or_branch:Ref
+  semantic_tags:Set<Ref>
+  work_refs:Set<Ref>
+  hypothesis_refs:Set<Ref>
+  knowledge_need_refs:Set<Ref>
+  expires_or_revalidate_at:Time?
+}
+
+record AdaptiveRouteDecision {
+  message:Ref
+  mode:RouteMode
+  targets:Set<Ref>
+  dependency_span:Score?
+  semantic_span:Score?
+  urgency:Score
+  payload_cost:Score
+  branch_load_cost:Score?
+  stale_risk:Score
+  repair_risk:Score?
+  observer_backaction_risk:Score?
+  confidence:Score
+  reason:Clay
+}
+
+rule route_material_message -> evaluate semantic_match+work_match+causal_dependents+subscriptions+urgency+payload_cost+branch_load+stale_risk+repair_risk+observer_backaction
+rule ordinary_local_delta -> prefer TARGETED_DIGEST|TARGETED_FULL_REF|SUBSCRIPTION_PULL
+rule high_impact_dense_invalidation -> allow DENSE_FANOUT
+rule low_relevance -> INDEX_ONLY
+rule missing_predecessor|projection_gap|ack_epoch_gap -> ANTI_ENTROPY_REPAIR
+rule same_hot_truth_store_observer_when_isolated_projection_possible -> penalize observer_backaction_risk
+rule route_policy_change -> candidate_until_telemetry_improves_declared_metrics
+
+// Field-matched capability exchange.
 type CapabilityCandidateKind = TOOL|API|MODEL_GATEWAY|RUNTIME|LIBRARY|SERVICE|DATA_SOURCE
 
 record CapabilityRecommendation {
@@ -149,32 +370,41 @@ rule FORBIDDEN -> never_use
 rule FORBIDDEN -> never_route_work_through
 rule FORBIDDEN -> preserve_as_owner_policy_not_technical_negative_result
 
-// Exploration/exploitation balance. Critical path may never starve falsification or novel search.
+// Exploration/exploitation balance.
 rule swarm_capacity.default_partition=[BUILD_AND_BLOCKER_DOMINANT,COUNTEREVIDENCE_RESERVED,EXPLORATION_RESERVED]
 rule exact_fraction_is_adaptive_not_fixed
 rule high_uncertainty -> increase_counterevidence_and_exploration
 rule hard_release_gate_near -> increase_build_test_recovery
-rule repeated_local_optimum -> increase_out_of_distribution_and_architecture_exploration
+rule repeated_local_optimum|low_source_diversity -> increase_out_of_distribution_and_architecture_exploration
+rule high_duplicate_rate -> increase partition_separation+subscription_pull+lease_precision
+rule high_stale_rate -> increase work_revision_revalidation+shorten_high_churn_leases
+rule high_false_interrupt_rate -> tighten route relevance
+rule low_affected_branch_recall -> widen dependency routing+anti_entropy
 
-// Important claims receive an adversarial second lane. Shared ancestry is explicitly marked.
+// Important claims receive adversarial second lanes.
 rule high_impact_claim -> create_or_reuse_counterhypothesis_lane
 rule high_impact_architecture_choice -> seek_independent_or_adversarial_check_when_capacity_allows
 rule same_source_or_same_prompt_lineage -> SHARED_ANCESTRY_NOT_INDEPENDENT_REPLICATION
+rule different_worker_label_without_different_evidence_ancestry -> SHARED_ANCESTRY_NOT_INDEPENDENT_REPLICATION
 rule negative_result -> preserve_and_route_to_affected_workers
 
-// Material result distribution is targeted, not broadcast spam.
+// Material result distribution and q23 bridge.
 rule material_delta -> identify_semantically_affected_work_claims_rooms
 rule material_delta -> publish_center_receipt
+rule material_delta q23_relevant -> go_q23_bridge.route_if_applicable
+rule q23_material_delta_or_question -> ingest through go_q23_bridge+omnisource
 rule affected_worker -> ingest_at_next_safe_point_or_interrupt_if_high_impact_conflict
 rule result_that_changes_critical_path -> immediate_reprioritization
 rule result_that_invalidates_claim -> interrupt_affected_work_before_next_effect
 
-// Each worker continues recursively while useful work exists and its current invocation budget permits.
+// Recursive continuation.
 rule worker.after_material_outcome -> live_refresh.refresh
 rule worker.after_material_outcome -> fuse_result_into_shared_state
+rule worker.after_material_outcome -> update WorkerCapabilityProfile from actual receipt
+rule worker.after_material_outcome -> update SwarmTelemetrySnapshot when role permits
 rule worker.after_material_outcome -> recompute_frontier
 rule worker.after_material_outcome -> select_next_highest_valid_nonoverlap_work
-rule recurrence_continue iff expected_marginal_value(next_round)>cost+risk and invocation_budget_remains
+rule recurrence_continue iff expected_marginal_value(next_round)>compute+coordination+observer_backaction+context_noise+risk and invocation_budget_remains
 rule recurrence_halt when no_valid_work|blocked|budget_exhausted|owner_gate|unsafe_or_unauthorized
 rule halt -> durable_handoff_with_best_next_frontier
 
@@ -183,11 +413,35 @@ rule Ubuntu_remote_build_test -> prefer verified_hostinger_github_runner when co
 rule final_release_truth -> Andreas_Ubuntu_target_required
 rule queued != executed
 rule workflow_started != test_passed
+rule stale_work_execution != current_work_pass
 rule only_execution_receipt_can_claim_runtime_effect
 
-invariant ALL_CURRENT_AND_FUTURE_WORKERS_SELF_COORDINATE_FROM_SHARED_STATE
+measure material_progress_delta_rate
+measure executed_evidence_yield
+measure stale_work_execution_rate
+measure work_revision_drift_rate
+measure duplicate_work_avoidance_rate
+measure duplicate_distribution_suppression_rate
+measure lease_stale_recovery_rate
+measure capability_profile_routing_accuracy
+measure source_lineage_diversity
+measure pseudo_replication_rate
+measure knowledge_need_response_rate
+measure saturation_route_change_success_rate
+measure affected_branch_recall
+measure false_interrupt_rate
+measure reentry_closure_rate
+measure observer_backaction_cost
+measure coordination_CPU_RAM_IO_network_token_context_cost
+measure go_q23_bidirectional_closure
+
+invariant ALL_CURRENT_AND_FUTURE_WORKERS_SELF_COORDINATE_FROM_SHARED_MATERIAL_STATE
+invariant EXPLORATION_DIVERSITY_IS_NOT_ERASED_BY_GLOBAL_MEMORY
 invariant ALL_CURRENT_AND_FUTURE_WORKERS_EXCHANGE_FIELD_MATCHED_TOOL_API_RECOMMENDATIONS
 invariant EACH_WORKER_INDEPENDENTLY_SEARCHES_FOR_BETTER_CAPABILITY_OPTIONS_WHEN_MATERIAL
+invariant HISTORICAL_WORKER_PROFILE_NEVER_MINTS_TOPIC_OWNERSHIP_OR_TRUTH
+invariant SHARED_MEMORY_NEVER_REQUIRES_RAW_CHAIN_OF_THOUGHT
+invariant COMMUNICATION_DELIVERY_NEVER_MINTS_CAUSAL_CREDIT
 invariant TOGETHER_TOGETHER_AI_IS_TABOO_UNTIL_EXPLICIT_OWNER_REVOCATION
 invariant SELF_COORDINATION_NEVER_MINTS_TRUTH
 invariant SELF_COORDINATION_NEVER_EXPANDS_EFFECT_AUTHORITY
@@ -195,3 +449,4 @@ invariant FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT
 invariant FRANK_NEVER_MUTATES_CLAY
 invariant LIVE_KNOWLEDGE_REFRESH_REPEATS_INSIDE_RECURSION
 invariant USEFUL_DISSENT_AND_NEGATIVE_RESULTS_SURVIVE_FUSION
+invariant Q23_AND_GO_EXCHANGE_RESULTS_AND_QUESTIONS_BIDIRECTIONALLY

@@ -1,0 +1,168 @@
+module clay.hyperposition.h7.reduction_gate
+version "HYP-RC7-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// H7 distinguishes lossless semantic reification from actual interaction reduction.
+// A semantic n-ary relation may lower to a relation-node + typed incidence edges without
+// implying that its dynamics can be replaced by member-member pairwise interactions.
+
+record AlternativeRef {
+  alternative_id:Ref
+  hypothesis_id:Ref
+  native_self:Ref
+  base_epoch:Epoch
+  branch_revision:Int
+  provenance:Set<EvidenceRef>
+  status:CURRENT|UNKNOWN|CONFLICT|REVOKED|STALE
+}
+
+record RoleBinding {
+  member:Ref
+  role:Symbol
+  ordinal:Int?
+  scope:Scope?
+}
+
+record NarySemanticRelation {
+  relation_id:Ref
+  relation_type:Symbol
+  members:Ordered<RoleBinding>
+  alternatives:Set<AlternativeRef>
+  semantic_epoch:Epoch
+  provenance:Set<EvidenceRef>
+  uncertainty:Real[0,1]?
+  status:CURRENT|UNKNOWN|CONFLICT|REVOKED|STALE
+}
+
+record TopologyIdentity {
+  semantic_hash:Hash
+  active_hash:Hash
+  coordination_hash:Hash
+  physical_hash:Hash
+  source_epoch:Epoch
+}
+
+record InteractionKernel {
+  relation:Ref
+  kernel_ref:Ref
+  material_reads:Set<Ref>|UNKNOWN
+  writes:Set<Ref>
+  effect_class:PURE|READ_ONLY_EXTERNAL|REVERSIBLE|EFFECTFUL|SECURITY_SENSITIVE|UNKNOWN
+  gain:Real?
+  delay:Duration?
+  timescale:Duration?
+  recurrent:Bool
+}
+
+type ReductionClass = REIFICATION_REDUCTION | MEMBER_PAIRWISE_REDUCTION | STATE_MACHINE_REDUCTION
+
+record ReductionReceipt {
+  receipt_id:Ref
+  source_relation:Ref
+  reduction_class:ReductionClass
+  candidate_representation:Ref
+  semantic_roundtrip_exact:Bool
+  role_binding_exact:Bool
+  provenance_exact:Bool
+  epoch_identity_exact:Bool
+  intervention_response_error:Real?
+  replay_divergence:Real?
+  workspace_selection_delta:Real?
+  outcome_delta:Real?
+  latency_delta:Duration?
+  memory_delta:Bytes?
+  contention_delta:Real?
+  recovery_delta:Real?
+  evidence:Set<EvidenceRef>
+  status:SUPPORTED|CHALLENGED|REFUTED|UNKNOWN
+}
+
+record HyperpositionReductionDecision {
+  relation:Ref
+  semantic_representation:Ref
+  physical_representation:Ref
+  interaction_representation:Ref
+  reification_receipt:ReductionReceipt
+  interaction_receipt:ReductionReceipt?
+  decision:KEEP_NARY_SEMANTICS_REIFIED_RUNTIME|PAIRWISE_INTERACTION_ACCEPTED|STATE_MACHINE_ACCEPTED|NATIVE_HIGHER_ORDER_RUNTIME_JUSTIFIED|UNKNOWN
+  rollback:RecoveryRef
+}
+
+fn reification_gate(r:NarySemanticRelation, candidate:Ref) -> ReductionReceipt {
+  // Relation-node + role-labelled incidence edges are allowed as a physical lowering only
+  // when exact semantic identity can be reconstructed.
+  let x = compare_roundtrip(r,candidate)
+  require x.relation_id_exact
+  require x.member_identity_exact
+  require x.role_binding_exact
+  require x.ordinal_exact
+  require x.provenance_exact
+  require x.semantic_epoch_exact
+  require x.alternative_identity_exact
+  return receipt(REIFICATION_REDUCTION,x)
+}
+
+fn interaction_reduction_gate(full:InteractionKernel, reduced:Ref, matched:ExperimentSpec) -> ReductionReceipt {
+  // Structural reification success is not evidence of interaction reducibility.
+  // Compare interventions and outcomes under matched state/input/budget.
+  require matched.inputs
+  require matched.state_epochs
+  require matched.seeds
+  require matched.effect_policy
+  require matched.observation_budget
+  let result = run_matched_intervention_bank(full,reduced,matched)
+  return receipt(MEMBER_PAIRWISE_REDUCTION,result)
+}
+
+fn choose_runtime(r:NarySemanticRelation, kernel:InteractionKernel, candidates:Set<Ref>, budget:Budget) -> HyperpositionReductionDecision {
+  let reified = best_exact_reification(r,candidates,budget)
+  require reified.semantic_roundtrip_exact
+  let reduced = best_interaction_reduction(kernel,candidates,budget)
+
+  if reduced.exists && reduced.intervention_response_error <= configured_equivalence_tolerance()
+                    && reduced.replay_divergence <= configured_equivalence_tolerance()
+                    && !dominated_by_full_or_reified(reduced) {
+    return decision(PAIRWISE_INTERACTION_ACCEPTED,reified,reduced)
+  }
+
+  if native_higher_order_candidate(kernel,candidates).exists
+     && materially_beats(reified,metrics=[latency,memory,contention,recovery,outcome])
+     && preserves_semantics_authority_provenance() {
+    return decision(NATIVE_HIGHER_ORDER_RUNTIME_JUSTIFIED,reified,native_higher_order_candidate(kernel,candidates))
+  }
+
+  return decision(KEEP_NARY_SEMANTICS_REIFIED_RUNTIME,reified,NONE)
+}
+
+// Measurement law: no opaque hyperposition score.
+rule higher_order_irreducibility uses [intervention_response_error,replay_divergence,workspace_selection_delta,outcome_delta,latency_delta,memory_delta,contention_delta,recovery_delta]
+rule PID_or_PEID_style_synergy is auxiliary_evidence_only
+rule multivariate_PID_lattice_result never sole promotion criterion
+rule temporal_topology is measured across multiple scales not one epoch hash
+
+// Physical branch-state policy inherited from the refuted PSW candidate.
+rule unresolved_alternative_storage may_use immutable_base+sparse_overlay
+rule cross_alternative_compute_reuse requires PURE + complete_or_conservative_material_read_set
+rule UNKNOWN_material_reads -> no_cross_alternative_compute_reuse
+rule equal_payload_without_equal_hypothesis_provenance_epoch_revision -> no_merge
+rule unresolved_alternatives never multi_execute external_or_security_sensitive_effects
+
+// Scientific/authority boundaries.
+invariant semantic_nary_identity_may_survive_pairwise_physical_lowering
+invariant reification_reduction != interaction_reduction
+invariant graph_projection != causal_equivalence
+invariant pairwise_projection_success_on_one_regime != universal_reducibility
+invariant higher_order_representation != consciousness_evidence
+invariant activation_or_synergy != truth
+invariant model_or_graph_or_gwt_salience_never_mints_effect_authority
+invariant Frank_self_harness_authority_is_proposal_only
+
+counterhypothesis H0_HYP_RC7 {
+  proposition="Current ClayGraph hyperrelation tables plus conventional relation-node lowering and existing intervention receipts already provide all useful H7 behavior; a new named reduction-gate abstraction adds complexity without changing executable Frank v0.1 behavior."
+  discriminator="Implement H7 only as tests/receipts first; promote a dedicated runtime abstraction only if it removes duplicated logic or improves measured correctness/latency/recovery on real Frank traces."
+}
+
+counterhypothesis H0_NATIVE_HYPEREDGE {
+  proposition="A native higher-order runtime primitive is unnecessary for Frank v0.1 because relation-node reification preserves semantics and pairwise/state-machine reductions cover all observed target dynamics at lower complexity."
+  discriminator="Real Frank matched intervention suite comparing reified incidence runtime, best member-pairwise/state-machine reduction and native higher-order candidate under identical semantics and resource budgets."
+}

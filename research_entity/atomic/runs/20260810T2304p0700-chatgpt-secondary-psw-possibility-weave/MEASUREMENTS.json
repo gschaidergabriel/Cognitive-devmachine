@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-PSW-001",
+  "environment":{"python":"3.13.5","platform":"Linux-6.18.35-x86_64-with-glibc2.41","machine":"x86_64","note":"local container microbenchmark; not target VPS"},
+  "main_scaling":{"cells":168,"fields":[64,256,1024],"branches":[4,16,64,256,1024],"divergence":[0.0,0.01,0.05,0.10,0.25,0.50],"read_sets":[4,16],"note":"1024-branch cells were run for F=256 and F=1024; smaller branch grid covered all F values"},
+  "aggregate_medians":{"overlay_wire_over_full":0.1778757338,"psw_wire_over_full":0.1845660361,"psw_wire_over_overlay":1.0151772977,"overlay_memo_time_over_full":0.7173810159,"psw_time_over_full":0.7203277532,"psw_time_over_overlay_memo":1.0093663139,"psw_faster_cells":65,"overlay_memo_faster_cells":103},
+  "mechanism_identity":{"all_cells_overlay_memo_unique_read_signature_count_equals_psw_group_count":true,"interpretation":"The defining pure-transition sharing count of PSW was exactly reproduced by conventional sparse overlay memoization keyed by the same exact read signature."},
+  "representative_replication":{"state_fields":1024,"branches":256,"read_set":16,"seeds":6,"rows":[
+    {"divergence":0.0,"median_unique_signatures":1.0,"sharing_factor":256.0,"overlay_wire_over_full":0.007842,"psw_wire_over_full":0.008382,"overlay_memo_time_over_full":0.238531,"psw_time_over_full":0.246841,"psw_over_overlay_memo":1.034910},
+    {"divergence":0.01,"median_unique_signatures":37.5,"sharing_factor":6.827881,"overlay_wire_over_full":0.017550,"psw_wire_over_full":0.018090,"overlay_memo_time_over_full":0.403348,"psw_time_over_full":0.406548,"psw_over_overlay_memo":1.005672},
+    {"divergence":0.05,"median_unique_signatures":145.5,"sharing_factor":1.759970,"overlay_wire_over_full":0.057509,"psw_wire_over_full":0.058048,"overlay_memo_time_over_full":0.750668,"psw_time_over_full":0.740064,"psw_over_overlay_memo":0.986425},
+    {"divergence":0.10,"median_unique_signatures":213.0,"sharing_factor":1.201904,"overlay_wire_over_full":0.107334,"psw_wire_over_full":0.107873,"overlay_memo_time_over_full":0.978591,"psw_time_over_full":0.952187,"psw_over_overlay_memo":0.981092},
+    {"divergence":0.25,"median_unique_signatures":253.0,"sharing_factor":1.011858,"overlay_wire_over_full":0.257761,"psw_wire_over_full":0.258300,"overlay_memo_time_over_full":1.169066,"psw_time_over_full":1.122234,"psw_over_overlay_memo":0.967915},
+    {"divergence":0.50,"median_unique_signatures":256.0,"sharing_factor":1.0,"overlay_wire_over_full":0.507694,"psw_wire_over_full":0.508234,"overlay_memo_time_over_full":1.194234,"psw_time_over_full":1.180237,"psw_over_overlay_memo":0.996123}
+  ]},
+  "representative_absolute_batches":{"state_fields":1024,"branches":256,"read_set":16,"median_over_six_seeds":[
+    {"divergence":0.0,"full_wire_bytes":3619457,"overlay_wire_bytes":28386,"psw_wire_bytes":30339,"full_batch_ns":1113008,"overlay_memo_batch_ns":274787,"psw_batch_ns":279612},
+    {"divergence":0.01,"full_wire_bytes":3615537,"overlay_wire_bytes":63457,"psw_wire_bytes":65410,"full_batch_ns":1106497,"overlay_memo_batch_ns":441892,"psw_batch_ns":446644},
+    {"divergence":0.05,"full_wire_bytes":3622424,"overlay_wire_bytes":208323,"psw_wire_bytes":210276,"full_batch_ns":1082790,"overlay_memo_batch_ns":821294,"psw_batch_ns":806065},
+    {"divergence":0.10,"full_wire_bytes":3620813,"overlay_wire_bytes":388641,"psw_wire_bytes":390594,"full_batch_ns":1099990,"overlay_memo_batch_ns":1074527,"psw_batch_ns":1055017},
+    {"divergence":0.25,"full_wire_bytes":3619302,"overlay_wire_bytes":932878,"psw_wire_bytes":934831,"full_batch_ns":1125914,"overlay_memo_batch_ns":1318716,"psw_batch_ns":1267364},
+    {"divergence":0.50,"full_wire_bytes":3619506,"overlay_wire_bytes":1837563,"psw_wire_bytes":1839516,"full_batch_ns":1127229,"overlay_memo_batch_ns":1349519,"psw_batch_ns":1339458}
+  ]},
+  "large_branch_examples":{"state_fields":1024,"branches":1024,"examples":[
+    {"divergence":0.0,"read_set":16,"unique_signatures":1,"sharing_factor":1024.0,"full_wire_bytes":14474241,"overlay_wire_bytes":71414,"psw_wire_bytes":79535,"overlay_memo_time_over_full":0.214212,"psw_time_over_full":0.221300},
+    {"divergence":0.01,"read_set":16,"unique_signatures":152,"sharing_factor":6.736842,"full_wire_bytes":14483338,"overlay_wire_bytes":211699,"psw_wire_bytes":219820,"overlay_memo_time_over_full":0.387884,"psw_time_over_full":0.391452},
+    {"divergence":0.10,"read_set":16,"unique_signatures":831,"sharing_factor":1.232250,"full_wire_bytes":14507130,"overlay_wire_bytes":1512552,"psw_wire_bytes":1520673,"overlay_memo_time_over_full":0.895742,"psw_time_over_full":0.887914},
+    {"divergence":0.50,"read_set":16,"unique_signatures":1024,"sharing_factor":1.0,"full_wire_bytes":14477901,"overlay_wire_bytes":7307745,"psw_wire_bytes":7315866,"overlay_memo_time_over_full":1.354959,"psw_time_over_full":1.422444}
+  ]},
+  "guarded_value_proxy":{"representative_F1024_N256_read16":"guarded field maps plus signature memoization were slower than ordinary overlay memoization in every median divergence row; at divergence 0/0.01/0.05/0.10/0.25/0.50 guarded_memo time over full was 0.4116/0.6454/1.0218/1.2097/1.3336/1.3099 respectively","interpretation":"field-wise guarded storage can be compact but did not beat the simpler overlay lookup in this Python proxy"},
+  "correctness":{"exact_branch_reconstruction_errors":0,"pure_output_mismatches_full_vs_overlay_memo":0,"pure_output_mismatches_full_vs_psw":0},
+  "negative_controls":{"incomplete_read_set":{"unsafe_false_share_mismatches":1,"exact_read_set_mismatches":0,"interpretation":"one omitted material read is sufficient to make signature-based shared execution unsound"},"payload_only_merge":{"naive_payload_merge":true,"strict_identity_merge":false,"interpretation":"same state payload with distinct hypothesis/provenance cannot be treated as the same epistemic branch"},"epoch_self":{"stale_base_epoch":"REJECT","wrong_native_self_Frank":"REJECT","current_self_root_epoch":"PASS"},"effect_lifting":{"PURE_known_readset":true,"PURE_unknown_readset":false,"EXTERNAL_READ":false,"EXTERNAL_WRITE":false,"SECURITY_CHANGE":false}},
+  "resource_interpretation":"Wire bytes are compact JSON serialization proxies and timings are local Python batch timings. They do not measure target-VPS RSS, ClayCode runtime cost or model token/context cost.",
+  "central_result":"Shared sparse state and pure computation have a large measurable low-divergence region, but PSW showed no unique operation-sharing mechanism versus SPARSE_OVERLAY_MEMO. The useful crossover is a representation/runtime policy result, not evidence for a new architecture organ."
+}

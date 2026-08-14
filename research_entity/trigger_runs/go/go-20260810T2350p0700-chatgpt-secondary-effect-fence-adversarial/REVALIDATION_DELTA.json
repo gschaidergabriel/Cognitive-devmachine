@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2350p0700-chatgpt-secondary-effect-fence-adversarial",
+  "kind": "FRESH_HEAD_REVALIDATION_DELTA",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "target_subject": "self.root / human-surface Frank v0.1",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "observed_pr": 204,
+  "previous_head": "d7759b63c8a8ecf4995f577fc9cbf459c40cc8ab",
+  "fresh_head": "f43b63c5d1de9446a27242ea7cae92d7a6809b3b",
+  "revalidation": {
+    "exact_v16_execution_identity": {
+      "status": "MATERIALLY_IMPROVED_ON_FRESH_HEAD",
+      "evidence": "Fence now carries execution_id and credential_fingerprint; runtime requires exact current V16 execution_id/epoch/credential plus a matching ADMITTED ingress row."
+    },
+    "multi_effect_cardinality": {
+      "status": "STILL_BLOCKING",
+      "evidence": "Schema still makes binding_hash globally UNIQUE while one live ingress execution still derives one stable public binding and binding_hash; reservation inserts that same hash per effect.",
+      "required_repair": "Remove global generation-hash uniqueness or make stored binding digest per-effect while retaining a separately comparable generation identity."
+    },
+    "gate_issued_object_provenance": {
+      "status": "STILL_OPEN",
+      "evidence": "Fresh branch frank_execution_gate.py still has no exact Gate-issued object registry/issuance seal; PR217 remains the dedicated stack."
+    },
+    "fork_subprocess_lineage": {
+      "status": "STILL_OPEN",
+      "evidence": "Fresh effect_execution_fence.py still states process-local secret dies with the process and retains WeakKeyDictionary process memory without an at-fork child reset/re-admission mechanism.",
+      "oob_reused": "FORKED_CAPABILITY_GHOST",
+      "new_oob_executed": false
+    }
+  },
+  "workflow_refresh": {
+    "self_hosted_vps_run": 31411278226,
+    "status": "QUEUED",
+    "current_execution_credit": "NONE"
+  },
+  "distribution": {
+    "pr_comment_id": 5243356315
+  },
+  "decision": "DO_NOT_PROMOTE_CURRENT_PR204_HEAD; one previous identity blocker improved, but multi-effect cardinality, exact Gate issuance and fork/subprocess capability lineage remain unresolved and target-lane execution is still pending."
+}

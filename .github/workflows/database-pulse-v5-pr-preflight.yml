@@ -1,0 +1,92 @@
+name: FRANK Database Pulse V5 PR Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/database_pulse_runtime_v5.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5_atomic.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v5.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v5_adversarial.py'
+      - '.github/workflows/database-pulse-v5-pr-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-v5-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile Database Pulse V5 stack
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v5.py \
+            research_entity/runtime/database_pulse_runtime_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5_atomic.py \
+            research_entity/runtime/test_database_pulse_runtime_v5.py \
+            research_entity/runtime/test_database_pulse_runtime_v5_adversarial.py
+      - name: Run Database Pulse V5 falsifiers
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5_adversarial
+
+  hostinger-v5-pr:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+      - name: Record exact PR execution environment
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          python3 - <<'PY'
+          import json,os,platform,sqlite3,sys
+          print(json.dumps({
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+          },sort_keys=True))
+          PY
+      - name: Compile Database Pulse V5 stack
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v5.py \
+            research_entity/runtime/database_pulse_runtime_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5_atomic.py \
+            research_entity/runtime/test_database_pulse_runtime_v5.py \
+            research_entity/runtime/test_database_pulse_runtime_v5_adversarial.py \
+            tools/database_pulse_rank_path_v5_benchmark.py
+      - name: Run Database Pulse V5 falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5_adversarial
+      - name: Run bounded V5 benchmark
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_rank_path_v5_benchmark.py \
+            --rows 5000 --repeats 150 --output /tmp/rank_path_v5_pr_exact.json
+          cat /tmp/rank_path_v5_pr_exact.json

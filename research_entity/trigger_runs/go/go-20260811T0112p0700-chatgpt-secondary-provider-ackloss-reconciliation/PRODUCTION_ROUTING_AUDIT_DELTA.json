@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0112p0700-chatgpt-secondary-provider-ackloss-reconciliation",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "event": "NORMAL_PRODUCTION_ROUTING_REACHABILITY_AUDIT",
+  "classification": "NEGATIVE_INTEGRATION_EVIDENCE_NOT_OOB",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "diagnostic_pr": 255,
+  "head": "782cce82092d80c24ae63631251576a8a6d58f76",
+  "tested_merge_sha": "20267cf526f41bd6b056fdd7d4846da69b99e194",
+  "base_branch_runtime_head_at_merge": "5a273bcbe5890b1802ddf6d7da0eb7df7a9c140b",
+  "workflow_run": 31419078056,
+  "workflow_job": 93555180821,
+  "artifact_id": 9074726016,
+  "artifact_sha256": "724835da9c5913fb43731e14d2696c140d1458e06542f2edf68f97db1a1f659b",
+  "target_environment": {
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "utc": "2026-08-10T18:30:52Z"
+  },
+  "baseline_before_audit": {
+    "physical_gate": "PASS_FRANK_EXECUTION_GATE_V1",
+    "v6_matrix": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+    "v6_current_delta_observed": {
+      "provider_entry_same_epoch_v16_rebind": "EFFECT_COMMITTING_BLOCKS_EXECUTION_GENERATION_REBIND",
+      "committing_terminal_release_outside_provider_window": "EFFECT_COMMITTING_BLOCKS_EXECUTION_RELEASE",
+      "blocked_release_kept_v15_busy": true,
+      "same_epoch_v16_rebind_before_attempt": "FENCED_ZERO_STATE_MUTATION",
+      "uncertain_retry_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+      "outcome_reconciliation_after_turnover": "PASS",
+      "integrity": "ok",
+      "foreign_key_violations": 0
+    }
+  },
+  "audit": {
+    "python_files_scanned": 212,
+    "parse_errors": 0,
+    "status": "REVIEW_REQUIRED_DIRECT_LEGACY_RUNTIME_REACHABILITY",
+    "direct_legacy_runtime_bypass_candidate": true,
+    "unexpected_runtime_legacy_import": "runtime/state/effect_terminal_runtime_v17_candidate.py -> EffectLifecycleRuntime",
+    "production_provider_guard_imports": 0,
+    "production_provider_guard_integrated": false,
+    "production_routing_gate_closed": false,
+    "wall_seconds": 0.86,
+    "user_seconds": 0.75,
+    "system_seconds": 0.09,
+    "cpu_percent": 97,
+    "max_rss_kib": 16976,
+    "swaps": 0,
+    "socket_messages_sent": 0,
+    "socket_messages_received": 0
+  },
+  "deeper_source_adjudication": {
+    "v17_base": "EffectTerminalRuntimeV17Candidate directly subclasses historical unbound EffectLifecycleRuntime.",
+    "v17_guard": "EffectTerminalRuntimeV17GuardedCandidate only overrides record_reentry; it still inherits the historical unbound reservation/begin surface.",
+    "existing_test_evidence": "tests/effect_reentry_done_v17_candidate_gate.py seeds EffectTerminalRuntimeV17GuardedCandidate via atomic_effect_reservation_with_optional_confirmation_consumption() and begin_attempt() with no ExecutionGenerationFence before testing bound re-entry/DONE.",
+    "scope_caveat": "This proves an unsafe candidate API surface and lack of caller-bound provider integration, but does not by itself prove that a deployed production token/API entrypoint currently imports or instantiates that V17 candidate. That dynamic reachability remains to be measured."
+  },
+  "strongest_counterhypothesis": "The V17 candidate modules are diagnostic-only and unreachable from every admitted production effect entrypoint; therefore their inherited unbound B1/B2 methods cannot be exercised in deployed Frank v0.1.",
+  "next_falsifier": "Build an entrypoint-rooted import/call graph plus a target execution trace from the ordinary authenticated action path. Require every effect-attempt edge to terminate in CallerBoundEffectLifecycleRuntime B1/B2/B3 + guarded_provider_commit. Separately make V17 terminalization expose only post-outcome evidence/re-entry/DONE capabilities or inherit the caller-bound lifecycle, then prove no unbound inherited start/retry method remains on any production-reachable object.",
+  "architecture_delta": {
+    "status": "BLOCKER_CONFIRMED_AT_INTEGRATION_SURFACE_CANDIDATE_LEVEL",
+    "decision": "Do not promote F-V01-09 from mechanism support to product effect-authority closure. Preserve PR#250's caller-bound mechanism, but require non-bypassable production routing and remove/contain the V17 inherited unbound lifecycle surface before terminal receipt integration.",
+    "preferred_design_direction": "One effect execution authority path: admitted execution -> caller-bound B1/B2/B3 -> guarded provider attempt. Post-outcome reconciliation/re-entry/DONE may remain evidence-only after generation death, but terminalization code must not accidentally re-export historical unbound start/retry authority."
+  },
+  "workflow_failure_interpretation": "EXPECTED_DIAGNOSTIC_ASSERTION_FAILURE_FROM_NEGATIVE_EVIDENCE; physical Gate and current v6 normal matrix passed before the audit. The sole GO OOB step was skipped on this follow-up run, so no second OOB experiment was executed.",
+  "go_oob_experiment_added": false,
+  "external_network_used": false,
+  "external_effect_performed": false,
+  "canonical_state_mutated": false
+}

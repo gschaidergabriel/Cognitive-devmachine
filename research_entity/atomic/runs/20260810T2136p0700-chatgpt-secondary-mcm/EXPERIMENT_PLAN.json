@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-MCM-001",
+  "claim_under_test":"Localizing non-monotone determinations to causal membranes preserves semantic correctness under reorder/duplicate/restart while avoiding unrelated total-order delay; it must also be compared to causal event sourcing, not only total ordering.",
+  "workload":{"kind":"synthetic causal DAG","atoms_per_trace":80,"determinations_per_trace":12,"seeds":400,"duplicates":"8% arrival duplication probability","delays":"18% delayed by 1..45 logical ticks"},
+  "baselines":["naive arrival-order mutable","strict global total order","strong causal event-sourcing/dependency cut","MCM"],
+  "controls":["shuffled/delayed arrival","duplicate delivery","crash at mid-trace and replay","stale-epoch required atom","high/low determination-rate sweep","full-state broadcast payload model","strong causal cut-reference payload model"],
+  "metrics":["decision correctness","logical seal latency p50/p95/p99","runtime p50/p95/p99","crash replay equivalence","stale rejection","cut size","broadcast/reference payload amplification","authority violations"],
+  "evidence_limit":"Synthetic local Python proxy. No real Frank transition trace, no compiled ClayCode execution, no target-VPS MCM execution."
+}

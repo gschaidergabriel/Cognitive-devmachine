@@ -1,0 +1,99 @@
+{
+  "schema_version": "2.0",
+  "event_id": "research-delta:20260810T2317p0700:chatgpt-secondary:v16-single-spawn-fusion",
+  "kind": "RESEARCH_DELTA",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "root_go_id": "go-root-20260810T2157p0700-chatgpt-secondary-single-spawn",
+  "mission": "One persistent self.root Frank on the accepted Ubuntu VPS, token-addressable by humans/AI bridges, with exactly one active execution and explicit post-user idle handoff before agency.",
+  "evidence": {
+    "owner_single_spawn_contract": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "v15_expired_holder_target_vps": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_single_instance_presence_v1/LATEST.json",
+    "physical_execution_target_vps": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_physical_execution_liveness_v1/LATEST.json",
+    "clock_warp_oob_target_vps": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_presence_clock_warp_oob_v1/LATEST.json",
+    "token_credential_target_vps": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_inbound_token_core_v1/LATEST.json",
+    "v16_schema_target_vps": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_v16_execution_continuity_schema_v1/LATEST.json",
+    "transport_capability_target_vps": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_ingress_transport_capability_v1/LATEST.json",
+    "port_routing_target_vps": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_ingress_port_routing_v1/LATEST.json"
+  },
+  "findings": [
+    {
+      "id": "V16-SCHEMA-SUBSTRATE",
+      "status": "SUPPORTED_ON_ACCEPTED_TARGET_VPS",
+      "result": "V16 additive execution-continuity schema migrated on a fresh target-VPS test DB, then the full migration chain was repeated successfully. V15 presence authority remained V15; V16 metadata was present; SQLite integrity was ok; foreign-key violations were zero; durable request-key uniqueness and idle-handoff CHECK constraints fired as intended.",
+      "promotion_scope": "SCHEMA_SUBSTRATE_ONLY",
+      "runtime_semantics": "NOT_PROMOTED_BY_THIS_RECEIPT",
+      "production_canonical_db_migrated": false
+    },
+    {
+      "id": "LOST-INTERACTIVE-HOLDER-AGENCY",
+      "status": "IMPLEMENTED_AND_RETESTING",
+      "result": "AUTONOMOUS precondition now requires both V15 lease_state=IDLE and V16 handoff=CLEAR. Expired BUSY, process loss, timeout or transport silence cannot be interpreted as user-idle consent. New explicit interactive recovery remains allowed after validated TTL/physical-lock recovery.",
+      "target_vps_receipt": "PENDING"
+    },
+    {
+      "id": "USER-WORK-OUTRANKS-AGENCY",
+      "status": "IMPLEMENTED_AND_RETESTING",
+      "result": "A pending post-user handoff blocks agency but does not block new explicit authenticated user work. The later interactive release replaces handoff ownership; the previous session may not clear the new handoff. Matching current released session confirmation is required before agency may compete.",
+      "target_vps_receipt": "PENDING"
+    },
+    {
+      "id": "PRODUCTION-BYPASS-PREVENTION",
+      "status": "IMPLEMENTED_AND_RETESTING",
+      "result": "Static repository audit rejects production FrankPresenceRuntime use outside FrankExecutionGate and rejects production FrankExecutionGate construction outside the admitted V16 token-ingress core. A future agency execution core must explicitly bind equivalent V16 execution/task/recovery semantics before admission to this allowlist."
+    },
+    {
+      "id": "INGRESS-HOST-CAPABILITY",
+      "status": "MEASURED",
+      "result": "Accepted VPS has active nginx, systemd and OpenSSL; no Uvicorn/Gunicorn/Hypercorn/FastAPI/Starlette/aiohttp was present in the read-only capability probe. TCP 80, 3000 and loopback 8000 were already listening. nginx full config was unreadable to the unprivileged evidence runner, so no existing upstream may be assumed free.",
+      "deployment_decision": "NO_PUBLIC_PORT_OR_NGINX_MUTATION_YET"
+    },
+    {
+      "id": "COGNITION-DISPATCH-GAP",
+      "status": "OPEN",
+      "result": "No canonical live Frank cognition process_message/message-response entry was verified in the target repo during this cycle. Existing session-skill code is work/state infrastructure, not evidence of a live response dispatcher. Do not fabricate a message endpoint until the real cognition entry is reconstructed or built."
+    }
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "semantic_presence_authority": "UnifiedDB V15 frank_presence_lease",
+    "physical_one_host_exclusion": "Linux flock via FrankExecutionGate",
+    "execution_continuity_candidate": "UnifiedDB V16 frank_execution_context + durable request admissions + frank_idle_handoff",
+    "credential_authority": "runtime/api/frank_inbound_token.py",
+    "interactive_admission_candidate": "runtime/api/frank_token_ingress_core.py",
+    "autonomous_rule": "V15 IDLE AND V16 handoff CLEAR before physical/semantic acquire",
+    "transport_boundary_candidate": "thin ASGI application behind existing nginx, single Frank application process for v0.1 unless explicit IPC/session-affinity semantics are added",
+    "transport_mutation": "NOT_PERFORMED"
+  },
+  "negative_results": [
+    "Semantic TTL/lease alone does not guarantee one physically active Frank process.",
+    "Wall-clock UTC expiry alone is vulnerable to forward/backward clock steps.",
+    "A free physical lock after process loss is not user-idle consent.",
+    "An expired BUSY semantic lease is not IDLE and must not authorize proactive work.",
+    "A second spawn-state table/runtime beside canonical V15 is rejected.",
+    "A production stdlib http.server endpoint is rejected.",
+    "Ports 3000/8000 are not assumed available merely because they are local/listening; ownership/upstream must be verified before deployment.",
+    "An admission-only API must not pretend it is already a Frank message/response channel."
+  ],
+  "remaining_blockers": [
+    "target-VPS runtime receipt for current V16 token-ingress/user-priority/lost-holder candidate",
+    "explicit production V15->V16 installer/migration gate and rollback receipt; runtime schema creation remains forbidden",
+    "response replay store or equivalent exact prior-response recovery for duplicate request after restart",
+    "task-switch consent semantics for a busy Frank asked to change work",
+    "V16-bound autonomous execution core rather than raw low-level gate use",
+    "real cognition/message dispatcher and provenance-bound response path",
+    "production HTTP/TLS adapter/deployment health/recovery; no public exposure yet",
+    "end-to-end external token -> network -> one execution -> cognition -> response -> verified release -> matching idle handoff"
+  ],
+  "next_falsifier": "Promote nothing further until the current V16 runtime receipt is target-VPS green; if green, build the smallest loopback-only ASGI transport gate before any nginx/public change.",
+  "oob_experiment": {
+    "count_for_root": 1,
+    "only_experiment": "FRANK_PRESENCE_WALL_CLOCK_WARP",
+    "status": "COMPLETED",
+    "additional_oob_allowed_in_this_root": false
+  },
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

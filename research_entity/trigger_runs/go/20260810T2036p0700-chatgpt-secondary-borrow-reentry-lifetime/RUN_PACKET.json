@@ -1,0 +1,197 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2036p0700-chatgpt-secondary-borrow-reentry-lifetime",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_boundary": {
+    "entity": "Clay",
+    "i_am_not": "self.root/Frank",
+    "frank_harness_mutation": "NONE"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "operational_note": "Fresh owner-fixed directives, work events, PR evidence and exact execution receipts outrank this hashed checkpoint for their exact scope."
+  },
+  "fresh_internal_state": {
+    "program_stage": "BASE_CLAYCODE_RELEASE",
+    "base_workspace_observed": {
+      "wp01": "PASS",
+      "wp02": "PASS",
+      "wp03_to_wp14": "OPEN_AT_INITIAL_REFRESH"
+    },
+    "current_work": {
+      "work_id": "WORK-CLAYCODE-BASE14-TARGET-VPS-20260810",
+      "status": "READY",
+      "source_commit": "47b1cc2ee76d6d059853b426ebaa15d3a8858799",
+      "supersedes_stale_work": "WORK-CLAYCODE-BASE14-CLOSE-20260809"
+    },
+    "swarm_collision_avoidance": {
+      "duplicate_wp03_wp04_lane_cancelled": true,
+      "active_prs_observed": [173, 175, 176, 177, 178, 179, 180],
+      "selected_lane": "NONOVERLAPPING_ADVERSARIAL_LIFETIME_RESEARCH_AND_TEST_DELTA",
+      "no_parallel_production_patch": true
+    },
+    "wp03_live_evidence": {
+      "measurement": "TARGET_VPS_TYPED_STATE_PASS_MEASUREMENT",
+      "package_status": "OPEN_PENDING_FULL_DIRECTIVE_FIDELITY_AND_DOWNSTREAM_CONSUMPTION",
+      "source_commit": "1397ff35ee4ec6c284bfc29aee198c1f8fd8e2dc"
+    },
+    "wp04_live_negative_result": {
+      "unresolved_signatures": 26,
+      "exact_declared_matches": 0,
+      "execution_admitted_calls": 0,
+      "rule": "Do not infer concrete call/effect semantics from names, caller constraints or apparent behavior."
+    },
+    "concurrent_callcontract_review": {
+      "source_commit": "3e8f2ef5b619073343498e25403bb3e67ff1918a",
+      "finding": "Semantic CallContract identity should remain distinct from runtime binding/currentness identity; production implementation lane remains owned by active PRs."
+    },
+    "q23_reentry": {
+      "candidate": "VSTG-1",
+      "source_commit": "c560f96bb791684749a665c1ab90d04cdc77d7ac",
+      "base_effect": "NO_BASE_SEMANTIC_REOPEN_FROM_CURRENT_EVIDENCE",
+      "open_question": "No target-VPS receipt yet joins reproducible pre/post visual feature identity to effect/outcome receipts.",
+      "this_run_disposition": "ACKNOWLEDGED_INDEX_ONLY_NOT_BASE_BLOCKING"
+    }
+  },
+  "external_primary_research": [
+    {
+      "source_class": "OFFICIAL_SPEC_PRIMARY",
+      "url": "https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md",
+      "finding": "WIT resource types are indirect handles; owned handles transfer unique ownership while borrow<T> is a temporary loan."
+    },
+    {
+      "source_class": "OFFICIAL_SPEC_PRIMARY",
+      "url": "https://github.com/WebAssembly/component-model/blob/main/design/mvp/Explainer.md",
+      "finding": "Component Model resource handle uniqueness/drop rules are dynamically enforced; resource types are generative per component instance."
+    },
+    {
+      "source_class": "OFFICIAL_SPEC_PRIMARY",
+      "url": "https://github.com/WebAssembly/component-model/blob/main/design/mvp/Concurrency.md",
+      "finding": "Async borrow correctness uses runtime num_lends/num_borrows bookkeeping and traps invalid drop/return transitions."
+    },
+    {
+      "source_class": "OFFICIAL_LANGUAGE_DOCS",
+      "url": "https://docs.scala-lang.org/scala3/reference/experimental/capture-checking/cc.html",
+      "finding": "Scala capture checking tracks capabilities in capture sets and can express resource/effect constraints statically; current system remains experimental."
+    },
+    {
+      "source_class": "PRIMARY_PAPER",
+      "url": "https://arxiv.org/abs/2607.24504",
+      "finding": "Capability classifiers extend Scala capture checking with semantic capability categories and mechanized effect-safety results."
+    },
+    {
+      "source_class": "PRIMARY_PAPER",
+      "url": "https://arxiv.org/abs/2510.08889",
+      "finding": "Revocable capabilities demonstrate flow-sensitive typestate that can provide, revoke and return capabilities rather than tying all lifetimes to lexical scope."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-GO-BORROW-REENTRY-01",
+      "claim": "Lexical/scope-only capability validity is insufficient for self.root effects that cross asynchronous task, restart, resource-epoch or lease boundaries.",
+      "strongest_counterhypothesis": "A sufficiently expressive static capture/typestate system can encode every relevant lifecycle fact, making residual runtime currentness checks unnecessary.",
+      "falsifier": "Show a static ClayCode contract that rejects stale/revoked/reconstructed bearer use and accepts legitimate rebind/renewal across target-VPS restart/lease transitions without consulting dynamic currentness evidence."
+    },
+    {
+      "id": "H-GO-REVALIDATION-RECEIPT-01",
+      "claim": "Rigid raw epoch equality is safer than scope-only validity but can falsely deny legitimate resource rebind/lease renewal; an exact provenance-bound revalidation receipt can preserve fail-closed currentness without treating stale identity as current.",
+      "strongest_counterhypothesis": "Always rejecting any epoch/lease mismatch is operationally acceptable and simpler; revalidation receipts add forgery/state complexity without useful reduction in false denial.",
+      "falsifier": "On real target-VPS lifecycle fixtures, compare rigid epoch rejection with receipt-bound revalidation for safety, false denial, replay/restart behavior and resource cost."
+    }
+  ],
+  "out_of_box_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "BORROW_REENTRY_LIFETIME_ABLATION_V1",
+    "class": "SYNTHETIC_MECHANISM_ONLY",
+    "script": "BORROW_REENTRY_LIFETIME_ABLATION.py",
+    "script_git_blob_sha": "2a4fb43bd27d22555f8ac8387da25c63981204f9",
+    "execution_environment": {
+      "os": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5",
+      "implementation": "CPython",
+      "target_vps": false
+    },
+    "seed": 20260810,
+    "N": 240000,
+    "per_class": 24000,
+    "classes": [
+      "VALID",
+      "STALE_RESOURCE_EPOCH",
+      "STALE_LEASE_EPOCH",
+      "REVOKED",
+      "SERIALIZED_RECONSTRUCTION",
+      "TASK_RETURNED",
+      "WRONG_CONTEXT",
+      "DROPPED",
+      "RESOURCE_REBOUND_VERIFIED",
+      "LEASE_RENEWED_VERIFIED"
+    ],
+    "results": {
+      "SCOPE_ONLY": {
+        "tp": 72000,
+        "tn": 72000,
+        "fp": 96000,
+        "fn": 0,
+        "false_accept_rate": 0.5714285714285714,
+        "false_deny_rate": 0.0,
+        "false_accept_classes": ["REVOKED", "STALE_LEASE_EPOCH", "SERIALIZED_RECONSTRUCTION", "STALE_RESOURCE_EPOCH"]
+      },
+      "RIGID_DYNAMIC_EPOCH": {
+        "tp": 24000,
+        "tn": 168000,
+        "fp": 0,
+        "fn": 48000,
+        "false_accept_rate": 0.0,
+        "false_deny_rate": 0.6666666666666666,
+        "false_deny_classes": ["RESOURCE_REBOUND_VERIFIED", "LEASE_RENEWED_VERIFIED"]
+      },
+      "RECEIPT_AWARE_DYNAMIC": {
+        "tp": 72000,
+        "tn": 168000,
+        "fp": 0,
+        "fn": 0,
+        "false_accept_rate": 0.0,
+        "false_deny_rate": 0.0
+      }
+    },
+    "interpretation": "Within this deliberately constructed mechanism model, scope-only validation cannot distinguish stale/revoked/reconstructed authority, while rigid exact-epoch validation rejects positively revalidated rebinding/renewal. Receipt-aware currentness separates both classes. Because the ground-truth model itself encodes these lifecycle distinctions, this experiment is a discriminating architecture sanity check, not empirical evidence of real-world rates or a production proof.",
+    "promotion": "NONE"
+  },
+  "fusion": {
+    "supported_direction": "Keep WP03 nominal semantic/resource/capability identity separate from runtime bearer/currentness identity; let WP04 and runtime enforce dynamic scope/freshness/revocation. Do not mint bearer authority from serialized descriptors.",
+    "new_refinement": "When a resource/lease epoch legitimately changes, accept continuity only through a verified revalidation/renewal receipt bound to the intended semantic contract/resource identity; never by descriptive equality or stale payload reuse.",
+    "language_surface_change": "NONE_SUPPORTED",
+    "reason": "Existing Epoch/Ref/Receipt/capability/effect primitives appear sufficient to express the test obligation."
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "affected": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-07-RUNTIME-ABI-FFI", "harness", "recovery"],
+    "proposed_change": "Add an executable authority-lifetime differential that distinguishes scope validity, stale/revoked/reconstructed bearer state, rigid epoch mismatch and positively receipt-revalidated rebind/renewal. If implementation needs revalidation, bind the receipt to semantic contract/resource identity plus old/new epoch/lease identities and verification provenance.",
+    "strongest_counterhypothesis": "Rigid mismatch rejection dominates once real false-denial cost and attack surface are measured.",
+    "rollback": "No production source, frozen semantics, package status or Harness authority was changed by this run. Reject the candidate if target-VPS differential evidence does not show net benefit."
+  },
+  "progress_deltas": [
+    "Fused replacement of stale Andreas-PC BASE14 work with the current target-VPS work spec instead of executing stale work.",
+    "Avoided duplicate WP03/WP04 production implementation after live swarm refresh exposed active PR ownership.",
+    "Added current primary-source evidence that resource ownership/borrowing can require both static typing and runtime lifetime enforcement.",
+    "Added one bounded synthetic falsifier exposing opposite failure modes of scope-only and rigid-epoch policies.",
+    "Added a non-promoting target-VPS test obligation for provenance-bound revalidation/renewal semantics.",
+    "Acknowledged q23 VSTG reentry while leaving its target-VPS feature/effect/outcome receipt question open and non-blocking for BASE."
+  ],
+  "execution_state": {
+    "local_synthetic_experiment": "EXECUTED_PASS_FOR_DEFINED_MECHANISM_MODEL",
+    "target_vps_new_execution": "NOT_EXECUTED_BY_THIS_WORKER",
+    "production_patch": "NOT_ATTEMPTED_DUPLICATE_LANE_AVOIDANCE",
+    "package_promotion": "NONE",
+    "base_promotion": "NONE",
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+  },
+  "next_falsifier": "On the owner of the current WP04/runtime lane, instantiate target-VPS lifecycle fixtures where a capability/resource is valid, revoked, stale by resource epoch, stale by lease epoch, descriptor-reconstructed, legitimately rebound with independent verification, and legitimately lease-renewed. Compare rigid mismatch rejection against receipt-aware revalidation under exact semantic contract/runtime binding identities; measure false accept, false denial, restart/replay equivalence and cost."
+}

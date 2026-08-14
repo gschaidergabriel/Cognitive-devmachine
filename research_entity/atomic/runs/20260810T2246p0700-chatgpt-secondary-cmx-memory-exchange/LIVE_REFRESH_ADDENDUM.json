@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2246p0700-chatgpt-secondary-cmx-memory-exchange",
+  "refresh_after_candidate_freeze": "2026-08-10T23:03+07:00",
+  "fresh_target_evidence": {
+    "V16_EXECUTION_CONTINUITY_SCHEMA": {
+      "commit": "877280f91ae580a53e3577cbec367265bd55c1ce",
+      "classification": "COMPLEMENTARY_BOUNDARY",
+      "finding": "Accepted-target VPS schema gate passes durable request-key uniqueness, migration repeatability and V15 authority preservation, but explicitly does not promote runtime handoff/idempotency semantics.",
+      "effect_on_cmx": "Future memory-use/outcome-credit receipts should bind to the canonical execution/task lineage as it matures; this does not rescue CMX utility economics."
+    },
+    "Q23_REPRESENTATION_LIFETIMES": {
+      "commit": "be5d71b3903037c19b51e4790ad96c43503ad5b2",
+      "classification": "ORTHOGONAL_WITH_SHARED_PERSISTENCE_BOUNDARY",
+      "finding": "Q23 adds visual representation lifetime/replay/restart and stale-identity test obligations with zero progress credit.",
+      "effect_on_cmx": "Future visual/perceptual experience may supply provenance-bound procedural evidence, but runtime caches/embeddings must not become canonical truth or utility-priced authority."
+    }
+  },
+  "collision_result": "NO_NEW_DUPLICATE_MECHANISM_FOUND",
+  "candidate_decision_after_refresh": "UNCHANGED_TESTED_PROXY_REFUTED_AS_DEFINED",
+  "architecture_promotion": "NONE",
+  "target_issue": "gschaidergabriel/Dr.-Unterweger#176"
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.1",
+  "run_id": "20260810T2203p0700-chatgpt-secondary-real-schema-authority",
+  "trigger_context": "atomic continuation requested with real results",
+  "entity": "Clay",
+  "target": "self.root / Frank v0.1",
+  "result": "REAL_TARGET_REPAIR_WITH_TARGET_PREFLIGHT_PASS_AND_HOST_DEPLOYMENT_BLOCKER",
+  "architecture_promotion": false,
+  "training_started": false,
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "initial_real_failure": {
+    "surface": "runtime/vps_integrity/latest.json",
+    "finding": "repo_static_integrity was the sole failing gate in the then-current 23-gate target-VPS deep-integrity receipt",
+    "root_cause": "production telemetry.py directly executed embedded SQLite schema while six research probes used executescript only on disposable databases",
+    "classification": "REAL_SCHEMA_AUTHORITY_DUPLICATION_PLUS_STATIC_GATE_FALSE_EQUIVALENCE"
+  },
+  "target_code_deltas": [
+    {"commit":"1cf3eaeba03e9a355654c9f41991cefd9780c748","delta":"introduce dedicated MCP telemetry schema migrator"},
+    {"commit":"697098d9cc84a977a1ba8065e3c84b17ca883bff","delta":"remove embedded schema authority from TelemetryStore"},
+    {"commit":"2580792df5a28b260bdceb08a55a3f8d63872101","delta":"separate production migrators from disposable schema probes in repo static integrity gate"},
+    {"commit":"5cfbf2538d994960c3dc0769110c571b90e14756","delta":"upgrade helper from fresh-create-only to additive in-place TemporalEntityV2 migration with FTS rebuild and fail-closed unknown legacy schema"},
+    {"commit":"3b39e4f9929a0be763b7e7ec71782c48d146e878","delta":"make telemetry schema migration transaction-atomic using BEGIN IMMEDIATE/COMMIT and reject pending application transactions"},
+    {"commit":"e10f24897e97c189baa5fa4e8a608bbf1bbecb35","delta":"add row/FTS preservation, forced-DDL-failure rollback and pending-transaction regressions"},
+    {"commit":"7f50bbd8195dc335e1ca9d6cfc84122a379bd5f7","delta":"extend self-hosted VPS discriminator with atomic rollback and pending transaction checks"},
+    {"commit":"e198bc9cb114b880cc96ddfa9e4adbd331b8251f","delta":"move MCP unprivileged target-VPS preflight before explicit sudo admission and bind telemetry migrator blob in deployment receipt"},
+    {"commit":"9bbb4bd8452540d379384a5d3b69abf870ae03ed","delta":"bind repo static audit to stronger transaction-atomic telemetry migration invariants"},
+    {"commit":"66069a7e315cee91e7f1d07132f90f57aec1d2ad","delta":"repair target-preflight CAS regression by isolating CLAY_MCP_STATE_DIR with temporary allowed root and verify backup preservation"},
+    {"commit":"673d2441c5f53e1007a52e58a0cd1b963e3512b7","delta":"add real subprocess-level loopback MCP server health and bearer-boundary regression; target receipt pending at this cutoff"}
+  ],
+  "real_target_vps_schema_receipt": {
+    "repository_commit": "f3ee4fdff836ec869dfd0160ce6d66c18c840a24",
+    "github_run_id": "31403551674",
+    "tested_sha": "8fe4109ce4b4404eee354dfd07e2dd8c262abfd7",
+    "artifact_digest": "3be83064229efbd7fda489fad7b947c4a6e71478b78cb78dadebddc6f917f037",
+    "runner": "clay@digital-retina Linux 6.8.0-117-generic x86_64 Python 3.12.3 SQLite 3.45.1",
+    "repo_static_integrity": "PASS",
+    "disposable_fresh_roundtrip": "PASS",
+    "legacy_in_place_migration": "PASS",
+    "legacy_row_preserved": true,
+    "legacy_fts_rebuild": "PASS",
+    "unsupported_legacy_schema_fail_closed": "PASS",
+    "live_telemetry": "LIVE_DB_NOT_FOUND",
+    "overall": "FAIL_TELEMETRY_SCHEMA_AUTHORITY_V1_TARGET",
+    "interpretation": "The original static/schema-authority failure is closed for the tested SHA; live target telemetry remains absent."
+  },
+  "real_target_vps_unprivileged_preflight": {
+    "repository_commit": "739c5713c12d264c04de2c52613958ce6c137cf0",
+    "github_run_id": "31405003623",
+    "tested_sha": "66069a7e315cee91e7f1d07132f90f57aec1d2ad",
+    "runner": "clay@digital-retina Linux 6.8.0-117-generic x86_64 Python 3.12.3",
+    "unprivileged_preflight": "PASS",
+    "pytest": "11 passed in 1.05s",
+    "test_scope": "runtime/clay_vps_mcp_v02/tests plus tests/test_telemetry_schema_authority.py",
+    "includes_transaction_atomic_migration_regressions": true,
+    "privilege_admission": "FAIL",
+    "sudo_noninteractive": "no",
+    "sudo_error": "sudo: a password is required",
+    "privileged_install_blocked": true,
+    "install": "SKIPPED",
+    "postdeploy": "SKIPPED",
+    "backup_probe": "SKIPPED",
+    "accepted_release": false,
+    "interpretation": "Current package/migration code builds and passes its unprivileged test surface on the accepted target host; system deployment remains independently blocked by host privilege admission."
+  },
+  "real_negative_preflight_lineage": {
+    "repository_commit": "563891e81e935ba4beb76711d8da394cf387f60c",
+    "github_run_id": "31404377795",
+    "tested_sha": "e198bc9cb114b880cc96ddfa9e4adbd331b8251f",
+    "result": "10 passed, 1 failed",
+    "failure": "CAS update test leaked state path to /var/lib/clay-vps-mcp and failed unprivileged with PermissionError",
+    "repair": "66069a7e315cee91e7f1d07132f90f57aec1d2ad",
+    "followup_target_result": "11 passed in 1.05s"
+  },
+  "deployment_blocker": {
+    "first_proof_run": "31402114519",
+    "first_proof_job": "93499375007",
+    "runner": "clay@digital-retina",
+    "observed_error": "sudo -n true -> sudo: a password is required",
+    "confirmed_again_run": "31405003623",
+    "effect": "system-wide MCP install/postdeploy/backup remain unavailable; clay-vps-mcp.service, frank-telemetry.service and unifieddb-backup.timer are not accepted as deployed by these receipts",
+    "classification": "HOST_PRIVILEGE_ADMISSION_BLOCKER_NOT_FRANK_CODE_FAILURE",
+    "security_disposition": "do not bypass with sudo password transport or broad CI NOPASSWD; requires narrow owner-approved host provisioning/capability"
+  },
+  "process_level_frontier": {
+    "commit": "673d2441c5f53e1007a52e58a0cd1b963e3512b7",
+    "test": "real python -m clay_vps_mcp.server subprocess on ephemeral loopback port; /healthz 200; protected /mcp unauthenticated 401; exact bearer crosses middleware; process remains alive; bounded temp state/workspace; cleanup",
+    "target_vps_receipt": "PENDING_AT_THIS_CUTOFF",
+    "promotion": "NONE_UNTIL_RECEIPT"
+  },
+  "current_unresolved": [
+    "process-level commit 673d244 requires target-VPS receipt before credit",
+    "live /srv/frank-telemetry/frank_telemetry.sqlite3 does not exist on accepted target in latest focused live receipt",
+    "system service deployment requires narrowly authorized noninteractive privilege path or equivalent owner-approved host provisioning",
+    "MCP v0.2 is not accepted/deployed and whole Frank v0.1 acceptance is not claimed"
+  ],
+  "affected_frank_packages": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "evidence_class": "CURRENT_TARGET_CODE_PLUS_REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_EXECUTION_PLUS_PRESERVED_FAILURE_EVIDENCE",
+  "status": "REAL_REPAIR_TARGET_PREFLIGHT_PASS_LIVE_DEPLOYMENT_BLOCKED_PROCESS_RETEST_PENDING"
+}

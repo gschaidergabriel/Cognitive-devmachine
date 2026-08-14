@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2059p0700-gpt56sol-productstart-lifecycle-v6",
+  "trigger": "go",
+  "created_at": "2026-08-12T20:59:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_basis": {
+    "research_entity_main_before_write": "d85aec0d2cccfb681fd9b4b37be3464d6a4671ab",
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "frank_repo_connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "intended_target_repository": "gschaidergabriel/frankv0.1",
+    "intended_target_repository_connector_resolution": "NOT_FOUND_404",
+    "alias_write_resolution": "VERIFIED_RW"
+  },
+  "grf": {
+    "observed_reality": "ProductStart V5 explicitly bound ExecCondition, ExecStartPre and DropInPaths but did not inspect ExecStartPost, ExecStop or ExecStopPost. The active ProductStart chain was concurrently advancing, so stale branch-green evidence could not be promoted.",
+    "generated_reality": "For the narrow Frank v0.1 ProductStart profile, executable lifecycle hooks after ExecStart and during stop/restart must either be explicitly identity-bound or explicitly observed empty; omission is not evidence of absence.",
+    "strongest_counter_reality": "The productive accepted Hostinger unit may contain no such hooks, or those hooks may be irrelevant to SQLite/state continuity; then V6 is conservative defense-in-depth and adds no positive product evidence.",
+    "discriminator": "SYSTEMD_POSTSTART_RESTART_LIFECYCLE_BLINDSPOT",
+    "outcome": "RETAIN_AS_CANDIDATE_NOT_PROMOTED"
+  },
+  "go_oob_accounting": {
+    "count": 1,
+    "experiment": "SYSTEMD_POSTSTART_RESTART_LIFECYCLE_BLINDSPOT",
+    "execution_mode": "OFFLINE_IN_MEMORY_V5_EVALUATOR_SNAPSHOT_ONLY",
+    "baseline": {
+      "ExecCondition": "",
+      "ExecStartPre": "",
+      "DropInPaths": "",
+      "ExecStartPost": "",
+      "ExecStop": "",
+      "ExecStopPost": "",
+      "inherited_v4": "PASS"
+    },
+    "treatment": {
+      "ExecStartPost": "/usr/bin/true --post-start-marker",
+      "ExecStop": "/usr/bin/true --stop-marker",
+      "ExecStopPost": "/usr/bin/true --post-stop-marker"
+    },
+    "baseline_result": "PASS_PRODUCT_START_PREEXEC_SURFACE_V5_CANDIDATE",
+    "treatment_result": "PASS_PRODUCT_START_PREEXEC_SURFACE_V5_CANDIDATE",
+    "classification": "SUPPORTED_OBSERVABILITY_BLINDSPOT",
+    "external_commands_executed": false,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE",
+    "second_oob_created": false
+  },
+  "repair": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 527,
+    "state": "DRAFT_OPEN",
+    "base_pull_request": 519,
+    "base_branch": "chatgpt/go-productstart-preexec-surface-v5-20260812",
+    "current_base_head_bound_into_v6": "4be6713c9e00a9ac6919998733147479c34a99af",
+    "current_v6_head": "f26c8d261c25d65610ed4863a5fb4571be00b19f",
+    "merge_strategy": "explicit two-parent merge commit with current V5 tree as base and only V6-owned files overlaid",
+    "candidate_path": "runtime/frank_storage_truth_v1/sqlite_v5_systemd_parent_gate_v6_candidate.py",
+    "regression_path": "tests/test_sqlite_v5_systemd_parent_gate_v6_candidate.py",
+    "workflow_path": ".github/workflows/frank-sqlite-productstart-lifecycle-v6.yml",
+    "mechanism": [
+      "compose on V5 rather than duplicate it",
+      "require ExecStartPost, ExecStop and ExecStopPost to be explicitly observed",
+      "require the three lifecycle properties to be empty for the narrow v0.1 ProductStart profile",
+      "deny any non-empty lifecycle property as an unbound executable surface",
+      "fail closed if any lifecycle property is unobserved",
+      "preserve inherited V5 failures",
+      "CLI emits fail-closed denial receipt on inherited/parser/filesystem/systemd/identity errors",
+      "no authority or canonical Frank state mutation"
+    ]
+  },
+  "ordinary_regression_evidence": {
+    "v6_regressions": "PASS_10_OF_10_ON_PRIOR_CURRENT_STACK",
+    "v5_regressions": "PASS_8_OF_8_ON_PRIOR_CURRENT_STACK",
+    "repo_static_integrity": "PASS_ON_PRIOR_CURRENT_STACK",
+    "green_run": 31603534428,
+    "green_job": 94136595296,
+    "runner": "clay",
+    "green_run_base_head": "784646cb3d22e8cd38d0ff1568827b79f26a5eb5",
+    "green_run_head": "b4037b66450eb1b088234ce2ae04a5a7a5cd953d",
+    "green_run_scope": "exact tested stack only; superseded as current integration evidence after V5 base advanced",
+    "current_exact_stack_run": 31604109694,
+    "current_exact_stack_base_head": "4be6713c9e00a9ac6919998733147479c34a99af",
+    "current_exact_stack_head": "f26c8d261c25d65610ed4863a5fb4571be00b19f",
+    "current_exact_stack_status_at_receipt": "QUEUED",
+    "product_host_observation_in_v6_ci": false
+  },
+  "negative_evidence_preserved": [
+    {
+      "class": "HARNESS_FAILURE_NOT_MECHANISM_FAILURE",
+      "observation": "First exact merge-SHA workflow had exact fetch and V5/V6 deterministic gates PASS, then failed because it assumed systemd-journald.service existed on the arbitrary self-hosted runner; static integrity was skipped."
+    },
+    {
+      "class": "HARNESS_FAILURE_NOT_MECHANISM_FAILURE",
+      "observation": "Second exact merge-SHA workflow again had V5/V6 deterministic gates PASS, then failed because generic systemctl list-units did not yield a usable service candidate on runner clay; static integrity was skipped."
+    },
+    {
+      "class": "TEST_SCOPE_CORRECTION",
+      "observation": "Runner service inventory was removed from V6 CI rather than misclassified as accepted Hostinger product evidence. Explicit-empty systemctl parsing is now deterministic/mocked; real Hostinger observation remains a separate acceptance receipt."
+    }
+  ],
+  "primary_source_fusion": {
+    "systemd": "Service lifecycle semantics include post-start and stop hooks in start/stop/restart behavior, supporting lifecycle-surface relevance without proving their presence on the productive unit.",
+    "sqlite": "Upstream fixed-line version evidence alone does not close F-V01-13; exact productive process/binary/mapped SQLite/state-lineage evidence remains required."
+  },
+  "concurrent_fusion": {
+    "research_entity_commit_seen_before_write": "d85aec0d2cccfb681fd9b4b37be3464d6a4671ab",
+    "existing_product_host_attestor_pr": 515,
+    "attestor_state": "MERGED",
+    "attestor_adjudication": "DO_NOT_DUPLICATE",
+    "accepted_host_observation_state": "BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED",
+    "hostinger_credit": "NOT_GRANTED",
+    "fusion": "V6 binds discovered lifecycle semantics; existing merged host attestor remains the next product-host observation mechanism once trusted Hostinger selectors/routing are available."
+  },
+  "collapse": [
+    {
+      "claim": "V5 observed-empty pre-exec surface is a complete ProductStart lifecycle identity",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "unobserved post-start/stop hooks can coexist with V5 PASS",
+      "outcome": "SUPPORTED_OFFLINE_EVALUATOR_LEVEL"
+    },
+    {
+      "claim": "explicit observed-empty lifecycle surface is a conservative v0.1 ProductStart candidate",
+      "outcome": "RETAIN_TESTING"
+    },
+    {
+      "claim": "productive Hostinger fixed-SQLite/lifecycle/recovery acceptance is proven",
+      "outcome": "REJECT_NOT_PROVEN"
+    }
+  ],
+  "next_falsifiers": [
+    "adjudicate current exact V5+V6 stack run 31604109694; green may promote mechanism integration only, not product acceptance",
+    "configure or otherwise obtain trusted accepted Hostinger hostname, machine-id digest, exact Frank systemd unit and executable selectors outside the failure domain appropriate to the claim",
+    "route the already-merged actual-process observer to accepted Hostinger and require its accepted-host selected-process SQLite/root-anchor match receipt",
+    "compose ProductStart lifecycle V6 with the accepted-host/process/runtime/source-byte chain",
+    "then execute bounded clean start/restart/recovery plus rollback/downgrade/library-swap fail-closed acceptance matrix"
+  ],
+  "promotion": "NOT_PROMOTED_DRAFT_PR",
+  "non_claims": [
+    "No production service install/start/stop/restart was performed by this run.",
+    "No /opt or /etc mutation was performed by this run.",
+    "No accepted Hostinger product observation was performed by this run.",
+    "No productive fixed SQLite mapping was proven by this run.",
+    "No canonical Frank state mutation or effect/Harness authority mutation was performed.",
+    "No F-V01-13 PASS or whole Frank v0.1 PASS.",
+    "No final-model training authorization."
+  ]
+}

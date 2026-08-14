@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "retrieval_mode": "REPEATED_FRESH_EXTERNAL_REFRESH",
+  "sources": [
+    {"id":"E-QWEN35-CONFIG","class":"OFFICIAL_MODEL","ref":"https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/config.json","finding":"Qwen3.5-4B vision tower remains 24 layers, hidden size 1024, patch 16, spatial merge 2, output 2560."},
+    {"id":"E-HF-QWEN35-CODE","class":"PRIMARY_GITHUB_PROJECT","ref":"https://github.com/huggingface/transformers/blob/main/src/transformers/models/qwen3_5/modeling_qwen3_5.py","finding":"get_image_features returns vision pooler_output before language-model execution; unmerged last_hidden_state is also physically present in the vision output."},
+    {"id":"E-LLAMA-MTMD","class":"PRIMARY_GITHUB_PROJECT","ref":"https://github.com/ggml-org/llama.cpp/blob/master/tools/mtmd/mtmd.cpp","finding":"libmtmd batch owns an aggregated output embedding buffer for multimodal chunks."},
+    {"id":"E-LLAMA-SERVER","class":"PRIMARY_GITHUB_PROJECT","ref":"https://github.com/ggml-org/llama.cpp/blob/master/tools/server/server-context.cpp","finding":"llama-server reads mtmd_batch_get_output_embd and decodes the image chunk using that embedding buffer, preserving the physical feature-tap opportunity."},
+    {"id":"E-STP-2026","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2607.24112","finding":"State Transition Pretraining jointly predicts actions from state changes and next states from current state+action; reported gains indicate action-grounded visual transition structure is a meaningful representation axis."},
+    {"id":"E-ACTIONENGINE-2026","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2602.20502","finding":"Training-free state-machine GUI memory can reduce repeated model calls; execution failures trigger visual re-grounding and memory repair."},
+    {"id":"E-EAM-2026","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2605.12294","finding":"Structured executable GUI memory as a knowledge graph can improve long-horizon planning and reduce token cost, motivating a graph baseline but not direct authority transfer."},
+    {"id":"E-TSR-2026","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2607.00502","finding":"Separating persistent task state from transient observations and using pre/post-action transition-aware verification improves long-horizon GUI agents without backbone modification."},
+    {"id":"E-AGMEM-2026","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2606.14106","finding":"Naive full-image visual memory can worsen hidden-operation blindness/grounding; action-grounded local visual memory outperformed full-image memory in reported OSWorld experiments."},
+    {"id":"E-AQUAUI-2026","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2605.19260","finding":"Adaptive quadtree spatial compression can reduce GUI visual tokens with small measured performance loss; temporal consistency matters."},
+    {"id":"E-GUIKV-2025","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2510.00536","finding":"GUI-specific spatial/temporal redundancy can be exploited in KV-cache compression, supporting a later cache-reuse branch with strict invalidation."},
+    {"id":"E-QWEN3-VL-EMBED","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2601.04720","finding":"Strong Qwen multimodal embedding behavior is obtained through explicit multi-stage contrastive/ranking training, countering any assumption that raw generative vision features are automatically calibrated open-set embeddings."},
+    {"id":"E-VLM2VEC","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2410.05160","finding":"VLMs become strong embedding models through contrastive adaptation; raw feature suitability for MVC remains an empirical question."}
+  ],
+  "counterevidence_summary": "Transition memory can amplify visual aliasing, stale state and confirmation bias; full-image memory may worsen action-level failures; raw VLM features are not automatically calibrated retrieval embeddings; therefore VSTG must be task-bound, provenance-bound, abstaining, and verified post-action.",
+  "currentness": "retrieved 2026-08-10; current official Qwen/Transformers/llama.cpp plus 2025-2026 primary papers"
+}

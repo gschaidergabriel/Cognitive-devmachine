@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-PSW-001",
+  "classification":"PROJECT_SPECIFIC_COMBINATION_ONLY",
+  "collision_summary":"The general PSW mechanism is not novel. Established work already covers persistent versions/structural sharing, guarded/faceted values, variational execution that shares similarities across configurations, and dependence-driven change propagation. The Frank-specific composition adds epistemic branch identity/provenance/epoch and authority constraints, but no world-first claim is supportable.",
+  "collisions":[
+    {"mechanism":"shared common state / multiple versions","closest":"persistent data structures","severity":"HIGH"},
+    {"mechanism":"guard-conditioned alternative values","closest":"faceted execution / variational values","severity":"HIGH"},
+    {"mechanism":"execute alternatives together and share redundant work","closest":"variational execution","severity":"VERY_HIGH"},
+    {"mechanism":"recompute only where input differences matter","closest":"self-adjusting computation / change propagation","severity":"HIGH"},
+    {"mechanism":"field-wise conditions / symbolic alternative sets","closest":"decision-diagram/faceted/symbolic techniques","severity":"HIGH"},
+    {"mechanism":"branch identity fencing","closest":"epochs/generation counters/provenance/versioning","severity":"HIGH"}
+  ],
+  "surviving_project_specific_elements":[
+    "unresolved epistemic branch is explicitly not truth/authority",
+    "self.root + base epoch + branch revision + hypothesis + provenance identity separation",
+    "pure-transition lifting requires exact current ClayCode read/effect contract",
+    "effectful unresolved alternatives are proposals only and never multi-branch external executions",
+    "downtime cannot synthesize unpersisted cognitive branch evolution",
+    "payload/storage dedup does not imply epistemic/provenance merge"
+  ],
+  "novelty_decision":"No equivalent search supports a mechanism-novelty claim. Preserve only project-specific composition language and benchmark-derived implementation obligations."
+}

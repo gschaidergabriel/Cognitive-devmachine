@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "cutoff": "2026-08-10T23:05:00+07:00",
+  "canonical": "RAE-8.8/revision-2/04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "latest_stack_epoch_observed": 23,
+  "program": "FRANK_V0_1",
+  "workspace_last_updated": "2026-08-10T21:18:00+07:00",
+  "current_high_leverage_open_packages": [
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-10-PROACTIVE-AGENCY-WEB",
+    "F-V01-11-MEMORY-REWARD-GOALS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "important_existing_mechanisms": [
+    "UnifiedDB state_epochs + semantic_transactions + transaction_ops + snapshots",
+    "ClayGraph graph_epochs + graph_deltas + hyperrelations + receiver receipts + invalidation queue",
+    "single global execution lease with lease_epoch fencing",
+    "effect reservation + idempotency/unknown-outcome reconciliation + verified outcome before DONE",
+    "GWT candidate/selection/broadcast/use/outcome/causal-learning/reentry chain"
+  ]
+}

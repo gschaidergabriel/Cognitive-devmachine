@@ -1,0 +1,115 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/1.0",
+  "run_id": "go-20260811T2225p0700-chatgpt-secondary-sqlite-v4-product-composition",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T15:25:00Z",
+  "created_at_local": "2026-08-11T22:25:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not": "self.root/Frank"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "primary_work_package": "F-V01-13_SECURITY-RECOVERY-OBSERVABILITY",
+  "cross_impacts": [
+    "F-V01-08_TOKEN-API-CLIENTS",
+    "F-V01-04_UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-16_END-TO-END-ACCEPTANCE"
+  ],
+  "single_go_oob_experiment": {
+    "count": 1,
+    "name": "DIFFERENTLY_NAMED_ELF_SQLITE_SYMBOL_INTERPOSITION",
+    "execution_class": "LOCAL_INDEPENDENT_MECHANISM_REPLICATION",
+    "intervention": "Preload a differently named DSO that exports sqlite3_libversion while preserving the expected version string and leaving the expected libsqlite3 object mapped.",
+    "baseline_under_v1_invariants": {
+      "mapped_object_exact": true,
+      "sqlite_version_exact": true,
+      "sqlite_source_id_exact": true,
+      "mapped_library_hash_exact": true,
+      "threadsafe_check": true
+    },
+    "result": "V1_FALSE_ADMISSION_CLASS_REPRODUCED_LOCALLY",
+    "foreign_participation_observed": true,
+    "symbol_origin_observation": "RTLD_DEFAULT resolved sqlite3_libversion to the foreign preload DSO while lookup through the _sqlite3 extension handle still resolved the accepted dependency definition.",
+    "limitations": [
+      "local host SQLite was 3.46.1, not the accepted Hostinger target runtime",
+      "the independently reproduced symbol was sqlite3_libversion whereas the separate target worker demonstrated the same broader class with sqlite3_prepare_v2",
+      "this is replication of mechanism class, not target acceptance"
+    ]
+  },
+  "swarm_adjudication": {
+    "finding": "A concurrent independent worker had already reproduced the same ELF interposition class on the accepted target and advanced the guard through V2/V3/V4.",
+    "action": "The temporary V1 repair commits made on PR #324 were force-reset back to its original head abb4804bb640772a464bdce2f7c6ca3746f404f2 to avoid a second competing architecture.",
+    "preferred_storage_repair": {
+      "pull_request": 348,
+      "head": "70c90e38f1301e99367ed6aa300796524bf9f56d",
+      "generation": "V4_NO_SITE_BOOT",
+      "target_workflow_run": 31505915434,
+      "target_job": 93827324670,
+      "target_result": "PASS",
+      "observed_green_steps": [
+        "build pinned SQLite 3.53.4",
+        "V2 loader fencing regression",
+        "V3 Python module-origin fencing regression",
+        "V4 pre-guard site-startup bypass regression",
+        "V4 product guard integration discriminator",
+        "disposable UnifiedDB+ClayGraph pair behind V4",
+        "V17 generation fencing + SQLite V4 target"
+      ]
+    }
+  },
+  "fresh_product_entrypoint_resolution": {
+    "owner_fixed_contract": "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
+    "contract_requires": "fully implemented token-authenticated API; SSH/runner/developer-only reachability is insufficient",
+    "current_repo_evidence": {
+      "file": "runtime/api/frank_inbound_token.py",
+      "finding": "The module explicitly states that it contains no HTTP server and no persistence authority; it is a credential primitive only."
+    },
+    "open_server_pr_search": "NO_OPEN_PRODUCT_TOKEN_API_SERVER_PR_FOUND",
+    "classification": "PRODUCTION_ENTRYPOINT_NOT_YET_RESOLVED"
+  },
+  "integration_dependency": {
+    "f08_active_candidate": {
+      "pull_request": 329,
+      "status": "DRAFT_OPEN_TARGET_ACCEPTANCE_NOT_YET_PROVEN_IN_THIS_RUN",
+      "purpose": "principal-stable request/idempotency identity across credential rotation"
+    },
+    "known_current_v16_gap": "request identity includes credential_fingerprint, so replacement credential can change durable request key for the same logical principal/session/client/request",
+    "reason_not_to_build_server_on_only_one_branch": "Building directly on V4 alone can preserve a known request-identity gap; building only on the F08 candidate omits the preferred V4 pre-import trust boundary. A production ingress must compose both accepted semantics before claiming boot/API continuity.",
+    "required_common_gate": [
+      "compose preferred SQLite V4 exact-head semantics with the accepted F08 principal/credential/request identity semantics on one fresh product base",
+      "resolve one canonical production API entrypoint and artifact/source-root identity",
+      "start the exact admitted interpreter with -I -S before any import-capable Frank Python code",
+      "do not restore ambient site/CWD/user-site imports; add only explicitly attested product roots if required",
+      "run the real token API dependency graph under the V4 admission topology",
+      "capture a boot receipt covering sys.executable, flags, sys.path, source/build hashes, SQLite manifest/library/symbol provenance and API readiness",
+      "exercise valid/missing/invalid/revoked/rotated credentials, concurrent requests, restart-to-readiness, cancellation/error handling and consequential replay/idempotency before F-V01-08 or F-V01-13 product promotion"
+    ]
+  },
+  "hypothesis": "A single common product boot that composes V4 pre-import trust with principal-stable token/request identity can make storage/runtime identity and API replay identity jointly enforceable without a second execution authority.",
+  "strongest_counterhypothesis": "The final self.root binary may eliminate Python repository-local imports and/or the current Python token stack entirely, making this particular Python service composition unnecessary; therefore production wiring must follow the selected final executable/package graph rather than force Python machinery into the cognitive core.",
+  "architecture_delta": {
+    "status": "NO_CHANGE_TO_PREFERRED_V4; NEW_CROSS_PACKAGE_TEST_OBLIGATION",
+    "reason": "Current target evidence already supports V4 more strongly than the local V1 repair. The novel durable delta is the unresolved common product-entrypoint/composition gate between F-V01-13 and F-V01-08.",
+    "rollback": "No canonical Frank runtime or database was mutated by this receipt."
+  },
+  "negative_results": [
+    "Old Axis-D hosted/target red status traced to an instrument configure failure before discriminator execution; no SQLite candidate failure credit assigned.",
+    "A Deep Integrity red run with no usable executed-step evidence remains UNKNOWN and is not promoted as candidate failure."
+  ],
+  "claim_boundary": {
+    "external_effect_performed": false,
+    "canonical_frank_database_mutated": false,
+    "self_root_harness_authority_granted": false,
+    "final_training_authorized": false,
+    "whole_frank_v0_1_acceptance": false,
+    "production_token_api_acceptance": false
+  }
+}

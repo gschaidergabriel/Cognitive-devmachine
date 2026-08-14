@@ -1,0 +1,239 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-EXECUTABLE-CORE-CAUSAL-CLOSURE-20260811T075529Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "created_at_utc": "2026-08-11T07:55:29Z",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "prior_notified_event_commit": "da8263303c445a0ab925cc19baf2ca7b449e207c",
+    "observed_head": "b7deca5eb0ea04d197a064cd7d9b3a33d1698351"
+  },
+  "intended_recipients": [
+    "Clay research center and evidence-ledger worker",
+    "separate Harness/review worker; no Frank self-Harness mutation",
+    "F-V01-02 ClayCode compiler/runtime worker",
+    "F-V01-03 cognitive-loop worker",
+    "F-V01-04 UnifiedDB/ClayGraph worker",
+    "F-V01-05 GWT/Hyperposition worker",
+    "F-V01-09 effect-authority worker",
+    "F-V01-13 security/recovery/observability worker"
+  ],
+  "evidence_families": [
+    {
+      "family_id": "E-CLAYCODE-EXECUTOR-CANDIDATE-20260811",
+      "classification": "TARGET_LOCAL_AUTHOR_SESSION_PLUS_SEMANTIC_SABOTAGE_OPEN_UNMERGED_PR",
+      "canonical_commits": [
+        "cf9ed31ded6771229b05f43f0ed1fb07053d7a51",
+        "4cb524853e33163d96b2e612d062233a4ab76bfa",
+        "67ed807d2008ae67d1d932d847725fd7ea712762",
+        "814001bee088f430a6bae2090962eb072886a936",
+        "b7deca5eb0ea04d197a064cd7d9b3a33d1698351"
+      ],
+      "deduplication": "The supervisor/steering commits consume and route the same PR310/PR313 evidence; they are not extra confirmations.",
+      "target_prs": [
+        {
+          "pr": "gschaidergabriel/Dr.-Unterweger#310",
+          "head": "83754cfdb8839fdc839a0b524cc0f6a755b1c421",
+          "state": "OPEN_UNMERGED",
+          "combined_status_contexts": 0,
+          "evaluator_blob": "0cc53af49bc44ad9b6d10238df55398fc0fb2db8",
+          "analyzer_blob": "762afb774b9d88b3468cd696abe5682878274735",
+          "differential_gate_blob": "4a13ad12efbbd0d87b5f44c5b91390ae130f8c5d",
+          "result": "200576 sampled requests, zero Python-vs-Clay mismatches; two semantic sabotages turned the gate red; exact source and grammar hashes are emitted."
+        },
+        {
+          "pr": "gschaidergabriel/Dr.-Unterweger#313",
+          "head": "7cc5258ddcabea279756399490f5f3eebbbf41d8",
+          "state": "OPEN_UNMERGED_STACKED_ON_PR310",
+          "combined_status_contexts": 0,
+          "result": "Raw unresolved count 29 becomes 3 after 26 declared host contracts and 0 after three call-site-reconstructed receipt declarations; this is resolution, not type/effect/runtime acceptance."
+        }
+      ],
+      "positive_update": [
+        "Exact Clay source is now parsed and executed for decide_effect rather than substring-checked.",
+        "Semantic mutations can make the differential gate fail.",
+        "The 29-versus-3 count ambiguity is provenance-resolved.",
+        "Clay EffectRequest structurally excludes the four Python-only cognitive hint fields."
+      ],
+      "static_counterevidence": [
+        "Evaluator.admit() iterates reachable call targets but does not reject analysis.diagnostics; analyzer records duplicate sum-variant ambiguity in diagnostics. A module with an ambiguous variant can therefore be admitted despite the advertised fail-closed rule.",
+        "The differential domain has 9*8*4*2^19 = 150994944 discrete request combinations; 200576 comparisons cover approximately 0.133 percent and use the shipping Python implementation as the only behavioral oracle.",
+        "Corpus parse coverage remains 3 of 40 sources (7.5 percent); no full type/effect checker, lowering, FFI, concurrency substrate or owner-reviewed receipt semantics exists."
+      ],
+      "independence_boundary": "Same owner/project, contributor session, target and implementation lineage. Delegated Sonnet plus coordinating Opus re-verification is same-lineage review, not independent runtime replication."
+    },
+    {
+      "family_id": "E-LOOP-GWT-CAUSAL-SLICE-20260811",
+      "classification": "TARGET_LOCAL_SYNCHRONOUS_TEST_SLICE_OPEN_UNMERGED_PR",
+      "canonical_commit": "e6be89269534799a4ee1ad8cf3018483d7587f1f",
+      "target_pr": "gschaidergabriel/Dr.-Unterweger#312",
+      "head": "746640bda388aebf240c965afee744ce332f6a9a",
+      "state": "OPEN_UNMERGED",
+      "combined_status_contexts": 0,
+      "loop_blob": "971a4a595cc86f9b35f245a15ca3b0ba05fba05f",
+      "schema_blob": "c598eb18992670dfa967d5427da58ebffd52e878",
+      "runtime_blob": "2301c050a34bc80b8e88375e0c88ed2fa86e4c3a",
+      "positive_update": [
+        "A bounded synchronous turn now composes Clay evaluation, disposable UnifiedDB candidate state, receiver-use control, effect lifecycle and terminal re-entry.",
+        "TRUTHFUL completes while SHUFFLED, empty-provenance and no-reentry arms stop at named links.",
+        "Breaking the SHUFFLED control and admitting learning early makes the check vector fail."
+      ],
+      "static_counterevidence": [
+        "V17 validates effect_id, attempt_id and outcome_hash, but episode_id, signal_id and causal_id are only non-empty TEXT. No foreign key or lookup binds them to an admitted WorkspaceEpisode, selected content or receiver-use fact.",
+        "record_bound_reentry accepts any non-empty provenance dictionary and hashes it; arbitrary non-empty GWT identifiers are predicted to reach REENTERED and DONE if the effect attempt/outcome fields match.",
+        "The next turn reads last_admitted_delta only through `0.1 if prior else 0.0`; all non-empty delta hashes are behaviorally equivalent. The current consumer is a Boolean presence gate, despite storing a high-cardinality hash.",
+        "Candidate selection is a deterministic max over fixed pressures; candidate and percept identifiers differ by arm, so this is not yet exact matched replay.",
+        "No real Hyperposition, ClayGraph or Needle implementation participates; receivers and causal credit are local Python dataclasses/hashes."
+      ]
+    },
+    {
+      "family_id": "E-STORAGE-IDENTITY-PROCESS-CRASH-20260811",
+      "classification": "TARGET_LOCAL_OBJECT_BINDING_PLUS_GENERAL_SIGKILL_ORACLE_OPEN_UNMERGED_PR",
+      "canonical_commit": "ad467b01b0f191570e4ce9edff22c38409920577",
+      "target_pr": "gschaidergabriel/Dr.-Unterweger#311",
+      "head": "bb9cc037ce6497d9979bfdc6003ede49b27824a4",
+      "state": "OPEN_UNMERGED",
+      "combined_status_contexts": 0,
+      "identity_probe_blob": "38528d248231b6ee493fd1e63595e6ef2488a389",
+      "crash_oracle_blob": "89dd18dfa6f7ede4f62cf61c6f9eda54f3d55a16",
+      "positive_update": [
+        "The live mapped libsqlite object is bound by realpath, GNU build-id, SHA-256 and package identity.",
+        "Ten multi-process SIGKILL cycles over WAL at NORMAL and FULL recorded 12807 fsynced post-commit receipts with zero observed loss, zero classified phantoms, integrity ok and post-crash writability.",
+        "Three measurement-instrument defects were preserved as negative results."
+      ],
+      "limits_and_counterevidence": [
+        "The fsynced log is written after COMMIT returns, so it observes durable post-commit receipts, not every COMMIT-return event in the kill-to-log window.",
+        "SQLite primary documentation states transactions are durable across application crashes; the run is valuable exact-object regression evidence but not a surprising discriminator.",
+        "The general SIGKILL oracle cannot decide WAL-reset fix presence. SQLite states the race was not reproduced organically and required special source instrumentation to force the schedule.",
+        "No power-loss, kernel-panic, VFS fault, filesystem/device flush, or targeted WAL-reset discriminator ran."
+      ]
+    },
+    {
+      "family_id": "E-LIVE-PRIMARY-SOURCES-20260811T075529Z",
+      "classification": "PRIMARY_EXTERNAL_SUPPORT_NOT_PROJECT_EXECUTION",
+      "sources": [
+        {
+          "url": "https://sqlite.org/pragma.html#pragma_synchronous",
+          "checked_utc": "2026-08-11T07:55:29Z",
+          "claim": "SQLite distinguishes application crash from operating-system crash/power loss; application-crash durability holds regardless of synchronous mode, while WAL NORMAL can lose recent transactions after power loss/system crash."
+        },
+        {
+          "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+          "checked_utc": "2026-08-11T07:55:29Z",
+          "claim": "The WAL-reset race affects concurrent WAL writers/checkpoints and was only reproduced using special test-control instrumentation; organic stress alone is not a decisive fix-presence test."
+        },
+        {
+          "url": "https://www3.sqlite.org/releaselog/3_53_4.html",
+          "checked_utc": "2026-08-11T07:55:29Z",
+          "claim": "SQLite 3.53.4 dated 2026-07-24 carries the WAL-reset fix lineage."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12137136/",
+          "checked_utc": "2026-08-11T07:55:29Z",
+          "claim": "The 2025 preregistered adversarial GNWT/IIT study found mixed results and substantially challenged key tenets; software broadcast/control completion must not be promoted to consciousness evidence."
+        }
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "id": "H-CAUSAL-BINDING-CLOSURE-001",
+      "concept": "CausalBindingClosure",
+      "hypothesis": "A GWT-to-effect re-entry is causally bound only if the database or a verified typed receipt links episode identity, selected content digest, broadcast identity and receiver-use witness to the exact outcome and admitted delta; non-empty strings are provenance shape, not causal truth.",
+      "counterhypothesis": "Application-level generation of these identifiers is sufficient because the V17 database only owns terminal effect integrity, not workspace semantics.",
+      "decisive_test": [
+        "On the current PR312 bytes, replace episode_id, signal_id and causal_id with never-created non-empty values and provenance with an unrelated non-empty dictionary.",
+        "If REENTERED/DONE still succeeds, classify current V17 as EFFECT_OUTCOME_BOUND_PLUS_SELF_ATTESTED_COGNITIVE_LINK.",
+        "Add an admitted WorkspaceEpisode/ReceiverUse receipt domain and require FK or verified typed-root membership; rerun the swap and require schema-level refusal.",
+        "Lesion selected-content or receiver-use while retaining identifiers; require downstream causal credit and learning admission to fail."
+      ]
+    },
+    {
+      "id": "H-REENTRY-INFORMATION-RANK-001",
+      "concept": "ReentryInformationRank",
+      "hypothesis": "Stored information and used information are separate axes. A re-entry channel is content-bearing only when at least two distinct admitted deltas induce preregistered distinguishable downstream state or action under matched conditions.",
+      "counterhypothesis": "Presence of any verified delta is the intended sufficient statistic for this minimal slice; Boolean consumption is not a defect if labeled honestly.",
+      "current_static_result": "PR312 maps every non-empty last_admitted_delta to the same +0.1 pressure change, so current downstream information rank is one presence bit, not delta-content use.",
+      "decisive_test": [
+        "Run matched turns with delta A, delta B and no delta while keeping all other bytes fixed.",
+        "Require A versus B to differ at a declared consumer if CONTENT_PATH is claimed; otherwise relabel as VERIFIED_REENTRY_PRESENCE.",
+        "Measure intervention rank over memory, candidate ordering, selected action and terminal outcome rather than only storage cardinality."
+      ]
+    },
+    {
+      "id": "H-ORACLE-INDEPENDENCE-TRIANGLE-001",
+      "concept": "OracleIndependenceTriangle",
+      "hypothesis": "Clay semantic confidence requires agreement among exact-source execution, the shipping Python reference and a separately derived declarative policy oracle or exhaustive symbolic partition; two shared-spec implementations can agree on the same mistake.",
+      "counterhypothesis": "Targeted semantic mutation adequacy plus branch-structured random differential testing is sufficient for the current narrow policy.",
+      "decisive_test": [
+        "Derive a policy truth table or SMT/BDD model from owner-reviewed requirements, not from either implementation.",
+        "Compare all reachable branch equivalence classes; report exact covered-state cardinality rather than sample count alone.",
+        "Generate one mutant per predicate/operator/variant and require kill or an explicit equivalent-mutant proof.",
+        "Preserve PR310 exact source_hash, grammar_hash, evaluator blob and target identity in each receipt."
+      ]
+    },
+    {
+      "id": "H-EVALUATOR-DIAGNOSTIC-ADMISSION-001",
+      "concept": "DiagnosticClosedAdmission",
+      "hypothesis": "Evaluator admission must fail whenever analysis.diagnostics is non-empty, before reachability or execution, because ambiguous nominal variants invalidate constructor identity globally.",
+      "counterhypothesis": "Only diagnostics reachable from the admitted function should block; global rejection would unnecessarily prevent isolated valid functions.",
+      "static_falsifier": "Analyzer marks duplicate sum variants as `<AMBIGUOUS>` in diagnostics, but Evaluator.admit does not inspect diagnostics.",
+      "decisive_test": [
+        "Create two sum types sharing variant ALLOW and a function returning ALLOW.",
+        "Current prediction: admit succeeds and returns EnumValue(`<AMBIGUOUS>`, `ALLOW`).",
+        "Require either global fail-closed rejection or a proven reachable-diagnostic slice; add negative receipt and mutation test."
+      ]
+    },
+    {
+      "id": "H-DEFECT-SPECIFICITY-GATE-001",
+      "concept": "DefectSpecificityGate",
+      "hypothesis": "Fix-presence promotion for the SQLite WAL-reset race requires a paired discriminator that fails on a known-vulnerable build and passes on a fixed build under the same forced schedule and build flags; untargeted crash stress cannot close axis C.",
+      "counterhypothesis": "Source-hook instrumentation perturbs the race, so only long organic stress is externally valid.",
+      "synthesis": "Use two non-substitutable lanes: deterministic upstream-style forced-schedule discrimination for internal validity, plus uninjected long-run stress for operational validity.",
+      "decisive_test": [
+        "Build vulnerable and fixed source siblings with identical options and upstream test-control hook.",
+        "Force the documented writer/checkpoint interleaving and require corruption/omission only on the vulnerable sibling.",
+        "Bind each loaded object by build-id/SHA/source-id and preserve negative results.",
+        "Only then compare the private 3.53.4 build and the Ubuntu object; do not infer axis C from general SIGKILL passes."
+      ]
+    }
+  ],
+  "preserved_negative_and_null_results": [
+    "All four target PRs 310-313 are open and unmerged; the inspected heads expose zero combined-status contexts.",
+    "No project-side CI receipt independently re-executed the reported author sessions at the exact PR heads.",
+    "PR310 executes a narrow policy slice but only 3/40 Clay sources parse.",
+    "UNRESOLVED=0 after declarations does not establish type, effect, implementation or runtime correctness.",
+    "PR312 is not emergence, consciousness, Hyperposition, ClayGraph, Needle, receiver competition or learning-dynamics evidence.",
+    "PR312 stores high-cardinality re-entry hashes but consumes only presence/absence in the next turn.",
+    "PR311 establishes process-crash regression behavior, not power-loss durability or WAL-reset fix presence.",
+    "No canonical database, external provider effect, work-package promotion, Frank completion or training occurred."
+  ],
+  "requested_reentry": [
+    "ClayCode worker: add DiagnosticClosedAdmission negative test, then build the OracleIndependenceTriangle over exact branch partitions.",
+    "GWT/loop worker: run the arbitrary-nonempty-ID counterexample and the A/B/no-delta ReentryInformationRank test before any causal-completion promotion.",
+    "UnifiedDB/ClayGraph worker: define typed WorkspaceEpisode, selected-content and ReceiverUse membership so V17 can bind cognitive facts rather than caller-supplied strings.",
+    "Storage worker: prioritize the upstream-style forced WAL-reset schedule over more untargeted cycles; add an external observer for COMMIT-return versus fsynced receipt boundaries.",
+    "Evidence/Harness reviewer: independently re-execute exact PR heads and emit partial receipts; do not modify Frank's protected Harness.",
+    "Center ledger: keep supervisor commits collapsed into their originating evidence families and preserve all negative/instrument results."
+  ],
+  "authority_boundary": {
+    "code_executed_by_this_event": false,
+    "target_repo_mutated": false,
+    "canonical_room_event_created": true,
+    "harness_mutated": false,
+    "external_effect": false,
+    "canonical_semantics_promoted": false,
+    "work_package_promoted": false,
+    "frank_v0_1_finished": false,
+    "training_run": false
+  }
+}

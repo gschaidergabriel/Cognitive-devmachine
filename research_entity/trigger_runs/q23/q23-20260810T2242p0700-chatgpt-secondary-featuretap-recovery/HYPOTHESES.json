@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H-Q23-FTAP-01",
+      "claim": "For Qwen3.5-4B, a single visual forward pass can supply both pre-merger vision hidden states and post-merger LLM-visible image embeddings; one or both can support Frank MVC/open-set routing without a second heavy vision encoder.",
+      "status": "OPEN_PRIMARY_SOURCE_SUPPORTED_RUNTIME_UNTESTED",
+      "strongest_counterhypothesis": "Pre-merger and post-merger generative-VLM features are both poorly calibrated for user-specific familiarity/open-set recognition, so a dedicated lightweight embedding encoder remains Pareto-superior.",
+      "falsifier": "Matched target-VPS evaluation shows both Qwen feature taps are dominated by the dedicated lightweight baseline on selective/open-set correctness at equal-or-lower total pathway cost.",
+      "cheapest_discriminating_test": "Run FEATURE_TAP_PROBE on frozen screenshots, then fit identical prototype/tiny-readout heads on pre-merger vs post-merger features and compare against dedicated lightweight embeddings."
+    },
+    {
+      "hypothesis_id": "H-Q23-RECOVERY-02",
+      "claim": "Frank multimodal restart/replay should treat libmtmd media/KV state as ephemeral until exact target-VPS persistence passes; durable recovery should be based on provenance-bound source evidence, feature/prototype version identity and semantic state, with re-encoding after restart when needed.",
+      "status": "OPEN_STRONGLY_MOTIVATED_BY_CURRENT_RUNTIME_LIMITATION",
+      "strongest_counterhypothesis": "Current Qwen3.5/libmtmd target configuration has a reliable multimodal cache persistence path that makes re-encoding unnecessary and materially improves recovery latency without correctness loss.",
+      "falsifier": "Exact Qwen3.5-4B target-VPS save/restart/restore test preserves multimodal state, cache/media identity and decoded outcome equivalence across repeated crash/restart cycles."
+    },
+    {
+      "hypothesis_id": "H-Q23-TEMPORAL-03",
+      "claim": "Frank should separate pre-encoder deterministic unchanged-frame suppression from post-encoder feature/history pruning; combining both can reduce total visual cost while preserving spatial transition evidence better than either alone.",
+      "status": "OPEN_EXTERNAL_PRIMARY_RESEARCH_SUPPORTED_FRANK_UNTESTED",
+      "strongest_counterhypothesis": "The second temporal stage adds complexity/cache/state cost without measurable task or token benefit after the cheap pre-encoder change gate.",
+      "falsifier": "Matched GUI replay shows combined gating fails to beat pre-encoder-only gating on task success, sensor-to-action latency and visual tokens per verified action."
+    }
+  ]
+}

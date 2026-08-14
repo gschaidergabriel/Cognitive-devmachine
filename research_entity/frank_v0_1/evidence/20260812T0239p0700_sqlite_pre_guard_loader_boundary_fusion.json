@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "record_type": "FRANK_V0_1_GR_FUSION_EVIDENCE",
+  "recorded_at": "2026-08-12T02:39:26+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_packages": ["F-V01-13", "F-V01-09"],
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "trigger": "go",
+  "source_repo": "gschaidergabriel/Dr.-Unterweger",
+  "source_main_before_merge": "abd769d5cee835af2b1b867041e52f8a443a3060",
+  "source_pr": 439,
+  "source_pr_head": "da5964942a67376c9647477139c67404069e2ce1",
+  "source_merge": "aa5f84c31c46ab3e3c405231cf93bddd1f7d51d8",
+  "observed_anchors": {
+    "accepted_target_productive_system_python_sqlite": "3.45.1",
+    "accepted_target_root_sqlite_anchor": "ABSENT in the cited V5 mechanism receipt",
+    "sqlite_upstream_release_threshold": "WAL-reset corruption defect documented through 3.51.2; fixed in 3.51.3 and designated backports",
+    "current_upstream_sqlite_release_observed": "3.53.4 (2026-07-24)",
+    "existing_v5_behavior": "root-anchor/runtime/source/parent-child admission fails closed but the shell launcher previously described itself as the first trust boundary"
+  },
+  "grf": {
+    "generated_reality": "The V5 shell launcher can be the first execution trust boundary because it fixes PATH before invoking helpers and then delegates to the Python guard.",
+    "counter_reality": "The ELF dynamic loader can execute inherited loader-control content before /bin/sh executes the first shell statement, so shell-level checks cannot be the earliest execution boundary.",
+    "hidden_assumption": "No attacker-controlled dynamic-loader environment is processed before shell code begins.",
+    "falsifier": "Compare the same V5 launcher invocation without loader injection against one bounded run-owned LD_PRELOAD constructor sentinel on the accepted target.",
+    "predicted_if_generated_reality_right": "No constructor sentinel can execute before the V5 shell establishes its invariants.",
+    "predicted_if_counter_reality_right": "Treatment constructor executes in the shell process before V5 shell checks; baseline remains clean.",
+    "outcome": "COUNTER_REALITY_SUPPORTED_GENERATED_REALITY_REJECTED"
+  },
+  "unusual_experiment": {
+    "count_in_this_go_cycle": 1,
+    "name": "PRE_GUARD_PRELOAD_SENTINEL",
+    "classification": "BOUNDED_UNUSUAL_EXPERIMENT",
+    "accepted_target_run": 31527873210,
+    "tested_head": "b17f67c4efa3476e39e89527c19499d767aaa1ee",
+    "baseline": {
+      "launcher_rc": 78,
+      "sentinel_present": false
+    },
+    "treatment": {
+      "launcher_rc": 78,
+      "sentinel_present": true,
+      "constructor_executables_observed": ["/usr/bin/dash", "/usr/bin/id"]
+    },
+    "safety_bounds": "run-owned harmless constructor wrote only PID/executable observations under /tmp; no root changes, no Frank state, no effect authority; run-owned tree cleaned",
+    "interpretation": "Downstream V5 SQLite admission still failed closed, but the claim that trust begins inside the shell was falsified.",
+    "repetition_policy": "The experiment workflow was converted to workflow_dispatch-only after the single evidence run so follow-up commits do not silently repeat it."
+  },
+  "repair": {
+    "state": "MERGED_TO_MAIN",
+    "merge": "aa5f84c31c46ab3e3c405231cf93bddd1f7d51d8",
+    "changes": [
+      "V5 launcher no longer claims the shell is the earliest trust boundary.",
+      "Non-empty LD_PRELOAD, LD_AUDIT or LD_LIBRARY_PATH reaching the shell admission are rejected fail-closed.",
+      "Those variables are unset before accepted downstream helper execution.",
+      "The launcher explicitly requires an upstream trusted execution/environment boundary before /bin/sh is exec'd."
+    ],
+    "important_limitation": "Shell rejection is defense-in-depth only; it cannot retroactively prevent loader code that executed before the shell. Therefore this repair does not close F-V01-13."
+  },
+  "validation": {
+    "ordinary_regression": "FRANK_SQLITE_V5_LAUNCHER_PRE_GUARD_PATH_REGRESSION_V1",
+    "accepted_target_run": 31528623653,
+    "exact_pr_head": "da5964942a67376c9647477139c67404069e2ce1",
+    "result": "PASS",
+    "new_go_oob_experiment": false,
+    "parallel_red_checks_adjudication": {
+      "deep_integrity": "The immediately preceding main SHA abd769d5... also had the same workflow conclusion failure, so it is not evidence that PR #439 introduced the failure.",
+      "directory_anchor_repair": "failed during checkout before candidate code executed",
+      "fresh_main_effect_fence": "failed during checkout before candidate code executed"
+    }
+  },
+  "fusion_with_parallel_evidence": {
+    "parallel_research_head_before_this_write": "7879d87773a182dc6638f15d681f7c3b0fbd6623",
+    "parallel_delta": "A sibling GO cycle promoted a distinct negative result showing ldd can diverge from the object already mapped in the observing process after loader-environment changes.",
+    "combined_mechanism": "Release-safe SQLite admission requires at least two distinct boundaries: upstream execution/environment provenance before the shell, and exact live mapped-object plus release-accepted SQLite identity downstream. ldd-style fresh resolution is diagnostic and must not substitute for live mapped-object identity.",
+    "non_claim": "Neither evidence item proves that the actual productive Frank service currently starts through a trusted parent or maps the fixed release-accepted SQLite object."
+  },
+  "next_discriminating_falsifier": {
+    "question": "What exact parent/service launches productive Frank on the accepted Hostinger Ubuntu VPS, and can loader-control contamination reach the admitted shell process?",
+    "required_observations": [
+      "exact production parent executable and package/build identity",
+      "exact service/unit/drop-in or equivalent deployment configuration identity and immutable receipt",
+      "proof that loader-control environment cannot enter the admitted Frank shell through the productive path",
+      "negative control showing a contaminated launch request cannot become an accepted Frank execution",
+      "child /proc mapped-object identity composed with release-accepted SQLite source/build identity",
+      "restart/crash/replay preservation of the same parent-to-launcher-to-guard-to-SQLite lineage",
+      "downgrade, library-swap and stale-anchor rejection"
+    ],
+    "promotion_condition": "Only production-path evidence can promote the upstream launch boundary from GENERATED/CANDIDATE to VERIFIED."
+  },
+  "promotion": {
+    "pre_guard_dynamic_loader_counter_reality": "SUPPORTED_ON_TESTED_ACCEPTED_TARGET_INVOCATION",
+    "shell_loader_env_rejection_repair": "MERGED_CANDIDATE_DEFENSE_IN_DEPTH",
+    "upstream_productive_launch_boundary": "UNVERIFIED",
+    "whole_F_V01_13": "IN_PROGRESS",
+    "whole_F_V01_09": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "authority": {
+    "canonical_frank_state_mutation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false,
+    "together_api_used": false
+  },
+  "primary_references": [
+    "https://www.sqlite.org/wal.html",
+    "https://sqlite.org/releaselog/3_51_3.html",
+    "https://sqlite.org/releaselog/3_53_4.html",
+    "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker-Hardening.html",
+    "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker-Invocation.html"
+  ]
+}

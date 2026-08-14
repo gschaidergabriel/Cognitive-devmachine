@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0242p0700-gpt56sol-sqlite-v5-root-provision",
+  "trigger": "go",
+  "origin_actor": "chatgpt-project-worker",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_after_cycle": "aa5f84c31c46ab3e3c405231cf93bddd1f7d51d8",
+    "main_note": "SQLite V5 release identity policy and upstream-of-shell trust-boundary repair are merged; F-V01-13 remains unclosed.",
+    "candidate_pr": 440,
+    "candidate_head": "37e8ef21569c79c7c6fb539d0182c7fe43dd45ba",
+    "candidate_state": "DRAFT_TESTING_MERGEABLE"
+  },
+  "observed_reality": {
+    "productive_readonly_probe_run": 31527030989,
+    "productive_sqlite_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+    "productive_library_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "productive_library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "productive_v5_anchor": "MISSING",
+    "published_patchset_run": 31528284106,
+    "published_patchset_status": "NO_EXPLICIT_WAL_RESET_FIX_IN_PUBLISHED_UBUNTU_PATCHSET",
+    "claim_boundary": "Absence of an explicit WAL-reset patch marker in the published Debian patch series is not by itself a universal proof about every possible binary-level backport; release remains fail-closed until exact fixed-runtime evidence exists."
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "claim_used": "The WAL-reset corruption bug affects upstream SQLite 3.7.0 through 3.51.2 and is fixed in 3.51.3+, with specific backport releases also identified by upstream.",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite 3.53.4 release/source identity",
+      "claim_used": "SQLite 3.53.4 is an upstream fixed-line release dated 2026-07-24 and supplies the source identity used by the current Frank V5 release policy.",
+      "url": "https://www.sqlite.org/changes.html"
+    }
+  ],
+  "grf": {
+    "leading_generated_reality": "Provision one independently pinned fixed SQLite artifact into a deployment-owned content-addressed runtime prefix, verify it before commit, and publish the V5 root anchor only after the runtime commit is durable.",
+    "strongest_counter_reality": "A self-consistent root anchor can still be unsafe if the manifest authorizes itself, deployment authority is compromised, service-manager startup binds a different loader environment/path, or rollback restores older installed state.",
+    "collapse": "RETAIN_DEPLOYMENT_CANDIDATE_KEEP_RELEASE_GATE_OPEN"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "SELF_FORGED_ANCHOR_ADVERSARIAL",
+    "scope": "disposable local filesystem paths only",
+    "baseline": "content-identical anchor under root-owned non-group/world-writable parent chain accepted by V5 anchor trust checks",
+    "intervention": "same anchor content changed to UID/GID 1000; separate /tmp parent-chain sensitivity control also exercised",
+    "result": "USER_OWNED_ANCHOR_REJECTED_AND_WORLD_WRITABLE_PARENT_REJECTED",
+    "interpretation": "supports the current V5 root-owned parent-chain trust condition against ordinary Frank self-forging; does not establish protection against privileged deployment compromise or namespace/kernel attacks",
+    "canonical_state_mutated": false,
+    "external_effect": false
+  },
+  "build_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 440,
+    "branch": "clay/go-sqlite-v5-root-provision-20260812",
+    "head": "37e8ef21569c79c7c6fb539d0182c7fe43dd45ba",
+    "files": [
+      "runtime/frank_storage_truth_v1/frank_sqlite_v5_root_provision_candidate.py",
+      "tests/test_frank_sqlite_v5_root_provision_candidate.py"
+    ],
+    "mechanism": [
+      "production apply requires UID 0",
+      "requires independently supplied expected manifest SHA-256 and rejects mismatch",
+      "delegates SQLite version/source acceptance to current V5 release policy rather than creating a second allowlist",
+      "re-hashes one nofollow-opened source library and exact manifest bytes",
+      "stages to a content-addressed root-owned /opt prefix with fsync and non-group/world-writable permissions",
+      "probes staged SQLite identity before commit",
+      "commits runtime directory before atomic root-owned /etc anchor publication",
+      "idempotent exact replay; conflicting or vulnerable identity fails closed"
+    ],
+    "self_review_fixes": [
+      "replaced single os.write assumption with complete-write loop",
+      "strengthened secure parent-chain and symlink rejection",
+      "removed circular self-authorizing manifest provenance by requiring an external expected manifest digest"
+    ]
+  },
+  "local_deterministic_gate": {
+    "status": "PASS_LOCAL_ROOT_SANDBOX_ONLY",
+    "checks_passed": 14,
+    "checks_total": 14,
+    "notable_checks": [
+      "content-addressed first commit",
+      "root-owned/non-writable runtime and anchor",
+      "idempotent exact second provision",
+      "externally pinned manifest mismatch denial",
+      "SQLite 3.45.1 release-policy denial"
+    ],
+    "limitation": "The test injects a fake ELF identity probe while retaining manifest/release-policy and filesystem-commit logic; this is not accepted-target production provisioning evidence."
+  },
+  "target_execution_disposition": {
+    "status": "BLOCKED_ROOT_CAPABILITY_NOT_AVAILABLE_TO_CURRENT_SELF_HOSTED_RUNNER",
+    "production_opt_or_etc_mutated": false,
+    "accepted_target_provisioning_pass_claimed": false,
+    "next_discriminating_test": "On an explicitly authorized root-capable accepted target, provision an independently accepted SQLite 3.53.4 manifest, then prove exact V5 launcher/productive mapped-object identity across service start, restart, rollback and downgrade/library-swap controls."
+  },
+  "coordination": {
+    "nonduplicated_parallel_lanes": [
+      "PR#433 deployment-owned runtime object",
+      "PR#435 productive mapped-inode observation",
+      "PR#437 pre-exec loader-environment negative evidence",
+      "merged PR#439 upstream-of-shell trust-boundary repair"
+    ],
+    "composition_required_before_promotion": true
+  },
+  "workspace_delta": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "KEEP_IN_PROGRESS_ADD_ROOT_PROVISION_CANDIDATE_AND_TARGET_ROOT_COMPOSITION_GATE"
+    },
+    "F-V01-09-EFFECT-AUTHORITY": {
+      "action": "NO_STATUS_CHANGE_STORAGE_RECOVERY_DEPENDENCY_REMAINS"
+    }
+  },
+  "research_disposition": "CANDIDATE_TESTING_LOCAL_PASS_TARGET_ROOT_BLOCKED",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

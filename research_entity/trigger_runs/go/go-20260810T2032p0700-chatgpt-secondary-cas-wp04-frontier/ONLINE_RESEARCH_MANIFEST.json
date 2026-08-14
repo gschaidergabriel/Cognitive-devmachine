@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2032p0700-chatgpt-secondary-cas-wp04-frontier",
+  "retrieval_windows": ["2026-08-10T20:23+07:00","2026-08-10T20:29+07:00"],
+  "sources": [
+    {
+      "class":"OFFICIAL_PRIMARY_DOC",
+      "source":"https://mlir.llvm.org/docs/LangRef/",
+      "finding":"MLIR keeps an open type/operation system with semantics attached to dialect operations/types and explicit verification; operation order may or may not be semantically meaningful depending on region semantics.",
+      "clay_disposition":"SUPPORTS_BACKEND_NEUTRAL_TYPED_IR_AND_TYPE_DIRECTED_ORDER_SEMANTICS; DOES_NOT_DEFINE_CLAY_CALL_SIGNATURES"
+    },
+    {
+      "class":"OFFICIAL_PRIMARY_DOC",
+      "source":"https://component-model.bytecodealliance.org/design/wit.html",
+      "finding":"WIT resource values use owned/borrowed handles with explicit lifetime/ownership semantics.",
+      "clay_disposition":"SUPPORTS_SEPARATING_DESCRIPTIVE_CAPABILITY_IDENTITY_FROM_RUNTIME_BEARER; WP07_INPUT_NOT_WP03_SURFACE_AUTHORITY"
+    },
+    {
+      "class":"PRIMARY_PROJECT_RELEASE",
+      "source":"https://github.com/bytecodealliance/wasmtime/releases/tag/v45.0.0",
+      "finding":"Wasmtime 45.0.0 was released 2026-05-21 and is the latest stable release observed in the current official repository index during this run.",
+      "clay_disposition":"CURRENT_BACKEND_CANDIDATE_CONTEXT_ONLY"
+    },
+    {
+      "class":"PRIMARY_SECURITY_EVIDENCE",
+      "source":"https://github.com/bytecodealliance/wasmtime/releases/tag/v44.0.2",
+      "finding":"A 2026-05-21 patched issue allowed WASI path_open(TRUNCATE) to bypass a FilePerms::WRITE host restriction in affected versions.",
+      "clay_disposition":"COUNTEREVIDENCE_TO_DELEGATING_EFFECT_AUTHORITY_TO_SANDBOX_BACKEND; KEEP_CLAYCODE_DETERMINISTIC_GATES_AND_ADVERSARIAL_TESTS"
+    }
+  ],
+  "source_hygiene": {
+    "future_dated_dev_entries_seen": true,
+    "handling":"Ignored future-dated September 2026 dev crawl artifacts because current date is 2026-08-10; only stable releases/doc facts dated on or before current date were used.",
+    "external_sources_define_clay_truth": false
+  },
+  "progress_delta":"External evidence supports implementation separation and fail-closed effect authority but does not justify any missing WP04 concrete Clay callable signature."
+}

@@ -1,0 +1,122 @@
+{
+  "schema": "ClayCodeTriggerResearchReceipt/v1",
+  "run_id": "claycode-20260811T2239p0700-chatgpt-secondary-ambiguous-variant-failclosed",
+  "trigger": "claycode",
+  "status": "TESTING_TARGET_QUEUED",
+  "created_at_local": "2026-08-11T22:39:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "identity_boundary": {
+    "clay_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_may_independently_research_test_implement": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "current_stage": "FRANK_V0_1",
+    "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "training_authorized": false
+  },
+  "fresh_target_frontier": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "parent_pr": 357,
+    "parent_branch": "chatgpt/claycode-frontier-integration-20260811",
+    "parent_evaluator_blob": "b628df5e55671409d5553253c4cdc4b7929d2cc9",
+    "frontier_summary": [
+      "first executable ClayCode evaluator candidate exists",
+      "current composed candidate reports 36/40 parser corpus coverage = 90 percent",
+      "frank.effects candidate unresolved ordinary call targets = 0",
+      "native/WASM compiler-lowering, complete type/effect, runtime ABI/FFI and stdlib remain open"
+    ]
+  },
+  "hypothesis": "The executable ClayCode evaluator preserves the analyzer's fail-closed nominal ambiguity result at admission and runtime.",
+  "strongest_counterhypothesis": "Analyzer diagnostics are informational only and duplicate variant names may safely become a runtime value without an exact nominal owner.",
+  "finding": {
+    "classification": "SUPPORTED_IMPLEMENTATION_GAP",
+    "evidence": [
+      "analyzer maps duplicate sum-type variants to <AMBIGUOUS> and records a diagnostic",
+      "Analysis.resolvable() treats diagnostics as non-resolvable",
+      "frontier Evaluator.admit() ignored analysis.diagnostics",
+      "frontier _resolve_path() constructed EnumValue using the <AMBIGUOUS> sentinel as type_name",
+      "frontier public enum() likewise did not reject the ambiguity sentinel"
+    ],
+    "interpretation": "This is an internal fail-closed inconsistency; no new ClayCode semantic rule is required to repair it."
+  },
+  "external_primary_mechanism_check": [
+    {
+      "source": "Rust Reference - Names / Name resolution",
+      "url": "https://doc.rust-lang.org/reference/names/name-resolution.html",
+      "use": "mechanism comparison only; names resolve to declarations and ambiguity is not silently converted into a new identity"
+    },
+    {
+      "source": "MLIR Documentation - Symbols and SymbolTables",
+      "url": "https://mlir.llvm.org/docs/SymbolsAndSymbolTables/",
+      "use": "mechanism comparison only; explicit symbol ownership/resolution supports fail-closed unresolved/ambiguous binding"
+    }
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "target_pr": 363,
+    "superseded_pr": 361,
+    "target_branch": "chatgpt/claycode-ambiguous-variant-failclosed-v2-20260811",
+    "target_head_sha": "6cfb8cc4774f7b6e026c5aa688d30f94d15f88f3",
+    "candidate_evaluator_blob": "e506afcb33b1d9ce9a8a60e3cb7a9134c00a0c4d",
+    "changes": [
+      "Evaluator.admit carries analyzer diagnostics into refusal set",
+      "_resolve_path rejects <AMBIGUOUS> even when admission is bypassed",
+      "public enum() rejects <AMBIGUOUS>",
+      "unique nominal variant remains executable as positive control"
+    ],
+    "semantic_change": "NONE; preserve already-existing analyzer semantics",
+    "rollback": "close PR 363 / delete three candidate paths; parent PR 357 remains unchanged"
+  },
+  "test_obligation": {
+    "workflow": "ClayCode ambiguous variant fail-closed VPS",
+    "workflow_run_id": 31508197043,
+    "state_at_receipt": "QUEUED",
+    "target": "self-hosted Linux/X64 accepted Hostinger lane",
+    "required_status": "PASS_CLAYCODE_AMBIGUOUS_VARIANT_FAILCLOSED",
+    "checks": [
+      "analyzer non-resolvable",
+      "exact ambiguity diagnostic present",
+      "static admission refuses ambiguity",
+      "runtime bypass refuses ambiguity",
+      "unique variant control executes",
+      "exact tested SHA and git blobs bound",
+      "resource shadow recorded"
+    ]
+  },
+  "negative_and_open_evidence": {
+    "target_pass_claim": false,
+    "wp04_pass_claim": false,
+    "wp05_pass_claim": false,
+    "f_v01_02_completion_claim": false,
+    "whole_frank_v0_1_acceptance": false,
+    "open_frontier": [
+      "comparison-chain semantics",
+      "Bool/Int equality semantics",
+      "MethodChain/member/library semantics",
+      "4/40 parser-rejected sources",
+      "broader unresolved call corpus",
+      "complete type/effect checker",
+      "native/WASM compiler-lowering",
+      "runtime ABI/FFI and stdlib/SDK"
+    ]
+  },
+  "effects": {
+    "external_effect_executed": false,
+    "canonical_frank_db_mutated": false,
+    "authority_minted": false,
+    "training_started": false
+  },
+  "next_falsifier": "Exact target run must pass on PR 363 head; then recompose with the moving PR 357 frontier and rerun the full frontier integration gate before any promotion."
+}

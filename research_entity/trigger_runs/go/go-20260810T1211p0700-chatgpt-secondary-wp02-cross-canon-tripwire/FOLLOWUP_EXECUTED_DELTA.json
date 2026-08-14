@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:24:23+07:00",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "focus": "CC-WP-02 standalone-vs-production canonicalizer acceptance blind spot",
+  "coordination": {
+    "absorbed_prior_run": "research_entity/trigger_runs/go/go-20260810T1219p0700-chatgpt-secondary-wp02-identity-layer/FINAL_SYNTHESIS.json",
+    "prior_obligation": "Parse current admitted G9+Dialect through both identity paths using one production parser constructor and separate semantic identity from parser/grammar contract identity.",
+    "nonduplication_delta": "This follow-up advances that obligation with an implementation candidate, direct gate coupling and an actually executed Lark placeholder lesion/rescue mechanism test."
+  },
+  "finding": {
+    "class": "LATENT_ACCEPTANCE_BLIND_SPOT",
+    "terminal_wp02_hostinger_pass_commit": "0dba0795d77a951ee540af542080ca00819f7991",
+    "current_main_standalone_canonicalizer_blob": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+    "production_frontend_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "closure_driver_blob": "32f3d114fe4ff07eb63c7679db407d3f882addd5",
+    "interpretation": "The terminal WP02 closure could pass a standalone canonicalizer component and a production frontend canonicalizer receipt independently even though they used different Lark optional-placeholder construction semantics. Commit comparison shows tools/claycode_base_canonicalizer.py was not modified between the terminal PASS and the current diagnosis, so this is not a post-PASS revert.",
+    "scope_guard": "This proves an evidence-coupling defect and parser-construction divergence. It does not by itself prove downstream persisted-hash corruption or justify WP02 promotion."
+  },
+  "candidate": {
+    "branch": "chatgpt/go-wp02-cross-canon-tripwire-20260810",
+    "pull_request": 153,
+    "head_sha": "5d2e7f904323c792cfdb2af72706391eabda7a99",
+    "status": "DRAFT_TESTING_NOT_PROMOTED",
+    "changes": [
+      "Standalone canonicalizer reuses claycode_base_frontend.build_parser and rejects synthetic None children.",
+      "Standalone receipt records maybe_placeholders=false and explicit absent-optional guards.",
+      "New cross-canonicalizer probe executes the standalone CLI and compares full G9/Dialect canonical syntax hashes to the same canonicalizer fed by the production parser constructor.",
+      "Production BASE canonicalizer validation now consumes the cross-parity result so the existing WP02 closure cannot pass the two paths independently.",
+      "Ubuntu pull-request workflow executes strict cross parity, production validation and selected-WP02 strict closure preflight."
+    ],
+    "rollback": "Close PR 153; main production files remain unchanged until independently executed candidate evidence exists."
+  },
+  "hypothesis": "Direct cross-path parser-construction parity is necessary because independently green canonicalizer receipts can hide a semantic-tree construction mismatch.",
+  "counterhypothesis": "Independent standalone canonicalizer PASS plus production canonicalizer PASS are sufficient; direct parity coupling adds no unique defect detection.",
+  "counterhypothesis_status": "WEAKENED_BY_CURRENT_EXACT_SOURCE_DIVERGENCE; FULL_REFUTATION_PENDING_EXACT_BRANCH_EXECUTION",
+  "exactly_one_out_of_box_experiment": {
+    "name": "IN_MEMORY_OPTIONAL_PLACEHOLDER_CONTRACT_LESION_RESCUE",
+    "status": "EXECUTED_LOCAL_MECHANISM_PASS",
+    "purpose": "Deliberately restore Lark optional-placeholder behavior in memory, then rescue with the production absence contract to test whether the proposed tripwire has a lesionable falsifier.",
+    "runtime": {
+      "node": "cdd9c3c1f8d5",
+      "os": "Debian GNU/Linux 13 (trixie)",
+      "kernel": "6.18.35",
+      "machine": "x86_64",
+      "python": "3.13.5",
+      "lark": "1.3.1",
+      "cpu_count": 5,
+      "interegular": "NOT_INSTALLED"
+    },
+    "fixture": "record X { a:Int }",
+    "minimal_grammar_features": "record declaration with [] optional type-parameter and [] optional field default",
+    "mutated": {
+      "maybe_placeholders": true,
+      "none_children": 5
+    },
+    "rescued": {
+      "maybe_placeholders": false,
+      "none_children": 0
+    },
+    "pass": true,
+    "evidence_class": "LOCAL_DEBIAN_MECHANISM_ONLY",
+    "limitations": [
+      "This local experiment uses a minimal reproducer, not the full V17/G9/Dialect checkout.",
+      "It is not Ubuntu/Hostinger/Andreas-target evidence.",
+      "Exact PR 153 execution remains required before merge or promotion."
+    ]
+  },
+  "ci": {
+    "workflow_run_id": 31358388301,
+    "first_job_id": 93362258481,
+    "retry_job_id": 93362454948,
+    "first_conclusion": "failure",
+    "retry_conclusion": "failure",
+    "visible_steps_first": 0,
+    "visible_steps_retry": 0,
+    "logs_first": "UNAVAILABLE_BLOB_NOT_FOUND",
+    "classification": "REPEATED_PRE_STEP_CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE",
+    "candidate_executed": false,
+    "scientific_effect": "NO_CHANGE"
+  },
+  "external_evidence": {
+    "official_lark": "Strict mode can report ambiguity/collisions, but advanced regex lookaround can escape interegular collision analysis; explicit metamorphic and parser-contract tests remain required.",
+    "source_class": "OFFICIAL_PRIMARY_DOCUMENTATION"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_GATE_REPAIR",
+    "language_semantics_change": false,
+    "frank_harness_change": false,
+    "decision": "Keep PR 153 draft until exact candidate bytes execute on an admitted Linux/Ubuntu lane. Do not relabel parser/grammar contract identity as cognitive semantic identity. Trace persisted hash consumers before any rename/migration."
+  },
+  "targeted_distribution": {
+    "claycode": "Consume PR 153 as the executable realization of the already distributed WP02 identity-layer parity obligation; preserve V17/V19 selection as a separate lane.",
+    "unifieddb": "Continue tracing persisted syntax/semantic/contract hash consumers before migration; this run does not establish downstream corruption.",
+    "harness": "No change; parser contract drift remains provenance/version evidence, not Frank cognitive semantic change by itself."
+  },
+  "next_falsifier": "Execute PR 153 exact bytes on a step-executing Ubuntu/Hostinger lane; require strict full G9+Dialect cross-parity PASS, mutation detection/rescue PASS, and full selected-WP02 closure PASS. If PASS, compare persisted hash consumers before deciding merge/migration; if FAIL, preserve the first exact counterexample.",
+  "promotion": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.1",
+  "event_id": "20260811T175302Z-chatgpt-secondary-cc-wp04-opaque-create",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-11T17:53:02Z",
+  "payload": {
+    "work_id": "CC-WP04-NOMINAL-ADMISSION-OPAQUE-20260812",
+    "goal_ref": "SELF_ROOT_V0_1_TARGET_VPS_API",
+    "origin_class": "BLOCKER_REMOVAL",
+    "title": "Close WP04 opaque-constructor admission gap on canonical ClayCode frontier",
+    "work_clay": "On the canonical post-#357 parser/analyzer/evaluator basis, make the bounded WP04 nominal checker independently reject direct construction of source-declared opaque records while preserving ordinary record construction and all existing nominal fail-closed controls.",
+    "reason_clay": "The analyzer already marks opaque construction UNRESOLVED, but the inherited bounded typechecker independently looked up module.records and admitted opaque constructors. Target falsifier run 31519056335 reproduced exactly this one-layer inconsistency: 13/14 checks passed and only opaque_record_constructor_rejected_by_wp04 failed.",
+    "completion_clay": "Complete when the exact minimal checker repair is target-green against current main, all 14 nominal/opaque controls pass, real frank.effects::decide_effect remains admitted with its exact reachable closure, plain record construction remains admitted, and no open comparison/host-signature semantics are invented.",
+    "evidence_need": ["TARGET_VPS_RED_THEN_GREEN", "CURRENT_MAIN_MERGE_CONTEXT", "REAL_FRANK_EFFECTS_POSITIVE_CONTROL", "OPAQUE_NEGATIVE_CONTROL", "PLAIN_RECORD_POSITIVE_CONTROL"],
+    "executor_policy": "Bounded WP04 admission only; fail closed on open semantics; WP06 backends remain downstream and may not delegate Clay type authority to Python/C coercion.",
+    "required_capabilities": ["GITHUB_RW", "HOSTINGER_UBUNTU_SELF_HOSTED_RUNNER", "CLAYCODE_TYPECHECK"],
+    "write_scope": ["gschaidergabriel/Dr.-Unterweger#401", "research_entity/state/work/events"],
+    "dependencies": ["CC-FV01-02-FRONTIER-STRICT-LALR-CANONICAL-20260812 complete"],
+    "invalidators": ["new main conflict", "real frank.effects regression", "plain record control regression", "new evidence changing opaque authority contract"],
+    "base_priority": 1.0,
+    "expected_impact": 0.95,
+    "urgency": 0.95,
+    "information_gain": 0.8,
+    "status": "READY"
+  }
+}

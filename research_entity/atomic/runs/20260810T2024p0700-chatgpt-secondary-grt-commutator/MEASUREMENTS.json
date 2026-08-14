@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-CCF-001",
+  "evidence_class":"LOCAL_SYNTHETIC_PROXY_EXECUTION",
+  "executed_by":"chatgpt-secondary private python runtime",
+  "environment":{"python":"3.13.5","compiler":"GCC 14.2.0","platform":"Linux-6.18.35-x86_64-with-glibc2.41","machine":"x86_64","processor":"UNKNOWN","numpy":"2.3.5","cpu_count_visible":5,"target_vps":false},
+  "primary_run":{"seed":42,"N":30000,"state_dimensions":512,"overlap_bias":0.65,"true_noncommute_rate":0.4840333333333333,
+    "total_seconds":{"full_replay":1.459047628999997,"local_sparse_commutator":0.10368824300002188,"rw_conflict":0.023829336000005696},
+    "derived":{"speedup_vs_full_replay":14.071485703540073,"slowdown_vs_rw_conflict":4.351285449162205,"safe_independence_gain_pp_vs_rw":16.896666666666672,"stale_label_change_rate":0.016433333333333335},
+    "full_replay":{"tp":14521,"fp":0,"fn":0,"tn":15479,"precision":1.0,"recall":1.0,"f1":1.0,"safe_parallel_fraction":0.5159666666666667,"unsafe_parallel_rate":0.0},
+    "local_sparse_commutator":{"tp":14521,"fp":0,"fn":0,"tn":15479,"precision":1.0,"recall":1.0,"f1":1.0,"safe_parallel_fraction":0.5159666666666667,"unsafe_parallel_rate":0.0},
+    "rw_conflict":{"tp":14521,"fp":5069,"fn":0,"tn":10410,"precision":0.7412455334354262,"recall":1.0,"f1":0.851396910087655,"safe_parallel_fraction":0.347,"unsafe_parallel_rate":0.0},
+    "stale_epoch_control":{"tp":14269,"fp":241,"fn":252,"tn":15238,"precision":0.9833907649896623,"recall":0.982645823290407,"f1":0.9830181530088525,"unsafe_parallel_rate":0.0084},
+    "shuffled_control":{"tp":7030,"fp":7491,"fn":7491,"tn":7988,"precision":0.48412643757316987,"recall":0.48412643757316987,"f1":0.48412643757316987,"unsafe_parallel_rate":0.2497},
+    "resource_matched_full_plus_rw":{"full_replay_fraction":0.07106570131030458,"full_pairs":2131,"tp":14521,"fp":4742,"fn":0,"tn":10737,"precision":0.7538285832943986,"recall":1.0,"f1":0.8596376983187308,"safe_parallel_fraction":0.3579},
+    "timing_sample_3000":{"full_replay":{"p50_us":42.416,"p95_us":95.15045,"p99_us":306.72654,"mean_us":57.48979533333333},"local_sparse_commutator":{"p50_us":3.734,"p95_us":6.32105,"p99_us":7.44007,"mean_us":3.5466373333333334},"rw_conflict":{"p50_us":0.84,"p95_us":1.364,"p99_us":1.78706,"mean_us":0.895038}}
+  },
+  "five_seed_robustness":[
+    {"seed":7,"N":10000,"local_exact_match":true,"speedup_vs_full":14.980634599212063,"safe_gain_pp":17.05,"rw_precision":0.7396946564885496},
+    {"seed":42,"N":10000,"local_exact_match":true,"speedup_vs_full":9.862990539653788,"safe_gain_pp":16.49,"rw_precision":0.7492396593673966},
+    {"seed":101,"N":10000,"local_exact_match":true,"speedup_vs_full":14.428229993394586,"safe_gain_pp":16.67,"rw_precision":0.7426674899660389},
+    {"seed":2026,"N":10000,"local_exact_match":true,"speedup_vs_full":10.429361429063848,"safe_gain_pp":16.69,"rw_precision":0.7449572127139364},
+    {"seed":9001,"N":10000,"local_exact_match":true,"speedup_vs_full":14.03121707600974,"safe_gain_pp":17.42,"rw_precision":0.730757341576507}
+  ],
+  "aggregate":{"all_local_exact":true,"speedup_mean":12.746486727466806,"speedup_range":[9.862990539653788,14.980634599212063],"safe_gain_pp_mean":16.864,"safe_gain_pp_range":[16.49,17.42],"rw_precision_mean":0.7414632720224857},
+  "interpretation":"Proxy supports exact sparse commutator classification for this deliberately eligible pure deterministic operation family and demonstrates stale-state danger. It does not measure eligible coverage or net value in real Frank, opaque model calls, stochastic transitions, q23 partial observability, target-VPS resource behavior, or production safety."
+}

@@ -1,3 +1,7 @@
+<!-- RAE_META
+{"packet_id":"KMP-FRANK-C9-TYPED-CAUSAL-ADMISSION","title":"KMP — FRANK C9 Typed Causal Admission & Effect Fabric","domains":["frank"],"epistemic_class":"MODEL_DERIVED_RESEARCH_SYNTHESIS_WITH_EXECUTED_MECHANISM_TEST","claim_status_hint":"OPEN","origin_actor":"chatgpt-secondary","source_refs":["20260809T0130p0700-chatgpt-secondary-r5"],"related_experiment_ids":["EXP-C9-EFFECT-ADMISSION-001"]}
+RAE_META -->
+
 # KMP — FRANK C9 Typed Causal Admission & Effect Fabric
 
 **packet_id:** `KMP-FRANK-C9-TYPED-CAUSAL-ADMISSION`  

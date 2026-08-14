@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2347p0700-chatgpt-secondary-hyperposition-lowering",
+  "program_target": "FRANK_V0_1",
+  "inputs": {
+    "frank": [
+      "research_entity/rooms/PROGRAM_STATE.json",
+      "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+      "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
+    ],
+    "clay": [
+      "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
+    ],
+    "claygraph": [
+      "research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"
+    ],
+    "unifieddb": [
+      "research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql"
+    ],
+    "gwt": [
+      "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"
+    ],
+    "hyperposition": [
+      "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md",
+      "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2347p0700-chatgpt-secondary-faceted-backend/FINAL_REPORT.md"
+    ],
+    "emergenz": [
+      "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
+      "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"
+    ],
+    "claycode": [
+      "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+      "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+      "tools/claycode_base_frontend.py",
+      "tools/claycode_base_typed_ir.py"
+    ]
+  },
+  "cross_branch_findings": [
+    "ClayGraph already preserves logical hyperrelation identity + typed roles + projection receipts, matching a semantic-nary/physical-faceted design.",
+    "UnifiedDB can persist semantic relation and lowering-plan records separately under epochs/transactions; no physical monolith requirement follows.",
+    "GWT/Hyperposition share epoch and intervention semantics; backend changes must not alter causal-use accounting.",
+    "Emergence/PID metrics remain diagnostics, not truth or authority and not universal backend-selection criteria.",
+    "Frozen G9 already exposes Hyperrelation/Set/Ordered/GraphDelta.hyperrelations; no semantic-freeze counterexample was observed."
+  ],
+  "scope_note": "Task-relevant bounded interconnect ingest; this run does not claim whole-repository revalidation or target-VPS acceptance."
+}

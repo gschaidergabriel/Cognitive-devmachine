@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "evidence_id":"F-V01-HARNESS-INGRESS-CI-TAIL-20260810T2105p0700",
+  "parent":"research_entity/frank_v0_1/evidence/20260810T2059p0700_harness_ingress_security_reentry.json",
+  "program":"FRANK_V0_1",
+  "direct_target_pr":105,
+  "head":"04646fb76f79652f45b9df4f517b203971e8eefd",
+  "workflow_run_id":31396108926,
+  "workflow":"Frank owner-fixed ingress security conformance",
+  "conclusion":"failure",
+  "diagnostic_change":"Workflow changed to capture discriminator JSON and source SHA, upload them with actions/upload-artifact@v4 under if:always(), then fail only in a final enforcement step.",
+  "observed_artifact_count":0,
+  "inference":"Because no diagnostic artifact exists despite if:always() upload, failure occurred before or at the diagnostic upload path. This narrows the likely blocker to checkout/job/action infrastructure or another pre-upload CI failure, rather than proving the candidate ClayCode contract failed its token-level discriminator.",
+  "caveat":"Exact step remains UNKNOWN because decoded job logs are unavailable through the connector. This inference is operational, not a candidate PASS.",
+  "parallel_independent_workflow":{"run_id":31396109139,"workflow":"Frank Deep Integrity","conclusion":"failure","attribution":"UNKNOWN_NOT_ASSIGNED_TO_INGRESS_CANDIDATE"},
+  "promotion":"NONE",
+  "next":"Obtain runnable CI step/log or alternate target execution channel, then compile/type-check and execute the candidate against actual Frank v0.1 ingress/effect paths."
+}

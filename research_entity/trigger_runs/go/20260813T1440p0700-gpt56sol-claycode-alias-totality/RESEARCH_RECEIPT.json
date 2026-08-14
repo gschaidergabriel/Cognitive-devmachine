@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1440p0700-gpt56sol-claycode-alias-totality",
+  "trigger": "go",
+  "timestamp_local": "2026-08-13T14:40:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "9fc6312583aafe120d1fe020ac1e78db40409c5c",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_after_repair": "3a69b78a344791ef111558713e0696a7818adbc6",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "reason": "SQLite F-V01-13 already had multiple overlapping active candidates, while the current ClayCode WP04 canonicalizer still made finite alias-chain semantics depend on Python call-stack depth.",
+    "duplicate_avoidance": [
+      "Skipped overlapping SQLite symbol-origin, connection-move and stale-receipt candidates",
+      "Integrated corpus-authority PR #556 before running a new unusual experiment so the inherited automatic CORPUS_GHOST_APPEND OOB could not create a second experiment",
+      "PR #561 covered cyclic aliases but retained recursive traversal for long acyclic alias chains; successor #572 subsumed its useful cycle/boundary behavior"
+    ]
+  },
+  "observed_reality": {
+    "pre_repair_main": "ecf81f398b91d83f5a43dab0c5b297e96e515260",
+    "pre_repair_typechecker": "runtime/claycode_typecheck_v1/typecheck.py",
+    "pre_repair_algorithm": "recursive non-parametric alias canonicalization with frozenset cycle tracking",
+    "python_primary_source": "Python 3.13 sys.getrecursionlimit/setrecursionlimit documentation states a finite interpreter-stack recursion limit and RecursionError behavior",
+    "deep_integrity_lane_restored": true,
+    "corpus_authority_pr_556_merged": true
+  },
+  "generated_reality": {
+    "hypothesis": "A long but finite acyclic ClayCode alias chain can fail with host RecursionError before reaching a nominal type result because WP04 recursively follows one Python frame per alias hop.",
+    "strongest_counterhypothesis": "Finite alias declarations are practically too shallow to hit host recursion limits, so cycle handling alone is sufficient and iterative resolution adds complexity without measurable value.",
+    "falsifier": "Construct a finite acyclic alias staircase around the current interpreter recursion limit and replay the exact recursive algorithmic shape from current main."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "ACYCLIC_ALIAS_DEPTH_STAIRCASE",
+    "class": "host-stack totality counterworld",
+    "reversible": true,
+    "disposable_state": true,
+    "product_bytes_modified": false,
+    "authority_minted": false,
+    "external_effect_executed": false,
+    "local_python_recursion_limit": 3000,
+    "observations": [
+      {"alias_count": 2950, "status": "PASS_TO_INT"},
+      {"alias_count": 2990, "status": "RecursionError"},
+      {"alias_count": 3000, "status": "RecursionError"},
+      {"alias_count": 3100, "status": "RecursionError"},
+      {"alias_count": 3200, "status": "RecursionError"}
+    ],
+    "result": "SUPPORTED_HOST_STACK_TOTALITY_GAP"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Python 3.13.14 sys documentation",
+      "finding": "Python exposes a finite interpreter recursion limit to prevent C-stack overflow and raises RecursionError when the limit is exceeded."
+    }
+  ],
+  "repair": {
+    "pull_request": 572,
+    "merged_commit": "3a69b78a344791ef111558713e0696a7818adbc6",
+    "change": [
+      "Replace non-parametric alias-chain recursion with iterative traversal",
+      "Retain exact typed TYPE_ALIAS_CYCLE fail-closed diagnostics",
+      "Canonicalize reachable function parameter and return boundaries even when a parameter is unused",
+      "Add ordinary 4096-alias repair regression plus self-cycle, two-node-cycle and unused-boundary controls",
+      "Add exact-head isolated self-hosted Alias Totality workflow"
+    ],
+    "effect_authority_change": false,
+    "harness_self_authority_change": false,
+    "training_authorization_change": false
+  },
+  "test_evidence": {
+    "candidate_head": "dd877381a5b1a80d61b3346139bb58c4e6fa5df8",
+    "alias_totality_workflow_run": 31678577942,
+    "alias_totality_runner": "clay-2 / self-hosted Linux X64",
+    "alias_totality_result": "SUCCESS",
+    "alias_totality_gate_assertion": "5/5 checks including 4096 finite acyclic aliases and typed cycle denial",
+    "additional_exact_head_success": [
+      "ClayCode Nominal Typecheck V1 VPS",
+      "ClayCode runtime nominal boundary repair VPS",
+      "ClayCode WP04 to WP06 Python admission barrier VPS",
+      "ClayCode WP04 WP06 C Admission Barrier VPS",
+      "ClayCode WP06 ABI Manifest Guard v1 VPS",
+      "ClayCode opaque parser fidelity V1",
+      "Frank self.root current-head v2",
+      "Frank fresh-main effect fence + provider contract VPS",
+      "Frank execution gate directory anchor repair VPS",
+      "Frank Deep Integrity"
+    ],
+    "bounded_dispatch_bridge": "SKIPPED_SEPARATE_NON_COUNTEREVIDENCE"
+  },
+  "grf_collapse": {
+    "finite_alias_graph_implies_host_stack_totality": "REJECT",
+    "cycle_detection_alone_is_sufficient": "REJECT",
+    "iterative_alias_resolution_with_typed_cycle_denial": "PROMOTED_TO_VERIFIED_FOR_EXACT_TESTED_PATH",
+    "all_recursive_type_structure_totality_is_closed": "REJECT",
+    "remaining_counter_reality": "Parameterized TypeRef structural nesting still uses recursive descent and remains a separate resource/totality surface."
+  },
+  "architecture_delta": {
+    "status": "PROMOTED_EXACT_PATH_NOT_WHOLE_PACKAGE",
+    "affected": [
+      "F-V01-02 ClayCode WP04 nominal type admission",
+      "WP04/runtime admission consistency",
+      "ClayCode fail-closed totality under adversarial finite alias depth"
+    ],
+    "supported_change": "Finite non-parametric alias-chain resolution must be independent of the Python interpreter call-stack limit; cycles remain typed failures rather than host exceptions.",
+    "promotion_boundary": "No whole F-V01-02 completion, no accepted Hostinger product-runtime acceptance, no whole Frank v0.1 PASS.",
+    "rollback": "Revert merge 3a69b78a344791ef111558713e0696a7818adbc6 if a semantic regression appears; preserve typed cycle denial and fail-closed behavior."
+  },
+  "negative_results_and_open_questions": [
+    "PR #561 became redundant as a narrower recursive successor and should not be merged independently after #572.",
+    "Deeply nested parameterized TypeRef structure remains recursively traversed and was deliberately not probed as a second unusual experiment in this macro-cycle.",
+    "F-V01-13 productive SQLite/lineage release evidence remains open despite extensive parallel work.",
+    "Final/paid model training remains owner-blocked."
+  ],
+  "outcome": "PROMOTE_TO_VERIFIED_EXACT_PATH_AND_REENTER_FRANK_V0_1"
+}

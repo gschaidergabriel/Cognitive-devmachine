@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "receipts": [
+    {
+      "id": "REENTRY-Q23-01",
+      "kind": "DURABLE_RUN_ARTIFACT",
+      "status": "COMMITTED",
+      "refs": ["RUN_MANIFEST.json","HYPOTHESES.json","COUNTERHYPOTHESES.json","ARCHITECTURE_DELTAS.json","TEST_OBLIGATIONS.json","PROGRESS_DELTAS.json"]
+    },
+    {
+      "id": "REENTRY-Q23-02",
+      "kind": "GO_Q23_BRIDGE",
+      "status": "COMMITTED_AS_BRIDGE_PAYLOAD",
+      "ref": "GO_Q23_EXCHANGE.json"
+    },
+    {
+      "id": "REENTRY-Q23-03",
+      "kind": "AFFECTED_BRANCH_ROUTING",
+      "status": "COMMITTED_AS_TARGETED_FEEDBACK_MANIFEST",
+      "ref": "BRANCH_FEEDBACK_MANIFEST.json"
+    }
+  ],
+  "truth_note": "These receipts prove repository persistence of research objects only. They do not prove target-runtime behavior, independent replication, architecture promotion or Frank acceptance."
+}

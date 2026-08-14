@@ -1,0 +1,28 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-omnisource-v10-selfhosted-execution-20260810T1700p0700",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T17:00:00+07:00",
+  "payload": {
+    "work_id": "WORK-OMNISOURCE-LIVE-FUSION-REENTRY-V1-20260810",
+    "spec_rev": 1,
+    "execution_receipt_id": "EXEC-OMNISOURCE-V10-SELFHOSTED-31377107931",
+    "executor_class": "SELF_HOSTED_GITHUB_ACTIONS_EXACT_BYTE_MIRROR",
+    "machine_ref": "runner:clay / Linux X64 / Dr.-Unterweger verification branch",
+    "action": "Execute exact-byte Clay UnifiedDB V10 SQL blob d777b108bb17177a721efa29f52929db939128ec and exact-byte test blob 3e46f511d892a0e2760d2f45c350733ce58a3738 on the current self-hosted runner through a hermetic verification snapshot in gschaidergabriel/Dr.-Unterweger. Verify blob identity before execution and persist runner/test receipt.",
+    "observed_effect": "REMOTE PASS. Runner clay, Linux X64, Linux-6.8.0-117-generic x86_64 glibc2.39, Python 3.12.3, SQLite 3.45.1. 11/11 declared checks passed; 19/19 source classes covered; semantic stale promotion gate passed; stale-work current-credit gate passed; missing component binding gate passed; stale work remained diagnostic; current exact-bound work receipt survived restart; provenance and contradictions preserved. 10000 observation+assessment pairs: 0.873553 s, 11447.5 pairs/s, p50 0.073885 ms, p95 0.169981 ms, SQLite DB 9605120 bytes.",
+    "verification": "Source Git blob SHAs were rechecked on the runner repo before execution and matched Clay exactly. Remote receipt is gschaidergabriel/Dr.-Unterweger:chatgpt/omnisource-v10-selfhosted-20260810 research/verification/clay_omnisource_v10/SELFHOSTED_RECEIPT.json, workflow run 31377107931 attempt 1. Scope is candidate mechanism evidence only. It is not Andreas target acceptance and does not close actual-current-repo replay, dependency evidence-gating, multi-connection WAL safety, adaptive mesh promotion or V10 promotion. Runner SQLite 3.45.1 is in a version family affected by SQLite's documented WAL-reset bug under simultaneous write/checkpoint multi-connection conditions, so no such release claim is inferred from this single-test scope.",
+    "evidence_refs": [
+      "research_entity/runtime/RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql",
+      "research_entity/experiments/omnisource_live_fusion_v1_test.py",
+      "research_entity/experiments/OMNISOURCE_LIVE_FUSION_V1_LOCAL_20260810.json",
+      "research_entity/mesh_feedback/20260810T1650p0700-omnisource-v10-go/BRANCH_FEEDBACK_MANIFEST.json",
+      "external:gschaidergabriel/Dr.-Unterweger:chatgpt/omnisource-v10-selfhosted-20260810:research/verification/clay_omnisource_v10/SELFHOSTED_RECEIPT.json",
+      "external:sqlite.org/wal.html#walreset"
+    ],
+    "truth_class": "REMOTE_EXECUTION_RECEIPT",
+    "success": true,
+    "complete": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "addendum_id": "Q23-PBC-VEC-KV-INTERACTION-20260810",
+  "parent_delta": "Q23-DELTA-PBC-VEC-20260810",
+  "fresh_primary_sources": [
+    {"id":"E-GUIKV-2025","ref":"arXiv:2510.00536","finding":"GUI-specific KV-cache compression exploits spatial saliency and temporal redundancy across screenshots and can preserve or improve accuracy at reduced decode cost."},
+    {"id":"E-STARKV-2026","ref":"arXiv:2606.01790","finding":"GUI KV importance is subspace- and trajectory-dependent; adaptive spatio-temporal reweighting outperforms fixed/shared cache selection at matched budgets and materially reduces peak memory in the reported setups."}
+  ],
+  "distinction": "Native/model-side KV-cache compression preserves decoder history representations. PBC-VEC stores bounded owned perceptual descriptors/evidence identities outside truth/effect authority and is intended to decide whether a new deep encode/decode is needed. These mechanisms may be complementary, redundant or interfere; literature cannot decide this for the target runtime.",
+  "new_counterhypothesis": "Once a strong native GUI-aware KV cache policy is enabled, VEC provides negligible additional end-to-end benefit and only adds stale-version/alias complexity.",
+  "test_obligation": {
+    "test_id": "Q23-T-VEC-KV-INTERACTION-01",
+    "priority": "P3_AFTER_PEH_AND_CORE_VEC_LIFETIME",
+    "variants": ["BASE_NO_EXTRA_CACHE", "NATIVE_KV_FULL", "NATIVE_GUI_AWARE_KV", "VEC_ONLY", "NATIVE_GUI_AWARE_KV_PLUS_VEC"],
+    "fixed_variables": ["same model/mmproj/runtime build", "same episode fixtures", "same visual token policy", "same action/outcome verifier"],
+    "metrics": ["vision encode count", "full decoder count", "KV bytes", "VEC descriptor bytes", "peak RSS/VRAM", "latency p50/p95/p99", "task success", "grounding", "hidden-operation miss", "stale reuse", "restart recovery"],
+    "pass_rule": "VEC survives as an architecture candidate only if it is Pareto-additive or uniquely improves early perceptual bypass/reuse under exact version controls; if strong native GUI-aware KV caching dominates, VEC is simplified or removed."
+  },
+  "architecture_effect": "NO_PROMOTION; ADDS_COUNTERBASELINE_AND_INTERACTION_TEST",
+  "confidence": 0.74
+}

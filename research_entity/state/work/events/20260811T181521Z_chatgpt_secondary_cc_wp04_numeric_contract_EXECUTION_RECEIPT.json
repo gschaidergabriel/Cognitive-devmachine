@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.1",
+  "event_id": "20260811T181521Z-chatgpt-secondary-cc-wp04-numeric-contract-receipt",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-11T18:15:21Z",
+  "payload": {
+    "work_id": "CC-WP04-NUMERIC-NOMINAL-CONTRACT-CENSUS-20260812",
+    "spec_rev": 1,
+    "execution_receipt_id": "DRU-PR412-RUN31521698815-WP04-NUMERIC-CONTRACT-CENSUS",
+    "executor_class": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "machine_ref": "clay@digital-retina / Hostinger Ubuntu self-hosted GitHub Actions runner",
+    "action": "Executed a whole-current-corpus declaration census for arithmetic-participating nominal types, combining parser-visible declarations with raw-source declaration scanning of all 42 current claycode files including parser-rejected sources.",
+    "observed_effect": "28 arithmetic nodes and 7 fully explicit arithmetic nodes were reproduced. Explicit signatures remained Epoch|Int (1), Float|Score (5), and Score|Score|Confidence (1). Int and Float were recognized only as builtin scalars. Confidence, Epoch and Score had zero parser declarations, zero raw declarations, zero alias targets and zero explicit scalar aliases anywhere in the 42-file current source set. domain_participants_with_explicit_scalar_alias was empty; domain_participants_without_explicit_scalar_alias was [Confidence, Epoch, Score].",
+    "verification": "Target PR-merge-context workflow 31521698815 / job 93880034941 completed SUCCESS against base 17c063bad59add4079764017841aa39c95e13720, event head b237acc9f6b89e9a09d86fa3f137e2c5a12de467 and tested merge SHA e3f2b9cfa0e137c72813af35c2c7abf946ee2eaf. Result explicitly retained cross_nominal_arithmetic_rule_selected=false, implicit_numeric_representation_inferred=false, absence_of_declaration_means_non_numeric=false, unknown_is_zero=false and promotion=NONE_DIAGNOSTIC_ONLY.",
+    "evidence_refs": [
+      "gschaidergabriel/Dr.-Unterweger#412",
+      "GitHubActions:31521698815",
+      "GitHubActionsJob:93880034941",
+      "gschaidergabriel/Dr.-Unterweger@b237acc9f6b89e9a09d86fa3f137e2c5a12de467"
+    ],
+    "conclusion": "SUPPORTED NEGATIVE RESULT: current procedural Clay sources do not declare scalar representation/algebra for Confidence, Epoch or Score. Their arithmetic use cannot authorize host coercion or alias erasure. Historical G9 V3 also uses these semantic type names without defining their numeric representation, so the next discriminating step is an operator-constraint census plus audit of frozen BASE/G9 typing artifacts before any new language contract.",
+    "truth_class": "REMOTE_EXECUTION_RECEIPT",
+    "success": true,
+    "complete": true
+  }
+}

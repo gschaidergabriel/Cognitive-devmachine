@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.2",
+  "evidence_id": "WP03-RULE-SEMANTICS-LOSS-20260810T1458P0700",
+  "created_at": "2026-08-10T14:58:00+07:00",
+  "refreshed_after_concurrent_wp03_fix_at": "2026-08-10T15:03:00+07:00",
+  "remote_execution_fused_at": "2026-08-10T15:07:28+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "status": "SUPPORTED_BY_REAL_SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_DIFFERENTIAL",
+  "work_package": "CC-WP-03-IR-TYPES",
+  "source_basis": {
+    "typed_ir_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "typed_ir_preceding_blob": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+    "concurrent_fix_commit": "623961b47ff05b36de8064996cd049210801b55a",
+    "concurrent_fix_scope": "AST-context contextual identifier extraction; semantic_core rule/law/invariant omission unchanged",
+    "frontend_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "v18_grammar_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "wp02_acceptance": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json"
+  },
+  "finding": "Current build_typed_ir lowers record/interface/function declarations and type universe but does not include rule_decl/law_decl/invariant_decl semantic content in semantic_core. source_rows are attached outside the typed_ir hash domain by design. Real self-hosted Ubuntu execution reproduces four frontend-distinct rule-program collisions to the same typed_ir_sha256. The concurrent contextual-identifier repair fixes declaration-name extraction but does not change this semantic_core omission.",
+  "predicted_and_observed_empty_rule_only_typed_ir_sha256": "f61bd407ad31201df12076ee3fc0acdeb21d995222ee10c1f615638fecd379ea",
+  "direct_falsifier": "tools/claycode_wp03_reward_relation_identity_falsifier.py",
+  "hostinger_falsifier_workflow": ".github/workflows/claycode-wp03-v18-reward-identity-hostinger.yml",
+  "required_distinctions": [
+    "rule a preserves b",
+    "rule a required_before b",
+    "rule brake cannot_be_silently_averaged_away"
+  ],
+  "strongest_counterhypothesis": "The current TypedIR intentionally scopes only declarations/types and another downstream identity layer preserves rule semantics; if so, CC-WP-03 must explicitly bind and test that layer before package closure rather than claiming the existing typed_ir_sha256 is whole-program semantic identity.",
+  "remote_execution": {
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_DIFFERENTIAL",
+    "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+    "receipt_commit": "1beb43de0a7d5a7a35aa108a6c55d07d16e4db15",
+    "github_run_id": "31368672238",
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "baseline_falsifier": {
+      "case_count": 4,
+      "collision_count": 4,
+      "classification": "TYPED_IR_SEMANTIC_IDENTITY_COLLISION_REPRODUCED",
+      "wp03_identity_gate_pass": false
+    },
+    "candidate_differential": {
+      "baseline_unique_hashes": 1,
+      "candidate_unique_hashes": 3,
+      "candidate_preserves_three_admitted_v18_rule_distinctions": true,
+      "layout_frontend_equivalent": true,
+      "layout_candidate_equivalent": true,
+      "pass": true
+    },
+    "candidate_blob": "d7f4c9b475466c813ae85716e9c57d7ee9f99512",
+    "current_typed_ir_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "scope_guard": "The Ubuntu PASS supports only the residual-semantics candidate differential on the exact bound components. It does not close WP03 or authorize downstream execution/training/effects."
+  },
+  "candidate_repair": {
+    "path": "tools/claycode_wp03_residual_semantics_candidate.py",
+    "test": "tools/test_claycode_wp03_residual_semantics_candidate.py",
+    "hostinger_workflow": ".github/workflows/claycode-wp03-residual-semantics-candidate-hostinger.yml",
+    "mechanism": "Keep existing structured declaration/type lowering; carry not-yet-lowered top-level semantic clauses as canonical frontend AST in opaque_unlowered_semantics and bind them into a candidate semantic hash domain.",
+    "reason_for_conservative_preservation": "Dropping not-yet-lowered semantics creates false equivalence. Conservative preservation may temporarily create false distinctions, which is safer until WP04/05 establishes explicit equivalence/lowering semantics.",
+    "remote_differential_status": "SUPPORTED_ON_EXACT_BOUND_SELF_HOSTED_UBUNTU_COMPONENTS",
+    "promotion": "NONE"
+  },
+  "external_primary_analogue": {
+    "MLIR_partial_conversion": "https://mlir.llvm.org/docs/DialectConversion/",
+    "MLIR_lowering_definition": "https://mlir.llvm.org/getting_started/Glossary/"
+  },
+  "test_obligations": [
+    {"obligation": "Remote execute the direct falsifier on exact current blobs and locked Ubuntu parser environment.", "status": "PASS"},
+    {"obligation": "Remote execute baseline-vs-residual candidate differential.", "status": "PASS"},
+    {"obligation": "Prove frontend-distinct V18 reward relations remain candidate-TypedIR-distinct.", "status": "PASS_ON_THREE_SELECTED_REWARD_RELATIONS"},
+    {"obligation": "Prove layout/comment-equivalent frontend programs remain candidate-TypedIR-equivalent.", "status": "PASS_ON_SELECTED_LAYOUT_CONTROL"},
+    {"obligation": "Run full G9/Dialect FrontendArtifact -> TypedIR bridge without silent reparse.", "status": "OPEN"},
+    {"obligation": "Reject expected_surface/source/grammar/frontend-contract tampering.", "status": "OPEN"},
+    {"obligation": "Check that opaque preservation does not mint effect authority and is consumed/validated by WP04/05 before execution.", "status": "OPEN"},
+    {"obligation": "Re-bind every WP03 acceptance run after any production TypedIR/candidate promotion blob change; do not inherit receipts across hashes.", "status": "OPEN"}
+  ],
+  "architecture_delta": "SUPPORTED_CANDIDATE_ONLY; current TypedIR whole-program semantic identity is falsified on tested rule-only programs; CC-WP-03 remains OPEN.",
+  "rollback": "Delete candidate wrapper/tests/workflows and retain this negative result; do not alter the WP02 accepted frontend surface.",
+  "affected_branches": {
+    "claycode": "BLOCKER_AND_SUPPORTED_CANDIDATE",
+    "harness": "TEST_OBLIGATION_ONLY",
+    "clayresearch": "NEGATIVE_RESULT_AND_CANDIDATE_EVIDENCE",
+    "frank": "NO_HARNESS_MUTATION",
+    "gwt": "NO_MATERIAL_CHANGE",
+    "unifieddb": "NO_MATERIAL_CHANGE",
+    "claygraph": "NO_MATERIAL_CHANGE",
+    "hyperposition": "NO_MATERIAL_CHANGE",
+    "emergenz": "NO_MATERIAL_CHANGE"
+  },
+  "wp03_status": "OPEN",
+  "base_release_status": "NOT_PASS",
+  "frank_harness_mutation": false,
+  "training_authorized": false
+}

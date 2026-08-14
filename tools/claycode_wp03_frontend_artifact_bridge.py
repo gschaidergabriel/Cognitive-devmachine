@@ -5,13 +5,18 @@ Why this exists:
 - CC-WP-02 has a selected production frontend with explicit surface/grammar identity.
 - `claycode_base_typed_ir.compile_sources()` historically reparses source through its own
   default grammar, so a green frontend receipt can be silently reinterpreted downstream.
+- The declaration-only TypedIR builder also has an executable negative result: admitted
+  top-level semantic statements can be frontend-distinct while collapsing to one TypedIR
+  semantic identity.
 - Typed semantic identity should remain independent of source/provenance identity, but the
   *compilation artifact* must still bind the exact frontend contract that produced the AST.
 
 This bridge therefore consumes already-produced frontend JSON artifacts, verifies them
 against the exact source and grammar bytes, rejects ambiguous same-source multi-surface
-inputs, calls the existing `build_typed_ir()` without reparsing, and emits a separate
-provenance-bound TypedIR artifact hash.
+inputs, and calls the tested residual-semantics TypedIR candidate without reparsing. The
+residual builder keeps existing structured declaration/type lowering and conservatively
+binds not-yet-lowered top-level canonical AST into `opaque_unlowered_semantics` so admitted
+semantics cannot silently disappear before CC-WP-04/05 give them explicit legality/lowering.
 
 Current frontend contract v1 predates explicit surface binding: its hash covers schema,
 grammar and semantic AST identity but not the surface label. Until a surface-bound frontend
@@ -19,8 +24,8 @@ contract revision is promoted, every bridge unit must therefore pin `expected_su
 the receipt-bound manifest. Relabeling an otherwise valid artifact then fails closed before
 typed IR is built.
 
-It is an adapter/interface repair, not a language-semantics change and not a WP03 PASS by
-itself. Model output never grants execution authority.
+This is a versioned production-path repair justified by executable counterevidence. It does
+not close WP03 and does not grant opaque semantics execution/effect authority.
 """
 from __future__ import annotations
 
@@ -36,10 +41,12 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import claycode_base_frontend as front  # noqa: E402
 import claycode_base_typed_ir as typed  # noqa: E402
+import claycode_wp03_residual_semantics_candidate as residual  # noqa: E402
 
-BRIDGE_SCHEMA = "ClayCodeTypedIRFrontendBinding/v1"
-ARTIFACT_DOMAIN = b"ClayCodeTypedIRFrontendBinding/v1\x00"
+BRIDGE_SCHEMA = "ClayCodeTypedIRFrontendBinding/v2-residual-semantics"
+ARTIFACT_DOMAIN = b"ClayCodeTypedIRFrontendBinding/v2-residual-semantics\x00"
 CURRENT_FRONTEND_SCHEMA = "ClayCodeBaseFrontendAST/v1"
+REQUIRED_LOWERING_STATUS = "PARTIAL_CONSERVATIVE_PRESERVATION"
 
 
 class FrontendBindingError(ValueError):
@@ -188,7 +195,16 @@ def compile_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         units.append(unit)
         bindings.append(binding)
 
-    ir = typed.build_typed_ir(units)
+    ir = residual.build_typed_ir(units)
+    if ir.get("lowering_status") != REQUIRED_LOWERING_STATUS:
+        raise FrontendBindingError(
+            f"unexpected TypedIR lowering status: {ir.get('lowering_status')!r}; "
+            f"expected {REQUIRED_LOWERING_STATUS!r}"
+        )
+    invariants = ir.get("invariants") if isinstance(ir.get("invariants"), dict) else {}
+    if invariants.get("opaque_semantics_mint_effect_authority") != "FORBIDDEN":
+        raise FrontendBindingError("residual TypedIR failed opaque-semantics authority invariant")
+
     binding_core = {
         "bridge_schema": BRIDGE_SCHEMA,
         "typed_ir_sha256": ir["typed_ir_sha256"],
@@ -196,13 +212,13 @@ def compile_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     }
     artifact_hash = sha256_bytes(ARTIFACT_DOMAIN + stable_json(binding_core))
     return {
-        "schema_version": "1.0",
+        "schema_version": "2.0",
         "bridge_schema": BRIDGE_SCHEMA,
         "typed_ir": ir,
         "frontend_bindings": bindings,
         "typed_ir_artifact_sha256": artifact_hash,
         "identity_semantics": {
-            "typed_ir_sha256": "semantic IR identity; excludes source/provenance by design",
+            "typed_ir_sha256": "semantic IR identity; excludes source/provenance by design and includes conservatively preserved unlowered semantics",
             "typed_ir_artifact_sha256": "binds semantic IR to exact frontend/source/grammar/surface contracts",
         },
         "invariants": {
@@ -210,9 +226,14 @@ def compile_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
             "implicit_frontend_dispatch": "FORBIDDEN",
             "unbound_surface_relabel": "FORBIDDEN",
             "same_source_cross_surface_ambiguity": "FAIL_CLOSED_WITHOUT_EQUIVALENCE_RECEIPT",
+            "unlowered_admitted_semantics_may_disappear": "FORBIDDEN",
+            "opaque_semantics_execution_authority": "FORBIDDEN",
             "frontend_artifact_mints_authority": "FORBIDDEN",
             "model_output_execution_authority": "FORBIDDEN",
+            "legacy_declaration_only_builder_is_production_entrypoint": "FORBIDDEN",
         },
+        "promotion_scope": "WP03_RECEIPT_BOUND_TYPEDIR_PRODUCTION_PATH_CANDIDATE",
+        "wp03_status": "OPEN",
     }
 
 

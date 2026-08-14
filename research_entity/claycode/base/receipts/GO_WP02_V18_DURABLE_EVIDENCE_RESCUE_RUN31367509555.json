@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260810T1450p0700-chatgpt-secondary-wp02-v18-evidence-rescue",
   "trigger": "go",
   "actor": {
@@ -15,7 +15,7 @@
   },
   "program_stage": "BASE_CLAYCODE_RELEASE",
   "hypothesis": "The selected current V18 parser/canonicalizer bytes remain strict-green on the self-hosted Ubuntu proxy, and the prior evidence-loss window can be removed by making evidence sealing/upload a fail-closed part of the same execution lane.",
-  "strongest_counterhypothesis": "A green replay plus durable artifact still does not satisfy the registered Andreas Ubuntu target requirement, and artifact durability itself cannot promote parser/canonical semantics.",
+  "strongest_counterhypothesis": "A green replay plus durable artifact cannot by itself create package, BASE, Andreas-target, Frank-Harness, or training authority; those decisions remain separate adjudication layers.",
   "execution": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "pull_request": 99,
@@ -91,18 +91,27 @@
   },
   "external_primary_evidence_effect": [
     "Current GitHub Actions documentation treats the upload-artifact digest as the SHA-256 identity used for artifact validation on download.",
-    "Current SLSA build guidance treats provenance existence, output digest identity and how the artifact was produced as distinct requirements; durable evidence therefore strengthens traceability but does not create semantic or target authority."
+    "Current SLSA build guidance separates provenance existence/output digest/how-produced traceability from the semantic meaning or authority of a build result."
   ],
+  "concurrency_reconciliation": {
+    "initial_local_adjudication": "WP02_OPEN_BASED_ON_WORKSPACE_1_4",
+    "fresh_conflicting_evidence_detected": true,
+    "newer_acceptance_receipt": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+    "fresh_workspace": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json schema_version 1.5",
+    "resolution": "NEWER_VERIFIED_ACCEPTANCE_OUTRANKS_THIS_WORKERS_STALE_OPEN_CLASSIFICATION"
+  },
   "adjudication": {
-    "wp02_proxy_execution": "SUPPORTED_EXACT_CURRENT_BYTES",
-    "wp02_formal_status": "OPEN",
+    "wp02_execution_replication": "SUPPORTED_EXACT_CURRENT_BYTES",
+    "wp02_formal_status": "PASS",
+    "wp02_decision_effect_of_this_receipt": "NO_CHANGE_ALREADY_PASS",
+    "wp02_acceptance_authority_ref": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
     "base_pass": false,
     "andreas_target_acceptance": false,
     "canonical_architecture_promotion": "NONE",
     "frank_harness_mutation": false,
     "training_authority": false,
-    "reason": "The exact current V18 component bytes now have durable self-hosted Ubuntu proxy replay evidence, but the current workspace and prior formal closure law still require the registered Andreas Ubuntu developer-system target receipt for formal WP02 acceptance."
+    "reason": "A fresher independently written acceptance receipt and workspace v1.5 already promote the same six V18 component identities to CC-WP-02 PASS. This rescue therefore strengthens reproducibility and durable evidence transport only. BASE release, Andreas target acceptance, Frank Harness authority and training remain unchanged."
   },
   "architecture_delta": "NO_CLAYCODE_SEMANTIC_CHANGE. Harden evidence transport so scientific PASS cannot silently coexist with missing durable artifacts.",
-  "next_falsifier": "Run the current exact WP02 closure on the registered Andreas Ubuntu developer-system target and bind the target receipt to the same selected component identities or an explicit successor identity bridge before changing CC-WP-02 from OPEN."
+  "next_falsifier": "CC-WP-03: execute the receipt-bound V18 FrontendArtifact -> TypedIR bridge and typed identity corpus on Ubuntu without silent reparse; preserve expected_surface and grammar binding fail-closed."
 }

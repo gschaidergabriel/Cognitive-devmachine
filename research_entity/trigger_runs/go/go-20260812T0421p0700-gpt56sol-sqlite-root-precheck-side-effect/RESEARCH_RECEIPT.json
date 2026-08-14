@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T04:21:12+07:00",
+  "worker": {
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "model": "GPT-5.6 Sol",
+    "entity": "Clay",
+    "i_am_not": ["Clay", "Frank", "self.root"]
+  },
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "status": "SUPPORTED_REPAIR_CANDIDATE",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "repo_anchor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch_start_main": "985f8370a6a6047d9962206f4fb6f2c049f4d370",
+    "current_main_observed_after_build": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+    "repair_pr": 486,
+    "repair_head": "f7eae0b1c3f61dace03ca5e703b5aaf9fdeca077",
+    "repair_mergeable_observed": true
+  },
+  "observed_anchors": [
+    "Merged #444 provides accepted-runner byte-reproducible SQLite 3.53.4 artifact identity: manifest 84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3 and library 8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9.",
+    "SQLite upstream documents the WAL-reset corruption bug through 3.51.2 and the fix in 3.51.3+, so 3.53.4 is on the fixed upstream lineage.",
+    "The production root anchor/service path remains unverified; F-V01-13 is therefore not closed.",
+    "Draft #440/#466 root provision logic performed pathlib mkdir followed by chown/chmod before the lstat-based secure-chain rejection."
+  ],
+  "generated_reality": "Eventual symlink denial in the privileged root provisioner might be sufficient because the path would fail before committed SQLite/anchor publication.",
+  "counter_reality": "Pathlib metadata operations may follow a symlink and mutate a caller-selected victim before the later secure-chain check denies the path, violating fail-closed-before-effect semantics.",
+  "causal_mechanism": "The old _ensure_root_secure_dir sequence called os.chown(path) and os.chmod(path) before _assert_root_secure_chain(path). chown/chmod follow directory symlinks by default, while the later lstat check detects the symlink only after those privileged effects.",
+  "unusual_experiment": {
+    "count_this_macro_cycle": 1,
+    "name": "PRECHECK_SYMLINK_SIDE_EFFECT",
+    "bounded": true,
+    "scope": "Disposable local root-owned filesystem only; no production or canonical Frank state.",
+    "baseline": "A normal root-owned directory was admitted by the legacy helper.",
+    "treatment": "A disposable symlink path referenced a root-owned victim directory initially mode 0700.",
+    "setup_note": "An initial placement under /var/tmp was rejected by the existing world-writable-parent policy; the same experiment was completed under /root. This is one experiment, not an additional branch.",
+    "observed": "The treatment was eventually denied as SECURE_CHAIN_SYMLINK_FORBIDDEN, but the victim mode changed 0700 -> 0755 before denial.",
+    "outcome": "COUNTERWORLD_SUPPORTED",
+    "canonical_state_mutated": false,
+    "production_effect": false
+  },
+  "repair": {
+    "state": "CANDIDATE",
+    "pr": 486,
+    "branch": "clay/go-sqlite-root-precheck-fix-20260812",
+    "changes": [
+      "Traverse/create deployment directory components through directory FDs with O_DIRECTORY|O_NOFOLLOW.",
+      "Reject existing symlink, non-root-owned, or group/world-writable components before privileged metadata mutation.",
+      "Only mutate newly created directory FDs with fchown/fchmod and fsync before continuing.",
+      "Use no-follow directory fsync and include file metadata changes in the durability point.",
+      "Port the exact #444 artifact-authority pin from draft #466 onto fresh main.",
+      "Add deterministic regression requiring symlink denial with victim mode unchanged."
+    ],
+    "rollback": "Drop/close PR #486; no production deployment was performed."
+  },
+  "ordinary_regression": {
+    "kind": "deterministic replay derived from the one unusual experiment",
+    "local_status": "PASS",
+    "checks": {
+      "existing_untrusted_dir_denied": true,
+      "normal_created_secure": true,
+      "symlink_denied": true,
+      "victim_unchanged": true
+    },
+    "accepted_target_status": "UNKNOWN_PENDING_OR_UNRUN",
+    "claim_boundary": "Local mechanism evidence only; not accepted-target root provisioning or production service evidence."
+  },
+  "ci_observation": {
+    "github_hosted_deep_integrity_run": 31537313824,
+    "github_hosted_status": "BLOCKED_INFRA_BILLING_NOT_PRODUCT_FAILURE",
+    "detail": "The GitHub-hosted job did not start because account payments/spending limit blocked execution.",
+    "self_hosted_status_at_receipt": "QUEUED_OR_UNKNOWN; no PASS promoted without completed exact-head evidence."
+  },
+  "grf_collapse": {
+    "outcome": "RETAIN",
+    "retained_reality": "Root deployment path authority must be established before root metadata effects; eventual rejection after following a symlink is insufficient.",
+    "refuted_reality": "Eventual secure-chain denial alone makes the old privileged helper fail-closed.",
+    "strongest_remaining_counter_reality": "Even a correct root provisioner does not prove the productive service parent, fixed-runtime mapping, root anchor installation, rollback/downgrade/library-swap continuity, canonical WAL-state migration, or semantic lineage recovery.",
+    "confidence": "HIGH for local mechanism defect and repair direction; LOW/UNKNOWN for production acceptance until target evidence exists."
+  },
+  "next_falsifier": "On an explicitly authorized root-capable accepted target, provision the exact pinned 3.53.4 artifact through the non-bypassable product path, then attest the actual Frank process mapped inode/object and root anchor across start/restart plus rollback/downgrade/library-swap controls. Keep semantic-lineage recovery gate independent and fail closed.",
+  "claims": {
+    "f_v01_13_closed": false,
+    "frank_v0_1_accepted": false,
+    "production_root_provisioned": false,
+    "training_authorized": false,
+    "harness_authority_changed": false,
+    "effect_authority_changed": false
+  }
+}

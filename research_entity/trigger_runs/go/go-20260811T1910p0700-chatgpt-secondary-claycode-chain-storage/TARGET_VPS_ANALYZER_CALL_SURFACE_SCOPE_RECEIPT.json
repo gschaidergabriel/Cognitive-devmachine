@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "receipt_id": "TARGET-VPS-CLAYCODE-ANALYZER-CALL-SURFACE-SCOPE-20260811T124927Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "classification": "TARGET_SELF_HOSTED_UBUNTU_NEGATIVE_SCOPE_PROBE_PASS",
+  "subject": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "integration_pr": 319,
+    "tested_head": "6e6ad15a4903390b12d4b4259f712678c454ed1c",
+    "workflow_run_id": 31493030207,
+    "job_id": 93783848174,
+    "conclusion": "success"
+  },
+  "runner": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "machine_name": "digital-retina",
+    "runs_on": ["self-hosted", "Linux", "X64"],
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "lark": "1.3.1",
+    "token_permissions": ["contents:read", "metadata:read"],
+    "persisted_checkout_credentials": "ABSENT"
+  },
+  "exact_probe_sha256": "4ca14a81422a9b33286990b0c876499cca020af856c037f7a3198391e153a9bc",
+  "probe": {
+    "name": "CLAYCODE_ANALYZER_CALL_SURFACE_SCOPE_V1",
+    "evidence_class": "NEGATIVE_SCOPE_AST_COVERAGE_PROBE",
+    "status": "PASS",
+    "meaning_of_pass": "The current analyzer call-target partition does not cover the full parser-produced call surface. The existing corpus UNRESOLVED total is therefore a lower-bound measurement, not complete executable semantic coverage.",
+    "corpus": {
+      "sources_parsed": 36,
+      "sources_rejected": 4
+    },
+    "totals": {
+      "parser_call_nodes": 677,
+      "analyzer_visible_call_nodes": 517,
+      "parser_call_nodes_missed_by_analyzer": 160,
+      "method_chain_nodes": 23,
+      "method_chain_callable_segments": 22,
+      "lambda_nodes": 50,
+      "record_construct_sites": 2,
+      "broadcast_sites": 1,
+      "with_update_nodes": 5
+    },
+    "derived": {
+      "blind_spot_call_sites_minimum": 182,
+      "unique_missed_call_callees": 129,
+      "unique_callable_method_segment_names": 3
+    },
+    "callable_method_segment_histogram": {
+      "filter": 11,
+      "map": 10,
+      "sort_desc": 1
+    },
+    "top_missed_call_callees": [
+      ["w", 11],
+      ["current_organ_state", 8],
+      ["current_instance", 6],
+      ["belief_commit", 2],
+      ["verified", 2],
+      ["now", 2],
+      ["r.auto_admissible", 2],
+      ["receipts.filter", 2],
+      ["relevance", 2],
+      ["candidates.filter", 2],
+      ["x.p.must_preserve_for_safety_or_correctness", 2],
+      ["mark", 2]
+    ],
+    "resource_shadow": {
+      "user_seconds": 8.15,
+      "system_seconds": 0.02,
+      "cpu_percent": 99,
+      "wall_seconds": 8.18,
+      "max_rss_kib": 33264,
+      "major_page_faults": 0,
+      "minor_page_faults": 6411,
+      "voluntary_context_switches": 1,
+      "involuntary_context_switches": 53,
+      "swaps": 0,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 80,
+      "exit_status": 0
+    }
+  },
+  "same_head_regression_context": {
+    "decide_effect": "6/6 PASS, 200576 requests, 0 mismatches",
+    "confirmation_and_hash": "9/9 PASS, 56000 hash plus 16000 confirmation comparisons, 0 mismatches",
+    "corpus_parse_coverage": "36/40 = 90.0 percent",
+    "existing_analyzer_unresolved_total": 320,
+    "frank_effects_unresolved": 0,
+    "operator_survival": "8/8 PASS"
+  },
+  "root_cause": {
+    "analyzer_observation": "analyzer._walk_expr traverses Call, Not, BoolOp and Compare only",
+    "parser_surface_observation": "current syntax also produces ListLiteral, SetLiteral, TupleLiteral, KwArg, Lambda, Arith, IndexAccess, MethodChain, WithUpdate, Broadcast, RecordConstruct and related nested expression carriers",
+    "consequence": "Calls nested under the expanded AST can be parser-valid while remaining invisible to analyzer call-target accounting and reachable-call admission checks."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_TEST_OBLIGATION",
+    "affected_work_packages": ["F-V01-02-CLAYCODE-COMPILER-RUNTIME", "F-V01-03-COGNITIVE-LOOP-CORE", "F-V01-05-GWT-HYPERPOSITION"],
+    "decisions": [
+      "Reclassify corpus UNRESOLVED=320 as LOWER_BOUND_UNTIL_ANALYZER_CALL_SURFACE_COMPLETE.",
+      "Extend structural AST traversal for nested expressions without assigning new runtime semantics.",
+      "Keep callable MethodChain segments explicitly unresolved/unclassified until typed member/library semantics are owner-fixed; do not auto-bind them as permissive host intrinsics.",
+      "Re-run all differential, corpus, operator and call-surface gates after traversal repair."
+    ],
+    "rollback": "If structural recursion changes target semantics rather than only visibility/admission accounting, revert the repair and retain this receipt as the negative-scope baseline."
+  },
+  "oob_accounting": {
+    "new_oob_experiment": false,
+    "macrocycle_oob_slot": "already consumed by RELATIONAL_CHAIN_METAMORPHIC_MUTATION_MATRIX"
+  },
+  "claim_boundary": {
+    "hidden_calls_declared_safe": false,
+    "hidden_calls_declared_executable": false,
+    "host_bindings_authorized": false,
+    "comparison_chain_semantics_selected": false,
+    "whole_frank_v0_1_acceptance": false,
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "training_authorized": false
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_ADDENDUM",
+  "run_id": "go-20260811T1948p0700-chatgpt-secondary-comparison-pressure",
+  "created_at_local": "2026-08-11T20:27:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_research_commit": "70e642ccd8d8a1611dd7234c060ad43cd5077269",
+  "topic": "GWT producer-bound successor recheck",
+  "baseline_negative": {
+    "pr": 317,
+    "status": "VALID_NEGATIVE_BASELINE",
+    "claim": "Caller-supplied non-empty episode_id/signal_id/causal_id are insufficient durable GWT/causal ancestry and can still pass the loop-core diagnostic path."
+  },
+  "existing_successor_candidate": {
+    "pr": 280,
+    "head": "7babc7bcf9ae05c611d094aa4053f9b82786ff56",
+    "workflow_run": 31436454733,
+    "job": 93611546057,
+    "overall_conclusion": "FAILURE",
+    "reclassified_failure": "HARNESS_ASSERTION_SCOPE_STRING_STALE_AFTER_SUCCESSFUL_RECOVERY_TEST",
+    "normal_steps_before_failure": [
+      "repository static integrity PASS",
+      "fresh-main execution-generation baseline PASS",
+      "V17 terminal consumer-only / separate support-producer / rollback PASS",
+      "historical fabricated-support gap regression PASS",
+      "provider outcome -> separate exact causal support -> V17 DONE PASS",
+      "separate exact-outcome plus semantic-delta admission matrix PASS",
+      "receiver/delivery/reconstruction/use/subject/outcome/causal-credit regressions PASS"
+    ],
+    "restart_test_output": {
+      "status": "PASS_V17_TERMINAL_CLOSE_REOPEN_RECOVERY",
+      "recovery_after_first_reopen": "REENTRY_PENDING",
+      "verification_after_second_reopen": "DONE_VALID",
+      "recovery_after_second_reopen": "COMPLETE",
+      "support_hash_preserved": true,
+      "reentry_hash_preserved": true,
+      "terminal_receipt_hash_preserved": true,
+      "execution_released_before_second_reopen": true,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "scope_actual": "V17_TERMINAL_COMPONENT_RESTART_PLUS_EXECUTION_RELEASE_NOT_FULL_PROCESS_FAILOVER",
+      "go_oob_experiment_added": false
+    },
+    "workflow_assertion_expected": "V17_TERMINAL_COMPONENT_RESTART_NOT_FULL_PROCESS_FAILOVER",
+    "root_cause": "The test intentionally evolved to include release of the original execution before the second reopen, and its output scope was updated accordingly. The workflow assertion still expected the older scope string.",
+    "pr_owned_oob": {
+      "name": "CROSS_CHAIN_SUPPORT_SPLICE",
+      "execution_in_failed_run": "SKIPPED_AFTER_STALE_SCOPE_ASSERTION",
+      "credit": "NONE"
+    }
+  },
+  "adjudication": {
+    "pr317_negative_remains_required_regression": true,
+    "pr280_normal_causal_support_mechanism": "STRONGLY_SUPPORTED_BY_TARGET_NORMAL_GATES_BUT_NOT_FULLY_ACCEPTED",
+    "pr280_full_candidate": "NOT_GREEN_BECAUSE_WORKFLOW_SCOPE_ASSERTION_STALE_AND_PR_OWNED_OOB_UNEXECUTED",
+    "whole_frank_v0_1_acceptance": false,
+    "architecture_consequence": "Prefer composition/review of PR280's producer-owned causal-support design over inventing a duplicate GWT repair, but repair/revalidate its restart scope assertion and independently execute its own declared splice falsifier in the appropriate macrocycle before promotion."
+  },
+  "write_attempt_boundary": {
+    "attempted_executable_sub_pr": true,
+    "purpose": "isolated ordinary repair of the stale restart-scope assertion without running PR280's OOB",
+    "result": "BLOCKED_BY_TOOL_SAFETY_CLASSIFICATION",
+    "bypass_attempted": false,
+    "executable_code_or_effect_authority_modified": false
+  },
+  "safety_nonclaims": {
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "canonical_state_mutated": false,
+    "training_authorized": false,
+    "additional_oob_experiment_executed_in_this_go_macrocycle": false
+  }
+}

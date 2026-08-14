@@ -1,0 +1,211 @@
+module self.root.atomic_causal_epoch_fabric
+version "ACEF-V0.1-research-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+type DeltaMonotonicity = MONOTONE_JOIN | NON_MONOTONE | EFFECT_COUPLED
+type DeltaVisibility = BRANCH_PRIVATE | EXECUTION_VISIBLE | CANONICAL_VISIBLE | QUARANTINED
+type TxStage = OPEN | PREPARED | EFFECT_PENDING | OUTCOME_UNKNOWN | COMMITTABLE | COMMITTED | ABORTED | QUARANTINED
+type BranchState = ACTIVE | DOMINATED | CONTRADICTED | COMMITTED | ABORTED
+type CommitClass = MONOTONE_ADMISSION | COGNITIVE_COMMIT | FAILURE_EVIDENCE_COMMIT | RECOVERY_COMMIT
+
+type SemanticDelta<T> = {
+  delta_id              : Ref
+  tx_id                 : Ref
+  branch_id             : Ref
+  kind                  : Symbol
+  payload               : T
+  monotonicity          : DeltaMonotonicity
+  visibility            : DeltaVisibility
+  epistemic_class       : Symbol
+  causal_parents        : SET<Ref>
+  provenance            : SET<EvidenceRef>
+  source_epoch          : Epoch
+  schema_epoch          : Epoch
+  lease_epoch           : Epoch
+  identity_lineage_head : Hash
+  authority_refs        : SET<AuthorityRef>
+  effect_refs           : SET<EffectId>
+}
+
+type CognitiveTxn = {
+  tx_id                 : Ref
+  execution_id          : ExecutionId
+  lease_epoch           : Epoch
+  read_state_epoch      : Epoch
+  schema_epoch          : Epoch
+  identity_lineage_head : Hash
+  parent_tx             : OPTION<Ref>
+  branches              : SET<Ref>
+  stage                 : TxStage
+  opened_at             : Time
+}
+
+type HypothesisBranch = {
+  branch_id      : Ref
+  tx_id          : Ref
+  assumptions    : SET<Ref>
+  contradictions : SET<Ref>
+  deltas         : SET<Ref>
+  state          : BranchState
+}
+
+type EffectLink = {
+  tx_id              : Ref
+  branch_id          : Ref
+  effect             : EffectId
+  reservation_ref    : Ref
+  attempt_ref        : OPTION<Ref>
+  outcome_ref        : OPTION<Ref>
+  outcome_certainty  : UNKNOWN | VERIFIED_SUCCESS | VERIFIED_FAILURE
+}
+
+type CausalUseReceipt = {
+  episode_ref     : Ref
+  candidate_ref   : Ref
+  receiver_ref    : Ref
+  tx_id           : Ref
+  branch_id       : Ref
+  delivered       : Bool
+  reconstructed   : Bool
+  used            : Bool
+  local_effect_ref: OPTION<Ref>
+}
+
+type CommitCertificate = opaque {
+  commit_id             : Ref
+  tx_id                 : Ref
+  branch_id             : Ref
+  commit_class          : CommitClass
+  base_epoch            : Epoch
+  new_epoch             : Epoch
+  lease_epoch           : Epoch
+  schema_epoch          : Epoch
+  identity_lineage_head : Hash
+  delta_root_hash       : Hash
+  causal_root_hash      : Hash
+  verified_effect_refs  : SET<Ref>
+  causal_use_refs       : SET<Ref>
+  signed_by_runtime     : Bool
+}
+
+type ConsistentCut = {
+  state_epoch          : Epoch
+  lease_epoch          : Epoch
+  identity_lineage_head: Hash
+  committed_tx_heads   : SET<Ref>
+  unresolved_effects   : SET<EffectId>
+  graph_projection_ref : OPTION<Ref>
+  replay_root_hash     : Hash
+}
+
+fn begin_cognitive_tx(execution, lease, state_epoch, schema_epoch, identity_head) -> CognitiveTxn {
+  require lease == current_execution_lease_epoch()
+  require execution == current_execution_id()
+  require identity_head == current_identity_lineage_head()
+  return trusted_runtime_begin_tx(execution,lease,state_epoch,schema_epoch,identity_head)
+}
+
+fn stage_delta<T>(tx:CognitiveTxn, branch:HypothesisBranch, d:SemanticDelta<T>) -> Ref {
+  require tx.stage in [OPEN,PREPARED,EFFECT_PENDING,OUTCOME_UNKNOWN]
+  require d.tx_id == tx.tx_id
+  require d.branch_id == branch.branch_id
+  require d.lease_epoch == tx.lease_epoch
+  require d.schema_epoch == tx.schema_epoch
+  require d.identity_lineage_head == tx.identity_lineage_head
+  return trusted_runtime_stage_immutable_delta(d)
+}
+
+fn admit_monotone<T>(tx:CognitiveTxn, d:SemanticDelta<T>) -> CommitCertificate {
+  require d.monotonicity == MONOTONE_JOIN
+  require d.effect_refs empty
+  require join_safe(d)
+  require provenance_admissible(d.provenance)
+  require tx.lease_epoch == current_execution_lease_epoch()
+  return trusted_runtime_monotone_admit(tx,d)
+}
+
+fn workspace_episode(tx:CognitiveTxn, branch:HypothesisBranch, candidates:SET<Ref>) -> WorkspaceEpisode {
+  require branch.tx_id == tx.tx_id
+  return gwt_select_and_broadcast(tx.tx_id,branch.branch_id,candidates)
+}
+
+fn link_effect(tx:CognitiveTxn, branch:HypothesisBranch, effect:EffectId, reservation:EffectReservationReceipt) -> EffectLink {
+  require tx.lease_epoch == current_execution_lease_epoch()
+  require branch.state == ACTIVE
+  require reservation_current(reservation)
+  return trusted_runtime_link_effect_without_expanding_authority(tx,branch,effect,reservation)
+}
+
+fn mark_unknown(tx:CognitiveTxn, link:EffectLink, evidence:SET<EvidenceRef>) -> CognitiveTxn {
+  require link.outcome_certainty == UNKNOWN
+  return transition_tx(tx,OUTCOME_UNKNOWN,evidence)
+}
+
+fn commit_branch(tx:CognitiveTxn, branch:HypothesisBranch, links:SET<EffectLink>, uses:SET<CausalUseReceipt>) -> CommitCertificate {
+  require tx.lease_epoch == current_execution_lease_epoch()
+  require tx.schema_epoch == current_schema_epoch()
+  require tx.identity_lineage_head == current_identity_lineage_head()
+  require branch.state == ACTIVE
+  require no_unresolved_contradiction(branch)
+  require every_effect_coupled_delta_has_verified_outcome(branch,links)
+  require every_material_learning_delta_has_verified_outcome_and_causal_use(branch,links,uses)
+  require no_authority_expansion(branch)
+  return atomic_publish_semantic_commit(tx,branch,links,uses)
+}
+
+fn abort_branch(tx:CognitiveTxn, branch:HypothesisBranch, reason:Ref) -> Ref {
+  require branch.state in [ACTIVE,CONTRADICTED,DOMINATED]
+  return preserve_abort_and_negative_evidence_without_canonicalizing_nonmonotone_deltas(tx,branch,reason)
+}
+
+fn retract_committed(source_delta:Ref, invalidating_evidence:EvidenceRef) -> Ref {
+  require invalidating_evidence admissible
+  let closure = causal_dependency_closure(source_delta)
+  return enqueue_differential_retraction(closure,invalidating_evidence)
+}
+
+fn recover_from_cut(cut:ConsistentCut) -> RecoveryDecision {
+  require cut.identity_lineage_head == admitted_identity_lineage_head_for(cut.state_epoch)
+  require cut.lease_epoch <= current_execution_lease_epoch()
+  if cut.unresolved_effects not_empty { return RECONCILE_REQUIRED }
+  require replay_hash_valid(cut.replay_root_hash)
+  return SAFE_TO_START
+}
+
+rule raw_web_evidence -> SemanticDelta(monotonicity=MONOTONE_JOIN,epistemic_class=UNTRUSTED_OBSERVATION)
+rule model_inference -> SemanticDelta(monotonicity=NON_MONOTONE,visibility=BRANCH_PRIVATE)
+rule goal_update -> SemanticDelta(monotonicity=NON_MONOTONE)
+rule reward_plasticity -> SemanticDelta(monotonicity=EFFECT_COUPLED)
+rule personality_slow_state_update -> SemanticDelta(monotonicity=EFFECT_COUPLED)
+rule outcome_derived_memory -> SemanticDelta(monotonicity=EFFECT_COUPLED)
+rule visual_raw_percept_with_provenance -> SemanticDelta(monotonicity=MONOTONE_JOIN)
+rule visual_learned_label -> SemanticDelta(monotonicity=NON_MONOTONE)
+rule GWT_ignition changes accessibility not truth
+rule Hyperposition branch existence changes possibility not truth
+rule ClayGraph projection changes topology not authority
+rule Needle output proposes route not effect authority
+rule translator output cannot change commit class or authority
+
+invariant no_cognitive_organ_direct_canonical_write
+invariant canonical_nonmonotone_state_requires_CommitCertificate
+invariant monotone_admission_never_contains_external_effect
+invariant stale_lease_epoch_cannot_stage_or_commit
+invariant stale_schema_epoch_cannot_commit
+invariant stale_identity_lineage_cannot_commit
+invariant outcome_unknown_never_commits_success_dependent_delta
+invariant effect_authority_preserved_from_existing_frank_effect_contract
+invariant external_effect_not_rolled_back_by_fiction
+invariant retry_after_unknown_requires_existing_effect_reconciliation_rules
+invariant GWT_salience_not_truth
+invariant broadcast_not_commit
+invariant recurrence_not_commit
+invariant recurrence_not_emergence
+invariant causal_credit_requires_use_plus_verified_outcome
+invariant reward_plasticity_requires_causal_credit
+invariant reentry_of_material_learning_requires_committed_causal_lineage
+invariant aborted_branch_nonmonotone_deltas_never_canonical
+invariant negative_result_and_failure_evidence_preserved
+invariant ClayGraph_rebuildable_from_UnifiedDB_commit_history
+invariant Hyperposition_unresolved_alternatives_remain_non_authoritative
+invariant self.root_self_harness_authority_proposal_only
+invariant no_paid_final_training_without_owner_authorization

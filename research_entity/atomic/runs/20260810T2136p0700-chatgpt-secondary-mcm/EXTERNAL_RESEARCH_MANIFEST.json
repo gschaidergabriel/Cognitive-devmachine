@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "retrieval_date":"2026-08-10",
+  "questions":["When is coordination semantically necessary?","Can global state be represented as a consistent causal cut?","Can cyclic computation run with partial logical time?","Is commitment/determination provenance already known?"],
+  "sources":[
+    {"title":"Keeping CALM: When Distributed Consistency is Easy","year":2019,"kind":"primary_preprint","finding":"monotonic logic characterizes consistent coordination-free distributed programs"},
+    {"title":"The Coordination Criterion","year":2026,"kind":"primary_preprint","finding":"coordination-free implementation iff specification is monotone under history extension for the declared outcome order"},
+    {"title":"Distributed Snapshots: Determining Global States of a Distributed System","year":1985,"kind":"primary_publication","finding":"consistent global states can be captured over distributed execution without requiring one physical instantaneous global read"},
+    {"title":"Naiad: A Timely Dataflow System","year":2013,"kind":"primary_system_publication","finding":"cyclic incremental computation can use logical timestamps and lightweight coordination"},
+    {"title":"Coordination Avoidance in Database Systems","year":2014,"kind":"primary_preprint","finding":"invariant confluence localizes when coordination is necessary for application invariants"},
+    {"title":"Blazes: Coordination Analysis for Distributed Programs","year":2013,"kind":"primary_preprint","finding":"program analysis can identify coordination-required locations and synthesize coordination"},
+    {"title":"Determination Provenance: From Ambiguity to Algebra","year":2026,"kind":"primary_preprint","finding":"commitments resolving multiple admissible outcomes have explicit provenance and depth"}
+  ],
+  "collision_result":"Core monotonicity/coordination, causal-cut, dataflow and determination-provenance ingredients are known. Candidate novelty cannot exceed a project-specific novel-combination claim without stronger search and real matched benchmarks.",
+  "counterevidence":"A strong causal event-sourcing/dependency baseline may reproduce most MCM benefits without a new cognitive architecture primitive."
+}

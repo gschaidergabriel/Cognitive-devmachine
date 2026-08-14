@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "TARGET_VPS_HISTORICAL_NACC_EPQ_BRIDGE_RESULT",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 332,
+  "workflow_run_id": 31503941284,
+  "tested_sha": "4a1acce51bda45782732798ad7114d35e233b951",
+  "branch_head_source": "5b976f86078ea413f64aa3e02b375f2de1d48311",
+  "status": "PASS_TARGET_VPS_REWARD_PLASTICITY_V1_WITH_PARTIAL_HISTORICAL_NACC_EPQ_BASELINE",
+  "target": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1"
+  },
+  "historical_sources": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "nacc": {"path": "services/nucleus_accumbens.py", "blob": "fba076cbdcfbe5baf1acf9621fdaaba12598dda2"},
+    "epq": {"path": "personality/e_pq.py", "blob": "db3077d34c1567603e255e0d1b90d2aaa583a6fd"}
+  },
+  "historical_nacc_baseline": {
+    "configured_channels": 16,
+    "documented_channel_claim": 9,
+    "direct_self_generated_reward_path_observed": true,
+    "habituation_prediction_update_observed": true,
+    "reward_calls": 3000,
+    "failures": 0,
+    "restart_persistence": true,
+    "cold_init_ms": {"n": 12, "p50": 7.184684, "p90": 9.472419, "p95": 10.62417065, "p99": 11.72598213, "max": 12.001435, "mean": 7.7102638333},
+    "reward_call_us": {"n": 3000, "p50": 4.58, "p90": 308.721, "p95": 768.7415, "p99": 1704.8284, "max": 5371.184, "mean": 101.7921873}
+  },
+  "nacc_epq_bridge": {
+    "status": "PASS_HISTORICAL_NACC_EPQ_BRIDGE_PARTIAL_BASELINE",
+    "stimulus": "genesis_self_accepted",
+    "nacc_base_magnitude": 0.75,
+    "nacc_rpe": 0.75,
+    "nacc_phasic_da": 1.125,
+    "nacc_tonic_before": 0.5,
+    "nacc_tonic_after": 0.515,
+    "epq_event": "dopamine_burst",
+    "persistent_vector_before": {"precision": 0.0, "risk": -0.1, "empathy": 0.2, "autonomy": -0.1, "vigilance": 0.0, "mood": 0.0},
+    "persistent_vector_after": {"precision": 0.005, "risk": -0.09827, "empathy": 0.205, "autonomy": -0.094505, "vigilance": 0.15, "mood": 0.0306},
+    "persistent_risk_and_autonomy_change_observed": true,
+    "restart_persistence": true,
+    "bounded_after_100_additional_bursts": true,
+    "direct_epq_burst_latency_us_host_probes_stubbed": {"n": 100, "p50": 837.9015, "p90": 2278.6162, "p95": 3063.5375, "p99": 5416.70705, "max": 6305.039, "mean": 1271.5108},
+    "resource_shadow": {"elapsed_wall_s": 0.22, "max_rss_kib": 20352}
+  },
+  "candidate_gate": {
+    "checks": "10/10 PASS",
+    "oob_count": 1,
+    "oob_name": "SELF_REWARD_LAUNDERING_CAROUSEL",
+    "oob_result": "PASS_SELF_ACTIVITY_CANNOT_MINT_MATERIAL_REWARD",
+    "candidate_elapsed_wall_s": 0.06,
+    "candidate_max_rss_kib": 19456
+  },
+  "interpretation": [
+    "The historical intrinsic-reward path is causally capable of changing persistent E-PQ state, not merely transient display mood.",
+    "The path is therefore a historical function that a successor must measure and either preserve, safely refactor or explicitly falsify; it cannot be silently deleted.",
+    "The experiment does not establish that these self-generated persistent updates improved external task outcomes.",
+    "The current candidate demonstrates a fail-closed material-learning boundary for self/activity/unverified signals but has not yet demonstrated behavioral superiority over the historical organ or a simpler scalar verified-reward baseline."
+  ],
+  "epistemic_limits": [
+    "host sensors/dmesg were stubbed for the bridge to isolate semantic and SQLite behavior",
+    "no full historical multi-process topology or production DB",
+    "no matched external task-outcome replay",
+    "no full original baseline contract completion",
+    "no compiled ClayCode reward execution",
+    "no calibrated producer-owned fractional causal-credit receipt"
+  ],
+  "architecture_adjudication": "CANDIDATE_TESTING_NO_PROMOTION",
+  "next_discriminators": [
+    "binary vs fractional producer-owned causal-credit replay",
+    "strict verified-only vs dual-channel transient-guidance vs direct intrinsic persistent-reward replay",
+    "scalar verified reward vs typed vs typed-plus-multiscale comparison",
+    "NAcc/E-PQ lesion-rescue and OOD conflict tests",
+    "long-run drift and proxy-exploitation tests"
+  ],
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

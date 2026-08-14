@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-PSW-001",
+  "claim":"Mostly-identical unresolved alternatives can share physical state and pure computation without merging epistemic/provenance identity or granting effect authority; PSW must add unique value over conventional sparse overlay plus exact read-signature memoization.",
+  "main_matrix":{
+    "state_fields":[64,256,1024],
+    "branch_counts":[4,16,64,256,1024],
+    "divergence_density":[0.0,0.01,0.05,0.10,0.25,0.50],
+    "pure_transition_read_set_sizes":[4,16],
+    "initial_scaling_cells":168,
+    "representative_replication":"F=1024,N=256,read_set=16 across six seeds and all six divergence levels"
+  },
+  "baselines":[
+    {"id":"FULL_COPY","description":"materialized independent branch dictionaries; required weak physical baseline"},
+    {"id":"SPARSE_OVERLAY","description":"one immutable base plus per-branch override map and exact branch metadata"},
+    {"id":"SPARSE_OVERLAY_MEMO","description":"SPARSE_OVERLAY plus pure-transition cache keyed by exact transition identity/read signature; strongest direct conventional baseline"},
+    {"id":"GUARDED_VALUE_PROXY","description":"field-wise branch->value guarded maps with memoized read signatures; proxy for faceted/guarded representation"},
+    {"id":"PERSISTENT_STRUCTURE_PRIOR_ART","description":"analytical/prior-art baseline; no claim that the Python overlay benchmark implements a production HAMT/persistent tree"}
+  ],
+  "correctness_controls":[
+    "every branch reconstructed from base+delta equals materialized full-copy branch",
+    "FULL_COPY, OVERLAY, OVERLAY_MEMO and PSW pure outputs must exactly match",
+    "payload-identical but provenance/hypothesis-distinct branches must not auto-merge",
+    "stale base epoch rejected",
+    "wrong native self rejected",
+    "unknown/dynamic exact read-set disables lifting",
+    "external/effectful/security-sensitive transitions reject multi-branch lifting"
+  ],
+  "causal_ablations":[
+    "NO_SPARSE_DELTA -> compare storage to FULL_COPY",
+    "NO_TRANSITION_LIFT -> force N pure evaluations and compare operation/time scaling",
+    "INCOMPLETE_READ_SET -> omit one true material read and demand a concrete false-share counterexample",
+    "PAYLOAD_ONLY_MERGE -> demand concrete provenance/hypothesis false-merge counterexample"
+  ],
+  "metrics":["exact reconstruction error","wire serialization bytes proxy","unique read signatures","sharing factor","pure transition evaluations","wall-clock ns per batch proxy","false semantic merge","stale-epoch false allow","wrong-self false allow","effectful lift rejection"],
+  "decision_law":"Beating FULL_COPY is insufficient. If SPARSE_OVERLAY_MEMO has identical exact output/operation grouping and lower-or-equivalent metadata/time, PSW has no unique architecture benefit and must not be promoted.",
+  "limitations_declared_up_front":["Python microbenchmark, not target VPS","JSON wire bytes are serialization proxy, not RSS","controlled integer state fields, not full Clay values","persistent HAMT/BDD production implementations not implemented","pure transition read sets are provided as trusted exact contracts in the positive path"]
+}

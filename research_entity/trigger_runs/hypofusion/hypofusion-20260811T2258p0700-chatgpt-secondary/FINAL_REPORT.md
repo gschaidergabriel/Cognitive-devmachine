@@ -3,78 +3,54 @@
 Run: `hypofusion-20260811T2258p0700-chatgpt-secondary`  
 Target: `self.root / human-surface Frank v0.1` on accepted Hostinger Ubuntu VPS  
 Actor: Clay temporary research worker; never self.root/Frank  
+Final late-arrival cutoff: `69525e83e2988b95daf5a2dc4d0a573695689b9c`  
 Training authorization: **FALSE**
 
 ## Executive result
 
-This run does **not** support adding another broad cognitive layer to Frank. The strongest fusion is a set of narrower verification and causal-admission laws that cut across existing components.
+This run does **not** support adding another broad cognitive layer to Frank. It supports narrower verification and causal-admission laws across existing components.
 
-The highest-value transformed result is:
+Central synthesis:
 
-> **A representation, projection, provenance record or workspace-like signal becomes operationally useful only when the exact kind of claim being made is separately verified at the point where it matters. Decodability does not imply causal control; idempotence does not imply current snapshot completeness; recorded provenance does not imply consumer verification; trusted producer identity does not imply exact artifact-subject identity.**
+> **Evidence of a property is not authority to act as though that property is currently, causally and referentially valid.** Decodability does not imply causal control; idempotence does not imply current snapshot completeness; recorded provenance does not imply consumer verification; trusted producer identity does not imply exact artifact-subject identity; a bare digest does not imply semantic-domain identity; and an isolated interpreter does not protect code executed before it starts.
 
-That synthesis produces four immediate Frank v0.1 priorities.
+No canonical architecture promotion follows from this run.
 
-1. **Latent cognition / LCOP: observation first, control only after a triad gate.** A latent feature must separately demonstrate (a) observability/decodability, (b) intervention reliability/selectivity and (c) incremental verified outcome/control value over existing Frank receipts/readouts. High probe accuracy alone is explicitly insufficient.
-2. **Reward projection: exactly-once folding is not enough for CURRENT state.** Fresh target evidence preserves the 10/10 terminal reward-bridge PASS and duplicate-safe deterministic fold under an intact bounded source, but concurrent DONE commits expose a distinct source-frontier/snapshot-completeness gap. A projection is CURRENT only if it proves which authoritative frontier it covers, unless a simpler writer-exclusion topology is machine-enforced and falsified under concurrency.
-3. **Consume-bound provenance: strengthen the semantic law, do not yet universalize the implementation.** Consumer-side verification of producer/object/epoch/authority binding is strengthened. The proposed universal CBPC remains a candidate until it beats branch-local typed guards in a matched common fault matrix.
-4. **ProductStart build trust: subject binding is conjunctive, not substitutable.** A late-arrival subject-swap falsifier showed that signer/repository/workflow verification without exact artifact subject digest can admit different bytes. ProductStart therefore treats producer/source policy, cryptographic verification, exact subject digest, installed-byte equality and state-lineage/recovery as separate candidate gates. This run does not choose a production signing provider or trust policy.
+## Strongest fused deltas
 
-## External adversarial triangulation
+1. **LCOP / latent cognition:** runtime admission requires a triad gate: observability/decodability, reliable/selective causal intervention, and incremental verified outcome/control value over current Frank receipts/readouts. Primary 2025-2026 research supports both causal latent interventions and serious confounds/failure modes, so LCOP is strengthened as an instrumented research plane and weakened as direct authority.
 
-### Latent probes and interventions
+2. **NativeModelWorkspace vs ClayGWT:** fresh workspace-like model-internal evidence makes the hypothesis testable but does not prove complementarity. Keep them distinct until `WORK-LCOP-DUAL-WORKSPACE-FACTORIAL-20260811` classifies complementarity, redundancy, antagonism, model-specificity or unresolved status under receiver-use/re-entry, recurrence, diversity, overcoupling, outcome and resource measurements.
 
-Primary 2025-2026 work cuts both ways. There are credible examples where hidden-state directions can be manipulated to alter a tested cognitive behavior, including self-reflection-like behavior. But causal-probing work also finds completeness/selectivity tradeoffs; deconfounded reasoning-mode probing shows task-format signals can masquerade as internal cognitive state; and recent actionability studies show that near-perfect internal discrimination can coexist with poor reliable correction and large off-target damage.
+3. **Reward currentness:** target evidence preserves scoped 10/10 terminal reward-bridge PASS and deterministic unique DONE-set folding under an intact bounded source. That does not close concurrent-source currentness. Reward must consume the same admitted/recovery-verified typed UnifiedDB lineage/checkpoint plus terminal event frontier/cursor as the shared state/recovery architecture; no private reward epoch/head. `CURRENT` requires exact frontier equality, else `STALE`, `PREFIX` or evidence-only.
 
-**Fusion:** LCOP is strengthened as an instrumented research plane and weakened as a direct runtime-control proposal. `decoded_state != causal_state`; `causal_steering != unique_representation`.
+4. **Consume-bound provenance:** strengthen consumer-side verification of identity/object/epoch/authority at consequential use. Do **not** yet promote one universal CBPC implementation; branch-local typed guards remain the mandatory simpler baseline.
 
-### Native-model workspace vs ClayGWT
+5. **ProductStart build trust:** a local subject-swap falsifier showed signer/repository/workflow verification without exact subject-digest checking can admit substituted bytes. Build trust remains conjunctive: trusted producer/source policy + crypto verification + exact subject digest + installed-byte equality + admitted state-lineage/recovery identity. No production signing provider or trust policy is selected by this run.
 
-A fresh 2026 study reports a privileged verbalizable representation set with global-workspace-like functional properties inside language models, while earlier neural architectures demonstrate shared bottleneck workspaces as viable coordination mechanisms.
+6. **Typed semantic checkpoint identity:** a late negative line showed identical raw digest bytes can carry incompatible semantic-root protocol/manifest meanings. `SemanticCheckpointIdentity(root_protocol, semantic_root_manifest_id, semantic_root_hash)` plus lineage/sequence/parent is therefore a stronger candidate than a bare root hash, but authority still requires an independent producer/admission path and rollback separation. PR372 was queued/testing at cutoff, not PASS.
 
-**Fusion:** this makes `H-DUAL-GWT-02` more experimentally concrete but does not establish that Frank needs two workspaces. Native-model workspace and ClayGWT remain separate hypotheses until the queued factorial distinguishes complementarity, redundancy, antagonism or model-specificity.
+7. **Pre-runtime boot trust:** a local PATH-helper falsifier executed hostile code before the intended absolute `/usr/bin/python3 -I -S` guard while still allowing that guard to start. The trusted ProductStart boundary therefore begins before the first helper/executable resolution. PATH, launcher bytes, helpers and interpreter invocation require fixed/attested semantics. PR373 target revalidation and installed-service restart remained pending at cutoff.
 
-### Synthetic personality / machine psychology
+8. **Synthetic personality:** external instability/steering evidence strengthens separation of owner-fixed identity, contextual persona, fast appraisal and slow regulatory state. Psychometric/persona outputs remain audit/context projections, never self.root identity or effect authority. Persistent personality state must beat prompt-only persona on long-horizon restart/OOD tests.
 
-Large-scale personality measurement work reports strong dependence on prompt order, persona, reasoning mode and interaction history. Activation-steering work also shows that interpretable value/personality-like dimensions can be entangled rather than cleanly separable.
+9. **Build/quantization latent transfer:** representation-sensitive quantization evidence justifies exact model/build/quantization/basis scoping by default. Transfer requires a per-probe/control certificate from matched pre/post causal and OOD validation, not a blanket assumption of failure or invariance.
 
-**Fusion:** owner-fixed identity, contextual persona, fast appraisal and slow regulatory state should remain separate constructs. Psychometrics are audit projections, not identity truth or effect authority. Persistent personality state must beat prompt-only persona under long-horizon restart/OOD tests before promotion.
+10. **Hyperposition:** retain conditionally for unresolved non-identifiability/equivalence where pairwise/factorized representations create false certainty. Simpler baselines remain mandatory.
 
-### Quantization/build changes
+11. **SQLite WAL:** keep fail-closed until exact loaded-object/source evidence proves a fixed/backported runtime or machine-checked topology proves the documented vulnerable concurrency trigger unreachable. A fixed Python/SQLite runtime is insufficient if untrusted pre-guard code can execute first.
 
-Current quantization research shows activation outliers and inter/intra-layer dependencies can materially affect low-bit behavior. This does not prove every latent probe or steering direction fails after compilation/quantization.
+## Final negative-result ingestion — LSCW
 
-**Fusion:** default latent observations/control artifacts to exact model/build/quantization/basis scope, and allow portability only via an explicit transfer certificate earned by matched pre/post intervention and OOD tests.
+The last material arrival before cutoff was the ATOMIC `Linear Semantic Conservation Witness` deep falsification packet. Its broad semantic-preservation claim is **REFUTED**. `LSCW-R1` remains shadow/research-only and the strongest ordinary `CurrentExecutionContext` counterbaseline is **NOT DEFEATED**.
 
-### Provenance, snapshots and exactly-once semantics
+This is negative evidence against another universal lifecycle witness/semantic architecture. It strengthens the existing Hypofusion position: use stage-specific semantic validators, ProductStart conjunctive gates, exact consumed-object checks, typed state lineage, current execution-generation/provider/recovery mechanisms, and compare any general witness against that simpler baseline on real target episodes. A same-pipeline hash/witness is not a compiler semantic-correctness oracle; later green guards do not prove earlier consumed paths were safe.
 
-SLSA independently supports verification of provenance against consumer expectations before use. SQLite WAL snapshot semantics and Kafka-style transactional exactly-once designs independently illustrate the distinction between duplicate safety and an exact source/read position bound to derived output.
+Supplemental adjudication is preserved in `LATE_NEGATIVE_RESULTS.md`.
 
-**Fusion:** strengthen consume-bound verification and source-frontier identity as mechanism-level candidates without pretending software-supply-chain or streaming systems are direct Frank replications.
+## Final transformed hypotheses
 
-## Internal live evidence / late arrivals
-
-The run continuously reread concurrent worker activity instead of freezing the 22:58 snapshot.
-
-### Reward
-
-The recomposed terminal reward bridge reached target-VPS **10/10 PASS** for its scoped gate: caller fractional credit is non-authoritative, unresolved fractional credit abstains, verified bound failure can admit negative utility, explicit no-learning blocks material reward, and raw reward candidates require a non-bypassable upstream bridge.
-
-That PASS does not erase the later source-frontier blocker. The deterministic DONE fold can still represent a valid prefix if the authoritative DONE universe changes concurrently after initial scan/frontier capture.
-
-### ProductStart build provenance
-
-A concurrent research lane decomposed build trust into independent axes and ran a local cryptographic subject-swap falsifier. A verifier that validated signature/repository/workflow while ignoring artifact digest admitted substituted bytes; a subject-bound verifier rejected them.
-
-This is a useful concrete subcase of consume-bound verification. It does not itself select GitHub attestations, Sigstore, owner-held signing keys or another production trust policy.
-
-### ClayCode
-
-Concurrent ClayCode work advanced the nominal typecheck/native backend frontier. The key hypofusion effect is **NO semantic expansion**: LCOP/frontier/build-trust records should first be attempted as compositions of current typed semantics. New language semantics require an executable counterexample, not research enthusiasm.
-
-## Transformed hypotheses
-
-Nine transformed hypotheses are persisted in `FUSION2_HYPOTHESES.json`:
+`FUSION2_HYPOTHESES.json` contains eleven transformed hypotheses:
 
 - `HF3-01-TRIANGULATED-LATENT-ADMISSION`
 - `HF3-02-DUAL-WORKSPACE-INTERACTION-ONLY`
@@ -85,62 +61,48 @@ Nine transformed hypotheses are persisted in `FUSION2_HYPOTHESES.json`:
 - `HF3-07-CONDITIONAL-HYPERPOSITION-FOR-NONIDENTIFIABILITY`
 - `HF3-08-SQLITE-LOADED-SOURCE-OR-TOPOLOGY-PROOF`
 - `HF3-09-BUILD-TRUST-SUBJECT-BINDING`
+- `HF3-10-TYPED-SEMANTIC-CHECKPOINT-DOMAIN`
+- `HF3-11-PRE-RUNTIME-BOOT-TRUST-BOUNDARY`
 
-None is a canonical architecture promotion.
+LSCW does not create a twelfth promoted hypothesis; it is preserved as a refuted broad claim plus unresolved shadow candidate and simpler-baseline obligation.
 
-## Highest-information experiment frontier
+## Highest-information frontier
 
-Ranked primarily by release criticality plus information gain:
+1. `REWARD_FOLD_CONCURRENT_DONE_FRONTIER_ON_SHARED_UNIFIEDDB_LINEAGE`
+2. `SEMANTIC_ROOT_DOMAIN_CROWN_SWAP_PLUS_PRODUCER_ADMISSION`
+3. `TARGET_PRE_GUARD_PATH_HELPER_FENCE_PLUS_INSTALLED_SERVICE_RESTART`
+4. `PRODUCTSTART_TRUST_CANDIDATE_MATRIX_PLUS_INSTALLED_RESTART`
+5. `WORK-LCOP-DUAL-WORKSPACE-FACTORIAL-20260811`
+6. `OBSERVABILITY_ACTIONABILITY_OUTCOME_TRIAD_MATRIX`
+7. `CBPC_VS_BRANCH_LOCAL_COMMON_FAULT_MATRIX`
+8. `TARGET_SQLITE_LOADED_OBJECT_ATTESTATION_PLUS_WAL_TOPOLOGY_PROOF`
+9. `PRE_POST_BINARY_LATENT_TRANSFER_MATRIX`
+10. `LONG_HORIZON_PERSONA_FACTORIAL`
+11. `LATENT_EQUIVALENCE_PAIRWISE_VS_HYPERPOSITION`
+12. `REAL_TARGET_CURRENT_EXECUTION_CONTEXT_VS_LSCW_R1_SHADOW`
 
-1. `REWARD_FOLD_CONCURRENT_DONE_FRONTIER` — prove exact authoritative frontier/currentness or prove writer exclusion by construction.
-2. `PRODUCTSTART_TRUST_CANDIDATE_MATRIX_PLUS_INSTALLED_RESTART` — compare owner-reviewable trust designs under subject swap/stale artifact/restart and compose with exact installed bytes + state lineage.
-3. `WORK-LCOP-DUAL-WORKSPACE-FACTORIAL-20260811` — NativeModelWorkspace intact/lesion/steer x ClayGWT truthful/shuffled/no-reentry with common-driver/overcoupling controls.
-4. `OBSERVABILITY_ACTIONABILITY_OUTCOME_TRIAD_MATRIX` — determine whether any latent signal adds held-out control value beyond system receipts/LoopDynamicsReadout.
-5. `CBPC_VS_BRANCH_LOCAL_COMMON_FAULT_MATRIX` — decide whether one shared consume-bound primitive is better than local guards.
-6. `TARGET_SQLITE_LOADED_OBJECT_ATTESTATION_PLUS_WAL_TOPOLOGY_PROOF` — close the current WAL release uncertainty by exact source/backport evidence or unreachable-topology proof.
-7. `PRE_POST_BINARY_LATENT_TRANSFER_MATRIX`.
-8. `LONG_HORIZON_PERSONA_FACTORIAL`.
-9. `LATENT_EQUIVALENCE_PAIRWISE_VS_HYPERPOSITION`.
+## Explicit non-promotions / rejections
 
-## Architecture consequences
-
-### Promote now
-
-**None.** No canonical architecture promotion is warranted from this run alone.
-
-### Strengthen as test/contract obligations
-
-- Separate latent observability, causal actionability and verified incremental utility.
-- Treat NativeModelWorkspace and ClayGWT as distinct until factorial evidence resolves the relationship.
-- Bind CURRENT derived projections to exact authoritative source frontier/snapshot unless simpler topology makes concurrency impossible by construction.
-- Verify semantic identity/epoch/authority at consequential consumption boundaries.
-- Bind build provenance to the exact artifact subject and exact installed bytes, not only signer/workflow identity.
-- Keep latent probes exact-build/basis scoped absent transfer evidence.
-- Keep SQLite WAL fail-closed until exact fixed loaded source/backport or documented trigger topology is machine-proven unreachable.
-- Keep Hyperposition conditional; pairwise/factorized baseline remains mandatory.
-- Keep psychometric/persona signals non-authoritative for self.root identity, effect authority and slow plasticity.
-
-### Explicitly reject for now
-
-- A single universal LLM “inner state” scalar/vector.
-- Probe accuracy as sufficient latent-control evidence.
-- Workspace-like latent activity as GWT equivalence or emergence evidence.
-- Psychometric personality score as persistent identity truth.
-- Quantized/build behavioral equivalence as proof of latent-basis equivalence.
-- Duplicate-safe reward folding as proof of current snapshot completeness.
-- Provenance metadata or trusted signer identity as sufficient artifact admission without consumer-side subject verification.
-- A universal CBPC implementation before the branch-local baseline comparison.
+- no universal LLM/agent inner-state scalar/vector;
+- no probe-accuracy-to-control shortcut;
+- no workspace-like activation = GWT/emergence equivalence;
+- no psychometric score = persistent identity truth;
+- no behavioral build equivalence = latent-basis equivalence;
+- no duplicate-safe reward fold = proof of CURRENT state;
+- no provenance/signer identity = exact artifact admission without subject verification;
+- no bare semantic-root hash = typed semantic identity;
+- no Python `-I -S` = complete trust boundary when pre-runtime helpers can execute;
+- no universal CBPC before local-guard comparison;
+- no production LSCW while `CurrentExecutionContext` remains an undefeated simpler baseline.
 
 ## Coverage / completion boundary
 
-All material current hypothesis bodies reached through the live mesh used by this run were clustered, countered and externally triangulated. However canonical active IDs `H-G3-001`, `H-G3-003`, `H-G3-005`, `H-G3-006` remain visible only as IDs through the available connector path; their exact bodies are marked `DESCRIPTION_INACCESSIBLE_DO_NOT_GUESS`, exactly as in the earlier hypofusion. No wording was fabricated.
+All material hypothesis bodies reached through the live mesh used by this run were clustered, countered and externally triangulated through cutoff `69525e83e2988b95daf5a2dc4d0a573695689b9c`. Canonical active IDs `H-G3-001`, `H-G3-003`, `H-G3-005`, `H-G3-006` remain visible only as IDs through the available connector path; exact bodies remain `DESCRIPTION_INACCESSIBLE_DO_NOT_GUESS`. No wording was fabricated.
 
-The GitHub connector supported verified read/write and late-arrival rereads, but no shell-backed exhaustive repository traversal/validator execution was available. Therefore the protocol's literal 100% completion gate is **not claimed**, even though all required durable artifacts for this scoped run were written.
+GitHub read/write and late-arrival rereads were verified, but no shell-backed exhaustive repository traversal or hypofusion contract-validator execution was available. Therefore the literal protocol 100% gate is **not claimed**.
 
 ## Final disposition
 
 `HYPOFUSION_RESULT = COMMITTED_TEST_FRONTIER_REFINEMENT_NO_CANONICAL_PROMOTION`
-
-The most important scientific change is a shift from **“can we observe a signal?”** toward **“what exact claim does the signal justify, and is that claim still bound and valid at the consumer/action boundary?”**. That same distinction now unifies the latent-cognition, reward-frontier, provenance and ProductStart findings without pretending they are the same mechanism.
 
 Whole Frank v0.1 remains **OPEN / NOT ACCEPTED**. Final/paid model training remains owner-gated and was not started. self.root/Frank self-Harness authority remains proposal-only.

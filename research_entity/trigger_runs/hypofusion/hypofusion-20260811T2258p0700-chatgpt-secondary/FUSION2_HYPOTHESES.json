@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "hypofusion-20260811T2258p0700-chatgpt-secondary",
   "hypotheses": [
     {
@@ -25,11 +25,11 @@
     {
       "id": "HF3-03-AUTHORITATIVE-PROJECTION-FRONTIER",
       "source_hypotheses": ["REWARD-DONE-FOLD","REWARD-SOURCE-FRONTIER-GAP","HF2-06"],
-      "what_changed": "Fresh target evidence shows duplicate-safe deterministic folding is not enough to identify currentness under concurrent source mutation; external snapshot/exactly-once systems independently support binding a read frontier to derived output.",
-      "hypothesis": "Every mutable authoritative-derived Frank projection that can be consumed as CURRENT must bind the exact authoritative source frontier/snapshot it covers; otherwise it is STALE/PREFIX/evidence-only.",
+      "what_changed": "Fresh target evidence shows duplicate-safe deterministic folding is not enough to identify currentness under concurrent source mutation; external snapshot/exactly-once systems independently support binding a read frontier to derived output. Late-arrival coordination further forbids a private reward epoch and binds reward currentness to the shared UnifiedDB lineage/checkpoint successor.",
+      "hypothesis": "Every mutable authoritative-derived Frank projection that can be consumed as CURRENT must bind the exact shared authoritative source lineage/checkpoint and event frontier/snapshot it covers; otherwise it is STALE/PREFIX/evidence-only.",
       "counterhypothesis": "A machine-enforced frozen-checkpoint topology can make explicit frontier metadata redundant.",
       "falsifier": "Writer-exclusion proof plus adversarial concurrency tests show no possible prefix-current ambiguity without explicit frontier identity.",
-      "highest_information_test": "REWARD_FOLD_CONCURRENT_DONE_FRONTIER",
+      "highest_information_test": "REWARD_FOLD_CONCURRENT_DONE_FRONTIER_ON_SHARED_UNIFIEDDB_LINEAGE",
       "affected_branches": ["unifieddb","frank","claygraph","gwt","harness"]
     },
     {
@@ -85,12 +85,32 @@
     {
       "id": "HF3-09-BUILD-TRUST-SUBJECT-BINDING",
       "source_hypotheses": ["HF2-03","CBPC-CANDIDATE","PRODUCTSTART-CONJUNCTIVE-GATE"],
-      "what_changed": "Late-arrival concurrent research split build trust into non-substitutable axes and locally falsified a signer/repository/workflow-only verifier with an artifact-subject swap.",
+      "what_changed": "Concurrent research split build trust into non-substitutable axes and locally falsified a signer/repository/workflow-only verifier with an artifact-subject swap.",
       "hypothesis": "ProductStart build trust is conjunctive: trusted producer/source policy, cryptographic verification, exact attested subject digest, local installed-byte equality, and admitted state-lineage/recovery identity must each hold; trusted signer/workflow identity cannot substitute for exact artifact subject binding.",
       "counterhypothesis": "An owner-controlled deployment channel plus exact local artifact hash is sufficient for v0.1 and a general attestation verifier adds needless machinery.",
       "falsifier": "A simpler owner-pinned deployment design provides equal producer/source authenticity, subject binding, revocation/rotation and restart recovery under subject-swap and stale-artifact faults.",
       "highest_information_test": "PRODUCTSTART_TRUST_CANDIDATE_MATRIX_PLUS_INSTALLED_RESTART",
       "affected_branches": ["frank","harness","unifieddb","claycode"]
+    },
+    {
+      "id": "HF3-10-TYPED-SEMANTIC-CHECKPOINT-DOMAIN",
+      "source_hypotheses": ["HF2-03","HF3-03","SEMANTIC-ROOT-LINEAGE-REPAIR"],
+      "what_changed": "A final late-arrival negative line showed that identical raw digest bytes can be paired with incompatible semantic-root protocol/manifest meanings. The selected lineage head therefore needs a domain-separated typed checkpoint identity, not a bare hash.",
+      "hypothesis": "Semantic continuity must bind SemanticCheckpointIdentity(root_protocol, semantic_root_manifest_id, semantic_root_hash) plus lineage/sequence/parent, and authoritative admission must originate from an independent checkpoint producer rather than caller-selected labels.",
+      "counterhypothesis": "Typed fields only relocate the authority leak if protocol/manifest/root remain caller-selectable or share the same rollback failure domain.",
+      "falsifier": "SEMANTIC_ROOT_DOMAIN_CROWN_SWAP must reject same-digest incompatible domains, followed by producer-admission and rollback tests on the exact target path.",
+      "highest_information_test": "SEMANTIC_ROOT_DOMAIN_CROWN_SWAP_PLUS_PRODUCER_ADMISSION",
+      "affected_branches": ["frank","unifieddb","harness","claygraph"]
+    },
+    {
+      "id": "HF3-11-PRE-RUNTIME-BOOT-TRUST-BOUNDARY",
+      "source_hypotheses": ["HF3-08","HF3-09","PRODUCTSTART-CONJUNCTIVE-GATE"],
+      "what_changed": "A final late-arrival local falsifier showed that inherited PATH can shadow a helper such as dirname and execute code before the intended absolute Python -I -S guard starts, while still returning a correct path.",
+      "hypothesis": "The trusted ProductStart boundary begins before the first executable/helper resolution: pre-admission helpers, PATH, launcher bytes and interpreter invocation must be fixed/attested so no untrusted executable runs before the Clay/SQLite admission guard.",
+      "counterhypothesis": "The current launcher environment is sufficiently trusted in production, making additional pre-Python fencing redundant.",
+      "falsifier": "Target-run PRE_GUARD_PATH_DIRNAME_HIJACK and installed service restart must show zero hostile pre-guard execution with exact launcher/manifest binding.",
+      "highest_information_test": "TARGET_PRE_GUARD_PATH_HELPER_FENCE_PLUS_INSTALLED_SERVICE_RESTART",
+      "affected_branches": ["frank","unifieddb","harness"]
     }
   ],
   "promotion": "NO_CANONICAL_ARCHITECTURE_PROMOTION_WITHOUT_DISCRIMINATING_EXECUTION"

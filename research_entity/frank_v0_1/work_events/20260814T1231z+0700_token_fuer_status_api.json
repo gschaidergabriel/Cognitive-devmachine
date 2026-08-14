@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_token_fuer_status_api",
+  "actor": "gabriel-claude/wp2",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "get github token from vault. need scope statuses:write + repo read. place on frank-api root-only file. test POST status on dummy sha. never print token.",
+  "done_when": "curl POST /statuses/<sha> from frank-api returns 201",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: frank-api, digital-retina, frank-laeufer, dr.-unterweger",
+  "source": {
+    "lauf": "20260813-054655",
+    "paket": "wp2",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-054655-wp2/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-054655-wp2/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 240,
+  "ergebnis_kurz": "gh keyring token (repo scope) placed at /root/frank-laeufer/token.env on frank-api, mode 600. POST status from frank-api returns HTTP 201. vault PAT is dead (401).",
+  "bericht": "token source: gh keyring token of account gschaidergabriel. scopes: gist, read:org, repo, workflow, write:packages. \"repo\" covers statuses:write. verified.\nvault entry \"Git-Anmeldung github.com\" (fine-grained github_pat_, 93 char) is DEAD: GET /repos -> 401, POST status -> 401. do not use. note for wissen.\nplaced on frank-api (31.97.117.141, digital-retina) as /root/frank-laeufer/token.env, line \"GITHUB_TOKEN=<value>\", mode 600, dir /root/frank-laeufer mode 700, owner root. 54 byte.\ntest from frank-api: curl POST /repos/gschaidergabriel/Dr.-Unterweger/statuses/59f306af93e2e4d49f94a281b691f7304d9db44c -> HTTP 201, id 52141001477, state pending, context frank-api/selbsttest, creator gschaidergabriel.\ncleanup: same context re-posted state=success so main head shows no stuck pending.\ntoken never printed to chat or log.\n"
+}

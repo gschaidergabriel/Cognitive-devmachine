@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260813T0740p0700-gpt56sol-fv0113-wal-sidecar-identity",
+  "trigger": "go",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "recorded_at": "2026-08-13T07:40:00+07:00",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_entity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_at_cycle_start": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "product_main_current_rechecked": "4304810ebeae015ebd88d2a85cfc1cecae2df9b3",
+  "candidate_pr": 557,
+  "candidate_pr_base_sha": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "candidate_head_before_cycle": "06310553422925cbd7dc36560c0fbff65d05f207",
+  "candidate_head_after_cycle": "517883ff08655caf166c76dfe5fd01cf0e8b97f4",
+  "fresh_main_recheck": {
+    "current_main": "4304810ebeae015ebd88d2a85cfc1cecae2df9b3",
+    "new_main_delta": "merged PR #562 CI-YAML repair",
+    "candidate_pr_mergeable": true,
+    "candidate_branch_base_is_older_than_current_main": true,
+    "fresh_main_composition_verdict": "UNKNOWN_PENDING_EXECUTION",
+    "fresh_main_composition_required_for_promotion": true
+  },
+  "observed_anchor": {
+    "existing_candidate_scope_before_cycle": {
+      "main_database_object_point_in_time_bound": true,
+      "active_wal_or_journal_object_bound": false,
+      "wal_sidecar_identity_attested": false,
+      "productive_persistence_path_exercised": false
+    },
+    "upstream_sqlite_release": "3.53.4",
+    "upstream_sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+  },
+  "this_macrocycle_unusual_experiment": {
+    "count": 1,
+    "id": "OPEN_CONNECTION_WAL_SIDECAR_REBIND",
+    "scope": "disposable local SQLite WAL fixture only",
+    "local_sqlite_version": "3.46.1",
+    "baseline": {
+      "main_database_inode": 2768533,
+      "wal_inode": 2768534,
+      "connection_read": "PASS",
+      "connection_commit": "PASS"
+    },
+    "intervention": "rename the already-open FRANK_UNIFIED.sqlite-wal aside and create a distinct decoy object at the canonical -wal pathname while leaving the main database pathname/object unchanged",
+    "observations": {
+      "main_database_inode_unchanged": true,
+      "original_wal_inode_retained_by_live_process": 2768534,
+      "canonical_wal_decoy_inode": 2768536,
+      "connection_read_after_rebind": "PASS",
+      "connection_commit_after_rebind": "PASS",
+      "proc_fd_followed_renamed_original_wal": true
+    },
+    "outcome": "GAP_CONFIRMED_MAIN_DB_OBJECT_BINDING_DOES_NOT_IMPLY_ACTIVE_WAL_OBJECT_BINDING",
+    "rollback": "temporary fixture removed; no Frank/VPS/canonical/effect state mutated"
+  },
+  "grf_counter_reality": {
+    "preferred_pretest_inference": "main database object identity plus exact SQLite runtime may be sufficient for productive WAL persistence identity",
+    "counterhypothesis": "the connection can retain a different already-open WAL object while the canonical -wal pathname is rebound, without moving the main database object",
+    "falsifier": "rebind only the active WAL pathname while keeping the existing connection alive",
+    "result": "COUNTERHYPOTHESIS_SUPPORTED_ON_LOCAL_LANE"
+  },
+  "ordinary_repair_replays": [
+    {
+      "id": "JOURNAL_POINTER_PLUS_HAS_MOVED",
+      "new_unusual_experiment_count": 0,
+      "mechanism": "SQLITE_FCNTL_JOURNAL_POINTER followed by WAL sqlite3_file xFileControl(SQLITE_FCNTL_HAS_MOVED)",
+      "baseline": 0,
+      "after_wal_rebind": 0,
+      "outcome": "REFUTED_ON_LOCAL_3_46_1",
+      "mechanistic_note": "Unix fileHasMoved depends on unixFile pInode; direct reuse on the WAL handle did not detect this rebind world"
+    },
+    {
+      "id": "PINNED_UNIX_WAL_FD_IDENTITY",
+      "new_unusual_experiment_count": 0,
+      "mechanism": "connection-specific JOURNAL_POINTER -> source/version/VFS-pinned Unix unixFile prefix -> open fd h -> fstat(dev,inode) -> compare with canonical -wal lstat",
+      "local_baseline_fd_identity": "65024:2768534",
+      "local_baseline_path_identity": "65024:2768534",
+      "local_after_rebind_fd_identity": "65024:2768534",
+      "local_after_rebind_path_identity": "65024:2768536",
+      "outcome": "SUPPORTED_MECHANISM_FEASIBILITY_LOCAL_ONLY",
+      "portability": "FALSE_PRIVATE_ABI_SOURCE_PINNED"
+    }
+  ],
+  "upstream_primary_evidence": [
+    {
+      "source": "https://sqlite.org/wal.html",
+      "finding": "the WAL file is part of persistent database state while present and must remain associated with its database"
+    },
+    {
+      "source": "https://sqlite.org/c3ref/file_control.html",
+      "finding": "SQLITE_FCNTL_JOURNAL_POINTER returns the journal/WAL sqlite3_file for a particular database connection"
+    },
+    {
+      "source": "https://sqlite.org/c3ref/file.html",
+      "finding": "sqlite3_file is VFS-subclassable; implementation-specific VFS objects append private fields"
+    },
+    {
+      "source": "https://github.com/sqlite/sqlite/blob/version-3.53.4/src/os_unix.c",
+      "finding": "exact 3.53.4 Unix unixFile prefix contains pMethod, pVfs, pInode and integer file descriptor h"
+    },
+    {
+      "source": "https://sqlite.org/releaselog/current.html",
+      "finding": "SQLite 3.53.4 source-id is pinned and includes the prior WAL-reset corruption fix"
+    }
+  ],
+  "product_delta": {
+    "pr": 557,
+    "commits": [
+      "a17472dc8f010026dedebe05a9e5507a9f6f2be6",
+      "69be7646921d8b0583e8cb150f0af11f78c21547",
+      "707002688c6cea4c75583a93e28fbdc82aac0d4c",
+      "517883ff08655caf166c76dfe5fd01cf0e8b97f4"
+    ],
+    "changes": [
+      "extend the diagnostic extension with a Linux/x64 exact-SQLite-3.53.4 source-id and Unix-VFS guarded WAL fd identity probe",
+      "compare connection-specific WAL fd dev/inode against the canonical -wal path twice around the path sample",
+      "add an ordinary WAL pathname-rebind regression; total deterministic candidate tests expected = 8",
+      "mark the mechanism receipt as WAL object bound only when the exact private-runtime regression passes",
+      "preserve portability=false, temporal-history=false, productive-persistence=false and whole-acceptance=false"
+    ],
+    "pr_reentry_comments": [5274404426, 5274424002]
+  },
+  "exact_runtime_ci_at_receipt_time": {
+    "workflow": "Frank SQLite connection guard v1",
+    "run_id": 31655138751,
+    "tested_head": "517883ff08655caf166c76dfe5fd01cf0e8b97f4",
+    "required_runner_labels": ["self-hosted", "Linux", "X64"],
+    "status": "QUEUED",
+    "verdict": "BLOCKED_UNKNOWN_UNTIL_EXECUTION",
+    "private_sqlite_35304_runtime_required_by_workflow": true
+  },
+  "parallel_ci_note": {
+    "workflow": "Frank Deep Integrity",
+    "run_id": 31655138742,
+    "status": "COMPLETED_FAILURE_WITH_ZERO_STEPS",
+    "runner_id": 0,
+    "classification": "INFRASTRUCTURE_BLOCKED_UNKNOWN_NOT_PRODUCT_FAIL"
+  },
+  "grf_collapse": {
+    "main_database_binding_implies_wal_binding": "REJECT",
+    "JOURNAL_POINTER_plus_HAS_MOVED_as_wal_rebind_detector": "REFUTED_ON_TESTED_LANE",
+    "source_pinned_unix_wal_fd_identity": "RETAIN_TESTING",
+    "portable_SQLite_WAL_identity_solution": "NOT_CLAIMED",
+    "F_V01_13_release_promotion": "NO_CHANGE_PENDING_EXACT_35304_FRESH_MAIN_AND_ACCEPTED_HOST_EVIDENCE"
+  },
+  "nonclaims": [
+    "the unusual experiment used local SQLite 3.46.1 and is not accepted Hostinger evidence",
+    "the private Unix-VFS bridge is not portable SQLite API and must fail closed outside exact pinned Linux/x64/source/VFS conditions",
+    "the exact 3.53.4 self-hosted candidate workflow had not executed at receipt time",
+    "fresh-main composition against 4304810ebeae015ebd88d2a85cfc1cecae2df9b3 or later is not yet proven",
+    "self-hosted mechanism success would still not equal accepted Hostinger productive persistence acceptance",
+    "temporal no-move history is not proven",
+    "production-safe/non-loadable diagnostic bootstrap is not proven",
+    "productive UnifiedDB transaction/checkpoint binding is not proven",
+    "restart/reopen, rollback, downgrade/library-swap and semantic-lineage continuity remain open",
+    "whole Frank v0.1 acceptance is not claimed"
+  ],
+  "next_discriminator": "First execute the updated PR #557 gate on exact private SQLite 3.53.4 and prove fresh-main composition against current main 4304810ebeae015ebd88d2a85cfc1cecae2df9b3 or later, requiring the WAL rebind regression to deny. If that passes, compose the same source-pinned WAL object identity into accepted Hostinger ProductStart around a real UnifiedDB WAL transaction/checkpoint and then test restart/reopen, rollback, downgrade/library-swap and semantic-lineage recovery.",
+  "authority": {
+    "harness_authority_changed": false,
+    "effect_authority": "NONE",
+    "final_training_authorized": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  }
+}

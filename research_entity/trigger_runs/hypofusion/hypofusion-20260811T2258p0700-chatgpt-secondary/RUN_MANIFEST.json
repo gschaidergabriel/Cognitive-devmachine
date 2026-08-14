@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.2",
   "run_id": "hypofusion-20260811T2258p0700-chatgpt-secondary",
   "trigger": "hypofusion",
   "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","role":"RESEARCH_ENTITY_TEMPORARY_WORKER"},
@@ -10,20 +10,27 @@
   "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "owner_fixed_state_is_newer_than_canonical_revision": true,
   "initial_live_cutoff_head": "dbb5974587bb6fd89689b3f895e79c8ce09c4fb0",
+  "final_late_arrival_cutoff": "69525e83e2988b95daf5a2dc4d0a573695689b9c",
   "late_arrivals_ingested": [
     "230c3b16322b56b32771a07d84f9dbd20387885b build provenance trust split + subject-swap falsifier",
     "c9a08b0b65a4188435c9b74f4839734a67200460 target-VPS terminal reward bridge 10/10 PASS",
     "b916f83d9b3d43a4b5732b88643aeb0b8237889b reward authority/source-frontier distribution",
-    "e6d242f1e5b804718d649129c3fb0f172adeed91 ClayCode nominal-typecheck/native-backend frontier; no new ClayCode semantic promotion"
+    "996e990503fec88b6958e5e7f820809de8c1e398 reward frontier bound to existing shared UnifiedDB lineage candidates; no private reward epoch",
+    "e6d242f1e5b804718d649129c3fb0f172adeed91 ClayCode nominal-typecheck/native-backend frontier; no new ClayCode semantic promotion",
+    "7e699ca03ba6f2ad9e743c5209ed7a248680def0 typed semantic-root lineage repair candidate; target queued",
+    "d2d54fb688727914b392604e89f452bfb82ff9bc pre-V4 PATH helper hijack local falsifier and repair candidate; target queued",
+    "69525e83e2988b95daf5a2dc4d0a573695689b9c ATOMIC LSCW broad semantic-preservation claim refuted; LSCW-R1 shadow-only; CurrentExecutionContext counterbaseline not defeated"
   ],
   "external_research": {
     "mode": "ADVERSARIAL_MECHANISM_LEVEL_PRIMARY_SOURCE_TRIANGULATION",
     "areas": ["causal probing","latent steering","model-native workspace analogues","personality instability","quantization/activation geometry","SLSA provenance verification","snapshot/exactly-once semantics","SQLite WAL recovery"],
     "anti_echo": true
   },
-  "transformed_hypotheses": ["HF3-01","HF3-02","HF3-03","HF3-04","HF3-05","HF3-06","HF3-07","HF3-08","HF3-09"],
+  "transformed_hypotheses": ["HF3-01","HF3-02","HF3-03","HF3-04","HF3-05","HF3-06","HF3-07","HF3-08","HF3-09","HF3-10","HF3-11"],
   "highest_information_experiments_ranked": [
-    "REWARD_FOLD_CONCURRENT_DONE_FRONTIER",
+    "REWARD_FOLD_CONCURRENT_DONE_FRONTIER_ON_SHARED_UNIFIEDDB_LINEAGE",
+    "SEMANTIC_ROOT_DOMAIN_CROWN_SWAP_PLUS_PRODUCER_ADMISSION",
+    "TARGET_PRE_GUARD_PATH_HELPER_FENCE_PLUS_INSTALLED_SERVICE_RESTART",
     "PRODUCTSTART_TRUST_CANDIDATE_MATRIX_PLUS_INSTALLED_RESTART",
     "WORK-LCOP-DUAL-WORKSPACE-FACTORIAL-20260811",
     "OBSERVABILITY_ACTIONABILITY_OUTCOME_TRIAD_MATRIX",
@@ -31,14 +38,18 @@
     "TARGET_SQLITE_LOADED_OBJECT_ATTESTATION_PLUS_WAL_TOPOLOGY_PROOF",
     "PRE_POST_BINARY_LATENT_TRANSFER_MATRIX",
     "LONG_HORIZON_PERSONA_FACTORIAL",
-    "LATENT_EQUIVALENCE_PAIRWISE_VS_HYPERPOSITION"
+    "LATENT_EQUIVALENCE_PAIRWISE_VS_HYPERPOSITION",
+    "REAL_TARGET_CURRENT_EXECUTION_CONTEXT_VS_LSCW_R1_SHADOW"
   ],
   "architecture_disposition": "TEST_OBLIGATIONS_AND_CANDIDATE_REFINEMENTS_ONLY_NO_CANONICAL_PROMOTION",
   "key_supported_deltas": [
     "latent runtime admission requires separate observability, causal-selectivity and incremental outcome/control gates",
-    "reward projection currentness requires exact authoritative source frontier/snapshot unless a simpler writer-exclusion topology is machine-proven",
+    "reward projection currentness binds the shared authoritative typed lineage/checkpoint plus terminal frontier unless simpler writer exclusion is machine-proven",
     "consumer-side identity/epoch/authority verification is strengthened as a semantic rule but one universal CBPC implementation remains unpromoted",
     "ProductStart exact artifact subject digest is a non-substitutable build-trust axis in the observed subject-swap falsifier",
+    "semantic checkpoint identity must be typed/domain-separated beyond a bare digest; producer admission/rollback authority remains open",
+    "trusted boot boundary begins before any pre-admission helper or executable resolution; local PATH-helper repair awaits target revalidation",
+    "LSCW broad semantic-preservation claim is refuted; production lifecycle witness remains unjustified unless it beats ordinary CurrentExecutionContext on real target faults",
     "SQLite WAL remains fail-closed until exact fixed loaded source/backport or unreachable trigger topology is proven",
     "Hyperposition remains conditional and must beat pairwise/factorized baselines"
   ],
@@ -46,7 +57,8 @@
     "Canonical active IDs H-G3-001/H-G3-003/H-G3-005/H-G3-006 remain reachable as IDs but their exact bodies were not exposed by the connector search path used; DESCRIPTION_INACCESSIBLE_DO_NOT_GUESS.",
     "No shell-backed exhaustive repository graph traversal or hypofusion contract validator was available in this invocation; repository reads/writes were performed through the verified GitHub connector.",
     "The queued LCOP dual-workspace experiment was not executed in this run; no final-model latent-state access was assumed.",
-    "Several concurrent ClayCode/backend lanes were pending during late-arrival reread and are not promoted by this run."
+    "Typed semantic-root PR372 and pre-guard PATH PR373 were queued at late-arrival adjudication; neither is target PASS evidence.",
+    "LSCW evidence is synthetic/shadow research evidence, not a target runtime promotion."
   ],
   "required_artifacts": [
     "INTERCONNECT_MANIFEST.json",
@@ -59,8 +71,9 @@
     "RUN_MANIFEST.json",
     "FINAL_REPORT.md"
   ],
+  "supplemental_artifacts": ["LATE_NEGATIVE_RESULTS.md"],
   "protocol_100_percent_gate": false,
-  "protocol_100_percent_reason": "Exact bodies of canonical H-G3 active IDs remain inaccessible and no shell-backed exhaustive validator was available; no wording was fabricated. All material reachable current mechanisms and late arrivals used by this run were explicitly screened.",
+  "protocol_100_percent_reason": "Exact bodies of canonical H-G3 active IDs remain inaccessible and no shell-backed exhaustive validator was available; no wording was fabricated. Material late arrivals through cutoff 69525e83e2988b95daf5a2dc4d0a573695689b9c were explicitly adjudicated.",
   "research_write": "COMMITTED",
   "self_harness_authority": "PROPOSAL_ONLY",
   "whole_frank_v0_1_acceptance": "NOT_CLAIMED"

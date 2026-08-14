@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260814T025002Z_pr232_namespace_correction_request_snapshot",
+  "kind": "provenance_correction_and_security_candidate",
+  "canonical": {
+    "rae": "RAE-8.8 revision 2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_parent": "849bac6ab241438acc8b7220224390799f195196",
+    "target_main_observed": "dc2af6421355c899ee076a3e8089e8f6407a1d54"
+  },
+  "correction": {
+    "superseded_event": "20260814T015041Z_pr232_referent_oscillation_budget",
+    "superseded_commit": "94c562d5b6e2109f6d8f04d504095e3c02e5dc8f",
+    "error": "PR232 commit lookups were performed in gschaidergabriel/Dr.-Unterweger although PR232 and its commits belong to gschaidergabriel/clay-global-research-entity.",
+    "verified_resolution": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pr": 232,
+      "base_snapshot": "73332a06c74931fe0c468a3596d37e7ed91041f8",
+      "current_snapshot": "d6c14f0c1c823fc5a33ac9f6f00ea9d8987ba7c9",
+      "compare": "ahead_by_6",
+      "commits_verified": [
+        "73332a06c74931fe0c468a3596d37e7ed91041f8",
+        "94fae1b3051a55b0125fb2a32f31d748d2415b04",
+        "9b29eab835ef04efb2e0650d19d2687f60332a4f",
+        "d6c14f0c1c823fc5a33ac9f6f00ea9d8987ba7c9"
+      ]
+    },
+    "credit_change": "REFERENT_EXISTENCE_AND_LINEAGE_RESTORED; EXECUTION_AND_PROVIDER_CREDIT_REMAIN_BLOCKED"
+  },
+  "security_delta": {
+    "candidate": "Mutable caller-owned message dictionaries are snapshotted before validation, routing and serialization.",
+    "local_falsifier": "A routing-side mutation previously changed validated content to blank text and added tool_calls before serialization.",
+    "repair_commit": "9b29eab835ef04efb2e0650d19d2687f60332a4f",
+    "boundary_commit": "d6c14f0c1c823fc5a33ac9f6f00ea9d8987ba7c9",
+    "evidence_class": "SOURCE_AND_LOCAL_CANDIDATE_ONLY",
+    "execution_gap": "Current Verify and Identity Guard reports contain zero executed steps; no live provider receipt."
+  },
+  "primary_sources": [
+    {
+      "url": "https://cwe.mitre.org/data/definitions/367.html",
+      "finding": "A checked resource can change before use, invalidating the check."
+    },
+    {
+      "url": "https://docs.python.org/3/library/copy.html",
+      "finding": "Assignment creates bindings rather than copies; nested mutable structures require an appropriate copy boundary."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-NAMESPACE-BEFORE-NEGATION",
+      "claim": "A failed object lookup may negate a provenance claim only when repository namespace and claimed referent namespace are identical.",
+      "falsifier": "A same-namespace commit fetch and ancestry comparison succeed after a negative verdict was issued from that same namespace and snapshot."
+    },
+    {
+      "id": "H-IMMUTABLE-ADMISSION-SNAPSHOT",
+      "claim": "Deep-snapshotting the admitted request before any routing side effect prevents post-validation mutation from changing serialized provider input.",
+      "test": "Mutate nested message dictionaries, list membership and typed extension fields during every routing hook and require serialized bytes to equal the admitted digest.",
+      "falsifier": "Any post-admission mutation changes serialized bytes, request identity or provider-visible input."
+    },
+    {
+      "id": "CH-SHALLOW-SNAPSHOT-SUFFICIENT",
+      "claim": "A shallow outer-list copy is sufficient.",
+      "test": "Mutate a nested message dictionary after shallow copy; if serialized output changes, the counterhypothesis is falsified."
+    }
+  ],
+  "new_concepts": [
+    "Namespace-Bound Negation",
+    "Provenance Coordinate Tuple",
+    "Admission Snapshot Seal"
+  ],
+  "null_and_negative_results": [
+    "No target-main change after dc2af642 was observed.",
+    "No accepted Ubuntu live-provider execution receipt was observed.",
+    "Restored commit lineage does not validate code behavior or provider capability."
+  ],
+  "routing": ["clayresearch", "frank", "gwt", "emergence", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "constraints": {
+    "training": "NOT_PERFORMED",
+    "harness_mutation": "NOT_PERFORMED",
+    "promotion": "NOT_CLAIMED",
+    "independent_replication": "NOT_CLAIMED"
+  }
+}

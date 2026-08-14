@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "benchmark_id": "U10-INVALIDATION-ANCHOR-MASK-V2-20260810",
+  "truth_class": "LOCAL_EXECUTION_RECEIPT_SYNTHETIC_MECHANISM_SCOPE_ONLY",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "scope_guard": "Random topology matching U10 cardinalities, not the exact U10 graph, not Hostinger/Andreas target evidence, and not a universal database benchmark.",
+  "runtime": {"python":"3.13.5","execution_host_class":"CHATGPT_LOCAL_CONTAINER","host_hardware":"UNKNOWN"},
+  "fixture": {"seed":7341903,"nodes":6000,"directed_edges":41963,"active_anchors":120,"read_trials":5000,"semantic_horizon":2},
+  "differential_control": {"sources_checked":1000,"on_demand_bfs_equals_v1_materialization_equals_anchor_mask":true},
+  "affected_anchor_lookup_ms": {
+    "on_demand_reverse_bfs_le2":{"p50":0.004607,"p95":0.008552,"p99":0.011107},
+    "v1_materialize_all_prepared_refs_then_intersect":{"p50":0.032689,"p95":0.057235,"p99":0.070074},
+    "v2_prepared_anchor_mask_intersection":{"p50":0.000681,"p95":0.001913,"p99":0.002834}
+  },
+  "derived_speedups_p50": {
+    "v2_vs_on_demand_bfs":6.765051395007343,
+    "v2_vs_v1_materialization":48.001468428781204
+  },
+  "prepared_index_memory_shadow": {
+    "reverse_direct_edge_entries":41963,
+    "support_pairs":333846,
+    "support_path_count":335332,
+    "python_support_dict_deep_size_estimate_bytes":31620904,
+    "python_reachability_masks_size_estimate_bytes":4856552,
+    "python_reverse_adjacency_deep_size_estimate_bytes":5477604,
+    "anchor_mask_bytes":812,
+    "measurement_guard":"sys.getsizeof recursive approximation; Python allocator/RSS and production representation will differ materially. Use only as a local memory-amplification warning."
+  },
+  "negative_result": "V1 full prepared-ref materialization is NOT_SELECTED for the affected-anchor hot path because on-demand BFS is materially faster on this fixture.",
+  "candidate_result": "V2 anchor-mask intersection preserves the same affected-anchor set and is materially faster than both V1 materialization and BFS on this fixture, but consumes a much larger prepared support structure than BFS.",
+  "architecture_adjudication": {
+    "prepared_mask":"CANDIDATE_FOR_READ_HEAVY_OR_HIGH_RECOMPILE_COST_REGIMES",
+    "on_demand_bfs":"RETAIN_AS_LOW_MEMORY_FALLBACK",
+    "selection_law":"choose from measured read/update/memory/recompile break-even; no unconditional default",
+    "promotion":"NONE"
+  },
+  "strongest_counterhypothesis":"On real ClayGraph topology the support index may amplify memory/cache misses and update cost enough that a 2-hop BFS, compressed bitmap, or specialized dynamic graph representation dominates end-to-end.",
+  "next_falsifiers":[
+    "Replay exact U10 topology and real mutation trace.",
+    "Measure process RSS/cache behavior and support-pair growth on hub/pathological graphs.",
+    "Measure full U10 weighted-field recompile time saved per mutation, not only invalidation lookup.",
+    "Compare dense Python-int masks with Roaring/sorted sparse anchor sets and on-demand BFS.",
+    "Run Hostinger Ubuntu and final Andreas Ubuntu target measurements."
+  ]
+}

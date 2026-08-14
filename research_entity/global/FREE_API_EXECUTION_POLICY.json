@@ -111,13 +111,16 @@
   },
   "rate_limit_retry_after": {
     "checked_at": "2026-08-13",
-    "claim": "A received HTTP 429 Retry-After field controls when a later request may be attempted and is parsed in either delay-seconds or HTTP-date form across regular-response and HTTPError paths; it does not authorize automatic replay of the same non-idempotent POST.",
+    "claim": "A received HTTP 429 Retry-After field controls when a later request may be attempted and is parsed in either delay-seconds or HTTP-date form across regular-response and HTTPError paths. Absolute HTTP-date cooldown is calculated from response receipt time, not request start; neither form authorizes automatic replay of the same non-idempotent POST.",
     "sources": [
       "https://www.rfc-editor.org/rfc/rfc6585.html#section-4",
       "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
     ],
-    "executable_evidence": "test_rate_limit_retry_after_controls_cooldown_without_post_replay",
-    "counterhypothesis": "Retry-After both supplies the cooldown and proves that identical POST replay is safe; falsified because RFC 6585 only describes when to make a new request, while RFC 9110 separately requires idempotency or proof that the original request was never applied."
+    "executable_evidence": [
+      "test_rate_limit_retry_after_controls_cooldown_without_post_replay",
+      "test_http_date_retry_after_is_relative_to_response_receipt_time"
+    ],
+    "counterhypothesis": "Retry-After both supplies the cooldown and proves that identical POST replay is safe, or an HTTP-date can be subtracted from request start; falsified because RFC 6585 only describes when to make a new request, RFC 9110 separately requires replay-safety evidence, and a 100-second request inflated a 40-second remaining window to 140 seconds."
   },
   "oversized_retry_after": {
     "checked_at": "2026-08-14",
@@ -333,7 +336,7 @@
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Every real provider request must emit a redacted execution receipt.",
     "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
-    "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
+    "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
     "Oversized Retry-After decimal values that exceed runtime integer-conversion limits use the 60-second fallback and cannot escape or suppress the execution receipt.",
     "Retry-After receipt cooldown metadata is capped at 86400 seconds for both delay-seconds and HTTP-date forms; the request remains nonretryable and requires fresh evaluation after the bounded horizon.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."

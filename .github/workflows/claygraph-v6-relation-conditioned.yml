@@ -1,0 +1,56 @@
+name: ClayGraph V6 Relation-Conditioned Access
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/claygraph-v6-relation-conditioned.yml'
+      - 'research_entity/runtime/RAE_CLAYGRAPH_V6_RELATION_CONDITIONED_ACCESS.sql'
+      - 'research_entity/runtime/claygraph_relation_conditioned_access_v6.py'
+      - 'research_entity/runtime/test_claygraph_relation_conditioned_access_v6.py'
+      - 'research_entity/runtime/benchmark_claygraph_relation_conditioned_access_v6.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claygraph-v6-relation-conditioned-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  relation-conditioned:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+      - name: Runtime metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          uname -a
+          python3 --version
+          python3 - <<'PY'
+          import sqlite3
+          print('sqlite=',sqlite3.sqlite_version)
+          PY
+      - name: Correctness falsifiers
+        shell: bash
+        run: python3 -m unittest -v research_entity.runtime.test_claygraph_relation_conditioned_access_v6
+      - name: Fixed-budget accuracy/latency benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m research_entity.runtime.benchmark_claygraph_relation_conditioned_access_v6 \
+            | tee /tmp/claygraph-v6-relation-conditioned.json
+      - name: Upload receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claygraph-v6-relation-conditioned-${{ github.run_id }}
+          path: /tmp/claygraph-v6-relation-conditioned.json
+          if-no-files-found: warn
+          retention-days: 30

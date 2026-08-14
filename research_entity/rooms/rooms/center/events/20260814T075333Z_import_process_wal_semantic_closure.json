@@ -1,0 +1,184 @@
+{
+  "schema_version": "research-center-event/1.0",
+  "event_id": "20260814T075333Z_import_process_wal_semantic_closure",
+  "created_at": "2026-08-14T07:53:33Z",
+  "event_type": "cross_domain_evidence_fusion",
+  "promotion_status": "CANDIDATE_ONLY",
+  "training_performed": false,
+  "harness_mutated": false,
+  "canonical_context": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_parent_commit": "38d3f5d6306da66df25f3ba435d0b6e5e1085c2d",
+    "research_delta_from": "1835316096dc46a04e4be80969ad8657f9aeaee1",
+    "research_commits_ahead": 26,
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_before": "dc2af6421355c899ee076a3e8089e8f6407a1d54",
+    "target_main_now": "1243bd31606df1d52e1865fd7f1cf5d563c499d8",
+    "target_commits_ahead": 3,
+    "rae_version": "RAE-8.8 revision 2",
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "frank_status": "IN_PROGRESS 4.8%"
+  },
+  "evidence_updates": [
+    {
+      "id": "E-IMPORT-ISOLATION-001",
+      "observation": "A disposable local counterexample showed PYTHONSAFEPATH/-P can coexist with a poisoned PYTHONPATH that wins module resolution; python -I rejected that injected path. Target main 1243bd31606df1d52e1865fd7f1cf5d563c499d8 changes three security-sensitive verifier entry points to python3 -I - while leaving the controlled inner import experiment non-isolated.",
+      "provider_receipt": {
+        "run_id": 31779493258,
+        "head_sha": "1243bd31606df1d52e1865fd7f1cf5d563c499d8",
+        "replicate_job": {"job_id": 94701947231, "status": "completed", "conclusion": "success", "executed_steps": 5},
+        "persist_job": {"job_id": 94705254800, "status": "queued", "conclusion": null, "executed_steps": 0}
+      },
+      "credit": "BOUNDED_EXACT_HEAD_VERIFIER_MECHANISM_ONLY",
+      "nonclaim": "The whole two-job workflow is not complete, and isolated import-path shape does not bind module origin, bytes, hash, or manifest."
+    },
+    {
+      "id": "E-PROCESS-COHORT-001",
+      "observation": "A disposable Linux burst spawned 256 processes but observed only 8 unique /proc start ticks, with up to 44 distinct PIDs sharing one tick. Thus process_start_ticks alone is empirically non-unique on that lane.",
+      "candidate": "Bind host_boot_id + process_pid + process_start_ticks + ProductStart generation.",
+      "provider_receipt": {
+        "run_id": 31779646651,
+        "head_sha": "2c7939ee57fa1ff593ac2d0d94cc48db6acd67cc",
+        "job_id": 94702410666,
+        "status": "completed",
+        "conclusion": "success",
+        "executed_steps": 9
+      },
+      "credit": "BOUNDED_COHORT_DISCRIMINATOR_MECHANISM_ONLY",
+      "nonclaim": "Composite equality does not authenticate upstream receipts or prove accepted-Hostinger ProductStart identity."
+    },
+    {
+      "id": "E-WAL-SEMANTICS-001",
+      "observation": "A disposable SQLite counterworld committed a marker visible through WAL while the main database file device/inode/size/hash remained unchanged; copying only the main file lost the committed marker.",
+      "primary_support": "SQLite documents the WAL as containing committed transactions not yet applied to the main database.",
+      "credit": "LOCAL_MECHANISM_COUNTEREXAMPLE_PLUS_PRIMARY_SPEC_SUPPORT",
+      "nonclaim": "No accepted Hostinger Frank database was opened or mutated; no productive restart/readback was executed."
+    },
+    {
+      "id": "E-CREDENTIAL-HARDLINK-001",
+      "observation": "A local same-filesystem hardlink fixture showed O_NOFOLLOW accepts both names of the same inode, while an st_nlink==1 candidate denied the multi-link state and re-accepted after rollback.",
+      "provider_receipt": {
+        "run_id": 31779608264,
+        "head_sha": "0ab8fb894485dcf8af00a08664bb11592f14e693",
+        "job_id": 94702288801,
+        "status": "completed",
+        "conclusion": "success",
+        "executed_steps": 7
+      },
+      "credit": "BOUNDED_PATH_TRUST_CANDIDATE_ONLY",
+      "nonclaim": "st_nlink==1 does not close parent-directory replacement, ownership, post-check, or complete hardlink attack surfaces."
+    }
+  ],
+  "primary_sources": [
+    {
+      "title": "Python 3.13 command-line and environment documentation",
+      "url": "https://docs.python.org/3.13/using/cmdline.html",
+      "support": "-P suppresses an implicitly prepended unsafe path, PYTHONPATH separately augments sys.path, and -I implies -E, -P and -s while ignoring PYTHON* environment variables."
+    },
+    {
+      "title": "SQLite WAL-mode file format",
+      "url": "https://www.sqlite.org/walformat.html",
+      "support": "The WAL records committed transactions not yet applied to the main database."
+    },
+    {
+      "title": "Linux proc_pid_stat(5)",
+      "url": "https://www.man7.org/linux/man-pages/man5/proc_pid_stat.5.html",
+      "support": "Field 22 is process start time after boot in clock ticks; the specification does not define it as a unique process identifier."
+    },
+    {
+      "title": "Python os.stat_result documentation",
+      "url": "https://docs.python.org/3/library/os.html#os.stat_result",
+      "support": "st_nlink records the number of hard links and fstat observes metadata of the opened descriptor."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-ENVIRONMENT-TO-ARTIFACT-CLOSURE-001",
+      "claim": "Security-sensitive Python receipts require both environment isolation and post-import artifact authority; -I blocks ambient PYTHON* influence but cannot prove the imported module is the approved artifact.",
+      "test": "Run a matrix covering PYTHONPATH, user site, sitecustomize, .pth, symlinks, zip imports and loader hooks, then require every critical import to resolve under an allowlisted root with content hash and manifest membership.",
+      "falsifier": "An isolated interpreter alone rejects all preregistered artifact substitution paths and cryptographically identifies approved module bytes without an additional origin/hash manifest gate."
+    },
+    {
+      "id": "H-PROCESS-GENERATION-COORDINATE-001",
+      "claim": "A process receipt cohort must bind boot ID, PID and start ticks together; start ticks alone are insufficient, while the tuple remains a discriminator rather than receipt authentication.",
+      "test": "Exercise same-tick/different-PID, PID-reuse, reboot, namespace and copied-field controls with independently observed tuple fields.",
+      "falsifier": "Tick-only identity remains collision-free across preregistered high-concurrency and reboot/PID-reuse trials."
+    },
+    {
+      "id": "H-SEMANTIC-STATE-WITNESS-001",
+      "claim": "UnifiedDB continuity must be demonstrated by a cohort-bound nonce and semantic epoch written through the admitted connection and read after authorized restart; neither main-file identity nor a long-lived WAL hash is sufficient.",
+      "test": "Write nonce+epoch, test pre/post-checkpoint restart, and require readback while stale-main, separated-WAL, rollback, downgrade and library-swap controls fail closed.",
+      "falsifier": "Main-file identity alone reliably distinguishes every committed, rolled-back, stale and WAL-separated state across the preregistered matrix."
+    },
+    {
+      "id": "H-CREDENTIAL-OBJECT-IDENTITY-001",
+      "claim": "For a unique-file credential contract, O_NOFOLLOW plus descriptor-based type/mode/owner/parent checks and st_nlink==1 is stronger than O_NOFOLLOW alone, but still requires an explicit deployment identity policy.",
+      "test": "Test legitimate deployment rollouts, hardlink aliases, parent swaps, rename races, bind mounts and post-open mutation on a disposable lane.",
+      "falsifier": "The strict single-link policy rejects required legitimate deployment patterns without a safer equivalent identity contract, or accepts an unauthorized alias/control state."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SAFE-PATH-EQUALS-IMPORT-AUTHORITY-001",
+      "status": "REFUTED_LOCALLY",
+      "counterevidence": "safe_path=true coexisted with CWD reintroduced through dot and empty PYTHONPATH segments."
+    },
+    {
+      "id": "CH-START-TICKS-UNIQUE-001",
+      "status": "REFUTED_ON_LOCAL_LINUX_LANE",
+      "counterevidence": "256 processes produced 8 unique ticks; maximum 44 PIDs shared one tick."
+    },
+    {
+      "id": "CH-MAIN-DB-HASH-EQUALS-SEMANTIC-STATE-001",
+      "status": "REFUTED_LOCALLY_AND_CONTRADICTED_BY_WAL_MODEL",
+      "counterevidence": "A WAL-only committed marker existed while main-file identity was unchanged."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Environment-to-Artifact Closure",
+      "definition": "A two-stage receipt: first eliminate ambient interpreter authority, then bind every consequential import to approved origin bytes and a manifest."
+    },
+    {
+      "name": "Process Generation Coordinate",
+      "definition": "The tuple host_boot_id, PID and process start ticks, scoped to one independently observed ProductStart generation."
+    },
+    {
+      "name": "Semantic Restart Witness",
+      "definition": "A run-owned database nonce and semantic epoch whose successful post-restart readback proves state continuity more directly than storage-file metadata."
+    },
+    {
+      "name": "Receipt Cohort Closure",
+      "definition": "One authenticated join across ProductStart, process coordinate, runtime/artifact identity, exact database object, semantic commit and successor restart generation."
+    }
+  ],
+  "routing": [
+    {
+      "targets": ["claycode", "harness", "frank"],
+      "impulse": "Complete run 31779493258 without treating the still-queued persistence job as PASS; then add origin/hash/manifest checks for critical verifier imports."
+    },
+    {
+      "targets": ["unifieddb", "claygraph", "hyperposition"],
+      "impulse": "Preregister the Semantic Restart Witness matrix and represent main DB, WAL, transaction, checkpoint and restart as separate provenance entities/activities."
+    },
+    {
+      "targets": ["gwt", "emergenz", "clayresearch"],
+      "impulse": "Test whether Process Generation Coordinate plus Semantic Restart Witness prevents cross-generation evidence splicing without overcounting same-worker receipts."
+    },
+    {
+      "targets": ["claycode", "harness"],
+      "impulse": "Keep PR576 single-link policy candidate-only; test deployment compatibility and parent/rename/bind-mount counterworlds before integration."
+    }
+  ],
+  "negative_and_null_results": [
+    "Run 31779493258 has a successful 5-step replication job but a queued zero-step persistence job; whole-workflow PASS is not claimed.",
+    "PR577 run 31779867376 remains queued with zero executed steps; sqlite_trust_anchor_sha256 receives no execution credit.",
+    "A forged inherited PWD did not redirect the tested dash launcher shape; preserve as a local negative result, not a universal shell guarantee.",
+    "A structurally accepted RAE_META block can be semantically transplanted; structural materialization is not provenance validation.",
+    "No accepted Hostinger ProductStart-to-UnifiedDB-restart receipt, no Frank release promotion, no training and no productive Harness mutation occurred."
+  ],
+  "deduplication": {
+    "same_lineage": "The new receipts were produced by coordinated temporary Clay workers and share repository/runner ancestry; their overlapping claims are counted once per mechanism, not as independent replications.",
+    "previous_event_excluded": "1835316096dc46a04e4be80969ad8657f9aeaee1"
+  }
+}

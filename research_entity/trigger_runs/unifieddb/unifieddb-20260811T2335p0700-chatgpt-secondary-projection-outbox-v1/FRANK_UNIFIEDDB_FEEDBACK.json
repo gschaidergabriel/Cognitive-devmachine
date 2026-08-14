@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.2",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "research_subject": "self.root / Frank",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "status": "PROJECTION_CONTINUITY_CANDIDATE_SUPPORTED_COMPONENT_REMAINS_OPEN",
+  "supported_now": [
+    "authoritative semantic mutation can emit a stable ProjectionEvent in the same UnifiedDB transaction on current disposable schema",
+    "ClayGraph can persist exact applied-event identity/hash and remain derived/rebuildable",
+    "three tested cross-store process-exit windows recover to exact source event root and current relation equivalence",
+    "consequential graph admission can fail closed on lag and derived payload-hash tamper",
+    "full tested derived graph state can be rebuilt from retained authoritative projection history",
+    "fresh-main target run passed 23/23 checks behind V4-admitted private SQLite 3.53.4"
+  ],
+  "target_receipt": {
+    "pr": 386,
+    "head": "b8858f949d4ad855bff5d682994de69bfd10b7c9",
+    "workflow_run": 31514757454,
+    "job": 93857015099,
+    "checks": "23/23 PASS",
+    "events": 76,
+    "current_relations": 16,
+    "projection_root": "be0090b4bfbe176862fccc736d0f6abdc16a752d16769a7fe7f254005b368316",
+    "merge_commit": "72029f838176fff5189b8c3cfd4ef5d957de6ba2"
+  },
+  "pending": [
+    "production projector scheduling/backpressure/lag telemetry",
+    "candidate schema promotion into migration lists only after production integration gate",
+    "selected-lineage logical rollback/recovery composed with repaired runtime",
+    "installed service/systemd non-bypass boot proof",
+    "canonical migration/rollback owner gate",
+    "separate OS-crash/power-loss evidence if required by final acceptance",
+    "large-corpus projection/retrieval quality-resource evidence",
+    "whole-product accepted-target composition"
+  ],
+  "state_policy_delta": {
+    "proposal": "model/effect-facing graph use requires exact authoritative projection event-set/root equivalence; delivery_state is advisory only",
+    "status": "SUPPORTED_DIRECTION_CANDIDATE_PATH_MERGED_NOT_PRODUCTION_ACTIVATED",
+    "effect_authority": "NONE"
+  },
+  "self_harness_authority": "PROPOSAL_ONLY",
+  "canonical_state_mutated": false,
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": false
+}

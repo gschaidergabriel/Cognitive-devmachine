@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2158p0700-chatgpt-secondary-live-coordination",
+  "trigger": "go",
+  "created_at": "2026-08-10T22:26:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "fresh_heads_before_write": {
+    "research_repo_observed_head": "945ee4be33ec78a3daa9cba3a10135e1aec0c950",
+    "target_repo_observed_head": "fbc908ef80cb1aecaa34e7e34a250c067a1cb4f5"
+  },
+  "hypothesis": {
+    "primary": "Repeated live coordination refresh should collapse stale competing self.root implementation branches to one selected semantic identity authority without erasing useful tested evidence.",
+    "strongest_counterhypothesis": "Closing stale branches discards unique evidence or leaves another competing direct identity implementation open, so the apparent deduplication is cosmetic rather than architectural.",
+    "discriminator": "Enumerate current open self.root PR topology, distinguish direct identity-authority implementations from explicit non-authority stacks and orthogonal token/presence/effect/compiler lanes, preserve verified exact-byte evidence, close only demonstrably superseded direct implementations, then re-enumerate."
+  },
+  "coordination_actions": [
+    {
+      "pr": 134,
+      "action": "CLOSED_WITHOUT_MERGE",
+      "reason": "Live refresh discovered PR #124 already owned the same identity boundary plus broader state/materializer/replay coverage; keeping #134 would create duplicate semantic authority."
+    },
+    {
+      "pr": 102,
+      "action": "CLOSED_WITHOUT_MERGE",
+      "reason": "Known-stale predecessor explicitly superseded by current-main PR #124. Historical branch remains evidence."
+    },
+    {
+      "pr": 123,
+      "action": "CLOSED_WITHOUT_MERGE_EVIDENCE_RETAINED",
+      "reason": "Overlapped #124 on frank_entity/frank_runtime/frank_security and would recreate competing identity implementation authority. Its exact tested evidence remains reusable.",
+      "retained_evidence": {
+        "workflow": "Frank v0.1 self.root identity V2 VPS",
+        "run_id": 31399654520,
+        "tested_head": "24430cc45c66c24327f46544d2367494aa79f401",
+        "conclusion": "SUCCESS",
+        "scope_limit": "Exact branch bytes/component evidence only; no whole Frank v0.1 acceptance."
+      }
+    }
+  ],
+  "out_of_box_experiment": {
+    "experiment_id": "IDENTITY_AUTHORITY_BRANCH_TOPOLOGY_COLLISION_REDUCTION",
+    "class": "DISTRIBUTED_COORDINATION_TOPOLOGY_EXPERIMENT",
+    "exactly_one_for_this_run": true,
+    "baseline_direct_identity_implementation_prs": [102, 123, 124],
+    "baseline_count": 3,
+    "intervention": "Live semantic-overlap adjudication plus closure-without-merge of only stale/superseded direct identity implementation lanes.",
+    "post_direct_identity_implementation_prs": [124],
+    "post_count": 1,
+    "explicit_non_authority_stack_not_counted_as_competing_authority": 144,
+    "orthogonal_open_lanes_observed": [140, 143, 147],
+    "retained_successful_component_evidence_runs": [31399654520],
+    "main_code_mutated_by_experiment": false,
+    "canonical_state_mutated": false,
+    "external_effect_performed": false,
+    "rollback": "Closed branches retain full history and can be reopened if future evidence falsifies supersession.",
+    "result": "SUPPORTED_SINGLE_SELECTED_IDENTITY_AUTHORITY_TOPOLOGY",
+    "interpretation": "The active direct identity implementation topology was reduced from three merge candidates to one selected authority lane (#124) while preserving exact-byte evidence from superseded lanes. This supports the no-duplicate-work/one-semantic-authority coordination rule, but does not prove #124 runtime identity continuity."
+  },
+  "fresh_cross_branch_evidence_consumed": {
+    "deep_integrity": {
+      "finding": "Observed GitHub-hosted zero-step red runs are PRE_STEP_TRANSPORT_FAILURE, not Frank regressions; unchanged full Deep Integrity suite passed all 16 stages on accepted self-hosted Linux/X64 Hostinger lane.",
+      "source_receipt": "research_entity/trigger_runs/harness/harness-20260810T2212p0700-chatgpt-secondary-ci-prestep-transport/RESEARCH_RECEIPT.json"
+    },
+    "claycode_wp04_effect_contract": {
+      "finding": "Target-VPS discriminator resolved execute<T>(EffectIntent<T>, Capability, NodeId, EffectAttempt) -> EffectReceipt and guarded authorize/reserve/attempt/verify/DONE chain; no WP04 promotion or external effect.",
+      "target_receipt_commit": "73724172ffd444ac09427bc64ed1e71ff112f0bf"
+    },
+    "presence_clock_warp": {
+      "finding": "UTC-only lease time is vulnerable to forward/backward wall-clock jumps; boot-id + monotonic is a measured candidate only, not promoted.",
+      "target_workflow_commit": "73100df56da7c6072b0f20906e15ba15d28a4b0e"
+    },
+    "token_ingress": {
+      "finding": "Target main advanced during this run with token-authenticated ingress core over the execution gate.",
+      "observed_target_commit": "64b7082cc5923597b6a58c6798c14581a061d964",
+      "acceptance_claim": "NONE_FROM_THIS_OBSERVATION"
+    }
+  },
+  "current_frontier": {
+    "identity": "PR #124 remains selected direct identity/replay implementation lane; PR #144 is an explicit non-authority installer stack on #124.",
+    "token_api": "PR #143/current main token-authenticated ingress is active; do not duplicate.",
+    "presence": "PR #140 BUSY interrupt handshake and current single-instance/physical execution work are active; do not duplicate.",
+    "presence_effect_integration": "PR #147 is already the current adversarial presence->effect fencing discriminator; do not duplicate.",
+    "claycode": "WP03/WP04 type/effect/runtime-binding research is active with target-VPS receipts; do not infer promotion from discriminators.",
+    "next_identity_falsifier_after_convergence": "On exact current main after #124/its selected stacks converge: boot + restart + stale-clone + token/API identity-contamination continuity on accepted target VPS, binding accepted binary/build provenance + admitted state lineage + exclusive current instance evidence."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_COORDINATION_RULE_NO_RUNTIME_PROMOTION",
+    "rules_reinforced": [
+      "One semantic authority per identity boundary.",
+      "Tested alternative evidence can be retained without retaining its implementation authority.",
+      "Refresh-before-write and refresh-before-promotion are required under high branch churn.",
+      "CI red with zero executed steps must not receive Frank regression credit.",
+      "Do not execute the final self.root continuity falsifier on a known-stale intermediate branch."
+    ]
+  },
+  "negative_results_and_limits": [
+    "This run did not merge #124 or mutate production/canonical Frank state.",
+    "The closed #134 self-hosted identity workflow remained queued at last observation and is not evidence.",
+    "The OOB experiment validates coordination topology, not self.root boot/restart continuity.",
+    "No paid/final model training was authorized or started.",
+    "Whole Frank v0.1 acceptance remains NOT_CLAIMED."
+  ],
+  "research_write_result": "COMMITTED"
+}

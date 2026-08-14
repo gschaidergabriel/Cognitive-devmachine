@@ -1,0 +1,163 @@
+{
+  "schema_version": "2.0",
+  "run_id": "go-root-20260810T1442p0700-chatgpt-secondary-wp03-semantic-identity",
+  "root_go_id": "go-root-20260810T1442p0700-chatgpt-secondary-wp03-semantic-identity",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "not_frank": true,
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "goal": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "boot_source": "000_CLAY_FRANK_SINGLE_PROJECT_SOURCE_CURRENT(1).txt",
+  "material_results": {
+    "wp02_consumed_current_state": {
+      "status": "PASS_PACKAGE_ONLY",
+      "acceptance_commit": "5fec5d15d577884a2976d1f2c1bacb7044d0e6be",
+      "release_workspace_commit": "4c594fcd2a71370aa7c8ce7dbfeb4009a53f267c",
+      "hostinger_run_id": "31367208214",
+      "base_release": "NOT_PASS"
+    },
+    "wp03_baseline_falsification": {
+      "classification": "DECLARATION_ONLY_TYPED_IR_WHOLE_PROGRAM_IDENTITY_FALSIFIED_ON_TESTED_RULE_PROGRAMS",
+      "current_baseline_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+      "ubuntu_run_id": "31368672238",
+      "tested_collision_pairs": 4,
+      "collisions_reproduced": 4,
+      "colliding_baseline_typed_ir_sha256": "f61bd407ad31201df12076ee3fc0acdeb21d995222ee10c1f615638fecd379ea"
+    },
+    "wp03_residual_candidate": {
+      "builder_blob": "d7f4c9b475466c813ae85716e9c57d7ee9f99512",
+      "mechanism": "Preserve not-yet-lowered top-level canonical frontend AST in opaque_unlowered_semantics and bind it into semantic identity while retaining structured type/declaration lowering.",
+      "current_differential_run": "31368672238",
+      "baseline_unique_selected_reward_hashes": 1,
+      "candidate_unique_selected_reward_hashes": 3,
+      "layout_comment_equivalence_preserved": true,
+      "authority": "NONE"
+    },
+    "wp03_full_bridge_gate": {
+      "ubuntu_run_id": "31369178423",
+      "receipt_commit": "ed0f56a4846a60506664e6d88c9573e669140f42",
+      "pass": true,
+      "source_units": 2,
+      "opaque_unlowered_semantics_count": 100,
+      "downstream_parser_calls": 0,
+      "tamper_cases": 5,
+      "tamper_rejected": 5,
+      "elapsed_seconds": 0.92,
+      "max_rss_kb": 32256
+    },
+    "wp03_production_bridge_v2": {
+      "source_commit": "f19aaf5759f55a85a1263b56e981ca614150049e",
+      "source_blob": "79d9474817bccae2d611940a0bee8bbac95ceee3",
+      "schema": "ClayCodeTypedIRFrontendBinding/v2-residual-semantics",
+      "ubuntu_run_id": "31369677917",
+      "ubuntu_receipt_commit": "f3db93743532e584c69a3784ac0c338c2ea476d6",
+      "pass": true,
+      "promotion_scope": "RECEIPT_BOUND_WP03_PRODUCTION_TYPEDIR_BRIDGE_V2_ONLY",
+      "reward_unique_hashes": 3,
+      "opaque_unlowered_semantics_count": 100,
+      "downstream_parser_calls": 0,
+      "tamper_regression_pass": true,
+      "legacy_declaration_only_baseline_preserved": true,
+      "legacy_declaration_only_builder_is_production_entrypoint": "FORBIDDEN",
+      "opaque_semantics_mint_effect_authority": "FORBIDDEN",
+      "wp03_status": "OPEN"
+    },
+    "wp03_opaque_inventory": {
+      "ubuntu_run_id": "31369984252",
+      "receipt_commit": "8bfa64e723e5872a72e655148e3c6a07059d0b73",
+      "pass": true,
+      "opaque_total": 100,
+      "opaque_kind_count": 10,
+      "opaque_kind_counts": {
+        "cycle_decl": 1,
+        "dialect_decl": 9,
+        "import_decl": 2,
+        "invariant_decl": 14,
+        "module_decl": 2,
+        "parent_decl": 1,
+        "rule_decl": 67,
+        "status_decl": 1,
+        "tensor_decl": 1,
+        "version_decl": 2
+      },
+      "all_classes_non_authoritative": true
+    }
+  },
+  "hypothesis_counterhypothesis_adjudication": {
+    "hypothesis": "Current declaration-only TypedIR can silently collapse frontend-distinct semantic statements; conservative residual preservation can repair identity loss without reparsing or authority minting.",
+    "strongest_counterhypothesis": "Either downstream hidden identity already preserved the distinctions, or the residual mechanism would over-distinguish layout/trivia and/or fail exact current G9/Dialect provenance/tamper gates.",
+    "result": "HYPOTHESIS_SUPPORTED_ON_TESTED_SCOPE; COUNTERHYPOTHESIS_REFUTED_ON_SELECTED_IDENTITY_LAYOUT_PROVENANCE_TAMPER_CONTROLS",
+    "remaining_counterhypothesis": "Lossless residual preservation may strand semantics unless WP04/05 explicitly validates/lowers/consumes or fail-closed defers/rejects every preserved class."
+  },
+  "live_external_research": {
+    "sources": [
+      "https://mlir.llvm.org/docs/LangRef/",
+      "https://llvm.org/docs/BitCodeFormat.html"
+    ],
+    "use": "Primary implementation analogues only: real Clay Ubuntu differential evidence outranks these analogies. They support retaining semantic operations/instructions in IR rather than treating type/declaration tables as complete whole-program semantics."
+  },
+  "exactly_one_out_of_box_experiment": {
+    "root_go_id": "go-root-20260810T1442p0700-chatgpt-secondary-wp03-semantic-identity",
+    "claim_id": "oob-claim-component-addressed-moving-main-canary-current-root",
+    "experiment": "COMPONENT_ADDRESSED_MOVING_MAIN_CANARY",
+    "status": "COMPLETED_IMMUTABLE",
+    "result": "NOT_TRANSFERABLE_COMPONENT_CHANGED",
+    "trigger_era_typed_ir_blob": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+    "current_typed_ir_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "rescue": "Rebind exact current bytes and rerun scientific gates; run 31368672238 supplied current-scope evidence.",
+    "no_second_oob_experiment_in_this_root": true
+  },
+  "negative_results_preserved": [
+    "Four frontend-distinct rule programs collide in the declaration-only TypedIR whole-program identity on the tested baseline.",
+    "Private Clay HTTPS clone from the self-hosted executor is not an admissible exact-source transport lane without credentials; content-addressed executor reconstruction remains the verified workaround.",
+    "Residual preservation alone is not WP04/05 semantic execution evidence and does not close WP03."
+  ],
+  "architecture_delta": {
+    "status": "PROMOTED_ON_NARROW_SCOPE",
+    "change": "Receipt-bound WP03 production bridge v2 now routes admitted FrontendArtifacts through the tested residual-semantics builder.",
+    "rollback": "Revert source commit f19aaf5759f55a85a1263b56e981ca614150049e; legacy declaration-only baseline remains preserved and executable for comparison, but is not accepted as whole-program production semantic identity.",
+    "frank_harness": "UNCHANGED",
+    "training": "NOT_AUTHORIZED"
+  },
+  "downstream_disposition_contract": {
+    "classes": 10,
+    "allowed_per_class": ["LOWERED_AND_VALIDATED", "EXPLICITLY_DEFERRED_FAIL_CLOSED", "REJECTED_WITH_REASON"],
+    "silent_drop": "FORBIDDEN",
+    "implicit_execution": "FORBIDDEN",
+    "effect_authority_from_opaque_semantics": "FORBIDDEN",
+    "priority": ["rule_decl", "invariant_decl", "remaining eight classes"]
+  },
+  "current_formal_progress": {
+    "base_packages_passed": 2,
+    "base_packages_total": 14,
+    "base_percent": 14.3,
+    "doomsday_progress_percent_resolver_equivalent": 26.9,
+    "forecast_low": "2026-08-23",
+    "forecast_high": "2026-10-02",
+    "forecast_center": "2026-09-12",
+    "forecast_confidence": "VERY_LOW",
+    "training_authorization_assumption": "conditional immediate authorization when frozen data gate is ready",
+    "progress_basis": "current package state unchanged by narrow WP03 bridge promotion; latest resolver-equivalent formal progress receipt at 2026-08-10T08:25:05Z"
+  },
+  "next_frontier": [
+    "Define explicit WP04 type/effect legality disposition for rule_decl and invariant_decl first, with mutation and fail-closed controls.",
+    "Extend the disposition matrix to dialect/import/module/version/cycle/status/parent/tensor classes without assuming all classes are executable operations.",
+    "Prove WP05 evaluator/lowering consumes only validated/lowered semantics and fails closed on deferred/unsupported opaque classes.",
+    "After downstream consumption exists, rerun exact current G9/Dialect identity/provenance/type/effect/evaluator corpus gates and only then consider CC-WP-03 package PASS."
+  ],
+  "research_write": "COMMITTED",
+  "wp03_status": "OPEN",
+  "base_release": "NOT_PASS",
+  "andreas_target_acceptance": false,
+  "frank_harness_mutation": false,
+  "training_authorized": false,
+  "final_adjudication": "MATERIAL_PROGRESS: SILENT SEMANTIC IDENTITY LOSS FALSIFIED; RECEIPT_BOUND PRODUCTION BRIDGE V2 NARROWLY PROMOTED WITH REAL UBUNTU EVIDENCE; 100 RESIDUAL NODES INVENTORIED INTO 10 EXPLICIT DOWNSTREAM OBLIGATION CLASSES; WP03 REMAINS OPEN; BASE NOT_PASS; FRANK HARNESS UNCHANGED; TRAINING NOT_AUTHORIZED",
+  "status": "CLOSED_AT_NEW_WP04_WP05_SEMANTIC_DISPOSITION_FRONTIER"
+}

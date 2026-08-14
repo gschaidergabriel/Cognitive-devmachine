@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "package_id": "Q23-PKG-20260810-FTAP-RECOVERY",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-featuretap-recovery",
+  "topic": "QWEN_NATIVE_REPRESENTATION_FOR_MVC_AND_MULTIMODAL_RECOVERY",
+  "title": "Same-pass Qwen3.5 feature taps plus explicit multimodal recovery boundary",
+  "source_classes": ["OFFICIAL_MODEL_REPO", "OFFICIAL_RUNTIME_CODE", "ISSUE_OR_FAILURE", "PRIMARY_RESEARCH", "CURRENT_REPO"],
+  "finding": "Qwen3.5 Transformers exposes pre- and post-merger visual features from one visual pass; libmtmd publicly exposes encoded media embeddings for decode reuse but its serialized chunks are metadata-only, and current llama-server failure evidence prevents assuming durable multimodal slot/KV recovery.",
+  "frank_relevance": "Enables a lower-cost falsifiable MVC feature-tap comparison while forcing provenance/recovery to remain independent of ephemeral VLM cache state.",
+  "fusion_result": "REFINES",
+  "hypotheses_created_or_revised": ["H-Q23-FTAP-01", "H-Q23-RECOVERY-02", "H-Q23-TEMPORAL-03"],
+  "architecture_delta_candidates": ["AD-Q23-QNDRF-FTAP-02"],
+  "test_obligations": ["T-Q23-FTAP-01", "T-Q23-ONEPASS-02", "T-Q23-RECOVERY-03", "T-Q23-TEMPORAL-04", "T-Q23-PROVENANCE-05"],
+  "affected_components": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY", "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"],
+  "confidence": 0.86,
+  "unresolved_uncertainty": "Exact target-VPS Qwen3.5 feature geometry, libmtmd pre-merger accessibility and multimodal restart behavior remain unmeasured."
+}

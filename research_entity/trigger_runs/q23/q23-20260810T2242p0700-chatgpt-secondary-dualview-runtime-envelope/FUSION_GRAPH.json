@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "nodes": [
+    {"id":"N1","kind":"INTERNAL_CANDIDATE","ref":"QNDRF-1","claim":"Reuse Qwen/mmproj visual encode for MVC and semantic escalation."},
+    {"id":"N2","kind":"PRIMARY_CODE","ref":"huggingface/transformers Qwen3.5","claim":"One vision forward exposes pre-merger and merged outputs; merged path is available before language decode."},
+    {"id":"N3","kind":"PRIMARY_CODE","ref":"llama.cpp libmtmd","claim":"Encoded merged media embeddings are publicly retrievable after encode."},
+    {"id":"N4","kind":"COUNTEREVIDENCE","ref":"QwenLM/Qwen3-VL-Embedding","claim":"High-quality multimodal retrieval uses retrieval-specific training and final hidden-state pooling/normalization rather than assuming raw visual projector geometry is calibrated."},
+    {"id":"N5","kind":"RUNTIME_FAILURE_ECOLOGY","ref":"llama.cpp current issues","claim":"Visual correctness/stability can depend on runtime/preprocessor/backend/batch/KV/FA conditions."},
+    {"id":"N6","kind":"ARCHITECTURE_DELTA","ref":"AD-Q23-QNDRF-1.1-MERGED-FIRST","claim":"Test merged reuse first; tiny projection second; pre-merger only if needed; dedicated encoder remains mandatory counterbaseline."},
+    {"id":"N7","kind":"TEST_OBLIGATION","ref":"TO-Q23-VISUAL-COMPAT-02","claim":"Bind prototype validity to a complete VisualEncoderCompatibilityID and measure cross-runtime geometry/behavior drift."}
+  ],
+  "edges": [
+    {"from":"N2","to":"N1","type":"IMPLEMENTABILITY_SUPPORT"},
+    {"from":"N3","to":"N1","type":"TARGET_RUNTIME_API_SUPPORT"},
+    {"from":"N4","to":"N1","type":"CALIBRATION_COUNTEREVIDENCE"},
+    {"from":"N5","to":"N1","type":"RUNTIME_VALIDITY_CONSTRAINT"},
+    {"from":"N1","to":"N6","type":"REFINED_BY"},
+    {"from":"N4","to":"N6","type":"FORCES_STAGED_FALSIFICATION"},
+    {"from":"N5","to":"N7","type":"GENERATES_TEST"},
+    {"from":"N6","to":"N7","type":"REQUIRES_COMPATIBILITY_RECEIPT"}
+  ],
+  "fusion_result": "Evidence supports implementation of a same-encode MVC experiment but does not support promotion of raw Qwen/mmproj features as a calibrated familiarity space. The minimum-complexity next move is a merged-feature benchmark with strict runtime identity and a dedicated-encoder counterbaseline."
+}

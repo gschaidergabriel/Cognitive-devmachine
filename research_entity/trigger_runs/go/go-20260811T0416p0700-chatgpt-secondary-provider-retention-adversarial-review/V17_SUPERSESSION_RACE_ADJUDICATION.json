@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0416p0700-chatgpt-secondary-provider-retention-adversarial-review",
+  "status": "COORDINATION_RACE_RESOLVED_PENDING_TARGET",
+  "affected_package": "F-V01-09-EFFECT-AUTHORITY",
+  "problem": {
+    "pr279": "closed itself because PR #280 was considered the stronger overlapping V17 execution/support candidate",
+    "pr280": "closed itself because PR #279 was considered the earlier/current-base overlapping V17.2 candidate",
+    "result": "circular supersession left no active V17 product candidate while stacked adversarial #284 still depended on #280"
+  },
+  "diff_adjudication": {
+    "selected_product_candidate": 280,
+    "historical_alternative": 279,
+    "reason": [
+      "#280 binds execution_id + lease_epoch + execution_generation_binding_hash directly to V17 reentry",
+      "#280 requires durable V16 EXECUTION_BOUND plus ingress-admission provenance for the effect generation",
+      "#280 requires full receiver closure addressable/delivered/reconstructed/used/local_effect",
+      "#280 binds verified prediction subject exactly to the effect",
+      "#280 uses an independent immutable effect_semantic_delta_admissions_v17 relation rather than terminal code inventing a delta id",
+      "latest fused V2 #280 imports #279's CORRELATED_ONLY rejection in both semantic-delta admission and reentry support",
+      "latest fused V2 #280 also binds current semantic record subject_id to exact effect"
+    ]
+  },
+  "actions": {
+    "pr280": {
+      "state": "REOPENED_DRAFT",
+      "latest_observed_head": "fcb4b66939e0ed0ade36169500f0a34aa5c896eb",
+      "latest_support_marker": "V17_EXECUTION_CANONICAL_SUPPORT_V2",
+      "target_workflow_run": 31434175120,
+      "target_state_at_write": "QUEUED_NOT_EXECUTED"
+    },
+    "pr279": {
+      "state": "CLOSED_HISTORICAL_EVIDENCE",
+      "direct_merge": "NOT_SELECTED"
+    },
+    "pr284": {
+      "state": "OPEN_BUT_STALE_PARENT_AT_REVIEW",
+      "old_parent": "0f5362e20b465562ededd331eaa2c75ff440f0e0",
+      "review_action": "commented that current #280 already rejects CORRELATED_ONLY; old-parent expected-negative cannot be interpreted against current V2",
+      "required": "refresh onto current #280 and convert to rejection regression, or preserve as historical pre-V2 negative evidence"
+    }
+  },
+  "nonclaims": [
+    "No V17 target PASS exists yet for the fused V2 head in this invocation.",
+    "Queued/cancelled workflows are not execution evidence.",
+    "No canonical migration or whole Frank acceptance is claimed.",
+    "No external provider/network effect occurred from this adjudication.",
+    "No final training authorization or self.root Harness authority is granted."
+  ]
+}

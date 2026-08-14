@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity",
+  "routes":[
+    {"query_class":"effect current state","authoritative_source":"effect_reservations + effect terminal receipt when promoted","derived_allowed":false,"required_keys":["effect_id","attempt_id","outcome_hash","outcome_verified","reentry_hash"]},
+    {"query_class":"execution ownership","authoritative_source":"frank_presence_lease + frank_execution_context + continuity events","derived_allowed":false,"required_keys":["lease_epoch","execution_id","current_task_state"]},
+    {"query_class":"GWT causal use","authoritative_source":"attention_episodes + receiver_receipts","derived_allowed":false,"required_keys":["attention_id","receiver_receipt_id","used","local_effect","outcome_ref"]},
+    {"query_class":"causal learning admission","authoritative_source":"verified prediction/outcome + causal_credit_receipts + admitted semantic record/receipt","derived_allowed":false,"required_keys":["outcome_id","verified","credit_id","record_id","epoch"]},
+    {"query_class":"topology/neighborhood","authoritative_source":"UnifiedDB identities","derived_source":"ClayGraph","derived_allowed":true,"rule":"graph result may nominate candidates but must be revalidated against authoritative rows before effect/learning authority"},
+    {"query_class":"model-visible bounded assembly","authoritative_source":"typed UnifiedDB query","derived_allowed":true,"rule":"assemble only task-relevant state with epoch/provenance/support references; no raw whole-store dump"},
+    {"query_class":"external provider outcome","authoritative_source":"external provider observation/receipt","derived_allowed":false,"rule":"KEEP_ISOLATED physically; persist cryptographic/content identity plus verification provenance into UnifiedDB"}
+  ],
+  "selection_integrity":"Selection/ranking provenance is stored separately from record provenance. A selected row does not gain epistemic/effect authority from ranking.",
+  "cross_splice_defense":"Terminalization query must join through identities proving one causal chain, not independently validate unrelated existing rows.",
+  "fallback":"If exact identity/epoch/provenance is absent or stale, return BLOCKED/UNKNOWN and require reconciliation; never guess by nearest graph/vector match."
+}

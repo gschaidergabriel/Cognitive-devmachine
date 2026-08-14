@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "cycle": 4,
+  "topic": "F-V01-13 exact loaded Ubuntu SQLite WAL-reset classification",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "SQLite official WAL-reset bug documentation",
+      "finding": "The WAL-reset race is likely present in upstream versions 3.7.0 through 3.51.2 and fixed in 3.51.3+, with selected backports."
+    },
+    {
+      "source": "SQLite 3.53.4 official release log",
+      "finding": "3.53.4 contains the WAL-reset fix."
+    },
+    {
+      "source": "Ubuntu official sqlite3 source archive",
+      "finding": "Exact source package sqlite3_3.45.1-1ubuntu2.7 is available; component SHA256 values were verified from its .dsc during target execution."
+    }
+  ],
+  "question": "Did Ubuntu backport or equivalently fix the WAL-reset defect in the exact libsqlite3-0 3.45.1-1ubuntu2.7 object currently loaded by Frank's accepted Ubuntu target, making the private 3.53.4 lane unnecessary?",
+  "hypothesis": {
+    "id": "H-STORAGE-UBUNTU-3451-WALRESET-001",
+    "claim": "The currently loaded Ubuntu 3.45.1-1ubuntu2.7 SQLite remains vulnerable to the targeted WAL-reset defect because its exact downstream source lineage lacks an equivalent fix."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-STORAGE-UBUNTU-3451-WALRESET-001",
+    "claim": "Canonical backported or independently implemented an equivalent fix while retaining the 3.45.1 version surface, so the loaded object will survive the deterministic upstream regression sequence."
+  },
+  "target_execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 320,
+    "base_pr": 315,
+    "workflow": "SQLite Ubuntu loaded-runtime Axis D v2",
+    "run_id": 31493057315,
+    "job_id": 93783938251,
+    "tested_sha": "fb17a57d14ec3c62e50d36095d3f020835bb8bc6",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_version": "2.336.0",
+    "result": "SUCCESS",
+    "classification": "PASS_CLASSIFIED_LOADED_UBUNTU_SQLITE_WAL_RESET_VULNERABLE",
+    "artifact_id": 9101841073,
+    "artifact_sha256": "573ea4fe9e2884cf2ab5c1810d7e2b05662a035dd3eb9acc4ac83a80981f4f5b"
+  },
+  "identity_binding": {
+    "loaded_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+    "loaded_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "loaded_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "loaded_build_id": "92f59a77085057d1b9de43e943ba6231dc7ae452",
+    "loaded_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "rebuilt_unmodified_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "source_id_match": true,
+    "ubuntu_source_component_sha256_all_match_dsc": true,
+    "patch_series_named_wal_reset_backport": false
+  },
+  "targeted_fault_result": {
+    "fault_hook": "sqlite3FaultSim(660)",
+    "fault_hook_scope": "test-only deterministic upstream-derived hook at WAL checkpoint copy path",
+    "fault_660_seen": 1,
+    "fault_update_rc": 0,
+    "integrity_rows": 18,
+    "integrity_last": "row 18 missing from index i1",
+    "result": "FAIL_INTEGRITY_CORRUPTION",
+    "exit": 20
+  },
+  "falsification_adjudication": {
+    "H-STORAGE-UBUNTU-3451-WALRESET-001": "SUPPORTED_ON_EXACT_ACCEPTED_TARGET_SOURCE_LINEAGE",
+    "CH-STORAGE-UBUNTU-3451-WALRESET-001": "REFUTED_ON_EXACT_ACCEPTED_TARGET_SOURCE_LINEAGE",
+    "confidence": "HIGH_FOR_TARGETED_DEFECT_CLASSIFICATION",
+    "limits": "Deterministic fault regression proves susceptibility of the exact source lineage to the documented failure mode; it does not quantify natural occurrence rate or power-loss behavior."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_INTEGRATION_OBLIGATION",
+    "name": "DO_NOT_USE_CURRENT_SYSTEM_SQLITE_FOR_CORRECTNESS_SENSITIVE_MULTI_CONNECTION_WAL_STATE",
+    "affected_work_packages": ["F-V01-13-STORAGE-TRUTH", "F-V01-01-SELFROOT-SKELETON", "F-V01-03-COGNITIVE-LOOP-CORE", "F-V01-09-EFFECT-AUTHORITY"],
+    "decision": "The current target system SQLite cannot remain the accepted runtime for correctness-sensitive multi-connection WAL state. Integrate an explicitly bound fixed runtime; the separately target-green private SQLite 3.53.4 candidate from PR #315 is the current measured candidate because it passes the same targeted defect discriminator and the process-crash oracle.",
+    "successor_gate": "Production Frank processes must prove at runtime which SQLite object/source id they loaded, prove it belongs to a fixed accepted lineage, rerun state/effect/presence differential gates on that exact bound runtime, and retain rollback/fail-closed behavior."
+  },
+  "instrument_negative_result": {
+    "initial_axis_d_run": 31492843100,
+    "classification": "INSTRUMENT_FAILURE_NOT_STORAGE_EVIDENCE",
+    "cause": "Ubuntu 3.45.1 configure does not accept --debug",
+    "repair": "Axis-D v2 removed unsupported configure flag and bound unmodified source id before test instrumentation."
+  },
+  "target_receipt": {
+    "path": "runtime/vps_storage/sqlite_loaded_axis_d_v1/LATEST.json",
+    "commit": "961668ebf69f14b9ad685ddb3e6e707da1337576"
+  },
+  "next_frontier": [
+    "Compose the already target-green private SQLite 3.53.4 candidate into an explicit Frank storage runtime boundary without replacing the host system package.",
+    "Re-run presence, V17 re-entry/DONE, GWT causal support and crash/restart suites under the exact selected fixed SQLite object.",
+    "Add runtime source-id/object-hash admission so accidental fallback to vulnerable system SQLite fails closed.",
+    "Keep power-loss/kernel-panic durability as a separate unresolved gate."
+  ],
+  "go_oob_experiment": "NONE_IN_CYCLE_4; the macrocycle's single OOB slot was already consumed in cycle 1",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "training_authorized": false
+}

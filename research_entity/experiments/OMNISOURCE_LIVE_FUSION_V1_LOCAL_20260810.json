@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260810T1636p0700-omnisource-v10-local",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+  "candidate": "research_entity/runtime/RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql",
+  "test": "research_entity/experiments/omnisource_live_fusion_v1_test.py",
+  "evidence_class": "LOCAL_SANDBOX_SQLITE_CANDIDATE_TEST",
+  "promotion_scope": "NONE_FROM_LOCAL_TEST_ALONE",
+  "hypothesis": "A provenance-bound all-source intake with explicit semantic-epoch gating, current-work revision binding and mandatory material re-entry can preserve contradictions/provenance while preventing stale observations or stale work executions from silently receiving current-state/current-work credit.",
+  "strongest_counterhypothesis": "A universal intake/re-entry layer adds storage/context/coordination overhead and false materiality; simpler V9/manual refresh or arrival-order/tag-only processing may dominate on real repo workloads, and adaptive routing may not justify its complexity.",
+  "fresh_internal_delta": {
+    "ref": "research_entity/claycode/supervisor/STEERING_20260810T1644P0700.json",
+    "finding": "A technically successful self-hosted replay can remain bound to an older work revision. Therefore successful execution on stale work semantics must remain diagnostic evidence and receive no current-work completion/promotion credit.",
+    "candidate_revision": "V10 now separates semantic promotion eligibility from current_work_credit_eligible and requires CURRENT work revision plus bound repo head, execution start and non-empty exact component hashes for current-work credit."
+  },
+  "fresh_external_evidence": [
+    {
+      "ref": "arXiv:2603.27775",
+      "title": "Enzyme: Incremental View Maintenance for Data Engineering",
+      "retrieved_on": "2026-08-10",
+      "delta": "Cost-based refresh selection supports adaptive incremental/full strategies rather than dogmatic incrementality."
+    },
+    {
+      "ref": "arXiv:2606.07795",
+      "title": "The Role of Semirings in Incremental View Maintenance",
+      "retrieved_on": "2026-08-10",
+      "delta": "June-2026 results show update complexity depends on query/semiring structure; some classes admit constant amortized update time while others have conditional lower bounds."
+    },
+    {
+      "ref": "arXiv:2502.20534",
+      "title": "Consistent Distributed Reactive Programming with Retroactive Computation",
+      "retrieved_on": "2026-08-10",
+      "delta": "Late/lost distributed source data can require retroactive recovery; checkpoint time-consistency motivates explicit epoch/checkpoint handling."
+    },
+    {
+      "ref": "arXiv:2501.09225",
+      "title": "Provenance Guided Rollback Suggestions",
+      "retrieved_on": "2026-08-10",
+      "delta": "Incremental provenance can localize failing changes and support rollback, strengthening the case for preserving provenance through live fusion."
+    },
+    {
+      "ref": "arXiv:2304.07458",
+      "title": "Layph: Making Change Propagation Constraint in Incremental Graph Processing by Layering Graph",
+      "retrieved_on": "2026-08-10",
+      "delta": "Counterevidence against naive locality: small graph changes may propagate globally, so dense invalidation remains a valid route."
+    }
+  ],
+  "test_harness_debug": {
+    "initial_attempt": "FAILED_TEST_HARNESS",
+    "failure": "checkpoint insert supplied 7 values for an 8-column table",
+    "disposition": "TEST_FIXED_AND_RERUN_FROM_SCRATCH",
+    "architecture_credit": "NONE_FROM_FAILED_ATTEMPT"
+  },
+  "result": {
+    "pass": true,
+    "checks_passed": 11,
+    "source_class_coverage": {"covered": 19, "total": 19},
+    "stale_promotion_gate_ok": true,
+    "work_revision_binding": {
+      "stale_work_credit_gate_ok": true,
+      "missing_component_binding_gate_ok": true,
+      "stale_diagnostic_rows_after_restart": 1,
+      "current_work_credit_rows_after_restart": 1
+    },
+    "duplicate_provenance": {"observations": 2, "distinct_provenance": 2},
+    "material_reentry_specific": {
+      "pending_before_close": 1,
+      "pending_after_close": 0,
+      "pending_after_restart": 0,
+      "closed_receipt_state_after_restart": "CLOSED"
+    },
+    "other_material_pending_after_restart": 3,
+    "other_material_pending_interpretation": "Three intentionally unclosed material items remain visible: two contradiction assessments plus one stale-work diagnostic assessment. The pending view does not hide them.",
+    "contradiction_rows_preserved": 2,
+    "restart_checkpoint": {
+      "semantic_epoch": 141,
+      "health_state": "HEALTHY",
+      "last_reentry_receipt_id": "r-open"
+    },
+    "performance": {
+      "n_observation_plus_assessment_pairs": 5000,
+      "elapsed_s": 0.228376,
+      "rows_per_s_pair_rate": 21893.7,
+      "insert_assess_ms_p50": 0.033665,
+      "insert_assess_ms_p95": 0.068912,
+      "sqlite_db_bytes": 4870144,
+      "comparison_to_pre_work_revision_guard_local_run": {
+        "pre_guard_rows_per_s_pair_rate": 29292.5,
+        "pre_guard_p50_ms": 0.024416,
+        "pre_guard_p95_ms": 0.043054,
+        "interpretation": "The stronger guard has measurable local overhead; this comparison is same general sandbox lane but not a formal matched microbenchmark and cannot by itself establish causality."
+      }
+    }
+  },
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "temporal_braid_fault",
+    "design": "Interleave a current claim, a later-arriving but older-epoch contradiction, a same-epoch duplicate-provenance observation, a restart boundary and a fresh supersession.",
+    "baseline": "arrival-order latest-wins",
+    "candidate": "epoch-aware promotion eligibility",
+    "baseline_false_stale_promotions": 1,
+    "candidate_false_stale_promotions": 0,
+    "baseline_final": "REFINED",
+    "candidate_final": "REFINED",
+    "interpretation": "Final-state equality hides a transient causal error: arrival-order processing temporarily promotes stale evidence; epoch-aware gating stores it without granting current-state authority.",
+    "promotion_effect": "NONE; bounded local evidence only"
+  },
+  "runtime_metadata": {
+    "os": "Linux 6.18.35 x86_64 glibc 2.41",
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "logical_cpu_count": 5,
+    "processor_model": "UNKNOWN",
+    "ram_total_bytes": 6368813056,
+    "target_host": "NOT_ANDREAS_UBUNTU_TARGET",
+    "hostinger_vps": "NOT_VERIFIED_IN_THIS_LOCAL_RECEIPT"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING_REVISED",
+    "unifieddb": "V10 now persists OmniSourceObservation, FusionAssessment, ResearchReentryReceipt, branch receipts and recovery checkpoints plus current-work revision/repo-head/component-hash binding and explicit stale-work diagnostic surfaces.",
+    "claygraph": "No new truth-bearing graph schema added; current graph invalidation/receiver surfaces remain derived routing/observability mechanisms.",
+    "adaptive_mesh_v2": "REMAINS_CANDIDATE_NOT_PROMOTED",
+    "rollback": "Do not include V10 migration in promoted stack; existing UnifiedDB V9 remains rollback baseline until remote/current-repo replay passes."
+  },
+  "next_falsifier": "Run the revised candidate on the authorized self-hosted Ubuntu runner and then replay actual current work/feedback/dependency events with work-revision changes, missing-edge, stale-epoch, duplicate, causal-reorder and crash/restart faults; compare against simpler V9/manual/broadcast/tag-only/arrival-order baselines with latency/resource/recall shadows.",
+  "research_reentry": "WRITE_REMOTE_TEST_AND_REAL_REPO_REPLAY_OBLIGATIONS; NO_ARCHITECTURE_PROMOTION"
+}

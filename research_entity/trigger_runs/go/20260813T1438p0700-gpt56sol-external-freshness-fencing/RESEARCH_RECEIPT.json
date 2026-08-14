@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1438p0700-gpt56sol-external-freshness-fencing",
+  "trigger": "go",
+  "timestamp_local": "2026-08-13T14:38:00+07:00",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "program": "FRANK_V0_1",
+  "work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "research_parent_observed": "05c0c95cc192d99068db98e440fad9dacd3e3605",
+  "product_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "925ed87f0644dafd4dfbe899ee83cc80478e26a4",
+    "current_main_lineage_pr": 567,
+    "current_main_lineage_head": "d89755c2ec16dce02c1fb3d6fab1f49e2c6c3abd",
+    "lineage_workflow_run": 31662607406,
+    "lineage_workflow_conclusion": "success",
+    "new_work_item": 569
+  },
+  "observed_reality": [
+    "Current-main lineage composition executes successfully but explicitly leaves external-anchor trust unverified, exact lineage-plus-anchor clone safety false, production integration false, and accepted Hostinger proof false.",
+    "The existing freshness bridge itself states that an exact clone or rollback of both lineage admission and external anchor requires a trusted out-of-snapshot freshness authority or equivalent remotely or physically monotonic witness.",
+    "State-local content identity therefore cannot close the exact-clone freshness failure domain by itself."
+  ],
+  "macrocycle_unusual_experiment": {
+    "count": 1,
+    "name": "IDENTICAL_CLONE_EXTERNAL_CAS_RACE_V1",
+    "scope": "disposable GitHub branch object only; no product/canonical Frank state",
+    "branch": "chatgpt/go-lineage-external-cas-witness-20260813",
+    "baseline_blob_sha": "6ab1906ab513e90513e408d6194ab21147734b76",
+    "winner_commit": "cd0c8e8c7cbdc2276787f2a817381117397e33ff",
+    "winner_blob_sha": "85cc022b7adea2b9cb030fbb0575af7c3eb85eab",
+    "loser_result": "HTTP_409_STALE_EXPECTED_SHA_CONFLICT",
+    "rollback_commit": "561849b29138ae8d9776d603242047f0959dadb9",
+    "result": "one of two identical stale-SHA writers advanced the external witness; the second stale writer was rejected; disposable file was removed afterward",
+    "promotion_credit": "MECHANISM_SUPPORTED_NOT_PRODUCTION_AUTHORITY"
+  },
+  "primary_external_evidence": [
+    "GitHub Contents API requires the current blob SHA when updating a file and documents HTTP 409 Conflict.",
+    "etcd v3.6 transactions are atomic If/Then/Else operations whose guards can compare value, version, create_revision or mod_revision and are explicitly suitable for compare-and-swap and concurrency control.",
+    "etcd exposes cluster_id plus cluster-wide monotonically increasing store revision; normal Range reads are linearizable unless serializable mode is explicitly requested."
+  ],
+  "generated_realities": [
+    {
+      "hypothesis": "An out-of-snapshot compare-and-swap witness can discriminate identical stale clones at one acquisition transition.",
+      "strongest_counter_reality": "The losing clone may later observe the successor and attempt reacquisition, so one CAS transition alone does not provide durable singleton/effect safety.",
+      "outcome": "MERGE",
+      "confidence": "HIGH_FOR_SINGLE_TRANSITION_ONLY"
+    },
+    {
+      "hypothesis": "A remote linearizable CAS plus monotonic fencing generation can close rollback/dual-holder ambiguity if every authoritative state/effect boundary validates the generation.",
+      "strongest_counter_reality": "Lease expiry, backend restore/identity swap, crash between remote acquisition and local persistence, or failure to carry fencing to an actual commit boundary can still admit stale effects.",
+      "outcome": "RETAIN_TESTING",
+      "confidence": "MEDIUM"
+    },
+    {
+      "hypothesis": "GitHub Contents CAS itself should become production freshness authority.",
+      "strongest_counter_reality": "The experiment proves stale-update exclusion only; it does not prove production-grade lease/fencing semantics, availability, latency, backend continuity, or non-bypassable composition with every Frank state/effect commit.",
+      "outcome": "DEFER",
+      "confidence": "LOW_FOR_PRODUCTION_SELECTION"
+    }
+  ],
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "summary": "Require a remote freshness authority outside the Hostinger snapshot failure domain with linearizable predecessor-CAS and a monotonically ordered fencing token. Lease/TTL may provide liveness, but stale generations must be rejected at authoritative UnifiedDB, selected-lineage, execution-lease and consequential effect commit/reentry boundaries.",
+    "backend_candidate": "etcd-style transaction/revision service",
+    "github_cas_disposition": "DIAGNOSTIC_MECHANISM_EVIDENCE_ONLY",
+    "rollback": "No product code changed; remove/close candidate if ordinary differential tests show no benefit or unacceptable dependency/cost."
+  },
+  "ordinary_test_obligations": [
+    "EXACT_CLONE_CONCURRENT_ACQUIRE",
+    "LOSER_RETRY_WHILE_WINNER_ACTIVE",
+    "LEASE_EXPIRY_REACQUIRE_FENCE",
+    "CRASH_AFTER_REMOTE_ACQUIRE_BEFORE_LOCAL_PERSIST",
+    "LOCAL_SNAPSHOT_ROLLBACK_AFTER_REMOTE_ADVANCE",
+    "REMOTE_UNAVAILABLE_FAIL_CLOSED",
+    "REMOTE_BACKEND_RESTORE_OR_IDENTITY_SWAP",
+    "CLEAN_RESTART_AND_MOVE",
+    "ACCEPTED_HOSTINGER_PRODUCTSTART",
+    "STALE_FENCING_GENERATION_REJECTED_AT_EFFECT_RESERVE_COMMIT_REENTRY_AND_LEARNING"
+  ],
+  "grf_outcome": "RETAIN_REMOTE_FRESHNESS_FENCING_CANDIDATE",
+  "durable_reentry": {
+    "product_issue": 569,
+    "product_pr_comment": 5277428411
+  },
+  "effect_authority_change": false,
+  "frank_harness_authority_change": false,
+  "canonical_frank_state_mutated": false,
+  "training_authorization_change": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

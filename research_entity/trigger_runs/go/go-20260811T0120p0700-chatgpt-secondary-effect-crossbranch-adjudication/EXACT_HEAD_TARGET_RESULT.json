@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0120p0700-chatgpt-secondary-effect-crossbranch-adjudication",
+  "kind": "EXACT_HEAD_TARGET_RESULT",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_pr": 250,
+  "head_sha": "5a273bcbe5890b1802ddf6d7da0eb7df7a9c140b",
+  "tested_merge_sha": "078dffae8be585bcd6a522dfbe4261bbc88115c6",
+  "main_parent": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+  "workflow_run_id": 31419002821,
+  "job_id": 93554938265,
+  "runner": "clay",
+  "machine": "digital-retina",
+  "runner_os": "Linux",
+  "runner_arch": "X64",
+  "kernel": "Linux 6.8.0-117-generic x86_64",
+  "python": "3.12.3",
+  "sqlite": "3.45.1",
+  "normal_results": {
+    "physical_gate": "PASS_FRANK_EXECUTION_GATE_V1",
+    "v14_crash_replay": "PASS_V14_EFFECT_LIFECYCLE_TEST_MODE",
+    "v14_same_confirmation_concurrency": {"attempts": 64, "admitted": 1},
+    "v14_real_process_death_atomic_rollback": "PASS",
+    "v14_restart_confirmation_replay": "PASS",
+    "v14_semantic_tamper_detection": "PASS",
+    "effect_matrix": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+    "same_epoch_v16_rebind_before_attempt": "FENCED_ZERO_STATE_MUTATION",
+    "provider_entry_same_epoch_v16_rebind": "EFFECT_COMMITTING_BLOCKS_EXECUTION_GENERATION_REBIND",
+    "provider_release_inside_window": "CANNOT_RELEASE_EXECUTION_DURING_PROVIDER_COMMIT",
+    "committing_terminal_release_outside_provider_window": "EFFECT_COMMITTING_BLOCKS_EXECUTION_RELEASE",
+    "blocked_release_kept_v15_busy": true,
+    "stale_source": "FENCED_ZERO_STATE_MUTATION",
+    "successor_cross_splice": "FENCED_ZERO_STATE_MUTATION",
+    "uncertain_retry_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+    "outcome_reconciliation_after_turnover": "PASS",
+    "successor_fresh_effect": "PASS",
+    "immutable_binding_update": "BLOCKED",
+    "immutable_binding_delete": "BLOCKED",
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "claycode_generation_contract": "PASS_CLAYCODE_EXACT_V15_V16_EFFECT_GENERATION_CONTRACT"
+  },
+  "failed_gate": {
+    "step": "Run current ClayCode frontend and TypedIR against exact v6 source",
+    "reason": "BOUND_WP03_GRAMMAR_MISSING_FROM_EXACT_MERGE_GRAPH",
+    "missing_path": "runtime/clay_wp03_exact_bundle/research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark",
+    "classification": "CROSS_BRANCH_DEPENDENCY_FAILURE_NOT_EFFECT_FENCE_REGRESSION"
+  },
+  "oob_step": {
+    "raw_libc_fork_bypass": "SKIPPED_AFTER_FRONTEND_FAILURE",
+    "note": "No new OOB result is claimed for this exact head. The worker-run exactly-one OOB remains CROSS_BRANCH_DEPENDENCY_GHOST."
+  },
+  "artifact": {
+    "id": 9074586820,
+    "sha256": "5566dff904e02af2be01e03a397808e32889699379c10eb90fc31c5d97751687"
+  },
+  "adjudication": {
+    "effect_fence_toctou_candidate": "SUPPORTED_ON_EXACT_TARGET_MERGE_SHA",
+    "full_pr_acceptance": "BLOCKED",
+    "compiler_frontend_acceptance": "BLOCKED_MISSING_EXACT_DEPENDENCY_ANCESTRY",
+    "f_v01_09_closure": false,
+    "promotion": "NONE",
+    "training_authorized": false
+  },
+  "next_falsifier": "Compose the accepted WP03 substrate into the same exact merge graph, then rerun this full matrix including frontend/TypedIR and the branch-owned OOB without changing effect semantics. After that, continue to WP04/lowering, canonical ordinary effect routing and real-provider uncertainty evidence."
+}

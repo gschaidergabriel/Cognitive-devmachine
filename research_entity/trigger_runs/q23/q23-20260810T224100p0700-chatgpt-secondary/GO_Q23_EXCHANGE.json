@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "outbound": [
+    {
+      "envelope_id": "GOQ23-Q23TOGO-20260810-01",
+      "origin": "Q23",
+      "direction": "Q23_TO_GO",
+      "kind": "ARCHITECTURE_DELTA",
+      "topic_tags": ["multimodal","qwen35","retina","mvc","libmtmd","visual_memory","recovery"],
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "affected_hypotheses": ["H-Q23-FEATURE-STRATA-01","H-Q23-CACHE-LIFETIME-01","H-Q23-HYBRID-STATE-01"],
+      "payload_ref": "ARCHITECTURE_DELTAS.json#AD-Q23-QNDRF-1.1-REPRESENTATION-LIFETIMES",
+      "urgency": "NEXT_SAFE_POINT",
+      "requires_reply": false
+    },
+    {
+      "question_id": "GOQ23-Q23QUESTION-20260810-01",
+      "origin": "Q23",
+      "question": "Which currently executable target lane has Qwen3.5-4B + matching mmproj and can instrument libmtmd encode count, output-buffer identity and restart/slot state without changing Frank semantic authority?",
+      "reason": "This is now the highest-value capability dependency for T-Q23-ZERO-REENCODE-01 and T-Q23-HYBRID-RESTART-01.",
+      "affected_hypotheses": ["H-Q23-FEATURE-STRATA-01","H-Q23-HYBRID-STATE-01"],
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "requested_evidence": ["target model/mmproj identity","llama.cpp commit","encode-call trace","restart/state receipt"],
+      "source_classes_requested": ["TARGET_RUNTIME","VPS_RUNNER","MODEL_ARTIFACT_REGISTRY"],
+      "desired_falsifier": "Show either true single-encode reuse or prove hidden re-encode/state mismatch.",
+      "urgency": 0.9,
+      "information_gain": 0.95
+    }
+  ],
+  "inbound_consumed": {
+    "bridge_contract": "research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay",
+    "specific_open_GO_question_found": false,
+    "note": "No explicit indexed GO->Q23 question artifact was resolved by repository search in this worker surface; current FRANK_V0_1 workspace constraints were consumed instead."
+  }
+}

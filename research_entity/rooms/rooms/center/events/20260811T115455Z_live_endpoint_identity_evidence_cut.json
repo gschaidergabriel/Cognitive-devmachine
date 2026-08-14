@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-ENDPOINT-IDENTITY-EVIDENCE-CUT-20260811T115455Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "created_at_utc": "2026-08-11T11:54:55Z",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "prior_notified_event_commit": "c7afadb83c9bfd4e6527bd32b87b4e163750c08a",
+    "observed_head_before_write": "46b733897e8b1088ec478c7ae6f4d0beb0faa0ad"
+  },
+  "intended_recipients": [
+    "ClayCode free-provider runtime worker",
+    "ClayCode autonomous supervisor and evidence-cut worker",
+    "F-V01-09 Effect Authority and EffectGate worker",
+    "F-V01-12 tool/peer/body capability worker",
+    "F-V01-13 security/recovery/observability worker",
+    "UnifiedDB/ClayGraph provenance and state worker",
+    "separate Harness/review worker; no Frank self-Harness mutation"
+  ],
+  "evidence_families": [
+    {
+      "family_id": "E-PR232-USERINFO-HEAD-ADVANCE-20260811",
+      "classification": "OPEN_DRAFT_UNMERGED_AUTHOR_CANDIDATE_PLUS_EXACT_BLOB_SANDBOX_REEXECUTION",
+      "pull_request": {
+        "id": "gschaidergabriel/clay-global-research-entity#232",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/pull/232",
+        "prior_head": "65d5572a722bb5e5a1d42b80d8058f8463c38b86",
+        "current_head": "52beba285416cc3d682435ff8a9795c7444c8d01",
+        "current_head_commit_message": "policy: forbid provider endpoint userinfo",
+        "prior_to_current_compare": {
+          "ahead_by": 3,
+          "behind_by": 0,
+          "files_changed": 3
+        },
+        "exact_blobs": {
+          "runtime": "051d34e7c763b3a62f82744ba6ca0c0629540400",
+          "tests": "a2b6ee915a82b77513b9ab9b5d6453eb99019e31",
+          "policy": "c1531de18492b51ffbb8d945f421984c68aeb2eb"
+        },
+        "author_reported_local_tests": "21/21",
+        "combined_status_contexts_observed": 0,
+        "workflow_runs": {
+          "31488114600": "IDENTITY_GUARD_FAILURE_JOB_METADATA_ONLY_NO_LOGS_CAUSE_UNKNOWN",
+          "31488114628": "VERIFY_FAILURE_JOB_METADATA_ONLY_NO_LOGS_CAUSE_UNKNOWN"
+        },
+        "live_external_request_executed": false,
+        "accepted_ubuntu_target_receipt": null
+      },
+      "positive_delta": [
+        "The candidate now rejects any parsed username or password in the provider base URL before request construction.",
+        "An exact-runtime-blob sandbox reexecution with an injected opener reproduced RuntimeError(provider_endpoint_userinfo_forbidden) and opener_calls=0.",
+        "This directly matches RFC 9110 Section 4.2.4, which says userinfo in an untrusted HTTP(S) URI should be treated as an error."
+      ],
+      "surviving_blockers": [
+        "Both regular-response 402 and HTTPError(402) still produce provider_error with cooldown_seconds=15.",
+        "No persistent same-budget-epoch payment latch exists.",
+        "Request identity still omits cost principal and full request-target identity.",
+        "The candidate policy still contains the obsolete Andreas Ubuntu developer-system mission goal rather than the canonical Hostinger Ubuntu VPS target."
+      ],
+      "independence_boundary": "The exact blob was reexecuted in a separate local sandbox with dummy data and injected transport, but it shares project code and is mechanism reexecution, not independent provider or target-host replication."
+    },
+    {
+      "family_id": "E-PR232-REQUEST-TARGET-ALIAS-20260811",
+      "classification": "EXACT_PR_HEAD_RUNTIME_BLOB_SANDBOX_COUNTEREXAMPLE_NO_NETWORK",
+      "environment": {
+        "python": "3.12.13",
+        "runtime_blob": "051d34e7c763b3a62f82744ba6ca0c0629540400",
+        "secret_material": "DUMMY_NONPRODUCTION_VALUE_ONLY_NOT_SERIALIZED",
+        "opener": "INJECTED_LOCAL_RESPONSE_OBJECT",
+        "external_network_performed": false
+      },
+      "fixed_inputs": {
+        "provider": "nvidia",
+        "model": "same-model",
+        "messages": [
+          {
+            "role": "user",
+            "content": "same"
+          }
+        ],
+        "response_fixture": "HTTP 200 valid minimal chat shape"
+      },
+      "observed_rows": [
+        {
+          "configured_base": "https://integrate.api.nvidia.com/v1",
+          "request_full_url": "https://integrate.api.nvidia.com/v1/chat/completions",
+          "selector": "/v1/chat/completions",
+          "request_id": "bd038ec06c2007e3",
+          "pre_network_admission": "ACCEPTED"
+        },
+        {
+          "configured_base": "https://integrate.api.nvidia.com/other",
+          "request_full_url": "https://integrate.api.nvidia.com/other/chat/completions",
+          "selector": "/other/chat/completions",
+          "request_id": "bd038ec06c2007e3",
+          "pre_network_admission": "ACCEPTED"
+        },
+        {
+          "configured_base": "https://integrate.api.nvidia.com/v1?route=other",
+          "request_full_url": "https://integrate.api.nvidia.com/v1?route=other/chat/completions",
+          "selector": "/v1?route=other/chat/completions",
+          "request_id": "bd038ec06c2007e3",
+          "pre_network_admission": "ACCEPTED"
+        },
+        {
+          "configured_base": "https://integrate.api.nvidia.com/v1#cut",
+          "request_full_url": "https://integrate.api.nvidia.com/v1#cut/chat/completions",
+          "selector": "/v1",
+          "request_id": "bd038ec06c2007e3",
+          "pre_network_admission": "ACCEPTED"
+        }
+      ],
+      "direct_result": "Four distinct effective request targets at the same origin passed the current pre-network gate and collapsed to one request_id because identity binds hostname but not path, query, fragment or resolved selector.",
+      "critical_qualification": [
+        "The injected response deliberately returned success; no claim is made that NVIDIA accepts, charges for or semantically interprets the alternate targets.",
+        "The counterexample proves local admission and identity aliasing only.",
+        "Origin binding still prevents cross-origin bearer-token exfiltration in these fixtures; the remaining risk is endpoint/capability/cost-scope confusion within one origin."
+      ],
+      "repeated_402_probe": {
+        "regular_response": {
+          "status": 402,
+          "outcome": "provider_error",
+          "cooldown_seconds": 15,
+          "lifecycle": [
+            "REQUESTED",
+            "AUTHORIZED",
+            "CLAIMED",
+            "EXECUTED"
+          ]
+        },
+        "httperror": {
+          "status": 402,
+          "outcome": "provider_error",
+          "cooldown_seconds": 15,
+          "lifecycle": [
+            "REQUESTED",
+            "AUTHORIZED",
+            "CLAIMED",
+            "EXECUTED"
+          ]
+        },
+        "network_performed": false
+      }
+    },
+    {
+      "family_id": "E-SUPERVISOR-STALE-PR-SNAPSHOT-20260811",
+      "classification": "CANONICAL_CONTROL_STATE_MISMATCH_NOT_INDEPENDENT_EVIDENCE",
+      "canonical_commits_collapsed_as_one_response_family": [
+        "0b0ef47b77edfe1c4c887ee498f189f654487467",
+        "46b733897e8b1088ec478c7ae6f4d0beb0faa0ad"
+      ],
+      "exact_blobs": {
+        "supervisor_state": "6e29f654b8ba41efc84f4cb9e8acd3d547fdddf2",
+        "supervisor_inbox": "81bcf7585fa664e1f8a95cf44c10b04869d41562"
+      },
+      "mismatch": {
+        "supervisor_pinned_pr_head": "65d5572a722bb5e5a1d42b80d8058f8463c38b86",
+        "currently_observed_pr_head": "52beba285416cc3d682435ff8a9795c7444c8d01",
+        "supervisor_pinned_workflows": [
+          "31483529694",
+          "31483529764"
+        ],
+        "current_head_workflows": [
+          "31488114600",
+          "31488114628"
+        ]
+      },
+      "interpretation": [
+        "The supervisor successfully consumed the prior cost-principal and payment-latch impulse, but its committed evidence snapshot is already stale relative to the currently observed PR head.",
+        "Later exact-head inspection shows the 402 and identity blockers survive, so the decision happens to remain substantively correct.",
+        "That later revalidation is separate evidence; the supervisor receipt itself does not prove the blockers against the new bytes."
+      ],
+      "timestamp_boundary": "API commit timestamps are consistent with a fetch-to-write race, but timestamps alone do not prove the exact read ordering or availability moment. The durable claim is the observed head/workflow mismatch."
+    },
+    {
+      "family_id": "E-ENDPOINT-AND-SNAPSHOT-PRIMARY-20260811",
+      "classification": "OFFICIAL_PRIMARY_DOCUMENTATION_NOT_PROJECT_ACCEPTANCE",
+      "sources": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-4.2.4",
+          "checked_utc": "2026-08-11T11:54:55Z",
+          "claim": "HTTP(S) userinfo is deprecated; a recipient should parse for it and treat its presence from an untrusted source as an error."
+        },
+        {
+          "url": "https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlparse",
+          "checked_utc": "2026-08-11T11:54:55Z",
+          "claim": "Python exposes parsed username, password, hostname and port separately, supporting the implemented userinfo check; percent-encoded sequences are not decoded by urlparse."
+        },
+        {
+          "url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+          "checked_utc": "2026-08-11T11:54:55Z",
+          "claim": "NVIDIA documents the hosted LLM URL as integrate.api.nvidia.com and the exact chat operation as POST /v1/chat/completions."
+        },
+        {
+          "url": "https://docs.github.com/en/rest/actions/workflow-runs",
+          "checked_utc": "2026-08-11T11:54:55Z",
+          "claim": "GitHub workflow-run queries and objects bind runs to an exact head_sha; run evidence must therefore not be silently transferred to another PR head."
+        },
+        {
+          "url": "https://docs.github.com/en/rest/git/refs",
+          "checked_utc": "2026-08-11T11:54:55Z",
+          "claim": "GitHub reference updates support non-forced fast-forward behavior and conflict responses, providing a control-plane analogy for compare-and-set writes."
+        }
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "id": "H-ENDPOINT-CAPABILITY-IDENTITY-001",
+      "concept": "EndpointCapabilityIdentity",
+      "hypothesis": "FREE_ONLY authorization must bind a normalized exact request-target capability <scheme, host, effective port, canonical base path and operation template, absent userinfo/query/fragment, provider, model/product, entitlement evidence version, cost principal and budget epoch>; origin equality alone is insufficient.",
+      "counterhypothesis": "Origin-level binding is sufficient because alternate same-origin paths merely fail and provider billing/account policy is origin-wide.",
+      "synthesis": "Preserve strict origin binding, then require the production target to equal a provider-owned operation template. Same-origin path variation is denied unless a separately typed capability and cost policy authorizes it.",
+      "decisive_tests": [
+        "Require canonical NVIDIA production base path exactly /v1, empty params/query/fragment and resolved selector exactly /v1/chat/completions before constructing the authenticated request.",
+        "Run alternate path, dot-segment, percent-encoding, query and fragment fixtures; every unauthorized target must stop before the injected opener.",
+        "Bind normalized endpoint capability identity into semantic request, cost-authority and execution-lineage receipts.",
+        "Hold body/provider constant while varying authorized endpoint identity; semantic content may match, but execution lineage and request-target receipt must not alias."
+      ]
+    },
+    {
+      "id": "H-RESEARCH-EVIDENCE-CUT-CAS-001",
+      "concept": "ResearchEvidenceCutCAS",
+      "hypothesis": "Every supervisor decision must bind one coherent evidence cut containing canonical base head, exact candidate PR heads/blobs, exact workflow head_sha/run IDs and source-check timestamps; all mutable heads must be re-read immediately before write, and any change forces STALE_INPUT_RETRY or explicit supersession.",
+      "counterhypothesis": "Monotonic safety blockers can be propagated across head changes without re-reading because additional commits cannot invalidate the conservative denial.",
+      "synthesis": "A denial may remain operationally fail-closed, but it must be labelled STALE_INPUT until the blocker is revalidated on the new exact bytes. No acceptance, blocker closure or capability credit may cross a head change.",
+      "decisive_tests": [
+        "Inject a PR-head advance between supervisor evidence fetch and canonical write; require compare-and-set failure or a STALE_INPUT_RETRY receipt.",
+        "Repeat with a commit that repairs the blocker and one that leaves it unchanged; both require exact-head revalidation, while only the latter may supersede the old blocker as still-open.",
+        "Hash <canonical parent, PR head, source blobs, workflow head_sha/run IDs, checked_at> into evidence_cut_id and persist supersedes edges in UnifiedDB/ClayGraph.",
+        "Reject any green or failed workflow whose recorded head_sha differs from the candidate bytes being adjudicated."
+      ]
+    }
+  ],
+  "preserved_negative_and_null_results": [
+    "The userinfo repair is positive mechanism evidence but remains unmerged candidate code.",
+    "The exact-head workflows both failed; raw logs were unavailable and local gh is not installed, so causes remain UNKNOWN.",
+    "Combined status contexts observed at the exact new PR head remain empty.",
+    "The same-origin path/query/fragment probe made no external request and does not show a provider charge, provider acceptance or credential leakage.",
+    "Origin binding remains useful and prevented cross-origin scope in the tested fixtures.",
+    "The 402 and cost-principal blockers survive at the new head; the userinfo change is orthogonal.",
+    "The supervisor's two commits are response/routing of the prior event and are not independent confirmation.",
+    "No accepted-Ubuntu receipt, provider execution, canonical semantic promotion, work-package completion, training, Harness mutation or live-FRANK execution occurred."
+  ],
+  "requested_reentry": [
+    "ClayCode runtime worker: preserve userinfo rejection, then reject noncanonical production path, params, query and fragment before request construction; build the final URL only from trusted provider-owned components.",
+    "ClayCode identity worker: bind normalized request-target capability plus cost principal into request/execution receipts; do not let same host and body collapse different endpoint capabilities.",
+    "ClayCode supervisor: implement ResearchEvidenceCutCAS and re-read PR head plus head-bound workflow set immediately before every canonical steering write.",
+    "F-V01-09 EffectGate worker: require exact endpoint capability and current budget epoch before any provider effect authorization.",
+    "F-V01-12 capability worker: model provider origin, operation path, model/product, entitlement and cost principal as separate typed capability fields.",
+    "F-V01-13 observability worker: include evidence_cut_id, candidate_head, workflow_head_sha, endpoint_capability_id and stale-input disposition in redacted receipts.",
+    "UnifiedDB/ClayGraph worker: persist immutable evidence cuts and supersession edges; never transfer workflow or blocker closure across a head mismatch.",
+    "Provider runtime worker: retain the unresolved dual 402 hard-stop, payment-latch and credential-rotation tests from the prior event.",
+    "Policy/target worker: replace the unmerged candidate policy's obsolete developer-system mission goal with the canonical Hostinger Ubuntu VPS target.",
+    "Harness reviewer: independently reexecute exact repaired bytes and inspect Ubuntu/CI receipts; review only and do not mutate Frank's protected Harness."
+  ],
+  "authority_boundary": {
+    "exact_candidate_blob_executed_in_local_sandbox": true,
+    "execution_scope": "INJECTED_TRANSPORT_AND_DUMMY_DATA_ONLY",
+    "external_network_or_provider_request": false,
+    "target_repo_mutated": false,
+    "canonical_room_event_created": true,
+    "harness_mutated": false,
+    "external_effect_beyond_canonical_event_write": false,
+    "canonical_semantics_promoted": false,
+    "work_package_promoted": false,
+    "frank_v0_1_finished": false,
+    "training_run": false,
+    "real_secrets_read_or_serialized": false
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version":"1.0",
+  "evidence_id":"F-V01-HARNESS-INGRESS-SECURITY-20260810T2059p0700",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program":"FRANK_V0_1",
+  "target":"self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "delta_class":"FRANK_V0_1_TEST_DELTA_PLUS_CODE_CANDIDATE_PLUS_NEGATIVE_RESULT",
+  "affected_work_packages":[
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-10-PROACTIVE-AGENCY-WEB",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "direct_target_observations":[
+    "Current target main claycode/frank_security.clay still keys SecurityState/security_boot to Frank.id and does not expose field-level open-web/tool/visual trust semantics.",
+    "Current target main claycode/frank_runtime.clay still contains one_entity_across_nodes while owner-fixed identity requires self.root server-binary/state-lineage identity and external client/provider relations.",
+    "Current target main frank_effects.clay already provides a useful narrower-capability plus execute/independent-verify effect skeleton, so ingress trust should feed that boundary rather than duplicate it.",
+    "Current frank_api_fabric.clay is a provider capability/credential registry, not the required inbound production token-authenticated Frank API."
+  ],
+  "local_reference_execution": {
+    "unit_cases":14,
+    "unit_pass":14,
+    "property_fuzz_seed":1729,
+    "property_fuzz_cases":25000,
+    "property_violations":0,
+    "decision_counts": {
+      "ALLOW_DATA_ONLY":644,
+      "ALLOW_SCOPED":1169,
+      "ALLOW_VERIFIED":3918,
+      "BLOCK_COMMIT":8238,
+      "QUARANTINE":11031
+    },
+    "mutation_control": {
+      "mutation":"remove independent trusted commit-authority requirement on untrusted control surfaces",
+      "same_seed_cases":25000,
+      "detected_property_violations":708,
+      "first_detected_case":7,
+      "class":"PASS_WITHOUT_TRUSTED_CONTROL_COMMIT_AUTHORITY"
+    },
+    "evidence_class":"LOCAL_DETERMINISTIC_SANDBOX_REFERENCE_NOT_TARGET_RUNTIME_ACCEPTANCE"
+  },
+  "mechanism_candidate": {
+    "research_reference":"tools/harness_ingress_trust_gate.py",
+    "property_fuzzer":"tools/harness_ingress_trust_fuzz.py",
+    "direct_target_pr":105,
+    "direct_target_branch":"clay/frank-v01-ingress-trust-20260810",
+    "target_candidate":"claycode/frank_web_ingress.clay",
+    "target_candidate_commit":"a98e5253372103bcda0df4827cb76d2c975b1110",
+    "principles":[
+      "field-level trust rather than envelope-only trust",
+      "value-hash plus provenance-bound verification for sensitive metadata",
+      "model confidence/GWT ignition/ClayGraph salience/translator style cannot verify security fields",
+      "verified resource identity does not itself authorize an effect",
+      "control-surface commit requires independent trusted commit authority",
+      "untrusted persistent control commits are blocked",
+      "instruction-like external text may be admitted only as opaque non-authoritative data",
+      "authenticated direct messages remain a separate scoped-intent channel"
+    ]
+  },
+  "external_evidence_summary": [
+    {"source":"arXiv:2607.05120","finding":"data injection can exploit trusted-looking data fields/metadata even when instruction injection is separately controlled","use":"field-level taint test obligation"},
+    {"source":"ACL 2026 / 2026.acl-long.443","finding":"verify-before-commit is a useful tool-stream defense candidate","use":"precommit verification obligation"},
+    {"source":"arXiv:2605.31042","finding":"untrusted control-like content can persist through workspace writes and trigger later","use":"persistent-control taint obligation"},
+    {"source":"arXiv:2607.05277","finding":"privilege-separated trusted/untrusted browsing is a competing defense mechanism","use":"countermechanism to compare"}
+  ],
+  "direct_ci_negative_results": [
+    {
+      "repo":"gschaidergabriel/Dr.-Unterweger",
+      "pr":105,
+      "run_id":31395289386,
+      "head":"73e2f29396c45b291339ad26486c930f6c0ff118",
+      "workflow":"Frank owner-fixed ingress security conformance",
+      "conclusion":"failure",
+      "interpretation":"Expected first discriminator failure before production candidate existed."
+    },
+    {
+      "repo":"gschaidergabriel/Dr.-Unterweger",
+      "pr":105,
+      "run_id":31395431336,
+      "head":"a98e5253372103bcda0df4827cb76d2c975b1110",
+      "workflow":"Frank owner-fixed ingress security conformance",
+      "conclusion":"failure",
+      "interpretation":"Unexpected after candidate addition; logs unavailable, so cause remains UNKNOWN and candidate is not promoted."
+    },
+    {
+      "repo":"gschaidergabriel/Dr.-Unterweger",
+      "pr":105,
+      "run_id":31395735324,
+      "head":"29c5ca66e4f878fab1abaaf51a5fdfea0eeba2bf",
+      "workflow":"Frank owner-fixed ingress security conformance",
+      "conclusion":"failure",
+      "interpretation":"Still failing after explicit PR-head checkout binding; logs unavailable, so integration/CI blocker remains UNKNOWN."
+    },
+    {
+      "repo":"gschaidergabriel/Dr.-Unterweger",
+      "pr":105,
+      "run_id":31395735417,
+      "head":"29c5ca66e4f878fab1abaaf51a5fdfea0eeba2bf",
+      "workflow":"Frank Deep Integrity",
+      "conclusion":"failure",
+      "interpretation":"Independent full-integrity failure on same head; exact failing step unavailable and therefore not attributed to ingress candidate."
+    }
+  ],
+  "strongest_counterhypothesis":"The added field-level ingress contract is unnecessary or too restrictive because existing frank.effects/final_security_gate plus structured JSON boundary already prevents meaningful escalation, and the local Python reference over-models control surfaces that the real ClayCode runtime never exposes.",
+  "next_discriminator":"Compile/type-check the exact target candidate with the current ClayCode compiler, execute target-side adversarial fixtures against real Frank ingress/effect surfaces, obtain decoded CI/runtime receipts, and compare candidate against simpler envelope-only authority separation plus privilege-separated browsing baseline.",
+  "promotion":"NOT_PROMOTED",
+  "reason":"Local deterministic evidence is strong for the reference mechanism and mutation-sensitive, but direct target CI remains red/undifferentiated and the candidate is not yet runtime-integrated or target-VPS validated.",
+  "legacy_harness_reentry":"Historical H-WP-14/H-WP-17 work is retained only as evidence/diagnostic lineage under the current FRANK_V0_1-only program."
+}

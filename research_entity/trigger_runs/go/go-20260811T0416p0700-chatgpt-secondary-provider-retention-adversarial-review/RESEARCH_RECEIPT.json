@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0416p0700-chatgpt-secondary-provider-retention-adversarial-review",
+  "trigger": "go",
+  "status": "SYNC_PENDING_TARGET_EXECUTION",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "is_frank": false,
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "affected_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "concurrency_note": {
+    "colliding_path": "research_entity/trigger_runs/go/go-20260811T0416p0700-chatgpt-secondary-provider-retention-adversarial/RESEARCH_RECEIPT.json",
+    "action": "NOT_OVERWRITTEN",
+    "reason": "Another worker committed the path first. This review preserves only evidence directly observed by this invocation."
+  },
+  "verified_prior_integration": {
+    "pr": 261,
+    "merge_commit": "15c9c4a59c2a1d0608b09be3b8379f5f8f080ad4",
+    "target_run": 31423170075,
+    "artifact_id": 9076164663,
+    "artifact_sha256": "b2e6cf7fc59b66b8aa2ba6d90738ce6b7587f6bf743e095c7f8468648351cb3d",
+    "result": "PASS",
+    "verified": [
+      "exact execution-generation integration matrix",
+      "typed provider normal differential",
+      "provider outcome -> V17 provenance-bound reentry -> DONE",
+      "ACK blackhole synthetic reconciliation with provider row count 1",
+      "current WP03 frontend + TypedIR provider probe",
+      "repository static integrity"
+    ]
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "Google AIP-155",
+      "finding": "request IDs can provide idempotency but APIs may choose a reasonable bounded honoring timeframe"
+    },
+    {
+      "source": "RFC 9110 section 9.2.2",
+      "finding": "non-idempotent requests should not be automatically retried without independent knowledge of idempotent semantics or proof the original was not applied"
+    },
+    {
+      "source": "Stripe idempotent requests",
+      "finding": "keys may be pruned after a bounded interval; reuse after pruning becomes a new request; parameter drift under one key is rejected"
+    },
+    {
+      "source": "Stripe API error handling",
+      "finding": "some API outcomes are indeterminate and require later observation rather than guessed success/failure"
+    }
+  ],
+  "hypothesis": "Provider idempotency retention UNKNOWN must not mint uncertain-effect retry authority.",
+  "strongest_counterhypothesis": "A production provider adapter could separately prove a finite or effectively non-expiring key horizon and make valid_until=None unreachable; the generic current type does not encode such a guarantee.",
+  "one_go_oob_by_this_invocation": {
+    "experiment": "UNKNOWN_RETENTION_TTL_RESURRECTION",
+    "diagnostic_pr": 264,
+    "head": "5daa8484e9d231339af43543bd238fd31377061c",
+    "target_run": 31432701813,
+    "state": "QUEUED_NOT_EXECUTED",
+    "matched_control": "finite retention advanced beyond expiry must deny retry",
+    "discriminator": "unknown retention with simulated provider key pruning would duplicate synthetic business effect iff retry is admitted",
+    "result": "UNKNOWN_PENDING_TARGET",
+    "external_effect": false,
+    "canonical_state_mutated": false
+  },
+  "parallel_repair_review": {
+    "pr": 265,
+    "head": "bd805dacdc29f82a30174d880d2deac3541994cc",
+    "repair": "ProviderIdempotencyContract.assert_same_intent_retry denies valid_until=None with PROVIDER_IDEMPOTENCY_RETENTION_UNKNOWN and keeps expired/live distinctions",
+    "target_run": 31432786222,
+    "target_state": "QUEUED_NOT_EXECUTED",
+    "review_id": 4901025136,
+    "review_finding": "The same assert_same_intent_retry method is already called by CallerBoundEffectLifecycleRuntime while binding a NEW provider contract. Therefore the patch may block unknown-retention contracts before first execution, broader than the PR's retry-only wording. Its added test is isolated to the dataclass and does not adjudicate the integrated lifecycle path.",
+    "required_adjudication": [
+      "Policy A: unknown retention intentionally forbids contract binding/first execution; update semantic claim and integrated tests accordingly.",
+      "Policy B: unknown retention may bind/execute once but cannot authorize an uncertain retry; split binding validation from retry validation and preserve read-only reconciliation."
+    ],
+    "promotion": "DO_NOT_PROMOTE_FROM_ISOLATED_TEST_ALONE"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_PENDING_TARGET_AND_SCOPE_ADJUDICATION",
+    "invariant": "UNKNOWN != infinite provider idempotency retention",
+    "preferred_boundary": "retry authority requires explicit still-live provider retention evidence; evidence-only reconciliation remains separate from effect authority"
+  },
+  "nonclaims": [
+    "No new retention OOB target result exists yet in this invocation.",
+    "Queued workflow status is not PASS.",
+    "No real external provider write was performed.",
+    "No whole Frank v0.1 acceptance is claimed.",
+    "No final training authorization is granted.",
+    "Frank/self.root receives no Harness mutation authority."
+  ],
+  "next_falsifiers": [
+    "Execute and inspect PR #264 target artifact.",
+    "Execute PR #265 target workflow and add integrated lifecycle coverage for first execution versus retry.",
+    "After provider-retention semantics are fixed, return to real provider timeout-after-acceptance/reconciliation and ordinary-route non-bypassability."
+  ]
+}

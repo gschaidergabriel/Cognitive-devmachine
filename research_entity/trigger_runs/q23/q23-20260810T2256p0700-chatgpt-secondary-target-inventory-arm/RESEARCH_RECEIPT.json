@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2256p0700-chatgpt-secondary-target-inventory-arm",
+  "trigger": "q23",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity_class": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK"
+  },
+  "status": "MATERIAL_RESEARCH_DELTA_COMMITTED_TARGET_EXECUTION_SYNC_PENDING",
+  "program": "FRANK_V0_1",
+  "target": "self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "work_ref": "WORK-Q23-VISION-SCALE-FEATURE-TAP-20260810",
+  "current_hypothesis": "The existing Qwen3.5 visual encode should be tested as the first deep visual representation for Frank MVC/open-set routing before adding a second heavy visual backbone; same-request merged feature reuse is physically available through libmtmd but persistent prototype reuse requires an explicit compatibility/lifetime contract.",
+  "strongest_counterhypothesis": "Raw Qwen/mmproj features may be poorly calibrated for user-specific open-set familiarity, or target runtime/resource behavior may make a dedicated lightweight encoder Pareto-superior.",
+  "new_primary_runtime_finding": {
+    "finding": "Current libmtmd stores encoded media output in context/batch-owned std::vector<float> buffers and returns borrowed pointers into those buffers. This supports a same-request feature tap but does not itself define a durable or restart-safe Frank feature handle. Serialized input chunks preserve chunk/preprocessing metadata rather than durable encoded embedding state; loaded placeholder media cannot simply be re-encoded without original media backing.",
+    "evidence_refs": [
+      "ggml-org/llama.cpp:tools/mtmd/mtmd.cpp current main mtmd_encode_chunk/mtmd_get_output_embd",
+      "ggml-org/llama.cpp:tools/mtmd/mtmd.cpp current main mtmd_batch_get_output_embd",
+      "ggml-org/llama.cpp:tools/mtmd/mtmd.cpp current main mtmd_input_chunk_save/load"
+    ],
+    "disposition": "REFINES_PEH_AND_VISUAL_ENCODER_COMPATIBILITY_CONTRACT"
+  },
+  "execution_delta": {
+    "target_repo_semantic_name": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "probe_commit": "0844e78cfee94116a881c189123f573aca2014d4",
+    "workflow_commit": "be8e98e7a20c99f3034cfb2cbf1367e7f46d0291",
+    "probe_path": "tests/q23_target_vps_multimodal_inventory_v1.py",
+    "workflow_path": ".github/workflows/q23-target-vps-multimodal-inventory-v1.yml",
+    "intended_receipt_path": "runtime/vps_unifieddb/q23_target_vps_multimodal_inventory_v1/LATEST.json",
+    "receipt_observed_at_research_write": false,
+    "execution_status": "SYNC_PENDING_NO_TARGET_PASS_CLAIM",
+    "probe_scope": [
+      "host OS/kernel/CPU/memory/filesystem inventory",
+      "NVIDIA/ROCm/PCI accelerator visibility",
+      "bounded llama.cpp binary discovery and --version probes",
+      "bounded Qwen3.5-4B/mmproj GGUF artifact discovery"
+    ],
+    "explicit_non_effects": [
+      "no model load",
+      "no model inference",
+      "no service restart",
+      "no Frank runtime mutation",
+      "no external network use by probe",
+      "no large model-file hashing"
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION_ONLY",
+    "decision": "Keep merged-first MVC ordering and bind any reusable prototype/calibrator to an exact VisualEncoderCompatibilityID. Do not treat stock libmtmd cache/chunk lifetime as semantic persistence.",
+    "affected_components": [
+      "digital_retina",
+      "mvc",
+      "qwen35",
+      "libmtmd",
+      "unifieddb",
+      "claygraph",
+      "gwt",
+      "recovery"
+    ],
+    "promotion": "NONE"
+  },
+  "next_falsifier": "Observe the target-VPS inventory receipt. If exact llama.cpp + Qwen3.5-4B + mmproj artifacts are present, bind their hashes/build/config and execute the existing runtime-sanity/feature-tap matrix with an actual vision-encode invocation counter. If absent, classify artifact/runtime availability as the concrete blocker before any feature-quality claim.",
+  "go_q23_exchange": {
+    "q23_to_go": "Target execution lane is armed but unreceipted. GO should treat Qwen feature reuse as a candidate with explicit lifetime/compatibility semantics, not as promoted architecture or persistent cache truth.",
+    "go_to_q23_need": "Do not allocate duplicate runtime work unless a current target receipt or capability change resolves the artifact/backend preconditions."
+  },
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "harness_mutated_by_frank": false,
+    "final_training_started": false,
+    "release_credit_created": false
+  }
+}

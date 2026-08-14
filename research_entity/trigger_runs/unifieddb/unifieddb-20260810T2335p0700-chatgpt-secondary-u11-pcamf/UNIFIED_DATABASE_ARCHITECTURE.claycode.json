@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0","architecture_id":"U11_PCAMF","status":"CANDIDATE_NOT_PROMOTED",
+  "principle":"Internal memory/query structure may be opaque and machine-native. Canonical truth, authority, replay and effect completion remain deterministic and proof-bound.",
+  "planes":{
+    "canonical_truth_spine":{"authoritative":true,"requirements":["append-only epoch versions","exact state root","execution_id + lease_epoch fencing","idempotent semantic transaction","replay at epoch","crash/restart recovery"]},
+    "typed_receipt_lattice":{"authoritative":true,"chain":["GWT_USE","EFFECT_ATTEMPT","VERIFIED_OUTCOME","CAUSAL_CREDIT","ADMITTED_DELTA","REENTRY","TERMINAL_DONE"],"alternate_terminal":["DONE_NO_LEARNING"],"rule":"non-empty IDs are insufficient; every edge resolves to verified canonical receipt in same admitted execution lineage"},
+    "associative_memory_fields":{"authoritative":false,"allowed":["PKM","ANN","modern Hopfield/energy memory","model-native neural memory","HDC exploratory"],"rule":"field output is candidate selection only"},
+    "adaptive_query_compiler":{"authoritative":false,"rule":"choose exact/temporal/PKM/ANN/FTS/graph plan from measured cost + admissibility; approximate path must abstain/fallback and rebind selected result to canonical record+epoch before use"},
+    "incremental_projection_engine":{"authoritative":false,"rule":"consume committed deltas/outbox; publish projection_source_epoch/root/readiness atomically; mixed/unknown epochs fail closed or rebuild"},
+    "authenticated_epoch_proofs":{"authoritative":"supports audit, not independent truth","rule":"periodic Merkle segment/checkpoint over canonical receipt/state hashes; inclusion/consistency proofs; no distributed consensus requirement for v0.1 single-VPS"}
+  },
+  "promotion_rule":"No learned/opaque field can change canonical state, causal credit, terminal DONE, or effect authority directly."
+}

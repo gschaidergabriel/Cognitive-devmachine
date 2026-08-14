@@ -1,0 +1,106 @@
+module atomic.asvb.v1
+version "0.1-candidate"
+status RADICAL_CANDIDATE_NOT_PROMOTED
+
+// Authority-Separated Voice Braid (ASVB)
+// Authorization substrate should be standard OAuth/token-exchange/RAR/sender-constraining.
+// This candidate concerns ClayCode semantic provenance, not a new cryptographic protocol.
+
+class VoiceClass = AUTHENTICATED_ORIGIN | RELAY_ACTOR | TRANSPORT_METADATA | RELAY_ASSERTED_ORIGIN
+class VoiceAuthority = USER_INTENT | RELAY_CONTEXT | DATA_ONLY | UNAUTHENTICATED_ASSERTION
+
+record VoiceSegment {
+  voice_class: VoiceClass
+  principal: PrincipalRef?
+  semantic_payload: ClayCode
+  source_hash: Hash
+  parent_request: RequestRef
+  provenance: ProvenanceSet
+  authority: VoiceAuthority
+}
+
+record DelegationContext {
+  subject: PrincipalRef?
+  actor_chain: Ordered<PrincipalRef>
+  resource: ResourceIdentity = self.root
+  authorization_details: Set<EffectScope>
+  session_id: SessionId
+  request_id: RequestId
+  credential_fingerprint: CredentialFingerprint
+  semantic_epoch: Epoch
+  sender_constraint: EvidenceRef?
+}
+
+record VoiceBraid {
+  request: RequestRef
+  delegation: DelegationContext
+  segments: Ordered<VoiceSegment>
+  turn_intent_ceiling: Set<EffectScope>
+  braid_hash: Hash
+}
+
+rule API_TOKEN = CREDENTIAL_NOT_IDENTITY
+rule PEER_AI != self.root
+rule CLIENT != self.root
+rule token_possession never_mints_effect_authority
+rule one_global_execution_lease remains owner_fixed and ASVB_does_not_bypass_busy
+
+rule cryptographically_authenticated_user_segment -> AUTHENTICATED_ORIGIN + USER_INTENT
+rule relay_generated_segment -> RELAY_ACTOR + RELAY_CONTEXT
+rule transport_headers_routing_metadata -> TRANSPORT_METADATA + DATA_ONLY
+rule relay_claims("user said X") without independent origin proof -> RELAY_ASSERTED_ORIGIN + UNAUTHENTICATED_ASSERTION
+
+rule DE_TO_CLAY preserves VoiceSegment boundaries + principal + source_hash + authority
+rule CLAY_TO_DE may render coherent conversation but may not erase provenance in internal state
+rule model_summary_of_user_text remains RELAY_ACTOR unless origin-bound source span/proof is preserved
+rule relay_translation_of_authenticated_origin may preserve USER_INTENT only when semantic_equivalence_receipt + origin_binding remain valid
+
+rule delegation_scope monotonically_non_increasing
+rule requested_effect must_be_subset_of turn_intent_ceiling
+rule requested_effect must_be_subset_of every delegated authorization ceiling
+rule relay_actor cannot widen authenticated_origin authority
+rule relay_actor may add context/recommendations/questions without inheriting USER_INTENT authority
+rule transport_metadata has zero instruction_authority
+rule VoiceBraid salience_or_GWT_ignition never_mints_authority
+rule current FrankExecutionLease holder identity != semantic origin identity unless evidence says same principal
+
+rule effect_request_from_braid -> collect only USER_INTENT segments with valid current origin/provenance + normal effect gate
+rule effect_request depending_on RELAY_CONTEXT may be proposed/reasoned_about but requires independently sufficient authority before effect
+rule missing_or_ambiguous_origin_proof -> preserve ambiguity; never promote to authenticated origin
+rule stale_epoch|revoked_delegation|audience_mismatch|sender_constraint_failure -> reject_or_degrade according_to standard authorization layer
+rule replayed_request_id_or_nonce -> reject
+
+// Synthetic reference used parent-sealed grant edges solely to discriminate semantics.
+// Production MUST NOT promote bespoke HMAC as authorization architecture.
+invariant production_authorization_prefers_standard_protocols
+invariant ASVB_novelty_claim_excludes_OAuth_token_exchange_RAR_DPoP_macaroons
+invariant authority_separation_survives_translation_summary_memory_and_reentry
+invariant external_AI_can_participate_without_identity_merger
+invariant user_can_port_Frank_through_bridges_without_relay_becoming_user
+
+metric relay_to_user_voice_laundering_rate
+metric authenticated_origin_preservation_rate
+metric valid_relay_context_acceptance_rate
+metric authority_false_allow_rate
+metric authority_false_deny_rate
+metric braid_validation_latency
+metric braid_wire_overhead
+metric translation_voice_boundary_error_rate
+
+acceptance requires matched_test([
+  DIRECT_USER,
+  USER_TO_AI_TO_FRANK,
+  USER_TO_AI1_TO_AI2_TO_FRANK,
+  AI_ONLY_TO_FRANK,
+  RELAY_ASSERTED_USER_WITHOUT_PROOF,
+  RELAY_SCOPE_ESCALATION,
+  ORIGIN_TAMPER,
+  ACTOR_REORDER,
+  STALE_EPOCH,
+  REVOKED_TOKEN,
+  AUDIENCE_MISMATCH,
+  REPLAY,
+  DE_TO_CLAY_SUMMARY_TRANSLATION,
+  EFFECT_REQUEST_FROM_MIXED_VOICES,
+  SINGLE_SPAWN_BUSY_CONCURRENCY
+])

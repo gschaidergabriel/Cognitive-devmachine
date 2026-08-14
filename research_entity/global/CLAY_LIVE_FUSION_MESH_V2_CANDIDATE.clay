@@ -1,19 +1,22 @@
 module clay.research.live_fusion_mesh_v2
-version "0.2-candidate"
+version "0.4-candidate"
 status CANDIDATE_NOT_PROMOTED
 
 goal="Frank v0.1 voll lauffähig auf Andreas PC"
 parent_mesh=@research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md
 parent_swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
 parent_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+omnisource=@research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay
+go_q23_bridge=@research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay
 work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
 state=UnifiedDB
 topology=ClayGraph
 coordination_language=latest_ClayCode
 
-// Research origin: 2026-08-10 exact-go live-fusion cycle.
-// This candidate strengthens targeted distribution without treating connectivity as evidence.
-// It is intentionally additive and rollbackable; it does not supersede owner-fixed protocols.
+// Candidate strengthens targeted distribution without treating connectivity as evidence.
+// Current internal evidence shows stronger same-hot-store observation can create substantial
+// backaction, so control/observer projections must account for latency/I/O/WAL/resource cost.
+// It remains additive/rollbackable and does not supersede owner-fixed protocols.
 
 record KnowledgeDeltaV2 {
   delta_id:Ref
@@ -25,61 +28,136 @@ record KnowledgeDeltaV2 {
   semantic_tags:Set<Ref>
   affected_work:Set<Ref>
   affected_claims:Set<Ref>
+  affected_hypotheses:Set<Ref>
   causal_predecessors:Set<Ref>
   evidence_refs:Set<Ref>
   truth_class:Ref
   payload_ref:Ref
+  work_id:Ref?
+  work_spec_rev:Ref?
+  repo_head:Ref?
   invalidation_priority:Score
+  created_at:Time
+}
+
+record KnowledgeNeedV2 {
+  need_id:Ref
+  origin_worker_or_branch:Ref
+  question:Clay
+  semantic_tags:Set<Ref>
+  affected_work:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  desired_evidence:Set<Ref>
+  desired_source_classes:Set<Ref>
+  desired_falsifier:Clay?
+  information_gain:Score
+  urgency:Score
+  expires_or_revalidate_at:Time?
+  created_at:Time
+}
+
+record CounterChallengeV2 {
+  challenge_id:Ref
+  target_claim_or_hypothesis:Ref
+  origin_worker_or_branch:Ref
+  strongest_competing_mechanism:Clay
+  requested_control_or_evidence:Clay
+  ancestry_difference_requirement:Clay?
+  urgency:Score
   created_at:Time
 }
 
 record BranchDependencyIndex {
   branch:Ref
   current_work:Set<Ref>
+  current_work_revisions:Set<Ref>
   current_claims:Set<Ref>
+  current_hypotheses:Set<Ref>
   semantic_tags:Set<Ref>
   dependency_refs:Set<Ref>
   invalidator_refs:Set<Ref>
+  subscriptions:Set<Ref>
+  knowledge_needs:Set<Ref>
   projection_epoch:Ref
   projection_hash:Hash
 }
 
+record BranchSubscriptionV2 {
+  branch_or_worker:Ref
+  semantic_tags:Set<Ref>
+  work_refs:Set<Ref>
+  hypothesis_refs:Set<Ref>
+  source_classes:Set<Ref>
+  knowledge_need_refs:Set<Ref>
+  priority:Score
+  expires_or_revalidate_at:Time?
+}
+
 record RoutePlan {
-  delta:Ref
-  mode:TARGETED_DELTA|DENSE_FANOUT|DIGEST_ONLY
+  delta_or_message:Ref
+  mode:TARGETED_FULL_REF|TARGETED_DIGEST|SUBSCRIPTION_PULL|DENSE_FANOUT|ANTI_ENTROPY_REPAIR|INDEX_ONLY
   predicted_affected_fraction:Score
   predicted_targeted_cost:Score
   predicted_dense_cost:Score
+  predicted_pull_cost:Score?
   predicted_repair_cost:Score
+  predicted_observer_backaction:Score?
+  source_lineage_diversity:Score?
   confidence:Score
   reason:Clay
   route_epoch:Ref
 }
 
 record RouteDecision {
-  delta:Ref
+  delta_or_message:Ref
   target_branch:Ref
   route_plan:Ref
-  reason:DIRECT_SEMANTIC|DIRECT_WORK|CAUSAL_DEPENDENT|CONFLICT_INTERRUPT|ANTI_ENTROPY_REPAIR|DENSE_FANOUT|INDEX_ONLY
+  reason:DIRECT_SEMANTIC|DIRECT_WORK|DIRECT_HYPOTHESIS|KNOWLEDGE_NEED_MATCH|SUBSCRIPTION_MATCH|CAUSAL_DEPENDENT|CONFLICT_INTERRUPT|ANTI_ENTROPY_REPAIR|DENSE_FANOUT|INDEX_ONLY|GO_Q23_BRIDGE
   payload_mode:FULL_REF|DIGEST_ONLY|NONE
   urgency:NEXT_SAFE_POINT|NEXT_CHECKPOINT|INDEX_ONLY
   dependency_path:Set<Ref>
   route_epoch:Ref
 }
 
+record DiscoveryBeaconV2 {
+  beacon_id:Ref
+  origin:Ref
+  semantic_tags:Set<Ref>
+  novelty_class:Ref
+  source_class:Ref
+  source_lineage:Set<Ref>
+  content_hash:Hash
+  payload_ref:Ref
+  affected_work:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  created_at:Time
+}
+
+record PullRequestV2 {
+  request_id:Ref
+  requester:Ref
+  beacon_or_delta:Ref
+  requested_payload_or_subgraph:Ref
+  reason:Clay
+  created_at:Time
+}
+
 record AntiEntropyDigest {
   digest_id:Ref
   semantic_epoch:Ref
   delta_hashes:Set<Hash>
+  open_need_hashes:Set<Hash>
   changed_claims:Set<Ref>
+  changed_hypotheses:Set<Ref>
   changed_work:Set<Ref>
   dependency_projection_hash:Hash
   source_projection_hash:Hash
+  q23_bridge_hash:Hash?
   created_at:Time
 }
 
 record FusionReceipt {
-  delta:Ref
+  delta_or_message:Ref
   branch:Ref
   route_reason:Ref
   delivered:Bool
@@ -87,65 +165,113 @@ record FusionReceipt {
   plan_revalidated:Bool
   used:Bool
   local_effect:Bool
+  causal_credit_supported:Bool
   interrupted_before_effect:Bool
   ack_epoch:Ref
   dependency_projection_hash:Hash
   observed_at:Time
 }
 
-// Differential/live-fusion principle: move semantic deltas through the current dependency graph
-// when locality exists; do not dogmatically incrementalize dense/global invalidations.
-rule material_delta -> canonicalize(KnowledgeDeltaV2)
+record RouteTelemetryV2 {
+  route_window:Ref
+  relevant_branch_recall:Score?
+  false_interrupt_rate:Score?
+  duplicate_payload_suppression:Score?
+  knowledge_need_response_rate:Score?
+  full_payload_fanout_per_delta:Score?
+  pull_rate:Score?
+  stale_window_until_repair:Duration?
+  route_cost_prediction_error:Score?
+  observer_backaction_cost:Score?
+  CPU_RAM_IO_network_token_context_cost:Score?
+}
+
+// Canonicalize and route by current state.
+rule material_delta -> canonicalize KnowledgeDeltaV2
 rule material_delta -> content_hash_deduplicate_preserve_distinct_provenance
-rule material_delta -> resolve_current(BranchDependencyIndex for all registered peer branches)
-rule material_delta -> estimate(RoutePlan from dependency_span+semantic_span+payload_size+repair_risk+current_load)
-rule RoutePlan.mode = argmin_expected_cost_subject_to(relevant_branch_recall,stale_risk,authority,provenance)
+rule new_knowledge_need -> canonicalize KnowledgeNeedV2
+rule high_impact_claim -> create_or_reuse CounterChallengeV2
+rule potential_material_finding -> may_emit DiscoveryBeaconV2 before full payload fanout
+rule material_delta|knowledge_need|counter_challenge|discovery_beacon -> resolve current BranchDependencyIndex for registered peer branches
+rule resolve_current -> include current work revision + hypotheses + subscriptions + open KnowledgeNeeds
+
+// Adaptive route planning.
+rule routable_message -> estimate RoutePlan from dependency_span+semantic_span+work_span+hypothesis_span+subscriptions+knowledge_needs+payload_size+repair_risk+current_load+source_ancestry+observer_backaction
+rule RoutePlan.mode = argmin_expected_cost_subject_to(relevant_branch_recall,stale_risk,authority,provenance,knowledge_need_closure)
 rule low_confidence_route_cost_estimate -> prefer safer mode + record uncertainty
+rule current route telemetry -> update route cost priors but never mint truth
 
-rule TARGETED_DELTA -> origin_branch receives FULL_REF
-rule TARGETED_DELTA -> route DIRECT_SEMANTIC to branches whose current semantic/work surface matches
-rule TARGETED_DELTA -> route DIRECT_WORK to branches with explicitly affected_work|affected_claims
-rule DENSE_FANOUT -> route one deduplicated FULL_REF envelope to all currently affected/registered branches
-rule DIGEST_ONLY -> origin receipt + compact digest/index update elsewhere
+rule TARGETED_FULL_REF -> route origin + direct semantic/work/hypothesis/need matches
+rule TARGETED_DIGEST -> route compact provenance+summary+payload_ref to likely affected receivers
+rule SUBSCRIPTION_PULL -> index beacon/delta and notify matching subscription; receiver pulls full payload only if needed
+rule DENSE_FANOUT -> one deduplicated FULL_REF envelope to all affected/registered branches when invalidation is dense or recall risk dominates
+rule INDEX_ONLY -> origin receipt + compact digest/index update elsewhere
+rule ANTI_ENTROPY_REPAIR -> rehydrate missing predecessor/delta refs + rebuild affected projection + plan revalidation
 
-// Invalidations propagate by causal dependency, not only vocabulary overlap.
+// Questions are first-class information flow.
+rule KnowledgeNeedV2 -> route to capability+semantic+source_class matched workers/branches and live_web
+rule q23_relevant KnowledgeNeedV2 -> go_q23_bridge
+rule GO_Q23 inbound question -> treat as KnowledgeNeedV2 with preserved origin
+rule material_answer_to_need -> create KnowledgeDeltaV2 + close/revise need through ResearchReentryReceipt
+rule unanswered_high_value_need -> remains on opportunity frontier
+rule stale_need_due_to_newer_evidence -> supersede_with_receipt
+
+// Invalidations propagate causally, not only vocabulary overlap.
 rule delta.kind in [CONTRADICTS,SUPERSEDES] -> traverse_current_dependency_dependents
 rule dependency_traversal -> continue while affected_current_work_exists and marginal_route_value>coordination_cost
 rule dependency_span_becomes_dense -> reconsider RoutePlan and allow DENSE_FANOUT
 rule high_impact_invalidation -> CONFLICT_INTERRUPT at next safe point
-rule REFines_dependency_premise -> traverse_only_current_direct_dependents unless evidence justifies deeper invalidation
-rule NO_MATERIAL_CHANGE -> DIGEST_ONLY
+rule REFINES_dependency_premise -> traverse_only_current_direct_dependents unless evidence justifies deeper invalidation
+rule NO_MATERIAL_CHANGE -> INDEX_ONLY
 
-// Payload minimization: route references/deltas, not duplicated global context.
-rule route_relevant -> FULL_REF payload reference + minimal provenance envelope
-rule low_relevance -> DIGEST_ONLY or INDEX_ONLY
-rule receiver_needs_details -> pull(payload_ref) from canonical state
+// Payload minimization and pull.
+rule route_relevant_full -> FULL_REF payload reference + minimal provenance envelope
+rule digest_sufficient -> TARGETED_DIGEST + payload_ref
+rule low_relevance -> INDEX_ONLY
+rule receiver_needs_details -> PullRequestV2(payload_ref or task_conditioned_subgraph)
 rule semantic_duplicate -> no duplicate full payload delivery
+rule same_content_distinct_provenance -> preserve provenance but do_not_inflate_replication
 
-// Anti-entropy makes dependency-index incompleteness observable instead of silently stale.
-rule branch_checkpoint -> compare(local dependency/work hash, current AntiEntropyDigest)
-rule ack_epoch_gap|projection_hash_mismatch|missing_predecessor -> request ANTI_ENTROPY_REPAIR
-rule ANTI_ENTROPY_REPAIR -> rehydrate missing delta refs + rebuild affected dependency projection + revalidate plan
+// Anti-entropy.
+rule branch_checkpoint -> compare(local dependency/work/hypothesis/need hash, current AntiEntropyDigest)
+rule ack_epoch_gap|projection_hash_mismatch|missing_predecessor|missing_need_answer -> request ANTI_ENTROPY_REPAIR
 rule repair_failure -> DEGRADED_COORDINATION + no_global_nonoverlap_claim
 rule stale_projection -> never silently treated CURRENT
 
-// Causal ordering is weaker than total ordering: only declared predecessors must be seen before
-// a dependent delta is consumed for a material effect.
+// Causal ordering is weaker than total ordering.
 rule delta.causal_predecessors missing -> hold_material_use + request_repair
 rule independent_deltas may_arrive_out_of_order=true
 rule total_global_order_not_required=true
 
-// Current work remains revisioned and must be revalidated before effect.
-rule material_delta_received -> revalidate(latest work spec_rev,dependencies,invalidators,authority)
+// Current work revision binding.
+rule work_bound_delta_received -> revalidate latest work_id+spec_rev+repo_head+dependencies+invalidators+authority
 rule invalidated_work -> interrupt_before_next_effect
+rule stale_work_execution -> diagnostic_only_for_current_credit unless explicitly adopted by newer revision
 rule ordinary_relevant_delta -> ingest_at_next_checkpoint
 rule network_delivery != use
 rule use != effect
 rule effect != causal_credit
 
-// Measurement contract for candidate evaluation.
+// Observer/control-plane backaction.
+rule route/control implementation -> measure observer_backaction where feasible
+rule same_hot_store_control_plane with higher write/checkpoint contention -> penalize route plan
+rule isolated_or_rebuildable_control_projection may_shadow_eval
+rule control_projection_correctness must match canonical semantics before performance credit
+rule lower nominal propagation latency without I/O/recovery cost accounting -> insufficient_promotion_evidence
+
+// GO<->Q23 bridge.
+rule q23_relevant delta|need|challenge|beacon -> go_q23_bridge route_if_applicable
+rule q23_to_go envelope -> preserve bridge provenance and apply same route/reentry semantics
+rule cross_trigger_delivery -> not independent replication
+rule q23 activity volume -> not global priority score by itself
+
+// Measurement contract.
 measure relevant_branch_recall
 measure full_payload_fanout_per_delta
+measure targeted_digest_per_delta
+measure subscription_pull_rate
+measure knowledge_need_response_rate
+measure counter_challenge_closure_rate
 measure digest_control_overhead
 measure route_mode_switch_rate
 measure route_cost_prediction_error
@@ -157,34 +283,38 @@ measure false_interrupt_rate
 measure receiver_reconstruction_rate
 measure plan_revalidation_rate
 measure projection_repair_success_rate
-measure CPU_RAM_IO_network_cost
+measure stale_work_current_credit_rejection
+measure source_lineage_diversity
+measure observer_backaction_cost
+measure go_q23_exchange_closure
+measure CPU_RAM_IO_network_token_context_cost
 
 promotion requires {
   synthetic_replay beats broadcast_and_tag_only_on_declared_metric_vector;
   adaptive_route_plan beats fixed_targeted_on_dense_invalidation_cases;
+  knowledge_need_and_pull_modes improve useful_reentry_per_cost;
   real_repo_worker_replay;
+  current_work_revision_churn_replay;
   stale_projection_fault_injection;
   missing_dependency_edge_fault_injection;
   duplicate_delta_fault_injection;
+  correlated_source_ancestry_control;
+  q23_bidirectional_question_and_delta_replay;
+  observer_backaction_measurement;
   crash_restart_recovery;
   exact provenance receipts;
   no evidence-strength inflation;
   rollback_to_current_mesh_protocol;
 }
 
-// Research evidence informing this candidate:
-// - McSherry et al., Differential Dataflow, CIDR 2013: incremental changes + nested iteration.
-// - Murray et al., Naiad: A Timely Dataflow System, SOSP 2013: cyclic dataflow with logical timestamps.
-// - Budiu et al., DBSP, PVLDB 2023 / extended 2025: general incremental view maintenance over rich/recursive queries.
-// - Yadav et al., Enzyme, arXiv:2603.27775 (2026): cost-based incremental refresh strategy selection in production pipelines.
-// - Yu et al., Layph, arXiv:2304.07458: small graph changes can propagate globally; constrain propagation where possible.
-// - Dotted Version Vectors: compact causal tracking for optimistic replication.
-
 invariant connectivity_does_not_mint_truth
 invariant repeated_distribution_does_not_create_independent_replication
 invariant provenance_survives_deduplication
 invariant branch_relevance_routing_never_expands_effect_authority
 invariant targeted_delta_is_not_dogma_when_dense_fanout_is_safer_or_cheaper
+invariant questions_are_requests_for_evidence_not_claims
+invariant stale_work_execution_does_not_gain_current_credit_by_routing
+invariant observer_control_plane_is_not_assumed_free
 invariant Frank_remains_separate_research_subject
 invariant Frank_never_mutates_Clay
 invariant candidate_not_promoted_without_real_replay_and_recovery_evidence

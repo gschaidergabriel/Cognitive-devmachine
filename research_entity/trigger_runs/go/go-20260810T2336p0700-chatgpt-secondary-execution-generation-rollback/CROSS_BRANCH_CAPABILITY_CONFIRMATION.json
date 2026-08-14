@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260810T2336p0700-chatgpt-secondary-execution-generation-rollback",
+  "created_at": "2026-08-10T23:41:00+07:00",
+  "evidence_class": "INDEPENDENT_CROSS_BRANCH_TARGET_RUNNER_NEGATIVE_EVIDENCE",
+  "source_pr": 202,
+  "source_experiment": "GO_OOB_EXECUTION_CAPABILITY_TUPLE_CLONE",
+  "workflow_run_id": 31409613216,
+  "job_id": 93524233201,
+  "tested_sha": "22ec5207fd759d500ad4172ca2ba7176a9cbfc7a",
+  "runner": "clay",
+  "machine": "digital-retina",
+  "runner_os": "Linux",
+  "runner_arch": "X64",
+  "kernel": "Linux 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+  "python": "3.12.3",
+  "result": {
+    "status": "REPRODUCED_EXECUTION_TUPLE_CLONE_PIGGYBACK",
+    "real_live_execution_lease_held": true,
+    "copied_caller_has_live_lease_object": false,
+    "copied_caller_has_physical_flock_handle": false,
+    "copied_tuple_start_admitted": true,
+    "copied_tuple_retry_admitted": true,
+    "start_final_state": "COMMITTING",
+    "retry_final_state": "COMMITTING",
+    "reservation_binding_update_accepted_inside_rolled_back_probe": true,
+    "provider_commit_fence_present": false,
+    "external_network_used": false,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false
+  },
+  "tested_blobs": {
+    "runtime/state/frank_execution_gate.py": "dc47f57f4d155c3e1b885b9136b8c630dae25274",
+    "runtime/state/effect_lifecycle_runtime.py": "f401b8d44e4edf78bf89e38b4e6275dc1aa2ce77",
+    "runtime/state/UNIFIEDDB_V16_1_EFFECT_EXECUTION_FENCE.sql": "6b7f88e6abc5ac6e1022a4abde7ff7c6ab18325f",
+    "tests/go_oob_effect_execution_tuple_clone.py": "86882768ca1d7748c2b29ba68ee1a957550e01b1"
+  },
+  "artifact": {
+    "id": 9071223036,
+    "size_bytes": 1793,
+    "sha256": "fc6b6ffc06db55f705f74802c6f1fd1dce7350de1a5ffe85e309cf1a6e2e345d",
+    "retention_days": 30
+  },
+  "adjudication": {
+    "supported_statement": "Equality of reconstructible execution-generation scalar values is not equivalent to possession of the live gate-issued execution capability.",
+    "combined_with_parent": "Parent #197 independently shows that DB-local generation state can also roll backward across snapshot restore. A final effect-authority design therefore needs both live caller-capability possession and restore-lineage fencing when rollback restore is supported.",
+    "product_promotion": "NONE",
+    "live_provider_bypass_claim": false,
+    "next_action": "Reuse this evidence against the selected effect-fence candidate; do not duplicate the experiment."
+  },
+  "distribution": {
+    "pr_199_comment": 5243198054
+  }
+}

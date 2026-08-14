@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "origin_actor": "ChatGPT / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "followup_kind": "TARGET_PROVENANCE_FALSIFIER",
+  "observed_product_revision": "edd253b8c00bcd408759ec6dff10f19c8ec64dec",
+  "observations": [
+    {
+      "workflow": "frank-sqlite-productive-path-readonly-v1.yml",
+      "run_id": 31564334543,
+      "workflow_job_name": "accepted-target-sqlite-productive-path-readonly",
+      "runner_selector": ["self-hosted", "Linux", "X64"],
+      "artifact_digest": "sha256:2de81865b40f747e419c4c6c915b519d3d508f16b34ebf45eb9b4d46fc35fb9e",
+      "artifact_host": "digital-retina",
+      "artifact_uid": 1000,
+      "artifact_status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+      "artifact_sqlite_version": "3.45.1",
+      "artifact_libsqlite_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "artifact_anchor_exists": false,
+      "claim_boundary": "Read-only evidence about the actual self-hosted runner digital-retina only. It is not accepted Hostinger VPS evidence unless an independent accepted-target identity binding proves digital-retina is that target."
+    },
+    {
+      "workflow": "frank-sqlite-v5-target-observation-v1.yml",
+      "run_id": 31564334542,
+      "workflow_job_name": "accepted-target-read-only-v5-observation",
+      "runner_selector": ["self-hosted", "Linux", "X64"],
+      "artifact_digest": "sha256:ba4acadbc53678f2284ed7802a6ec231f8167bdae1bd6be3ef6b4d0034c7d70d",
+      "artifact_host": "digital-retina",
+      "artifact_runner_name": "clay",
+      "artifact_euid": 1000,
+      "artifact_anchor_exists": false,
+      "artifact_launcher_exit_code": 78,
+      "artifact_launcher_denial": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:LAUNCHER_NOT_ROOT_OWNED",
+      "workflow_expected_denial": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:ROOT_TRUST_ANCHOR_MISSING",
+      "claim_boundary": "The failure is partly a stale test expectation after launcher hardening: the checkout launcher is rejected earlier for ownership. This still proves fail-closed behavior, but it does not exercise the intended absent-root-anchor branch and does not establish accepted Hostinger runtime state."
+    }
+  ],
+  "grf": {
+    "observed_reality": "Two workflows whose job names say accepted-target were scheduled with only generic self-hosted/Linux/X64 labels and produced artifacts identifying host digital-retina.",
+    "generated_reality": "Generic self-hosted scheduling can silently route acceptance-labeled tests to a development runner, creating provenance-valid evidence for the wrong machine.",
+    "strongest_counter_reality": "digital-retina could in fact be the accepted Hostinger VPS under an undocumented hostname/runner mapping.",
+    "falsifier": "Require an independent canonical target identity/attestation and compare it to the runner before any accepted-target assertion.",
+    "outcome": "RETAIN_AS_RELEASE_TEST_OBLIGATION"
+  },
+  "required_delta": [
+    "Accepted-target workflows must fail closed before substantive observation if runner/host identity is not independently bound to the accepted Hostinger target.",
+    "Job names and generic self-hosted labels are not evidence of target identity.",
+    "Preserve digital-retina observations as valid runner-local negative evidence, not as Hostinger production truth.",
+    "Update stale absent-anchor regression semantics so earlier valid fail-closed denials are distinguished from the specific root-anchor branch under test.",
+    "After target binding, rerun productive ProductStart/root-anchor/mapped-SQLite/start-restart/rollback and lineage tests on the exact accepted host."
+  ],
+  "new_go_oob_experiment": false,
+  "canonical_frank_state_mutated": false,
+  "productive_host_mutated": false,
+  "effect_authority": "NONE",
+  "harness_authority": "NONE",
+  "training_authorized": false,
+  "together_used": false,
+  "disposition": "NEW_TARGET_PROVENANCE_BLOCKER_RECORDED; F-V01-13_REMAINS_IN_PROGRESS"
+}

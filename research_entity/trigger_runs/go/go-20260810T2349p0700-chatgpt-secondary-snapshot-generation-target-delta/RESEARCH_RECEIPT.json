@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2349p0700-chatgpt-secondary-snapshot-generation-target-delta",
+  "parent_run": "go-20260810T2345p0700-chatgpt-secondary-deep-v01-generation-authority-fusion",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T23:49:00+07:00",
+  "kind": "LATE_TARGET_EVIDENCE_DELTA",
+  "target_evidence": {
+    "source_pr": 207,
+    "workflow_run_id": 31409921422,
+    "job_id": 93525229538,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "tested_synthetic_merge_sha": "60c770c28eb556873e0142999569aafc74f951f5",
+    "stacked_base_parent": "2d1ef44ec81145cb082b443a74b86f0398da082a",
+    "transport_fix_parent": "1a3e54713cc6d0f836dc77f1008ff5a87b5183ee",
+    "baseline_status": "PASS_FRANK_EXECUTION_GATE_V1",
+    "diagnostic_status": "REPRODUCED_SNAPSHOT_ROLLBACK_GENERATION_RESURRECTION",
+    "epoch_before_snapshot": 1,
+    "epoch_reached_after_snapshot": 2,
+    "epoch_after_restore_without_bump": 1,
+    "old_capability_resurrected_after_restore": true,
+    "old_capability_heartbeat_reason": "HEARTBEAT_RENEWED",
+    "counterfactual_restore_bump_epoch": 3,
+    "old_capability_fenced_after_restore_bump": true,
+    "counterfactual_fence_reason": "STALE_OR_NONHOLDER_HEARTBEAT",
+    "sqlite_integrity_after_restore": "ok",
+    "foreign_key_violations_final": 0,
+    "canonical_state_mutated": false,
+    "product_runtime_mutated": false,
+    "external_effect_performed": false
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_NEGATIVE_CURRENT_MECHANISM",
+    "finding": "DB-local V15 lease_epoch is an in-lineage generation fence but is not globally monotone across restoration of an older valid UnifiedDB snapshot. A pre-snapshot capability can become current again after rollback even though SQLite integrity remains valid.",
+    "required_property": "Accepted recovery must advance or consult a non-rollback incarnation/restore generation before self.root resumes material operations, or prove an equivalent invalidation mechanism that makes every pre-restore execution/response/effect/handoff capability permanently stale.",
+    "candidate_forms": [
+      "external monotonic incarnation counter outside reverted snapshot",
+      "restore-time signed/verified generation bump before runtime readiness",
+      "non-rollback host identity epoch plus DB lease epoch composite generation",
+      "equivalent recovery authority with formal stale-capability invalidation"
+    ],
+    "counterhypothesis": "If production policy can prove an older snapshot is never restored after any newer execution generation existed, or a separate already-admitted non-rollback authority invalidates all pre-restore capabilities before runtime opens, the demonstrated path may be unreachable in production.",
+    "next_discriminator": "Test the actual Frank v0.1 backup/restore/recovery implementation, not only disposable SQLite state. Kill/restart/restore with issued token/request/effect/response/handoff capabilities and require every pre-restore material capability to fail before readiness becomes HEALTHY."
+  },
+  "external_primary_support": {
+    "source": "etcd disaster recovery/revision documentation",
+    "relevance": "Snapshot restore can lower observed revisions; revision bump and compaction are used to prevent stale clients/watches from treating restored old revision space as current. This is an engineering analogy, not proof that Frank should copy etcd implementation."
+  },
+  "classification": "REAL_TARGET_VPS_NEGATIVE_RECOVERY_EVIDENCE",
+  "whole_frank_v0_1_acceptance": "NOT_PASS",
+  "research_write": "COMMITTED"
+}

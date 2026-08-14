@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0042p0700-chatgpt-secondary-projection-realtime-step",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T00:42:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_boundary": {
+    "worker": "temporary Clay research worker",
+    "not_self_root": true,
+    "target_subject": "self.root / Frank v0.1",
+    "frank_self_harness_authority": "proposal_only"
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "active_stage": "FRANK_V0_1"
+  },
+  "research_parent_head_observed_before_write": "09738db6a83cf7fc5553f300d6bc03c25976a351",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "target_main_at_selection": "f181fead56ec9336edc607c7451c46f5e7e69e8a",
+  "frontier_context": {
+    "merged_projection_worker_main_parent": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+    "projection_shadowload_pr": 392,
+    "shadowload_target_result": "TARGET_SUPPORTED_22_OF_22_BOUNDED_KEEP_DRAFT",
+    "ci_workspace_blocker_receipt": "go-20260812T0038p0700-chatgpt-secondary-unifieddb-shadowload-adjudication",
+    "new_diagnostic_pr": 400,
+    "new_diagnostic_head": "b73f97ea8f577899d6613da57a6ee56c03a12650"
+  },
+  "leading_hypothesis": "Generation fencing is sufficient to keep the new single-host UnifiedDB-to-ClayGraph projection lease effectively single-active even when the host realtime clock changes discontinuously.",
+  "strongest_counterhypothesis": "Because projection_worker_v1_candidate.py derives lease expiry from time.time_ns()/CLOCK_REALTIME, a forward realtime discontinuity can make a still-live lease appear expired after only a tiny monotonic interval. A contender can then acquire a newer generation before the intended lease duration has elapsed; generation fencing only reacts after takeover.",
+  "fresh_external_evidence": [
+    {
+      "source": "Python official time documentation",
+      "url": "https://docs.python.org/3.12/library/time.html",
+      "claim_used": "The time clock is adjustable and time.time/time_ns is backed by CLOCK_REALTIME where available; CLOCK_REALTIME can have discontinuities when system time changes. Python exposes a separate monotonic clock for interval measurement."
+    },
+    {
+      "source": "Python official current time documentation",
+      "url": "https://docs.python.org/3/library/time.html",
+      "claim_used": "time.monotonic() cannot go backwards and is not affected by system clock updates; CLOCK_BOOTTIME is a suspend-aware monotonic Linux clock."
+    }
+  ],
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "name": "PROJECTION_LEASE_REALTIME_FORWARD_STEP",
+    "type": "safe injected-clock lease discriminator",
+    "host_clock_mutated": false,
+    "production_state_mutated": false,
+    "parameters": {
+      "lease_ms": 5000,
+      "logical_monotonic_elapsed_ms": 10,
+      "simulated_forward_realtime_step_ms": 10000
+    },
+    "sensitivity_control": "With only 10 ms elapsed and no realtime discontinuity, contender B must receive LEASE_HELD.",
+    "intervention": "Keep logical elapsed at 10 ms but present the current lease arithmetic with a +10000 ms realtime step.",
+    "sandbox_mechanism_result": {
+      "environment": {
+        "python": "3.13.5",
+        "sqlite": "3.46.1",
+        "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+        "time_clock": "clock_gettime(CLOCK_REALTIME)",
+        "time_adjustable": true,
+        "time_monotonic": false,
+        "monotonic_clock": "clock_gettime(CLOCK_MONOTONIC)",
+        "monotonic_adjustable": false,
+        "monotonic_monotonic": true
+      },
+      "control": {
+        "worker_a_generation": 1,
+        "worker_b_result": "LEASE_HELD",
+        "lease_until_ms": 1005000
+      },
+      "intervention": {
+        "worker_a_generation": 1,
+        "worker_b_result": "ACQUIRED",
+        "worker_b_generation": 2,
+        "old_generation_fenced_after_takeover": true,
+        "new_lease_until_ms": 1015010
+      },
+      "classification": "LOCAL_MECHANISM_GAP_REPRODUCED_NOT_TARGET_EVIDENCE"
+    },
+    "target_execution": {
+      "workflow_run": 31518618721,
+      "check_job": 93869871470,
+      "runner_requirement": ["self-hosted", "Linux", "X64"],
+      "status_at_receipt_write": "QUEUED",
+      "classification": "PENDING_ACCEPTED_TARGET_EVIDENCE"
+    }
+  },
+  "analysis": {
+    "supported_now": [
+      "The current lease arithmetic is sensitive to an injected realtime forward discontinuity in a faithful local mechanism reproduction.",
+      "Generation fencing correctly invalidates the old holder after a newer generation is acquired.",
+      "Therefore generation fencing and expiry-clock correctness are separate safety properties."
+    ],
+    "not_yet_supported": [
+      "Accepted Hostinger target reproduction of PR #400.",
+      "Any claim that real host clock stepping has occurred in production.",
+      "Any selected production repair.",
+      "Multi-host lease safety, power-loss durability or whole Frank v0.1 acceptance."
+    ]
+  },
+  "architecture_delta": {
+    "status": "TESTING_PENDING_TARGET",
+    "unifieddb_claygraph_projection_worker": "Do not promote clock-step-safe single-active scheduling from the current realtime-expiry lease until the accepted-target discriminator is executed and a successor clock/boot policy is tested.",
+    "candidate_successor_direction_not_selected": "Evaluate same-boot monotonic or CLOCK_BOOTTIME expiry with explicit boot identity so restart/reboot semantics remain explicit; retain generation fencing as an independent stale-worker fence.",
+    "required_regressions_after_any_repair": [
+      "existing 25/25 process-crash lease/backpressure gate",
+      "PR #392 concurrent shadow-load gate",
+      "stale-generation fencing",
+      "boot/restart recovery",
+      "bounded lease-expiry liveness"
+    ],
+    "rollback": "Diagnostic-only branch/PR can be closed with no product rollback because no worker implementation changed."
+  },
+  "coordination": {
+    "duplicate_work_avoided": [
+      "WAL/main-file snapshot pairing was already covered by PRs #286/#296 and was not rebuilt.",
+      "Concurrent shadow-load was already covered by PR #392 and was not duplicated.",
+      "Older V15 presence clock/recovery work was treated as related ancestry, not as proof for the new projector lease."
+    ],
+    "targeted_reentry": [
+      "unifieddb",
+      "claygraph",
+      "security-recovery",
+      "service/deployment",
+      "continuity"
+    ]
+  },
+  "claim_boundary": [
+    "No real host clock adjustment.",
+    "No production/canonical database mutation.",
+    "No external effect.",
+    "No Frank/self.root Harness mutation authority.",
+    "No training authorization.",
+    "No whole Frank v0.1 acceptance."
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "evidence_class": "LOCAL_SYNTHETIC_NEGATIVE_CONTROLS_PLUS_PRIMARY_SQLITE_DOCUMENTATION_PLUS_CURRENT_SCHEMA_AUDIT",
+  "local_environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "negative_controls": [
+    {
+      "id": "REPLAY_AMBIENT_CLOCK_DRIFT",
+      "result": "GAP_REPRODUCED",
+      "observation": {"before_count": 1, "after_count": 0, "database_sha256_unchanged": true},
+      "meaning": "A replay-critical view that depends on CURRENT_TIMESTAMP is not a function of durable state alone. Identical database bytes can produce different current-state membership at different wall-clock times.",
+      "source_surface": "UNIFIEDDB_V6_MIGRATION.sql:v_current_semantic_records"
+    },
+    {
+      "id": "WAL_MAIN_FILE_ONLY_SNAPSHOT_LOSS",
+      "result": "GAP_REPRODUCED",
+      "observation": {"journal_mode": "wal", "source_committed_rows": 1, "main_file_only_copy_rows": 0, "wal_bytes": 4152},
+      "meaning": "A raw hash/copy of the main .sqlite file does not identify the complete committed database state while committed frames remain in WAL."
+    },
+    {
+      "id": "ROLLBACK_ATTACH_APPLICATION_ATOMICITY_PRIMITIVE",
+      "result": "PASS_MECHANISM_ONLY",
+      "observation": {"attached_journal_mode": "delete", "counts_after_cross_file_commit_then_cross_file_rollback": [1,1]},
+      "meaning": "The local binding supports one-connection ATTACH transactions in rollback-journal mode. This is not crash/power-loss replication; official SQLite documentation supplies the cross-file atomicity contract when main is file-backed and mode is not WAL."
+    },
+    {
+      "id": "TRUSTED_SCHEMA_OFF_PRIMITIVE",
+      "result": "PASS_MECHANISM_ONLY",
+      "observation": {"default": 1, "after_off": 0},
+      "meaning": "The scripting-language binding can disable trusted-schema mode. Product adoption still requires regression testing all persistent views/triggers/functions."
+    },
+    {
+      "id": "FTS5_INTEGRITY_PRIMITIVE",
+      "result": "PASS_MECHANISM_ONLY",
+      "observation": {"fts5_available": true, "integrity_check_completed": true},
+      "meaning": "A derived FTS health/rebuild receipt can use SQLite FTS5 integrity-check/rebuild primitives when the target build exposes FTS5. Target build availability remains to be measured."
+    }
+  ],
+  "deltas": [
+    {
+      "id": "U13_REPLAY_CLOCK_V1",
+      "priority": "BLOCKING_FOR_EXACT_REPLAY",
+      "law": "Every replay-critical semantic query is a pure function of explicit semantic epoch/root plus an explicit validity-time parameter; ambient process wall-clock is not an implicit input.",
+      "design": [
+        "replace replay-critical CURRENT_TIMESTAMP views with parameterized query contracts",
+        "carry as_of_valid_time and as_of_semantic_epoch in QueryReceiptV2",
+        "for live-now reads resolve now once at the cognition-cycle boundary and persist the chosen value in the query/assembly receipt",
+        "replay must reuse the persisted as_of value rather than evaluating a new now"
+      ],
+      "falsifier": "BYTE_STABLE_TIME_SHIFT: identical restored DB bytes + same query receipt must return identical result after real wall-clock advances."
+    },
+    {
+      "id": "U13_SNAPSHOT_MANIFEST_V2",
+      "priority": "BLOCKING_FOR_RECOVERY",
+      "law": "A snapshot identity binds a transactionally consistent logical database image and its recovery context, not just hashes of filenames.",
+      "required_fields": [
+        "snapshot_id","snapshot_method","sqlite_version","sqlite_source_id","compile_options_digest","journal_mode","synchronous","page_size",
+        "materialization_pair_digest","unified_live_schema_digest","graph_live_schema_digest","semantic_epoch","semantic_root_hash","transaction_cursor",
+        "graph_projection_receipt_id","unified_snapshot_sha256","graph_snapshot_sha256","wal_bundle_hashes_if_applicable","external_floor_generation","external_floor_ref","restore_verification_receipt"
+      ],
+      "allowed_methods_initial": ["ONLINE_BACKUP","VACUUM_INTO","ROLLBACK_JOURNAL_QUIESCENT_BUNDLE","WAL_COMPLETE_BUNDLE"],
+      "falsifier": "COMMITTED_WAL_ONLY_FRAME: snapshot verifier must reject a main-file-only artifact that omits a committed WAL frame."
+    },
+    {
+      "id": "U13_STATE_PROJECTION_CERTIFICATE_V1",
+      "priority": "HIGH",
+      "law": "Static schema compatibility and dynamic projection freshness are distinct. ClayGraph is usable only through an admitted projection certificate bound to a canonical semantic head.",
+      "canonical_receipt_fields": [
+        "projection_receipt_id","semantic_epoch","semantic_root_hash","graph_epoch","derivation_contract_hash","materializer_identity","materializer_code_hash","graph_content_digest","lag_class","status","created_at"
+      ],
+      "status_values": ["CANDIDATE","ADMITTED","STALE","RETRACTED","REBUILD_REQUIRED"],
+      "truth_rule": "The authoritative admission row lives in UnifiedDB. ClayGraph may mirror the receipt id/digest but cannot self-admit.",
+      "query_policy": {
+        "truth_critical": "require exact admitted semantic root unless query contract explicitly permits no-Graph fallback",
+        "exploratory": "bounded lag allowed only when lag class/policy is present in the query receipt",
+        "stale": "bypass to canonical state or return explicit degraded/unknown; schedule rebuild"
+      },
+      "falsifier": "SAME_SCHEMA_DYNAMIC_SKEW: a schema-valid ClayGraph derived from an inadmissible semantic head must not satisfy a truth-critical graph-assisted query."
+    },
+    {
+      "id": "U13_SELECTION_RECEIPT_V2",
+      "priority": "HIGH",
+      "law": "Record provenance and selection provenance are separately auditable commitments.",
+      "required_fields": [
+        "query_id","semantic_epoch","semantic_root_hash","as_of_valid_time","projection_receipt_id","index_identity","index_content_digest","candidate_universe_hash","normalized_query_digest","retrieval_operator","ranker_identity","filter_policy_digest","ordered_candidate_digest","candidate_count","selected_refs_digest","score_trace_digest","admissibility_digest","selection_receipt_hash"
+      ],
+      "falsifier": "AUTHENTIC_RECORDS_UNTRUSTED_SELECTOR: changing only non-admitted graph/index structure must not silently produce an authoritative selection receipt."
+    },
+    {
+      "id": "U13_CANONICAL_ROOT_CHAIN_V1",
+      "priority": "BLOCKING_FOR_LINEAGE_IDENTITY",
+      "law": "state_epochs.root_hash is reproducibly computed from typed canonical state transition commitments, not supplied as opaque text.",
+      "candidate_formula": "SHA256(domain='FRANK_SEMANTIC_ROOT_V1' || parent_root || canonical_epoch || tx_receipt_hash || ordered_typed_op_digests || authority_scope_digest || provenance_digest)",
+      "exclusions": ["ambient current time","ClayGraph activation/rank","unadmitted derived-index payload","host-language container representation"],
+      "requirements": [
+        "domain separation and canonical byte encoding",
+        "ordered operation digests with explicit type identity",
+        "same parent + same tx commitments => same root on replay",
+        "same parent + any semantic mutation => different root",
+        "lineage admission performs compare-and-swap against parent root/epoch"
+      ],
+      "falsifier": "SAME_EPOCH_SIBLING_ROOT: two different typed payloads from one parent must produce distinct roots; a transplanted root must fail replay verification."
+    },
+    {
+      "id": "U13_SQLITE_DEFENSIVE_OPEN_V1",
+      "priority": "MEDIUM_HIGH",
+      "law": "Normal cognition opens SQLite with the strongest target-supported non-authoritative-schema posture that preserves Frank's required schema behavior.",
+      "initial_candidate": ["PRAGMA trusted_schema=OFF","extension loading remains disabled","verify writable_schema remains OFF","where C binding exists evaluate SQLITE_DBCONFIG_DEFENSIVE"],
+      "falsifier": "SCHEMA_SIDE_EFFECT_INJECTION: a malicious/rogue persistent schema object must not gain execution authority through application-defined functions or virtual tables."
+    },
+    {
+      "id": "U13_DERIVED_INDEX_HEALTH_V1",
+      "priority": "MEDIUM_HIGH",
+      "law": "Every derived retrieval index has a source-root/watermark, health check, rebuild recipe and admission state; successful index lookup never upgrades truth authority.",
+      "fts5_profile": ["integrity-check","external-content integrity-check with rank=1 where applicable","rebuild on failed/stale admission"],
+      "generic_profile": ["source semantic root","builder/index code digest","content digest","health state","rebuild receipt"],
+      "falsifier": "STALE_INDEX_VALID_RECORDS: authentic canonical records retrieved through a stale/corrupted index must not yield an authoritative selection receipt."
+    },
+    {
+      "id": "U13_STORAGE_PROFILE_FORK_V2",
+      "priority": "HIGH",
+      "profiles": {
+        "SYSTEM_SAFE_DELETE": {
+          "journal": "DELETE","synchronous": "FULL","cross_file_strategy": "evaluate bounded ATTACH atomic projection admission","expected_tradeoff": "stronger two-file commit semantics, more writer/fsync cost"
+        },
+        "PRIVATE_FIXED_WAL": {
+          "journal": "WAL","cross_file_strategy": "canonical outbox + StateProjectionCertificate replay; never assume ATTACH set atomicity","expected_tradeoff": "higher read/write concurrency, explicit derived lag/replay"
+        }
+      },
+      "decision_metrics": ["correctness","crash recovery","p50/p95/p99","write amplification","fsync/io","lock wait","RSS/CPU","projection lag","rebuild time"],
+      "decision_rule": "Keep one semantic/logical contract while selecting physical lowering from measured target evidence."
+    }
+  ],
+  "primary_sources": [
+    "https://www.sqlite.org/lang_attach.html",
+    "https://www.sqlite.org/wal.html",
+    "https://www.sqlite.org/backup.html",
+    "https://sqlite.org/deterministic.html",
+    "https://www.sqlite.org/fts5.html",
+    "https://sqlite.org/appfunc.html",
+    "https://sqlite.org/fileformat.html"
+  ],
+  "research_pr": {"repository":"gschaidergabriel/Dr.-Unterweger","pr":293,"role":"adversarial research layer on PR #286; no runtime promotion"},
+  "promotion": "HOLD",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1421p0700-chatgpt-secondary-sqlite-production-binding-collapse",
+  "trigger": "go",
+  "timestamp_local": "2026-08-14T14:21:24+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "aa60fc852615e2426851f5ca49b7e80bbf56cff2",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "implementation_snapshot": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "main_before_research_write": "1243bd31606df1d52e1865fd7f1cf5d563c499d8",
+    "target": "Frank v0.1 / self.root on accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "The fixed SQLite 3.53.4 candidate is reproducible and capability-compatible, while the newest read-only productive-path observation still sees system SQLite 3.45.1 with no root trust anchor and the actual-process observer cannot bind its host/service to the canonical accepted target. The highest-information next work is therefore production binding and restart evidence, not another guard variant.",
+    "duplicate_avoidance": [
+      "Existing V6 launcher and live-process attestor already bind runtime/source/library identity inside one process generation.",
+      "Existing productive-path and actual-process workflows already implement read-only fail-closed observation.",
+      "Search of the canonical research repo found no receipt containing implementation run ids 31778957663, 31565850463 or 31533964697 before this write."
+    ]
+  },
+  "observed_reality": {
+    "productive_path_run": {
+      "run_id": 31778957663,
+      "job_id": 94700326319,
+      "observed_at_utc": "2026-08-14T07:11:11Z",
+      "runner_name": "clay-3",
+      "hostname": "digital-retina",
+      "python_executable": "/usr/bin/python3",
+      "sqlite_version": "3.45.1",
+      "sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+      "libsqlite3_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "libsqlite3_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+      "root_anchor": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+      "root_anchor_present": false,
+      "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+      "exit_code": 78,
+      "mutation": false,
+      "whole_frank_v0_1_acceptance": false
+    },
+    "actual_process_run": {
+      "run_id": 31565850463,
+      "job_id": 94017371635,
+      "runner_name": "clay",
+      "hostname": "digital-retina",
+      "synthetic_integration_only": true,
+      "expected_hostname_configured": false,
+      "expected_machine_id_sha256_configured": false,
+      "expected_systemd_unit_configured": false,
+      "expected_executable_configured": false,
+      "mapped_inode_fd_binding": true,
+      "stable_pid_starttime_binding": true,
+      "stable_sqlite_mapping_window_binding": true,
+      "status": "BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED",
+      "observation_only": true,
+      "effect_authority": "NONE"
+    },
+    "sqlite_35304_candidate_run": {
+      "run_id": 31533964697,
+      "job_id": 93920494088,
+      "runner_name": "clay",
+      "hostname": "digital-retina",
+      "tested_sha": "0e4a8b31557b808ded0b618be0d05a0e26c83a57",
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+      "runtime_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+      "runtime_reproducibility": "PASS",
+      "required_probe_pass": "10/10",
+      "wal_status": "PASS",
+      "status": "PASS_CANDIDATE",
+      "system_install_performed": false,
+      "production_anchor_provisioned": false,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The documented WAL-reset corruption defect affects releases through 3.51.2 and is fixed in 3.51.3 and later; 3.53.4 is beyond the fixed threshold, but version availability alone does not prove which library a Frank production process loads."
+    }
+  ],
+  "generated_reality": {
+    "hypothesis": "F-V01-13 is now blocked less by missing SQLite mechanism code than by an unclosed deployment identity chain: canonical accepted host -> configured service/executable -> exact process generation -> mapped fixed libsqlite bytes -> root trust anchor -> real database file descriptors -> restart/recovery continuity.",
+    "strongest_counterhypothesis": "The self-hosted digital-retina runner is already the accepted Hostinger target by project convention, and the unconfigured observer bindings are only CI metadata debt; if so, production identity may already be operationally known even though it is not machine-verifiable in the current observer.",
+    "counterevidence": "An older research receipt called clay/digital-retina the accepted target, while the newer actual-process observer reports all four expected canonical host/service bindings unconfigured. This contradiction is retained and not resolved by naming convention alone.",
+    "falsifier": "Populate canonical host identity and Frank systemd unit/executable bindings from owner-fixed deployment truth, then rerun the actual-process observer against the exact accepted service. A valid result must select one stable service process and bind PID/starttime plus mapped libsqlite device/inode/hash/source-id to the trusted root anchor and the actual Frank persistence database file descriptors."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "WAL_IDENTITY_STABILITY_SANDBOX",
+    "class": "reversible process-library identity attestation probe",
+    "scope": "LOCAL_SANDBOX_NOT_ACCEPTED_VPS",
+    "product_bytes_modified": false,
+    "reversible": true,
+    "description": "Test whether source-id plus the actually mapped libsqlite path/device/inode/SHA-256 remains stable across WAL activation, writes, checkpoint and reopen, rather than trusting sqlite_version() alone.",
+    "observed_sqlite_version": "3.46.1",
+    "mapped_library": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "mapped_library_sha256": "8bfe9b7394a8ba2813210fead1955b2fc1eded143999722e35d6b89d04ecf504",
+    "rows": 1000,
+    "integrity_check": "ok",
+    "identity_stable": true,
+    "result": "RETAIN_ATTESTATION_METHOD_ONLY",
+    "nonclaim": "The sandbox SQLite 3.46.1 is inside the upstream vulnerable range and this test provides no accepted-VPS safety or release evidence."
+  },
+  "collapse": {
+    "outcome": "RETAIN_BLOCKER_AND_REPRIORITIZE",
+    "architecture_delta": "NO_NEW_GUARD_ARCHITECTURE. Existing V6/live-process mechanisms are sufficient for the next discriminating step; close deployment identity and recovery evidence instead.",
+    "promotion_status": "BLOCKED",
+    "affected": [
+      "F-V01-13 SECURITY-RECOVERY-OBSERVABILITY",
+      "productive SQLite runtime attestation",
+      "accepted-host/service identity binding",
+      "restart/recovery evidence"
+    ],
+    "next_falsifier_sequence": [
+      "Resolve owner-fixed canonical accepted host identity plus Frank systemd unit and executable without inferring them from runner labels.",
+      "Provision or select the fixed SQLite runtime and root-owned FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1 only through authorized deployment administration.",
+      "Run the exact Frank service through the existing V6 launcher/live attestor and require actual-process binding to the fixed mapped library and real persistence database file descriptors.",
+      "Restart/crash/replay the exact current service and prove the post-restart generation re-establishes the same trusted lineage while rejecting downgrade/library-swap/stale-anchor cases.",
+      "Only then reconsider F-V01-13 promotion; do not infer whole Frank v0.1 acceptance from candidate or CI success."
+    ]
+  },
+  "nonclaims": [
+    "No accepted Hostinger VPS runtime PASS was established in this cycle.",
+    "No claim that digital-retina is the current accepted target solely from its runner label.",
+    "No production package upgrade or root-anchor provisioning was performed.",
+    "No production effect authority or Harness self-mutation was performed.",
+    "No whole Frank v0.1 acceptance.",
+    "No final training authorization."
+  ]
+}

@@ -1,0 +1,91 @@
+name: UnifiedDB U11B Graph Gate Hostinger
+
+on:
+  push:
+    branches:
+      - chatgpt/go-u11b-minimal-current-main-20260810
+    paths:
+      - '.github/workflows/u11b-graph-gate-hostinger.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V11B_GRAPH_PLAN_BINDINGS.sql'
+      - 'research_entity/runtime/semantic_access_generation_builder_v11.py'
+      - 'research_entity/runtime/test_semantic_access_v11b_graph_gate.py'
+      - 'research_entity/runtime/u11b_graph_gate_hostinger_probe.py'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/u11b-graph-gate-hostinger.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V11B_GRAPH_PLAN_BINDINGS.sql'
+      - 'research_entity/runtime/semantic_access_generation_builder_v11.py'
+      - 'research_entity/runtime/test_semantic_access_v11b_graph_gate.py'
+      - 'research_entity/runtime/u11b_graph_gate_hostinger_probe.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-u11b-graph-gate-hostinger
+  cancel-in-progress: true
+
+jobs:
+  u11b-graph-gate:
+    runs-on: self-hosted
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact Clay candidate head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Run legacy plus integrated U11B falsifiers
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          cd research_entity/runtime
+          python3 u11b_graph_gate_hostinger_probe.py --output /tmp/U11B_GRAPH_GATE_HOSTINGER.json
+
+      - name: Persist exact-checkout Hostinger receipt to candidate branch
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          TARGET_BRANCH: chatgpt/go-u11b-minimal-current-main-20260810
+        run: |
+          set -euo pipefail
+          src=/tmp/U11B_GRAPH_GATE_HOSTINGER.json
+          dst=research_entity/unifieddb/receipts/U11B_GRAPH_GATE_HOSTINGER_LATEST.json
+          mkdir -p "$(dirname "$dst")"
+          cp "$src" "$dst"
+          python3 - "$dst" <<'PY'
+          import json,sys
+          p=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert p['pass'] is True
+          assert p['tests_run']==p['tests']
+          assert p['failures']==0 and p['errors']==0
+          print(json.dumps({
+              'pass':p['pass'],
+              'tests':p['tests'],
+              'elapsed_ms':p['elapsed_ms'],
+              'python':p['python'],
+              'sqlite':p['sqlite'],
+              'source_commit':p['source_commit'],
+          },sort_keys=True))
+          PY
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add "$dst"
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "evidence(unifieddb): record U11B graph gate Hostinger ${RUN_ID} [skip ci]"
+          for n in 1 2 3 4 5 6; do
+            git fetch origin "$TARGET_BRANCH"
+            git rebase "origin/$TARGET_BRANCH" && git push origin "HEAD:$TARGET_BRANCH" && exit 0
+            git rebase --abort || true
+            sleep $((n * 2))
+          done
+          exit 1

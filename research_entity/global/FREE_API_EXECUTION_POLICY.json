@@ -50,6 +50,16 @@
     "executable_evidence": "test_unknown_text_message_role_is_blocked_before_network",
     "counterhypothesis": "An arbitrary nonempty role can be delegated to provider-side validation; falsified for this adapter because it causes an avoidable authenticated network call before the provider can reject it."
   },
+  "exact_model_identifier": {
+    "checked_at": "2026-08-14",
+    "claim": "The model field must match the model identifier served by NVIDIA NIM exactly; leading or trailing whitespace is rejected before credential use or network access rather than silently normalized.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/ai-assistant-integrations/codex-cli.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html"
+    ],
+    "executable_evidence": "test_model_name_with_surrounding_whitespace_is_blocked_before_network",
+    "counterhypothesis": "Any nonblank model string can be delegated to provider-side validation or trimmed locally; falsified because leading, trailing and newline whitespace all reached the authenticated opener, while silent normalization would change request identity rather than validate the caller's exact identifier."
+  },
   "incomplete_body_errors": {
     "checked_at": "2026-08-11",
     "claim": "http.client.IncompleteRead after a received response is an incomplete provider response, not an unhandled process exception.",
@@ -289,7 +299,7 @@
     "Credential binding compares the full remote origin boundary, including the effective HTTPS port; hostname equality alone is insufficient.",
     "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
-    "The text-chat adapter validates a nonempty model plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
+    "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
     "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",
     "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
     "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with user; invalid sequences are rejected before routing, credential use or network access.",

@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:12:30+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "result_class": "HOSTINGER_CURRENT_MAIN_CLOSURE_PASS_TARGET_GATE_STILL_OPEN",
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 64,
+    "workflow": "Clay WP02 Current Main Closure",
+    "workflow_run_id": 31343761706,
+    "workflow_job_id": 93321758224,
+    "workflow_conclusion": "success",
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "git": "2.43.0",
+    "cpu_model": "AMD EPYC 9354P 32-Core Processor",
+    "allocated_cpu_threads": 4,
+    "mem_total_kb": 16376020,
+    "virtualization": "kvm",
+    "boot_id": "8fab241d-868e-447d-b802-01d403c22e88",
+    "lark": "1.3.1",
+    "interegular": "0.3.3"
+  },
+  "source": {
+    "clay_revision": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+    "transport": "EXACT_GIT_BLOB_BUNDLE",
+    "v9_blob": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+    "v17_blob": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "requirements_lock_blob": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+    "g9_blob": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "dialect_blob": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "frontend_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "strict_probe_blob": "e050b922acefe554ba4d6de19c4324952d45e803",
+    "frontend_validation_blob": "031c08d42b3fe01376a83424f39cc6dc140b4adb",
+    "canonicalizer_blob": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+    "discriminator_blob": "71fc016ecf8a6b6497cdfd115fdbcfee8c48486c",
+    "source_identity_verification": "PASS"
+  },
+  "checks": {
+    "v9_to_v17_discriminator": true,
+    "strict_lalr_construction": true,
+    "full_g9_dialect_frontend": true,
+    "grammar_bound_canonicalizer": true,
+    "overall": true
+  },
+  "resource_measurements": {
+    "discriminator": {"user_s": "UNKNOWN", "system_s": "UNKNOWN", "max_rss_kb": "UNKNOWN"},
+    "strict": {"user_s": "UNKNOWN", "system_s": "UNKNOWN", "max_rss_kb": "UNKNOWN"},
+    "frontend": {"user_s": "UNKNOWN", "system_s": "UNKNOWN", "max_rss_kb": "UNKNOWN"},
+    "canonical": {"user_s": "UNKNOWN", "system_s": "UNKNOWN", "max_rss_kb": "UNKNOWN"},
+    "data_quality": "AGGREGATOR_LABEL_PARSE_DEFECT; unknown preserved rather than fabricated"
+  },
+  "artifact": {
+    "name": "clay-wp02-current-main-31343761706",
+    "artifact_id": 9046623226,
+    "artifact_sha256": "b15b1b5abd3b12b00746e572c04407fe76354d58ac770875dc9b5a2d5c6c0b86",
+    "retention_days": 30
+  },
+  "hypothesis_status": "SUPPORTED_BY_EXACT_SOURCE_HOSTINGER_CLOSURE_AND_INDEPENDENT_REPLICATION",
+  "architecture_delta": "NO_CHANGE",
+  "package_impact": {
+    "CC-WP-02-PARSER-CANON": "OPEN_TARGET_RECEIPT_REQUIRED",
+    "CC-WP-03-IR-TYPES": "DO_NOT_PROMOTE_FROM_THIS_RECEIPT_ALONE"
+  },
+  "counts_as_wp02_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "promotion_allowed": false,
+  "test_obligations": [
+    "Replay the same hash-locked closure on the registered Andreas Ubuntu developer target.",
+    "Repair /usr/bin/time aggregation and rerun required resource measurement before formal package promotion.",
+    "Retain absent-optional and relation/call-boundary regression guards across Lark/runtime upgrades."
+  ],
+  "exactly_one_out_of_box_experiment_ref": "OPTIONAL_PLACEHOLDER_SENSITIVITY_AS_SEMANTIC_DIFF_FALSIFIER",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

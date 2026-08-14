@@ -1,3 +1,7 @@
+<!-- RAE_META
+{"packet_id":"KMP-ANDROID-R1-FEEDBACK-FRANK","title":"KMP — Android R1 -> FRANK feedback","domains":["frank"],"claim_status_hint":"CURRENT"}
+RAE_META -->
+
 # KMP — Android R1 -> FRANK feedback
 
 **Status:** CURRENT / ACTIVE / CROSS-BRANCH FEEDBACK  

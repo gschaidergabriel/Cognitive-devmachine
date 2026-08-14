@@ -457,7 +457,8 @@ def execute_chat(
     model: str,
     environ: dict[str, str] | None = None,
     opener=None,
-    now=time.time,
+    now=time.monotonic,
+    wall_time=time.time,
     nonce_factory=None,
     payment_latches: set[str] | None = None,
 ) -> dict:
@@ -474,6 +475,7 @@ def execute_chat(
             environ=environ,
             opener=opener,
             now=now,
+            wall_time=wall_time,
             nonce_factory=nonce_factory,
             payment_latches=payment_latches,
         )
@@ -487,7 +489,8 @@ def _execute_chat_locked(
     model: str,
     environ: dict[str, str] | None = None,
     opener=None,
-    now=time.time,
+    now=time.monotonic,
+    wall_time=time.time,
     nonce_factory=None,
     payment_latches: set[str] | None = None,
 ) -> dict:
@@ -576,7 +579,7 @@ def _execute_chat_locked(
             elif status == 429:
                 outcome = "rate_limited"
                 cooldown_seconds = _retry_after_seconds(
-                    response_headers, finished
+                    response_headers, wall_time()
                 )
                 retryable = False
             else:
@@ -636,7 +639,7 @@ def _execute_chat_locked(
             status = exc.code
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
-            cooldown_seconds = _retry_after_seconds(exc.headers, finished)
+            cooldown_seconds = _retry_after_seconds(exc.headers, wall_time())
             retryable = False
         else:
             status = exc.code

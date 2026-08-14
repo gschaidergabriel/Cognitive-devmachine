@@ -1,0 +1,8 @@
+{
+  "consequence":"ECT is narrowed to fallback status only. No architecture promotion. Real WP04 coverage and oracle trust are mandatory next tests.",
+  "evidence":["Trusted metadata baseline is one read and therefore dominates ECT whenever it exists.","FIELD_VALUE witness mode only succeeds because verifier diagnostics are assumed trustworthy and semantically discriminating.","BOOL_ONLY mode correctly collapses to UNKNOWN rather than inventing a contract."],
+  "result":"PARTIALLY_SUPPORTED",
+  "run_id":"20260810T2126p0700-chatgpt-secondary-ect-contract-tomography",
+  "schema_version":"1.0",
+  "strongest_counterhypothesis":"Trusted static exact metadata or a small conventional resolver closes CallContracts more safely and cheaply; otherwise black-box observations are under-identifying and cannot prove exact semantics."
+}

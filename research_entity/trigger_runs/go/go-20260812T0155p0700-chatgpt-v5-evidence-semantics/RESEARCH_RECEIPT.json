@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T01:55:00+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "fresh_state": {
+    "research_main_seen": "b0802ba3c98261bad2b0d605c8af3c4c7f0ee5c5",
+    "frank_main_before_repair": "6f200ca443d2a354b4a0a3e5a27bd7057f09a5c6",
+    "frank_main_repair_commit": "1a7098b12e3c6ce97de21f8ace973ea1b33a8bd0"
+  },
+  "grf": {
+    "observed_anchors": [
+      "Main V5 fixes the SQLite trust-anchor path and contains loaded-object and anchor continuity checks.",
+      "V5 target workflow run 31524848656 concluded success at workflow level, but its mechanism receipt was BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN because sudo_nopasswd=false.",
+      "Positive root-owned-anchor execution, the encoded target-side atomic-replacement branch, and full fixed-SQLite process admission therefore did not execute in that run.",
+      "An independent CI evidence gate on main now rejects blocked-but-green semantics."
+    ],
+    "leading_hypothesis": "Release evidence must fail closed at orchestration level as well as inside Frank; a blocked required target measurement must not produce a green release-relevant signal.",
+    "strongest_counter_reality": "A green measurement workflow is harmless if its artifact internally says BLOCKED and later adjudication always reads it correctly.",
+    "falsifier": "Independently inspect the blocked branch and reject success-exit semantics; current main should become non-success until the required target measurement can actually execute.",
+    "outcome": "PROMOTE_EVIDENCE_SEMANTICS_REPAIR_RETAIN_V5_RELEASE_BLOCK",
+    "confidence": "HIGH_FOR_FALSE_GREEN_ORCHESTRATION_DEFECT; PRODUCTION_SQLITE_ADMISSION_STILL_UNPROVED"
+  },
+  "repair": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "1a7098b12e3c6ce97de21f8ace973ea1b33a8bd0",
+    "file": ".github/workflows/frank-sqlite-v5-evidence-gate-v1.yml",
+    "policy": "BLOCKED required target evidence must not conclude PASS",
+    "run_id": 31525079818,
+    "run_conclusion": "failure",
+    "interpretation": "EXPECTED_FAIL_CLOSED_CURRENT_MAIN_BECAUSE_V5_TARGET_EVIDENCE_IS_BLOCKED"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "GO-OOB-V5-ANCHOR-ATOMIC-INODE-SWAP-SANDBOX-V1",
+    "bounded": true,
+    "reversible": true,
+    "scope": "local synthetic reproduction of the V5 anchor-reader inode continuity mechanism; not accepted-target evidence",
+    "baseline": "root-owned read-only anchor under a root-owned non-writable parent was read successfully",
+    "intervention": "replace the anchor atomically after lstat and immediately before os.open while preserving root ownership and read-only mode",
+    "result": "DENIED_WITH_ANCHOR_REPLACED_DURING_OPEN",
+    "rollback": "temporary files and directory removed",
+    "production_claim": false
+  },
+  "negative_results": [
+    "The target-side V5 workflow's green conclusion is not evidence that its positive root-owned-anchor branch ran.",
+    "Current self-hosted lane lacks passwordless sudo for that workflow, so positive root-owned anchor and full-process admission remain unmeasured there.",
+    "The local atomic-inode-swap result supports one V5 mechanism only and cannot close the production gate."
+  ],
+  "next_discriminating_test": {
+    "priority": "P0",
+    "test": "Use an independently authorized provisioning lane on the accepted Hostinger Ubuntu target to install the exact trusted anchor and approved fixed SQLite artifact, then run V5 full-process admission before opening a non-destructive scratch WAL database through the productive persistence entrypoint; capture exact binary, guard, launcher, manifest, library, source-id, service identity, restart and downgrade/swap rejection receipts.",
+    "release_effect_if_pass": "NARROWS_F_V01_13_BUT_DOES_NOT_ALONE_COMPLETE_FRANK_V0_1",
+    "release_effect_if_blocked_or_fail": "KEEP_F_V01_13_RELEASE_BLOCKING"
+  },
+  "training": "NOT_AUTHORIZED_NOT_STARTED"
+}

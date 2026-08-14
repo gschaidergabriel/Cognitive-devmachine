@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260813T0014p0700-gpt56sol-fv0113-connection-guard-fusion",
+  "trigger": "go",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "recorded_at": "2026-08-13T00:14:14+07:00",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_entity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+  "candidate_pr": 557,
+  "candidate_head_after_fusion": "06310553422925cbd7dc36560c0fbff65d05f207",
+  "observed_ci": {
+    "initial_run": 31613664992,
+    "initial_result": "FAILURE_BEFORE_CANDIDATE_TESTS",
+    "initial_exact_cause": "self-hosted runner lacked /usr/include/sqlite3ext.h",
+    "repair": "compile guard against headers installed by the existing hash-verified canonical SQLite 3.53.4 parity builder, and execute the deterministic gate with the exact private 3.53.4 runtime",
+    "latest_connection_guard_run": 31621529325,
+    "latest_status_at_receipt_time": "QUEUED",
+    "latest_result": "UNKNOWN"
+  },
+  "this_macrocycle_unusual_experiment": {
+    "count": 1,
+    "id": "POST_GUARD_PATH_REBIND_STALE_RECEIPT",
+    "scope": "disposable local SQLite WAL fixture only",
+    "observations": {
+      "baseline_has_moved": 0,
+      "baseline_inode": 2622054,
+      "replacement_path_inode": 2622057,
+      "already_open_connection_write_read_continued": true,
+      "fresh_same_connection_has_moved": 1
+    },
+    "outcome": "ONE_POSITIVE_GUARD_RECEIPT_IS_POINT_IN_TIME_AND_MUST_NOT_BE_CACHED_AS_DURABLE_CAPABILITY",
+    "production_or_authority_mutation": false
+  },
+  "shared_counterevidence_fused_not_reexecuted": [
+    {
+      "research_commit": "26accebc2fcd4d3e52645d8a8f842c1e26a0ca53",
+      "finding": "move-away/move-back ABA can return HAS_MOVED=0; no temporal no-move-history claim"
+    },
+    {
+      "research_commit": "727ffa67799c4b93f9d7936b3210bdda19fe2c4f",
+      "finding": "temporary enable_load_extension(True) is not intrinsically exclusive on a shared connection"
+    },
+    {
+      "research_commit": "a505f9e48d298938779e45c4b5218058f04453fe",
+      "finding": "main-file HAS_MOVED does not bind the active WAL sidecar object"
+    }
+  ],
+  "product_delta": {
+    "ci_header_assumption_removed": true,
+    "canonical_sqlite_35304_headers_used": true,
+    "canonical_sqlite_35304_test_runtime_bound": true,
+    "ordinary_aba_regression_added": true,
+    "hardlink_alias_regression_present_from_concurrent_fusion": true,
+    "receipt_semantics_narrowed": true,
+    "explicit_nonclaims_added": [
+      "temporal_no_move_history_attested=false",
+      "receipt_reuse_as_durable_capability=false",
+      "active_wal_or_journal_object_bound=false",
+      "wal_sidecar_identity_attested=false",
+      "exclusive_connection_bootstrap_attested=false",
+      "production_safe_dynamic_extension_loading_attested=false"
+    ]
+  },
+  "grf_collapse": {
+    "HAS_MOVED_as_current_main_file_discriminator": "RETAIN_TESTING",
+    "HAS_MOVED_as_historical_no_move_proof": "REJECT",
+    "main_file_guard_as_complete_WAL_persistence_binding": "REJECT",
+    "dynamic_extension_load_as_production_safe_without_exclusive_bootstrap": "REJECT",
+    "F_V01_13_release_promotion": "NO_CHANGE"
+  },
+  "next_discriminator": "On the accepted Hostinger ProductStart/self.root persistence process, bind the exact fixed SQLite runtime plus canonical main DB and active WAL/journal object across a unique productive transaction/checkpoint, with an exclusive/non-loadable diagnostic mechanism, then replay restart/reopen, rollback, downgrade/library-swap and semantic-lineage controls.",
+  "authority": {
+    "harness_authority_changed": false,
+    "effect_authority": "NONE",
+    "final_training_authorized": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  }
+}

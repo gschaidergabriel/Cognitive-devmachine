@@ -1,0 +1,17 @@
+{
+  "package_id":"Q23-PKG-001-QWEN35-NATIVE-VISION",
+  "run_id":"q23-20260810T1737p0700",
+  "observed_at":"2026-08-10T17:37:00+07:00",
+  "topic":"QWEN35_4B_MULTIMODAL_INTERNALS",
+  "source_class":"OFFICIAL_MODEL",
+  "source_refs":["https://huggingface.co/Qwen/Qwen3.5-4B","https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/config.json","https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/preprocessor_config.json"],
+  "finding":"Current official Qwen3.5-4B is a 4B causal language model with Vision Encoder. Its configuration exposes a 24-layer visual encoder with hidden size 1024, out hidden size 2560, patch size 16, spatial merge 2 and image/video token identities; the processor uses Qwen3VLProcessor semantics.",
+  "why_interesting_for_target_architecture":"Frank already pays for a native deep visual encoder in the required core model, so a second heavy Retina semantic encoder should be treated as a baseline requiring positive evidence rather than a default architecture component.",
+  "fusion_result":"SUPPORTS",
+  "hypothesis_created_or_revised":["H-Q23-001","H-Q23-003","H-Q23-004"],
+  "architecture_delta_candidates":["AD-Q23-001","AD-Q23-003"],
+  "test_obligations":["TO-Q23-001","TO-Q23-004","TO-Q23-005"],
+  "swarm_targets":["frank","harness","claycode","gwt"],
+  "confidence":0.97,
+  "falsifier":"Matched Frank execution can still show a separate lightweight/heavy encoder materially improves total task/resource Pareto performance enough to justify duplication."
+}

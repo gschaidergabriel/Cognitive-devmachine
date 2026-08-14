@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2358p0700-after-hyperposition-late-fusion",
+  "status": "LATE_CONCURRENT_EVIDENCE_FUSED_NO_PROMOTION",
+  "late_inputs": [
+    "research_entity@e611826be1064993951930c4a75229e1b3cdb029",
+    "research_entity@1a36996969577ce106b03cc3c4d55503fd48690c",
+    "research_entity@c6aa1fef93942f83b11a2021711f6dc19cd1bf41"
+  ],
+  "finding": "Late Hyperposition work adds topology-scoped rewrite/cache validity: exact rewrites must bind the topology planes they materially read, and incomplete read closure must conservatively bind all planes and remain non-exact. A parallel ClayCode prototype passed 7/7 local topology-scope selftests. A separate Hyperposition TypedIR lowering prototype passed 2000 finite cases with semantic-hash stability across native/latent backends and zero projection mismatches, but both remain non-target evidence.",
+  "interaction_with_current_target_delta": "The target H7C LawCertificate and faceted-backend admission candidates remain compatible. TopologyScopeCertificate should become an additional validator input to exact rewrite/cache reuse rather than a new language syntax. Do not reopen frozen ClayCode semantics from these synthetic results.",
+  "new_required_guard": "Before exact cached rewrite/reuse, require either complete topology-read closure with matching fingerprints for every materially read SEMANTIC/ACTIVE/COORDINATION/PHYSICAL plane, or a conservative all-plane binding marked non-exact when closure is incomplete.",
+  "strongest_counterhypothesis": "A single existing state/topology generation may already advance on every material topology change; if real target traces prove that invariant, scoped per-plane certificates are unnecessary complexity.",
+  "next_target_discriminator": "On exact current structured frontend -> WP03 TypedIR -> WP04 chain, vary active, coordination and physical topology independently while preserving semantic topology where valid; compare coarse generation, bind-all and typed scoped certificates for stale reuse, invalidation amplification and cost. Real Frank trace and accepted-target VPS receipt required before promotion.",
+  "promotion": "NONE",
+  "wp03_pass": false,
+  "wp04_pass": false,
+  "authority_change": false
+}

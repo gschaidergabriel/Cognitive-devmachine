@@ -1,0 +1,208 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260811T0059p0700-chatgpt-secondary-effect-gate-fusion",
+  "trigger": "go",
+  "timestamp_local": "2026-08-11T00:59:02+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "selected_frontier": [
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "target_repository_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "observed_main_sha": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+    "accepted_target_runner": "clay",
+    "accepted_target_machine": "digital-retina",
+    "accepted_target_os": "Ubuntu/Linux x86_64"
+  },
+  "hypothesis": "Effect execution must be authorized by a caller-presented, Gate-issued, current-process execution capability bound to the exact admitted V15/V16 execution generation; lock/lease observation or durable scalar identity alone is insufficient.",
+  "strongest_counterhypothesis": "The current V15/V16 durable generation tuple plus the physical flock is sufficient and an additional Gate-issued process-incarnation capability is redundant.",
+  "evidence": {
+    "current_main_gate_state": {
+      "finding": "The process-incarnation-aware FrankExecutionGate repair has reached current main. The former open PR241 is coordination-stale relative to main rather than the current product source.",
+      "ancestry_check": {
+        "pr241_head": "23a43edd4a7546ca08e9c9a3e508efac8ac27deb",
+        "current_main": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+        "merge_base": "c32c822ab6e35fd2548af1ce9e199793bddcadf3",
+        "pr241_ahead_by": 4,
+        "pr241_behind_by": 2
+      }
+    },
+    "target_gate_validation": {
+      "workflow_run": 31416288578,
+      "tested_merge_sha": "80b8ddfd1ab4751870632307b231cbef2881321c",
+      "environment": {
+        "runner": "clay",
+        "machine": "digital-retina",
+        "kernel": "Linux 6.8.0-117-generic x86_64",
+        "python": "3.12.3"
+      },
+      "gate_baseline": {
+        "status": "PASS_FRANK_EXECUTION_GATE_V1",
+        "wall_s": 0.21,
+        "max_rss_kib": 25592
+      },
+      "directory_anchor": {
+        "status": "PASS_DIRECTORY_ANCHOR_BLOCKS_LOCKFILE_REPLACEMENT_SPLIT_BRAIN",
+        "contender_status": "BUSY",
+        "contender_reason": "PHYSICAL_EXECUTION_ALREADY_ACTIVE",
+        "two_concurrent_gate_leases_observed": false,
+        "wall_s": 0.17,
+        "max_rss_kib": 25216
+      },
+      "fork_process_incarnation": {
+        "status": "PASS_FORK_PROCESS_INCARCATION_EXECUTION_GATE_REPAIR",
+        "child_process_nonce_rotated": true,
+        "inherited_lease_detached": true,
+        "inherited_heartbeat": "FENCED",
+        "inherited_gate_issued_capability": "FENCED",
+        "fresh_child_contender": "BUSY_PARENT_FLOCK_RETAINED",
+        "child_detach_semantic_release": false,
+        "parent_heartbeat_after_child": "PASS",
+        "successor_after_parent_release": "PASS",
+        "parent_epoch": 1,
+        "successor_epoch": 2,
+        "wall_s": 0.15,
+        "max_rss_kib": 24320
+      },
+      "artifact": {
+        "artifact_id": 9073531742,
+        "sha256": "d1e51d64fc5b18faac88e2127142fca1e8331950f853a529d2f02ee87c89e0c3"
+      }
+    },
+    "historical_effect_fence_candidate": {
+      "pr": 238,
+      "head_sha": "4e5240364dda454a298d76efdf6d647314245f11",
+      "target_workflow_run": 31415175261,
+      "status": "TARGET_PASS_BUT_STALE_ANCESTRY",
+      "results": {
+        "physical_gate_baseline": "PASS",
+        "B1_exact_v16_reservation": "PASS",
+        "B2_exact_v16_attempt": "PASS",
+        "B3_exact_v16_provider_precommit": "PASS",
+        "stale_source_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+        "uncertain_retry_after_turnover": "FENCED",
+        "outcome_reconciliation_after_turnover": "PASS",
+        "process_incarnation_fork_fence": "PASS"
+      },
+      "current_main_ancestry": {
+        "current_main": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+        "ahead_by": 38,
+        "behind_by": 49
+      },
+      "promotion": "FORBIDDEN_UNCHANGED; REBUILD/FUSE ON FRESH MAIN"
+    },
+    "current_vps_integrity": {
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "tested_commit": "c7dbfac70a00d54acaf5477e011f15fc4bb38769",
+      "gate_count": 23,
+      "fail_count": 1,
+      "failing_gate": "repo_static_integrity",
+      "known_findings": [
+        "DIRECT_CANONICAL_DB_OPEN false-positive classification for runtime/clay_vps_mcp_v02/tests/test_stack.py",
+        "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR in runtime/state/effect_terminal_runtime_v17_candidate.py"
+      ],
+      "all_other_observed_gates": "PASS"
+    }
+  },
+  "external_knowledge_refresh": [
+    {
+      "source": "Linux flock(2) manual",
+      "finding": "flock locks are associated with open file descriptions; duplicate descriptors share the same lock and any duplicate can modify/release it."
+    },
+    {
+      "source": "Linux unix(7) SCM_RIGHTS manual",
+      "finding": "SCM_RIGHTS passes a reference to an open file description and is semantically equivalent to dup into another process."
+    },
+    {
+      "source": "Linux lslocks(8) manual",
+      "finding": "for FLOCK/OFD locks the notion of one holder process is not unique; fork/cmsg can make multiple processes share one open file description."
+    },
+    {
+      "source": "etcd concurrency documentation",
+      "finding": "a lease/lock alone does not protect external resources; protected resources need a validated generation/fencing token."
+    },
+    {
+      "source": "AWS idempotent mutating API guidance",
+      "finding": "idempotency and execution authority are separate; mutating retries require request identity and atomic durable state handling."
+    }
+  ],
+  "out_of_box_experiment": {
+    "count": 1,
+    "experiment_id": "GO_OOB_SCM_RIGHTS_OPEN_FILE_DESCRIPTION_TRANSFER",
+    "classification": "BOUNDED_LOCAL_LINUX_MECHANISM_TEST_NOT_TARGET_VPS_PROOF",
+    "question": "Can a flock-backed open file description be transferred to another process through SCM_RIGHTS without relying on fork inheritance, demonstrating that raw ownership of the lock FD cannot be treated as Frank execution authority?",
+    "environment": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5"
+    },
+    "result": {
+      "received_fd": true,
+      "same_ofd_lock_operation": "ADMITTED",
+      "fresh_open_lock_while_parent_and_received_alive": "BLOCKED",
+      "fresh_open_after_child_close_while_parent_alive": "BLOCKED",
+      "fresh_open_after_all_shared_ofd_refs_closed": "ADMITTED",
+      "child_exit_status": 0,
+      "wall_ms": 25.955,
+      "self_user_ms": 2.367,
+      "self_sys_ms": 4.126,
+      "external_network_used": false,
+      "external_effect_performed": false
+    },
+    "interpretation": "SUPPORTED_MECHANISM: physical flock possession is an open-file-description relation that can cross process boundaries independently of the semantic Frank execution capability. Therefore a raw/transferred anchor FD must never mint or satisfy EffectAuthorization/ExecutionGenerationFence authority.",
+    "architecture_consequence": "Keep the Gate-issued exact capability + current-process incarnation boundary. Add an adversarial obligation that SCM_RIGHTS/pidfd-style access to an anchor FD cannot mint a Gate-issued FrankExecutionLease or effect fence. No new authority architecture is promoted by this local mechanism test."
+  },
+  "analysis": {
+    "counterhypothesis_status": "REFUTED_FOR_SUFFICIENCY",
+    "reason": "Target evidence already reproduced inherited-capability shadowing in the older exact-object design and the fresh Gate process-incarnation repair now fences it. The SCM_RIGHTS mechanism test independently shows why the physical open-file-description itself cannot be the trusted capability identity.",
+    "supported_architecture": [
+      "physical exclusion anchored independently from replaceable lockfile path",
+      "Gate-issued exact execution capability",
+      "process-incarnation validation",
+      "caller-presented exact V15/V16 execution-generation binding at effect reservation/start/retry/provider-precommit",
+      "outcome observation/reconciliation remains separate from execution authority"
+    ],
+    "not_promoted": [
+      "stale PR238 effect-fence implementation",
+      "DB-local epoch as rollback-proof generation authority",
+      "raw lock FD as capability",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION_PLUS_FRESH_MAIN_FUSION_REQUIRED",
+    "delta": "Use current-main process-incarnation-aware Gate primitive as the physical capability foundation for a freshly rebuilt exact V15/V16 caller-bound effect fence. Do not cherry-pick stale PR238 wholesale.",
+    "new_test_obligation": "SCM_RIGHTS_TRANSFERRED_ANCHOR_FD_NEVER_MINTS_EXECUTION_CAPABILITY",
+    "rollback": "No current-main effect architecture mutated by this receipt; retain current main if fresh fusion fails."
+  },
+  "next_frontier_ranked": [
+    "Fresh-main F-V01-09 fusion: rebuild B1/B2/B3 exact execution-generation fence on current process-incarnation Gate; reuse historical target matrices as baselines only.",
+    "Fresh-main repo_static_integrity repair: path-aware colocated-test classification plus isolate V17 candidate DDL in explicit Research-Entity migrator; do not merge stale PR209 unchanged.",
+    "Run exact-current ClayCode frontend/TypedIR effect declarations and lowering evidence.",
+    "Execute a real provider timeout-after-acceptance/idempotent reconciliation test before terminal Effect Authority credit.",
+    "Integrate verified outcome -> provenance-bound UnifiedDB re-entry -> DONE terminal receipt.",
+    "Keep snapshot/restore generation floor and whole-VM rollback as a separate recovery authority problem."
+  ],
+  "negative_results_preserved": [
+    "V14 unbound caller/stale first-start/stale retry can reach COMMITTING on earlier fresh-main evidence.",
+    "Exact-object process-local registry alone was insufficient across fork in the older effect-fence stack.",
+    "Target-passing stale branch ancestry is not promotion evidence for current main.",
+    "Current repo_static_integrity remains failed despite all other observed VPS integrity gates passing."
+  ],
+  "training_authorized": false,
+  "external_effect_performed": false,
+  "canonical_target_state_mutated": false,
+  "research_write": "COMMITTED_RECEIPT_ONLY"
+}

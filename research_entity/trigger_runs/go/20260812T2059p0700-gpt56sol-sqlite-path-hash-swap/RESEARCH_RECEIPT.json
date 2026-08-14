@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2059p0700-gpt56sol-sqlite-path-hash-swap",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:59:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "shared_head_checked_before_write": "d85aec0d2cccfb681fd9b4b37be3464d6a4671ab",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "program": "FRANK_V0_1",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "53d0906e5e0d5493517393164854681c2db06854",
+    "training_authorized": false
+  },
+  "duplicate_avoidance": {
+    "parallel_receipts_reviewed": [
+      "research_entity/trigger_runs/go/20260812T2050p0700-gpt56sol-sqlite-live-attestor-decoy/RESEARCH_RECEIPT.json",
+      "research_entity/frank_v0_1/work_events/20260812T2052p0700_sqlite_live_inode_replacement_and_vps_checkout_isolation.json",
+      "research_entity/trigger_runs/go/20260812T2054p0700-gpt56sol-productstart-target-selection/HOST_ATTESTOR_ADJUDICATION.json"
+    ],
+    "delta_preserved_here": "Independent timed swap-restore falsifier for the superseded path-based SHA-256 sequence: replace the expected library pathname only during the hash window, restore the originally mapped inode before the post-sample, then compare with the current same-FD binding repair. No duplicate product patch was attempted because PR #529 had already merged a stronger repair."
+  },
+  "observed_reality": {
+    "superseded_attestor_source_observed_at": "1d104517f2fd03c82a5154edd0df7f6f2f3aa215",
+    "superseded_sequence": "sample live mapping identity -> stat expected pathname -> hash expected pathname -> resample mapping identity",
+    "parallel_current_main_hardening": "b4868cb58de5279c5c772c8f9cb0c88b6191afc8",
+    "current_repair": "SHA-256 is bound to one O_NOFOLLOW-opened file descriptor whose device/inode matches the selected live mapping, with size/mtime/ctime stability fencing",
+    "current_self_hosted_receipt_head": "53d0906e5e0d5493517393164854681c2db06854",
+    "current_self_hosted_matrix": "23_PASS_0_FAIL",
+    "current_self_hosted_hostname": "digital-retina",
+    "accepted_host_process_observer": "PR#515 merged at 9519a8fe151867d2c5a26ae43c0b63cfeb6ab6bd",
+    "accepted_host_observer_current_status": "BLOCKED_CANONICAL_TARGET_HOST_BINDING_UNCONFIGURED",
+    "accepted_host_release_credit": "NOT_GRANTED",
+    "open_productive_binding_work_item": "gschaidergabriel/Dr.-Unterweger#534"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption race is documented through 3.51.2 and fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite current release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "Upstream current release observed in this cycle is 3.53.4, which is in the fixed lineage."
+    }
+  ],
+  "grf": {
+    "anchor_R0": "The superseded live attestor bound mapping identity before/after but hashed the pathname in between; concurrent workers subsequently merged a same-FD content-identity repair.",
+    "generated_R2": "A pathname can temporarily point at trusted bytes during the hash window and be restored to the originally mapped inode before the post-sample, making pre/post mapping identity stable while the measured hash belongs to a different object.",
+    "counter_R3": "The before/after mapping identity checks are sufficient to make this transient substitution observable or impossible to pass.",
+    "discriminating_test": "Use disposable files A and B. Record A as the selected mapping identity, atomically point the expected pathname to B during only the hash operation, then restore A before the post identity sample.",
+    "outcome": "GENERATED_R2_SUPPORTED_FOR_SUPERSEDED_SEQUENCE; CURRENT_SAME_FD_REPAIR_REJECTS",
+    "promotion": "Retain same-FD mapping/content binding and stability fences as required attestation semantics; do not promote F-V01-13 to release PASS."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "SQLITE_PATH_HASH_SWAP_RESTORE_WINDOW",
+    "scope": "Disposable local sandbox only; no Frank database/state, accepted Hostinger service, provider, Harness authority or production mutation.",
+    "baseline": "Expected pathname and selected mapping identity both refer to object A.",
+    "treatment": "Expected pathname is atomically switched to object B only for the path-based SHA-256 call, then restored to object A before the post identity sample.",
+    "observed": {
+      "pre_post_identity_equal": true,
+      "restored_inode_matches_mapping": true,
+      "path_hash_matches_temporary_object_B": true,
+      "path_hash_matches_selected_object_A": false
+    },
+    "superseded_mechanism_result": "FALSE_CONTENT_IDENTITY_WINDOW_REPRODUCED",
+    "current_same_fd_counterprobe": "REJECTED_WITH_FD_IDENTITY_MISMATCH",
+    "outcome": "SUPPORTED_NEGATIVE_RESULT_ALREADY_REPAIRED_ON_CURRENT_MAIN"
+  },
+  "validation": {
+    "local_disposable_falsifier": "PASS: transient path-hash substitution reproduced against superseded sequence",
+    "local_same_fd_counterprobe": "PASS: mapping device/inode mismatch rejects the substituted pathname object",
+    "current_product_regressions": "PR #529 records six live-attestor regressions and current self-hosted deep-integrity receipt is 23/23 PASS",
+    "github_hosted_ci_availability": "A separate GitHub-hosted deep-integrity job was not started because of account billing/spending-limit enforcement; this is infrastructure availability, not a code-test FAIL."
+  },
+  "fusion": {
+    "hypothesis": "Current same-FD content identity materially closes the transient pathname substitution gap demonstrated here.",
+    "strongest_counterhypothesis": "Even a perfect library-object attestor cannot grant release credit if the selected process is not independently bound to the accepted Hostinger machine, canonical ProductStart service, productive persistence path and recovery lineage.",
+    "outcome": "MERGE",
+    "release_decision": "F-V01-13 remains IN_PROGRESS. The next discriminator is deployment identity/routing plus execution of the already-merged accepted-host actual-process observer, followed by productive UnifiedDB start/restart/recovery and rollback/downgrade/library-swap rejection."
+  },
+  "reentry": {
+    "architecture_delta": "No new product-code delta: parallel PR #529 already implemented the stronger same-FD + metadata-stability repair.",
+    "negative_result": "Superseded path-based hash sequence admitted a transient object-substitution measurement window despite equal pre/post mapping identity.",
+    "next_falsifier": "Configure independent accepted Hostinger hostname + machine-id hash + exact systemd unit + executable selectors, run merged PR #515 observer on that host, require live selected Frank process to map the root-anchored fixed SQLite object, then exercise the real UnifiedDB path through clean restart/recovery plus rollback/downgrade/library-swap fail-closed tests.",
+    "forbidden_promotion": "Do not equate generic self-hosted 23/23 PASS, SQLite 3.53.4 availability, or live library-object identity alone with accepted Hostinger productive Frank release acceptance."
+  },
+  "authority": {
+    "frank_self_harness_mutation": false,
+    "effect_authority": "NONE",
+    "production_mutation": false,
+    "training_authorized": false
+  },
+  "outcome": "COMMITTED_INDEPENDENT_NEGATIVE_RESULT; NO_DUPLICATE_PRODUCT_PATCH; RETAIN_F_V01_13_IN_PROGRESS"
+}

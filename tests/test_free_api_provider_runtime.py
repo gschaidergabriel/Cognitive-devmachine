@@ -1020,6 +1020,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     VALID_MESSAGES, model="mock", environ=env,
                     opener=opener,
                     now=iter((started, started + 0.01)).__next__,
+                    wall_time=lambda: started,
                 )
                 receipt = result["receipt"]
                 self.assertEqual(receipt["outcome"], "rate_limited")
@@ -1046,10 +1047,38 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((100.0, 200.0)).__next__,
+            wall_time=lambda: 200.0,
         )
         receipt = result["receipt"]
         self.assertEqual(receipt["outcome"], "rate_limited")
         self.assertEqual(receipt["duration_ms"], 100_000)
+        self.assertEqual(receipt["cooldown_seconds"], 40)
+
+    def test_duration_and_http_date_retry_after_use_distinct_clocks(self):
+        class Response:
+            status = 429
+            headers = {
+                "Retry-After": "Thu, 01 Jan 1970 00:04:00 GMT"
+            }
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise AssertionError("non-200 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((10.0, 10.25)).__next__,
+            wall_time=lambda: 200.0,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["outcome"], "rate_limited")
+        self.assertEqual(receipt["duration_ms"], 250)
         self.assertEqual(receipt["cooldown_seconds"], 40)
 
     def test_oversized_retry_after_emits_receipt_with_safe_fallback(self):

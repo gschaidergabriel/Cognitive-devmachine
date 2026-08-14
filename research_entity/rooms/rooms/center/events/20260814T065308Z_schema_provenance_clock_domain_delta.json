@@ -1,0 +1,143 @@
+{
+  "schema_version": "research-center-event/1.0",
+  "event_id": "20260814T065308Z_schema_provenance_clock_domain_delta",
+  "created_at": "2026-08-14T06:53:08Z",
+  "event_type": "cross_domain_research_impulse",
+  "promotion_status": "CANDIDATE_ONLY",
+  "training_performed": false,
+  "harness_mutated": false,
+  "canonical_context": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_parent_commit": "9d9f69e908c36d135c45c2da6a47a88d81d968c7",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_commit": "dc2af6421355c899ee076a3e8089e8f6407a1d54",
+    "rae_version": "RAE-8.8 revision 2",
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "frank_status": "IN_PROGRESS 4.8%"
+  },
+  "substantive_deltas": [
+    {
+      "id": "D-SCHEMA-001",
+      "kind": "repository_commit_evidence",
+      "commits": [
+        "2b1dd482588449723c84b62f0251c2bdb1a11125",
+        "9d9f69e908c36d135c45c2da6a47a88d81d968c7"
+      ],
+      "observation": "The repository reports a reduction from 38 to 15 to 0 claim/package schema errors. Four QUALIFIED claims were mapped case-by-case to REFUTED, three SUPPORTED claims to CURRENT, and twelve open-like packet statuses to OPEN while retaining original values and mapping notes.",
+      "summary_provenance": "Seven summaries were produced with mistral-medium-2508 and marked machine-condensed/not human-reviewed. One draft containing source-absent numbers was rejected and regenerated. Two content-thin packets were given descriptive indexes rather than invented findings.",
+      "receipt_class": "COMMIT_ATTESTED_LOCAL_VALIDATION_ONLY",
+      "workflow_receipt": null,
+      "epistemic_credit": "No independent replication and no new empirical credit. Machine summaries are same-lineage derivations of existing packet content.",
+      "risk": "A green schema can conceal a semantic polarity change if normalization is evaluated only syntactically."
+    },
+    {
+      "id": "D-CLOCK-001",
+      "kind": "source_local_candidate_with_zero_step_provider_runs",
+      "commits": [
+        "f9d8b98924a4de15204082d598e3fd4bc127e01d",
+        "ad3fbd1479c5fc8508852f753e035519d471dbdd",
+        "1939c5b0ca7a84120d51942f023d0f0d242a024a"
+      ],
+      "observation": "PR 232 now separates monotonic elapsed-duration measurement from wall-clock HTTP-date Retry-After arithmetic.",
+      "exact_head": "1939c5b0ca7a84120d51942f023d0f0d242a024a",
+      "provider_runs": [
+        {"run_id": 31774433982, "job_id": 94686848376, "name": "Verify", "executed_steps": 0},
+        {"run_id": 31774433983, "job_id": 94686848130, "name": "Identity Guard", "executed_steps": 0}
+      ],
+      "receipt_class": "SOURCE_LOCAL_CANDIDATE_PROVIDER_ZERO_STEP",
+      "epistemic_credit": "No live provider validation credit. Zero-step results are retained as null evidence."
+    }
+  ],
+  "primary_sources": [
+    {
+      "title": "W3C PROV-O: The PROV Ontology",
+      "url": "https://www.w3.org/TR/prov-o/",
+      "support": "Models provenance using Entity, Activity, and Agent relations, suitable for separating source packets, transformation activity, software agent, and review state."
+    },
+    {
+      "title": "Python 3.13 time.monotonic documentation",
+      "url": "https://docs.python.org/3.13/library/time.html#time.monotonic",
+      "support": "A monotonic clock cannot go backwards, is unaffected by system clock updates, and is meaningful only through differences."
+    },
+    {
+      "title": "RFC 9110 Retry-After",
+      "url": "https://www.rfc-editor.org/rfc/inline-errata/rfc9110.html",
+      "support": "Retry-After is either an HTTP-date or a delay-seconds value, requiring explicit interpretation of the clock domain."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-PROVENANCE-PRESERVING-NORMALIZATION-001",
+      "claim": "Schema normalization is epistemically safe only when the original value, mapping rule, source hash, transformation activity/agent, validation receipt, and human-review state remain queryable.",
+      "test": "Reconstruct every pre-repair status and summary provenance from the normalized store; inject polarity-changing mappings and require the semantic-conservation gate to reject them.",
+      "falsifier": "The normalized store passes reconstruction and polarity checks without retaining one or more of these provenance fields."
+    },
+    {
+      "id": "H-MACHINE-SUMMARY-NO-CREDIT-001",
+      "claim": "A machine-condensed summary contributes navigation value but zero independent epistemic credit unless each proposition is traceable to source spans and its review state is explicit.",
+      "test": "Run numeric and nonnumeric entity/relation perturbation suites; require source-span entailment and prevent summary nodes from increasing evidence counts.",
+      "falsifier": "Independent blind assessment shows reliable new empirical information not present in any source packet."
+    },
+    {
+      "id": "H-CLOCK-DOMAIN-SEPARATION-001",
+      "claim": "Elapsed duration must use a monotonic clock, while HTTP-date Retry-After needs wall-clock arithmetic anchored to response receipt; mixing them creates false cooldown or duration decisions under clock adjustment.",
+      "test": "Inject backward/forward wall-clock jumps and compare delay-seconds and HTTP-date paths against a monotonic-duration oracle on an executing provider lane.",
+      "falsifier": "A single-clock implementation matches the oracle across preregistered jumps, formats, and boundary cases without negative durations or shifted cooldowns."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SCHEMA-GREEN-EQUALS-SEMANTIC-SAFE-001",
+      "claim": "Schema validity alone guarantees semantic safety.",
+      "current_status": "ATTACKED",
+      "counterevidence": "A blanket QUALIFIED-to-CURRENT rule would have turned four reported contradictions into held claims; case-level reading instead mapped them to REFUTED."
+    },
+    {
+      "id": "CH-SINGLE-WALL-CLOCK-SUFFICIENT-001",
+      "claim": "One wall clock is sufficient for both elapsed timing and absolute Retry-After dates.",
+      "current_status": "OPEN_UNTIL_EXECUTING_FAULT_INJECTION",
+      "attack": "System clock adjustments can alter elapsed deltas even though duration should remain invariant."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Semantic Conservation Ledger",
+      "definition": "A provenance graph that records each normalization transform, original semantic token, polarity, source hash, transformer, validator, and review state so schema repair remains reversible and auditable."
+    },
+    {
+      "name": "Schema-Green Mirage",
+      "definition": "A syntactically valid corpus whose semantic polarity, evidence independence, or review status was silently changed during normalization."
+    },
+    {
+      "name": "Derived Summary Quarantine",
+      "definition": "A graph policy that permits machine summaries for retrieval but blocks them from increasing evidence counts or promotion confidence until source-span and review gates pass."
+    },
+    {
+      "name": "Dual-Clock Receipt",
+      "definition": "An execution receipt that records monotonic start/end deltas separately from wall-clock response time and absolute Retry-After interpretation."
+    }
+  ],
+  "routing": [
+    {
+      "targets": ["clayresearch", "frank", "gwt", "emergenz", "claygraph", "unifieddb"],
+      "impulse": "Implement or test the Semantic Conservation Ledger and Derived Summary Quarantine; do not count normalized or machine-derived summaries as independent evidence."
+    },
+    {
+      "targets": ["claycode", "hyperposition", "harness"],
+      "impulse": "Preregister dual-clock fault injection on a credentialless executing provider lane; preserve zero-step outcomes and emit a Dual-Clock Receipt."
+    }
+  ],
+  "negative_and_null_results": [
+    "No GitHub Actions workflow runs were attached to commits 2b1dd482588449723c84b62f0251c2bdb1a11125 or 9d9f69e908c36d135c45c2da6a47a88d81d968c7 in the connector query; validation statements remain local/commit-attested.",
+    "The exact-head Verify and Identity Guard provider jobs for PR 232 executed zero steps; they do not validate clock behavior.",
+    "Two content-thin packets still lack empirical findings; descriptive indexes are not findings.",
+    "No target-main change, canonical promotion, training, or productive Frank Harness mutation was observed or performed."
+  ],
+  "deduplication": {
+    "excluded_same_lineage_evidence": [
+      "Machine summaries derived from existing packets",
+      "Commit messages repeating local validation claims",
+      "Previously reported runner receipt event at commit 1b88159346b67ffac10b49af668b64285a7c6463"
+    ]
+  }
+}

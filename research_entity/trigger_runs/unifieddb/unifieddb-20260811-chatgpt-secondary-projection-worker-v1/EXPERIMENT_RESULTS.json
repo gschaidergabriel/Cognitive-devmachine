@@ -1,0 +1,50 @@
+{
+  "schema_version":"1.1",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "status":"TARGET_SUPPORTED_SINGLE_HOST_PROJECTION_WORKER_CANDIDATE",
+  "hypothesis":"a single-active UnifiedDB lease generation plus bounded batches and exact-current graph admission recovers safely from tested projector process crash while preserving authoritative-write availability under projection backpressure",
+  "strongest_counterhypotheses":[
+    "a process crash can leave the lease or destination in a state that prevents bounded takeover",
+    "a competing worker can enter while a live lease exists",
+    "an expired/stale generation can continue projecting after takeover",
+    "backpressure may accidentally block or demote authoritative writes",
+    "bounded drain may report healthy before exact projection is restored",
+    "worker receipt/lag telemetry may not match durable queue state"
+  ],
+  "target_result": {
+    "repo":"gschaidergabriel/Dr.-Unterweger",
+    "pr":391,
+    "head":"6fe47f9672a997f784ac168314f8bc0c65afcd65",
+    "base":"72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "workflow":"Frank UnifiedDB projection worker V1 VPS",
+    "workflow_run":31515873771,
+    "job":93860745062,
+    "conclusion":"SUCCESS",
+    "checks_passed":25,
+    "checks_total":25,
+    "runner":"clay",
+    "machine":"digital-retina",
+    "initial_backlog":{"pending":96,"pressure":"HARD","authoritative_writes_allowed":true,"consequential_graph_use_allowed":false},
+    "crash":{"applied":7,"pending_after":89,"lease_generation":1,"process_exit":81},
+    "contender":{"result":"LEASE_HELD","process_exit":75},
+    "takeover":{"expired_lease_takeover":true,"newer_generation":true,"stale_generation_fenced":true},
+    "second_backlog":{"pending":80,"batches":[13,55,12],"pressure_path":["HARD","HARD","SOFT","NONE"]},
+    "final":{"max_source_epoch":176,"max_applied_epoch":176,"pending_events":0,"lag_epochs":0,"missing_events":0,"extra_events":0,"hash_conflicts":0,"projection_exact":true,"health":"HEALTHY","pressure":"NONE","authoritative_writes_allowed":true,"consequential_graph_use_allowed":true},
+    "throughput_events_per_second":{"batch_13":248.6885171922293,"batch_55":344.9872103832369,"batch_12":304.25762141888464},
+    "integrity":{"UnifiedDB":"ok","ClayGraph":"ok"},
+    "artifact":{"id":9111199960,"bytes":17641,"digest_sha256":"4fe49d40f8acc1540d5a66d81b96bbcbc6b9f10087e9ff47e0bad24ff0fb51ee"},
+    "merge_commit":"7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5"
+  },
+  "counterhypothesis_adjudication": {
+    "live_lease_collision":"REFUTED_FOR_TESTED_SINGLE_HOST_WINDOW",
+    "takeover_failure":"REFUTED_FOR_TESTED_PROCESS_CRASH_WINDOW",
+    "stale_generation_continues_after_takeover":"REFUTED_BY_FENCING_TEST",
+    "backpressure_blocks_authoritative_truth":"REFUTED_FOR_TESTED_POLICY",
+    "premature_health_before_exact_projection":"REFUTED_FOR_TESTED_DRAIN",
+    "sustained_large_corpus_or_multi_host_safety":"UNRESOLVED"
+  },
+  "promotion":"CANDIDATE_AND_REGRESSION_PATH_SUPPORTED_PRODUCTION_SCHEMA_AND_SERVICE_ACTIVATION_HELD",
+  "canonical_state_mutated":false,
+  "external_effect_performed":false,
+  "training_authorized":false
+}

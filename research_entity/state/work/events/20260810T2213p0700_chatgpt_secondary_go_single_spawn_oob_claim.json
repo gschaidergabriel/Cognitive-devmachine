@@ -1,0 +1,44 @@
+{
+  "schema_version": "2.0",
+  "event_id": "go-root-oob-claim:20260810T2213p0700:chatgpt-secondary:single-spawn-clock-warp",
+  "kind": "WORK_CLAIM",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "root_go_id": "go-root-20260810T2157p0700-chatgpt-secondary-single-spawn",
+  "payload": {
+    "oob_slot": {
+      "claim_id": "oob-claim-frank-presence-wall-clock-warp-v1",
+      "status": "COMPLETED",
+      "experiment": "FRANK_PRESENCE_WALL_CLOCK_WARP",
+      "classification": "OUT_OF_THE_BOX_EXPERIMENT",
+      "question": "Can UTC-only lease expiry cause premature takeover or delayed recovery under wall-clock jumps, and would a boot_id + monotonic_ns candidate remove that failure mode on the fixed Ubuntu target?",
+      "baseline": "canonical UnifiedDB V15 frank_presence_runtime UTC expires_at",
+      "candidate": "same semantic lease with same-boot monotonic expiry and boot_id invalidation; NOT_PROMOTED",
+      "result_class": "UTC_COUNTEREXAMPLE_AND_MONOTONIC_CANDIDATE_SUPPORTED_IN_MECHANISM_PROBE",
+      "target_vps_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_presence_clock_warp_oob_v1/LATEST.json",
+      "github_run_id": "31402601396",
+      "tested_sha": "73100df56da7c6072b0f20906e15ba15d28a4b0e",
+      "observations": {
+        "forward_wall_jump_seconds": 3600,
+        "modeled_physical_elapsed_seconds_forward_case": 1,
+        "premature_takeover_observed": true,
+        "backward_wall_jump_seconds": -3600,
+        "modeled_physical_elapsed_seconds_backward_case": 11,
+        "delayed_recovery_observed": true,
+        "target_boot_id_present": true,
+        "monotonic_clock": true,
+        "clock_adjustable": false,
+        "clock_resolution_seconds": 1e-9
+      },
+      "promotion": "CANDIDATE_FOR_MEASURED_V16_DESIGN_NOT_PROMOTED",
+      "counterhypothesis": "UTC may remain operationally adequate for v0.1 when paired with the now-measured one-host physical execution lock; adding V16 clock identity may not repay complexity until real clock-discipline/reboot tests show residual benefit."
+    },
+    "all_other_tests_in_this_root": "NORMAL_DISCRIMINATING_OR_VALIDATION_TESTS_NOT_OOB",
+    "oob_count_for_this_root": 1,
+    "frank_harness_mutation": false,
+    "training_authorized": false,
+    "authority": "RESEARCH_EXPERIMENT_ONLY"
+  }
+}

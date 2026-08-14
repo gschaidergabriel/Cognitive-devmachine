@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "hypotheses": [
+    {
+      "id": "H-Q23-MERGED-REUSE-01",
+      "claim": "The public merged Qwen/mmproj media embeddings are sufficient for Frank's first-stage user-specific MVC familiarity/open-set discriminator after deterministic pooling and calibration, eliminating a second heavy visual encoder.",
+      "status": "TEST_REQUIRED",
+      "support": [
+        "Transformers Qwen3.5 exposes image features before language decoding.",
+        "llama.cpp libmtmd exposes output media embeddings after encode.",
+        "The existing QNDRF candidate already requires same-encode reuse before a duplicate backbone."
+      ],
+      "cheapest_falsifier": "Matched known/near-neighbor-unknown/OOD screenshot benchmark comparing merged-feature MVC against a dedicated lightweight embedding baseline at equal calibration protocol.",
+      "promotion_rule": "Promote only if open-set/selective-risk performance is non-inferior under a pre-registered task-risk margin and total latency/RAM/VRAM/decoder-call cost is Pareto-competitive or better."
+    },
+    {
+      "id": "H-Q23-TINY-PROJ-02",
+      "claim": "If raw merged Qwen features are not sufficiently calibrated, a tiny learned projection over frozen merged features can recover user-specific instance/layout separation without another deep visual encode.",
+      "status": "TEST_REQUIRED_AFTER_H-Q23-MERGED-REUSE-01_FAILURE_OR_MARGIN_MISS",
+      "cheapest_falsifier": "Train a small projection only on frozen GOLD/SILVER admitted examples and compare held-out/OOD open-set metrics against raw merged features and the dedicated encoder baseline.",
+      "guard": "No online update is promoted without candidate shadow evaluation, atomic versioning and last-known-good rollback."
+    },
+    {
+      "id": "H-Q23-DUALVIEW-03",
+      "claim": "A two-view descriptor from the same Qwen vision encode can combine pre-merger spatial patch geometry with merged LLM-token geometry and may outperform merged-only familiarity without a second heavy encoder.",
+      "status": "BLOCKED_UNTIL_MERGED_ONLY_TEST",
+      "support": [
+        "Current Transformers Qwen3.5 VisionModel returns both pre-merger last_hidden_state and merged pooler_output from one vision forward pass."
+      ],
+      "runtime_constraint": "Current public libmtmd API exposes merged output embeddings but not the pre-merger hidden-state view.",
+      "cheapest_falsifier": "Do not extend/fork libmtmd unless merged-only or tiny-projection variants fail the pre-registered open-set criterion. Then instrument pre-merger features in a bounded experimental branch and measure incremental gain versus maintenance/runtime cost."
+    },
+    {
+      "id": "H-Q23-COMPAT-ENVELOPE-04",
+      "claim": "MVC prototype validity depends on the complete visual runtime/preprocessing compatibility envelope, not only model/mmproj weights.",
+      "status": "STRONGLY_SUPPORTED_AS_TEST_OBLIGATION_NOT_YET_TARGET_MEASURED",
+      "support": [
+        "Current llama.cpp issue evidence reports Qwen3.5 visual crashes or incorrect vision behavior depending on batch, Flash Attention, KV layout and multimodal processing path.",
+        "Visual preprocessing/orientation/token-grid changes can alter the representation consumed downstream."
+      ],
+      "cheapest_falsifier": "Matched fixture feature-drift matrix across runtime SHA, backend, preprocessing path, image-token budget and canonicalization version; demonstrate stable geometry and behavior despite those changes."
+    },
+    {
+      "id": "H-Q23-CANONICAL-PIXEL-GATE-05",
+      "claim": "Cheap unchanged-frame suppression should hash canonicalized perceived pixels/ROI plus source epoch rather than raw file bytes, so EXIF/container differences cannot silently poison familiarity identity.",
+      "status": "ARCHITECTURE_CANDIDATE",
+      "cheapest_falsifier": "Orientation/metadata metamorphic tests where visually equivalent inputs must map to the same canonical pixel identity while perceptually different orientations must not collide."
+    }
+  ]
+}

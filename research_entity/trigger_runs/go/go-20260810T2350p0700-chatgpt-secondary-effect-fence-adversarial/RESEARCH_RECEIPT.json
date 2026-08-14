@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2350p0700-chatgpt-secondary-effect-fence-adversarial",
+  "trigger": "go",
+  "created_at": "2026-08-10T23:50:28+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "id": "FRANK_V0_1",
+    "status": "IN_PROGRESS",
+    "work_package": "F-V01-09-EFFECT-AUTHORITY",
+    "training_authorized": false
+  },
+  "identity_lock": {
+    "research_entity": "Clay",
+    "target_native_self": "self.root",
+    "target_human_surface": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "target_cognition": "CLAYCODE_ONLY",
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "selected_question": "Does the fresh caller-bound immutable execution-generation fence candidate actually preserve ordinary multi-effect execution and exact capability lineage while closing stale reservation/start/retry/provider-commit authority gaps?",
+  "prior_evidence": {
+    "receipt": "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json",
+    "current_main_negative_run": 31407119970,
+    "supported_defect": "V14 persisted effect lifecycle can admit stale first-attempt, stale same-key retry and an internal unbound caller into COMMITTING after execution-generation turnover; historical V14 lifecycle baseline itself remains functional."
+  },
+  "fresh_swarm_frontier": {
+    "pr_204": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "head": "d7759b63c8a8ecf4995f577fc9cbf459c40cc8ab",
+      "status": "OPEN_DRAFT_CANDIDATE_NOT_PROMOTED",
+      "mechanism": "caller-bound immutable B1 reservation / B2 begin+retry / B3 provider-precommit fence with process-local ExecutionGenerationFence and provider commit serialization"
+    },
+    "pr_217": {
+      "head": "4f0f3e18e9ca139d92eaf8e4afdd1466ab4bc771",
+      "status": "OPEN_DRAFT_STACK",
+      "purpose": "exact Gate-issued FrankExecutionLease object identity / constructor-forgery hardening"
+    },
+    "pr_211": {
+      "head": "c1e7f3bbce925138d8cc93b5a4af53ce666db509",
+      "status": "OPEN_DRAFT_COUNTERTEST",
+      "purpose": "same-epoch V16 execution_id rebind alias discriminator"
+    },
+    "pr_214": {
+      "head": "7648b0f62e4b8ba39d9e032bd08fdc910d225a20",
+      "status": "OPEN_DRAFT_COMPETING_INTEGRATION",
+      "observed_useful_property": "per-effect execution fence hash includes effect_id and therefore does not share PR204's generation-hash cardinality collision",
+      "observed_limit": "raw current lease/session/client presentation is weaker caller capability provenance than the selected opaque Gate-issued execution capability direction"
+    }
+  },
+  "fresh_external_evidence": [
+    {
+      "class": "OFFICIAL_TECHNICAL",
+      "source": "Hazelcast FencedLock documentation",
+      "url": "https://docs.hazelcast.com/hazelcast/5.5/data-structures/fencedlock",
+      "delta": "A fencing token is generation-scoped evidence passed to an external resource so stale owners can be rejected; current lock observation alone is not sufficient stale-owner safety."
+    },
+    {
+      "class": "OFFICIAL_TECHNICAL",
+      "source": "Stripe idempotent requests documentation",
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "delta": "Idempotency addresses duplicate retries; it does not replace caller/execution ownership fencing, and indeterminate provider outcomes remain a reconciliation concern."
+    },
+    {
+      "class": "PRIMARY_OS_DOCUMENTATION",
+      "source": "Linux flock(2) / fork(2) / open(2) man-pages",
+      "urls": [
+        "https://man7.org/linux/man-pages/man2/flock.2.html",
+        "https://man7.org/linux/man-pages/man2/fork.2.html",
+        "https://man7.org/linux/man-pages/man2/open.2.html"
+      ],
+      "delta": "forked descendants inherit file descriptors/open-file descriptions; flock state is associated with the open file description and can therefore survive into a child until all duplicated descriptors are closed or unlocked."
+    },
+    {
+      "class": "OFFICIAL_RUNTIME_DOCUMENTATION",
+      "source": "Python os.register_at_fork documentation",
+      "url": "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "delta": "Python provides an after_in_child hook suitable for clearing/reseeding process-local capability registries if fork descendants must not inherit authority."
+    }
+  ],
+  "hypothesis": "PR204's B1/B2/B3 structure is directionally correct, but exact-generation safety requires capability issuance and lifecycle semantics to survive ordinary cardinality, same-epoch logical execution identity, constructor forgery, fork/subprocess inheritance and provider-commit TOCTOU discriminators.",
+  "strongest_counterhypothesis": "The current DB V15/V16 checks plus the physical FrankExecutionGate may still prevent a real provider effect from a forked or forged caller even where the transient capability model is imperfect; therefore the new fork result is a provenance/liveness falsifier, not evidence of an unauthenticated provider bypass.",
+  "normal_discriminating_test": {
+    "name": "SAME_EXECUTION_MULTI_EFFECT_CARDINALITY",
+    "mechanism_under_test": "PR204 UNIFIEDDB_EFFECT_EXECUTION_FENCE_V1 sidecar cardinality",
+    "observation": {
+      "schema_fact": "effect_id is PRIMARY KEY and binding_hash is globally UNIQUE",
+      "runtime_fact": "derive_execution_generation_fence reuses one secret for the same live FrankExecutionLease and therefore returns the same public binding/fingerprint/binding_hash for all effects under that execution",
+      "effect_1": "ADMITTED",
+      "effect_2_same_live_execution": "REJECTED",
+      "error": "IntegrityError: UNIQUE constraint failed: effect_execution_generation_fences.binding_hash"
+    },
+    "environment": {
+      "os": "Linux 6.18.35 x86_64",
+      "libc": "glibc 2.41",
+      "python": "3.13.5",
+      "sqlite": "3.46.1"
+    },
+    "classification": "REFUTES_PR204_CURRENT_HEAD_MULTI_EFFECT_CORRECTNESS",
+    "repair_candidate": "Keep effect_id as the uniqueness key; either remove global UNIQUE from the generation identity hash or store a per-effect binding digest that includes effect_id while separately retaining a comparable generation identity."
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_invocation": 1,
+    "name": "FORKED_CAPABILITY_GHOST",
+    "question": "Does PR204's process-local WeakKeyDictionary secret necessarily die when the source process retires, or can fork create an independently surviving child copy?",
+    "method": "Minimal Linux/Python reproduction of WeakKeyDictionary[lease, secret], owner._closed, weak owner reference and capability fingerprint; derive in parent, fork, retire/remove parent copy, synchronize child, then call child-side liveness assertion.",
+    "result": {
+      "parent_retired_its_copy": true,
+      "child_assert_live": true,
+      "child_reason": "LIVE",
+      "child_exit": 0,
+      "elapsed_ms": 51.881
+    },
+    "environment": {
+      "os": "Linux 6.18.35 x86_64",
+      "libc": "glibc 2.41",
+      "python": "3.13.5"
+    },
+    "interpretation": "The process-local-secret design does not automatically die across fork because child memory and lock/open-file-description state may be inherited. This does not establish provider bypass; it establishes a missing fork/subprocess capability-lineage policy and regression obligation.",
+    "repair_candidates": [
+      "If descendants must not inherit authority, clear/reseed capability issuance/liveness registries with os.register_at_fork(after_in_child=...) and add a fork discriminator.",
+      "If descendants are intentionally part of one admitted execution generation, model and test that lineage explicitly rather than relying on accidental inheritance."
+    ]
+  },
+  "existing_adversarial_findings_reused_not_duplicated": [
+    "PR204 B0: public FrankExecutionLease constructor permits live-looking same-field object forgery unless exact Gate issuance is registered and checked; PR217 addresses this lane.",
+    "PR204 exact V16 generation identity: fence does not bind execution_id/credential admission; PR211 tests same-epoch execution_id rebinding."
+  ],
+  "architecture_delta_candidate": {
+    "status": "CANDIDATE_NOT_PROMOTED",
+    "name": "EXACT_EXECUTION_CAPABILITY_FENCE_FUSION_V2",
+    "preserve": [
+      "immutable reservation-to-generation provenance",
+      "caller-presented transient capability at B1/B2/B3",
+      "provider precommit recheck serialized through the live execution lease",
+      "outcome/reconciliation admissible after generation turnover",
+      "zero authoritative effect-state mutation on stale rejection"
+    ],
+    "add_or_fuse": [
+      "exact Gate-issued lease object identity / unforgeable issuance registry",
+      "exact V16 execution_id plus admitted ingress/credential provenance rather than epoch-only logical execution identity",
+      "per-effect binding cardinality that permits multiple effects in one execution generation",
+      "explicit fork/subprocess capability-lineage policy with at-fork clearing/reseed when descendants are not admitted",
+      "rollback/incarnation protection from the separate snapshot-generation-resurrection lane before final recovery promotion"
+    ],
+    "permanent_regressions": [
+      "multiple effects from one live execution generation",
+      "manual/copy-constructed same-field lease cannot derive capability",
+      "same-epoch execution_id rebind cannot start prior execution's reservation",
+      "fork child cannot inherit live effect authority unless explicitly admitted by policy",
+      "stale first attempt/retry/provider precommit after generation turnover",
+      "uncertain provider outcome remains reconcilable without transferring execution authority"
+    ]
+  },
+  "work_impact": {
+    "F-V01-09-EFFECT-AUTHORITY": "REMAINS_IN_PROGRESS",
+    "presence_execution_generation_effect_fence": "OPEN_BLOCKED_BY_ADVERSARIAL_COUNTEREVIDENCE",
+    "promotion": "NO",
+    "reason": "Current candidate family has useful mechanisms but exact execution-generation semantics are not yet closed under Gate issuance, exact logical execution identity, multi-effect cardinality and fork/subprocess inheritance.",
+    "next_best_work": [
+      "repair/fuse the four blocker dimensions on fresh current main rather than merging PR204 as-is",
+      "rerun parent V14 baseline plus all countertests on the self-hosted target-compatible lane",
+      "only after current-source pass, integrate the strict path into ordinary ClayCode lowering/runtime and remove/unreach unbound production attempt paths",
+      "then continue real-provider unknown-outcome reconciliation and verified outcome -> UnifiedDB re-entry -> DONE"
+    ]
+  },
+  "swarm_distribution": {
+    "pr_204_comment_id": 5243282179,
+    "formal_request_changes_attempt": "REJECTED_BY_GITHUB_422_SELF_REVIEW_NOT_ALLOWED",
+    "material_delta_visibility": "PR_COMMENT_PUBLISHED"
+  },
+  "workflow_state_at_last_refresh": {
+    "pr_204_vps_run": {
+      "run_id": 31410622572,
+      "status": "QUEUED_AT_OBSERVATION",
+      "credit": "NONE_UNTIL_EXECUTED"
+    },
+    "pr_204_hosted_shadow": {
+      "run_id": 31410622849,
+      "status": "COMPLETED_FAILURE_ZERO_STEPS",
+      "classification": "TRANSPORT_OR_RUNNER_EVIDENCE_NOT_CODE_FALSIFICATION"
+    },
+    "pr_204_deep_integrity": {
+      "run_id": 31410622577,
+      "status": "COMPLETED_FAILURE_ZERO_STEPS",
+      "classification": "TRANSPORT_OR_RUNNER_EVIDENCE_NOT_CODE_FALSIFICATION"
+    },
+    "pr_211_self_hosted_countertest": {
+      "run_id": 31410367079,
+      "status": "QUEUED_AT_OBSERVATION",
+      "credit": "NONE_UNTIL_EXECUTED"
+    }
+  },
+  "safety_and_authority": {
+    "external_provider_effect_performed": false,
+    "canonical_target_state_mutated": false,
+    "final_training_started": false,
+    "frank_self_harness_authority_changed": false,
+    "local_discriminators": "sandbox/disposable only",
+    "web_research": "read-only"
+  },
+  "decision": "DO_NOT_PROMOTE_PR204_CURRENT_HEAD; preserve its useful B1/B2/B3 + provider commit serialization mechanisms, fuse stronger issuance/execution/cardinality/fork semantics, and require fresh self-hosted evidence before current-work credit."
+}

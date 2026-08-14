@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260811T2143p0700-chatgpt-secondary-fv01-12-capability-body",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+  "candidate_pr": 335,
+  "candidate_head": "b8d66258bff71a5f61e49956b8a5e8376b455b19",
+  "finding_class": "NORMAL_MIGRATION_FALSIFIER_NOT_GO_OOB",
+  "hypothesis": "When artifact binding is introduced over persisted older capability state, a TOOL receipt with successful old-generation trials but no exact artifact provenance must not inherit those trials into the first artifact-bound generation.",
+  "pre_fix_path": {
+    "status": "STATICALLY_FALSIFIED",
+    "reason": "observe_capability_presence preserved previous trial_generation whenever previous_artifact was absent, so a pre-artifact CAN_DELEGATE receipt could carry old trials into the newly artifact-bound presence",
+    "effect_boundary": "persistent candidate upgrade/migration only; no remote exploit claim"
+  },
+  "repair": {
+    "runtime_commit": "e646afeeeaab7a31b6fac90f65a189c9dfa7d6d8",
+    "runtime_blob": "c6841d3b44dd1eeb6ae61a5102888eb8e34dba56",
+    "policy": "non-revoked TOOL state that has a trial_generation but lacks artifact provenance always starts a new trial_generation when exact artifact binding is first established",
+    "history": "old capability_trials are preserved raw but excluded from current artifact-bound competence"
+  },
+  "regression_gate": {
+    "path": "tests/frank_capability_legacy_artifact_migration_v1_gate.py",
+    "test_commit": "8ef389dbcd62edd9823064d8f113ec83b577c511",
+    "workflow_commit": "b8d66258bff71a5f61e49956b8a5e8376b455b19",
+    "scenario": "seed a pre-artifact TOOL belief as CAN_DELEGATE with two legacy-generation successes and no artifact hash; current read must already fail closed; re-observation must bind exact artifact with zero effective trials/new generation; only two newly bound probes may restore CAN_DELEGATE; all four raw trials must remain",
+    "go_oob_experiment_added": false
+  },
+  "target_workflow": {
+    "workflow": "Frank F-V01-12 capability/body candidate VPS",
+    "run": 31507042078,
+    "head": "b8d66258bff71a5f61e49956b8a5e8376b455b19",
+    "status_at_receipt": "QUEUED",
+    "promotion_before_target_result": false
+  },
+  "peer_route_research": {
+    "current_v0_1_real_verified_peer_producer_found": false,
+    "historical_provider_surface_found": "Project-Frankenstein/ui/ui_tester/claude_client.py with ANTHROPIC_API_KEY",
+    "adjudication": "DO_NOT_SYNTHESIZE_PEER_CAN_DELEGATE; keep external peer UNKNOWN until a current independent producer creates verifiable route receipts",
+    "design_analogy": "reuse V17 producer-owned immutable support receipt / consumer-only validation pattern, while keeping peer capability separate from effect authority"
+  },
+  "adjudication": "PATCHED_TARGET_PENDING",
+  "exact_go_oob_count_unchanged": 1,
+  "exact_go_oob_name": "GHOST_PEER_ROOT_CROWN",
+  "frank_self_harness_authority_changed": false,
+  "training_authorization_changed": false
+}

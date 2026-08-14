@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2035p0700-chatgpt-secondary-runner-provenance-audit",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:35:49+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent_observed_before_write": "9cd99e175c71f34c2981b00866988cafdf619f62",
+  "target": {
+    "program": "FRANK_V0_1",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "accepted_release_host_contract": "Hostinger Ubuntu VPS",
+    "frank_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "frank_main_observed": "d7307539d9d30940a1761f5e567374e951a2ea48"
+  },
+  "observed_evidence": {
+    "current_v6_source_identity_run": {
+      "run_id": 31565689905,
+      "job_id": 94016898560,
+      "runner_name": "clay",
+      "machine_name": "digital-retina",
+      "result": "PASS_SELF_HOSTED_MECHANISM",
+      "claim_boundary": "The job proves V6 source-chain and regression behavior on the observed self-hosted machine, but the run metadata alone does not independently bind that machine to the owner-fixed Hostinger acceptance host or the productive Frank process."
+    },
+    "historical_pre_guard_counterworld_run": {
+      "run_id": 31527873210,
+      "job_id": 93900512070,
+      "job_name": "accepted-target-pre-guard-preload-counterworld",
+      "runner_name": "clay",
+      "machine_name": "digital-retina",
+      "counterworld_result": "COUNTERWORLD_REPRODUCED_PRE_GUARD_LD_PRELOAD_EXECUTION",
+      "provenance_reclassification": "RETAIN mechanism evidence; do not grant Hostinger/productive-target credit from the job name or generic self-hosted routing alone. Independent accepted-host binding remains required."
+    },
+    "current_actual_process_observer": {
+      "merged_pr": 515,
+      "required_positive_selectors": [
+        "FRANK_V0_1_EXPECTED_HOSTNAME",
+        "FRANK_V0_1_EXPECTED_MACHINE_ID_SHA256",
+        "FRANK_V0_1_SYSTEMD_UNIT",
+        "FRANK_V0_1_EXECUTABLE"
+      ],
+      "positive_observation_requirement": "exact accepted-host binding + exact active systemd unit + exactly one stable selected Frank executable + stable mapped SQLite inode-to-same-FD hash + trusted root anchor"
+    }
+  },
+  "primary_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption bug is documented for versions through 3.51.2 and fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "SQLite 3.53.4 is in the fixed WAL-reset lineage."
+    }
+  ],
+  "hypothesis": "A workflow/job labelled accepted-target on the shared self-hosted lane is sufficient provenance for accepted Hostinger runtime credit.",
+  "strongest_counterhypothesis": "Routing labels and historical naming can alias a different self-hosted machine; only independently bound host plus productive unit/process/runtime evidence can mint accepted Hostinger credit.",
+  "discriminator": "Inspect immutable workflow job metadata and require the merged actual-process observer's four independently configured deployment selectors before productive credit.",
+  "result": {
+    "job_label_equals_host_identity": "REJECT",
+    "runner_local_mechanism_evidence": "RETAIN",
+    "accepted_hostinger_productive_runtime_evidence": "BLOCKED_UNTIL_INDEPENDENT_BINDING",
+    "f_v01_13": "IN_PROGRESS"
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "PRE_GUARD_PRELOAD_SENTINEL_LOCAL_REPLICATION",
+    "scope": "Disposable local sandbox only",
+    "baseline_or_treatment_summary": "A harmless LD_PRELOAD constructor created a marker before the shell-level loader-environment rejection; the launcher-equivalent still exited 78.",
+    "result": "REPLICATES_EXISTING_PRE_GUARD_EXECUTION_BOUNDARY",
+    "novel_architecture_delta": false,
+    "canonical_state_mutated": false,
+    "product_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "grf_collapse": {
+    "v6_source_hashing_is_useful": "RETAIN",
+    "sqlite_3_53_4_fixed_lineage": "RETAIN",
+    "shell_guard_prevents_pre_shell_loader_execution": "REJECT",
+    "generic_self_hosted_job_name_proves_hostinger_identity": "REJECT",
+    "existing_productstart_pre_guard_trust_rule": "RETAIN_NO_CHANGE",
+    "existing_actual_process_observer": "RETAIN_AS_NEXT_DISCRIMINATOR"
+  },
+  "reentry": {
+    "architecture_delta": "NO_CHANGE",
+    "negative_result": "Historical workflow naming must not upgrade digital-retina/self-hosted evidence to accepted Hostinger productive evidence without independent host/process binding.",
+    "next_falsifier": "Execute the existing actual-process read-only observer on the owner-fixed Hostinger acceptance host with independently provisioned hostname, machine-id digest, canonical systemd unit, executable selector and trusted SQLite root anchor; then require start/restart/recovery plus rollback/downgrade/library-swap evidence before F-V01-13 promotion.",
+    "do_not_repeat": "Do not rerun the LD_PRELOAD unusual experiment for this finding; its mechanism is already established and this cycle used exactly one bounded replication."
+  },
+  "claim_boundary": "This receipt records provenance correction and mechanism replication only. It does not claim accepted Hostinger execution, productive Frank process admission, restart/recovery PASS, F-V01-13 PASS, whole Frank v0.1 acceptance, Harness/effect authority, or final-model training authorization."
+}

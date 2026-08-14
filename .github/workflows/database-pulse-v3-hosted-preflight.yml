@@ -1,0 +1,151 @@
+name: UnifiedDB Pulse Rank V3-V5 Hosted Preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_index_v3.py'
+      - 'research_entity/runtime/test_database_pulse_rank_index_v3.py'
+      - 'research_entity/runtime/database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v4.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v4.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/database_pulse_runtime_v5.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v5.py'
+      - 'research_entity/runtime/database_pulse_model_organ.py'
+      - 'research_entity/runtime/test_database_pulse_model_replacement_identity.py'
+      - 'research_entity/runtime/auth_shadow_focus_guard.py'
+      - 'research_entity/runtime/test_auth_shadow_focus_guard.py'
+      - 'research_entity/harness/reference/state_auth_shadow.py'
+      - 'tools/database_pulse_rank_index_v3_benchmark.py'
+      - 'tools/database_pulse_rank_index_v3_randomized_falsifier.py'
+      - '.github/workflows/database-pulse-v3-hosted-preflight.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-pulse-rank-v3-v5-hosted-main
+  cancel-in-progress: true
+
+jobs:
+  hosted-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Compile and test Pulse rank semantics, lifecycle, full Runtime V5, identity, and focus integrity
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_index_v3.py \
+            research_entity/runtime/test_database_pulse_rank_index_v3.py \
+            research_entity/runtime/database_pulse_runtime_v3.py \
+            research_entity/runtime/test_database_pulse_runtime_v3.py \
+            research_entity/runtime/database_pulse_rank_path_v4.py \
+            research_entity/runtime/test_database_pulse_rank_path_v4.py \
+            research_entity/runtime/database_pulse_rank_path_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5.py \
+            research_entity/runtime/database_pulse_runtime_v5.py \
+            research_entity/runtime/test_database_pulse_runtime_v5.py \
+            research_entity/runtime/database_pulse_model_organ.py \
+            research_entity/runtime/test_database_pulse_model_replacement_identity.py \
+            research_entity/runtime/auth_shadow_focus_guard.py \
+            research_entity/runtime/test_auth_shadow_focus_guard.py \
+            research_entity/harness/reference/state_auth_shadow.py \
+            tools/database_pulse_rank_index_v3_benchmark.py \
+            tools/database_pulse_rank_index_v3_randomized_falsifier.py
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_index_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v3 \
+            research_entity.runtime.test_database_pulse_rank_path_v4 \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
+            research_entity.runtime.test_database_pulse_model_replacement_identity \
+            research_entity.runtime.test_auth_shadow_focus_guard
+
+      - name: Randomized differential falsifier
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_rank_index_v3_randomized_falsifier.py \
+            --seeds 12 --initial-keys 180 --steps 120 --budget 64 \
+            --output research_entity/benchmarks/database_pulse/rank_index_v3_randomized_hosted.json
+
+      - name: Matched V2 versus V3 engineering benchmark
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_rank_index_v3_benchmark.py \
+            --rows 3000 --budget 64 --repeats 200 --updates 100 \
+            --output research_entity/benchmarks/database_pulse/rank_index_v3_hosted.json
+
+      - name: Attach hosted-run metadata and enforce gates
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, platform, sqlite3, sys
+          from datetime import datetime, timezone
+          base=pathlib.Path('research_entity/benchmarks/database_pulse')
+          meta={
+            'evidence_class':'GITHUB_HOSTED_UBUNTU_AUXILIARY_EXECUTION',
+            'scope':'AUXILIARY_PREFLIGHT_NOT_HOSTINGER_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'git_sha':os.environ.get('GIT_SHA',''),
+            'github_run_id':os.environ.get('RUN_ID',''),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+          }
+          for name in ('rank_index_v3_randomized_hosted.json','rank_index_v3_hosted.json'):
+            p=base/name; x=json.loads(p.read_text(encoding='utf-8')); x['execution_metadata']=meta
+            x['release_boundary']='Auxiliary GitHub-hosted Ubuntu evidence only; Hostinger and Andreas-target receipts remain separate gates.'
+            p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          rnd=json.loads((base/'rank_index_v3_randomized_hosted.json').read_text())
+          bench=json.loads((base/'rank_index_v3_hosted.json').read_text())
+          assert rnd['pass'] is True,rnd
+          c=bench['correctness']
+          assert c['wide_reference_focus']==c['expected_focus'],bench
+          assert c['active_field_correct'] is True,bench
+          assert c['rank_index_correct'] is True,bench
+          assert c['rank_query_plan_uses_index'] is True,bench
+          assert c['rank_index_verify_initial']['pass'] is True,bench
+          assert c['rank_index_verify_final']['pass'] is True,bench
+          print('PULSE_RUNTIME_V3_HOSTED_PREFLIGHT=PASS')
+          print('PULSE_RUNTIME_V5_TWO_PHASE_LIFECYCLE_GATE=PASS')
+          print('PULSE_MODEL_REPLACEMENT_IDENTITY_GATE=PASS')
+          print('PULSE_AUTH_SHADOW_FOCUS_USE_BOUNDARY_GATE=PASS')
+          PY
+
+      - name: Persist auxiliary receipts
+        run: |
+          set -euo pipefail
+          base=research_entity/benchmarks/database_pulse
+          cp "$base/rank_index_v3_randomized_hosted.json" /tmp/
+          cp "$base/rank_index_v3_hosted.json" /tmp/
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p "$base"
+          cp /tmp/rank_index_v3_randomized_hosted.json "$base/"
+          cp /tmp/rank_index_v3_hosted.json "$base/"
+          git config user.name 'clay-rank-index-v3-hosted'
+          git config user.email 'clay-rank-index-v3-hosted@users.noreply.github.com'
+          git add "$base/rank_index_v3_randomized_hosted.json" "$base/rank_index_v3_hosted.json"
+          git commit -m 'evidence(unifieddb): persist Pulse Runtime V3-V5 hosted preflight [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1

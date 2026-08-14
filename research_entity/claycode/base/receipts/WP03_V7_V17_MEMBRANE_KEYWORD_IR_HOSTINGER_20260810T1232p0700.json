@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CLAY-WP03-V7-V17-MEMBRANE-KEYWORD-IR-HOSTINGER-20260810T1232P0700",
+  "origin_actor": "chatgpt-secondary",
+  "ingested_by": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:32:45+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-03-IR-TYPES",
+  "evidence_class": "VERIFIED_REMOTE_EXECUTION_SELF_HOSTED_UBUNTU_EXACT_BLOB_RESEARCH_PROXY",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "executor_pr": 88,
+  "executor_pr_base": "clay-wp03-keyword-ident-candidate-20260810",
+  "executor_pr_head": "clay-wp03-v7-v17-membrane-20260810",
+  "workflow_run_id": 31358920312,
+  "workflow_conclusion": "success",
+  "artifact_id": 9051613361,
+  "artifact_name": "clay-wp03-v7-v17-compose-31358920312",
+  "artifact_digest": "sha256:1816fbc0ea5f386ab3889314b67d0d301f64a8c711f16d6eea8bb836afa115e2",
+  "runtime": {
+    "runner_name": "clay",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "strict_build_ms": 383.7593998759985,
+    "artifact_reported_github_sha": "6821186b3a6e6965967426e0221c27330ab5fec6"
+  },
+  "exact_input_git_blobs": {
+    "grammar_v7_typed_fn_v17_relation_membrane": "ca0b8c8202edbdc6edd2f53e5eb60ca3ef416e1b",
+    "frontend": "55728fd20323a364bb5e831989644b65189603d1",
+    "typed_ir_keyword_candidate": "1234ab634dff60197ea45d4a52969c5ea442746a",
+    "g9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797"
+  },
+  "gates": {
+    "strict_build": true,
+    "strict_full_g9_dialect": true,
+    "relation_boundary": true,
+    "operator_identity": true,
+    "full_typed_ir": true,
+    "keyword_identifiers": true,
+    "authority_none": true
+  },
+  "errors": [],
+  "full_declaration_count": 25,
+  "full_program_semantic_id": "clayir:3c7d2867ea17b195d8d2f4af87e14d7e4bd4480277f2b646aa00986a08729c20",
+  "full_source_semantic_hashes": {
+    "CLAYCODE_G9_FUSION_SPEC_V3.clay": "394a0aaa67060cc2855cef527e1759f54e6527c04548bef34b4c0d82f330ae2a",
+    "DIALECT_REGISTRY_V3.clay": "a5607527dc3d8ae5368a50049ab08dd2a21d4fbfc8060e9369a596440191c876"
+  },
+  "relation_boundary_cases": {
+    "accepted": [
+      "Needle.owns(X)",
+      "Needle.owns (X)",
+      "Needle.owns\\t(X)",
+      "Needle.owns X",
+      "Needle.owns\\tX",
+      "Needle.lowers X",
+      "Needle.lowers\\tX",
+      "4B_need_not_learn Needle.owns",
+      "Needle.owns + trailing horizontal trivia",
+      "Needle.owns + trailing comment"
+    ],
+    "rejected": [
+      "bare Needle.lowers",
+      "Needle.lowers (X)"
+    ]
+  },
+  "operator_identity": {
+    "add_semantic_hash": "135dcdb4205fc84e2a50330715776a64f86afbdc488e1aa50c6d849a77156171",
+    "sub_semantic_hash": "6d445e2d8540643133f2599b70eda00e1766f315a800811a2901270cf53b552a",
+    "discriminated": true
+  },
+  "adjudication": "SUPPORTED_COMPOSED_RESEARCH_CANDIDATE",
+  "causal_interpretation": {
+    "upstream_v7_optional_dotted_relation_strict_conflict": "REPAIRED_ON_TESTED_COMPOSED_BYTES",
+    "downstream_value_based_keyword_identifier_bug": "REPAIRED_ON_TESTED_CANDIDATE_BYTES",
+    "composition_interaction_regression_observed": false
+  },
+  "production_selection": {
+    "wp02_parser": "KEEP_V17_SELECTED",
+    "wp03_grammar": "CANDIDATE_ONLY",
+    "wp03_typed_ir": "CANDIDATE_ONLY",
+    "promotion_allowed": false
+  },
+  "counts_as_wp03_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "frank_harness_mutation": false,
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "scope_guard": "Exact staged Hostinger Ubuntu research composition only. It does not replace selected WP02 V17, close WP03/WP04/BASE, merge either candidate, mutate Frank Harness authority, or satisfy registered Andreas Ubuntu developer-system acceptance.",
+  "next_falsifier": "Port/rebase the minimum two supported deltas onto fresh Clay main under exact provenance, run the canonical WP03 validator and differential equivalence suite, then require the registered Andreas Ubuntu target receipt before formal promotion.",
+  "authority_invariant": "model output != execution authority"
+}

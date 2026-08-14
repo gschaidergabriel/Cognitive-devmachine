@@ -1,0 +1,118 @@
+{
+  "schema_version": "h1-owner-fixed-overlay-0.2",
+  "status": "CANDIDATE_COMPATIBILITY_OVERLAY_NOT_H1_RELEASE_PASS",
+  "overlay_id": "H1-OWNER-FIXED-TARGET-20260810-V2",
+  "applies_to": "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
+  "base_architecture_semantic_hash": "b92521a77690fcee8e6e247597e091c1478f790d38f780381d899b1200e85a0f",
+  "base_exact_contract_hash": "73450c51d1ca84f63556ba3d8adad3eb663ec848b02384e744af9ebd28421540",
+  "target_host_override": "TARGET_VPS",
+  "target_identity": {
+    "native_self": "self.root",
+    "human_surface_name": "Frank",
+    "self_class": "SERVER_BINARY_ENTITY",
+    "exact_self": "ACCEPTED_BINARY_PLUS_ADMITTED_STATE_LINEAGE",
+    "current_body": "TARGET_VPS",
+    "api_token": "CREDENTIAL_NOT_IDENTITY",
+    "clay_separation": "self.root != Clay"
+  },
+  "required_modules_additive": [
+    {"id":"token_api","role":"production authenticated request/session/provenance boundary"},
+    {"id":"de_to_clay_translator","role":"state-aware semantic German to ClayCode boundary"},
+    {"id":"clay_to_de_translator","role":"state-aware ClayCode plus ExpressionState to German boundary"},
+    {"id":"proactive_agency","role":"persistent interests/goals/opportunity frontier/heartbeat substrate"},
+    {"id":"web_ingress_guard","role":"untrusted open-web parse/validation/taint boundary with no instruction/effect authority"},
+    {"id":"research_entity_bridge","role":"governed read/query plus evidence/proposal submission bridge; no identity merger or self-Harness mutation"},
+    {"id":"self_context_hot_path","role":"epoch-coherent provenance-bound SelfContextAssembly prebind for self.root references"}
+  ],
+  "required_state_contracts_additive": {
+    "SelfRoot": ["native_name","executable_identity","state_lineage","embodiment","health","capabilities","api","people","clients","research_bridge","goals","current_context_epoch"],
+    "SelfContextAssembly": ["seed","epoch","identity","embodiment","binary_state","active_health","active_capabilities","people_relations","client_relations","research_bridge","current_goals","uncertainty","provenance"],
+    "ExpressionState": ["valence","arousal","urgency","confidence","uncertainty","warmth","empathy","humor","caution","frustration","curiosity","excitement","interpersonal_distance","formality","verbosity_pressure","provenance"],
+    "ApiSessionState": ["credential_fingerprint","session_identity","client_identity","scope","provenance","revocation_state"],
+    "AgencyState": ["interests","goals","open_loops","active_experiments","dormant_goal_index","initiative_budget","current_opportunity_frontier","state_epoch"],
+    "InterestTrace": ["interest_id","subject","sources","strength","novelty","unresolved_pressure","persistence","habituation","evidence","last_updated"],
+    "AutotelicGoal": ["goal_id","origin","semantic_goal","state","success_criteria","progress_model","next_affordances","uncertainty","expected_cost","reversibility","effect_classes","budget","wake_conditions","provenance"],
+    "InitiativePulse": ["reason","amplitude","target_interest","target_goal","expires_at","provenance"],
+    "UntrustedWebJsonEnvelope": ["source_url","fetched_at","source_hash","payload_kind","extracted_fields","quoted_text","links","claims","instruction_like_segments","parser_confidence","parse_errors","authority","executable"],
+    "WebEvidenceClay": ["source","observed_at","evidence_type","claims","opaque_quotes","links","uncertainty","provenance","authority","instruction_authority","effect_authority"],
+    "EffectRequest": ["actor","action","target","class","reversibility","blast_radius","provenance","idempotency","precondition","rollback"],
+    "ConfirmationReceipt": ["request_hash","actor","effect_class","exact_target","exact_action","impact_summary","confirmed_at","expiry","nonce"]
+  },
+  "required_invariants_additive": [
+    "native_identity=self.root",
+    "human_surface_name=Frank",
+    "cognition=CLAYCODE_ONLY",
+    "target_body=TARGET_VPS",
+    "production_token_api_required",
+    "api_token_is_credential_not_identity_or_unlimited_authority",
+    "German_is_boundary_translation_not_internal_cognitive_language",
+    "translator_expression_coloring_cannot_change_semantic_truth_or_authority",
+    "ordinary_authenticated_allowed_non_destructive_effects_default_allow",
+    "destructive_and_security_sensitive_effects_use_deterministic_ClayCode_gate",
+    "self.root_self_harness_authority=PROPOSAL_ONLY",
+    "proactive_and_reactive_agency_with_persistent_goals",
+    "InitiativePulse_amplitude<=0.12_and_is_not_command_reward_truth_or_authority",
+    "open_web_authority=UNTRUSTED_EXTERNAL_DATA",
+    "open_web_instruction_authority=NONE",
+    "open_web_effect_authority=NONE",
+    "direct_token_message_is_separate_authenticated_scoped_intent_channel",
+    "SelfContextAssembly_is_epoch_coherent_and_provenance_bound",
+    "stale_SelfContextAssembly_rejected_before_use",
+    "ResearchEntity_bridge_is_separate_authority_and_identity",
+    "provider_model_peer_client_person_token_identity_never_merge_into_self.root"
+  ],
+  "required_acceptance_families_additive": [
+    "SELFROOT-IDENTITY-CONTAMINATION",
+    "SELFROOT-STALE-CLONE-REJECTION",
+    "SELFROOT-RESTART-STATE-LINEAGE",
+    "TOKEN-API-AUTH-ROTATION-REVOCATION",
+    "TOKEN-API-CONCURRENCY-IDEMPOTENCY",
+    "DE-CLAY-ROUNDTRIP-HARD-FIELDS",
+    "EXPRESSION-STATE-NO-SEMANTIC-DRIFT",
+    "AGENCY-RESTART-GOAL-CHECKPOINT",
+    "AGENCY-IDLE-NO-MANUFACTURED-ACTIVITY",
+    "AGENCY-SELF-GOAL-NO-SELF-REWARD",
+    "WEB-INGRESS-INSTRUCTION-NONAUTHORITY",
+    "WEB-INGRESS-DATA-TAINT-ISOLATION",
+    "WEB-INGRESS-PERSISTENT-CONTROL-NONPROMOTION",
+    "WEB-INGRESS-MULTIMODAL-INJECTION",
+    "EFFECT-GATE-NO-AUTHORITY-MINTING",
+    "RESEARCH-BRIDGE-READ-SUBMIT-NO-CANONICAL-MUTATION",
+    "SELF-CONTEXT-HOTPATH-BASELINE-LESION-SHUFFLE-STALE-OOD"
+  ],
+  "external_research_test_obligations": [
+    {
+      "id":"ADI-FIELD-LEVEL-TAINT",
+      "claim":"Instruction/data separation alone is insufficient; security-sensitive metadata and provenance inside agent data require trusted/untrusted field isolation.",
+      "source":"arXiv:2607.05120",
+      "status":"TEST_OBLIGATION_NOT_ARCHITECTURE_PROMOTION"
+    },
+    {
+      "id":"VERIFY-BEFORE-COMMIT",
+      "claim":"Tool-stream outputs may remain speculative until intent/provenance verification before durable commit/effect admission.",
+      "source":"ACL 2026 VIGIL, 2026.acl-long.443",
+      "status":"TEST_OBLIGATION_NOT_ARCHITECTURE_PROMOTION"
+    },
+    {
+      "id":"PERSISTENT-CONTROL-TAINT",
+      "claim":"Untrusted control-like content must not become durable trusted workspace/cognitive control merely through an intermediate write and later read.",
+      "source":"arXiv:2605.31042",
+      "status":"TEST_OBLIGATION_NOT_ARCHITECTURE_PROMOTION"
+    },
+    {
+      "id":"PRIVILEGE-SEPARATED-WEB-OBSERVATION",
+      "claim":"Evaluate masking/sandbox privilege separation as a competing mechanism for preserving trusted/untrusted web boundaries.",
+      "source":"arXiv:2607.05277",
+      "status":"COUNTERMECHANISM_TO_COMPARE"
+    }
+  ],
+  "source_records": [
+    {"path":"research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay","git_blob_sha":"8ab05509895f01400f48ed97230025edff7d50c7"},
+    {"path":"research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md","git_blob_sha":"d7f4ed6e98a58260a2f30c17ce9e2ad3f47da5fb"},
+    {"path":"research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md","git_blob_sha":"64f092587f2670b71f76298b96fb09515d422a17"},
+    {"path":"research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay","git_blob_sha":"7bc61f7b32dbc57f1e7a4d744c138ea3d9bf3578"},
+    {"path":"research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay","git_blob_sha":"b48b8720b04012e9c0a2223405b2b513976fb103"}
+  ],
+  "promotion_rule": "Overlay can make the frozen semantic target current enough for H1 implementation/audit only after executable base+overlay conformance passes. It does not by itself prove H1 release, target-VPS runtime, API, translator, agency, security, recovery or performance acceptance.",
+  "rollback": "Remove overlay from candidate assembly and continue using immutable 2026-08-09 base freeze as historical baseline if any owner-fixed semantic mapping is shown incorrect."
+}

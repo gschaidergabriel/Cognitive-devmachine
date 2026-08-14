@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "20260810T1220p0700-chatgpt-pulse-s2-aba-identity-counterevidence",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "observed_main_head_before_write": "04f0014a7f2341701f186f7c6ba25eba2689471d",
+  "subject": "UNIFIEDDB_PULSE_EFFECTIVIZER_S2_CONTENT_ABA_VS_VERSIONED_PROJECTION_IDENTITY",
+  "source_candidate": {
+    "path": "research_entity/runtime/semantic_pulse_effectivizer_s2.py",
+    "main_blob_sha": "fc505b86fd6df4005c1bb640632c27174eb8832a",
+    "prior_receipt": "research_entity/unifieddb/receipts/20260810T1211p0700_CHATGPT_PULSE_EFFECTIVIZER_S2_GO.json"
+  },
+  "baseline_evidence": {
+    "spm_path": "research_entity/runtime/semantic_access_pulse_v12.py",
+    "spm_test_path": "research_entity/runtime/test_semantic_access_pulse_v12.py",
+    "spm_test_blob_sha": "3f2b5e5d13de2a3d51b8c91027089ad1b5f976c3",
+    "relevant_semantics": "SPM-S1 test fixtures intentionally advance target_record_id versions (for example rec:<seed>:...:v0 to v1/v2) and segment hashes commit to target_record_id as well as target_logical_id/path data. Therefore equal final content fingerprint does not prove equal projection identity."
+  },
+  "hypothesis_under_test": "A per-logical A->B->A content-fingerprint chain may be removed entirely from final-state projection work because its final content fingerprint equals its entry fingerprint.",
+  "strongest_counterhypothesis": "The same-content return can still carry a new record/version/provenance identity; dropping the touched logical id and its impacted seeds can reuse an ABA-stale immutable access segment even though the final global source epoch advances.",
+  "executable_falsifier": {
+    "evidence_class": "VERIFIED_LOCAL_EXECUTABLE_MODEL_BOUND_TO_EXISTING_SPM_VERSIONED_RECORD_FIXTURE_SEMANTICS",
+    "runtime": {
+      "platform": "Linux 6.18.35 x86_64 glibc2.41",
+      "python": "3.13.5"
+    },
+    "events": [
+      "A: content a0 -> a1, record version 0 -> 1, impact seed:A",
+      "A: content a1 -> a0, record version 1 -> 2, impact seed:A",
+      "B: content b0 -> b1, record version 0 -> 1, impact seed:B"
+    ],
+    "current_s2_effectivization": {
+      "content_effective_ids": ["B"],
+      "content_cancelled_ids": ["A"],
+      "recompute_seeds": ["seed:B"],
+      "resulting_A_segment": "rec:seed:A:v0"
+    },
+    "independent_final_rebuild": {
+      "expected_A_segment": "rec:seed:A:v2",
+      "expected_B_segment": "rec:seed:B:v1"
+    },
+    "final_projection_equal": false,
+    "classification": "ABA_STALE_SEGMENT_REUSE_COUNTEREXAMPLE"
+  },
+  "root_cause": "S2 currently treats before_fingerprint == after_fingerprint as permission to erase both the logical invalidation identity and its impact seeds. That is only content equality. SPM-S1 projection identity can include versioned target_record_id/provenance, so content cancellation is not automatically identity cancellation.",
+  "minimal_conservative_candidate": {
+    "rule": "Keep net-zero chains in cancelled_logical_ids for content diagnostics, but preserve every touched logical id and union every event impact seed into the one final SPM invalidation plan unless a future explicit identity-stability witness proves safe erasure.",
+    "fully_cancelled_batch_effect": "No metadata-only fake change is needed: the touched logical id remains a real invalidation identity; SPM can recompute its seeds against the final source state and publish the new epoch even when the resulting immutable segment is reusable.",
+    "rollback": "Disable batch effectivization and execute existing sequential SPM-S1."
+  },
+  "bounded_proxy_tradeoff": {
+    "fixture": "same 5000-seed/200-logical/200-event/batch-size-10 rng-seed-7 workload used by the S2 receipt",
+    "sequential_seed_mentions": 4800,
+    "original_s2_distinct_recomputed_seeds": 3774,
+    "original_s2_recompute_reduction_fraction": 0.21375,
+    "aba_safe_distinct_recomputed_seeds": 3936,
+    "aba_safe_recompute_reduction_fraction": 0.18,
+    "generation_map_row_reduction_fraction": 0.9,
+    "interpretation": "Identity-safe recomputation gives up only 3.375 percentage points of the synthetic recompute reduction while preserving the dominant 90% generation-map publication reduction. The previous 10.198x p50 proxy speedup must be rerun; it is not assumed unchanged."
+  },
+  "implementation_candidate": {
+    "branch": "chatgpt/go-pulse-s2-aba-safe-20260810",
+    "effectivizer_commit": "ddb1011d6d9ecafc168a77b02993a7aba948d492",
+    "integration_test_commit": "d399b17f7a3a2130cb1ca4e3a49a7de30c2a6925",
+    "shadow_workflow_commit": "7e8bc6a08d0f2f851195e7ceb6991052af6a61ab",
+    "draft_pr": 150,
+    "main_modified": false,
+    "frank_harness_modified": false
+  },
+  "validation_state": {
+    "local_abstract_falsifier": "PASS_COUNTEREXAMPLE_REPRODUCED",
+    "local_conservative_model": "PASS_FINAL_MAP_EQUALS_INDEPENDENT_REBUILD",
+    "pr_identity_guard": "FAIL_PRE_STEP_OR_ADMISSION_CLASS_NO_VISIBLE_STEPS_NOT_SCIENTIFIC_CODE_EVIDENCE",
+    "branch_shadow_ubuntu": "UNKNOWN_NO_CONNECTOR_VISIBLE_RUN_OR_STATUS_YET",
+    "hostinger_exact_candidate": "UNKNOWN",
+    "andreas_target": "NOT_ATTEMPTED",
+    "canonical_promotion": "NONE"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING_WITH_MATERIAL_COUNTEREVIDENCE_AGAINST_CURRENT_S2_CANCELLATION",
+    "affected": [
+      "unifieddb/pulse-effectivizer-s2",
+      "unifieddb/spm-s1",
+      "claygraph/projection-epoch-consumers",
+      "runtime/continuity",
+      "harness/recovery"
+    ],
+    "new_test_obligation": "Every effectivization cancellation claim must distinguish content fingerprint equality from record/version/provenance identity stability and compare batched final projection against an independent sequential/full rebuild on versioned-record fixtures.",
+    "current_s2_promotion": "BLOCKED_BY_ABA_COUNTEREVIDENCE_UNTIL_RESOLVED"
+  },
+  "out_of_box": "No additional out-of-box experiment counted here; this is a normal cross-branch falsifier. The exact-go macrocycle already consumed its one allowed unusual experiment in the WP03 conflict-peeling lane.",
+  "live_web": "DEGRADED_REFRESH_503_IN_THIS_WORKER_SUBCYCLE; decision rests on exact current repository semantics and executable counterexample, not an external claim.",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

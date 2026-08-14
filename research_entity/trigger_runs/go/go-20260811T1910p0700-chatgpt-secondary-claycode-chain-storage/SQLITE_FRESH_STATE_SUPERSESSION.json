@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "receipt_id": "SQLITE-FRESH-STATE-SUPERSESSION-20260811T2009P0700",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "classification": "FRESH_SHARED_STATE_SUPERSEDES_EARLIER_UNKNOWN",
+  "earlier_local_state": {
+    "claim": "Exact WAL-reset backport status of Ubuntu libsqlite3-0 3.45.1-1ubuntu2.7 was UNKNOWN from public package/version/notice evidence alone.",
+    "decision_at_that_time": "Fail closed pending exact source/patch provenance or target-specific discriminator.",
+    "still_valid_as_historical_method": true,
+    "current_truth_status": "SUPERSEDED_BY_NEWER_TARGET_EVIDENCE"
+  },
+  "newer_shared_evidence": [
+    {
+      "clay_commit": "e7def259515b01ea61db2ccb1f6457291a1a2f48",
+      "topic": "exact loaded Ubuntu SQLite WAL-reset classification",
+      "target_repo_pr": 320,
+      "workflow_run": 31493057315,
+      "tested_sha": "fb17a57d14ec3c62e50d36095d3f020835bb8bc6",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "classification": "PASS_CLASSIFIED_LOADED_UBUNTU_SQLITE_WAL_RESET_VULNERABLE",
+      "loaded_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+      "loaded_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "loaded_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+      "source_id_match_to_rebuilt_unmodified_ubuntu_source": true,
+      "deterministic_fault_hook": "sqlite3FaultSim(660)",
+      "fault_result": "FAIL_INTEGRITY_CORRUPTION",
+      "integrity_last": "row 18 missing from index i1",
+      "confidence": "HIGH_FOR_TARGETED_DEFECT_CLASSIFICATION",
+      "limit": "Does not quantify natural occurrence rate or power-loss behavior."
+    },
+    {
+      "clay_commit": "cbcba0535e9256d72fb492918cf309fbd6ce013e",
+      "topic": "fixed SQLite runtime product admission boundary",
+      "target_repo_pr": 324,
+      "workflow_run": 31494090226,
+      "tested_sha": "a23b79d58d9f50d34501d1894a270330111a27e6",
+      "target_receipt_head": "d6bcdc13fd9e6ed115431ab7c956a3bb329ac04e",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "fixed_runtime": "SQLite 3.53.4 private build",
+      "admission": "PASS_FIXED_SQLITE_RUNTIME_GUARD_INTEGRATION 7/7",
+      "negative_controls": [
+        "wrong manifest hash denied before target",
+        "wrong library hash denied before target",
+        "wrong source id denied before target",
+        "system fallback to vulnerable /usr/lib object denied before target and receipt"
+      ],
+      "v17_regression": "PASS 18/18 behind admitted fixed runtime",
+      "system_package_replaced": false,
+      "architecture_status": "TARGET_SUPPORTED_PRODUCT_INTEGRATION_CANDIDATE"
+    }
+  ],
+  "adjudication": {
+    "system_sqlite_3_45_1_1ubuntu2_7_for_correctness_sensitive_multi_connection_wal": "REJECTED_FOR_ACCEPTED_TARGET",
+    "private_sqlite_3_53_4_with_fail_closed_runtime_object_admission": "SUPPORTED_TESTED_CANDIDATE",
+    "canonical_database_migrated": false,
+    "whole_frank_v0_1_acceptance": false,
+    "remaining_storage_gates": [
+      "promote immutable build/manifest provenance into accepted deployment artifact boundary",
+      "broader presence/V17/GWT/effect-authority suites under exact admitted object",
+      "restart/recovery while enforcing same runtime admission",
+      "power-loss/kernel-panic durability remains separate"
+    ]
+  },
+  "knowledge_rule": "Fresh target execution evidence outranks earlier public-package inference. Preserve the earlier UNKNOWN as a valid historical pre-test state, but do not repeat it as current storage truth.",
+  "oob_accounting": {
+    "new_oob_experiment": false,
+    "macrocycle_oob_slot": "already consumed by RELATIONAL_CHAIN_METAMORPHIC_MUTATION_MATRIX"
+  },
+  "claim_boundary": {
+    "host_sqlite_globally_replaced": false,
+    "power_loss_durability_proven": false,
+    "whole_frank_v0_1_acceptance": false,
+    "training_authorized": false
+  }
+}

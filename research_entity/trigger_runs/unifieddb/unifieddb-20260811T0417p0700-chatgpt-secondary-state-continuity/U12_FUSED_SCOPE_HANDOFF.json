@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "target_work_package":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "active_candidate":{"repository":"gschaidergabriel/Dr.-Unterweger","pr":286,"branch":"chatgpt/unifieddb-storage-pair-fused-main-20260811","head_sha":"2c75a19302581538fe55307affbdc1f1a1ebd35c","draft":true},
+  "superseded_candidate":{"pr":282,"state":"CLOSED_NOT_MERGED","reason":"fresh-main fused successor #286 owns overlapping apply_current_schema.py lane"},
+  "pair_gate_scope":"schema/migration-pair compatibility + interrupted migration/certificate admission; NOT arbitrary dynamic ClayGraph payload freshness and NOT authoritative UnifiedDB rollback detection",
+  "new_required_target_controls":[
+    "non-destructive disposable remigration with sentinels preserved",
+    "injected failure after Graph DDL before Unified DDL => normal open reject + deterministic recovery",
+    "injected failure after Graph CURRENT stamp before Unified CURRENT stamp => normal open reject + deterministic recovery",
+    "same-certificate Graph payload rollback diagnostic => classify separately from schema-pair admission",
+    "repo static integrity audit on exact self-hosted candidate"
+  ],
+  "scope_correction_packet":"research_entity/knowledge_micro_packets/unifieddb/KMP-UDB-U12-SCHEMA-PAIR-SCOPE-CORRECTION-20260811.md",
+  "storage_gate":"WAL safety remains independent R0 requirement; target-unproven/affected builds use rollback-journal fail-closed candidate",
+  "graph_freshness_gate":"must use graph source semantic epoch/materialization status/derivation receipt and rebuild-quarantine semantics; do not infer from pair digest",
+  "semantic_rollback_gate":"must use selected semantic lineage/head plus rollback-domain-independent recovery authority/floor; do not infer from pair digest",
+  "target_result":"UNKNOWN_PENDING_SELF_HOSTED_RUN_FOR_HEAD_2c75a19302581538fe55307affbdc1f1a1ebd35c",
+  "promotion":"HOLD",
+  "authority":"no merge/canonical migration/whole-Frank acceptance/training authorization/Frank-self-harness authority from this handoff"
+}

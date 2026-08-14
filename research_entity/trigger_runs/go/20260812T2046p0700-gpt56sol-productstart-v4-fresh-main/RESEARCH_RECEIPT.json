@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2046p0700-gpt56sol-productstart-v4-fresh-main",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:46:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "c9d18b692fdfe3ca732eec97f681af9d0b26509d",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "program": "FRANK_V0_1",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_at_final_refresh": "dc81f6697b787e0bee7d391daf91008276280106",
+    "candidate_branch": "chatgpt/go-productstart-v4-fresh-main-20260812b",
+    "candidate_head": "a1f892043e1e1f8e656bb313ef3f9d508ff94af8",
+    "draft_pr": 524,
+    "superseded_pr": 513,
+    "accepted_release_host_contract": "Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "selected_frontier": {
+    "reason": "The stale stacked ProductStart V4 branch failed before its actual gate because it referenced V6 regression files only present on newer main. The discriminating task was to distinguish stale-composition failure from ProductStart V4 mechanism failure and recompose without weakening the release boundary.",
+    "duplicate_avoidance": [
+      "Did not duplicate PR #525 stable cmdline product-process identity.",
+      "Did not duplicate PR #523 selected-lineage external-anchor freshness identity.",
+      "Preserved older PR #519 pre-exec/drop-in and #521 service-filesystem namespace candidates as separate evidence needing current-main recomposition."
+    ]
+  },
+  "observed_reality": {
+    "stale_productstart_run": {
+      "run": 31565489962,
+      "head": "ff37db3cc9414c2ff252278aeb7be3a25ebd262d",
+      "classification": "STALE_COMPOSITION_TEST_HARNESS_FAILURE",
+      "failure": "tests/frank_sqlite_v6_launcher_wiring_regression.py absent on stacked branch before V4 execution"
+    },
+    "fresh_branch_run": {
+      "run": 31602350986,
+      "tested_head": "b8f471bbec0652a4326d44b66c26a9f8fd5e165a",
+      "runner": "clay / digital-retina / self-hosted Linux X64",
+      "mechanism_checks": [
+        "ProductStart V4 11/11 PASS",
+        "V6 parent binding 3/3 PASS",
+        "V6 source-chain hash 5/5 PASS",
+        "V6 launcher wiring PASS",
+        "V6 loader-directory trust PASS",
+        "V6 pycache source-only re-entry PASS",
+        "repo static integrity PASS"
+      ],
+      "product_observation": "FAIL_CLOSED_NO_ADMITTED_PRODUCT_START_V4",
+      "product_identity_anchor_observed": false,
+      "product_candidate_unit_count": 0,
+      "hostinger_credit": "NOT_GRANTED"
+    },
+    "current_main_merge_replay": {
+      "run": 31602659067,
+      "merge_sha": "ef1e73634b5f338a0ecc2a8c919b9a47eab58d66",
+      "base_main": "1d104517f2fd03c82a5154edd0df7f6f2f3aa215",
+      "mechanism_suite": "PASS",
+      "product_observation": "FAIL_CLOSED_NO_ADMITTED_PRODUCT_START_V4",
+      "product_identity_anchor_observed": false,
+      "product_candidate_unit_count": 0,
+      "hostinger_credit": "NOT_GRANTED"
+    },
+    "later_product_main_delta": {
+      "main": "dc81f6697b787e0bee7d391daf91008276280106",
+      "change_class": "CI checkout isolation only",
+      "semantic_overlap_with_productstart_v4_files": false,
+      "rule": "Do not silently promote the prior merge-SHA run to exact-latest-main runtime evidence; retain it as exact evidence for ef1e736 and recheck after future overlapping semantic changes."
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "SQLite documents the WAL-reset corruption race through 3.51.2 and the fix in 3.51.3 and later; fixed version identity does not by itself prove Frank uses that runtime productively."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "SQLite 3.53.4 source identity is 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "hypothesis": "An independently provisioned exact ProductStart content identity anchor is sufficient both to select the accepted release and to prove anti-rollback freshness.",
+  "strongest_counterhypothesis": "Exact content/hash identity distinguishes many sibling/stale-path substitutions but cannot distinguish a coordinated rollback of both release files and their matching identity anchor without an external monotonic/freshness witness.",
+  "go_out_of_box": {
+    "count": 1,
+    "name": "PRODUCTSTART_TIME_TRAVEL_PAIR",
+    "scope": "Disposable local in-memory discriminator only; no VPS, Frank state, provider, Harness or canonical mutation.",
+    "sequence": [
+      {"state": "A", "anchor": "A", "accepted_by_content_only_v4_model": true},
+      {"state": "B", "anchor": "B", "accepted_by_content_only_v4_model": true},
+      {"state": "A_ROLLBACK", "anchor": "A_ROLLBACK", "accepted_by_content_only_v4_model": true}
+    ],
+    "result": "CONTENT_IDENTITY_IS_NOT_ANTI_ROLLBACK_FRESHNESS",
+    "candidate_invariant_preserved": "anti_rollback_freshness_proven=false",
+    "canonical_state_mutated": false,
+    "product_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "repair": {
+    "draft_pr": 524,
+    "candidate_head": "a1f892043e1e1f8e656bb313ef3f9d508ff94af8",
+    "changed_files": 7,
+    "role": "fresh-main ProductStart exact release-anchor layer",
+    "superseded_stale_pr": 513,
+    "superseded_pr_closed": true
+  },
+  "grf_collapse": [
+    {"claim": "stale stacked workflow failure implies ProductStart V4 mechanism failure", "outcome": "REJECT"},
+    {"claim": "ProductStart V4 composes with current merged V6 controls on the tested self-hosted lane", "outcome": "RETAIN_SUPPORTED_MECHANISM"},
+    {"claim": "content/hash ProductStart identity alone proves anti-rollback freshness", "outcome": "REJECT"},
+    {"claim": "productive accepted Hostinger ProductStart is currently admitted", "outcome": "REJECT_NOT_PROVEN_FAIL_CLOSED"},
+    {"claim": "F-V01-13 or whole Frank v0.1 is complete", "outcome": "REJECT_OPEN"}
+  ],
+  "fusion_frontier": {
+    "required_conjuncts": [
+      "fresh ProductStart release anchor from PR #524",
+      "service-filesystem namespace closure from PR #521 or successor",
+      "interpreted product-process identity from PR #525 if it survives adjudication",
+      "positive live mapped SQLite object + release identity observation rather than typed BLOCKED",
+      "selected self.root semantic-lineage + external freshness identity from PR #523 or successor",
+      "accepted Hostinger host/unit/product selectors independently bound",
+      "start/restart/recovery plus rollback/downgrade/library-swap fail-closed receipts"
+    ],
+    "next_discriminator": "Compose only independently supported conjuncts, then execute them on the exact accepted Hostinger ProductStart. Absence of canonical unit/anchor/product process remains a release failure, not a mechanism bypass opportunity."
+  },
+  "authority_and_nonclaims": {
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "canonical_state_mutated": false,
+    "production_service_mutated": false,
+    "final_training_authorized": false,
+    "f_v01_13_pass": false,
+    "whole_frank_v01_pass": false
+  }
+}

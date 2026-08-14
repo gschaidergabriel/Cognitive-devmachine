@@ -1,0 +1,162 @@
+module clay.hyperposition.h7b.context_admissibility
+version "HYP-RC7B-candidate"
+status CANDIDATE_NOT_PROMOTED
+parent @research_entity/trigger_runs/hyperposition/hyperposition-20260810T2323p0700-chatgpt-secondary-h7-reduction-gate/architecture/HYPERPOSITION_REDUCTION_GATE_CANDIDATE.clay
+
+// H7B closes a loophole in higher-order reduction tests:
+// a nominally pairwise model may recover an n-ary interaction by allowing its
+// pairwise weights/state-machine transitions to depend on another member of the
+// same candidate relation. Operational fit then exists, but the higher-order
+// dependency has merely moved into hidden context/state.
+
+record ContextSource {
+  ref:Ref
+  source_class:EXOGENOUS | PREEXISTING_STATE | RELATION_MEMBER | DERIVED_FROM_RELATION_MEMBER | UNKNOWN
+  material_reads:Set<Ref>|UNKNOWN
+  source_epoch:Epoch
+  provenance:Set<EvidenceRef>
+}
+
+record ReductionContextContract {
+  candidate_relation:Ref
+  allowed_sources:Set<ContextSource>
+  forbidden_member_closure:Set<Ref>
+  max_state_memory:Duration?
+  max_context_bits:Int?
+  hidden_state_schema:Ref?
+  provenance_required:Bool
+}
+
+record ContextAdmissibilityReceipt {
+  receipt_id:Ref
+  candidate_relation:Ref
+  reduction_candidate:Ref
+  context_contract:ReductionContextContract
+  observed_context_sources:Set<ContextSource>
+  member_leakage_detected:Bool
+  derived_member_leakage_detected:Bool
+  hidden_state_equivalence_unresolved:Bool
+  semantic_reduction_admissible:Bool
+  operational_equivalence_observed:Bool
+  evidence:Set<EvidenceRef>
+  status:SUPPORTED|CHALLENGED|REFUTED|UNKNOWN
+}
+
+type IrreducibilityAxis =
+    REPRESENTATIONAL
+  | OPERATIONAL
+  | SEMANTIC
+  | INTERVENTIONAL
+  | COST
+
+record IrreducibilityReadout {
+  relation:Ref
+  axis:IrreducibilityAxis
+  pairwise_static_error:Real?
+  pairwise_contextual_error:Real?
+  state_machine_error:Real?
+  full_nary_error:Real?
+  intervention_response_error:Real?
+  replay_divergence:Real?
+  workspace_selection_delta:Real?
+  outcome_delta:Real?
+  latency_delta:Duration?
+  memory_delta:Bytes?
+  recovery_delta:Real?
+  context_admissibility:ContextAdmissibilityReceipt?
+  uncertainty:Real[0,1]?
+  evidence:Set<EvidenceRef>
+}
+
+fn context_admissibility_gate(relation:Ref, reduced:Ref, c:ReductionContextContract) -> ContextAdmissibilityReceipt {
+  let reads = material_reads_of(reduced)
+  let member_closure = semantic_member_dependency_closure(relation)
+  let direct_leak = intersects(reads,member_closure)
+  let derived_leak = depends_on_any(reads,member_closure)
+  let hidden_unresolved = hidden_state_dependency_unknown(reduced)
+
+  // A reduction may still be operationally useful even when semantic reduction is denied.
+  // Denial here means "do not call this evidence that the n-ary dependency disappeared".
+  let semantic_ok = !direct_leak
+                    && !derived_leak
+                    && !hidden_unresolved
+                    && all_sources_provenance_valid(c.allowed_sources)
+
+  return ContextAdmissibilityReceipt(
+    candidate_relation=relation,
+    reduction_candidate=reduced,
+    context_contract=c,
+    observed_context_sources=resolve_context_sources(reduced),
+    member_leakage_detected=direct_leak,
+    derived_member_leakage_detected=derived_leak,
+    hidden_state_equivalence_unresolved=hidden_unresolved,
+    semantic_reduction_admissible=semantic_ok,
+    operational_equivalence_observed=UNKNOWN,
+    evidence=current_evidence(),
+    status=SUPPORTED_IF_OBSERVED
+  )
+}
+
+fn contextual_reduction_gate(full:InteractionKernel, reduced:Ref, matched:ExperimentSpec, c:ReductionContextContract) -> IrreducibilityReadout {
+  let operational = run_matched_intervention_bank(full,reduced,matched)
+  let ctx = context_admissibility_gate(full.relation,reduced,c)
+
+  return IrreducibilityReadout(
+    relation=full.relation,
+    axis=SEMANTIC,
+    pairwise_contextual_error=operational.prediction_error,
+    intervention_response_error=operational.intervention_response_error,
+    replay_divergence=operational.replay_divergence,
+    workspace_selection_delta=operational.workspace_selection_delta,
+    outcome_delta=operational.outcome_delta,
+    latency_delta=operational.latency_delta,
+    memory_delta=operational.memory_delta,
+    recovery_delta=operational.recovery_delta,
+    context_admissibility=ctx,
+    uncertainty=operational.uncertainty,
+    evidence=operational.evidence + ctx.evidence
+  )
+}
+
+// Reduction ladder: do not jump directly from static pairwise to native n-ary.
+rule reduction_search_order = [
+  MEMBER_PAIRWISE_STATIC,
+  MEMBER_PAIRWISE_CONTEXTUAL_WITH_ADMISSIBLE_EXOGENOUS_CONTEXT,
+  BOUNDED_STATE_MACHINE_WITH_EXPLICIT_STATE_SCHEMA,
+  NATIVE_HIGHER_ORDER_RUNTIME
+]
+
+// Critical anti-smuggling law.
+rule relation_member_used_as_pairwise_context -> operational_reduction_possible_but_semantic_reduction_denied
+rule derived_feature_of_relation_member_used_as_context -> operational_reduction_possible_but_semantic_reduction_denied
+rule hidden_state_with_unknown_material_reads -> semantic_reduction=UNKNOWN
+rule state_machine_reduction requires explicit_state_schema + bounded_memory + provenance + intervention_equivalence
+
+// Keep representation, dynamics, semantics and cost as separate axes.
+rule exact_relation_node_reification may_support REPRESENTATIONAL_reducibility only
+rule low_prediction_error may_support OPERATIONAL_reducibility only
+rule SEMANTIC_reducibility requires context_admissibility + role/provenance/epoch preservation
+rule INTERVENTIONAL_reducibility requires matched lesions+context_swaps+gain_delay_perturbations+rescue
+rule COST_reducibility requires measured latency+memory+contention+recovery shadow
+rule no_single_axis implies all_other_axes
+
+// Statistical higher-order measures are evidence, not promotion authority.
+rule PID_or_PEID_or_O_information requires null_or_bias_control before mechanistic use
+rule synergy_signal_without_intervention != causal_higher_order_evidence
+
+// Preserve uncertainty instead of forced collapse.
+rule operational_fit + semantic_reduction_denied -> preserve [REDUCED_RUNTIME_CANDIDATE,NARY_SEMANTIC_RELATION]
+rule insufficient_identifiability -> status=UNKNOWN + preserve competing representations
+rule pairwise_reduction_success_on_observed_regime != universal_reducibility
+
+invariant context_cannot_hide_relation_member_dependency_and_count_as_semantic_reduction
+invariant hidden_state_cannot_hide_relation_member_dependency_and_count_as_semantic_reduction
+invariant semantic_identity_survives_optimized_physical_lowering
+invariant graph_activation_or_information_synergy_never_mints_truth_or_effect_authority
+invariant higher_order_evidence_is_functional_system_evidence_not_consciousness_evidence
+invariant Frank_self_harness_authority_is_proposal_only
+
+counterhypothesis H0_HYP_RC7B {
+  proposition="Context provenance adds no practical discrimination because any pairwise/state-machine reduction can be treated as purely operational and semantic n-ary identity can always remain separately reified."
+  discriminator="Real Frank traces where a contextual pairwise candidate matches outcomes but changes lesions/context swaps/replay after member-derived context is withheld; if no such cases appear and implementation complexity rises, keep H7B as validator-only rather than runtime primitive."
+}

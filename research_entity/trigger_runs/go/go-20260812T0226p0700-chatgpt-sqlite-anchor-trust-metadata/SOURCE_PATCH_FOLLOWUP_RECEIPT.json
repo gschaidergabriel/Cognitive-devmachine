@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T02:30:07+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "relationship_to_macro_cycle": {
+    "same_go_macro_cycle": true,
+    "new_unusual_experiments_in_followup": 0,
+    "macro_cycle_unusual_experiment_total": 1,
+    "macro_cycle_unusual_experiment_id": "PARENT_WRITABILITY_TRANSPOSITION"
+  },
+  "fresh_shared_observation": {
+    "source_repo": "gschaidergabriel/Dr.-Unterweger",
+    "source_commit": "e9caba147e04503e66c699be2ef7daef57597221",
+    "workflow": ".github/workflows/frank-sqlite-published-patchset-readonly-v1.yml",
+    "workflow_run": 31527930172,
+    "workflow_job": 93900699490,
+    "artifact_id": 9115677290,
+    "artifact_zip_sha256": "f85d063a3b976ec0da0395f1a8ec7e72bd3ab0464d01ec0baa0ee9232e7115c5",
+    "source_version": "3.45.1-1ubuntu2.7",
+    "download_source": "Ubuntu archive published source package",
+    "dsc_to_debian_tar_sha256_check": "PASS_BEFORE_INSPECTION",
+    "inspection_status": "NO_EXPLICIT_WAL_RESET_FIX_IN_PUBLISHED_UBUNTU_PATCHSET",
+    "inspection_semantics": "The verified published Debian patchset contained neither a patch touching src/wal.c or wal.c nor WAL-reset/wal-reset/walRestart markers under the probe criteria.",
+    "mutation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE"
+  },
+  "fusion": {
+    "upstream_anchor": "SQLite states the WAL-reset corruption bug is likely present through 3.51.2 and fixed in 3.51.3+, with selected older backports explicitly named.",
+    "productive_runtime": "Accepted-target /usr/bin/python3 resolves SQLite 3.45.1 from libsqlite3.so.0.8.6, package 3.45.1-1ubuntu2.7.",
+    "installed_changelog": "No explicit WAL-reset fix evidence was found in the installed Debian changelog.",
+    "published_patchset": "No explicit WAL-reset fix or wal.c-touching Debian patch was found in the exact DSC-verified Ubuntu 2.7 patchset.",
+    "collapse": "STRONG_NEGATIVE_PROVENANCE_EVIDENCE; DO_NOT_PROMOTE_PRODUCTIVE_SQLITE_3_45_1_AS_FIXED"
+  },
+  "epistemic_boundary": {
+    "supported": "The exact published Ubuntu 3.45.1-1ubuntu2.7 Debian patchset inspected does not establish the required WAL-reset repair and contains no detected wal.c-targeting patch under the recorded criteria.",
+    "not_claimed": "This receipt does not claim a live corruption reproduction or mathematical proof that every possible vendor build path is vulnerable.",
+    "release_decision": "F-V01-13 remains fail-closed; use an independently attested fixed SQLite runtime or stronger exact-build evidence before release promotion."
+  },
+  "next_falsifier": "Trusted deployment/admin authority installs and attests a fixed SQLite runtime (>= upstream-fixed lineage or exact approved backport), creates the root-owned/non-writable runtime anchor, then positive V5 admission plus downgrade/library-swap/restart/WAL-recovery evidence must pass on the accepted target.",
+  "negative_results_preserved": [
+    "Current productive SQLite remains 3.45.1.",
+    "Required production root anchor remains absent in the last accepted-target observation.",
+    "No second unusual experiment was run.",
+    "No production SQLite files were mutated.",
+    "No sudo or Frank self-install authority was granted.",
+    "No final/model training was started."
+  ]
+}

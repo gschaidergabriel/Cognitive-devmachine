@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2244p0700-chatgpt-secondary-v16-hardcrash-replay",
+  "trigger": "go",
+  "status": "PARTIAL_EXECUTED_WITH_DURABLE_DELTA_TARGET_VPS_PENDING",
+  "started_local": "2026-08-10T22:44:00+07:00",
+  "receipt_local": "2026-08-10T23:02:30+07:00",
+  "timezone": "Asia/Phnom_Penh",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "organ_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_clay_persistent_entity": false,
+    "is_frank": false
+  },
+  "identity_lock": {
+    "research_entity": "Clay",
+    "target_native_self": "self.root",
+    "target_human_surface": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "target_cognition": "ClayCode only",
+    "andreas_role": "KNOWN_PERSON_USER_PILOT_OPERATOR",
+    "gabriel_role": "PROJECT_OWNER_RESEARCH_DIRECTOR",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "clay_head_before_write": "3bb558db58b0f6961c72c7b73643b6d1620c030e"
+  },
+  "program": {
+    "program_id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "training_authorized": false,
+    "legacy_h1_h2_h3_active_stage": false
+  },
+  "live_swarm_refresh": {
+    "important_behavior": "The selected falsifier was replanned twice when fresher main evidence invalidated its premise; stale work was closed instead of being completed blindly.",
+    "observed_target_transitions": [
+      {
+        "commit": "7e4acabe6bcfc566b4d25440c8f755096af499b3",
+        "change": "V16 execution continuity/idle handoff schema introduced"
+      },
+      {
+        "commit": "6c1f8e53a12e40d6992f9bf2fea0ad4b9cf5610f",
+        "change": "V16 migration admitted into current schema chain"
+      },
+      {
+        "commit": "d83b2bfd849059ecc47c29da3de9f3eb1978e09d",
+        "change": "schema-only discriminator; runtime_semantics_promoted=false"
+      },
+      {
+        "commit": "99ec7317c85226b80e482501fe79c4fd4de6fdeb",
+        "change": "V16 execution/idempotency/task/idle-handoff runtime state machine added"
+      },
+      {
+        "commit": "306d4217e506289901d08196db73fc680c136075",
+        "change": "token ingress bound to durable V16 execution continuity"
+      },
+      {
+        "commit": "4605154b0b4acecf3f0c94150412a3d287bdc79a",
+        "change": "normal V16 ingress test validates durable replay after orderly ingress object recreation plus idle handoff"
+      },
+      {
+        "commit": "fb759f48916fda9795ca9ebbab72773c97c952ce",
+        "change": "target-VPS workflow for normal V16 durable replay/idle handoff added"
+      }
+    ]
+  },
+  "hypothesis": {
+    "primary": "Current V16 token ingress preserves request admission idempotency across abrupt API-process death while V15 remains BUSY: an exact retry is recognized from durable UnifiedDB state and does not spawn a new execution.",
+    "strongest_counterhypothesis": "Durable replay is only proven after orderly object disposal/release; abrupt process death loses enough process-local state that the same request is re-admitted, deadlocks, or creates a second execution identity.",
+    "selected_discriminator": "Hard-exit the process with os._exit immediately after successful admission, perform no semantic release/continuity close, then submit the exact same synthetic authenticated credential/session/request in a fresh process against the same disposable V15+V16 state."
+  },
+  "original_baseline_and_prechange_evidence": {
+    "pre_v16_ingress_blob": "adcfaaf76998afc8f0dbccb1c23d8ceb3de9a584",
+    "pre_v16_behavior": "request idempotency used process-local _active_request_ids and explicitly reported durable_request_idempotency_stored=false",
+    "v15_presence_behavior": "same semantic holder can renew the same non-expired lease epoch after physical flock becomes available",
+    "interpretation": "Before V16 runtime integration, process death could erase request-id memory while preserving the semantic holder/epoch. That was a real discriminator, not a claim of observed duplicate external effect."
+  },
+  "build_and_coordination": {
+    "stale_pr": {
+      "pr": 165,
+      "branch": "chatgpt/go-v16-restart-idempotency-oob-20260810",
+      "status": "CLOSED_SUPERSEDED",
+      "reason": "Fresh main landed V16 runtime integration while the old-base falsifier was queued; its premise no longer represented current runtime."
+    },
+    "current_pr": {
+      "pr": 171,
+      "branch": "chatgpt/go-v16-hardcrash-replay-oob-v2-20260810",
+      "head_sha": "c4df5aeba4a27fef59ba6dd6dabd41ccf6e15ce9",
+      "status": "OPEN_DRAFT_CURRENT_DISCRIMINATOR",
+      "test": "tests/frank_v16_hardcrash_replay_oob.py",
+      "workflow": ".github/workflows/frank-v16-hardcrash-replay-oob-vps.yml",
+      "production_runtime_mutated": false,
+      "canonical_frank_state_mutated": false
+    }
+  },
+  "execution_state": {
+    "workflow_run_id": 31406672860,
+    "target_vps_job": {
+      "job_id": 93514598223,
+      "runner_class": "self-hosted Linux X64 accepted target lane",
+      "status_at_receipt": "QUEUED",
+      "conclusion": null,
+      "runtime_result": "UNKNOWN_NOT_EXECUTED_AT_RECEIPT"
+    },
+    "hosted_proxy_job": {
+      "job_id": 93514598321,
+      "runner_class": "GitHub-hosted ubuntu-latest non-target proxy",
+      "status": "COMPLETED",
+      "conclusion": "failure",
+      "step_payload_available": false,
+      "job_log_fetch": "BlobNotFound/404",
+      "classification": "UNKNOWN_EXECUTOR_OR_ACTIONS_FAILURE_NOT_RUNTIME_FAIL",
+      "promotion_value": "NONE"
+    }
+  },
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "experiment": "PROCESS_REINCARNATION_RETRY",
+    "same_experiment_rebased_after_live_main_changed": true,
+    "novelty": "Treat abrupt ingress-process death as a process reincarnation boundary and require durable request identity to survive the loss of all process-local routing memory while the semantic presence remains BUSY.",
+    "reversible": true,
+    "disposable_test_state_only": true,
+    "external_network_effect": false,
+    "real_provider_effect": false,
+    "promotion_at_receipt": "PENDING_TARGET_VPS_EXECUTION"
+  },
+  "static_current_runtime_findings": [
+    {
+      "finding": "Token ingress now performs durable lookup_request before physical gate acquisition and can return IDEMPOTENT_REPLAY with new_execution_spawned=false.",
+      "status": "SUPPORTED_BY_CURRENT_SOURCE_NOT_YET_HARDCRASH_TARGET_EXECUTION"
+    },
+    {
+      "finding": "V16 durable request key is derived from credential fingerprint + session_ref + client_ref + request_id and is stored in frank_ingress_request_admissions.",
+      "status": "SUPPORTED_BY_CURRENT_SOURCE"
+    },
+    {
+      "finding": "Cross-process early lookup_request returns a replay receipt but does not itself append a REQUEST_REPLAYED continuity event; same-process admit_followup_request does append one.",
+      "status": "OBSERVABILITY_GAP_CANDIDATE_TO_MEASURE_IN_PR171"
+    },
+    {
+      "finding": "Current ingress admission API/request key has no request-payload fingerprint parameter, so same request_id with a different payload cannot currently be compared at this layer.",
+      "status": "TRANSPORT_IDEMPOTENCY_BINDING_GAP_CANDIDATE"
+    },
+    {
+      "finding": "Durable replay explicitly reports response_replay_available=false.",
+      "status": "KNOWN_OPEN_RESULT_REPLAY_LIMITATION"
+    }
+  ],
+  "external_live_knowledge": [
+    {
+      "source_class": "IETF_PRIMARY_WORKING_DOCUMENT",
+      "source": "draft-ietf-httpapi-idempotency-key-header-07",
+      "current_status": "EXPIRED_2026-04-18",
+      "use": "Mechanism inspiration only, not treated as a current standard. It describes unique idempotency keys and request fingerprint/parameter matching for safe retry of non-idempotent methods."
+    },
+    {
+      "source_class": "AWS_OFFICIAL_IMPLEMENTATION_DOCUMENTATION",
+      "source": "Amazon EC2 API idempotency",
+      "use": "Independent implementation evidence that same client token + same parameters can retry without repeating the operation, while parameter mismatch is rejected."
+    },
+    {
+      "source_class": "STRIPE_OFFICIAL_IMPLEMENTATION_DOCUMENTATION",
+      "source": "Stripe idempotent requests",
+      "use": "Independent implementation evidence for server-side persistence of first-result/status and parameter comparison on key reuse."
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_DIRECTION_WITH_OPEN_TARGET_FALSIFIER",
+    "supported": [
+      "Durable request admission belongs in the canonical V16 continuity state rather than process RAM or a second hidden store.",
+      "Lookup-before-spawn is the correct current direction for exact retry safety.",
+      "Hard process-death recovery must be tested separately from orderly object recreation.",
+      "Idempotency admission safety, replay observability and response-result replay are distinct acceptance dimensions."
+    ],
+    "open_candidates": [
+      "Record provenance-bound REQUEST_REPLAYED evidence for cross-process lookup replays without creating a second authority.",
+      "Bind a request/payload fingerprint at the transport-to-admission boundary so request-id reuse with different semantic content fails deterministically.",
+      "Define bounded retention/expiry semantics for the durable admission ledger and response replay/status retrieval."
+    ],
+    "rollback": "Do not promote or merge PR171 if target execution contradicts current source assumptions; preserve V16 current main as last-known-good and retain the failing hard-crash receipt as negative evidence."
+  },
+  "work_impacts": [
+    {
+      "work_package": "F-V01-08-TOKEN-API-CLIENTS",
+      "impact": "Major live advance: V16 durable execution/request continuity is now in current source. Keep IN_PROGRESS because hard-crash target evidence, full network server/TLS, response replay/status semantics and payload binding remain incomplete or unproven."
+    },
+    {
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "impact": "Hard process-death idempotency and replay-event provenance are now explicit recovery/observability discriminators."
+    }
+  ],
+  "negative_results_and_nonclaims": [
+    "The original stale-base process-local idempotency falsifier was intentionally closed after current main invalidated it.",
+    "GitHub-hosted proxy conclusion=failure has no available step/log evidence and is not classified as a product/runtime failure.",
+    "No target-VPS hard-crash result exists at this receipt timestamp because the job is queued.",
+    "No duplicate external effect was performed or observed.",
+    "No whole token API completion is claimed.",
+    "No whole Frank v0.1 acceptance is claimed.",
+    "No paid/final training is authorized or started.",
+    "No self.root/Frank Harness mutation was authorized by Frank."
+  ],
+  "next_frontier": [
+    "Resolve target-VPS job 93514598223 and persist exact result/resource/executor metadata when it executes.",
+    "If hard-crash replay passes, separately test/request REQUEST_REPLAYED event observability under the same crash case.",
+    "Add a transport-level same-idempotency-key/different-payload mismatch discriminator before any consequential effect path depends on retry safety.",
+    "Keep response replay/result retrieval separate from admission deduplication and test both.",
+    "Refresh main before any patch because F-V01-08 and effect/recovery lanes are changing rapidly."
+  ],
+  "authority_and_effects": {
+    "external_network_used_by_oob_test": false,
+    "real_external_effect_performed": false,
+    "production_token_used": false,
+    "canonical_target_database_mutated": false,
+    "harness_changed_by_frank_authority": false,
+    "training_authorized": false
+  },
+  "research_write": "COMMITTED_BY_THIS_UNIQUE_PATH_IF_GITHUB_ACCEPTS"
+}

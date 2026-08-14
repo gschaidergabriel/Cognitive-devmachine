@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-frank-vps-followup-20260810T0720p0700",
+  "created_at": "2026-08-10T07:20:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "frank_repository": "gschaidergabriel/Dr.-Unterweger",
+  "loop_gate_followup": {
+    "local_fix_commit": "ed9e2a5b88c803cdea47b0f9fc1e6d89358e31e1",
+    "deep_integrity_gate_addition_commit": "06ebc0ea925847e1f4638db237790de66f00aea5",
+    "last_verified_hostinger_deep_integrity_receipt_commit": "695fda5ed9c8ac06a534c47aa295207f4ed01b9b",
+    "last_verified_hostinger_deep_integrity_result": "22_PASS_0_FAIL_WITH_PYTEST_18_PASS",
+    "new_loop_factorial_hostinger_receipt": "PENDING",
+    "adjudication": "LOCAL_REGRESSION_FIXED_AND_UBUNTU_GATE_WIRED; DO_NOT_CLAIM_NEW_GATE_PASS_UNTIL_NEW_RECEIPT"
+  },
+  "make_lane_followup": {
+    "initial_failure": "BOOTSTRAPPED_CMAKE_MISSING",
+    "first_fix_commit": "57ba7b65c8ae3ec93ce2a4f8037288e55cced6f6",
+    "first_retest_evidence_commit": "878ea27c5f31de469f8a50c7c4404327fcb73bae",
+    "first_retest_observation": "Hostinger resolved cmake executable at toolchain/local/bin, proving the scripts-path repair, then aborted before cmake version output or a new JSON receipt.",
+    "new_failure_class": "PREFIX_PYTHON_MODULE_PATH_PLUS_RECEIPT_CONTINUITY",
+    "local_falsifier": "A console script installed under a posix_local prefix is shell-discoverable while its imported package is not importable until the prefix purelib/platlib is added to PYTHONPATH.",
+    "strongest_counterhypothesis": "The CMake wheel itself is unusable on the Hostinger runner even when both executable and Python package paths are bound.",
+    "second_fix_commit": "274995a000a553823f4c349af1ea64167c682706",
+    "second_fix": [
+      "derive scripts/purelib/platlib from active Python sysconfig",
+      "bind both PATH and PYTHONPATH",
+      "classify cmake wrapper failure explicitly as BOOTSTRAPPED_CMAKE_UNUSABLE",
+      "do not delete last-known receipt at run start",
+      "publish replacement receipt atomically"
+    ],
+    "new_hostinger_receipt": "PENDING",
+    "promotion_allowed": false
+  },
+  "verified_real_model_context": {
+    "separate_prebuilt_v2_receipt_status": "PASS",
+    "fixed_accuracy": 0.75,
+    "task_count": 4,
+    "fixed_cumulative_latency_ms": 49831.534,
+    "decode_tokens_per_second_mean": 10.552447395535133,
+    "prompt_tokens_per_second_mean": 38.110198987659686,
+    "adaptive_shadow_early_halt_count": 0,
+    "readout_uncertain_events": 8,
+    "interpretation": "Real Qwen-class execution is already proven independently of the still-unclosed Make source-build lane. Raw visible confidence remains uncalibrated and may not authorize early halt."
+  },
+  "coordination": {
+    "duplicate_work_avoided": true,
+    "active_parallel_claycode_and_unifieddb_workers_observed": true,
+    "runner_contention_interpretation": "No fresh receipt is treated as queued/running/unknown rather than PASS or FAIL.",
+    "out_of_box_experiment": "NO_ADDITIONAL_EXPERIMENT; shared go cycle already contains its single bounded unusual experiment in the WP02 adjudication lane"
+  },
+  "architecture_delta": "NO_ARCHITECTURE_CHANGE",
+  "test_delta": "PROMOTE_LOOP_FACTORIAL_TO_REAL_HOSTINGER_DEEP_INTEGRITY_MATRIX",
+  "continuity_delta": "REMOTE_SETUP_FAILURE_MUST_NOT_DELETE_LAST_KNOWN_RECEIPT; NEW_RECEIPTS_ATOMIC_REPLACE_ONLY",
+  "toolchain_delta": "PIP_PREFIX_TOOL_BOOTSTRAP_MUST_BIND_ACTIVE_PYTHON_INSTALL_SCHEME_SCRIPTS_AND_MODULE_PATHS",
+  "next_falsifiers": [
+    "new Hostinger deep-integrity receipt proves loop_reentry_factorial PASS as an individually measured gate",
+    "new Hostinger make-lane receipt proves cmake --version, pinned llama.cpp Make build, model server readiness and benchmark execution or localizes the next explicit failure"
+  ],
+  "global_controls": [
+    "QUEUED != EXECUTED != PASS",
+    "absence of a fresh receipt is UNKNOWN/PENDING",
+    "successful command discovery != executable usability",
+    "old receipt preservation != current run PASS",
+    "Hostinger evidence != final Andreas target acceptance",
+    "real model execution != release acceptance",
+    "model output != effect authority"
+  ],
+  "research_write_result": "COMMITTED_FOLLOWUP_PENDING_REMOTE_RECEIPTS",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+}

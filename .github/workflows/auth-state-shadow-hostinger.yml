@@ -1,0 +1,86 @@
+name: UnifiedDB Auth State Shadow Hostinger
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/auth-state-shadow-hostinger.yml'
+      - 'research_entity/runtime/auth_state_shadow_hostinger_probe.py'
+      - 'research_entity/harness/reference/state_auth_shadow.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-auth-state-shadow-hostinger
+  cancel-in-progress: false
+
+jobs:
+  auth-state-shadow:
+    runs-on: self-hosted
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact Clay commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Run exact-repo falsifiers and benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=/tmp/AUTH_STATE_SHADOW_HOSTINGER.json
+          python3 research_entity/runtime/auth_state_shadow_hostinger_probe.py \
+            --output "$OUT" --rows 20000 --updates 20
+          python3 - "$OUT" <<'PY'
+          import json,sys
+          p=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert p['pass'] is True
+          assert p['falsifiers']['passed']==p['falsifiers']['tests']==7
+          assert p['benchmark']['rebuild_equivalent'] is True
+          assert p['benchmark']['verify_after_pass'] is True
+          assert p['benchmark']['tamper_detected'] is True
+          print(json.dumps({
+              'root_speedup_p50':p['benchmark']['root_speedup_p50'],
+              'shadow_refresh_p50_ms':p['benchmark']['shadow_delta_refresh']['p50_ms'],
+              'canonical_root_p50_ms':p['benchmark']['canonical_full_root_recompute']['p50_ms'],
+              'page_ratio':p['benchmark']['page_ratio'],
+          },sort_keys=True))
+          PY
+
+      - name: Persist exact-repo Hostinger receipt
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          src=/tmp/AUTH_STATE_SHADOW_HOSTINGER.json
+          dst=research_entity/unifieddb/receipts/AUTH_STATE_SHADOW_HOSTINGER_LATEST.json
+          mkdir -p "$(dirname "$dst")"
+          python3 - "$src" "$dst" "$RUN_ID" "$SOURCE_SHA" <<'PY'
+          import json,sys
+          src,dst,run_id,sha=sys.argv[1:]
+          p=json.load(open(src,encoding='utf-8'))
+          p['github_run_id']=run_id
+          p['source_commit']=sha
+          p['truth_class']='VERIFIED_REMOTE_EXECUTION_EXACT_CLAY_CHECKOUT'
+          p['runner']='self-hosted Hostinger Ubuntu/Linux lane'
+          open(dst,'w',encoding='utf-8').write(json.dumps(p,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add "$dst"
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "evidence(unifieddb): record auth state shadow Hostinger ${RUN_ID} [skip ci]"
+          for n in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep $((n * 2))
+          done
+          exit 1

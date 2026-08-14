@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:31:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "fresh_repo_frontier": {
+    "base_gate": "NOT_PASS",
+    "wp01": "PASS",
+    "wp02": "OPEN_V17_SELECTED",
+    "wp03": "OPEN_GRAMMAR_PLUS_TYPED_IR_INTEGRITY_WORK_ACTIVE",
+    "wp04": "OPEN_DO_NOT_ADVANCE_FROM_RESEARCH_PROXY",
+    "formal_base_progress": "1/14",
+    "h1_formal_progress": "1/22",
+    "production_change_authorized": false
+  },
+  "fresh_external_knowledge": {
+    "retrieved_at": "2026-08-10",
+    "primary_sources": [
+      "https://lark-parser.readthedocs.io/en/stable/grammar.html",
+      "https://lark-parser.readthedocs.io/en/stable/how_to_use.html",
+      "https://lark-parser.readthedocs.io/en/stable/tree_construction.html"
+    ],
+    "supported_points": [
+      "Lark terminal priorities participate in lexical choice and strict mode is the required collision/follow-conflict falsifier for the candidate grammar family.",
+      "Ignored trivia and parse-tree rule/alias context are semantic integration details for this LALR frontend; post-parse consumers must not replace grammar context with global token-value heuristics.",
+      "Advanced regex/lookaround can reduce collision-analysis visibility, so removing lookaround is a research hypothesis only and must preserve the selected V17 language exactly before promotion."
+    ]
+  },
+  "hypothesis": "A no-lookahead Needle relation membrane may replace V17 only if it is strict-LALR clean and preserves every selected V17 qid/call/relation/trivia semantic boundary plus downstream typed-IR behavior.",
+  "strongest_counterhypothesis": "Special high-priority Needle terminals cannot safely approximate the V17 identifier boundary: each attempted simplification may steal a valid qid continuation or trivia case even when common alphanumeric suffix fuzz passes.",
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "LEXICAL_BOUNDARY_CONSERVATION_SWEEP",
+    "source_synthesis": "research_entity/trigger_runs/go/go-20260810T1222p0700-chatgpt-secondary-parser-wp03-causal-cycle/FINAL_SYNTHESIS.json",
+    "result": "V18 whole-prefix design refuted; V19 delimiter-consuming design refuted; V17 retained. Novelty alone did not promote architecture."
+  },
+  "v20_new_counterexample": {
+    "candidate": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V20_WORD_BOUNDARY_RULE_PRIORITY.lark",
+    "mechanism": "V20 uses high-priority /Needle\\.owns\\b/. A regex word boundary occurs before '.', '-' and '?', although selected V17 can continue the qid/postfix-qid through those characters. Therefore V20 can steal a prefix that its existing owns_extra/ownsX/ownership fuzz does not cover.",
+    "predicted_regressions": [
+      "rule Needle.owns.more",
+      "rule Needle.owns-more",
+      "rule Needle.owns?"
+    ],
+    "controls": [
+      "rule Needle.owns",
+      "rule Needle.owns X",
+      "rule Needle.owns(X)",
+      "rule Needle.owns_extra",
+      "rule Needle.ownsX",
+      "rule Needle.owns2"
+    ],
+    "falsifier_commit": "19dc92e871d8193ffebcfbd34fa20e3a5fcbf8f3",
+    "falsifier_path": "tools/claycode_v20_qid_continuation_shadow_falsifier.py",
+    "workflow_gate_commit": "10cc51b58811cab1a6e1b69ec85256540d2e42ea",
+    "workflow_path": ".github/workflows/claycode-v20-word-boundary-priority.yml",
+    "local_mechanism_check": "SUPPORTED_REGEX_BOUNDARY_MECHANISM",
+    "hostinger_receipt": "NOT_VISIBLE_AT_SYNTHESIS",
+    "scientific_status": "COUNTEREXAMPLE_SUPPORTED_REMOTE_EXECUTION_PENDING",
+    "promotion": "NONE"
+  },
+  "wp03_latest_integrity_fusion": {
+    "source": "research_entity/trigger_runs/go/go-20260810T1223p0700-chatgpt-sol-wp03-alias-integrity/FINAL_SYNTHESIS.json",
+    "pr145_core_strategy": "SUPPORTED",
+    "pr145_current_bytes": "HARDENING_REQUIRED_BEFORE_MERGE",
+    "failure": "direct_identifier trusts a single child token under ident_* without verifying alias suffix equals literal, allowing replay/corrupted-AST alias-token mismatch to fail open",
+    "required_fix": "For ident_* direct children require exactly one token and token value equal to alias suffix; malformed/mismatched aliases fail closed; direct NAME remains accepted.",
+    "wp03_promotion": "NONE"
+  },
+  "coordination": {
+    "duplicate_v19_probe_and_workflow": "REMOVED_AFTER_FRESH_REREAD_OF_CONCURRENT_CANONICAL_WORK",
+    "rule": "Fresh repo state repeatedly superseded stale local plans; duplicate work was deleted and effort moved to orthogonal falsifiers.",
+    "shared_truth_write": "THIS_SYNTHESIS"
+  },
+  "architecture_delta": {
+    "status": "TESTING_NO_PRODUCTION_PROMOTION",
+    "wp02_parser": "KEEP_V17_SELECTED",
+    "v18": "REFUTED",
+    "v19": "REFUTED_CURRENT_DELIMITER_DESIGN",
+    "v20": "COUNTEREXAMPLE_SUPPORTED_REMOTE_EXECUTION_PENDING",
+    "wp03": "OPEN_HARDEN_PR145_AND_REPLAY_EXACT_SELECTED_GRAMMAR",
+    "wp04": "DO_NOT_ADVANCE",
+    "base": "NOT_PASS",
+    "frank_harness_mutation": false
+  },
+  "measurement_status": {
+    "formal_base_progress": 7.142857,
+    "formal_h1_progress": 4.545455,
+    "release_strict_doomsday_progress_percent": 26.5,
+    "release_strict_forecast_low": "2026-08-23",
+    "release_strict_forecast_high": "2026-10-02",
+    "release_strict_forecast_center": "2026-09-12",
+    "forecast_confidence": "VERY_LOW",
+    "forecast_basis": "current formal stage package statuses + empty DOOMSDAY event ledger + evidence-mapped 25.12% historical baseline + bootstrap priors; no verified accelerator multiplier admitted",
+    "next_level_eta_10h_day": "1.0d-4.3d",
+    "throughput_basis": "BOOTSTRAP_STAGE_PRIORS_NO_MEASURED_STAGE_OBSERVATIONS"
+  },
+  "next_frontier": [
+    "Consume V20 QID-continuation hosted/self-hosted receipts when materialized; if the three predicted V17-valid continuations diverge, preserve V20 as a negative result and keep V17 selected.",
+    "Harden PR145 alias/token equality fail-closed on its candidate branch and replay the exact selected grammar/frontend plus frozen G9+Dialect under hosted/self-hosted Ubuntu.",
+    "Keep WP02 and BASE formal promotion open until registered Andreas Ubuntu developer-system receipts exist; proxy/Hostinger evidence remains bounded to its measured scope.",
+    "Do not start paid/final model training without explicit owner authorization."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_write": "COMMITTED",
+  "authority_invariant": "model output != execution authority"
+}

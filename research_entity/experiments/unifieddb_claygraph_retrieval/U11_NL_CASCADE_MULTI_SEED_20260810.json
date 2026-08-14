@@ -1,0 +1,13 @@
+{
+  "benchmark": "U11_COHERENT_FASTPATH_PLUS_NL_CLAYGRAPH_FALLBACK_CASCADE_V1",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "boundary": "Synthetic exact normalized-key seeds are an upper-bound coverage experiment, not production seed-coverage evidence.",
+  "aggregate": [
+    {"coverage":0.0,"fast_hit_rate":0.0,"top1_mean":1.0,"latency_mean_us":1067.968797,"p95_mean_us":1557.842867},
+    {"coverage":0.25,"fast_hit_rate":0.25,"top1_mean":1.0,"latency_mean_us":810.844403,"p95_mean_us":1547.196867},
+    {"coverage":0.5,"fast_hit_rate":0.5,"top1_mean":1.0,"latency_mean_us":547.549088,"p95_mean_us":1515.825683},
+    {"coverage":0.75,"fast_hit_rate":0.75,"top1_mean":1.0,"latency_mean_us":282.900685,"p95_mean_us":1388.255267},
+    {"coverage":1.0,"fast_hit_rate":1.0,"top1_mean":1.0,"latency_mean_us":9.294544,"p95_mean_us":9.735317}
+  ],
+  "interpretation": "At fixed synthetic Top-1, coherent U11 seed coverage monotonically lowers mean latency by bypassing the NL/ClayGraph fallback. p95 remains fallback-dominated until coverage is nearly complete. This supports a compiled-known-semantics fastpath plus open-world fallback, not replacement of either tier."
+}

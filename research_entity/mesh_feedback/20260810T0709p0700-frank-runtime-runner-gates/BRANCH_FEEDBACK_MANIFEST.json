@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-frank-runtime-runner-gates-20260810T0709p0700",
+  "created_at": "2026-08-10T07:09:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "operational_target": "FRANK_V0_1_UBUNTU_LINUX_DEVELOPER_SYSTEM_ONLY",
+  "frank_source": {
+    "uploaded_zip_sha256": "d8ec1262a560dda040729ef5fc6282f6a34b7380a804549c221f8d6e2d38deb9",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "critical_runtime_blob_verified_equal_to_remote": "cd91031d2eacc9f195a3f6e608c52adf7219fc90"
+  },
+  "local_execution": {
+    "pytest_full_before": "18_PASS_0_FAIL",
+    "standalone_gate_passes_before_first_failure": 27,
+    "first_reproduced_failure": "tests/loop_reentry_factorial_regression.py",
+    "failure_class": "TEST_ORACLE_DRIFT_NOT_RUNTIME_REGRESSION",
+    "focused_post_fix_pytest": "14_PASS_0_FAIL",
+    "pytest_full_after": "18_PASS_0_FAIL",
+    "standalone_factorial_after": "PASS"
+  },
+  "finding_loop_readout_quality": {
+    "leading_hypothesis": "The legacy standalone factorial oracle predates loop-dynamics v1.4 residual-estimator quality gating and incorrectly expects a semantic regime from an estimator-unbound readout.",
+    "strongest_counterhypothesis": "The v1.4 runtime itself regressed and should still infer convergence without explicit residual quality metadata.",
+    "discriminator": "Run the same truthful/shuffled/no-reentry/lesion/rescue trajectories first through the historical estimator-unbound readout and then through an explicitly quality-bound residual estimator.",
+    "result": "Estimator-unbound readouts correctly fail closed as READOUT_UNCERTAIN; with estimator id/version/uncertainty/age bound, truthful and rescue classify CONVERGING_FIXED_POINT while shuffled/no-reentry/lesion classify STALLED.",
+    "adjudication": "COUNTERHYPOTHESIS_REFUTED_FOR_THIS_FIXTURE; UPDATE_TEST_ORACLE_ONLY",
+    "runtime_architecture_delta": "NO_CHANGE",
+    "test_delta": "tests/loop_reentry_factorial_regression.py updated to preserve fail-closed legacy readout and bind explicit v1.4 quality metadata before convergence/stall assertions",
+    "frank_commit": "ed9e2a5b88c803cdea47b0f9fc1e6d89358e31e1",
+    "effect_authority": "NONE"
+  },
+  "finding_hostinger_cmake_prefix": {
+    "source_receipt": "runtime/vps_integrity/real_qwen4b_shadow_make_latest.json",
+    "observed_remote_status_before_fix": "FAIL",
+    "observed_remote_failure_before_fix": "BOOTSTRAPPED_CMAKE_MISSING",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "platform": "Ubuntu/Linux x86_64",
+    "leading_hypothesis": "System Python's posix_local installation scheme places pip --prefix console scripts under <prefix>/local/bin while the workflow exported only <prefix>/bin.",
+    "strongest_counterhypothesis": "The cmake wheel did not install a usable executable despite pip reporting installation success.",
+    "local_discriminator": "Resolve sysconfig.get_path('scripts', vars={'base': prefix, 'platbase': prefix}) under system Python and compare against workflow PATH assumptions.",
+    "local_result": "Resolved scripts path is <prefix>/local/bin under posix_local; workflow assumption <prefix>/bin alone is insufficient.",
+    "repair": "Compute the Python sysconfig scripts directory at runtime and prepend it, retaining <prefix>/bin and <prefix>/local/bin as compatibility fallbacks.",
+    "frank_commit": "57ba7b65c8ae3ec93ce2a4f8037288e55cced6f6",
+    "remote_retest_status": "PENDING_NEW_RECEIPT",
+    "promotion_allowed": false
+  },
+  "coordination": {
+    "fresh_overlap_checked": true,
+    "parallel_clay_commit_observed": "6d180c094c3f0b0c4f98ede3a1f4f6e6cbfdf9bb",
+    "parallel_work_scope": "CC-WP-02-PARSER-CANON Hostinger falsifier",
+    "collision_assessment": "NON_OVERLAPPING_WITH_FRANK_LOOP_ORACLE_AND_REAL_QWEN4B_MAKE_TOOLCHAIN_REPAIR",
+    "out_of_box_experiment": "NOT_ADDED_BY_THIS_DELTA_BECAUSE_CURRENT_SHARED_GO_CYCLE_ALREADY_RECORDS_ONE_BOUNDED_EXPERIMENT_IN_WP02_ADJUDICATION"
+  },
+  "branch_feedback": {
+    "frank": {
+      "delta": "Preserve loop readout fail-closed semantics; do not weaken v1.4 quality gates to satisfy legacy regression assertions.",
+      "next_test": "Replace matched synthetic pressure law with frozen historical/runtime episode measurements while preserving estimator identity and uncertainty."
+    },
+    "harness": {
+      "delta": "Standalone repo gates are part of the executable closure even when pytest does not collect them; gate-oracle version drift must be treated separately from runtime defects.",
+      "next_test": "Run complete standalone gate inventory on immutable current head and capture per-gate timing/resource/failure metadata."
+    },
+    "claycode": {
+      "delta": "Hostinger Ubuntu workflow portability must resolve tool installation paths from the active Python install scheme rather than assume <prefix>/bin.",
+      "next_test": "Require the new make-lane receipt to prove cmake discovery, pinned llama.cpp build, real model server readiness and benchmark execution on the self-hosted runner."
+    },
+    "continuity": {
+      "delta": "A CI workflow PASS/FAIL needs scientific adjudication: failure from a stale oracle or environment path assumption is not evidence of semantic runtime regression.",
+      "next_test": "Keep immutable source identity plus explicit failure-class receipts and fail closed on unverified remote rerun results."
+    }
+  },
+  "global_controls": [
+    "QUEUED != EXECUTED != PASS",
+    "READOUT_UNCERTAIN is correct when required estimator quality identity is absent",
+    "test failure != runtime regression until failure class is localized",
+    "remote workflow repair != Hostinger PASS until a new execution receipt exists",
+    "no architecture promotion from synthetic matched replay alone",
+    "Andreas target acceptance remains separate from Hostinger evidence",
+    "model output != execution authority"
+  ],
+  "architecture_delta": "NO_ARCHITECTURE_CHANGE_TEST_AND_CONTINUITY_DELTA_ONLY",
+  "research_write_result": "TARGETED_FEEDBACK_TO_FRANK_HARNESS_CLAYCODE_CONTINUITY",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+}

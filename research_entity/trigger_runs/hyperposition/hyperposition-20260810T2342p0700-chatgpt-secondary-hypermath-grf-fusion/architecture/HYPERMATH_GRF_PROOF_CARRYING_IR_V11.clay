@@ -1,0 +1,243 @@
+module clay.hyperposition.hypermath_grf.v11
+version "HYPERMATH-GRF-PCIR-V1.1-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Result of HyperMath + H7B context-admissibility + C-GRF + fresh GO continuity fusion.
+// Design correction: do NOT create a new opaque runtime organ unless target evidence demands it.
+// HyperMath is first a proof-carrying algebraic IR / thin semantic fabric compiled into UnifiedDB
+// preprocessing, ClayCode evaluation and bounded GWT/GRF capsules.
+
+import hypermath=@research_entity/trigger_runs/hyperposition/hyperposition-20260810-hypermath-thin-net/architecture/CLAY_HYPERPOSITION_ALGEBRA_FABRIC_CANDIDATE.clay
+import h7b=@research_entity/trigger_runs/hyperposition/hyperposition-20260810T2331p0700-chatgpt-secondary-context-admissibility/architecture/H7B_HYPERMATH_FUSION_DELTA.clay
+import grf=@research_entity/trigger_runs/clayresearch/clayresearch-20260810T2324p0700-chatgpt-secondary-generative-reality-framework/GENERATIVE_REALITY_FRAMEWORK.md
+
+// -----------------------------------------------------------------------------
+// 1. THIN PROOF-CARRYING ALGEBRAIC IR
+// -----------------------------------------------------------------------------
+record HyperIR {
+  href:HashRef
+  op:ATOM|ALT|JOINT|ROLE_BIND|EXCLUDE|REQUIRE|RETRACT|CONTEXT_GATE|PROJECT|MARGINALIZE|DELTA|FIXPOINT
+  args:Ordered<Ref>
+  roles:Ordered<Ref>
+  constraints:Set<Ref>
+  carrier:Set<CarrierRef>
+  state_epoch:Epoch
+  provenance:Set<EvidenceRef>
+  epistemic:SUPPORTED|REFUTED|UNKNOWN|CONFLICT|REVOKED|STALE
+  law_refs:Set<LawCertificateRef>
+}
+rule HyperIR.href = content_hash(canonical(HyperIR excluding href))
+rule HyperIR immutable=true
+rule equal_payload_without_equal_hypothesis_provenance_epoch_revision != same_HyperIR
+
+record RewriteWitness {
+  source:HyperRef
+  target:HyperRef
+  rewrite:RewriteRef
+  law:LawCertificateRef
+  context_admissibility:Ref
+  material_read_set:Set<Ref>|UNKNOWN
+  effect_class:PURE|READ_ONLY|EXTERNAL|SECURITY_SENSITIVE|UNKNOWN
+  exactness:EXACT|BOUNDED_APPROX|UNKNOWN
+  proof_or_test:Set<EvidenceRef>
+}
+
+rule rewrite.exact requires law.status in [PROVED,TESTED_BOUNDED] + context_admissibility.semantic_reduction_admissible=true + complete_or_conservative(material_read_set)
+rule UNKNOWN_material_read_set -> rewrite.exact=false
+rule hidden_relation_member_moved_to_context -> semantic_reduction=false
+rule operational_factorization may_remain true when canonical_nary_semantics_remain_reified
+rule EXTERNAL|SECURITY_SENSITIVE|UNKNOWN effect -> no_cross_alternative_multi_execution
+
+// -----------------------------------------------------------------------------
+// 2. GO-DERIVED GENERATION FENCE FOR THIN-NET TRANSPORT
+// -----------------------------------------------------------------------------
+record HyperFenceKey {
+  semantic_root:Hash
+  state_epoch:Epoch
+  execution_generation:Int
+  delivery_generation:Int
+  schema_version:Version
+}
+
+record HHandleV11 {
+  href:HashRef
+  fence:HyperFenceKey
+  portable_delta:Ref?
+}
+
+rule resolve(HHandleV11,current) requires href_hash_match + schema_compatible + fence.semantic_root=current.semantic_root + fence.state_epoch=current.state_epoch + fence.execution_generation=current.execution_generation + fence.delivery_generation=current.delivery_generation
+rule stale_execution_generation -> REJECT_STALE_HANDLE
+rule stale_delivery_generation -> REJECT_STALE_HANDLE
+rule stale_state_epoch -> REJECT_STALE_HANDLE
+rule partial_response_restart cannot_splice HyperIR handles across delivery_generation
+rule completed_response_replay may reuse exact stored handles only_with exact authenticated request + same admitted semantic/result lineage
+rule token_or_handle_presence != identity
+rule handle_or_hyperposition_value != effect_authority
+
+// -----------------------------------------------------------------------------
+// 3. UNIFIEDDB = ALGEBRAIC PREPROCESSOR, NOT SECOND COGNITION
+// -----------------------------------------------------------------------------
+record HyperPlanV11 {
+  plan_id:Ref
+  state_epoch:Epoch
+  roots:Set<HashRef>
+  requested_carriers:Set<CarrierRef>
+  relevant_closure:Set<HashRef>
+  elimination_order:Ordered<Ref>
+  factorization:Ref?
+  rewrite_witnesses:Set<RewriteWitness>
+  exactness:EXACT|BOUNDED_APPROX|UNKNOWN
+  fallback:Ref
+  predicted_cost:Cost
+}
+
+fn compile_hyperplan(query,state) -> HyperPlanV11 {
+  require state.epoch == UnifiedDB.current_semantic_epoch()
+  closure=dependency_relevant_hyperclosure(query.roots,query.task,query.budget)
+  candidate=factorize_or_keep_materialized(closure)
+  witnesses=prove_or_test_rewrites(candidate)
+  if any_required_witness_invalid(witnesses) { return conservative_fallback_plan(closure) }
+  return costed_variable_elimination_plan(candidate,witnesses)
+}
+
+rule UnifiedDB executes HyperPlanV11 incrementally under semantic epoch publication
+rule known FAQ|InsideOut|factorized|GDL style mechanism may be backend implementation
+rule HyperMath does_not_require distinct runtime if conventional planner preserves exact semantics + equal_or_better_cost
+rule model hot_read receives bounded HyperCapsule not global database dump
+rule cache key includes semantic_root + state_epoch + exact material read signature + carrier/law version
+
+// -----------------------------------------------------------------------------
+// 4. C-GRF AS HYPERPOSITION PROGRAM, NOT GIANT VIDEO WORLD
+// -----------------------------------------------------------------------------
+type RealityClass = OBSERVED|INFERRED|RETRIEVED|PREDICTED|HYPOTHETICAL|INTERVENTIONAL|COUNTERFACTUAL|PLANNED|DESIRED|IMAGINED|REPLAY|ADVERSARIAL
+
+record RealityBranchV11 {
+  branch_id:Ref
+  parent_anchor:Ref
+  reality_class:RealityClass
+  hyper_ref:HashRef
+  model_ref:Ref
+  model_hash:Hash
+  action_or_intervention:Set<Ref>
+  causal_assumptions:Set<Ref>
+  horizon:Duration
+  epistemic_uncertainty:Real[0,1]
+  aleatoric_uncertainty:Real[0,1]
+  structural_uncertainty:Real[0,1]
+  support_distance:Real>=0
+  predicted_decision_gain:Real
+  predicted_information_gain:Real
+  simulation_cost:Cost
+  expiry:Time
+  provenance:Set<EvidenceRef>
+}
+
+record PossibleWorldSetV11 {
+  anchor:Ref
+  branches:Set<RealityBranchV11>
+  compatibility:Ref
+  exclusion:Ref
+  higher_order_constraints:Set<Ref>
+  hyper_ref:HashRef
+}
+
+rule RealityBranchV11 lowers_to HyperIR without losing reality_class|uncertainty|provenance|parent_anchor
+rule GENERATED != OBSERVED
+rule DESIRED != PREDICTED
+rule COUNTERFACTUAL requires factual_parent + explicit_intervention + causal_assumptions + influence_or_identifiability_status
+rule synthetic_success != verified_outcome
+rule synthetic_replay != autobiographical_memory
+
+// -----------------------------------------------------------------------------
+// 5. SIMULATION IS A COSTED ACTION
+// -----------------------------------------------------------------------------
+record SimulationBid {
+  branch_set:Ref
+  predicted_decision_gain:Real
+  predicted_information_gain:Real
+  uncertainty_reduction_gain:Real
+  support_distance:Real>=0
+  compute_cost:Cost
+  latency_cost:Cost
+  opportunity_cost:Cost
+  calibration_ref:Ref
+}
+
+fn should_simulate(bid:SimulationBid,state) -> Bool {
+  calibrated_gain=calibrate_from_realized_reconciliation_history(bid)
+  return calibrated_gain > bid.compute_cost + bid.latency_cost + bid.opportunity_cost
+}
+
+rule epistemic_uncertainty_alone != command_to_simulate
+rule always_simulate is explicit baseline
+rule never_simulate is explicit baseline
+rule simulation_policy promotion requires heldout target replay + realized outcome reconciliation
+rule model forecast cannot self-certify calibration
+
+record RealityReconciliationReceiptV11 {
+  branch:Ref
+  realized_outcome:Ref
+  prediction_error:Ref
+  intervention_response_error:Ref
+  calibration_error:Ref
+  causal_credit:Ref
+  falsified_assumptions:Set<Ref>
+  model_update:ADMIT|REJECT|HOLD
+  reward_update:ADMIT|REJECT|HOLD
+  state_reentry:Ref
+  evidence:Set<EvidenceRef>
+}
+
+// -----------------------------------------------------------------------------
+// 6. COMPUTABILITY CLAIM BOUNDARY
+// -----------------------------------------------------------------------------
+rule current_HyperMath_GRf_operations are ordinary_effective_computation_until_proven_otherwise
+rule catalytic_compute_architecture != formal_super_Turing_by_definition
+rule formal_super_Turing_claim requires explicit_non_Turing_primitive_or_oracle + proof_that_total_system_computes_nonrecursive_function
+rule large_factorization_speedup != computability_class_expansion
+
+// -----------------------------------------------------------------------------
+// 7. PROMOTION / FALSIFICATION
+// -----------------------------------------------------------------------------
+experiment HYPERMATH_GRF_TARGET_DISCRIMINATOR {
+  arms=[
+    PLAIN_CLAYCODE_UNIFIEDDB,
+    CONVENTIONAL_FACTORIZED_FAQ_PLANNER,
+    HYPERMATH_PCIR,
+    HYPERMATH_PCIR_PLUS_GRF_SELECTIVE_SIMULATION
+  ]
+  controls=[
+    ALWAYS_SIMULATE,
+    NEVER_SIMULATE,
+    NONLICENSED_REWRITE,
+    CONTEXT_SMUGGLING,
+    STALE_STATE_EPOCH,
+    STALE_EXECUTION_GENERATION,
+    STALE_DELIVERY_GENERATION,
+    CRASH_RESTART_REPLAY,
+    RELATION_LESION,
+    PAIRWISE_REDUCTION
+  ]
+  matched=[input,state_epoch,semantic_root,model,seeds,effect_policy,compute_budget]
+  measure=[task_quality,semantic_roundtrip_error,false_merge_rate,unknown_conflict_preservation,provenance_reconstruction,model_context_tokens,wire_bytes,preprocess_latency,p50,p95,p99,CPU,RSS,invalidation_amplification,recovery_time,simulation_rate,realized_utility,calibration_error,effect_authority_integrity]
+}
+
+counterhypothesis H0_HYPERMATH_RUNTIME {
+  proposition="Typed ClayCode records plus conventional factorized FAQ planner provide all useful behavior; HyperMath should remain syntax/type/proof metadata only."
+}
+counterhypothesis H0_GRF_GATE {
+  proposition="Frank's existing loop allocation performs as well as an explicit simulation bid/gate on real tasks; GRF gating adds complexity without outcome gain."
+}
+counterhypothesis H0_THIN_NET {
+  proposition="Content-addressed handles save bytes but cache miss, invalidation and recovery overhead erase end-to-end benefit."
+}
+counterhypothesis H0_HIGHER_ORDER_CAUSALITY {
+  proposition="Higher-order relations are useful descriptions but pairwise/state-machine operational reductions match all target interventions and outcomes."
+}
+
+invariant no_truth_promotion_from_factorization
+invariant no_effect_authority_from_hyperposition
+invariant no_generated_branch_becomes_observed_without_real_outcome_receipt
+invariant no_stale_generation_handle_reuse
+invariant no_hidden_context_smuggling_as_semantic_reduction
+invariant simpler_baseline_dominates -> no_distinct_HyperMath_runtime_promotion

@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:25:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "canonical_parent_revision": 2,
+  "canonical_parent_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "input_evidence": {
+    "remote_closure_receipt": "research_entity/claycode/remote_vps/WP02_IMMUTABLE_SINGLE_FLIGHT_CLOSURE_PASS_20260810T0714p0700.json",
+    "clay_commit": "ae97e17656290988a12bbb35391f053fce8fa86e",
+    "hostinger_run_id": 31343808739,
+    "hostinger_job_id": 93321887528,
+    "scientific_gate_result": "PASS",
+    "resource_metadata_gap": "user/system CPU, RSS, page faults and context switches remained UNKNOWN"
+  },
+  "diagnosis": {
+    "status": "SUPPORTED_BY_WORKFLOW_SOURCE_AND_GNU_TIME_FORMAT_REPRODUCTION",
+    "old_pattern": "^<exact label>:\\s*(.+)$",
+    "observed_problem": "GNU /usr/bin/time -v human-readable labels are indented; the old column-zero regex therefore misses existing measurements.",
+    "scientific_interpretation": "RECEIPT_EXTRACTION_BUG_NOT_CLAYCODE_SEMANTIC_FAILURE"
+  },
+  "repair": {
+    "commit": "29c579d00ed91a6984e228a141f43c58e6342b8c",
+    "path": "tools/gnu_time_v_receipt.py",
+    "git_blob": "510b56e1c5a1ddcc30e46345cf2857e897c70f30",
+    "parser": "GNU_TIME_V_WHITESPACE_SAFE_V1",
+    "pattern": "^\\s*<exact label>:\\s*(.+?)\\s*$",
+    "fields": [
+      "user_seconds",
+      "system_seconds",
+      "max_rss_kb",
+      "major_page_faults",
+      "minor_page_faults",
+      "voluntary_context_switches",
+      "involuntary_context_switches"
+    ],
+    "unknown_policy": "PRESERVE_LITERAL_UNKNOWN_NEVER_ZERO_FILL",
+    "semantic_architecture_change": false
+  },
+  "remote_regression": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 71,
+    "workflow_run_id": 31344287554,
+    "job_id": 93323227568,
+    "state_at_materialization": "QUEUED",
+    "counts_as_evidence": false,
+    "rule": "Do not convert QUEUED to PASS; fuse only an observed completed receipt."
+  },
+  "adjudication": {
+    "wp02_status": "OPEN_PENDING_ANDREAS_TARGET_ADJUDICATION",
+    "hostinger_remote_research_closure": "PASS",
+    "resource_parser_repair": "IMPLEMENTED_REMOTE_VERIFICATION_PENDING",
+    "counts_as_wp02_pass": false,
+    "counts_as_andreas_target_acceptance": false,
+    "promotion_allowed": false,
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+  },
+  "next_obligations": [
+    "When the Hostinger regression run completes, fuse its raw/parsed receipt only if the whitespace-safe parser actually recovers the seven expected metrics.",
+    "Use tools/gnu_time_v_receipt.py or an equivalent whitespace-safe parser in the registered Andreas Ubuntu target WP02 acceptance workflow.",
+    "On target, capture complete host/build/runtime/resource metadata and preserve any still-missing value as UNKNOWN rather than zero."
+  ],
+  "authority_invariant": "model output != execution authority"
+}

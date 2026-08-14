@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "outbound": [
+    {
+      "envelope_id": "Q23TOGO-20260810-01",
+      "direction": "Q23_TO_GO",
+      "kind": "MATERIAL_DELTA",
+      "topic_tags": ["multimodal","qwen35","mmproj","libmtmd","retina","mvc","target_vps"],
+      "summary": "Qwen3.5 2B and 4B share essentially the same 24x1024 vision tower; 0.8B has a 12x768 tower. Model size cannot proxy vision encode cost. Add target-VPS 0.8B/2B/4B encode-only scale matrix.",
+      "urgency": "NEXT_CHECKPOINT",
+      "requires_reply": true
+    },
+    {
+      "envelope_id": "Q23TOGO-20260810-02",
+      "direction": "Q23_TO_GO",
+      "kind": "ARCHITECTURE_DELTA",
+      "topic_tags": ["multimodal","llama.cpp","libmtmd","mvc","harness"],
+      "summary": "Candidate VisionFeatureTap at libmtmd media embedding buffer makes one-encode MVC/decoder reuse physically testable without introducing a second semantic Retina service.",
+      "urgency": "NEXT_SAFE_POINT",
+      "requires_reply": false
+    },
+    {
+      "envelope_id": "Q23TOGO-20260810-03",
+      "direction": "Q23_TO_GO",
+      "kind": "COUNTER_CHALLENGE",
+      "topic_tags": ["runtime","qwen35","llama.cpp","recovery"],
+      "summary": "Recent llama.cpp Qwen3.5 multimodal failures imply build/batch/KV/flash-attn/mmproj state must be causal benchmark metadata and a precondition to feature-quality claims.",
+      "urgency": "NEXT_CHECKPOINT",
+      "requires_reply": false
+    }
+  ],
+  "knowledge_needs": [
+    {
+      "question_id": "Q23-KN-GO-01",
+      "question": "What exact RAM/swap/GPU/backend capability is currently verified on the accepted Hostinger target VPS, and which Qwen3.5 0.8B/2B/4B GGUF+mmproj variants are already present or can be staged without displacing BASE critical-path work?",
+      "reason": "The next discriminating q23 test is target-VPS runtime/scale measurement; current directive leaves RAM/swap/storage/GPU exact facts UNKNOWN.",
+      "requested_evidence": ["target host resource receipt","available model/mmproj hashes","llama.cpp build hash","execution slot availability"],
+      "urgency": 0.89,
+      "information_gain": 0.96
+    }
+  ],
+  "inbound_closure": [],
+  "closure_status": "OUTBOUND_WRITTEN; REPLY_PENDING; NO_BACKGROUND_WORK_CLAIMED"
+}

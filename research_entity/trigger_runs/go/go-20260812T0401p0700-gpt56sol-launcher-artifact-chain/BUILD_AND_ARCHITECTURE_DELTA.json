@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0401p0700-gpt56sol-launcher-artifact-chain",
+  "program": "FRANK_V0_1",
+  "focus": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "state": "CANDIDATE_REQUIREMENT",
+  "architecture_delta": {
+    "name": "PRODUCTSTART_ADMISSION_BUNDLE_IDENTITY",
+    "problem": "Current storage ProductStart lanes separately establish SQLite runtime artifact authority, parent/pre-exec environment policy, and path integrity, but do not yet prove that the launcher and recursively executed/imported admission-guard bytes are the independently accepted release bytes.",
+    "invariant": "Before productive Frank state is opened, the exact executable admission bundle must be antecedently accepted and non-caller-selectably bound. The observed systemd parent, launcher, V5 guard and all transitively authoritative guard-code members must resolve to that accepted bundle or ProductStart fails closed.",
+    "separation_law": [
+      "path provenance != artifact identity",
+      "root ownership != artifact identity",
+      "SQLite library identity != launcher/guard identity",
+      "candidate-calculated digest != independent release authority",
+      "systemd active/loaded != accepted ProductStart"
+    ],
+    "composition_inputs": {
+      "PR466": "independent SQLite runtime manifest/library artifact authority candidate",
+      "PR468": "systemd parent/pre-exec environment candidate",
+      "PR469": "full component path-integrity candidate",
+      "PR470": "direct V5 guard loader-environment defense-in-depth candidate"
+    },
+    "required_next_falsifiers": [
+      "Reject a root-owned/nonwritable byte-distinct launcher with accepted basename.",
+      "Reject a byte-distinct V5 guard while launcher bytes remain accepted.",
+      "Reject a byte-distinct transitively imported V4/V3/V2/V1 member.",
+      "Rescue exact independently accepted admission bundle.",
+      "Prove productive start/restart uses the admitted bundle and accepted SQLite object.",
+      "Prove rollback/downgrade/path/library swap fails closed before persisted writable state opens."
+    ],
+    "promotion_evidence": [
+      "antecedent release/build authority for admission bundle identity",
+      "exact accepted-target ProductStart receipt",
+      "mapped/runtime object identity",
+      "restart continuity",
+      "rollback/downgrade/path/library swap controls",
+      "pre-open persisted-state safety"
+    ],
+    "rollback": "No product mutation performed by this run; requirement can be rejected if an existing stronger non-caller-selectable bundle attestation is found and independently demonstrated to cover the full launcher/guard chain on ProductStart."
+  },
+  "result": {
+    "F_V01_01": "NO_STATUS_PROMOTION",
+    "F_V01_13": "NO_STATUS_PROMOTION",
+    "whole_frank_v0_1": "NO_STATUS_PROMOTION"
+  },
+  "authority": {
+    "frank_harness_mutation": false,
+    "production_effect": false,
+    "training_authorized": false
+  }
+}

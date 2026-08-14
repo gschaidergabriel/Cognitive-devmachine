@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "target_work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 278,
+  "candidate_branch": "chatgpt/unifieddb-wal-safe-fresh-main-20260811",
+  "candidate_head_sha": "d3c8c477dce98fba31fcde2d577e8a7f2d0df075",
+  "tested_pr_merge_sha": "7047155557802a617b2aa0fb05f3377a8a2a3a0b",
+  "workflow_run_id": 31433580357,
+  "job_id": 93602515062,
+  "runner": {
+    "name": "clay",
+    "machine": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "sqlite": "3.45.1"
+  },
+  "result": "PASS_COMPONENT_TARGET_VPS",
+  "observations": {
+    "wal_reset_upstream_fix_proven_by_version": false,
+    "selected_migration_journal_mode": "delete",
+    "normal_open_journal_mode": "delete",
+    "synchronous": "FULL",
+    "forced_wal_on_affected_build": "FAIL_CLOSED",
+    "unified_schema_fingerprint": "88d8f11986f1bb6e8725ac1b780cc9ed3d5aceec8cebe4447b39a6587b512ef9",
+    "graph_schema_fingerprint": "ac6db72653ec37d2c5c4962cdb7c852019fc9b70b65dd8e262734ca1b49a99a4",
+    "stale_unified_fingerprint": "FAIL_CLOSED",
+    "missing_graph_fingerprint": "FAIL_CLOSED",
+    "integrity": "ok",
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  },
+  "resource_metrics": {
+    "wal_gate_elapsed_s": 0.12,
+    "wal_gate_peak_rss_kib": 22272,
+    "fingerprint_gate_elapsed_s": 0.15,
+    "fingerprint_gate_peak_rss_kib": 23348
+  },
+  "external_primary_basis": {
+    "sqlite_wal_bug_range": "3.7.0 through 3.51.2 unless fixed backport",
+    "fixed": ["3.51.3+", "3.44.6", "3.50.7"],
+    "source": "sqlite.org WAL documentation and 3.51.3 release log"
+  },
+  "coordination": {
+    "parallel_materialization_pair_candidate": "chatgpt/unifieddb-u12-materialization-pair-gate-20260811",
+    "relationship": "COMPLEMENTARY",
+    "fusion_obligation": "Prefer one composed implementation that keeps WAL fail-closed storage safety and also binds UnifiedDB+ClayGraph pair identity; do not merge two conflicting apply_current_schema.py implementations independently without recomposition and target retest."
+  },
+  "promotion": "HOLD_FOR_COMPOSED_CURRENT_MAIN_REVALIDATION",
+  "non_claims": [
+    "whole Frank v0.1 acceptance",
+    "physical UnifiedDB/ClayGraph consolidation superiority",
+    "whole-VM rollback safety",
+    "semantic-lineage uniqueness closure",
+    "effect-authority promotion",
+    "final training authorization",
+    "Frank/self.root Harness mutation authority"
+  ]
+}

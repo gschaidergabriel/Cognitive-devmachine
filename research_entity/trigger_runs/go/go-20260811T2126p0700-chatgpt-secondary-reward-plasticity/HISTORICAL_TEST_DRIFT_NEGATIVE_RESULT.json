@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "NEGATIVE_RESULT",
+  "subject": "historical Project-Frankenstein Nucleus Accumbens source/test consistency",
+  "historical_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "source": {
+    "path": "services/nucleus_accumbens.py",
+    "blob_sha": "fba076cbdcfbe5baf1acf9621fdaaba12598dda2"
+  },
+  "tests": {
+    "path": "tests/test_nucleus_accumbens.py",
+    "blob_sha": "047b0fb91b990ff2b713aff42d961066dcd0d569"
+  },
+  "status": "SOURCE_TEST_DRIFT_CONFIRMED",
+  "confirmed_conflicts": [
+    {
+      "dimension": "channel_count",
+      "source": "CHANNEL_NAMES and REWARD_CHANNELS contain 16 configured channels",
+      "test": "TestAllChannels.test_channel_count asserts both counts equal 9",
+      "impact": "original suite cannot be treated as current ground truth at this exact historical commit"
+    },
+    {
+      "dimension": "habituation_semantics",
+      "source": "_init_habituations explicitly uses 0.0=fresh and migrates legacy 1.0=fresh state to the new 0.0=fresh convention",
+      "test": "TestBaselineState.test_initial_habituations asserts every channel equals 1.0; several recovery/adaptation assertions retain old-direction assumptions",
+      "impact": "historical tests straddle a semantic migration and may report false failures or false behavioral expectations"
+    },
+    {
+      "dimension": "motivation_api_name",
+      "source": "implementation exposes motivation_label()",
+      "test": "TestCognitiveMode.test_label_transitions calls _motivation_label()",
+      "impact": "exact suite contains at least one stale API assertion"
+    },
+    {
+      "dimension": "documented_test_scope",
+      "source": "implementation documentation says 9 channels although source contains 16",
+      "test": "file header says 24 categories but file contains at least 28 numbered categories",
+      "impact": "documentation/test metadata are stale and cannot be used as completeness denominators"
+    }
+  ],
+  "preserved_valid_obligations_from_original_tests": [
+    "reward-call latency target below 1 ms in the original unit-test harness",
+    "tick latency target below 1 ms in the original unit-test harness",
+    "positive reward produces positive phasic signal and tonic rise",
+    "RPE shrinks with repeated predictable reward",
+    "opponent accumulator growth/decay",
+    "boredom/repetitiveness behavior",
+    "anhedonia recovery behavior",
+    "DB logging/retention/state persistence",
+    "tonic clamp",
+    "all currently configured channels should execute rather than silently disappear"
+  ],
+  "baseline_policy": "Do not mark the historical organ baseline failed merely because stale historical tests fail. Reconstruct behavior from exact source plus executable probes, preserve stale-test failures as negative evidence, and only use non-drifted assertions as baseline obligations.",
+  "candidate_impact": "PR #332 custom exact-source baseline intentionally measures current source behavior instead of requiring the stale original suite to pass. This does not complete the full original baseline contract.",
+  "architecture_delta": "NO_PROMOTION; ADD_TEST_LINEAGE_DRIFT_AS_BASELINE_METADATA_AND_REQUIRE_DIFFERENTIAL_PROBES_FOR_MIGRATED_SEMANTICS",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

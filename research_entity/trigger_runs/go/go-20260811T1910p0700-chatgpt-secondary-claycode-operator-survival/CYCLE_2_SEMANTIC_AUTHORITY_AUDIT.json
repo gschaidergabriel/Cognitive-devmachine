@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "cycle": 2,
+  "topic": "ClayCode comparison-chain semantic authority audit",
+  "actor": "chatgpt-secondary",
+  "fresh_counterevidence": {
+    "target_pr": 316,
+    "head_sha": "dc0f4eeb7bbbe4ce044e1d780b8232fd4a8d3056",
+    "state": "OPEN_DRAFT_MERGEABLE",
+    "diagnostic": "5 < 10 < 8 evaluates true under current Boolean left-fold but false under adjacent-pair interpretation",
+    "bounded_report": "1596/12348 divergences against adjacent-pair reference; conditional on that reference being selected semantics"
+  },
+  "authority_audit": [
+    {
+      "source": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+      "status": "CURRENT_FROZEN_BASE_AUTHORITY",
+      "finding": "The freeze names CLAYCODE_G9_FUSION_SPEC_V3.clay as the primary BASE semantic contract and closes semantic redesign by default unless an executable counterexample forces a versioned amendment. It does not specify comparison-chain evaluation semantics."
+    },
+    {
+      "source": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "status": "PRIMARY_BASE_SEMANTIC_CONTRACT",
+      "finding": "No rule found selecting Boolean left-fold, adjacent-pair/chained comparison, or another comparison-chain interpretation."
+    },
+    {
+      "source": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark",
+      "status": "FROZEN_FRONTEND_LINEAGE",
+      "finding": "The accepted syntax lineage represents expressions as term ((operator|infix_relop) term)* and explicitly says canonical meaning remains typed IR; syntax alone does not establish runtime comparison-chain meaning."
+    },
+    {
+      "source": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "status": "CURRENT_BUILD_WORKSPACE",
+      "finding": "CC-WP-05 EVALUATOR is OPEN and language semantic changes require an executable counterexample; target-VPS executable evidence is required before package promotion."
+    }
+  ],
+  "hypothesis": "The current Boolean left-fold in Evaluator._eval(Compare) is implementation behavior rather than recovered owner-fixed ClayCode semantics.",
+  "counterhypothesis": "The phrase 'evaluated left to right' in the reconstructed surface AST comment is sufficient authority to define Boolean left-fold semantics.",
+  "adjudication": {
+    "result": "OPEN_SEMANTIC_CONFLICT",
+    "reason": "'Left to right' specifies evaluation order but does not by itself select whether chained relations compare adjacent operands or recursively compare a Boolean result to the next operand. The frozen primary semantic contract does not disambiguate this. Inventing a choice would violate the semantic-freeze authority order.",
+    "build_decision": "NO_SEMANTIC_FIX_AUTHORIZED_IN_THIS_CYCLE",
+    "diagnostic_pr_316_disposition": "RETAIN_AS_NEGATIVE_SCOPE_PROBE",
+    "f_v01_02_evaluator_status": "OPEN_NOT_PASS"
+  },
+  "architecture_consequence": {
+    "status": "TEST_OBLIGATION",
+    "required_owner_or_recovered_decision": [
+      "CHAIN_RELATION_SEMANTICS",
+      "BOOL_NUMERIC_ORDERING_BOUNDARY"
+    ],
+    "after_decision": "Replace the scope diagnostic with an executable differential regression for the selected semantics and rerun the target-VPS evaluator/differential suite."
+  },
+  "out_of_box_experiment": "NONE_IN_CYCLE_2; the exact go macrocycle already consumed its single OOB slot in cycle 1",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

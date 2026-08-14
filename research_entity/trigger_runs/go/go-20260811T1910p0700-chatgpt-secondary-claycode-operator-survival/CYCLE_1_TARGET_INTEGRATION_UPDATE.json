@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival",
+  "cycle": 1,
+  "classification": "TARGET_INTEGRATED_CLAYCODE_OPERATOR_SURVIVAL_CONFIRMED",
+  "supersedes_evidence_state": "TARGET_VPS_NEW_OPERATOR_GATE_UNKNOWN_NOT_CREDITED",
+  "target_execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 319,
+    "workflow_run_id": 31494089650,
+    "job_id": 93787357774,
+    "tested_sha": "50a7675a3f5572c2a877e7797fe134fe90efc5c3",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_labels": ["self-hosted", "Linux", "X64", "clay", "digital-retina"],
+    "result": "SUCCESS"
+  },
+  "integrated_results": {
+    "decide_effect_differential": {
+      "status": "PASS_CLAYCODE_DECIDE_EFFECT_DIFFERENTIAL",
+      "checks_passed": 16,
+      "checks_total": 16,
+      "requests_compared": 200576,
+      "mismatches": 0,
+      "sweep": 200000,
+      "corpus_coverage_percent": 90.0,
+      "corpus_coverage": "27/30"
+    },
+    "confirmation_hash_differential": {
+      "status": "PASS_CONFIRMATION_HASH_CLAYCODE_DIFFERENTIAL",
+      "checks_passed": 7,
+      "checks_total": 7,
+      "requests_compared": 20000,
+      "mismatches": 0
+    },
+    "semantic_traversal_gate": {
+      "status": "PASS_CLAYCODE_SEMANTIC_TRAVERSAL_GATE",
+      "checks_passed": 4,
+      "checks_total": 4,
+      "finding": "previously unvisited traversal paths are exercised while source SHA remains bound"
+    },
+    "operator_survival_gate": {
+      "status": "PASS_CLAYCODE_OPERATOR_SURVIVAL",
+      "checks_passed": 8,
+      "checks_total": 8,
+      "observations": {
+        "bang_not_depth": 1,
+        "double_bang_not_depth": 2,
+        "word_not_depth": 1,
+        "boolean_prefix_ast_type": "Path",
+        "bang_true": false,
+        "bang_false": true,
+        "double_bang_true": true,
+        "double_bang_false": false,
+        "word_not_true": false,
+        "word_not_false": true,
+        "boolean_prefix_true": true,
+        "boolean_prefix_false": false
+      }
+    }
+  },
+  "adjudication": {
+    "H-CLAYCODE-SEMANTIC-TOKEN-SURVIVAL-001": "SUPPORTED_ON_ACCEPTED_TARGET_INTEGRATED_STACK",
+    "operator_survival_architecture_delta": "SUPPORTED_REGRESSION_INVARIANT",
+    "general_evaluator_correctness": "NOT_PROMOTED",
+    "comparison_chain_semantics": "OPEN_SEMANTIC_CONFLICT_REMAINS_FROM_PR_316",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "provenance_note": "This update credits only checks visibly executed in the successful #319 target job. It does not retroactively credit earlier zero-step/infra-only failures or resolve semantics not covered by the integrated gates.",
+  "go_oob_experiment": "NO_NEW_OOB; this is target confirmation of cycle 1. The macrocycle's single OOB experiment remains OPERATOR_SURVIVAL_METAMORPHIC_MATRIX."
+}

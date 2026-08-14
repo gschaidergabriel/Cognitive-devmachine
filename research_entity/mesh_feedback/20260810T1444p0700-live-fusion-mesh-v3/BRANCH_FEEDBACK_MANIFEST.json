@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-live-fusion-v3-20260810T1444p0700",
+  "created_at": "2026-08-10T14:44:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "subject": "Dual-plane live fusion: dense compact impact beacons plus sparse full-payload routing",
+  "status": "OPEN_CROSS_BRANCH_RESEARCH_CANDIDATE",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_refs": [
+    "research_entity/global/CLAY_LIVE_FUSION_MESH_V3_DUAL_PLANE_CANDIDATE.clay",
+    "research_entity/experiments/live_fusion_mesh_v3_dual_plane_sim.py",
+    "research_entity/experiments/LIVE_FUSION_MESH_V3_DUAL_PLANE_SYNTHETIC_20260810.md",
+    "research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay"
+  ],
+  "evidence_class": "SIMULATION_ONLY_PLUS_LIVE_EXTERNAL_PRIMARY_RESEARCH",
+  "independent_replication_created_by_distribution": false,
+  "headline_result": {
+    "synthetic_deltas": 5000,
+    "central_dependency_edge_missing_rate": 0.08,
+    "local_shadow_missing_rate": 0.08,
+    "v2_micro_recall": 0.9630402585162245,
+    "v3_micro_recall": 0.9962299717247879,
+    "v2_missed_required_deliveries": 549,
+    "v3_missed_required_deliveries": 56,
+    "v2_full_payloads_per_delta": 2.861,
+    "v3_full_payloads_per_delta": 2.9596,
+    "v3_beacons_per_delta": 7.2036,
+    "v3_weighted_network_cost_per_delta": 3.175708,
+    "broadcast_weighted_network_cost_per_delta": 9.0,
+    "candidate_status": "SUPPORTED_AS_RESEARCH_CANDIDATE_NOT_PROMOTED"
+  },
+  "branches": {
+    "clayresearch": {
+      "delta": "Evaluate dual-plane fusion as a stronger-mesh candidate: compact global impact beacons for material deltas, local relevance acknowledgements, and sparse full-payload routing. Treat correlated projection ancestry as a first-class confounder.",
+      "next_test": "Adjudicate real-repo matched replay and verify that the secondary relevance surface is genuinely provenance-distinct rather than another projection of the same stale source."
+    },
+    "frank": {
+      "delta": "Frank-related contradictions can use immediate impact beacons to expose potential invalidation to every research branch while full content remains targeted. This changes research coordination only and does not grant Frank Harness authority.",
+      "next_test": "Replay a high-impact Frank loop/reward contradiction and verify affected work is interrupted before next material effect even when the central ClayGraph edge is missing."
+    },
+    "gwt": {
+      "delta": "ImpactBeacon and BranchImpactAck extend causal observability: beacon exposure != acknowledgement != payload reconstruction != use != local effect. AckClosure should remain observable as a separate stage.",
+      "next_test": "Measure beacon->ack->payload->reconstruction->use closure with irrelevant/shuffled controls and dropped-ack faults."
+    },
+    "emergenz": {
+      "delta": "Dense control-plane visibility must not be interpreted as emergence or synchrony quality. Measure overcoupling, false AFFECTED acknowledgements and correlated-blind-spot amplification.",
+      "next_test": "Lesion the control plane and local relevance path separately; test whether increased visibility improves recovery without collapsing branch diversity."
+    },
+    "claycode": {
+      "delta": "ClayCode should be able to express ImpactBeacon, BranchImpactAck and AckClosure plus stale/unknown effect guards without reopening BASE semantics unless compilation proves a concrete gap.",
+      "next_test": "Compile minimal dual-plane record/rule semantics through parser->IR->type/effect->evaluator when BASE packages are ready; no BASE PASS credit from representability alone."
+    },
+    "hyperposition": {
+      "delta": "Preserve alternative route and relevance interpretations when central and local projections disagree. UNKNOWN/STALE should remain unresolved alternatives until repair, not be forced into AFFECTED/NOT_AFFECTED.",
+      "next_test": "Stress disagreement between current ClayGraph, raw work events and local branch dependency state; verify reversible route escalation rather than premature collapse."
+    },
+    "claygraph": {
+      "delta": "ClayGraph remains the fast derived routing surface, but V3 explicitly cross-checks high-impact invalidations against a distinct raw/current work provenance path. Projection lineage must be exposed so correlated checks are detectable.",
+      "next_test": "Inject a ClayGraph-only missing edge and a correlated ClayGraph+secondary-source missing edge; measure which is repaired and how quickly."
+    },
+    "unifieddb": {
+      "delta": "Persist ImpactBeacon identity, per-branch impact acks, basis epoch/hash, AckClosure, and projection-lineage metadata transactionally. Raw current work/event refs should remain available as a cross-check against derived graph state.",
+      "next_test": "Replay duplicate/out-of-order beacons and crash/restart with an open AckClosure; verify idempotent closure and no mixed semantic epochs."
+    },
+    "harness": {
+      "delta": "Extend the existing V2 real-replay fault matrix with V3 dual-plane routing, dropped beacon/ack faults and correlated-projection-blindness. Promotion remains blocked on real execution/recovery evidence.",
+      "next_test": "Run broadcast vs tag-only vs V2 vs V3 on current repo events with exact network/latency/resource/provenance rows and pre/post-repair recall."
+    }
+  },
+  "global_controls": [
+    "control-plane visibility != evidence strengthening",
+    "ack count != truth or independent replication",
+    "shared projection ancestry != independent safety check",
+    "delivery != reconstruction != use != effect != causal credit",
+    "UNKNOWN/STALE must not be silently treated current",
+    "candidate remains rollbackable and unpromoted until real replay/recovery evidence",
+    "Frank remains separate research subject and never mutates Clay"
+  ],
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "fully_correlated_projection_blind_spot",
+    "result": "V3 recall collapsed to V2 recall when missing-edge ancestry was fully correlated; both missed 354 required deliveries in the adversarial synthetic run.",
+    "interpretation": "A second routing/ack plane only increases robustness when its relevance evidence is materially provenance-distinct."
+  },
+  "research_write_result": "EXPLICIT_FEEDBACK_TO_ALL_9_REGISTERED_BRANCHES"
+}

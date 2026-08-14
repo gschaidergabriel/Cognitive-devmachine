@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0039p0700-chatgpt-secondary-claycode-frontier-drift",
+  "object": "FOLLOWUP_TARGET_RESULTS",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "fresh_research_repo_parent_before_write": "c5becef85d630a93130754c611a0bd8c55c188c5",
+  "supersedes_only_temporal_status_fields_in": "RESEARCH_RECEIPT.json",
+  "does_not_overwrite_parallel_supervisor_evidence": true,
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "claycode_frontier": {
+    "pr": 357,
+    "final_head": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+    "merged": true,
+    "merge_commit": "a5e79b2a1835e500e78b0373166b3437133c6f43",
+    "merge_time_observed": "2026-08-11T17:46:27Z",
+    "fresh_main_observed_after_merge": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+    "promotion_scope": "CLAYCODE_EXECUTABLE_FRONTIER_ONLY",
+    "whole_F_V01_02_complete": false,
+    "whole_frank_v0_1_acceptance": false
+  },
+  "accepted_target_gates": {
+    "strict_generic_relation": {
+      "run": 31518547821,
+      "status": "PASS"
+    },
+    "frontier_integration": {
+      "run": 31518547921,
+      "status": "PASS"
+    },
+    "current_main_composition": {
+      "run": 31518547883,
+      "job": 93869643365,
+      "status": "PASS_CURRENT_MAIN_COMPOSED_FRONTIER",
+      "tested_current_main": "f181fead56ec9336edc607c7451c46f5e7e69e8a",
+      "frontier_head": "a2505ca8f4c7b01a727e7a3e4362544f05c42cd1",
+      "merged_tree_sha": "2f1e90fe50833f88769b91523864ea9c301ef1aa",
+      "frontier_scope": {
+        "sources_parsed": 36,
+        "sources_total": 40,
+        "coverage_percent": 90.0,
+        "unresolved_unique_names": 429,
+        "unresolved_occurrences": 464
+      },
+      "current_main_scope": {
+        "sources_parsed": 36,
+        "sources_total": 42,
+        "coverage_percent": 85.7,
+        "unresolved_unique_names": 429,
+        "unresolved_occurrences": 464,
+        "new_sources": [
+          "frank_unifieddb_projection_outbox_v1.clay",
+          "frank_unifieddb_projection_worker_v1.clay"
+        ],
+        "new_sources_parsed": [],
+        "new_sources_rejected": [
+          "frank_unifieddb_projection_outbox_v1.clay",
+          "frank_unifieddb_projection_worker_v1.clay"
+        ]
+      },
+      "decide_effect_requests_compared": 200576,
+      "decide_effect_mismatches": 0,
+      "effect_request_hash_requests_compared": 56000,
+      "effect_request_hash_mismatches": 0,
+      "confirmation_requests_compared": 16000,
+      "confirmation_mismatches": 0,
+      "frank_effects_unresolved": 0,
+      "ordinary_calls_missed": 0,
+      "callable_method_segments_open": 22,
+      "adjudication": "HISTORICAL_40_SOURCE_FRONTIER_REGRESSION_PRESERVED_SEPARATELY_FROM_GROWING_CURRENT_MAIN_UNIVERSE"
+    },
+    "combined_wp03_relop_alias": {
+      "run": 31518547880,
+      "status": "PASS"
+    },
+    "ambiguous_variant_fail_closed": {
+      "run": 31518547745,
+      "status": "PASS"
+    },
+    "package_import": {
+      "run": 31518547939,
+      "status": "PASS"
+    },
+    "negation_hotfix": {
+      "run": 31518547805,
+      "status": "PASS"
+    }
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "WITH_RHS_PARSE_FOREST_SHADOW",
+    "pr": 393,
+    "workflow_run": 31518303121,
+    "job": 93868828101,
+    "tested_synthetic_merge_sha": "6b76d0f923cd11a6ccb968a17078fc1097136710",
+    "status": "PASS_WITH_RHS_PARSE_FOREST_SHADOW",
+    "grammar_sha256": "1880638608fdc93c8fda7973f8c09247ec8fd7214e20305ae0aa7656b73d1c6d",
+    "legacy_shadow_grammar_sha256": "6741281d2779ab5e4c91505bac34ba047f13cb3d5f7738a0de2b044dc537cd49",
+    "legacy_strict_lalr_conflict": true,
+    "legacy_strict_error_terminal": "AND_KW_NL",
+    "legacy_unparenthesized_ambig_nodes": 2,
+    "legacy_unparenthesized_ambiguity_alternatives": 6,
+    "current_strict_lalr": true,
+    "current_unparenthesized_ambig_nodes": 0,
+    "current_unparenthesized_ambiguity_alternatives": 0,
+    "current_parenthesized_ambig_nodes": 0,
+    "current_parenthesized_ambiguity_alternatives": 0,
+    "wall_seconds": 0.74,
+    "max_rss_kib": 27008,
+    "artifact_id": 9112166176,
+    "artifact_zip_sha256": "09f66cdc3c60480f2a27057989cdf34b608427074817cebffe75e6322273e8ca",
+    "product_grammar_mutated": false,
+    "external_effect": false,
+    "authority": "NONE",
+    "promotion": "NONE",
+    "counterhypothesis_adjudication": "PARSER_TABLE_NOISE_ONLY_REFUTED_FOR_TESTED_WITNESS; LEGACY_RULE_HAS_REAL_MULTIPLE_PARSE_FOREST"
+  },
+  "independent_convergent_evidence": {
+    "pr": 395,
+    "experiment": "WITH_RHS_BOOLEAN_CROWN_SWAP",
+    "run": 31518337418,
+    "job": 93868937243,
+    "status": "PASS_WITH_RHS_BOOLEAN_CROWN_SWAP",
+    "relationship": "DIFFERENT_TEST_DESIGN_SAME_REPAIR_DIRECTION",
+    "shared_test_oracle": false
+  },
+  "next_frontier": {
+    "wp04_post_frontier_pr": 401,
+    "status_at_followup": "OPEN_TARGET_RUN_QUEUED",
+    "current_obligation": "RECOMPOSE_NOMINAL_TYPE_ADMISSION_ON_MERGED_FRONTEND_AND_ENFORCE_OPAQUE_RECORD_CONSTRUCTOR_FAIL_CLOSED",
+    "downstream": [
+      "validated WP04 program/entry -> WP06 lowering",
+      "member/library/host signature typing remains open",
+      "runtime ABI/FFI and general application acceptance remain open"
+    ]
+  },
+  "sqlite_release_gate": {
+    "status": "UNCHANGED_FROM_PARENT_RECEIPT",
+    "fixed_private_runtime_mechanism": "SUPPORTED",
+    "installed_product_service_boot_binding": "OPEN"
+  },
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "research_disposition": "SUPPORTED_FRONTIER_MERGE_PLUS_INDEPENDENT_ADVERSARIAL_CONFIRMATION; ADVANCE_TO_POST_FRONTIER_WP04"
+}

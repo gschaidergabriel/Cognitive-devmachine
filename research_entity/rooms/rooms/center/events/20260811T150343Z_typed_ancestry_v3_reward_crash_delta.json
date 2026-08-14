@@ -1,0 +1,425 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260811T150343Z_typed_ancestry_v3_reward_crash_delta",
+  "kind": "LIVE_RESEARCH_FUSION_DELTA",
+  "observed_at_utc": "2026-08-11T15:03:43Z",
+  "origin": {
+    "entity": "Clay",
+    "organ": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "mode": "scheduled_live_research",
+    "write_scope": "provenance-only center event"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank v0.1",
+    "accepted_target": "Hostinger Ubuntu VPS / digital-retina",
+    "training_authorized": false,
+    "frank_self_harness_authority": false
+  },
+  "delta_cut": {
+    "previous_notified_research_commit": "1940acff2303a3221d5d0dde67db24d77fbe32e8",
+    "research_head_observed_immediately_before_write": "285d8b3de5bb928f807d2571e1ae5d25ebff0bcb",
+    "target_main_observed": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "target_main_change": "Merge PR #311: storage identity + SIGKILL process-crash oracle",
+    "cut_is_concurrent": true
+  },
+  "evidence_dependency_policy": {
+    "independent_replication_claimed": false,
+    "deduplication": [
+      "All target workflow receipts share the same repository/owner/runner lineage and are treated as same-lineage target evidence, not independent replication.",
+      "V2, its single consumed OOB, and V3 are one falsification-repair lineage; V3 does not erase the V2 negative.",
+      "PR311 process-crash, V16/V17 reconciliation, and request-effect ancestry are separate discriminators but share target/runtime ancestry.",
+      "Reward papers support mechanism-space hypotheses only; they do not validate the Frank candidate.",
+      "Only target main commit 7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5 is a canonical target-repository mutation in this cut; draft PR heads are not promoted."
+    ]
+  },
+  "substantive_deltas": [
+    {
+      "id": "D-SQLITE-IDENTITY-CRASH-001",
+      "disposition": "CANONICAL_TARGET_MERGE_WITH_BOUNDED_EVIDENCE",
+      "evidence": {
+        "target_commit": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+        "loaded_object": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+        "package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+        "elf_build_id": "92f59a77085057d1b9de43e943ba6231dc7ae452",
+        "object_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+        "process_crash_oracle": {
+          "cycles": 10,
+          "writers_per_cycle": 6,
+          "acknowledged_commits": 12807,
+          "lost": 0,
+          "phantom": 0,
+          "committed_but_unlogged_in_flight": 9,
+          "integrity_after_each_kill": "ok",
+          "writable_after_each_kill": true
+        }
+      },
+      "boundary": "Process-SIGKILL durability only; not power loss, kernel panic, or the targeted upstream WAL-reset discriminator. The package-modified source-id is not mapped to an upstream source tree."
+    },
+    {
+      "id": "D-SQLITE-V2-V3-002",
+      "disposition": "V2_REFUTED_V3_TARGET_SUPPORTED_DRAFT",
+      "negative_receipt": {
+        "pr": 336,
+        "head_sha": "6a0f0747d242aa95497223bbcb03aef1057f2647",
+        "run": 31503138219,
+        "job": 93817951790,
+        "discriminator": "GO_OOB_PYTHONPATH_SQLITE_MODULE_SHADOW",
+        "status": "SUPPORTED_FAIL_OPEN_PYTHONPATH_SQLITE_MODULE_SHADOW",
+        "result": "V2 admitted a disposable PYTHONPATH sqlite3.py while the correct private _sqlite3/native object remained mapped; admitted target observed shadow marker and synchronous=0."
+      },
+      "repair_receipt": {
+        "pr": 337,
+        "draft": true,
+        "tested_sha": "279b555bb16052a0b20ab2fb71312d14c7137905",
+        "run": 31503879257,
+        "job": 93820442350,
+        "artifact_id": 9110506945,
+        "artifact_digest_sha256": "0e983116594709902304860766386db69811ad57bf8dd67cb999188390acd898",
+        "status": "PASS_V3_REPAIR_AND_COMPOSITION",
+        "checks": "6/6",
+        "nonisolated_launch": "DENIED rc=78 PYTHON_INTERPRETER_NOT_ISOLATED_USE_DASH_I",
+        "exact_regression": "same already-consumed PYTHONPATH/sqlite3.py no longer selected",
+        "clean_and_attacked_module": "/usr/lib/python3.12/sqlite3/__init__.py",
+        "clean_and_attacked_synchronous": 2,
+        "composition": [
+          "PASS_V17_BOUND_REENTRY_DONE_CANDIDATE_DIFFERENTIAL",
+          "PASS_FIXED_SQLITE_UNIFIEDDB_PAIR_SMOKE"
+        ]
+      },
+      "boundary": "V3 closes the measured PYTHONPATH shadow class at the candidate wrapper. It remains unmerged and does not prove non-bypassable product boot/service wiring, trusted interpreter/stdlib bytes, power-loss durability, or complete F-V01-13."
+    },
+    {
+      "id": "D-SQLITE-AXIS-D-003",
+      "disposition": "INCONCLUSIVE_HARNESS_CONTRACT_FAILURE",
+      "receipt": {
+        "run": 31503879596,
+        "job": 93820443715,
+        "artifact_id": 9106297250,
+        "classification": "HARNESS_CONFIGURE_CONTRACT_FAILURE_INCONCLUSIVE_AXIS_D",
+        "failure": "Ubuntu SQLite source configure rejected unsupported --debug before semantic adjudication."
+      },
+      "boundary": "Not evidence for FIXED or VULNERABLE. Preserve exact source preparation and repair only the harness configure contract before rerun."
+    },
+    {
+      "id": "D-V16-V17-CRASH-004",
+      "disposition": "TARGET_SUPPORTED_DRAFT_WITH_EXACT_AUTHORITY_NEGATIVES",
+      "evidence": {
+        "diagnostic_run": 31500348506,
+        "repair_run": 31501186346,
+        "authority_negative_run": 31501836858,
+        "positive": "Expired takeover reconciles one stale V16 ADMITTED request to FAILED while V17 recovers DONE_VALID; retry replays FAILED and exactly one provider-effect attempt remains.",
+        "negatives": [
+          "normal release/reacquire without EXPIRED_TAKEOVER cannot reconcile",
+          "wrong session/client after real takeover cannot reconcile"
+        ],
+        "preserved_first_repair_harness_failure": "no such table: effect_attempts"
+      },
+      "open_boundary": "Exact request ownership and response replay remain open."
+    },
+    {
+      "id": "D-REQUEST-EFFECT-ANCESTRY-005",
+      "disposition": "CURRENT_RUNTIME_MODEL_COUNTEREXAMPLE",
+      "receipt": {
+        "pr": 331,
+        "run": 31502734782,
+        "job": 93816597675,
+        "tested_sha": "64100c6",
+        "status": "PASS_CURRENT_V17_REQUEST_EFFECT_ANCESTRY_AMBIGUITY_REPRODUCED",
+        "counterexample": "Two distinct V16 request admissions share one execution; one V17 effect remains DONE_VALID because current effect fence/reentry binding carries execution identity but no request key."
+      },
+      "refuted_counterhypothesis": "Execution identity implies one real request.",
+      "open_boundary": "Seal request_key_hash to effect_id before provider execution and produce a response receipt only for that exact edge."
+    },
+    {
+      "id": "D-REWARD-NACC-EPQ-006",
+      "disposition": "PARTIAL_HISTORICAL_BASELINE_PLUS_TARGET_SUPPORTED_CANDIDATE_NO_PROMOTION",
+      "receipt": {
+        "research_commit": "2bcc0609667fc995e31336eee35ff8e5511b4880",
+        "target_pr": 332,
+        "target_run": 31503941284,
+        "tested_sha": "4a1acce51bda45782732798ad7114d35e233b951",
+        "status": "PASS_TARGET_VPS_REWARD_PLASTICITY_V1_WITH_PARTIAL_HISTORICAL_NACC_EPQ_BASELINE",
+        "historical_source_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+        "reward_calls": 3000,
+        "reward_failures": 0,
+        "direct_self_generated_reward_path_observed": true,
+        "persistent_epq_change_observed": true,
+        "restart_persistence": true,
+        "candidate_checks": "10/10",
+        "oob": "SELF_REWARD_LAUNDERING_CAROUSEL -> PASS_SELF_ACTIVITY_CANNOT_MINT_MATERIAL_REWARD"
+      },
+      "negative_and_limits": [
+        "Historical source has 16 configured channels while documentation/tests claim 9; habituation and method-name contracts also drift.",
+        "No matched external task-outcome replay, full production topology, compiled ClayCode reward execution, superiority result, or calibrated producer-owned fractional causal-credit receipt.",
+        "The bridge used stubbed host probes to isolate semantic and SQLite behavior."
+      ]
+    },
+    {
+      "id": "D-CAPABILITY-FRESHNESS-007",
+      "disposition": "TARGET_SUPPORTED_PARTIAL_LIFECYCLE_CANDIDATE",
+      "receipt": {
+        "research_commit": "285d8b3de5bb928f807d2571e1ae5d25ebff0bcb",
+        "target_pr": 335,
+        "target_head": "b87bc2ffe386ee64282bcde85687f9ce88e423f0",
+        "run": 31504081257,
+        "job": 93821125709,
+        "artifact_id": 9106418562,
+        "artifact_sha256": "e82d581d84c18a0c54fea9223670e369892d1a9d32409dcc703ff55fd7e1b367",
+        "status": "PASS_FV01_12_FRESHNESS_REVOCATION_GATE",
+        "sequence": [
+          "fresh two-probe generation -> CAN_DELEGATE",
+          "stale -> UNKNOWN",
+          "revoked -> UNKNOWN",
+          "reobserve and one new probe -> UNKNOWN",
+          "two probes in new generation -> CAN_DELEGATE"
+        ],
+        "raw_history_preserved": true,
+        "pre_revocation_trials_resurrected": false,
+        "restart_and_integrity": "PASS"
+      },
+      "boundary": "External peer route verification, concurrent in-flight revocation, effect-authority composition, calibration and OOD transfer remain open. CAN_DELEGATE mints neither effect nor Harness authority."
+    },
+    {
+      "id": "D-ORIGIN-BINDING-CROSSCUT-008",
+      "disposition": "INTERFACE_LEVEL_COUNTEREXAMPLE_CLUSTER",
+      "evidence": [
+        "ClayCode PR310 uses bare sibling imports and tests inject its directory into sys.path; isolated repository-root package import fails ModuleNotFoundError: syntax.",
+        "Current web-to-agency interfaces permit a SELF_PROPOSAL_ONLY web candidate to be relabeled SELF_GENERATED because registration lacks immutable source_ref/adoption/effect-policy ancestry.",
+        "The F-V01-12 ghost-peer OOB showed the low-level programmer API could accept caller-supplied authority before the candidate scrubbed it.",
+        "PR332 currently accepts a caller-supplied numeric causal-credit value while V17 only proves binary episode identity/terminal state."
+      ],
+      "boundary": "These prove interface insufficiency or diagnostic counterexamples, not a demonstrated production exploit unless separately evidenced."
+    },
+    {
+      "id": "D-RETINA-009",
+      "disposition": "BLOCKER_RECLASSIFICATION",
+      "evidence": "library_L3.npz is legacy ancestry because recovered frank_eye.py now calls deterministic gol_library.analyze_with_library.",
+      "remaining_exact_blockers": [
+        "retina_v8.pt",
+        "DINOv2 ONNX model",
+        "public pretrained cache objects at exact revisions"
+      ],
+      "boundary": "No replacement or end-to-end retina execution claimed."
+    }
+  ],
+  "fused_concept": {
+    "id": "H-TYPED-ANCESTRY-CONSERVATION-001",
+    "name": "Typed Ancestry Conservation Gate",
+    "hypothesis": "Every transition that increases authority, persistence, terminal truth, response ownership, or material reward must consume a producer-owned, subject-bound, scope-bound receipt/capability and preserve immutable parent edges across representations.",
+    "non_design": "Not one universal bearer token. Each boundary verifies the minimum local typed edge and policy epoch it needs.",
+    "strongest_counterhypothesis": "Independent local gates are sufficient; a generalized envelope adds coupling, latency, database amplification, transplant surface and a new single-point failure. Several observed gaps may be test adapters rather than production routes.",
+    "discriminator": {
+      "name": "ORIGIN_SUBSTITUTION_MATRIX",
+      "negative_rows": [
+        "ClayCode earlier-path syntax.py/host.py namespace collision",
+        "SQLite PYTHONPATH sqlite3.py shadow",
+        "web evidence relabeled as SELF_GENERATED",
+        "ghost peer/caller metadata crowns authority",
+        "wrong request on the same execution claims the effect/response",
+        "caller-supplied fractional causal credit mints persistent reward"
+      ],
+      "arms": [
+        "current local gates",
+        "typed ancestry conservation",
+        "permissive label-only negative control"
+      ],
+      "positive_controls": [
+        "valid internal self-generated goal",
+        "stdlib SQLite through trusted candidate launcher",
+        "real locally executed tool in current generation",
+        "exact admitted request bound to one effect and response",
+        "verified binary causal attribution"
+      ],
+      "metrics": [
+        "false authority/persistence/reward/response admissions",
+        "valid utility and coverage",
+        "latency and database amplification",
+        "restart/replay stability",
+        "cross-episode receipt transplant",
+        "stale policy-epoch and revocation behavior"
+      ],
+      "preregistered_success_rule": "Zero negative false admissions on fresh target blocks without unacceptable positive-control utility or resource collapse. Any cross-subject, cross-request, cross-generation or stale-epoch transplant is a hard falsifier."
+    }
+  },
+  "testable_hypotheses": [
+    {
+      "id": "H-TRUSTED-BOOT-MODULE-BYTES-001",
+      "hypothesis": "V3 closes the observed environment-path shadow, but product-safe admission additionally requires a non-bypassable service launcher and byte/package identity for the interpreter and imported stdlib module.",
+      "counterhypothesis": "Host package ownership and permissions plus -I and module-origin checks already provide sufficient trust; extra byte binding adds cost without measurable security benefit.",
+      "falsifier": "On a fresh target clone, substitute interpreter/stdlib module bytes or a trusted-path import hook while keeping expected paths and V3-visible flags. If V3/product boot accepts altered semantics, the stronger gate is required; if all allowed threat-model substitutions fail before Frank code, the stronger claim loses support."
+    },
+    {
+      "id": "H-REQUEST-SCOPED-INGRESS-CAP-001",
+      "hypothesis": "A trusted V16 producer must mint an immutable request-scoped capability and bind request_key_hash to effect_id before provider execution; response ownership must consume the same edge.",
+      "counterhypothesis": "Execution-generation plus session/client and current V17 guards are sufficient.",
+      "falsifier": "Fresh matrix with same-execution wrong request, cross-execution request, stale takeover epoch, fabricated labels and exact positive request. Any wrong request effect/response admission falsifies sufficiency."
+    },
+    {
+      "id": "H-BINARY-BEFORE-FRACTIONAL-CREDIT-001",
+      "hypothesis": "Use producer-owned binary verified attribution for v0.1 persistent reward until fractional credit has calibrated counterfactual/lesion evidence and uncertainty.",
+      "counterhypothesis": "Caller-supplied or simple outcome-proportional floats improve adaptation enough to justify the laundering risk.",
+      "falsifier": "Matched replay arms: binary producer receipt, producer-owned fractional receipt, caller float, outcome-only. Compare external outcomes, false reward admissions, long-run drift and proxy exploitation."
+    },
+    {
+      "id": "H-CAP-REVOCATION-RACE-001",
+      "hypothesis": "Generation binding prevents stale evidence resurrection but needs an atomic revocation/in-flight execution fence to prevent a time-of-check/time-of-use delegation after revocation.",
+      "counterhypothesis": "Current generation check at prediction time is sufficient because later effect authority is separate.",
+      "falsifier": "Adversarial scheduler revokes between prediction, route selection and effect admission. Any post-revocation delegation/effect under the old generation falsifies sufficiency."
+    },
+    {
+      "id": "H-DUAL-CHANNEL-INTRINSIC-001",
+      "hypothesis": "Preserve useful intrinsic signals as bounded transient GUIDANCE_ASSOCIATION while allowing persistent VALUE_PLASTICITY only after later producer-owned verified outcomes and causal episodes.",
+      "counterhypothesis": "Strict verified-only scalar reward is safer and equally useful, or historical direct intrinsic persistent reward performs materially better.",
+      "falsifier": "Three-arm target replay: strict verified-only, dual-channel, direct intrinsic persistence. Measure external task utility, drift, proxy exploitation, restart stability and causal-receipt coverage."
+    }
+  ],
+  "speculative_concepts": [
+    {
+      "id": "X-RECEIPT-DNA-RECOMBINATION-001",
+      "label": "abgefahren / untested",
+      "idea": "An adversary splices individually valid receipt fragments from different episodes, subjects or policy epochs into a synthetic ancestry chain.",
+      "test": "Recombine parent hashes, subject digest, request identity, effect class, trial generation and policy epoch; require full parent-closure verification rather than field-wise validity."
+    },
+    {
+      "id": "X-PROVENANCE-PHASE-TRANSITION-001",
+      "label": "abgefahren / untested",
+      "idea": "Many individually non-authoritative signals may collectively create effective authority through ranking, consensus or repeated selection without any explicit authority bit changing.",
+      "test": "Increase the count/correlation of weak web, peer and self signals under fixed material-effect policy; check for a nonlinear crossing in goal selection, reward persistence or delegation."
+    }
+  ],
+  "primary_sources_checked": [
+    {
+      "checked_at_utc": "2026-08-11T15:03:43Z",
+      "source": "Python command-line documentation",
+      "url": "https://docs.python.org/3/using/cmdline.html",
+      "use": "-I implies isolated operation and the relevant -E/-P/-s path/environment restrictions; this supports the measured V3 mechanism, not product-boot sufficiency."
+    },
+    {
+      "checked_at_utc": "2026-08-11T15:03:43Z",
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "use": "Official WAL-reset bug scope/topology and fix boundary; motivates a special targeted discriminator rather than interpreting generic SIGKILL as fix presence."
+    },
+    {
+      "checked_at_utc": "2026-08-11T15:03:43Z",
+      "source": "SQLite 3.51.3 release log",
+      "url": "https://sqlite.org/releaselog/3_51_3.html",
+      "use": "Official fix release context only; version equality is not target fix-presence evidence."
+    },
+    {
+      "checked_at_utc": "2026-08-11T15:03:43Z",
+      "source": "Lee et al., Nature Neuroscience 2024",
+      "url": "https://www.nature.com/articles/s41593-024-01689-1",
+      "use": "Feature-specific reward-prediction-error mechanism hypothesis."
+    },
+    {
+      "checked_at_utc": "2026-08-11T15:03:43Z",
+      "source": "Sousa et al., Nature 2025",
+      "url": "https://www.nature.com/articles/s41586-025-09089-6",
+      "use": "Joint time-magnitude distributional reward mechanism hypothesis."
+    },
+    {
+      "checked_at_utc": "2026-08-11T15:03:43Z",
+      "source": "Masset et al., Nature 2025",
+      "url": "https://www.nature.com/articles/s41586-025-08929-9",
+      "use": "Multi-timescale reinforcement-learning/dopamine mechanism hypothesis."
+    },
+    {
+      "checked_at_utc": "2026-08-11T15:03:43Z",
+      "source": "Greenstreet et al., Nature 2025",
+      "url": "https://www.nature.com/articles/s41586-025-09008-9",
+      "use": "Value-free action-prediction teaching signal supports separating guidance from persistent value plasticity."
+    }
+  ],
+  "routed_research_impulses": [
+    {
+      "consumers": [
+        "unifieddb",
+        "claygraph",
+        "storage",
+        "recovery",
+        "claycode"
+      ],
+      "priority": "HIGH",
+      "impulse": "Retain V2 negative; treat V3 as target-supported draft. Add non-bypassable product service launch, interpreter/stdlib byte-origin controls, and repair Axis-D configure flags before the targeted WAL-reset rerun."
+    },
+    {
+      "consumers": [
+        "gwt",
+        "frank",
+        "emergenz",
+        "api",
+        "effect-lifecycle"
+      ],
+      "priority": "HIGH",
+      "impulse": "Implement and attack a request-scoped ingress capability with request_key_hash->effect_id->response parent closure; preserve autonomous effects on a separate provenance path."
+    },
+    {
+      "consumers": [
+        "reward",
+        "memory",
+        "goals",
+        "gwt",
+        "harness-research"
+      ],
+      "priority": "HIGH",
+      "impulse": "Run binary-vs-fractional causal-credit and strict-vs-dual-vs-direct intrinsic reward replays. Do not connect caller floats to persistent reward."
+    },
+    {
+      "consumers": [
+        "agency",
+        "web-ingress",
+        "capabilities",
+        "claygraph"
+      ],
+      "priority": "HIGH",
+      "impulse": "Execute ORIGIN_SUBSTITUTION_MATRIX with exact positive controls, transplant negatives, generation/epoch revocation and resource metrics."
+    },
+    {
+      "consumers": [
+        "F-V01-12",
+        "routing",
+        "capabilities"
+      ],
+      "priority": "MEDIUM",
+      "impulse": "Add revocation/in-flight race tests, independently verified external-peer route evidence, and OOD calibration; presence stays UNKNOWN and CAN_DELEGATE stays non-authoritative."
+    },
+    {
+      "consumers": [
+        "claycode-supervisor"
+      ],
+      "priority": "HIGH",
+      "impulse": "Keep package-stable import/namespace collision closure separate from SQLite V3. Consume V3 as a successor runtime-origin receipt, not as proof that PR310 package imports or product boot are solved."
+    }
+  ],
+  "routing_receipt": {
+    "repository_native_room": "research_entity/rooms/rooms/center/events",
+    "delivery_mode": "single provenance-marked center event for repo-native consumers",
+    "active_external_worker_delivery_claimed": false,
+    "direct_target_repo_write_by_this_event": false
+  },
+  "preserved_null_negative_and_inconclusive": [
+    "Axis-D configure --debug failure is inconclusive, not SQLite semantic evidence.",
+    "First V16 crash-repair attempt failed its own harness measurement because effect_attempts table was absent; candidate semantics were not refuted by that run.",
+    "Hosted Deep Integrity F-V01-12 failure had zero retrievable executed steps/logs and remains infrastructure-only absent contrary evidence.",
+    "Historical NAcc source/test/documentation drift is preserved and not relabeled as a historical organ semantic failure.",
+    "PR311 saw zero lost/phantom acknowledged commits under SIGKILL; this is a bounded positive/null result and not proof against power-loss or WAL-reset failures.",
+    "No independent replication exists in this cut."
+  ],
+  "nonclaims_and_safety": {
+    "target_execution_by_this_organ": false,
+    "external_provider_effect": false,
+    "canonical_frank_database_mutated": false,
+    "target_repository_modified_by_this_event": false,
+    "harness_mutated": false,
+    "training_performed": false,
+    "promotion_performed": false,
+    "whole_frank_v0_1_acceptance_claimed": false,
+    "consciousness_claimed": false
+  }
+}

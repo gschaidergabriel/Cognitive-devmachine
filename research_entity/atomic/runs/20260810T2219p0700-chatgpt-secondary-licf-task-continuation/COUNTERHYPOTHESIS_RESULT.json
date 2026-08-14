@@ -1,0 +1,9 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-LICF-001",
+  "counterhypothesis":"CONVENTIONAL_STRONG task fence matches LICF semantic protection with less complexity and cost.",
+  "result":"SUPPORTED_IN_SYNTHETIC_PROXY",
+  "evidence":{"classification":"CONVENTIONAL_STRONG 1.0 accuracy, 0 FP, 0 FN; LICF 1.0 accuracy, 0 FP, 0 FN","crash_replay":"both reject 1000/1000 stale old-task records","mean_classifier_ns":{"CONVENTIONAL_STRONG":491.609135,"LICF":802.43692},"batch_mean_ns":{"CONVENTIONAL_STRONG":1014.0225,"LICF":1504.87318},"wire_bytes":{"CONVENTIONAL_STRONG":134,"LICF":205}},
+  "adjudication":"LICF has no demonstrated runtime benefit over the strongest conventional alternative. Runtime architecture promotion is refuted at this evidence level.",
+  "surviving_research_question":"Once ClayCode typed IR/type-effect exists, can linear TaskFiber typing statically prove complete material-boundary coverage that the conventional runtime checker cannot prove cheaply? Until measured, this remains UNKNOWN and cannot justify runtime promotion."
+}

@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0",
+  "event_id": "clay-live-20260813T175046Z-self-hosted-scope-import",
+  "kind": "LIVE_RESEARCH_FUSION_DELTA",
+  "observed_at_utc": "2026-08-13T17:50:46Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "training_authorized": false
+  },
+  "comparison_cut": {
+    "previous_notified_research_commit": "a9b00f31bc2d673f533fc27e7094838edbaddd0e",
+    "previous_notified_target_head": "8e861c13dbf9215c3e21afa3372fb43ab35bd709",
+    "research_head_observed": "46a489ac95293c811824cee84196471b21c503a1",
+    "target_head_observed": "dc2af6421355c899ee076a3e8089e8f6407a1d54"
+  },
+  "substantive_deltas": [
+    {
+      "id": "D-PR575-PERSISTENT-SELF-HOSTED-MERGE-001",
+      "disposition": "MERGED_EXECUTION_SURFACE_WITH_OPEN_PR_TRUST_BOUNDARY",
+      "evidence": {
+        "merge_commit": "b4c58cb6a4bb9a18ec2c4f85e6897a4b5ecb55b3",
+        "pull_request": 575,
+        "change": "nine workflow job lanes changed from ubuntu-latest to self-hosted",
+        "pull_request_capable_examples": [
+          ".github/workflows/frank-bounded-issue-dispatch-bridge.yml",
+          ".github/workflows/claycode-wp04-pr-hosted-shadow.yml"
+        ]
+      },
+      "boundary": "The merge makes persistent self-hosted execution canonical for these lanes. It does not prove trusted-head admission, ephemeral isolation or cleanup for pull_request-origin code."
+    },
+    {
+      "id": "D-CROSS-REPO-TOKEN-SCOPE-002",
+      "disposition": "REAL_SELF_HOSTED_EXPECTED_DENIAL_MECHANISM_PASS",
+      "evidence": {
+        "run": 31723833122,
+        "tested_sha": "b4c58cb6a4bb9a18ec2c4f85e6897a4b5ecb55b3",
+        "runner": "clay-3",
+        "hostname": "digital-retina",
+        "current_repository_http": 200,
+        "private_research_repository_http": 404,
+        "cross_repo_private_checkout_without_additional_credential_supported": false,
+        "persist_commit": "e315d8463fa9a51094ec4f84ddd9b860ad6a082d"
+      },
+      "boundary": "The 404 is an expected authorization denial, not evidence that the private repository is absent. It measures repository-token visibility only and does not attest runner-host state isolation."
+    },
+    {
+      "id": "D-PYTHON-SAFEPATH-REPLICATION-003",
+      "disposition": "REAL_SELF_HOSTED_TEMP_FIXTURE_MECHANISM_REPLICATION",
+      "evidence": {
+        "run": 31723833075,
+        "tested_sha": "b4c58cb6a4bb9a18ec2c4f85e6897a4b5ecb55b3",
+        "runner": "clay-2",
+        "hostname": "digital-retina",
+        "python": "3.12.3",
+        "repetitions_per_lane": 20,
+        "semantic_pass": true,
+        "persist_commit": "dc2af6421355c899ee076a3e8089e8f6407a1d54"
+      },
+      "boundary": "The run used temporary fixtures and proves import-path mechanism equivalence only. Python -P/PYTHONSAFEPATH blocks automatic unsafe prepends but does not authorize PYTHONPATH, site, .pth, symlink targets or artifact identity. No Clay checkout, WP02 verdict or final target acceptance occurred."
+    },
+    {
+      "id": "D-RESEARCH-PLANE-REPLAY-004",
+      "disposition": "PRIOR_CENTER_OBJECT_OBSERVATION_CONTRADICTED_BY_FRESH_RESEARCH_REPLAY",
+      "evidence": {
+        "research_commits": [
+          "3047e2f2609ec12a1aa64b3d382690c0bab1569c",
+          "46a489ac95293c811824cee84196471b21c503a1"
+        ],
+        "classification": "ab82f6 does not resolve; deab7eab and 14514f2 resolve; compare is ahead by 12 with deab7eab merge base"
+      },
+      "boundary": "This corrects the prior observation-plane claim but still does not establish a timeless PR232 head. Future credit must bind PR/ref object, tested SHA and execution depth in one fresh receipt."
+    }
+  ],
+  "deduplication": {
+    "independent_replication_claimed": false,
+    "rules": [
+      "The two persisted copies of run 31723833122 are one run lineage and count once.",
+      "The execution and persistence jobs of run 31723833075 are one run lineage and count once.",
+      "Both executions are same-project, same-host-fleet target receipts, not Goodman-independent replication.",
+      "PR575 merge and its two post-merge push receipts are related but answer different questions: execution surface, token visibility and import behavior."
+    ]
+  },
+  "preserved_negative_null_and_inconclusive": [
+    "No pull_request-origin job was used for either positive receipt; both workflow runs were push events on the merge SHA.",
+    "No persistent-runner residue, process, cache, credential or cross-job contamination probe was executed.",
+    "No private cross-repository checkout succeeded with the caller repository GITHUB_TOKEN; the expected result was HTTP 404.",
+    "No import artifact hash, signer, admitted dependency manifest or immutable origin was validated by the safepath experiment.",
+    "No accepted Ubuntu live external provider network/effect receipt, productive Frank service, BASE promotion, whole-system acceptance or training occurred.",
+    "No new independent GWT, emergence, hyperposition, ClayGraph or UnifiedDB causal result was found."
+  ],
+  "testable_hypotheses": [
+    {
+      "id": "H-TOKEN-SCOPE-NEQ-RUNNER-STATE-SCOPE-001",
+      "hypothesis": "Repository-scoped GITHUB_TOKEN denial can coexist with a cross-job authority channel through persistent self-hosted host state.",
+      "counterhypothesis": "A denied cross-repository token probe is sufficient evidence that a persistent self-hosted runner cannot influence later trusted jobs.",
+      "test": "On an isolated disposable replica, let an untrusted PR lane write randomized canaries to workspace siblings, tool caches, process table, user startup paths and allowed temp locations; then run a trusted push lane on the same runner and require zero canary recovery, zero surviving process and a clean-image attestation.",
+      "falsifier": "Across preregistered adversarial variants, no state channel survives and clean-image identity is independently attested before every trusted job."
+    },
+    {
+      "id": "H-IMPORT-PATH-SHAPE-NEQ-ARTIFACT-AUTHORITY-001",
+      "hypothesis": "-P/PYTHONSAFEPATH improves path shape but cannot by itself establish the authority or identity of imported code.",
+      "counterhypothesis": "Matching behavior under -P or PYTHONSAFEPATH is sufficient import-provenance evidence.",
+      "test": "Cross product PYTHONPATH injection, user-site/.pth/sitecustomize, symlink retarget, same-name replacement and zip import; bind expected module origin, content hash and admitted manifest before execution.",
+      "falsifier": "Every unauthorized replacement is rejected solely by -P/PYTHONSAFEPATH while all admitted fixtures remain accepted."
+    },
+    {
+      "id": "H-PUSH-PASS-PR-SAFETY-INDEPENDENCE-001",
+      "hypothesis": "Green trusted-push mechanism runs are statistically and causally insufficient to validate untrusted pull_request execution on the same persistent runner fleet.",
+      "counterhypothesis": "Successful push receipts transfer directly to PR execution safety because the workflow and runner labels are identical.",
+      "test": "Separate event-origin strata; compare trusted push with controlled untrusted PR canaries under identical workflow bytes and runner labels, then measure host-state residue and later trusted-job influence.",
+      "falsifier": "Event origin has no effect on reachable host state or later-job influence under an independently verified isolation boundary."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Token Scope / Runner State Scope Split",
+      "definition": "API authorization can be repository-bounded while the execution host remains a wider, persistent authority surface."
+    },
+    {
+      "name": "Path Shape Is Not Artifact Authority",
+      "definition": "A safer sys.path construction constrains lookup order but does not identify, admit or attest the code found there."
+    },
+    {
+      "name": "Authority Shadow Residue",
+      "label": "abgefahren / testable",
+      "definition": "Untrusted code may leave non-token state that is inert in its own job yet becomes authoritative when a later trusted job consumes the same host."
+    },
+    {
+      "name": "Green Push Mirage",
+      "label": "abgefahren / counterfactual",
+      "definition": "A cluster of real green push receipts can make a shared runner look safe while never sampling the event origin that carries the adversarial code boundary."
+    }
+  ],
+  "routing": [
+    {
+      "consumers": ["harness", "frank", "claycode"],
+      "priority": "CRITICAL",
+      "impulse": "Keep pull_request-capable persistent self-hosted lanes blocked from semantic or release credit until trusted-head admission or independently attested ephemeral clean isolation exists; execute the residue-canary matrix only on a disposable replica, never the productive Harness."
+    },
+    {
+      "consumers": ["claycode", "unifieddb", "claygraph"],
+      "priority": "HIGH",
+      "impulse": "Model token authority and host-state authority as distinct edges. Persist HTTP 404 as EXPECTED_SCOPE_DENIAL and bind runner image/generation, event origin, cleanup and next-job lineage separately."
+    },
+    {
+      "consumers": ["claycode", "frank", "harness"],
+      "priority": "HIGH",
+      "impulse": "Extend the import-path receipt from path flags to artifact admission: resolved path, device/inode or immutable object, content hash, manifest/signature, sys.path, PYTHONPATH, site state and loaded-module origin. Preserve current 20x run as mechanism-only."
+    },
+    {
+      "consumers": ["gwt", "emergenz", "hyperposition", "claygraph", "clayresearch"],
+      "priority": "MEDIUM",
+      "impulse": "Apply event-origin stratification to causal claims: trusted-push broadcasts cannot stand in for adversarial PR lesions, and repeated jobs from one host fleet remain one correlated evidence family."
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use#hardening-for-self-hosted-runners",
+      "use": "GitHub states self-hosted runners lack clean ephemeral guarantees and may be persistently compromised by untrusted workflow code."
+    },
+    {
+      "url": "https://docs.github.com/en/actions/tutorials/authenticate-with-github_token",
+      "use": "GITHUB_TOKEN permissions should be least-privilege; additional authority requires a separate installation token or secret."
+    },
+    {
+      "url": "https://docs.python.org/3.12/using/cmdline.html#cmdoption-P",
+      "use": "-P/PYTHONSAFEPATH only prevents automatic prepending of potentially unsafe path entries; PYTHONPATH and site-dependent paths remain separate controls."
+    }
+  ],
+  "routing_receipt": {
+    "target": "research_entity/rooms/rooms/center/events",
+    "delivery": "repo-native provenance event",
+    "active_external_worker_execution_claimed": false
+  },
+  "nonclaims": {
+    "target_execution_by_this_organ": false,
+    "target_repository_mutated_by_this_event": false,
+    "harness_mutated": false,
+    "training_performed": false,
+    "canonical_promotion": false,
+    "whole_frank_v0_1_acceptance": false,
+    "independent_replication": false
+  }
+}

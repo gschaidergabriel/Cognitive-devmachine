@@ -1,0 +1,54 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-response-stream-continuity-20260810T2342p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T23:42:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-V01-RESPONSE-STREAM-CONTINUITY-20260810",
+    "goal_ref": "FRANK_V0_1",
+    "origin_class": "GO_TOKEN_API_CONTINUITY_GAP",
+    "title": "Bind response/stream delivery, replay and cancellation to one Frank execution generation",
+    "work_clay": "Extend the production token-API execution contract so durable request admission is followed by provenance-bound response lifecycle state: RESPONSE_STARTED, monotonically identified chunks or atomic response body receipt, terminal response, delivery/replay cursor, cancellation, disconnect and release/handoff. Bind every emit/chunk/terminal operation to the current V15/V16 execution generation and apply a final pre-emit fence. After restart, an admitted request must not execute twice; if a complete response was durably produced it must be replayable to the authenticated same scoped request/client without rerunning cognition/effects. A partial response must have an explicit resume-or-restart policy that cannot splice chunks across generations. BUSY remains privacy-preserving and token authentication remains credential/scope, never SELF.",
+    "reason_clay": "Current V16 execution continuity provides durable request idempotency and duplicate-execution prevention, while the current replay body explicitly reports response_replay_available=false. A production token API therefore still lacks a complete crash/reconnect delivery contract even when request admission is exactly-once. HTTP transport implementation should not precede this lifecycle contract because automatic release after a POST can break same-session continuation and release before final emission conflicts with generation fencing.",
+    "completion_clay": "Target-compatible integration test covers: valid authenticated request -> response start -> chunks/terminal -> final pre-emit generation fence -> release/handoff; duplicate same request after restart returns stored terminal response without re-execution; partial-stream crash has explicit bounded resume/restart behavior; stale generation cannot emit any later chunk or terminal record; cancellation is idempotent and provenance-bound; disconnect never silently marks DONE; BUSY leaks no holder/session/location; exact raw response/chunk hashes and resource/latency rows are preserved; no current effect path is duplicated; target-VPS receipt binds exact source/runtime/schema hashes.",
+    "evidence_need": [
+      "CURRENT_V16_REQUEST_ADMISSION_REPLAY_RECEIPT",
+      "RESPONSE_STATE_SCHEMA_OR_TYPED_CLAYCODE_CONTRACT",
+      "RESTART_AFTER_RESPONSE_COMMIT_BEFORE_DELIVERY_RECEIPT",
+      "PARTIAL_STREAM_CRASH_RECEIPT",
+      "STALE_GENERATION_PRE_EMIT_FENCE_RECEIPT",
+      "CANCELLATION_IDEMPOTENCY_RECEIPT",
+      "TARGET_VPS_NETWORK_TO_RESPONSE_LATENCY_RESOURCE_ROWS"
+    ],
+    "required_capabilities": [
+      "TARGET_REPOSITORY_CHECKOUT",
+      "PYTHON",
+      "SQLITE",
+      "TOKEN_INGRESS_CORE",
+      "V15_PRESENCE",
+      "V16_EXECUTION_CONTINUITY",
+      "SELF_HOSTED_TARGET_VPS_TEST"
+    ],
+    "dependencies": [
+      "F-V01-08-TOKEN-API-CLIENTS",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "invalidators": [
+      "A newer current-main target receipt already proves durable response replay/partial-stream recovery with generation fencing",
+      "The production API contract is owner-fixed to a non-streaming atomic response surface and an equivalent durable response receipt already exists"
+    ],
+    "write_scope": [
+      "target repo runtime/api/",
+      "target repo runtime/state/",
+      "target repo claycode/",
+      "target repo tests/",
+      "target repo runtime/vps_unifieddb/"
+    ],
+    "base_priority": 0.91,
+    "expected_impact": 0.95,
+    "urgency": 0.84,
+    "information_gain": 0.93,
+    "status": "READY"
+  }
+}

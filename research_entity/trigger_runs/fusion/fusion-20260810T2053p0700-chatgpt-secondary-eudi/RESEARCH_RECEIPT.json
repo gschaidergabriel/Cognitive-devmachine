@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "run_id": "fusion-20260810T2053p0700-chatgpt-secondary-eudi",
+  "timestamp": "2026-08-10T20:53:00+07:00",
+  "organ": "chatgpt-secondary / OpenAI / GPT-5.6 Sol",
+  "trigger": ["fusion", "hypofusion", "unifieddb", "frank"],
+  "target": "FRANK_V0_1",
+  "result_class": "FRANK_V0_1_ARCHITECTURE_DELTA",
+  "directive": {
+    "path": "research_entity/global/SELF_ROOT_EXECUTABLE_UNIFIED_DATABASE_IMAGE_RESEARCH_DIRECTIVE.md",
+    "status": "PROVISIONAL_RESEARCH_DIRECTIVE",
+    "concept": "EUDI — Executable Unified Database Image",
+    "candidate_artifact": "self.root.udb",
+    "promotion": "NONE",
+    "production_mutation": "NONE",
+    "novelty_claim": "NONE"
+  },
+  "current_project_basis": [
+    "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+    "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json"
+  ],
+  "fused_external_evidence": {
+    "direct_prior_art": [
+      "SHED — Self Hosted Executable Database: mutable key-value store appended to ELF executable; generic executable+database concept is prior art"
+    ],
+    "persistence": [
+      "Orthogonal Persistence Revisited — long-lived objects/persistent programming",
+      "Understanding and Optimizing Persistent Memory Allocation — recoverability and offset-based persistent references",
+      "Persistence and Synchronization: Friends or Foes? — crash consistency/transaction tradeoffs"
+    ],
+    "agent_memory": [
+      "Is Agent Memory a Database? — correctness as governed evolving state trajectory",
+      "A-TMA — explicit current/historical/transition state roles reduce ghost-memory failure",
+      "Filesystem-Based Memory for LLM Agents — organization and store shape are empirical design variables",
+      "Quine — native POSIX process substrate for LLM agents"
+    ],
+    "llm_storage": [
+      "current ggml-org/llama.cpp GGUF source: aligned tensor blob; FILE-pointer GGUF reader starts from current file offset",
+      "LLM in a Flash — storage layout/access locality is material to large-model inference"
+    ],
+    "linux": [
+      "memfd_create/fexecve provide detached verified file-descriptor execution",
+      "open/execve ETXTBSY documents executing-image/write conflict",
+      "fs-verity protects read-only files and cannot directly authenticate a mixed mutable whole-file image",
+      "executable memfd is a security-sensitive primitive and must be narrowly scoped"
+    ],
+    "sqlite": [
+      "ordinary SQLite requires SQLite header at byte zero, incompatible with ordinary ELF header at byte zero",
+      "stock WAL active state uses main DB + -wal + -shm",
+      "custom VFS can translate logical I/O but crash/locking semantics require proof"
+    ],
+    "content_addressing": [
+      "Content-defined Merkle Trees for Efficient Container Delivery — block/chunk identity can reduce delta-transfer cost"
+    ]
+  },
+  "hypotheses": [
+    "H-EUDI-01 deployment coherence",
+    "H-EUDI-02 model subregion zero-copy",
+    "H-EUDI-03 detached self execution",
+    "H-EUDI-04 single-image crash consistency",
+    "H-EUDI-05 region isolation",
+    "H-EUDI-06 identity stability",
+    "H-EUDI-07 backup/update economics",
+    "H-EUDI-08 corruption blast radius",
+    "H-EUDI-09 Frank causal equivalence",
+    "H-EUDI-10 scientific novelty boundary"
+  ],
+  "key_synthesis": [
+    "physical unity must not imply semantic or authority unity",
+    "ROOT_ID must remain distinct from evolving STATE_HEAD lineage",
+    "the multi-GB model should remain aligned/file-backed rather than copied into mutable database rows",
+    "a minimal ELF bootstrap can detach the runtime into verified executable memfd before mutable image access",
+    "standard SQLite is not itself the EUDI physical format; it is at most a logical engine behind a custom VFS/container",
+    "strict one-authoritative-file architecture is rejected if security/recovery/performance are worse than a split-layout control",
+    "scientific novelty is explicitly unproven; executable-with-database prior art already exists"
+  ],
+  "new_counterevidence": [
+    "Linux fs-verity is whole-file read-only authenticity protection; a mixed mutable self image cannot directly receive fs-verity protection for only its immutable subregions",
+    "filesystem permission isolation is weaker inside one writable inode than across separate immutable/mutable files",
+    "therefore cryptographic subregion verification is not automatically equivalent to OS-level least privilege and must be independently attacked"
+  ],
+  "required_experiments": [
+    "EUDI-E0 prior-art map",
+    "EUDI-E1 minimal boot/memfd/state persistence proof",
+    "EUDI-E2 embedded GGUF differential/performance",
+    "EUDI-E3 ETXTBSY/memfd handoff discriminator",
+    "EUDI-E4 crash-consistency campaign",
+    "EUDI-E5 corruption/fault injection",
+    "EUDI-E6 upgrade/rollback/lineage migration",
+    "EUDI-E7 authority/security adversarial suite",
+    "EUDI-E8 backup/replication/compaction benchmark",
+    "EUDI-E9 causal differential against split layout",
+    "EUDI-E10 sustained target-VPS run"
+  ],
+  "affected_work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-10-PROACTIVE-AGENCY-WEB",
+    "F-V01-11-MEMORY-REWARD-GOALS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-15-FINAL-MODEL",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "distribution": {
+    "global_worker_visibility": "via global provisional directive in canonical Clay research repository",
+    "science_facing_status": "research hypothesis + prior-art discipline; not externally published and not claimed novel",
+    "required_behavior": "future relevant workers adapt/falsify/update rather than treat this version as doctrine"
+  },
+  "training_authorized": false,
+  "final_status": "COMMITTED_FOR_FURTHER_RESEARCH_AND_VALIDATION"
+}

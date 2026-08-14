@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0","evidence_class":"LOCAL_SYNTHETIC_NOT_TARGET_VPS",
+  "certificate":{"threshold":1.5493415594100952,"calibration_selected_n":1494,"calibration_errors":0,"one_sided_confidence":0.99,"zero_error_binomial_upper_bound":0.0030776973796365903,"target_risk":0.005,"calibration_route_rate":0.498,"index_hash":"63baf9c5eaee5e839d4b2e8193db6c5efe135e6d9a8660b8bcefe4453ff4712c","validity_scope":"exchangeable calibration regime + exact index hash; not arbitrary distribution shift"},
+  "iid_test":{"queries":3000,"route_rate":0.49566666666666664,"routed_errors":0,"routed_n":1487,"routed_error_rate":0.0,"overall_hybrid_error_vs_brute":0.0,"brute_latency_us":{"n":3000,"p50":36.0785,"p95":71.476,"p99":412.94940999999983,"mean":82.17143533333332},"pkm_component_latency_us":{"n":3000,"p50":24.847,"p95":39.170549999999984,"p99":72.7322999999999,"mean":30.972478666666664}},
+  "adversarial_same_index_shift":{"queries":500,"construction":"top-500 product-gate-score random stored keys queried exactly; canonical brute self-match is similarity 1","score_min":1.401625633239746,"score_max":1.7078447341918945,"route_rate":0.044,"routed_n":22,"routed_errors":22,"routed_error_rate":1.0},
+  "index_version_binding":{"original_index_hash":"63baf9c5eaee5e839d4b2e8193db6c5efe135e6d9a8660b8bcefe4453ff4712c","updated_index_hash":"cfaa26e4263ecda9ce37f3b4b308fdcc2f932fb467609298e6601441af0c1744","certificate_valid_after_index_change":false},
+  "shadow_sentinel_tradeoff":[
+    {"shadow_fraction_of_routed":0.02,"iid_exact_shadow_fraction_of_all_queries":0.009913333333333333,"constructed_shift_expected_queries_to_first_checked_mismatch":1136.3636363636365},
+    {"shadow_fraction_of_routed":0.05,"iid_exact_shadow_fraction_of_all_queries":0.024783333333333334,"constructed_shift_expected_queries_to_first_checked_mismatch":454.5454545454545},
+    {"shadow_fraction_of_routed":0.1,"iid_exact_shadow_fraction_of_all_queries":0.04956666666666667,"constructed_shift_expected_queries_to_first_checked_mismatch":227.27272727272725},
+    {"shadow_fraction_of_routed":0.25,"iid_exact_shadow_fraction_of_all_queries":0.12391666666666666,"constructed_shift_expected_queries_to_first_checked_mismatch":90.90909090909092},
+    {"shadow_fraction_of_routed":0.5,"iid_exact_shadow_fraction_of_all_queries":0.24783333333333332,"constructed_shift_expected_queries_to_first_checked_mismatch":45.45454545454546},
+    {"shadow_fraction_of_routed":1.0,"iid_exact_shadow_fraction_of_all_queries":0.49566666666666664,"constructed_shift_expected_queries_to_first_checked_mismatch":22.72727272727273}
+  ]
+}

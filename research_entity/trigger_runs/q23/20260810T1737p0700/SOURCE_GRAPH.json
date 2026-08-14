@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T1737p0700",
+  "nodes": [
+    {"id":"I-QNDRF","type":"INTERNAL_ARCHITECTURE","ref":"research_entity/retina/QWEN_NATIVE_DISSOLVED_RETINA_FUSION_CANDIDATE_20260810.md"},
+    {"id":"I-MVC","type":"INTERNAL_CONTRACT","ref":"research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md"},
+    {"id":"E-QWEN35-CARD","type":"OFFICIAL_MODEL","ref":"https://huggingface.co/Qwen/Qwen3.5-4B"},
+    {"id":"E-QWEN35-CONFIG","type":"OFFICIAL_MODEL_CONFIG","ref":"https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/config.json"},
+    {"id":"E-QWEN35-PREPROC","type":"OFFICIAL_PROCESSOR_CONFIG","ref":"https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/preprocessor_config.json"},
+    {"id":"E-TRANSFORMERS-Q35","type":"RUNTIME_IMPLEMENTATION","ref":"https://github.com/huggingface/transformers/blob/main/src/transformers/models/qwen3_5/modeling_qwen3_5.py"},
+    {"id":"E-QWEN3VL","type":"OFFICIAL_MODEL_REPO","ref":"https://github.com/QwenLM/Qwen3-VL"},
+    {"id":"E-QWEN3VL-EMBED","type":"OFFICIAL_EMBEDDING_REPO","ref":"https://github.com/QwenLM/Qwen3-VL-Embedding"},
+    {"id":"W-QNDRF","type":"CURRENT_WORK","ref":"research_entity/state/work/events/20260810T1716p0700_chatgpt_secondary_qwen_native_retina_fusion_benchmark.json"}
+  ],
+  "edges": [
+    {"from":"E-QWEN35-CARD","to":"E-QWEN35-CONFIG","relation":"CONFIGURES","value":0.98,"traversed":true},
+    {"from":"E-QWEN35-CONFIG","to":"E-TRANSFORMERS-Q35","relation":"IMPLEMENTED_BY","value":0.99,"traversed":true},
+    {"from":"E-QWEN35-CONFIG","to":"I-QNDRF","relation":"SUPPORTS_SINGLE_NATIVE_VISION_CORE","value":0.94,"traversed":true},
+    {"from":"E-QWEN3VL-EMBED","to":"I-MVC","relation":"COUNTEREVIDENCE_RAW_FEATURE_CALIBRATION","value":0.97,"traversed":true},
+    {"from":"E-QWEN3VL","to":"I-QNDRF","relation":"SUPPORTS_NATIVE_GUI_SPATIAL_OCR_CAPABILITY_RESEARCH","value":0.88,"traversed":true},
+    {"from":"I-QNDRF","to":"W-QNDRF","relation":"GENERATES_DISCRIMINATING_WORK","value":1.0,"traversed":true},
+    {"from":"E-QWEN3VL-EMBED","to":"F-Q23-03","relation":"OPENS_TEXT_VISUAL_ANCHOR_HYPOTHESIS","value":0.90,"traversed":true},
+    {"from":"E-QWEN35-CONFIG","to":"F-Q23-07","relation":"OPENS_FEATURE_VERSION_STABILITY_BRANCH","value":0.93,"traversed":true}
+  ],
+  "next_expansion": [
+    "current llama.cpp/libmtmd media embedding API and server reuse path",
+    "primary GUI temporal-token pruning and action-grounded visual-memory literature",
+    "open-set/OOD calibration for frozen VLM representations",
+    "Qwen3.5 quantization/mmproj compatibility across deployed Frank artifacts",
+    "current <=4B abliterated multimodal challengers under matched runtime budget"
+  ]
+}

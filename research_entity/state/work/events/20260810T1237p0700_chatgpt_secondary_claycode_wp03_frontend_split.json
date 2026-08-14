@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-wp03-frontend-split-20260810T1237p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T12:37:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "reason_clay": "Fresh critical-path differential found that current WP-03 typed IR silently defaults to V7_OPERATOR_FN while the admitted WP-02 production frontend defaults to V17_DECLARATIVE_TRIVIA_SAFE. This is semantic, not cosmetic: identical source `rule Needle.owns(X)` is a call under V17 but a dotted_relation under V7; `record X { foo-bar:Int }` is accepted by V17 and rejected by V7. Evidence: research_entity/claycode/base/WP03_FRONTEND_GRAMMAR_SPLIT_COUNTEREXAMPLE_20260810T1236p0700.md. Local execution is proxy-only (Python 3.13.5, Lark 1.3.1, strict false because interegular unavailable); Ubuntu/full-corpus replication remains required.",
+    "work_clay": "Continue BASE14 closure with WP-02/WP-03 integration elevated to a hard receipt obligation. Typed IR must consume an explicitly identified frontend artifact/AST and bind frontend_schema/surface/grammar_sha256/semantic-or-contract hash instead of silently reparsing through an older default grammar. If a structured V7/Vx surface remains intentional, expose it as a separate admitted frontend with explicit dispatch and cross-frontend ambiguity/equivalence tests. Same source accepted by multiple surfaces must fail closed unless semantic equivalence is proven. Add Needle call/relation, hyphen identifier, operator identity, full G9/Dialect and grammar-hash differential regressions. Run coherent Source->Frontend->TypedIR on verified Ubuntu before WP-03 PASS.",
+    "completion_clay": "Inherited BASE14 completion plus: no typed-IR path silently selects a grammar different from the receipt-bound frontend; any multi-surface frontend architecture has explicit surface identity/dispatch; same-source cross-surface collisions are rejected or equivalence-proven; V17 current G9+Dialect frontend artifacts flow into typed IR without reparsing semantic drift; Ubuntu receipts bind source hash, grammar hash, frontend contract hash and typed IR hash.",
+    "executor_policy": "Re-read main and active frontend/typed-IR leases before any edit. Prefer adapter/interface repair over language redesign. Do not delete V7 merely because it is old if structured syntax still needs it; instead eliminate silent ambiguity and bind dialect identity explicitly. Preserve the earlier grouping semantic-hash counterexample as a separate WP-02 regression obligation.",
+    "dependencies": [
+      "research_entity/claycode/base/WP03_FRONTEND_GRAMMAR_SPLIT_COUNTEREXAMPLE_20260810T1236p0700.md",
+      "research_entity/claycode/base/CANONICAL_GROUPING_HASH_COUNTEREXAMPLE_20260810T1236p0700.md",
+      "tools/claycode_base_frontend.py",
+      "tools/claycode_base_typed_ir.py",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 0.99,
+    "urgency": 0.98,
+    "information_gain": 0.99,
+    "status": "READY"
+  }
+}

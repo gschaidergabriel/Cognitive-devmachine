@@ -1,0 +1,48 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "deltas":[
+    {
+      "delta_id":"PD-Q23-ZC-01",
+      "kind":["IMPLEMENTATION_FACT","ARCHITECTURE_DELTA"],
+      "description":"Current libmtmd exposes the projected media embedding buffer after mtmd_batch_encode and before llama_decode. A tiny MVC/readout can therefore execute synchronously on the same buffer, then either bypass semantic decode or pass the unchanged buffer onward.",
+      "hypothesis":"A zero-copy MVC gate lowers total familiar-state path cost versus copying/persisting the full projected token tensor or running a second heavy vision encoder.",
+      "strongest_counterhypothesis":"Raw projected features are not sufficiently calibrated for user-specific open-set familiarity, or scanning the full token buffer adds enough latency/cache pressure that decoder bypass is not useful.",
+      "falsifier":"Matched target-VPS fixtures show no Pareto gain in latency/resources/task success/open-set error against FULL_QWEN and a dedicated lightweight embedding baseline.",
+      "status":"CANDIDATE_NOT_PROMOTED"
+    },
+    {
+      "delta_id":"PD-Q23-SP-02",
+      "kind":["REVISED_HYPOTHESIS","TEST_DELTA"],
+      "description":"Use global plus 2x2 spatial pooled descriptors as a zero-copy baseline, not global mean alone. At Qwen3.5-4B output width 2560 this is 12,800 floats = 50 KiB independent of image-token count.",
+      "strongest_counterhypothesis":"Coarse pooling loses small text and instance-level cues; tiny learned projection or a separate embedding encoder dominates.",
+      "status":"TESTING_REQUIRED"
+    },
+    {
+      "delta_id":"PD-Q23-MODEL-03",
+      "kind":["ALTERNATIVE_ELIMINATED","SOURCE_NETWORK_EXPANSION"],
+      "description":"Official Qwen3.6 currently exposes 27B and 35B-A3B open models, so it does not supersede Qwen3.5-4B for a strict <=4B path. Gemma 4 E4B is multimodal and llama.cpp has Gemma4/Gemma4V code, but its official model card reports 4.5B effective and 8B total including embeddings; retain only as a resource challenger unless the size budget is redefined.",
+      "status":"NO_MODEL_SWITCH"
+    },
+    {
+      "delta_id":"PD-Q23-TEMP-04",
+      "kind":["ARCHITECTURE_DELTA","TEST_DELTA"],
+      "description":"Recent GUI evidence supports adaptive spatial token reduction, temporal redundancy handling and action-grounded crop memory, while also showing that background/static regions and naive full-image memory can materially affect state-transition grounding. Retina must therefore use ROI+context and periodic/on-demand anchors rather than changed-pixels-only sensing.",
+      "strongest_counterhypothesis":"Frank-specific GUI tasks obtain no net benefit from the extra context/anchor policy under equal resource budgets.",
+      "status":"CANDIDATE_REFINEMENT"
+    },
+    {
+      "delta_id":"PD-Q23-EMB-05",
+      "kind":["NEW_COUNTERHYPOTHESIS","UNCERTAINTY_REDUCTION"],
+      "description":"Current VLM embedding work obtains strong retrieval embeddings using explicit contrastive/embedding training. Therefore raw generative Qwen projected visual features must not be presumed calibrated for cosine/open-set familiarity.",
+      "falsifier":"Frozen raw Qwen descriptors match or beat tiny-trained and dedicated embedding baselines on held-out/OOD user-specific familiarity with calibration and resource shadows.",
+      "status":"OPEN"
+    },
+    {
+      "delta_id":"PD-Q23-RECOVERY-06",
+      "kind":["ISSUE_OR_FAILURE","TEST_DELTA"],
+      "description":"Current llama.cpp issue ecology contains Qwen3.5-4B GGUF/load and multimodal CUDA failures plus an unresolved gap in save/restore for slots containing images. q23 recovery acceptance must explicitly test image-containing restart/cache/replay, exact mmproj/model identity, stale media descriptors and backend-specific failures.",
+      "status":"MANDATORY_TEST_OBLIGATION"
+    }
+  ]
+}

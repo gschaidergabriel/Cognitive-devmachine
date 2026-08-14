@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0120p0700-chatgpt-secondary-effect-crossbranch-adjudication",
+  "kind": "ADJUDICATION_ADDENDUM",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "observed_product_pr": 250,
+  "observed_head": "5a273bcbe5890b1802ddf6d7da0eb7df7a9c140b",
+  "observed_merge_sha": "078dffae8be585bcd6a522dfbe4261bbc88115c6",
+  "new_candidate_delta": {
+    "source_commit": "14676753b20ad431cbffe5cebfca870adf2da385",
+    "mechanism": [
+      "SQLite trigger blocks execution_id/lease_epoch/credential generation rebind while an exactly bound effect is COMMITTING",
+      "SQLite trigger blocks terminal execution release while that exact execution owns a COMMITTING effect",
+      "OUTCOME_UNKNOWN and verified outcomes remain turnover-compatible for evidence reconciliation without inheriting retry/start authority"
+    ],
+    "purpose": "close the B2/B3 provider-entry TOCTOU and the begin-to-outcome release interval without treating SQLite as an authority source",
+    "status": "CANDIDATE_AWAITING_EXACT_HEAD_TARGET_ACCEPTANCE"
+  },
+  "normal_regression_surface": {
+    "same_epoch_v16_rebind_before_attempt": "expected FENCED_ZERO_STATE_MUTATION",
+    "provider_entry_same_epoch_v16_rebind": "expected EFFECT_COMMITTING_BLOCKS_EXECUTION_GENERATION_REBIND",
+    "provider_release_inside_window": "expected CANNOT_RELEASE_EXECUTION_DURING_PROVIDER_COMMIT",
+    "committing_terminal_release_outside_provider_window": "expected EFFECT_COMMITTING_BLOCKS_EXECUTION_RELEASE",
+    "blocked_release_kept_v15_busy": true,
+    "classification": "NORMAL_REGRESSION_NOT_NEW_OOB"
+  },
+  "cross_branch_dependency_recheck": {
+    "frontend_probe_blob_sha": "6348e1ed92c85d1158c8fab1373fe9e0ce8b446b",
+    "frontend_probe_still_requires_bound_wp03_bundle": true,
+    "required_grammar_path": "runtime/clay_wp03_exact_bundle/research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark",
+    "required_grammar_present_on_observed_pr_head": false,
+    "result": "DEPENDENCY_GHOST_STILL_OPEN",
+    "law": "NO_SIBLING_ARTIFACT_ANCESTRY -> NO_COMPILER_OR_RUNTIME_ACCEPTANCE_CLAIM"
+  },
+  "latest_workflow_state": {
+    "effect_v6_run_id": 31419002821,
+    "effect_v6_state_when_observed": "QUEUED",
+    "self_root_current_head_run_id": 31419002665,
+    "self_root_state_when_observed": "QUEUED",
+    "deep_integrity_run_id": 31419002729,
+    "deep_integrity_conclusion": "FAILURE",
+    "deep_integrity_note": "No code-regression interpretation made here without job-step evidence."
+  },
+  "external_mechanism_consistency": [
+    {
+      "source": "Burrows, Chubby OSDI 2006",
+      "finding": "recipient-side sequencer validation rejects stale lock generations at the protected operation boundary",
+      "relation": "supports B3/generation validation at provider-entry semantics"
+    },
+    {
+      "source": "AWS Builders Library, Making retries safe with idempotent APIs",
+      "finding": "timeout can leave effect state indeterminate; unique caller request identity plus atomic idempotency and reconciliation avoids duplicate side effects",
+      "relation": "supports OUTCOME_UNKNOWN + provider-specific reconciliation rather than blind retry"
+    },
+    {
+      "source": "Stripe API idempotent requests/error handling",
+      "finding": "same idempotency key is reusable only for semantically identical operations; some API failures are indeterminate",
+      "relation": "supports semantic request fingerprint binding and explicit unknown outcomes"
+    }
+  ],
+  "go_oob_experiment_count_delta": 0,
+  "go_oob_note": "This addendum adds no new out-of-box experiment. CROSS_BRANCH_DEPENDENCY_GHOST remains the exactly-one OOB experiment for this worker run.",
+  "promotion": "NONE",
+  "authority": "NONE",
+  "training_authorized": false,
+  "next_falsifier": "Exact observed PR250 head must complete the full target workflow after explicit WP03 dependency composition; the TOCTOU regression must pass and the frontend/TypedIR gate must be self-contained in the same merge graph."
+}

@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_laeufer_skript_bauen",
+  "actor": "gabriel-claude/wp3",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "build poller on frank-api. loop: list open PR, fetch head sha, run gate script, POST commit status pending/success/failure. log to file. depends wp1 shape.",
+  "done_when": "script runs one full cycle dry-run, no error",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: frank-api, claycode, frank-laeufer, tore.json",
+  "source": {
+    "lauf": "20260813-054655",
+    "paket": "wp3",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-054655-wp3/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260813-054655-wp3/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 900,
+  "ergebnis_kurz": "yml2sh + torkonfig + laeufer on frank-api. full dry-run cycle 87s over 241 open PR, no error. FOUND: 2 of 24 live gates are invalid YAML and never ran (explains 408 failures).",
+  "bericht": "built 3 part, source in repo bin/frank-laeufer/, deployed to frank-api:/root/frank-laeufer (root only, 700).\n1 yml2sh.py: workflow yml -> standalone bash. translate run-steps 1:1, replace actions/checkout with exact git fetch --depth=1 origin $SHA + detach + rev-parse assert, replace upload-artifact with copy to $LAEUFER_EVIDENZ. if:always() honored via TOR_RC flag. ${{ }} mapped to shell var, unknown expr left visible as UNKNOWN_EXPR_*.\n2 torkonfig.py: reads the 24 live gate yml, emits tore/<id>.sh + tore.json (id, kontext, paths filter, timeout_min, pass_token).\n3 laeufer.py: list open PR -> head sha -> changed files -> paths filter -> POST status pending -> run tore/<id>.sh with GITHUB_* env -> verdict = exit 0 AND pass_token in log -> POST success/failure. state file zustand.json prevent rerun of same (pr,sha,gate). log per run in log/. flags --dry-run --once --pr --tor --force.\n\nFINDING, hard: 2 of 24 live gate yml are INVALID YAML. clay-wp02-v18-committed-replay.yml and clay-v18-replay-pr-dispatch-bridge.yml. python heredoc inside run-block has continuation line at column 0, kill the block scalar at line 45. github create a run, 0 job, conclusion failure. that is exact the 204/204 + 204/204 failure in the run history. those two gate never executed one single step. proof: check-runs list empty, jobs list empty for run 31621634972.\n22 of 24 convert clean, all 22 pass bash -n.\n\ndry-run full cycle on frank-api: 241 open PR, 3 gate configured, 87 sec, geplant 35, uebersprungen 688, ZERO error. per-PR sample: PR 561 -> only claycode-nominal-typecheck-v1-vps selected by paths filter, other 2 skipped. correct.\n\nopen for wp5: 241 open PR x N gate is too much for one cycle. need bound (only PR updated last X day, or only newest M).\n"
+}

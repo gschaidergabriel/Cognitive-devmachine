@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "V7_V16_V17_PARSER_FUSION_STAGE1_NEGATIVE_20260810T0738p0700",
+  "created_at": "2026-08-10T07:38:04+07:00",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity": "Clay",
+  "research_subject": "Frank",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "experiment": "CC_BASE_V7_V16_V17_PARSER_FUSION_STAGE1",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXACT_SOURCE_PARSER_CANONICAL_DISCRIMINATOR",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "executor_pr": 108,
+  "workflow": "Clay V7 V16 V17 Parser Fusion Stage1",
+  "workflow_run_id": 31344969097,
+  "workflow_job_id": 93325093779,
+  "workflow_conclusion": "failure_expected_scientific_negative",
+  "artifact_id": 9047009568,
+  "artifact_sha256": "cff3c825033a8d5e44eaa5e510da45811421cd2f15165ae9418b49ad0ca9a5a5",
+  "source_revision": "6cd98757ee7e2cfb1ccebe8b1bf7cfd6b4c5b535",
+  "executor_source_revision": "71fae4e0561c2d5819dcd3bf78613a7f8face341",
+  "runtime": {
+    "runner": "clay / digital-retina",
+    "os": "Linux X64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "production_frontend": "claycode_base_frontend.build_parser",
+    "maybe_placeholders": false
+  },
+  "exact_source_blobs": {
+    "v7": "a63b7ce112fbe6acf1890fef24a204f3863a5292",
+    "v16": "97edbe25defdc6f7641e5e1ecf3f29558a58abfa",
+    "v17": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "frontend": "55728fd20323a364bb5e831989644b65189603d1",
+    "g9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "requirements_lock": "4a361757efede020cfb288ad7beda2c4a7e6c6b5"
+  },
+  "hypothesis": "V16 can unify V17 declarative WP02 parser/canonical semantics with V7 typed-fn/operator surface on Stage1 without semantic drift.",
+  "strongest_counterhypothesis": "Separate grammar contracts remain safer because V16 changes a declarative/canonical invariant or the V7 typed baseline cannot be used under the same strict runtime.",
+  "checks": {
+    "v7_strict": false,
+    "v16_strict": true,
+    "v17_strict": true,
+    "v16_v17_current_corpus_equal": false,
+    "v7_v16_current_corpus_equal": false,
+    "v16_call_trivia_equivalent": true,
+    "v16_call_distinct_from_prefix": true,
+    "v17_call_trivia_equivalent": true,
+    "v7_v16_typed_fn_equal": false,
+    "v7_operator_identity": false,
+    "v16_operator_identity": true,
+    "v17_typed_fn_out_of_surface": true
+  },
+  "failed_support_checks": [
+    "v16_v17_current_corpus_equal",
+    "v7_v16_current_corpus_equal",
+    "v7_v16_typed_fn_equal",
+    "v7_operator_identity"
+  ],
+  "strict_details": {
+    "v7": {
+      "pass": false,
+      "error": "GrammarError: Shift/Reduce conflict for terminal OR. [strict-mode] * <dotted_relation : qid DOT_REL>"
+    },
+    "v16": {"pass": true, "error": null},
+    "v17": {"pass": true, "error": null}
+  },
+  "corpus_frontend_hashes": {
+    "g9": {
+      "v16": "394a0aaa67060cc2855cef527e1759f54e6527c04548bef34b4c0d82f330ae2a",
+      "v17": "9146f3af7c8c82b9b76f087252b2b4971b2cd5a38d4c2588358bb5eaa14b9e27",
+      "v7": null,
+      "all_none_placeholder_counts_zero_for_v16_v17": true
+    },
+    "dialect": {
+      "v16": "a5607527dc3d8ae5368a50049ab08dd2a21d4fbfc8060e9369a596440191c876",
+      "v17": "1b2cc9b28adcbc67e7733578ae0cfad8a0ae7960a213a6888ce855395bd0b49f",
+      "v7": null,
+      "all_none_placeholder_counts_zero_for_v16_v17": true
+    }
+  },
+  "relation_boundary": {
+    "v16_call_hash": "4e8a79891a260a5c3bbd9833d7c684016c34ec4a77668398dd169a973d4eda2e",
+    "v17_call_hash": "4e8a79891a260a5c3bbd9833d7c684016c34ec4a77668398dd169a973d4eda2e",
+    "v16_prefix_hash": "f2b895ebaa76ea0ad43b8692b25a2c029d89501115fc3b87f9504a54639d22d6",
+    "v17_prefix_hash": "f2b895ebaa76ea0ad43b8692b25a2c029d89501115fc3b87f9504a54639d22d6",
+    "v16_and_v17_horizontal_trivia_equivalence": true,
+    "v16_and_v17_call_prefix_discrimination": true
+  },
+  "typed_fn_surface": {
+    "v16_add_hash": "3d936c33b86e5e53e0749f1816719ac211203efc25875124bd9d06503a14899d",
+    "v16_sub_hash": "c54e2bae5a443ee84a7bbe9e9929fbe3e74f2b9492004eaf2d9a447dd0df383a",
+    "v16_operator_identity_preserved": true,
+    "v17_rejects_fn_as_out_of_surface": true,
+    "v7_not_measurable_under_strict_runtime": true
+  },
+  "measurements": {
+    "wall_ms": 11911,
+    "user_seconds": 11.85,
+    "system_seconds": 0.04,
+    "cpu_percent": 99,
+    "max_rss_kb": 35148,
+    "major_page_faults": 0,
+    "minor_page_faults": 6707,
+    "voluntary_context_switches": 1,
+    "involuntary_context_switches": 85,
+    "filesystem_inputs": 0,
+    "filesystem_outputs": 40,
+    "exit_status": 2
+  },
+  "adjudication": "V16_NOT_SUPPORTED_FOR_FUSION_AT_STAGE1; SPLIT_GRAMMAR_COUNTERHYPOTHESIS_CURRENTLY_FAVORED; FAILURE_LOCALIZATION_REQUIRED_BEFORE_ANY_TYPED_IR_STAGE2",
+  "architecture_delta": "NO_CHANGE_SPLIT_GRAMMAR_REMAINS_SAFER",
+  "interpretation_guard": "The V16-vs-V17 corpus hash difference is not yet proven to be a true language-semantic difference; it may be a parse-tree representation difference caused by grammar shape. The next cheapest falsifier is an exact V16-vs-V17 canonical AST/path diff on the first mismatching corpus constructs. V7 strict failure is independently real under the measured runtime and makes strict V7 baseline comparisons unavailable until explicitly addressed.",
+  "next_falsifier": "Localize the first V16-vs-V17 canonical AST/token-path divergence on G9 and Dialect under the same production parser. Do not run Stage2 active typed-IR and do not create V18 unless a concrete executable counterexample requires it.",
+  "promotion_allowed": false,
+  "counts_as_wp02_pass": false,
+  "counts_as_wp03_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "training_authorized": false,
+  "go_oob_budget": {
+    "exactly_one_experiment_already_consumed": true,
+    "this_stage_is_oob": false,
+    "no_additional_oob_experiment_added": true
+  },
+  "scope_guard": "Scientific negative Stage1 parser/canonical evidence only. No grammar switch, no WP pass, no Andreas target acceptance, no Frank Harness mutation, no release/freeze/training authorization.",
+  "authority_invariant": "model output != execution authority"
+}

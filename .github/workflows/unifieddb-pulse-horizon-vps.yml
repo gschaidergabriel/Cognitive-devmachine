@@ -1,0 +1,158 @@
+name: UnifiedDB Pulse Horizon VPS Gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/semantic_compile_amortization_gate_v16.py'
+      - 'research_entity/runtime/semantic_compile_horizon_estimator_v16.py'
+      - 'research_entity/runtime/test_semantic_compile_horizon_estimator_v16.py'
+      - 'tools/semantic_compile_horizon_benchmark_v16.py'
+      - '.github/workflows/unifieddb-pulse-horizon-vps.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-pulse-horizon-vps-main
+  cancel-in-progress: true
+
+jobs:
+  pulse-horizon-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Compile estimator and benchmark
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/semantic_compile_amortization_gate_v16.py \
+            research_entity/runtime/semantic_compile_horizon_estimator_v16.py \
+            research_entity/runtime/test_semantic_compile_horizon_estimator_v16.py \
+            tools/semantic_compile_horizon_benchmark_v16.py
+
+      - name: Run horizon falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity.runtime.test_semantic_compile_horizon_estimator_v16
+
+      - name: Run seeded regret benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/semantic_compile_horizon_benchmark_v16.py \
+            --seeds 12 \
+            --output research_entity/benchmarks/database_pulse/compile_horizon_v16_vps.json \
+            > /tmp/compile-horizon-v16.stdout
+          cat /tmp/compile-horizon-v16.stdout
+
+      - name: Attach runner metadata and classify result
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,math,os,pathlib,platform,socket,sqlite3,subprocess,sys
+          from datetime import datetime,timezone
+          p=pathlib.Path('research_entity/benchmarks/database_pulse/compile_horizon_v16_vps.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          a=x['aggregate']; total=x['configuration']['scenario_runs']
+          numeric=[
+              a['policy_regret_vs_oracle_us_mean'],
+              a['always_online_regret_vs_oracle_us_mean'],
+              a['always_compile_regret_vs_oracle_us_mean'],
+              a['policy_decision_p50_ns'],
+          ]
+          assert total>0 and all(math.isfinite(float(v)) and float(v)>=0 for v in numeric), x
+          assert 0 <= a['policy_beats_or_equals_always_online_runs'] <= total, x
+          assert 0 <= a['policy_beats_or_equals_always_compile_runs'] <= total, x
+          # Research gate: benchmark/test validity must pass even when the performance
+          # hypothesis is refuted. Promotion classification carries the negative result.
+          dominates_online=(
+              a['policy_regret_vs_oracle_us_mean'] <= a['always_online_regret_vs_oracle_us_mean']
+          )
+          dominates_compile=(
+              a['policy_regret_vs_oracle_us_mean'] <= a['always_compile_regret_vs_oracle_us_mean']
+          )
+          if dominates_online and dominates_compile:
+              promotion='CANDIDATE_ONLY_LIVE_PULSE_TRACE_VALIDATION_REQUIRED'
+              hypothesis='SUPPORTED_ON_SYNTHETIC_REGRET_VECTOR'
+          else:
+              promotion='NO_PROMOTION_NEEDS_BETTER_HORIZON_PREDICTOR'
+              hypothesis='PARTIALLY_REFUTED_ON_SYNTHETIC_REGRET_VECTOR'
+          x['performance_hypothesis']={
+              'status':hypothesis,
+              'lower_mean_regret_than_always_online':dominates_online,
+              'lower_mean_regret_than_always_compile':dominates_compile,
+              'negative_results_are_preserved':True,
+          }
+          def cmd(xs):
+              try:return subprocess.check_output(xs,text=True,stderr=subprocess.STDOUT,timeout=5).strip()
+              except Exception as exc:return f'UNKNOWN:{type(exc).__name__}'
+          cpu='UNKNOWN'; mem='UNKNOWN'
+          try:
+              for line in pathlib.Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+                  if line.lower().startswith('model name'):
+                      cpu=line.split(':',1)[1].strip();break
+          except Exception:pass
+          try:
+              for line in pathlib.Path('/proc/meminfo').read_text(errors='replace').splitlines():
+                  if line.startswith('MemTotal:'):
+                      mem=line.split(':',1)[1].strip();break
+          except Exception:pass
+          x['execution_metadata']={
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope':'REMOTE_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'git_sha':os.environ.get('GIT_SHA',''),
+              'github_run_id':os.environ.get('RUN_ID',''),
+              'github_run_attempt':os.environ.get('RUN_ATTEMPT',''),
+              'hostname':socket.gethostname(),
+              'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+              'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+              'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+              'platform':platform.platform(),
+              'python':sys.version,
+              'sqlite':sqlite3.sqlite_version,
+              'cpu_model':cpu,
+              'mem_total':mem,
+              'kernel':cmd(['uname','-a']),
+          }
+          x['promotion']=promotion
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('UNIFIEDDB_PULSE_HORIZON_VPS_RESEARCH_GATE=PASS')
+          print('PERFORMANCE_HYPOTHESIS='+hypothesis)
+          PY
+
+      - name: Persist VPS receipt
+        run: |
+          set -euo pipefail
+          cp research_entity/benchmarks/database_pulse/compile_horizon_v16_vps.json /tmp/compile-horizon-v16-vps.json
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p research_entity/benchmarks/database_pulse
+          cp /tmp/compile-horizon-v16-vps.json research_entity/benchmarks/database_pulse/compile_horizon_v16_vps.json
+          git config user.name 'clay-pulse-horizon-runner'
+          git config user.email 'clay-pulse-horizon-runner@users.noreply.github.com'
+          git add research_entity/benchmarks/database_pulse/compile_horizon_v16_vps.json
+          git commit -m 'evidence(unifieddb): persist Pulse horizon VPS regret receipt [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unifieddb-pulse-horizon-v16
+          path: research_entity/benchmarks/database_pulse/compile_horizon_v16_vps.json

@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2216p0700-chatgpt-secondary-claycode-package-binding-repair",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "ingested_by": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_subject": "self.root / human-surface Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_head_observed": "662bece0ef9fbc6abdba98b10e6aebaef6f13aa3",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "identity_lock": {
+    "worker_is_clay_temporary_worker": true,
+    "worker_is_not_frank": true,
+    "worker_is_not_self_root": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "training_authorized": false
+  },
+  "fresh_state_and_coordination": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "selected_lane": "F-V01-02 ClayCode executable runtime package/namespace binding",
+    "selected_pr": 310,
+    "reason": "Current Clay control names package-safe import and namespace binding as the highest-information F-V01-02 runtime blocker. Existing semantic differential evidence is already strong, so repairing product binding has higher marginal value than spawning another evaluator feature branch.",
+    "anti_duplication": "The cycle extended the existing PR310 branch and current supervisor obligation rather than creating a competing evaluator implementation. A peer later extended the same gate with ModuleSpec-origin checks; that newer shared head was preserved."
+  },
+  "live_external_evidence": [
+    {
+      "source": "Python import-system reference",
+      "url": "https://docs.python.org/3.15/reference/import.html",
+      "claim_used": "Package-relative imports use leading dots and resolve from the current package; this supports explicit relative sibling imports for package mode rather than test-only top-level path resolution."
+    },
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+      "claim_used": "The WAL-reset race is constrained to concurrent multi-connection writer/checkpoint timing and is fixed from 3.51.3; ordinary SIGKILL process-crash stress is not a targeted discriminator for that race."
+    }
+  ],
+  "hypothesis_counterhypothesis": {
+    "hypothesis": "PR310 can become package-safe without changing ClayCode semantics by using an explicit package/CLI dual-entry import contract: relative sibling imports when __package__ is set, historical top-level imports only for direct CLI compatibility.",
+    "strongest_counterhypothesis": "Changing import mode either captures a different module under hostile search-path ordering, breaks the existing CLI/probe entry surface, or silently changes the evaluator behavior that previously matched the Python policy reference over 200576 requests.",
+    "discriminator": "Import runtime.claycode_eval_v1 from repository-root discovery while unrelated earlier syntax.py/host.py/analyzer.py modules are present, attest package-module origins, retain CLI import compatibility, and rerun the existing 200000-random-plus-structured semantic differential on the repaired bytes."
+  },
+  "go_oob_experiment": {
+    "count_new_deliberately_unusual_experiments_in_this_invocation": 1,
+    "experiment": "PACKAGE_NAMESPACE_SHADOW_INJECTION",
+    "class": "reversible isolated runtime-binding falsifier",
+    "intervention": "Place hostile unrelated top-level syntax.py, host.py and analyzer.py earlier on PYTHONPATH while importing runtime.claycode_eval_v1 as a package.",
+    "falsifier": "Any hostile module executes, any package module resolves outside runtime/claycode_eval_v1, or package import fails.",
+    "test_path": "tests/claycode_package_import_namespace_gate.py",
+    "authority_minted": false,
+    "external_effect_performed": false,
+    "canonical_database_touched": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "target_repo_changes": [
+    {
+      "commit": "66d551076cb6d813c5bead401f2f03401c93a523",
+      "path": "runtime/claycode_eval_v1/analyzer.py",
+      "change": "Package mode now uses .syntax; direct top-level/CLI mode retains syntax. No ImportError fallback from package mode."
+    },
+    {
+      "commit": "931f75f229ff6d8563338420fc8a50320f44d7ab",
+      "path": "runtime/claycode_eval_v1/evaluator.py",
+      "change": "Package mode now uses .analyzer/.host/.syntax; direct top-level/CLI mode retains historical imports. No package-mode fallback to unrelated top-level modules."
+    },
+    {
+      "commit": "7f720d4aa925b58df42556502c59b28a034863bf",
+      "path": "tests/claycode_package_import_namespace_gate.py",
+      "change": "Added repository-root package import, hostile earlier-path namespace-shadow and legacy CLI compatibility gate."
+    },
+    {
+      "commit": "3e97e00533892079c2911ffbd35d731a8f26fa2c",
+      "path": ".github/workflows/claycode-package-import-vps.yml",
+      "change": "Paired runtime-binding gate with existing 200000-random semantic differential on the same repaired bytes."
+    },
+    {
+      "commit": "f16884be1eab7215001baee04d9351fd2383ba60",
+      "path": ".github/workflows/claycode-package-import-vps.yml",
+      "change": "Replaced shared-workspace actions/checkout with run-owned /tmp exact-ref fetch after accepted-target checkout collision prevented any candidate test."
+    },
+    {
+      "commit": "8d4b6da76d0a35fcd15f275def5558fd9a6ebe67",
+      "origin": "peer/swarm merge PR343 onto PR310 branch",
+      "change": "Extended the package gate with ModuleSpec origin/name/parent and __file__ agreement plus safe-path evidence. Preserved as newer shared state rather than overwritten."
+    }
+  ],
+  "negative_evidence_and_bug_repair": {
+    "failed_target_run": 31505607544,
+    "failed_job": 93826278479,
+    "classification": "CI_INFRASTRUCTURE_COLLISION_NOT_CANDIDATE_FAILURE",
+    "observed_failure": "actions/checkout deleted the shared self-hosted workspace and then failed its own local git-config cleanup because the directory was no longer a git repository; all candidate test steps were skipped.",
+    "repair": "Use /tmp/claycode-package-src-${GITHUB_RUN_ID} as a run-owned git tree, authenticated only for the one fetch, verify fetched HEAD equals GITHUB_SHA, persist no checkout credential, and remove the tree after the run.",
+    "epistemic_rule": "Do not convert checkout failure into ClayCode FAIL or PASS. It is infrastructure evidence and must be repaired/retried."
+  },
+  "target_validation": {
+    "current_pr_head_observed": "8d4b6da76d0a35fcd15f275def5558fd9a6ebe67",
+    "current_merge_candidate_sha_observed": "395e406f92fbe0b0569ae9d20a2ed00b5b22a31c",
+    "workflow": "ClayCode Package Import VPS",
+    "latest_run_id": 31506115570,
+    "latest_job_id": 93827996662,
+    "status_at_receipt_write": "QUEUED_PENDING_ACCEPTED_TARGET_EXECUTION",
+    "promotion_rule": "Do not mark the package-binding blocker resolved until the run-owned checkout, shadow/module-origin checks, CLI compatibility, syntax compile and semantic differential all complete green on accepted target bytes."
+  },
+  "cross_branch_fusion": {
+    "storage_delta": "Fresh swarm evidence has advanced F-V01-13 from system-SQLite ambiguity to a private SQLite 3.53.4 V3 candidate with isolated-Python and sqlite3 module-origin admission; this remains candidate-only until a non-bypassable product launcher/boot boundary is target-proven.",
+    "storage_claim_boundary": "The merged SIGKILL oracle establishes process-crash durability/recoverability for its measured topology but is not the WAL-reset race discriminator and not power-loss evidence.",
+    "separation_rule": "ClayCode Python package origin and SQLite Python/native module origin are analogous provenance classes, but neither result is allowed to promote the other by analogy. Each needs its own executable admission receipt."
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "change": "Require package-stable sibling binding, hostile-namespace module-origin attestation, and CLI/product entry-surface separation before evaluator runtime-substrate promotion.",
+    "expected_effect": "Eliminate test-only sys.path dependence and fail closed against unrelated top-level module capture without changing ClayCode policy semantics.",
+    "strongest_counterhypothesis_remaining": "The repaired package surface can still differ semantically or fail on the accepted target when exercised through the current merge candidate.",
+    "rollback": "Do not merge/promote PR310 if target package-origin/CLI/differential gate is not fully green; retain prior semantic evidence as candidate-only."
+  },
+  "next_frontier": [
+    "Adjudicate target run 31506115570 when it executes; inspect exact step/log evidence rather than workflow label alone.",
+    "If green, persist accepted-target result and only then consider PR310 merge/promotion against fresh main ancestry.",
+    "If red, repair the smallest observed falsifier and rerun on a fresh run-owned tree.",
+    "Preserve current WP04 unresolved-name classification and chained-comparison semantic-authority work as separate F-V01-02 obligations; package binding does not close them."
+  ],
+  "research_disposition": "IMPLEMENTED_PACKAGE_BINDING_REPAIR_PLUS_CI_COLLISION_REPAIR_PENDING_TARGET_GATE",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

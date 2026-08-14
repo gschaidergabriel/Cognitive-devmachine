@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "trigger": "unifieddb",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "fresh_parent": "e20783b5ac9eaf914a510277ab846b31d9755f12",
+  "program": "FRANK_V0_1",
+  "primary_component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "prior_supported_inputs": [
+    "PROCESS_CRASH fixed-SQLite V4 slice merged",
+    "authoritative transactional ProjectionEvent/outbox candidate merged and target-supported",
+    "ClayGraph remains derived/rebuildable and consequential use fails closed when not exact-current"
+  ],
+  "active_intersections": {
+    "unifieddb": "lease, fencing generation, backlog/lag telemetry and receipts live in authoritative scheduler state",
+    "claygraph": "single active bounded projector is a derived-state maintenance mechanism only",
+    "claycode": "worker scheduling/backpressure semantics are declared in Clay, not invented by Python",
+    "security_recovery": "process-crash lease expiry/takeover and stale-generation fencing",
+    "gwt": "consequential graph use stays closed during lag regardless of worker health optimism",
+    "effect_authority": "derived backlog cannot mint authority; exact-current projection remains prerequisite",
+    "frank": "authoritative writes stay available when derived graph is backpressured"
+  },
+  "overlap_refresh": {
+    "existing_worker_found": false,
+    "existing_projection_outbox_reused": true,
+    "new_non_duplicate_scope": "production-style bounded worker scheduling/backpressure/telemetry candidate"
+  },
+  "whole_frank_v0_1_acceptance": false,
+  "training_authorized": false
+}

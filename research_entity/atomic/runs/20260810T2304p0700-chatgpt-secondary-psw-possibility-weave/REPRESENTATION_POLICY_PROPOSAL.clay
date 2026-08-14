@@ -1,0 +1,52 @@
+module self.root.hyperposition.physical_policy.v0
+version "0.1-research-obligation"
+status TEST_OBLIGATION_NOT_ARCHITECTURE_PROMOTION
+
+// This is a physical/runtime policy proposal derived from PSW refutation.
+// It does not redefine Hyperposition, ACEF, truth, branch identity or effect authority.
+
+type RepresentationMode = MATERIALIZED | SPARSE_OVERLAY | SPARSE_OVERLAY_MEMO
+
+record BranchWorkloadTelemetry {
+  active_branches:Int>=1
+  material_state_fields:Int>=0
+  mean_delta_fields:Real>=0
+  exact_read_signature_count:Int>=1
+  transition:Ref
+  transition_effect:PURE|OTHER
+  read_set_contract:Ref?
+  observed_full_cost:ResourceEstimate?
+  observed_sparse_cost:ResourceEstimate?
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+}
+
+record RepresentationDecision {
+  mode:RepresentationMode
+  telemetry:BranchWorkloadTelemetry
+  reason:ClayCode
+  calibrated_policy_version:VersionRef
+  effect_authority:NONE
+}
+
+law physical_representation != epistemic_semantics
+law storage_deduplication != branch_identity_merge
+law equal_payload != equal_hypothesis_or_provenance
+law changing RepresentationMode cannot change reconstructed branch values
+law changing RepresentationMode cannot change branch self/entity/version/epoch/revision/hypothesis/provenance identity
+
+rule PURE + exact_current read_set_contract + signature_diversity_low + measured_sparse_cost_better -> may_choose SPARSE_OVERLAY_MEMO
+rule PURE + exact_current read_set_contract + sparse_state_but_no_compute_share -> may_choose SPARSE_OVERLAY
+rule high_signature_diversity | unknown_read_set | measured_materialized_cost_better -> choose MATERIALIZED or separate_execution
+rule transition_effect != PURE -> no_cross_branch_execution_memoization
+rule representation threshold is calibrated_from_real_target_measurements not owner-independent hardcoded magic
+
+metric representation_switch_count
+metric conversion_latency
+metric conversion_bytes
+metric reconstruction_equivalence_error
+metric decision_regret_against_sampled_counterfactual
+metric read_signature_diversity
+metric delta_density
+
+acceptance requires exact_reconstruction + zero_identity_drift + zero_effect_authority_change

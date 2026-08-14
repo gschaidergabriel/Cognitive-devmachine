@@ -1,0 +1,462 @@
+module frank.generative_reality.candidate.v1
+version "0.1-research-candidate"
+status ARCHITECTURE_CANDIDATE_BASELINE_GATED
+
+// Research identity / ancestry.
+research_entity="Clay"
+target_native_identity=self.root
+target_human_surface_name="Frank"
+actor="chatgpt-secondary/OpenAI/GPT-5.6-Sol"
+canonical_parent="RAE-8.8:r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+parent_g9=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay
+parent_loop=@research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md
+parent_coupling=@research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md
+parent_gwt=@research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md
+parent_hp=@research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md
+parent_reward=@research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay
+parent_agency=@research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay
+
+// C-GRF is an engineering possible-world substrate. It is not a physics claim,
+// not a consciousness claim, and not a second independent cognition architecture.
+law C_GRF_INSIDE_ONE_SELF_ROOT_LOOP_CORE=true
+law C_GRF_NOT_SECOND_SEMANTIC_ARCHITECTURE=true
+law C_GRF_NOT_QUANTUM_CLAIM=true
+law GENERATIVE_SIMULATION_NOT_CONSCIOUSNESS_EVIDENCE=true
+
+symbol RealityClass =
+  OBSERVED
+| INFERRED
+| RETRIEVED
+| PREDICTED
+| HYPOTHETICAL
+| INTERVENTIONAL
+| COUNTERFACTUAL
+| PLANNED
+| DESIRED
+| IMAGINED
+| REPLAY
+| ADVERSARIAL
+
+symbol RealityDecisionKind = ACT|OBSERVE|RETRIEVE|SIMULATE|ASK|STOP
+symbol BranchStatus = CANDIDATE|ACTIVE|SELECTED|EXPIRED|FALSIFIED|SUPPORTED|RECONCILED|QUARANTINED
+symbol ModelSupport = IN_DISTRIBUTION|EDGE|OOD|UNKNOWN
+
+record ModelUncertainty {
+  epistemic:Real[0,1]
+  aleatoric:Real[0,1]
+  structural:Real[0,1]
+  support:ModelSupport
+  support_distance:Real>=0
+  calibration_ref:Ref?
+  evidence:Set<Ref>
+}
+
+record RealityAnchor {
+  anchor_id:Ref
+  state_epoch:Epoch
+  graph_epoch:Epoch
+  admitted_observations:Set<Ref>
+  self_state_refs:Set<Ref>
+  world_state_refs:Set<Ref>
+  unresolved_unknowns:Set<Ref>
+  unresolved_conflicts:Set<Ref>
+  validity:TimeRange?
+  provenance:Set<Ref>
+  provenance_hash:Hash
+}
+
+record RealityBranch {
+  branch_id:Ref
+  parent_anchor:Ref
+  parent_branch:Ref?
+  origin_reality_class:RealityClass
+  current_reality_class:RealityClass
+  model_ref:Ref
+  model_version:Ref
+  action_sequence:Ordered<Ref>
+  interventions:Ordered<Ref>
+  causal_assumptions:Set<Ref>
+  shared_factual_context:Set<Ref>
+  predicted_state_trajectory:Ordered<Ref>
+  predicted_observations:Ordered<Ref>
+  horizon:Duration|Symbol
+  uncertainty:ModelUncertainty
+  constraint_violations:Set<Ref>
+  expected_task_utility:Real[-1,1]
+  expected_information_gain:Real[0,1]
+  expected_controllability_gain:Real[0,1]
+  model_risk:Real[0,1]
+  effect_risk:Real[0,1]
+  resource_cost:Cost
+  reality_distance:Real>=0
+  status:BranchStatus
+  expires_at:Time?
+  source_epoch:Epoch
+  graph_epoch:Epoch
+  provenance:Set<Ref>
+}
+
+record PossibleWorldSet {
+  set_id:Ref
+  anchor:Ref
+  branches:Set<Ref>
+  compatibility:Set<Ref>
+  exclusions:Set<Ref>
+  model_disagreement:Real>=0
+  selection_projection:Set<Ref>
+  source_epoch:Epoch
+  graph_epoch:Epoch
+  hyperposition_ref:Ref
+  provenance:Set<Ref>
+}
+
+record RealityDecision {
+  decision_id:Ref
+  kind:RealityDecisionKind
+  selected_branch:Ref?
+  expected_verified_task_gain:Real[-1,1]
+  expected_information_gain:Real[0,1]
+  expected_controllability_gain:Real[0,1]
+  expected_model_risk:Real[0,1]
+  expected_ood_cost:Real>=0
+  expected_resource_cost:Cost
+  expected_instability_cost:Real>=0
+  expected_effect_risk:Real[0,1]
+  marginal_value_more_simulation:Real[-1,1]
+  unresolved_pressure:Real[0,1]
+  reason:ClayCode
+  provenance:Set<Ref>
+}
+
+record RealityReconciliationReceipt {
+  receipt_id:Ref
+  anchor_id:Ref
+  branch_id:Ref
+  model_ref:Ref
+  model_version:Ref
+  realized_outcome:Ref
+  verified:Bool
+  semantic_prediction_error:Map<Symbol,Real>
+  transition_error_by_horizon:Map<Symbol,Real>
+  intervention_response_error:Real?
+  calibration_error:Real?
+  factual_influence_retained:Bool?
+  causal_credit:Real[0,1]
+  falsified_assumptions:Set<Ref>
+  supported_assumptions:Set<Ref>
+  model_update_admitted:Bool
+  memory_update_admitted:Bool
+  reward_update_admitted:Bool
+  rollback_or_recovery:Ref?
+  source_epoch:Epoch
+  graph_epoch:Epoch
+  provenance:Set<Ref>
+}
+
+record RealityModelPortfolio {
+  portfolio_id:Ref
+  deterministic_mechanistic:Set<Ref>
+  causal_symbolic:Set<Ref>
+  episodic_transition:Set<Ref>
+  semantic_latent:Set<Ref>
+  visual_latent:Set<Ref>
+  social_belief:Set<Ref>
+  adversarial_generators:Set<Ref>
+  fallback_generators:Set<Ref>
+  selection_policy:Ref
+  calibration_state:Ref
+  provenance:Set<Ref>
+}
+
+// -----------------------------------------------------------------------------
+// Reality contamination firewall.
+// -----------------------------------------------------------------------------
+
+invariant RealityBranch.origin_reality_class is IMMUTABLE
+invariant GENERATED_NEVER_BECOMES_OBSERVED_BY_REPETITION
+invariant GENERATED_NEVER_BECOMES_OBSERVED_BY_RETRIEVAL
+invariant GENERATED_NEVER_BECOMES_OBSERVED_BY_SUMMARIZATION
+invariant GENERATED_NEVER_BECOMES_OBSERVED_BY_GWT_IGNITION
+invariant GENERATED_NEVER_BECOMES_OBSERVED_BY_REWARD
+invariant SIMULATED_SUCCESS_NEVER_EQUALS_VERIFIED_OUTCOME
+invariant SYNTHETIC_REPLAY_NEVER_EQUALS_AUTOBIOGRAPHICAL_OBSERVATION
+invariant DESIRED_NEVER_EQUALS_PREDICTED
+invariant PLAUSIBLE_NEVER_EQUALS_PROBABLE
+invariant MODEL_CONFIDENCE_NEVER_MINTS_EFFECT_AUTHORITY
+invariant GRAPH_CONNECTIVITY_NEVER_MINTS_CAUSALITY
+
+rule generated_branch_later_confirmed_by_observation
+  -> create_new OBSERVED evidence linked_to generated_branch
+  -> preserve generated_branch.origin_reality_class
+
+rule same_semantic_payload+different_origin_reality_class
+  -> preserve_distinct_identity + preserve_distinct_provenance
+
+rule retrieval|summarization|projection|broadcast
+  -> preserve origin_reality_class + current_reality_class + branch_id + provenance
+
+// -----------------------------------------------------------------------------
+// Counterfactual boundary.
+// -----------------------------------------------------------------------------
+
+rule RealityBranch.current_reality_class=COUNTERFACTUAL requires
+  parent_anchor
+  + explicit(interventions)
+  + explicit(causal_assumptions)
+  + nonempty(shared_factual_context)
+
+rule counterfactual_factual_influence_lost
+  -> downgrade_semantic_claim_to INTERVENTIONAL|HYPOTHETICAL
+  -> never_claim_individualized_counterfactual_truth
+
+rule arbitrary_generated_what_if != COUNTERFACTUAL
+
+// -----------------------------------------------------------------------------
+// Hyperposition / ClayGraph / GWT coupling.
+// -----------------------------------------------------------------------------
+
+rule generate_possible_worlds(anchor,task,budget)
+  -> sparse_task_conditioned_branches
+  -> preserve_alternatives_as PossibleWorldSet
+
+rule PossibleWorldSet -> Hyperposition preserve compatibility+exclusion+uncertainty+lineage
+rule Hyperposition.selection_projection != destructive_branch_deletion
+rule selected_or_material_branch -> ClayGraph sparse_branch_projection
+rule ClayGraph.branch_projection != truth
+rule ClayGraph.branch_projection != effect_authority
+
+rule GWT receives compact_reality_branch_summaries not full_unbounded_branch_tree
+rule GWT.selection_may_consider [relevance,impact,uncertainty,information_gain,model_disagreement,reversibility,urgency,causal_support,expected_compute_value]
+rule GWT.causal_use_receipt links selected_branch -> chosen_intent -> observed_outcome
+rule GWT_ignition != branch_truth
+
+// -----------------------------------------------------------------------------
+// Value of computation / adaptive simulation.
+// -----------------------------------------------------------------------------
+
+rule branch_objective(b)=
+  b.expected_task_utility
+  + weight(INFO)*b.expected_information_gain
+  + weight(CONTROLLABILITY)*b.expected_controllability_gain
+  - weight(MODEL_RISK)*b.model_risk
+  - weight(OOD)*b.uncertainty.support_distance
+  - weight(RESOURCE)*normalize(b.resource_cost)
+  - weight(EFFECT_RISK)*b.effect_risk
+
+rule simulate_next iff
+  expected_marginal_value(next_simulation)
+  > compute_cost + delay_cost + instability_cost + model_risk_cost
+  && unresolved_pressure is MATERIAL
+
+rule high_value_branch+high_epistemic_uncertainty+cheap_observation_available
+  -> prefer OBSERVE over confident_effect
+
+rule useful_allowed_action_ready+marginal_value_more_simulation<=expected_value_action
+  -> prefer ACT
+
+rule no_useful_action_or_information_gain -> STOP|IDLE
+
+// -----------------------------------------------------------------------------
+// Asymmetric fidelity / temporal abstraction.
+// -----------------------------------------------------------------------------
+
+law WORLD_MODEL_FIDELITY_IS_TASK_AND_CAUSAL_RELEVANCE_CONDITIONED=true
+law FULL_SENSOR_RECONSTRUCTION_IS_NOT_DEFAULT_OBJECTIVE=true
+
+symbol RealityHorizon = FAST|MEDIUM|SLOW
+rule FAST -> exact_local_transition_when_available
+rule MEDIUM -> subgoal_or_option_level_prediction
+rule SLOW -> coarse_long_horizon_successor_or_checkpoint_prediction
+rule high_predictability -> may_use_cached_or_temporally_abstract_prediction
+rule transition_surprise_or_model_disagreement -> increase_detail_or_observe
+
+// -----------------------------------------------------------------------------
+// Outcome reconciliation / learning.
+// -----------------------------------------------------------------------------
+
+rule real_outcome
+  -> verify(real_outcome)
+  -> reconcile_against causally_used_branches
+  -> RealityReconciliationReceipt
+
+rule reconciliation -> localize_error [OBSERVATION_MODEL|TRANSITION_MODEL|CAUSAL_ASSUMPTION|PLANNER|ACTION_EXECUTION|UNKNOWN]
+rule model_update only_if verified_outcome + causally_implicated_model_component + admissible_evidence
+rule prediction_error != material_reward
+rule surprise may_create EPISTEMIC information_value only_through parent_reward_contract
+rule reward_update only_through parent_reward verified_outcome+causal_credit
+rule generated_replay cannot grade_itself_into_material_reward
+
+// -----------------------------------------------------------------------------
+// Effect boundary.
+// -----------------------------------------------------------------------------
+
+rule RealityBranch cannot directly_lower_to_tool_wire
+rule selected_branch may_support EffectIntent
+rule Needle lowers selected EffectIntent only
+rule effect.commit remains governed_by external_deterministic_effect_authority
+rule effect_class_may_require factual_support_threshold independent_of branch_utility
+
+// -----------------------------------------------------------------------------
+// Persistence / recovery.
+// -----------------------------------------------------------------------------
+
+rule UnifiedDB persists semantic_identity(branch,anchor,origin_class,model_version,lineage,reconciliation,epoch,provenance)
+rule heavyweight_tensor_or_video may_store_external_artifact_ref + content_hash
+rule one_logical_C_GRF != one_physical_storage_engine
+rule crash_restart -> restore admitted anchors + branch metadata + calibration + reconciliation without reality_class_mutation
+rule stale_epoch_branch -> reject_from_current_effect_planning + preserve_as historical_evidence
+
+// -----------------------------------------------------------------------------
+// Social reality boundary.
+// -----------------------------------------------------------------------------
+
+record PersonModel {
+  person_ref:Ref
+  predicted_beliefs:Set<Ref>
+  predicted_goals:Set<Ref>
+  predicted_reactions:Set<Ref>
+  uncertainty:ModelUncertainty
+  evidence:Set<Ref>
+  provenance:Set<Ref>
+}
+
+invariant PersonModel != person_ref
+invariant simulated_person_state != hidden_mental_fact
+invariant social_simulation != consent
+
+// -----------------------------------------------------------------------------
+// Candidate hypotheses and strongest counters.
+// -----------------------------------------------------------------------------
+
+hypothesis H_GRF_01 {
+  proposition="Immutable reality-origin classes reduce synthetic-to-factual contamination beyond current generic provenance/epistemic fields."
+  counter="Current UnifiedDB epistemic_class and evidence provenance already suffice; explicit reality classes add ontology and latency without gain."
+  discriminator="same-content OBSERVED/INFERRED/IMAGINED/REPLAY collision through persistence->retrieval->summary->GWT->EffectIntent"
+}
+
+hypothesis H_GRF_02 {
+  proposition="Task-sufficient semantic/causal latent models outperform full reconstruction per Frank-v0.1 resource while preserving action-relevant accuracy."
+  counter="Compressed semantics omit hidden physical variables and create catastrophic blind spots."
+  discriminator="matched Retina semantic vs semantic+latent vs reconstructive model under OOD hidden-variable perturbations"
+}
+
+hypothesis H_GRF_03 {
+  proposition="Hyperposition-preserved model/branch ensembles improve OOD calibration and robust action selection."
+  counter="Branch ensembles mostly add indecision, context cost and false uncertainty; a calibrated single model dominates."
+  discriminator="single-model vs top-k PossibleWorldSet on ambiguous/OOD episodes with rare-correct-branch fixtures"
+}
+
+hypothesis H_GRF_04 {
+  proposition="Explicit causal/interventional branches improve transfer under mechanism changes."
+  counter="Causal structure is underidentified and wrong causal models become more confidently wrong than associative rollout."
+  discriminator="known-SCM sandbox observational predictor vs associative rollout vs intervention-aware branch with held-out interventions"
+}
+
+hypothesis H_GRF_05 {
+  proposition="Adaptive SIMULATE/OBSERVE/ACT gating improves outcome per latency/resource versus fixed reflection depth."
+  counter="Value-of-computation estimation is itself miscalibrated and fixed small rollout budgets are more reliable."
+  discriminator="0/1/4/8 fixed rollouts vs adaptive controller across easy/ambiguous/OOD tasks"
+}
+
+hypothesis H_GRF_06 {
+  proposition="Verified mismatch-driven localized world-model revision improves long-horizon fidelity."
+  counter="Sparse realized outcomes cause overfit and degrade transfer."
+  discriminator="frozen vs online localized update with longitudinal held-out transitions, restart replay and OOD transfer"
+}
+
+hypothesis H_GRF_07 {
+  proposition="Provenance-gated synthetic replay improves consolidation without self-confirming reality contamination."
+  counter="Synthetic replay primarily amplifies model bias even with typed provenance."
+  discriminator="no replay vs raw replay vs provenance-gated replay vs adversarial replay with injected false regularities"
+}
+
+hypothesis H_GRF_08 {
+  proposition="GWT selective branch recruitment controls cost while preserving useful alternatives."
+  counter="GWT bottleneck suppresses rare correct branches."
+  discriminator="all-branch context vs top-k vs uncertainty-stratified GWT with rare-correct-branch lesions/rescues"
+}
+
+hypothesis H_GRF_09 {
+  proposition="Reality contamination firewall prevents internal memory/reward corruption that effect authority cannot catch."
+  counter="Existing epistemic_class plus generic effect authority is sufficient and a dedicated firewall duplicates policy."
+  discriminator="separate memory contamination, reward contamination and external-effect contamination suites with/without immutable origin enforcement"
+}
+
+hypothesis H_GRF_10 {
+  proposition="One logical typed reality contract over specialized simulator portfolio improves cross-domain composability and observability."
+  counter="Unified contract erases domain semantics or forces least-common-denominator modeling."
+  discriminator="unified typed portfolio vs isolated planners on cross-domain tasks measuring conversion loss, calibration, latency and recovery"
+}
+
+counterhypothesis H0_GRF_SIMPLER {
+  proposition="No named C-GRF subsystem is needed: current self/world state + ordinary prospection + Hyperposition + GWT + verified outcome/reentry provide the same useful function with lower complexity."
+  promotion_falsifier="C-GRF must improve at least one hard metric (reality contamination, counterfactual validity, planning accuracy/calibration, recovery, or resource efficiency) without unacceptable regressions."
+}
+
+// -----------------------------------------------------------------------------
+// Baselines / tests / promotion bar.
+// -----------------------------------------------------------------------------
+
+symbol GRFBaseline =
+  B0_REACTIVE_NO_SIMULATION
+| B1_DETERMINISTIC_SYMBOLIC_PROJECTION
+| B2_FREE_FORM_LLM_TEXT_ROLLOUT
+| B3_CURRENT_HP_GWT_PROSPECTION_NO_GRF_TYPES
+| B4_TYPED_C_GRF_POSSIBLE_WORLD_SET
+| B5_LEARNED_SEMANTIC_LATENT_WORLD_MODEL
+| B6_OPTIONAL_HEAVY_VISUAL_WORLD_MODEL
+
+measure verified_task_success
+measure prediction_log_loss
+measure brier_score
+measure calibration_error
+measure semantic_transition_error_by_horizon
+measure intervention_response_error
+measure counterfactual_consistency
+measure useful_minority_branch_retention
+measure OOD_detection
+measure reality_contamination_rate
+measure false_factual_retrieval_rate
+measure simulated_success_to_effect_leakage_rate
+measure simulation_utility_per_recurrence
+measure action_latency_p50_p90_p95_p99
+measure CPU_RAM_GPU_token_context_IO
+measure state_storage_amplification
+measure restart_replay_equivalence
+measure stale_epoch_rejection
+measure rollback_success
+measure GWT_delivery_reconstruction_use_effect_reentry_funnel
+
+control TRUTHFUL_OUTCOME
+control SHUFFLED_OUTCOME
+control PROVENANCE_BROKEN
+control NO_REENTRY
+control FROZEN_MODEL_DYNAMIC_TOPOLOGY
+control FROZEN_TOPOLOGY_DYNAMIC_MODEL
+control CAUSAL_EDGE_LESION_RESCUE
+control BRANCH_ID_SHUFFLE
+control PLANTED_FALSE_MEMORY
+control SAME_CONTENT_DIFFERENT_REALITY_CLASS
+control MODEL_EXPLOITATION_TRAP
+control LONG_HORIZON_COMPOUNDING_ERROR
+control HIDDEN_VARIABLE_OOD
+
+rule candidate_promotion requires matched_baseline + counterhypothesis_test + heldout_OOD + lesion_rescue + restart_recovery + resource_shadow + rollback
+rule no_ClayCode_language_semantics_change_without executable_expressivity_or_lowering_counterexample
+rule current_epistemic_class_fields must_be_reused_or_proven_insufficient before schema_duplication
+rule B6_heavy_visual_world_model is OPTIONAL_FOR_V0_1 unless task evidence proves required
+
+// Work-package routing only; this does not create a new programme stage.
+impact F_V01_03_COGNITIVE_LOOP_CORE="RealityMetaController + prospection/reconciliation path"
+impact F_V01_04_UNIFIEDDB_STATE_CONTINUITY="typed branch origin/lineage/model/calibration/reconciliation persistence"
+impact F_V01_05_GWT_HYPERPOSITION_TOPOLOGY="PossibleWorldSet + selective branch causal-use receipts"
+impact F_V01_06_DIGITAL_RETINA_MVC="factual perceptual anchor + optional latent dynamics"
+impact F_V01_07_NEEDLE_TRANSLATOR="selected EffectIntent only; branch never becomes wire action"
+impact F_V01_09_EFFECT_AUTHORITY="simulation never mints authorization; factual-support policy candidate"
+impact F_V01_10_PROACTIVE_AGENCY_WEB="self-generated goal foresight + information-seeking"
+impact F_V01_11_MEMORY_REWARD_GOALS="synthetic replay provenance + outcome mismatch + no dream reward"
+impact F_V01_13_SECURITY_RECOVERY_OBSERVABILITY="contamination/model-exploitation/restart tests"
+impact F_V01_14_TRAINING_DATA_HELDOUT="teach observed/inferred/predicted/hypothetical/counterfactual/desired distinctions"
+impact F_V01_16_END_TO_END_ACCEPTANCE="reality contamination + adaptive simulation acceptance"
+
+final_disposition SUPPORTED_AS_TESTABLE_ARCHITECTURE_DIRECTION_NOT_PROMOTED

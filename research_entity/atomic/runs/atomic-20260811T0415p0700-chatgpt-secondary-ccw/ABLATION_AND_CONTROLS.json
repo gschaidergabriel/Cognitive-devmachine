@@ -1,0 +1,18 @@
+{
+  "controls":[
+    {"name":"NO_CANDIDATE_CURRENT_V17","evidence":"accepted-target negative already exists","result":"FAIL causal support/execution binding; fabricated support can reach DONE"},
+    {"name":"STRONG_CONVENTIONAL_RECEIPT","result":"0/13 invalid mutations admitted; valid path accepted; atomic transaction rollback clean"},
+    {"name":"CCW_DERIVED_VIEW","result":"0/13 invalid mutations visible; valid path visible; direct write rejected by SQLite"},
+    {"name":"SUPPORT_INVALIDATION","result":"persisted receipt remained present after support invalidation while CCW closure disappeared"},
+    {"name":"ATOMIC_TRANSACTION_FAULT","result":"conventional baseline rolled back REENTERED/reentry/DONE together, killing CCW's naive crash-window advantage"}
+  ],
+  "ablations":[
+    {"ablation":"remove canonical episode/execution relation","expected":"closure disappears or receipt trigger rejects","observed":"covered by wrong execution/fabricated episode mutations"},
+    {"ablation":"remove receiver/GWT use","expected":"no closure","observed":"PASS negative"},
+    {"ablation":"remove admitted credit/delta","expected":"no learning-bearing closure","observed":"PASS negative"},
+    {"ablation":"remove REENTERED terminal state","expected":"no closure","observed":"PASS negative"},
+    {"ablation":"remove persisted DONE table entirely","expected":"same closure correctness but slower point reads and fewer writes/storage","observed":"supported in local discriminator"}
+  ],
+  "missing_controls":["accepted-target CCW differential","compiled ClayCode lowering","real workload terminal-read/write ratio","support revocation semantics in current canonical Frank schema"],
+  "promotion_blocked":true
+}

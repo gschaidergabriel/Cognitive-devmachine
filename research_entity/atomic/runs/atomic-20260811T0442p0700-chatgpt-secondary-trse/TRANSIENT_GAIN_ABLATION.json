@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "candidate":"TRSE-001",
+  "evidence_class":"LOCAL_SYNTHETIC_REFERENCE_MODEL_ONLY",
+  "question":"Is transverse spectral radius below one sufficient to characterize short-horizon perturbation safety for a non-normal recurrent return operator?",
+  "seed":20260811,
+  "systems":10000,
+  "construction":"2D rotated non-normal stable return maps M = Q [[a,k],[0,a]] Q^T with a in [0.45,0.85], k in [0.5,4.0]; each map has rho(M)<1 but may have operator norm >1.",
+  "results":{"fraction_rho_lt_1":1.0,"rho_p50":0.6508073344493652,"fraction_sigma_max_gt_1":0.9707,"sigma_max_p50":2.3970495656947683,"sigma_max_p95":3.941129149708456,"max_sigma_max":4.168530426760267,"fraction_empirical_directional_p95_gain_gt_1":0.9699,"empirical_directional_p95_gain_p50":2.388245438163879},
+  "interpretation":"Asymptotic transverse stability and finite-return perturbation amplification are distinct. In this adversarial family every map is asymptotically stable by spectral radius, while most can amplify some perturbations strongly over one return because of non-normality.",
+  "project_consequence":"Future Frank recurrence diagnostics should report at least two axes: asymptotic orbital/transverse stability (Floquet/return eigenstructure) and finite-horizon transverse amplification (operator-norm or empirical gain quantiles). Do not turn either metric alone into continuation/effect authority.",
+  "nonclaim":"This intentionally adversarial construction is not a prevalence estimate for real Frank and does not establish production thresholds."
+}

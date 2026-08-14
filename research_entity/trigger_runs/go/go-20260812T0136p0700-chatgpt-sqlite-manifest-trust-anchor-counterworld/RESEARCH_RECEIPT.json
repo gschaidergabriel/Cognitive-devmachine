@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0136p0700-chatgpt-sqlite-manifest-trust-anchor-counterworld",
+  "trigger": "go",
+  "origin_actor": "chatgpt",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS / self-hosted Linux X64 runner clay",
+  "target_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "observed_baseline": {
+    "system_python_sqlite_version": "3.45.1",
+    "system_python_sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "prior_release_floor_probe": {
+      "workflow": "frank-sqlite-wal-safety-probe-v1.yml",
+      "run_id": 31520524735,
+      "disposition": "FAILED_BELOW_FIXED_VERSION_FLOOR"
+    }
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation - WAL-reset bug",
+      "claim_used": "The WAL-reset corruption race affects SQLite through 3.51.2 under the documented concurrent writer/checkpoint topology and is fixed in 3.51.3+.",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    }
+  ],
+  "hypothesis": "The V4 fixed-SQLite guard is sufficient to establish that the admitted runtime artifact is the independently authorized production SQLite artifact.",
+  "strongest_counterhypothesis": "V4 establishes strong internal consistency with a caller-supplied manifest digest, but without an independently pinned deployment/owner trust anchor the caller can select between distinct self-consistent runtime artifacts and have either admitted.",
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "CALLER_SELECTED_MANIFEST_COUNTERWORLD",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "a4f11b7ecb185a8e9e1e86818c4662b7a90fb133",
+    "workflow": ".github/workflows/frank-sqlite-manifest-trust-anchor-counterworld-v1.yml",
+    "workflow_run": 31523441341,
+    "job": 93885889689,
+    "runner": "clay",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "status": "PASS_COUNTERWORLD_EXECUTED",
+    "archive": {
+      "sqlite_version": "3.53.4",
+      "source_archive": "sqlite-autoconf-3530400.tar.gz",
+      "source_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+    },
+    "reality_a": {
+      "build": "DEFAULT",
+      "sqlite_version": "3.53.4",
+      "library_sha256": "9791a0b0b1f7a60f1e6a93e7b9532e72ea16b0059ade057b3f6995aa4d496cbc",
+      "manifest_sha256": "21f21b491b59ba2ebcdf4775410f6e519f967812495045c655765f0546d07b77",
+      "v4_admission": "PASS_FIXED_SQLITE_RUNTIME_V4_CANDIDATE_ADMISSION"
+    },
+    "reality_b": {
+      "build": "CFLAGS=-O2 -DSQLITE_DQS=0",
+      "sqlite_version": "3.53.4",
+      "library_sha256": "d6fa0b1168e8edb9eda1f125dbba7c734af90b49327ac209588d758befd1191e",
+      "manifest_sha256": "2f07308b294da02201feb1d3a6e8f3321f859998bcffd90333ab61635252d1fb",
+      "v4_admission": "PASS_FIXED_SQLITE_RUNTIME_V4_CANDIDATE_ADMISSION"
+    },
+    "observations": {
+      "distinct_library_hashes": true,
+      "distinct_manifest_hashes": true,
+      "same_upstream_source_id": true,
+      "reality_a_admitted": true,
+      "reality_b_admitted": true,
+      "reality_a_has_dqs0": false,
+      "reality_b_has_dqs0": true,
+      "canonical_state_mutated_by_admission": false,
+      "effect_authority": "NONE"
+    },
+    "artifact": {
+      "artifact_id": 9113989856,
+      "artifact_name": "frank-sqlite-manifest-trust-anchor-counterworld-31523441341",
+      "artifact_digest": "sha256:a4f821160257deae540a9ab2512d43257f1f802ba95fa4053c0423cc30a7c36d"
+    }
+  },
+  "adjudication": {
+    "hypothesis_status": "REFUTED_FOR_INDEPENDENT_AUTHORIZATION_CLAIM",
+    "counterhypothesis_status": "SUPPORTED_ON_ACCEPTED_TARGET",
+    "result_status": "RETAIN_TRUST_ANCHOR_GAP_CALLER_CAN_SELECT_DISTINCT_SELF_CONSISTENT_RUNTIME",
+    "mechanism_supported": "V4 strongly validates runtime consistency against the supplied manifest digest, exact mapped library, source id, stdlib origin and isolated no-site loader policy.",
+    "mechanism_not_supported": "No independent owner/deployment trust anchor was shown that constrains which manifest digest is authorized before V4 admission.",
+    "release_promotion": "NO_RELEASE_PROMOTION"
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "delta": "Require a non-caller-selectable production trust anchor for the fixed SQLite manifest/runtime identity before V4 admission can contribute to release acceptance. The trust anchor must be bound by owner/deployment policy or an equivalently non-bypassable artifact identity mechanism and must fail closed on digest substitution, downgrade or library swap.",
+    "affected_components": [
+      "fixed SQLite runtime admission",
+      "UnifiedDB persistence startup",
+      "recovery/boot continuity",
+      "release attestation"
+    ],
+    "rollback": "This receipt changes no production runtime and grants no effect authority; remove/disable only the bounded research workflow if it creates maintenance noise."
+  },
+  "next_discriminating_test": {
+    "priority": "HIGH",
+    "test": "Bind one accepted 3.53.4 manifest digest to a non-caller-selectable deployment trust anchor, wire the exact productive Frank/UnifiedDB persistence entrypoint through that guard, then prove on accepted target that valid boot succeeds while manifest-digest substitution, alternate same-source build, downgrade and library swap all fail closed before persistence opens. Follow with exact crash/restart/WAL persistence evidence on that same admitted runtime."
+  },
+  "non_claims": [
+    "F-V01-13 is not closed.",
+    "The private 3.53.4 candidate is not yet proven to be the productive Frank persistence runtime.",
+    "System Python 3.45.1 is not made safe by the private candidate.",
+    "No whole Frank v0.1 acceptance is claimed.",
+    "No final model training authorization is implied or changed."
+  ],
+  "workspace_delta_recommendation": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "KEEP_IN_PROGRESS_ADD_INDEPENDENT_SQLITE_MANIFEST_TRUST_ANCHOR_OBLIGATION"
+  },
+  "research_disposition": "SUPPORTED_SECURITY_DELTA_NO_RELEASE_PROMOTION",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

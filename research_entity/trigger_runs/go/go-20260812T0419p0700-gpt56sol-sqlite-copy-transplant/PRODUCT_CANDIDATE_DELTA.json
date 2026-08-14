@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260812T0419p0700-gpt56sol-sqlite-copy-transplant",
+  "observed_at": "2026-08-12T04:38:00+07:00",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "program": "FRANK_V0_1",
+  "reasoning_frame": "GRF",
+  "research_parent_head_before_write": "3fdb6185a9873a5a172380387e9d9b4bd79f0831",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "focus": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-01-IDENTITY-SERVER-BINARY"
+  ],
+  "current_product_main": {
+    "sha": "138d6ec70a0b4fb3d2b438766481f6775ce9f495",
+    "copy_transplant_repair": "MERGED_NARROW_PASS_PR_490",
+    "accepted_self_hosted_regression_run": 31537695696,
+    "release_gate_closed": false
+  },
+  "preserved_negative_evidence": {
+    "original_external_admission_run": {
+      "run_id": 31536877295,
+      "outcome": "FAIL_BEFORE_ADMISSION_TESTS",
+      "cause": "actions checkout failed on shared self-hosted workspace; SQLite admission was not executed"
+    },
+    "isolated_fetch_retry": {
+      "run_id": 31537581176,
+      "exact_fetch": "PASS",
+      "deterministic_unit_tests": "PASS",
+      "runtime_admission": "FAIL_CLOSED_EXIT_78",
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "wal_reset_fix_known": true,
+      "observed_rebuilt_library": {
+        "basename": "libsqlite3.so.3.53.4",
+        "size": 5032352,
+        "sha256": "072a00598a03cd9614004bf542920449718746e11d7c41620209be635ed45808"
+      },
+      "policy_expected_prior_overlay_library": {
+        "basename": "libsqlite3.so.3.53.4",
+        "size": 5032360,
+        "sha256": "766647ee994e598c87ebf8827cf065c6880b2f29e8a112db56b564f0a84f973a"
+      },
+      "reason": "SQLite artifact set mismatch: missing=1 unexpected=1",
+      "interpretation": "Matching upstream SQLite version and source-id does not imply a fresh generic rebuild is byte-identical to an earlier build. Binary admission must pin a reproducible release artifact or a fully specified reproducible build, not infer binary identity from source identity."
+    }
+  },
+  "reproducible_runtime_anchor": {
+    "merged_builder_commit": "9c891aa8b076113b21903ac3db0d39a61aec6a91",
+    "builder": "tools/build_private_sqlite_35304_parity_v1.sh",
+    "prior_independent_accepted_target_run": 31533964697,
+    "prior_tested_sha": "0e4a8b31557b808ded0b618be0d05a0e26c83a57",
+    "library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "runtime_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "sqlite_version": "3.53.4",
+    "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "reproducibility": "PASS_TWO_BUILDS_BYTE_IDENTICAL",
+    "capability_parity": "PASS_10_OF_10",
+    "wal_probe": "PASS",
+    "v16_continuity": "PASS",
+    "system_install_performed": false,
+    "production_anchor_provisioned": false
+  },
+  "fresh_candidate": {
+    "branch": "chatgpt/sqlite-repro-admission-current-main-20260812",
+    "candidate_sha": "a8e5fa4f0a4db721a7627da998a7e4e17e0e128c",
+    "workflow": ".github/workflows/sqlite-35304-reproducible-external-admission-vps.yml",
+    "accepted_self_hosted_run": 31538571452,
+    "run_conclusion": "SUCCESS",
+    "artifact_id": 9119774779,
+    "artifact_digest": "sha256:55283e70864d3e24684913aebf1daae4708bac1d92828c3c03012f3d9221a0ff",
+    "result": {
+      "protocol": "FRANK_SQLITE_35304_REPRODUCIBLE_EXTERNAL_ADMISSION_V1",
+      "status": "PASS",
+      "positive_external_pin_admitted": true,
+      "one_nibble_wrong_hash_rejected": true,
+      "observed_library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+      "observed_library_size": 1680880,
+      "observed_runtime_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+      "observed_sqlite3_extension_sha256": "b30bc4b6a8fa3c80fa0ff79b752e811ffda985497155501691c1d169b289b238",
+      "frank_database_opened": false,
+      "system_install_performed": false,
+      "production_anchor_provisioned": false,
+      "canonical_state_mutated": false,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    },
+    "pull_request": {
+      "number": 496,
+      "state_at_observation": "OPEN",
+      "merged": false,
+      "base": "main",
+      "base_sha": "138d6ec70a0b4fb3d2b438766481f6775ce9f495",
+      "head_sha": "a8e5fa4f0a4db721a7627da998a7e4e17e0e128c"
+    }
+  },
+  "grf": {
+    "observed_anchors": [
+      "Generic same-source rebuild failed exact binary admission on the accepted self-hosted target.",
+      "A merged path-independent parity builder had already demonstrated two-build byte reproducibility and capability parity on that target.",
+      "Accepted-target productive parent discovery still reports zero productive Frank systemd parent candidates."
+    ],
+    "generated_reality": "The merged reproducible parity builder can reconstruct the prior independently pinned SQLite runtime identity and therefore support real external binary admission without learning the admitted hash from the same run.",
+    "strongest_counter_reality": "Toolchain, host, source packaging or build-environment drift changes the rebuilt library or loaded artifact set, so the prior independent binary identity no longer matches and admission must fail closed.",
+    "discriminating_test": "On a fresh current-main branch, exact-fetch the tested SHA on the accepted self-hosted lane, rebuild via the merged parity builder, compare library and runtime-manifest hashes against the prior independent successful run, inspect the actually loaded SQLite library and system _sqlite3 extension, and require a one-nibble wrong-hash control to reject.",
+    "predicted_if_hypothesis_right": "Prior independent library+manifest pins reproduce exactly; loaded runtime matches them; positive admission passes; wrong-hash control rejects.",
+    "predicted_if_counter_reality_right": "Rebuild or loaded artifact identity differs and the workflow fails closed before any production mutation.",
+    "actual": "HYPOTHESIS_SUPPORTED: run 31538571452 SUCCESS with exact prior library+manifest hashes, exact loaded runtime identity, and wrong-hash rejection.",
+    "collapse": "PROMOTE_REPRODUCIBLE_EXTERNAL_ARTIFACT_ADMISSION_MECHANISM_ONLY",
+    "confidence": "HIGH_FOR_THIS_EXACT_SELF_HOSTED_BUILD_AND_ADMISSION_PATH; LOW_FOR_PRODUCTIVE_SERVICE_START_UNTIL_PROVISIONED"
+  },
+  "bounded_unusual_experiment": {
+    "macrocycle_total": 1,
+    "already_recorded": "REGULAR_COPY_SIBLING_GUARD_TRANSPLANT",
+    "additional_unusual_experiment_count": 0,
+    "note": "All later tests in this delta are ordinary deterministic validation/negative controls, not additional GO unusual experiments."
+  },
+  "remaining_release_frontier": {
+    "accepted_target_parent_evidence": "NO_PRODUCT_SYSTEMD_PARENT_OBSERVED",
+    "source_research_commit": "3fdb6185a9873a5a172380387e9d9b4bd79f0831",
+    "product_candidate_unit_count": 0,
+    "release_gate": "FAIL_CLOSED_NO_ADMITTED_PRODUCT_PARENT",
+    "next_discriminator": "Canonically bind one ProductStart tuple and release-bundle identity, provision it through an authorized root-owned path, then prove exact productive start plus restart/recovery/rollback while copied/stale/sibling/downgrade/library-swap variants fail closed before any writable Frank persistence open."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED",
+    "proposal": [
+      "Use the merged reproducible parity builder/runtime manifest as the SQLite binary identity source for ProductStart/release admission; do not use an unconstrained fresh autoconf rebuild as a proxy for a previously admitted binary.",
+      "Keep source/version/source-id checks as necessary upstream evidence, but separate them from exact binary artifact admission.",
+      "Compose this artifact identity with the ProductStart/systemd parent gate and productive root-owned release-bundle identity before release promotion."
+    ]
+  },
+  "outcome": "RETAIN_AND_REENTER_F_V01_13",
+  "promotion": "MECHANISM_SUPPORTED_RELEASE_STILL_BLOCKED",
+  "nonclaims": [
+    "No productive /opt or /etc provisioning",
+    "No productive Frank systemd parent observed or installed",
+    "No productive root trust anchor provisioned",
+    "No Frank database opened by the fresh candidate",
+    "No restart/recovery/rollback acceptance",
+    "No F-V01-13 closure",
+    "No whole Frank v0.1 acceptance",
+    "No Frank Harness or effect-authority mutation",
+    "No final-model training authorization"
+  ]
+}

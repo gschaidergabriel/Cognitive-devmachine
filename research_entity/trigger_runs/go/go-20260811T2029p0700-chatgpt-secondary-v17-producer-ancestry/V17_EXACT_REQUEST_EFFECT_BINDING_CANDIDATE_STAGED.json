@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "event_type": "GO_RESEARCH_CANDIDATE_STAGED",
+  "run_id": "go-20260811T2029p0700-chatgpt-secondary-v17-producer-ancestry",
+  "created_at_local": "2026-08-11T21:58:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "topic": "Exact interactive request-to-effect provenance prerequisite for safe response replay",
+  "status": "STAGED_TARGET_UNVERIFIED",
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "worker_is_frank": false,
+    "target_native_identity": "self.root",
+    "human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "measured_parent_gap": {
+    "clay_fusion_commit": "5a66948f84b9e579bdae071e1a95b8ef859192aa",
+    "target_run": 31502734782,
+    "target_job": 93816597675,
+    "status": "PASS_CURRENT_V17_REQUEST_EFFECT_ANCESTRY_AMBIGUITY_REPRODUCED",
+    "finding": "Two distinct V16 requests in one execution both match the current V17 execution-generation ancestry for one effect; current durable state has no exact request_key_hash-to-effect_id edge even though the effect reaches DONE_VALID."
+  },
+  "candidate_branch": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_pr": 331,
+    "branch": "chatgpt/go-v17-fixed-sqlite-composition-20260811",
+    "promotion_state": "DRAFT_ONLY"
+  },
+  "candidate_components": [
+    {
+      "path": "runtime/api/frank_token_ingress_request_capability_candidate.py",
+      "role": "Trusted ingress wrapper mints a sealed process-local request capability only for a newly durable ADMITTED request on a live execution; durable REPLAY receives no new effect authority.",
+      "authority": "Capability revalidates exact V16 request row plus live physical lease, execution, epoch, credential, session and client on every use."
+    },
+    {
+      "path": "runtime/state/interactive_request_effect_binding_candidate.py",
+      "role": "Persists immutable exact request_key_hash <-> effect_id ancestry after reservation and before ATTEMPT_STARTED; combines request capability with existing ExecutionGenerationFence.",
+      "scope": "Interactive direct-token effects only; autonomous/internal effects retain separate provenance paths."
+    },
+    {
+      "path": "tests/effect_reentry_v17_request_effect_binding_candidate.py",
+      "role": "Ordinary positive/negative provenance and authority repair gate."
+    },
+    {
+      "path": ".github/workflows/frank-v17-request-effect-binding-vps.yml",
+      "role": "Scoped self-hosted Linux/X64 target gate behind V2-admitted private SQLite 3.53.4."
+    }
+  ],
+  "required_target_falsifiers_before_support": [
+    "request A and request B are both newly admitted in the same execution and receive distinct live request capabilities",
+    "durable replay of request A receives no newly minted request capability",
+    "direct construction of a request capability without trusted seal is denied",
+    "one effect is immutably bound to request A before ATTEMPT_STARTED",
+    "request B in the same execution cannot rebind or begin request A's effect",
+    "request A can begin exactly one ATTEMPT_STARTED and the effect can still reach V17 DONE_VALID",
+    "execution-generation-only ancestry still observes both requests while exact request-effect binding observes exactly one",
+    "after execution release request A's old request capability is dead",
+    "a new execution/request cannot reuse the old request-effect binding",
+    "integrity_check is ok and foreign_key_check is empty",
+    "no external effect, no canonical database mutation, no second GO OOB"
+  ],
+  "response_replay_gate": {
+    "ready": false,
+    "reason": "Do not add replayable result/response receipts until exact request-effect ancestry itself has an accepted target receipt.",
+    "future_invariant": "A replay receipt may consume exact request-effect ancestry plus verified effect outcome and V17 terminal truth, but must never create effect truth or provider authority.",
+    "crash_semantics": "If no response/result receipt existed before a crash, do not invent historical response bytes. Expose a typed recovered verified outcome or no-response-receipt state instead."
+  },
+  "go_oob_accounting": {
+    "current_worker_macrocycle_distinct_oob_count": 1,
+    "current_worker_macrocycle_oob": "CROSS_CHAIN_SUPPORT_SPLICE",
+    "candidate_added_oob": false
+  },
+  "promotion": {
+    "target_execution_verified": false,
+    "architecture_delta_status": "STAGED_CANDIDATE",
+    "canonical_merge_authorized": false,
+    "training_authorized": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  }
+}

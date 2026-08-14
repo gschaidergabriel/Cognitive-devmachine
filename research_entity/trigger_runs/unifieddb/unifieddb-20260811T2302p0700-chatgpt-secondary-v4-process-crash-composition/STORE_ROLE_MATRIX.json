@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.1",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "decision": "LOGICALLY_UNIFIED_PHYSICALLY_LAYERED",
+  "stores": [
+    {
+      "store": "UnifiedDB",
+      "role": "AUTHORITATIVE_SEMANTIC_STATE",
+      "physical_candidate": "pinned SQLite 3.53.4 behind V4 admission",
+      "owns": ["typed state", "epochs", "provenance", "transactions", "replay", "effect/re-entry receipts", "selection lineage"],
+      "truth_authority": true,
+      "rebuildable": false
+    },
+    {
+      "store": "ClayGraph",
+      "role": "DERIVED_REBUILDABLE_TOPOLOGY",
+      "physical_candidate": "separate SQLite projection",
+      "owns": ["semantic dependency edges", "loop topology", "organ lineage", "GWT/receiver/causal edges", "dynamic projections"],
+      "truth_authority": false,
+      "rebuildable": true
+    },
+    {
+      "store": "RecoveryFloor",
+      "role": "KEEP_ISOLATED_ROLLBACK_DOMAIN_WITNESS",
+      "physical_candidate": "independently verified monotonic durable witness",
+      "owns": ["minimum admitted lineage generation/epoch/root reference"],
+      "truth_authority": "RECOVERY_ADMISSION_ONLY",
+      "rebuildable": false,
+      "reason_for_isolation": "a rollback witness only inside the same UnifiedDB rollback domain cannot detect rewind of that domain"
+    },
+    {
+      "store": "Vector_FTS_RetrievalSidecars",
+      "role": "DERIVED_CANDIDATE_RETRIEVAL",
+      "physical_candidate": "specialized sidecars",
+      "owns": ["candidate ids", "scores", "approximate retrieval acceleration"],
+      "truth_authority": false,
+      "rebuildable": true,
+      "admission_rule": "candidate ids must resolve back to current authoritative UnifiedDB identities before use"
+    },
+    {
+      "store": "LargeArtifacts_ModelTensorBacking",
+      "role": "KEEP_ISOLATED_PHYSICAL_BACKING",
+      "truth_authority": false,
+      "rebuildable": "BY_ARTIFACT_POLICY",
+      "reason_for_isolation": "size, access pattern and failure domain do not justify forcing all physical data into one transactional file"
+    }
+  ],
+  "forbidden_promotions": [
+    "ClayGraph activation -> truth",
+    "retrieval score -> truth",
+    "SQLite engine identity -> UnifiedDB semantic authority",
+    "one green process-crash run -> power-loss durability",
+    "physical consolidation -> semantic simplification without differential evidence"
+  ]
+}

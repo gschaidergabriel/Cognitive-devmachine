@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0415p0700-gpt56sol-sqlite-pwd-negative",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T04:15:19+07:00",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "21f31e4f59dd9f92f89d5b72fe5666a788211659",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "985f8370a6a6047d9962206f4fb6f2c049f4d370",
+  "frontier_selection": {
+    "workspace_blocker": "SQLite/WAL release remains open until the exact productive fixed runtime, trusted parent/service boundary, and recovery semantics are proven.",
+    "duplicate_avoidance": "Fresh main already contained SQLite 3.53.4 reproducible parity work plus PATH, loader-environment and file-symlink launcher hardening, while multiple overlapping draft lanes were already testing systemd parent, mapped inode and artifact authority boundaries.",
+    "selected_uncovered_question": "Can an attacker forge inherited PWD so a relative V5 launcher computes SELF_PATH in an attacker-controlled sibling directory despite executing trusted launcher bytes?"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+      "finding": "The WAL-reset corruption bug affects SQLite through 3.51.2 and requires WAL plus multiple connections with concurrent write/checkpoint activity; fixed in 3.51.3 and later, with specified backports."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "SQLite 3.53.4 is post-fix and publishes source identity 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc; version alone still does not attest Frank's productive loaded object."
+    }
+  ],
+  "observed_reality": {
+    "launcher_path": "runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v5_launcher.sh",
+    "relevant_logic": "relative invocation sets SELF_PATH=$PWD/$0 after replacing inherited PATH; file-level symlink launcher paths are denied before sibling guard resolution.",
+    "current_main_latest_sqlite_change": "#476 rejects file-level V5 launcher symlink transplant and explicitly leaves F-V01-13 open.",
+    "sandbox_checkout": "BLOCKED_NO_NETWORK: container could not resolve github.com; exact repo checkout was not available locally."
+  },
+  "grf": {
+    "generated_reality": "If /bin/sh trusts a caller-supplied false PWD, trusted relative launcher execution could redirect sibling GUARD resolution into a foreign directory without a file-level symlink.",
+    "strongest_counter_reality": "The shell canonicalizes or repairs PWD to the actual current directory before executing the script, making this proposed bypass unreachable on the observed shell.",
+    "falsifier": "Execute a disposable shell script through /bin/sh from a trusted directory while exporting PWD to a distinct attacker-controlled directory and observe the script-visible PWD/derived SELF path.",
+    "collapse": "COUNTER_REALITY_SUPPORTED_LOCALLY; NO PRODUCT PATCH JUSTIFIED FROM THIS BRANCH."
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "FORGED_PWD_RELATIVE_LAUNCH_SIBLING_REDIRECT",
+    "classification": "BOUNDED_LOCAL_SHELL_COUNTERWORLD",
+    "scope": "disposable /tmp directories only; no Frank state, service, provider, Harness or external effect",
+    "baseline": "trusted script executed from its real directory",
+    "intervention": "export PWD=<distinct evil directory> and invoke /bin/sh ./show.sh from the trusted directory",
+    "observed": {
+      "script_visible_pwd": "actual trusted working directory, not injected evil directory",
+      "derived_self": "actual trusted working directory/./show.sh",
+      "result": "PWD_POISON_NOT_REPRODUCED_ON_LOCAL_BIN_SH"
+    },
+    "interpretation": "The local /bin/sh implementation repaired PWD, so this specific proposed sibling-resolution bypass was not supported.",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "ordinary_regression": {
+    "kind": "semantic mirror of current launcher logic, not exact checkout",
+    "checks": [
+      "hostile PATH dirname helper not executed",
+      "file-level symlink launcher transplant returns 78 and reports SYMLINK_LAUNCHER_PATH"
+    ],
+    "status": "PASS_LOCAL_SEMANTIC_MIRROR",
+    "claim_boundary": "Does not replace exact-main or accepted-target receipts."
+  },
+  "architecture_delta": {
+    "status": "NO_CHANGE",
+    "reason": "The discriminating PWD-poison counterworld was not reproduced; adding a new PWD-specific guard would increase complexity without evidence of a reachable failure on the observed shell.",
+    "retained_obligations": [
+      "prove exact productive Frank service maps/uses an accepted fixed SQLite object",
+      "prove trusted pre-exec parent/service environment and artifact identity",
+      "prove restart/rollback/downgrade/library-swap continuity",
+      "prove provenance-bound semantic lineage recovery"
+    ],
+    "next_falsifier": "Run the same PWD-relative-launch discriminator on the exact accepted Hostinger /bin/sh only if product startup actually permits relative launcher invocation; otherwise prefer proving the productive systemd ExecStart is absolute and root-anchored."
+  },
+  "authority": {
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "canonical_frank_state_mutated": false,
+    "product_repo_mutated": false,
+    "training_authorized": false
+  },
+  "outcome": "RETAIN_NEGATIVE_RESULT_NO_CHANGE"
+}

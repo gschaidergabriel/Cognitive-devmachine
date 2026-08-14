@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "routes":[
+    {"query_class":"AUTHORITATIVE_READ_WRITE","route":"UnifiedDB","worker_dependency":"NONE","rule":"projection backlog never demotes source truth"},
+    {"query_class":"CONSEQUENTIAL_GRAPH_READ","route":"ClayGraph","admission":["exact projection event-set/root","current relation equivalence","no hash divergence"],"on_lag":"FAIL_CLOSED"},
+    {"query_class":"PROJECTOR_WORK","route":"ordered PENDING ProjectionEvents","scheduler":"current UnifiedDB lease generation only","batch":"bounded"},
+    {"query_class":"WORKER_HEALTH","route":"UnifiedDB worker state + derived currentness measurement","outputs":["health","pressure","pending_events","lag_epochs","oldest_pending_age","generation"]},
+    {"query_class":"BACKPRESSURE_ACTION","route":"deterministic policy","HARD":"throttle/pause derived-dependent producers","authoritative_writes":"continue"},
+    {"query_class":"CRASH_RECOVERY","route":"wait for live lease expiry -> acquire newer generation -> idempotent replay -> exact-current admission"}
+  ],
+  "fail_closed":["live foreign lease collision","stale fencing generation","graph lag","graph extra event","payload hash conflict","unknown schema/epoch"],
+  "not_claimed":["multi-host lease clock safety","external broker semantics","production service boot"]
+}

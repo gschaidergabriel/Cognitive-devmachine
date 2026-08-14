@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.1",
+  "result_id": "GO-2026-08-12-CLAYCODE-CORPUS-AUTHORITY-PR556",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-02",
+  "state": "TESTING",
+  "generated_at": "2026-08-12T15:34:00Z",
+  "observed_anchors": {
+    "frank_repo": "gschaidergabriel/Dr.-Unterweger",
+    "fresh_main_base": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "final_candidate_head": "c2bec73425855c2a4b83e450cb8149f279295355",
+    "pull_request": 556,
+    "pull_request_state": "DRAFT",
+    "historical_pre_projection_reference": "5ec9955775d9bf142e327166990a2228d543c071",
+    "projection_outbox_introduction": "72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "projection_worker_introduction": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5"
+  },
+  "generated_reality_hypothesis": "A frozen explicit source manifest anchored to the pre-projection 40-source frontier plus one shared fail-closed selector prevents filesystem discovery/parser acceptance from silently minting ClayCode corpus authority.",
+  "strongest_counter_reality": "A manifest can become stale or self-authorizing; moving its reference or changing its membership could merely relocate the authority ambiguity instead of solving it.",
+  "mechanism": {
+    "manifest": "claycode/CLAYCODE_CORPUS_AUTHORITY_V1.json",
+    "selector": "runtime/claycode_eval_v1/corpus_authority.py",
+    "shared_consumers": [
+      "runtime/claycode_eval_v1/corpus_probe.py",
+      "tests/claycode_analyzer_call_surface_coverage_gate.py",
+      "tests/claycode_corpus_count_semantics_gate.py",
+      ".github/workflows/claycode-frontier-current-main-composition-vps.yml"
+    ],
+    "authority_workflow": ".github/workflows/claycode-corpus-authority-v1-vps.yml",
+    "fail_closed_on": [
+      "unclassified newly discovered .clay source",
+      "missing authorized source",
+      "reference commit drift",
+      "reference-tree membership mismatch",
+      "authorized/excluded overlap",
+      "malformed authority manifest"
+    ],
+    "reference_commit_double_bound_in_manifest_and_selector": true,
+    "reference_membership_proven_by_git_ls_tree": true,
+    "all_clay_source_changes_trigger_authority_ci": true
+  },
+  "intended_unusual_experiment": {
+    "name": "UNCLASSIFIED_PARSEABLE_CORPUS_INFLATION",
+    "execution_class": "OFFLINE_IN_MEMORY_PREDICATE_COUNTERWORLD",
+    "baseline": "36 parsed / 6 rejected / 42 discovered; 429 unique unresolved / 464 occurrences",
+    "treatment": "add one hypothetical syntactically accepted but non-authorized inert source -> 37 parsed / 6 rejected / 43 discovered; unresolved frontier unchanged",
+    "observed_result": "old composed frontier predicate accepted baseline and treatment",
+    "interpretation": "supports a corpus-authority blindspot at predicate level; does not prove any arbitrary source is parseable",
+    "committed_regression_replays_same_condition": true,
+    "new_unusual_experiments_in_authority_regression": 0
+  },
+  "go_protocol_deviation": {
+    "exactly_one_unusual_experiment_invariant_satisfied": false,
+    "cause": "A pre-existing automatically triggered ClayCode Frontier Current-Main Composition workflow executed its own separate CORPUS_GHOST_APPEND synthetic OOB before the inherited step was noticed.",
+    "second_experiment_intentionally_initiated_by_this_worker": false,
+    "negative_result_preserved": true,
+    "repair": "Removed the inherited CORPUS_GHOST_APPEND GO-OOB step from current-main composition; authority inflation remains covered by ordinary deterministic regression.",
+    "further_unusual_experiments_after_detection": 0,
+    "promotion_consequence": "Do not claim this macro-cycle satisfied the exactly-one GO experiment law. Keep PR/testing state bounded and visible."
+  },
+  "final_exact_head_evidence": {
+    "authority_workflow_run": 31613977937,
+    "tested_exact_head": "c2bec73425855c2a4b83e450cb8149f279295355",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "provenance_limit": "runner identity is execution provenance only; it does not prove accepted Hostinger product-host identity",
+    "status": "PASS",
+    "immutable_reference_tree": {
+      "reference_commit": "5ec9955775d9bf142e327166990a2228d543c071",
+      "historical_clay_sources": 40,
+      "manifest_authorized_sources": 40,
+      "exact_membership_match": true
+    },
+    "authority_checks": "12/12",
+    "discovered": 42,
+    "authorized": 40,
+    "explicitly_excluded": 2,
+    "excluded_sources": [
+      "frank_unifieddb_projection_outbox_v1.clay",
+      "frank_unifieddb_projection_worker_v1.clay"
+    ],
+    "unclassified": 0,
+    "missing_authorized": 0,
+    "selected_parsed": 36,
+    "selected_rejected": 4,
+    "selected_total": 40,
+    "selected_coverage_percent": 90.0,
+    "unresolved_unique_names": 429,
+    "unresolved_occurrences": 464,
+    "call_surface": "PASS",
+    "count_semantics": "PASS"
+  },
+  "final_current_main_composition_evidence": {
+    "workflow_run": 31613978002,
+    "status": "PASS_CURRENT_MAIN_COMPOSED_AUTHORIZED_FRONTIER",
+    "current_main_sha": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "pr_head_sha": "c2bec73425855c2a4b83e450cb8149f279295355",
+    "merge_rc": 0,
+    "frontier_scope_count": 40,
+    "authority_status": "PASS",
+    "authority_counts": {
+      "discovered": 42,
+      "authorized": 40,
+      "excluded_observed": 2,
+      "unclassified": 0,
+      "missing_authorized": 0
+    },
+    "frontier_parsed": 36,
+    "frontier_total": 40,
+    "coverage_percent": 90.0,
+    "unresolved_unique_names": 429,
+    "unresolved_occurrences": 464,
+    "decide_effect_requests_compared": 200576,
+    "decide_effect_mismatches": 0,
+    "confirmation_mismatches": 0,
+    "hash_mismatches": 0,
+    "ordinary_parser_calls_missed": 0,
+    "frank_effects_unresolved": 0,
+    "package_namespace": "PASS"
+  },
+  "other_final_head_evidence": {
+    "claycode_frontier_integration": "PASS",
+    "claycode_runtime_nominal_boundary": "PASS",
+    "claycode_package_import": "PASS",
+    "claycode_ambiguous_variant_fail_closed": "PASS",
+    "claycode_wp04_wp06_c_admission_barrier": "PASS",
+    "claycode_opaque_parser_fidelity": "PASS",
+    "frank_self_root_current_head": "PASS",
+    "frank_execution_gate": "PASS",
+    "frank_fresh_main_effect_fence_provider_contract": "PASS"
+  },
+  "negative_and_blocked_evidence": {
+    "pre_fix_current_main_composition": "FAIL because legacy workflow still defined frozen frontier as all 42 PR-head .clay files; repaired to authority-selected 40 and rerun PASS",
+    "frank_deep_integrity": "NOT_EXECUTED_INFRA_BLOCKED",
+    "frank_deep_integrity_detail": "GitHub check created no runner/steps and annotated recent account payment failure or spending-limit requirement. This is not treated as PASS or product counterevidence.",
+    "merge_performed": false,
+    "promotion_allowed": false
+  },
+  "predicted_observations": {
+    "if_hypothesis_right": "unclassified filesystem additions fail closed before changing the canonical denominator and composed exact-head/current-main gates preserve the 36/40, 429/464 authorized frontier",
+    "if_counter_reality_right": "a future authority-relevant change can alter membership/denominator without explicit reviewed reclassification or a composed gate can bypass the selector"
+  },
+  "next_falsifiers": [
+    "rerun Frank Deep Integrity after GitHub billing/spending infrastructure permits job start",
+    "explicit owner/research adjudication if either excluded UnifiedDB projection candidate should become language-corpus-authorized",
+    "future all-clay source addition must demonstrate unclassified fail-closed behavior in ordinary CI without a new GO OOB",
+    "accepted Hostinger runtime evidence remains separate and required for product acceptance"
+  ],
+  "outcome": "RETAIN_SUPPORTED_CANDIDATE_BLOCKED_FROM_PROMOTION",
+  "claim_boundary": {
+    "language_semantics_promoted": false,
+    "host_bindings_authorized": false,
+    "effect_authority_minted": false,
+    "frank_harness_mutated": false,
+    "whole_f_v01_02_complete": false,
+    "accepted_hostinger_vps_proven": false,
+    "whole_frank_v0_1_acceptance": false,
+    "final_training_authorized": false
+  }
+}

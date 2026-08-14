@@ -1,16 +1,13 @@
 name: ClayCode autonomous FREE_ONLY research
 
+# FREE_ONLY fail-closed pause (2026-08-12): GitHub-hosted ubuntu-latest jobs are
+# currently rejected before runner allocation by an account billing/spending-limit
+# block (runs 31548258330 and 31555133561). Do not buy capacity or raise limits.
+# Keep explicit dispatch available for a future verified zero-cost execution surface;
+# restore schedule/push only after supervisor evidence shows the selected runner path
+# is currently available without paid fallback.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '13 * * * *'
-  push:
-    paths:
-      - 'research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json'
-      - 'tools/claycode_autonomous_cycle.py'
-      - 'tools/mistral_inference.py'
-      - 'tools/nvidia_inference.py'
-      - '.github/workflows/claycode-autonomous-research.yml'
 
 concurrency:
   group: claycode-autonomous-free-only-${{ github.ref }}

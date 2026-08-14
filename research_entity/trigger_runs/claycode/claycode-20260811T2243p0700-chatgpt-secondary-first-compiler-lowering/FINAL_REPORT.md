@@ -1,45 +1,72 @@
-# ClayCode run — first bounded compiler/lowering
+# ClayCode run — bounded compiler/lowering frontier
 
 Run: `claycode-20260811T2243p0700-chatgpt-secondary-first-compiler-lowering`
 
 ## Result
 
-A first real compiler/lowering candidate now exists as target PR `Dr.-Unterweger#364`, rebuilt directly from fresh target main `a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3` after the executable evaluator was merged. The earlier stacked PR #362 was closed as stale rather than promoted.
+The ClayCode compiler frontier now has three deliberately separate lanes:
 
-The candidate lowers only `frank.effects::decide_effect` plus its reachable Clay function `destructive_guard_complete` into deterministic CPython AST/code. This is deliberately narrower than the parser/evaluator surface.
+- PR #369: bounded nominal type admission;
+- PR #364: CPython-AST reference/differential backend;
+- PR #366: native C11/shared-object backend candidate.
 
-## Why this lane
+This separation is intentional. ClayCode remains semantic authority. The Python and C artifacts are compiled projections, not independent semantic architectures.
 
-Current target evidence already supports execution of the pure effect-policy subset on the accepted Ubuntu VPS: 200,576 differential requests, zero mismatches, plus package-origin and fail-closed/purity gates. The remaining F-V01-02 compiler/lowering gap was not covered by an active fresh-main lane.
+## Accepted evidence
 
-## Hypothesis / counterhypothesis
+The existing executable evaluator substrate from PR #310 already has target evidence for 200,576 `decide_effect` comparisons with zero mismatch.
 
-Hypothesis: an already evidenced pure ClayCode subset can be compiled without semantic drift or new authority.
+PR #369 reached `PASS_CLAYCODE_NOMINAL_TYPECHECK_V1_GATE` on the accepted Linux/X64 target with 12/12 checks. It statically rejects Bool-vs-Int equality, comparison chains, wrong argument/return/condition types, ambiguous variants and untyped host intrinsics. It is a bounded type-admission candidate, not WP04 completion.
 
-Counterhypothesis: a host-AST backend simply imports Python coercions/semantics and becomes a second semantic architecture.
+PR #364 produced a real target-supported Python-AST lowering mechanism on run `31510276958`: 12/12 checks, 200,576 three-way comparisons, zero mismatch, capability-surface audit PASS, adversarial host-capability AST graft detected, comparison chains and Bool/Int host coercion fail closed. The paired warm shadow measured 15,777.25 ns/call for the evaluator versus 7,196.48 ns/call for the compiled backend, about 2.192x evaluator/compiled ratio. This speed shadow is not a promotion gate.
 
-The candidate therefore refuses intrinsic-reachable entries, unknown AST nodes and multi-relation comparison chains; it does not select Bool/Int equality semantics; it exposes no authority-minting or external-effect binding; and its target gate compares the source evaluator, compiled backend and shipping Python policy reference on the same request corpus.
+PR #366 independently produced native C11 lowering evidence on run `31509419897`: 8/8 checks, 200,576 comparisons, zero mismatch, deterministic generated C and shared-object identities. It is a bounded WP06 mechanism candidate, not WP06 completion.
 
-## External refresh
+## No backend winner yet
 
-Python 3.12's documented AST/code-object compilation path is used only as a bootstrap backend. Current Cranelift remains a later native-code competitor, not an immediate replacement: adopting a second IR/codegen stack before ClayCode type/effect semantics are broader and frozen would add implementation surface without resolving the current semantic uncertainty.
+The accepted Python-AST and C runs do not share identical source/grammar/analyzer/evaluator ancestry and their performance scopes are not matched. Therefore no honest backend winner can be selected yet. The next discriminating comparison must run both backends behind the same accepted nominal type boundary, source ancestry, target, request corpus and matched warm benchmark.
 
-## Mesh fusion
+## Python-backend counterhypothesis hardening
 
-The current UnifiedDB/ClayGraph V2 composition evidence requires canonical production state to remain unopened/unmigrated pending explicit migration/recovery gates. This compiler run is therefore source/value-only and performs no UnifiedDB/ClayGraph canonical mutation. ClayCode remains semantic authority; backend code is a projection.
+The strongest counterhypothesis is that a Python-AST backend imports host semantics or host capabilities and becomes a second architecture.
 
-## Target state
+The run therefore hardened #364 beyond simple result equality:
 
-PR: `Dr.-Unterweger#364`
+- cross-runtime Bool/Int equality is refused instead of inheriting Python `True == 1` behavior;
+- multi-relation comparison chains remain unresolved/fail-closed;
+- intrinsic-reachable entries fail closed;
+- emitted AST/global capability surface is audited;
+- an adversarial `os.system` AST graft must be detected;
+- semantic sabotage must turn the differential red;
+- source parameters/locals using reserved backend prefix `__clay_` are rejected;
+- unbound Clay paths must never fall through to Python globals;
+- Clay local bindings must resolve before same-spelled sum variants;
+- conditional branch-local bindings are conservatively not promoted to definite outer bindings.
 
-Head: `bef7686f909f9d87d59f33731f0f7241e78bc2fe`
+## Preserved negative result
 
-Workflow run: `31508447693`
+Fresh-current target run `31511909950` tested synthetic merge `a46cb8abf8e99b645a7a9261c83348ed7fcafdd5`, binding the PR into target main `9085f0b3e2be364759d5d8a9d3a08bb71ca06b44`.
 
-State at report write: `QUEUED`
+The reserved-binding gate passed and rejected both helper-parameter and generated-function-local shadowing. The next path-resolution gate failed before semantic execution with `ModuleNotFoundError: No module named 'runtime'`. This is classified as a test-harness path bug, not compiler counterevidence; the main differential gate was consequently skipped.
 
-No compiler PASS or F-V01-02 subcheck promotion is claimed until the exact target receipt is observed.
+The repair is intentionally minimal: the test now inserts the repository root into `sys.path`, and the workflow additionally invokes the scope gate with `PYTHONPATH=$TREE` and Python `-P`. Current repaired head observed during this report is `06051ce66e02361238987e250fbc3b2f02e8f95f`.
+
+## Current replay
+
+Current target main at refresh: `9085f0b3e2be364759d5d8a9d3a08bb71ca06b44`.
+
+Fresh-current repaired target run: `31512274848`, job `93848790327`.
+
+State at report refresh: `QUEUED`.
+
+Until that exact current composition passes, #364 remains draft and the hardened reference backend is not promoted as current-main merge evidence. The earlier green run remains valid mechanism evidence only.
+
+## Research consequence
+
+The architecture delta is `SUPPORTED_DUAL_BACKEND_MECHANISMS_WITH_HARDENED_REFERENCE_BACKEND_PENDING_FRESH_CURRENT_REPLAY`.
+
+No ClayCode language semantic change was selected. No canonical UnifiedDB/ClayGraph state was mutated. No external effect or authority was minted. No WP04/WP06/general compiler/runtime/FFI completion, whole Frank v0.1 acceptance, or training authorization is claimed.
 
 ## Next falsifier
 
-Require the exact target head to complete the 10-check gate with zero three-way mismatches across 200,576 requests. If green, inspect resource shadow and generated-AST identity, then promote only this bounded lowering slice. If red, preserve the failure and repair the smallest falsified boundary rather than expanding compiler scope.
+Require the repaired exact current #364 replay to pass reserved-binding 2/2, path/scope 5/5, compiler 12/12 and 200,576/0 differential cases. Then compare Python-AST and C only on one matched accepted type/source/base ancestry before choosing any backend.

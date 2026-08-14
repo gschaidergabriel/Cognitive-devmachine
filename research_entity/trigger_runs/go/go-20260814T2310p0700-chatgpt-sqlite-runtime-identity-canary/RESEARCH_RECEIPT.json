@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260814T2310p0700-chatgpt-sqlite-runtime-identity-canary",
+  "created_at": "2026-08-14T23:10:20+07:00",
+  "organ": "gpt-5.6-sol temporary Clay worker",
+  "program": "FRANK_V0_1",
+  "scope": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY"
+  ],
+  "observed_anchors": [
+    "Current FRANK_V0_1_WORKSPACE keeps F-V01-13 IN_PROGRESS and states that accepted target reports SQLite 3.45.1 while Frank uses WAL; release remains fail-closed until fixed/backported runtime, upgraded fixed runtime, or machine-checked unreachable trigger topology is proven.",
+    "Concurrent go receipt go-20260814T2308p0700-chatgpt-unifieddb-root-repair reports sqlite_wal_preflight/storage target-CI PASS for repaired branches but explicitly makes no whole-Frank acceptance claim and leaves downstream stack recomposition as its next falsifier.",
+    "Repository code-search/index queries for sqlite3_libversion/sqlite_source_id did not provide sufficient evidence to establish or refute exact productive runtime-library attestation. Search absence is preserved as UNKNOWN, not evidence of code absence."
+  ],
+  "grf_candidate": {
+    "generated_reality": "A version-only or otherwise weak SQLite runtime preflight can accept a same-version but different build/library, so version evidence alone cannot establish the exact persistence runtime identity required by the release gate.",
+    "strongest_counter_reality": "The productive Frank persistence path already binds the loaded SQLite source/build/library identity and has a negative downgrade/library-swap test; repository search simply failed to surface it.",
+    "hidden_assumption": "A same-version library substitution is materially possible at the runtime linking/import boundary and is not already prevented by a stronger owner-pinned artifact policy.",
+    "falsifier": "Show current productive-path code plus accepted-target receipt that binds the loaded SQLite runtime to an owner-accepted source/build/artifact identity and rejects a controlled same-version substitution before persistence becomes authoritative.",
+    "outcome": "RETAIN_AS_TEST_OBLIGATION"
+  },
+  "unusual_experiment": {
+    "count_in_this_go_cycle": 1,
+    "name": "same-version library-swap canary",
+    "class": "bounded synthetic local model; no production mutation",
+    "baseline": "accept when reported SQLite version equals trusted version",
+    "intervention": "substitute synthetic runtime metadata with identical version but different source_id, resolved library path and artifact hash",
+    "hardened_candidate": "accept only when version, source_id, resolved library path and artifact hash all match the trusted manifest",
+    "observed": {
+      "baseline_trusted": true,
+      "baseline_same_version_swap": true,
+      "bound_trusted": true,
+      "bound_same_version_swap": false,
+      "assertions": "PASS"
+    },
+    "interpretation": "Synthetic evidence only: a version-only predicate cannot discriminate a same-version swap, while a bound manifest can. This does not establish the current Frank implementation or accepted-VPS behavior.",
+    "rollback": "No repository/runtime/state mutation occurred in the experiment."
+  },
+  "test_obligation": {
+    "target": "accepted Hostinger Ubuntu VPS exact productive Frank persistence path",
+    "minimum_evidence": [
+      "capture runtime SQLite version and upstream/source identity from the loaded library",
+      "resolve the library/binary actually loaded by the persistence process and bind it to an immutable artifact/build identity under owner-accepted policy",
+      "bind the attestation receipt to the exact Frank execution/state generation and semantic lineage used for authoritative persistence",
+      "negative controlled same-version library/build substitution or equivalent loader-bound canary must fail closed before authoritative DB mutation",
+      "repeat after crash/restart to prove the same trusted runtime identity and lineage are re-established"
+    ],
+    "promotion_rule": "Do not close F-V01-13 from version strings, package metadata, synthetic tests, or branch WAL tests alone; require exact productive-path accepted-target evidence or the workspace-defined machine-checked unreachable-topology alternative."
+  },
+  "negative_results_preserved": [
+    "No local checkout could be established in this session, so no Frank source patch or repository test suite was executed locally.",
+    "No accepted-VPS shell/runtime access was available in this session, so no productive SQLite library identity was measured.",
+    "GitHub code-search/index non-hits are inconclusive and must not be interpreted as absence of an existing gate."
+  ],
+  "non_claims": [
+    "No F-V01-13 closure claim",
+    "No whole Frank v0.1 acceptance claim",
+    "No productive runtime mutation",
+    "No model training started or authorized",
+    "No Together API/service used",
+    "No Frank self-Harness mutation authority exercised"
+  ],
+  "next_falsifier": "On the accepted target and exact productive Frank persistence process, capture loaded SQLite source/build/library identity and execution/state-lineage binding, then run one controlled negative same-version substitution (or an equivalent non-bypassable loader-policy test) and require fail-closed behavior before authoritative persistence."
+}

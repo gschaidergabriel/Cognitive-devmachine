@@ -1,0 +1,31 @@
+{
+  "schema": "clay.udb_claygraph_snapshot_coherence.local.v1",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "journal_mode": "WAL",
+  "synchronous": "FULL",
+  "trials": 100,
+  "orchestration": "Reader BEGIN -> read state marker -> writer commits coupled state+graph update -> same reader reads graph marker.",
+  "single_file": {
+    "incoherent_reads": 0,
+    "incoherent_rate": 0.0,
+    "observed_pair": [0, 0]
+  },
+  "two_file_attach": {
+    "incoherent_reads": 100,
+    "incoherent_rate": 1.0,
+    "observed_pair": [0, 1]
+  },
+  "interpretation": "In this deliberately adversarial acquisition order, the one-file reader kept one old snapshot for both state and graph. The attached-WAL reader acquired state before the writer commit and graph after it, yielding a mixed logical view on every trial.",
+  "external_primary_evidence": [
+    "https://www.sqlite.org/isolation.html",
+    "https://sqlite.org/lang_attach.html",
+    "https://www.sqlite.org/wal.html"
+  ],
+  "claim_boundary": "Mechanism evidence for same-file snapshot coherence under this workload. Not a universal claim against every multi-store design; explicit epoch/receipt pinning can detect or compensate for cross-store skew at additional complexity/cost.",
+  "promotion": "CANDIDATE_SUPPORT"
+}

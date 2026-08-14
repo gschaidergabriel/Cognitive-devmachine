@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "refresh_mode": "DEGRADED_LIVE_REFRESH",
+  "general_web": {
+    "attempted": true,
+    "result": "HTTP_503",
+    "consequence": "No general-web-only evidence used for promotion or rejection."
+  },
+  "primary_repository_refreshes": [
+    {
+      "repository": "huggingface/transformers",
+      "path": "src/transformers/models/qwen3_5/modular_qwen3_5.py",
+      "observed_sha": "6e4f37cc7ec74cbaac2cdbcbf2c8219914e1088d",
+      "finding": "Qwen3.5 vision deletes Qwen3-VL DeepStack helpers and returns pre-merger last_hidden_state plus merged pooler_output; text model uses hybrid recurrent gated-delta and full-attention layers."
+    },
+    {
+      "repository": "huggingface/transformers",
+      "path": "src/transformers/models/qwen3_vl/modular_qwen3_vl.py",
+      "observed_sha": "4803adbfce2f9f685b7b36ea727564bb13f3e462",
+      "finding": "Qwen3-VL reference retains deepstack_visual_indexes and deepstack feature injection; this is a material architecture difference from Qwen3.5."
+    },
+    {
+      "repository": "ggml-org/llama.cpp",
+      "path": "tools/mtmd/mtmd.h",
+      "observed_sha": "e5063d114cc9dc534951a14c57d63b699fb6d182",
+      "finding": "Public libmtmd C API exposes image/audio chunk identity, token positions and final encoded output embeddings; API is explicitly experimental."
+    },
+    {
+      "repository": "ggml-org/llama.cpp",
+      "path": "tools/mtmd/mtmd-helper.cpp",
+      "observed_sha": "d77c93966471b27709c2c9fa7ffcf933ba02c930",
+      "finding": "mtmd_helper_decode_image_chunk accepts an already-calculated embedding buffer and decodes it into llama_context; normal eval path calls mtmd_encode_chunk then mtmd_get_output_embd then this helper."
+    },
+    {
+      "repository": "QwenLM/Qwen3-VL-Embedding",
+      "path": "README.md",
+      "observed_sha": "273604572610ef6596c489f1a277539e8f2de81a",
+      "finding": "Qwen's retrieval embedding models are separately trained and extract a final semantic vector from last-layer EOS hidden state, evidence against assuming raw generative-VLM visual outputs are calibrated retrieval/open-set embeddings."
+    },
+    {
+      "repository": "apple/ml-mobileclip",
+      "path": "README.md",
+      "observed_sha": "3cbe24526ea10909c255e14ae6783ed039181b8f",
+      "finding": "MobileCLIP2-S0 publishes an 11.4M-parameter image encoder and 1.5 ms image latency on iPhone 12 Pro Max, making it a credible lightweight counterbaseline rather than a strawman heavy second stack."
+    },
+    {
+      "repository": "facebookresearch/dinov3",
+      "path": "MODEL_CARD.md",
+      "observed_sha": "2bd45fb07beab1ad5f7a734608e79d5fd8899b42",
+      "finding": "DINOv3 exposes class and patch tokens and explicitly supports kNN/linear readouts and retrieval with frozen features, making ViT-S/16 a dense-feature adversarial baseline."
+    }
+  ],
+  "refresh_checkpoints": [
+    "pre-adjudication project/runtime refresh",
+    "post-Qwen3.5 representation-strata finding",
+    "counterbaseline refresh",
+    "pre-write canonical/work refresh"
+  ]
+}

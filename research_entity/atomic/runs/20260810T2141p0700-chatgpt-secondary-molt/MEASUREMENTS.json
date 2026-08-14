@@ -1,0 +1,33 @@
+{
+  "architecture_promotion":"NONE",
+  "candidate_id":"ATOMIC-CANDIDATE-MOLT-001",
+  "evidence_class":"LOCAL_LINUX_USERSPACE_SIMULATION",
+  "latency_quantiles_and_restart":{
+    "append_inode_flag_probe":{"errno":1,"error":"[Errno 1] Operation not permitted","original_flags":524288,"status":"SETFLAGS_BLOCKED"},
+    "candidate":"ATOMIC-CANDIDATE-MOLT-001","kernel":"6.18.35",
+    "latency_quantiles":{
+      "bytes_per_tx":{"molt":455.59,"ratio":16.43098007393382,"simple":27.7275},
+      "file_bytes_after_n":373128,
+      "molt_us":{"max":35048.891,"mean":1942.43807125,"min":603.034,"p50":1228.241,"p90":2683.6715,"p95":5370.341199999994,"p99":17619.91162},
+      "n":800,
+      "ratio":{"mean":1.0372698001817047,"p50":1.0570046596325393,"p95":1.2976371287564978,"p99":0.7876706556267076},
+      "recovery_us_after_n":13892.981,
+      "restart_continuity":{"after_epoch":810,"before_epoch":800,"expected_after":810,"pass":true},
+      "simple_us":{"max":38028.328,"mean":1872.6449675,"min":618.931,"p50":1162.0014999999999,"p90":2242.9449,"p95":4138.553899999991,"p99":22369.64332}
+    },
+    "rusage":{"maxrss_kb":111600},"schema_version":"1.0"
+  },
+  "primary":{
+    "attack_geometry":{"naive_odrdw_prefix_changed":true,"o_append_file_growth":6,"o_append_pwrite_prefix_changed":false},
+    "benchmark":{"durable_slowdown_ratio":1.105640120819382,"epoch":300,"molt_bytes_per_tx":454.9066666666667,"molt_durable_mean_us":2114.1487066666664,"molt_durable_total_ms":634.244612,"molt_framing_mean_us_no_fsync":35.65391666666667,"n":300,"recovery_ms":5.743503,"simple_bytes_per_tx":27.273333333333333,"simple_durable_mean_us":1912.14905,"simple_durable_total_ms":573.644715},
+    "candidate":"ATOMIC-CANDIDATE-MOLT-001",
+    "corruption_matrix":{"mutations":2000,"root_fail_closed":67,"state_cases":712,"state_no_fabrication":712,"undetected_or_bad":0},
+    "crash_cut_matrix":{"cuts":451,"failures":0,"frame_bytes":450,"fully_committed":1,"rolled_back":450,"sample_failure":[]},
+    "evidence_class":"LOCAL_LINUX_USERSPACE_SIMULATION","kernel":"6.18.35","schema_version":"1.0",
+    "semantic_controls":{"forbidden_root_epoch_admitted":1,"forbidden_root_semantic_status":"SEMANTIC_REJECTED","replay_epoch_admitted":1,"replay_status":"CHAIN_REJECTED"}
+  },
+  "production_mutation":"NONE",
+  "run_id":"atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "schema_version":"1.0",
+  "scope_guard":"Crash cuts are simulated torn suffixes, not real filesystem power-loss receipts. FS_APPEND_FL could not be set in local container due missing privilege; kernel-enforced append-only claim remains untested locally."
+}

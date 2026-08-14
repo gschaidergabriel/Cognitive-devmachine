@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2000p0700-chatgpt-secondary-proactive-agency-selector",
+  "delta_id": "DELTA_2_CRASH_RECOVERY_AND_CONTRACT_COVERAGE",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "timestamp_local": "2026-08-11T20:00:57+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 322,
+  "candidate_head_observed": "fb3029b95f4c2926778e41704712994cdedf411e",
+  "ordinary_falsifier": {
+    "name": "AUTONOMOUS_RELEASE_GOAL_STATE_CRASH_WINDOW",
+    "classification": "NORMAL_RECOVERY_REGRESSION_NOT_OOB",
+    "failure_found": "initial candidate released the canonical FrankExecutionLease before changing the goal row from ACTIVE to its final state; process death in that interval could leave a persistent ACTIVE goal with no live lease",
+    "severity": "RELEASE_BLOCKING_CANDIDATE_BUG",
+    "repair": [
+      "added UNIFIEDDB_AGENCY_RELEASE_RECOVERY_V1_CANDIDATE.sql",
+      "added exact PREPARED release intent journal keyed by goal_id + lease_epoch + captured goal revision",
+      "added RecoverySafeAgencyExecutionLease",
+      "finalization now executes under one BEGIN IMMEDIATE transaction",
+      "finalization rechecks V15 presence is IDLE and epoch is not older than the prepared lease",
+      "goal ACTIVE->final transition uses revision/status CAS",
+      "GOAL_STATUS_CHANGED evidence and release-intent COMPLETED are committed atomically",
+      "revision/status mismatch becomes explicit CONFLICT and is not guessed through"
+    ],
+    "regression_test": "tests/frank_agency_release_recovery_v1_gate.py",
+    "target_status": "PENDING_ACCEPTED_TARGET_EXECUTION_RECEIPT"
+  },
+  "oob_count_integrity": {
+    "new_oob_in_delta": 0,
+    "total_oob_for_go_invocation": 1,
+    "sole_oob": "CURIOSITY_SIREN_TRAP"
+  },
+  "owner_contract_refresh": {
+    "source": "research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md",
+    "candidate_coverage_doc": "runtime/agency/ACCEPTANCE_COVERAGE.md",
+    "adjudication": "PR_322_IS_FOUNDATION_CANDIDATE_NOT_F_V01_10_ACCEPTANCE",
+    "still_open": [
+      "no-new-message production heartbeat",
+      "causal interest formation from measured information gain/competence/control/unresolved pressure",
+      "policy-governed candidate -> trial -> adoption",
+      "wake conditions and long-horizon progress semantics",
+      "expected-value action closure",
+      "valid-idle heartbeat/backoff differential",
+      "InitiativePulse lesion/rescue",
+      "no-self-reward causal-credit acceptance",
+      "deterministic autonomous effect-class policy restricted to READ_ONLY or SANDBOX_REVERSIBLE",
+      "open-web sandbox parser -> JSON evidence -> ClayCode evidence ingress",
+      "prompt-injection adversarial family with zero authority escapes on frozen corpus",
+      "matched REACTIVE_ONLY vs substrate-no-pulse vs full proactive long-horizon differential",
+      "all four owner-required final proactive/web/goal-restart/autonomous-experiment receipts"
+    ]
+  },
+  "validation_visibility": {
+    "candidate_workflow": ".github/workflows/frank-agency-v1-vps.yml",
+    "mechanism": "manual exact-SHA git fetch on self-hosted Linux/X64 plus PASS-only evidence commit to runtime/vps_unifieddb/frank_agency_v1_candidate/LATEST.json",
+    "visible_pass_commit_at_delta_time": false,
+    "interpretation": "NO_TARGET_PASS_CLAIM",
+    "ambient_pr_failures": "checkout/infrastructure failures only; substantive candidate tests were skipped and therefore do not falsify or validate PR #322"
+  },
+  "architecture_disposition": "KEEP_PR_322_DRAFT_CANDIDATE_UNTIL_VISIBLE_TARGET_PASS; DO_NOT_MARK_F_V01_10_PASS",
+  "next_highest_value_slice": "policy-governed goal proposal/trial/adoption plus immutable autonomous effect-class admission, followed by no-message heartbeat/valid-idle differential; do not build open-web authority surface before the non-authoritative evidence codec boundary is explicit",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

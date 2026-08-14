@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2015p0700-authority-twin-ir-boundary",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T20:15:00+07:00",
+  "identity_boundary": "I_AM=RESEARCH_ENTITY_TEMPORARY_WORKER; I_AM_NOT=self.root; I_AM_NOT=Frank; self.root/Frank Harness mutation authority remains PROPOSAL_ONLY; Clay independently owns research/build/test authorization.",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "current_stack_epoch": 23,
+  "current_program_stage": "BASE_CLAYCODE_RELEASE",
+  "current_stage_observation": {
+    "workspace": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "pass_packages": ["CC-WP-01-SPEC-FREEZE", "CC-WP-02-PARSER-CANON"],
+    "open_packages": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-05-EVALUATOR", "CC-WP-06-COMPILER-LOWERING", "CC-WP-07-RUNTIME-ABI-FFI", "CC-WP-08-STDLIB-SDK", "CC-WP-09-CONCURRENCY-MEMORY", "CC-WP-10-GENERAL-APP-SUITE", "CC-WP-11-FUZZ-CONFORMANCE", "CC-WP-12-CORPUS-HELDOUT", "CC-WP-13-HARNESS-HANDOFF", "CC-WP-14-BASE-AUDIT"],
+    "strict_local_stage_progress_percent": 14.2857142857,
+    "gate_status": "NOT_PASS"
+  },
+  "coordination_observation": {
+    "stale_work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "stale_reason": "Its own invalidator fires when the Ubuntu developer system ceases to be the Frank v0.1 target host. Current owner-fixed truth is the accepted Hostinger target VPS, so the old revision cannot receive current completion credit without revalidation.",
+    "projection_read": "research_entity/state/work/projections/CURRENT_DYNAMIC_WORK.clay returned 404 during this run; no current projection was invented.",
+    "action": "Create a WORK_REVISE event revalidating the BASE closure work against target-VPS semantics and narrowing immediate execution to WP03 typed IR followed by WP04 type/effect."
+  },
+  "live_external_research": [
+    {
+      "source": "Tan et al., ETAS: An Effect-Typed Language for Agent Systems",
+      "date": "2026-07-20",
+      "id": "arXiv:2607.17780",
+      "evidence_class": "PRIMARY_PREPRINT",
+      "material_delta": "ETAS separates ordinary types from escaping effect rows and a persistent requested-action trace; dynamic semantics distinguish requested, handled, denied and committed actions. Static checking leaves residual runtime obligations when dynamic resources prevent a full static proof. This is closely relevant to ClayCode WP03/WP04 boundaries but is not evidence that ClayCode should copy ETAS syntax."
+    },
+    {
+      "source": "Bao and Rompf, Type, Ability, and Effect Systems: Perspectives on Purity, Semantics, and Expressiveness",
+      "date": "2025-10-08",
+      "id": "arXiv:2510.07582",
+      "evidence_class": "PRIMARY_PREPRINT",
+      "material_delta": "Minimal capability and effect systems are incomparable in expressiveness under the paper's semantic-purity measure; a hybrid design can combine strengths. This is counterevidence against treating one typing device as sufficient for every Clay authority/effect requirement."
+    },
+    {
+      "source": "WebAssembly Component Model WIT reference / resources",
+      "retrieved_at": "2026-08-10",
+      "evidence_class": "OFFICIAL_IMPLEMENTATION_DOCUMENTATION",
+      "material_delta": "WIT resources are host/component-side entities transferred through owned/borrowed handles rather than ordinary copied data. This supports using opaque nominal resource/capability handles at ClayCode host boundaries, while not by itself proving authorization semantics."
+    },
+    {
+      "source": "Lin et al., VIGIL: Defending LLM Agents Against Tool-Stream Injection via Verify-Before-Commit",
+      "date": "2026-07",
+      "id": "ACL 2026 long paper 443",
+      "evidence_class": "PRIMARY_PEER_REVIEWED",
+      "material_delta": "Verify-before-commit with intent-grounded verification improves resistance to tool-stream injection while retaining an adaptive reasoning loop. Supports preserving a separate commit/authority boundary rather than allowing tool-stream content to directly authorize effects."
+    },
+    {
+      "source": "An et al., IPIGuard: Tool Dependency Graph-Based Defense Against Indirect Prompt Injection",
+      "date": "2025-11",
+      "id": "EMNLP 2025 main paper 53",
+      "evidence_class": "PRIMARY_PEER_REVIEWED",
+      "material_delta": "Decoupling action planning from untrusted external data via structural tool-dependency constraints improves indirect-prompt-injection robustness. Supports Clay's owner-fixed untrusted-web authority separation as an architectural constraint rather than a prompt convention."
+    }
+  ],
+  "leading_hypothesis": {
+    "id": "H-GO-20260810-WP03-AUTHORITY-IDENTITY",
+    "claim": "ClayCode WP03 should separate semantic-content identity from authority identity using nominal channel/epoch/opaque-handle semantics; identical content across web and authenticated direct-message ingress may share semantic meaning while never becoming authority-equivalent by value equality. WP04 should then layer effect summaries, requested-action traces and dynamic residual authority checks on top of that typed substrate.",
+    "expected_benefit": "Prevents serialized/descriptive payload fields from becoming bearer authority; makes stale-epoch and cross-channel confusion testable; keeps the existing default-allow safe direct-message posture compatible with zero web effect authority."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-GO-20260810-WP03-AUTHORITY-IDENTITY",
+    "claim": "Embedding authority distinctions too deeply into WP03 types could duplicate WP04, increase implementation burden and reject valid programs; authority should remain mostly runtime policy, with WP03 carrying only ordinary records and resource identity.",
+    "discriminator": "Require the smallest nominal distinction that blocks structural forgery while preserving content-level equivalence, then defer requested-action/effect/policy obligations that depend on runtime facts to WP04. Reject any WP03 design that needs policy automata or dynamic authorization decisions to type ordinary data."
+  },
+  "out_of_box_experiment": {
+    "exactly_one_for_this_go_macrocycle": true,
+    "name": "Authority-Twin metamorphic IR boundary test",
+    "class": "LOCAL_SYNTHETIC_PROXY_NOT_PRODUCTION_COMPILER_RECEIPT",
+    "method": "Generate 200000 identical semantic payload twins. Present each payload once through UNTRUSTED_EXTERNAL_DATA and once through AUTHENTICATED_DIRECT_MESSAGE. Inject top-level and nested forged authority/effect/token/capability-like fields in a randomized subset. Compare an intentionally bad structural/value-authority baseline against a candidate with out-of-band nominal channel, epoch-bound authority identity and opaque capability-handle context. Preserve content hash equality while requiring authority identity inequality across channels and epochs.",
+    "n_pairs": 200000,
+    "seed": 260810,
+    "results": {
+      "naive_structural_escalations": 99987,
+      "naive_structural_escalation_rate": 0.499935,
+      "typed_web_escalations": 0,
+      "typed_web_escalation_rate": 0.0,
+      "typed_direct_false_denials_for_safe_grants": 0,
+      "content_hash_mismatches": 0,
+      "authority_identity_collisions": 0,
+      "stale_epoch_identity_accepts": 0,
+      "proxy_median_validation_ns_naive": 640,
+      "proxy_median_validation_ns_typed": 204,
+      "proxy_p95_validation_ns_naive": 1095,
+      "proxy_p95_validation_ns_typed": 278
+    },
+    "interpretation_guard": "The zero-escalation result is expected from the constructed nominal design and demonstrates discriminator adequacy only. It is not a security proof, not a ClayCode compiler PASS and not target-VPS evidence. Python microtiming is environment-specific and must not be promoted as ClayCode performance evidence.",
+    "result": "SUPPORTS_MINIMAL_NOMINAL_AUTHORITY_IDENTITY_SPLIT_AS_WP03_CANDIDATE"
+  },
+  "architecture_delta_candidate": {
+    "status": "CANDIDATE_NOT_PROMOTED",
+    "wp03_minimum": [
+      "Introduce a semantic-content identity/hash plane that does not encode bearer authority.",
+      "Introduce nominal ingress authority class assigned by trusted boundary construction, never parsed from payload data.",
+      "Bind authority-bearing identity to an authority/session epoch where freshness matters.",
+      "Represent host/resource/capability possession through opaque non-forgeable handle/reference identity; serialized descriptive records cannot reconstruct bearer possession.",
+      "Make UNTRUSTED_EXTERNAL_DATA and AUTHENTICATED_DIRECT_MESSAGE non-coercible authority classes even when their semantic payloads are equal.",
+      "Preserve existing records/enums/maps/results/epochs/resources and semantic identity obligations without adding new surface syntax unless the production implementation yields a concrete counterexample."
+    ],
+    "wp04_follow_on": [
+      "Track escaping effect summaries separately from persistent requested-action/audit traces.",
+      "Keep REQUESTED, AUTHORIZED/HANDLED, EXECUTED/COMMITTED, VERIFIED semantics distinct.",
+      "Emit residual runtime checks for dynamic scope/freshness/resource facts that static typing cannot prove.",
+      "Keep model/GWT/translator/ClayGraph output unable to mint authority.",
+      "Keep destructive/security-sensitive operations behind deterministic ClayCode effect gates."
+    ]
+  },
+  "test_obligations": [
+    "same semantic payload across web/direct channels: equal content meaning allowed, authority identity must differ",
+    "top-level forged effect_authority/token_scope/capability fields in web payload never grant authority",
+    "nested/encoded instruction-like or authority-like data remains inert data",
+    "stale authority/session epoch cannot compare as current authority identity",
+    "serialization/deserialization of descriptive capability metadata cannot reconstruct an opaque bearer handle",
+    "authenticated direct-message safe scopes remain usable without unnecessary denial",
+    "dangerous/destructive effects still require the deterministic effect gate even for authenticated direct messages",
+    "positive and negative typed IR corpus plus real self.root AgencyState/WebEvidenceClay fixtures run through production canonical IR without untyped escape hatch",
+    "target-VPS reproduction required before WP03/WP04 PASS"
+  ],
+  "negative_results_and_limits": [
+    "No production ClayCode WP03 implementation was available through the current tool surface, so no package PASS is claimed.",
+    "The current production frontend V18 proves parser/canonical work for its selected BASE-D component set; it does not itself prove typed IR/type/effect semantics.",
+    "Current dynamic-work projection path returned 404, so current lease/projection state beyond explicit events/workspace remains UNKNOWN.",
+    "External research supports the architecture direction but does not substitute for matched compiler/runtime receipts."
+  ],
+  "next_frontier": [
+    "Revalidate WORK-CLAYCODE-BASE14-CLOSE-20260809 under target-VPS semantics via append-only WORK_REVISE.",
+    "Implement the minimal nominal authority identity split in the production canonical IR without surface-language expansion unless a concrete counterexample appears.",
+    "Build WP03 positive/negative corpus including AgencyState, InterestTrace, AutotelicGoal, GoalCheckpoint, InitiativePulse, UntrustedWebJsonEnvelope, WebEvidenceClay and authenticated-direct-message identity.",
+    "Run target-VPS typed-IR fixtures and semantic identity metamorphic tests; only then consider WP03 PASS.",
+    "Immediately feed the resulting type identities into WP04 effect/action-trace checker and residual runtime authority closure tests."
+  ],
+  "promotion": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_reentry": "MATERIAL_DELTA_READY_FOR_WORK_REVISE_AND_SHARED_RESEARCH_STATE",
+  "rollback": "Append-only research receipt only; no Frank/self.root Harness, ClayCode release gate, semantic freeze or effect authority was mutated."
+}

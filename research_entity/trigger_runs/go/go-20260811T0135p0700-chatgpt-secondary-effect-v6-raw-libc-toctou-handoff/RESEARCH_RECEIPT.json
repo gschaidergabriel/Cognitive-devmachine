@@ -1,0 +1,184 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0135p0700-chatgpt-secondary-effect-v6-raw-libc-toctou-handoff",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "identity_lock": {
+    "i_am_not": "FRANK/self.root",
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "started_from_canonical": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "shared_state_refreshed_before_write": {
+    "observed_research_head": "9177f026d08bdb23175376d126799ad35118ef0a",
+    "overlap_receipts": [
+      "007ec85fa052832f74ccb1a44f7c4c8aafdc18e3",
+      "9177f026d08bdb23175376d126799ad35118ef0a"
+    ],
+    "coordination_decision": "ADD_ONLY_NEW_DELTA; do not overwrite or duplicate sibling evidence"
+  },
+  "program": "FRANK_V0_1",
+  "primary_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_pr": 250,
+  "product_branch": "chatgpt/go-effect-fence-v6-fresh-main-20260811",
+  "latest_branch_head_observed": "ad6e22bc244ba2eee1684295c9dd4aec99ba953d",
+  "latest_main_observed": "3a7ca32266fbebec57777673515b9ec988b19c66",
+  "branch_graph_snapshot": {
+    "merge_base": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+    "ahead_by": 22,
+    "behind_by": 36,
+    "pr_draft": true,
+    "pr_mergeable_at_snapshot": false,
+    "promotion": "NONE"
+  },
+  "hypothesis": "Effect start/retry/provider authority requires a caller-presented transient execution-generation fence that equals the immutable reservation binding, current V15 presence, exact V16 execution/credential/admission and an exact still-live Gate-issued process incarnation. Once an effect is COMMITTING, logical execution-generation turnover must be serialized against that attempt until outcome state leaves COMMITTING.",
+  "strongest_counterhypotheses": [
+    "CPython at-fork cleanup rather than explicit process-incarnation validation is doing the real safety work, so a raw third-party libc fork could inherit effective authority.",
+    "B3 can pass and then a low-level same-epoch V16 rebind can race before provider entry, making the provider attempt stale despite a green precommit check.",
+    "A global current V15 epoch plus singleton process state is sufficient; caller-bound generation provenance adds complexity without causal safety value."
+  ],
+  "architecture_delta": {
+    "status": "TESTING_PARTIALLY_SUPPORTED_NOT_PROMOTED",
+    "mechanisms": [
+      "immutable effect_execution_generation_fences sidecar keyed by effect_id",
+      "transient sealed ExecutionGenerationFence bound to exact Gate-issued lease object/process incarnation",
+      "B1 reservation plus exact generation binding",
+      "B2 first-attempt/retry exact-generation validation",
+      "B3 provider precommit exact-generation validation",
+      "local effect_commit_window serializing physical/V15 release through provider return",
+      "UnifiedDB trigger rejecting execution_id/lease_epoch/credential rebind while exact-bound effect is COMMITTING",
+      "UnifiedDB trigger rejecting terminal execution release while exact-bound effect is COMMITTING",
+      "generation turnover removes retry/start authority but preserves evidence-only outcome reconciliation"
+    ],
+    "authority_nonclaims": [
+      "SQLite does not mint effect authority",
+      "flock/open-file-description possession does not mint effect authority",
+      "model/GWT/ClayGraph output does not mint effect authority",
+      "persisted binding bytes cannot reconstruct the transient execution capability"
+    ]
+  },
+  "normal_target_evidence": {
+    "exact_toctou_result_source": "shared receipt 007ec85fa052832f74ccb1a44f7c4c8aafdc18e3",
+    "head_sha": "5a273bcbe5890b1802ddf6d7da0eb7df7a9c140b",
+    "tested_merge_sha": "078dffae8be585bcd6a522dfbe4261bbc88115c6",
+    "workflow_run_id": 31419002821,
+    "job_id": 93554938265,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "results": {
+      "physical_gate": "PASS_FRANK_EXECUTION_GATE_V1",
+      "v14_crash_replay": "PASS_V14_EFFECT_LIFECYCLE_TEST_MODE",
+      "v14_same_confirmation_concurrency": {"attempts": 64, "admitted": 1},
+      "v14_real_process_death_atomic_rollback": "PASS",
+      "effect_matrix": "PASS_FRESH_MAIN_EFFECT_FENCE_V6_MATRIX",
+      "same_epoch_v16_rebind_before_attempt": "FENCED_ZERO_STATE_MUTATION",
+      "provider_entry_same_epoch_v16_rebind": "EFFECT_COMMITTING_BLOCKS_EXECUTION_GENERATION_REBIND",
+      "provider_release_inside_window": "CANNOT_RELEASE_EXECUTION_DURING_PROVIDER_COMMIT",
+      "committing_terminal_release_outside_provider_window": "EFFECT_COMMITTING_BLOCKS_EXECUTION_RELEASE",
+      "blocked_release_kept_v15_busy": true,
+      "stale_source": "FENCED_ZERO_STATE_MUTATION",
+      "successor_cross_splice": "FENCED_ZERO_STATE_MUTATION",
+      "uncertain_retry_after_turnover": "FENCED_ZERO_STATE_MUTATION",
+      "outcome_reconciliation_after_turnover": "PASS",
+      "successor_fresh_effect": "PASS",
+      "immutable_binding_update": "BLOCKED",
+      "immutable_binding_delete": "BLOCKED",
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0,
+      "claycode_static_generation_contract": "PASS_CLAYCODE_EXACT_V15_V16_EFFECT_GENERATION_CONTRACT"
+    },
+    "adjudication": "EFFECT_FENCE_TOCTOU_MECHANISM_SUPPORTED_ON_EXACT_TARGET_MERGE_SHA; full PR acceptance remained blocked by compiler materialization ancestry"
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "RAW_LIBC_FORK_BYPASS",
+    "design": "Acquire the real Gate lease and exact V16 effect fence, then call libc fork directly through ctypes.PyDLL(None).fork so Python os.register_at_fork callbacks are intentionally bypassed while the GIL remains held. In the raw child, attempt to assert the inherited Gate lease and effect fence; then verify the parent remains live.",
+    "target_run_id": 31417859101,
+    "tested_merge_sha": "9f0479b8ebb313c6a3a3dbba830e3800e37d3c29",
+    "runner": "clay/digital-retina",
+    "result": "PASS_RAW_LIBC_FORK_BYPASS_OOB",
+    "child_gate_assertion": "PermissionError:EXECUTION_LEASE_PROCESS_PID_MISMATCH",
+    "child_effect_fence_assertion": "PermissionError:EXECUTION_LEASE_PROCESS_PID_MISMATCH",
+    "parent_fence_after_child": "LIVE",
+    "parent_heartbeat_after_child": "ACQUIRED",
+    "external_network_used": false,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false,
+    "resource_shadow": {
+      "wall_seconds": 0.12,
+      "user_seconds": 0.07,
+      "system_seconds": 0.03,
+      "max_rss_kib": 24832
+    },
+    "scope_note": "This OOB passed before the later COMMITTING/V16 TOCTOU SQL trigger delta. The process-incarnation code and OOB test surface were unchanged by that later SQL-only safety delta, but no exact-latest-head OOB promotion is claimed."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Linux fork(2)/flock(2) man-pages",
+      "finding": "forked processes inherit descriptors referring to the same open file descriptions; flock locks are associated with open file descriptions, so inherited/duplicated descriptor possession alone cannot be treated as unique execution authority."
+    },
+    {
+      "source": "Python os.register_at_fork documentation",
+      "finding": "registered Python callbacks are not guaranteed for third-party C code that calls fork directly without CPython fork hooks, motivating an explicit process-incarnation falsifier independent of at-fork cleanup."
+    },
+    {
+      "source": "Python ctypes documentation",
+      "finding": "PyDLL keeps the GIL while calling the foreign function, avoiding CDLL GIL-release as an extra variable in the raw libc fork discriminator."
+    },
+    {
+      "source": "SQLite transaction and CREATE TRIGGER documentation",
+      "finding": "SQLite provides serializable transaction ordering; BEGIN IMMEDIATE acquires a write transaction before mutation, and RAISE(ABORT,...) in a trigger can fail closed on forbidden generation/terminal transitions."
+    }
+  ],
+  "cross_worker_fusion": {
+    "provider_reconciliation_pr": 254,
+    "provider_reconciliation_target_result": "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB on synthetic provider ledger; exact real-provider evidence still open",
+    "materializer_fix": {
+      "merged_commit": "c82d40a5859784a52d700c5e85c251839cc47c30",
+      "scope": "current WP03/V18 local materializer repair only",
+      "effect_on_this_branch": "removes the previously observed missing-bound-grammar dependency from current main, but exact-current #250 composition/rerun remains required"
+    },
+    "terminal_v17_gap": "OPEN; separate terminal/DONE path still requires exact execution-generation plus canonical GWT/causal/delta binding before total F-V01-09 promotion"
+  },
+  "negative_and_pending_evidence": [
+    "Exact TOCTOU target run stopped later at the ClayCode frontend/TypedIR step because the exact merge graph lacked the bound WP03 grammar dependency; this was classified as cross-branch dependency failure, not effect-fence regression.",
+    "The materializer dependency repair was subsequently merged to current main, but #250 was 36 commits behind and not mergeable at the final snapshot, so no exact-current full rerun result is claimed here.",
+    "A hosted normal-shadow job failed twice before Step 1 with steps=null/log blob unavailable; this is UNKNOWN infrastructure evidence and not a code pass/fail.",
+    "No real external provider timeout-after-acceptance reconciliation was performed in this cycle.",
+    "No verified outcome -> canonical provenance-bound re-entry -> terminal DONE promotion was made.",
+    "No non-bypassable ordinary effect routing/lowering promotion was made.",
+    "No WP03/WP04 compiler semantic promotion was made.",
+    "No final/paid model training was authorized or started."
+  ],
+  "next_frontier_ranked": [
+    "Recompose the preferred #250 effect-fence semantics on exact current main without overwriting newer materializer/self.root work, then rerun the full normal target matrix plus this cycle's unchanged raw-libc discriminator only if the next cycle assigns it as that cycle's single OOB or replication lane.",
+    "Use the now-merged WP03/V18 materializer fix to rerun exact-current real frontend/TypedIR and continue to WP04 type/effect plus lowering; do not treat static source markers as compiler acceptance.",
+    "Fuse #254 provider-idempotency/reconciliation contract into the preferred lineage only after ancestry/current-main revalidation; retain real-provider timeout-after-acceptance as an open evidence gate.",
+    "Bind terminal verified-outcome/reentry/DONE to exact execution generation and canonical GWT/causal/delta support identities; keep separate V17 total promotion blocked until that falsifier passes.",
+    "Generalize transport-specific IngressExecutionLease semantics to a provenance-bound admitted execution capability before proactive writable agency, without allowing scheduler presence alone to mint authority."
+  ],
+  "final_adjudication": {
+    "effect_fence_generation_mechanism": "SUPPORTED_ON_TARGET_FOR_TESTED_MERGE_SHA",
+    "raw_libc_process_incarnation_falsifier": "PASS_ON_EARLIER_TARGET_MERGE_SHA",
+    "latest_branch_total_acceptance": "NOT_PROVEN",
+    "pr_250_promotion": "NONE",
+    "f_v01_09_closure": false,
+    "frank_v0_1_complete": false,
+    "training_authorized": false,
+    "research_write": "COMMITTED"
+  },
+  "completed_at": "2026-08-11T01:35:00+07:00"
+}

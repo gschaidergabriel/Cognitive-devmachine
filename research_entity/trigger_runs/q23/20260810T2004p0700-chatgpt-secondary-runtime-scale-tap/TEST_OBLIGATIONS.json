@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "test_obligations": [
+    {
+      "test_id": "Q23-T-RUNTIME-SANITY-01",
+      "priority": "P0_BEFORE_Q23_FEATURE_CLAIMS",
+      "stage": "H1_WHEN_BASE_AVAILABLE",
+      "matrix": ["Qwen3.5-0.8B","Qwen3.5-2B","Qwen3.5-4B"],
+      "controls": ["fixed known-image questions","fixed image-token budgets","cold/warm","crash/restart","mmproj offload state where available","batch/ubatch variants if applicable","exact build/model/mmproj hashes"],
+      "metrics": ["vision correctness","crash/hang","encode p50/p95/p99","RSS/peak","CPU","swap","bytes copied","token count","restart recovery"],
+      "pass_rule": "Select at least one stable runtime configuration per tested scale before interpreting feature geometry."
+    },
+    {
+      "test_id": "Q23-T-VISION-SCALE-01",
+      "priority": "P1",
+      "stage": "H1",
+      "matrix": ["0.8B encode-only","2B encode-only","4B encode-only","0.8B full decode","2B full decode","4B full decode"],
+      "fixed_variables": ["same image fixtures","same image token budgets","same source bytes","same target VPS state where feasible"],
+      "metrics": ["encode latency quantiles","decoder latency quantiles","sensor-to-state","CPU/RSS/swap","visual tokens","task correctness","OCR/grounding"],
+      "decision": "Quantify whether 2B actually saves visual cost and whether 0.8B is a useful low-cost deep-vision operating point."
+    },
+    {
+      "test_id": "Q23-T-FEATURE-TAP-01",
+      "priority": "P1",
+      "stage": "H1_H2",
+      "variants": ["FULL_QWEN","TAP_RAW_POOL","TAP_TINY_PROJECTION","DEDICATED_LIGHT_EMBEDDING"],
+      "mandatory_controls": ["shuffled labels","stale feature version","mmproj version swap","unknown near-neighbor UI","same-image recurrence","layout variant","conflicting visual state"],
+      "metrics": ["encode invocation count","false familiar","missed familiar","unknown rejection","calibration","sensor-to-state","sensor-to-action","RAM","CPU","copy bytes","task success"],
+      "pass_rule": "Tap candidate must show true one-encode reuse and Pareto-competitive open-set/task/resource behavior."
+    },
+    {
+      "test_id": "Q23-T-ROI-CONTEXT-01",
+      "priority": "P2",
+      "stage": "H1_H3",
+      "variants": ["FULL_FRAME","ROI_ONLY","ROI_PLUS_CONTEXT","ADAPTIVE_QUADTREE","HYBRID_PERIODIC_ANCHOR"],
+      "controls": ["modal outside ROI","small text","background state transition","static context change","hidden operation"],
+      "metrics": ["visual tokens/action","grounding correctness","hidden-operation blindness","task success","latency"],
+      "pass_rule": "No ROI policy promoted solely from token savings; layout/background failure modes must stay within tolerance."
+    },
+    {
+      "test_id": "Q23-T-PAR-DOSE-01",
+      "priority": "P2",
+      "stage": "H1_H3",
+      "experience_doses": [0,1,2,4,8,16,32,64],
+      "variants": ["QWEN_ONLY","DIRECT_MEMORY","PAR_RAW","PAR_PROJECTED","PAR_ACTIVE","PAR_WRONG_SEED","SHAM_N"],
+      "metrics": ["Delta(N)","N_onset","N_robust","N_90","N_harm","task success","memory precision/recall","false familiarity","stale-memory override","visual tokens/action","latency"],
+      "pass_rule": "Any claim that Frank experience improves perception/retrieval requires dose-response evidence, not familiar/unfamiliar binary comparison."
+    }
+  ],
+  "execution_note": "No target-VPS test was executed in this q23 invocation; current BASE gate is still in progress."
+}

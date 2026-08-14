@@ -1,17 +1,21 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.6",
   "workspace_id": "claycode-base-compiler",
   "status": "ACTIVE_BUILD",
-  "owner_directive": "Finish ClayCode as a general-purpose executable programming language/semantic IR and compiler/runtime before Clay 0.1. Preserve existing FRANK/XENO/ClayCode semantics wherever possible: less redesign, more compilation, lowering, runtime, FFI, stdlib and real application execution. Frank v0.1 execution/release target is exclusively the Ubuntu Linux developer system; Android/mobile/edge portability is out of scope until the owner explicitly reopens it.",
+  "owner_directive": "Finish ClayCode as a general-purpose executable programming language/semantic IR and compiler/runtime before Clay 0.1. Preserve existing FRANK/XENO/ClayCode semantics wherever possible: less redesign, more compilation, lowering, runtime, FFI, stdlib and real application execution. self.root/Frank v0.1 execution/release target is the accepted target VPS. The language/runtime must express and execute proactive/autotelic long-horizon agency, typed open-web untrusted-data ingress, direct-token scoped intent and deterministic effect-authority separation.",
   "target_host_directive": "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
-  "frank_v0_1_target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
-  "out_of_scope_for_frank_v0_1": ["ANDROID", "MOBILE", "GENERIC_EDGE_PORTABILITY", "WINDOWS", "MACOS", "BSD"],
+  "frank_v0_1_target_host": "TARGET_VPS",
+  "proactive_agency_directive": "research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay",
+  "proactive_agency_acceptance": "research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md",
+  "out_of_scope_for_frank_v0_1": ["ANDROID", "MOBILE", "GENERIC_EDGE_PORTABILITY", "WINDOWS", "MACOS", "BSD", "MANDATORY_LOCAL_PC_DEPLOYMENT"],
   "general_purpose_acceptance_contract": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
   "release_gate_ref": "research_entity/global/LORA1_RELEASE_GATE.md",
   "mesh_protocol_ref": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
   "primary_inputs": [
     "latest clay branch material",
-    "latest FRANK architecture and overlays",
+    "latest self.root/Frank architecture and overlays",
+    "SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay",
+    "SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md",
     "latest ClayCode multiworker UECC/CBEL-TV/IARC results",
     "XENO -> ClayCode lineage",
     "latest GWT",
@@ -21,16 +25,16 @@
     "latest Emergenz",
     "Harness implementation feedback",
     "Level-0 historical earned-work mappings",
-    "Ubuntu Linux developer-system runtime evidence"
+    "accepted target-VPS runtime evidence"
   ],
-  "coordination_rule": "Workers prefer compiler/runtime/toolchain implementation over semantic redesign. A ClayCode semantic change requires a concrete executable application or FRANK counterexample showing the existing semantics cannot express/lower the needed behavior. Non-Ubuntu portability work is not current v0.1 work.",
+  "coordination_rule": "Workers prefer compiler/runtime/toolchain implementation over semantic redesign. A ClayCode semantic change requires a concrete executable application or self.root/Frank counterexample showing the existing semantics cannot express/lower the needed behavior. Current v0.1 implementation evidence is target-VPS-centered; non-target portability is not current v0.1 work.",
   "blocker_burndown": {
     "scope": "CC-WP-01..CC-WP-14",
     "status": "EXECUTABLE_CLOSURE_PLAN_ACTIVE",
     "report": "research_entity/claycode/base/CC_BASE_14_BLOCKER_BURNDOWN_20260809T1904p0700.md",
     "execution_work_event": "research_entity/state/work/events/20260809T1904p0700_chatgpt_secondary_claycode_base14_close.json",
     "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
-    "accounting_rule": "Do not promote any package from proxy/research evidence alone. Update package status only from its stated production/Ubuntu acceptance receipts.",
+    "accounting_rule": "Do not promote any package from proxy/research evidence alone. Update package status only from its stated production/target-VPS acceptance receipts.",
     "critical_path": [
       "CC-WP-01-SPEC-FREEZE",
       "CC-WP-02-PARSER-CANON",
@@ -55,24 +59,24 @@
   "general_purpose_gate_status": "NOT_PASS",
   "work_packages": {
     "CC-WP-01-SPEC-FREEZE": {"status":"PASS","goal":"Fuse existing candidates into one frozen executable semantic contract; preserve current semantics unless a real compiler/application counterexample forces change.","receipt":"research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"},
-    "CC-WP-02-PARSER-CANON": {"status":"OPEN","goal":"Parser plus deterministic canonicalizer for the frozen representation."},
-    "CC-WP-03-IR-TYPES": {"status":"OPEN","goal":"Typed canonical IR, collections, epistemic state, semantic identity and universal computational core."},
-    "CC-WP-04-TYPE-EFFECT": {"status":"OPEN","goal":"Validator/type/effect checker with precise diagnostics; preserve expressibility != authority."},
-    "CC-WP-05-EVALUATOR": {"status":"OPEN","goal":"Reference evaluator/interpreter for executable core semantics."},
-    "CC-WP-06-COMPILER-LOWERING": {"status":"OPEN","goal":"Real compiler/lowering pipeline with translation-validation contracts; first useful Ubuntu-native and/or WASM/WASI target used on Ubuntu."},
-    "CC-WP-07-RUNTIME-ABI-FFI": {"status":"OPEN","goal":"Ubuntu/Linux runtime ABI, typed host FFI, capability/effect gateway, modules/packages and explicit resource identity for Frank v0.1."},
-    "CC-WP-08-STDLIB-SDK": {"status":"OPEN","goal":"Minimal standard library/SDK for algorithms, collections, files/processes, HTTP/network, database adapters, async/concurrency, UI/event-loop adapters and backend interop on Ubuntu."},
-    "CC-WP-09-CONCURRENCY-MEMORY": {"status":"OPEN","goal":"Define/implement errors, async/concurrency, atomics/resource/memory semantics sufficient for real Ubuntu applications and backend lowering."},
-    "CC-WP-10-GENERAL-APP-SUITE": {"status":"OPEN","goal":"Compile and execute mandatory general-purpose application proof suite on Ubuntu: CLI, real website/HTTP service, DB-backed service, concurrent service, GUI/interactive app, compiler/tool, GPU/ML/numerical backend, sandboxed system effect and FRANK component."},
-    "CC-WP-11-FUZZ-CONFORMANCE": {"status":"OPEN","goal":"Unit/property/fuzz/mutation/roundtrip/conformance/differential tests across compiler/runtime/FFI/application suite."},
-    "CC-WP-12-CORPUS-HELDOUT": {"status":"OPEN","goal":"Semantics-derived positive/negative training corpus generator plus leak-resistant held-out/eval suite."},
-    "CC-WP-13-HARNESS-HANDOFF": {"status":"OPEN","goal":"Compile real frozen FRANK subsystem(s), prove no semantic escape hatch is needed and hand stable Ubuntu-targeted compiler/runtime into H2/H3."},
-    "CC-WP-14-BASE-AUDIT": {"status":"OPEN","goal":"General-purpose manifest, hashes, Ubuntu executable application receipts, unresolved-language-counterexample audit and PASS decision."}
+    "CC-WP-02-PARSER-CANON": {"status":"PASS","goal":"Parser plus deterministic canonicalizer for the frozen representation.","receipt":"research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json"},
+    "CC-WP-03-IR-TYPES": {"status":"OPEN","goal":"Typed canonical IR, collections, epistemic state, semantic identity and universal computational core, including AgencyState/InterestTrace/AutotelicGoal/GoalCheckpoint/InitiativePulse, ingress-authority classes, UntrustedWebJsonEnvelope/WebEvidenceClay and authenticated-direct-message identity."},
+    "CC-WP-04-TYPE-EFFECT": {"status":"OPEN","goal":"Validator/type/effect checker with precise diagnostics; preserve expressibility != authority. Enforce untrusted-web instruction/effect authority = NONE, distinct authenticated-direct-message scope, taint/provenance propagation, and deterministic effect gates so translator/model/GWT/graph salience cannot mint authority."},
+    "CC-WP-05-EVALUATOR": {"status":"OPEN","goal":"Reference evaluator/interpreter for executable core semantics including proactive heartbeat/goal-lifecycle semantics and authority-separated web evidence handling."},
+    "CC-WP-06-COMPILER-LOWERING": {"status":"OPEN","goal":"Real compiler/lowering pipeline with translation-validation contracts; first useful target-VPS-native and/or WASM/WASI target used on the accepted VPS."},
+    "CC-WP-07-RUNTIME-ABI-FFI": {"status":"OPEN","goal":"Target-VPS/Linux runtime ABI, typed host FFI, capability/effect gateway, modules/packages and explicit resource identity for self.root v0.1, including resource-bounded proactive heartbeat, token API boundary and sandboxed web parser/codec integration."},
+    "CC-WP-08-STDLIB-SDK": {"status":"OPEN","goal":"Minimal standard library/SDK for algorithms, collections, files/processes, HTTP/network, JSON/schema validation, database adapters, async/concurrency, safe web parsing/evidence envelopes, UI/event-loop adapters and backend interop on the target VPS."},
+    "CC-WP-09-CONCURRENCY-MEMORY": {"status":"OPEN","goal":"Define/implement errors, async/concurrency, atomics/resource/memory semantics sufficient for real target-VPS applications, including persistent long-horizon goals/checkpoints, dormant wake conditions, bounded proactive scheduler/heartbeat and restart-safe AgencyState."},
+    "CC-WP-10-GENERAL-APP-SUITE": {"status":"OPEN","goal":"Compile and execute mandatory general-purpose application proof suite on target VPS: CLI, real website/HTTP service, DB-backed service, concurrent service, GUI/interactive app where applicable, compiler/tool, GPU/ML/numerical backend where available, sandboxed system effect, self.root component, plus proactive-agency/web-ingress proof component."},
+    "CC-WP-11-FUZZ-CONFORMANCE": {"status":"OPEN","goal":"Unit/property/fuzz/mutation/roundtrip/conformance/differential tests across compiler/runtime/FFI/application suite, including adversarial web-injection schemas, nested instruction-like data, malformed JSON, taint/authority non-escalation and direct-token/open-web channel separation."},
+    "CC-WP-12-CORPUS-HELDOUT": {"status":"OPEN","goal":"Semantics-derived positive/negative training corpus generator plus leak-resistant held-out/eval suite including proactive/reactive differentials, interest/goal lifecycle cases and untrusted-web vs authenticated-direct-message authority examples."},
+    "CC-WP-13-HARNESS-HANDOFF": {"status":"OPEN","goal":"Compile real frozen self.root/Frank subsystem(s), including the proactive agency and web-ingress semantics, prove no semantic/authority escape hatch is needed and hand stable target-VPS compiler/runtime into H2/H3."},
+    "CC-WP-14-BASE-AUDIT": {"status":"OPEN","goal":"General-purpose manifest, hashes, target-VPS executable application receipts, proactive-agency/web-ingress expressibility and authority-separation audit, unresolved-language-counterexample audit and PASS decision."}
   },
   "application_acceptance": {
-    "required": ["CLI", "HTTP_WEBSITE", "DB_SERVICE", "CONCURRENT_SERVICE", "GUI_INTERACTIVE", "COMPILER_TOOL", "GPU_ML_NUMERICAL", "SYSTEM_EFFECT_SANDBOX", "FRANK_COMPONENT", "FULL_FRANK_HANDOFF"],
+    "required": ["CLI", "HTTP_WEBSITE", "DB_SERVICE", "CONCURRENT_SERVICE", "GUI_INTERACTIVE", "COMPILER_TOOL", "GPU_ML_NUMERICAL", "SYSTEM_EFFECT_SANDBOX", "FRANK_COMPONENT", "PROACTIVE_AGENCY_WEB_INGRESS_COMPONENT", "FULL_FRANK_HANDOFF"],
     "passed": [],
-    "rule": "Representability is insufficient; each applicable proof must compile/lower and execute with a reproducible receipt on the Ubuntu developer-system target before Frank v0.1 BASE PASS."
+    "rule": "Representability is insufficient; each applicable proof must compile/lower and execute with a reproducible receipt on the accepted target VPS before self.root/Frank v0.1 BASE PASS."
   },
   "language_change_policy": {
     "default": "IMPLEMENT_COMPILER_RUNTIME_STDLIB_FFI",
@@ -94,10 +98,20 @@
       "id": "BASE-SEMANTIC-FREEZE-V1",
       "class": "IMPLEMENTATION_FREEZE",
       "status": "CURRENT",
-      "claim": "WP-01 is closed by an explicit BASE semantic freeze; semantic redesign is closed by default unless an executable counterexample requires a versioned amendment.",
+      "claim": "WP-01 is closed by an explicit BASE semantic freeze; semantic redesign is closed by default unless an executable counterexample requires a versioned amendment. New owner-fixed self.root agency/web-ingress requirements must first be expressed with existing frozen semantics; only an executable failure may reopen language semantics.",
       "evidence": ["research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"]
+    },
+    {
+      "id": "CC-WP02-V18-HOSTINGER-EXACT-BYTE-PASS",
+      "class": "UBUNTU_IMPLEMENTATION_ACCEPTANCE",
+      "status": "CURRENT",
+      "claim": "CC-WP-02 parser/canonicalizer is closed for the selected BASE-D V18 component set by exact-byte self-hosted target-VPS Ubuntu strict/full-corpus/canonical/mutation/parity evidence. This is a package PASS only; BASE release and full self.root target-VPS acceptance remain NOT_PASS.",
+      "evidence": ["research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json"]
     }
   ],
-  "completed_receipts": ["research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"],
-  "last_updated": "2026-08-09"
+  "completed_receipts": [
+    "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+    "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json"
+  ],
+  "last_updated": "2026-08-10"
 }

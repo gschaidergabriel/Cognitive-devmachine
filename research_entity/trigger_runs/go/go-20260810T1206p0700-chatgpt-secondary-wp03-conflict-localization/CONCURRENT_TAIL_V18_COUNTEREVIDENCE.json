@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1206p0700-chatgpt-secondary-wp03-conflict-localization",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "class": "CONCURRENT_TAIL_COUNTEREVIDENCE",
+  "observed_repo_head_before_write": "9093efff6a257d991c6fcfbc9378344017e5dd9b",
+  "concurrent_candidate": {
+    "commit": "e005557a6a9381bff39465c42f33930b54b48807",
+    "followup_fix_commit": "3cf17c3fbe53242c54d53e34bdb5da6435e56448",
+    "validator_commit": "cf7f66b356168137908a279d4135fde845799591",
+    "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_NO_LOOKAHEAD.lark",
+    "blob_sha": "fd521479e6bf9a3515e799771a82cb4bb131bf3e",
+    "declared_status": "RESEARCH_ONLY_NOT_PRODUCTION_DEFAULT"
+  },
+  "hypothesis_under_test": "Reserving whole NEEDLE_OWNS / NEEDLE_LOWERS terminals removes the V17 regex-lookahead dependency while allowing strict LALR to distinguish call, prefix relation and bare Needle.owns atom with one-token lookahead.",
+  "local_exact_byte_result": {
+    "evidence_class": "LOCAL_CONTAINER_REPRODUCTION_NOT_UBUNTU_TARGET_ACCEPTANCE",
+    "lark": "1.3.1",
+    "interegular": null,
+    "nonstrict_construction": "PASS",
+    "strict_construction": "FAIL_GRAMMAR_CONFLICT",
+    "first_observed_error": "Shift/Reduce conflict for terminal IN. [strict-mode] * <needle_owns_atom : NEEDLE_OWNS>",
+    "accepted_nonstrict_examples": [
+      "rule Needle.lowers X",
+      "rule Needle.owns X",
+      "rule 4B_need_not_learn Needle.owns",
+      "rule Needle.owns(X)",
+      "rule Needle.owns (X)"
+    ],
+    "rejected_nonstrict_control": "rule Needle.lowers (X)"
+  },
+  "causal_interpretation": "The no-lookahead tokenization removes the regex-lookaround issue but does not remove the surface ambiguity. After NEEDLE_OWNS, a keyword such as in can still be shifted as relation_primary/qid because operator keywords are also admitted as ident, or the parser can reduce NEEDLE_OWNS to the bare atom and consume in as the infix operator.",
+  "counterhypothesis_status": {
+    "whole_dotted_terminal_alone_is_sufficient": "REFUTED_ON_CURRENT_V18_BYTES",
+    "v18_current_candidate_strict_clean": false,
+    "typed_ir_implicated": false,
+    "v18_promotion": "NONE"
+  },
+  "architecture_effect": {
+    "status": "COUNTEREVIDENCE",
+    "decision": "Do not select or promote current V18. Keep V17 production selection unchanged. Resolve the expression-identifier/operator-role ambiguity or use an already-bounded relation membrane, then require strict exact-byte + full-corpus + semantic-hash differential receipts.",
+    "collision_note": "This receipt does not overwrite the concurrent V18 worker; it is additive evidence for supervisor/research-center adjudication.",
+    "frank_harness_mutation": false
+  },
+  "freshness": {
+    "repo": "REFRESHED",
+    "live_web": "DEGRADED_LIVE_REFRESH_503_TWO_ATTEMPTS",
+    "external_decision_dependency": "No external claim was required to classify the exact local Lark strict conflict; prior official Lark strict-mode evidence remains background only."
+  },
+  "next_falsifier": "Run the current V18 shadow validator on an interegular-enabled exact-byte Ubuntu lane. A strict-construction failure should be materialized before canonical normalization or semantic-equivalence claims are evaluated.",
+  "promotion": "NONE"
+}

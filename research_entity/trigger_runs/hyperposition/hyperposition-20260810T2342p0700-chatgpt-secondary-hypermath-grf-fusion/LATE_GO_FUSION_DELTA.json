@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hyperposition-20260810T2342p0700-chatgpt-secondary-hypermath-grf-fusion",
+  "kind": "LATE_LIVE_HELPER_FUSION_DELTA",
+  "status": "MATERIAL_ARCHITECTURE_REFINEMENT",
+  "helper_evidence": [
+    {
+      "ref": "59ed1c7524977bea39eb42ae42d035385049817f",
+      "class": "GO_SAME_EPOCH_EXECUTION_ID_FALSIFIER_DESIGN",
+      "finding": "lease_epoch alone is not exact logical execution identity; same epoch can alias different execution_id candidates unless exact V16 execution/admission identity is bound."
+    },
+    {
+      "ref": "058eaf1d23a24342d70f024a2a072423f2ceabe2",
+      "class": "REAL_TARGET_VPS_NEGATIVE_RECOVERY_EVIDENCE",
+      "finding": "restoring an older valid SQLite snapshot reproduced old-capability resurrection; DB-local epoch can move backwards while SQLite integrity remains valid. A non-rollback restore/incarnation generation or equivalent invalidation is required before material readiness."
+    }
+  ],
+  "architecture_refinement": {
+    "old_v11_assumption": "HHandle freshness bound semantic root + state epoch + execution generation + delivery generation in one object.",
+    "new_v12_rule": "Split canonical semantic identity from delivery lineage. HCanonicalHandle binds semantic root + state epoch + non-rollback restore incarnation + schema. HDeliveryUse separately binds exact request/execution/admission/session/client/delivery lineage. Effect authority remains a third independent fence.",
+    "reason": "This prevents stale delivery and snapshot resurrection without needlessly invalidating immutable semantic content merely because a new execution legitimately references it."
+  },
+  "verified_local_synthetic_test": {
+    "same_semantic_cross_execution_reuse": true,
+    "same_epoch_execution_alias_rejected": true,
+    "snapshot_resurrection_rejected_by_incarnation": true,
+    "evidence_class": "VERIFIED_LOCAL_SYNTHETIC_EXECUTION"
+  },
+  "new_candidate": "architecture/HYPERMATH_GENERATION_LINEAGE_V12_DELTA.clay",
+  "new_counterhypotheses": [
+    "Production recovery may already provide an equivalent non-rollback invalidation mechanism, making explicit restore_incarnation redundant.",
+    "Per-handle delivery lineage may be overbinding; response-envelope-level lineage may achieve zero stale-splice failures at lower cost."
+  ],
+  "canonical_promotion": "NONE",
+  "authority": {
+    "effect_authority_change": false,
+    "training_authorized": false,
+    "target_self_harness_mutation": false
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "harness-adversarial-counterexample-1.0",
+  "run_id": "harness-20260810T2028p0700-chatgpt-secondary-hwp10-effect-authority",
+  "trigger": "harness",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "H-WP-10-EFFECT-AUTHORITY",
+  "evidence_class": "LOCAL_DETERMINISTIC_ADVERSARIAL_REPLICATION",
+  "tested_candidate": {
+    "path": "research_entity/harness/reference_effect_authority.py",
+    "implementation_commit": "e389be2a56a0c3a694b3d6b20abc299bb48f2c32",
+    "baseline_test_commit": "544f3d2e5710bde59972cdcf696d990aabde515b",
+    "baseline_receipt_commit": "d8c5bb7a64addcdca5374c57547d033df395658b",
+    "baseline_claimed_result": "12/12 local deterministic acceptance tests PASS"
+  },
+  "source_contract": "research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay",
+  "source_contract_status": "PROJECT_OWNER_FIXED_DIRECTIVE",
+  "adversarial_execution": {
+    "tests": 5,
+    "passed": 0,
+    "failed": 5,
+    "runner_result": "FFFFF",
+    "duration_seconds": 0.06,
+    "target_runtime_claim": false
+  },
+  "counterexamples": [
+    {
+      "id": "EA-CEX-01",
+      "severity": "P0_AUTHORITY_ESCALATION_CANDIDATE",
+      "invariant": "SELF_PROPOSAL_ONLY cannot authorize privileged changes",
+      "input": "actor=SELF_PROPOSAL_ONLY, authenticated=false, effect_class=PRIVILEGED_CHANGE, preauthorized_exact_change=true",
+      "observed": "ALLOW",
+      "expected": "not ALLOW; proposal/confirmation path must require an independently valid authority source",
+      "root_cause": "PRIVILEGED_CHANGE direct-preauthorization branch does not require authenticated user/scoped validated authority."
+    },
+    {
+      "id": "EA-CEX-02",
+      "severity": "P0_AUTHORITY_ESCALATION_CANDIDATE",
+      "invariant": "Unauthenticated user-shaped requests cannot self-assert privileged preauthorization",
+      "input": "actor=AUTHENTICATED_USER, authenticated=false, effect_class=PRIVILEGED_CHANGE, preauthorized_exact_change=true",
+      "observed": "ALLOW",
+      "expected": "not ALLOW",
+      "root_cause": "preauthorized_exact_change is treated as sufficient by itself."
+    },
+    {
+      "id": "EA-CEX-03",
+      "severity": "P0_AUTHORITY_ESCALATION_CANDIDATE",
+      "invariant": "SELF_PROPOSAL_ONLY cannot mint a confirmation receipt for credential/security effects",
+      "input": "SELF_PROPOSAL_ONLY request plus matching SELF_PROPOSAL_ONLY ConfirmationReceipt",
+      "observed": "ALLOW",
+      "expected": "DENY or REQUIRE_CONFIRMATION from a valid authenticated authority",
+      "root_cause": "confirmation validation checks receipt.actor == req.actor but does not require AUTHENTICATED_USER plus authenticated request state."
+    },
+    {
+      "id": "EA-CEX-04",
+      "severity": "P0_AUTHORITY_ESCALATION_CANDIDATE",
+      "invariant": "SELF_PROPOSAL_ONLY cannot mint a confirmation receipt for financial/legal commitments",
+      "input": "SELF_PROPOSAL_ONLY financial/legal request plus matching SELF_PROPOSAL_ONLY ConfirmationReceipt",
+      "observed": "ALLOW",
+      "expected": "DENY or valid authenticated-user confirmation",
+      "root_cause": "same confirmation-authority omission as EA-CEX-03."
+    },
+    {
+      "id": "EA-CEX-05",
+      "severity": "P1_CONFIRMATION_IDENTITY_COLLISION_CANDIDATE",
+      "invariant": "Confirmation request identity must bind policy-relevant guard state",
+      "input": "two DELETE_DATA requests with same actor/action/target/effect_class but different guard/policy state",
+      "observed": "same request_hash",
+      "expected": "different request_hash when any policy-relevant field changes",
+      "root_cause": "request_hash covers only actor/action/target/effect_class."
+    }
+  ],
+  "independent_comparison": {
+    "alternative_path": "research_entity/harness/reference/effect_authority.py",
+    "alternative_commit": "7ba8c6bc7e1dc4f814ff61df63fc89fc006b637d",
+    "finding": "This concurrently-created variant already binds policy-relevant fields into the hash and requires authenticated-user authority for privileged preauthorization and confirmation application. It is therefore safer on EA-CEX-01..05, but it still requires contract-level review for DELETE_ACCOUNT warning semantics, MASS_DELETE rollback semantics, and persistent nonce/restart integration."
+  },
+  "decision": "FAIL_COUNTEREXAMPLE_CURRENT_CANDIDATE",
+  "promotion": "BLOCK_H_WP_10_PROMOTION_AND_BLOCK_ANY_H1_RELEASE_CLAIM_DEPENDENT_ON_CURRENT_REFERENCE_EFFECT_AUTHORITY_CANDIDATE",
+  "repair_requirements": [
+    "Canonicalize to exactly one H1 effect-authority implementation.",
+    "Bind every policy-relevant request field into ConfirmationReceipt request identity; exclude only explicitly non-authoritative cognition/salience hints.",
+    "Require independently valid authenticated/scoped authority for privileged exact preauthorization.",
+    "Require AUTHENTICATED_USER plus authenticated request state for user confirmation receipts; SELF_PROPOSAL_ONLY remains proposal-only.",
+    "Add EA-CEX-01..05 as permanent regression tests.",
+    "Integrate consumed confirmation nonce/idempotency state with H-WP-02 canonical state ledger and test crash/restart replay.",
+    "Run target-VPS and full-H1 pipeline tests before promotion."
+  ],
+  "limitations": [
+    "Local deterministic reproduction only; not target-VPS execution.",
+    "Counterexamples test authority semantics, not the full effect commit pipeline.",
+    "The repository is concurrently changing; downstream workers must bind to exact candidate commit/hash before interpreting this result."
+  ],
+  "research_reentry": "Material executable counterevidence; must be consumed by harness release audit, frank architecture, ClayCode effect semantics, UnifiedDB/state-ledger idempotency and ClayGraph authority-edge validation."
+}

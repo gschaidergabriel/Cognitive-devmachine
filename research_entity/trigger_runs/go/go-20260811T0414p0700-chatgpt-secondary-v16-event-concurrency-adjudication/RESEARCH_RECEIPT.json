@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0414p0700-chatgpt-secondary-v16-event-concurrency-adjudication",
+  "trigger": "go",
+  "status": "COMPLETED_USEFUL_STOP_TARGET_QUEUE_PENDING",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "identity_lock": {
+    "worker_is": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "Frank v0.1",
+  "program_stage": "FRANK_V0_1",
+  "primary_work_packages": [
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "coordination": {
+    "current_product_main_observed": "d55b452776295153576011988b0befce7f13b238",
+    "selected_existing_candidate_pr": 270,
+    "selected_candidate_head": "5bfd2d49885e1b9db88328a85d7c5b2aa6e9596e",
+    "duplicate_product_patch_created": false,
+    "reason": "PR #270 is already the fresh-main repair lane for the exact reproduced V16 timestamp-alias defect; creating another product branch would duplicate active work.",
+    "target_workflow_run": 31432822090,
+    "target_workflow_status_at_observation": "QUEUED",
+    "other_live_overlap": "Multiple effect/identity/WP04 lanes are concurrently active; no stale branch promotion attempted."
+  },
+  "problem": "V16 continuity event_hash used semantic fields plus created_at as event identity. Repeated legitimate REQUEST_REPLAYED observations at an identical clock instant can therefore collide even though they are distinct event instances.",
+  "hypothesis": "Treat created_at as timing evidence and bind event-instance identity to the durable frank_execution_continuity_events.seq INTEGER PRIMARY KEY AUTOINCREMENT value. Under the existing BEGIN IMMEDIATE writer transaction, folding the next durable seq into the event hash should remove same-instant aliasing while keeping hashes reconstructible.",
+  "strongest_counterhypothesis": "Explicit sequence selection may still collide under concurrent writers or produce non-reconstructible event hashes, and BEGIN IMMEDIATE serialization may impose material tail-latency under contention.",
+  "source_evidence": {
+    "current_schema": "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V16_EXECUTION_CONTINUITY.sql@blob-f9342b94109e5288cc4d6bba643a33856e6e754c",
+    "primary_external": [
+      {
+        "source": "Python datetime documentation",
+        "url": "https://docs.python.org/3/library/datetime.html",
+        "finding": "Subsequent datetime.now() calls may return the same instant depending on underlying clock precision."
+      },
+      {
+        "source": "SQLite AUTOINCREMENT documentation",
+        "url": "https://sqlite.org/autoinc.html",
+        "finding": "INTEGER PRIMARY KEY AUTOINCREMENT values are monotonically increasing for committed rows and sqlite_sequence tracks the historical maximum."
+      },
+      {
+        "source": "SQLite transaction documentation",
+        "url": "https://sqlite.org/lang_transaction.html",
+        "finding": "BEGIN IMMEDIATE starts a write transaction immediately and excludes another simultaneous writer transaction on the same database."
+      }
+    ]
+  },
+  "normal_baseline": {
+    "kind": "schema-identical SQLite micro-replica",
+    "events": 128,
+    "same_timestamp": true,
+    "result": "PASS",
+    "elapsed_ms": 241.321
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "SAME_INSTANT_CONCURRENT_REPLAY_STORM_8x32",
+    "kind": "bounded local mechanism micro-replica; not exact Frank target-runtime evidence",
+    "writers": 8,
+    "events_per_writer": 32,
+    "same_created_at_for_all_events": true,
+    "sqlite_version": "3.46.1",
+    "additional_successful_writes": 256,
+    "errors": 0,
+    "total_rows_after_baseline_and_oob": 384,
+    "unique_seq": 384,
+    "unique_event_hash": 384,
+    "hash_reconstruction": "PASS_ALL_ROWS",
+    "sqlite_integrity": "ok",
+    "oob_elapsed_ms": 818.791,
+    "write_latency_ms": {
+      "p50": 1.669,
+      "p95": 28.345,
+      "max": 733.138
+    },
+    "result": "MECHANISM_SUPPORTED_WITH_CONTENTION_TAIL_LATENCY",
+    "promotion": "NONE"
+  },
+  "analysis": {
+    "supported": [
+      "Timestamp alone is not a safe event-instance identity for V16 continuity events.",
+      "The durable sequence design survives a bounded same-instant concurrent-writer stress micro-replica with unique reconstructible hashes and intact SQLite state.",
+      "The current repair direction in PR #270 is materially stronger than keeping created_at in the uniqueness relation."
+    ],
+    "limits": [
+      "The local experiment is mechanism evidence only; exact target-VPS execution of PR #270 was still queued at observation time.",
+      "Contention creates nontrivial tail latency; target receipts must preserve latency/resource measurements rather than treating correctness as the only criterion.",
+      "AUTOINCREMENT guarantees monotonic non-reuse of committed rowids, not gap-free sequences; no architecture should require seq+1 continuity as a truth invariant.",
+      "No claim is made for hostile database tampering or a writer bypassing the normal transaction path."
+    ]
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_SUPPORTED_MECHANISM_ONLY",
+    "candidate": "event instance identity = durable sequence; timestamp = evidence only",
+    "product_change_owner": "existing PR #270",
+    "new_product_patch": false,
+    "reason": "avoid duplicate active work while preserving independent counterhypothesis evidence"
+  },
+  "test_obligations": [
+    "Require exact self-hosted Linux/X64 PR #270 baseline + repaired two-replay regression + 128 same-instant burst + repo static integrity before promotion.",
+    "Add or preserve a concurrent-writer stress measurement in a later target-lane performance/reliability suite if target event-write concurrency can occur in production.",
+    "Track p50/p95/max or equivalent tail-latency under contention; correctness PASS must not erase resource/latency cost.",
+    "Never infer strict gap-free event numbering from AUTOINCREMENT semantics.",
+    "Refresh current main and PR overlap before merge/promotion."
+  ],
+  "next_frontier": "Adjudicate PR #270 only after its exact self-hosted target workflow leaves QUEUED and fresh-main ancestry remains valid. If green, use it as F-V01-08/F-V01-13 evidence; if target tail latency or regression fails, retain the timestamp-alias negative result and test an alternative SQLite-assigned-rowid/two-phase-hash design rather than weakening uniqueness.",
+  "authority": "NONE",
+  "execution_authority": "NONE",
+  "external_effect_performed": false,
+  "canonical_frank_state_mutated": false,
+  "training_authorized": false
+}

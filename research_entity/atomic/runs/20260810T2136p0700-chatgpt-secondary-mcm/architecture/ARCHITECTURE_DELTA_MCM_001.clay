@@ -1,0 +1,315 @@
+module clay.atomic.mcm.architecture_delta.v1
+version "MCM-ARCH-DELTA-001-v1"
+status CANDIDATE_OVERLAY_NOT_PROMOTED
+
+import mcm = @research_entity/atomic/runs/20260810T2136p0700-chatgpt-secondary-mcm/candidate/CANDIDATE_ATOMIC_MCM_001.clay
+import gwt = @research_entity/global/RAE_GWT_MICROKERNEL.clay
+import workspace = @research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json
+
+class ArchitectureDeltaState = DISABLED | SHADOW | DUAL_RUN | CANDIDATE_ACTIVE | PROMOTED | ROLLED_BACK
+class TransitionRoute = FREE_FLOW_MONOTONE | OPEN_DETERMINATION_MEMBRANE | EXISTING_COORDINATION_FALLBACK | QUARANTINE
+class ClassificationSource = STATIC_TYPEDIR_PROOF | EXPLICIT_VERSIONED_CONTRACT | SAFE_RUNTIME_WITNESS | UNKNOWN_SOURCE
+class DeterminationSurface = GWT | HYPERPOSITION | MEMORY | REWARD | GOAL | AGENCY | NEEDLE | PERCEPTION | EFFECT | RECOVERY | OTHER
+class GateVerdict = PASS | FAIL | UNKNOWN | NOT_RUN
+
+record PolarityContract {
+  transition_ref:Ref
+  transition_version:Version
+  semantic_epoch:Epoch
+  declared_domain:Ref
+  polarity:DeltaPolarity
+  source:ClassificationSource
+  proof_or_witness:EvidenceRef?
+  call_contract_hash:Hash?
+  type_effect_hash:Hash
+  semantic_hash:Hash
+}
+
+record PolarityReceipt {
+  transition_ref:Ref
+  state_instance_id:StateInstanceId
+  semantic_epoch:Epoch
+  polarity:DeltaPolarity
+  contract_hash:Hash
+  classifier_hash:Hash
+  verified:Bool
+  provenance:Set<EvidenceRef>
+}
+
+record DeterminationBarrier {
+  barrier_id:Ref
+  surface:DeterminationSurface
+  request:MembraneRequest
+  cut:CausalCut?
+  seal:MembraneSeal?
+  reason:Ref
+  fallback:TransitionRoute
+}
+
+record WorkspaceEpisodeBinding {
+  workspace_episode:WorkspaceEpisodeRef
+  seal_id:Ref
+  cut_hash:Hash
+  selection_hash:Hash
+  semantic_epoch:Epoch
+  state_instance_id:StateInstanceId
+  gwt_selection_ref:Ref?
+  reconstruction_contract_hash:Hash
+}
+
+record MCMArchitectureConfig {
+  state:ArchitectureDeltaState
+  semantic_epoch:Epoch
+  feature_flag:Ref
+  unknown_route:TransitionRoute
+  use_existing_gwt_fallback:Bool
+  use_existing_unifieddb_fallback:Bool
+  require_exact_receiver_reconstruction:Bool
+  allow_effect_authority_minting:Bool=false
+}
+
+record MCMArchitectureReceipt {
+  config_hash:Hash
+  tested_target_ref:Ref
+  target_commit:Hash?
+  semantic_epoch:Epoch
+  census_total:Int
+  monotone_count:Int
+  determination_count:Int
+  unknown_count:Int
+  false_monotone_count:Int
+  crash_replay_mismatches:Int
+  authority_violations:Int
+  strong_baseline_ref:EvidenceRef?
+  verdict:GateVerdict
+  evidence:Set<EvidenceRef>
+}
+
+// -----------------------------------------------------------------------------
+// DELTA 1: ClayCode frontend / TypedIR becomes the semantic coordination oracle.
+// -----------------------------------------------------------------------------
+rule typed_transition enters polarity_classification after canonical_TypedIR + type_effect_resolution
+rule polarity=MONOTONE requires STATIC_TYPEDIR_PROOF or EXPLICIT_VERSIONED_CONTRACT or SAFE_RUNTIME_WITNESS
+rule missing_declared_domain -> UNKNOWN
+rule missing_type_effect_hash -> UNKNOWN
+rule missing_semantic_hash -> UNKNOWN
+rule stale_transition_version -> UNKNOWN
+rule stale_semantic_epoch -> UNKNOWN
+rule unproven_polarity -> UNKNOWN
+rule UNKNOWN != MONOTONE
+rule classifier_confidence != proof
+rule model_output != proof
+rule name_similarity != proof
+rule CJC_FULL_COMMUTE != proof_of_MONOTONE
+rule ECT_admitted_CallContract may enable reclassification but does_not itself imply MONOTONE
+rule SCF_semantic_charge may constrain classification but does_not itself imply MONOTONE
+
+// -----------------------------------------------------------------------------
+// DELTA 2: Runtime coordination is derived from semantic polarity.
+// BEFORE: state-changing work may enter a globally coordinated/broadcast path by default.
+// AFTER: monotone admitted deltas may join locally; determinations and unknowns cross a barrier.
+// -----------------------------------------------------------------------------
+rule current_provenance_bound_MONOTONE -> FREE_FLOW_MONOTONE
+rule DETERMINATION -> OPEN_DETERMINATION_MEMBRANE
+rule UNKNOWN -> EXISTING_COORDINATION_FALLBACK when config.use_existing_gwt_fallback=true
+rule UNKNOWN -> QUARANTINE when consequential_transition + no_safe_fallback
+rule stale_epoch -> QUARANTINE
+rule provenance_gap -> QUARANTINE
+rule external_effect -> OPEN_DETERMINATION_MEMBRANE then deterministic_effect_gate
+
+// -----------------------------------------------------------------------------
+// DELTA 3: GWT globality becomes determination-induced, not permanent state geometry.
+// -----------------------------------------------------------------------------
+rule GWT_candidate_add_support -> MONOTONE when only_adds_typed_evidence
+rule GWT_candidate_add_counterevidence -> MONOTONE when only_adds_typed_evidence
+rule GWT_candidate_score_update -> UNKNOWN unless semantic_domain_proves_monotone_accumulation
+rule GWT_winner_selection -> DETERMINATION
+rule GWT_ignite -> DETERMINATION
+rule GWT_focus_replace -> DETERMINATION
+rule GWT_reentry_admission -> DETERMINATION when it changes persistent learned_state
+rule GWT_ignition != truth
+rule GWT_ignition != authority
+rule WorkspaceEpisode may_bind_to MembraneSeal only after complete_current_causal_cut
+rule no_seal -> no_MCM_WorkspaceEpisodeBinding
+rule addressable != delivered
+rule delivered != reconstructed
+rule reconstructed != used
+rule used != local_effect
+rule verified_outcome required before causal_credit
+rule causal_credit required before reward_plasticity
+
+// -----------------------------------------------------------------------------
+// DELTA 4: Receiver reconstruction changes from ambient-current-state reads to sealed-cut reads.
+// -----------------------------------------------------------------------------
+rule receiver_for_bound_episode reads exact seal.cut + explicitly_admitted_episode_inputs
+rule receiver may_read_newer_state_as_separate_context but cannot_retroactively_attribute_it_to_old_episode
+rule receiver_receipt binds workspace_episode + seal_id + receiver + reconstruction_hash + semantic_epoch
+rule missing_receiver_reconstruction_receipt -> no_causal_use_credit
+rule changed_cut|changed_policy|changed_selection -> new_WorkspaceEpisodeBinding
+
+// -----------------------------------------------------------------------------
+// DELTA 5: UnifiedDB stores immutable semantic deltas and determination receipts.
+// Storage backend is replaceable; MCM semantics do not require a one-file layout.
+// -----------------------------------------------------------------------------
+rule UnifiedDB persists MonotoneDelta
+rule UnifiedDB persists PolarityContract + PolarityReceipt
+rule UnifiedDB persists MembraneRequest + CausalCut + MembraneSeal
+rule UnifiedDB persists WorkspaceEpisodeBinding + ReceiverReconstructionReceipt + OutcomeReentryReceipt
+rule UnifiedDB transaction_epoch must_bind state_instance_id + semantic_epoch
+rule duplicate_semantic_hash -> idempotent_noop
+rule storage_layout != semantic_polarity
+rule MOLT_append_only_frames may_implement persistence if independently_validated
+rule MOLT_NOT_PRESENT does_not_block MCM_semantic_test
+rule EUDI_single_writable_inode is_not_required
+
+// -----------------------------------------------------------------------------
+// DELTA 6: Hyperposition is a first-class monotone-before-collapse surface.
+// -----------------------------------------------------------------------------
+rule Hyperposition_add_alternative -> MONOTONE when no_existing_alternative_is_invalidated
+rule Hyperposition_add_support -> MONOTONE when evidence_is_additive_in_declared_domain
+rule Hyperposition_eliminate_alternative -> DETERMINATION
+rule Hyperposition_select_unique -> DETERMINATION
+rule Hyperposition_collapse -> DETERMINATION
+rule unresolved_alternatives survive until determination_seal or independent_invalidating_evidence
+
+// -----------------------------------------------------------------------------
+// DELTA 7: Memory / reward / goals / agency become split into evidence accumulation and commitment.
+// -----------------------------------------------------------------------------
+rule Memory_add_event -> MONOTONE when append_only_provenance_bound
+rule Memory_add_relation -> MONOTONE when relation_semantics_are_additive
+rule Memory_retract|Memory_overwrite|Memory_forget_semantically -> DETERMINATION
+rule retrieval_projection != memory_deletion
+
+rule verified_outcome_evidence_add -> MONOTONE
+rule causal_use_evidence_add -> MONOTONE
+rule reward_prediction_update -> UNKNOWN until typed_reward_semantics_are_classified
+rule reward_admission_to_plastic_state -> DETERMINATION
+rule reward_plasticity requires verified_outcome + causal_credit + RewardPlasticityReceipt
+rule self_generated_completion != material_reward
+
+rule goal_evidence_add -> MONOTONE
+rule interest_signal_add -> MONOTONE when bounded_evidence_only
+rule goal_candidate_add -> MONOTONE
+rule goal_activate|goal_deactivate|goal_replace -> DETERMINATION
+rule action_commitment -> DETERMINATION
+rule InitiativePulse != reward
+rule InitiativePulse != authority
+
+// -----------------------------------------------------------------------------
+// DELTA 8: Needle / tools / perception use the same determination boundary without gaining authority.
+// -----------------------------------------------------------------------------
+rule Needle_candidate_route_add -> MONOTONE when only_adds_candidate
+rule Needle_unique_route_selection -> DETERMINATION
+rule tool_invocation_proposal -> DETERMINATION
+rule tool_result_external_data -> provenance_bound_evidence + UNKNOWN_or_MONOTONE_by_contract
+rule tool_result cannot_mint authority
+
+rule DigitalRetina_add_percept -> MONOTONE when append_only_typed_percept
+rule MVC_add_known|unknown|ambiguous_evidence -> MONOTONE when no_unique_commitment
+rule unique_recognition_commitment -> DETERMINATION
+rule perception_to_action_commitment -> DETERMINATION
+rule percept_salience != truth
+
+// -----------------------------------------------------------------------------
+// DELTA 9: API and translator remain boundaries, not semantic classifiers.
+// -----------------------------------------------------------------------------
+rule authenticated_direct_message -> immutable_intent_evidence + scoped_user_intent
+rule API_token != identity
+rule API_token != unlimited_authority
+rule translator maps human_surface Frank <-> self.root without changing semantic_truth
+rule translator may_not change polarity
+rule translator may_not change effect_authority
+rule translator may_not fabricate proof_or_witness
+
+// -----------------------------------------------------------------------------
+// DELTA 10: Effect authority remains downstream and independent.
+// -----------------------------------------------------------------------------
+rule MembraneSeal.effect_authority = NONE
+rule MCMArchitectureConfig.allow_effect_authority_minting=false
+rule effect_proposal after seal -> CURRENT_effect_authority_gate
+rule effect_gate_verdict not_derived_from MCM_polarity
+rule destructive|security_sensitive_effect remains deterministic_effect_gate
+rule CEA_effect_antichain may_handle post_provider_unknown_outcome if independently_validated
+rule CEA_world_hypothesis != authority
+
+// -----------------------------------------------------------------------------
+// DELTA 11: Dual-time outcomes preserve causal origin; current application is separately classified.
+// -----------------------------------------------------------------------------
+rule late_verified_outcome may_join origin_episode_evidence when exact_origin_binding_valid
+rule old_origin_epoch != automatically_stale_causal_evidence
+rule applying_origin_delta_to_current_state requires current_applicability_classification
+rule current_application MONOTONE -> free_flow_current_epoch only with proof
+rule current_application DETERMINATION|UNKNOWN -> membrane_or_existing_fallback
+
+// -----------------------------------------------------------------------------
+// DELTA 12: CJC / SCF / ECT / MOLT / CEA are orthogonal evidence providers, not authority shortcuts.
+// -----------------------------------------------------------------------------
+rule CJC_HIDDEN_CAUSAL_NONCOMMUTE|CJC_STATE_NONCOMMUTE|CJC_UNKNOWN -> escalate_to_DETERMINATION_or_UNKNOWN
+rule CJC_FULL_COMMUTE may_reduce_order_risk but never_mints_MONOTONE
+rule SCF_violation -> QUARANTINE_or_existing_fallback
+rule ECT_UNRESOLVED|ECT_QUARANTINED -> UNKNOWN
+rule MOLT may_change persistence_cost not semantic_truth
+rule CEA may_change reconciliation_state not original_effect_authority
+
+// -----------------------------------------------------------------------------
+// ROLLOUT: shadow first, then dual-run, then candidate-active only after real evidence.
+// -----------------------------------------------------------------------------
+rule DISABLED -> existing_Frank_v0_1_behavior
+rule SHADOW -> compute polarity + cuts + seals without changing runtime decisions
+rule DUAL_RUN -> execute existing_path as authority + compare MCM shadow decisions
+rule CANDIDATE_ACTIVE -> MCM_may_route only transitions with promoted PolarityContract
+rule any_false_MONOTONE_classification -> ROLLED_BACK
+rule any_authority_violation -> ROLLED_BACK
+rule recovery_mismatch -> ROLLED_BACK
+rule semantic_divergence_without_explained_expected_delta -> ROLLED_BACK
+rule feature_flag_MCM_OFF -> existing_GWT + existing_coordination + existing_UnifiedDB path
+
+// -----------------------------------------------------------------------------
+// PROMOTION GATES: MCM must beat the strongest relevant baseline, not a strawman.
+// -----------------------------------------------------------------------------
+rule promotion_requires real_current_Frank_v0_1_transition_census
+rule promotion_requires target_VPS_execution
+rule promotion_requires matched_strong_causal_event_sourcing_baseline
+rule promotion_requires false_monotone_count=0 in tested promotion corpus
+rule promotion_requires crash_replay_mismatches=0 in tested promotion corpus
+rule promotion_requires authority_violations=0
+rule promotion_requires UNKNOWN_fail_closed_or_safe_fallback
+rule promotion_requires exact_GWT_selection_delivery_reconstruction_use_outcome_reentry_receipts
+rule promotion_requires at_least_one_material_unique_gain over strong_baseline
+rule material_unique_gain = unique_defect_coverage | architecture_compression | lower_resource_cost | lower_state_amplification | lower_latency | stronger_causal_observability | simpler_recovery
+rule no_material_unique_gain -> NO_GAIN_ARCHIVE_OR_REVISE
+rule proxy_advantage_vs_global_total_order alone != promotion
+rule candidate_elegance != evidence
+
+metric polarity_census_coverage
+metric false_monotone_count
+metric determination_rate
+metric unknown_rate
+metric membrane_open_rate
+metric seal_success_rate
+metric seal_latency_p50
+metric seal_latency_p95
+metric seal_latency_p99
+metric cut_member_count
+metric receiver_reconstruction_latency
+metric state_amplification
+metric persistence_write_amplification
+metric broadcast_payload_bytes
+metric causal_credit_precision
+metric crash_replay_mismatches
+metric stale_rejection_rate
+metric authority_violations
+metric strong_baseline_delta
+metric architecture_module_edges_removed
+
+invariant Clay != self.root
+invariant self.root.human_surface_name = Frank
+invariant self.root.cognition = CLAYCODE_ONLY
+invariant candidate_overlay != canonical_promotion
+invariant MONOTONE_requires_declared_domain_and_evidence
+invariant UNKNOWN_never_optimistically_free_flows
+invariant membrane_does_not_mint_truth
+invariant membrane_does_not_mint_effect_authority
+invariant GWT_determination_still_requires_causal_observability
+invariant target_self_harness_authority_is_PROPOSAL_ONLY
+invariant no_paid_or_final_training_without_owner_authorization

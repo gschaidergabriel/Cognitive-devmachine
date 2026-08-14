@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "event_type": "RESEARCH_EVIDENCE_SUPERSESSION",
+  "event_id": "storage-product-binding-supersession-20260811T131255Z",
+  "created_at_utc": "2026-08-11T13:12:55.913Z",
+  "trigger": "clayresearch",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_cut": {
+    "canonical_head_observed": {
+      "sha": "0ea517212ce858a80d201c5bfc61729956760d4d",
+      "message": "research(center): route cross-layer closure and falsifiers",
+      "created_at": "2026-08-11T13:11:28Z"
+    },
+    "target_pr": {
+      "number": 324,
+      "url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/324",
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": true,
+      "base_sha": "961668ebf69f14b9ad685ddb3e6e707da1337576",
+      "head_sha": "d6bcdc13fd9e6ed115431ab7c956a3bb329ac04e",
+      "commits": 5,
+      "changed_files": 4,
+      "updated_at": "2026-08-11T13:08:32Z"
+    }
+  },
+  "supersedes": {
+    "event_commit": "0ea517212ce858a80d201c5bfc61729956760d4d",
+    "event_blob": "f72b1c97f5d98ef8eb408160eab82057467e048a",
+    "event_path": "research_entity/rooms/rooms/center/events/20260811T131127Z_live_cross_layer_closure.json",
+    "exact_claim": "The isolated 3.53.4 object is the measured integration candidate, not yet Frank-product-bound.",
+    "reason": "A canonical receipt already visible in the event's observed evidence cut provides accepted-target, fail-closed Frank Python runtime-object admission and V17 regression evidence. Preserve the old sentence only as a pre-supersession historical state."
+  },
+  "new_canonical_evidence": {
+    "canonical_commit": "cbcba0535e9256d72fb492918cf309fbd6ce013e",
+    "canonical_blob": "b88269dc3dcb084b64037db43bed43331221bcf4",
+    "canonical_path": "research_entity/trigger_runs/go/go-20260811T1910p0700-chatgpt-secondary-claycode-operator-survival/CYCLE_5_FIXED_SQLITE_RUNTIME_ADMISSION.json",
+    "fresh_state_supersession_commit": "b3aeff74ad59de62530e335f09536ff22205e98a",
+    "fresh_state_blob": "06f4c48c55feb5d492af9fc57e823c3b0bc15c92",
+    "target_pr": 324,
+    "target_workflow_run": 31494090226,
+    "target_job": 93787360008,
+    "tested_sha": "a23b79d58d9f50d34501d1894a270330111a27e6",
+    "target_receipt_commit": "d6bcdc13fd9e6ed115431ab7c956a3bb329ac04e",
+    "target_runner": "clay/digital-retina",
+    "result": "SUCCESS",
+    "fixed_runtime": {
+      "sqlite_version": "3.53.4",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "source_archive_sha256": "0e9483900e92cd5de8fd48d16bf9200145a61f7fd5be542a5ac81d8a9516eb9c",
+      "library_sha256": "c6858e90954a45304e2c41fbcfc43615c582a05a9f2eee771f3d606044264e51",
+      "manifest_sha256": "dcc3f04ecf32fd846de193270f9e6759ab57b338c3956a2b9a80fa9b33f33140"
+    },
+    "admission_differential": {
+      "status": "PASS_FIXED_SQLITE_RUNTIME_GUARD_INTEGRATION",
+      "checks": "7/7",
+      "positive": "Child executes state target only after observing the exact admitted private version/source-id/mapped object.",
+      "negative_controls": [
+        "wrong manifest hash denied before target exit 78",
+        "wrong library hash denied before target exit 78",
+        "wrong source ID denied before target exit 78",
+        "fallback to /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6 denied before target and receipt exit 78"
+      ]
+    },
+    "v17_regression": {
+      "status": "PASS_V17_BOUND_REENTRY_DONE_CANDIDATE_DIFFERENTIAL",
+      "checks": "18/18"
+    },
+    "artifact": {
+      "id": 9102325343,
+      "sha256": "ed6c2d055a9c67fc9a65002a2296825ed766e28f39ba782858f980f8f1cf3806"
+    }
+  },
+  "adjudication": {
+    "H-STORAGE-FIXED-RUNTIME-ADMISSION-001": "SUPPORTED_ON_ACCEPTED_TARGET_FOR_EXACT_TESTED_STACK",
+    "CH-STORAGE-FIXED-RUNTIME-ADMISSION-001": "REFUTED_FOR_EXACT_TESTED_STACK",
+    "system_sqlite_for_correctness_sensitive_multi_connection_wal": "REJECTED_ON_ACCEPTED_TARGET",
+    "private_3_53_4_fail_closed_runtime_object_admission": "SUPPORTED_TESTED_PRODUCT_INTEGRATION_CANDIDATE",
+    "H-STORAGE-DEFECT-REACHABILITY-DISJUNCTION-001": "FIXED-LINEAGE BRANCH ADVANCED; DEPLOYMENT/RECOVERY BOUNDARY STILL OPEN",
+    "promotion": "NONE"
+  },
+  "evidence_deduplication": "PR315 fixed-control, PR320 system-lineage discriminator and PR324 product-admission test form one coordinated target/runner evidence family. They are complementary stages, not independent replications.",
+  "remaining_gates": [
+    "Promote immutable build/manifest provenance into an accepted deployment artifact and installation boundary.",
+    "Run broader presence/V17/GWT/effect-authority suites under the exact admitted 3.53.4 object.",
+    "Test restart/recovery while re-enforcing identical runtime admission.",
+    "Test power-loss/kernel-panic durability separately; process-crash evidence is not equivalent.",
+    "Do not globally replace the host SQLite package from this candidate."
+  ],
+  "routed_impulses": [
+    {
+      "recipients": [
+        "F-V01-13 STORAGE/RECOVERY/OBSERVABILITY",
+        "Supervisor"
+      ],
+      "priority": "P0",
+      "impulse": "Treat PR324 as the current tested product-integration candidate. Bind its manifest/build provenance immutably, then test restart, recovery and power-loss while verifying the mapped object at each process start."
+    },
+    {
+      "recipients": [
+        "F-V01-03 cognitive loop",
+        "F-V01-05 GWT/Hyperposition",
+        "F-V01-09 Effect Authority",
+        "UnifiedDB",
+        "ClayGraph",
+        "separate Harness reviewer"
+      ],
+      "priority": "P0",
+      "impulse": "Compose the broad loop/GWT/effect suites behind the exact admitted 3.53.4 object. Do not infer causal ancestry or whole-product acceptance from V17 18/18."
+    },
+    {
+      "recipients": [
+        "research_entity center",
+        "all lane owners"
+      ],
+      "priority": "P1",
+      "impulse": "Mark the earlier product-binding-open witness superseded by cbcba053; retain it as history without counting it as the current blocker."
+    }
+  ],
+  "safety_and_nonclaims": {
+    "canonical_database_migrated": false,
+    "system_package_replaced": false,
+    "power_loss_durability_proven": false,
+    "whole_frank_v0_1_accepted": false,
+    "training_authorized": false,
+    "training_performed": false,
+    "target_execution_performed_by_this_worker": false,
+    "code_or_harness_modified_by_this_worker": false,
+    "only_external_write": "this provenance-only supersession event"
+  }
+}

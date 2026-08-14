@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "benchmark":"U15_1_TYPED_GAP_SIGNATURE_PARAPHRASE_INVARIANCE_V1",
+  "execution_class":"LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "origin_actor":"chatgpt-secondary",
+  "scope":"Synthetic structural plan-key invariance after entity/intent/requirement resolution; this does not test upstream resolution robustness.",
+  "configuration":{"seeds":[20260810,20260811,20260812],"semantic_families_per_seed":250,"surface_variants_per_family":20,"queries_per_seed":5000,"total_queries":15000},
+  "aggregate":{"surface_invariant_family_rate":1.0,"raw_surface_plan_cache_hit_rate":0.0,"typed_gap_plan_cache_hit_rate":0.95,"typed_signature_p50_ns_mean":4436.333333333333},
+  "per_seed":[
+    {"seed":20260810,"queries":5000,"raw_unique_plan_keys":5000,"typed_unique_plan_keys":250,"surface_invariant_family_rate":1.0,"typed_gap_plan_cache_hit_rate":0.95,"signature_p50_ns":4446.0,"signature_p95_ns":5608},
+    {"seed":20260811,"queries":5000,"raw_unique_plan_keys":5000,"typed_unique_plan_keys":250,"surface_invariant_family_rate":1.0,"typed_gap_plan_cache_hit_rate":0.95,"signature_p50_ns":4437.0,"signature_p95_ns":4717},
+    {"seed":20260812,"queries":5000,"raw_unique_plan_keys":5000,"typed_unique_plan_keys":250,"surface_invariant_family_rate":1.0,"typed_gap_plan_cache_hit_rate":0.95,"signature_p50_ns":4426.0,"signature_p95_ns":4697}
+  ],
+  "web_fusion_basis":["Adaptive retrieval can save work by stopping/deepening conditionally, but recent 2026 evidence reports substantial robustness sensitivity to semantically equivalent surface-form changes.","Current GraphRAG/DRIFT and context-aware graph traversal work independently support entity-anchored, query-adaptive traversal while keeping traversal budget explicit."],
+  "architecture_consequence":"After entity/intent/evidence-requirement typing, structural ClayGraph expansion/caching should use an epoch-bound typed gap signature rather than raw query wording. Raw text may remain upstream evidence for resolution; it must not fragment an otherwise identical deterministic structural plan.",
+  "limitations":["The typed requirements are assumed correct; upstream resolver/intent/gap extraction can still be paraphrase-sensitive.","This benchmark measures plan-key invariance/cache reuse, not answer accuracy.","Synthetic paraphrases and family labels are model-authored.","Hostinger and Andreas target execution remain required."],
+  "promotion":"CANDIDATE_ONLY"
+}

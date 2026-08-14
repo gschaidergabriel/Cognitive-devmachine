@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "controls":[
+    {"id":"C1","name":"FULL_CONTEXT","purpose":"upper bound on distinction preservation; high token cost"},
+    {"id":"C2","name":"TOPK_SAFE","purpose":"ordinary relevance selection plus mandatory hard witnesses"},
+    {"id":"C3","name":"SAFE_DECISION_COVER","purpose":"strong conventional selector; decisive against DCA selector novelty"},
+    {"id":"C4","name":"QUERY_AWARE_NO_CERT","purpose":"separate retrieval correctness from completeness reasoning"},
+    {"id":"C5","name":"GLOBAL_CERT","purpose":"test global completeness versus query-relative completeness"},
+    {"id":"C6","name":"QR_STALE_UNFENCED","purpose":"stale certificate lesion"}
+  ],
+  "ablations":[
+    {"remove":"DistinctionWitness","prediction":"minority/material alternatives may silently collapse under budget"},
+    {"remove":"QueryCompletenessWitness","prediction":"no-match becomes unsafe negative closure under partial source"},
+    {"remove":"CurrentnessWitness","prediction":"prior-epoch completeness can authorize stale absence"},
+    {"replace":"decision cover with top-k","prediction":"higher uncovered material distinction rate"},
+    {"replace":"DCA object with ordinary metadata bundle","prediction":"should tie if DCA has no non-bypass semantic advantage; this is strongest kill test"}
+  ],
+  "safety_invariants":["no assembly selection mints truth","no completeness witness mints effect authority","missing/omitted does not lower to absent","stale certificate forces refresh","hard identity/intent/authority constraints are not relevance-scored away"]
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:35:00+07:00",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "parent_run": "go-20260810T1201p0700-chatgpt-secondary-wp02-placeholder-parity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "evidence_class": "REAL_SELF_HOSTED_LINUX_HOSTINGER_PROXY_EXACT_PR153_TOOL_BLOBS_ON_HASH_VERIFIED_WP02_BUNDLE",
+  "candidate": {
+    "pull_request": 153,
+    "head_sha_tested": "5d2e7f904323c792cfdb2af72706391eabda7a99",
+    "canonicalizer_blob": "0e3a9f3c16991cc121f88fac1980f675b8453557",
+    "validation_blob": "a57c00de8be2add031a69ad99bac689ad523a358",
+    "cross_parity_blob": "84a57f03d58435e4c504b980f399c4798a46f9ff"
+  },
+  "workflow": {
+    "transport_repository": "gschaidergabriel/Dr.-Unterweger",
+    "diagnostic_pull_request": 84,
+    "run_id": 31358931457,
+    "job_id": 93363776377,
+    "conclusion": "success",
+    "artifact_id": 9051622631,
+    "artifact_digest": "sha256:b0cb07a3aa8d109377446249f55da33a0d802e7535440aa906704c998fbf57b4",
+    "artifact_expires_at": "2026-09-09T05:33:13Z"
+  },
+  "runner": {
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "cpu_model": "AMD EPYC 9354P 32-Core Processor",
+    "cpu_threads_available": 4,
+    "mem_total_kb": 16376020,
+    "virtualization": "kvm"
+  },
+  "verified_source_blobs": {
+    "v17_grammar": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "production_frontend": "55728fd20323a364bb5e831989644b65189603d1",
+    "g9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797"
+  },
+  "checks": {
+    "v17_discriminator": "PASS",
+    "strict_lalr_no_conflicts": "PASS",
+    "production_frontend": "PASS",
+    "standalone_canonicalizer": "PASS",
+    "strict_cross_canonicalizer_parity": "PASS",
+    "production_canonicalizer_validation": "15/15 PASS",
+    "production_triggered_cross_parity": "PASS",
+    "strict_parser_contract_bound": true,
+    "production_parser_contract_bound": true,
+    "full_g9_dialect_hash_parity": true
+  },
+  "same_oob_experiment_replication": {
+    "family": "OPTIONAL_PLACEHOLDER_SENSITIVITY_AS_SEMANTIC_DIFF_FALSIFIER",
+    "new_experiment_family_count": 0,
+    "mutation": "maybe_placeholders=True",
+    "mutation_none_counts": [5, 3, 9],
+    "mutation_detected_all": true,
+    "rescue": "claycode_base_frontend.build_parser(maybe_placeholders=False)",
+    "rescued_none_counts": [0, 0, 0],
+    "rescue_pass_all": true,
+    "note": "This is confirmatory replication of the one OOB experiment family already selected for this exact go macro-cycle, not a second unusual experiment."
+  },
+  "resource_measurements": {
+    "discriminator": {"wall_s": 5.34, "user_s": 5.29, "system_s": 0.04, "max_rss_kb": 36444, "exit_status": 0},
+    "strict": {"wall_s": 0.83, "user_s": 0.79, "system_s": 0.03, "max_rss_kb": 31220, "exit_status": 0},
+    "frontend": {"wall_s": 0.63, "user_s": 0.60, "system_s": 0.02, "max_rss_kb": 31488, "exit_status": 0},
+    "canonicalizer": {"wall_s": 0.55, "user_s": 0.52, "system_s": 0.02, "max_rss_kb": 29568, "exit_status": 0},
+    "cross_parity_strict": {"wall_s": 1.67, "user_s": 1.60, "system_s": 0.06, "max_rss_kb": 33320, "exit_status": 0},
+    "production_validation": {"wall_s": 6.63, "user_s": 6.54, "system_s": 0.09, "max_rss_kb": 33408, "exit_status": 0}
+  },
+  "counterhypothesis": {
+    "claim": "Independent standalone and production canonicalizer tests are sufficient without direct parity coupling.",
+    "status": "REFUTED_ON_TESTED_V17_G9_DIALECT_HOSTINGER_PROXY",
+    "reason": "The newly coupled PR153 tripwire itself passes under direct strict and production-triggered parity, while the prior architecture allowed the two paths to remain independently green despite parser-construction divergence."
+  },
+  "remaining_identity_layer_question": {
+    "status": "OPEN",
+    "question": "Do downstream UnifiedDB/cache/replay/dedup/promotion consumers conflate production grammar-independent semantic_hash, production grammar-bound contract_hash, and standalone grammar-bound canonical syntax identity?",
+    "rule": "Do not rename or migrate persisted hashes unless an actual consumer conflation is demonstrated."
+  },
+  "targeted_distribution": {
+    "pr153_comment_id": 5236302129,
+    "original_duplicate_pr142": "CLOSED_UNMERGED_SUPERSEDED",
+    "diagnostic_pr84": "DRAFT_DO_NOT_MERGE"
+  },
+  "gate_impact": {
+    "CC-WP-02-PARSER-CANON": "REMAINS_OPEN",
+    "BASE_CLAYCODE_RELEASE": "REMAINS_IN_PROGRESS",
+    "counts_as_wp02_pass": false,
+    "counts_as_andreas_target_acceptance": false,
+    "promotion_allowed": false
+  },
+  "next_falsifier": "Trace all current persisted identity-hash consumers across UnifiedDB, replay, cache, deduplication and promotion; if no conflation exists, preserve separate identity layers and avoid migration. If conflation exists, add a typed/versioned identity-key contract and matched replay migration test. Formal WP02 still requires the registered Andreas Ubuntu target receipt.",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

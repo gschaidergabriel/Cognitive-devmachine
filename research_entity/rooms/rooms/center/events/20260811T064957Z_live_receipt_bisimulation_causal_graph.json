@@ -1,0 +1,211 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-RECEIPT-BISIMULATION-CAUSAL-GRAPH-20260811T064957Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "prior_notified_event_commit": "0833bcfb1fe68b85a665ecebb20becf7e7d16b17",
+    "observed_head": "1c867c47d9a545f0b2f439352f524b4fb7dfe7a3"
+  },
+  "intended_recipients": [
+    "Clay research center and evidence-ledger worker",
+    "separate Harness/review worker; no Frank self-Harness mutation",
+    "F-V01-02 ClayCode compiler/runtime worker",
+    "F-V01-03 cognitive-loop worker",
+    "F-V01-04 UnifiedDB/ClayGraph worker",
+    "F-V01-05 GWT/Hyperposition worker",
+    "F-V01-09 effect-authority worker",
+    "F-V01-13 security/recovery/observability worker"
+  ],
+  "evidence_families": [
+    {
+      "family_id": "E-EXTERNAL-RECEIPT-INTEGRITY-AUDIT-20260811",
+      "classification": "EXTERNAL_REVIEWER_PLUS_TARGET_LOCAL_REEXECUTION_AND_ADVERSARIAL_SABOTAGE",
+      "independence_boundary": "Reviewer/model perspective is externally adversarial, but re-executions share the accepted target, source repository and mechanisms; this is not independent runtime replication.",
+      "project_commit": "1c867c47d9a545f0b2f439352f524b4fb7dfe7a3",
+      "report_blob": "d11c1c0fbecec2b8d58dec756705f3308c07346e",
+      "target": "clay@digital-retina",
+      "findings": [
+        "Effect-authority, presence and V17 headline outputs reproduced in the audit table.",
+        "Effect receipt denominators cannot fall because failure aborts before receipt emission.",
+        "V17 advertises 18 checks although 14 final entries are hardcoded True and four are computed.",
+        "EXECUTABLE_POLICY_ORACLE only checks 13 Clay source substrings; it does not parse, type, lower or execute the Clay semantics.",
+        "Reported gate latency samples one repeated warm READ_ONLY branch rather than the decision space.",
+        "Named restart is a same-process connection reopen, not process crash/restart.",
+        "Root CLAUDE.md retains Andreas-PC mission anchors that conflict with the owner-fixed Hostinger target directive.",
+        "1000/1000 policy-field mutations changed request hash while four cognitive fields did not, supporting non-cognitive authority separation.",
+        "Sabotaging the Python V17 attempt guard still caused SQLite V17_REENTRY_CANONICAL_BINDING_MISMATCH through schema RAISE(ABORT) triggers."
+      ],
+      "scope_limits": [
+        "Three prominent probe families were inspected; systemic extrapolation to roughly 200 probes is unproven.",
+        "No canonical database, external effect or production path was exercised.",
+        "No audit-driven promotion requested."
+      ]
+    },
+    {
+      "family_id": "E-GRAPH-IDENTITY-CAUSALITY-TARGET-FAMILY-20260811",
+      "classification": "MULTIPLE_DISTINCT_TARGET_PROBES_SHARED_PROJECT_RUNNER_ANCESTRY",
+      "supervisor_commit": "d3e25a1ecb9b386cfba70bcbd9abd118b6ec27c5",
+      "evidence": [
+        {
+          "run": 31439072374,
+          "result": "PASS_GRAPH_IDENTITY_VECTOR_V1_MECHANISM",
+          "claim": "Structural, epistemic and dynamic roots separate bounded mutation classes and unknown persistent tables fail closed.",
+          "boundary": "candidate mechanism; not canonical identity or causal use"
+        },
+        {
+          "run": 31437472309,
+          "result": "CLAYGRAPH_NOT_CAUSALLY_PRESENT_IN_MODEL_VISIBLE_ASSEMBLY",
+          "claim": "Query-relevant Graph semantic lesions left bounded assembly unchanged, while identical restored semantics changed full assembly via graph_epoch alone.",
+          "boundary": "identity/provenance is not causal consumption"
+        },
+        {
+          "run": 31438812356,
+          "result": "ROOT_DOMAIN_TYPE_CONFUSION_REPRODUCED",
+          "claim": "Bare selected-head digest does not identify root protocol/manifest domain."
+        },
+        {
+          "run": 31438451690,
+          "result": "REPLAY_USE_PROVENANCE_COMPOSITION_DEFECT_REPRODUCED",
+          "claim": "LIVE_CAPTURE and REPLAY_BOUND use receipts differ at identical as-of time and cannot both be embedded into byte-stable semantic selection identity."
+        },
+        {
+          "run": 31438310214,
+          "result": "CANDIDATE_UNIVERSE_COMPLETENESS_GAP_REPRODUCED",
+          "claim": "An incomplete approximate universe can mint a self-consistent SelectionReceipt; integrity does not prove completeness."
+        }
+      ],
+      "deduplication": "These probes distinguish different composition properties but share source/project/runner ancestry; they are not independent confirmations of one broad Graph claim."
+    },
+    {
+      "family_id": "E-UPSTREAM-SEMANTICS-20260811",
+      "classification": "PRIMARY_DOCUMENTATION_SUPPORT_NOT_PROJECT_EXECUTION",
+      "sources": [
+        {
+          "url": "https://docs.python.org/3.12/using/cmdline.html#cmdoption-O",
+          "checked_utc": "2026-08-11T06:49:57Z",
+          "claim": "CPython -O removes assert statements and __debug__-conditional code."
+        },
+        {
+          "url": "https://sqlite.org/lang_createtrigger.html#the_raise_function",
+          "checked_utc": "2026-08-11T06:49:57Z",
+          "claim": "RAISE(ABORT/FAIL/ROLLBACK) in a trigger terminates the current query with SQLITE_CONSTRAINT."
+        },
+        {
+          "url": "https://slsa.dev/spec/v1.2/build-requirements",
+          "checked_utc": "2026-08-11T06:49:57Z",
+          "claim": "Provenance accuracy requires data generated or directly obtained by the trusted control plane; completeness remains an explicit concern."
+        }
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "id": "H-RECEIPT-MECHANISM-BISIMULATION-001",
+      "concept": "ReceiptMechanismBisimulation",
+      "claim": "Every advertised receipt check should have a bidirectional witness: executed observation -> check result, and check result -> exact code/observation/falsifier identity; hardcoded success entries and pre-receipt aborts violate this relation even when the underlying mechanism is safe.",
+      "proposed_contract": {
+        "per_check": [
+          "check_id",
+          "computed_boolean",
+          "observation_digest",
+          "oracle_stage",
+          "mutant_or_negative_baseline_id",
+          "failure_reason"
+        ],
+        "run": [
+          "partial_receipt_emitted_on_failure",
+          "executed_check_count",
+          "skipped_check_count",
+          "assertion_mode",
+          "exact_program_hash",
+          "runner_identity"
+        ],
+        "rule": "A count denominator contains only actually evaluated booleans. Reaching the end is a separate run-completed bit."
+      },
+      "counterhypothesis": "Binary fail-closed gates are sufficient for release safety; detailed partial receipts increase complexity and can leak or mislead without improving decisions.",
+      "decisive_test": [
+        "Mutate every advertised predicate false one at a time and require a signed/readable partial receipt naming that predicate.",
+        "Run normal and python -O modes; semantic result and receipt schema must remain equivalent except explicit interpreter-mode provenance.",
+        "Replace Clay source semantics while preserving marker strings; EXECUTED_CLAY evidence must fail.",
+        "Measure whether reviewers locate injected faults faster and with fewer false classifications using bisimulated receipts versus current receipts."
+      ]
+    },
+    {
+      "id": "H-EVIDENCE-CLASS-LATTICE-001",
+      "concept": "MechanicallyDerivedEvidenceClass",
+      "claim": "Evidence class must be derived from bound stage receipts rather than free text: SOURCE_PRESENT < PARSED < TYPED < LOWERED < EXECUTED < TARGET_EXECUTED < ADVERSARIAL_TARGET.",
+      "counterhypothesis": "A strict linear lattice is too coarse because static proofs, schema constraints and differential execution are incomparable evidence modes.",
+      "synthesis": "Use a vector rather than one rank: <source_binding, semantic_stage, execution_scope, adversarial_strength, recovery_scope, independence, reporting_fidelity>.",
+      "falsifier": "Any label claiming a stage without its exact-byte predecessor receipt must be rejected mechanically."
+    },
+    {
+      "id": "H-DUAL-EVIDENCE-ENVELOPE-001",
+      "concept": "MechanismReportingEnvelope",
+      "claim": "Project status must preserve separate axes for enforced mechanism strength and reporting/measurement fidelity; the audit demonstrates strong database invariants coexisting with weak receipt semantics.",
+      "counterhypothesis": "Two axes still hide important distinctions; only the full evidence vector above is safe.",
+      "promotion_rule": "No scalar PASS may average away a zero on semantic execution, crash scope or causal use."
+    },
+    {
+      "id": "H-BOOT-DIRECTIVE-CONSISTENCY-001",
+      "concept": "BootDirectiveConsistencyReceipt",
+      "claim": "Before any worker reentry, a precedence graph over root instructions and owner-fixed directives must resolve one target-body identity or fail closed on contradiction.",
+      "counterhypothesis": "Andreas PC may intentionally denote a development body while Hostinger denotes final acceptance; the apparent contradiction is a missing scope relation rather than wrong content.",
+      "decisive_test": [
+        "Extract every target-body/mission-anchor assertion with source hash and precedence.",
+        "Require explicit scope labels DEVELOPMENT_BODY versus FINAL_ACCEPTANCE_BODY.",
+        "Re-run worker bootstrap and verify the resolved target is stable at T0 and material reentry.",
+        "Owner decision remains required before changing the root mission anchor."
+      ]
+    },
+    {
+      "id": "H-CAUSAL-GRAPH-ADMISSION-002",
+      "concept": "CausalProjectionAdmission",
+      "claim": "Graph identity can enter model-visible routing only when a query-relevant semantic lesion changes the bounded consumer output and a query-irrelevant lesion does not; epoch/root changes alone confer no causal authority.",
+      "counterhypothesis": "The bounded assembly is not the true consumer; Graph may causally affect a later model or decision stage while assembly bytes remain invariant.",
+      "decisive_test": [
+        "Trace the actual retrieval/assembly/model/decision consumer chain with typed identities.",
+        "Lesion query-relevant Graph content and require a preregistered downstream behavioral change.",
+        "Lesion query-irrelevant content and require invariance.",
+        "Shuffle epoch/provenance while restoring identical content and require semantic consumer invariance.",
+        "Separate selection integrity from candidate-universe completeness and root-domain typing."
+      ]
+    }
+  ],
+  "preserved_negative_and_null_results": [
+    "N-AUDIT-001: hypothesis that python -O makes the V17 invariant vacuous was falsified; schema triggers still rejected the malformed reentry.",
+    "Same-process connection reopen remains a bounded positive result, not crash/restart evidence.",
+    "Presence lease cross-process behavior is argued from SQLite locking but not yet demonstrated by multiprocessing.",
+    "GraphIdentityVector mechanism PASS does not close causal model-visible use.",
+    "SelectionReceipt integrity does not prove universe completeness.",
+    "No Clay evaluator/interpreter/lowering/code generator was found in the audited target checkout; F-V01-03 remains OPEN.",
+    "No training is authorized."
+  ],
+  "requested_reentry": [
+    "Evidence/Harness worker: prototype ReceiptMechanismBisimulation outside Frank's protected self-Harness.",
+    "F-V01-09/F-V01-13: reclassify policy oracle and restart evidence; retain schema-trigger strength and negative baseline.",
+    "ClayCode F-V01-02: treat source substring presence as SOURCE_PRESENT only; preserve WP04 29-target priority.",
+    "Center/owner queue: adjudicate root mission-anchor scope without autonomous edit.",
+    "UnifiedDB/ClayGraph/GWT/Hyperposition: preregister CausalProjectionAdmission at the actual consumer, not only assembly bytes.",
+    "Observability: report mechanism and measurement fidelity as separate vector axes."
+  ],
+  "authority_boundary": {
+    "code_executed_by_this_event": false,
+    "target_repo_mutated": false,
+    "harness_mutated": false,
+    "external_effect": false,
+    "canonical_semantics_promoted": false,
+    "work_package_promoted": false,
+    "frank_v0_1_finished": false,
+    "training_run": false
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0015p0700-chatgpt-secondary-effect-process-incarnation",
+  "work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "status": "CANDIDATE_TESTING",
+  "parent_candidate": {
+    "pr": "gschaidergabriel/Dr.-Unterweger#228",
+    "finding": "Exact V16 + Gate-issued exact-object + multi-effect parent matrices are supported, but exact-object/process-local authority alone is falsified across fork."
+  },
+  "exact_target_falsifier": {
+    "pr": "gschaidergabriel/Dr.-Unterweger#233",
+    "run_id": 31413734864,
+    "tested_merge_sha": "d1491791553e4b21d83e6f22361b8683fa3bcb20",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "status": "REPRODUCED_FORK_INHERITED_GATE_CAPABILITY_SHADOW",
+    "child_can_mint_fence": true,
+    "child_fence_assert_live": true,
+    "child_B2_state": "COMMITTING",
+    "child_B3_reason": "PROVIDER_COMMIT_EXECUTION_FENCE_VALID",
+    "parent_fence_still_live": true,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false
+  },
+  "selected_successor": {
+    "pr": "gschaidergabriel/Dr.-Unterweger#238",
+    "head_sha": "4e5240364dda454a298d76efdf6d647314245f11",
+    "base": "gschaidergabriel/Dr.-Unterweger#228",
+    "design": [
+      "Preserve exact Gate-issued object WeakSet.",
+      "Add Gate-controlled WeakKeyDictionary mapping exact lease object to issuer PID only after successful physical flock + V15 acquire.",
+      "Perform issuer PID preflight before entering copied registry RLock so fork child fails closed without relying on at-fork lock cleanup.",
+      "Revalidate exact-object membership plus issuer PID under guard in same process.",
+      "Require the same Gate/process binding for heartbeat, release and provider commit window; public construction/copy cannot gain direct lease-method authority.",
+      "Preserve exact V16 execution_id/credential/admitted-ingress B1/B2/B3 binding and multi-effect cardinality from parent."
+    ],
+    "normal_regression": "tests/frank_execution_gate_process_incarnation_v5.py",
+    "target_workflow": ".github/workflows/frank-effect-process-incarnation-v5-vps.yml"
+  },
+  "latest_target_evidence": {
+    "exact_parent_matrix_on_selected_successor_run": 31415174635,
+    "exact_parent_matrix_on_selected_successor": "SUCCESS",
+    "process_incarnation_repair_run": 31415175261,
+    "process_incarnation_repair_status": "PENDING_OR_QUEUED_AT_FINAL_WRITE",
+    "claim": "Parent equivalence is target-supported on final selected head; dedicated fork-repair PASS is not yet claimed."
+  },
+  "sole_oob_in_this_go_cycle": {
+    "name": "FORKED_WEAK_CAPABILITY_MICROREPLICA",
+    "count": 1,
+    "role": "independent mechanism replication predicting the exact #233 result"
+  },
+  "strongest_remaining_falsifier": "Run 31415175261 must show copied same-process lease methods fail, fork child fails Gate/process authority, parent remains live/releases, and all matched parent matrices remain green.",
+  "separate_open_layers": [
+    "physical lock-anchor path replacement / state-root replacement (#225/#235)",
+    "snapshot/restore incarnation (#197)",
+    "non-bypassable production effect routing",
+    "real provider timeout-after-acceptance/idempotent reconciliation",
+    "ClayCode frontend/TypedIR/compiler/lowering exact-current evidence",
+    "verified provider outcome -> UnifiedDB re-entry -> DONE terminal receipt"
+  ],
+  "training_authorized": false,
+  "main_merge_performed": false,
+  "canonical_runtime_state_mutated": false,
+  "research_write": "COMMITTED"
+}

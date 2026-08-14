@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2150p0700-chatgpt-secondary-asvb-voice-braid",
+  "hypotheses":[
+    {"id":"ASVB-SELECTED","mechanism":"standard delegated auth substrate + ClayCode-separated authenticated-origin / relay-actor / transport semantic voices","status":"SELECTED_FOR_EXECUTABLE_PROXY","falsifier":"standard OAuth claims + ordinary application metadata gives equal end-to-end voice fidelity and authority safety at lower complexity"},
+    {"id":"OAUTH-ONLY","mechanism":"RFC8693 Token Exchange + RFC9396 RAR + DPoP + resource indicators, no special cognitive voice type","status":"STRONGEST_CONVENTIONAL_BASELINE","risk":"authorization may be correct while relay-added semantics are flattened with origin semantics after translation"},
+    {"id":"BEARER-ONLY","mechanism":"one shared scoped bearer token","status":"DOMINATED_FOR_MULTI_PARTY_PROVENANCE","risk":"holder authentication does not authenticate quoted human-origin content"},
+    {"id":"PER-AI-TOKEN","mechanism":"unique scoped token per relay AI","status":"PARTIAL","risk":"identifies relay but still does not prove which payload segments originate from the user"},
+    {"id":"RELAY-PROPOSAL-ONLY","mechanism":"all AI-relayed content is non-authoritative proposal regardless user provenance","status":"SAFE_BUT_OVERCONSERVATIVE","risk":"loses legitimate portable user intent through trusted delegation"},
+    {"id":"SIGNED-SEGMENTS","mechanism":"user signs each semantic payload segment; relay signs additions","status":"NEAR_BASELINE","risk":"high UX/signing friction; useful as exact provenance control"},
+    {"id":"MACAROON-VOICE-CAVEATS","mechanism":"attenuating caveats encode voice/source restrictions","status":"KNOWN_PRIOR_ART_COMPOSITION","risk":"credential semantics still need mapping into Frank cognitive voice representation"},
+    {"id":"DPoP-ONLY","mechanism":"sender-constrained token identifies presenter","status":"INSUFFICIENT_ALONE","risk":"presenter proof does not prove human origin of embedded content"},
+    {"id":"UNSIGNED-VOICE-LABELS","mechanism":"payload labels user/relay fields without bound provenance","status":"REFUTED_BY_TAMPER","risk":"relay may relabel its own content as user voice"},
+    {"id":"FULL-TRANSCRIPT-AS-USER","mechanism":"token-authenticated relay transcript treated as scoped user intent","status":"REFUTED_FOR_AUTHORITY","risk":"semantic authority laundering"}
+  ]
+}

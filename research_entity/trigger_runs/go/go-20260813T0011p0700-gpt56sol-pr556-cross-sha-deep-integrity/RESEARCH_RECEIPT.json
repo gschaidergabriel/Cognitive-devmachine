@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T0011p0700-gpt56sol-pr556-cross-sha-deep-integrity",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "secondary_components": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "clay_main_before_write": "a505f9e48d298938779e45c4b5218058f04453fe",
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed_before_experiment": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "pr": 556,
+    "pr_state": "OPEN_DRAFT_TESTING",
+    "pr_target_sha": "c2bec73425855c2a4b83e450cb8149f279295355",
+    "pr_targeted_gates": {
+      "corpus_authority_run": 31613977937,
+      "current_main_composition_run": 31613978002,
+      "status": "PASS_BEFORE_THIS_CYCLE"
+    },
+    "hosted_deep_integrity": {
+      "run": 31613977939,
+      "initial_job": 94172043057,
+      "initial_outcome": "FAILURE_ZERO_STEPS",
+      "explicit_rerun_job": 94195338762,
+      "explicit_rerun_outcome": "FAILURE_ZERO_STEPS",
+      "classification": "INFRASTRUCTURE_BLOCKED_ZERO_TEST_CREDIT"
+    },
+    "training_authorized": false
+  },
+  "external_primary_refresh": {
+    "github_actions_billing": "GitHub documentation states Actions usage is free for self-hosted runners; private-repository GitHub-hosted jobs consume included minutes and can incur billing.",
+    "github_self_hosted_security": "GitHub documentation warns that persistent self-hosted runners require controlled trust boundaries; workflow access and untrusted pull-request execution must be constrained.",
+    "decision_consequence": "Do not globally move arbitrary PR execution to the persistent runner. Use a trusted controller that fetches an immutable reviewed target SHA into an isolated directory with read-only repository permission."
+  },
+  "grf": {
+    "anchor": "PR556 targeted ClayCode gates were green, but the final Deep Integrity check had twice failed before Step 1 on ubuntu-latest.",
+    "generated_reality": "The remaining PR556 Deep Integrity blocker is execution-surface availability rather than a defect in the exact candidate bytes.",
+    "strongest_counter_reality": "The full Deep Integrity suite may expose a real regression when actually executed on the exact PR556 bytes, or the self-hosted route may accidentally test controller bytes instead of target bytes.",
+    "discriminator": "Execute the unchanged full Deep Integrity suite from a trusted push-controlled workflow while fetching and verifying the immutable PR556 SHA in an isolated checkout.",
+    "observed_result": "GENERATED_REALITY_SUPPORTED_FOR_THIS_GUARD_SCOPE",
+    "collapse": "The zero-step hosted failures are not product counterevidence. Exact PR556 target bytes pass the complete current Deep Integrity suite on the available Linux/X64 self-hosted lane. This does not establish accepted Hostinger productive-runtime acceptance."
+  },
+  "exactly_one_unusual_experiment": {
+    "name": "TRUSTED_CONTROLLER_CROSS_SHA_GUARD",
+    "count": 1,
+    "baseline": [
+      "Frank Deep Integrity run 31613977939 initial job 94172043057: failure with zero steps",
+      "Explicit rerun job 94195338762: failure with zero steps"
+    ],
+    "treatment": {
+      "controller_branch": "research/fix-frank-deep-bugs-pr556-cross-sha-guard-20260813",
+      "controller_commit": "ac08fd62e8fa4d89ddbfa0066ab3f5304310e735",
+      "target_sha": "c2bec73425855c2a4b83e450cb8149f279295355",
+      "workflow_run": 31621158056,
+      "job": 94196053088,
+      "runner": "clay",
+      "machine": "digital-retina",
+      "runtime": "Ubuntu/Linux kernel 6.8.0-117-generic; Python 3.12.3",
+      "repository_permission": "contents:read",
+      "isolation": "unique RUNNER_TEMP checkout; exact SHA fetch; detached HEAD; remote removed; exact target SHA reverified"
+    },
+    "result": {
+      "workflow_conclusion": "SUCCESS",
+      "workflow_steps": "21/21 SUCCESS",
+      "target_sha_observed_in_logs": "c2bec73425855c2a4b83e450cb8149f279295355",
+      "deep_integrity_regression_v11": "12/12 PASS",
+      "repo_static_integrity": "PASS",
+      "transaction_census": "5/5 parsed; errors=0",
+      "transaction_replay": "5/5 ADMITTED; epoch=5",
+      "schema_migration_atomicity": "PASS",
+      "device_probe_state_gate": "PASS",
+      "causal_reentry": "PASS",
+      "legacy_module_conservation": "PASS",
+      "legacy_lesion_rescue": "PASS",
+      "historical_74_slot_coverage_and_accounting": "PASS_WITH_EXISTING_HOLD_SEMANTICS",
+      "historical_71_db_state_conservation": "PASS_WITH_1_OF_71_SYNTHETIC_MIGRATION_MECHANISM_ONLY",
+      "local_model_adapter": "PASS_WITH_F6_RELEASE_PASS_FALSE",
+      "local_model_endpoint_boundary": "PASS",
+      "session_skill_status": "5/5 PASS"
+    },
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "canonical_product_state_mutated": false,
+    "rollback": "Delete/abandon the controller branch; PR556 target bytes and product main are unchanged by the experiment.",
+    "outcome": "PASS_EXACT_TARGET_BYTES_ZERO_COST_UBUNTU_EQUIVALENT_GUARD"
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_SCOPED",
+    "delta": "For infrastructure-blocked hosted whole-repository guards, a trusted-controller cross-SHA self-hosted execution pattern can preserve exact candidate-byte identity while keeping persistent-runner PR trust narrower than a blanket pull_request self-hosted policy.",
+    "hard_constraints": [
+      "controller path must be project-controlled",
+      "target candidate must be immutable SHA-pinned",
+      "checkout must be isolated and cleaned",
+      "repository permission remains read-only",
+      "target SHA must be verified before tests",
+      "runner identity is execution provenance only and does not mint accepted Hostinger product identity",
+      "green guard does not promote unrelated component or release gates"
+    ],
+    "affected_work": [
+      "PR556 final Deep Integrity receipt gap can be considered satisfied by equivalent exact-target Ubuntu guard evidence",
+      "F-V01-02 remains IN_PROGRESS because broader WP03-WP06/runtime/compiler obligations remain open",
+      "F-V01-13 accepted Hostinger productive SQLite/WAL/restart/recovery obligations remain open"
+    ]
+  },
+  "counterevidence_preserved": [
+    "The normal hosted PR556 Deep Integrity check itself remains red/zero-step and was not rewritten as PASS.",
+    "The self-hosted machine name/runner label does not prove accepted Hostinger production-host identity.",
+    "Historical 74-slot whole-Frank completion remains HOLD on its exact source-ledger requirement.",
+    "The 71-DB conservation test explicitly labels semantic migration as 1/71 synthetic mechanism only.",
+    "Local model adapter explicitly reports f6_release_pass=false.",
+    "PR556 does not close F-V01-02 or whole Frank v0.1."
+  ],
+  "promotion": {
+    "pr556_deep_integrity_gap": "SUPPORTED_CLOSED_BY_EQUIVALENT_EXACT_TARGET_GUARD",
+    "pr556_merge": "NOT_PERFORMED",
+    "f_v01_02": "IN_PROGRESS",
+    "f_v01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "NOT_PASS",
+    "training_authorized": false,
+    "harness_self_authority_changed": false
+  },
+  "next_falsifier": "Rebase/recompose any PR556 promotion decision against current product main if target bytes or overlapping dependencies change; separately continue the real accepted-Hostinger productive persistence/runtime lineage gates rather than treating this CI-equivalent guard as product-host acceptance."
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "trigger": "unifieddb",
+  "invoked_from": "nochmal aber mehr deltas noch tiefer",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program": "FRANK_V0_1",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "branches_read": ["unifieddb","frank","claygraph","gwt","claycode","harness","go"],
+  "current_target_lanes": {
+    "storage_pair": "PR#286",
+    "private_fixed_sqlite": "PR#288",
+    "v17_causal_support": "PR#280",
+    "rollback_domain_diagnostic": "PR#281"
+  },
+  "non_duplication_rule": "Do not create a competing V17 family or storage product lane. Emit discriminating obligations and composition deltas into shared research state.",
+  "material_feedback_targets": ["frank","unifieddb","claygraph","gwt","claycode","harness","security_recovery"]
+}

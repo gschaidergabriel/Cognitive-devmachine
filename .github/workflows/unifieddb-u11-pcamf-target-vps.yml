@@ -1,0 +1,101 @@
+name: UnifiedDB U11 PCAMF Target VPS Proof Gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/unifieddb_u11_target_vps_probe.py'
+      - 'research_entity/trigger_runs/unifieddb/unifieddb-20260810T2335p0700-chatgpt-secondary-u11-pcamf/U11_PROOF_CARRYING_RECEIPT_LATTICE_CANDIDATE.sql'
+      - '.github/workflows/unifieddb-u11-pcamf-target-vps.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-u11-pcamf-target-vps-main
+  cancel-in-progress: true
+
+jobs:
+  hosted-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+      - name: Compile probe
+        run: python3 -m py_compile tools/unifieddb_u11_target_vps_probe.py
+      - name: Run hosted falsifier
+        run: |
+          set -euo pipefail
+          python3 tools/unifieddb_u11_target_vps_probe.py --output /tmp/u11-hosted.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/u11-hosted.json'))
+          assert x['status']=='PASS', x
+          assert x['mutation_falsifier']['false_accepts']==0, x
+          PY
+
+  target-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+      - name: Compile exact-source probe
+        run: python3 -m py_compile tools/unifieddb_u11_target_vps_probe.py
+      - name: Run U11 proof, mutation, restart and backup gate
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          OUT=/tmp/u11-pcamf-target-vps.json
+          python3 tools/unifieddb_u11_target_vps_probe.py --output "$OUT"
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          p='/tmp/u11-pcamf-target-vps.json'
+          x=json.load(open(p))
+          x['execution_metadata']={
+            'evidence_class':'REAL_CURRENT_TARGET_VPS_SUBSYSTEM_EXECUTION',
+            'git_sha':os.environ.get('GIT_SHA',''),
+            'github_run_id':os.environ.get('RUN_ID',''),
+            'github_run_attempt':os.environ.get('RUN_ATTEMPT',''),
+            'created_at':datetime.now(timezone.utc).isoformat(),
+          }
+          x['scope']='U11 receipt-lattice/schema/restart/backup target-VPS subsystem evidence; NOT whole Frank v0.1 acceptance'
+          with open(p,'w') as f: json.dump(x,f,indent=2,sort_keys=True); f.write('\n')
+          assert x['status']=='PASS',x
+          assert x['mutation_falsifier']['false_accepts']==0,x
+          assert x['checks']['restart_chain_ok'],x
+          assert x['checks']['backup_restore_chain_ok'],x
+          PY
+      - name: Persist exact target-VPS receipt
+        run: |
+          set -euo pipefail
+          cp /tmp/u11-pcamf-target-vps.json /tmp/u11-pcamf-target-vps-preserved.json
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p research_entity/benchmarks/unifieddb
+          cp /tmp/u11-pcamf-target-vps-preserved.json research_entity/benchmarks/unifieddb/u11_pcamf_target_vps.json
+          git config user.name 'clay-unifieddb-u11-runner'
+          git config user.email 'clay-unifieddb-u11@users.noreply.github.com'
+          git add research_entity/benchmarks/unifieddb/u11_pcamf_target_vps.json
+          git commit -m 'evidence(unifieddb): persist U11 PCAMF target-VPS proof gate [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unifieddb-u11-pcamf-target-vps
+          path: /tmp/u11-pcamf-target-vps.json

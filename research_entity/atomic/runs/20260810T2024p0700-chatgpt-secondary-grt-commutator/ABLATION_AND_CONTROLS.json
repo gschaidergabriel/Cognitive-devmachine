@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-CCF-001",
+  "results":[
+    {"control":"NO_CANDIDATE_RW_CONFLICT","result":"SAFE_BUT_OVERCONSERVATIVE","evidence":"0 false commute; 34.70% safe independence versus 51.5967% for exact local commutator; 5069 false conflicts / 30000"},
+    {"control":"FULL_REPLAY","result":"EXACT_REFERENCE_BUT_COSTLIER_IN_PROXY","evidence":"same 14521 noncommuting labels; 1.4590s versus 0.10369s local sparse commutator"},
+    {"control":"SHUFFLED_EDGE","result":"DESTROYS_STRUCTURE","evidence":"precision=recall=0.4841; unsafe-parallel rate=24.97%"},
+    {"control":"STALE_EPOCH","result":"FAILS_SAFETY_REQUIREMENT","evidence":"1.6433% labels changed; 252 false commute decisions; unsafe-parallel rate=0.84%. Therefore stale receipts must be invalidated, not trusted."},
+    {"control":"RESOURCE_MATCHED_FULL_PLUS_RW","result":"LOCAL_CCF_RETains_MORE_SAFE_INDEPENDENCE","evidence":"full replay could cover ~7.11% of pairs at the measured local wall-clock; hybrid safe independence=35.79% versus local=51.5967%"}
+  ],
+  "causal_interpretation":"The selected mechanism's useful proxy signal is not edge prevalence: shuffling destroys correctness. State identity matters: stale reuse introduces unsafe false commuting. The result therefore supports pair identity + current epoch as causal requirements within the synthetic semantics.",
+  "remaining_missing_controls":["real H1/H2 transition coverage","opaque-model UNKNOWN path","stochastic transition calibration","q23 visual alias fixtures","target-VPS resource shadow","crash/restart fabric rebuild"]
+}

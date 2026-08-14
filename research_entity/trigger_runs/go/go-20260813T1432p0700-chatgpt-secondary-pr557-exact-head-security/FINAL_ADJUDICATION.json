@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260813T1432p0700-chatgpt-secondary-pr557-exact-head-security",
+  "adjudicated_at": "2026-08-13T14:34:00+07:00",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "pr": 557,
+  "exact_head": "819e84a5853a244e84352f206371ccf51d52a1a5",
+  "workflow_run": 31678111965,
+  "job": 94377104622,
+  "workflow_result": "SUCCESS",
+  "executed_steps": 9,
+  "artifact": {
+    "id": 9172365092,
+    "name": "frank-sqlite-connection-guard-31678111965",
+    "digest": "sha256:1a8a230bb56c8c62e22139c950aced6789126b6868f2e48e7eaaa5841328d33a",
+    "tested_sha": "819e84a5853a244e84352f206371ccf51d52a1a5",
+    "event_sha": "e2ca1a97ce5dd1664a9723ad9690b0dab0438071",
+    "pr_head_sha": "819e84a5853a244e84352f206371ccf51d52a1a5",
+    "runner": "clay",
+    "host": "digital-retina"
+  },
+  "sqlite": {
+    "runtime_version": "3.53.4",
+    "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "canonical_private_runtime": true
+  },
+  "regression": {
+    "tests": 8,
+    "status": "PASS",
+    "covered": [
+      "baseline connection guard",
+      "hardlink alias fail-closed",
+      "temporal ABA non-overclaim regression",
+      "main DB path rebind fail-closed",
+      "WAL path rebind fail-closed",
+      "wrong expected DB denied",
+      "wrong extension hash denied",
+      "wrong SQLite source-id denied"
+    ],
+    "repo_static_integrity": "PASS"
+  },
+  "scope_preserved": {
+    "status": "MECHANISM_TEST_ONLY",
+    "productive_hostinger_mutation": false,
+    "productive_persistence_path_exercised": false,
+    "frank_identity_attested": false,
+    "restart_recovery_attested": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "grf_collapse": {
+    "pr557_exact_head_provenance": "PROMOTE_TO_VERIFIED_FOR_THIS_HEAD_AND_RUN",
+    "sqlite_35304_connection_guard_mechanism": "SUPPORTED_ON_SELF_HOSTED_TEST_LANE",
+    "productive_hostinger_persistence": "DEFER",
+    "f_v01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "NOT_PASS"
+  },
+  "remaining_security_obligation": {
+    "status": "OPEN",
+    "finding": "Repository allow_forking=true while the PR557 pull_request job executes candidate head bytes on a persistent self-hosted runner without a same-repository head-repo guard.",
+    "recommended_fail_closed_gate": "For pull_request require github.event.pull_request.head.repo.full_name == github.repository before running candidate bytes on self-hosted Linux/X64; preserve workflow_dispatch/non-PR operation as needed.",
+    "promotion_effect": "Do not treat the workflow as safely general for arbitrary fork PRs until this boundary or an equivalent isolation guarantee is implemented and tested."
+  },
+  "unusual_experiment_count_this_go": 1,
+  "research_write_state": "COMMITTED"
+}

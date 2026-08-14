@@ -1,0 +1,44 @@
+module frank.atomic.carf_v0_1
+version "CARF-001"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+target self.root
+
+// INTERNAL DEPENDENCY CREDIT ONLY. Never real-world causal truth or authority.
+enum ProvAtomKind [OBSERVATION,MEMORY_USE,WORLD_USE,SELF_USE,GOAL_USE,GWT_DELIVERED,GWT_RECONSTRUCTED,GWT_USED,LOCAL_EFFECT,VERIFIED_OUTCOME,STATE_DELTA,CONTROL_SIGNAL]
+
+record ProvAtom { atom_id:AtomRef; kind:ProvAtomKind; episode:EpisodeRef; semantic_epoch:Epoch; state_epoch:Epoch; source_receipt:ReceiptRef }
+sum ProvExpr { Atom(ProvAtomRef); AnyOf(Set<ProvExprRef>); AllOf(Set<ProvExprRef>) }
+record ProvenanceCircuit { root:ProvExprRef; nodes:Set<ProvExprRef>; episode:EpisodeRef; semantic_epoch:Epoch; state_epoch:Epoch; content_hash:Hash }
+record ResponsibilityWitness { atom:ProvAtomRef; outcome:OutcomeRef; score:Rational01; minimum_contingency_size:Int?; method:EXACT|BOUNDED|ABSTAIN; circuit_hash:Hash; episode:EpisodeRef; semantic_epoch:Epoch; state_epoch:Epoch }
+record CreditBudget { max_active_atoms:Int; max_contingency_depth:Int; max_cpu_ns:Int?; on_exhaustion:ABSTAIN }
+
+rule gwt.broadcast != causal_credit
+rule gwt.delivered != causal_credit
+rule gwt.reconstructed != causal_credit
+rule causal_credit candidate_atoms require gwt.used | verified_local_dependency
+rule responsibility(EXACT) requires verified_outcome + provenance_integrity + current_epochs
+rule responsibility(BOUNDED) must disclose bound + cannot masquerade_as_exact
+rule budget_exhausted -> ResponsibilityWitness(method=ABSTAIN,score=0)
+rule stale_or_broken_provenance -> ABSTAIN
+rule reward.material_update requires verified_outcome + current(ResponsibilityWitness) + score>0
+rule slow_memory_personality_goal_plasticity requires plasticity_receipt + responsibility_witness
+rule responsibility_score != probability
+rule responsibility_score != truth
+rule responsibility_score != effect_authority
+rule responsibility_score != self_identity
+rule responsibility_score != user_intent
+rule provenance_circuit != effect_authority
+rule provenance_circuit physical_representation may_be FACTORIZED_DAG | OTHER_EQUIVALENT
+rule ClayGraph(provenance_circuit) is DERIVED_DIAGNOSTIC_ONLY
+rule UnifiedDB persists provenance_root + witness + exact_epoch_lineage
+rule replay may_recompute_credit only_if circuit_hash + epochs + outcome_identity match
+
+ablation BROADCAST_ALL removes responsibility_evaluator
+ablation FIRST_PATH chooses first_satisfied_derivation
+ablation ANCESTOR_DAG credits all_satisfied_ancestors
+ablation FACTORIZED_DAG_BASELINE preserves exact_structure_without_CARF_runtime
+
+failure COMPLEXITY_BUDGET_EXCEEDED -> ABSTAIN
+failure STALE_PROVENANCE -> ABSTAIN
+failure PROVENANCE_BROKEN -> ABSTAIN
+failure OUTCOME_UNVERIFIED -> NO_MATERIAL_PLASTICITY

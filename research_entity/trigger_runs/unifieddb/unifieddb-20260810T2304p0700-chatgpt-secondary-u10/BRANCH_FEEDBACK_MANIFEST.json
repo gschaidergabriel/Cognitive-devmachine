@@ -1,0 +1,8 @@
+{"schema_version":"1.0","feedback":[
+{"branch":"frank","priority":"P0","delta":"all state/effect writes must bind state_epoch + current execution lease_epoch; no mutable-only state authority"},
+{"branch":"claycode","priority":"P0","delta":"add typed EpochRead/EpochCommit/ReplayAt/ProjectionReady/SelectionReceipt primitives and stale-base effect"},
+{"branch":"claygraph","priority":"P0","delta":"publish projection_source_epoch/root and rebuild status; graph remains derived"},
+{"branch":"gwt","priority":"P0","delta":"WorkspaceEpisode selection receipt includes exact state/projection epoch + candidate set hash"},
+{"branch":"harness","priority":"P0","delta":"add repeated supersede, temporal replay, stale-writer, app-crash, OS-crash/power-loss surrogate, online-backup restore, projection-lag tests"},
+{"branch":"effect_authority","priority":"P0","delta":"provider outcome reconciliation and reentry must commit as canonical causal history with idempotency"}
+],"status":"SYNC_PENDING"}

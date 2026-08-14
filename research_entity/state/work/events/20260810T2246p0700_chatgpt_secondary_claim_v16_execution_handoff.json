@@ -1,0 +1,33 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-claim:20260810T2246p0700:chatgpt-secondary:v16-execution-handoff",
+  "kind": "WORK_CLAIM",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "root_go_id": "go-root-20260810T2157p0700-chatgpt-secondary-single-spawn",
+  "payload": {
+    "work_id": "FRANK-V01-V16-EXECUTION-IDENTITY-IDLE-HANDOFF",
+    "classification": "NORMAL_ARCHITECTURE_AND_DISCRIMINATING_TEST_NOT_OOB",
+    "status": "CLAIMED",
+    "scope": [
+      "durable execution_id bound to lease_epoch/session/client/credential fingerprint",
+      "current_task_id/current_task_state semantic fields",
+      "interactive release creates AWAITING_USER_IDLE_CONFIRMATION",
+      "matching explicit confirmation clears handoff",
+      "wrong session/timeout/silence cannot clear handoff",
+      "autonomous acquire blocked while handoff pending",
+      "new explicit interactive request remains allowed while handoff pending"
+    ],
+    "baseline": "UnifiedDB V15 frank_presence_lease + process-local ingress routing",
+    "authority": "owner-fixed FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "excluded": [
+      "network/TLS deployment",
+      "live cognition response implementation",
+      "paid/final training",
+      "any additional OOB experiment"
+    ],
+    "oob_count_for_root_remains": 1
+  }
+}

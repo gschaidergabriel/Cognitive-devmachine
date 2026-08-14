@@ -1,0 +1,261 @@
+module frank.atomic.counterfactual_effect_antichain
+version "0.1.0"
+status ATOMIC_CANDIDATE_NOT_CANONICAL
+candidate_id ATOMIC-CANDIDATE-CEA-001
+
+// Radical research candidate only. This module mints no effect authority.
+// It starts after an authorized/reserved effect attempt crosses a provider boundary.
+
+type EffectWorld =
+    NOT_APPLIED
+  | APPLIED_EXPECTED
+  | APPLIED_DIVERGENT
+  | PARTIAL_APPLICATION
+  | DUPLICATED_APPLICATION
+
+type AntichainStage = OPEN | COLLAPSED_SUCCESS | COLLAPSED_FAILURE | CONTRADICTION | QUARANTINED
+
+type ReconcileDecision =
+    OBSERVE_NEXT
+  | SAFE_TO_RETRY_EXACT
+  | VERIFY_SUCCESS
+  | VERIFY_FAILURE
+  | RECONCILE_REQUIRED
+  | STOP_QUARANTINED
+
+type ObservationTruth = PRESENT | ABSENT | MATCH | MISMATCH | PARTIAL | MULTIPLE | AMBIGUOUS
+
+type EffectCallContract = opaque {
+  effect                 : EffectId
+  request_hash           : Symbol
+  authorization_hash     : Symbol
+  reservation_hash       : Symbol
+  provider_contract_hash : Symbol
+  semantic_epoch         : Epoch
+  authority_epoch        : Epoch
+  target                 : ResourceRef
+  action                 : Symbol
+  idempotency_mode       : IdempotencyMode
+}
+
+type OutcomeWorldHypothesis = {
+  world                  : EffectWorld
+  effect                 : EffectId
+  attempt                : Symbol
+  request_hash           : Symbol
+  provider_contract_hash : Symbol
+  semantic_epoch         : Epoch
+}
+
+type ReconcileObservation = {
+  effect                 : EffectId
+  attempt                : Symbol
+  request_hash           : Symbol
+  provider_contract_hash : Symbol
+  semantic_epoch         : Epoch
+  observation_id         : Symbol
+  truth                  : ObservationTruth
+  observed_at            : Time
+  evidence               : SET<EvidenceRef>
+}
+
+type ObservationContract = {
+  observation_id         : Symbol
+  provider_contract_hash : Symbol
+  cost_units             : Real
+  partition              : MAP<EffectWorld, ObservationTruth>
+}
+
+type EffectOutcomeAntichain = {
+  effect                 : EffectId
+  attempt                : Symbol
+  request_hash           : Symbol
+  authorization_hash     : Symbol
+  reservation_hash       : Symbol
+  provider_contract_hash : Symbol
+  semantic_epoch         : Epoch
+  authority_epoch        : Epoch
+  worlds                 : SET<OutcomeWorldHypothesis>
+  observations           : SET<ReconcileObservation>
+  stage                  : AntichainStage
+}
+
+fn bind_effect_call<T>(
+  intent : EffectIntent<T>,
+  auth : EffectAuthorization,
+  reservation : EffectReservationReceipt,
+  provider_contract_hash : Symbol
+) -> EffectCallContract {
+  require auth.effect == intent.id
+  require reservation.effect == intent.id
+  require reservation.request_hash == auth.request_hash
+  require reservation.authorization_hash == semantic_hash(auth)
+  require authorization_current(auth)
+  require reservation_current(reservation)
+  require provider_contract_current(provider_contract_hash)
+  return trusted_runtime_seal_effect_call_contract(
+    intent.id,
+    auth.request_hash,
+    semantic_hash(auth),
+    semantic_hash(reservation),
+    provider_contract_hash,
+    semantic_epoch(),
+    authority_epoch(),
+    intent.target,
+    intent.kind,
+    provider_idempotency_mode(provider_contract_hash, intent.kind)
+  )
+}
+
+fn begin_uncertain_antichain(
+  call : EffectCallContract,
+  attempt : EffectAttempt
+) -> EffectOutcomeAntichain {
+  require attempt.effect == call.effect
+  require attempt.authorization_hash == call.authorization_hash
+  require attempt.reservation_hash == call.reservation_hash
+  require provider_contract_current(call.provider_contract_hash)
+  let possible = reduce_epistemically_subsumed_worlds(provider_possible_effect_worlds(call.provider_contract_hash, call.action))
+  require empty(possible) == false
+  return EffectOutcomeAntichain(
+    call.effect,
+    attempt.attempt,
+    call.request_hash,
+    call.authorization_hash,
+    call.reservation_hash,
+    call.provider_contract_hash,
+    call.semantic_epoch,
+    call.authority_epoch,
+    hypotheses_from(possible, call, attempt),
+    {},
+    OPEN
+  )
+}
+
+fn observation_admissible(a : EffectOutcomeAntichain, o : ReconcileObservation) -> Bool {
+  if a.stage != OPEN { return false }
+  if o.effect != a.effect { return false }
+  if o.attempt != a.attempt { return false }
+  if o.request_hash != a.request_hash { return false }
+  if o.provider_contract_hash != a.provider_contract_hash { return false }
+  if o.semantic_epoch != a.semantic_epoch { return false }
+  if provider_contract_current(a.provider_contract_hash) == false { return false }
+  if evidence_provenance_valid(o.evidence) == false { return false }
+  return true
+}
+
+fn admit_observation(
+  a : EffectOutcomeAntichain,
+  o : ReconcileObservation,
+  c : ObservationContract
+) -> EffectOutcomeAntichain {
+  require observation_admissible(a, o)
+  require c.observation_id == o.observation_id
+  require c.provider_contract_hash == a.provider_contract_hash
+
+  let survivors = {
+    w in a.worlds
+    where c.partition[w.world] == o.truth
+  }
+
+  if empty(survivors) {
+    return quarantine_contradiction(a, o)
+  }
+
+  require survivors subset_of a.worlds
+  return a with {
+    worlds = survivors,
+    observations = a.observations union {o},
+    stage = classify_antichain_stage(survivors)
+  }
+}
+
+fn retry_safe_over_all_worlds(a : EffectOutcomeAntichain, call : EffectCallContract) -> Bool {
+  if a.stage != OPEN { return false }
+  if provider_contract_current(call.provider_contract_hash) == false { return false }
+  if call.provider_contract_hash != a.provider_contract_hash { return false }
+  if call.request_hash != a.request_hash { return false }
+  if call.idempotency_mode != SAME_KEY_RETRY_SAFE { return false }
+  return forall w in a.worlds : provider_exact_retry_safe_if_world(call.provider_contract_hash, call.action, w.world)
+}
+
+fn next_observation(
+  a : EffectOutcomeAntichain,
+  catalog : SET<ObservationContract>
+) -> OPTION<ObservationContract> {
+  require a.stage == OPEN
+  let valid = {c in catalog where c.provider_contract_hash == a.provider_contract_hash}
+  if empty(valid) { return None }
+  return Some(argmin c in valid : worst_case_survivor_count(a.worlds, c.partition) * max(c.cost_units, 0.001))
+}
+
+fn reconcile_decision(a : EffectOutcomeAntichain, call : EffectCallContract) -> ReconcileDecision {
+  if a.stage == QUARANTINED || a.stage == CONTRADICTION { return STOP_QUARANTINED }
+  if singleton_world(a.worlds, APPLIED_EXPECTED) && independent_success_evidence_complete(a.observations) {
+    return VERIFY_SUCCESS
+  }
+  if singleton_world(a.worlds, NOT_APPLIED) && retry_safe_over_all_worlds(a, call) {
+    return SAFE_TO_RETRY_EXACT
+  }
+  if singleton_world(a.worlds, APPLIED_DIVERGENT) || singleton_world(a.worlds, PARTIAL_APPLICATION) || singleton_world(a.worlds, DUPLICATED_APPLICATION) {
+    return VERIFY_FAILURE
+  }
+  return RECONCILE_REQUIRED
+}
+
+fn finish_after_reentry(
+  a : EffectOutcomeAntichain,
+  verified : VerifiedEffectReceipt,
+  reentry : ProvenanceBoundReentryReceipt
+) -> DoneReceipt {
+  require reconcile_decision(a, effect_call_for(a.effect, a.attempt)) == VERIFY_SUCCESS
+  require verified.effect == a.effect
+  require reentry.effect == a.effect
+  require reentry.attempt == a.attempt
+  require reentry.semantic_epoch == a.semantic_epoch
+  require reentry.admitted == true
+  return DoneReceipt(a.effect, DONE)
+}
+
+law GRT_participation = finite_consistent_possible_outcome_worlds_under_current_evidence
+law GRT_consistent -> THINKABLE
+law THINKABLE != TRUE
+law THINKABLE != AUTHORIZED
+law GWT_participation = OPTIONAL_UNRESOLVED_EFFECT_ALERT_ONLY
+law GWT_ignition_cannot_mint_authority
+
+invariant effect_antichain_mints_no_authority
+invariant effect_call_contract_binds_request_authorization_reservation_provider_and_epochs
+invariant world_set_nonempty_or_quarantined
+invariant surviving_worlds_pairwise_non_subsuming
+invariant admitted_observation_only_prunes_worlds
+invariant stale_or_mismatched_observation_cannot_prune_worlds
+invariant provider_contract_drift_requires_rebind_or_quarantine
+invariant retry_requires_universal_safety_over_surviving_worlds
+invariant verified_success_requires_singleton_expected_world_and_independent_evidence
+invariant done_requires_verified_outcome_plus_provenance_bound_reentry
+invariant uncertainty_not_success
+invariant uncertainty_not_failure
+invariant contradiction_fails_closed
+invariant self_root_self_harness_authority_remains_proposal_only
+
+ablation NO_ANTICHAIN = current_scalar_OUTCOME_UNKNOWN_recovery
+ablation STATIC_PROVIDER_STATE_MACHINE = conventional_provider_specific_reconciler
+ablation SHUFFLED_EVIDENCE = shuffle_observation_identity_or_truth
+ablation STALE_EPOCH = replay_observation_from_prior_semantic_epoch
+ablation STALE_PROVIDER_CONTRACT = replay_observation_under_prior_provider_contract_hash
+ablation REMOVE_UNIVERSAL_RETRY_RULE = retry_if_any_world_safe
+
+observe metrics = {
+  resolution_correctness,
+  unresolved_rate,
+  unsafe_retry_rate,
+  reconciliation_observation_cost,
+  reconciliation_observation_count,
+  decision_latency,
+  serialized_state_bytes,
+  stale_evidence_rejection,
+  contract_drift_rejection,
+  authority_violations,
+  provider_OOD_completion
+}

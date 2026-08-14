@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "evidence_class": "LOCAL_SYNTHETIC_REFERENCE_SIMULATION",
+  "promotion_power": "DISCRIMINATOR_ONLY_NOT_TARGET_RUNTIME_EVIDENCE",
+  "scenario_design": {
+    "architectures": ["LOOSE_REFERENCE", "TASK_TX_REFERENCE", "ACEF_REFERENCE"],
+    "provider_outcomes": ["SUCCESS_ACK", "SUCCESS_TIMEOUT", "FAIL_ACK", "NO_EFFECT_TIMEOUT"],
+    "idempotency": [false, true],
+    "crash_points": [0,1,2,3,4,5,6],
+    "reconciliation": ["RESOLVES_SUCCESS", "RESOLVES_FAILURE", "STAYS_UNKNOWN"],
+    "cancel_after_crash": [false, true],
+    "scenarios_per_architecture": 336
+  },
+  "results": {
+    "LOOSE_REFERENCE": {
+      "scenarios": 336,
+      "scenarios_with_any_violation": 176,
+      "violation_counts": {
+        "OUTCOME_CONDITIONED_BELIEF_WITHOUT_VERIFIED_SUCCESS": 176,
+        "CANCELLED_TX_LEFT_OUTCOME_BELIEF_VISIBLE": 96
+      },
+      "mean_modeled_synchronous_commits": 5.815,
+      "mean_modeled_writes": 5.815,
+      "unknown_suspended": 34,
+      "cancelled_scenarios": 144,
+      "cancelled_with_raw_evidence_retained": 144,
+      "cancelled_with_belief_visible": 144
+    },
+    "TASK_TX_REFERENCE": {
+      "scenarios": 336,
+      "scenarios_with_any_violation": 0,
+      "violation_counts": {},
+      "mean_modeled_synchronous_commits": 4.815,
+      "mean_modeled_writes": 4.815,
+      "unknown_suspended": 34,
+      "cancelled_scenarios": 144,
+      "cancelled_with_raw_evidence_retained": 44,
+      "cancelled_with_belief_visible": 28
+    },
+    "ACEF_REFERENCE": {
+      "scenarios": 336,
+      "scenarios_with_any_violation": 0,
+      "violation_counts": {},
+      "mean_modeled_synchronous_commits": 2.988,
+      "mean_modeled_writes": 4.226,
+      "unknown_suspended": 34,
+      "cancelled_scenarios": 144,
+      "cancelled_with_raw_evidence_retained": 144,
+      "cancelled_with_belief_visible": 28
+    }
+  },
+  "interpretation": [
+    "Within this bounded model, both TASK_TX and ACEF prevent the modeled premature outcome-conditioned belief violations that LOOSE_REFERENCE intentionally permits.",
+    "ACEF preserves raw monotone evidence across all modeled cancelled traces while TASK_TX loses/hides it in many early-cancel traces.",
+    "ACEF uses fewer modeled synchronous commit barriers than TASK_TX because monotone/failure evidence writes are modeled as join-safe admissions; this is not a measured latency claim.",
+    "Unknown external effects remain suspended rather than guessed complete in both safe references."
+  ],
+  "critical_limits": [
+    "LOOSE_REFERENCE is a deliberately weak comparison model and is not claimed to represent the current Frank implementation.",
+    "Commit and write counts are model assumptions, not storage-engine measurements.",
+    "No current ClayCode compiler execution occurred.",
+    "No accepted Hostinger target-VPS benchmark occurred.",
+    "No real provider external effect occurred.",
+    "The simulator proves only that the candidate semantics are discriminable under the encoded invariants, not that ACEF is better in production."
+  ]
+}

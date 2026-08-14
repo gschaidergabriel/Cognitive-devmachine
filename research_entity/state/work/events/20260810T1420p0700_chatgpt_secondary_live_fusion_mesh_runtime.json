@@ -1,0 +1,61 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-live-fusion-mesh-runtime-20260810T1420p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T14:20:00+07:00",
+  "payload": {
+    "work_id": "WORK-LIVE-FUSION-MESH-RUNTIME-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "USER_DIRECTED_CROSS_BRANCH_INTEGRATION",
+    "title": "Falsify and integrate live-fusion causal mesh companion on Ubuntu",
+    "work_clay": "Starting from newest main, test research_entity/runtime/live_fusion_mesh_runtime.py and its tests against the current dynamic_work_runtime_v2.py + UnifiedDB V9 work fabric. Preserve WorkEvent v2.0 as baseline. Implement only the smallest adapter needed to derive two independent relevance target sets from current ClayGraph and UnifiedDB/dependency state, then exercise SemanticDeltaPulse -> ack/dedupe -> replan receipt -> reconciliation. Inject stale semantic epochs, duplicate event files, missed delivery/sync, ack loss, conflicting work revisions, process crash/restart and a critical invalidator arriving before effect. Compare FULL_NINE_BRANCH_BROADCAST, SINGLE_PROJECTION_TARGETING, DUAL_PROJECTION_ACK and DUAL_PROJECTION_ACK_PLUS_RECONCILIATION under matched inputs. Do not promote the candidate from synthetic evidence; retain rollback to existing WorkEvent transport.",
+    "reason_clay": "Current mesh distributes semantic deltas but does not explicitly close delivery->ingest->replan. Live research plus the 100-seed synthetic experiment found single-projection targeting fragile under stale topology; dual ClayGraph+UnifiedDB routing plus ack/idempotency and periodic anti-entropy repair preserved modeled eventual affected-branch recall with lower fanout. The next discriminating step is real repository/SQLite/Ubuntu execution rather than more architecture prose.",
+    "completion_clay": "Committed runtime is executed from a clean checkout; py_compile and test suite pass; adapter reads real current ClayGraph and UnifiedDB dependency/projection state without inventing a second semantic authority; matched failure-injection corpus covers stale epoch, duplicate pulse, missed sync, ack loss, conflicting work revision, restart and critical invalidator; duplicate application rate is zero; all required recipients on frozen corpus converge after reconciliation or candidate is refuted; p50/p95/p99 latency, CPU, RSS, DB/file amplification and message/fanout counts are captured with full host/build metadata; results are compared to current WorkEvent/broadcast baseline; rollback is demonstrated; Ubuntu/Hostinger receipt is written if that runner is actually used; affected branches receive evidence-class-preserving feedback; candidate remains RESEARCH_CANDIDATE unless promotion gate is independently satisfied.",
+    "evidence_need": [
+      "CLEAN_CHECKOUT_TEST_RECEIPT",
+      "LIVE_FUSION_RUNTIME_PY_COMPILE_RECEIPT",
+      "LIVE_FUSION_RUNTIME_TEST_RECEIPT",
+      "DUAL_RELEVANCE_ADAPTER_RECEIPT",
+      "STALE_EPOCH_FAILURE_INJECTION_RECEIPT",
+      "DUPLICATE_DEDUPE_RECEIPT",
+      "ACK_LOSS_REDELIVERY_RECEIPT",
+      "WORK_REVISION_INVALIDATION_RECEIPT",
+      "CRASH_RESTART_RECONCILIATION_RECEIPT",
+      "BROADCAST_VS_TARGETED_MATCHED_BENCHMARK",
+      "CPU_RAM_LATENCY_DB_AMPLIFICATION_METADATA",
+      "ROLLBACK_TO_WORK_EVENT_V2_RECEIPT"
+    ],
+    "executor_policy": "Prefer verified local Claude Code/build organ or Hostinger Ubuntu GitHub runner when available. This is subordinate to the ClayCode BASE critical path: integrate where it reuses current runtime/UnifiedDB work and does not block CC-WP-02..14. Re-read newest main and latest work revision before every effect. No paid training/API use. Simulation/research evidence must not be mislabeled runtime PASS.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "PYTHON3_EXECUTION",
+      "SQLITE_EXECUTION",
+      "GITHUB_READ_WRITE",
+      "LOCAL_TEST_EXECUTION"
+    ],
+    "write_scope": [
+      "research_entity/runtime/",
+      "research_entity/experiments/",
+      "research_entity/state/work/events/",
+      "research_entity/mesh_feedback/"
+    ],
+    "dependencies": [
+      "research_entity/global/CLAY_LIVE_FUSION_CAUSAL_MESH_CANDIDATE.clay",
+      "research_entity/runtime/live_fusion_mesh_runtime.py",
+      "research_entity/runtime/dynamic_work_runtime_v2.py",
+      "research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql",
+      "research_entity/experiments/CLAY_LIVE_FUSION_MESH_SYNTHETIC_20260810.json"
+    ],
+    "invalidators": [
+      "Executable evidence shows dual projection plus reconciliation is dominated by current WorkEvent/broadcast baseline under matched reliability/resource constraints",
+      "Current ClayGraph or UnifiedDB dependency surfaces cannot provide an independent second relevance view without semantic duplication",
+      "Newer main already implements equivalent ack/replan/reconciliation closure with verified receipts"
+    ],
+    "base_priority": 0.82,
+    "expected_impact": 0.90,
+    "urgency": 0.62,
+    "information_gain": 0.96,
+    "status": "READY"
+  }
+}

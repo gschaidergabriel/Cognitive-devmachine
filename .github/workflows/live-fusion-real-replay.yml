@@ -1,0 +1,144 @@
+name: Clay live-fusion real repo replay
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/experiments/live_fusion_mesh_v2_real_replay.py'
+      - '.github/workflows/live-fusion-real-replay.yml'
+
+concurrency:
+  group: clay-live-fusion-real-replay-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  real-replay:
+    runs-on: [self-hosted, linux]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Revalidate current live-fusion work revision
+        shell: bash
+        run: |
+          test -f research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay
+          test -f research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+          grep -q 'CANDIDATE_NOT_PROMOTED' research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+          test -f research_entity/state/work/events/20260810T1642p0700_chatgpt_secondary_live_fusion_replay_failclosed_revision.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          work_id='WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810'
+          expected='chatgpt-secondary-live-fusion-replay-failclosed-revision-20260810T1642p0700'
+          specs=[]
+          for p in sorted(Path('research_entity/state/work/events').glob('*.json')):
+              try: x=json.loads(p.read_text())
+              except Exception: continue
+              if x.get('kind') not in {'WORK_CREATE','WORK_REVISE'}: continue
+              payload=x.get('payload') if isinstance(x.get('payload'),dict) else {}
+              if payload.get('work_id') != work_id: continue
+              specs.append((str(x.get('created_at') or ''), str(x.get('event_id') or p.stem), p))
+          assert specs, 'no current work spec found'
+          specs.sort(key=lambda z:(z[0],z[1]))
+          created,event_id,path=specs[-1]
+          assert event_id == expected, f'STALE_WORK_REVISION latest={event_id} expected={expected}'
+          env=Path(os.environ['GITHUB_ENV'])
+          with env.open('a') as f:
+              f.write(f'CURRENT_SPEC_REV={len(specs)}\n')
+              f.write(f'CURRENT_WORK_REVISION_EVENT_ID={event_id}\n')
+              f.write(f'CURRENT_WORK_REVISION_PATH={path}\n')
+          print(json.dumps({'spec_rev':len(specs),'event_id':event_id,'path':str(path)},indent=2))
+          PY
+
+      - name: Compile replay experiment
+        run: python3 -m py_compile research_entity/experiments/live_fusion_mesh_v2_real_replay.py
+
+      - name: Execute real repo replay and fault matrix
+        run: |
+          python3 research_entity/experiments/live_fusion_mesh_v2_real_replay.py --repo-root . --write | tee /tmp/live-fusion-real-replay.json
+
+      - name: Adjudicate observability and bind current spec
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          rp=Path('research_entity/experiments/results/LIVE_FUSION_MESH_V2_REAL_REPLAY_LATEST.json')
+          x=json.loads(rp.read_text())
+          underlying=x.get('verdict')
+          required_fields={'pre_route_dependency_projection_hash','per_delta_route_plans','receiver_reentry_closure'}
+          missing=sorted(required_fields-set(x))
+          receiver_executed=bool((x.get('receiver_reentry_closure') or {}).get('executed')) if isinstance(x.get('receiver_reentry_closure'),dict) else False
+          promotion_grade=(not missing) and receiver_executed
+          x['work_revision']={
+              'spec_rev':int(os.environ['CURRENT_SPEC_REV']),
+              'event_id':os.environ['CURRENT_WORK_REVISION_EVENT_ID'],
+              'path':os.environ['CURRENT_WORK_REVISION_PATH'],
+          }
+          x['observability_adjudication']={
+              'promotion_grade_complete':promotion_grade,
+              'missing_required_surfaces':missing,
+              'receiver_reentry_executed':receiver_executed,
+              'derived_expected_branches_are_oracle_only':True,
+              'fault_booleans_are_not_operational_receipts_unless_backed_by_runtime_effect_refs':True,
+          }
+          x['underlying_candidate_verdict']=underlying
+          if not promotion_grade:
+              x['verdict']='REVISE'
+              x['promotion_authority']='NONE'
+          rp.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          receipts=list(Path('research_entity/state/work/events').glob('*live_fusion_mesh_v2_real_replay_WORK_EXECUTION_RECEIPT.json'))
+          assert receipts, 'execution receipt missing'
+          ep=receipts[-1]
+          r=json.loads(ep.read_text())
+          p=r.get('payload') if isinstance(r.get('payload'),dict) else {}
+          p['spec_rev']=int(os.environ['CURRENT_SPEC_REV'])
+          p['work_revision_event_id']=os.environ['CURRENT_WORK_REVISION_EVENT_ID']
+          p['observed_effect']=x['verdict']
+          p['verification']='Current-spec Hostinger replay executed; promotion-grade observability separately adjudicated. Missing receiver/reentry or pre-route surfaces force REVISE.'
+          p['success']=x['verdict'] in {'SUPPORTED_AS_RESEARCH_CANDIDATE_NOT_PROMOTED','NO_CHANGE'}
+          p['complete']=True
+          r['payload']=p
+          ep.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'verdict':x['verdict'],'underlying':underlying,'promotion_grade':promotion_grade,'spec_rev':p['spec_rev'],'receipt':str(ep)},indent=2))
+          PY
+
+      - name: Validate result and receipt
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r=Path('research_entity/experiments/results/LIVE_FUSION_MESH_V2_REAL_REPLAY_LATEST.json')
+          x=json.loads(r.read_text())
+          assert x['promotion_authority']=='NONE'
+          assert x['verdict'] in {'SUPPORTED_AS_RESEARCH_CANDIDATE_NOT_PROMOTED','REVISE','REFUTED','NO_CHANGE'}
+          assert len(x['faults']) >= 10
+          assert x['work_revision']['spec_rev']==int(os.environ['CURRENT_SPEC_REV'])
+          assert x['work_revision']['event_id']==os.environ['CURRENT_WORK_REVISION_EVENT_ID']
+          receipts=list(Path('research_entity/state/work/events').glob('*live_fusion_mesh_v2_real_replay_WORK_EXECUTION_RECEIPT.json'))
+          assert receipts, 'execution receipt missing'
+          rr=json.loads(receipts[-1].read_text())
+          assert rr['payload']['spec_rev']==int(os.environ['CURRENT_SPEC_REV'])
+          print(json.dumps({'verdict':x['verdict'],'observability':x['observability_adjudication'],'receipt':str(receipts[-1])},indent=2))
+          PY
+
+      - name: Commit execution evidence
+        shell: bash
+        run: |
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/experiments/results/LIVE_FUSION_MESH_V2_REAL_REPLAY_LATEST.json
+          git add research_entity/state/work/events/*live_fusion_mesh_v2_real_replay_WORK_EXECUTION_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record current-spec live fusion real-replay execution receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

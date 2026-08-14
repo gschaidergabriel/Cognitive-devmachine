@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "fusion":[
+    {"id":"FG-Q23-001","inputs":["Qwen3.5-HF-runtime","llama.cpp-libmtmd","local-zero-copy-proxy"],"output":"AD-Q23-QNDRF-1.1-ZC","logic":"The same projected media buffer is physically available before semantic decode; local proxy shows avoidable copy cost, so direct synchronous readout is the cheapest executable feature-reuse candidate."},
+    {"id":"FG-Q23-002","inputs":["Qwen3-VL-Embedding","VLM2Vec","QNDRF-1"],"output":"CH-Q23-ZC-001","logic":"Strong multimodal embedding behavior is explicitly trained in these systems; feature reuse remains plausible but raw metric calibration is not established."},
+    {"id":"FG-Q23-003","inputs":["AQuaUI","AGMem","GUI-KV","HistoricalScreenshotPruning"],"output":"PD-Q23-TEMP-04","logic":"GUI perception has exploitable spatial/temporal redundancy, but aggressive crop/history assumptions can hide state; use adaptive ROI+context+anchors and action-grounded memory with adversarial fixtures."},
+    {"id":"FG-Q23-004","inputs":["llama.cpp-issue-24737","llama.cpp-issue-23407","llama.cpp-issue-25854","llama.cpp-issue-25717"],"output":"PD-Q23-RECOVERY-06","logic":"Current runtime failure ecology makes image-containing restart/cache/backend validation a release-relevant q23 obligation."},
+    {"id":"FG-Q23-005","inputs":["Qwen3.6-official","Gemma4-official","Qwen3.5-4B-config"],"output":"PD-Q23-MODEL-03","logic":"No current official Qwen3.6 <=4B replacement; Gemma 4 is a challenger but violates strict <=4B total accounting, so no model switch is justified."},
+    {"id":"FG-Q23-006","inputs":["AD-Q23-QNDRF-1.1-ZC","PAR-1"],"output":"AD-Q23-PAR-1.1-COMPACT-SEED","logic":"If calibrated familiarity exists, EAP should receive compact provenance-bound seed/descriptor metadata, not raw token tensors; memory remains context-only and wrong-seed controls are mandatory."}
+  ],
+  "promotion":"NONE"
+}

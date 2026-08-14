@@ -1,13 +1,15 @@
 module claycode.g9.v3
-version "0.4-g9-fusion-candidate"
+version "0.5-g9-reward-loop-candidate"
 parent [@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay,@research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay]
 status CURRENT_RESEARCH_CANDIDATE
 
 // G9 V3: XENO control semantics + Clay/UnifiedDB/ClayGraph native cognition + dialect ecology.
-// Main new mechanisms: typed dialect interfaces, delta calculus, capability-bearing effects,
-// budgeted equivalence search, experimental compositional provenance.
+// Main mechanisms: typed dialect interfaces, delta calculus, capability-bearing effects,
+// budgeted equivalence search, experimental compositional provenance, and explicit
+// outcome-gated reward/control plasticity before provenance-bound re-entry.
 
 import dialects=@research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay
+import frank_reward=@research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay
 
 // ---------- CORE / DELTA CALCULUS ----------
 record Delta<T> {
@@ -108,6 +110,18 @@ rule gwt.causal_credit_axes=[deliv,recon,use,effect,reentry]
 rule gwt.broadcast!=gwt.use
 rule gwt.reentry requires observed_outcome_or_state_delta
 
+// ---------- REWARD / VALUE / SLOW PLASTICITY ----------
+// Historical NAcc function is a baseline-gated FUSE candidate, not a promoted biological claim.
+rule reward.material_update requires verified_outcome + causal_credit
+rule reward.self_proposal_or_activity -> exploration_only_until_independent_verified_outcome
+rule reward.value_state preserves typed_dimensions + predictions([FAST,MEDIUM,SLOW])
+rule reward.low_prediction_error + low_residual_pressure != automatic_boredom
+rule reward.low_prediction_error + high_residual_pressure + low_route_diversity -> STAGNATION_CANDIDATE
+rule reward.safety_or_resource_brake cannot_be_silently_averaged_away
+rule reward.control != truth
+rule reward.control != effect_authority
+rule reward.plasticity_receipt required_before slow_personality_or_memory_value_update
+
 // ---------- NEEDLE / EFFECT LOWERING ----------
 record EffectIntent {
   semantic_intent:IntentRef
@@ -200,7 +214,11 @@ cycle(input,node){
   if residual.effect {effect_intent=EffectIntent(residual);receipt=Needle.execute(effect_intent)}
   outcome=verify(receipt? or residual)
   credit=causal_credit(outcome,ws)
-  reenter(Delta(outcome))
+  reward_evidence=frank_reward.derive_typed_reward_outcome_evidence(outcome,credit,state)
+  reward_plasticity=frank_reward.update(reward_evidence)
+  reward_control=frank_reward.control(state.unresolved_pressure,state.loop_dynamics)
+  slow_delta=admit_slow_plasticity(reward_plasticity,reward_control,state)
+  reenter(Delta(outcome+credit+reward_plasticity+reward_control+slow_delta))
   if node.organ==CHATGPT {meta.analyze_explicit_turn()}
 }
 
@@ -215,3 +233,7 @@ invariant goal_coalition_not_goal_list
 invariant latent_never_sole_critical_control_channel
 invariant hidden_provider_cot_not_persisted
 invariant candidate_language_semantics_reversible_until_validated
+invariant material_reward_requires_verified_outcome_and_causal_credit
+invariant self_generated_activity_cannot_mint_material_reward
+invariant reward_control_never_mints_truth_or_execution_authority
+invariant slow_reward_personality_memory_plasticity_is_receipted_before_reentry

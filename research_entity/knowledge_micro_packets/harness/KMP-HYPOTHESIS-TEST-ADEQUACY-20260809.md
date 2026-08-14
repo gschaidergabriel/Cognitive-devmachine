@@ -1,3 +1,7 @@
+<!-- RAE_META
+{"packet_id":"KMP-HYPOTHESIS-TEST-ADEQUACY-20260809","title":"Hypothesis-Test Adequacy Chain","domains":["harness"],"topics":["hypothesis testing","test adequacy","counterhypothesis","experiment parameters","evidence pipeline"],"claim_status_hint":"OPEN","source_refs":["research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_experiment_adequacy_batch003.json"],"search_terms":["test execution","test adequacy","counterhypothesis","fallback parameters","INCONCLUSIVE","oracle version"]}
+RAE_META -->
+
 # KMP — Hypothesis-Test Adequacy Chain
 
 **Packet ID:** `KMP-HYPOTHESIS-TEST-ADEQUACY-20260809`  

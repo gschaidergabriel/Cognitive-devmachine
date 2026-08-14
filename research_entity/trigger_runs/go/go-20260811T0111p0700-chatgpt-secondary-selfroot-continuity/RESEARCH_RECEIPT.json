@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0111p0700-chatgpt-secondary-selfroot-continuity",
+  "trigger": "go",
+  "started_local": "2026-08-11T01:11:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "actor_is_not_frank": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target": {
+    "native_self": "self.root",
+    "human_surface_name": "Frank",
+    "body": "accepted Hostinger Ubuntu VPS",
+    "cognition": "CLAYCODE_ONLY"
+  },
+  "fresh_coordination": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "effect_fence_lane_not_duplicated": true,
+    "overlap_evidence": [
+      "PR #250 GO v6 fresh-main exact V15/V16 effect authority fusion",
+      "PR #252 fresh-main exact V15/V16 caller-bound effect fence"
+    ],
+    "selected_lane": "F-V01-01 identity / boot continuity"
+  },
+  "executed_actions": [
+    {
+      "action": "PROMOTE_SOURCE_TO_REPLAY_IDENTITY_BOUNDARY",
+      "pr": 227,
+      "head_sha": "e681e375c55fe1dc9a5f4f0738b96eb9a9baaeaf",
+      "merge_sha": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+      "result": "MERGED_TO_MAIN",
+      "scope": "self.root source/replay/prompt/graph identity boundary only",
+      "non_claims": ["binary identity acceptance", "effect authority closure", "whole Frank v0.1 acceptance", "training authorization"]
+    },
+    {
+      "action": "REBASE_RETARGET_BOOT_CONTINUITY_CANDIDATE",
+      "pr": 231,
+      "head_sha": "186bff981b69f776c85b2d4172dd35b9f27a5425",
+      "synthetic_merge_sha": "50f409950ffcd9dcae51cf310dc5822b3dc2c9f6",
+      "result": "TARGET_VPS_MECHANISM_PASS_BUT_NOT_PROMOTED"
+    }
+  ],
+  "target_vps_evidence": {
+    "workflow_run": 31418439384,
+    "runner_name": "clay",
+    "machine": "digital-retina",
+    "os_kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "mechanism_checks_passed": 37,
+    "mechanism_checks_total": 37,
+    "probe_elapsed_ms": 151.355,
+    "production_decision": "BLOCKED_NO_TRUSTED_BUILDER",
+    "trusted_builder_pinned": false,
+    "real_artifact_attestation_verified": false,
+    "target_attestation_verifier": "BLOCKED_NO_ATTESTATION_VERIFIER:/usr/bin/gh missing",
+    "canonical_state_opened": false,
+    "effect_authority": "NONE",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "hypothesis": "Conjunctive artifact provenance + source-bound admitted/recovery-verified state + target lease + restart/copy classification can establish self.root boot continuity.",
+  "strongest_counterhypothesis": "The current StateLineage evidence is not itself a unique continuation proof; two sibling/transplanted states can share one source commit and identity contract while differing in semantic lineage and still satisfy the evaluator.",
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "SAME_SOURCE_SIBLING_STATE_CHIMERA",
+    "execution_class": "LOCAL_EXACT_SEMANTIC_MICRO_REPLICA",
+    "variables_held_constant": ["artifact digest", "build provenance fields", "source_repo_head", "identity contract hash", "target body", "instance lease", "copy disposition"],
+    "variable_changed": ["semantic_epoch", "semantic_root_hash"],
+    "state_a_decision": "ALLOW_SELF_ROOT_CONTINUITY",
+    "sibling_state_b_decision": "ALLOW_SELF_ROOT_CONTINUITY",
+    "result": "COUNTERHYPOTHESIS_SUPPORTED_LOCALLY",
+    "target_vps_reproduction": "NOT_EXECUTED",
+    "diagnostic_branch": "chatgpt/go-oob-sibling-state-chimera-20260811",
+    "test_commit": "6246a222e4ddd4889e685f098c2a9f21a2b351b6",
+    "workflow_commit": "a1d61f1fb2761734ef8708f220db68535c5ae0e7",
+    "diagnostic_pr_creation": "BLOCKED_BY_CONNECTOR_SAFETY_CLASSIFICATION",
+    "canonical_state_mutated": false,
+    "external_effect": false
+  },
+  "counterhypothesis_adjudication": {
+    "upstream_unique_lineage_constructor_found": false,
+    "candidate_runtime_exposes_caller_constructed_StateLineage": true,
+    "classification": "OPEN_PRODUCT_INTEGRATION_GAP",
+    "reason": "The mechanism tests admission/recovery booleans but the candidate does not yet implement an independent production authority that proves a unique selected semantic lineage head."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SLSA v1.2 Verifying Artifacts",
+      "url": "https://slsa.dev/spec/v1.2/verifying-artifacts",
+      "use": "artifact digest, trusted builder identity and expected source/build provenance are verification dimensions"
+    },
+    {
+      "source": "GitHub Artifact Attestations documentation",
+      "url": "https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations",
+      "use": "GitHub Actions can generate and verify signed build provenance; current target still lacks verifier/tooling and owner-pinned builder policy"
+    },
+    {
+      "source": "The Update Framework Specification v1.0.19",
+      "url": "https://theupdateframework.github.io/specification/v1.0.19/",
+      "use": "trusted prior state/version is required to detect rollback rather than accepting a self-asserted newer object"
+    },
+    {
+      "source": "RFC 9162 Certificate Transparency v2",
+      "url": "https://www.rfc-editor.org/rfc/rfc9162.html",
+      "use": "consistency proofs are an example of proving that a newer authenticated head extends a previously trusted head"
+    },
+    {
+      "source": "etcd v3.7 Disaster Recovery",
+      "url": "https://etcd.io/docs/v3.7/op-guide/recovery/",
+      "use": "restores can move revisions backward and create new logical-cluster identity; revision bump/compaction invalidates stale views"
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "promoted": [
+      "self.root source-to-replay identity semantics on target-repository main"
+    ],
+    "blocked_from_promotion": [
+      "PR #231 boot continuity candidate unchanged"
+    ],
+    "required_next_mechanism": "Bind boot state to an independently verified selected continuation head/receipt that distinguishes sibling/transplanted semantic roots; compose with the already target-supported external generation-floor recovery lane (#240) without treating epoch equality alone as lineage identity.",
+    "simpler_baseline": "exact external accepted semantic-root head + epoch with fail-closed equality before normal boot",
+    "stronger_candidate": "authenticated append-only/consistency-linked state-head chain if the simpler external root anchor is insufficient under measured recovery scenarios",
+    "rollback": "PR #231 remains draft/unmerged; source-to-replay identity merge #227 can remain independently because it does not grant binary/state continuity authority"
+  },
+  "work_impacts": {
+    "F-V01-01-IDENTITY-SERVER-BINARY": "replace stale pre-self.root-main blocker with build-attestation + unique state-lineage continuity blocker",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "cross-link state-head/rollback recovery with external generation-floor candidate #240",
+    "F-V01-09-EFFECT-AUTHORITY": "no duplicate work; active exact V15/V16 caller-bound fence lanes remain authoritative for that slice"
+  },
+  "negative_results_preserved": [
+    "37/37 boot mechanism PASS does not imply production acceptance",
+    "artifact/source equality does not uniquely identify semantic state lineage",
+    "epoch-only external floors cannot by themselves prove root identity for equal-generation divergent state copies",
+    "missing /usr/bin/gh on target means real attestation verification is not available yet"
+  ],
+  "training_authorized": false,
+  "research_write_authority": "RESEARCH_ENTITY_ONLY"
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-LICF-001",
+  "ablations":[
+    {"name":"NO_CANDIDATE_ABLATION","implementation":"CONVENTIONAL_STRONG","result":"200000/200000 classifications correct; 1000/1000 crash/replay stale tasks rejected","meaning":"Removing the fiber hash/successor mint while retaining ordinary task_epoch+revision+witness+idempotency loses no measured semantic coverage."},
+    {"name":"REMOVE_REVISION_WITNESS_IDEMPOTENCY","implementation":"TASK_EPOCH_SIMPLE","result":"46213 false allows / 200000 total, concentrated in duplicate, stale revision and witness-splice controls","meaning":"Task epoch alone fixes task-switch/stale-task isolation but is insufficient for stronger material-lineage guarantees represented in this proxy."},
+    {"name":"REMOVE_TASK_DIMENSION","implementation":"CURRENT_LEASE_ONLY","result":"107708 false allows / 200000 total in the proxy; 0/1000 stale old-task crash/replay records rejected","meaning":"Presence/execution fencing alone cannot express task-local continuity. This is a surface-specific statement, not whole-Frank end-to-end evidence."},
+    {"name":"SHUFFLED_WITNESS_CONTROL","cases":15501,"CURRENT_LEASE_ONLY_false_allows":15501,"TASK_EPOCH_SIMPLE_false_allows":15501,"CONVENTIONAL_STRONG_false_allows":0,"LICF_false_allows":0},
+    {"name":"STALE_TASK_CONTROL","cases":15559,"CURRENT_LEASE_ONLY_false_allows":15559,"TASK_EPOCH_SIMPLE_false_allows":0,"CONVENTIONAL_STRONG_false_allows":0,"LICF_false_allows":0}
+  ],
+  "resource_match":"All four validators ran in one Python 3.13.5 process against the same 200000 seeded cases and same 50000-case timing sample.",
+  "decision":"Fiber-specific runtime mechanism has zero demonstrated unique coverage in this discriminator; candidate runtime promotion fails."
+}

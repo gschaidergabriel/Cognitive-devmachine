@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0352p0700-gpt56-wal-concurrency-failclosed",
+  "trigger": "go",
+  "origin_actor": "GPT-5.6-Sol temporary Clay worker",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_head_observed_before_write": "12c3613890c4bb94b681b545d3911caa415a70ef",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "grf": {
+    "observed_reality": [
+      "Current workspace keeps F-V01-13 SECURITY-RECOVERY-OBSERVABILITY IN_PROGRESS because exact productive SQLite runtime identity and WAL safety are not yet accepted.",
+      "Upstream SQLite documents the WAL-reset corruption bug as likely affecting 3.7.0 through 3.51.2, fixed in 3.51.3+, with 3.44.6 and 3.50.7 backports.",
+      "Ubuntu Noble package metadata still reports SQLite 3.45.1-1ubuntu2.7 on amd64/i386; semantic package version alone does not prove an undocumented downstream WAL-reset backport.",
+      "Merged Frank PR #444 produced a byte-reproducible canonical SQLite 3.53.4 candidate with pinned sqlite_source_id and library hash, but explicitly did not provision production /opt or /etc state.",
+      "During this invocation draft PR #460 advanced concurrently from da8a8d9 to 5a06e0d5, b32313be and c87668a4 while remaining open/draft; current exact-head VPS run 31535070745 was still queued when observed.",
+      "The current PR #460 candidate now preflights persisted SQLite header bytes before vulnerable SQLite opens both normal runtime state and existing migration DBs, but exact productive mapped-object identity remains a separate gate."
+    ],
+    "generated_hypothesis": "The vulnerable-runtime WAL-to-DELETE migration boundary is conservatively fail-closed under concurrent foreign connections: if any other connection keeps the database open, SQLite refuses the journal-mode transition rather than silently switching beneath a live peer.",
+    "causal_mechanism": "Changing journal_mode from WAL to DELETE requires an exclusive-enough state transition. A second open connection prevents the transition and SQLite returns database-is-locked while preserving WAL mode.",
+    "strongest_counter_reality": "A different SQLite build, VFS, locking mode, network filesystem, or timing window could allow a transition or produce a different failure mode; local 3.46.1 mechanism evidence cannot prove accepted-target or productive-path behavior.",
+    "falsifier": "On the accepted Ubuntu lane, hold a second connection open across the vulnerable-runtime rollback migration boundary and observe either journal_mode changing to DELETE or any mutation without a fail-closed error.",
+    "predicted_if_hypothesis_right": "Single-connection baseline changes WAL to DELETE; idle/read/write second-connection cases fail with a lock error and journal_mode remains WAL.",
+    "predicted_if_counter_reality_right": "At least one concurrent case changes mode or mutates state without fail-closed rejection.",
+    "collapse": {
+      "concurrent_wal_delete_transition": "RETAIN_AS_TEST_OBLIGATION",
+      "PR_460": "DO_NOT_OVERWRITE_ACTIVE_CONCURRENT_BRANCH",
+      "F-V01-13": "KEEP_IN_PROGRESS"
+    }
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+      "claim_used": "WAL-reset bug likely spans 3.7.0..3.51.2; fixed in 3.51.3+ with 3.44.6 and 3.50.7 backports; trigger requires WAL plus multiple connections and concurrent write/checkpoint activity."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "claim_used": "SQLite 3.53.4 is in the fixed family and has canonical source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    },
+    {
+      "source": "Ubuntu Noble package metadata",
+      "url": "https://packages.ubuntu.com/noble/amd64/sqlite3",
+      "claim_used": "Noble amd64 package version remains 3.45.1-1ubuntu2.7."
+    }
+  ],
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "GO_OOB_CONCURRENT_WAL_DELETE_FAIL_CLOSED",
+    "authority": "LOCAL_SANDBOX_MECHANISM_ONLY",
+    "sqlite_version": "3.46.1",
+    "design": "Create a WAL database, compare a single-connection WAL->DELETE transition baseline against three bounded interventions with a second connection idle, holding a read transaction, or holding a write transaction.",
+    "baseline": {
+      "case": "single_connection",
+      "result": "PASS_TRANSITION_TO_DELETE",
+      "observed_journal_mode_after": "delete"
+    },
+    "interventions": [
+      {
+        "case": "idle_second_connection",
+        "result": "FAIL_CLOSED_DATABASE_LOCKED",
+        "observed_journal_mode_after": "wal"
+      },
+      {
+        "case": "read_transaction_second_connection",
+        "result": "FAIL_CLOSED_DATABASE_LOCKED",
+        "observed_journal_mode_after": "wal"
+      },
+      {
+        "case": "write_transaction_second_connection",
+        "result": "FAIL_CLOSED_DATABASE_LOCKED",
+        "observed_journal_mode_after": "wal"
+      }
+    ],
+    "result": "HYPOTHESIS_SUPPORTED_LOCALLY",
+    "limitations": [
+      "Not accepted-target evidence.",
+      "Does not reproduce the upstream corruption race itself.",
+      "Does not establish behavior for all VFS/filesystem/SQLite builds.",
+      "No product state or canonical database was mutated."
+    ],
+    "rollback": "Temporary databases deleted at experiment end."
+  },
+  "implementation_coordination": {
+    "frank_repo": "gschaidergabriel/Dr.-Unterweger",
+    "active_candidate_pr": 460,
+    "latest_candidate_head_observed": "c87668a49486f40726d0323f822dd43c06539108",
+    "latest_target_run_observed": 31535070745,
+    "latest_target_run_status_observed": "QUEUED",
+    "implementation_write_this_worker": false,
+    "reason": "The overlapping draft branch advanced repeatedly during this invocation. To preserve ancestry and avoid overwriting a live worker, this worker emitted a separate research/test obligation rather than mutating the contested branch.",
+    "test_obligation": "After PR #460 head stabilizes, add or verify an equivalent deterministic regression proving WAL->DELETE transition refusal under a second open connection, then execute it on the accepted self-hosted Ubuntu lane at the exact candidate SHA."
+  },
+  "reentry": {
+    "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "action": "ADD_CONCURRENT_JOURNAL_TRANSITION_FAILCLOSED_TEST_OBLIGATION",
+    "promotion": false,
+    "next_falsifier": "Accepted-target exact-head replication of the concurrent WAL->DELETE fail-closed regression plus productive mapped SQLite 3.53.4 identity binding across restart/downgrade/library-swap attempts.",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "training_authorization": "UNCHANGED_FALSE"
+  }
+}

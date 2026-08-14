@@ -1,0 +1,17 @@
+{
+  "candidate": "ATOMIC-CANDIDATE-CJC-001",
+  "counterevidence": [
+    "state-only baseline misses all hidden generated cases",
+    "exact symbolic CJC matches exhaustive reference on all exact-eligible measured cases",
+    "exhaustive 2^N baseline crosses behind CJC at context length 6-8 in all five replications"
+  ],
+  "next_falsifier": "run on current Frank-v0.1 transition traces and compare exact-eligibility coverage, hidden-class incidence, native runtime cost, correctness, recovery/stale rejection, and end-to-end task effects against conventional scheduler + replay",
+  "result": "PARTIALLY_SUPPORTED_AND_UNRESOLVED",
+  "schema_version": "1.0",
+  "strongest_counterhypothesis": "A conventional compiler/runtime scheduler plus occasional exact replay and separate credit bookkeeping is simpler and Pareto-superior; real Frank contains too few exact-eligible transitions for CJC to matter.",
+  "supporting_evidence": [
+    "generic Python CJC is much slower than exhaustive replay at small context sizes",
+    "model/tool/external/opaque transitions necessarily fall back",
+    "components of CJC are known techniques"
+  ]
+}

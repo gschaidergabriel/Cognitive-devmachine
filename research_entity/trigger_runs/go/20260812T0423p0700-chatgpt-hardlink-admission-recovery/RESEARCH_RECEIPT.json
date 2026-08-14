@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0423p0700-chatgpt-hardlink-admission-recovery",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T04:23:07+07:00",
+  "origin_actor": "chatgpt",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent_observed": {
+    "research_main_before_write": "d168af6234f347c3bea012cc6ae31c0417d824f9",
+    "product_main_at_final_refresh": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4"
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "SQLite WAL safety is fixed upstream in 3.51.3+, but release closure still requires exact productive artifact admission, trusted launcher/service identity, and recovery evidence. The current V5 launcher had just gained symlink-transplant rejection, making adjacent path-alias mechanisms the smallest high-information discriminator."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "WAL-reset corruption bug is documented through 3.51.2 and fixed in 3.51.3 and later."
+    },
+    {
+      "source": "Linux kernel protected_hardlinks documentation",
+      "url": "https://cdn.kernel.org/doc/html/latest/admin-guide/sysctl/fs.html",
+      "finding": "protected_hardlinks=1 is conditional; source-file owners or users with read/write access may still create hardlinks, so it is not a complete application admission invariant."
+    }
+  ],
+  "grf_candidate": {
+    "observed_anchor": "Product main 985f837 rejected file-level symlink launcher paths before sibling guard resolution.",
+    "generated_reality": "A same-inode hardlink can preserve exact launcher bytes while changing $0 and therefore SELF_DIR/GUARD sibling resolution without triggering -L.",
+    "causal_mechanism": "Hardlink creates another directory entry to the same inode; shell receives the alternate path as $0; launcher derives sibling guard from that alternate path.",
+    "strongest_counter_reality": "Trusted installation ownership and kernel hardlink restrictions make the path shape unreachable in accepted production, so launcher-level nlink rejection adds no material protection.",
+    "falsifier": "Create a hardlink to the exact current launcher bytes and observe whether the launcher rejects before sibling guard resolution; separately retain production service ownership as an independent release obligation.",
+    "outcome": "PROMOTE_MECHANISM_ONLY_NOT_RELEASE"
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "HARDLINK_LAUNCHER_TRANSPLANT",
+    "class": "pre-Python path identity aliasing",
+    "reversible": true,
+    "product_bytes_modified": false,
+    "canonical_state_mutated": false,
+    "exact_source_blob_sha1": "9f7638fb04f7e1ff08540b6c09ea98dfb3ed63d9",
+    "observed": {
+      "hardlink_same_device_and_inode": true,
+      "hardlink_count": 2,
+      "symlink_denial_observed": false,
+      "sibling_guard_directory_relocated": true,
+      "terminal_denial_in_local_root_probe": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:RUNTIME_MUST_NOT_RUN_AS_ROOT"
+    },
+    "interpretation": "The old exact launcher did not detect hardlink transplant and derived its sibling guard from the hardlink directory. Root denial stopped the local execution later, so this is mechanism evidence rather than an accepted-VPS exploit receipt."
+  },
+  "parallel_replication_and_collapse": {
+    "independent_product_pr": 482,
+    "merged_product_commit": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+    "targeted_self_hosted_run": 31537077376,
+    "run_status": "completed",
+    "run_conclusion": "success",
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "verified_regression_status": "PASS_V5_PRE_GUARD_PATH_REGRESSION",
+    "verified_hardlink_denial": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:HARDLINKED_LAUNCHER_PATH",
+    "duplicate_local_branch": "clay-go-sqlite-v5-hardlink-admission-20260812",
+    "duplicate_pr": 487,
+    "duplicate_pr_state": "closed_unmerged",
+    "reason": "Fresh-main refresh showed a parallel worker had already merged and self-hosted-tested the same mechanism; retaining a competing implementation would create stale duplicate work."
+  },
+  "next_discriminator": {
+    "subject": "externally pinned productive SQLite artifact admission",
+    "prior_run": 31536877295,
+    "prior_run_outcome": "FAIL_BEFORE_TEST_EXECUTION",
+    "failure_class": "shared self-hosted checkout workspace invalidated before repository checkout",
+    "failure_detail": "actions/checkout attempted clean/auth removal after workspace contents deletion and found no .git; deterministic admission and SQLite build steps were skipped.",
+    "repair_branch": "clay-go-sqlite-admission-main-20260812",
+    "repair_commit": "4594c7467d759d9702dc0d2c425b3a385f2c7b76",
+    "repair": "Fetch exact GITHUB_SHA into run-unique RUNNER_TEMP repository, remove remote, verify exact HEAD, and execute all admission logic from that isolated repository.",
+    "revalidation_run": 31537581176,
+    "revalidation_status_at_receipt_write": "queued",
+    "revalidation_conclusion_at_receipt_write": null,
+    "adjudication": "UNKNOWN_NOT_PASS_UNTIL_COMPLETED_RECEIPT"
+  },
+  "claim_boundary": {
+    "hardlink_path_integrity": "SUPPORTED_ON_TARGETED_SELF_HOSTED_REGRESSION",
+    "productive_fixed_sqlite_runtime_admission": "UNKNOWN_PENDING_REVALIDATION",
+    "root_anchor_and_service_trust": "OPEN",
+    "crash_restart_recovery": "OPEN",
+    "F-V01-13": "IN_PROGRESS",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "final_model_training_authorized": false
+  }
+}

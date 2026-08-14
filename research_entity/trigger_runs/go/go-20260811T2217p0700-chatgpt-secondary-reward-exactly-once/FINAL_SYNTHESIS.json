@@ -1,0 +1,165 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
+  "trigger": "user_continue_do_what_is_needed",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "PRODUCTIVE_HANDOFF_WITH_STACKED_CLAY_SURFACE_DIAGNOSTIC_QUEUED",
+  "candidate_pr": 332,
+  "candidate_branch": "chatgpt/go-reward-plasticity-v1-20260811",
+  "candidate_head": "a24dbbc6bc1d169377b4bd503913dd01a2800bb8",
+  "last_exact_reward_composition_parent": "0b765534e693707b813dab9ff7471189ee48ef91",
+  "last_exact_reward_synthetic_merge": "5120eec34e649c0c753a465d323072c5534d9e93",
+  "main_at_handoff": "94bc32c65520c984f62b5aad4c5723a4d8b2c357",
+  "main_delta_since_reward_composition": {
+    "merge_pr": 359,
+    "domain": "fixed SQLite V4 no-site launcher/admission",
+    "direct_reward_file_overlap": false,
+    "changed_paths_are_storage_launcher_guard_and_tests_only": true,
+    "final_promotion_still_requires_fresh_main_composition": true
+  },
+  "target_evidence": {
+    "recomposed_plasticity_historical_baseline": {
+      "run": 31510240829,
+      "synthetic_merge": "5120eec34e649c0c753a465d323072c5534d9e93",
+      "status": "PASS",
+      "candidate_checks": "10/10",
+      "historical_nacc_reward_calls": 3000,
+      "historical_nacc_failures": 0,
+      "historical_nacc_restart_persistence": true,
+      "historical_nacc_to_epq_persistent_bridge": true,
+      "go_oob_name": "SELF_REWARD_LAUNDERING_CAROUSEL",
+      "go_oob_result": "PASS_SELF_ACTIVITY_CANNOT_MINT_MATERIAL_REWARD"
+    },
+    "recomposed_terminal_bridge": {
+      "run": 31510241118,
+      "synthetic_merge": "5120eec34e649c0c753a465d323072c5534d9e93",
+      "status": "PASS",
+      "checks": "10/10",
+      "caller_fractional_credit": "FORBIDDEN",
+      "fractional_credit": "UNRESOLVED_DEFAULT_ABSTAIN",
+      "binary_credit": "EXPLICIT_EXPERIMENTAL_NOT_CALIBRATED_FRACTION",
+      "raw_candidate_forged_input_negative_control": true,
+      "artifact_id": 9108959987,
+      "artifact_digest": "sha256:efc4a56f8e7bbf1428687cdd821a0b9033efbdee5eb7bf1e1d96a6a7f1578e49"
+    },
+    "recomposed_exactly_once_receipt_fold": {
+      "run": 31510240927,
+      "synthetic_merge": "5120eec34e649c0c753a465d323072c5534d9e93",
+      "status": "PASS",
+      "checks": "10/10",
+      "artifact_id": 9108838789,
+      "artifact_digest": "sha256:9fed0d750aa3be4d4b12696f8c1136b68ddebe057c67d657b561fa7ab68fce2d",
+      "receipt_sha256": "7e9b1a81eb6ae8587897efaf8b213beccf168200999c01e5adc7b52c60522f7a",
+      "source_truth": "UNIQUE_V17_DONE_RECEIPT_SET",
+      "reward_state": "DERIVED_REBUILDABLE_PROJECTION_NOT_AUTHORITY",
+      "mutable_consumption_ledger_added": false,
+      "source_lineage_rollback_solved": false
+    },
+    "current_main_reward_claycode_frontier": {
+      "run": 31510240843,
+      "synthetic_merge": "5120eec34e649c0c753a465d323072c5534d9e93",
+      "status": "MEASURED_PARSE_REJECTION",
+      "measurement_workflow_completed": true,
+      "parsed": false,
+      "analyzed": false,
+      "executable_functions": [],
+      "first_rejection": "COMMA at line 12 column 22 in comma-separated reward record fields",
+      "transition_obligations_required": 21,
+      "transition_obligations_explicit": 3,
+      "transition_obligations_missing": 18,
+      "artifact_id": 9109196624,
+      "artifact_digest": "sha256:213a1ee4e93c7a194b251f96d25de3b05201ced2a33836cce92fb3ab6a45b4b8",
+      "receipt_sha256": "c9d236a29086df455e08d179b086fb42c6bc8e43963ea2b229389753a5acdbcd",
+      "resource_wall_s": 0.18,
+      "max_rss_kib": 25088,
+      "interpretation": "Workflow green means the frontier measurement completed successfully; it is explicitly not Clay-native reward execution PASS."
+    }
+  },
+  "stacked_clay_surface_successor_diagnostic": {
+    "pr": 383,
+    "base_pr": 314,
+    "base_head": "1f90de1082fbd73599f343d87d7bb85d47484d7e",
+    "head": "23d030fe0f8d2bb37f4f64c6422d93026154574c",
+    "target_run": 31511862605,
+    "status_at_handoff": "QUEUED_NO_RESULT_CREDIT",
+    "purpose": "Run the unchanged reward source against #314's measured comma-field/arithmetic/in/list/word-and syntax expansion to locate the next parser/analyzer/evaluator frontier.",
+    "static_expected_next_limits": [
+      "#314 parser surface may remove current comma/and/in/list/arithmetic parse blockers",
+      "#314 analyzer remains the older walker and does not recursively model all newly added AST forms",
+      "#314 evaluator does not implement ListLiteral or arithmetic AST evaluation and its relation dispatcher has no in-membership implementation",
+      "exploration_nudge still contains min(...) without an owner-reviewed Clay/host binding",
+      "even complete subset execution cannot satisfy the 18 still-missing full reward-state transition/receipt definitions"
+    ],
+    "promotion": "NONE_STACKED_DIAGNOSTIC_ONLY"
+  },
+  "architecture_fusion": {
+    "outcome_truth": "producer-owned verified V17 terminal outcome/DONE identity",
+    "attribution_gate": "non-bypassable terminal reward bridge; caller fractional credit forbidden; fractional default abstain",
+    "exactly_once_learning_under_intact_source": "deterministic canonical fold over unique DONE set",
+    "persistent_reward_state": "derived/rebuildable projection, never independent truth",
+    "reward_dimension_and_utility": "not producer-owned yet; current TASK +/-1 binary mapping is test-only policy identity",
+    "source_currentness": "must later bind shared UnifiedDB/recovery selected typed SemanticCheckpointIdentity and terminal frontier; no private reward epoch",
+    "full_clay_native_update": "not ready: current main fails parse and only 3/21 finite transition definitions are explicit"
+  },
+  "unifieddb_recovery_dependency": {
+    "pr_297": "authoritative semantic checkpoint root in one stable read transaction",
+    "pr_267": "single-winner selected-head CAS and immutable history",
+    "pr_307": "typed SemanticCheckpointIdentity required instead of bare root hash",
+    "decision": "Reward consumes the eventual shared admitted/recovery-verified identity/frontier; no second reward checkpoint/head authority."
+  },
+  "highest_information_next_discriminators": [
+    {
+      "rank": 1,
+      "name": "CONSUME_PR383_SURFACE314_REWARD_FRONTIER",
+      "purpose": "measure exact post-#314 parser/analyzer/evaluator frontier without modifying reward semantics"
+    },
+    {
+      "rank": 2,
+      "name": "REWARD_FOLD_CONCURRENT_DONE_FRONTIER",
+      "purpose": "prove exact source snapshot/frontier completeness under concurrent DONE commits and classify stale/prefix projections"
+    },
+    {
+      "rank": 3,
+      "name": "PRODUCER_OWNED_REWARD_VALUATION_OR_SCALAR_CONTROL",
+      "purpose": "prevent caller/model reward-dimension and utility self-labeling; compare producer-owned typed valuation against simpler scalar binary control"
+    },
+    {
+      "rank": 4,
+      "name": "CLAY_NATIVE_REWARD_21_OBLIGATION_TRANSITION_GATE",
+      "purpose": "after shared ClayCode syntax/evaluator support exists, require all finite state-transition/receipt obligations explicitly in Clay and execute them; no Python implication"
+    },
+    {
+      "rank": 5,
+      "name": "SCALAR_VS_TYPED_VS_MULTISCALE_AND_GUIDANCE_ABLATIONS",
+      "purpose": "matched replay/OOD/resource/proxy tests plus NAcc/E-PQ lesion-rescue and long-run drift"
+    }
+  ],
+  "infra_classification": {
+    "deep_integrity": "recent failures with zero steps/no substantive execution are infrastructure-only evidence and no waiver; a real Deep Integrity execution remains mandatory",
+    "temporary_hosted_smoke_pr": "#367 closed unmerged after zero-step hosted failure; no mechanism credit"
+  },
+  "go_oob": {
+    "count": 1,
+    "name": "SELF_REWARD_LAUNDERING_CAROUSEL",
+    "all_later_discriminators_additional_oob": 0
+  },
+  "claim_boundary": {
+    "historical_nacc_replaced": false,
+    "typed_reward_superiority": false,
+    "fractional_causal_credit_solved": false,
+    "producer_owned_reward_valuation_solved": false,
+    "source_frontier_currentness_solved": false,
+    "source_lineage_rollback_solved": false,
+    "full_clay_native_reward_transition": false,
+    "f_v01_11_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "training_authorized": false,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false,
+    "frank_self_harness_authority_changed": false
+  }
+}

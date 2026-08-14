@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "timestamp_local": "2026-08-11T19:10:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "subject": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 312,
+    "head": "746640bda388aebf240c965afee744ce332f6a9a",
+    "file": "runtime/frank_loop_core_v1/loop_core_slice.py"
+  },
+  "owner_contract": "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
+  "classification": "DIAGNOSTIC_REFERENCE_TEST_OBLIGATION",
+  "promotion_denied_as": "TARGET_CLAYCODE_ONLY_LOOP_CORE_IMPLEMENTATION",
+  "evidence": {
+    "claycode_native_part": [
+      "effect authority is decided by executing claycode/frank_effects.clay::decide_effect"
+    ],
+    "python_semantic_parts": [
+      "Candidate semantic type",
+      "WorkspaceEpisode semantic type",
+      "ReceiverReport semantic type",
+      "control-pressure calculation",
+      "GWT candidate construction and max-pressure selection",
+      "broadcast-content identity and receiver-use decision",
+      "causal-credit marker",
+      "admitted-learning decision",
+      "cross-turn self.learning semantic state"
+    ],
+    "contract_conflict": "The owner-fixed Clay-native contract requires GWT candidates/WorkspaceEpisodes/re-entry and cognitive semantic communication to be Clay-native and forbids a second independent semantic architecture in Python. Conventional Python is permitted only as compiled/projection/runtime machinery whose semantics remain reconstructible/auditable against Clay."
+  },
+  "strongest_counterhypothesis": "PR #312 is intentionally only a diagnostic causal slice, not the target architecture. Its own claim boundary says it is not a cognitive architecture; therefore the Python semantics are acceptable if the PR is retained strictly as a reference baseline/test scaffold and receives no target-implementation PASS credit.",
+  "decision": {
+    "retain": true,
+    "retain_as": "simpler executable causal reference baseline",
+    "target_progress_credit": "TEST_EVIDENCE_ONLY",
+    "required_successor": "Express candidate/episode/receiver-use/learning/re-entry semantics in Clay/ClayCode, compile/lower them into runtime machinery, and differential-test the Clay-native successor against the four-arm Python reference.",
+    "negative_result_preserved": "A completed four-arm causal slice does not by itself establish Clay-native target architecture, cognition, or emergence."
+  },
+  "affected_work_packages": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-05-GWT-HYPERPOSITION"
+  ],
+  "claims_not_made": [
+    "PR #312 is architecturally invalid as a diagnostic",
+    "whole Frank v0.1 loop core implemented",
+    "emergence",
+    "final acceptance"
+  ]
+}

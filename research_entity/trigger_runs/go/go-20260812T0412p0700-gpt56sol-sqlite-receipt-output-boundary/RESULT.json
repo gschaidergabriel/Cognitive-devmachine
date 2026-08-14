@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0412p0700-gpt56sol-sqlite-receipt-output-boundary",
+  "trigger": "go",
+  "program_stage": "FRANK_V0_1",
+  "organ_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "reasoning_frame": "GRF",
+  "research_head_observed_before_write": "fe70e32ba4122c063bb640f784fd93eafea9ee86",
+  "product_main_observed": "33bb74de9074042e3c1a186ea3f22d2ea8a572f4",
+  "focus": ["F-V01-13-SECURITY-RECOVERY-OBSERVABILITY", "F-V01-09-EFFECT-AUTHORITY"],
+  "upstream_anchor": {
+    "wal_reset_bug": "SQLite upstream documents affected releases through 3.51.2 and fixed releases from 3.51.3 onward, with designated backports.",
+    "current_upstream_release_observed": "3.53.4 (2026-07-24)",
+    "sqlite_3_53_4_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "references": ["https://sqlite.org/wal.html", "https://sqlite.org/releaselog/3_53_4.html", "https://sqlite.org/c3ref/libversion.html"]
+  },
+  "local_baseline_nonproduction": {
+    "scope": "ChatGPT sandbox only; not accepted Hostinger runtime evidence",
+    "sqlite_version": "3.46.1",
+    "sqlite_source_id": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1",
+    "mapped_library": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "mapped_library_sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71",
+    "interpretation": "confirms the need to interrogate the library actually loaded by the process rather than infer from CLI/package naming; does not promote any VPS claim"
+  },
+  "single_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "INDEPENDENT_LIBRARY_TRANSPLANT_REPLICATION",
+    "scope": "temporary local sandbox copy plus LD_PRELOAD; rollback by temporary-directory removal",
+    "baseline": {"path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6", "inode": 2884265, "version": "3.46.1", "sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71"},
+    "treatment": {"path_class": "run-owned temporary copied libsqlite3.so.0", "inode": 1180261, "version": "3.46.1", "sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71"},
+    "observed": "version/source-id/file digest remained identical while mapped pathname and inode changed; rollback restored the baseline mapping",
+    "novelty_adjudication": "INDEPENDENT_REPLICATION_ONLY; existing canonical loader-swap/transplant evidence is stronger and remains authoritative",
+    "promotion": "NO_NEW_ARCHITECTURE_PROMOTION"
+  },
+  "ordinary_review_finding": {
+    "target_pr": 486,
+    "target_head": "f7eae0b1c3f61dace03ca5e703b5aaf9fdeca077",
+    "file": "runtime/frank_storage_truth_v1/frank_sqlite_v5_root_provision_candidate.py",
+    "finding": "The root CLI accepts a caller-selected --receipt path and writes the receipt with Path(args.receipt).write_text(...) after successful provisioning; the new no-follow/root-secure deployment rules do not bind that output path.",
+    "generated_reality": "A root provisioner receipt is harmless observability output independent of effect authority.",
+    "counter_reality": "Because the provisioner runs as root, an unconstrained receipt pathname is itself a privileged filesystem effect and can bypass the otherwise constrained destination topology.",
+    "strongest_counterhypothesis": "Only a fully trusted root invoker can ever choose argv, making arbitrary receipt targeting unreachable in the production path.",
+    "discriminator": "Machine-bind production invocation or constrain receipt emission; add deterministic controls for normal in-root output, outside-root output, symlink destination and pre-existing conflicting receipt.",
+    "recommended_repair": "Prefer stdout-only receipt emission or a fixed/content-addressed root-owned non-writable receipt directory with no-follow/dirfd/atomic publication; reject arbitrary caller-selected receipt paths.",
+    "state": "CANDIDATE_SECURITY_FINDING_PENDING_CODE_FIX_AND_TEST"
+  },
+  "coordination": {
+    "pr_486_comment_id": 5259038409,
+    "durable_feedback": true
+  },
+  "current_frontier_fusion": {
+    "productive_fixed_sqlite_runtime": "UNVERIFIED",
+    "productive_root_anchor": "UNVERIFIED",
+    "canonical_product_parent": "UNVERIFIED",
+    "full_productstart_bundle_identity": "UNVERIFIED",
+    "restart_rollback_downgrade_library_swap_lineage": "UNVERIFIED",
+    "F_V01_13": "IN_PROGRESS",
+    "F_V01_09": "IN_PROGRESS",
+    "whole_FRANK_V0_1": "IN_PROGRESS"
+  },
+  "authority": {
+    "canonical_frank_state_mutated": false,
+    "production_effect": false,
+    "harness_authority": "NONE",
+    "training_authorized": false,
+    "together_api_used": false
+  },
+  "outcome": "RETAIN_RECEIPT_OUTPUT_BOUNDARY_AS_NEXT_FIX_CANDIDATE"
+}

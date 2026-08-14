@@ -1,0 +1,38 @@
+name: ClayCode V21 Maximal QID Shared Exact
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-v21-maximal-qid-shared-exact.yml'
+      - 'tools/claycode_v21_maximal_qid_shared_exact_probe.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V21_MAXIMAL_QID_SHARED_EXACT.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+  workflow_dispatch:
+
+jobs:
+  hosted-strict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated parser environment
+        run: |
+          python3 -m venv /tmp/clay-v21-hosted-${GITHUB_RUN_ID}
+          /tmp/clay-v21-hosted-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+      - name: Execute strict V17-equivalence discriminator
+        run: |
+          VENV=/tmp/clay-v21-hosted-${GITHUB_RUN_ID}
+          if "$VENV/bin/python" tools/claycode_v21_maximal_qid_shared_exact_probe.py > /tmp/clay_v21.json; then rc=0; else rc=$?; fi
+          cat /tmp/clay_v21.json
+          exit "$rc"
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-v21-hosted-${GITHUB_RUN_ID}
+
+# Hostinger is intentionally NOT declared here. Current measured runner topology is
+# repository-scoped to gschaidergabriel/Dr.-Unterweger. Any target/proxy Hostinger replay
+# must use that executor repository and bind exact Clay input blobs; a queued self-hosted
+# Clay-repository job is not execution evidence.

@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CQC-001",
+  "evidence_class":"LOCAL_SYNTHETIC_REFERENCE_MODEL_ONLY",
+  "run_environment":{"os":"Linux","kernel":"6.18.35","arch":"x86_64","glibc":"2.41","python":"3.13.5","compiler":"GCC 14.2.0","cpu_count":5,"cpu_model":"UNKNOWN","gpu":"NOT_USED","network":"NOT_USED","target_vps":false},
+  "seed":20260811,
+  "states":96,
+  "actions":8,
+  "trace_cases_per_architecture":104064,
+  "results":{
+    "FULL_NO_FUSION":{"classes":96,"compression":1.0,"transition_table_entries":768,"table_reduction":0.0,"inconsistent_block_actions":0,"trace_violations":0,"trace_violation_rate":0.0},
+    "OUTPUT_ONLY":{"classes":6,"compression":16.0,"transition_table_entries":48,"table_reduction":0.9375,"inconsistent_block_actions":24,"trace_violations":74112,"trace_violation_rate":0.7121771217712177},
+    "NORMAL_PATH_BISIM":{"classes":6,"compression":16.0,"transition_table_entries":48,"table_reduction":0.9375,"inconsistent_block_actions":24,"trace_violations":74112,"trace_violation_rate":0.7121771217712177},
+    "RANDOM_24_CLASS_FUSION":{"classes":24,"compression":4.0,"transition_table_entries":192,"table_reduction":0.75,"inconsistent_block_actions":192,"trace_violations":104064,"trace_violation_rate":1.0},
+    "CQC_INTERVENTIONAL_QUOTIENT":{"classes":24,"compression":4.0,"transition_table_entries":192,"table_reduction":0.75,"inconsistent_block_actions":0,"trace_violations":0,"trace_violation_rate":0.0}
+  },
+  "partition_refinement_latency_ms":{"n":200,"p50":0.194228,"p95":0.216101,"min":0.190783,"max":0.325683,"note":"single local Python process proxy; not target-VPS/compiler performance"},
+  "interpretation":"CQC exactly removes the four intentionally duplicate implementations while preserving the 24 intervention-distinct causal modes. Output-only and normal-path equivalence overcompress to six classes and fail 71.2% of intervention-rich trace cases. Random equal-size fusion fails all trace cases. This is a discriminator result, not evidence of real Frank compression.",
+  "unknown_or_unmeasured":["real historical organ state-space size","stochastic/LLM transition abstraction","real Frank quotient ratio","target-VPS compile latency","runtime CPU/RAM change","token/context change","held-out/OOD real cognitive quality","real GWT causal-use parity","real effect/recovery parity"]
+}

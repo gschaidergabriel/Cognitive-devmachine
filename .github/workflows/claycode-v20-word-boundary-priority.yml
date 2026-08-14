@@ -1,0 +1,101 @@
+name: ClayCode V20 Word-Boundary Rule-Priority
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-v20-word-boundary-priority.yml'
+      - 'tools/claycode_v20_word_boundary_priority_probe.py'
+      - 'tools/claycode_v20_qid_continuation_shadow_falsifier.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V20_WORD_BOUNDARY_RULE_PRIORITY.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hosted-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated strict parser environment
+        run: |
+          python3 -m venv /tmp/clay-v20-preflight-${GITHUB_RUN_ID}
+          /tmp/clay-v20-preflight-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+      - name: Strict frozen semantic discriminator
+        id: main_probe
+        continue-on-error: true
+        run: /tmp/clay-v20-preflight-${GITHUB_RUN_ID}/bin/python tools/claycode_v20_word_boundary_priority_probe.py
+      - name: QID-continuation counterexample falsifier
+        id: qid_probe
+        continue-on-error: true
+        run: /tmp/clay-v20-preflight-${GITHUB_RUN_ID}/bin/python tools/claycode_v20_qid_continuation_shadow_falsifier.py
+      - name: Candidate must survive all gates
+        if: always()
+        run: |
+          test '${{ steps.main_probe.outcome }}' = 'success'
+          # This falsifier returns 0/success when it CONFIRMS a regression; therefore a
+          # surviving candidate requires the falsifier step to be non-successful.
+          test '${{ steps.qid_probe.outcome }}' = 'failure'
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-v20-preflight-${GITHUB_RUN_ID}
+
+  hostinger-probe:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build isolated strict parser environment
+        run: |
+          python3 -m venv /tmp/clay-v20-hostinger-${GITHUB_RUN_ID}
+          /tmp/clay-v20-hostinger-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+      - name: Execute discriminators and persist bounded receipts
+        run: |
+          VENV=/tmp/clay-v20-hostinger-${GITHUB_RUN_ID}
+          set +e
+          "$VENV/bin/python" tools/claycode_v20_word_boundary_priority_probe.py > /tmp/clay_v20.json
+          main_rc=$?
+          "$VENV/bin/python" tools/claycode_v20_qid_continuation_shadow_falsifier.py > /tmp/clay_v20_qid.json
+          qid_rc=$?
+          set -e
+          python3 - <<'PY'
+          import json, os, pathlib
+          run=os.environ['GITHUB_RUN_ID']; sha=os.environ['GITHUB_SHA']; runner=os.environ.get('RUNNER_NAME','UNKNOWN')
+          specs=[
+            ('/tmp/clay_v20.json','V20_WORD_BOUNDARY_HOSTINGER_LATEST.json','CLAYCODE-V20-WORD-BOUNDARY-HOSTINGER-'),
+            ('/tmp/clay_v20_qid.json','V20_QID_CONTINUATION_HOSTINGER_LATEST.json','CLAYCODE-V20-QID-CONTINUATION-HOSTINGER-'),
+          ]
+          outdir=pathlib.Path('research_entity/claycode/base/receipts'); outdir.mkdir(parents=True,exist_ok=True)
+          for src,name,prefix in specs:
+            d=json.loads(pathlib.Path(src).read_text())
+            d['receipt_id']=prefix+run
+            d['commit']=sha; d['run_id']=run; d['runner_name']=runner
+            d['truth_class']='VERIFIED_REMOTE_EXECUTION_BOUNDED_PARSER_CANDIDATE_SCOPE'
+            d['promotion']='NONE'
+            (outdir/name).write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/claycode/base/receipts/V20_WORD_BOUNDARY_HOSTINGER_LATEST.json research_entity/claycode/base/receipts/V20_QID_CONTINUATION_HOSTINGER_LATEST.json
+          git commit -m 'evidence(claycode): record V20 main and qid-continuation Hostinger probes' || true
+          pushed=0
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then pushed=1; break; fi
+            git rebase --abort || true
+            sleep 2
+          done
+          test "$pushed" -eq 1
+          # qid_rc==0 means the falsifier CONFIRMED a regression. Candidate gate must fail.
+          if [ "$qid_rc" -eq 0 ]; then exit 1; fi
+          exit "$main_rc"
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-v20-hostinger-${GITHUB_RUN_ID}

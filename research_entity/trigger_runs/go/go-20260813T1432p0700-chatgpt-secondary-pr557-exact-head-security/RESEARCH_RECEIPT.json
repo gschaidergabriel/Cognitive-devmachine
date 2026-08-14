@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260813T1432p0700-chatgpt-secondary-pr557-exact-head-security",
+  "observed_at": "2026-08-13T14:32:09+07:00",
+  "organ": "temporary ChatGPT secondary worker of Clay",
+  "program": "FRANK_V0_1",
+  "grf": {
+    "r0_observed": [
+      "Clay research main observed at b2154e7be21c62ec4d09423bbb4911ec0cd86955.",
+      "Dr.-Unterweger main observed at 925ed87f0644dafd4dfbe899ee83cc80478e26a4.",
+      "PR557 success run 31655138751 was a real executed job on self-hosted runner clay, but its workflow head_sha/tested event revision was 517883ff08655caf166c76dfe5fd01cf0e8b97f4 while the PR API head was a different commit; therefore that run is not exact-PR-head provenance evidence.",
+      "During this GO cycle PR557 moved concurrently; commit 59833e069d93cd8334652aff3b761dc51e6ab9a3 repaired the workflow selector to use github.event.pull_request.head.sha for pull_request events, and later PR head 819e84a5853a244e84352f206371ccf51d52a1a5 retained that selector.",
+      "Exact-head run 31678033966 fetched the repaired PR head successfully but was cancelled during the SQLite build by a later branch update; downstream deterministic gate/static-integrity steps were skipped, so it carries no mechanism PASS credit.",
+      "Repository metadata reports allow_forking=true. The PR557 workflow runs on [self-hosted, Linux, X64] and currently gates only on github.repository == gschaidergabriel/Dr.-Unterweger; it does not require github.event.pull_request.head.repo.full_name == github.repository."
+    ],
+    "generated_reality": "The previous PR557 green can be explained by testing GitHub's synthetic merge revision instead of the exact PR head; a base-only byte can therefore influence a green verdict without existing in the reviewed PR head.",
+    "counter_reality": "The synthetic merge revision is a valid integration target when the explicit question is mergeability/current-base composition. It is not sufficient for the current control-plane obligation that specifically requires exact-head provenance on reviewed candidate bytes.",
+    "mechanism": "For pull_request workflows GitHub assigns GITHUB_SHA to the merge-ref commit. Exact head testing requires selecting github.event.pull_request.head.sha and binding the receipt to that revision.",
+    "primary_sources": [
+      "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+      "https://docs.github.com/en/enterprise-server@3.18/actions/reference/security/securely-using-pull_request_target",
+      "https://sqlite.org/wal.html",
+      "https://sqlite.org/releaselog/current.html"
+    ],
+    "sqlite_external_anchor": {
+      "current_release_observed": "3.53.4",
+      "release_date": "2026-07-24",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "wal_reset_bug_status": "SQLite documents the WAL-reset bug as fixed in 3.51.3 and later; 3.53.4 is in the fixed line.",
+      "promotion_limit": "Version identity alone does not prove Frank's productive connection/file/WAL object, restart lineage, Hostinger ProductStart identity, or non-bypassable persistence path."
+    },
+    "discriminating_test": "A completed self-hosted PR557 run must emit tested_sha exactly equal to the then-current PR head SHA and must reach the SQLite 3.53.4 deterministic candidate gate, static integrity assertion, bounded scope artifact and successful exit. Cancelled or merge-SHA runs do not satisfy this discriminator.",
+    "unusual_experiment": {
+      "count": 1,
+      "name": "GHOST_BASE_BYTE_SYNTHETIC_MERGE",
+      "scope": "disposable local git repository only",
+      "baseline": "PR head lacked base_only_fix.txt and the toy gate returned FAIL.",
+      "intervention": "Advance base with one base-only repair byte, then create a synthetic merge with the unchanged PR head.",
+      "observation": "Synthetic merge contained the base-only byte and the same toy gate returned PASS while the PR head remained FAIL.",
+      "result": "RETAIN hypothesis that merge-SHA green cannot substitute for exact-head provenance when candidate-head identity is the claim under test.",
+      "rollback": "Temporary repository deleted immediately; no Frank/VPS/GitHub product state was touched by the experiment."
+    },
+    "new_security_counterevidence": {
+      "status": "OPEN",
+      "finding": "Because private-repo forking is enabled, exact PR-head execution on a persistent self-hosted runner needs an explicit same-repository head guard (or equivalent isolation policy) before the workflow can be treated as safely general for pull_request events.",
+      "smallest_repair_candidate": "Match the existing Deep Integrity pattern: allow workflow_dispatch/non-PR, but for pull_request require github.event.pull_request.head.repo.full_name == github.repository before executing candidate bytes on the self-hosted runner.",
+      "reason_not_mutated_in_this_run": "PR557 was under active concurrent edits and cancel-in-progress runs; this worker preserved ancestry and avoided racing or cancelling the current branch work."
+    },
+    "collapse": {
+      "previous_run_31655138751_exact_head_credit": "REJECT",
+      "github_head_selector_repair": "RETAIN_TESTING",
+      "sqlite_35304_mechanism_pass_on_latest_exact_head": "DEFER_UNTIL_COMPLETED_RUN",
+      "self_hosted_fork_boundary": "RETAIN_AS_OPEN_SECURITY_OBLIGATION",
+      "whole_frank_v0_1_promotion": "REJECT"
+    }
+  },
+  "authority": {
+    "harness_mutated": false,
+    "effect_authority_mutated": false,
+    "final_training_authorized": false,
+    "together_used": false
+  },
+  "next_falsifiers": [
+    "Obtain one non-cancelled PR557 run whose evidence artifact binds tested_sha to the exact current PR head and reaches all decision assertions.",
+    "Add or independently prove an equivalent fail-closed same-repository/fork isolation boundary before executing PR head code on a persistent self-hosted runner.",
+    "Do not promote F-V01-13 from this mechanism evidence; accepted Hostinger productive persistence still requires exact runtime/database/WAL object binding plus restart/reopen, downgrade/library-swap/rollback and semantic-lineage evidence."
+  ],
+  "research_delta": "Exact-head provenance gap diagnosed; concurrent selector repair independently validated against GitHub primary semantics; one bounded unusual experiment causally demonstrated synthetic-merge false-credit risk; a new self-hosted fork execution boundary was identified and preserved as an OPEN security obligation."
+}

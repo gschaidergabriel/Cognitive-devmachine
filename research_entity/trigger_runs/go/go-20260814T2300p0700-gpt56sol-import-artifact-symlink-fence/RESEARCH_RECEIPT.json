@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "cycle_id": "go-20260814T2300p0700-gpt56sol-import-artifact-symlink-fence",
+  "trigger": "go",
+  "created_at": "2026-08-14T23:00:00+07:00",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "entity_id": "frank-project-global-research-entity",
+  "active_program": "FRANK_V0_1",
+  "component_targets": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "authority": {
+    "i_am": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "i_am_not": "FRANK",
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "final_training_authorized": false,
+    "together_used": false
+  },
+  "repo_anchors": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_repo_base_head": "1746679dcc8a351f97e0e676b257246f98df6dd7",
+    "declared_frank_repo": "gschaidergabriel/frankv0.1",
+    "declared_frank_repo_resolution": "NOT_FOUND_VIA_CONNECTED_GITHUB_2026-08-14",
+    "verified_workspace_alias": "gschaidergabriel/Dr.-Unterweger",
+    "verified_workspace_alias_head": "4e463f9495d304de4e833f6e9e8609baddaf79b2",
+    "repo_identity_consequence": "Do not promote alias evidence to exact declared-repository identity without explicit binding."
+  },
+  "observed_reality": [
+    {
+      "ref": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
+      "claim": "python_import_artifact_authority remains OPEN; executed python3 -I verifier isolation does not bind imported artifact origin, bytes hash, or admitted manifest."
+    },
+    {
+      "ref": "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/clay_import_path/runs/31779493258.json",
+      "claim": "Bounded self-hosted Ubuntu mechanism replication: current file-backed script lane loaded SCRIPT_DIR_SHADOW 20/20; PYTHONSAFEPATH lane loaded EPHEMERAL_DEPS 20/20 with safe_path true. Scope explicitly excludes Frank repository execution and final target acceptance."
+    },
+    {
+      "ref": "gschaidergabriel/Dr.-Unterweger@1243bd31606df1d52e1865fd7f1cf5d563c499d8",
+      "claim": "Receipt verifier invocations were hardened from python3 to python3 -I, isolating them from PYTHON* environment and unsafe script-directory prepending."
+    }
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "Python 3.14 command-line documentation",
+      "url": "https://docs.python.org/3/using/cmdline.html",
+      "claim": "-I implies -E, -P and -s; -P prevents prepending potentially unsafe current/script paths; PYTHONSAFEPATH provides the -P behavior while retaining other environment handling."
+    },
+    {
+      "source": "Python 3.14 importlib documentation",
+      "url": "https://docs.python.org/3/library/importlib.html",
+      "claim": "ModuleSpec.origin records loader origin and SourceLoader/ResourceLoader can expose the file path/bytes, but module.__file__ and module.__spec__.origin are not synchronized and therefore path metadata alone is not immutable artifact authority."
+    },
+    {
+      "source": "Python pathlib documentation",
+      "url": "https://docs.python.org/3/library/pathlib.html",
+      "claim": "Path.resolve resolves symlinks; stat follows symlinks by default while lstat/follow_symlinks=false exposes link-object identity."
+    }
+  ],
+  "grf_candidates": [
+    {
+      "id": "H-IMPORT-PATH-01",
+      "generated_reality": "Unsafe script-directory prepending is a direct code-origin ambiguity on self-hosted Python tool execution.",
+      "causal_mechanism": "python script.py prepends the resolved script directory to sys.path, allowing a same-named module beside the script to outrank intended PYTHONPATH dependencies.",
+      "strongest_counter_reality": "All relevant production invocations may already run with -I, -P, PYTHONSAFEPATH, or otherwise immutable directories, making the mechanism unreachable in the real Frank path.",
+      "falsifier": "Repository-scoped production callsite audit plus exact admitted Ubuntu execution with shadow controls.",
+      "outcome": "RETAIN_AS_MECHANISM_NOT_PRODUCT_CLAIM",
+      "confidence": "HIGH_FOR_PYTHON_MECHANISM_LOW_FOR_FRANK_PRODUCT_REACHABILITY"
+    },
+    {
+      "id": "H-IMPORT-AUTH-02",
+      "generated_reality": "Safe-path isolation is necessary but insufficient for imported-artifact authority.",
+      "causal_mechanism": "Even after removing unsafe search-path prepending, the selected dependency location, symlink target, loader, or bytes can differ from the admitted artifact unless the runtime binds origin and content to a trusted manifest.",
+      "strongest_counter_reality": "A separately proven immutable dependency image/mount plus authenticated build identity may make per-import byte attestation redundant.",
+      "falsifier": "On the admitted target, prove the dependency root is authenticated and immutable across start/restart, or demonstrate an import attestor rejects path swap, symlink swap, byte swap, loader-hook and manifest mismatch controls.",
+      "outcome": "RETAIN_HIGH_INFORMATION_FRONTIER",
+      "confidence": "HIGH"
+    }
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "id": "GO-OOB-SYMLINK-SCRIPT-DIR-SHADOW-FENCE-V1",
+    "scope": "LOCAL_DISPOSABLE_CONTAINER_ONLY_NOT_ACCEPTED_UBUNTU_NOT_FRANK_PRODUCT",
+    "runtime": "Python 3.13.5",
+    "design": "Trusted dependency directory supplied through PYTHONPATH; attacker directory contains both probe script and same-named dependency; launcher invokes the probe through a symlink. Compare baseline, python -P, and PYTHONSAFEPATH=1.",
+    "observations": {
+      "baseline": {
+        "origin": "SYMLINK_TARGET_SHADOW",
+        "safe_path": false,
+        "interpretation": "Resolved script target directory won precedence."
+      },
+      "python_minus_P": {
+        "origin": "TRUSTED_DEPS",
+        "safe_path": true,
+        "interpretation": "Unsafe script-directory precedence was removed while PYTHONPATH dependency remained usable."
+      },
+      "PYTHONSAFEPATH_1": {
+        "origin": "TRUSTED_DEPS",
+        "safe_path": true,
+        "interpretation": "Environment safe-path mode matched -P for this fixture."
+      }
+    },
+    "result": "SUPPORTED_BOUNDED_MECHANISM",
+    "negative_boundary": "This does not attest the imported dependency bytes, loader, symlink/object identity, admitted manifest, or any Frank production callsite."
+  },
+  "fusion": {
+    "architecture_delta_state": "CANDIDATE",
+    "architecture_delta": "Split Python execution trust into two independent gates: PATH_INGRESS_SAFETY and IMPORT_ARTIFACT_ADMISSION. Use -I for hermetic verifiers that need no ambient dependencies. For tools that intentionally require PYTHONPATH, prefer -P or PYTHONSAFEPATH=1, then separately attest security-critical imported artifacts. Artifact admission should record module name, loader class, ModuleSpec.origin, strictly resolved path, link/object observations, content digest from actually selected bytes, and an authenticated admitted-manifest/build identity. Device/inode may be cohort evidence but must not become long-lived semantic identity.",
+    "why_no_product_patch_now": "The connected GitHub code-search index returned incomplete zero-result searches and the available executed receipt is explicitly a temporary-fixture mechanism replication, not an exact Frank production callsite receipt. Patching unknown callsites could break intentional dependency semantics and would overclaim reachability.",
+    "release_effect": "NO_RELEASE_PROMOTION"
+  },
+  "next_discriminating_test": {
+    "priority": "HIGH",
+    "description": "Implement a bounded import-artifact authority probe on an admitted zero-cost Ubuntu lane: for one security-critical pure-Python dependency, capture origin/resolved path/loader/content SHA-256 and compare to an authenticated manifest; controls must include script-dir shadow, PYTHONPATH alternate, symlink target substitution, in-place byte substitution, sitecustomize/user-site injection, and meta_path/custom-loader substitution. Fail closed on unexpected loader/origin/hash/manifest. Then repeat across restart with the exact admitted runtime/build cohort.",
+    "promotion_condition": "Only exact admitted-target execution with authenticated manifest/build provenance can promote this to product evidence."
+  },
+  "preserved_counterevidence": [
+    "Run 31779493258 is mechanism-only and explicitly not final target acceptance.",
+    "-I/-P safe-path success does not prove artifact-byte authority.",
+    "The declared frankv0.1 repository was not resolvable through the connected GitHub surface in this cycle, while Dr.-Unterweger was; repository identity remains explicit rather than silently fused.",
+    "No Harness mutation and no final-model training were performed."
+  ],
+  "research_delta": "COMMITTED_RECEIPT_ONLY_NO_PRODUCT_CODE_MUTATION",
+  "status": "SUPPORTED_CANDIDATE_NEXT_FALSIFIER_DEFINED"
+}

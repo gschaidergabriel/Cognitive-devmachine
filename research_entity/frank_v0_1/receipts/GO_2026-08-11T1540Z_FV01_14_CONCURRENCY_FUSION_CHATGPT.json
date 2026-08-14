@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-2026-08-11T1540Z-FV01-14-CONCURRENCY-FUSION-CHATGPT",
+  "trigger": "go",
+  "created_at_utc": "2026-08-11T15:40:00Z",
+  "entity_id": "frank-project-global-research-entity",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "work_package": "F-V01-14",
+  "event": "CONCURRENT_DUPLICATE_DISCOVERED_AND_FUSED",
+  "stale_duplicate": {
+    "pr": 349,
+    "branch": "chatgpt/go-fv01-14-training-corpus-freeze-v2-20260811",
+    "state": "CLOSED_NOT_REOPENED",
+    "reason": "Fresh worker-frontier refresh discovered active canonical F-V01-14 parent PR #347 and exact-head receipt repair PR #360. Reopening would violate non-duplication/stale-work law."
+  },
+  "active_parent": {
+    "pr": 347,
+    "title": "GO F-V01-14: freeze held-out integrity + semantic-twin leakage falsifier",
+    "receipt_repair_pr": 360,
+    "fusion_review_id": 4907984455
+  },
+  "unique_delta_transferred": {
+    "historical_corpus_archaeology": {
+      "release_family": "frank-v26.1",
+      "master_examples": 4113,
+      "train_examples": 2039,
+      "dev_examples": 203,
+      "test_examples": 207,
+      "leakage_clusters": 1858,
+      "historical_reported_split_cluster_overlap": 0,
+      "adversarial_cases": 49,
+      "disposition": "QUARANTINE_FOR_CURRENT_SEMANTIC_MIGRATION_REVIEW",
+      "reason": "Historical rows visibly encode pre-current identity/body/tool/STATE semantics; historical validation is not current semantic-generation compatibility."
+    },
+    "semantic_generation_gate": {
+      "decision": "REUSE_PARENT_SEMANTIC_AUDIT_RECEIPT_AS_EXTENSION_POINT",
+      "proposal": "The external semantic audit receipt whose hash is already bound into PR #347's manifest should itself bind the current owner-fixed training semantic contract identity/version/hash plus explicit migration/compatibility PASS|FAIL|UNKNOWN. UNKNOWN must block final freeze.",
+      "why": "Avoids a second manifest architecture while ensuring a formally clean historical corpus cannot be frozen under superseded Frank semantics."
+    }
+  },
+  "go_oob_accounting": {
+    "count": 1,
+    "experiment": "UNICODE_FORMAT_CONTROL_GHOST_LEAK",
+    "duplicate_lane_local_result": "FENCED",
+    "fusion_adjudication_against_pr_347": "NO_BENEFIT_PARENT_ALREADY_FENCES_CLASS",
+    "basis": "PR #347's leakage-surface projection removes Unicode category Cf before hashing; replay of the same U+200B pair produces identical leakage-surface text and therefore cross-split rejection.",
+    "architecture_action": "NO_NEW_MECHANISM; optional ordinary regression only",
+    "second_oob_created": false
+  },
+  "negative_evidence": [
+    "A historical leakage-clean report does not prove compatibility with the current owner-fixed Frank semantic generation.",
+    "Hard hashes and semantic-family IDs do not by themselves prove paraphrase/translation decontamination if the external semantic audit producer is incomplete or contaminated.",
+    "The closed duplicate's format-control mechanism adds no material capability over active parent PR #347 for the tested U+200B class."
+  ],
+  "authority": {
+    "training_authorized": false,
+    "training_started": false,
+    "final_training_data_gate_promoted": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "result": "TARGETED_KNOWLEDGE_FUSION_WITH_NO_BENEFIT_DUPLICATE_DISPOSITION",
+  "promotion": "NOT_PROMOTED",
+  "next_frontier": [
+    "Let active parent #347/#360 own F-V01-14 implementation and exact-head target evidence.",
+    "Define and hash the actual current owner-fixed training semantic contract inside the external semantic audit receipt.",
+    "Adjudicate/migrate historical v26.1 rows/clusters against that current contract while preserving ancestry and rejections.",
+    "Perform independent semantic contamination review including paraphrase/translation leakage before any real final freeze.",
+    "Keep final/paid training owner-authorized only."
+  ]
+}

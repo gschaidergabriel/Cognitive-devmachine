@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "receipt_id": "Q23-TARGET-VPS-MM-INVENTORY-REENTRY-20260810",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "source_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/q23_target_vps_multimodal_inventory_v1/LATEST.json",
+  "source_github_run_id": "31406011620",
+  "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_READ_ONLY_MULTIMODAL_CAPABILITY_INVENTORY",
+  "executor": {
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3"
+  },
+  "observed_capability": {
+    "llama_cli_candidates": 0,
+    "llama_mtmd_cli_candidates": 0,
+    "llama_server_candidates": 0,
+    "qwen_mmproj_artifact_count": 0,
+    "nvidia_smi_returncode": 127,
+    "rocminfo_returncode": 127
+  },
+  "interpretation": "Within the bounded read-only inventory scope, the accepted target VPS does not currently expose the llama.cpp multimodal binaries or Qwen/mmproj artifacts required for the real q23 feature-tap/scoped-zero-copy falsifier. This is capability/blocker evidence, not proof of universal host absence and not a feature-quality result.",
+  "new_blocker": "Q23 target-runtime feature-tap tests require an exact target-compatible llama.cpp/libmtmd + Qwen3.5-4B + matching mmproj runtime/artifact surface before TO-Q23-SCOPED-ZC-07 can execute.",
+  "architecture_effect": "NONE_PROMOTED. Keep lifetime-safe merged-first candidate and light-encoder counterbaseline; do not infer target performance from proxy/synthetic evidence.",
+  "work_effect": {
+    "F-V01-06-DIGITAL-RETINA-MVC": "REMAINS_OPEN_BLOCKED_ON_TARGET_MULTIMODAL_RUNTIME_SURFACE_FOR_REAL_FEATURE_TEST",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "TARGET_CAPABILITY_RECEIPT_ADDED_NO_PASS_CREDIT",
+    "F-V01-16-END-TO-END-ACCEPTANCE": "NO_PASS_CREDIT"
+  },
+  "probe_runtime_changed": false,
+  "model_inference_executed": false,
+  "q23_feature_tap_promoted": false,
+  "canonical_promotion": "NONE",
+  "next_falsifier": "After an authorized/selected exact multimodal runtime surface exists on the accepted target, bind binary/model/mmproj/preprocessor identities and execute TO-Q23-SCOPED-ZC-07 plus the MVC feature ladder on matched visual fixtures."
+}

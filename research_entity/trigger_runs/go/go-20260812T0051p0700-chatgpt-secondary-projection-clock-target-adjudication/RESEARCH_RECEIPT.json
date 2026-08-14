@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0051p0700-chatgpt-secondary-projection-clock-target-adjudication",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T00:51:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_parent_observed": "316f82b2c2a7eb66a74797731da2f9b8b18132fe",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "fresh_target_main": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+  "parent_research_receipt": "go-20260812T0042p0700-chatgpt-secondary-projection-realtime-step",
+  "exact_one_go_oob": {
+    "name": "PROJECTION_LEASE_REALTIME_FORWARD_STEP",
+    "new_oob_count_in_this_followup": 0,
+    "diagnostic_pr": 400,
+    "diagnostic_head": "dc1084e5f3170688f348b7616bb072f5062a7328",
+    "accepted_target": {
+      "workflow_run": 31519078808,
+      "job": 93871399369,
+      "runner": "clay",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "result": "PASS_REPRODUCED_PROJECTION_REALTIME_FORWARD_STEP_TAKEOVER",
+      "gate_semantics": {
+        "lease_ms": 5000,
+        "logical_elapsed_ms": 10,
+        "simulated_forward_realtime_step_ms": 10000,
+        "control": "same 10 ms logical interval without realtime step refuses contender",
+        "intervention": "same logical interval plus +10 s realtime input permits V1 contender takeover",
+        "post_takeover": "old generation remains correctly fenced"
+      },
+      "claim_class": "TARGET_SUPPORTED_NEGATIVE_MECHANISM_EVIDENCE"
+    },
+    "safety": [
+      "host clock was not changed",
+      "disposable SQLite state only",
+      "no production/canonical database mutation",
+      "no external effect"
+    ]
+  },
+  "adjudication": {
+    "v1_projection_lease_clock_safety": "REFUTED_FOR_FORWARD_REALTIME_DISCONTINUITY_CLASS",
+    "generation_fencing": "SUPPORTED_AFTER_TAKEOVER_BUT_INSUFFICIENT_TO_PREVENT_PREMATURE_TAKEOVER",
+    "scope": "single-host projection-worker lease clock source only"
+  },
+  "repair_candidate": {
+    "pr": 404,
+    "head": "e3776a4c39b0efbb0857eab2cd3d44be16f8786c",
+    "status": "BOUNDED_TARGET_SUPPORTED_KEEP_DRAFT",
+    "architecture": {
+      "authority_retained": [
+        "claygraph_projection_worker_v1.lease_owner",
+        "claygraph_projection_worker_v1.lease_generation"
+      ],
+      "additive_clock_sidecar": [
+        "clock_protocol=LINUX_BOOT_ID_CLOCK_BOOTTIME_V1",
+        "lease_boot_id",
+        "lease_until_boottime_ms",
+        "last_heartbeat_boottime_ms"
+      ],
+      "realtime_role": "telemetry only for lease expiry semantics",
+      "no_duplicate_authority": "sidecar contains neither lease_owner nor lease_generation"
+    },
+    "accepted_target": {
+      "workflow_run": 31519419410,
+      "job": 93872507853,
+      "runner": "clay",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "exact_head": "e3776a4c39b0efbb0857eab2cd3d44be16f8786c",
+      "result": "PASS_PROJECTION_LEASE_CLOCK_V2_CANDIDATE",
+      "gate_checks_total": 13,
+      "gate_checks": [
+        "V1 sensitivity reproduces forward realtime takeover",
+        "V2 forward realtime step does not expire same-boot lease",
+        "V2 forward step keeps original generation",
+        "same-boot real boottime expiry still permits takeover",
+        "old generation remains fenced after normal takeover",
+        "boot identity change permits reboot liveness takeover",
+        "new state binds new boot identity",
+        "expired holder cannot self-renew",
+        "active lease without boot identity fails closed",
+        "release clears owner and boottime expiry",
+        "sidecar does not duplicate owner/generation authority",
+        "Linux boot_id/CLOCK_BOOTTIME capability is observable",
+        "clock protocol is exact"
+      ]
+    },
+    "portable_job": {
+      "job": 93872507715,
+      "result": "INFRASTRUCTURE_NOT_EXECUTED",
+      "reason": "GitHub account payment/spending-limit prevented job start",
+      "semantic_counterevidence": false
+    }
+  },
+  "primary_source_basis": [
+    {
+      "source": "Python time documentation",
+      "url": "https://docs.python.org/3.12/library/time.html",
+      "used_for": "CLOCK_REALTIME is adjustable; monotonic clocks are separate; CLOCK_BOOTTIME is suspend-aware monotonic on Linux"
+    },
+    {
+      "source": "Linux kernel sysctl random documentation",
+      "url": "https://docs.kernel.org/admin-guide/sysctl/kernel.html",
+      "used_for": "boot_id is stable within a boot and changes across boots"
+    }
+  ],
+  "strongest_remaining_counterhypotheses": [
+    "assert-before-apply leaves a possible in-flight derived apply window around lease takeover",
+    "boot-aware lease clock does not prove installed systemd/service ownership",
+    "boot-aware lease clock does not prove power-loss/kernel-panic durability",
+    "V2 has not yet repeated the full process-crash/backpressure and 880-event concurrent shadow-load corpus through the V2 executable path",
+    "realtime-based projection-age telemetry is a separate discontinuity concern and is not silently fixed here"
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_BOUNDED_NOT_PROMOTED",
+    "projection_scheduler": "prefer boot-scoped CLOCK_BOOTTIME expiry plus explicit boot identity over CLOCK_REALTIME expiry for the single-host projector candidate",
+    "fencing": "retain generation fencing as independent stale-worker protection",
+    "promotion_gate": [
+      "repeat process-crash/backpressure regressions through V2",
+      "repeat concurrent shadow-load through V2",
+      "prove service/systemd installed-byte binding",
+      "stronger crash/power-loss recovery",
+      "fresh-main integration and recovery receipts"
+    ],
+    "rollback": "PR #404 remains draft and is not in production migration/service lists"
+  },
+  "coordination": {
+    "fresh_main_drift_adjudicated": "0ed593da changes isolated self-hosted checkout workflow only and does not overlap V2 lease files",
+    "related_runner_hygiene": "isolated RUNNER_TEMP checkout is now target-proven for the current-head boundary; persistent root-owned residue remains separate",
+    "targeted_reentry": ["unifieddb", "claygraph", "security-recovery", "continuity", "service-deployment"]
+  },
+  "training_authorized": false,
+  "production_mutation": false,
+  "whole_frank_acceptance": false
+}

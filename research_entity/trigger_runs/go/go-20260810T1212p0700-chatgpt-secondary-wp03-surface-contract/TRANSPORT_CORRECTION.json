@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1212p0700-chatgpt-secondary-wp03-surface-contract",
+  "correction_class": "TRANSPORT_ANCESTRY_NEGATIVE_RESULT",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "finding": "The Dr.-Unterweger self-hosted Hostinger runner is online and can execute repository workflows, but cross-repository SSH checkout of the private Clay repository is not currently authorized by a working SSH identity.",
+  "evidence": [
+    {
+      "executor_run": 31360430740,
+      "workflow": "clay-wp03-surface-binding-exact-vps-ssh",
+      "result": "RETURN_CODE_128_BEFORE_SOURCE_CHECKOUT",
+      "stderr": "git@github.com: Permission denied (publickey)"
+    },
+    {
+      "executor_run": 31360560571,
+      "workflow": "clay-wp03-surface-binding-exact-vps-ssh",
+      "result": "BOUNDED_RETRY_RETURN_CODE_128_BEFORE_SOURCE_CHECKOUT",
+      "stderr": "git@github.com: Permission denied (publickey)"
+    },
+    {
+      "executor_run": 31358204717,
+      "workflow": "clay-pulse-v5-provenance-exact-vps-ssh",
+      "result": "HISTORICAL_SAME_TRANSPORT_FAILURE",
+      "stderr": "git@github.com: Permission denied (publickey)",
+      "correction": "A persisted evidence commit named 'persist exact Pulse V5 provenance SSH' records the attempt, not a successful exact-source execution. Commit naming must never be used as PASS evidence."
+    }
+  ],
+  "credential_discovery": {
+    "existing_cross_repo_secret_name_found_in_executor_workflows": false,
+    "deploy_key_management_available_to_current_worker": false,
+    "bypass_attempted": false
+  },
+  "adjudication": "HOSTINGER_EXECUTION_AVAILABLE_BUT_PRIVATE_CLAY_SOURCE_TRANSPORT_BLOCKED",
+  "authority": "NONE",
+  "promotion": "NONE",
+  "required_next_capability": "Authorized exact-source transport: a scoped read token/deploy key or a content-addressed source handoff whose exact Clay inputs can be verified independently.",
+  "stop_rule": "Do not repeat SSH checkout attempts until transport authority/capability changes. Do not count persisted failure receipts as successful Hostinger execution."
+}

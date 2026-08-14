@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "mode":"SHADOW_WORKER_BEFORE_PRODUCTION_SCHEMA_OR_SERVICE",
+  "stages":[
+    {"stage":0,"name":"DISPOSABLE_WORKER_SCHEMA","gate":"candidate worker SQL installed only after outbox candidate on disposable current schemas"},
+    {"stage":1,"name":"LEASE_COLLISION_AND_PROCESS_CRASH","gate":"live contender refused; crash leaves durable lease; expiry takeover succeeds; stale generation fenced"},
+    {"stage":2,"name":"BACKPRESSURE_AND_BOUNDED_DRAIN","gate":"HARD backlog measured; batches respect max; pressure transitions HARD->SOFT->NONE; graph stays closed until exact"},
+    {"stage":3,"name":"LONGER_SHADOW_LOAD","gate":"sustained event rate, retry/lock/resource/age telemetry within accepted operating window"},
+    {"stage":4,"name":"PRODUCTION_SCHEMA_PROMOTION_CANDIDATE","gate":"only then consider adding outbox+worker candidate SQL to current migration lists with reversible migration receipt"},
+    {"stage":5,"name":"SERVICE_DEPLOYMENT_CANDIDATE","gate":"systemd/service entry crosses trusted V4 runtime first, one active worker identity, restart/recovery receipts"},
+    {"stage":6,"name":"CANONICAL_MIGRATION","gate":"owner-authorized maintenance + selected-lineage recovery + last-known-good"}
+  ],
+  "rollback": {
+    "current":"delete candidate branch/PR; production schemas and canonical state unchanged",
+    "post_schema_promotion":"stop projector, rebuild derived graph from authoritative history, reverse candidate tables if safe",
+    "canonical":"only provenance-bound admitted last-known-good under independent RecoveryFloor"
+  },
+  "automatic_promotion":false
+}

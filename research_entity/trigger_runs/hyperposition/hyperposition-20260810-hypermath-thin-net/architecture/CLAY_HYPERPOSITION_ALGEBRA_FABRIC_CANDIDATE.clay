@@ -1,0 +1,298 @@
+module clay.hyperposition.hypermath.h0
+version "HYPERMATH-H0-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Hypothesis: Hyperposition becomes a thin algebraic semantic fabric embedded in ClayCode,
+// inter-worker ClayCode text, and UnifiedDB preprocessing. It is not a quantum claim and
+// does not imply mathematical hypercomputation beyond ordinary computability.
+
+// -----------------------------------------------------------------------------
+// 0. DESIGN PREMISE
+// -----------------------------------------------------------------------------
+// Do not force all Hyperposition semantics into one commutative semiring.
+// Use a MULTI-SORTED, LAW-CARRYING algebra: every carrier declares exactly which rewrite
+// laws are valid. The compiler may only apply transformations licensed by the carrier's
+// machine-verifiable LawCertificate.
+
+record LawCertificate {
+  carrier:CarrierRef
+  version:Version
+  associative:Set<OpRef>
+  commutative:Set<OpRef>
+  distributive:Set<(OpRef,OpRef)>
+  idempotent:Set<OpRef>
+  annihilators:Map<OpRef,ValueRef>
+  identities:Map<OpRef,ValueRef>
+  monotone:Set<OpRef>
+  exact_rewrites:Set<RewriteRef>
+  approximate_rewrites:Set<RewriteRef>
+  forbidden_rewrites:Set<RewriteRef>
+  proof_refs:Set<ProofRef>
+  test_refs:Set<EvidenceRef>
+  semantic_scope:Scope
+  status:PROVED|TESTED_BOUNDED|CANDIDATE|REFUTED
+}
+
+// -----------------------------------------------------------------------------
+// 1. HYPERPOSITION EXPRESSION DAG
+// -----------------------------------------------------------------------------
+type HOp = ATOM | ALT | JOINT | ROLE_BIND | EXCLUDE | REQUIRE | RETRACT | CONTEXT_GATE | PROJECT | MARGINALIZE | DELTA | FIXPOINT
+
+type EpistemicState = SUPPORTED | REFUTED | UNKNOWN | CONFLICT | REVOKED | STALE
+
+record HAtom {
+  atom_id:Ref
+  semantic_ref:Ref
+  hypothesis_id:Ref?
+  entity_ref:Ref?
+  state_epoch:Epoch
+  branch_revision:Int?
+  epistemic:EpistemicState
+  provenance:Set<EvidenceRef>
+  valid_time:TimeRange?
+  timescale:Duration?
+}
+
+record HRole {
+  member:Ref
+  role:Symbol
+  ordinal:Int?
+  scope:Scope?
+}
+
+record HExpr {
+  href:HashRef                 // content-addressed canonical node id
+  op:HOp
+  args:Ordered<Ref>
+  roles:Ordered<HRole>
+  constraints:Set<Ref>
+  source_epoch:Epoch
+  provenance:Set<EvidenceRef>
+  epistemic:EpistemicState
+  carrier_hints:Set<CarrierRef>
+  law_certificate_refs:Set<Ref>
+}
+
+rule HExpr.href = content_hash(canonical(HExpr excluding href))
+rule HExpr is immutable
+rule equal_payload_without_equal_hypothesis_provenance_epoch_revision != same_HExpr
+rule UNKNOWN|CONFLICT|REVOKED|STALE are preserved unless an explicit admissible operation resolves them
+
+// Core intended meanings; exact algebraic laws are carrier-specific.
+operator ALT(a,b) = coexist_without_selection(a,b)
+operator JOINT(a,b,roles) = contextual_composition(a,b,roles)
+operator EXCLUDE(a,b) = incompatibility_constraint(a,b)
+operator REQUIRE(a,b) = dependency_constraint(a,b)
+operator RETRACT(a,b) = provenance_bound_subtraction_or_invalidation(a,b)
+operator CONTEXT_GATE(ctx,x) = restrict_without_truth_promotion(ctx,x)
+operator MARGINALIZE(vars,x,carrier) = eliminate_variables_under(carrier,x)
+operator DELTA(old,new) = typed_incremental_change(old,new)
+
+// -----------------------------------------------------------------------------
+// 2. CARRIER POLYMORPHISM
+// -----------------------------------------------------------------------------
+// One Hyperposition expression may be projected/evaluated into multiple carriers.
+// This is analogous to semiring-weighted computation, but Frank-specific semantics can
+// use weaker/stronger structures when a semiring law would be unsound.
+
+record HyperCarrier {
+  carrier_id:CarrierRef
+  value_type:TypeRef
+  operations:Map<HOp,OpRef>
+  laws:LawCertificate
+  exactness:EXACT|BOUNDED_APPROX|UNKNOWN
+  no_truth_promotion:Bool
+  no_effect_authority_promotion:Bool
+}
+
+carrier PROVENANCE_CARRIER uses existing ClayCode ProvExpr ANY|ALL|DIFF semantics
+carrier COMPATIBILITY_CARRIER preserves alternative compatibility/exclusion/require relations
+carrier EPISTEMIC_CARRIER preserves SUPPORTED|REFUTED|UNKNOWN|CONFLICT|REVOKED|STALE without UNKNOWN=false collapse
+carrier COST_CARRIER may use min-plus/tropical-like operations only for declared cost projections
+carrier PROBABILITY_CARRIER optional and requires calibrated probabilistic semantics; confidence != probability
+carrier TOPOLOGY_CARRIER projects semantic/active/coordination/physical topology separately
+
+rule carrier_switch never changes canonical semantic HExpr
+rule carrier_evaluation_result != canonical_truth
+rule numeric_weight_or_probability_or_salience never mints effect_authority
+
+// -----------------------------------------------------------------------------
+// 3. THIN NET IN CLAYCODE TEXT / WORKER COMMUNICATION
+// -----------------------------------------------------------------------------
+// The text surface carries compact handles, not repeated full metadata.
+// Example conceptual form (surface syntax remains compiler research):
+//   claim c17 := temp(high) ^h{9af31c...}
+// A receiver resolves the handle only against the exact compatible epoch/root, or receives
+// a portable delta packet. Missing/stale handles degrade explicitly rather than silently.
+
+record HHandle {
+  href:HashRef
+  source_epoch:Epoch
+  semantic_root:Hash
+  schema_version:Version
+}
+
+record HPortableDelta {
+  parent_root:Hash
+  target_root:Hash
+  nodes:Set<HExpr>
+  evidence:Set<EvidenceRef>
+}
+
+record MessageWeave {
+  message_id:Ref
+  claycode_payload:Ref
+  span_or_statement_hrefs:Map<Ref,HHandle>
+  portable_delta:HPortableDelta?
+  sender_epoch:Epoch
+  receiver_expected_epoch:Epoch?
+  provenance:Set<EvidenceRef>
+}
+
+rule interworker_text may embed compact HHandle annotations
+rule repeated_semantics should reference interned HExpr instead_of_repeating_full_annotation
+rule receiver_resolve(handle) requires hash_match + schema_compatibility + epoch_policy
+rule unresolved_handle -> UNKNOWN_OR_REQUEST_PORTABLE_DELTA
+rule handle_text itself carries no authority
+rule open_web cannot construct privileged HHandle authority
+
+// -----------------------------------------------------------------------------
+// 4. UNIFIEDDB AS HYPERPOSITION PREPROCESSOR / ALGEBRAIC COMPUTE FABRIC
+// -----------------------------------------------------------------------------
+// UnifiedDB remains semantic state authority. Hyperposition expressions become canonical
+// content-addressed semantic objects; query preprocessing compiles only the relevant slice.
+
+record HyperPreprocessQuery {
+  query_ref:Ref
+  task_ref:Ref
+  state_epoch:Epoch
+  root_hrefs:Set<HashRef>
+  requested_carriers:Set<CarrierRef>
+  budget:Budget
+  output_contract:Ref
+}
+
+record HyperPlan {
+  plan_id:Ref
+  query_ref:Ref
+  state_epoch:Epoch
+  relevant_hrefs:Set<HashRef>
+  factorization_ref:Ref?
+  elimination_order:Ordered<Ref>
+  carrier_plan:Map<CarrierRef,Ref>
+  law_certificates:Set<Ref>
+  read_set:Set<Ref>|UNKNOWN
+  exactness:EXACT|BOUNDED_APPROX|UNKNOWN
+  fallback:Ref
+  cost_prediction:Cost
+}
+
+record HyperCapsule {
+  capsule_id:Ref
+  source_epoch:Epoch
+  semantic_root:Hash
+  selected_projection:Set<Ref>
+  unresolved_alternatives:Set<Ref>
+  active_hyperrelations:Set<Ref>
+  provenance_summary:Ref
+  invalidation_frontier:Set<Ref>
+  gwt_links:Set<Ref>
+  state_hash:Hash
+  evidence:Set<EvidenceRef>
+}
+
+fn hyper_preprocess(q:HyperPreprocessQuery) -> HyperCapsule {
+  require q.state_epoch == UnifiedDB.current_semantic_epoch()
+  let closure = dependency_relevant_hyperclosure(q.root_hrefs,q.task_ref,q.budget)
+  let f = choose_factorization(closure,q.requested_carriers)
+  let order = choose_semantically_equivalent_elimination_order(f,q.requested_carriers,q.budget)
+  let plan = compile_with_only_validated_laws(closure,f,order,q.requested_carriers)
+  let result = execute_incrementally(plan)
+  return bounded_capsule(result,q.output_contract)
+}
+
+rule hyper_preprocess prefers factorization+variable_elimination+incremental_reuse when law_certificates permit
+rule hyper_preprocess may fall_back_to materialized_or_independent_execution when factorization_is_unsound_or_not_beneficial
+rule normal model hot_read consumes HyperCapsule not global_database_dump
+rule HyperCapsule is bounded_projection not second truth store
+rule every cached subexpression binds semantic_epoch + content_hash + exact material read signature when reuse depends on reads
+
+// -----------------------------------------------------------------------------
+// 5. COMPUTATION REUSE / PSW NEGATIVE RESULT INTEGRATION
+// -----------------------------------------------------------------------------
+rule unresolved_branch_storage may_use immutable_base+sparse_overlay
+rule exact PURE computation may_share_across_alternatives iff complete_or_conservative_material_read_set_equal
+rule UNKNOWN_or_dynamic_read_set -> independent_execution
+rule external_read_write|security_sensitive|effectful operations never multi_execute from unresolved alternatives
+rule factorized_representation is physical/runtime policy not identity merger
+
+// -----------------------------------------------------------------------------
+// 6. SELECTION / COLLAPSE
+// -----------------------------------------------------------------------------
+record HSelectionReceipt {
+  selection_id:Ref
+  source_href:HashRef
+  alternatives_before:Set<Ref>
+  selected:Set<Ref>
+  suppressed:Set<Ref>
+  selector_ref:Ref
+  basis:Set<EvidenceRef>
+  state_epoch:Epoch
+  gwt_episode:Ref?
+  outcome_ref:Ref?
+}
+
+rule ALT never collapses merely because one branch is more salient
+rule destructive_alternative_collapse requires HSelectionReceipt
+rule selection_receipt != truth_promotion
+rule selection_receipt != effect_authority
+
+// -----------------------------------------------------------------------------
+// 7. PROMOTION GATES
+// -----------------------------------------------------------------------------
+// "Hypercomputer" is only an engineering nickname for a semantic preprocessing / algebraic
+// compute fabric. No super-Turing or physical quantum speedup is claimed.
+
+metric_vector = [
+  semantic_roundtrip_error,
+  contradiction_unknown_preservation,
+  answer_or_task_quality,
+  false_merge_rate,
+  stale_epoch_rejection,
+  provenance_reconstruction,
+  query_latency_p50_p95_p99,
+  preprocessing_latency,
+  model_context_tokens,
+  wire_bytes,
+  CPU,
+  RSS,
+  cache_hit_rate,
+  invalidation_amplification,
+  recovery_time,
+  crash_restart_equivalence,
+  effect_authority_integrity
+]
+
+rule promote HyperMath only_if beats_or_matches [plain_ClayCode_structures, conventional_hypergraph_relation_node, sparse_overlay+exact_read_signature_memoization, current_UnifiedDB_preprocessor] on declared Pareto vector
+rule novel_notation_without_measured_gain -> NO_PROMOTION
+rule elegant_algebra_without_law_certificate -> NO_OPTIMIZING_REWRITE
+rule synthetic_speedup != target_live_speedup
+
+counterhypothesis H0_HYPERMATH {
+  proposition="Existing ClayCode typed records + ProvExpr + Hyperrelation tables + conventional query planner are sufficient; a new algebra layer adds token/compiler/database complexity without improving target-v0.1 outcomes or cost."
+  discriminator="Matched current-target replay HYPERMATH_OFF vs HYPERMATH_ON with identical semantic inputs, model, effect policy, seeds and budgets; measure task quality, context tokens, wire bytes, p50/p95/p99 latency, CPU/RSS, false merges, stale rejection and recovery."
+}
+
+counterhypothesis H0_HYPERCOMPUTE {
+  proposition="Any large speedup comes entirely from known factorization/indexing/variable-elimination/knowledge-compilation techniques, so HyperMath is useful only as a compiler facade rather than a distinct computational model."
+  discriminator="Compare HyperMath planner against strongest conventional FAQ/InsideOut-style, factorized-query, provenance-circuit and sparse-overlay baselines under identical expressions and costs."
+}
+
+invariant Hyperposition_is_engineering_semantics_not_quantum_claim
+invariant HyperMath_does_not_claim_super_Turing_computation
+invariant semantic_colocation != physical_colocation
+invariant shared_state != shared_authority
+invariant graph_connectivity != causal_use
+invariant compact_handle != knowledge_without_resolution
+invariant no_hidden_chain_of_thought_persistence
+invariant self.root_self_harness_authority_is_proposal_only

@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0336p0700-gpt56sol-sibling-genesis-lineage",
+  "trigger": "go",
+  "origin_actor": "chatgpt-project-worker",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "reasoning_frame": "GRF",
+  "research_subject": "self.root / Frank v0.1",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_head": "eb60c48ccad21d1561e49b3ce5b017dc28423167",
+  "work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "observed_anchors": {
+    "candidate_repo": "gschaidergabriel/Dr.-Unterweger",
+    "candidate_pr": 436,
+    "candidate_head": "bbc00b0c44b0c0d05f115f144df536cbe0e0598d",
+    "candidate_path": "runtime/identity/state_lineage_head_v2_candidate.py",
+    "candidate_blob_sha": "3fd688e6962f1286c883bbb2893ab8b27bd27361",
+    "candidate_schema": "SELF_ROOT_SELECTED_LINEAGE_HEAD_CANDIDATE_V2",
+    "candidate_semantic_root_identity": "root_protocol + semantic_root_manifest_id + semantic_root_hash + derived identity_hash",
+    "candidate_head_identity": "lineage_id + sequence + typed semantic checkpoint identity + parent_head_hash",
+    "accepted_at_bound_into_head_hash": false
+  },
+  "grf_candidates": [
+    {
+      "id": "R2_TYPED_ROOT_V2_SUFFICIENT_FOR_UNIQUE_LINEAGE",
+      "generated_reality": "A typed semantic-root domain plus lineage_id/sequence/parent head is sufficient to reject independently initialized same-lineage sibling states.",
+      "strongest_counter_reality": "Two independently initialized stores with the same lineage_id and identical typed semantic-root identity derive the same genesis head, so the V2 head alone cannot distinguish sibling genesis or a transplanted clone carrying the same state identity.",
+      "falsifier": "Initialize two independent disposable stores from the same typed semantic root and lineage_id; compare derived genesis head identities. Use a different-lineage control.",
+      "outcome": "REFUTED_FOR_UNIQUE_SIBLING_IDENTITY",
+      "confidence": "HIGH_FOR_EXACT_CANDIDATE_HASH_SEMANTICS",
+      "scope_limit": "Does not refute typed semantic-root domain separation itself and does not prove a production transplant exploit."
+    },
+    {
+      "id": "R2_TYPED_ROOT_PLUS_EXTERNAL_ADMISSION_ANCHOR",
+      "generated_reality": "Retain typed semantic-root identity, but bind selected lineage to an independently trusted deployment/admission identity outside clonable state, with explicit migration/recovery receipts.",
+      "strongest_counter_reality": "If the external anchor is itself copied, rolled back, or minted by the candidate state, sibling/transplant ambiguity persists.",
+      "falsifier": "Future ordinary candidate must reject same-state sibling/transplant/stale-anchor branches, fail closed on missing/rolled-back anchor, and permit only explicitly authorized migration/recovery continuity.",
+      "outcome": "RETAIN_AS_NEXT_ARCHITECTURE_CANDIDATE",
+      "confidence": "MEDIUM",
+      "scope_limit": "No production anchor or migration authority implemented by this receipt."
+    }
+  ],
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "SIBLING_GENESIS_IDENTICAL_HEAD_COLLISION",
+    "class": "DISPOSABLE_LOCAL_HASH_AND_SQLITE_COUNTERWORLD",
+    "purpose": "Discriminate typed-root semantic correctness from unique admitted-lineage identity.",
+    "treatment": "Two independently initialized disposable stores use identical lineage_id self.root:semantic-lineage and identical typed semantic-root identity.",
+    "control": "Derive otherwise equivalent genesis head with a different lineage_id.",
+    "observed": {
+      "sibling_a_head": "9c5cb4c5567051654ad143ec12dcabc4083ef40f6f4ec4cea95bcd50b1e78325",
+      "sibling_b_head": "9c5cb4c5567051654ad143ec12dcabc4083ef40f6f4ec4cea95bcd50b1e78325",
+      "independent_accepted_at_values_differed": true,
+      "same_lineage_same_root_heads_identical": true,
+      "different_lineage_control_head_different": true
+    },
+    "classification": "COUNTERREALITY_REPRODUCED",
+    "rollback": "Disposable local stores only; no canonical/product state mutation.",
+    "effect_authority": "NONE"
+  },
+  "fusion": {
+    "negative_result": "PR#436 V2 typed-root head is not sufficient by itself to satisfy unique admitted semantic-lineage / sibling-transplant rejection.",
+    "retained_mechanism": "Typed semantic checkpoint identity remains useful for preventing root-protocol/manifest type confusion.",
+    "architecture_delta": "Unique Frank state identity needs a separately admitted lineage-genesis/deployment anchor that cannot be minted solely from clonable state. The state head should bind this admission identity while preserving typed semantic-root identity. Boot/recovery must compare against independently trusted selected-lineage state, fail closed when absent/stale/rolled back, and use explicit authorized migration receipts for legitimate moves.",
+    "anti_goodhart": "Do not promote a deterministic content hash to unique identity merely because it is collision-resistant; identical admitted inputs intentionally hash identically.",
+    "affected_invariants": [
+      "server-binary + admitted persistent state lineage identity",
+      "sibling/transplanted/stale clone rejection",
+      "restart/recovery/rollback lineage continuity",
+      "no state/model component may mint its own admission authority"
+    ]
+  },
+  "current_frontier_context": {
+    "sqlite_3_53_4_candidate": "Reproducible capability-parity candidate exists on accepted self-hosted lane but productive root/service/mapped-object admission remains open.",
+    "claycode_structural_field_pr_448": "Accepted-target candidate PASS; open pending repository promotion/integration.",
+    "whole_frank_v0_1_acceptance": false
+  },
+  "next_falsifier": "Build a V3 selected-lineage candidate that composes typed semantic-root identity with an independently provisioned admission/genesis anchor and explicit migration receipt; then run ordinary sibling/transplant/stale-anchor/missing-anchor/restart controls. Do not treat a state-local random nonce alone as sufficient because it is clonable with the state.",
+  "claims_not_made": [
+    "No product code was changed by this receipt.",
+    "No accepted-target identity gate PASS is claimed.",
+    "No canonical Frank state was mutated.",
+    "No external effect authority was exercised.",
+    "No Frank Harness self-authority was granted.",
+    "No final/model training authorization is claimed."
+  ],
+  "status": "RESEARCH_DELTA_COMMITTED_NEGATIVE_RESULT_AND_NEXT_ARCHITECTURE_CANDIDATE"
+}

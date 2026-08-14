@@ -1,0 +1,27 @@
+{
+  "schema": "CLAY_GO_COORDINATION_DELTA/1.0",
+  "trigger": "go",
+  "worker": "GPT-5.6-Sol temporary Clay worker",
+  "observed_after_initial_receipt": {
+    "target_main": "9c891aa8b076113b21903ac3db0d39a61aec6a91",
+    "main_delta": "PR #444 merged the accepted-target byte-reproducible SQLite 3.53.4 capability-parity builder after synchronization through current main.",
+    "research_head_before_this_write": "f2f6d7f1202a9761cf3d1bc7d173c49ad5f79e9e"
+  },
+  "coordination_action": {
+    "pr": 454,
+    "action": "merged ancestry-only synchronization of current main into draft root-provision candidate branch #440",
+    "resulting_root_candidate_head": "4e43a62c8cb84359cc66becd67111e9b27e07f72",
+    "root_or_production_mutation": false,
+    "additional_unusual_experiment": false
+  },
+  "external_evidence_fusion": {
+    "linux_fsync": "Linux fsync(2) documentation states that fsync on a file does not necessarily persist its containing directory entry and an explicit directory fsync is needed; the #440 candidate explicitly fsyncs the runtime parent after rename and the anchor parent after replace.",
+    "evidence_url": "https://man7.org/linux/man-pages/man2/fsync.2.html",
+    "interpretation": "The synthetic DURABILITY_ORDER_REVERSAL_COUNTERWORLD is therefore a counter-reality outside the intended acknowledged-fsync model, but it remains useful as a real accepted-host crash/power-loss test obligation because virtualized storage semantics must be measured rather than assumed."
+  },
+  "current_boundary": {
+    "F-V01-13": "IN_PROGRESS",
+    "reason": "fixed reproducible artifact is merged and root-provision candidate is current-main-composed, but no authorized root production install, productive service-parent binding, mapped-object restart proof, rollback/downgrade proof, or whole Frank acceptance exists.",
+    "training_authorized": false
+  }
+}

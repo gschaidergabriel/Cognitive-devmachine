@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "experiment": "REFERENCE_PEH_SCOPE_TEST",
+  "executed_at": "2026-08-10T22:59:07+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "evidence_class": "SYNTHETIC_EXECUTABLE_CONTRACT_TEST_NOT_TARGET_RUNTIME",
+  "source": "research_entity/trigger_runs/q23/q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope/experiments/reference_peh_scope_test.py",
+  "environment": {
+    "os": "Linux",
+    "kernel": "6.18.35",
+    "architecture": "x86_64",
+    "glibc": "2.41",
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "processor": "UNKNOWN"
+  },
+  "tests": {
+    "descriptor_shape": true,
+    "next_encode_invalidates": true,
+    "reset_invalidates": true,
+    "free_invalidates": true,
+    "durable_descriptor_survives_owner_free": true
+  },
+  "all_boolean_contract_tests_pass": true,
+  "materialization_example": {
+    "n_embd": 2560,
+    "n_tokens": 256,
+    "float_bytes": 4,
+    "raw_tensor_bytes": 2621440,
+    "raw_tensor_mib": 2.5,
+    "pooled_descriptor_bytes": 10240,
+    "pooled_descriptor_kib": 10.0,
+    "raw_to_descriptor_byte_ratio": 256.0
+  },
+  "interpretation": "The proposed Frank generation-fence state machine is executable and deterministically rejects stale ephemeral views after next encode/reset/free while allowing a copied compact descriptor to survive owner destruction. This validates the wrapper contract logic only. It does not prove actual llama.cpp pointer invalidation timing, Qwen feature quality, concurrency safety or target-VPS performance.",
+  "upstream_primary_code_fact": "Current libmtmd owns non-batch output in ctx->out_embd and batch output in mtmd_batch::output_embd; returned pointers are views into those owners.",
+  "target_acceptance": false,
+  "canonical_promotion": "NONE",
+  "next_falsifier": "TO-Q23-SCOPED-ZC-07 on exact target-compatible llama.cpp/Qwen multimodal runtime with forced next-encode/free/reset/race schedules."
+}

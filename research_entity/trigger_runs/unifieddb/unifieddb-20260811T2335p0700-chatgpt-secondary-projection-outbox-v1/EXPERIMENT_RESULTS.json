@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.2",
+  "run_id": "unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1",
+  "status": "TARGET_SUPPORTED_PROJECTION_CONTINUITY_CANDIDATE",
+  "hypothesis": "a transactional authoritative projection event plus idempotent derived apply preserves exact UnifiedDB->ClayGraph semantics across the tested process-exit windows without cross-file atomicity assumptions",
+  "counterhypotheses": [
+    "authoritative commit may survive while projection event does not",
+    "mid-graph crash may leak a partial derived mutation",
+    "graph-commit-before-ACK may duplicate projection on replay",
+    "lag or derived receipt tamper may pass unnoticed",
+    "full derived rebuild may not reproduce current relation semantics/root",
+    "added durability may impose unacceptable latency/storage amplification"
+  ],
+  "freshness": {
+    "superseded_old_head": "2f86298b8d1e2196d199ea6d69965d62d54bd1bd",
+    "fresh_main": "5ec9955775d9bf142e327166990a2228d543c071",
+    "fresh_semantic_candidate_head": "6201556c8f47f1226ed8c2bc3792851ed3912294",
+    "tested_head_with_scheduler_fix": "b8858f949d4ad855bff5d682994de69bfd10b7c9",
+    "scheduler_only_delta": "workflow concurrency cancel-in-progress false -> true"
+  },
+  "target_result": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 386,
+    "workflow": "Frank UnifiedDB projection outbox V1 VPS",
+    "workflow_run": 31514757454,
+    "job": 93857015099,
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "host_sqlite_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+    "private_sqlite": {
+      "version": "3.53.4",
+      "source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "library_sha256": "0baf52fdef6f11b0c8867e77505f87ac5ea6c699372e52d9bf67cf742ff7d92d"
+    },
+    "checks_passed": 23,
+    "checks_total": 23,
+    "projection": {
+      "authoritative_events": 76,
+      "applied_events": 76,
+      "root": "be0090b4bfbe176862fccc736d0f6abdc16a752d16769a7fe7f254005b368316",
+      "current_relations": 16,
+      "exact_event_root_equivalence": true,
+      "relation_query_equivalence": true
+    },
+    "crash_windows": {
+      "after_unified_commit_before_graph": "PASS_RECOVERED_EXACTLY",
+      "inside_claygraph_transaction": "PASS_ROLLED_BACK_THEN_REPLAYED",
+      "after_graph_commit_before_unified_ack": "PASS_IDEMPOTENT_NO_DUPLICATE"
+    },
+    "falsifiers": {
+      "projection_lag": "DETECTED_AND_FAIL_CLOSED",
+      "derived_payload_hash_tamper": "DETECTED_AND_FAIL_CLOSED",
+      "full_derived_graph_wipe_rebuild": "EXACT_ROOT_AND_QUERY_EQUIVALENCE",
+      "unified_integrity_check": "ok",
+      "graph_integrity_check": "ok"
+    },
+    "latency_us": {
+      "authoritative_commit_plus_outbox": {"p50": 1035.2645, "p95": 2359.38, "p99": 3513.903, "max": 4039.004},
+      "projection_drain": {"p50": 2107.3125, "p95": 4598.076, "p99": 5382.77, "max": 7930.394}
+    },
+    "storage_bytes": {"unified": 1269760, "graph": 413696},
+    "artifact": {
+      "id": 9110606930,
+      "bytes": 17002,
+      "digest_sha256": "9ce0640a2e65b0967e01c6956bc92e211250306d17f3350eb979f51d311ff06a"
+    }
+  },
+  "target_integration": {
+    "pr": 386,
+    "merge_commit": "72029f838176fff5189b8c3cfd4ef5d957de6ba2",
+    "state": "MERGED_TO_MAIN",
+    "production_migration_lists_changed": false
+  },
+  "supplemental_prefalsifier": {
+    "workflow_run": 31513246399,
+    "classification": "HOSTED_INFRA_PRESTART_FAILURE",
+    "executed_steps": 0,
+    "candidate_test_executed": false,
+    "epistemic_effect": "NONE"
+  },
+  "counterhypothesis_adjudication": {
+    "authoritative_event_loss_after_commit": "REFUTED_FOR_TESTED_PROCESS_CRASH_WINDOW",
+    "partial_graph_tx_leak": "REFUTED_FOR_TESTED_PROCESS_CRASH_WINDOW",
+    "duplicate_after_graph_commit_before_ack": "REFUTED_FOR_TESTED_PROCESS_CRASH_WINDOW",
+    "silent_lag_or_tamper": "REFUTED_FOR_TESTED_FALSIFIERS",
+    "non_reproducible_rebuild": "REFUTED_FOR_TESTED_76_EVENT_HISTORY",
+    "unacceptable_cost": "NOT_REFUTED_GLOBALLY; CURRENT_SMALL_SCALE_LATENCY_SHADOW_RECORDED"
+  },
+  "promotion_state": "CANDIDATE_AND_REGRESSION_PATH_SUPPORTED_PRODUCTION_SCHEMA_ACTIVATION_HELD",
+  "claim_boundaries": [
+    "disposable current-schema projection continuity only",
+    "no canonical migration claim",
+    "no power-loss or kernel-panic durability claim",
+    "no production projector scheduling/backpressure claim",
+    "no large-corpus graph/vector/FTS quality claim",
+    "no whole Frank v0.1 acceptance"
+  ],
+  "canonical_state_mutated": false,
+  "external_effect_performed": false,
+  "training_authorized": false
+}

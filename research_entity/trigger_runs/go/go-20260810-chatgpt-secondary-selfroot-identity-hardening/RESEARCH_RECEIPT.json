@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810-chatgpt-secondary-selfroot-identity-hardening",
+  "trigger": "go",
+  "date_local": "2026-08-10",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "selected_work": "F-V01-01-IDENTITY-SERVER-BINARY",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 102,
+  "target_branch": "clay/frank-identity-conformance-20260810",
+  "primary_hypothesis": "The owner-fixed self.root boundary can be migrated without losing historical Frank functions if stable native identity, accepted binary/state lineage, runtime-instance provenance, external-person/client/provider relations and proposal-only self-harness authority remain explicitly separated.",
+  "strongest_counterhypothesis": "The stale identity phrases are non-causal compatibility/documentation only, and aggressive migration or static-gate hardening can introduce more severe authority or runtime regressions than the stale text itself.",
+  "findings": [
+    {
+      "id": "GO-ID-GATE-SEMANTIC-CAMOUFLAGE-20260810",
+      "status": "SUPPORTED_BY_BOUNDED_METAMORPHIC_FALSIFIER",
+      "claim": "The original PR-102 exact-string conformance discriminator was insufficient as a merge gate because required words could be supplied non-causally and stale semantics could be cosmetically rewritten to evade exact forbidden markers.",
+      "scope": "repository static conformance only",
+      "not_claimed": "No target-runtime identity failure or success is inferred from the static mutation test."
+    },
+    {
+      "id": "GO-ID-MIGRATION-AUTHORITY-REGRESSION-20260810",
+      "status": "REPAIRED_ON_DRAFT_BRANCH",
+      "claim": "A concurrent self.root security migration temporarily collapsed the prior surface-specific Frank repo write policy into a blanket capability-gated ALLOW path, which would have violated the proposal-only self-harness authority invariant.",
+      "repair_commit": "2488a7acf9f4638c6ea62db21e5c611321ce4f0f",
+      "repair": "Restored explicit mutation-surface classification, DENY_HARD for Harness/cognitive/security/workflow/test/build/documentation/research-receipt surfaces, allowed only target operational state/effect-queue/telemetry/self-observation-proposal surfaces, and retained self.root identity checks."
+    },
+    {
+      "id": "GO-ID-GATE-V3-HARDENING-20260810",
+      "status": "COMMITTED_ON_DRAFT_BRANCH",
+      "claim": "The identity gate now strips ClayCode comments for executable checks, rejects contradictory external-actor-as-self assignments, detects semantic-family cross-node and legacy-personal-self contamination, verifies proposal-only self-harness routing, and carries an intrinsic mutation self-test.",
+      "commit": "c710f06b7f52f54d47ef92d75ea22297d696deb8",
+      "self_test_local": {
+        "compliant_fixture": "PASS",
+        "mutants": {
+          "comment_only_required_markers": "FAIL",
+          "cross_node_identity_merge": "FAIL",
+          "legacy_personal_self_literal": "FAIL",
+          "api_token_as_self": "FAIL",
+          "provider_as_self": "FAIL",
+          "old_security_equality": "FAIL",
+          "blanket_private_repo_allow": "FAIL"
+        }
+      },
+      "limitation": "Local intrinsic self-test is not the same as CI or target-VPS execution."
+    }
+  ],
+  "out_of_box_experiment": {
+    "count": 1,
+    "id": "METAMORPHIC-SEMANTIC-CAMOUFLAGE-IDENTITY-GATE",
+    "purpose": "Attempt to make the original exact-string identity gate report PASS while retaining stale identity meaning through cosmetic rewrites and non-causal marker placement.",
+    "baseline": "stale fixture -> FAIL",
+    "adversarial_mutant": "stale semantics retained; forbidden exact strings cosmetically changed; required identity markers supplied without proving semantic binding",
+    "result": "original v1 marker gate could be driven to PASS; therefore PASS did not imply meaningful identity repair",
+    "architecture_consequence": "Promote metamorphic/semantic-family static checks only as repository discrimination; require boot/API/restart/stale-clone runtime receipts before identity gate promotion.",
+    "reversible": true,
+    "mutation_scope": "temporary local copies only"
+  },
+  "external_evidence": [
+    {
+      "source": "SPIFFE Workload Identity / SPIFFE ID and SVID semantics",
+      "role": "supports separation of stable logical workload identity from short-lived verifiable identity documents and runtime evidence"
+    },
+    {
+      "source": "The Update Framework specification",
+      "role": "supports monotonic version/rollback rejection: correctly signed but stale state is not sufficient current-state authority"
+    },
+    {
+      "source": "metamorphic testing literature",
+      "role": "supports mutation/metamorphic relations when direct expected outputs are weak or oracle quality is the object under test"
+    }
+  ],
+  "concurrency_and_coordination": {
+    "parallel_branch_activity_observed": true,
+    "stale_write_attempt": "GitHub contents update rejected with HTTP 409 after another worker advanced the same harness file",
+    "response": "re-fetched current branch, preserved newer work, revalidated and applied only a CAS-matching merged delta",
+    "result": "no stale overwrite"
+  },
+  "current_target_branch_evidence": {
+    "owner_fixed_source": "000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt",
+    "entity_surface": "claycode/frank_entity.clay",
+    "runtime_surface": "claycode/frank_runtime.clay",
+    "security_surface": "claycode/frank_security.clay",
+    "conformance_gate": "harness/owner_fixed_identity_conformance.py",
+    "metamorphic_suite": "harness/owner_fixed_identity_metamorphic.py",
+    "ci_status_at_receipt_write": "NO_WORKFLOW_RUN_OBSERVED_FOR_COMMIT_c710f06b7f52f54d47ef92d75ea22297d696deb8"
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "invariant": "self.root identity = stable native identity + accepted binary/build identity + admitted monotonic state lineage + verified current embodiment evidence; providers/models/sessions/clients/tokens/persons/Clay remain external relations/provenance/capabilities",
+    "security_invariant": "self.root self-observation and Harness-change generation remain PROPOSAL_ONLY; target authority cannot mutate Harness/cognitive/security/workflow/test/build/research-receipt surfaces",
+    "static_gate_law": "repository conformance PASS != runtime identity acceptance",
+    "required_next_discriminator": "CI static/metamorphic PASS, then current-source boot/API/restart/stale-clone/split-brain/rollback tests bound to exact binary/state/epoch identities"
+  },
+  "negative_results_and_limits": [
+    "The original exact-string gate was falsified as a sufficient semantic repair oracle.",
+    "No GitHub Actions workflow run was observed yet for the latest hardening commit at the final check before this receipt.",
+    "No target-VPS runtime identity acceptance, restart acceptance, API acceptance or stale-clone rejection receipt was produced in this run.",
+    "No final/model training was started; owner authorization remains required."
+  ],
+  "whole_mesh_reentry": {
+    "frank_v0_1": "Identity repair remains F-V01-01 IN_PROGRESS until runtime continuity evidence exists; branch static semantics are materially improved but not release evidence.",
+    "effect_authority": "Preserve proposal-only self-harness surface classification while default-allow semantics apply only to authorized ordinary non-destructive operational effects.",
+    "claycode": "Typed IR/type-effect work should encode stable self.root identity, state-lineage freshness and external actor/capability relations without relying on string markers.",
+    "unifieddb": "Identity/state continuity requires monotonic epoch/lineage rejection of stale clones/forks plus exact build/state provenance.",
+    "api": "Token authenticates scoped caller intent; token/session/client identity must never become SELF and stale sessions need rejection tests.",
+    "recovery": "Restart/migration acceptance must prove current admitted state lineage and no split brain before preserving self.root."
+  },
+  "next_frontier": [
+    "Observe/run PR-102 conformance + metamorphic CI on the latest head and preserve artifact receipts.",
+    "Add/execute boot, API, clean-restart, stale-clone, stale-epoch, foreign-binary, state-fork and split-brain discriminators.",
+    "Bind successful runtime identity receipts to exact binary/build hash, state epoch/lineage and accepted target VPS instance provenance.",
+    "Only then update F-V01-01 evidence/blocker or promote identity migration toward main."
+  ],
+  "research_write_result": "COMMITTED"
+}

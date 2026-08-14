@@ -1,0 +1,77 @@
+{
+  "schema_version":"1.1",
+  "run_id":"hypofusion-20260810T1431p0700-chatgpt-secondary-r5",
+  "parent":"hypofusion-20260810T1223p0700-chatgpt-secondary-r4",
+  "late_arrival_cutoff":"d5d09a3ea4961ed689f48521f6406d00a888ce37",
+  "transformed_hypotheses":[
+    {
+      "id":"H-HF5-01",
+      "name":"MULTI_LAYER_EVIDENCE_IDENTITY_CONTRACT",
+      "source_hypotheses":["H-HF4-05","H-HF4-06"],
+      "external_refs":["SLSA Build Provenance"],
+      "claim":"Release evidence is not one hash. Semantic identity, exact byte identity, producer/build/input provenance and admission/authority identity must be separately bound or explicitly bridged by equivalence evidence before a candidate receipt can count as current release evidence.",
+      "what_changed":"Post-R4 V18 reached strict 85/85 G9+Dialect and production/standalone AST-byte parity as a candidate, yet formal promotion remained blocked because exact current committed bytes did not durably execute on the required Ubuntu lane. The failure is therefore evidence-identity, not merely parser correctness.",
+      "counterhypothesis":"Canonical semantic hash/parity alone is sufficient and the extra identities are redundant.",
+      "falsifier":"Hold canonical semantics constant while changing committed bytes, selected surface or build inputs; if current release acceptance remains sound without explicit provenance/equivalence binding across adversarial replay, the stronger tuple is unnecessary.",
+      "highest_information_test":"Durable content-addressed exact-current-byte Ubuntu replay plus same-semantic/different-surface equivalence canary and stale-receipt rejection.",
+      "affected_branches":["claycode","harness","clayresearch","unifieddb"],
+      "status":"SUPPORTED_DIRECTION_PENDING_TARGET_RECEIPT"
+    },
+    {
+      "id":"H-HF5-02",
+      "name":"MEASURED_CAUSAL_REWARD_SUBSPACE_BASELINE",
+      "source_hypotheses":["H-HF4-03","H-HF4-08","FRANK-NACC-CALLER-COVERAGE-20260810"],
+      "external_refs":["Lee et al. 2024 feature-specific RPE","Gershman et al. 2024 dopamine/RPE critique"],
+      "claim":"Historical reward preservation must target the measured causal reward subspace actually invoked and propagated into state/reentry, not a one-to-one copy of every named NAcc channel. A typed or multihorizon successor is selected only if it beats both the measured historical function and a simpler scalar causal-outcome baseline.",
+      "what_changed":"Static archaeology found documentation drift (9 claimed versus 16 defined channel names) and sparse exact runtime call candidates while explicitly leaving indirect/dynamic runtime use UNKNOWN. This makes channel-name count an invalid baseline proxy.",
+      "counterhypothesis":"Static search undercounts runtime dispatch and most named channels have distinct causal functions that a compressed successor would erase.",
+      "falsifier":"H1 instrumentation observes broad distinct channel activation with differential downstream E-PQ/reentry effects that are lost by the reduced/typed successor.",
+      "highest_information_test":"Instrument reward invocation caller/channel/outcome provenance/phasic-tonic state/E-PQ delta/reentry on frozen traces and autonomous paths, then run historical-vs-scalar-vs-typed-vs-multihorizon matched factorial.",
+      "affected_branches":["frank","harness","gwt","clayresearch","unifieddb"],
+      "status":"OPEN_BASELINE_GATED"
+    },
+    {
+      "id":"H-HF5-03",
+      "name":"COMPLETENESS_GATED_ADAPTIVE_LIVE_FUSION",
+      "source_hypotheses":["CLAY_LIVE_FUSION_MESH_V2_CANDIDATE","CLAY_LIVE_DELTA_ROUTER_V1_CANDIDATE","CLAY_LIVE_FUSION_CAUSAL_MESH_CANDIDATE"],
+      "external_refs":["Differential Dataflow","DBSP","NATS JetStream"],
+      "claim":"Live cross-worker fusion should adapt between TARGETED_DELTA, DENSE_FANOUT and DIGEST_ONLY using current dependency span, multi-view projection-completeness confidence and measured cost. High-impact invalidations require zero permanent missed recipients after reconciliation; incomplete routing views must trigger anti-entropy, an independent second view, dense fallback or explicit DEGRADED_COORDINATION rather than silent targeted routing.",
+      "what_changed":"The original 5,000-delta missing-edge falsifier reduced full payloads versus broadcast but missed 603 required deliveries at 8% hidden edges. A late independent candidate using the union of ClayGraph and UnifiedDB routing views plus reconciliation reached 0.9970 hot-path affected recall and 1.0 eventual synthetic recall, but required 8.034 send attempts/event versus 9.0 broadcast: correctness improved while the modeled transport saving shrank to ~10.7%. This strengthens adaptive multi-view repair and simultaneously strengthens the cost counterhypothesis.",
+      "counterhypothesis":"Broadcast is simpler and dominates once dual-view reconciliation, anti-entropy, durability and real dense topology are counted.",
+      "falsifier":"Real repository replay shows no material latency/byte/resource gain at equal correctness, any permanent high-impact miss/stale effect after repair, or coordination overhead that dominates benefit.",
+      "highest_information_test":"Execute one converged real-repo broadcast/tag-only/adaptive lane with ClayGraph+UnifiedDB disagreement, missing/stale edge, duplicate, causal-reorder, crash/restart and Git-fallback faults; measure permanent miss rate, repair latency, false interrupts, payload/control bytes and resources.",
+      "affected_branches":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+      "status":"SUPPORTED_AS_RESEARCH_CANDIDATE_NOT_PROMOTED"
+    },
+    {
+      "id":"H-HF5-04",
+      "name":"ORIGIN_ARRIVAL_PROJECTION_REENTRY_WITH_OBSERVER_PASSIVITY",
+      "source_hypotheses":["H-HF4-07","H-HF4-11","CLAY-LIVE-FUSION-REENTRY-V1"],
+      "external_refs":["SQLite WAL documentation","sqlite3_wal_checkpoint_v2"],
+      "claim":"Reentry must preserve authoritative causal-origin event identity/time, arrival/current-application time and projection derivation identity separately. Effectivized projection deltas cannot replace the raw event cursor. The observer/reentry mechanism is acceptable only if it is causally passive within resource/reliability budgets or isolated so it cannot materially perturb the authoritative writer.",
+      "what_changed":"Post-R4 work connected dual-time feedback to the raw event plane and exposed observer backaction as a new failure mode. SQLite's official WAL/checkpoint semantics make same-file interference empirically plausible rather than merely theoretical.",
+      "counterhypothesis":"Same-file observation is harmless at project load and isolation complexity is worse than any contention.",
+      "falsifier":"Matched workload shows same-file observer has no material writer-tail/retry/WAL/checkpoint regression and equal recovery semantics versus isolated/no-observer paths.",
+      "highest_information_test":"No-observer vs same-file vs isolated observer factorial with p50/p95/p99 writer latency, SQLITE_BUSY/retries, WAL bytes, checkpoint latency, crash/restart, ABA and delayed/out-of-order feedback controls.",
+      "affected_branches":["unifieddb","claygraph","gwt","harness","clayresearch","frank"],
+      "status":"SUPPORTED_FAILURE_MODE_OPEN_ARCHITECTURE_CHOICE"
+    },
+    {
+      "id":"H-HF5-05",
+      "name":"CAUSAL_RECEIPT_DURABILITY_WITH_MEASURED_COMMIT_POLICY",
+      "source_hypotheses":["H-HF5-03","CLAY-LIVE-FUSION-REENTRY-V1","live-fusion-local-durability-cost-20260810T1434p0700"],
+      "external_refs":[],
+      "claim":"Causal delivery/replan/effect receipts require durable semantics, but per-record fsync is an implementation choice rather than semantic law. Group/transaction commit is admissible only if crash/power-loss-surrogate tests preserve the receipt contract, replay equivalence and no unobservable delivered-but-not-durable window while materially improving latency/resources.",
+      "what_changed":"A late local candidate microbenchmark measured strict locked per-record fsync mean cost ~111.84x buffered append. A selective-sync shadow was ~2.714x faster than strict-all-receipts and replayed 250/250 deltas plus 500/500 deliveries, but was NOT_SELECTED because replay equivalence alone does not prove immediate durability or power-loss safety.",
+      "counterhypothesis":"Every causal receipt must be individually fsynced immediately; batching creates an unacceptable audit gap and any speed gain is irrelevant.",
+      "falsifier":"A transaction/group-commit design reproduces latency benefit while process-crash, torn-tail and power-loss-surrogate tests show no loss of required causal receipts, no duplicate/stale effect and 100% authoritative fallback replay equivalence.",
+      "highest_information_test":"Matched Hostinger Ubuntu strict-per-record vs UnifiedDB transaction/group-commit factorial with p50/p95/p99, CPU/RSS/I/O, crash/torn-tail/power-loss surrogate, observer-backaction and effect-idempotency receipts.",
+      "affected_branches":["unifieddb","harness","clayresearch","claygraph","gwt"],
+      "status":"OPEN_OPTIMIZATION_BASELINE_GATED"
+    }
+  ],
+  "carried_r4_updates":{"H-HF4-01":"NO_MATERIAL_CHANGE","H-HF4-02":"STRENGTHENED_BY_ROUTE_POLICY_ALTERNATIVES","H-HF4-04":"STRENGTHENED_BY_FUSION_RECEIPT_STAGES","H-HF4-09":"NO_MATERIAL_CHANGE","H-HF4-10":"STRENGTHENED_BY_TRANSPORT_DUPLICATION_BOUNDARY"},
+  "fusion2_meta_invariant":"An optimization may erase or batch structure only after semantic/causal/temporal/evidence identity is preserved, recipient-completeness failure is bounded and repaired, receiver/effect closure remains observable, and observer/control/durability mechanisms pass measured backaction and recovery gates.",
+  "scientific_promotion":"NONE",
+  "architecture_action":"ADD_TEST_OBLIGATIONS_NARROW_SHARED_CANDIDATES_NO_CANONICAL_PROMOTION"
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260813T0017p0700-gpt56sol-fv0113-hardlink-alias",
+  "trigger": "go",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "recorded_at": "2026-08-13T00:17:00+07:00",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "canonical_entity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 557,
+  "candidate_head_verified": "06310553422925cbd7dc36560c0fbff65d05f207",
+  "this_macrocycle_unusual_experiment": {
+    "count": 1,
+    "id": "OPEN_DB_HARDLINK_ALIAS",
+    "scope": "disposable local SQLite WAL fixture only",
+    "local_sqlite_version": "3.46.1",
+    "baseline": {
+      "database_nlink": 1,
+      "frank_db_has_moved": 0,
+      "current_prepatch_guard_would_admit": true
+    },
+    "intervention": "create a second POSIX hardlink to the exact already-open main database object while leaving the original pathname in place",
+    "observations": {
+      "database_nlink": 2,
+      "alias_same_inode": true,
+      "frank_db_has_moved": 0,
+      "current_prepatch_guard_would_admit": true
+    },
+    "outcome": "GAP_CONFIRMED_HAS_MOVED_DOES_NOT_DETECT_HARDLINK_ALIAS",
+    "rollback": "temporary fixture removed; no product, VPS, authority or canonical runtime mutated"
+  },
+  "upstream_evidence": [
+    {
+      "source": "https://sqlite.org/howtocorrupt.html",
+      "finding": "multiple links/names to one SQLite database are unsafe because journal/WAL coordination is pathname-derived"
+    },
+    {
+      "source": "https://sqlite.org/src/doc/trunk/src/os_unix.c",
+      "finding": "Unix verification logic treats st_nlink != 1 as suspicious for a database file"
+    }
+  ],
+  "product_delta": {
+    "guard_commit": "7f193fae57bdf34019a4cec48c6a451ea73c46d2",
+    "guard_change": "fail closed with DATABASE_PATH_MULTIPLE_HARDLINKS unless st_nlink == 1; include database_nlink in receipt",
+    "regression_commit": "be9a53a5d48c41873bfa874ce050b44a9c6df1b3",
+    "regression": "hardlink alias proves HAS_MOVED remains 0 but attest_connection denies",
+    "ci_commit": "481a7a4432c4eccc714b43db3b8bf32ea4b258fc",
+    "parallel_worker_updates_preserved": true,
+    "current_head_contains_delta": true
+  },
+  "post_repair_evidence": {
+    "workflow": "Frank SQLite connection guard v1",
+    "run_id": 31621529325,
+    "job_id": 94197302812,
+    "tested_head": "06310553422925cbd7dc36560c0fbff65d05f207",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "private_sqlite_35304_runtime_required_by_workflow": true,
+    "deterministic_candidate_gate": "PASS",
+    "repository_static_integrity": "PASS",
+    "result": "SUCCESS"
+  },
+  "grf_collapse": {
+    "HAS_MOVED_as_hardlink_alias_detector": "REJECT",
+    "st_nlink_eq_1_as_required_point_in_time_alias_guard": "RETAIN_TESTING",
+    "connection_guard_as_complete_WAL_persistence_binding": "REJECT",
+    "F_V01_13_release_promotion": "NO_CHANGE"
+  },
+  "nonclaims": [
+    "local unusual experiment is not accepted Hostinger evidence",
+    "self-hosted mechanism CI is not productive persistence acceptance",
+    "active WAL/journal sidecar identity remains unattested",
+    "exclusive or production-safe dynamic extension bootstrap remains unattested",
+    "temporal no-move history remains unattested",
+    "restart/reopen and rollback continuity remain unattested",
+    "semantic-lineage identity remains open",
+    "whole Frank v0.1 acceptance is not claimed"
+  ],
+  "next_discriminator": "On the accepted Hostinger ProductStart/self.root productive persistence path, bind the exact fixed SQLite runtime plus main database and active WAL/journal object across a real transaction/checkpoint with an exclusive or non-loadable diagnostic mechanism; then exercise restart/reopen, rollback, downgrade/library-swap and semantic-lineage controls.",
+  "authority": {
+    "harness_authority_changed": false,
+    "effect_authority": "NONE",
+    "final_training_authorized": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  }
+}

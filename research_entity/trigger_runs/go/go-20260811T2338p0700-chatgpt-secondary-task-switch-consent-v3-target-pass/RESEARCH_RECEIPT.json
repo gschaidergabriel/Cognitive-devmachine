@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2338p0700-chatgpt-secondary-task-switch-consent-v3-target-pass",
+  "trigger": "go",
+  "created_at_local": "2026-08-11T23:38:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "research_center_parent_observed": "a7d6f40bf89b5c513184d93b8d48fabea2d76aca",
+  "component": "F-V01-08-TOKEN-API-CLIENTS / unfinished-task switch consent",
+  "predecessor_research_receipt": "research_entity/trigger_runs/go/go-20260811T2336p0700-chatgpt-secondary-task-switch-consent-v3/RESEARCH_RECEIPT.json",
+  "candidate": {
+    "pr": 385,
+    "head": "4fd0febc5033a5ecaf8db36972c091ca3a5d4036",
+    "base_main_at_branch": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44",
+    "status": "TARGET_SUPPORTED_CANDIDATE_NOT_PRODUCT_PROMOTED"
+  },
+  "accepted_target": {
+    "workflow": "Frank task switch consent v3 VPS",
+    "run": 31512727612,
+    "job": 93850284043,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "tested_sha": "4fd0febc5033a5ecaf8db36972c091ca3a5d4036",
+    "event_merge_sha": "49e432a67bc200e916c523e9f7cb2008a7484dcf",
+    "checkout_mode": "ISOLATED_GIT_INIT_FETCH_EXACT_SHA_DETACHED",
+    "status": "PASS_TARGET_VPS_TASK_SWITCH_CONSENT_V3",
+    "artifact_id": 9109963610,
+    "artifact_size_bytes": 4570,
+    "artifact_sha256": "d116cff68f124989b23c8982c335146c671f4e807e91d6fc3bf05efe27e9793d",
+    "bounded_receipt_sha256": "8dce7e4f2332da2a9c6e14a0571032469bc1d42f2e9eaf59f04ebfee6a4adeac",
+    "bounded_receipt_hash_recomputed": true
+  },
+  "byte_binding": {
+    "semantic_blob": "27e9ae39a7ec0d294f160777d66a50368000f6dd",
+    "runtime_blob": "5a21d36968e93c000a4a31ecd5293c4f0689fff9",
+    "schema_blob": "fca9bdef9c4b643864722ecebbb0874c14ad3030",
+    "migrator_blob": "3f9208ddc1571aa10e044511d8a3f7676709b322",
+    "test_blob": "5de6f8040e623da700a048fff175a2df82912e3e",
+    "token_core_blob": "9e0c563206302d412d8d397283e542749cf54b93",
+    "continuity_blob": "8c685240b467e54636599e1e9a0fa7ab4faa140e",
+    "repo_static_audit_blob": "90ba0bd6c4bf6dcb816d62914166d651834ef29a"
+  },
+  "current_v16_negative_baseline": {
+    "classification": "SUPPORTED_CURRENT_V16_CANNOT_DISTINGUISH_UNRELATED_FOLLOWUP_TASK",
+    "http_status": 200,
+    "status": "CONTINUE",
+    "continued_existing_execution": true,
+    "followup_calls": 1,
+    "task_identity_present_in_api": false
+  },
+  "candidate_checks": {
+    "count": 21,
+    "passed": 21,
+    "failed": 0,
+    "items": [
+      "challenge_collision_cannot_resurrect_consumed",
+      "challenge_nonce_alone_cannot_mint_consent",
+      "concurrent_double_consume_exactly_once",
+      "consent_replay_denied",
+      "decision_receipt_id_reuse_denied",
+      "decision_target_binding_mismatch_denied",
+      "forged_user_decision_denied",
+      "grant_and_decision_evidence_committed_together",
+      "migrator_delegates_to_central_schema_executor",
+      "one_shot_switch_allowed",
+      "restart_grant_created",
+      "restart_preserves_verified_grant",
+      "runtime_embeds_no_create_table_ddl",
+      "runtime_has_no_schema_executescript",
+      "same_revision_state_drift_rejected",
+      "same_task_continues_without_switch_consent",
+      "sqlite_integrity",
+      "stale_projection_revision_rejected",
+      "terminal_task_allows_new_task_without_abandonment_consent",
+      "unfinished_unrelated_task_requires_consent",
+      "verified_exact_user_decision_grants"
+    ]
+  },
+  "single_go_oob": {
+    "count": 1,
+    "name": "CONSENT_REPLAY_AFTER_TASK_ADVANCE",
+    "anti_control_naive_without_revision_binding_would_allow": true,
+    "candidate_status": "DENY",
+    "candidate_semantic_code": "CONSENT_NOT_GRANTED_OR_ALREADY_USED",
+    "result": "PASS_STALE_CONSENT_INVALIDATED"
+  },
+  "repository_architecture_gate": {
+    "status": "PASS repo_static_integrity_audit",
+    "runtime_v3_schema_ddl": false,
+    "centralized_migrator_use": true
+  },
+  "resource_shadow": {
+    "wall_seconds": 0.14,
+    "user_seconds": 0.08,
+    "system_seconds": 0.03,
+    "cpu_percent": 80,
+    "max_rss_kb": 23936,
+    "major_page_faults": 0,
+    "minor_page_faults": 3454,
+    "voluntary_context_switches": 204,
+    "involuntary_context_switches": 2,
+    "swaps": 0,
+    "filesystem_inputs": 0,
+    "filesystem_outputs": 2160,
+    "exit_status": 0
+  },
+  "supported_claim": "On exact candidate bytes on the accepted self-hosted Ubuntu target, V3 enforces producer-bound explicit user-decision evidence for unfinished unrelated task switching while preserving one-shot/freshness/concurrency/restart semantics and repository schema-authority invariants.",
+  "not_supported_or_not_implemented": [
+    "real authenticated stable-principal current-user decision producer",
+    "authoritative TaskSnapshot producer composed into product ingress",
+    "canonical task cancellation/suspension/transition producer",
+    "FrankTokenIngressCore product composition",
+    "fresh-current-main product integration/revalidation",
+    "whole F-V01-08 acceptance",
+    "whole Frank v0.1 acceptance",
+    "final or paid training authorization"
+  ],
+  "authority_boundary": {
+    "nonce_is_consent_authority": false,
+    "decision_and_grant_atomic": true,
+    "runtime_schema_authority": false,
+    "execution_authority_minted": false,
+    "effect_authority_minted": false,
+    "canonical_task_state_mutated": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "promotion": {
+    "status": "TARGET_SUPPORTED_CANDIDATE_ONLY",
+    "product_promotion": "BLOCKED",
+    "blockers": [
+      "fresh-current-main integration/revalidation",
+      "producer-owned stable principal/session/client identity composition",
+      "separate authenticated explicit current-user decision producer",
+      "authoritative TaskSnapshot + canonical task transition/cancellation composition",
+      "FrankTokenIngressCore composition and differential/recovery validation"
+    ]
+  },
+  "next": [
+    "Refresh current target main and confirm overlap or drift before any integration write.",
+    "Reuse stable identity semantics from #329/#377 lineage; do not equate credential continuity with user consent.",
+    "Find or build a separate authenticated current-user decision producer without adding another GO OOB.",
+    "Compose V3 with authoritative TaskSnapshot/task-transition and token ingress only after producer authority is verified.",
+    "Re-run exact target and recovery/differential gates on a fresh-current integration candidate before promotion."
+  ],
+  "training_authorized": false,
+  "whole_frank_v0_1": "NOT_ACCEPTED"
+}

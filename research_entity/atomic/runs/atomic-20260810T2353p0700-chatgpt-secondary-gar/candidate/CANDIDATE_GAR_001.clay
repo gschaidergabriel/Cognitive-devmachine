@@ -1,0 +1,54 @@
+module frank.atomic.generative_authority_region
+version "GAR-001-v0.1"
+status CANDIDATE_LANGUAGE_GAP
+parent [@research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay,
+        @research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md]
+
+class AuthorityRegion<K> = K
+record DurableAuthorityShadow<K> {
+  effect_id: EffectId
+  execution_digest: Hash
+  provenance_root: Hash
+  state_epoch: Epoch
+  schema_epoch: Epoch
+}
+record LiveExecutionCapability<K> {
+  region: AuthorityRegion<K>
+  gate_issued: Bool
+  alive: Bool
+}
+record EffectReservation<K> {
+  effect_id: EffectId
+  authority_shadow: DurableAuthorityShadow<K>
+}
+record OutcomeEvidence {
+  effect_id: EffectId
+  outcome_hash: Hash
+  provider_receipt: Hash
+}
+
+law authority_requires_live_region
+law durable_shadow_is_provenance_not_authority
+law generation_turnover_creates_fresh_region
+law region_identity_not_reconstructible_from_persisted_bytes
+law external_effect_requires_same_region_reservation_and_live_capability
+law provider_mutation_must_execute_inside_live_region_scope
+law detached_precommit_pass_is_not_authority
+law outcome_evidence_may_reconcile_after_region_turnover
+law model_output_gwt_claygraph_translator_cannot_mint_region
+law self_root_harness_authority_is_proposal_only
+
+invariant LiveExecutionCapability.gate_issued = true
+invariant LiveExecutionCapability.alive = true
+invariant DurableAuthorityShadow != LiveExecutionCapability
+
+metric stale_region_effect_admission = 0
+metric serialized_authority_resurrection = 0
+metric detached_precommit_effect_admission = 0
+
+surface LANGUAGE_GAP_REQUIRED
+surface REQUIRED_TYPED_IR_SEMANTICS_generative_brand
+surface REQUIRED_TYPED_IR_SEMANTICS_affine_or_borrowed_capability
+surface REQUIRED_TYPED_IR_SEMANTICS_nonserializable
+surface REQUIRED_TYPED_IR_SEMANTICS_scoped_effect_region
+surface CURRENT_G9_DOES_NOT_PROVE_THESE_RULES

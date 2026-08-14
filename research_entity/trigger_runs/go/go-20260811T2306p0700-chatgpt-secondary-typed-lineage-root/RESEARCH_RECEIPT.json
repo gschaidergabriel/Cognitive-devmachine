@@ -1,0 +1,113 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT_V1",
+  "run_id": "go-20260811T2306p0700-chatgpt-secondary-typed-lineage-root",
+  "trigger": "go",
+  "status": "TESTING_TARGET_QUEUED",
+  "created_local": "2026-08-11T23:06:48+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "identity_boundary": {
+    "persistent_research_entity": "Clay",
+    "target_native_identity": "self.root",
+    "human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "note": "canonical continuity anchor remains revision 2; current operational truth additionally refreshed from latest GitHub heads/workspace"
+  },
+  "coordination_refresh": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "0b765534e693707b813dab9ff7471189ee48ef91",
+    "clay_repository_recent_head_observed_before_write": "44d654862f295e4411c624a100ee621a40bc9d6d",
+    "overlap_result": "NO_ACTIVE_REPAIR_FOUND_FOR_PR307_TYPED_SELECTED_HEAD_SUCCESSOR; ClayCode/storage/reward lanes intentionally not duplicated"
+  },
+  "problem": {
+    "work_packages": [
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "negative_evidence": [
+      "PR#231: same-source sibling state chimera defeats bare admitted/recovery booleans",
+      "PR#267: selected-head CAS solves sibling single-winner selection but stores only bare semantic_root_hash",
+      "PR#307: accepted-target negative probe reproduced same digest bytes matching incompatible protocol/manifest meanings",
+      "PR#304: accepted-target negative probe reproduced unstable semantic-root scope from operational user_version/meta inputs"
+    ]
+  },
+  "hypothesis": "Selected state continuity should bind a domain-separated SemanticCheckpointIdentity over semantic_root_protocol + semantic_root_manifest_id + semantic_root_hash, and the selected head hash plus match relation should bind that complete typed identity.",
+  "strongest_counterhypothesis": "Typed fields only repair representation/type confusion. If protocol/manifest/root values are caller-selected rather than produced and admitted by an independent authoritative semantic-checkpoint producer, the authority leak is merely relocated. The selected-head store also remains vulnerable if its own failure domain rolls back with protected state.",
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "target_pr": 372,
+    "target_branch": "chatgpt/go-typed-lineage-root-repair-20260811",
+    "target_head": "c819dcdf68a008ec5e3641322a39c27324bf3a11",
+    "files": [
+      "runtime/identity/state_lineage_head_typed_v2_candidate.py",
+      "tests/frank_state_lineage_typed_root_v2_gate.py",
+      ".github/workflows/frank-state-lineage-typed-root-v2-vps.yml"
+    ],
+    "mechanism": [
+      "explicit SemanticCheckpointIdentity(protocol, manifest_id, root_hash, typed_identity)",
+      "domain-separated typed root identity",
+      "head hash binds typed root domain + lineage + sequence + parent",
+      "selected_matches requires exact typed identity",
+      "same-domain root evolution remains CAS guarded",
+      "protocol/manifest transition fails closed pending external bridge receipt",
+      "research store uses rollback journal DELETE + synchronous FULL rather than WAL"
+    ],
+    "rollback": "delete the V2 candidate/gate/workflow branch files; V1 candidate remains unmodified"
+  },
+  "go_oob": {
+    "count": 1,
+    "experiment": "SEMANTIC_ROOT_DOMAIN_CROWN_SWAP",
+    "design": "hold raw 64-hex digest constant while swapping protocol and semantic inclusion manifest",
+    "anti_control": "V1 receives only bare digest and therefore cannot distinguish conceptual domain A from incompatible domain B",
+    "candidate_prediction": "V2 matches exact A and rejects incompatible B despite identical raw digest bytes",
+    "execution_status": "QUEUED_ON_ACCEPTED_SELF_HOSTED_LINUX_X64",
+    "workflow_run": 31510362510
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://github.com/theupdateframework/specification/blob/master/tuf-spec.md",
+      "use": "mechanism analogy: trusted metadata binds type/spec/version/roles and rejects rollback/mix-and-match; does not define Frank semantics"
+    },
+    {
+      "source": "https://www.rfc-editor.org/rfc/rfc9162.html",
+      "use": "mechanism analogy: a checkpoint belongs to a specific append-only log identity/history and consistency relation; bare root bytes are not a universal semantic statement"
+    },
+    {
+      "source": "https://etcd.io/docs/v3.5/op-guide/recovery/",
+      "use": "mechanism analogy: snapshot restore may require explicit revision-lineage discontinuity handling and stale-observer invalidation"
+    }
+  ],
+  "target_evidence": {
+    "pr307_negative_scope_run": 31438812356,
+    "pr304_negative_scope_run": 31438521066,
+    "pr267_selected_head_run": 31433086428,
+    "pr372_exact_head_target_run": 31510362510,
+    "pr372_exact_head_target_status": "QUEUED",
+    "deep_integrity_note": "Broad Deep Integrity is failure on PR372 head, but the same broad lane was already failure on parent PR307/PR304 heads; no V2-specific causal attribution is made."
+  },
+  "adjudication": {
+    "typed_selected_head": "TESTING",
+    "producer_semantic_manifest": "BLOCKED_OPEN",
+    "canonical_integration": "NOT_ATTEMPTED",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "training_authorized": false
+  },
+  "next_falsifiers": [
+    "target execute PR372 exact-head gate and preserve resource/environment receipt",
+    "repair PR304 semantic-root scope with explicit versioned inclusion manifest before producer integration",
+    "bind V2 typed selected head to independently admitted checkpoint receipt rather than caller fields",
+    "compose selected head with external generation floor and boot continuity without merging authority domains",
+    "prove restart/restore behavior on installed product bytes"
+  ]
+}

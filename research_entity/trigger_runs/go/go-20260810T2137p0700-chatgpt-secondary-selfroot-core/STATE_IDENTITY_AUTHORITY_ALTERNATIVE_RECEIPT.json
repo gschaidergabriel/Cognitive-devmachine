@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2137p0700-chatgpt-secondary-selfroot-core",
+  "receipt_id": "self-root-state-authority-alternative-20260810",
+  "created_at": "2026-08-10T22:14:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 127,
+  "candidate_branch": "clay/selfroot-state-authority-stack-20260810",
+  "candidate_class": "TESTED_ALTERNATIVE_NOT_SELECTED",
+  "hypothesis": "A repository-admitted identity_root:CURRENT semantic row can be the sole authority for atomically migrating UnifiedDB identity metadata from the historical personal-entity id to self.root.",
+  "mechanism_evidence": {
+    "run_id": 31401226678,
+    "job_id": 93496413679,
+    "tested_pr_merge_sha": "aae6caee66f5535273fd6552c21a9b398522eb08",
+    "artifact_id": 9067790946,
+    "artifact_digest": "sha256:f38031f7e867ea1c51fdefa7962dbc7b4e6e2ad3ebc8b46fb7d378ddd06b83ad",
+    "authority_matrix": "PASS_20_OF_20",
+    "wall_seconds": 0.08,
+    "max_rss_kib": 21504,
+    "canonical_db_opened": false,
+    "notable_controls": [
+      "FRANK_REPO/self authority cannot mint CURRENT identity",
+      "non-git provenance rejected",
+      "provider/token identity contamination rejected",
+      "legacy identity preserved as lineage",
+      "injected mid-transaction failure rolls meta/materialization fully back"
+    ]
+  },
+  "materializer_integration_evidence": {
+    "run_id": 31401829907,
+    "job_id": 93498590622,
+    "tested_pr_merge_sha": "c1be48f860441647348b8c97f47cfb9083c04df7",
+    "artifact_id": 9067987876,
+    "artifact_digest": "sha256:47366827515865604c1f7c4a26a52499595d10aaa17eb4e4ec477ae7207c02b2",
+    "authority_matrix": "PASS_20_OF_20",
+    "materializer_matrix": "PASS_12_OF_12",
+    "authority_wall_seconds": 0.07,
+    "authority_max_rss_kib": 21504,
+    "materializer_wall_seconds": 0.06,
+    "materializer_max_rss_kib": 20736,
+    "canonical_db_opened": false
+  },
+  "supersession": {
+    "status": "NOT_SELECTED_AFTER_LIVE_COORDINATION_REFRESH",
+    "newer_active_lane": "PR 124 / chatgpt/go-selfroot-current-main-20260810",
+    "newer_head_observed": "d166c7db84c0642e3ae115d07a5b5f68d391ac7d",
+    "reason": "PR 124 advanced during this cycle and now directly owns repo_semantic_materializer_impl.py, adds an owner-fixed source hash check, self.root/Frank physical stamp, a repo semantic identity transaction and full replay regression. Keeping PR 127's wrapper plus separate identity_root:CURRENT authority would create a second competing identity authority at the same semantic boundary.",
+    "decision": "Close PR 127 without merge as implementation lane. Preserve its successful rollback/self-authority-denial tests as reusable discriminators and independent mechanism evidence.",
+    "architecture_rule_reinforced": "One semantic authority at a boundary; do not introduce a second Python/transaction identity architecture merely because it independently passes tests."
+  },
+  "reusable_delta": [
+    "Atomic identity metadata rollback lesion test",
+    "Self/FRANK_REPO authority denial for identity promotion",
+    "Provider/token contamination negative controls",
+    "Legacy-id ancestry preservation checks",
+    "Disposable target-VPS state migration fixtures"
+  ],
+  "next_selected_frontier": "Fresh stack on the latest PR 124 head, limited to physical installer/boot/preflight/runtime continuity surfaces not already owned by PR 124.",
+  "research_write_result": "COMMITTED"
+}

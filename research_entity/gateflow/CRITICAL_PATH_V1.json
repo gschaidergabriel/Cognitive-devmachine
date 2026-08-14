@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "status": "ACTIVE_COORDINATION_VIEW",
+  "scope": "Frank v0.1 promotion scheduling only; not an owner-fixed architecture or acceptance override",
+  "generated_at": "2026-08-11T01:09:00+07:00",
+  "law": "Waves prioritize scarce integration/promotion/Target-VPS capacity. They do not prohibit parallel research or implementation in later waves.",
+  "selection_rule": "Prefer the earliest unresolved wave containing a P0/P1 risk, stale authority/provenance, recovery resurrection, or a dependency that prevents multiple downstream terminal receipts. Within a wave prefer promotion/reentry over spawning duplicate implementations.",
+  "waves": [
+    {
+      "wave": 0,
+      "name": "identity-runtime-authority spine",
+      "work_packages": [
+        "F-V01-01-IDENTITY-SERVER-BINARY",
+        "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+        "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+        "F-V01-08-TOKEN-API-CLIENTS",
+        "F-V01-09-EFFECT-AUTHORITY",
+        "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+      ],
+      "why": "These packages define the exact self.root identity, typed execution substrate, durable state, ingress/execution generation, effect authority and recovery semantics to which later cognitive receipts must bind."
+    },
+    {
+      "wave": 1,
+      "name": "causal cognition spine",
+      "work_packages": [
+        "F-V01-03-COGNITIVE-LOOP-CORE",
+        "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+        "F-V01-07-NEEDLE-TRANSLATOR",
+        "F-V01-11-MEMORY-REWARD-GOALS"
+      ],
+      "why": "These packages close the native Clay causal loop from state through selection/use to verified outcome, causal credit and re-entry."
+    },
+    {
+      "wave": 2,
+      "name": "perception-agency-body",
+      "work_packages": [
+        "F-V01-06-DIGITAL-RETINA-MVC",
+        "F-V01-10-PROACTIVE-AGENCY-WEB",
+        "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES"
+      ],
+      "why": "These organs widen the already-authoritative loop into multimodal perception, proactive long-horizon behavior and typed external capability/body interaction."
+    },
+    {
+      "wave": 3,
+      "name": "frozen data and final model",
+      "work_packages": [
+        "F-V01-14-TRAINING-DATA-HELDOUT",
+        "F-V01-15-FINAL-MODEL"
+      ],
+      "why": "Final training/evaluation should bind the real architecture and remains subject to explicit owner authorization."
+    },
+    {
+      "wave": 4,
+      "name": "terminal end-to-end",
+      "work_packages": [
+        "F-V01-16-END-TO-END-ACCEPTANCE"
+      ],
+      "why": "DOOMSDAY requires one exact target-VPS binary/model/state/API identity to pass all mandatory acceptance families together."
+    }
+  ],
+  "current_blocking_wave": 0,
+  "current_focus": [
+    "F-V01-01: fresh-current self.root/binary trust and recovery-bound identity",
+    "F-V01-02: TypedIR -> type/effect -> evaluator -> compiler/lowering -> runtime/FFI on real Frank components",
+    "F-V01-04/F-V01-13: rollback/state-root/process-incarnation recovery closure",
+    "F-V01-08: full production token/response/session lifecycle acceptance",
+    "F-V01-09: exact V16 effect capability, non-bypassable routing, real provider unknown-outcome reconciliation, canonical verified-outcome -> reentry -> DONE"
+  ],
+  "anti_starvation": {
+    "later_wave_parallel_work_allowed": true,
+    "free_exploration_reserved": true,
+    "promotion_pressure_should_not_eliminate_falsification": true
+  }
+}

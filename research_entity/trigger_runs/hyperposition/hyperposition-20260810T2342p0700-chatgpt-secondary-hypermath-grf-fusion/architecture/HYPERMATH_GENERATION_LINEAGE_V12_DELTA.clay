@@ -1,0 +1,108 @@
+module clay.hyperposition.hypermath_grf.v12_generation_lineage
+version "HYPERMATH-GRF-V1.2-GENERATION-LINEAGE-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+// Late fusion from fresh GO target evidence:
+// - same lease_epoch can host different logical V16 execution_id identities;
+// - restoring an older valid UnifiedDB snapshot can resurrect an old DB-local epoch/capability;
+// therefore state_epoch/lease_epoch alone are not globally sufficient freshness identities.
+
+import parent=@research_entity/trigger_runs/hyperposition/hyperposition-20260810T2342p0700-chatgpt-secondary-hypermath-grf-fusion/architecture/HYPERMATH_GRF_PROOF_CARRYING_IR_V11.clay
+
+// -----------------------------------------------------------------------------
+// 1. DO NOT OVERBIND CANONICAL SEMANTICS TO ONE EXECUTION
+// -----------------------------------------------------------------------------
+record SemanticIncarnationFence {
+  semantic_root:Hash
+  state_epoch:Epoch
+  restore_incarnation:IncarnationRef
+  schema_version:Version
+}
+
+record HCanonicalHandle {
+  href:HashRef
+  semantic:SemanticIncarnationFence
+}
+
+// Immutable HyperIR content may be reused across executions iff it resolves against the
+// admitted semantic incarnation. Execution identity is not part of canonical semantic truth.
+rule resolve(HCanonicalHandle,current) requires href_hash_match + schema_compatible + semantic.semantic_root=current.semantic_root + semantic.state_epoch=current.state_epoch + semantic.restore_incarnation=current.restore_incarnation
+rule restore_of_older_snapshot requires fresh_nonrollback_restore_incarnation before HEALTHY/material_use
+rule repeated_DB_local_state_epoch_after_restore != same_semantic_incarnation
+rule canonical_handle_reuse_across_execution permitted_if SemanticIncarnationFence matches
+
+// -----------------------------------------------------------------------------
+// 2. BIND EACH DELIVERY/REPLAY USE TO EXACT LOGICAL EXECUTION LINEAGE
+// -----------------------------------------------------------------------------
+record DeliveryLineageFence {
+  request_id:Ref
+  lease_epoch:Int
+  execution_id:ExecutionId
+  credential_fingerprint:Hash
+  session_ref_hash:Hash
+  client_ref_hash:Hash
+  admitted_ingress_ref:Ref
+  delivery_generation:Int
+  response_id:Ref
+}
+
+record HDeliveryUse {
+  canonical:HCanonicalHandle
+  lineage:DeliveryLineageFence
+  span_or_chunk_ref:Ref
+}
+
+rule emit_or_replay(HDeliveryUse,current) requires lineage.execution_id=current.execution_id + lineage.lease_epoch=current.lease_epoch + lineage.credential_fingerprint=current.credential_fingerprint + lineage.session_ref_hash=current.session_ref_hash + lineage.client_ref_hash=current.client_ref_hash + lineage.admitted_ingress_ref=current.admitted_ingress_ref + lineage.delivery_generation=current.delivery_generation
+rule same_lease_epoch_different_execution_id -> REJECT_STALE_DELIVERY_USE
+rule partial_stream_restart cannot_splice delivery uses across execution_id|delivery_generation|restore_incarnation
+rule completed_response_replay may replay exact stored HDeliveryUse only under authenticated same admitted request lineage or explicit new replay receipt
+
+// -----------------------------------------------------------------------------
+// 3. AUTHORITY REMAINS SEPARATE
+// -----------------------------------------------------------------------------
+// These fields prove provenance/freshness of semantic and response use; they do not grant effects.
+record EffectExecutionFenceRef {
+  ref:Ref
+}
+rule HCanonicalHandle has_no_effect_authority
+rule HDeliveryUse has_no_effect_authority
+rule durable_generation_fields are provenance_not_live_capability
+rule external_effect_commit still requires current process-local capability + independent effect authority fence
+
+// -----------------------------------------------------------------------------
+// 4. RECOVERY FALSIFIERS
+// -----------------------------------------------------------------------------
+experiment HYPERMATH_V12_RECOVERY_FENCE {
+  cases=[
+    SAME_STATE_EPOCH_DIFFERENT_EXECUTION_ID,
+    SNAPSHOT_RESTORE_OLD_STATE_EPOCH,
+    SNAPSHOT_RESTORE_OLD_SEMANTIC_ROOT,
+    PARTIAL_RESPONSE_CRASH,
+    COMPLETED_RESPONSE_REPLAY,
+    NEW_EXECUTION_REFERENCES_SAME_IMMUTABLE_HYPERIR
+  ]
+  require=[
+    stale_delivery_rejected,
+    pre_restore_delivery_rejected,
+    fresh_restore_incarnation_required,
+    exact_replay_provenance,
+    canonical_content_reuse_not_needlessly_rejected,
+    no_effect_authority_minted
+  ]
+}
+
+counterhypothesis H0_RESTORE_INCARNATION {
+  proposition="The accepted production recovery policy never restores an older state after a newer execution generation or already has an equivalent non-rollback invalidation authority; explicit restore_incarnation is redundant."
+  discriminator="Exercise the actual Frank backup/restore path with issued semantic/response/effect/handoff capabilities and require every pre-restore material use to be stale before readiness becomes HEALTHY."
+}
+
+counterhypothesis H0_DELIVERY_LINEAGE_OVERBINDING {
+  proposition="Exact execution/request lineage on every semantic delivery reference costs more than it prevents; binding only the response envelope is sufficient."
+  discriminator="Compare per-handle lineage vs envelope-level lineage under same-execution alias, chunk replay and cache/reuse workload; promote the least granular scheme with zero stale-splice failures."
+}
+
+invariant semantic_identity != execution_identity
+invariant execution_lineage != effect_authority
+invariant DB_integrity_ok != freshness_after_snapshot_restore
+invariant same_numeric_epoch != same_incarnation
+invariant exact_immutable_semantic_reuse should_not_be_destroyed_by_transport_fencing

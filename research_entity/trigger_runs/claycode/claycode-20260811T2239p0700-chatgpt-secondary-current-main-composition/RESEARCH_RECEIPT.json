@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260811T2239p0700-chatgpt-secondary-current-main-composition",
+  "trigger": "claycode",
+  "created_at_local": "2026-08-11T22:39:30+07:00",
+  "created_at_utc": "2026-08-11T15:39:30Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-9.5",
+    "revision": 9,
+    "state_hash": "c956beb10704e98d04e84e555c8e12d91133df2cc2a61f8ad573d6d0091ecf32"
+  },
+  "research_center_parent_observed": "1ed6a1fc0d7a977c07497ca5c145bb41fd90e14f",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 357,
+  "hypothesis": "A ClayCode frontier integration claim is valid only if the exact candidate is composed with the current canonical main tree before target execution; testing the PR head alone is insufficient once main advances.",
+  "strongest_counterhypothesis": "The current-main delta is non-overlapping or semantically irrelevant, so head-only target evidence would remain representative of the eventual merge result.",
+  "fresh_overlap_observation": {
+    "pre_repair_pr_head": "9e1afcbaa369ed06f53598ea20a7b665cbfce9d9",
+    "current_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "compare_state": "DIVERGED",
+    "ahead_by": 39,
+    "behind_by": 13,
+    "github_mergeable_before_repair": false,
+    "material_overlap": "Current main had integrated PR #310/#343 package/evaluator paths also modified by the frontier candidate."
+  },
+  "falsifier": {
+    "gap": "The existing ClayCode Frontier Integration VPS workflow selected github.event.pull_request.head.sha for pull_request runs and therefore exercised the branch head rather than a current-base composition.",
+    "consequence": "A green run could not by itself prove the actual main+candidate merge tree after main advanced.",
+    "classification": "SUPPORTED_INTEGRATION_EVIDENCE_GAP"
+  },
+  "repair": {
+    "fail_closed_workflow_commit": "e483596bba891d4960a4b789db35856e9d1a9a4e",
+    "workflow": ".github/workflows/claycode-frontier-current-main-composition-vps.yml",
+    "mechanism": "Fetch exact branch head plus live refs/heads/main into run-owned /tmp state, merge head onto current main, fail on any unmerged path, bind merged tree identity, then execute the ClayCode package/differential/corpus/census gates.",
+    "concurrent_delta_preserved": "bf8ee50a05b65d63bb2b1f0ab90111f3c2296a3c confirmation gate package-path/logging repair",
+    "main_only_path_preserved": ".github/workflows/claycode-package-import-vps.yml",
+    "recomposition_commit": "11d3e578d6366da02b29c0e3ec39c552cada9ffa",
+    "recomposition_parent_branch": "bf8ee50a05b65d63bb2b1f0ab90111f3c2296a3c",
+    "recomposition_parent_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "force_update_used": false
+  },
+  "post_repair_state": {
+    "pr_head": "11d3e578d6366da02b29c0e3ec39c552cada9ffa",
+    "pr_base_sha": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "github_mergeable": true,
+    "full_frontier_target_run": 31508062579,
+    "full_frontier_target_run_state": "QUEUED_AT_RECEIPT",
+    "package_import_run": 31508062684,
+    "package_import_run_state": "CANCELLED_NOT_PRODUCT_EVIDENCE",
+    "wp04_hosted_shadow_run": 31508062681,
+    "wp04_hosted_shadow_state": "FAILED_LOG_BLOB_UNAVAILABLE_AT_RECEIPT",
+    "whole_component_promotion": "NOT_CLAIMED"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION_ADDED",
+    "change": "Current-main composition becomes an explicit fail-closed ClayCode integration invariant rather than an assumption derived from PR targeting.",
+    "affected_surfaces": [
+      "ClayCode target CI",
+      "package/evaluator frontier integration",
+      "fresh-main evidence promotion"
+    ],
+    "promotion_gate": "Require accepted-target PASS on an exact current-main composed tree before scoped integration promotion.",
+    "rollback": "Revert the dedicated composition workflow and merge-resolution commit if it is shown to mis-model GitHub merge semantics; never replace it with head-only evidence."
+  },
+  "negative_and_unknown_evidence": [
+    "Cancelled workflows are not counted as ClayCode product failures.",
+    "WP04 Hosted Shadow is a real workflow failure but the job log blob was unavailable, so cause remains UNKNOWN.",
+    "Full ClayCode Frontier Integration run 31508062579 was still queued; no PASS is claimed."
+  ],
+  "external_primary_basis": [
+    "GitHub REST Git tree/commit model: composed file trees are explicit Git objects and a commit can be created from a chosen tree with ordered parents."
+  ],
+  "research_write": "COMMITTED",
+  "frank_harness_modified_under_frank_authority": false,
+  "final_training_authorized": false
+}

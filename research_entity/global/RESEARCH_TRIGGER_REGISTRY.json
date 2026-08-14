@@ -1,39 +1,182 @@
 {
-  "schema_version": "2.7",
+  "schema_version": "3.0",
   "matching": "trimmed_full_message_case_insensitive_exact",
-  "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "entity_display_name": "Clay",
-  "legacy_internal_namespace": "RAE",
-  "trigger_renames": {"clay": "clayresearch"},
-  "entity_name_rule": "Exact message clay names/invokes the Clay research entity and is not a scientific branch trigger. The former integrated foundry trigger is now clayresearch.",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
-  "research_center_protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
-  "program_narrative": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
-  "program_progress_tool": "tools/program_progress.py",
-  "interconnection_protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
-  "interconnection_preflight": "tools/research_interconnect_preflight.py",
-  "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
-  "goodman_filter_checker": "tools/goodman_filter_check.py",
-  "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "shared_program_rule": "Every research-center branch remains loyal to its own scientific domain but must read PROGRAM_STATE.json, current live room deltas and RESEARCH_CENTER_PROGRAM_NARRATIVE.md before major work. Level 0 first assimilates the complete FRANK archive. After Level 0, exact 666 spawns diverse seeded research fields sharing the same narrative and milestone attractor rather than deterministically routing every worker into the obvious implementation task. Project-Frankenstein archaeology and first-principles emergent-coupling analysis remain mandatory cross-cutting knowledge. Exact go is the maximum-depth telemetry-driven whole-swarm research/build/test/live-knowledge cycle and exact q23 is its bidirectionally coupled specialist multimodal-perception field. No paid LoRA training is automatically authorized by stage completion.",
+  "program_target": "FRANK_V0_1",
+  "program_workspace": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+  "target_rule": "Every registered trigger is a specialized lens on the same self.root / Frank v0.1 target and must re-enter code/tests/architecture/work/negative-results for Frank v0.1.",
+  "entity_name_rule": "Exact message clay addresses the Clay research entity and is not a scientific trigger.",
   "triggers": {
-    "666": {"kind":"phase_sensitive_autonomous_research_genesis","protocol":"research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md","level0_protocol":"research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md","post_level0_protocol":"research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md","purpose":"Before Level-0 PASS, iteratively and exhaustively assimilate the Drive FRANK archive then Project-Frankenstein. After Level-0 PASS, spawn a new seeded/diverse temporary research field on every invocation, perform work immediately and feed evidence-preserving results into the shared research mesh.","mesh_role":"archive_assimilator_then_emergent_field_genesis","home_room":"center","requires_program_state":true,"requires_room_pulse":true,"must_act_immediately":true,"dedicated_level0_progress":true,"post_level0_stochastic_field_spawn":true,"training_auto_start_forbidden":true},
-    "go": {"kind":"maximum_depth_telemetry_driven_recursive_swarm_cycle","research_mode":"MAXIMUM_USEFUL_SYNCHRONOUS_DEPTH_AND_VISIBLE_OUTPUT","protocol":"research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md","evidence_synthesis":"research_entity/global/GO_SWARM_EVOLUTION_V2_EVIDENCE_SYNTHESIS_20260810.md","go_q23_bridge":"research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay","purpose":"Run the whole Clay organism for maximum useful synchronous depth: refresh exact current work/repo/swarm state, evaluate swarm telemetry, perform repeated multi-ecology live external research, deepen through source/code/citation/project/failure networks, form hypotheses and strongest counterhypotheses, build/test/measure, fuse every material result, adapt routing/worker/source strategy from receipts, exchange questions/results bidirectionally with q23, force a measurable progress delta each major cycle, perform exactly one bounded out-of-box experiment, and produce a comprehensive evidence-rich handoff without filler or raw token burning.","mesh_role":"whole_system_recursive_research_build_test_swarm_evolution_controller","home_room":"center","requires_program_state":true,"requires_current_repo_refresh":true,"requires_live_worker_reread":true,"requires_swarm_telemetry":true,"requires_current_work_revision_binding":true,"requires_fresh_external_research_every_invocation":true,"requires_repeated_live_external_refresh":true,"requires_multi_source_ecology":true,"requires_source_network_deepening":true,"requires_counterhypothesis_search":true,"requires_progress_delta_each_major_cycle":true,"requires_bidirectional_q23_exchange":true,"requires_targeted_pullable_reentry":true,"requires_swarm_self_evaluation":true,"requires_exactly_one_bounded_out_of_box_experiment":true,"maximum_useful_depth":true,"maximum_useful_visible_output":true,"no_filler_or_raw_token_burn":true,"must_act_immediately":true,"training_auto_start_forbidden":true},
-    "q12": {"kind":"creator_advisor_meta","protocol":"research_entity/triggers/Q12_CREATOR_ADVISOR_PROTOCOL.md","profile":"research_entity/advisor/Q12_CREATOR_MODEL_PROFILE.json","purpose":"Instantiate the Gabriel-Q12 creator-advisor simulation: explain current state, reconstruct design intent/history, advise with first-principles Creator-Scientist reasoning, generate falsifiable ideas and coordinate the research center when explicitly delegated by the owner.","mesh_role":"creator_advisor_and_optional_delegated_center_manager","home_room":"center","requires_program_state":true,"requires_current_repo_refresh":true,"requires_dynamic_progress_eta":true,"literal_human_identity_claim_forbidden":true,"training_auto_start_forbidden":true},
-    "q23": {"kind":"domain_research","research_mode":"MAXIMUM_DEPTH_INTERCONNECTIVE_MULTIMODAL_PERCEPTION","protocol":"research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md","field":"research_entity/global/Q23_MULTIMODAL_PERCEPTION_RESEARCH_FIELD.clay","go_q23_bridge":"research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay","experience_dose_contract":"research_entity/retina/Q23_FRANK_EXPERIENCE_DOSE_RESPONSE_CONTRACT_20260810.md","purpose":"Run the persistent multimodal perception/Retina fusion field for maximum useful synchronous depth: repeatedly refresh live internal, GO/global and external knowledge; expand source/citation/runtime/project/failure networks; accumulate falsifiable hypotheses and strongest counterhypotheses; densely fuse evidence; force progress deltas; translate findings into architecture/test/work deltas; measure Frank experience effects as N=0 versus an independent-episode dose curve; and exchange questions/results bidirectionally with go and affected swarm branches until the invocation budget, authority gate or locally saturated frontier stops productive recursion.","mesh_role":"recursive_multimodal_perception_frontier_expansion_and_architecture_feedback","home_room":"center","requires_program_state":true,"requires_current_repo_refresh":true,"requires_interconnect_manifest":true,"requires_live_worker_reread":true,"requires_repeated_live_external_refresh":true,"requires_primary_or_official_sources_when_available":true,"requires_hypothesis_accumulation":true,"requires_strongest_counterhypothesis":true,"requires_progress_delta_each_major_cycle":true,"requires_dense_incremental_fusion":true,"requires_network_deepening":true,"requires_architecture_test_work_reentry":true,"requires_bidirectional_go_exchange":true,"experience_claim_requires_dose_response":true,"stagnation_requires_route_change":true,"maximum_useful_depth":true,"must_act_immediately":true,"training_auto_start_forbidden":true,"feedback_targets":["frank","harness","gwt","claycode","claygraph","unifieddb","hyperposition","emergenz","clayresearch"]},
-    "dump": {"kind":"research_intake","protocol":"research_entity/global/DUMP_PROTOCOL.md","purpose":"Ingest arbitrary dump material, fuse it with current Clay knowledge, research derived hypotheses, packetize results, then archive the processed originals.","mesh_role":"intake_to_shared_mesh"},
-    "fusion": {"kind":"global_mesh_meta_research","protocol":"research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md","purpose":"Research across the complete current Clay knowledge/evidence graph and live center, including executable Harness evidence; generate cross-domain hypotheses/experiments, resolve or expose contradictions, audit current-stage readiness and write explicit feedback or NO_CHANGE receipts back to every peer branch.","mesh_role":"whole_mesh_research_feedback_loop","required_foundations":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness","q23"],"required_outputs":["GLOBAL_COVERAGE_MANIFEST.json","BRANCH_FEEDBACK_MANIFEST.json","FINAL_REPORT.md"],"feedback_targets":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness","q23"]},
-    "hypofusion": {"kind":"hypothesis_screening_global_meta_research","protocol":"research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md","purpose":"Screen all reachable current/open hypotheses including fresh workers/Harness/q23 evidence against broad supporting, analogous, better-mechanism, null, failure-mode and counterhypothesis evidence, then perform whole-mesh Fusion 2 and current-stage feedback.","mesh_role":"hypothesis_screening_external_triangulation_fusion_loop","required_foundations":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness","q23"],"requires_live_worker_reread":true,"requires_counterhypothesis_search":true,"feedback_targets":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness","q23"]},
-    "clayresearch": {"kind":"integrated_research_foundry","protocol":"research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md","purpose":"Run the complete Synthetic Clay foundry across architecture, language, GWT/emergence, higher-order coupling, ClayGraph, UnifiedDB, Harness, q23 multimodal perception and Safe-Effect Geometry while directing current work toward the active staged-program gate.","mesh_role":"integrated_master_foundry","required_foundations":["clayresearch","frank","claycode","claygraph","unifieddb","gwt","emergenz","hyperposition","harness","q23"],"required_permanent_research_foundations":["research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"]},
-    "gwt": {"kind":"domain_research","protocol":"research_entity/triggers/GWT_RESEARCH_PROTOCOL.md","purpose":"Research GWT selection, competition, ignition, broadcast, reconstruction, uptake, causal use, outcome and re-entry; permanently operationalize measurable emergence/readout mathematics in ClayCode and FRANK/Harness.","measurement_contract":"research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","mesh_role":"connected_domain","required_foundations":["clayresearch","frank","claygraph","unifieddb","emergenz","hyperposition","claycode","harness","gwt","q23"]},
-    "frank": {"kind":"domain_research","protocol":"research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md","purpose":"Research FRANK as one integrated cognitive/runtime architecture grounded in Synthetic Clay, authored as ClayCode semantic IR, informed by ClayGraph/UnifiedDB/q23 and continuously checked against Harness evidence and the current staged-program gate.","mesh_role":"clay_architecture_projection_authored_in_claycode_over_claygraph_and_unifieddb_substrates_with_harness_validation","required_foundations":["clayresearch","claycode","claygraph","unifieddb","gwt","hyperposition","emergenz","harness","q23","frank"],"primary_foundation":"clayresearch","primary_architecture_language":"ClayCode semantic IR","deep_substrate_foundation":"claygraph","deep_persistence_foundation":"unifieddb","execution_validation_foundation":"harness","required_architecture_artifact":"FRANK_ARCHITECTURE.claycode.json"},
-    "emergenz": {"kind":"domain_research","protocol":"research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md","purpose":"Research measurable functional/causal emergence with GWT/Hyperposition/q23-linked interventions, lesion/rescue, re-entry, interaction terms, PID/PEID, information-flow and multiscale causal tests using Harness replay surfaces.","gwt_measurement_contract":"research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","hyperposition_measurement_contract":"research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md","mesh_role":"connected_domain","required_foundations":["clayresearch","gwt","hyperposition","frank","claygraph","unifieddb","claycode","harness","q23","emergenz"]},
-    "claycode": {"kind":"domain_research","protocol":"research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md","purpose":"Research and build ClayCode as FRANK's executable internal architecture/runtime language and current BASE-stage release target, using FRANK requirements plus Harness/GWT/Hyperposition/ClayGraph/UnifiedDB/q23 counterexamples and Goodman anti-echo validation.","mesh_role":"frank_feedback_validator_and_architecture_language","required_foundations":["frank","clayresearch","claygraph","unifieddb","gwt","hyperposition","emergenz","harness","q23","claycode"],"primary_feedback_foundation":"frank","execution_feedback_foundation":"harness","requires_goodman_anti_echo_review":true},
-    "hyperposition": {"kind":"domain_research","protocol":"research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md","purpose":"Research contextual alternatives, higher-order codependencies, dynamic topology and multi-timescale coupling; permanently operationalize measurable higher-order emergence/coupling readouts in ClayCode and FRANK/Harness.","measurement_contract":"research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md","mesh_role":"connected_domain","required_foundations":["clayresearch","frank","claygraph","unifieddb","claycode","gwt","emergenz","harness","q23","hyperposition"]},
-    "claygraph": {"kind":"domain_research","protocol":"research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md","purpose":"Research associative graph memory, higher-order topology, persistent cognitive substrate and reversible graph/state migration while supporting a ClayGraph for every Harness implementation and dynamic experiment trace, including q23 perceptual-memory hypotheses.","harness_graph_contract":"research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md","mesh_role":"whole_mesh_memory_and_graph_substrate_research","required_foundations":["clayresearch","frank","claycode","hyperposition","gwt","emergenz","unifieddb","harness","q23","claygraph"]},
-    "unifieddb": {"kind":"domain_research","protocol":"research_entity/triggers/UNIFIED_DATABASE_RESEARCH_PROTOCOL.md","purpose":"Research the logically unified Clay-native persistence/query/transaction/retrieval substrate while supporting earlier stages and q23 perceptual retrieval without prematurely forcing the final UnifiedDB consolidation stage; final physical decisions follow H3 measurements.","mesh_role":"whole_mesh_unified_persistence_query_transaction_substrate_research","required_foundations":["clayresearch","frank","claycode","claygraph","hyperposition","gwt","emergenz","harness","q23","unifieddb"]},
-    "harness": {"kind":"domain_research","protocol":"research_entity/triggers/HARNESS_BUILD_PROTOCOL.md","purpose":"Build, execute, validate and falsify the staged FRANK implementations: H1 Reference Harness, H2 ClayCode Harness and H3 One-Module FRANK, including q23/QNDRF/PAR differentials where stage-appropriate.","mesh_role":"executable_convergence_integration_validation_and_falsification_branch","required_foundations":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","q23","harness"],"coverage_mode":"ALL_REGISTERED_BRANCHES_PLUS_LIVE_WORKERS_PLUS_ARCHAEOLOGY","requires_live_worker_reread":true,"must_build_and_execute":true,"harness_graph_contract":"research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"},
-    "spawn": {"kind":"weighted_stochastic_deep_research_genesis","protocol":"research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md","weights":"research_entity/global/SPAWN_RESEARCH_WEIGHTS.json","selector":"tools/spawn_research.py","purpose":"Spawn one weighted-random temporary research direction per invocation, research it at maximum useful depth, network it through the complete Research Center including q23 where relevant, and write evidence-preserving feedback to the shared mesh; ClayCode is deliberately the most probable origin branch.","mesh_role":"stochastic_deep_research_field_genesis","home_room":"center","requires_program_state":true,"requires_interconnect_manifest":true,"requires_live_worker_reread":true,"must_act_immediately":true,"maximum_useful_depth":true,"research_center_networking":"MANDATORY","claycode_dominant_probability":true,"training_auto_start_forbidden":true}
-  }
+    "666": {
+      "kind": "phase_sensitive_autonomous_research_genesis",
+      "protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Generate and execute a high-value non-duplicate research field whose material result advances, falsifies or de-risks Frank v0.1.",
+      "must_reenter_frank_v0_1": true
+    },
+    "go": {
+      "kind": "maximum_depth_recursive_frank_v0_1_cycle",
+      "protocol": "research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Maximum useful live research/build/test/measure/fuse continuation of Frank v0.1.",
+      "requires_repeated_live_refresh": true,
+      "requires_progress_delta_each_major_cycle": true,
+      "requires_exactly_one_bounded_out_of_box_experiment": true,
+      "must_reenter_frank_v0_1": true
+    },
+    "q12": {
+      "kind": "creator_advisor_meta",
+      "protocol": "research_entity/triggers/Q12_CREATOR_ADVISOR_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Creator-advisor reasoning and delegated coordination for Frank v0.1.",
+      "literal_human_identity_claim_forbidden": true,
+      "must_reenter_frank_v0_1": true
+    },
+    "q23": {
+      "kind": "multimodal_perception_research",
+      "protocol": "research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Research/build/test Frank v0.1 multimodal perception, Retina/MVC and associated model/runtime paths.",
+      "must_reenter_frank_v0_1": true
+    },
+    "atomic": {
+      "kind": "radical_measured_candidate_research",
+      "protocol": "research_entity/triggers/ATOMIC_RADICAL_INVENTION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Invent and execute one radical GWT+ClayCode-consistent candidate only as a measured possible improvement to Frank v0.1.",
+      "must_reenter_frank_v0_1": true
+    },
+    "dump": {
+      "kind": "research_intake",
+      "protocol": "research_entity/global/DUMP_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Ingest supplied material and fuse relevant results into Frank v0.1 knowledge, architecture, tests or work.",
+      "must_reenter_frank_v0_1": true
+    },
+    "fusion": {
+      "kind": "whole_mesh_frank_v0_1_synthesis",
+      "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Fuse the complete relevant mesh and produce direct Frank v0.1 architecture/test/work deltas or evidence-backed NO_CHANGE.",
+      "must_reenter_frank_v0_1": true
+    },
+    "hypofusion": {
+      "kind": "frank_v0_1_hypothesis_screening",
+      "protocol": "research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Screen hypotheses/counterhypotheses by evidence and their implications for Frank v0.1.",
+      "must_reenter_frank_v0_1": true
+    },
+    "clayresearch": {
+      "kind": "integrated_frank_v0_1_research_foundry",
+      "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Integrated Clay research/build foundry for Frank v0.1.",
+      "must_reenter_frank_v0_1": true
+    },
+    "gwt": {
+      "kind": "domain_research",
+      "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Implement and measure GWT selection/broadcast/reconstruction/use/outcome/re-entry mechanisms actually used by Frank v0.1.",
+      "must_reenter_frank_v0_1": true
+    },
+    "frank": {
+      "kind": "whole_target_architecture_build",
+      "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Research, implement, integrate and validate the complete current Frank v0.1 target.",
+      "must_reenter_frank_v0_1": true
+    },
+    "emergenz": {
+      "kind": "domain_research",
+      "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Measure causal/emergent interactions inside Frank v0.1 and convert supported findings into current-target tests/architecture.",
+      "must_reenter_frank_v0_1": true
+    },
+    "claycode": {
+      "kind": "domain_build_research",
+      "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Build the ClayCode compiler/runtime required to compile and execute real Frank v0.1 semantics/components.",
+      "must_reenter_frank_v0_1": true
+    },
+    "hyperposition": {
+      "kind": "domain_research",
+      "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Research/implement unresolved alternatives and higher-order topology used by Frank v0.1.",
+      "must_reenter_frank_v0_1": true
+    },
+    "claygraph": {
+      "kind": "domain_research",
+      "protocol": "research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Build/measure derived Frank v0.1 topology, dependency, activation and causal diagnostic surfaces without truth promotion.",
+      "must_reenter_frank_v0_1": true
+    },
+    "unifieddb": {
+      "kind": "domain_build_research",
+      "protocol": "research_entity/triggers/UNIFIED_DATABASE_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Build Frank v0.1 authoritative state persistence/query/transaction/replay/recovery substrate.",
+      "must_reenter_frank_v0_1": true
+    },
+    "harness": {
+      "kind": "direct_frank_v0_1_validation_repair",
+      "protocol": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Instrument, execute, falsify, fuzz, replay, benchmark, repair and re-test current Frank v0.1 directly. Harness is a method, not a product.",
+      "harness_is_product": false,
+      "h1_h2_h3_active_stages": false,
+      "must_build_and_execute": true,
+      "must_reenter_frank_v0_1": true
+    },
+    "spawn": {
+      "kind": "weighted_research_field_genesis",
+      "protocol": "research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md",
+      "program_target": "FRANK_V0_1",
+      "purpose": "Spawn a non-duplicate field only when it can produce evidence or implementation relevant to Frank v0.1.",
+      "must_reenter_frank_v0_1": true
+    }
+  },
+  "reserved_commands": [
+    "666",
+    "go",
+    "q12",
+    "q23",
+    "atomic",
+    "dump",
+    "fusion",
+    "hypofusion",
+    "clayresearch",
+    "gwt",
+    "frank",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness",
+    "spawn"
+  ],
+  "global_invariants": [
+    "all triggers target FRANK_V0_1",
+    "Harness is method not product",
+    "H1/H2/H3 are historical evidence only",
+    "no paid/final training without owner authorization",
+    "Clay != self.root/Frank",
+    "self.root self-Harness authority is proposal-only",
+    "negative results survive",
+    "current executable evidence outranks architecture prose"
+  ],
+  "last_updated": "2026-08-10T20:39:00+07:00",
+  "trigger_renames": {
+    "clay": "clayresearch"
+  },
+  "status_footer_protocol": "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md"
 }

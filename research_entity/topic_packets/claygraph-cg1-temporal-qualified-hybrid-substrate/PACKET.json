@@ -1,14 +1,101 @@
 {
-  "packet_id":"claygraph-cg1-temporal-qualified-hybrid-substrate",
-  "title":"ClayGraph G1 Temporal Qualified Hybrid Memory Substrate",
-  "status":"OPEN_HOLD_CANDIDATE",
-  "domains":["claygraph","synthetic-clay","frank","claycode","gwt","hyperposition","emergence","memory-state","persistence-databases"],
-  "system_layers":["persistent-state","semantic-projection","activation-memory","cognitive-runtime","verification-plane","migration"],
-  "summary":"ClayGraph G1 proposes exact anchors over authoritative FRANK/RAE stores, a persistent temporal/provenance-aware semantic assertion graph, and a transient conservative activation overlay. It rejects treating activation as truth and rejects mandatory physical database monolithism. Primary FRANK integration is M.MEMORY_FABRIC via transient S.ACTIVE_ASSEMBLY; CognitiveFrame and capability authority remain exact/external. A five-query proxy found naive parent-like two-hop activation did not beat lexical retrieval, while a qualified one-hop candidate improved the tiny goldset; full runtime/live-FRANK replication is pending.",
-  "architecture_delta":["exact_anchor_index","reified temporal assertion envelope","conflict_set preservation","qualified one-hop default activation","adaptive incremental/rebuild maintenance","FRANK M.MEMORY_FABRIC integration"],
-  "negative_results":["naive two-hop no recall gain in local proxy","no evidence for all-DB physical merge","complete 71-store inventory unavailable","Qwen3-4B benefit unmeasured","full repo/runtime benchmark blocked"],
-  "external_evidence":[{"class":"STANDARD","ref":"W3C PROV-O","implication":"Use explicit provenance entities/activities/agents or specialized equivalents."},{"class":"AUTHORITATIVE_GUIDANCE","ref":"Microsoft Event Sourcing pattern","implication":"Keep exact historical system-of-record where justified; materialize projections and do not force event sourcing everywhere."},{"class":"IMPLEMENTATION","ref":"getzep/graphiti","implication":"Temporal validity, episodes/provenance, incremental graph updates and hybrid semantic+keyword+graph retrieval are implementable patterns, not proof of ClayGraph performance."},{"class":"PREPRINT","ref":"arXiv:2501.13956","implication":"Temporal graph agent memory has promising author-reported retrieval/latency results."},{"class":"PREPRINT","ref":"arXiv:2508.01680","implication":"Temporal conflicts are an active GraphRAG failure mode and temporal retrieval is testable."},{"class":"PREPRINT","ref":"arXiv:2606.15246","implication":"Provenance/epistemic stance should not collapse attributed claims into one factual layer."},{"class":"COMMUNITY_ANECDOTE","ref":"Reddit r/aiengineering Graphiti retrieval failure example","implication":"Having correct graph data does not guarantee query retrieves the right relation; false-association/retrieval quality must be benchmarked."}],
-  "open_questions":["Can candidate gains reproduce on actual current RAE materialization with independent gold queries?","Which of the 71 FRANK stores are exact authority vs derived semantic cache?","Where is live incremental-vs-rebuild crossover?","Does bounded graph assembly improve Qwen3-4B at equal token budget?","Can crash/replay and privacy gates pass before any store cutover?"],
-  "next_tests":["run official current-corpus benchmark","live read-only 71-store inventory","shadow parity/replay","stale/conflict exact-anchor injection","matched-budget GWT memory lesion","target 4B comparison"],
-  "origin_actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","canonical_parent_revision":2,"canonical_parent_state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346","run_id":"claygraph-20260808T0642p0700-chatgpt-secondary-r2","evidence_boundary":"Architecture/research candidate. External source classes remain distinct; no phenomenal consciousness claim."
+  "packet_id": "claygraph-cg1-temporal-qualified-hybrid-substrate",
+  "title": "ClayGraph G1 Temporal Qualified Hybrid Memory Substrate",
+  "status": "OPEN",
+  "domains": [
+    "claygraph",
+    "synthetic-clay",
+    "frank",
+    "claycode",
+    "gwt",
+    "hyperposition",
+    "emergence",
+    "memory-state",
+    "persistence-databases"
+  ],
+  "system_layers": [
+    "persistent-state",
+    "semantic-projection",
+    "activation-memory",
+    "cognitive-runtime",
+    "verification-plane",
+    "migration"
+  ],
+  "summary": "ClayGraph G1 proposes exact anchors over authoritative FRANK/RAE stores, a persistent temporal/provenance-aware semantic assertion graph, and a transient conservative activation overlay. It rejects treating activation as truth and rejects mandatory physical database monolithism. Primary FRANK integration is M.MEMORY_FABRIC via transient S.ACTIVE_ASSEMBLY; CognitiveFrame and capability authority remain exact/external. A five-query proxy found naive parent-like two-hop activation did not beat lexical retrieval, while a qualified one-hop candidate improved the tiny goldset; full runtime/live-FRANK replication is pending.",
+  "architecture_delta": [
+    "exact_anchor_index",
+    "reified temporal assertion envelope",
+    "conflict_set preservation",
+    "qualified one-hop default activation",
+    "adaptive incremental/rebuild maintenance",
+    "FRANK M.MEMORY_FABRIC integration"
+  ],
+  "negative_results": [
+    "naive two-hop no recall gain in local proxy",
+    "no evidence for all-DB physical merge",
+    "complete 71-store inventory unavailable",
+    "Qwen3-4B benefit unmeasured",
+    "full repo/runtime benchmark blocked"
+  ],
+  "external_evidence": [
+    {
+      "class": "STANDARD",
+      "ref": "W3C PROV-O",
+      "implication": "Use explicit provenance entities/activities/agents or specialized equivalents."
+    },
+    {
+      "class": "AUTHORITATIVE_GUIDANCE",
+      "ref": "Microsoft Event Sourcing pattern",
+      "implication": "Keep exact historical system-of-record where justified; materialize projections and do not force event sourcing everywhere."
+    },
+    {
+      "class": "IMPLEMENTATION",
+      "ref": "getzep/graphiti",
+      "implication": "Temporal validity, episodes/provenance, incremental graph updates and hybrid semantic+keyword+graph retrieval are implementable patterns, not proof of ClayGraph performance."
+    },
+    {
+      "class": "PREPRINT",
+      "ref": "arXiv:2501.13956",
+      "implication": "Temporal graph agent memory has promising author-reported retrieval/latency results."
+    },
+    {
+      "class": "PREPRINT",
+      "ref": "arXiv:2508.01680",
+      "implication": "Temporal conflicts are an active GraphRAG failure mode and temporal retrieval is testable."
+    },
+    {
+      "class": "PREPRINT",
+      "ref": "arXiv:2606.15246",
+      "implication": "Provenance/epistemic stance should not collapse attributed claims into one factual layer."
+    },
+    {
+      "class": "COMMUNITY_ANECDOTE",
+      "ref": "Reddit r/aiengineering Graphiti retrieval failure example",
+      "implication": "Having correct graph data does not guarantee query retrieves the right relation; false-association/retrieval quality must be benchmarked."
+    }
+  ],
+  "open_questions": [
+    "Can candidate gains reproduce on actual current RAE materialization with independent gold queries?",
+    "Which of the 71 FRANK stores are exact authority vs derived semantic cache?",
+    "Where is live incremental-vs-rebuild crossover?",
+    "Does bounded graph assembly improve Qwen3-4B at equal token budget?",
+    "Can crash/replay and privacy gates pass before any store cutover?"
+  ],
+  "next_tests": [
+    "run official current-corpus benchmark",
+    "live read-only 71-store inventory",
+    "shadow parity/replay",
+    "stale/conflict exact-anchor injection",
+    "matched-budget GWT memory lesion",
+    "target 4B comparison"
+  ],
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "run_id": "claygraph-20260808T0642p0700-chatgpt-secondary-r2",
+  "evidence_boundary": "Architecture/research candidate. External source classes remain distinct; no phenomenal consciousness claim.",
+  "status_original": "OPEN_HOLD_CANDIDATE",
+  "status_mapping_note": "'OPEN_HOLD_CANDIDATE' steht nicht im Schema. Auf OPEN abgebildet — alle vorgefundenen Varianten sind Spielarten von 'offen'; der Zusatz bleibt in status_original erhalten."
 }

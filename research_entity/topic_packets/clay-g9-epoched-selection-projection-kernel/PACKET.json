@@ -1,14 +1,29 @@
 {
-  "schema_version":"1.0",
-  "packet_id":"clay-g9-epoched-selection-projection-kernel",
-  "title":"Clay G9 — EPOCH: Epoched Projection, Orchestration & Causal-Handoff Kernel",
-  "status":"OPEN_ARCHITECTURE_CANDIDATE_HOLD",
-  "origin_run":"clay-20260808T1716p0700-chatgpt-secondary-r2",
-  "origin_actor":"chatgpt-secondary",
-  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346","clay_generation":3},
-  "domains":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph","model_runtime","formal_methods_testing","scheduling_concurrency"],
-  "candidate":"EPOCH-G9",
-  "core_findings":[
+  "schema_version": "1.0",
+  "packet_id": "clay-g9-epoched-selection-projection-kernel",
+  "title": "Clay G9 — EPOCH: Epoched Projection, Orchestration & Causal-Handoff Kernel",
+  "status": "OPEN",
+  "origin_run": "clay-20260808T1716p0700-chatgpt-secondary-r2",
+  "origin_actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "clay_generation": 3
+  },
+  "domains": [
+    "clay",
+    "frank",
+    "gwt",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "model_runtime",
+    "formal_methods_testing",
+    "scheduling_concurrency"
+  ],
+  "candidate": "EPOCH-G9",
+  "core_findings": [
     "Selection integrity is distinct from record provenance for graph-selected effect-bound evidence.",
     "ClayCode should execute deterministic state semantics before projecting unresolved semantic alternatives to an LLM.",
     "Immutable semantic epochs + delta overlays + lazy sparse activation form a plausible low-cost memory substrate, but ClayGraph G1d remains HOLD.",
@@ -18,7 +33,7 @@
     "Projection integrity requires semantic as well as hash/basis/schema checks; trusted miscompile is a separate failure class.",
     "Persistent latent activation is not emergence; causal Assembly lesion/rescue/OOD controls remain required."
   ],
-  "new_evidence_refs":[
+  "new_evidence_refs": [
     "research_entity/trigger_runs/clay/clay-20260808T1716p0700-chatgpt-secondary-r2/EXPERIMENT_RESULTS.json",
     "research_entity/trigger_runs/clay/clay-20260808T1716p0700-chatgpt-secondary-r2/FRESHNESS_DELTA.md",
     "research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json",
@@ -27,12 +42,18 @@
     "research_entity/runtime/tool_results/g9-groq-rawprojection-20260808T1716.json",
     "research_entity/runtime/tool_results/g9-groq-compiledprojection-20260808T1716.json"
   ],
-  "knowledge_micro_packets":["KMP-G9-SELECTION-INTEGRITY","KMP-G9-READ-AWARE-EPOCH-MAINTENANCE","KMP-G9-DETERMINISTIC-BEFORE-GENERATIVE","KMP-G9-GWT-ORTHOGONALITY","KMP-G9-ASSEMBLY-EMERGENCE-CONTROL"],
-  "hypothesis_count_first_generation":64,
-  "fusion2_hypothesis_count":24,
-  "local_experiment_count":9,
-  "new_hosted_8b_proxy_arm_count":2,
-  "highest_information_next_tests":[
+  "knowledge_micro_packets": [
+    "KMP-G9-SELECTION-INTEGRITY",
+    "KMP-G9-READ-AWARE-EPOCH-MAINTENANCE",
+    "KMP-G9-DETERMINISTIC-BEFORE-GENERATIVE",
+    "KMP-G9-GWT-ORTHOGONALITY",
+    "KMP-G9-ASSEMBLY-EMERGENCE-CONTROL"
+  ],
+  "hypothesis_count_first_generation": 64,
+  "fusion2_hypothesis_count": 24,
+  "local_experiment_count": 9,
+  "new_hosted_8b_proxy_arm_count": 2,
+  "highest_information_next_tests": [
     "EXP-G9-LIVE-SELECTION-INTEGRITY-ATTACK",
     "EXP-G9-QWEN4B-DETERMINISTIC-COMPILER-FACTORIAL",
     "EXP-CG4/G9-LATENT-FIELD-TRUTHFUL-SHUFFLED-NOFIELD",
@@ -42,8 +63,18 @@
     "EXP-G9-EPOCH-CRASH-REPLAY",
     "EXP-G9-ANDROID-GOVERNOR-SUSTAINED"
   ],
-  "negative_results":["always graph hot path not promoted","fixed compaction threshold not universal","maintenance debt scalar not universally superior","metadata-only projection integrity insufficient","compiled model projection still not deterministic authority","activation/recurrence not emergence","cross-branch convergence not replication"],
-  "promotion":"NONE",
-  "canonical_revision_changed":false,
-  "accepted_clay_generation_change":false
+  "negative_results": [
+    "always graph hot path not promoted",
+    "fixed compaction threshold not universal",
+    "maintenance debt scalar not universally superior",
+    "metadata-only projection integrity insufficient",
+    "compiled model projection still not deterministic authority",
+    "activation/recurrence not emergence",
+    "cross-branch convergence not replication"
+  ],
+  "promotion": "NONE",
+  "canonical_revision_changed": false,
+  "accepted_clay_generation_change": false,
+  "status_original": "OPEN_ARCHITECTURE_CANDIDATE_HOLD",
+  "status_mapping_note": "'OPEN_ARCHITECTURE_CANDIDATE_HOLD' steht nicht im Schema. Auf OPEN abgebildet — alle vorgefundenen Varianten sind Spielarten von 'offen'; der Zusatz bleibt in status_original erhalten."
 }

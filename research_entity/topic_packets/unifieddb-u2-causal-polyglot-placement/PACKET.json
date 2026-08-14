@@ -1,20 +1,23 @@
 {
-  "schema_version":"1.0",
-  "packet_id":"TOPIC-UNIFIEDDB-U2-CPPF",
-  "title":"UnifiedDB U2 — Causal Polyglot Placement Fabric",
-  "domains":["unifieddb","frank","claycode","claygraph","gwt","hyperposition","clay","emergenz"],
-  "status":"OPEN_HOLD",
-  "origin_actor":"chatgpt-secondary",
-  "run_id":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
-  "parent":"UD-RC1",
-  "summary":[
-    "Unified semantics/query contracts remain the target, but physical placement is decomposed into transaction, data, index, compute, process and fault-domain axes.",
-    "Every result receives an admissibility class so exact facts, exact derived values, approximate candidates, salience and model-internal state cannot be implicitly flattened.",
-    "Canonical commit + durable derivation replay and one-engine atomicity both survived the constructed recovery family; the replayable outbox carried measurable write overhead.",
-    "Selection integrity is separate from record provenance and from replay integrity.",
-    "External evidence contains strong examples both for integrated cross-modal query execution and for decoupled vector/index storage, so physical placement remains workload-specific."
+  "schema_version": "1.0",
+  "packet_id": "TOPIC-UNIFIEDDB-U2-CPPF",
+  "title": "UnifiedDB U2 — Causal Polyglot Placement Fabric",
+  "domains": [
+    "unifieddb",
+    "frank",
+    "claycode",
+    "claygraph",
+    "gwt",
+    "hyperposition",
+    "clay",
+    "emergenz"
   ],
-  "key_experiments":[
+  "status": "OPEN",
+  "origin_actor": "chatgpt-secondary",
+  "run_id": "unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+  "parent": "UD-RC1",
+  "summary": "Unified semantics/query contracts remain the target, but physical placement is decomposed into transaction, data, index, compute, process and fault-domain axes. Every result receives an admissibility class so exact facts, exact derived values, approximate candidates, salience and model-internal state cannot be implicitly flattened. Canonical commit + durable derivation replay and one-engine atomicity both survived the constructed recovery family; the replayable outbox carried measurable write overhead. Selection integrity is separate from record provenance and from replay integrity. External evidence contains strong examples both for integrated cross-modal query execution and for decoupled vector/index storage, so physical placement remains workload-specific.",
+  "key_experiments": [
     "EXP-U2-PLACEMENT-001",
     "EXP-U2-RECOVERY-002",
     "EXP-U2-SELECTION-INTEGRITY-003",
@@ -22,7 +25,7 @@
     "EXP-U2-WRITE-006",
     "EXP-U2-EPOCH-ADMISSION-007"
   ],
-  "micro_packets":[
+  "micro_packets": [
     "research_entity/knowledge_micro_packets/unifieddb/KMP-U2-PLACEMENT-LATTICE.md",
     "research_entity/knowledge_micro_packets/unifieddb/KMP-U2-RESULT-ADMISSIBILITY.md",
     "research_entity/knowledge_micro_packets/unifieddb/KMP-U2-RECOVERY-SELECTION.md",
@@ -30,12 +33,14 @@
     "research_entity/knowledge_micro_packets/claycode/KMP-U2-QUERY-ADMISSION.md",
     "research_entity/knowledge_micro_packets/claygraph/KMP-U2-SELECTION-PLACEMENT.md"
   ],
-  "highest_next":[
+  "highest_next": [
     "real FRANK trace-driven placement benchmark",
     "cross-engine typed query equivalence",
     "real crash/restart/rebuild and derivation-version replay",
     "live ClayGraph selection-integrity test",
     "Linux/Android sustained physical-lowering comparison"
   ],
-  "promotion":"NONE"
+  "promotion": "NONE",
+  "status_original": "OPEN_HOLD",
+  "status_mapping_note": "'OPEN_HOLD' steht nicht im Schema. Auf OPEN abgebildet — alle vorgefundenen Varianten sind Spielarten von 'offen'; der Zusatz bleibt in status_original erhalten."
 }

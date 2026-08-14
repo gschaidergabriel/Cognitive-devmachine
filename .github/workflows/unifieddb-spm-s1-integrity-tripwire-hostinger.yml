@@ -1,0 +1,107 @@
+name: UnifiedDB SPM-S1 Integrity Tripwire Hostinger
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-spm-s1-integrity-tripwire-hostinger.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_SPM_S1_INTEGRITY_TRIPWIRE.sql'
+      - 'research_entity/runtime/semantic_access_segmented_maintenance_s1_guarded.py'
+      - 'research_entity/runtime/test_semantic_access_segmented_maintenance_s1_guarded.py'
+      - 'research_entity/runtime/test_semantic_access_segmented_maintenance_s1_guarded_recovery_edges.py'
+      - 'research_entity/runtime/benchmark_semantic_access_segmented_maintenance_s1_guarded.py'
+      - 'research_entity/runtime/semantic_access_segmented_maintenance_s1.py'
+      - 'research_entity/runtime/test_semantic_access_segmented_maintenance_s1.py'
+      - 'research_entity/runtime/semantic_access_pulse_v16.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v16.py'
+      - 'research_entity/runtime/semantic_access_pulse_v12.py'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V12_SEGMENTED_PULSE_GENERATIONS.sql'
+  workflow_dispatch:
+
+concurrency:
+  group: spm-s1-integrity-tripwire-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hostinger-spm-s1-integrity:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Capture exact runtime metadata
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts
+          {
+            echo "commit=${GITHUB_SHA}"
+            date -u +"utc=%Y-%m-%dT%H:%M:%SZ"
+            uname -a
+            python3 --version
+            python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('machine=', platform.machine())
+          print('processor=', platform.processor() or 'UNKNOWN')
+          print('sqlite=', sqlite3.sqlite_version)
+          version=tuple(int(x) for x in sqlite3.sqlite_version.split('.')[:3])
+          safe = version >= (3,51,3) or ((3,50,7) <= version < (3,51,0)) or ((3,44,6) <= version < (3,45,0))
+          print('sqlite_2026_wal_reset_fix_family=', safe)
+          print('note=single-connection tests do not exercise the multi-connection WAL-reset bug')
+          PY
+            command -v lscpu >/dev/null && lscpu || true
+            command -v free >/dev/null && free -h || true
+            df -h .
+          } | tee artifacts/spm_s1_integrity_environment.txt
+      - name: Compile exact candidate and falsifiers
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 -m py_compile \
+            semantic_access_pulse_v12.py \
+            semantic_access_pulse_v16.py \
+            semantic_access_segmented_maintenance_s1.py \
+            semantic_access_segmented_maintenance_s1_guarded.py \
+            test_semantic_access_segmented_maintenance_s1_guarded.py \
+            test_semantic_access_segmented_maintenance_s1_guarded_recovery_edges.py \
+            benchmark_semantic_access_segmented_maintenance_s1_guarded.py
+      - name: Preserve current SPM-S1 baseline guards
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 -m unittest -v \
+            test_semantic_access_segmented_maintenance_s1.SegmentedPulseMaintenanceS1Tests \
+            2>&1 | tee ../../artifacts/spm_s1_baseline_tests.txt
+      - name: Run between-audit mutation and recovery falsifiers
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 -m unittest -v \
+            test_semantic_access_segmented_maintenance_s1_guarded.SegmentedPulseMaintenanceS1GuardedTests \
+            test_semantic_access_segmented_maintenance_s1_guarded_recovery_edges.SPMGuardedRecoveryEdgeTests \
+            2>&1 | tee ../../artifacts/spm_s1_integrity_tripwire_tests.txt
+      - name: Measure guarded overhead and tamper recovery
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          if [ -x /usr/bin/time ]; then
+            /usr/bin/time -v python3 benchmark_semantic_access_segmented_maintenance_s1_guarded.py \
+              --seeds 1200 --clusters 60 --paths 20 --events 8 --query-repeats 1000 \
+              --output ../../artifacts/spm_s1_integrity_tripwire_benchmark.json \
+              > ../../artifacts/spm_s1_integrity_tripwire_benchmark_stdout.txt \
+              2> ../../artifacts/spm_s1_integrity_tripwire_time.txt
+          else
+            python3 benchmark_semantic_access_segmented_maintenance_s1_guarded.py \
+              --seeds 1200 --clusters 60 --paths 20 --events 8 --query-repeats 1000 \
+              --output ../../artifacts/spm_s1_integrity_tripwire_benchmark.json \
+              | tee ../../artifacts/spm_s1_integrity_tripwire_benchmark_stdout.txt
+            echo 'GNU time unavailable' > ../../artifacts/spm_s1_integrity_tripwire_time.txt
+          fi
+          cat ../../artifacts/spm_s1_integrity_tripwire_benchmark.json
+          cat ../../artifacts/spm_s1_integrity_tripwire_time.txt
+      - name: Upload exact evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-spm-s1-integrity-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error

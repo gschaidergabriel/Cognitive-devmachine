@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "observed_at_local": "2026-08-11T21:26:49+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_after_candidate_creation": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "main_delta_observed": "Merge PR #311 storage identity + SIGKILL crash oracle",
+    "candidate_pr": 332,
+    "candidate_head": "44dc4a08b7f7cc63928f3af5890939da2e1a3103",
+    "current_pr_base": "7bdfb2405b3752c304c926e9a53f9c7a90fd4fa5",
+    "synthetic_merge_sha": "6ad399ffb71a9f08d1e9ad049c633b8573365288",
+    "mergeable": true
+  },
+  "overlap_resolution": {
+    "active_nonduplicated_lanes_observed": [
+      "ClayCode parser/evaluator/surface",
+      "loop-core/GWT causal closure",
+      "UnifiedDB/ClayGraph identity and selection",
+      "SQLite storage/recovery",
+      "token API rotation/idempotency",
+      "effect authority/provider reconciliation",
+      "proactive agency/web ingress",
+      "Digital Retina/MVC temporal feature identity"
+    ],
+    "selected_gap": "F-V01-11-MEMORY-REWARD-GOALS",
+    "reward_plasticity_open_pr_found_before_claim": false
+  },
+  "hypothesis": "A typed multi-timescale reward-state candidate can preserve the owner-fixed verified-outcome-plus-causal-credit admission boundary while keeping self-generated activity non-authoritative and exploration-only.",
+  "strongest_counterhypothesis": "A simpler scalar verified-outcome-plus-causal-credit controller with explicit safety/homeostatic gates may match or beat the typed multi-timescale candidate under matched replay, OOD transfer, recovery and resource cost.",
+  "internal_contract_basis": {
+    "source": "research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay",
+    "status": "RESEARCH_CANDIDATE_BASELINE_GATED",
+    "historical_lineage": [
+      "nucleus_accumbens.py",
+      "e_pq.py"
+    ],
+    "hard_boundary": "NO_ORIGINAL_BASELINE_NO_REPLACEMENT_CLAIM",
+    "original_nacc_baseline_bound_in_this_run": false
+  },
+  "live_external_evidence": [
+    {
+      "source": "Lee et al., Nature Neuroscience 2024",
+      "doi": "10.1038/s41593-024-01689-1",
+      "claim_used": "feature-specific reward prediction errors are a live alternative to one scalar homogeneous RPE signal",
+      "url": "https://www.nature.com/articles/s41593-024-01689-1"
+    },
+    {
+      "source": "Sousa et al., Nature 2025",
+      "doi": "10.1038/s41586-025-09089-6",
+      "claim_used": "joint time/magnitude distributional reward coding motivates testing multidimensional value representations",
+      "url": "https://www.nature.com/articles/s41586-025-09089-6"
+    },
+    {
+      "source": "Masset et al., Nature 2025",
+      "doi": "10.1038/s41586-025-08929-9",
+      "claim_used": "multiple discount timescales are empirically observed and can provide computational benefits",
+      "url": "https://www.nature.com/articles/s41586-025-08929-9"
+    }
+  ],
+  "candidate_delta": {
+    "target_pr": 332,
+    "files": [
+      "claycode/frank_reward_state_v1_candidate.clay",
+      "runtime/reward/frank_reward_plasticity_v1_candidate.py",
+      "tests/frank_reward_plasticity_v1_candidate_gate.py",
+      ".github/workflows/frank-reward-plasticity-v1-vps.yml"
+    ],
+    "material_learning_gate": "verified && admitted_evidence_class && causal_credit>0 && confidence>0",
+    "material_learning_weight": "confidence * causal_credit",
+    "self_activity_policy": "SELF_PROPOSAL|ACTIVITY_ONLY|UNVERIFIED => material_learning_weight=0; exploration_nudge<=0.12",
+    "candidate_timescales": {
+      "FAST": 0.30,
+      "MEDIUM": 0.09,
+      "SLOW": 0.02
+    },
+    "typed_dimensions": [
+      "TASK",
+      "EPISTEMIC",
+      "SOCIAL",
+      "SAFETY",
+      "RESOURCE",
+      "HOMEOSTATIC",
+      "NOVELTY"
+    ],
+    "semantic_execution_scope": "ClayCode semantic source added but compiled ClayCode execution is not claimed; Python is isolated reference candidate only"
+  },
+  "local_execution": {
+    "environment": "isolated ChatGPT worker container",
+    "status": "PASS_REWARD_PLASTICITY_V1_CANDIDATE_GATE",
+    "checks_passed": 10,
+    "checks_total": 10,
+    "failed_checks": [],
+    "target_credit": "LOCAL_ONLY_NOT_TARGET_VPS"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "SELF_REWARD_LAUNDERING_CAROUSEL",
+    "mechanism": "cycle maximal self-generated apparent-success signals through SELF_PROPOSAL, ACTIVITY_ONLY and UNVERIFIED labels while presenting utility=1, novelty=1, confidence=1 and causal_credit=1",
+    "required_fail_closed": [
+      "material state digest unchanged",
+      "material learning weight exactly zero for every event",
+      "predictions unchanged",
+      "tonic unchanged",
+      "exploration nudge at most 0.12"
+    ],
+    "local_status": "PASS_SELF_ACTIVITY_CANNOT_MINT_MATERIAL_REWARD",
+    "target_status": "QUEUED_NOT_YET_EXECUTED",
+    "external_effect_performed": false,
+    "canonical_state_mutated": false
+  },
+  "target_vps_execution": {
+    "workflow": "Frank reward plasticity v1 candidate VPS",
+    "workflow_run": 31501474830,
+    "head_sha": "44dc4a08b7f7cc63928f3af5890939da2e1a3103",
+    "status_observed": "QUEUED",
+    "result": "UNKNOWN_UNTIL_EXECUTED",
+    "no_pass_claim_before_execution": true
+  },
+  "architecture_adjudication": {
+    "status": "CANDIDATE_TESTING",
+    "architecture_delta": "ADD_BASELINE_GATED_TYPED_REWARD_PLASTICITY_CANDIDATE_AND_FALSIFICATION_OBLIGATIONS",
+    "promotion": "NOT_AUTHORIZED",
+    "historical_replacement_claimed": false,
+    "typed_reward_superiority_claimed": false,
+    "scalar_counterhypothesis_refuted": false
+  },
+  "required_successors": [
+    "bind/reconstruct historical NAcc/E-PQ original baseline",
+    "matched scalar vs typed vs typed+multitimescale replay",
+    "lesion/rescue habituation/opponent/phasic/tonic candidate mechanisms",
+    "OOD and conflicting task/safety/resource evaluations",
+    "compose with producer-owned verified outcome + causal-credit support rather than caller-supplied evidence",
+    "compose persistence/restart with fixed SQLite and semantic-lineage recovery gates",
+    "execute semantic source through current ClayCode parser/type/effect/evaluator/compiler path",
+    "measure resource cost and long-run drift"
+  ],
+  "negative_results_and_limits": [
+    "original NAcc baseline is not bound in this run",
+    "local 10/10 PASS is not target-VPS evidence",
+    "typed/multitimescale superiority is not established",
+    "ClayCode compiled execution of the new semantic source is not established",
+    "whole F-V01-11 completion is not claimed",
+    "whole Frank v0.1 acceptance is not claimed"
+  ],
+  "workspace_delta": {
+    "F-V01-11-MEMORY-REWARD-GOALS": {
+      "action": "ADD_CANDIDATE_TESTING_EVIDENCE_KEEP_PACKAGE_OPEN",
+      "candidate_pr": 332,
+      "target_run": 31501474830,
+      "status": "OPEN_CANDIDATE_TESTING"
+    }
+  },
+  "research_disposition": "CANDIDATE_DELTA_WITH_ACTIVE_COUNTERHYPOTHESIS_AND_TARGET_RUN_PENDING",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

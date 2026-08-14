@@ -1,0 +1,34 @@
+{
+  "schema_version": "branch-feedback-1.0",
+  "run_id": "harness-20260810T2028p0700-chatgpt-secondary-hwp10-effect-authority",
+  "source": "ADVERSARIAL_COUNTEREXAMPLE_REPORT.json",
+  "status": "MATERIAL_COUNTEREVIDENCE_ROUTED",
+  "feedback": {
+    "harness": {
+      "impact": "H-WP-10 remains NOT_PASS; do not use the 12/12 local baseline receipt alone as promotion evidence.",
+      "action": "Canonicalize duplicate implementations, repair EA-CEX-01..05, then rerun acceptance + adversarial + recovery + target-VPS integration tests."
+    },
+    "frank": {
+      "impact": "The external effect gateway remains architecturally required; raw preauthorization booleans and target self-proposals must not become authority.",
+      "action": "Preserve proposal/intent/capability/authority/confirmation/effect/outcome separation in the next architecture refreeze."
+    },
+    "claycode": {
+      "impact": "H2 needs typed authority-source and confirmation-identity semantics strong enough to express authenticated authority, request-bound confirmation and one-shot consumption.",
+      "action": "Use EA-CEX-01..05 as expressibility/differential tests; reopen BASE only if current semantics cannot encode them."
+    },
+    "unifieddb": {
+      "impact": "One-shot confirmation consumption cannot be only process-local if crash/restart replay must remain safe.",
+      "action": "Coordinate with H-WP-02 so nonce/receipt consumption and effect commit identity survive restart without duplicate effects."
+    },
+    "claygraph": {
+      "impact": "Authority edges must distinguish proposal/salience/confirmation/validated-authority/effect-commit relations; no edge from self-proposal, GWT ignition or salience to executable authority.",
+      "action": "Represent EA-CEX lesions as forbidden authority paths in static/dynamic Harness ClayGraph validation."
+    },
+    "H-WP-17-REFERENCE-RELEASE-AUDIT": {
+      "impact": "Any target-contract-gate component completion must not be interpreted as Reference Harness release readiness while H-WP-10 has reproducible authority counterexamples.",
+      "action": "Ingest exact counterexample report and retain H1 release gate NOT_PASS."
+    }
+  },
+  "independence_note": "This is adversarial executable replication of a sibling H-WP-10 implementation, not independent evidence for the underlying owner-fixed policy itself.",
+  "training_effect": "No change: paid/final training remains unauthorized and blocked by staged gates."
+}

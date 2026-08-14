@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CQC-001",
+  "evidence_class":"LOCAL_SYNTHETIC_REFERENCE_MODEL_ONLY",
+  "question":"Can intervention-scoped partition refinement compress true implementation duplicates while refusing to merge states that are indistinguishable on normal paths but causally distinct under Frank-like interventions?",
+  "model":{"observable_groups":6,"hidden_causal_modes":4,"implementation_duplicates_per_mode":4,"states":96,"normal_actions":4,"interventions":["LESION","REENTRY_SHUFFLE","STALE_EPOCH","AUTHORITY_BREAK"]},
+  "baselines":["FULL_NO_FUSION","OUTPUT_ONLY","NORMAL_PATH_BISIM","RANDOM_24_CLASS_FUSION","CQC_INTERVENTIONAL_QUOTIENT"],
+  "test_sequences":"all action sequences length 1..3 plus 500 seeded length-4 sequences",
+  "seed":20260811,
+  "measures":["equivalence class count","compression ratio","transition table entries/reduction","inconsistent block-actions","trace violations/rate","partition refinement latency"],
+  "causal_discriminator":"Normal actions intentionally hide causal mode; intervention actions reveal it. Four duplicate implementations of each causal mode are exactly equivalent and should collapse.",
+  "promotion_rule":"Synthetic PASS only justifies a real Frank shadow-test obligation; it cannot promote CQC into the target architecture.",
+  "real_next_test":"After executable current loop-core and applicable Original Baseline traces exist, encode one bounded historical/current component pair as protected labeled transitions, compare manual baseline vs CQC on matched lesion/reentry/recovery/effect controls, and run on accepted target VPS."
+}

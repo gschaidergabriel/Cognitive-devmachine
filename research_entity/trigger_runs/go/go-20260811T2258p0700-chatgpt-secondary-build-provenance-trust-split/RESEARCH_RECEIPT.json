@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2258p0700-chatgpt-secondary-build-provenance-trust-split",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "subject": "self.root / human-surface Frank v0.1",
+  "canonical_parent_observed_before_write": "49ac39cbedcf55cfc40d173dd22f7bb9f55bf9df",
+  "program_stage": "FRANK_V0_1",
+  "work_packages_affected": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "internal_evidence": {
+    "productstart_gate_receipt": "research_entity/trigger_runs/go/go-20260811T2249p0700-chatgpt-secondary-productstart-conjunctive-gate/RESEARCH_RECEIPT.json",
+    "target_boot_candidate": "gschaidergabriel/Dr.-Unterweger:PR#231",
+    "sigstore_capability_probe": "gschaidergabriel/Dr.-Unterweger:PR#229",
+    "observed_gap": "ProductStart requires trusted builder/artifact attestation, but PR#231 remains BLOCKED_NO_TRUSTED_BUILDER / BLOCKED_NO_ATTESTATION_VERIFIER. PR#229 is capability-only and does not select production trust policy."
+  },
+  "fresh_primary_external_evidence": [
+    {
+      "source": "GitHub Docs: Using artifact attestations to establish provenance for builds",
+      "retrieved_utc": "2026-08-11T15:58:00Z",
+      "finding": "Artifact attestations are available for private/internal repositories only on GitHub Enterprise Cloud; Free/Pro/Team support is public-repository-only."
+    },
+    {
+      "source": "actions/attest current README",
+      "retrieved_utc": "2026-08-11T15:58:00Z",
+      "finding": "Current GitHub attestation action binds artifact name/digest to an in-toto predicate; private/internal repositories use GitHub's private Sigstore instance and verification is supported through GitHub CLI."
+    },
+    {
+      "source": "GitHub Docs: Verifying attestations offline",
+      "retrieved_utc": "2026-08-11T15:58:00Z",
+      "finding": "Offline verification requires artifact + bundle + trusted root + GitHub CLI; trusted roots must be refreshed over time as Sigstore key material rotates."
+    },
+    {
+      "source": "sigstore/cosign-installer current README",
+      "retrieved_utc": "2026-08-11T15:58:00Z",
+      "finding": "Official installer currently documents GitHub-hosted runners as supported and warns that self-hosted runners may not work; therefore installer presence cannot be assumed as a production target invariant."
+    }
+  ],
+  "hypothesis": "Frank ProductStart build provenance should be decomposed into independently testable trust axes: owner-pinned builder/source policy, cryptographically verified provenance, exact artifact-subject digest binding, local installed-byte equality, and state-lineage/identity/recovery conjunction. No builder/workflow identity alone may admit an artifact.",
+  "strongest_counterhypothesis": "A simpler trusted deployment channel plus exact local artifact hash may be sufficient for v0.1, making an additional general-purpose attestation verifier unnecessary. This remains unproven because a local hash without an independently trusted producer does not establish who built the bytes or from what source, and the current ProductStart contract explicitly requires trusted builder/provenance evidence.",
+  "live_adjudication": {
+    "github_native_private_attestation_path": "NOT_CURRENTLY_PROMOTABLE_FROM_AVAILABLE_EVIDENCE",
+    "reason": "Current GitHub primary documentation makes private-repository artifact attestations Enterprise-Cloud-only, matching the prior measured native-attestation blocker class. Current repository plan/Enterprise entitlement was not independently queried by this worker, so the claim is bounded to the documented feature requirement plus prior project execution evidence.",
+    "gh_missing_on_target": "SECONDARY_BLOCKER_NOT_ROOT_CAUSE",
+    "production_sigstore_public_good_selection": "NOT_AUTHORIZED_NOT_SELECTED",
+    "reason_sigstore": "Keyless public Sigstore may expose signing identity/provenance in public transparency infrastructure and represents a production trust/privacy choice; this worker does not mint that owner decision."
+  },
+  "oob_experiment": {
+    "name": "ATTESTATION_SUBJECT_SWAP",
+    "count_for_this_go": 1,
+    "execution_class": "LOCAL_SANDBOX_CRYPTOGRAPHIC_FALSIFIER",
+    "production_key_material_used": false,
+    "external_effect": false,
+    "setup": "Generate ephemeral Ed25519 key; sign provenance metadata for artifact A including repository, main ref, signer-workflow identity and exact SHA-256 subject digest. Construct different artifact B. Compare a deliberately unsafe verifier that validates signature/repository/workflow but ignores subject digest against a subject-bound verifier that also hashes the candidate bytes.",
+    "artifact_a_sha256": "504887ee2d2467993cef3e1d3adb807f90caf32c47a22c5ec0ccf3b64536aac6",
+    "artifact_b_sha256": "83b9a40a91867e95a653c88351459f8b647c57938d25c0fa733896a45adb3244",
+    "results": {
+      "unsafe_baseline_artifact_a": "ALLOW",
+      "unsafe_subject_swap_artifact_b": "ALLOW_FAIL_OPEN",
+      "subject_bound_artifact_a": "ALLOW",
+      "subject_bound_subject_swap_artifact_b": "DENY_EXPECTED"
+    },
+    "classification": "SUPPORTED_SUBJECT_DIGEST_IS_NON_SUBSTITUTABLE_PROVENANCE_AXIS",
+    "resource_shadow": {
+      "python": "3.13.5",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "iterations": 5000,
+      "unsafe_signature_policy_us": {"p50": 105.967, "p95": 133.618, "p99": 213.728},
+      "subject_bound_policy_us": {"p50": 107.06, "p95": 135.781, "p99": 235.489},
+      "interpretation": "Local synthetic microbenchmark only; tiny artifact payloads and ephemeral key. It measures the falsifier implementation, not target ProductStart latency."
+    },
+    "rollback": "No repository target state, production key, VPS install, canonical Frank state or external service was modified by the experiment."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE_REFINEMENT",
+    "change": "Represent ProductStart build trust as a conjunctive BuildTrustBundle with at least: trusted_policy_id, canonical_repository, source_digest/ref, signer/builder identity, crypto_verification_receipt, subject_sha256, local_installed_sha256, verifier/trust-root version, and freshness/rollback state. Exact subject digest equality is mandatory and cannot be substituted by a trusted signer identity.",
+    "do_not_do": [
+      "Do not treat a trusted workflow name as sufficient artifact identity.",
+      "Do not treat a local hash as provenance without an independently trusted producer/verification chain.",
+      "Do not automatically select public Sigstore keyless signing for a private Frank release without an owner-fixed privacy/trust decision.",
+      "Do not claim GitHub-native private artifact attestations are available unless current account/plan capability is explicitly verified."
+    ],
+    "next_discriminators_ranked": [
+      "Verify current repository/account entitlement for GitHub private artifact attestations directly; if unavailable, close GitHub-native branch as NOT_AVAILABLE rather than retrying gh installation.",
+      "Execute or supersede PR#229 only as a verifier-capability probe; capability alone must not choose trust policy.",
+      "Design two owner-reviewable production trust candidates: offline-pinned verifier+roots versus owner-held signing key/public-key pin, each with rotation/revocation/recovery semantics and no secret committed to Git.",
+      "After owner selects a trust policy, compose exact artifact subject verification with V4 storage admission + selected state-lineage + canonical ProductStart entrypoint and execute installed stop/start/crash-restart on exact bytes."
+    ],
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "training_authorization_changed": false
+  },
+  "research_reentry": {
+    "status": "COMMITTED_AS_DURABLE_DELTA",
+    "target_repo_mutation": "NONE",
+    "reason_no_target_patch": "The highest-value uncertainty is an owner-governed production trust-policy selection plus current feature entitlement. Implementing a signer or committing private key material without that authority would be unsafe and would create false completion."
+  }
+}

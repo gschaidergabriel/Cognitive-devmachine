@@ -11,6 +11,11 @@ from research_entity.harness.reference.possibility_frontier import (
     StalePossibilityEpoch,
     compile_frontier,
 )
+from research_entity.runtime.semantic_gap_controller_v15 import (
+    EvidenceItem,
+    EvidenceRequirement,
+    SufficiencyGapControllerV15,
+)
 
 
 @dataclass(frozen=True)
@@ -85,6 +90,57 @@ class PossibilityFieldCompilerTests(unittest.TestCase):
         self.assertEqual(receipt.selected_refs, ('ask-tool','tool-done'))
         self.assertEqual(receipt.deepening_count, 1)
         self.assertEqual(eap.calls, 0)
+
+    def test_typed_gap_controller_closes_missing_ref_before_eap(self):
+        semantic = FakeSemantic(SemanticResult(('semantic:anchor',), sufficient=False))
+        eap = FakeEAP(selected=('semantic:fallback',))
+        items = {
+            'semantic:anchor': EvidenceItem('semantic:anchor', frozenset({'anchor'})),
+            'semantic:needed': EvidenceItem('semantic:needed', frozenset({'need:one'})),
+        }
+        def expand(query_text, terms, selected, source_epoch, graph_epoch, budget):
+            del query_text, selected, source_epoch, graph_epoch, budget
+            return [items['semantic:needed']] if 'semantic:needed' in terms else []
+        gap = SufficiencyGapControllerV15(expand=expand, max_rounds=1, max_items=8)
+        compiler = PossibilityFieldCompiler(
+            semantic,
+            eap,
+            gap_controller=gap,
+            evidence_item_resolver=lambda refs: [items[ref] for ref in refs],
+        )
+        receipt = compiler.compile(PossibilityFieldQuery(
+            'q-gap','find exact missing evidence',7,9,
+            evidence_requirements=(EvidenceRequirement(
+                'need-one', required_refs=frozenset({'semantic:needed'}), min_items=1
+            ),),
+        ))
+        self.assertEqual(receipt.mode, 'GAP_CONTROLLED_SUFFICIENT')
+        self.assertEqual(receipt.selected_refs, ('semantic:anchor','semantic:needed'))
+        self.assertEqual(receipt.gap_rounds, 1)
+        self.assertEqual(receipt.remaining_gap_ids, ())
+        self.assertEqual(eap.calls, 0)
+
+    def test_unclosed_typed_gap_falls_to_eap_and_surfaces_gap_id(self):
+        semantic = FakeSemantic(SemanticResult(('semantic:anchor',), sufficient=False))
+        eap = FakeEAP(selected=('semantic:fallback',))
+        items = {'semantic:anchor': EvidenceItem('semantic:anchor', frozenset({'anchor'}))}
+        gap = SufficiencyGapControllerV15(expand=lambda *args: [], max_rounds=1, max_items=8)
+        compiler = PossibilityFieldCompiler(
+            semantic,
+            eap,
+            gap_controller=gap,
+            evidence_item_resolver=lambda refs: [items[ref] for ref in refs],
+        )
+        receipt = compiler.compile(PossibilityFieldQuery(
+            'q-gap-miss','missing evidence stays missing',7,9,
+            evidence_requirements=(EvidenceRequirement(
+                'need-missing', required_refs=frozenset({'semantic:missing'}), min_items=1
+            ),),
+        ))
+        self.assertEqual(receipt.mode, 'EAP_ACTIVE_ASSEMBLY')
+        self.assertEqual(receipt.remaining_gap_ids, ('need-missing',))
+        self.assertEqual(receipt.gap_rounds, 1)
+        self.assertEqual(eap.calls, 1)
 
     def test_insufficient_paths_deepen_to_eap_and_preserve_negative_space(self):
         semantic = FakeSemantic(SemanticResult(('legacy:x',), mode='SEMANTIC_SEED_FASTPATH', sufficient=False))

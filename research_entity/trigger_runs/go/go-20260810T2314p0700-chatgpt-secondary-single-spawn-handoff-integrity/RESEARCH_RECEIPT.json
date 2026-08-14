@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-20260810T2314+0700-CHATGPT-SECONDARY-SINGLE-SPAWN-HANDOFF-INTEGRITY",
+  "trigger": "go",
+  "timestamp_local": "2026-08-10T23:14:14+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "mission": "finished self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu target VPS",
+  "observed_heads": {
+    "research_repo_before_receipt": "190fb235ff2a55bd32e0bbef4e1625bd8e0ae2c8",
+    "target_repo_latest_observed": "e6f683859d2e9ec5eae9c6316445fc28ebdeafd6",
+    "legacy_canonical_revision": 2,
+    "legacy_canonical_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "owner_directive_delta": {
+    "status": "COMMITTED",
+    "commit": "1bb857fda890f9ef02f7ec208371dfd01c4cb29c",
+    "path": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "semantics": [
+      "API token is credential, never self.root identity",
+      "one global active Frank execution",
+      "valid active work returns BUSY to competing callers",
+      "lease IDLE is resource state, not user idle/consent evidence",
+      "interactive release requires explicit session-bound idle handoff before proactive autonomy",
+      "timeout, transport silence and disconnect are not idle confirmation",
+      "wrong-session handoff confirmation is rejected",
+      "pending handoff does not block a new explicit authenticated interactive recovery request",
+      "stale execution/effect epochs are fenced"
+    ]
+  },
+  "hypothesis": "Single-process/server identity is insufficient for owner-fixed one-Frank semantics; cognitive execution requires one fenced active presence/execution plus explicit interactive-to-autonomous handoff semantics.",
+  "strongest_counterhypothesis": "A single server process plus lease IDLE is sufficient and an explicit idle-handoff layer adds only friction.",
+  "discrimination": {
+    "result": "COUNTERHYPOTHESIS_REFUTED_FOR_OWNER_POLICY",
+    "basis": [
+      "current main admits single-instance V15 presence with monotonic fencing",
+      "current main admits Linux one-host physical execution exclusion",
+      "current main admits V16 durable execution continuity/idempotency/idle handoff",
+      "current main execution-gate regression test now proves crash/process-loss and TTL expiry do not authorize AUTONOMOUS takeover while V15 semantic state is not IDLE",
+      "only explicit interactive recovery may take over after expired lost-holder state"
+    ],
+    "scope_limit": "This supports the owner-fixed Frank v0.1 execution policy; it is not a general scientific claim that all agent systems require identical handoff semantics."
+  },
+  "one_out_of_box_experiment": {
+    "count": 1,
+    "name": "GHOST_HOLDER_FENCING",
+    "classification": "ADMITTED_GO_OOB_EXPERIMENT",
+    "result": "SUPPORTED",
+    "summary": "A stale holder wakes after expiry/takeover; a newer lease epoch fences old heartbeat/release so the successor remains authoritative.",
+    "note": "Later crash/disconnect tests in this run are ordinary recovery discriminators and are not counted as additional OOB experiments."
+  },
+  "target_vps_evidence": [
+    {
+      "evidence": "V15 single-instance presence race/fencing discriminator",
+      "result": "PASS",
+      "details": "12 contenders -> exactly 1 ACQUIRED and 11 BUSY; same-holder renewal; stale ghost-holder heartbeat/release FENCED."
+    },
+    {
+      "evidence": "historical V1 idle-handoff mechanism run 31402891439",
+      "result": "PASS_HISTORICAL_MECHANISM_ONLY",
+      "executor": "digital-retina / Ubuntu Linux 6.8 / Python 3.12.3",
+      "resource_shadow": {"elapsed_seconds": 0.22, "max_rss_kib": 30828},
+      "note": "Architecture later superseded by FrankExecutionGate + canonical V16; PR closed stale."
+    },
+    {
+      "evidence": "V16 execution-continuity schema receipt FRANK-V01-V16-EXECUTION-CONTINUITY-SCHEMA-31405792425",
+      "result": "PASS_SCHEMA_SUBSTRATE",
+      "executor": "digital-retina / Ubuntu Linux 6.8 / Python 3.12.3",
+      "resource_shadow": {"elapsed_seconds": 0.14, "max_rss_kib": 18708},
+      "limitations": ["runtime handoff/idempotency promotion was not claimed by the schema receipt"]
+    },
+    {
+      "evidence": "token ingress core receipt FRANK-V01-TOKEN-INGRESS-CORE-V1-31403630647",
+      "result": "PASS_SUBSTRATE",
+      "executor": "digital-retina / Ubuntu Linux 6.8 / Python 3.12.3",
+      "resource_shadow": {"elapsed_seconds": 0.14, "max_rss_kib": 25088},
+      "limitations": ["network server not implemented in receipt", "TLS termination not implemented in receipt", "whole token API not complete"]
+    },
+    {
+      "evidence": "ingress port/routing projection FRANK-V01-INGRESS-PORT-ROUTING-V1-31405277437",
+      "result": "PASS_CAPABILITY_EVIDENCE_ONLY",
+      "observed": ["nginx service available", "listeners included ports 80, 3000 and 127.0.0.1:8000", "nginx config not readable to probe", "no production ingress selected"],
+      "resource_shadow": {"elapsed_seconds": 0.08, "max_rss_kib": 13952}
+    }
+  ],
+  "stale_and_duplicate_suppression": [
+    {"pr": 131, "status": "CLOSED_NO_CREDIT", "reason": "main independently landed equivalent singleton presence/fencing before promotion"},
+    {"pr": 146, "status": "CLOSED_HISTORICAL_EVIDENCE_ONLY", "reason": "V1 handoff predates admitted FrankExecutionGate"},
+    {"pr": 154, "status": "CLOSED_NO_CURRENT_CREDIT", "reason": "broader canonical V16 continuity/token-ingress plus current crash safety landed on main"},
+    {"pr": 180, "status": "CLOSED_NO_CREDIT", "reason": "main independently admitted exact crash/TTL AUTONOMOUS blocking test and V15+V16 precondition"},
+    {"pr": 167, "status": "CLOSED_STALE", "reason": "current static audit added newer V16 direct-execution-gate invariant; old repair would overwrite it"}
+  ],
+  "negative_results_and_blockers": [
+    {
+      "id": "STATIC_AUDIT_FALSE_POSITIVE_RUNTIME_TEST",
+      "status": "CONFIRMED",
+      "symptom": "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
+      "cause": "whole-file token heuristic combines a TemporaryDirectory sqlite3.connect with an unrelated temporary /state literal in the same unittest file",
+      "impact": "general deep-integrity jobs can fail after otherwise passing Frank runtime discriminators"
+    },
+    {
+      "id": "TOKEN_API_NETWORK_EDGE",
+      "status": "OPEN",
+      "evidence": "current target-VPS token-ingress receipt explicitly records network_server_implemented=false, tls_termination_implemented=false, whole_token_api_complete=false"
+    },
+    {
+      "id": "PRODUCTION_INGRESS_SELECTION",
+      "status": "OPEN",
+      "evidence": "target-VPS routing probe found nginx/listeners but production_ingress_selected=false and nginx config unreadable to the probe"
+    }
+  ],
+  "current_patch_lane": {
+    "pr": 184,
+    "status": "TESTING",
+    "title": "Fix current static-integrity false positives from colocated runtime tests",
+    "head": "f4482f8168c9ba0a5cec524e2e746b88f5a771cd",
+    "self_hosted_vps_run": 31407655919,
+    "run_status_at_receipt_write": "QUEUED",
+    "safety": [
+      "retains runtime/api/frank_token_ingress_core.py as the only current production direct FrankExecutionGate allowlist",
+      "retains DIRECT_EXECUTION_GATE_BYPASSES_V16_CONTINUITY",
+      "retains DIRECT_PRESENCE_RUNTIME_BYPASSES_EXECUTION_GATE",
+      "changes only production-authority classification of colocated runtime test fixtures"
+    ]
+  },
+  "architecture_delta": {
+    "status": "PROMOTED_BY_CURRENT_MAIN_PLUS_OWNER_DIRECTIVE",
+    "accepted": [
+      "V15 semantic presence/fencing authority",
+      "Linux one-host physical execution exclusion",
+      "V16 execution continuity/idempotency/idle-handoff authority",
+      "AUTONOMOUS requires V15 semantic IDLE and V16 handoff CLEAR",
+      "crash/TTL/disconnect never constitutes user-idle confirmation"
+    ],
+    "rejected": [
+      "second parallel V16 handoff implementation",
+      "lease-IDLE-only autonomy admission",
+      "duplicate singleton presence subsystem"
+    ]
+  },
+  "next_frontier": [
+    "complete real token API network server/transport on target VPS without bypassing V16 ingress",
+    "select and verify production ingress/TLS termination path using current nginx capability",
+    "surface BUSY versus HANDOFF_REQUIRED/current-task-switch semantics through client/peer-AI protocol without leaking active content",
+    "bind downstream effect attempts to current execution/generation fencing and verified outcome re-entry",
+    "resolve PR 184 target-VPS static-integrity evidence before merge/promotion"
+  ],
+  "final_model_training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CQC-001",
+  "controls":[
+    {"id":"FULL_NO_FUSION","purpose":"safety/reference ceiling","result":"96 classes; 0/104064 violations; no compression"},
+    {"id":"OUTPUT_ONLY","purpose":"weak observational merge control","result":"6 classes; 74112/104064 violations"},
+    {"id":"NORMAL_PATH_BISIM","purpose":"tests recurrence without material fault interventions","result":"6 classes; 74112/104064 violations"},
+    {"id":"RANDOM_24_CLASS_FUSION","purpose":"size-matched null control","result":"24 classes; 104064/104064 violations"},
+    {"id":"CQC_ALL_INTERVENTIONS","purpose":"candidate","result":"24 classes; 0/104064 violations"}
+  ],
+  "intervention_subset_ablations":[
+    {"alphabet":"normal only","classes":6,"violations":74112,"rate":0.7121771217712177},
+    {"alphabet":"normal + LESION","classes":12,"violations":51752,"rate":0.49730934809348093},
+    {"alphabet":"normal + REENTRY_SHUFFLE","classes":12,"violations":51660,"rate":0.49642527675276754},
+    {"alphabet":"normal + STALE_EPOCH","classes":24,"violations":0,"rate":0.0},
+    {"alphabet":"normal + AUTHORITY_BREAK","classes":24,"violations":0,"rate":0.0},
+    {"alphabet":"normal + LESION + REENTRY_SHUFFLE","classes":24,"violations":0,"rate":0.0}
+  ],
+  "key_lesson":"Intervention selection changes the inferred equivalence relation. Some intervention families are redundant in this synthetic model while others are decisive. Therefore certificate scope must record the exact alphabet and cannot be generalized to untested future interventions.",
+  "mandatory_future_real_controls":["truthful vs shuffled reentry","provenance broken","no-reentry","organ lesion/rescue","crash/restart/rollback","effect-authority stale generation","resource-matched manual fusion baseline","held-out/OOD episodes"]
+}

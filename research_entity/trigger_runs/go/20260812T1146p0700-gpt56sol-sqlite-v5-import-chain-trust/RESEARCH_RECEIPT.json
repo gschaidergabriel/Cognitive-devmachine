@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "20260812T1146p0700-gpt56sol-sqlite-v5-import-chain-trust",
+  "organ": "ChatGPT / GPT-5.6 Sol temporary Clay worker",
+  "framework": "GRF",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination": {
+    "research_main_refreshed_before_write": "18de4d7884c478126cc210449ba58db72454dac6",
+    "parallel_receipt_observed": "research_entity/trigger_runs/go/20260812T1145p0700-chatgpt-secondary-sqlite-preload-replication/RESEARCH_RECEIPT.json",
+    "parallel_result": "DISTINCT_NO_CHANGE_LD_PRELOAD_REPLICATION; NO_IMPORT_CHAIN_OVERLAP_FOUND",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_before_repair": "c20a9277b95df4ad6cbcba11ed53a4f07e1745f1",
+    "product_main_after_merge": "edd253b8c00bcd408759ec6dff10f19c8ec64dec",
+    "product_pr": 504,
+    "stale_predecessor_pr_closed": 500
+  },
+  "r0_observed": [
+    "Current merged SQLite V5 launcher attested the launcher, canonical launcher parent chain, and V5 entry guard before Python, but not V4/V3/V2/V1 Python modules imported during V5 admission.",
+    "Current V5 loads V4 before the trusted-anchor read; V4 loads V3, V3 loads V2, and V2 loads V1.",
+    "A root-owned non-group/other-writable parent directory does not make an already-existing non-root-owned regular child file immutable to that child file owner.",
+    "SQLite upstream documents the WAL-reset corruption race through 3.51.2 and its fix in 3.51.3 and later; project release policy already pins fixed SQLite 3.53.4.",
+    "F-V01-13 remained IN_PROGRESS before this delta and productive root-anchor/service/runtime/restart/recovery evidence was still required."
+  ],
+  "primary_external_evidence": [
+    {
+      "source": "https://www.sqlite.org/wal.html#the_wal_reset_bug",
+      "claim": "WAL-reset bug affected likely 3.7.0 through 3.51.2 and is fixed in 3.51.3 and later, with listed backports."
+    },
+    {
+      "source": "https://www.sqlite.org/releaselog/3_53_4.html",
+      "claim": "SQLite 3.53.4 release identity/date and source-id are downstream of the WAL-reset repair."
+    }
+  ],
+  "r1_hypothesis": {
+    "hypothesis": "Attesting only the V5 entry module before Python is insufficient because imported predecessor modules are executable admission code and can run top-level code before later anchor checks.",
+    "causal_mechanism": "Python importlib executes module top-level code while resolving the V5 -> V4 -> V3 -> V2 -> V1 guard chain; ownership of a pre-existing child file can remain non-root even when its parent directory is root-owned and non-writable.",
+    "predicted_if_right": "A runtime-user-owned imported V4 sibling can execute code before anchor evaluation while the parent directory, launcher and V5 entry file remain root-trusted.",
+    "confidence": "HIGH_AFTER_DISCRIMINATING_EXPERIMENT"
+  },
+  "r3_counter_reality": {
+    "strongest_counterhypothesis": "Trusted V5 entry file plus trusted parent directory transitively establishes trust for imported predecessor guard modules.",
+    "falsifier": "Keep the directory/launcher/V5 entry root-owned and non-writable while making only the pre-existing imported V4 file runtime-user-owned; observe whether V4 top-level code executes before the later anchor path.",
+    "outcome": "REFUTED"
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "id": "V5_WRITABLE_IMPORTED_PREDECESSOR",
+    "scope": "disposable local /opt-shaped sandbox only; no productive Frank/VPS/canonical state",
+    "baseline_shape": "root-owned non-writable deployment parent, launcher and V5 entry file",
+    "treatment": "imported V4 sibling owned by nobody uid 65534 mode 0644 with harmless top-level marker write",
+    "observed": {
+      "process_rc": 0,
+      "marker": "EXECUTED_BEFORE_ANCHOR",
+      "v4_uid": 65534,
+      "v4_mode": "0644"
+    },
+    "result": "COUNTER_REALITY_SUPPORTED",
+    "rollback": "Disposable tree and marker removed after observation.",
+    "canonical_state_mutated": false,
+    "production_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE"
+  },
+  "intervention": {
+    "product_change": "Before first Python exec, launcher now enumerates fixed_sqlite_runtime_guard_v5_candidate.py, v4_candidate.py, v3_candidate.py, v2_candidate.py and fixed_sqlite_runtime_guard.py and requires every member to be regular, non-symlink, single-link, root-owned and not group/other writable.",
+    "new_regression": "tests/frank_sqlite_v5_python_guard_chain_regression.py",
+    "new_workflow": ".github/workflows/frank-sqlite-v5-python-chain-regression-current.yml",
+    "candidate_head": "1c04f872b1509da41331fd74f6591afcf142fcd1",
+    "exact_self_hosted_run": 31564201644,
+    "runner": "clay / self-hosted Linux X64",
+    "result": "SUCCESS",
+    "passed_steps": [
+      "exact candidate fetch",
+      "launcher shell syntax",
+      "existing pre-guard path regression",
+      "new imported-guard chain regression",
+      "repository static integrity",
+      "evidence upload",
+      "cleanup"
+    ],
+    "merge": {
+      "pr": 504,
+      "method": "squash",
+      "main_commit": "edd253b8c00bcd408759ec6dff10f19c8ec64dec",
+      "tree": "55b948e7e08be25dcfcbafb4a082007d27b46236"
+    }
+  },
+  "negative_and_boundary_evidence": [
+    "Two unrelated repository-wide replay workflows fired on the candidate push and failed independently; they were not substituted for the dedicated storage-gate result.",
+    "An earlier branch/PR #500 became stale when main advanced with anchor-parent symlink hardening; it was closed and superseded rather than promoted.",
+    "The repair establishes ownership/link-shape trust for the known import chain but does not bind those files to a release-bundle content hash.",
+    "No productive Hostinger root provisioning, productive systemd parent, root anchor, mapped SQLite object, restart/recovery, rollback/downgrade, or semantic-lineage acceptance was proven by this cycle."
+  ],
+  "collapse": {
+    "generated_reality": "V5 entry trust transitively protects imported admission code",
+    "outcome": "REJECT",
+    "counter_reality": "pre-existing imported predecessor ownership is an independent executable trust boundary",
+    "counter_outcome": "SUPPORTED",
+    "repair_reality": "bind complete known Python guard import chain before Python exec",
+    "repair_outcome": "PROMOTED_TO_MAIN_AT_MECHANISM_LEVEL",
+    "not_promoted": [
+      "F-V01-13 PASS",
+      "productive fixed SQLite admission",
+      "productive restart/recovery continuity",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "next_discriminating_test": {
+    "target": "accepted Hostinger Ubuntu productive ProductStart path",
+    "requirements": [
+      "provision independently trusted root-owned release bundle and root anchor",
+      "bind productive service parent/ExecStart argv and filesystem namespace to the accepted launcher/target bundle",
+      "capture productive mapped SQLite 3.53.4 object plus version/source-id/library hash/manifest hash/anchor hash",
+      "exercise start and restart with WAL state",
+      "prove downgrade, library swap, stale/copy bundle and rollback controls fail closed or recover to admitted lineage",
+      "retain unique semantic state lineage across restart/move and reject transplanted sibling state"
+    ],
+    "reason": "Production ProductStart composition is now higher-information than additional synthetic V5 guard variants."
+  },
+  "training_authorized": false,
+  "together_used": false,
+  "final_status": "IMPORT_CHAIN_TRUST_GAP_REPAIRED_AND_MERGED; F-V01-13_REMAINS_IN_PROGRESS"
+}

@@ -1,0 +1,235 @@
+{
+  "schema_version": "1.2",
+  "run_id": "go-20260811T2157p0700-chatgpt-secondary-sqlite-v3-site-preinit",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_during_cycle": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+    "parent_v3_pr": 337,
+    "parent_v3_head": "279b555bb16052a0b20ab2fb71312d14c7137905"
+  },
+  "live_external_evidence": [
+    {
+      "source": "Python 3.12 command-line documentation",
+      "url": "https://docs.python.org/3.12/using/cmdline.html",
+      "claim_used": "Python -I implies -E, -P and -s, not -S; -I alone therefore does not establish no_site."
+    },
+    {
+      "source": "Python site module documentation",
+      "url": "https://docs.python.org/3/library/site.html",
+      "claim_used": "site processes site-package paths; executable .pth import lines and sitecustomize run during normal startup; -S prevents automatic site.main processing."
+    },
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug",
+      "claim_used": "The WAL-reset bug affects releases through 3.51.2 and is fixed in 3.51.3 and later."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "claim_used": "The 3.53 line contains the WAL-reset fix."
+    }
+  ],
+  "selected_frontier": {
+    "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Current swarm already occupied ClayCode, loop/GWT, token API, web ingress, reward, capabilities and visual lanes; V3 was target-green for the consumed PYTHONPATH regression but retained an untested site-initialization trust surface."
+  },
+  "hypothesis": "V3 Python -I plus stdlib sqlite3-origin attestation is sufficient to prevent pre-admission Python mutation of the high-level sqlite3 API.",
+  "strongest_counterhypothesis": "Because -I does not disable site, an executable system/venv site-packages .pth hook can run before V3, import and mutate the genuine stdlib sqlite3 module while preserving sqlite3.__file__, allowing V3's private-library/version/source-id/hash/origin checks to pass while target behavior is altered.",
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "GO_OOB_SYSTEM_SITE_PREINIT_HOOK",
+    "pr": 338,
+    "branch": "chatgpt/go-sqlite-v3-system-site-oob-20260811",
+    "initial_inconclusive_run": {
+      "workflow_run": 31505040918,
+      "classification": "INCONCLUSIVE_TEST_INSTRUMENT_SYNTAX_ERROR",
+      "note": "The disposable attacker source had a syntax error. V3 PASS with unmodified target behavior from this run is not evidence for or against the hypothesis. Only the harness was repaired and the exact same OOB was rerun."
+    },
+    "decisive_target_run": {
+      "workflow_run": 31505385422,
+      "job": 93825523115,
+      "tested_head_sha": "fae476035c2437a7435efe90c9a5b18eeb8f4cf2",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "os_kernel": "Linux 6.8.0-117-generic x86_64",
+      "python": "3.12.3",
+      "system_sqlite_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+      "python_i_flags": {
+        "isolated": 1,
+        "ignore_environment": 1,
+        "safe_path": true,
+        "no_site": 0,
+        "system_site_paths_present": true
+      },
+      "private_sqlite_version": "3.53.4",
+      "private_sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "v3_admission_status": "PASS_FIXED_SQLITE_RUNTIME_V3_CANDIDATE_ADMISSION",
+      "v3_sqlite3_origin": "/usr/lib/python3.12/sqlite3/__init__.py",
+      "attack_marker_seen_by_target": "EXECUTED",
+      "target_pragma_synchronous": 0,
+      "status": "SUPPORTED_FAIL_OPEN_SYSTEM_SITE_PREINIT_HOOK",
+      "artifact_id": 9106907141,
+      "artifact_sha256": "c041532bdb9fa99a9bcf17ff45fac163180c84dcbf67c25611579efd63aaf8ee",
+      "canonical_database_touched": false,
+      "system_package_modified": false,
+      "external_effect_performed": false
+    }
+  },
+  "oob_adjudication": {
+    "hypothesis_status": "REFUTED_ON_ACCEPTED_TARGET",
+    "counterhypothesis_status": "SUPPORTED_ON_ACCEPTED_TARGET",
+    "v3_promotion_disposition": "NOT_SELECTED_FAIL_OPEN",
+    "architecture_delta": "Python runtime admission must prevent automatic site initialization before Frank admission code, not merely ignore environment paths and attest the final sqlite3 module origin.",
+    "claim_boundary": "This proves a pre-admission Python mutation class under a writable/controlled site-packages path. It does not by itself prove an unprivileged remote exploit chain into production site-packages."
+  },
+  "repair_candidate": {
+    "protocol": "FRANK_FIXED_SQLITE_RUNTIME_V4_CANDIDATE",
+    "pr": 348,
+    "branch": "chatgpt/sqlite-v4-no-site-repair-20260811",
+    "tested_head_sha": "70c90e38f1301e99367ed6aa300796524bf9f56d",
+    "mechanism": [
+      "require trusted python3 -I -S before any import-capable Frank Python code",
+      "verify isolated, ignore_environment, safe_path and no_site flags",
+      "preserve -I -S across child execve",
+      "retain V2 ELF-loader environment fencing",
+      "retain V1 private SQLite object/version/source-id/hash checks",
+      "retain V3 stdlib sqlite3 origin attestation",
+      "fail closed when launched with -I but without -S"
+    ],
+    "ordinary_regression": "Reuse GO_OOB_SYSTEM_SITE_PREINIT_HOOK only as the consumed attack class; no second OOB experiment.",
+    "target_validation": {
+      "status": "PASS_TARGET_REGRESSION_AND_COMPOSITION",
+      "workflow_run": 31505915434,
+      "job": 93827324670,
+      "runner": "clay",
+      "machine": "digital-retina",
+      "os_kernel": "Linux 6.8.0-117-generic x86_64",
+      "python": "3.12.3",
+      "python_i_s_flags": {
+        "isolated": 1,
+        "ignore_environment": 1,
+        "safe_path": true,
+        "no_site": 1,
+        "site_package_paths_present": false
+      },
+      "private_sqlite_version": "3.53.4",
+      "private_sqlite_archive_sha3_256": "454e45f61c6bd75b7420e7190732dea03ce6639c63ada47bbc592f67fc340338",
+      "private_sqlite_library_sha256": "726f92c5085dfd5162832aa41c78e7acf1c22bfc1029e1d39a63260ea7913dad",
+      "v4_file_sha256": "4254029e4ee915f79c535f16f4be7c3ef038fcf74cfe4dc196976e077404364f",
+      "misconfigured_i_only": {
+        "returncode": 78,
+        "receipt_exists": false,
+        "target_exists": false,
+        "denial": "PYTHON_INTERPRETER_NOT_ISOLATED_NO_SITE_USE_DASH_I_DASH_S"
+      },
+      "accepted_i_s": {
+        "status": "PASS_FIXED_SQLITE_RUNTIME_V4_CANDIDATE_ADMISSION",
+        "python_no_site": true,
+        "attack_marker": null,
+        "target_pragma_synchronous": 2,
+        "sqlite3_origin": "/usr/lib/python3.12/sqlite3/__init__.py"
+      },
+      "v17_composition": {
+        "status": "PASS_V17_BOUND_REENTRY_DONE_CANDIDATE_DIFFERENTIAL",
+        "effect_receipt_binds_reentry": true,
+        "provider_effect_allowed_after_admission": true,
+        "replay_blocked_after_done": true,
+        "replay_provider_called": false,
+        "wrong_instance_blocked": true
+      },
+      "unifieddb_claygraph_pair": {
+        "status": "PASS_FIXED_SQLITE_UNIFIEDDB_PAIR_SMOKE",
+        "system_libsqlite3_mapped": false,
+        "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+      },
+      "resource_shadows": {
+        "v4_repair_elapsed_seconds": 3.39,
+        "v4_repair_max_rss_kb": 12636,
+        "v17_elapsed_seconds": 0.20,
+        "v17_max_rss_kb": 16420,
+        "pair_elapsed_seconds": 0.06,
+        "pair_max_rss_kb": 15924
+      },
+      "final_workflow_status": "PASS_V4_REPAIR_AND_COMPOSITION"
+    },
+    "remaining_gate": "Actual product service wiring must launch the guard with trusted python3 -I -S before any Python/site hook or Frank import can execute; no silent V3/unisolated fallback is acceptable."
+  },
+  "concurrent_swarm_evidence_fused": {
+    "axis_d": {
+      "source_worker_pr": 339,
+      "workflow_run": 31505374170,
+      "job": 93825617091,
+      "tested_sha": "8788c123b066f1ccbb7ff24fbfd9c39c1edad096",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "target_package": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+      "exact_ubuntu_source_reconstructed": true,
+      "ubuntu_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+      "same_fault_ubuntu_result": {
+        "exit": 20,
+        "classification": "VULNERABLE",
+        "integrity_corruption": true,
+        "detail": "row 18 missing from index i1"
+      },
+      "same_fault_upstream_3_53_4_result": {
+        "exit": 0,
+        "classification": "FIXED_OR_EQUIVALENT",
+        "integrity_corruption": false,
+        "integrity_last": "ok"
+      },
+      "status": "PASS_AXIS_D_REPAIRED_AND_METAMORPHIC_DISCRIMINATOR",
+      "artifact_id": 9107597956,
+      "artifact_sha256": "3ed95de47ac6a38b43ae8aba3c2d830391be1313bdb14ce897c1c886be62ead5",
+      "fusion": "The exact Ubuntu 3.45.1-1ubuntu2.7 source lineage is behaviorally classified vulnerable under the targeted deterministic WAL-reset fault while the fixed 3.53.4 control remains integral. System SQLite is therefore not a viable Frank WAL-state candidate; private fixed SQLite remains required."
+    },
+    "fresh_main_product_boot_coordination": {
+      "branch": "chatgpt/sqlite-v4-fresh-main-product-boot-20260811",
+      "main_base": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+      "observed_state": "ACTIVE_CONCURRENT_WORKER_BRANCH",
+      "observed_delta": "V1-V4 stack plus V4 repair regression and V4 launcher appeared while this run was active.",
+      "duplicate_write_avoided": true,
+      "handoff": "Do not duplicate the fresh-main/product-entrypoint lane. Consume its target evidence when published; next unresolved storage acceptance remains installed service bytes/config plus restart/recovery/non-bypass evidence."
+    }
+  },
+  "workspace_impact": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "status": "KEEP_IN_PROGRESS",
+      "add_release_gate": "Reject V3 admission; V4 no-site isolated admission is target-supported. System SQLite 3.45.1-1ubuntu2.7 is now behaviorally rejected by exact-source Axis D. Promotion still requires non-bypassable installed service entrypoint plus boot/restart/recovery evidence using private fixed SQLite.",
+      "wal_reset_gate": "SYSTEM_LINE_REJECTED_TARGET_EVIDENCE; private SQLite 3.53.4 remains the fixed-line candidate."
+    },
+    "F-V01-09-EFFECT-AUTHORITY": {
+      "status": "NO_PACKAGE_PROMOTION_FROM_THIS_RUN",
+      "supporting_evidence": "V17 bound re-entry/DONE differential remains green when composed behind V4 admission on the accepted target."
+    }
+  },
+  "negative_results": [
+    {
+      "candidate": "FRANK_FIXED_SQLITE_RUNTIME_V3_CANDIDATE",
+      "result": "REFUTED_FOR_PRODUCT_PROMOTION",
+      "reason": "PASS admission can coexist with a preinitialized, genuine-origin-but-monkeypatched sqlite3 module under site startup."
+    },
+    {
+      "candidate": "UBUNTU_SYSTEM_SQLITE_3_45_1_1UBUNTU2_7_FOR_FRANK_WAL_STATE",
+      "result": "REFUTED_BY_EXACT_SOURCE_AXIS_D",
+      "reason": "Target package source lineage corrupts under the deterministic WAL-reset fault while upstream 3.53.4 fixed-line control remains integral."
+    }
+  ],
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "research_disposition": "V3_REFUTED_V4_TARGET_SUPPORTED_SYSTEM_SQLITE_REFUTED_FRESH_MAIN_PRODUCT_BOOT_OWNED_BY_CONCURRENT_WORKER"
+}

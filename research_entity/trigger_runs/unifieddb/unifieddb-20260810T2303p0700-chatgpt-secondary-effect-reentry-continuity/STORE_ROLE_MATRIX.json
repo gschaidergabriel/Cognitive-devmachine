@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity",
+  "roles": [
+    {"object":"effect_reservations","physical":"UnifiedDB SQLite","role":"AUTHORITATIVE_EFFECT_STATE","authority":"HIGH","rebuildable":false,"notes":"V14 lifecycle state/request/auth/attempt/outcome/reentry identity; REENTERED currently physical terminal-like state but must not alone mean DONE."},
+    {"object":"effect_lifecycle_events","physical":"UnifiedDB SQLite","role":"AUTHORITATIVE_EVENT_HISTORY","authority":"HIGH","rebuildable":false,"notes":"hash-verifiable effect transition log"},
+    {"object":"frank_presence_lease","physical":"UnifiedDB SQLite","role":"AUTHORITATIVE_EXECUTION_FENCE","authority":"HIGH","rebuildable":false,"notes":"V15 single-instance presence epoch"},
+    {"object":"frank_execution_context + frank_execution_continuity_events","physical":"UnifiedDB SQLite","role":"AUTHORITATIVE_EXECUTION_CONTINUITY","authority":"HIGH","rebuildable":false,"notes":"V16 execution identity and recovery state"},
+    {"object":"attention_episodes","physical":"UnifiedDB SQLite","role":"AUTHORITATIVE_GWT_EPISODE_EVIDENCE","authority":"MEDIUM_HIGH","rebuildable":false,"notes":"selection episode; activation itself is not truth/authority"},
+    {"object":"receiver_receipts","physical":"UnifiedDB SQLite","role":"AUTHORITATIVE_GWT_USE_RECEIPT","authority":"MEDIUM_HIGH","rebuildable":false,"notes":"addressable/delivered/reconstructed/used/local_effect distinctions"},
+    {"object":"causal_credit_receipts","physical":"UnifiedDB SQLite","role":"CAUSAL_CREDIT_RECEIPT","authority":"CONDITIONAL","rebuildable":false,"notes":"must be relationally bound to the same verified effect outcome; target_key alone is insufficient for terminal authority"},
+    {"object":"semantic_records","physical":"UnifiedDB SQLite","role":"AUTHORITATIVE_SEMANTIC_STATE","authority":"CONDITIONAL","rebuildable":false,"notes":"CURRENT record existence is insufficient proof that a specific effect caused/admitted the delta"},
+    {"object":"effect_execution_bindings/effect_reentry_bindings/effect_terminal_receipts","physical":"research-only V17 candidate tables","role":"CANDIDATE_EFFECT_CLOSURE_SUBSTRATE","authority":"HOLD","rebuildable":true,"notes":"not canonical migration; promotion requires target evidence plus relational causal closure"},
+    {"object":"effect_reentry_bindings_v17/effect_done_receipts_v17/effect_terminal_events_v17","physical":"additive V17 prototype tables","role":"CANDIDATE_LOCAL_TERMINALIZATION","authority":"HOLD","rebuildable":true,"notes":"SQL guards now bind exact V14 attempt/outcome and exact REENTERED hash; support/execution closure remains a separate requirement"},
+    {"object":"ClayGraph projections","physical":"derived sidecar/topology","role":"DERIVED_REBUILDABLE_INDEX","authority":"NONE","rebuildable":true,"notes":"use for topology/query acceleration/intervention handles; never source of truth/effect authority"},
+    {"object":"vector/activation/rank surfaces","physical":"derived/index/model sidecars","role":"ACTIVATION_OR_RETRIEVAL_INDEX","authority":"NONE","rebuildable":true,"notes":"rank/salience is not record truth or causal credit"},
+    {"object":"provider receipts/external service state","physical":"external","role":"EXTERNAL_ISOLATED_EVIDENCE","authority":"VERIFICATION_INPUT","rebuildable":false,"notes":"KEEP_ISOLATED; bind hashes/identity/provenance into UnifiedDB rather than pretending physical consolidation"}
+  ],
+  "physical_consolidation_decision":"KEEP_MIXED: logically unified semantic authority with authoritative SQLite state and derived/external sidecars; no evidence in this run justifies one physical engine for all modalities."
+}

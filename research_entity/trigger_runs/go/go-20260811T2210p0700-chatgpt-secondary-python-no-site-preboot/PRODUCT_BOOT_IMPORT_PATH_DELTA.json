@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2210p0700-chatgpt-secondary-python-no-site-preboot",
+  "status": "TEST_OBLIGATION_NO_CODE_CHANGE",
+  "oob_experiment": "NONE_ADDITIONAL",
+  "finding": "The no-site repair changes the production import topology as well as the attack surface. Product boot must not silently restore ambient site/CWD imports after V4 admission.",
+  "primary_evidence": [
+    {
+      "source": "Python 3.12 sys documentation",
+      "url": "https://docs.python.org/3.12/library/sys.html",
+      "finding": "The normally prepended script/current-directory path is considered potentially unsafe and is suppressed by -P; -I implies -P. A program may explicitly modify sys.path for its own purposes."
+    },
+    {
+      "source": "Python 3.12 runpy documentation",
+      "url": "https://docs.python.org/3.12/library/runpy.html",
+      "finding": "runpy.run_path on a simple script executes that file in a fresh namespace; only when the supplied path itself is a valid sys.path entry such as a directory/zip is it prepended to sys.path."
+    }
+  ],
+  "inference": "A production target executed as a simple script through the V4 run_path path cannot assume its repository/script directory is importable under -I -S. If the real Frank runtime imports sibling/project modules, the trusted launcher must establish an explicit, provenance-bound import root after admission or use another attested package/image layout. Re-enabling ambient site processing would reopen the class just falsified.",
+  "required_product_test": [
+    "Resolve the canonical production entrypoint and exact source/package identity first.",
+    "Start with the exact admitted Python executable and -I -S before any import-capable Frank Python code.",
+    "Add only an explicitly attested source/package root after V4 admission if real runtime imports require it; bind the path to accepted source/binary provenance.",
+    "Reject unexpected/mutable path entries and demonstrate that site/CWD/user-site are absent from the accepted import graph.",
+    "Run the real token API/runtime dependency graph, not only synthetic V17 and disposable UnifiedDB pair gates, under this topology.",
+    "Fail closed on source-root/package/hash drift and preserve a boot receipt of sys.executable, sys.flags, sys.path and admitted artifact identities."
+  ],
+  "strongest_counterhypothesis": "The final Frank executable/package may not require any repository-local Python import path at runtime, in which case an explicit source-root addition is unnecessary and should be omitted. Resolve this from the real product dependency graph rather than adding path machinery preemptively.",
+  "architecture_action": "NO_SPECULATIVE_LAUNCHER_PATCH_UNTIL_CANONICAL_ENTRYPOINT_RESOLVED",
+  "affected_work_packages": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ]
+}

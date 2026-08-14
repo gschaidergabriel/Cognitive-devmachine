@@ -1,0 +1,200 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CLAY-LIVE-STAGE-COVERAGE-ATTRIBUTION-TRUTH-20260811T085345Z",
+  "event_type": "LIVE_RESEARCH_FUSION_IMPULSE",
+  "status": "ROUTED_RESEARCH_ONLY_NO_PROMOTION",
+  "created_at_utc": "2026-08-11T08:53:45Z",
+  "actor": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "prior_notified_event_commit": "02935a9deb3f5e5b6d69d4503e7ef096c0dd9695",
+    "observed_head_before_write": "f668536108560e0432ff5357b65e7c41bde0e25b"
+  },
+  "intended_recipients": [
+    "Clay research center and evidence-ledger worker",
+    "F-V01-02 ClayCode compiler/runtime worker",
+    "F-V01-03 cognitive-loop and reward/memory worker",
+    "F-V01-04 UnifiedDB/ClayGraph provenance worker",
+    "F-V01-05 GWT/Hyperposition worker",
+    "separate Harness/review worker; no Frank self-Harness mutation"
+  ],
+  "evidence_families": [
+    {
+      "family_id": "E-CLAYCODE-SURFACE-NEGATION-20260811",
+      "classification": "OPEN_UNMERGED_AUTHOR_SESSION_SAME_LINEAGE_REVERIFICATION",
+      "canonical_commit": "53c85d379e4e97708011c35c8d1f692d49cd951d",
+      "supervisor_commits_collapsed_not_extra_evidence": [
+        "12dc1206662d3f7762c4a51aeafa088a3e6d3cb4",
+        "3f813a6de7646807d73395b5655dca5a957ca6e9",
+        "f668536108560e0432ff5357b65e7c41bde0e25b"
+      ],
+      "canonical_report": {
+        "path": "research_entity/reports/20260811T1615p0700_CLAYCODE_SURFACE_90_PERCENT_AND_NEGATION_DEFECT.md",
+        "blob": "7d46d9dd2f70e320ab865e7261d6ab9c1999bd45"
+      },
+      "target_pr": {
+        "id": "gschaidergabriel/Dr.-Unterweger#314",
+        "url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/314",
+        "head": "e3e31680ab28c145cda9eb9cc687790b178da4fd",
+        "state": "OPEN_UNMERGED_STACKED_ON_PR310",
+        "combined_status_contexts_observed": 0,
+        "grammar_blob": "dfe38faf8536161083f08905752e7d8eb90461e8",
+        "syntax_blob": "a71bf30718feba0753663d76f9dc9b5e11602971",
+        "evaluator_blob_unchanged_from_pr310": "0cc53af49bc44ad9b6d10238df55398fc0fb2db8"
+      },
+      "positive_update": [
+        "Reported corpus parse/lowering acceptance increased from 3/40 to 36/40 sources while four unevidenced/conflicting sources remain rejected.",
+        "A minimal executable counterexample showed that PR310 silently erased anonymous literal !: before the fix f(true)=True and f(false)=False; PR314 names the token and aliases the rule so Not is preserved, yielding False and True.",
+        "BOOLEAN now uses a word boundary, preventing identifiers such as false_alarm_rate from being split at false.",
+        "Each syntax increment reportedly retained baseline parse structure and a sampled decide_effect differential gate with zero mismatches."
+      ],
+      "critical_qualification": [
+        "36/40 is source parse/AST-lowering coverage, not semantic-analysis or executable evaluator coverage.",
+        "The unchanged evaluator imports/handles only Literal, Path, Not, BoolOp, Compare, Call and the old statement set, while the new syntax blob can emit arithmetic, collections, lambdas, indexing, method chains, with-update, broadcast, for, match, pass, if-else and multiple new declaration nodes; unsupported executed nodes fail closed.",
+        "The 200576-request gate never exercised ! because frank_effects.clay spells the relevant condition as == false. Request-count coverage did not imply construct coverage.",
+        "No GitHub combined-status context or separately inspectable target-host receipt was observed at the exact PR314 head."
+      ],
+      "independence_boundary": "Coordinating-session reruns and delegated models share implementation, corpus and project lineage. Classify as same-lineage re-verification, not independent replication."
+    },
+    {
+      "family_id": "E-LOOPCORE-REENTRY-BEHAVIOR-20260811",
+      "classification": "SYNTHETIC_SANDBOX_PLUS_SAME-BYTES_TARGET-REEXECUTION_REPORTED",
+      "canonical_commit": "53c85d379e4e97708011c35c8d1f692d49cd951d",
+      "l0": {
+        "report_path": "research_entity/reports/20260811T1502p0700_LOOPCORE_L0_REENTRY_LESION_BEHAVIORAL_VALUE.md",
+        "report_blob": "224941c04dc9f8cb5644ef2d2f0ce247f6963a13",
+        "event_path": "research_entity/frank_v0_1/work_events/20260811T1502p0700_loopcore_l0_reentry_lesion_sandbox.json",
+        "event_blob": "e7108fda20dcdec5253bb69c9d68836b05690abf",
+        "design": "30 seeds, 60 cycles, four actions, reward mapping switch at cycle 30.",
+        "result": "TRUTHFUL mean reward 0.601 versus 0.275 for SHUFFLED, NO_REENTRY and TRUTHFUL_SABOTAGED; truthful won 29/30 with one tie and zero inversions; exact sign p approximately 2.9e-8.",
+        "preserved_limits": [
+          "All three broken arms were bitwise identical because a fixed first-action fallback collapsed the intended lesions.",
+          "recovery_cycles_to_0.8 is invalid because its rolling window includes pre-switch observations; the report instead notes 0.724 to 0.486.",
+          "Target-host replay used the same code and seeds and was reported bit-identical; it is cross-host reproduction, not an independent experiment."
+        ]
+      },
+      "l1_l2": {
+        "report_path": "research_entity/reports/20260811T1516p0700_LOOPCORE_L1_L2_MISINFORMATION_COST_AND_SABOTAGE_EQUIVALENCE.md",
+        "report_blob": "e92ddec088344d1a17f4939a128b76d465b23937",
+        "event_path": "research_entity/frank_v0_1/work_events/20260811T1516p0700_loopcore_l1_l2_misinformation_cost.json",
+        "event_blob": "4676d0c23aa58476af21f9e61b38fccb8945edd4",
+        "l1_null": "Forced exploration plus a forgiving window did not distinguish broken arms because fixed-priority A0 remained permissive without own-bucket samples; preserved as N-LOOPCORE-L1-001.",
+        "l2_result": "TRUTHFUL 0.581 plus/minus 0.050; NO_REENTRY 0.296 plus/minus 0.045; TRUTHFUL_SABOTAGED 0.296 plus/minus 0.045 and exactly equal to NO_REENTRY; SHUFFLED 0.247 plus/minus 0.175. NO_REENTRY minus SHUFFLED was 4.9 percentage points; two-sided exact sign p 0.0161248.",
+        "interpretation": "Structurally invalid or hash-broken reentry collapsed to no information, while structurally acceptable but action-misattributed feedback was behaviorally worse and high-variance."
+      },
+      "critical_qualification": [
+        "The synthetic binding repurposes real host intrinsic names for unrelated experiment predicates, so contract names do not attest bound semantics; this is sandbox evidence only.",
+        "Raw code/results are reported in session scratch and VPS temporary storage rather than durable canonical blobs. The canonical reports/events preserve summaries, not independently inspectable raw run lineage.",
+        "The L0 event still says sandbox-only while a later report addendum claims target reexecution, creating a report/event state mismatch.",
+        "Cryptographic/hash validity establishes byte binding, not the truth of action/outcome attribution. A same-authority producer can recompute a valid hash over wrong semantics."
+      ],
+      "scope_boundary": "No live FRANK, training, consciousness, emergence, real GWT competition, Hyperposition, ClayGraph or UnifiedDB learning claim follows."
+    },
+    {
+      "family_id": "E-LARK-TREE-CONSTRUCTION-PRIMARY-20260811",
+      "classification": "OFFICIAL_PRIMARY_DOCUMENTATION_NOT_PROJECT_EXECUTION",
+      "sources": [
+        {
+          "url": "https://lark-parser.readthedocs.io/en/stable/tree_construction.html",
+          "checked_utc": "2026-08-11T08:53:45Z",
+          "claim": "Lark filters unnamed literals by default and conditionally inlines ? rules when one child remains after filtering; named terminals are retained."
+        },
+        {
+          "url": "https://lark-parser.readthedocs.io/en/stable/classes.html",
+          "checked_utc": "2026-08-11T08:53:45Z",
+          "claim": "keep_all_tokens defaults false and controls automatic punctuation-token removal."
+        }
+      ],
+      "fusion": "The documented tree-shaping rules directly predict the PR310 silent-negation mechanism; they support the root-cause explanation but do not independently execute the project patch."
+    }
+  ],
+  "concepts": [
+    {
+      "id": "H-STAGE-COVERAGE-VECTOR-001",
+      "concept": "StageCoverageVector",
+      "hypothesis": "Language coverage must be reported per construct and source as a vector <lexed, parsed, AST-preserved, analyzed, admitted, executed, differentially checked, mutation-killed>; a scalar percentage must not cross stage boundaries.",
+      "counterhypothesis": "Parse/AST corpus coverage is a useful scalar if every newly representable node fails closed until later stages support it.",
+      "current_evidence": "PR314 raises parse/lowering acceptance to 36/40 while evaluator.py remains the PR310 blob and rejects many newly emitted node classes.",
+      "decisive_test": [
+        "Generate at least one positive and one semantic mutant for every grammar alternative and AST class.",
+        "Record the highest completed stage for each cell and publish numerator/denominator per stage.",
+        "Attempt admission/execution of every newly lowered node; unsupported nodes must be explicit expected refusals, never counted as executable coverage.",
+        "Block promotion whenever a user-facing scalar is not stage-qualified."
+      ]
+    },
+    {
+      "id": "H-SEMANTIC-TOKEN-CONSERVATION-001",
+      "concept": "SemanticTokenConservation",
+      "hypothesis": "Every semantics-bearing operator token must produce exactly one typed semantic node or a declared, tested desugaring receipt; silent erasure is a correctness failure even when corpus request differentials pass.",
+      "counterhypothesis": "Token conservation is too syntactic because a correct frontend may normalize or desugar operators without preserving a one-to-one node.",
+      "synthesis": "Permit many-to-one or zero-node lowering only through an explicit desugaring map whose before/after semantics are mutation-tested.",
+      "decisive_test": [
+        "Operator-mutate !, not, unary -, and/or, in, comparisons, with-update and broadcast on minimal executable witnesses.",
+        "Compare tokens, parse trees, lowered AST and behavior; require each mutation to change a declared observable or be proven equivalent.",
+        "Add the historical anonymous-! grammar as a must-fail regression fixture."
+      ]
+    },
+    {
+      "id": "H-ATTRIBUTION-TRUTH-GATE-001",
+      "concept": "AttributionTruthGate",
+      "hypothesis": "A reentry receipt is safe for learning only when syntactic/hash validity, origin authority, subject/action attribution, temporal alignment, semantic truth and consumer use are separately verified; hash validity alone can authenticate misinformation.",
+      "counterhypothesis": "If the sole receipt signer is a trusted control plane and its schema derives action/outcome attribution from protected state, valid provenance is sufficient.",
+      "current_evidence": "In L2, malformed/hash-broken reentry equaled NO_REENTRY, but SHUFFLED feedback retained enough structure to pass and reduced reward by 4.9 points with high variance.",
+      "decisive_test": [
+        "Using the currently authorized signing path, recompute structurally valid receipts over deliberately wrong action/outcome attribution.",
+        "Hold seeds, actions and availability constant; compare truthful, invalid-hash, valid-misattributed and no-reentry arms.",
+        "Require attribution lookup against protected selected-action/outcome state before learning admission.",
+        "If valid-misattributed receipts are accepted and degrade behavior, falsify provenance-validity-equals-truth."
+      ]
+    },
+    {
+      "id": "H-RECEIPT-STATE-MONOTONICITY-001",
+      "concept": "ReceiptStateMonotonicity",
+      "hypothesis": "Later execution evidence must create an immutable new event or explicit supersession edge; a mutable report addendum must not silently upgrade an earlier sandbox-only event.",
+      "counterhypothesis": "A timestamped, hash-bound report addendum is sufficient when the original event remains historically correct.",
+      "decisive_test": [
+        "Graph-check every report addendum against linked event status, target, artifact hashes and execution identity.",
+        "Require a new REEXECUTION event carrying exact code/result hashes and a supersedes edge to the sandbox event.",
+        "Treat unmatched addenda as author-reported evidence, not canonical target execution closure."
+      ]
+    }
+  ],
+  "preserved_negative_and_null_results": [
+    "PR314 is open, unmerged and has zero observed combined-status contexts.",
+    "Four of forty corpus sources remain deliberately rejected.",
+    "Thirty-six parsed/lowered sources do not imply thirty-six executable sources.",
+    "The decide_effect differential gate did not exercise unary negation and therefore did not detect its silent deletion.",
+    "L1 failed to distinguish lesion types because the policy collapsed the arms; this null is structural evidence, not absence of a misinformation effect.",
+    "L0 SHUFFLED, NO_REENTRY and sabotage equality is a policy-collapse artifact; L2 later separates SHUFFLED from no information.",
+    "The L0 recovery-cycles metric is invalid and must not be reused.",
+    "Loop target reexecutions use the same bytes and seeds and do not constitute independent replication.",
+    "Raw loop run artifacts are not durable canonical repo objects.",
+    "No canonical semantic promotion, work-package completion, training, Harness mutation or live-FRANK execution occurred."
+  ],
+  "requested_reentry": [
+    "ClayCode worker: publish the StageCoverageVector and execute/fail-close one witness per new AST class; add construct-level operator mutation before merge.",
+    "ClayCode reviewer: treat PR310 as blocked without the PR314 negation fix, then independently reexecute the exact stacked head and emit target/CI receipts.",
+    "Loop/GWT worker: run the valid-hash-but-wrong-attribution adversary and separate truth, validity and consumer-use gates.",
+    "UnifiedDB/ClayGraph worker: bind selected action, observed outcome, episode and receiver-use to protected records rather than caller-supplied semantic labels.",
+    "Evidence worker: issue a new immutable target-reexecution event for the L0/L2 addenda with durable code/result hashes; preserve the stale-event mismatch until closed.",
+    "Harness reviewer: independently review only; do not mutate Frank's protected Harness."
+  ],
+  "authority_boundary": {
+    "code_executed_by_this_event": false,
+    "target_repo_mutated": false,
+    "canonical_room_event_created": true,
+    "harness_mutated": false,
+    "external_effect": false,
+    "canonical_semantics_promoted": false,
+    "work_package_promoted": false,
+    "frank_v0_1_finished": false,
+    "training_run": false
+  }
+}

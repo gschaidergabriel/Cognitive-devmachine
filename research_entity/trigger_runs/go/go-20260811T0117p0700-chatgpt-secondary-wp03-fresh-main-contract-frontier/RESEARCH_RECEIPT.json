@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0117p0700-chatgpt-secondary-wp03-fresh-main-contract-frontier",
+  "trigger": "go",
+  "status": "COMPLETED_USEFUL_STOP",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "identity_lock": {
+    "worker_is": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "Frank v0.1",
+  "program_stage": "FRANK_V0_1",
+  "primary_work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "coordination": {
+    "initial_lane_considered": "F-V01-09 presence/execution-generation effect fence",
+    "collision_detected": true,
+    "overlapping_product_prs": [199, 204, 228, 238, 240],
+    "reroute": "WP03 fresh-main real-Frank frontend/TypedIR integration",
+    "later_wp04_overlap_detected": [111, 113, 118],
+    "duplicate_checker_built": false
+  },
+  "hypothesis": "After the already target-verified generic/relational angle-token repair and declaration-aware constructor-alias repair are combined on fresh main, current claycode/frank_effects.clay reaches current WP03 TypedIR without case-insensitive nominal semantics or Any/dynamic fallback.",
+  "strongest_counterhypotheses": [
+    "A further lexical/generic ambiguity still blocks the real Frank source after the repairs are combined.",
+    "Legacy upper-case constructor aliases collide with explicit nominal declarations and silently rewrite user-defined types.",
+    "The grammar is parser-strategy-sensitive even when the production LALR parse succeeds.",
+    "The next blocker is not parsing but unresolved module/external nominal/host-contract binding before WP04 type/effect admission."
+  ],
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_pr": 245,
+  "product_branch": "chatgpt/go-wp03-fresh-main-parser-diversity-20260811",
+  "product_head": "072f6d1233decb4bd5772b8843bc7a80391cd638",
+  "fresh_main_target_run": {
+    "workflow_run_id": 31418150523,
+    "job_id": 93552052965,
+    "tested_merge_sha": "be772078ac13e54a2a442725bd1563df670d10cd",
+    "main_parent": "2bb92d0675616c468bbbc90c31a10f775ad565db",
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "conclusion": "SUCCESS",
+    "artifact_id": 9074239813,
+    "artifact_sha256": "4bf2d535b4d09eb006c93960d0f7c54e16f0272ada78051589a63e3cf86db00c"
+  },
+  "normal_results": {
+    "angle_token_regression": {
+      "status": "PASS_REL_OP_GENERIC_CONTEXT_DISAMBIGUATION",
+      "strict_lalr": true,
+      "real_frank_effects_structured_parse": "PASS",
+      "real_semantic_hash": "23281a448af0cbbb3d574111d2aadf93589b3423580be0b2e004238e44efb052"
+    },
+    "declaration_aware_constructor_aliases": {
+      "status": "PASS_DECLARATION_AWARE_ALIAS_REGRESSION_CANDIDATE",
+      "explicit_collision_declarations_shadow_aliases": ["SET", "OPTION", "ORDERED", "LIST", "MAP", "RESULT"],
+      "unresolved_legacy_aliases_remain_supported": true,
+      "nested_resolution_independent": true,
+      "external_type_mentions_are_not_declarations": true,
+      "case_insensitive_nominals": false,
+      "unknown_to_any": false
+    },
+    "real_frank_structured_to_typedir": {
+      "status": "PASS_STRUCTURED_FRONTEND_REAL_FRANK_TO_TYPEDIR_CANDIDATE",
+      "classification": "REAL_FRANK_STRUCTURED_TO_TYPEDIR_PASS",
+      "function_count": 13,
+      "class_decl_count": 16,
+      "field_count": 80,
+      "invariant_count": 22,
+      "use_decl_count": 2,
+      "typed_ir_sha256": "821ccaab1a0b4d699ae6e6748eec5d16736c3e80d34568a217688d78cfd68371",
+      "frontend_semantic_hash": "23281a448af0cbbb3d574111d2aadf93589b3423580be0b2e004238e44efb052",
+      "source_rewritten": false,
+      "promotion": "NONE"
+    },
+    "external_contract_frontier": {
+      "status": "PASS_EXTERNAL_CONTRACT_FRONTIER_EXTRACTED",
+      "imports": ["frank.hive", "frank.memory"],
+      "call_occurrence_count": 37,
+      "unique_call_target_count": 27,
+      "external_call_target_count": 23,
+      "external_constructor_candidates": ["DoneReceipt", "EffectAttempt", "EffectOutcomeState", "EffectReceipt", "VerifiedEffectReceipt"],
+      "external_operation_candidates": [
+        "atomic_effect_reservation_with_optional_confirmation_consumption",
+        "authorization_current",
+        "authorization_hash_current",
+        "capability_current",
+        "confirmation_current",
+        "confirmation_nonce_used",
+        "final_security_gate",
+        "independently_observe_effect",
+        "node_can_use",
+        "now",
+        "policy_relevant_effect_projection",
+        "reservation_current",
+        "reservation_hash_current",
+        "runtime_effect",
+        "semantic_hash",
+        "trusted_runtime_derive",
+        "trusted_runtime_effect_authorization",
+        "verb_for"
+      ],
+      "explicit_repo_module_definition_search": {
+        "frank.hive": "NOT_FOUND",
+        "frank.memory": "NOT_FOUND",
+        "runtime_effect": "NOT_FOUND"
+      },
+      "resolution_claimed": false,
+      "signature_inference_used": false
+    }
+  },
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "ALGORITHM_DIVERSE_AST_CONVERGENCE",
+    "production_parser_changed": false,
+    "grammar_changed": false,
+    "result": "MIXED_NEGATIVE_COUNTEREXAMPLE",
+    "full_real_frank": {
+      "production": "LALR/contextual",
+      "adversarial": "Earley/dynamic",
+      "explicit_ambiguity": false,
+      "canonical_ast_equal": true,
+      "canonical_bytes_equal": true,
+      "semantic_hash_equal": true,
+      "semantic_hash": "23281a448af0cbbb3d574111d2aadf93589b3423580be0b2e004238e44efb052"
+    },
+    "synthetic_micro_generic_relational": {
+      "adversarial": "Earley/dynamic_complete",
+      "explicit_ambiguity": true,
+      "canonical_ast_equal": false,
+      "semantic_hash_equal": false,
+      "disposition": "NEGATIVE_GRAMMAR_FALSIFIER; NO_PRODUCTION_CHANGE"
+    },
+    "full_corpus_dynamic_complete": {
+      "disposition": "RESOURCE_NEGATIVE_SUPERSEDED_BY_BOUNDED_DYNAMIC",
+      "note": "The first target run made exhaustive terminal splitting materially more expensive on the full corpus; it was bounded rather than promoted as a production strategy."
+    }
+  },
+  "external_knowledge": {
+    "source_policy": "PRIMARY_OR_OFFICIAL_ONLY_FOR_TECHNICAL_CLAIMS",
+    "findings": [
+      "Lark documents LALR contextual lexing as parser-state constrained and Earley dynamic/dynamic_complete as a distinct, more general and potentially much slower family; this motivated parser-algorithm diversity as a falsifier rather than a production replacement.",
+      "Rust reference name-resolution and MLIR named type/dialect semantics support explicit declaration/name resolution rather than indiscriminate global case-insensitive string rewriting; executable Frank evidence remained the promotion authority."
+    ]
+  },
+  "negative_results_and_limits": [
+    "The synthetic generic+relational micro-program remains explicitly ambiguous under Earley dynamic_complete even though the real Frank corpus converges across LALR and bounded Earley dynamic.",
+    "Earley dynamic_complete is not resource-competitive on the full real Frank corpus in this experiment.",
+    "The first external-frontier diagnostic revision extracted literal 'use' rather than module identities; this diagnostic bug was repaired and target-retested before this receipt.",
+    "No explicit current product-repo definitions were found for modules frank.hive or frank.memory, or for runtime_effect; therefore no import/host-contract binding is claimed.",
+    "No WP03/WP04 package promotion, effect-authority promotion, canonical Frank runtime mutation, or final-training authorization is claimed."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_SUPPORTED_BY_TARGET_VPS_FOR_FRONTEND_BOUNDARY_ONLY",
+    "supported": [
+      "Current real frank_effects structured surface can reach current WP03 TypedIR on fresh main with strict LALR and explicit declaration-aware legacy constructor compatibility.",
+      "Explicit declarations outrank compatibility aliases; case-insensitive nominal semantics and unknown-to-Any fallback remain rejected.",
+      "The next integration boundary is explicit module/external nominal/host-contract binding, not further parser patching."
+    ],
+    "not_supported": [
+      "General grammar unambiguity under all parser/lexer strategies.",
+      "WP04 type/effect acceptance of the full real Frank effect module.",
+      "Runtime/provider execution authority from any compiler receipt."
+    ]
+  },
+  "test_obligations": [
+    "Retain the synthetic generic+relational dynamic_complete ambiguity case as a grammar counterexample/regression witness; do not let it silently disappear.",
+    "Resolve frank.hive/frank.memory and every external nominal/call target only from explicit module or host-contract evidence.",
+    "Feed the resolved exact source signatures/contracts into existing WP04 admission/runtime-binding lanes (#111/#113/#118) rather than building a duplicate checker.",
+    "Fail closed for unresolved effectful call contracts and preserve orthogonal code-trust versus ingress/value-provenance witnesses.",
+    "Refresh main/overlap before any merge or promotion of PR #245."
+  ],
+  "next_frontier": "Materialize or identify the authoritative module/host-contract source for frank.hive, frank.memory and the 23 external call targets; then integrate the fresh-main real-Frank TypedIR with existing WP04 signature/contract/runtime-binding gates. If no authoritative contract source exists, create an explicit owner-reviewed contract artifact rather than inferring signatures from call names.",
+  "authority": "NONE",
+  "execution_authority": "NONE",
+  "training_authorized": false
+}

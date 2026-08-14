@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "GO-ROUTE-MODE-HYSTERESIS-CANARY-20260810",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "evidence_class": "DETERMINISTIC_SYNTHETIC_CONTROL_CANARY_ONLY",
+  "exactly_one_out_of_box_experiment_for_this_run": true,
+  "subject": "route-plan mode chattering near dependency-completeness safety threshold",
+  "hypothesis": "A fail-closed asymmetric hysteresis policy can reduce TARGETED_DELTA/DENSE_FANOUT mode thrashing without permitting targeted routing below the declared completeness safety threshold.",
+  "strongest_counterhypothesis": "Hysteresis merely hides instability by spending substantially more dense-fanout cost, so it is not Pareto-superior and may be unnecessary if route-plan recomputation is cheap.",
+  "parent_refs": [
+    "research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay",
+    "research_entity/global/CLAY_LIVE_FUSION_MESH_V3_DUAL_PLANE_CANDIDATE.clay"
+  ],
+  "external_analogue_refs": [
+    "https://arxiv.org/abs/2603.27775",
+    "https://arxiv.org/abs/2602.01524",
+    "https://www.usenix.org/conference/osdi25/presentation/frank"
+  ],
+  "method": {
+    "seed": 20260810,
+    "steps": 500,
+    "completeness_trace": "bounded deterministic multi-frequency oscillation around 0.90 with fixed-seed noise plus one degradation burst and one recovery burst",
+    "baseline_policy": "TARGETED iff completeness >= 0.90 else DENSE",
+    "hysteresis_policy": "fail closed TARGETED->DENSE immediately below 0.90; DENSE->TARGETED only at completeness >= 0.95",
+    "mode_cost_model": {"TARGETED": 3.0, "DENSE": 9.0},
+    "rollback": "remove this control candidate; retain v3 route-plan rules unchanged"
+  },
+  "results": {
+    "baseline": {
+      "switches": 62,
+      "switch_rate": 0.12424849699398798,
+      "weighted_send_cost": 2868.0,
+      "average_send_cost": 5.736,
+      "unsafe_targeted_steps": 0,
+      "targeted_steps": 272,
+      "dense_steps": 228
+    },
+    "fail_closed_hysteresis": {
+      "switches": 23,
+      "switch_rate": 0.04609218436873747,
+      "weighted_send_cost": 4068.0,
+      "average_send_cost": 8.136,
+      "unsafe_targeted_steps": 0,
+      "targeted_steps": 72,
+      "dense_steps": 428
+    },
+    "delta": {
+      "switch_reduction": 39,
+      "switch_reduction_fraction": 0.6290322580645161,
+      "weighted_send_cost_increase_fraction": 0.41841004184100417
+    }
+  },
+  "adjudication": "SUPPORTED_AS_TEST_OBLIGATION_NOT_ARCHITECTURE_PROMOTION",
+  "interpretation": "Asymmetric hysteresis materially reduces route-mode chattering in this canary while preserving fail-closed completeness, but the modeled network-cost penalty is large. Route-mode switch rate and re-entry hysteresis width should therefore be measured in real-repo v2/v3 replay rather than silently hard-coded.",
+  "architecture_delta": "NO_PROMOTION; add route_mode_switch_rate, dwell_time and hysteresis-width sweep to the existing live-fusion real-replay/fault matrix if execution cost permits.",
+  "affected_branches": {
+    "clayresearch": "DELTA_TEST_OBLIGATION",
+    "claygraph": "DELTA_ROUTE_COMPLETENESS_CONTROL",
+    "harness": "DELTA_REAL_REPLAY_METRIC",
+    "unifieddb": "NO_MATERIAL_CHANGE",
+    "gwt": "NO_MATERIAL_CHANGE",
+    "frank": "NO_MATERIAL_CHANGE",
+    "claycode": "NO_MATERIAL_CHANGE",
+    "hyperposition": "NO_MATERIAL_CHANGE",
+    "emergenz": "NO_MATERIAL_CHANGE"
+  },
+  "controls": [
+    "connectivity does not mint truth",
+    "route stability does not mint evidence or effect authority",
+    "no architecture promotion from synthetic evidence",
+    "Frank remains separate research subject"
+  ]
+}

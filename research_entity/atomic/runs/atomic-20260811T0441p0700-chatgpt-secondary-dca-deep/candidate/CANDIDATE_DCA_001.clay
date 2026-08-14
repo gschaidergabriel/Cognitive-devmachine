@@ -1,0 +1,105 @@
+module atomic.dca.v0_1
+version "0.1-research-candidate"
+status RADICAL_CANDIDATE_NOT_PROMOTED
+
+// Distinguishing Context Assembly (DCA-001)
+// Physical selector may be ordinary weighted set/test cover over current UnifiedDB/ClayGraph views.
+// Semantic novelty candidate is the typed model-visible boundary.
+
+enum MissingSemantics { PRESENT_IN_ASSEMBLY, CERTIFIED_ABSENT_FOR_QUERY_SCOPE, NOT_LOADED_OR_INCOMPLETE_UNKNOWN, STALE_CERTIFICATE }
+enum AssemblyDecision { READY, EXPAND, ABSTAIN, REFRESH }
+
+record MaterialDistinction {
+  left:HypothesisRef
+  right:HypothesisRef
+  consequence:DecisionOrActionRef
+  penalty:Float
+}
+
+record DistinctionWitness {
+  protected:Set<MaterialDistinction>
+  unresolved:Set<MaterialDistinction>
+  selector_hash:Hash
+  evidence_refs:Set<ProvenanceRef>
+}
+
+record QueryCompletenessWitness {
+  query_scope:QueryRef
+  completeness:CERTIFIED_COMPLETE|PARTIAL|UNKNOWN
+  source_semantic_epoch:Epoch
+  source_state_epoch:Epoch
+  source_projection_hash:Hash
+  evidence_refs:Set<ProvenanceRef>
+}
+
+record CurrentnessWitness {
+  semantic_epoch:Epoch
+  state_epoch:Epoch
+  selector_hash:Hash
+  dependency_hash:Hash
+  projection_hash:Hash
+}
+
+record ContextPayload {
+  hard_witnesses:Set<EvidenceRef>
+  selected_evidence:Set<EvidenceRef>
+  token_cost:Int
+  provenance_roots:Set<ProvenanceRef>
+}
+
+record DistinguishingContextAssembly {
+  payload:ContextPayload
+  distinction:DistinctionWitness
+  completeness:Set<QueryCompletenessWitness>
+  currentness:CurrentnessWitness
+  decision:AssemblyDecision
+  version:Hash
+}
+
+rule hard_witnesses includes current_identity + scoped_user_intent + required_authority_or_recovery_constraints
+rule selector may_use conventional_weighted_set_cover
+rule selector objective = minimize token_cost while preserving material_decision_distinctions + hard_witnesses
+rule unresolved_material_distinction + no_budget -> EXPAND|ABSTAIN
+rule missing_evidence != absent_evidence
+rule certified_absent(query) requires matching QueryCompletenessWitness.CERTIFIED_COMPLETE
+rule certified_absent(query) requires CurrentnessWitness matches current semantic_epoch + state_epoch + selector_hash + dependency_hash
+rule stale_completeness -> STALE_CERTIFICATE -> REFRESH
+rule incomplete_or_unknown_scope + no_present_evidence -> NOT_LOADED_OR_INCOMPLETE_UNKNOWN
+rule NOT_LOADED_OR_INCOMPLETE_UNKNOWN cannot_lower_to false
+rule NOT_LOADED_OR_INCOMPLETE_UNKNOWN cannot_lower_to absent
+rule STALE_CERTIFICATE cannot_lower_to absent
+rule DistinguishingContextAssembly cannot_mint truth
+rule DistinguishingContextAssembly cannot_mint self_identity
+rule DistinguishingContextAssembly cannot_mint user_intent
+rule DistinguishingContextAssembly cannot_mint effect_authority
+rule ClayGraph_activation cannot_mint completeness
+rule Hyperposition_branch_omission cannot_imply branch_refutation
+rule selector_score cannot_replace provenance
+rule answer_negative_claim requires PRESENT_counterevidence_or current QueryCompletenessWitness.CERTIFIED_COMPLETE
+rule context_reuse requires current dependency_hash + selector_hash compatibility
+
+observe assembly.token_cost
+observe assembly.protected_distinction_fraction
+observe assembly.unresolved_distinctions
+observe assembly.completeness_coverage
+observe assembly.refresh_count
+observe assembly.overclosure_attempts
+observe assembly.false_abstention
+observe assembly.context_reuse
+
+ablation remove_distinction_witness
+ablation remove_query_completeness_witness
+ablation remove_currentness_witness
+ablation replace_selector_with_topk
+ablation replace_dca_with_conventional_metadata_bundle
+
+failure BUDGET_EXHAUSTED -> EXPAND|ABSTAIN
+failure PARTIAL_SCOPE -> UNKNOWN
+failure STALE_VIEW -> REFRESH
+failure PROVENANCE_MISMATCH -> ABSTAIN
+
+invariant omission_never_equals_absence
+invariant current_query_completeness_required_for_negative_closure
+invariant hard_identity_intent_authority_fields_never_sacrificed_for_relevance_score
+invariant unresolved_alternatives_survive_context_truncation_as_unresolved
+invariant assembly_selection_has_zero_effect_authority

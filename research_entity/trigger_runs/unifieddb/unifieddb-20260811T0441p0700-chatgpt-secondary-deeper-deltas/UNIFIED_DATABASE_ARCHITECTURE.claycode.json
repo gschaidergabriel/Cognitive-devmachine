@@ -1,0 +1,71 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "status":"CANDIDATE_NOT_PROMOTED",
+  "semantic_contract":{
+    "canonical_authority":"UnifiedDB typed semantic state + append/replay commitments",
+    "derived_topology":"ClayGraph",
+    "truth_exclusions":["activation","embedding similarity","retrieval rank","unadmitted projection payload"],
+    "replay_clock":"explicit as_of_valid_time + semantic epoch/root",
+    "lineage_identity":"canonical root chain + selected lineage + external rollback floor",
+    "selection_identity":"SelectionReceiptV2 independent from record provenance"
+  },
+  "architectures":[
+    {
+      "id":"A_SPECIALIZED_BASELINE",
+      "layout":"independent canonical/graph/index stores with explicit coordination",
+      "strengths":["small failure domains","domain-specific tuning"],
+      "risks":["torn multi-store updates","IPC/serialization","complex recovery"],
+      "promotion_role":"baseline only"
+    },
+    {
+      "id":"B_LOGICALLY_UNIFIED_SPECIALIZED",
+      "layout":"one typed ClayCode query/transaction API over specialized physical stores",
+      "strengths":["semantic/type unification without forced colocation","portable physical lowerings"],
+      "risks":["coordination remains external to one engine","selection/freshness receipts mandatory"],
+      "promotion_role":"required logical contract"
+    },
+    {
+      "id":"C_CANONICAL_PLUS_OUTBOX_DERIVED",
+      "layout":"UnifiedDB canonical commit + durable projection outbox; ClayGraph/FTS/vector replay asynchronously",
+      "strengths":["canonical atomicity","derived state rebuildable","works with WAL profile"],
+      "risks":["temporary projection lag","write amplification","outbox/replay complexity"],
+      "historical_mechanism_evidence":"U2: 1200 constructed trials, 0 final mismatch after replay vs 533 torn unsynchronized; outbox write p50 slower than monolith",
+      "promotion_role":"primary WAL-compatible candidate"
+    },
+    {
+      "id":"D_DELETE_ATTACH_BOUNDED_ATOMIC_PROJECTION",
+      "layout":"file-backed UnifiedDB main + ClayGraph ATTACH, rollback journal DELETE/FULL, one bounded cross-file transaction for semantic head + projection admission/batch",
+      "strengths":["SQLite cross-file atomicity contract outside WAL","no physical monolith required"],
+      "risks":["writer serialization","super-journal/fsync cost","larger lock scope"],
+      "local_proxy":"rollback across both files observed; separate parallel run measured attached p50 ~1.48x two separate commits",
+      "promotion_role":"current-system target A/B candidate"
+    },
+    {
+      "id":"E_PRIVATE_FIXED_WAL_ASYNC_DERIVED",
+      "layout":"verified fixed private SQLite + WAL for canonical store; ClayGraph remains async/rebuildable with StateProjectionCertificate",
+      "strengths":["reader/writer concurrency","lower expected fsync frequency"],
+      "risks":["ATTACH is not crash-atomic across files in WAL","explicit lag/replay required","private runtime loader/source provenance"],
+      "promotion_role":"candidate pending exact target private-SQLite gate"
+    },
+    {
+      "id":"F_PHYSICAL_MONOLITH",
+      "layout":"canonical semantic state + graph/index structures physically consolidated into one engine/file where feasible",
+      "strengths":["single-engine transaction boundary","lowest coordination surface in some workloads"],
+      "risks":["common-mode crash/corruption radius","write amplification","contention","derived data gains accidental operational coupling"],
+      "historical_mechanism_evidence":"U2 in-process mixed-read monolith did not materially beat same-process logical separate stores; monolith had lower write-path cost than outbox in the synthetic mechanism test",
+      "promotion_role":"benchmark-only; no default preference"
+    }
+  ],
+  "new_receipt_layers":[
+    "MaterializationPairCertificate: executable schema/source compatibility",
+    "LiveSchemaAttestation: actual sqlite_schema identity",
+    "CanonicalRootChain: dynamic authoritative semantic identity",
+    "StateProjectionCertificate: dynamic derived projection identity/freshness",
+    "SelectionReceiptV2: candidate/ranker/index/filter provenance",
+    "SnapshotManifestV2: consistent recovery image identity",
+    "ExternalRecoveryFloor: rollback-domain-independent monotonic admission"
+  ],
+  "decision_law":"correctness/replay/provenance/selection/recovery first; among passing architectures choose physical lowering by target p50/p95/p99, concurrency, write amplification, fsync/io, RSS/CPU, projection lag and rebuild time",
+  "promotion":"HOLD"
+}

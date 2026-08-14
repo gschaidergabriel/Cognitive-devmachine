@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0336p0700-gpt56sol-sibling-genesis-lineage",
+  "research_repo_head_observed_before_write": "b82f498d084e23a3f8ef3bc9b17ca155cdbb8d21",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_included": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+  "candidate_branch": "chatgpt/go-lineage-admission-v3-20260812",
+  "candidate_head": "6d12a27a70bdfa4cacde08b87de7262c432fbb09",
+  "pull_request": 458,
+  "pull_request_state": "OPEN_DRAFT",
+  "changed_files": 3,
+  "accepted_target_workflow": {
+    "name": "Frank lineage admission identity V1 candidate VPS",
+    "run_id": 31535088114,
+    "status": "QUEUED",
+    "conclusion": null,
+    "pass_claimed": false
+  },
+  "generic_integrity": {
+    "classification": "CI_INFRASTRUCTURE_BLOCKED",
+    "reason": "GitHub-hosted job was not started because account payments failed or spending limit needs increase; this is not classified as a product semantic failure."
+  },
+  "go_unusual_experiment_count": 1,
+  "go_unusual_experiment": "SIBLING_GENESIS_IDENTICAL_HEAD_COLLISION",
+  "additional_unusual_experiments_after_it": 0,
+  "merge_decision": "DEFER",
+  "reason": "Exact current-head accepted-target evidence is still queued/unavailable; required integration evidence is infrastructure-blocked. Preserve draft and do not promote identity gate.",
+  "next_falsifier": "Execute exact-head accepted-target workflow and inspect non-secret TPM/vTPM capability inventory. If target has usable TPM/vTPM, test a TPM-backed external anchor candidate; otherwise build an independently held external admission verifier and test sibling/transplant/restart/rollback/migration controls.",
+  "whole_frank_v0_1_acceptance": false,
+  "training_authorized": false
+}

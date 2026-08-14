@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T1910p0700-chatgpt-secondary-claycode-chain-storage",
+  "trigger": "go",
+  "timestamp_local": "2026-08-11T19:10:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": ["self.root", "Frank"],
+    "target_native_identity": "self.root",
+    "target_human_surface_name": "Frank",
+    "target_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "observed_main_sha": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3"
+  },
+  "current_frontier_observed": {
+    "pr_310": {
+      "head": "83754cfdb8839fdc839a0b524cc0f6a755b1c421",
+      "role": "first executable ClayCode evaluator + decide_effect differential gate",
+      "reported_target_vps_baseline": "200576 requests, 0 mismatches, 6/6 checks",
+      "commit_status_checks_observed": 0
+    },
+    "pr_311": {
+      "head": "bb9cc037ce6497d9979bfdc6003ede49b27824a4",
+      "role": "SQLite loaded-object identity + SIGKILL process-crash oracle"
+    },
+    "pr_312": {
+      "head": "746640bda388aebf240c965afee744ce332f6a9a",
+      "role": "first executable causal loop slice with GWT controls"
+    },
+    "pr_313": {
+      "head": "7cc5258ddcabea279756399490f5f3eebbbf41d8",
+      "role": "missing ClayCode types + PURE intrinsics + differential coverage"
+    },
+    "pr_314": {
+      "head": "e3e31680ab28c145cda9eb9cc687790b178da4fd",
+      "role": "ClayCode surface 7.5% -> 90% + negation/BOOLEAN lexer fixes",
+      "commit_status_checks_observed": 0
+    }
+  },
+  "live_external_research": {
+    "sqlite_wal_reset": {
+      "upstream_fact": "SQLite upstream documents a rare WAL-reset corruption race for versions 3.7.0 through 3.51.2 and a fix in 3.51.3; the trigger requires WAL plus multiple database connections in separate threads/processes and a tight write/checkpoint race.",
+      "target_package_observed": "libsqlite3-0:amd64 3.45.1-1ubuntu2.7",
+      "ubuntu_backport_status_for_this_exact_fix": "UNKNOWN",
+      "decision": "KEEP_F_V01_13_FAIL_CLOSED; package version alone cannot prove FIXED or VULNERABLE because downstream backports are possible and current upstream source-id mapping is non-canonical.",
+      "sources": [
+        "https://sqlite.org/wal.html",
+        "https://sqlite.org/releaselog/3_51_3.html",
+        "https://packages.ubuntu.com/noble-updates/database/sqlite3"
+      ]
+    }
+  },
+  "claycode_semantic_conflict": {
+    "hypothesis": "PR #310's Compare evaluator accidentally folds the Boolean result of one relation into the next relation, so a grammar-legal comparison chain can diverge from adjacent-pair comparison semantics.",
+    "strongest_counterhypothesis": "The ClayCode surface may intentionally define comparison chains as a Boolean left-fold; the current syntax comment says chains are evaluated left-to-right, and no owner-fixed semantic contract found in this cycle disambiguates the phrase.",
+    "observed_implementation": "Compare evaluation assigns left = apply_relation(left,right) on every step; after the first relation, left is Bool. Python bool is a subclass of int, so numeric ordering accepts that Bool unless explicitly excluded.",
+    "minimal_discriminator": {
+      "expression": "5 < 10 < 8",
+      "adjacent_pair_expected": false,
+      "current_left_fold_result": true,
+      "promotion_rule": "Do not call this a confirmed evaluator bug until the comparison-chain semantic authority is fixed or recovered; treat it now as an OPEN_SEMANTIC_CONFLICT and mandatory regression/test obligation."
+    },
+    "secondary_type_boundary": "Even outside chains, runtime ordering currently uses isinstance(x,(int,float)); in Python this accepts Bool. If ClayCode Bool and numeric types are nominally distinct, true < false is a type-boundary leak and must fail closed."
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_macro_cycle": 1,
+    "name": "RELATIONAL_CHAIN_METAMORPHIC_MUTATION_MATRIX",
+    "class": "BOUNDED_REVERSIBLE_LOCAL_SEMANTIC_FALSIFIER",
+    "method": "Enumerate integer triples a,b,c in [-3,3] and all ordered pairs of six relation operators (<,<=,>,>=,==,!=). Compare the current PR #310 Boolean-left-fold algorithm against adjacent-pair chain semantics.",
+    "cases": 12348,
+    "mismatches": 1596,
+    "mismatch_rate_percent": 12.92517006802721,
+    "boundary": "This quantifies consequence if adjacent-pair semantics is authoritative; it does not itself decide the language semantics and is not target-VPS evidence."
+  },
+  "analysis": {
+    "baseline_scope": "PR #310's 200576-case differential baseline is strong evidence for decide_effect only; it does not cover generic relational-chain semantics. PR #314 demonstrates this exact class of risk by finding two unrelated silent semantic/lexical defects that the decide_effect corpus did not exercise.",
+    "integration_risk": "PRs #313 and #314 are sibling stacks on #310 while #312 declares a #310 dependency from a main-based branch. No combined commit-head status check was observed for the composed stack in this cycle. Individual green receipts must not be promoted as composition evidence.",
+    "storage_result": "PR #311's SIGKILL oracle is useful process-crash evidence but does not target the upstream WAL-reset race and cannot resolve the Ubuntu backport question."
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "affected_work_packages": ["F-V01-02-CLAYCODE-COMPILER-RUNTIME", "F-V01-03-COGNITIVE-LOOP-CORE", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+    "required_next_actions": [
+      "Recover or owner-fix explicit comparison-chain semantics before evaluator promotion.",
+      "Add a comparison-chain differential/metamorphic regression gate covering true/false outcomes and mixed relation operators.",
+      "If Bool and numeric are nominally distinct, explicitly reject Bool in numeric ordering instead of relying on Python isinstance(int).",
+      "Create and target-test a composed integration head containing #310 + compatible #313/#314 semantics plus #312 before current-work PASS credit.",
+      "Resolve SQLite fix presence by exact patched-source/package provenance or a target-specific trigger-unreachability proof; keep F-V01-13 fail closed meanwhile."
+    ],
+    "rollback": "No target runtime or product state changed in this research cycle; drop this candidate if an owner-fixed ClayCode contract explicitly defines Boolean left-fold comparison chains and dedicated tests confirm that semantics."
+  },
+  "negative_or_unknown_results": [
+    "Ubuntu package version 3.45.1-1ubuntu2.7 alone did not establish whether the upstream WAL-reset fix is backported.",
+    "No existing Clay research or target-repo hit for this exact comparison-chain conflict was found in repository search.",
+    "No combined status checks were observed on PR #310 or PR #314 heads."
+  ],
+  "claims_not_made": [
+    "Frank v0.1 complete",
+    "whole-system acceptance",
+    "ClayCode evaluator promotion",
+    "SQLite target vulnerable",
+    "SQLite target fixed",
+    "emergence",
+    "final training authorized"
+  ]
+}

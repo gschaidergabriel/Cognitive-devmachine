@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "executed": [
+    {"tool":"GitHub","purpose":"verify canonical/current programme/workspace/schema/directives","result":"PASS"},
+    {"tool":"web.run","purpose":"fresh primary SQLite transaction/WAL/durability research","result":"PASS","sources":["https://sqlite.org/lang_transaction.html","https://sqlite.org/isolation.html","https://sqlite.org/wal.html","https://www.sqlite.org/pragma.html","https://www2.sqlite.org/releaselog/3_51_3.html"]},
+    {"tool":"python","purpose":"local SQLite state-lineage/execution-fence falsifier and latency proxy","result":"PASS_WITH_LIMITS","environment":{"python":"3.13.5","sqlite":"3.46.1","platform":"Linux-6.18.35-x86_64-with-glibc2.41"}}
+  ],
+  "not_executed": [
+    {"capability":"accepted target VPS run","reason":"No direct workflow dispatch/terminal action was available in this invocation; current target evidence was read from repository receipts only."},
+    {"capability":"real provider write/reconciliation","reason":"Out of scope for UnifiedDB continuity subcycle and production provider remains an open adjacent gate."}
+  ],
+  "authority_note":"No Frank/self.root Harness mutation was authorized by the target. Research candidate writes are Clay-side only.",
+  "status":"COMPLETE"
+}

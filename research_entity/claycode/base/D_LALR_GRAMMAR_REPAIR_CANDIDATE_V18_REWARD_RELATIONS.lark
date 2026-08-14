@@ -1,0 +1,102 @@
+// D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS
+// Minimal successor to V17 after current G9 V3 full-corpus replay exposed exactly three
+// missing semantic relation tokens in the reward/value section. V17 remains immutable
+// baseline evidence. V18 changes no rule shape, precedence, identifier class, dotted-prefix
+// behavior, typed-fn surface or operator aliases. It adds only:
+//   infix: preserves, required_before
+//   postfix: cannot_be_silently_averaged_away
+// The ambiguous source phrase `FAST|MEDIUM|SLOW predictions` is intentionally NOT made
+// parseable by reserving `predictions` as an operator; current G9 must spell the intended
+// prediction payload explicitly as predictions([FAST,MEDIUM,SLOW]).
+// Hostinger candidate evidence: run 31363616701, 85/85 statements + whole G9/Dialect +
+// production/standalone AST parity + regression distinctions PASS. Formal WP02 promotion
+// still requires replay of the actually committed V18/source bytes and release receipts.
+start: NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
+?statement: module_decl | version_decl | status_decl | parent_decl | import_decl | interface_decl | dialect_decl | law_decl | rule_decl | invariant_decl | class_decl | record_decl | tensor_decl | codec_decl | surface_decl | metric_decl | hash_decl | needle_decl | cycle_decl
+module_decl: "module" qid
+version_decl: "version" STRING
+status_decl: "status" qid
+parent_decl: "parent" list
+import_decl: "import" ident "=" REF
+interface_decl: "interface" ident interface_block
+dialect_decl: "dialect" ident dialect_block
+law_decl: "law" expr
+rule_decl: "rule" expr
+invariant_decl: "invariant" expr
+class_decl: ("class"|"type") ident [type_params] "=" expr
+record_decl: "record" ident [type_params] record_block
+tensor_decl: "tensor" ident "=" list
+codec_decl: "codec" ident "=" ident [ident]
+surface_decl: "surface" ident
+metric_decl: "metric" ident "=" expr
+hash_decl: "hash" ident "(" ident ")" "=" expr
+needle_decl: "needle" ident "(" [params] ")" "->" type_expr
+cycle_decl: "cycle" "(" [params] ")" cycle_block
+record_block: "{" _bsep* field (_bsep+ field)* _bsep* "}"
+interface_block: "{" _bsep* interface_member (_bsep+ interface_member)* _bsep* "}"
+?interface_member: field | method_sig
+dialect_block: "{" _bsep* dialect_stmt (_bsep+ dialect_stmt)* _bsep* "}"
+?dialect_stmt: invariant_decl | expr
+cycle_block: "{" _bsep* cycle_stmt (_bsep+ cycle_stmt)* _bsep* "}"
+?cycle_stmt: if_stmt | expr
+if_stmt: "if" expr cycle_block
+field: ident ":" type_expr ["=" expr]
+method_sig: ident "(" [params] ")" "->" type_expr
+params: param ("," param)*
+param: ident [":" type_expr]
+type_params: "<" type_expr ("," type_expr)* ">"
+?type_expr: type_atom ("|" type_atom)*
+?type_atom: qid [type_params] ["?"]
+?expr: term ((operator term) | (infix_relop ["="] term))*
+?term: prefix_relation | postfix_relation | primary
+prefix_relation: prefix_relop term | DOTTED_PREFIX_REL primary
+postfix_relation: primary postfix_relop
+prefix_relop: PREFIX_REL
+postfix_relop: POSTFIX_REL
+infix_relop: INFIX_REL
+?primary: call | postfix_optional | qid | REF | SIGNED_NUMBER | STRING | BOOLEAN | list | set | "(" expr ")"
+postfix_optional: qid "?"
+call: qid "(" [expr ("," expr)*] ")"
+list: "[" [expr ("," expr)*] "]"
+set: "{" [expr ("," expr)*] "}"
+operator: ">="|"<="|"!="|"=="|"->"|"=>"|">"|"<"|"="|"|"|"+"|"-"|"*"|"/"|"&&"|"||"|"or"|"iff"|"requires"|"in"|"subset_of"
+qid: ident ("." ident)*
+BOOLEAN: "true" | "false"
+?ident: NAME
+      | "module" -> ident_module
+      | "version" -> ident_version
+      | "status" -> ident_status
+      | "parent" -> ident_parent
+      | "import" -> ident_import
+      | "interface" -> ident_interface
+      | "dialect" -> ident_dialect
+      | "law" -> ident_law
+      | "rule" -> ident_rule
+      | "class" -> ident_class
+      | "type" -> ident_type
+      | "record" -> ident_record
+      | "tensor" -> ident_tensor
+      | "codec" -> ident_codec
+      | "surface" -> ident_surface
+      | "metric" -> ident_metric
+      | "hash" -> ident_hash
+      | "needle" -> ident_needle
+      | "cycle" -> ident_cycle
+      | "or" -> ident_or
+      | "iff" -> ident_iff
+      | "requires" -> ident_requires
+      | "in" -> ident_in
+      | "subset_of" -> ident_subset_of
+NAME: /(?!(module|version|status|parent|import|interface|dialect|law|rule|invariant|class|type|record|tensor|codec|surface|metric|hash|needle|cycle|if|or|iff|requires|in|subset_of|lowers|true|false)\b)[A-Za-z_][A-Za-z0-9_-]*/
+REF: /@[A-Za-z0-9_\.\/-]+/
+_bsep: ";" | NEWLINE
+%import common.ESCAPED_STRING -> STRING
+%import common.SIGNED_NUMBER
+%import common.NEWLINE
+%import common.WS_INLINE
+%ignore WS_INLINE
+%ignore /\/\/[^\n]*/
+PREFIX_REL.10: "4B_emits" | "4B_need_not_learn"
+DOTTED_PREFIX_REL.11: /Needle\.(?:lowers|owns)(?=[ \t]+[^ \t\n;\/\(])/
+POSTFIX_REL.5: "cannot_be_silently_averaged_away" | "is_explanation_of_derivation" | "roles_are_typed" | "outside_stable_prefix" | "must_be_preserved_unless_counterevidence" | "personalizes_for_Andreas_when_FRANK_target" | "preserves_general_transfer_variants"
+INFIX_REL.5: "preserves" | "required_before" | "never_implies" | "never_requires" | "may_reference" | "never_confers" | "returns" | "loads" | "cannot_authorize" | "distinct_from" | "lowers" | "owns" | "lifecycle" | "consumes" | "writes" | "includes"

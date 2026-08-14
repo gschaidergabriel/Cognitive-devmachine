@@ -104,6 +104,7 @@ class DatabasePulseRuntimeV2(DatabasePulseRuntime):
         if int(spec.basis_epoch) != self.ledger.epoch:
             raise StaleEpoch(f"pulse basis {spec.basis_epoch}!={self.ledger.epoch}")
 
+        source_domains = tuple(dict.fromkeys(spec.source_domains))
         previous = self._previous_pulse()
         previous_focus = tuple(str(x) for x in (previous or {}).get("focus_refs", []))
         shuffle_salt = None
@@ -112,7 +113,7 @@ class DatabasePulseRuntimeV2(DatabasePulseRuntime):
                 {"previous_receipt_hash": previous.get("receipt_hash"), "control": "SHUFFLED"}
             )
         selection = self.active_field.select(
-            source_domains=tuple(dict.fromkeys(spec.source_domains)),
+            source_domains=source_domains,
             basis_epoch=spec.basis_epoch,
             max_candidates=spec.max_candidates,
             max_focus=spec.max_focus,
@@ -123,6 +124,8 @@ class DatabasePulseRuntimeV2(DatabasePulseRuntime):
         )
         if selection.semantic_state_hash != self.ledger.semantic_state_hash:
             raise StaleEpoch("active-field semantic root changed before pulse commit")
+        known_candidate_universe_count = self.active_field._count_epi(source_domains, "KNOWN")
+        candidate_budget_truncated = known_candidate_universe_count > len(selection.candidate_refs)
 
         reentry_targets = self._reentry_targets_v2(
             mode=mode, previous=previous, candidate_refs=selection.candidate_refs
@@ -153,6 +156,8 @@ class DatabasePulseRuntimeV2(DatabasePulseRuntime):
                 "reentry_mode": mode,
                 "candidate_generation": PROJECTION_VERSION,
                 "active_field_selection_hash": selection.selection_hash,
+                "candidate_universe_count": known_candidate_universe_count,
+                "candidate_budget_truncated": candidate_budget_truncated,
                 "focus": [
                     {k: x[k] for k in ("ref", "score", "source_semantic_hash", "domain_epoch")}
                     for x in focus
@@ -203,9 +208,11 @@ class DatabasePulseRuntimeV2(DatabasePulseRuntime):
             "committed_epoch": spec.basis_epoch + 1,
             "input_semantic_state_hash": selection.semantic_state_hash,
             "query_hash": selection.selection_hash,
-            "query_truncated": False,
+            "query_truncated": candidate_budget_truncated,
             "candidate_generation": PROJECTION_VERSION,
             "candidate_count": len(selection.candidate_refs),
+            "candidate_universe_count": known_candidate_universe_count,
+            "candidate_budget": spec.max_candidates,
             "projection_last_event_seq": selection.projection_last_event_seq,
             "projection_refresh_mode": selection.refresh_mode,
             "scheduler_semantic_hash": scheduler_hash,
@@ -274,6 +281,8 @@ class DatabasePulseRuntimeV2(DatabasePulseRuntime):
                 "implementation": IMPLEMENTATION_ID_V2,
                 "candidate_generation": PROJECTION_VERSION,
                 "active_field_selection_hash": selection.selection_hash,
+                "candidate_universe_count": known_candidate_universe_count,
+                "candidate_budget_truncated": candidate_budget_truncated,
                 "receipt_hash": body["receipt_hash"],
                 "reentry_mode": mode,
             },

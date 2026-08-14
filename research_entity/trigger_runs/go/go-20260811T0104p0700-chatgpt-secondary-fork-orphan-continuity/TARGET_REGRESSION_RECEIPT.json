@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260811T0104p0700-chatgpt-secondary-fork-orphan-continuity",
+  "classification": "POST_OOB_NORMAL_REGRESSION_NO_NEW_OOB",
+  "repository": "gschaidergabriel/Dr.-Unterweger",
+  "pr": 246,
+  "base_sha": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+  "candidate_head_sha": "c4977e4cb2bd9e44065aed76dc5a540a32e7c685",
+  "tested_pr_merge_sha": "260b87f4a27af7a52e9f923477fee8bd1b7a1519",
+  "workflow_run_id": 31417022956,
+  "runner": {
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "kernel": "6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026",
+    "python": "3.12.3"
+  },
+  "blobs": {
+    "runtime_state_frank_execution_gate_py": "e3a59aee94acfa6150dfe968b693cbb057339a0d",
+    "merged_fork_incarnation_regression": "518e7d81b4e2b328a93193f68b77dfe6b0a60cf6",
+    "fork_orphan_recovery_regression": "226008c43a609afdde252c613bb3f0bd6d4d380e"
+  },
+  "baseline_result": {
+    "status": "PASS_FORK_PROCESS_INCARCATION_EXECUTION_GATE_REPAIR",
+    "child_process_nonce_rotated": true,
+    "inherited_lease_detached": true,
+    "inherited_heartbeat": "FENCED",
+    "inherited_gate_issued_capability": "FENCED",
+    "fresh_child_contender": "BUSY_PARENT_FLOCK_RETAINED",
+    "child_detach_semantic_release": false,
+    "parent_heartbeat_after_child": "PASS",
+    "successor_after_parent_release": "PASS"
+  },
+  "reused_oob_regression_result": {
+    "status": "PASS_FORK_ORPHAN_PHYSICAL_RECOVERY_ON_CURRENT_MAIN",
+    "historical_oob_reused_as_regression": true,
+    "go_oob_experiment_added": false,
+    "child_fork_detached": true,
+    "child_lease_closed": true,
+    "physical_anchor_recovered_while_child_alive": true,
+    "physical_recovery_seconds": 0.000150,
+    "semantic_release_by_child": false,
+    "external_network_used": false,
+    "external_effect_performed": false,
+    "canonical_state_mutated": false
+  },
+  "adjudication": {
+    "historical_pr238_v5_normal_fork_recovery": "REFUTED_BY_TARGET_OOB",
+    "current_main_pr241_normal_fork_recovery_repair": "SUPPORTED_BY_TARGET_REGRESSION",
+    "authority_vs_availability_distinction": "SUPPORTED",
+    "explicit_pass_fds_exec_descriptor_export": "NOT_CLOSED_BY_THIS_REGRESSION_SEPARATE_PR242"
+  },
+  "architecture_delta": {
+    "status": "RETAIN_CURRENT_MAIN_AT_FORK_DETACH_FOR_NORMAL_FORK_CLASS",
+    "new_runtime_architecture_required_by_this_result": false,
+    "permanent_test_obligation": "hard-crash issuing parent while fork child survives; physical anchor must recover while child remains alive",
+    "do_not_claim": [
+      "whole execution-generation rollback safety",
+      "explicit descriptor export/exec safety",
+      "provider timeout-after-acceptance reconciliation",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "next_frontier": [
+    "Consume independent PR242 descriptor-export/exec evidence without duplicating its OOB.",
+    "Keep current-main fork-orphan regression in the execution/recovery suite.",
+    "Fuse this normal-fork closure into the fresh-main F-V01-09 effect-fence integration lane."
+  ]
+}

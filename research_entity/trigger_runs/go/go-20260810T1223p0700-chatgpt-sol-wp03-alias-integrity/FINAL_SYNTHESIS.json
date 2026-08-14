@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-sol-current",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:23:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "fresh_repo_frontier": {
+    "observed_initial_head": "2028478e3f4485ea3dc08e69ccfc89297073da56",
+    "wp02": "V17_SELECTED_FORMAL_ANDREAS_TARGET_OPEN",
+    "wp03": "UPSTREAM_GRAMMAR_AND_DOWNSTREAM_KEYWORD_IDENTIFIER_WORK_ACTIVE",
+    "typed_ir_candidate_pr": 145,
+    "typed_ir_candidate_branch": "go-wp03-keyword-ident-20260810",
+    "typed_ir_candidate_head": "189785dbd1c0c4989f9a18b79653e71617457a8d",
+    "typed_ir_candidate_blob": "1234ab634dff60197ea45d4a52969c5ea442746a",
+    "remote_composed_receipt_at_check": "NOT_VISIBLE",
+    "production_change_authorized": false
+  },
+  "fresh_external_knowledge": {
+    "retrieved_at": "2026-08-10",
+    "sources": [
+      "https://lark-parser.readthedocs.io/en/stable/tree_construction.html",
+      "https://lark-parser.readthedocs.io/en/stable/grammar.html"
+    ],
+    "supported_points": [
+      "Rule aliases become parse-tree branch names.",
+      "Rule structure and aliases therefore preserve identifier-position context independently of the literal token value.",
+      "Named terminals and rule branches are distinct tree-construction signals; post-parse semantic extraction should use the grammar context rather than globally filtering token strings."
+    ]
+  },
+  "hypothesis": "PR145's AST-context identifier extraction correctly preserves grammar-admitted reserved-word identifiers, but its ident_* branch should fail closed if replayed/corrupted canonical AST bytes disagree with the alias identity.",
+  "strongest_counterhypothesis": "Alias/token agreement need not be checked because only the trusted production parser can construct canonical AST values, so an ident_status node can never contain any other literal.",
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "ALIAS_TOKEN_IDENTITY_MISMATCH_MATRIX",
+    "evidence_class": "LOCAL_REVERSIBLE_TYPED_IR_HELPER_FALSIFIER",
+    "runtime": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5",
+      "cpu_count": 5
+    },
+    "method": "Reproduce PR145 direct_identifier semantics over synthetic canonical-AST nodes for every grammar alias. For each alias, first present the matching literal, then mutate only the child literal while retaining the ident_* branch name. Compare current candidate behavior with a minimal fail-closed alias-suffix equality guard.",
+    "alias_count": 24,
+    "valid_current_candidate": {
+      "accepted": 24,
+      "expected": 24,
+      "result": "PASS"
+    },
+    "mismatched_current_candidate": {
+      "accepted": 24,
+      "expected_reject": 24,
+      "result": "FAIL_OPEN"
+    },
+    "hardened_shadow": {
+      "valid_accepted": 24,
+      "mismatched_rejected": 24,
+      "result": "PASS"
+    },
+    "mechanism": "Current PR145 direct_identifier trusts any single token under an ident_* branch and returns its token value. It does not verify that ident_status carries status, ident_record carries record, etc.",
+    "counterhypothesis_status": "PARTIALLY_SURVIVES_FOR_TRUSTED_FRESH_PARSE_ONLY; REFUTED_FOR_REPLAY_OR_CORRUPTED_AST_FAIL_CLOSED_REQUIREMENT",
+    "promotion": "NONE"
+  },
+  "decision": {
+    "pr145_core_strategy": "SUPPORTED",
+    "pr145_current_bytes": "HARDENING_REQUIRED_BEFORE_MERGE",
+    "required_minimal_change": "For ident_* direct children, require exactly one token and require token value == alias suffix; otherwise raise TypedIRError. Continue accepting direct NAME unchanged.",
+    "semantic_change": "NONE_FOR_VALID_GRAMMAR_OUTPUT",
+    "authority_change": "NONE",
+    "parser_change": "NONE",
+    "frank_harness_mutation": false
+  },
+  "required_regressions": [
+    "All grammar-admitted keyword identifiers remain preserved in record/field/fn/typed-param/interface/method/param positions.",
+    "All 24 current ident_* aliases accept their exact matching literal.",
+    "Every alias/literal mismatch fails closed.",
+    "Malformed ident_* with zero or multiple token values fails closed.",
+    "Full frozen G9 + Dialect deterministic typed-IR replay remains unchanged under the selected exact grammar provenance.",
+    "No syntax/semantic/contract hash is renamed or promoted by this hardening alone."
+  ],
+  "coordination": {
+    "collision_policy": "Do not mutate active parser/V20 lanes. Route only this independent typed-IR integrity obligation to the PR145/WP03 owner lane.",
+    "selected_parser": "NO_CHANGE",
+    "wp03_promotion": "NONE",
+    "wp04": "DO_NOT_ADVANCE_FROM_THIS_EVIDENCE",
+    "base": "NOT_PASS"
+  },
+  "next_frontier": [
+    "Apply the alias/token equality guard on the PR145 candidate branch, not main, and add the mutation matrix regression.",
+    "Replay the hardened candidate against the exact selected WP03 grammar/frontend provenance and frozen G9+Dialect.",
+    "Materialize hosted/self-hosted Ubuntu receipts; distinguish transport failure from scientific failure.",
+    "Only after the selected grammar and hardened typed-IR candidate jointly pass should WP03 merge/promotion be reconsidered.",
+    "Registered Andreas Ubuntu developer-system evidence remains the formal BASE acceptance authority."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_write": "COMMITTED",
+  "authority_invariant": "model output != execution authority"
+}

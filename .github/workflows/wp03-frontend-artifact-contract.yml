@@ -1,0 +1,83 @@
+name: WP03 Frontend Artifact Contract
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/wp03-frontend-artifact-contract.yml'
+      - 'tools/claycode_wp03_frontend_artifact_contract.py'
+      - 'tools/test_claycode_wp03_frontend_artifact_contract.py'
+      - 'tools/claycode_wp03_frontend_artifact_contract_validation.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hosted-discriminator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build isolated validation environment
+        run: |
+          python3 -m venv /tmp/clay-wp03-artifact-${GITHUB_RUN_ID}
+          /tmp/clay-wp03-artifact-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+      - name: Execute base and extended discriminators
+        shell: bash
+        run: |
+          VENV=/tmp/clay-wp03-artifact-${GITHUB_RUN_ID}
+          set +e
+          "$VENV/bin/python" tools/test_claycode_wp03_frontend_artifact_contract.py > /tmp/wp03_artifact.json
+          rc_base=$?
+          "$VENV/bin/python" tools/claycode_wp03_frontend_artifact_contract_validation.py > /tmp/wp03_artifact_extended.json
+          rc_extended=$?
+          set -e
+          cat /tmp/wp03_artifact.json
+          cat /tmp/wp03_artifact_extended.json
+          python3 - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path('research_entity/claycode/base/receipts')
+          root.mkdir(parents=True,exist_ok=True)
+          base=json.loads(pathlib.Path('/tmp/wp03_artifact.json').read_text())
+          base['receipt_id']='WP03-FRONTEND-ARTIFACT-CONTRACT-HOSTED-'+os.environ['GITHUB_RUN_ID']
+          base['github_sha']=os.environ['GITHUB_SHA']
+          base['github_run_id']=os.environ['GITHUB_RUN_ID']
+          base['truth_class']='VERIFIED_GITHUB_HOSTED_UBUNTU_RESEARCH_ADAPTER_DISCRIMINATOR'
+          base['promotion']='NONE'
+          base['wp03_status_change']='NONE'
+          (root/'WP03_FRONTEND_ARTIFACT_CONTRACT_HOSTED_LATEST.json').write_text(json.dumps(base,indent=2,sort_keys=True)+'\n')
+          ext=json.loads(pathlib.Path('/tmp/wp03_artifact_extended.json').read_text())
+          ext['receipt_id']='WP03-FRONTEND-ARTIFACT-CONTRACT-EXTENDED-HOSTED-'+os.environ['GITHUB_RUN_ID']
+          ext['github_sha']=os.environ['GITHUB_SHA']
+          ext['github_run_id']=os.environ['GITHUB_RUN_ID']
+          ext['truth_class']='VERIFIED_GITHUB_HOSTED_UBUNTU_RESEARCH_ADAPTER_EXTENDED_BOUNDARY'
+          ext['promotion']='NONE'
+          ext['wp03_status_change']='NONE'
+          (root/'WP03_FRONTEND_ARTIFACT_CONTRACT_EXTENDED_HOSTED_LATEST.json').write_text(json.dumps(ext,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-wp03-artifact-runner'
+          git config user.email 'clay-wp03-artifact-runner@users.noreply.github.com'
+          git add research_entity/claycode/base/receipts/WP03_FRONTEND_ARTIFACT_CONTRACT_HOSTED_LATEST.json research_entity/claycode/base/receipts/WP03_FRONTEND_ARTIFACT_CONTRACT_EXTENDED_HOSTED_LATEST.json
+          git commit -m 'evidence(wp03): record base plus extended frontend-artifact discriminators' || true
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then
+              if [ "$rc_base" -ne 0 ] || [ "$rc_extended" -ne 0 ]; then exit 1; fi
+              exit 0
+            fi
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 1
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-wp03-artifact-${GITHUB_RUN_ID}

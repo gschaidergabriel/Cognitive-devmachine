@@ -1,0 +1,52 @@
+{
+  "schema": "CLAY_GO_FOLLOWUP_DELTA/1.0",
+  "parent_run_id": "GO-20260811T135335Z-CHATGPT-SECONDARY-FV01-08-TOKEN-IDENTITY",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "classification": "SELF_FALSIFICATION_FIXED_CANDIDATE_STILL_TARGET_PENDING",
+  "finding": {
+    "name": "STALE_AUTH_CONTEXT_AFTER_CREDENTIAL_EXPIRY",
+    "before": "authenticate() rejected expired credentials, but the first rescue version of admit_request() revalidated credential/principal status and scope without rechecking expires_at or the captured principal auth epoch.",
+    "risk": "An AuthContext created before expiry could have been reused for a later request attempt after the credential expired, despite fresh authenticate() correctly rejecting the token.",
+    "scope": "candidate-only defect; canonical V16 migration/runtime was not changed by this candidate"
+  },
+  "repair": {
+    "runtime_commit": "491fced40cb81fa30efbdb3564eb42a5b5cd71d1",
+    "regression_commit": "2b124f12866d187d23b6ec1624f158816046b203",
+    "invariants_added": [
+      "Every request admission/replay attempt revalidates credential status.",
+      "Every request admission/replay attempt revalidates principal status.",
+      "Every request admission/replay attempt compares current principal auth_epoch with the AuthContext epoch.",
+      "Every request admission/replay attempt revalidates credential expires_at against the current attempt time.",
+      "Current scopes are checked before replay disclosure or consequential admission."
+    ],
+    "new_regression": "Create AuthContext before credential expiry, then attempt admission after expiry; must fail with STALE_OR_EXPIRED_AUTH_CONTEXT."
+  },
+  "experiment_accounting": {
+    "go_oob_experiment_count_total": 1,
+    "go_oob_experiment": "ROTATION_REPLAY_ALIAS",
+    "new_oob_added_by_followup": false,
+    "followup_test_class": "ORDINARY_SECURITY_CONTINUITY_REGRESSION"
+  },
+  "target_status": {
+    "accepted_target_composite_result": "PENDING_UNVERIFIED",
+    "reason": "No PASS-only target receipt is visible and GitHub Actions workflow discovery/execution remains inconsistent for the diagnostic branch.",
+    "do_not_promote": [
+      "whole Frank v0.1 acceptance",
+      "production token API acceptance",
+      "canonical V16 integration",
+      "duplicate external effect reproduction"
+    ]
+  },
+  "architecture_status": "CANDIDATE_TESTING",
+  "claim_boundary": {
+    "canonical_migration_chain_changed": false,
+    "external_effect_performed": false,
+    "final_training_authorized": false,
+    "self_root_harness_authority_granted": false
+  }
+}

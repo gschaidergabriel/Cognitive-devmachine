@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260811T0122p0700-chatgpt-secondary-provider-reconciliation-contract",
+  "recorded_at": "2026-08-11T02:10:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "reason_for_fresh_main": "The earlier stacked #250/#254 mechanism line became strongly divergent from main. Fresh-main integration was rebuilt directly from current main rather than claiming a stale stacked PASS as merge/promotion evidence.",
+  "candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 261,
+    "branch": "chatgpt/go-provider-fence-fresh-main-20260811",
+    "head_at_checkpoint": "cbb603fe9c0b8d28988a60612d562347d3edc000",
+    "base": "main",
+    "base_sha": "3a7ca32266fbebec57777673515b9ec988b19c66",
+    "mergeable_at_checkpoint": true,
+    "behind_main_at_checkpoint": 0,
+    "status": "DRAFT_NOT_PROMOTED"
+  },
+  "integrated_mechanisms": [
+    "Exact effect reservation binding to live admitted V16 execution id + V15 lease epoch + credential/holder identity + process-local capability fingerprint.",
+    "Persisted execution-generation projection is provenance only and cannot reconstruct live effect authority.",
+    "COMMITTING blocks logical execution rebind and terminal release; the Gate-issued process-incarnation effect_commit_window serializes local release against final B3 through provider return.",
+    "Immutable per-effect ProviderIdempotencyContract sidecar is optionally bound atomically with reservation + exact execution generation.",
+    "Historical downstream_retry_safe boolean is compatibility metadata and cannot authorize an uncertain same-generation retry.",
+    "Retry requires the exact immutable provider contract, same semantic request fingerprint and current provider retention/duplicate-result semantics.",
+    "Final B3 provider boundary rechecks exact execution generation and the exact bound provider contract when present.",
+    "Read-only outcome reconciliation verifies exact provider/request binding but deliberately does not require or recreate stale ExecutionGenerationFence authority.",
+    "ClayCode source mirrors exact execution-generation, typed provider retry and observation/reconciliation semantics; ExecutionGenerationFence remains opaque."
+  ],
+  "already_target_verified_before_latest_probe_only_change": {
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "repo_authority_audit": "PASS",
+    "effect_generation_matrix": {
+      "status": "PASS_FRESH_MAIN_EFFECT_GENERATION_INTEGRATION",
+      "same_epoch_alias": "FENCED_ZERO_STATE_MUTATION",
+      "provider_entry_rebind": "EFFECT_COMMITTING_BLOCKS_EXECUTION_GENERATION_REBIND",
+      "provider_window_release": "CANNOT_RELEASE_EXECUTION_DURING_PROVIDER_COMMIT",
+      "committing_terminal_release": "EFFECT_COMMITTING_BLOCKS_EXECUTION_RELEASE",
+      "successor_adoption": "FENCED_ZERO_STATE_MUTATION",
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0
+    },
+    "typed_provider_normal_matrix": {
+      "status": "PASS_TYPED_PROVIDER_CONTRACT_RUNTIME_MATRIX",
+      "legacy_bool_same_generation_retry": "RETRY_REQUIRES_TYPED_PROVIDER_CONTRACT",
+      "typed_same_generation_retry": "CALLER_BOUND_TYPED_PROVIDER_RETRY_DURABLY_STARTED",
+      "changed_semantic_request": "FAIL_CLOSED",
+      "provider_contract_hash_splice": "FAIL_CLOSED",
+      "b3_missing_bound_contract": "BOUND_PROVIDER_CONTRACT_NOT_PRESENTED",
+      "b3_exact_contract": "PASS",
+      "provider_contract_immutable": true,
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0
+    },
+    "provider_to_v17_terminal": {
+      "status": "PASS_FRESH_MAIN_PROVIDER_TO_V17_REENTRY_DONE",
+      "provider_outcome": "OUTCOME_SUCCEEDED_VERIFIED",
+      "reentry": "REENTERED_PROVENANCE_BOUND",
+      "terminal_receipt": "DONE_COMMITTED",
+      "recovery_decision": "COMPLETE",
+      "external_effect_performed": false,
+      "canonical_state_mutated": false
+    },
+    "single_go_oob": {
+      "experiment": "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT",
+      "status": "PASS_ACK_BLACKHOLE_PROVIDER_RECONCILIATION_OOB",
+      "provider_contract_atomically_bound": true,
+      "provider_contract_immutable": true,
+      "provider_commits_after_timeout": 1,
+      "frank_state_after_timeout": "OUTCOME_UNKNOWN",
+      "successor_retry": "FENCED_ZERO_STATE_MUTATION",
+      "reconciliation_without_execution_fence": true,
+      "provider_rows_after_reconciliation": 1,
+      "final_effect_state": "OUTCOME_SUCCEEDED",
+      "external_network_used": false,
+      "external_provider_used": false,
+      "canonical_state_mutated": false
+    }
+  },
+  "claycode_diagnostic_history": [
+    {
+      "classification": "TEST_DISPATCH_ERROR",
+      "finding": "The first fresh-main probe invoked the generic BASE-D frontend for Frank's procedural use/block-function source. Generic BASE-D rejected the source; current Frank target lane uses FRANK_STRUCTURED_V1 instead.",
+      "architecture_consequence": "No Frank source weakening. Probe moved to the existing structured frontend."
+    },
+    {
+      "classification": "PACKAGING_OBSERVABILITY_BLOCKER",
+      "finding": "Current runtime bundle did not physically contain the generic frontend file expected by the first probe. Current main already contains owner-compatible content-addressed WP03/V18 materializers that reconstruct exact frontend/grammar/TypedIR blobs from local Git history.",
+      "architecture_consequence": "Workflow now checks out full history and uses materialize_v18_local_v2.py; no generated substitute compiler was invented."
+    },
+    {
+      "classification": "PROBE_INTERPRETATION_ERROR",
+      "run": 31422953833,
+      "tested_merge_sha": "d2bbac7a9bdb130d5ec4d4485384c0e4ea3ccbab",
+      "finding": "Structured strict parsing and both deterministic TypedIR builds completed. Failure phase was TYPED_IR_PROVIDER_TYPES because the candidate-specific probe read structured record types from ordinary declarations instead of the established tagged_record_lowering overlay; it therefore falsely reported even EffectAttempt as missing.",
+      "architecture_consequence": "Current head uses the same tagged-record lowering overlay as the target-verified structured Frank lane, requires ExecutionGenerationFence opacity=OPAQUE_DECLARED, and checks exact provider/fence fields. Source is not rewritten and acceptance is not weakened."
+    }
+  ],
+  "latest_pending_target_validation": {
+    "candidate_head": "cbb603fe9c0b8d28988a60612d562347d3edc000",
+    "workflow_run": 31423170075,
+    "status_at_checkpoint": "QUEUED",
+    "required_new_evidence": [
+      "Current structured Frank frontend strict parse deterministic PASS.",
+      "Content-addressed WP03 materializer exact blob identities PASS.",
+      "TypedIR deterministic build PASS.",
+      "tagged_record_lowering preserves ExecutionGenerationFence as OPAQUE_DECLARED and all provider/fence fields.",
+      "Current main V17 candidate schema authority/apply/rollback remains PASS on same exact candidate."
+    ]
+  },
+  "independent_compiler_replication": {
+    "branch": "chatgpt/go-provider-wp03-hosted-replication-20260811",
+    "workflow_run": 31423548621,
+    "scope": "Compiler/frontend/materializer/TypedIR only; no runtime/provider/OOB effect path.",
+    "status_at_checkpoint": "QUEUED",
+    "epistemic_role": "Secondary replication only; cannot replace self-hosted target acceptance."
+  },
+  "counterhypothesis_status": {
+    "claim": "A legacy downstream_retry_safe boolean plus stable idempotency key is sufficient for uncertain provider retries.",
+    "adjudication": "REFUTED_AS_PROVIDER_RETRY_AUTHORITY_MECHANISM",
+    "reason": "Normal same-generation differential now denies the legacy path and admits only exact immutable typed provider semantics; ACK-blackhole evidence shows read-only reconciliation can resolve a committed provider result without replaying effect authority."
+  },
+  "promotion": "NONE",
+  "remaining_gates": [
+    "Real provider timeout-after-acceptance and provider-side exactly-once/reconciliation receipt remains OPEN.",
+    "Latest exact-current self-hosted structured frontend/tagged-record/TypedIR validation is pending.",
+    "WP04 type/effect/compiler/lowering/runtime-binding acceptance remains OPEN; frontend/TypedIR evidence is not a WP04 pass.",
+    "Ordinary production effect routing must be proven non-bypassable end to end.",
+    "Final CLAY_0_1_EFFECT_AUTHORITY_RECEIPT integration remains required even though current V17 provider->reentry->DONE candidate path passes on disposable state.",
+    "Current-source crash/restart/replay and recovery-generation/snapshot rollback obligations remain OPEN.",
+    "Real accepted-target final release evidence remains separate from synthetic/disposable mechanism evidence."
+  ],
+  "training_authorized": false,
+  "frank_self_harness_authority": "PROPOSAL_ONLY"
+}

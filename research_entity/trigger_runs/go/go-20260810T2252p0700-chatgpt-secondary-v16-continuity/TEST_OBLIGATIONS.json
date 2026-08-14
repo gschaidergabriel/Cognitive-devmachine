@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2252p0700-chatgpt-secondary-v16-continuity",
+  "obligations": [
+    {
+      "id": "GO-V16-RUNTIME-001",
+      "priority": "P1_RELEASE_BLOCKING_COMPONENT_EVIDENCE",
+      "component": ["F-V01-08-TOKEN-API-CLIENTS", "F-V01-10-PROACTIVE-AGENCY-WEB", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "question": "Does current V16 runtime preserve durable request replay and explicit idle handoff on the accepted target VPS?",
+      "required_cases": [
+        "interactive acquire/bind",
+        "same-session durable request replay",
+        "restart replay without duplicate execution",
+        "interactive release creates pending handoff before semantic IDLE",
+        "silence does not clear",
+        "wrong session cannot clear",
+        "new explicit interactive request remains possible while pending",
+        "autonomous acquisition blocked while pending",
+        "matching released session clears",
+        "stale epoch writes/effects rejected"
+      ],
+      "status": "TARGET_WORKFLOW_PRESENT_RECEIPT_NOT_YET_OBSERVED_DURING_THIS_RUN"
+    },
+    {
+      "id": "GO-FLOCK-RECOVERY-001",
+      "priority": "P1_RECOVERY",
+      "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "question": "Can a forked child retain the Frank physical flock after the parent dies?",
+      "test": "Acquire FrankExecutionGate, fork a child that keeps the descriptor alive, terminate the parent holder, assert successor remains physically BUSY while child retains the shared open-file-description lock; then close/exit child and assert bounded recovery permits a new fenced semantic epoch without overlap.",
+      "expected_safe_behavior": "No two-active Frank executions; explicit DEGRADED/RECOVERING while residual child lock survives; eventual verified recovery after final duplicate descriptor closes.",
+      "status": "OPEN"
+    },
+    {
+      "id": "GO-EFFECT-REENTRY-001",
+      "priority": "P1_RELEASE_BLOCKING_COMPONENT_EVIDENCE",
+      "component": "F-V01-09-EFFECT-AUTHORITY",
+      "question": "Does current effect lifecycle structurally bind verified outcome re-entry to exact causal/provenance identity before terminal DONE?",
+      "current_source_falsifier": {
+        "target_test_commit": "0167a4915c8400e2c5218c59c8b75321743a61ae",
+        "target_workflow_commit": "2b3d92287249bc1b374dc9244a3fc76b6f675515",
+        "observed_source_gap": "record_reentry accepts an arbitrary dict including empty payload after a verified outcome; trace validation accepts REENTERED; recovery_decision treats REENTERED as COMPLETE; V14 schema has no explicit DONE state."
+      },
+      "required_candidate_properties": [
+        "exact effect_id binding",
+        "exact attempt_id binding",
+        "exact verified outcome hash binding",
+        "typed provenance/causal identity binding",
+        "admitted semantic delta or explicitly typed no-learning result",
+        "mismatch/empty payload rejection",
+        "explicit REENTERED -> DONE terminal transition",
+        "recovery COMPLETE only after DONE",
+        "trace verifier enforces the new transition and hashes",
+        "migration/restart/rollback and old-baseline differential tests"
+      ],
+      "status": "SOURCE_LEVEL_GAP_CONFIRMED_TARGET_VPS_NEGATIVE_RECEIPT_PENDING"
+    },
+    {
+      "id": "GO-PROVIDER-IDEMPOTENCY-001",
+      "priority": "P1_EFFECT_RECOVERY",
+      "component": "F-V01-09-EFFECT-AUTHORITY",
+      "question": "Are provider retries classified per concrete provider/action rather than globally?",
+      "cases": [
+        "Google Calendar create with stable caller-selected provider-valid event ID: candidate SAME_KEY_RETRY_SAFE after direct verification",
+        "Gmail users.messages.send: default RECONCILE_REQUIRED after uncertain acceptance unless independently verified reconciliation proves safe behavior"
+      ],
+      "status": "PRIMARY_DOC_EVIDENCE_CAPTURED_REAL_PROVIDER_UNCERTAINTY_RUN_OPEN"
+    }
+  ],
+  "out_of_box_experiment_count_for_this_go_run": 1,
+  "no_second_out_of_box_experiment_permitted": true
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "candidate_id": "CC-RELEASE-INPUT-CLOSURE-20260810",
+  "status": "CANDIDATE_NOT_PROMOTED",
+  "actor": "chatgpt-secondary",
+  "trigger_context": "go",
+  "problem": "Exact global git HEAD equality is appropriate as a contemporaneous anti-replay invariant inside one WP14/promoter run, but it is too coarse as the sole durable equivalence identity in a high-churn monorepo: unrelated research/receipt commits can advance HEAD without changing ClayCode release inputs.",
+  "current_supported_invariant": {
+    "scope": "COLLECTION_WP14_PROMOTION_TIME",
+    "rule": "strict target repository_commit == checkout HEAD",
+    "reason": "Prevents replaying an old coherent target bundle into a newer checkout during release mutation.",
+    "implemented_by": [
+      "tools/claycode_base_wp14_strict_audit.py",
+      "tools/claycode_promote_release_workspace.py"
+    ]
+  },
+  "proposed_durable_identity": {
+    "name": "ReleaseInputClosureDigest",
+    "purpose": "Distinguish release-relevant source/input changes from unrelated monorepo churn without weakening provenance.",
+    "minimum_fields": [
+      "source_revision_git_commit",
+      "release_input_closure_sha256",
+      "canonical sorted input records {identity,path_or_uri,sha256,role}",
+      "compiler/runtime/toolchain identities and versions",
+      "dependency/lock/config digests that affect lowering or execution",
+      "target/build environment fingerprint required by the acceptance contract",
+      "generated artifact digests",
+      "release epoch id"
+    ],
+    "durable_freshness_rule": "A later repository revision may reuse an accepted release epoch only if the complete declared release-input closure and required environment/toolchain identity remain cryptographically identical; any relevant-input change invalidates the epoch and requires re-execution.",
+    "authority_rule": "Closure equality is evidence reuse eligibility, never execution/effect authority."
+  },
+  "primary_external_support": [
+    {
+      "source": "Bazel official Remote Caching documentation",
+      "evidence_class": "T0_OFFICIAL",
+      "relevant_mechanism": "Build actions declare required inputs, commands/environment, and cache/reuse is keyed from action/input identity rather than arbitrary repository wall-clock churn."
+    },
+    {
+      "source": "SLSA v1.2 Provenance / Source Requirements",
+      "evidence_class": "T1_PRIMARY_STANDARD_SPEC",
+      "relevant_mechanism": "Provenance tracks artifacts to source revision and supports cryptographic digests for source/content/material identity."
+    },
+    {
+      "source": "Nix reference manual - content-addressed derivations/outputs",
+      "evidence_class": "T0_OFFICIAL",
+      "relevant_mechanism": "Content-addressing separates object identity from unrelated external metadata and motivates content-derived release identity."
+    }
+  ],
+  "strongest_counterhypothesis": "Global git commit identity alone is simpler, complete and safer; path/input closure risks omitting hidden dependencies and producing false equivalence.",
+  "why_not_promoted_now": [
+    "The complete transitive ClayCode release input closure has not yet been enumerated and measured.",
+    "An incomplete closure would be more dangerous than conservative exact-HEAD invalidation because it could silently reuse stale evidence.",
+    "Current BASE is not PASS, so correctness dominates avoiding future redundant reruns."
+  ],
+  "required_discriminating_tests_before_promotion": [
+    {
+      "test": "UNRELATED_MONOREPO_CHURN",
+      "intervention": "Change only an unrelated research/receipt artifact outside the declared release input closure.",
+      "expected": "global git commit changes; release_input_closure_sha256 stays identical; durable release eligibility may remain valid."
+    },
+    {
+      "test": "RELEASE_SOURCE_MUTATION",
+      "intervention": "Change a compiler/runtime/acceptance source that can affect ClayCode output.",
+      "expected": "release_input_closure_sha256 changes and prior release epoch becomes stale."
+    },
+    {
+      "test": "TOOLCHAIN_OR_LOCK_MUTATION",
+      "intervention": "Change a relevant dependency lock, compiler/runtime version, lowering config or target ABI input.",
+      "expected": "closure/environment identity changes and prior release epoch becomes stale."
+    },
+    {
+      "test": "HIDDEN_INPUT_FALSIFIER",
+      "intervention": "Vary an undeclared input while all declared closure records remain constant.",
+      "expected": "If output/semantics change, candidate closure is REFUTED/INCOMPLETE until that dependency is captured."
+    },
+    {
+      "test": "REPLAY_AFTER_RELEVANT_CHANGE",
+      "intervention": "Attempt to reuse old target receipts after a release-input mutation.",
+      "expected": "fail closed before downstream PASS."
+    }
+  ],
+  "promotion_gate": "Do not replace or relax exact-HEAD contemporaneous checks until complete closure discovery plus the hidden-input falsifier passes on local, Hostinger-compatible and Andreas target evidence lanes where applicable.",
+  "rollback": "No runtime change in this candidate; current exact-HEAD freshness checks remain authoritative.",
+  "training_gate_touched": false
+}

@@ -1,0 +1,21 @@
+{
+ "schema_version": "1.1",
+ "task_id": "task-MC-CLAYCODE-20260814T140654",
+ "room_id": "claycode",
+ "title": "Unblock 13 F-V0.1 PRs: classify the 12 new Clay sources held by the frozen corpus authority",
+ "goal_clay": "record Goal {origin:MASTER_CLAY;authority:PROPOSAL_ONLY;room:CLAYCODE;kind:ARBEITSAUFTRAG;work_package:F-V01-02;action:UNBLOCK_13_F_V0_1_PRS_CLASSIFY_THE_12_NEW_CLAY}",
+ "status": "OPEN",
+ "dependencies": [
+  "claycode/CLAYCODE_CORPUS_AUTHORITY_V1.json",
+  "runtime/claycode_eval_v1/corpus_authority.py",
+  "runtime/claycode_eval_v1/corpus_probe.py"
+ ],
+ "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:false;owner_decision_required:false}",
+ "created_by": "master-clay-auftrag",
+ "stack_epoch": 17,
+ "created_at": "2026-08-14T14:06:54Z",
+ "completion_test_prose": "File claycode/CORPUS_AUTHORITY_RECLASSIFICATION_PROPOSAL.json exists with exactly these 12 sources: frank_web_ingress, frank_effect_execution_fence_candidate, frank_boot_continuity, frank_human_projection, frank_token_tls_transport_candidate, frank_unifieddb_semantic_checkpoint_root, frank_capability_body, frank_training_data_freeze_v1_candidate, frank_needle, frank_task_switch_consent, frank_task_switch_consent_v3, frank_visual_mvc. Each entry: source, introducing PR, introducing commit, proposed classification (authorized | excluded_pending_authority) with stated reason, work package. Plus a dry-run receipt showing that applying the proposal to a SCRATCH copy of the manifest makes 'python3 -P -m runtime.claycode_eval_v1.corpus_probe' pass on the composed tree of PR 105, which today raises CORPUS_AUTHORITY_FAIL_CLOSED with unclassified_sources=[frank_web_ingress.clay].",
+ "rationale_prose": "MEASURED 2026-08-14 on frank-api. Root cause of claycode-frontier-current-main-composition-vps being 1 green : 15 red is NOT ClayCode maturity. The discriminator reports 6/6 checks PASS, then corpus_probe raises CORPUS_AUTHORITY_FAIL_CLOSED because claycode/CLAYCODE_CORPUS_AUTHORITY_V1.json has status FROZEN_REFERENCE_PENDING_OWNER_RECLASSIFICATION with 40 authorized + 2 excluded. Every PR that adds a new .clay source is unclassified and fails closed. 12 sources block 13 PRs, and those PRs are the program's own go output: 352 (F-V01-07 Needle), 370+385 (F-V01-08), 335 (F-V01-12), 347 (F-V01-14), 507, 105, 330, 199, 231, 275, 276, 297. This is the single largest unblock available.",
+ "requested_by_prose": "Master Clay, Gabriels Arbeitsgefaehrte — NICHT die Forschungsentitaet und nicht self.root/Frank. Bitte, keine Weisung: Evidenz schlaegt Rang.",
+ "hard_rule_prose": "Do NOT modify the live manifest — authority is PROPOSAL_ONLY. Do not invent a classification: derive it from what each source is, and say so per entry."
+}

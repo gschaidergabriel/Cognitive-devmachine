@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260812T0336p0700-chatgpt-sol-ldtrace-preexec",
+  "organ": "GPT-5.6 Sol temporary Clay worker",
+  "program": "FRANK_V0_1",
+  "status": "RESEARCH_DELTA",
+  "grf": {
+    "r0_observed": [
+      "Current Frank workspace keeps F-V01-13 security/recovery/observability IN_PROGRESS and requires exact productive SQLite/runtime/recovery proof.",
+      "Current Dr.-Unterweger main contains the merged SQLite V5 shell launcher repair from PR #439; that launcher rejects non-empty LD_PRELOAD, LD_AUDIT and LD_LIBRARY_PATH but explicitly requires an upstream trusted pre-shell environment boundary.",
+      "SQLite upstream documents the WAL-reset corruption bug through 3.51.2 and its fix in 3.51.3+, while SQLite 3.53.4 is a fixed current release identity already being tested by project candidate lanes."
+    ],
+    "generated_reality": "A production parent that merely blocks the three known code-injection loader variables may still admit other dynamic-loader controls whose semantics prevent the shell admission guard from executing; therefore filter-by-known-dangerous-variable is a weaker boundary than constructing a minimal allowlisted environment before execve.",
+    "counter_reality": "Other LD_* variables may be availability/diagnostic-only and not enable arbitrary code execution; if the parent requires an explicit cryptographic/semantic admission receipt rather than interpreting child exit status alone, a zero exit from a pre-shell loader mode may not become a false Frank admission.",
+    "falsifier": "Invoke the exact shell-boundary shape with LD_TRACE_LOADED_OBJECTS=1 and compare shell-observable denial/output/exit status to a baseline. A safe shell-only boundary would still execute the shell guard or produce an unambiguous non-admission result not confusable with success.",
+    "outcome": "RETAIN"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "LD_TRACE_PREEXEC_SUCCESS_SHADOW",
+    "environment": "local disposable Linux sandbox; NOT accepted Hostinger VPS",
+    "mutation_scope": "run-owned /tmp only; no Frank state, no production service, no root-owned project path, no external effect",
+    "baseline": {
+      "invocation": "/bin/sh launcher.sh --help",
+      "exit_code": 78,
+      "observation": "shell executed and emitted FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:RUNTIME_MUST_NOT_RUN_AS_ROOT"
+    },
+    "treatment": {
+      "environment_delta": "LD_TRACE_LOADED_OBJECTS=1",
+      "exit_code": 0,
+      "observation": "dynamic loader printed dependency mapping for /bin/sh and the shell script body did not execute"
+    },
+    "result": "SUPPORTED_LOCAL_COUNTERWORLD",
+    "interpretation": "An inherited loader control outside the launcher's three-variable blocklist can act before shell code and can terminate with rc=0. Production admission must therefore be bound to an upstream pre-exec trust boundary and positive admission receipt, not shell return code or a short denylist alone.",
+    "rollback": "temporary tree removed/ephemeral"
+  },
+  "primary_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "claim": "WAL-reset bug affects 3.7.0 through 3.51.2 and is fixed in 3.51.3+ under the documented concurrent WAL writer/checkpoint conditions."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "claim": "3.53.4 carries the WAL-reset fix and source-id 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    },
+    {
+      "source": "glibc dynamic linker documentation",
+      "url": "https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker-Environment-Variables.html",
+      "claim": "The dynamic linker behavior is controlled by multiple environment variables beyond LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH."
+    }
+  ],
+  "affected_work_packages": [
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-08-TOKEN-API-CLIENTS"
+  ],
+  "architecture_delta": {
+    "state": "SUPPORTED_TEST_OBLIGATION",
+    "requirement": "The admitted production service/parent should construct a minimal allowlisted environment before execve of the V5 shell/guard, and successful Frank start/admission must require a provenance-bound positive receipt from the guard/product rather than treating process rc=0 as sufficient.",
+    "do_not_claim": [
+      "No accepted-target reproduction of LD_TRACE_PREEXEC_SUCCESS_SHADOW",
+      "No proof that an API/web/user request can set production service environment",
+      "No F-V01-13 closure",
+      "No production SQLite provisioning",
+      "No whole Frank v0.1 acceptance"
+    ],
+    "next_discriminator": "Identify and attest the exact productive service parent/unit/drop-ins on the accepted Hostinger host; execute a bounded environment matrix including LD_TRACE_LOADED_OBJECTS and the already-known preload controls at the parent boundary; require pre-exec rejection or environment erasure plus positive V5 admission receipt and mapped SQLite 3.53.4 inode/source/hash continuity across restart."
+  },
+  "coordination": {
+    "frank_repo_observed_head_before_delta": "1a424c5319b4c55d12506f292be8f90728141d10 or later after merged PR #448; refresh before product writes",
+    "research_repo_parent_observed": "eb60c48ccad21d1561e49b3ce5b017dc28423167",
+    "duplicate_avoidance": "Does not repeat PRE_GUARD_PRELOAD_SENTINEL from PR #439 and does not duplicate root provisioning #440, runtime parity #444, or mapped-inode #435."
+  }
+}

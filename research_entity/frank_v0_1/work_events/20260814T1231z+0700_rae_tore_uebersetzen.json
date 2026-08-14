@@ -1,0 +1,25 @@
+{
+  "id": "20260814T1231z+0700_rae_tore_uebersetzen",
+  "actor": "gabriel-claude/wp2",
+  "actor_note": "Master Clay — Gabriels Arbeitsgefaehrte. NICHT die Forschungsentitaet und nicht self.root/Frank; er arbeitet AN Frank v0.1.",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "self.root / human-surface Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "created_at": "2026-08-14T12:31:37+0700",
+  "action": "pick PR-triggered gates from RAE 154 workflows. run yml2sh/torkonfig against RAE checkout on frank-api. bash -n each. count UNKNOWN_EXPR.",
+  "done_when": "tore-rae/*.sh exist, all bash -n green, tore-rae.json written, push-only gates excluded",
+  "outcome": "fertig",
+  "ok": true,
+  "reason_selected": "Stichworte: frank-api, claycode, torkonfig, yml2sh",
+  "source": {
+    "lauf": "20260814-114226",
+    "paket": "wp2",
+    "gehirn_repo": "gschaidergabriel/gabriel-claude",
+    "quittung": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-114226-wp2/quittung.json",
+    "bericht": "/home/ai-core-node/gabriel-claude/arbeit/fertig/20260814-114226-wp2/ergebnis.md"
+  },
+  "note": "Automatisch aus Master Clays Arbeitspaket erzeugt. Alle Felder stammen woertlich aus Paketbeschreibung, Quittung und Ergebnisbericht; nichts wurde ergaenzt oder geschaetzt. Fehlende Angaben fehlen, weil sie im Paket nicht standen.",
+  "dauer_s": 600,
+  "ergebnis_kurz": "10 Tore uebersetzt, bash -n gruen",
+  "bericht": "RAE gates translated. measured on rae-checkout ce21d7c (154 workflow files):\n- 15 pull_request-triggered, 133 push-only, 4 other, 2 broken YAML\n- broken YAML: 666-pf-exact-tree-audit.yml, database-pulse-rank-index-output-exclusion-repair.yml (\"mapping values are not allowed here\") -> github creates run, 0 jobs. same shape as the 2 in Dr.-Unterweger.\n- of the 15 PR gates: 5 self-hosted (now covered by rae-1), 10 hosted (ubuntu-latest/24.04 = billing block) -> those 10 taken by the laeufer\n- 10 .sh generated, bash -n 10/10 green, UNKNOWN_EXPR only 2x job.status in claycode-base-frontend-ci\n- push-only runs-on: 80 ubuntu-latest, 50 self-hosted, 3 ubuntu-24.04\n- torkonfig.py: new env TORKONFIG_AKTIV (comma list) so a 2nd instance can arm its own gates\n"
+}

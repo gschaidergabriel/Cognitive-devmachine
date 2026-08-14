@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T04:18:49+07:00",
+  "worker_provenance": "GPT-5.6 Sol temporary Clay worker",
+  "grf": {
+    "observed_reality": [
+      "PR #404 V2 projection worker orders each event as assert_lease_v2 -> v1.apply_event -> renew_lease_v2.",
+      "projection_outbox_v1.apply_event commits derived ClayGraph state in a graph transaction and only afterward opens a separate UnifiedDB transaction to mark the event APPLIED.",
+      "PR #404 itself lists the assert-before-apply window as a strongest remaining counterhypothesis."
+    ],
+    "generated_reality": "A pre-apply lease assertion might be sufficient because generation changes are independently fenced by acquire/renew semantics.",
+    "counter_reality": "The current owner can pass assert_lease_v2, expire, lose the lease to a successor generation, and still commit one derived ClayGraph mutation before renew observes the loss.",
+    "causal_mechanism": "Lease ownership/generation lives in UnifiedDB while the derived graph commit is a separate database transaction. No generation-bearing commit fence spans the interval from lease validation through the derived commit.",
+    "hidden_assumptions": [
+      "All successor lease acquisition uses the authoritative V2 acquire path on the same UnifiedDB file.",
+      "ClayGraph remains derived/rebuildable and does not itself mint semantic authority.",
+      "A repair must preserve crash/replay idempotency rather than claim cross-database atomic commit."
+    ],
+    "falsifier": "Admit successor B/gen2 after A/gen1 passes its lease assertion but before A performs the derived commit, then observe whether A/gen1 can still mutate the graph.",
+    "predicted_if_preassert_is_sufficient": "A/gen1 derived mutation is rejected or impossible after B/gen2 admission.",
+    "predicted_if_counter_reality_is_right": "B/gen2 becomes authoritative while A/gen1 can still commit the derived mutation.",
+    "outcome": "COUNTER_REALITY_SUPPORTED_REPAIR_TESTING"
+  },
+  "unusual_experiment": {
+    "name": "LEASE_TAKEOVER_BETWEEN_ASSERT_AND_GRAPH_COMMIT",
+    "count_for_go_macrocycle": 1,
+    "scope": "disposable local SQLite files only",
+    "baseline": "A/gen1 asserted and committed while still the admitted generation.",
+    "treatment": "A/gen1 asserted at boot-time 1050; after expiry B acquired gen2 at 1101; A/gen1 then committed the derived graph write.",
+    "treatment_result": {
+      "authoritative_lease_owner": "worker-b",
+      "authoritative_lease_generation": 2,
+      "derived_graph_writer": "worker-a",
+      "derived_graph_generation": 1,
+      "stale_generation_mutated_graph": true
+    },
+    "sensitivity_control": "A second authoritative lease check after B/gen2 admission rejects A/gen1 before graph mutation.",
+    "safety": "No canonical Frank state, accepted VPS state, external provider effect, Harness authority or training authority was mutated."
+  },
+  "repair_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "base_pr": 404,
+    "base_head": "f1283362a1b04005f09f9c6fcb72ff969706343d",
+    "draft_pr": 483,
+    "head": "5f18571f6b67371a255fe61f36d7042aa087e9a8",
+    "branch": "chatgpt/go-unifieddb-projection-lease-commit-fence-v3-20260812",
+    "files": [
+      "runtime/state/projection_worker_lease_commit_fence_v3_candidate.py",
+      "tests/unifieddb_projection_lease_commit_fence_v3_gate.py",
+      ".github/workflows/frank-unifieddb-projection-lease-commit-fence-v3-vps.yml"
+    ],
+    "mechanism": "Hold BEGIN IMMEDIATE on authoritative UnifiedDB across exact V2 owner/generation/boot/expiry validation, one bounded derived-graph callback, optional in-transaction UnifiedDB acknowledgement, and authoritative commit. Since acquire_lease_v2 also requires BEGIN IMMEDIATE on that UnifiedDB file, successor generation admission cannot commit inside the protected interval.",
+    "non_claim": "This is not a cross-database atomic commit. Crash after graph commit and before UnifiedDB acknowledgement remains an idempotent replay/recovery obligation."
+  },
+  "ordinary_regression": {
+    "checks_expected": 5,
+    "checks": [
+      "initial V2 generation is admitted",
+      "successor acquisition is blocked during protected callback",
+      "protected operation and UnifiedDB acknowledgement commit",
+      "successor generation can acquire after fence commit",
+      "stale predecessor generation is rejected before callback"
+    ],
+    "target_workflow_run": 31537165602,
+    "target_workflow_status_at_receipt": "QUEUED",
+    "target_pass_claimed": false
+  },
+  "collapse": {
+    "pre_apply_assertion_sufficient": "REFUTED_BY_BOUNDED_COUNTERWORLD",
+    "takeover_between_assert_and_commit": "SUPPORTED",
+    "unifieddb_write_lock_commit_fence": "TESTING",
+    "promotion": "NONE"
+  },
+  "affected_frank_components": [
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "strongest_remaining_counterhypothesis": "The new primitive is not yet production-integrated because projection_outbox_v1.apply_event is not split into a graph-only operation plus an acknowledgement that can execute inside the already-open UnifiedDB transaction. Therefore the candidate can pass its isolated lock regression while the actual worker still follows the old unfenced path.",
+  "next_discriminators": [
+    "Adjudicate exact-head accepted-target run 31537165602; queued/blocked/skipped is not PASS.",
+    "Split or adapt apply_event without changing its replay semantics so run_batch_v2/V3 actually uses the commit fence.",
+    "Replay existing crash windows, process-crash shadow-load corpus and lease takeover regression through the integrated path.",
+    "Verify no new deadlock/starvation or unacceptable writer-latency regression under bounded concurrent load."
+  ],
+  "coordination": {
+    "research_repo_head_observed_before_write": "5b76ed1dc2526f1842a5f149b5a3abc1d995917d",
+    "duplicate_search": "No existing research entry contained LEASE_TAKEOVER_BETWEEN_ASSERT_AND_GRAPH_COMMIT.",
+    "active_storage_lanes_avoided": true
+  },
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "effect_authority_changed": false,
+    "training_authorized": false,
+    "whole_frank_v0_1_pass": false
+  }
+}

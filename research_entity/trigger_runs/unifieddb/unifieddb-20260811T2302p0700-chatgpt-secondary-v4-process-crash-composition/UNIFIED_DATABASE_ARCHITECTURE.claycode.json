@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T2302p0700-chatgpt-secondary-v4-process-crash-composition",
+  "semantic_authority": "Clay/ClayCode typed UnifiedDB contracts",
+  "physical_engine_candidate": "SQLite 3.53.4 private runtime admitted by V4",
+  "architectures_evaluated": [
+    {
+      "id": "A_SPECIALIZED_BASELINE",
+      "shape": "separate state DB + graph DB + retrieval indexes + isolated recovery witness",
+      "strengths": ["clear failure domains", "specialized access patterns", "simple rollback boundaries"],
+      "weaknesses": ["more routing", "cross-store consistency receipts required"],
+      "status": "BASELINE_RETAIN"
+    },
+    {
+      "id": "B_LOGICALLY_UNIFIED_API",
+      "shape": "one typed Clay query/transaction/replay surface over physically specialized stores",
+      "strengths": ["one semantic authority", "model never chooses storage engine", "typed provenance and epoch checks"],
+      "weaknesses": ["router correctness becomes critical"],
+      "status": "SUPPORTED_DIRECTION"
+    },
+    {
+      "id": "C_SHARED_CANONICAL_PLUS_SIDECARS",
+      "shape": "authoritative UnifiedDB SQLite state plane + rebuildable ClayGraph/retrieval sidecars + isolated recovery witness",
+      "strengths": ["strong transaction core", "bounded projections", "recovery witness survives same-domain logical rewind"],
+      "weaknesses": ["cross-file atomicity must never be assumed", "projection freshness needs receipts"],
+      "status": "PREFERRED_CURRENT_CANDIDATE"
+    },
+    {
+      "id": "D_PHYSICAL_CONSOLIDATION",
+      "shape": "semantic state, graph and auxiliary indexes in one physical SQLite database",
+      "strengths": ["fewer physical handles", "single-file transaction convenience"],
+      "weaknesses": ["larger rollback blast radius", "derived graph churn contaminates authoritative write path", "cannot contain independent rollback witness", "specialized retrieval may regress"],
+      "status": "NOT_SELECTED_WITHOUT_DOMINATING_MEASUREMENTS"
+    }
+  ],
+  "preferred_architecture": "C_SHARED_CANONICAL_PLUS_SIDECARS",
+  "core_invariants": [
+    "UnifiedDB owns authoritative typed semantic state and epochs",
+    "ClayGraph is rebuildable and cannot mint truth or effect authority",
+    "model-facing retrieval returns bounded assemblies with selection/provenance receipts, never raw storage authority",
+    "every authoritative write binds current lineage, execution generation and epoch",
+    "stale schema/epoch/provenance fails closed",
+    "recovery evidence classes are non-substitutable",
+    "physical SQLite identity is deployment evidence, not semantic authority"
+  ],
+  "recovery_evidence_classes": [
+    {
+      "class": "PROCESS_CRASH",
+      "example": "SIGKILL/application-process termination",
+      "promotion_scope": "process restart only"
+    },
+    {
+      "class": "OS_CRASH",
+      "example": "kernel/system crash or hard reboot",
+      "promotion_scope": "separate target experiment required"
+    },
+    {
+      "class": "POWER_LOSS",
+      "example": "loss of stable power/storage flush boundary",
+      "promotion_scope": "separate hardware/storage experiment required"
+    },
+    {
+      "class": "LOGICAL_ROLLBACK",
+      "example": "restored stale snapshot or lineage rewind",
+      "promotion_scope": "external monotonic witness + lineage verification"
+    },
+    {
+      "class": "PROJECTION_REBUILD",
+      "example": "ClayGraph/index loss or stale projection",
+      "promotion_scope": "rebuild from authoritative UnifiedDB and compare roots/epochs"
+    },
+    {
+      "class": "DEPLOYMENT_BOOT",
+      "example": "installed service starts only through V4 trusted boundary",
+      "promotion_scope": "service/systemd non-bypass evidence"
+    }
+  ],
+  "claim": "architecture candidate only; whole Frank v0.1 remains unaccepted"
+}

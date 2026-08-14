@@ -1,0 +1,63 @@
+name: UnifiedDB ClayGraph Retrieval Hardening
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-claygraph-retrieval-hardening.yml'
+      - 'research_entity/experiments/unifieddb_claygraph_retrieval/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-claygraph-retrieval-hardening-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  retrieval-hardening:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout tested tree read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Runtime metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          uname -a
+          python3 --version
+          python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('sqlite=', sqlite3.sqlite_version)
+          print('fts5=', sqlite3.connect(':memory:').execute("SELECT sqlite_compileoption_used('ENABLE_FTS5')").fetchone()[0])
+          PY
+
+      - name: Retrieval correctness falsifiers
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research_entity/experiments/unifieddb_claygraph_retrieval
+          python3 -m unittest -v test_unifieddb_claygraph_retrieval_candidate.py
+
+      - name: Retrieval hardening benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research_entity/experiments/unifieddb_claygraph_retrieval
+          python3 benchmark_retrieval_hardening.py | tee /tmp/UNIFIEDDB_CLAYGRAPH_RETRIEVAL_HARDENING.json
+
+      - name: Upload benchmark receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-claygraph-retrieval-hardening-${{ github.run_id }}
+          path: /tmp/UNIFIEDDB_CLAYGRAPH_RETRIEVAL_HARDENING.json
+          if-no-files-found: warn
+          retention-days: 30

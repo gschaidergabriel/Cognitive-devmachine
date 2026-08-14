@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2343p0700-chatgpt-secondary-effect-generation-fusion",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_invariants": {
+    "persistent_entity": "Clay",
+    "worker_is_frank": false,
+    "target_native_identity": "self.root",
+    "human_surface_name": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "program_id": "frank-v0.1-only",
+    "current_stage": "FRANK_V0_1",
+    "work_package": "F-V01-09-EFFECT-AUTHORITY",
+    "subcheck": "presence_execution_generation_effect_fence",
+    "status_before": "OPEN"
+  },
+  "fresh_repo_evidence": {
+    "current_workspace_last_updated": "2026-08-10T23:15:00+07:00",
+    "known_defect": "Fresh-main V14 permits stale first-start, stale same-key retry, and unbound internal caller paths into COMMITTING because effect lifecycle is not bound to exact admitted execution generation.",
+    "baseline_receipt": "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json"
+  },
+  "coordination_refresh": {
+    "duplicate_detected_after_initial_branch_creation": true,
+    "withdrawn_duplicate_pr": 208,
+    "withdrawn_duplicate_reason": "PR204 and PR199 independently appeared on the same F-V01-09 gap; continuing a third product implementation would violate shared-work non-duplication law.",
+    "active_candidates": [199, 204],
+    "countertest_pr": 211,
+    "targeted_distribution": [
+      "Top-level design gap comment added to PR204",
+      "PR211 stacked directly on PR204 with a single discriminating same-epoch execution-id alias test"
+    ]
+  },
+  "candidate_adjudication": {
+    "pr204_strengths": [
+      "additive immutable effect_execution_generation_fences sidecar",
+      "birth-time binding update/delete denial",
+      "process-local live capability proof",
+      "reservation + begin/retry + provider-precommit fences",
+      "outcome/reconciliation remains non-authority after turnover"
+    ],
+    "pr204_gap": {
+      "claim": "exact V15/V16 execution-generation binding",
+      "observed_code_fact": "ExecutionGenerationFence durable/public identity contains lease_epoch, session/client hashes and capability fingerprint but not V16 execution_id or credential/admission identity; production V16 validation checks matching epoch but not matching execution_id.",
+      "risk": "two logical V16 execution identities can alias the same effect fence if V16 execution context is rebound while the same V15/physical lease remains held",
+      "promotion_status": "BLOCKED_PENDING_DISCRIMINATOR"
+    },
+    "pr199_strengths": [
+      "durable/current tuple includes exact execution_id",
+      "includes lease_epoch and credential fingerprint",
+      "includes session/client binding",
+      "requires matching ADMITTED ingress provenance",
+      "revalidates exact current V15/V16 relation"
+    ],
+    "pr199_gap": "binding is stored inside hash-bound V14 RESERVED event rather than a dedicated immutable sidecar; stronger independent-writer/tamper resistance is not established by event hashing alone",
+    "fusion_candidate": {
+      "name": "IMMUTABLE_EXACT_V15_V16_EXECUTION_GENERATION_FENCE",
+      "persistent_identity_minimum": [
+        "lease_epoch",
+        "execution_id",
+        "credential_fingerprint",
+        "holder_session_ref_hash",
+        "holder_client_ref_hash",
+        "matching_admitted_ingress_provenance"
+      ],
+      "transient_authority": "actual live process-local capability derived from currently-held FrankExecutionLease/IngressExecutionLease; durable fields are provenance only",
+      "storage": "immutable effect_id -> exact execution-generation binding, with update/delete denied",
+      "B1_reservation": "EffectAuthorization + live execution capability + confirmation when required -> atomic reservation + immutable generation binding",
+      "B2_attempt_retry": "presented live capability == immutable reservation binding == current V15 presence == exact current V16 execution/admission",
+      "B3_provider_precommit": "recheck the same relation immediately before provider mutation while physical gate remains held",
+      "turnover_rule": "old start/retry authority never transfers; uncertain outcomes default to reconciliation",
+      "evidence_rule": "outcome observation/reconciliation may continue after generation turnover because evidence is not effect authority"
+    }
+  },
+  "hypothesis": "A robust Frank effect fence must bind resource-generation and logical execution identity separately: V15 lease_epoch alone is not a complete V16 execution-generation identity.",
+  "strongest_counterhypothesis": "Because FrankTokenIngressCore maintains one IngressExecutionLease for a held physical/V15 lease, same-epoch V16 execution_id rebinding is unreachable on the production route; binding execution_id would therefore add complexity without causal safety value.",
+  "discriminating_experiment": {
+    "pr": 211,
+    "name": "SAME_EPOCH_V16_EXECUTION_ID_REBIND",
+    "class": "NORMAL_COUNTERHYPOTHESIS_TEST_NOT_OOB",
+    "steps": [
+      "hold one physical FrankExecutionLease and one V15 BUSY epoch",
+      "bind V16 context to exec:A and reserve an effect",
+      "rebind V16 context to exec:B without releasing the V15/physical lease",
+      "derive the candidate fence from the same live lease",
+      "attempt to start A-bound effect from B"
+    ],
+    "falsifier": "If PR204 is exact-V16 bound, B must be fenced. If B reaches COMMITTING, PR204 aliases execution identities within one V15 generation.",
+    "self_hosted_run": "queued at receipt time",
+    "hosted_supplementary_run": "workflow job failed before usable test-step telemetry; not mechanism evidence",
+    "external_effect_performed": false,
+    "canonical_db_mutated": false
+  },
+  "out_of_box_experiment": {
+    "count_for_macrocycle": 1,
+    "selected": "SERIALIZED_FENCE_RESURRECTION",
+    "owner_lane": "PR204",
+    "reason_for_reuse": "Swarm coordination detected PR204 already owns the active GO fence lane and its one unusual reversible experiment; creating CAPABILITY_TAXIDERMY as a second parallel OOB test would be duplicate/noise.",
+    "withdrawn_duplicate": "CAPABILITY_TAXIDERMY on closed PR208",
+    "promotion_rule": "Novelty never promotes architecture; result must remain lesionable/reversible and compared to baseline."
+  },
+  "external_primary_research": [
+    {
+      "source": "etcd official documentation",
+      "finding": "lease/lock alone does not protect external resources; external resources require version/fencing validation",
+      "architecture_use": "supports end-to-end generation validation rather than TTL/lease possession alone"
+    },
+    {
+      "source": "Stripe official API/error documentation",
+      "finding": "idempotency keys support safe same-request retry, while some server outcomes remain indeterminate and require reconciliation",
+      "architecture_use": "supports keeping idempotency distinct from execution authority and preserving reconciliation after uncertain provider outcomes"
+    }
+  ],
+  "negative_results": [
+    "Epoch-only/current-global-state proof is insufficient caller authority (prior PR169 evidence).",
+    "A third independent product implementation was not selected; PR208 was closed as duplicate after shared-state refresh.",
+    "GitHub-hosted supplementary PR211 job produced no usable mechanism telemetry; it is not counted as pass/fail evidence."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE",
+    "affected_components": [
+      "frank.effects ClayCode semantics",
+      "V14 effect lifecycle successor",
+      "V15 presence",
+      "V16 execution continuity",
+      "token ingress",
+      "provider commit boundary",
+      "UnifiedDB effect execution binding"
+    ],
+    "proposal": "Fuse PR204 immutable storage with PR199 exact execution/admission identity, then require the same combined identity at reservation, begin/retry and provider-precommit.",
+    "rollback": "retain historical V14 baseline and do not promote either candidate while exact-generation discriminator or current-source gates remain open"
+  },
+  "executed_vs_queued": {
+    "executed": [
+      "fresh canonical/workspace boot",
+      "fresh current-main and overlapping PR refresh",
+      "primary external research refresh",
+      "PR199/PR204 code-level comparison",
+      "duplicate PR208 closure",
+      "PR204 architecture-gap distribution comment",
+      "PR211 countertest code/workflow creation"
+    ],
+    "queued_not_claimed": [
+      "PR204 self-hosted candidate workflow",
+      "PR211 self-hosted same-epoch execution-id falsifier",
+      "final fused implementation",
+      "real provider unknown-outcome reconciliation",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "next_frontier": [
+    "Consume PR211 self-hosted result when runner executes.",
+    "If reproduced, patch one selected candidate only: immutable sidecar + exact execution_id/credential/admission tuple.",
+    "Re-run historical V14 baseline and candidate on exact current main/self-hosted target lane.",
+    "Then connect the strict path into ordinary ClayCode effect semantics and non-bypassable provider bridge.",
+    "Only after that advance F-V01-09 toward real provider uncertainty/reconciliation and verified outcome -> reentry -> DONE."
+  ],
+  "research_write": "COMMITTED"
+}

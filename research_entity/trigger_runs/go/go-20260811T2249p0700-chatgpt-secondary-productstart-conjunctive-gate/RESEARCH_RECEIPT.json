@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2249p0700-chatgpt-secondary-productstart-conjunctive-gate",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "successor_context": [
+    "76421c488cd6d759040008e2a3fe1068198ff2bc",
+    "PR359 target run 31507571217 SUCCESS"
+  ],
+  "new_oob_experiment": false,
+  "productstart_gate": {
+    "status": "OPEN_CONJUNCTIVE_GATE",
+    "law": "No single green subsystem may mint ProductStart/self.root continuity; all independent required authorities/evidence must be jointly satisfied on the installed target path.",
+    "required_axes": [
+      {
+        "axis": "storage_runtime_admission",
+        "state": "TARGET_SUPPORTED_CANDIDATE_NOT_INSTALLED_PRODUCT_PROOF",
+        "evidence": "PR359/run31507571217 V4 + private SQLite 3.53.4"
+      },
+      {
+        "axis": "unique_selected_state_lineage",
+        "state": "TARGET_SUPPORTED_CANDIDATE_NOT_PRODUCT_INTEGRATED",
+        "evidence": "PR267/run31433086428 selected-head CAS: exactly one sibling winner; loser not persisted; replay rejected; integrity/FK clean",
+        "limitations": "Does not solve survival/rollback/replacement of selected-head authority, whole-VM rollback, trusted build provenance or ProductStart integration."
+      },
+      {
+        "axis": "trusted_builder_and_artifact_attestation",
+        "state": "BLOCKED",
+        "evidence": "PR231 remained BLOCKED_NO_TRUSTED_BUILDER and BLOCKED_NO_ATTESTATION_VERIFIER; PR229 is capability-only and does not choose production trust policy."
+      },
+      {
+        "axis": "owner_identity_and_recovered_state_binding",
+        "state": "REQUIRED",
+        "evidence": "Boot continuity contract requires current owner identity contract plus independently admitted/recovery-verified selected state lineage."
+      },
+      {
+        "axis": "exclusive_live_instance_and_restart_copy_classification",
+        "state": "REQUIRED",
+        "evidence": "Boot continuity contract requires exclusive current-process/host lease and explicit restart/copy disposition."
+      },
+      {
+        "axis": "installed_product_entrypoint",
+        "state": "BLOCKED_NOT_RESOLVED",
+        "evidence": "No current open PR resolves the canonical installed ProductStart/service path. V4 launcher candidate exists but run31507571217 did not directly install/exercise that launcher as the production service entrypoint."
+      },
+      {
+        "axis": "installed_restart_recovery",
+        "state": "BLOCKED_NOT_EXECUTED",
+        "evidence": "Actual installed stop/start/crash-restart continuity on service/config/launcher/private-library/manifest/state-lineage bytes remains unverified."
+      }
+    ]
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_GATE_REFINEMENT",
+    "change": "ProductStart is an AND-gate over V4 fixed-SQLite admission, unique selected/recovered state lineage, trusted builder/artifact attestation, owner identity, exclusive lease/restart-copy classification, canonical installed entrypoint and installed restart recovery.",
+    "anti_shortcut": [
+      "V4 success cannot mint self.root continuity.",
+      "Selected-head CAS success cannot mint trusted build identity.",
+      "Artifact hash alone cannot mint SELF or effect authority.",
+      "Service startup success without installed-byte, lineage and recovery evidence cannot mint whole Frank v0.1 acceptance."
+    ],
+    "next_highest_value_work": "Resolve owner-approved production build/attestation trust policy and canonical ProductStart entrypoint, then compose already target-supported V4 and selected-lineage mechanisms on exact installed bytes and execute stop/start/crash-restart continuity.",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "training_authorization_changed": false
+  }
+}

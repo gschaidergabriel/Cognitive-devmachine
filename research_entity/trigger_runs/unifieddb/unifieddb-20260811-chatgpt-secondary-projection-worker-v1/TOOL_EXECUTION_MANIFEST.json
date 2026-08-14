@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.1",
+  "run_id":"unifieddb-20260811-chatgpt-secondary-projection-worker-v1",
+  "executed":[
+    {"tool":"GitHub","purpose":"refresh target/research main, overlap search and prior UnifiedDB receipts","result":"VERIFIED_RW"},
+    {"tool":"web.run","purpose":"primary SQLite WAL/durability/cross-file atomicity evidence carried forward from same unifieddb trigger","result":"PRIMARY_SQLITE_EVIDENCE_ACTIVE"},
+    {"tool":"GitHub","purpose":"build Clay semantic contract + candidate worker SQL + Python implementation + target gate + workflow","result":{"target_pr":391,"head":"6fe47f9672a997f784ac168314f8bc0c65afcd65"}},
+    {"tool":"GitHub Actions self-hosted target","purpose":"lease collision, hard process exit, expiry takeover, stale-generation fencing, bounded backpressure drain, integrity and throughput shadow","result":{"workflow_run":31515873771,"job":93860745062,"conclusion":"SUCCESS","checks":"25/25 PASS","runner":"clay","machine":"digital-retina"}},
+    {"tool":"GitHub","purpose":"merge target-validated worker candidate/regression path without production schema/service activation","result":{"pr":391,"merge_commit":"7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5","production_migration_lists_changed":false,"service_deployed":false}}
+  ],
+  "target_measurement":{
+    "initial_pending":96,
+    "crash_applied":7,
+    "pending_after_crash":89,
+    "contender":"LEASE_HELD",
+    "final_source_epoch":176,
+    "final_applied_epoch":176,
+    "final_pending":0,
+    "final_lag":0,
+    "throughput_events_per_second":{"batch_13":248.6885171922293,"batch_55":344.9872103832369,"batch_12":304.25762141888464},
+    "artifact_id":9111199960,
+    "artifact_digest_sha256":"4fe49d40f8acc1540d5a66d81b96bbcbc6b9f10087e9ff47e0bad24ff0fb51ee"
+  },
+  "guards":[
+    "candidate worker schema not in production migration lists",
+    "disposable current-schema target state only",
+    "no canonical Frank state",
+    "no systemd/service deployment",
+    "no multi-host clock-safety claim",
+    "no external effect",
+    "no training",
+    "no whole-product promotion"
+  ]
+}

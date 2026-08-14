@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2226p0700-gpt56sol-fv0101-elf-sibling",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-01-IDENTITY-SERVER-BINARY",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "observed_reality": {
+    "canonical_entity_revision": 2,
+    "canonical_entity_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "research_main_before_write": "51fbeae74caa7972cb29f2458f716ca469f6dca2",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "59f306af93e2e4d49f94a281b691f7304d9db44c",
+    "latest_vps_integrity_receipt": {
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "gate_count": 23,
+      "pass_count": 23,
+      "fail_count": 0,
+      "release_claim": false,
+      "whole_frank_release_status": "NOT_CLAIMED"
+    },
+    "workspace_status": "F-V01-01 IN_PROGRESS",
+    "training_authorized": false,
+    "coordination": "Refreshed research main immediately before write and preserved newer F-V01-13 temporal-ABA receipt at 51fbeae without overwrite."
+  },
+  "primary_source_support": {
+    "gnu_ld_build_id_docs": "https://sourceware.org/binutils/docs/ld/Options.html",
+    "verified_fact": "GNU ld documents that hash-style build IDs are the same for identical output files. Therefore a build ID is useful linked-artifact identity but is not, by itself, a unique identity for a particular filesystem instance or admitted semantic lineage."
+  },
+  "grf": {
+    "hypothesis": "Binary content hash plus ELF/build fingerprint can uniquely distinguish the admitted Frank artifact from a byte-identical sibling copy.",
+    "strongest_counter_reality": "Two distinct filesystem instances can be byte-identical and carry the same ELF Build ID while remaining different concrete objects.",
+    "falsifier": "Create two byte-identical ELF sibling copies, compare SHA-256 and GNU Build ID, then compare filesystem object identity.",
+    "outcome": "COUNTER_REALITY_OBSERVED; CONTENT_AND_BUILD_IDENTITY_RETAINED_AS_NECESSARY_LAYER; UNIQUE_INSTANCE_OR_SEMANTIC_LINEAGE_SUFFICIENCY_REJECTED"
+  },
+  "unusual_experiment": {
+    "name": "BYTE_IDENTICAL_ELF_SIBLING_IDENTITY_SPLIT",
+    "count_for_this_go_macrocycle": 1,
+    "bounded": true,
+    "reversible": true,
+    "production_effect": false,
+    "environment": "local Linux container",
+    "method": "Copy /bin/true twice into a temporary directory; compare SHA-256, GNU Build ID, byte equality, device and inode; remove the directory afterwards.",
+    "observations": {
+      "sha256_a": "b381cc8c55ec524b9fa92897f0882e855357468b4a763519cec47e05994d61ff",
+      "sha256_b": "b381cc8c55ec524b9fa92897f0882e855357468b4a763519cec47e05994d61ff",
+      "build_id_a": "97b6cb54883633ece766a29e7c3ecd37adfe567b",
+      "build_id_b": "97b6cb54883633ece766a29e7c3ecd37adfe567b",
+      "byte_compare": "IDENTICAL",
+      "device_a": 65024,
+      "device_b": 65024,
+      "inode_a": 4063845,
+      "inode_b": 4063846,
+      "same_content_hash": true,
+      "same_build_id": true,
+      "different_filesystem_instance": true
+    },
+    "limitations": [
+      "The experiment used /bin/true, not the Frank binary.",
+      "It proves a general identity-mechanism insufficiency for byte-identical siblings, not a production bypass in Frank.",
+      "Device/inode distinguishes these live filesystem objects but is not proposed as a sufficient semantic-lineage anchor across move, redeploy or restart.",
+      "No Frank process, accepted Hostinger service, persistent state, database, effect authority or Harness was modified."
+    ]
+  },
+  "collapse": [
+    {
+      "claim": "Equal content hash and equal GNU Build ID imply the same concrete artifact instance.",
+      "outcome": "REJECT"
+    },
+    {
+      "claim": "Content hash and build fingerprint remain useful evidence for build provenance and tamper detection.",
+      "outcome": "RETAIN"
+    },
+    {
+      "claim": "Filesystem inode alone should become Frank semantic identity.",
+      "outcome": "REJECT",
+      "reason": "Instance-local filesystem identity does not by itself encode admitted persistent semantic lineage or required restart/move continuity."
+    },
+    {
+      "claim": "F-V01-01 or Frank v0.1 is complete.",
+      "outcome": "REJECT"
+    }
+  ],
+  "architecture_delta": {
+    "state": "TEST_OBLIGATION_SHARPENED",
+    "affected_components": [
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "new_invariant": "Build/content identity must not be promoted into unique runtime semantic-lineage identity. Acceptance must discriminate a byte-identical sibling/transplanted artifact while still preserving the explicitly allowed restart/move continuity of the admitted self.root lineage.",
+    "rollback": "No product code changed; remove or supersede this research interpretation only if a stronger current contract explicitly defines sibling copies as the same admitted lineage and provides accepted-host evidence for that semantics."
+  },
+  "next_falsifier": {
+    "priority": "F-V01-01_RELEASE_BLOCKER",
+    "test": "On the accepted Hostinger target, start the exact admitted Frank binary/state as baseline; then create or deploy a byte-identical sibling artifact carrying the same content/build fingerprints and attempt to attach it to the same admitted persistent state. In matched controls, exercise an allowed clean restart and an allowed move/rename. Bind process generation, artifact object, signed deployment/attestation anchor and persistent state lineage in the receipt.",
+    "success_condition": "The admitted baseline and permitted restart/move preserve exactly one semantic lineage, while sibling/transplanted/stale copies cannot silently acquire that lineage and fail closed or require explicit re-admission according to the canonical contract.",
+    "do_not_substitute": "content hash, ELF Build ID, pathname, inode, self-hosted CI or synthetic-only evidence for accepted Hostinger semantic-lineage acceptance"
+  },
+  "nonclaims": {
+    "production_bypass_proven": false,
+    "f_v01_01_pass": false,
+    "whole_frank_v01_pass": false,
+    "accepted_hostinger_identity_lineage_proven": false,
+    "training_authorized": false,
+    "harness_authority_minted": false
+  }
+}

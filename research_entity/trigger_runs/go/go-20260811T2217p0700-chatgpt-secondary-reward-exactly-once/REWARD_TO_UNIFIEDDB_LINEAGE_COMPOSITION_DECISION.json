@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "COORDINATED_DEPENDENCY_DECISION_NO_SECOND_REWARD_EPOCH",
+  "reward_parent_evidence": {
+    "target_receipt_fold_run": 31508591524,
+    "result": "10/10 PASS under intact bounded V17 DONE source",
+    "open_gap": "exact authoritative source frontier/currentness under concurrent writes and source rollback"
+  },
+  "existing_unifieddb_lineage_candidates": [
+    {
+      "pr": 297,
+      "role": "derive authoritative UnifiedDB semantic checkpoint root in one explicit stable read transaction after storage/schema admission",
+      "important_boundary": "checkpoint evidence only; checkpoint_admitted=false and recovery_verified=false until later authority freezes/admit it"
+    },
+    {
+      "pr": 267,
+      "role": "single-winner selected lineage-head CAS with immutable history and sibling exclusion",
+      "important_boundary": "selected-head authority rollback/replacement remains separate"
+    },
+    {
+      "pr": 307,
+      "role": "negative type-confusion evidence requiring typed SemanticCheckpointIdentity rather than a bare semantic root hash",
+      "required_type": "SemanticCheckpointIdentity := root_protocol + semantic_root_manifest_id + semantic_root_hash"
+    }
+  ],
+  "composition_decision": {
+    "forbidden": "introduce a reward-specific authoritative epoch/head/checkpoint store",
+    "required": "reward projection consumes the same admitted/recovery-verified typed SemanticCheckpointIdentity and terminal-event frontier/cursor selected by the shared UnifiedDB/recovery architecture",
+    "reward_projection_identity": [
+      "typed SemanticCheckpointIdentity",
+      "terminal DONE/event frontier at or within that checkpoint",
+      "source universe digest/count",
+      "reward valuation/policy identity",
+      "canonical fold order digest",
+      "projected reward-state digest"
+    ],
+    "currentness": "CURRENT only when the projection's shared selected-lineage/checkpoint identity and terminal frontier equal the currently admitted authoritative source; otherwise STALE/PREFIX/EVIDENCE_ONLY",
+    "cache": "derived/discardable; never selected-head or truth authority"
+  },
+  "required_future_discriminator": "REWARD_FOLD_CONCURRENT_DONE_FRONTIER composed on the eventual selected-lineage/checkpoint successor, not on a private reward epoch",
+  "promotion": "NONE",
+  "go_oob_experiment_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

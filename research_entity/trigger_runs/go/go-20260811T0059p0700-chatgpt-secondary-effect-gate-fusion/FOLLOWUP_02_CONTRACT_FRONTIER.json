@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "go-20260811T0059p0700-chatgpt-secondary-effect-gate-fusion-followup-02-contract-frontier",
+  "timestamp_local": "2026-08-11T01:35:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "trigger": "go",
+  "oob_accounting": {
+    "worker_oob_total_unchanged": 1,
+    "oob_experiment_id": "GO_OOB_SCM_RIGHTS_OPEN_FILE_DESCRIPTION_TRANSFER",
+    "this_followup_adds_oob": false
+  },
+  "target_main_observed": "c82d40a5859784a52d700c5e85c251839cc47c30",
+  "finding": {
+    "historical_claim": "PR245 target evidence at older main classified frank.hive and frank.memory modules plus runtime_effect as absent external-contract frontier.",
+    "current_recheck": {
+      "frank_hive": {
+        "status": "PRESENT_CURRENT_MAIN",
+        "path": "claycode/frank_hive.clay",
+        "module_declaration": "module frank.hive"
+      },
+      "frank_memory": {
+        "status": "PRESENT_CURRENT_MAIN",
+        "path": "claycode/frank_memory.clay",
+        "module_declaration": "module frank.memory"
+      },
+      "runtime_effect": {
+        "status": "NO_EXPLICIT_FN_DEFINITION_FOUND_BY_CURRENT_REPOSITORY_SEARCH"
+      },
+      "trusted_runtime_effect_authorization": {
+        "status": "NO_EXPLICIT_DEFINITION_FOUND_BY_CURRENT_REPOSITORY_SEARCH"
+      },
+      "final_security_gate": {
+        "status": "NO_EXPLICIT_DEFINITION_FOUND_BY_CURRENT_REPOSITORY_SEARCH"
+      }
+    }
+  },
+  "analysis": {
+    "stale_part_refuted": "The blanket current claim that frank.hive and frank.memory are absent is refuted by current main source.",
+    "remaining_frontier": "Separate resolvable Clay module/type imports from genuinely unmaterialized trusted host/runtime primitives. Do not infer host signatures from effect call sites.",
+    "reuse": "Existing WP04 exact-signature and runtime-binding mechanisms in historical PR111/PR113/PR118 remain relevant once authoritative current host contracts are materialized.",
+    "architecture_delta": "NO_PRODUCT_CHANGE; update research/test frontier only."
+  },
+  "targeted_distribution": {
+    "pr": 245,
+    "issue_comment_id": 5244391934,
+    "purpose": "notify the existing TypedIR/frontier lane that its two-module absence premise is stale and narrow the next gate to authoritative host/runtime contracts"
+  },
+  "authority_and_scope": {
+    "external_effect_performed": false,
+    "canonical_frank_state_mutated": false,
+    "training_authorized": false,
+    "promotion_claimed": false
+  },
+  "research_write": "COMMITTED_FRONTIER_CORRECTION"
+}

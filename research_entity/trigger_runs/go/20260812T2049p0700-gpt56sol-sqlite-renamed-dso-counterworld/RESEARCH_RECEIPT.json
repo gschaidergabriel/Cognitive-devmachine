@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T2049p0700-gpt56sol-sqlite-renamed-dso-counterworld",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T20:49:27+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "171415456b42c9df3ad0d215b9c43f0ab0f11d93",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_state": {
+    "program": "FRANK_V0_1",
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "product_repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_at_final_prewrite_refresh": "e711a114d282a921f13d0ae2b1d1898a461d4cc4",
+    "live_attestor_blob_sha": "27292eb86c7afb3339f5a00cd5720adb24ed5dd7",
+    "training_authorized": false
+  },
+  "observed_reality": {
+    "workspace_gate": "F-V01-13 remains IN_PROGRESS and release-fail-closed for the accepted target SQLite/WAL path until fixed-runtime identity or equivalent topology proof is productively established.",
+    "accepted_target_runtime_observation": {
+      "observed_on_product_head": "1d104517f2fd03c82a5154edd0df7f6f2f3aa215",
+      "sqlite_version": "3.45.1",
+      "libsqlite3_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING",
+      "anchor_runtime_match": false,
+      "anchor_schema_trusted": false,
+      "anchor_metadata_trusted": false
+    },
+    "later_product_main_changes": [
+      {
+        "sha": "dc81f6697b787e0bee7d391daf91008276280106",
+        "class": "CI checkout isolation",
+        "semantic_storage_runtime_overlap_observed": false
+      },
+      {
+        "sha": "e711a114d282a921f13d0ae2b1d1898a461d4cc4",
+        "class": "persist deep-integrity receipt",
+        "semantic_storage_runtime_overlap_observed": false
+      }
+    ],
+    "live_attestor_scope": {
+      "status": "PASS_SQLITE_LIVE_PROCESS_IDENTITY when its checks pass",
+      "proof_scope": "ONE_LIVE_PROCESS_GENERATION_SQLITE_MAPPING_IDENTITY_ONLY",
+      "frank_identity_attested": false,
+      "productive_persistence_path_exercised": false,
+      "restart_recovery_attested": false
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption bug affects versions through 3.51.2 and is fixed in 3.51.3 and later; it requires WAL plus multiple connections in separate threads/processes with concurrent write/checkpoint timing."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "SQLite 3.53.4 is a fixed release and reports SQLITE_SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "generated_reality": {
+    "hypothesis": "If the live attestor proves the anchored libsqlite3 mapping in a process, that evidence is sufficient to treat the process as having a unique SQLite engine for persistence.",
+    "strongest_counterhypothesis": "The attestor's basename filter proves only the selected libsqlite3 mapping and can coexist with another SQLite shared object loaded under a different filename; therefore it cannot establish exclusivity or productive call-site binding by itself.",
+    "falsifier": "Load a second byte-identical SQLite DSO under a basename that does not contain libsqlite3.so, invoke sqlite3_libversion from it, and compare all mappings with the current attestor basename filter."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "RENAMED_SQLITE_DSO_COUNTERWORLD",
+    "scope": "Disposable local Linux process only; no VPS, Frank state, provider, Harness, product repo or canonical state mutation.",
+    "baseline_sqlite_version": "3.46.1",
+    "renamed_copy_sqlite_version": "3.46.1",
+    "baseline_mapping": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "renamed_mapping_basename": "xeno_payload.so",
+    "all_sqlite_like_mapping_count": 2,
+    "attestor_name_filter_mapping_count": 1,
+    "renamed_mapping_visible_to_current_name_filter": false,
+    "result": "COUNTERHYPOTHESIS_SUPPORTED",
+    "interpretation": "Do not promote one mapped anchored libsqlite3 identity into a claim that no other SQLite engine exists or that Frank persistence calls are bound to that engine.",
+    "rollback": "Temporary directory and copied DSO removed automatically at experiment exit.",
+    "canonical_state_mutated": false,
+    "product_state_mutated": false,
+    "effect_authority": "NONE"
+  },
+  "collapse": {
+    "preferred_outcome": "MERGE",
+    "retained_claim": "The current live attestor is useful as a narrow mapping-identity primitive.",
+    "rejected_overclaim": "The current attestor alone proves exclusive SQLite runtime identity or productive persistence-path binding.",
+    "release_effect": "NO_PROMOTION; F-V01-13 remains fail-closed."
+  },
+  "architecture_test_delta": {
+    "type": "TEST_OBLIGATION",
+    "candidate": "Bind productive persistence operations to the attested process generation and exact SQLite object/call path, or explicitly machine-check and reject additional SQLite engine mappings/modules relevant to persistence.",
+    "smallest_next_falsifier": "On the accepted Hostinger service PID, obtain a root/provenance-bound 3.53.4 live-process attestation and then exercise a real Frank persistence transaction while independently proving the executing sqlite3 module/DSO identity is the same anchored object; repeat across restart and reject downgrade/library-swap.",
+    "production_code_patch_this_run": "NONE",
+    "reason_no_product_patch": "Concurrent product-main work is active and the new evidence narrows proof semantics rather than justifying a blind mutation of the current admission chain."
+  },
+  "negative_results_preserved": [
+    "Accepted-target productive-path observation on 1d1045 still saw SQLite 3.45.1 and missing production trust anchor.",
+    "A 3.53.4 candidate installation/anchor does not by itself prove the productive Frank persistence path uses it.",
+    "The live mapping attestor's current basename filter does not prove absence of a renamed second SQLite DSO."
+  ],
+  "outcome": "RETAIN_NARROW_ATTESTOR_PLUS_NEW_TEST_OBLIGATION",
+  "promotion": "NONE"
+}

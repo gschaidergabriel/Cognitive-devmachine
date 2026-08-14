@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T1149p0700-chatgpt-secondary-productstart-interpreter",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_state": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "30723ac981cd375eff8f812f6f23bb56d1fde25b",
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_observed": "edd253b8c00bcd408759ec6dff10f19c8ec64dec",
+    "target_main_message": "security(storage): attest full SQLite V5 imported guard chain (#504)",
+    "target_self_hosted_run": 31564201644,
+    "workspace_f13_note": "Canonical workspace still describes the older SQLite 3.45.1 blocker and therefore lags the newer merged V5 guard-chain implementation evidence. This receipt does not overwrite shared workspace state."
+  },
+  "observed_anchors": [
+    "Target main #504 records exact-head self-hosted success for launcher syntax, inherited pre-guard regression, imported-guard-chain regression, static integrity, evidence upload and cleanup.",
+    "Target main explicitly keeps productive root-anchor/service/runtime/restart/recovery evidence open.",
+    "Current V5 launcher begins with #!/bin/sh and explicitly states that an upstream trusted launcher/service must establish the executable/environment boundary before /bin/sh executes.",
+    "Open draft PR #484 binds systemd executable path, ExecStartEx flags and structured argv semantics, but remains stale/non-promotable and does not explicitly bind the script interpreter identity."
+  ],
+  "hypothesis": "For a script-based ProductStart, binding launcher bytes/hash plus systemd executable path and argv is insufficient to uniquely bind the first executable code image unless the shebang interpreter chain is also deployment-attested.",
+  "strongest_counterhypothesis": "If the accepted deployment immutably and independently attests /bin/sh and its resolved executable identity across start, restart and rollback, then an additional runtime interpreter identity field is redundant rather than release-critical.",
+  "live_external_evidence": [
+    {
+      "source": "Linux man-pages execve(2)",
+      "claim_used": "An executable script beginning with #!interpreter causes the named interpreter to be invoked with the script path and arguments; interpreter identity is therefore a distinct execution layer.",
+      "url": "https://man7.org/linux/man-pages/man2/execve.2.html"
+    },
+    {
+      "source": "systemd D-Bus API documentation",
+      "claim_used": "ExecStart records expose an executable path plus the argv vector and runtime metadata, supporting explicit ProductStart tuple observation rather than treating argv as incidental text.",
+      "url": "https://www.freedesktop.org/software/systemd/man/org.freedesktop.systemd1.html"
+    }
+  ],
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "SHEBANG_INTERPRETER_IDENTITY_DIVERGENCE",
+    "environment": "disposable local sandbox only",
+    "canonical_or_vps_state_mutated": false,
+    "external_network_used_by_experiment": false,
+    "procedure": "Create one executable #!/bin/sh probe once, hash it, execute the same unchanged bytes directly through kernel/shebang dispatch, then execute the same bytes explicitly with /bin/bash; record /proc/$$/exe and hash again; cleanup temp tree.",
+    "script_sha256_before": "0b7435557e29eec8294b4bd5d2eafc88dbfa8a3170979d519b70f7eea06a2a78",
+    "script_sha256_after": "0b7435557e29eec8294b4bd5d2eafc88dbfa8a3170979d519b70f7eea06a2a78",
+    "baseline": {
+      "execution": "direct executable script / kernel shebang dispatch",
+      "observed_interpreter_exe": "/usr/bin/dash",
+      "bash_version": ""
+    },
+    "intervention": {
+      "execution": "explicit /bin/bash over the identical script bytes",
+      "observed_interpreter_exe": "/usr/bin/bash",
+      "bash_version": "5.2.37(1)-release"
+    },
+    "local_bin_sh_resolved_to": "/usr/bin/dash",
+    "result": "SUPPORTED_INTERPRETER_IDENTITY_IS_SEPARATE_FROM_SCRIPT_BYTE_IDENTITY",
+    "falsified_reality": "A trusted launcher script hash by itself uniquely identifies the first executable code image.",
+    "epistemic_limit": "This is a mechanism discriminator only. It does not prove the accepted Hostinger VPS currently starts Frank through the wrong interpreter or that an attacker can alter the productive interpreter."
+  },
+  "grf_collapse": {
+    "preferred_reality": "ProductStart admission should bind the actual script interpreter chain in addition to launcher/argv/release/runtime/state identities.",
+    "preferred_status": "RETAIN_AS_TEST_OBLIGATION",
+    "counter_reality_status": "OPEN_UNTIL_ACCEPTED_DEPLOYMENT_INTERPRETER_IDENTITY_AND_ROLLBACK_CONTINUITY_ARE_PROVEN",
+    "promotion": "NOT_VERIFIED_PRODUCT_ACCEPTANCE"
+  },
+  "architecture_test_delta": {
+    "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "action": "EXTEND_PRODUCTSTART_TUPLE_WITH_SCRIPT_INTERPRETER_IDENTITY_WHERE_APPLICABLE",
+    "required_observations": [
+      "exact expected service/unit identity",
+      "ExecStart/ExecStartEx executable, flags and full argv",
+      "script shebang interpreter pathname and resolved path chain",
+      "root-owned non-group-or-other-writable interpreter path plus strong artifact/build identity under deployment policy",
+      "launcher/guard release-bundle identities and root anchor",
+      "mapped fixed SQLite runtime identity",
+      "exact Frank target and admitted semantic state lineage",
+      "start/restart/rollback continuity"
+    ],
+    "negative_control": "A deterministic fixture may keep launcher bytes constant while changing interpreter identity; ProductStart admission must fail closed. This ordinary regression is a follow-up test obligation, not a second unusual experiment."
+  },
+  "targeted_distribution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 484,
+    "comment_id": 5262409914,
+    "purpose": "Feed the interpreter-identity discriminator into the existing stale ProductStart/ExecStart recomposition frontier instead of opening a duplicate implementation branch."
+  },
+  "non_claims": [
+    "No production /opt or /etc mutation.",
+    "No service install/start/restart/rollback was performed.",
+    "No accepted-VPS ProductStart admission PASS is claimed.",
+    "No F-V01-13 PASS or whole Frank v0.1 acceptance is claimed.",
+    "No Harness/effect authority changed.",
+    "No final-model training authorization changed.",
+    "No second unusual experiment was run."
+  ],
+  "research_disposition": "SUPPORTED_NEW_PRODUCTSTART_TEST_OBLIGATION_PLUS_TARGETED_DISTRIBUTION",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

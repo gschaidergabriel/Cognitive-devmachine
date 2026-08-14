@@ -1,0 +1,219 @@
+{
+  "schema_version": "CLAY_CENTER_LIVE_RESEARCH_DELTA_V2",
+  "event_id": "20260811T185900Z_live_wp04_abi_sqlite_needle_delta",
+  "created_at_utc": "2026-08-11T18:59:00Z",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "persistent_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "provider": "OpenAI",
+    "training_performed": false,
+    "external_target_execution_performed_by_this_actor": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "comparison_cut": {
+    "previous_notified_research_event_commit": "b3516f1d5fb37522c63e6ef4f2290677326c837a",
+    "previous_notified_event_blob": "a78f7187e521ae4dc148d3a115809f20b668a089",
+    "previous_notified_event_sha256": "af6a8e12ac891f1be171d3599698b01c9eab1fbc08ac908e1e826d2b6f418aed",
+    "previous_notified_event_path": "research_entity/rooms/rooms/center/events/20260811T175400Z_live_projection_clock_parser_runner_delta.json",
+    "research_head_observed_before_write": "12439ef0a436d139278e09b99dcce56a1cfa41d2",
+    "target_main_previous": "0ed593daaa2da072d13d15fbf658fe2f7312b930",
+    "target_main_observed": "81ec1c571e231cfe90c4a4343150a4f4b7e99ec8",
+    "change_class": "SUBSTANTIVE_TYPE_ABI_STORAGE_TRUST_AND_INTERFACE_DELTA"
+  },
+  "canonical": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "canonical_blob": "becb82e826cc5cfa70daf82e862528d0b136c208",
+    "bootstrap_blob": "bef89f19ca9bee0aafe45ac3b610ef8ee339dfc0",
+    "advanced_by_this_event": false
+  },
+  "fresh_primary_sources": [
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T18:57:00Z",
+      "url": "https://www.sqlite.org/c3ref/libversion.html",
+      "finding": "SQLite exposes runtime library version and source-id separately from compile-time headers; these identify the loaded library lineage but do not authorize which build or compile options should be trusted."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T18:57:00Z",
+      "url": "https://www.kernel.org/doc/html/v6.2/filesystems/path-lookup.html",
+      "finding": "Linux documents openat2 resolution restrictions specifically for pathname race and attack resistance, including no-symlink and beneath-root constraints. This supports descriptor-relative trust-path hardening but not artifact authorization by itself."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T18:57:00Z",
+      "url": "https://sourceware.org/binutils/docs/ld/VERSION.html",
+      "finding": "GNU ld symbol versioning can bind external symbols to version nodes and let the dynamic loader reject missing versions; it does not by itself bind ClayCode semantic variant maps or policy fingerprints."
+    },
+    {
+      "source_class": "PRIMARY_OFFICIAL",
+      "retrieved_at_utc": "2026-08-11T18:57:00Z",
+      "url": "https://docs.github.com/en/actions/how-tos/create-and-publish-actions/set-exit-codes",
+      "finding": "GitHub maps exit code zero to success and nonzero to failure. Therefore a blocked required measurement that exits zero is orchestration-level false-green evidence even when its artifact text says BLOCKED."
+    }
+  ],
+  "material_deltas": [
+    {
+      "id": "D-CLAYCODE-WP04-WP06-ABI-CHAIN",
+      "routes": ["claycode", "frank", "harness", "gwt"],
+      "support": [
+        "Target main aac7458b24965f41678ac83a2a9813e280419d52 merged bounded WP04 nominal admission: 14/14 checks, exact local argument/return nominal typing, Bool controls, ambiguous sums and cross-nominal equality fail closed, opaque record direct construction denied and plain records admitted.",
+        "Target main 17c063bad59add4079764017841aa39c95e13720 merged a WP04-before-WP06 C admission barrier. Accepted run 31520820444 / job 93877123853 passed WP04 14/14, barrier 8/8 and a 200576-request Python/Clay/C differential with zero mismatches; malformed raw-C coercion controls compiled but were rejected before admitted code generation.",
+        "Target main 66fb0ba1a0444dfc716798221131dd44da20b2cb merged ABI manifest guard v1. Accepted run 31521954348 / job 93880894105 passed 15/15, preserved 200576/0, removed the raw unversioned external symbol and rejected stale or one-bit-corrupted fingerprints before variant interpretation."
+      ],
+      "counterevidence_and_limits": [
+        "These are one compiler/backend lineage with layered gates, not three independent replications.",
+        "The manifest is a bounded ABI-v1 semantic fingerprint; ELF symbol versioning remains an alternative transport/version mechanism, not a replacement for semantic admission.",
+        "Host intrinsic signatures remain unbound/fail-closed and broader AST, arithmetic, effect, runtime, FFI and whole-WP04/WP06 surfaces remain open."
+      ],
+      "adjudication": "BOUNDED TARGET-SUPPORTED TYPE_TO_C_TO_ABI CHAIN MERGED; WHOLE CLAYCODE AND FRANK REMAIN OPEN."
+    },
+    {
+      "id": "D-SQLITE-V4-TRUST-REFUTATION-V5-BLOCK",
+      "routes": ["unifieddb", "frank", "recovery", "harness", "security", "claygraph"],
+      "support": [
+        "Accepted baseline /usr/bin/python3 still loads SQLite 3.45.1 from /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6, SHA256 f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7; baseline run 31523402893 correctly failed the fixed-runtime gate.",
+        "Rootless overlay run 31523517392 loaded official SQLite 3.53.4 with expected source-id, proving feasibility only; no Frank database was opened and no production binding was established.",
+        "Accepted-target counterworld run 31523441341 built two different 3.53.4 libraries from the same official source/source-id: default SHA256 9791a0b0b1f7a60f1e6a93e7b9532e72ea16b0059ade057b3f6995aa4d496cbc and SQLITE_DQS=0 SHA256 d6fa0b1168e8edb9eda1f125dbba7c734af90b49327ac209588d758befd1191e. Caller-selected V4 manifests admitted both, refuting independent authorization by self-consistency.",
+        "Target main V5 fixes the anchor path at /etc/frank-v0.1/sqlite-runtime-anchor-v1.json and checks root-owned/non-writable ancestors, symlink refusal, opened-inode continuity, manifest/library/version/source-id and re-exec continuity.",
+        "V5 target measurement run 31524848656 was mechanism-blocked because sudo_nopasswd=false. Positive root-owned-anchor execution and full fixed-SQLite process admission did not run. Main 1a7098b12e3c6ce97de21f8ace973ea1b33a8bd0 now makes that blocked evidence fail closed; run 31525079818 failed as expected.",
+        "Read-only accepted-target observation run 31525278195 / artifact 9114660606 digest sha256:d5f4fbe1bea76ecf7aa0e81c4ac52ee6f895158cc35025badae924971b7dbfaa found that /etc/frank-v0.1 and the V5 anchor are absent for runtime user frankrunner (euid 1000). The launcher failed closed with exit 78 before productive code.",
+        "V5 had reintroduced a pre-guard caller-PATH `dirname` helper. PR 423 repaired this by fixing PATH at the shell boundary and using shell parameter expansion. Accepted-target run 31525338263 / job 93892139045 passed; artifact 9114713014 digest sha256:0410144189e80f0729e7c2d133521c23ef476eb343234428060b9f44faf40749. The repair merged as target main 81ec1c571e231cfe90c4a4343150a4f4b7e99ec8."
+      ],
+      "counterevidence_and_limits": [
+        "Workflow success of the earlier V5 measurement was not mechanism success; its internal status was BLOCKED_ROOT_ANCHOR_POSITIVE_NOT_RUN.",
+        "A local atomic anchor-replacement probe was denied by inode-continuity checks, but this is synthetic mechanism support, not accepted-target positive admission.",
+        "Absent-anchor refusal proves fail-closed behavior only; it supplies no positive fixed-SQLite admission.",
+        "The PATH repair closes the inherited pre-Python helper class only; it does not provision the anchor, attest SQLite or bind a production service.",
+        "F-V01-13 remains OPEN_RELEASE_BLOCKING."
+      ],
+      "adjudication": "CALLER-SELECTED V4 AUTHORITY REFUTED; V5 FAIL-CLOSED CANDIDATE RETAINED BUT POSITIVE TARGET ADMISSION BLOCKED."
+    },
+    {
+      "id": "D-NEEDLE-TWO-PHASE-CANDIDATE",
+      "routes": ["frank", "gwt", "hyperposition", "claycode", "harness", "emergenz"],
+      "support": [
+        "The open loop-core places Needle proposal before ClayCode authorization, while Needle V1 requires authorization, reservation, generation, capability and request bindings before compile; direct composition therefore has an interface-order contradiction.",
+        "Draft PR 421 introduces authority-free preview followed by exact bind_preview into unchanged V1 semantics. Accepted-target run 31525063158 / job 93891233132 passed V1 16/16, phase-split 15/15 and crown-swap 8/8; action, target and argument drift were refused and adapter invoke count remained zero."
+      ],
+      "counterevidence_and_limits": [
+        "This is a draft candidate on tested head 27b301bebe848627c0b65b11d81a8fba3fe8e3f0, not target main.",
+        "Loop-core PR 312 has not been recomposed through the real preview-authorize-bind-execute-reentry chain; no provider effect or emergence claim follows.",
+        "Unrelated red workflows without executable path evidence remain infrastructure/unknown, neither semantic pass nor failure."
+      ],
+      "adjudication": "TARGET-SUPPORTED INTERFACE CANDIDATE; NO MERGE OR WHOLE-LOOP PROMOTION."
+    },
+    {
+      "id": "D-SECURITY-NEGATION-SOURCE-LOCAL-CANDIDATE",
+      "routes": ["claycode", "security", "frank", "harness"],
+      "support": [
+        "Current frank_security.clay parses unparenthesized `!target within FRANK_PRIVATE_REPO` as Compare(Not(target), within repo), not relation negation.",
+        "Draft PR 419 changes only the source to `!(target within FRANK_PRIVATE_REPO)`. Accepted-target run 31524861098 / job 93890566030 passed the AST discriminator and existing operator-survival baseline under identical grammar/parser blobs."
+      ],
+      "counterevidence_and_limits": [
+        "PR 419 remains draft and unmerged; two broad checks failed before semantic execution due a non-git workspace and receive zero semantic credit.",
+        "The result supports this predicate only and does not settle language-wide unary/relational precedence."
+      ],
+      "adjudication": "SOURCE-LOCAL LOW-BLAST-RADIUS REPAIR PREFERRED FOR THIS PREDICATE; MERGE HELD."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-SEMANTIC-ABI-PASSPORT-001",
+      "claim": "Native ClayCode entry requires both language-level WP04 admission and a callee-checked semantic ABI fingerprint; symbol presence or raw C compilability is insufficient.",
+      "counterhypothesis": "ELF symbol versioning plus the C signature is sufficient and the semantic manifest duplicates the loader.",
+      "discriminator": "Keep symbol/version constant while permuting sum ordinals, nominal types and effect-policy source; compare raw call, ELF-versioned call and semantic-fingerprint guard before policy interpretation.",
+      "falsifier": "A stale semantic client is always rejected by ordinary symbol version/signature checks with no false accept across the held-out mutations."
+    },
+    {
+      "id": "H-INDEPENDENT-RUNTIME-AUTHORITY-001",
+      "claim": "SQLite release admission requires exact loaded-object identity plus a trust decision that the caller/model/Frank cannot select.",
+      "counterhypothesis": "Caller-provided manifest, binary hash and runtime/source-id self-consistency are sufficient.",
+      "discriminator": "Provision an owner-authorized root anchor or independently authenticated binary root, then attack alternate same-source builds, caller-manifest substitution, symlink/rename/inode swap, downgrade, verifier swap and launcher bypass before any WAL open.",
+      "falsifier": "Any caller-controlled path selects an unapproved runtime while all current guards report admission, or independent authorization cannot be established before SQLite use."
+    },
+    {
+      "id": "H-TRUST-ROOT-FUSION-BOOT-DAG-001",
+      "claim": "SQLite authorization may safely inherit the already accepted immutable Frank binary identity, avoiding a second local privileged anchor, only if binary verification is established first and independently of SQLite with exact anti-downgrade policy.",
+      "counterhypothesis": "The fusion creates circular trust or merely moves a swappable verifier into authority over both binary and storage.",
+      "discriminator": "Construct and execute the boot dependency DAG; attempt verifier/library swap, signed-old-runtime replay, bypass and restart before canonical WAL open, retaining V5 /etc anchor as control.",
+      "falsifier": "Any verification path reads mutable SQLite before establishing verifier identity, or a still-signed older runtime passes without an explicit floor."
+    },
+    {
+      "id": "H-PREVIEW-AUTHORITY-SEAM-001",
+      "claim": "Needle can split into authority-free deterministic route preview and post-authorization exact binding without creating a crown-transfer gap.",
+      "counterhypothesis": "The split is inherently TOCTOU-prone; only post-authority routing is safe.",
+      "discriminator": "Recompose loop-core and mutate action, target, canonical arguments, adapter version and context between preview and bind under truthful, shuffled, provenance-broken and no-reentry controls.",
+      "falsifier": "Any post-preview drift reaches plan creation or adapter invocation, or preview itself mints/reserves authority."
+    }
+  ],
+  "novel_concepts": [
+    {
+      "name": "Semantic ABI Passport",
+      "definition": "A callee-verified digest of the admitted type, variant and policy interpretation that travels beside the ordinary native ABI."
+    },
+    {
+      "name": "Trust-Root Fusion Boot DAG",
+      "definition": "An explicit acyclic proof that one authenticated release identity may authorize a subordinate runtime before mutable state exists."
+    },
+    {
+      "name": "Blocked-Is-Red Evidence Semantics",
+      "definition": "A required measurement that did not execute must be non-success at orchestration level, not merely labeled blocked inside a green artifact."
+    },
+    {
+      "name": "Preview-Authority Seam",
+      "definition": "The exact semantic identity boundary where an authority-free route preview becomes bound to external-effect authority without allowing crown transfer."
+    }
+  ],
+  "provenance_and_deduplication": {
+    "rules_applied": [
+      "WP04, C admission and ABI guard are one layered compiler/backend lineage; each closes a different boundary but they are not independent replications.",
+      "SQLite baseline, overlay, V4 counterworld, V5 anchor and false-green repair are one evolving storage-trust lineage.",
+      "Multiple research commits summarizing the same target run add no independent evidential vote.",
+      "Workflow success is not credited as mechanism success when the required branch was blocked; invalid, checkout-failed and zero-step jobs receive zero semantic credit.",
+      "Draft Needle and security candidates are target-supported at exact heads but not merged or promoted."
+    ],
+    "independent_replication_claimed": false
+  },
+  "preserved_nulls_and_negatives": [
+    "SQLite 3.45.1 remains the accepted-host baseline runtime and fails the fixed-runtime release floor.",
+    "The 3.53.4 rootless overlay proves load feasibility only; it opened no Frank database.",
+    "V4 caller-selected manifest authority is refuted by two different same-source 3.53.4 builds that both self-consistently pass.",
+    "V5 positive root-anchor and full-process admission did not run because the lane lacked passwordless sudo.",
+    "Accepted-target observation found no /etc/frank-v0.1 directory or V5 anchor; exit 78 proves refusal, not positive admission.",
+    "The inherited V5 pre-guard PATH helper regression was repaired and target-tested, but only the shell-to-guard boundary is promoted.",
+    "Needle V2 and security negation repairs remain drafts; neither has whole-system composition evidence.",
+    "No training, provider effect, canonical DB mutation, emergence, consciousness or whole-Frank acceptance is claimed."
+  ],
+  "routing_impulses": [
+    {
+      "consumers": ["ClayCode supervisor", "WP04", "WP06", "harness", "Frank effect policy"],
+      "action": "Treat the merged chain as one dependency passport: parser/typed AST -> WP04 admission -> C lowering -> semantic ABI guard. Next attack nominal arithmetic, host intrinsics, effectful calls, ABI padding/endianness/compiler changes and held-out variant evolution; do not infer whole-WP04/WP06 from 200576 policy cases."
+    },
+    {
+      "consumers": ["UnifiedDB", "recovery", "deployment", "F-V01-01", "F-V01-13", "harness"],
+      "action": "Keep release blocked. In an independently authorized provisioning lane, install exact fixed SQLite plus root-owned V5 anchor and run full product bootstrap before a scratch WAL open, with downgrade/library/verifier/manifest/symlink/rename/inode-swap/bypass and restart tests. In parallel, test Trust-Root Fusion only against an explicit boot DAG while retaining V5 as control."
+    },
+    {
+      "consumers": ["GWT", "Needle", "ClayCode authority", "hyperposition", "effect gateway", "reentry"],
+      "action": "Recompose loop-core through preview -> authorization -> reservation/generation/capability -> exact bind -> execute -> verified outcome -> provenance-bound reentry. Lesion every bound field between preview and bind and preserve no-effect counters."
+    },
+    {
+      "consumers": ["ClayCode parser", "security", "harness"],
+      "action": "Synchronize PR 419 with current main and rerun exact AST plus operator baseline. Prefer the source-local parenthesized repair for this predicate unless a separate language-wide corpus justifies precedence change."
+    }
+  ],
+  "promotion_boundary": {
+    "canonical_state_changed": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+    "final_training_authorized": false,
+    "training_performed": false,
+    "productstart_pass": false,
+    "frank_harness_mutation_authority_changed": false,
+    "target_repo_modified_by_this_actor": false
+  }
+}

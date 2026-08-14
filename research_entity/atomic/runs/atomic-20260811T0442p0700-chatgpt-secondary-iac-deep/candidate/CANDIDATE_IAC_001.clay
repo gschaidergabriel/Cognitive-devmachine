@@ -1,0 +1,125 @@
+module atomic.iac.v0_1
+version "IAC-001"
+status CANDIDATE_NOT_PROMOTED
+
+enum RecurrenceRoute { CONTINUE, HALT_AND_ROUTE, RESEED, ABSTAIN, REFRESH }
+enum CoverageState { CERTIFIED_CURRENT, PARTIAL, UNKNOWN, STALE }
+
+record ActionSemanticKey {
+  action_kind:Symbol
+  target_hash:Hash
+  exact_scope_hash:Hash
+  effect_class:Symbol
+  destructive_kind:Symbol
+  confirmation_requirement:Symbol
+  intended_payload_hash:Hash
+}
+
+record BranchActionProjection {
+  branch_id:HypothesisRef
+  branch_provenance:ProvenanceRef
+  state_epoch:Epoch
+  decision_epoch:Epoch
+  effect_policy_epoch:Epoch
+  action:ActionSemanticKey
+}
+
+record HyperpositionCoverageWitness {
+  branch_set_hash:Hash
+  coverage:CoverageState
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+  source_projection_hash:Hash
+  evidence:Set<ProvenanceRef>
+}
+
+record InvariantActionWitness {
+  branch_set_hash:Hash
+  action:ActionSemanticKey
+  branch_count:Int
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+  decision_epoch:Epoch
+  effect_policy_epoch:Epoch
+  projection_hash:Hash
+  coverage_ref:Hash
+}
+
+fn derive_action_invariance(
+  projections:Set<BranchActionProjection>,
+  coverage:HyperpositionCoverageWitness,
+  current_state_epoch:Epoch,
+  current_semantic_epoch:Epoch,
+  current_decision_epoch:Epoch,
+  current_effect_policy_epoch:Epoch
+) -> OPTION<InvariantActionWitness> {
+  require coverage.coverage == CERTIFIED_CURRENT
+  require coverage.state_epoch == current_state_epoch
+  require coverage.semantic_epoch == current_semantic_epoch
+  require projections is_exactly coverage.branch_set_hash
+  require forall p in projections: p.state_epoch == current_state_epoch
+  require forall p in projections: p.decision_epoch == current_decision_epoch
+  require forall p in projections: p.effect_policy_epoch == current_effect_policy_epoch
+  let keys = set_map(projections, p -> p.action)
+  if cardinality(keys) != 1 { return none }
+  return some(non_authoritative_invariance_witness(keys.only, projections, coverage))
+}
+
+fn recurrence_route(
+  invariant:OPTION<InvariantActionWitness>,
+  unresolved_pressure:Float,
+  dynamics:LoopDynamicsReadout,
+  budget:RecurrenceBudget
+) -> RecurrenceRoute {
+  if invariant.some { return HALT_AND_ROUTE }
+  if dynamics.regime == DIVERGING_OR_OVERTHINKING && can_reseed(budget) { return RESEED }
+  if budget.exhausted { return ABSTAIN }
+  if unresolved_pressure > 0 { return CONTINUE }
+  return ABSTAIN
+}
+
+law action_invariance_does_not_collapse_hyperposition
+law epistemic_uncertainty_may_remain_after_HALT_AND_ROUTE
+law singleton_action_projection_is_not_truth
+law singleton_action_projection_is_not_user_intent
+law singleton_action_projection_is_not_effect_authority
+law action_key_must_include_all_policy_material_effect_dimensions
+law action_key_equality_cannot_ignore_target_scope_confirmation_or_payload
+law missing_branch_is_not_refuted_branch
+law incomplete_or_unknown_coverage_forbids_invariance_witness
+law stale_state_semantic_decision_or_effect_epoch_forbids_witness
+law GWT_ignition_or_model_confidence_cannot_mint_invariance
+law routed_action_still_requires_normal_effect_gate
+law effect_gate_DENY_overrides_IAC_route
+law effect_gate_REQUIRE_CONFIRMATION_remains_REQUIRE_CONFIRMATION
+law witness_is_ephemeral_or_revalidatable_evidence_not_canonical_truth
+law branch_provenance_survives_action_equivalence
+
+observe projected_action_cardinality
+observe branch_count
+observe branch_action_entropy
+observe recurrence_count_saved
+observe false_halt
+observe false_continue
+observe coverage_state
+observe witness_refresh_count
+observe decision_epoch
+observe effect_policy_epoch
+
+ablation remove_coverage_guard
+ablation remove_decision_epoch_guard
+ablation replace_exact_singleton_with_confidence_threshold
+ablation replace_adaptive_stop_with_fixed_budget
+ablation replace_IAC_with_plain_action_set_cardinality
+
+failure COVERAGE_PARTIAL -> ABSTAIN
+failure COVERAGE_UNKNOWN -> ABSTAIN
+failure COVERAGE_STALE -> REFRESH
+failure DECISION_EPOCH_STALE -> REFRESH
+failure EFFECT_POLICY_EPOCH_STALE -> REFRESH
+failure ACTION_KEYS_DIVERGE -> CONTINUE
+
+invariant no_new_runtime_authority
+invariant no_truth_promotion
+invariant no_effect_retry_authority
+invariant unresolved_worlds_preserved

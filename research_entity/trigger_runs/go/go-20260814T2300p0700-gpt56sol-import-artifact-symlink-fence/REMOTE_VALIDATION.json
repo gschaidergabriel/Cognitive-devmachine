@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "cycle_id": "go-20260814T2300p0700-gpt56sol-import-artifact-symlink-fence",
+  "created_at": "2026-08-14T23:09:00+07:00",
+  "program": "FRANK_V0_1",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_patch": {
+    "commit": "996c7e91584b4ad91920ce591bc6fc569362013f",
+    "path": ".github/workflows/clay-vps-mcp-v02-deploy.yml",
+    "change": "Harden stdlib-only MCP deployment receipt generator and final acceptance verifier to python3 -I -S; inject a PYTHONPATH poison sentinel, assert it is ignored by interpreter search state, persist interpreter isolation evidence, and fail closed if the persisted receipt lacks isolation evidence. Venv/package-dependent lanes intentionally unchanged."
+  },
+  "remote_run": {
+    "run_id": "31817773142",
+    "job_id": "94823472131",
+    "head_sha": "996c7e91584b4ad91920ce591bc6fc569362013f",
+    "runner": "clay",
+    "runner_id": 2,
+    "status": "COMPLETED_FAILURE",
+    "preflight": "PASS",
+    "preflight_tests": "12 passed in 2.51s",
+    "privilege_admission": "FAIL",
+    "privilege_error": "sudo: a password is required",
+    "install": "SKIPPED",
+    "postdeploy": "SKIPPED",
+    "backup": "SKIPPED",
+    "receipt_persist": "PASS",
+    "final_acceptance_gate": "FAIL_CLOSED"
+  },
+  "persisted_receipt": {
+    "path": "gschaidergabriel/Dr.-Unterweger:runtime/vps_mcp/v02/LATEST.json",
+    "receipt_id": "CLAY-VPS-MCP-V02-31817773142",
+    "source_sha": "996c7e91584b4ad91920ce591bc6fc569362013f",
+    "accepted_release": false,
+    "receipt_interpreter": {
+      "isolated": true,
+      "no_site": true,
+      "safe_path": true,
+      "pythonpath_ignored": true
+    },
+    "secret_values_emitted": false,
+    "whole_frank_v0_1_release_status": "NOT_CLAIMED"
+  },
+  "adjudication": {
+    "receipt_lane_hardening": "PASS_EXACT_SELF_HOSTED_UBUNTU_EXECUTION",
+    "deployment_acceptance": "BLOCKED_PRIVILEGE_ADMISSION",
+    "frank_v0_1_release": "NO_PROMOTION",
+    "artifact_authority": "STILL_OPEN",
+    "host_build_attestation": "STILL_OPEN",
+    "counterevidence_preserved": "The run did not install or exercise postdeploy/backup because noninteractive sudo was unavailable. Interpreter-isolation success must not be misrepresented as deployment or Frank acceptance."
+  },
+  "next_falsifiers": [
+    "Resolve or explicitly redesign the MCP deployment privilege-admission contract; do not bypass it merely to make CI green.",
+    "Complete Python import-artifact authority with authenticated origin/loader/content-digest/manifest binding on an admitted runtime.",
+    "Preserve the separate Hostinger ProductStart/SQLite semantic-lineage and restart/recovery blockers."
+  ]
+}

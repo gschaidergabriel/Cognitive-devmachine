@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "PASS_TARGET_VPS_REWARD_TERMINAL_BRIDGE_V1_GATE",
+  "candidate_pr": 332,
+  "candidate_head": "9d62101046f8629b67817578371b59dc0e94b0d2",
+  "current_main_parent": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+  "tested_pr_merge_sha": "78d9c1d313786e263b7838f95a742e427899d924",
+  "workflow_run_id": 31508591628,
+  "artifact_id": 9108534007,
+  "artifact_digest": "sha256:76267b39965cf096ec09497cae737c3c3957a9b4a921af58026067d70514d65c",
+  "receipt_sha256": "beb51091b144755a501e406f7e6c664c340533c0d7b4626d0e91e852eae897c0",
+  "target": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1"
+  },
+  "result": {
+    "checks_passed": 10,
+    "checks_total": 10,
+    "failed_checks": [],
+    "caller_fractional_credit_is_never_authoritative": true,
+    "default_abstains_when_fractional_credit_unresolved": true,
+    "fractional_credit_refused_until_producer_receipt_schema_exists": true,
+    "bound_reentry_without_done_is_not_reward_authority": true,
+    "verified_outcome_without_bound_reentry_is_not_reward_authority": true,
+    "terminal_explicit_no_learning_blocks_material_reward": true,
+    "verified_bound_failure_can_admit_negative_utility": true,
+    "unverified_outcome_never_admitted": true,
+    "raw_candidate_requires_non_bypassable_upstream_bridge": true,
+    "raw_candidate_forged_weight_observed": 1.0
+  },
+  "binary_example": {
+    "credit_semantics": "BINARY_NOT_CALIBRATED_FRACTION",
+    "material_credit": 1.0,
+    "utility": 1.0,
+    "reason": "BINARY_VERIFIED_BOUND_ATTRIBUTION_ADMITTED",
+    "terminal_receipt_hash": "668f871863709d80dc33d1583d9575dfc5342bbcacf562d16faae5b894aa50c3"
+  },
+  "resource_shadow": {
+    "elapsed_wall_s": 0.22,
+    "user_cpu_s": 0.13,
+    "system_cpu_s": 0.04,
+    "max_rss_kib": 24832,
+    "exit_status": 0
+  },
+  "architecture_adjudication": {
+    "public_reward_authority_boundary": "PRODUCER_OWNED_V17_DONE_PLUS_NON_BYPASSABLE_TERMINAL_BRIDGE_OR_STRONGER",
+    "raw_reward_plasticity_candidate": "NON_AUTHORITATIVE_INTERNAL_MECHANISM_ONLY",
+    "fractional_credit": "UNRESOLVED_DEFAULT_ABSTAIN",
+    "binary_credit": "EXPLICIT_EXPERIMENTAL_NOT_CALIBRATED_FRACTION",
+    "caller_fractional_credit": "FORBIDDEN"
+  },
+  "promotion": "NONE_INTERFACE_HARDENING_CANDIDATE_ONLY",
+  "go_oob_experiment_delta": 0,
+  "canonical_state_mutated": false,
+  "external_effect_performed": false,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

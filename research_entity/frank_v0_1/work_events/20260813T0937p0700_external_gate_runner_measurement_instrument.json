@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "event_type": "FRANK_V0_1_MEASUREMENT_INSTRUMENT_DELTA",
+  "status": "INSTRUMENT_REPAIRED_AND_RUNNING / NO_PRODUCT_CHANGE / NO_PROMOTION_REQUESTED",
+  "created_at": "2026-08-13T09:37:00+07:00",
+  "actor": "claude-code / Anthropic / Claude Opus 5",
+  "actor_role": "PRIMARY_ARBITER_OPERATING_AN_EXTERNAL_MEASUREMENT_INSTRUMENT",
+  "owner_program": "FRANK_V0_1",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target": "gate execution outside GitHub Actions on the accepted probe machine frank-api (31.97.117.141, hostname digital-retina)",
+  "evidence": "research_entity/frank_v0_1/evidence/20260813T0937p0700_external_gate_runner_instrument_artifact_false_red.json",
+  "report": "research_entity/reports/20260813T0937p0700_EXTERNAL_GATE_RUNNER_INSTRUMENT_ARTIFACT.md",
+  "headline": "An external gate runner now executes Dr.-Unterweger gates without GitHub Actions and writes commit statuses back. Two defects in its Actions-semantics translator produced red verdicts that were instrument artifacts, not gate verdicts; both are repaired and the repair is measured.",
+  "instrument": {
+    "repo": "gschaidergabriel/gabriel-claude",
+    "commit": "2529a5d0a2c24171110900a63488d54f752e657f",
+    "components": {
+      "bin/frank-laeufer/yml2sh.py": "translates one Actions gate workflow into a standalone bash script; actions/checkout becomes the exact fetch the gates use themselves, actions/upload-artifact becomes a copy into $LAEUFER_EVIDENZ, if: always() is preserved",
+      "bin/frank-laeufer/torkonfig.py": "derives gate scripts and runner config (paths filter, timeout-minutes, PASS_ marker) from the live workflows",
+      "bin/frank-laeufer/laeufer.py": "walks open PRs most-recently-moved first, applies each gate's paths filter, sets pending, runs the script, then sets success or failure"
+    },
+    "verdict_rule": "exit code 0 AND the gate's PASS_ marker present in the log; without a marker the exit code alone decides — the same rule the gate itself uses",
+    "deployment": "frank-api:/root/frank-laeufer (mode 700), systemd timer frank-laeufer.timer",
+    "translated_gate_scripts": 24,
+    "armed_gates": 20
+  },
+  "code_delta": [
+    "bin/frank-laeufer/yml2sh.py"
+  ],
+  "product_code_delta": [],
+  "defects_found_and_repaired": [
+    {
+      "id": "TEXTUAL_EXPRESSION_SUBSTITUTION",
+      "cause": "GitHub substitutes ${{ … }} textually into the run body before any shell parse, including inside single quotes; the translator mapped expressions onto shell variables, a map with a strictly smaller domain.",
+      "observed": "TARGET_SHA='${PR_HEAD_SHA}' stayed literal, git fetch asked for a ref of that name, rc=128",
+      "affected_gates": 2,
+      "repair": "placeholders @@LAEUFER:VAR@@ in the body plus a generated laeufer_einsetzen() that substitutes quoting-blind before execution"
+    },
+    {
+      "id": "WORKING_DIRECTORY_IGNORED",
+      "cause": "working-directory was translated neither per step nor from 'defaults: run:'.",
+      "observed": "frank-provider-fence-fresh-main-vps ran in the empty workspace, 'fatal: not a git repository' from step 2, rc=1 after 2.4 s, 0 of 20 PASS_ markers, red on 25 PRs",
+      "affected_gates": 1,
+      "repair": "working-directory honoured per step and from defaults, as the 5th argument of the generated schritt(); absent it, $GITHUB_WORKSPACE"
+    }
+  ],
+  "measured": {
+    "measured_at": "2026-08-13T02:37Z",
+    "frank-provider-fence-fresh-main-vps": {
+      "before": "rc=1 after ~2.4 s, 0 of 20 PASS_ markers",
+      "after_pr_520_aa00dbdf": "rc=0, 11 executed steps, 6 PASS_ markers",
+      "after_further_prs": "rc=0 on PRs 557, 558, 560, 564, 565, 566, 567 at 8.1–8.6 s per run"
+    },
+    "claycode-frontier-integration-vps": {
+      "before": "rc=128, 2 steps",
+      "after": "PENDING — no post-fix run on disk at the time of writing"
+    },
+    "claycode-frontier-current-main-composition-vps": {
+      "before": "rc=128, 3 steps",
+      "after": "re-run started 2026-08-13T02:37:17Z, still executing when this record was written"
+    }
+  },
+  "runner_working_tree_mutated": false,
+  "canonical_database_touched": false,
+  "external_effect_performed": "commit statuses on Dr.-Unterweger pull requests only",
+  "authority_minted": false,
+  "epistemic_consequence": "A red verdict from a second instrument is a gate verdict only if the instrument reached the gate's own assertion step. Executed step count and PASS_ marker count must be reported next to the exit code.",
+  "work_package_reentry": [],
+  "branches_touched": []
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260812T2054p0700-gpt56sol-productstart-target-selection",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "research_main_parent": "d2469de26514503afa09fbac1a303dab4f2d403e",
+  "product_pr": 544,
+  "candidate_branch": "chatgpt/go-claycode-opaque-fidelity-20260812",
+  "first_pr_composition": {
+    "candidate_head": "16f0bca94827eeed19e3959ba03946458d27cfec",
+    "synthetic_merge_sha": "20b47d835d0bcfd7fdc9835d6bee8aa5889cc91f",
+    "workflow_run": 31605599016,
+    "job": 94143607977,
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "result": "FAIL_TEST_HARNESS_IMPORT",
+    "passed_before_failure": [
+      "immutable synthetic merge SHA fetch",
+      "pinned lark 1.3.1 / interegular 0.3.3 provisioning",
+      "byte hashing",
+      "py_compile"
+    ],
+    "failure": "tests/claycode_opaque_parser_fidelity_gate.py raised ModuleNotFoundError: No module named runtime before parse_module executed",
+    "interpretation": "NO_EVIDENCE_AGAINST_OPAQUE_GRAMMAR_REPAIR",
+    "downstream_steps": "skipped by set -e after harness import failure"
+  },
+  "ordinary_repair": {
+    "commit": "11f656ac2a88658481a0a54efcdc6574b04168dc",
+    "change": "match established WP04 gate import convention by adding repository root Path(__file__).resolve().parents[1] to sys.path before importing runtime modules",
+    "grammar_changed_again": false,
+    "new_unusual_experiment": false
+  },
+  "retest": {
+    "workflow_run": 31605998271,
+    "job": 94144962166,
+    "candidate_head": "11f656ac2a88658481a0a54efcdc6574b04168dc",
+    "state_at_receipt_write": "QUEUED",
+    "pass_claimed": false,
+    "reason_for_stop": "required self-hosted runner capacity not yet available to execute the corrected exact PR composition"
+  },
+  "freshness": {
+    "product_main_observed": "c1a349a59d15b51c8e70dc02b21f7ac410e7db3c",
+    "main_already_contains_opaque_fix": false,
+    "pr_536_state": "OPEN_DRAFT",
+    "pr_536_still_names_explicit_opaque_parser_fidelity_as_next_smallest_falsifier": true
+  },
+  "grf_collapse": [
+    {
+      "claim": "run 31605599016 refutes the named OPAQUE_KW grammar repair",
+      "outcome": "REJECT",
+      "reason": "the test process failed during Python module import before invoking the parser"
+    },
+    {
+      "claim": "the import failure may be repaired by matching the existing repository-root sys.path convention without changing product semantics",
+      "outcome": "RETAIN",
+      "state": "RETEST_QUEUED"
+    },
+    {
+      "claim": "PR 544 is ready for promotion",
+      "outcome": "DEFER",
+      "reason": "corrected fidelity, WP04 baseline and static-integrity gates have not yet completed"
+    }
+  ],
+  "unusual_experiment_budget": {
+    "whole_go_macrocycle_exact_count": 1,
+    "experiment": "FUTURE_TEST_GHOST",
+    "new_unusual_experiment_count_in_claycode_phase": 0
+  },
+  "authority_nonclaims": {
+    "external_effect": false,
+    "harness_authority": false,
+    "effect_authority": false,
+    "canonical_frank_state_mutated": false,
+    "f_v01_02_pass": false,
+    "whole_frank_v01_pass": false,
+    "training_authorized": false
+  }
+}

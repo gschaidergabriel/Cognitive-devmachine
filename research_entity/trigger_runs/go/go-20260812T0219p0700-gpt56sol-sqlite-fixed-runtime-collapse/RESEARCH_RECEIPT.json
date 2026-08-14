@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0219p0700-gpt56sol-sqlite-fixed-runtime-collapse",
+  "trigger": "go",
+  "origin_actor": "chatgpt-project-worker",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "reasoning_frame": "GRF",
+  "research_subject": "self.root / Frank v0.1",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "observed_reality": {
+    "productive_python_sqlite_version": "3.45.1",
+    "productive_sqlite_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+    "productive_library": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+    "productive_library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "productive_package": "libsqlite3-0 3.45.1-1ubuntu2.7",
+    "production_root_anchor": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+    "production_root_anchor_status": "MISSING_IN_LAST_READONLY_TARGET_OBSERVATION",
+    "target_runner": "clay",
+    "target_machine": "digital-retina"
+  },
+  "repo_deltas_executed": [
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "14c643ad455fb76da05a0f2a606c97c977b43ae1",
+      "path": ".github/workflows/frank-sqlite-package-provenance-readonly-v1.yml",
+      "purpose": "Read-only exact installed package/runtime/changelog provenance discriminator."
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "e9caba147e04503e66c699be2ef7daef57597221",
+      "path": ".github/workflows/frank-sqlite-published-patchset-readonly-v1.yml",
+      "purpose": "Read-only DSC-SHA256-verified inspection of the exact published Ubuntu 3.45.1-1ubuntu2.7 Debian patchset."
+    }
+  ],
+  "target_evidence": {
+    "installed_package_provenance": {
+      "workflow_run": 31527682462,
+      "artifact_id": 9115578271,
+      "artifact_zip_sha256": "7416198e6a9ae33e2570d9ef87bbc90223958a639d3cd81cb4b2641c12606b80",
+      "status": "NO_EXPLICIT_WAL_RESET_FIX_EVIDENCE_IN_INSTALLED_CHANGELOG"
+    },
+    "published_source_patchset": {
+      "workflow_run": 31527930172,
+      "artifact_id": 9115677290,
+      "artifact_zip_sha256": "f85d063a3b976ec0da0395f1a8ec7e72bd3ab0464d01ec0baa0ee9232e7115c5",
+      "source_version": "3.45.1-1ubuntu2.7",
+      "dsc_sha256": "2e6909bc4316d52ad471704a246f67c46bd50b4edc8956fa75b5cc0e057819de",
+      "debian_tar_sha256": "65e98fe518e9b1b89e90f8028d09d64c3786664b3dcc878a393ab82f7a770108",
+      "dsc_checksum_match": true,
+      "wal_source_touch_files": [],
+      "status": "NO_EXPLICIT_WAL_RESET_FIX_IN_PUBLISHED_UBUNTU_PATCHSET"
+    },
+    "fixed_runtime_overlay_prior": {
+      "workflow_run": 31523517392,
+      "artifact_id": 9114063482,
+      "artifact_zip_sha256": "0d884ef58eefc171706a2172594e333b11089fa6c90471a447776bccf5579082",
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "overlay_version": "3.53.4",
+      "overlay_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "loaded_library_sha256": "766647ee994e598c87ebf8827cf065c6880b2f29e8a112db56b564f0a84f973a",
+      "pass": true,
+      "system_install_performed": false,
+      "frank_database_opened": false
+    },
+    "v5_fail_closed_prior": {
+      "workflow_run": 31524962995,
+      "artifact_id": 9114532353,
+      "status": "PASS_FAIL_CLOSED_NO_DEPLOYMENT_ANCHOR",
+      "target_executed": false,
+      "trust_root_observed_by_that_candidate": "/opt/frank-v0.1/sqlite-runtime-v1"
+    }
+  },
+  "live_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "claim_used": "The WAL-reset corruption bug is likely present through 3.51.2, fixed in 3.51.3+, with selected older backports named.",
+      "url": "https://sqlite.org/wal.html#the_wal_reset_bug"
+    },
+    {
+      "source": "SQLite release history",
+      "claim_used": "3.51.3 fixes the WAL-reset corruption bug; later 3.53.x lineage includes the fix.",
+      "url": "https://sqlite.org/changes.html"
+    },
+    {
+      "source": "Ubuntu USN-8565-1",
+      "claim_used": "Noble security package 3.45.1-1ubuntu2.7 addresses Session-extension CVEs 2026-50812/50813, not a stated WAL-reset repair.",
+      "url": "https://ubuntu.com/security/notices/USN-8565-1"
+    }
+  ],
+  "grf_candidates": [
+    {
+      "id": "R2_UBUNTU_HIDDEN_BACKPORT",
+      "hypothesis": "Ubuntu 3.45.1-1ubuntu2.7 contains the WAL-reset repair despite the upstream version number.",
+      "strongest_counter_reality": "The package contains only unrelated Ubuntu security patches and remains on an unfixed WAL lineage.",
+      "discriminating_test": "Inspect installed changelog, then exact published DSC-verified Debian patchset for WAL-reset markers or wal.c-touching patches.",
+      "outcome": "REJECT",
+      "confidence": "HIGH_FOR_PUBLISHED_PACKAGE_PROVENANCE",
+      "epistemic_limit": "No claim of live corruption reproduction or proof over every hypothetical non-published vendor build."
+    },
+    {
+      "id": "R2_ROOT_ANCHOR_IS_SUFFICIENT",
+      "hypothesis": "A root-owned anchor matching version/source-id/library hash is sufficient to establish WAL safety.",
+      "strongest_counter_reality": "An anchor can faithfully attest an exact but still unfixed 3.45.1 runtime; identity consistency is not safety provenance.",
+      "outcome": "REJECT_AS_GENERAL_RULE",
+      "replacement_rule": "Admission must bind to a known-safe fixed lineage or an independently verified exact backport, not merely to internally consistent bytes."
+    },
+    {
+      "id": "R2_FIXED_OVERLAY_FEASIBLE",
+      "hypothesis": "A fixed 3.53.4 runtime can execute on the accepted host without replacing the system SQLite package.",
+      "strongest_counter_reality": "Loader/runtime constraints prevent Python from actually mapping the expected fixed library.",
+      "outcome": "RETAIN",
+      "evidence": "Run 31523517392 mapped the expected 3.53.4 object and source-id on the accepted self-hosted Ubuntu runner without system install.",
+      "promotion_limit": "No canonical Frank DB was opened; production trust-anchor/service wiring remains absent."
+    }
+  ],
+  "go_unusual_experiment": {
+    "count_new_in_this_invocation": 1,
+    "id": "SELF_ATTESTING_UNKNOWN_SAFETY_ANCHOR_INVERSION",
+    "type": "BOUNDED_LOCAL_COUNTERFACTUAL_MATCHER_TEST",
+    "baseline": "Missing production anchor is rejected by the read-only productive-path matcher.",
+    "intervention": "Construct a synthetic anchor containing exactly the already observed 3.45.1 sqlite_version, sqlite_source_id and library_sha256, without claiming fixed-lineage provenance.",
+    "result": "The identity-only comparison admits the synthetic anchor with zero mismatches.",
+    "interpretation": "Identity attestation and safety provenance are distinct gates. A self-consistent anchor must not be promoted as proof of the WAL repair.",
+    "target_mutation": false,
+    "canonical_state_mutation": false,
+    "rollback": "No persistent intervention; synthetic object discarded.",
+    "scope": "Applies to the tested identity-only matcher semantics; newer deployment guards may add stronger policy and must be evaluated independently."
+  },
+  "collapse": {
+    "F_V01_13_sqlite_system_runtime": "BLOCKED_UNFIXED_PUBLISHED_LINEAGE",
+    "F_V01_13_rootless_fixed_runtime_feasibility": "SUPPORTED_3_53_4_NO_FRANK_DB_OPEN",
+    "F_V01_13_production_fixed_runtime_binding": "OPEN_REQUIRES_PRIVILEGED_TRUSTED_DEPLOYMENT_AND_POSITIVE_ADMISSION",
+    "whole_frank_v0_1_acceptance": false
+  },
+  "next_falsifier": "With independent trusted deployment/admin authority: install or provision an exact approved fixed 3.53.4 runtime object, create the root-owned/non-writable fixed deployment anchor, run positive V5 admission plus downgrade/library-swap/restart and WAL-recovery controls, then test a disposable copy of the real Frank persistence topology before any canonical state promotion.",
+  "authority_boundary": {
+    "sudo_nopasswd_on_last_target_observation": false,
+    "root_deployment_performed": false,
+    "frank_self_harness_authority_changed": false,
+    "effect_authority_changed": false,
+    "training_authorization_changed": false,
+    "final_training_started": false,
+    "together_used": false
+  },
+  "research_disposition": "SUPPORTED_NEGATIVE_PROVENANCE_PLUS_FIXED_RUNTIME_DEPLOYMENT_FRONTIER"
+}

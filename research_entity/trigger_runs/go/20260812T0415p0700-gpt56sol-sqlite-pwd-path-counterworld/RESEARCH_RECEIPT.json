@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0415p0700-gpt56sol-sqlite-pwd-path-counterworld",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T04:15:38+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent_observed": {
+    "research_main_before_write": "2887fff906d0b1cadc18285cd1c9fa693785c210",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "Current main contains the reproducible SQLite 3.53.4 parity runtime and a V5 launcher symlink-transplant repair, while production fixed-runtime/root-anchor/service admission is still explicitly open. The highest-value non-duplicate question was whether relative invocation could derive a foreign sibling guard from attacker-controlled PWD even without a file symlink.",
+    "duplicate_avoidance": [
+      "Do not repeat the merged file-level symlink-transplant experiment/repair from Dr.-Unterweger main@985f8370a6a6047d9962206f4fb6f2c049f4d370.",
+      "Do not duplicate active PR #479 systemd ExecStartEx flag work; its target lane remains unresolved and has newer branch activity.",
+      "Do not claim SQLite 3.53.4 availability closes productive admission; exact product service/runtime identity is still required."
+    ]
+  },
+  "observed_reality": {
+    "dr_unterweger_main_observed": "985f8370a6a6047d9962206f4fb6f2c049f4d370",
+    "main_change": "V5 launcher rejects file-level symlink invocation before sibling guard resolution.",
+    "sqlite_3_53_4_main_commit": "9c891aa8b076113b21903ac3db0d39a61aec6a91",
+    "sqlite_3_53_4_main_claim_boundary": "reproducible capability-parity runtime merged; no production /opt or /etc provisioning and no F-V01-13 closure",
+    "active_parallel_pr": 479,
+    "parallel_pr_head_observed": "aa7e539d336166847529c8834ce0d36c1fcf9d22",
+    "parallel_target_run_31536544907": "COMPLETED_CANCELLED",
+    "parallel_followup_workflow_31537006337": "QUEUED at observation",
+    "workspace_status": "F-V01-13 IN_PROGRESS"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption race affects SQLite 3.7.0 through 3.51.2 and is fixed in 3.51.3 and later; trigger requires WAL mode plus at least two connections with concurrent write/checkpoint timing."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "url": "https://sqlite.org/releaselog/3_53_4.html",
+      "finding": "SQLite 3.53.4 contains the WAL-reset fix and publishes SQLITE_SOURCE_ID 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc."
+    }
+  ],
+  "grf_candidate": {
+    "observed_anchor": "Current V5 launcher computes SELF_PATH from PWD when $0 is relative, then derives the sibling guard path from SELF_PATH.",
+    "generated_reality": "A caller-forged inherited PWD may cause the shell to read the trusted launcher from the real current directory while the launcher resolves GUARD under a foreign directory.",
+    "causal_mechanism": "If /bin/sh preserves a false inherited PWD, SELF_PATH=$PWD/$0 can diverge from the file actually opened by the shell; the existing file-symlink test would not necessarily detect that divergence.",
+    "strongest_counter_reality": "The shell validates or reconstructs PWD from the actual current working directory before script execution, so a forged inherited PWD cannot redirect sibling resolution.",
+    "falsifier": "Run the same relative launcher path from one real cwd with a normal PWD control and with an environment-forged PWD that contains only a foreign sibling guard; compare the first fail-closed boundary reached.",
+    "predicted_if_hypothesis": "Treatment advances past V5_GUARD_MISSING to ROOT_TRUST_ANCHOR_MISSING (or executes the foreign guard if an anchor exists), while control stops at V5_GUARD_MISSING.",
+    "predicted_if_counterhypothesis": "Control and forged-PWD treatment both resolve the real cwd and stop at V5_GUARD_MISSING.",
+    "confidence_before": "MEDIUM_LOW"
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "FORGED_PWD_RELATIVE_LAUNCHER_SIBLING_REDIRECT",
+    "class": "path-identity counterworld",
+    "reversible": true,
+    "disposable_state": true,
+    "scope": "local Linux sandbox only",
+    "product_bytes_modified": false,
+    "canonical_frank_state_mutated": false,
+    "external_effect": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "setup": "Materialized the current V5 launcher decision logic in /tmp, invoked it as non-root through a relative path, and placed a fake guard only in the forged-PWD sibling tree. No /etc anchor was created, so success/failure was discriminated only by which fail-closed boundary was reached.",
+    "control": {
+      "invocation": "/bin/sh ./actual/frank_v0_1_sqlite_v5_launcher.sh --help",
+      "result_code": 78,
+      "stderr_marker": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:V5_GUARD_MISSING"
+    },
+    "intervention": {
+      "change": "Set inherited PWD to the foreign tree using /usr/bin/env while leaving the actual cwd and relative launcher path unchanged.",
+      "result_code": 78,
+      "stderr_marker": "FRANK_V0_1_SQLITE_V5_LAUNCH_DENIED:V5_GUARD_MISSING"
+    },
+    "result": "REFUTED_NO_BENEFIT",
+    "interpretation": "On the tested /bin/sh runtime, the shell did not preserve the forged PWD in a way that redirected the launcher's sibling resolution. The proposed PWD-only bypass is rejected for this runtime. This does not prove all shells or the accepted Hostinger service parent behave identically; production parent/service attestation remains the stronger gate."
+  },
+  "collapse": {
+    "preferred_candidate": "REJECT",
+    "counter_reality": "RETAIN",
+    "architecture_delta": "NO_CHANGE",
+    "code_patch": "NOT_JUSTIFIED",
+    "negative_result_preserved": true,
+    "why": "The treatment did not separate from the control, so adding launcher complexity for forged PWD would be unsupported and risks Goodhart hardening against a non-observed path."
+  },
+  "reentry": {
+    "affected_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "verified_delta": "One path-confusion hypothesis eliminated on the local shell runtime; no release promotion.",
+    "next_discriminator": "Finish/adjudicate the current systemd parent-gate lineage, then on the accepted Hostinger product service prove a root-owned trusted parent, clean pre-exec loader configuration, exact V5 launcher/guard bytes, root-owned release anchor, exact mapped SQLite 3.53.4 artifact identity, and start/restart plus rollback/downgrade/library-swap fail-closed behavior.",
+    "release_gate": "OPEN",
+    "final_training_authorized": false
+  },
+  "claim_boundary": "Local negative-result research receipt only. No accepted-target execution in this run, no production provisioning/service mutation, no Frank DB open, no canonical state mutation, no F-V01-13 PASS, no whole Frank v0.1 acceptance."
+}

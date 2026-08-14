@@ -1,5 +1,7 @@
 import importlib.util
+import http.client
 import json
+import ssl
 import sys
 import unittest
 from pathlib import Path
@@ -10,6 +12,8 @@ SPEC = importlib.util.spec_from_file_location("free_api_provider_runtime", PATH)
 MOD = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = MOD
 SPEC.loader.exec_module(MOD)
+
+VALID_MESSAGES = [{"role": "user", "content": "test"}]
 
 
 class FreeApiProviderRuntimeTests(unittest.TestCase):
@@ -52,7 +56,14 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return json.dumps({"choices": [{"message": {"content": "mock-ok"}}]}).encode()
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {
+                            "role": "assistant", "content": "mock-ok"
+                        },
+                    }]
+                }).encode()
 
         captured = {}
         def opener(request, timeout):
@@ -75,6 +86,45 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("never-serialize-this", repr(result))
         self.assertNotIn("together", captured["url"])
 
+    def test_credential_cannot_change_between_authorization_and_request(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {"role": "assistant", "content": "ok"},
+                    }]
+                }).encode()
+
+        captured = {}
+        env = {
+            "NVIDIA_API_KEY": "authorized-secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def mutate_after_authorization():
+            env["NVIDIA_API_KEY"] = "swapped-secret"
+            return "fixed-attempt-nonce"
+
+        def opener(request, timeout):
+            captured["authorization"] = request.headers["Authorization"]
+            return Response()
+
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
+            nonce_factory=mutate_after_authorization,
+            now=iter((15.0, 15.01)).__next__,
+        )
+
+        self.assertEqual(result["content"], "ok")
+        self.assertEqual(
+            captured["authorization"], "Bearer authorized-secret"
+        )
+
     def test_invalid_text_request_schema_is_blocked_before_network(self):
         called = False
 
@@ -95,10 +145,213 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_request_messages_are_snapshotted_before_routing_side_effects(self):
+        messages = [{"role": "user", "content": "validated-text"}]
+
+        class MutatingEnvironment(dict):
+            mutated = False
+
+            def get(self, key, default=None):
+                if not self.mutated:
+                    self.mutated = True
+                    messages[0]["content"] = ""
+                    messages[0]["tool_calls"] = [{"id": "unvalidated"}]
+                return super().get(key, default)
+
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {"role": "assistant", "content": "ok"},
+                    }]
+                }).encode()
+
+        captured = {}
+
+        def opener(request, timeout):
+            captured["body"] = json.loads(request.data)
+            return Response()
+
+        env = MutatingEnvironment({
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        })
+        result = MOD.execute_chat(
+            messages, model="mock", environ=env, opener=opener,
+            now=iter((20.0, 20.01)).__next__,
+        )
+
+        self.assertEqual(result["content"], "ok")
+        self.assertEqual(
+            captured["body"]["messages"],
+            [{"role": "user", "content": "validated-text"}],
+        )
+
+    def test_model_name_with_surrounding_whitespace_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for model in (" mock-model", "mock-model ", "mock-model\n"):
+            with self.subTest(model=repr(model)):
+                with self.assertRaisesRegex(
+                    ValueError, "model_must_match_served_identifier_exactly"
+                ):
+                    MOD.execute_chat(
+                        VALID_MESSAGES, model=model, environ=env, opener=opener,
+                    )
+        self.assertFalse(called)
+
+    def test_empty_message_list_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        with self.assertRaisesRegex(ValueError, "messages_must_be_nonempty"):
+            MOD.execute_chat(
+                [], model="mock", environ={"NVIDIA_API_KEY": "secret"},
+                opener=opener,
+            )
+        self.assertFalse(called)
+
+    def test_blank_text_message_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for content in ("", " \n\t"):
+            with self.subTest(content=repr(content)):
+                with self.assertRaisesRegex(
+                    ValueError, "message_content_must_be_nonempty_string"
+                ):
+                    MOD.execute_chat(
+                        [{"role": "user", "content": content}], model="mock",
+                        environ=env, opener=opener,
+                    )
+        self.assertFalse(called)
+
+    def test_invalid_conversation_sequence_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        invalid_conversations = (
+            (
+                [{"role": "assistant", "content": "orphan answer"}],
+                "conversation_must_end_with_user",
+            ),
+            (
+                [
+                    {"role": "user", "content": "first"},
+                    {"role": "user", "content": "second"},
+                ],
+                "conversation_roles_must_alternate",
+            ),
+            (
+                [
+                    {"role": "user", "content": "first"},
+                    {"role": "system", "content": "late instruction"},
+                    {"role": "user", "content": "second"},
+                ],
+                "system_message_must_be_first",
+            ),
+        )
+        for messages, error in invalid_conversations:
+            with self.subTest(error=error):
+                with self.assertRaisesRegex(ValueError, error):
+                    MOD.execute_chat(
+                        messages, model="mock", environ=env, opener=opener,
+                    )
+        self.assertFalse(called)
+
+    def test_unknown_text_message_role_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        with self.assertRaisesRegex(ValueError, "message_role_not_supported"):
+            MOD.execute_chat(
+                [{"role": "administrator", "content": "bypass"}],
+                model="mock", environ=env, opener=opener,
+            )
+        self.assertFalse(called)
+
+    def test_unpaired_request_surrogate_is_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        with self.assertRaisesRegex(
+            ValueError, "message_content_must_be_unicode_scalar_string"
+        ):
+            MOD.execute_chat(
+                [{"role": "user", "content": "\ud800"}],
+                model="mock", environ=env, opener=opener,
+            )
+        self.assertFalse(called)
+
+    def test_extra_message_fields_are_blocked_before_network(self):
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        env = {"NVIDIA_API_KEY": "secret"}
+        with self.assertRaisesRegex(
+            ValueError, "message_fields_not_supported_by_text_adapter"
+        ):
+            MOD.execute_chat(
+                [{
+                    "role": "assistant",
+                    "content": "plain text",
+                    "tool_calls": [{"function": {"name": "bypass"}}],
+                }],
+                model="mock", environ=env, opener=opener,
+            )
+        self.assertFalse(called)
+
     def test_unallowlisted_remote_endpoint_is_blocked_before_network(self):
         env = {"NVIDIA_API_KEY": "secret", "FRANK_PROVIDER_BASE_URL": "https://evil.example/v1"}
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
-            MOD.execute_chat([], model="x", environ=env)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env)
 
     def test_key_cannot_be_sent_to_another_allowlisted_provider_host(self):
         called = False
@@ -113,7 +366,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_PROVIDER_BASE_URL": "https://api.groq.com/openai/v1",
         }
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
-            MOD.execute_chat([], model="x", environ=env, opener=opener)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
     def test_key_cannot_be_sent_to_noncanonical_provider_port(self):
@@ -129,7 +382,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_PROVIDER_BASE_URL": "https://integrate.api.nvidia.com:444/v1",
         }
         with self.assertRaisesRegex(RuntimeError, "not_bound_to_selected_provider"):
-            MOD.execute_chat([], model="x", environ=env, opener=opener)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
     def test_provider_url_userinfo_is_rejected_before_network(self):
@@ -147,7 +400,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             ),
         }
         with self.assertRaisesRegex(RuntimeError, "userinfo_forbidden"):
-            MOD.execute_chat([], model="x", environ=env, opener=opener)
+            MOD.execute_chat(VALID_MESSAGES, model="x", environ=env, opener=opener)
         self.assertFalse(called)
 
     def test_default_transport_rejects_redirects_before_auth_can_be_forwarded(self):
@@ -167,7 +420,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -192,7 +445,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -222,7 +475,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"choices":[{"message":{"content":"ok"}}]}'
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         env = {
             "NVIDIA_API_KEY": "secret",
@@ -252,7 +505,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=lambda *args, **kwargs: Response(),
+            VALID_MESSAGES, model="mock", environ=env, opener=lambda *args, **kwargs: Response(),
             now=iter((20.0, 20.01)).__next__,
         )
         self.assertEqual(result["receipt"]["status"], 200)
@@ -260,6 +513,156 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIn("EXECUTED", result["receipt"]["lifecycle"])
         self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
         self.assertNotIn("DONE", result["receipt"]["lifecycle"])
+
+    def test_length_finished_response_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"length",'
+                    b'"message":{"role":"assistant","content":"partial"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((25.0, 25.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "provider_output_truncated")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_null_finish_reason_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":null,'
+                    b'"message":{"role":"assistant","content":"partial"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((26.0, 26.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_empty_stopped_response_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop",'
+                    b'"message":{"role":"assistant","content":""}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((27.0, 27.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_whitespace_only_stopped_response_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop",'
+                    b'"message":{"role":"assistant","content":" \\n\\t"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((27.1, 27.11)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_missing_assistant_role_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop",'
+                    b'"message":{"content":"unattributed"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((28.0, 28.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
 
     def test_structurally_invalid_json_responses_fail_closed_with_receipt(self):
         class Response:
@@ -276,13 +679,13 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         }
         malformed = (
             b"[]", b'{"choices":[]}',
-            b'{"choices":[{"message":{"content":null}}]}',
-            b'{"choices":[{"message":"not-an-object"}]}',
+            b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":null}}]}',
+            b'{"choices":[{"finish_reason":"stop","message":"not-an-object"}]}',
         )
         for body in malformed:
             with self.subTest(body=body):
                 result = MOD.execute_chat(
-                    [], model="mock", environ=env,
+                    VALID_MESSAGES, model="mock", environ=env,
                     opener=lambda *args, body=body, **kwargs: Response(body),
                     now=iter((50.0, 50.01)).__next__,
                 )
@@ -293,6 +696,272 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
                 self.assertIsNone(result["content"])
+
+    def test_non_bytes_response_body_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __init__(self, body): self.body = body
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return self.body
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        valid_json = '{"choices":[{"message":{"content":"must-not-pass"}}]}'
+        for invalid_body in (valid_json, bytearray(valid_json.encode())):
+            with self.subTest(body_type=type(invalid_body).__name__):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, body=invalid_body, **kwargs: (
+                        Response(body)
+                    ),
+                    now=iter((55.0, 55.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], 200)
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
+    def test_non_utf8_network_json_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __init__(self, body): self.body = body
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return self.body
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        document = json.dumps({
+            "choices": [{
+                "finish_reason": "stop",
+                "message": {"role": "assistant", "content": "must-not-pass"},
+            }]
+        })
+        for encoding in ("utf-16", "utf-32"):
+            body = document.encode(encoding)
+            with self.subTest(encoding=encoding):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, body=body, **kwargs: Response(body),
+                    now=iter((56.0, 56.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], 200)
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
+    def test_nonfinite_json_constants_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __init__(self, body): self.body = body
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return self.body
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for token in (b"NaN", b"Infinity", b"-Infinity"):
+            body = (
+                b'{"choices":[{"finish_reason":"stop","message":{'
+                b'"role":"assistant","content":"must-not-pass"}}],'
+                b'"nonstandard":' + token + b"}"
+            )
+            with self.subTest(token=token):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, body=body, **kwargs: Response(body),
+                    now=iter((57.0, 57.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], 200)
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
+    def test_overflowing_json_exponents_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __init__(self, body): self.body = body
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return self.body
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for token in (b"1e400", b"-1e400"):
+            body = (
+                b'{"choices":[{"finish_reason":"stop","message":{'
+                b'"role":"assistant","content":"must-not-pass"}}],'
+                b'"usage":{"total_tokens":' + token + b"}}"
+            )
+            with self.subTest(token=token):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, body=body, **kwargs: Response(body),
+                    now=iter((57.5, 57.51)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], 200)
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
+        finite_body = (
+            b'{"choices":[{"finish_reason":"stop","message":{'
+            b'"role":"assistant","content":"finite-ok"}}],'
+            b'"usage":{"ratio":1e300}}'
+        )
+        finite_result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(finite_body),
+            now=iter((57.6, 57.61)).__next__,
+        )
+        self.assertEqual(finite_result["receipt"]["outcome"], "success")
+        self.assertEqual(finite_result["content"], "finite-ok")
+
+    def test_duplicate_json_names_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"message":{'
+                    b'"content":"first","content":"must-not-pass"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((58.0, 58.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_unpaired_json_surrogate_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"\\uDEAD"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((58.5, 58.51)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_response_tool_calls_cannot_reach_text_verified_state(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop","message":{'
+                    b'"role":"assistant","content":"must-not-pass",'
+                    b'"tool_calls":[{"id":"call-1","type":"function",'
+                    b'"function":{"name":"act","arguments":"{}"}}]}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((58.6, 58.61)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_excessive_json_nesting_emits_invalid_response_receipt(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                depth = 20_000
+                return b"[" * depth + b"0" + b"]" * depth
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((59.0, 59.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
 
     def test_http_error_is_executed_but_never_verified(self):
         def opener(request, timeout):
@@ -306,7 +975,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=opener,
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
             now=iter((60.0, 60.01)).__next__,
         )
         receipt = result["receipt"]
@@ -315,6 +984,151 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIn("EXECUTED", receipt["lifecycle"])
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
+
+    def test_rate_limit_retry_after_controls_cooldown_without_post_replay(self):
+        class Response:
+            status = 429
+            def __init__(self, retry_after):
+                self.headers = {"Retry-After": retry_after}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        cases = (
+            ("response", "137", 100.0, 137),
+            ("http_error", "137", 100.0, 137),
+            ("response", "Thu, 01 Jan 1970 00:04:00 GMT", 100.0, 140),
+            ("http_error", "Thu, 01 Jan 1970 00:04:00 GMT", 100.0, 140),
+        )
+        for transport, retry_after, started, expected in cases:
+            with self.subTest(transport=transport, retry_after=retry_after):
+                if transport == "response":
+                    opener = lambda *args, **kwargs: Response(retry_after)
+                else:
+                    def opener(request, timeout, retry_after=retry_after):
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 429, "Too Many Requests",
+                            {"Retry-After": retry_after}, None,
+                        )
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((started, started + 0.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["outcome"], "rate_limited")
+                self.assertFalse(receipt["retryable"])
+                self.assertEqual(receipt["cooldown_seconds"], expected)
+
+    def test_http_date_retry_after_is_relative_to_response_receipt_time(self):
+        class Response:
+            status = 429
+            headers = {
+                "Retry-After": "Thu, 01 Jan 1970 00:04:00 GMT"
+            }
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise AssertionError("non-200 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((100.0, 200.0)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["outcome"], "rate_limited")
+        self.assertEqual(receipt["duration_ms"], 100_000)
+        self.assertEqual(receipt["cooldown_seconds"], 40)
+
+    def test_oversized_retry_after_emits_receipt_with_safe_fallback(self):
+        class Response:
+            status = 429
+            headers = {"Retry-After": "9" * 5000}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                if transport == "response":
+                    opener = lambda *args, **kwargs: Response()
+                else:
+                    def opener(request, timeout):
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 429, "Too Many Requests",
+                            Response.headers, None,
+                        )
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((100.0, 100.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["outcome"], "rate_limited")
+                self.assertEqual(receipt["cooldown_seconds"], 60)
+                self.assertFalse(receipt["retryable"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+
+    def test_retry_after_cooldown_is_bounded_in_receipts(self):
+        class Response:
+            status = 429
+            def __init__(self, retry_after):
+                self.headers = {"Retry-After": retry_after}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            for retry_after in ("9" * 100, "Fri, 31 Dec 9999 23:59:59 GMT"):
+                with self.subTest(transport=transport, retry_after=retry_after):
+                    if transport == "response":
+                        opener = (
+                            lambda *args, retry_after=retry_after, **kwargs:
+                            Response(retry_after)
+                        )
+                    else:
+                        def opener(request, timeout, retry_after=retry_after):
+                            raise MOD.urllib.error.HTTPError(
+                                request.full_url, 429, "Too Many Requests",
+                                {"Retry-After": retry_after}, None,
+                            )
+
+                    result = MOD.execute_chat(
+                        VALID_MESSAGES, model="mock", environ=env,
+                        opener=opener,
+                        now=iter((100.0, 100.01)).__next__,
+                    )
+                    receipt = result["receipt"]
+                    self.assertEqual(receipt["outcome"], "rate_limited")
+                    self.assertEqual(
+                        receipt["cooldown_seconds"],
+                        86_400,
+                    )
+                    self.assertFalse(receipt["retryable"])
 
     def test_regular_error_status_response_cannot_be_verified(self):
         class Response:
@@ -330,7 +1144,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((65.0, 65.01)).__next__,
         )
@@ -342,6 +1156,161 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_generic_provider_errors_cannot_trigger_automatic_post_replay(self):
+        class Response:
+            def __init__(self, status):
+                self.status = status
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        for transport in ("response", "http_error"):
+            for status in (400, 401, 403, 422, 500, 503):
+                with self.subTest(transport=transport, status=status):
+                    if transport == "response":
+                        opener = (
+                            lambda *args, status=status, **kwargs:
+                            Response(status)
+                        )
+                    else:
+                        def opener(request, timeout, status=status):
+                            raise MOD.urllib.error.HTTPError(
+                                request.full_url, status, "provider error", {}, None,
+                            )
+
+                    result = MOD.execute_chat(
+                        VALID_MESSAGES, model="mock", environ=env,
+                        opener=opener,
+                        now=iter((65.02, 65.03)).__next__,
+                    )
+                    receipt = result["receipt"]
+                    self.assertEqual(receipt["status"], status)
+                    self.assertEqual(receipt["outcome"], "provider_error")
+                    self.assertFalse(receipt["retryable"])
+                    self.assertIn("EXECUTED", receipt["lifecycle"])
+                    self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                    self.assertNotIn("DONE", receipt["lifecycle"])
+                    self.assertIsNone(result["content"])
+
+    def test_unexpected_success_status_is_not_retryable(self):
+        class Response:
+            def __init__(self, status):
+                self.status = status
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b""
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for status in (201, 204, 206):
+            with self.subTest(status=status):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, status=status, **kwargs: Response(status),
+                    now=iter((65.1, 65.11)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], status)
+                self.assertEqual(
+                    receipt["outcome"], "unexpected_success_status"
+                )
+                self.assertFalse(receipt["retryable"])
+                self.assertEqual(receipt["cooldown_seconds"], 0)
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
+    def test_http_202_pending_response_cannot_be_verified_as_final_text(self):
+        class Response:
+            status = 202
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"message":{"content":"not-final"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((66.0, 66.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 202)
+        self.assertEqual(receipt["outcome"], "provider_result_pending")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_invalid_http_status_is_rejected_before_body_and_execution_state(self):
+        missing = object()
+        body_reads = []
+
+        class Response:
+            def __init__(self, status):
+                if status is not missing:
+                    self.status = status
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                body_reads.append(limit)
+                return b'{"choices":[{"message":{"content":"must-not-pass"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for invalid_status in (missing, True, "200", 99, 600):
+            with self.subTest(status=invalid_status):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, status=invalid_status, **kwargs: (
+                        Response(status)
+                    ),
+                    now=iter((67.0, 67.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertIsNone(receipt["status"])
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertNotIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
+
+        def invalid_http_error(request, timeout):
+            raise MOD.urllib.error.HTTPError(
+                request.full_url, "402", "invalid typed status", {}, None,
+            )
+
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env, opener=invalid_http_error,
+            now=iter((68.0, 68.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
+        self.assertFalse(receipt["payment_latch_active"])
+        self.assertEqual(body_reads, [])
+
     def test_unreachable_provider_has_no_http_status_or_executed_state(self):
         def opener(request, timeout):
             raise MOD.urllib.error.URLError("connection refused")
@@ -352,13 +1321,111 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env, opener=opener,
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
             now=iter((70.0, 70.01)).__next__,
         )
         receipt = result["receipt"]
         self.assertIsNone(receipt["status"])
         self.assertEqual(receipt["outcome"], "unreachable_provider")
         self.assertNotIn("EXECUTED", receipt["lifecycle"])
+
+    def test_remote_disconnect_before_response_emits_unreachable_receipt(self):
+        def opener(request, timeout):
+            raise http.client.RemoteDisconnected(
+                "remote end closed connection without response"
+            )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
+            now=iter((75.0, 75.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "unreachable_provider")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_bad_status_line_before_response_emits_unreachable_receipt(self):
+        def opener(request, timeout):
+            raise http.client.BadStatusLine("NOT-HTTP\n")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
+            now=iter((76.0, 76.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "unreachable_provider")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_tls_error_before_response_emits_unreachable_receipt(self):
+        def opener(request, timeout):
+            raise ssl.SSLError("certificate verify failed")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
+            now=iter((77.0, 77.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertIsNone(receipt["status"])
+        self.assertEqual(receipt["outcome"], "unreachable_provider")
+        self.assertNotIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_transport_ambiguity_cannot_trigger_automatic_post_replay(self):
+        class BodyTimeoutResponse:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): raise TimeoutError("body stalled")
+
+        def remote_disconnect(request, timeout):
+            raise http.client.RemoteDisconnected(
+                "remote end closed connection without response"
+            )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        openers = (
+            remote_disconnect,
+            lambda *args, **kwargs: BodyTimeoutResponse(),
+        )
+        for opener in openers:
+            with self.subTest(opener=opener.__name__):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env, opener=opener,
+                    now=iter((80.0, 80.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertFalse(receipt["retryable"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+                self.assertIsNone(result["content"])
 
     def test_body_read_timeout_preserves_received_status_and_executed_state(self):
         class Response:
@@ -373,7 +1440,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
         result = MOD.execute_chat(
-            [], model="mock", environ=env,
+            VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((90.0, 90.01)).__next__,
         )
@@ -383,6 +1450,62 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIn("EXECUTED", receipt["lifecycle"])
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
+
+    def test_oversized_response_is_detected_without_verifying_truncated_body(self):
+        requested_sizes = []
+
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                requested_sizes.append(limit)
+                return b"x" * limit
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((95.0, 95.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(requested_sizes, [MOD.MAX_PROVIDER_RESPONSE_BYTES + 1])
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "provider_response_too_large")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
+    def test_incomplete_http_body_preserves_status_and_emits_receipt(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise http.client.IncompleteRead(b"partial", 12)
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((96.0, 96.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "incomplete_provider_response")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
 
 
 if __name__ == "__main__":

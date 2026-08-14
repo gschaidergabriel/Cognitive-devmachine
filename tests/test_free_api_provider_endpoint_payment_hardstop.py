@@ -1,7 +1,9 @@
 import importlib.util
 import sys
+import threading
 import unittest
 import urllib.error
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 
@@ -11,9 +13,18 @@ MOD = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = MOD
 SPEC.loader.exec_module(MOD)
 
+VALID_MESSAGES = [{"role": "user", "content": "test"}]
+
 
 class Response:
-    def __init__(self, status=200, body=b'{"choices":[{"message":{"content":"ok"}}]}'):
+    def __init__(
+        self,
+        status=200,
+        body=(
+            b'{"choices":[{"finish_reason":"stop",'
+            b'"message":{"role":"assistant","content":"ok"}}]}'
+        ),
+    ):
         self.status = status
         self.body = body
 
@@ -51,7 +62,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
                     RuntimeError, "not_bound_to_selected_provider"
                 ):
                     MOD.execute_chat(
-                        [],
+                        VALID_MESSAGES,
                         model="x",
                         environ={
                             "NVIDIA_API_KEY": "secret",
@@ -68,7 +79,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
             "https://integrate.api.nvidia.com:443/v1",
         ):
             result = MOD.execute_chat(
-                [],
+                VALID_MESSAGES,
                 model="x",
                 environ={
                     "NVIDIA_API_KEY": "secret",
@@ -104,7 +115,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
             with self.subTest(opener=repr(opener)):
                 latches = set()
                 result = MOD.execute_chat(
-                    [],
+                    VALID_MESSAGES,
                     model="x",
                     environ=env,
                     opener=opener,
@@ -123,12 +134,52 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
                     RuntimeError, "payment_required_hard_stop_active"
                 ):
                     MOD.execute_chat(
-                        [],
+                        VALID_MESSAGES,
                         model="x",
                         environ=env,
                         opener=lambda *args, **kwargs: Response(),
                         payment_latches=latches,
                     )
+
+    def test_http_402_latches_before_response_body_is_read(self):
+        body_reads = []
+
+        class StalledPaymentResponse:
+            status = 402
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                pass
+
+            def read(self, limit):
+                body_reads.append(limit)
+                raise TimeoutError("payment response body stalled")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "stalled-402-epoch",
+        }
+        latches = set()
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="x",
+            environ=env,
+            opener=lambda *args, **kwargs: StalledPaymentResponse(),
+            now=iter((2.1, 2.11)).__next__,
+            payment_latches=latches,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 402)
+        self.assertEqual(receipt["outcome"], "payment_required_hard_stop")
+        self.assertFalse(receipt["retryable"])
+        self.assertTrue(receipt["payment_latch_active"])
+        self.assertEqual(body_reads, [])
+        self.assertIsNone(MOD.route(env, payment_latches=latches)["selected"])
 
     def test_new_budget_epoch_does_not_inherit_old_epoch_payment_latch(self):
         latches = set()
@@ -140,7 +191,7 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
         }
         env_b = {**env_a, "FRANK_FREE_ONLY_BUDGET_EPOCH": "epoch-b"}
         MOD.execute_chat(
-            [],
+            VALID_MESSAGES,
             model="x",
             environ=env_a,
             opener=lambda *args, **kwargs: Response(status=402, body=b"{}"),
@@ -149,6 +200,64 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
         )
         self.assertIsNone(MOD.route(env_a, payment_latches=latches)["selected"])
         self.assertEqual(MOD.route(env_b, payment_latches=latches)["selected"], "nvidia")
+
+    def test_concurrent_attempt_waits_for_payment_hard_stop_result(self):
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "concurrent-402-epoch",
+        }
+        latches = set()
+        first_opened = threading.Event()
+        release_first = threading.Event()
+        second_opened = threading.Event()
+        opener_lock = threading.Lock()
+        opener_calls = 0
+
+        def opener(*args, **kwargs):
+            nonlocal opener_calls
+            with opener_lock:
+                opener_calls += 1
+                call_number = opener_calls
+            if call_number == 1:
+                first_opened.set()
+                self.assertTrue(release_first.wait(2))
+                return Response(status=402, body=b"{}")
+            second_opened.set()
+            return Response()
+
+        def attempt(clock_start, nonce):
+            try:
+                return MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="x",
+                    environ=env,
+                    opener=opener,
+                    now=iter((clock_start, clock_start + 0.01)).__next__,
+                    nonce_factory=lambda: nonce,
+                    payment_latches=latches,
+                )
+            except Exception as exc:
+                return exc
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            first = pool.submit(attempt, 4.0, "first")
+            self.assertTrue(first_opened.wait(2))
+            second = pool.submit(attempt, 5.0, "second")
+            second_reached_network_while_first_pending = second_opened.wait(0.5)
+            release_first.set()
+            first_result = first.result(timeout=2)
+            second_result = second.result(timeout=2)
+
+        self.assertFalse(second_reached_network_while_first_pending)
+        self.assertEqual(
+            first_result["receipt"]["outcome"],
+            "payment_required_hard_stop",
+        )
+        self.assertIsInstance(second_result, RuntimeError)
+        self.assertEqual(str(second_result), "payment_required_hard_stop_active")
+        self.assertEqual(opener_calls, 1)
 
 
 if __name__ == "__main__":

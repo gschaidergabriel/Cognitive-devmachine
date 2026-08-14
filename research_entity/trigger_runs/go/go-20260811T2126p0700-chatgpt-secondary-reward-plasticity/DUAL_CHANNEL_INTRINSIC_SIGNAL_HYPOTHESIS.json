@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2126p0700-chatgpt-secondary-reward-plasticity",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "kind": "HYPOTHESIS_COUNTERHYPOTHESIS_FUSION_DELTA",
+  "hypothesis_id": "F-V01-11-H-DUAL-CHANNEL-INTRINSIC-SIGNAL",
+  "status": "CANDIDATE_UNTESTED",
+  "problem": "Historical Frank used internally generated activity as direct NAcc reward and could propagate dopamine-burst events into persistent E-PQ personality. A strict zero-internal-signal replacement reduces reward-laundering risk but may also delete useful intrinsic exploration and value-free associative consolidation.",
+  "hypothesis": {
+    "name": "DUAL_CHANNEL_INTRINSIC_SIGNAL",
+    "mechanism": [
+      "VALUE_PLASTICITY: persistent value/tonic/personality/goal-priority updates require independently verified outcome, admitted evidence class, positive causal credit and provenance-bound episode identity.",
+      "GUIDANCE_ASSOCIATION: self-generated novelty/action-prediction/internal guidance may influence bounded transient route choice, exploration or value-free associative consolidation without minting persistent reward, truth, effect authority or personality change.",
+      "RETROSPECTIVE_PROMOTION: when a later independently verified outcome credits an earlier internal guidance signal through the same causal episode trace, only the verified credited contribution may be admitted to persistent value plasticity.",
+      "DECAY_AND_SCOPE: unverified internal guidance must decay or expire and remain lesionable; it cannot recursively increase its own future admission weight.",
+      "SEPARATE_RECEIPTS: value plasticity and guidance/association updates require different receipt types so activation/guidance cannot be confused with reward/truth/authority."
+    ],
+    "relationship_to_pr332": "PR #332 currently implements the VALUE_PLASTICITY fail-closed side and a <=0.12 exploration nudge. The dual-channel hypothesis is a possible successor/refinement, not an instruction to change the queued branch before its current baseline gate completes."
+  },
+  "strongest_counterhypotheses": [
+    {
+      "id": "C1_SIMPLE_SCALAR_VERIFIED_REWARD",
+      "claim": "A single scalar verified-outcome+causal-credit controller with explicit safety/homeostatic gates may match or outperform dual-channel typed/multiscale control with lower complexity and fewer failure surfaces."
+    },
+    {
+      "id": "C2_SELF_GUIDE_MATERIAL_REWARD_CAN_BE_SAFE",
+      "claim": "Self-generated internal reward may provide real long-horizon learning gains; forbidding persistent material learning until external verification could be too conservative and impair sparse-reward autonomy."
+    },
+    {
+      "id": "C3_GUIDANCE_CHANNEL_IS_REWARD_HACKING_BY_ANOTHER_NAME",
+      "claim": "Even a nominally non-value guidance channel could become behaviorally reward-equivalent if route selection repeatedly optimizes it, recreating proxy exploitation despite zero tonic/personality update."
+    }
+  ],
+  "live_primary_evidence": [
+    {
+      "source": "Greenstreet et al., Nature 2025, Dopaminergic action prediction errors serve as a value-free teaching signal",
+      "doi": "10.1038/s41586-025-09008-9",
+      "url": "https://www.nature.com/articles/s41586-025-09008-9",
+      "role": "supports testing a value-free associative teaching channel distinct from reward-guided learning; action prediction errors alone did not support reward-guided learning in the reported experiments"
+    },
+    {
+      "source": "Kahnt & Schoenbaum, Nature Reviews Neuroscience 2025",
+      "doi": "10.1038/s41583-024-00898-8",
+      "url": "https://www.nature.com/articles/s41583-024-00898-8",
+      "role": "reviews evidence that dopamine transients can encode information richer than integrated scalar value"
+    },
+    {
+      "source": "Wang et al., arXiv 2604.03098, Co-Evolution of Policy and Internal Reward for Language Agents",
+      "url": "https://arxiv.org/abs/2604.03098",
+      "role": "counterevidence to blanket rejection of self-generated internal reward; reports gains from self-guidance/internal reward on studied agent benchmarks"
+    },
+    {
+      "source": "Cagatan & Zhao, arXiv 2606.15385, Reward Hacking in Language Model Agents",
+      "url": "https://arxiv.org/abs/2606.15385",
+      "role": "counterweight: proxy reward optimization widened observed-hidden objective gaps and was not repaired by finer credit assignment in the reported suite"
+    },
+    {
+      "source": "Forbes et al., ICML 2025, Action-Dependent Optimality-Preserving Reward Shaping",
+      "url": "https://proceedings.mlr.press/v267/forbes25a.html",
+      "role": "supports explicit separation between useful intrinsic shaping and preserving the intended external objective"
+    }
+  ],
+  "cheapest_discriminating_experiment": {
+    "name": "FROZEN_SPARSE_OUTCOME_THREE_ARM_REPLAY",
+    "status": "QUEUED_AS_FUTURE_ORDINARY_EXPERIMENT_NOT_GO_OOB",
+    "arms": [
+      "A strict verified external/value plasticity only; no internal guidance",
+      "B dual-channel transient guidance/association plus verified value plasticity",
+      "C self-generated internal signals admitted directly to persistent material reward"
+    ],
+    "matched_controls": [
+      "same frozen episodes and seeds",
+      "same external verified outcomes",
+      "same route/action candidate universe",
+      "same compute and recurrence budgets",
+      "same initial reward/personality state",
+      "truthful vs shuffled causal-credit controls",
+      "proxy affordance present vs absent"
+    ],
+    "primary_metrics": [
+      "verified external task success",
+      "observed-vs-hidden objective gap",
+      "proxy exploitation rate",
+      "time/steps to verified outcome",
+      "goal persistence under sparse delayed reward",
+      "route diversity and stagnation",
+      "persistent value/personality drift without verified outcomes",
+      "recovery after misleading intrinsic guidance",
+      "latency/CPU/RAM/token/state amplification"
+    ],
+    "decision_rule": "Do not promote dual-channel semantics unless B improves verified external outcomes or sparse-reward efficiency over A without increasing proxy exploitation/unverified persistent drift, and does not lose to a materially simpler baseline on the declared Pareto vector."
+  },
+  "architecture_delta": "ADD_SEPARATE_GUIDANCE_ASSOCIATION_VS_VALUE_PLASTICITY_HYPOTHESIS_AND_RECEIPT_BOUNDARY; NO CURRENT PROMOTION",
+  "go_oob_count_delta": 0,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

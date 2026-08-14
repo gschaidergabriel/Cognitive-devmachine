@@ -8,13 +8,17 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import json
+import math
 import os
 import secrets
+import threading
 import time
 import urllib.error
 import urllib.request
 from dataclasses import asdict, dataclass
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -22,7 +26,13 @@ from urllib.parse import urlparse
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
+MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
+MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
+TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
+TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
+TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
 PROCESS_PAYMENT_LATCHES: set[str] = set()
+PROCESS_EXECUTION_LOCK = threading.Lock()
 
 
 @dataclass(frozen=True)
@@ -64,6 +74,35 @@ PROVIDERS = (
         "https://openrouter.ai/api/v1",
     ),
 )
+
+RUNTIME_ENVIRONMENT_KEYS = frozenset(
+    {
+        "FRANK_ALLOW_LOCAL_TEST_ENDPOINT",
+        "FRANK_FREE_ONLY_BUDGET_EPOCH",
+        "FRANK_PROVIDER_BASE_URL",
+        "FRANK_ZERO_COST_ATTESTED_PROVIDERS",
+    }
+    | {key_name for spec in PROVIDERS for key_name in spec.key_names}
+)
+
+
+def _snapshot_runtime_environment(
+    environ: dict[str, str] | None,
+) -> dict[str, str]:
+    """Capture only recognized runtime inputs before authorization begins."""
+    source = os.environ if environ is None else environ
+    snapshot: dict[str, str] = {}
+    try:
+        for name in sorted(RUNTIME_ENVIRONMENT_KEYS):
+            value = source.get(name)
+            if value is None:
+                continue
+            if not isinstance(value, str):
+                raise ValueError("runtime_environment_values_must_be_strings")
+            snapshot[name] = value
+    except (AttributeError, RuntimeError, TypeError) as exc:
+        raise ValueError("runtime_environment_could_not_be_snapshotted") from exc
+    return snapshot
 
 
 def _attested_zero_cost_providers(environ: dict[str, str]) -> set[str]:
@@ -194,18 +233,97 @@ def _safe_attempt_id(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()[:32]
 
 
+def _is_unicode_scalar_text(value) -> bool:
+    """Reject lone UTF-16 surrogates that are not Unicode characters."""
+    return isinstance(value, str) and not any(
+        0xD800 <= ord(character) <= 0xDFFF for character in value
+    )
+
+
+def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
+    """Parse RFC Retry-After delay-seconds or HTTP-date, else use default."""
+    try:
+        value = headers.get("Retry-After") if headers is not None else None
+    except (AttributeError, TypeError):
+        return default
+    if not isinstance(value, str):
+        return default
+    value = value.strip()
+    if value and all("0" <= character <= "9" for character in value):
+        try:
+            return min(int(value), MAX_PROVIDER_COOLDOWN_SECONDS)
+        except ValueError:
+            return default
+    try:
+        retry_at = parsedate_to_datetime(value)
+        if retry_at.tzinfo is None:
+            return default
+        return min(
+            max(0, math.ceil(retry_at.timestamp() - received_at)),
+            MAX_PROVIDER_COOLDOWN_SECONDS,
+        )
+    except (OverflowError, TypeError, ValueError):
+        return default
+
+
 def _validate_text_chat_request(messages, model) -> None:
     if not isinstance(model, str) or not model.strip():
         raise ValueError("model_must_be_nonempty_string")
+    if not _is_unicode_scalar_text(model):
+        raise ValueError("model_must_be_unicode_scalar_string")
+    if model != model.strip():
+        raise ValueError("model_must_match_served_identifier_exactly")
     if not isinstance(messages, list):
         raise ValueError("messages_must_be_list")
+    if not messages:
+        raise ValueError("messages_must_be_nonempty")
     for message in messages:
         if not isinstance(message, dict):
             raise ValueError("message_must_be_object")
+        if set(message) != TEXT_CHAT_MESSAGE_FIELDS:
+            raise ValueError("message_fields_not_supported_by_text_adapter")
         if not isinstance(message.get("role"), str) or not message["role"].strip():
             raise ValueError("message_role_must_be_nonempty_string")
+        if not _is_unicode_scalar_text(message["role"]):
+            raise ValueError("message_role_must_be_unicode_scalar_string")
+        if message["role"] not in TEXT_CHAT_ROLES:
+            raise ValueError("message_role_not_supported_by_text_adapter")
         if not isinstance(message.get("content"), str):
             raise ValueError("message_content_must_be_string")
+        if not _is_unicode_scalar_text(message["content"]):
+            raise ValueError("message_content_must_be_unicode_scalar_string")
+        if not message["content"].strip():
+            raise ValueError("message_content_must_be_nonempty_string")
+
+    if messages[-1]["role"] != "user":
+        raise ValueError("conversation_must_end_with_user")
+
+    conversation = messages
+    if messages[0]["role"] == "system":
+        conversation = messages[1:]
+    if any(message["role"] == "system" for message in conversation):
+        raise ValueError("system_message_must_be_first")
+
+    expected_role = "user"
+    for message in conversation:
+        if message["role"] != expected_role:
+            raise ValueError("conversation_roles_must_alternate")
+        expected_role = "assistant" if expected_role == "user" else "user"
+
+
+def _snapshot_text_chat_request(messages, model) -> list[dict[str, str]]:
+    """Copy mutable caller input once, then validate and use only that copy."""
+    if not isinstance(messages, list):
+        _validate_text_chat_request(messages, model)
+    try:
+        snapshot = [
+            dict(message) if isinstance(message, dict) else message
+            for message in tuple(messages)
+        ]
+    except (RuntimeError, TypeError, ValueError) as exc:
+        raise ValueError("messages_could_not_be_snapshotted") from exc
+    _validate_text_chat_request(snapshot, model)
+    return snapshot
 
 
 class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
@@ -213,6 +331,14 @@ class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
+
+
+class ProviderResponseTooLarge(ValueError):
+    """The provider response exceeded the bounded adapter's byte limit."""
+
+
+class ProviderOutputTruncated(ValueError):
+    """The provider explicitly stopped because its output limit was reached."""
 
 
 def _open_no_redirect(request: urllib.request.Request, timeout: int):
@@ -294,6 +420,36 @@ def _cost_policy_principal_id(
     return _safe_request_id(value)
 
 
+def _is_valid_http_status(value: object) -> bool:
+    return (
+        isinstance(value, int)
+        and not isinstance(value, bool)
+        and 100 <= value <= 599
+    )
+
+
+def _reject_nonfinite_json_constant(value: str) -> None:
+    raise ValueError(f"nonstandard_json_constant:{value}")
+
+
+def _parse_finite_json_float(value: str) -> float:
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise ValueError("json_float_out_of_range")
+    return parsed
+
+
+def _reject_duplicate_json_names(
+    pairs: list[tuple[str, object]],
+) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for name, value in pairs:
+        if name in result:
+            raise ValueError("duplicate_json_name")
+        result[name] = value
+    return result
+
+
 def execute_chat(
     messages: list[dict[str, str]],
     *,
@@ -304,9 +460,32 @@ def execute_chat(
     nonce_factory=None,
     payment_latches: set[str] | None = None,
 ) -> dict:
+    """Serialize authorization through receipt so payment latches are atomic."""
+    with PROCESS_EXECUTION_LOCK:
+        return _execute_chat_locked(
+            messages,
+            model=model,
+            environ=environ,
+            opener=opener,
+            now=now,
+            nonce_factory=nonce_factory,
+            payment_latches=payment_latches,
+        )
+
+
+def _execute_chat_locked(
+    messages: list[dict[str, str]],
+    *,
+    model: str,
+    environ: dict[str, str] | None = None,
+    opener=None,
+    now=time.time,
+    nonce_factory=None,
+    payment_latches: set[str] | None = None,
+) -> dict:
     """Execute one bounded chat request and return output plus a redacted receipt."""
-    _validate_text_chat_request(messages, model)
-    env = os.environ if environ is None else environ
+    request_messages = _snapshot_text_chat_request(messages, model)
+    env = _snapshot_runtime_environment(environ)
     latches = PROCESS_PAYMENT_LATCHES if payment_latches is None else payment_latches
     route_state = route(env, payment_latches=latches)
     selected = route_state["selected"]
@@ -337,7 +516,7 @@ def execute_chat(
     started = now()
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
     body = json.dumps(
-        {"model": model, "messages": messages, "stream": False}
+        {"model": model, "messages": request_messages, "stream": False}
     ).encode()
     request = urllib.request.Request(
         request_url,
@@ -351,67 +530,127 @@ def execute_chat(
     request_opener = _open_no_redirect if opener is None else opener
     status = None
     response_started = False
+    response_headers = None
     retryable = False
+    finished = None
 
     try:
         with request_opener(request, timeout=30) as response:
-            status = getattr(response, "status", 200)
+            candidate_status = getattr(response, "status", None)
+            if not _is_valid_http_status(candidate_status):
+                raise ValueError("response_status_must_be_http_integer")
+            status = candidate_status
             response_started = True
+            response_headers = getattr(response, "headers", None)
             lifecycle.append("EXECUTED")
-            response_body = response.read(2_000_000)
-        if not isinstance(status, int):
-            raise ValueError("response_status_must_be_integer")
-        if not 200 <= status < 300:
+            if status == 200:
+                response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
+                if not isinstance(response_body, bytes):
+                    raise TypeError("response_body_must_be_bytes")
+                if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
+                    raise ProviderResponseTooLarge
+        if status != 200:
+            finished = now()
             content = None
-            if status == PAYMENT_REQUIRED_STATUS:
+            if status == 202:
+                outcome = "provider_result_pending"
+                cooldown_seconds = 0
+                retryable = False
+            elif 200 <= status <= 299:
+                outcome = "unexpected_success_status"
+                cooldown_seconds = 0
+                retryable = False
+            elif status == PAYMENT_REQUIRED_STATUS:
                 latches.add(_payment_latch_key(selected, env))
                 outcome = "payment_required_hard_stop"
                 cooldown_seconds = 0
                 retryable = False
             elif status == 429:
                 outcome = "rate_limited"
-                cooldown_seconds = 60
-                retryable = True
+                cooldown_seconds = _retry_after_seconds(
+                    response_headers, finished
+                )
+                retryable = False
             else:
                 outcome = "provider_error"
                 cooldown_seconds = 15
-                retryable = True
+                retryable = False
         else:
-            payload = json.loads(response_body)
+            payload = json.loads(
+                response_body.decode("utf-8"),
+                parse_constant=_reject_nonfinite_json_constant,
+                parse_float=_parse_finite_json_float,
+                object_pairs_hook=_reject_duplicate_json_names,
+            )
             choices = payload["choices"]
             if not isinstance(choices, list) or not choices:
                 raise ValueError("response_choices_must_be_nonempty_list")
-            message = choices[0]["message"]
+            choice = choices[0]
+            if not isinstance(choice, dict):
+                raise ValueError("response_choice_must_be_object")
+            finish_reason = choice.get("finish_reason")
+            if finish_reason == "length":
+                raise ProviderOutputTruncated
+            if finish_reason != "stop":
+                raise ValueError("response_finish_reason_not_supported")
+            message = choice["message"]
             if not isinstance(message, dict):
                 raise ValueError("response_message_must_be_object")
+            if not set(message).issubset(TEXT_RESPONSE_MESSAGE_FIELDS):
+                raise ValueError("response_fields_not_supported_by_text_adapter")
+            if message.get("role") != "assistant":
+                raise ValueError("response_role_must_be_assistant")
             content = message["content"]
-            if not isinstance(content, str):
-                raise ValueError("response_content_must_be_string")
+            if not _is_unicode_scalar_text(content):
+                raise ValueError("response_content_must_be_unicode_scalar_string")
+            if not content.strip():
+                raise ValueError("response_content_must_be_nonempty_string")
             lifecycle.extend(["VERIFIED", "DONE"])
             outcome = "success"
             cooldown_seconds = 0
             retryable = False
     except urllib.error.HTTPError as exc:
-        lifecycle.append("EXECUTED")
-        status = exc.code
         content = None
-        if status == PAYMENT_REQUIRED_STATUS:
+        finished = now()
+        if not _is_valid_http_status(exc.code):
+            status = None
+            outcome = "invalid_provider_response"
+            cooldown_seconds = 15
+            retryable = False
+        elif exc.code == PAYMENT_REQUIRED_STATUS:
+            status = exc.code
+            lifecycle.append("EXECUTED")
             latches.add(_payment_latch_key(selected, env))
             outcome = "payment_required_hard_stop"
             cooldown_seconds = 0
             retryable = False
-        elif status == 429:
+        elif exc.code == 429:
+            status = exc.code
+            lifecycle.append("EXECUTED")
             outcome = "rate_limited"
-            cooldown_seconds = 60
-            retryable = True
+            cooldown_seconds = _retry_after_seconds(exc.headers, finished)
+            retryable = False
         else:
+            status = exc.code
+            lifecycle.append("EXECUTED")
             outcome = "provider_error"
             cooldown_seconds = 15
-            retryable = True
+            retryable = False
+    except ProviderResponseTooLarge:
+        content = None
+        outcome = "provider_response_too_large"
+        cooldown_seconds = 15
+        retryable = False
+    except ProviderOutputTruncated:
+        content = None
+        outcome = "provider_output_truncated"
+        cooldown_seconds = 0
+        retryable = False
     except (
         json.JSONDecodeError,
         KeyError,
         IndexError,
+        RecursionError,
         TypeError,
         ValueError,
     ):
@@ -419,7 +658,11 @@ def execute_chat(
         outcome = "invalid_provider_response"
         cooldown_seconds = 15
         retryable = False
-    except (urllib.error.URLError, TimeoutError):
+    except (
+        urllib.error.URLError,
+        OSError,
+        http.client.HTTPException,
+    ):
         content = None
         outcome = (
             "incomplete_provider_response"
@@ -427,9 +670,10 @@ def execute_chat(
             else "unreachable_provider"
         )
         cooldown_seconds = 15
-        retryable = True
+        retryable = False
 
-    finished = now()
+    if finished is None:
+        finished = now()
     body_digest = hashlib.sha256(body).hexdigest()
     request_id = _safe_request_id(
         f"{selected}:{endpoint_capability_id}:"

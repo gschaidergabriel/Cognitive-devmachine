@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.3",
+  "run_id": "claycode-20260811T2243p0700-chatgpt-secondary-first-compiler-lowering",
+  "trigger": "claycode",
+  "created_at_local": "2026-08-11T22:43:00+07:00",
+  "refreshed_at_local": "2026-08-11T23:27:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_boot_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_main_at_refresh": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44",
+  "standing_constraints": {
+    "semantic_authority": "ClayCode",
+    "backend_role": "compiled projection only",
+    "unifieddb_claygraph_mutation": false,
+    "external_effect_performed": false,
+    "authority_minted": false,
+    "final_training_authorized": false
+  },
+  "accepted_evaluator_input": {
+    "pr": 310,
+    "merged_main": "a3ad42f3c2c2d52474ebc2bf1278bb91d4a6a0e3",
+    "target_run": 31506115570,
+    "requests_compared": 200576,
+    "mismatches": 0
+  },
+  "mesh": {
+    "nominal_type_admission": {
+      "pr": 369,
+      "target_run": 31509914652,
+      "status": "PASS_CLAYCODE_NOMINAL_TYPECHECK_V1_GATE",
+      "checks": "12/12",
+      "elapsed_wall_seconds": 0.20,
+      "max_rss_kib": 25088,
+      "ownership": "bounded nominal type admission; backend lanes must not create a second type system",
+      "wp04_complete": false
+    },
+    "python_ast_reference_backend": {
+      "pr": 364,
+      "first_accepted_head": "74bc81aaff436e1c1b96f6365818bb8d222f9f38",
+      "first_accepted_synthetic_merge": "919751adb962fe995b890bab961e8c93ff0c2580",
+      "first_accepted_main_parent": "0b765534e693707b813dab9ff7471189ee48ef91",
+      "first_accepted_target_run": 31510276958,
+      "first_accepted_target_job": 93842059040,
+      "first_accepted_status": "PASS_CLAYCODE_PYTHON_LOWERING_V1",
+      "checks": "12/12",
+      "requests_compared": 200576,
+      "mismatches": 0,
+      "generated_ast_sha256": "4705d614089878c6e5b0b334c20a80431d3b16e4401b388fa19c16cf2f8c5bc8",
+      "source_ancestry": {
+        "clay_source_sha256": "fb1e7316f0987e917da4385e50dd5b1037a02500c2cdbbb2266f36a74bfd0d88",
+        "grammar_sha256": "64a22026f16802c06f6a11613315bdbcee938c11a5f32e66eccde7e093478ac4",
+        "analyzer_sha256": "28de0788992b27a260da40cecaf1b4ca3552c790f1c89d135f2eb528f192030d",
+        "evaluator_sha256": "8e6e239a38122020b91c42fe9b2cdb683113c2ff4c58a67c723a26b259c53759",
+        "syntax_sha256": "43078694850dc6c8bce1cc295e397d010f14fe550871af1b7a68f5ddec1d9b5d"
+      },
+      "benchmark": {
+        "corpus_size": 2048,
+        "rounds": 6,
+        "counterbalanced": true,
+        "evaluator_median_ns_per_call": 15777.2470703125,
+        "compiled_median_ns_per_call": 7196.484130859375,
+        "median_speedup_evaluator_over_compiled": 2.192354875439494,
+        "promotion_gate": false
+      },
+      "whole_gate": {
+        "elapsed_wall_seconds": 10.50,
+        "max_rss_kib": 29056,
+        "exit_status": 0
+      },
+      "artifact_digest": "sha256:e1f0a6b7ea64c908b3f9869ea099bb61017faffa9980f4d84486596a7db02e07",
+      "evidence_class": "SUPPORTED_MECHANISM_NOT_CURRENT_MAIN_MERGE_EVIDENCE"
+    },
+    "native_c_backend": {
+      "pr": 366,
+      "target_run": 31509419897,
+      "status": "PASS_CLAYCODE_C_LOWERING_V1_CANDIDATE",
+      "checks": "8/8",
+      "requests_compared": 200576,
+      "mismatches": 0,
+      "generated_c_sha256": "b8bdd0da5eab025676fe91e9ca5835dc3ad5250afe032099a1e1043547183bdf",
+      "shared_object_sha256": "4b8ff5d3af602fd5b1615a7b74f4bcac7e61c59825c7a662006b5fd4df21576e",
+      "whole_gate": {
+        "elapsed_wall_seconds": 10.12,
+        "max_rss_kib": 34476
+      },
+      "wp06_complete": false
+    }
+  },
+  "hypothesis": "A target-supported pure ClayCode subset can be compiled into multiple deterministic executable backends without semantic drift when open semantics and host capability boundaries fail closed.",
+  "strongest_counterhypothesis": "Backend agreement can be an ancestry or host-runtime artifact; Python-AST may leak Python name/coercion/capability semantics and C may encode translation-specific assumptions.",
+  "python_backend_hardening": {
+    "bool_int_host_equality_alias": "FAIL_CLOSED_CROSS_RUNTIME_TYPE_COMPARISON_REFUSED",
+    "comparison_chain": "FAIL_CLOSED_UNRESOLVED",
+    "intrinsic_reachable_entry": "FAIL_CLOSED",
+    "capability_surface_audit": "PASS_ON_FIRST_ACCEPTED_TARGET_RUN",
+    "adversarial_host_capability_ast_graft": "DETECTED_ON_FIRST_ACCEPTED_TARGET_RUN",
+    "semantic_sabotage": "DIFFERENTIAL_TURNS_RED",
+    "reserved_binding_prefix": "__clay_",
+    "reserved_binding_target_evidence": {
+      "run": 31511909950,
+      "status": "PASS_RESERVED_BINDING_FAIL_CLOSED",
+      "checks": "2/2",
+      "details": [
+        "parameter __clay_compare rejected",
+        "local __clay_fn_decide_effect rejected"
+      ]
+    },
+    "path_resolution_contract": "Clay function environment first, then sum variant, otherwise fail closed; conditional branch locals are not promoted to definite outer bindings",
+    "path_resolution_gate": {
+      "checks_expected": "5/5",
+      "latest_executed_run": 31511909950,
+      "result": "HARNESS_IMPORT_FAILURE_BEFORE_SEMANTIC_CHECKS",
+      "error": "ModuleNotFoundError: No module named runtime",
+      "classification": "TEST_HARNESS_PATH_BUG_NOT_COMPILER_COUNTEREVIDENCE",
+      "repair_commits": [
+        "07ac0dfb9dc96d8c9ac451c3305f336da28ee22f",
+        "06051ce66e02361238987e250fbc3b2f02e8f95f"
+      ],
+      "repair": "test inserts repository root into sys.path; workflow additionally runs with PYTHONPATH=$TREE and python -P"
+    }
+  },
+  "fresh_current_replay": {
+    "pr": 364,
+    "current_head_at_refresh": "06051ce66e02361238987e250fbc3b2f02e8f95f",
+    "current_main": "9085f0b3e2be364759d5d8a9d3a08bb71ca06b44",
+    "target_run": 31512274848,
+    "target_job": 93848790327,
+    "state_at_refresh": "QUEUED",
+    "promotion_rule": "remain draft and do not claim current-main PASS until exact current merge target run is green"
+  },
+  "backend_comparison": {
+    "python_ast_mechanism_supported": true,
+    "native_c_mechanism_supported": true,
+    "winner_selected": false,
+    "reason_no_winner": "accepted backend runs have different source/grammar/analyzer/evaluator ancestry and non-matched performance scopes",
+    "required_next_comparison": "same nominal type-admission boundary + same Clay source/grammar/analyzer/evaluator + same target/corpus + matched warm backend benchmark + capability/isolation audit"
+  },
+  "negative_results_and_nonclaims": [
+    "PR #362 was closed unmerged after becoming stale.",
+    "Fresh-current run 31511909950 failed at the new path-resolution test harness import before semantic execution; this failure is preserved, not hidden.",
+    "No current-main PASS is claimed for hardened PR #364 while replay 31512274848 is queued.",
+    "No backend winner is selected.",
+    "No WP04/WP06/general compiler/runtime/FFI completion is claimed.",
+    "No comparison-chain or Bool/Int cross-nominal semantics are selected.",
+    "No whole Frank v0.1 acceptance is claimed."
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_DUAL_BACKEND_MECHANISMS_WITH_HARDENED_REFERENCE_BACKEND_PENDING_FRESH_CURRENT_REPLAY",
+    "type_system_owner": "PR #369 bounded nominal admission",
+    "reference_backend": "PR #364 CPython AST",
+    "native_backend_candidate": "PR #366 C11/shared object",
+    "semantic_change": false,
+    "rollback": "all backend candidates remain PR-scoped; current main unchanged by this compiler run"
+  },
+  "next_falsifiers": [
+    "complete exact current PR #364 replay 31512274848 and require reserved-binding 2/2, path-resolution 5/5, compiler 12/12 and 200576/0 mismatch",
+    "after integration, compose #369 type admission with both backend paths",
+    "rerun Python-AST and C on identical source/type/base ancestry with matched warm performance and capability evidence",
+    "expand compiler scope only after the next source subset has static type/effect admission and differential evidence"
+  ],
+  "research_write": "COMMITTED_NEGATIVE_AND_REPAIR_PENDING_TARGET_REPLAY"
+}

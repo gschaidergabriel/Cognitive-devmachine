@@ -240,6 +240,8 @@ def _validate_text_chat_request(messages, model) -> None:
         raise ValueError("model_must_be_nonempty_string")
     if not _is_unicode_scalar_text(model):
         raise ValueError("model_must_be_unicode_scalar_string")
+    if model != model.strip():
+        raise ValueError("model_must_match_served_identifier_exactly")
     if not isinstance(messages, list):
         raise ValueError("messages_must_be_list")
     if not messages:

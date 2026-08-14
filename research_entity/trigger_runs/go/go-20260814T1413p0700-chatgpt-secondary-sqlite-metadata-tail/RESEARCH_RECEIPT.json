@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-14T14:13:45+07:00",
+  "organ": "chatgpt-secondary / GPT-5.6 Sol temporary Clay worker",
+  "program": "FRANK_V0_1",
+  "grf": {
+    "observed_reality": [
+      "Canonical workspace still records F-V01-13 IN_PROGRESS and an older accepted-target SQLite 3.45.1 observation.",
+      "Current Frank repository main contains merged reproducible SQLite 3.53.4 capability-parity runtime evidence at commit 9c891aa8b076113b21903ac3db0d39a61aec6a91.",
+      "Current Frank repository main contains a live SQLite process mapping attestor with FD/inode/hash/PID-generation and receipt-tail mapping fencing; commit 2e1909830fee948ed4af5d52c726c02530b2dd72 explicitly limits proof scope to one live process generation and leaves productive Frank persistence/restart obligations open.",
+      "Upstream SQLite documentation states the WAL-reset corruption bug affects versions through 3.51.2 and is fixed in 3.51.3 and later; SQLite 3.53.4 therefore contains the fix.",
+      "Current Frank main observed before the experiment: 12eb0dd1301793298710e643da8f035a7454ba3d."
+    ],
+    "generated_reality": "F-V01-13 can retire the specific WAL-reset version hazard if the productive Hostinger Frank persistence process is proven to map the accepted anchored fixed SQLite runtime and the same process identity is bound to Frank's admitted service/state lineage.",
+    "counter_reality": "The existing 3.53.4 builder and mapping attestor may remain mechanism-only: a non-productive or wrong process could satisfy SQLite mapping identity while the real Frank persistence path still runs another library or an unbound process identity.",
+    "falsifier": "Exercise the productive Frank database on the accepted Hostinger service, bind exact PID/start-ticks to Frank service identity, prove /proc mapping + trusted anchor/source-id/hash for the loaded fixed SQLite library, then restart and run rollback/downgrade/library-swap negative controls.",
+    "outcome": "RETAIN"
+  },
+  "baseline": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "branch_base_sha": "12eb0dd1301793298710e643da8f035a7454ba3d",
+    "live_attestor_test_count": 9,
+    "result": "PASS",
+    "runner": "clay-2"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "kind": "bounded process-metadata tail-drift counterworld",
+    "branch": "chatgpt/go-sqlite-metadata-tail-counterworld-20260814",
+    "head_sha": "8ee8d2f1fb201369b8d6ce08f04d39ee1685571e",
+    "workflow_run": 31779114950,
+    "intervention": "After process exe/cgroup metadata capture, mutate only the simulated process metadata while holding PID generation and SQLite mapping identity stable, then execute the existing final SQLite receipt-tail mapping check.",
+    "result": "COUNTERWORLD_REPRODUCED",
+    "interpretation": "The SQLite attestor correctly remains a narrow one-live-process-generation mapping proof. Its captured exe/cgroup fields are not a Frank identity proof; productive acceptance must compose a separate Frank process-identity proof using the same PID/start-ticks anchor.",
+    "authority_bypass_claimed": false,
+    "productive_hostinger_mutation": false,
+    "canonical_state_mutated": false,
+    "rollback": "Experiment exists only on an isolated branch; main Frank repository was not modified."
+  },
+  "tests": [
+    {"name": "baseline_live_attestor_regression", "result": "PASS", "detail": "9 tests"},
+    {"name": "go_sqlite_metadata_tail_counterworld_20260814", "result": "PASS_EXPERIMENT_EXECUTED_COUNTERWORLD_REPRODUCED"},
+    {"name": "repo_static_integrity_audit", "result": "PASS"}
+  ],
+  "evidence_refs": [
+    "gschaidergabriel/Dr.-Unterweger@9c891aa8b076113b21903ac3db0d39a61aec6a91",
+    "gschaidergabriel/Dr.-Unterweger@2e1909830fee948ed4af5d52c726c02530b2dd72",
+    "gschaidergabriel/Dr.-Unterweger@8ee8d2f1fb201369b8d6ce08f04d39ee1685571e",
+    "gschaidergabriel/Dr.-Unterweger:run/31779114950",
+    "https://sqlite.org/wal.html",
+    "https://sqlite.org/releaselog/current.html"
+  ],
+  "affected_components": [
+    "F-V01-01-IDENTITY-SERVER-BINARY",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "promotion": {
+    "sqlite_3_53_4_fixed_runtime_mechanism": "SUPPORTED",
+    "productive_hostinger_fixed_sqlite_path": "OPEN",
+    "frank_process_identity_composition": "OPEN",
+    "restart_rollback_downgrade_library_swap": "OPEN",
+    "whole_frank_v0_1": "NOT_CLAIMED"
+  },
+  "next_falsifier": "One target-VPS productive persistence receipt must simultaneously bind Frank service identity, PID/start-ticks, actual DB open/write/read, loaded SQLite source-id/hash/mapping, restart continuity, and fail-closed rollback/downgrade/library-swap controls.",
+  "negative_result_preserved": true,
+  "training_authorized": false,
+  "together_used": false
+}

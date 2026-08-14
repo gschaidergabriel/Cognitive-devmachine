@@ -1,0 +1,65 @@
+module clay.research.live_fusion_work_lease_candidate
+version "0.3"
+status OPEN_RESEARCH_CANDIDATE_NOT_PROMOTED
+
+goal="stronger live fusion without duplicate or stale work effects"
+parent_live_fusion_reentry=@research_entity/global/CLAY_LIVE_FUSION_REENTRY_PROTOCOL.clay
+base_work_protocol=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+base_coordination=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+runtime_candidate=@research_entity/runtime/live_fusion_work_lease_v1.py
+
+// Parent PR #156 owns targeted delivery, ACK/resolution, ABA-safe causal event identity,
+// late-event replay and high-impact effect guards. This candidate adds work ownership plus
+// durable pre-effect reservation so crash-after-effect-before-receipt cannot silently retry.
+record WorkLease {
+  work_id:Ref
+  spec_rev:Int
+  holder:Ref
+  lease_token:Ref
+  fence_epoch:Int
+  acquired_at:Time
+  expires_at:Time
+}
+
+record EffectIntent {
+  effect_key:Hash
+  work_id:Ref
+  spec_rev:Int
+  lease_token:Ref
+  fence_epoch:Int
+  request_hash:Hash
+  state:RESERVED|FINALIZED
+  result_hash:Hash|UNKNOWN
+}
+
+rule LiveFusion_reentry_and_semantic_resolution -> parent_live_fusion_reentry
+rule worker_before_consequential_effect -> parent_effect_guard + current_work_spec_revalidation + valid_active_lease + durable_effect_reservation
+rule work_claim -> one active lease per work_id
+rule active_lease_collision -> reject_second_holder
+rule lease_expiry_or_release -> next holder increments fence_epoch
+rule older_fence_epoch_without_existing_reservation -> cannot_start_effect
+rule stale_spec_rev -> cannot_reserve_effect
+rule new_effect -> reserve_effect_before_external_operation
+rule reserve_same_effect_same_request_when_RESERVED -> RECOVERY_REQUIRED; never_auto_repeat_external_effect
+rule reserve_same_effect_different_request -> IDEMPOTENCY_CONFLICT
+rule reserve_same_effect_when_FINALIZED -> ALREADY_FINALIZED
+rule verified_outcome -> finalize_existing_reservation
+rule finalize_same_result -> IDEMPOTENT_REPLAY
+rule finalize_conflicting_result -> IDEMPOTENCY_CONFLICT
+rule unavailable_current_authority_or_revision_state -> fail_closed_for_consequential_effect
+
+rule parent_PR_156_remains_live_fusion_transport_candidate
+rule current_work_events_remain_authoritative_until_remote_differential_passes
+rule lease_candidate_never_mints_work_priority_truth_or_effect_authority
+rule promotion_requires Ubuntu_remote_regression + two_connection_collision + crash_after_reserve + crash_after_external_effect_before_finalize + recovery_reconciliation + lease_expiry + late_old_holder + spec_revision_race + resource_shadow
+rule promotion_requires no_regression_against_parent_live_fusion_reentry_or_current_work_event_protocol
+rule no_benefit_or_excess_cost -> REFUTED_OR_KEEP_ISOLATED
+
+invariant ACK_and_semantic_resolution_are_parent_bus_responsibility
+invariant lease_is_collision_control_not_truth
+invariant fence_epoch_is_effect_safety_not_epistemic_rank
+invariant RESERVED_is_not_verified_outcome
+invariant FINALIZED_is_receipt_state_not_semantic_correctness
+invariant unresolved_RESERVED_effect_fails_closed_until_reconciled
+invariant Frank_never_authorizes_its_own_harness_change
+invariant ResearchEntity_and_FRANK_remain_separate

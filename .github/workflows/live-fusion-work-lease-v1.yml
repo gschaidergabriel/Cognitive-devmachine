@@ -1,0 +1,54 @@
+name: Live Fusion Work Lease V1
+
+on:
+  push:
+    paths:
+      - 'research_entity/runtime/live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/live_fusion_work_lease_v1.py'
+      - 'research_entity/runtime/test_live_fusion_work_lease_v1.py'
+      - 'research_entity/runtime/test_live_fusion_work_lease_integration_v1.py'
+      - 'research_entity/global/LIVE_FUSION_ACK_LEASE_CANDIDATE.clay'
+      - '.github/workflows/live-fusion-work-lease-v1.yml'
+  pull_request:
+    paths:
+      - 'research_entity/runtime/live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_v13.py'
+      - 'research_entity/runtime/live_fusion_work_lease_v1.py'
+      - 'research_entity/runtime/test_live_fusion_work_lease_v1.py'
+      - 'research_entity/runtime/test_live_fusion_work_lease_integration_v1.py'
+      - 'research_entity/global/LIVE_FUSION_ACK_LEASE_CANDIDATE.clay'
+      - '.github/workflows/live-fusion-work-lease-v1.yml'
+  workflow_dispatch:
+
+jobs:
+  hosted-reference-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run parent + lease + integration tests
+        working-directory: research_entity/runtime
+        run: python -m unittest -v test_live_fusion_reentry_v13.py test_live_fusion_work_lease_v1.py test_live_fusion_work_lease_integration_v1.py
+
+  hostinger-reference-tests:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Observe exact runtime
+        run: |
+          python3 --version
+          uname -a
+          python3 - <<'PY'
+          import sqlite3
+          print('sqlite', sqlite3.sqlite_version)
+          PY
+      - name: Run parent + lease + integration tests
+        working-directory: research_entity/runtime
+        run: python3 -m unittest -v test_live_fusion_reentry_v13.py test_live_fusion_work_lease_v1.py test_live_fusion_work_lease_integration_v1.py

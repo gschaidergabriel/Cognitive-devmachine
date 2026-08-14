@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.1",
+  "experiment_id": "EXP-LIVE-FUSION-WORK-LEASE-20260810",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "status": "SIMULATION_AND_LOCAL_EXECUTION_CANDIDATE_NOT_PROMOTED",
+  "parent_live_fusion_candidate": "PR #156",
+  "coordination_delta": "After discovering PR #156, duplicate ACK/reentry work was abandoned. This candidate retains only incremental work ownership, fencing, stale-spec and durable effect-intent protections.",
+  "hypothesis": "PR #156 causal worker re-entry plus one-active-work lease/fencing and durable reserve-before-effect reduces duplicate/stale execution under retry, crash and failover.",
+  "counterhypothesis": "PR #156 plus mandatory live refresh/revalidation is sufficient and lease/effect-intent state adds coordination or SQLite cost without material incremental benefit.",
+  "out_of_box_experiment_count": 1,
+  "synthetic_combined_result_mean": {
+    "matched_seeds": 500,
+    "tasks_per_seed": 1000,
+    "baseline_duplicate_effect_fraction": 0.1760524428,
+    "combined_candidate_duplicate_effect_fraction": 0.0,
+    "baseline_stale_effects_per_task": 0.05642,
+    "combined_candidate_stale_effects_per_task": 0.0,
+    "baseline_valid_task_completion": 0.9243652043,
+    "combined_candidate_valid_task_completion": 0.9971158898,
+    "baseline_transport_deliveries_per_task": 14.990784,
+    "combined_candidate_transport_deliveries_per_task": 4.20053
+  },
+  "synthetic_warning": "These values are assumption-bound simulation outputs, not production measurements. Zero duplicate/stale outcomes follow from modeled fail-closed/idempotent laws and must be falsified on real execution.",
+  "bug_found_during_recursive_cycle": {
+    "class": "CRASH_AFTER_EXTERNAL_EFFECT_BEFORE_RECEIPT",
+    "old_failure": "A post-effect idempotent receipt alone leaves a crash window: the external effect may succeed and the worker may die before the receipt is durable, allowing a retry to repeat the effect.",
+    "repair": "Persist an effect intent as RESERVED before the consequential external operation. Finalize only after outcome verification. A replay/restart that finds the same still-RESERVED effect key returns RECOVERY_REQUIRED and cannot automatically repeat the effect.",
+    "remaining_uncertainty": "RESERVED does not prove whether the external operation ran. Recovery must reconcile the real external state or use a provider-side idempotency/transaction key before finalization."
+  },
+  "local_execution": {
+    "command": "python3 -m unittest -v test_live_fusion_work_lease_v1.py",
+    "result": "6 tests passed in 0.048s",
+    "covered": [
+      "two SQLite connections cannot hold one live work lease simultaneously",
+      "lease expiry failover increments fence epoch",
+      "old/expired holder cannot reserve a new effect",
+      "stale spec revision fails closed before effect reservation",
+      "new effect is durably RESERVED before external execution",
+      "finalization is idempotent and conflicting result replay is rejected",
+      "crash/restart with unresolved RESERVED effect returns RECOVERY_REQUIRED instead of execution permission",
+      "restart preserves FINALIZED effect state"
+    ]
+  },
+  "parent_composition_test": {
+    "path": "research_entity/runtime/test_live_fusion_work_lease_integration_v1.py",
+    "intent": "Require both terminal PR #156 semantic resolution and a current lease/spec plus durable effect reservation before an affected consequential effect proceeds.",
+    "remote_status": "AWAITING_SUCCESSFUL_GITHUB_OR_HOSTINGER_EXECUTION_RECEIPT"
+  },
+  "required_remote_tests": [
+    "parent PR #156 integration",
+    "crash after RESERVED before external effect",
+    "crash after external effect before FINALIZED",
+    "reconcile unresolved RESERVED against real provider/external state",
+    "provider-side idempotency key where available",
+    "late old-holder attempt",
+    "spec revision during active lease",
+    "concurrent claim contention",
+    "restart/replay",
+    "latency CPU RAM SQLite busy and write amplification",
+    "Hostinger Ubuntu differential"
+  ],
+  "promotion_rule": "No promotion until incremental benefit over PR #156 plus current revalidation is measured on Ubuntu with recovery/resource evidence. NO_BENEFIT, KEEP_ISOLATED and REFUTED are valid outcomes."
+}

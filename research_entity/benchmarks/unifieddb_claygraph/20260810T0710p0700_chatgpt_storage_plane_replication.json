@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "run_id": "clay-unifieddb-claygraph-storage-plane-replication-20260810T0710p0700",
+  "created_at": "2026-08-10T07:10:37+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_class": "LOCAL_SYNTHETIC_INDEPENDENT_REPLICATION",
+  "basis_main_head": "3d5270327c557c1582cf31ee732c6f1ec6a01a17",
+  "candidate_refs": {
+    "h1_query_pushdown": "8d5beaa28969c553735edfe91a09ec3e56f0c0fe",
+    "lean_current_indexes": "5c567ab896f050c043672e43851c9f1bf99e5dcc",
+    "claygraph_v3_heads": "512b26e2642d687eecc50a41938d79c224e4cbce",
+    "semantic_access_runtime": "08840f50ecffef127a77e8186384c196cb278d07",
+    "proof_activation_separation": "a9165bb6fac2e30c61c48afb39d62bc2ecb40988"
+  },
+  "environment": {
+    "os": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "hardware": "UNKNOWN_OPENAI_SANDBOX",
+    "target_host": false
+  },
+  "scope_boundary": "Synthetic component/storage-plane benchmark. It tests semantic equivalence and physical access-path cost; it is not evidence of universal database superiority and not final Andreas Ubuntu target evidence.",
+  "unifieddb_query_pushdown_100k": {
+    "rows": 100000,
+    "domains": 100,
+    "legacy_repetitions_per_case": 7,
+    "candidate_repetitions_per_case": 60,
+    "equivalent_cases": 4,
+    "total_cases": 4,
+    "cases": {
+      "point": {"legacy_p50_ms": 502.200966, "legacy_p95_ms": 506.612684, "candidate_p50_ms": 0.018519, "candidate_p95_ms": 0.027742, "p50_speedup": 27118.15, "equivalent": true},
+      "domain_known": {"legacy_p50_ms": 480.489391, "legacy_p95_ms": 499.625173, "candidate_p50_ms": 0.342023, "candidate_p95_ms": 0.374223, "p50_speedup": 1404.85, "equivalent": true},
+      "three_domain": {"legacy_p50_ms": 488.839340, "legacy_p95_ms": 568.907452, "candidate_p50_ms": 0.3096935, "candidate_p95_ms": 0.381367, "p50_speedup": 1578.46, "equivalent": true},
+      "global_known": {"legacy_p50_ms": 648.644539, "legacy_p95_ms": 714.464175, "candidate_p50_ms": 0.336010, "candidate_p95_ms": 0.443826, "p50_speedup": 1930.43, "equivalent": true}
+    },
+    "interpretation": "The legacy H1 path materialized and JSON-decoded the full state before filtering. Bounded SQL predicate pushdown plus LIMIT preserved the compared outputs and removed the O(N) full-state decode from these bounded reads."
+  },
+  "unifieddb_lean_index_ablation_200k": {
+    "rows": 200000,
+    "current_fraction": 0.6,
+    "configs": {
+      "base": {"logical_bytes": 17186816, "key_lookup_p50_ms": 15.4475, "domain_lookup_p50_ms": 0.1038815, "global_known_4096_p50_ms": 10.9736985, "append_20k_ms": 118.044526},
+      "order_only": {"logical_bytes": 21479424, "key_lookup_p50_ms": 6.474765, "domain_lookup_p50_ms": 0.0827025, "global_known_4096_p50_ms": 4.508468, "append_20k_ms": 157.162112},
+      "key_only": {"logical_bytes": 21422080, "key_lookup_p50_ms": 0.015659, "domain_lookup_p50_ms": 0.118823, "global_known_4096_p50_ms": 11.1630875, "append_20k_ms": 132.249637},
+      "both": {"logical_bytes": 25714688, "key_lookup_p50_ms": 0.016304, "domain_lookup_p50_ms": 0.083019, "global_known_4096_p50_ms": 4.7731185, "append_20k_ms": 135.109321}
+    },
+    "derived_tradeoffs": {
+      "both_vs_base_storage_ratio": 1.4962,
+      "both_vs_base_append_ratio_single_batch": 1.1446,
+      "key_only_vs_base_key_lookup_speedup": 986.49,
+      "order_only_vs_base_global_4096_speedup": 2.4340
+    },
+    "interpretation": "The two lean CURRENT indexes are complementary rather than redundant: key-first dominates key-only retrieval; order-first helps domain/global ordered CURRENT reads. Promotion should depend on real query-frequency and write-amplification measurements."
+  },
+  "rejected_heavy_index_candidate_300k": {
+    "candidate": "state(status,epistemic,domain,k,domain_epoch,semantic_hash)",
+    "rows": 300000,
+    "global_known_4096_base_p50_ms": 24.1389345,
+    "global_known_4096_candidate_p50_ms": 15.4714905,
+    "read_speedup": 1.5602,
+    "base_logical_bytes_sample": 25870336,
+    "candidate_logical_bytes_sample": 40955904,
+    "storage_ratio": 1.5831,
+    "append_20k_base_p50_ms": 104.506546,
+    "append_20k_candidate_p50_ms": 333.788183,
+    "append_ratio": 3.1949,
+    "status": "NOT_SELECTED",
+    "reason": "Read gain did not justify measured storage and write amplification in this synthetic workload."
+  },
+  "claygraph_v3_head_projection_80k_x3": {
+    "logical_edges": 80000,
+    "versions_per_edge": 3,
+    "physical_edge_rows": 240000,
+    "latest_current_edges": 64000,
+    "full_latest_set_equivalence": true,
+    "out_of_order_old_version_resurrection_guard": true,
+    "legacy_repetitions_per_case": 5,
+    "fast_repetitions_per_case": 80,
+    "cases": {
+      "source": {"legacy_p50_ms": 69.217839, "fast_p50_ms": 0.120162, "p50_speedup": 576.04, "equivalent": true},
+      "source_relation": {"legacy_p50_ms": 76.325120, "fast_p50_ms": 0.1229535, "p50_speedup": 620.76, "equivalent": true},
+      "global_relation": {"legacy_p50_ms": 99.360856, "fast_p50_ms": 0.118796, "p50_speedup": 836.40, "equivalent": true}
+    },
+    "interpretation": "Rebuildable latest-head tables remove repeated GROUP BY/MAX version resolution from hot reads while preserving tombstone/latest-version semantics in the tested synthetic history."
+  },
+  "external_evidence": [
+    "https://sqlite.org/pragma.html#pragma_optimize",
+    "https://sqlite.org/queryplanner.html",
+    "https://sqlite.org/queryplanner-ng.html",
+    "https://sqlite.org/optoverview.html",
+    "https://arxiv.org/abs/2509.25530",
+    "https://arxiv.org/abs/2603.14828"
+  ],
+  "fusion": {
+    "supported": [
+      "Keep bounded SQL predicate pushdown in the H1 query plane candidate.",
+      "Keep ClayGraph V3 latest-head projection as a strong hot-read candidate pending target-host write/rebuild/recovery measurement.",
+      "Treat the two lean CURRENT indexes as workload-conditioned complementary candidates, not universally free wins.",
+      "Keep graph activation separate from proof eligibility and authority."
+    ],
+    "not_selected": [
+      "Heavy status+epistemic covering index as a default state index.",
+      "Unbounded naive graph expansion as an accuracy strategy."
+    ],
+    "required_next_tests": [
+      "Replay the exact benchmarks on representative real UnifiedDB/ClayGraph snapshots.",
+      "Run on the verified Ubuntu lane with page/WAL/checkpoint, RSS/CPU, write latency and recovery metadata.",
+      "Measure held-out Recall@k, MRR/nDCG, counterevidence recall, stale-accept rate and null-query abstention at matched context budgets.",
+      "Ablate each lean state index against observed Frank query-frequency distribution before promotion.",
+      "Crash/rebuild test ClayGraph heads and verify equality with legacy latest views after recovery and out-of-order ingestion."
+    ]
+  }
+}

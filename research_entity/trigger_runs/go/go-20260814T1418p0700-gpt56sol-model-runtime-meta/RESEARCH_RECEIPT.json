@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1418p0700-gpt56sol-model-runtime-meta",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "research_repo_parent_before_receipt": "c61918963858b8a04958774f167ce34927025cd0",
+  "center_dispatch": {
+    "interrupt_event": "research_entity/rooms/rooms/harness/events/evt-20260814T071016513317Z-3326771d.json",
+    "work_order": "RAE_META_BACKFILL",
+    "selected_room": "model_runtime",
+    "selected_lane": "model_runtime",
+    "lane_size": 1,
+    "target_file": "research_entity/knowledge_micro_packets/model_runtime/KMP-G7-RESOLUTION-RECURRENCE-MEMORY.md",
+    "packet_commit": "c61918963858b8a04958774f167ce34927025cd0",
+    "packet_content_sha": "71baea9e1e1ac6f48422cb33132ec4fc0ef3d881",
+    "result": "PASS_FOLDER_LOCAL_STRUCTURE_AND_DERIVABILITY",
+    "evidence_boundary": "The committed singleton file was reread from main. Its RAE_META JSON parses, has packet_id, exact heading-derived title, folder-derived model_runtime domain, literal OPEN status, literal origin_actor, and only source_refs present in the packet body. A full repository checkout was unavailable through the private-repo connector boundary, so the repository-wide materializer command itself is not claimed as executed."
+  },
+  "grf": {
+    "observed_anchor": "The center opened 16 folder-partitioned RAE_META lanes because 75/324 packets lacked RAE_META; model_runtime was a one-file lane and remained unannotated when claimed.",
+    "hypothesis": "Adding a packet-self-derived RAE_META header to the model_runtime singleton closes that lane without changing packet claims.",
+    "strongest_counterhypothesis": "A structurally green RAE_META header can still carry semantically transplanted metadata, so materializer acceptance alone does not prove derivability/provenance correctness.",
+    "discriminator": "Validate both structural acceptance and literal derivability of every emitted field from the packet/folder."
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "RAE_META_SEMANTIC_TRANSPLANT_COUNTERWORLD",
+    "reversible": true,
+    "canonical_state_mutated": false,
+    "execution_class": "LOCAL_EXACT_RELEVANT_LOGIC_MIRROR",
+    "baseline": "Correct packet_id/title/model_runtime domain metadata parsed with no structural error.",
+    "counterworld": "The same packet_id with a Frank packet title and frank domain also parsed with no structural error.",
+    "result": "PASS_COUNTERWORLD",
+    "hypothesis_status": "REFUTED_FOR_SEMANTIC_DERIVABILITY_VALIDATION",
+    "counterhypothesis_status": "SUPPORTED_LOCALLY",
+    "interpretation": "tools/materialize_micro_packets.py is a structural materializer gate, not a semantic provenance validator. A green materializer result must not be promoted to proof that title/domain/source metadata is packet-derived.",
+    "rollback": "No validator or canonical-state change was made from this experiment."
+  },
+  "routine_validation": {
+    "materializer_parse_ok": true,
+    "packet_id_literal_in_body": true,
+    "title_exact_heading": true,
+    "domain_matches_folder": true,
+    "claim_status_literal_in_body": true,
+    "origin_actor_literal_in_body": true,
+    "all_source_refs_literal_in_body": true
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "affected_component": "research knowledge materialization/provenance boundary feeding FRANK_V0_1",
+    "delta": "Keep materializer completion scoped to structural materialization; if semantic RAE_META correctness becomes a release-relevant invariant, add a separate derivability/provenance validator rather than overloading the materializer.",
+    "strongest_counterargument": "The dispatch hard rule plus human/worker review may be sufficient for this derived-memory backfill, and a semantic validator could add complexity without current release value.",
+    "next_falsifier": "Measure whether existing provenance/schema tooling already rejects a deliberately domain/title-transplanted RAE_META packet before adding any new validator.",
+    "rollback": "No production or Harness behavior changed."
+  },
+  "negative_results_preserved": [
+    "A structurally accepted RAE_META block can be semantically wrong.",
+    "No full-repository materializer run, GitHub Actions run, self-hosted runner run, or Hostinger VPS run is claimed in this invocation."
+  ],
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "together_api_used": false
+}

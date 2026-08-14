@@ -1,11 +1,12 @@
 {
-  "schema_version": "5.8",
+  "schema_version": "5.9",
   "status": "ACTIVE",
-  "last_reviewed_cycle": "go-20260814T1551p0700-gpt56sol-completed-isolation-anchor-cohort-recompose",
-  "current_focus": "Two lanes previously marked queued have now executed successfully and must be reclassified without over-promotion. Target-main import-path isolation run 31779493258 on head 1243bd31606df1d52e1865fd7f1cf5d563c499d8 is completed/success: the self-hosted replication job executed 5 steps and the persistence job executed 6 reported steps, validating github_sha binding, exactly one unusual experiment, REAL_SELF_HOSTED_UBUNTU_EXECUTION, contents:read replication scope, no checkout in the replication job, model-output-not-execution-authority, and pass=true before persisting the receipt to main as 4e463f9495d304de4e833f6e9e8609baddaf79b2. This upgrades python3 -I verifier isolation to bounded executed mechanism evidence only; it still does not bind imported module origin/bytes/hash/manifest and is not ProductStart authority. PR577 exact head fd740fe4f0e85fde64ef53cdd22d87579a96e100 run 31779867376 is also completed/success on self-hosted clay/digital-retina with 9 steps. Its 12/12 cohort regressions include fail-closed rejection of sqlite_trust_anchor_sha256 mismatch, same-start-tick/different-PID, same-PID/start-tick/different-boot, generation splice, database-object mismatch, semantic-lineage mismatch, freshness mismatch and malformed digest; the emitted receipt explicitly says PASS_MECHANISM_ONLY, receipt_authentication_performed=false, productive_hostinger_mutation=false, frank_database_opened=false and whole_frank_v0_1_acceptance=NOT_CLAIMED. Therefore sqlite_trust_anchor_sha256 receives bounded exact-head cohort-discriminator mechanism credit, not authentication, ProductStart, UnifiedDB persistence/restart, BASE or Frank-v0.1 credit. Preserve the semantic restart witness frontier, persistent self-hosted PR credential-lifetime isolation, effect-authority source re-adjudication, FREE_ONLY, Goodman ancestry collapse and all open ClayCode semantic frontiers.",
+  "last_reviewed_cycle": "go-20260814T1650p0700-gpt56sol-pr232-custom-adapter-boundary",
+  "current_focus": "PR232 has advanced to exact current head 00644f35e0cc972820ad47526867f56991e46e45. A bounded local executable counterexample at 9a8376baa5489e66f6031114e94489e09262ffab shows that custom opener/response adapters can raise RuntimeError outside the previously enumerated urllib/OSError/HTTPException branches: before valid response metadata the exception escaped without a receipt, and after valid HTTP 200 status a body-read RuntimeError also escaped. Candidate repair 6ded60d9b7e2903973191e43be84b758cb682b14 adds an outer except Exception boundary that emits unreachable_provider before response metadata or incomplete_provider_response after response_started, keeps retryable=false, and deliberately does not catch BaseException control signals. Policy commit 00644f35 records that boundary. Python's official exception hierarchy supports this distinction: SystemExit, KeyboardInterrupt and GeneratorExit derive from BaseException outside ordinary Exception. However current-head Research Entity Verify/Identity Guard remain hosted-instrument failures; Identity Guard job 94733115620 on run 31789540996 completed failure with steps=[] and runner_id=0, so this lane receives zero executed target/provider credit. Treat the new repair as bounded source/local candidate mechanism evidence only. No accepted-Ubuntu live external network/provider-effect receipt exists. Preserve the already-consumed python3 -I and PR577 bounded mechanism evidence, semantic restart witness frontier, persistent self-hosted PR credential-lifetime isolation, effect-authority source re-adjudication, FREE_ONLY, Goodman ancestry collapse and all open ClayCode semantic frontiers.",
   "free_only": true,
   "blocked_capabilities": {
     "free_api_runtime": "NO_NEW_ACCEPTED_UBUNTU_LIVE_PROVIDER_RECEIPT",
+    "pr232_current_head_execution": "HEAD_00644F35E0CC972820AD47526867F56991E46E45_HOSTED_VERIFY_AND_IDENTITY_GUARD_HAVE_NO_EXECUTED_STEPS_ZERO_TARGET_CREDIT",
     "persistent_self_hosted_pr_safety": "BLOCKED_UNTIL_TRUSTED_MATERIALIZATION_IS_SEPARATED_FROM_CREDENTIALLESS_CANDIDATE_EXECUTION_OR_ZERO_COST_EPHEMERAL_ISOLATION_IS_BOUND",
     "persistent_self_hosted_pr_candidate_credentials": "RUN_31358373038_ATTEMPT_2_OBSERVED_ACTIONS_CHECKOUT_V4_PERSIST_CREDENTIALS_TRUE_CONTENTS_READ_TOKEN_IN_LOCAL_GIT_CONFIG_UNTIL_POST_JOB_NO_EXFILTRATION_OR_WRITE_SCOPE_CLAIM",
     "python_import_artifact_authority": "OPEN_EXECUTED_PYTHON3_I_ISOLATION_DOES_NOT_BIND_IMPORTED_ARTIFACT_ORIGIN_BYTES_HASH_OR_MANIFEST",
@@ -29,6 +30,7 @@
     "wp04_status": "OPEN_WITH_BOUNDED_EVIDENCE",
     "wp05_status": "OPEN_WITH_BOUNDED_EVIDENCE",
     "wp06_status": "OPEN_WITH_BOUNDED_EVIDENCE",
+    "pr232_custom_adapter_exception_boundary": "HEAD_00644F35_LOCAL_COUNTEREXAMPLE_9A8376BA_REPAIR_6DED60D9_POLICY_00644F35_BOUNDED_SOURCE_LOCAL_CANDIDATE_MECHANISM_ONLY_NO_TARGET_OR_PROVIDER_CREDIT",
     "pr574_process_cohort_identity": "EXACT_HEAD_2C7939EE57FA1FF593AC2D0D94CC48DB6ACD67CC_RUN_31779646651_SUCCESS_SELF_HOSTED_CLAY_BOUNDED_MECHANISM_ONLY",
     "pr577_sqlite_anchor_cohort": "EXACT_HEAD_FD740FE4F0E85FDE64EF53CDD22D87579A96E100_RUN_31779867376_SUCCESS_SELF_HOSTED_CLAY_12_OF_12_COHORT_REGRESSIONS_PASS_MECHANISM_ONLY",
     "python_verifier_isolation": "HEAD_1243BD31606DF1D52E1865FD7F1CF5D563C499D8_RUN_31779493258_COMPLETED_SUCCESS_REPLICATION_AND_PERSISTENCE_EXECUTED_RECEIPT_PERSISTED_AS_4E463F9495D304DE4E833F6E9E8609BADDAF79B2_BOUNDED_MECHANISM_ONLY",
@@ -45,6 +47,7 @@
     "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST"
   },
   "high_information_targets": [
+    "execute PR232 current exact head on a zero-cost admitted Ubuntu lane and require the custom-adapter before-response and after-status RuntimeError falsifiers to reach assertions; retain zero provider capability until a separate accepted-Ubuntu real external network/effect receipt exists",
     "on the exact accepted Hostinger ProductStart generation, write a run-owned UnifiedDB nonce plus semantic epoch through the canonical admitted WAL connection and require exact readback after authorized restart/reopen under the successor admitted generation; pass pre-checkpoint and post-checkpoint cases and fail stale-DB/WAL-separation/rollback/downgrade/library-swap controls",
     "compose ProductStart/runtime/persistence/restart receipts only when independently observed host_boot_id, PID, start ticks, ProductStart generation, exact runtime/artifact identity and authenticated SQLite trust-anchor identity bind one cohort; PR577 proves digest mismatch discrimination, not anchor authenticity",
     "extend executed python3 -I verifier isolation into environment-to-artifact closure by binding actual imported module origin, symlink/object identity, content hash and admitted manifest while keeping site/PYTHONPATH/loader-hook controls fail-closed",
@@ -54,10 +57,11 @@
     "classify 429 unique/464 unresolved Calls and 22 MethodChain/member segments without host/library defaulting, and prove every productive evaluator/compiler/lowering/FFI route passes canonical WP04 admission with immutable/private admitted state"
   ],
   "steering_notes": [
-    "Run 31779493258 is now a completed executed workflow, so prior queued/zero-credit wording is stale; credit remains bounded to verifier-environment isolation and receipt persistence.",
-    "The persistence job in run 31779493258 intentionally held Contents:write and checkout credentials in a trusted receipt-persistence lane; do not generalize that credential lifetime to candidate-controlled PR execution.",
-    "PR577 run 31779867376 proves cohort discrimination on the exact candidate head, but its own receipt states receipt_authentication_performed=false and productive_hostinger_mutation=false; do not promote authentication or ProductStart.",
-    "PR577 is stacked on PR574 rather than current main; current-main/product composition and productive semantic restart evidence remain separate gates.",
+    "The PR232 custom-adapter RuntimeError result is local candidate mechanism evidence until the exact current head executes on an admitted zero-cost Ubuntu lane; source commits and PR text cannot substitute for executed target assertions.",
+    "Catching Exception rather than BaseException preserves Python process-control signals such as SystemExit and KeyboardInterrupt outside the provider receipt fallback; do not broaden this boundary without an executable counterexample and review.",
+    "Current PR232 hosted Identity Guard run 31789540996 job 94733115620 executed zero steps with runner_id=0; classify it as instrument state, not a code or provider failure.",
+    "Run 31779493258 remains bounded verifier-environment isolation evidence only; imported artifact authority is still open.",
+    "PR577 run 31779867376 remains bounded cohort-discriminator evidence only and does not authenticate the SQLite trust anchor or ProductStart.",
     "Do not use a long-lived WAL SHA or inode as canonical semantic identity; use semantic nonce/epoch restart readback.",
     "No BASE/Frank promotion, no paid fallback, no Together, no canonical semantic selection from host behavior, and no Frank Harness modification."
   ],

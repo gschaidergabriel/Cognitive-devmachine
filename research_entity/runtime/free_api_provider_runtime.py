@@ -241,10 +241,10 @@ def _is_unicode_scalar_text(value) -> bool:
     )
 
 
-def _response_headers_or_none(response):
-    """Treat transport-provided header properties as untrusted metadata."""
+def _transport_metadata_or_none(response, attribute):
+    """Treat transport-provided properties as untrusted metadata."""
     try:
-        return getattr(response, "headers", None)
+        return getattr(response, attribute, None)
     except Exception:
         return None
 
@@ -557,12 +557,12 @@ def _execute_chat_locked(
 
     try:
         with request_opener(request, timeout=30) as response:
-            candidate_status = getattr(response, "status", None)
+            candidate_status = _transport_metadata_or_none(response, "status")
             if not _is_valid_http_status(candidate_status):
                 raise ValueError("response_status_must_be_http_integer")
             status = candidate_status
             response_started = True
-            response_headers = _response_headers_or_none(response)
+            response_headers = _transport_metadata_or_none(response, "headers")
             lifecycle.append("EXECUTED")
             if status == 200:
                 response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
@@ -633,28 +633,29 @@ def _execute_chat_locked(
     except urllib.error.HTTPError as exc:
         content = None
         finished = now()
-        if not _is_valid_http_status(exc.code):
+        candidate_status = _transport_metadata_or_none(exc, "code")
+        if not _is_valid_http_status(candidate_status):
             status = None
             outcome = "invalid_provider_response"
             cooldown_seconds = 15
             retryable = False
-        elif exc.code == PAYMENT_REQUIRED_STATUS:
-            status = exc.code
+        elif candidate_status == PAYMENT_REQUIRED_STATUS:
+            status = candidate_status
             lifecycle.append("EXECUTED")
             latches.add(_payment_latch_key(selected, env))
             outcome = "payment_required_hard_stop"
             cooldown_seconds = 0
             retryable = False
-        elif exc.code == 429:
-            status = exc.code
+        elif candidate_status == 429:
+            status = candidate_status
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
             cooldown_seconds = _retry_after_seconds(
-                _response_headers_or_none(exc), wall_time()
+                _transport_metadata_or_none(exc, "headers"), wall_time()
             )
             retryable = False
         else:
-            status = exc.code
+            status = candidate_status
             lifecycle.append("EXECUTED")
             outcome = "provider_error"
             cooldown_seconds = 15

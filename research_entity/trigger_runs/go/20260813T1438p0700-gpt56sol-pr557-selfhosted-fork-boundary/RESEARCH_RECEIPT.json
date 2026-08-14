@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260813T1438p0700-gpt56sol-pr557-selfhosted-fork-boundary",
+  "trigger": "go",
+  "timestamp_local": "2026-08-13T14:38:00+07:00",
+  "worker": "gpt-5.6-sol-temporary-clay-organ",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "research_parent_observed": "b9e86aeb278371beeb496786fcba6bc8c51c263c",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 557,
+  "observed_problem": {
+    "exact_head_gap": "The pull_request workflow originally used GITHUB_SHA, which is not the required exact reviewed PR head for this control-plane claim.",
+    "fork_boundary_gap": "The persistent self-hosted job was repo-gated but did not require pull_request head.repo.full_name to equal github.repository before executing candidate head bytes.",
+    "instrument_count_gap": "The workflow hard-coded 'Ran 8 tests' and became stale when a ninth ordinary regression was added, risking a false-red instrument verdict after a passing unittest process."
+  },
+  "repairs": [
+    {
+      "commit": "59833e069d93cd8334652aff3b761dc51e6ab9a3",
+      "change": "For pull_request select github.event.pull_request.head.sha, validate exact 40-hex SHA, fetch and detach-checkout exactly that object, and record tested_sha separately from event_sha."
+    },
+    {
+      "commit": "1738516f72a063f88441a2adfd51ca4c69d78c34",
+      "change": "Fail closed before self-hosted execution unless a pull_request head repository equals github.repository; record pr_head_repo and same_repository_pr_head_required."
+    },
+    {
+      "commit": "b722001510f63ee186ba2f9546dd5e944aa7546b",
+      "change": "Replace stale exact test-count grep with positive nonzero Ran-N-tests plus exact OK marker, preserving the unittest process exit as the primary pass/fail authority."
+    }
+  ],
+  "parallel_ancestry_preserved": {
+    "status": true,
+    "notes": [
+      "Concurrent product commits descended from this worker's writes rather than being overwritten.",
+      "The final tested head includes the parent-directory symlink regression added after the fork-boundary repair."
+    ]
+  },
+  "this_worker_unusual_experiment": {
+    "count": 1,
+    "name": "SYNTHETIC_MERGE_ALIAS",
+    "scope": "disposable local git graph only",
+    "baseline": "PR_HEAD was distinct from a synthetic merge commit.",
+    "observation": "The old event-SHA selector resolved to the synthetic merge while the repaired selector resolved to the unchanged PR_HEAD.",
+    "result": "RETAIN exact pull_request.head.sha binding as the correct discriminator when the claim under test is exact reviewed PR-head provenance.",
+    "rollback": "Temporary repository deleted; no Frank/VPS/product state changed by the experiment."
+  },
+  "final_self_hosted_run": {
+    "workflow_run": 31678451468,
+    "job": 94378180823,
+    "conclusion": "SUCCESS",
+    "runner": "clay-3",
+    "host": "digital-retina",
+    "tested_sha": "b722001510f63ee186ba2f9546dd5e944aa7546b",
+    "event_sha": "f8bf21f0d9077c2d97b562ee2519104b2a0e1c82",
+    "pr_head_sha": "b722001510f63ee186ba2f9546dd5e944aa7546b",
+    "pr_head_repo": "gschaidergabriel/Dr.-Unterweger",
+    "sqlite_version": "3.53.4",
+    "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "tests": 9,
+    "tests_result": "PASS",
+    "repo_static_integrity": "PASS",
+    "artifact_id": 9172500633,
+    "artifact_sha256": "dd8e558db736b4e633b2c93945c3f9aa255a12e585302c0e5a5c3301e70a8485"
+  },
+  "grf_collapse": {
+    "synthetic_merge_sha_as_exact_pr_head_provenance": "REJECT",
+    "exact_pr_head_binding": "PROMOTE_TO_VERIFIED_FOR_RUN_31678451468",
+    "same_repository_positive_path": "SUPPORTED_ON_SELF_HOSTED_TEST_LANE",
+    "fork_rejection_negative_path": "DEFER_UNTIL_ACTUAL_FORK_OR_EQUIVALENT_EVENT_FIXTURE",
+    "stale_exact_test_count_as_gate": "REJECT",
+    "sqlite_35304_connection_guard_mechanism": "SUPPORTED_ON_SELF_HOSTED_TEST_LANE",
+    "productive_hostinger_persistence": "DEFER",
+    "whole_frank_v0_1": "NOT_PASS"
+  },
+  "scope_preserved": {
+    "status": "MECHANISM_TEST_ONLY",
+    "productive_hostinger_mutation": false,
+    "productive_persistence_path_exercised": false,
+    "candidate_root_authority_positive_tested": false,
+    "production_safe_dynamic_extension_loading_attested": false,
+    "frank_identity_attested": false,
+    "restart_recovery_attested": false,
+    "effect_authority": "NONE",
+    "final_training_authorized": false,
+    "together_used": false
+  },
+  "next_falsifiers": [
+    "Exercise the fork-rejection branch with an actual fork PR or an equivalent trusted event-policy fixture before claiming the negative security path is runtime-proven.",
+    "Execute the already-preserved SHM_PATH_REBIND_SPLIT_COORDINATION obligation in a future GO macrocycle; do not spend a second unusual-experiment budget in this one.",
+    "Move evidence to the accepted Hostinger ProductStart/self.root productive UnifiedDB WAL path with exact runtime/database/WAL identity, trusted artifact authority, restart/reopen, downgrade/library-swap/rollback and provenance-bound semantic lineage before F-V01-13 promotion."
+  ],
+  "research_delta": "PR557 exact-head provenance is now runtime-proven for the final tested head, the same-repository self-hosted admission boundary is implemented and positive-path tested, and stale exact test-count instrumentation is removed; production acceptance remains blocked by productive Hostinger persistence/recovery/identity obligations and the unexecuted fork-negative path.",
+  "research_write_state": "COMMITTED"
+}

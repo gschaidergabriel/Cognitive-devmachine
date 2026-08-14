@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2054p0700-chatgpt-secondary-sqlite-loader-interposition",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_shared_state_before_write": {
+    "clay_main_observed": "b081374e7f20624b15a4b5d44fb8bbae9676b545",
+    "target_repo_main_observed": "2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3",
+    "storage_parent_pr": 324,
+    "storage_parent_head": "abb4804bb640772a464bdce2f7c6ca3746f404f2",
+    "gwt_overlap_resolved_to_existing_pr": 280,
+    "gwt_existing_target_workflow_run": 31497278804,
+    "gwt_existing_target_workflow_status": "SUCCESS"
+  },
+  "internal_prior_evidence": [
+    {
+      "clay_commit": "b3aeff74ad59de62530e335f09536ff22205e98a",
+      "claim": "Exact accepted-target Ubuntu SQLite 3.45.1-1ubuntu2.7 is WAL-reset-vulnerable and a private SQLite 3.53.4 runtime candidate is justified.",
+      "status_after_this_run": "PARTIALLY_RETAINED"
+    },
+    {
+      "clay_commit": "cbcba0535e9256d72fb492918cf309fbd6ce013e",
+      "claim": "V1 version/source-id/mapped-object/hash admission is a sufficient product runtime object-identity boundary.",
+      "status_after_this_run": "SUPERSEDED_BY_TARGET_FALSIFICATION"
+    }
+  ],
+  "live_external_evidence": [
+    {
+      "source": "GNU C Library dynamic linker / ld.so documentation",
+      "claim_used": "LD_PRELOAD can load objects before other shared objects and provides an interposition surface; hardened deployment should avoid dynamic-linker environment dependence and symbol interposition where possible.",
+      "url": "https://man7.org/linux/man-pages/man8/ld.so.8.html"
+    },
+    {
+      "source": "SQLite compile-time options documentation",
+      "claim_used": "Compile-time options can materially change SQLite runtime behavior and are introspectable separately from source identity.",
+      "url": "https://www.sqlite.org/compile.html"
+    },
+    {
+      "source": "SQLite sqlite3_sourceid documentation",
+      "claim_used": "sqlite3_sourceid identifies source provenance and is not, by itself, a complete compile/runtime behavior identity.",
+      "url": "https://www.sqlite.org/c3ref/libversion.html"
+    }
+  ],
+  "hypothesis": "A same-version and same-source-id SQLite shared object built from the same official 3.53.4 source can interpose the sqlite3 API through LD_PRELOAD under a renamed basename while FRANK_FIXED_SQLITE_RUNTIME_V1 still hashes and admits the expected libsqlite3 mapping.",
+  "strongest_counterhypothesis": "V1's re-exec plus mapped-object/version/source-id/hash checks already fail closed before target execution whenever another SQLite provider interposes the API.",
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "GO_OOB_SAME_SOURCE_ID_SQLITE_PRELOAD_INTERPOSITION",
+    "target_repo_pr": 327,
+    "workflow_run": 31497180996,
+    "job": 93797738183,
+    "tested_sha": "9404050d914da6509f3a0b3085782872ed0ee893",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "python": "3.12.3",
+    "status": "SUPPORTED_FAIL_OPEN_SAME_SOURCE_ID_PRELOAD_INTERPOSITION",
+    "accepted_sqlite_version": "3.53.4",
+    "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "clean_expected_library_sha256": "1d0442d6a7879355754648adcb8bce6ca0f7ccc880c7adc541a785b4f2cf3ca7",
+    "shadow_library_sha256": "5e5cdb6fcd493596b51d0fc01f46760d1c1b47806767bc576882cd7b0ba837ba",
+    "shadow_build_delta": "SQLITE_DEFAULT_SYNCHRONOUS=0",
+    "clean_target_synchronous": 2,
+    "interposed_target_synchronous": 0,
+    "v1_guard_returncode_under_interposition": 0,
+    "v1_guard_receipt_under_interposition": "PASS_FIXED_SQLITE_RUNTIME_ADMISSION",
+    "shadow_mapped": true,
+    "expected_private_library_also_mapped": true,
+    "wall_seconds": 0.28,
+    "max_rss_kib": 21864,
+    "artifact_id": 9103490795,
+    "artifact_sha256": "6179e245818d24bacd53d193561491d5a8ea0a357e1cf5855b8dbc6a41180b65",
+    "canonical_database_touched": false,
+    "system_sqlite_replaced": false,
+    "external_effect_performed": false
+  },
+  "oob_adjudication": {
+    "hypothesis_status": "SUPPORTED_ON_ACCEPTED_TARGET",
+    "counterhypothesis_status": "REFUTED_ON_ACCEPTED_TARGET",
+    "v1_runtime_admission_status": "REFUTED_AS_SUFFICIENT_OBJECT_IDENTITY_BOUNDARY",
+    "upstream_sqlite_3_53_4_fix_status": "NOT_FALSIFIED_BY_THIS_EXPERIMENT",
+    "reason": "The expected private libsqlite object was mapped and hash/source-id/version-correct, yet pysqlite behavior came from the renamed same-source-id preloaded provider."
+  },
+  "ordinary_repair_successor": {
+    "classification": "ORDINARY_REPAIR_REGRESSION_AFTER_SINGLE_GO_OOB",
+    "new_oob_experiment": false,
+    "candidate": "FRANK_FIXED_SQLITE_RUNTIME_V2_CANDIDATE",
+    "target_repo_pr": 327,
+    "workflow_run": 31497796849,
+    "job": 93799786920,
+    "tested_sha": "64404cc62e24d5b98d3cd09704e578cbaa5ce316",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "python": "3.12.3",
+    "status": "PASS_V2_REPAIRS_REPRODUCED_PRELOAD_BYPASS",
+    "checks_passed": 5,
+    "checks_total": 5,
+    "failed_checks": [],
+    "clean_target": {
+      "sqlite_version": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "synchronous": 2,
+      "mapped_library_sha256": "dfb5c97688a982201af9a9f9210cf6637f127b37ca6bf163af1f7f76c2c08b05",
+      "receipt": "PASS_FIXED_SQLITE_RUNTIME_V2_CANDIDATE_ADMISSION"
+    },
+    "reproduced_shadow_sha256": "5e5cdb6fcd493596b51d0fc01f46760d1c1b47806767bc576882cd7b0ba837ba",
+    "preload_shadow_returncode": 78,
+    "preload_shadow_denial": "FRANK_FIXED_SQLITE_V2_ADMISSION_DENIED:FORBIDDEN_LOADER_ENV:LD_PRELOAD",
+    "forged_child_plus_preload_returncode": 78,
+    "forged_child_plus_preload_denied_before_target_and_receipt": true,
+    "wall_seconds": 0.26,
+    "max_rss_kib": 21496,
+    "artifact_id": 9103953371,
+    "artifact_sha256": "12e6e8d2d0301d0a02eb9a11023e085a5b6428ee97fa860d808f7eb8066b18f8",
+    "tested_byte_sha256": {
+      "fixed_sqlite_runtime_guard_v1": "0c871579d503dfafc95e36dce2bbfe801687a0ce16f9ada26da531df7d3087f2",
+      "fixed_sqlite_runtime_guard_v2_candidate": "ee3d474384f56e6c1920b4329831653c2414f931ef2e974fe80ab8170a3bbf18",
+      "v2_repair_gate": "e2ba7bb3762cc301c537552eb60103efb83ff7545186fdc99126bc4dd623fe60",
+      "v2_target_workflow": "cdba200c9a3ca719a00f5a2d4fff10e52e877e925f099b531a3a871d88953ac1"
+    },
+    "mechanism_delta": [
+      "deny non-empty LD_PRELOAD and LD_AUDIT",
+      "deny active /etc/ld.so.preload",
+      "deny a preexisting globally visible sqlite3 provider before intentional candidate load",
+      "set child LD_LIBRARY_PATH to exactly the pinned candidate directory",
+      "repeat loader-cleanliness checks in the fresh child before pysqlite import"
+    ]
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_REPAIR_CANDIDATE_WITH_NARROW_CLAIM",
+    "affected_work_packages": [
+      "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "F-V01-16-END-TO-END-ACCEPTANCE"
+    ],
+    "supersede": "Do not promote FRANK_FIXED_SQLITE_RUNTIME_V1 as a sufficient correctness-sensitive SQLite process-binding proof.",
+    "retain": "Private official SQLite 3.53.4 remains the target-supported fixed WAL-reset runtime candidate; the exact Ubuntu 3.45.1-1ubuntu2.7 system runtime remains rejected for the targeted defect class.",
+    "candidate_successor": "FRANK_FIXED_SQLITE_RUNTIME_V2_CANDIDATE is target-supported for the specifically reproduced preexisting/global loader-interposition class.",
+    "required_next_gates": [
+      "trusted-launch/deployment boundary that does not treat Python-level checks as protection from hostile pre-main constructors",
+      "immutable build/manifest provenance bound to owner-accepted builder/source policy",
+      "restart/recovery and broader UnifiedDB/V17/GWT/effect suites under the exact V2-admitted runtime",
+      "power-loss/kernel-panic durability remains a separate discriminator",
+      "composition into current main before any release promotion"
+    ]
+  },
+  "negative_results_preserved": [
+    "V1 7/7 ordinary admission controls were insufficient against same-source-id renamed ELF interposition.",
+    "A correct source-id does not uniquely identify the active compiled provider behavior.",
+    "A correctly mapped and correctly hashed expected libsqlite object does not prove its symbols are the ones actually serving pysqlite when another earlier provider can interpose."
+  ],
+  "swarm_coordination": {
+    "duplicate_work_avoided": [
+      {
+        "topic": "GWT / exact causal re-entry ancestry",
+        "existing_pr": 280,
+        "existing_head": "930c83e4cf18cb73ce86d8e5fb6aceff5861c89f",
+        "existing_target_run": 31497278804,
+        "existing_target_status": "SUCCESS",
+        "decision": "DO_NOT_DUPLICATE; route storage result only where dependency-relevant"
+      }
+    ],
+    "other_active_nonoverlapping_lane_observed": "PR #326 token-rotation request identity"
+  },
+  "workspace_delta": {
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "SUPERSEDE_V1_RUNTIME_BINDING_SUFFICIENCY; ADD_V2_CANDIDATE_AND_TRUSTED_LAUNCH_GATE",
+      "status": "KEEP_IN_PROGRESS"
+    },
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY": {
+      "action": "REQUIRE_EXACT_V2_OR_STRONGER_RUNTIME_ADMISSION_FOR_CORRECTNESS_SENSITIVE_SQLITE_EXECUTION",
+      "status": "KEEP_OPEN"
+    },
+    "F-V01-09-EFFECT-AUTHORITY": {
+      "action": "RETAIN_SQLITE_RECOVERY_DEPENDENCY; V2_REPAIR_DOES_NOT_CLOSE_REAL_PROVIDER_OR_LIFECYCLE_GATES",
+      "status": "KEEP_IN_PROGRESS"
+    },
+    "F-V01-16-END-TO-END-ACCEPTANCE": {
+      "action": "DO_NOT_ACCEPT_UNTIL_REPAIRED_RUNTIME_IS_COMPOSED_AND_RECOVERY_TESTED",
+      "status": "KEEP_OPEN"
+    }
+  },
+  "research_disposition": "TARGET_FALSIFICATION_PLUS_TARGET_SUPPORTED_REPAIR_CANDIDATE",
+  "whole_frank_v0_1_acceptance": false,
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false
+}

@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260811T0015p0700-chatgpt-secondary-effect-process-incarnation",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_target_entity": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "stage": "FRANK_V0_1",
+    "work_package": "F-V01-09-EFFECT-AUTHORITY",
+    "training_authorized": false
+  },
+  "selection_reason": "Current workspace identifies presence_execution_generation_effect_fence as an open effect-authority blocker with reproduced stale/unbound COMMITTING admission on fresh main. Existing live branches were refreshed before further mutation to avoid duplicate architecture work.",
+  "shared_state_refresh": {
+    "primary_parent_candidate": "gschaidergabriel/Dr.-Unterweger#204",
+    "stronger_successor": "gschaidergabriel/Dr.-Unterweger#228",
+    "exact_fork_counterhypothesis_lane": "gschaidergabriel/Dr.-Unterweger#233",
+    "physical_lock_anchor_dependency": "gschaidergabriel/Dr.-Unterweger#225",
+    "state_root_replacement_counterhypothesis": "gschaidergabriel/Dr.-Unterweger#235",
+    "snapshot_restore_incarnation_dependency": "gschaidergabriel/Dr.-Unterweger#197"
+  },
+  "measured_or_observed_evidence": [
+    {
+      "class": "TARGET_VPS_PRIOR_RUN",
+      "ref": "gschaidergabriel/Dr.-Unterweger:run/31411845493",
+      "result": "PR204 parent candidate reached physical Gate baseline and ClayCode contract but failed the same-execution second reservation; root cause is UNIQUE(binding_hash), which incorrectly enforces one effect per execution generation."
+    },
+    {
+      "class": "INDEPENDENT_CONVERGENCE",
+      "ref": "gschaidergabriel/Dr.-Unterweger#228",
+      "result": "Concurrent worker had already independently reproduced the same cardinality defect on target run 31410890028, removed UNIQUE(binding_hash), and added a stronger exact Gate-issued lease-object invariant. The temporary duplicate #204 schema patch in this run was therefore reverted to preserve branch ownership/topology."
+    },
+    {
+      "class": "CODE_INSPECTION",
+      "ref": "gschaidergabriel/Dr.-Unterweger#228@395e1d4becd9e7100fd9d3ca4f5b539d890c1cb2",
+      "result": "Gate-issued identity is held in process-local WeakSet/WeakKeyDictionary structures; without process-incarnation validation these objects are candidates for fork inheritance."
+    },
+    {
+      "class": "EXACT_TARGET_VPS_COUNTERHYPOTHESIS",
+      "ref": "gschaidergabriel/Dr.-Unterweger:run/31413734864",
+      "tested_merge_sha": "d1491791553e4b21d83e6f22361b8683fa3bcb20",
+      "runner": "clay",
+      "machine": "digital-retina",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "python": "3.12.3",
+      "result": "REPRODUCED_FORK_INHERITED_GATE_CAPABILITY_SHADOW",
+      "observations": {
+        "gate_issued_registry_visible_in_child": true,
+        "child_can_mint_fence": true,
+        "child_fence_assert_live": true,
+        "child_B2_changed": true,
+        "child_B2_state": "COMMITTING",
+        "child_B3_reason": "PROVIDER_COMMIT_EXECUTION_FENCE_VALID",
+        "child_guarded_provider_boundary": "SYNTHETIC_CHILD_PROVIDER_RETURN",
+        "effect_state_after_child": "COMMITTING",
+        "parent_fence_still_live_after_child": true,
+        "external_network_used": false,
+        "external_effect_performed": false,
+        "canonical_state_mutated": false
+      },
+      "matched_parent_controls": "PASS: physical Gate baseline, exact V15/V16 B1/B2/B3, Gate-issued multi-effect matrix, ClayCode semantic contract",
+      "interpretation": "Exact-object Gate issuance plus copied process-local capability state is falsified as sufficient physical effect authority across POSIX fork on the accepted self-hosted target lane."
+    }
+  ],
+  "hypothesis": {
+    "id": "H-EFFECT-PROCESS-INCARNATION-V5",
+    "statement": "Exact-object Gate issuance plus V15/V16 identity is necessary but not sufficient on POSIX if a child process inherits the Gate lease object, process-local capability registries/secrets and flock open-file-description through fork. Effect authority must additionally be bound to the issuing OS process incarnation before copied registries/locks are consulted.",
+    "status": "SUPPORTED_BY_EXACT_TARGET_COUNTEREXAMPLE_TO_PARENT"
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-EFFECT-CURRENT_GATE_ALREADY_FENCES_FORK",
+    "statement": "Current exact-V16/Gate-issued checks already invalidate forked child authority.",
+    "status": "REFUTED_ON_TARGET",
+    "ref": "gschaidergabriel/Dr.-Unterweger:run/31413734864"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Linux man-pages flock(2)",
+      "url_identity": "https://man7.org/linux/man-pages/man2/flock.2.html",
+      "finding": "flock locks are associated with an open file description; descriptors inherited via fork/dup refer to the same lock. flock is advisory on ordinary local Linux filesystems."
+    },
+    {
+      "source": "Python os.register_at_fork documentation",
+      "url_identity": "https://docs.python.org/3/library/os.html",
+      "finding": "Python exposes child/parent fork hooks, but third-party C forks may bypass them unless the CPython fork hooks are called; therefore at-fork cleanup alone is not the strongest authority guard."
+    },
+    {
+      "source": "etcd v3.7 disaster recovery",
+      "url_identity": "https://etcd.io/docs/v3.7/op-guide/recovery/",
+      "finding": "snapshot restore can move revisions backward; revision bump/compaction is recommended to prevent old revision assumptions and stale caches from remaining plausible. This supports a separate restore-incarnation layer beyond process incarnation."
+    },
+    {
+      "source": "AWS EC2 API idempotency",
+      "url_identity": "https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html",
+      "finding": "same client token plus same parameters allows retry without repeating an already completed action; provider idempotency/reconciliation remains distinct from execution authority."
+    }
+  ],
+  "out_of_box_experiment": {
+    "name": "FORKED_WEAK_CAPABILITY_MICROREPLICA",
+    "count_in_this_go_cycle": 1,
+    "classification": "INDEPENDENT_MECHANISM_REPLICATION_NOT_TARGET_RUNTIME",
+    "intervention": "Acquire local POSIX flock, store a lease object in WeakSet and secret in WeakKeyDictionary, fork once, and inspect inherited process-local capability state plus inherited lock fd.",
+    "result": {
+      "issued_registry_survives": true,
+      "weakkey_secret_survives": true,
+      "inherited_fd_live": true,
+      "new_open_can_independently_lock": false,
+      "child_capability_surface_admitted": true,
+      "child_exit": 0
+    },
+    "interpretation": "Independently predicted the mechanism later reproduced by exact target #233. This local experiment remains mechanism replication rather than target-runtime evidence."
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING_TARGET_FALSIFIER_CONFIRMED",
+    "target_pr": "gschaidergabriel/Dr.-Unterweger#238",
+    "head_sha": "080370de82c97336d8fd35d463ff6a1262fb0c10",
+    "base_pr": "gschaidergabriel/Dr.-Unterweger#228",
+    "change": [
+      "FrankExecutionLease records issuer PID at construction.",
+      "Gate-issued validity rejects PID mismatch before accessing copied WeakSet/RLock state.",
+      "heartbeat, release and effect_commit_window reject inherited cross-process use with EXECUTION_LEASE_PROCESS_INCARNATION_MISMATCH.",
+      "same-process exact-object Gate-issued registry remains required.",
+      "normal fork regression requires child fail-closed while parent remains live."
+    ],
+    "rollback": "Close/revert PR238 only; #228 remains unchanged as the parent candidate.",
+    "non_claims": [
+      "No PR238 target-VPS PASS yet.",
+      "No main merge or canonical state mutation.",
+      "No real provider/network effect.",
+      "No snapshot/VM-restore-incarnation closure.",
+      "No lock-anchor replacement closure.",
+      "No final F-V01-09 closure.",
+      "No training authorization.",
+      "No self.root/Frank Harness mutation authority."
+    ]
+  },
+  "target_execution": {
+    "parent_and_exact_fork_falsifier_run": 31413734864,
+    "parent_and_fork_falsifier_status": "SUCCESS_WITH_FORK_SHADOW_REPRODUCED",
+    "pr238_vps_run": 31414738551,
+    "pr238_status_at_receipt_update": "QUEUED",
+    "pr238_parent_exact_v16_run": 31414738326,
+    "pr238_parent_status_at_receipt_update": "QUEUED",
+    "hosted_deep_integrity": "FAILURE_SEPARATE_REPO_GATE_NOT_USED_AS_CANDIDATE_PASS"
+  },
+  "cross_branch_integration": {
+    "required_before_promotion": [
+      "Require PR238 exact target run to fence fork-child authority while preserving #228 matched parent matrices.",
+      "Integrate/revalidate physical lock-anchor replacement safety from #225/#235 or equivalent deployment invariant.",
+      "Add non-rollback restore/snapshot incarnation fencing per #197 evidence before recovery promotion.",
+      "Preserve exact V16 execution_id + credential/admitted-ingress immutable B1/B2/B3 binding and multi-effect cardinality from #228.",
+      "Complete non-bypassable production effect facade/lowering.",
+      "Complete real provider timeout-after-acceptance idempotent reconciliation.",
+      "Complete exact ClayCode frontend/TypedIR/compiler/lowering evidence."
+    ]
+  },
+  "research_write": "COMMITTED",
+  "next_falsifier": "Exact self-hosted PR238 target execution. PASS requires fork child fail-closed by process incarnation, parent authority/release preserved, and #228 physical/V15/V16/Gate-issued/multi-effect matrices unchanged. Failure reopens the physical capability design rather than weakening the fence requirement.",
+  "generation_completed": true
+}

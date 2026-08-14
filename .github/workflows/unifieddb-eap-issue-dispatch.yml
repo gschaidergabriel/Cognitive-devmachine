@@ -47,17 +47,19 @@ jobs:
           }
           code_model="$(dispatch_one unifieddb-eap-vps-benchmark.yml)"
           code_incremental="$(dispatch_one unifieddb-eap-incremental-vps.yml)"
-          python3 - "$code_model" "$code_incremental" <<'PY' > /tmp/UNIFIEDDB_EAP_DISPATCH.json
+          code_exact_topk="$(dispatch_one unifieddb-eap-exact-topk-vps.yml)"
+          python3 - "$code_model" "$code_incremental" "$code_exact_topk" <<'PY' > /tmp/UNIFIEDDB_EAP_DISPATCH.json
           import json, os, sys
           from datetime import datetime, timezone
           event=json.load(open(os.environ['GITHUB_EVENT_PATH'],encoding='utf-8'))
-          model_code, incremental_code=sys.argv[1:3]
+          model_code, incremental_code, exact_topk_code=sys.argv[1:4]
           dispatches=[
             {'workflow':'unifieddb-eap-vps-benchmark.yml','http_status':model_code,'accepted':model_code=='204'},
             {'workflow':'unifieddb-eap-incremental-vps.yml','http_status':incremental_code,'accepted':incremental_code=='204'},
+            {'workflow':'unifieddb-eap-exact-topk-vps.yml','http_status':exact_topk_code,'accepted':exact_topk_code=='204'},
           ]
           print(json.dumps({
-            'schema_version':'1.2',
+            'schema_version':'1.3',
             'evidence_class':'REAL_GITHUB_ISSUE_TRIGGER_AND_WORKFLOW_DISPATCH',
             'created_at':datetime.now(timezone.utc).isoformat(),
             'dispatches':dispatches,
@@ -72,6 +74,7 @@ jobs:
           cat /tmp/UNIFIEDDB_EAP_DISPATCH.json
           test "$code_model" = 204
           test "$code_incremental" = 204
+          test "$code_exact_topk" = 204
 
       - name: Persist dispatch receipt
         shell: bash

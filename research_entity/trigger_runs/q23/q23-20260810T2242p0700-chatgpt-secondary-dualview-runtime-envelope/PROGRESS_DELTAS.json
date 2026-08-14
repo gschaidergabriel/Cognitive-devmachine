@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "deltas": [
+    {
+      "id": "PD-Q23-01",
+      "class": "IMPLEMENTABILITY",
+      "delta": "Feature reuse is no longer only conceptual: current Transformers exposes Qwen image features before language decoding and current libmtmd exposes the encoded media embedding buffer."
+    },
+    {
+      "id": "PD-Q23-02",
+      "class": "ARCHITECTURE_SIMPLIFICATION",
+      "delta": "Changed candidate ordering from raw-Qwen-vs-dedicated-backbone to merged-feature MVC first, tiny projection second, pre-merger instrumentation third, duplicate encoder last."
+    },
+    {
+      "id": "PD-Q23-03",
+      "class": "COUNTEREVIDENCE",
+      "delta": "Official Qwen3-VL-Embedding design strengthens the case that raw generative visual features require explicit calibration/testing; no raw-feature retrieval/open-set claim is promoted."
+    },
+    {
+      "id": "PD-Q23-04",
+      "class": "RUNTIME_CORRECTNESS",
+      "delta": "Introduced VisualEncoderCompatibilityID binding prototypes to weights plus runtime/preprocessor/backend/token/canonicalization geometry, because current runtime evidence shows multimodal behavior can change with deployment parameters."
+    },
+    {
+      "id": "PD-Q23-05",
+      "class": "TEST_COVERAGE",
+      "delta": "Added differential visual feature/behavior matrix across full-decode, dedicated encoder, merged reuse, tiny projection and optional dual-view same-encode path, with open-set, routing, recovery and resource metrics."
+    },
+    {
+      "id": "PD-Q23-06",
+      "class": "NEGATIVE_SCOPE",
+      "delta": "No target runtime benchmark was executed; no F-V01-06 subcheck is marked PASS; no final architecture promotion is claimed."
+    }
+  ]
+}

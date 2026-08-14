@@ -1,0 +1,110 @@
+name: UnifiedDB Pulse Rank V5 Lifecycle Hosted Gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v4.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v4.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5.py'
+      - 'tools/database_pulse_rank_path_v5_benchmark.py'
+      - '.github/workflows/database-pulse-v5-lifecycle-hosted.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-pulse-rank-v5-lifecycle-hosted-main
+  cancel-in-progress: true
+
+jobs:
+  lifecycle-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Compile and falsify V4/V5 lifecycle
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v4.py \
+            research_entity/runtime/test_database_pulse_rank_path_v4.py \
+            research_entity/runtime/database_pulse_rank_path_v5.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5.py \
+            tools/database_pulse_rank_path_v5_benchmark.py
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v4 \
+            research_entity.runtime.test_database_pulse_rank_path_v5
+
+      - name: Execute matched V4 versus V5 lifecycle benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_rank_path_v5_benchmark.py \
+            --rows 5000 --repeats 120 \
+            --output research_entity/benchmarks/database_pulse/rank_path_v5_lifecycle_hosted.json \
+            > /tmp/v5-lifecycle.stdout
+          cat /tmp/v5-lifecycle.stdout
+
+      - name: Classify and attach Ubuntu metadata
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,pathlib,platform,sqlite3,sys
+          from datetime import datetime,timezone
+          p=pathlib.Path('research_entity/benchmarks/database_pulse/rank_path_v5_lifecycle_hosted.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          assert all(x['correctness'].values()),x
+          assert all(x['falsifier'].values()),x
+          x['execution_metadata']={
+            'evidence_class':'GITHUB_HOSTED_UBUNTU_AUXILIARY_EXECUTION',
+            'scope':'AUXILIARY_PREFLIGHT_NOT_HOSTINGER_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'git_sha':os.environ.get('GIT_SHA',''),
+            'github_run_id':os.environ.get('RUN_ID',''),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+          }
+          x['architecture_result']=(
+            'V5_SUPPORTED_OVER_V4_FOR_LIFECYCLE_SEPARATION'
+            if x['falsifier']['v4_inline_build_observed'] and x['falsifier']['v4_online_after_churn_keeps_index']
+               and x['falsifier']['v5_read_phase_schema_mutation_absent'] and x['falsifier']['v5_maintenance_removes_index']
+            else 'NO_PROMOTION'
+          )
+          x['promotion']='TESTING_ONLY_HOSTINGER_AND_LIVE_TRACE_REQUIRED'
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('PULSE_RANK_V5_LIFECYCLE_HOSTED_GATE=PASS')
+          print('ARCHITECTURE_RESULT='+x['architecture_result'])
+          PY
+
+      - name: Persist auxiliary receipt
+        run: |
+          set -euo pipefail
+          src=research_entity/benchmarks/database_pulse/rank_path_v5_lifecycle_hosted.json
+          cp "$src" /tmp/rank_path_v5_lifecycle_hosted.json
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p research_entity/benchmarks/database_pulse
+          cp /tmp/rank_path_v5_lifecycle_hosted.json "$src"
+          git config user.name 'clay-pulse-v5-hosted'
+          git config user.email 'clay-pulse-v5-hosted@users.noreply.github.com'
+          git add "$src"
+          git commit -m 'evidence(unifieddb): persist Pulse V5 lifecycle hosted receipt [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1

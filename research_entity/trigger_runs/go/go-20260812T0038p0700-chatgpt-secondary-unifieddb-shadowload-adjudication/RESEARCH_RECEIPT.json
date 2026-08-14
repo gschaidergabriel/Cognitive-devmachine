@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0038p0700-chatgpt-secondary-unifieddb-shadowload-adjudication",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T00:38:46+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_boundary": {
+    "worker": "temporary Clay research worker",
+    "not_self_root": true,
+    "target_subject": "self.root / Frank v0.1"
+  },
+  "canonical_boot": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "program": "FRANK_V0_1",
+    "active_stage": "FRANK_V0_1"
+  },
+  "research_parent_head": "fcfc549b79c98d377b20165696d446af62b1d3ee",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "target_main_at_selection": "7b458a2e779f2dd8756e3bf9df03ff96d4e3f5e5",
+  "candidate": {
+    "pr": 392,
+    "head": "212a471e8c9022241fc6fb942581bd47d9918288",
+    "title": "unifieddb: add concurrent projection shadow-load gate",
+    "status": "BOUNDED_TARGET_SUPPORTED_KEEP_DRAFT",
+    "production_mutation": false
+  },
+  "leading_hypothesis": "The lease-fenced UnifiedDB-to-ClayGraph projection worker can preserve authoritative write availability through derived backlog and a crashed-worker live-lease interval while keeping consequential graph use fail-closed until exact-current recovery.",
+  "strongest_counterhypothesis": "The observed pass is an artifact of a single-host disposable workload and pressure thresholds; under concurrent production the projection may either block authoritative writes, permit stale graph use, fail lease takeover, or hide contention/tail-latency failures.",
+  "target_execution": {
+    "workflow_run": 31517421729,
+    "job": 93865950348,
+    "runner": "clay",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "os_kernel_observed": "Linux digital-retina 6.8.0-117-generic x86_64",
+    "runtime": {
+      "python": "3.12.3",
+      "sqlite": "3.53.4",
+      "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+      "python_isolated_flags_required": true
+    },
+    "artifact": {
+      "id": 9111667017,
+      "digest": "sha256:9b91466e0d34b12421ced359cc4ae70dcd2fb9ad0c42aff0b7f450f1603e9eef"
+    },
+    "result": {
+      "checks_passed": 22,
+      "checks_total": 22,
+      "produced_events": 880,
+      "applied_events": 880,
+      "producer_lock_retries": 0,
+      "producer_commit_latency_ms": {
+        "p50": 1.205757,
+        "p95": 8.599556,
+        "p99": 14.297143,
+        "max": 431.423787
+      },
+      "max_pending_events": 339,
+      "max_lag_epochs": 338,
+      "max_oldest_pending_age_ms": 2046,
+      "drain_after_producer_stop_seconds": 1.0670267594978213,
+      "final_projection_exact": true,
+      "final_pressure": "NONE",
+      "final_health": "HEALTHY"
+    },
+    "claim_boundary": [
+      "single-host disposable target-VPS shadow load only",
+      "does not prove production migration or systemd service activation",
+      "does not prove multi-host lease safety",
+      "does not prove power-loss or kernel-panic durability",
+      "does not prove 24h operating window or whole Frank v0.1 acceptance"
+    ]
+  },
+  "live_external_refresh": {
+    "primary_sources": [
+      "https://sqlite.org/releaselog/3_53_4.html",
+      "https://sqlite.org/wal.html"
+    ],
+    "finding": "SQLite 3.53.4 is the current 2026-07-24 release and its official release lineage includes the WAL-reset corruption fix. SQLite documents the WAL-reset race as affecting versions through 3.51.2 under concurrent WAL writer/checkpoint conditions; fixed releases begin at 3.51.3 and later.",
+    "architecture_effect": "Keep the exact hash-pinned fixed SQLite runtime lane; do not treat the target system SQLite 3.45.1 as release-safe for concurrent Frank WAL state."
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go": 1,
+    "name": "pressure-only consequential-use gate lesion",
+    "type": "offline adversarial lesion over captured target samples",
+    "baseline": "current consequential graph-use gate requires exact-current projection",
+    "lesion": "allow consequential graph use whenever projection pressure is not HARD",
+    "samples_total": 52,
+    "lagged_samples": 51,
+    "baseline_false_use_windows": 0,
+    "lesion_false_use_windows": 15,
+    "lesion_false_use_rate_of_lagged_samples": 0.2941176471,
+    "lesion_pressure_class": "SOFT",
+    "interpretation": "SOFT pressure is not a safe proxy for causal freshness. Retain exact-current gating.",
+    "rollback": "offline analysis only; no target or production state changed"
+  },
+  "counterevidence_and_infrastructure": {
+    "generic_red_checks_are_semantically_unadjudicated": true,
+    "self_root_run": 31517421619,
+    "fresh_main_effect_run": 31517421634,
+    "failure_class": "CHECKOUT_WORKSPACE_EACCES_BEFORE_ASSERTIONS",
+    "offending_path": "runtime/claycode_eval_v1/__pycache__/analyzer.cpython-312.pyc",
+    "tracking_issue": "gschaidergabriel/Dr.-Unterweger#397",
+    "rule": "Do not count these red runs as Frank/UnifiedDB semantic failures until checkout hygiene is repaired and their assertions execute."
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_BOUNDED_NOT_PROMOTED",
+    "unifieddb": "retain authoritative-write availability under derived projection backpressure for the tested single-host candidate",
+    "claygraph": "retain fail-closed consequential-use gate until projection is exact-current; SOFT is insufficient",
+    "security_recovery": "treat persistent-runner workspace ownership as an explicit CI/reproducibility blocker; rerun skipped global regressions after repair",
+    "sqlite": "retain private hash-pinned 3.53.4 candidate lane until fixed runtime is product-integrated or trigger topology is machine-proven unreachable",
+    "production": "no migration/service activation from this receipt"
+  },
+  "targeted_reentry": [
+    "unifieddb",
+    "claygraph",
+    "security-recovery",
+    "effect-authority",
+    "gwt",
+    "claycode",
+    "frank-v0.1"
+  ],
+  "next_falsifiers": [
+    "repair issue #397 and rerun the skipped current-head/effect global regressions on the exact candidate",
+    "test power-loss/kernel-panic durability and checkpoint/recovery semantics under fixed SQLite",
+    "test multi-host or explicitly prove single-host-only lease topology as a release invariant",
+    "integrate the fixed SQLite runtime into the actual product boot/runtime path before closing F-V01-13 storage safety"
+  ],
+  "authority": {
+    "training_authorized": false,
+    "self_harness_mutation_by_frank": false,
+    "external_effects": "GitHub research receipt, PR adjudication comment, and CI issue only"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "result_class":"POSITIVE_IMPLEMENTATION_POLICY_PROXY",
+  "problem":"FULL_COPY is wasteful at low divergence but memoized shared execution becomes overhead when nearly every branch has a distinct transition read signature.",
+  "candidate_policy":"Choose conventional SPARSE_OVERLAY_MEMO when measured/estimated unique_read_signatures / active_branches is sufficiently low; otherwise materialize or execute branches independently. Representation conversion must preserve exact branch semantic identity/provenance/epochs.",
+  "main_grid":{"cells":168,"threshold_used_for_probe":0.8,"mean_regret_vs_per_cell_oracle":0.00155564,"p95_regret":0.0,"exact_measured_winner_fraction":0.964286,"warning":"threshold inspected on main grid; not independent"},
+  "heldout_grid":{"cells":48,"threshold":0.8,"mean_regret_vs_per_cell_oracle":0.00082934,"p95_regret":0.0,"exact_measured_winner_fraction":0.958333,"grid":"F 256/1024; N 64/256; divergence 0..50%; read-set 4/16; separate seed family"},
+  "interpretation":"A representation selector based on observable signature diversity is a more plausible durable design than a universal PSW structure. The number 0.8 is not a production threshold; target traces and ClayCode runtime costs must calibrate it.",
+  "next_real_test":"Record real Hyperposition/ACEF branch count, sparse-delta density, transition read signatures, pure/effect class and actual runtime cost on the target VPS; compare materialized versus sparse+memo under an identical semantic trace."
+}

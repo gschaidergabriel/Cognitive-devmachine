@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "created_at": "2026-08-12T01:54:30+07:00",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER:gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "research_repo_parent_main": "7a536fbadaba37da89a1d145cf5332ae551a84eb",
+  "work_packages": [
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+    "F-V01-07-NEEDLE-TRANSLATOR",
+    "F-V01-09-EFFECT-AUTHORITY"
+  ],
+  "grf": {
+    "R0_observed": [
+      "Open loop-core PR #312 places a Needle-style proposal after GWT receiver-use but before ClayCode effect authorization and effect reservation.",
+      "Open Needle V1 PR #352 requires non-empty effect authorization, reservation, execution-generation, capability and request bindings before NeedleRouter.compile() can return a plan.",
+      "The two candidate interfaces therefore cannot directly compose at the current pre-authority Needle slot without either reordering the loop or splitting Needle mechanics into phases.",
+      "SQLite/recovery had multiple newer concurrent GO lanes, including a target-measured 3.53.4 overlay feasibility result; this worker intentionally did not duplicate that frontier."
+    ],
+    "R1_hypothesis": "A two-phase Needle boundary can preserve the loop order and V1 authority fences: a pre-authority route preview performs deterministic adapter selection and strict argument validation only, then a post-authority bind requires exact semantic identity and delegates to unchanged V1 compile/execute semantics.",
+    "R3_strongest_counter_reality": "A phase split creates a TOCTOU/crown-transfer gap where a benign preview can be replaced after authorization by a different action, target, arguments or adapter while retaining stable logical IDs.",
+    "falsifier": "Construct a benign route preview, swap action/target/arguments after the preview while preserving intent_id/effect_id and supplying non-empty hard bindings, and test whether the candidate can produce a plan or invoke an adapter.",
+    "R4_intervention": "Implemented NeedleRouterV2PhaseSplit.preview() plus bind_preview(); preview contains no authority-like hard fields, bind_preview domain-validates the preview and requires exact intent/effect/action/target/canonical-argument identity before unchanged V1 compile().",
+    "R5_emergence_claim": "NONE; this is an interface-composition result, not evidence of emergence.",
+    "R6_collapse": "RETAIN_AS_TARGET_SUPPORTED_CANDIDATE; direct V1 pre-authority composition is rejected for the measured interface, while the split candidate survives the bounded normal and adversarial discriminators. Whole loop-core composition remains untested.",
+    "confidence": "HIGH_FOR_EXACT_TESTED_CANDIDATE_AND_INTERFACE_GAP; LOW_FOR_UNTESTED_PRODUCTION_COMPOSITION"
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-loop-needle-phase-split-20260812",
+    "draft_pr": 421,
+    "base_branch": "chatgpt/go-needle-v1-authority-boundary-20260811",
+    "base_sha": "c673be56a1e1485ee7b2c9c8714798614570303b",
+    "tested_head_sha": "27b301bebe848627c0b65b11d81a8fba3fe8e3f0",
+    "files": [
+      "runtime/needle/frank_needle_v2_phase_split_candidate.py",
+      "tests/frank_needle_v2_phase_split_gate.py",
+      "tests/frank_needle_v2_preview_crown_swap_oob.py",
+      ".github/workflows/frank-needle-v2-phase-split-vps.yml"
+    ],
+    "state": "DRAFT_TARGET_SUPPORTED_NOT_PROMOTED"
+  },
+  "target_evidence": {
+    "workflow_run_id": 31525063158,
+    "job_id": 93891233132,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "tested_sha": "27b301bebe848627c0b65b11d81a8fba3fe8e3f0",
+    "conclusion": "SUCCESS",
+    "v1_normal_regression": {
+      "status": "PASS_FV01_07_NEEDLE_V1_CANDIDATE",
+      "checks": "16/16",
+      "compile_latency_us": {"n": 2000, "p50": 21.59, "p95": 49.39, "min": 20.0, "max": 79.431},
+      "effect_authority_minted_by_needle": false
+    },
+    "v2_phase_split_normal": {
+      "status": "PASS_NEEDLE_V2_PHASE_SPLIT_CANDIDATE",
+      "checks": "15/15",
+      "v1_pre_authority_refusal": "MISSING_BOUND_HARD_FIELD:effect_authorization_hash",
+      "action_drift": "PREVIEW_INTENT_DRIFT:action",
+      "target_drift": "PREVIEW_INTENT_DRIFT:target",
+      "argument_drift": "PREVIEW_INTENT_DRIFT:arguments",
+      "preview_is_authority": false,
+      "effect_authority_minted_by_v2": false
+    },
+    "artifact": {
+      "id": 9114563919,
+      "zip_sha256": "9765d06eae9b43abb3341a145d231f32ea3782b99693a78b913a631b5502be4e",
+      "size_bytes": 4415
+    }
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "id": "PREVIEW_CROWN_SWAP_AFTER_AUTHORITY_GAP",
+    "class": "BOUNDED_REVERSIBLE_ADVERSARIAL_INTERFACE_INTERVENTION",
+    "anti_control": "A deliberately weak bridge checking only unchanged intent_id/effect_id accepts the swapped crown.",
+    "candidate_result": "PASS_PREVIEW_CROWN_SWAP_FENCED",
+    "checks": "8/8",
+    "candidate_refusal": "PREVIEW_INTENT_DRIFT:action,arguments,target",
+    "adapter_invoke_count": 0,
+    "external_effect": false,
+    "canonical_state_mutation": false,
+    "outcome": "COUNTER_REALITY_REFUTED_FOR_TESTED_DRIFT_CLASS"
+  },
+  "counterevidence_and_nonclaims": [
+    "PR-level Frank Deep Integrity was red on the same head, but its job exposed no executable steps and its log blob fetch returned 404; this is preserved as infrastructure/unknown evidence, not treated as Needle semantic failure or pass.",
+    "Other unrelated repository workflows were red on the branch push; their failures are not promoted into this bounded Needle mechanism receipt without path-specific evidence.",
+    "The loop-core #312 has not yet been recomposed to execute this real Needle V2 preview/bind path.",
+    "No real adapter/provider effect was executed.",
+    "No canonical Frank database was mutated.",
+    "No whole F-V01-03, F-V01-05, F-V01-07, F-V01-09 or Frank v0.1 acceptance is claimed.",
+    "No final/paid training is authorized or started.",
+    "Frank/self.root receives no Harness mutation authority."
+  ],
+  "external_mechanism_context": {
+    "role": "ANALOGY_ONLY_NOT_FRANK_AUTHORITY",
+    "finding": "Current MCP tool-call surfaces distinguish tool name/arguments from the invocation transport/lifecycle, which supports interface phase separation as a conventional design pattern; Frank authority remains owner-fixed Clay/ClayCode semantics."
+  },
+  "next_discriminator": "Recompose loop-core #312 against the target-supported V2 preview/bind boundary and prove the observable chain GWT selected episode -> preview -> ClayCode authorization -> canonical reservation/execution-generation/capability bindings -> bind_preview -> Needle execute -> verified outcome -> provenance-bound re-entry under TRUTHFUL, SHUFFLED, PROVENANCE_BROKEN and NO_REENTRY controls."
+}

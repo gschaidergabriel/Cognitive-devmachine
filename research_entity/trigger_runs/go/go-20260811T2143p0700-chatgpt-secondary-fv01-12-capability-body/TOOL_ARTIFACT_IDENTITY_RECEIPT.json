@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260811T2143p0700-chatgpt-secondary-fv01-12-capability-body",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+  "candidate_pr": 335,
+  "candidate_head": "bdd4a93c8e9dceadd48df0149d971692049cf32e",
+  "finding_class": "NORMAL_ARTIFACT_IDENTITY_FALSIFIER_NOT_GO_OOB",
+  "hypothesis": "A local-tool capability must bind to the exact observed executable artifact, not only a pathname, because same-path binary drift between successful probes and a later capability read can otherwise leave stale competence actionable.",
+  "pre_fix_code_path": {
+    "status": "STATICALLY_FALSIFIED",
+    "reason": "tool presence stored only resolved path/version metadata; probes reopened that pathname; current_capability did not compare current executable bytes against the artifact that produced the successful trials",
+    "possible_effect": "same-path executable replacement could preserve an old CAN_DELEGATE receipt until freshness expiry",
+    "remote_exploit_claimed": false
+  },
+  "repair": {
+    "runtime_commit": "4429a86bf2667357d842a137eed60605e4f0cbd3",
+    "runtime_blob": "df30a94d25eca0a354ba3c8ef47ea29fb5f3bdf6",
+    "semantic_commit": "4ec80871d37b6db2904b28e3dc90ba1244f556c7",
+    "semantic_blob": "fde1314ea0c4161fd74120282f8bea936e9db413",
+    "mechanism": [
+      "observe resolved executable artifact with SHA-256 and filesystem identity",
+      "self-verify LOCAL_TOOL presence rather than trusting caller-supplied artifact fields",
+      "open exact observed artifact and execute via inherited /proc/self/fd handle so pathname replacement after verification cannot change the bytes executed by the probe",
+      "current capability reads compare current artifact identity and fail closed to UNKNOWN on drift/unavailability",
+      "re-observing changed executable identity starts a new trial_generation so old successes cannot transfer to new bytes"
+    ],
+    "authority_boundary": "artifact-bound CAN_DELEGATE remains capability evidence only and never effect or Harness authority"
+  },
+  "regression_gate": {
+    "path": "tests/frank_capability_tool_artifact_identity_v1_gate.py",
+    "commit": "6e7e725a72ccee38de045d29fba39c8653297d8c",
+    "scenario": "same executable pathname earns CAN_DELEGATE on v1 bytes, bytes are replaced in place, current read and probe must return UNKNOWN, re-observation must start at zero effective trials, and only two probes of v2 bytes may restore CAN_DELEGATE while raw v1 history remains preserved",
+    "go_oob_experiment_added": false
+  },
+  "target_workflow": {
+    "workflow_commit": "bdd4a93c8e9dceadd48df0149d971692049cf32e",
+    "workflow_run": 31506267657,
+    "status_at_receipt": "QUEUED",
+    "promotion_before_target_result": false
+  },
+  "adjudication": "PATCHED_TARGET_PENDING",
+  "frank_self_harness_authority_changed": false,
+  "training_authorization_changed": false
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0358p0700-gpt56sol-sqlite-authority-fusion",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "research_repo_parent_observed_before_write": "3135225ef53172f8a9d6e995d3a647e9cf20c661",
+  "canonical_continuity": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "observed_reality": {
+    "upstream_sqlite_wal_reset_bug_fixed_mainline_from": "3.51.3",
+    "accepted_artifact_sqlite_version": "3.53.4",
+    "accepted_artifact_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "accepted_artifact_library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "accepted_artifact_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "target_runner_status": "UNKNOWN_UNASSIGNED_QUEUED",
+    "target_runner_direct_listing": "BLOCKED_403",
+    "production_acceptance": false
+  },
+  "grf": {
+    "generated_reality": "A fixed caller-visible SQLite version or caller-supplied matching manifest digest is enough to admit the productive persistence runtime.",
+    "counter_reality": "Release authority requires independently controlled exact artifact identity, and productive truth additionally requires proof of the actually mapped object on the accepted execution path.",
+    "collapse": "COUNTER_REALITY_SUPPORTED",
+    "retained_mechanism": "Source-controlled exact artifact authority plus mapped-object/runtime identity attestation and fail-closed receipt consistency.",
+    "remaining_counter_reality": "A correct wrapper remains bypassable unless deployment/service-parent routing and restart/rollback paths are proven non-bypassable."
+  },
+  "exactly_one_bounded_unusual_experiment_this_invocation": {
+    "count": 1,
+    "name": "GO_OOB_RUNTIME_IDENTITY_TRIANGULATION",
+    "scope": "local sandbox observation only; no production or canonical mutation",
+    "channels": [
+      "python sqlite3.sqlite_version",
+      "SQL sqlite_version()",
+      "SQL sqlite_source_id()",
+      "/proc/self/maps libsqlite path",
+      "mapped library SHA-256"
+    ],
+    "result": {
+      "python_sqlite_version": "3.46.1",
+      "sql_sqlite_version": "3.46.1",
+      "version_channels_agree": true,
+      "sql_sqlite_source_id": "2024-08-13 09:16:08 c9c2ab54ba1f5f46360f1b4f35d849cd3f080e6fc2b6c60e91b16c63f69aalt1",
+      "mapped_libsqlite_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "mapped_libsqlite_sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71",
+      "mapped_libsqlite_count": 1,
+      "environment": "LOCAL_SANDBOX_NOT_ACCEPTED_VPS",
+      "production_effect": false
+    },
+    "adjudication": "INFORMATIONAL_CONTROL_ONLY_NO_RELEASE_PROMOTION",
+    "additional_unusual_experiments": 0
+  },
+  "product_deltas": [
+    {
+      "pr": 461,
+      "commit": "ef32c3bb3cb537ee865335d411297b02ae33a5e4",
+      "state": "TESTING_DRAFT",
+      "delta": "Fixed stacked V6 target workflow to diff against its actual V5 stack base instead of origin/main, preventing a false narrow-diff failure."
+    },
+    {
+      "pr": 466,
+      "commit": "11a6c941e3df76a726969878876ab6e819b04459",
+      "state": "TESTING_DRAFT",
+      "delta": "Added fail-closed post-delegation receipt identity checks for manifest SHA, library SHA, SQLite version and source-id."
+    },
+    {
+      "pr": 466,
+      "commit": "08ceda41248b2cd000e158c59f2bb7cae1aaeefe",
+      "state": "TESTING_DRAFT",
+      "delta": "Added deterministic negative regression for base receipt library-identity drift."
+    }
+  ],
+  "fusion": {
+    "preferred_candidate": "PR_466",
+    "reason": "PR #466 is coordinated on main with durable Clay research provenance and composes the root provision mechanism; the useful post-delegation drift fence from overlapping PR #461 was transferred into #466.",
+    "overlap_policy": "Do not promote competing duplicate artifact-authority architectures; retain #461 only as replication/control until explicitly superseded or closed.",
+    "new_test_obligation": "Execute PR #466 exact head 08ceda41248b2cd000e158c59f2bb7cae1aaeefe; then on an authorized root-capable accepted target prove exact trusted artifact install, non-bypassable service-parent entry, productive mapped-object identity, restart continuity, rollback/downgrade/library-swap rejection, and canonical WAL migration/recovery.",
+    "promotion": "DEFER_TARGET_EVIDENCE_PENDING"
+  },
+  "negative_results_and_nonclaims": [
+    "Queued or zero-step workflow status is not PASS.",
+    "Local sandbox SQLite identity is not accepted-VPS evidence.",
+    "Accepted SQLite 3.53.4 artifact evidence alone does not prove productive mapped runtime identity.",
+    "No F-V01-13 closure.",
+    "No whole Frank-v0.1 acceptance.",
+    "No Harness or effect authority granted.",
+    "No model training authorization."
+  ]
+}

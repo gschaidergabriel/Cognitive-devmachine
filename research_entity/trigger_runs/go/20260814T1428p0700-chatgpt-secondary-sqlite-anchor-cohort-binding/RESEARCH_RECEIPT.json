@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260814T1428p0700-chatgpt-secondary-sqlite-anchor-cohort-binding",
+  "trigger": "go",
+  "timestamp_local": "2026-08-14T14:28:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_before_write": "8d7e842136fa2d699f1f5f66e8788e228aa8ee73",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "implementation": {
+    "repository_alias": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_on_pr": 574,
+    "base_head": "2c7939ee57fa1ff593ac2d0d94cc48db6acd67cc",
+    "branch": "chatgpt/go-receipt-cohort-anchor-binding-20260814",
+    "head": "fd740fe4f0e85fde64ef53cdd22d87579a96e100",
+    "pull_request": 577,
+    "pull_request_state": "OPEN_DRAFT",
+    "training_authorized": false
+  },
+  "coordination": {
+    "parallel_results_preserved": [
+      "20260814T1421 SQLite production-binding collapse: next gate is accepted host/service -> exact process -> mapped fixed SQLite -> root anchor -> real DB FDs -> restart/recovery.",
+      "20260814T1422 WAL semantic-state result: main DB file identity alone is not a semantic commit witness; require nonce/epoch restart readback.",
+      "20260814T1424 receipt-cohort process identity repair: bind host_boot_id + PID + start ticks, not tick alone."
+    ],
+    "duplicate_avoidance": "No new V6 guard variant, WAL experiment, or process-collision experiment was repeated."
+  },
+  "observed_reality": {
+    "productive_sqlite_observation": "Latest parallel productive-path receipt still reports SQLite 3.45.1 and missing /etc/frank-v0.1/sqlite-runtime-anchor-v1.json; no productive release PASS.",
+    "old_ephemeral_root_anchor_run": "Run 31524535474 failed before build/provisioning because sudo -n required a password on digital-retina; this is infrastructure/authority failure, not evidence against the fixed-SQLite mechanism.",
+    "v5_anchor_semantics": "V5 emits trust_anchor_sha256 and binds parent/re-exec child to the same exact anchor bytes, in addition to manifest/library/version/source identity.",
+    "pr574_gap": "PR #574 cohort bound exact SQLite library SHA-256 and external freshness but did not include V5 trust_anchor_sha256 in the normalized cohort digest."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "The WAL-reset corruption defect affects releases through 3.51.2 and is fixed in 3.51.3 and later; WAL state can contain committed data before the main database file is updated."
+    },
+    {
+      "source": "SQLite current release log",
+      "url": "https://sqlite.org/releaselog/current.html",
+      "finding": "Current upstream SQLite release is 3.53.4 (2026-07-24), matching the release-accepted source identity pinned by the project V5 guard."
+    }
+  ],
+  "grf": {
+    "hypothesis": "If normalized product receipts bind the fixed SQLite library but omit the exact V5 OS-owned trust-anchor bytes, byte-distinct anchor instances selecting the same library can be silently collapsed into one release cohort.",
+    "strongest_counterhypothesis": "Exact library identity plus external freshness already makes SQLite anchor identity redundant for composition.",
+    "falsifier": "Hold all PR #574 cohort fields constant and vary only sqlite_trust_anchor_sha256 across one normalized receipt; a fail-closed cohort must reject the composition.",
+    "collapse": "RETAIN narrow anchor-identity binding. External freshness remains separately required and this does not solve coherent whole-cohort rollback."
+  },
+  "go_unusual_experiment": {
+    "count": 1,
+    "id": "GO-OOB-DASH-PWD-FORGERY-V1",
+    "scope": "LOCAL_DISPOSABLE_SHELL_FIXTURE_ONLY",
+    "reversible": true,
+    "product_bytes_modified": false,
+    "accepted_vps_mutated": false,
+    "canonical_state_mutated": false,
+    "description": "Probe whether a forged inherited PWD can redirect the V6 relative-launcher SELF_PATH calculation under /bin/sh -> dash.",
+    "controls": ["truthful PWD", "forged existing PWD", "forged nonexistent PWD"],
+    "observed": "dash reset PWD to the real current working directory in all tested lanes; the forged value did not survive as the shell PWD used by the launcher shape.",
+    "outcome": "REFUTED_NO_BENEFIT",
+    "nonclaim": "Local dash behavior is not accepted-Hostinger production evidence."
+  },
+  "intervention": {
+    "candidate_change": "Add sqlite_trust_anchor_sha256 as a required validated SHA-256 cohort binding field and include it in the domain-separated cohort digest.",
+    "ordinary_regression": "Added same-library/different-SQLite-trust-anchor mismatch denial; workflow expectation increased from 11 to 12 tests.",
+    "commits": [
+      "896d6a32d94307ff386ca144d0f710533e11be75",
+      "124dbd07ef63a6d5c32f4590257a8353cb4431f8",
+      "fd740fe4f0e85fde64ef53cdd22d87579a96e100"
+    ],
+    "pull_request": 577,
+    "rollback": "Close/revert stacked PR #577 if exact-head regression or integration shows the field is unavailable or semantically redundant; preserve that as negative evidence rather than weakening upstream trust silently."
+  },
+  "execution_evidence": {
+    "workflow": "Frank product receipt cohort V1",
+    "run_id": 31779867376,
+    "exact_head": "fd740fe4f0e85fde64ef53cdd22d87579a96e100",
+    "status_at_reentry": "QUEUED",
+    "classification": "UNKNOWN_PENDING_NOT_PASS"
+  },
+  "next_discriminator": "After mechanism validation and review, accepted production evidence still requires exact ProductStart/self.root service + real V5/V6 root anchor + fixed SQLite + canonical UnifiedDB WAL nonce/epoch commit + restart/readback under a new admitted generation + stale-anchor/downgrade/library-swap/rollback controls + independently trusted external freshness.",
+  "nonclaims": [
+    "No accepted Hostinger productive SQLite PASS established.",
+    "No Frank database opened or mutated by this worker.",
+    "No root anchor provisioned.",
+    "No effect or Harness authority granted.",
+    "No whole Frank v0.1 acceptance.",
+    "No final model training authorization."
+  ]
+}

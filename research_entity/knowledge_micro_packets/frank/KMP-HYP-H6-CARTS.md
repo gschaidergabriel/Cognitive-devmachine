@@ -1,3 +1,7 @@
+<!-- RAE_META
+{"packet_id":"KMP-HYP-H6-CARTS","title":"H6 CARTS -> FRANK","domains":["frank"],"source_refs":["Hyperposition H6 HYP-RC6 CARTS"]}
+RAE_META -->
+
 # H6 CARTS -> FRANK
 
 **Source:** Hyperposition H6 `HYP-RC6 CARTS`  

@@ -1,0 +1,29 @@
+{
+  "affects_claims": [],
+  "affects_rooms": [],
+  "ancestry_family": "UNKNOWN",
+  "artifact_refs": [],
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "created_at": "2026-08-14T14:00:40.276369Z",
+  "delivery": "NEXT_CHECKPOINT",
+  "dependencies": [],
+  "event_id": "evt-20260814T140040276335Z-d241e68a",
+  "event_type": "WORK_ORDER_OPEN_LANES",
+  "origin_actor": "claude-code-lead",
+  "origin_worker": "master-clay-auftrag",
+  "payload": {
+    "abschlusstest": "A single file claycode/CORPUS_AUTHORITY_RECLASSIFICATION_PROPOSAL.json exists containing exactly the 12 unclassified sources (frank_web_ingress, frank_effect_execution_fence_candidate, frank_boot_continuity, frank_human_projection, frank_token_tls_transport_candidate, frank_unifieddb_semantic_checkpoint_root, frank_capability_body, frank_training_data_freeze_v1_candidate, frank_needle, frank_task_switch_consent, frank_task_switch_consent_v3, frank_visual_mvc). Each entry carries: source, introducing PR, introducing commit, proposed classification (authorized | excluded_pending_authority) WITH the stated reason, and the work package it belongs to. Plus a dry-run receipt showing that applying the proposal to a scratch copy of the manifest makes 'python3 -P -m runtime.claycode_eval_v1.corpus_probe' pass on the composed tree of PR 105 (currently it raises CORPUS_AUTHORITY_FAIL_CLOSED with unclassified_sources=[frank_web_ingress.clay]). Do NOT modify the live manifest.",
+    "art": "ARBEITSAUFTRAG",
+    "aufgegeben_am": "2026-08-14T21:00:40+0700",
+    "aufgegeben_von": "master-clay (gabriel-claude)",
+    "hinweis_an_den_worker": "Diese Aufgabe kommt von Master Clay, Gabriels Arbeitsgefaehrte — NICHT von der Forschungsentitaet selbst und nicht von self.root/Frank. Sie ist eine Bitte, keine Weisung: Evidenz schlaegt Rang.",
+    "titel": "Unblock 13 F-V0.1 PRs: classify the 12 new Clay sources held by the frozen corpus authority",
+    "warum": "MEASURED 2026-08-14 on frank-api. claycode-frontier-current-main-composition-vps is 1 green : 15 red on current PRs. Root cause is NOT ClayCode maturity: the discriminator step reports 6/6 checks PASS, then corpus_probe raises CORPUS_AUTHORITY_FAIL_CLOSED because claycode/CLAYCODE_CORPUS_AUTHORITY_V1.json is status FROZEN_REFERENCE_PENDING_OWNER_RECLASSIFICATION and lists 40 authorized + 2 excluded. Any PR adding a new .clay source is unclassified -> fail closed. 12 distinct sources are affected, blocking 13 PRs, and they are the program's own go output: PR 352 (GO F-V01-07 Needle), 370 + 385 (F-V01-08 task-switch consent), 335 (F-V01-12 capability body), 347 (F-V01-14 held-out freeze), 507 (visual MVC), 105 + 330 (web ingress), 199, 231, 275, 276, 297. The work exists and is queued behind one classification decision each. Authority is PROPOSAL_ONLY: produce the proposal with evidence, the owner decides."
+  },
+  "room_id": "claycode",
+  "schema_version": "1.0",
+  "trigger": "go"
+}

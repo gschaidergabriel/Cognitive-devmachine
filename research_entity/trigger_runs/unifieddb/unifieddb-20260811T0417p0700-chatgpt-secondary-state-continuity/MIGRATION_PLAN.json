@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
+  "candidate":"UNIFIEDDB_V10_STATE_CONTINUITY_FENCING_CANDIDATE.sql",
+  "phases":[
+    {"phase":0,"name":"PRECHECK","actions":["capture exact target SQLite version + sqlite_source_id + package provenance","capture journal_mode/synchronous/checkpoint configuration","enumerate all DB connections/processes/checkpoint callers","verify current external execution-generation floor mechanism and its rollback failure domain"],"promotion_gate":"all metadata known or literal UNKNOWN; no safety assumption from version string alone"},
+    {"phase":1,"name":"SHADOW_SCHEMA","actions":["apply additive candidate objects with enforcement_state=SHADOW","backfill one lineage candidate from current admitted semantic root without changing authority","emit comparison receipts only"],"rollback":"drop/ignore candidate views/tables only after preserving run evidence; canonical state path remains unchanged"},
+    {"phase":2,"name":"LINEAGE_FALSIFICATION","actions":["same-source sibling chimera","stale state snapshot","transplanted DB","equal epoch divergent root","missing external floor","rolled-back external floor","restart/move continuity"],"promotion_gate":"all stale/sibling/transplant cases fail closed; valid recovery path succeeds"},
+    {"phase":3,"name":"SQLITE_WAL_GATE","actions":["if exact SQLite build is upstream fixed/backported => continue","else prove machine-checked single-connection or writer/checkpoint mutual exclusion topology","otherwise quarantine authoritative writes or change journal/runtime build"],"promotion_gate":"WAL-reset bug conditions proven fixed or unreachable on accepted target"},
+    {"phase":4,"name":"ENFORCE_STATE_FENCE","actions":["bind authoritative semantic transactions to exact current execution generation and admitted lineage","require continuity commit for new state epoch","bind snapshots to lineage/external floor"],"promotion_gate":"query/replay equivalence + stale write rejection + no lost valid writes"},
+    {"phase":5,"name":"CRASH_RESTART_REPLAY","actions":["kill during transaction","kill after WAL commit before checkpoint","restore previous DB snapshot","restore valid latest snapshot","checkpoint/restart matrix","verify last-known-good rollback"],"promotion_gate":"no silent state rewind, corruption, duplicate authoritative commit or stale-generation write"},
+    {"phase":6,"name":"TARGET_PERFORMANCE","actions":["p50/p95/p99 state mutation","read latency","checkpoint time","WAL growth","write amplification","RSS/CPU/storage I/O","model-visible assembly cost"],"promotion_gate":"Pareto competitive versus current specialized/logically-unified baseline"},
+    {"phase":7,"name":"PROMOTION","actions":["only after independent validation promote canonical migration/runtime gate","update F-V01-04 evidence and adjacent F-V01-01/F-V01-13 obligations"],"promotion_gate":"target-VPS receipts + recovery evidence + rollback verified"}
+  ],
+  "keep_isolated":["external monotonic recovery floor","large tensor/model backing when measurements justify","derived indexes when rebuildability/resource isolation is superior"],
+  "status":"READY_FOR_TARGET_FALSIFIER_NOT_PROMOTED"
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T2217p0700-chatgpt-secondary-reward-exactly-once",
+  "component": "F-V01-11-MEMORY-REWARD-GOALS",
+  "status": "MEASURED_CURRENT_MAIN_REWARD_CLAYCODE_PARSE_REJECTION",
+  "candidate_pr": 332,
+  "candidate_head": "a24dbbc6bc1d169377b4bd503913dd01a2800bb8",
+  "tested_pr_merge_sha": "5120eec34e649c0c753a465d323072c5534d9e93",
+  "workflow_run_id": 31510240843,
+  "artifact_id": 9109196624,
+  "artifact_digest": "sha256:213a1ee4e93c7a194b251f96d25de3b05201ced2a33836cce92fb3ab6a45b4b8",
+  "receipt_sha256": "c9d236a29086df455e08d179b086fb42c6bc8e43963ea2b229389753a5acdbcd",
+  "target": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "python": "3.12.3"
+  },
+  "bound_sources": {
+    "reward_source_blob": "e5e53b0d12f5cfd6311b8040fd6cd80effd1c343",
+    "grammar_blob": "82aeaf494b35b4f825f62112846af68bce00fd70",
+    "syntax_blob": "9dfb236969aa28a69767dc7ef9ba4b0c32e4988a",
+    "analyzer_blob": "65340ea5c14d95cbf3da0f5cf4a0ccfc9578b745",
+    "evaluator_blob": "ea6bdafdbaaeebbca9d26558af1a88501327bfa1",
+    "host_blob": "066f8b5ab94791442222f67d9ee02cc7a8fa7845",
+    "probe_blob": "4c3679a136e4ccc964735aa4dfaef7573788f8d1"
+  },
+  "frontier": {
+    "parsed": false,
+    "analyzed": false,
+    "executable_functions": [],
+    "exception_type": "UnexpectedToken",
+    "first_rejection": "Unexpected token COMMA at line 12 column 22; current grammar expected semicolon, right brace, equals or newline",
+    "adjudication": "CURRENT_CLAYCODE_SURFACE_DOES_NOT_PARSE_REWARD_SOURCE; DO_NOT_INVENT_SYNTAX_OR_CLAIM_EXECUTION"
+  },
+  "transition_readiness": {
+    "lineage": "historical PR #128 finite reward-transition readiness obligation family",
+    "required": 21,
+    "explicitly_declared": 3,
+    "missing_exact_definition": 18,
+    "declared": [
+      "material_admission",
+      "material_learning_weight",
+      "exploration_nudge"
+    ],
+    "missing": [
+      "horizon_rates",
+      "phasic_mix_weights",
+      "observed_value",
+      "bounded_update",
+      "bounded_distribution_update",
+      "normalize_by_prediction_uncertainty",
+      "robust_mix",
+      "clamp01",
+      "tonic_transition",
+      "habituation_transition",
+      "opponent_transition",
+      "admitted_events_transition",
+      "last_phasic_transition",
+      "state_epoch_transition",
+      "veto_threshold",
+      "brake_threshold",
+      "receipt_projection",
+      "receipt_provenance"
+    ],
+    "deterministic_full_state_transition_ready": false,
+    "rule": "PYTHON_REFERENCE_CHOICES_CANNOT_FILL_MISSING_CLAY_DEFINITIONS"
+  },
+  "resource_shadow": {
+    "elapsed_wall_s": 0.18,
+    "user_cpu_s": 0.15,
+    "system_cpu_s": 0.02,
+    "max_rss_kib": 25088,
+    "exit_status": 0
+  },
+  "next_diagnostic": {
+    "pr": 383,
+    "base": "ClayCode surface PR #314 head 1f90de1082fbd73599f343d87d7bb85d47484d7e",
+    "question": "After #314's comma-field/arithmetic/in/list/word-and syntax expansion, does this exact unchanged reward source parse/analyze/execute any subset, and which evaluator/transition obligations remain?",
+    "promotion": "NONE_STACKED_DIAGNOSTIC_ONLY"
+  },
+  "claim_boundary": {
+    "workflow_green_means_measurement_completed_not_reward_execution_pass": true,
+    "claycode_reward_semantics_promoted": false,
+    "python_reference_replaced": false,
+    "full_reward_transition_ready": false,
+    "f_v01_11_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "go_oob_experiment_added": false,
+    "canonical_state_mutated": false,
+    "external_effect_performed": false,
+    "training_authorized": false,
+    "frank_self_harness_authority_changed": false
+  }
+}

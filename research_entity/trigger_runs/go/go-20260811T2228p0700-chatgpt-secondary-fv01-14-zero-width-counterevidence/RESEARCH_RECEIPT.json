@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.1",
+  "run_id": "go-20260811T2228p0700-chatgpt-secondary-fv01-14-zero-width-counterevidence",
+  "trigger": "go",
+  "entity_id": "frank-project-global-research-entity",
+  "display_name": "Clay",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_boundary": {
+    "clay_is_frank": false,
+    "frank_is_separate_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "research_repository_head_before_write": "7f3624bff041be39cfcc37e25c1c5be6eb88a953",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_main_at_cycle": "cd5cec575282eb8bd81a8f8e5a9116f47141abf0",
+  "work_package": "F-V01-14-FINAL-TRAINING-DATA",
+  "coordination": {
+    "initial_open_pr_recall_missed_active_lane": true,
+    "active_preferred_pr_discovered_after_refresh": 347,
+    "preferred_pr_head_at_counterevidence": "333992fa1a7e11b93dcfbb64bcfae400e0f8e25f",
+    "preferred_pr_head_after_fusion": "fad33bbb239b964b5fe5d83caced3434380691c3",
+    "duplicate_candidate_pr_created_before_refresh": 354,
+    "duplicate_candidate_pr_closed_unmerged": true,
+    "duplicate_branch_reclassified": "ADVERSARIAL_COUNTEREVIDENCE_ONLY",
+    "counterevidence_distributed_to_preferred_pr_review_id": 4907876357
+  },
+  "hypothesis": "The preferred F-V01-14 freeze mechanism can be strengthened without claiming semantic equivalence by binding a narrow leakage-only surface hash that removes invisible Unicode format controls which are not removed by its original NFKC/line-trim normalization.",
+  "strongest_counterhypothesis": "A Cf-stripped surface hash can only close a narrow invisible-format bypass. It does not discover semantic paraphrases and must not replace the preferred PR's independent semantic-family plus semantic-audit-receipt mechanism.",
+  "fresh_external_evidence": [
+    {
+      "source": "Lee et al., Deduplicating Training Data Makes Language Models Better",
+      "identifier": "arXiv:2107.06499",
+      "use": "training duplicates and train/test overlap can distort memorization and evaluation"
+    },
+    {
+      "source": "Singh et al., Evaluation data contamination in LLMs: how do we measure it and (when) does it matter?",
+      "identifier": "arXiv:2411.03923",
+      "use": "contamination detectors have threshold/representation false-negative tradeoffs; lexical detection is not semantic completeness"
+    },
+    {
+      "source": "Chai et al., When Benchmarks Leak: Inference-Time Decontamination for LLMs",
+      "identifier": "ACL 2026 DOI 10.18653/v1/2026.acl-long.2071",
+      "use": "close variants leaking into training can compromise benchmark interpretation"
+    }
+  ],
+  "go_out_of_box_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "ZERO_WIDTH_HELDOUT_GHOST",
+    "heldout_visible_text": "Effect authority requires verified outcome and causal credit.",
+    "train_intervention": "insert U+200B ZERO WIDTH SPACE inside the same visible sentence and alter whitespace while assigning different family identities",
+    "baseline": "byte hash + original NFKC/whitespace normalization + caller family identity",
+    "baseline_observation": "byte and original normalized hashes differ, so the cosmetic twin is not caught by those surfaces",
+    "repair_observation": "a leakage-only view that NFKC-normalizes, strips Unicode category Cf, case-folds and collapses whitespace while preserving punctuation produces an equal leakage hash and rejects the cross-split twin",
+    "local_repair_gate": "14/14 PASS",
+    "semantic_identity_claimed": false,
+    "target_equivalence_claimed": false
+  },
+  "preferred_pr_counterevidence": {
+    "pr": 347,
+    "original_code_fact": "_normalized_text performed NFKC plus newline normalization/rstrip/strip but did not remove Unicode category Cf",
+    "original_isolation_dimensions": [
+      "EXACT_CONTENT_CROSS_SPLIT",
+      "NORMALIZED_CONTENT_CROSS_SPLIT",
+      "SOURCE_LINEAGE_CROSS_SPLIT",
+      "SEMANTIC_FAMILY_CROSS_SPLIT"
+    ],
+    "counterexample_condition": "If source_lineage_id and semantic_family_id are independently different, an invisible U+200B cosmetic twin was not necessarily caught by the original four dimensions.",
+    "recommended_repair": "Add a non-semantic Cf-stripped leakage hash to frozen rows and manifest root, preserving punctuation/code operators, and add a cross-split isolation dimension for that hash.",
+    "distribution": "GitHub review 4907876357 on PR #347"
+  },
+  "fusion_outcome": {
+    "status": "FUSED_INTO_PREFERRED_LANE",
+    "preferred_pr": 347,
+    "observed_head": "fad33bbb239b964b5fe5d83caced3434380691c3",
+    "runtime_delta_observed": [
+      "_leakage_surface_text NFKC-normalizes",
+      "Unicode category Cf controls are removed",
+      "casefold plus whitespace collapse is applied",
+      "punctuation and code operators remain preserved",
+      "leakage_surface_sha256 is bound into each frozen row and therefore the manifest root",
+      "LEAKAGE_SURFACE_CROSS_SPLIT is a new isolation dimension",
+      "leakage_surface_semantic_identity remains false"
+    ],
+    "test_delta_observed": {
+      "ordinary_check_count": 20,
+      "cross_worker_regression": "zero_width_heldout_ghost_from_pr_354",
+      "expected_result": "PASS_FUSED_LEAKAGE_SURFACE_FENCE",
+      "counts_as_new_go_oob_for_preferred_worker": false
+    },
+    "target_workflow": {
+      "run_id": 31507477393,
+      "name": "Frank training data freeze V1 VPS",
+      "status_at_refresh": "QUEUED",
+      "conclusion": null,
+      "target_pass_claimed": false
+    }
+  },
+  "superseded_adversarial_branch": {
+    "pr": 354,
+    "state": "CLOSED_UNMERGED",
+    "purpose_retained": "COUNTEREXAMPLE_AND_REPAIR_PROTOTYPE_ONLY",
+    "target_workflow_pass_claimed": false,
+    "reason": "preferred broader F-V01-14 lane #347 discovered after shared-state refresh"
+  },
+  "architecture_delta": {
+    "status": "FUSED_TARGET_PENDING",
+    "decision": "Keep #347 as the preferred F-V01-14 lane; the narrow Unicode-format-control leakage falsifier has been incorporated there as an ordinary cross-worker regression and a non-semantic leakage-surface fence.",
+    "expected_effect": "close an invisible surface-variant heldout leak without conflating punctuation-sensitive ClayCode/code samples",
+    "required_successors": [
+      "target VPS executes preferred repaired exact head",
+      "verify semantic-audit receipt content and family discovery independently",
+      "bind actual final Frank train/dev/heldout corpus and contamination-sensitivity evaluation"
+    ],
+    "rollback": "No promoted runtime change from this worker; PR #354 remains closed/unmerged. Preferred PR #347 owns adjudication and rollback of the fused fence."
+  },
+  "target_state": {
+    "preferred_pr_347_target_status_at_write": "QUEUED",
+    "target_pass_claimed": false,
+    "final_training_data_gate_claimed": false,
+    "model_training_authorized": false,
+    "final_training_started": false,
+    "external_effect_performed": false,
+    "canonical_frank_state_mutated": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "research_disposition": "COUNTEREVIDENCE_FUSED_IN_PREFERRED_LANE_DUPLICATE_CLOSED_TARGET_PENDING"
+}

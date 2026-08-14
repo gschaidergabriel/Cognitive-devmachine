@@ -1,0 +1,18 @@
+{
+  "evidence_class":"LOCAL_SYNTHETIC_SQLITE_DISCRIMINATOR_NOT_TARGET_RUNTIME",
+  "environment":{"python":"3.13.5","platform":"Linux-6.18.35-x86_64-with-glibc2.41","machine":"x86_64","sqlite":"3.46.1"},
+  "mutation_corpus":{"cases":14,"valid_cases":1,"invalid_or_mixed_cases":13,"conventional_receipt":{"valid_accepted":1,"invalid_accepted":0},"ccw_view":{"valid_visible":1,"invalid_visible":0},"verdict":"TIE_CORRECTNESS_UNDER_SHARED_STRONG_CLOSURE_PREDICATE"},
+  "atomic_fault_control":{"injected_at":"after REENTERED/reentry writes before DONE receipt inside one transaction","after_rollback":{"state":"VERIFIED","reentry_rows":0,"done_rows":0,"closure_rows":0},"verdict":"STRONG_CONVENTIONAL_BASELINE_REMOVES_NAIVE_TWO_WRITE_CRASH_WINDOW"},
+  "view_write_control":{"direct_insert_rejected":true,"sqlite_error":"cannot modify causal_closure_v because it is a view"},
+  "support_invalidation_control":{"before":{"persisted_receipt":1,"derived_closure":1},"after_delta_invalidated":{"persisted_receipt":1,"derived_closure":0},"interpretation":"A receipt alone can become stale relative to revocable/quarantined support; a conventional design can match CCW only by revalidation/invalidation logic, which makes the receipt non-sufficient authority."},
+  "scaling_single_runs":[
+    {"N":1000,"receipt":{"populate_s":0.066853131,"db_bytes":933888,"point_median_ns":3735,"point_p95_ns":4146,"point_p99_ns":7211},"ccw":{"populate_s":0.027334212,"db_bytes":831488,"point_median_ns":9053,"point_p95_ns":9995,"point_p99_ns":34291}},
+    {"N":5000,"receipt":{"populate_s":0.175437701,"db_bytes":3977216,"point_median_ns":3906,"point_p95_ns":6830,"point_p99_ns":9154},"ccw":{"populate_s":0.130350172,"db_bytes":3538944,"point_median_ns":11327,"point_p95_ns":19449,"point_p99_ns":61271}},
+    {"N":20000,"receipt":{"populate_s":0.684041209,"db_bytes":15478784,"point_median_ns":3986,"point_p95_ns":4547,"point_p99_ns":6750},"ccw":{"populate_s":0.450365598,"db_bytes":13770752,"point_median_ns":19299,"point_p95_ns":24216,"point_p99_ns":43895}}
+  ],
+  "replicated_N10000":{"repetitions":6,"query_samples_per_rep":3000,"order":"alternated","receipt":{"populate_s_median":0.3477309325,"db_bytes":7774208,"point_median_ns_median":3911,"point_p95_ns_median":4261.5,"point_p99_ns_median":5348},"ccw":{"populate_s_median":0.249629948,"db_bytes":6918144,"point_median_ns_median":15605.75,"point_p95_ns_median":21907,"point_p99_ns_median":33985.5},"ratios_ccw_over_receipt":{"populate_median":0.7158406901,"storage_median":0.8898840885,"point_median_latency_median":3.9896384,"point_p95_latency_median":5.133663552}},
+  "read_amplification_warning":"Full closure scans were orders of magnitude slower than COUNT on the receipt table in this local schema; CCW requires indexed point use, incremental/non-authoritative materialization, or workload evidence before production consideration.",
+  "raw_rows_preserved":"Exact per-run values remain in the executing session and the committed discriminator reproduces the experiment shape; this packet preserves reported distributions/ratios rather than claiming hardware-portable performance.",
+  "external_effects":0,
+  "target_vps_ccw_runs":0
+}

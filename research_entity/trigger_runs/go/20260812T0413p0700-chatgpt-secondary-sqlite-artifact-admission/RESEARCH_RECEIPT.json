@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0413p0700-chatgpt-secondary-sqlite-artifact-admission",
+  "trigger": "go",
+  "timestamp_local": "2026-08-12T04:13:41+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_identity": {
+    "entity_id": "frank-project-global-research-entity",
+    "display_name": "Clay",
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent_observed": {
+    "research_main_before_write": "21f31e4f59dd9f92f89d5b72fe5666a788211659",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "selected_frontier": {
+    "domain": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "reason": "The accepted target still reports productive SQLite 3.45.1 and lacks the OS-owned trust anchor. A prior disposable Hostinger overlay proved SQLite 3.53.4 can be loaded, but the candidate --require-wal-safe gate admitted solely by version and therefore did not prove exact admitted artifact identity or reject same-version library substitution.",
+    "duplicate_avoidance": [
+      "Preserve prior 20260812T0220p0700 SQLite anchor-schema repair as authoritative for FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1 schema/root-anchor semantics.",
+      "Do not claim the new standalone attestor replaces the existing V5 launcher/manifest chain.",
+      "Do not merge the stale clay-go-sqlite-runtime-attestation-20260812 branch because comparison showed it 62 commits behind main."
+    ]
+  },
+  "observed_reality": {
+    "accepted_target_runner": "clay / digital-retina / self-hosted Linux X64",
+    "productive_sqlite_baseline": "3.45.1",
+    "productive_libsqlite_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+    "python_sqlite_extension_sha256": "b30bc4b6a8fa3c80fa0ff79b752e811ffda985497155501691c1d169b289b238",
+    "prior_overlay_run": 31523517392,
+    "prior_overlay_version": "3.53.4",
+    "prior_overlay_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+    "prior_overlay_libsqlite_sha256": "766647ee994e598c87ebf8827cf065c6880b2f29e8a112db56b564f0a84f973a",
+    "prior_overlay_libsqlite_size": 5032360,
+    "prior_overlay_scope": "disposable rootless runtime overlay; no Frank DB open; no system install",
+    "current_workspace_status": "F-V01-13 IN_PROGRESS"
+  },
+  "grf_candidate": {
+    "hypothesis": "A fixed-version runtime gate is insufficient for release identity. Admission must independently bind the loaded runtime to externally admitted version/source identity and exact artifact fingerprints, while preserving the existing V5 root-anchor/manifest authority chain.",
+    "strongest_counterhypothesis": "SQLite version plus sqlite_source_id already identify the effective runtime strongly enough, so hashing loaded artifacts adds no material protection and only creates deployment brittleness.",
+    "falsifier": "Hold sqlite3_libversion()/sqlite3_sourceid() constant while changing loaded library bytes; then test whether an externally pinned artifact policy rejects the changed bytes and unexpected/transplanted artifacts."
+  },
+  "go_out_of_box": {
+    "count": 1,
+    "name": "SAME_SOURCE_ID_DIFFERENT_BYTES",
+    "class": "runtime identity aliasing",
+    "reversible": true,
+    "disposable_state": true,
+    "frank_database_opened": false,
+    "product_bytes_modified": false,
+    "description": "In isolated local subprocesses, load the real local SQLite shared library and a temporary byte-altered copy, then compare sqlite3_libversion(), sqlite3_sourceid() and SHA-256.",
+    "result": "COUNTERHYPOTHESIS_FALSIFIED_FOR_EXACT_BYTE_IDENTITY",
+    "observed_version_both": "3.46.1",
+    "observed_source_id_same": true,
+    "original_sha256_prefix": "14c441",
+    "altered_sha256_prefix": "695ecd",
+    "interpretation": "Version and source_id do not attest byte-for-byte loaded-library identity. This does not by itself show executable malicious substitution; it establishes an exact-artifact attestation gap."
+  },
+  "repair_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "fresh_base": "96aada947b8389f6aa4783c1ce3b5ad065c67435",
+    "branch": "clay-go-sqlite-admission-main-20260812",
+    "commits": [
+      "e6bd783",
+      "0ed24e6",
+      "4ca31ef62e8c14607088ac7dc9d2b5f45ffd872c"
+    ],
+    "files": [
+      "runtime/state/sqlite_runtime_attestation.py",
+      "tests/sqlite_runtime_attestation_gate.py",
+      ".github/workflows/clay-go-sqlite-admission-vps.yml"
+    ],
+    "mechanism": [
+      "Keep WAL-fix version floor independent from runtime artifact admission.",
+      "Admission requires exact sqlite_version and sqlite_source_id plus exact loaded artifact set keyed by SHA-256, size and basename; optional path pinning defaults true.",
+      "Reject missing/duplicate/unexpected artifacts, wrong source ID, changed hash and path transplant under pin_paths=true.",
+      "Return exit 78 on admission or WAL-safety failure.",
+      "Hostinger workflow uses artifact identities pinned from prior independent receipts, not learned from the same candidate execution.",
+      "Negative control changes one expected hash nibble and must fail closed with exit 78."
+    ],
+    "local_deterministic_test": {
+      "status": "PASS",
+      "admission_cases": 7,
+      "local_sqlite_version": "3.46.1",
+      "local_wal_safe": false
+    }
+  },
+  "accepted_target_test": {
+    "workflow": "clay-go-sqlite-admission-vps.yml",
+    "run": 31536877295,
+    "tested_sha": "4ca31ef62e8c14607088ac7dc9d2b5f45ffd872c",
+    "status_at_receipt_write": "QUEUED",
+    "conclusion_at_receipt_write": null,
+    "adjudication": "UNKNOWN_NOT_PASS_UNTIL_COMPLETED_RECEIPT",
+    "note": "Queued is not execution evidence. A later completed run must be independently read and integrated before promotion."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://sqlite.org/wal.html",
+      "finding": "WAL-reset corruption bug is documented through 3.51.2; fixed in 3.51.3 and later with listed backports 3.44.6 and 3.50.7."
+    },
+    {
+      "source": "SQLite 3.53.4 release history/source identity",
+      "url": "https://sqlite.org/changes.html",
+      "finding": "3.53.4 is later than the fixed mainline floor and publishes a concrete SQLITE_SOURCE_ID."
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE_PENDING_TARGET_EXECUTION",
+    "affected": [
+      "F-V01-13 security/recovery/observability",
+      "productive SQLite runtime attestation",
+      "downgrade/library-swap rejection"
+    ],
+    "supported_change": "Exact loaded SQLite artifact identity should be admitted independently from semantic version safety and then composed with the existing root-owned V5 manifest/anchor chain; same-version/source metadata alone is not byte identity.",
+    "strongest_counterevidence": "The productive Hostinger runtime remains 3.45.1 and root anchor remains absent; the new fixed overlay is still disposable and not the productive Frank persistence process.",
+    "rollback": "Delete/revert the standalone candidate branch if V5 integration provides equivalent or stronger exact loaded-artifact admission; never weaken the existing fail-closed root-anchor semantics.",
+    "promotion_blockers": [
+      "Run 31536877295 has not completed at receipt write time.",
+      "Even a pinned overlay PASS would only prove reproducible admitted overlay identity, not productive Frank process binding.",
+      "Need fixed SQLite on the exact productive Frank persistence process or a machine-checked unreachable-topology proof.",
+      "Need valid root-owned FRANK_SQLITE_RUNTIME_TRUST_ANCHOR_V1 bound to actual V5 manifest/runtime chain.",
+      "Need downgrade/library-swap rejection at productive startup and crash/restart/replay acceptance."
+    ]
+  },
+  "outcome": "RETAIN",
+  "nonclaims": [
+    "No F-V01-13 promotion",
+    "No whole Frank v0.1 acceptance",
+    "No productive SQLite upgrade",
+    "No root trust-anchor provisioning",
+    "No claim that queued GitHub Actions work passed",
+    "No final model training authorization"
+  ],
+  "next_falsifier": "Read run 31536877295 when completed. If externally pinned overlay admission passes, integrate equivalent exact-artifact checking into the existing V5 root-anchor/manifest startup path and execute productive-process downgrade/library-swap plus crash/restart controls on the accepted Hostinger VPS."
+}

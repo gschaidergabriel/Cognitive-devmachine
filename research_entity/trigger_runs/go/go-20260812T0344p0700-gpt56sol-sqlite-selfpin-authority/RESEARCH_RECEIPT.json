@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0344p0700-gpt56sol-sqlite-selfpin-authority",
+  "trigger": "go",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "reasoning_frame": "GRF",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "f2f6d7f1202a9761cf3d1bc7d173c49ad5f79e9e",
+  "program": "FRANK_V0_1",
+  "focus_component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "fresh_product_main_observed": "9c891aa8b076113b21903ac3db0d39a61aec6a91",
+  "source_product_prs": [440, 444],
+  "observed_reality": {
+    "sqlite_wal_reset_fix_floor": "3.51.3+ or explicit upstream-listed backport",
+    "ordinary_accepted_runner_sqlite": "3.45.1 remains observed outside the private fixed-runtime lane",
+    "merged_reproducible_runtime_pr": 444,
+    "merged_runtime_library_sha256": "8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9",
+    "merged_runtime_manifest_sha256": "84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3",
+    "root_provision_candidate_pr": 440,
+    "provision_candidate_claim": "requires an independently supplied expected manifest SHA-256",
+    "machine_enforced_release_policy_observed": "accepted sqlite_version + sqlite_source_id; manifest digest equality is checked against a caller-supplied string, but digest provenance is not independently machine-bound"
+  },
+  "grf": {
+    "generated_reality": "Caller-provided expected_manifest_sha256 is sufficient to encode independent release-artifact authority because a mismatch fails closed.",
+    "counter_reality": "A caller that can choose both manifest bytes and the expected digest can self-pin a byte-distinct library that exports the accepted SQLite version/source-id; digest equality then proves only self-consistency, not canonical build provenance.",
+    "falsifier": "Build a harmless byte-distinct shared object exporting the accepted 3.53.4 version/source-id, create a matching runtime manifest, compare wrong external pin versus self-derived pin under the current relevant release/provision checks.",
+    "collapse": "GENERATED_REALITY_REFUTED_COUNTER_REALITY_SUPPORTED"
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "SELF_PINNED_COUNTERFEIT_RUNTIME_AUTHORITY",
+    "classification": "BOUNDED_UNUSUAL_EXPERIMENT",
+    "scope": "disposable local sandbox only; harmless shared object; no production/canonical state mutation",
+    "baseline": {
+      "expected_manifest_sha256": "deliberately wrong external pin",
+      "result": "DENY_MANIFEST_HASH"
+    },
+    "intervention": {
+      "library_exports": {
+        "sqlite_version": "3.53.4",
+        "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc"
+      },
+      "counterfeit_library_sha256": "9804d8dbfc31f2860e285cfd13e0d75bc849356af1a10efd7e0c302ba77b595e",
+      "self_derived_manifest_sha256": "ba6b9c255827d5218c5d607bbb908a17dcd2261c77f76387a9d573bcfc2676e9",
+      "canonical_source_build": false,
+      "result": "PASS_RELEVANT_CURRENT_PROVISION_CHECKS"
+    },
+    "interpretation": "The manifest digest check is a consistency fence but not, by itself, a release-artifact authority fence. The independent provenance assumption must be bound to an owner/deployment-controlled artifact identity source that the provisioning caller cannot choose.",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "primary_external_evidence": [
+    {
+      "source": "SQLite WAL documentation",
+      "claim": "WAL-reset bug affects upstream through 3.51.2 and is fixed in 3.51.3+ with upstream-listed backports."
+    },
+    {
+      "source": "SQLite 3.53.4 release log",
+      "claim": "3.53.4 source-id is 2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc and lies on the fixed line."
+    }
+  ],
+  "architecture_consequence": {
+    "state": "SUPPORTED_REPAIR_REQUIRED_BEFORE_ROOT_PROVISION_PROMOTION",
+    "required_invariant": "Release artifact authority must bind exact independently accepted runtime-manifest and library content identity, not only SQLite version/source-id plus a caller-selectable digest.",
+    "preferred_current_repair": "Bind PR#440 provision admission to the reproducible PR#444 artifact identity (runtime manifest SHA-256 84b80e1f07782572b0b610c5ebb08cdd067728604b95b59ce16468e1df9217e3 and library SHA-256 8451424a644fbca8a77836aa2d762c21dfc1a5bf635e25fd4fe5dde0127689f9) through an owner/deployment-controlled release policy or equivalent non-caller-selectable trust source.",
+    "required_regression": "A byte-distinct library exporting the accepted version/source-id with a self-derived matching manifest digest MUST be denied; the exact merged reproducible #444 artifact identity MUST pass.",
+    "rotation_rule": "Future runtime artifact rotations require an explicit trusted release-policy update and fresh reproducibility/target evidence; do not dynamically trust whichever manifest digest the provisioning caller supplies."
+  },
+  "promotion": {
+    "negative_result": "PROMOTED_TO_RESEARCH_EVIDENCE",
+    "pr_440": "KEEP_DRAFT_REPAIR_REQUIRED",
+    "pr_444": "MERGED_REPRODUCIBLE_ARTIFACT_EVIDENCE_RETAINED",
+    "F_V01_13": "IN_PROGRESS",
+    "whole_frank_v0_1": "IN_PROGRESS"
+  },
+  "remaining_release_gates": [
+    "Apply the artifact-authority repair and deterministic counterfeit regression.",
+    "Execute privileged root-owned provisioning on an explicitly authorized accepted target.",
+    "Prove exact productive Frank service maps/uses the accepted object across start/restart/rollback/downgrade/library-swap controls.",
+    "Close independent semantic-lineage and recovery obligations."
+  ],
+  "authority": {
+    "canonical_frank_state_mutation": false,
+    "production_effect": false,
+    "harness_authority": "NONE",
+    "training_authorized": false
+  }
+}

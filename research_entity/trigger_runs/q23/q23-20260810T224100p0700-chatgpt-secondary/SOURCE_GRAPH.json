@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "nodes": [
+    {"id":"S-INTERNAL-QNDRF1","class":"CURRENT_PROJECT_CANDIDATE","ref":"research_entity/retina/QWEN_NATIVE_DISSOLVED_RETINA_FUSION_CANDIDATE_20260810.md"},
+    {"id":"S-INTERNAL-MVC","class":"CURRENT_PROJECT_CANDIDATE","ref":"research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md"},
+    {"id":"S-HF-Q35","class":"PRIMARY_RUNTIME_REFERENCE","ref":"huggingface/transformers:src/transformers/models/qwen3_5/modular_qwen3_5.py@6e4f37cc"},
+    {"id":"S-HF-Q3VL","class":"PRIMARY_RUNTIME_REFERENCE","ref":"huggingface/transformers:src/transformers/models/qwen3_vl/modular_qwen3_vl.py@4803adbf"},
+    {"id":"S-LLAMA-MTMD-H","class":"PRIMARY_RUNTIME_API","ref":"ggml-org/llama.cpp:tools/mtmd/mtmd.h@e5063d11"},
+    {"id":"S-LLAMA-MTMD-HELPER","class":"PRIMARY_RUNTIME_IMPLEMENTATION","ref":"ggml-org/llama.cpp:tools/mtmd/mtmd-helper.cpp@d77c9396"},
+    {"id":"S-QWEN-EMBED","class":"PRIMARY_COMPETING_MECHANISM","ref":"QwenLM/Qwen3-VL-Embedding:README.md@27360457"},
+    {"id":"S-MOBILECLIP2","class":"PRIMARY_COMPETING_MECHANISM","ref":"apple/ml-mobileclip:README.md@3cbe2452"},
+    {"id":"S-DINOV3","class":"PRIMARY_COMPETING_MECHANISM","ref":"facebookresearch/dinov3:MODEL_CARD.md@2bd45fb0"}
+  ],
+  "edges": [
+    {"from":"S-HF-Q35","to":"S-HF-Q3VL","type":"ARCHITECTURE_DIFF","claim":"Qwen3.5 removes DeepStack pathways present in Qwen3-VL."},
+    {"from":"S-LLAMA-MTMD-HELPER","to":"S-INTERNAL-QNDRF1","type":"IMPLEMENTABILITY_STRENGTHENING","claim":"Same encoded media buffer can be fed into decoder path without rerunning image encoder."},
+    {"from":"S-QWEN-EMBED","to":"S-INTERNAL-QNDRF1","type":"COUNTEREVIDENCE","claim":"Retrieval-quality multimodal embedding requires explicit representation training; raw generation features are not automatically calibrated retrieval space."},
+    {"from":"S-MOBILECLIP2","to":"S-INTERNAL-MVC","type":"MANDATORY_COUNTERBASELINE","claim":"Very small independent encoder may be cheap enough to justify duplicate vision work if open-set gain is large."},
+    {"from":"S-DINOV3","to":"S-INTERNAL-MVC","type":"DENSE_FEATURE_COUNTERBASELINE","claim":"Frozen dense patch features permit simple downstream readouts and retrieval."},
+    {"from":"S-LLAMA-MTMD-H","to":"S-HF-Q35","type":"FEATURE_SURFACE_LIMIT","claim":"Public mtmd exports final encoded media embeddings and positions, not Qwen3.5 pre-merger hidden-state surface."}
+  ],
+  "deduplication": {
+    "existing_qndr_feature_reuse_claim": "REUSED_NOT_COUNTED_AS_NEW",
+    "new_nodes_counted": ["Qwen3.5 representation strata/DeepStack removal","public precomputed-embedding decode helper","concrete MobileCLIP2-S0 counterbaseline","visual state lifetime split"]
+  }
+}

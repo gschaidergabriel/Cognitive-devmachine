@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2253p0700-chatgpt-secondary-visual-epoch-compat",
+  "trigger": "q23",
+  "actor": "chatgpt-secondary/OpenAI/GPT-5.6-Sol",
+  "subject": "self.root / human-surface Frank v0.1 multimodal perception",
+  "authority": "Clay Research Entity worker; target self-Harness authority remains proposal-only",
+  "status": "MATERIAL_DELTA_CANDIDATE_NOT_PROMOTED",
+  "observed_at": "2026-08-10T22:53:00+07:00",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_commits_created": [
+    "70ae4c50e15f4bdc597b2a1a8389113e5f6e0230",
+    "9032085e6450d34421bc11014579d102abda576d",
+    "a226cd243fda7d01ba34c6af51b8a345eb6c93ff"
+  ],
+  "concurrent_target_q23_refs": [
+    "390d01c03d745b53e30b79b655eea224f8504177",
+    "082d363a190b7c2743e37f35480f04cda12f9c32",
+    "9ffead52492e1d7c25c363af36e14e59f998bb0d"
+  ],
+  "progress_deltas": [
+    {
+      "kind": "ARCHITECTURE_DELTA",
+      "id": "Q23-VISUAL-EPOCH-COMPAT-CERT-V1",
+      "claim": "Retain exact VisualFeatureEpoch equality as the fail-closed default. Permit cross-epoch prototype reuse only behind an exact source/target, direction-bound, scope-bound, held-out, revocable compatibility certificate; otherwise require re-encode. Compatibility bridges are temporary and should be retired by progressive current-epoch prototype backfill when raw ROI/image evidence is available.",
+      "promotion": "CANDIDATE"
+    },
+    {
+      "kind": "NEGATIVE_RESULT",
+      "id": "Q23-NR-TOKEN-ORDER-POOLER-SPATIAL-COLLISION",
+      "claim": "The current reference global-mean plus token-order-bucket descriptor is not sufficient as a production spatial descriptor. A left/right 2D layout swap can collide at cosine 1.0 in the synthetic oracle while 2D geometry-bound pooling separates it.",
+      "promotion": "SUPPORTED_SYNTHETIC_MECHANISM_NEGATIVE_RESULT"
+    },
+    {
+      "kind": "TEST_DELTA",
+      "id": "Q23-T6-REAL-CROSS-EPOCH-GEOMETRY",
+      "claim": "Real Qwen/libmtmd held-out testing must measure exact-epoch versus raw cross-epoch versus certified mapping versus full re-encode, bind real nx/ny/position schema, include open-set calibration and server-vs-cli differential, and demonstrate bridge retirement/recovery before promotion.",
+      "promotion": "REQUIRED_FALSIFIER"
+    },
+    {
+      "kind": "CAPABILITY_NEGATIVE_RESULT",
+      "id": "Q23-TARGET-VPS-BOUNDED-MM-SURFACE-NOT-DETECTED-20260810",
+      "claim": "Accepted self-hosted target VPS read-only inventory receipt 31406011620 found no llama-server/llama-cli/llama-mtmd-cli and no Qwen/mmproj artifacts in its bounded known paths; nvidia-smi and rocminfo were not found. No model inference was executed. This is bounded non-detection, not universal host absence.",
+      "evidence_ref": "gschaidergabriel/Dr.-Unterweger@9ffead52492e1d7c25c363af36e14e59f998bb0d",
+      "promotion": "REAL_TARGET_VPS_CAPABILITY_EVIDENCE_ONLY"
+    }
+  ],
+  "synthetic_oracle": {
+    "status": "PASS",
+    "good_cross_epoch": {
+      "heldout_top1_accuracy": 1.0,
+      "heldout_open_set_auc": 1.0,
+      "heldout_fpr95": 0.0,
+      "heldout_known_score_p05": 0.910584,
+      "heldout_unknown_score_p95": 0.407310
+    },
+    "deliberately_bad_mapping": {
+      "heldout_top1_accuracy": 0.00390625,
+      "heldout_open_set_auc": 0.500712,
+      "heldout_fpr95": 0.936198,
+      "certificate_disposition": "REJECT"
+    },
+    "spatial_counterexample": {
+      "row_bucket_cosine": 1.0,
+      "spatial_pyramid_cosine": 0.0243902439
+    },
+    "epistemic_limits": [
+      "synthetic_only",
+      "no real Qwen embeddings measured",
+      "no real libmtmd grid metadata measured",
+      "no production transform learned",
+      "no target-VPS compatibility-workflow receipt visible at close"
+    ]
+  },
+  "fresh_external_primary_findings": [
+    {
+      "source": "ggml-org/llama.cpp current libmtmd/server source",
+      "finding": "The server consumes libmtmd output embeddings as a physical buffer before llama decode, so one-encode feature reuse remains physically plausible; this does not prove safe familiarity geometry."
+    },
+    {
+      "source": "ggml-org/llama.cpp issue 22785",
+      "finding": "Reported Qwen-VL fine-grained OCR degradation in llama-server while llama-cli on the same build remains correct despite identical visual-token count; this supports binding preprocessing/grid/position identity and mandating server-vs-cli differential rather than treating token count as spatial equivalence."
+    },
+    {
+      "source": "primary backward-compatible representation learning literature",
+      "finding": "Measured mapping between embedding generations can preserve compatibility in some settings, supporting a falsifiable certificate candidate but not automatic compatibility."
+    },
+    {
+      "source": "primary VLM open-set research",
+      "finding": "VLM representations are not inherently reliable open-set recognizers; held-out OOD metrics remain mandatory."
+    }
+  ],
+  "affected_frank_v0_1_work": [
+    "F-V01-06-DIGITAL-RETINA-MVC",
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "next_falsifier": "Q23-T6 REAL-CROSS-EPOCH-GEOMETRY on exact Qwen3.5-4B/mmproj/llama.cpp identities with provenance-bound screenshot fixtures, real libmtmd embedding+nx/ny/position capture, exact-epoch/raw-cross-epoch/certified-map/full-reencode variants, open-set metrics, server-vs-cli OCR/spatial differentials, single-factor runtime/preprocessor/backend/mmproj perturbations, restart/recovery and progressive backfill/bridge retirement.",
+  "target_vps_pass_claimed": false,
+  "whole_frank_v0_1_acceptance_claimed": false,
+  "paid_or_final_training_started": false,
+  "research_reentry": "RECORDED_IN_CLAY_TRIGGER_RUN"
+}

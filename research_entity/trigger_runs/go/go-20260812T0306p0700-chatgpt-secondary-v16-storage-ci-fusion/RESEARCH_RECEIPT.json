@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0306p0700-chatgpt-secondary-v16-storage-ci-fusion",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank v0.1",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_parent_observed_before_write": "ca49f3a7237606ac3c16fa7d2b01db0721aed9e9",
+  "program": "FRANK_V0_1",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "fresh_target_repo_state": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed_after_cycle": "f68a6c798e19a7d6f53587d603e9d9ef0a498056",
+    "merged_v16_handoff_fence_pr": 441,
+    "merged_v16_handoff_fence_main": "0f0ea1e03c869167783d111a29b241424dfce111",
+    "merged_projection_schema_authority_pr": 443,
+    "merged_projection_schema_authority_main": "a46a88d8a78d0970852d20032b8c9069e3b1b7fb",
+    "merged_directory_anchor_ci_repair_pr": 445,
+    "merged_directory_anchor_ci_repair_main": "f68a6c798e19a7d6f53587d603e9d9ef0a498056"
+  },
+  "grf_collapse": {
+    "observed_reality": [
+      "Baseline V16 allowed the released epoch-A actor to clear epoch-A idle handoff after a successor interactive epoch B was already BUSY.",
+      "Independent V15 presence BUSY fencing still blocked AUTONOMOUS admission in that window.",
+      "Projection outbox and worker candidate modules directly executed DDL outside the central migration executor and were the only repo-static violations at that point.",
+      "The generic directory-anchor PR gate failed before Frank tests because actions/checkout ran against a persistent self-hosted workspace lacking .git, then attempted git config --local after cleaning it."
+    ],
+    "retained_mechanisms": [
+      "V16 confirmation must bind identity, explicit released epoch, pending-row epoch, current semantic IDLE at that exact epoch, cleared execution context, and a one-row CAS.",
+      "Candidate schema installation may remain opt-in while DDL execution authority is centralized through apply_current_schema.apply().",
+      "Self-hosted validation should fetch exact candidate bytes into a run-owned tree rather than depend on persistent default-workspace git state."
+    ],
+    "counterevidence_preserved": [
+      "The V16 baseline defect did not bypass the independent V15 BUSY exclusion gate; no concurrent autonomous execution was demonstrated.",
+      "Private hash-pinned SQLite 3.53.4 regression success does not prove the productive Frank process loads that fixed runtime.",
+      "The accepted runner's ordinary Python 3.12.3 environment still reported sqlite3.sqlite_version=3.45.1 during the final directory-anchor CI validation.",
+      "Generic Deep Integrity remained externally blocked by account billing/spending-limit infrastructure during related PR validation and was not promoted to PASS."
+    ]
+  },
+  "go_oob_experiment": {
+    "count_new_in_this_invocation": 1,
+    "experiment": "STALE_IDLE_CONFIRMATION_AFTER_SUCCESSOR_ACQUIRE",
+    "baseline_target_run": 31528096679,
+    "baseline_artifact_id": 9115741483,
+    "baseline_artifact_sha256": "1c6435b8cec57011236b4d2b3d4d462e06b9ce7d52dbb8593cff48d7480b9736",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "status": "SUPPORTED_STALE_CONFIRMATION_UNDERBINDING",
+    "stale_old_actor_cleared_handoff_during_successor_busy": true,
+    "autonomous_remained_blocked_by_v15_busy": true,
+    "classification": "PROVENANCE_STATE_UNDERBINDING_WITH_AUTONOMOUS_CONCURRENCY_CONTROL_HOLDING",
+    "canonical_state_mutated": false,
+    "external_effect_performed": false,
+    "additional_unusual_experiments_after_this": 0
+  },
+  "v16_fusion": {
+    "prior_counterexample_lane": "PR#195 explicit released_lease_epoch + CAS fenced ABA after a newer handoff replaced the row",
+    "new_counterexample_lane": "pending predecessor handoff remains epoch A while successor interactive epoch B is already BUSY",
+    "combined_repair": [
+      "caller session/client identity matches released handoff",
+      "released_lease_epoch is a positive integer",
+      "released_lease_epoch equals current pending handoff epoch",
+      "current V15 presence is IDLE at exactly released_lease_epoch",
+      "V16 execution_id and lease_epoch are cleared",
+      "final clear uses pending-state plus released-epoch CAS and requires one changed row"
+    ],
+    "target_regression_run": 31529128237,
+    "target_regression_artifact_id": 9116156802,
+    "target_regression_artifact_sha256": "d27f762eb5321d451ab3a77081517c82a3b4018f7593f505e64882ff99a3e69d",
+    "merged_pr": 441,
+    "merged_main": "0f0ea1e03c869167783d111a29b241424dfce111",
+    "old_pr_195_closed_as_superseded": true,
+    "outcome": "PROMOTE_NARROW_V16_HANDOFF_PROVENANCE_FENCE_TO_CURRENT_MAIN"
+  },
+  "projection_schema_authority_fusion": {
+    "baseline_static_failures": [
+      "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/projection_outbox_v1_candidate.py",
+      "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/projection_worker_v1_candidate.py"
+    ],
+    "repair": "Route explicit candidate DDL installation through runtime/state/apply_current_schema.py apply(conn, files), while keeping candidate SQL outside UNIFIED_FILES and GRAPH_FILES production migration lists.",
+    "target_repair_run": 31530140786,
+    "target_static_integrity": "PASS repo_static_integrity_audit",
+    "outbox_sqlite_3_53_4_recovery_run": 31530402707,
+    "outbox_result": "PASS exact-head hash-pinned SQLite 3.53.4 crash/replay and bounded recovery gate",
+    "worker_sqlite_3_53_4_recovery_run": 31530402990,
+    "worker_result": "PASS exact-head hash-pinned SQLite 3.53.4 lease/backpressure/crash-recovery gate",
+    "merged_pr": 443,
+    "merged_main": "a46a88d8a78d0970852d20032b8c9069e3b1b7fb",
+    "candidate_promoted_to_production_schema": false,
+    "outcome": "PROMOTE_SCHEMA_EXECUTION_AUTHORITY_REPAIR_WITH_CANDIDATE_STATUS_UNCHANGED"
+  },
+  "directory_anchor_ci_repair": {
+    "baseline_failed_run": 31530403071,
+    "baseline_failure": "actions/checkout exited 128 before Frank tests because persistent self-hosted workspace lacked .git and checkout cleanup attempted git config --local",
+    "repair": "Manual read-only exact-head fetch into /tmp run-owned repository, separate base fetch for direct tree diff, all tests executed from run-owned tree, bounded artifact upload and cleanup.",
+    "first_repair_run": 31531018593,
+    "first_repair_negative_result": "Exact fetch succeeded but depth-1 origin/main...HEAD diff lacked a merge base; static audit still passed.",
+    "final_target_run": 31531103368,
+    "final_target_artifact_id": 9116882942,
+    "final_target_artifact_sha256": "c9ea439cc7c20b8dae0a3d806550e01b509a4cc7369cbb6768dfe0bf4f02e98a",
+    "final_results": {
+      "execution_gate_baseline": "PASS_FRANK_EXECUTION_GATE_V1",
+      "directory_anchor_replacement": "PASS_DIRECTORY_ANCHOR_BLOCKS_LOCKFILE_REPLACEMENT_SPLIT_BRAIN",
+      "two_concurrent_gate_leases_observed": false,
+      "successor_after_actual_release": "ACQUIRED",
+      "repo_static_integrity": "PASS repo_static_integrity_audit",
+      "go_oob_experiment_added": false,
+      "runner_python": "3.12.3",
+      "runner_python_sqlite": "3.45.1"
+    },
+    "merged_pr": 445,
+    "merged_main": "f68a6c798e19a7d6f53587d603e9d9ef0a498056",
+    "outcome": "PROMOTE_CI_HARNESS_REPAIR_ONLY_NO_PRODUCT_RUNTIME_CREDIT"
+  },
+  "live_external_evidence": [
+    {
+      "source": "SQLite WAL documentation - WAL-reset bug",
+      "claim_used": "The documented WAL-reset corruption race affects versions through 3.51.2 and is fixed in 3.51.3+, with listed backports.",
+      "url": "https://www.sqlite.org/wal.html#the_wal_reset_bug"
+    }
+  ],
+  "workspace_delta_recommendation": {
+    "F-V01-08-TOKEN-API-CLIENTS": {
+      "action": "ADD_V16_RELEASED_EPOCH_CONFIRMATION_FENCE_AS_CURRENT_MAIN_EVIDENCE",
+      "keep_package_status": "OPEN"
+    },
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": {
+      "action": "ADD_MERGED_V16_PROVENANCE_FENCE_AND_PROJECTION_SCHEMA_AUTHORITY_PLUS_RECOVERY_EVIDENCE",
+      "keep_package_status": "IN_PROGRESS",
+      "sqlite_release_gate": "KEEP_OPEN",
+      "reason": "Private fixed-runtime tests pass, but ordinary accepted-runner Python still reports SQLite 3.45.1 and exact productive Frank SQLite loading/trust/downgrade rejection remains unproven."
+    }
+  },
+  "remaining_high_value_blockers": [
+    "F-V01-01 trusted real-artifact attestation plus unique provenance-bound semantic lineage and sibling/transplanted/stale clone rejection",
+    "F-V01-13 exact productive fixed SQLite runtime identity/trust/downgrade resistance or machine-checked proof that WAL-reset trigger topology is unreachable",
+    "F-V01-09 dedicated exact-current lifecycle crash/restart replay, real-provider timeout-after-acceptance plus durable reconciliation, and final production effect-routing/receipt integration",
+    "F-V01-02 typed IR/type-effect/evaluator/compiler/runtime obligations remain broadly open beyond current narrow frontend evidence",
+    "Final paid/model training remains owner-gated and unauthorized"
+  ],
+  "research_disposition": "PROMOTED_THREE_NARROW_MERGED_DELTAS_WITH_RELEASE_GATES_PRESERVED",
+  "training_authorization_changed": false,
+  "frank_self_harness_authority_changed": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

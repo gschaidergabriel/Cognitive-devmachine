@@ -1,60 +1,40 @@
 {
-  "schema_version": "3.0",
-  "program_id": "frank-v0.1-only",
+  "schema_version": "4.0",
+  "program_id": "clayverse-clay-machine-only",
   "status": "ACTIVE",
-  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
-  "current_stage": "FRANK_V0_1",
-  "stage_order": ["FRANK_V0_1"],
-  "status_footer_mode": "FRANK_V0_1_PLUS_DOOMSDAY",
+  "owner_directive": "research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md",
+  "current_stage": "CLAY_MACHINE",
+  "stage_order": ["CLAY_MACHINE"],
   "target": {
-    "id": "FRANK_V0_1",
-    "native_identity": "self.root",
-    "human_surface_name": "Frank",
-    "host": "accepted Hostinger Ubuntu VPS",
-    "acceptance_contract": "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md",
-    "workspace": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
-    "terminal_receipt": "SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json"
+    "id": "CLAY_MACHINE",
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "workspace": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
+    "mission": "ClayCode as a real programming language with compiler, virtual Clay Machine, Clay environment, deep Linux interoperability, and a minimal ClayOS"
   },
   "stage_gates": {
-    "FRANK_V0_1": {
-      "label": "Frank v0.1",
+    "CLAY_MACHINE": {
+      "label": "Clay Machine",
       "status": "IN_PROGRESS",
-      "gate_name": "FRANK_V0_1_FINISHED_GATE",
       "progress_source": {
         "kind": "work_packages",
-        "path": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+        "path": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
         "field": "work_packages"
       },
-      "required_pass_artifacts": ["SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json"],
-      "completion_law": "PASS only when the exact accepted self.root/Frank v0.1 binary/state identity is running on the accepted target VPS and satisfies the current finished-v0.1 acceptance contract. ClayCode, UnifiedDB, GWT, Hyperposition, Retina/MVC, Needle/translator, API, effect authority, proactive agency, security/recovery and model work are component obligations of this single gate.",
-      "training_authorized": false
+      "completion_law": "PASS only when the canonical ClayCode language/compiler/runtime can execute real programs in the virtual Clay Machine, the Clay environment can interact with Linux through explicit typed boundaries, and the minimal ClayOS boots/runs its defined scope with reproducible tests and receipts. Component or synthetic PASS does not imply whole-machine PASS."
     }
   },
-  "superseded_stage_model": {
+  "superseded_programs": {
     "status": "HISTORICAL_EVIDENCE_ONLY",
-    "stages": [
-      "L0_ARCHIVE_ASSIMILATION",
-      "BASE_CLAYCODE_RELEASE",
-      "H1_REFERENCE_HARNESS",
-      "H2_CLAYCODE_HARNESS",
-      "H3_ONE_MODULE_FRANK",
-      "UDB_UNIFIED_DATABASE",
-      "DATA_LORA_TRAINING_DATA",
-      "WAIT"
-    ],
-    "law": "These identifiers may appear in historical receipts/workspaces and can contribute evidence to current Frank v0.1 component work, but they are not active programme stages or release targets."
+    "programs": ["FRANK_V0_1", "UCM2_ONLY", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_FRANK"],
+    "law": "Legacy Frank/self.root/UCM2/harness paths may contribute bounded implementation or regression evidence when semantics still match, but they do not select active work or define current completion."
   },
-  "progress_semantics": {
-    "complete_statuses": ["PASS","COMPLETE","COMPLETED","DONE","CLOSED"],
-    "failed_statuses": ["FAILED","REFUTED"],
-    "unfinished_statuses": ["OPEN","CLAIMED","ACTIVE","IN_PROGRESS","BLOCKED","BLOCKED_OWNER_AUTHORIZATION","NOT_PASS"],
-    "formula": "100 * completed_subcheck_weight / total_subcheck_weight where subchecks exist, otherwise completed_work_package_weight / total_work_package_weight",
-    "default_work_package_weight": 1,
-    "bar_cells": 20,
-    "rounding": "nearest_integer",
-    "rule": "Visible programme progress is Frank v0.1 progress. No separate GitHub/Reference/Clay Harness or H1/H2/H3 progress block exists."
+  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS code, tests, architecture, work items, or explicit negative results.",
+  "authority_rules": {
+    "grf": "reasoning_framework_only",
+    "together": "FORBIDDEN",
+    "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED",
+    "host_behavior": "NOT_LANGUAGE_AUTHORITY",
+    "model_consensus": "NOT_SEMANTIC_AUTHORITY"
   },
-  "trigger_target_rule": "Every registered trigger is a specialized research/build/test lens on FRANK_V0_1 and must re-enter code/tests/architecture/work/negative-results for Frank v0.1.",
-  "training_rule": "Final paid/model training remains blocked until explicit project-owner authorization. Training-data preparation and bounded runtime learning allowed by existing contracts may proceed as Frank v0.1 component work.",
-  "last_updated": "2026-08-10T20:39:00+07:00"
+  "last_updated": "2026-08-16T04:35:00+07:00"
 }

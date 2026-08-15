@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260815T1953p0700-chatgpt-secondary-typeref-totality",
+  "candidate_successor_head": "79af65690b6252cd2109d4f9542f96341ad9bf58",
+  "pull_request": 583,
+  "changes_since_first_supported_candidate": [
+    "Add iterative TypeRef diagnostic rendering to remove the same host-stack dependency from mismatch/error formatting.",
+    "Extend the fixed 4096-depth ordinary candidate regression from 5 to 6 checks.",
+    "Keep production typecheck.py untouched."
+  ],
+  "candidate_successor_workflow": {
+    "run_id": 31886097862,
+    "job_id": 95015510788,
+    "name": "ClayCode TypeRef Totality Candidate VPS",
+    "status_at_observation": "queued",
+    "credit": "ZERO_UNTIL_EXECUTED"
+  },
+  "concurrent_main_observation": {
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "latest_main_observed": "be53e78c0c603a2d5f775cd0fe978cf0c5e15773",
+    "latest_main_change": "PR586 ProductStart V6 pre-Python boundary discriminator",
+    "candidate_original_base": "b0518b68fe79140bfbc5c4b48d57aba746ece1ba",
+    "classification": "MAIN_ADVANCED_NONOVERLAPPING_BUT_CURRENT_MAIN_COMPOSITION_NOT_YET_PROVEN"
+  },
+  "decision": "DO_NOT_PRODUCT_INTEGRATE_OR_PROMOTE_FROM_STALE_BASE",
+  "reason": "The successor candidate requires its own exact-head runner PASS and any production integration must be rebuilt/reviewed against fresh main be53e78c or later. Concurrent ProductStart evidence belongs to another worker and is preserved rather than overwritten.",
+  "promotion": "NO_CHANGE"
+}

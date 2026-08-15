@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_SINGLE_VM_FRONTEND_ORACLE_TARGET_RECEIPT",
+  "created_local": "2026-08-16T04:49:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "runtime_core": {
+    "pr": 600,
+    "head": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
+    "workflow_run": 31910296146,
+    "self_hosted_runner": "clay-3",
+    "result": "PASS",
+    "explicit_vm_frames": true,
+    "deep_call_chain_depth": 1500,
+    "explicit_call_depth_limit": true
+  },
+  "frontend_oracle": {
+    "pr": 602,
+    "head": "482b7b62975aaa5b02d58a5d4a0373b56158a425",
+    "workflow_run": 31910116292,
+    "result": "PASS",
+    "role": "SOURCE_FRONTEND_TO_VM_DIFFERENTIAL_ORACLE_ONLY",
+    "production_runtime_candidate": false
+  },
+  "fusion_decision": {
+    "target_runtime_count": 1,
+    "runtime_core_preference": "PR600",
+    "retain_from_pr602": "frontend/source differential tests and fail-closed semantic cases",
+    "do_not_do": "Do not merge two independent VM runtimes.",
+    "blocking_boundary": "Canonical ClayCodeBaseTypedIR/v1 does not yet provide a typed executable expression graph; function bodies remain body_tokens.",
+    "next_discriminator": "Define an admitted provenance-bound executable typed-expression IR after type/effect checking, lower it into the single serialized VM core, and port the PR602 differential oracle onto that path."
+  },
+  "unusual_experiment_accounting": {
+    "this_worker_go": 1,
+    "name": "CALL_FRAME_ALIAS_CROSSTALK",
+    "consumed": true,
+    "unsafe_shared_locals_result": 99,
+    "isolated_frame_result": 7,
+    "expected": 7,
+    "additional_unusual_experiment": false
+  },
+  "non_claims": [
+    "No canonical executable TypedIR is implemented by this receipt.",
+    "No PR600 merge is authorized by component PASS alone.",
+    "No deep Linux interoperability, ClayOS completion, self-hosting, or whole Clay Machine completion is claimed."
+  ]
+}

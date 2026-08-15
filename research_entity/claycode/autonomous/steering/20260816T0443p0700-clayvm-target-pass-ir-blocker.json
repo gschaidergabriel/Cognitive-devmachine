@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_VM_TARGET_EXECUTION_DELTA",
+  "created_local": "2026-08-16T04:43:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "candidate_pr": 600,
+  "candidate_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+  "target_execution": {
+    "workflow_run": 31909944841,
+    "workflow": "Clay Machine VM bootstrap",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "runner_name": "clay-2",
+    "checkout": "PASS",
+    "revision_and_byte_binding": "PASS",
+    "vm_bootstrap_gate": "PASS",
+    "job_conclusion": "success"
+  },
+  "promotion": {
+    "detached_serialized_vm_core": "TARGET_EXECUTED_CANDIDATE",
+    "canonical_claycode_to_vm_compiler": "NOT_PROVEN",
+    "canonical_ir_boundary": "BLOCKED_SCHEMA_IDENTITY_MISMATCH",
+    "merge_pr600": "DEFER",
+    "whole_clay_machine": "NOT_CLAIMED"
+  },
+  "blocking_reason": "The successful VM core still consumes bootstrap schema claycode.typed-ir.v0, while current canonical ClayCode typed IR is ClayCodeBaseTypedIR/v1. A successful detached VM does not prove canonical compiler lowering or provenance preservation.",
+  "fusion_state": {
+    "runtime_core": "PR600",
+    "frontend_semantic_oracle": "PR602",
+    "target_runtime_count": 1,
+    "policy": "Do not merge two independent VMs; port source/frontend differential evidence onto the single serialized/verifiable core after canonical TypedIR lowering is admitted."
+  },
+  "pr602_current_evidence": {
+    "first_exact_head": "84b13964180bced071d3b35fcf5b989a71157964",
+    "first_run": 31910010784,
+    "first_run_result": "FAIL_TEST_STEP_AFTER_SUCCESSFUL_CHECKOUT_AND_ENV",
+    "failure_class": "TEST_IMPORT_PATH_UNDER_PYTHON_MINUS_P",
+    "minimal_repair_head": "482b7b62975aaa5b02d58a5d4a0373b56158a425",
+    "repair": "explicit PYTHONPATH includes repository root and tests root",
+    "repaired_run_state_at_receipt": "QUEUED",
+    "semantic_vm_failure_claimed": false
+  },
+  "unusual_experiment_accounting": {
+    "count_this_worker_go": 1,
+    "name": "CALL_FRAME_ALIAS_CROSSTALK",
+    "consumed": true,
+    "additional_unusual_experiment": false
+  },
+  "next_falsifier": "Implement or prove a deterministic provenance-bound ClayCodeBaseTypedIR/v1-to-PR600 single-VM lowering adapter that refuses unresolved Call/MethodChain authority, then rerun exact-head target execution and port the PR602 differential policy oracle onto that runtime."
+}

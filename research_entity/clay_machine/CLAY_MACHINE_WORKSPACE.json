@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "workspace_id": "clayverse-clay-machine",
   "status": "ACTIVE",
   "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
@@ -15,7 +15,10 @@
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
       "goal": "Nominal/structural type and effect semantics independent of Python recursion/host defaults, with bounded complexity and explicit semantic authority.",
-      "blocker": "Merged TypeRef iterative traversal has a reproduced alias-wrapped depth complexity risk from branch-local ancestry copying; canonical-main non-copying DFS-path repair plus Ubuntu regression is required before treating totality as complexity-robust."
+      "blocker": "Merged TypeRef iterative traversal has a reproduced alias-wrapped depth complexity risk from branch-local ancestry copying; production remains unmodified until the non-copying candidate reproduces on self-hosted Linux and is integrated with production regression.",
+      "candidate": "PR #605 adds a non-production mutable DFS active-alias path candidate, depth-4096 regression and exact-SHA self-hosted Linux/X64 gate.",
+      "experiment_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_ALIAS_PATH_COMPLEXITY.json",
+      "local_discriminator": "At alias-wrapped depth 2048, current copy-per-branch prototype measured 0.023614s versus 0.001776s for the mutable-path candidate (~13.3x); direct-cycle, structural-cycle and sibling-branch controls passed. Sandbox timing is not release evidence."
     },
     "CM-03-EVALUATOR-INTERPRETER": {
       "status": "IN_PROGRESS",
@@ -63,6 +66,9 @@
   "frontier": {
     "canonical_product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
     "typeref_merge_commit": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
+    "typeref_linear_candidate_pr": 605,
+    "typeref_linear_candidate_head": "c7a54d6a9703380d0ea0097c485fec77abc2fcec",
+    "typeref_linear_candidate_state": "OPEN_SELF_HOSTED_RUN_NOT_YET_OBSERVED",
     "call_ownership_partition_merge_commit": "210bd190d26d5ad3aa3d0b646e52d42646680c9b",
     "unresolved_call_names": 429,
     "unresolved_call_occurrences": 464,
@@ -70,7 +76,7 @@
     "clayvm_candidate_pr": 600,
     "clayvm_candidate_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
     "clayvm_candidate_state": "DRAFT_CI_QUEUED_AND_REVIEW_BLOCKED",
-    "next_discriminator": "Repair TypeRef ancestry copying on canonical main; in parallel, replace PR #600 Python-recursive OP_CALL with an explicit Clay VM frame stack and verify exact-head CI before promotion."
+    "next_discriminator": "Observe exact-head PR #605 self-hosted candidate gate, then wire the non-copying path into production typecheck.py with regression if it passes; in parallel, replace PR #600 Python-recursive OP_CALL with an explicit Clay VM frame stack and verify exact-head CI before promotion."
   },
   "coordination_negative_result": "Parallel GO workers can currently collide on the exactly-one unusual-experiment cardinality; shared CAS/lease serialization remains required.",
   "laws": [

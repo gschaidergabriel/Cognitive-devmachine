@@ -19,9 +19,10 @@ The existing/main Clay/Frank/ClayVerse instance is a reference and evidence sour
 3. `research_entity/unified_clay_machine/UCM2/README.md`
 4. `research_entity/unified_clay_machine/UCM2/KEY_MODULE_CONTRACT.md`
 5. `research_entity/unified_clay_machine/UCM2/GO_PROTOCOL.md`
-6. latest versioned report in `research_entity/unified_clay_machine/UCM2/reports/`
-7. newest available VPS/work-log/repository evidence for the main instance
-8. relevant UCM2 code/state/tests/evidence
+6. `research_entity/unified_clay_machine/UCM2/FREE_API_COGNITIVE_ORGAN_FABRIC.md`
+7. latest versioned report in `research_entity/unified_clay_machine/UCM2/reports/`
+8. newest available VPS/work-log/repository evidence for the main instance
+9. relevant UCM2 code/state/tests/evidence
 
 Do not start an independent research lineage from chat/model memory.
 
@@ -29,9 +30,9 @@ Do not start an independent research lineage from chat/model memory.
 
 When the human sends `go`, execute the maximal targeted swarm cycle defined in `research_entity/unified_clay_machine/UCM2/GO_PROTOCOL.md`.
 
-`go` is UCM2-only: freshness ingest -> self-read -> swarm hypotheses/counter-hypotheses -> free/current evidence where useful -> build UCM2 -> use it as a ClayVerse consumer -> falsify/replay/recovery/failure controls -> record experiences -> fuse/analyse -> append-only report -> commit.
+`go` is UCM2-only: freshness ingest -> self-read -> swarm hypotheses/counter-hypotheses -> free/current evidence and API organs where useful -> build UCM2 -> use it as a ClayVerse consumer -> falsify/replay/recovery/failure controls -> record experiences -> fuse/analyse -> append-only report -> commit.
 
-Use genuinely free/replenishing APIs and local/open-source tools when they materially improve the UCM experiment. Together API is forbidden.
+Genuinely free/replenishing APIs are allowed for the **entire UCM2 cycle**, including research, source discovery, coding, building, generation, embeddings, retrieval, reranking, VLM/perception, OCR, speech, reasoning, evaluation, simulation, adversarial test generation, data transformation and analysis. NVIDIA NIM/API Catalog capabilities are a first-class candidate organ family. Together API is forbidden. No paid fallback may silently activate.
 
 ## Core law
 
@@ -42,14 +43,14 @@ Every research cycle must:
 - develop and mutate UCM2 only;
 - keep the single `UCM2_CORE` key-module architecture as the default research hypothesis;
 - represent UnifiedDB/state, world/self model, wiki/knowledge, memory/experiences, Hyperpositions and other Clay surfaces inside that unified semantic body unless evidence falsifies the design;
-- let frontier models read/query UCM2 as a real experimental Clay Machine;
+- let frontier models and useful free API/model organs read/query bounded UCM2 assemblies as a real experimental Clay Machine;
 - execute self-read, state, replay, recovery, module, graph, API and failure tests as applicable;
-- record material frontier-worker experiences inside UCM2 and summarize them in the append-only report;
+- record material frontier-worker/API/model experiences inside UCM2 and summarize them in the append-only report;
 - preserve negative results and contradictions;
 - write a new append-only versioned work report;
 - commit all material code/state/report changes to this repository;
 - export bounded findings so the main instance can consume them later without treating UCM2 as authority.
 
-No UCM2 result becomes main-instance truth merely because a frontier model produced it or because it passed inside the shadow machine.
+No UCM2 result becomes main-instance truth merely because a frontier model/API produced it or because it passed inside the shadow machine.
 
 If the latest VPS state cannot be directly verified, mark the input gap explicitly and never claim an unseen VPS state as current.

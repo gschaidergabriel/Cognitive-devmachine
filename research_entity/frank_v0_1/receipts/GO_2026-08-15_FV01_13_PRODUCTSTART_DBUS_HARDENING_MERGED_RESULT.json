@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "trigger": "go",
+  "worker_provenance": "ChatGPT GPT-5.6 Sol temporary Clay organ",
+  "macro_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "EXECSTART_RENDERING_PATH_TOKEN_COLLISION",
+    "additional_unusual_experiments": 0,
+    "outcome": "greedy human-rendered ExecStart path extraction refuted as a canonical executable identity surface"
+  },
+  "primary_source_basis": "systemd D-Bus Service.ExecStart exposes structured executable-path and argv records; typed measurement is preferred over parsing a human rendering for this boundary",
+  "frank_main_lineage": {
+    "merged_pr_586": "pre-Python V6 ProductStart discriminator",
+    "merged_pr_590": "persistent PR-path workflow trigger",
+    "merged_pr_591": "typed D-Bus executable-path hardening of the single #586 gate",
+    "pr_591_base_sha": "43646539dbb66541e1c3ade148309318a2427340",
+    "pr_591_head_sha": "207fdcdae5c54259c68bda568e10f9e8462c6535",
+    "pr_591_tested_merge_sha": "223760d6ddc7fc83c323f804583fb006b73b98e7",
+    "pr_591_merged_main_sha": "6a7201b6a2b5f8ce16321af37bc6e13961a00834"
+  },
+  "fresh_main_target_evidence": {
+    "workflow_run": 31886402749,
+    "conclusion": "SUCCESS",
+    "runner": "clay",
+    "host": "clayverse",
+    "artifact_id": 9247373959,
+    "artifact_sha256": "3ee7c82c7fbc6a2d5d80575dfd8efedb3ad9a93aacc3e87ae85bce66bd858b29",
+    "tested_repository_sha": "223760d6ddc7fc83c323f804583fb006b73b98e7",
+    "regression": "PASS 11/11",
+    "new_go_unusual_experiment_count": 0,
+    "static_integrity": "PASS",
+    "units": [
+      {
+        "unit": "frank-laeufer-rae.service",
+        "load_state": "loaded",
+        "typed_exec_path": "/usr/bin/python3",
+        "exec_path_source": "SYSTEMD_DBUS_SERVICE_EXECSTART",
+        "status": "NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY",
+        "user": "EMPTY"
+      },
+      {
+        "unit": "frank-laeufer.service",
+        "load_state": "loaded",
+        "typed_exec_path": "/usr/bin/python3",
+        "exec_path_source": "SYSTEMD_DBUS_SERVICE_EXECSTART",
+        "status": "NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY",
+        "user": "root"
+      }
+    ],
+    "raw_exec_argv_emitted": false,
+    "service_started_by_gate": false,
+    "service_stopped_by_gate": false,
+    "frank_database_opened": false,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "independent_replication": {
+    "workflow_run": 31886270491,
+    "conclusion": "SUCCESS",
+    "tested_sha": "90a1c7750596bbbaacbfc1be93c37fadb354fbfe",
+    "regression": "PASS 11/11",
+    "same_two_typed_rejections": true
+  },
+  "duplicate_control": {
+    "pr_588": "CLOSED_SUPERSEDED_REPLICATION",
+    "parallel_gate_merged": false
+  },
+  "grf_collapse": {
+    "human_rendered_execstart_as_preferred_identity_measurement": "REJECT",
+    "typed_dbus_execstart_for_prepython_boundary": "PROMOTE_TO_VERIFIED_AT_THIS_MEASURED_SURFACE",
+    "either_current_dormant_unit_is_current_v6_productstart": "REJECT",
+    "no_canonical_productstart_exists_elsewhere": "NOT_CLAIMED",
+    "fv01_13_complete": false
+  },
+  "next_discriminator": "Provision or discover one canonical non-root ProductStart service whose first executable directly crosses the accepted V6 launcher; then compose identity anchor, clean environment, fixed SQLite, canonical UnifiedDB WAL persistence, restart/readback, stale-anchor/downgrade/library-swap, lineage and rollback controls.",
+  "training_authorized": false
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260815T1953p0700-chatgpt-productstart-envfile-argv-chimera",
   "program": "FRANK_V0_1",
   "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
@@ -55,7 +55,50 @@
       "artifact_digest": "sha256:2050f99973a04d5c7b79e607797eb94e66fc50ecb72a269878d1c373029d275f",
       "loaded_candidate_units": 2,
       "dormant_current_v6_semantic_candidates": 0,
-      "measurement_limitation": "initial argv object binding intentionally failed on symlinked /usr/bin/python3; ordinary repair commit 05e924ec3b983c8baa7ad1987166775fd9c8928e removes that measurement artifact and remains separate from unusual-experiment accounting"
+      "measurement_limitation": "initial argv object binding intentionally failed on symlinked /usr/bin/python3"
+    },
+    "repaired_exact_target_run": {
+      "workflow_run": 31886083243,
+      "head": "05e924ec3b983c8baa7ad1987166775fd9c8928e",
+      "runner": "clay-3",
+      "conclusion": "SUCCESS",
+      "artifact_id": 9247305549,
+      "artifact_digest": "sha256:971e47579414784c8963cb0eba8a209f069ff7742cdd2a950a9355d9760289a1",
+      "repo_static_integrity": "PASS",
+      "loaded_candidate_units": 2,
+      "dormant_current_v6_semantic_candidates": 0,
+      "target_results": {
+        "frank-laeufer-rae.service": {
+          "status": "DORMANT_NOT_ADMITTED_CURRENT_V6_SEMANTICS",
+          "active_state": "inactive",
+          "sub_state": "dead",
+          "direct_exec_python": true,
+          "canonical_v6_launcher_bound": false,
+          "v6_nonroot_runtime_proven": false,
+          "environment_file_provenance_complete": false,
+          "admission_blockers": [
+            "V6_NONROOT_RUNTIME_NOT_PROVEN",
+            "CANONICAL_V6_LAUNCHER_NOT_BOUND_TO_EXECSTART_FILE_OBJECTS",
+            "ENVIRONMENTFILE_PROVENANCE_INCOMPLETE"
+          ]
+        },
+        "frank-laeufer.service": {
+          "status": "DORMANT_NOT_ADMITTED_CURRENT_V6_SEMANTICS",
+          "active_state": "inactive",
+          "sub_state": "dead",
+          "direct_exec_python": true,
+          "explicit_root_user": true,
+          "canonical_v6_launcher_bound": false,
+          "v6_nonroot_runtime_proven": false,
+          "environment_file_provenance_complete": true,
+          "admission_blockers": [
+            "V6_NONROOT_RUNTIME_NOT_PROVEN",
+            "CANONICAL_V6_LAUNCHER_NOT_BOUND_TO_EXECSTART_FILE_OBJECTS"
+          ]
+        }
+      },
+      "measurement_artifact_resolved": true,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
     }
   },
   "parallel_fusion": {
@@ -64,7 +107,14 @@
     "independent_target_run": 31885985822,
     "independent_result": "SUCCESS: both observed loaded units classified NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY because ExecStart is /usr/bin/python3 rather than directly crossing the merged V6 launcher",
     "canonical_research_receipt_commit": "c63c7b6f3cac714239c4f68e65886150716284d8",
-    "fusion": "PR586 owns the simpler pre-Python ordering discriminator on fresh main. This receipt preserves the orthogonal EnvironmentFile/resolved-argv identity counter-reality and should not duplicate PR586 implementation."
+    "frank_main_after_merge_and_ci_lifecycle": "43646539dbb66541e1c3ade148309318a2427340",
+    "fusion": "Merged #586 owns the simpler pre-Python ordering discriminator on current main; #590 keeps that gate live on relevant PRs. This receipt preserves the orthogonal EnvironmentFile/resolved-argv identity counter-reality and repaired V3 replication without duplicating the merged gate."
+  },
+  "grf_collapse": {
+    "either_observed_python_first_unit_is_a_current_admitted_v6_productstart": "REJECT_TARGET_VERIFIED_FOR_EXACT_MEASURED_CONFIG",
+    "more_attestation_of_these_two_units_is_the_highest_value_release_step": "REJECT",
+    "next_high_value_release_reality": "ONE_NEW_OR_DISCOVERED_EXACT_NONROOT_PRODUCTSTART_DIRECTLY_CROSSES_MERGED_V6_THEN_REAL_CANONICAL_UNIFIEDDB_WAL_AND_RESTART_CONTROLS",
+    "old_units_may_be_deleted_or_mutated_based_on_this_receipt": "NOT_AUTHORIZED"
   },
   "safety_scope": {
     "service_start": false,
@@ -77,5 +127,5 @@
   },
   "unusual_experiment_count_for_this_macrocycle": 1,
   "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
-  "next_falsifier": "Do not start either rejected legacy/current-config unit. Provision or discover one exact non-root ProductStart whose first ExecStart crosses the root-owned merged V6 launcher under a clean upstream environment, then bind real canonical UnifiedDB WAL persistence, fixed SQLite runtime identity, restart/readback, and rollback/downgrade/library-swap controls."
+  "next_falsifier": "Provision or discover one exact non-root ProductStart whose first ExecStart crosses the root-owned merged V6 launcher under a clean upstream environment. Only then bind real canonical UnifiedDB WAL persistence, exact fixed SQLite runtime/source/object identity, successor-generation restart/readback, and stale-anchor/downgrade/library-swap/rollback controls into one provenance-bound cohort."
 }

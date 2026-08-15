@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_VM_BOOTSTRAP_CANDIDATE_RECEIPT",
+  "trigger": "go",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "canonical_program_state_observed": "0bd57855fb52d90450b1cfeea3a572eb3dfcbc57",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_base_observed_before_branch": "a34c17b122541e54c3ee8a1bfb9b7970d0cc406e",
+  "product_main_observed_after_pr_open": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "product_branch": "clay/go-claymachine-vm-bootstrap-20260816",
+  "product_pr": 600,
+  "product_pr_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+  "product_pr_state": "DRAFT_OPEN_MERGEABLE",
+  "affected_work_packages": [
+    "CM-04-COMPILER-LOWERING-BYTECODE",
+    "CM-05-VIRTUAL-CLAY-MACHINE",
+    "CM-08-LINUX-INTEROP",
+    "CM-09-MINIMAL-CLAYOS",
+    "CM-10-TOOLING-OBSERVABILITY-RECOVERY"
+  ],
+  "candidate": {
+    "typed_ir_input": "claycode.typed-ir.v0",
+    "bytecode_magic": "CLAYVM\\x00\\x01",
+    "format_version": 1,
+    "vm_model": "bounded stack machine",
+    "admitted_types": ["Int", "Bool"],
+    "admitted_ops": ["CONST_I64", "LOAD_LOCAL", "ADD_I64", "SUB_I64", "MUL_I64", "DIV_I64", "EQ_I64", "CALL", "RET", "HOSTCALL"],
+    "validation": "module/header/index/instruction/return validation before ClayOS process admission",
+    "host_boundary": "no ambient host access; hostcall requires explicit capability",
+    "clayos_scope": "minimal process facade with RUNNING/EXITED/TRAPPED lifecycle and module hash"
+  },
+  "local_evidence": {
+    "command": "python3 -m unittest -v claymachine.test_clayvm",
+    "result": "PASS_7_OF_7",
+    "example_result": 42,
+    "scope": "local sandbox implementation equivalent to PR candidate semantics; not accepted-target or self-hosting evidence"
+  },
+  "unusual_experiment_accounting": {
+    "count_this_go": 1,
+    "consumed": true,
+    "name": "SEMANTIC_TWIN_FUNCTION_ORDER",
+    "setup": "reverse function declaration order while preserving the same typed-IR semantics",
+    "result": "byte-identical compiled module and main result 42",
+    "interpretation": "supports canonical declaration-order-independent lowering for the bounded admitted subset"
+  },
+  "ci_evidence": {
+    "first_run": 31909913092,
+    "first_result": "FAIL_BEFORE_STEPS_RUNNER_ID_0",
+    "interpretation": "ubuntu-latest workflow admission failed before VM test execution; not a VM semantic failure",
+    "repair": "switch to existing project runner labels [self-hosted, Linux, X64] and add byte-hash binding",
+    "second_run": 31909944841,
+    "second_state_at_receipt": "QUEUED_SELF_HOSTED",
+    "promotion_rule": "do not merge or claim exact-PR-head PASS until the second run actually executes and passes"
+  },
+  "primary_source_design_alignment": {
+    "webassembly": "stack-machine execution, validation before execution, explicit embedding imports rather than ambient environment access",
+    "linux_seccomp": "future defense-in-depth syscall-surface reduction only; seccomp is not treated as a complete sandbox"
+  },
+  "grf": {
+    "observed": "canonical Clay Machine work packages CM-04 and CM-05 were OPEN while an existing typed-IR frontend exists",
+    "hypothesis": "a small deterministic bytecode verifier/stack VM can establish the first executable machine boundary without inventing new ClayCode surface semantics",
+    "counterhypothesis": "the custom bytecode boundary may duplicate or prematurely freeze semantics before unresolved callable/member ownership is resolved",
+    "collapse": "RETAIN_AS_DRAFT_CANDIDATE",
+    "reason": "the VM is intentionally restricted to already admitted typed-IR Int/Bool semantics and remains draft/merge-gated"
+  },
+  "negative_results_preserved": [
+    "first exact-head GitHub Actions attempt failed before any step because the selected hosted runner path was not admitted",
+    "self-hosted exact-head run was still queued at receipt time",
+    "no accepted Hostinger/VPS execution of this ClayVM candidate occurred",
+    "no self-hosting or real kernel claim",
+    "no whole Clay Machine completion claim"
+  ],
+  "next_falsifiers": [
+    "execute the exact PR-head Clay Machine VM bootstrap gate on the self-hosted Linux runner",
+    "bind compiler output from the canonical production ClayCode frontend to this lowering boundary without hand-authored IR",
+    "classify unresolved callable/member ownership before widening CALL/HOSTCALL semantics",
+    "add verifier stack-effect/type-state validation before expanding instruction surface"
+  ]
+}

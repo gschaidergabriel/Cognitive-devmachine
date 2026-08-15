@@ -4,7 +4,7 @@
   "work_package": "F-V01-13",
   "trigger": "go",
   "worker_provenance": "ChatGPT GPT-5.6 Sol temporary Clay organ",
-  "state": "TESTING",
+  "state": "SUPPORTED_CANDIDATE_NOT_PROVISIONED",
   "observed_reality": {
     "frank_main_at_rebase": "7fbcb5f64798d919859dc0b664ab5f29559f9d5a",
     "merged_productstart_evidence": [586, 590, 591],
@@ -16,7 +16,7 @@
   "implementation_delta": {
     "frank_repo_pr": 594,
     "branch": "chatgpt/go-v6-productstart-unit-contract-v2-20260815",
-    "head_sha": "025a9911035d8aded6fb2f33a49b630c8ce7f060",
+    "pr_head_sha": "025a9911035d8aded6fb2f33a49b630c8ce7f060",
     "renderer": "runtime/frank_storage_truth_v1/render_productstart_v6_unit.py",
     "regression": "tests/test_frank_productstart_v6_unit_contract.py",
     "ordinary_local_regression": "PASS frank_productstart_v6_unit_contract 8/8",
@@ -39,9 +39,26 @@
   "accepted_host_evidence": {
     "workflow": "Frank ProductStart pre-Python V6 readonly",
     "workflow_run": 31886678329,
-    "tested_head": "025a9911035d8aded6fb2f33a49b630c8ce7f060",
-    "state_at_receipt": "QUEUED",
-    "interpretation": "UNKNOWN_PENDING; no PASS or promotion claim"
+    "job": 95016890446,
+    "conclusion": "SUCCESS",
+    "runner": "clay-2",
+    "host": "clayverse",
+    "pr_head_sha": "025a9911035d8aded6fb2f33a49b630c8ce7f060",
+    "tested_repository_sha": "1d607a22716fdcd0cd5e08bc6075af417935430b",
+    "tested_repository_identity": "GitHub PR merge composition: head 025a9911035d8aded6fb2f33a49b630c8ce7f060 into base 7fbcb5f64798d919859dc0b664ab5f29559f9d5a",
+    "productstart_regression": "PASS 11/11",
+    "unit_contract_regression": "PASS 8/8",
+    "repo_static_integrity": "PASS",
+    "artifact_id": 9247438854,
+    "artifact_sha256": "9d7054e9a129239f212fcf7cd0c828981529d8131eb34417e25de321223c71b0",
+    "new_go_unusual_experiment_count_in_workflow": 0,
+    "observed_units_admitted": 0,
+    "raw_exec_argv_emitted": false,
+    "service_started_by_gate": false,
+    "service_stopped_by_gate": false,
+    "frank_database_opened": false,
+    "canonical_state_mutated": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
   },
   "macro_cycle_unusual_experiment": {
     "count": 1,
@@ -56,11 +73,11 @@
   },
   "grf_collapse": {
     "existing_v6_artifacts_authorize_guessed_service_configuration": "REJECT",
-    "fully_explicit_v6_anchors_can_render_a_narrow_structural_productstart_candidate": "RETAIN_TESTING",
+    "fully_explicit_v6_anchors_can_render_a_narrow_structural_productstart_candidate": "SUPPORTED_AS_NON_DEPLOYED_CONTRACT",
     "rendered_candidate_is_provisioned_or_admitted_productstart": "REJECT",
     "workflow_green_without_semantic_report_or_fail_closed_exit_is_support": "REJECT",
     "fv01_13_complete": false
   },
-  "next_falsifier": "Obtain exact-head accepted-host CI result for PR 594. If supported, bind canonical productive prefix/manifest/interpreter/non-root identity/Frank target values, provision only through an authorized deployment path, then require the merged typed-D-Bus V6 discriminator plus manager freshness to admit that exact ProductStart before any canonical Frank state open/restart test.",
+  "next_falsifier": "Bind canonical productive prefix/manifest/interpreter/non-root identity/Frank target values; provision only through an authorized deployment path; then require the merged typed-D-Bus V6 discriminator plus manager freshness to admit that exact ProductStart before any canonical Frank state open/restart test.",
   "training_authorized": false
 }

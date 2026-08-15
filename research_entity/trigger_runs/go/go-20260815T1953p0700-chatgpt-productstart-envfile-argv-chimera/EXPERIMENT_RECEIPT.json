@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260815T1953p0700-chatgpt-productstart-envfile-argv-chimera",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "experiment": {
+    "name": "EXECSTART_ENVFILE_ARGV_CHIMERA",
+    "classification": "EXACTLY_ONE_BOUNDED_UNUSUAL_EXPERIMENT_FOR_THIS_CHATGPT_GO_MACROCYCLE",
+    "scope": "disposable local synthetic fixture only",
+    "mechanism_question": "Can an unchanged ExecStart template identity select different interpreted program bytes through EnvironmentFile-provided argv state?",
+    "baseline": {
+      "execstart_template_sha256": "d827d69366467d028adcea8dfda1bedb0d28223be357d981d75ac267866883d3",
+      "resolved_argv_sha256": "196653328bdd01172610a92de5afebf470a264b926b45e36e16f8c27f037381f",
+      "script_sha256": "a8648cd1d9e15ef0a7707ce38fbe495fd1f00d4390e3262f3d9edcb61e7e51ff",
+      "observable_output": "A"
+    },
+    "treatment": {
+      "execstart_template_sha256": "d827d69366467d028adcea8dfda1bedb0d28223be357d981d75ac267866883d3",
+      "resolved_argv_sha256": "76dc30e1613f60e6be20819bb810558a0a53a28729f6a2d30ba21e669b2ad9a0",
+      "script_sha256": "891d1b6f0e9199a48ab27c10cb19d3eef02cdc6307b9632ec74c0b8453ebe86b",
+      "observable_output": "B"
+    },
+    "rollback": {
+      "resolved_argv_sha256": "196653328bdd01172610a92de5afebf470a264b926b45e36e16f8c27f037381f",
+      "script_sha256": "a8648cd1d9e15ef0a7707ce38fbe495fd1f00d4390e3262f3d9edcb61e7e51ff",
+      "observable_output": "A",
+      "rollback_restored_baseline": true
+    },
+    "outcome": "SUPPORTED_COUNTER_REALITY",
+    "collapse": {
+      "execstart_template_hash_plus_interpreter_identity_is_sufficient_program_identity": "REJECT",
+      "environmentfile_or_equivalent_resolved_argv_provenance_matters_when_execution_depends_on_environment": "RETAIN",
+      "productive_hostinger_occurrence_of_this_exact_chimera": "NOT_CLAIMED"
+    },
+    "cleanup": "temporary fixture removed"
+  },
+  "implementation_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-productstart-unit-attestation-20260814-2300",
+    "candidate_commits": [
+      "c2da65ec879c5f503a5c71604d59620aa271c387",
+      "342ffb86f4d6f34968939cc64800a2a8540eaa70",
+      "05e924ec3b983c8baa7ad1987166775fd9c8928e"
+    ],
+    "files": [
+      "tests/frank_productstart_dormant_semantic_attestor_v3.py",
+      ".github/workflows/frank-productstart-dormant-semantic-attestation-v3.yml"
+    ],
+    "first_exact_target_run": {
+      "workflow_run": 31885983596,
+      "head": "342ffb86f4d6f34968939cc64800a2a8540eaa70",
+      "runner": "clay-4",
+      "conclusion": "SUCCESS",
+      "artifact_id": 9247266120,
+      "artifact_digest": "sha256:2050f99973a04d5c7b79e607797eb94e66fc50ecb72a269878d1c373029d275f",
+      "loaded_candidate_units": 2,
+      "dormant_current_v6_semantic_candidates": 0,
+      "measurement_limitation": "initial argv object binding intentionally failed on symlinked /usr/bin/python3; ordinary repair commit 05e924ec3b983c8baa7ad1987166775fd9c8928e removes that measurement artifact and remains separate from unusual-experiment accounting"
+    }
+  },
+  "parallel_fusion": {
+    "independent_pr": 586,
+    "independent_head": "25657611cf884eee03022cf9cf54c8e436a3f8a1",
+    "independent_target_run": 31885985822,
+    "independent_result": "SUCCESS: both observed loaded units classified NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY because ExecStart is /usr/bin/python3 rather than directly crossing the merged V6 launcher",
+    "canonical_research_receipt_commit": "c63c7b6f3cac714239c4f68e65886150716284d8",
+    "fusion": "PR586 owns the simpler pre-Python ordering discriminator on fresh main. This receipt preserves the orthogonal EnvironmentFile/resolved-argv identity counter-reality and should not duplicate PR586 implementation."
+  },
+  "safety_scope": {
+    "service_start": false,
+    "service_stop": false,
+    "frank_database_open": false,
+    "canonical_frank_state_mutation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false
+  },
+  "unusual_experiment_count_for_this_macrocycle": 1,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "next_falsifier": "Do not start either rejected legacy/current-config unit. Provision or discover one exact non-root ProductStart whose first ExecStart crosses the root-owned merged V6 launcher under a clean upstream environment, then bind real canonical UnifiedDB WAL persistence, fixed SQLite runtime identity, restart/readback, and rollback/downgrade/library-swap controls."
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_EXECUTABLE_TYPED_IR_SINGLE_VM_FUSION_FRONTIER",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_main_observed": "7b9901881749598cb3ee67c68fce281f05fc410d",
+  "canonical_executable_typed_ir": {
+    "pr": 609,
+    "head": "ccb52873eec7b7fdb22d5ea27d30f56456ba08d2",
+    "base": "7b9901881749598cb3ee67c68fce281f05fc410d",
+    "schema": "ClayExecutableTypedIR/v1",
+    "workflow": "ClayCode Executable TypedIR V1",
+    "run_id": 31910577429,
+    "runner": "clay-3",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "result": "PASS",
+    "checks_total": 10,
+    "exact_head_checkout": true,
+    "raw_body_tokens_reparsed": false,
+    "host_or_member_semantics_added": false,
+    "whole_machine_pass": false
+  },
+  "single_vm_runtime_core": {
+    "current_pr": 608,
+    "head": "da911b0cea8bb01826cb9f5be1579e0cb774e0f6",
+    "base": "7b9901881749598cb3ee67c68fce281f05fc410d",
+    "workflow": "Clay Machine VM bootstrap",
+    "run_id": 31910505772,
+    "result": "PASS",
+    "supersedes_pr": 600,
+    "superseded_pr_state": "CLOSED_UNMERGED_EVIDENCE_ONLY",
+    "frontend_oracle_pr": 602
+  },
+  "integration_negative_result": {
+    "claim_rejected": "A pure field-renaming adapter from canonical executable TypedIR into the current serialized VM core is sufficient.",
+    "reason": "The inherited serialized compiler surface is only num/name/bin/call with Int parameters, while the admitted decide_effect path requires Bool, nominal variants, record-field selection, boolean short-circuiting, comparisons, let/if control flow and typed returns.",
+    "outcome": "REJECT_SIMPLE_ADAPTER_RETAIN_SINGLE_VM_FUSION"
+  },
+  "next_discriminator": "Port the already-proven #602 PURE semantics/opcodes into the one #608 serialized/verifier core so it consumes #609 ClayExecutableTypedIR/v1 directly, then execute source -> canonical executable IR -> serialized bytecode -> one ClayVM differential against #602.",
+  "durable_product_reviews": {
+    "pr608_review_id": 4944793346,
+    "pr609_state": "DRAFT_EXACT_HEAD_PASS"
+  },
+  "unusual_experiment_accounting": {
+    "additional_unusual_experiment_executed": false,
+    "note": "This fusion work used ordinary deterministic code review, build and exact-head CI only; the worker's one unusual experiment was already consumed earlier in the macrocycle."
+  },
+  "coordination": {
+    "workspace_schema_1_7_stale_pointer": "At observation, CLAY_MACHINE_WORKSPACE.json schema 1.7 still named closed PR #600 as the bytecode/VM candidate. This receipt records the live supersession to PR #608 and should be folded into the next CAS-safe workspace update.",
+    "parallel_go_exactly_one_experiment_collision_risk": "OPEN"
+  },
+  "authority_limits": [
+    "No member/generic/host/effect authority minted.",
+    "No Together API usage.",
+    "No final paid/model training authorization.",
+    "No whole Clay Machine PASS."
+  ]
+}

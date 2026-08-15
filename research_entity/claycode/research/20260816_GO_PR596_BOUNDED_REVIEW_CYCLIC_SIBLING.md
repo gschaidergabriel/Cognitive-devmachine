@@ -9,12 +9,12 @@
 - Worker: temporary Clay research/build worker, GPT-5.6 Sol.
 - Research parent before write: `ce6e66e9e1fddff471a012882350ddd3f9f9e7cf`.
 - Product repo: `gschaidergabriel/Dr.-Unterweger`.
-- Product main observed unchanged: `7fbcb5f64798d919859dc0b664ab5f29559f9d5a`.
+- Product main before promotion: `7fbcb5f64798d919859dc0b664ab5f29559f9d5a`.
 - Reviewed candidate: PR #596, exact head `c75d5a1dd787be60d6785fbadc0de68606a3ba85`.
 
 ## R0 — observed reality
 
-PR #596 is open and review-gated. The current candidate replaces recursive TypeRef canonicalization/equality/diagnostic rendering with explicit work stacks while preserving the inherited WP04 rule that a parameterized nominal head is not itself alias-resolved; only its parameters are canonicalized. Existing exact-head evidence reports 8/8 fixed depth-4096 TypeRef checks and a broader current-main regression envelope.
+PR #596 began this cycle open, clean and mergeable. The candidate replaces recursive TypeRef canonicalization/equality/diagnostic rendering with explicit work stacks while preserving the inherited WP04 rule that a parameterized nominal head is not itself alias-resolved; only its parameters are canonicalized. Existing exact-head evidence reports 8/8 fixed depth-4096 TypeRef checks and a broader current-main regression envelope.
 
 No submitted PR review existed before this cycle.
 
@@ -76,20 +76,49 @@ A COMMENT review was submitted on PR #596 at exact head `c75d5a1dd787be60d6785fb
 
 Official Python documentation states that the recursion limit exists to prevent interpreter/C-stack overflow and that setting it too high can crash the process. Official dataclasses documentation states that generated equality compares fields structurally. These facts support removing host recursion from finite ClayCode TypeRef processing instead of treating a raised recursion limit as the semantic fix.
 
+## R4 / canonical promotion executed
+
+After the bounded review, live GitHub state still reported PR #596 as `mergeable=true`, `mergeable_state=clean`, base `7fbcb5f64798d919859dc0b664ab5f29559f9d5a`, head `c75d5a1dd787be60d6785fbadc0de68606a3ba85`.
+
+The PR was merged with an expected-head SHA fence so concurrent head drift would fail the mutation rather than silently promote different bytes.
+
+Canonical product merge commit:
+
+- `e8a311ef9b7743f4fb8284c2e031e2c5a332d605`
+- GitHub verification: signed/verified
+- parent: `7fbcb5f64798d919859dc0b664ab5f29559f9d5a`
+- canonical tree: `cd00ec68f9c6bc60994beefe04283d620bdaddfc`
+
+Critically, the canonical merge tree is exactly the same tree already bound to PR head / merge-context evidence: `cd00ec68f9c6bc60994beefe04283d620bdaddfc`. Therefore the previously executed exact-tree regression envelope applies to the canonical bytes, while commit identity remains separately recorded.
+
+No new post-merge runtime execution is claimed in this cycle because the dedicated TypeRef workflow is configured for `pull_request` and `workflow_dispatch`, not `push`; canonical byte identity is established, but a fresh canonical-main execution receipt remains a stronger optional follow-up.
+
 ## Collapse
 
-Outcome: `RETAIN / SUPPORTED_REVIEW_CANDIDATE`.
+Outcome: `PROMOTED_TO_CANONICAL_BYTES` for the bounded TypeRef production integration.
 
-Not promoted:
+Established:
 
-- PR #596 is not canonical main merely because this review found no blocker;
-- ClayCode compiler/runtime is not complete;
-- Clay Machine VM / ClayOS is not complete.
+- the reviewed integration is now on canonical product main;
+- canonical merge tree exactly matches the tested PR tree;
+- branch-local alias provenance survived the new cyclic-sibling discriminator;
+- generic/host/member semantics remain unpromoted.
+
+Not established:
+
+- whole ClayCode compiler/runtime completion;
+- all TypeRef consumers repository-wide are stack-total;
+- Clay Machine VM completion;
+- ClayOS completion;
+- independent semantic replication.
 
 ## Next discriminator
 
-1. Normal canonical merge decision for PR #596 under project policy.
-2. If merged, bind post-merge canonical-main bytes/receipts before promotion.
-3. Then resume the current high-information Clay Machine frontier: classify the 429 unresolved Call names / 464 occurrences and 22 MethodChain/member segments from canonical corpus authority without host/default inference or exclusion-based manufactured coverage.
+Resume the current high-information Clay Machine frontier from fresh canonical main:
 
-Rollback: this research delta is documentary only; product bytes were not changed by this cycle.
+1. re-run/re-bind the corpus census after merge;
+2. classify the 429 unresolved Call names / 464 occurrences into true language-level callable ownership vs receiver-qualified/member/library ownership without host/default inference;
+3. classify the 22 MethodChain/member segments under the same authority rule;
+4. only then add the smallest explicit semantic contracts needed by the canonical corpus.
+
+Rollback of product promotion: revert merge commit `e8a311ef9b7743f4fb8284c2e031e2c5a332d605` if later falsification finds semantic drift.

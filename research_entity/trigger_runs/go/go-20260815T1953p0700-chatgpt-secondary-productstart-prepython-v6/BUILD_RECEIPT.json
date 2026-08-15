@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260815T1953p0700-chatgpt-secondary-productstart-prepython-v6",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "base_main": "b0518b68fe79140bfbc5c4b48d57aba746ece1ba",
+    "branch": "chatgpt/go-productstart-prepython-v6-discriminator-20260815",
+    "head": "25657611cf884eee03022cf9cf54c8e436a3f8a1",
+    "pull_request": 586,
+    "pull_request_state": "DRAFT",
+    "changed_files": [
+      "tests/frank_productstart_prepython_v6_readonly_gate.py",
+      "tests/test_frank_productstart_prepython_v6_readonly_gate.py",
+      ".github/workflows/frank-productstart-prepython-v6-readonly.yml"
+    ]
+  },
+  "mechanism": "Read-only classifier rejects loaded systemd configurations whose first ExecStart executable is not the exact merged V6 launcher basename before interpreter/runtime execution; a direct V6 launcher with explicit root User is also rejected. Direct V6 + explicit non-root remains only a candidate and never becomes ProductStart PASS in this gate.",
+  "local_execution": {
+    "py_compile": "PASS",
+    "deterministic_regression": "PASS frank_productstart_prepython_v6_readonly_gate 7/7",
+    "target_state_mutated": false,
+    "new_unusual_experiment_count": 0
+  },
+  "target_execution": {
+    "workflow_run": 31885985822,
+    "job": 95015248745,
+    "head": "25657611cf884eee03022cf9cf54c8e436a3f8a1",
+    "status_at_receipt": "QUEUED",
+    "conclusion": "UNKNOWN",
+    "runner_assigned": false,
+    "credit": "ZERO_TARGET_EXECUTION_CREDIT_UNTIL_COMPLETED_RECEIPT"
+  },
+  "expected_target_result": {
+    "frank-laeufer-rae.service": "NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY",
+    "frank-laeufer.service": "NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY",
+    "epistemic_status": "PREDICTION_NOT_TARGET_EVIDENCE"
+  },
+  "safety_scope": {
+    "service_start": false,
+    "service_stop": false,
+    "frank_database_open": false,
+    "canonical_state_mutation": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false
+  },
+  "unusual_experiment_count_for_macrocycle": 1,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

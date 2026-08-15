@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_TRUTH_PLANE_AND_TYPEREF_COMPLEXITY",
+  "trigger": "go",
+  "trigger_started_local": "2026-08-16T04:29:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_parent_observed_before_receipt_write": "121bc1f48b810cf0753054b835231e64a0214a76",
+  "product_main_observed": "a34c17b122541e54c3ee8a1bfb9b7970d0cc406e",
+  "observed_truth_plane_conflict": {
+    "new_owner_override": "CLAYVERSE_CLAY_MACHINE_ONLY",
+    "stale_program_state_before_this_cycle": "FRANK_V0_1",
+    "stale_bootstrap_before_this_cycle": "FRANK_V0_1",
+    "risk": "future workers could regress work selection if they booted only the legacy mandatory files"
+  },
+  "truth_plane_delta": {
+    "owner_directive_commit": "9b3b1f59df0904c530a39ed999a6b09619bbaffb",
+    "workspace_commit": "170fbfe310548edf7fd405cbf81f21b38336f264",
+    "program_state_commit": "c1d4d43c5da17da22a5053b2d2421a53d5f61029",
+    "bootstrap_commit": "121bc1f48b810cf0753054b835231e64a0214a76",
+    "result": "ACTIVE_BOOT_AND_PROGRAM_ROUTING_NOW_CLAYVERSE_CLAY_MACHINE_ONLY"
+  },
+  "concurrent_change": {
+    "pr596": "MERGED_DURING_CYCLE_BY_OTHER_WORKER",
+    "typeref_merge_commit": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
+    "immediate_successor_main": "a34c17b122541e54c3ee8a1bfb9b7970d0cc406e",
+    "action_this_worker": "DO_NOT_REMERGE; reinterpret complexity evidence against canonical merged bytes"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ALIAS_PARAMETERIZED_DEPTH_COMPLEXITY",
+    "bounded": true,
+    "scope": "local detached reproduction of the merged _canonical traversal mechanism; not an accepted-VPS product-byte performance receipt",
+    "shape": "A0 -> Box<A1> -> ... -> Box<An> -> Int",
+    "measurements": [
+      {"depth": 4096, "seconds": 0.121404, "peak_mib": 0.904},
+      {"depth": 8192, "seconds": 0.413335, "peak_mib": 1.594},
+      {"depth": 16384, "seconds": 1.768229, "peak_mib": 3.156},
+      {"depth": 32768, "seconds": 14.966441, "peak_mib": 6.373}
+    ],
+    "mechanism": "growing alias ancestry is repeatedly copied through set(inherited_aliases) and frozenset(active_aliases) at structural descent",
+    "hypothesis": "explicit-stack TypeRef traversal removes Python recursion dependence without introducing a material pathological complexity surface",
+    "counterhypothesis": "branch-local ancestry copying is semantically correct but can become superlinear on alias-wrapped parameter depth",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED_LOCAL_MECHANISM_SCOPE",
+    "promotion": "DO_NOT_TREAT_CURRENT_TYPEREF_TOTALITY_AS_COMPLEXITY_ROBUST_UNTIL_CANONICAL_REPAIR_AND_UBUNTU_REGRESSION"
+  },
+  "github_write_before_truth_plane": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 596,
+    "review_id": 4944763237,
+    "action": "COMMENT",
+    "purpose": "record the complexity counterevidence and a bounded non-copying DFS-path repair direction"
+  },
+  "recommended_repair": {
+    "mechanism": "retain one mutable DFS-path alias set with explicit enter/exit frames instead of copying the full ancestry set into every child",
+    "required_invariants": [
+      "A -> Box<A> remains fail-closed as TYPE_ALIAS_CYCLE",
+      "Pair<A,A> with A -> Int keeps sibling alias provenance isolated",
+      "existing diagnostic rendering contract remains stable",
+      "current nominal semantics do not widen into generic semantics"
+    ],
+    "required_evidence": "canonical-main implementation plus exact-head/self-hosted Ubuntu regression including alias-wrapped depth complexity"
+  },
+  "next_actions": [
+    "repair TypeRef ancestry tracking on canonical product main and bind Ubuntu regression evidence",
+    "then classify the smallest freestanding unresolved-call ownership subset from canonical corpus bytes",
+    "continue compiler/lowering/VM/environment/Linux-interop/ClayOS work without inventing host semantics"
+  ],
+  "scope_limits": [
+    "No whole Clay Machine completion claim.",
+    "No new generic TypeRef semantics selected.",
+    "No accepted-VPS performance claim from local timing.",
+    "No final paid training authorization.",
+    "Together remains forbidden."
+  ]
+}

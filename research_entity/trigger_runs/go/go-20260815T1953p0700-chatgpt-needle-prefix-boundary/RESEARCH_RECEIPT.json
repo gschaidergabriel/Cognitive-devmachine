@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "trigger": "go",
   "run_id": "go-20260815T1953p0700-chatgpt-needle-prefix-boundary",
   "worker_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER/gpt-5.6-sol",
@@ -39,56 +39,87 @@
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "pull_request": 352,
     "branch": "chatgpt/go-needle-v1-authority-boundary-20260811",
-    "head": "f836471383616e7682675945a5b733391e4315d7",
+    "head": "117b3799f73940283fcaf4a0a656ba9a92bb73c0",
     "commits": [
       "482f17ea662556eeaa5502ef707ca211f2f7d631",
       "070af42f9cc71353b2d6da1f3d68a6bf672775ab",
       "849781e5d0e5940907f997bac2c838dc72ee20a8",
-      "f836471383616e7682675945a5b733391e4315d7"
+      "f836471383616e7682675945a5b733391e4315d7",
+      "117b3799f73940283fcaf4a0a656ba9a92bb73c0"
     ],
     "changes": [
       "Replace raw target-prefix startswith checks in both compile and execute revalidation with a lexical child-boundary fence.",
       "Add seven-case target-prefix boundary regression gate.",
       "Bind the regression gate into exact-SHA/blob-attested self-hosted VPS workflow.",
-      "Repair stale corpus-authority regression so explicitly classified exclusions may grow while historical exclusions remain observed and missing/unclassified sources still fail closed."
+      "Repair stale corpus-authority regression so explicitly classified exclusions may grow while historical exclusions remain observed and missing/unclassified sources still fail closed.",
+      "Align the corpus VPS workflow with the same growing-explicit-exclusion invariant instead of duplicating excluded_observed == 2."
     ],
     "pr_review_id": 4943886695
   },
   "evidence": {
     "local_exact_matcher_regression": "PASS 7/7",
-    "accepted_vps_exact_needle": {
+    "accepted_vps_exact_needle_on_849": {
       "workflow_run_id": 31885975883,
       "tested_head": "849781e5d0e5940907f997bac2c838dc72ee20a8",
       "status": "SUCCESS",
       "target_prefix_boundary_step": "SUCCESS"
     },
-    "current_main_composition_on_849": {
-      "workflow_run_id": 31885975881,
+    "accepted_vps_exact_needle_latest": {
+      "workflow_run_id": 31886373666,
+      "tested_head": "117b3799f73940283fcaf4a0a656ba9a92bb73c0",
+      "status": "SUCCESS",
+      "ordinary_needle_gate": "SUCCESS",
+      "target_prefix_boundary_step": "SUCCESS",
+      "exact_sha_and_blob_attestation": "SUCCESS"
+    },
+    "current_main_composition_latest": {
+      "workflow_run_id": 31886373696,
+      "tested_head": "117b3799f73940283fcaf4a0a656ba9a92bb73c0",
       "status": "SUCCESS"
     },
-    "preserved_negative_result": {
-      "workflow_run_id": 31885975874,
-      "tested_head": "849781e5d0e5940907f997bac2c838dc72ee20a8",
-      "status": "FAILURE",
-      "failed_step": "Run corpus authority regression",
-      "isolated_cause": "Regression froze excluded_observed == 2 although the manifest explicitly classifies additional non-language candidates including frank_needle.clay. This contradicted the corpus-authority mechanism, which permits explicitly excluded discovery while failing closed on missing authorized or unclassified sources.",
-      "repair_commit": "f836471383616e7682675945a5b733391e4315d7"
-    },
-    "latest_head_runs_at_refresh": {
-      "head": "f836471383616e7682675945a5b733391e4315d7",
-      "corpus_authority_run": {"id": 31886247071, "status": "QUEUED_UNVERIFIED"},
-      "needle_vps_run": {"id": 31886247073, "status": "QUEUED_UNVERIFIED"},
-      "current_main_composition_run": {"id": 31886247070, "status": "IN_PROGRESS_UNVERIFIED"}
+    "preserved_negative_results": [
+      {
+        "workflow_run_id": 31885975874,
+        "tested_head": "849781e5d0e5940907f997bac2c838dc72ee20a8",
+        "status": "FAILURE",
+        "failed_step": "Run corpus authority regression",
+        "isolated_cause": "Regression froze excluded_observed == 2 although the manifest explicitly classifies additional non-language candidates including frank_needle.clay.",
+        "repair_commit": "f836471383616e7682675945a5b733391e4315d7"
+      },
+      {
+        "workflow_run_id": 31886247071,
+        "tested_head": "f836471383616e7682675945a5b733391e4315d7",
+        "status": "FAILURE",
+        "successful_steps_before_failure": [
+          "Run corpus authority regression",
+          "Measure exact authorized corpus frontier"
+        ],
+        "failed_step": "Gate frozen authority and frontier invariants",
+        "isolated_cause": "Workflow duplicated the stale excluded_observed == 2 assumption after the actual regression had already been repaired.",
+        "repair_commit": "117b3799f73940283fcaf4a0a656ba9a92bb73c0"
+      }
+    ],
+    "latest_corpus_authority_at_receipt_refresh": {
+      "workflow_run_id": 31886373716,
+      "tested_head": "117b3799f73940283fcaf4a0a656ba9a92bb73c0",
+      "status": "IN_PROGRESS_UNVERIFIED",
+      "confirmed_steps": {
+        "manifest_reference_membership": "SUCCESS",
+        "compile_authority_paths": "SUCCESS",
+        "corpus_authority_regression": "SUCCESS",
+        "frontier_measurement": "IN_PROGRESS",
+        "final_frontier_gate": "PENDING"
+      }
     },
     "current_main_at_refresh": "43646539dbb66541e1c3ade148309318a2427340",
-    "branch_relation_to_main_at_refresh": "ahead 12 / behind 4",
+    "branch_relation_to_main_at_refresh": "ahead 13 / behind 4 / diverged",
     "primary_external_reference": "RFC 3986 path segments are slash-separated; used only to motivate lexical segment-boundary discrimination, not as proof of product containment semantics."
   },
   "counterevidence_and_open_falsifiers": [
     "ClayCode declares NeedleIntent.target as ResourceRef and requires target matches target_prefix, but the current candidate contract does not define canonical URI/path normalization semantics.",
     "Dot-segment and percent-encoded traversal forms remain outside this repair and must not be represented as fixed.",
-    "The branch is diverged from current main; current-main composition evidence must be kept distinct from branch-isolated evidence.",
-    "The 849 exact Needle VPS gate is successful, but the latest f836 full run set remains unverified until the freshly triggered runs complete.",
+    "The branch remains diverged from current main; current-main composition evidence is successful for head 117b3799 but must remain distinct from branch-isolated evidence.",
+    "The latest exact Needle VPS gate and current-main composition are successful, but the latest corpus-authority workflow is still in progress at this receipt revision.",
     "PR #352 remains open, draft, and unmerged; no canonical promotion is claimed."
   ],
   "next_falsifier": "Define or locate canonical ResourceRef normalization/containment semantics at the ClayCode/effect-authority boundary, then test raw, dot-segment, percent-encoded, query/fragment, scheme-wide and opaque-namespace cases without widening Needle authority.",

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "trigger": "go",
+  "worker_provenance": "ChatGPT GPT-5.6 Sol temporary Clay organ",
+  "observed_reality": {
+    "frank_repo_main": "b0518b68fe79140bfbc5c4b48d57aba746ece1ba",
+    "prior_candidate_pr": 581,
+    "prior_result": "two loaded but inactive/dead Frank-named systemd units remained unpromoted",
+    "prior_parser_boundary": "ExecStart executable path extracted from human-readable systemctl show rendering with greedy path= sed expression"
+  },
+  "generated_hypothesis": "The PR-581 human-readable ExecStart path extraction is sufficient to bind a canonical ProductStart executable.",
+  "strongest_counter_reality": "A later argv token containing path= can be selected by the greedy parser while the real structured ExecStart executable is unchanged.",
+  "unusual_experiment": {
+    "name": "EXECSTART_RENDERING_PATH_TOKEN_COLLISION",
+    "count": 1,
+    "scope": "disposable local string-only discriminator",
+    "baseline": "record path=/usr/bin/python3 with no later path= token -> extracted /usr/bin/python3",
+    "intervention": "same executable plus later argv token path=/tmp/decoy -> extracted /tmp/decoy",
+    "rollback": "disposable in-memory fixture discarded",
+    "external_effects": 0,
+    "canonical_state_mutated": false,
+    "frank_database_opened": false,
+    "harness_authority": "NONE",
+    "effect_authority": "NONE"
+  },
+  "outcome": "RETAIN_COUNTEREVIDENCE_AND_REPAIR_CANDIDATE",
+  "collapse": {
+    "human_rendering_plus_greedy_path_search_is_canonical_identity": "REFUTED",
+    "typed_systemd_dbus_execstart_is_higher_information_discriminator": "RETAIN_TESTING",
+    "typed_shape_match_alone_authorizes_productstart": "REJECT",
+    "production_exploit_claimed": false
+  },
+  "primary_evidence": {
+    "systemd_dbus_semantics": "org.freedesktop.systemd1.Service.ExecStart is a structured array containing executable path and argv",
+    "project_productstart_v3_shape": "LAUNCHER --prefix ABS_PREFIX --manifest ABS_MANIFEST ABS_TARGET under /opt/frank-v0.1"
+  },
+  "implementation_delta": {
+    "frank_repo_pr": 588,
+    "branch": "chatgpt/go-productstart-dbus-execstart-20260815",
+    "head": "f6375e64da03e9d9cd1157cb0d79b519d1b5f598",
+    "local_ordinary_regression": "PASS 6/6",
+    "self_hosted_workflow_run": 31886010615,
+    "self_hosted_workflow_state_at_receipt": "QUEUED_NO_RUNNER",
+    "new_unusual_experiments_in_committed_regression": 0
+  },
+  "promotion_boundary": "Do not start either dormant unit as Frank v0.1 from name/inventory evidence. First obtain typed ExecStart classification. A match still requires independent ProductStart identity anchor, artifact, clean-environment, live-process, fixed-SQLite, canonical UnifiedDB persistence, lineage, restart and rollback controls.",
+  "training_authorized": false
+}

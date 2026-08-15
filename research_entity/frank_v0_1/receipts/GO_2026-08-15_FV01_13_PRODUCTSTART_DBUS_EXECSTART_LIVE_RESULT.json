@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "trigger": "go",
+  "frank_repo_pr": 588,
+  "tested_repository_sha": "f6375e64da03e9d9cd1157cb0d79b519d1b5f598",
+  "workflow_run": 31886010615,
+  "workflow_conclusion": "SUCCESS",
+  "runner_name": "clay",
+  "host": "clayverse",
+  "artifact_id": 9247277553,
+  "artifact_sha256": "8157975e034b96bd474b2101f44b16ee88baba42dee5f7de6abab45cb6ffb3e9",
+  "ordinary_regression": {
+    "status": "PASS",
+    "cases": 6,
+    "new_go_unusual_experiment_count": 0
+  },
+  "live_observation": {
+    "mode": "READ_ONLY",
+    "candidate_match_count": 0,
+    "candidate_count": 2,
+    "units": [
+      {
+        "unit": "frank-laeufer-rae.service",
+        "typed_exec_path": "/usr/bin/python3",
+        "argv_count": 5,
+        "argv_sha256": "024285f9faba169edfb3d16f767b7e991c21000976786552734da6efc7ff38ae",
+        "candidate_match": false,
+        "failure": "LAUNCHER_OUTSIDE_TRUSTED_RUNTIME_ROOT"
+      },
+      {
+        "unit": "frank-laeufer.service",
+        "typed_exec_path": "/usr/bin/python3",
+        "argv_count": 5,
+        "argv_sha256": "da0f064c1c28cba799a3d92834b29ef06dcf7370c61707b2bd8781be9af7fc22",
+        "candidate_match": false,
+        "failure": "LAUNCHER_OUTSIDE_TRUSTED_RUNTIME_ROOT"
+      }
+    ]
+  },
+  "scope_receipt": {
+    "service_start_requested": false,
+    "service_stop_requested": false,
+    "frank_database_opened": false,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "grf_collapse": {
+    "one_of_two_dormant_units_is_current_productstart_v3_candidate": "REJECT",
+    "typed_dbus_execstart_discrimination_at_this_boundary": "SUPPORTED",
+    "no_productstart_exists_anywhere": "NOT_CLAIMED",
+    "fv01_13_complete": false
+  },
+  "next_discriminator": "Provision or discover the actual canonical ProductStart path crossing the /opt/frank-v0.1 V6 launcher/identity contract before controlled live persistence/restart testing.",
+  "training_authorized": false
+}

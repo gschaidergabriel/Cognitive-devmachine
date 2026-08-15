@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "workspace_id": "clayverse-clay-machine",
   "status": "ACTIVE",
   "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
@@ -15,10 +15,26 @@
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
       "goal": "Nominal/structural type and effect semantics independent of Python recursion/host defaults, with bounded complexity and explicit semantic authority.",
-      "blocker": "Merged TypeRef iterative traversal has a reproduced alias-wrapped depth complexity risk from branch-local ancestry copying; production remains unmodified until the non-copying candidate reproduces on self-hosted Linux and is integrated with production regression.",
-      "candidate": "PR #605 adds a non-production mutable DFS active-alias path candidate, depth-4096 regression and exact-SHA self-hosted Linux/X64 gate.",
+      "blocker": "The non-copying mutable-path candidate reproduced on self-hosted Linux/X64, but production runtime/claycode_typecheck_v1/typecheck.py remains unmodified. Production integration plus exact-head semantic/complexity regression is required before treating TypeRef totality as complexity-robust.",
+      "candidate": "PR #605 is closed unmerged and intentionally isolated from production. Its self-hosted candidate gate passed 5/5 semantic/totality controls at alias-wrapped depth 4096 on run 31910166336.",
       "experiment_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_ALIAS_PATH_COMPLEXITY.json",
-      "local_discriminator": "At alias-wrapped depth 2048, current copy-per-branch prototype measured 0.023614s versus 0.001776s for the mutable-path candidate (~13.3x); direct-cycle, structural-cycle and sibling-branch controls passed. Sandbox timing is not release evidence."
+      "local_discriminator": "At alias-wrapped depth 2048, current copy-per-branch prototype measured 0.023614s versus 0.001776s for the mutable-path candidate (~13.3x); direct-cycle, structural-cycle and sibling-branch controls passed. Sandbox timing is not release evidence.",
+      "self_hosted_evidence": {
+        "run_id": 31910166336,
+        "runner": "clay-3",
+        "machine": "clayverse",
+        "event_head_sha": "c7a54d6a9703380d0ea0097c485fec77abc2fcec",
+        "tested_pr_merge_sha": "9f5efd467166a954e540fb53dfe6cfb265c377df",
+        "candidate_blob": "8e6645d97629778348130657e59484b4211520e6",
+        "gate_blob": "fc9c8ce7a899992cbbb73da4f3eec32841b91549",
+        "python": "3.12.3",
+        "lark": "1.3.1",
+        "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+        "result": "PASS_CLAYCODE_TYPEREF_ALIAS_LINEAR_CANDIDATE_GATE",
+        "checks": "5/5",
+        "production_typechecker_wired": false,
+        "whole_clay_machine_acceptance": false
+      }
     },
     "CM-03-EVALUATOR-INTERPRETER": {
       "status": "IN_PROGRESS",
@@ -68,7 +84,8 @@
     "typeref_merge_commit": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
     "typeref_linear_candidate_pr": 605,
     "typeref_linear_candidate_head": "c7a54d6a9703380d0ea0097c485fec77abc2fcec",
-    "typeref_linear_candidate_state": "OPEN_SELF_HOSTED_RUN_NOT_YET_OBSERVED",
+    "typeref_linear_candidate_state": "CLOSED_UNMERGED_SELF_HOSTED_PASS_PRODUCTION_NOT_WIRED",
+    "typeref_linear_candidate_run": 31910166336,
     "call_ownership_partition_merge_commit": "210bd190d26d5ad3aa3d0b646e52d42646680c9b",
     "unresolved_call_names": 429,
     "unresolved_call_occurrences": 464,
@@ -76,7 +93,7 @@
     "clayvm_candidate_pr": 600,
     "clayvm_candidate_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
     "clayvm_candidate_state": "DRAFT_CI_QUEUED_AND_REVIEW_BLOCKED",
-    "next_discriminator": "Observe exact-head PR #605 self-hosted candidate gate, then wire the non-copying path into production typecheck.py with regression if it passes; in parallel, replace PR #600 Python-recursive OP_CALL with an explicit Clay VM frame stack and verify exact-head CI before promotion."
+    "next_discriminator": "Wire the proven non-copying TypeRef active-alias path into production typecheck.py on fresh canonical main, preserve cycle/sibling semantics, add a production-comparison regression, and require exact-head self-hosted Linux/X64 evidence before promotion. In parallel, replace PR #600 Python-recursive OP_CALL with an explicit Clay VM frame stack and verify exact-head CI before promotion."
   },
   "coordination_negative_result": "Parallel GO workers can currently collide on the exactly-one unusual-experiment cardinality; shared CAS/lease serialization remains required.",
   "laws": [

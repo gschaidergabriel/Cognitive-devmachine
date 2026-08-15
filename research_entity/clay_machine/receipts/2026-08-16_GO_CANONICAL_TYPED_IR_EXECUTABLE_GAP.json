@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_CANONICAL_TYPED_IR_EXECUTABLE_GAP_RECEIPT",
+  "created_local": "2026-08-16T04:47:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "observed_product_main": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "canonical_ir_implementation": "runtime/clay_wp03_exact_bundle/tools/claycode_base_typed_ir.py",
+  "canonical_ir_schema": "ClayCodeBaseTypedIR/v1",
+  "observations": [
+    "Canonical BASE TypedIR currently establishes deterministic nominal type identity, declaration signatures, type classification and semantic identity.",
+    "Function declarations store body_tokens rather than a typed executable expression graph.",
+    "The implementation comment explicitly says expressions remain syntax trees until later checker/evaluator semantics consume them.",
+    "PR #600 currently accepts a separate bootstrap claycode.typed-ir.v0 expression dictionary with k/num/name/bin/call nodes; that shape is not emitted by the canonical BASE TypedIR builder.",
+    "Therefore a direct ClayCodeBaseTypedIR/v1 -> PR600 bytecode adapter cannot currently be proven semantics-preserving without either a new canonical typed-expression lowering stage or bypassing/reconstructing semantics from tokens."
+  ],
+  "grf": {
+    "generated_reality": "Introduce a canonical executable typed-expression IR stage after BASE declaration TypedIR and type/effect checking, then lower only that admitted stage into the single ClayVM core.",
+    "strongest_counter_reality": "Treat body_tokens as sufficient compiler input and reparse/reinfer inside the VM compiler. This duplicates frontend/type authority, risks semantic drift, and weakens provenance unless equivalence is explicitly proven.",
+    "smallest_discriminator": "For one already-supported pure function, produce a canonical typed expression graph with parameter/result TypeRefs and resolved Clay-call targets, then prove deterministic lowering and differential equivalence without consulting raw source/body_tokens in the VM backend.",
+    "outcome": "DEFER_DIRECT_ADAPTER; REQUIRE_CANONICAL_EXECUTABLE_TYPED_EXPRESSION_BOUNDARY"
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "affected_work_packages": ["CM-03-EVALUATOR-INTERPRETER", "CM-04-COMPILER-LOWERING-BYTECODE", "CM-05-VIRTUAL-CLAY-MACHINE"],
+    "required_boundary": "typed executable expression IR with resolved call ownership, explicit types/effects, provenance and deterministic identity",
+    "anti_bypass_rule": "ClayVM backend must not silently derive missing language semantics from host behavior or raw body token reparsing unless an equivalence contract and tests make that derivation canonical.",
+    "rollback": "No production code changed by this receipt; reject this candidate if an already-canonical executable expression IR is found and proven to supersede the observed BASE TypedIR representation."
+  },
+  "unusual_experiment_accounting": {
+    "this_worker_go": 1,
+    "already_consumed": true,
+    "name": "CALL_FRAME_ALIAS_CROSSTALK",
+    "additional_unusual_experiment_here": false
+  },
+  "non_claims": [
+    "No canonical executable TypedIR implementation is claimed.",
+    "No direct adapter is claimed correct.",
+    "No whole Clay Machine completion is claimed."
+  ]
+}

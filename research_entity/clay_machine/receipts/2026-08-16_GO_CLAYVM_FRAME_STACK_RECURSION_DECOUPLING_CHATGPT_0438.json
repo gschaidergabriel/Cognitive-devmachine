@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "program": "clayverse-clay-machine",
+  "work_package": "CM-05-VIRTUAL-CLAY-MACHINE",
+  "trigger": "go",
+  "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "timestamp_context": "2026-08-16T04:38+07:00",
+  "observed": {
+    "product_main": "79c389b81e205c30ee9502031ddadc7d6b050408",
+    "pr": 600,
+    "initial_pr_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+    "initial_exact_head_vm_workflow_run": 31909944841,
+    "initial_exact_head_vm_workflow_result": "SUCCESS",
+    "initial_blocker": "OP_CALL used recursive Python self._call(...), making host Python recursion depth an implicit ClayVM call-depth/failure semantic."
+  },
+  "grf": {
+    "hypothesis": "A VM-owned explicit activation-frame stack with a ClayVM-owned frame limit removes Python recursion depth from Clay call semantics without changing the admitted bytecode contract.",
+    "counterhypothesis": "Replacing host recursion with explicit frames changes return propagation, argument isolation, resource-limit behavior, or existing arithmetic/process semantics.",
+    "discriminator": "Retain existing regressions, require an explicit ClayVM frame-depth trap, and execute a call chain deeper than the deliberately lowered Python recursion limit."
+  },
+  "local_candidate": {
+    "result": "PASS_9_OF_9",
+    "clayvm_sha256": "87b02e91c64b8662c08b3edef2a065a9dfa508a8d752c278e2b71e217f7932d4",
+    "test_sha256": "f00ca8820826aad467cc966f039c7a8290256930f12fbb5adebcd5958807cf0a",
+    "ordinary_regressions": [
+      "compile_load_run",
+      "ClayOS process lifecycle",
+      "division semantics and zero trap",
+      "loader corruption/trailing-byte fail-closed",
+      "capability-denied host boundary",
+      "bad IR schema rejection",
+      "prior function-order semantic twin retained as ordinary regression",
+      "explicit Clay call-depth fail-closed limit"
+    ]
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "id": "PYTHON_RECURSION_DECOUPLING_1200",
+    "intervention": "Temporarily lower Python sys recursion limit to 500 inside a local disposable test, then compare a recursive Python depth-1200 baseline against a 1200-deep Clay call chain executed with explicit VM frames; restore the original recursion limit in finally.",
+    "baseline_result": "Python recursive baseline raised RecursionError as predicted.",
+    "candidate_result": "Explicit-frame ClayVM returned integer 7 for the 1200-deep Clay call chain.",
+    "rollback": "Original Python recursion limit restored; disposable local candidate only.",
+    "scope": "SANDBOX_MECHANISM_EVIDENCE_ONLY"
+  },
+  "coordination": {
+    "collision_observed": true,
+    "detail": "Before writing the product runtime, the PR branch advanced from 1e3a3d... to 6dc5e4e... via a parallel worker commit named 'fix(clayvm): replace Python-recursive calls with explicit VM frames'. The stale product-runtime write was therefore aborted rather than overwriting concurrent work.",
+    "parallel_fix_head": "6dc5e4e022a71c09b4954304b4dbcf38057d7598",
+    "parallel_fix_extra": "The parallel repair also adds load-time CALL_ARITY_MISMATCH validation.",
+    "worker_product_delta": "Only missing deterministic regressions were added to the existing PR branch.",
+    "regression_commit": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
+    "regression_tests": [
+      "VM-owned max_frames=4 fails closed with CALL_DEPTH_LIMIT on an 8-deep chain",
+      "1500-deep Clay call chain returns 7 using explicit VM frames"
+    ],
+    "exact_head_workflow_run": 31910296146,
+    "exact_head_workflow_state_at_receipt": "PENDING"
+  },
+  "collapse": {
+    "python_recursive_op_call": "REJECT",
+    "explicit_vm_activation_frames": "RETAIN_TESTING",
+    "clay_owned_frame_limit": "RETAIN_TESTING",
+    "promotion": "DEFER",
+    "promotion_blockers": [
+      "Exact regression head dda5992709bcdd3800fa90c2526ed5aebf43a6e2 self-hosted Clay Machine workflow must complete successfully.",
+      "PR #600 still uses detached claycode.typed-ir.v0 rather than the canonical ClayCode frontend/TypedIR boundary; PR #602 remains a differential/oracle source rather than a second runtime."
+    ]
+  },
+  "authority": {
+    "together_used": false,
+    "external_effect": false,
+    "final_training_authorized": false,
+    "whole_clay_machine_completion_claimed": false
+  }
+}

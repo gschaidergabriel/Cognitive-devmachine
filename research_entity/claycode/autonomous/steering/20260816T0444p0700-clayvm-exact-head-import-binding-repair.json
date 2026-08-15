@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_VM_EXACT_HEAD_IMPORT_BINDING_REPAIR",
+  "created_local": "2026-08-16T04:44:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "bb4ed91a90bf62b2a0dda9cbcf76dd134b426efd",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "candidate_pr": 602,
+  "failed_candidate_head": "84b13964180bced071d3b35fcf5b989a71157964",
+  "failed_workflow_run": 31910010784,
+  "failed_runner": "clay",
+  "failed_host": "clayverse",
+  "failure": {
+    "stage": "Execute Clay VM differential and fail-closed regressions",
+    "cause": "ModuleNotFoundError: No module named 'claycode_decide_effect_differential_gate'",
+    "result_json": "MISSING",
+    "vm_semantics_executed": false,
+    "classification": "TEST_HARNESS_IMPORT_BINDING_FAILURE_NOT_VM_SEMANTIC_FAILURE"
+  },
+  "repair": {
+    "commit": "482b7b62975aaa5b02d58a5d4a0373b56158a425",
+    "branch": "chatgpt/go-clay-machine-stack-vm-v1-fresh-20260816",
+    "change": "Keep python -P isolation and explicitly set PYTHONPATH to both repository root and repository tests directory for the VM gate process.",
+    "language_semantics_changed": false,
+    "vm_semantics_changed": false,
+    "effect_or_host_authority_changed": false
+  },
+  "grf": {
+    "observed": "The exact fresh-head PR602 runner reached dependency provisioning but failed before the gate imported its differential oracle; the same import pattern also failed on superseded PR601.",
+    "hypothesis": "The VM gate failure is entirely explained by Python -P suppressing script-directory insertion while PYTHONPATH exposed only the repository root, not tests/.",
+    "strongest_counter_reality": "After explicit import-root binding, a genuine compiler/VM semantic defect may appear once the 50,000-request differential actually executes.",
+    "discriminator": "Run exact repair head 482b7b62975aaa5b02d58a5d4a0373b56158a425 on the self-hosted Clay Machine Stack VM V1 lane and require a result.json plus the existing differential/fail-closed assertions.",
+    "outcome": "REPAIR_COMMITTED; SEMANTIC_RESULT_PENDING_EXACT_HEAD_EXECUTION"
+  },
+  "unusual_experiment_accounting": {
+    "additional_unusual_experiment_executed": false,
+    "reason": "The current user-triggered GO macrocycle already has exactly-one experiment accounting in shared state; this is ordinary deterministic CI repair."
+  },
+  "current_execution_state_at_write": {
+    "workflow_run": 31910116292,
+    "status": "QUEUED",
+    "pass_claimed": false
+  },
+  "next": "Observe exact repair-head execution. If semantic PASS, retain PR602 only as canonical-frontend differential oracle per single-VM fusion; if semantic FAIL, preserve the first actual VM/compiler mismatch and repair without widening unresolved call/member/host semantics."
+}

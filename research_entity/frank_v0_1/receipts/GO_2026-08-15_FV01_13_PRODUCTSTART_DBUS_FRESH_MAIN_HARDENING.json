@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "trigger": "go",
+  "worker_provenance": "ChatGPT GPT-5.6 Sol temporary Clay organ",
+  "macro_cycle_unusual_experiment_count": 1,
+  "unusual_experiment_name": "EXECSTART_RENDERING_PATH_TOKEN_COLLISION",
+  "additional_unusual_experiments_after_counterexample": 0,
+  "observed_concurrent_main": {
+    "frank_main_sha": "43646539dbb66541e1c3ade148309318a2427340",
+    "merged_pr_586": "pre-Python V6 discriminator rejects both observed Python-first dormant units",
+    "merged_pr_590": "persistent pull_request path trigger for the discriminator workflow"
+  },
+  "duplicate_control": {
+    "standalone_typed_pr": 588,
+    "disposition": "CLOSED_SUPERSEDED_REPLICATION",
+    "reason": "avoid a second parallel ProductStart gate after #586 merged"
+  },
+  "fresh_main_candidate": {
+    "pr": 591,
+    "base_sha": "43646539dbb66541e1c3ade148309318a2427340",
+    "head_sha": "207fdcdae5c54259c68bda568e10f9e8462c6535",
+    "purpose": "replace human-readable ExecStart executable-path extraction in the single merged #586 gate with typed systemd D-Bus Service.ExecStart while preserving #586 semantics and #590 PR trigger",
+    "local_regression": "PASS 11/11",
+    "new_go_unusual_experiment_count": 0
+  },
+  "target_replication_before_fresh_main_reset": {
+    "workflow_run": 31886270491,
+    "tested_sha": "90a1c7750596bbbaacbfc1be93c37fadb354fbfe",
+    "conclusion": "SUCCESS",
+    "runner": "clay-2",
+    "host": "clayverse",
+    "artifact_id": 9247346550,
+    "artifact_sha256": "5666de6af9ae061045b2c4fc7ba5eb78e1e6a1ac30f91fa40a3276dd0486cf95",
+    "regression": "PASS 11/11",
+    "units": [
+      {
+        "unit": "frank-laeufer-rae.service",
+        "typed_exec_path": "/usr/bin/python3",
+        "status": "NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY",
+        "user": "EMPTY"
+      },
+      {
+        "unit": "frank-laeufer.service",
+        "typed_exec_path": "/usr/bin/python3",
+        "status": "NOT_ADMITTED_CURRENT_V6_PREPYTHON_BOUNDARY",
+        "user": "root"
+      }
+    ],
+    "raw_exec_argv_emitted": false,
+    "service_started_by_gate": false,
+    "service_stopped_by_gate": false,
+    "frank_database_opened": false,
+    "canonical_state_mutated": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE"
+  },
+  "fresh_main_pr_run": {
+    "workflow_run": 31886402749,
+    "head_sha": "207fdcdae5c54259c68bda568e10f9e8462c6535",
+    "base_sha": "43646539dbb66541e1c3ade148309318a2427340",
+    "state_at_receipt": "QUEUED_NO_RUNNER",
+    "interpretation": "UNKNOWN_PENDING; do not promote from queued status"
+  },
+  "grf_collapse": {
+    "human_rendered_execstart_should_be_identity_authority": "REJECT",
+    "typed_dbus_execstart_is_a_stronger_measurement_surface": "SUPPORTED_AT_TARGET_BY_REPLICATION",
+    "either_observed_dormant_unit_is_current_v6_productstart": "REJECT_AT_MEASURED_BOUNDARY",
+    "canonical_productstart_does_not_exist_elsewhere": "NOT_CLAIMED",
+    "fv01_13_complete": false
+  },
+  "next_discriminator": "Provision or discover one canonical non-root ProductStart service whose first executable directly crosses the accepted V6 launcher, then compose identity anchor, clean environment, fixed SQLite, canonical UnifiedDB WAL persistence, restart/readback, stale-anchor/downgrade/library-swap and rollback controls.",
+  "training_authorized": false
+}

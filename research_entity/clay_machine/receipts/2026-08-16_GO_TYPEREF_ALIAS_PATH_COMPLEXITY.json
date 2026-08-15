@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+  "observed_product_main": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "production_typeref_file_blob": "dc30c17646d388a38ce6743416c6254b61bb7e8b",
+  "trigger": "go",
+  "experiment_cardinality_for_this_macrocycle": 1,
+  "unusual_experiment": {
+    "id": "ALIAS_WRAPPED_COMB_DEPTH",
+    "purpose": "Discriminate ordinary deep parameter traversal from alias-ancestry copying cost.",
+    "shape": "A0 -> Box<A1> -> ... -> Box<Int>",
+    "baseline": "Current production canonicalizer with per-branch set/frozenset ancestry copies.",
+    "candidate": "Depth-first mutable active-alias path with explicit build-frame cleanup.",
+    "local_environment": "ChatGPT Linux sandbox; not accepted Ubuntu/VPS release evidence.",
+    "depth_seconds": {
+      "64": {"current_alias": 0.000086, "candidate_alias": 0.000056, "current_plain": 0.000041, "candidate_plain": 0.000043},
+      "128": {"current_alias": 0.000204, "candidate_alias": 0.000109, "current_plain": 0.000078, "candidate_plain": 0.000080},
+      "256": {"current_alias": 0.000580, "candidate_alias": 0.000204, "current_plain": 0.000153, "candidate_plain": 0.000160},
+      "512": {"current_alias": 0.001845, "candidate_alias": 0.000402, "current_plain": 0.000300, "candidate_plain": 0.000311},
+      "1024": {"current_alias": 0.006133, "candidate_alias": 0.000931, "current_plain": 0.000600, "candidate_plain": 0.000635},
+      "1536": {"current_alias": 0.013546, "candidate_alias": 0.001299, "current_plain": 0.001039, "candidate_plain": 0.000926},
+      "2048": {"current_alias": 0.023614, "candidate_alias": 0.001776, "current_plain": 0.001271, "candidate_plain": 0.001364}
+    },
+    "depth_2048_speedup_ratio": 13.296,
+    "semantic_controls": {
+      "direct_alias_cycle_fail_closed": "PASS",
+      "parameter_wrapped_alias_cycle_fail_closed": "PASS",
+      "sibling_alias_provenance_branch_local": "PASS"
+    },
+    "interpretation": "The alias-wrapped shape grows much faster than the plain parameter baseline under the current copy-per-branch implementation, while the mutable-path candidate tracks approximately linear depth growth in this bounded local experiment.",
+    "counterhypothesis": "The measured difference is sandbox/interpreter noise rather than structural ancestry-copy complexity.",
+    "falsifier": "Run exact-head candidate and production-comparison regression on the self-hosted Linux/X64 target, then integrate only if semantic controls and scaling advantage reproduce.",
+    "outcome": "RETAIN_CANDIDATE_NOT_PROMOTED"
+  },
+  "product_candidate": {
+    "pull_request": 605,
+    "head_sha": "c7a54d6a9703380d0ea0097c485fec77abc2fcec",
+    "production_typechecker_wired": false,
+    "vps_ci_observed": false
+  },
+  "authority": {
+    "whole_clay_machine_acceptance": false,
+    "production_semantics_changed": false,
+    "effect_authority": "NONE"
+  }
+}

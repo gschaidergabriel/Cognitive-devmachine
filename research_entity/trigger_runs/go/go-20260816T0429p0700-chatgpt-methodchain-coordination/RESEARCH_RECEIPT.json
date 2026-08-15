@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_METHODCHAIN_TRIPWIRE_AND_COORDINATION_NEGATIVE",
+  "trigger": "go",
+  "trigger_started_local": "2026-08-16T04:29:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "9910a6f7c2996ac255583fbc436a4aedc23d9ec3",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "program_anchor": {
+    "program_state_schema": "4.0",
+    "stage": "CLAY_MACHINE",
+    "workspace_schema": "1.1",
+    "legacy_frank_program_state": "HISTORICAL_EVIDENCE_ONLY"
+  },
+  "observed_frontier": {
+    "pr598_merge": "210bd190d26d5ad3aa3d0b646e52d42646680c9b",
+    "ordinary_call_partition": "BARE_UNQUALIFIED_CALL_TARGET and DOTTED_CALLEE_TARGET measured separately without execution semantics",
+    "unresolved_call_names": 429,
+    "unresolved_call_occurrences": 464,
+    "methodchain_member_segments_open": 22,
+    "methodchain_histogram": {"filter": 11, "map": 10, "sort_desc": 1},
+    "ordinary_parser_call_nodes_seen_by_analyzer_walk": 677,
+    "ordinary_parser_call_nodes_observed": 677,
+    "methodchain_interpretation": "separate typed member/library contract obligation, not evidence of a generic ordinary-Call parser omission"
+  },
+  "product_delta": {
+    "pr": 480,
+    "state": "DRAFT_NOT_PROMOTABLE",
+    "feature_head_after_assertion_fix": "8b31ab36f0c982d95e3ffe1dd19f66ae410f8b30",
+    "current_synthetic_merge_observed": "d5cc2b8e0cc6375da9738993af957d72a89e4567",
+    "current_synthetic_merge_base": "79c389b81e205c30ee9502031ddadc7d6b050408",
+    "repair": "surface every syntactically preserved MethodChain segment as an analyzer diagnostic while member/library semantics remain unbound",
+    "semantic_non_delta": [
+      "no MethodChain/member/library execution semantics selected",
+      "no cross-module ownership selected",
+      "no host binding added",
+      "ordinary Call partition remains separate"
+    ],
+    "workflow_after_coordination_refresh": "regression-only; records shared unusual-experiment slot consumed and does not execute the candidate counterworld"
+  },
+  "generated_reality": "a callable member segment whose spelling matches an ordinary Clay function could accidentally inherit that ordinary-call ownership by name",
+  "strongest_counter_reality": "ordinary-call ownership and member-call ownership are distinct; receiver/member semantics require their own explicit contract and matching spelling is insufficient",
+  "executed_counterworld": {
+    "name": "METHODCHAIN_NAME_COLLISION_COUNTERWORLD",
+    "coordination_status": "INADVERTENT_EXTRA_SHARED_GO_EXPERIMENT_DUE_REFRESH_RACE",
+    "accepted_runner": "clay-3 self-hosted Linux/X64",
+    "tested_synthetic_merge": "b0a2873cb038b1cf16885f020beacb8b432c1409",
+    "ubuntu_kernel_observed": "6.8.0-117-generic",
+    "python_observed": "3.12.3",
+    "lark_observed": "1.3.1",
+    "observations": {
+      "ordinary_map_kind": "CLAY_FN",
+      "callable_method_segments": ["map"],
+      "analysis_resolvable": false,
+      "analysis_diagnostic": "unbound MethodChain call semantics in collision: .map()",
+      "evaluator_admission": "FAIL_CLOSED",
+      "authority_minted": false,
+      "external_effect_executed": false
+    },
+    "workflow_reported_status": "FAIL",
+    "failure_classification": "TEST_ASSERTION_FALSE_NEGATIVE",
+    "failure_mechanism": "the positive-check dictionary stored host_or_member_authority_minted=false directly, so the harness treated the correct negative observation as a failed boolean assertion",
+    "semantic_interpretation": "COUNTER_REALITY_SUPPORTED_AT_MEASURED_DIAGNOSTIC_BOUNDARY; spelling collision did not collapse ordinary-call and MethodChain ownership",
+    "assertion_fix_commit": "8b31ab36f0c982d95e3ffe1dd19f66ae410f8b30",
+    "rerun_in_this_macrocycle": false,
+    "rerun_rule": "do not execute again until a future macro-cycle coordinator allocates a fresh unusual-experiment slot"
+  },
+  "coordination_negative_result": {
+    "status": "GLOBAL_EXACTLY_ONE_CARDINALITY_NOT_SATISFIED_OR_SERIALIZED",
+    "preexisting_receipt": "research_entity/claycode/research/20260816_GO_UNUSUAL_EXPERIMENT_COORDINATION_COLLISION.md",
+    "preexisting_commit": "ff692abfb00557cf869ada3749d38fc11eb85530",
+    "new_observation": "this worker scheduled its counterworld before refreshing the newly written shared collision record; the queued accepted-runner job then executed before the workflow could be changed to regression-only",
+    "repair_obligation": "shared CAS/lease keyed by canonical macro_cycle_id with RESERVED/EXECUTED/RELEASED/INVALIDATED state before any future unusual experiment",
+    "no_retroactive_pass_claim": true
+  },
+  "standard_regression_state": {
+    "workflow": "ClayCode MethodChain Boundary Regression VPS",
+    "latest_run_observed": 31910065614,
+    "state_at_receipt_preparation": "PENDING",
+    "claim": "NO_GREEN_CURRENT_SYNTHETIC_MERGE_REGRESSION_CLAIM_YET"
+  },
+  "grf_collapse": {
+    "retain": [
+      "MethodChain analyzer tripwire as defense-in-depth candidate",
+      "typed member/library contract remains OPEN",
+      "matching names cannot mint member ownership",
+      "shared unusual-experiment lease is a real coordination requirement"
+    ],
+    "reject": [
+      "treating the harness FAIL as evidence of semantic boundary failure",
+      "re-running the unusual experiment merely to turn the scalar status green",
+      "using MethodChain frequency or names to infer library semantics"
+    ],
+    "defer": [
+      "promotion/merge of PR #480 until regression-only synthetic-merge evidence is green and overlap with stronger WP04 admission barriers is reconciled"
+    ]
+  },
+  "current_workspace_reentry": {
+    "typeref": "alias-ancestry copying complexity repair remains a higher active blocker on its dedicated branch; do not duplicate",
+    "clayvm": "PR #600 is the first bootstrap candidate but remains draft because OP_CALL uses Python recursion; explicit VM frame stack/trampoline plus Clay-defined resource limit is required",
+    "methodchain": "keep separate from PR #598 bare/dotted ordinary-call ownership work"
+  },
+  "scope_limits": [
+    "No whole Clay Machine completion claim.",
+    "No MethodChain/member/library semantics selected.",
+    "No cross-module executable ownership selected.",
+    "No authority minted or external effect executed by the counterworld.",
+    "No final paid/model training authorization.",
+    "Together API not used."
+  ]
+}

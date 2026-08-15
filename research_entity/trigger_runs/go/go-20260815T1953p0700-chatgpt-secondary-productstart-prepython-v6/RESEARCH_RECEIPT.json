@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260815T1953p0700-chatgpt-secondary-productstart-prepython-v6",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+  "trigger": "go",
+  "grf": {
+    "r0_observed": [
+      "Dr.-Unterweger main verified at b0518b68fe79140bfbc5c4b48d57aba746ece1ba before re-entry.",
+      "Merged current-main runtime/frank_storage_truth_v1/frank_v0_1_sqlite_v6_launcher.sh blob d40ba9697cef9b4d0e05cd511684d9528e3dafe6 states that product/service execution must cross the root-anchored V6 boundary before import-capable Frank code and rejects runtime UID 0.",
+      "PR #581 accepted-target read-only run 31818263690 / head 5a51c2585d2909ede03e99e2630a795262920d27 observed frank-laeufer-rae.service and frank-laeufer.service loaded but inactive/dead; both ExecStart surfaces resolve first to /usr/bin/python3 -> /usr/bin/python3.12; frank-laeufer.service explicitly reports User=root.",
+      "SQLite upstream documents the WAL-reset corruption race through 3.51.2 and the fix from 3.51.3; current Frank release-observer work separately pins a later fixed SQLite identity. This cycle does not promote any productive SQLite runtime claim."
+    ],
+    "generated_reality": "The two newly observed dormant Frank-named units might be current ProductStart candidates that only need secret-safe argv/EnvironmentFile binding before controlled start.",
+    "strongest_counter_reality": "A Python-first systemd ExecStart is structurally downstream of the merged V6 pre-import boundary rather than crossing it. It can execute import-capable code before any later V6 handoff; an explicit root runtime also conflicts with the merged V6 launcher.",
+    "discriminating_experiment": {
+      "name": "PYTHON_WRAPPER_BEFORE_V6_COUNTERREALITY",
+      "classification": "EXACTLY_ONE_BOUNDED_UNUSUAL_EXPERIMENT",
+      "environment": "disposable local temporary tree; no Frank/VPS/canonical state",
+      "method": "A Python parent wrote PRE_V6_PYTHON_CODE_EXECUTED, then os.execv() handed control to a benign V6-guard stand-in that wrote V6_GUARD_ENTERED.",
+      "observed_trace": [
+        "PRE_V6_PYTHON_CODE_EXECUTED",
+        "V6_GUARD_ENTERED"
+      ],
+      "result": "PASS_PYTHON_WRAPPER_BEFORE_V6_COUNTERREALITY",
+      "rollback": "temporary experiment tree removed",
+      "scope": "architecture-ordering discriminator only; not a productive Hostinger exploit claim"
+    },
+    "collapse": [
+      {
+        "claim": "frank-laeufer.service is admissible current V6 ProductStart in the observed configuration",
+        "outcome": "REJECT",
+        "reason": "Python-first ordering violates the merged pre-import V6 boundary; explicit User=root independently conflicts with the V6 runtime UID gate."
+      },
+      {
+        "claim": "frank-laeufer-rae.service is admissible current V6 ProductStart in the observed configuration",
+        "outcome": "REJECT",
+        "reason": "Python-first ordering alone discriminates the current configuration. DynamicUser/effective UID remains useful metadata but is no longer necessary for this rejection."
+      },
+      {
+        "claim": "both dormant units are certainly irrelevant historical artifacts",
+        "outcome": "DEFER",
+        "reason": "Their hidden argv/worktree lineage may still identify useful ancestry; rejection is only as current admissible V6 ProductStart configuration."
+      }
+    ]
+  },
+  "next_falsifier": "Ordinary read-only accepted-target discriminator: compare effective ExecStart/argv, effective UID and environment-policy hashes against the exact current merged V6 ProductStart contract; emit NOT_ADMITTED_CURRENT_V6 for Python-first/root configurations. Then provision/admit one exact service whose ExecStart directly crosses the root-owned V6 launcher with non-root runtime and clean loader environment. Only after exact ProductStart admission run a controlled canonical UnifiedDB WAL write/read under the pinned fixed SQLite runtime, clean restart/readback under successor generation, and stale-anchor/downgrade/library-swap/rollback controls.",
+  "research_reentry": {
+    "product_pr": "gschaidergabriel/Dr.-Unterweger#581",
+    "product_pr_review_id": 4943883976,
+    "review_kind": "COMMENT",
+    "canonical_product_state_mutated": false,
+    "service_state_mutated": false,
+    "frank_database_opened": false,
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false
+  },
+  "negative_results_preserved": [
+    "A green read-only unit-attestation workflow does not admit a ProductStart.",
+    "Root-owned systemd fragment/interpreter identity does not establish the required pre-Python V6 ordering.",
+    "A Python wrapper that later execs a guard cannot retroactively make the guard precede Python execution.",
+    "Stress non-reproduction cannot exonerate a SQLite build from the upstream WAL-reset race."
+  ],
+  "unusual_experiment_count": 1,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "final_model_training": "NOT_AUTHORIZED"
+}

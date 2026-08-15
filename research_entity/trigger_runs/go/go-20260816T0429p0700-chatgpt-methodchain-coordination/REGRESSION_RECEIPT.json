@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_METHODCHAIN_REGRESSION_RECEIPT",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "80a90945e307008d3675dce30776efca57a4f4c1",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "pr": 480,
+  "pr_state": "DRAFT_NOT_PROMOTED",
+  "feature_head": "8b31ab36f0c982d95e3ffe1dd19f66ae410f8b30",
+  "tested_synthetic_merge": "d5cc2b8e0cc6375da9738993af957d72a89e4567",
+  "workflow_run_id": 31910065614,
+  "job_id": 95073680036,
+  "runner": "clay-4",
+  "runner_class": "self-hosted Linux/X64",
+  "ubuntu_kernel": "6.8.0-117-generic",
+  "python": "3.12.3",
+  "status": "PASS_REGRESSION_ONLY_CURRENT_MAIN_COMPOSITION",
+  "unusual_experiment": {
+    "executed_in_this_run": false,
+    "reason": "shared GO unusual-experiment slot already consumed; workflow records the slot and performs only deterministic regression gates"
+  },
+  "ordinary_call_surface": {
+    "parser_call_nodes": 677,
+    "analyzer_visible_call_nodes": 677,
+    "missed_call_nodes": 0,
+    "status": "PASS"
+  },
+  "methodchain_surface": {
+    "callable_segments": 22,
+    "histogram": {"filter": 11, "map": 10, "sort_desc": 1},
+    "semantic_status": "OPEN_TYPED_MEMBER_LIBRARY_CONTRACT",
+    "methodchain_semantics_selected": false,
+    "host_bindings_authorized": false
+  },
+  "nominal_gate": {
+    "checks_passed": 14,
+    "checks_total": 14,
+    "status": "PASS_CLAYCODE_NOMINAL_TYPECHECK_V1_GATE",
+    "authority_claim": "NONE",
+    "external_effect_executed": false
+  },
+  "promotion_boundary": {
+    "methodchain_analyzer_tripwire": "SUPPORTED_AT_TESTED_SYNTHETIC_MERGE",
+    "whole_clay_machine": "IN_PROGRESS",
+    "merge_decision": "DEFER",
+    "reason": "typed MethodChain/member/library semantics remain open and PR #480 must still be reconciled with stronger WP04-before-evaluator admission architecture; component regression PASS does not define language or whole-machine completion"
+  },
+  "next_frontier_reentry": [
+    "do not rerun the unusual name-collision experiment in this macro-cycle",
+    "retain shared CAS/lease serialization as a coordination repair obligation",
+    "prioritize canonical TypeRef alias-ancestry complexity repair and explicit ClayVM frame-stack/resource semantics per current Clay Machine workspace",
+    "keep MethodChain/member semantics separate from PR #598 bare/dotted ordinary-call ownership measurement"
+  ],
+  "scope_limits": [
+    "No MethodChain/member/library execution semantics selected.",
+    "No cross-module executable ownership selected.",
+    "No host authority minted.",
+    "No whole Clay Machine PASS claim.",
+    "Together API not used.",
+    "No final paid/model training authorization."
+  ]
+}

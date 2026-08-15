@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_NEXT_FRONTIER_CENSUS_REVALIDATION",
+  "created_local": "2026-08-16T04:20:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main": "7fbcb5f64798d919859dc0b664ab5f29559f9d5a",
+  "main_drift_observed": false,
+  "measurement_class": "RECEIPT_BOUND_REVALIDATION_NOT_INDEPENDENT_RERUN",
+  "census": {
+    "authorized_sources": 40,
+    "parsed_authorized_sources": 36,
+    "parser_rejected_sources": 4,
+    "coverage_percent": 90.0,
+    "unresolved_unique_call_names": 429,
+    "unresolved_call_occurrences": 464,
+    "methodchain_member_segments_open": 22
+  },
+  "provenance": {
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_state": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json",
+    "same_exact_product_main": "7fbcb5f64798d919859dc0b664ab5f29559f9d5a"
+  },
+  "interpretation": [
+    "The census is current with respect to repository byte identity because product main did not drift, but this GO worker did not independently execute the corpus census again.",
+    "429/464 are unresolved Call ownership observations, not 429/464 proven language bugs or host intrinsics.",
+    "22 MethodChain/member segments are open semantic-authority observations, not permission to infer callable/member behavior from names or Python/host conventions.",
+    "PR352 remains a negative control: a raw coverage hole can be exposed, but authority exclusions are not an acceptable fix for the canonical corpus gate.",
+    "The next cycle should reproduce or classify this frontier using canonical corpus authority without exclusions before widening semantics."
+  ],
+  "typeref_frontier": {
+    "selected_pr": 596,
+    "head": "c75d5a1dd787be60d6785fbadc0de68606a3ba85",
+    "state": "OPEN_READY_FOR_REVIEW_MERGEABLE",
+    "submitted_reviews": 0,
+    "canonical_promotion": false,
+    "reason_blocked": "NORMAL_REVIEW_AND_IF_MERGED_POST_MERGE_CANONICAL_MAIN_BINDING_REQUIRED"
+  },
+  "unusual_experiment_accounting": {
+    "count_this_go": 1,
+    "consumed": true,
+    "instruction": "Do not execute another unusual experiment in this macro-cycle. The census revalidation is ordinary provenance checking only."
+  },
+  "recommended_next_discriminator": "Start with the small freestanding/ownership subset if its current classification receipt can be reproduced from canonical corpus bytes; distinguish true unresolved language-level callable ownership from receiver-qualified/member syntax before adding any builtin/library authority.",
+  "promotion_forbidden": [
+    "no generic TypeRef semantics",
+    "no host/member defaulting",
+    "no corpus exclusions to manufacture coverage",
+    "no whole Clay Machine completion claim",
+    "no legacy Frank-v0.1 active-program regression"
+  ]
+}

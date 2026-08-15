@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.6",
+  "schema_version": "1.7",
   "workspace_id": "clayverse-clay-machine",
   "status": "ACTIVE",
   "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
@@ -45,9 +45,24 @@
     "CM-04-COMPILER-LOWERING-BYTECODE": {
       "status": "IN_PROGRESS",
       "goal": "Define lowering and executable bytecode/IR with deterministic verifier and compiler receipts.",
-      "candidate": "PR #600 provides deterministic serialized CLAYVM bytecode for a detached claycode.typed-ir.v0 Int/Bool bootstrap subset and now has exact-head self-hosted execution evidence.",
-      "blocker": "Canonical ClayCodeBaseTypedIR/v1 currently carries typed declarations/signatures but function bodies remain body_tokens; it does not yet provide the canonical typed executable expression graph needed to prove semantics-preserving lowering into the single ClayVM. Direct token reparsing or detached bootstrap dictionaries must not masquerade as canonical compiler output.",
-      "gap_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_CANONICAL_TYPED_IR_EXECUTABLE_GAP.json"
+      "prior_gap": "Canonical ClayCodeBaseTypedIR/v1 carries typed declarations/signatures but function bodies remain body_tokens; direct token reparsing or detached bootstrap dictionaries must not masquerade as canonical compiler output.",
+      "executable_typed_ir_candidate": "Draft PR #609 materializes ClayExecutableTypedIR/v1 directly from the existing canonical structured parser/analyzer AST for the already-admitted PURE #602 subset. It does not reparse body_tokens, mint member/host/generic semantics, or define a second VM.",
+      "executable_typed_ir_evidence": {
+        "pr": 609,
+        "head_sha": "ccb52873eec7b7fdb22d5ea27d30f56456ba08d2",
+        "base_sha": "7b9901881749598cb3ee67c68fce281f05fc410d",
+        "workflow": "ClayCode Executable TypedIR V1",
+        "run_id": 31910577429,
+        "runner": "clay-3",
+        "labels": ["self-hosted", "Linux", "X64"],
+        "result": "PASS",
+        "gate_checks": "10/10 by fail-on-any-check exit contract",
+        "exact_head_checkout": true,
+        "new_unusual_experiment": false,
+        "whole_clay_machine_acceptance": false
+      },
+      "bytecode_candidate": "PR #600 provides deterministic serialized CLAYVM bytecode and verifier mechanisms on exact tested head 543e67fff23fc1f2369785dde766824f23273bef.",
+      "next_discriminator": "Lower ClayExecutableTypedIR/v1 into the single #600 serialized/verifiable ClayVM core and run a source -> canonical executable IR -> bytecode -> VM differential against the retained #602 frontend/evaluator oracle."
     },
     "CM-05-VIRTUAL-CLAY-MACHINE": {
       "status": "IN_PROGRESS",
@@ -75,7 +90,7 @@
         "result": "PASS_INTEGRATION_CONTEXT_ONLY",
         "exact_head_checkout": false
       },
-      "blocker": "The prior Python-recursive call-stack blocker is closed for the exact tested bootstrap head. VM promotion remains coupled to CM-04's canonical executable TypedIR/lowering boundary and to broader verifier/object/runtime semantics; component PASS is not whole-machine PASS.",
+      "blocker": "The prior Python-recursive call-stack blocker is closed for the exact tested bootstrap head. Canonical executable TypedIR now has an exact-head draft candidate (#609), but VM promotion still requires one provenance-bound #609 -> #600 lowering path plus broader verifier/object/runtime semantics; component PASS is not whole-machine PASS.",
       "review": "PR #600 review 4944772646 recorded the original call-stack obligation."
     },
     "CM-06-MEMORY-CONCURRENCY-RUNTIME": {
@@ -106,7 +121,7 @@
     }
   },
   "frontier": {
-    "canonical_product_main_observed": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
+    "canonical_product_main_observed": "7b9901881749598cb3ee67c68fce281f05fc410d",
     "typeref_stack_totality_merge_commit": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
     "typeref_ancestry_complexity_merge_commit": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
     "typeref_ancestry_complexity_state": "MERGED_EXACT_HEAD_SELF_HOSTED_PASS",
@@ -119,12 +134,15 @@
     "unresolved_call_occurrences": 464,
     "raw_unresolved_call_sites": 574,
     "methodchain_member_segments_open": 22,
+    "canonical_executable_typed_ir_pr": 609,
+    "canonical_executable_typed_ir_head": "ccb52873eec7b7fdb22d5ea27d30f56456ba08d2",
+    "canonical_executable_typed_ir_run": 31910577429,
+    "canonical_executable_typed_ir_state": "DRAFT_EXACT_HEAD_PASS_NOT_MERGED",
     "clayvm_candidate_pr": 600,
     "clayvm_candidate_head": "543e67fff23fc1f2369785dde766824f23273bef",
     "clayvm_candidate_run": 31910392175,
-    "clayvm_candidate_state": "DRAFT_EXACT_HEAD_FRAME_STACK_PASS_CANONICAL_EXECUTABLE_IR_BLOCKED",
-    "canonical_executable_typed_ir_state": "OPEN",
-    "next_discriminator": "Primary path: define a canonical typed executable expression IR after type/effect checking and prove deterministic source/IR -> single-CLAYVM lowering without raw-token semantic reinvention. Parallel bounded CM-02 path: make compact alias-DAG expansion resource-safe."
+    "clayvm_candidate_state": "DRAFT_EXACT_HEAD_FRAME_STACK_PASS_AWAITING_CANONICAL_IR_ADAPTER",
+    "next_discriminator": "Bind #609 canonical executable TypedIR to the one #600 serialized/verifiable ClayVM and differential-check execution against #602 without raw-token semantic reinvention. Parallel bounded CM-02 path: make compact alias-DAG expansion resource-safe."
   },
   "coordination_negative_result": "Parallel GO workers can currently collide on the exactly-one unusual-experiment cardinality; shared CAS/lease serialization remains required. This remains visible even though each worker may individually record one experiment. This cycle also exposed a CI-provenance pitfall: github.sha in pull_request workflows is a merge ref unless the workflow explicitly checks out github.event.pull_request.head.sha.",
   "laws": [

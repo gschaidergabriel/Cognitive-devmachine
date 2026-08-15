@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "workspace_id": "clayverse-clay-machine",
   "status": "ACTIVE",
   "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
@@ -52,13 +52,15 @@
     "CM-05-VIRTUAL-CLAY-MACHINE": {
       "status": "IN_PROGRESS",
       "goal": "Implement Clay VM instruction semantics, execution loop, call/stack/object model, traps, limits and deterministic tests.",
-      "candidate": "PR #600 provides the first Python-hosted serialized ClayVM bootstrap slice. Head dda5992709bcdd3800fa90c2526ed5aebf43a6e2 replaces Python-recursive OP_CALL with VM-owned activation frames and an explicit max_frames resource limit.",
+      "candidate": "PR #600 provides the first Python-hosted serialized ClayVM bootstrap slice. Exact tested head 543e67fff23fc1f2369785dde766824f23273bef uses VM-owned activation frames and an explicit max_frames resource limit; its final commit also fixes CI to attest the PR head rather than the GitHub pull_request merge ref.",
       "call_stack_evidence": {
-        "run_id": 31910296146,
-        "event_head_sha": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
-        "runner": "clay-3",
+        "run_id": 31910392175,
+        "tested_head_sha": "543e67fff23fc1f2369785dde766824f23273bef",
+        "event_merge_sha": "d5c7b3d5f2195d73fd1981e28c9268cd89f2602a",
+        "runner": "clay-2",
         "labels": ["self-hosted", "Linux", "X64"],
         "result": "PASS",
+        "checks": "9/9",
         "exact_head_checkout": true,
         "revision_binding": true,
         "vm_gate": true,
@@ -66,7 +68,14 @@
         "explicit_frame_limit_regression": true,
         "python_recursive_call_semantics": false
       },
-      "blocker": "The prior Python-recursive call-stack blocker is closed for the tested bootstrap head. VM promotion remains coupled to CM-04's canonical executable TypedIR/lowering boundary and to broader verifier/object/runtime semantics; component PASS is not whole-machine PASS.",
+      "superseded_merge_ref_evidence": {
+        "run_id": 31910296146,
+        "event_head_sha": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
+        "tested_merge_sha": "fb7d09090d6334fafb9c8c54cc4f16917e7db95a",
+        "result": "PASS_INTEGRATION_CONTEXT_ONLY",
+        "exact_head_checkout": false
+      },
+      "blocker": "The prior Python-recursive call-stack blocker is closed for the exact tested bootstrap head. VM promotion remains coupled to CM-04's canonical executable TypedIR/lowering boundary and to broader verifier/object/runtime semantics; component PASS is not whole-machine PASS.",
       "review": "PR #600 review 4944772646 recorded the original call-stack obligation."
     },
     "CM-06-MEMORY-CONCURRENCY-RUNTIME": {
@@ -111,13 +120,13 @@
     "raw_unresolved_call_sites": 574,
     "methodchain_member_segments_open": 22,
     "clayvm_candidate_pr": 600,
-    "clayvm_candidate_head": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
-    "clayvm_candidate_run": 31910296146,
+    "clayvm_candidate_head": "543e67fff23fc1f2369785dde766824f23273bef",
+    "clayvm_candidate_run": 31910392175,
     "clayvm_candidate_state": "DRAFT_EXACT_HEAD_FRAME_STACK_PASS_CANONICAL_EXECUTABLE_IR_BLOCKED",
     "canonical_executable_typed_ir_state": "OPEN",
     "next_discriminator": "Primary path: define a canonical typed executable expression IR after type/effect checking and prove deterministic source/IR -> single-CLAYVM lowering without raw-token semantic reinvention. Parallel bounded CM-02 path: make compact alias-DAG expansion resource-safe."
   },
-  "coordination_negative_result": "Parallel GO workers can currently collide on the exactly-one unusual-experiment cardinality; shared CAS/lease serialization remains required. This remains visible even though each worker may individually record one experiment.",
+  "coordination_negative_result": "Parallel GO workers can currently collide on the exactly-one unusual-experiment cardinality; shared CAS/lease serialization remains required. This remains visible even though each worker may individually record one experiment. This cycle also exposed a CI-provenance pitfall: github.sha in pull_request workflows is a merge ref unless the workflow explicitly checks out github.event.pull_request.head.sha.",
   "laws": [
     "ClayVerse/Clay Machine is the only active program.",
     "GRF expands hypotheses but does not mint truth.",

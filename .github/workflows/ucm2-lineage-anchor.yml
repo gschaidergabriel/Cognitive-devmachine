@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   lineage-anchor:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 10
     steps:
       - name: Checkout exact candidate
@@ -22,19 +22,19 @@ jobs:
           persist-credentials: false
       - name: Runtime identity
         run: |
-          python --version
-          python - <<'PY'
+          python3 --version
+          python3 - <<'PY'
           import sqlite3
           print('sqlite', sqlite3.sqlite_version)
           PY
       - name: Compile UCM2 sources
         run: |
-          python -m py_compile \
+          python3 -m py_compile \
             research_entity/unified_clay_machine/UCM2/runtime/ucm2.py \
             research_entity/unified_clay_machine/UCM2/runtime/ucm2_lineage_anchor.py \
             research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py \
             research_entity/unified_clay_machine/UCM2/tests/test_ucm2_lineage_anchor.py
       - name: Existing replay recovery regression
-        run: python research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py
+        run: python3 research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py
       - name: External lineage anchor discriminator
-        run: python research_entity/unified_clay_machine/UCM2/tests/test_ucm2_lineage_anchor.py
+        run: python3 research_entity/unified_clay_machine/UCM2/tests/test_ucm2_lineage_anchor.py

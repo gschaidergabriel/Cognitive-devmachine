@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "kind": "STRICT_CLAYOS_ARTIFACT_LAUNCH",
+  "product_pr": 623,
+  "tested_head_sha": "810493c77b99140a7318a44eac46474cdc2ff709",
+  "product_merge_commit": "ac86a23a9d6e766ac5709b7dbfe0664c7a7560b7",
+  "workflow": {
+    "run_id": 31911242635,
+    "job_id": 95076512648,
+    "runner": "clay-2",
+    "machine": "clayverse",
+    "python": "3.12.3",
+    "exact_head_checkout": true,
+    "event_merge_sha": "15807bf02b874945af86771a5f01bbb847af0215",
+    "strict_os_plus_artifact_tests": "14/14",
+    "vm_core_regressions": "9/9",
+    "result": "PASS"
+  },
+  "canonical_boundary": {
+    "package_clayos_module": "claymachine.clayos",
+    "artifact_schema": "ClayVMArtifact/v1",
+    "canonical_exec": "ClayOS.exec_artifact",
+    "expected_identity_required": true,
+    "process_records_artifact_sha256": true,
+    "process_records_vm_blob_sha256": true,
+    "process_records_source_sha256": true,
+    "process_records_grammar_sha256": true,
+    "process_records_executable_ir_sha256": true,
+    "raw_blob_default": "REJECTED_RAW_CLAYVM_EXECUTION_DISABLED",
+    "raw_blob_bootstrap_opt_in": "allow_unbound_bootstrap=True",
+    "opt_in_raw_process_marked_unverified": true
+  },
+  "fail_closed_controls": {
+    "tampered_artifact_before_pid": "PASS_REJECTED",
+    "transplanted_artifact_before_pid": "PASS_REJECTED",
+    "default_raw_blob_before_pid": "PASS_REJECTED"
+  },
+  "counterevidence": {
+    "absolute_codebase_non_bypassability": false,
+    "low_level_load_module_still_available": true,
+    "legacy_claymachine_clayvm_clayos_still_available": true,
+    "interpretation": "Canonical package-level ClayOS launch is provenance-strict, but legacy low-level Python entry points have not yet been internalized or removed. Release authority must distinguish canonical route enforcement from total codebase unreachability."
+  },
+  "next_discriminator": "Inventory imports/callers of claymachine.clayvm.ClayOS and load_module outside tests/low-level VM code. If no production dependency requires them, internalize the legacy ClayOS facade and document raw load_module as verifier/test primitive; then gate canonical CLI/environment launch through package ClayOS.exec_artifact.",
+  "experiment_accounting": {
+    "new_unusual_experiment": false,
+    "macrocycle_unusual_experiment_count": 1,
+    "macrocycle_unusual_experiment": "ALIAS_WRAPPED_COMB_DEPTH"
+  },
+  "authority": {
+    "whole_clay_machine_acceptance": false,
+    "effect_authority": "NONE",
+    "training_authorized": false
+  }
+}

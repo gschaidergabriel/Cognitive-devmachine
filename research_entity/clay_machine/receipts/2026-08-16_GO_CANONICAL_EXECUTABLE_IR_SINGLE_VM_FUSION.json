@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "kind": "CANONICAL_EXECUTABLE_IR_SINGLE_VM_FUSION",
+  "product_main_after_merge": "5591da02c4a9260445f4c355d7606aa0703245f1",
+  "canonical_executable_ir": {
+    "pr": 609,
+    "merge_commit": "1bf95a2bf6912c7d40585a70d4a65221cf8fcd19",
+    "final_head": "9b5a699311c8b1878b8f8cc65e9fb45acef632f0",
+    "schema": "ClayExecutableTypedIR/v1",
+    "typecheck_authority": "ClayCodeNominalTypeCheck/v1",
+    "body_tokens_reparsed": false,
+    "second_vm_created": false
+  },
+  "single_vm_integration": {
+    "pr": 614,
+    "tested_head": "9271686e5fb5691c18f930922c32ad05997cb2e5",
+    "merge_commit": "5591da02c4a9260445f4c355d7606aa0703245f1",
+    "workflow_run": 31910823368,
+    "job": 95075478606,
+    "runner": "clay-4",
+    "machine": "clayverse",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "result": "PASS_CLAY_EXECUTABLE_IR_SINGLE_VM",
+    "executable_ir_authority_checks": "12/12",
+    "vm_core_regressions": "9/9",
+    "integration_checks": "16/16",
+    "semantic_overlap": [
+      "Int literal",
+      "Int local",
+      "Clay function call with Int parameters",
+      "Int equality -> Bool",
+      "single return"
+    ],
+    "deterministic_vm_blob": true,
+    "source_tree_vs_single_vm_differential": true,
+    "source_provenance_carried_in_lowering_receipt": true,
+    "grammar_provenance_carried_in_lowering_receipt": true,
+    "vm_blob_hash_bound_in_lowering_receipt": true,
+    "provenance_embedded_in_vm_blob": false,
+    "whole_clay_machine_completion": false
+  },
+  "independent_supporting_bridge": {
+    "pr": 613,
+    "tested_head": "67ac82378e70f068a426d4c87f3b75b8065eb6f4",
+    "workflow_run": 31910755060,
+    "job": 95075316288,
+    "runner": "clay-3",
+    "checks": "5/5",
+    "role": "Independent checked-source to single-VM replication; superseded as canonical IR authority by merged ClayExecutableTypedIR/v1."
+  },
+  "ci_provenance_negative_result": {
+    "finding": "github.sha on pull_request is normally the synthetic merge ref, not the PR head.",
+    "repair": "Current Clay gates explicitly checkout github.event.pull_request.head.sha and assert git rev-parse HEAD matches it.",
+    "importance": "Prior merge-ref successes remain integration-context evidence only when exact-head identity was not asserted."
+  },
+  "remaining_counterevidence": [
+    "The serialized CLAYVM blob does not yet embed source/executable-IR provenance; hashes live in the lowering receipt only.",
+    "The merged adapter implements only the semantic intersection already shared by canonical executable IR and the current VM core; Bool literals, let/if, records, enums, fields and broader effects remain fail-closed.",
+    "A ClayExecutableTypedIR dictionary carrying only the expected schema/typecheck identity string is not by itself a cryptographic authority proof; canonical production use must preserve trusted construction/provenance and later artifact integrity checks.",
+    "Whole Clay Machine acceptance remains false; environment, deeper Linux interop, memory/concurrency, ClayOS breadth and self-hosting are open."
+  ],
+  "next_discriminators": [
+    "Embed or cryptographically bind source/grammar/executable-IR identity into the serialized VM module format and make loader verification fail closed on mismatch.",
+    "Expand the single VM instruction/lowering surface only for semantics already admitted by ClayExecutableTypedIR/v1, using #602 differential cases as oracle and avoiding a second checker or runtime.",
+    "Bound compact alias-DAG expansion/materialization in CM-02."
+  ],
+  "experiment_accounting": {
+    "this_worker_unusual_experiments": 1,
+    "unusual_experiment": "ALIAS_WRAPPED_COMB_DEPTH",
+    "additional_unusual_experiment_in_ir_vm_fusion": false
+  },
+  "authority": {
+    "effect_authority": "NONE",
+    "training_authorized": false,
+    "whole_clay_machine_acceptance": false
+  }
+}

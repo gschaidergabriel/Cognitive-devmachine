@@ -1,0 +1,33 @@
+name: UCM2 v1 preflight
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/unified_clay_machine/UCM2/runtime/ucm2.py'
+      - 'research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py'
+      - 'research_entity/unified_clay_machine/UCM2/tests/test_legacy_v1_preflight.py'
+      - '.github/workflows/ucm2-v1-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ucm2-v1-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compile UCM2 candidate
+        run: |
+          python -m py_compile \
+            research_entity/unified_clay_machine/UCM2/runtime/ucm2.py \
+            research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py \
+            research_entity/unified_clay_machine/UCM2/tests/test_legacy_v1_preflight.py
+      - name: Existing replay and recovery regression
+        run: python research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py
+      - name: Legacy v1 fail-closed preflight regression
+        run: python research_entity/unified_clay_machine/UCM2/tests/test_legacy_v1_preflight.py

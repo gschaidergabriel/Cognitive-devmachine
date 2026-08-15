@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_VM_BOOTSTRAP_IR_BOUNDARY",
+  "created_local": "2026-08-16T04:39:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "observed_product_main": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "candidate_pr": 600,
+  "candidate_head_observed": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+  "grf": {
+    "observed": [
+      "PR600 introduces a deterministic Python-hosted stack VM, module loader, capability-gated host boundary and minimal ClayOS process facade.",
+      "The first dedicated PR workflow on head 30a2aa6a56157f81b6251148a56920211c5b3e10 failed before runner allocation: ubuntu-latest, runner_id=0, empty steps.",
+      "The branch was subsequently repaired by a parallel worker to use [self-hosted, Linux, X64] and bind revision/file hashes; the resulting run on head 1e3a3d0534848d0760b8d6fffecdedc778a9e461 was still queued when observed.",
+      "PR600 accepts an input marker schema=claycode.typed-ir.v0 with top-level functions/body expression dictionaries.",
+      "Canonical existing ClayCode typed IR in runtime/clay_wp03_exact_bundle/tools/claycode_base_typed_ir.py identifies ir_schema=ClayCodeBaseTypedIR/v1 and uses declarations, returns, body_tokens, invariants, sources, typed_ir_sha256 and program_semantic_id."
+    ],
+    "hypothesis": "The PR600 VM core can become a useful Clay Machine target runtime if its bootstrap IR is kept explicitly separate from canonical ClayCode TypedIR until a provenance-bound lowering bridge is defined after callable/member ownership is resolved.",
+    "strongest_counter_reality": "Treating the PR600 schema string as already-admitted ClayCode TypedIR would create a hidden second language architecture: arbitrary dictionaries could masquerade as canonical compiler output and bypass the actual TypedIR identity/provenance and unresolved callable/member semantics.",
+    "discriminator": "Require the VM bootstrap to either (A) rename and scope its input as an internal ClayVM bootstrap IR with no ClayCode admission claim, or (B) consume exact ClayCodeBaseTypedIR/v1 bytes/identity through a deterministic lowering adapter that fails closed on unresolved callable/member ownership. Then execute exact branch bytes on self-hosted Linux/X64.",
+    "outcome": "DEFER_PR600_PROMOTION_PENDING_IR_BOUNDARY_AND_EXACT_HEAD_EXECUTION"
+  },
+  "evidence": {
+    "canonical_typed_ir_schema": "ClayCodeBaseTypedIR/v1",
+    "candidate_claimed_schema": "claycode.typed-ir.v0",
+    "schemas_equivalent": false,
+    "candidate_is_currently_proven_claycode_to_vm_compiler": false,
+    "candidate_is_useful_as_detached_vm_target_prototype": true,
+    "first_vm_ci_semantic_result": "NOT_EXECUTED_RUNNER_ALLOCATION_FAILURE",
+    "repaired_self_hosted_ci_current_state": "QUEUED_WHEN_OBSERVED"
+  },
+  "unusual_experiment_accounting": {
+    "this_worker_go_count": 1,
+    "this_worker_go_experiment": "TYPE_PARAMETER_ORDER_PERMUTATION",
+    "additional_unusual_experiment_executed_for_this_receipt": false,
+    "instruction": "Do not execute another unusual experiment in this GO macro-cycle."
+  },
+  "promotion_boundary": {
+    "clayvm_runtime": "CANDIDATE_DRAFT",
+    "clayos_facade": "CANDIDATE_DRAFT_NOT_KERNEL",
+    "linux_interop": "CAPABILITY_BOUNDARY_CANDIDATE_ONLY",
+    "claycode_to_vm_lowering": "OPEN_SCHEMA_MISMATCH",
+    "callable_member_ownership": "OPEN",
+    "whole_clay_machine": "OPEN"
+  },
+  "next": "Resolve the canonical TypedIR-to-ClayVM boundary before merging PR600; preserve PR598 call-surface partition and keep dotted/MethodChain authority separate."
+}

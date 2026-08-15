@@ -1,22 +1,13 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "kind": "CLAY_MACHINE_GO_CALL_ARITY_VALIDATION_DELTA",
   "trigger": "go",
   "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
-  "research_head_observed_before_write": "c59391dca82e9f449404603e0b246580dccc7589",
   "product_repository": "gschaidergabriel/Dr.-Unterweger",
   "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
-  "observed_frontier": {
-    "clayvm_bootstrap_pr": 600,
-    "clayvm_bootstrap_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
-    "bootstrap_self_hosted_run": 31909944841,
-    "bootstrap_result": "PASS_7_OF_7_ON_SELF_HOSTED_LINUX_X64",
-    "canonical_ir_boundary": "ClayCodeBaseTypedIR/v1 remains distinct from PR600 bootstrap schema claycode.typed-ir.v0",
-    "independent_existing_blocker": "PR600 OP_CALL uses recursive Python self._call, so host recursion still leaks into VM call-depth/failure semantics"
-  },
-  "hypothesis": "PR600 structural bytecode validation admits an OP_CALL whose encoded argc disagrees with the target function signature, deferring the inconsistency to runtime.",
-  "strongest_counterhypothesis": "The executable boundary may intentionally trust compiler-produced bytecode and allow arity mismatch to remain a runtime trap; in that architecture the missing pre-admission check is a compiler-provenance contract rather than a verifier defect.",
+  "hypothesis": "The earlier PR600 structural bytecode validator admitted OP_CALL argc values inconsistent with the target function signature and deferred the inconsistency to runtime.",
+  "strongest_counterhypothesis": "A trusted-compiler-only executable boundary could intentionally leave arity to compiler provenance/runtime trapping, but that trust contract would have to be explicit and non-bypassable for raw executable blobs.",
   "discriminator": {
     "name": "CALL_ARGC_POST_COMPILE_MUTATION",
     "unusual_experiment_count": 1,
@@ -28,40 +19,64 @@
     "self_hosted_run": 31910150097,
     "runner": "clay-2",
     "machine": "clayverse",
-    "result": "SUPPORTED: load_module admitted the mutated module; ClayVM.run subsequently trapped ARITY_MISMATCH:add",
-    "classification": "PRE_ADMISSION_CALL_SIGNATURE_VALIDATION_GAP"
+    "result": "SUPPORTED: the then-current load_module admitted the mutated module; ClayVM.run subsequently trapped ARITY_MISMATCH:add",
+    "classification": "PRE_ADMISSION_CALL_SIGNATURE_VALIDATION_GAP",
+    "pr_state_after_collapse": "CLOSED_UNMERGED_EVIDENCE_RETAINED"
   },
   "architecture_delta": {
-    "state": "SUPPORTED_TEST_OBLIGATION",
-    "claim": "If ClayVM executable blobs are independently loadable, executable validation must bind OP_CALL argc to the target signature before execution/process admission; otherwise compiler provenance/trust must be explicit and non-bypassable.",
-    "reason": "ClayOS.exec_blob currently presents raw blob loading as fail-closed module validation before process admission, so a signature-inconsistent blob reaching runtime is evidence that structural validation is incomplete for that stated boundary.",
+    "state": "REPAIRED_ON_CURRENT_PR600_HEAD_PENDING_CANONICAL_LOWERING",
+    "claim": "Independently loadable ClayVM executable blobs reject OP_CALL argc/target-signature mismatch during validation before execution/process admission.",
     "affected_work_packages": ["CM-04-COMPILER-LOWERING-BYTECODE", "CM-05-VIRTUAL-CLAY-MACHINE", "CM-09-MINIMAL-CLAYOS", "CM-10-TOOLING-OBSERVABILITY-RECOVERY"]
   },
-  "repair_candidate": {
+  "live_overlap_collapse": {
+    "old_clayvm_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+    "current_clayvm_head_observed": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
+    "repair_commit": "6dc5e4e022a71c09b4954304b4dbcf38057d7598",
+    "repair_semantics": [
+      "_validate_code now rejects OP_CALL argc != target parameter count with CALL_ARITY_MISMATCH",
+      "Clay calls now use VM-owned activation frames rather than Python recursion",
+      "max_frames introduces explicit fail-closed CALL_DEPTH_LIMIT"
+    ],
+    "regression_commit": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
+    "self_hosted_run": 31910296146,
+    "self_hosted_runner": "clay-3",
+    "self_hosted_machine": "clayverse",
+    "exact_pr_merge_sha_tested": "fb7d09090d6334fafb9c8c54cc4f16917e7db95a",
+    "result": "PASS_9_OF_9",
+    "deep_chain_regression": "depth 1500 executes using VM frames without Python recursion",
+    "frame_limit_regression": "max_frames=4 rejects a deeper chain with CALL_DEPTH_LIMIT"
+  },
+  "redundant_repair_candidate": {
     "pr": 606,
     "head": "128e0842119d5006833272a631fcd1602889b7ba",
-    "design": "Separate load_verified_module/verify_call_arity layer rejects encoded argc != target parameter count while preserving the established valid module path.",
-    "regressions": ["valid compiler output evaluates main to 42", "established argc mutation rejected before execution with CALL_ARITY_MISMATCH"],
-    "self_hosted_run": 31910211916,
-    "state_at_receipt_write": "QUEUED",
-    "promotion": "DEFER_PENDING_EXACT_RUN_AND_ADMISSION_PATH_INTEGRATION"
+    "outcome": "CLOSED_UNMERGED_SUPERSEDED_BY_PR600_DIRECT_REPAIR",
+    "reason": "Live overlap refresh showed the canonical candidate branch had independently integrated the same verifier obligation plus the larger frame-stack repair. Duplicate runtime machinery was not promoted."
   },
   "external_mechanism_context": {
     "reference": "WebAssembly validation model",
-    "relevance": "Typed call validation binds a call to the target function type; implementations may defer function validation but require it before body execution. This is mechanism context, not Clay semantic authority."
+    "relevance": "Typed call validation binds a call to the target function type; implementations may defer function validation but require it before body execution. Mechanism context only, not Clay semantic authority."
   },
   "grf_collapse": {
-    "preferred_reality": "ClayVM should have an explicit executable verifier boundary rather than relying on runtime traps for statically checkable call-signature inconsistencies.",
-    "counterevidence_preserved": "A provenance-bound trusted-compiler-only module format could rationally move this obligation to compiler attestation; PR600 does not yet establish such a non-bypassable provenance contract.",
-    "outcome": "RETAIN_AND_REPAIR_CANDIDATE"
+    "outcome": "PROMOTE_REPAIR_EVIDENCE_WITH_LIMITS",
+    "supported": [
+      "The original pre-admission arity gap existed on the tested old head.",
+      "The current PR600 head repairs that gap on its tested Int/Bool bootstrap bytecode surface.",
+      "The current PR600 head removes Python recursion from Clay call-depth semantics on the tested frame-stack surface."
+    ],
+    "still_open": [
+      "Canonical ClayCodeBaseTypedIR/v1 to ClayVM lowering/provenance boundary",
+      "Broader type/object/memory/concurrency semantics",
+      "Deep typed Linux interoperability",
+      "Clay Environment and full minimal ClayOS acceptance",
+      "Whole Clay Machine completion"
+    ]
   },
   "scope_limits": [
-    "No claim that PR600 is canonical ClayCode-to-VM lowering.",
-    "No claim that Python recursive call-stack semantics are repaired.",
-    "No product-main merge in this receipt.",
+    "No claim that PR600 is yet canonical ClayCode-to-VM lowering.",
+    "No product-main merge performed by this receipt.",
     "No whole Clay Machine completion claim.",
     "No external effect or training authorization.",
     "Together API not used.",
-    "No second unusual experiment executed in this GO macro-cycle."
+    "Exactly one unusual experiment executed in this GO macro-cycle; later work was ordinary repair/regression/coordination."
   ]
 }

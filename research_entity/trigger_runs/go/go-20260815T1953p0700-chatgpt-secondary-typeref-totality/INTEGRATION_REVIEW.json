@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260815T1953p0700-chatgpt-secondary-typeref-totality",
+  "reviewed_after_candidate_pass": true,
+  "target_head": "442cb0049876c119df74cac00756106c5d1f0a4c",
+  "candidate_run": 31885904602,
+  "new_unusual_experiment": false,
+  "observed_code_counter_surface": {
+    "kind": "TYPE_REF_DIAGNOSTIC_RENDERING_RECURSION",
+    "evidence": "Current TypeRef.__str__ recursively renders params; current WP04 mismatch diagnostics interpolate TypeRef objects. Integrating iterative canonicalization/equality alone could therefore leave a host-stack-dependent failure path when a deep type mismatch reaches diagnostics.",
+    "status": "OPEN_DERIVED_FROM_SOURCE_REVIEW_NOT_EXECUTED_AS_NEW_OOB"
+  },
+  "decision": "KEEP_PR583_DRAFT_DO_NOT_PRODUCT_INTEGRATE_YET",
+  "reason": "Mechanism PASS is narrower than production-path totality. A production integration must either add bounded/iterative TypeRef diagnostic rendering or prove an earlier admitted-depth bound that makes the recursive renderer unreachable.",
+  "next_falsifier": "Ordinary fixed-depth integration regression covering a deep mismatching TypeRef through the real NominalTypeChecker diagnostic path, with no new threshold search and no second unusual experiment.",
+  "pull_request_comment_id": 5302338762,
+  "promotion": "NO_PRODUCT_INTEGRATION"
+}

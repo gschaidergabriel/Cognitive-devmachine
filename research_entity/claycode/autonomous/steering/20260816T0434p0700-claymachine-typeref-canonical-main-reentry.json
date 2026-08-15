@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_TYPEREF_CANONICAL_MAIN_REENTRY",
+  "created_local": "2026-08-16T04:34:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_repo_parent": "ce6e66e9e1fddff471a012882350ddd3f9f9e7cf",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_before": "7fbcb5f64798d919859dc0b664ab5f29559f9d5a",
+  "selected_pr": 596,
+  "selected_pr_head": "c75d5a1dd787be60d6785fbadc0de68606a3ba85",
+  "selected_pr_tree": "cd00ec68f9c6bc60994beefe04283d620bdaddfc",
+  "merge_result": {
+    "merged": true,
+    "merge_method": "squash",
+    "canonical_main": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
+    "canonical_main_tree": "cd00ec68f9c6bc60994beefe04283d620bdaddfc",
+    "verified_commit_signature": true,
+    "tree_identity_matches_premerge_tested_tree": true
+  },
+  "premerge_executable_evidence": {
+    "production_typeref_totality": "PASS_CLAYCODE_TYPEREF_PRODUCTION_TOTALITY_GATE",
+    "checks": "8_OF_8_PASS_DEPTH_4096",
+    "run": 31908420433,
+    "artifact_sha256": "a365569ef32f5b7189d1901e7c34df34e9f1243700b30267f0d9d32c56506e58",
+    "checker_blob": "dc30c17646d388a38ce6743416c6254b61bb7e8b",
+    "syntax_blob": "a71bf30718feba0753663d76f9dc9b5e11602971",
+    "gate_blob": "9ec99a9a9df06e08fcae539d9ceede0a7b8653f0",
+    "executed_successful_compatibility_workflows": 12,
+    "conditionally_skipped_workflows": 1,
+    "scope": "fresh-main byte-identical merge-context evidence; no generic semantics and no whole-machine acceptance"
+  },
+  "postmerge_observation": {
+    "integrity": "PASS",
+    "vps_integrity": "PASS",
+    "sqlite_productive_path_readonly": "FAIL_EXIT_78",
+    "sqlite_package_provenance_readonly": "FAIL_EXIT_78",
+    "sqlite_published_patchset_readonly": "FAIL_EXIT_78",
+    "sqlite_productive_path_observed": {
+      "sqlite_version": "3.45.1",
+      "libsqlite3_path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "libsqlite3_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+      "anchor_metadata_trusted": false,
+      "anchor_runtime_match": false,
+      "anchor_schema_trusted": false,
+      "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING"
+    },
+    "causal_interpretation": "SQLite failures are the pre-existing fail-closed persistence/release lane and are not evidence that the TypeRef merge regressed ClayCode. Main is not globally green and no release promotion is allowed."
+  },
+  "grf": {
+    "observed": "PR596 is canonical main and its merged tree is byte-identical to the premerge tested tree.",
+    "hypothesis": "Explicit-stack TypeRef canonicalization/equality/rendering removes host recursion-depth dependence while preserving current admitted nominal/alias semantics.",
+    "counterhypothesis": "Hidden recursive behavior or alias provenance coupling still makes deep structural TypeRefs host-stack dependent or semantically unstable.",
+    "collapse": "RETAIN_SUPPORTED_FOR_CURRENT_ADMITTED_TYPEREF_SCOPE",
+    "promotion_boundary": "Do not infer generic TypeRef semantics, full WP04/WP06 completion, VM/compiler completion, or whole Clay Machine acceptance."
+  },
+  "unusual_experiment_accounting": {
+    "count_this_go": 1,
+    "consumed": true,
+    "name": "RECURSION_LIMIT_PINCH",
+    "class": "LOCAL_ISOLATED_STRUCTURAL_REPRO_NOT_PRODUCT_IMPORT",
+    "setup": "Recursion limit forced to 64; nested TypeRef depth 512; compare legacy recursive structural canonicalization with the merged explicit-stack algorithm and exercise iterative rendering/equality/mismatch.",
+    "result": {
+      "legacy_recursive": "RECURSION_ERROR_EXPECTED",
+      "current_canonical": "PASS",
+      "current_render_len": 2563,
+      "current_same_equal": true,
+      "current_same_mismatch": false,
+      "current_elapsed_ms": 2.617
+    },
+    "interpretation": "The isolated discriminator supports the intended mechanism and demonstrates a concrete host-stack failure in the legacy shape. It is not target-VPS or exact-module-import evidence and therefore does not supersede the 4096-depth target-lane receipt."
+  },
+  "frontier_after_merge": {
+    "authorized_sources": 40,
+    "parsed_authorized_sources": 36,
+    "coverage_percent": 90.0,
+    "unresolved_unique_call_names": 429,
+    "unresolved_call_occurrences": 464,
+    "methodchain_member_segments_open": 22,
+    "recommended_next_discriminator": "Reproduce/classify the smallest freestanding unresolved-call ownership subset from canonical corpus bytes, separating language-level callable ownership from receiver-qualified/member syntax before adding any builtin, library or host authority."
+  },
+  "negative_results_preserved": [
+    "SQLite accepted-target trust anchor remains blocked on observed 3.45.1 runtime path.",
+    "No generic TypeRef semantics selected.",
+    "No whole Clay Machine completion claim.",
+    "No legacy Frank-v0.1 active-program regression."
+  ],
+  "next_actions_ranked": [
+    "429/464 unresolved Call ownership classification from canonical corpus without exclusions",
+    "22 MethodChain/member semantic-authority classification",
+    "productive WP04 admission non-bypassability across evaluator/compiler/lowering/FFI",
+    "accepted-target SQLite trust-anchor/runtime remediation as a separate persistence/release blocker"
+  ]
+}

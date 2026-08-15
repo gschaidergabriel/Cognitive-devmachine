@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "kind": "PROVENANCE_BOUND_CLAYVM_ARTIFACT",
+  "product_pr": 619,
+  "product_tested_head": "ee8d45d2aa8ae043ae655cf640f339cbe0ac9e3b",
+  "product_merge_commit": "156cce431946630b6ef792ab3a65b4734b7df65d",
+  "workflow": {
+    "run_id": 31911040455,
+    "job_id": 95075986858,
+    "runner": "clay-4",
+    "machine": "clayverse",
+    "python": "3.12.3",
+    "exact_head_checkout": true,
+    "event_merge_sha": "a04c72cb758089b3e303940f761509cb6e79af29",
+    "result": "PASS",
+    "provenance_tests": "8/8",
+    "canonical_ir_single_vm_regression": "16/16"
+  },
+  "artifact": {
+    "schema": "ClayVMArtifact/v1",
+    "wrapped_core_format": "CLAYVM/1",
+    "second_vm_created": false,
+    "semantic_surface_widened": false,
+    "canonical_header": true,
+    "source_sha256_bound": true,
+    "grammar_sha256_bound": true,
+    "executable_ir_sha256_bound": true,
+    "vm_blob_sha256_bound": true,
+    "caller_expected_identity_required": true,
+    "existing_vm_loader_reused_after_envelope_verification": true,
+    "deterministic_artifact_bytes": true
+  },
+  "fail_closed_controls": {
+    "wrong_expected_source": "PASS_REJECTED",
+    "wrong_expected_executable_ir": "PASS_REJECTED",
+    "self_consistent_transplanted_artifact": "PASS_REJECTED",
+    "header_identity_tamper": "PASS_REJECTED",
+    "vm_payload_tamper": "PASS_REJECTED",
+    "raw_clayvm_core_substitution": "PASS_REJECTED",
+    "trailing_artifact_bytes": "PASS_REJECTED"
+  },
+  "counterevidence": {
+    "legacy_raw_load_module_still_callable": true,
+    "production_routing_non_bypassable": false,
+    "interpretation": "The bound artifact admission path is provenance-aware, but callers that are allowed to invoke the legacy raw CLAYVM loader can still bypass the envelope. This is the next security/architecture gate, not a whole-machine PASS."
+  },
+  "next_discriminator": "Inventory production/runtime entry points to raw load_module/ClayOS.exec_blob and route the production ClayOS/program-loading path through ClayVMArtifact/v1 while preserving raw loading only as an explicitly internal/test primitive.",
+  "experiment_accounting": {
+    "new_unusual_experiment": false,
+    "macrocycle_unusual_experiment_count": 1,
+    "macrocycle_unusual_experiment": "ALIAS_WRAPPED_COMB_DEPTH"
+  },
+  "authority": {
+    "effect_authority": "NONE",
+    "whole_clay_machine_acceptance": false,
+    "training_authorized": false
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_FRONTEND_VM_ORACLE_EXACT_HEAD_RECEIPT",
+  "created_local": "2026-08-16T04:44:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "2a7b608585c10edd78ab084378b171131b87905a",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "candidate_pr": 602,
+  "tested_head": "482b7b62975aaa5b02d58a5d4a0373b56158a425",
+  "target_run": 31910116292,
+  "target_job": 95073800063,
+  "runner": "clay",
+  "host": "clayverse",
+  "result": {
+    "status": "PASS_CLAY_MACHINE_STACK_VM_V1",
+    "checks_passed": 9,
+    "checks_total": 9,
+    "differential_requests": 50576,
+    "structured_requests": 576,
+    "randomized_requests": 50000,
+    "seed": 8162026,
+    "mismatches": 0,
+    "reachable_functions": ["decide_effect", "destructive_guard_complete"],
+    "instruction_count": 253,
+    "peak_rss_kib": 33584,
+    "wall_seconds": 4.87,
+    "whole_clay_machine_completion": "NOT_CLAIMED"
+  },
+  "promotion": {
+    "frontend_semantic_oracle": "SUPPORTED_FOR_NARROW_TESTED_CLOSURE",
+    "standalone_production_vm": "DEFER",
+    "host_stack_independent_vm": "NOT_PROVEN",
+    "reason": "Current ClayVM CALL still recursively invokes Python _call; operand/local frame isolation is tested, but activation control is not yet an explicit iterative VM frame stack.",
+    "canonical_ir_boundary": "OPEN",
+    "single_vm_fusion_target": true
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_in_this_receipt": false,
+    "worker_go_experiment_already_consumed": "TYPEREF_ALIAS_DAG_EXPANSION_BOMB"
+  },
+  "next_falsifier": "Move CALL control into an explicit iterative ClayVM activation stack, then rerun the same exact-head differential and fail-closed regressions without any new unusual experiment."
+}

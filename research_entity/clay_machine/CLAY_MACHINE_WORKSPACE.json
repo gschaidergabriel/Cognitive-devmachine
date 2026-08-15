@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "workspace_id": "clayverse-clay-machine",
+  "status": "ACTIVE",
+  "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "work_packages": {
+    "CM-01-LANGUAGE-SPEC-PARSER-IR": {
+      "status": "IN_PROGRESS",
+      "goal": "Canonical ClayCode syntax, parser, AST/IR and corpus authority with unknown constructs failing closed.",
+      "current_evidence": {"authorized_sources": 40, "parsed_authorized_sources": 36, "coverage_percent": 90.0, "parser_rejected_sources": 4}
+    },
+    "CM-02-TYPE-EFFECT-SYSTEM": {
+      "status": "IN_PROGRESS",
+      "goal": "Nominal/structural type and effect semantics independent of Python recursion/host defaults, with bounded complexity and explicit semantic authority.",
+      "blocker": "Merged TypeRef iterative traversal has a newly measured alias-wrapped depth complexity risk; exact canonical-main repair plus Ubuntu regression is required before treating totality as robust."
+    },
+    "CM-03-EVALUATOR-INTERPRETER": {
+      "status": "IN_PROGRESS",
+      "goal": "Fail-closed executable ClayCode evaluator for admitted language semantics; no host behavior by default."
+    },
+    "CM-04-COMPILER-LOWERING-BYTECODE": {
+      "status": "OPEN",
+      "goal": "Define lowering and executable bytecode/IR with deterministic verifier and compiler receipts."
+    },
+    "CM-05-VIRTUAL-CLAY-MACHINE": {
+      "status": "OPEN",
+      "goal": "Implement Clay VM instruction semantics, execution loop, call/stack/object model, traps, limits and deterministic tests."
+    },
+    "CM-06-MEMORY-CONCURRENCY-RUNTIME": {
+      "status": "OPEN",
+      "goal": "Define VM memory/object lifetime, concurrency/scheduling and failure semantics."
+    },
+    "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK": {
+      "status": "OPEN",
+      "goal": "A self-contained Clay environment directory/runtime with standard library, modules, packaging and developer SDK."
+    },
+    "CM-08-LINUX-INTEROP": {
+      "status": "OPEN",
+      "goal": "Typed capability-bound Linux filesystem/process/network/device/FFI interop with explicit effects, receipts and fail-closed boundaries."
+    },
+    "CM-09-MINIMAL-CLAYOS": {
+      "status": "OPEN",
+      "goal": "Minimal ClayOS services/shell/runtime personality hosted by the Clay VM/environment, sufficient to demonstrate boot, program execution, state and Linux interaction."
+    },
+    "CM-10-TOOLING-OBSERVABILITY-RECOVERY": {
+      "status": "OPEN",
+      "goal": "Compiler/VM diagnostics, fuzzing, replay, crash/recovery, provenance, performance and reproducibility gates."
+    },
+    "CM-11-SELF-HOSTING-BOOTSTRAP": {
+      "status": "OPEN",
+      "goal": "Progressively move selected compiler/runtime components into ClayCode and prove bootstrap equivalence without circular trust."
+    }
+  },
+  "frontier": {
+    "canonical_product_main_observed": "a34c17b122541e54c3ee8a1bfb9b7970d0cc406e",
+    "typeref_merge_commit": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
+    "unresolved_call_names": 429,
+    "unresolved_call_occurrences": 464,
+    "methodchain_member_segments_open": 22,
+    "next_discriminator": "Repair/measure alias-wrapped TypeRef ancestry complexity on canonical main, then classify the smallest canonical unresolved-call ownership subset without host/library defaulting."
+  },
+  "laws": [
+    "ClayVerse/Clay Machine is the only active program.",
+    "GRF expands hypotheses but does not mint truth.",
+    "Legacy Frank/self.root/UCM2 paths are evidence only.",
+    "No hidden host semantics, generic semantics, effect authority, or completion claims from names or model consensus.",
+    "Together API is forbidden.",
+    "No final paid training without explicit owner authorization."
+  ]
+}

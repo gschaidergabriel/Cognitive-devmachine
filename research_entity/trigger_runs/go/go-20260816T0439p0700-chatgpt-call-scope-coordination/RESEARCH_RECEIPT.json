@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_BARE_CALL_SCOPE_AND_SWARM_COORDINATION",
+  "trigger": "go",
+  "trigger_started_local": "2026-08-16T04:28:00+07:00",
+  "receipt_written_local": "2026-08-16T04:39:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "8290a7faaa38789d39bb30acf298c3a91fb1052e",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "canonical_program_state": {
+    "schema_version": "4.0",
+    "current_stage": "CLAY_MACHINE",
+    "workspace": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json"
+  },
+  "observed_frontier": {
+    "pr598_merge": "210bd190d26d5ad3aa3d0b646e52d42646680c9b",
+    "pr598_result": "BARE_UNQUALIFIED_CALL_TARGET and DOTTED_CALLEE_TARGET are now measured separately without minting ownership semantics",
+    "call_ownership_branch": "chatgpt/go-claymachine-call-ownership-census-20260816",
+    "call_ownership_branch_head": "9da6ab78e51fc638bf77db2036f2b03fd3acd534",
+    "call_ownership_branch_state": "DIVERGED_FROM_MAIN; contains richer cross-module candidate/ambiguity/raw-call-site census and a dedicated VPS workflow",
+    "typeref_ancestry_branch": "chatgpt/go-claymachine-typeref-ancestry-linear-20260816",
+    "typeref_ancestry_branch_observed_head": "79c389b81e205c30ee9502031ddadc7d6b050408",
+    "concurrent_vm_research_heads": [
+      "78a6b5589bee202e1a218df87625cbf81285f5e7",
+      "8290a7faaa38789d39bb30acf298c3a91fb1052e"
+    ]
+  },
+  "hypothesis": "A bare unresolved Call name that matches one global Clay declaration is sufficient evidence to design direct cross-module ownership from name coincidence.",
+  "strongest_counterhypothesis": "Bare name coincidence is still insufficient because lexical/local binding and callable-namespace rules can change ownership; an explicit scope/module/import contract is required before execution authority is selected.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "BARE_GLOBAL_SHADOW_INVERSION",
+    "bounded": true,
+    "reversible": true,
+    "scope": "local synthetic discriminator only; no product bytes and no accepted-VPS claim",
+    "baseline": {
+      "global_function": "foo -> module_A",
+      "local_bindings": [],
+      "name_only_owner": "module_A",
+      "scope_aware_owner": "module_A",
+      "expected": "module_A"
+    },
+    "adversarial_control": {
+      "global_function": "foo -> module_A",
+      "local_bindings": ["foo"],
+      "name_only_owner": "module_A",
+      "scope_aware_owner": null,
+      "expected": null
+    },
+    "result": "NAME_ONLY_HEURISTIC_FAILS_THE_SHADOW_CONTROL; SCOPE_AWARE_RULE_PRESERVES_BASELINE_AND_CONTROL",
+    "interpretation": "Supports the counterhypothesis at mechanism level: global name coincidence cannot by itself mint ownership.",
+    "limitation": "Current ClayCode callable namespace/shadowing semantics are not promoted here. The current analyzer/evaluator dispatch ordinary Call by analyzed callee kind, while local Let bindings populate the value environment. This experiment therefore exposes a contract question, not a proven production bug."
+  },
+  "grf_collapse": {
+    "preferred_reality": "Explicit scope/module/import ownership must precede promotion of bare cross-module Call candidates.",
+    "counterevidence_preserved": "ClayCode may intentionally define function calls in a namespace separate from local value bindings; if owner-fixed semantics choose that rule, the synthetic shadow control is not a language bug.",
+    "outcome": "RETAIN_CONTRACT_OBLIGATION_NO_EXECUTION_SEMANTICS_PATCH"
+  },
+  "swarm_collision_decision": {
+    "product_patch_created_by_this_worker": false,
+    "reason": "Active overlapping branches already cover both call-ownership census and TypeRef ancestry repair; a new product branch would duplicate or race current work.",
+    "required_reentry": [
+      "Do not duplicate PR598 syntactic ownership partition.",
+      "If the richer call-ownership census branch is continued, rebase/rebuild it on current product main and reconcile its cross-module categories with PR598 bare-vs-dotted surfaces before merge.",
+      "Keep dotted/member/MethodChain semantics separate from bare unqualified ownership.",
+      "Do not promote a unique global-name match to executable ownership until lexical scope and module/import rules are explicit and fail-closed.",
+      "Do not duplicate the TypeRef ancestry repair while its dedicated branch is active.",
+      "Do not duplicate the concurrent ClayVM bootstrap work; consume its canonical receipts after integration."
+    ]
+  },
+  "scope_limits": [
+    "No whole Clay Machine completion claim.",
+    "No new cross-module, member, host, or callable-value semantics selected.",
+    "No accepted-VPS claim for the local unusual experiment.",
+    "No final paid training authorization.",
+    "Together API not used."
+  ]
+}

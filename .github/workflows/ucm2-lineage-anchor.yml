@@ -1,0 +1,40 @@
+name: UCM2 lineage anchor
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/unified_clay_machine/UCM2/runtime/**'
+      - 'research_entity/unified_clay_machine/UCM2/tests/**'
+      - '.github/workflows/ucm2-lineage-anchor.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lineage-anchor:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Runtime identity
+        run: |
+          python3 --version
+          python3 - <<'PY'
+          import sqlite3
+          print('sqlite', sqlite3.sqlite_version)
+          PY
+      - name: Compile UCM2 sources
+        run: |
+          python3 -m py_compile \
+            research_entity/unified_clay_machine/UCM2/runtime/ucm2.py \
+            research_entity/unified_clay_machine/UCM2/runtime/ucm2_lineage_anchor.py \
+            research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py \
+            research_entity/unified_clay_machine/UCM2/tests/test_ucm2_lineage_anchor.py
+      - name: Existing replay recovery regression
+        run: python3 research_entity/unified_clay_machine/UCM2/tests/test_ucm2.py
+      - name: External lineage anchor discriminator
+        run: python3 research_entity/unified_clay_machine/UCM2/tests/test_ucm2_lineage_anchor.py

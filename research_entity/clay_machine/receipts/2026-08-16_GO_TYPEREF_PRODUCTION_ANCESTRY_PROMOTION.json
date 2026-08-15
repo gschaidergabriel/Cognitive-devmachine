@@ -1,0 +1,81 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "trigger": "go",
+  "scope": "CM-02-TYPE-EFFECT-SYSTEM / TypeRef alias ancestry complexity",
+  "observed_at": "2026-08-16T04:47:30+07:00",
+  "grf": {
+    "observed_reality": "Merged TypeRef canonicalization on product main was stack-total but copied branch-local alias ancestry. Concurrent candidate work converged on a mutable DFS active-path mechanism.",
+    "hypothesis": "A single mutable active-alias DFS path with explicit leave frames removes repeated ancestry-set copying while preserving fail-closed direct/structural cycle detection and sibling provenance.",
+    "counter_reality": "Mutable path state can leak or unwind too early across structural siblings, producing missed or false cycles; exact-head/provenance mistakes can also make a green PR-merge-context run look like head evidence.",
+    "collapse": "RETAIN/PROMOTE the bounded alias-ancestry repair only. Generic type semantics, full effect semantics, and whole Clay Machine completion remain OPEN."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "BROOM_ALIAS_DEPTH_WIDTH",
+    "class": "bounded isolated source-faithful discriminator",
+    "topology": "Alias chain depth N terminating in one parameterized Hub with width N leaf parameters; N in [128,256,512,1024,2048].",
+    "purpose": "Stress simultaneous ancestry depth and sibling width, where the old copy-per-child mechanism duplicates the inherited alias set at every child.",
+    "n_2048": {
+      "old_inherited_alias_elements_copied": 4194304,
+      "candidate_active_alias_adds": 2048,
+      "candidate_active_alias_removes": 2048,
+      "old_median_seconds": 0.034718918000010035,
+      "candidate_median_seconds": 0.009967805000002272,
+      "observed_speed_ratio_old_over_candidate": 3.4831056586682947,
+      "semantic_summary_equal": true
+    },
+    "authority": "SANDBOX_DIAGNOSTIC_ONLY_NOT_RELEASE_EVIDENCE",
+    "rollback": "Ephemeral isolated harness only; no product mutation was made by the experiment."
+  },
+  "provenance_discovery": {
+    "pr_605": {
+      "state": "CLOSED_UNMERGED",
+      "workflow_run": 31910166336,
+      "green_but_not_exact_head": true,
+      "event_head_sha": "c7a54d6a9703380d0ea0097c485fec77abc2fcec",
+      "tested_pr_merge_sha": "9f5efd467166a954e540fb53dfe6cfb265c377df",
+      "reason": "pull_request GITHUB_SHA resolves to the PR merge branch commit unless the workflow explicitly uses github.event.pull_request.head.sha."
+    },
+    "primary_source": "GitHub Actions documentation: pull_request GITHUB_SHA is the last merge commit of the PR merge branch; use github.event.pull_request.head.sha for the head commit."
+  },
+  "production_candidate": {
+    "pr": 603,
+    "head_sha": "2805fcf33d86e692f1aac53b23e60452a4acd036",
+    "base_sha": "79c389b81e205c30ee9502031ddadc7d6b050408",
+    "mechanism": "mutable active_aliases DFS path with explicit leave_aliases frames in production NominalTypeChecker._canonical",
+    "generic_semantics_selected": false,
+    "effect_authority": "NONE"
+  },
+  "exact_head_self_hosted_evidence": {
+    "workflow_run": 31910197430,
+    "artifact_id": 9253477641,
+    "artifact_digest": "sha256:b4edcb3b9c63643b4f6d1dc4302ff79b0d929f81e045b528af29ef3b19970d66",
+    "evidence_context": "EXACT_PR_HEAD",
+    "tested_sha": "2805fcf33d86e692f1aac53b23e60452a4acd036",
+    "event_head_sha": "2805fcf33d86e692f1aac53b23e60452a4acd036",
+    "checker_blob": "6e8ed088d9d157fa4dc0d40329ae5ca610042727",
+    "gate_blob": "b8de778de525918c1b1a511b05529d8f90822534",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "result": "PASS_CLAYCODE_TYPEREF_PRODUCTION_TOTALITY_GATE",
+    "checks": "12/12",
+    "alias_depth_8192_seconds": 0.01986217312514782,
+    "alias_depth_32768_seconds": 0.09880053345113993,
+    "deep_over_shallow_ratio": 4.97430632733973,
+    "deep_seconds_limit": 5.0,
+    "ratio_limit": 12.0,
+    "whole_clay_machine_completion": false
+  },
+  "promotion": {
+    "merged_pr": 603,
+    "product_main_commit": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
+    "product_main_checker_blob": "6e8ed088d9d157fa4dc0d40329ae5ca610042727",
+    "product_main_gate_blob": "b8de778de525918c1b1a511b05529d8f90822534",
+    "exact_tested_blobs_match_product_main": true,
+    "component_result": "PROMOTED_TYPE_REF_ALIAS_ANCESTRY_COMPLEXITY_FIX",
+    "cm_02_status": "IN_PROGRESS",
+    "whole_clay_machine_completion": false
+  },
+  "next_falsifier": "Move CM-02 to the next unresolved semantic boundary: canonical executable typed expression/effect semantics and generic/type-composition rules must be specified and tested without inheriting Python host behavior."
+}

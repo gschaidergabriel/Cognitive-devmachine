@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "run_id": "go-20260815T1953p0700-chatgpt-secondary-productstart-prepython-v6",
   "program": "FRANK_V0_1",
   "component": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
@@ -9,7 +9,8 @@
     "branch": "chatgpt/go-productstart-prepython-v6-discriminator-20260815",
     "head": "25657611cf884eee03022cf9cf54c8e436a3f8a1",
     "pull_request": 586,
-    "pull_request_state": "DRAFT",
+    "pull_request_state": "MERGED",
+    "merge_sha": "be53e78c0c603a2d5f775cd0fe978cf0c5e15773",
     "review_receipt": 4943889468,
     "changed_files": [
       "tests/frank_productstart_prepython_v6_readonly_gate.py",
@@ -62,6 +63,26 @@
     "harness_authority": "NONE",
     "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
     "new_unusual_experiment_count": 0
+  },
+  "ci_lifecycle_followup": {
+    "pull_request": 590,
+    "head": "5e1ba53679a371110f3ff5e189ed06a5957ba4a4",
+    "merge_sha": "43646539dbb66541e1c3ade148309318a2427340",
+    "purpose": "replace one-off evidence-branch push trigger with narrow pull_request path gate plus workflow_dispatch",
+    "workflow_run": 31886181799,
+    "job": 95015706651,
+    "status": "COMPLETED",
+    "conclusion": "SUCCESS",
+    "runner": "clay-2",
+    "new_unusual_experiment_count": 0,
+    "semantic_job_body_changed": false
+  },
+  "concurrency_revalidation": {
+    "current_product_main": "43646539dbb66541e1c3ade148309318a2427340",
+    "pr586_merge_is_ancestor": true,
+    "comparison_from_pr586_merge": "ahead_by=2; behind_by=0",
+    "intervening_product_changes": "runtime/vps_integrity receipt refresh plus PR590 workflow-trigger lifecycle change",
+    "falsifier_overwritten": false
   },
   "grf_collapse": {
     "python_first_current_units_are_admissible_after_argv_only_binding": "REJECT",

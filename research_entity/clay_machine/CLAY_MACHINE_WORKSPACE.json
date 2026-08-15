@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "workspace_id": "clayverse-clay-machine",
   "status": "ACTIVE",
   "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
@@ -43,14 +43,29 @@
     "CM-04-COMPILER-LOWERING-BYTECODE": {
       "status": "IN_PROGRESS",
       "goal": "Define lowering and executable bytecode/IR with deterministic verifier and compiler receipts.",
-      "candidate": "PR #600 lowers an admitted claycode.typed-ir.v0 Int/Bool subset into deterministic CLAYVM bytecode; draft only pending exact-head evidence and review obligations."
+      "candidate": "PR #600 provides deterministic serialized CLAYVM bytecode for a detached claycode.typed-ir.v0 Int/Bool bootstrap subset and now has exact-head self-hosted execution evidence.",
+      "blocker": "Canonical ClayCodeBaseTypedIR/v1 currently carries typed declarations/signatures but function bodies remain body_tokens; it does not yet provide the canonical typed executable expression graph needed to prove semantics-preserving lowering into the single ClayVM. Direct token reparsing or detached bootstrap dictionaries must not masquerade as canonical compiler output.",
+      "gap_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_CANONICAL_TYPED_IR_EXECUTABLE_GAP.json"
     },
     "CM-05-VIRTUAL-CLAY-MACHINE": {
       "status": "IN_PROGRESS",
       "goal": "Implement Clay VM instruction semantics, execution loop, call/stack/object model, traps, limits and deterministic tests.",
-      "candidate": "PR #600 provides the first Python-hosted ClayVM bootstrap slice.",
-      "blocker": "Exact PR head 1e3a3d0534848d0760b8d6fffecdedc778a9e461 executes OP_CALL through recursive Python self._call(...), making Python recursion an implicit Clay VM call-depth/failure semantic. Keep draft unpromoted until an explicit VM frame stack/trampoline and Clay-defined resource limit are tested.",
-      "review": "PR #600 review 4944772646 records the call-stack test obligation."
+      "candidate": "PR #600 provides the first Python-hosted serialized ClayVM bootstrap slice. Head dda5992709bcdd3800fa90c2526ed5aebf43a6e2 replaces Python-recursive OP_CALL with VM-owned activation frames and an explicit max_frames resource limit.",
+      "call_stack_evidence": {
+        "run_id": 31910296146,
+        "event_head_sha": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
+        "runner": "clay-3",
+        "labels": ["self-hosted", "Linux", "X64"],
+        "result": "PASS",
+        "exact_head_checkout": true,
+        "revision_binding": true,
+        "vm_gate": true,
+        "deep_call_chain_depth": 1500,
+        "explicit_frame_limit_regression": true,
+        "python_recursive_call_semantics": false
+      },
+      "blocker": "The prior Python-recursive call-stack blocker is closed for the tested bootstrap head. VM promotion remains coupled to CM-04's canonical executable TypedIR/lowering boundary and to broader verifier/object/runtime semantics; component PASS is not whole-machine PASS.",
+      "review": "PR #600 review 4944772646 recorded the original call-stack obligation."
     },
     "CM-06-MEMORY-CONCURRENCY-RUNTIME": {
       "status": "OPEN",
@@ -91,9 +106,11 @@
     "unresolved_call_occurrences": 464,
     "methodchain_member_segments_open": 22,
     "clayvm_candidate_pr": 600,
-    "clayvm_candidate_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
-    "clayvm_candidate_state": "DRAFT_CI_QUEUED_AND_REVIEW_BLOCKED",
-    "next_discriminator": "Wire the proven non-copying TypeRef active-alias path into production typecheck.py on fresh canonical main, preserve cycle/sibling semantics, add a production-comparison regression, and require exact-head self-hosted Linux/X64 evidence before promotion. In parallel, replace PR #600 Python-recursive OP_CALL with an explicit Clay VM frame stack and verify exact-head CI before promotion."
+    "clayvm_candidate_head": "dda5992709bcdd3800fa90c2526ed5aebf43a6e2",
+    "clayvm_candidate_run": 31910296146,
+    "clayvm_candidate_state": "DRAFT_EXACT_HEAD_FRAME_STACK_PASS_CANONICAL_EXECUTABLE_IR_BLOCKED",
+    "canonical_executable_typed_ir_state": "OPEN",
+    "next_discriminator": "Wire the proven non-copying TypeRef active-alias path into production typecheck.py with exact-head regression; for the VM lane, define a canonical typed executable expression IR after type/effect checking and prove deterministic source/IR -> single-CLAYVM lowering without raw-token semantic reinvention."
   },
   "coordination_negative_result": "Parallel GO workers can currently collide on the exactly-one unusual-experiment cardinality; shared CAS/lease serialization remains required.",
   "laws": [

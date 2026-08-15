@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260815T1953p0700-chatgpt-secondary-typeref-totality",
+  "trigger": "go",
+  "active_program": "FRANK_V0_1",
+  "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "research_entity_parent_head": "a2141fff0c82af45ddc08aee63ea786f22d2a9a0",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_main_base": "b0518b68fe79140bfbc5c4b48d57aba746ece1ba",
+  "grf": {
+    "r0_observed": [
+      "Current NominalTypeChecker._canonical resolves non-parametric alias chains iteratively but recursively descends TypeRef.params.",
+      "Current _same canonicalizes then uses TypeRef dataclass equality, which is also recursive for deeply nested params.",
+      "PR572 explicitly left parameterized TypeRef structural descent open as a resource/totality surface."
+    ],
+    "r1_hypothesis": "Finite acyclic parameterized TypeRef trees can make WP04 behavior depend on the host Python recursion limit even after PR572 fixed deep non-parametric alias chains.",
+    "r3_counter_reality": "The remaining recursive parameter traversal may be practically total for all admitted TypeRef structures, so no bounded finite counterexample exists below realistic resource limits.",
+    "falsifier": "Construct finite unary Box<...<Int>> TypeRef trees at increasing depth and execute the exact current recursive parameter-canonicalization shape without aliases or effects.",
+    "outcome": "RETAIN_HYPOTHESIS_BUILD_CANDIDATE"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "PARAMETRIC_TYPEREF_DEPTH_STAIRCASE",
+    "bounded": true,
+    "reversible": true,
+    "repository_mutation": false,
+    "external_effect": false,
+    "measuring_python_recursion_limit": 3000,
+    "observations": [
+      {"depth": 1472, "result": "PASS"},
+      {"depth": 1504, "result": "RECURSION_ERROR"},
+      {"depth": 3072, "result": "RECURSION_ERROR"}
+    ],
+    "interpretation": "SUPPORTED_HOST_STACK_TOTALITY_GAP_FOR_FINITE_ACYCLIC_PARAMETERIZED_TYPEREF_STRUCTURE",
+    "limitations": "Sandbox mechanism evidence only; does not establish production frequency, accepted-Hostinger runtime impact, broader ClayCode generic semantics, or whole WP04 failure."
+  },
+  "primary_source_check": {
+    "source": "Python 3.13 official sys documentation",
+    "url": "https://docs.python.org/3.13/library/sys.html#sys.getrecursionlimit",
+    "finding": "Python defines a finite interpreter recursion limit and RecursionError behavior; raising the limit is platform-dependent and can be unsafe, so host-recursion removal is the bounded repair direction."
+  },
+  "candidate_build": {
+    "branch": "chatgpt/go-claycode-typeref-totality-20260815",
+    "head": "442cb0049876c119df74cac00756106c5d1f0a4c",
+    "pull_request": 583,
+    "draft": true,
+    "files": [
+      "runtime/claycode_typecheck_v1/typeref_totality_candidate.py",
+      "tests/claycode_typeref_totality_candidate_gate.py",
+      ".github/workflows/claycode-typeref-totality-candidate-vps.yml"
+    ],
+    "mechanism": [
+      "explicit work-stack TypeRef canonicalization",
+      "current non-parametric alias-resolution rule preserved",
+      "active alias provenance carried through parameterized descendants",
+      "direct and parameter-wrapped alias cycles fail closed to TYPE_ERROR callback surface",
+      "iterative canonical TypeRef equality"
+    ],
+    "ordinary_local_candidate_checks": {
+      "deep_4096_canonical": "PASS",
+      "deep_4096_same": "PASS",
+      "deep_4096_mismatch": "PASS",
+      "direct_alias_cycle": "PASS",
+      "parameter_wrapped_alias_cycle": "PASS"
+    },
+    "production_typechecker_integrated": false,
+    "reason_not_integrated_yet": "Separate mechanism validity from semantic/diagnostic-order promotion; require exact-head Ubuntu candidate evidence before a minimal production integration patch."
+  },
+  "current_ci_state": {
+    "checked_head": "442cb0049876c119df74cac00756106c5d1f0a4c",
+    "workflow_runs_observed": 0,
+    "combined_status_entries_observed": 0,
+    "classification": "UNVERIFIED_NOT_PASS",
+    "rule": "No exact-head Ubuntu/VPS credit until a real workflow run executes and its receipt is inspected."
+  },
+  "promotion_boundary": {
+    "f_v01_02_status_change": false,
+    "base_status_change": false,
+    "frank_v0_1_acceptance_change": false,
+    "accepted_hostinger_runtime_claim": false,
+    "harness_authority_change": false,
+    "effect_authority_change": false,
+    "training_authorized": false,
+    "together_used": false
+  },
+  "next_falsifiers_ranked": [
+    "Obtain exact-head self-hosted Ubuntu execution of PR583 candidate gate and inspect tested SHA plus resources.",
+    "If candidate PASS, integrate only _canonical/_same through the candidate while preserving typed cycle diagnostics; run existing alias, nominal, WP04-WP06 and Deep Integrity regressions.",
+    "Test whether diagnostic order/count changes under direct and parameter-wrapped alias cycles; reject integration if it changes admitted semantics beyond current contract.",
+    "Only after integration PASS update ClayCode supervisor/workspace evidence; do not promote whole F-V01-02 from this candidate alone."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "run_id": "go-20260815T1953p0700-chatgpt-needle-prefix-boundary",
+  "worker_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER/gpt-5.6-sol",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-07-NEEDLE-TRANSLATOR",
+  "grf": {
+    "observed_reality": "PR #352 Needle candidate used raw target.startswith(target_prefix) in both compile-time adapter selection and execute-time adapter revalidation.",
+    "generated_reality": "For hierarchical ResourceRef targets, a scoped prefix could lexically capture sibling resources whose string begins with the same bytes.",
+    "counter_reality": "target_prefix could intentionally denote a broad opaque namespace, so a repair that blindly requires slash children could break deliberate scheme-wide registrations.",
+    "discriminating_test": "Sibling-prefix smuggling against file:///srv/frank/data, with exact/child and broad file:// controls.",
+    "collapse": "Lexical sibling overmatch CONFIRMED. Exact/child semantics retained; deliberately broad prefix roots ending '/' or ':' retained. URI/path dot-segment and percent-encoding normalization remains unproven and separate.",
+    "outcome": "RETAIN"
+  },
+  "unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "SIBLING_PREFIX_SMUGGLING",
+    "bounded": true,
+    "reversible": true,
+    "baseline_result": {
+      "scope": "file:///srv/frank/data",
+      "incorrectly_admitted_siblings": [
+        "file:///srv/frank/database/secret.txt",
+        "file:///srv/frank/data_evil/secret.txt",
+        "file:///srv/frank/data-old/archive.txt",
+        "file:///srv/frank/data2/x"
+      ]
+    },
+    "counter_control_result": "All four lexical siblings rejected while exact scope and slash-child remained admitted.",
+    "not_claimed": [
+      "dot-segment normalization",
+      "percent-decoding normalization",
+      "filesystem containment",
+      "production effect-authority acceptance"
+    ]
+  },
+  "implementation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 352,
+    "branch": "chatgpt/go-needle-v1-authority-boundary-20260811",
+    "head": "849781e5d0e5940907f997bac2c838dc72ee20a8",
+    "commits": [
+      "482f17ea662556eeaa5502ef707ca211f2f7d631",
+      "070af42f9cc71353b2d6da1f3d68a6bf672775ab",
+      "849781e5d0e5940907f997bac2c838dc72ee20a8"
+    ],
+    "changes": [
+      "Replace raw target-prefix startswith checks in both compile and execute revalidation with a lexical child-boundary fence.",
+      "Add seven-case target-prefix boundary regression gate.",
+      "Bind the regression gate into exact-SHA/blob-attested self-hosted VPS workflow."
+    ],
+    "pr_review_id": 4943886695
+  },
+  "evidence": {
+    "local_exact_matcher_regression": "PASS 7/7",
+    "accepted_vps_workflow_run_id": 31885975883,
+    "accepted_vps_status_at_receipt": "QUEUED_UNVERIFIED",
+    "current_main": "b0518b68fe79140bfbc5c4b48d57aba746ece1ba",
+    "branch_relation_to_main": "ahead 11 / behind 1 at observation",
+    "primary_external_reference": "RFC 3986 path segments are slash-separated; used only to motivate lexical segment-boundary discrimination, not as proof of product containment semantics."
+  },
+  "counterevidence_and_open_falsifiers": [
+    "ClayCode declares NeedleIntent.target as ResourceRef and requires target matches target_prefix, but the current candidate contract does not define canonical URI/path normalization semantics.",
+    "Dot-segment and percent-encoded traversal forms remain outside this repair and must not be represented as fixed.",
+    "PR branch is one commit behind current main; stale branch-isolated corpus failures must not be confused with current-main composition evidence.",
+    "Accepted Hostinger VPS regression is not PASS until workflow 31885975883 actually completes successfully with the new gate."
+  ],
+  "next_falsifier": "Define or locate canonical ResourceRef normalization/containment semantics at the ClayCode/effect-authority boundary, then test raw, dot-segment, percent-encoded, query/fragment, scheme-wide and opaque-namespace cases without widening Needle authority.",
+  "promotion_state": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
+  "training_authorized": false
+}

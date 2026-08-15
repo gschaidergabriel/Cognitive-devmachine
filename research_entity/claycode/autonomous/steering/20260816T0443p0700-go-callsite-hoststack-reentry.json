@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_CALLSITE_AND_VM_HOSTSTACK_REENTRY",
+  "created_local": "2026-08-16T04:43:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "bb4ed91a90bf62b2a0dda9cbcf76dd134b426efd",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "observations": {
+    "typeref_main_merge": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
+    "call_ownership_pr": 599,
+    "call_ownership_head": "9da6ab78e51fc638bf77db2036f2b03fd3acd534",
+    "call_ownership_target_run": 31909934001,
+    "call_ownership_target_job": 95073358415,
+    "call_ownership_target_status": "SUCCESS_PASS_MEASUREMENT_COHERENT",
+    "runner": "clay-3",
+    "host": "clayverse",
+    "authorized_sources": 40,
+    "parsed_sources": 36,
+    "parse_rejected_sources": 4,
+    "unresolved_unique_names": 429,
+    "historical_corpus_probe_module_name_incidences": 464,
+    "raw_analyzer_observed_call_sites": 574,
+    "cross_module_unique_function_owner": {
+      "unique_names": 32,
+      "module_name_incidences": 37,
+      "raw_call_sites": 56
+    },
+    "no_parsed_corpus_declaration": {
+      "unique_names": 397,
+      "module_name_incidences": 427,
+      "raw_call_sites": 518
+    },
+    "repo_static_integrity": "PASS",
+    "new_unusual_experiments_in_pr599_gate": 0
+  },
+  "measurement_correction": {
+    "negative_result": "The first PR599 run incorrectly compared raw Call sites against corpus_probe.call_target_occurrences and failed with 574 versus 464 while still reconstructing 429 unique names exactly.",
+    "root_cause": "Analysis.partition contributes each target name once per parsed module, so corpus_probe.call_target_occurrences is a module/name-incidence metric, not a raw syntax-call-site count.",
+    "repair": "Report module/name incidence and analyzer-observed raw Call sites as separate dimensions and require exact reconstruction of the historical 429/464 baseline.",
+    "outcome": "SUPPORTED"
+  },
+  "grf": {
+    "observed": [
+      "Merged PR598 already provides a richer syntactic/global unresolved-call ownership census.",
+      "PR599 adds a directly manifest-bound measurement and separates the historical 464 module/name incidences from 574 raw Call sites.",
+      "Only 32 of 429 unresolved ordinary-Call names have exactly one function declaration owner in another successfully parsed authorized module; name coincidence is not import or execution authority.",
+      "PR600 and PR602 both currently execute Clay function calls by recursively invoking Python methods rather than owning an explicit VM activation stack.",
+      "PR600 also embeds its declaration-order unusual experiment as a rerunnable unittest, so normal CI repeats the experiment rather than preserving it as an ordinary post-experiment regression.",
+      "PR602 exact-head run 31910010784 failed before producing result.json; exact VM semantic PASS is therefore not established for head 84b13964180bced071d3b35fcf5b989a71157964."
+    ],
+    "generated_reality": "A single ClayVM should own both operand and activation stacks explicitly, receive provenance-bound canonical ClayCode lowering, and use PR602-style source-level differential tests as an oracle rather than retain a second runtime.",
+    "strongest_counter_reality": "A VM with an explicit operand stack but Python-recursive CALL control is only host-stack-independent for shallow programs; the host recursion boundary can fail before the advertised ClayVM call-depth or step budget.",
+    "primary_source_support": "Current Python sys documentation states that the interpreter recursion limit protects against C-stack overflow and warns that setting it too high can crash the process; therefore raising host recursion is not an acceptable ClayVM ownership mechanism.",
+    "discriminator": "Replace recursive VM CALL control with an iterative explicit frame stack and run ordinary deterministic deep finite-call regression plus existing differential/fail-closed gates; no new unusual experiment is required.",
+    "collapse": "RETAIN_SINGLE_VM_FUSION; BLOCK_HOST_RECURSIVE_RUNTIME_PROMOTION; RETAIN_PR599_METRIC_DELTA_WITHOUT_SECOND_SYMBOL_ARCHITECTURE"
+  },
+  "unusual_experiment_accounting": {
+    "count_this_worker_go": 1,
+    "consumed": true,
+    "name": "TYPEREF_ALIAS_DAG_EXPANSION_BOMB",
+    "new_unusual_experiment_after_consumption": false,
+    "measurements": [
+      {"depth": 8, "aliases": 9, "materialized_nodes": 511, "peak_bytes_approx": 37336},
+      {"depth": 12, "aliases": 13, "materialized_nodes": 8191, "peak_bytes_approx": 591448},
+      {"depth": 16, "aliases": 17, "materialized_nodes": 131071, "peak_bytes_approx": 9426112}
+    ],
+    "interpretation": "Iterative TypeRef canonicalization removes host call-stack dependence but full tree materialization can still grow exponentially from a compact alias DAG; stack-totality is not resource-totality."
+  },
+  "durable_actions": [
+    "PR596 merged to product main as e8a311ef9b7743f4fb8284c2e031e2c5a332d605.",
+    "PR599 exact-head corrected VPS measurement passed and review records final 429/464/574 dimensions and overlap with merged PR598.",
+    "PR600 review records host-recursive CALL blocker plus rerunnable unusual-experiment accounting defect.",
+    "PR602 review records host-recursive CALL blocker and recommends explicit iterative frame stack.",
+    "No second VM implementation was added by this worker."
+  ],
+  "next_falsifiers": [
+    "Preserve PR598 as the ownership architecture and fold PR599's raw Call-site/module-incidence distinction into one canonical measurement surface rather than merge parallel ownership logic blindly.",
+    "Repair the chosen serialized ClayVM core to use an explicit iterative activation stack and prove its configured VM call bound is independent of CPython recursion.",
+    "Bind the chosen VM input to canonical ClayCode TypedIR/provenance rather than a detached bootstrap dictionary marker.",
+    "Port PR602's canonical frontend differential oracle onto the one serialized VM core and require zero mismatch while unresolved/member/host surfaces remain fail closed.",
+    "Add TypeRef expansion budget or DAG sharing/hash-consing before claiming resource totality."
+  ],
+  "nonclaims": [
+    "No general ClayCode cross-module import semantics selected.",
+    "No builtin, member, host, Linux, effect, or execution authority minted by the census.",
+    "No ClayVM candidate is promoted as host-stack-independent by this receipt.",
+    "No ClayOS completion, self-hosting, or whole Clay Machine completion is claimed.",
+    "No Together usage."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_POST_MERGE_RECEIPT_INTERLEAVING",
+  "created_local": "2026-08-16T04:35:00+07:00",
+  "trigger": "go",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_parent_observed_before_write": "67d14022aa1ea7379b09a1459450dca5328106d3",
+  "observed": {
+    "typeref_merge_commit": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
+    "immediate_successor_main": "a34c17b122541e54c3ee8a1bfb9b7970d0cc406e",
+    "successor_distance": 1,
+    "successor_commit_class": "VPS_INTEGRITY_RECEIPT_SKIP_CI",
+    "changed_files": [
+      "runtime/vps_integrity/latest.json",
+      "runtime/vps_integrity/latest.log",
+      "runtime/vps_integrity/latest.metrics.jsonl",
+      "runtime/vps_integrity/latest_timing.tsv"
+    ],
+    "productive_typechecker_blob_at_merge": "dc30c17646d388a38ce6743416c6254b61bb7e8b",
+    "productive_typechecker_blob_at_successor": "dc30c17646d388a38ce6743416c6254b61bb7e8b",
+    "productive_typechecker_blob_unchanged": true
+  },
+  "grf": {
+    "hypothesis": "The automatic post-merge integrity receipt advances main without mutating the newly merged ClayCode production bytes.",
+    "counter_reality": "Receipt persistence races with or rewrites productive ClayCode, invalidating canonical byte binding immediately after merge.",
+    "falsifier": "Compare the exact merge commit to its immediate successor and require that all changed paths are bounded evidence outputs while the production typechecker blob remains identical.",
+    "outcome": "RETAIN_SUPPORTED",
+    "counter_reality_observed": false
+  },
+  "unusual_experiment": {
+    "name": "POST_MERGE_RECEIPT_INTERLEAVING",
+    "count_this_go": 1,
+    "bounded": true,
+    "reversible": true,
+    "result": "PASS_ONLY_RECEIPT_PATHS_CHANGED_TYPECHECKER_BLOB_STABLE"
+  },
+  "scope_limits": [
+    "This does not prove every production file in the repository is immutable under all receipt writers.",
+    "This does not mint generic TypeRef semantics.",
+    "This does not complete the ClayCode compiler, Clay VM, Linux interop, or ClayOS.",
+    "The next compiler discriminator remains canonical-corpus unresolved Call ownership and MethodChain/member authority without host/default inference or coverage exclusions."
+  ],
+  "next_focus": {
+    "authorized_sources": 40,
+    "parsed_authorized_sources": 36,
+    "coverage_percent": 90.0,
+    "unresolved_unique_call_names": 429,
+    "unresolved_call_occurrences": 464,
+    "methodchain_member_segments_open": 22,
+    "recommended_discriminator": "Reproduce and classify the smallest freestanding unresolved-call ownership subset from canonical corpus bytes before adding builtin/library/host authority."
+  }
+}

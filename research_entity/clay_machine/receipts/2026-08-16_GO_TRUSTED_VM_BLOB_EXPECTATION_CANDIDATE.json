@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "kind": "TRUSTED_VM_BLOB_EXPECTATION_CANDIDATE_RECEIPT",
+  "created_local": "2026-08-16T05:18:00+07:00",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "status": "CANDIDATE_EXACT_HEAD_RUNNERS_QUEUED",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_pr": 630,
+  "candidate_head": "1c9bcb51401d6657cceb9f80cf7b07e62771748f",
+  "base_main_observed": "7b54a420172e1d4a8099071eb49352f895943636",
+  "finding": "ClayVMArtifact/v1 self-describes vm_blob_sha256, while ProvenanceExpectation currently binds source/grammar/executable-IR identities only. General strict ClayOS callers therefore do not independently bind the expected VM core identity at admission. ClayEnvManifest/v1 already mitigates artifact substitution by checking trusted artifact_sha256 before launch and records vm_blob_sha256, but the reusable admission API should consume that VM identity directly rather than only post-check it.",
+  "candidate_change": [
+    "Add vm_blob_sha256 to ProvenanceExpectation.",
+    "Reject artifact header VM identity that differs from the caller-supplied expected VM identity before load_module/process admission.",
+    "Make clayenv run pass manifest.vm_blob_sha256 into ProvenanceExpectation.",
+    "Retain artifact payload SHA and whole-artifact SHA checks as independent integrity layers."
+  ],
+  "strong_ordinary_falsifier": "Construct a different valid CLAYVM/1 core returning 666, keep original source/grammar/executable-IR identities, recompute the artifact header vm_blob_sha256 so the artifact is internally self-consistent, and require VM_BLOB_IDENTITY_MISMATCH against the trusted original expectation before process admission.",
+  "workflow_runs": {
+    "provenance_artifact": {"run": 31911688339, "state_at_receipt": "QUEUED"},
+    "clayenv": {"run": 31911688345, "state_at_receipt": "QUEUED"},
+    "strict_clayos": {"run": 31911688289, "state_at_receipt": "QUEUED"}
+  },
+  "promotion": "NOT_AUTHORIZED_UNTIL_EXACT_HEAD_REQUIRED_RUNS_PASS",
+  "unusual_experiment_accounting": {
+    "count_this_go": 1,
+    "name": "CALL_FRAME_ALIAS_CROSSTALK",
+    "already_consumed": true,
+    "additional_unusual_experiment": false
+  },
+  "non_claims": [
+    "No PASS is claimed for PR #630 while runners are queued.",
+    "Hash identity is not signature/PKI authenticity.",
+    "ClayEnvManifest/v1 whole-artifact SHA precheck is not claimed broken.",
+    "No whole Clay Machine release is claimed."
+  ]
+}

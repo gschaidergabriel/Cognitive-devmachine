@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "trigger": "go",
   "run_id": "go-20260815T1953p0700-chatgpt-needle-prefix-boundary",
   "worker_provenance": "RESEARCH_ENTITY_TEMPORARY_WORKER/gpt-5.6-sol",
@@ -77,6 +77,15 @@
       "tested_head": "117b3799f73940283fcaf4a0a656ba9a92bb73c0",
       "status": "SUCCESS"
     },
+    "corpus_authority_latest": {
+      "workflow_run_id": 31886373716,
+      "tested_head": "117b3799f73940283fcaf4a0a656ba9a92bb73c0",
+      "status": "SUCCESS",
+      "manifest_reference_membership": "SUCCESS",
+      "corpus_authority_regression": "SUCCESS",
+      "authorized_frontier_measurement": "SUCCESS",
+      "frozen_authority_and_frontier_gate": "SUCCESS"
+    },
     "preserved_negative_results": [
       {
         "workflow_run_id": 31885975874,
@@ -99,18 +108,6 @@
         "repair_commit": "117b3799f73940283fcaf4a0a656ba9a92bb73c0"
       }
     ],
-    "latest_corpus_authority_at_receipt_refresh": {
-      "workflow_run_id": 31886373716,
-      "tested_head": "117b3799f73940283fcaf4a0a656ba9a92bb73c0",
-      "status": "IN_PROGRESS_UNVERIFIED",
-      "confirmed_steps": {
-        "manifest_reference_membership": "SUCCESS",
-        "compile_authority_paths": "SUCCESS",
-        "corpus_authority_regression": "SUCCESS",
-        "frontier_measurement": "IN_PROGRESS",
-        "final_frontier_gate": "PENDING"
-      }
-    },
     "current_main_at_refresh": "43646539dbb66541e1c3ade148309318a2427340",
     "branch_relation_to_main_at_refresh": "ahead 13 / behind 4 / diverged",
     "primary_external_reference": "RFC 3986 path segments are slash-separated; used only to motivate lexical segment-boundary discrimination, not as proof of product containment semantics."
@@ -119,7 +116,6 @@
     "ClayCode declares NeedleIntent.target as ResourceRef and requires target matches target_prefix, but the current candidate contract does not define canonical URI/path normalization semantics.",
     "Dot-segment and percent-encoded traversal forms remain outside this repair and must not be represented as fixed.",
     "The branch remains diverged from current main; current-main composition evidence is successful for head 117b3799 but must remain distinct from branch-isolated evidence.",
-    "The latest exact Needle VPS gate and current-main composition are successful, but the latest corpus-authority workflow is still in progress at this receipt revision.",
     "PR #352 remains open, draft, and unmerged; no canonical promotion is claimed."
   ],
   "next_falsifier": "Define or locate canonical ResourceRef normalization/containment semantics at the ClayCode/effect-authority boundary, then test raw, dot-segment, percent-encoded, query/fragment, scheme-wide and opaque-namespace cases without widening Needle authority.",

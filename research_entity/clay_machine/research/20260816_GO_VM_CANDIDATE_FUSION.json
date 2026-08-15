@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_VM_CANDIDATE_FUSION",
+  "created_local": "2026-08-16T04:41:00+07:00",
+  "trigger": "go",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "f1abd9f721f24e5dc0caa4f9fd412ebe75d415e5",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "candidates": {
+    "preferred_semantic_lineage": {
+      "pr": 601,
+      "head": "6191a8200f24aaac5fb15f1d8b1df901a3fc36bc",
+      "state": "DRAFT_BLOCKED_REVIEW",
+      "strengths": [
+        "lowers directly from the existing ClayCode parser/analyzer",
+        "reachable Clay-function closure fails closed on unresolved/non-Clay calls",
+        "three-way Python-policy / Clay-tree / Clay-VM differential",
+        "no host intrinsic/syscall surface in the candidate bytecode"
+      ],
+      "confirmed_review_blockers": [
+        "NUMBER literals are inferred as Int and emitted via int(expr.value), permitting silent Float-to-Int truncation unless repaired",
+        "BytecodeFunction stores parameter names but not declared Clay types; VM activation currently checks arity only",
+        "runtime comparison admits float and field selection admits generic Mapping, allowing host values to broaden semantics after compilation"
+      ],
+      "review_id": 4944773327
+    },
+    "component_donor": {
+      "pr": 600,
+      "head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+      "state": "DRAFT_COMPONENT_DONOR",
+      "strengths": [
+        "deterministic serialised module format with magic/version",
+        "loader and structural bytecode validation",
+        "checked signed-i64 arithmetic",
+        "explicit capability host object",
+        "minimal process-state ClayOS facade"
+      ],
+      "confirmed_review_blockers": [
+        "new claycode.typed-ir.v0 dict schema is not yet bound in this cycle to an exact canonical current-main producer",
+        "OP_HOSTCALL is admitted by module validation/runtime although compile_typed_ir does not source/type/effect-bind host calls",
+        "a hand-crafted module can request a globally configured host capability without a module import signature/effect declaration",
+        "validator is structural but does not yet prove stack typing, call arity against target metadata, or return type before process admission"
+      ],
+      "review_id": 4944773588
+    }
+  },
+  "grf": {
+    "hypothesis": "The quickest safe first Clay VM is a single lineage that compiles already-admitted canonical ClayCode semantics and later absorbs independent binary-module and ClayOS mechanisms.",
+    "counter_reality": "Merging both first-VM candidates as peer architectures creates two semantic truth planes and makes later equivalence harder to establish.",
+    "discriminator": "Prefer the candidate anchored to the current parser/analyzer and independent differential, then import only donor mechanisms whose semantics can be bound to that lineage.",
+    "outcome": "MERGE_ARCHITECTURES_NOT_BRANCHES"
+  },
+  "fusion_plan": [
+    "keep PR601 as preferred first semantic VM lineage after fixing typed activation/literal boundaries and obtaining exact-head Ubuntu evidence",
+    "do not merge PR600's raw HOSTCALL path into the first PURE VM slice",
+    "after PR601 is type-bound, transplant/version PR600's deterministic module format and verifier concepts into the same compiler lineage",
+    "reintroduce Linux interop only through explicit module imports carrying Clay signature, effect class and capability identity",
+    "reuse PR600 ClayOS process-state facade only after admitted module identity and typed runtime boundaries are canonical"
+  ],
+  "unusual_experiment_accounting": {
+    "new_unusual_experiments_in_this_fusion": 0,
+    "current_user_go_macrocycle_total": 1,
+    "already_consumed": "ALIAS_PARAMETERIZED_DEPTH_COMPLEXITY"
+  },
+  "non_claims": [
+    "No first Clay VM candidate is promoted in this receipt.",
+    "No Linux interop semantics are selected by a Python host callable.",
+    "No minimal ClayOS completion is claimed.",
+    "No whole Clay Machine completion is claimed."
+  ]
+}

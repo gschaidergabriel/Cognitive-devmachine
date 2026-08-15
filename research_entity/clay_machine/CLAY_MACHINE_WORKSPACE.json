@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "workspace_id": "clayverse-clay-machine",
   "status": "ACTIVE",
   "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
@@ -9,24 +9,29 @@
     "CM-01-LANGUAGE-SPEC-PARSER-IR": {
       "status": "IN_PROGRESS",
       "goal": "Canonical ClayCode syntax, parser, AST/IR and corpus authority with unknown constructs failing closed.",
-      "current_evidence": {"authorized_sources": 40, "parsed_authorized_sources": 36, "coverage_percent": 90.0, "parser_rejected_sources": 4}
+      "current_evidence": {"authorized_sources": 40, "parsed_authorized_sources": 36, "coverage_percent": 90.0, "parser_rejected_sources": 4},
+      "call_ownership_evidence": "PR #598 merged a syntax-only partition of bare unqualified versus dotted callee targets; no import/member/host semantics selected."
     },
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
       "goal": "Nominal/structural type and effect semantics independent of Python recursion/host defaults, with bounded complexity and explicit semantic authority.",
-      "blocker": "Merged TypeRef iterative traversal has a newly measured alias-wrapped depth complexity risk; exact canonical-main repair plus Ubuntu regression is required before treating totality as robust."
+      "blocker": "Merged TypeRef iterative traversal has a reproduced alias-wrapped depth complexity risk from branch-local ancestry copying; canonical-main non-copying DFS-path repair plus Ubuntu regression is required before treating totality as complexity-robust."
     },
     "CM-03-EVALUATOR-INTERPRETER": {
       "status": "IN_PROGRESS",
       "goal": "Fail-closed executable ClayCode evaluator for admitted language semantics; no host behavior by default."
     },
     "CM-04-COMPILER-LOWERING-BYTECODE": {
-      "status": "OPEN",
-      "goal": "Define lowering and executable bytecode/IR with deterministic verifier and compiler receipts."
+      "status": "IN_PROGRESS",
+      "goal": "Define lowering and executable bytecode/IR with deterministic verifier and compiler receipts.",
+      "candidate": "PR #600 lowers an admitted claycode.typed-ir.v0 Int/Bool subset into deterministic CLAYVM bytecode; draft only pending exact-head evidence and review obligations."
     },
     "CM-05-VIRTUAL-CLAY-MACHINE": {
-      "status": "OPEN",
-      "goal": "Implement Clay VM instruction semantics, execution loop, call/stack/object model, traps, limits and deterministic tests."
+      "status": "IN_PROGRESS",
+      "goal": "Implement Clay VM instruction semantics, execution loop, call/stack/object model, traps, limits and deterministic tests.",
+      "candidate": "PR #600 provides the first Python-hosted ClayVM bootstrap slice.",
+      "blocker": "Exact PR head 1e3a3d0534848d0760b8d6fffecdedc778a9e461 executes OP_CALL through recursive Python self._call(...), making Python recursion an implicit Clay VM call-depth/failure semantic. Keep draft unpromoted until an explicit VM frame stack/trampoline and Clay-defined resource limit are tested.",
+      "review": "PR #600 review 4944772646 records the call-stack test obligation."
     },
     "CM-06-MEMORY-CONCURRENCY-RUNTIME": {
       "status": "OPEN",
@@ -38,11 +43,13 @@
     },
     "CM-08-LINUX-INTEROP": {
       "status": "OPEN",
-      "goal": "Typed capability-bound Linux filesystem/process/network/device/FFI interop with explicit effects, receipts and fail-closed boundaries."
+      "goal": "Typed capability-bound Linux filesystem/process/network/device/FFI interop with explicit effects, receipts and fail-closed boundaries.",
+      "candidate": "PR #600 contains a capability-only bootstrap host boundary, but this is not yet deep typed Linux interop acceptance."
     },
     "CM-09-MINIMAL-CLAYOS": {
-      "status": "OPEN",
-      "goal": "Minimal ClayOS services/shell/runtime personality hosted by the Clay VM/environment, sufficient to demonstrate boot, program execution, state and Linux interaction."
+      "status": "IN_PROGRESS",
+      "goal": "Minimal ClayOS services/shell/runtime personality hosted by the Clay VM/environment, sufficient to demonstrate boot, program execution, state and Linux interaction.",
+      "candidate": "PR #600 contains a minimal RUNNING/EXITED/TRAPPED process facade; draft bootstrap only, not ClayOS completion."
     },
     "CM-10-TOOLING-OBSERVABILITY-RECOVERY": {
       "status": "OPEN",
@@ -54,13 +61,18 @@
     }
   },
   "frontier": {
-    "canonical_product_main_observed": "a34c17b122541e54c3ee8a1bfb9b7970d0cc406e",
+    "canonical_product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
     "typeref_merge_commit": "e8a311ef9b7743f4fb8284c2e031e2c5a332d605",
+    "call_ownership_partition_merge_commit": "210bd190d26d5ad3aa3d0b646e52d42646680c9b",
     "unresolved_call_names": 429,
     "unresolved_call_occurrences": 464,
     "methodchain_member_segments_open": 22,
-    "next_discriminator": "Repair/measure alias-wrapped TypeRef ancestry complexity on canonical main, then classify the smallest canonical unresolved-call ownership subset without host/library defaulting."
+    "clayvm_candidate_pr": 600,
+    "clayvm_candidate_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+    "clayvm_candidate_state": "DRAFT_CI_QUEUED_AND_REVIEW_BLOCKED",
+    "next_discriminator": "Repair TypeRef ancestry copying on canonical main; in parallel, replace PR #600 Python-recursive OP_CALL with an explicit Clay VM frame stack and verify exact-head CI before promotion."
   },
+  "coordination_negative_result": "Parallel GO workers can currently collide on the exactly-one unusual-experiment cardinality; shared CAS/lease serialization remains required.",
   "laws": [
     "ClayVerse/Clay Machine is the only active program.",
     "GRF expands hypotheses but does not mint truth.",

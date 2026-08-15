@@ -1,7 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "kind": "CLAY_MACHINE_VM_EXACT_HEAD_IMPORT_BINDING_REPAIR",
   "created_local": "2026-08-16T04:44:00+07:00",
+  "updated_local": "2026-08-16T04:44:30+07:00",
   "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
   "trigger": "go",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
@@ -28,21 +29,58 @@
     "vm_semantics_changed": false,
     "effect_or_host_authority_changed": false
   },
+  "exact_repair_head_execution": {
+    "workflow_run": 31910116292,
+    "job": 95073800063,
+    "tested_head": "482b7b62975aaa5b02d58a5d4a0373b56158a425",
+    "runner": "clay",
+    "host": "clayverse",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "status": "PASS_CLAY_MACHINE_STACK_VM_V1",
+    "checks": "9/9",
+    "requests_compared": 50576,
+    "randomized_requests": 50000,
+    "structured_requests": 576,
+    "mismatches": 0,
+    "seed": 8162026,
+    "bytecode_instruction_count": 253,
+    "bytecode_sha256": "4a2587183447c256e8dd07be059ea08c3942bc70fd40b750ef6650cb6028ba8e",
+    "result_sha256": "ac9d4293c3d23906587a0bb7f1d5fb59cb8ea8adcf5c8a73ed00b118b17efd00",
+    "elapsed_seconds": 4.87,
+    "max_resident_kbytes": 33584,
+    "fail_closed_checks": [
+      "unresolved_call",
+      "comparison_chain",
+      "cross_nominal_equality",
+      "bool_ordering"
+    ],
+    "call_frames_are_isolated": true,
+    "no_host_intrinsic_opcode_surface": true,
+    "external_effect_performed": false,
+    "general_claycode_vm": "NOT_CLAIMED",
+    "host_ffi": "NOT_IMPLEMENTED",
+    "clay_os": "NOT_IMPLEMENTED",
+    "whole_clay_machine_completion": "NOT_CLAIMED"
+  },
   "grf": {
-    "observed": "The exact fresh-head PR602 runner reached dependency provisioning but failed before the gate imported its differential oracle; the same import pattern also failed on superseded PR601.",
-    "hypothesis": "The VM gate failure is entirely explained by Python -P suppressing script-directory insertion while PYTHONPATH exposed only the repository root, not tests/.",
-    "strongest_counter_reality": "After explicit import-root binding, a genuine compiler/VM semantic defect may appear once the 50,000-request differential actually executes.",
-    "discriminator": "Run exact repair head 482b7b62975aaa5b02d58a5d4a0373b56158a425 on the self-hosted Clay Machine Stack VM V1 lane and require a result.json plus the existing differential/fail-closed assertions.",
-    "outcome": "REPAIR_COMMITTED; SEMANTIC_RESULT_PENDING_EXACT_HEAD_EXECUTION"
+    "observed": "The fresh-head gate first failed solely at test-oracle import binding. After the narrow import-root repair, the exact repair head completed the intended three-way differential and all fail-closed regressions with zero mismatches.",
+    "hypothesis": "Explicit repository+tests import roots under python -P remove the harness defect without changing ClayCode or VM semantics.",
+    "strongest_counter_reality": "This narrow PASS could still conceal defects outside the two-function PURE closure, serialized VM core, canonical TypedIR lowering boundary, cross-module call ownership, host FFI, Linux interop, or ClayOS.",
+    "discriminator_result": "SUPPORTED_FOR_BOUNDED_ORACLE_SCOPE",
+    "outcome": "PROMOTE_PR602_EVIDENCE_AS_CANONICAL_FRONTEND_VM_DIFFERENTIAL_ORACLE_ONLY"
   },
   "unusual_experiment_accounting": {
-    "additional_unusual_experiment_executed": false,
-    "reason": "The current user-triggered GO macrocycle already has exactly-one experiment accounting in shared state; this is ordinary deterministic CI repair."
+    "this_macrocycle": 1,
+    "name": "CALL_FRAME_ALIAS_CROSSTALK",
+    "new_unusual_experiment_in_repair_gate": false,
+    "additional_unusual_experiment_executed_by_this_repair": false
   },
-  "current_execution_state_at_write": {
-    "workflow_run": 31910116292,
-    "status": "QUEUED",
-    "pass_claimed": false
+  "architecture_fusion": {
+    "single_vm_target": true,
+    "pr600_role": "serialized/verifiable runtime-core candidate pending canonical TypedIR/provenance binding",
+    "pr602_role": "canonical ClayCode frontend/differential semantic oracle",
+    "do_not_promote_two_vms": true
   },
-  "next": "Observe exact repair-head execution. If semantic PASS, retain PR602 only as canonical-frontend differential oracle per single-VM fusion; if semantic FAIL, preserve the first actual VM/compiler mismatch and repair without widening unresolved call/member/host semantics."
+  "next": "Bind canonical ClayCodeBaseTypedIR/v1 plus provenance to the single serialized ClayVM core, port this exact source-level differential oracle onto that one runtime, and require four-way agreement while unresolved Call/MethodChain/member and host semantics remain fail closed."
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.9",
+  "schema_version": "2.0",
   "workspace_id": "clayverse-clay-machine",
   "status": "ACTIVE",
   "target": "Working Clay Machine: ClayCode language + compiler + VM + Clay environment + Linux interoperability + minimal ClayOS",
@@ -67,12 +67,12 @@
         "whole_clay_machine_acceptance": false
       },
       "supporting_replication": "PR #613 exact head 67ac82378e70f068a426d4c87f3b75b8065eb6f4 passed 5/5 and is closed unmerged; its temporary ClayCodeExecutableTypedIR/v0 wrapper is superseded as authority by merged ClayExecutableTypedIR/v1 and retained only as independent checked-source/single-VM evidence.",
-      "blocker": "A real canonical compiler path exists for a deliberately tiny PURE intersection. Provenance is now bound by ClayVMArtifact/v1 for the protected launch path; remaining CM-04 work is to expand bytecode/lowering only for semantics already admitted by ClayExecutableTypedIR/v1, without backend-local language/type reinvention."
+      "blocker": "A real canonical compiler path exists for a deliberately tiny PURE intersection. Provenance is bound by ClayVMArtifact/v1 and canonical package ClayOS launches now require that artifact. Remaining CM-04 work is to expand bytecode/lowering only for semantics already admitted by ClayExecutableTypedIR/v1, without backend-local language/type reinvention."
     },
     "CM-05-VIRTUAL-CLAY-MACHINE": {
       "status": "IN_PROGRESS",
       "goal": "Implement Clay VM instruction semantics, execution loop, call/stack/object model, traps, limits and deterministic tests.",
-      "production_candidate": "The fresh-main single ClayVM core from PR #608 merged as 94efad064602689dfc3c9a5b3e9cab0136ed9d0a, is integrated with canonical executable IR by PR #614, and can now be wrapped in a provenance-bound ClayVMArtifact/v1 by merged PR #619.",
+      "production_candidate": "The fresh-main single ClayVM core from PR #608 merged as 94efad064602689dfc3c9a5b3e9cab0136ed9d0a, is integrated with canonical executable IR by PR #614, wrapped in ClayVMArtifact/v1 by PR #619, and exposed through provenance-strict package ClayOS by PR #623.",
       "exact_head_runtime_evidence": {
         "source_candidate_head": "da911b0cea8bb01826cb9f5be1579e0cb774e0f6",
         "run_id": 31910505772,
@@ -87,15 +87,24 @@
         "tested_head_sha": "ee8d45d2aa8ae043ae655cf640f339cbe0ac9e3b",
         "merge_commit": "156cce431946630b6ef792ab3a65b4734b7df65d",
         "run_id": 31911040455,
-        "job_id": 95075986858,
-        "runner": "clay-4",
-        "machine": "clayverse",
-        "result": "PASS",
         "provenance_tests": "8/8",
         "canonical_ir_single_vm_regression": "16/16",
         "exact_head_checkout": true
       },
-      "current_blocker": "The provenance-bound artifact path is verified, but legacy callers can still invoke raw load_module(CL​AYVM/1) directly. Production/ClayOS launch routing must become non-bypassable for canonical programs before artifact provenance is release authority. The current instruction/type surface also remains intentionally narrow."
+      "strict_clayos_evidence": {
+        "pr": 623,
+        "tested_head_sha": "810493c77b99140a7318a44eac46474cdc2ff709",
+        "merge_commit": "ac86a23a9d6e766ac5709b7dbfe0664c7a7560b7",
+        "run_id": 31911242635,
+        "job_id": 95076512648,
+        "runner": "clay-2",
+        "machine": "clayverse",
+        "strict_os_plus_artifact_tests": "14/14",
+        "vm_core_regressions": "9/9",
+        "default_raw_blob_execution": "REJECTED",
+        "exact_head_checkout": true
+      },
+      "current_blocker": "Canonical package-level ClayOS launch is provenance-strict, but low-level `claymachine.clayvm.load_module` and the legacy `claymachine.clayvm.ClayOS` remain directly importable Python primitives. Inventory and internalization are still required before claiming codebase-wide non-bypassability. The instruction/type surface also remains intentionally narrow."
     },
     "CM-06-MEMORY-CONCURRENCY-RUNTIME": {
       "status": "OPEN",
@@ -113,7 +122,17 @@
     "CM-09-MINIMAL-CLAYOS": {
       "status": "IN_PROGRESS",
       "goal": "Minimal ClayOS services/shell/runtime personality hosted by the Clay VM/environment, sufficient to demonstrate boot, program execution, state and Linux interaction.",
-      "candidate": "The merged ClayVM core contains a minimal RUNNING/EXITED/TRAPPED process facade. It does not yet force canonical program launches through ClayVMArtifact/v1, so provenance-aware launch routing remains open."
+      "canonical_launch_boundary": "PR #623 merged as ac86a23a9d6e766ac5709b7dbfe0664c7a7560b7. Package `claymachine.ClayOS` now defaults to provenance-bound `exec_artifact`; raw CLAYVM execution is rejected unless `allow_unbound_bootstrap=True`, and any opt-in raw process is marked unverified.",
+      "launch_evidence": {
+        "tested_head_sha": "810493c77b99140a7318a44eac46474cdc2ff709",
+        "run_id": 31911242635,
+        "result": "PASS",
+        "checks": "14/14 + 9/9 VM regression",
+        "tamper_rejected_before_pid": true,
+        "transplant_rejected_before_pid": true,
+        "default_raw_rejected_before_pid": true
+      },
+      "blocker": "ClayOS remains a minimal process facade, not a complete OS/environment. Canonical CLI/environment wiring, filesystem/module services, persistent state, scheduling and recovery are still open. Legacy low-level raw launch surfaces are also not yet internalized."
     },
     "CM-10-TOOLING-OBSERVABILITY-RECOVERY": {
       "status": "IN_PROGRESS",
@@ -122,17 +141,14 @@
       "provenance_evidence": {
         "tested_head_sha": "ee8d45d2aa8ae043ae655cf640f339cbe0ac9e3b",
         "run_id": 31911040455,
-        "job_id": 95075986858,
-        "runner": "clay-4",
-        "machine": "clayverse",
-        "result": "PASS",
         "checks": "8/8",
         "canonical_ir_single_vm_regression": "16/16",
         "raw_core_substitution_rejected_by_bound_loader": true,
         "self_consistent_transplant_rejected_against_expected_identity": true,
         "deterministic_artifact": true
       },
-      "current_frontier": "Make production/ClayOS canonical launch routing consume ClayVMArtifact/v1 non-bypassably, while leaving raw CLAYVM loading explicitly internal/test-only. Then add recovery/replay/longer-horizon artifact lineage gates."
+      "strict_launch_boundary": "PR #623 makes the canonical package ClayOS provenance-strict and rejects raw artifacts before process admission by default.",
+      "current_frontier": "Inventory direct low-level loader/legacy ClayOS imports outside tests and VM implementation; internalize or explicitly quarantine them, then wire a canonical Clay environment/CLI launch path through package ClayOS.exec_artifact. Add recovery/replay/longer-horizon artifact lineage gates afterward."
     },
     "CM-11-SELF-HOSTING-BOOTSTRAP": {
       "status": "OPEN",
@@ -140,7 +156,7 @@
     }
   },
   "frontier": {
-    "canonical_product_main_observed": "156cce431946630b6ef792ab3a65b4734b7df65d",
+    "canonical_product_main_observed": "ac86a23a9d6e766ac5709b7dbfe0664c7a7560b7",
     "typeref_ancestry_complexity_merge_commit": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
     "typeref_ancestry_complexity_state": "MERGED_EXACT_HEAD_SELF_HOSTED_PASS",
     "typeref_remaining_resource_frontier": "ALIAS_DAG_EXPANSION_MATERIALIZATION_BUDGET_OR_SHARING",
@@ -156,16 +172,20 @@
     "vm_provenance_artifact_merge": "156cce431946630b6ef792ab3a65b4734b7df65d",
     "vm_provenance_artifact_tested_head": "ee8d45d2aa8ae043ae655cf640f339cbe0ac9e3b",
     "vm_provenance_artifact_run": 31911040455,
-    "vm_provenance_embedding_state": "MERGED_BOUND_PATH_PASS_LEGACY_RAW_BYPASS_OPEN",
+    "strict_clayos_merge": "ac86a23a9d6e766ac5709b7dbfe0664c7a7560b7",
+    "strict_clayos_tested_head": "810493c77b99140a7318a44eac46474cdc2ff709",
+    "strict_clayos_run": 31911242635,
+    "vm_provenance_embedding_state": "MERGED_STRICT_PACKAGE_CLAYOS_PASS_LOW_LEVEL_BYPASS_OPEN",
     "unresolved_call_names": 429,
     "unresolved_call_occurrences": 464,
     "raw_unresolved_call_sites": 574,
     "methodchain_member_segments_open": 22,
-    "next_discriminator": "Inventory raw load_module/ClayOS.exec_blob production entry points and route canonical ClayOS/program launches through ClayVMArtifact/v1 non-bypassably; preserve raw core loading only as an explicitly internal/test primitive. Then expand additional already-admitted PURE semantics into this same VM. Parallel bounded CM-02 path: make compact alias-DAG expansion resource-safe."
+    "next_discriminator": "Inventory imports/callers of `claymachine.clayvm.ClayOS`, `load_module` and package-level raw loader use outside tests. If production does not require raw launch, internalize/quarantine the legacy OS facade and wire the first canonical Clay environment/CLI command through package ClayOS.exec_artifact. Then expand already-admitted PURE semantics into the same VM. Parallel bounded CM-02 path: make compact alias-DAG expansion resource-safe."
   },
   "research_receipts": [
     "research_entity/clay_machine/receipts/2026-08-16_GO_CANONICAL_EXECUTABLE_IR_SINGLE_VM_FUSION.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_PROVENANCE_BOUND_CLAYVM_ARTIFACT.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_PROVENANCE_BOUND_CLAYVM_ARTIFACT.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_STRICT_CLAYOS_ARTIFACT_LAUNCH.json"
   ],
   "coordination_negative_result": "Parallel GO workers can collide on exactly-one unusual-experiment cardinality and shared frontiers. CAS/lease discipline remains required. This macrocycle also exposed and repaired a CI provenance pitfall: github.sha in pull_request workflows is a merge ref unless the workflow explicitly checks out github.event.pull_request.head.sha.",
   "laws": [

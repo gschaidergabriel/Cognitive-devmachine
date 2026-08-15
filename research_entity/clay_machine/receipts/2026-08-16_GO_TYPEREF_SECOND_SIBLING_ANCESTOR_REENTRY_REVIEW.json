@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_TYPEREF_SECOND_SIBLING_ANCESTOR_REENTRY_REVIEW",
+  "created_local": "2026-08-16T04:45:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "d809dcf8df528edb921f9acf744a013396286a24",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "subject_pr": 603,
+  "mechanism_reviewed_at": "7f3dec908f2946207573333ad244382e011b430b",
+  "current_pr_head_observed": "2805fcf33d86e692f1aac53b23e60452a4acd036",
+  "head_delta_after_mechanism_review": "workflow-only; compare 7f3dec9..2805fcf changes only .github/workflows/claycode-typeref-exact-head-vps.yml",
+  "grf": {
+    "observed_anchor": "PR #603 replaces branch-local alias ancestry copies with one mutable DFS active_aliases path plus explicit leave frames.",
+    "hypothesis": "The mutable path removes repeated ancestry-copy cost while preserving structural-cycle detection and sibling isolation.",
+    "strongest_counter_reality": "The first sibling may unwind a parent alias too early, allowing a cycle reachable only through a later sibling to escape detection.",
+    "discriminator": "SECOND_SIBLING_ANCESTOR_REENTRY",
+    "outcome": "COUNTER_REALITY_NOT_REPRODUCED; RETAIN_CANDIDATE_PENDING_EXACT_HEAD_TARGET_GATE"
+  },
+  "unusual_experiment": {
+    "count_for_this_worker_go": 1,
+    "name": "SECOND_SIBLING_ANCESTOR_REENTRY",
+    "baseline": "A -> Pair<B,C>; B -> Int; C -> String => Pair<Int,String>, no diagnostics",
+    "treatment": "A -> Pair<B,C>; B -> Int; C -> A => Pair<Int,<TYPE_ERROR>> with exactly TYPE_ALIAS_CYCLE reaching A",
+    "rollback": "restore C -> String => Pair<Int,String>, no diagnostics",
+    "external_effect": false,
+    "reversible": true,
+    "additional_unusual_experiments_after_this": 0
+  },
+  "ordinary_local_measurement_not_target_evidence": {
+    "alias_wrapped_depth_8192_median_seconds": 0.0164979,
+    "alias_wrapped_depth_32768_median_seconds": 0.0727049,
+    "deep_over_shallow_ratio": 4.40693,
+    "exact_unary_shape_preserved": true,
+    "diagnostics": 0
+  },
+  "durable_cross_reference": {
+    "pr603_comment_id": 5304365303,
+    "comment_scope": "independent adversarial review; no merge authority claimed"
+  },
+  "promotion_boundary": {
+    "local_review_is_release_evidence": false,
+    "production_merge_requires_current_exact_head_target_gate": true,
+    "generic_semantics_selected": false,
+    "effect_authority": "NONE",
+    "whole_clay_machine_completion": "NOT_CLAIMED"
+  },
+  "next": "Use PR #603/#605 overlap as one repair lane, require exact-head self-hosted evidence for the production-wired candidate, then move CM-02 frontier to alias-DAG expansion/resource totality rather than declaring TypeRef universally bounded."
+}

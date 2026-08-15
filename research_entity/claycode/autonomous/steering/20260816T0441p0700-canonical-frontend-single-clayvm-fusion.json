@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_SINGLE_VM_CANONICAL_FRONTEND_FUSION_STEERING",
+  "created_local": "2026-08-16T04:41:00+07:00",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_observed_before_write": "c3e02405d3d678b2e0e3f45ff6eb9cd2034cb245",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "79c389b81e205c30ee9502031ddadc7d6b050408",
+  "observed_candidates": {
+    "serialized_vm_core_pr": 600,
+    "serialized_vm_core_head": "1e3a3d0534848d0760b8d6fffecdedc778a9e461",
+    "canonical_frontend_vm_oracle_pr": 602,
+    "canonical_frontend_vm_oracle_head": "84b13964180bced071d3b35fcf5b989a71157964",
+    "discarded_stale_assembly_pr": 601
+  },
+  "grf": {
+    "observed": [
+      "PR600 is the stronger detached runtime-core candidate because it defines deterministic serialized bytecode, module validation, bounded execution, an explicit capability host boundary, and a minimal ClayOS process facade.",
+      "PR600 currently accepts a bootstrap marker schema named claycode.typed-ir.v0 that is not equivalent to canonical ClayCodeBaseTypedIR/v1; research commit 8290a7f already marks this as an open compiler-boundary mismatch.",
+      "PR602 compiles from the repository's existing ClayCode parser/analyzer and executes the already-admitted PURE frank.effects::decide_effect closure through an independent stack-bytecode prototype.",
+      "PR602's exact-head self-hosted Linux/X64 gate is queued with runner_id=0; no PASS or FAIL is claimed.",
+      "Product main remained 79c389b81e205c30ee9502031ddadc7d6b050408 after PR602 recomposition and includes the merged PR598 unresolved-call ownership partition."
+    ],
+    "generated_reality": "Keep one serialized/verifiable ClayVM core and connect canonical ClayCode semantics to it through a provenance-bound lowering adapter; use source-level differential gates as semantic oracles rather than maintaining a second VM.",
+    "strongest_counter_reality": "Merging PR600 and PR602 independently would create two VM architectures with different bytecode models and admission boundaries, increasing semantic drift and allowing one path to bypass canonical TypedIR/provenance rules.",
+    "discriminator": "After the runtime core has an admitted IR boundary, port a canonical source/TypedIR slice into the single VM and require the same result across shipping reference, current Clay evaluator, canonical lowered bytecode, and serialized VM execution while all unresolved callable/member surfaces fail closed.",
+    "collapse": "MERGE_ARCHITECTURE_NOT_IMPLEMENTATIONS",
+    "outcome": "RETAIN_PR600_AS_RUNTIME_CORE_CANDIDATE; RETAIN_PR602_AS_FRONTEND_DIFFERENTIAL_ORACLE; DO_NOT_PROMOTE_TWO_VMS"
+  },
+  "architecture_decision_candidate": {
+    "vm_runtime_count_target": 1,
+    "runtime_core_preference_current": "PR600 candidate, conditional on canonical IR/provenance repair and exact-head execution",
+    "frontend_oracle": "PR602 source/parser/analyzer differential tests",
+    "canonical_lowering_boundary": "OPEN",
+    "required_input_identity": "canonical ClayCode TypedIR/provenance identity; arbitrary bootstrap dictionaries must not masquerade as canonical compiler output",
+    "callable_member_policy": "preserve PR598 separation and fail closed until ownership semantics are admitted",
+    "host_policy": "explicit capability boundary only; no ambient OS authority",
+    "duplicate_runtime_policy": "delete or archive prototype runtime machinery once unified path is proven"
+  },
+  "unusual_experiment_accounting": {
+    "count_this_worker_go": 1,
+    "consumed": true,
+    "name": "CALL_FRAME_ALIAS_CROSSTALK",
+    "counter_reality_result": 99,
+    "isolated_frame_candidate_result": 7,
+    "expected_caller_result": 7,
+    "interpretation": "call activation-frame isolation is a required VM invariant",
+    "additional_unusual_experiment_after_overlap_discovery": false
+  },
+  "negative_results_and_limits": [
+    "PR602 exact-head self-hosted gate has not executed yet; queued is not PASS.",
+    "PR600 exact-head self-hosted execution was also queued in the previously recorded receipt; no new accepted-target PASS is claimed here.",
+    "PR602 must not be merged as a second production VM.",
+    "PR600 is not yet a proven canonical ClayCode-to-VM compiler because its current input schema is detached from canonical ClayCode TypedIR.",
+    "No host FFI/Linux effect widening, real ClayOS kernel, self-hosting, or whole Clay Machine completion is claimed."
+  ],
+  "next_falsifiers": [
+    "observe exact-head self-hosted results for PR600 and PR602 without promoting queued states",
+    "define or prove the deterministic canonical ClayCodeBaseTypedIR/v1-to-single-ClayVM lowering boundary with provenance identity preserved",
+    "add verifier stack-effect/type-state validation before widening serialized bytecode semantics",
+    "port the PR602 differential policy oracle onto the single serialized VM core and require four-way agreement",
+    "keep unresolved ordinary Call and MethodChain/member authority fail closed until current ownership research admits them"
+  ]
+}

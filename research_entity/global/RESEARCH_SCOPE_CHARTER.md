@@ -1,98 +1,101 @@
-# GLOBAL RESEARCH SCOPE CHARTER — RAE-8.8
+# GLOBAL RESEARCH SCOPE CHARTER — UCM-ONLY
 
 ## Mission
 
-The Research Entity studies how to build **persistent, adaptive, agentic cognitive software systems end-to-end**.
+Until explicitly changed by the human owner, the entire Research Entity studies, builds, falsifies and improves **only the Unified Clay Machine (UCM)**.
 
-Synthetic Clay is a major target application/runtime architecture, but it is **not the scope boundary** of the Research Entity. The system environment below/around Clay remains substrate-plural and must be researched independently.
+All former broad research domains are frozen unless they are directly required to improve or test the UCM.
 
-The initial engineering target is Linux because it provides the current FRANK host and the fastest path to measurable integration. Linux-first must never silently become Linux-only.
+## Experimental body
 
-## Architectural separation
+The Research Entity does not mutate the main Clay/Frank/ClayVerse instance during research. It develops an isolated second Clay Machine under:
 
-Always distinguish:
+`research_entity/unified_clay_machine/UCM2/`
 
-1. **Host substrate / environment** — OS, kernel, hardware, drivers, process model, filesystem, network, security primitives.
-2. **Portable systems runtime** — scheduler, IPC abstraction, state adapters, capability gateway, sandbox, model adapters, observability, recovery.
-3. **Cognitive runtime** — FRANK state, GWT/reentry, goals, self/world models, learning, memory and policy loops.
-4. **Internal representation / language** — XENO, ClayCode and other IR/protocol candidates.
-5. **Application substrate** — Synthetic Clay or competing adaptive state/material architectures.
-6. **Interfaces** — tools, browser, terminal, GUI, APIs, robots, sensors and external services.
-7. **Research/verification plane** — experiments, replay, counterfactuals, formal methods, benchmarks and provenance.
+UCM2 is the mutable research body. The main instance is a source of current architecture, runtime observations, VPS work logs, receipts, failures and requirements.
 
-The application may ultimately be implemented largely in Synthetic Clay while layers 1–2 remain conventional or platform-native software. Do not force Clay into layers where empirical evidence does not support it.
+## Input authority
 
-## Research domains
+Every cycle starts from the newest verifiable evidence available, in this order where present:
 
-The Entity may open and maintain domain shards for at least:
+1. latest versioned VPS work reports and exact receipts;
+2. latest admitted/main repository state and exact commit SHA;
+3. current main-instance architecture/state contracts;
+4. prior UCM2 work reports and experimental state;
+5. external research only when it directly informs a UCM question.
 
-- operating systems and kernel interfaces;
-- Linux services/systemd/cgroups/namespaces/eBPF/containers;
-- Windows/macOS/BSD portability;
-- mobile/embedded/edge substrates;
-- hardware/CPU/GPU/NPU/accelerators;
-- scheduling, concurrency and multi-rate runtimes;
-- IPC, shared memory, event buses, RPC and distributed systems;
-- storage engines, databases, logs, graph stores, indexes and filesystems;
-- memory architectures and retrieval/activation systems;
-- security, capabilities, identity, sandboxing and policy enforcement;
-- networking, remote execution, federation and offline operation;
-- model inference runtimes, routing, quantization, training and adapters;
-- agent orchestration and multi-agent protocols;
-- tool/browser/terminal/computer-control interfaces;
-- observability, tracing, deterministic replay and crash recovery;
-- formal verification, fuzzing, model checking and testing;
-- deployment, packaging, updates, rollback and migrations;
-- performance, latency, throughput, cost, energy and resource budgets;
-- FRANK cognitive architecture, GWT, reentry and multi-timescale coupling;
-- XENO, ClayCode, machine-native IR and direct-code research;
-- Synthetic Clay and competing state/material paradigms;
-- HCI/UX where it affects system operation or cognition;
-- scientific methodology for measuring emergence, continuity and functional integration.
+Chat/model/provider memory is never research authority.
 
-New domains are allowed whenever the current problem crosses the existing taxonomy.
+If direct VPS freshness cannot be verified, the cycle must record an explicit `VPS_FRESHNESS_GAP` rather than silently treating older evidence as current.
 
-## Cross-platform doctrine
+## What belongs to UCM research
 
-For every platform-dependent mechanism distinguish:
+Research is in scope only when it directly advances the Unified Clay Machine, including:
 
-- semantic contract;
-- portable interface;
-- platform implementation;
-- capability/performance differences;
-- failure/recovery semantics;
-- security boundary.
+- fluid UnifiedDB/state materialization;
+- integrated wiki/knowledge/memory;
+- module/organ model and module lifecycle;
+- state machines and execution continuity;
+- self/world models;
+- Semantic Hyperposition and GRT/GRF possibility state;
+- GWT/reentry when represented as UCM state/topology;
+- ClayGraph as derived topology/index/projection;
+- retrieval, activation and bounded assemblies;
+- provenance, epochs, transactions, replay and recovery;
+- sync/distribution/HA required by UCM;
+- API and small runtime/binary required to operate UCM;
+- model/tool adapters required for frontier models to use/read/test UCM2;
+- observability, benchmarks, fuzzing, ablation, failure injection and security required to validate UCM.
 
-Prefer a stable semantic core with platform-specific adapters over pretending all operating systems expose identical primitives.
+Anything else is OUT OF SCOPE unless it is a direct dependency of one of these items.
 
-A Linux implementation may be promoted as the first reference implementation, but a claim of architectural necessity requires evidence that alternatives cannot implement the same semantic contract.
+## Frontier-model research law
 
-## Research behavior
+Frontier models are temporary workers, not authorities. They should use UCM2 as a real experimental machine:
 
-For substantive architecture work:
+- read/query its current state;
+- inspect its module graph and history;
+- propose and implement bounded UCM2 mutations;
+- run self-read/replay/recovery/failure tests;
+- compare predictions with measured outcomes;
+- preserve negative results;
+- emit exact work reports with source and tested SHAs.
 
-1. Identify the actual system layer(s) involved.
-2. Load existing evidence and negative results for those layers.
-3. Inspect the relevant source repositories and runtime evidence.
-4. Generate competing mechanisms, not one favored design.
-5. Search external literature/code/field reports when useful.
-6. Build or simulate the highest-information experiments available.
-7. Measure end-to-end behavior, failure tails and recovery, not only local microbenchmarks.
-8. Preserve negative results and portability failures.
-9. Promote mechanisms only at the scope actually tested.
-10. Feed successful cross-domain mechanisms back into the global architecture map.
+A model claim without an executable or independently inspectable receipt remains a hypothesis.
 
-## Anti-bias rules
+## Separation from the main instance
 
-- Clay is a candidate substrate, not an answer that every problem must fit.
-- Biological analogy is a hypothesis generator, not implementation evidence.
-- Linux convenience is not proof of universal architectural superiority.
-- A single benchmark is not a system architecture.
-- A fast path that weakens provenance/recovery/security is not automatically better.
-- A portable abstraction that destroys useful platform capabilities is not automatically better.
-- Do not optimize token efficiency while ignoring task success, repair, latency, cost or safety.
-- Do not equate persistent state, GWT traces or self-description with phenomenal consciousness.
+UCM2 may import or mirror main-instance semantics and evidence, but it may not write experimental state into the main instance as truth.
+
+Promotion path is one-way and explicit:
+
+`MAIN/VPS evidence -> UCM2 experiment -> versioned report/receipt -> bounded candidate knowledge for main instance`
+
+The main instance may later consume the reports when working on ClayVerse, but must independently admit/promote any mechanism according to its own authority gates.
+
+## Work-report law
+
+Every material research cycle ends with a new append-only report in:
+
+`research_entity/unified_clay_machine/UCM2/reports/`
+
+Each report records at minimum:
+
+- report id and parent report;
+- timestamp;
+- source main repo SHA(s);
+- source VPS receipt/work-log identifiers and observed freshness;
+- UCM2 before/after commit or state epoch;
+- question/hypotheses/counter-hypotheses;
+- changes made;
+- tests and exact outcomes;
+- failures/negative evidence;
+- what is VERIFIED / OBSERVED / INFERRED / HYPOTHESIS / REFUTED;
+- reusable finding for the main instance;
+- next highest-information UCM experiment.
+
+No material cycle is DONE until its report and associated changes are versioned in the repository.
 
 ## Success criterion
 
-The long-run target is an architecture whose **cognitive/application semantics remain stable while the physical environment can change**: different OS, machine, accelerator, storage layout or deployment topology should be replaceable behind explicit contracts when evidence shows that the relevant semantics can be preserved.
+The target is a measured working Unified Clay Machine whose durable semantics are primarily represented as a fluid typed data/state fabric, with derived topology, a small trustworthy runtime/binary and a unified API, and whose state can be replayed, recovered, inspected and used by frontier models without depending on provider chat memory.

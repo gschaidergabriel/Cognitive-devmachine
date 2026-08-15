@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260815T1953p0700-chatgpt-secondary-typeref-totality",
+  "observed_target_head": "442cb0049876c119df74cac00756106c5d1f0a4c",
+  "pull_request": 583,
+  "candidate_workflow": {
+    "run_id": 31885904602,
+    "name": "ClayCode TypeRef Totality Candidate VPS",
+    "status": "queued",
+    "conclusion": null,
+    "job_id": 95015052122,
+    "credit": "ZERO_UNTIL_EXECUTED"
+  },
+  "same_head_completed_existing_gates": [
+    {"run_id": 31885904516, "name": "Frank execution gate directory anchor repair VPS", "conclusion": "success"},
+    {"run_id": 31885904533, "name": "ClayCode WP04 to WP06 Python admission barrier VPS", "conclusion": "success"},
+    {"run_id": 31885904574, "name": "Frank self.root current-head v2", "conclusion": "success"},
+    {"run_id": 31885904552, "name": "ClayCode Nominal Typecheck V1 VPS", "conclusion": "success"},
+    {"run_id": 31885904596, "name": "Frank Deep Integrity", "conclusion": "success"}
+  ],
+  "interpretation": "The detached candidate files do not regress several existing exact-head gates, but this does not validate the candidate mechanism because production typecheck.py does not import it. Candidate mechanism remains UNVERIFIED on the self-hosted lane until run 31885904602 executes.",
+  "promotion": "NO_CHANGE"
+}

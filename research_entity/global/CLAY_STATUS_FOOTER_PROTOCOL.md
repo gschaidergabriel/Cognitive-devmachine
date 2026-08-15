@@ -1,42 +1,40 @@
-# Mandatory Clay Visible Status Footer — Frank v0.1 Only
+# Mandatory Clay Visible Status Footer — ClayVerse / Clay Machine
 
 **Status:** CURRENT  
-**Owner directive:** `research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md`
+**Owner directive:** `research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md`
 
-Every substantive visible Clay project response ends with exactly one final plain Markdown fenced text block and nothing visible after it.
+Every substantive visible Clay project response ends with exactly one final plain Markdown fenced `text` block and nothing visible after it.
 
 Opening fence must be exactly:
 
 ```text
 ```
 
-The persistent Research Entity is Clay. The target subject is `self.root`, human-facing as Frank.
+The persistent Research Entity is Clay. The only active top-level directive is ClayVerse; the active engineering program/stage is `CLAY_MACHINE`.
+
+Legacy Frank/self.root/UCM2/Harness/H1/H2/H3 material may appear only as bounded implementation, regression or historical evidence when relevant. It must not be presented as the active program, active completion target, active progress stage or active ETA basis.
 
 ## Current target
 
 ```text
-PROGRAM = FRANK_V0_1
-NATIVE_TARGET = self.root
-HUMAN_SURFACE = Frank
-TARGET_BODY = accepted Hostinger Ubuntu VPS
+PROGRAM = CLAYVERSE_CLAY_MACHINE_ONLY
+STAGE = CLAY_MACHINE
+PRODUCT = Clay Machine
+MISSION = ClayCode language + compiler/toolchain + Clay VM + Clay Environment + typed Linux interoperability + minimal ClayOS
 ```
 
-No visible status surface may present GitHub Harness, Reference Harness, Clay Harness, H1, H2 or H3 as an active stage/product/progress target.
+## Dynamic truth and progress law
 
-Legacy Harness/H1/H2/H3 progress may appear only when explicitly discussing historical evidence.
+Resolve current state from the strongest available current evidence, including:
 
-## Dynamic progress law
-
-Resolve current progress from:
-
+- `research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md`
 - `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json`
-- `tools/program_progress.py`
-- current verified capability/forecast inputs when available.
+- `research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json`
+- current product/research repository heads and exact runtime/test receipts when material.
 
-Never copy stale percentages or dates from chat.
+Never copy stale Frank-v0.1 percentages, forecasts or dates from chat/history. Never calculate whole-machine completion from a green component workflow.
 
-If a resolver cannot execute, say `UNRESOLVED` rather than inventing a value.
+If no canonical resolver provides a valid progress percentage or ETA, report `UNRESOLVED` rather than inventing one.
 
 ## Required footer
 
@@ -44,50 +42,38 @@ If a resolver cannot execute, say `UNRESOLVED` rather than inventing a value.
 CLAY STATUS
 Entity: JOINED|DEGRADED_UNJOINED|LOCAL_ONLY
 GitHub: VERIFIED_RW|VERIFIED_RO|UNVERIFIED|FAILED
-Canonical: <revision/hash>
+Canonical: <current research revision/hash>
+Product main: <current product revision/hash or UNRESOLVED>
 Organ: <current worker/provenance>
 Trigger: <none|registered trigger>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
-Program: Frank v0.1
-Native target identity: self.root
-Human surface name: Frank
-Goal: finished self.root / Frank v0.1 on accepted target VPS
-Target host: Hostinger VPS / current accepted Ubuntu target identity
-Cognition: ClayCode-only
-German surface: state-aware bidirectional translator
-Agency: proactive + reactive; persistent interests/goals; bounded autonomous research/experiments
-Web ingress: open web = untrusted validated data -> ClayCode evidence; direct token messages = separate scoped-intent channel
-Action posture: default-allow allowed non-destructive actions; deterministic ClayCode gates for destructive/security-sensitive effects
-Harness: direct Frank v0.1 validation method; no separate Harness product/H1/H2/H3 stage
-Short commands: 666 · go · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
-
-FRANK v0.1
-Progress: <dynamic 20-cell bar + percent OR UNRESOLVED>
+Program: ClayVerse / Clay Machine
+Stage: CLAY_MACHINE
+Goal: working Clay Machine — ClayCode + compiler/toolchain + Clay VM + Clay Environment + typed Linux interop + minimal ClayOS
+Legacy Frank/self.root/UCM2/Harness: bounded evidence only
+Together API: FORBIDDEN
+Final paid/model training: OWNER_AUTHORIZATION_REQUIRED
+Current frontier: <dynamic concise blocker/discriminator>
+Progress: <canonical dynamic percent/bar OR UNRESOLVED>
 Acceptance: <IN_PROGRESS|PASS|BLOCKED|UNRESOLVED>
-Primary blockers: <dynamic concise blockers>
-ETA @ 10h/day: <dynamic range OR UNRESOLVED>
-ETA confidence: <dynamic basis>
-
-DOOMSDAY / finished Frank v0.1
-Progress: <dynamic bar/percent OR UNRESOLVED>
-Forecast: <dynamic range OR UNRESOLVED>
-Center: <dynamic center OR UNRESOLVED>
-Confidence: <dynamic confidence>
-Conditional on owner authorization for final training when required: <yes|no>
-Forecast basis: unified Frank v0.1 critical path + historical earned work + current capabilities/capacity
+ETA: <canonical dynamic range OR UNRESOLVED>
+Evidence note: component/synthetic/legacy PASS does not imply whole Clay Machine PASS
+Short commands: 666 · go · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 ```
-
-There is no special `FIRST GITHUB FRANK HARNESS` block for exact `frank`.
 
 ## Pre-send invariant
 
 1. exactly one final fenced text block;
 2. opening fence exactly ` ```text `;
 3. heading `CLAY STATUS`;
-4. `Program: Frank v0.1` present;
-5. native identity `self.root` present;
-6. human name Frank present;
-7. target VPS present;
-8. no current H1/H2/H3/GitHarness progress block;
-9. all registered short commands present;
+4. `Program: ClayVerse / Clay Machine` present;
+5. `Stage: CLAY_MACHINE` present;
+6. active goal names ClayCode/compiler/VM/environment/Linux interop/minimal ClayOS;
+7. legacy Frank/self.root/UCM2/Harness is not shown as an active program or completion target;
+8. current product/research revisions are refreshed when GitHub is available;
+9. invented progress/ETA is forbidden;
 10. nothing visible after the closing fence.
+
+## Supersession note
+
+This protocol supersedes the prior Frank-v0.1-only footer framing. The Owner Program Directive and `PROGRAM_STATE.json` remain authoritative if this status surface ever becomes stale again.

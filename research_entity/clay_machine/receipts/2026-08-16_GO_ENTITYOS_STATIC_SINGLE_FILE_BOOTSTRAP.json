@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_STATIC_SINGLE_FILE_BOOTSTRAP",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "worker_model": "GPT-5.6 Sol",
+  "owner_product_boundary": "EntityOS single executable file",
+  "research_head_before_write": "890a7f2fcec65078aa95494fe2e5e7990a9801fb",
+  "product_main_observed": "95417c724a015fa4c0dc4d373ad8ead87bd48bde",
+  "current_semantic_process_merge": "7995e78e234e9825faba7ad76ffe960f9e77577b",
+  "grf": {
+    "observed_reality": [
+      "Product main already routes explicit EXTERNAL_COMMUNICATION process effects from ClayExecutableTypedIR/v1 through the single ClayVM OP_HOSTCALL into linux.process.spawn.v0.",
+      "Current research explicitly rejects widening ClayVM values to Bytes without a typed/versioned module and runtime admission contract.",
+      "No EntityOS source or binary existed in either searched repository at cycle start.",
+      "The active local sandbox has GCC 14.2 and can produce statically linked x86-64 Linux ELF executables."
+    ],
+    "generated_reality": "A bounded static ELF bootstrap can test the one-file product boundary now without pretending to solve the still-open canonical String/Bytes/argv language and VM contract.",
+    "strongest_counter_reality": "A parallel C runtime could fork Clay semantics or be misread as whole-machine acceptance; therefore the bootstrap must mirror only already-admitted VM opcodes, mint no new ClayCode syntax, carry explicit non-acceptance labeling and remain a draft integration candidate.",
+    "discriminator": "Can one copy-and-run static ELF named EntityOS preserve a tiny admitted VM lowering/execution slice, fail-closed process capability gating, direct no-shell Linux exec, and tamper detection without dynamic runtime dependencies?",
+    "outcome": "SUPPORTED_PACKAGING_BOOTSTRAP_ONLY"
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "sha256": "a4a6858169aa7a85ce33c753ea926a7d3c2f30fe4bcee1c0d0ae025bd47b93b4",
+    "size_bytes": 692600,
+    "mode": "0755",
+    "format": "ELF64 x86-64 statically linked",
+    "dynamic_dependency_check": "ldd: not a dynamic executable",
+    "scope": "BOOTSTRAP_PROOF_NOT_WHOLE_MACHINE_ACCEPTANCE",
+    "source_branch": "go/entityos-static-bootstrap-20260816",
+    "source_commit": "b52085607a35cff820320b45708e77dbc93f5e03",
+    "draft_pr": 702
+  },
+  "tests": {
+    "boot_manifest": "PASS",
+    "self_seal_baseline": "PASS d9eac5fe3a1214ab",
+    "micro_lowering_vm": "PASS 40+2=42 over 20 bytes using mirrored ClayVM/1 CONST_I64 ADD_I64 RET opcodes",
+    "process_capability_denied_without_grant": "PASS rc=60",
+    "direct_linux_execve_with_named_capability": "PASS /usr/bin/printf literal argv; no implicit shell",
+    "copy_rename_run_same_host": "PASS from / using /tmp/entityos-copyrun/RenamedEntityOS",
+    "fresh_ubuntu_vps": "NOT_EXECUTED"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "SEALED_PAYLOAD_SINGLE_BYTE_TAMPER",
+    "setup": "Copy EntityOS, change one byte inside the embedded sealed payload in ELF rodata, preserve executable headers/code, then run --selfcheck; retain original as rollback/baseline.",
+    "prediction_if_seal_is_effective": "Tampered copy remains loadable but selfcheck rejects it; original remains green.",
+    "result": "PASS_FAIL_CLOSED",
+    "observed": "tampered copy rc=41 with ENTITYOS_SELF_SEAL_FAIL; original immediately rechecked ENTITYOS_SELF_SEAL_OK",
+    "rollback": "original artifact never modified; tampered copy deleted"
+  },
+  "external_primary_source_fusion": {
+    "gcc_static_linking": "Current GCC documentation states -static prevents linking with shared libraries on systems supporting dynamic linking.",
+    "linux_proc_exe": "Linux proc_pid_exe documentation confirms the executed file can be reopened via /proc/pid/exe; useful future basis for stronger whole-file self-attestation.",
+    "architecture_consequence": "Keep the release as one ELF; next attestation iteration should bind the whole executable rather than only a sealed payload region."
+  },
+  "nonclaims": [
+    "This is not the canonical ClayCode parser/typechecker/compiler.",
+    "This does not implement the required typed String/Bytes/argv module contract.",
+    "This does not replace the canonical Python ClayVM/runtime.",
+    "This has not run on the accepted/fresh Ubuntu VPS.",
+    "This does not contain all ClayOS, state, network, visual, audio or data-plane capabilities.",
+    "Whole Clay Machine acceptance remains false."
+  ],
+  "next_canonical_build_action": "Define and test the smallest versioned typed ClayVM module/value contract carrying owned immutable String/Bytes/argv from canonical source/typecheck through ClayExecutableTypedIR/v1 into the single ClayVM; then package those canonical compiler/VM/ClayOS components into EntityOS rather than mirroring only a tiny opcode subset.",
+  "authority": {
+    "together_used": false,
+    "training_started": false,
+    "whole_machine_completion_claimed": false
+  }
+}

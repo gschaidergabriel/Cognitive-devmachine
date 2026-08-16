@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "kind": "ENTITYOS_SOURCE_PROVENANCE_REPLAY_HARDENING",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_main_after_cycle": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "main_security_hardening": {
+    "pr": 760,
+    "merge_commit": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "result": "MERGED",
+    "effect": "Repository-static preview GO execution route fails closed as BUILD_INTERNAL_ONLY instead of accepting a replayable static nonce.",
+    "product_runtime_code_changed": false
+  },
+  "unusual_experiment": {
+    "name": "DIRTY_WORKTREE_SAME_HEAD_ARCHIVE",
+    "bounded": true,
+    "reversible": true,
+    "environment": "isolated local tool sandbox",
+    "git_head_before": "3def2329a43d234e5449cdcf7c388d4da948bb88",
+    "git_head_after": "3def2329a43d234e5449cdcf7c388d4da948bb88",
+    "archive_sha256_before": "f4a241066e77630a96e35cfc4c4f507d9abc5dfebb4293cb0470aa22d9e5da0e",
+    "archive_sha256_after": "7a4a79286751458e911cb084863f0b528c15432b4b946eee43edef6cddfb8e43",
+    "intervention": "Mutate tracked checkout bytes and admit untracked checkout material while preserving the same Git HEAD, then restage with the old checkout-tar mechanism.",
+    "observed_result": "Same source_head produced different staged archive bytes.",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED_DIRTY_TREE_CAN_CHANGE_ARCHIVE_UNDER_SAME_HEAD",
+    "nonclaim": "This does not establish that any historical Vercel build was dirty; it establishes that the old source_head label was not sufficient content authority for a mutable checkout tar."
+  },
+  "repair_fusion": {
+    "preferred_pr": 769,
+    "branch": "clay/go-entityos-git-provenance-v2-20260816",
+    "current_head": "02a5b0a2163f23f9a0bdb1da810409fe919a9b49",
+    "state": "DRAFT_UNVALIDATED_EXTERNAL_RATE_LIMIT",
+    "source_staging_schema": "ClayGoSourceStage/v4",
+    "source_binding": "COMMITTED_GIT_OBJECTS_AND_DETACHED_EXACT_HEAD",
+    "archive_reproducibility": "SANITIZED_SHALLOW_EXACT_GIT_DOUBLE_BUILD_CANONICAL_TAR_GZIP_N",
+    "git_index_transport": "OMITTED_AND_REBUILT_FROM_EXACT_HEAD_IN_SANDBOX",
+    "remote_credentials_or_remote_config_admitted": false,
+    "ambient_checkout_dirt_admitted": false,
+    "reusable_http_execution_endpoint": false,
+    "execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "vercel_oidc_required": true,
+    "test_network_policy": "DENY_ALL_AFTER_TOOLCHAIN_PROVISION",
+    "ordinary_regressions_added": [
+      "tests.test_entityos_build_provenance",
+      "EntityOS status with PATH=/nonexistent while host python3 is unavailable"
+    ],
+    "ordinary_regression_unusual_experiment_count": 0
+  },
+  "negative_evidence_preserved": [
+    {
+      "lane": "closed PR 759 / head 83b750523775a3d4e3bf79106052dce2a2adc1de",
+      "result": "Vercel deployment READY but EntityOS batch SKIPPED_WRONG_ENV_OR_REF; not product evidence.",
+      "source_archive_sha256_first": "9a0f41371d0321bc0918e450a6a0350a1e6fa91c38284c6c271b68433a930d1f",
+      "source_archive_sha256_second": "66e7c97e92a8dae191be422b375431d3607432b4674bdd165f847edb87a89fce",
+      "interpretation": "Repeated staging of one head was not reproducible in that lane."
+    },
+    {
+      "lane": "Batch-3 Git bundle transport",
+      "result": "ERROR before Sandbox matrix: shallow Git bundle did not send all necessary objects."
+    },
+    {
+      "lane": "PR 764 source-only build-internal batch",
+      "result": "Sandbox/toolchain steps passed but offline_go_matrix exited 1; no current EntityOS PASS."
+    }
+  ],
+  "historical_exact_head_evidence": {
+    "source_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "entityos_sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+    "observed": "Earlier isolated Vercel Sandbox matrix reported one-file EntityOS PASS, deny-all test networking and Sandbox stop.",
+    "promotion_status": "HISTORICAL_EXACT_HEAD_ONLY_NOT_CURRENT_RELEASE_ACCEPTANCE"
+  },
+  "current_external_blocker": {
+    "exact_head": "02a5b0a2163f23f9a0bdb1da810409fe919a9b49",
+    "provider": "Vercel",
+    "commit_status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "entityos_built_for_exact_head": false,
+    "entityos_sha256_for_exact_head": null,
+    "classification": "EXTERNAL_DEPLOYMENT_RATE_LIMIT_NOT_CODE_RESULT"
+  },
+  "next_discriminator": "When Vercel permits a new Preview build, execute the exact then-current PR-769 head only. Require sanitized exact-Git provenance, reproducible source archive, OIDC-bound build-internal invocation, all matrix steps exit 0, GO_MATRIX_RESULT=PASS, EntityOS one-file SHA-256, build-provenance regression PASS, PATH-without-host-Python PASS, relocation byte identity, DENY_ALL test networking and successful Sandbox stop. Any head movement invalidates an older receipt for promotion.",
+  "experiment_accounting": {
+    "this_go_unusual_experiments": 1,
+    "unusual_experiment": "DIRTY_WORKTREE_SAME_HEAD_ARCHIVE",
+    "additional_unusual_experiments": false
+  },
+  "authority": {
+    "effect_authority": "NONE",
+    "training_authorized": false,
+    "training_started": false,
+    "vps_or_self_hosted_product_testing_used": false,
+    "together_used": false,
+    "whole_clay_machine_acceptance": false
+  }
+}

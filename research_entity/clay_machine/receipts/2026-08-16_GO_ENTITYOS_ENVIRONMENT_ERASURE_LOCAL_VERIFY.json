@@ -2,23 +2,30 @@
   "schema": "ClayMachineGoReceipt/v1",
   "date": "2026-08-16",
   "trigger": "go",
-  "scope": "EntityOS one-file local verification and portability falsifier",
-  "provenance": {
-    "product_repository": "gschaidergabriel/Dr.-Unterweger",
-    "product_main_observed_after_artifact_build": "35fc8cc4e7ebbd024f51f92537ad6666eb407261",
-    "artifact_workflow_run": 31927007084,
-    "artifact_build_head": "66e466c9c57d72c520e98085f221afcaffab9494",
-    "artifact_sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
-    "artifact_size_bytes": 11931208,
+  "scope": "EntityOS one-file verification plus exactly one bounded local portability falsifier",
+  "current_product": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_head": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
+    "head_delta": "build(entityos): bind security concept into one-file provenance",
+    "workflow_run": 31927513690,
+    "workflow_status": "SUCCESS",
     "artifact_name": "EntityOS",
-    "artifact_origin": "GitHub Actions uploaded artifact retrieved into active analysis environment"
+    "artifact_sha256": "7cf8d7f415417dfd25fbcc74592a09a5827bb79e69e945ed9c3c1a43c82c7c8a",
+    "artifact_size_bytes": 11932320,
+    "artifact_mode": "0755",
+    "security_concept_sha256": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
+    "workflow_evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
+    "workflow_kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "workflow_source_regression_rc": 0,
+    "whole_machine_acceptance": false
   },
-  "observed": {
-    "workflow_result": "SUCCESS",
-    "local_status": "PASS",
+  "current_head_local_verification": {
+    "artifact_retrieved_from_workflow": true,
+    "status": "PASS",
+    "build_head_reported": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
     "frozen_runtime": true,
     "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
-    "local_self_test": "PASS",
+    "self_test": "PASS",
     "vm_result": 42,
     "typed_ir_vm_process_effect": "PASS",
     "unauthorized_host_process": "DENIED",
@@ -26,33 +33,37 @@
     "whole_machine_acceptance": false
   },
   "unusual_experiment": {
-    "count": 1,
+    "count_for_this_go_worker": 1,
     "name": "ONEFILE_ENVIRONMENT_ERASURE",
+    "artifact_build_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "artifact_sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
     "baseline": "EntityOS --self-test-json in active environment",
-    "intervention": "execute exact same EntityOS from / with env -i and only TMPDIR set to an empty provisioned temporary directory",
+    "intervention": "execute exact same artifact from / with env -i and only TMPDIR set to an empty provisioned temporary directory",
     "baseline_output_sha256": "a8b9c29a3993d8bfe864af0c9b4eb35db5b48f14193c8a07667d49203c33cdaf",
     "intervention_output_sha256": "a8b9c29a3993d8bfe864af0c9b4eb35db5b48f14193c8a07667d49203c33cdaf",
     "result": "BYTE_IDENTICAL_PASS",
     "temporary_directory_after_exit": "EMPTY",
-    "rollback": "temporary directory removed; no product or canonical runtime state mutated"
+    "rollback": "temporary directory removed; no product or canonical runtime state mutated",
+    "note": "The later f525 current-head artifact was subjected only to ordinary verification, not a second unusual experiment. The independently triggered product workflow has its own workflow-level relocation regression; it is not counted as a second experiment initiated by this go worker."
   },
   "grf": {
-    "hypothesis": "The frozen one-file candidate can execute its admitted canonical smoke path without relying on ordinary inherited process-environment variables or the caller working directory.",
-    "counterhypothesis": "The apparent one-file property hides an environment or cwd dependency that breaks canonical self-test when the process environment is erased.",
-    "outcome": "RETAIN_BOUNDED",
-    "limits": "This does not prove static linkage, zero host ABI dependencies, exact-current-main build identity, fresh-machine portability, crash recovery, security-concept implementation, or whole Clay Machine acceptance."
+    "hypothesis": "The frozen one-file EntityOS candidate has a robust product boundary while current semantics remain concentrated in the single canonical compiler/VM/ClayOS path.",
+    "counterhypothesis": "Packaging success masks host-environment fragility or a detached semantic sidecar that never reaches the canonical VM path.",
+    "collapse": "One-file execution and admitted smoke/process paths are supported at current main; whole-machine completion remains false. The highest-value semantic blocker remains integrating typed Bytes plus String/argv/effect signatures into canonical source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM, rather than adding parallel adapters.",
+    "outcome": "RETAIN_BOUNDED"
   },
   "coordination": {
     "current_shared_frontier": "canonical typed value integration for Bytes plus String/argv/effect signatures through source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM -> EntityOS",
-    "overlap": "Draft product PR #708 already owns the detached ClayVMTypedValueContract/v1 candidate lane.",
-    "pr708_ci_retry": "Attempt 2 again completed with zero executed job steps; classify as runner/infrastructure non-execution, not semantic candidate failure.",
+    "overlap": "Draft product PR #708 owns the detached ClayVMTypedValueContract/v1 candidate lane.",
+    "pr708_ci_retry": "Attempt 2 again completed with zero executed job steps; runner/infrastructure non-execution, not semantic candidate failure.",
     "duplicate_implementation_created": false
   },
-  "next_action": "Integrate the winning typed value metadata into the canonical single-VM module/admission boundary, add canonical String/Bytes/argv process values and effect signatures, execute deterministic exact-head gates, then rebuild and retest the single-file EntityOS on the accepted Ubuntu lane.",
+  "next_action": "Integrate the winning typed value metadata into the canonical single-VM module/admission boundary, add canonical String/Bytes/argv process values and effect signatures, execute deterministic exact-head gates, then rebuild and retest one-file EntityOS on the accepted Ubuntu lane.",
   "claims": {
-    "entityos_artifact_built_this_cycle": false,
+    "entityos_artifact_built_by_current_main_workflow": true,
     "entityos_artifact_locally_verified_this_cycle": true,
-    "accepted_vps_verified_this_cycle": false,
+    "exact_current_product_main_artifact_verified": true,
+    "accepted_vps_identity_proven_by_this_receipt": false,
     "whole_clay_machine_acceptance": false,
     "training_authorized": false,
     "together_used": false

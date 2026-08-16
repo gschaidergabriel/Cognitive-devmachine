@@ -44,18 +44,18 @@
     },
     "CM-08-LINUX-INTEROP": {
       "status": "OPEN",
-      "evidence": "Single VM currently exposes only a narrow capability bootstrap.",
-      "blocker": "Typed filesystem/process/network/device/FFI effects with receipts, byte-stream values and fail-closed authority are not accepted."
+      "evidence": "PR #695 merged as d36ff25cb732fa74d7283f978f0e1191cda41d10: ClayOS now has a capability-gated linux.process.spawn.v0 component using absolute direct argv with shell=false, fresh process group, simultaneous bounded stdout/stderr capture, timeout/output-limit states and process-table observations. Parallel PR #694 was closed unmerged after fusion; its unique request-snapshot/provenance and explicit env/cwd/stdin/failure-class evidence is retained in research receipts.",
+      "blocker": "Component host-process infrastructure is not canonical ClayCode process execution. Nominal host signatures remain untyped, ClayExecutableTypedIR/v1 is PURE-only, the VM lacks canonical String/Bytes/argv values, and Clay-visible env/cwd/stdin/live streaming/PTY plus separately explicit shell semantics remain open. Typed filesystem/network/device/FFI effects and fail-closed authority also remain unaccepted."
     },
     "CM-09-MINIMAL-CLAYOS": {
       "status": "IN_PROGRESS",
-      "evidence": "Provenance-strict package ClayOS, low-level loader internalization and minimal clayenv CLI build/run route are merged.",
-      "blocker": "ClayOS remains a minimal process facade; persistent services/state, scheduling, filesystem/module services and recovery remain open."
+      "evidence": "Provenance-strict package ClayOS, low-level loader internalization and minimal clayenv CLI build/run route are merged. PR #695 adds a bounded capability-gated host-process component to ClayOS but does not close the canonical ClayCode/TypedIR/VM process path.",
+      "blocker": "ClayOS remains a minimal process facade; persistent services/state, scheduling, filesystem/module services, recovery and canonical Clay process-effect integration remain open."
     },
     "CM-10-TOOLING-OBSERVABILITY-RECOVERY": {
       "status": "IN_PROGRESS",
-      "evidence": "Provenance/tamper/transplant gates, strict launch gates, raw-loader policy and artifact identity checks are merged. GO mutable-buffer evidence adds a provenance tripwire for borrowed media/data buffers.",
-      "blocker": "Arbitrary Python private-module introspection is not physically sandboxed; replay/recovery/long-horizon artifact lineage, stronger process isolation and buffer lifetime receipts remain open."
+      "evidence": "Provenance/tamper/transplant gates, strict launch gates, raw-loader policy and artifact identity checks are merged. GO mutable-buffer evidence adds a provenance tripwire for borrowed media/data buffers. CM-TERM fusion preserves a request-snapshot requirement before mutable caller-owned host-process inputs can be receipt-bound.",
+      "blocker": "Arbitrary Python private-module introspection is not physically sandboxed; replay/recovery/long-horizon artifact lineage, stronger process isolation, buffer lifetime receipts and canonical host-process request/outcome receipts remain open."
     },
     "CM-11-SELF-HOSTING-BOOTSTRAP": {
       "status": "OPEN",
@@ -73,7 +73,8 @@
     },
     "CM-TERM": {
       "status": "OPEN",
-      "blocker": "No canonical Clay argv/env/cwd/stdin/stdout/stderr/PTY value/effect path executes a real Linux process without implicit shell/harness semantics."
+      "evidence": "Merged PR #695 provides the first retained direct no-shell Linux host-process component behind ClayOS capability gating with bounded dual-pipe capture. Draft PR #694 was closed unmerged after cross-worker fusion; its 8/8 local adapter evidence and request-snapshot/env/cwd/stdin requirements remain research constraints, not a second runtime.",
+      "blocker": "No canonical Clay argv/env/cwd/stdin/stdout/stderr/PTY value/effect path reaches the merged host-process component. Required host intrinsic Clay signatures, effectful executable TypedIR, VM String/Bytes/argv support, live streaming, explicit environment/cwd/stdin and separately explicit PTY/shell semantics remain open."
     },
     "CM-DATA": {
       "status": "IN_PROGRESS",
@@ -92,8 +93,8 @@
     }
   },
   "frontier": {
-    "repository_head_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
-    "latest_clay_machine_semantic_merge": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
+    "repository_head_observed": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
+    "latest_clay_machine_semantic_merge": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
     "typeref_repair_merge": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
     "canonical_executable_ir_merge": "1bf95a2bf6912c7d40585a70d4a65221cf8fcd19",
     "single_clayvm_merge": "94efad064602689dfc3c9a5b3e9cab0136ed9d0a",
@@ -116,9 +117,13 @@
     "cm02_production_totality_run": 31923469219,
     "cm02_merge": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
     "cm02_state": "MERGED_AFTER_EXACT_HEAD_GREEN",
-    "state": "CANONICAL_SOURCE_TO_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; MODULE_PROVIDER_V1_MERGED_WITH_PLAIN_USE_V2_CORRECTION_BLOCKED_ON_SAFE_EXECUTION; CM02_PRODUCTION_ALIAS_DAG_SHARING_MERGED; CLAY_IO_MUTABLE_BUFFER_PROVENANCE_FENCE_SUPPORTED_RESEARCH_CONSTRAINT",
+    "cmterm_host_process_pr": 695,
+    "cmterm_host_process_merge": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
+    "cmterm_duplicate_closed_pr": 694,
+    "cmterm_state": "HOST_PROCESS_COMPONENT_MERGED_CANONICAL_CLAY_EFFECT_PATH_OPEN",
+    "state": "CANONICAL_SOURCE_TO_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; MODULE_PROVIDER_V1_MERGED_WITH_PLAIN_USE_V2_CORRECTION_BLOCKED_ON_SAFE_EXECUTION; CM02_PRODUCTION_ALIAS_DAG_SHARING_MERGED; CLAY_IO_MUTABLE_BUFFER_PROVENANCE_FENCE_SUPPORTED_RESEARCH_CONSTRAINT; BOUNDED_CAPABILITY_GATED_LINUX_HOST_PROCESS_COMPONENT_MERGED_WITH_CANONICAL_CLAY_EFFECT_PATH_OPEN",
     "release": "NOT_PASSED",
-    "next_discriminator": "Highest-value unblocked semantic frontier: select the smallest canonical Clay Bytes/Buffer ownership+lifetime contract needed by CM-DATA/CM-VIS/CM-AUDIO, then wire one provenance-bound opaque-byte ingress through typed/effect IR and the single VM with deterministic tests. In parallel, CM-07 remains blocked on a trusted actually-started isolated/source-admitted runner for preserved v2 head 07f0bf7bc19e398f4820cd346a58190f98e596c6. CM-02 next resource follow-up is bounded diagnostic rendering, not another alias-DAG implementation lane."
+    "next_discriminator": "Highest-value shared unblocked semantic frontier: select the smallest canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface needed by CM-DATA and CM-TERM, then wire one provenance-bound opaque-byte ingress/process request through typed/effect IR and the single VM without backend-local semantics. CM-07 remains blocked on a trusted actually-started isolated/source-admitted runner for preserved v2 head 07f0bf7bc19e398f4820cd346a58190f98e596c6."
   },
   "progress": {
     "work_packages_total": 11,
@@ -143,9 +148,12 @@
     "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_PLAIN_USE_SCOPE_TRUST_GATE.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_EPHEMERAL_GATE_BILLING_BLOCK.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_IMPORT_SEMANTICS_AND_EPHEMERAL_DISPATCH.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_CLAY_IO_MUTABLE_BUFFER_PROVENANCE_FENCE.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CLAY_IO_MUTABLE_BUFFER_PROVENANCE_FENCE.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CMTERM_DIRECT_LINUX_PROCESS_ADAPTER_V1.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CMTERM_CANONICAL_EFFECT_PATH_BLOCKER.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CMTERM_PARALLEL_ADAPTER_FUSION.json"
   ],
-  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent implementations must not become parallel canonical paths: #663 was closed after #660; CM-02 duplicates #664/#667/#673 were closed after fusion into #681. Persistent self-hosted pull_request execution of candidate repository bytes is not trusted merely from asserted head SHA; source admission/isolation is separate. CM-07 remains fail-closed on that boundary. New I/O negative result: readonly buffer access does not imply immutable producer storage or stable provenance; do not optimize copy count by silently borrowing mutable backing memory.",
+  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent implementations must not become parallel canonical paths: #663 was closed after #660; CM-02 duplicates #664/#667/#673 were closed after fusion into #681; CM-TERM draft #694 was closed unmerged after #695 became the stronger merged ClayOS host-process lane, while #694-only request/provenance requirements were preserved as research evidence. Persistent self-hosted pull_request execution of candidate repository bytes is not trusted merely from asserted head SHA; source admission/isolation is separate. CM-07 remains fail-closed on that boundary. New I/O negative result: readonly buffer access does not imply immutable producer storage or stable provenance; do not optimize copy count by silently borrowing mutable backing memory.",
   "laws": [
     "ClayVerse/Clay Machine is the only active program.",
     "GRF expands hypotheses but does not mint truth.",

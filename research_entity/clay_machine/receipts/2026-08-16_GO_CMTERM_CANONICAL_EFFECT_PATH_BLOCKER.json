@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_CMTERM_CANONICAL_EFFECT_PATH_BLOCKER",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "CM-TERM",
+  "timestamp_local": "2026-08-16T10:52:00+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "candidate_pr": 694,
+  "candidate_head": "c85ce119db9b522abf7a89beac978ec7ecc366e2",
+  "observed_anchors": [
+    {
+      "path": "runtime/claycode_typecheck_v1/typecheck.py",
+      "blob_sha": "a083c8ad3adcd9ec3ea57577856d9b614e4d26a3",
+      "observation": "The nominal checker explicitly keeps host intrinsic signatures OPEN: host effect classes are observed, but missing Clay parameter/return signatures prevent type admission."
+    },
+    {
+      "path": "runtime/claycode_eval_v1/host.py",
+      "blob_sha": "066f8b5ab94791442222f67d9ee02cc7a8fa7845",
+      "observation": "Host contracts classify generic runtime_effect as EXTERNAL_COMMUNICATION, but the registry carries arity/effect/contract rather than Clay parameter/return types."
+    },
+    {
+      "path": "runtime/claycode_executable_typed_ir_v1.py",
+      "blob_sha": "cd121d3bb54149d8db88e9403670d30948394331",
+      "observation": "ClayExecutableTypedIR/v1 is explicitly PURE-only and rejects host/effect call kinds; its executable literal surface currently accepts Bool/Int and rejects String literals."
+    },
+    {
+      "path": "claymachine/clayvm.py",
+      "blob_sha": "7ed09a716e1b79d97a009d2bfb09330bba797625",
+      "observation": "Current serialized VM execution surface is predominantly Int/Bool and does not yet provide a general String/Bytes/argv object path required by CM-TERM."
+    }
+  ],
+  "hypothesis_before_discriminator": "The direct Linux adapter can be wired immediately into the existing hostcall/effect path without selecting new language semantics.",
+  "counterhypothesis": "The canonical effect path is not yet type-admissible/executable for process data, so immediate wiring would create backend-local or host-invented semantics.",
+  "discriminator": "Inspect the current nominal type checker host-signature law, host contract registry, canonical executable TypedIR admission rules and ClayVM value surface.",
+  "result": "COUNTERHYPOTHESIS_SUPPORTED",
+  "collapse": {
+    "immediate_backend_wiring": "REJECT",
+    "explicit_adapter_pr_694": "RETAIN_AS_BOUNDED_HOST_ADAPTER_CANDIDATE",
+    "canonical_cmterm_pass": "NOT_PROMOTED"
+  },
+  "dependency_chain": [
+    "Select Clay-visible process request/result types with no host-invented meaning.",
+    "Add explicit typed host/effect signatures rather than arity-only contracts.",
+    "Extend executable TypedIR beyond PURE-only in a capability/effect-preserving way.",
+    "Provide the minimum String/Bytes/argv representation required by the admitted process contract through the VM/runtime path.",
+    "Only then route to the explicit Linux adapter and add ClayOS lifecycle/receipt integration.",
+    "PTY/interactive shell remains a separate explicit effect and must not be smuggled into direct spawn."
+  ],
+  "smallest_next_design_question": "What is the minimum non-generic Clay type surface that can represent an arbitrary executable path, argv, environment, cwd and byte streams without forcing premature general collection/object semantics or fixed-arity argv?",
+  "unusual_experiment": "NONE_NEW; the macro-cycle's exactly-one bounded unusual experiment remains SHELL_METACHAR_LITERAL_ARGV from the paired CM-TERM adapter receipt.",
+  "whole_clay_machine_acceptance": "NOT_CLAIMED",
+  "outcome": "DEFER_CANONICAL_WIRING_UNTIL_TYPE_AND_VM_SURFACE_IS_SELECTED"
+}

@@ -5,78 +5,84 @@
   "stage": "CLAY_MACHINE",
   "frontier": "CM-DATA",
   "status": "TESTING",
-  "research_head_observed_before_first_write": "fe576be9a2512592c72b82c0ed1b7b4a9b288192",
-  "product_main_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "product_main_observed_initial": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "product_main_observed_final": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
   "product_pr": 693,
   "candidate_branch": "chatgpt/go-cm-data-binary-frame-20260816",
-  "candidate_head": "f495fd3f0c51f04a4c9e7127d5b5a466dd302779",
+  "candidate_head_final": "09dade4dd646e652ad5126f1a1a680a6420a3605",
+  "fresh_main_merge": {
+    "merge_commit": "09dade4dd646e652ad5126f1a1a680a6420a3605",
+    "candidate_parent": "6405cd167037b1f64b3bcb62e69c8859e6943083",
+    "main_parent": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
+    "force_push": false,
+    "pr_mergeable_after_sync": true
+  },
   "candidate_files": [
     "claymachine/data_plane.py",
     "tests/test_clay_data_plane.py",
     ".github/workflows/claymachine-vm-bootstrap.yml"
   ],
   "hypothesis": "A minimal byte-exact deterministic framed-stream oracle can provide a falsifiable CM-DATA migration baseline before canonical Clay Bytes/Buffer ownership and VM-ingress semantics are selected.",
-  "counterhypothesis": "A Python framing oracle can become an architectural dead end if its host-language copy/framing behavior is mistaken for canonical Clay value, ownership, effect, provenance, authority, or runtime semantics.",
+  "counterhypothesis": "A host-language framing oracle can silently mint host-native wire semantics or unsafe execution authority unless typed-buffer shape and source admission are fail-closed.",
   "mechanism": {
     "frame": "MAGIC | payload_length:u32le | crc32:u32le | payload",
     "default_max_payload_bytes": 16777216,
-    "ingress": "bytes-like inputs are snapshotted to immutable bytes",
-    "decode": "strict exact-frame decode plus incremental fragmented/concatenated stream decode",
-    "failure_policy": "bad magic, oversize, checksum mismatch, truncation and trailing bytes fail closed",
-    "crc32_authority": "NONE; transport-corruption detection only, never authenticity/provenance/identity/capability/authorization/effect authority"
+    "mutable_or_unknown_ingress": "snapshot to immutable bytes",
+    "typed_memoryview": "admit only one-byte formats B/b/c with itemsize 1; wider/native typed views fail closed",
+    "streaming": "incremental fragmented/concatenated decoder",
+    "crc32_authority": "NONE; transport-corruption detection only"
   },
-  "observed_local_evidence": {
-    "command": "python3 -m unittest -v tests.test_clay_data_plane",
-    "tests": 8,
-    "passed": 8,
-    "failed": 0,
-    "covered_falsifiers": [
-      "all octets 0x00..0xff round-trip",
-      "fragmented and concatenated stream frames",
-      "checksum tamper fails closed",
-      "oversized advertised length fails before payload",
-      "truncated stream fails on finish",
-      "exact decoder rejects trailing bytes",
-      "readonly memoryview over mutable bytearray is snapshotted before later producer mutation"
+  "local_evidence": {
+    "original_candidate_tests": "8/8 PASS",
+    "current_hardened_candidate_tests": "9/9 PASS",
+    "current_test_scope": [
+      "all 0x00..0xff octets",
+      "fragmented and concatenated frames",
+      "CRC tamper rejection",
+      "oversize rejection",
+      "truncation rejection",
+      "trailing-byte rejection",
+      "readonly mutable-backed view snapshot",
+      "non-byte typed memoryview rejection",
+      "self-similar payload one-byte fragmentation regression"
     ]
   },
-  "unusual_experiment": {
+  "unusual_experiment_for_this_go": {
     "count": 1,
-    "description": "Embed the framing MAGIC itself plus NUL/0xff bytes inside the payload, then deliver the complete encoded frame one byte at a time and compare against single-shot decode.",
-    "result": "PASS",
-    "interpretation": "Self-similar binary content and maximal fragmentation did not confuse frame boundaries; streamed decode matched the baseline exactly."
+    "description": "Embed frame MAGIC plus NUL/0xff inside payload and deliver the encoded frame one byte at a time; compare to single-shot baseline.",
+    "result": "PASS"
   },
-  "ci_evidence": {
-    "workflow": "Clay Machine VM bootstrap",
-    "workflow_run": 31925136887,
-    "job": 95111410262,
-    "final_head": "f495fd3f0c51f04a4c9e7127d5b5a466dd302779",
-    "tested_head_match": true,
-    "runner": "clay",
-    "machine": "clayverse",
-    "python": "3.12.3",
-    "vm_tests_passed": 9,
-    "cm_data_tests_passed": 8,
-    "cm_data_tests_failed": 0,
-    "result": "PASS",
-    "broader_final_head_workflows_at_last_observation": {
-      "successful": 6,
-      "queued": 3,
-      "failed": 0
-    },
-    "scope": "Exact-head candidate execution on the Clay self-hosted Linux/X64 runner. This proves this CM-DATA regression gate on that runner; it does not by itself establish canonical Clay Bytes/Buffer semantics or whole-machine acceptance."
+  "parallel_followup_adopted": {
+    "commits": [
+      "31583c11f896884b4372b469c455e79a7c0005b5",
+      "352f171540124bbb4d19bb7870ecad7094b3517f",
+      "6405cd167037b1f64b3bcb62e69c8859e6943083"
+    ],
+    "deltas": [
+      "reject non-byte typed memoryviews",
+      "retain typed-buffer falsifier as ordinary regression",
+      "replace automatic pull_request self-hosted execution with explicit workflow_dispatch source admission"
+    ],
+    "accounting": "The parallel follow-up GO had its own experiment accounting; this receipt still records exactly one unusual experiment for this GO."
   },
-  "fusion": "The current mutable-buffer provenance fence strengthens snapshot-at-ingress as the conservative reference behavior: readonly host access alone is not evidence that producer backing storage is immutable. Zero-copy remains deferred until explicit immutable provenance or lease/epoch ownership semantics exist. CRC32 is intentionally non-authoritative.",
+  "execution_evidence_correction": {
+    "predecessor_run": 31925136887,
+    "predecessor_head": "f495fd3f0c51f04a4c9e7127d5b5a466dd302779",
+    "functional_result": "9/9 VM and 8/8 CM-DATA tests passed on self-hosted runner clay",
+    "trust_classification": "FUNCTIONAL_PREDECESSOR_EVIDENCE_ONLY_NOT_RELEASE_TRUSTED",
+    "reason": "The run was triggered from pull_request candidate bytes on a persistent self-hosted runner without explicit source admission; current policy rejects that lane as release evidence.",
+    "current_source_admission_gate": "workflow_dispatch requires admitted_head_sha equal dispatch SHA before checkout/execution",
+    "current_final_head_source_admitted_run": "NOT_EXECUTED_WITH_AVAILABLE_TOOLING"
+  },
+  "fusion": "Snapshot-at-ingress remains the conservative reference for mutable/unknown exporters. Host-native typed buffers do not acquire Clay wire semantics implicitly. CRC32 never grants trust. Persistent self-hosted candidate execution requires explicit source admission.",
   "nonclaims": [
-    "not a canonical Clay Bytes/Buffer type",
-    "not a canonical Clay ownership/lifetime contract",
-    "not wired through canonical typed/effect IR",
-    "not wired through the single ClayVM ingress path",
+    "not a canonical Clay Bytes/Buffer ownership/lifetime contract",
+    "not wired through canonical typed/effect IR and single ClayVM ingress",
+    "no trusted source-admitted final-head VPS PASS for PR #693",
     "no CM-NET, CM-VIS or CM-AUDIO readiness claim",
     "no whole Clay Machine acceptance",
     "no owner-gated model training authorization"
   ],
-  "promotion_gate": "Retain as TESTING after exact-head framing-gate PASS until equivalent provenance-bound opaque-byte semantics are selected and wired through canonical Clay type/effect IR into the single VM, then exercised through a real canonical Clay program and accepted-target boundary.",
-  "next_falsifier": "Define the smallest canonical Clay Bytes/Buffer ownership+lifetime contract, then prove one opaque-byte ingress through checker -> typed/effect IR -> single ClayVM with deterministic snapshot/borrow semantics and accepted Ubuntu evidence.",
-  "rollback": "Close PR #693 and delete the candidate branch; product main and canonical workspace status remain unmodified by the candidate."
+  "next_falsifier": "Run the explicit source-admitted workflow_dispatch on exact head 09dade4dd646e652ad5126f1a1a680a6420a3605; if green, select the smallest canonical Clay Bytes/Buffer ownership+lifetime contract and wire one opaque-byte ingress through checker -> typed/effect IR -> single ClayVM.",
+  "rollback": "Close PR #693; branch is isolated and product main remains unmodified by CM-DATA until an explicit merge."
 }

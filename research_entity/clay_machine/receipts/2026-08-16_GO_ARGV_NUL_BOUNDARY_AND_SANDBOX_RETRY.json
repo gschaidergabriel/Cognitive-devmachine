@@ -1,0 +1,71 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "active_program": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build/test worker via ChatGPT GPT-5.6 Sol",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "r0_observed": {
+    "product_main_final_refresh": "d0d40503b9ba29618a6a8789b8f0dc0208115635",
+    "semantic_hostcall_merge_ancestor": "14fbd477ad3a2ae1ca6082ea9c21e510f583b258",
+    "current_vm_string_state": "String literal/return supported; VM function params and hostcall args remain Int-only",
+    "current_process_signature": "linux.process.spawn.v0::(Int)->Int request-id bridge",
+    "whole_machine_acceptance": false
+  },
+  "grf": {
+    "hypothesis": "Opaque Clay Bytes and Linux process argv must remain distinct semantic value classes; argv needs an explicit no-NUL invariant instead of silently reusing arbitrary Bytes.",
+    "strongest_counterhypothesis": "A lower-level host adapter could represent process arguments as bytes and therefore a separate argv/string contract is unnecessary except at final syscall encoding.",
+    "discriminator": "Compare an ordinary direct argv control with an argument containing an embedded NUL at the current Python/Linux process-adapter boundary."
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "ARGV_EMBEDDED_NUL_REJECTION",
+    "execution_location": "isolated ChatGPT sandbox",
+    "control": {
+      "argv": ["/usr/bin/printf", "%s", "control-ok"],
+      "returncode": 0,
+      "stdout": "control-ok"
+    },
+    "intervention": "Invoke /usr/bin/printf with byte argument A\\x00B.",
+    "result": "FAIL_CLOSED_BEFORE_PROCESS_EXECUTION",
+    "exception_type": "ValueError",
+    "exception_message": "embedded null byte",
+    "interpretation_scope": "Python subprocess/process-adapter boundary; not direct kernel-syscall proof",
+    "rollback": "No persistent state or product source changed."
+  },
+  "collapse": {
+    "retain": [
+      "Do not model canonical Clay Bytes as process argv by identity.",
+      "Select a canonical process Arg/String contract with explicit embedded-NUL rejection and encoding semantics.",
+      "Keep Bytes opaque and NUL-capable with separate ownership/lifetime/provenance rules."
+    ],
+    "defer": [
+      "Exact source-level Clay syntax for Arg versus String",
+      "Whether the final Linux adapter uses str or bytes after explicit validated encoding",
+      "Bytes/Buffer lease/epoch and streaming semantics"
+    ],
+    "web_primary_source_status": "UNAVAILABLE_503_DURING_THIS_CYCLE_NO_EXTERNAL_PROMOTION"
+  },
+  "exact_main_entityos_rebuild": {
+    "workflow_run": 31930445459,
+    "tested_head": "14fbd477ad3a2ae1ca6082ea9c21e510f583b258",
+    "attempt_1": "FAILURE_PRE_RUN_ZERO_STEPS",
+    "attempt_2": "FAILURE_PRE_RUN_ZERO_STEPS",
+    "attempt_2_job": 95124461723,
+    "classification": "INFRASTRUCTURE_NONEXECUTION_NOT_CODE_FAILURE",
+    "current_main_after_retry": "d0d40503b9ba29618a6a8789b8f0dc0208115635",
+    "current_main_delta": "CI workflow isolation/regression-lane change only in observed commit",
+    "current_exact_artifact": "NOT_BUILT_IN_THIS_WORKER"
+  },
+  "exact_blocker": "NO_ADMISSIBLE_EXACT_CURRENT_ENTITYOS_FREEZE_EXECUTION: the isolated GitHub-hosted sandbox did not start on both attempts; the active local sandbox cannot materialize the complete private source plus pinned PyInstaller toolchain.",
+  "next_executable_action": "On the first actually-started isolated sandbox for current main, build entityos/build_canonical_onefile.py twice with matching SHA-256, execute the exact resulting EntityOS, then add the smallest reviewed Arg/String no-NUL contract through canonical checker -> ClayExecutableTypedIR -> single ClayVM -> capability-gated Linux process path and rebuild/retest EntityOS.",
+  "entityos_artifact_state": "BLOCKED_CURRENT_HEAD_BUILD",
+  "authority": {
+    "sandbox_only": true,
+    "vps_test_performed": false,
+    "together_used": false,
+    "training_authorized_or_started": false
+  }
+}

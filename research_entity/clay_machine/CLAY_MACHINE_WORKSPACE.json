@@ -38,8 +38,8 @@
     },
     "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. PR #648 keeps every use declaration fail-closed at executable build. PR #653 merged deterministic ClayPackageIndex/v1 after exact-head self-hosted PASS run 31921054505. PR #635 merged lossless MODULE/WILDCARD use intent after exact-head PASS runs 31921439509, 31921439331, 31921439318 and 31921439348. PR #660 merged ClayPackageResolution/v1 exact module-provider selection; exact-head self-hosted Linux/X64 run 31923122223 passed on head a993083ff58081c2078d92f1769e649e366e3988. Fresh canonical-corpus inspection supplies counterevidence to the breadth of that v1 law: claycode/frank_memory.clay contains plain `use frank.entity.Frank`, while claycode/frank_entity.clay declares `module frank.entity` and `entity Frank`; current resolver v1 nevertheless requires every use target to equal an exact module identity. Draft PR #674 head 0fe6d68e023a2c201f6663448774ff02e042335b is the active semantic-correction candidate: wildcard module-provider identity may remain explicit, while plain-use name binding fails closed as unselected. PR #677 separately explores short MODULE namespace collision rejection and must not outrun the corrected plain-use contract.",
-      "blocker": "Do not treat merged provider-resolution PASS as proof that every plain use denotes a module. First adjudicate the corpus-backed plain-use ambiguity and correct/fail-close that scope via #674 exact-head evidence. Then define the smallest explicit imported-symbol ownership/visibility/collision contract for plain versus wildcard use and feed one canonical resolution surface into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. PR #648 remains fail-closed until end-to-end executable closure is proven; meaningful stdlib/SDK remains open."
+      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. PR #648 keeps every use declaration fail-closed at executable build. PR #653 merged deterministic ClayPackageIndex/v1 after exact-head self-hosted PASS run 31921054505. PR #635 merged lossless MODULE/WILDCARD use intent after exact-head PASS runs 31921439509, 31921439331, 31921439318 and 31921439348. PR #660 merged ClayPackageResolution/v1 exact module-provider selection; exact-head self-hosted Linux/X64 run 31923122223 passed on head a993083ff58081c2078d92f1769e649e366e3988. Canonical-corpus counterevidence remains decisive against the breadth of that v1 law: claycode/frank_memory.clay contains plain `use frank.entity.Frank`, while claycode/frank_entity.clay declares `module frank.entity` and `entity Frank`. Corrective branch chatgpt/go-cm07-plain-use-failclosed-20260816 reached head 07f0bf7bc19e398f4820cd346a58190f98e596c6 with ClayPackageIndex/v2 (lossless ordered use_decls changes the canonical hash domain), ClayPackageResolution/v2 scoped to WILDCARD_MODULE_PROVIDER_ONLY, and plain use fail-closed as name-binding unselected. PR #674 was closed unmerged to prevent promotion without a trusted execution lane. Its GitHub-hosted ubuntu-latest candidate run 31923593584 / job 95107444133 never instantiated a runner or steps because GitHub blocked the job for account payment/spending-limit state; classify this as infrastructure billing block, not code FAIL or PASS. Resolver and package-index pull-request self-hosted gates on the branch were converted to fail-closed skipped markers; audit also confirmed clayenv-minimal.yml checks out pull_request.head.sha and executes repository Python on persistent self-hosted infrastructure.",
+      "blocker": "CM-07 code correctness for the v2 correction is UNTESTED. Restore an actually-started ephemeral/isolated or explicitly source-admitted exact-head execution path for preserved head 07f0bf7bc19e398f4820cd346a58190f98e596c6; do not use persistent self-hosted PR execution as a shortcut. If green, rebuild on fresh main and then define the smallest explicit plain-use versus wildcard imported-symbol ownership/visibility/collision contract. Feed one canonical resolution surface into the nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. PR #648 remains fail-closed until end-to-end executable closure is proven; meaningful stdlib/SDK remains open."
     },
     "CM-08-LINUX-INTEROP": {
       "status": "OPEN",
@@ -82,16 +82,21 @@
     "canonical_module_provider_resolution_tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
     "canonical_module_provider_resolution_run": 31923122223,
     "cm07_plain_use_semantic_correction_pr": 674,
-    "cm07_plain_use_semantic_correction_head": "0fe6d68e023a2c201f6663448774ff02e042335b",
-    "cm07_module_namespace_collision_pr": 677,
+    "cm07_plain_use_semantic_correction_state": "CLOSED_UNMERGED_BLOCKED_SAFE_EXECUTION",
+    "cm07_plain_use_semantic_correction_head": "07f0bf7bc19e398f4820cd346a58190f98e596c6",
+    "cm07_package_index_candidate_schema": "ClayPackageIndex/v2",
+    "cm07_resolver_candidate_schema": "ClayPackageResolution/v2",
+    "cm07_ephemeral_candidate_run": 31923593584,
+    "cm07_ephemeral_candidate_job": 95107444133,
+    "cm07_ephemeral_candidate_result": "BLOCKED_BILLING_BEFORE_RUNNER_START_NOT_CODE_RESULT",
     "cm02_detached_sharing_candidate_pr": 645,
     "cm02_closed_duplicate_production_prs": [664, 667, 673],
     "cm02_preferred_production_integration_pr": 681,
     "cm02_preferred_production_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
     "cm02_preferred_exact_head_workflow": 31923469033,
-    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_PLUS_LOSSLESS_USE_MODE_PLUS_EXACT_MODULE_PROVIDER_RESOLUTION_MERGED; PLAIN_USE_SCOPE_COUNTEREVIDENCE_REQUIRES_CORRECTION; CM02_SINGLE_CONSOLIDATED_PRODUCTION_DAG_LANE_PENDING_EXACT_HEAD",
+    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_PLUS_LOSSLESS_USE_MODE_PLUS_EXACT_MODULE_PROVIDER_RESOLUTION_V1_MERGED; PLAIN_USE_SCOPE_V1_OVERCLAIM_HAS_V2_FAIL_CLOSED_CANDIDATE_BUT_TRUSTED_EXECUTION_IS_BLOCKED; CM02_SINGLE_CONSOLIDATED_PRODUCTION_DAG_LANE_PENDING_EXACT_HEAD",
     "release": "NOT_PASSED",
-    "next_discriminator": "CM-07: obtain exact-head evidence for plain-use fail-closed correction #674 before symbol expansion. In parallel CM-02: obtain exact-head self-hosted evidence for consolidated PR #681 and merge only if production-sharing + alias-totality + unchanged production-totality and overlapping ClayCode gates are green."
+    "next_discriminator": "CM-07: execute preserved v2 correction head 07f0bf7bc19e398f4820cd346a58190f98e596c6 on an actually-started ephemeral/isolated or explicitly source-admitted runner; current GitHub-hosted attempt was blocked before runner start by billing/spending state and is not code evidence. Audit remaining pull_request -> persistent self-hosted execution surfaces before reopening promotion. In parallel CM-02: obtain exact-head evidence for consolidated PR #681 and merge only if production-sharing + alias-totality + unchanged production-totality and overlapping ClayCode gates are green."
   },
   "progress": {
     "work_packages_total": 11,
@@ -112,9 +117,12 @@
     "research_entity/clay_machine/receipts/2026-08-16_GO_DETERMINISTIC_MODULE_PROVIDER_RESOLVER.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_PROVIDER_RESOLVER_COORDINATION_CYCLIC_ORDER.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CM02_PRODUCTION_TYPEREF_DAG_SHARING.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_PLAIN_USE_SEMANTIC_FENCE.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_PLAIN_USE_SEMANTIC_FENCE.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_PLAIN_USE_SCOPE_TRUST_GATE.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_EPHEMERAL_GATE_BILLING_BLOCK.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_IMPORT_SEMANTICS_AND_EPHEMERAL_DISPATCH.json"
   ],
-  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent valid implementations must not become parallel canonical paths: PR #663 was closed after #660 landed; CM-02 production duplicates #664, #667 and #673 were closed after fusion into #681. Distinct pair-revisit, cache-taint and diagnostic-expansion observations were preserved as research evidence. Pull-request workflows must checkout and assert github.event.pull_request.head.sha rather than treating github.sha merge refs as exact candidate evidence; workspace writes use compare-and-swap and must fuse rather than overwrite concurrent updates.",
+  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent valid implementations must not become parallel canonical paths: PR #663 was closed after #660 landed; CM-02 production duplicates #664, #667 and #673 were closed after fusion into #681. Distinct pair-revisit, cache-taint and diagnostic-expansion observations were preserved as research evidence. Pull-request workflows that directly execute candidate repository bytes on persistent self-hosted runners are not trusted merely because they assert github.event.pull_request.head.sha: exact provenance and source-admission/isolation are separate requirements. CM-07 corrective work converted its direct resolver/package-index self-hosted gates to fail-closed skipped markers and exposed clayenv-minimal.yml as another candidate-byte execution surface. Workspace writes use compare-and-swap and must fuse rather than overwrite concurrent updates.",
   "laws": [
     "ClayVerse/Clay Machine is the only active program.",
     "GRF expands hypotheses but does not mint truth.",

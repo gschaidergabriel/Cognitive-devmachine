@@ -1,0 +1,76 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_head_observed": "4c2607d8b4cfc427ad5a8bed0d203f5020f2aacf",
+  "verified_entityos_binary_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+  "verified_entityos_binary": {
+    "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "canonical_workflow_run": 31929651652,
+    "canonical_workflow_conclusion": "success",
+    "local_recheck": "PASS",
+    "whole_machine_acceptance": false,
+    "head_note": "Current product head 4c2607d only adds a source-admitted ClayVM test workflow; no EntityOS product source mutation relative to parent b32ec5d was observed, but the verified binary remains build-head-bound to b32ec5d and is not relabeled as an exact 4c2607d build."
+  },
+  "observed_reality": {
+    "accepted_target_runtime": {
+      "libsqlite_package": "libsqlite3-0",
+      "package_version": "3.45.1-1ubuntu2.7",
+      "runtime_sqlite_version": "3.45.1",
+      "runtime_source_id": "2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1",
+      "loaded_library": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+      "loaded_library_sha256": "f2cd05de8b6f71ea9d0495a6f9ff9cae844b15d9c45b7ef49ee0af0f81658cc7",
+      "trust_anchor": "/etc/frank-v0.1/sqlite-runtime-anchor-v1.json",
+      "trust_anchor_exists": false
+    },
+    "readonly_gate_runs": {
+      "productive_path": {
+        "run": 31929651624,
+        "status": "BLOCKED_PRODUCTION_TRUST_ANCHOR_MISSING"
+      },
+      "installed_package_provenance": {
+        "run": 31929651590,
+        "status": "NO_EXPLICIT_WAL_RESET_FIX_EVIDENCE_IN_INSTALLED_CHANGELOG"
+      },
+      "published_ubuntu_patchset": {
+        "run": 31929651665,
+        "status": "NO_EXPLICIT_WAL_RESET_FIX_IN_PUBLISHED_UBUNTU_PATCHSET",
+        "dsc_sha256": "2e6909bc4316d52ad471704a246f67c46bd50b4edc8956fa75b5cc0e057819de",
+        "debian_tar_sha256": "65e98fe518e9b1b89e90f8028d09d64c3786664b3dcc878a393ab82f7a770108"
+      }
+    },
+    "upstream_sqlite": {
+      "wal_documentation": "https://sqlite.org/wal.html",
+      "release_3_51_3": "https://sqlite.org/releaselog/3_51_3.html",
+      "finding": "SQLite upstream documents the WAL-reset corruption bug as affecting versions 3.7.0 through 3.51.2 and as fixed in 3.51.3; upstream also names backports 3.44.6 and 3.50.7."
+    }
+  },
+  "grf": {
+    "hypothesis": "The accepted target's stock SQLite 3.45.1-1ubuntu2.7 cannot currently satisfy the EntityOS persistence release gate because neither exact runtime trust anchoring nor evidence of the upstream WAL-reset fix is present.",
+    "strongest_counterhypothesis": "Ubuntu may have carried an equivalent fix under a differently named patch or source delta not detected by changelog/series heuristics.",
+    "discriminating_evidence": "Exact loaded-library identity plus installed changelog and published Ubuntu source patchset were checked independently; neither package nor published patchset supplied explicit WAL-reset evidence, while upstream marks 3.45.1 inside the affected version range.",
+    "outcome": "RETAIN_BLOCKER",
+    "promotion_scope": "release blocker evidence; does not by itself prove every possible downstream-equivalent patch absent"
+  },
+  "release_consequence": {
+    "entityos_artifact": "VERIFIED_COMPONENT_CANDIDATE",
+    "whole_machine_release": "NOT_PASSED",
+    "sqlite_route_a_current_package_backport_proven": false,
+    "sqlite_route_b_fixed_productive_runtime_proven": false,
+    "sqlite_route_c_trigger_unreachable_proven": false
+  },
+  "next_executable_step": "Choose and execute one release-safe persistence route: preferably make the one-file EntityOS load a fixed SQLite runtime whose upstream/base version is >=3.51.3 (or an explicitly proven fixed backport), bind runtime source/build identity plus loaded-library SHA-256 into a non-bypassable trust anchor, reject downgrade/library swap, then rerun the productive-path, package/source provenance, crash/restart/WAL lifecycle, and canonical one-file EntityOS gates on the accepted Ubuntu target. If retaining host-dynamic SQLite instead, upgrade the accepted target to an equivalently proven fixed build before minting the anchor. Do not promote 3.45.1-1ubuntu2.7 on current evidence.",
+  "unusual_experiment": {
+    "count_for_go_cycle": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "source": "canonical EntityOS workflow run 31929651652",
+    "result": "PASS",
+    "note": "SQLite investigation and dead-DISPLAY recheck were standard release/regression checks, not additional unusual experiments."
+  },
+  "research_state": "SUPPORTED_NEGATIVE_RELEASE_EVIDENCE",
+  "release_state": "NOT_PASSED"
+}

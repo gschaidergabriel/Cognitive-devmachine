@@ -1,0 +1,84 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_STALE_DISPLAY_REACHABILITY_FIX_31929651652",
+  "observed_at_utc": "2026-08-16T05:44:00Z",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "SUPPORTED_FIX_EXACT_ARTIFACT_VERIFIED_RELEASE_OPEN",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_parent_head_observed": "846dce6e83de674098549e7ecd2675415630d511",
+  "negative_control_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_STALE_DISPLAY_NEGATIVE_CONTROL.json",
+  "product_fix": {
+    "parent_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "commit": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "file": "entityos/boot_entry.py",
+    "change": "Probe actual X11/XWayland reachability before selecting graphical first-start/product surface; unreachable DISPLAY falls back to canonical headless path.",
+    "authority_change": false
+  },
+  "vps_exact_head_gate": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31929651652,
+    "job_id": 95122460806,
+    "result": "SUCCESS",
+    "source_regression": "SUCCESS",
+    "build": "SUCCESS",
+    "canonical_runtime_gates": "SUCCESS",
+    "artifact_upload": "SUCCESS"
+  },
+  "artifact": {
+    "artifact_id": 9258908699,
+    "artifact_name": "entityos-canonical-onefile-31929651652",
+    "build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "binary_sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "file_kind": "ELF 64-bit LSB x86-64 GNU/Linux",
+    "pyinstaller_onefile": true,
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true,
+    "self_test": "SELFTEST_PASS",
+    "whole_machine_acceptance": false
+  },
+  "local_exact_artifact_regression": {
+    "environment": "downloaded workflow artifact in active worker container",
+    "state": "isolated one-time EntityOS grant minted headlessly",
+    "intervention": "DISPLAY=:65535 with libX11 present but endpoint unreachable",
+    "expected_after_fix": "canonical headless fallback",
+    "exit_code": 0,
+    "stderr": "",
+    "result": "PASS_STALE_DISPLAY_HEADLESS_FALLBACK"
+  },
+  "security_control": {
+    "name": "INITIAL_GRANT_EXTRA_CAPABILITY_TAMPER",
+    "classification": "NORMAL_DISCRIMINATING_SECURITY_CONTROL",
+    "tamper": "Append unauthorized linux.process.spawn.v0 capability intent while preserving mode 0600",
+    "intervention_exit_code": 73,
+    "intervention_stderr": "ENTITYOS_INITIAL_GRANT_REQUIRED",
+    "rollback": "CANONICAL_GRANT_RESTORED",
+    "rollback_exit_code": 0,
+    "result": "FAIL_CLOSED_AND_RECOVERED"
+  },
+  "grf_collapse": {
+    "observed_reality": "The prior exact EntityOS artifact misclassified a non-empty but unreachable DISPLAY as graphical availability; the fixed exact-head artifact probes reachability and falls back headlessly.",
+    "preferred_hypothesis": "Actual X11 connection reachability, rather than DISPLAY-string presence alone, is the correct discriminator for the current native graphical boundary.",
+    "strongest_counterhypothesis": "The failure was artifact/container-specific and a reachability probe would add unnecessary behavior without changing the observed path.",
+    "discriminator": "Rebuild exact one-file EntityOS at the fix head and run the same isolated granted state with an unreachable DISPLAY endpoint.",
+    "outcome": "PROMOTE_TO_VERIFIED_FOR_TESTED_BOUNDARY",
+    "confidence": "HIGH_FOR_TESTED_STALE_DISPLAY_BOUNDARY_LOW_FOR_WHOLE_MACHINE"
+  },
+  "unusual_experiment_accounting": {
+    "selected_macro_cycle_unusual_experiment": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "count": 1,
+    "note": "The grant tamper and stale-DISPLAY reproducer are classified as normal deterministic security/regression controls; the workflow-native relocation/Unicode extraction perturbation remains the one unusual experiment for this go macro-cycle."
+  },
+  "remaining_frontier": {
+    "whole_machine_acceptance": false,
+    "highest_value_shared_semantic_blocker": "Canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface shared by CM-DATA and CM-TERM remains incomplete.",
+    "next_executable_action": "Implement and deterministically gate the minimal Clay Bytes/Buffer plus String/argv/effect-signature surface across checker, executable TypedIR and the single ClayVM; route one real process/data request through it; then rebuild and rerun exact one-file EntityOS gates."
+  },
+  "authority": {
+    "together_api": "FORBIDDEN",
+    "whole_machine_pass_claimed": false
+  }
+}

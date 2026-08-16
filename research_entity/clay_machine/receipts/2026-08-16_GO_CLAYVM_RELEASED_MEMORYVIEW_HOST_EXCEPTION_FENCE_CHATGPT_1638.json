@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "kind": "GO_CLAYVM_RELEASED_MEMORYVIEW_HOST_EXCEPTION_FENCE",
+  "date_local": "2026-08-16T16:38:00+07:00",
+  "worker": "ChatGPT GPT-5.6 Sol temporary Clay worker",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "authority": {
+    "testing_policy": "SANDBOX_ONLY_TESTING",
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "together_used": false,
+    "final_paid_training_authorized_or_started": false
+  },
+  "r0_observed": {
+    "research_main_before_write": "b6d43d15a1d0355fb466d48cf61b245bb4d91332",
+    "product_main_observed": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+    "target_pr": 741,
+    "target_pr_original_head": "12a30d9abd0c197139f6d5a01867ab440bff16fe",
+    "target_pr_repair_head": "0a23254125d0eb0fbb3b98ede45c5f9ebb754cef",
+    "target": "typed Bytes through CLAYVM/2 and the exact one-file EntityOS freeze path",
+    "baseline_candidate_behavior": "normal contiguous byte memoryview is snapshotted to immutable bytes; non-contiguous byte view is rejected with a Clay Trap",
+    "upstream_python_semantics": "after memoryview.release(), further view operations raise ValueError; host exception taxonomy is not Clay language authority"
+  },
+  "grf": {
+    "generated_reality": "PR741 snapshot_clay_bytes fully normalizes all admitted memoryview failure states into versioned Clay-visible traps.",
+    "counter_reality": "A lifecycle-invalid but still type-correct memoryview can cause CPython ValueError to cross the host-to-Clay value boundary and thereby let host runtime exception taxonomy define observable Clay failure semantics.",
+    "falsifier": "Release one harmless memoryview before admission and invoke the exact PR741 snapshot_clay_bytes boundary once.",
+    "predicted_if_generated_reality": "A Clay Trap is observed; no raw host exception crosses the boundary.",
+    "predicted_if_counter_reality": "CPython ValueError escapes the boundary.",
+    "outcome": "COUNTER_REALITY_SUPPORTED"
+  },
+  "experiment": {
+    "name": "RELEASED_MEMORYVIEW_HOST_EXCEPTION_LEAK",
+    "evidence_class": "LOCAL_ISOLATED_BOUNDED_SANDBOX",
+    "new_unusual_experiment_count": 1,
+    "baseline": {
+      "input": "memoryview(bytearray(b'abc'))",
+      "result": "b'abc'"
+    },
+    "treatment": {
+      "input": "memoryview(bytearray(b'xyz')) followed by release() before Clay admission",
+      "observed_exception_type": "ValueError",
+      "observed_exception_message": "operation forbidden on released memoryview object",
+      "is_clay_trap": false
+    },
+    "effect_or_security_bypass_observed": false,
+    "result": "REFUTES_COMPLETE_HOST_EXCEPTION_NORMALIZATION"
+  },
+  "candidate_repair": {
+    "branch": "chatgpt/go-clayvm-bytes-v2-20260816-1610",
+    "transformer_commit": "1e3fc3936e1f5b181c826e1053455cc8d0335355",
+    "regression_commit": "d42028e23f7fcecb7019708b1e26f88d72a42b5a",
+    "sandbox_workflow_commit": "0a23254125d0eb0fbb3b98ede45c5f9ebb754cef",
+    "repair_semantics": "Convert ValueError arising while inspecting/copying a memoryview at Bytes admission into Trap('BYTES_VIEW_RELEASED'), preserving existing Bytes format/dimension/contiguity checks.",
+    "local_post_experiment_regressions": {
+      "contiguous_memoryview": "PASS",
+      "bytearray_snapshot": "PASS",
+      "released_memoryview_to_clay_trap": "PASS",
+      "strided_memoryview_reject": "PASS"
+    },
+    "local_regression_new_unusual_experiment_count": 0
+  },
+  "isolated_hosted_gate": {
+    "workflow": "ClayVM Bytes V2 Released View Repair Sandbox",
+    "run_id": 31939527237,
+    "job_id": 95146572577,
+    "head": "0a23254125d0eb0fbb3b98ede45c5f9ebb754cef",
+    "runner_label": "ubuntu-latest",
+    "status": "BLOCKED_BEFORE_EXECUTION",
+    "steps": 0,
+    "runner_id": 0,
+    "annotation": "job was not started because recent account payments failed or spending limit needs to be increased",
+    "code_pass_or_fail_inferred": false
+  },
+  "entityos": {
+    "artifact_status": "BLOCKED",
+    "artifact_built_in_this_macrocycle": false,
+    "exact_blocker": "The owner-admissible GitHub-hosted isolated sandbox did not start, while the active local sandbox lacks the complete private repository checkout and pinned PyInstaller build toolchain required to freeze and execute the exact branch EntityOS.",
+    "next_executable_step": "Run the already-committed ubuntu-latest workflow after hosted sandbox execution becomes available. It must apply the exact repair, pass the released-view and existing Bytes/VM regressions, build EntityOS twice with matching SHA-256, then execute that exact EntityOS self-test and status. Only then materialize/promote the repair and reconcile PR741 with the parallel PR740 String/process candidate.",
+    "whole_clay_machine_acceptance": false
+  },
+  "capability_frontier_preserved": {
+    "CM_NET": "OPEN",
+    "CM_PORT": "OPEN",
+    "CM_TERM": "OPEN",
+    "CM_DATA": "IN_PROGRESS",
+    "CM_VIS": "OPEN",
+    "CM_AUDIO": "OPEN"
+  },
+  "result": {
+    "classification": "SUPPORTED_REPAIR_CANDIDATE_WITH_EXECUTION_BLOCK",
+    "architecture_delta": "Host memoryview lifecycle failures at canonical Bytes ingress must be normalized into Clay-visible failure semantics before Bytes/Buffer can serve CM-DATA, CM-TERM, visual/video, audio or network ingress.",
+    "counterevidence_preserved": "The repair has only local mechanism regression evidence; no full source-to-VM-to-EntityOS branch execution occurred because the isolated hosted job never started.",
+    "promotion": "DEFER"
+  }
+}

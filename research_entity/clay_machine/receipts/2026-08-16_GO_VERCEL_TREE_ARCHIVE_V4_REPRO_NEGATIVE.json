@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "scope": "Ordinary deterministic staging falsifier; no new unusual experiment and no EntityOS runtime execution.",
+  "observed_reality": {
+    "product_branch": "clay/go-entityos-deterministic-source-stage-20260816",
+    "candidate_head": "51b6fd6d9394283e2b08bcbee9d91524c8256b2e",
+    "candidate_tree": "24cb30d3347a4194ddc6bba498edae12fac1e3ee",
+    "vercel_deployment": "dpl_9m595zUEfsLMLhpeum3nyU4dX1Yd",
+    "stage_schema": "ClayGoSourceStage/v4",
+    "build_invocations_observed": 2,
+    "first_tar_sha256": "19c7e54ef3d36f9d734eea012cc001a1248147afd2d7c7b531f691dcb2b58134",
+    "second_tar_sha256": "6314bd9674f6140cf5a88289693ecf55e8d9f93e1773734155f79164411a9eeb",
+    "first_archive_sha256": "108c71e01d4d6f6d465a061977e2eb51fc631e61fb2c24afa753c4046bc02a1d",
+    "second_archive_sha256": "67f277beb00573da36ad538b89aa42bd9885909898d53376b5d5b0d7fc2a8ccd",
+    "first_archive_bytes": 1270544,
+    "second_archive_bytes": 1270532,
+    "same_head": true,
+    "same_tree": true,
+    "raw_tar_byte_identical": false,
+    "gzip_archive_byte_identical": false,
+    "entityos_runtime_executed_by_this_deployment": false,
+    "classification": "SOURCE_STAGE_REPRODUCIBILITY_REFUTED_FOR_V4"
+  },
+  "grf": {
+    "hypothesis": "Archiving the resolved Git tree object with fixed --mtime and gzip -n removes commit-PAX and checkout-metadata variability, making the staged payload byte-reproducible for an equal head/tree.",
+    "strongest_counter_reality": "Some archive input, attribute/configuration surface, archive backend behavior, or repeated-build environment state remains variable even when head/tree and the visible command arguments are equal.",
+    "discriminator": "Compare the raw tar and gzip digests from two Vercel build invocations for the exact same head/tree before any Sandbox execution.",
+    "observed_outcome": "Both the raw tar digest and compressed archive digest/size changed. Therefore gzip metadata is not the sole cause; nondeterminism exists at or before raw tar construction.",
+    "collapse": "REJECT_V4_REPRODUCIBILITY_CLAIM; RETAIN_COMMITTED_TREE_BINDING_GOAL"
+  },
+  "external_primary_evidence": {
+    "source": "Git archive documentation",
+    "finding": "Git documents --mtime as the archive-entry modification-time override and documents the commit-id global PAX header for tar archives of commit/tag objects. V4 archives a tree object and supplies --mtime, so the observed raw-tar drift must not be explained away as expected commit-PAX behavior without further evidence."
+  },
+  "ordinary_next_discriminator": {
+    "product_pr": 762,
+    "head": "5e3911eff5f17e74b07ba10413095b0839d9a82e",
+    "purpose": "Run the same git archive operation twice inside one build invocation, compare again across the repeated Vercel build-hook invocation, and record the first differing byte/header plus Git version, umask, tar.* config and export-subst paths.",
+    "sandbox_started": false,
+    "new_unusual_experiment": false,
+    "promotion_allowed": false
+  },
+  "parallel_frontier": {
+    "fresh_main_source_payload_head": "c0c2583cc2a0d0db19c4148254c7b039b92ee0e9",
+    "fresh_main_source_archive_double_build": "BYTE_IDENTICAL",
+    "fresh_main_source_archive_sha256": "2a4ee1a55ca49ab42264a68b173366e4e1fd3ac2afea1365a6bef539e8b9c42e",
+    "fresh_main_sanitized_git_metadata_double_build": "NOT_BYTE_IDENTICAL",
+    "interpretation": "The highest-value shared blocker is reproducible credential-free source/provenance attestation rather than source payload determinism alone."
+  },
+  "hard_boundaries": {
+    "whole_clay_machine_acceptance": false,
+    "current_main_entityos_acceptance": false,
+    "vps_test_evidence_used": false,
+    "self_hosted_test_evidence_used": false,
+    "production_host_test_evidence_used": false,
+    "together_api_used": false,
+    "training_started": false
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_in_this_receipt": 0,
+    "this_go_unusual_experiment": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "this_go_unusual_experiment_count": 1
+  },
+  "next_falsifier": "Resolve a reproducible credential-free attestation mechanism and then run one fresh exact-head isolated Vercel Sandbox rebuild/execute of the then-current EntityOS candidate with current provenance/security gates."
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "execution_policy": "ISOLATED_VERCEL_SANDBOX_ONLY",
+  "scope": "Batch 2 release hardening; no new Clay language/runtime semantics",
+  "baseline_main_before_batch2": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+  "primary_preview_head": "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+  "independent_build_authenticated_replication_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+  "vercel": {
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "primary_preview_deployment": "dpl_8CArsKnsHGstKi46oSYBWazwt79X",
+    "primary_preview_runtime_log": "GET /api/go-cycle-v2 HTTP 200",
+    "build_authenticated_deployment": "dpl_ESwWufAfNd36LRYBza5FpBZsnYco",
+    "build_oidc_present": true,
+    "deployment_protection_weakened": false,
+    "network_policy_during_tests": "DENY_ALL"
+  },
+  "deterministic_source_stage": {
+    "schema": "ClayGoSourceStage/v2",
+    "construction": "sorted fixed-metadata GNU tar + gzip -n",
+    "double_vercel_build_same_archive": true,
+    "primary_head_archive_sha256": "8a6f6de8573f75cf28ea3d590ace20392f0b5887dbc6f3ef6a06a851d0684a9d",
+    "primary_head_archive_bytes": 1273112,
+    "replication_head_archive_sha256": "492748eea90264e6188372597afb0bd25f2958d7bc0f75271555f2da7128f38e",
+    "replication_head_archive_bytes": 1274079,
+    "prior_nondeterministic_tar_defect": "CLOSED_FOR_SAME_HEAD_DOUBLE_BUILD"
+  },
+  "primary_preview_result": {
+    "status": "GO_SANDBOX_MATRIX_VERIFIED",
+    "cm07": "PASS",
+    "entityos_dirfd": "PASS",
+    "canonical_source_pipeline": "PASS_20_OF_20",
+    "entityos_double_build_sha_match": true,
+    "entityos_sha256": "a8decdc38d01b944fb5ae507662a4ccf795962b46fcd2888269e956d2e1ee48b",
+    "entityos_size_bytes": 9165200,
+    "entityos_mode": "0755",
+    "entityos_self_test": "PASS",
+    "host_python_path_lesion": "PASS",
+    "relocated_copy": "BYTE_IDENTICAL_PASS",
+    "sandbox_stopped": true
+  },
+  "build_authenticated_replication": {
+    "status": "GO_SANDBOX_MATRIX_VERIFIED",
+    "source_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "cm07": "PASS",
+    "entityos_dirfd": "PASS",
+    "canonical_source_pipeline": "PASS",
+    "entityos_onefile": "PASS",
+    "entityos_sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+    "sandbox_stopped": true,
+    "step_exit_codes": {
+      "unpack_and_bind_source": 0,
+      "provision_system_freeze_toolchain_sudo": 0,
+      "provision_pinned_python_toolchain": 0,
+      "offline_go_matrix": 0
+    },
+    "second_vercel_build_invocation": "SKIPPED_ALREADY_EXECUTED_THIS_DEPLOYMENT",
+    "duplicate_sandbox_start": false
+  },
+  "provenance_change_after_batch": {
+    "current_main_advanced": true,
+    "new_requirement": "EntityOS canonical builder now verifies git HEAD and clean worktree",
+    "implication": "Batch 3 must stage sanitized exact Git provenance without leaking repository credentials; Batch 2 does not prove the newer builder path"
+  },
+  "whole_machine_acceptance": false
+}

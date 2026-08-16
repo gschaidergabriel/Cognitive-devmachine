@@ -1,0 +1,80 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "authority_refresh": {
+    "research_head_observed": "fee86dc2eb03774f7880857e4a315fd77abbd1de",
+    "directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "effect": "all tests, experiments, build validation and runtime validation are sandbox-only; VPS/self-hosted/production execution is historical-only and cannot be promoted as current evidence"
+  },
+  "product_state_observed": {
+    "main_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+    "canonical_string_commit_already_on_main": "2b1a7fbae158c36910dd623234b2fdfa8550a563",
+    "string_state": "canonical String literals and String returns are on main; String parameters/argv remain fail-closed",
+    "strict_artifact_defect": "entityos/canonical_entry.py still imports raw ClayVM/load_module and executes the typed process probe below the production ClayVMArtifact/v1 admission boundary"
+  },
+  "coordination": {
+    "superseded_pr": 718,
+    "superseded_pr_state": "CLOSED_UNMERGED_AFTER_STRING_IMPLEMENTATION_WAS_SUPERSEDED_BY_PR_719",
+    "narrow_strict_artifact_branch": "clay/go-strict-artifact-process-probe-20260816",
+    "narrow_strict_artifact_head": "00f5214da1d96d0bdf0a200aede6870eab9f2b6f",
+    "narrow_diff": "2 files only: claymachine/clayos.py and entityos/canonical_entry.py",
+    "narrow_pr": 726,
+    "narrow_pr_state": "CLOSED_UNMERGED_IMMEDIATELY_AFTER_SANDBOX_ONLY_DIRECTIVE_REFRESH",
+    "reason": "do not schedule, depend on, or promote self-hosted/VPS CI under the active owner directive",
+    "candidate_preserved": true
+  },
+  "sandbox_execution": {
+    "environment": "active isolated ChatGPT container sandbox",
+    "existing_local_entityos": {
+      "build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+      "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+      "size_bytes": 12820848,
+      "sandbox_status": "PASS",
+      "sandbox_selftest": "PASS",
+      "vm_result": 42,
+      "whole_machine_acceptance": false,
+      "evidence_class": "SANDBOX_RUNTIME_RECHECK_OF_HISTORICALLY_SELF_HOSTED_BUILT_BINARY",
+      "promotion_limit": "not current-source release evidence because the binary build itself did not occur inside a sandbox and predates canonical String main"
+    },
+    "bounded_unusual_experiment": {
+      "count_for_this_worker_go_cycle": 1,
+      "name": "FROZEN_RUNTIME_WITH_EMPTY_ENV_AND_POISONED_HOST_PYTHON",
+      "artifact_build_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+      "baseline_selftest_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+      "intervention_selftest_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+      "result": "BYTE_IDENTICAL_SELF_TEST",
+      "execution_location": "isolated local sandbox",
+      "interpretation": "supports that the frozen binary does not silently depend on host Python environment resolution",
+      "rollback": "environment only"
+    }
+  },
+  "exact_current_entityos_build": {
+    "status": "BLOCKED",
+    "requested_source_head": "950d1642437de5d940035cd04c90d50e8d34a64e or later coordinated fresh main plus the narrow strict-artifact candidate",
+    "canonical_builder": "entityos/build_canonical_onefile.py",
+    "builder_requires": [
+      "complete current private product source tree",
+      "PyInstaller build tool",
+      "lark runtime/data"
+    ],
+    "sandbox_observation": {
+      "pyinstaller_installed": false,
+      "lark_version": "1.3.1",
+      "sandbox_network": "unavailable",
+      "private_repo_zipball_via_connector": "metadata_only_no_reusable_local_archive_bytes",
+      "local_current_source_tree": false
+    },
+    "blocking_invariant": "the active directive requires the current EntityOS build itself to occur inside an isolated sandbox, but this sandbox cannot currently receive the complete private source archive and lacks the pinned PyInstaller build tool with no network path to install it",
+    "next_executable_step": "materialize the exact current product source tree plus pinned PyInstaller 6.21.0 inside an isolated sandbox, apply/rebase the preserved 2-file strict-artifact candidate, run build_canonical_onefile.py twice for reproducibility, then execute that exact EntityOS status, self-test, canonical String build/run, strict artifact admission and capability fail-closed gates in the same sandbox"
+  },
+  "release_priority": {
+    "sqlite_wal_reset_blocker": "RETAIN",
+    "policy_update": "its discriminating persistence/crash/restart evidence must now be recreated in an isolated sandbox rather than a VPS/self-hosted runner",
+    "string_argv_bytes_frontier": "String literals/returns advanced on main; canonical String params/argv and Bytes/Buffer ownership/lifetime remain open",
+    "whole_machine_acceptance": "NOT_PASSED"
+  },
+  "outcome": "BLOCKED_CURRENT_ENTITYOS_SANDBOX_BUILD_INPUT_TOOLCHAIN; STRICT_ARTIFACT_FIX_PRESERVED_UNMERGED; SQLITE_RELEASE_BLOCKER_RETAINED"
+}

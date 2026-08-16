@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "scope": "Current exact-head EntityOS/Vercel promotion blocker after fail-closed replay hotfix; no whole-machine acceptance.",
+  "observed": {
+    "main_replay_hotfix": "MERGED_AND_PRODUCTION_DEPLOYMENT_READY",
+    "main_remote_go_endpoint": "FAIL_CLOSED_BUILD_INTERNAL_ONLY_BY_SOURCE",
+    "pr_761_head_checked": "56fb7cccebfcc1ae7727ae523f0c912fe6545332",
+    "pr_761_vercel_status": "FAILURE_DEPLOYMENT_RATE_LIMITED_RETRY_IN_24_HOURS",
+    "pr_765_head_checked": "2a4effb63b3012d15cb051cf571e0d520d73cf65",
+    "pr_765_vercel_status": "FAILURE_DEPLOYMENT_RATE_LIMITED_RETRY_IN_24_HOURS",
+    "sandbox_job_started_for_these_heads": false,
+    "fresh_current_entityos_artifact_observed": false
+  },
+  "grf": {
+    "hypothesis": "The current blocker for promoting the hardened source-staging lane is provider build-rate capacity, not a demonstrated EntityOS/runtime defect.",
+    "strongest_counterhypothesis": "The Vercel failure could mask a candidate code defect because no build step was started.",
+    "discriminator": "Provider status explicitly reports deployment rate limiting before a deployment/runtime receipt exists; therefore classify the code result as UNEXECUTED, not PASS or FAIL.",
+    "outcome": "BLOCKED_EXTERNAL_EXECUTION_CAPACITY"
+  },
+  "latest_candidate_context": {
+    "pr": 765,
+    "purpose": "deterministic Git-blob source staging after SourceStage v3/v4 reproducibility refutation",
+    "local_isolated_mechanism_validation": "PASS_REPORTED_IN_CANONICAL_RESEARCH_RECEIPT",
+    "promotion": "BLOCKED_UNTIL_EXACT_HEAD_VERCEL_EXECUTION"
+  },
+  "experiment_accounting": {
+    "this_worker_unusual_experiment": "STATIC_NONCE_REPLAY_CHAOS_PROBE",
+    "count": 1,
+    "additional_unusual_experiment_started_after_rate_limit": false
+  },
+  "next_executable_action": "When an authorized isolated deployment slot is available, execute exactly the current chosen candidate head in Vercel; first require repeated build-hook source TAR/archive SHA identity, then run the build-internal no-HTTP Sandbox matrix with network DENY_ALL, rebuild the one-file EntityOS, capture its SHA256/selftest/PATH-without-host-Python/relocation receipts, and only then consider fusion to fresh main. If another authorized isolated sandbox capable of receiving the exact private source and toolchain becomes available earlier, it may run the same deterministic regression gate without weakening provenance or using VPS/self-hosted/production hosts.",
+  "entityos_artifact": "BLOCKED_NO_FRESH_CURRENT_BYTES",
+  "whole_clay_machine_acceptance": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false,
+  "production_host_acceptance_used": false,
+  "together_api_used": false
+}

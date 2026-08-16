@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "kind": "GO_ENTITYOS_STRING_TYPEDIR_FRONTIER_RECEIPT",
+  "date": "2026-08-16",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_pr": 721,
+  "candidate_head": "793a90cf198542d367f0fa1c46ca3b73a79e4c24",
+  "observed_frontier": "Canonical ClayCode String/Bytes/argv/effect-signature values are required before CM-TERM can become canonical ClayCode process execution and before the one-file EntityOS can close that capability gate.",
+  "delta": {
+    "typed_ir": "ClayExecutableTypedIR/v1 candidate now admits nominally checked STRING literals as type String.",
+    "normal_baseline": "ASCII String hello-clay is required to survive source -> canonical executable TypedIR exactly.",
+    "unusual_experiment": "Exactly one bounded unusual experiment for this GO cycle: multi-byte UTF-8 String café 🧪 through source -> canonical executable TypedIR.",
+    "downstream_boundary": "Production executable_ir_adapter.py and claymachine/clayvm.py remain intentionally Int/Bool bootstrap-only; no VM String execution is claimed."
+  },
+  "execution_evidence": {
+    "workflow": "ClayCode Executable TypedIR V1",
+    "run_id": 31929877997,
+    "job_id": 95122977486,
+    "runner": "clay-4",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "tested_head": "793a90cf198542d367f0fa1c46ca3b73a79e4c24",
+    "conclusion": "success"
+  },
+  "counterevidence": [
+    "The current single-VM integration gate had not completed at receipt creation time.",
+    "TypedIR success is not ClayVM String execution.",
+    "No EntityOS artifact was rebuilt or tested from PR 721 in this GO cycle.",
+    "The active analysis container could not clone GitHub because outbound DNS/network resolution was unavailable; this is an analysis-environment limitation, not product evidence."
+  ],
+  "outcome": "RETAIN",
+  "entityos_artifact": "BLOCKED",
+  "exact_blocker": "Canonical executable_ir_adapter -> single serialized ClayVM lacks String/Bytes typed-value representation/opcodes/object lifetime and therefore cannot carry canonical argv into the already-merged linux.process.spawn.v0 host component.",
+  "next_executable_step": "After PR 721 remains exact-head green and non-regressive, extend the one canonical adapter/ClayVM path with the smallest provenance-bound owned String/Bytes value surface, prove wrong-type/transplant/tamper rejection plus source-tree differential equality, then rebuild and test the exact one-file EntityOS on the accepted Linux runner/VPS.",
+  "whole_clay_machine_acceptance": false,
+  "authority": "NONE",
+  "together_api_used": false,
+  "final_training_started": false
+}

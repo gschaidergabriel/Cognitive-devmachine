@@ -1,11 +1,13 @@
 {
-  "schema_version": "4.2",
+  "schema_version": "4.3",
   "purpose": "Minimal current boot index for ClayVerse Clay Machine / EntityOS work.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "owner_directive": "research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md",
   "product_boundary_directive": "research_entity/global/ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE.md",
+  "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+  "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
   "workspace": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
   "fixed_capability_plan": "research_entity/clay_machine/CLAY_MACHINE_CONNECTIVITY_PORTABILITY_IO_PLAN.md",
@@ -21,10 +23,11 @@
   },
   "boot_sequence": [
     "verify current research-repository main and this bootstrap",
-    "load CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE and ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE",
+    "load CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE, ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE, SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE and VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE",
     "load PROGRAM_STATE, CLAY_MACHINE_WORKSPACE and CLAY_MACHINE_CONNECTIVITY_PORTABILITY_IO_PLAN",
     "refresh current product main and task-relevant receipts/code",
-    "avoid duplicate or stale-worker work",
+    "refresh shared batch/worker coordination and avoid duplicate or stale-worker work",
+    "execute build/test/validation in coordinated isolated Vercel Sandbox batches when available and appropriate",
     "execute the trigger through the Clay Machine target and persist bounded evidence into the one-file EntityOS release boundary"
   ],
   "source_of_truth_order": [
@@ -45,6 +48,14 @@
     "together_api": "FORBIDDEN",
     "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED"
   },
-  "go": "Maximum useful EntityOS/Clay Machine research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. Refresh connectivity, zero-install portability, direct Linux terminal/process execution, low-latency Clay data transformation, visual/image/video transport and audio transport; produce a concrete delta when unblocked; finish by rebuilding/testing the exact one-file EntityOS artifact when technically possible or by naming its exact blocker and next executable step.",
+  "execution_authorization": {
+    "vercel_sandbox": "FULLY_AUTHORIZED_FOR_ISOLATED_ENTITYOS_DEVELOPMENT_AND_VALIDATION",
+    "vercel_available_tools": "USE_INTELLIGENTLY_WHEN_RELEVANT",
+    "batching": "COORDINATED_HIGH_INFORMATION_BATCHES_PREFERRED",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_vps_test_runners": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN"
+  },
+  "go": "Maximum useful EntityOS/Clay Machine research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. Refresh connectivity, zero-install portability, direct Linux terminal/process execution, low-latency Clay data transformation, visual/image/video transport and audio transport; coordinate high-information Vercel Sandbox batches; produce a concrete delta when unblocked; finish by rebuilding/testing the exact one-file EntityOS artifact when technically possible or by naming its exact blocker and next executable step.",
   "fallback": "If current owner/program/repository verification fails, mark degraded state, preserve the one-file EntityOS Clay Machine target, and do not invent completion or execution state."
 }

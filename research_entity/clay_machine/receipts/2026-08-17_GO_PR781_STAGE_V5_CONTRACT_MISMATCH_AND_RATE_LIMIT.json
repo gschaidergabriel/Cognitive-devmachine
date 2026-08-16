@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "research_parent_observed": "4bb351b7e71c571dfb09016209885f0ea6e532b9",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 781,
+  "preferred_branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+  "observed_pre_repair_head": "eba6a8e69324c297014ce3fd5040f7595b391b79",
+  "observed_post_repair_head": "2b9370cb210c4c3e43a84058a1828a5d1223b9a2",
+  "source_contract_finding": {
+    "classification": "PRE_SANDBOX_FAIL_CLOSED_CONTRACT_MISMATCH",
+    "stage_file": "mcp/vercel-sandbox-mcp/scripts/stage-go-source.mjs",
+    "runner_file": "mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs",
+    "pre_repair_stage_value": "IMMUTABLE_RAW_GIT_BLOBS_PLUS_TRACKED_MODES_PLUS_EXAACT_HEAD_OBJECTS",
+    "runner_required_value": "IMMUTABLE_RAW_GIT_BLOBS_PLUS_TRACKED_MODES_PLUS_EXACT_HEAD_OBJECTS",
+    "predicted_pre_repair_failure": "SOURCE_BINDING_UNEXPECTED before Sandbox.create()",
+    "prediction_basis": "direct source-contract comparison only; no executable result is claimed",
+    "post_repair_stage_value": "IMMUTABLE_RAW_GIT_BLOBS_PLUS_TRACKED_MODES_PLUS_EXACT_HEAD_OBJECTS",
+    "repair_observed_on_same_preferred_lane": true,
+    "parallel_duplicate_implementation_created": false
+  },
+  "coordination": {
+    "stale_write_was_rejected_by_github_409": true,
+    "newer_same_lane_change_was_refreshed_before_any_retry": true,
+    "overwrite_of_newer_worker_state": false
+  },
+  "vercel_observation_for_post_repair_head": {
+    "combined_status": "failure",
+    "context": "Vercel",
+    "target": "build-rate-limit",
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "executable_result": "BLOCKED_PROVIDER_NON_EXECUTION"
+  },
+  "experiment_accounting": {
+    "canonical_global_unusual_experiment_limit": 1,
+    "canonical_global_unusual_experiment_count": 1,
+    "new_unusual_experiment_executed_by_this_pass": 0,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY"
+  },
+  "adversarial_review": {
+    "ready_deployment_is_not_execution_evidence": true,
+    "latest_observed_ready_batch5_deployment_skipped_non_target_preview": true,
+    "do_not_promote_parallel_batch5_unusual_experiment": true,
+    "remaining_cosmetic_runner_log_typo": "SANITIZED_GIT_HEAD=s does not alter the equality gate but should not be treated as a canonical head receipt field"
+  },
+  "current_frontier": "PR781 source-contract mismatch is repaired on the preferred lane, but exact-head executable truth remains blocked by Vercel build-rate limiting. When capacity returns, require an actually-started exact-head Vercel Sandbox and the regression/acceptance-only raw-tree+shallow-safe provenance, Bytes v2, double one-file EntityOS, runtime/no-host-Python/state/capability/relocation, DENY_ALL, and successful stop matrix. No second unusual experiment.",
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

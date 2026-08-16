@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_TYPEREF_DIAGNOSTIC_RENDER_BOUNDARY_PROMOTION",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_head_before_write": "39d18b9dbda0baa204d8eca12f02da9c2b89b4b8",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_verified_after_merge": "c48d5ef4e9ce0a67ebd734e64acbd235a7c717f7",
+  "product_main_tree": "8c7dc7ae7f50433fb1461f450348a1df37b1a8cd",
+  "pull_request": 696,
+  "issue": 692,
+  "scope": "CM-02 diagnostic-only TypeRef rendering resource boundary",
+  "grf": {
+    "observed_anchor": "Merged CM-02 alias-DAG structural sharing bounds canonicalization/equality by distinct structural work, but the prior diagnostic renderer expanded every occurrence path.",
+    "generated_hypothesis": "Diagnostic rendering is an independent resource surface and requires its own explicit output budget even when TypeRef structure is shared.",
+    "strongest_counterhypothesis": "Structural sharing alone is sufficient; an additional render budget would only reduce compatibility and add complexity.",
+    "discriminator": "Render a compact maximally shared binary TypeRef DAG through the exact production renderer and measure expanded output, time and allocation.",
+    "collapse": "Counterhypothesis refuted. A tiny DAG can expand into very large diagnostic text. Preserve ordinary/deep accepted diagnostics while bounding pathological occurrence-tree expansion."
+  },
+  "unusual_experiment": {
+    "exactly_one_in_macro_cycle": true,
+    "new_unusual_experiments_after_this": 0,
+    "id": "TYPEREF-MAX-SHARED-DAG-DIAGNOSTIC-EXPANSION",
+    "shape": "leaf I; each level P(child, child) reuses the same immutable child object twice",
+    "measurements": [
+      {"depth": 4, "distinct_nodes": 5, "render_chars": 91, "wall_ms": 0.088, "tracemalloc_peak_kib": 0.7},
+      {"depth": 8, "distinct_nodes": 9, "render_chars": 1531, "wall_ms": 0.819, "tracemalloc_peak_kib": 12.5},
+      {"depth": 12, "distinct_nodes": 13, "render_chars": 24571, "wall_ms": 11.383, "tracemalloc_peak_kib": 192.9},
+      {"depth": 16, "distinct_nodes": 17, "render_chars": 393211, "wall_ms": 201.103, "tracemalloc_peak_kib": 3242.7},
+      {"depth": 18, "distinct_nodes": 19, "render_chars": 1572859, "wall_ms": 729.039, "tracemalloc_peak_kib": 11978.4}
+    ],
+    "result": "SUPPORTED_INDEPENDENT_DIAGNOSTIC_RESOURCE_SURFACE"
+  },
+  "implementation": {
+    "production_constant": {"TYPE_REF_DIAGNOSTIC_MAX_CHARS": 32768},
+    "limit_marker": "<TYPE_REF_RENDER_LIMIT_EXCEEDED>",
+    "mechanism": "Perform an exact bounded preflight of expanded diagnostic character cost without materializing output. Preserve the existing byte-identical Name<A, B> rendering when within budget; return an explicit incomplete marker when above budget.",
+    "unchanged_semantics": ["_canonical", "_same", "TypeRef identity/equality", "alias semantics", "effect semantics", "host/effect authority"],
+    "ordinary_regressions_added": 5
+  },
+  "negative_evidence": [
+    {
+      "candidate_head": "f5ee630f98f8d7683295b578ea6d5e72d6884296",
+      "initial_budget_chars": 16384,
+      "run": 31925064497,
+      "outcome": "FAIL",
+      "cause": "The unchanged production-totality contract requires the depth-4096 unary TypeRef diagnostic to remain complete; that accepted output is 20,483 characters and was incorrectly bounded by the initial 16 KiB candidate.",
+      "response": "Raise the diagnostic-only budget to 32,768 rather than weakening the existing contract."
+    },
+    {
+      "candidate_head": "2296d48174b7623424dbbc07b523adf9190b79d6",
+      "run": 31925147719,
+      "attempt": 1,
+      "outcome": "FAIL_TIMING_RATIO_ONLY",
+      "semantic_checks": "11/12 checks passed; deep diagnostic rendering passed with length 20,483",
+      "timing": {"deep_32768_seconds": 0.437, "ratio": 14.657, "ratio_limit": 12.0, "observed_cpu_percent": 45},
+      "interpretation": "Host-contention candidate; absolute deep runtime remained far below the 5 s guard."
+    },
+    {
+      "candidate_head": "2296d48174b7623424dbbc07b523adf9190b79d6",
+      "run": 31925147719,
+      "attempt": 2,
+      "outcome": "PASS_12_OF_12",
+      "timing": {"deep_32768_seconds": 0.10004, "ratio": 4.229, "observed_cpu_percent": 96},
+      "interpretation": "One same-job replication separated timing noise from semantic/resource regression; no further unusual experiment was performed."
+    }
+  ],
+  "final_source_admission": {
+    "base_main": "0ba403c130e9238a676708cadf1079bc35ac2654",
+    "candidate_head": "e677fb865e33dca5e0d9bc883eebffe0f891ca94",
+    "candidate_contains_base_as_merge_parent": true,
+    "changed_paths_relative_to_base": [
+      "runtime/claycode_typecheck_v1/typecheck.py",
+      "tests/test_typeref_diagnostic_render_bound.py"
+    ],
+    "workflow_lanes_completed_success": 16,
+    "key_runs": {
+      "typeref_production_sharing": 31925333676,
+      "typeref_production_totality": 31925333630,
+      "typeref_exact_head_regression": 31925333615,
+      "nominal_typecheck": 31925333609,
+      "alias_totality": 31925333695,
+      "single_vm": 31925333613,
+      "clayos_strict_launch": 31925333661
+    }
+  },
+  "promotion": {
+    "merge_commit": "c48d5ef4e9ce0a67ebd734e64acbd235a7c717f7",
+    "merge_tree": "8c7dc7ae7f50433fb1461f450348a1df37b1a8cd",
+    "merge_verified_on_product_main": true,
+    "outcome": "PROMOTED_CM02_DIAGNOSTIC_RESOURCE_BOUNDARY",
+    "cm02_complete": false,
+    "whole_clay_machine_acceptance": false,
+    "remaining_cm02_scope": "Broader type/effect semantics required for Clay Machine I/O, process/network and buffer semantics remain open."
+  },
+  "authority": {
+    "together_used": false,
+    "training_authorized_or_started": false,
+    "effect_authority_changed": false,
+    "whole_machine_completion_claimed": false
+  }
+}

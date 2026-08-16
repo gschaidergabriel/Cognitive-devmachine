@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "execution_context": "ISOLATED_LOCAL_SANDBOX",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "current_product_head_observed_before_receipt": "d0d40503b9ba29618a6a8789b8f0dc0208115635",
+  "artifact_under_test": {
+    "name": "EntityOS",
+    "embedded_build_head": "4486a320a3a321c70f3f0b52a12a85d3957be1a7",
+    "sha256": "eb6b1ebc2fd6b8e2ce9defe89867bb22f879e390fc9255aa6301c4a84b614bf6",
+    "size_bytes": 8919008,
+    "origin_note": "Downloaded historical workflow artifact and re-executed in the current isolated local sandbox. Its original self-hosted build provenance is not promoted as current sandbox build evidence.",
+    "current_head_release_candidate": false
+  },
+  "normal_local_regressions": {
+    "frozen_status": "PASS",
+    "self_test": "PASS",
+    "clay_string_build_run": "PASS_ENTITYOS_LOCAL_SANDBOX_OK",
+    "host_effect_without_capability": "FAIL_CLOSED_AS_EXPECTED",
+    "host_effect_with_capability": "PASS_ENTITYOS_NORMAL_HOST_OK"
+  },
+  "grf": {
+    "observed_anchor": "Canonical direct Clay String argv and Bytes/Buffer ownership/lifetime remain open, while the downstream EntityOS host process adapter already uses direct no-shell argv.",
+    "hypothesis": "If mixed argv survives the already-built downstream host boundary literally, the highest-information remaining failure surface is upstream canonical Clay String/Bytes/argv/effect typing rather than shell tokenization in the host adapter.",
+    "counter_reality": "The host adapter may reinterpret empty strings, Unicode, newlines or shell metacharacters even with shell=false, so upstream typing alone would not be sufficient.",
+    "falsifier": "Send one bounded mixed argv vector containing Unicode+space, empty string, shell-metacharacter payload and embedded newline through the EntityOS capability-gated host path and compare exact argv observed by the child process.",
+    "outcome": "SUPPORTED_DOWNSTREAM_LITERALITY_ONLY"
+  },
+  "go_unusual_experiment": {
+    "newly_allocated_count": 1,
+    "name": "MIXED_ARGV_LITERALITY",
+    "effect": "linux.process.spawn.v0",
+    "input": ["α β", "", "$(printf PWN);&|", "line1\nline2"],
+    "observed": ["α β", "", "$(printf PWN);&|", "line1\nline2"],
+    "shell_injection_observed": false,
+    "bounded": true,
+    "rollback": "none_required_read_only_process_probe",
+    "result": "PASS_DISCRIMINATOR"
+  },
+  "interpretation": {
+    "promotes": "Downstream direct-argv literality for the exact historical artifact re-executed in this sandbox.",
+    "does_not_promote": [
+      "current-main EntityOS build",
+      "canonical Clay String argv path",
+      "canonical Bytes/Buffer ownership/lifetime",
+      "whole Clay Machine acceptance"
+    ],
+    "remaining_shared_blocker": "Select and implement the smallest canonical Clay String/argv plus Bytes/Buffer ownership/lifetime and effect-signature surface through checker -> effectful ExecutableTypedIR -> single ClayVM -> controlled Linux process boundary, then rebuild the exact current main as the canonical frozen one-file EntityOS in an actually-started isolated sandbox."
+  },
+  "sandbox_build_block": {
+    "current_policy": "SANDBOX_ONLY_TESTING",
+    "github_hosted_runner_state": "BLOCKED_BEFORE_STEP_ZERO_BY_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
+    "local_private_repo_checkout_available": false,
+    "local_pyinstaller_available": false,
+    "exact_current_head_entityos_built_in_this_cycle": false
+  },
+  "whole_clay_machine_acceptance": false
+}

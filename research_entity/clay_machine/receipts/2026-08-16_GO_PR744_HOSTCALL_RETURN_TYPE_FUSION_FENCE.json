@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_PR744_HOSTCALL_RETURN_TYPE_FUSION_FENCE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "CM-TERM/CM-DATA/ClayVM",
+  "timestamp_local": "2026-08-16T16:56:00+07:00",
+  "research_main_before_write": "63b3ffc560380877b2447f2b0e72c5bb76a47634",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "candidate_pr": 744,
+  "candidate_head": "81f1b99c70af56d9459d81190a1244484748d32f",
+  "observed_anchors": [
+    {
+      "path": "claymachine/clayvm.py",
+      "candidate_blob_sha": "04a955fb2e40ba2a02ad4fd7ec075a49547ee6dd",
+      "observation": "PR744 OP_HOSTCALL appends the host handler result directly and OP_RET returns it without normalizing the value against the function's declared return type."
+    },
+    {
+      "candidate_pr": 741,
+      "observation": "The ClayVM Bytes/v2 candidate adds runtime _normalize_value(fn.return_type, result) at OP_RET, providing a compatible fail-closed return-type fence for later fusion."
+    }
+  ],
+  "hypothesis_before_discriminator": "Exact admitted host handlers are sufficient to preserve declared hostcall return contracts without a VM-level return-type fence.",
+  "counterhypothesis": "A misbound or future host handler can return a canonical scalar of the wrong type and the VM can return it through a function declared with another return type unless the runtime checks the result.",
+  "discriminator": "Isolated source-equivalent minimal reproduction of the PR744 OP_HOSTCALL/OP_RET control flow using a function declared Int, with an integer handler result as control and a String handler result as the intervention.",
+  "unusual_experiment": {
+    "name": "HOSTCALL_RETURN_TYPE_CORRUPTION",
+    "count": 1,
+    "context": "ISOLATED_LOCAL_SOURCE_EQUIVALENT_NOT_EXACT_BLOB",
+    "baseline": "Handler returned integer 7; VM returned integer 7.",
+    "intervention": "Handler returned String NOT_AN_INT; VM returned that String with no Clay trap despite declared Int function return type.",
+    "result": "TYPE_VIOLATION_ACCEPTED"
+  },
+  "result": "COUNTERHYPOTHESIS_SUPPORTED",
+  "collapse": {
+    "pr744_path_only_string_semantics": "RETAIN_CANDIDATE",
+    "pr744_generic_hostcall_return_contract": "REQUIRES_FUSION_FENCE",
+    "pr741_return_normalization": "RETAIN_AS_COMPATIBLE_RESCUE",
+    "entityos_acceptance": "NOT_PROMOTED"
+  },
+  "test_obligations": [
+    "When PR741 and PR744 semantics are composed, preserve nominal String-versus-Bytes argument separation and runtime declared-result normalization.",
+    "Add an ordinary regression in the retained implementation lane: an admitted String-to-Int hostcall whose handler returns String must fail closed; new unusual experiment count must be zero because the unusual intervention was consumed by this GO cycle.",
+    "Run the identical reviewed bytes in an actually-started isolated full-repository sandbox, then execute the relevant single-VM, CM-TERM, strict ClayOS and deep-integrity regressions and rebuild/self-test the exact one-file EntityOS artifact."
+  ],
+  "execution_policy": "SANDBOX_ONLY; VPS, self-hosted VPS runners and production-host testing are not admissible evidence.",
+  "entityos_artifact": "BLOCKED",
+  "whole_clay_machine_acceptance": false,
+  "coordination": "Product PR744 issue comment 5306865169",
+  "outcome": "RETAIN_PR744_ONLY_WITH_RETURN_TYPE_FUSION_FENCE_AND_ALLOWED_EXACT_HEAD_SANDBOX"
+}

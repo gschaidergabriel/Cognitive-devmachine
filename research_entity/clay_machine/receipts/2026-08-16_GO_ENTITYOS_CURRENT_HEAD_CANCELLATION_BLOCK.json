@@ -1,0 +1,62 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "CURRENT_HEAD_EXACT_ENTITYOS_BLOCKED_BY_CANCELLED_BUILD",
+  "supersedes_for_current_head_claims": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_LOCAL_REPLICATION_AND_ARITH_NEGATIVE.json",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "current_product_head": "57759c6bc0d52fa531a7b26993223c22f4549282",
+  "current_head_delta": "EntityOS selftest now includes an already-admitted effectful TypedIR -> serialized ClayVM -> capability-gated Linux process probe and does not claim new ClayCode source syntax.",
+  "current_head_workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31926943891,
+    "job_id": 95115897445,
+    "event": "push",
+    "status": "completed",
+    "conclusion": "cancelled",
+    "runner": "clay-3 self-hosted Linux X64",
+    "source_regression_rc": 0,
+    "source_regression_checks_passed": 16,
+    "source_regression_checks_total": 16,
+    "build_stage": "CANCELLED_DURING_PYINSTALLER_CARCHIVE_BUILD",
+    "log_terminal_evidence": "PyInstaller reached Building PKG (CArchive) EntityOS.pkg, then GitHub Actions logged: The operation was canceled.",
+    "entityos_sha256": "UNKNOWN",
+    "single_file_runtime": "UNKNOWN",
+    "canonical_pipeline_runtime": "UNKNOWN",
+    "unusual_experiment_count_in_cancelled_run": 0,
+    "whole_entityos_completion": false
+  },
+  "last_verified_predecessor_artifact": {
+    "build_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+    "sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "status": "VERIFIED_PREDECESSOR_ONLY_NOT_CURRENT",
+    "local_replication": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "negative_result_preserved": {
+    "name": "ARITHMETIC_EXPRESSION_NOT_ADMITTED_BY_TYPECHECKER_V1",
+    "status": "RETAINED_NONCURRENT_ARTIFACT_LANGUAGE_COVERAGE_EVIDENCE",
+    "note": "Observed on the verified predecessor EntityOS; current-head behavior was not remeasured because the exact current artifact was not produced."
+  },
+  "macro_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "UNICODE_SPACE_PATH_FOREIGN_CWD_LOCAL_REPLICATION",
+    "artifact_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+    "result": "PASS_BYTE_IDENTICAL_SELFTEST_PASS",
+    "law": "Do not execute another unusual experiment in this same user-triggered macro-cycle."
+  },
+  "grf": {
+    "observed_reality": "The current source head passes the canonical source-pipeline regression but its exact one-file build did not complete because the Actions job was cancelled during PyInstaller packaging.",
+    "retained_hypothesis": "The new typed VM process-effect selftest delta is packaging-compatible because it only imports existing canonical runtime modules and source regression remains green.",
+    "strongest_counter_reality": "The added runtime imports or frozen dependency closure could still break the one-file build or runtime despite source regression passing.",
+    "falsifier": "Produce and execute an exact 57759c6/current-or-newer one-file EntityOS artifact and require selftest typed_ir_vm_process_effect=PASS plus all existing canonical gates.",
+    "outcome": "DEFER"
+  },
+  "exact_blocker": "No exact current-head EntityOS artifact exists from run 31926943891: the build was cancelled before artifact creation. The only local executable available in this worker is the now-stale but byte-verified 5b1fd8 predecessor. Re-running the shared workflow in this same go cycle would execute its unconditional unusual-experiment step and would violate the exactly-one unusual-experiment law after this worker already performed one bounded unusual replication.",
+  "next_executable_action": "In the next go macro-cycle, if 57759c6 or a descendant remains current, run the exact-head EntityOS workflow and count its single built-in unusual experiment as that cycle's one experiment; then download the produced artifact, verify its SHA/build_head, execute status/selftest/build/run/capability gates locally, and only then promote ENTITYOS ARTIFACT to VERIFIED for the current head.",
+  "training_authorized": false,
+  "together_api_used": false
+}

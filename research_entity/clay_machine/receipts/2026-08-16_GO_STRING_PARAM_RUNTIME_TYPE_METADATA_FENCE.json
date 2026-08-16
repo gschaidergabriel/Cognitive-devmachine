@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_STRING_PARAM_RUNTIME_TYPE_METADATA_FENCE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "timestamp_local": "2026-08-16T12:59:15+07:00",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "execution_policy": "SANDBOX_ONLY_TESTING",
+    "vps_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "coordination_refresh": {
+    "research_main_observed": "21c3a7412cd32715a8e5d697391f94ffa5921ad6",
+    "product_main_observed": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "overlapping_current_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_SANDBOX_ONLY_ENTITYOS_BUILD_BLOCKER_AND_STRICT_ARTIFACT_CANDIDATE.json",
+    "duplicate_product_patch_avoided": true
+  },
+  "observed_anchors": [
+    {
+      "path": "claymachine/clayvm.py",
+      "blob_sha": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
+      "observation": "FunctionMeta serializes parameter names but not parameter types; current compile_typed_ir admits only Int parameters while allowing Int/Bool/String returns."
+    },
+    {
+      "path": "claymachine/clayvm.py",
+      "blob_sha": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
+      "observation": "OP_CALL and OP_HOSTCALL currently fail closed unless every argument is a Python int; runtime entry frames therefore rely on the narrow all-Int surface rather than serialized nominal parameter type metadata."
+    },
+    {
+      "path": "claymachine/executable_ir_adapter.py",
+      "observation": "Canonical String literals/returns are admitted, but local/call/hostcall parameter transport remains deliberately Int-only; canonical argv is still open."
+    }
+  ],
+  "hypothesis_before_discriminator": "String parameters can be safely enabled by widening only the current Int parameter gate and OP_CALL runtime guard to accept str values.",
+  "strongest_counterhypothesis": "Without parameter types serialized into the admitted ClayVM artifact and checked at frame entry, merely widening value guards permits a value whose runtime type contradicts a declared Int function signature to cross the VM entry/call boundary.",
+  "baseline": {
+    "environment": "isolated local ChatGPT sandbox",
+    "source_basis": "reconstructed semantic slice from the exact current clayvm.py blob fetched through the private GitHub connector; not an exact full product checkout",
+    "current_string_parameter_result": "ValidationError:VM_V0_TYPE_SURFACE_INT_PARAMS_INT_BOOL_STRING_RETURN",
+    "promotion_limit": "local reconstructed-slice evidence is a discriminator/negative result, not an exact-current EntityOS or production-code PASS"
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "INT_SIGNATURE_STRING_INJECTION_AFTER_NAIVE_WIDENING",
+    "intervention": "Locally widen the reconstructed compile parameter gate to permit String and widen only internal OP_CALL argument guards to int|str; leave serialized FunctionMeta parameter metadata unchanged.",
+    "control_result": "String -> String identity executed and returned ENTITYOS_STRING_PARAM under the naive widening.",
+    "adversarial_probe": "Compile a declared Int -> Int identity and invoke its public VM entry with the String WRONG_TYPE_STRING.",
+    "observed_result": "The declared Int -> Int function returned WRONG_TYPE_STRING; runtime type confusion was observed because the frame had no serialized parameter type to enforce.",
+    "rollback": "local reconstructed file only; no product repository mutation",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED"
+  },
+  "collapse": {
+    "naive_string_guard_widening": "REJECT",
+    "serialized_parameter_type_metadata": "RETAIN_AS_REQUIRED_DESIGN_OBLIGATION",
+    "string_parameter_release": "DEFER",
+    "canonical_argv_release": "DEFER"
+  },
+  "required_next_semantic_step": [
+    "Select a canonical parameter-type encoding in the serialized ClayVM artifact rather than inferring type from host/Python values.",
+    "Validate parameter type metadata when loading the module and enforce it at public frame entry and internal OP_CALL boundaries.",
+    "Preserve or explicitly migrate existing all-Int artifact identity with deterministic compatibility tests; malformed/stale type metadata must fail closed.",
+    "Only after that admit String parameters through executable TypedIR and the single VM.",
+    "Then replace or supersede the integer request-id CM-TERM bridge with canonical Clay-visible String/argv plus explicit typed effect signatures; Bytes/Buffer ownership/lifetime remains a separate shared CM-DATA obligation."
+  ],
+  "entityos_build_state": {
+    "current_product_head": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "sandbox_workflow_run": 31930154546,
+    "sandbox_workflow_result": "FAILURE_BEFORE_RUNNER_STEPS",
+    "sandbox_workflow_blocker": "GitHub account payment/spending-limit state prevented the ubuntu-latest job from starting; this is infrastructure evidence, not a code failure.",
+    "active_local_sandbox": {
+      "exact_current_private_source_tree_present": false,
+      "pyinstaller_present": false,
+      "entityos_current_head_built_here": false
+    },
+    "artifact_status": "BLOCKED"
+  },
+  "next_executable_action": "In an actually-started isolated sandbox that contains exact current product source plus the pinned EntityOS build toolchain, implement the smallest canonical parameter-type metadata/frame-entry enforcement candidate, run compatibility + wrong-type fail-closed + String-parameter gates, rebuild the exact one-file EntityOS twice for reproducibility, then execute that exact EntityOS self-test/String/typed-effect gates. Do not use VPS/self-hosted execution as test evidence.",
+  "whole_clay_machine_acceptance": false,
+  "outcome": "NEGATIVE_RESULT_PERSISTED; NAIVE_STRING_PARAM_WIDENING_REFUTED; ENTITYOS_CURRENT_HEAD_BUILD_BLOCKED"
+}

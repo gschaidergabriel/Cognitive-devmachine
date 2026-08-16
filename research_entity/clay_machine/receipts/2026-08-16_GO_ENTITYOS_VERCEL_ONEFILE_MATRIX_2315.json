@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY_TESTING",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_pr": 755,
+  "tested_product_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+  "tested_source_archive_sha256": "492748eea90264e6188372597afb0bd25f2958d7bc0f75271555f2da7128f38e",
+  "execution_surface": "VERCEL_SANDBOX",
+  "execution_evidence": {
+    "status": "GO_SANDBOX_MATRIX_VERIFIED",
+    "source_binding": "EXACT_VERCEL_GIT_COMMIT_SHA",
+    "network_policy_during_tests": "DENY_ALL",
+    "sandbox_stopped": true,
+    "stop_error": null,
+    "cm07": "PASS",
+    "entityos_dirfd": "PASS",
+    "canonical_source_pipeline": "PASS",
+    "entityos_onefile": "PASS",
+    "step_results": [
+      {"label": "unpack_and_bind_source", "exit_code": 0},
+      {"label": "provision_system_freeze_toolchain_sudo", "exit_code": 0},
+      {"label": "provision_pinned_python_toolchain", "exit_code": 0},
+      {"label": "offline_go_matrix", "exit_code": 0}
+    ]
+  },
+  "entityos_artifact": {
+    "name": "EntityOS",
+    "sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+    "single_file": true,
+    "reproducible_double_build": true,
+    "runtime_self_test": "PASS",
+    "host_python_path_lesion": "PASS",
+    "relocation_copy": "BYTE_IDENTICAL",
+    "whole_machine_acceptance": false
+  },
+  "grf": {
+    "observed_reality": "The exact PR head was staged deterministically, bound to the Vercel Git commit SHA, built and tested in an actually started isolated Vercel Sandbox with network denied during the test matrix.",
+    "generated_reality": "A deterministic staged-source plus frozen-runtime one-file pipeline can provide a strong intermediate EntityOS release boundary while broader Clay Machine capabilities remain incomplete.",
+    "strongest_counter_reality": "A green one-file matrix could still be unsafe to promote if the reusable sandbox execution endpoint is replayable or if later product heads differ from the tested source identity.",
+    "discriminating_observation": "Review the execution endpoint and exact-head binding independently from the artifact gates.",
+    "outcome": "RETAIN_TESTED_ARTIFACT_EVIDENCE_BLOCK_PROMOTION_ON_ENDPOINT_REPLAY_RESISTANCE_AND_WHOLE_MACHINE_GAPS"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "note": "The originating bounded batch is the single unusual experiment for this GO macro-cycle. Later observation of an already-running exact-head preview build did not initiate another unusual experiment."
+  },
+  "security_review": {
+    "state": "BLOCKS_PR_PROMOTION",
+    "finding": "The reusable preview execution path currently relies on a static run nonce embedded in repository source; this is not strong replay resistance for the owner-fixed reusable endpoint contract.",
+    "required_delta": "Remove or cryptographically replace the reusable static nonce path, or make the sandbox batch non-replayable/build-internal-only while preserving fixed-job, exact-head, fail-closed semantics.",
+    "no_secret_value_persisted": true
+  },
+  "non_claims": [
+    "whole Clay Machine acceptance",
+    "CM-NET completion",
+    "CM-TERM general argv/streaming/PTY completion",
+    "CM-DATA final canonical Bytes/Buffer lifetime completion",
+    "CM-VIS completion",
+    "CM-AUDIO completion",
+    "self-hosting completion"
+  ],
+  "next_executable_step": "Harden PR 755 execution replay resistance without weakening exact-head source binding, then require the hardened exact head to pass the same deterministic Vercel Sandbox matrix before merge consideration.",
+  "product_delta": "DRAFT_PR_755_RETAINED_NOT_MERGED",
+  "research_delta": "COMMITTED_RECEIPT",
+  "together_api_used": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false
+}

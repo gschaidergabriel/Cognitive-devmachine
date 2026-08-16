@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "research_head_before_write": "4201371163286b553fa56efedde2faa83c4cb4ed",
+  "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_fusion": {
+    "pr": 781,
+    "head_observed": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "status": "PREFERRED_UNPROMOTED_PENDING_VERCEL_SANDBOX"
+  },
+  "coordination_outcome": {
+    "parallel_internal_batch5_provenance_lane_promoted": false,
+    "reason": "PR781 already carries the stronger raw-Git-tree SourceStage v5, pinned Sandbox SDK, atomic single-owner execution guard, epoch-safe Bytes v2 and twin byte-identical EntityOS freeze gate.",
+    "parallel_moving_head_pr_779": "CLOSED_UNMERGED",
+    "pinned_internal_fusion_pr_784": "MERGED_ONLY_INTO_NONCANONICAL_INTERNAL_BATCH_BRANCH",
+    "canonical_promotion_lane": "PR781_ONLY",
+    "pr781_review_handoff_id": 4946696986
+  },
+  "new_candidate_falsifier": {
+    "name": "CONTROLLED_SHARED_BUFFER_TRANSACTION_MIDPOINT_COPY",
+    "target_claim": "An owned copy of borrowed mutable storage alone guarantees producer-epoch consistency.",
+    "mechanism": "Shared mmap begins entirely at epoch A. Producer writes only the first half to epoch B and pauses at an explicit transaction midpoint. A naive owned copy at that point is B|A, a stable value corresponding to neither complete producer epoch. Producer then completes epoch B.",
+    "predicted_discriminator": "CROSS_EPOCH_COPY_OBSERVED",
+    "entityos_contract": "CM-DATA Bytes/Buffer ownership, lease, epoch and stability semantics",
+    "execution_surface_required": "ACTUALLY_STARTED_ISOLATED_VERCEL_SANDBOX",
+    "executed": false,
+    "authorized_go_unusual_experiment_count_consumed": 0,
+    "reason_not_executed": "Exact candidate Vercel previews are currently rejected by provider build-rate limit before build/Sandbox creation.",
+    "local_or_vps_substitute_allowed": false
+  },
+  "observed_execution_block": {
+    "parallel_internal_batch5_head": "67586cd21e1970e65437eaada02943b1282104cc",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "experiment_executed": false,
+    "entityos_artifact_built": false
+  },
+  "current_capability_frontier": {
+    "CM_NET": "OPEN",
+    "CM_PORT": "OPEN",
+    "CM_TERM": "OPEN_STRING_ARGV_EFFECT_PATH_DOWNSTREAM_OF_BYTES",
+    "CM_DATA": "IN_PROGRESS_EPOCH_SAFE_BYTES_BUFFER_FRONTIER",
+    "CM_VIS": "OPEN",
+    "CM_AUDIO": "OPEN"
+  },
+  "next_exact_executable_step": "When Vercel capacity permits, refresh PR781 exact head and product main; run one coordinated exact-head Vercel Sandbox batch. Preserve PR781 SourceStage v5/raw-tree provenance, pinned Sandbox SDK, atomic owner claim, Bytes/mixed-V2 regressions, two pristine byte-identical EntityOS freezes and full runtime/pathless/state/capability/relocation matrix. If this macro-cycle's one unusual intervention is still unconsumed and the candidate remains relevant, execute CONTROLLED_SHARED_BUFFER_TRANSACTION_MIDPOINT_COPY exactly once inside that admitted Sandbox and record its result; never count a merely staged or local substitute.",
+  "hard_non_claims": [
+    "No authorized unusual experiment executed in this GO",
+    "No exact-head Vercel Sandbox started for the preferred candidate",
+    "No fresh one-file EntityOS artifact built",
+    "No Bytes executable PASS/FAIL established",
+    "No whole EntityOS or Clay Machine PASS",
+    "No VPS/self-hosted/production-host test evidence used"
+  ],
+  "together_api_used": false
+}

@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "organ": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "execution_policy": "SANDBOX_ONLY_TESTING",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "promotion_candidate": {
+    "pr": 769,
+    "branch": "clay/go-entityos-git-provenance-v2-20260816",
+    "head": "1dd04ce555af72babb5b5f9deef2e7198d3d6af4",
+    "base": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "mergeable": true,
+    "draft": true,
+    "whole_machine_acceptance": false
+  },
+  "observed_positive_evidence": [
+    {
+      "head": "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+      "surface": "VERCEL_SANDBOX",
+      "status": "GO_SANDBOX_MATRIX_VERIFIED",
+      "entityos_sha256": "a8decdc38d01b944fb5ae507662a4ccf795962b46fcd2888269e956d2e1ee48b",
+      "gates": [
+        "CM07_PASS",
+        "ENTITYOS_DIRFD_PASS",
+        "CANONICAL_SOURCE_PIPELINE_PASS_20_OF_20",
+        "ONE_FILE_DOUBLE_BUILD_REPRODUCIBLE",
+        "RUNTIME_SELF_TEST_PASS",
+        "HOST_PYTHON_PATH_LESION_PASS",
+        "RELOCATION_BYTE_IDENTICAL",
+        "NETWORK_DENY_ALL_DURING_TESTS",
+        "SANDBOX_STOPPED"
+      ],
+      "scope": "historical exact-head candidate evidence only"
+    },
+    {
+      "head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+      "surface": "VERCEL_SANDBOX",
+      "status": "GO_SANDBOX_MATRIX_VERIFIED",
+      "source_archive_sha256": "492748eea90264e6188372597afb0bd25f2958d7bc0f75271555f2da7128f38e",
+      "entityos_sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+      "network_policy_during_tests": "DENY_ALL",
+      "sandbox_stopped": true,
+      "scope": "historical exact-head candidate evidence only"
+    },
+    {
+      "head": "8788a5bbf9a7ca77a4dd8d9ac819840d2bc6fa74",
+      "surface": "VERCEL_SANDBOX_BUILD_INTERNAL_DIRECT_IMPORT",
+      "status": "GO_SANDBOX_MATRIX_VERIFIED",
+      "entityos_sha256": "b4ebad5fee7012c4263d0ada688baf0dfa35a7b2ae735fc1486728a707e85344",
+      "network_policy_during_tests": "DENY_ALL",
+      "sandbox_stopped": true,
+      "scope": "historical exact-head candidate evidence; source-staging reproducibility later falsified"
+    }
+  ],
+  "negative_result": {
+    "id": "SAME_HEAD_SOURCE_ARCHIVE_NONDETERMINISM",
+    "head": "8788a5bbf9a7ca77a4dd8d9ac819840d2bc6fa74",
+    "observation": "Two Vercel build-hook invocations for the same exact commit produced different staged source archive digests.",
+    "first_archive_sha256": "590221547e11a28a85b3ca165a7a5ae95af4cbb18f62b4a15fae6bc3558de99b",
+    "second_archive_sha256": "4bda7259fb1a692f1a7447dfbdadf579bcc8e290ebc65eb4a6e969c7599e491d",
+    "first_archive_bytes": 1269890,
+    "second_archive_bytes": 1269885,
+    "outcome": "REFUTED_PREVIOUS_ARCHIVE_REPRODUCIBILITY_CLAIM",
+    "promotion_consequence": "Do not promote the previous staging design on one-file PASS alone."
+  },
+  "security_result": {
+    "prior_blocker": "Repository-static nonce exposed a replayable preview Sandbox-start path.",
+    "main_fix_pr": 760,
+    "main_fix_merge": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "current_main_http_execution_surface": "FAIL_CLOSED_BUILD_INTERNAL_ONLY",
+    "preferred_candidate_execution": "BUILD_INTERNAL_DIRECT_IMPORT_NO_HTTP_EXECUTION_SURFACE"
+  },
+  "fusion_delta": {
+    "candidate_pr": 769,
+    "design": [
+      "fresh branch created directly from security-hotfixed current main",
+      "credential-free shallow exact-commit Git provenance staged for Sandbox",
+      "fetch/reflog transport traces removed",
+      "checkout-dependent .git/index omitted from archive and rebuilt from exact HEAD inside Sandbox",
+      "sandbox requires exact Git HEAD, clean status and no configured remotes",
+      "staged source archive is built twice and byte-compared before execution",
+      "cross-invocation digest marker fails closed if repeated build hooks disagree",
+      "Sandbox batch is build-internal only; public HTTP handler remains inert",
+      "test networking changes to DENY_ALL before offline EntityOS matrix",
+      "Sandbox stop remains mandatory"
+    ]
+  },
+  "current_external_blocker": {
+    "system": "VERCEL",
+    "candidate_head": "1dd04ce555af72babb5b5f9deef2e7198d3d6af4",
+    "github_status": "failure",
+    "exact_description": "Deployment rate limited — retry in 24 hours.",
+    "effect": "No exact-head Vercel Preview/Sandbox receipt exists for PR 769 yet.",
+    "classification": "EXTERNAL_EXECUTION_CAPACITY_BLOCKER_NOT_A_MATRIX_FAILURE"
+  },
+  "grf": {
+    "observed_reality": "Older exact heads can build/test a one-file EntityOS in real isolated Vercel Sandboxes, but prior source staging was not reproducible and a reusable static-nonce execution path violated replay-resistance requirements.",
+    "generated_reality": "A fresh-main, build-internal, sanitized exact-Git staging path with explicit archive reproducibility gates can satisfy source identity and replay-resistance without weakening the canonical EntityOS builder.",
+    "strongest_counter_reality": "The new exact-Git archive may still be nondeterministic or the canonical EntityOS builder may reject the reconstructed index/provenance once actually executed in Vercel Sandbox.",
+    "discriminating_test": "Run the exact PR 769 head in a real Vercel Preview build; require staging double-build/cross-hook digest agreement, exact Git provenance, clean status/no remotes, full offline EntityOS matrix, host-Python lesion, relocation, DENY_ALL and Sandbox stop.",
+    "outcome": "DEFER_PROMOTION_UNTIL_RATE_LIMIT_CLEARS_AND_EXACT_HEAD_TEST_EXECUTES"
+  },
+  "unusual_experiment": {
+    "macro_cycle_count": 1,
+    "id": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "note": "The intentional unusual experiment was consumed earlier in this GO macro-cycle. Subsequent Vercel executions/attempts were regression validation only and were explicitly marked unusual_experiment_count=0."
+  },
+  "non_claims": [
+    "PR 769 exact-head Vercel Sandbox PASS",
+    "current canonical main EntityOS artifact verification",
+    "whole Clay Machine acceptance",
+    "CM-NET completion",
+    "CM-TERM completion",
+    "CM-DATA completion",
+    "CM-VIS completion",
+    "CM-AUDIO completion",
+    "self-hosting completion"
+  ],
+  "next_executable_step": "When Vercel permits another deployment, execute the exact current PR 769 head as a Preview; accept promotion only if the build-internal exact-Git staging and full one-file EntityOS Sandbox matrix pass with digest-stable source staging, exact provenance, DENY_ALL and clean Sandbox stop. If the PR head or main moves first, recreate/rebase from fresh main and test that exact resulting head instead.",
+  "entityos_artifact_state": "BLOCKED_CURRENT_CANONICAL_PROMOTION",
+  "research_write": "COMMITTED_RECEIPT",
+  "together_api_used": false,
+  "vps_test_evidence_used": false,
+  "self_hosted_test_evidence_used": false,
+  "production_host_test_evidence_used": false
+}

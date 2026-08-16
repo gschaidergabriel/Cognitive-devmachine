@@ -1,0 +1,65 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "status": "BLOCKED_SAFE_EXECUTION_NOT_CODE_FAIL",
+  "observed_product_main_before_candidate_close": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "candidate": {
+    "pr": 674,
+    "state": "CLOSED_UNMERGED",
+    "head_at_close": "07f0bf7bc19e398f4820cd346a58190f98e596c6",
+    "branch_preserved": "chatgpt/go-cm07-plain-use-failclosed-20260816",
+    "package_index_schema": "ClayPackageIndex/v2",
+    "package_index_change_reason": "ordered lossless use_decls changes canonical package-index bytes and package_sha256; v1 hashes must not be silently reinterpreted",
+    "resolver_schema": "ClayPackageResolution/v2",
+    "resolver_scope": "WILDCARD_MODULE_PROVIDER_ONLY",
+    "plain_use_semantics": "NOT_SELECTED_FAIL_CLOSED",
+    "build_use_gate": "UNCHANGED_FAIL_CLOSED"
+  },
+  "safe_execution_lane": {
+    "workflow": "ClayEnv resolver ephemeral candidate",
+    "workflow_run": 31923593584,
+    "job": 95107444133,
+    "runner_class": "GitHub-hosted ubuntu-latest intended ephemeral",
+    "head": "07f0bf7bc19e398f4820cd346a58190f98e596c6",
+    "observed_conclusion": "failure",
+    "runner_started": false,
+    "steps_started": false,
+    "github_annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "classification": "INFRA_BILLING_BLOCK_NOT_CODE_FAILURE",
+    "semantic_test_status": "UNTESTED"
+  },
+  "self_hosted_trust_findings": {
+    "resolver_workflow": "FAIL_CLOSED_SKIPPED_PENDING_SOURCE_ADMISSION_OR_ISOLATION",
+    "package_index_workflow": "FAIL_CLOSED_SKIPPED_PENDING_SOURCE_ADMISSION_OR_ISOLATION",
+    "additional_confirmed_surface": ".github/workflows/clayenv-minimal.yml checks out pull_request.head.sha and executes repository Python on persistent self-hosted Linux/X64",
+    "broader_legacy_pr_workflows": "multiple additional self-hosted PR workflows were auto-enqueued; not promoted as safe merely because they pre-existed",
+    "promotion_law": "candidate PR bytes are not accepted to execute on persistent self-hosted infrastructure without explicit source admission or an isolation boundary"
+  },
+  "grf": {
+    "observed": "A semantically stronger CM-07 candidate exposed both a package-hash versioning issue and an unsafe PR-to-self-hosted execution path.",
+    "generated_hypothesis": "The plain-use correction can be tested safely on ephemeral infrastructure and later admitted to accepted infrastructure without weakening the execution fence.",
+    "counter_reality": "A green result from an unsafe persistent self-hosted PR workflow could be technically correct while violating the trust model; conversely the current red GitHub-hosted run can be infrastructure-only and says nothing about code correctness.",
+    "discriminator": "Run the exact preserved head on an actually-started ephemeral runner, bind tested SHA and source hashes, then only after source admission run accepted self-hosted/VPS evidence.",
+    "collapse": "Current evidence is BLOCKED/UNTESTED. Do not label code PASS or FAIL from the billing-blocked ephemeral run."
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_in_this_followup": 0,
+    "sole_unusual_experiment_for_this_go_macrocycle": "PLAIN_USE_DUAL_ROLE_COLLISION",
+    "experiment_already_consumed": true
+  },
+  "local_sandbox_attempt": {
+    "goal": "clone preserved candidate for local exact-head regression",
+    "result": "BLOCKED_NO_GITHUB_DNS_NETWORK",
+    "promotion": "NONE"
+  },
+  "next_falsifier": "Restore a zero-cost/allowed GitHub-hosted ephemeral execution path or another explicitly isolated source-admitted runner; execute PR #674 preserved head 07f0bf7bc19e398f4820cd346a58190f98e596c6 package + resolver regressions bound to exact SHA. If green, rebuild the candidate on fresh main, re-audit all pull_request self-hosted gates, and keep #648 fail closed until name binding -> nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM is end-to-end proven.",
+  "hard_boundaries": {
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "training_started": false,
+    "effect_authority_widened": false
+  }
+}

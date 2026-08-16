@@ -1,19 +1,18 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
   "date": "2026-08-16",
   "trigger": "go",
   "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
   "execution_policy": "ISOLATED_SANDBOX_ONLY",
-  "scope": "Credential-free EntityOS source provenance staging reproducibility; ordinary deterministic debugging only, no second unusual experiment.",
-  "observed_reality": {
+  "scope": "Credential-free EntityOS source provenance staging reproducibility; ordinary deterministic debugging only, no additional unusual experiment claimed by this receipt.",
+  "v3_negative": {
     "product_branch": "clay/go-entityos-deterministic-source-stage-20260816",
     "candidate_head": "f5bc74baa3373b609265b3df824a23eeb1b0db65",
     "candidate_tree": "4d87ff1783aa058bce1153dff74baa846c9926bb",
     "vercel_deployment": "dpl_AJx43pUyNZ1nd2ZH7NTS2UfhGovZ",
     "stage_schema": "ClayGoSourceStage/v3",
-    "build_invocations_observed": 2,
     "first_archive_sha256": "821f595ba1324b47574c70b98c938ed35c6f3f49494fa3527460b80e1b7f4650",
     "first_archive_bytes": 1270508,
     "second_archive_sha256": "f5afb1e36fa239f4d89c0f4913ccf45078f8c09bc8214dcc48348cecf58b7367",
@@ -24,38 +23,86 @@
     "classification": "SOURCE_STAGE_REPRODUCIBILITY_REFUTED_FOR_V3",
     "entityos_runtime_executed_by_this_deployment": false
   },
-  "grf": {
-    "hypothesis": "A credential-free source stage can be bound to the exact committed Git tree and made byte-reproducible without transferring repository credentials or ambient checkout bytes.",
-    "strongest_counter_reality": "The provenance package contains archive metadata or Git metadata whose serialization varies between otherwise identical build invocations, so an equal head/tree does not imply equal staged bytes.",
-    "discriminator": "Run the stage twice for the exact same committed head/tree and compare raw tar/archive digests and byte counts before any Sandbox execution.",
-    "observed_outcome": "V3 failed the discriminator: both digest and size differed across the two Vercel build invocations.",
-    "collapse": "REJECT_V3_REPRODUCIBILITY_CLAIM; RETAIN_CREDENTIAL_FREE_TREE_BINDING_GOAL"
-  },
-  "repair_candidate": {
-    "product_commit": "51b6fd6d9394283e2b08bcbee9d91524c8256b2e",
-    "branch": "clay/go-entityos-deterministic-source-stage-20260816",
-    "change": "Archive the resolved Git tree object rather than the commit object, bind source_head -> source_tree separately, add tar_sha256, retain fixed mtime and gzip -n, and exclude Git metadata/untracked checkout bytes.",
-    "stage_schema": "ClayGoSourceStage/v4",
+  "v4_negative": {
+    "repair_commit": "51b6fd6d9394283e2b08bcbee9d91524c8256b2e",
+    "source_tree": "24cb30d3347a4194ddc6bba498edae12fac1e3ee",
     "vercel_deployment": "dpl_9m595zUEfsLMLhpeum3nyU4dX1Yd",
-    "observed_deployment_state_at_receipt_write": "QUEUED",
-    "build_test_status": "UNTESTED",
+    "stage_schema": "ClayGoSourceStage/v4",
+    "first_tar_sha256": "19c7e54ef3d36f9d734eea012cc001a1248147afd2d7c7b531f691dcb2b58134",
+    "second_tar_sha256": "6314bd9674f6140cf5a88289693ecf55e8d9f93e1773734155f79164411a9eeb",
+    "first_archive_sha256": "108c71e01d4d6f6d465a061977e2eb51fc631e61fb2c24afa753c4046bc02a1d",
+    "second_archive_sha256": "67f277beb00573da36ad538b89aa42bd9885909898d53376b5d5b0d7fc2a8ccd",
+    "first_archive_bytes": 1270544,
+    "second_archive_bytes": 1270532,
+    "classification": "SOURCE_STAGE_REPRODUCIBILITY_REFUTED_FOR_V4",
+    "inference": "The raw TAR itself changed across repeated Vercel build-hook invocations; removing the commit PAX header and using gzip -n did not solve cross-hook reproducibility.",
     "promotion_allowed": false
   },
-  "parallel_fusion": {
-    "fresh_main_candidate_deployment": "dpl_6ZVPWk1pWwgCMxQN1oh2AAgLtrPr",
-    "fresh_main_candidate_head": "c0c2583cc2a0d0db19c4148254c7b039b92ee0e9",
-    "source_archive_double_build": "BYTE_IDENTICAL",
-    "source_archive_sha256": "2a4ee1a55ca49ab42264a68b173366e4e1fd3ac2afea1365a6bef539e8b9c42e",
-    "sanitized_git_metadata_double_build": "NOT_BYTE_IDENTICAL",
-    "first_git_metadata_sha256": "9925f71d4e010ff6c564b12ca76b70cd1f579229103285dfd54f49e7f96aafc5",
-    "second_git_metadata_sha256": "0abe7866483be244c62f5233c0361435ee7181d1d0a1befb1839f43b9be23619",
-    "interpretation": "The current shared blocker is reproducible credential-free provenance attestation, not merely deterministic source payload bytes. Prefer the strongest fresh-main provenance lane; do not create parallel canonical mechanisms."
+  "repro_isolator": {
+    "product_head": "5344c3706050a2f5ee9bc60b0f17eda4cf5d4206",
+    "source_tree": "a39a45d51249ca81ed95bd635a31ae28c1878796",
+    "vercel_deployment": "dpl_8bYEXhseu2QEnKEjWFYUHGBEyJ1D",
+    "git_version": "git version 2.50.1",
+    "gzip_version": "gzip 1.12",
+    "first_build_hook": {
+      "raw_tar_sha256": "c6edcd6b68a00fb77400564c099159d571a5aa7f4c6666a6879fba8c0cd45feb",
+      "archive_sha256": "45d56b0739ecfb266ec710848bdce69ba65aec8246f357db9e68e4b4dfd814e4",
+      "raw_tar_repeat_match_within_hook": true,
+      "gzip_repeat_match_within_hook": true
+    },
+    "second_build_hook": {
+      "raw_tar_sha256": "bdb276becf99606caf76eaee32f7251a86d9f11752484d047a2cdb304fbcc868",
+      "archive_sha256": "d40962093f7ab106d7d59e8fa137b31cc014892764b38835e56f5d6631c4b69c",
+      "raw_tar_repeat_match_within_hook": true,
+      "gzip_repeat_match_within_hook": true
+    },
+    "cross_hook_tar_byte_identical": false,
+    "interpretation": "The same immutable tree is stable within one build-hook invocation but changes across separate Vercel build-hook invocations. The unresolved nondeterminism is therefore upstream of gzip and cross-invocation, not source content drift demonstrated by this isolator."
+  },
+  "attested_snapshot_lane": {
+    "candidate_head": "7c43fafbb6ae154f11bdfcf81d1f87e593800a4c",
+    "vercel_deployment": "dpl_DfDZC4PZAJyR5QSVspf2ETMRv23H",
+    "source_attestation_schema": "EntityOSSourceSnapshotAttestation/v1",
+    "source_archive_sha256": "b87f02c7a248d9233102e9d93fc56f4dd580dfc2736b25bb43e2d5cb3cbb15fe",
+    "attested_files": 1279,
+    "oidc_present": true,
+    "unpack_and_bind_source_exit": 0,
+    "provision_system_freeze_toolchain_sudo_exit": 0,
+    "provision_pinned_python_toolchain_exit": 0,
+    "offline_go_matrix_exit": 1,
+    "sandbox_stopped": true,
+    "status": "GO_SANDBOX_MATRIX_FAILED",
+    "promotion_allowed": false,
+    "note": "This is an exact isolated Sandbox negative result. It does not refute the attestation architecture as a whole because the bounded failed-step tail was not yet available in the observed receipt."
+  },
+  "preferred_fused_candidate": {
+    "product_pr": 765,
+    "branch": "chatgpt/go-deterministic-gitblob-stage-20260816",
+    "head": "2a4effb63b3012d15cb051cf571e0d520d73cf65",
+    "schema": "ClayGoSourceStage/v5",
+    "mechanism": "Read exact committed tree/blob objects with git ls-tree/cat-file, encode deterministic fixed-header USTAR directly, build TAR twice in-process, compress with gzip -n; do not use git archive or checkout bytes.",
+    "local_isolated_mechanism_validation": "PASS_REPORTED_BY_CANONICAL_PARALLEL_RECEIPT",
+    "vercel_exact_head_execution": "UNEXECUTED_RATE_LIMITED",
+    "promotion_allowed": false,
+    "review_obligation": "Add a fail-closed regression for non-UTF-8 Git path bytes before broad portability promotion; current Node listing path decodes ls-tree output as UTF-8 text."
+  },
+  "grf": {
+    "hypothesis": "A credential-free source stage can be exact and reproducible if source payload bytes are derived only from immutable Git tree/blob objects and encoded by a deterministic archive encoder with all metadata fixed.",
+    "strongest_counter_reality": "A custom encoder can be deterministic yet semantically incomplete for path/mode/symlink edge cases, or Vercel cross-hook execution can reveal additional nondeterminism not seen in local isolated mechanism tests.",
+    "discriminator": "Require two Vercel build-hook invocations for the exact same v5 head/tree to emit identical tar_sha256 and archive_sha256, then run the build-internal no-HTTP isolated Sandbox matrix on that exact source with network DENY_ALL and capture the one-file EntityOS SHA256 and runtime gates.",
+    "collapse": "REJECT_V3; REJECT_V4; DEFER_ATTESTED_SNAPSHOT; RETAIN_V5_GIT_BLOB_AS_PREFERRED_UNPROMOTED_CANDIDATE"
+  },
+  "external_execution_block": {
+    "classification": "BLOCKED_EXTERNAL_EXECUTION_CAPACITY",
+    "observed_provider_state": "VERCEL_DEPLOYMENT_RATE_LIMITED_BEFORE_BUILD_OR_SANDBOX_START_FOR_CURRENT_V5_CANDIDATE",
+    "current_candidate_result": "UNEXECUTED_NOT_PASS_NOT_FAIL",
+    "fresh_current_entityos_artifact_observed": false
   },
   "experiment_accounting": {
     "new_unusual_experiment_in_this_receipt": 0,
-    "coordinated_go_unusual_experiment": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
-    "coordinated_go_unusual_experiment_count": 1,
-    "note": "This receipt records ordinary reproducibility checks and a deterministic repair candidate only."
+    "canonical_macro_experiment_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_VERCEL_SANDBOX_ENTITYOS_EXACT_HEAD.json",
+    "canonical_macro_experiment": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "note": "All source-stage reproducibility checks recorded here are deterministic implementation/debugging discriminators, not additional unusual experiments."
   },
   "hard_boundaries": {
     "whole_clay_machine_acceptance": false,
@@ -66,5 +113,5 @@
     "together_api_used": false,
     "training_started": false
   },
-  "next_falsifier": "Let the exact v4 staging deployment execute if selected by the existing Vercel queue and require two byte-identical tar/archive digests for the same head/tree. Independently prefer the fresh-current-main credential-free attestation lane when it becomes runnable. Only after a provenance mechanism is reproducible and fail-closed should one exact-head isolated Vercel Sandbox rebuild and execute EntityOS with provenance negative controls, PATH-without-host-Python, relocation, exact SHA256 and Sandbox stop evidence."
+  "next_falsifier": "When an authorized isolated Vercel deployment slot is available, execute PR #765 exact head 2a4effb63b3012d15cb051cf571e0d520d73cf65 and require repeated build-hook tar/archive byte identity. If and only if that passes, fuse the v5 Git-blob staging plus current build-internal no-HTTP runner onto then-current main and run one exact-head Vercel Sandbox EntityOS matrix with DENY_ALL tests, provenance negative controls, deterministic one-file double-build, exact SHA256, self-test, PATH-without-host-Python, relocation and clean Sandbox stop."
 }

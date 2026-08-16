@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "trigger": "go",
+  "correction_of": "research_entity/clay_machine/receipts/2026-08-16_GO_IMPORT_NAMESPACE_COLLISION_DISCRIMINATOR.json",
+  "reason": "Concurrent product merges landed while the original receipt was being written, so its PR-open/candidate labels were stale. The experimental result itself is unchanged.",
+  "current_product_head_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "merged_product_deltas": [
+    {
+      "commit": "0533f84909358ed8ae17c3dbcbfdbd4f837c4644",
+      "meaning": "deterministic ClayPackageIndex/v1 package identity merged"
+    },
+    {
+      "commit": "2e3f46e5c46c03a305fc6b1a0a30496b2cf79215",
+      "meaning": "canonical Module.use_decls MODULE versus WILDCARD intent merged"
+    },
+    {
+      "commit": "6cf1fc3925c58230e223292fc193374753b370e2",
+      "meaning": "ClayPackageResolution/v1 exact module-provider resolver merged; symbol semantics remain NOT_SELECTED"
+    }
+  ],
+  "current_observed_gap": "ClayPackageIndex/v1 still stores only legacy uses. The merged resolver compensates by re-reading and re-parsing source to recover use mode. Imported symbol ownership and namespace-collision semantics remain NOT_SELECTED, so issue #656 remains an active next falsifier.",
+  "current_candidate": {
+    "pr": 684,
+    "head": "7c824227618c76b06b6174b1bd2875ec74931ec5",
+    "state": "DRAFT_PENDING_EXACT_HEAD_GATES",
+    "delta": "ClayPackageIndex/v2 binds use_decls directly; resolver consumes bound use metadata and retains only source-byte hash recheck as temporal race/tamper guard."
+  },
+  "unusual_experiment_accounting": {
+    "count": 1,
+    "id": "LOCAL_DECL_IMPORT_SHORTNAME_COLLISION",
+    "result": "PASS",
+    "new_unusual_experiments_in_correction": 0
+  },
+  "retained_architecture_result": "Provider identity is necessary but insufficient for executable imports. A later symbol/name layer must fail closed on local/import and import/import namespace collisions before the existing unresolved-use execution fence may be reconsidered.",
+  "counterevidence": "Former #635 exact head had a failed hosted-shadow job during receipt-bound WP03 substrate materialization with exit 128 before semantic shadow steps ran. Retained as historical unresolved evidence; not treated as a semantic failure or erased by later merges.",
+  "whole_clay_machine_acceptance": false,
+  "together_api_used": false,
+  "training_started": false
+}

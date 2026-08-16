@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "grf": {
+    "observed_reality": [
+      "Current canonical program requires one executable file named EntityOS and permits test/build/experiment execution only in isolated sandboxes.",
+      "Current product main observed during this cycle was 05c910705fe9a430ee0f958760639f54217aa9da.",
+      "A historical exact-head EntityOS Actions artifact exists for product commit 4486a320a3a321c70f3f0b52a12a85d3957be1a7 and is explicitly whole_machine_acceptance=false.",
+      "The current local isolated sandbox has no PyInstaller module and package-network DNS resolution is unavailable, so current-main canonical PyInstaller re-freeze is not executable here.",
+      "PR #744 remains draft and reports its GitHub-hosted sandbox did not start because of account billing/spending state, so its current bytes are not promoted by this receipt."
+    ],
+    "generated_hypothesis": "The historical one-file EntityOS candidate may depend on ambient Python/process environment variables despite being a frozen one-file executable.",
+    "counter_reality": "The frozen one-file candidate carries enough runtime state to execute its canonical self-test with essentially all inherited environment removed.",
+    "falsifier": "Run the exact downloaded ELF with env -i, retaining only HOME, TMPDIR, PATH and LC_ALL, and require the same SELFTEST_PASS/exit-0 outcome as the ordinary sandbox baseline.",
+    "outcome": "REJECT ambient-environment-dependence hypothesis for this bounded self-test; RETAIN historical one-file portability mechanism evidence only."
+  },
+  "artifact_binding": {
+    "source_commit": "4486a320a3a321c70f3f0b52a12a85d3957be1a7",
+    "actions_run": 31930336025,
+    "actions_artifact_id": 9259105647,
+    "actions_artifact_archive_digest": "sha256:4f78ca6ba3c55aab1fd1f11cc9ec57f31c4aa1054c885377195fc734ed5ec266",
+    "entityos_sha256": "49aff497c7e801dafe0ed360f22fb999801335b1eedbc5833b1c236695e66325",
+    "entityos_size_bytes": 12822184,
+    "format": "ELF 64-bit LSB x86-64 dynamically linked",
+    "historical_build_toolchain": {
+      "python": "3.12.3",
+      "pyinstaller": "6.21.0",
+      "lark": "1.3.1"
+    },
+    "historical_build_receipt": {
+      "pyinstaller_onefile": true,
+      "reproducibility_builds": 2,
+      "reproducibility_sha256_match": true,
+      "whole_machine_acceptance": false
+    }
+  },
+  "ordinary_sandbox_baseline": {
+    "status_command": "PASS; single_file_candidate=true; frozen_runtime=true; canonical pipeline ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS; whole_machine_acceptance=false",
+    "self_test": "SELFTEST_PASS",
+    "self_test_exit": 0,
+    "no_grant_noninteractive": {
+      "exit": 73,
+      "stderr": "ENTITYOS_INITIAL_GRANT_REQUIRED",
+      "interpretation": "Fail-closed launch behavior observed for this exact historical artifact."
+    }
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "ENVIRONMENT_AMPUTATION",
+    "intervention": "env -i with only HOME=<isolated>, TMPDIR=<isolated>, PATH=/usr/bin:/bin, LC_ALL=C",
+    "command": "EntityOS --self-test",
+    "exit": 0,
+    "stdout": "SELFTEST_PASS",
+    "stderr": "",
+    "result": "PASS",
+    "rollback": "Experiment used only temporary isolated HOME/TMPDIR and did not mutate repository or product state."
+  },
+  "counterevidence_and_nonclaims": [
+    "This artifact predates current product main and cannot establish current-main EntityOS correctness.",
+    "The artifact receipt itself declares whole_machine_acceptance=false.",
+    "Historical self-hosted/VPS evidence is not used for current promotion because the current owner execution policy is sandbox-only.",
+    "No current-main EntityOS binary was built in this cycle.",
+    "No PR #744 semantic or release promotion is claimed."
+  ],
+  "ci_triage": {
+    "historical_cm_term_run": 31930336019,
+    "finding": "The bounded test emitted PASS_CM_TERM_TYPED_IR_VM_PROCESS_SLICE with 10/10 checks; workflow conclusion was failure because a legacy grep expected unusual_experiment_count=1 while the result schema reported historical_unusual_regression and new_unusual_experiment_count=0.",
+    "historical_strict_launch_run": 31930336021,
+    "finding_2": "It failed on forbidden low-level load_module import in entityos/canonical_entry.py; current main observed in this cycle no longer imports that low-level loader and instead uses provenance_artifact APIs."
+  },
+  "entityos_gate": {
+    "status": "BLOCKED_CURRENT_MAIN_REFREEZE",
+    "exact_blockers": [
+      "Local isolated sandbox: PyInstaller absent and package-network DNS unavailable.",
+      "GitHub-hosted isolated runner for the active candidate lane: billing/spending block before runner allocation."
+    ],
+    "next_sandbox_executable_step": "On the first actually-started isolated sandbox with Python 3.12.x, PyInstaller 6.21.0 and lark 1.3.1 available, fetch the exact reviewed current product head, run entityos/build_canonical_onefile.py, require the builder's two-build SHA-256 reproducibility match, then execute the resulting exact dist/EntityOS status, --self-test, fail-closed initial-grant regression, strict artifact-only policy, single-VM regressions and copy-run checks before any promotion.",
+    "promotion_state": "DEFER"
+  }
+}

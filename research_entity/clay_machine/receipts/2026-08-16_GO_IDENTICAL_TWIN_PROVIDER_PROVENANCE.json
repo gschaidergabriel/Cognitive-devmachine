@@ -6,18 +6,19 @@
   "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
   "observed_product_state": {
     "product_main_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
-    "canonical_provider_resolver_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
-    "canonical_provider_resolver_pr": 660,
-    "resolver_scope": "ClayPackageResolution/v1 MODULE_PROVIDER_ONLY",
+    "provider_resolver_merge_under_review": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "provider_resolver_pr": 660,
+    "resolver_scope_as_merged": "ClayPackageResolution/v1 MODULE_PROVIDER_ONLY",
+    "new_counterevidence": "authorized plain-use syntax does not prove exact-module identity",
     "symbol_semantics": "NOT_SELECTED",
     "executable_use_gate": "UNCHANGED_FAIL_CLOSED"
   },
   "grf": {
-    "observed": "Current merged resolver rejects duplicate declared package providers before symbol semantics are selected.",
+    "observed": "The merged resolver rejects duplicate declared package providers before symbol semantics are selected, but separate current-corpus evidence falsifies treating every plain use path as an exact module identity.",
     "generated_hypothesis": "Provider provenance multiplicity must remain visible even when two explicit providers are byte/content identical.",
     "counter_reality": "A content-addressed resolver could collapse equal package hashes into one provider and silently erase the fact that two explicit provider roots asserted the same package authority.",
-    "discriminator": "Create two physically distinct provider roots with byte-identical package manifests/content, require equal canonical package hashes, then supply both explicitly to the provider resolver.",
-    "collapse": "Content identity is not provider provenance. Duplicate explicit package providers must fail closed rather than deduplicate by hash."
+    "discriminator": "Create two physically distinct provider roots with byte-identical package manifests/content, require equal canonical package hashes, then supply both explicitly to the duplicate-provider authority branch.",
+    "collapse": "Content identity is not provider provenance. The duplicate-package fail-closed invariant survives, while the broader v1 claim that every plain use target is an exact module must be narrowed."
   },
   "unusual_experiment": {
     "name": "IDENTICAL_TWIN_PROVIDER_COLLISION",
@@ -30,11 +31,33 @@
     "classification": "LOCAL_MECHANISM_PASS",
     "exact_self_hosted_reproduction": {
       "pr": 675,
-      "head": "e7563b7f64b8a459c39ce324a70db3e0f9dff464",
-      "workflow_run": 31923239337,
-      "state_at_receipt_write": "QUEUED",
+      "latest_head_after_removing_unavailable_hosted_shadow": "5f7c66a2aa61bf82f2d7c5d791cbd67aab5d2448",
+      "state": "PENDING_SELF_HOSTED_QUEUE",
       "promotion": "PENDING_EXACT_HEAD_EXECUTION"
+    },
+    "hosted_shadow_negative_result": {
+      "attempted_head": "848d1057f34014641aec7a0dc18adca1126ce4d8",
+      "workflow_run": 31923438749,
+      "job_started": false,
+      "classification": "INFRASTRUCTURE_BLOCKED_NOT_CODE_EVIDENCE",
+      "reason": "GitHub reported failed account payments or spending-limit restriction before any job step executed.",
+      "cleanup": "hosted-only workflow removed from branch; no semantic code changed"
     }
+  },
+  "plain_use_counterevidence": {
+    "authority_manifest": "claycode/CLAYCODE_CORPUS_AUTHORITY_V1.json",
+    "frank_memory_authorized": true,
+    "frank_entity_authorized": true,
+    "importing_source": "claycode/frank_memory.clay",
+    "plain_use": "frank.entity.Frank",
+    "provider_source": "claycode/frank_entity.clay",
+    "provider_module": "frank.entity",
+    "top_level_symbol_kind": "entity",
+    "top_level_symbol": "Frank",
+    "exact_module_named_frank_entity_Frank_in_observed_pair": false,
+    "interpretation": "Parser USE_MODE_MODULE is currently a syntactic/plain-use label, not sufficient evidence that the full path is a module identity.",
+    "repair_candidate": 674,
+    "repair_policy": "WILDCARD module-provider resolution may remain explicit; plain-use name binding must fail closed until its module-vs-symbol semantics are selected."
   },
   "coordination": {
     "superseded_duplicate_product_pr": 662,
@@ -44,12 +67,17 @@
       {
         "pr": 679,
         "finding": "Local collision surface omitted sum-type variants even though current analyzer admits unique variants as unqualified candidates.",
-        "action": "commented; retain fail-closed behavior or fuse with stronger variant coverage"
+        "action": "commented; candidate is additionally downstream of unresolved plain-use semantics"
       },
       {
         "pr": 678,
         "finding": "Resolve-to-binding phase rebuilt package indexes without rebinding rebuilt package_sha256 values to provider-resolution package hashes, leaving a TOCTOU/provenance consistency gap.",
-        "action": "commented; require exact package hash revalidation while retaining sum-variant coverage"
+        "action": "commented; candidate is additionally downstream of unresolved plain-use semantics"
+      },
+      {
+        "pr": 674,
+        "finding": "Current authorized source pair directly supports narrowing plain-use semantics rather than treating the full path as exact module identity.",
+        "action": "commented with independent source verification; exact-head CI still required"
       }
     ]
   },
@@ -66,7 +94,7 @@
     }
   ],
   "hard_boundaries": {
-    "symbol_semantics": "NOT_SELECTED",
+    "plain_use_name_binding": "NOT_SELECTED_FAIL_CLOSED_REQUIRED",
     "wildcard_symbol_expansion": "NOT_SELECTED",
     "call_ownership": "NOT_SELECTED",
     "linking": "NOT_SELECTED",
@@ -77,6 +105,6 @@
     "together_api_used": false,
     "final_training_authorized_or_started": false
   },
-  "next_falsifier": "Fuse the strongest MODULE short-binding collision candidate so it both covers every currently addressable local name (including unique sum variants) and revalidates package identity across the resolve-to-binding seam; keep WILDCARD/imported symbol semantics and execution fail closed until separately proven.",
-  "status": "LOCAL_MECHANISM_SUPPORTED_EXACT_TARGET_PENDING"
+  "next_falsifier": "First land or otherwise prove the #674-style semantic narrowing: plain use must not inherit exact-module authority from path shape. Then define an explicit plain-use module-vs-exported-symbol binding contract from authorized ClayCode evidence; only after that revisit MODULE short-name collision plans and checker -> ClayExecutableTypedIR/v1 -> single ClayVM integration.",
+  "status": "LOCAL_DUPLICATE_PROVIDER_INVARIANT_SUPPORTED; BROADER_PLAIN_USE_MODULE_ASSUMPTION_COUNTEREVIDENCED; EXACT_SELF_HOSTED_DIAGNOSTIC_PENDING"
 }

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "research_parent_observed": "334176196d94b7ba6fed5cbbc28407064448f3f2",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 781,
+  "preferred_branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+  "current_preferred_head_observed": "1334610341674e92abda50c3ca887bf4ca035107",
+  "last_empirical_vercel_sandbox": {
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "sandbox_actually_started": true,
+    "raw_git_tree_source_binding": "PASS_TO_OBSERVED_SCOPE",
+    "system_toolchain_provisioning": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "pinned_python_toolchain_step": "FAIL_HEREDOC_ESCAPE",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false,
+    "sandbox_stopped": true
+  },
+  "source_verified_repairs_on_current_head": {
+    "python_heredoc_backslash_escape_fixed": true,
+    "sanitized_git_head_percent_s_receipt_fixed": true,
+    "duplicate_unusual_experiment_path_removed": true,
+    "immutable_owned_bytes_regression_control_present": true,
+    "runtime_verified_on_current_head": false
+  },
+  "experiment_accounting": {
+    "global_unusual_experiment_limit": 1,
+    "global_unusual_experiment_count": 1,
+    "global_slot_consumed": true,
+    "new_unusual_experiments_in_this_coordination_pass": 0,
+    "runner_required_mode": "REGRESSION_ACCEPTANCE_ONLY"
+  },
+  "current_vercel_status": {
+    "head": "1334610341674e92abda50c3ca887bf4ca035107",
+    "status": "FAILURE_DEPLOYMENT_RATE_LIMIT_RETRY_IN_24_HOURS",
+    "deployment_created_for_head": false,
+    "sandbox_started_for_head": false,
+    "meaning": "EXTERNAL_PROVIDER_NON_EXECUTION_NOT_ENTITYOS_CODE_FAIL"
+  },
+  "next_executable_step": "When Vercel build capacity is available, refresh PR781 head and product main, then run exactly one regression/acceptance batch in an actually-started Vercel Sandbox. Require exact source binding, regression-only accounting, DENY_ALL before offline tests, full ClayVM/Bytes/provenance matrix, two pristine byte-identical one-file EntityOS builds, exact artifact digest, status/self-test/no-host-Python/state-restart/capability/relocation gates, and successful Sandbox stop.",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT"
+}

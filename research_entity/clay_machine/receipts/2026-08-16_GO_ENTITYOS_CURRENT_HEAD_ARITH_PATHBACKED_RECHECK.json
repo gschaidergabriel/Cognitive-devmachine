@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_parent_observed": "dd1da5effc2256056b1c726f8c7cc5e9a82e939d",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "artifact": {
+    "name": "EntityOS",
+    "source": "GitHub Actions artifact 9258758674 from EntityOS Canonical One-File VPS run 31929090825",
+    "sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "size_bytes": 12820496,
+    "mode": "0755",
+    "current_head_ci": "PASS",
+    "local_exact_artifact_selftest": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "whole_machine_acceptance": false,
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true
+  },
+  "normal_discriminating_test": {
+    "name": "CURRENT_HEAD_ARITHMETIC_EXPRESSION_ADMISSION",
+    "source": "module clay.entityos.active_go; fn twice(x : Int) -> Int { return x + x }; fn main() -> Int { return twice(21) }",
+    "observed_exit_code": 1,
+    "observed_error": "nominal typechecker rejected executable IR: UNSUPPORTED_EXPRESSION:twice:AST node Arith not admitted by typechecker v1",
+    "secondary_observation": "The frozen CLI surfaces this expected semantic rejection as an unhandled exception/traceback rather than a bounded diagnostic.",
+    "interpretation": "Executable coverage remains deliberately narrow; arithmetic expressions are not yet admitted by the current nominal typechecker. This is a concrete CM-03/CM-04 coverage obligation, not by itself the highest release blocker.",
+    "outcome": "SUPPORTED_NEGATIVE_RESULT"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "UNLINKED_EXECUTABLE_PROC_FD_STARTUP",
+    "baseline": "Path-backed exact EntityOS executes --self-test-json successfully.",
+    "intervention": "Copy the exact one-file ELF into an isolated temp directory, open it, unlink the pathname, then exec the still-open file through /proc/self/fd/<fd>.",
+    "predicted_if_path_independent": "Embedded one-file runtime starts and produces the same self-test result.",
+    "predicted_if_path_backed_startup_required": "Bootloader fails before EntityOS self-test because the embedded package cannot be reopened by executable path.",
+    "observed_exit_code": 255,
+    "observed_error": "Could not load PyInstaller's embedded PKG archive from the executable",
+    "outcome": "REFUTED_PATH_INDEPENDENT_STARTUP",
+    "derived_invariant": "The current PyInstaller one-file carrier requires a stable path-backed executable during startup; do not unlink/replace the running path before bootloader package acquisition completes.",
+    "rollback": "Isolated temporary copy only; no repository, accepted runner or user state was modified."
+  },
+  "current_parallel_evidence": {
+    "canonical_onefile_vps_run": 31929090825,
+    "canonical_onefile_vps": "PASS",
+    "initial_grant_vps": "PASS",
+    "sqlite_package_provenance_readonly": "FAIL",
+    "sqlite_published_patchset_readonly": "FAIL",
+    "sqlite_productive_path_readonly": "FAIL",
+    "note": "Packaging/reproducibility is stronger than whole-machine/runtime acceptance; SQLite provenance/productive-path failures remain fail-closed evidence."
+  },
+  "grf_collapse": {
+    "observed": "Current-head EntityOS is a reproducible executable carrier with passing exact self-test and canonical VM/process path, but whole-machine acceptance is explicitly false.",
+    "retained_hypothesis": "Keep the one-file carrier and expand canonical semantics through the existing ClayCode -> TypedIR -> single ClayVM -> ClayOS path.",
+    "counter_reality": "A reproducible one-file shell can conceal narrow language/value/effect coverage and host/storage dependencies.",
+    "decision": "RETAIN_CARRIER_AND_EXPAND_SEMANTICS"
+  },
+  "release_blocker": {
+    "status": "BLOCKED",
+    "exact_blocking_invariant": "Whole-machine acceptance remains false: canonical Clay Bytes/Buffer ownership+lifetime and String/argv/effect-signature semantics plus broader typed runtime/network/media/storage paths are not yet admitted end-to-end; productive SQLite provenance/path gates also remain fail-closed.",
+    "next_executable_step": "Implement and gate the smallest canonical String/Bytes/argv value plus effect-signature slice through TypedIR and the single ClayVM into the existing capability-gated ClayOS process component, then rebuild/retest exact one-file EntityOS; separately satisfy the productive SQLite trust/provenance gate with privileged runner remediation or equivalent accepted proof."
+  }
+}

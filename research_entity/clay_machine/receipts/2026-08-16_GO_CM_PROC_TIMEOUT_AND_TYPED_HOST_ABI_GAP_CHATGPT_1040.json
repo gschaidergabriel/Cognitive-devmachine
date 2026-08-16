@@ -1,0 +1,111 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "worker": "CHATGPT_TEMPORARY_CLAY_ORGAN",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "research_head_observed_before_write": "fe576be9a2512592c72b82c0ed1b7b4a9b288192",
+  "product_head_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "scope": ["CM-PROC", "CM-TERM", "CM-08-LINUX-INTEROP", "CM-02-TYPE-EFFECT-SYSTEM", "CM-04-COMPILER-LOWERING-BYTECODE", "CM-05-VIRTUAL-CLAY-MACHINE"],
+  "observed_anchors": [
+    {
+      "path": "runtime/claycode_typecheck_v1/typecheck.py",
+      "observation": "Host intrinsic arity/effect class can be observed, but every current host intrinsic is rejected with HOST_INTRINSIC_TYPE_SIGNATURE_UNBOUND because explicit Clay parameter/return types are absent."
+    },
+    {
+      "path": "runtime/claycode_executable_typed_ir_v1.py",
+      "observation": "Executable TypedIR v1 admits only CLAY_FN calls; non-Clay calls, including INTRINSIC, fail closed. materialize_source currently analyzes with an empty host-contract map."
+    },
+    {
+      "path": "claymachine/clayvm.py",
+      "observation": "The single VM already contains OP_HOSTCALL and a capability-gated backend call id 1 bound to capability linux.uname_hash, but the current source-level HOST_CONTRACTS registry has no linux.uname_hash entry. Hostcall arguments/results are integer-only."
+    },
+    {
+      "path": "claymachine/clayos.py",
+      "observation": "Canonical ClayOS launch is provenance-strict and executes the single ClayVM, but it does not expose real Linux subprocess/process-tree semantics."
+    },
+    {
+      "path": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
+      "observation": "Current CM-08 is OPEN; CM-TERM explicitly lacks canonical Clay argv/env/cwd/stdin/stdout/stderr/PTY effects. Current workspace also selects canonical Bytes/Buffer ownership+lifetime as the highest-value shared I/O prerequisite."
+    }
+  ],
+  "generated_reality": {
+    "hypothesis": "Adding a Linux subprocess runner directly beneath ClayOS is premature. The causal predecessor is one canonical typed host ABI shared by analyzer, nominal checker, executable TypedIR, single-VM lowering and capability dispatch; process I/O must then reuse the canonical Bytes/Buffer value model rather than invent a process-only representation.",
+    "mechanism": "A typed intrinsic contract must bind source call identity, parameter/return Clay types, effect class, capability identity and stable VM hostcall identity before executable IR admission. The process family then binds argv/cwd/env/stdin/stdout/stderr/exit/timeout to typed values and executes only through the same single VM/ClayOS path.",
+    "strongest_counter_reality": "Use integer handles or a direct host-side subprocess facade now and add type/value semantics later.",
+    "counter_reality_disposition": "DEFER. It can produce an early demo but would put process meaning in an out-of-band host table/direct facade, violating the current no-hidden-second-semantics and VM/direct/executable-equivalence laws unless the handle/value contract itself is first canonicalized."
+  },
+  "unusual_experiment": {
+    "name": "CM_PROC_TIMEOUT_DESCENDANT_ESCAPE",
+    "count": 1,
+    "environment": "disposable local Linux sandbox",
+    "external_effects": 0,
+    "canonical_state_mutated": false,
+    "baseline": "A Python parent spawned /bin/sleep 20 as a descendant. Timeout cleanup killed only the direct child.",
+    "baseline_observation": {
+      "descendant_state_after_parent_kill": "S",
+      "descendant_still_running": true
+    },
+    "intervention": "Launch the process in a new session/process group and kill the whole group on timeout.",
+    "intervention_observation": {
+      "descendant_state_after_group_kill": "Z",
+      "descendant_still_running": false
+    },
+    "rollback": "All disposable descendant processes were killed; observed Z means terminated/not running, not a claim of immediate parent reaping.",
+    "outcome": "SUPPORTED_PROCESS_GROUP_CLEANUP_REQUIRED",
+    "interpretation": "A CM-PROC timeout contract that only terminates the direct child is insufficient for process-tree cleanup. The eventual Linux adapter must define process-group/session ownership and bounded cleanup/reaping semantics."
+  },
+  "primary_mechanism_evidence": [
+    "Python subprocess documentation: run/Popen expose argv, cwd, env, stdio and timeout behavior; timeout handling of the direct child does not by itself define descendant cleanup.",
+    "Linux kill(2): negative pid targets a process group.",
+    "Linux setsid(2): a new session creates a distinct process group/session boundary usable for scoped cleanup."
+  ],
+  "collapse": [
+    {
+      "claim": "CM-PROC is blocked only because subprocess spawning code is missing.",
+      "outcome": "REJECT",
+      "reason": "The canonical language/type/IR path currently cannot admit host intrinsic calls and the VM host ABI is integer-only."
+    },
+    {
+      "claim": "Current backend hostcall availability proves a canonical Clay host effect path.",
+      "outcome": "REJECT",
+      "reason": "linux.uname_hash is currently orphaned from the source-level HOST_CONTRACTS/TypedIR admission path."
+    },
+    {
+      "claim": "Process timeout may safely kill only the direct child.",
+      "outcome": "REJECT",
+      "reason": "The single bounded experiment left the descendant running in the baseline."
+    },
+    {
+      "claim": "Typed host ABI before process effects is the smallest architecture predecessor.",
+      "outcome": "RETAIN",
+      "confidence": "medium-high",
+      "promotion_needed": "Static one-registry consistency plus source->typecheck->ExecutableTypedIR->single-VM->capability-dispatch differential evidence; no backend-only semantics."
+    }
+  ],
+  "next_falsifiers": [
+    "Finish/select the canonical Clay Bytes/Buffer ownership+lifetime contract already identified by current workspace; CM-PROC stdout/stderr/stdin must reuse it.",
+    "Define one typed host-intrinsic registry shape without yet widening authority, and statically prove every executable VM hostcall has exactly one reviewed source/type/effect/capability mapping and no orphan dispatch entries.",
+    "After the byte/value contract exists, admit one read-only hostcall end-to-end through ClayCode -> nominal checker -> ClayExecutableTypedIR/v1 -> single VM -> capability gate, then use the same ABI for a bounded CM-PROC ProcessSpec/ProcessResult slice.",
+    "CM-PROC negative matrix must include descendant timeout cleanup, cwd/env/argv fidelity, stdin/stdout/stderr byte fidelity, nonzero exit, signal termination, output/resource bounds and no implicit shell."
+  ],
+  "source_admission_boundary": {
+    "product_code_write": "NOT_ATTEMPTED",
+    "reason": "Current shared workspace records persistent self-hosted pull_request execution of model-generated candidate bytes as not trusted without explicit source admission/isolation; current ephemeral GitHub-hosted lane is billing-blocked before runner start. Avoided creating a candidate product PR that could trigger unadmitted persistent execution.",
+    "local_full_repo_test": "BLOCKED_DNS",
+    "local_clone_observation": "Could not resolve host github.com in the local container; no full-repository local PASS is claimed."
+  },
+  "experiment_accounting": {
+    "new_unusual_experiments": 1,
+    "exactly_one_requirement_satisfied": true,
+    "no_second_unusual_experiment_afterward": true
+  },
+  "authority": {
+    "effect_authority": "NONE",
+    "harness_authority": "NONE",
+    "training_authorized": false,
+    "together_used": false,
+    "whole_clay_machine_completion": false
+  }
+}

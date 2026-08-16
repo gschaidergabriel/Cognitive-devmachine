@@ -1,0 +1,83 @@
+{
+  "schema": "ClayResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "owner_directive": "single executable file named EntityOS remains the delivery boundary unless superseded by newer owner-fixed contract",
+  "observed": {
+    "research_head_before_write": "aca3394dd5ca6d3a349331cb49b86582ff074f4f",
+    "product_head_verified": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "product_head_commit_message": "ci(entityos): serialize exact-head evidence without cancelling builds",
+    "entityos_workflow_run": 31927007084,
+    "entityos_workflow_conclusion": "success",
+    "artifact_sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "artifact_size_bytes": 11931208,
+    "artifact_status": {
+      "schema": "EntityOSCanonicalOneFile/v1",
+      "build_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+      "single_file_candidate": true,
+      "frozen_runtime": true,
+      "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+      "process_capability": "linux.process.spawn.v0",
+      "whole_machine_acceptance": false
+    },
+    "independent_local_revalidation": {
+      "self_test": "PASS",
+      "vm_result": 42,
+      "typed_ir_vm_process_effect": "PASS",
+      "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK",
+      "host_without_capability": {
+        "returncode": 1,
+        "stderr": "CAPABILITY_DENIED:linux.process.spawn.v0"
+      },
+      "host_with_capability": {
+        "returncode": 0,
+        "stdout": "ENTITYOS_66E_OK"
+      }
+    }
+  },
+  "grf_decision_trace": {
+    "hypothesis": "The canonical one-file boundary can carry the current admitted compiler-to-VM-to-ClayOS path plus a capability-gated TypedIR process effect without relying on sidecar runtime files.",
+    "counterhypothesis": "The frozen one-file artifact only passes in its original CI location or bypasses the actual TypedIR/VM process-effect path.",
+    "discriminators": [
+      "exact-head CI build and canonical gates",
+      "independent execution of status and --self-test-json",
+      "capability-denied and capability-granted host process checks",
+      "one bounded relocation/Unicode/foreign-cwd experiment on the prior source-equivalent one-file candidate"
+    ],
+    "outcome": "RETAIN",
+    "promotion_limit": "Component/release-boundary evidence only; whole Clay Machine acceptance remains false."
+  },
+  "unusual_experiment": {
+    "count_selected_by_this_go": 1,
+    "candidate_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+    "intervention": "copy identical EntityOS into a Unicode-and-spaces path, execute from foreign cwd '/', compare hash/status/self-test/capability behavior, then remove the temporary copy",
+    "result": "NO_REGRESSION",
+    "baseline_host_deny_returncode": 1,
+    "intervention_host_deny_returncode": 1,
+    "granted_host_result": "ENTITYOS_RELOC_OK",
+    "rollback": "temporary relocated copy removed",
+    "note": "An initial stale expectation of deny returncode 77 was falsified; the current baseline itself returns 1, so this was not a relocation defect."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED",
+    "delta": "EntityOS now has verified one-file packaging for the current admitted ClayCode -> executable TypedIR -> single ClayVM -> ClayOS path, including a capability-gated TypedIR VM process-effect probe. This does not yet define canonical ClayCode String/Bytes/argv/process-effect source semantics.",
+    "affected_components": [
+      "CM-04-COMPILER-LOWERING-BYTECODE",
+      "CM-05-VIRTUAL-CLAY-MACHINE",
+      "CM-08-LINUX-INTEROP",
+      "CM-09-MINIMAL-CLAYOS",
+      "CM-10-TOOLING-OBSERVABILITY-RECOVERY"
+    ],
+    "rollback": "revert EntityOS process-effect integration or keep it as non-canonical probe if subsequent canonical type/effect design contradicts it"
+  },
+  "current_blocker": "whole_machine_acceptance=false; the smallest canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface is still unselected, so canonical ClayCode process/data semantics do not yet reach the single VM and Linux boundary end-to-end.",
+  "next_executable_action": "Select the smallest canonical Bytes/Buffer ownership+lifetime and String/argv/process-effect signatures needed by CM-DATA and CM-TERM, admit them in the checker/typed-effect IR, wire one provenance-bound opaque-byte/process request through the single VM, rebuild EntityOS, and rerun exact-head one-file gates.",
+  "limitations": [
+    "The successful GitHub workflow is exact-head CI evidence; this receipt does not independently attest that the runner is the accepted Hostinger VPS identity.",
+    "whole_machine_acceptance remains false.",
+    "No final paid/model training was authorized or started."
+  ]
+}

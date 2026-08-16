@@ -1,0 +1,67 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "worker_scope": "temporary Clay research/build/test worker",
+  "observed_reality": {
+    "product_main_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "canonical_provider_resolution_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "canonical_provider_resolution_pr": 660,
+    "canonical_provider_resolution_tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
+    "canonical_provider_resolution_run": 31923122223,
+    "canonical_provider_resolution_job": 95106223320,
+    "canonical_provider_resolution_conclusion": "SUCCESS",
+    "canonical_scope": "ClayPackageResolution/v1 MODULE_PROVIDER_ONLY; SYMBOL_SEMANTICS NOT_SELECTED",
+    "execution_use_gate": "UNCHANGED_FAIL_CLOSED"
+  },
+  "coordination": {
+    "parallel_candidate_pr": 666,
+    "parallel_candidate_head": "50b598f2f51390aec5607823513ebef7715b4a93",
+    "parallel_candidate_result": "CLOSED_NOT_MERGED_SUPERSEDED_BY_PR_660",
+    "reason": "Equivalent provider-resolution ownership had already landed on main; retaining another canonical path would fragment semantics.",
+    "architecture_outcome": "REJECT_DUPLICATE_PATH_RETAIN_DISTINCT_EVIDENCE"
+  },
+  "grf": {
+    "observed": "Exact module-provider resolution is now merged and exact-head CI passed, while symbol semantics remain explicitly unselected.",
+    "generated_hypothesis": "Filesystem path aliases could accidentally be treated as distinct provider identities by a resolver whose identity boundary leaks host path provenance.",
+    "counter_reality": "If logical package identity dominates path identity, presenting one physical manifest through a real path and a symlink alias should not mint a second provider and must fail closed as a duplicate identity.",
+    "discriminator": "Present the same physical Clay package manifest twice: direct path plus symlink alias.",
+    "collapse": "The bounded probe failed closed. This supports keeping package identity semantic and path-independent, but it is local mechanism evidence only and does not extend the exact-runtime acceptance scope of PR #660."
+  },
+  "unusual_experiment": {
+    "name": "SYMLINK_MANIFEST_ALIAS_EQUIVOCATION",
+    "count_for_this_worker_macrocycle": 1,
+    "environment": "isolated local mechanism probe",
+    "input_shape": "one physical clay.package.json supplied by real path and symlink alias resolving to the same file",
+    "result": "FAIL_CLOSED",
+    "error": "DUPLICATE_PACKAGE_IDENTITY",
+    "elapsed_ns_observed": 211013,
+    "evidence_tier": "LOCAL_MECHANISM_ONLY",
+    "promotion_effect": "NONE",
+    "rollback": "No product main mutation from the experiment; duplicate PR #666 closed without merge."
+  },
+  "exact_head_evidence_reused_not_reexecuted": {
+    "workflow_run": 31923122223,
+    "job": 95106223320,
+    "tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
+    "conclusion": "SUCCESS",
+    "scope": "canonical PR #660 module-provider resolver and package regressions"
+  },
+  "hard_boundaries": {
+    "symbol_semantics": "NOT_SELECTED",
+    "wildcard_expansion": "NOT_SELECTED",
+    "namespace_shadowing": "NOT_SELECTED",
+    "call_ownership": "NOT_SELECTED",
+    "linking": "NOT_SELECTED",
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "clayenv_build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Define and discriminate the smallest imported-symbol ownership/collision contract for MODULE versus WILDCARD, then bind the surviving resolution closure into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM path while preserving provenance and the fail-closed executable use gate until end-to-end evidence is green.",
+  "status": "SUPPORTING_EVIDENCE_RETAINED_NO_DUPLICATE_PRODUCT_PATH"
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_head_observed": "1b851e3f680f4208a2632380e5cd8b25111c5b94",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "grf_decision_trace": {
+    "observed_anchor": "Current ClayVM stores String constants but VM call/hostcall arguments remain Int-only; current process bridge maps an Int request ID to pre-admitted tuple[str,...]. Current host_process rejects bytes and embedded NUL at its argv boundary.",
+    "hypothesis": "Clay must keep Bytes/opaque transport distinct from String/argv semantics and admit process effects through explicit typed conversion rather than implicit Bytes-to-String or shell-text coercion.",
+    "strongest_counterhypothesis": "A single String-like process argument type is sufficient and opaque byte support can be recovered without semantic loss at the host boundary.",
+    "falsifier": "Probe Linux exec-style argv with an invalid-UTF8 opaque byte payload and with an embedded NUL, alongside a harmless baseline.",
+    "outcome": "RETAIN"
+  },
+  "unusual_experiment": {
+    "name": "POSIX_ARGV_OPAQUE_INVALID_UTF8_VS_NUL_BOUNDARY",
+    "count": 1,
+    "sandbox": {
+      "kernel": "Linux 6.18.35 x86_64",
+      "libc": "glibc 2.41",
+      "python": "3.13.5"
+    },
+    "baseline": {
+      "argv_payload": "baseline",
+      "returncode": 0,
+      "stdout_hex": "626173656c696e65"
+    },
+    "invalid_utf8_bytes_arm": {
+      "payload_hex": "41ff42",
+      "returncode": 0,
+      "stdout_hex": "41ff42",
+      "lossless_roundtrip": true
+    },
+    "embedded_nul_arm": {
+      "payload_hex": "410042",
+      "result": "REJECTED_BEFORE_EXEC",
+      "exception": "ValueError",
+      "message": "embedded null byte"
+    },
+    "interpretation": "The Linux/POSIX argv substrate can transport non-UTF8 bytes except embedded NUL. Therefore canonical Clay Bytes cannot be silently normalized through UTF-8 String, while arbitrary Bytes also cannot be claimed losslessly representable as argv. String/Bytes/argv conversion must be explicit and typed.",
+    "production_pass_claimed": false,
+    "whole_machine_pass_claimed": false
+  },
+  "historical_entityos_regression": {
+    "source_commit": "14fbd477ad3a2ae1ca6082ea9c21e510f583b258",
+    "github_workflow_run": 31930445479,
+    "github_artifact_id": 9259106936,
+    "github_artifact_archive_digest": "sha256:9fe4d985e4d0acc9744ad5d8d5f8c41ab7d3fab4855cdd63ca673dd7e08405b4",
+    "entityos_sha256": "5dcbecb7982fdefdcc1971cefaf223bcb4f613c824a4db01f53109d3ec545c73",
+    "entityos_bytes": 1213311,
+    "exact_binary_self_test": {
+      "returncode": 0,
+      "status": "PASS_ENTITYOS_SINGLE_FILE_SMOKE",
+      "checks_passed": 7,
+      "checks_total": 7
+    },
+    "path_without_python_regression": {
+      "returncode": 127,
+      "stderr": "env: 'python3': No such file or directory",
+      "finding": "Historical artifact is a /usr/bin/env python3 zipapp and is not self-contained without host Python. This is historical negative evidence, not current-main acceptance evidence."
+    }
+  },
+  "current_main_builder_observation": {
+    "path": "entityos/build_canonical_onefile.py",
+    "builder": "PyInstaller --onefile",
+    "reproducibility_rule": "two builds must have identical SHA256",
+    "current_main_artifact_built_in_this_cycle": false
+  },
+  "external_primary_evidence": {
+    "source": "POSIX.1-2024 exec family specification",
+    "claim": "argv is an array of pointers to null-terminated character strings; embedded NUL cannot be represented within one argv element."
+  },
+  "current_blocker": "This session can read current private GitHub source and can execute isolated local sandbox probes, but it cannot materialize the complete current private repo tree into the execution sandbox or invoke the repository's authenticated Vercel Sandbox acceptance plane. Therefore the exact current main EntityOS cannot be rebuilt/tested here without substituting stale source or unverified assembly.",
+  "next_sandbox_executable_step": "Use the verified Vercel Sandbox control plane to stage exact private product head 1b851e3f680f4208a2632380e5cd8b25111c5b94 without leaking GitHub credentials into the sandbox, run entityos/build_canonical_onefile.py, verify the double-build SHA match, execute EntityOS self-test with PATH lacking host Python, copy/rename/re-run it, externally bind the artifact SHA256, then delete the sandbox. In parallel, the next semantic implementation should introduce an explicit Clay String/argv contract and a separate opaque Bytes value; do not conflate Bytes with argv or parse shell text implicitly."
+}

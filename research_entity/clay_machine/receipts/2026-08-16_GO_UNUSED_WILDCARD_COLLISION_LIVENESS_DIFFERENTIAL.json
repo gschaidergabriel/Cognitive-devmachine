@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "experiment": "UNUSED_WILDCARD_COLLISION_LIVENESS_DIFFERENTIAL",
+  "new_unusual_experiment_count": 1,
+  "truth_class": "SYNTHETIC_SEMANTIC_DISCRIMINATOR",
+  "observed_anchors": [
+    "Current main has merged ClayPackageResolution/v1 exact provider resolution while symbol semantics remain NOT_SELECTED.",
+    "Current authorized corpus evidence discussed on PR #674 shows a plain use path can be symbol-shaped: use frank.entity.Frank while frank.entity is the module and Frank is a top-level entity.",
+    "PR #682 proposes an import-time fail-closed wildcard collision surface; Rust and Go demonstrate materially different viable import/name-resolution mechanisms and therefore cannot be inherited as Clay authority."
+  ],
+  "generated_reality": "Reject any wildcard-import name collision immediately at import-resolution time.",
+  "counter_reality": "Keep conflicting wildcard candidates latent and reject only when a name is actually used ambiguously; an explicit local declaration may shadow an otherwise unused wildcard candidate.",
+  "experiment_method": "Disposable in-memory semantic comparator over three bounded collision cases. No product repository mutation, external effect, training, or authority change.",
+  "cases": [
+    {
+      "case": "unused_collision",
+      "import_time_candidate_admits": false,
+      "use_site_aware_admits": true
+    },
+    {
+      "case": "used_ambiguous_collision",
+      "import_time_candidate_admits": false,
+      "use_site_aware_admits": false
+    },
+    {
+      "case": "local_shadows_unused_glob",
+      "import_time_candidate_admits": false,
+      "use_site_aware_admits": true
+    }
+  ],
+  "measured_result": "The import-time collision candidate is strictly more conservative on this synthetic discriminator: it rejects two cases admitted by the use-site-aware model, while both reject an actually used ambiguous collision.",
+  "interpretation": "This falsifies equivalence between import-time rejection and use-site-aware rejection. It does not select Clay semantics. Immediate wildcard collision rejection carries a demonstrated liveness/expressiveness cost and should remain a candidate until corpus/use-site evidence discriminates it.",
+  "strongest_counterevidence": "Fail-closed import-time rejection is simpler and may be intentionally selected by Clay for determinism/safety; the synthetic comparator does not measure real Clay corpus compatibility or compiler complexity.",
+  "promotion": {
+    "import_time_wildcard_collision_rule": "DEFER",
+    "use_site_aware_collision_rule": "DEFER",
+    "plain_use_exact_module_assumption": "REFUTED_AT_UNIVERSAL_SCOPE_BY_CURRENT_CORPUS_EVIDENCE",
+    "pr_674_fail_closed_plain_use_direction": "RETAIN_AS_HIGH_PRIORITY_CANDIDATE",
+    "clayenv_build_use_gate": "RETAIN_FAIL_CLOSED"
+  },
+  "next_discriminator": "Resolve the plain-use name-binding contract first (module versus exported symbol versus other explicitly admitted form) using authorized corpus evidence and exact-head tests. Only then compare wildcard collision timing on actual referenced/unreferenced names before feeding symbol ownership into the nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM path.",
+  "external_effect": false,
+  "effect_authority": "NONE",
+  "whole_clay_machine_completion": false,
+  "together_used": false,
+  "final_training_authorized_or_started": false
+}

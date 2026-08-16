@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "research_head_before_write": "1ca531b82e6d8c4832b3c39035cefd112ead39a2",
+  "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "coordination": {
+    "preferred_fusion_pr": 781,
+    "preferred_fusion_head": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "preferred_branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "superseded_closed_unmerged_prs": [776, 777, 780, 782],
+    "duplicate_canonical_paths_remaining_from_this_batch": false
+  },
+  "candidate_semantics": {
+    "clayvm_v2": "typed Int/Bytes parameter identity; Int-only modules retain CLAYVM/1",
+    "bytes": "built-in immutable bytes only",
+    "bytearray": "BYTES_MUTABLE_REQUIRES_EPOCH",
+    "memoryview": "BYTES_BORROWED_REQUIRES_EPOCH",
+    "released_memoryview": "BYTES_VIEW_RELEASED",
+    "buffer_frontier": "explicit ownership/lease/epoch/stability contract remains open",
+    "mixed_int_bytes_v2_regression": "materialized in canonical Bytes gate; not yet executed in Vercel"
+  },
+  "candidate_provenance_and_runner": {
+    "source_stage": "ClayGoSourceStage/v5",
+    "source_materialization": "GIT_LS_TREE_PLUS_CAT_FILE_RAW_BLOBS",
+    "git_archive_semantics_applied": false,
+    "git_bundle": "exact SHA-bound credential-free provenance capsule",
+    "sandbox_sdk": "@vercel/sandbox@2.9.2 pinned and runtime-verified",
+    "duplicate_start_guard": "atomic single-owner claim",
+    "execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "network_policy_during_offline_matrix": "DENY_ALL",
+    "release_freeze": "two independent pristine-source one-file EntityOS builds require identical SHA256 and cmp byte identity",
+    "runtime_matrix": [
+      "build provenance",
+      "canonical source to single ClayVM",
+      "status/self-test",
+      "PATH without host Python",
+      "initial-grant state/restart",
+      "capability denial/admission",
+      "relocation byte identity",
+      "mandatory Sandbox stop"
+    ]
+  },
+  "execution_evidence": {
+    "exact_candidate_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "exact_candidate_sandbox_started": false,
+    "exact_candidate_entityos_artifact_built": false,
+    "exact_candidate_bytes_pass_fail": "UNEXECUTED",
+    "exact_candidate_twin_freeze_digest": "UNEXECUTED",
+    "whole_entityos_acceptance": false
+  },
+  "experiment_accounting": {
+    "authorized_go_unusual_experiment_count": 0,
+    "reason": "Earlier local/container counterexamples are retained as bounded mechanism evidence but do not count as the authorized global GO unusual experiment. Vercel build capacity rejected the candidate before Sandbox creation.",
+    "next_rule": "Do not execute/count another local substitute. The single authorized unusual intervention may be consumed only inside an actually-started admitted isolated Vercel Sandbox."
+  },
+  "capability_frontier": {
+    "CM_NET": "OPEN",
+    "CM_PORT": "OPEN",
+    "CM_TERM": "OPEN_STRING_ARGV_EFFECT_PATH_DOWNSTREAM_OF_BYTES",
+    "CM_DATA": "IN_PROGRESS_BYTES_BUFFER_OWNERSHIP",
+    "CM_VIS": "OPEN",
+    "CM_AUDIO": "OPEN"
+  },
+  "next_exact_executable_step": "When Vercel capacity permits, refresh PR781 head and product main, then run one coordinated exact-head isolated Vercel Sandbox batch proving source-stage-v5 raw-tree identity, exact reconstructed Git HEAD/tree/clean/no-remotes, pinned SDK and atomic single-owner start, Bytes/released/mixed-V2 plus current CM-07/single-VM regressions, two pristine one-file EntityOS freezes with identical SHA256/bytes, runtime/pathless/state/capability/relocation gates, DENY_ALL and successful stop. Only that Sandbox may establish executable PASS/FAIL and consume the one authorized unusual intervention.",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

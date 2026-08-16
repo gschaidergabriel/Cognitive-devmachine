@@ -1,0 +1,51 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_boundary": "EntityOS",
+  "canonical_workspace_head_observed": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
+  "artifact": {
+    "name": "EntityOS",
+    "scope": "LOCAL_BOOTSTRAP_CANDIDATE_NOT_RELEASE_ACCEPTED",
+    "sha256": "266ffc8b259ff1fd80dd142b665a64c2a8d8b934c33c4becbeef0399d12cf262",
+    "format": "single executable Python script",
+    "host_runtime_dependency": "python3 via /usr/bin/env",
+    "sidecar_files_required_by_candidate": false
+  },
+  "observed_anchors": [
+    "Current workspace release is NOT_PASSED.",
+    "Merged single ClayVM exists; current canonical VM surface remains Int/Bool-narrow.",
+    "Merged ClayOS linux.process.spawn.v0 component exists, but no canonical Clay String/Bytes/argv/effect path reaches it.",
+    "Current next discriminator selects the smallest canonical Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface needed by CM-DATA and CM-TERM."
+  ],
+  "hypothesis": "A single-file EntityOS packaging boundary can already be exercised independently of the still-open canonical String/Bytes/effect semantics, exposing packaging/hidden-sidecar failures early.",
+  "counterhypothesis": "The current compiler/VM/ClayOS architecture implicitly requires repository sidecars or ambient project state, so one-file execution will fail in an amputated clean-room directory.",
+  "baseline": {
+    "command": "/mnt/data/EntityOS --self-test",
+    "status": "PASS",
+    "deterministic_vm_sha256": "4978d59affb6028431b1f53888eb9abee203fb029b49c541df2182907e2e9956",
+    "vm_result": 42,
+    "linux_interop_stdout": "entityos-interop-ok",
+    "linux_interop_stdout_sha256": "71bb0a5c8df6f267551f20f670849685be2c80f530a735a20d067d16b945fcfa"
+  },
+  "unusual_experiment": {
+    "count_in_this_go_cycle": 1,
+    "name": "dependency-amputation clean-room run",
+    "method": "Copy only EntityOS into a fresh temporary directory, clear the environment except HOME/PATH/LANG, run --self-test, compare artifact hash, then delete the directory.",
+    "result": "PASS",
+    "artifact_hash_before": "266ffc8b259ff1fd80dd142b665a64c2a8d8b934c33c4becbeef0399d12cf262",
+    "artifact_hash_after_copy": "266ffc8b259ff1fd80dd142b665a64c2a8d8b934c33c4becbeef0399d12cf262",
+    "hidden_project_sidecar_dependency_observed": false,
+    "rollback": "temporary directory deleted"
+  },
+  "limitations": [
+    "This candidate is not the accepted Clay Machine and does not close whole-machine acceptance.",
+    "It does not contain the full current repository compiler/evaluator/ClayOS implementation; it is a bounded product-boundary bootstrap using the current merged ClayVM v0 shape and source bindings.",
+    "It depends on host Python 3 and therefore is not yet a self-contained native/static runtime.",
+    "It does not solve canonical Clay Bytes/Buffer ownership/lifetime, String/argv, effectful TypedIR, VM object surface, or provenance-bound process requests."
+  ],
+  "outcome": "RETAIN_AS_PACKAGING_FALSIFIER_NOT_PRODUCT_PROMOTION",
+  "entityos_release_state": "BLOCKED",
+  "exact_blocker": "Canonical Clay String/Bytes/argv plus effect signatures and ownership/lifetime semantics are not admitted through checker -> effectful executable TypedIR -> single ClayVM -> merged ClayOS linux.process.spawn.v0; the local one-file bootstrap cannot substitute for those missing semantics.",
+  "next_executable_action": "Implement the smallest immutable String and owned immutable Bytes value representation plus argv list shape in the canonical type/effect checker and single ClayVM, then add one capability-gated process-spawn intrinsic through effectful TypedIR with provenance-bound request snapshot; run existing exact-head gates and rebuild EntityOS from those admitted components."
+}

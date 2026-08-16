@@ -1,0 +1,48 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "artifact": {
+    "name": "EntityOS",
+    "source": "GitHub Actions artifact 9258143200 from workflow run 31927007084",
+    "product_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "size_bytes": 11931208,
+    "mode": "0755",
+    "format_observed_locally": "ELF 64-bit LSB executable x86-64",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS"
+  },
+  "upstream_exact_head_evidence": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31927007084,
+    "conclusion": "success",
+    "evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
+    "selftest": "SELFTEST_PASS",
+    "source_regression_rc": 0,
+    "ci_unusual_experiment": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "ci_unusual_result": "BYTE_IDENTICAL; runtime tmp cleanup empty",
+    "whole_entityos_completion": false
+  },
+  "local_exact_artifact_verification": {
+    "artifact_hash_matches_ci": true,
+    "status_command": "PASS",
+    "self_test": "SELFTEST_PASS",
+    "canonical_program_build": "PASS",
+    "canonical_program_result": 42,
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_capability": "LOCAL_OK"
+  },
+  "go_cycle_unusual_experiment_accounting": {
+    "executed_by_this_worker": 1,
+    "name": "dependency-amputation clean-room run",
+    "scope": "earlier local bootstrap packaging falsifier",
+    "note": "The CI relocation experiment was pre-existing exact-head evidence discovered during refresh and was not re-executed by this worker, so it is not an additional worker experiment."
+  },
+  "outcome": "ENTITYOS_EXACT_CANONICAL_ARTIFACT_VERIFIED_COMPONENT_BOUNDARY",
+  "entityos_artifact_state": "VERIFIED",
+  "whole_machine_acceptance": false,
+  "remaining_frontier": "Canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface through checker -> effectful executable TypedIR -> single ClayVM -> ClayOS process component, followed by remaining Clay Machine connectivity/portability/data/media/visual acceptance gates.",
+  "promotion_law": "Exact one-file artifact verification does not imply whole Clay Machine acceptance."
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_parent_observed": "1fa5f79b05de547d45647a2d01cd56473fee265b",
+  "product_head": "9fe685f944a895b90d372335f1fa3778281fc486",
+  "artifact": {
+    "name": "EntityOS",
+    "source": "GitHub Actions artifact 9258681223 from run 31928824264",
+    "sha256": "69b27f432b20b4e4bc5782beb1c86aafcf33249e9379297a6f72115e9681c890",
+    "size_bytes": 12819952,
+    "format": "ELF 64-bit LSB x86-64",
+    "pyinstaller_onefile": true,
+    "whole_machine_acceptance": false
+  },
+  "local_exact_artifact_recheck": {
+    "self_test": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "visual_grounded_queries": "PASS",
+    "visual_no_data_boundary": "PASS",
+    "status_build_head": "9fe685f944a895b90d372335f1fa3778281fc486",
+    "fresh_noninteractive_without_grant": {
+      "exit_code": 73,
+      "stderr": "ENTITYOS_INITIAL_GRANT_REQUIRED"
+    },
+    "isolated_first_grant_then_restart": {
+      "first_exit_code": 0,
+      "second_exit_code": 0,
+      "state_dir_mode": "0700",
+      "grant_file_mode": "0600"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "INITIAL_GRANT_STATE_SYMLINK_ATTACK",
+    "baseline": "Valid isolated one-time grant persists and second no-display launch reuses it without prompting.",
+    "intervention": "Pre-create initial-grant-v1.json as a symlink to /dev/null inside an isolated EntityOS state root, then attempt deterministic test acceptance.",
+    "predicted_if_fail_closed": "Exit 73, reject unsafe state, do not replace the symlink target.",
+    "observed": {
+      "exit_code": 73,
+      "stderr": "ENTITYOS_INITIAL_GRANT_STATE_UNSAFE",
+      "symlink_target_after": "/dev/null"
+    },
+    "outcome": "SUPPORTED_FAIL_CLOSED_STATE_BOUNDARY",
+    "rollback": "Experiment used only an isolated temporary state tree; no user state or repository runtime state was modified."
+  },
+  "grf_collapse": {
+    "observed": "The exact current one-file EntityOS artifact is independently reproducible on two existing Linux/X64 lanes and passes its canonical self-test plus an additional local exact-byte recheck.",
+    "retained_hypothesis": "The current one-file packaging and first-start grant boundary are strong enough to continue as the release carrier while deeper Clay Machine capability semantics are expanded.",
+    "counter_reality": "A one-file shell can still be functionally narrow or host-dependent even when packaging, local self-test and grant security pass.",
+    "decision": "RETAIN current EntityOS carrier; do not promote whole-machine acceptance."
+  },
+  "release_blocker": {
+    "status": "BLOCKED",
+    "exact_blocking_invariant": "Whole-machine acceptance remains false because canonical Clay Bytes/Buffer ownership+lifetime and String/argv/effect-signature semantics plus broader network/media/runtime capability paths are not yet admitted through ClayCode -> TypedIR -> single ClayVM -> ClayOS.",
+    "next_executable_step": "Implement and gate the smallest canonical String/Bytes/argv value and effect-signature slice that drives one real process request through the existing TypedIR/ClayVM/ClayOS path without prewired request-id semantics, then rebuild and re-test the exact one-file EntityOS."
+  }
+}

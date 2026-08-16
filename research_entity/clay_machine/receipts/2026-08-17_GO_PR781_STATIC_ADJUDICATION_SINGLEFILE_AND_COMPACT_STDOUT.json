@@ -1,0 +1,54 @@
+{
+  "schema": "ClayEntityOSStaticAdjudication/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head_observed": "71289f9ad7386fa83755693f568e406f2d121e91",
+    "vercel_status": "BUILD_RATE_LIMIT_BEFORE_NEW_SANDBOX_START"
+  },
+  "adjudications": [
+    {
+      "candidate_finding": "RUNNER_MARKER_VALIDATION_USES_COMPACTED_STDOUT",
+      "countercheck": "compact(max=32000) retains approximately 27960 bytes from the end of stdout; run-go-matrix.sh re-emits every marker currently checked by run-buildtime-go-sandbox.mjs in its final summary and emits ENTITYOS_SHA256 at the end.",
+      "current_effect": "NO_CURRENT_FALSE_NEGATIVE_FOR_EXISTING_MARKER_SET_IF_MATRIX_REACHES_FINAL_SUMMARY",
+      "decision": "NO_CHANGE",
+      "future_invariant": "Any newly machine-validated marker must either be repeated in the final summary or the runner must validate against untruncated stdout."
+    },
+    {
+      "candidate_finding": "ENTITYOS_ONEFILE_TOPLEVEL_ENTRY_GAP",
+      "observed_source_mechanism": "build_entityos checks that exactly one top-level regular file exists but does not prove that the output directory has exactly one top-level entry; a companion directory or symlink could coexist while the current count remains one.",
+      "independent_test_cover": "tests/test_entityos_build_provenance.py covers source provenance and does not close this output-package shape gap.",
+      "decision": "RETAIN",
+      "recommended_delta": "Require exactly one top-level output entry, require it to be the regular executable EntityOS and reject companion sidecar entries before reporting ENTITYOS_ONEFILE=PASS.",
+      "runtime_verified": false
+    },
+    {
+      "candidate_finding": "RELOCATION_CLAIM_ONLY_RUNTIME_OUTPUT",
+      "resolution_head": "71289f9ad7386fa83755693f568e406f2d121e91",
+      "resolution": "Matrix now hashes and cmp-checks the relocated EntityOS copy against the built artifact and separately compares self-test output.",
+      "decision": "SOURCE_HARDENED_AWAIT_EXECUTION"
+    }
+  ],
+  "experiment_accounting": {
+    "global_limit": 1,
+    "global_count": 1,
+    "global_slot_consumed": true,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "new_unusual_experiments_executed_by_this_adjudication": 0
+  },
+  "whole_entityos_acceptance": false,
+  "next_executable_step": "After closing the retained single-file output-shape gap, obtain an actually-started exact-current-head Vercel Sandbox run and execute the regression/acceptance-only matrix through DENY_ALL, Bytes-v2, deterministic twin EntityOS builds, exact one-entry artifact shape, runtime/status/self-test/no-host-Python/state/capability/relocation gates and successful Sandbox stop.",
+  "execution_policy": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_testing": "NOT_USED_FORBIDDEN",
+    "production_host_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only": true,
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "together_used": false,
+    "training_authorized_or_started": false
+  },
+  "r0_observed": {
+    "product_main": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+    "research_main_before_write": "b6d43d15a1d0355fb466d48cf61b245bb4d91332",
+    "current_host_process_blob": "886ee0cbba5706536ef5602bc15f313eb56d26c0",
+    "current_vm_blob": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
+    "current_executable_ir_adapter_blob": "13e09586365efe8e5760d8249340f059f9553800",
+    "current_executable_typed_ir_blob": "8b0280efc96767841b55e11c5e6dddacaf652ca6",
+    "pr740": "OPEN_DRAFT; intentionally proposes only one absolute executable String with empty additional argv; full argv vector remains explicitly OPEN",
+    "pr741": "OPEN_DRAFT; Bytes/CLAYVM/2 candidate; full pipeline not yet verified",
+    "safe_github_hosted_candidate_execution": "BLOCKED_BEFORE_RUNNER_START_BY_ACCOUNT_BILLING_SPENDING_STATE",
+    "current_exact_entityos_build_in_this_worker": "BLOCKED_NO_COMPLETE_PRIVATE_REPO_MATERIALIZATION_IN_LOCAL_SANDBOX"
+  },
+  "grf": {
+    "generated_reality": "Canonical direct Linux process semantics should preserve argv as an ordered vector of distinct String elements; shell parsing is a separate explicit effect.",
+    "counter_reality": "A single command String can serve as the canonical CM-TERM process request without semantic loss.",
+    "discriminator": "Run the exact current host_process.py boundary with adversarial but valid argv elements containing spaces, an empty argument, Unicode, shell metacharacters and glob syntax, then compare child-observed argv element-for-element and verify that no shell side effect occurs.",
+    "predicted_if_generated_reality": "Every argument boundary survives exactly and shell metacharacters remain inert data.",
+    "predicted_if_counter_reality": "Element boundaries require command-string quoting/parsing or shell-like interpretation to preserve the requested arguments."
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "ARGV_ELEMENT_BOUNDARY_ROUNDTRIP",
+    "execution_location": "isolated ChatGPT local sandbox",
+    "source_exactness": {
+      "github_blob_sha1": "886ee0cbba5706536ef5602bc15f313eb56d26c0",
+      "local_git_blob_sha1": "886ee0cbba5706536ef5602bc15f313eb56d26c0",
+      "exact_match": true
+    },
+    "baseline": {
+      "argv": ["/usr/bin/printf", "baseline-ok"],
+      "result": "PASS"
+    },
+    "intervention_argv_payload": [
+      "alpha beta",
+      "",
+      "snow-雪",
+      "$(touch /mnt/data/clay_go_sandbox/SHOULD_NOT_EXIST)",
+      "*",
+      "semi;colon"
+    ],
+    "observed": {
+      "returncode": 0,
+      "argv_roundtrip_exact": true,
+      "empty_argument_preserved": true,
+      "spaces_preserved_in_one_argument": true,
+      "unicode_argument_preserved": true,
+      "shell_metacharacters_not_executed": true,
+      "timed_out": false,
+      "output_limited": false,
+      "duration_ms": 14.855
+    },
+    "result": "PASS",
+    "rollback": "No product source, runtime state or external system was mutated."
+  },
+  "external_primary_evidence": {
+    "linux_execve": "Linux man-pages execve(2): argv is an array/vector of pointers to strings passed as command-line arguments.",
+    "python_subprocess": "Python 3.14 subprocess documentation: an argument sequence is generally preferred; on POSIX a single String with shell=False only names the program when no additional arguments are supplied."
+  },
+  "coordination": {
+    "prior_overlap": "Earlier receipts already replicated embedded-NUL rejection and one-file packaging blockers; this receipt does not repeat those experiments.",
+    "pr740_relation": "PR740 is retained as a deliberately narrow executable-only String bootstrap candidate, not promoted as the final CM-TERM argv representation.",
+    "pr741_relation": "Bytes remains semantically separate from process argv Strings; no Bytes-to-argv coercion is proposed.",
+    "duplicate_product_patch_avoided": true
+  },
+  "collapse": {
+    "outcome": "MERGE",
+    "retained": [
+      "Direct process launch must preserve argument element boundaries without implicit shell parsing.",
+      "A one-executable-String intrinsic can be a narrow bootstrap slice but cannot close the full argv requirement.",
+      "The next canonical process value surface should represent an ordered immutable String vector or a nominal Argv value with equivalent semantics; concrete syntax/type representation remains unselected until checker/type/effect evidence exists.",
+      "Shell execution remains a separate explicit effect/capability.",
+      "Embedded NUL rejection and absolute executable-path validation remain valid host-boundary constraints."
+    ],
+    "counterevidence": [
+      "This experiment exercised the exact current outer host-process adapter, not the unmerged PR740 source/type/effect/TypedIR/VM candidate end-to-end.",
+      "No current-main EntityOS binary was built or executed by this worker.",
+      "The safe GitHub-hosted candidate lane is infrastructure-blocked before runner start, so no candidate runtime PASS exists from that lane."
+    ]
+  },
+  "affected_frontiers": [
+    "CM-02-TYPE-EFFECT-SYSTEM",
+    "CM-04-COMPILER-LOWERING-BYTECODE",
+    "CM-05-VIRTUAL-CLAY-MACHINE",
+    "CM-08-LINUX-INTEROP",
+    "CM-09-MINIMAL-CLAYOS",
+    "CM-10-TOOLING-OBSERVABILITY-RECOVERY",
+    "CM-TERM",
+    "CM-DATA"
+  ],
+  "entityos_artifact_state": "BLOCKED_CURRENT_HEAD_VERIFICATION",
+  "exact_blocker": "The current worker cannot materialize the complete private product repository inside its isolated local sandbox, while the owner-admissible GitHub-hosted isolated lane is blocked before runner start by account billing/spending state. Therefore the exact current one-file EntityOS cannot be rebuilt/executed here. Independently, full canonical argv-vector semantics are still absent from source/type/effect -> Executable TypedIR -> ClayVM -> HostProcessVMHost.",
+  "next_executable_action": "In an actually-started owner-admissible isolated sandbox, test PR740 as the narrow one-executable String bootstrap and PR741 interaction, then add the smallest canonical ordered immutable String-vector/Argv candidate through host contract typing -> nominal type/effect checker -> ClayExecutableTypedIR -> ClayVM value ABI -> HostProcessVMHost. Regress empty argument, embedded spaces, Unicode, shell metacharacters, NUL rejection, capability denial, legacy Int bridge and Bytes type-confusion; then perform deterministic double one-file EntityOS build SHA comparison and execute/copy-run that exact EntityOS."
+}

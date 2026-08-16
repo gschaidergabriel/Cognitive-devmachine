@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "date": "2026-08-16",
   "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
@@ -62,14 +62,28 @@
     }
   },
   "source_staging_counterevidence": {
-    "deployment": "dpl_AJx43pUyNZ1nd2ZH7NTS2UfhGovZ",
-    "head": "f5bc74baa3373b609265b3df824a23eeb1b0db65",
-    "tree": "4d87ff1783aa058bce1153dff74baa846c9926bb",
-    "first_archive_sha256": "821f595ba1324b47574c70b98c938ed35c6f3f49494fa3527460b80e1b7f4650",
-    "second_archive_sha256": "f5afb1e36fa239f4d89c0f4913ccf45078f8c09bc8214dcc48348cecf58b7367",
-    "status": "NONDETERMINISTIC_ACROSS_BUILD_INVOCATIONS",
-    "cause": "UNKNOWN",
-    "important_nonclaim": "The mismatch does not by itself prove tracked source-content divergence; it proves the emitted staging archive bytes were not reproducible under the claimed v3 staging path."
+    "older_v3_failure": {
+      "deployment": "dpl_AJx43pUyNZ1nd2ZH7NTS2UfhGovZ",
+      "head": "f5bc74baa3373b609265b3df824a23eeb1b0db65",
+      "tree": "4d87ff1783aa058bce1153dff74baa846c9926bb",
+      "first_archive_sha256": "821f595ba1324b47574c70b98c938ed35c6f3f49494fa3527460b80e1b7f4650",
+      "second_archive_sha256": "f5afb1e36fa239f4d89c0f4913ccf45078f8c09bc8214dcc48348cecf58b7367",
+      "status": "NONDETERMINISTIC_ACROSS_BUILD_INVOCATIONS",
+      "cause": "UNKNOWN"
+    },
+    "newer_v2_source_tar_discriminator": {
+      "deployment": "dpl_6ZVPWk1pWwgCMxQN1oh2AAgLtrPr",
+      "head": "c0c2583cc2a0d0db19c4148254c7b039b92ee0e9",
+      "first_source_archive_sha256": "2a4ee1a55ca49ab42264a68b173366e4e1fd3ac2afea1365a6bef539e8b9c42e",
+      "second_source_archive_sha256": "2a4ee1a55ca49ab42264a68b173366e4e1fd3ac2afea1365a6bef539e8b9c42e",
+      "source_archive_status": "REPRODUCIBLE_ACROSS_TWO_BUILD_INVOCATIONS",
+      "first_git_metadata_sha256": "9925f71d4e010ff6c564b12ca76b70cd1f579229103285dfd54f49e7f96aafc5",
+      "second_git_metadata_sha256": "0abe7866483be244c62f5233c0361435ee7181d1d0a1befb1839f43b9be23619",
+      "git_metadata_status": "NONDETERMINISTIC_ACROSS_BUILD_INVOCATIONS",
+      "execution_at_build_time": false,
+      "interpretation": "Tracked source archive bytes are now reproducible in this newer candidate, but the separately generated sanitized Git metadata tar remains byte-nondeterministic. No Sandbox/EntityOS current-head PASS follows from this source-staging-only deployment."
+    },
+    "important_nonclaim": "Archive-byte mismatch does not by itself prove tracked source-content divergence; the later discriminator narrows the remaining nondeterminism to Git metadata packaging rather than tracked source tar bytes."
   },
   "primary_source_constraints": [
     "Git git-archive documentation: commit/tag archives use recorded commit time unless --mtime overrides it; tar archives can carry commit identity in a global pax header; tar.umask and Git attributes/config can affect archive output.",
@@ -81,5 +95,5 @@
     "older_exact_head_sandbox_artifact_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_VERCEL_SANDBOX_ENTITYOS_EXACT_HEAD.json",
     "whole_machine_acceptance": false
   },
-  "next_falsifier": "Make staging reproducibility fail-closed across repeated Vercel build invocations using a sanitized Git/config environment and/or explicit archive-byte cross-invocation assertion; then consume the next go macro-cycle's single unusual experiment on one exact current-head Vercel Sandbox batch that freezes and executes EntityOS after the merged provenance fence."
+  "next_falsifier": "Make sanitized Git metadata attestation byte-reproducible or replace it with a deterministic exact-head/source-tree attestation that cannot admit checkout-local bytes; then consume the next go macro-cycle's single unusual experiment on one exact current-head Vercel Sandbox batch that freezes and executes EntityOS after the merged provenance fence."
 }

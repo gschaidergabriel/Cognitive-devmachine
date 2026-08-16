@@ -1,0 +1,38 @@
+{
+  "schema": "ClayGoEntityOSReentryCorrection/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "observed_product_head": "08775c4aef154fd35cda44c6d2407a02586d9cb0",
+  "observed_head_delta": "spec(entityos): make UnifiedDB packets the sole visual data source",
+  "last_verified_executable": {
+    "head": "d7d9d3391ceb1a2b3419dfb6071b9861e5f940ff",
+    "workflow_run": 31927783481,
+    "artifact_sha256": "36274cad5bcfcf21fd893efdfde358d04784c86a9b90f3af3247c8ed381d2c4a",
+    "size_bytes": 11937560,
+    "selftest": "PASS",
+    "builder_box_schema": "EntityOSBuilderBox/v1",
+    "whole_machine_acceptance": false
+  },
+  "new_release_invariant": {
+    "visual_information_source": "UnifiedDB entity packets plus Clay-native functions/real machine state",
+    "visual_layer_competing_knowledge_base": "FORBIDDEN",
+    "out_of_domain_result": "NO DATA",
+    "missing_metric_result": "NO DATA_OR_UNAVAILABLE_NO_ESTIMATE",
+    "packet_requirement": "typed semantic values/units/relations/order/status/provenance/build identity/evidence class/capability state must be explicit enough that Builder Box never reconstructs facts from prose",
+    "release_blocking": true
+  },
+  "counterevidence": "The verified d7d9d339 inspect slice proves one-file grounded queries, schema validation, white HTML input surface and fail-visible unknown behavior, but its Builder Box assembles several facts directly from runtime constants/functions rather than proving UnifiedDB entity packets as the sole visual data substrate. Therefore it cannot satisfy the exact-current 08775c4a visual contract.",
+  "current_blocker": "Define and execute the canonical UnifiedDB-to-EntityOS visual packet boundary, migrate performance and what-is-a-claymachine inspection facts through those packets, and prove out-of-domain queries return literal NO DATA without a visual-side knowledge fallback. The interactive same-surface launch/follow-up gate also remains open.",
+  "next_executable_action": "Implement a minimal typed UnifiedDB entity-packet schema and query adapter inside the canonical EntityOS path; populate only real current performance/build/pipeline/capability/acceptance facts with provenance and factual class; make the Builder Box consume only those packets; return NO DATA for an unrelated query and UNAVAILABLE/NO DATA for an absent metric; then rebuild the exact current head as one EntityOS file and run the canonical self-hosted Ubuntu/Linux one-file workflow plus independent local inspect/selftest checks.",
+  "unusual_experiment": {
+    "count_for_this_go_worker": 1,
+    "name": "HERMETIC_EXILE",
+    "result": "PASS",
+    "note": "No additional unusual experiment was introduced for this reentry correction."
+  },
+  "outcome": "REPRIORITIZE",
+  "training_authorized": false
+}

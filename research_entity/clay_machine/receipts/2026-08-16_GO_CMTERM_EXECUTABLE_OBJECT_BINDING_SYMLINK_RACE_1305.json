@@ -1,0 +1,86 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build/test worker via ChatGPT GPT-5.6 Sol",
+  "execution_policy": "SANDBOX_ONLY_TESTING",
+  "observed_frontier": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_head_at_branch_creation": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
+    "existing_process_capability": "linux.process.spawn.v0",
+    "existing_request_receipt_identity": "argv path string plus process outcome; no bound executable object identity",
+    "source_anchor": "claymachine/host_process.py"
+  },
+  "hypothesis": {
+    "claim": "A requested absolute executable path is insufficient provenance when the path can resolve to a different object between admission and process spawn.",
+    "mechanism": "subprocess.Popen resolves the pathname at spawn time; a mutable symlink/path can therefore select a different executable while the request argv string remains unchanged.",
+    "counterhypothesis": "shell=false plus an absolute argv[0] is sufficient to bind executable identity.",
+    "falsifier": "Hold the requested path string constant while changing the symlink target and observe whether different harmless executables run."
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "SYMLINK_SWAP_PROCESS_TARGET_IDENTITY",
+    "execution_location": "isolated ChatGPT sandbox",
+    "artifact_under_test": {
+      "source": "downloaded historical canonical one-file EntityOS workflow artifact",
+      "build_head": "00f5214da1d96d0bdf0a200aede6870eab9f2b6f",
+      "entityos_sha256": "3a9addb066c1acddff1058c964cd176e30a22ce83fb85448e2d79a75b89ec9e0",
+      "qualification": "test object only; historical self-hosted build is not promoted as current release evidence under sandbox-only policy"
+    },
+    "baseline": {
+      "symlink_target": "/usr/bin/printf",
+      "requested_path": "/mnt/data/entityos_symlink_exp/target",
+      "returncode": 0,
+      "stdout": "BASELINE_OK"
+    },
+    "intervention": {
+      "requested_path_constant": true,
+      "targets_alternated": ["/usr/bin/printf", "/usr/bin/false"],
+      "calls": 24,
+      "printf_rc0_race_ok": 9,
+      "false_rc1_empty": 15,
+      "other_outcomes": 0
+    },
+    "outcome": "SUPPORTED_PATH_IDENTITY_GAP",
+    "rollback": "symlink reset to /usr/bin/printf; no persistent host effect"
+  },
+  "candidate_repair": {
+    "product_branch": "clay/go-entityos-exec-object-binding-20260816-1305",
+    "candidate_head": "0f3483a7cd19685d6bfe25fdc90b274df4074b09",
+    "pull_request": 732,
+    "mechanism": "Open argv[0] with Linux O_PATH|O_CLOEXEC, execute the opened object through /proc/self/fd/<fd> with pass_fds, and receipt-bind st_dev/st_ino/st_mode/st_size/st_mtime_ns.",
+    "clayos_reentry": "Executable object identity is copied into ClayOS process state.",
+    "deterministic_regression": "Retarget the symlink after executable open but before real Popen; execution must remain on the originally opened object.",
+    "local_candidate_checks": {
+      "py_compile": "PASS",
+      "deterministic_open_then_retarget_regression": "PASS",
+      "continuous_swap_procfd_prototype_trials": 40,
+      "continuous_swap_identity_mismatches": 0
+    }
+  },
+  "counterevidence_and_limits": {
+    "object_identity_not_content_identity": true,
+    "content_hash_binding": "OPEN",
+    "direct_clay_string_argv": "OPEN",
+    "bytes_buffer_ownership_lifetime": "OPEN",
+    "streaming_io_pty_shell": "OPEN",
+    "whole_entityos_acceptance": false
+  },
+  "exact_branch_sandbox_gate": {
+    "workflow": ".github/workflows/go-entityos-exec-object-binding-sandbox.yml",
+    "run_id": 31930581866,
+    "head": "0f3483a7cd19685d6bfe25fdc90b274df4074b09",
+    "runner_label": "ubuntu-latest",
+    "result": "NO_SEMANTIC_RESULT_INFRASTRUCTURE_NONEXECUTION",
+    "runner_id": 0,
+    "steps_executed": 0,
+    "vps_or_self_hosted_evidence_promoted": false
+  },
+  "entityos_release_effect": {
+    "artifact_status": "BLOCKED",
+    "blocking_invariant": "No actually-started isolated exact-head build/test lane has rebuilt and executed the candidate one-file EntityOS after the executable-object binding delta.",
+    "next_executable_step": "On an actually-started isolated Ubuntu sandbox, checkout PR #732 exact head, run tests.test_clay_host_process_executable_binding plus existing host-process and canonical source-to-single-VM gates, run entityos/build_canonical_onefile.py with the exact candidate head, then execute that exact EntityOS status/self-test and verify linux.process.spawn.v0 still fails closed without capability while the deterministic path-retarget regression remains green. Do not allocate a second unusual experiment for this macro-cycle."
+  },
+  "outcome": "CANDIDATE_REPAIR_WRITTEN; EXACT_ENTITYOS_REBUILD_BLOCKED_BY_SANDBOX_RUNNER_NONEXECUTION"
+}

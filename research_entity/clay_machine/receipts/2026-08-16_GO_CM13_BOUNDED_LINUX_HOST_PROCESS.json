@@ -10,7 +10,8 @@
   "product_base": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
   "product_candidate": "fa6a88f2c1abca32c1f851525700dd14256b9ee2",
   "product_pr": 695,
-  "product_pr_state": "READY_FOR_REVIEW_OPEN_MERGEABLE",
+  "product_pr_state": "MERGED_AFTER_EXACT_HEAD_GREEN",
+  "product_merge": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
   "frontier": "CM-TERM / CM-08-LINUX-INTEROP / CM-13 terminal-subprocess family",
   "outcome": "RETAIN_PARTIAL_VERIFIED",
   "promotion_scope": "Capability-gated bounded non-interactive Linux host-process primitive only; interactive PTY, ClayCode string/argv lowering and whole CM-TERM/ClayMachine acceptance remain open.",
@@ -62,7 +63,8 @@
     {"workflow": "Clay environment minimal build-run", "run_id": 31925042618, "conclusion": "SUCCESS"},
     {"workflow": "ClayCode runtime nominal boundary repair VPS", "run_id": 31925042592, "conclusion": "SUCCESS"},
     {"workflow": "Clay Executable IR Single VM", "run_id": 31925042554, "conclusion": "SUCCESS"},
-    {"workflow": "ClayOS strict artifact launch", "run_id": 31925042518, "conclusion": "SUCCESS"}
+    {"workflow": "ClayOS strict artifact launch", "run_id": 31925042518, "conclusion": "SUCCESS"},
+    {"workflow": "ClayCode opaque parser fidelity V1", "run_id": 31925042624, "conclusion": "SUCCESS"}
   ],
   "remaining_blockers": [
     "Interactive PTY and live bidirectional stream semantics",
@@ -73,7 +75,8 @@
   "negative_results_preserved": [
     "Initial new workflow absence was not treated as PASS.",
     "A tool invocation that never started was not counted as the unusual experiment.",
-    "Research PRs #277/#278 encountered fast-moving canonical ancestry; stale branches were not forced."
+    "Research PRs #277/#278 encountered fast-moving canonical ancestry; stale branches were not forced.",
+    "Repository auto-merge is disabled; merge occurred manually only after the visible candidate workflows completed successfully or were explicitly skipped."
   ],
   "authority": {"together_used": false, "training_started": false, "release_claimed": false}
 }

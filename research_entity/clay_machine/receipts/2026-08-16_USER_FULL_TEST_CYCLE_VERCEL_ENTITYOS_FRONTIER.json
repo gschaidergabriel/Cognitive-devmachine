@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "kind": "USER_FULL_TEST_CYCLE_VERCEL_ENTITYOS_FRONTIER",
+  "requested_scope": "run all currently possible tests and remaining validation work",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed_at_close": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "research_parent_observed": "da1ea4fb1375eac2c803f59ac2a7c81de0afa092",
+  "verified_isolated_batches": [
+    {
+      "label": "VERCEL_BATCH1_ENTITYOS_ONEFILE",
+      "tested_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+      "result": "PASS",
+      "entityos_sha256": "39ae46bbc7a5a1c4f5b5ef9686bdab473169254f31bdb1559bdb80acc801ad2d",
+      "entityos_bytes": 9165200,
+      "checks": [
+        "CM07 package/resolver v2",
+        "EntityOS dirfd grant regression",
+        "canonical source to TypedIR to single ClayVM",
+        "one-file EntityOS build and self-test",
+        "initial grant persistence and symlink fail-closed",
+        "UnifiedDB inspect",
+        "Clay build/run result 42",
+        "Linux process capability deny/allow",
+        "Unicode/space copy relocation with byte-identical self-test",
+        "Sandbox stopped"
+      ]
+    },
+    {
+      "label": "VERCEL_BATCH2_BUILD_INTERNAL",
+      "tested_heads": [
+        "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+        "33424a2e86545ef45ee6824a900fd0c6845f7a0b"
+      ],
+      "result": "PASS",
+      "entityos_sha256_on_33424a2e": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+      "checks": [
+        "deterministic same-head source staging in tested lane",
+        "CM07 17/17",
+        "dirfd 4/4",
+        "canonical pipeline 20/20",
+        "one-file EntityOS",
+        "PATH without host Python",
+        "relocation byte identity",
+        "initial grant and symlink fence",
+        "Clay build/run 42",
+        "process capability deny/allow",
+        "DENY_ALL during semantic tests",
+        "Sandbox stopped"
+      ]
+    }
+  ],
+  "current_main_security_state": {
+    "main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "repository_static_go_endpoint": "BUILD_INTERNAL_ONLY_FAIL_CLOSED",
+    "old_replayable_preview_nonce_route": "REMOVED_FROM_CURRENT_MAIN"
+  },
+  "fresh_main_provenance_results": [
+    {
+      "lane": "sanitized Git provenance",
+      "result": "FAIL_BEFORE_OR_INSIDE_CURRENT_MATRIX",
+      "interpretation": "real negative evidence; historical Batch PASS cannot be promoted to current main"
+    },
+    {
+      "lane": "external tracked-source attestation",
+      "result": "SANDBOX_STARTED_BUT_OFFLINE_MATRIX_EXIT_1_ON_PRE_FIX_HEAD",
+      "sandbox_stopped": true
+    },
+    {
+      "candidate_repair": "align JavaScript attestation path sorting with Python ordinal verifier",
+      "repair_head": "60b4ee800cbaeb4d2b3754a117e571e03ab4da48",
+      "result": "NOT_EXECUTED",
+      "reason": "VERCEL_BUILD_RATE_LIMIT"
+    }
+  ],
+  "string_process_frontier": {
+    "preferred_feature_source_pr": 744,
+    "utf8_failclosed_source_pr": 743,
+    "disposable_fresh_main_branch": "chatgpt/string-path-current-main-20260816",
+    "prepared_test_head": "ff5f731c5f3c60191fc01f4e87e9f3834138282d",
+    "composition": "current main + path-only String process hostcall + UTF-8 encoder fail-closed + build-internal isolated Vercel gate",
+    "expected_test_scope": [
+      "real /usr/bin/true",
+      "nonzero /usr/bin/false",
+      "capability denial",
+      "signature type mismatch rejection",
+      "legacy Int request path",
+      "shell metacharacter path literalization",
+      "surrogate UTF-8 fail-closed",
+      "canonical executable IR to single VM regression"
+    ],
+    "execution_result": "NOT_EXECUTED",
+    "reason": "VERCEL_BUILD_RATE_LIMIT_BEFORE_SANDBOX_START"
+  },
+  "bytes_frontier": {
+    "source_pr": 741,
+    "status": "BLOCKED_ON_EPOCH_CONSISTENT_PROVENANCE_CONTRACT",
+    "real_isolated_negative_result": {
+      "shared_mmap_bytes": 4194304,
+      "snapshot_rounds": 240,
+      "all_a": 42,
+      "all_b": 30,
+      "mixed_ab": 168
+    },
+    "conclusion": "owned immutable snapshot storage is insufficient to prove epoch-consistent provenance under concurrent producer mutation",
+    "required_next_contract_options": [
+      "producer lease/epoch stability handshake",
+      "versioned immutable publication",
+      "seqlock-like validated retry",
+      "fail closed when stability cannot be proven"
+    ]
+  },
+  "process_identity_frontier": {
+    "source_pr": 732,
+    "status": "OPEN_UNIQUE",
+    "observed_problem": "same absolute symlink path can resolve to different executable objects under retarget race",
+    "candidate": "open exact executable object and execute via descriptor-bound /proc/self/fd path with receipt identity",
+    "promotion": "requires fresh isolated exact-head test"
+  },
+  "pr_cleanup": {
+    "closed_as_superseded_or_duplicate": [729, 747, 765, 768, 769, 771],
+    "disposable_integration_prs_merged_only_into_test_branch": [773, 774],
+    "retained_unique_frontiers": [732, 741, 743, 744, 751, 775, 776]
+  },
+  "external_blocker": {
+    "provider": "Vercel",
+    "kind": "BUILD_RATE_LIMIT",
+    "observed_commit_status_target_contains": "upgradeToPro=build-rate-limit",
+    "sandbox_started_for_blocked_new_heads": false,
+    "classification": "EXTERNAL_PLATFORM_LIMIT_NOT_CODE_RESULT"
+  },
+  "whole_machine": {
+    "entityos_current_main_verified": false,
+    "whole_clay_machine_acceptance": false,
+    "reason": "historical exact-head one-file passes exist, but current-main provenance revalidation and remaining String/Bytes/process/network/media/runtime semantics are not all accepted"
+  },
+  "authority": {
+    "vps_or_self_hosted_product_testing_used_for_this_cycle": false,
+    "together_used": false,
+    "training_authorized": false,
+    "training_started": false
+  }
+}

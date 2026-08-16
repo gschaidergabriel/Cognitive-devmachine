@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_CMTERM_BOOL_INT_REQUEST_ALIAS_REPLICATION",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "CM-TERM",
+  "timestamp_local": "2026-08-16T17:02:13+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "05c910705fe9a430ee0f958760639f54217aa9da",
+  "candidate_branch": "go/string-process-path-v1-20260816-1656",
+  "candidate_head": "591ff029f5a5b4b482d38bc17003f35f879e7360",
+  "candidate_pr": 746,
+  "candidate_pr_state": "CLOSED_UNMERGED_EXECUTION_POLICY_SAFETY",
+  "overlap_pr": 744,
+  "observed_anchors": [
+    {
+      "path": "claymachine/clayvm.py",
+      "observation": "At the pre-PR744 main baseline, OP_HOSTCALL globally required exact Python int values before invoking a host handler even though String constants already existed in the serialized VM."
+    },
+    {
+      "path": "claymachine/host_process_vm.py",
+      "observation": "The pre-PR744 legacy request bridge looked up a Python mapping key without repeating exact request-id typing at the host boundary."
+    },
+    {
+      "pr": 744,
+      "observation": "Parallel candidate PR #744 already moves scalar hostcall typing into typed host handlers and explicitly checks type(request_id) is int in the legacy v0 process handler. This functionally covers the production fence developed independently in PR #746."
+    }
+  ],
+  "hypothesis": "If non-Int scalar transport is admitted to ClayVM hostcalls, trusting Python mapping lookup for legacy Int request IDs can admit a semantically wrong value through equality aliasing unless the host boundary repeats exact type identity.",
+  "strongest_counterhypothesis": "The VM-level type gate is sufficient and host handlers do not need an independent exact type fence.",
+  "discriminator": "Admit request ID 1, retain the real Int control, then present Python boolean true directly to the host process handler. Python dictionaries treat True and 1 as equal keys, so a missing exact-type fence can select request 1.",
+  "unusual_experiment": {
+    "name": "PYTHON_BOOL_INT_KEY_ALIAS_AT_HOST_PROCESS_BOUNDARY",
+    "new_unusual_experiment_count": 1,
+    "bounded": true,
+    "reversible": true,
+    "linux_effect_for_unusual_case": "NONE_EXPECTED"
+  },
+  "local_source_equivalent_sandbox_result": {
+    "status": "PASS_NARROW_BOUNDARY_FALSIFIER",
+    "checks": {
+      "int_control_executes_real_process": true,
+      "string_request_id_fails_at_host_type_fence": true,
+      "unusual_bool_does_not_alias_int_request": true,
+      "unusual_bool_produces_no_process_receipt": true
+    },
+    "evidence_limit": "This was a narrow source-equivalent isolated sandbox reconstruction, not an exact branch checkout, not a full repository regression and not EntityOS acceptance evidence."
+  },
+  "coordination_collapse": {
+    "pr746_production_delta": "REJECT_AS_DUPLICATE_OF_BROADER_PR744_MECHANISM",
+    "bool_int_alias_falsifier": "RETAIN_AS_ADVERSARIAL_REGRESSION_OBLIGATION",
+    "distribution": "Posted to PR #744 conversation; do not count it as an additional GO unusual experiment in that worker's accounting.",
+    "pr746": "CLOSED_UNMERGED"
+  },
+  "execution_policy_negative_result": {
+    "observation": "Opening PR #746 triggered legacy VPS/self-hosted PR workflows despite the current owner-fixed sandbox-only execution policy.",
+    "response": "PR #746 was closed immediately; those runs are forbidden evidence and must not be used for promotion.",
+    "sandbox_runs": "The relevant new GitHub-hosted EntityOS/CM-TERM jobs completed failure before any recorded step execution, so they provide no code or artifact evidence.",
+    "test_policy": "No VPS/self-hosted/production-host result from this cycle is admitted as evidence."
+  },
+  "entityos": {
+    "artifact_status": "BLOCKED",
+    "rebuilt": false,
+    "verified": false,
+    "blocker": "No actually-started allowed exact-head sandbox was available for this candidate. The active local sandbox lacks a full product checkout plus PyInstaller/build substrate; GitHub-hosted exact-head jobs did not execute steps.",
+    "next_executable_step": "After all candidate-triggered workflows are verified isolated-sandbox-only and an actually-started sandbox is available, run the PR #744 exact-head regressions, build entityos/build_canonical_onefile.py with the exact candidate SHA, execute EntityOS --self-test-json, and repeat from a moved copy with identical SHA."
+  },
+  "remaining_semantic_frontier": "PR #744 advances one String executable path but general canonical Clay argv plus Bytes/Buffer ownership/lifetime, output bytes, streaming, env/cwd/stdin and PTY remain open.",
+  "whole_clay_machine_acceptance": "NOT_CLAIMED",
+  "outcome": "MERGE_TEST_OBLIGATION_INTO_PR744; DO_NOT_PROMOTE_PR746"
+}

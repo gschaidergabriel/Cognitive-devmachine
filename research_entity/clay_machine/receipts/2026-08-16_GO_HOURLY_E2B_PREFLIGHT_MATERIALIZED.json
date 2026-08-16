@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_seen": "b4cdfb3a57a9aa842eeae38f1461d4cc385a6a05",
+  "research_parent_seen": "810ad8fe21ed9a2cc0c34ac069297aa4a4326a0c",
+  "repair_pr": 750,
+  "repair_head": "b138ecc90957f39539dacb594b7ff7cb7cde9775",
+  "repair_base": "b4cdfb3a57a9aa842eeae38f1461d4cc385a6a05",
+  "repair_mergeable": true,
+  "materialized_delta": {
+    "matrix_removed_closed_pr749": true,
+    "remaining_sources_freshly_checked_open": [740, 741, 743, 744, 747, 732, 693],
+    "retained_string_candidate": 744,
+    "matrix_new_bounded_experiment": "FUSION_ORDER_REVERSAL",
+    "matrix_new_bounded_experiment_count": 1,
+    "hosted_preflight_ephemeral_lock_generation_removed": true,
+    "hosted_preflight_requires_committed_lockfile": true,
+    "accepted_install_command": "npm ci --ignore-scripts",
+    "readme_pre_start_lock_gate": true
+  },
+  "hosted_preflight_evidence": {
+    "run": 31946119910,
+    "head": "a9a4163d2d9bb4970c46e57f43b040a3564c9da7",
+    "runner_allocated": false,
+    "steps": [],
+    "classification": "INFRASTRUCTURE_BILLING_ZERO_STEP_NOT_CODE_RESULT"
+  },
+  "e2b": {
+    "worker_deployed": false,
+    "budget_checked": false,
+    "templates_checked": false,
+    "sandbox_started": false,
+    "sandbox_start_count": 0,
+    "free_zero_cost_eligibility_confirmed": false
+  },
+  "deterministic_install": {
+    "package_lock_committed": false,
+    "status": "BLOCKED",
+    "reason": "No accepted non-sandbox-starting environment in this automation runtime could generate/review the npm lockfile; the workflow now fails closed instead of generating an ephemeral dependency graph."
+  },
+  "entityos": {
+    "artifact_built": false,
+    "self_test_run": false,
+    "copy_run": false,
+    "whole_machine_acceptance": false
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "reason": "This cycle performed orchestration/preflight repair only and did not start an isolated semantic execution surface."
+  },
+  "next_executable_action": "Generate and commit mcp/e2b-worker/package-lock.json without starting E2B; run npm ci, unit tests, TypeScript and Wrangler dry-run; then perform non-starting E2B budget/template/free-eligibility preflight. Only after explicit zero-cost confirmation may exactly one sandbox start execute the refreshed matrix and bounded EntityOS double-build/self-test/copy-run gates.",
+  "outcome": "PREFLIGHT_MATERIALIZED_E2B_START_NOT_CONSUMED"
+}

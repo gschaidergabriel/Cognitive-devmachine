@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
@@ -59,6 +59,31 @@
     },
     "rollback": "temporary trees deleted; no persistent host authority/state"
   },
+  "execution_safety_evidence": {
+    "candidate_head": "5f1ffa834bcfe0b7ed62ee5a087a939cb750ed77",
+    "allowed_entityos_sandbox_run": 31939643326,
+    "allowed_entityos_sandbox_job": 95146850994,
+    "allowed_entityos_sandbox_status": "FAILURE_BEFORE_STEPS",
+    "allowed_entityos_sandbox_steps": 0,
+    "forbidden_trigger_leak_example": {
+      "run_id": 31939643343,
+      "workflow": "Frank execution gate directory anchor repair VPS",
+      "workflow_path": ".github/workflows/frank-execution-gate-directory-anchor-repair-vps.yml",
+      "trigger": "pull_request -> main",
+      "runs_on": ["self-hosted", "Linux", "X64"],
+      "job_steps_executed": 9,
+      "conclusion": "success",
+      "evidence_admissibility": "FORBIDDEN_BY_CURRENT_SANDBOX_ONLY_DIRECTIVE"
+    },
+    "other_pr_head_runs_observed": [
+      "Frank execution gate directory anchor repair VPS",
+      "ClayCode runtime nominal boundary repair VPS",
+      "Frank fresh-main effect fence + provider contract VPS",
+      "Frank self.root current-head v2",
+      "Frank Deep Integrity"
+    ],
+    "interpretation": "Opening an EntityOS candidate PR can execute unrelated legacy self-hosted/VPS workflows while the allowed exact-head one-file sandbox may not start. Promotion is blocked on workflow-trigger isolation before reopening the candidate PR."
+  },
   "primary_evidence": [
     {
       "source": "Linux man-pages openat2(2)",
@@ -72,8 +97,8 @@
   "candidate_state": {
     "pr736_static_candidate": "REFUTED_AS_SUFFICIENT_FOR_TOCTOU_WORLD",
     "pr742_dirfd_candidate": "RETAIN_TESTING_UNMERGED",
-    "promotion_blocker": "No safe actually-started exact-head lane currently exists that can build the canonical one-file EntityOS without also queuing forbidden VPS/self-hosted workflows; active ChatGPT sandbox lacks PyInstaller/full private checkout.",
-    "next_executable_step": "First repair PR/workflow trigger isolation so only allowed GitHub-hosted/isolated sandbox jobs can start. Then execute preserved PR742 head 5f1ffa834bcfe0b7ed62ee5a087a939cb750ed77 regressions, double-build reproducible one-file EntityOS, and run the exact artifact status/self-test/copy-run grant-state matrix before any merge/promotion."
+    "promotion_blocker": "PR-trigger isolation is unsafe: exact candidate head launched forbidden legacy self-hosted/VPS jobs, while the allowed EntityOS one-file sandbox did not start (steps=0). The active ChatGPT sandbox also lacks PyInstaller/full private checkout, so it cannot substitute an exact current one-file build.",
+    "next_executable_step": "First remove or gate pull_request triggers from legacy self-hosted/VPS workflows for Clay Machine candidate PRs so opening PR742 cannot execute forbidden hosts. Then run only the allowed isolated exact-head sandbox on preserved head 5f1ffa834bcfe0b7ed62ee5a087a939cb750ed77, execute regressions, double-build reproducible one-file EntityOS, and run the exact artifact status/self-test/copy-run grant-state matrix before any merge/promotion."
   },
   "entityos_artifact": "BLOCKED",
   "whole_machine_acceptance": false,

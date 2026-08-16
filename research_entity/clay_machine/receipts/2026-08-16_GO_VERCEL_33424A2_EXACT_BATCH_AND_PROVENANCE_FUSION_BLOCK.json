@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_main_observed": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+  "candidate_pr": 755,
+  "candidate_branch": "chatgpt/go-vercel-cm07-entityos-20260816",
+  "tested_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+  "merge_base_with_observed_main": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+  "relation_to_observed_main": "DIVERGED_AHEAD_5_BEHIND_7",
+  "vercel": {
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_ESwWufAfNd36LRYBza5FpBZsnYco",
+    "deployment_state": "READY",
+    "build_region": "iad1",
+    "oidc_present": true,
+    "secret_value_emitted": false,
+    "source_archive_sha256": "492748eea90264e6188372597afb0bd25f2958d7bc0f75271555f2da7128f38e",
+    "source_archive_bytes": 1274079,
+    "source_staging_schema": "ClayGoSourceStage/v2",
+    "source_git_metadata_included": false,
+    "network_policy_during_tests": "DENY_ALL",
+    "sandbox_stopped": true,
+    "sandbox_stop_error": null
+  },
+  "matrix": {
+    "status": "GO_SANDBOX_MATRIX_VERIFIED",
+    "unpack_and_bind_source_exit": 0,
+    "provision_system_freeze_toolchain_sudo_exit": 0,
+    "provision_pinned_python_toolchain_exit": 0,
+    "offline_go_matrix_exit": 0,
+    "cm07": "PASS",
+    "entityos_dirfd": "PASS",
+    "canonical_source_pipeline": "PASS",
+    "entityos_onefile": "PASS",
+    "duplicate_second_build_invocation": "SKIPPED_ALREADY_EXECUTED_THIS_DEPLOYMENT"
+  },
+  "entityos": {
+    "artifact": "EntityOS",
+    "single_file": true,
+    "sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+    "whole_machine_acceptance": false,
+    "promotion_to_current_main_allowed": false
+  },
+  "current_integration_block": {
+    "status": "EXACT_HEAD_FUSION_REQUIRED",
+    "observed_main_provenance_gate_merge": "7b8ba167eb37493f857d517ee64b678b061e0b2b",
+    "main_gate_property": "canonical one-file freeze now requires exact clean Git source identity and fails closed on redirected/untrusted Git provenance",
+    "candidate_stage_property": "credential-free deterministic Vercel source staging intentionally excludes .git before isolated Sandbox transfer",
+    "conflict": "The green 33424a2 branch is based before the merged provenance gate, so its PASS does not test the current main provenance requirement. A naive merge of the gate into stripped staged source would reject the Sandbox build because Git metadata is absent.",
+    "security_goal": "Fuse committed-tree/source-manifest attestation with canonical build provenance without trusting caller-supplied build_head and without transferring repository credentials/Git metadata into the Sandbox."
+  },
+  "grf": {
+    "observed_reality": "Exact head 33424a2 produced a real isolated Vercel Sandbox PASS and one-file EntityOS while current main independently gained a stricter canonical Git provenance gate.",
+    "hypothesis": "A credential-free committed-tree/source-manifest attestation can preserve deterministic staged-source execution and satisfy the stronger canonical provenance invariant.",
+    "strongest_counter_reality": "Removing Git metadata destroys information required to distinguish a byte-equivalent staged tree from an unauthorized or incomplete source set, so manifest binding alone may be insufficient unless it is derived from and verified against the committed Git tree before staging.",
+    "falsifier": "Create one fresh descendant of then-current main containing the staged-source lane plus a fail-closed committed-tree manifest/provenance bridge; execute that exact head in one isolated Vercel Sandbox and require provenance negative controls plus the full one-file EntityOS matrix.",
+    "outcome": "RETAIN_33424A2_RUNTIME_EVIDENCE_FOR_EXACT_ARTIFACT_ONLY; DEFER_MAIN_PROMOTION"
+  },
+  "policy": {
+    "vps_test_evidence_used": false,
+    "self_hosted_test_evidence_used": false,
+    "production_host_test_evidence_used": false,
+    "together_api_used": false,
+    "out_of_band_vps_receipt_commits_on_product_main": "OBSERVED_BUT_EXCLUDED_FROM_CURRENT_ACCEPTANCE_EVIDENCE"
+  },
+  "unusual_experiment_accounting": "NO_NEW_EXPERIMENT_ADDED_BY_THIS_REENTRY; this receipt records already-observed execution evidence and integration analysis only.",
+  "next_executable_step": "Synchronize only the non-duplicate PR 755 remainder onto a fresh descendant of current product main while preserving the merged provenance gate; implement a fail-closed committed-tree/source-manifest bridge for credential-free staged source; then run one exact-head isolated Vercel Sandbox batch requiring provenance negative controls, reproducible one-file EntityOS, status/self-test, PATH-without-host-Python, relocation and exact SHA256 before any promotion."
+}

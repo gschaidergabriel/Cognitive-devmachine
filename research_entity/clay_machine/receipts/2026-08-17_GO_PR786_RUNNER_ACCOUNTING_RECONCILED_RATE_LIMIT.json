@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "research_parent_observed": "2c39a2f82eb9c99889b457ae96ed449cf96f0282",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "preferred_head_observed": "9e1d0fd61767fc4bbd4af2ba5fbf161bd83e9bfb",
+  "supersedes_only_the_open_reconciliation_claim_in": "research_entity/clay_machine/receipts/2026-08-17_GO_PR786_FUSION_ACCOUNTING_RECONCILIATION.json",
+  "source_inspection_reconciliation": {
+    "batch5_matrix_accounting_fence": "PASS",
+    "buildtime_runner_accounting_alignment": "PASS",
+    "execution_intent_accounting_alignment": "PASS",
+    "global_unusual_experiment_limit": 1,
+    "global_unusual_experiment_count": 1,
+    "global_slot_consumed": true,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "new_unusual_experiments_authorized": 0,
+    "new_unusual_experiments_executed_by_this_reconciliation": 0,
+    "measured_pr781_heredoc_escape_fix_present": true,
+    "measured_sanitized_git_head_fix_present": true
+  },
+  "strongest_current_cycle_sandbox_evidence_remains": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "raw_tree_source_binding": "PASS",
+    "system_toolchain_provision": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "failure": "PROVISION_PINNED_PYTHON_TOOLCHAIN_HEREDOC_SYNTAX",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false,
+    "sandbox_stopped": true,
+    "scope": "HISTORICAL_EXACT_HEAD_BOUNDED_EVIDENCE_ONLY"
+  },
+  "current_exact_head_execution_state": {
+    "source_head": "9e1d0fd61767fc4bbd4af2ba5fbf161bd83e9bfb",
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "entityos_sha256": null,
+    "runtime_acceptance": "UNVERIFIED"
+  },
+  "current_frontier": "Obtain one actually-started exact-head Vercel Sandbox regression/acceptance batch for the current PR786 head. Require Stage-v5 raw-tree plus shallow-safe provenance, pinned SDK and single-owner execution, Bytes-v2 and released-view regressions with zero new unusual experiments, CM-07 and canonical source-to-single-VM gates, pristine byte-identical twin one-file EntityOS builds with exact digest, status/self-test/no-host-Python/state-restart/capability/relocation gates, DENY_ALL during offline tests, and successful Sandbox stop.",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT"
+}

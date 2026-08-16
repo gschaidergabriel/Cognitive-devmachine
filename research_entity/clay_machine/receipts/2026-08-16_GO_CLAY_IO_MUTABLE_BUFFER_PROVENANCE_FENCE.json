@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "grf": {
+    "observed_reality": [
+      "Fixed capability plan requires low-latency Clay data transformation plus visual/image/video and audio transport.",
+      "Python buffer/memoryview is a plausible reference-implementation substrate for low-copy transport, but host behavior is not Clay semantic authority."
+    ],
+    "generated_hypothesis": "A readonly memoryview can serve as a provenance-stable zero-copy Clay ingress buffer even when the producer originally owns mutable storage.",
+    "counter_reality": "Readonly only removes mutation authority from the view consumer; the producer can still mutate the backing storage and invalidate a previously bound provenance digest.",
+    "falsifier": "Create one readonly memoryview over bytearray, hash/read it, mutate the producer bytearray once, then re-read/re-hash the readonly view.",
+    "outcome": "REJECT generated_hypothesis; RETAIN counter_reality"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Python 3.14 built-in types documentation, memoryview.toreadonly",
+      "url": "https://docs.python.org/3/library/stdtypes.html#memoryview.toreadonly",
+      "finding": "The official example shows a readonly memoryview reflecting mutations made through the original writable view/backing bytearray."
+    },
+    {
+      "source": "Python 3.14 C API Buffer Protocol documentation",
+      "url": "https://docs.python.org/3/c-api/buffer.html",
+      "finding": "The buffer protocol is explicitly an access view onto an underlying exporter and supports direct/zero-copy access; readonly describes consumer write access, not a snapshot guarantee."
+    }
+  ],
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "READONLY_MEMORYVIEW_PROVENANCE_MUTATION",
+    "environment": {
+      "python": "3.13.5",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+    },
+    "before_bytes": "clay-visual-frame-0001",
+    "after_bytes": "clay-AUDIO!-frame-0001",
+    "before_sha256": "2ce3fddd9311daebf86299923e19942a03d078232c10a136a1002de9cd4eff97",
+    "after_sha256": "fe635e89207ccf9c844189405d81a1aa02731ba2a94edbc6bb7d78f14d78a108",
+    "view_readonly": true,
+    "backing_type": "bytearray",
+    "result": "Producer mutation changed bytes and digest despite readonly view; readonly is not provenance immutability."
+  },
+  "deterministic_candidate_test": {
+    "scope": "local sandbox reference prototype only; NOT product-repository code and NOT Clay Machine PASS",
+    "candidate_contract": "ClayIOEnvelope/v1 with explicit DATA/VISUAL/AUDIO plane, provenance/timestamps/format identity, immutable-buffer digest, zero-copy only for C-contiguous memoryview ultimately backed by built-in immutable bytes; mutable/unknown exporters are snapshotted.",
+    "tests": "7/7 PASS",
+    "covered": [
+      "immutable bytes zero-copy",
+      "mutable bytearray snapshot",
+      "readonly view over mutable exporter snapshot",
+      "immutable bytes slice zero-copy",
+      "non-contiguous view copy",
+      "explicit separate data/visual/audio planes",
+      "fail-closed invalid provenance/format/timestamp metadata"
+    ]
+  },
+  "ordinary_micro_measurements": {
+    "warning": "Sandbox microbenchmarks only; no release performance claim.",
+    "4KiB_immutable_median_ns": 3846,
+    "4KiB_mutable_median_ns": 4407,
+    "1MiB_immutable_median_ns": 578164,
+    "1MiB_mutable_median_ns": 604583,
+    "1MiB_sha256_only_median_ns": 576578,
+    "1MiB_copy_only_median_ns": 22634,
+    "interpretation": "In this prototype the mandatory full-buffer SHA-256 dominates 1 MiB ingress cost; copying mutable input added far less cost than hashing. This does not justify always-copy or always-hash production policy; streaming/incremental provenance remains open."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+    "affected_workstreams": ["CM-DATA", "CM-VIS", "CM-AUDIO", "CM-06-MEMORY-CONCURRENCY-RUNTIME", "CM-10-TOOLING-OBSERVABILITY-RECOVERY"],
+    "rule": "Do not equate readonly buffer access with immutable provenance. Until Clay selects and tests explicit buffer lifetime/lease/epoch semantics, zero-copy provenance-bound ingress should be restricted to storage proven immutable for the admitted implementation; mutable or semantically unknown exporters require snapshot/copy or fail closed.",
+    "non_claims": [
+      "No canonical Clay Bytes/Buffer language type selected.",
+      "No VM instruction or compiler lowering added.",
+      "No network/process/media baseline gate passed.",
+      "No product code committed from this experiment."
+    ],
+    "next_falsifier": "Define the smallest canonical Clay Buffer/Bytes ownership + lifetime contract at the typed/effect boundary, then compare immutable-owned, copied-mutable, and explicit leased/epoch-checked borrowed buffers through one VM ingress path with provenance and latency measurements."
+  },
+  "product_delta_same_go": {
+    "pr": 681,
+    "candidate_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+    "exact_head_workflow": 31923469033,
+    "exact_head_result": "success",
+    "production_totality_run": 31923469219,
+    "production_totality_result": "success",
+    "merge_commit": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
+    "post_merge_observed_main": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+    "scope": "CM-02 production TypeRef alias-DAG structural sharing only; no whole-machine completion."
+  }
+}

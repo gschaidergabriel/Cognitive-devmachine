@@ -1,5 +1,5 @@
 {
-  "schema_version": "4.1",
+  "schema_version": "4.2",
   "program_id": "clayverse-clay-machine-only",
   "status": "ACTIVE",
   "owner_directive": "research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md",
@@ -9,7 +9,8 @@
     "id": "CLAY_MACHINE",
     "product_repository": "gschaidergabriel/Dr.-Unterweger",
     "workspace": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
-    "mission": "ClayCode as a real programming language with compiler, virtual Clay Machine, Clay environment, deep Linux interoperability, minimal ClayOS, and a first-class typed optical/visual signal output that can be mapped through explicit adapters to arbitrary supported visual media"
+    "fixed_capability_plan": "research_entity/clay_machine/CLAY_MACHINE_CONNECTIVITY_PORTABILITY_IO_PLAN.md",
+    "mission": "ClayCode as a real programming language with compiler, virtual Clay Machine, self-contained zero-install Clay environment, deep/direct Linux interoperability, general Internet/network connectivity, direct process/terminal execution, low-latency Clay data transformation, typed visual/image/video and audio transport, first-class optical/visual signal output, and a minimal ClayOS"
   },
   "stage_gates": {
     "CLAY_MACHINE": {
@@ -20,22 +21,25 @@
         "path": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
         "field": "work_packages"
       },
-      "completion_law": "PASS only when the canonical ClayCode language/compiler/runtime can execute real programs in the virtual Clay Machine, the Clay environment can interact with Linux through explicit typed boundaries, the minimal ClayOS boots/runs its defined scope with reproducible tests and receipts, and ClayCode can emit a canonical typed visual/optical signal end-to-end through the VM/environment into both a deterministic headless test sink and at least one concrete visual adapter without host rendering behavior defining Clay semantics. Component or synthetic PASS does not imply whole-machine PASS."
+      "completion_law": "PASS only when the canonical ClayCode language/compiler/runtime executes real programs in the virtual Clay Machine; the Clay environment interacts with Linux through explicit typed boundaries; the minimal ClayOS boots/runs its defined scope with reproducible tests and receipts; ClayCode emits/receives a canonical typed visual/optical signal through a deterministic sink and at least one concrete adapter; a copied self-contained Clay environment starts on a fresh compatible Linux target without a mandatory installation step; a canonical Clay program connects to a real network/Internet endpoint; a canonical Clay process/PTY path executes a real Linux executable without an implicit hidden shell/harness; representative ordinary ingress data is transformed into Clay-native typed streams with measured low overhead; image/video traverse the visual plane; and audio traverses its declared media boundary. Component, synthetic or out-of-path host success does not imply whole-machine PASS."
     }
   },
   "superseded_programs": {
     "status": "HISTORICAL_EVIDENCE_ONLY",
     "programs": ["FRANK_V0_1", "UCM2_ONLY", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_FRANK"],
-    "law": "Legacy Frank/self.root/UCM2/harness paths may contribute bounded implementation or regression evidence when semantics still match, but they do not select active work or define completion."
+    "law": "Legacy Frank/self.root/UCM2/harness paths may contribute bounded implementation or regression evidence when semantics still match, but they do not select active work or define current completion."
   },
-  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS/typed-visual-signal code, tests, architecture, work items, or explicit negative results. Exact go must keep the optical/visual signal workstream live during refresh and reprioritization and research/build/test it whenever it is an actionable high-information frontier.",
+  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS/connectivity/portability/terminal/data-plane/media/typed-visual-signal code, tests, architecture, work items, or explicit negative results. Exact go must load the fixed capability plan, preserve each capability stream's status/blockers, include them in frontier selection, and produce a concrete research/falsification/build/test/runtime delta in that family whenever an unblocked high-information step exists.",
   "authority_rules": {
     "grf": "reasoning_framework_only",
     "together": "FORBIDDEN",
     "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED",
     "host_behavior": "NOT_LANGUAGE_AUTHORITY",
     "model_consensus": "NOT_SEMANTIC_AUTHORITY",
-    "visual_renderer_behavior": "NOT_LANGUAGE_AUTHORITY"
+    "visual_renderer_behavior": "NOT_LANGUAGE_AUTHORITY",
+    "network_protocol_behavior": "NOT_LANGUAGE_AUTHORITY",
+    "shell_behavior": "NOT_IMPLICIT_LANGUAGE_AUTHORITY",
+    "unknown_data_format": "OPAQUE_TYPED_BYTES_OR_FAIL_CLOSED_NOT_GUESS"
   },
-  "last_updated": "2026-08-16T10:19:00+07:00"
+  "last_updated": "2026-08-16T10:30:00+07:00"
 }

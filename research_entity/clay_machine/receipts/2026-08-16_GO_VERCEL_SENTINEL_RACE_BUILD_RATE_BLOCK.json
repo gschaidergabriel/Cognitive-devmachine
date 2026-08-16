@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "date": "2026-08-16",
   "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
-  "scope": "Current-main Vercel build-internal EntityOS lane consolidation, duplicate-build sentinel falsification/repair, and exact-head rate-limit blocker; not whole-machine acceptance.",
+  "scope": "Current-main Vercel build-internal EntityOS lane consolidation, duplicate-build sentinel falsification/repair, exact-head pathless-runtime gate fusion, and rate-limit blocker; not whole-machine acceptance.",
   "observed_reality": {
     "canonical_product_repo": "gschaidergabriel/Dr.-Unterweger",
     "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
@@ -38,7 +38,8 @@
   "repair": {
     "canonical_candidate_pr": 768,
     "branch": "clay/vercel-sandbox-batch-go-20260816-2325",
-    "commit": "a48320c79c7ec1def281199a731f174b7b7764fb",
+    "sentinel_fix_commit": "a48320c79c7ec1def281199a731f174b7b7764fb",
+    "current_candidate_head": "38134065c86ae025ad1859b10d370ca0fe4930e6",
     "mechanism": "single atomic writeFileSync(flag=wx); EEXIST becomes successful DUPLICATE_BUILD_INVOCATION_SKIPPED; all other write errors rethrow fail-closed",
     "ordinary_regression": {
       "result": "PASS",
@@ -58,8 +59,14 @@
     "retained_candidate": "PR #768 sanitized shallow exact-Git staging with no configured remote and no injected credentials",
     "closed_duplicate_prs_in_this_cycle": [758, 767]
   },
+  "ordinary_matrix_fusion": {
+    "commit": "38134065c86ae025ad1859b10d370ca0fe4930e6",
+    "change": "Add ENTITYOS_PATH_WITHOUT_HOST_PYTHON lesion to the actually invoked Vercel offline matrix and require its PASS marker.",
+    "reason": "The promotion contract already required host-Python independence, while current main's matrix did not test it.",
+    "new_unusual_experiment_count": 0
+  },
   "exact_head_execution": {
-    "candidate_head": "a48320c79c7ec1def281199a731f174b7b7764fb",
+    "candidate_head": "38134065c86ae025ad1859b10d370ca0fe4930e6",
     "vercel_status": "BLOCKED_BEFORE_BUILD",
     "vercel_reason": "upgradeToPro=build-rate-limit",
     "sandbox_started": false,
@@ -75,5 +82,5 @@
     "No Together API was used.",
     "Historical Vercel EntityOS digests remain exact-head evidence only and are not promoted to current main."
   ],
-  "next_executable_action": "When Vercel accepts a preview build again, rerun exact PR #768 head (or a fresh descendant rebased to then-current main) through the existing build-internal regression lane. Require exact sanitized Git HEAD/clean/no-remote provenance, exactly one Sandbox under duplicate hook invocation, GO_MATRIX_RESULT=PASS, one-file EntityOS SHA-256, PATH-without-host-Python PASS, relocation BYTE_IDENTICAL, DENY_ALL during tests, and sandbox stop PASS before considering merge/promotion."
+  "next_executable_action": "When Vercel accepts a preview build again, rerun exact PR #768 head 38134065c86ae025ad1859b10d370ca0fe4930e6 or a fresh descendant rebased to then-current main through the existing build-internal regression lane. Require exact sanitized Git HEAD/clean/no-remote provenance, exactly one Sandbox under duplicate hook invocation, GO_MATRIX_RESULT=PASS, one-file EntityOS SHA-256, PATH-without-host-Python PASS, relocation BYTE_IDENTICAL, DENY_ALL during tests, and sandbox stop PASS before considering merge/promotion."
 }

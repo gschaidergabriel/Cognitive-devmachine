@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_ENTITYOS_STRING_LITERAL_NEGATIVE_RESULT",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "ENTITYOS/CM-DATA/CM-LOWER/CM-TERM",
+  "evidence_time_local": "2026-08-16T11:42:00+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_main_observed": "66e466c9c57d72c520e98085f221afcaffab9494",
+  "exact_entityos": {
+    "workflow_run_id": 31927007084,
+    "artifact_sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "self_test": "PASS",
+    "typed_ir_vm_process_effect": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "observed_anchor": "Current parser syntax and nominal typechecker admit String literals/types, but the canonical ClayExecutableTypedIR/v1 lowerer accepts only BOOL/NUMBER literals and rejects STRING before the VM adapter.",
+  "discriminating_test": {
+    "source": "module clay.entityos.stringgate\nfn main() -> String { return \"EntityOS-String-OK\" }\n",
+    "command": "EntityOS build <source> --entry main --artifact <artifact> --manifest <manifest>",
+    "exit_code": 1,
+    "observed_error": "ExecutableTypedIRError: literal outside executable TypedIR v1 PURE subset: STRING",
+    "result": "FAIL_CLOSED_AT_EXECUTABLE_TYPED_IR"
+  },
+  "hypothesis": "The smallest product-convergent next patch is a canonical UTF-8 String value path from Clay literal -> ClayExecutableTypedIR/v1 -> VM bootstrap IR -> serialized ClayVM -> ClayOS/run result, with explicit bounds and no host/Python semantic substitution.",
+  "counterhypothesis": "String should wait until Bytes/Buffer ownership and lifetime semantics are fixed together, because a String-only VM representation could create a second incompatible data model or force later byte-layout migration.",
+  "falsifier_for_patch": "A patched exact-head EntityOS must build and run the String source above to the exact Unicode/UTF-8 String value, preserve existing Int/Bool/provenance/capability gates, and continue rejecting unsupported Bytes/argv/effects rather than guessing them.",
+  "affected_components": [
+    "CM-DATA",
+    "CM-LOWER",
+    "CM-EXE",
+    "CM-TERM",
+    "EntityOS"
+  ],
+  "collapse": {
+    "string_parser_and_nominal_type_surface": "OBSERVED_ADMITTED",
+    "string_executable_typed_ir": "REFUTED_CURRENT_HEAD",
+    "string_serialized_vm_execution": "BLOCKED_BY_UPSTREAM_LOWERING",
+    "whole_entityos_acceptance": "NOT_PROMOTED"
+  },
+  "unusual_experiment": {
+    "count_in_this_worker_cycle": 1,
+    "note": "No additional unusual experiment was initiated for this negative-result receipt; the cycle's bounded relocation/environment experiment is recorded in the preceding exact-head receipt."
+  },
+  "next_executable_action": "Implement the smallest bounded canonical UTF-8 String representation end-to-end through ClayExecutableTypedIR/v1 and the single serialized ClayVM, add exact String build/run regression to EntityOS self-test/VPS gate, then separately derive Bytes/Buffer ownership and argv from that typed data contract rather than encoding them as opaque integer handles.",
+  "outcome": "ENTITYOS_CURRENT_ARTIFACT_VERIFIED; STRING_EXECUTION_BLOCKER_BOUND_EXACTLY"
+}

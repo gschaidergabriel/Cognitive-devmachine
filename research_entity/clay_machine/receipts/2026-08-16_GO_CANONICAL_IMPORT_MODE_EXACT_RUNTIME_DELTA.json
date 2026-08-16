@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-01/CM-07 canonical import-mode fidelity before package resolution",
+  "observed_research_head_before_write": "29f724f2d5c10406e1dea9e4ddf7d29db90958d0",
+  "observed_product_main": "20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
+  "prior_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_CANONICAL_MODULE_RESOLUTION_FUSION_GAP.json",
+  "source_basis": "FAST project source plus live GitHub state and exact-head self-hosted Actions evidence; GitHub/runtime evidence takes precedence",
+  "observed": [
+    "Canonical ClayCode accepted both `use module` and `use module.*`, but the anonymous wildcard literal was dropped before Module lowering, so the compatibility projection Module.uses could not distinguish the two admitted source forms.",
+    "Merged PR 648 remains the execution safety boundary: clayenv build rejects every source containing use declarations until canonical package resolution exists.",
+    "PR 653 provides the complementary package identity/index layer. Its package index records package/module identity and use targets but explicitly leaves import semantics RECORDED_NOT_RESOLVED.",
+    "PR 635 now preserves import spelling intent inside the canonical production grammar/AST while retaining legacy Module.uses unchanged: a named USE_WILDCARD token plus Module.use_decls carrying MODULE or WILDCARD.",
+    "The initial second clayenv.modules metadata index was removed from the product candidate after live coordination showed it would duplicate the canonical package/frontend ownership lanes."
+  ],
+  "grf": {
+    "generated_reality": "Preserve plain-versus-wildcard source intent in the canonical AST without yet assigning resolver or namespace behavior.",
+    "strongest_counter_reality": "Plain and wildcard use declarations might eventually be defined to have identical Clay semantics, making the distinction unnecessary for execution.",
+    "collapse": "RETAIN_AST_FIDELITY; REFUTE_SECOND_INDEX_AS_CANONICAL_ARCHITECTURE",
+    "reason": "Preserving admitted source information assigns no execution semantics, remains backward compatible through Module.uses, and leaves the future resolver free to prove identical or different behavior rather than reconstruct erased intent."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "USE_MODE_ERASURE_COLLISION",
+    "count": 1,
+    "run_id": 31920549245,
+    "tested_head": "94afe27e39f82c6fcd9624063d057a7cde24a1bf",
+    "runner": "clay-3",
+    "platform": "self-hosted Linux/X64",
+    "baseline": "parse canonical sources differing only by `use clay.std.identity` versus `use clay.std.identity.*`",
+    "observed": "legacy Module.uses collided at the same module-only tuple; metadata-only treatment preserved MODULE versus WILDCARD",
+    "result": "PASS_DISCRIMINATOR",
+    "new_unusual_experiments_after_this": 0
+  },
+  "ordinary_evidence": [
+    {
+      "run_id": 31920658807,
+      "tested_head": "3110b7da3c7fb264288786c87e76deff770f10d2",
+      "result": "PASS",
+      "scope": "metadata-index ordinary regression before architecture collapse",
+      "checks": "9/9",
+      "new_unusual_experiment_count": 0,
+      "python": "3.12.3",
+      "lark": "1.3.1"
+    },
+    {
+      "pr": 653,
+      "run_id": 31921054505,
+      "result": "PASS",
+      "scope": "exact-head self-hosted package identity/index plus current ClayEnv regressions",
+      "import_semantics": "RECORDED_NOT_RESOLVED"
+    },
+    {
+      "pr": 635,
+      "run_id": 31921360509,
+      "pre_migration_head": "66195f7da7101f83e2eafe3768103f8904f11dbf",
+      "produced_commit": "23192728a040b3971df84a25ddef2e19db9530d3",
+      "result": "PASS",
+      "scope": "guarded canonical grammar/AST migration; exact head binding, isolated Lark 1.3.1, AST fidelity, two-production-file commit/push",
+      "new_unusual_experiment_count": 0
+    },
+    {
+      "pr": 635,
+      "run_id": 31921439509,
+      "tested_head": "3e965a328e82168923feb8857363938d7ad13ca9",
+      "result": "PASS",
+      "scope": "final read-only exact-head canonical use-decl fidelity regression",
+      "new_unusual_experiment_count": 0
+    },
+    {
+      "pr": 635,
+      "run_id": 31921439331,
+      "tested_head": "3e965a328e82168923feb8857363938d7ad13ca9",
+      "result": "PASS",
+      "scope": "existing opaque/plain parser fidelity plus current nominal source gate"
+    },
+    {
+      "pr": 635,
+      "run_id": 31921439318,
+      "tested_head": "3e965a328e82168923feb8857363938d7ad13ca9",
+      "result": "PASS",
+      "scope": "ClayCode Frontier Integration VPS"
+    }
+  ],
+  "negative_and_blocked_evidence": [
+    "A GitHub-hosted migration attempt was never started because the hosted runner was blocked by account billing/spending state; no production bytes were modified.",
+    "A self-hosted attempt failed during system-pip provisioning before migration; no production bytes were modified.",
+    "A later isolated-venv attempt rejected a stale expected grammar anchor before migration; no production bytes were modified.",
+    "Final-head ClayCode Package Import VPS run 31921439348 was still queued at receipt time and therefore is NOT claimed PASS."
+  ],
+  "product_candidate": {
+    "pr": 635,
+    "state": "DRAFT_OPEN_MERGEABLE",
+    "head": "3e965a328e82168923feb8857363938d7ad13ca9",
+    "base": "main@20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
+    "changed_files": [
+      ".github/workflows/clayenv-module-index.yml",
+      "runtime/clay_wp04_type_effect_v1/FRANK_STRUCTURED_V1.lark",
+      "runtime/claycode_eval_v1/syntax.py",
+      "tests/claycode_use_decl_fidelity_gate.py"
+    ],
+    "second_module_index_present": false,
+    "import_resolution_selected": false,
+    "namespace_collision_semantics_selected": false,
+    "call_ownership_selected": false,
+    "effect_authority_widened": false,
+    "status": "SUPPORTED_CANDIDATE_NOT_PROMOTED"
+  },
+  "architecture_outcomes": {
+    "second_clayenv_module_index": "REFUTED_AS_CANONICAL_ARCHITECTURE",
+    "canonical_ast_use_decls": "SUPPORTED_CANDIDATE",
+    "canonical_package_identity_index_pr653": "SUPPORTED_CANDIDATE_SEPARATE_LANE",
+    "canonical_import_resolver": "OPEN",
+    "clayenv_use_execution": "FAIL_CLOSED_BY_PR648"
+  },
+  "next_falsifier": {
+    "name": "DETERMINISTIC_CANONICAL_PACKAGE_IMPORT_RESOLVER",
+    "requirements": [
+      "consume canonical package/module identity plus lossless use_decls",
+      "bind provider/package provenance before symbol admission",
+      "define plain versus wildcard namespace behavior explicitly rather than infer it",
+      "reject duplicate/ambiguous providers and symbol collisions fail-closed",
+      "feed the existing nominal checker -> Executable TypedIR -> one serialized ClayVM path",
+      "preserve PR 648 rejection until exact-head resolver and ClayEnv integration evidence are green"
+    ]
+  },
+  "authority": {
+    "together_used": false,
+    "final_training": "NOT_TOUCHED_OWNER_AUTHORIZATION_REQUIRED",
+    "frank_scope": "HISTORICAL_EVIDENCE_ONLY",
+    "external_effect": false,
+    "whole_clay_machine_acceptance": false
+  },
+  "outcome": "CANONICAL_IMPORT_MODE_FIDELITY_SUPPORTED; RESOLUTION_REMAINS_OPEN_AND_FAIL_CLOSED"
+}

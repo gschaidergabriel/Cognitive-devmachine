@@ -1,0 +1,84 @@
+{
+  "schema": "ClayEntityOSGoRunnerHardening/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head_observed": "fa03f212883ffcf6b6144bc498f249b50a8cc362",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_SANDBOX_START",
+    "exact_head_sandbox_executed": false
+  },
+  "prior_empirical_vercel_truth": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "actually_started_isolated_vercel_sandbox": true,
+    "stage_v5_source_binding_reached": true,
+    "git_provenance_reconstruction_reached": true,
+    "failure_step": "provision_pinned_python_toolchain",
+    "failure_class": "RUNNER_HEREDOC_ESCAPE_NOT_ENTITYOS_SEMANTIC_FAIL",
+    "offline_matrix_executed": false,
+    "entityos_built": false,
+    "entityos_sha256": null,
+    "sandbox_stopped": true
+  },
+  "source_hardening_since_empirical_failure": [
+    {
+      "commit": "58778ac0adcbaf1476341b3d47a848429c3a7ab7",
+      "claim": "repair heredoc escaping and sanitized git-head diagnostic"
+    },
+    {
+      "commit": "1334610341674e92abda50c3ca887bf4ca035107",
+      "claim": "remove duplicate unusual-experiment path and keep runner regression-only"
+    },
+    {
+      "commit": "71289f9ad7386fa83755693f568e406f2d121e91",
+      "claim": "bind relocation matrix to copied EntityOS byte digest, cmp identity and runtime-output identity"
+    },
+    {
+      "commit": "b97c6b78268233511f5d8454a0ef3b321441215d",
+      "claim": "require relocation byte-identity markers and relocation SHA equality in the Vercel promotion runner"
+    },
+    {
+      "commit": "fa03f212883ffcf6b6144bc498f249b50a8cc362",
+      "claim": "validate machine PASS markers and EntityOS digests against full in-memory matrix stdout while keeping emitted logs bounded"
+    }
+  ],
+  "cm_data_source_gate_review": {
+    "head_reviewed": "c70a46ed36e81034d965e80e597afb4dc29d98a3",
+    "immutable_owned_bytes": "ADMITTED",
+    "mutable_bytearray_without_epoch": "FAIL_CLOSED_BY_BYTES_MUTABLE_REQUIRES_EPOCH",
+    "borrowed_memoryview_without_epoch": "FAIL_CLOSED_BY_BYTES_BORROWED_REQUIRES_EPOCH",
+    "released_memoryview": "FAIL_CLOSED_BY_BYTES_VIEW_RELEASED",
+    "canonical_buffer_lease_epoch_path": "NOT_YET_IMPLEMENTED_IN_REVIEWED_CLAYVM_SOURCE",
+    "classification": "SAFE_FENCE_BUT_CM_DATA_NOT_ACCEPTED"
+  },
+  "unusual_experiment_accounting": {
+    "global_limit": 1,
+    "global_count": 1,
+    "global_slot_consumed": true,
+    "new_unusual_experiments_executed_by_this_delta": 0,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY"
+  },
+  "evidence_boundary": {
+    "source_changes_verified_by_inspection": true,
+    "source_changes_executable_verified": false,
+    "reason": "Vercel rejected the current head for build-rate-limit before deployment/Sandbox start",
+    "whole_entityos_acceptance": false
+  },
+  "next_executable_step": "When Vercel build capacity admits the exact then-current PR781 head, run only the build-internal regression/acceptance Sandbox batch: exact Stage-v5 source binding, repaired toolchain probe, DENY_ALL before offline tests, Bytes-v2/released-view and adjacent regressions, canonical source-to-single-VM gates, deterministic twin EntityOS builds, exact artifact digest, status/self-test/no-host-Python/state/capability gates, relocation artifact SHA/cmp/runtime-output identity, and successful Sandbox stop. Persist the exact artifact digest and result before promotion.",
+  "safety": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_testing": "NOT_USED_FORBIDDEN",
+    "production_host_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "final_paid_training": "NOT_ATTEMPTED_OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_CAPACITY"
+}

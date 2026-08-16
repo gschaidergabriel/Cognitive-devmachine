@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-07 canonical package/module identity under live parallel-worker overlap",
+  "research_head_before_write_observed": "b38221ee182dd90c6e40d39c6c99d815829bd097",
+  "product_main_latest_observed_before_write": "f2c5ccdddd1791cd404c1e8d25f41869a02673ea",
+  "observed": [
+    "The current workspace identifies canonical modules/stdlib packaging plus broader executable semantics as the pre-Linux frontier.",
+    "The canonical ClayCode parser accepts both `use x` and `use x.*`, while the current compatibility Module.uses projection stores only the target qid and therefore erases import mode.",
+    "During this GO cycle parallel product work appeared on the same CM-07 frontier: merged PR 636 (ClayEnv relocation regression), draft PR 635 (metadata preservation of MODULE versus WILDCARD use mode), and open PR 639 (Clay.toml package/module binding graph plus stdlib seed).",
+    "A local candidate PR 638 independently implemented a deterministic ClayPackageManifest/v1 -> ClayPackageIndex/v1 and exact-head gate, but became architecturally redundant once the broader PR 639 appeared."
+  ],
+  "bounded_unusual_experiment": {
+    "count": 1,
+    "name": "ABSOLUTE_PACKAGE_ROOT_RELOCATION_INVARIANCE",
+    "candidate_pr": 638,
+    "candidate_head": "6c4a2f5565172c4f70a3aa912aa83353dcbb0cd0",
+    "workflow_run": 31920645245,
+    "workflow_job": 95099885982,
+    "runner": "clay-2",
+    "exact_head_verified": true,
+    "tests": "14/14 PASS",
+    "treatment": "Place identical package content under unrelated absolute host directory roots and require byte-identical canonical package index and package hash.",
+    "result": "PASS",
+    "interpretation": "The candidate package identity/index need not depend on absolute host placement.",
+    "rollback": "PR 638 was closed without merge after overlap detection; no canonical product path was changed by this candidate.",
+    "whole_clay_machine_pass_claimed": false
+  },
+  "ordinary_regression_evidence": {
+    "same_run": 31920645245,
+    "clayenv_build_run_regressions": "PASS",
+    "observed_program_result": 42,
+    "new_unusual_experiment_count_beyond_named_one": 0
+  },
+  "overlap_collapse": {
+    "candidate_pr_638": "CLOSED_UNMERGED_SUPPORTED_PROTOTYPE",
+    "reason": "Avoid two competing package architectures after PR 639 appeared and PR 636 merged overlapping relocation evidence.",
+    "preferred_active_candidate": 639,
+    "preferred_candidate_scope": "PACKAGE_PROVIDER_AND_MODULE_BINDING_ONLY",
+    "promotion": "DEFER"
+  },
+  "pr_639_review_findings": {
+    "head_observed": "ef7d3b328e543993cd86cd583673c760ffdae710",
+    "green_compatibility_run_observed": 31920628673,
+    "green_run_tested_sha_observed": "368c63916dc33ef51b8b650a82bbb9f0e84a3455",
+    "exact_head_resolver_evidence": "NOT_OBSERVED",
+    "finding_1": "The inspected green compatibility job tested the PR merge ref rather than head ef7d3b3, and its executed step list did not include the newly-added package-resolver gate; do not treat that run as exact-head resolver evidence.",
+    "finding_2": "PR 639 correctly limits itself to binding/provider identity because the canonical AST still erases MODULE versus WILDCARD use mode; symbol/linker semantics must not be inferred from that lossy projection.",
+    "finding_3": "PackageGraph.receipt serializes absolute manifest/source paths, so receipt_sha256 is host-location dependent. This can be provenance metadata but must not silently become portable package identity.",
+    "coordination_review_posted": true
+  },
+  "grf_collapse": {
+    "generated_reality": "A fresh standalone package-index implementation should be promoted because it is exact-head green and relocation invariant.",
+    "counter_reality": "Parallel workers may already have produced a broader package candidate; promoting both creates competing package truths.",
+    "outcome": "REJECT_DUPLICATE_PROMOTION_RETAIN_EVIDENCE",
+    "surviving_architecture": "Converge on one explicit package/provider graph, preserve import mode losslessly before linker semantics, keep portable logical identity separate from host-location provenance, and require exact-head evidence before promotion."
+  },
+  "next_discriminators": [
+    "Obtain exact-head evidence for the actual PR 639 resolver bytes, not only merge-ref compatibility evidence.",
+    "Integrate or canonically supersede PR 635 so `use x` versus `use x.*` survives into the AST/TypedIR boundary before any symbol linker is admitted.",
+    "Define whether package identity hash is content/logical identity while absolute paths remain non-identity provenance metadata.",
+    "Only then feed resolved multi-module closure into the existing nominal checker -> executable TypedIR -> single ClayVM pipeline; do not add a second execution path.",
+    "Re-run accepted self-hosted Linux evidence after those bytes change."
+  ],
+  "non_claims": [
+    "PR 638 is not canonical and was not merged.",
+    "PR 639 is not claimed exact-head validated by this receipt.",
+    "No cross-module symbol linking or execution is claimed.",
+    "No Linux effect authority was widened.",
+    "No whole Clay Machine acceptance is claimed.",
+    "Together API was not used.",
+    "No final/model training was authorized or started."
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "recorded_at": "2026-08-16T13:07:00+07:00",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "worker": {
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "provider_model": "GPT-5.6 Sol",
+    "is_frank": false
+  },
+  "authority": {
+    "testing_policy": "SANDBOX_ONLY_TESTING",
+    "vps_or_production_test_used": false,
+    "together_used": false,
+    "harness_authority_mutated": false,
+    "training_authorized_or_started": false
+  },
+  "r0_observed": {
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_before_fix": "d0d40503b9ba29618a6a8789b8f0dc0208115635",
+    "tested_prior_isolated_artifact_build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+    "tested_prior_isolated_artifact_sha256": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+    "tested_prior_isolated_artifact_size_bytes": 12821560,
+    "prior_artifact_status": {
+      "single_file_candidate": true,
+      "frozen_runtime": true,
+      "self_test_json": "PASS",
+      "whole_machine_acceptance": false
+    },
+    "current_source_bug_anchor": "entityos/boot_entry.py used Path(...).resolve() before the intended is_symlink() state-root fence, erasing final-component symlink identity"
+  },
+  "grf": {
+    "generated_reality": "A caller-controlled ENTITYOS_STATE_HOME symlink can redirect the persistent one-time internal grant into a different directory while the later symlink fence sees only the resolved target.",
+    "strongest_counter_reality": "Path resolution is harmless because the later state-directory and state-file safety checks still reject redirected approval state.",
+    "discriminating_test": "Compare a fresh direct ENTITYOS_STATE_HOME control with a final-component symlink ENTITYOS_STATE_HOME treatment using the exact prior isolated EntityOS file and deterministic test-only initial-grant acceptance.",
+    "predicted_if_hypothesis": "Treatment exits successfully and creates initial-grant-v1.json in the symlink target.",
+    "predicted_if_counter": "Treatment fails closed with no grant state written through the symlink.",
+    "outcome": "HYPOTHESIS_SUPPORTED_COUNTER_REFUTED"
+  },
+  "unusual_experiment": {
+    "count_this_go": 1,
+    "name": "STATE_HOME_SYMLINK_REDIRECTION",
+    "environment": "isolated local container sandbox",
+    "control": {
+      "rc": 0,
+      "grant_state_exists": true,
+      "grant_state_mode": "600"
+    },
+    "treatment": {
+      "rc": 0,
+      "grant_state_created_in_symlink_target": true,
+      "grant_state_mode": "600",
+      "stderr": ""
+    },
+    "result": "SYMLINK_STATE_HOME_ACCEPTED_AND_REDIRECTED",
+    "rollback": "temporary control, symlink and target directories removed; no canonical/user state used"
+  },
+  "repair": {
+    "product_commit": "828106fac3cb388410dd7d524ebbdbd39efcf4c4",
+    "commit_message": "fix(entityos): fail closed on grant-state symlink redirect",
+    "changes": [
+      "preserve explicit state-root final-component symlink identity with absolute() rather than resolve() before admission",
+      "reject explicit ENTITYOS_STATE_HOME and XDG_STATE_HOME roots that are symlinks",
+      "add exact frozen-EntityOS regression requiring rc=73, ENTITYOS_STATE_DIR_SYMLINK_REJECTED and no redirected grant file",
+      "change the canonical one-file workflow from self-hosted Linux/X64 to ubuntu-latest isolated GitHub-hosted sandbox",
+      "reclassify the already-known relocation/Unicode case as an ordinary regression with new_go_unusual_experiment_count=0"
+    ],
+    "local_source_level_regression": "PASS_STATE_HOME_SYMLINK_REGRESSION_CANDIDATE",
+    "whole_machine_acceptance": false
+  },
+  "exact_current_build_attempt": {
+    "workflow": "EntityOS Canonical One-File Sandbox",
+    "run_id": 31930611447,
+    "job_id": 95124690265,
+    "head_sha": "828106fac3cb388410dd7d524ebbdbd39efcf4c4",
+    "runner_label": "ubuntu-latest",
+    "runner_id": 0,
+    "executed_steps": 0,
+    "github_conclusion": "failure",
+    "semantic_conclusion": "NO_EXECUTION_INFRASTRUCTURE_BLOCK",
+    "annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "current_entityos_artifact_for_head": "NOT_BUILT"
+  },
+  "counterevidence_and_residuals": [
+    "The repair closes the measured final-component state-root symlink bypass but is not proof against every parent-component symlink or path-swap race; descriptor-relative no-follow traversal remains a stronger future hardening candidate if the threat model requires it.",
+    "The successful local executable tested in this GO is from build head 950d164..., not current product head 828106...; it cannot be promoted as exact-current EntityOS evidence.",
+    "GitHub-hosted runner billing/spending state prevented any exact-current frozen build or regression execution; this is not a semantic PASS or FAIL."
+  ],
+  "entityos_artifact_status": "BLOCKED",
+  "exact_blocker": "GitHub-hosted ubuntu-latest jobs do not start because of account payment/spending-limit state, so current head 828106fac3cb... cannot yet produce the required sandbox-built and sandbox-tested single-file EntityOS artifact.",
+  "next_executable_step": "Restore GitHub-hosted Actions billing/spending availability, rerun EntityOS Canonical One-File Sandbox on exact current main, require all steps including symlink fail-closed regression to PASS, then download the produced one-file EntityOS and re-execute status/self-test/grant/ClayCode-VM/host-effect gates in an isolated clean Ubuntu sandbox.",
+  "promotion": "DEFER"
+}

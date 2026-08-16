@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "research_head_observed_before_write": "f0b1942d838779f106e08fa51875f903dd242dd4",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "execution_truth": "ACTUALLY_STARTED_EXACT_IDENTITY_VERCEL_SANDBOX_ONLY_FOR_EXECUTABLE_PRODUCT_CLAIMS",
+  "selected_frontier": "single preferred exact-provenance EntityOS Batch4 lane carrying epoch-safe ClayVM Bytes v2",
+  "preferred_product_candidate": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head_before_retry": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "retry_head": "843703b949ac0fb2d44eeda69f2adb708cffcc38",
+    "retry_tree": "2384c0bf4f82d16436f2b24c6775a115e07b6274",
+    "retry_tree_changed": false,
+    "retry_purpose": "obtain fresh exact-head Vercel execution after another preview demonstrated temporary provider build capacity",
+    "promotion_state": "DRAFT_BLOCKED_UNEXECUTED"
+  },
+  "fusion_state": {
+    "absorbed_or_superseded_prs_closed_unmerged": [776, 777, 780, 782],
+    "parallel_canonical_batch4_paths_remaining_from_this_set": 1,
+    "canonical_semantics": [
+      "CLAYVM/2 serializes exact Int and Bytes parameter types while Int-only modules remain CLAYVM/1",
+      "Bytes admits built-in immutable bytes only",
+      "bytearray fails closed as BYTES_MUTABLE_REQUIRES_EPOCH",
+      "living memoryview fails closed as BYTES_BORROWED_REQUIRES_EPOCH",
+      "released memoryview normalizes to BYTES_VIEW_RELEASED",
+      "mutable/shared/borrowed ingress is deferred to an explicit Buffer lease/epoch/stability contract",
+      "mixed Int+Bytes CLAYVM/2 regression preserves both per-function type metadata and execution",
+      "String/argv hostcall remains downstream and is not silently fused"
+    ],
+    "runner_contracts": [
+      "ClayGoSourceStage/v5 raw Git blob materialization via git ls-tree plus git cat-file",
+      "git archive export semantics excluded from source authority",
+      "hash-bound credential-free exact Git bundle for HEAD/tree provenance",
+      "ambient Vercel checkout bytes not admitted as source authority",
+      "pinned @vercel/sandbox 2.9.2 checked by runner",
+      "atomic single-owner build-hook claim",
+      "VERCEL_BUILD_INTERNAL_ONLY with no reusable public arbitrary-command endpoint",
+      "DENY_ALL before offline acceptance matrix",
+      "pristine exact source restoration before each release freeze",
+      "two independent one-file EntityOS builds require equal SHA-256 and cmp byte identity",
+      "runtime/self-test, no-host-Python PATH, state/restart, capability and relocation gates plus mandatory Sandbox stop"
+    ]
+  },
+  "adversarial_static_review": {
+    "exact_tree": "2384c0bf4f82d16436f2b24c6775a115e07b6274",
+    "git_symlink_entries_observed": 0,
+    "git_submodule_entries_observed": 0,
+    "note": "current exact candidate tree does not exercise symlink/submodule materialization; unsupported Git tree entry classes are nevertheless fail-closed by the v5 stager"
+  },
+  "vercel_observations": {
+    "batch5_capacity_probe": {
+      "deployment_id": "dpl_6dT9WsEySQsfMfDB85UJwdhffXEX",
+      "source_head": "d2013fd9e718707793bb59c5ed324670241bd0fd",
+      "branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+      "deployment_state": "READY",
+      "actual_build_started": true,
+      "sandbox_started": false,
+      "observed_runner_result": "SKIP_NON_TARGET_PREVIEW",
+      "observed_twice": true,
+      "root_cause": "copied v3 runner hard-coded EXPECTED_REF=chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325 rather than the Batch5 branch",
+      "meaning": "READY proved only that Vercel performed the preview build; it established no Sandbox or EntityOS executable evidence"
+    },
+    "preferred_retry": {
+      "source_head": "843703b949ac0fb2d44eeda69f2adb708cffcc38",
+      "source_tree": "2384c0bf4f82d16436f2b24c6775a115e07b6274",
+      "github_vercel_status": "failure",
+      "status_target": "build-rate-limit upgrade/retry surface",
+      "deployment_observed_in_project_list": false,
+      "sandbox_started": false,
+      "entityos_artifact_built": false,
+      "semantic_pass_fail": "UNRESOLVED_NOT_EXECUTED",
+      "interpretation": "provider rejected preferred retry before deployment/build/Sandbox creation"
+    }
+  },
+  "unusual_experiment_accounting": {
+    "slot_state_for_current_go_coordination": "CONSUMED_1_OF_1",
+    "preferred_runner_new_unusual_experiment_count": 0,
+    "additional_unusual_experiment_executed_by_this_fusion_work": false,
+    "mechanism_basis": "bounded shared mutable exporter torn-snapshot counterexample already persisted by current GO coordination",
+    "policy": "no second unusual intervention; Vercel Batch4 is regression/acceptance-only"
+  },
+  "counterhypotheses_and_outcomes": [
+    {
+      "counterhypothesis": "Vercel READY implies the Batch5 EntityOS matrix ran",
+      "outcome": "REJECT",
+      "evidence": "build logs show two SKIP_NON_TARGET_PREVIEW results and no Sandbox.create path"
+    },
+    {
+      "counterhypothesis": "current provider build capacity means preferred PR781 will now necessarily execute",
+      "outcome": "REJECT",
+      "evidence": "fresh exact retry 843703b9 was immediately rate-limited and produced no deployment"
+    },
+    {
+      "counterhypothesis": "multiple overlapping fusion PRs are useful independent implementations",
+      "outcome": "REJECT_FOR_CANONICAL_PROMOTION",
+      "evidence": "overlapping branches carried stale/pre-epoch Bytes semantics or duplicate runners; unique value was fused into PR781 and duplicates closed unmerged"
+    }
+  ],
+  "next_executable_sequence": [
+    "when provider build capacity admits the preferred PR781 branch, require an actual preview build for exact then-current head with the branch-matching EXPECTED_REF",
+    "require actual Sandbox creation and capture Sandbox identity before accepting any executable claim",
+    "require ClayGoSourceStage/v5 raw-tree provenance plus exact HEAD/tree clean zero-remote reconstruction",
+    "run current epoch-safe Bytes v2 and released-view regressions including mixed Int+Bytes V2",
+    "run CM07, dirfd, build-provenance and canonical source-to-single-VM gates under DENY_ALL",
+    "build EntityOS twice from separately restored pristine exact source and require identical SHA-256 plus byte identity",
+    "run exact artifact status/self-test, no-host-Python PATH, state/restart, capability and relocation gates",
+    "require successful Sandbox stop and persist exact artifact digest and bounded receipt",
+    "only after this exact candidate passes consider downstream String/argv fusion; whole EntityOS acceptance remains independently gated by the full acceptance vector"
+  ],
+  "vps_or_self_hosted_test_evidence_used": false,
+  "production_host_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT_BEFORE_PREFERRED_EXACT_HEAD_SANDBOX"
+}

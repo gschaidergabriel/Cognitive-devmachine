@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "retained_candidate_pr": 744,
+  "retained_candidate_head": "81f1b99c70af56d9459d81190a1244484748d32f",
+  "scope": "CM-TERM process-path receipt/provenance discriminator",
+  "observed_anchor": "PR #744 adds a path-only String process hostcall through the single ClayVM and records HostProcessReceipt.argv, but requested path identity is not necessarily executed binary identity.",
+  "hypothesis": "A path/argv receipt is sufficient to bind the executed program identity for the path-only String process effect.",
+  "counterhypothesis": "The same absolute path string can resolve to a different executable between invocations, so a path/argv receipt proves request/outcome but not stable executed binary identity.",
+  "experiment": {
+    "name": "EXECUTABLE_SYMLINK_RETARGET_SAME_PATH",
+    "bounded_unusual_experiment": true,
+    "new_unusual_experiment_count": 1,
+    "environment": "isolated local sandbox",
+    "evidence_scope": "source-equivalent reconstruction of current-main claymachine/host_process.py behavior; NOT exact Git-blob execution and NOT EntityOS artifact execution",
+    "baseline": "One absolute symlink path pointed to /usr/bin/true and run_host_process((path,)) returned rc=0.",
+    "intervention": "The same symlink path was retargeted to /usr/bin/false and run_host_process((same_path,)) returned rc=1.",
+    "observation": "Both receipts retained the same argv path string while process behavior changed from rc=0 to rc=1.",
+    "outcome": "PATH_STRING_AND_ARGV_RECEIPT_DO_NOT_BIND_EXECUTED_BINARY_IDENTITY"
+  },
+  "collapse": {
+    "hypothesis": "REJECT_AT_PROVENANCE_STRONG_SCOPE",
+    "counterhypothesis": "RETAIN",
+    "confidence": "HIGH_FOR_MECHANISM_LOW_FOR_EXACT_PRODUCT_BYTES_UNTIL_EXACT_HEAD_SANDBOX_REPLAY",
+    "production_semantics_promoted": false,
+    "whole_clay_machine_acceptance": false
+  },
+  "affected_components": [
+    "CM-08-LINUX-INTEROP",
+    "CM-10-TOOLING-OBSERVABILITY-RECOVERY",
+    "CM-TERM",
+    "EntityOS effect receipts/provenance"
+  ],
+  "test_obligation": "Before provenance-strong promotion of linux.process.spawn.path.v1, explicitly choose and test receipt scope: either bind post-spawn executable identity, bind/open an executable descriptor under a declared identity policy, or state that v1 receipts are path/outcome receipts and keep executed-binary identity OPEN.",
+  "next_executable_step": "Apply the receipt-scope decision to retained PR #744 and replay it on the exact PR head in an actually-started isolated/source-admitted full-repository sandbox together with existing CM-TERM/single-VM/strict-ClayOS gates and an exact one-file EntityOS rebuild/self-test.",
+  "execution_constraints": {
+    "sandbox_only_testing": true,
+    "vps_or_self_hosted_test_evidence_allowed": false,
+    "github_hosted_isolated_lane": "currently blocked/no-start under billing-spending condition",
+    "current_local_sandbox": "lacks full private product checkout and PyInstaller required for canonical EntityOS freeze"
+  },
+  "entityos_artifact": "BLOCKED_NOT_BUILT_IN_THIS_CYCLE"
+}

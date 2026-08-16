@@ -1,20 +1,21 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "date": "2026-08-16",
   "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
-  "scope": "Evidence fusion for an actually-started isolated Vercel Sandbox run and exact one-file EntityOS candidate; not whole-machine acceptance.",
+  "scope": "Evidence fusion for actually-started isolated Vercel Sandbox execution and exact one-file EntityOS candidates; not whole-machine acceptance.",
   "grf": {
     "observed_reality": [
       "The active owner policy requires Clay Machine execution evidence to come from isolated sandboxes rather than VPS/self-hosted execution.",
       "GitHub-hosted Actions for the current String-path frontier had been blocked before runner start by account billing/spending state.",
-      "Vercel deployment dpl_ESwWufAfNd36LRYBza5FpBZsnYco cloned exact product head 33424a2e86545ef45ee6824a900fd0c6845f7a0b and its build logs recorded an actually-started Vercel Sandbox batch."
+      "Vercel deployment dpl_ESwWufAfNd36LRYBza5FpBZsnYco cloned exact product head 33424a2e86545ef45ee6824a900fd0c6845f7a0b and its build logs recorded an actually-started Vercel Sandbox batch.",
+      "A separate concurrent GO lane later produced another actually-started build-time Vercel Sandbox receipt for exact head 1c6486593471b0b3b32ee4f7ac44fda34258005b; it is preserved as parallel evidence and is not counted as this worker macro-cycle's unusual experiment."
     ],
-    "generated_hypothesis": "A preview-only fixed Vercel build job can provide a compliant isolated execution lane that binds one exact source head, builds the one-file EntityOS candidate, exercises deterministic offline gates, and stops the Sandbox without using VPS/self-hosted execution.",
-    "counter_reality": "A READY Vercel deployment or successful serverless build may exist without any Sandbox execution, may test stale checkout bytes, or may produce an EntityOS result that cannot be attributed to the exact candidate source.",
-    "discriminating_observation": "Require build-log evidence of Sandbox creation/execution, exact source-head/archive binding, all matrix step exit codes, deny-all network during tests, exact EntityOS digest, duplicate-run suppression, and clean Sandbox stop.",
-    "outcome": "RETAIN generated_hypothesis for exact head 33424a2e86545ef45ee6824a900fd0c6845f7a0b only; DEFER promotion to current main or other candidate heads."
+    "generated_hypothesis": "A fixed build-internal Vercel job can provide a compliant isolated execution lane that binds one exact source head, builds the one-file EntityOS candidate, exercises deterministic offline gates, and stops the Sandbox without using VPS/self-hosted execution.",
+    "counter_reality": "A READY Vercel deployment or successful serverless build may exist without any Sandbox execution; checkout-derived archives or import-capable ignored files may weaken source attribution; a reusable HTTP route/static nonce can create unnecessary replay/exposure surface; and an exact-head PASS becomes stale when main or the candidate changes.",
+    "discriminating_observation": "Require actual Sandbox execution, exact source identity binding, all matrix step exit codes, deny-all network during tests, exact EntityOS digest, duplicate-run suppression, clean Sandbox stop, and fresh-head provenance checks before promotion.",
+    "outcome": "RETAIN the Vercel Sandbox execution lane; DEFER promotion of any tested historical digest to current main."
   },
   "exact_sandbox_receipt": {
     "provider": "Vercel Sandbox",
@@ -58,19 +59,44 @@
     "name": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
     "count": 1,
     "result": "PASS for exact head 33424a2e86545ef45ee6824a900fd0c6845f7a0b",
-    "note": "No second unusual experiment is claimed by this receipt."
+    "note": "This worker macro-cycle starts no second unusual experiment. Parallel workers may have independent GO experiment accounting and are recorded separately rather than merged into this count."
+  },
+  "parallel_other_macro_cycle_evidence": {
+    "provider": "Vercel Sandbox",
+    "deployment_id": "dpl_GaKgqTe4U96DzhxfWxq31Ugkhw4e",
+    "source_head": "1c6486593471b0b3b32ee4f7ac44fda34258005b",
+    "source_archive_sha256": "ec3c0885bcd4bf4aacaa0a00781c01fcccc57981b74227c0dbe99220dbfe4de0",
+    "entityos_sha256": "fa6366843129c5bf7a678342e7758e9f222771bbe4fb832223b273744a4716e3",
+    "entityos_size_bytes": 9165200,
+    "status": "GO_SANDBOX_MATRIX_VERIFIED",
+    "network_policy_during_tests": "DENY_ALL",
+    "entityos_path_without_host_python": "PASS",
+    "entityos_relocation": "BYTE_IDENTICAL",
+    "sandbox_stopped": true,
+    "duplicate_second_build_invocation": "DUPLICATE_BUILD_INVOCATION_SKIPPED",
+    "separate_worker_macro_cycle": true,
+    "promotion_effect": "NONE; exact-head evidence only."
   },
   "counterevidence_and_staleness": {
     "tested_head_not_current_main": true,
-    "observed_product_main_after_test": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+    "observed_product_main_initial": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+    "observed_product_main_latest_in_this_receipt": "7640638664266196f52d38dc63f8a51a04190f9d",
+    "latest_semantic_provenance_merge_before_that_main": "6c0ce7e8c6131b6295d8621ef47d79994ff3dd4c",
+    "latest_semantic_provenance_merge_effect": "Canonical EntityOS build now rejects ignored import-capable artifacts and repository-root mismatch.",
     "string_path_pr": 744,
-    "string_path_tested_by_this_vercel_receipt": false,
-    "string_path_reason": "The exact tested 33424a2 ClayVM did not contain the path-only String hostcall candidate from PR #744.",
+    "string_path_head": "64530ed97303623849b92f2503abb0fa0ad24598",
+    "string_path_vs_main_status": "DIVERGED",
+    "string_path_ahead_by": 11,
+    "string_path_behind_by": 23,
+    "string_path_merge_base": "7a228d3d3fc33a2681e635e8725d44c06518e891",
+    "string_path_tested_by_exact_sandbox_receipts_above": false,
+    "string_path_reason": "Neither exact tested Vercel head contains the preferred PR #744 path-only String hostcall candidate as a fresh current-main fusion.",
     "stronger_committed_tree_staging_candidate_commit": "46a491ab5ebdff936e2bc4d164c75a2dae82c0e9",
-    "stronger_committed_tree_staging_tested_by_this_receipt": false,
-    "build_provenance_ignored_artifact_pr": 757,
-    "build_provenance_ignored_artifact_tested_by_this_receipt": false,
-    "note": "PR #757 records a separate provenance blindspot involving ignored import-capable artifacts; its existence prevents generalizing this earlier exact-head digest to a canonical current-main build."
+    "stronger_committed_tree_staging_tested_by_primary_receipt": false,
+    "build_provenance_ignored_artifact_merge": "6c0ce7e8c6131b6295d8621ef47d79994ff3dd4c",
+    "build_internal_only_hardening_pr": 759,
+    "build_internal_only_hardening_state": "OPEN_UNVERIFIED",
+    "note": "PR #759 removes the repository-static run nonce and makes the HTTP surface fail closed as BUILD_INTERNAL_ONLY; it intentionally did not start another Vercel Sandbox in its originating GO because that GO had already consumed its unusual experiment."
   },
   "architecture_delta": {
     "state": "SUPPORTED_EXECUTION_LANE_EXACT_HEAD_ONLY",
@@ -80,7 +106,7 @@
       "CM-09-MINIMAL-CLAYOS",
       "CM-10-TOOLING-OBSERVABILITY-RECOVERY"
     ],
-    "rule": "Vercel Sandbox is now supported as an isolated exact-head execution lane when the job is fixed/bounded, source identity is independently bound, post-provision test networking is denied, exact one-file EntityOS output is measured, and Sandbox stop is observed. A provider deployment READY state alone remains insufficient evidence.",
+    "rule": "Vercel Sandbox is supported as an isolated exact-head execution lane when the job is fixed/bounded and preferably build-internal, source identity is independently bound, post-provision test networking is denied, exact one-file EntityOS output is measured, duplicate execution is suppressed, and Sandbox stop is observed. A deployment READY state alone remains insufficient evidence.",
     "non_claims": [
       "No whole Clay Machine acceptance.",
       "No current-main EntityOS acceptance.",
@@ -88,8 +114,8 @@
       "No canonical Clay Bytes/Buffer lifetime completion.",
       "No CM-NET, general argv/streaming/PTY, CM-VIS, CM-AUDIO or self-hosting completion.",
       "No VPS/self-hosted/production-host evidence used for Clay Machine acceptance.",
-      "No retained downloadable EntityOS bytes were exported from the destroyed Sandbox by this lane."
+      "No retained downloadable EntityOS bytes were exported from the destroyed Sandboxes by these lanes."
     ],
-    "next_falsifier": "Fuse the preferred path-only String hostcall and current provenance hardening onto then-current main, bind staged bytes to the committed Git tree without weakening canonical one-file build provenance, then obtain a fresh exact-head isolated Vercel Sandbox receipt that rebuilds and executes that exact EntityOS candidate."
+    "next_falsifier": "Create one fresh-main fusion candidate containing the preferred path-only String hostcall, current ignored-import/root provenance fence, committed-tree source staging, and build-internal Vercel control plane; then obtain one fresh exact-head isolated Vercel Sandbox receipt that rebuilds and executes that exact EntityOS candidate before any merge/promotion."
   }
 }

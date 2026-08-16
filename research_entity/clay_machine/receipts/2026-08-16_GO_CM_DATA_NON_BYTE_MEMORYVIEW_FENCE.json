@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "grf": {
+    "observed_reality": [
+      "Current Clay Machine workspace identifies canonical Bytes/Buffer ownership+lifetime plus typed/effect IR -> single-VM ingress as the highest-value unblocked CM-DATA frontier.",
+      "Parallel product PR #693 already implemented a Python CM-DATA framing oracle with snapshot-at-ingress semantics, so a second data-plane implementation would duplicate active work.",
+      "PR #693 pre-falsifier _as_bytes accepted arbitrary memoryview values by calling bytes(value).",
+      "Historical exact-head run 31925136887/job 95111410262 passed 8 CM-DATA tests on f495fd3f0c51f04a4c9e7127d5b5a466dd302779, but that head's workflow was pull_request -> persistent self-hosted and therefore is retained as mechanism execution evidence, not current source-admitted release/acceptance evidence.",
+      "Current repaired PR #693 head observed after CAS updates: 6405cd167037b1f64b3bcb62e69c8859e6943083."
+    ],
+    "generated_hypothesis": "Snapshotting every Python memoryview with bytes(value) is a safe byte-exact reference ingress because the snapshot detaches later producer mutation.",
+    "counter_reality": "A memoryview may expose multi-byte typed elements; bytes(value) then snapshots their native in-memory representation, silently assigning host representation/byte-order semantics to an allegedly opaque portable byte channel.",
+    "falsifier": "Pass memoryview(array('I', [0x01020304])) through the exact PR #693 framing candidate and inspect whether it fails closed or emits a host-native payload.",
+    "outcome": "REJECT generated_hypothesis as too broad; RETAIN byte-oriented snapshot semantics only and fail closed for wider/native typed memoryviews."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "NON_BYTE_MEMORYVIEW_NATIVE_REPRESENTATION",
+    "environment": {
+      "python": "3.13.5",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "byteorder": "little"
+    },
+    "input": "memoryview(array('I', [0x01020304]))",
+    "memoryview_format": "I",
+    "memoryview_itemsize": 4,
+    "pre_repair_candidate_accepted": true,
+    "observed_payload_hex": "04030201",
+    "classification": "COUNTERHYPOTHESIS_SUPPORTED_NON_BYTE_TYPED_BUFFER_ACCEPTED",
+    "rollback": "No external effect; disposable local reconstruction removed after the test."
+  },
+  "ordinary_regressions_before_repair": {
+    "scope": "Seven ordinary PR #693 tests were executed while deliberately excluding #693's own previously consumed OOB test.",
+    "result": "7/7 PASS"
+  },
+  "product_delta": {
+    "pr": 693,
+    "branch": "chatgpt/go-cm-data-binary-frame-20260816",
+    "current_head_observed": "6405cd167037b1f64b3bcb62e69c8859e6943083",
+    "changes": [
+      "claymachine/data_plane.py now admits memoryview only when itemsize == 1 and format is B/b/c; wider/native typed exporters fail closed.",
+      "tests/test_clay_data_plane.py adds the discovered typed-memoryview case as an ordinary regression.",
+      "claymachine-vm-bootstrap workflow no longer auto-runs candidate PR bytes on the persistent self-hosted runner; workflow_dispatch requires an explicit admitted_head_sha equal to the dispatch SHA before checkout/execution."
+    ],
+    "local_reconstructed_candidate_suite": "9/9 PASS",
+    "accepted_target_current_head": "NOT_EXECUTED_BY_THIS_WORKER",
+    "connector_limitation": "Available GitHub connector exposes workflow reads/retries but no workflow_dispatch creation action; no source-admitted current-head VPS run was invented."
+  },
+  "stale_or_nonpromotable_evidence": {
+    "historical_run": 31925136887,
+    "historical_job": 95111410262,
+    "historical_head": "f495fd3f0c51f04a4c9e7127d5b5a466dd302779",
+    "historical_result": "PASS_8_CM_DATA_TESTS_PLUS_9_VM_TESTS",
+    "reason_not_current_acceptance": [
+      "The product head subsequently changed to add the typed-memoryview fence and workflow source-admission correction.",
+      "The historical workflow at f495fd3 was triggered by pull_request and ran on persistent self-hosted Linux/X64; current Clay Machine policy requires an actually isolated/ephemeral or explicitly source-admitted candidate-byte execution path for promotion."
+    ],
+    "retained_value": "Mechanism evidence for the older framing candidate only; it does not prove current repaired bytes."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+    "affected_workstreams": [
+      "CM-DATA",
+      "CM-VIS",
+      "CM-AUDIO",
+      "CM-06-MEMORY-CONCURRENCY-RUNTIME",
+      "CM-10-TOOLING-OBSERVABILITY-RECOVERY"
+    ],
+    "rule": "An opaque Clay byte ingress must not silently reinterpret wider host-native typed buffer elements as bytes. Until canonical Clay Buffer/Bytes semantics select an explicit typed reinterpretation law, admit explicit byte-oriented storage only or fail closed; mutable/unknown backing still requires snapshot/copy or a separately proven lease/epoch contract.",
+    "counterevidence_preserved": "The current Python framing oracle remains noncanonical and is not yet wired through ClayCode type/effect semantics, canonical executable IR or the single ClayVM.",
+    "next_falsifier": "Select the smallest canonical owned immutable Clay Bytes value and prove one source/typechecker -> executable typed/effect IR -> single ClayVM opaque-byte ingress without host-native representation leakage, then run the exact repaired head on an explicitly source-admitted accepted Ubuntu path."
+  },
+  "nonclaims": [
+    "No canonical Clay Bytes/Buffer language type is selected by this receipt.",
+    "No current-head accepted VPS/self-hosted PASS is claimed.",
+    "No CM-NET, CM-TERM, CM-VIS or CM-AUDIO baseline is passed.",
+    "No whole Clay Machine acceptance is claimed.",
+    "No final/paid training is authorized or started.",
+    "No Together API/service was used."
+  ]
+}

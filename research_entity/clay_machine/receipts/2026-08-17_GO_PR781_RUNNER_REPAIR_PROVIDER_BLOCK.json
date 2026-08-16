@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "research_parent_observed": "334176196d94b7ba6fed5cbbc28407064448f3f2",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 781,
+  "preferred_branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+  "preferred_head_observed": "1334610341674e92abda50c3ca887bf4ca035107",
+  "repair_source_inspection": {
+    "sanitized_git_head_format_fixed": true,
+    "sanitized_git_head_format": "SANITIZED_GIT_HEAD=%s",
+    "python_template_newline_escape_fixed": true,
+    "generated_python_intent": "sys.version.replace('\\n', ' ')",
+    "duplicate_unusual_experiment_path_removed": true,
+    "sandbox_sdk_pinned": "2.9.2",
+    "runner_execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "runner_new_unusual_experiment_count": 0,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY"
+  },
+  "experiment_accounting": {
+    "global_unusual_experiment_limit": 1,
+    "global_unusual_experiment_count": 1,
+    "global_slot_consumed": true,
+    "additional_unusual_experiments_allowed": false
+  },
+  "latest_empirical_sandbox_evidence": {
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "result": "FAIL_PROVISION_PINNED_PYTHON_TOOLCHAIN_HEREDOC",
+    "raw_tree_source_binding": "PASS",
+    "system_toolchain_provision": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "sandbox_stopped": true,
+    "entityos_artifact_built": false
+  },
+  "current_exact_head_execution_state": {
+    "source_head": "1334610341674e92abda50c3ca887bf4ca035107",
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "new_vercel_deployment_observed": false,
+    "sandbox_started": false,
+    "runtime_claim": "UNVERIFIED_AFTER_REPAIR"
+  },
+  "current_frontier": "Run the repaired exact current PR781 head in an actually-started Vercel Sandbox regression/acceptance batch. Require raw-tree/shallow-safe provenance, pinned Sandbox SDK/single-owner, CM-07/dirfd/source-to-single-VM, Bytes-v2/released-view/immutable-bytes controls, pristine source before twin freezes, byte-identical one-file EntityOS builds, status/self-test/no-host-Python/state-restart/capability/relocation gates, DENY_ALL during tests and successful Sandbox stop.",
+  "blocker": "Vercel deployment quota currently prevents creation of a fresh deployment/Sandbox for the repaired exact head; source inspection cannot promote the repair to executable truth.",
+  "new_unusual_experiments_executed": 0,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_DEPLOYMENT_QUOTA_PENDING_FRESH_EXACT_HEAD_SANDBOX"
+}

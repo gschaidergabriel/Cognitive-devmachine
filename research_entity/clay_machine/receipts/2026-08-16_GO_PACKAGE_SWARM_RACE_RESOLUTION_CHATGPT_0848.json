@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-07 package/module frontier live swarm collision resolution",
+  "research_head_before_write": "a40a282f97e07b86ddd33378f4b3169ed8802e31",
+  "product_main_observed": "f2c5ccdddd1791cd404c1e8d25f41869a02673ea",
+  "predecessor_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_PACKAGE_OVERLAP_AND_IMPORT_MODE_REVIEW_CHATGPT.json",
+  "predecessor_state_change": "The predecessor correctly recorded its observation at commit time, but live product coordination changed immediately afterward: PR 638 and PR 639 are now both CLOSED_UNMERGED. Its preferred_active_candidate=639 is therefore no longer current.",
+  "current_observed": {
+    "pr_635": "OPEN_DRAFT_IMPORT_MODE_METADATA_CANDIDATE",
+    "pr_638": "CLOSED_UNMERGED_EXACT_HEAD_PACKAGE_INDEX_PROTOTYPE",
+    "pr_639": "CLOSED_UNMERGED_PARALLEL_CLAY_TOML_RESOLVER_PROTOTYPE",
+    "pr_644": "OPEN_CURRENT_MAIN_CLAYENV_CLI_TRUST_BOUNDARY_WORK",
+    "workspace_package_system": "STILL_OPEN_NOT_CANONICAL"
+  },
+  "this_go_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "DUPLICATE_PACKAGE_PROVIDER_ROOT_ORDER_REVERSAL",
+    "execution_surface": "LOCAL_ISOLATED_MECHANISM_PROBE",
+    "treatment": "Create two package roots claiming logical package clay.collision; resolve in [z,a] and [a,z] caller order.",
+    "observations": {
+      "both_orders_fail_closed": true,
+      "diagnostic_order_invariant": true,
+      "search_order_winner": false
+    },
+    "result": "PASS",
+    "epistemic_limit": "This validates the duplicate-provider ordering mechanism only; it is not exact-head whole-resolver or self-hosted integration evidence.",
+    "rollback": "Temporary directories only; no persistent runtime effect."
+  },
+  "external_research_refresh": {
+    "primary_source": "Go Modules Reference",
+    "finding": "Go resolves a package only when exactly one module in the build list provides it and reports an error when two or more provide it; this independently supports fail-closed ambiguity rather than root-order precedence.",
+    "promotion_limit": "Clay does not copy Go module/version semantics; only the ambiguity invariant is retained."
+  },
+  "grf_collapse": {
+    "generated_reality_a": "Promote PR 639 because it is broader and includes stdlib seed/dependency edges.",
+    "counter_reality_a": "Its separate Clay.toml/path-derived package contract competes with the ClayEnv package identity architecture and its exact resolver gate was not yet observed on the accepted self-hosted lane.",
+    "generated_reality_b": "Reopen PR 638 immediately because it has 14/14 exact-head package-index evidence.",
+    "counter_reality_b": "PR 638 is stale/diverged by three product-main commits and immediate recomposition would touch clayenv/cli.py while active PR 644 also changes that surface, creating another collision.",
+    "outcome": "DEFER_RECOMPOSITION_RETAIN_EVIDENCE",
+    "reason": "Avoid a third same-surface collision. Keep both package prototypes closed, preserve their tests/invariants, and recompose exactly one canonical CM-07 package/import layer from fresh main after the current ClayEnv CLI trust-boundary change settles."
+  },
+  "retained_invariants": [
+    "One canonical package/manifest/index architecture only.",
+    "Portable logical/package identity must not depend on absolute host root.",
+    "Duplicate package providers fail closed independent of discovery/root order.",
+    "Preserve MODULE versus WILDCARD use mode losslessly before symbol/linker semantics.",
+    "Resolved multi-module closure must feed the existing canonical checker -> executable TypedIR -> single ClayVM path, never a second execution architecture.",
+    "Exact-head self-hosted Linux/X64 evidence is required after recomposition."
+  ],
+  "targeted_reentry": {
+    "product_pr_638_comment_id": 5305234219,
+    "note": "Order-invariant duplicate-provider failure was routed back to the package-index lineage; no adoption of PR 639's separate manifest architecture was requested."
+  },
+  "next_discriminator": "After the active ClayEnv CLI trust-boundary work no longer overlaps, refresh product main, preserve import mode canonically (or adopt/supersede PR 635), then recompose exactly one package/index + dependency-provider graph and rerun exact-head self-hosted tests including relocation and duplicate-provider-order controls.",
+  "non_claims": [
+    "No package system was merged by this GO.",
+    "No cross-module symbol linking/execution is claimed.",
+    "No stdlib is canonical yet.",
+    "No Linux effect authority or ClayOS surface was widened.",
+    "No whole Clay Machine acceptance is claimed.",
+    "Together API was not used.",
+    "No final/model training was authorized or started."
+  ]
+}

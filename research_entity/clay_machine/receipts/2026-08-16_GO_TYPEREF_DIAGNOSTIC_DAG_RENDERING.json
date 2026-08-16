@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_anchor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "post_merge_main_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+    "typeref_renderer_blob": "a083c8ad3adcd9ec3ea57577856d9b614e4d26a3",
+    "production_typeref_pr": 681,
+    "production_typeref_merge": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
+    "production_sharing_exact_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+    "production_sharing_run": 31923469033,
+    "production_sharing_result": "success",
+    "production_totality_run": 31923469219,
+    "production_totality_result": "success"
+  },
+  "grf": {
+    "observed_reality": [
+      "PR #681 is merged and its two previously pending exact-head TypeRef production gates completed successfully on c0a275b35869bc5838ea1f775a557f3534ae4635.",
+      "The production _render_type_ref implementation is iterative and recursion-free but expands every logical occurrence in root.params; it carries no output, visit, or DAG-expansion budget.",
+      "The current workspace already records diagnostic expansion of a compact shared DAG as a separate CM-02 resource-surface follow-up."
+    ],
+    "generated_hypothesis": "The iterative renderer is operationally safe because TypeRef canonicalization is stack-total and now structurally shares repeated alias DAG subtrees.",
+    "counter_reality": "Structural sharing can invert into diagnostic amplification: a tiny unique-node DAG can represent an exponentially large logical tree, and the renderer expands the logical tree rather than the unique graph.",
+    "falsifier": "Hold unique-node count linear in depth while comparing the current render algorithm on a unary chain versus a binary DAG whose two children are the same object at every level.",
+    "outcome": "REJECT generated safety inference; RETAIN counter-reality as a bounded diagnostic resource-exhaustion mechanism. Reachability/exploitability from admitted ClayCode remains unproven."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "DAG_COMPRESSION_INVERSION",
+    "classification": "LOCAL_SYNTHETIC_MECHANISM_EVIDENCE_NOT_PRODUCT_PASS",
+    "method": "Reimplemented the fetched production _render_type_ref traversal exactly over a minimal immutable TypeRef shape; no repository code was executed. Compared equal unique-node counts for unary-chain and identity-shared binary-DAG shapes.",
+    "measurements": [
+      {"depth": 4, "shape": "linear", "unique_nodes": 5, "rendered_chars": 13, "elapsed_seconds": 0.000009615},
+      {"depth": 4, "shape": "shared_binary", "unique_nodes": 5, "rendered_chars": 91, "elapsed_seconds": 0.000017386},
+      {"depth": 8, "shape": "linear", "unique_nodes": 9, "rendered_chars": 25, "elapsed_seconds": 0.000004998},
+      {"depth": 8, "shape": "shared_binary", "unique_nodes": 9, "rendered_chars": 1531, "elapsed_seconds": 0.000148750},
+      {"depth": 12, "shape": "linear", "unique_nodes": 13, "rendered_chars": 37, "elapsed_seconds": 0.000005338},
+      {"depth": 12, "shape": "shared_binary", "unique_nodes": 13, "rendered_chars": 24571, "elapsed_seconds": 0.002127638},
+      {"depth": 16, "shape": "linear", "unique_nodes": 17, "rendered_chars": 49, "elapsed_seconds": 0.000007441},
+      {"depth": 16, "shape": "shared_binary", "unique_nodes": 17, "rendered_chars": 393211, "elapsed_seconds": 0.034957002},
+      {"depth": 18, "shape": "linear", "unique_nodes": 19, "rendered_chars": 55, "elapsed_seconds": 0.000012508},
+      {"depth": 18, "shape": "shared_binary", "unique_nodes": 19, "rendered_chars": 1572859, "elapsed_seconds": 0.134302046}
+    ],
+    "headline_result": "19 unique nodes rendered to 1,572,859 characters in the shared-binary case versus 55 characters for a 19-node unary chain.",
+    "rollback": "No product mutation was performed by the experiment."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+    "affected_work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+    "rule": "TypeRef diagnostic rendering must be independently resource-bounded; stack-total canonicalization and DAG-aware equality are insufficient. Preserve the existing Name<A, B> rendering exactly for ordinary small values, but impose deterministic expansion/output limits before diagnostics can amplify a compact shared DAG.",
+    "preferred_candidate": "Keep _render_type_ref iterative; use a depth/continuation traversal that does not enqueue an entire high-fanout tuple at once; cap expanded TypeRef occurrences and output characters; append an explicit truncation marker when either budget is exhausted. This is diagnostic hardening only and must not mint language/type semantics.",
+    "strongest_counterhypothesis": "The amplification shape may be unreachable from parser-admitted/canonical ClayCode or diagnostics may never render a sufficiently large canonical DAG, so a production change could be unnecessary complexity.",
+    "next_discriminator": "Add an ordinary deterministic production regression that constructs the already-supported shared TypeRef DAG directly, proves normal small rendering remains byte-for-byte unchanged, proves pathological rendering is capped with an explicit marker, then run the exact-head TypeRef sharing/totality gates on an actually admitted execution lane.",
+    "non_claims": [
+      "No product code was patched in this receipt.",
+      "No production repository test was run by this worker.",
+      "No exploitability or externally reachable denial-of-service claim is made.",
+      "No whole CM-02 or Clay Machine completion is claimed."
+    ]
+  },
+  "coordination": {
+    "current_cm02_state_correction": "Workspace text saying PR #681 gates are queued/pending is stale: PR #681 is merged and both named exact-head runs are success.",
+    "cm07_unchanged": "Trusted isolated execution remains the blocker for the preserved CM-07 v2 correction head; this receipt does not bypass that trust boundary.",
+    "unusual_experiment_count_this_go": 1
+  }
+}

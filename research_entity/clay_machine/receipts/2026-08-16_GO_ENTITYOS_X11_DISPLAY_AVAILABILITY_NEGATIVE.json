@@ -1,0 +1,71 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_X11_DISPLAY_AVAILABILITY_NEGATIVE",
+  "observed_at_utc": "2026-08-16T05:43:43Z",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "NEGATIVE_RESULT_RETAINED",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "tested_product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "tested_binary_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+  "evidence_scope": "LOCAL_SESSION_LINUX_X64_HEADLESS_WITH_DISPLAY_ENV",
+  "observed_environment": {
+    "DISPLAY": ":0",
+    "x11_library_loadable": true,
+    "x11_display_openable": false
+  },
+  "observations": [
+    {
+      "case": "normal_first_launch_without_existing_grant",
+      "state_home": "fresh isolated temporary directory",
+      "exit_code": 73,
+      "stderr": [
+        "ENTITYOS_INITIAL_GRANT_GUI_ERROR:ENTITYOS_X11_DISPLAY_OPEN_FAILED",
+        "ENTITYOS_INITIAL_GRANT_DECLINED"
+      ],
+      "grant_created": false
+    },
+    {
+      "case": "deterministic isolated test grant_then_product_surface",
+      "state_home": "fresh isolated temporary directory",
+      "exit_code": 74,
+      "stderr": [
+        "ENTITYOS_VISUAL_SHELL_ERROR:ENTITYOS_X11_DISPLAY_OPEN_FAILED"
+      ],
+      "grant_created": true,
+      "grant_mode": "0600"
+    }
+  ],
+  "source_anchor": {
+    "file": "entityos/visual_shell.py",
+    "predicate": "graphical_display_available",
+    "current_behavior": "returns true when DISPLAY is nonempty and libX11 is discoverable, without proving XOpenDisplay succeeds"
+  },
+  "grf_collapse": {
+    "observed_reality": "The exact successful one-file EntityOS artifact can encounter a host where DISPLAY is present and libX11 is loadable but the X endpoint cannot be opened.",
+    "preferred_hypothesis": "The graphical availability predicate is weaker than the actual visual-shell precondition and can route normal boot into a known-unavailable X11 path.",
+    "strongest_counterhypothesis": "A supported graphical host contract may intentionally require every nonempty DISPLAY to be valid, making this environment outside the accepted compatibility set.",
+    "discriminator": "Run a deterministic regression in which DISPLAY is present but XOpenDisplay fails; require a declared fail-closed/headless result rather than treating environment presence as graphical availability.",
+    "outcome": "RETAIN",
+    "confidence": "HIGH_FOR_PREDICATE_MISMATCH_LOCAL_SCOPE"
+  },
+  "affected_gates": [
+    "ENTITYOS_FIRST_START_PERMISSION_CONTINUITY",
+    "CM-PORT",
+    "ENTITYOS_VISUAL_HOST_BOUNDARY"
+  ],
+  "release_consequence": "Does not invalidate the successful self-hosted exact-head workflow, but whole-machine acceptance remains false and supported-host behavior for stale/unreachable DISPLAY is not yet explicitly gated.",
+  "next_executable_action": "In the next product-changing cycle, replace or strengthen graphical_display_available with a real short-lived XOpenDisplay probe (closing it immediately) or an equivalent explicit host capability probe; add a deterministic stale/unreachable-DISPLAY regression covering both first-start and post-grant no-argument launch; then rebuild and rerun the exact one-file EntityOS gates.",
+  "unusual_experiment_accounting": {
+    "this_receipt_adds_unusual_experiment": false,
+    "macro_cycle_unusual_experiment_count": 1,
+    "macro_cycle_unusual_experiment": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "reason": "This is ordinary exact-artifact compatibility verification of the current session environment, not a second novelty intervention."
+  },
+  "authority": {
+    "whole_machine_pass_claimed": false,
+    "together_api": "FORBIDDEN"
+  }
+}

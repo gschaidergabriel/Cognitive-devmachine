@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "scope": "Current-main Vercel build-internal EntityOS lane consolidation, duplicate-build sentinel falsification/repair, and exact-head rate-limit blocker; not whole-machine acceptance.",
+  "observed_reality": {
+    "canonical_product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "main_security_delta": "PR #760 merged; reusable preview GO execution endpoint now fails closed as BUILD_INTERNAL_ONLY",
+    "accepted_test_policy": "ISOLATED_SANDBOX_ONLY",
+    "vps_self_hosted_or_production_host_testing_used": false,
+    "vercel_project": "dr-unterweger",
+    "historical_exact_head_vercel_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_VERCEL_SANDBOX_ENTITYOS_EXACT_HEAD.json",
+    "historical_receipt_promotion_effect": "NONE_CURRENT_HEAD_STALE"
+  },
+  "grf": {
+    "generated_hypothesis": "A build-internal Vercel Sandbox lane can safely suppress Vercel's duplicate build-hook invocation by using a filesystem sentinel before Sandbox.create.",
+    "strongest_counter_reality": "The check-then-create sentinel sequence can race: both hooks can observe absence, one can create the sentinel, and the other can fail with EEXIST. That prevents a second Sandbox but still turns harmless duplicate invocation into deployment failure.",
+    "discriminator": "Run two synchronized claimants against the exact existsSync then exclusive-write mechanism and inspect ownership plus process exit codes.",
+    "outcome": "COUNTER_REALITY_CONFIRMED_AND_REPAIRED"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "CONCURRENT_SENTINEL_CLAIM_RACE",
+    "count": 1,
+    "environment": "ephemeral local isolated container; mechanism-only, not EntityOS acceptance",
+    "baseline_mechanism": "existsSync(sentinel) then writeFileSync(flag=wx)",
+    "observed": {
+      "claimants": 2,
+      "owners": 1,
+      "loser_result": "ERROR:EEXIST",
+      "loser_exit_nonzero": true
+    },
+    "interpretation": "Duplicate Sandbox ownership remained bounded to one, but a concurrent duplicate build hook could fail the deployment.",
+    "rollback": "No persistent system state; temporary sentinel directory removed with container lifecycle."
+  },
+  "repair": {
+    "canonical_candidate_pr": 768,
+    "branch": "clay/vercel-sandbox-batch-go-20260816-2325",
+    "commit": "a48320c79c7ec1def281199a731f174b7b7764fb",
+    "mechanism": "single atomic writeFileSync(flag=wx); EEXIST becomes successful DUPLICATE_BUILD_INVOCATION_SKIPPED; all other write errors rethrow fail-closed",
+    "ordinary_regression": {
+      "result": "PASS",
+      "claimants": 2,
+      "claimed": 1,
+      "skip_exists": 1,
+      "exit_codes": [0, 0],
+      "new_unusual_experiment_count": 0
+    }
+  },
+  "source_provenance_fusion": {
+    "current_entityos_builder_requirement": "clean Git repository with exact rev-parse HEAD and exact repository root",
+    "refuted_or_incompatible_paths": [
+      "SourceStage v3/v4 archive reproducibility claims were independently refuted by repeated Vercel build hooks",
+      "no-.git Git-blob source staging can be deterministic but cannot by itself satisfy the current canonical EntityOS build-provenance gate"
+    ],
+    "retained_candidate": "PR #768 sanitized shallow exact-Git staging with no configured remote and no injected credentials",
+    "closed_duplicate_prs_in_this_cycle": [758, 767]
+  },
+  "exact_head_execution": {
+    "candidate_head": "a48320c79c7ec1def281199a731f174b7b7764fb",
+    "vercel_status": "BLOCKED_BEFORE_BUILD",
+    "vercel_reason": "upgradeToPro=build-rate-limit",
+    "sandbox_started": false,
+    "fresh_entityos_built": false,
+    "semantic_pass_fail_inferred": false,
+    "rate_limit_classification": "INFRASTRUCTURE_NON_EXECUTION"
+  },
+  "non_claims": [
+    "No current-main EntityOS artifact was built by this worker macro-cycle.",
+    "No exact-head PR #768 Sandbox matrix PASS exists at receipt time.",
+    "No whole Clay Machine acceptance.",
+    "No VPS/self-hosted/production-host test evidence was used.",
+    "No Together API was used.",
+    "Historical Vercel EntityOS digests remain exact-head evidence only and are not promoted to current main."
+  ],
+  "next_executable_action": "When Vercel accepts a preview build again, rerun exact PR #768 head (or a fresh descendant rebased to then-current main) through the existing build-internal regression lane. Require exact sanitized Git HEAD/clean/no-remote provenance, exactly one Sandbox under duplicate hook invocation, GO_MATRIX_RESULT=PASS, one-file EntityOS SHA-256, PATH-without-host-Python PASS, relocation BYTE_IDENTICAL, DENY_ALL during tests, and sandbox stop PASS before considering merge/promotion."
+}

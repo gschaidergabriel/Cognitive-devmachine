@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "scope": "One bounded no-git source-snapshot Vercel Sandbox discriminator plus current Vercel build-rate-limit blocker; not whole-machine acceptance.",
+  "observed_reality": {
+    "execution_policy": "SANDBOX_ONLY_TESTING",
+    "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "product_main_public_go_route": "BUILD_INTERNAL_ONLY_FAIL_CLOSED",
+    "unusual_candidate_branch": "clay/go-entityos-attested-snapshot-20260816",
+    "tested_candidate_head": "7c43fafbb6ae154f11bdfcf81d1f87e593800a4c",
+    "vercel_deployment": "dpl_DfDZC4PZAJyR5QSVspf2ETMRv23H",
+    "source_attestation": {
+      "schema": "EntityOSSourceSnapshotAttestation/v1",
+      "archive_sha256": "b87f02c7a248d9233102e9d93fc56f4dd580dfc2736b25bb43e2d5cb3cbb15fe",
+      "archive_bytes": 1452956,
+      "source_transport": "GIT_ARCHIVE_GZIP_N",
+      "git_metadata_included": false,
+      "attested_files": 1279
+    },
+    "sandbox_matrix": {
+      "status": "GO_SANDBOX_MATRIX_FAILED",
+      "unpack_and_bind_source_exit": 0,
+      "provision_system_freeze_toolchain_sudo_exit": 0,
+      "provision_pinned_python_toolchain_exit": 0,
+      "offline_go_matrix_exit": 1,
+      "sandbox_stopped": true,
+      "error": "STEP_FAILED:offline_go_matrix:exit=1"
+    },
+    "diagnostic_followup_head": "7b70f0f7b9b3c142eb702f8a0ba59ef80eb9c884",
+    "diagnostic_followup_change": "surface bounded failed matrix output",
+    "diagnostic_followup_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "gitblob_stage_candidate_pr": 765,
+    "gitblob_stage_candidate_head": "2a4effb63b3012d15cb051cf571e0d520d73cf65",
+    "gitblob_stage_candidate_vercel_status": "FAILURE_BUILD_RATE_LIMIT"
+  },
+  "grf": {
+    "generated_hypothesis": "A source snapshot with externally bound attestation and no .git metadata can support stronger EntityOS source provenance while preserving the existing offline matrix.",
+    "strongest_counter_reality": "Removing repository metadata or changing source-attestation inputs exposes an unstated build/runtime dependency and the matrix fails before a valid one-file artifact is established.",
+    "discriminator": "Run the exact attested snapshot through the same deny-all offline EntityOS matrix and require every step plus one-file digest to pass.",
+    "observed_outcome": "REFUTED_CURRENT_FORM: source binding and toolchain provisioning passed, but offline_go_matrix exited 1; no current-candidate EntityOS digest was produced.",
+    "next_falsifier": "After Vercel build capacity is available, run the bounded diagnostic head 7b70f0f7... to expose the failed matrix tail, repair only the identified ordinary defect, then rerun one exact-head isolated Sandbox matrix. Separately, PR #765 requires Vercel cross-hook tar/gzip digest identity before promotion."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "ATTESTED_NO_GIT_SOURCE_SNAPSHOT_THROUGH_OFFLINE_ENTITYOS_MATRIX",
+    "count": 1,
+    "result": "REFUTED_CURRENT_FORM",
+    "no_second_unusual_experiment_started": true
+  },
+  "entityos_artifact": {
+    "state": "BLOCKED",
+    "reason": "The tested attested snapshot candidate failed offline_go_matrix before a verified current-candidate EntityOS digest; current-main build-internal replacement is not yet promoted, and new Vercel preview validation is presently blocked by provider build-rate-limit.",
+    "historical_exact_head_receipts_remain_evidence_only": true
+  },
+  "nonclaims": [
+    "No current-main EntityOS build or runtime PASS.",
+    "No whole Clay Machine acceptance.",
+    "No VPS, self-hosted VPS runner, or production-host test was used.",
+    "No downloadable EntityOS artifact was exported by this worker.",
+    "The Vercel build-rate-limit is provider scheduling/account evidence, not a code failure in the diagnostic or Git-blob candidate."
+  ]
+}

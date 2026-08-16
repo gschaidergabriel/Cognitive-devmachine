@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_EMBEDDED_NUL_BYTES_ARGV_FENCE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "CM-DATA/CM-TERM/String-Bytes-argv",
+  "timestamp_local": "2026-08-16T16:56:00+07:00",
+  "research_main_before_write": "5084d53a2941befc94b064b6baee14e4daa21033",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "05c910705fe9a430ee0f958760639f54217aa9da",
+  "candidate_pr": 744,
+  "candidate_head_observed": "efc461e9b7a391fd74e966f34e3d8d1cf5fa345f",
+  "execution_context": "ISOLATED_LOCAL_CONTAINER",
+  "external_primary_source": {
+    "kind": "POSIX_EXEC_SPEC",
+    "url": "https://pubs.opengroup.org/onlinepubs/9799919799/functions/exec.html",
+    "relevant_contract": "argv and envp are arrays of pointers to null-terminated strings"
+  },
+  "observed_anchors": [
+    "PROGRAM_STATE v4.5 requires isolated sandbox testing only; VPS/self-hosted VPS/production-host testing is forbidden.",
+    "Current CLAY_MACHINE_WORKSPACE next discriminator requires a minimal canonical Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface.",
+    "PR744 is a draft path-only String hostcall candidate and explicitly leaves general argv and Bytes open.",
+    "PR744 head efc461e9 already contains an explicit ARGV_NUL_DENIED host-process boundary check, but the current PR gate does not yet carry a dedicated NUL regression.",
+    "Allowed ubuntu-latest EntityOS/CM-TERM/Strict-ClayOS jobs on the current candidate are zero-step/failing under the current billing/spending block, while legacy VPS/self-hosted PR-trigger leaks have executed and are inadmissible under the owner-fixed policy."
+  ],
+  "hypothesis": "Clay should preserve opaque Bytes independently from String/argv and require an explicit fail-closed conversion/admission boundary before Linux argv effects.",
+  "strongest_counterhypothesis": "A single internal text/byte value could remain sufficient if all host-effect boundaries are length-aware and enforce the Linux argv contract explicitly; separate nominal Bytes and String types might not be necessary solely because of NUL handling.",
+  "discriminator": "Compare an ordinary argv control with one bounded embedded-NUL intervention while independently checking opaque byte round-trip preservation.",
+  "baseline": {
+    "argv": "AB",
+    "returncode": 0,
+    "stdout": "AB",
+    "result": "PASS"
+  },
+  "unusual_experiment": {
+    "name": "EMBEDDED_NUL_BYTES_VS_ARGV_BOUNDARY",
+    "count": 1,
+    "payload_hex": "410042",
+    "payload_len": 3,
+    "opaque_bytes_roundtrip": "PASS",
+    "argv_result": "REJECTED",
+    "exception_type": "ValueError",
+    "exception_text": "embedded null byte",
+    "result": "PASS_DISCRIMINATOR"
+  },
+  "collapse": {
+    "explicit_bytes_to_argv_fence": "SUPPORTED",
+    "separate_nominal_Bytes_and_String_from_this_test_alone": "NOT_PROVEN",
+    "host_behavior_as_Clay_language_authority": "REJECTED",
+    "pr744_ARGV_NUL_DENIED": "CONSISTENT_WITH_EXTERNAL_AND_SANDBOX_EVIDENCE",
+    "entityos_acceptance": "NOT_PROMOTED"
+  },
+  "test_obligations": [
+    "After the remaining forbidden PR-trigger leaks are gated, add an ordinary regression that exercises the retained ARGV_NUL_DENIED path without minting another unusual experiment.",
+    "Keep Bytes semantics independent from String/argv semantics and do not infer language authority from Python or Linux behavior; select the Clay contract explicitly in checker/TypedIR/VM.",
+    "Run the exact reviewed candidate bytes only in an actually-started isolated sandbox through CM-TERM, single-VM, strict ClayOS, Deep Integrity and the one-file EntityOS rebuild/self-test/copy-run path.",
+    "Do not credit any VPS/self-hosted PR execution produced after the sandbox-only owner directive."
+  ],
+  "entityos_artifact": "BLOCKED",
+  "exact_blocker": "No admissible exact-current EntityOS build can be executed in this invocation: the private product repo cannot be materialized into the active local container through the available connector, allowed GitHub-hosted sandbox jobs are blocked before runner start by billing/spending state, and current PR synchronization still exposes legacy VPS/self-hosted trigger leaks.",
+  "next_executable_step": "Finish gating/removing all legacy pull_request VPS/self-hosted trigger leaks, then execute PR744 exact reviewed bytes on an allowed actually-started isolated sandbox and rebuild/self-test/copy-run exactly one EntityOS file. If hosted sandbox remains unavailable, provide an isolated source-admitted sandbox checkout surface to this worker; do not fall back to VPS testing.",
+  "whole_clay_machine_acceptance": false,
+  "outcome": "RETAIN_EXPLICIT_BYTES_ARGV_FENCE; DEFER_CANONICAL_TYPE_SELECTION_AND_ENTITYOS_PROMOTION"
+}

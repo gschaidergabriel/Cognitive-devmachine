@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "execution_truth": "ACTUALLY_STARTED_EXACT_IDENTITY_VERCEL_SANDBOX_ONLY_FOR_EXECUTABLE_PRODUCT_CLAIMS",
+  "research_head_observed_before_write": "f3a1680093ed1c3f127726e1b8bfaf43e2dca974",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "selected_frontier": "current exact-head EntityOS acceptance lane before further Bytes/String semantic fusion",
+  "observed_acceptance_gap": {
+    "pr": 776,
+    "head_before_repair": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+    "matrix_file": "mcp/vercel-sandbox-mcp/scripts/run-go-matrix.sh",
+    "finding": "the matrix labelled ENTITYOS_REPRODUCIBLE_ONEFILE_BUILD produced only one EntityOS freeze; therefore it could not establish byte-for-byte reproducibility of the one-file artifact",
+    "counterhypothesis": "a single successful freeze can hide nondeterministic build inputs or generated-state dependence even when source staging itself is deterministic",
+    "promotion_consequence": "do not emit reproducible EntityOS acceptance without two independent clean-head freezes plus digest and byte comparison"
+  },
+  "product_delta": {
+    "pr": 776,
+    "branch": "chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325",
+    "commit": "85d2bef68e112d24837a8411fbb18ab7ab809d41",
+    "change": "build EntityOS twice from separately restored exact clean HEAD into independent output directories, require equal SHA-256 and cmp byte identity, then copy one verified artifact into the canonical one-file runtime gate directory",
+    "new_markers": [
+      "ENTITYOS_REPRODUCIBLE_BUILD=PASS",
+      "ENTITYOS_BUILD_A_SHA256=<sha256>",
+      "ENTITYOS_BUILD_B_SHA256=<sha256>"
+    ],
+    "parallel_path_created": false,
+    "fusion_rule": "existing PR776 acceptance lane strengthened in place"
+  },
+  "vercel_observation": {
+    "candidate_head": "85d2bef68e112d24837a8411fbb18ab7ab809d41",
+    "combined_status": "failure",
+    "status_target": "Vercel build-rate-limit upgrade/retry surface",
+    "interpretation": "DEPLOYMENT_RATE_LIMITED_BEFORE_EXACT_HEAD_PREVIEW_OR_SANDBOX_START",
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "semantic_pass_fail": "UNRESOLVED_NOT_EXECUTED"
+  },
+  "unusual_experiment": {
+    "planned": "CM06_CONCURRENT_SHARED_EXPORTER_EPOCH_COHERENCE",
+    "executed_this_trigger": false,
+    "new_unusual_experiment_count_this_trigger": 0,
+    "blocker": "Vercel deployment rate limit prevented an actually-started isolated Sandbox; no substitute local/VPS/self-hosted experiment was allowed",
+    "carry_forward_rule": "consume exactly one bounded unusual experiment only when an authorized Vercel Sandbox actually starts; do not falsely count static review or a blocked deployment as an experiment"
+  },
+  "next_executable_sequence": [
+    "when Vercel capacity allows, execute exact PR776 head 85d2bef68e112d24837a8411fbb18ab7ab809d41 build-internally and require actual Sandbox creation",
+    "require exact source head/tree and clean reconstructed Git provenance with zero remotes",
+    "require two independent clean-head EntityOS freezes to produce identical SHA-256 and byte-identical files",
+    "require status/self-test, no-host-Python PATH gate, capability denial/admission, relocation byte identity and successful Sandbox stop under DENY_ALL test networking",
+    "only then advance PR777 Bytes v2 and consume the planned CM06 concurrent exporter epoch-coherence unusual experiment in the actually-started Sandbox",
+    "after Bytes evidence, fuse the preferred String-path lane rather than retaining parallel VM semantics"
+  ],
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_RATE_LIMIT_BEFORE_CURRENT_CANDIDATE_SANDBOX"
+}

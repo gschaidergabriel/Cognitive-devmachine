@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "date": "2026-08-16",
   "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
@@ -23,6 +23,8 @@
   },
   "normal_discriminating_test": {
     "name": "CURRENT_HEAD_ARITHMETIC_EXPRESSION_ADMISSION",
+    "artifact_product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "artifact_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
     "source": "module clay.entityos.active_go; fn twice(x : Int) -> Int { return x + x }; fn main() -> Int { return twice(21) }",
     "observed_exit_code": 1,
     "observed_error": "nominal typechecker rejected executable IR: UNSUPPORTED_EXPRESSION:twice:AST node Arith not admitted by typechecker v1",
@@ -33,14 +35,17 @@
   "unusual_experiment": {
     "count": 1,
     "name": "UNLINKED_EXECUTABLE_PROC_FD_STARTUP",
-    "baseline": "Path-backed exact EntityOS executes --self-test-json successfully.",
-    "intervention": "Copy the exact one-file ELF into an isolated temp directory, open it, unlink the pathname, then exec the still-open file through /proc/self/fd/<fd>.",
+    "artifact_product_head": "9fe685f944a895b90d372335f1fa3778281fc486",
+    "artifact_sha256": "69b27f432b20b4e4bc5782beb1c86aafcf33249e9379297a6f72115e9681c890",
+    "direct_applicability_to_current_d4fc_head": "UNVERIFIED_DIRECTLY",
+    "baseline": "Path-backed exact predecessor EntityOS executes --self-test-json successfully.",
+    "intervention": "Copy the exact predecessor one-file ELF into an isolated temp directory, open it, unlink the pathname, then exec the still-open file through /proc/self/fd/<fd>.",
     "predicted_if_path_independent": "Embedded one-file runtime starts and produces the same self-test result.",
     "predicted_if_path_backed_startup_required": "Bootloader fails before EntityOS self-test because the embedded package cannot be reopened by executable path.",
     "observed_exit_code": 255,
     "observed_error": "Could not load PyInstaller's embedded PKG archive from the executable",
-    "outcome": "REFUTED_PATH_INDEPENDENT_STARTUP",
-    "derived_invariant": "The current PyInstaller one-file carrier requires a stable path-backed executable during startup; do not unlink/replace the running path before bootloader package acquisition completes.",
+    "outcome": "REFUTED_PATH_INDEPENDENT_STARTUP_FOR_9fe685f_ARTIFACT",
+    "derived_invariant": "For the directly tested 9fe685f PyInstaller one-file carrier, startup requires a stable path-backed executable until bootloader package acquisition completes. Do not promote this to the d4fc head without direct replication or equivalent build-identity proof.",
     "rollback": "Isolated temporary copy only; no repository, accepted runner or user state was modified."
   },
   "current_parallel_evidence": {

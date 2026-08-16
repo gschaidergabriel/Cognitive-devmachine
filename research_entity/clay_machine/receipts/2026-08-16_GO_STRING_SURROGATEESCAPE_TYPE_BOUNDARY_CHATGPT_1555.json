@@ -1,60 +1,6 @@
 {
-  "schema_version": "1.0",
-  "trigger": "go",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
-  "stage": "CLAY_MACHINE",
-  "organ": "ChatGPT temporary Clay research worker",
-  "date": "2026-08-16",
-  "research_parent_observed_before_write": "3b20f83aadb4c52d69f4adeec4d8d0a6f05719ba",
-  "product_repository": "gschaidergabriel/Dr.-Unterweger",
-  "product_main_observed": "f9cea2647073ca3d44cfc7cba16dba742bc3d713",
-  "grf": {
-    "observed_anchors": [
-      "Current product main EntityOS Initial Grant Sandbox run 31930675508 failed before any step started; its job had no executed steps, so this is infrastructure/no-start evidence rather than code evidence.",
-      "The separate String hostcall discriminator branch 1a4664234f53a58ed4e9fe2c4040293b5dd323ac defines the current Int-only control and an explicit not-yet-admitted String process signature, but sandbox run 31937820574/job 95142430453 also failed before steps, so that branch has no executed exact-head artifact evidence.",
-      "Prior local receipts already established that explicit non-UTF8 argv Bytes can round-trip on POSIX and that embedded NUL is rejected at the argv boundary; this experiment therefore targeted a different hidden alias: host-language str plus surrogateescape."
-    ],
-    "generated_reality": "If Clay String is lowered directly through a host Python str on POSIX, lone surrogate code points may be converted back into arbitrary non-UTF8 argv bytes by surrogateescape, silently collapsing the intended String/Bytes distinction.",
-    "counter_reality": "The host str/process boundary rejects lone surrogates before execution, so a direct host str carrier already enforces a Unicode-only String boundary.",
-    "falsifier": "Pass one normal Unicode control and one lone-surrogate U+DCFF string as distinct argv elements to a child process; have the child report the exact filesystem-encoded bytes.",
-    "predicted_if_generated_reality": "The normal control is UTF-8 stable while U+DCFF is accepted and re-encoded to raw byte FF.",
-    "predicted_if_counter_reality": "The lone-surrogate argument is rejected before child execution.",
-    "outcome": "PROMOTE_NARROW_RUNTIME_FACT_AND_TEST_OBLIGATION"
-  },
-  "unusual_experiment": {
-    "name": "LONE_SURROGATE_STRING_TO_ARGV_ALIAS",
-    "new_unusual_experiment_count": 1,
-    "execution_boundary": "ISOLATED_CHATGPT_CONTAINER",
-    "bounded": true,
-    "rollback": "child processes only; no product or user state mutated",
-    "environment": {
-      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
-      "python": "3.13.5",
-      "filesystem_encoding": "utf-8",
-      "filesystem_errors": "surrogateescape"
-    },
-    "baseline": {
-      "input": "A_utf8_B",
-      "rc": 0,
-      "child_reported_hex": "415f757466385f42"
-    },
-    "intervention": {
-      "input_semantics": "A + lone surrogate U+DCFF + B",
-      "rc": 0,
-      "child_reported_hex": "41ff42",
-      "raw_byte_alias_observed": true
-    },
-    "result": "SUPPORT_STRING_BYTES_TYPE_SEPARATION_AND_SURROGATE_REJECTION_REQUIRED"
-  },
-  "primary_external_evidence": [
-    {
-      "source": "Python PEP 383",
-      "fact": "On POSIX, surrogateescape maps undecodable bytes 0x80..0xFF to lone surrogates U+DC80..U+DCFF and maps those surrogates back to the original bytes on encoding; the PEP explicitly discusses byte smuggling and security risk.",
-      "evidence_role": "mechanism corroboration, not substitute for local measurement"
-    }
-  ],
   "architecture_delta": {
-    "state": "SUPPORTED_TEST_OBLIGATION",
     "affected_components": [
       "ClayCode String/Bytes type semantics",
       "ClayExecutableTypedIR/v1 value admission",
@@ -62,20 +8,86 @@
       "HostProcessVMHost / Linux process argv boundary",
       "EntityOS one-file host interoperability"
     ],
-    "required_invariant": "Canonical Clay String must not inherit Python/POSIX surrogateescape semantics. String admission/serialization must reject surrogate code points U+D800..U+DFFF and use explicit strict Unicode/UTF-8 semantics. Arbitrary OS octets belong to an explicit Bytes value path. Any Bytes-to-argv path must separately reject embedded NUL because the POSIX argv ABI cannot represent it inside an argument.",
     "anti_shortcut": "Do not treat Python str, filesystem text, shell text, argv bytes, Clay String, and Clay Bytes as one interchangeable representation.",
     "next_discriminating_product_test": "When the String-valued process hostcall is implemented, add a deterministic normal regression that rejects a lone-surrogate String before Linux effect dispatch while preserving the existing explicit Bytes/non-UTF8 behavior and NUL fail-closed boundary.",
-    "rollback": "If later canonical Clay String semantics intentionally include opaque surrogate tokens, keep them in a distinct host-adapter/opaque type and do not expose them as normal String semantics."
+    "required_invariant": "Canonical Clay String must not inherit Python/POSIX surrogateescape semantics. String admission/serialization must reject surrogate code points U+D800..U+DFFF and use explicit strict Unicode/UTF-8 semantics. Arbitrary OS octets belong to an explicit Bytes value path. Any Bytes-to-argv path must separately reject embedded NUL because the POSIX argv ABI cannot represent it inside an argument.",
+    "rollback": "If later canonical Clay String semantics intentionally include opaque surrogate tokens, keep them in a distinct host-adapter/opaque type and do not expose them as normal String semantics.",
+    "state": "SUPPORTED_TEST_OBLIGATION"
   },
   "artifact": {
     "entityos_artifact": "BLOCKED",
-    "whole_machine_acceptance": false,
+    "latest_main_sandbox_code_result": "UNKNOWN_BECAUSE_JOB_NEVER_STARTED",
     "local_exact_main_rebuild": "BLOCKED_NO_PYINSTALLER_AND_PRIVATE_REPO_DNS_PATH",
     "local_pyinstaller": "ABSENT",
-    "current_main_sandbox_code_result": "UNKNOWN_BECAUSE_JOB_NEVER_STARTED",
-    "string_discriminator_branch_code_result": "UNKNOWN_BECAUSE_JOB_NEVER_STARTED"
+    "string_discriminator_branch_code_result": "UNKNOWN_BECAUSE_JOB_NEVER_STARTED",
+    "whole_machine_acceptance": false
   },
-  "exact_blocker": "No actually-started isolated PyInstaller-capable sandbox is currently producing and executing an exact-current-head canonical one-file EntityOS. The current main grant gate and the String discriminator branch both failed before workflow steps, while the active local container lacks PyInstaller and cannot clone the private repo through its network path.",
+  "date": "2026-08-16",
+  "exact_blocker": "No actually-started isolated PyInstaller-capable sandbox is currently producing and executing an exact-current-head canonical one-file EntityOS. Latest product main 950544e33ea179557cf3e54fc970a4a3954fe9cd has EntityOS Initial Grant Sandbox run 31938018528/job 95142898351 with steps=null; the String discriminator branch also failed before steps. The active local container lacks PyInstaller and cannot clone the private repo through its network path.",
+  "grf": {
+    "counter_reality": "The host str/process boundary rejects lone surrogates before execution, so a direct host str carrier already enforces a Unicode-only String boundary.",
+    "falsifier": "Pass one normal Unicode control and one lone-surrogate U+DCFF string as distinct argv elements to a child process; have the child report the exact filesystem-encoded bytes.",
+    "generated_reality": "If Clay String is lowered directly through a host Python str on POSIX, lone surrogate code points may be converted back into arbitrary non-UTF8 argv bytes by surrogateescape, silently collapsing the intended String/Bytes distinction.",
+    "observed_anchors": [
+      "At experiment time, product main EntityOS Initial Grant Sandbox run 31930675508 failed before any step started; its job had no executed steps, so this is infrastructure/no-start evidence rather than code evidence.",
+      "The separate String hostcall discriminator branch 1a4664234f53a58ed4e9fe2c4040293b5dd323ac defines the current Int-only control and an explicit not-yet-admitted String process signature, but sandbox run 31937820574/job 95142430453 also failed before steps, so that branch has no executed exact-head artifact evidence.",
+      "Prior local receipts already established that explicit non-UTF8 argv Bytes can round-trip on POSIX and that embedded NUL is rejected at the argv boundary; this experiment therefore targeted a different hidden alias: host-language str plus surrogateescape.",
+      "Post-write refresh found newer product main 950544e33ea179557cf3e54fc970a4a3954fe9cd; its EntityOS Initial Grant Sandbox run 31938018528/job 95142898351 also has steps=null and therefore no latest-head code evidence."
+    ],
+    "outcome": "PROMOTE_NARROW_RUNTIME_FACT_AND_TEST_OBLIGATION",
+    "predicted_if_counter_reality": "The lone-surrogate argument is rejected before child execution.",
+    "predicted_if_generated_reality": "The normal control is UTF-8 stable while U+DCFF is accepted and re-encoded to raw byte FF."
+  },
   "next_executable_step": "Restore an actually-started isolated PyInstaller-capable sandbox, rerun the exact-current EntityOS canonical one-file build and current grant/security gates, then implement the explicit Clay String value/signature path with strict surrogate rejection plus separate Bytes argv semantics and execute those regressions against the exact produced EntityOS file.",
-  "paid_training_authorized": false
+  "organ": "ChatGPT temporary Clay research worker",
+  "paid_training_authorized": false,
+  "post_write_refresh": {
+    "code_evidence": false,
+    "entityos_initial_grant_job": 95142898351,
+    "entityos_initial_grant_sandbox_run": 31938018528,
+    "interpretation": "latest-head EntityOS grant workflow again failed before workflow steps; do not treat as code failure or PASS",
+    "job_conclusion": "failure",
+    "job_steps": null,
+    "product_main": "950544e33ea179557cf3e54fc970a4a3954fe9cd",
+    "product_main_commit_message": "revert(go): keep ancestor symlink regression on draft PR"
+  },
+  "primary_external_evidence": [
+    {
+      "evidence_role": "mechanism corroboration, not substitute for local measurement",
+      "fact": "On POSIX, surrogateescape maps undecodable bytes 0x80..0xFF to lone surrogates U+DC80..U+DCFF and maps those surrogates back to the original bytes on encoding; the PEP explicitly discusses byte smuggling and security risk.",
+      "source": "Python PEP 383"
+    }
+  ],
+  "product_main_observed_at_experiment": "f9cea2647073ca3d44cfc7cba16dba742bc3d713",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_parent_observed_before_write": "3b20f83aadb4c52d69f4adeec4d8d0a6f05719ba",
+  "schema_version": "1.1",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "unusual_experiment": {
+    "baseline": {
+      "child_reported_hex": "415f757466385f42",
+      "input": "A_utf8_B",
+      "rc": 0
+    },
+    "bounded": true,
+    "environment": {
+      "filesystem_encoding": "utf-8",
+      "filesystem_errors": "surrogateescape",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5"
+    },
+    "execution_boundary": "ISOLATED_CHATGPT_CONTAINER",
+    "intervention": {
+      "child_reported_hex": "41ff42",
+      "input_semantics": "A + lone surrogate U+DCFF + B",
+      "raw_byte_alias_observed": true,
+      "rc": 0
+    },
+    "local_receipt_sha256": "ccdeabbe89c22936feb5a5c3f499e6d8c52a6f79ec1baab622b773d3a5f948de",
+    "name": "LONE_SURROGATE_STRING_TO_ARGV_ALIAS",
+    "new_unusual_experiment_count": 1,
+    "result": "SUPPORT_STRING_BYTES_TYPE_SEPARATION_AND_SURROGATE_REJECTION_REQUIRED",
+    "rollback": "child processes only; no product or user state mutated"
+  }
 }

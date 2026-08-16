@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "trigger": "go",
+  "recorded_at": "2026-08-16T10:07:00+07:00",
+  "observed_product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "merged_provider_resolution": {
+    "pr": 660,
+    "merge_commit": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "scope": "ClayPackageResolution/v1 exact module-provider selection",
+    "execution_use_gate": "UNCHANGED_FAIL_CLOSED"
+  },
+  "macrocycle_unusual_experiment": {
+    "count": 1,
+    "id": "LOCAL_DECL_IMPORT_SHORTNAME_COLLISION",
+    "source_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_IMPORT_NAMESPACE_COLLISION_DISCRIMINATOR.json",
+    "product_issue": 656,
+    "result": "PASS_RETAIN_HYPOTHESIS",
+    "new_unusual_experiments_in_fusion": 0
+  },
+  "grf_collapse": {
+    "candidate_677": {
+      "state": "REJECT_SUPERSEDED_CLOSED",
+      "head": "3150918c0e6212f9f708250da236da0447e87d9f",
+      "reason": "Mixed namespace binding into provider-resolution stage and inherited an older pull-request self-hosted execution lane without explicit source admission/isolation."
+    },
+    "candidate_678": {
+      "state": "MERGE_USEFUL_IDEAS_THEN_CLOSE",
+      "head": "edf2aef571c3ad9d225b18dfa496d989444a501f",
+      "useful_delta": "Separate ClayModuleBindingPlan/v1 and conservative inclusion of sum variants already addressable unqualified by the current nominal analyzer.",
+      "counterevidence": "Its pull_request workflow directly executed model-generated PR bytes on persistent self-hosted runner clay without an explicit source-admission or ephemeral-isolation gate.",
+      "observed_job": 95106648404,
+      "observed_job_result": "SUCCESS",
+      "evidence_class": "MECHANISM_EVIDENCE_ONLY_UNTRUSTED_EXECUTION_SURFACE_NOT_PROMOTION_EVIDENCE"
+    },
+    "candidate_679": {
+      "state": "RETAIN_DRAFT_CANDIDATE",
+      "head": "c4109cdbe8ef709d390e8eed54ec5d4702145f28",
+      "schema": "ClayModuleBindingPlan/v1",
+      "architecture": "separate stage after ClayPackageResolution/v1",
+      "module_binding": "final target-module segment only",
+      "local_collision_surface": "top-level declaration names plus sum variants already admitted unqualified by current nominal analyzer",
+      "import_import_collision": "fail closed",
+      "wildcard": "record provider use without symbol expansion or binding",
+      "namespace_partition": "NOT_SELECTED",
+      "symbol_semantics": "NOT_SELECTED",
+      "execution_use_gate": "UNCHANGED_FAIL_CLOSED"
+    }
+  },
+  "test_evidence": {
+    "candidate_679_workflow_run": 31923420401,
+    "candidate_679_job": 95107009794,
+    "candidate_679_result": "SKIPPED",
+    "candidate_679_reason": "AWAITING_SOURCE_ADMISSION_OR_EPHEMERAL_ISOLATION",
+    "promotion_status": "BLOCKED",
+    "local_container_clone": "BLOCKED_NO_DNS_GITHUB_REACHABILITY"
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "requirement": "Keep deterministic provider resolution separate from namespace binding. A MODULE short binding must fail closed against the conservative currently-addressable local name surface and prior MODULE bindings. WILDCARD symbol semantics remain unselected. Do not execute model-generated pull-request bytes on persistent self-hosted infrastructure absent explicit source admission or ephemeral isolation.",
+    "affected_components": [
+      "CM-01-LANGUAGE-SPEC-PARSER-IR",
+      "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK"
+    ],
+    "rollback": "Keep merged #648 unresolved-use execution rejection and leave #679 draft/unmerged."
+  },
+  "next_falsifier": "Provide an explicitly admitted or ephemeral-isolated zero-cost execution surface for #679 exact head, then run package + provider-resolver + binding regressions with exact tested-SHA binding. Only a permitted green may support merge consideration; afterwards classify the smallest exported-symbol surface for WILDCARD/imported callable ownership before relaxing #648.",
+  "whole_clay_machine_acceptance": false,
+  "together_api_used": false,
+  "training_started": false
+}

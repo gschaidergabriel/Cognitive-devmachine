@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "grf": {
+    "observed_reality": [
+      "Product main was 4c2607d8b4cfc427ad5a8bed0d203f5020f2aacf at final refresh.",
+      "The last successful canonical one-file artifact was built from b32ec5a5f577099f90d74a038b5e3aee4db0c43e; comparison b32ec5a5...4c2607d8 shows the only product-repository delta is an added typed-value CI workflow file, not EntityOS/runtime source.",
+      "Current PROGRAM_STATE schema 4.5 requires SANDBOX_ONLY_TESTING and forbids VPS/self-hosted/production-host testing as current evidence.",
+      "The downloaded canonical artifact is an ELF x86-64 PyInstaller one-file executable named EntityOS with external SHA-256 1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1 and size 12820848 bytes."
+    ],
+    "generated_hypothesis": "The existing one-file candidate can be treated as a usable current product-code baseline in sandbox while whole-machine acceptance remains false.",
+    "counter_reality": "A successful historical VPS build or a component/self-test PASS could be mistaken for current whole-machine acceptance, especially after the execution-policy change.",
+    "falsifier": "Execute the exact downloaded EntityOS only in the isolated local sandbox, inspect its embedded build identity and whole_machine_acceptance field, and compare the successful build commit to current product main.",
+    "outcome": "RETAIN baseline as sandbox-verified one-file artifact; REJECT any promotion to whole-machine PASS or current VPS evidence."
+  },
+  "sandbox_artifact_verification": {
+    "artifact": "EntityOS",
+    "build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "external_sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "file_kind": "ELF 64-bit LSB executable, x86-64, dynamically linked",
+    "mode": "0755",
+    "build_receipt": {
+      "pyinstaller_onefile": true,
+      "reproducibility_builds": 2,
+      "reproducibility_sha256_match": true
+    },
+    "ordinary_tests": {
+      "status": "PASS",
+      "self_test_json": "PASS",
+      "capability_gated_linux_process_printf": "PASS",
+      "first_start_test_accept_initial_grant": "PASS",
+      "second_start_reused_persistent_grant_without_new_acceptance": "PASS",
+      "grant_receipt_mode": "0600"
+    },
+    "embedded_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "embedded_whole_machine_acceptance": false,
+    "scope": "Isolated sandbox verification of an existing canonical one-file artifact only; not a new build in this go and not whole-machine acceptance."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "ARGV_EMBEDDED_NUL_REJECTION",
+    "environment": "isolated local sandbox",
+    "intervention": "Attempt one direct /usr/bin/printf subprocess argv element containing A\\u0000B through the Python exec substrate.",
+    "result": "ValueError: embedded null byte",
+    "interpretation": "Canonical Clay String/argv semantics must reject embedded NUL deterministically before Linux process dispatch; String alone is insufficient as an argv contract.",
+    "rollback": "No persistent state or product source was changed by the experiment."
+  },
+  "execution_policy_fence": {
+    "current_policy": "SANDBOX_ONLY_TESTING",
+    "supersedes": "Earlier project state that allowed/used self-hosted VPS test runners.",
+    "worker_dispatch_correction": "A self-hosted branch workflow was dispatched before the newly refreshed sandbox-only directive was observed. It failed during dependency installation; EntityOS build and test steps were skipped. After refresh, the workflow file was deleted from the branch and no result from that run is promoted.",
+    "forbidden_as_current_evidence": [
+      "VPS testing",
+      "self-hosted VPS runner testing",
+      "production-host testing"
+    ]
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+    "affected_workstreams": ["CM-TERM", "CM-05-VIRTUAL-CLAY-MACHINE", "CM-08-LINUX-INTEROP", "EntityOS release gate"],
+    "rule": "When canonical String/argv reaches the VM/effect path, embedded NUL must fail closed before host dispatch; preserve exact typed/provenance-bound argv semantics rather than delegating this semantic decision to host exec errors.",
+    "non_claims": [
+      "No canonical String/Bytes/argv VM implementation was merged by this go.",
+      "No current-head EntityOS was rebuilt from source in the sandbox because the active environment did not contain a private-repository checkout/source tree.",
+      "No VPS/self-hosted result is promoted under PROGRAM_STATE 4.5.",
+      "Whole Clay Machine acceptance remains false."
+    ],
+    "next_sandbox_executable_step": "Obtain the current product source tree in an isolated sandbox, implement the smallest canonical String/argv plus Bytes/Buffer ownership/effect-signature surface through checker -> ClayExecutableTypedIR -> serialized ClayVM, add deterministic embedded-NUL rejection before linux.process.spawn.v0, then rebuild the exact one-file EntityOS and rerun the existing artifact/self-test/grant/process gates entirely in sandbox."
+  }
+}

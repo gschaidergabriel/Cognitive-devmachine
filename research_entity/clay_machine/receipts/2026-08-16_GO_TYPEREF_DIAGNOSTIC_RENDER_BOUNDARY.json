@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_TYPEREF_DIAGNOSTIC_RENDER_BOUNDARY",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "recorded_at_utc": "2026-08-16T03:43:30Z",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_head_before_write": "294d2263678e533ae042732b6c1866f328459440",
+  "product_observed": {
+    "main": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+    "cm02_merge": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
+    "cm02_pr": 681,
+    "cm02_tested_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+    "exact_head_workflows": {
+      "production_sharing": 31923469033,
+      "production_totality": 31923469219,
+      "all_observed_pr_workflows": "16/16 completed success"
+    }
+  },
+  "grf": {
+    "observed_reality": "Production alias-DAG structural sharing and pair-memoized equality are merged, while _render_type_ref still expands every occurrence path when formatting diagnostics.",
+    "generated_reality": "The renderer is a separate resource surface: a tiny shared DAG can create a very large diagnostic even when canonicalization and equality are near-linear in distinct DAG nodes.",
+    "counter_reality": "Structural sharing alone might have bounded all TypeRef resource surfaces enough that renderer hardening would add complexity without measurable benefit.",
+    "discriminator": "Render a maximally shared binary TypeRef DAG using the exact current _render_type_ref algorithm while keeping the number of distinct immutable TypeRef objects tiny.",
+    "outcome": "COUNTER_REALITY_REFUTED; renderer expansion is independently unbounded by DAG sharing and requires a diagnostic-only bound."
+  },
+  "unusual_experiment": {
+    "count_this_macro_cycle": 1,
+    "id": "TYPEREF-MAX-SHARED-DAG-DIAGNOSTIC-EXPANSION",
+    "bounded": true,
+    "reversible": true,
+    "production_algorithm_source": "runtime/claycode_typecheck_v1/typecheck.py::_render_type_ref at CM-02 tested/merged implementation",
+    "shape": "leaf I; each level P(child, child) reuses the same child object twice",
+    "measurements": [
+      {"depth": 4, "distinct_nodes": 5, "render_chars": 91, "wall_ms": 0.088, "tracemalloc_peak_kib": 0.7},
+      {"depth": 8, "distinct_nodes": 9, "render_chars": 1531, "wall_ms": 0.819, "tracemalloc_peak_kib": 12.5},
+      {"depth": 12, "distinct_nodes": 13, "render_chars": 24571, "wall_ms": 11.383, "tracemalloc_peak_kib": 192.9},
+      {"depth": 16, "distinct_nodes": 17, "render_chars": 393211, "wall_ms": 201.103, "tracemalloc_peak_kib": 3242.7},
+      {"depth": 18, "distinct_nodes": 19, "render_chars": 1572859, "wall_ms": 729.039, "tracemalloc_peak_kib": 11978.4}
+    ],
+    "result": "At depth 18 only 19 distinct DAG nodes expanded into 1,572,859 diagnostic characters; this demonstrates occurrence-tree growth independent of structural object count.",
+    "rollback": "No repository/runtime state changed by the experiment."
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE_TEST_OBLIGATION",
+    "issue": 692,
+    "proposal": "Keep TypeRef identity/canonicalization/equality unchanged. Add a deterministic diagnostic-only render budget that preserves existing byte-identical output below the limit and emits an explicit bounded incompleteness marker when exact expanded output exceeds the admitted budget.",
+    "reason_for_character_budget": "A distinct-node cap alone is insufficient because shared occurrence paths can expand exponentially and identifier text itself can be large.",
+    "counterhypothesis": "Bounding diagnostics may hide a suffix that distinguishes two types; therefore bounded output must be explicitly marked incomplete and never feed type identity/equality or any authority decision.",
+    "promotion_tests": [
+      "ordinary existing diagnostic strings remain byte-identical below the limit",
+      "deep non-recursive chains remain supported within the admitted budget",
+      "maximally shared DAG output/time/memory is bounded by the configured diagnostic budget rather than expanded-tree size",
+      "existing production TypeRef totality, alias totality, nominal typecheck and overlapping exact-head gates remain green"
+    ]
+  },
+  "fixed_capability_refresh": {
+    "CM-NET": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-PORT": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-TERM": "RESEARCH_DELTA_EXISTS_BASELINE_NOT_PROMOTED",
+    "CM-DATA": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-VIS": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-AUDIO": "OPEN_BASELINE_NOT_PROMOTED"
+  },
+  "result": "CM02_RESOURCE_SURFACE_FALSIFIED_AND_DURABLE_FOLLOWUP_CREATED",
+  "whole_clay_machine_acceptance": false
+}

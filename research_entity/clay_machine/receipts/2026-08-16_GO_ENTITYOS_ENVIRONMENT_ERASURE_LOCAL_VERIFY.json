@@ -1,0 +1,60 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "scope": "EntityOS one-file local verification and portability falsifier",
+  "provenance": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed_after_artifact_build": "35fc8cc4e7ebbd024f51f92537ad6666eb407261",
+    "artifact_workflow_run": 31927007084,
+    "artifact_build_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "artifact_sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "artifact_size_bytes": 11931208,
+    "artifact_name": "EntityOS",
+    "artifact_origin": "GitHub Actions uploaded artifact retrieved into active analysis environment"
+  },
+  "observed": {
+    "workflow_result": "SUCCESS",
+    "local_status": "PASS",
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "local_self_test": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "unauthorized_host_process": "DENIED",
+    "granted_host_process": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ONEFILE_ENVIRONMENT_ERASURE",
+    "baseline": "EntityOS --self-test-json in active environment",
+    "intervention": "execute exact same EntityOS from / with env -i and only TMPDIR set to an empty provisioned temporary directory",
+    "baseline_output_sha256": "a8b9c29a3993d8bfe864af0c9b4eb35db5b48f14193c8a07667d49203c33cdaf",
+    "intervention_output_sha256": "a8b9c29a3993d8bfe864af0c9b4eb35db5b48f14193c8a07667d49203c33cdaf",
+    "result": "BYTE_IDENTICAL_PASS",
+    "temporary_directory_after_exit": "EMPTY",
+    "rollback": "temporary directory removed; no product or canonical runtime state mutated"
+  },
+  "grf": {
+    "hypothesis": "The frozen one-file candidate can execute its admitted canonical smoke path without relying on ordinary inherited process-environment variables or the caller working directory.",
+    "counterhypothesis": "The apparent one-file property hides an environment or cwd dependency that breaks canonical self-test when the process environment is erased.",
+    "outcome": "RETAIN_BOUNDED",
+    "limits": "This does not prove static linkage, zero host ABI dependencies, exact-current-main build identity, fresh-machine portability, crash recovery, security-concept implementation, or whole Clay Machine acceptance."
+  },
+  "coordination": {
+    "current_shared_frontier": "canonical typed value integration for Bytes plus String/argv/effect signatures through source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM -> EntityOS",
+    "overlap": "Draft product PR #708 already owns the detached ClayVMTypedValueContract/v1 candidate lane.",
+    "pr708_ci_retry": "Attempt 2 again completed with zero executed job steps; classify as runner/infrastructure non-execution, not semantic candidate failure.",
+    "duplicate_implementation_created": false
+  },
+  "next_action": "Integrate the winning typed value metadata into the canonical single-VM module/admission boundary, add canonical String/Bytes/argv process values and effect signatures, execute deterministic exact-head gates, then rebuild and retest the single-file EntityOS on the accepted Ubuntu lane.",
+  "claims": {
+    "entityos_artifact_built_this_cycle": false,
+    "entityos_artifact_locally_verified_this_cycle": true,
+    "accepted_vps_verified_this_cycle": false,
+    "whole_clay_machine_acceptance": false,
+    "training_authorized": false,
+    "together_used": false
+  }
+}

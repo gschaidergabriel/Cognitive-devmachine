@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
   "date": "2026-08-16",
@@ -8,25 +8,26 @@
   "product_repository": "gschaidergabriel/Dr.-Unterweger",
   "research_repository": "gschaidergabriel/clay-global-research-entity",
   "grf": {
-    "observed_reality": "Preview runtime invocation was blocked by Vercel Deployment Protection before the fixed handler; the coordinated branch already carried a build-authenticated Vercel batch path with VERCEL_OIDC_TOKEN present during Vercel build.",
-    "generated_reality": "The fixed high-information EntityOS matrix can run inside one isolated Vercel Sandbox from the build control plane, with exact staged source identity and no public arbitrary-command endpoint.",
-    "strongest_counter_reality": "The build hook could start more than one Sandbox, source staging could admit checkout-local bytes rather than exact committed source, or the one-file build/runtime gates could fail after network denial.",
-    "discriminator": "Execute the fixed coordinated offline matrix in one OIDC-authenticated Vercel Sandbox; require exact source binding, duplicate-build suppression, deny-all test networking, zero exit codes, exact EntityOS SHA and successful sandbox stop.",
-    "outcome": "SUPPORTED_FOR_EXACT_TESTED_HEAD",
-    "promotion_limit": "Does not establish whole Clay Machine acceptance or validate later untested PR heads."
+    "observed_reality": "Preview runtime invocation was blocked by Vercel Deployment Protection before the handler. A coordinated Vercel branch then demonstrated build-authenticated Sandbox execution. This GO independently used one bounded build-time OIDC Sandbox on a separate non-canonical branch and retired the one-shot hook immediately after evidence capture.",
+    "generated_reality": "Vercel build OIDC can act as a safer fixed control plane for one isolated offline EntityOS matrix without exposing a runtime/public arbitrary-command endpoint.",
+    "strongest_counter_reality": "The build hook could create duplicate Sandboxes, source staging could bind the wrong head, the frozen file could still require host Python, or move/copy execution could diverge.",
+    "discriminator": "Require exactly one Sandbox start, exact build-head binding, deny-all networking during tests, zero-exit matrix, exact one-file digest, host-Python PATH lesion, relocation identity and successful sandbox stop.",
+    "outcome": "SUPPORTED_FOR_EXACT_TESTED_HEAD_ONLY",
+    "promotion_limit": "Neither tested branch is current-main whole-machine acceptance; artifacts were ephemeral and not retained as release deliverables."
   },
-  "coordinated_unusual_experiment": {
+  "this_go_unusual_experiment": {
     "count": 1,
-    "id": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "id": "BUILD_TIME_OIDC_CONTROL_PLANE_WITHOUT_RUNTIME_ENDPOINT",
     "execution_surface": "VERCEL_SANDBOX",
-    "deployment_id": "dpl_ESwWufAfNd36LRYBza5FpBZsnYco",
-    "tested_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
-    "source_archive_sha256": "492748eea90264e6188372597afb0bd25f2958d7bc0f75271555f2da7128f38e",
+    "deployment_id": "dpl_GaKgqTe4U96DzhxfWxq31Ugkhw4e",
+    "tested_head": "1c6486593471b0b3b32ee4f7ac44fda34258005b",
+    "source_archive_sha256": "ec3c0885bcd4bf4aacaa0a00781c01fcccc57981b74227c0dbe99220dbfe4de0",
     "network_policy_during_tests": "DENY_ALL",
-    "duplicate_build_hook_behavior": "SKIPPED_ALREADY_EXECUTED_THIS_DEPLOYMENT",
-    "sandbox_stopped": true
+    "duplicate_build_hook_behavior": "DUPLICATE_BUILD_INVOCATION_SKIPPED",
+    "sandbox_stopped": true,
+    "cleanup": "Branch vercel-build hook reverted to source-staging-only after the one bounded execution; no second Sandbox run was authorized by this GO."
   },
-  "verified_batch_receipt": {
+  "this_go_verified_batch": {
     "status": "GO_SANDBOX_MATRIX_VERIFIED",
     "step_results": [
       {"label": "unpack_and_bind_source", "exit_code": 0},
@@ -34,19 +35,35 @@
       {"label": "provision_pinned_python_toolchain", "exit_code": 0},
       {"label": "offline_go_matrix", "exit_code": 0}
     ],
-    "cm07": "PASS",
-    "entityos_dirfd": "PASS",
-    "canonical_source_pipeline": "PASS",
+    "cm07_tests": "17/17 PASS",
+    "entityos_dirfd_tests": "4/4 PASS",
+    "canonical_source_pipeline": "20/20 PASS",
     "entityos_onefile": "PASS",
-    "entityos_sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+    "entityos_runtime_gates": "PASS",
+    "entityos_path_without_host_python": "PASS",
+    "entityos_relocation": "BYTE_IDENTICAL",
+    "entityos_sha256": "fa6366843129c5bf7a678342e7758e9f222771bbe4fb832223b273744a4716e3",
+    "entityos_size_bytes": 9165200,
+    "entityos_mode": "0755",
+    "entityos_format": "ELF 64-bit x86-64",
     "artifact_retention": "EPHEMERAL_SANDBOX_ONLY",
     "whole_machine_acceptance": false
+  },
+  "external_coordinated_replication": {
+    "counts_toward_this_go_unusual_experiment": false,
+    "deployment_id": "dpl_ESwWufAfNd36LRYBza5FpBZsnYco",
+    "tested_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "source_archive_sha256": "492748eea90264e6188372597afb0bd25f2958d7bc0f75271555f2da7128f38e",
+    "status": "GO_SANDBOX_MATRIX_VERIFIED",
+    "entityos_sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+    "sandbox_stopped": true,
+    "interpretation": "Independent coordinated branch evidence supports the same control-plane mechanism but is provenance-separate and cannot transfer PASS across heads."
   },
   "matrix_contract": [
     "CM07 package/resolver v2 tests",
     "EntityOS grant directory descriptor regression",
     "canonical source to executable IR to single ClayVM gate",
-    "one-file EntityOS freeze",
+    "one-file EntityOS reproducible freeze",
     "exact status and self-test",
     "host-Python PATH lesion",
     "persistent initial-grant and symlink fail-closed controls",
@@ -56,26 +73,30 @@
     "copy/move/Unicode-path relocation with byte-identical self-test output"
   ],
   "counterevidence": {
-    "current_product_main_seen_after_batch": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+    "current_product_main_seen": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
     "semantic_parent_before_receipt_noise": "7b8ba167eb37493f857d517ee64b678b061e0b2b",
     "main_receipt_noise": "runtime/vps_integrity/latest.json was modified by frank-self-hosted-runner after the semantic parent",
     "acceptance_classification": "REJECT_AS_CLAY_MACHINE_TEST_EVIDENCE_UNDER_SANDBOX_ONLY_POLICY",
-    "reason": "Current owner-fixed program state forbids VPS and self-hosted VPS testing."
+    "reason": "Current owner-fixed program state forbids VPS and self-hosted VPS testing.",
+    "active_workflow_surface": "GitHub reports many legacy active VPS-labelled workflows; current connector does not expose workflow-disable mutation, so broad neutralization was not claimed."
   },
-  "current_pr_state_at_receipt_write": {
+  "moving_head_boundary": {
     "pr": 755,
-    "tested_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
-    "later_head_observed": "46a491ab5ebdff936e2bc4d164c75a2dae82c0e9",
-    "later_head_delta": "bind staged batch source to committed Git tree",
-    "later_head_exact_batch_status": "UNKNOWN_AT_RECEIPT_WRITE",
-    "promotion_rule": "Do not transfer the 33424a2 PASS to 46a491a or later heads without exact-head isolated evidence."
+    "exact_tested_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "later_heads_observed": [
+      "46a491ab5ebdff936e2bc4d164c75a2dae82c0e9",
+      "2a210696c3347e46914031bf97712bcd885c7963",
+      "8788a5bbf9a7ca77a4dd8d9ac819840d2bc6fa74"
+    ],
+    "promotion_rule": "No exact-head PASS inheritance after material staging/control-plane changes."
   },
   "next_executable_actions": [
-    "Treat the tested 33424a2 EntityOS artifact as exact-head ephemeral evidence only; do not claim retained release artifact.",
-    "Require exact-head isolated Vercel evidence after any material source-staging/runtime change before promotion.",
-    "Quarantine VPS/self-hosted receipt commits from current Clay Machine acceptance semantics and disable or neutralize remaining active VPS/self-hosted test paths where tooling/authority permits.",
-    "Continue highest semantic frontier: canonical Bytes/Buffer ownership/lifetime and String/argv/effect signature path through typed/effect IR and the single VM."
+    "Keep whole_machine_acceptance=false and distinguish ephemeral tested EntityOS from a retained release artifact.",
+    "Require exact-current isolated Vercel evidence after material head changes before promotion.",
+    "Quarantine VPS/self-hosted receipt commits from acceptance semantics and disable/neutralize legacy VPS test paths when an authorized workflow-disable path is available.",
+    "Continue highest semantic frontier: canonical Bytes/Buffer ownership/lifetime plus String/argv/effect signatures through typed/effect IR and the single VM."
   ],
+  "research_outcome": "MERGE_CONTROL_PLANE_MECHANISM_EVIDENCE; NO_WHOLE_MACHINE_PROMOTION",
   "together_api_used": false,
   "vps_test_used_by_this_go": false,
   "self_hosted_test_used_by_this_go": false

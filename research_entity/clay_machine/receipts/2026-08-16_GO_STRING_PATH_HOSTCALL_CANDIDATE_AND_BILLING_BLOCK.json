@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_base_main": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "candidate_branch": "clay/go-string-path-hostcall-20260816-1632",
+  "candidate_head": "81f1b99c70af56d9459d81190a1244484748d32f",
+  "candidate_pr": 744,
+  "candidate_state": "DRAFT_BLOCKED_FULL_REPO_SANDBOX",
+  "frontier": ["CM-TERM", "CM-DATA", "CM-05", "CM-08"],
+  "observed_anchor": "Current canonical process bridge admits linux.process.spawn.v0::(Int)->Int; ClayVM already serializes String constants but its OP_HOSTCALL runtime previously rejected every non-Int argument before host dispatch.",
+  "generated_candidate": "Transport canonical scalar Clay values through OP_HOSTCALL and make exact hostcall handlers own fail-closed signature checks; add a narrow path-only linux.process.spawn.path.v1::(String)->Int contract without String-to-shell or String-to-argv parsing.",
+  "strongest_counterhypothesis": "A path-only String process signature may become throwaway surface if canonical argv/Bytes aggregates arrive immediately; widening the generic VM hostcall transport could also expose a handler that accidentally relied on the old global Int fence.",
+  "discriminator": "Preserve explicit Int checking on legacy process hostcall; require String at the new path handler; execute one real absolute path and one bounded shell-metacharacter path decoy; regress all existing single-VM/CM-TERM tests before promotion.",
+  "local_component_evidence": {
+    "context": "LOCAL_RECONSTRUCTED_COMPONENT_SANDBOX_NOT_EXACT_REPO_CHECKOUT",
+    "status": "PASS_MECHANISM_FALSIFIER",
+    "checks": [
+      "String /usr/bin/true reached direct shell=false process boundary and returned 0",
+      "/usr/bin/false returned nonzero",
+      "capability denial failed closed",
+      "String-signature Int argument was rejected during lowering",
+      "legacy Int request-id control remained functional",
+      "single new shell-metacharacter executable-path experiment failed as literal exec and created no marker"
+    ],
+    "promotion_limit": "This is not exact-head full-repository execution and cannot promote the PR or EntityOS."
+  },
+  "new_unusual_experiment": {
+    "name": "SHELL_METACHARACTER_EXECUTABLE_PATH_LITERALIZATION",
+    "count": 1,
+    "result": "PASS_LOCAL_COMPONENT_FALSIFIER",
+    "rollback": "Candidate remains isolated on draft PR; no main merge."
+  },
+  "github_hosted_sandbox": {
+    "workflow_run": 31939611879,
+    "job": 95146775284,
+    "status": "BLOCKED_BEFORE_RUNNER_START",
+    "steps_executed": 0,
+    "runner_id": 0,
+    "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased.",
+    "code_result": "NONE"
+  },
+  "entityos": {
+    "artifact": "NOT_BUILT_IN_THIS_GO_CYCLE",
+    "reason": "The only configured full-repository GitHub-hosted sandbox was blocked before runner allocation; the active local container could not obtain the private full repository checkout, so exact one-file build/self-test/copy-run evidence was unavailable.",
+    "next_executable_action": "Restore an allowed actually-started isolated full-repository runner, then execute PR #744 workflow gate-and-entityos against exact head: path gate -> existing baselines -> reproducible one-file build -> EntityOS self-test -> moved-copy run -> artifact hash. Merge only if that exact-head lane is green."
+  },
+  "outcome": "DEFER",
+  "whole_clay_machine_completion": "NOT_CLAIMED"
+}

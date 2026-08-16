@@ -3,12 +3,13 @@
   "date": "2026-08-16",
   "trigger": "go",
   "scope": "EntityOS one-file verification plus exactly one bounded local portability falsifier",
-  "current_product": {
+  "product_state_at_close": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
-    "main_head": "f764d27af6781d4f68ae4064f4d97898f946d90f",
-    "head_delta": "fix(entityos): verify bound security concept identity",
-    "workflow_run": 31927650073,
-    "workflow_status": "SUCCESS",
+    "main_head_observed": "2a86c4689636d48fe08d9bdb7bbefa5d47e17677",
+    "main_head_delta": "spec(entityos): require generative Clay Machine visual test app",
+    "latest_verified_executable_head": "f764d27af6781d4f68ae4064f4d97898f946d90f",
+    "latest_verified_workflow_run": 31927650073,
+    "latest_verified_workflow_status": "SUCCESS",
     "artifact_name": "EntityOS",
     "artifact_sha256": "9c64e32ffafa252e7495d7edd9e562dbcf0e10bcebb1f38e8392551818d2b9bd",
     "artifact_size_bytes": 11930480,
@@ -16,9 +17,11 @@
     "security_concept_sha256": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
     "workflow_evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
     "workflow_source_regression_rc": 0,
+    "newer_spec_after_artifact": true,
+    "new_release_blocker": "embedded generative visual test application with grounded Clay data, Builder Box validation, white terminal/canvas UX and required query gates",
     "whole_machine_acceptance": false
   },
-  "current_head_local_verification": {
+  "latest_executable_local_verification": {
     "artifact_retrieved_from_workflow": true,
     "status": "PASS",
     "build_head_reported": "f764d27af6781d4f68ae4064f4d97898f946d90f",
@@ -44,25 +47,30 @@
     "result": "BYTE_IDENTICAL_PASS",
     "temporary_directory_after_exit": "EMPTY",
     "rollback": "temporary directory removed; no product or canonical runtime state mutated",
-    "note": "Later current-main artifacts f525 and f764 were subjected only to ordinary verification, not a second unusual experiment. Independently triggered product workflows retain their own workflow-level regression accounting and are not additional experiments initiated by this go worker."
+    "note": "Later executable heads were subjected only to ordinary verification, not a second unusual experiment. Independently triggered product workflows retain their own workflow-level regression accounting and are not additional experiments initiated by this go worker."
   },
   "grf": {
     "hypothesis": "The frozen one-file EntityOS candidate has a robust product boundary while current semantics remain concentrated in the single canonical compiler/VM/ClayOS path.",
-    "counterhypothesis": "Packaging success masks host-environment fragility or a detached semantic sidecar that never reaches the canonical VM path.",
-    "collapse": "One-file execution, exact build provenance including security-concept identity, and admitted smoke/process paths are supported at current main; whole-machine completion remains false. The highest-value semantic blocker remains integrating typed Bytes plus String/argv/effect signatures into canonical source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM, rather than adding parallel adapters.",
+    "counterhypothesis": "Packaging success masks host-environment fragility, detached semantic sidecars, or missing user-visible machine functionality.",
+    "collapse": "One-file execution, exact build provenance including security-concept identity, and admitted smoke/process paths are supported through executable head f764. Current main 2a86 adds a release-blocking visual inspection application that is not present in that artifact, so exact-current whole-product acceptance is BLOCKED. The shared semantic blocker remains canonical Bytes plus String/argv/effect signatures through source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM; draft PR #708 owns the detached typed-value candidate lane.",
     "outcome": "RETAIN_BOUNDED"
   },
   "coordination": {
-    "current_shared_frontier": "canonical typed value integration for Bytes plus String/argv/effect signatures through source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM -> EntityOS",
-    "overlap": "Draft product PR #708 owns the detached ClayVMTypedValueContract/v1 candidate lane.",
+    "typed_value_overlap": "Draft product PR #708 owns ClayVMTypedValueContract/v1; no duplicate implementation created by this worker.",
     "pr708_ci_retry": "Attempt 2 again completed with zero executed job steps; runner/infrastructure non-execution, not semantic candidate failure.",
+    "visual_app_open_pr_search": "No open product PR matching EntityOS visual test app / Builder Box was found at close.",
     "duplicate_implementation_created": false
   },
-  "next_action": "Integrate the winning typed value metadata into the canonical single-VM module/admission boundary, add canonical String/Bytes/argv process values and effect signatures, execute deterministic exact-head gates, then rebuild and retest one-file EntityOS on the accepted Ubuntu lane.",
+  "next_actions": [
+    "Implement the smallest embedded visual test application substrate inside EntityOS: fixed render schema + Builder Box validator + grounded query model for performance and what is a claymachine + visible UNKNOWN behavior, then package and execute it on the accepted Ubuntu lane.",
+    "In parallel but without duplicating PR #708, integrate the winning typed value metadata into the canonical single-VM module/admission boundary and carry canonical Bytes/String/argv/effect signatures through ClayExecutableTypedIR/v1 to the process path."
+  ],
   "claims": {
-    "entityos_artifact_built_by_current_main_workflow": true,
+    "entityos_artifact_built_by_verified_workflow": true,
     "entityos_artifact_locally_verified_this_cycle": true,
-    "exact_current_product_main_artifact_verified": true,
+    "latest_verified_executable_head": "f764d27af6781d4f68ae4064f4d97898f946d90f",
+    "current_main_head_has_newer_release_spec": true,
+    "exact_current_main_artifact_includes_visual_app_requirement": false,
     "accepted_vps_identity_proven_by_this_receipt": false,
     "whole_clay_machine_acceptance": false,
     "training_authorized": false,

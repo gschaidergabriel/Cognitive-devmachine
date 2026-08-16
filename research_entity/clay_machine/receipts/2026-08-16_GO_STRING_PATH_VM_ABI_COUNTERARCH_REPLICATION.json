@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "frontier": ["CM-TERM", "CM-DATA", "CM-05", "CM-08"],
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "retained_implementation_pr": 744,
+  "retained_implementation_head": "81f1b99c70af56d9459d81190a1244484748d32f",
+  "counterarchitecture_pr": 745,
+  "counterarchitecture_head": "80df28a408c10489956f02952434cbc7712f653e",
+  "counterarchitecture_pr_state": "CLOSED_UNMERGED_DUPLICATE_IMPLEMENTATION_LANE",
+  "observed_anchor": "Current ClayVM globally rejects non-Int OP_HOSTCALL arguments. The retained PR #744 moves exact scalar hostcall type enforcement to each host handler; the independent counterarchitecture preserved the global Int-only VM hostcall fence and encoded only one semantic String executable path across a bounded Int ABI.",
+  "retained_hypothesis": "Transport canonical scalar Clay values through OP_HOSTCALL and require every admitted hostcall handler to enforce its exact signature. This directly enables String transport and avoids backend byte-vector encoding for the path-only slice.",
+  "counterhypothesis": "Preserve the existing global Int-only VM hostcall fence and lower one semantic String executable-path literal into a bounded length-prefixed UTF-8 byte vector carried as Int values to a dedicated hostcall. This minimizes generic VM type-surface widening but does not provide dynamic String transport.",
+  "mechanism_tradeoff": {
+    "retained_pr_744": "Simpler semantic String transport and a more general scalar hostcall substrate, but correctness depends on every current/future host handler enforcing exact argument types after the global VM fence is removed.",
+    "closed_pr_745": "Preserves the current generic VM Int-only fail-closed fence and keeps legacy hostcalls unchanged, but introduces a dedicated physical ABI encoding, adds stack arguments proportional to UTF-8 path length, and cannot satisfy general dynamic String/argv transport."
+  },
+  "independent_exact_blob_replication": {
+    "context": "LOCAL_ISOLATED_SANDBOX",
+    "source_identity_checks": {
+      "claymachine/clayvm.py": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
+      "claymachine/host_process.py": "886ee0cbba5706536ef5602bc15f313eb56d26c0",
+      "candidate_host_process_vm.py": "6312ed9c689b565d049633438742d05308cf2e5b",
+      "candidate_executable_ir_adapter.py": "132e012e5d78afe229298d63a38d04e94fc70af9",
+      "candidate_discriminator.py": "69bdc27f571840cb8df4729d01f0ed3a60912113"
+    },
+    "string_discriminator": "PASS_STRING_HOSTCALL_V1",
+    "real_process": "/usr/bin/true",
+    "real_process_returncode": 0,
+    "legacy_int_control": "PASS",
+    "cm_term_regression": "PASS_CM_TERM_TYPED_IR_VM_PROCESS_SLICE_10_OF_10",
+    "clayvm_unittest": "PASS_11_OF_11"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "NUL_BEARING_STRING_PROCESS_PATH_REJECTION",
+    "input_class": "semantic String executable path containing NUL plus sandbox marker suffix",
+    "observed_result": "PROCESS_PATH_REJECTED:ARGV_NUL_DENIED",
+    "linux_marker_created": false,
+    "interpretation": "The counterarchitecture reused the canonical host-process NUL fence and rejected the invalid path before Linux process execution."
+  },
+  "coordination": {
+    "decision": "FUSE_COUNTEREVIDENCE_NOT_DUPLICATE_CANONICAL_PATH",
+    "action": "PR #745 closed unmerged; independent mechanism and exact local replication transferred to PR #744 discussion.",
+    "reason": "Parallel equivalent or competing implementation lanes must not become simultaneous canonical paths."
+  },
+  "entityos": {
+    "artifact": "NOT_BUILT_IN_THIS_GO_CYCLE",
+    "github_actions": "BLOCKED_BEFORE_RUNNER_START_BY_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
+    "local_build_environment": "BLOCKED_FULL_TREE_AND_PYINSTALLER_UNAVAILABLE",
+    "vps_testing": "NOT_PERFORMED_SANDBOX_ONLY_DIRECTIVE",
+    "next_executable_action": "Run retained PR #744 on an actually-started isolated full-repository sandbox with the canonical reproducible one-file EntityOS build, exact EntityOS self-test and moved-copy run. Compare the retained generic scalar hostcall mechanism against the preserved counterarchitecture specifically on fail-closed wrong-type behavior before promotion; then continue toward canonical argv aggregate plus Bytes/Buffer ownership/lifetime."
+  },
+  "outcome": "MERGE_AS_COUNTEREVIDENCE",
+  "whole_clay_machine_completion": "NOT_CLAIMED"
+}

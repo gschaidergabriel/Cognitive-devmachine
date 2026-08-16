@@ -1,0 +1,64 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "observed_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
+    "message": "build(entityos): bind security concept into one-file provenance",
+    "change": "EntityOS builder now requires entityos/SECURITY_CONCEPT.md, hashes it, injects SECURITY_CONCEPT_SHA256 into the frozen build identity module, and emits security_concept_sha256 in EntityOSBuildReceipt/v1."
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "workflow_run": 31927513690,
+    "workflow_artifact_id": 9258281758,
+    "build_head": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
+    "sha256": "7cf8d7f415417dfd25fbcc74592a09a5827bb79e69e945ed9c3c1a43c82c7c8a",
+    "size_bytes": 11932320,
+    "mode": "0755",
+    "format_observed_locally": "ELF 64-bit LSB executable x86-64",
+    "security_concept_sha256": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS"
+  },
+  "verification": {
+    "accepted_self_hosted_linux_x64_workflow": "PASS",
+    "source_regression": "PASS",
+    "one_file_build": "PASS",
+    "canonical_entityos_gates": "PASS",
+    "local_downloaded_artifact_hash_matches_receipt": true,
+    "local_status": "PASS",
+    "local_self_test": "SELFTEST_PASS",
+    "local_vm_result": 42,
+    "local_typed_ir_vm_process_effect": "PASS",
+    "local_typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK"
+  },
+  "go_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "executor": "EntityOS exact-head self-hosted Linux x64 workflow triggered by this product commit",
+    "result": "PASS; baseline/intervention byte-identical and runtime temporary extraction root empty after exit",
+    "rollback": "temporary path removed"
+  },
+  "external_primary_evidence": {
+    "source": "PyInstaller 6.21.0 official documentation",
+    "finding": "onefile mode extracts support files into a temporary runtime directory; POSIX extraction location is selected from TMPDIR/TEMP/TMP then hard-coded fallbacks, so portability and extraction-root authority require explicit tests rather than inferring them from the outer ELF alone."
+  },
+  "grf_collapse": {
+    "hypothesis": "The immediate current-head EntityOS provenance gap can be closed by binding the owner-fixed security concept into build identity and rebuilding exact current main.",
+    "counterhypothesis": "Rebuilding only changes metadata and does not strengthen product provenance because the security concept remains external documentation.",
+    "discriminator": "Require the exact file hash to be consumed by the builder, injected into the frozen build-identity module, emitted in the receipt, then rebuild and execute the exact one-file artifact on the self-hosted Linux x64 lane and locally.",
+    "outcome": "RETAIN_WITH_SCOPE_BOUNDARY",
+    "scope_boundary": "This proves build provenance binding, not implementation of first-start permission persistence or destructive-password gating."
+  },
+  "entityos_artifact_state": "UPDATED_AND_VERIFIED",
+  "whole_machine_acceptance": false,
+  "remaining_frontier": "Current highest-information semantic blocker remains canonical owned Bytes/typed-value admission through WP04 -> ClayExecutableTypedIR/v1 -> the single ClayVM, followed by minimal explicit String/argv process semantics and the remaining network/portability/data/media/visual acceptance gates. Runtime extraction/loading authority remains separately open because outer ELF identity alone does not prove extracted-code ancestry.",
+  "negative_results_preserved": [
+    "Whole-machine acceptance remains false.",
+    "Security concept provenance binding is not security-policy implementation.",
+    "PyInstaller one-file packaging is not by itself proof of extracted-runtime identity authority."
+  ]
+}

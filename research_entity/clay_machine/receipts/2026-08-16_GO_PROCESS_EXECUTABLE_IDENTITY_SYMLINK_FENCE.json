@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "research_base_observed": "62266e80329d80dae7b599e69d34e0e67faeffc8",
+  "product_main_observed": "1b851e3f680f4208a2632380e5cd8b25111c5b94",
+  "scope": [
+    "CM-TERM",
+    "CM-08 Linux interoperability",
+    "process effect provenance",
+    "EntityOS acceptance evidence"
+  ],
+  "coordination": {
+    "preferred_string_lane": "PR #744 path-only String hostcall through the single ClayVM",
+    "bytes_lane": "PR #741 typed Bytes through CLAYVM/2",
+    "older_overlapping_string_lane": "PR #740 canonical source String process intrinsic candidate",
+    "action": "DO_NOT_DUPLICATE_PRODUCT_IMPLEMENTATION",
+    "product_pr_744_already_contains_related_counterevidence": true
+  },
+  "observed": {
+    "current_host_boundary": "claymachine/host_process.py validates absolute String argv, forbids NUL, uses shell=false and records requested argv/outcome but does not bind executable content identity",
+    "current_vm_process_bridge": "claymachine/host_process_vm.py stores immutable request-id -> argv tuples and process receipts",
+    "entityos_builder": "entityos/build_canonical_onefile.py requires two PyInstaller one-file builds with identical SHA-256",
+    "exact_product_main_build_executed_this_cycle": false
+  },
+  "grf": {
+    "observed_anchor": "The process request text can be immutable while Linux executable-path resolution remains late-bound at effect time.",
+    "generated_reality": "If path/argv immutability were sufficient executable provenance, the same immutable request would continue to identify the same executable across calls.",
+    "counter_reality": "Linux path lookup can resolve the same absolute path to a different executable after namespace/filesystem mutation, so request identity and executable identity are distinct.",
+    "falsifier": "Retarget one absolute executable symlink between two calls while keeping the exact argv tuple unchanged, then rollback and repeat.",
+    "outcome": "REFUTE_REQUEST_IMMUTABILITY_IMPLIES_EXECUTABLE_IDENTITY",
+    "confidence": "HIGH_FOR_PATH_SEMANTICS; MEDIUM_FOR_REQUIRED_PRODUCT_POLICY"
+  },
+  "unusual_experiment": {
+    "name": "SYMLINK_RETARGET_SAME_IMMUTABLE_ARGV",
+    "count_for_this_go_macro_cycle": 1,
+    "environment": "isolated local sandbox; source-equivalent reconstruction of current-main host_process semantics, not claimed as exact private-repo blob execution",
+    "baseline": "same immutable argv points through symlink to executable A and emits A",
+    "intervention": "atomically retarget the same absolute symlink path to executable B without changing argv",
+    "predicted_if_hypothesis_right": "same argv continues to execute A",
+    "predicted_if_counterhypothesis_right": "same argv executes B because path resolution is late-bound",
+    "result": {
+      "baseline_executes_A": true,
+      "resolved_target_changed_under_same_argv": true,
+      "retarget_executes_B": true,
+      "rollback_executes_A": true,
+      "same_immutable_argv_all_runs": true,
+      "classification": "PATH_STRING_AND_ARGV_RECEIPT_DO_NOT_BIND_EXECUTED_BINARY_IDENTITY"
+    },
+    "rollback": "retarget symlink back to executable A; final control again executed A"
+  },
+  "fusion": {
+    "preferred_result": "RETAIN_PR_744_WITH_PROVENANCE_SCOPE_OBLIGATION",
+    "counterhypothesis": "If late-bound executable-path semantics are intentional, this is not itself a correctness defect; receipts must explicitly say executable identity is unbound.",
+    "test_obligation": "Before a process receipt is treated as provenance-strong executable evidence, choose and test one explicit policy: record/attest post-spawn executable identity; bind/open an executable object before execution; or explicitly classify v1 as path/outcome-only and keep executable-identity provenance OPEN.",
+    "do_not_infer": [
+      "immutable argv implies immutable executable",
+      "requested path identity equals executed binary identity",
+      "component path-hostcall success implies EntityOS acceptance"
+    ]
+  },
+  "entityos": {
+    "artifact_built_this_cycle": false,
+    "artifact_updated_this_cycle": false,
+    "artifact_verified_this_cycle": false,
+    "exact_blocker": "This ChatGPT session cannot invoke the secured authenticated POST/source-staging path of the verified Vercel sandbox; the local isolated sandbox cannot clone the private exact-current repo; GitHub-hosted isolated jobs are currently no-start/billing blocked; VPS/self-hosted execution is forbidden for current Clay Machine tests.",
+    "next_executable_step": "Use a reusable authenticated source-admitted Vercel job surface to stage the exact reviewed current product SHA, reconcile the non-duplicate #741 Bytes and #744 String-path lanes, include the executable-identity provenance policy/regression, run current CM-DATA/CM-TERM gates, double-build EntityOS with identical SHA-256, then execute that exact one-file artifact self-test/status/moved-copy/PATH-without-host-Python controls.",
+    "whole_clay_machine_acceptance": false
+  }
+}

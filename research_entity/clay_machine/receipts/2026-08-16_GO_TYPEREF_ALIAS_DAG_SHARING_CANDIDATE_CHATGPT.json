@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-02 production-safe TypeRef alias-DAG structural sharing candidate",
+  "research_head_before_write_observed": "a40a282f97e07b86ddd33378f4b3169ed8802e31",
+  "product_main_base_used": "f2c5ccdddd1791cd404c1e8d25f41869a02673ea",
+  "product_candidate": {
+    "pull_request": 645,
+    "head": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "branch": "chatgpt/go-typeref-dag-sharing-fresh-main-20260816",
+    "production_typechecker_wired": false,
+    "scope": [
+      "detached iterative alias canonicalizer with one mutable active-alias DFS path",
+      "per-canonicalization immutable TypeRef subtree sharing",
+      "DAG-aware equality using visited node-pair identities",
+      "seven ordinary semantic/resource regressions",
+      "exact PR-head self-hosted Linux/X64 gate"
+    ]
+  },
+  "observed_anchors": [
+    "Current workspace CM-02 explicitly names product issue #640 as the bounded alias-DAG structural-sharing frontier.",
+    "Merged PR #603 already repaired quadratic alias-ancestry path copying, but repeated alias-DAG result materialization remains a separate resource hazard.",
+    "An older worker PR #599 and the canonical 2026-08-16 alias-DAG materialization receipt already identify the same mechanism class, so this cycle is independent replication plus an implementation candidate, not a novel mechanism claim.",
+    "Product main advanced during construction; the candidate was recomposed onto fresh main f2c5ccdddd1791cd404c1e8d25f41869a02673ea before PR creation."
+  ],
+  "bounded_unusual_experiment": {
+    "count": 1,
+    "name": "ALIAS_DIAMOND_DAG_MATERIALIZATION",
+    "environment": "disposable ChatGPT Linux sandbox",
+    "shape": "A0 -> Pair<A1,A1> recursively to Int",
+    "depth": 18,
+    "current_materializing_mechanism": {
+      "logical_result_node_positions": 524287,
+      "runtime_seconds_approx": 3.78,
+      "tracemalloc_peak_mib_approx": 37.8
+    },
+    "structural_sharing_prototype": {
+      "unique_result_nodes": 19,
+      "runtime_seconds_approx": 0.00049,
+      "tracemalloc_peak_mib_approx": 0.014
+    },
+    "controls": "Small semantic equality, direct-cycle, wrapped-cycle and sibling-reuse controls preserved the expected result shapes in the sandbox prototype.",
+    "result": "SUPPORTS_BOUNDED_STRUCTURAL_SHARING_CANDIDATE",
+    "accepted_target_evidence": false,
+    "new_unusual_experiment_count_beyond_named_one": 0
+  },
+  "ordinary_candidate_gate": {
+    "workflow_run": 31920728069,
+    "workflow_job": 95100090497,
+    "tested_head_expected": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "status_observed": "QUEUED_NO_RUNNER_ASSIGNED",
+    "runner_id_observed": 0,
+    "conclusion_observed": null,
+    "interpretation": "No failure is observed, but there is also no target-runner PASS; exact-head target evidence remains unavailable at this observation point."
+  },
+  "grf": {
+    "generated_reality": "Per-call immutable subtree sharing can remove exponential result materialization while preserving current nominal alias/cycle semantics.",
+    "causal_mechanism": "Completed alias targets are immutable TypeRef values, so one canonical subtree can be reused for repeated references inside one canonicalization; graph-aware equality then visits each shared node pair at most once.",
+    "strongest_counter_reality": "Identity sharing or cache lifetime could accidentally suppress context-sensitive cycle diagnostics, leak results across checker epochs, or move the exponential cost into equality/diagnostic traversal.",
+    "hidden_assumptions": [
+      "TypeRef values remain immutable and semantically structural at this boundary.",
+      "Alias meaning does not depend on sibling occurrence identity within one canonicalization call.",
+      "The cache remains local to one canonicalization/checker state and is populated only after a subtree completes without a cycle event."
+    ],
+    "falsifier": "Any current production semantic/cycle regression, cross-branch false cycle, stale-cache behavior, or superlinear shared-DAG equality/resource result on exact PR-head evidence rejects or redesigns the candidate.",
+    "outcome": "RETAIN_CANDIDATE_DEFER_PRODUCTION_PROMOTION"
+  },
+  "next_discriminators": [
+    "Require workflow 31920728069 to execute on an assigned self-hosted Linux/X64 runner and PASS on exact PR head c50026c2462a6debebae5db13eb330c66fda2c85.",
+    "If exact-head candidate evidence passes, compose the smallest reviewed integration into NominalTypeChecker._canonical/_same against current main rather than maintaining a second production path.",
+    "Run the existing TypeRef production-totality gate plus cycle/sibling/resource controls on exact integration head and compare diagnostics/value semantics to the current production baseline.",
+    "Only after those receipts should CM-02 alias-DAG materialization be promoted from blocker to verified repair."
+  ],
+  "non_claims": [
+    "PR #645 is not canonical and is not production-wired at this receipt point.",
+    "Queued self-hosted status is not PASS evidence.",
+    "Sandbox timing/memory is not accepted target performance evidence.",
+    "No Linux effect authority was widened.",
+    "No whole Clay Machine acceptance is claimed.",
+    "Together API was not used.",
+    "No final/model training was authorized or started."
+  ]
+}

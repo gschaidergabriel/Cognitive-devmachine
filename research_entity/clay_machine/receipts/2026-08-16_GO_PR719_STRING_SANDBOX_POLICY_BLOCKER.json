@@ -1,0 +1,88 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "execution_policy": "SANDBOX_ONLY_TESTING",
+    "vps_self_hosted_current_evidence": "FORBIDDEN",
+    "whole_machine_acceptance": false
+  },
+  "product_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr": 719,
+    "merge_commit": "2b1a7fbae158c36910dd623234b2fdfa8550a563",
+    "current_main_observed": "777895270357908e49a079fb2c308844c6469b83",
+    "ancestry_check": "CURRENT_MAIN_IS_DESCENDANT_OF_PR719_MERGE",
+    "semantic_slice": "String literals and String returns are admitted through ClayExecutableTypedIR/v1 and the existing single ClayVM path.",
+    "still_fail_closed": [
+      "String parameters",
+      "argv construction from Clay-owned values",
+      "canonical Bytes/Buffer ownership and lifetime",
+      "effect-signature integration for those values"
+    ]
+  },
+  "falsifier_repair": {
+    "branch": "go/entityos-string-single-vm-20260816",
+    "commit": "73815560077d104fe8f2cfecd415afe55f2c5bfb",
+    "change_kind": "TEST_ONLY_EXPECTATION_ALIGNMENT",
+    "finding": "The previous 19/20 result was not a runtime String failure. String parameters were rejected earlier at the function parameter contract with VM_BOOTSTRAP_PARAMS_INT_ONLY; the test had expected a later call-site error.",
+    "runtime_semantics_widened_by_fix": false,
+    "post_fix_single_vm_gate": "PASS"
+  },
+  "coordination": {
+    "closed_overlapping_prs": [721, 723, 724],
+    "reason": "Avoid parallel canonical String opcode/runtime lines after PR719 became main ancestry."
+  },
+  "sandbox_build_gate": {
+    "workflow": ".github/workflows/entityos-semantic-onefile-rebuild-vps.yml",
+    "required_runner": "ubuntu-latest",
+    "current_main_policy_state": "SANDBOX_ONLY_RESTORED",
+    "failed_hosted_run": 31930154546,
+    "failed_hosted_run_head": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "failure_phase": "BEFORE_WORKFLOW_STEPS",
+    "github_annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "interpretation": "INFRASTRUCTURE_BILLING_BLOCKER_NOT_CODE_FAILURE",
+    "transient_regression": {
+      "commit": "316fbbcd4b0f166d0a0bd722f9f8d04ee7bba230",
+      "problem": "Workflow temporarily changed back to self-hosted Linux X64, conflicting with sandbox-only owner policy.",
+      "resolved_by_current_main": "777895270357908e49a079fb2c308844c6469b83",
+      "current_runner": "ubuntu-latest"
+    }
+  },
+  "local_diagnostic_artifact": {
+    "artifact_name": "EntityOS",
+    "kind": "NONCANONICAL_LIGHTWEIGHT_ONEFILE_DIAGNOSTIC",
+    "source_slice": "PR719 merge staging",
+    "sha256": "57ac6bab4d78e424accb59b62ce9cffabf533cd1d1ae1b8e442e9096eea92954",
+    "size_bytes": 1212993,
+    "observations": [
+      "single-file startup PASS",
+      "self-test PASS",
+      "String source -> TypedIR -> single ClayVM PASS",
+      "second local build byte-identical"
+    ],
+    "promotion": "NOT_RELEASE_CANONICAL; canonical release builder remains entityos/build_canonical_onefile.py"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "UNICODE_CANONICAL_EQUIVALENCE_DECOY",
+    "location": "isolated local sandbox prototype",
+    "intervention": "Compare composed U+00E9 with decomposed U+0065 U+0301 as ClayString values while also verifying their Unicode-normalized equivalence.",
+    "predicted_preferred": "Without explicit normalization semantics, exact ClayString/UTF-8 identity remains distinct even when Unicode normalization says the texts are canonically equivalent.",
+    "predicted_counter": "The value layer silently normalizes or aliases the byte identities.",
+    "result": "PASS_PREFERRED; identities stayed distinct and no implicit normalization occurred.",
+    "prototype_tests": "7/7 PASS",
+    "promotion": "CANDIDATE_ONLY; not merged into canonical runtime"
+  },
+  "collapse": {
+    "promote": "PR719 admitted String literal/return slice and corrected fail-closed discriminator",
+    "retain": "Clay-owned value/lifetime layer as next architecture candidate",
+    "reject": "Using self-hosted/VPS runs as current evidence",
+    "defer": "Whole EntityOS acceptance"
+  },
+  "entityos_artifact": "BLOCKED_CURRENT_CANONICAL_BUILD",
+  "exact_blocker": "The allowed GitHub-hosted sandbox runner cannot start because GitHub reports failed recent account payments or an insufficient spending limit, while sandbox-only policy forbids falling back to the self-hosted/VPS runner. The active local sandbox does not contain a complete materialized latest private source tree for the canonical PyInstaller rebuild.",
+  "next_executable_step": "Restore GitHub-hosted Actions billing/spending capacity or otherwise materialize the exact latest private main source into an isolated sandbox; then run entityos/build_canonical_onefile.py twice with the pinned toolchain, require byte reproducibility, execute status/self-test/String build-run/strict admission on those exact bytes, and only then continue the minimum String-parameter + Bytes/Buffer + argv/effect-signature slice."
+}

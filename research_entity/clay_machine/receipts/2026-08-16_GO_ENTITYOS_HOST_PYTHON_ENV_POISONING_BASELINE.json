@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_ENTITYOS_HOST_PYTHON_ENV_POISONING_BASELINE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "EntityOS/portability/security/reproducibility",
+  "timestamp_local": "2026-08-16T17:03:25+07:00",
+  "research_main_before_write": "5084d53a2941befc94b064b6baee14e4daa21033",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "05c910705fe9a430ee0f958760639f54217aa9da",
+  "baseline_artifact": {
+    "source_run_id": 31930112424,
+    "source_artifact_id": 9259038991,
+    "build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+    "file": "EntityOS",
+    "format": "ELF_64_X86_64",
+    "size_bytes": 12821560,
+    "sha256": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+    "build_receipt_reproducibility_sha256_match": true,
+    "stored_self_test_status": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "observed_anchor": "The baseline was a real one-file PyInstaller EntityOS artifact produced by an isolated GitHub-hosted runner and downloaded into the current isolated worker sandbox. Current product main is 34 commits ahead and includes runtime/EntityOS source changes, so this artifact is historical baseline evidence only.",
+  "generated_reality": "A frozen one-file runtime might still consult host PYTHONPATH/PYTHONHOME/sitecustomize and permit a host directory to shadow embedded EntityOS or Clay Machine packages.",
+  "counter_reality": "The frozen runtime isolates module discovery sufficiently that hostile host Python discovery variables cannot shadow the embedded runtime for this tested path.",
+  "discriminator": "Run a normal self-test control, then exactly one bounded environment-poisoning intervention against the same immutable EntityOS binary. The intervention clears the environment and supplies attacker PYTHONPATH/PYTHONHOME, a marker-writing sitecustomize.py, and shadow entityos/claymachine packages that raise if imported.",
+  "unusual_experiment": {
+    "name": "HOST_PYTHON_ENVIRONMENT_POISONING",
+    "count": 1,
+    "context": "ISOLATED_CHATGPT_CONTAINER_SANDBOX_ON_HISTORICAL_HOSTED_ARTIFACT",
+    "baseline_status": "PASS",
+    "intervention_exit_code": 0,
+    "intervention_status": "PASS",
+    "attacker_marker_created": false,
+    "stderr_empty": true,
+    "artifact_sha_before": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+    "artifact_sha_after": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+    "artifact_unchanged": true,
+    "result": "HOST_PYTHON_DISCOVERY_POISONING_NOT_OBSERVED"
+  },
+  "collapse": {
+    "historical_baseline": "RETAIN_AS_SECURITY_PORTABILITY_REGRESSION_EVIDENCE",
+    "current_main_entityos": "NOT_VERIFIED_BY_THIS_RESULT",
+    "whole_machine_acceptance": "NOT_PROMOTED"
+  },
+  "test_obligations": [
+    "Add or preserve an ordinary regression for the exact current EntityOS build proving that PYTHONPATH/PYTHONHOME/sitecustomize cannot shadow embedded entityos/claymachine modules on the admitted launch/self-test path.",
+    "Rebuild the exact current product head in a fully materialized isolated repository sandbox using the canonical one-file builder, then run the regression against that exact artifact.",
+    "Preserve the immutable artifact SHA before/after the intervention and fail closed if hostile discovery variables alter import provenance or execution semantics."
+  ],
+  "current_entityos_artifact": "BLOCKED_THIS_WORKER",
+  "current_blocker": "This worker could not produce a canonical current-head EntityOS: its local isolated sandbox does not contain the full private product checkout and PyInstaller is not installed; direct pip provisioning from the container network failed. The historical binary cannot substitute because current main is 34 commits ahead with runtime/EntityOS source changes.",
+  "next_executable_step": "Materialize exact product main 05c910705fe9a430ee0f958760639f54217aa9da in an isolated full-repository sandbox with the pinned PyInstaller toolchain; execute entityos/build_canonical_onefile.py with that build head; require the builder's two-build SHA match; execute the exact produced EntityOS self-test and the host-Python-environment-poisoning case as an ordinary regression with new unusual experiment count zero.",
+  "execution_policy": "SANDBOX_ONLY; no VPS, self-hosted VPS runner, production host or deployment host test evidence used.",
+  "outcome": "NEW_HISTORICAL_BASELINE_SECURITY_EVIDENCE_DURABLY_RECORDED_CURRENT_HEAD_BUILD_STILL_REQUIRED"
+}

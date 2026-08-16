@@ -47,13 +47,24 @@
     "interpretation": "Self-similar binary content and maximal fragmentation did not confuse frame boundaries; streamed decode matched the baseline exactly."
   },
   "ci_evidence": {
-    "predecessor_head": "a988f0bb6793626a8b9799b28953a4ad9550fd29",
-    "predecessor_triggered_workflows": 9,
-    "predecessor_successful_workflows": 9,
-    "predecessor_limitation": "Clay Machine VM bootstrap checked out exact predecessor head and passed its 9 existing VM regressions but did not execute tests/test_clay_data_plane.py.",
-    "repair": "candidate adds tests/test_clay_data_plane.py to Clay Machine VM bootstrap path filters, exact-head sha256 binding and execution steps",
-    "final_head_ci_observed_state": "REGISTERED_BUT_PENDING_OR_IN_PROGRESS",
-    "final_head_ci_claim": "NO_PASS_CLAIM_UNTIL_COMPLETED"
+    "workflow": "Clay Machine VM bootstrap",
+    "workflow_run": 31925136887,
+    "job": 95111410262,
+    "final_head": "f495fd3f0c51f04a4c9e7127d5b5a466dd302779",
+    "tested_head_match": true,
+    "runner": "clay",
+    "machine": "clayverse",
+    "python": "3.12.3",
+    "vm_tests_passed": 9,
+    "cm_data_tests_passed": 8,
+    "cm_data_tests_failed": 0,
+    "result": "PASS",
+    "broader_final_head_workflows_at_last_observation": {
+      "successful": 6,
+      "queued": 3,
+      "failed": 0
+    },
+    "scope": "Exact-head candidate execution on the Clay self-hosted Linux/X64 runner. This proves this CM-DATA regression gate on that runner; it does not by itself establish canonical Clay Bytes/Buffer semantics or whole-machine acceptance."
   },
   "fusion": "The current mutable-buffer provenance fence strengthens snapshot-at-ingress as the conservative reference behavior: readonly host access alone is not evidence that producer backing storage is immutable. Zero-copy remains deferred until explicit immutable provenance or lease/epoch ownership semantics exist. CRC32 is intentionally non-authoritative.",
   "nonclaims": [
@@ -61,12 +72,11 @@
     "not a canonical Clay ownership/lifetime contract",
     "not wired through canonical typed/effect IR",
     "not wired through the single ClayVM ingress path",
-    "no completed exact-final-head CM-DATA accepted-target gate yet",
     "no CM-NET, CM-VIS or CM-AUDIO readiness claim",
     "no whole Clay Machine acceptance",
     "no owner-gated model training authorization"
   ],
-  "promotion_gate": "Retain as TESTING until final-head CM-DATA CI completes and equivalent provenance-bound opaque-byte semantics are selected and wired through canonical Clay type/effect IR into the single VM, followed by accepted-target evidence.",
-  "next_falsifier": "Observe the exact-final-head CM-DATA gate, then define the smallest canonical Clay Bytes/Buffer ownership+lifetime contract and prove one opaque-byte ingress through checker -> typed/effect IR -> single ClayVM with deterministic snapshot/borrow semantics and accepted Ubuntu evidence.",
+  "promotion_gate": "Retain as TESTING after exact-head framing-gate PASS until equivalent provenance-bound opaque-byte semantics are selected and wired through canonical Clay type/effect IR into the single VM, then exercised through a real canonical Clay program and accepted-target boundary.",
+  "next_falsifier": "Define the smallest canonical Clay Bytes/Buffer ownership+lifetime contract, then prove one opaque-byte ingress through checker -> typed/effect IR -> single ClayVM with deterministic snapshot/borrow semantics and accepted Ubuntu evidence.",
   "rollback": "Close PR #693 and delete the candidate branch; product main and canonical workspace status remain unmodified by the candidate."
 }

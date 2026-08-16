@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "execution_surface": "VERCEL_SANDBOX",
+  "tested_source_head": "0daa0e5db27b56ae23c14bae1a2a361fc12aa305",
+  "source_archive_sha256": "33a6c56502a885f0373aa3c9ad21b2634aa6b013534098c6dbe69bd3f12b63b8",
+  "network_policy_during_code_under_test": "DENY_ALL",
+  "sandbox_stopped": true,
+  "sandbox_stop_error": null,
+  "batch_status": "GO_SANDBOX_MATRIX_VERIFIED",
+  "gates": {
+    "cm07_package_resolver_v2": "PASS",
+    "entityos_grant_dirfd": "PASS",
+    "canonical_source_pipeline": "PASS_20_OF_20",
+    "entityos_reproducible_double_build": "PASS",
+    "entityos_runtime_status": "PASS",
+    "entityos_selftest": "PASS",
+    "entityos_path_without_host_python": "PASS",
+    "entityos_relocation_copy_run": "PASS_BYTE_IDENTICAL",
+    "go_matrix": "PASS"
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "sha256": "bbb66242b1b2fc29d3ee8d28d0cf16a77d1633d1c581f52bc54be1c5d514490f",
+    "size_bytes": 9165200,
+    "mode": "0755",
+    "format": "ELF_64_X86_64_LINUX",
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true,
+    "whole_machine_acceptance": false
+  },
+  "runtime_status_observed": {
+    "schema": "EntityOSCanonicalOneFile/v1",
+    "build_head": "0daa0e5db27b56ae23c14bae1a2a361fc12aa305",
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "process_capability": "linux.process.spawn.v0",
+    "unifieddb_packet_schema": "UnifiedDBEntityPacket/v1",
+    "visual_data_source": "UnifiedDB",
+    "builder_box_schema": "EntityOSBuilderBox/v1",
+    "visual_inspect_candidate": true
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "ENTITYOS_PATH_WITHOUT_HOST_PYTHON",
+    "intervention": "Execute the frozen one-file EntityOS with an empty environment except isolated HOME and PATH=/nonexistent, while separately confirming python3 cannot resolve from PATH.",
+    "predicted_if_self_contained_runtime": "EntityOS status succeeds while python3 lookup fails with exit 127.",
+    "predicted_counterhypothesis": "EntityOS startup fails because it silently requires host Python from PATH.",
+    "observed": "EntityOS status succeeded and host python3 lookup failed with exit 127.",
+    "outcome": "PROMOTE_SELF_CONTAINED_RUNTIME_EVIDENCE_FOR_TESTED_ARTIFACT_ONLY",
+    "rollback": "No persistent runtime mutation; disposable sandbox stopped."
+  },
+  "grf_decision_trace": {
+    "observed_anchor": "The exact staged source archive was hash-bound to the tested source head before execution; the code-under-test ran after network lock-down.",
+    "hypothesis": "The current one-file freeze is runtime-self-contained enough to boot/status without host Python on PATH.",
+    "strongest_counterhypothesis": "PyInstaller packaging still has an undeclared runtime dependence on host Python resolution.",
+    "discriminator": "PATH lesion with independent failed host-python lookup.",
+    "collapse": "RETAIN_SELF_CONTAINED_RUNTIME_CANDIDATE; KEEP_WHOLE_MACHINE_ACCEPTANCE_FALSE"
+  },
+  "concurrency_and_freshness": {
+    "tested_head_was_current_at_execution": true,
+    "branch_advanced_after_execution": true,
+    "later_observed_branch_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "later_observed_product_main": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+    "promotion_rule": "Do not treat this receipt as exact-head verification for later descendants or current main."
+  },
+  "negative_results_preserved": {
+    "github_hosted_runner_lane": "BLOCKED_BEFORE_RUNNER_START_BY_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
+    "whole_machine_acceptance": "NOT_PASSED",
+    "artifact_retained_for_download": false
+  },
+  "next_executable_step": "Adjudicate the current PR 755 head against current main; run the same bounded Vercel matrix only when a fresh exact descendant is selected, then continue the canonical Bytes/Buffer lifetime plus String/argv/effect-signature frontier without VPS or self-hosted testing.",
+  "together_api_used": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false
+}

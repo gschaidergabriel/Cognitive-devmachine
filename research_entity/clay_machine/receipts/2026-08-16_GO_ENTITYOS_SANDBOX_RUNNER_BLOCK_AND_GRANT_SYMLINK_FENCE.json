@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "date": "2026-08-16",
   "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
@@ -12,7 +12,9 @@
     "product_main_observed_after_policy_refresh": "777895270357908e49a079fb2c308844c6469b83",
     "product_main_delta": "fix(entityos): enforce sandbox-only semantic rebuild",
     "current_head_sandbox_workflow_run": 31930376620,
-    "current_head_sandbox_workflow_state_when_observed": "PENDING_NO_JOB_YET",
+    "current_head_sandbox_workflow_job": 95124206598,
+    "current_head_sandbox_workflow_result": "BLOCKED_BEFORE_RUNNER_START",
+    "current_head_sandbox_workflow_blocker": "GitHub account payments failed or Actions spending limit needs to be increased",
     "explicit_hosted_sandbox_falsifier_run": 31930318800,
     "explicit_hosted_sandbox_falsifier_job": 95123989301,
     "explicit_hosted_sandbox_result": "BLOCKED_BEFORE_RUNNER_START",
@@ -22,8 +24,8 @@
   "grf": {
     "hypothesis": "Moving canonical EntityOS rebuild validation from persistent self-hosted VPS execution to an ephemeral GitHub-hosted Ubuntu runner would satisfy the active sandbox-only execution boundary while retaining exact-head evidence.",
     "counter_reality": "The hosted sandbox lane may be administratively unavailable even when the workflow is semantically correct, leaving no executable current-head build path.",
-    "discriminating_test": "Run the same-repository exact-head EntityOS one-file workflow with runs-on ubuntu-24.04 and inspect whether any job steps actually begin.",
-    "outcome": "COUNTER_REALITY_RETAINED: runner allocation was blocked before step zero by account billing/spending state; this is infrastructure evidence, not a product-code failure."
+    "discriminating_test": "Run the same-repository exact-head EntityOS one-file workflow on a GitHub-hosted Ubuntu runner and inspect whether any job steps actually begin.",
+    "outcome": "COUNTER_REALITY_RETAINED: both the candidate and current-main hosted sandbox lanes were blocked before step zero by account billing/spending state; this is infrastructure evidence, not a product-code failure."
   },
   "exactly_one_current_sandbox_unusual_experiment": {
     "name": "INITIAL_GRANT_SYMLINK_SENTINEL",
@@ -48,9 +50,9 @@
   },
   "entityos_artifact": {
     "current_head_status": "BLOCKED",
-    "reason": "No actually-started isolated sandbox build of current product main was available at observation time; GitHub-hosted runner allocation is blocked/pending under account billing/spending state and the private source tree is not materialized in the local sandbox.",
+    "reason": "The exact current-main sandbox rebuild was blocked before runner start by GitHub Actions billing/spending state, and the private source tree is not materialized in the local isolated sandbox. Therefore no current-head EntityOS build/test receipt exists from an allowed execution environment.",
     "historical_downloadable_artifact_available": true,
     "historical_artifact_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98"
   },
-  "next_sandbox_executable_step": "Restore one actually-startable isolated source-bearing sandbox lane: either resolve GitHub Actions billing/spending so the current main EntityOS Semantic One-File Rebuild Sandbox job allocates an ubuntu runner, or materialize the exact private product source tree inside the local isolated sandbox. Then build current main into exactly one EntityOS file and run source->TypedIR->single-VM, self-test, one-time-grant, Linux-process capability, provenance/state, crash/restart and one-file portability gates there. Do not fall back to VPS/self-hosted execution."
+  "next_sandbox_executable_step": "Restore one actually-startable isolated source-bearing sandbox lane: either resolve GitHub Actions billing/spending so the current main EntityOS Semantic One-File Rebuild Sandbox job allocates an Ubuntu runner, or materialize the exact private product source tree inside the local isolated sandbox. Then build current main into exactly one EntityOS file and run source->TypedIR->single-VM, self-test, one-time-grant, Linux-process capability, provenance/state, crash/restart and one-file portability gates there. Do not fall back to VPS/self-hosted execution."
 }

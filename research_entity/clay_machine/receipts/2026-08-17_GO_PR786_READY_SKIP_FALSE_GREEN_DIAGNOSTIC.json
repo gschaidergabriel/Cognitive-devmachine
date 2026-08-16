@@ -1,0 +1,40 @@
+{
+  "schema": "ClayEntityOSGoReadySkipDiagnostic/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 786,
+  "current_exact_head_observed": "ad4a7dff6db3132f11c61e553ee4c762c0c378a2",
+  "diagnosed_predecessor_head": "d2013fd9e718707793bb59c5ed324670241bd0fd",
+  "diagnosed_deployment": "dpl_6dT9WsEySQsfMfDB85UJwdhffXEX",
+  "diagnosed_deployment_state": "READY",
+  "direct_build_log_observation": {
+    "vercel_env": "preview",
+    "vercel_git_ref_reported": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+    "runner_status": "SKIP_NON_TARGET_PREVIEW",
+    "sandbox_started": false,
+    "entityos_matrix_started": false,
+    "entityos_built": false
+  },
+  "causal_discriminator": {
+    "predecessor_runner_expected_ref": "chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325",
+    "actual_preview_ref": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+    "result": "HARDCODED_EXPECTED_REF_DRIFT_CAUSED_ZERO_EXIT_SKIP_AND_READY_DEPLOYMENT_WITHOUT_ACCEPTANCE_EXECUTION"
+  },
+  "current_head_relation": {
+    "current_runner_expected_ref": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+    "drift_source_fix_present": true,
+    "current_head_runtime_revalidation": "BLOCKED_BEFORE_DEPLOYMENT_BY_VERCEL_RATE_LIMIT",
+    "github_hosted_exact_head_entityos_job": "NOT_STARTED_RUNNER_ID_0_BILLING_SPENDING_GATE"
+  },
+  "promotion_invariant": "VERCEL_DEPLOYMENT_READY_IS_NEVER_ACCEPTANCE_EVIDENCE. Promotion requires explicit GO_SANDBOX_MATRIX_VERIFIED plus exact EntityOS digest, relocation digest identity, and successful Sandbox stop on the same exact head.",
+  "new_unusual_experiment_count": 0,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_EXECUTION_CAPACITY",
+  "next_executable_step": "When Vercel admits the exact then-current PR786 head, require the build log to show actual Sandbox creation and GO_SANDBOX_MATRIX_VERIFIED; fail promotion on SKIP_NON_TARGET_PREVIEW even if the deployment state is READY. Persist exact EntityOS and relocation SHA-256 equality plus Sandbox stop before merge.",
+  "together_api_used": false,
+  "vps_or_self_hosted_acceptance_used": false
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "4.3",
+  "schema_version": "4.4",
   "program_id": "clayverse-clay-machine-only",
   "status": "ACTIVE",
   "owner_directive": "research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md",
@@ -14,6 +14,17 @@
     "release_artifact": "EntityOS",
     "release_form": "ONE_EXECUTABLE_FILE",
     "mission": "ClayCode as a real programming language with compiler, virtual Clay Machine, self-contained runtime/environment, deep/direct Linux interoperability, general Internet/network connectivity, direct process/terminal execution, low-latency Clay data transformation, typed visual/image/video and audio transport, first-class optical/visual signal output, and a minimal ClayOS, delivered as exactly one executable file named EntityOS"
+  },
+  "execution_policy": {
+    "owner_rule": "SANDBOX_ONLY_TESTING",
+    "tests": "ISOLATED_SANDBOXES_ONLY",
+    "experiments": "ISOLATED_SANDBOXES_ONLY",
+    "build_validation": "ISOLATED_SANDBOXES_ONLY",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_vps_test_runners": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "vps_role": "DEPLOYMENT_TARGET_ONLY_WHEN_EXPLICITLY_REQUIRED_NOT_TEST_ENVIRONMENT",
+    "go_rule": "Exact go must perform build/test/experiment work only in isolated sandboxes and must never schedule, trigger, rely on, or promote VPS/self-hosted/production-host test execution as evidence."
   },
   "stage_gates": {
     "CLAY_MACHINE": {
@@ -30,9 +41,9 @@
   "superseded_programs": {
     "status": "HISTORICAL_EVIDENCE_ONLY",
     "programs": ["FRANK_V0_1", "UCM2_ONLY", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_FRANK"],
-    "law": "Legacy Frank/self.root/UCM2/harness paths may contribute bounded implementation or regression evidence when semantics still match, but they do not select active work or define current completion."
+    "law": "Legacy Frank/self.root/UCM2/harness paths may contribute bounded implementation or regression evidence when semantics still match, but they do not select active work and they do not define completion."
   },
-  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS/connectivity/portability/terminal/data-plane/media/typed-visual-signal code, tests, architecture, work items, or explicit negative results inside the one-file EntityOS product boundary. Exact go must load the fixed capability plan, preserve each capability stream's status/blockers, include them in frontier selection, and produce a concrete research/falsification/build/test/runtime delta whenever an unblocked high-information step exists; it must finish by rebuilding/testing EntityOS when technically possible or naming the exact EntityOS blocker and next executable step.",
+  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS/connectivity/portability/terminal/data-plane/media/typed-visual-signal code, tests, architecture, work items, or explicit negative results inside the one-file EntityOS product boundary. Exact go must load the fixed capability plan, preserve each capability stream's status/blockers, include them in frontier selection, and produce a concrete research/falsification/build/test/runtime delta whenever an unblocked high-information step exists. All build, test, experiment and runtime-validation execution must occur only inside isolated sandboxes; VPS, self-hosted VPS runners and production hosts are forbidden as test environments. Exact go must finish by rebuilding/testing EntityOS in sandbox when technically possible or naming the exact EntityOS blocker and next sandbox-executable step.",
   "authority_rules": {
     "grf": "reasoning_framework_only",
     "together": "FORBIDDEN",
@@ -44,5 +55,5 @@
     "shell_behavior": "NOT_IMPLICIT_LANGUAGE_AUTHORITY",
     "unknown_data_format": "OPAQUE_TYPED_BYTES_OR_FAIL_CLOSED_NOT_GUESS"
   },
-  "last_updated": "2026-08-16T12:08:00+07:00"
+  "last_updated": "2026-08-16T12:52:00+07:00"
 }

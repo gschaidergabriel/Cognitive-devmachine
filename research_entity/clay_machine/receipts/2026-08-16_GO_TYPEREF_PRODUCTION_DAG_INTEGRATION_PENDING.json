@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-TYPEREF-PRODUCTION-DAG-INTEGRATION-PENDING-2026-08-16",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+  "state": "TESTING",
+  "observed_research_main_before_write": "17f07519bb32cc16d495d2d6248e57a9d0377b6b",
+  "observed_product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "product_pr": 673,
+  "product_branch": "chatgpt/go-typeref-production-dag-fresh-main-20260816",
+  "product_head": "75b96b9d70b6228d768f6ec5a3e000bc15405745",
+  "production_delta": {
+    "runtime/claycode_typecheck_v1/typecheck.py": {
+      "blob_sha": "5a7cfac3871ff2698f437490591424794ffdd0f5",
+      "change": "per-call immutable alias-subtree memoization with cycle-contamination exclusion; DAG-aware _same visited node-pair set"
+    },
+    "tests/claycode_typeref_production_dag_sharing_gate.py": {
+      "blob_sha": "68bdf35d1fb03424325e4b1350de1def499637b1",
+      "change": "fixed production regression for linear reachable identities, structural sharing, equality and cycle-contaminated cache fail-closed behavior"
+    },
+    ".github/workflows/claycode-typeref-production-dag-vps.yml": {
+      "blob_sha": "cc19195e8128c95078aa96dc7a38b54c02da5bd4",
+      "change": "exact pull-request-head self-hosted Linux/X64 gate that also runs the unchanged production totality regression"
+    }
+  },
+  "grf": {
+    "observed_anchor": "Current production NominalTypeChecker rebuilds repeated alias-DAG subtrees and _same revisits repeated pairs; detached candidate PR #645 has exact-head self-hosted support but production_typechecker_wired=false.",
+    "generated_hypothesis": "Per-call immutable structural sharing can bound repeated alias-DAG materialization without changing WP04 nominal alias semantics.",
+    "strongest_counterhypothesis": "A cycle encountered while constructing an alias can contaminate the memo and cause a later sibling branch to reuse a partially invalid subtree as if it were valid.",
+    "falsifier": "Construct Pair<A,A> with A -> Box<B> and B -> A; reject the candidate if the first cyclic construction populates reusable alias cache state or the second sibling avoids independent fail-closed cycle handling.",
+    "outcome": "RETAIN_TESTING"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "CYCLE_CONTAMINATED_ALIAS_CACHE_POISONING",
+    "scope": "bounded local mechanism probe",
+    "shape": "Pair<A,A>; A -> Box<B>; B -> A",
+    "observed": {
+      "left": "Box<TYPE_ERROR>",
+      "right": "Box<TYPE_ERROR>",
+      "cycle_events": 2,
+      "alias_cache_after_probe": "EMPTY",
+      "siblings_same_identity": false
+    },
+    "result": "PASS_AGAINST_CACHE_POISONING",
+    "promotion_limit": "LOCAL_MECHANISM_EVIDENCE_ONLY"
+  },
+  "ordinary_regression_plan": {
+    "new_unusual_experiment_count": 0,
+    "existing_totality_gate_unchanged": true,
+    "checks": [
+      "depth-18 alias diamond preserves Int leaf",
+      "reachable unique TypeRef identities <= depth + 2",
+      "repeated Pair children reuse identical completed subtree",
+      "DAG-aware _same accepts equivalent graph and rejects leaf mismatch",
+      "cycle-contaminated alias is not memoized as valid",
+      "existing depth-4096 parameter tree and 8192/32768 alias-chain production gate remains green"
+    ]
+  },
+  "exact_head_ci": {
+    "workflow_run": 31923213166,
+    "workflow": "ClayCode TypeRef production DAG sharing VPS",
+    "head_sha": "75b96b9d70b6228d768f6ec5a3e000bc15405745",
+    "status_at_receipt": "QUEUED",
+    "conclusion_at_receipt": null,
+    "production_pass_claimed": false
+  },
+  "coordination": {
+    "stale_pr_closed": 668,
+    "fresh_pr": 673,
+    "fresh_pr_mergeable_at_last_check": true,
+    "parallel_cm07_merge_observed": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "parallel_overlap_with_this_three_file_delta": false
+  },
+  "counterevidence_and_open_risks": [
+    "Exact-head self-hosted Linux/X64 evidence for production wiring is still queued, so CM-02 is not promoted.",
+    "_render_type_ref can still expand a logically shared DAG into a very large diagnostic string; output-size hardening remains separate.",
+    "Whole Clay Machine acceptance remains false; this is a bounded typechecker resource/totality repair only."
+  ],
+  "authority": {
+    "generic_semantics_selected": false,
+    "package_import_semantics_selected": false,
+    "effect_authority": "NONE",
+    "whole_clay_machine_completion": false,
+    "together_api_used": false,
+    "final_model_training": "NOT_AUTHORIZED_NOT_USED"
+  },
+  "next_falsifier": "Require exact PR-head self-hosted Linux/X64 success for the new production DAG gate plus unchanged production totality gate and relevant TypeRef/nominal regressions before merge or workspace promotion."
+}

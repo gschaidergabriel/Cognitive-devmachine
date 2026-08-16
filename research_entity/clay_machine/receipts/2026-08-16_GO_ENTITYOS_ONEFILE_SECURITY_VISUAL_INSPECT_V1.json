@@ -1,0 +1,84 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "status": "SUPPORTED_COMPONENT_DELTA",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "owner_directive_date": "2026-08-16",
+  "observed_baseline": {
+    "commit": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
+    "onefile_workflow_run": 31927513690,
+    "artifact_sha256": "7cf8d7f415417dfd25fbcc74592a09a5827bb79e69e945ed9c3c1a43c82c7c8a",
+    "artifact_size_bytes": 11932320,
+    "security_gap": "builder bound SECURITY_CONCEPT.md SHA256 into build identity, but EntityOS status/selftest did not expose or validate the bound identity",
+    "whole_machine_acceptance": false
+  },
+  "interventions": [
+    {
+      "commit": "f764d27af6781d4f68ae4064f4d97898f946d90f",
+      "change": "runtime imports, exposes, and frozen-selftest validates SECURITY_CONCEPT_SHA256",
+      "workflow_run": 31927650073,
+      "workflow_conclusion": "success"
+    },
+    {
+      "owner_requirement_commit": "2a86c4689636d48fe08d9bdb7bbefa5d47e17677",
+      "requirement": "release-blocking generative Clay Machine visual test application with grounded performance and what-is-a-claymachine queries, Builder Box validation, white input surface, and visible unknowns"
+    },
+    {
+      "commit": "d7d9d3391ceb1a2b3419dfb6071b9861e5f940ff",
+      "change": "first grounded Builder Box inspect slice inside canonical EntityOS: performance, what is a claymachine, fail-visible unknown query, fixed component whitelist, provenance fields, and white HTML render surface",
+      "workflow_run": 31927783481,
+      "workflow_conclusion": "success"
+    }
+  ],
+  "final_exact_artifact": {
+    "build_head": "d7d9d3391ceb1a2b3419dfb6071b9861e5f940ff",
+    "sha256": "36274cad5bcfcf21fd893efdfde358d04784c86a9b90f3af3247c8ed381d2c4a",
+    "size_bytes": 11937560,
+    "mode": "0o755",
+    "format": "ELF 64-bit x86-64",
+    "pyinstaller_onefile": true,
+    "security_concept_sha256": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
+    "builder_box_schema": "EntityOSBuilderBox/v1",
+    "visual_inspect_candidate": true,
+    "whole_machine_acceptance": false
+  },
+  "exact_runtime_evidence": {
+    "github_self_hosted_linux_workflow": "SUCCESS",
+    "local_status_build_head_match": true,
+    "local_selftest": "SELFTEST_PASS",
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "process_capability": "linux.process.spawn.v0",
+    "what_is_a_claymachine_supported": true,
+    "performance_supported": true,
+    "performance_probe_result": 42,
+    "performance_probe_elapsed_ns_single_observation": 420931742,
+    "unsupported_query_supported": false,
+    "unsupported_query_unknowns": ["unsupported_query"],
+    "white_html_surface_marker": true,
+    "input_surface_marker": true
+  },
+  "macrocycle_selected_unusual_experiment": {
+    "count": 1,
+    "id": "ONEFILE_STERILE_ENVIRONMENT",
+    "artifact_build_head": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
+    "intervention": "execute the exact one-file binary from / with env -i and only minimal PATH/LANG/LC_ALL plus experiment marker",
+    "baseline_selftest_json_sha256": "a8b9c29a3993d8bfe864af0c9b4eb35db5b48f14193c8a07667d49203c33cdaf",
+    "intervention_selftest_json_sha256": "a8b9c29a3993d8bfe864af0c9b4eb35db5b48f14193c8a07667d49203c33cdaf",
+    "result": "BYTE_IDENTICAL_PASS",
+    "rollback": "process environment only; no persistent mutation"
+  },
+  "preexisting_ci_regression_note": "The canonical one-file workflow also retains its pre-existing relocation/Unicode extraction regression gate; it is treated as a standing CI acceptance regression, not the macrocycle-selected unusual experiment.",
+  "counterevidence_and_open_gates": [
+    "whole_machine_acceptance remains false",
+    "the visual slice produces a grounded Builder Box model and HTML surface but does not yet prove an interactive accepted-target browser/render loop",
+    "the current performance query is a real runtime probe but broader canonical performance measurement/state history is not yet integrated",
+    "network, full terminal/PTY streaming, typed Bytes/Buffer ownership and streaming, visual/video, audio, state continuity, self-hosting, and other current Clay Machine capability gates remain incomplete according to the current program/workspace contracts"
+  ],
+  "next_discriminating_action": "Bind Builder Box/query resolution to the accepted interactive visual renderer inside the same EntityOS artifact without creating a bypass network/effect path; then prove performance and what-is-a-claymachine end-to-end on the accepted Ubuntu/VPS target with provenance-visible unknown handling. In parallel preserve the canonical String/Bytes/argv/effect frontier required for terminal/data/network/media gates.",
+  "outcome": "RETAIN_AND_ADVANCE",
+  "promotion_scope": "Verified only for the exact one-file candidate, security-concept identity visibility/fail-closed validation, grounded Builder Box inspect slice, and listed runtime gates; not a whole Clay Machine acceptance promotion."
+}

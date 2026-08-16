@@ -1,0 +1,70 @@
+{
+  "schema": "ClayEntityOSAcceptanceRunnerFusionReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "research_parent_observed": "19e78f6060e4ccc3db6b7ad27078d076874306a2",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "preferred_head_observed": "ad4a7dff6db3132f11c61e553ee4c762c0c378a2",
+  "delta_from_prior_pr786_receipt": {
+    "matrix_commit": "947b9c45d51c178b9ed5e86792a0c0edbc387112",
+    "runner_commit": "ad4a7dff6db3132f11c61e553ee4c762c0c378a2",
+    "copy_move_rename_relocation": true,
+    "relocation_sha256_emitted": true,
+    "relocation_sha256_must_equal_entityos_sha256": true,
+    "relocation_cmp_identity_required": true,
+    "relocation_runtime_output_identity_required": true,
+    "runner_requires_relocation_artifact_byte_identity_marker": true,
+    "runner_requires_relocation_runtime_output_identity_marker": true,
+    "runner_requires_copy_rename_marker": true,
+    "runner_parses_relocation_sha256": true,
+    "runner_fails_closed_on_relocation_sha_mismatch": true,
+    "full_matrix_stdout_used_for_machine_validation": true
+  },
+  "experiment_accounting": {
+    "global_limit": 1,
+    "global_count": 1,
+    "global_slot_consumed": true,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "new_unusual_experiments_authorized": 0,
+    "new_unusual_experiments_executed_by_this_delta": 0
+  },
+  "current_exact_head_execution_state": {
+    "source_head": "ad4a7dff6db3132f11c61e553ee4c762c0c378a2",
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "provider_description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "entityos_sha256": null,
+    "relocation_sha256": null,
+    "runtime_acceptance": "UNVERIFIED"
+  },
+  "strongest_current_cycle_empirical_sandbox": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "raw_tree_source_binding": "PASS",
+    "system_toolchain_provision": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "failure": "PINNED_PYTHON_TOOLCHAIN_HEREDOC_SYNTAX",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false,
+    "sandbox_stopped": true,
+    "scope": "HISTORICAL_EXACT_HEAD_BOUNDED_EVIDENCE_ONLY"
+  },
+  "coordination": {
+    "pr781": "CLOSED_SUPERSEDED_BY_PR786",
+    "pr786": "PREFERRED_SINGLE_PROMOTION_LANE",
+    "parallel_newer_writes_overwritten": false
+  },
+  "next_executable_step": "When Vercel capacity admits the exact then-current PR786 head, execute only the build-internal persistent-false regression/acceptance Sandbox with zero new unusual experiments. Require Stage-v5 source/provenance, repaired pinned toolchain probe, DENY_ALL before offline tests, Bytes/CM-07/canonical single-VM gates, twin byte-identical one-file EntityOS builds and exact digest, runtime/state/capability gates, copy-move-rename relocation with matching artifact SHA256/cmp/runtime output, and successful Sandbox stop. Persist exact artifact digest before promotion.",
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "production_host_test_evidence_used": false,
+  "together_api_used": false
+}

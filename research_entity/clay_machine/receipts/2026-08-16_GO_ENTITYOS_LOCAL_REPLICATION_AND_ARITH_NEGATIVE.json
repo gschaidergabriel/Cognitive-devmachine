@@ -1,0 +1,92 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "EXACT_ARTIFACT_LOCAL_REPLICATION_PASS_WITH_LANGUAGE_COVERAGE_NEGATIVE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+  "upstream_ci": {
+    "run_id": 31926373645,
+    "job_id": 95114507239,
+    "runner_class": "self-hosted Linux X64",
+    "conclusion": "success",
+    "artifact_id": 9257962341,
+    "artifact_sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "whole_machine_acceptance": false
+  },
+  "local_replication": {
+    "environment": "active ChatGPT Linux sandbox outside repository tree",
+    "artifact_format": "ELF 64-bit LSB executable, x86-64",
+    "size_bytes": 11930688,
+    "sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "sha256_matches_upstream_ci": true,
+    "status_command": "PASS",
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "self_test": "PASS",
+    "self_test_vm_result": 42,
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_without_capability_rc": 1,
+    "host_with_capability": "ENTITYOS_OK",
+    "host_with_capability_rc": 0,
+    "supported_external_program": {
+      "source_shape": "id(42)",
+      "build": "PASS",
+      "run": "PASS",
+      "result": 42
+    }
+  },
+  "negative_result": {
+    "name": "ARITHMETIC_EXPRESSION_NOT_ADMITTED_BY_TYPECHECKER_V1",
+    "source_shape": "fn twice(x : Int) -> Int { return x + x }",
+    "result": "REJECTED",
+    "error": "ExecutableTypedIRError: nominal typechecker rejected executable IR: UNSUPPORTED_EXPRESSION:twice:AST node Arith not admitted by typechecker v1",
+    "interpretation": "EntityOS is a real frozen compiler/VM/ClayOS candidate but its admitted executable ClayCode language surface remains narrow. This is not a packaging failure and does not invalidate the supported canonical subset.",
+    "promotion": "NEGATIVE_RESULT_PRESERVED"
+  },
+  "macro_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "UNICODE_SPACE_PATH_FOREIGN_CWD_LOCAL_REPLICATION",
+    "bounded": true,
+    "reversible": true,
+    "method": "Copy the exact artifact without byte changes to a directory containing Unicode and spaces, launch EntityOS --self-test-json from /tmp, then compare artifact SHA-256.",
+    "baseline_sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "experiment_sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "result": "PASS_BYTE_IDENTICAL_SELFTEST_PASS",
+    "rollback": "Delete copied experiment directory; canonical artifact unchanged."
+  },
+  "grf": {
+    "observed_reality": "Exact current main artifact builds and executes on the upstream self-hosted Linux x64 lane and the same bytes execute in an independent Linux sandbox.",
+    "retained_hypothesis": "The one-file product boundary is viable for the currently admitted canonical Clay subset.",
+    "strongest_counter_reality": "The apparent one-file portability may still fail on compatible-but-older GNU/Linux or constrained temporary filesystems even when the file itself is intact.",
+    "discriminator": "Run the exact EntityOS bytes on the declared oldest supported Ubuntu/glibc floor and on a clean target with controlled temporary-directory execution constraints; keep failures separate from Clay semantic failures.",
+    "outcome": "RETAIN"
+  },
+  "primary_external_evidence": [
+    {
+      "source": "PyInstaller 6.21.0 official documentation",
+      "claim": "onefile is a single bundled executable but unpacks support files to a temporary directory at runtime; POSIX noexec or unsuitable temp locations can prevent execution"
+    },
+    {
+      "source": "PyInstaller 6.21.0 official documentation",
+      "claim": "GNU/Linux bundles do not bundle libc; binaries built on newer glibc may fail on older systems, so the oldest intended supported Linux should be used as the build floor"
+    }
+  ],
+  "not_promoted": [
+    "whole EntityOS / whole Clay Machine acceptance",
+    "general ClayCode arithmetic coverage",
+    "canonical String/Bytes/argv/env/cwd/stdin/stdout/stderr/PTY closure",
+    "CM-NET closure",
+    "CM-DATA/CM-VIS/CM-AUDIO closure",
+    "persistent state/recovery closure",
+    "self-hosting/bootstrap equivalence",
+    "portable execution across the declared Linux compatibility floor"
+  ],
+  "next_discriminator": "Preserve the current highest-value shared frontier: select the smallest provenance-bound canonical String/Bytes/argv plus ownership/lifetime/effect-signature surface shared by CM-TERM and CM-DATA, wire it through checker -> ClayExecutableTypedIR -> single ClayVM -> ClayOS process boundary, rebuild EntityOS, then rerun exact one-file gates including the declared Linux compatibility floor.",
+  "training_authorized": false,
+  "together_api_used": false
+}

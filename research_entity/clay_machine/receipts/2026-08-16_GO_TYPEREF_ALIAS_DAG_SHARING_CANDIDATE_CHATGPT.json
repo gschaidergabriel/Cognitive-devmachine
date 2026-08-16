@@ -7,6 +7,7 @@
   "focus": "CM-02 production-safe TypeRef alias-DAG structural sharing candidate",
   "research_head_before_write_observed": "a40a282f97e07b86ddd33378f4b3169ed8802e31",
   "product_main_base_used": "f2c5ccdddd1791cd404c1e8d25f41869a02673ea",
+  "product_main_latest_observed_after_candidate_gate": "cb3fe8058c1043e6cfbabc7d7f44ef39e1c23899",
   "product_candidate": {
     "pull_request": 645,
     "head": "c50026c2462a6debebae5db13eb330c66fda2c85",
@@ -24,7 +25,8 @@
     "Current workspace CM-02 explicitly names product issue #640 as the bounded alias-DAG structural-sharing frontier.",
     "Merged PR #603 already repaired quadratic alias-ancestry path copying, but repeated alias-DAG result materialization remains a separate resource hazard.",
     "An older worker PR #599 and the canonical 2026-08-16 alias-DAG materialization receipt already identify the same mechanism class, so this cycle is independent replication plus an implementation candidate, not a novel mechanism claim.",
-    "Product main advanced during construction; the candidate was recomposed onto fresh main f2c5ccdddd1791cd404c1e8d25f41869a02673ea before PR creation."
+    "Product main advanced during construction; the candidate was recomposed onto fresh main f2c5ccdddd1791cd404c1e8d25f41869a02673ea before PR creation.",
+    "A later main advance to cb3fe8058c1043e6cfbabc7d7f44ef39e1c23899 merged ClayEnv trust-boundary changes and did not overlap the candidate TypeRef files."
   ],
   "bounded_unusual_experiment": {
     "count": 1,
@@ -44,18 +46,36 @@
     },
     "controls": "Small semantic equality, direct-cycle, wrapped-cycle and sibling-reuse controls preserved the expected result shapes in the sandbox prototype.",
     "result": "SUPPORTS_BOUNDED_STRUCTURAL_SHARING_CANDIDATE",
-    "accepted_target_evidence": false,
+    "accepted_target_performance_claimed": false,
     "new_unusual_experiment_count_beyond_named_one": 0
   },
   "ordinary_candidate_gate": {
     "workflow_run": 31920728069,
     "workflow_job": 95100090497,
-    "tested_head_expected": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "runner_id": 23,
+    "runner_name": "clay-3",
     "labels": ["self-hosted", "Linux", "X64"],
-    "status_observed": "QUEUED_NO_RUNNER_ASSIGNED",
-    "runner_id_observed": 0,
-    "conclusion_observed": null,
-    "interpretation": "No failure is observed, but there is also no target-runner PASS; exact-head target evidence remains unavailable at this observation point."
+    "status": "COMPLETED",
+    "conclusion": "SUCCESS",
+    "evidence_context": "EXACT_PR_HEAD",
+    "tested_sha": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "event_head_sha": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "candidate_blob": "100334e2b307836a879d3e5b02b70f4b8dab136d",
+    "gate_blob": "7a6b2731bc48df80bc511b032cd51b9444ac6957",
+    "tests": "7/7 PASS",
+    "test_elapsed_seconds": 0.079,
+    "timed_process_wall_seconds": 0.21,
+    "maximum_resident_set_kbytes": 38168,
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "artifact_id": 9256297839,
+    "artifact_digest": "sha256:c658d63e5d67043bb198f24fef40f24c2b0ad0d76e2ae7a98c69bd82a08887ed",
+    "production_typechecker_wired": false,
+    "new_unusual_experiment_count": 0,
+    "effect_authority": "NONE",
+    "whole_clay_machine_completion": false,
+    "interpretation": "The detached structural-sharing mechanism survives exact-head self-hosted Linux/X64 semantic, cycle, sibling, stack-totality and DAG-sharing regressions. This supports the mechanism candidate but does not yet prove production integration."
   },
   "grf": {
     "generated_reality": "Per-call immutable subtree sharing can remove exponential result materialization while preserving current nominal alias/cycle semantics.",
@@ -66,18 +86,17 @@
       "Alias meaning does not depend on sibling occurrence identity within one canonicalization call.",
       "The cache remains local to one canonicalization/checker state and is populated only after a subtree completes without a cycle event."
     ],
-    "falsifier": "Any current production semantic/cycle regression, cross-branch false cycle, stale-cache behavior, or superlinear shared-DAG equality/resource result on exact PR-head evidence rejects or redesigns the candidate.",
-    "outcome": "RETAIN_CANDIDATE_DEFER_PRODUCTION_PROMOTION"
+    "falsifier": "Any current production semantic/cycle regression, cross-branch false cycle, stale-cache behavior, or superlinear shared-DAG equality/resource result on exact production-integration head rejects or redesigns the candidate.",
+    "outcome": "SUPPORTED_CANDIDATE_DEFER_PRODUCTION_PROMOTION"
   },
   "next_discriminators": [
-    "Require workflow 31920728069 to execute on an assigned self-hosted Linux/X64 runner and PASS on exact PR head c50026c2462a6debebae5db13eb330c66fda2c85.",
-    "If exact-head candidate evidence passes, compose the smallest reviewed integration into NominalTypeChecker._canonical/_same against current main rather than maintaining a second production path.",
-    "Run the existing TypeRef production-totality gate plus cycle/sibling/resource controls on exact integration head and compare diagnostics/value semantics to the current production baseline.",
-    "Only after those receipts should CM-02 alias-DAG materialization be promoted from blocker to verified repair."
+    "Compose the smallest reviewed integration into NominalTypeChecker._canonical/_same against fresh current main rather than maintaining a second production path.",
+    "Run the unchanged TypeRef production-totality gate plus direct DAG structural-sharing/equality controls on exact integration head and compare diagnostics/value semantics to the current production baseline.",
+    "Only after exact production-integration receipts should CM-02 alias-DAG materialization be promoted from blocker to verified repair."
   ],
   "non_claims": [
     "PR #645 is not canonical and is not production-wired at this receipt point.",
-    "Queued self-hosted status is not PASS evidence.",
+    "Exact-head candidate PASS is not production integration PASS.",
     "Sandbox timing/memory is not accepted target performance evidence.",
     "No Linux effect authority was widened.",
     "No whole Clay Machine acceptance is claimed.",

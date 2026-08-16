@@ -1,0 +1,55 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "NEGATIVE_RESULT_RELEASE_BLOCKER",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "tested_head": "7ddd48d7d26706f85333f14712844de202be70c1",
+  "artifact": {
+    "name": "EntityOS",
+    "sha256": "3a57fae21a9e3d1818ca1371a7ef4e1e6727009c8961c673ec49cb9aaeebab28",
+    "size_bytes": 11942848,
+    "source_workflow_run_id": 31928129136,
+    "source_workflow_job_id": 95118747010,
+    "source_workflow_conclusion": "success",
+    "selftest_recheck": "SELFTEST_PASS",
+    "whole_machine_acceptance": false
+  },
+  "observed_recheck": {
+    "environment": "Linux 6.18.35 x86_64 GNU/Linux",
+    "invocation": "./EntityOS",
+    "exit_code": 0,
+    "behavior": "prints the EntityOS CLI capability banner and exits",
+    "stdout_sha256": "4ab0bff2ddf8b6f4af32b670c7076b2dcd3cff5a85d492cab5254fb4969475dc",
+    "visual_window_observed": false
+  },
+  "source_confirmation": {
+    "entry_path": "entityos/canonical_entry.py",
+    "behavior": "main() calls _banner() and returns 0 when argv is empty",
+    "html_path": "inspect-html renders static HTML text to stdout; it does not implement the required interactive Linux application event loop"
+  },
+  "owner_requirement": {
+    "path": "ENTITYOS_CLAY_MACHINE_VISUAL_TEST_APP_REQUIREMENT.md",
+    "release_blocking": true,
+    "required_default_launch": "launching EntityOS opens a normal movable/resizable Linux application window with pointer/keyboard input and a Clay visual surface",
+    "required_interaction_invariant": "visual interaction -> typed Clay action/input -> canonical Clay function/effect -> resulting machine/UnifiedDB state -> new entity packets -> recomposed visualization"
+  },
+  "grf": {
+    "observed_anchor": "exact current one-file artifact passes compiler/VM/ClayOS/UnifiedDB gates but no-argument launch remains CLI-only",
+    "hypothesis": "the current one-file packaging is sufficient as a base and the highest-information next product delta is a canonical local visual window/event-loop adapter inside the same EntityOS artifact",
+    "counterhypothesis": "the existing inspect-html surface is already sufficient for the release-blocking interactive visual target",
+    "discriminating_result": "counterhypothesis refuted at current head: no-argument launch has no interactive window path and source explicitly selects _banner()",
+    "outcome": "RETAIN_ONEFILE_BASE_ADVANCE_VISUAL_SHELL"
+  },
+  "unusual_experiment": {
+    "count_for_macrocycle": 1,
+    "id": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "result": "BYTE_IDENTICAL_PASS",
+    "note": "No second unusual experiment was introduced by this negative launch check; this check is the ordinary release falsifier."
+  },
+  "exact_blocker": "EntityOS head 7ddd48d does not yet satisfy the release-blocking standalone interactive Linux visual shell/default-launch contract.",
+  "next_executable_action": "Implement the smallest offline local window/event loop in the canonical EntityOS entry so empty-argv launch opens the Clay visual surface; route one input query through UnifiedDB packets and one admitted semantic interaction through typed Clay action/state/recomposition; rebuild the exact one-file EntityOS and gate that exact artifact on a graphical Ubuntu target while preserving NO DATA and capability boundaries.",
+  "promotion_scope": "Negative evidence only. The exact one-file artifact is verified as a component candidate, not whole-machine accepted."
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build/test worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only": true,
+    "vps_test_performed": false,
+    "self_hosted_test_triggered": false,
+    "together_used": false,
+    "training_authorized_or_started": false
+  },
+  "observed": {
+    "research_main_before_write": "197449d019183620ac2e4edef502fd92a4bc2cca",
+    "product_main_final_observed": "2ccda102e64dd477eb9a48ffc527c941de0ba8aa",
+    "candidate_base_when_created": "950544e33ea179557cf3e54fc970a4a3954fe9cd",
+    "candidate_branch": "clay/go-cmterm-string-intrinsic-20260816",
+    "candidate_head": "38bc9f56aed1ebb3c366721490eed16135566f71",
+    "candidate_pr": 740,
+    "candidate_pr_state": "DRAFT_OPEN_UNMERGED",
+    "current_outer_process_boundary": "run_host_process already accepts tuple[str,...], requires an absolute first argv element, uses shell=false, clean env, cwd=/, bounded stdout/stderr, and rejects embedded NUL.",
+    "current_semantic_barrier": "Canonical String literals exist in ClayExecutableTypedIR/v1, but source intrinsics remain type-signature-unbound in the nominal checker; Executable TypedIR still rejects INTRINSIC execution; the current VM hostcall path admits only Int arguments and CM-TERM reaches Linux through an Int request handle."
+  },
+  "grf": {
+    "hypothesis": "The smallest useful CM-TERM step is one source-level typed String process intrinsic carried through the canonical checker/effect surface into ClayExecutableTypedIR/v1 and the single ClayVM, reusing the existing capability-gated no-shell Linux process boundary rather than adding a backend-local semantic path.",
+    "strongest_counterhypothesis": "Opening String at the generic VM hostcall boundary without a complete value ABI could silently widen unrelated hostcalls or make String/Bytes semantics ambiguous; full Bytes/Buffer ownership and typed hostcall descriptors may need to land first.",
+    "discriminator": "Run the draft candidate in an actually-started isolated full-repo sandbox and require explicit source type/effect/signature binding, capability denial, wrong-type/signature rejection, legacy Int control, one direct String process call, existing VM regressions, deterministic EntityOS double-freeze, and execution of that exact EntityOS file.",
+    "collapse": "RETAIN_AS_DRAFT_CANDIDATE_ONLY. The outer Linux boundary is not the immediate blocker for the one-String executable shape, but canonical source/type/effect/VM admission remains unverified and therefore unpromoted."
+  },
+  "candidate": {
+    "scope": "one absolute executable String only; no additional argv yet",
+    "proposed_signature": "linux.process.spawn.v1::(String)->Int",
+    "effect_class": "EXTERNAL_COMMUNICATION",
+    "capability": "linux.process.spawn.v0",
+    "keeps_legacy_int_request_control": true,
+    "bytes_buffer_added": false,
+    "env_cwd_stdin_streaming_pty_shell_added": false,
+    "production_source_modified": false,
+    "whole_machine_acceptance": false
+  },
+  "remote_sandbox": {
+    "workflow_run": 31938162896,
+    "job": 95143249779,
+    "candidate_head": "38bc9f56aed1ebb3c366721490eed16135566f71",
+    "conclusion": "FAILURE_BEFORE_RUNNER_STEPS",
+    "steps_observed": [],
+    "job_log": "ABSENT_BLOB_404",
+    "interpretation": "INFRASTRUCTURE_OR_BILLING_NO_START_NOT_CODE_EVIDENCE"
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "NUL_BEARING_DIRECT_EXECUTABLE_STRING_BOUNDARY",
+    "execution_location": "isolated ChatGPT container against exact current host_process.py source copied from product repository",
+    "baseline": "/usr/bin/true executed through run_host_process and returned 0",
+    "intervention": "attempt one executable String containing an embedded NUL",
+    "observed": "ARGV_NUL_DENIED",
+    "result": "PASS_FAIL_CLOSED_OUTER_BOUNDARY",
+    "scope_limit": "This does not test the draft canonical source/type/effect/TypedIR/VM candidate and does not establish EntityOS acceptance.",
+    "overlap_note": "This invariant independently replicates existing argv-NUL evidence; it is retained here only as the exactly-one unusual experiment for this macro-cycle.",
+    "rollback": "in-memory/local sandbox only"
+  },
+  "local_build": {
+    "full_private_repo_checkout_available": false,
+    "pyinstaller_preinstalled": false,
+    "pyinstaller_install_attempt": "FAILED_NO_NETWORK_DNS_OR_CACHE",
+    "entityos_built_this_cycle": false,
+    "entityos_executed_this_cycle": false
+  },
+  "outcome": "DRAFT_CANDIDATE_PERSISTED_PROMOTION_BLOCKED",
+  "entityos_artifact_state": "BLOCKED",
+  "exact_blocker": "NO_ACTUALLY_STARTED_FULL_REPO_ISOLATED_SANDBOX_FOR_PR740_AND_NO_LOCAL_PYINSTALLER_CAPABLE_COMPLETE_CHECKOUT; therefore the proposed canonical source String intrinsic path and the exact patched one-file EntityOS freeze have not been executed.",
+  "next_executable_action": "Run PR #740 head 38bc9f56aed1ebb3c366721490eed16135566f71 in an actually-started isolated/source-admitted PyInstaller-capable sandbox. If and only if all candidate/regression/fail-closed gates and deterministic EntityOS build+execution pass, materialize the exact candidate delta into production source on a fresh current-main base, update the prior String blocker discriminator, rebuild the one-file EntityOS, and retest that exact artifact before merge/promotion.",
+  "paid_training_authorized": false,
+  "whole_machine_acceptance": false
+}

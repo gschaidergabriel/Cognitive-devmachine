@@ -1,0 +1,75 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "status": "DECONFLICTED_NO_PROMOTION",
+  "observed_product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "grf": {
+    "observed": "Current main already contained canonical lossless use intent, deterministic package identity and merged ClayPackageResolution/v1. Parallel research then produced corpus-backed counterevidence showing that plain MODULE-mode use cannot safely be assumed to denote an exact module provider.",
+    "generated_hypothesis": "Bind ordered MODULE/WILDCARD use intent into package identity so later resolution consumes one provenance-bound semantic read instead of reparsing source; preserve fail-closed execution until name binding/linking are explicit.",
+    "counter_reality": "If every plain use were treated as an exact module provider, authorized forms such as use frank.entity.Frank would overclaim module identity where the current corpus also supports exported-symbol interpretation.",
+    "collapse": "The package-index/use-intent fusion remains useful, but v1 plain-use provider semantics are not promotable. The active correction path was deconflicted into PR #674 and then closed unmerged when safe exact-head execution could not be established."
+  },
+  "sole_bounded_unusual_experiment_for_this_macrocycle": {
+    "name": "NESTED_PACKAGE_NAMESPACE_TWIN_PROVIDER",
+    "baseline": "One explicit provider for clay.pkg.util resolves deterministically.",
+    "intervention": "Construct overlapping parent/child package namespaces that both structurally claim clay.pkg.util and reverse provider order.",
+    "observed": "Both provider orders failed closed as AMBIGUOUS_MODULE_PROVIDER:clay.pkg.util.",
+    "rollback": "Discard the synthetic in-memory provider universe.",
+    "external_effect": false,
+    "outcome": "NO_NOVEL_BENEFIT",
+    "reason": "The result agrees with already-preserved provider-ambiguity/prefix-collision regressions; it is retained for this macrocycle's experiment accounting but does not justify a new canonical mechanism."
+  },
+  "candidate_history": [
+    {
+      "pr": 685,
+      "title": "refactor(clayenv): fuse package use intent into provider resolution",
+      "state": "CLOSED_UNMERGED",
+      "head": "b25ba720b6f2223a49f94f69f624e263cb6fe62a",
+      "reason": "Fresh shared evidence refuted the candidate's v1 breadth for plain MODULE-mode use. Keeping it open would create a parallel and semantically overbroad path."
+    },
+    {
+      "pr": 674,
+      "title": "fix(clayenv): keep plain use name binding fail closed",
+      "state": "CLOSED_UNMERGED",
+      "head_at_close": "07f0bf7bc19e398f4820cd346a58190f98e596c6",
+      "surviving_candidate_semantics": {
+        "package_index": "ClayPackageIndex/v2 with ordered lossless use_decls bound into package identity",
+        "resolver": "ClayPackageResolution/v2",
+        "resolver_scope": "WILDCARD_MODULE_PROVIDER_ONLY",
+        "plain_use_semantics": "NOT_SELECTED_FAIL_CLOSED",
+        "resolver_second_source_parse": false,
+        "build_use_gate": "UNCHANGED_FAIL_CLOSED"
+      },
+      "promotion": "NONE"
+    }
+  ],
+  "execution_evidence": {
+    "semantic_test_status": "UNTESTED_AT_CURRENT_CORRECTION_HEAD",
+    "persistent_self_hosted": "BLOCKED_PENDING_EXPLICIT_SOURCE_ADMISSION_OR_ISOLATION",
+    "github_hosted_ephemeral_attempt": {
+      "workflow_run": 31923593584,
+      "job": 95107444133,
+      "runner_started": false,
+      "steps_started": false,
+      "classification": "INFRA_BILLING_BLOCK_NOT_CODE_FAILURE"
+    },
+    "authoritative_followup_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_EPHEMERAL_GATE_BILLING_BLOCK.json"
+  },
+  "additional_static_finding": {
+    "finding": "When package identity changed to ClayPackageIndex/v2, the preserved correction branch still exposed ClayPackageIndex/v1 in clayenv package-index help text.",
+    "repair_location": "preserved closed correction branch after PR close",
+    "canonical_main_effect": false,
+    "promotion": "NONE"
+  },
+  "next_falsifier": "Use an explicitly isolated or source-admitted execution lane to run the exact preserved correction bytes with tests.test_clayenv_package and tests.test_clayenv_resolver bound to exact SHA and source hashes. Do not reopen executable use support until plain-use name binding, wildcard visibility/collision semantics, nominal checking, ClayExecutableTypedIR/v1 lowering and single-ClayVM execution are proven end to end.",
+  "hard_boundaries": {
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "training_started": false,
+    "effect_authority_widened": false,
+    "accepted_vps_pass_claimed": false
+  }
+}

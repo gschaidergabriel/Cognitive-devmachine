@@ -1,0 +1,84 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "outcome": "VERIFIED_CURRENT_MAIN_CANDIDATE_NOT_WHOLE_MACHINE_ACCEPTANCE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_product_main": "5b1fd8fda29c88f540533b9c6b73903716360723",
+  "canonical_fusion": {
+    "source_pr": 704,
+    "pr_head": "6ecb16b8d0d215d1bbc7808e780c489d5a920565",
+    "merge_commit": "0c4b8ce470ac2389f49e8fcb523a9c13e23ac78f",
+    "post_merge_gate_commit": "5b1fd8fda29c88f540533b9c6b73903716360723"
+  },
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31926373645,
+    "job_id": 95114507239,
+    "event": "push",
+    "runner": "self-hosted Linux X64 / clay-4 / clayverse",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "conclusion": "success",
+    "tested_exact_head": true,
+    "source_regression_rc": 0,
+    "source_regression_checks": "16/16"
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "schema": "EntityOSCanonicalOneFile/v1",
+    "format": "ELF 64-bit LSB x86-64",
+    "size_bytes": 11930688,
+    "sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "build_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+    "whole_machine_acceptance": false
+  },
+  "verified_gates": {
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "source_pipeline_regression": "PASS_16_OF_16",
+    "single_file_frozen_build": "PASS",
+    "entityos_self_test": "PASS",
+    "canonical_clay_build_run_result": 42,
+    "provenance_bound_manifest_run": "PASS",
+    "linux_process_without_capability": "DENIED",
+    "linux_process_with_explicit_capability": "PASS",
+    "artifact_uploaded_from_exact_main_run": true,
+    "downloaded_bytes_sha256_rechecked_locally": true,
+    "local_no_python_on_PATH_self_test": "PASS"
+  },
+  "unusual_experiment_accounting": {
+    "this_exact_main_push": 0,
+    "reason": "The macro-cycle had already executed its bounded unusual experiment before canonical fusion; the post-merge main gate deliberately skipped the unusual step to avoid duplicate experiment accounting.",
+    "prior_macro_cycle_experiment": "single-file launch after sidecar amputation / empty working directory",
+    "prior_result": "PASS",
+    "rollback": "temporary directory removed"
+  },
+  "negative_results_preserved": [
+    "The first transitional zipapp exact VPS run built one file but failed parser boot because lark was not bundled.",
+    "After bundling lark, local archive execution exposed an archive-hostile pathlib grammar read; exact grammar bytes were embedded as a bounded transport repair.",
+    "The transitional zipapp still required host Python and therefore was not final self-contained EntityOS.",
+    "A concurrent alternative native zero-python freeze experiment failed its clean-directory gate and was not selected as canonical product evidence."
+  ],
+  "primary_external_evidence": {
+    "python_zipapp": "Python documentation confirms zipapp execution requires an appropriate interpreter.",
+    "pyinstaller": "PyInstaller 6.21.0 documentation states one-file bundles can run without a separately installed Python interpreter."
+  },
+  "remaining_release_blockers": [
+    "Fresh compatible clean-Ubuntu zero-install portability is not yet accepted across the required target matrix; env/PATH isolation is supportive but not a fresh-OS proof.",
+    "Canonical ClayCode still lacks the complete provenance-bound String/Bytes/argv/env/cwd/stdin/stdout/stderr/PTY and effectful TypedIR/VM surface required for full CM-TERM and CM-DATA closure.",
+    "CM-NET, CM-VIS and CM-AUDIO remain open.",
+    "Persistent ClayOS state/services, crash/restart/recovery and broader machine lifecycle acceptance remain open.",
+    "The final small-computer EntityOS user surface and full minimal-ClayOS boot scope are not yet release-accepted.",
+    "Self-hosting/bootstrap equivalence remains open."
+  ],
+  "next_executable_action": "Keep this exact frozen one-file boundary as the canonical packaging gate; next select and implement the smallest provenance-bound Clay String/Bytes/argv ownership+effect ABI shared by CM-TERM and CM-DATA, wire it through checker -> executable TypedIR -> single ClayVM -> ClayOS, rebuild the exact EntityOS file, and rerun the current-main artifact gate on a fresh compatible Ubuntu target when available.",
+  "whole_clay_machine_acceptance": false,
+  "together_api_used": false,
+  "training_authorized": false
+}

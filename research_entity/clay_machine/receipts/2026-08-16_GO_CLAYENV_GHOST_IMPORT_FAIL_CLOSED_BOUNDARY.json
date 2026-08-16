@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "research_head_before_write_observed": "1d36391952ff504292bd9c78a3de0c426f021e1d",
+  "product_main_after_merge": "79d7eafd618950d6ff0ef85a751f0ccea8f5c4a9",
+  "grf": {
+    "observed_reality": "Clay grammar/parser accepts use declarations, but the current single-source executable materializer and ClayEnv build path have no canonical package/module resolver.",
+    "generated_hypothesis": "An impossible unused use-declaration can survive the executable path because imports are currently metadata rather than resolved executable ownership.",
+    "strongest_counterhypothesis": "A downstream executable-IR, VM, or admission layer already rejects an impossible unused import even though the analyzer does not resolve Module.uses.",
+    "discriminator": "Add exactly one impossible unused declaration, `use ghost.nonexistent.*`, to a source whose local probe returns 42 and run the existing exact-head self-hosted executable-IR/VM lane.",
+    "collapse": "Counterhypothesis falsified narrowly: the impossible unused declaration was accepted and the local reachable function materialized. This does not prove all imports are ignored; calls to unresolved imported symbols still fail closed."
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "GHOST_IMPORT_PLACEBO",
+    "product_pr": 637,
+    "candidate_head": "58e53c76893c5ee24b3476338656e2fe1b124d8a",
+    "workflow_run": 31920584339,
+    "runner_class": "self-hosted Linux/X64",
+    "intervention": "use ghost.nonexistent.* plus local probe() -> 42",
+    "outcome": "ACCEPTED",
+    "executable_typed_ir_gate": "PASS",
+    "vm_core_gate": "PASS",
+    "source_ir_vm_integration_gate": "PASS",
+    "interpretation": "CURRENT_SINGLE_SOURCE_EXECUTABLE_PATH_CAN_SILENTLY_ACCEPT_AN_IMPOSSIBLE_UNUSED_IMPORT_DECLARATION",
+    "pr_disposition": "CLOSED_UNMERGED_AFTER_MEASUREMENT"
+  },
+  "production_delta": {
+    "pull_request": 648,
+    "candidate_head": "159e57ee20a6377e76c438b7c600ffc126f8aa92",
+    "merge_commit": "79d7eafd618950d6ff0ef85a751f0ccea8f5c4a9",
+    "mechanism": "ClayEnv build parses the source first and raises MODULE_PACKAGE_RESOLUTION_OPEN before artifact/manifest emission whenever Module.uses is non-empty.",
+    "scope": "ClayEnv single-source build boundary only; generic parser/analyzer/executable materializer semantics are unchanged.",
+    "rollback": "Remove _require_single_source_module_boundary once a canonical package dependency/link phase actually resolves imports into the existing checker -> executable TypedIR -> single ClayVM path, with replacement regression evidence."
+  },
+  "target_evidence": {
+    "workflow": "Clay environment minimal build-run",
+    "workflow_run": 31920843926,
+    "job": 95100371878,
+    "runner_name": "clay",
+    "machine_name": "clayverse",
+    "runner_class": "self-hosted Linux/X64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "exact_head_binding": "PASS:159e57ee20a6377e76c438b7c600ffc126f8aa92",
+    "tests": "PASS_24_OF_24",
+    "ghost_import_fail_closed_regression": "PASS",
+    "strict_artifact_and_provenance_regressions": "PASS",
+    "cli_smoke": "PASS_BUILD_RUN_RESULT_42",
+    "cleanup": "PASS"
+  },
+  "counterevidence_and_limits": [
+    "Existing real Clay source claycode/frank_effects.clay contains currently-unused use declarations; therefore a global ban in the generic executable materializer would regress observed source compatibility and was deliberately not implemented.",
+    "The parser compatibility projection currently loses the distinction between `use X` and `use X.*`; import-mode semantics remain open.",
+    "The fail-closed boundary is temporary safety, not a package system, linker, stdlib, SDK, or cross-module execution implementation.",
+    "No Linux effect authority was widened.",
+    "No whole Clay Machine acceptance is claimed."
+  ],
+  "live_coordination": {
+    "package_identity_candidate_pr": 650,
+    "package_identity_scope": "ClayPackageManifest/v1 -> ClayPackageIndex/v1; use targets RECORDED_NOT_RESOLVED; no linker",
+    "import_mode_metadata_candidate_pr": 635,
+    "coordination_action": "Review note added to PR 650 requiring its rebase to preserve PR 648's build guard until a canonical dependency/link phase replaces it.",
+    "survivor_invariant": "Do not remove the fail-closed build boundary merely because package metadata exists; remove it only with one tested resolver/link path feeding canonical executable semantics."
+  },
+  "next_discriminators": [
+    "Rebase/verify PR 650 on product main 79d7eafd while preserving the PR 648 guard.",
+    "Preserve or canonically absorb PR 635's MODULE versus WILDCARD source distinction before assigning import semantics.",
+    "Define one dependency closure and symbol-ownership contract for bare unqualified calls first; keep dotted/member resolution separate.",
+    "Only then replace the temporary `use` rejection with a tested package resolver feeding the existing nominal checker -> executable TypedIR -> one ClayVM path."
+  ],
+  "authority": {
+    "together_used": false,
+    "final_training": "NOT_TOUCHED_OWNER_AUTHORIZATION_REQUIRED",
+    "whole_clay_machine_acceptance": false,
+    "external_effect_authority": "NONE"
+  },
+  "outcome": "MERGED_TEMPORARY_FAIL_CLOSED_BOUNDARY_AND_REENTERED_CM07_PACKAGE_RESOLVER_FRONTIER"
+}

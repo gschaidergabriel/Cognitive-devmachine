@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "research_parent_observed": "31efbe795efd787f523ad0bcbde9f47992ca6b4e",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "preferred_head_observed": "40aad4c3061214e97aeac7ee769004e1ac6e005c",
+  "fusion_state": {
+    "pr781_closed_unmerged_as_absorbed": true,
+    "single_preferred_promotion_lane": 786,
+    "stage_v5_raw_git_tree_provenance_preserved": true,
+    "shallow_safe_git_reconstruction_preserved": true,
+    "sandbox_sdk_pin": "2.9.2",
+    "atomic_single_owner_runner_preserved": true,
+    "build_internal_only": true
+  },
+  "measured_prior_sandbox_evidence": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "sandbox_actually_started": true,
+    "raw_tree_source_binding": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "system_toolchain_provision": "PASS",
+    "failure": "STEP_FAILED:provision_pinned_python_toolchain:exit=1",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false,
+    "sandbox_stopped": true
+  },
+  "runner_reconciliation_on_preferred_head": {
+    "measured_python_heredoc_escape_failure_repaired_in_source": true,
+    "sanitized_git_head_emission_repaired_in_source": true,
+    "batch5_matrix_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "batch5_cross_epoch_unusual_experiment_execution_removed": true,
+    "required_marker_GO_RUNNER_MODE": "REGRESSION_ACCEPTANCE_ONLY",
+    "required_marker_GO_GLOBAL_UNUSUAL_EXPERIMENT_ACCOUNTING": "CONSUMED_1_OF_1_PRIOR_EVIDENCE",
+    "required_marker_GO_NEW_UNUSUAL_EXPERIMENT_COUNT": 0,
+    "runner_reports_new_unusual_experiment_count": 0,
+    "source_inspection_only_for_current_head": true
+  },
+  "experiment_accounting": {
+    "global_unusual_experiment_limit": 1,
+    "global_unusual_experiment_count": 1,
+    "state": "CONSUMED_1_OF_1_PRIOR_EVIDENCE",
+    "new_unusual_experiments_executed_by_this_pass": 0,
+    "second_unusual_experiment_authorized": false
+  },
+  "current_exact_head_execution_state": {
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "new_vercel_deployment_observed": false,
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "runtime_claim": "UNVERIFIED_AFTER_FUSION_REPAIR"
+  },
+  "next_exact_executable_step": "Run exact preferred head in one actually-started build-internal Vercel Sandbox regression/acceptance batch with 0 new unusual experiments. Require Stage-v5 raw-tree and shallow-safe provenance, pinned SDK/single-owner gate, Bytes-v2/released-view regressions, CM-07/dirfd/source-to-single-VM, pristine twin one-file EntityOS builds with identical SHA-256, status/self-test/no-host-Python/first-grant/state/capability/relocation, DENY_ALL, and successful Sandbox stop.",
+  "blocker": "Vercel build-rate quota rejects the repaired exact preferred head before deployment/Sandbox creation.",
+  "provider_non_execution_is_not_entityos_code_failure": true,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT_PENDING_FRESH_EXACT_HEAD_SANDBOX",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

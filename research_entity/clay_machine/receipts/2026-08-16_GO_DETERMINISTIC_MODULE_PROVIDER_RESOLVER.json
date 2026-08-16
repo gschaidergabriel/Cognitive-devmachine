@@ -1,0 +1,83 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "observed_research_workspace_before": {
+    "package_identity_pr": 653,
+    "package_identity_state": "SUPPORTED_CANDIDATE_NOT_MERGED",
+    "use_mode_pr": 635,
+    "use_mode_state": "SUPPORTED_CANDIDATE_NOT_MERGED",
+    "execution_use_gate": "FAIL_CLOSED_UNTIL_CANONICAL_RESOLUTION"
+  },
+  "executed_product_deltas": {
+    "merged_pr_653": {
+      "head": "1ac68d1e190fd5478645b32664e4e1db5c38a243",
+      "merge_commit": "0533f84909358ed8ae17c3dbcbfdbd4f837c4644",
+      "scope": "deterministic ClayPackageIndex/v1 identity layer"
+    },
+    "merged_pr_635": {
+      "head": "3e965a328e82168923feb8857363938d7ad13ca9",
+      "merge_commit": "2e3f46e5c46c03a305fc6b1a0a30496b2cf79215",
+      "scope": "lossless canonical UseDecl MODULE/WILDCARD metadata"
+    },
+    "resolver_pr": {
+      "number": 660,
+      "base": "a7878e4d293b486eec0ee4875c70437c5ca99650",
+      "head": "a993083ff58081c2078d92f1769e649e366e3988",
+      "state_when_receipted": "OPEN_CI_QUEUED",
+      "workflow_run": 31923122223,
+      "scope": "ClayPackageResolution/v1 exact module-provider selection only"
+    }
+  },
+  "grf": {
+    "observed": "Package identity and import-mode intent existed as separately tested candidates; build remained fail-closed for all use declarations.",
+    "generated_hypothesis": "An explicit exact module-provider resolver can safely fuse those two semantics without selecting symbol/linking semantics.",
+    "counter_reality": "A package-prefix or provider-order heuristic may appear deterministic while silently selecting one of multiple real providers.",
+    "discriminator": "Construct overlapping nested package prefixes that both provide the exact same module identity.",
+    "collapse": "Require exact module-provider cardinality == 1; never select by prefix length or provider order. Symbol semantics remain NOT_SELECTED."
+  },
+  "unusual_experiment": {
+    "name": "NESTED_PACKAGE_PREFIX_PROVIDER_COLLISION",
+    "count_for_this_macrocycle": 1,
+    "environment": "isolated local mechanism probe",
+    "target_module": "clay.pkg.util",
+    "providers": [
+      {"package": "clay.pkg", "provided_module": "clay.pkg.util"},
+      {"package": "clay.pkg.util", "provided_module": "clay.pkg.util"}
+    ],
+    "naive_longest_prefix_result": "clay.pkg.util",
+    "exact_provider_count": 2,
+    "result": "FAIL_CLOSED_AMBIGUOUS_MODULE_PROVIDER",
+    "interpretation": "Longest-prefix resolution is unsafe as a Clay semantic authority because it can hide exact provider multiplicity.",
+    "repository_regression": "tests/test_clayenv_resolver.py::test_nested_package_prefix_collision_fails_closed_regression"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Go Modules Reference",
+      "finding": "If two or more modules provide a package, Go reports an error rather than selecting by list/search order.",
+      "role": "design evidence only; not Clay authority"
+    },
+    {
+      "source": "Rust Reference name resolution/use declarations",
+      "finding": "Ambiguous imports/name candidates are compile-time errors in defined cases; glob semantics carry separate ambiguity rules.",
+      "role": "design evidence only; not Clay authority"
+    }
+  ],
+  "hard_boundaries": {
+    "resolution_scope": "MODULE_PROVIDER_ONLY",
+    "symbol_semantics": "NOT_SELECTED",
+    "wildcard_expansion": "NOT_SELECTED",
+    "call_ownership": "NOT_SELECTED",
+    "linking": "NOT_SELECTED",
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "clayenv_build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Define explicit imported symbol ownership/collision semantics and prove they feed the existing nominal checker -> ClayExecutableTypedIR/v1 -> single serialized ClayVM without bypassing provenance or #648 fail-closed behavior.",
+  "status": "SUPPORTED_PENDING_EXACT_HEAD_CI"
+}

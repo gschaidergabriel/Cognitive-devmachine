@@ -1,0 +1,79 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-16T03:44:00Z",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_head_before_write": "c82cfb16acbc16f03de9e380a8b8b41cf3ff4dec",
+  "product_main_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "results": {
+    "cm02": {
+      "candidate_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+      "pr": 681,
+      "merged": true,
+      "merge_commit": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
+      "exact_head_workflows": {
+        "type_ref_production_sharing": {"run": 31923469033, "conclusion": "success"},
+        "type_ref_production_totality": {"run": 31923469219, "conclusion": "success"},
+        "alias_totality": {"run": 31923469088, "conclusion": "success"},
+        "nominal_typecheck": {"run": 31923469124, "conclusion": "success"},
+        "type_ref_exact_head_regression": {"run": 31923469155, "conclusion": "success"},
+        "executable_ir_single_vm": {"run": 31923469119, "conclusion": "success"},
+        "wp06_abi_manifest_guard": {"run": 31923469067, "conclusion": "success"}
+      },
+      "collapse": "PROMOTE_PRODUCTION_ALIAS_DAG_REPAIR_EVIDENCE_ONLY",
+      "remaining_counterevidence": "_render_type_ref diagnostic expansion is not bounded by structural sharing; CM-02 as a whole remains IN_PROGRESS."
+    },
+    "cm07": {
+      "candidate_pr": 674,
+      "candidate_head": "07f0bf7bc19e398f4820cd346a58190f98e596c6",
+      "github_hosted_run": 31923593584,
+      "github_hosted_job": 95107444133,
+      "github_hosted_result": "BLOCKED_BILLING_BEFORE_RUNNER_OR_STEP_START",
+      "interpretation": "INFRASTRUCTURE_BLOCK_NOT_CODE_PASS_OR_FAIL",
+      "sandbox_mechanism_probe": {
+        "scope": "candidate resolver core transcribed from exact-head resolver.py with package-index dependency stubbed; NOT an exact-head repository test",
+        "ordinary_cases": 3,
+        "ordinary_result": "PASS",
+        "ordinary_cases_detail": [
+          "wildcard provider resolution",
+          "plain use fails closed",
+          "ambiguous module provider fails closed"
+        ],
+        "baseline_resolution_sha256": "93c2495fa2186a7b3940e0fa17f5df5cca8ae43cdea8c030b266159cf1b81292"
+      },
+      "collapse": "RETAIN_V2_CORRECTION_AS_CANDIDATE_ONLY",
+      "remaining_blocker": "Actually-started isolated/ephemeral or explicitly source-admitted exact-head repository execution is still required before promotion."
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "METAMORPHIC_INDEX_ORDER",
+    "scope": "bounded sandbox mechanism probe only",
+    "seed": "0xC1A7",
+    "trials": 256,
+    "intervention": "randomly permute provider argument order and internal module-entry order while preserving root identity and logical package universe",
+    "hypothesis": "ClayPackageResolution/v2 result and resolution_sha256 are invariant to irrelevant provider/internal module ordering",
+    "counterhypothesis": "hidden enumeration-order coupling changes resolution payload or hash",
+    "failures": 0,
+    "outcome": "RETAIN_ORDER_INVARIANCE_AT_MECHANISM_LEVEL",
+    "external_effect": false,
+    "rollback": "discard /tmp/cm07_core_probe.py and synthetic in-memory package indexes",
+    "promotion_limit": "does not substitute for exact candidate repository execution"
+  },
+  "negative_results": [
+    "Container git clone could not run because the sandbox had no DNS/network access to github.com.",
+    "GitHub-hosted CM-07 candidate job did not start because GitHub reported account payment/spending-limit state."
+  ],
+  "next_discriminators": [
+    "Refresh CLAY_MACHINE_WORKSPACE CM-02 from pending to merged/green production alias-DAG evidence without declaring CM-02 complete.",
+    "Restore trusted exact-head execution for CM-07 without directly executing model-generated PR bytes on the persistent self-hosted runner.",
+    "After CM-07 v2 exact-head green evidence, define the smallest explicit plain-use/imported-symbol ownership and collision contract before relaxing the executable-use fence."
+  ],
+  "authority": {
+    "effect_authority": "NONE",
+    "training_authorized": false,
+    "together_used": false,
+    "whole_clay_machine_completion": false
+  }
+}

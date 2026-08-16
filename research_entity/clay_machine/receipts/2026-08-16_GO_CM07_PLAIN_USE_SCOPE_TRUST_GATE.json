@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "trigger": "go",
+  "recorded_at": "2026-08-16T10:09:00+07:00",
+  "observed_product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "observed_workspace_schema": "2.2",
+  "r0_counterexample": {
+    "source_use": "claycode/frank_memory.clay: use frank.entity.Frank",
+    "provider_module": "claycode/frank_entity.clay: module frank.entity",
+    "exported_name": "entity Frank",
+    "consequence": "ClayPackageResolution/v1 overclaims by requiring every plain use target to equal an exact module identity."
+  },
+  "preferred_semantic_correction": {
+    "pr": 674,
+    "state": "DRAFT_CANDIDATE",
+    "head": "b694f88b442fc8a10d3aa9a1b935a771d69bc467",
+    "schema": "ClayPackageResolution/v2",
+    "scope": "WILDCARD_MODULE_PROVIDER_ONLY",
+    "plain_use": "PLAIN_USE_NAME_BINDING_UNSELECTED_FAIL_CLOSED",
+    "wildcard_use": "exact module provider may be selected when unique",
+    "symbol_semantics": "NOT_SELECTED",
+    "build_use_gate": "UNCHANGED_FAIL_CLOSED"
+  },
+  "trust_boundary_intervention": {
+    "change": "Replaced direct pull-request self-hosted execution in PR #674 workflow with an explicit fail-closed skipped gate pending source admission or ephemeral isolation.",
+    "commit": "b694f88b442fc8a10d3aa9a1b935a771d69bc467",
+    "superseded_unsafe_run": 31923483524,
+    "superseded_unsafe_job": 95107172632,
+    "superseded_unsafe_result": "CANCELLED_BEFORE_RUNNER_ASSIGNMENT",
+    "current_gate_run": 31923519916,
+    "current_gate_job": 95107262533,
+    "current_gate_result": "SKIPPED_AWAITING_SOURCE_ADMISSION_OR_EPHEMERAL_ISOLATION",
+    "current_gate_runner_id": null,
+    "semantic_test_status": "BLOCKED_NOT_PASS"
+  },
+  "candidate_fusion": {
+    "pr_679": "Retain draft only after PR #674 resolves plain-use scope; separate ClayModuleBindingPlan/v1 remains preferable to mixing binding into provider resolution, and its conservative local collision surface includes currently addressable sum variants.",
+    "pr_677": "Closed superseded; mixed namespace binding into provider-resolution layer and inherited unsafe PR self-hosted execution.",
+    "pr_678": "Closed superseded; useful sum-variant collision idea fused into #679, but its self-hosted PR workflow executed without explicit source admission. Exact-head green is mechanism evidence only, not promotion evidence."
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_executed_by_this_fusion_worker": 0,
+    "shared_frontier_experiment_already_recorded": "LOCAL_DECL_IMPORT_SHORTNAME_COLLISION",
+    "parallel_pr674_go_experiment": "PLAIN_USE_DUAL_ROLE_COLLISION",
+    "rule": "Do not merge experiment counts from distinct concurrent GO macro-cycles into one claimed exact-one receipt."
+  },
+  "grf_outcome": "MERGE_AND_REPRIORITIZE",
+  "next_falsifier": "Obtain an explicitly source-admitted or ephemeral-isolated zero-cost execution surface for PR #674 exact head, run package + resolver regressions bound to exact tested SHA and the two corpus counterexample sources, then merge only if green. After v2 scope correction, revisit #679-style plain-use namespace/symbol ownership semantics; keep #648 fail closed until end-to-end checker -> ClayExecutableTypedIR/v1 -> single ClayVM closure exists.",
+  "whole_clay_machine_acceptance": false,
+  "together_api_used": false,
+  "training_started": false
+}

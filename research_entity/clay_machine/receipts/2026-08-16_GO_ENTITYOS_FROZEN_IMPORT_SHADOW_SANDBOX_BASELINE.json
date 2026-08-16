@@ -1,0 +1,77 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build/test worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "entityos_single_file": "research_entity/global/ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE.md"
+  },
+  "r0_observed": {
+    "product_main_head_final_refresh": "14fbd477ad3a2ae1ca6082ea9c21e510f583b258",
+    "current_head_change": "Merge CM-TERM explicit hostcall signature gate; product source changed after the tested baseline artifact",
+    "latest_current_head_sandbox_rebuild_run": 31930445459,
+    "latest_current_head_sandbox_rebuild_job": 95124276836,
+    "latest_current_head_sandbox_rebuild_result": "INFRASTRUCTURE_NONEXECUTION",
+    "latest_current_head_sandbox_rebuild_steps": 0,
+    "latest_current_head_sandbox_rebuild_runner_id": 0
+  },
+  "baseline_artifact": {
+    "source": "GitHub Actions artifact entityos-semantic-onefile-31930112424",
+    "workflow_run": 31930112424,
+    "build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+    "scope": "HISTORICAL_RUNTIME_BASELINE_NOT_CURRENT_HEAD_ACCEPTANCE",
+    "artifact": "EntityOS",
+    "sha256": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+    "size_bytes": 12821560,
+    "pyinstaller_onefile": true,
+    "workflow_reproducibility_builds": 2,
+    "workflow_reproducibility_sha256_match": true
+  },
+  "local_isolated_sandbox_baseline": {
+    "execution": "ACTUALLY_EXECUTED",
+    "status_command": "PASS; single_file_candidate=true; frozen_runtime=true",
+    "self_test": "PASS",
+    "claycode_string_build_run": "PASS result=ENTITYOS_GO_LOCAL_OK",
+    "host_effect_without_capability": "PASS_FAIL_CLOSED rc=1 CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_effect_with_explicit_capability": "PASS output=ENTITYOS_HOST_LOCAL_OK"
+  },
+  "grf": {
+    "hypothesis": "The PyInstaller one-file EntityOS runtime is isolated from host Python import-path shadowing and therefore does not silently depend on repository/module imports at launch.",
+    "strongest_counterhypothesis": "Despite being one file, runtime startup or self-test imports host-visible entityos/claymachine/clayenv/runtime packages from CWD/PYTHONPATH, allowing hidden sidecar dependency or import hijack.",
+    "discriminator": "Run the exact downloaded EntityOS from a hostile working directory whose PYTHONPATH shadows entityos, claymachine, clayenv and runtime with modules that create a sentinel and raise if imported.",
+    "promotion_scope": "Only the tested 950d164 artifact; does not promote current 14fbd477 head or whole-machine acceptance."
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "HOST_IMPORT_SHADOW_AGAINST_FROZEN_ENTITYOS",
+    "execution_location": "isolated ChatGPT sandbox",
+    "perturbation": "hostile CWD plus PYTHONPATH containing shadow entityos/claymachine/clayenv/runtime packages; each package would create SHADOW_IMPORTED_* sentinel then raise RuntimeError",
+    "command": "EntityOS --self-test-json",
+    "returncode": 0,
+    "self_test_status": "PASS",
+    "shadow_import_sentinels": "NONE",
+    "outcome": "PASS_FROZEN_RUNTIME_REJECTS_HOST_IMPORT_SHADOW",
+    "rollback": "shadow directory removed; artifact unchanged"
+  },
+  "current_exact_head_build_attempt": {
+    "local_pyinstaller_present": false,
+    "pinned_install_attempt": "pyinstaller==6.21.0 and lark==1.3.1",
+    "result": "BLOCKED_DNS_NETWORK",
+    "error_class": "Temporary failure in name resolution",
+    "complete_current_private_source_tree_materialized_in_sandbox": false
+  },
+  "collapse": {
+    "retain": "Frozen one-file packaging has positive runtime evidence against host import shadowing at the historical 950d164 artifact scope.",
+    "do_not_promote": [
+      "current-head EntityOS buildability",
+      "current-head hostcall signature semantics",
+      "whole-machine acceptance"
+    ],
+    "blocking_invariant": "No exact-current 14fbd477 EntityOS has been rebuilt and validated inside an isolated sandbox; GitHub-hosted sandbox execution did not start, and this local sandbox cannot currently materialize the complete current private source plus pinned PyInstaller toolchain.",
+    "next_executable_step": "In an isolated sandbox with the exact 14fbd477-or-newer current main tree and pinned canonical PyInstaller toolchain, run entityos/build_canonical_onefile.py double-freeze, then execute status, --self-test-json, strict provenance admission, explicit hostcall-signature fail-closed cases, String program build/run and capability-denied/granted process gates on that exact resulting EntityOS."
+  },
+  "outcome": "RUNTIME_BASELINE_ADVANCED; EXACT_CURRENT_ENTITYOS_REBUILD_BLOCKED"
+}

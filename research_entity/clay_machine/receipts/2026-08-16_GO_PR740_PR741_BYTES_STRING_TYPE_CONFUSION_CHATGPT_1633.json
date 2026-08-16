@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "kind": "GO_PR740_PR741_BYTES_STRING_HOSTCALL_INTERACTION_RECEIPT",
+  "date_local": "2026-08-16",
+  "worker": "ChatGPT GPT-5.6 Sol temporary Clay worker",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "authority": {
+    "testing_policy": "SANDBOX_ONLY_TESTING",
+    "vps_testing_used": false,
+    "together_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "r0_observed": {
+    "research_main_before_write": "53665d4569a80afab5c79ec2990aafab4aeb0617",
+    "product_main": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+    "pr740": {
+      "head": "38bc9f56aed1ebb3c366721490eed16135566f71",
+      "state": "OPEN_DRAFT",
+      "purpose": "candidate canonical source String process intrinsic",
+      "verified_full_pipeline": false
+    },
+    "pr741": {
+      "head": "12a30d9abd0c197139f6d5a01867ab440bff16fe",
+      "state": "OPEN_DRAFT",
+      "purpose": "typed Bytes through CLAYVM/2",
+      "verified_full_pipeline": false
+    },
+    "interaction_anchor": "PR741 admits bytes as a Clay VM value; PR740 candidate removes the VM-global Int-only hostcall argument fence and moves process argument type admission into HostProcessVMHost, where only exact int or exact str are admitted."
+  },
+  "grf": {
+    "generated_reality": "The two candidates compose safely because process-host admission remains nominal/exact after generic VM hostcall widening.",
+    "counter_reality": "A PR741 Bytes value can masquerade as a PR740 String process path after the generic VM hostcall fence is widened and reach Linux.",
+    "falsifier": "Inject one bytes value at the proposed PR740 process-host admission boundary and measure whether the outer process boundary is reached.",
+    "predicted_if_generated_reality": "Trap PROCESS_REQUEST_TYPE and zero additional outer process calls.",
+    "predicted_if_counter_reality": "Bytes reaches the outer process boundary or is coerced to a process path."
+  },
+  "experiment": {
+    "evidence_class": "LOCAL_ISOLATED_INTERACTION_MODEL_NOT_PRODUCTION_PASS",
+    "baseline_control": {
+      "input_type": "str",
+      "value": "/usr/bin/true",
+      "shell": false,
+      "returncode": 0,
+      "outer_process_calls": 1
+    },
+    "unusual": {
+      "name": "BYTES_MASQUERADE_AS_PROCESS_STRING",
+      "new_unusual_experiment_count": 1,
+      "input_type": "bytes",
+      "trap": "PROCESS_REQUEST_TYPE",
+      "additional_outer_process_calls": 0
+    },
+    "status": "PASS"
+  },
+  "result": {
+    "outcome": "RETAIN",
+    "claim": "The host-owned exact-type fence proposed by PR740 blocks a PR741 bytes value in this isolated interaction model.",
+    "not_claimed": [
+      "No production cross-branch PASS",
+      "No canonical source/type/effect/TypedIR/VM PASS",
+      "No current-main EntityOS build or execution by this worker",
+      "No whole Clay Machine acceptance"
+    ],
+    "counterevidence": [
+      "PR740 isolated GitHub-hosted candidate workflow did not start due account billing/spending infrastructure status.",
+      "PR741 isolated GitHub-hosted candidate workflow did not start due account billing/spending infrastructure status.",
+      "The active worker cannot obtain a complete private-repository checkout through its local network path, so an exact combined EntityOS build is not available here."
+    ]
+  },
+  "next_discriminating_action": "In an actually-started owner-admissible isolated sandbox, apply the PR740 candidate transformer on top of PR741 head (or an explicit integration branch), then run source/type/effect -> Executable TypedIR -> CLAYVM/2 -> HostProcessVMHost controls including the single Bytes-to-process type-confusion regression, followed by deterministic double one-file EntityOS build SHA comparison and exact EntityOS self-test/copy-run. Do not merge either semantic candidate solely from this interaction receipt."
+}

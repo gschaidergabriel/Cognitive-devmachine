@@ -1,0 +1,68 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "research_head_before_write": "21c3a7412cd32715a8e5d697391f94ffa5921ad6",
+    "vps_or_self_hosted_evidence_promotable": false
+  },
+  "product": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_head_observed": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "main_change": "semantic one-file rebuild workflow moved from self-hosted VPS runner to ubuntu-latest isolated GitHub-hosted sandbox",
+    "canonical_string_state": "String literals and String returns are already on main; String parameters/argv remain fail-closed"
+  },
+  "sandbox_onefile_run": {
+    "workflow": "EntityOS Semantic One-File Rebuild Sandbox",
+    "run_id": 31930154546,
+    "job_id": 95123845518,
+    "head_sha": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "runner_label": "ubuntu-latest",
+    "conclusion": "failure",
+    "runner_id": 0,
+    "runner_name": "",
+    "steps": [],
+    "job_logs_available": false,
+    "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+    "interpretation": "PRE_RUN_INFRASTRUCTURE_BLOCKER_NOT_PRODUCT_TEST_FAILURE",
+    "rerun_attempted_by_this_worker_after_annotation": false
+  },
+  "entityos_artifact": {
+    "current_exact_source_sandbox_build": "BLOCKED",
+    "reason": "the policy-compliant GitHub-hosted sandbox did not receive a runner because of account billing/spending state; the active local sandbox also lacks the full private current source tree and pinned PyInstaller build tool",
+    "historical_local_binary": {
+      "build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+      "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+      "sandbox_runtime_recheck": "PASS",
+      "promotion": "FORBIDDEN_AS_CURRENT_RELEASE_EVIDENCE",
+      "reason": "original build was historical self-hosted execution and predates current canonical String main"
+    }
+  },
+  "strict_artifact_candidate": {
+    "branch": "clay/go-strict-artifact-process-probe-20260816",
+    "head": "00f5214da1d96d0bdf0a200aede6870eab9f2b6f",
+    "files": ["claymachine/clayos.py", "entityos/canonical_entry.py"],
+    "purpose": "remove raw load_module/direct ClayVM product-entry bypass for typed process probe and route it through ClayVMArtifact/v1 plus ClayOS.exec_artifact",
+    "pr": 726,
+    "pr_state": "CLOSED_UNMERGED_AFTER_SANDBOX_ONLY_POLICY_REFRESH",
+    "next_state": "REBASE_AND_VALIDATE_ONLY_IN_ISOLATED_SANDBOX"
+  },
+  "unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "already_completed": true,
+    "name": "FROZEN_RUNTIME_WITH_EMPTY_ENV_AND_POISONED_HOST_PYTHON",
+    "result": "BYTE_IDENTICAL_SELF_TEST",
+    "additional_unusual_experiment_run_after_policy_refresh": false
+  },
+  "retained_release_blockers": [
+    "SQLite WAL-reset productive persistence trust/fix evidence remains unresolved and its crash/restart/WAL discriminators must now be recreated in an isolated sandbox",
+    "canonical String parameters/argv and Bytes/Buffer ownership/lifetime remain open",
+    "strict ClayVMArtifact/v1 admission for EntityOS typed process probe remains an unmerged candidate"
+  ],
+  "next_executable_step": "Restore/increase GitHub Actions billing or spending allowance so ubuntu-latest can actually allocate, or provision another owner-compliant isolated sandbox containing the exact private product source plus pinned PyInstaller 6.21.0. Then build the exact current-head EntityOS twice for reproducibility and execute status, self-test, canonical String build/run, strict artifact admission, capability fail-closed, SQLite persistence/crash/restart/WAL and downgrade/library-substitution gates entirely inside that sandbox.",
+  "outcome": "ENTITYOS_CURRENT_ARTIFACT_BLOCKED_BY_SANDBOX_RUNNER_BILLING_BEFORE_EXECUTION",
+  "whole_machine_acceptance": "NOT_PASSED"
+}

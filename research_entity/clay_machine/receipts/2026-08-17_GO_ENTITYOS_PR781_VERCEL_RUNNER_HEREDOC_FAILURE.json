@@ -1,0 +1,79 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "preferred_product_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816"
+  },
+  "observed_vercel_sandbox_run": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "source_tree": "1e1c9fafce44fa39a5dba863e7fe635906f819c8",
+    "source_tree_entries": 1282,
+    "source_checkout_shallow": true,
+    "source_materialization": "GIT_LS_TREE_PLUS_CAT_FILE_RAW_BLOBS",
+    "archive_sha256": "e6e1972572dabf27739f71a709ed5f67fdbb8b1391e0313729f70f3c73cd842d",
+    "git_bundle_sha256": "e27494578cd4dbdfb47ff80819291ba1fdd9a2d1eb675c172b3256277c9e3f3a",
+    "actually_started_isolated_vercel_sandbox": true,
+    "steps": [
+      {"label": "unpack_and_bind_raw_git_tree_source_bytes", "exit_code": 0},
+      {"label": "provision_system_freeze_toolchain_sudo", "exit_code": 0},
+      {"label": "reconstruct_exact_git_provenance_without_checkout_index", "exit_code": 0},
+      {"label": "provision_pinned_python_toolchain", "exit_code": 1}
+    ],
+    "python": "3.13.13",
+    "libpython": "/usr/lib64/libpython3.13.so",
+    "lark": "1.3.1",
+    "pyinstaller": "6.21.0",
+    "failure": "generated Python heredoc contained a template-interpreted literal newline in sys.version.replace and raised SyntaxError: unterminated string literal",
+    "secondary_runner_defect": "SANITIZED_GIT_HEAD diagnostic printed literal s instead of percent-s formatting",
+    "network_policy_during_tests": null,
+    "bytes_matrix_executed": false,
+    "entityos_built": false,
+    "entityos_sha256": null,
+    "new_unusual_experiment_count": 0,
+    "sandbox_stopped": true,
+    "sandbox_stop_error": null,
+    "classification": "RUNNER_FAIL_NOT_ENTITYOS_SEMANTIC_FAIL"
+  },
+  "repair_observation": {
+    "repaired_head_observed": "1334610341674e92abda50c3ca887bf4ca035107",
+    "repairs_verified_by_source_inspection": [
+      "SANITIZED_GIT_HEAD percent-s formatting restored",
+      "Python newline escaped through the JavaScript template layer",
+      "MATRIX_PASS_MARKER_MISSING label corrected"
+    ],
+    "duplicate_unusual_experiment_path_removed": true,
+    "exact_repaired_head_vercel_status": "failure",
+    "exact_repaired_head_vercel_failure_class": "BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_SANDBOX_START",
+    "exact_repaired_head_sandbox_executed": false
+  },
+  "grf": {
+    "observed": "Stage-v5 source provenance and Sandbox startup reached the pinned Python toolchain step on bdca4ea; execution failed in runner-generated Python before the offline matrix.",
+    "hypothesis": "The immediate blocker is a build-runner quoting/diagnostic defect, not Bytes-v2 or EntityOS semantics.",
+    "counterhypothesis": "Additional semantic or artifact failures may remain hidden behind the runner failure.",
+    "falsifier": "Fresh exact repaired-head Vercel Sandbox run must reach DENY_ALL and execute the full Bytes-v2 plus one-file EntityOS matrix.",
+    "outcome": "RETAIN_RUNNER_FAILURE_MECHANISM; DEFER_PRODUCT_PROMOTION"
+  },
+  "entityos_acceptance": false,
+  "promotion": "BLOCKED",
+  "next_executable_step": "When Vercel build capacity admits the exact current preferred PR781 head, run one build-internal isolated Sandbox batch through Stage-v5 provenance, DENY_ALL, Bytes-v2/released-view regressions, canonical source-to-single-VM gates, deterministic twin EntityOS freeze, status/self-test, no-host-Python, state/restart/capability/relocation and successful Sandbox stop. Persist the exact artifact digest and result before any merge/promotion.",
+  "unusual_experiment_accounting": {
+    "this_worker_cycle_executed_new_unusual_experiment": false,
+    "reason": "The only actually-started PR781 Sandbox run failed before the experiment/matrix stage; subsequent repaired head was blocked by Vercel build-rate-limit before Sandbox start.",
+    "do_not_invent_completion": true
+  },
+  "safety": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_testing": "NOT_USED_FORBIDDEN",
+    "production_host_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "final_paid_training": "NOT_ATTEMPTED_OWNER_AUTHORIZATION_REQUIRED"
+  }
+}

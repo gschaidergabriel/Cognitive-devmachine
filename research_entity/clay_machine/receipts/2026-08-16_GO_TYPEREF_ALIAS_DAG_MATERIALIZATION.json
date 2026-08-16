@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+  "trigger": "go",
+  "observed_product_head": "0a94c67121582c6d7a2165b776323758fc80ea55",
+  "production_typechecker_blob": "6e8ed088d9d157fa4dc0d40329ae5ca610042727",
+  "observed_mechanism": "NominalTypeChecker._canonical fully materializes repeated alias-DAG branches as fresh TypeRef trees even though TypeRef is immutable and may safely share canonical subtrees.",
+  "grf": {
+    "hypothesis": "Per-canonicalization memoization of successfully canonicalized aliases can reuse immutable canonical TypeRef subtrees, changing representation from repeated tree materialization toward structural sharing without changing nominal alias meaning.",
+    "counterhypothesis": "Alias memoization leaks ancestry state across siblings or masks a contextual cycle, so the apparent resource win changes fail-closed alias-cycle semantics.",
+    "falsifier": "Production integration must preserve direct-cycle, parameter-wrapped-cycle and sibling-provenance controls, remain Python-stack-total, and pass the existing exact-head TypeRef gate plus a deterministic alias-DAG structural-sharing regression on the self-hosted Linux/X64 target."
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "ALIAS_DIAMOND_STRUCTURAL_SHARING",
+    "shape": "A18 -> Pair<A19,A19> recursively to Int, with the same alias referenced twice at every level",
+    "environment": "ChatGPT Linux sandbox faithful standalone reconstruction of current _canonical mechanism; not accepted release/VPS evidence",
+    "baseline": {
+      "depth": 18,
+      "seconds": 4.334049,
+      "peak_mib_tracemalloc": 36.006187,
+      "unique_typeref_objects": 262144
+    },
+    "candidate": {
+      "mechanism": "iterative per-call alias memo plus direct reuse of already-canonical frozen TypeRef subtrees; cycle-epoch prevents memo promotion of subtrees that observed an alias cycle",
+      "depth": 18,
+      "seconds": 0.000592,
+      "peak_mib_tracemalloc": 0.011154,
+      "unique_typeref_objects": 19,
+      "baseline_over_candidate_time_ratio": 7315.715,
+      "baseline_over_candidate_peak_memory_ratio": 3228.046,
+      "baseline_over_candidate_unique_object_ratio": 13797.053
+    },
+    "ordinary_semantic_controls": {
+      "direct_alias_cycle_fail_closed_and_equal_to_baseline": "PASS",
+      "parameter_wrapped_alias_cycle_fail_closed_and_equal_to_baseline": "PASS",
+      "sibling_alias_provenance_and_value_equal_to_baseline": "PASS"
+    },
+    "interpretation": "The open CM-02 alias-DAG blocker is reproduced as representation/work duplication rather than a requirement of the current immutable TypeRef semantics. Structural sharing is a retained repair candidate, not yet production-verified.",
+    "outcome": "RETAIN_CANDIDATE_NOT_PROMOTED"
+  },
+  "candidate_patch_design": {
+    "scope": "runtime/claycode_typecheck_v1/typecheck.py::_canonical and _same",
+    "canonicalization": [
+      "keep active_aliases and explicit leave frames",
+      "add one alias_cache per _canonical call",
+      "on cache hit append the already-canonical TypeRef directly instead of traversing/rebuilding it",
+      "memoize aliases only after their full subtree finishes without a newly observed cycle",
+      "allow alias chains that terminate at a cached canonical subtree to inherit the same immutable result"
+    ],
+    "comparison_followup": "Because structural sharing introduces DAGs intentionally, _same should track already-compared identity pairs so equality does not re-expand shared subgraphs exponentially.",
+    "diagnostic_followup": "_render_type_ref still expands the logical tree to text; diagnostic output-size bounding is a separate resource-hardening question and is not claimed solved here."
+  },
+  "authority": {
+    "production_semantics_changed": false,
+    "product_repository_write": false,
+    "self_hosted_target_verified": false,
+    "whole_clay_machine_acceptance": false,
+    "effect_authority": "NONE",
+    "final_training": "NOT_TOUCHED",
+    "together_used": false
+  }
+}

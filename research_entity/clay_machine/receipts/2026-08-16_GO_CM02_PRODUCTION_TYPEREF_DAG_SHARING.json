@@ -5,27 +5,24 @@
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
   "observed": {
-    "research_main_before_first_write": "76635176955a0dac6e9fef36b728b2fbe2ab0ea6",
     "product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
     "latest_semantic_product_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
-    "latest_semantic_product_merge_pr": 660,
-    "cm07_provider_resolver_state": "MERGED_EXACT_MODULE_PROVIDER_ONLY_SYMBOL_SEMANTICS_NOT_SELECTED",
     "cm02_issue": 640,
-    "detached_candidate_pr": 645,
-    "superseded_local_production_pr": 664,
-    "superseded_local_production_head": "c7c0058d5c24faab788eb196fd2656846ddd4824",
-    "superseded_local_production_state": "CLOSED_UNMERGED_AFTER_LIVE_DECONFLICT",
-    "preferred_parallel_production_pr": 673,
-    "preferred_parallel_production_head": "75b96b9d70b6228d768f6ec5a3e000bc15405745",
-    "preferred_parallel_exact_head_workflow": 31923213166,
-    "preferred_parallel_exact_head_workflow_state_at_update": "QUEUED",
+    "detached_exact_head_candidate_pr": 645,
+    "closed_duplicate_production_prs": [664, 667, 673],
+    "consolidated_production_pr": 681,
+    "consolidated_production_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+    "consolidated_production_workflow": 31923469033,
+    "consolidated_production_workflow_state_at_update": "QUEUED",
+    "separate_production_totality_workflow": 31923469219,
+    "separate_production_totality_state_at_update": "PENDING",
     "whole_clay_machine_acceptance": false
   },
   "grf": {
     "generated_hypothesis": "Per-canonicalization immutable alias structural sharing removes repeated-subtree materialization without changing admitted nominal alias or cycle semantics.",
     "counter_reality": "Structural sharing alone may make canonicalization compact while equality still re-traverses the same shared node pairs exponentially.",
     "discriminator": "Compare two independently allocated but structurally identical shared binary TypeRef DAGs with current pair traversal versus visited-pair traversal.",
-    "collapse": "The counter-reality was observed: sharing requires DAG-aware pair memoization in _same. Parallel PR #673 independently integrates both mechanisms and adds a dedicated production DAG gate plus cycle-cache-contamination regression, so duplicate PR #664 was rejected from promotion."
+    "collapse": "The counter-reality was observed: structural sharing requires DAG-aware pair memoization in _same. Parallel implementations converged on the same core and were collapsed to one consolidated production lane, PR #681."
   },
   "unusual_experiment": {
     "name": "SHARED_DAG_PAIR_REVISIT_DISCRIMINATOR",
@@ -45,23 +42,22 @@
       "pair_visit_ratio_approx": 364722
     },
     "result": "DAG_AWARE_EQUALITY_REQUIRED_WITH_STRUCTURAL_SHARING",
-    "interpretation": "Independent mechanism evidence supporting the surviving #673 design; exact-head self-hosted production evidence remains required."
+    "interpretation": "Independent convergent mechanism evidence for PR #681; exact-head production evidence remains required."
   },
-  "production_delta": {
-    "surviving_mechanism": "PR #673: per-call alias cache reuses completed immutable TypeRef subtrees; cycle-observing subtrees are not cached; active alias DFS-path/cycle diagnostics are preserved; _same tracks visited identity pairs.",
-    "surviving_gate": "PR #673 adds a dedicated depth-18 structural-sharing/equality/cycle-cache regression and executes the existing production totality gate unchanged on the same exact head.",
-    "ci_provenance": "PR #673 exact-head workflow fetches and asserts github.event.pull_request.head.sha and binds production checker plus both gate blobs.",
-    "local_duplicate_delta": "PR #664 implemented the same mechanism but modified the existing totality gate directly; it was closed unmerged once the cleaner overlapping #673 lane was discovered."
+  "production_fusion": {
+    "mechanism": "PR #681 uses a per-call alias cache for completed acyclic immutable TypeRef subtrees, denies cache promotion for cycle-tainted subtrees, preserves active alias ancestry/cycle diagnostics and memoizes visited identity pairs in _same.",
+    "retained_from_pr_667": "Negative result: compact TypeRef DAG object sharing does not bound _render_type_ref diagnostic output expansion; renderer hardening remains separate.",
+    "retained_from_pr_673": "The consolidated #681 exact-head workflow now additionally compiles and executes the unchanged tests/claycode_typeref_production_totality_gate.py, alongside #681 production-sharing regressions and the existing alias-totality gate.",
+    "retained_from_this_go": "Independent depth-22 pair-revisit measurement supports _same visited-pair memoization.",
+    "ci_provenance": "#681 workflow fetches and asserts github.event.pull_request.head.sha and records exact checker/gate blobs plus Python/Lark/kernel identity."
   },
   "coordination": {
-    "cm07_parallel_advance": "While CM-02 work ran, PR #660 merged exact module-provider resolution after #635/#653; production CM-02 work was based on that semantic merge.",
-    "cm02_parallel_overlap": "Live open-PR refresh found #667 and #673 after #664 had already been opened. #673 is the cleaner production lane because it preserves the existing totality gate unchanged while adding a dedicated DAG gate and cache-poisoning control.",
-    "action": "Closed #664 without merge; retained this macrocycle's distinct pair-revisit measurement as convergent evidence for #673.",
-    "negative_result": "A correct patch is not a useful canonical delta when a stronger parallel implementation already owns the same production surface.",
-    "stale_or_duplicate_write_promoted": false
+    "action": "Closed duplicate #664 and #673 without merge; parallel worker closed #667. Fused the strongest non-duplicative gate property from #673 into #681 and distributed this GO's pair-revisit evidence to the surviving lane.",
+    "negative_result": "Correct overlapping patches are not multiple useful canonical deltas; live shared-state deconfliction is part of correctness.",
+    "duplicate_production_path_promoted": false
   },
   "hard_boundaries": {
-    "production_cm02_pass": "PENDING_PR_673_EXACT_HEAD_SELF_HOSTED_RESULT",
+    "production_cm02_pass": "PENDING_PR_681_EXACT_HEAD_SELF_HOSTED_RESULT",
     "generic_semantics": "NOT_SELECTED",
     "render_type_ref_output_size_hardening": "OPEN_SEPARATE_FOLLOWUP",
     "linux_effects": "UNCHANGED",
@@ -70,6 +66,6 @@
     "together_api_used": false,
     "final_training_authorized_or_started": false
   },
-  "next_falsifier": "Require PR #673 exact-head workflow 31923213166 plus overlapping production TypeRef regressions to execute on self-hosted Linux/X64 at head 75b96b9d70b6228d768f6ec5a3e000bc15405745. If green, prefer #673 and retire remaining duplicate production lanes; if red, preserve the failing observation and repair only the violated invariant.",
-  "status": "SUPPORTED_COORDINATION_DELTA_PENDING_PR673_EXACT_HEAD_VPS"
+  "next_falsifier": "Require PR #681 head c0a275b35869bc5838ea1f775a557f3534ae4635 to pass workflow 31923469033 and overlapping TypeRef/typecheck gates on self-hosted Linux/X64. Only then consider merge with expected-head binding; on any failure preserve the exact observation and repair only the violated invariant.",
+  "status": "SUPPORTED_COORDINATION_DELTA_PENDING_PR681_EXACT_HEAD_VPS"
 }

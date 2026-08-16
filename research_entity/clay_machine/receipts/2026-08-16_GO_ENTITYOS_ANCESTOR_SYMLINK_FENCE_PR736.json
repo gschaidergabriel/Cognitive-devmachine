@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
@@ -11,7 +11,8 @@
     "observed_reality": [
       "entityos/boot_entry.py at product main rejects a configured state root when the final component itself is a symlink",
       "the same implementation used Path.absolute plus final-component Path.is_symlink and did not reject pre-existing symlink ancestors",
-      "EntityOS Initial Grant Sandbox run 31930675508 at exact product main completed FAILURE with job 95124859932 showing steps=[] and runner_id=0, so it is infrastructure/no-start evidence rather than code execution evidence"
+      "EntityOS Initial Grant Sandbox run 31930675508 at exact product main completed FAILURE with job 95124859932 showing steps=[] and runner_id=0, so it is infrastructure/no-start evidence rather than code execution evidence",
+      "PR736 exact head 3050e13036d927766907067b35662d88e1284209 triggered EntityOS Canonical One-File Sandbox run 31937815970; job 95142419539 completed failure with steps=null, so the exact PR head also has no executed one-file build evidence"
     ],
     "generated_reality": "A non-symlink final ENTITYOS_STATE_HOME beneath a symlinked parent can redirect persisted grant authority while bypassing the final-component symlink check.",
     "counter_reality": "Path.is_symlink on the final configured path or the subsequent mkdir/is_symlink check might indirectly expose the symlinked ancestor and fail closed.",
@@ -45,7 +46,15 @@
       "direct final-component symlink rejection PASS",
       "ancestor symlink rejection PASS with ENTITYOS_STATE_DIR_SYMLINK_REJECTED",
       "normal non-symlink state directory creation PASS"
-    ]
+    ],
+    "exact_head_sandbox": {
+      "workflow": "EntityOS Canonical One-File Sandbox",
+      "run_id": 31937815970,
+      "job_id": 95142419539,
+      "status": "FAILURE_BEFORE_STEPS",
+      "steps": null,
+      "code_evidence": false
+    }
   },
   "primary_external_evidence": [
     {
@@ -64,7 +73,7 @@
   ],
   "outcome": "RETAIN_CANDIDATE_UNMERGED",
   "entityos_artifact": "BLOCKED",
-  "artifact_blocker": "No actually-started isolated sandbox has rebuilt and tested exact PR736 head as the one-file EntityOS artifact; current main hosted sandbox run 31930675508 failed before any step started, and local sandbox could not clone the private repository because outbound DNS to github.com was unavailable.",
+  "artifact_blocker": "No actually-started isolated sandbox has rebuilt and tested exact PR736 head as the one-file EntityOS artifact. Exact-head run 31937815970/job 95142419539 failed before steps; current-main hosted sandbox run 31930675508/job 95124859932 also failed before steps. Local sandbox could not clone the private repository because outbound DNS to github.com was unavailable, and PyInstaller is not preinstalled locally.",
   "next_executable_step": "Run the exact PR736 head in an actually-started isolated sandbox using entityos/build_canonical_onefile.py, then execute the initial-grant regression matrix including the new ancestor-symlink case against the exact produced EntityOS file. Do not merge/promote before that evidence.",
   "whole_machine_acceptance": false,
   "paid_training_authorized": false

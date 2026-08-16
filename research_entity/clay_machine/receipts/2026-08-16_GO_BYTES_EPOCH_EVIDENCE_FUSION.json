@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "research_endpoint": "EntityOS",
+  "product_form": "ONE_EXECUTABLE_FILE",
+  "joined_research_head": "58d814cc5b43e663bc9ccdaef498fa0339ec302f",
+  "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "fusion_reason": "Parallel workers independently produced materially equivalent torn-snapshot counterevidence. Fuse the architectural implication instead of allowing duplicate semantic paths.",
+  "evidence_inputs": [
+    {
+      "receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_BYTES_CONCURRENT_EPOCH_COUNTEREXAMPLE.json",
+      "commit": "fe51b3fd26bb705085c4eb9c88b87b194cc98530",
+      "scope": "32 MiB shared mmap; concurrent full-buffer producer epochs; owned bytes snapshot observed mixed 0x00/0xff"
+    },
+    {
+      "receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_CM06_SHARED_EXPORTER_TORN_SNAPSHOT.json",
+      "commit": "01143bccb41ff6d4b3fd69068664d4add305cb0b",
+      "scope": "32 MiB multiprocessing shared-memory exporter; concurrent full-buffer producer epochs; memoryview.tobytes snapshot observed mixed 0x11/0xEE"
+    }
+  ],
+  "evidence_class": "INDEPENDENT_NON_VERCEL_MECHANISM_COUNTEREVIDENCE",
+  "executable_truth_caveat": "Neither experiment establishes EntityOS executable PASS/FAIL. Exact executable truth remains Vercel Sandbox only.",
+  "fused_conclusion": {
+    "supported": "Ownership after copying does not by itself prove that a mutable/shared/borrowed exporter was captured from one producer epoch.",
+    "rejected_inference": "CONTIGUOUS_OR_READONLY_VIEW_PLUS_COPY_IMPLIES_PRODUCER_EPOCH_CONSISTENT_CLAY_BYTES",
+    "canonical_safe_split": {
+      "Bytes": "immutable owned exact byte sequence; current candidate conservatively admits built-in bytes only",
+      "Buffer": "separate future mutable/shared/borrowed transport type requiring explicit ownership, lease, epoch/stability, lifetime and concurrency semantics before snapshot or zero-copy admission"
+    },
+    "temporary_conservatism": "Rejecting every bytearray/memoryview at the current Bytes boundary is a fail-closed subset, not a permanent claim that restricted single-owner Buffer implementations can never be safe. Such admission requires an explicit Clay contract and executable evidence."
+  },
+  "product_delta": {
+    "pr": 777,
+    "head": "fbc2cc2ed67034c47fdd707ba4bdc127f45f1d27",
+    "state": "DRAFT_UNVERIFIED",
+    "bytes_policy": "built-in immutable bytes admitted; bytearray -> BYTES_MUTABLE_REQUIRES_EPOCH; live memoryview -> BYTES_BORROWED_REQUIRES_EPOCH; released memoryview -> BYTES_VIEW_RELEASED",
+    "tests_aligned": [
+      "tests/clayvm_bytes_v2_gate.py",
+      "tests/clayvm_bytes_released_view_regression.py"
+    ]
+  },
+  "vercel_execution_lane": {
+    "pr": 776,
+    "head_observed": "99f7ae429ed000f41aa3b864355dc97ec5f5a048",
+    "latest_started_intermediate_observation": "BUILD_FAILED_BEFORE_SANDBOX_START:VERCEL_GIT_SOURCE_TREE_DIRTY",
+    "repair": "raw committed Git-tree blob materialization; ambient checkout dirtiness is not source authority",
+    "current_external_block": "DEPLOYMENT_BUILD_RATE_LIMIT",
+    "exact_pr777_sandbox_started": false
+  },
+  "next_exact_vercel_batch": [
+    "run PR776 current raw-tree source/provenance staging gate in an actually-started isolated Vercel Sandbox",
+    "stage exact PR777 head and run Bytes-v2 plus epoch-fence and released-view regressions",
+    "rerun current TypedIR/single-VM/provenance baselines",
+    "double-build exact one-file EntityOS and require identical SHA256",
+    "run exact artifact status/self-test, PATH-without-host-Python, capability-denial/admission and relocation controls",
+    "stop the bounded Sandbox and persist exact source SHA, commands, exits, logs and artifact digest"
+  ],
+  "string_process_fusion": "DEFER_PR744_UNTIL_BYTES_EXACT_VERCEL_RESULT",
+  "whole_entityos_acceptance": false,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

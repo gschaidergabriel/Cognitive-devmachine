@@ -1,0 +1,82 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "observed_product_state": {
+    "product_main_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "canonical_provider_resolver_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "canonical_provider_resolver_pr": 660,
+    "resolver_scope": "ClayPackageResolution/v1 MODULE_PROVIDER_ONLY",
+    "symbol_semantics": "NOT_SELECTED",
+    "executable_use_gate": "UNCHANGED_FAIL_CLOSED"
+  },
+  "grf": {
+    "observed": "Current merged resolver rejects duplicate declared package providers before symbol semantics are selected.",
+    "generated_hypothesis": "Provider provenance multiplicity must remain visible even when two explicit providers are byte/content identical.",
+    "counter_reality": "A content-addressed resolver could collapse equal package hashes into one provider and silently erase the fact that two explicit provider roots asserted the same package authority.",
+    "discriminator": "Create two physically distinct provider roots with byte-identical package manifests/content, require equal canonical package hashes, then supply both explicitly to the provider resolver.",
+    "collapse": "Content identity is not provider provenance. Duplicate explicit package providers must fail closed rather than deduplicate by hash."
+  },
+  "unusual_experiment": {
+    "name": "IDENTICAL_TWIN_PROVIDER_COLLISION",
+    "count_for_this_macrocycle": 1,
+    "environment": "isolated local mechanism probe mirroring the merged resolver's duplicate-package authority branch",
+    "provider_roots_distinct": true,
+    "content_hash_equal": true,
+    "local_probe_package_sha256": "d07c99549bb80fa93175a672dfa862dccfc5f3eb72052435ad56fb423bc4c2f6",
+    "observed_result": "DUPLICATE_PACKAGE_PROVIDER:twin",
+    "classification": "LOCAL_MECHANISM_PASS",
+    "exact_self_hosted_reproduction": {
+      "pr": 675,
+      "head": "e7563b7f64b8a459c39ce324a70db3e0f9dff464",
+      "workflow_run": 31923239337,
+      "state_at_receipt_write": "QUEUED",
+      "promotion": "PENDING_EXACT_HEAD_EXECUTION"
+    }
+  },
+  "coordination": {
+    "superseded_duplicate_product_pr": 662,
+    "superseded_stacked_diagnostic_pr": 671,
+    "reason": "Live main/parallel workers had already selected and merged PR #660; duplicate product architectures were closed rather than promoted.",
+    "ordinary_review_findings": [
+      {
+        "pr": 679,
+        "finding": "Local collision surface omitted sum-type variants even though current analyzer admits unique variants as unqualified candidates.",
+        "action": "commented; retain fail-closed behavior or fuse with stronger variant coverage"
+      },
+      {
+        "pr": 678,
+        "finding": "Resolve-to-binding phase rebuilt package indexes without rebinding rebuilt package_sha256 values to provider-resolution package hashes, leaving a TOCTOU/provenance consistency gap.",
+        "action": "commented; require exact package hash revalidation while retaining sum-variant coverage"
+      }
+    ]
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Rust Reference name resolution/use declarations",
+      "finding": "Name resolution and use resolution are explicit compiler phases; ambiguous glob/name candidates have defined error/shadowing rules.",
+      "role": "design comparison only; not Clay authority"
+    },
+    {
+      "source": "Go Language Specification import declarations",
+      "finding": "Imports create explicit package bindings or dot-imported identifiers under language-defined scope rules; cycles are separately specified.",
+      "role": "design comparison only; not Clay authority"
+    }
+  ],
+  "hard_boundaries": {
+    "symbol_semantics": "NOT_SELECTED",
+    "wildcard_symbol_expansion": "NOT_SELECTED",
+    "call_ownership": "NOT_SELECTED",
+    "linking": "NOT_SELECTED",
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "clayenv_build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Fuse the strongest MODULE short-binding collision candidate so it both covers every currently addressable local name (including unique sum variants) and revalidates package identity across the resolve-to-binding seam; keep WILDCARD/imported symbol semantics and execution fail closed until separately proven.",
+  "status": "LOCAL_MECHANISM_SUPPORTED_EXACT_TARGET_PENDING"
+}

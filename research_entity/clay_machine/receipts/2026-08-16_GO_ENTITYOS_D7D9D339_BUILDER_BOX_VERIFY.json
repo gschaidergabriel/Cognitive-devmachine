@@ -1,0 +1,61 @@
+{
+  "schema": "ClayGoEntityOSVerification/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "tested_product_head": "d7d9d3391ceb1a2b3419dfb6071b9861e5f940ff",
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31927783481,
+    "conclusion": "success",
+    "artifact_id": 9258358796
+  },
+  "entityos": {
+    "artifact": "EntityOS",
+    "sha256": "36274cad5bcfcf21fd893efdfde358d04784c86a9b90f3af3247c8ed381d2c4a",
+    "size_bytes": 11937560,
+    "mode": "0755",
+    "format": "ELF 64-bit LSB executable x86-64",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "builder_box_schema": "EntityOSBuilderBox/v1",
+    "whole_machine_acceptance": false
+  },
+  "verified_in_active_session": {
+    "artifact_downloaded_from_exact_workflow": true,
+    "artifact_sha256_measured": true,
+    "status_build_head_matches": true,
+    "self_test_json_status": "PASS",
+    "clay_vm_result": 42,
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "performance_query": "SUPPORTED_AND_MEASURED",
+    "what_is_a_claymachine_query": "SUPPORTED_AND_PROVENANCE_BOUND",
+    "unsupported_query": "VISIBLE_UNKNOWN_NO_FABRICATION",
+    "html_white_input_surface_selftest": "PASS"
+  },
+  "grf_decision_trace": {
+    "observed_anchor": "Exact-head one-file workflow succeeded on self-hosted Linux X64, the emitted ELF was downloaded and independently executed, and the grounded inspect queries returned validated Builder Box models tied to build/pipeline/security provenance.",
+    "hypothesis": "A minimal grounded inspection slice can live inside the one-file EntityOS boundary without introducing a detached UI architecture or fabricated machine facts.",
+    "counterhypothesis": "The visual slice is only decorative/static output and does not yet constitute the required universal interactive OS surface.",
+    "falsifier": "Inspect the exact binary behavior and canonical entry path: supported queries must execute real probes/state; unknown queries must fail visibly; rendered surface must remain inside the binary; interactive launch/progressive exploration must be separately demonstrated.",
+    "outcome": "RETAIN_BOUNDED",
+    "promotion_limit": "Grounded Builder Box inspection is verified for the admitted slice only; whole-machine visual acceptance is not promoted."
+  },
+  "unusual_experiment": {
+    "count_for_this_go_worker": 1,
+    "name": "HERMETIC_EXILE",
+    "result": "PASS",
+    "scope_note": "Performed earlier in this same go cycle on a verified EntityOS baseline; later d7d9d339 checks were ordinary verification only.",
+    "rollback": "temporary experiment directory removed"
+  },
+  "negative_results": [
+    "The first local inspect invocation used an unsupported --json token after the inspect command; EntityOS correctly treated it as query text and returned UNKNOWN. Re-running the documented inspect <query> form passed for both required grounded queries.",
+    "The current inspect-html path emits a white HTML surface with an input element but does not by itself prove an interactive launched application, progressive follow-up loop, universal inspectability, or full factual-class visualization.",
+    "whole_machine_acceptance remains false."
+  ],
+  "current_blocker": "Complete and prove the universal interactive Clay surface beyond the grounded static inspect slice: actual launch/display on the accepted Ubuntu lane, live same-surface query/follow-up interaction, visibly distinct verified/measured/inferred/planned/blocked/unavailable/unknown classes, broader canonical ClayCode/EntityOS discovery, and bounded generative composition without a conventional menu hierarchy.",
+  "next_executable_action": "Extend the current Builder Box slice into the smallest real interactive surface loop inside the same EntityOS file, with an accepted-host launch/display test and deterministic interaction transcript covering performance, what is a claymachine, one follow-up query, and one unsupported query. Bind every displayed fact to provenance/class metadata, validate the render model before display, then rebuild exact current head and rerun one-file workflow plus independent local verification.",
+  "training_authorized": false
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_CURRENT_HEAD_B32_VERIFY",
+  "timestamp_local": "2026-08-16T12:44:00+07:00",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "CURRENT_EXACT_HEAD_ENTITYOS_VERIFIED_RELEASE_OPEN",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+  "workflow": {
+    "run_id": 31929651652,
+    "job_id": 95122460806,
+    "result": "SUCCESS",
+    "evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux"
+  },
+  "artifact": {
+    "workflow_artifact_id": 9258908699,
+    "name": "EntityOS",
+    "size_bytes": 12820848,
+    "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "file_kind": "ELF 64-bit LSB x86-64 GNU/Linux",
+    "pyinstaller_onefile": true,
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true,
+    "local_download_reexecuted": true,
+    "local_self_test": "SELFTEST_PASS"
+  },
+  "runtime": {
+    "build_head_bound": true,
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "process_capability": "linux.process.spawn.v0",
+    "unifieddb_packet_schema": "UnifiedDBEntityPacket/v1",
+    "visual_data_source": "UnifiedDB",
+    "initial_grant_second_launch": "REUSED_WITHOUT_PROMPT",
+    "whole_machine_acceptance": false
+  },
+  "grf_collapse": {
+    "observed_reality": "Product main advanced during this go cycle from d4fc929 to b32ec5a; the newer head changed GUI display reachability probing and then passed its own exact-head canonical one-file workflow. The produced ELF was downloaded and reexecuted locally with matching embedded build head and SELFTEST_PASS.",
+    "strongest_counterhypothesis": "The prior one-file PASS would become stale or fail after the GUI reachability change.",
+    "discriminator": "Build and execute EntityOS from the newer exact head on the self-hosted Linux lane, then independently execute the downloaded exact artifact.",
+    "outcome": "RETAIN",
+    "confidence": "HIGH_FOR_TESTED_CURRENT_HEAD_BOUNDARIES_LOW_FOR_WHOLE_MACHINE"
+  },
+  "go_cycle_unusual_experiment_note": {
+    "worker_initiated_count": 1,
+    "worker_initiated_name": "MINIMAL_ENV_EMPTY_PATH_NO_HOME_FOREIGN_CWD",
+    "worker_initiated_result": "BYTE_IDENTICAL_SELFTEST_AND_EMPTY_TMP_AFTER_EXIT",
+    "scope": "Executed earlier in this same go cycle on exact predecessor artifact d4fc929 before product main advanced; recorded in receipt 2026-08-16_GO_ENTITYOS_MINIMAL_ENV_REVERIFY. The current-head canonical CI also independently executed its standard relocation/Unicode probe as part of repository automation; that concurrent CI probe was not initiated as a second worker experiment."
+  },
+  "release_blocker": "Whole-machine acceptance remains false. Current canonical architecture still needs the smallest Clay-native Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface shared by CM-DATA and CM-TERM, then a provenance-bound typed/effect IR -> single ClayVM process/data path without backend-local request-handle semantics.",
+  "next_executable_action": "Implement and deterministically gate minimal Clay Bytes/Buffer + String/argv/effect signatures across checker, executable TypedIR and ClayVM; route one real process/data request through that canonical path; rebuild and rerun the current one-file EntityOS exact-head gates.",
+  "authority": {
+    "together_api": "FORBIDDEN",
+    "whole_machine_pass_claimed": false
+  }
+}

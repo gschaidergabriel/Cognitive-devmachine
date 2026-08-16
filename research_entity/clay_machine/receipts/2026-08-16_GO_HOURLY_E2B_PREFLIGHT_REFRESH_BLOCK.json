@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main": "b4cdfb3a57a9aa842eeae38f1461d4cc385a6a05",
+  "research_parent_seen": "3897c8e8a416f6c158316dfc590284d74a9c4e97",
+  "supervisor_state": "8.0",
+  "frontier": ["E2B_ISOLATED_EXECUTION", "CM-TERM", "CM-DATA", "EntityOS"],
+  "retained_candidate": {
+    "pr": 744,
+    "state": "OPEN_DRAFT",
+    "head": "5685570027ec5e10cf96da0d1ba3cd58ba6620b3",
+    "relation": "DIVERGED_FROM_CURRENT_MAIN",
+    "promotion_credit": false
+  },
+  "candidate_inventory": {
+    "740": "OPEN_DRAFT_SOURCE_STRING_INTRINSIC",
+    "741": "OPEN_DRAFT_CLAYVM2_BYTES",
+    "743": "OPEN_DRAFT_UTF8_FAIL_CLOSED",
+    "744": "OPEN_DRAFT_RETAINED_STRING_PATH",
+    "747": "OPEN_DRAFT_ENTITYOS_GRANT_DIRFD",
+    "732": "OPEN_DRAFT_EXECUTABLE_OBJECT_BINDING",
+    "693": "OPEN_DRAFT_DATA_FRAME_ORACLE",
+    "749": "CLOSED_UNMERGED_REMOVE_FROM_MATRIX"
+  },
+  "prepared_e2b_lineage": {
+    "matrix_commit": "0b58d7d4a856bbafdbc168460f31dd674e0c44a0",
+    "bridge_commit": "bd8d6704b87a7bceeea3cebf78d98f122229cd07",
+    "status": "PREPARED_BUT_STALE_NOT_ON_CURRENT_MAIN",
+    "matrix_staleness": [
+      "contains closed PR749 source and fusion variants",
+      "does not represent current product main",
+      "bridge package declares npm ci workflow without package-lock.json in prepared commit"
+    ]
+  },
+  "preflight_attempt": {
+    "cloudflare_connector_available_in_runtime": false,
+    "e2b_connector_available_in_runtime": false,
+    "plugin_catalog_cloudflare_match": false,
+    "plugin_catalog_e2b_match": false,
+    "worker_deployed": false,
+    "e2b_budget_checked": false,
+    "e2b_templates_checked": false,
+    "sandbox_started": false,
+    "sandbox_start_count": 0,
+    "reason": "No connected Cloudflare/E2B execution surface is exposed to this automation runtime, and FREE_ONLY forbids consuming an unverified paid start or substituting persistent self-hosted/VPS execution."
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "reason": "No isolated execution surface actually started; do not consume a novelty slot on orchestration-only inspection."
+  },
+  "entityos": {
+    "artifact": "NOT_BUILT_THIS_CYCLE",
+    "reason": "No accepted isolated full-repository execution surface was available in this runtime.",
+    "whole_machine_acceptance": false
+  },
+  "next_executable_action": "Materialize the prepared Cloudflare->E2B bridge and refreshed one-sandbox matrix on current main, remove PR749 and its fusion variants, add a deterministic lockfile/install path, then perform only non-starting E2B budget/template preflight. Consume exactly one sandbox start only if the account explicitly confirms zero-cost/free eligibility; inside it bind exact current heads and run the retained matrix including EntityOS double-build/self-test/copy-run evidence.",
+  "outcome": "BLOCKED_EXECUTION_SURFACE_WITH_FRESH_COORDINATION_DELTA"
+}

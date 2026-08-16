@@ -1,5 +1,5 @@
 {
-  "schema": "ClayResearchReceipt/v1",
+  "schema": "ClayResearchReceipt/v1.1",
   "date": "2026-08-16",
   "trigger": "go",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
@@ -7,22 +7,30 @@
   "endpoint": "EntityOS",
   "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
   "scope": "Vercel build-internal exact-source staging provenance before EntityOS Sandbox execution",
+  "accounting_correction": {
+    "supersedes_local_unusual_experiment_count": true,
+    "authorized_go_unusual_experiment_count": 0,
+    "reason": "The current execution law permits experiments only in authorized isolated sandboxes. The local/container discriminator below is retained as non-promotable mechanism evidence and is not counted as the globally allowed GO unusual experiment.",
+    "coordination_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_COORDINATION_EXPERIMENT_ACCOUNTING_MIXED_V2.json"
+  },
   "observed": {
-    "research_base_before_write": "01143bccb41ff6d4b3fd69068664d4add305cb0b",
+    "original_research_base_before_write": "01143bccb41ff6d4b3fd69068664d4add305cb0b",
     "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
-    "fusion_pr": 776,
-    "fusion_branch": "chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325",
-    "fusion_head_after_repair": "99f7ae429ed000f41aa3b864355dc97ec5f5a048",
+    "original_predecessor_pr": 776,
+    "original_predecessor_head": "99f7ae429ed000f41aa3b864355dc97ec5f5a048",
+    "original_predecessor_state": "CLOSED_UNMERGED_AFTER_FUSION",
+    "active_fusion_pr": 782,
+    "active_fusion_head_after_rehome": "762b295392236316406e0a9b664cf278057c7c08",
     "latest_observed_older_vercel_build_failure": "VERCEL_GIT_SOURCE_TREE_DIRTY",
-    "latest_exact_repair_head_vercel_status": "DEPLOYMENT_RATE_LIMITED_RETRY_IN_24_HOURS",
-    "exact_repair_head_vercel_sandbox_started": false,
-    "exact_repair_head_entityos_artifact_built": false
+    "active_fusion_vercel_status": "DEPLOYMENT_RATE_LIMITED_RETRY_IN_24_HOURS",
+    "active_fusion_vercel_sandbox_started": false,
+    "active_fusion_entityos_artifact_built": false
   },
   "hypothesis": "A canonical committed-tree source TAR derived with git archive can differ from the raw Git tree because committed export attributes can transform or omit tracked blobs, weakening exact source-tree provenance even when the Git tree SHA is recorded separately.",
   "strongest_counterhypothesis": "git archive is sufficiently exact for source staging because it is derived from the immutable commit object and therefore cannot materially diverge from committed source bytes.",
-  "unusual_experiment": {
-    "count": 1,
+  "local_mechanism_discriminator": {
     "name": "GIT_ARCHIVE_EXPORT_ATTRIBUTE_PROVENANCE_DRIFT",
+    "counts_as_authorized_go_unusual_experiment": false,
     "execution_surface": "isolated local tool container",
     "promotion_authority": "MECHANISM_ONLY_NOT_ENTITYOS_EXECUTABLE_TRUTH",
     "intervention": "Synthetic Git repository committed payload.txt with export-subst and secret.txt with export-ignore, then archived exact HEAD with git archive and compared extracted bytes/presence against raw HEAD blobs.",
@@ -33,19 +41,23 @@
     }
   },
   "repair": {
-    "product_commit": "99f7ae429ed000f41aa3b864355dc97ec5f5a048",
+    "original_product_commit": "99f7ae429ed000f41aa3b864355dc97ec5f5a048",
+    "active_fusion_product_commit": "762b295392236316406e0a9b664cf278057c7c08",
+    "active_fusion_pr": 782,
     "file": "mcp/vercel-sandbox-mcp/scripts/stage-go-source.mjs",
     "mechanism": "Replace git archive source materialization with git ls-tree -r -z plus git cat-file raw blobs, preserving tracked regular/executable/symlink modes and failing closed on unsupported tree entries or non-UTF8 paths; retain separate SHA-bound credential-free Git bundle for exact commit provenance.",
     "manifest_schema": "ClayGoSourceStage/v5",
     "local_deterministic_regression": "PASS for export-subst, export-ignore, executable mode and symlink preservation",
-    "local_regression_authority": "NON_PROMOTABLE_MECHANISM_EVIDENCE"
+    "local_regression_authority": "NON_PROMOTABLE_MECHANISM_EVIDENCE",
+    "fusion_state": "REHOMED_TO_ACTIVE_BATCH4_BYTES_ENTITYOS_LANE"
   },
   "grf_outcome": "RETAIN_REPAIR_PENDING_VERCEL_SANDBOX",
-  "entityos_impact": "Strengthens exact-source identity of the build-internal path that must eventually produce and validate the one-file EntityOS artifact. Does not establish current EntityOS build/runtime PASS.",
-  "next_discriminator": "When Vercel build-rate capacity permits, run PR #776 exact head 99f7ae429ed000f41aa3b864355dc97ec5f5a048 through the build-internal lane, require source stage v5/raw-tree identity, actually-started isolated Sandbox, exact reconstructed HEAD/tree/clean state, offline matrix, deterministic one-file EntityOS build/runtime/pathless/relocation gates and successful Sandbox stop. If the branch advances, bind and test the new exact head instead.",
+  "entityos_impact": "Strengthens exact-source identity of the single active fused build-internal path that must eventually produce and validate the one-file EntityOS artifact. Does not establish current EntityOS build/runtime PASS.",
+  "next_discriminator": "When Vercel build-rate capacity permits, execute the then-current exact PR #782 fusion head in an actually-started isolated Vercel Sandbox; require ClayGoSourceStage/v5 raw-tree identity, exact reconstructed Git HEAD/tree/clean/no-remote provenance, current Bytes/mixed-V2 and CM-07/single-VM regressions, two clean one-file EntityOS freezes with identical SHA-256 and byte identity, runtime/self-test/pathless/state/capability/relocation gates, DENY_ALL offline execution and successful Sandbox stop. The one authorized unusual experiment may only be counted if such an authorized Sandbox actually executes the selected bounded intervention.",
   "hard_non_claims": [
-    "No Vercel Sandbox started for repair head",
-    "No exact-head EntityOS artifact exists from repair head",
+    "No Vercel Sandbox started for active fusion head",
+    "No exact-head EntityOS artifact exists from active fusion head",
+    "No authorized unusual experiment executed in this macrocycle yet",
     "No whole EntityOS or Clay Machine PASS",
     "No VPS/self-hosted/production-host test evidence"
   ]

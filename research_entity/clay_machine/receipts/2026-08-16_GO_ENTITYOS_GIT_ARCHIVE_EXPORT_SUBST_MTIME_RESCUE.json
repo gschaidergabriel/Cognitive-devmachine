@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "kind": "ENTITYOS_GIT_TREE_ARCHIVE_SEMANTICS_FALSIFIER",
+  "observed_reality": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "fusion_pr": 775,
+    "fusion_branch": "clay/go-entityos-attested-buildinternal-fusion-20260816",
+    "final_candidate_head": "263e03e3308a742f86c114543de037994de0e05d",
+    "exact_head_vercel_status": "failure",
+    "exact_head_vercel_classification": "BUILD_RATE_LIMIT_BEFORE_BUILD",
+    "sandbox_started_for_final_head": false,
+    "entityos_built_for_final_head": false,
+    "whole_clay_machine_acceptance": false
+  },
+  "grf": {
+    "hypothesis": "Archiving the exact Git tree object instead of the commit object, with a genuinely fixed archive mtime, yields source bytes independent of commit identity/export-subst and reproducible across staging calls.",
+    "strongest_counter_reality": "Commit-object archive semantics or ambiguous mtime syntax can inject commit/time-dependent bytes even when the Git tree is unchanged.",
+    "discriminator": "Create two commits with the exact same tree and an export-subst path, compare commit-object archives, compare tree-object archives, then repeat the tree archive with an explicit ISO-8601 epoch mtime and verify extracted bytes against the Git blob.",
+    "collapse": "RETAIN tree-object plus explicit ISO-8601 fixed mtime; REJECT commit-object archive as tree-byte authority; REJECT --mtime=@0 as a validated fixed-epoch spelling in the measured Git 2.47.3 environment."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "SAME_TREE_EXPORT_SUBST_COMMIT_ARCHIVE_DIVERGENCE_WITH_MTIME_RESCUE",
+    "bounded": true,
+    "reversible": true,
+    "environment": {
+      "location": "isolated local tool sandbox",
+      "git": "2.47.3"
+    },
+    "same_tree": "587fd7a1d7de5c9070eabeb40a9a053c045e822c",
+    "baseline": {
+      "two_commits_same_tree": true,
+      "commit_archives_differ": true,
+      "tree_archive_with_mtime_at_0_byte_identical": false,
+      "extracted_tree_payload_matches_git_blob": true
+    },
+    "rescue": {
+      "fixed_mtime_utc": "1970-01-01T00:00:00Z",
+      "tree_archives_byte_identical": true,
+      "commit_archives_still_differ": true,
+      "source_blob_matches_extracted": true,
+      "literal_tree_payload_preserved": "source=$Format:%H$"
+    },
+    "outcome": "COUNTERHYPOTHESIS_PARTIALLY_SUPPORTED_THEN_RESCUED"
+  },
+  "primary_evidence": [
+    {
+      "source": "Git git-archive documentation",
+      "url": "https://git-scm.com/docs/git-archive",
+      "finding": "Archive behavior differs depending on whether the tree-ish is a commit/tag or a tree, and archive mtime can be overridden explicitly."
+    },
+    {
+      "source": "Git gitattributes documentation",
+      "url": "https://git-scm.com/docs/gitattributes",
+      "finding": "export-subst can substitute commit-derived placeholders during git archive, so commit-object archive bytes are not necessarily a pure function of the tree object."
+    }
+  ],
+  "ordinary_local_regressions": {
+    "scope": "provenance decision logic only; NOT a full EntityOS build and NOT product acceptance",
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "duration_seconds": 0.180,
+    "covered": [
+      "clean Git exact head",
+      "dirty source rejection",
+      "ignored import artifact rejection",
+      "external attested snapshot accept and content tamper reject",
+      "extra-file/schema/transport rejection",
+      "attestation externality",
+      "missing-attestation fail closed"
+    ]
+  },
+  "product_delta": {
+    "pr": 775,
+    "branch": "clay/go-entityos-attested-buildinternal-fusion-20260816",
+    "final_head": "263e03e3308a742f86c114543de037994de0e05d",
+    "source_staging_schema": "EntityOSSourceSnapshotAttestation/v2",
+    "source_transport": "GIT_TREE_ARCHIVE_FIXED_MTIME_GZIP_N",
+    "fixed_archive_mtime_utc": "1970-01-01T00:00:00Z",
+    "public_execution_endpoint": "BUILD_INTERNAL_ONLY",
+    "sandbox_execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "status": "DRAFT_UNVALIDATED_EXTERNAL_RATE_LIMIT"
+  },
+  "exact_blocker": {
+    "provider": "Vercel",
+    "head": "263e03e3308a742f86c114543de037994de0e05d",
+    "commit_status": "failure",
+    "classification": "BUILD_RATE_LIMIT_BEFORE_BUILD",
+    "sandbox_started": false,
+    "entityos_sha256": null,
+    "next_executable_step": "When Vercel accepts a Preview build again, execute the exact then-current PR #775 head only. Require source-attestation v2 staging, actual Sandbox creation, deny-all test networking, every matrix step exit 0, GO_MATRIX_RESULT=PASS, exact EntityOS SHA-256, PATH-without-host-Python PASS, relocation byte identity and successful Sandbox stop. Any head movement invalidates an older receipt for promotion."
+  },
+  "experiment_accounting": {
+    "this_go_unusual_experiments": 1,
+    "additional_unusual_experiments": false,
+    "note": "The ISO-mtime rescue is the rescue phase of the same bounded export-subst archive experiment, not a second unusual experiment."
+  },
+  "hard_boundaries": {
+    "whole_clay_machine_acceptance": false,
+    "vps_test_evidence_used": false,
+    "self_hosted_test_evidence_used": false,
+    "production_host_test_evidence_used": false,
+    "together_api_used": false,
+    "training_started": false
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "worker_scope": "temporary Clay research/build/test worker",
+  "observed_reality": {
+    "research_base": "1ce4569ed4960e0b836a6d261c790fb695acd907",
+    "product_main_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "merged_provider_resolver_pr": 660,
+    "merged_provider_resolver_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "current_resolver_schema": "ClayPackageResolution/v1",
+    "current_resolver_scope": "MODULE_PROVIDER_ONLY",
+    "current_symbol_semantics": "NOT_SELECTED",
+    "package_index_schema": "ClayPackageIndex/v1",
+    "parser_fact": "canonical parser preserves UseDecl(module, mode)",
+    "package_index_fact": "v1 compatibility projection records legacy uses and does not retain use mode",
+    "resolver_fact": "merged resolver rereads the exact indexed source, verifies source_sha256, reparses it, and consumes canonical use_decls",
+    "execution_use_gate": "UNCHANGED_FAIL_CLOSED"
+  },
+  "corpus_counterexample": {
+    "consumer": "claycode/frank_memory.clay",
+    "consumer_blob_sha": "7206577ab67213ba7393c51e0e49e264995455c6",
+    "plain_use": "use frank.entity.Frank",
+    "provider_source": "claycode/frank_entity.clay",
+    "provider_blob_sha": "e90e88ac85fe77a3d7358594505121b3d9cf23ee",
+    "provider_module": "frank.entity",
+    "exported_declaration": "entity Frank",
+    "falsified_assumption": "every plain MODULE-mode use path can be treated as an exact logical module identity"
+  },
+  "local_mechanism_falsifier": {
+    "environment": "disposable local Python model mirroring the current resolver/index information boundary",
+    "tests": 5,
+    "passed": 5,
+    "product_suite": false,
+    "findings": [
+      "MODULE and WILDCARD declarations with the same module path collapse to the same legacy ClayPackageIndex/v1 uses projection",
+      "missing provider fails closed in the mechanism model",
+      "cycles remain bounded and deterministic in the mechanism model",
+      "canonical package identity rather than display name or provider order prevents namespace-doppelgaenger selection"
+    ]
+  },
+  "grf": {
+    "leading_hypothesis": "The package-index mode-loss seam is dangerous only if a resolver treats ClayPackageIndex/v1 as semantically complete; the merged resolver avoids that specific failure by source-hash-bound reparse.",
+    "strongest_counter_reality": "Reparsing can preserve syntax intent yet still overclaim name-binding semantics if it assumes every plain use path denotes an exact module.",
+    "discriminator": "Compare the merged v1 exact-module rule with authorized corpus examples in which the final path component is an exported declaration rather than a module.",
+    "observed_result": "The corpus contains use frank.entity.Frank while the provider module is frank.entity and Frank is an entity declaration; therefore plain-use-as-exact-module is not justified.",
+    "collapse": "RETAIN the hash-bound reparse and deterministic provider identity mechanism; REJECT universal exact-module semantics for plain MODULE-mode uses; DEFER plain-use name binding until an explicit namespace contract exists."
+  },
+  "architecture_delta": {
+    "package_index_decision": "NO_FORCED_SCHEMA_BUMP: ClayPackageIndex/v1 may remain a discovery/identity index while the resolver verifies source_sha256 before reparsing canonical use_decls.",
+    "resolver_decision": "Plain MODULE-mode uses must fail closed until module-vs-exported-symbol name binding and ambiguity/collision behavior are selected explicitly.",
+    "candidate_product_pr": 674,
+    "candidate_head": "a5d540c9f665f469646c28752c861420dbf73a34",
+    "candidate_state_observed": "OPEN_DRAFT_MERGEABLE",
+    "candidate_exact_head_workflow": 31923238785,
+    "candidate_workflow_state_observed": "QUEUED",
+    "promotion": "NOT_AUTHORIZED_BY_THIS_RECEIPT"
+  },
+  "unusual_experiment": {
+    "name": "NAMESPACE_DOPPELGAENGER_CANONICAL_IDENTITY_SELECTION",
+    "count_for_this_worker_macrocycle": 1,
+    "environment": "disposable local mechanism model",
+    "setup": "two package candidates share the same display/package namespace shape but have distinct canonical identities; provider enumeration order is reversed",
+    "result": "DETERMINISTIC_SELECTION_BY_CANONICAL_IDENTITY",
+    "evidence_tier": "LOCAL_MECHANISM_ONLY",
+    "promotion_effect": "NONE",
+    "rollback": "temporary local files only; no product repository mutation"
+  },
+  "coordination": {
+    "duplicate_product_path_created": false,
+    "existing_canonical_fix_candidate": 674,
+    "product_review_comment_id": 5305439887,
+    "superseded_research_pr": 275,
+    "reason": "Avoid a second resolver architecture and avoid stale-base research writes while preserving independent falsification evidence."
+  },
+  "hard_boundaries": {
+    "product_main_mutated": false,
+    "full_product_clone_or_suite_executed_locally": false,
+    "symbol_semantics_selected": false,
+    "linking_authorized": false,
+    "linux_effects_changed": false,
+    "effect_authority": "NONE",
+    "clayenv_build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Require exact PR-head self-hosted CI for PR #674. If green, specify and test the smallest plain-use namespace contract that distinguishes exact module imports from exported declaration imports and fails closed on dual-role/collision ambiguity, then feed the resolved binding table into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM path without relaxing the current executable use fence before end-to-end evidence is green.",
+  "status": "RESEARCH_DELTA_RECORDED_PR674_PENDING_EXACT_HEAD_CI"
+}

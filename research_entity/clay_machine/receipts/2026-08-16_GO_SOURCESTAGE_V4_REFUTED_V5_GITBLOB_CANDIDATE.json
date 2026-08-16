@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "scope": "Vercel source-staging reproducibility falsification and deterministic Git-blob transport candidate; not whole-machine acceptance and not a current-main EntityOS receipt.",
+  "observed_reality": {
+    "accepted_test_policy": "SANDBOX_ONLY_TESTING",
+    "vps_or_self_hosted_acceptance_used": false,
+    "product_main_at_candidate_base": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "historical_exact_head_entityos_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_VERCEL_SANDBOX_ENTITYOS_EXACT_HEAD.json",
+    "hardened_exact_head": "8788a5bbf9a7ca77a4dd8d9ac819840d2bc6fa74",
+    "hardened_entityos_sha256": "b4ebad5fee7012c4263d0ada688baf0dfa35a7b2ae735fc1486728a707e85344",
+    "hardened_matrix": {
+      "status": "GO_SANDBOX_MATRIX_VERIFIED",
+      "invocation": "BUILD_INTERNAL_DIRECT_IMPORT_NO_HTTP_EXECUTION_SURFACE",
+      "network_policy_during_tests": "DENY_ALL",
+      "cm07": "PASS",
+      "entityos_dirfd": "PASS",
+      "canonical_source_pipeline": "PASS",
+      "entityos_onefile": "PASS",
+      "sandbox_stopped": true
+    }
+  },
+  "negative_results": [
+    {
+      "candidate": "ClayGoSourceStage/v3",
+      "exact_head": "8788a5bbf9a7ca77a4dd8d9ac819840d2bc6fa74",
+      "source_tree": "2ef490c7e8abb75c5c75ffb6ed7587d9a03c03a4",
+      "first_archive_sha256": "590221547e11a28a85b3ca165a7a5ae95af4cbb18f62b4a15fae6bc3558de99b",
+      "first_archive_bytes": 1269890,
+      "second_archive_sha256": "4bda7259fb1a692f1a7447dfbdadf579bcc8e290ebc65eb4a6e969c7599e491d",
+      "second_archive_bytes": 1269885,
+      "result": "REFUTED_REPRODUCIBILITY_CLAIM"
+    },
+    {
+      "candidate": "ClayGoSourceStage/v4",
+      "exact_head": "51b6fd6d9394283e2b08bcbee9d91524c8256b2e",
+      "source_tree": "24cb30d3347a4194ddc6bba498edae12fac1e3ee",
+      "first_tar_sha256": "19c7e54ef3d36f9d734eea012cc001a1248147afd2d7c7b531f691dcb2b58134",
+      "first_archive_sha256": "108c71e01d4d6f6d465a061977e2eb51fc631e61fb2c24afa753c4046bc02a1d",
+      "first_archive_bytes": 1270544,
+      "second_tar_sha256": "6314bd9674f6140cf5a88289693ecf55e8d9f93e1773734155f79164411a9eeb",
+      "second_archive_sha256": "67f277beb00573da36ad538b89aa42bd9885909898d53376b5d5b0d7fc2a8ccd",
+      "second_archive_bytes": 1270532,
+      "result": "REFUTED_REPRODUCIBILITY_CLAIM",
+      "inference": "Because the raw TAR hash changed, gzip metadata and the removed commit PAX header cannot by themselves explain the cross-hook mismatch."
+    }
+  ],
+  "grf": {
+    "generated_hypothesis": "The exact committed Git tree can be transported reproducibly if source bytes and executable/symlink semantics are derived directly from immutable Git tree/blob objects and the archive encoder fixes every header field itself.",
+    "strongest_counter_reality": "A custom archive encoder may silently change source semantics, mishandle paths/symlinks/executable modes, or remain deterministic only on a toy tree while failing on the product tree.",
+    "discriminator": "First require a local isolated utility test for repeated byte identity plus extraction semantics; then require repeated Vercel build hooks on the exact product candidate to emit identical TAR and gzip digests before any merge or Sandbox promotion.",
+    "outcome": "RETAIN_AS_CANDIDATE_NOT_PROMOTED"
+  },
+  "candidate_implementation": {
+    "product_pr": 765,
+    "branch": "chatgpt/go-deterministic-gitblob-stage-20260816",
+    "commit": "2a4effb63b3012d15cb051cf571e0d520d73cf65",
+    "schema": "ClayGoSourceStage/v5",
+    "mechanism": [
+      "read exact HEAD tree oid",
+      "enumerate committed files with git ls-tree",
+      "read bytes only with git cat-file blob",
+      "normalize ordinary executable modes from Git mode bits",
+      "preserve symlink targets from symlink blobs",
+      "emit deterministic USTAR with fixed uid/gid/mtime/header fields",
+      "exclude only the explicit staging exclusions",
+      "build TAR twice in-process and fail closed unless byte-identical",
+      "compress with gzip -n"
+    ],
+    "git_archive_used": false,
+    "checkout_bytes_admitted": false,
+    "global_git_config_or_attribute_transport_effect_admitted": false
+  },
+  "local_isolated_utility_falsifier": {
+    "environment": "ephemeral local container; not VPS/self-hosted acceptance and not EntityOS runtime acceptance",
+    "result": "PASS",
+    "checks": [
+      "node syntax check",
+      "two independent script invocations emitted identical compressed archive SHA-256",
+      "two in-process TAR builds emitted identical TAR SHA-256",
+      "archive extraction succeeded",
+      "Git symlink preserved",
+      "Git executable bit preserved",
+      "regular file content preserved"
+    ],
+    "sample_tar_sha256": "7dddfcc4707343d17fc517efc0538419d0fdd5b0099534d4917f36789cf1e4a3",
+    "sample_archive_sha256": "2a7f63366922ccde477e0a00fecc6490f0e18c88f26f23b252ff7346cf028124",
+    "promotion_weight": "MECHANISM_ONLY"
+  },
+  "exactly_one_bounded_unusual_experiment_accounting": {
+    "canonical_macro_experiment_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_VERCEL_SANDBOX_ENTITYOS_EXACT_HEAD.json",
+    "name": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "count": 1,
+    "note": "The v5 utility falsifier is ordinary deterministic implementation validation and is not claimed as an additional unusual experiment. Parallel workers may have separate GO receipts; those are not counted into this worker's macro receipt."
+  },
+  "current_nonclaims": [
+    "No v5 Vercel build receipt was observed at write time.",
+    "No v5 current-product-tree cross-hook reproducibility PASS.",
+    "No current-main EntityOS artifact acceptance.",
+    "No whole Clay Machine acceptance.",
+    "No retained/downloadable EntityOS bytes were exported by this worker.",
+    "No VPS or self-hosted runtime evidence was used for Clay Machine acceptance."
+  ],
+  "next_falsifier": "Obtain a Vercel preview build for PR #765 and require both Vercel build-hook invocations to emit identical v5 tar_sha256 and archive_sha256 for the exact same source_head/source_tree. If that passes, rebase/fuse the v5 staging mechanism plus the build-internal no-HTTP Sandbox runner onto one fresh quiescent current-main head, then execute one exact-head isolated Sandbox EntityOS matrix and bind the resulting EntityOS SHA-256 to that source tree."
+}

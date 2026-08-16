@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY_TESTING",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "whole_machine_acceptance": false,
+  "entityos_product_state": "BLOCKED_CURRENT_CANONICAL_PROMOTION",
+  "coordinated_unusual_experiment": {
+    "count": 1,
+    "receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_VERCEL_ONEFILE_MATRIX_2315.json",
+    "id": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "note": "This receipt adds ordinary diagnostics/falsifiers only and does not consume another unusual experiment."
+  },
+  "observed_evidence": [
+    {
+      "kind": "VERCEL_SANDBOX_EXACT_HEAD_PASS",
+      "head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+      "entityos_sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+      "result": "CM07_PASS_DIRFD_PASS_CANONICAL_PIPELINE_PASS_ONEFILE_PASS_DENY_ALL_SANDBOX_STOPPED"
+    },
+    {
+      "kind": "VERCEL_SANDBOX_REPLAY_HARDENED_PASS",
+      "head": "8788a5bbf9a7ca77a4dd8d9ac819840d2bc6fa74",
+      "entityos_sha256": "b4ebad5fee7012c4263d0ada688baf0dfa35a7b2ae735fc1486728a707e85344",
+      "result": "BUILD_INTERNAL_DIRECT_IMPORT_NO_HTTP_EXECUTION_SURFACE_AND_MATRIX_PASS"
+    },
+    {
+      "kind": "NEGATIVE_RESULT",
+      "result": "SAME_HEAD_AND_TREE_PRODUCED_DIFFERENT_SOURCE_ARCHIVE_DIGESTS_ACROSS_DUPLICATE_VERCEL_BUILD_INVOCATIONS"
+    },
+    {
+      "kind": "VERCEL_ISOLATOR",
+      "head": "5344c3706050a2f5ee9bc60b0f17eda4cf5d4206",
+      "git_version": "2.50.1",
+      "result": "RAW_TAR_REPEAT_MATCH_WITHIN_EACH_INVOCATION_TRUE_BUT_RAW_TAR_DIGEST_CHANGED_ACROSS_INVOCATIONS; GZIP_REPEAT_MATCH_WITHIN_INVOCATION_TRUE; SANDBOX_NOT_STARTED"
+    },
+    {
+      "kind": "LOCAL_ISOLATED_FALSIFIER",
+      "result": "git_archive_mtime_at_0_resolved_to_wall_clock_like_time_and_changed_same_tree_tar_across_seconds; explicit ISO 1970-01-01T00:00:01Z fixed the tar entry time"
+    },
+    {
+      "kind": "LOCAL_ISOLATED_FALSIFIER",
+      "result": "SANITIZED_SHALLOW_GIT_TRANSPORT_DIFFERED_ONLY_IN_DOT_GIT_INDEX_STAT_CACHE; deleting index and reconstructing from HEAD produced byte-identical index and whole canonical tar"
+    },
+    {
+      "kind": "COUNTER_LANE_NEGATIVE_RESULT",
+      "head": "7c43fafbb6ae154f11bdfcf81d1f87e593800a4c",
+      "result": "EXTERNAL_ATTESTED_NO_GIT_SNAPSHOT_VERCEL_SANDBOX_OFFLINE_MATRIX_EXIT_1; SANDBOX_STOPPED"
+    }
+  ],
+  "grf_candidates": [
+    {
+      "hypothesis": "gzip creates the source archive nondeterminism",
+      "counterevidence": "raw TAR digest already changes while two gzip runs on one raw TAR match",
+      "outcome": "REJECT"
+    },
+    {
+      "hypothesis": "the commit global PAX header is the sole source of nondeterminism",
+      "counterevidence": "tree-object archive with commit PAX header removed still changed raw TAR digest across Vercel build invocations",
+      "outcome": "REJECT"
+    },
+    {
+      "hypothesis": "git archive --mtime=@0 is parsed as an approximate date and leaks invocation time",
+      "support": "Git archive source routes --mtime through approxidate; isolated reproduction plus Vercel within-vs-cross-invocation behavior match this mechanism",
+      "outcome": "SUPPORTED_NOT_CANONICAL_UNTIL_CURRENT_LANE_RETEST"
+    },
+    {
+      "hypothesis": "transporting a checkout-generated .git/index breaks shallow-Git archive reproducibility through stat-cache metadata",
+      "support": "two independent exact-head stages differed in .git/index and whole TAR; remove/rebuild index discriminated to byte identity",
+      "outcome": "SUPPORTED"
+    }
+  ],
+  "preferred_candidate": {
+    "product_pr": 761,
+    "observed_head": "e5599527e5852ccb31bdd21c80b32cde34c2a927",
+    "design": "SANITIZED_SHALLOW_EXACT_GIT_WITHOUT_TRANSPORTED_INDEX; DOUBLE_ARCHIVE_EQUALITY; CROSS_INVOCATION_EQUALITY_MARKER; REBUILD_INDEX_INSIDE_ISOLATED_SANDBOX; BUILD_INTERNAL_ONLY_HTTP_404",
+    "state": "UNVERIFIED_EXACT_HEAD",
+    "promotion_allowed": false
+  },
+  "current_external_blocker": {
+    "provider": "Vercel",
+    "code": "api-deployments-free-per-day",
+    "observation": "more than 100 deployments; new preview deployment blocked by provider quota",
+    "effect": "exact current PR 761 candidate cannot obtain the required fresh Vercel Sandbox receipt in this cycle"
+  },
+  "next_executable_step": "When an isolated Vercel preview execution is available again, run the exact then-current preferred PR 761 descendant and require: same staged archive SHA across duplicate Vercel build-hook invocations; exact detached Git HEAD; no remote; index reconstructed inside Sandbox; clean source; DENY_ALL during tests; CM07/DirFD/canonical pipeline/one-file EntityOS matrix PASS; sandbox stop. Then fuse only that verified head onto freshly refreshed main and rerun the same exact-main regression before promotion.",
+  "non_claims": [
+    "whole Clay Machine acceptance",
+    "current main EntityOS acceptance",
+    "CM-NET completion",
+    "CM-TERM completion",
+    "CM-DATA completion",
+    "self-hosting completion"
+  ],
+  "together_api_used": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false
+}

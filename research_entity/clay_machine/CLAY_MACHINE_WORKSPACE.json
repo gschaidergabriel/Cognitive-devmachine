@@ -14,8 +14,8 @@
     },
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #603 merged TypeRef alias-ancestry complexity repair; exact-head self-hosted run 31910197430 passed 12/12 including depth 32768 and bounded scaling ratio.",
-      "blocker": "Compact alias-DAG expansion/materialization can still grow explosively; require a resource bound or structural sharing without changing nominal alias meaning."
+      "evidence": "PR #603 merged TypeRef alias-ancestry complexity repair; exact-head self-hosted run 31910197430 passed 12/12 including depth 32768 and bounded scaling ratio. GO alias-DAG discriminator reproduced exponential repeated subtree materialization at depth 18 (262144 unique TypeRef objects / 36.006 MiB tracemalloc peak) while an iterative per-call memo + immutable structural-sharing prototype preserved bounded cycle/sibling controls with 19 unique objects / 0.011 MiB. Canonical receipt committed and product issue #640 opened.",
+      "blocker": "Integrate resource-safe alias-DAG structural sharing into the production checker and prove it on exact PR-head self-hosted Linux/X64 without changing nominal alias/cycle semantics; _same must also avoid re-expanding shared DAG pairs."
     },
     "CM-03-EVALUATOR-INTERPRETER": {
       "status": "IN_PROGRESS",
@@ -62,7 +62,7 @@
     }
   },
   "frontier": {
-    "repository_head_observed": "7b54a420172e1d4a8099071eb49352f895943636",
+    "repository_head_observed": "6a8ef1950e03e1b29b7b98c27e1f9cee6eb146e2",
     "latest_clay_machine_semantic_merge": "60612d0ffc5798879bce7045f5b3d22093698e2d",
     "typeref_repair_merge": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
     "canonical_executable_ir_merge": "1bf95a2bf6912c7d40585a70d4a65221cf8fcd19",
@@ -76,7 +76,7 @@
     "minimal_clayenv_run": 31911536923,
     "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED",
     "release": "NOT_PASSED",
-    "next_discriminator": "Highest-value next work: expand canonical already-admitted semantics through the same executable-IR/single-VM path and establish canonical modules/stdlib packaging in ClayEnv. Parallel bounded blocker: resource-safe alias-DAG materialization. Then define typed Linux effects and persistent/recoverable ClayOS services."
+    "next_discriminator": "CM-02 bounded implementation target is product issue #640: integrate per-call immutable alias structural sharing + DAG-aware _same and reproduce cycle/sibling/resource controls on exact PR-head self-hosted Linux/X64. In parallel, expand canonical already-admitted semantics through executable-IR/single-VM and establish canonical modules/stdlib packaging in ClayEnv; then define typed Linux effects and persistent/recoverable ClayOS services."
   },
   "progress": {
     "work_packages_total": 11,
@@ -91,7 +91,8 @@
     "research_entity/clay_machine/receipts/2026-08-16_GO_PROVENANCE_BOUND_CLAYVM_ARTIFACT.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_STRICT_CLAYOS_ARTIFACT_LAUNCH.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CLAYOS_LOWLEVEL_IMPORT_INTERNALIZATION.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_MINIMAL_CLAYENV_BUILD_RUN.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_MINIMAL_CLAYENV_BUILD_RUN.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_ALIAS_DAG_MATERIALIZATION.json"
   ],
   "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. CAS/lease discipline remains required. This macrocycle also exposed a CI provenance pitfall: github.sha on pull_request is the merge ref unless workflows explicitly checkout and assert github.event.pull_request.head.sha.",
   "laws": [

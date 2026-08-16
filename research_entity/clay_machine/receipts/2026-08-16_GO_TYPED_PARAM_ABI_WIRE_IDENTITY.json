@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "observed_at": "2026-08-16T09:00:00Z",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_head_observed": "65b4265154ee7235d2b245ac9ec6fc6536a8459b",
+  "research_parent_observed": "3b20f83aadb4c52d69f4adeec4d8d0a6f05719ba",
+  "source_identity": {
+    "claymachine/clayvm.py": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
+    "claymachine/executable_ir_adapter.py": "13e09586365efe8e5760d8249340f059f9553800"
+  },
+  "grf": {
+    "observed_reality": [
+      "Current ClayVM v1 serializes function parameter names but not declared parameter types into the VM module metadata.",
+      "Current compile_typed_ir intentionally rejects all non-Int parameters while allowing String returns.",
+      "Current executable_ir_adapter intentionally rejects non-Int locals and call parameters; linux.process.spawn.v0 remains typed as (Int)->Int request-id bridge.",
+      "Current product main retained the same clayvm.py and executable_ir_adapter.py blob identities while unrelated EntityOS state-symlink work advanced main."
+    ],
+    "generated_reality": "Directly removing the current String-parameter fail-closed guard would permit String values without binding their declared parameter type identity into the serialized ClayVM artifact.",
+    "counter_reality": "The existing serialized module metadata may already differ when only the declared parameter type changes, making an ABI extension unnecessary for String parameter identity.",
+    "falsifier": "Under a counterfactual guard bypass, serialize otherwise identical one-parameter functions differing only in declared parameter type. If the wire bytes differ, the counter-reality survives; if identical, naive guard removal is refuted.",
+    "outcome": "REFUTE_NAIVE_GUARD_REMOVAL_RETAIN_TYPED_PARAMETER_ABI_CANDIDATE"
+  },
+  "bounded_unusual_experiment": {
+    "count": 1,
+    "name": "counterfactual parameter-type wire collision",
+    "scope": "synthetic mirror of the exact current FunctionMeta/module metadata serialization; no repository mutation; no host effect",
+    "baseline_declared_param_type": "Int",
+    "intervention_declared_param_type": "String",
+    "wire_bytes_identical": true,
+    "baseline_sha256": "4b652051797c3d2a0dc58aec074d72a1d35533ed1b473d08487a1c2d7dd2c3f1",
+    "intervention_sha256": "4b652051797c3d2a0dc58aec074d72a1d35533ed1b473d08487a1c2d7dd2c3f1",
+    "result": "REFUTE_NAIVE_RELAXATION"
+  },
+  "normal_sandbox_prototype": {
+    "classification": "NOT_PRODUCT_EVIDENCE",
+    "candidate": "typed parameter metadata carried by a new VM wire identity; exact entry argument validation; String and Bytes remain distinct; Linux argv encoding occurs explicitly at the host boundary",
+    "checks_passed": 9,
+    "checks_total": 9,
+    "checks": [
+      "declared parameter type changes wire identity",
+      "deterministic String ABI serialization",
+      "String parameter type roundtrip",
+      "Bytes remains distinct from String",
+      "valid String entry argument admitted",
+      "wrong String entry argument type fails closed",
+      "Bool is not silently admitted as Int",
+      "Linux argv String encoding is explicit UTF-8",
+      "embedded NUL in Linux argv String fails closed"
+    ],
+    "int_wire_sha256": "479ab0c3f7c79ff0470ebd1c62cf787a44c476c5c309df8de58ba0b95f370dc8",
+    "string_wire_sha256": "60b7263d5cf31ec9826b52c2013e5b7293d75553238e6b42946ede5403565cb9",
+    "bytes_wire_sha256": "24f27ac86344310e6a1288bdaa0138074e6754e03e30d6ec24808d6c0bdce468"
+  },
+  "primary_external_evidence": [
+    {
+      "source": "Linux man-pages execve(2)",
+      "claim": "Linux process argv is a null-pointer-terminated vector of strings; argument/environment byte accounting and E2BIG limits apply at the exec boundary."
+    },
+    {
+      "source": "The Open Group Base Specifications, exec family",
+      "claim": "argv members are null-terminated character strings and the argv array terminates with a null pointer; ARG_MAX constrains argument/environment storage."
+    }
+  ],
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "affected_frontiers": ["CM-05-VIRTUAL-CLAY-MACHINE", "CM-06-MEMORY-CONCURRENCY-RUNTIME", "CM-08-LINUX-INTEROP", "CM-TERM", "CM-DATA"],
+    "decision": "Do not relax String parameter checks on ClayVM v1. First bind parameter type identity into the canonical VM artifact ABI, then allow exact typed entry/internal-call validation. Keep Bytes as a separate canonical value class; perform explicit String-to-UTF-8 argv conversion only at the Linux interop boundary and reject embedded NUL.",
+    "rollback": "No production mutation was made; discard the candidate if a smaller provenance-equivalent ABI mechanism is demonstrated and passes the same discriminators."
+  },
+  "entityos_artifact": "BLOCKED",
+  "artifact_blocker": "No actually-started isolated sandbox is presently available to apply and test the canonical clayvm.py/executable_ir_adapter.py ABI patch and rebuild the exact one-file EntityOS. The current hosted EntityOS sandbox evidence observed in this go cycle failed before steps, while the local sandbox cannot clone the private product repository through direct GitHub DNS.",
+  "next_executable_step": "Implement typed parameter identity in the canonical ClayVM artifact format and executable IR lowering on a fresh product-main branch; add String parameter/local/internal-call and strict wrong-type regressions plus a direct typed argv bridge without conflating String with Bytes; then run source->TypedIR->single-VM gates and rebuild/execute the exact one-file EntityOS in an actually-started isolated sandbox before merge or promotion.",
+  "whole_clay_machine_acceptance": false,
+  "paid_training_authorized": false
+}

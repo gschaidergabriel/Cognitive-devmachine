@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_delta": {
+    "pr": 727,
+    "merge_commit": "14fbd477ad3a2ae1ca6082ea9c21e510f583b258",
+    "tested_pr_head": "4486a320a3a321c70f3f0b52a12a85d3957be1a7",
+    "change": "Bind the existing linux.process.spawn.v0 request-id bridge to one explicit versioned TypedIR hostcall signature before lowering to the single ClayVM.",
+    "accepted_signature": "linux.process.spawn.v0::(Int)->Int",
+    "fail_closed_cases": [
+      "missing signature",
+      "unadmitted signature",
+      "wrong arity",
+      "wrong argument type",
+      "wrong return type"
+    ],
+    "canonical_entityos_process_probe_bound_to_signature": true,
+    "whole_machine_acceptance": false
+  },
+  "grf": {
+    "observed_anchor": "The canonical executable-IR adapter admitted the process capability/effect identity but did not bind an exact callable signature; the existing process bridge still uses an Int request-id indirection while direct Clay String argv and Bytes/Buffer semantics remain open.",
+    "hypothesis": "A versioned exact hostcall signature at the canonical TypedIR->single-VM boundary reduces semantic ambiguity without inventing backend-local process semantics and can preserve the already-merged real Linux process path.",
+    "counter_reality": "A signature string could be sidecar paperwork that does not actually constrain lowering or could break the frozen EntityOS self-test while leaving the apparent component gate green.",
+    "falsifier": "Require a valid exact signature to preserve real CM-TERM execution and require a capability/effect-identical semantic doppelganger signature to fail before VM/Linux effect execution; then rebuild and execute the one-file EntityOS.",
+    "outcome": "SUPPORTED_BOUNDED_V0_CONTRACT_NOT_FINAL_PROCESS_TYPE_SURFACE"
+  },
+  "go_unusual_experiment": {
+    "newly_allocated_count": 1,
+    "name": "SEMANTIC_DOPPELGANGER_SIGNATURE",
+    "intervention": "Keep capability and EXTERNAL_COMMUNICATION effect identity but replace the admitted (Int)->Int request-id signature with linux.process.spawn.v0::(String)->Int.",
+    "expected_if_hypothesis": "Lowering rejects HOSTCALL_SIGNATURE_NOT_ADMITTED before any external effect.",
+    "expected_if_counter_reality": "Forged signature still lowers or reaches VM/Linux execution.",
+    "observed": "Rejected before effect execution.",
+    "effect_executed": false,
+    "result": "PASS_DISCRIMINATOR"
+  },
+  "exact_pr_head_evidence": {
+    "workflow_run": 31930333315,
+    "runner": "clay-2",
+    "runner_class": "self-hosted Linux X64",
+    "signature_gate": "PASS_CM_TERM_HOSTCALL_SIGNATURE",
+    "real_process_regression": "PASS_CM_TERM_TYPED_IR_VM_PROCESS_SLICE",
+    "source_to_single_vm_regression": "PASS_CLAY_EXECUTABLE_IR_SINGLE_VM",
+    "vm_unit_regressions": "PASS",
+    "reproducible_onefile_build": "PASS",
+    "frozen_entityos_selftest": "PASS",
+    "entityos_sha256": "eb6b1ebc2fd6b8e2ce9defe89867bb22f879e390fc9255aa6301c4a84b614bf6",
+    "entityos_size_bytes": 8919008,
+    "whole_machine_acceptance": false
+  },
+  "post_merge_product_evidence_and_contradictions": {
+    "exact_merge_head": "14fbd477ad3a2ae1ca6082ea9c21e510f583b258",
+    "self_hosted_single_file_gate_run": 31930445479,
+    "self_hosted_single_file_gate": "PASS",
+    "self_hosted_artifact_sha256": "5dcbecb7982fdefdcc1971cefaf223bcb4f613c824a4db01f53109d3ec545c73",
+    "self_hosted_artifact_size_bytes": 1213311,
+    "self_hosted_artifact_local_retest": "PASS_ENTITYOS_SINGLE_FILE_SMOKE",
+    "contradiction": "The self-hosted entityos-single-file workflow uses tools/build_entityos.py zipapp and exposes a different CLI/artifact identity from the canonical PyInstaller entityos/build_canonical_onefile.py path. This is product-boundary ambiguity, not whole-machine acceptance evidence.",
+    "canonical_frozen_path": "entityos/build_canonical_onefile.py",
+    "legacy_zipapp_path": "tools/build_entityos.py",
+    "current_main_observed": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
+    "current_main_canonical_sandbox_run": 31930505961,
+    "current_main_canonical_sandbox_job": 95124420211,
+    "current_main_canonical_sandbox_result": "BLOCKED_BEFORE_STEP_ZERO",
+    "current_main_canonical_sandbox_blocker": "GitHub reports recent account payments failed or spending limit must be increased; no semantic test step ran."
+  },
+  "protocol_accounting_note": {
+    "new_go_experiment_count": 1,
+    "automatic_preexisting_regression": "The existing entityos-single-file workflow also executed its historical zero-sidecar amputation step after merge. It was not newly designed or allocated by this GO and is treated as a release regression. If the GO cardinality law is interpreted as counting every downstream step labelled unusual regardless of provenance, this creates a strict-cardinality ambiguity that should be removed by classifying recurring release regressions separately from the one newly allocated GO experiment.",
+    "negative_result_preserved": true
+  },
+  "explicitly_open": [
+    "canonical Clay String argv value and direct argv path",
+    "canonical Clay Bytes/Buffer ownership and lifetime semantics",
+    "source-level host intrinsic declaration/signature surface",
+    "env/cwd/stdin/stdout/stderr live streaming",
+    "PTY and separately explicit shell semantics",
+    "single authoritative EntityOS packaging/build identity",
+    "exact current-main canonical frozen rebuild in the required isolated sandbox lane"
+  ],
+  "next_discriminator": "On a refreshed current main, first eliminate EntityOS packager identity ambiguity in favor of the canonical frozen self-contained path without bypassing the sandbox policy; then select the smallest canonical String/argv plus Bytes/Buffer ownership/lifetime type surface and carry one provenance-bound process request through checker -> effectful ExecutableTypedIR -> single ClayVM -> controlled Linux process boundary.",
+  "whole_clay_machine_acceptance": false
+}

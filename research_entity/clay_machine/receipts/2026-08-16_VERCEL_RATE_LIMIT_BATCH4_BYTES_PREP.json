@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "execution_truth": "VERCEL_SANDBOX_ONLY_FOR_EXECUTABLE_CLAIMS",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "observed_external_blocker": {
+    "provider": "Vercel",
+    "class": "DEPLOYMENT_BUILD_RATE_LIMIT",
+    "exact_message": "Deployment rate limited — retry in 24 hours.",
+    "effect": "NO_NEW_EXACT_HEAD_PREVIEW_OR_SANDBOX_CAN_BE_PROMOTED_DURING_LIMIT",
+    "classification": "EXTERNAL_QUOTA_NON_EXECUTION_NOT_PRODUCT_CODE_FAIL"
+  },
+  "replay_safe_execution_lane": {
+    "preferred_pr": 776,
+    "preferred_head_observed": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+    "execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "public_replayable_command_endpoint": false,
+    "source_transport": "DETERMINISTIC_COMMITTED_TREE_TAR_PLUS_HASH_BOUND_GIT_BUNDLE",
+    "promotion": "BLOCKED_UNTIL_ACTUALLY_STARTED_VERCEL_SANDBOX"
+  },
+  "batch4_bytes_candidate": {
+    "pr": 777,
+    "head": "fcf198ceb0318285bad8e2332e21dbec93804ff8",
+    "base": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "source": "fresh-main recomposition of PR741 non-overlapping product blobs",
+    "clayvm_format": "CLAYVM/2_WHEN_BYTES_USED",
+    "bytes_transport": "TYPED_BYTES_PARAMS_AND_RETURNS",
+    "released_memoryview": "MATERIALIZED_PRODUCTION_FAIL_CLOSED_TRAP_BYTES_VIEW_RELEASED",
+    "known_tests_staged": [
+      "tests/clayvm_bytes_v2_gate.py",
+      "tests/clayvm_bytes_released_view_regression.py"
+    ],
+    "vercel_execution": "NOT_STARTED_RATE_LIMIT",
+    "promotion": "UNVERIFIED_CANDIDATE"
+  },
+  "string_process_frontier": {
+    "preferred_existing_pr": 744,
+    "head_observed": "5e29cf8f81b4bf88612580225fe6399e02adda54",
+    "relationship": "overlaps Bytes in clayvm.py and executable_ir_adapter.py",
+    "decision": "DO_NOT_BLIND_MERGE; THREE_WAY_FUSE_ONLY_AFTER_BYTES_EXACT_VERCEL_RESULT",
+    "general_argv_streaming_pty": "OPEN"
+  },
+  "next_executable_batch_when_vercel_capacity_returns": [
+    "run replay-safe build-internal provenance/staging gate",
+    "run PR777 exact Bytes-v2 + released-view regressions",
+    "rerun current VM/IR/provenance baselines",
+    "double-build exact one-file EntityOS and require identical SHA256",
+    "run status/self-test/PATH-without-host-Python/capability/relocation controls",
+    "only if Bytes is green, fuse preferred PR744 String-path hostcall and repeat exact EntityOS batch"
+  ],
+  "vps_or_self_hosted_test_evidence_used": false,
+  "whole_machine_acceptance": false
+}

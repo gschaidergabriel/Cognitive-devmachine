@@ -1,0 +1,84 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "authority_refresh": {
+    "research_head_observed_before_write": "21c3a7412cd32715a8e5d697391f94ffa5921ad6",
+    "program_state_schema": "4.5",
+    "execution_policy": "SANDBOX_ONLY_TESTING",
+    "rule_applied": "VPS/self-hosted/production-host test execution is not promoted as current evidence."
+  },
+  "product_state": {
+    "product_main_observed": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "main_string_semantics": "Current main independently contains canonical String literal/return support through ClayExecutableTypedIR and the single ClayVM, while String parameters/argv remain fail-closed.",
+    "noncanonical_comparison_branch": "clay/go-entityos-string-vm-20260816",
+    "comparison_branch_head": "32e92aacb086c844ceb3a24d340fbaae7f15ba0f",
+    "coordination": "The comparison branch is not promoted over main. Main uses an explicit text/u16 VM constant representation; the comparison branch used a separate str/u32 representation. Equivalent semantics must not become parallel canonical runtimes."
+  },
+  "candidate_artifact_provenance": {
+    "artifact": "EntityOS",
+    "artifact_sha256": "95e8811d7e0ee314ce12fb482232de1fc2fbe332edf4f3019a568c3ea0ec2d4f",
+    "size_bytes": 8918480,
+    "embedded_build_head": "32e92aacb086c844ceb3a24d340fbaae7f15ba0f",
+    "origin_workflow_run": 31930143572,
+    "origin_execution_environment": "self-hosted Linux X64",
+    "origin_evidence_policy": "NOT_PROMOTED_UNDER_SANDBOX_ONLY_TESTING",
+    "allowed_use": "Treat the downloaded bytes only as an external candidate artifact, then independently execute those exact bytes in the isolated local sandbox."
+  },
+  "sandbox_runtime_recheck": {
+    "environment": "active isolated ChatGPT container sandbox",
+    "exact_artifact_sha256_rechecked": "95e8811d7e0ee314ce12fb482232de1fc2fbe332edf4f3019a568c3ea0ec2d4f",
+    "mode": "0755",
+    "status_command": {
+      "single_file_candidate": true,
+      "frozen_runtime": true,
+      "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+      "whole_machine_acceptance": false
+    },
+    "self_test": {
+      "status": "PASS",
+      "frozen_runtime": true,
+      "vm_result": 42,
+      "typed_ir_vm_process_effect": "PASS",
+      "host_process_result": "ENTITYOS_HOST_OK",
+      "whole_machine_acceptance": false
+    },
+    "fresh_clay_string_program": {
+      "source_semantics": "fn greeting() -> String; fn main() -> String",
+      "build_status": "BUILT",
+      "run_status": "EXITED",
+      "result": "ENTITYOS_CURRENT_STRING_OK",
+      "interpretation": "The exact downloaded one-file candidate can compile and execute an admitted Clay String literal/return program through its embedded compiler/IR/VM/ClayOS path in the sandbox."
+    }
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "UTF8_SHELL_DECOY_ROUNDTRIP",
+    "execution_location": "isolated local sandbox",
+    "artifact_sha256": "95e8811d7e0ee314ce12fb482232de1fc2fbe332edf4f3019a568c3ea0ec2d4f",
+    "intervention": "Compile and run one Clay String literal containing shell-looking $(touch <marker>) text plus Unicode through the exact EntityOS build/run path.",
+    "predicted_if_string_is_data": "Exact String roundtrip and marker absent.",
+    "predicted_counter_reality": "Payload is interpreted as host command or corrupted across the compiler/VM boundary.",
+    "result": {
+      "exact_roundtrip": true,
+      "marker_absent": true,
+      "run_status": "EXITED"
+    },
+    "outcome": "RETAIN String-as-data hypothesis for the admitted literal/return subset; no shell authority is implied by String content.",
+    "rollback": "Temporary sandbox files only; removed after test."
+  },
+  "promotion_limits": {
+    "current_canonical_entityos_build": "BLOCKED",
+    "reason": [
+      "The tested candidate is built from a noncanonical comparison branch, not current product main.",
+      "Its build origin was a self-hosted runner and therefore cannot be promoted as current build-validation evidence under PROGRAM_STATE 4.5.",
+      "The active sandbox does not have the complete current private product source tree needed to rebuild current main in-place."
+    ],
+    "whole_machine_acceptance": false,
+    "string_params_argv_bytes_effect_signatures": "OPEN"
+  },
+  "next_sandbox_executable_step": "Materialize the exact latest product-main source tree and pinned PyInstaller toolchain inside an isolated sandbox, rebuild EntityOS twice there, verify reproducible identity, execute status/self-test plus canonical String build/run and strict artifact-admission gates on that exact current-main binary, then continue the smallest canonical String-parameter/argv plus Bytes/Buffer ownership/effect-signature slice without backend-local semantics.",
+  "outcome": "BLOCKED_CURRENT_CANONICAL_SANDBOX_BUILD_INPUT; RETAIN_SANDBOX_ARTIFACT_BEHAVIOR_EVIDENCE; REJECT_SELF_HOSTED_EVIDENCE_PROMOTION"
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_product_main_before": "7a228d3d3fc33a2681e635e8725d44c06518e891",
+  "promoted_product_main": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+  "promotion_method": "NON_FORCE_FAST_FORWARD",
+  "promotion_ancestry": {
+    "ahead_by": 12,
+    "behind_by": 0,
+    "merge_base": "7a228d3d3fc33a2681e635e8725d44c06518e891"
+  },
+  "prepromotion_runtime_evidence": {
+    "receipt": "research_entity/clay_machine/receipts/2026-08-16_VERCEL_BATCH1_ENTITYOS_ONEFILE_VERIFIED.json",
+    "tested_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+    "execution_surface": "VERCEL_SANDBOX",
+    "entityos_single_file": true,
+    "entityos_sha256": "39ae46bbc7a5a1c4f5b5ef9686bdab473169254f31bdb1559bdb80acc801ad2d",
+    "entityos_size_bytes": 9165200,
+    "reproducible_double_build": "PASS",
+    "runtime_status": "PASS",
+    "self_test": "PASS",
+    "copy_unicode_space_relocation": "PASS_BYTE_IDENTICAL_SELFTEST",
+    "canonical_source_to_single_vm": "PASS_20_OF_20",
+    "cm07_package_resolver_v2": "PASS_17_OF_17",
+    "entityos_grant_dirfd": "PASS_4_OF_4",
+    "whole_machine_acceptance": false
+  },
+  "grf": {
+    "observed_reality": "A Vercel sandbox had already built and tested EntityOS from exact source head 40b35996306911076de7bb2686f4c3ed637e6ee1 while product main was its linear ancestor.",
+    "generated_reality": "Promoting the exact tested head by linear fast-forward preserves the already-measured source/artifact relation without creating an untested merge composition.",
+    "strongest_counter_reality": "The hosted GitHub sandbox lane might have recovered and provided an independent exact-head rerun, making promotion less dependent on the existing Vercel receipt.",
+    "discriminator": "Rerun the exact previously zero-step EntityOS Canonical One-File Sandbox job on PR 744 without changing source bytes.",
+    "outcome": "Counter-reality refuted for this cycle: rerun again failed before runner allocation with runner_id=0 and steps=[], with GitHub annotation stating failed recent payments or insufficient spending limit.",
+    "collapse": "PROMOTE_TESTED_HEAD_TO_MAIN; KEEP_GITHUB_HOSTED_LANE_BLOCKED; KEEP_WHOLE_MACHINE_ACCEPTANCE_FALSE"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "ZERO_STEP_RUNNER_REALLOCATION_RECOVERY_DISCRIMINATOR",
+    "baseline": "PR 744 EntityOS Canonical One-File Sandbox run 31957188655 attempt 1 failed before execution with no steps and no runner.",
+    "intervention": "Rerun the exact same job once, preserving source SHA 64530ed97303623849b92f2503abb0fa0ad24598 and ubuntu-latest label.",
+    "treatment_result": "FAIL_BEFORE_RUNNER_ALLOCATION",
+    "runner_id": 0,
+    "steps": [],
+    "annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "rollback": "No repository/source/runtime mutation was made by the failed job; no rollback required.",
+    "classification": "INFRASTRUCTURE_BLOCK_PERSISTS"
+  },
+  "negative_results_preserved": {
+    "github_hosted_entityos_sandbox": "BLOCKED_BILLING_BEFORE_RUNNER_START",
+    "whole_entityos_acceptance": "NOT_PASSED",
+    "artifact_surface_in_current_chat_runtime": "NOT_AVAILABLE_REMOTE_SANDBOX_ARTIFACT_ONLY"
+  },
+  "remaining_frontier": [
+    "verify deterministic source staging fix after tested head",
+    "verify PATH-without-host-Python gate after tested head",
+    "adjudicate EntityOS build provenance candidate",
+    "adjudicate String/Bytes/process candidate through canonical TypedIR and single VM",
+    "close network/data/media/self-hosting/recovery capability gates"
+  ],
+  "next_executable_step": "Use the authorized Vercel sandbox matrix on a fresh descendant of promoted main that contains deterministic source staging plus the PATH lesion and build-provenance candidate, with no VPS/self-hosted substitution; retain exact source SHA, EntityOS SHA256 and artifact/recovery receipts.",
+  "together_api_used": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false
+}

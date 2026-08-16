@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "product_tree": "2064ad6e8c10063ed10f8fb67be88cd82965ca3b",
+  "frontier": ["CM-DATA", "CM-TERM", "CM-05", "CM-08"],
+  "observed_anchor": "Current main exposes only linux.process.spawn.v0::(Int)->Int to canonical process hostcalls; current workspace selects shared Bytes/Buffer plus String/argv/effect signatures as the next discriminator.",
+  "primary_sources": [
+    "https://pubs.opengroup.org/onlinepubs/9799919799/functions/exec.html",
+    "https://component-model.bytecodealliance.org/design/wit.html"
+  ],
+  "source_implication": "POSIX process argv is an array of pointers to null-terminated character strings, while a typed component model independently distinguishes Unicode string from list<u8>/byte buffer. This supports keeping Clay String/argv semantics distinct from arbitrary byte transport.",
+  "hypothesis": "A canonical Clay interface should preserve arbitrary non-NUL octets in a Bytes/Buffer carrier while treating process argv as a distinct string-vector surface with explicit NUL rejection and effect signatures.",
+  "strongest_counterhypothesis": "A host-native bytes argv representation could make a separate Unicode String surface unnecessary for Linux-only v0.1 semantics; premature generalization could add type surface without improving the canonical VM path.",
+  "discriminating_experiment": {
+    "name": "NUL_INVALID_UTF8_HOST_BOUNDARY",
+    "count": 1,
+    "context": "LOCAL_ISOLATED_HOST_SEMANTICS_SANDBOX_NOT_EXACT_REPO_VM",
+    "cases": {
+      "invalid_utf8_bytes_argv": {
+        "payload_hex": "ff41fe",
+        "returncode": 0,
+        "stdout_hex": "ff41fe",
+        "preserved": true
+      },
+      "nul_str_argv": {
+        "result": "ValueError:embedded null byte",
+        "rejected": true
+      },
+      "nul_bytes_argv": {
+        "result": "ValueError:embedded null byte",
+        "rejected": true
+      }
+    },
+    "status": "PASS_HOST_BOUNDARY_DISCRIMINATOR",
+    "promotion_limit": "This establishes host-boundary semantics only; it is not evidence that ClayVM/TypedIR already implements Bytes, argv, or String process transport."
+  },
+  "parallel_fusion": {
+    "research_main_seen": "fb332eb746425e466afdc2cee5de22ac3a7dd5ec",
+    "candidate_pr": 744,
+    "candidate_head": "81f1b99c70af56d9459d81190a1244484748d32f",
+    "decision": "FUSE_NOT_DUPLICATE",
+    "note": "PR #744 is the retained implementation lane for the path-only String hostcall candidate; no second implementation PR was opened from this worker."
+  },
+  "independent_full_repo_replication": {
+    "branch": "clay/go-entityos-replicate-20260816-1640",
+    "head": "5efcebe8ca6d74dce3fce5ad883e1f4b4fa9e211",
+    "workflow_run": 31939727330,
+    "job": 95147046707,
+    "runner_label": "ubuntu-latest",
+    "runner_id": 0,
+    "steps_executed": 0,
+    "status": "BLOCKED_BEFORE_RUNNER_START",
+    "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased.",
+    "code_result": "NONE"
+  },
+  "entityos": {
+    "artifact": "NOT_BUILT_IN_THIS_GO_CYCLE",
+    "reason": "The permitted full-repository GitHub-hosted sandbox was blocked before runner allocation and the active local container had no authenticated private-repository checkout; no exact EntityOS build/self-test/copy-run was therefore executed.",
+    "next_executable_action": "Restore an allowed actually-started isolated full-repository runner, then execute the retained PR #744 exact-head gate: canonical String-path discriminator and existing baselines -> reproducible one-file EntityOS build -> exact EntityOS self-test -> moved-copy run -> artifact hash. If PR #744 passes, continue to canonical argv aggregate plus Bytes/Buffer ownership/lifetime rather than interpreting the path-only String contract as CM-TERM completion."
+  },
+  "outcome": "DEFER",
+  "whole_clay_machine_completion": "NOT_CLAIMED"
+}

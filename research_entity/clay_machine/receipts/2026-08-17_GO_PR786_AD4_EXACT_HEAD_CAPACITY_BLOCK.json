@@ -1,0 +1,76 @@
+{
+  "schema": "ClayEntityOSGoExactHeadClosure/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "exact_head_observed": "ad4a7dff6db3132f11c61e553ee4c762c0c378a2",
+  "source_hardening_present": {
+    "stage_v5_raw_git_blob_provenance": true,
+    "shallow_boundary_reconstruction": true,
+    "sandbox_sdk_pinned_2_9_2": true,
+    "sandbox_ephemeral_persistent_false": true,
+    "single_owner_build_execution": true,
+    "full_stdout_machine_validation": true,
+    "global_unusual_experiment_accounting_consumed_1_of_1": true,
+    "runner_regression_acceptance_only": true,
+    "new_unusual_experiment_count": 0,
+    "one_file_builder_rejects_preexisting_sidecars": true,
+    "one_file_builder_requires_exactly_one_regular_nonsymlink_entityos": true,
+    "one_file_builder_applies_same_gate_to_repro_build": true,
+    "one_file_sidecar_unit_regressions_added": true,
+    "relocation_copy_move_rename_sha_bound": true,
+    "relocation_cmp_byte_identity_required": true,
+    "relocation_runtime_output_identity_required": true,
+    "runner_requires_relocation_markers_and_digest_identity": true
+  },
+  "source_delta_commits_from_this_worker": [
+    "c0b60424b3163884090dafe221128b8843941ba7",
+    "8ce4ed5ee82066e2bad5688896b02f8bf82afd26"
+  ],
+  "executable_verification": {
+    "exact_head_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX_CREATION",
+    "exact_head_sandbox_started": false,
+    "exact_head_offline_matrix_started": false,
+    "exact_head_entityos_built": false,
+    "exact_head_entityos_sha256": null,
+    "exact_head_runtime_acceptance": "UNVERIFIED"
+  },
+  "strongest_current_cycle_empirical_sandbox": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "scope": "ABSORBED_PR781_HISTORICAL_EXACT_HEAD_ONLY",
+    "raw_tree_source_binding": "PASS",
+    "system_toolchain_provision": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "failure": "PINNED_PYTHON_TOOLCHAIN_HEREDOC_SYNTAX",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false,
+    "sandbox_stopped": true
+  },
+  "cm_data_boundary": {
+    "owned_immutable_bytes": "ADMITTED",
+    "mutable_or_borrowed_bytes_without_epoch": "FAIL_CLOSED",
+    "released_view": "FAIL_CLOSED",
+    "canonical_buffer_lease_epoch_path": "OPEN_SEMANTIC_FRONTIER_AFTER_CURRENT_ACCEPTANCE_RUN"
+  },
+  "coordination": {
+    "pr781": "CLOSED_UNMERGED_SUPERSEDED",
+    "pr786": "SINGLE_PREFERRED_PROMOTION_LANE",
+    "cm_term": "SERIALIZED_FOLLOW_ON_AFTER_PR786_EXACT_SANDBOX_EVIDENCE",
+    "no_new_unusual_experiment_started": true
+  },
+  "next_executable_step": "On the exact then-current PR786 head, when Vercel actually admits a build, run exactly one build-internal ephemeral regression/acceptance Sandbox with zero new unusual experiments. Require Stage-v5 exact source binding and shallow-safe provenance, repaired pinned toolchain, DENY_ALL before the offline matrix, Bytes-v2/released-view regressions, CM-07 and canonical source-to-single-VM gates, exact-one-file EntityOS output, pristine byte-identical twin builds and digest, status/self-test/no-host-Python/state/restart/capability gates, copy/move/rename relocation SHA/cmp/runtime-output identity, and successful Sandbox stop. Persist the exact EntityOS digest before promotion.",
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT",
+  "whole_entityos_acceptance": false,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "production_host_test_evidence_used": false,
+  "together_api_used": false,
+  "final_paid_training_attempted": false
+}

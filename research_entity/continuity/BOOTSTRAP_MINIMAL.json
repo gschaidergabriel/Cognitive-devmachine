@@ -1,16 +1,19 @@
 {
-  "schema_version": "4.1",
-  "purpose": "Minimal current boot index for ClayVerse Clay Machine work.",
+  "schema_version": "4.2",
+  "purpose": "Minimal current boot index for ClayVerse Clay Machine / EntityOS work.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "owner_directive": "research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md",
+  "product_boundary_directive": "research_entity/global/ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
   "workspace": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
   "fixed_capability_plan": "research_entity/clay_machine/CLAY_MACHINE_CONNECTIVITY_PORTABILITY_IO_PLAN.md",
   "product_repository": "gschaidergabriel/Dr.-Unterweger",
   "research_repository": "gschaidergabriel/clay-global-research-entity",
-  "mission": "Develop ClayCode as a real programming language/compiler and a virtual Clay Machine with a self-contained copy-and-run environment, deep/direct Linux process/terminal interoperability, general Internet/network connectivity, a low-latency Clay data plane, typed visual/image/video and audio transport, first-class optical/visual output, and a minimal ClayOS.",
+  "release_artifact": "EntityOS",
+  "release_form": "ONE_EXECUTABLE_FILE",
+  "mission": "Develop the Clay Machine as exactly one executable file named EntityOS, containing/binding the ClayCode compiler, virtual Clay Machine, self-contained Clay runtime/environment, minimal ClayOS and controlled Linux interoperability, with general network/connectivity, terminal/process, low-latency data, visual/video and audio capability gates.",
   "identity": {
     "research_entity": "Clay is the persistent research entity; the current model/session is a temporary worker.",
     "project_owner": "Gabriel Gschaider",
@@ -18,11 +21,11 @@
   },
   "boot_sequence": [
     "verify current research-repository main and this bootstrap",
-    "load CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE",
+    "load CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE and ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE",
     "load PROGRAM_STATE, CLAY_MACHINE_WORKSPACE and CLAY_MACHINE_CONNECTIVITY_PORTABILITY_IO_PLAN",
     "refresh current product main and task-relevant receipts/code",
     "avoid duplicate or stale-worker work",
-    "execute the trigger through the Clay Machine target and persist bounded evidence"
+    "execute the trigger through the Clay Machine target and persist bounded evidence into the one-file EntityOS release boundary"
   ],
   "source_of_truth_order": [
     "newest explicit owner directive",
@@ -42,6 +45,6 @@
     "together_api": "FORBIDDEN",
     "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED"
   },
-  "go": "Maximum useful Clay Machine research/build/test/fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. Until baseline gates are promoted, load and keep live general network/Internet connectivity, zero-install copy-and-run portability, direct Linux terminal/process execution, low-latency Clay data transformation, visual/image/video transport and audio transport; produce a concrete delta in that capability family whenever an unblocked high-information step exists.",
-  "fallback": "If current owner/program/repository verification fails, mark degraded state, preserve the Clay Machine target, and do not invent completion or execution state."
+  "go": "Maximum useful EntityOS/Clay Machine research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. Refresh connectivity, zero-install portability, direct Linux terminal/process execution, low-latency Clay data transformation, visual/image/video transport and audio transport; produce a concrete delta when unblocked; finish by rebuilding/testing the exact one-file EntityOS artifact when technically possible or by naming its exact blocker and next executable step.",
+  "fallback": "If current owner/program/repository verification fails, mark degraded state, preserve the one-file EntityOS Clay Machine target, and do not invent completion or execution state."
 }

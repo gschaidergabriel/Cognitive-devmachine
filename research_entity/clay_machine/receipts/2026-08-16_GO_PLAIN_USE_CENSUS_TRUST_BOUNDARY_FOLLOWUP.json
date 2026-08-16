@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16-GO-PLAIN-USE-CENSUS-TRUST-BOUNDARY-FOLLOWUP",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "status": "BLOCKED_SOURCE_ADMISSION_OR_EPHEMERAL_EXECUTION",
+  "observed_product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "supersedes_status_only": "2026-08-16-GO-PLAIN-USE-CORPUS-COUNTEREVIDENCE-AND-CENSUS active-candidate fields; earlier observations remain historical evidence",
+  "canonical_counterevidence": {
+    "plain_use_source": "claycode/frank_memory.clay",
+    "plain_use_source_sha": "7206577ab67213ba7393c51e0e49e264995455c6",
+    "plain_use": "frank.entity.Frank",
+    "parent_module_source": "claycode/frank_entity.clay",
+    "parent_module_source_sha": "e90e88ac85fe77a3d7358594505121b3d9cf23ee",
+    "parent_module": "frank.entity",
+    "declared_name_kind": "entity",
+    "declared_name": "Frank",
+    "conclusion": "UseDecl.mode=MODULE does not by itself prove that the complete qid is an exact module identity. Path shape is insufficient semantic authority."
+  },
+  "product_candidate_outcomes": [
+    {
+      "pr": 669,
+      "state": "CLOSED_UNMERGED",
+      "reason": "coordination duplicate after canonical resolver #660 landed"
+    },
+    {
+      "pr": 687,
+      "state": "CLOSED_UNMERGED",
+      "reason": "symbol expansion was semantically premature after corpus counterevidence"
+    },
+    {
+      "pr": 674,
+      "state": "CLOSED_UNMERGED",
+      "head_observed": "07f0bf7bc19e398f4820cd346a58190f98e596c6",
+      "reason": "plain-use fail-closed correction not promoted; exact-head candidate workflows were cancelled during live branch churn"
+    },
+    {
+      "pr": 688,
+      "state": "CLOSED_UNMERGED",
+      "head_observed": "6d091c01abed01932b9021ba072d09c300f444dd",
+      "reason": "imported-symbol candidate deliberately deferred at source-admission / persistent self-hosted runner trust boundary"
+    },
+    {
+      "pr": 690,
+      "state": "CLOSED_UNMERGED",
+      "head_observed": "66b73e657a41297f9f9873d6b4b25d6e71a2b1fd",
+      "candidate": "ClayPlainUseCensus/v1 measurement only",
+      "reason": "persistent self-hosted execution was not admitted; replacement GitHub-hosted job failed before step 1, so no census result exists"
+    }
+  ],
+  "census_execution_evidence": {
+    "initial_self_hosted_run": 31923550531,
+    "initial_state": "QUEUED_UNASSIGNED_NOT_EXECUTED_AT_WITHDRAWAL",
+    "ephemeral_head": "66b73e657a41297f9f9873d6b4b25d6e71a2b1fd",
+    "ephemeral_run": 31923700580,
+    "ephemeral_job": 95107717149,
+    "requested_label": "ubuntu-latest",
+    "result": "FAILURE_BEFORE_STEP_1",
+    "job_steps_observed": 0,
+    "runner_name_observed": "",
+    "job_logs": "UNAVAILABLE_404_NO_BLOB",
+    "interpretation": "Infrastructure/admission failure only. No candidate Python or Clay parser/test code executed, therefore no semantic PASS/FAIL and no census counts are claimed."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "id": "PREFIX_PACKAGE_PROVIDER_SHADOW_REVERSAL",
+    "count": 1,
+    "outcome": "REFUTED_PREFIX_PROVIDER_AUTHORITY",
+    "new_unusual_experiment_after_counterevidence": 0
+  },
+  "grf_collapse": {
+    "retain": [
+      "Merged #660 exact module-provider resolution is bounded evidence for its tested provider contract, not proof of universal plain-use semantics.",
+      "The authorized corpus requires at least one non-exact-module interpretation candidate for a plain use.",
+      "A corpus-wide plain-use census is a high-information measurement before selecting a binding contract."
+    ],
+    "reject": [
+      "Every plain MODULE use qid is necessarily an exact module identity.",
+      "A failed pre-step GitHub-hosted job is evidence against the census implementation or Clay semantics.",
+      "Model-generated candidate bytes may be sent to a persistent self-hosted Clay runner merely because a pull-request workflow requests it."
+    ],
+    "defer": [
+      "Exact module versus parent-declaration precedence for plain use.",
+      "Wildcard exported-name visibility and collision policy.",
+      "Checker/linker integration and any relaxation of the #648 executable-use fence."
+    ]
+  },
+  "next_discriminator": "Establish an explicit source-admission path or a genuinely available ephemeral execution lane for model-generated research candidates. Then execute ClayPlainUseCensus/v1 against the authority-bound current corpus and publish exact shape counts. Use those counts only to discriminate candidate name-binding contracts; dual-role/unsupported cases remain fail-closed. After one contract is selected, integrate one provenance-bound import surface into the nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. Keep #648 closed until end-to-end executable closure is proven.",
+  "claim_boundary": {
+    "whole_clay_machine_pass": false,
+    "plain_use_semantics_selected": false,
+    "census_executed": false,
+    "census_counts_known": false,
+    "symbol_binding_authorized": false,
+    "execution_admission": false,
+    "effect_authority": false,
+    "persistent_self_hosted_model_generated_execution": false,
+    "together_used": false,
+    "final_training_authorized": false
+  }
+}

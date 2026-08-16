@@ -1,0 +1,75 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "research_head_before_write": "fee86dc2eb03774f7880857e4a315fd77abbd1de",
+  "product_main_observed": "399ee6e223617efcda19e09d5b2ce271258391b1",
+  "execution_policy": {
+    "directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "policy": "SANDBOX_ONLY_TESTING",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_vps_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN"
+  },
+  "product_delta": {
+    "string_path": "PR #719 merged; canonical String literals/returns now traverse ClayExecutableTypedIR/v1 -> adapter -> single serialized ClayVM while String parameters/argv remain fail-closed",
+    "current_main_sandbox_rebuild": "commit 399ee6e223617efcda19e09d5b2ce271258391b1 changes EntityOS semantic rebuild execution to ubuntu-latest isolated GitHub-hosted sandbox"
+  },
+  "sandbox_execution_observation": {
+    "canonical_main_workflow": "EntityOS Semantic One-File Rebuild Sandbox",
+    "workflow_run": 31930154546,
+    "job": 95123710315,
+    "status": "FAIL_BEFORE_FIRST_STEP",
+    "runner_label": "ubuntu-latest",
+    "failure_message": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the Billing & plans section in your settings.",
+    "code_execution_started": false,
+    "interpretation": "INFRASTRUCTURE_BILLING_BLOCKER_NOT_CODE_RESULT"
+  },
+  "independent_replication": {
+    "branch": "go/entityos-sandbox-canonical-20260816",
+    "workflow_run": 31930148511,
+    "job": 95123594258,
+    "runner_label": "ubuntu-24.04",
+    "status": "FAIL_BEFORE_FIRST_STEP",
+    "same_billing_failure": true,
+    "cleanup": "duplicate branch workflow removed after canonical main sandbox workflow appeared"
+  },
+  "entityos_artifact": {
+    "current_main_exact_sandbox_build": "BLOCKED",
+    "current_main_build_head": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "last_locally_available_candidate_build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "last_locally_available_candidate_sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "last_candidate_build_provenance_under_new_policy": "HISTORICAL_SELF_HOSTED_BUILD; NOT CURRENT RELEASE EVIDENCE",
+    "whole_machine_acceptance": false
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_worker_go_cycle": 1,
+    "name": "FROZEN_ENTITYOS_EMPTY_ENV_POISONED_HOST_PYTHON",
+    "execution_boundary": "LOCAL_ISOLATED_SANDBOX",
+    "artifact_build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "baseline_selftest_sha256": "f2558a959a26bb7afba37fe22fa5406fd08317a801310d1965e2ba7c4a4bbded",
+    "intervention_selftest_sha256": "f2558a959a26bb7afba37fe22fa5406fd08317a801310d1965e2ba7c4a4bbded",
+    "intervention": "empty environment with isolated HOME/TMPDIR, PATH=/nonexistent and deliberately invalid PYTHONHOME/PYTHONPATH",
+    "result": "BYTE_IDENTICAL_SELF_TEST",
+    "rollback": "PROCESS_ENVIRONMENT_ONLY",
+    "promotion_scope": "one-file portability evidence for the locally available b32 candidate only; not exact-current-main release evidence"
+  },
+  "grf": {
+    "observed_anchor": "Sandbox-only execution is now authoritative, current main contains a hosted-sandbox rebuild path, but GitHub-hosted jobs cannot start because of account billing/spending state.",
+    "hypothesis": "The immediate obstacle to obtaining fresh exact-main EntityOS evidence is sandbox execution availability rather than the current String/VM code path.",
+    "strongest_counterhypothesis": "A different isolated sandbox with private-repository source access could build and test current main without GitHub-hosted Actions billing.",
+    "falsifier": "Start any owner-compliant isolated sandbox that can fetch exact private product head, run the canonical double one-file build, execute current gates, and emit exact artifact/receipt evidence.",
+    "outcome": "RETAIN_INFRASTRUCTURE_BLOCKER"
+  },
+  "release_blockers": [
+    "No exact-current-main EntityOS build/test can currently start in the canonical GitHub-hosted isolated sandbox because account billing/spending state blocks runner allocation.",
+    "VPS/self-hosted runners cannot be used as fallback under the active owner directive.",
+    "Whole-machine acceptance remains open; historical SQLite/WAL persistence findings require a sandbox-executable fixed-runtime/trust-anchor/lifecycle replacement before release promotion.",
+    "String parameters/argv, canonical Bytes/Buffer ownership/lifetime and effectful process/data semantics remain open after the merged String-literal/return slice."
+  ],
+  "next_executable_step": "Restore an actually-startable isolated sandbox with private-repository checkout capability (for example by resolving GitHub Actions billing/spending availability or using another owner-compliant isolated sandbox). Then build exact product main with entityos/build_canonical_onefile.py, require bit-identical double freeze, run source->TypedIR->single-VM, strict ClayOS artifact admission, initial grant, UnifiedDB, process capability, crash/restart/persistence and exactly one bounded unusual experiment. Do not substitute a VPS/self-hosted runner.",
+  "research_state": "SUPPORTED_INFRASTRUCTURE_BLOCKER_WITH_LOCAL_SANDBOX_PORTABILITY_EVIDENCE",
+  "release_state": "NOT_PASSED"
+}

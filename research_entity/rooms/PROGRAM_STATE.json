@@ -1,8 +1,9 @@
 {
-  "schema_version": "4.2",
+  "schema_version": "4.3",
   "program_id": "clayverse-clay-machine-only",
   "status": "ACTIVE",
   "owner_directive": "research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md",
+  "product_boundary_directive": "research_entity/global/ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE.md",
   "current_stage": "CLAY_MACHINE",
   "stage_order": ["CLAY_MACHINE"],
   "target": {
@@ -10,18 +11,20 @@
     "product_repository": "gschaidergabriel/Dr.-Unterweger",
     "workspace": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
     "fixed_capability_plan": "research_entity/clay_machine/CLAY_MACHINE_CONNECTIVITY_PORTABILITY_IO_PLAN.md",
-    "mission": "ClayCode as a real programming language with compiler, virtual Clay Machine, self-contained zero-install Clay environment, deep/direct Linux interoperability, general Internet/network connectivity, direct process/terminal execution, low-latency Clay data transformation, typed visual/image/video and audio transport, first-class optical/visual signal output, and a minimal ClayOS"
+    "release_artifact": "EntityOS",
+    "release_form": "ONE_EXECUTABLE_FILE",
+    "mission": "ClayCode as a real programming language with compiler, virtual Clay Machine, self-contained runtime/environment, deep/direct Linux interoperability, general Internet/network connectivity, direct process/terminal execution, low-latency Clay data transformation, typed visual/image/video and audio transport, first-class optical/visual signal output, and a minimal ClayOS, delivered as exactly one executable file named EntityOS"
   },
   "stage_gates": {
     "CLAY_MACHINE": {
-      "label": "Clay Machine",
+      "label": "Clay Machine / EntityOS",
       "status": "IN_PROGRESS",
       "progress_source": {
         "kind": "work_packages",
         "path": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
         "field": "work_packages"
       },
-      "completion_law": "PASS only when the canonical ClayCode language/compiler/runtime executes real programs in the virtual Clay Machine; the Clay environment interacts with Linux through explicit typed boundaries; the minimal ClayOS boots/runs its defined scope with reproducible tests and receipts; ClayCode emits/receives a canonical typed visual/optical signal through a deterministic sink and at least one concrete adapter; a copied self-contained Clay environment starts on a fresh compatible Linux target without a mandatory installation step; a canonical Clay program connects to a real network/Internet endpoint; a canonical Clay process/PTY path executes a real Linux executable without an implicit hidden shell/harness; representative ordinary ingress data is transformed into Clay-native typed streams with measured low overhead; image/video traverse the visual plane; and audio traverses its declared media boundary. Component, synthetic or out-of-path host success does not imply whole-machine PASS."
+      "completion_law": "PASS only when the canonical ClayCode language/compiler/runtime executes real programs in the virtual Clay Machine and all currently accepted Clay Machine capability gates are satisfied by the exact delivered artifact, which must be one executable file named EntityOS. The artifact must carry/bind the Clay environment and minimal ClayOS, cross Linux through explicit typed boundaries, provide the accepted typed visual/optical path, real network path, direct Linux process path, low-latency data path, image/video and audio transport, state/recovery/provenance requirements, and copy-and-run on a fresh compatible Linux target without mandatory installation or companion runtime files. Runtime-generated user state is permitted data, not a release sidecar. Component, synthetic, source-tree or out-of-path host success does not imply whole-machine PASS."
     }
   },
   "superseded_programs": {
@@ -29,7 +32,7 @@
     "programs": ["FRANK_V0_1", "UCM2_ONLY", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_FRANK"],
     "law": "Legacy Frank/self.root/UCM2/harness paths may contribute bounded implementation or regression evidence when semantics still match, but they do not select active work or define current completion."
   },
-  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS/connectivity/portability/terminal/data-plane/media/typed-visual-signal code, tests, architecture, work items, or explicit negative results. Exact go must load the fixed capability plan, preserve each capability stream's status/blockers, include them in frontier selection, and produce a concrete research/falsification/build/test/runtime delta in that family whenever an unblocked high-information step exists.",
+  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS/connectivity/portability/terminal/data-plane/media/typed-visual-signal code, tests, architecture, work items, or explicit negative results inside the one-file EntityOS product boundary. Exact go must load the fixed capability plan, preserve each capability stream's status/blockers, include them in frontier selection, and produce a concrete research/falsification/build/test/runtime delta whenever an unblocked high-information step exists; it must finish by rebuilding/testing EntityOS when technically possible or naming the exact EntityOS blocker and next executable step.",
   "authority_rules": {
     "grf": "reasoning_framework_only",
     "together": "FORBIDDEN",
@@ -41,5 +44,5 @@
     "shell_behavior": "NOT_IMPLICIT_LANGUAGE_AUTHORITY",
     "unknown_data_format": "OPAQUE_TYPED_BYTES_OR_FAIL_CLOSED_NOT_GUESS"
   },
-  "last_updated": "2026-08-16T10:30:00+07:00"
+  "last_updated": "2026-08-16T12:08:00+07:00"
 }

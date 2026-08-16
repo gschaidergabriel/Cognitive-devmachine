@@ -1,0 +1,61 @@
+{
+  "schema": "ClayMachineGoEntityOSSandboxRebuildReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY_TESTING",
+  "product_boundary": "ONE_EXECUTABLE_FILE_NAMED_EntityOS",
+  "observed": {
+    "product_repo_main_head_at_final_refresh": "4249f30a92133b226347f82ed61809595cdb80e9",
+    "candidate_runtime_source_commit": "8cab7c37654fe24ccfeb1e6cb0a5d4a75f6e75d3",
+    "candidate_parent_artifact_sha256": "287a5f73f4cb026c32a63187504fccbd397136e310ef7688648ddcd15baba281",
+    "candidate_parent_artifact_bytes": 1213474,
+    "local_rebuild_path": "/mnt/data/EntityOS",
+    "local_rebuild_sha256": "2bd08aa3ba78db9d801b131a3f722857693cff7e807dd3dab8c42290a55ec0c5",
+    "local_rebuild_bytes": 1248891,
+    "local_rebuild_source": "source tree extracted from the successful GitHub Actions EntityOS artifact for 8cab7c37654fe24ccfeb1e6cb0a5d4a75f6e75d3; not a fresh checkout of current main",
+    "local_rebuild_self_test_status": "PASS_ENTITYOS_SINGLE_FILE_SMOKE",
+    "local_rebuild_acceptance_field": "CANDIDATE_NOT_FINAL",
+    "whole_clay_machine_acceptance": false
+  },
+  "runtime_checks": {
+    "single_clayvm_executes": true,
+    "minimal_clayos_present": true,
+    "controlled_linux_interop": true,
+    "source_provenance_present": true,
+    "vm_blob_hash_bound": true,
+    "host_process_int_request_control": "PASS_RETURN_CODE_0_RECEIPT_0",
+    "host_process_string_request_id_rejection": "PROCESS_HOSTCALL_REQUEST_ID_TYPE"
+  },
+  "ci_observation": {
+    "branch": "go/string-process-path-v1-20260816-1656",
+    "head_observed": "dcbcc82392b3a361fe6e4ea86e85088dec34b910",
+    "affected_runs": [31940563282, 31940563303, 31940563356],
+    "classification": "BLOCKED_BEFORE_RUNNER_START_NOT_CODE_RESULT",
+    "annotation": "GitHub reported account payments/spending-limit state and did not start the jobs.",
+    "evidence_rule": "Do not classify these workflow conclusions as code FAIL or PASS."
+  },
+  "runtime_delta_identity": {
+    "commit_8cab": "adds exact Python int request-id fences at HostProcessVMHost receipt and spawn boundaries",
+    "commit_dcbcc": "adds only tests; no runtime file change",
+    "inference": "the downloaded 8cab runtime artifact exercises the same host_process_vm runtime implementation as dcbcc, but is not an exact dcbcc artifact and does not carry dcbcc source identity"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ENTITYOS_UNICODE_SPACE_RELOCATION",
+    "baseline": "downloaded 8cab EntityOS self-test PASS at original sandbox path",
+    "intervention": "copy the exact artifact without byte changes into a path containing Unicode plus spaces and execute self-test there",
+    "predicted_failure_world": "path-sensitive self-containment or launch assumptions cause hash drift or runtime failure",
+    "observed": "sha256 unchanged; exit 0; PASS_ENTITYOS_SINGLE_FILE_SMOKE",
+    "rollback": "temporary relocation directory deleted",
+    "outcome": "REFUTED_PATH_SENSITIVITY_FOR_THIS_CANDIDATE_ONLY"
+  },
+  "counterevidence_and_limits": [
+    "The rebuilt EntityOS is not an exact-current-main artifact.",
+    "The artifact explicitly reports CANDIDATE_NOT_FINAL and whole-machine acceptance is not established.",
+    "The current canonical Clay String/Bytes/argv/effect path remains open.",
+    "GitHub-hosted CI billing prevents exact-head runner evidence until an actually-started isolated sandbox is available."
+  ],
+  "highest_value_blocker": "Select and implement the smallest canonical Clay String/Bytes/argv plus effect-signature surface that can pass provenance-bound process input through the canonical checker/executable TypedIR/single ClayVM/ClayOS host-process boundary without backend-local semantics.",
+  "next_sandbox_executable_step": "On an actually-started isolated sandbox, run the exact-head request-id type gate plus CM-TERM VM process, strict ClayOS artifact launch and canonical EntityOS one-file gates; then implement the smallest source-authorized String/Bytes/argv signature only if those exact-head controls are green.",
+  "research_outcome": "SUPPORTED_PARTIAL_DELTA_NOT_RELEASE_PASS"
+}

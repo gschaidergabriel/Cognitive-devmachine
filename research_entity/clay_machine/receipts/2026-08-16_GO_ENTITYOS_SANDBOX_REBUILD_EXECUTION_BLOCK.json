@@ -1,0 +1,36 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "status": "SUPPORTED_NEGATIVE_RESULT",
+  "active_program": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "observed_product_head": "777895270357908e49a079fb2c308844c6469b83",
+  "owner_execution_policy": "SANDBOX_ONLY_TESTING",
+  "observations": [
+    "GitHub-hosted EntityOS semantic rebuild run 31930376620 for head 777895270357908e49a079fb2c308844c6469b83 completed FAILURE before any workflow step executed.",
+    "The active local isolated sandbox does not have PyInstaller installed; attempting to install pyinstaller==6.21.0 failed because external package resolution/network DNS was unavailable.",
+    "A previously produced frozen one-file EntityOS from source head 950d1642437de5d940035cd04c90d50e8d34a64e was re-executed only inside the local isolated sandbox: status PASS, self-test status PASS with vm_result=42, and a String Clay program returned ENTITYOS_STRING_OK through ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS.",
+    "Git compare 950d1642437de5d940035cd04c90d50e8d34a64e..777895270357908e49a079fb2c308844c6469b83 reports only .github/workflows/entityos-semantic-onefile-rebuild-vps.yml changed; no product-code file changed in that interval.",
+    "The 950d artifact build provenance came from a self-hosted runner and therefore is not admissible as current build-validation evidence under the newer sandbox-only owner policy, even though local sandbox re-execution is retained as bounded binary-behavior evidence."
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "name": "argv0_identity_perturbation",
+    "artifact_scope": "older frozen EntityOS candidate",
+    "intervention": "Execute status with a caller-supplied Unicode/metacharacter argv[0] while keeping the executable and command unchanged.",
+    "baseline_vs_intervention": "BYTE_IDENTICAL_STATUS",
+    "baseline_status_rc": 0,
+    "intervention_status_rc": 0,
+    "status_sha256": "199805d542bab765b372db34019bad3980b7d41361d8196ddd0a8d5dea4d526a",
+    "interpretation": "Caller argv[0] perturbation did not affect EntityOS status behavior. This is robustness evidence only and does not establish typed ClayVM argv support."
+  },
+  "candidate_reality": "Current product semantics can be rebuilt as the frozen one-file EntityOS in an isolated sandbox once the pinned freezer/toolchain is available there.",
+  "counter_reality": "The semantic source may still hide a frozen-build or runtime dependency defect; previous self-hosted success cannot falsify this under the current policy.",
+  "falsifier": "An actually-started isolated sandbox must install or already contain the pinned PyInstaller toolchain, build exact current head twice with matching SHA-256, execute the exact EntityOS file, and pass normal product gates.",
+  "exact_blocker": "NO_ADMISSIBLE_CURRENT_HEAD_FROZEN_BUILD_EXECUTION_PATH: GitHub-hosted sandbox fails before steps; active local sandbox lacks PyInstaller 6.21.0 and cannot resolve/install it.",
+  "next_executable_action": "Provide PyInstaller 6.21.0 to an isolated sandbox without relying on a forbidden self-hosted/VPS test runner (for example via a pre-provisioned sandbox image or allowed offline wheel), then rebuild entityos/build_canonical_onefile.py at exact current head and run normal gates. After that, continue the shared semantic frontier: canonical Bytes/Buffer ownership+lifetime plus String/argv/effect signatures through TypedIR and the single VM.",
+  "entityos_artifact_state": "BLOCKED_CURRENT_HEAD_BUILD",
+  "whole_clay_machine_acceptance": false
+}

@@ -1,0 +1,67 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_X11_DISPLAY_REACHABILITY_FIX_VERIFIED",
+  "observed_at_utc": "2026-08-16T05:45:00Z",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "FIX_VERIFIED_TESTED_BOUNDARY_RELEASE_OPEN",
+  "resolves_local_negative_receipt": "2026-08-16_GO_ENTITYOS_X11_DISPLAY_AVAILABILITY_NEGATIVE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "tested_product_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+  "product_change": "fix(entityos): probe X11 reachability before GUI boot",
+  "tested_binary": {
+    "name": "EntityOS",
+    "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "mode": "0755",
+    "build_reproducibility_sha256_match": true
+  },
+  "self_hosted_exact_head_gate": {
+    "workflow_run_id": 31929651652,
+    "status": "SUCCESS",
+    "artifact_id": 9258908699,
+    "evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_machine_acceptance": false
+  },
+  "local_exact_artifact_regression": {
+    "environment": {
+      "DISPLAY": ":0",
+      "x11_endpoint_openable": false
+    },
+    "status_build_head_match": true,
+    "self_test": "SELFTEST_PASS",
+    "fresh_first_launch": {
+      "exit_code": 73,
+      "stderr": "ENTITYOS_INITIAL_GRANT_REQUIRED",
+      "grant_created": false
+    },
+    "isolated_test_grant_then_launch": {
+      "exit_code": 0,
+      "stderr_empty": true,
+      "grant_created": true,
+      "result": "HEADLESS_ENTITYOS_SURFACE_STARTED"
+    }
+  },
+  "grf_collapse": {
+    "observed_reality": "The current EntityOS head now tests actual X11 reachability before choosing GUI boot; the previously observed stale/unreachable DISPLAY case falls back to the declared non-graphical first-start/headless path.",
+    "preferred_hypothesis": "The availability/precondition mismatch that caused ENTITYOS_X11_DISPLAY_OPEN_FAILED on a stale DISPLAY is repaired for the tested boundary.",
+    "strongest_counterhypothesis": "Other display failure windows can still exist after the reachability probe, so this does not prove complete GUI race/recovery behavior.",
+    "falsifier": "Disconnect or invalidate the X endpoint after a successful reachability probe but before/during visual shell creation and verify explicit fail-closed/recovery semantics.",
+    "outcome": "PROMOTE_TO_VERIFIED_FOR_STALE_DISPLAY_BOUNDARY",
+    "confidence": "HIGH_FOR_TESTED_STALE_DISPLAY_BOUNDARY"
+  },
+  "unusual_experiment": {
+    "current_exact_head_gate_count": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "result": "BYTE_IDENTICAL",
+    "note": "The local stale-DISPLAY regression is an ordinary compatibility falsifier, not an additional unusual experiment."
+  },
+  "current_frontier_after_fix": "Whole-machine acceptance remains false. Continue with the canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface shared by CM-DATA and CM-TERM, then route one provenance-bound process/data request through typed/effect IR and the single ClayVM before rebuilding EntityOS.",
+  "authority": {
+    "whole_machine_pass_claimed": false,
+    "together_api": "FORBIDDEN"
+  }
+}

@@ -1,26 +1,25 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "trigger": "go",
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
-  "observed_research_main": "3b20f83aadb4c52d69f4adeec4d8d0a6f05719ba",
-  "observed_product_main": "65b4265154ee7235d2b245ac9ec6fc6536a8459b",
+  "observed_research_main_before_write": "48a0db610d8828ca9abdac691c5f7d89decb7c6c",
+  "observed_product_main": "950544e33ea179557cf3e54fc970a4a3954fe9cd",
   "product_repository": "gschaidergabriel/Dr.-Unterweger",
   "execution_policy": "ISOLATED_SANDBOX_ONLY",
   "grf": {
     "observed_reality": [
-      "entityos/boot_entry.py at product main originally rejected a configured state root only when the final component itself was a symlink",
-      "the original implementation used Path.absolute plus final-component Path.is_symlink and did not reject pre-existing symlink ancestors",
-      "EntityOS Initial Grant Sandbox run 31930675508 at product head f9cea2647073ca3d44cfc7cba16dba742bc3d713 completed FAILURE with job 95124859932 showing steps=[] and runner_id=0, so it is infrastructure/no-start evidence rather than code execution evidence",
-      "PR736 exact head 3050e13036d927766907067b35662d88e1284209 triggered EntityOS Canonical One-File Sandbox run 31937815970; job 95142419539 completed failure before steps, so the exact PR head has no executed one-file build evidence",
-      "product main now contains an equivalent runtime repair in 529c1e8801163c8b502edc4bbeae10582ce8e925 and an ancestor-symlink regression in 65b4265154ee7235d2b245ac9ec6fc6536a8459b",
-      "EntityOS Initial Grant Sandbox run 31937946288 at current observed product main 65b4265154ee7235d2b245ac9ec6fc6536a8459b also failed before steps; GitHub annotation states the job did not start because recent account payments failed or the spending limit must be increased"
+      "Current product main 950544e33ea179557cf3e54fc970a4a3954fe9cd intentionally keeps the original final-component-only state-path symlink fence; commits 533b4f0318343f70d487c6bea406e7fc39ec4283 and 950544e33ea179557cf3e54fc970a4a3954fe9cd reverted the transient ancestor-symlink runtime fix and regression from main pending trusted sandbox evidence.",
+      "Draft PR736 remains the unpromoted candidate carrying the ancestor-symlink fence and its regression; exact PR head 3050e13036d927766907067b35662d88e1284209 has no executed one-file artifact evidence because run 31937815970/job 95142419539 failed before steps.",
+      "EntityOS Initial Grant Sandbox run 31938018528 at exact current product main 950544e33ea179557cf3e54fc970a4a3954fe9cd has job 95142898351 with steps=null; GitHub annotation states the job was not started because recent account payments failed or the spending limit needs to be increased.",
+      "The hosted-runner failures are infrastructure/no-start evidence, not code execution failures and not EntityOS PASS evidence."
     ],
     "generated_reality": "A non-symlink final ENTITYOS_STATE_HOME beneath a symlinked parent can redirect persisted grant authority while bypassing a final-component-only symlink check.",
     "counter_reality": "Path.is_symlink on the final configured path or the subsequent mkdir/is_symlink check might indirectly expose the symlinked ancestor and fail closed.",
-    "falsifier": "Construct a temporary real parent and a symlink alias to it, configure a normal child state directory through the alias, then execute the exact relevant state-root and state-dir logic and observe whether the child is created below the real target.",
+    "falsifier": "Construct a temporary real parent and a symlink alias to it, configure a normal child state directory through the alias, then execute the relevant state-root/state-dir logic and observe whether the child is created below the real target.",
     "prediction_if_hypothesis": "final path reports is_symlink=false and the redirected child is created under the real symlink target",
-    "prediction_if_counter": "state-root or state-dir validation raises ENTITYOS_STATE_DIR_SYMLINK_REJECTED and no redirected child is created"
+    "prediction_if_counter_reality": "state-root or state-dir validation raises ENTITYOS_STATE_DIR_SYMLINK_REJECTED and no redirected child is created",
+    "collapse": "The bounded isolated experiment supported the redirect hypothesis. The candidate repair is retained on draft PR736 but deliberately not promoted to main without exact one-file sandbox evidence."
   },
   "unusual_experiment": {
     "count": 1,
@@ -35,60 +34,55 @@
     },
     "rollback": "temporary directory deleted automatically; no persistent host state"
   },
-  "intervention": {
+  "candidate_intervention": {
     "product_branch": "go/20260816-entityos-ancestor-symlink-fence",
     "product_pr": 736,
+    "product_pr_state": "OPEN_DRAFT_UNMERGED",
     "product_pr_head": "3050e13036d927766907067b35662d88e1284209",
-    "pr_state_observed": "OPEN_DRAFT_UNMERGED",
-    "equivalent_current_main": {
-      "runtime_fix_commit": "529c1e8801163c8b502edc4bbeae10582ce8e925",
-      "regression_commit": "65b4265154ee7235d2b245ac9ec6fc6536a8459b",
-      "runtime_mechanism": "configured state root is compared against Path.resolve(strict=false); differing resolution fails closed with ENTITYOS_STATE_DIR_SYMLINK_REJECTED",
-      "regression": "exact one-file initial-grant workflow now includes a symlinked ancestor with a normal nested child state path"
-    },
-    "local_rescue_validation": [
-      "patched helper py_compile PASS in the original branch evidence",
+    "changes": [
+      "reject a configured EntityOS grant-state root redirected by an existing ancestor symlink",
+      "add the ancestor-symlink case to the exact one-file initial-grant regression matrix"
+    ],
+    "local_candidate_validation": [
+      "candidate helper syntax compile PASS",
       "direct final-component symlink rejection PASS",
       "ancestor symlink rejection PASS with ENTITYOS_STATE_DIR_SYMLINK_REJECTED",
-      "normal non-symlink state directory creation PASS"
+      "normal non-symlink state path PASS; persisted grant mode 0600"
     ],
-    "exact_head_sandbox": {
-      "workflow": "EntityOS Canonical One-File Sandbox",
+    "exact_pr_head_sandbox": {
       "run_id": 31937815970,
       "job_id": 95142419539,
       "status": "FAILURE_BEFORE_STEPS",
-      "steps": null,
       "code_evidence": false
     },
-    "current_main_sandbox": {
-      "workflow": "EntityOS Initial Grant Sandbox",
-      "run_id": 31937946288,
-      "job_id": 95142725322,
-      "status": "FAILURE_BEFORE_STEPS_BILLING_OR_SPENDING_LIMIT",
-      "steps": null,
-      "code_evidence": false
+    "transient_main_history": {
+      "runtime_fix_commit": "529c1e8801163c8b502edc4bbeae10582ce8e925",
+      "regression_commit": "65b4265154ee7235d2b245ac9ec6fc6536a8459b",
+      "promotion_state": "REVERTED_FROM_MAIN_PENDING_SANDBOX",
+      "runtime_revert_commit": "533b4f0318343f70d487c6bea406e7fc39ec4283",
+      "regression_revert_commit": "950544e33ea179557cf3e54fc970a4a3954fe9cd"
     }
   },
-  "primary_external_evidence": [
-    {
-      "source": "Linux openat2(2) manual",
-      "claim_used": "RESOLVE_NO_SYMLINKS affects symbolic links in all pathname components, unlike final-component-only no-follow behavior; this supports treating ancestor symlinks as a distinct path-resolution security condition."
-    },
-    {
-      "source": "Python pathlib documentation",
-      "claim_used": "Path.absolute makes a path absolute without resolving symlinks, while Path.is_symlink identifies the specific path object as a symlink; therefore ancestor components require separate treatment."
-    }
-  ],
+  "current_main_artifact_evidence": {
+    "product_head": "950544e33ea179557cf3e54fc970a4a3954fe9cd",
+    "workflow": "EntityOS Initial Grant Sandbox",
+    "run_id": 31938018528,
+    "job_id": 95142898351,
+    "status": "FAILURE_BEFORE_STEPS_BILLING_OR_SPENDING_LIMIT",
+    "steps": null,
+    "code_evidence": false,
+    "entityos_built_by_run": false
+  },
   "counterevidence_and_limits": [
-    "The current main repair closes the demonstrated static pre-existing ancestor-symlink redirect only.",
-    "Userspace path resolution checks do not prove absence of path-component swap/TOCTOU races between validation and later creation/replacement.",
-    "Rejecting all symlink-resolving configured state paths can reduce compatibility on intentionally symlinked state paths; that tradeoff is security-specific.",
-    "Neither PR736 exact head nor current main has actually executed the canonical one-file EntityOS sandbox build/runtime regression after this repair, so artifact promotion remains blocked."
+    "The candidate closes only the demonstrated static pre-existing ancestor-symlink redirect; userspace path checks do not prove absence of path-component swap/TOCTOU races.",
+    "Rejecting symlink-resolving state paths can reduce compatibility for intentionally symlinked state locations.",
+    "No actually-started isolated sandbox has rebuilt and executed PR736 exact head as the canonical one-file EntityOS artifact, so candidate local helper evidence cannot justify promotion.",
+    "Current main intentionally remains without the ancestor-symlink candidate while this artifact evidence is unavailable."
   ],
-  "outcome": "RETAIN_IMPLEMENTED_ON_MAIN_ARTIFACT_UNVERIFIED",
+  "outcome": "RETAIN_CANDIDATE_UNMERGED_MAIN_REVERTED_PENDING_SANDBOX",
   "entityos_artifact": "BLOCKED",
-  "artifact_blocker": "No actually-started isolated sandbox has rebuilt and tested the current observed product main 65b4265154ee7235d2b245ac9ec6fc6536a8459b as the one-file EntityOS artifact. Current-main run 31937946288/job 95142725322 failed before steps because GitHub reports account payment/spending-limit blocking; PR736 exact-head run 31937815970/job 95142419539 also failed before steps. These are infrastructure/no-start results, not code failures or product PASS evidence.",
-  "next_executable_step": "Restore an actually-starting isolated runner, then build exact current product main with entityos/build_canonical_onefile.py and execute the initial-grant regression matrix, including the ancestor-symlink case, against the exact produced EntityOS file. Promote only from that exact artifact evidence.",
+  "artifact_blocker": "The required isolated one-file EntityOS build/runtime path is not currently starting. Exact current-main run 31938018528/job 95142898351 and PR736 exact-head run 31937815970/job 95142419539 both failed before steps; current-main GitHub annotation explicitly reports account payment/spending-limit blocking. Therefore no exact produced EntityOS file from the candidate has been executed and accepted.",
+  "next_executable_step": "Provide an actually-starting isolated runner, check out exact PR736 head 3050e13036d927766907067b35662d88e1284209, run entityos/build_canonical_onefile.py, then execute the initial-grant regression matrix including the ancestor-symlink case against the exact produced EntityOS file. Promote/merge only if that exact-artifact run passes; then rebuild and retest the resulting exact current main EntityOS.",
   "whole_machine_acceptance": false,
   "paid_training_authorized": false
 }

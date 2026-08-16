@@ -1,0 +1,59 @@
+{
+  "schema": "ClayEntityOSStaticAdversarialReview/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "research_parent_observed": "543706b7d6b53c9f22f031bc1f2f0cf40d66ee8b",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head_observed": "1334610341674e92abda50c3ca887bf4ca035107",
+    "current_executable_state": "BLOCKED_BY_VERCEL_DEPLOYMENT_RATE_LIMIT_BEFORE_NEW_SANDBOX",
+    "prior_exact_sandbox_failure_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "prior_failure_mechanism": "RUNNER_TOOLCHAIN_PYTHON_HEREDOC_ESCAPE",
+    "prior_sandbox_stopped": true,
+    "repair_observed_in_source": true,
+    "repair_executable_verification": false
+  },
+  "static_acceptance_review": {
+    "finding": "RUNNER_MARKER_VALIDATION_USES_COMPACTED_STDOUT",
+    "observed_source_mechanism": "run() applies compact(..., 32000) to command stdout before returning the step; offline_go_matrix PASS-marker and EntityOS SHA extraction then inspect matrix.stdout, which is already truncated.",
+    "counter_reality": "A successful matrix whose output exceeds the compaction window can lose a middle PASS marker or digest and be reported as MATRIX_PASS_MARKER_MISSING or ENTITYOS_SHA256_MISSING despite exit_code=0.",
+    "classification": "RECEIPT_FALSE_NEGATIVE_RISK_NOT_CLAY_SEMANTIC_FAILURE",
+    "recommended_small_delta": "Preserve full command stdout in-memory for machine marker/digest validation while compacting only the emitted build log and bounded stored diagnostic text.",
+    "runtime_verified": false,
+    "promotion_effect": "Do not treat this static finding as an observed failure; harden before or alongside the next exact-head Vercel acceptance run when safely coordinated."
+  },
+  "post_pr781_cmterm_review": {
+    "candidate_pr": 744,
+    "candidate_head_observed": "5e29cf8f81b4bf88612580225fe6399e02adda54",
+    "decision": "RETAIN_SERIALIZED_DO_NOT_FUSE_BEFORE_PR781_ACCEPTANCE",
+    "fusion_contract": [
+      "Preserve PR781 CLAYVM/2 Int/Bytes value identity, parameter metadata, return normalization and mutable/borrowed Bytes fail-closed epoch fences.",
+      "When PR744 removes the VM-global Int-only hostcall filter, every admitted hostcall handler must enforce its own exact Clay-visible signature because canonical VM values will include Int, Bool, String and Bytes.",
+      "Retain linux.process.spawn.v0 exact Int request-id checking and linux.process.spawn.path.v1 exact String checking; Bytes must not be silently accepted by either legacy process hostcall.",
+      "Keep path-v1 direct/no-shell and shared UTF-8-scalar argv validation; general argv, streaming and PTY remain separate gates.",
+      "Replace PR744 historical GitHub-hosted execution surface with the current build-internal exact-head Vercel Sandbox acceptance path after fusion."
+    ],
+    "counterhypothesis": "String hostcall widening may interact with CLAYVM/2 value transport or provenance serialization in ways not visible in either independent component branch; therefore the fused exact artifact requires a fresh Vercel Sandbox run."
+  },
+  "experiment_accounting": {
+    "global_unusual_experiment_limit": 1,
+    "global_unusual_experiment_count": 1,
+    "global_slot_consumed": true,
+    "new_unusual_experiments_executed_by_this_review": 0,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY"
+  },
+  "execution_policy": {
+    "vps_or_self_hosted_test_evidence_used": false,
+    "production_host_test_evidence_used": false,
+    "together_api_used": false
+  },
+  "whole_entityos_acceptance": false,
+  "next_executable_step": "When Vercel build capacity admits the exact then-current PR781 head, run the regression/acceptance-only build-internal Sandbox batch; require exact source binding, repaired toolchain probe, DENY_ALL before offline tests, Bytes-v2 and adjacent regressions, pristine deterministic twin EntityOS builds, exact artifact status/self-test/no-host-Python/state/capability/relocation gates, successful stop, and no second unusual experiment.",
+  "acceptance": "IN_PROGRESS_EXTERNAL_VERCEL_CAPACITY_BLOCKS_EXECUTABLE_RECHECK"
+}

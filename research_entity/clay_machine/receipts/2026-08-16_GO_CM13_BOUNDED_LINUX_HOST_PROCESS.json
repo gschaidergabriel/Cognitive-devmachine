@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_CM13_BOUNDED_LINUX_HOST_PROCESS",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE_BUILD",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "canonical_parent_observed_before_write": "780c0de031f7c8fb9dce56db7acd984c331abf24",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_base": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "product_candidate": "fa6a88f2c1abca32c1f851525700dd14256b9ee2",
+  "product_pr": 695,
+  "product_pr_state": "READY_FOR_REVIEW_OPEN_MERGEABLE",
+  "frontier": "CM-TERM / CM-08-LINUX-INTEROP / CM-13 terminal-subprocess family",
+  "outcome": "RETAIN_PARTIAL_VERIFIED",
+  "promotion_scope": "Capability-gated bounded non-interactive Linux host-process primitive only; interactive PTY, ClayCode string/argv lowering and whole CM-TERM/ClayMachine acceptance remain open.",
+  "hypothesis": "A shell-free argv process primitive with explicit capability admission, clean environment, bounded dual-pipe capture, timeout and fresh process-group termination can establish the first real CM-TERM control-plane foothold without inventing PTY or ClayCode string semantics.",
+  "strongest_counterhypothesis": "Dual stdout/stderr pipe pressure can deadlock a superficially bounded wrapper when one pipe fills while the controller waits on the other.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "DUAL_PIPE_70K_NO_NEWLINE",
+    "bounded": true,
+    "input": "70000 A bytes to stdout + 70000 B bytes to stderr, no newline, timeout 2.0 s, combined budget 200000 bytes",
+    "observed": {
+      "returncode": 0,
+      "stdout_bytes": 70000,
+      "stderr_bytes": 70000,
+      "stdout_exact": true,
+      "stderr_exact": true,
+      "timed_out": false,
+      "output_limited": false,
+      "duration_ms": 21.779
+    },
+    "result": "COUNTERHYPOTHESIS_NOT_OBSERVED_FOR_TESTED_SHAPE"
+  },
+  "implementation": {
+    "capability": "linux.process.spawn.v0",
+    "shell": false,
+    "absolute_executable_required": true,
+    "ambient_environment_inherited": false,
+    "stdin": "DEVNULL",
+    "fresh_process_group": true,
+    "combined_stdout_stderr_budget": true,
+    "timeout_process_group_kill": true,
+    "receipt_and_process_table_hashes": true
+  },
+  "accepted_vps_evidence": {
+    "workflow": "Clay CM-13 Host Process VPS",
+    "run_id": 31925042613,
+    "job_id": 95111167203,
+    "conclusion": "SUCCESS",
+    "tested_sha": "fa6a88f2c1abca32c1f851525700dd14256b9ee2",
+    "python": "Python 3.12.3",
+    "kernel": "Linux 6.8.0-84-generic x86_64 GNU/Linux",
+    "tests": "7/7 PASS in 0.114 s",
+    "artifact_id": 5847571926,
+    "whole_cm13_completion": false,
+    "whole_clay_machine_completion": false
+  },
+  "overlap_regressions": [
+    {"workflow": "Clay Machine VM bootstrap", "run_id": 31925042561, "conclusion": "SUCCESS"},
+    {"workflow": "Clay environment minimal build-run", "run_id": 31925042618, "conclusion": "SUCCESS"},
+    {"workflow": "ClayCode runtime nominal boundary repair VPS", "run_id": 31925042592, "conclusion": "SUCCESS"},
+    {"workflow": "Clay Executable IR Single VM", "run_id": 31925042554, "conclusion": "SUCCESS"},
+    {"workflow": "ClayOS strict artifact launch", "run_id": 31925042518, "conclusion": "SUCCESS"}
+  ],
+  "remaining_blockers": [
+    "Interactive PTY and live bidirectional stream semantics",
+    "Canonical ClayCode byte/string and argv/env/cwd/stdin/stdout/stderr lowering through checker -> executable IR -> single ClayVM -> ClayOS",
+    "Broader typed filesystem/process/network/device authority and receipts"
+  ],
+  "next_discriminator": "Select the smallest canonical Clay byte/string plus argv value and transport one literal ClayCode argument through executable IR into the single VM, then bind it to linux.process.spawn.v0 without shell semantics.",
+  "negative_results_preserved": [
+    "Initial new workflow absence was not treated as PASS.",
+    "A tool invocation that never started was not counted as the unusual experiment.",
+    "Research PRs #277/#278 encountered fast-moving canonical ancestry; stale branches were not forced."
+  ],
+  "authority": {"together_used": false, "training_started": false, "release_claimed": false}
+}

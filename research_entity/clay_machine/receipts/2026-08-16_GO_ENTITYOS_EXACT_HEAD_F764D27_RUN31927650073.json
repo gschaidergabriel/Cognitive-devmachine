@@ -1,0 +1,58 @@
+{
+  "schema": "ClayGoEntityOSVerification/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "tested_product_head": "f764d27af6781d4f68ae4064f4d97898f946d90f",
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31927650073,
+    "conclusion": "success",
+    "artifact_id": 9258319792
+  },
+  "entityos": {
+    "artifact": "EntityOS",
+    "sha256": "9c64e32ffafa252e7495d7edd9e562dbcf0e10bcebb1f38e8392551818d2b9bd",
+    "size_bytes": 11930480,
+    "mode": "0755",
+    "format": "ELF 64-bit LSB executable x86-64",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "security_concept_sha256": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
+    "whole_machine_acceptance": false
+  },
+  "verified_in_active_session": {
+    "artifact_sha256_matches_workflow_receipt": true,
+    "status_build_head_matches": true,
+    "self_test_json_status": "PASS",
+    "claycode_build_status": "BUILT",
+    "claycode_run_status": "EXITED",
+    "claycode_run_result": 42,
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_capability_stdout": "CURRENT_HEAD_OK"
+  },
+  "grf_decision_trace": {
+    "observed_anchor": "Current product head has a canonical PyInstaller one-file builder and exact-head self-hosted Linux workflow; the exact artifact was downloaded and independently executed in the active session.",
+    "hypothesis": "One-file packaging can carry the admitted ClayCode->TypedIR->single ClayVM->ClayOS slice plus bounded Linux process bridge without runtime sidecars.",
+    "counterhypothesis": "The binary depends on checkout-relative files or extraction-path assumptions and therefore is not a genuine single-file runtime boundary.",
+    "falsifier": "Exact-head workflow plus relocated Unicode TMPDIR/foreign-CWD execution, followed by independent active-session execution of the downloaded ELF.",
+    "outcome": "RETAIN",
+    "promotion_limit": "One-file candidate packaging is verified for this admitted slice only; whole Clay Machine acceptance remains false."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT",
+    "rollback": "TEMP_PATH_REMOVED"
+  },
+  "negative_results": [
+    "Earlier code-search indexing missed entityos/ although the Git tree contained it; tree/API evidence superseded the false-negative search result.",
+    "An unrelated legacy SQLite provenance workflow failed at prior head f525e3cf; that failure was not treated as EntityOS build evidence.",
+    "whole_machine_acceptance remains false despite the exact one-file candidate passing its current slice gates."
+  ],
+  "current_blocker": "Select the smallest canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface required by CM-DATA and CM-TERM, then wire one provenance-bound opaque-byte ingress/process request through canonical checker/effect IR and the single VM into the capability-gated Linux process component without backend-local semantics.",
+  "next_executable_action": "Implement and gate that minimal canonical Bytes/Buffer + String/argv/effect surface end-to-end, then rebuild the exact current-head EntityOS and rerun the same one-file status/self-test/build-run/capability gates before any broader acceptance claim."
+}

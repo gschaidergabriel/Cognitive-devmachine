@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed_after_hotfix": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "subject_pr": 760,
+  "subject_head": "cc8f48ee185c2c0b3ef38d44c6164e7027023745",
+  "subject_file": "mcp/vercel-sandbox-mcp/api/go-cycle-v2.js",
+  "experiment": {
+    "name": "STATIC_NONCE_REPLAY_CHAOS_PROBE",
+    "classification": "BOUNDED_UNUSUAL_EXPERIMENT",
+    "count": 1,
+    "environment": "isolated local tool container",
+    "cases": 256,
+    "dimensions": "8 HTTP methods x 8 URL/query shapes x 4 Vercel environment/ref combinations",
+    "adversarial_inputs": [
+      "historical repository-static nonce replay",
+      "empty nonce",
+      "percent-encoded NUL",
+      "path/traversal-like query text",
+      "4096-character query value",
+      "method variation",
+      "preview/production environment variation"
+    ],
+    "expected": "Every request shape fails closed without invoking Sandbox execution.",
+    "observed": "256/256 returned HTTP 404 with status BUILD_INTERNAL_ONLY and Cache-Control no-store.",
+    "result": "PASS",
+    "handler_reconstruction_sha256": "aa0e1118e7ae610a9d1c2ce220c7ab248f9fd5f68b5e983b88a5c56fc51cf348"
+  },
+  "grf": {
+    "observed_anchor": "PR760 reduces the historical remote GO endpoint to an inert handler and was merged to current product main during this GO cycle.",
+    "hypothesis": "Removing request-dependent execution logic makes replay/bypass variants observationally equivalent and fail-closed at the HTTP surface.",
+    "strongest_counterhypothesis": "A method, URL, old nonce, malformed query, or Vercel environment combination could still enter an execution-capable branch.",
+    "discriminator": "Cartesian replay/chaos probe over method, URL/query, and environment/ref dimensions against the exact PR760 handler bytes.",
+    "collapse": "COUNTERHYPOTHESIS_NOT_OBSERVED_IN_256_CASES; RETAIN_FAIL_CLOSED_HOTFIX_AS_COMPONENT_SECURITY_EVIDENCE"
+  },
+  "limits": [
+    "This is handler-level component evidence, not a Vercel deployment/runtime proof.",
+    "It does not rebuild or accept the one-file EntityOS artifact.",
+    "It does not validate the replacement build-internal Vercel Sandbox control plane.",
+    "Whole Clay Machine acceptance remains false."
+  ],
+  "coordination": {
+    "prior_main_hotfix_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_VERCEL_REPLAY_ENDPOINT_FAILCLOSED_MAIN.json",
+    "duplicate_product_patch_created": false,
+    "stale_parallel_pr_759_reused": false,
+    "open_buildtime_lane_pr": 758
+  },
+  "next_executable_step": "Refresh PR758 against current main and require a fresh exact-head Vercel Sandbox build/runtime receipt before promotion; do not reintroduce any remotely replayable runtime endpoint. Continue the canonical CM-DATA Bytes/Buffer and CM-TERM String/argv/effect-signature frontier after the execution lane is trustworthy.",
+  "entityos_artifact_this_cycle": "NOT_BUILT",
+  "whole_clay_machine_acceptance": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false,
+  "production_host_test_used": false,
+  "together_api_used": false
+}

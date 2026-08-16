@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_NON_UTF8_ARGV_BYTE_PRESERVATION",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "timestamp_local": "2026-08-16T17:00:00+07:00",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "research_main_before_write": "f95bf37b826bb18371e9fc493a10f529b730a040",
+  "product_main_observed": "05c910705fe9a430ee0f958760639f54217aa9da",
+  "workstream": "CM-TERM/CM-DATA/ClayVM/EntityOS",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY; no VPS, self-hosted VPS runner, or production-host test execution",
+  "observed_anchors": [
+    "Current main executable_ir_adapter admits linux.process.spawn.v0::(Int)->Int only; String process signature is not admitted.",
+    "Current main ClayVM serializes UTF-8 String constants but OP_HOSTCALL rejects every non-Int argument with TYPE_TRAP.",
+    "Current main HostProcessVMHost bridges one Int request id to an immutable tuple[str,...] request and does not yet expose Clay-visible argv Bytes.",
+    "Draft PR #741 proposes provenance-bound Clay Bytes through CLAYVM/2; draft PR #744 proposes a narrow path-only String hostcall. Both remain blocked on an actually-started isolated full-repository gate."
+  ],
+  "hypothesis": "A general direct Linux argv boundary can safely be modeled as Clay String values without losing host argument identity.",
+  "counterhypothesis": "Linux argv can contain non-NUL byte sequences that are not valid UTF-8; collapsing the direct effect boundary to Unicode String would either reject valid host arguments or introduce implicit codec semantics, so general argv requires an opaque Bytes-preserving representation and explicit String encoding.",
+  "discriminator": "Launch a child with shell=false and a single non-UTF8 bytes argument, then read /proc/self/cmdline in the child and compare the exact raw argument bytes with the parent's input while also recording Python's sys.argv reconstruction.",
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "NON_UTF8_ARGV_BYTE_PRESERVATION",
+    "count": 1,
+    "context": "LOCAL_ISOLATED_SANDBOX",
+    "control_arg_hex": "41534349495f434c4159",
+    "intervention_arg_hex": "80434c4159",
+    "shell": false,
+    "child_returncode": 0,
+    "proc_cmdline_observed_arg_hex": "80434c4159",
+    "raw_non_utf8_preserved": true,
+    "python_sys_argv_repr": "'\\udc80CLAY'",
+    "python_filesystem_encoding": "utf-8",
+    "python_filesystem_errors": "surrogateescape",
+    "result": "COUNTERHYPOTHESIS_SUPPORTED",
+    "rollback": "Ephemeral child process and temporary local files only; no product/runtime state mutation."
+  },
+  "primary_reference_basis": [
+    "Linux man-pages execve(2): argv is passed as char* strings terminated by null pointers; embedded NUL is not representable as an element.",
+    "Linux man-pages proc_pid_cmdline(5): process command line is exposed as NUL-separated strings.",
+    "Python subprocess/os documentation: POSIX process arguments and OS boundaries may use bytes; str/bytes conversion uses the filesystem encoding/error handler where applicable."
+  ],
+  "collapse": {
+    "general_argv_as_implicit_unicode_string": "REJECT",
+    "path_only_string_subset": "RETAIN_CANDIDATE_ONLY_WITH_EXPLICIT_ENCODING_SCOPE",
+    "opaque_bytes_for_general_linux_argv": "RETAIN",
+    "implicit_bytes_to_string_decode": "REJECT",
+    "entityos_acceptance": "NOT_PROMOTED"
+  },
+  "fusion_requirements": [
+    "When PR #741 and PR #744 or successors are composed, preserve nominal String-versus-Bytes separation at the hostcall signature boundary.",
+    "Define general argv elements as provenance-bound owned immutable Bytes or an equivalent explicit byte-string type with NUL rejection before the Linux boundary.",
+    "Any String-to-argv conversion must be an explicit codec operation with named encoding/error policy; do not silently use Python filesystem decoding/encoding as Clay language semantics.",
+    "Keep shell=false for direct argv effects; shell semantics must remain a separately named/effect-authorized path.",
+    "Preserve the independent hostcall declared-return-type fence identified by the PR #744/#741 fusion work."
+  ],
+  "next_discriminating_implementation": "Against one reviewed fusion head, add an ordinary regression (new unusual count zero) that proves a Clay Bytes argv element containing 0x80 reaches the no-shell host process boundary byte-exact while the path-only String signature cannot acquire Bytes authority. Then run canonical checker -> executable IR -> single ClayVM -> ClayOS process effect -> exact one-file EntityOS rebuild/self-test/copy-run in an actually-started isolated full-repository sandbox.",
+  "current_external_blocker": "GitHub-hosted isolated Actions jobs are being stopped before runner allocation by account billing/spending state; the active local sandbox cannot fetch/install the full private current tree/toolchain needed for the canonical current-head PyInstaller EntityOS re-freeze.",
+  "entityos_artifact": "BLOCKED_CURRENT_HEAD_REFREEZE",
+  "whole_clay_machine_acceptance": false,
+  "outcome": "RETAIN_BYTES_PRESERVING_ARGV_BOUNDARY_AND_EXPLICIT_STRING_CODEC_FUSION_RULE"
+}

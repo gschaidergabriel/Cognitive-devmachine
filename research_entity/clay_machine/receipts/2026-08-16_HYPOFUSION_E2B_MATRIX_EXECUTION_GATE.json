@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "hypofusion",
+  "observed_research_main_before_write": "8a47c1828b45206266cb13e68f9a81bfd142593d",
+  "observed_product_main": "b543cf126eda90ccf8c1478653274631f1301398",
+  "prepared_matrix_commit": "0b58d7d4a856bbafdbc168460f31dd674e0c44a0",
+  "prepared_mcp_bridge_commit": "bd8d6704b87a7bceeea3cebf78d98f122229cd07",
+  "matrix_branch_relation_to_main": {
+    "status": "DIVERGED",
+    "ahead_by": 11,
+    "behind_by": 8,
+    "merge_base": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe"
+  },
+  "observed_current_candidate_state": {
+    "preferred_string_path_pr": 744,
+    "preferred_string_path_state": "OPEN_DRAFT_BLOCKED_ON_ACTUALLY_STARTED_ISOLATED_EXECUTION",
+    "duplicate_string_path_pr": 749,
+    "duplicate_string_path_state": "CLOSED_UNMERGED",
+    "bytes_pr": 741,
+    "bytes_state": "OPEN_DRAFT_BLOCKED_ON_ACTUALLY_STARTED_ISOLATED_EXECUTION",
+    "source_string_intrinsic_pr": 740,
+    "source_string_intrinsic_state": "OPEN_DRAFT_BLOCKED_ON_ACTUALLY_STARTED_ISOLATED_EXECUTION"
+  },
+  "observations": [
+    "Current PROGRAM_STATE makes sandbox-only testing authoritative; VPS/self-hosted/production test execution is forbidden.",
+    "The one-sandbox Clay matrix is structurally aligned with the current highest-information need because String, Bytes, data, executable-binding and grant candidates remain unpromoted without exact sandbox evidence.",
+    "The stored matrix plan is already stale relative to current PR coordination because it still includes PR 749 after that duplicate was closed in favor of PR 744.",
+    "The prepared bridge branch is not a linear successor of product main; it is 11 commits ahead and 8 behind, so deploying it unchanged would test a divergent source reality.",
+    "The bridge README instructs npm ci, but the prepared worker directory contains no package-lock.json; therefore that documented pre-deploy command is not reproducibly executable as written.",
+    "Cloudflare current primary documentation supports stateless createMcpHandler with @modelcontextprotocol/server@2.0.0, matching the bridge architecture.",
+    "E2B package 2.31.0 primary package documentation uses the default Sandbox import and supports the bridge's chosen SDK family; the import itself is not the blocker."
+  ],
+  "hypotheses": [
+    {
+      "id": "H1_MERGE_STRING_FIRST",
+      "claim": "Promote PR 744 before broader fusion because String process transport is the narrowest executable CM-TERM step.",
+      "counter": "Exact synchronized sandbox and EntityOS evidence is still absent, so merging first would collapse uncertainty before the required discriminator.",
+      "outcome": "DEFER"
+    },
+    {
+      "id": "H2_MERGE_BYTES_FIRST",
+      "claim": "Promote PR 741 first because Bytes is the common substrate for data, media and future process output.",
+      "counter": "Its exact isolated regression and one-file EntityOS build are also unexecuted; Bytes-first does not resolve String/effect interaction or fusion conflicts.",
+      "outcome": "DEFER"
+    },
+    {
+      "id": "H3_RUN_PREPARED_MATRIX_AS_IS",
+      "claim": "Use commit 0b58d7d immediately and spend one E2B start to compare all variants.",
+      "counter": "The plan contains a now-closed duplicate candidate and the branch diverges materially from current main; this would spend scarce execution budget on a stale experiment graph.",
+      "outcome": "REJECT"
+    },
+    {
+      "id": "H4_REFRESH_EXECUTION_SUBSTRATE_THEN_ONE_MATRIX",
+      "claim": "First synchronize the bridge/matrix substrate to fresh main and fresh candidate heads, repair deterministic worker installation, then consume exactly one E2B start for the refreshed multi-variant matrix.",
+      "counter": "This adds preflight work and could delay semantic progress if the bridge itself is unusable, but its cheap checks are outside the scarce E2B start budget and directly protect that budget.",
+      "outcome": "RETAIN"
+    }
+  ],
+  "fusion": {
+    "decision": "REFRESH_EXECUTION_SUBSTRATE_THEN_ONE_MATRIX",
+    "why": "It preserves sandbox-only authority, avoids premature semantic promotion, removes a known stale candidate, and converts one scarce E2B start into a discriminator across the competing String/Bytes/data/security realities.",
+    "promotion_rule": "No candidate or fusion is promoted merely because it composes; require exact refreshed-head semantic/regression evidence plus deterministic one-file EntityOS build/run evidence in the isolated sandbox.",
+    "next_executable_steps": [
+      "Rebase/synchronize the E2B matrix + MCP bridge work onto then-current product main without silently resolving runtime/test conflicts.",
+      "Regenerate the matrix source set from current PR state: remove closed duplicate PR 749 and refresh every selected PR head/status before execution.",
+      "Generate and commit package-lock.json for mcp/e2b-worker, then require npm ci && npm run check to pass in an allowed isolated environment before deployment.",
+      "Deploy/configure the Cloudflare Worker only after the checked source is synchronized; keep E2B_API_KEY and MCP_BEARER_TOKEN as secrets.",
+      "Run e2b_budget and e2b_list_templates first; consume exactly one start only after all cheap preflight checks pass.",
+      "Inside that one E2B sandbox run the refreshed candidate/fusion matrix, including fusion-order reversal, current semantic/regression gates, and bounded EntityOS builds.",
+      "Promote only evidence from the exact tested refreshed heads; keep unresolved argv/Bytes output/streaming/PTY/content-binding/mount-hardening frontiers OPEN."
+    ]
+  },
+  "execution": {
+    "sandbox_started": false,
+    "e2b_attempt_consumed": false,
+    "cloudflare_deployed": false,
+    "entityos_built_in_this_trigger": false,
+    "new_unusual_experiment_count": 0
+  },
+  "whole_clay_machine_acceptance": false
+}

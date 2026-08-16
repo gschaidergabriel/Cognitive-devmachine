@@ -14,8 +14,8 @@
     },
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #603 merged TypeRef alias-ancestry complexity repair; exact-head self-hosted run 31910197430 passed 12/12 including depth 32768 and bounded scaling ratio. GO alias-DAG materialization discriminator reproduced exponential subtree expansion while detached PR #645 proved a structural-sharing candidate on exact-head self-hosted Linux/X64. A separate GO pair-revisit discriminator measured depth-22 equality at 8,388,607 visited pairs without pair memo versus 23 with (id(left),id(right)) memo. Live deconflict closed duplicate production PR #664 unmerged. Preferred production lane is PR #673 head 75b96b9d70b6228d768f6ec5a3e000bc15405745: per-call immutable sharing, cycle-contamination protection, DAG-aware _same, a dedicated DAG regression and the unchanged production totality gate.",
-      "blocker": "PR #673 exact-head self-hosted Linux/X64 workflow 31923213166 remains queued; production PASS/merge is blocked until that exact head and overlapping TypeRef regressions are green. _render_type_ref can still expand a compact shared DAG into large diagnostic text and remains a separate resource-surface follow-up."
+      "evidence": "PR #603 merged TypeRef alias-ancestry complexity repair; exact-head self-hosted run 31910197430 passed 12/12 including depth 32768 and bounded scaling ratio. GO alias-DAG materialization evidence and detached PR #645 support per-call immutable structural sharing. Independent GO pair-revisit evidence measured depth-22 equality at 8,388,607 visited pairs without pair memo versus 23 with (id(left),id(right)) memo. Duplicate production lanes #664, #667 and #673 are now closed unmerged after deconfliction. Consolidated production lane is draft PR #681 head c0a275b35869bc5838ea1f775a557f3534ae4635: per-call immutable sharing, cycle-taint protection, safe-sibling reuse, DAG-aware _same, its production-sharing regressions, existing alias-totality gate, and the unchanged production TypeRef totality gate fused from #673.",
+      "blocker": "PR #681 exact-head self-hosted Linux/X64 production-sharing workflow 31923469033 is queued; separate production-totality run 31923469219 is pending. Production PASS/merge remains blocked until the exact consolidated head and overlapping TypeRef regressions are green. _render_type_ref can still expand a compact shared DAG into large diagnostic text and remains a separate resource-surface follow-up."
     },
     "CM-03-EVALUATOR-INTERPRETER": {
       "status": "IN_PROGRESS",
@@ -38,8 +38,8 @@
     },
     "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. PR #648 keeps every use declaration fail-closed at executable build. PR #653 merged deterministic ClayPackageIndex/v1 after exact-head self-hosted PASS run 31921054505. PR #635 merged lossless MODULE/WILDCARD use intent after exact-head PASS runs 31921439509, 31921439331, 31921439318 and 31921439348. PR #660 merged ClayPackageResolution/v1 exact module-provider selection; exact-head self-hosted Linux/X64 run 31923122223 passed on head a993083ff58081c2078d92f1769e649e366e3988. Fresh canonical-corpus inspection supplies counterevidence to the breadth of that v1 law: claycode/frank_memory.clay contains plain `use frank.entity.Frank`, while claycode/frank_entity.clay declares `module frank.entity` and `entity Frank`; current resolver v1 nevertheless requires every use target to equal an exact module identity. PR #674 is the active semantic-correction candidate that keeps plain-use name binding fail-closed while retaining only unambiguous wildcard-module provider binding. PR #677 separately explores short MODULE namespace collision rejection and must not outrun the corrected plain-use contract.",
-      "blocker": "Do not treat merged provider-resolution PASS as proof that every plain use denotes a module. First adjudicate the corpus-backed plain-use ambiguity and correct/fail-close that scope (current candidate #674). Then define the smallest explicit imported-symbol ownership/visibility/collision contract for plain versus wildcard use and feed one canonical resolution surface into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. PR #648 remains fail-closed until end-to-end executable closure is proven; meaningful stdlib/SDK remains open."
+      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. PR #648 keeps every use declaration fail-closed at executable build. PR #653 merged deterministic ClayPackageIndex/v1 after exact-head self-hosted PASS run 31921054505. PR #635 merged lossless MODULE/WILDCARD use intent after exact-head PASS runs 31921439509, 31921439331, 31921439318 and 31921439348. PR #660 merged ClayPackageResolution/v1 exact module-provider selection; exact-head self-hosted Linux/X64 run 31923122223 passed on head a993083ff58081c2078d92f1769e649e366e3988. Fresh canonical-corpus inspection supplies counterevidence to the breadth of that v1 law: claycode/frank_memory.clay contains plain `use frank.entity.Frank`, while claycode/frank_entity.clay declares `module frank.entity` and `entity Frank`; current resolver v1 nevertheless requires every use target to equal an exact module identity. Draft PR #674 head 0fe6d68e023a2c201f6663448774ff02e042335b is the active semantic-correction candidate: wildcard module-provider identity may remain explicit, while plain-use name binding fails closed as unselected. PR #677 separately explores short MODULE namespace collision rejection and must not outrun the corrected plain-use contract.",
+      "blocker": "Do not treat merged provider-resolution PASS as proof that every plain use denotes a module. First adjudicate the corpus-backed plain-use ambiguity and correct/fail-close that scope via #674 exact-head evidence. Then define the smallest explicit imported-symbol ownership/visibility/collision contract for plain versus wildcard use and feed one canonical resolution surface into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. PR #648 remains fail-closed until end-to-end executable closure is proven; meaningful stdlib/SDK remains open."
     },
     "CM-08-LINUX-INTEROP": {
       "status": "OPEN",
@@ -82,14 +82,16 @@
     "canonical_module_provider_resolution_tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
     "canonical_module_provider_resolution_run": 31923122223,
     "cm07_plain_use_semantic_correction_pr": 674,
+    "cm07_plain_use_semantic_correction_head": "0fe6d68e023a2c201f6663448774ff02e042335b",
     "cm07_module_namespace_collision_pr": 677,
     "cm02_detached_sharing_candidate_pr": 645,
-    "cm02_preferred_production_integration_pr": 673,
-    "cm02_preferred_production_head": "75b96b9d70b6228d768f6ec5a3e000bc15405745",
-    "cm02_preferred_exact_head_workflow": 31923213166,
-    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_PLUS_LOSSLESS_USE_MODE_PLUS_EXACT_MODULE_PROVIDER_RESOLUTION_MERGED; PLAIN_USE_SCOPE_COUNTEREVIDENCE_REQUIRES_CORRECTION; CM02_PRODUCTION_DAG_SHARING_PENDING_EXACT_HEAD",
+    "cm02_closed_duplicate_production_prs": [664, 667, 673],
+    "cm02_preferred_production_integration_pr": 681,
+    "cm02_preferred_production_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+    "cm02_preferred_exact_head_workflow": 31923469033,
+    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_PLUS_LOSSLESS_USE_MODE_PLUS_EXACT_MODULE_PROVIDER_RESOLUTION_MERGED; PLAIN_USE_SCOPE_COUNTEREVIDENCE_REQUIRES_CORRECTION; CM02_SINGLE_CONSOLIDATED_PRODUCTION_DAG_LANE_PENDING_EXACT_HEAD",
     "release": "NOT_PASSED",
-    "next_discriminator": "CM-07: adjudicate corpus-backed plain-use ambiguity and correct/fail-close resolver scope before symbol expansion (candidate #674). In parallel CM-02: obtain exact-head self-hosted evidence for preferred production PR #673 and merge only if unchanged totality plus dedicated DAG gate are green."
+    "next_discriminator": "CM-07: obtain exact-head evidence for plain-use fail-closed correction #674 before symbol expansion. In parallel CM-02: obtain exact-head self-hosted evidence for consolidated PR #681 and merge only if production-sharing + alias-totality + unchanged production-totality and overlapping ClayCode gates are green."
   },
   "progress": {
     "work_packages_total": 11,
@@ -109,9 +111,10 @@
     "research_entity/clay_machine/receipts/2026-08-16_GO_CANONICAL_IMPORT_MODE_EXACT_RUNTIME_DELTA.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_DETERMINISTIC_MODULE_PROVIDER_RESOLVER.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_PROVIDER_RESOLVER_COORDINATION_CYCLIC_ORDER.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_CM02_PRODUCTION_TYPEREF_DAG_SHARING.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM02_PRODUCTION_TYPEREF_DAG_SHARING.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_PLAIN_USE_SEMANTIC_FENCE.json"
   ],
-  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent valid implementations must not become parallel canonical paths: PR #663 was closed after #660 landed, and duplicate production CM-02 PR #664 was closed after the stronger #673 lane appeared. Distinct measurements were retained as research evidence. Pull-request workflows must checkout and assert github.event.pull_request.head.sha rather than treating github.sha merge refs as exact candidate evidence; workspace writes use compare-and-swap and must fuse rather than overwrite concurrent updates.",
+  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent valid implementations must not become parallel canonical paths: PR #663 was closed after #660 landed; CM-02 production duplicates #664, #667 and #673 were closed after fusion into #681. Distinct pair-revisit, cache-taint and diagnostic-expansion observations were preserved as research evidence. Pull-request workflows must checkout and assert github.event.pull_request.head.sha rather than treating github.sha merge refs as exact candidate evidence; workspace writes use compare-and-swap and must fuse rather than overwrite concurrent updates.",
   "laws": [
     "ClayVerse/Clay Machine is the only active program.",
     "GRF expands hypotheses but does not mint truth.",

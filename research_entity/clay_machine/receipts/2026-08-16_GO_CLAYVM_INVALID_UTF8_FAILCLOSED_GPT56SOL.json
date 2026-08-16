@@ -1,0 +1,84 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only": true,
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "together_used": false,
+    "training_authorized_or_started": false
+  },
+  "r0_observed": {
+    "product_main": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+    "research_main_before_write": "839d03d91e65bc1414dd84633edc987ce9bdb8c7",
+    "clayvm_blob_before_patch": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
+    "clayvm_writer_behavior": "_Writer.text called str.encode('utf-8') without translating UnicodeEncodeError into ClayVM ValidationError",
+    "existing_string_control": "normal String constants compile and round-trip through CLAYVM/1",
+    "pr740": "OPEN_DRAFT narrow canonical source String process intrinsic candidate",
+    "allowed_sandbox_retry_run": 31939480422,
+    "allowed_sandbox_retry_job": 95146462421,
+    "allowed_sandbox_retry_result": "FAILED_BEFORE_ANY_STEP; steps=[]; runner_id=0; no code/build evidence",
+    "entityos_onefile_builder": "present on product main; PyInstaller onefile double-build SHA equality gate",
+    "current_exact_entityos_build_in_this_worker": "BLOCKED"
+  },
+  "grf": {
+    "generated_reality": "The serialized ClayVM compiler should own a deterministic UTF-8 validation boundary for String constants and must not leak a Python encoder exception.",
+    "counter_reality": "Higher ClayCode parsing/type layers will always exclude non-UTF-8-representable Python str values, so low-level VM encoding does not need an explicit fail-closed mapping.",
+    "discriminator": "Invoke the exact current VM text-encoding behavior with a normal UTF-8 String control and one lone-surrogate String value, then classify the exception boundary.",
+    "predicted_if_generated_reality_is_currently_violated": "The lone surrogate escapes as UnicodeEncodeError instead of ValidationError.",
+    "predicted_if_counter_reality_suffices": "The low-level compiler cannot be reached with such a value or still returns a canonical ClayVM validation error."
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "LONE_SURROGATE_UTF8_ENCODER_ESCAPE",
+    "execution_location": "isolated ChatGPT local sandbox",
+    "baseline": {
+      "value": "/usr/bin/true",
+      "result": "PASS_UTF8_ENCODE",
+      "encoded_length": 13
+    },
+    "intervention": {
+      "value_constructor": "chr(0xD800)",
+      "observed_exception_type": "UnicodeEncodeError",
+      "observed_clay_validation_error": false
+    },
+    "result": "FAIL_CLOSED_BOUNDARY_DEFECT_CONFIRMED",
+    "rollback": "No production runtime or external system mutated by the experiment."
+  },
+  "intervention": {
+    "product_branch": "clay/go-clayvm-utf8-failclosed-20260816",
+    "product_pr": 743,
+    "product_head": "289505aec4229580d93ac89e531ed9c37d0c51f9",
+    "source_delta": "Catch UnicodeEncodeError in claymachine.clayvm._Writer.text and rethrow ValidationError('INVALID_UTF8').",
+    "test_delta": "Add deterministic clayvm_invalid_utf8_failclosed_gate.py using chr(0xD800); origin unusual experiment retained as regression with new_unusual_experiment_count=0.",
+    "local_rescue_regression": {
+      "normal_utf8": "PASS",
+      "lone_surrogate": "ValidationError INVALID_UTF8",
+      "scope": "targeted exact repair logic only; not full-repo or EntityOS acceptance"
+    }
+  },
+  "collapse": {
+    "outcome": "RETAIN",
+    "confidence": "HIGH for the boundary defect and narrow repair; LOW for whole-machine impact until full isolated exact-head test",
+    "counterevidence": [
+      "The defect may be unreachable from future fully canonical source-level String construction, but the low-level VM compiler is itself a validation boundary and remains directly callable by current internal tooling.",
+      "No full exact-head VM regression suite ran in an actually-started allowed GitHub-hosted sandbox in this cycle.",
+      "No exact one-file EntityOS artifact was built or executed in this cycle."
+    ]
+  },
+  "affected_frontiers": [
+    "CM-04-COMPILER-LOWERING-BYTECODE",
+    "CM-05-VIRTUAL-CLAY-MACHINE",
+    "CM-10-TOOLING-OBSERVABILITY-RECOVERY",
+    "CM-DATA",
+    "CM-TERM"
+  ],
+  "entityos_artifact_state": "BLOCKED",
+  "exact_blocker": "The owner-admissible GitHub-hosted isolated retry for the String intrinsic/EntityOS candidate again failed before runner allocation (steps=[]; runner_id=0), while this local sandbox cannot perform the repository's pinned PyInstaller one-file double-build. The new VM hardening is therefore not yet covered by a full exact-head isolated EntityOS freeze/execution.",
+  "next_executable_action": "In the first actually-started owner-admissible isolated full-repo sandbox, rebase/test PR743 and PR740 together, run the invalid-UTF8 gate plus existing ClayVM/single-VM/CM-TERM controls, then execute entityos/build_canonical_onefile.py for two matching one-file EntityOS builds and run the exact artifact self-test/status. Do not use VPS or self-hosted runners."
+}

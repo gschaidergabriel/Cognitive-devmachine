@@ -5,24 +5,24 @@
   "scope": "EntityOS one-file verification plus exactly one bounded local portability falsifier",
   "current_product": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
-    "main_head": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
-    "head_delta": "build(entityos): bind security concept into one-file provenance",
-    "workflow_run": 31927513690,
+    "main_head": "f764d27af6781d4f68ae4064f4d97898f946d90f",
+    "head_delta": "fix(entityos): verify bound security concept identity",
+    "workflow_run": 31927650073,
     "workflow_status": "SUCCESS",
     "artifact_name": "EntityOS",
-    "artifact_sha256": "7cf8d7f415417dfd25fbcc74592a09a5827bb79e69e945ed9c3c1a43c82c7c8a",
-    "artifact_size_bytes": 11932320,
+    "artifact_sha256": "9c64e32ffafa252e7495d7edd9e562dbcf0e10bcebb1f38e8392551818d2b9bd",
+    "artifact_size_bytes": 11930480,
     "artifact_mode": "0755",
     "security_concept_sha256": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
     "workflow_evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
-    "workflow_kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
     "workflow_source_regression_rc": 0,
     "whole_machine_acceptance": false
   },
   "current_head_local_verification": {
     "artifact_retrieved_from_workflow": true,
     "status": "PASS",
-    "build_head_reported": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
+    "build_head_reported": "f764d27af6781d4f68ae4064f4d97898f946d90f",
+    "security_concept_sha256_reported": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
     "frozen_runtime": true,
     "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
     "self_test": "PASS",
@@ -44,12 +44,12 @@
     "result": "BYTE_IDENTICAL_PASS",
     "temporary_directory_after_exit": "EMPTY",
     "rollback": "temporary directory removed; no product or canonical runtime state mutated",
-    "note": "The later f525 current-head artifact was subjected only to ordinary verification, not a second unusual experiment. The independently triggered product workflow has its own workflow-level relocation regression; it is not counted as a second experiment initiated by this go worker."
+    "note": "Later current-main artifacts f525 and f764 were subjected only to ordinary verification, not a second unusual experiment. Independently triggered product workflows retain their own workflow-level regression accounting and are not additional experiments initiated by this go worker."
   },
   "grf": {
     "hypothesis": "The frozen one-file EntityOS candidate has a robust product boundary while current semantics remain concentrated in the single canonical compiler/VM/ClayOS path.",
     "counterhypothesis": "Packaging success masks host-environment fragility or a detached semantic sidecar that never reaches the canonical VM path.",
-    "collapse": "One-file execution and admitted smoke/process paths are supported at current main; whole-machine completion remains false. The highest-value semantic blocker remains integrating typed Bytes plus String/argv/effect signatures into canonical source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM, rather than adding parallel adapters.",
+    "collapse": "One-file execution, exact build provenance including security-concept identity, and admitted smoke/process paths are supported at current main; whole-machine completion remains false. The highest-value semantic blocker remains integrating typed Bytes plus String/argv/effect signatures into canonical source/typecheck -> ClayExecutableTypedIR/v1 -> single ClayVM, rather than adding parallel adapters.",
     "outcome": "RETAIN_BOUNDED"
   },
   "coordination": {

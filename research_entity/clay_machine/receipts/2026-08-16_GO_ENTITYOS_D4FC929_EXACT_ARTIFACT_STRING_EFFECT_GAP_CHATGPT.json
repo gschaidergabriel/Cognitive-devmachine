@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "kind": "CLAY_MACHINE_ENTITYOS_EXACT_ARTIFACT_STRING_EFFECT_FRONTIER_RECEIPT",
   "date": "2026-08-16",
   "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
@@ -11,7 +11,8 @@
   "exact_artifact": {
     "name": "EntityOS",
     "sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
-    "size_bytes": 49716056,
+    "size_bytes": 12820496,
+    "size_verification": "verified from downloaded GitHub Actions ZIP central directory and local extracted file stat",
     "carrier": "ELF64_x86_64_PyInstaller_onefile",
     "github_actions_run_id": 31929090825,
     "github_actions_job_id": 95121136050,
@@ -63,6 +64,9 @@
       "Run the resulting exact EntityOS on the accepted Hostinger Ubuntu VPS and capture machine identity/provenance before any whole-machine PASS."
     ]
   },
+  "corrections": [
+    "Version 1.0 carried an incorrect size_bytes value copied from transient session metadata. Version 1.1 corrects it to 12820496 using the downloaded workflow ZIP and extracted exact artifact. SHA-256 and artifact identity are unchanged."
+  ],
   "non_claims": [
     "No accepted Hostinger VPS execution is claimed by this receipt.",
     "No whole-machine EntityOS acceptance is claimed.",

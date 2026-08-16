@@ -1,0 +1,65 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "worker_provenance": "temporary Clay research/build/test worker via ChatGPT GPT-5.6 Sol",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_reality": {
+    "product_main_final_refresh": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "entityos_product_boundary": "ONE_EXECUTABLE_FILE_NAMED_EntityOS",
+    "execution_policy": "ISOLATED_SANDBOX_ONLY_VERCEL_PREFERRED_VPS_FORBIDDEN",
+    "preferred_source_staging_candidate": {
+      "pr": 765,
+      "head": "2a4effb63b3012d15cb051cf571e0d520d73cf65",
+      "schema": "ClayGoSourceStage/v5",
+      "state": "CANDIDATE_NOT_PROMOTED"
+    },
+    "vercel_current_status": "DEPLOYMENT_RATE_LIMITED_RETRY_IN_24_HOURS",
+    "vercel_candidate_execution_observed": false,
+    "whole_machine_acceptance": false
+  },
+  "grf": {
+    "hypothesis": "Build-local untracked dependency files can make a checkout-level git status dirty even though they are not part of the committed source authority and do not contaminate a fresh exact-head staged repository.",
+    "strongest_counterhypothesis": "Untracked build-local files may still leak into staging or hide a real source mutation, so ignoring them at the outer checkout could weaken provenance.",
+    "discriminator": "Create a disposable committed Git repository, add an untracked Vercel-like node_modules decoy, compare status with untracked-files=all versus untracked-files=no, then fetch the exact HEAD into a fresh shallow staging repository and require full cleanliness including untracked files.",
+    "outcome": "RETAIN_MECHANISM_ONLY_NOT_PRODUCT_PROMOTION"
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "VERCEL_BUILD_LOCAL_UNTRACKED_CONTAMINATION_DECOY",
+    "execution_location": "isolated ChatGPT disposable container",
+    "control_and_intervention": {
+      "committed_source": "tracked.txt",
+      "decoy": "mcp/vercel-sandbox-mcp/node_modules/pkg/file.js",
+      "outer_status_untracked_all_detected_decoy": true,
+      "outer_status_untracked_no_ignored_decoy": true,
+      "fresh_shallow_exact_head_status_untracked_all_clean": true
+    },
+    "result": "PASS",
+    "interpretation": "Checkout-level untracked dependency dirt is not sufficient evidence that committed source authority is dirty; full cleanliness belongs on the freshly materialized exact-head staging repository. This does not validate PR #765 or EntityOS itself.",
+    "rollback": "Temporary repository removed automatically; no product/runtime state changed."
+  },
+  "fusion": {
+    "parallel_research_head_at_refresh": "e22c53c99fa6341b714df12e7ef48174bbc3a14e",
+    "parallel_result": "SourceStage v3/v4 reproducibility claims already refuted; PR #765 v5 Git-blob deterministic staging candidate preferred over patching stale PR #761.",
+    "decision": "DO_NOT_DUPLICATE_OR_MERGE_UNTESTED_STAGING_CODE",
+    "reason": "Current Vercel rate limit prevents exact candidate execution and promotion evidence."
+  },
+  "entityos_artifact": {
+    "built_in_this_cycle": false,
+    "updated_in_this_cycle": false,
+    "verified_current_main_in_this_cycle": false,
+    "state": "BLOCKED"
+  },
+  "exact_blocker": "VERCEL_BUILD_RATE_LIMIT: the preferred isolated execution lane rejected new candidate deployments with 'Deployment rate limited — retry in 24 hours', so PR #765 and the current-main fusion cannot produce fresh EntityOS build/runtime evidence in this cycle.",
+  "next_executable_action": "When the Vercel deployment quota resets, run PR #765 on Vercel and require repeated build-hook tar/archive SHA identity. If it passes, fuse v5 staging plus the build-internal no-HTTP sandbox runner onto then-current main, execute one exact-head isolated Sandbox matrix with network DENY_ALL, build EntityOS twice with identical SHA-256, run self-test and moved-copy/PATH-without-host-Python checks, then bind the artifact digest to the exact source head/tree before promotion.",
+  "authority": {
+    "sandbox_only": true,
+    "vps_test_performed": false,
+    "together_used": false,
+    "training_authorized_or_started": false
+  }
+}

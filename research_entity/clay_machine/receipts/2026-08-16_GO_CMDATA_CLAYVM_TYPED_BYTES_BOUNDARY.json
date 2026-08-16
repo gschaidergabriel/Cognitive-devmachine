@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "observed_product_main": "0ba403c130e9238a676708cadf1079bc35ac2654",
+  "grf": {
+    "observed_reality": [
+      "The canonical executable adapter currently admits Int parameters only and Int/Bool returns for the ClayExecutableTypedIR/v1 -> claycode.typed-ir.v0 overlap.",
+      "ClayVM/1 FunctionMeta stores parameter names but not parameter types; the serialized module writes function name, parameter count/names, return type, code offset/length, then code.",
+      "ClayVM runtime frames and public run/call admission are currently Int-oriented; non-Int call arguments are rejected.",
+      "Open PR #693 already provides the current Python CM-DATA byte-framing/snapshot conformance oracle, including fail-closed rejection of non-byte-oriented memoryview exporters.",
+      "Closed PR #699 exact prototype head 4cce87e29bfa9726630fa7b7223ebc6db6e1816f added a separate owned immutable ClayBytes Python substrate and a local exact-source 12/12 gate, but did not cross WP04 -> executable IR -> single ClayVM."
+    ],
+    "generated_reality": "A small Python-owned immutable ClayBytes value with content digest could be merged first and later wired into the VM.",
+    "strongest_counter_reality": "Because PR #693 already occupies the Python conformance-oracle layer, another Python-only byte abstraction duplicates the migration layer; canonical progress requires typed module/runtime admission, and widening VM arguments without serialized parameter types risks type-unsound execution.",
+    "discriminator": "Inspect the exact canonical adapter and ClayVM/1 module/runtime type boundary before promoting a Bytes substrate.",
+    "outcome": "REJECT duplicate Python-only architecture promotion; RETAIN prototype evidence; PROMOTE typed module-format/runtime admission as the next CM-DATA discriminator."
+  },
+  "static_architecture_evidence": {
+    "executable_adapter": {
+      "path": "claymachine/executable_ir_adapter.py",
+      "constraints": [
+        "function params must currently be Int",
+        "return type is currently Int or Bool",
+        "literal/local lowering is Int-only"
+      ]
+    },
+    "clayvm": {
+      "path": "claymachine/clayvm.py",
+      "constraints": [
+        "FunctionMeta.params is a tuple of parameter names, not typed parameter descriptors",
+        "serialized ClayVM/1 function metadata does not encode parameter types",
+        "runtime call arguments are currently Int-checked"
+      ]
+    },
+    "derived_failure_world": "If runtime argument guards were naively widened to bytes without a typed module-format contract, an identity-shaped function declared Int -> Int could not be validated against parameter-type metadata at module/runtime admission. Do not implement this widening as a local VM shortcut."
+  },
+  "product_candidate": {
+    "pr": 699,
+    "state": "CLOSED_UNMERGED_AFTER_SHARED_STATE_REENTRY",
+    "candidate_head": "4cce87e29bfa9726630fa7b7223ebc6db6e1816f",
+    "files": [
+      "claymachine/bytes_value.py",
+      "tests/clay_owned_bytes_gate.py"
+    ],
+    "local_exact_source_gate": "12/12 PASS; exit 0",
+    "scope": "prototype/negative architecture evidence only",
+    "reason_closed": "PR #693 already supplies the Python snapshot/byte-oriented conformance oracle; merging #699 would create a second Python migration abstraction instead of crossing the canonical typed IR/VM boundary.",
+    "non_claims": [
+      "no accepted Ubuntu/VPS PASS",
+      "no completed GitHub CI PASS",
+      "no ClayCode Bytes type/literal",
+      "no ClayVM Bytes ABI/opcode",
+      "no borrowed/mutable Buffer lease/epoch/lifetime semantics",
+      "no whole Clay Machine completion"
+    ]
+  },
+  "parallel_candidate": {
+    "pr": 693,
+    "observed_head": "09dade4dd646e652ad5126f1a1a680a6420a3605",
+    "state": "OPEN_UNMERGED",
+    "role": "Python CM-DATA framing/snapshot conformance oracle; not canonical Clay Bytes/Buffer authority"
+  },
+  "exactly_one_bounded_unusual_experiment_for_this_go": {
+    "name": "UNICODE_CONFUSABLE_MODULE_IDENTITY",
+    "result": "REFUTED_AT_SYNTAX_BOUNDARY",
+    "finding": "Current canonical QID grammar accepts ASCII identifier segments only; precomposed accented, combining-mark and Cyrillic-confusable spellings tested in the bounded probe were rejected. No resolver Unicode-normalization layer is justified by this attack path.",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+    "affected_workstreams": [
+      "CM-DATA",
+      "CM-02-TYPE-EFFECT-SYSTEM",
+      "CM-04-COMPILER-LOWERING-BYTECODE",
+      "CM-05-VIRTUAL-CLAY-MACHINE",
+      "CM-06-MEMORY-CONCURRENCY-RUNTIME",
+      "CM-TERM",
+      "CM-NET",
+      "CM-VIS",
+      "CM-AUDIO"
+    ],
+    "rule": "Do not add canonical Bytes by widening ClayVM runtime values alone. Select an explicit typed value/module-format/runtime admission contract that preserves declared parameter and return types, provenance and fail-closed behavior through WP04 -> ClayExecutableTypedIR/v1 -> the single ClayVM. Keep Python data-plane code as conformance/migration oracle only.",
+    "next_falsifier": "Design the smallest backward-compatible or explicitly versioned ClayVM typed-value/module contract for one owned immutable Bytes parameter/return path, then prove that Int -> Int rejects bytes at admission while Bytes -> Bytes accepts an immutable provenance-bound value. Compare against the existing Int/Bool VM baseline and preserve deterministic module identity/replay."
+  },
+  "other_frontier_state": {
+    "CM07": "Preserved v2 correction remains blocked on an actually-started isolated/source-admitted exact-head execution lane; GitHub-hosted attempt was billing/spending-blocked before runner start.",
+    "CM02": "Merged exact-head green; diagnostic rendering resource behavior remains a separate open surface."
+  }
+}

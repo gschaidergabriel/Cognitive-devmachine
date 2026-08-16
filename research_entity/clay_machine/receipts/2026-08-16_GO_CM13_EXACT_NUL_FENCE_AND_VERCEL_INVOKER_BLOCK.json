@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "research_base_observed": "8b2fc8578fa4ab588eaa9f91c29c4517dc1470ca",
+  "product_main_observed": "7a228d3d3fc33a2681e635e8725d44c06518e891",
+  "owner_vercel_batch_directive_observed": "37a1b89ff2cc8c950080e463b1f50079f96cb135",
+  "coordination": {
+    "preferred_string_lane": "PR #744 path-only String hostcall through the single ClayVM",
+    "bytes_lane": "PR #741 typed Bytes through CLAYVM/2",
+    "duplicate_batch_pr_753": "CLOSED_UNMERGED_AFTER_COORDINATION",
+    "action": "RETAIN_PR_744_AND_DO_NOT_DUPLICATE_PRODUCT_IMPLEMENTATION"
+  },
+  "exact_current_source_binding": {
+    "path": "claymachine/host_process.py",
+    "product_main": "7a228d3d3fc33a2681e635e8725d44c06518e891",
+    "github_git_blob_sha1": "886ee0cbba5706536ef5602bc15f313eb56d26c0",
+    "local_reconstructed_git_blob_sha1": "886ee0cbba5706536ef5602bc15f313eb56d26c0",
+    "blob_identity_match": true
+  },
+  "grf": {
+    "observed_anchor": "The current-main CM-13 Linux process boundary already accepts explicit String argv, uses shell=false, and rejects NUL-bearing argv before Linux spawn, while the canonical current-main ExecutableIR/ClayVM process path remains Int-request-id-only.",
+    "generated_reality": "The missing String process capability may primarily be an upstream typed VM/ExecutableIR contract gap rather than a defect in the Linux argv boundary itself.",
+    "strongest_counter_reality": "If CM-13 accepts malformed String argv or permits hidden argument smuggling, widening the VM String path would expose an unsafe host boundary and should be rejected.",
+    "falsifier": "Run the exact current-main host_process blob with a real-process baseline, then attempt one NUL-bearing argv value that would create a marker if it reached Linux.",
+    "outcome": "RETAIN_NARROW_STRING_PATH_LANE_WITH_UPSTREAM_TYPED_TRANSPORT_BLOCKER",
+    "confidence": "HIGH_FOR_EXACT_CM13_NUL_BOUNDARY; WHOLE_MACHINE_UNPROVEN"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "NUL_ARGV_SMUGGLE_AT_CM13_LINUX_BOUNDARY",
+    "count": 1,
+    "environment": "LOCAL_ISOLATED_CONTAINER",
+    "baseline": {
+      "command": "/usr/bin/true",
+      "returncode": 0,
+      "real_process_executed": true
+    },
+    "intervention": "Invoke exact current-main run_host_process with /usr/bin/touch and a marker argv containing an embedded NUL plus suffix.",
+    "predicted_if_boundary_unsafe": "Linux effect is reached or marker is created despite the embedded NUL.",
+    "predicted_if_boundary_fail_closed": "Request is rejected before Linux spawn and the marker remains absent.",
+    "result": {
+      "exception_class": "HostProcessBoundaryError",
+      "exception": "ARGV_NUL_DENIED",
+      "marker_exists": false,
+      "classification": "FAIL_CLOSED_BEFORE_LINUX_EFFECT"
+    },
+    "rollback": "Temporary marker path removed with isolated temporary directory teardown.",
+    "outcome": "PASS_DISCRIMINATOR"
+  },
+  "github_hosted_execution_block": {
+    "historical_discriminator_run": 31937905223,
+    "runner_id": 0,
+    "steps": [],
+    "status": "NOT_STARTED",
+    "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+    "classification": "INFRASTRUCTURE_BILLING_BLOCK_NOT_CODE_FAILURE"
+  },
+  "vercel_coordination_and_attempt": {
+    "authorization": "FULL_BY_OWNER_DIRECTIVE",
+    "preferred_execution_surface": "VERCEL_SANDBOX",
+    "active_matrix_branch": "chatgpt/go-vercel-cm07-entityos-20260816",
+    "matrix_deployment_observed_ready": "dpl_GZJ3TNEbj4AAVURUBWzXAi6NAZrr",
+    "matrix_head_observed": "7c8f46f68652cb93785f7d237648f78a6afff174",
+    "prior_runtime_logs_before_invocation": "NONE_OBSERVED_FOR_PREVIOUS_MATRIX_DEPLOYMENT",
+    "wrong_route_probe": "HTTP_404_NO_SANDBOX_START",
+    "correct_route_probe": "HTTP_302_VERCEL_SSO_BEFORE_FUNCTION_EXECUTION",
+    "temporary_share_access_probe": "HTTP_302_VERCEL_SSO_BEFORE_FUNCTION_EXECUTION",
+    "sandbox_started_by_this_worker": false,
+    "classification": "DEPLOYMENT_PROTECTION_AUTHENTICATED_INVOKER_BLOCK",
+    "security_decision": "DO_NOT_WEAKEN_PREVIEW_PROTECTION_OR_CREATE_PUBLIC_ARBITRARY_COMMAND_BYPASS"
+  },
+  "fusion": {
+    "new_evidence": "Exact-current-main CM-13 NUL validation is fail-closed and does not require a competing process implementation. The preferred #744 lane remains the narrow upstream typed String-path candidate.",
+    "counterevidence_preserved": "A component boundary PASS does not establish canonical ClayCode String/argv support, general argv, Bytes, streaming, PTY, executable-content provenance, or whole EntityOS acceptance.",
+    "pr_744_comment_id": 5308308061,
+    "decision": "RETAIN_PR_744"
+  },
+  "entityos": {
+    "artifact_built_this_cycle": false,
+    "artifact_updated_this_cycle": false,
+    "artifact_verified_this_cycle": false,
+    "whole_clay_machine_acceptance": false,
+    "artifact_status": "BLOCKED",
+    "exact_blocker": "The coordinated Vercel one-sandbox EntityOS matrix exists and Vercel Sandbox is owner-authorized, but the current ChatGPT Vercel connector cannot cross Preview Deployment Protection to invoke the bounded matrix endpoint: the correct route and temporary share-access path both return the Vercel SSO redirect before function execution. GitHub-hosted ubuntu-latest jobs are independently rejected before step 1 by account billing/spending state. VPS/self-hosted/production-host testing remains forbidden.",
+    "next_sandbox_executable_step": "Expose or use a secure authenticated Vercel connector/action that can invoke the existing bounded protected matrix endpoint without weakening Deployment Protection. Stage the then-current exact reviewed product/PR head, run the coordinated String/Bytes/current regression batch, build EntityOS twice with identical SHA-256, execute that exact one-file artifact status/self-test/PATH-without-host-Python/moved-copy/state controls, retain artifact digest and logs, then promote only surviving semantics."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "authority_refresh": {
+    "execution_policy": "SANDBOX_ONLY_TESTING",
+    "directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "rule_applied": "Only isolated-sandbox execution is promoted as current test/experiment/runtime evidence; historical self-hosted build origin is retained only as provenance."
+  },
+  "coordination": {
+    "product_main_observed": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "research_head_observed_before_write": "761ed6c5397dc681d3d8b803bd2c9bb25d72e7df",
+    "parallel_overlap_detected": "2026-08-16_GO_SANDBOX_ONLY_ENTITYOS_BUILD_BLOCKER_AND_STRICT_ARTIFACT_CANDIDATE.json already contains a poisoned/empty host-Python environment experiment on a different historical EntityOS candidate.",
+    "classification": "EXPLICIT_INDEPENDENT_REPLICATION_NOT_NEW_MECHANISM",
+    "no_parallel_runtime_created": true
+  },
+  "artifact_provenance": {
+    "artifact": "EntityOS",
+    "origin_workflow": "EntityOS Semantic One-File Rebuild VPS",
+    "origin_workflow_run": 31930112424,
+    "origin_build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+    "origin_environment": "historical self-hosted Linux X64",
+    "origin_environment_promotion": "NOT_ALLOWED_AS_CURRENT_BUILD_VALIDATION",
+    "artifact_sha256": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+    "artifact_size_bytes": 12821560,
+    "artifact_mode": "0755",
+    "artifact_format": "ELF 64-bit LSB x86-64 dynamically linked",
+    "build_receipt_sha_match_in_sandbox": true,
+    "build_receipt_reproducibility_sha256_match": true,
+    "build_receipt_whole_machine_acceptance": false
+  },
+  "sandbox_runtime_recheck": {
+    "environment": "active isolated ChatGPT container sandbox",
+    "status": "PASS",
+    "self_test_json": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "host_process_result": "ENTITYOS_HOST_OK",
+    "reported_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "reported_frozen_runtime": true,
+    "reported_whole_machine_acceptance": false
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "SANITIZED_PATH_PYTHONLESS_STARTUP_REPLICATION",
+    "execution_location": "isolated local sandbox",
+    "baseline": "Exact artifact status command in the sandbox passes under the normal process environment.",
+    "intervention": "/usr/bin/env -i HOME=/tmp PYTHONHASHSEED=0 PATH=/nonexistent <absolute EntityOS> status",
+    "control": "/usr/bin/env -i HOME=/tmp PATH=/nonexistent /usr/bin/env python3 --version",
+    "prediction_if_frozen_runtime_is_host_python_independent_at_launch": "EntityOS returns 0 and status while the Python control is unresolved.",
+    "prediction_counter_reality": "EntityOS fails like the host-Python control because launch still relies on /usr/bin/env python3 or PATH Python resolution.",
+    "result": {
+      "entityos_returncode": 0,
+      "entityos_frozen_runtime": true,
+      "entityos_stderr_empty": true,
+      "python_control_returncode": 127,
+      "python_control_error": "env: 'python3': No such file or directory"
+    },
+    "collapse": "RETAIN frozen one-file launch independence from host-Python PATH for this exact artifact; this is a replication of the mechanism, not whole portability or current-head build evidence.",
+    "rollback": "environment-only intervention; no persistent runtime mutation"
+  },
+  "legacy_packaging_counterexample": {
+    "path": "tools/build_entityos.py",
+    "observed_interpreter": "/usr/bin/env python3",
+    "interpretation": "The legacy zipapp packaging path remains host-Python/PATH dependent at launch and is weaker than the frozen PyInstaller candidate for the one-file product boundary."
+  },
+  "product_delta": {
+    "branch": "clay/go-entityos-pythonless-gate-20260816",
+    "head": "3ae31c4fe8e5456d18cfae97dfd0d27a2cfb6390",
+    "pull_request": 729,
+    "changed_files": 1,
+    "change": "Add a canonical semantic-onefile regression gate requiring exact freshly-built EntityOS to start under sanitized PATH=/nonexistent while the host-Python control fails; record pythonless_path_startup=PASS.",
+    "runner_policy_changed": false,
+    "merge_state": "OPEN_UNMERGED_PENDING_EXECUTABLE_SANDBOX_EVIDENCE"
+  },
+  "current_head_build_blocker": {
+    "product_main": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "hosted_workflow_run": 31930154546,
+    "hosted_job": 95123710315,
+    "observed_status": "failure",
+    "steps": 0,
+    "runner_id": 0,
+    "classification": "ISOLATED_HOSTED_RUNNER_DID_NOT_START; NOT_CODE_FAILURE",
+    "exact_current_head_entityos": "BLOCKED",
+    "reason": "No exact 399ee6e... EntityOS was built in an accepted isolated sandbox. The tested artifact embeds parent head 950d164... and cannot be relabeled as current-head build evidence even though the only 399ee6e... source delta is workflow configuration."
+  },
+  "grf": {
+    "observed": "A historically built canonical one-file ELF executes correctly in the current isolated sandbox and survives removal of host Python from PATH; the exact current-head hosted build does not start its runner.",
+    "generated_hypothesis": "The frozen PyInstaller EntityOS packaging boundary is the stronger product lane because launch-time Python resolution is internalized while preserving controlled Linux host boundaries.",
+    "counter_reality": "Passing the PATH lesion does not imply static portability, current-source reproducibility, clean-build acceptance, or whole-machine completion; dynamic loader/glibc and exact-source/toolchain provenance remain compatibility/evidence surfaces.",
+    "discriminator": "Build current product main twice inside an accepted isolated sandbox, require matching reproducibility identity, then run the codified PATH-lesion/status/self-test/String/effect fail-closed gates on those exact bytes.",
+    "collapse": "PROMOTE pythonless startup as a regression requirement; DEFER exact-current EntityOS verification until sandbox build execution exists."
+  },
+  "next_sandbox_executable_step": "Materialize exact latest product-main source plus pinned PyInstaller 6.21.0/lark 1.3.1 inside an isolated sandbox (or restore an actually-started GitHub-hosted isolated runner), build EntityOS twice, compare reproducibility receipts, then execute PR #729 pythonless startup gate plus status/self-test/current semantic gates on the exact current-head artifact before merge/promotion.",
+  "hard_boundaries": {
+    "whole_clay_machine_acceptance": false,
+    "current_head_entityos_verified": false,
+    "vps_test_used": false,
+    "self_hosted_test_promoted": false,
+    "together_api_used": false,
+    "training_started": false,
+    "effect_authority_widened": false
+  },
+  "outcome": "REPLICATED_PYTHONLESS_FROZEN_STARTUP_IN_SANDBOX; PR729_OPEN; EXACT_CURRENT_HEAD_SANDBOX_BUILD_BLOCKED"
+}

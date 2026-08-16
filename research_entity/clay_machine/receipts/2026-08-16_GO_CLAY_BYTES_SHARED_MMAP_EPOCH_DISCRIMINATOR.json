@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "frontier": ["CM-DATA", "CM-TERM", "CM-06-MEMORY-CONCURRENCY-RUNTIME"],
+  "observed_product_context": {
+    "candidate_pr": 741,
+    "candidate_head": "0a23254125d0eb0fbb3b98ede45c5f9ebb754cef",
+    "candidate_semantics_under_test": "snapshot mutable one-byte C-contiguous memoryview with memoryview.tobytes() into owned bytes",
+    "current_main_seen_before_experiment": "7b8ba167eb37493f857d517ee64b678b061e0b2b",
+    "later_main_receipt_only_descendant_seen": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+    "note": "The experiment is a mechanism discriminator for the candidate ownership contract; it is not exact-current-main product acceptance."
+  },
+  "grf": {
+    "observed_reality": "The current Bytes candidate copies a mutable admitted memoryview into a new bytes object, while earlier project evidence already rejected readonly-view as proof of immutable backing provenance.",
+    "generated_reality": "An owned copy could be sufficient to define a stable Clay Bytes value even if the exporter remains mutable, because post-copy producer mutations cannot mutate the returned bytes object.",
+    "strongest_counter_reality": "If the producer can mutate shared memory concurrently while the copy is in progress, the resulting owned bytes object can be a torn/mixed state that never corresponded to a single producer epoch; ownership-after-copy does not itself establish snapshot consistency or provenance-stable ingress.",
+    "discriminating_prediction_hypothesis": "Every copied 4 MiB snapshot during alternating whole-buffer A/B producer epochs is internally homogeneous ALL_A or ALL_B.",
+    "discriminating_prediction_counterhypothesis": "At least one copied snapshot is MIXED_AB while the producer updates the shared buffer in halves.",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED_MID_UPDATE_SNAPSHOT",
+    "collapse": "RETAIN_OWNED_COPY_FOR_ORDINARY_MUTABLE_INPUTS; REQUIRE_EXPLICIT_LEASE_EPOCH_STABILITY_OR_EQUIVALENT_VALIDATED_SNAPSHOT_PROTOCOL_FOR_CONCURRENT_SHARED_MUTABLE_EXPORTERS"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "MUTABLE_SHARED_MMAP_EPOCHLESS_SNAPSHOT",
+    "execution_surface": "VERCEL_SANDBOX",
+    "deployment_id": "dpl_Bpxd1yAdQuxsN2BKJqD6P2Mj7iyn",
+    "deployment_commit": "1625ee84ab273df4f494ad513bc235ca3b1e674f",
+    "sandbox_runtime": "python3.13",
+    "network_policy": "deny-all",
+    "endpoint_scope": "fixed-bounded-one-experiment-no-arbitrary-command",
+    "buffer_size_bytes": 4194304,
+    "rounds": 240,
+    "baseline": {
+      "snapshots": 8,
+      "result": "8/8 ALL_A"
+    },
+    "intervention": "A separate process alternated the same shared mmap between A and B in two half-buffer writes with a bounded pause between halves while the candidate snapshot operation copied the full memoryview.",
+    "observed_counts": {
+      "ALL_A": 42,
+      "ALL_B": 30,
+      "MIXED_AB": 168
+    },
+    "mixed_example": {
+      "first_half_A": 0,
+      "second_half_A": 2097152
+    },
+    "exit_code": 0,
+    "stderr": "",
+    "rollback": "Ephemeral sandbox stopped; temporary mmap file deleted by the experiment; no canonical product source was mutated by the experiment itself."
+  },
+  "interpretation": {
+    "supported_claim": "memoryview.tobytes() provides owned immutable result storage but does not by itself guarantee a producer-epoch-consistent snapshot when the backing shared memory is concurrently mutated",
+    "not_supported": [
+      "that PR 741 is otherwise incorrect",
+      "that all mutable buffers require copying",
+      "that zero-copy can never be safe",
+      "that Clay Bytes semantics are now selected",
+      "that whole EntityOS or Clay Machine acceptance passed"
+    ],
+    "required_contract_delta": "For concurrently mutable/shared exporters, define and test an explicit producer lease/epoch/stability handshake, versioned immutable publication protocol, seqlock-like validated retry, or another mechanism that proves the admitted bytes correspond to one declared producer epoch. Fail closed or snapshot through a validated protocol when stability cannot be established.",
+    "performance_followup": "Any retry/copy/lease design must be measured for latency, throughput, copy count, allocation pressure and starvation under sustained writer activity before CM-DATA performance claims."
+  },
+  "next_falsifiers": [
+    "Implement the smallest versioned epoch-before/copy/epoch-after retry oracle and prove it never admits MIXED_AB under the same writer intervention.",
+    "Bound retry/starvation behavior under a continuously mutating producer and fail closed after a declared budget.",
+    "Carry the selected stability metadata through typed Clay Bytes/Buffer -> executable TypedIR -> single ClayVM ingress without backend-local semantics."
+  ],
+  "product_delta": "NO_CANONICAL_PRODUCT_CODE_PROMOTION_FROM_THIS_EXPERIMENT",
+  "together_api_used": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false
+}

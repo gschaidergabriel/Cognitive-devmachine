@@ -1,0 +1,86 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "CURRENT_HEAD_EXACT_ENTITYOS_RETRY_PASS_LOCAL_REPLICATION_PASS",
+  "supersedes_for_current_head_build_claims": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_CURRENT_HEAD_CANCELLATION_BLOCK.json",
+  "preserves": [
+    "The first attempt of run 31926943891 was cancelled during packaging and remains valid historical negative execution evidence.",
+    "Whole Clay Machine / whole EntityOS acceptance remains false."
+  ],
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_head": "57759c6bc0d52fa531a7b26993223c22f4549282",
+  "current_head_delta": "EntityOS selftest verifies an already-admitted effectful TypedIR -> serialized ClayVM -> capability-gated Linux process path without claiming new ClayCode syntax.",
+  "upstream_exact_head_gate": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31926943891,
+    "attempt": 2,
+    "job_id": 95116001473,
+    "runner": "clay-4 self-hosted Linux X64",
+    "job_conclusion": "success",
+    "build_step": "PASS",
+    "canonical_gates": "PASS",
+    "artifact_upload": "PASS",
+    "artifact_id": 9258135713,
+    "artifact_archive_digest_sha256": "5b947fd4d680982b0b79bc894fe5b984689257d54db8c576b15130fc43197e50",
+    "entityos_sha256": "5b8d9445e154028a7bfb509524e2e6a23a8fd6076ce8bf416450a920c0a6eb1e",
+    "entityos_size_bytes": 11932640,
+    "source_regression": 0,
+    "single_file_runtime": true,
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_entityos_completion": false
+  },
+  "local_replication": {
+    "environment": "active ChatGPT Linux sandbox outside repository tree",
+    "downloaded_artifact_id": 9258135713,
+    "sha256": "5b8d9445e154028a7bfb509524e2e6a23a8fd6076ce8bf416450a920c0a6eb1e",
+    "sha256_matches_upstream_receipt": true,
+    "build_head_status": "57759c6bc0d52fa531a7b26993223c22f4549282",
+    "status_command": "PASS",
+    "self_test_json": "PASS",
+    "self_test_vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "typed_ir_vm_process_result": 0,
+    "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK",
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_without_capability_rc": 1,
+    "host_with_capability": "ENTITYOS_CURRENT_OK",
+    "host_with_capability_rc": 0
+  },
+  "workflow_unusual_experiment_observed_not_launched_by_this_worker": {
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "count_in_attempt_2": 1,
+    "result": "PASS",
+    "note": "This was the workflow's own built-in experiment on the current head. This worker did not trigger the retry."
+  },
+  "this_worker_macro_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "ENV_STARVED_MODE0555_CWD_PREDECESSOR_REPLICATION",
+    "artifact_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+    "result": "PASS",
+    "scope": "Immediate predecessor only; retained as portability regression evidence, not current-head acceptance evidence.",
+    "rollback": "Temporary environment directory removed; canonical artifact unchanged."
+  },
+  "grf": {
+    "observed_reality": "The exact current source head now has a successful self-hosted Linux one-file build, exact canonical gate execution, uploaded artifact, and byte-matching independent local execution.",
+    "retained_hypothesis": "The one-file EntityOS boundary remains viable after adding the admitted typed VM process-effect selftest path.",
+    "strongest_counter_reality": "Current success can still fail on the declared oldest compatible Linux/glibc floor, a noexec or unsuitable temporary extraction filesystem, or once canonical String/Bytes/Buffer/argv and broader typed effects are admitted.",
+    "falsifier": "Run the exact current-or-descendant EntityOS on the declared oldest supported Linux/glibc floor and constrained temp-filesystem cases, while expanding only canonical String/Bytes/Buffer/argv/effect semantics through checker -> TypedIR -> single VM -> ClayOS.",
+    "outcome": "RETAIN"
+  },
+  "remaining_release_blockers": [
+    "Canonical Clay String/Bytes/Buffer ownership and lifetime semantics are not closed.",
+    "Canonical argv/env/cwd/stdin/stdout/stderr/PTY process effects are not closed.",
+    "CM-NET, broader CM-DATA, CM-VIS and CM-AUDIO remain open or incomplete.",
+    "Persistent state/recovery and self-hosting/bootstrap equivalence remain open.",
+    "Portable execution across the declared oldest Linux/glibc floor and constrained onefile temp extraction environments remains unproven.",
+    "Whole Clay Machine / whole EntityOS acceptance remains false."
+  ],
+  "next_discriminator": "Keep the current one-file artifact as regression baseline; select the smallest provenance-bound canonical String + Bytes/Buffer ownership/lifetime + argv/effect-signature surface shared by CM-TERM and CM-DATA, wire it through checker -> ClayExecutableTypedIR -> single ClayVM -> ClayOS, rebuild EntityOS, then rerun exact-head one-file and portability-floor gates.",
+  "training_authorized": false,
+  "together_api_used": false
+}

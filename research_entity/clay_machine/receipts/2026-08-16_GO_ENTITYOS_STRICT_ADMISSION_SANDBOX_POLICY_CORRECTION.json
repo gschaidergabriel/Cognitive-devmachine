@@ -1,0 +1,57 @@
+{
+  "schema": "ClayMachineGOReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "state": "BLOCKED_VALIDATION",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_head_last_observed": "828106fac3cb388410dd7d524ebbdbd39efcf4c4",
+  "merged_delta": {
+    "pr": 728,
+    "merge_sha": "3fb48fd22bc65ce160c021acca702357ab22df3a",
+    "mechanism": "EntityOS TypedIR process probe now executes through ClayOS.exec_artifact with ClayVMArtifact/v1 ProvenanceExpectation instead of raw ClayVM load_module",
+    "whole_machine_acceptance": false
+  },
+  "owner_policy_correction": {
+    "program_state_schema": "4.5",
+    "execution_policy": "SANDBOX_ONLY_TESTING",
+    "vps_self_hosted_production_test_evidence": "FORBIDDEN",
+    "late_refresh_effect": "Earlier self-hosted receipts are historical observations only and are inadmissible for current promotion. PR #728 body was corrected after merge."
+  },
+  "sandbox_evidence": {
+    "downloaded_candidate_sha256": "87399e5a65c14b86b3963786f2a6bfda56f9d6d60de43b375f9cf1bdc0c6d4c2",
+    "candidate_runtime_selftest_in_active_isolated_sandbox": "PASS",
+    "typed_ir_vm_process_admission": "ClayVMArtifact/v1",
+    "candidate_build_provenance": "INADMISSIBLE_SELF_HOSTED_ORIGIN",
+    "current_canonical_sandbox_run": 31930611447,
+    "current_canonical_sandbox_job": 95124690265,
+    "current_canonical_sandbox_result": "INFRASTRUCTURE_NON_START_STEPS_NULL_NOT_CODE_RESULT",
+    "semantic_rebuild_sandbox_run": 31930611424,
+    "local_rebuild_result": "BLOCKED_TOOLCHAIN_AND_DNS",
+    "local_toolchain": {
+      "lark": "1.3.1",
+      "pyinstaller": "MISSING_REQUIRED_6.21.0",
+      "pyinstaller_cache": "NONE_FOUND",
+      "pip_network": "DNS_TEMPORARY_FAILURE"
+    }
+  },
+  "unusual_experiment_accounting": {
+    "required": 1,
+    "physically_executed_this_macro_cycle": 2,
+    "deviation": true,
+    "experiment_1": "PROVENANCE_TRANSPLANT_RAW_VS_STRICT active sandbox discriminator",
+    "experiment_2": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD pre-existing automatic self-hosted workflow experiment",
+    "promotion_note": "Experiment 2 is inadmissible as evidence under schema 4.5 but still counts as physical execution.",
+    "coordination_repair_observed_on_current_main": "Canonical EntityOS workflow now treats relocation/Unicode as regression and emits new_go_unusual_experiment_count=0."
+  },
+  "durable_blocker": {
+    "issue": 733,
+    "blocking_invariant": "No actually-started isolated-sandbox exact-current-head reproducible one-file EntityOS build receipt exists.",
+    "next_executable_step": "On an actually-started isolated sandbox with source access and pinned PyInstaller 6.21.0 freezer toolchain, rebuild exact current product main twice, require identical SHA and one EntityOS file, then execute source-single-VM, status, selftest, one-time grant including symlink rejection, and capability-gated Linux interop gates in that same sandbox."
+  },
+  "next_semantic_frontier_after_validation": "Smallest canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface for CM-DATA and CM-TERM through typed/effect IR and the single VM.",
+  "negative_results_preserved": [
+    "GitHub-hosted sandbox jobs can fail before any step starts; steps=null is not a code failure.",
+    "Sandbox runtime PASS of a binary does not repair inadmissible build provenance.",
+    "This go macro-cycle violated exactly-one unusual-experiment cardinality with 2 physical executions."
+  ]
+}

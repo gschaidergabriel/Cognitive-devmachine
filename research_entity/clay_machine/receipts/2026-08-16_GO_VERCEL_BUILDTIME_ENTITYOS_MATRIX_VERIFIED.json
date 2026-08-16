@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "ISOLATED_VERCEL_SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_product_main": "7b8ba167eb37493f857d517ee64b678b061e0b2b",
+  "tested_branch": "chatgpt/go-vercel-cm07-entityos-20260816",
+  "tested_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+  "merge_base_with_observed_main": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+  "relation_to_observed_main": "DIVERGED_AHEAD_5_BEHIND_6",
+  "pull_request": 755,
+  "vercel": {
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_ESwWufAfNd36LRYBza5FpBZsnYco",
+    "execution_mode": "AUTHENTICATED_PREVIEW_BUILD_INTERNAL_HANDLER_TO_SANDBOX",
+    "external_protection_bypass_required": false,
+    "network_policy_during_tests": "DENY_ALL",
+    "sandbox_stopped": true,
+    "stop_error": null
+  },
+  "source_stage": {
+    "schema": "ClayGoSourceStage/v2",
+    "source_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "archive_sha256": "492748eea90264e6188372597afb0bd25f2958d7bc0f75271555f2da7128f38e",
+    "archive_bytes": 1274079,
+    "oidc_present": true,
+    "secret_value_emitted": false
+  },
+  "matrix": {
+    "status": "GO_SANDBOX_MATRIX_VERIFIED",
+    "unpack_and_bind_source_exit": 0,
+    "provision_system_freeze_toolchain_sudo_exit": 0,
+    "provision_pinned_python_toolchain_exit": 0,
+    "offline_go_matrix_exit": 0,
+    "cm07": "PASS",
+    "entityos_dirfd": "PASS",
+    "canonical_source_pipeline": "PASS",
+    "entityos_onefile": "PASS",
+    "path_without_host_python": "PASS_BY_OFFLINE_MATRIX_EXIT_ZERO_AND_GATE_PRESENT",
+    "relocation": "PASS_BY_OFFLINE_MATRIX_EXIT_ZERO_AND_GATE_PRESENT"
+  },
+  "entityos": {
+    "artifact": "EntityOS",
+    "single_file": true,
+    "sha256": "5f2f574dd71cdc0d8475ecda536d701d97ee567850d84e63c324de1ed87886d6",
+    "tested_head": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "whole_machine_acceptance": false,
+    "promotion_state": "BRANCH_VERIFIED_NOT_CURRENT_MAIN_VERIFIED"
+  },
+  "grf": {
+    "observed_reality": "The external Vercel protection-bypass path was rate-limited, while VERCEL_OIDC_TOKEN was present in preview build context. The branch therefore invoked the existing fixed GO handler internally during the preview build and actually started one isolated Sandbox.",
+    "generated_reality": "Build-context authentication can remove the deployment-protection control-plane dependency without weakening the fixed bounded sandbox job.",
+    "strongest_counter_reality": "The build-context path could behave differently from the runtime handler or silently execute multiple batches due repeated Vercel build hooks.",
+    "discriminating_observation": "First build hook executed one Sandbox matrix and persisted a deployment marker; the second hook reported SKIPPED_ALREADY_EXECUTED_THIS_DEPLOYMENT with the same prior EntityOS SHA.",
+    "outcome": "SUPPORTED_FOR_THIS_PREVIEW_BUILD",
+    "promotion_limit": "Current main contains additional provenance-gate changes not present in tested head; exact merged/current-main artifact must be rebuilt and re-run before main-level promotion."
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_count_in_this_receipt": 0,
+    "note": "This receipt records execution evidence from the coordinated Vercel branch. The current temporary worker's GO macro-cycle already consumed its exactly-one bounded control-plane experiment in 2026-08-16_GO_VERCEL_STAGE_DETERMINISM_AND_RUNTIME_INVOKER_BLOCK.json; no second experiment is introduced here."
+  },
+  "next_executable_step": "Synchronize the tested Vercel batch path with exact current main, including the canonical build provenance gate, then require a fresh actually-started isolated Vercel Sandbox matrix on the synchronized head and record the exact rebuilt EntityOS SHA before merge/promotion."
+}

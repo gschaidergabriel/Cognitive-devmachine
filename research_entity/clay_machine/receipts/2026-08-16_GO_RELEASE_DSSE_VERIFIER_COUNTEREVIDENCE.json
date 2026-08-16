@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "pre-ClayOS authenticated release metadata and rollback semantics",
+  "research_head_before_write_observed": "ad89328171e7778820771878045668304f745042",
+  "product_main_observed_after_parallel_activity": "20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
+  "product_candidate": {
+    "pull_request": 651,
+    "head": "a2c7fea1f6bb956527d7b1e26dcce8ba310dd1ef",
+    "state_at_receipt": "OPEN_NOT_PROMOTED",
+    "exact_head_workflow_run": 31920935889,
+    "job": 95100600301,
+    "runner": "clay",
+    "runner_class": "self-hosted Linux/X64",
+    "workflow_result": "PASS",
+    "mechanism_result": "SUPPORTED_COMPONENT_MECHANISM",
+    "whole_release_authority_result": "NOT_PROVEN"
+  },
+  "primary_evidence_basis": [
+    "The Update Framework model starts from trusted root metadata/keys provisioned to the client and uses monotonic metadata versions to detect rollback.",
+    "DSSE authenticates payload type plus payload bytes through pre-authentication encoding and recommends signature verification before trusting parsed payload semantics.",
+    "in-toto Statement/v1 provides typed subject digests suitable for binding exact ClayEnv manifest and ClayVM artifact identities.",
+    "Ed25519 verification is delegated to the pinned cryptography library rather than implemented as project-specific cryptography."
+  ],
+  "candidate_mechanism": [
+    "Verify an externally pinned 32-byte Ed25519 public-key object before using it.",
+    "Verify a DSSE envelope before parsing its in-toto Statement/v1 payload.",
+    "Bind signed subjects to the exact ClayEnvManifest/v1 and ClayVMArtifact/v1 bytes and bind vm_blob_sha256 across signed predicate and existing provenance manifest.",
+    "Execute only through the existing run_artifact -> ClayOS.exec_artifact path.",
+    "Persist a canonical release state under an exclusive file lock; reject lower signed releaseVersion and same-version/different-payload equivocation.",
+    "Fail closed on a changed trusted key after state exists until a separate root-rotation protocol is defined."
+  ],
+  "ordinary_regressions": [
+    "valid signed release executes and exact replay remains idempotent",
+    "attacker-signed release rejected",
+    "trusted-key file substitution rejected against supplied key pin",
+    "different valid artifact/manifest pair rejected under another signed release",
+    "lower signed release version rejected after newer release",
+    "same release version with different signed payload rejected as equivocation",
+    "root-key change rejected until rotation protocol exists",
+    "public release-run CLI exercised"
+  ],
+  "experiment_accounting": {
+    "new_unusual_experiment_count": 0,
+    "single_unusual_experiment_for_this_go_invocation": "CLAYENV_PACKAGE_ROOT_RELOCATION",
+    "single_unusual_experiment_status": "ALREADY_PASS_AND_MERGED_PR_636"
+  },
+  "grf": {
+    "generated_reality": "A DSSE signature plus a hash-pinned Ed25519 public key supplied to release-run constitutes independent release authority.",
+    "strongest_counter_reality": "If the same invoking principal can select both the public-key path and its expected hash, the verifier proves consistency with a chosen key but cannot prove that the key came from an independently authorized trust root.",
+    "observed_counterevidence": "PR 651 public CLI currently accepts both --trusted-release-key and --trusted-release-key-sha256. Therefore the root origin is an external assumption, not enforced authority inside this public surface.",
+    "second_counter_reality": "Monotonic local release state detects stale metadata while intact but can itself be rolled back by host/snapshot restoration unless anchored in a stronger non-rollbackable or externally reconciled state.",
+    "collapse": "RETAIN_DSSE_IN_TOTO_ED25519_AND_VERSION_FENCE_AS_SUPPORTED_MECHANISM; DEFER_PROMOTION_AS_RELEASE_AUTHORITY"
+  },
+  "promotion_blockers": [
+    "Source the accepted release root from a non-caller-controlled OS/deployment trust boundary or equivalent canonical trust store.",
+    "Prove arbitrary caller-selected root substitution cannot authorize release execution.",
+    "Define root-key rotation and recovery rather than silently accepting a new key.",
+    "Define rollback-resistant or externally reconciled release-version state and test host/snapshot rollback.",
+    "Compose canonical package/module closure identity into signed release subjects once CM-07 package resolution is canonical.",
+    "Rebase/retest the release candidate against current product main after concurrent ClayEnv/package changes."
+  ],
+  "coordination": {
+    "parallel_package_front": "PR 650 canonical package identity remains a separate current candidate and may overlap clayenv CLI/workflow files.",
+    "parallel_import_mode_front": "PR 635 preserves MODULE versus WILDCARD metadata but remains non-linking.",
+    "survivor_rule": "Do not overwrite or merge stale overlapping ClayEnv candidates without fresh-main recomposition and exact-head retest."
+  },
+  "authority": {
+    "together_used": false,
+    "final_training": "NOT_TOUCHED_OWNER_AUTHORIZATION_REQUIRED",
+    "linux_effect_authority_widened": false,
+    "second_vm_or_clayos_path_added": false,
+    "whole_clay_machine_acceptance": false
+  },
+  "outcome": "SUPPORTED_RELEASE_VERIFICATION_MECHANISM_WITH_EXPLICIT_ROOT_AUTHORITY_AND_STATE_ROLLBACK_COUNTEREVIDENCE"
+}

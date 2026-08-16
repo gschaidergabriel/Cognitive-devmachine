@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_ENTITYOS_ONEFILE_TYPED_PROCESS_EXACT_HEAD",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "ENTITYOS/CM-TERM",
+  "evidence_time_local": "2026-08-16T11:36:48+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_main_observed": "66e466c9c57d72c520e98085f221afcaffab9494",
+  "semantic_parent": "57759c6bc0d52fa531a7b26993223c22f4549282",
+  "accepted_vps_workflow": {
+    "run_id": 31927007084,
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "runner_class": "self-hosted linux x64 hostinger-vps"
+  },
+  "exact_entityos_artifact": {
+    "file": "EntityOS",
+    "sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_machine_acceptance": false
+  },
+  "local_reverification": {
+    "status_build_head_matches": true,
+    "self_test_json": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK",
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_explicit_capability": "ENTITYOS_GRANTED_OK"
+  },
+  "observed_architecture_delta": "The canonical one-file EntityOS now contains and self-tests an effectful TypedIR hostcall -> serialized ClayVM -> capability-gated ClayOS Linux process path. The probe explicitly starts from constructed TypedIR and does not add ClayCode source syntax.",
+  "hypothesis": "The highest-value next semantic gate is to admit the smallest Clay-visible process request surface through nominal type/effect checking and source lowering, using explicit String/argv and Bytes/Buffer ownership semantics rather than backend-invented values.",
+  "counterhypothesis": "Keeping process effects as an internal TypedIR-only primitive could be sufficient for the current machine boundary, postponing source syntax until broader object/value semantics stabilize.",
+  "discriminator": "Current canonical_entry explicitly states that its typed process probe mints no new ClayCode source syntax; current CLAY_MACHINE_WORKSPACE next_discriminator independently calls for smallest canonical Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface for CM-DATA and CM-TERM.",
+  "collapse": {
+    "typed_ir_to_vm_to_clayos_process_path": "PROMOTE_TO_VERIFIED_FOR_EXACT_ARTIFACT",
+    "claycode_source_to_process_effect": "NOT_VERIFIED",
+    "whole_entityos_acceptance": "NOT_PROMOTED"
+  },
+  "bounded_unusual_experiment": {
+    "count_in_this_worker_cycle": 1,
+    "kind": "RELOCATE_AND_RENAME_PRIOR_ACCEPTED_ONEFILE_ARTIFACT_TO_UNICODE_FOREIGN_PATH",
+    "result": "RELOCATION_STATUS_PASS; stale CLI assumption 'clay' returned UNKNOWN_ENTITYOS_COMMAND; no product defect promoted",
+    "rollback": "temporary relocated copy removed",
+    "note": "Later workflow-owned unusual relocation evidence on newer heads is independent CI evidence, not a second experiment initiated by this worker."
+  },
+  "next_executable_action": "Select and test the minimum source-level Clay process-effect contract: explicit nominal String/argv plus Bytes/Buffer lifetime/ownership and effect signature; lower one ClayCode process call into effectful ClayExecutableTypedIR/v1 HOST_CALL; require fail-closed capability denial and positive exact-head one-file EntityOS execution on accepted VPS.",
+  "whole_clay_machine_acceptance": "NOT_CLAIMED",
+  "outcome": "ENTITYOS_ONEFILE_EXACT_HEAD_VERIFIED; SOURCE_LEVEL_PROCESS_EFFECT_REMAINS_NEXT_SEMANTIC_BLOCKER"
+}

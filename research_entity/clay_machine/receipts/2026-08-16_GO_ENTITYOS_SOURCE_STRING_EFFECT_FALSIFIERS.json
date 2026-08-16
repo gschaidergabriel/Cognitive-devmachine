@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_ENTITYOS_SOURCE_STRING_EFFECT_FALSIFIERS",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "research_parent_observed": "082808af69f8c866fb16bdfbd5fcbfacd9051b34",
+  "product_head_tested": "66e466c9c57d72c520e98085f221afcaffab9494",
+  "accepted_vps_workflow": {
+    "run_id": 31927007084,
+    "status": "completed",
+    "conclusion": "success",
+    "runner_class": "self-hosted Linux X64"
+  },
+  "exact_entityos_artifact": {
+    "file": "EntityOS",
+    "sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "size_bytes": 11931208,
+    "frozen_runtime": true,
+    "embedded_build_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "whole_machine_acceptance": false
+  },
+  "baseline_reverification": {
+    "self_test": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK",
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_explicit_capability": "ENTITYOS_GRANTED_OK"
+  },
+  "normal_falsifiers": [
+    {
+      "name": "SOURCE_STRING_TO_EXECUTABLE_TYPED_IR",
+      "source": "module entityos.string_probe\\nfn main() -> String { return \\"ENTITYOS_STRING\\" }\\n",
+      "command_surface": "EntityOS build <source> --artifact <artifact> --manifest <manifest>",
+      "return_code": 1,
+      "result": "REJECTED_FAIL_CLOSED",
+      "observed_error": "ExecutableTypedIRError: literal outside executable TypedIR v1 PURE subset: STRING",
+      "artifact_emitted": false,
+      "manifest_emitted": false
+    },
+    {
+      "name": "SOURCE_EXTERNAL_INTRINSIC_TO_TYPED_EFFECT_IR",
+      "source": "module entityos.effect_probe\\nfn main() -> Int { return runtime_effect(1, 2) }\\n",
+      "command_surface": "EntityOS build <source> --artifact <artifact> --manifest <manifest>",
+      "return_code": 1,
+      "result": "REJECTED_FAIL_CLOSED",
+      "observed_error": "ExecutableTypedIRError: nominal typechecker rejected executable IR: HOST_INTRINSIC_TYPE_SIGNATURE_UNBOUND:main:runtime_effect has effect/arity contract but no explicit Clay parameter/return types",
+      "artifact_emitted": false,
+      "manifest_emitted": false
+    }
+  ],
+  "grf_collapse": {
+    "hypothesis": "The remaining canonical process path is blocked at source/type/value semantics rather than at the already-verified TypedIR-to-VM-to-ClayOS capability bridge.",
+    "counterhypothesis": "The current source frontend already admits enough String and external-effect semantics, so only packaging or VM host wiring remains.",
+    "outcome": "PROMOTE_BLOCKER_TO_DIRECT_RUNTIME_EVIDENCE",
+    "reason": "The exact current one-file EntityOS accepts its internal effectful TypedIR process probe but independently rejects a source String before executable IR admission and rejects a source external intrinsic at nominal host-signature admission."
+  },
+  "architecture_constraint": "Do not bypass the blocker with an integer request-id pseudo-process intrinsic. Select canonical Clay String/argv plus Bytes/Buffer ownership/lifetime and explicit host parameter/return/effect signatures, then lower those admitted values through ClayExecutableTypedIR/v1 and the single ClayVM into the existing capability-gated ClayOS process component.",
+  "unusual_experiment_initiated_by_this_receipt": false,
+  "cycle_unusual_experiment_already_consumed": "ONEFILE_RELOCATED_UNICODE_FOREIGN_PATH",
+  "whole_clay_machine_acceptance": "NOT_CLAIMED",
+  "entityos_artifact_state": "VERIFIED_CURRENT_HEAD_BUT_WHOLE_MACHINE_BLOCKED",
+  "next_executable_action": "Implement and test the smallest canonical immutable String plus owned immutable Bytes and argv value contract with explicit process-spawn host signature/effect identity; prove source -> nominal type/effect checker -> ClayExecutableTypedIR/v1 -> single ClayVM -> capability-gated ClayOS on the exact one-file EntityOS, with deny/allow and provenance-bound request snapshot tests."
+}

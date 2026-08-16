@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_after_policy_cleanup": "7a228d3d3fc33a2681e635e8725d44c06518e891",
+  "preferred_string_path_pr": 744,
+  "preferred_string_path_head_after_sync": "64530ed97303623849b92f2503abb0fa0ad24598",
+  "branch_sync": {
+    "status": "SYNCED_TO_CURRENT_MAIN_AT_OBSERVATION",
+    "behind_by": 0,
+    "scope": "linux.process.spawn.path.v1::(String)->Int",
+    "general_argv": "OPEN",
+    "bytes_streaming_pty": "OPEN"
+  },
+  "grf_decision_trace": {
+    "observed_anchor": "PR #744 carried the preferred narrow String executable-path hostcall but was stale relative to product main and its allowed GitHub-hosted EntityOS acceptance job could not start. Synchronization also exposed legacy PR workflows still targeting self-hosted Linux runners despite the current sandbox-only execution policy.",
+    "hypothesis": "The path-only String slice is semantically compatible with current main and can be advanced independently if its exact head is synchronized and all triggered verification paths are constrained to isolated hosted sandboxes.",
+    "strongest_counterhypothesis": "Merging current main into the branch changes or conflicts with the hostcall semantics, or the apparent String path literalization hides shell/normalization behavior at the shared Linux boundary.",
+    "falsifier": "Synchronize by exact tree composition, verify the PR has no changed-file overlap with newer main changes, then bind one isolated experiment to the exact host_process blob and require literal path preservation without shell interpretation.",
+    "outcome": "RETAIN_WITH_ACCEPTANCE_BLOCKER"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "NEWLINE_IN_EXECUTABLE_PATH_LITERAL_ROUNDTRIP",
+    "count": 1,
+    "environment": "LOCAL_ISOLATED_CONTAINER",
+    "exact_repo_blob": {
+      "path": "claymachine/host_process.py",
+      "git_blob_sha": "04f8dd84566d9383600911ff847384946e23c1d6",
+      "reconstructed_size_bytes": 5803,
+      "blob_identity_match": true
+    },
+    "baseline": {
+      "argv": ["/usr/bin/true"],
+      "returncode": 0
+    },
+    "probe": {
+      "construction": "temporary symlink whose executable path contains a literal newline and points to /usr/bin/true",
+      "returncode": 0,
+      "path_preserved_exactly": true,
+      "shell_used": false
+    },
+    "interpretation": "The exact shared host_process boundary treats a valid UTF-8 executable path containing a newline as one literal argv element. This supports the narrow one-String-path/no-shell contract; it does not prove general argv, Bytes, streaming, PTY or whole-machine acceptance.",
+    "outcome": "RETAIN"
+  },
+  "runner_policy_cleanup": {
+    "invalid_evidence_quarantined": [
+      "Clay CM-13 Host Process VPS run 31956904296",
+      "ClayVM provenance-bound artifact run 31957067410",
+      "Clay Executable IR Single VM run 31957067406",
+      "ClayCode opaque parser fidelity V1 run 31957067505"
+    ],
+    "reason": "These runs used self-hosted Linux/X64 runners and therefore do not satisfy the current sandbox-only testing policy.",
+    "main_fixes": [
+      "915ae1da82c5fe33f8239bf324e2e8cd035647d5",
+      "0718c6c22804e91c964e9fe6173db30aec7e7717",
+      "e12ef8eda6de04bb78d1455f6537e85e96f3d6be",
+      "7a228d3d3fc33a2681e635e8725d44c06518e891"
+    ],
+    "result": "Triggered CM-13, ClayVM provenance, executable-IR/single-VM and parser-fidelity workflows now target ubuntu-latest hosted sandboxes."
+  },
+  "entityos_acceptance_attempt": {
+    "workflow": "EntityOS Canonical One-File Sandbox",
+    "run_id": 31957188655,
+    "job_id": 95189490114,
+    "tested_head_intended": "64530ed97303623849b92f2503abb0fa0ad24598",
+    "labels": ["ubuntu-latest"],
+    "steps": [],
+    "runner_id": 0,
+    "status": "NOT_STARTED",
+    "github_annotation": "job not started because account payments failed or spending limit needs to be increased",
+    "entityos_built": false,
+    "entityos_verified": false
+  },
+  "local_build_capability": {
+    "network": "DNS/network unavailable from local isolated container",
+    "pyinstaller_available": false,
+    "exact_current_private_repo_materialized": false
+  },
+  "current_blocker": "The exact synchronized current head cannot complete the one-file EntityOS rebuild/self-test/copy-run acceptance because the allowed GitHub-hosted ubuntu-latest job is rejected before step 1 and the available local isolated container lacks both the complete private repo tree and PyInstaller/network. The authenticated Vercel Sandbox bridge exists but is not invokable through the currently exposed connector with the required POST bearer request, and must not be weakened to a public bypass.",
+  "next_sandbox_executable_step": "Restore an actually-starting isolated hosted sandbox path: fix GitHub Actions billing/spend or expose a secure connector action that can invoke the authenticated Vercel sandbox probe. Then run exact head 64530ed97303623849b92f2503abb0fa0ad24598, require String-path gate plus current CM-TERM/single-VM regressions, build EntityOS twice with identical SHA-256, execute the exact binary and a moved copy with host-Python independence checks, and retain the artifact/receipt before promotion.",
+  "whole_clay_machine_completion": false,
+  "entityos_artifact_status": "BLOCKED"
+}

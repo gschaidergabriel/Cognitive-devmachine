@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "release-trust candidate fusion after current-main ClayEnv safety changes",
+  "observed_product_main": "20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
+  "observed_research_head_before_write": "3c63799756caddbdaeed241216c4f94921d416a9",
+  "source_basis": "FAST project source plus live GitHub state; GitHub/runtime evidence takes precedence",
+  "observed": [
+    "Merged PR 644 requires an externally supplied trusted ClayEnv manifest SHA-256 before artifact launch.",
+    "Merged PR 648 fails closed on every Clay source containing use declarations until canonical package resolution exists.",
+    "PR 651 provides the preferred standards-aligned DSSE plus in-toto Ed25519 release-verification mechanism and has an exact-head self-hosted Linux/X64 PASS at its own head, but its ancestry predates PR 648 and therefore it is not current-main promotion evidence.",
+    "Fresh overlapping PR 654 implemented custom signed JSON release metadata with expiry, version plus epoch, artifact/provenance preflight and durable anti-rollback state, but would create a second release-metadata architecture and advanced state before actual ClayOS execution success.",
+    "PR 654 was closed unmerged after fusion guidance was posted to PR 651.",
+    "PR 653 is the current package identity/index candidate and remains non-executing: use targets are recorded but unresolved; PR 648 remains the execution safety boundary.",
+    "PR 635 is the current canonical-AST candidate for preserving MODULE versus WILDCARD use-declaration intent without selecting resolution semantics."
+  ],
+  "fusion_decision": {
+    "release_representation_survivor": "PR_651_DSSE_IN_TOTO",
+    "custom_signed_json_path": "REJECT_AS_DUPLICATE_PRODUCT_ARCHITECTURE",
+    "retain_from_pr_654": [
+      "signed expiry/freeze semantics",
+      "consider explicit epoch/generation in addition to releaseVersion when it distinguishes reset or rotation generations",
+      "preflight exact artifact bytes plus source/grammar/executable-IR/VM bound provenance before any persistent trust-state advance"
+    ],
+    "retain_from_pr_651": [
+      "DSSE pre-authentication encoding and signature-before-payload-trust",
+      "in-toto typed subject digest binding",
+      "externally provisioned Ed25519 key object with explicit pin",
+      "fail-closed key change until rotation protocol exists",
+      "persist release trust state only after successful run_artifact to ClayOS execution"
+    ]
+  },
+  "strongest_counterevidence": [
+    "A caller that can choose both trusted-key path and expected key hash can choose a self-consistent root; this proves key consistency, not independent release authority.",
+    "Local monotonic state can be rolled back by host or snapshot restoration unless anchored in a stronger non-rollbackable or externally reconciled authority.",
+    "A release candidate tested before PR 648 cannot be promoted over current main without recomposition and exact-head retest because ClayEnv CLI/workflow overlap can weaken the unresolved-use fail-closed boundary.",
+    "Advancing release state before actual ClayOS execution success can ratchet the local fence on a non-runnable release; state advancement should remain after successful execution while artifact/provenance preflight still happens before execution."
+  ],
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "COHERENT_ARTIFACT_MANIFEST_PAIR_SWAP",
+    "count": 1,
+    "baseline": "valid pair A returns 42 under its externally pinned manifest digest",
+    "treatment": "replace both artifact and manifest with a separately valid coherent pair B returning 43 while retaining A trust input",
+    "expected_discriminator": "B fails TRUSTED_MANIFEST_SHA256_MISMATCH before ClayOS admission",
+    "observed_scope": "the unit gate containing this regression passed on the earlier external-digest candidate; a later end-to-end smoke failed only because the workflow invocation had not yet supplied the new required digest flag",
+    "later_resolution": "the external digest boundary and smoke wiring were subsequently merged through PR 644",
+    "new_unusual_experiments_after_this": 0
+  },
+  "next_discriminators": [
+    "Observe and promote only exact-head evidence for PR 653 package identity/index; do not relax PR 648 yet.",
+    "Promote lossless MODULE versus WILDCARD use intent into canonical production grammar/AST, then define one deterministic resolver/provider graph with ambiguity failure.",
+    "Only after canonical package closure exists, recompose PR 651 onto current main, add expiry/freeze and retained preflight invariants, and rerun exact-head ClayEnv/ClayOS/provenance gates.",
+    "Source the accepted release root from a non-caller-controlled OS/deployment trust boundary and define root rotation/recovery.",
+    "Bind rollback state to protected monotonic storage or an independently reconciled external authority and test host/snapshot rollback.",
+    "Make the signed release path non-bypassable before any production ClayOS release claim."
+  ],
+  "authority": {
+    "together_used": false,
+    "final_training": "NOT_TOUCHED_OWNER_AUTHORIZATION_REQUIRED",
+    "frank_scope": "NOT_TOUCHED",
+    "linux_effect_authority_widened": false,
+    "whole_clay_machine_acceptance": false
+  },
+  "outcome": "FUSE_DSSE_SURVIVOR_WITH_EXPIRY_PREFLIGHT_REQUIREMENTS; RELEASE_AUTHORITY_REMAINS_OPEN"
+}

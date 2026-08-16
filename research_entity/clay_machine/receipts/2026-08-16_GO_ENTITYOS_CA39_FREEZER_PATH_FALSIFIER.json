@@ -1,0 +1,36 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "status": "SUPPORTED_NEGATIVE_RESULT",
+  "active_program": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "observed_product_head": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
+  "canonical_builder_path": "entityos/build_canonical_onefile.py",
+  "canonical_builder_blob": "3409eddadd6a5f75952132965ce15fa46de3977d",
+  "observations": [
+    "Exact-head sandbox workflow run 31930505961/job 95124420211 completed FAILURE with ubuntu-latest, runner_id=0 and zero executed steps; this is infrastructure/pre-run evidence, not EntityOS code-test evidence.",
+    "The exact-head canonical builder invokes the active Python as -m PyInstaller --onefile --name EntityOS and requires two SHA-256-identical builds before emitting its build receipt.",
+    "The active isolated local sandbox reports Python 3.13.5 but no PyInstaller module; no cached PyInstaller wheel/archive was found and the sandbox has no DNS/package-resolution path.",
+    "No current-head EntityOS artifact was built in this worker."
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "name": "static_cpython_freezer_escape_hatch",
+    "purpose": "Discriminate whether the current sandbox can create a Python-capable one-file executable without PyInstaller using only its installed compiler/static Python toolchain.",
+    "baseline": "Canonical freezer prerequisite fails because PyInstaller is absent.",
+    "intervention": "Compile a minimal embedded-CPython ELF against the installed libpython3.13.a; retry non-PIE after the default PIE relocation failure.",
+    "result": "REFUTED_LOCAL_ESCAPE_HATCH",
+    "evidence": "Default link failed on R_X86_64_32/_PyRuntime PIE relocation. Non-PIE link then failed on unresolved python_hashlib_Hacl_Hash_SHA2_* symbols; the referenced libHacl_Hash_SHA2.a is not installed in the sandbox.",
+    "rollback": "Temporary experiment files only under /tmp; no product/research source was mutated by the experiment.",
+    "interpretation": "The local static-embedding path is not an immediately viable replacement for the pinned canonical one-file freezer."
+  },
+  "candidate_reality": "The exact current EntityOS source can still produce the canonical one-file artifact once an admissible isolated sandbox actually starts with the pinned freezer available.",
+  "counter_reality": "A current semantic-source or frozen-runtime defect may remain hidden; prior binaries and pre-run workflow failures cannot falsify it.",
+  "falsifier": "In an actually-started isolated sandbox with the pinned PyInstaller toolchain available offline or pre-provisioned, build exact head twice with matching SHA-256, then execute that exact EntityOS and run its normal product gates.",
+  "exact_blocker": "NO_ADMISSIBLE_CURRENT_HEAD_FREEZE_EXECUTION_PATH: GitHub-hosted sandbox has zero steps/runner_id=0; active local sandbox lacks PyInstaller and its tested static-CPython fallback cannot link.",
+  "next_executable_action": "Provision PyInstaller in an admissible isolated sandbox without VPS/self-hosted production execution, then run entityos/build_canonical_onefile.py for exact head ca39aac2663fbbbb47341335d915d5b31c6d2beb and test the resulting single file EntityOS.",
+  "entityos_artifact_state": "BLOCKED_CURRENT_HEAD_BUILD",
+  "whole_clay_machine_acceptance": false
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "manual_vercel_repair",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_base_observed": "26bb7bc7f1f10f1416306f514f3be700fe3ccd93",
+  "product_main_after": "1b851e3f680f4208a2632380e5cd8b25111c5b94",
+  "observed": {
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "configured_root_directory": "mcp/vercel-sandbox-mcp",
+    "initial_repair_commit": "3774ffed2252d3839b307bbe69bf1f02610189e2",
+    "initial_repair_deployment": "dpl_7AN35hPgU65tHHhSQ5xZ5ShV16Fx",
+    "initial_repair_result": "ERROR_ROOT_DIRECTORY_MISSING",
+    "root_fix_commit": "802beff765f449449c274f12a344a5b47a338f03",
+    "root_fix_deployment": "dpl_CjPgpxM9PCeSUN6aBvWDEX86M1z5",
+    "root_fix_deployment_state": "READY",
+    "root_http_status": 200,
+    "sandbox_probe_http_status": 200,
+    "sandbox_probe_status": "SANDBOX_EXECUTION_VERIFIED",
+    "sandbox_probe_exit_code": 0,
+    "sandbox_probe_stdout": "CLAY_SANDBOX_OK\nLinux 971ffdfc-a72 6.12.76 #1 SMP Thu Jul 16 23:42:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\nv24.14.1\n",
+    "sandbox_stopped": true,
+    "sandbox_stop_error": null,
+    "security_cleanup_commit": "1b851e3f680f4208a2632380e5cd8b25111c5b94",
+    "security_cleanup_deployment": "dpl_6pAxhMPk3kym91fqMzD8jQKpftC6",
+    "security_cleanup_deployment_state": "READY",
+    "old_bootstrap_probe_after_cleanup_http_status": 405,
+    "old_bootstrap_probe_cache_control": "no-store",
+    "runtime_errors_last_hour": 0
+  },
+  "grf": {
+    "observed_anchor": "The Vercel project Root Directory mismatch was repaired by placing the bridge at mcp/vercel-sandbox-mcp, after which the production deployment became READY and the root returned HTTP 200.",
+    "hypothesis": "The remaining blocker was deployment topology rather than Vercel Sandbox capability; once the configured root contained a valid Vercel Function using @vercel/sandbox, a real isolated sandbox would start and execute a fixed diagnostic.",
+    "counterhypothesis": "Even after fixing project topology, Vercel Sandbox creation or OIDC-backed execution would fail at runtime.",
+    "falsifier": "Invoke the deployed fixed diagnostic and require a real sandbox start, command exit 0, expected stdout, and successful stop.",
+    "outcome": "PROMOTE_TO_VERIFIED",
+    "confidence": "HIGH"
+  },
+  "verified_claims": [
+    "Vercel production deployment for the configured project root is READY.",
+    "A real Vercel isolated sandbox was created from the deployed function.",
+    "A fixed command executed inside that sandbox with exit code 0.",
+    "The sandbox reported Linux x86_64 and Node v24.14.1.",
+    "The sandbox was explicitly stopped successfully.",
+    "The temporary bootstrap authorization path was removed and the production probe now fails closed unless CLAY_SANDBOX_PROBE_TOKEN is configured."
+  ],
+  "claims_not_made": [
+    "No EntityOS artifact was built or accepted by this repair.",
+    "No VPS or production host was used as a Clay test environment.",
+    "No CM-07 semantic candidate was executed by this diagnostic.",
+    "No arbitrary-command public sandbox endpoint is left enabled.",
+    "No whole Clay Machine acceptance is claimed."
+  ],
+  "next_executable_step": "Use this verified Vercel Sandbox execution lane for the next isolated Clay/EntityOS exact-head test. For reusable authenticated invocation, configure CLAY_SANDBOX_PROBE_TOKEN in Vercel project environment settings or replace the fixed probe with an equivalently fail-closed authenticated control plane."
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "execution_policy": "ISOLATED_VERCEL_SANDBOX_ONLY",
+  "owner_vercel_batch_authorization": "FULL",
+  "product_main_observed": "7a228d3d3fc33a2681e635e8725d44c06518e891",
+  "tested_branch": "chatgpt/go-vercel-cm07-entityos-20260816",
+  "tested_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+  "relation_to_observed_main": "AHEAD_12_BEHIND_0",
+  "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+  "vercel_deployment_id": "dpl_2uRR1tFoinJHpu4S4V2FHw3hcLHA",
+  "sandbox": {
+    "runtime_bootstrap": "python3.13",
+    "system": "Amazon Linux 2023",
+    "network_during_tests": "DENY_ALL",
+    "system_packages": ["binutils", "diffutils", "python3.13", "python3.13-libs", "python3.13-devel"],
+    "build_python": "3.13.13",
+    "lark": "1.3.1",
+    "pyinstaller": "6.21.0",
+    "stopped": true,
+    "stop_error": null
+  },
+  "results": {
+    "source_archive_exact_head_binding": "PASS",
+    "cm07_package_resolver_v2": "PASS_17_OF_17",
+    "entityos_grant_dirfd": "PASS_4_OF_4",
+    "canonical_source_to_single_vm": "PASS_20_OF_20",
+    "entityos_reproducible_double_build": "PASS",
+    "entityos_sha256_match_between_two_builds": true,
+    "entityos_runtime_status": "PASS",
+    "entityos_self_test": "PASS",
+    "entityos_initial_grant_fail_closed": "PASS",
+    "entityos_persistent_grant_permissions": "PASS",
+    "entityos_state_symlink_rejection": "PASS",
+    "entityos_unifieddb_inspect": "PASS",
+    "entityos_claycode_build_run_42": "PASS",
+    "entityos_process_capability_denial": "PASS",
+    "entityos_process_capability_admitted_printf": "PASS",
+    "entityos_copy_unicode_space_relocation": "PASS_BYTE_IDENTICAL_SELFTEST",
+    "matrix_terminal_marker": "GO_MATRIX_RESULT=PASS"
+  },
+  "entityos": {
+    "artifact": "EntityOS",
+    "single_file": true,
+    "format": "ELF_64_X86_64",
+    "mode": "0755",
+    "size_bytes": 9165200,
+    "sha256": "39ae46bbc7a5a1c4f5b5ef9686bdab473169254f31bdb1559bdb80acc801ad2d",
+    "build_receipt_schema": "EntityOSBuildReceipt/v1",
+    "build_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true,
+    "frozen_runtime": true,
+    "single_file_candidate": true,
+    "whole_machine_acceptance": false
+  },
+  "negative_results_preserved": {
+    "vercel_runtime_python_missing_shared_lib": "WORKED_AROUND_WITH_AL2023_SYSTEM_PYTHON_3_13_DEVEL",
+    "minimal_sandbox_missing_objdump": "WORKED_AROUND_WITH_NATIVE_SANDBOX_SUDO_DNF_BINUTILS",
+    "minimal_sandbox_missing_cmp": "WORKED_AROUND_WITH_NATIVE_SANDBOX_SUDO_DNF_DIFFUTILS",
+    "source_staging_tar_reproducibility": "OPEN_BUILD_TOOLING_DEFECT_REPEATED_VERCEL_BUILD_INVOCATIONS_PRODUCE_DIFFERENT_TAR_GZ_SHA_FOR_SAME_HEAD"
+  },
+  "promotion_boundary": {
+    "cm07_v2_and_entityos_dirfd_candidate": "SUPPORTED_BY_REAL_VERCEL_EXACT_HEAD_MATRIX",
+    "whole_entityos": "NOT_ACCEPTED_YET",
+    "remaining_required": [
+      "fresh-main synchronization and broad regression",
+      "String/Bytes/process candidate adjudication",
+      "PATH-without-host-Python gate",
+      "build provenance candidate adjudication",
+      "deterministic source staging",
+      "network/data/media/self-hosting/recovery capability closure"
+    ]
+  }
+}

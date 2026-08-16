@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "experiment_accounting": {
+    "bounded_unusual_experiments_this_macro_cycle": 1,
+    "global_slot_consumed": true,
+    "additional_unusual_experiments_allowed_this_macro_cycle": false
+  },
+  "observed_heads_before_experiment": {
+    "research_main": "2f5aae6edda23bdaf1f81bfe4317fdf125257823",
+    "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "bytes_candidate_pr": 777,
+    "bytes_candidate_head": "fcf198ceb0318285bad8e2332e21dbec93804ff8"
+  },
+  "vercel_state": {
+    "exact_candidate_status_context": "Vercel",
+    "status": "failure",
+    "target_class": "build-rate-limit",
+    "meaning": "NO_NEW_EXACT_HEAD_SANDBOX_OBSERVATION; QUOTA_NON_EXECUTION_NOT_PRODUCT_CODE_FAIL",
+    "executable_source_of_truth": "VERCEL_SANDBOX",
+    "product_promotion_from_this_receipt": false
+  },
+  "hypothesis": "Converting a C-contiguous borrowed mutable buffer to owned bytes is sufficient to create a producer-epoch-consistent Clay Bytes snapshot.",
+  "counterhypothesis": "Ownership after copy does not establish that all bytes came from one producer epoch when the exporter can mutate concurrently outside the copying process/GIL; an explicit lease/epoch/stability protocol is required before admitting borrowed mutable buffers as canonical Clay Bytes.",
+  "bounded_experiment": {
+    "execution_surface": "LOCAL_ISOLATED_CONTAINER_SANDBOX_NONAUTHORITATIVE_FOR_ENTITYOS_EXECUTABLE_CLAIMS",
+    "mechanism": "32 MiB anonymous shared mmap; forked writer alternated full-buffer 0x00/0xff producer epochs while reader materialized bytes(memoryview(mmap)).",
+    "size_bytes": 33554432,
+    "writer_rounds": 80,
+    "snapshots_observed_before_discriminator": 1,
+    "mixed_snapshot_observed": true,
+    "mixed_snapshot": {
+      "zero_count": 15200208,
+      "ff_count": 18354224,
+      "first_byte": 0,
+      "last_byte": 255,
+      "sampled_4k_transitions": 28,
+      "sha256": "160e01f8f7a67663180127d60b8cdf993c075d4757cd6eeb5c5890419404aa99"
+    }
+  },
+  "result": "COUNTERHYPOTHESIS_SUPPORTED",
+  "interpretation": "An owned immutable bytes result can still be a torn cross-epoch snapshot. Copying a borrowed mutable/shared exporter is therefore insufficient as the semantic admission contract for canonical Clay Bytes.",
+  "entityos_impact": {
+    "affected_workstreams": ["CM-06-MEMORY-CONCURRENCY-RUNTIME", "CM-DATA", "CM-VIS", "CM-AUDIO"],
+    "required_fence": "Canonical Clay Bytes should admit already-owned immutable bytes only until an explicit producer lease/epoch/stability contract exists for mutable or borrowed Buffer ingress.",
+    "bytes_buffer_split": "Bytes = immutable owned value; Buffer/shared ingress = separate future lease/epoch-aware contract.",
+    "pr777_status": "MUST_REMAIN_UNPROMOTED_UNTIL_EPOCH_FENCE_IS_MATERIALIZED_AND_EXACT_HEAD_VERCEL_SANDBOX_BATCH_PASSES"
+  },
+  "next_vercel_batch_obligations": [
+    "replay-safe build-internal source/provenance staging gate",
+    "PR777 exact Bytes-v2 gate with mutable/borrowed ingress fail-closed epoch fence",
+    "released-view regression",
+    "current VM/IR/provenance baselines",
+    "double-build exact one-file EntityOS and identical SHA256",
+    "status/self-test/PATH-without-host-Python/capability/relocation controls"
+  ],
+  "whole_machine_acceptance": false,
+  "vps_or_self_hosted_test_evidence_used": false
+}

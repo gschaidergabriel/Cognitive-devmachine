@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-07 coordination recovery after mutually eliminating overlapping package candidates",
+  "research_head_before_write_observed": "0403bbb82e9f3f63403c666d1396647f2c2a72ea",
+  "product_main_before_repair": "cb3fe8058c1043e6cfbabc7d7f44ef39e1c23899",
+  "observed_race": {
+    "pr_638": "closed unmerged after this worker initially preferred broader PR 639",
+    "pr_639": "subsequently closed unmerged by parallel worker explicitly preferring exact-head-evidenced PR 638 and PR 635",
+    "combined_effect": "two individually conservative overlap decisions eliminated both package-identity implementation candidates",
+    "classification": "COORDINATION_NEGATIVE_RESULT"
+  },
+  "recovery": {
+    "new_pr": 650,
+    "head": "82242da9ae420224976f18333f762f63d22e49cb",
+    "base": "cb3fe8058c1043e6cfbabc7d7f44ef39e1c23899",
+    "strategy": "rebase the narrower ClayPackageManifest/v1 -> ClayPackageIndex/v1 slice onto current main rather than reopen obsolete PR 638 base",
+    "preserves_current_manifest_trust_boundary": true,
+    "import_semantics": "RECORDED_NOT_RESOLVED",
+    "second_execution_path_added": false,
+    "parallel_pr_635_role": "complementary metadata-only preservation of MODULE versus WILDCARD use mode"
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count": 0,
+    "already_consumed_macrocycle_experiment": "ABSOLUTE_PACKAGE_ROOT_RELOCATION_INVARIANCE",
+    "original_exact_head_run": 31920645245,
+    "original_result": "PASS_14_OF_14",
+    "rebase_relocation_check": "ORDINARY_REPEAT_REGRESSION_NOT_NEW_EXPERIMENT"
+  },
+  "current_ci": {
+    "workflow_run": 31920915714,
+    "candidate_head": "82242da9ae420224976f18333f762f63d22e49cb",
+    "state_at_receipt_write": "QUEUED",
+    "claim": "NO_PASS_CLAIM_UNTIL_EXACT_HEAD_JOB_COMPLETES"
+  },
+  "grf_collapse": {
+    "generated_reality": "Conservative overlap suppression monotonically reduces duplicated architecture.",
+    "counter_reality": "Independent workers can mutually supersede each other and erase the only live implementation candidate.",
+    "observed_outcome": "COUNTER_REALITY_OCCURRED",
+    "retained_law": "Overlap collapse needs a survivor invariant: do not close candidate A in favor of B unless B remains live or a replacement candidate is atomically established.",
+    "architecture_outcome": "RETAIN_ONE_REBASED_PACKAGE_IDENTITY_CANDIDATE_PLUS_COMPLEMENTARY_IMPORT_MODE_METADATA; DEFER_LINKER"
+  },
+  "next_discriminators": [
+    "Require PR 650 exact-head self-hosted Linux/X64 PASS on current main bytes before promotion.",
+    "Preserve or canonically absorb PR 635 MODULE versus WILDCARD distinction before cross-module symbol/linker semantics.",
+    "Then define one dependency closure feeding the existing nominal checker -> executable TypedIR -> single ClayVM path.",
+    "Keep portable package logical identity separate from absolute host-path provenance.",
+    "Do not widen Linux effect authority from package metadata alone."
+  ],
+  "non_claims": [
+    "PR 650 is not yet claimed PASS at this receipt point.",
+    "No cross-module execution is claimed.",
+    "No stdlib semantic surface is claimed.",
+    "No whole Clay Machine acceptance is claimed.",
+    "Together API was not used.",
+    "No training was authorized or started."
+  ]
+}

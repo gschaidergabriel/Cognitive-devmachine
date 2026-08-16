@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "research_base_observed": "98a395c56e41a5176a83ecd70634b5a515c6d2c7",
+  "product_main_observed": "1b851e3f680f4208a2632380e5cd8b25111c5b94",
+  "scope": ["EntityOS single-file packaging", "Linux interoperability", "CM-PORT", "CM-TERM"],
+  "coordination_note": "A separate concurrent GO receipt already recorded mutable-buffer coherence work at research head 98a395c5. This receipt is an independent user-triggered worker cycle and must not be fused as the same unusual-experiment accounting unit.",
+  "grf": {
+    "observed_anchor": "The owner-fixed product boundary requires exactly one executable EntityOS with no mandatory companion runtime files. Current production uses a one-file packaging path, while future embedded native helpers could otherwise pressure the sidecar boundary.",
+    "generated_reality": "Linux memfd-backed execution can provide a no-persistent-sidecar mechanism for an embedded helper while preserving the one-file release boundary.",
+    "counter_reality": "The kernel/runtime may require a filesystem-resident executable path, making memfd execution unavailable or unreliable even on the supported Linux class.",
+    "falsifier": "Load the bytes of a harmless existing ELF into memfd, execute it through /proc/self/fd/<n>, and require the child marker plus zero exit status; compare with a direct-exec baseline.",
+    "outcome": "RETAIN_AS_ARCHITECTURE_CANDIDATE",
+    "confidence": "MEDIUM_MECHANISM_ONLY"
+  },
+  "unusual_experiment": {
+    "name": "ENTITYOS_MEMFD_EMBEDDED_HELPER_EXECUTION",
+    "count_for_this_go_macro_cycle": 1,
+    "environment": "isolated local ChatGPT container; Linux 6.18.35 x86_64; Python 3.13.5; no VPS/self-hosted/production execution",
+    "network_dependency": "none",
+    "payload_source": "/usr/bin/printf",
+    "payload_sha256": "e7c954d7c89a494227b35c537a0a42fe315b4ea687b90a90b3eeee06c52927dd",
+    "mechanism": "os.memfd_create -> write ELF bytes -> executable fd -> execve(/proc/self/fd/<fd>)",
+    "baseline": {
+      "direct_exec": "/usr/bin/printf BASELINE_DIRECT_EXEC_OK",
+      "result": "PASS"
+    },
+    "result": {
+      "marker": "ENTITYOS_MEMFD_OK",
+      "child_exit_code": 0,
+      "classification": "MEMFD_EXECUTION_SUPPORTED_ON_OBSERVED_LINUX_SANDBOX"
+    },
+    "rollback": "child exited; anonymous memfd lifetime ended with process; no persistent runtime mutation"
+  },
+  "implication": {
+    "retained": "memfd/fd-backed execution is a plausible optional Linux adapter for future embedded EntityOS helpers without a mandatory persistent companion file",
+    "not_promoted": "This does not prove current EntityOS uses or needs memfd, does not prove compatibility with the accepted deployment kernel, and does not replace canonical ClayCode/TypedIR/ClayVM effect semantics.",
+    "required_before_use": "If selected, define explicit capability/provenance binding, executable-content identity, kernel compatibility/fallback behavior, and deterministic sandbox regressions before any canonical integration."
+  },
+  "execution_plane": {
+    "vercel_production_main": "READY at product main 1b851e3f680f4208a2632380e5cd8b25111c5b94",
+    "vercel_real_sandbox_mechanism": "previously VERIFIED by 2026-08-16_VERCEL_SANDBOX_EXECUTION_VERIFIED.json",
+    "current_probe_surface": "POST bearer-token only; GET observed as 405 with no open execution path",
+    "attempted_preview_route_write": "BLOCKED_BY_OPENAI_GITHUB_WRITE_SAFETY_BEFORE_COMMIT; not bypassed",
+    "additional_paid_vercel_start": "NOT_ATTEMPTED"
+  },
+  "entityos": {
+    "artifact_built_this_cycle": false,
+    "artifact_updated_this_cycle": false,
+    "artifact_verified_this_cycle": false,
+    "exact_blocker": "No currently invokable source-admitted isolated zero-cost lane in this session can stage the private current product SHA and execute the canonical one-file EntityOS builder. GitHub-hosted jobs remain no-start/billing blocked; the reusable Vercel control-plane PR is stale/conflicted and not accepted, while its next real sandbox start is separately constrained by current free-only cost authority.",
+    "next_executable_step": "Fresh-main reconcile the Vercel control plane without weakening bearer/source-staging fences, add a committed lockfile, prove preview health/auth without starting a paid sandbox, then when an owner-allowed zero-cost isolated start is available stage the exact current product SHA, double-build EntityOS, require identical SHA-256, run self-test/status/PATH-without-Python/copy-rename checks, and only then consider semantic PR promotion."
+  },
+  "whole_clay_machine_acceptance": false
+}

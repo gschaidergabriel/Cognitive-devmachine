@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "trigger": "go",
+  "recorded_at": "2026-08-16T09:57:38+07:00",
+  "observed_product_head": "20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
+  "candidate_prs": {
+    "use_decl_fidelity": {
+      "pr": 635,
+      "head": "3e965a328e82168923feb8857363938d7ad13ca9",
+      "state": "OPEN_SUPPORTED_CANDIDATE",
+      "counterevidence": "ClayCode WP04 PR Hosted Shadow job 95101808694 failed while materializing receipt-bound WP03 V18 substrate with exit 128 before semantic shadow steps ran."
+    },
+    "package_identity": {
+      "pr": 653,
+      "head": "1ac68d1e190fd5478645b32664e4e1db5c38a243",
+      "state": "OPEN_SUPPORTED_CANDIDATE"
+    }
+  },
+  "hypothesis": "A canonical MODULE import resolver must combine deterministic provider identity with the importing module's canonical local top-level namespace; provider identity alone is insufficient to prevent semantic collisions.",
+  "counterhypothesis": "Exact provider identity is sufficient; MODULE imports may bind their short module name even when that name is already occupied by a local top-level declaration.",
+  "unusual_experiment": {
+    "count": 1,
+    "id": "LOCAL_DECL_IMPORT_SHORTNAME_COLLISION",
+    "scope": "bounded local Python mechanism probe; no production mutation",
+    "world": {
+      "importer": "app.main",
+      "local_top_level_name": "Net",
+      "use": "lib.Net",
+      "use_mode": "MODULE",
+      "provider_count": 1
+    },
+    "baseline": "provider-only comparator accepted and bound the unique provider",
+    "candidate": "fail-closed resolver rejected with IMPORT_NAMESPACE_COLLISION",
+    "result": "PASS",
+    "collapse": "RETAIN_HYPOTHESIS"
+  },
+  "ordinary_controls": [
+    "unique provider plus collision-free MODULE short name -> deterministic resolution plan",
+    "duplicate providers -> AMBIGUOUS_MODULE_PROVIDER",
+    "missing provider -> UNRESOLVED_MODULE_PROVIDER"
+  ],
+  "prototype": {
+    "schema_candidate": "ClayImportResolutionPlan/v1",
+    "ordinary_plan_sha256": "7395d4c48fc1a39e4e5d20a70d6d3f3aa3aa2ed0e97dee24534a32be0ef62adf",
+    "local_probe_path": "/mnt/data/clay_import_resolver_probe.py"
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "requirement": "MODULE import binding must fail closed on collision with canonical local top-level names or another MODULE import binding; wildcard symbol expansion remains undefined until canonical export/symbol semantics exist.",
+    "affected_components": [
+      "CM-01-LANGUAGE-SPEC-PARSER-IR",
+      "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK"
+    ],
+    "rollback": "Keep merged PR #648 unresolved-use execution rejection; no executable import semantics were enabled."
+  },
+  "durable_product_delta": {
+    "issue": 656,
+    "title": "CM-07: resolver must reject local-declaration/import short-name collisions"
+  },
+  "next_falsifier": "Build the smallest resolver slice on top of the selected #635 + #653 fusion; derive canonical local namespace surface, reject provider ambiguity/missing providers and local/import plus import/import short-name collisions, emit deterministic provenance-bound resolution bytes, and retain #648 fail-closed execution until exact-head ClayEnv integration is green.",
+  "whole_clay_machine_acceptance": false,
+  "together_api_used": false,
+  "training_started": false
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "kind": "ENTITYOS_VERCEL_LIVE_FALSIFIER_FOLLOWUP",
+  "parent_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_SOURCE_PROVENANCE_REPLAY_HARDENING.json",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "candidate": {
+    "pr": 776,
+    "branch": "chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325",
+    "current_head": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+    "state": "DRAFT_NOT_MERGE_READY"
+  },
+  "live_negative_execution": {
+    "tested_head": "8df127fbf7d97b4f3abfdc5e705bfb49a028c7fd",
+    "vercel_deployment": "dpl_3GtAfZ8H2wSv23nQRhLKm8wH6swe",
+    "vercel_region": "iad1",
+    "build_reached_vercel_build": true,
+    "sandbox_started": false,
+    "failure_step": "stage-go-source.mjs before Sandbox creation",
+    "error": "VERCEL_GIT_SOURCE_TREE_DIRTY",
+    "classification": "REAL_BUILD_BOUNDARY_FAILURE_NOT_ENTITYOS_MATRIX_RESULT",
+    "mechanism": "Vercel performs dependency installation before vercel-build, so ambient checkout cleanliness is not a valid prerequisite for an immutable-commit-object source staging design."
+  },
+  "repairs": [
+    {
+      "commit": "8df127fbf7d97b4f3abfdc5e705bfb49a028c7fd",
+      "repair": "Correct malformed sysconfig lookup to get_config_var('LDLIBRARY') in the build-internal toolchain preflight."
+    },
+    {
+      "commit": "71c0fc7fce213795c3477bc5cfc18d84968321f4",
+      "repair": "Before the one-file freeze inside the isolated Sandbox, reset and clean the reconstructed repository back to exact admitted HEAD so regression artifacts cannot enter EntityOS."
+    },
+    {
+      "commit": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+      "repair": "Remove the false ambient Vercel checkout-clean prerequisite. Source TAR remains derived only from immutable Git commit/tree objects; exact Git provenance remains separately hash-bound. Manifest states ambient_build_checkout_bytes_admitted=false."
+    }
+  ],
+  "current_external_blocker": {
+    "exact_head": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+    "provider": "Vercel",
+    "commit_status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "entityos_built_for_exact_head": false,
+    "entityos_sha256_for_exact_head": null,
+    "classification": "EXTERNAL_DEPLOYMENT_RATE_LIMIT_NOT_CODE_RESULT"
+  },
+  "next_discriminator": "Execute the exact then-current PR-776 head in Vercel Preview when capacity permits. Require source/provenance hashes, OIDC-bound build-internal execution, exact reconstructed HEAD/tree, clean zero-remote Sandbox source, pristine pre-freeze reset, all matrix markers PASS, exact one-file EntityOS SHA-256, host-Python-independent startup, byte-identical relocation, DENY_ALL test networking and successful Sandbox stop.",
+  "experiment_accounting": {
+    "new_unusual_experiments_in_this_followup": 0,
+    "original_go_unusual_experiment_already_recorded": "DIRTY_WORKTREE_SAME_HEAD_ARCHIVE"
+  },
+  "authority": {
+    "effect_authority": "NONE",
+    "training_authorized": false,
+    "training_started": false,
+    "vps_or_self_hosted_product_testing_used": false,
+    "together_used": false,
+    "whole_clay_machine_acceptance": false
+  }
+}

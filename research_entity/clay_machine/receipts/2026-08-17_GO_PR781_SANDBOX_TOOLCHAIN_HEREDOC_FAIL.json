@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "research_parent_observed": "4bb351b7e71c571dfb09016209885f0ea6e532b9",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 781,
+  "preferred_branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+  "sandbox_source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+  "vercel_deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+  "vercel_execution_observation": {
+    "sandbox_actually_started": true,
+    "source_tree": "1e1c9fafce44fa39a5dba863e7fe635906f819c8",
+    "source_tree_entries": 1282,
+    "source_materialization": "GIT_LS_TREE_PLUS_CAT_FILE_RAW_BLOBS",
+    "source_checkout_shallow": true,
+    "source_archive_sha256": "e6e1972572dabf27739f71a709ed5f67fdbb8b1391e0313729f70f3c73cd842d",
+    "source_git_bundle_sha256": "e27494578cd4dbdfb47ff80819291ba1fdd9a2d1eb675c172b3256277c9e3f3a",
+    "sandbox_sdk_version": "2.9.2",
+    "steps": [
+      {"label": "unpack_and_bind_raw_git_tree_source_bytes", "exit_code": 0},
+      {"label": "provision_system_freeze_toolchain_sudo", "exit_code": 0},
+      {"label": "reconstruct_exact_git_provenance_without_checkout_index", "exit_code": 0},
+      {"label": "provision_pinned_python_toolchain", "exit_code": 1}
+    ],
+    "failure": "STEP_FAILED:provision_pinned_python_toolchain:exit=1",
+    "failure_mechanism": "The JavaScript template literal emitted a physical newline into the generated Python heredoc at sys.version.replace('\\n', ' '), producing SyntaxError: unterminated string literal.",
+    "sandbox_stopped": true,
+    "stop_error": null,
+    "network_policy_during_tests": null,
+    "offline_go_matrix_started": false,
+    "entityos_artifact_built": false,
+    "entityos_sha256": null
+  },
+  "secondary_runner_receipt_defect": {
+    "observed_output": "SANITIZED_GIT_HEAD=s",
+    "source_format": "printf 'SANITIZED_GIT_HEAD=s\\\\n' \"$actual\"",
+    "required_fix": "Use a %s conversion so the exact sanitized Git HEAD is emitted in the receipt log."
+  },
+  "repair_obligation": {
+    "python_template_fix": "Escape the backslash at the JavaScript-template layer so generated Python receives the two characters backslash+n in sys.version.replace('\\n', ' ').",
+    "git_head_receipt_fix": "Change the printf format to SANITIZED_GIT_HEAD=%s.",
+    "rerun": "Run the same regression/acceptance matrix on the repaired exact PR781 head in an actually-started Vercel Sandbox; do not substitute VPS/self-hosted/production hosts.",
+    "promotion_gate": "Require full offline matrix, byte-identical twin one-file EntityOS builds, exact artifact digest, status/self-test/no-host-Python/state-restart/capability/relocation gates, DENY_ALL during tests, and successful Sandbox stop before merge/promotion."
+  },
+  "post_failure_retrigger": {
+    "head": "2b9370cb210c4c3e43a84058a1828a5d1223b9a2",
+    "semantic_delta": "NONE_RETRIGGER_MARKER_ONLY",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "sandbox_started": false
+  },
+  "new_unusual_experiments_executed": 0,
+  "global_unusual_experiment_count_remains": "1/1_CONSUMED",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_RUNNER_FIX_AND_FRESH_EXACT_HEAD_SANDBOX_RERUN"
+}

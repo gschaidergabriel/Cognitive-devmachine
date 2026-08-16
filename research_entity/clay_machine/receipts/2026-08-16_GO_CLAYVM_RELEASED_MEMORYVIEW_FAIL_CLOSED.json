@@ -1,0 +1,45 @@
+{
+  "schema": "ClayResearchReceipt/v1",
+  "date": "2026-08-16",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "worker": "ChatGPT GPT-5.6 Sol temporary Clay worker",
+  "scope": "CM-DATA / CM-06 / ClayVM Bytes ingress fail-closed boundary",
+  "observed_product_main": "7640638664266196f52d38dc63f8a51a04190f9d",
+  "candidate_pr": 741,
+  "candidate_head": "0a23254125d0eb0fbb3b98ede45c5f9ebb754cef",
+  "observed_candidate_function": "claymachine.clayvm.snapshot_clay_bytes",
+  "observed_candidate_behavior": "memoryview metadata and tobytes are accessed without normalizing ValueError from a released memoryview",
+  "hypothesis": "A released memoryview can leak host exception taxonomy through the Clay Bytes ingress boundary unless explicitly normalized to a Clay Trap.",
+  "counterhypothesis": "Existing itemsize/format/ndim/c_contiguous checks are sufficient to fail closed for released memoryviews.",
+  "experiment": {
+    "classification": "EXACTLY_ONE_BOUNDED_UNUSUAL_EXPERIMENT_FOR_THIS_GO_MACRO_CYCLE",
+    "execution_surface": "isolated ChatGPT tool container; no VPS, self-hosted runner, or production host",
+    "baseline": "memoryview over bytes is readable and tobytes succeeds",
+    "intervention": "release the memoryview, then access the same metadata/tobytes surface used by the candidate",
+    "observed": "CPython raises ValueError('operation forbidden on released memoryview object') before a Clay Trap is produced",
+    "persistent_mutation": false,
+    "rollback": "discarded the released view object",
+    "new_go_unusual_experiment_count": 1
+  },
+  "collapse": {
+    "counterhypothesis": "REJECT",
+    "hypothesis": "RETAIN",
+    "promotion": "RESEARCH_CONSTRAINT_ONLY",
+    "whole_clay_machine_acceptance": false
+  },
+  "existing_repair_candidate": {
+    "path": "tests/candidates/apply_clayvm_bytes_released_view_fix.py",
+    "behavior": "exact-source-drift transformer catches ValueError and raises Trap('BYTES_VIEW_RELEASED')",
+    "ordinary_regression": "tests/clayvm_bytes_released_view_regression.py",
+    "regression_declares_new_go_unusual_experiment_count": 0,
+    "status": "PRESENT_ON_PR_741_HEAD_BUT_NOT_PROMOTED_BY_THIS_RECEIPT"
+  },
+  "required_next_falsifier": "Run the existing PR #741 released-view repair + ordinary Bytes v2 regressions + exact one-file EntityOS build/self-test in an actually-started isolated sandbox, preferably the current Vercel Sandbox path, without executing a second unusual experiment for this macro-cycle.",
+  "nonclaims": [
+    "No product source was merged by this receipt.",
+    "No current-main EntityOS artifact is claimed verified.",
+    "No whole-machine acceptance is claimed.",
+    "Historical or current VPS evidence is not used as Clay Machine acceptance evidence."
+  ]
+}

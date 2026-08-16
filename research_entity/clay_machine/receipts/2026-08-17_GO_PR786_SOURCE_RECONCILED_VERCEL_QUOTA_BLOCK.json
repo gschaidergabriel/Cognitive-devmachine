@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "preferred_head_observed": "9e1d0fd61767fc4bbd4af2ba5fbf161bd83e9bfb",
+  "source_reconciliation": {
+    "pr781_absorbed_and_closed_unmerged": true,
+    "stage_v5_raw_tree_provenance": "PRESENT",
+    "shallow_safe_git_reconstruction": "PRESENT",
+    "sandbox_sdk_pin": "2.9.2",
+    "single_owner_build_execution": "PRESENT",
+    "measured_heredoc_escape_fix": "PRESENT",
+    "measured_sanitized_git_head_fix": "PRESENT",
+    "bytes_v2_epoch_fence": "PRESENT",
+    "global_unusual_experiment_accounting": "CONSUMED_1_OF_1_PRIOR_EVIDENCE",
+    "batch5_runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "batch5_runner_new_unusual_experiment_count": 0,
+    "buildtime_runner_accounting_alignment": "RECONCILED"
+  },
+  "strongest_current_cycle_executable_observation": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "raw_tree_source_binding": "PASS",
+    "system_toolchain_provision": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "failure": "PROVISION_PINNED_PYTHON_TOOLCHAIN_HEREDOC_SYNTAX",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false,
+    "sandbox_stopped": true
+  },
+  "current_exact_head_execution_state": {
+    "source_head": "9e1d0fd61767fc4bbd4af2ba5fbf161bd83e9bfb",
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "new_vercel_deployment_observed": false,
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "entityos_sha256": null,
+    "runtime_acceptance": "UNVERIFIED"
+  },
+  "current_frontier": "Obtain one actually-started exact-head Vercel Sandbox regression/acceptance batch for the reconciled PR786 head. Require Stage-v5 raw-tree/shallow-safe provenance, pinned SDK/single-owner, Bytes-v2/released-view regressions with zero new unusual experiments, CM-07/canonical source-to-single-VM, pristine twin one-file EntityOS builds with identical SHA-256, exact artifact digest, status/self-test/no-host-Python/state-restart/capability/relocation gates, DENY_ALL and successful Sandbox stop.",
+  "blocker": "External Vercel deployment quota prevents creation of a fresh deployment/Sandbox for the reconciled exact head; source inspection is not executable PASS evidence.",
+  "new_unusual_experiments_executed_by_this_reconciliation": 0,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_DEPLOYMENT_QUOTA"
+}

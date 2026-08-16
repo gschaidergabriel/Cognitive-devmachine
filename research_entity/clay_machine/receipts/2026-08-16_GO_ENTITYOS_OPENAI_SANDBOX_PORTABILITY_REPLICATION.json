@@ -1,0 +1,63 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_OPENAI_SANDBOX_PORTABILITY_REPLICATION",
+  "observed_at_utc": "2026-08-16T05:43:44Z",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "EXACT_ARTIFACT_CROSS_ENVIRONMENT_REPLICATION_PASS_RELEASE_OPEN",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "source_workflow_run_id": 31929090825,
+  "source_workflow_attempt": 2,
+  "source_artifact_id": 9258876082,
+  "evidence_context": "OPENAI_ISOLATED_LINUX_X86_64_SANDBOX_NOT_ACCEPTANCE_HOST",
+  "environment": {
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "libc": "Debian GLIBC 2.41-12+deb13u3",
+    "acceptance_host": false
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "binary_size_bytes": 12820496,
+    "binary_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "artifact_zip_sha256": "92d2dd412cd56b8f07d228ae94a23d0d6fbc266c9f4501063ed4626b593eb1a4",
+    "mode": "0755",
+    "file_kind": "ELF 64-bit LSB x86-64 GNU/Linux"
+  },
+  "local_replication": {
+    "status_command": "PASS",
+    "reported_build_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "reported_single_file_candidate": true,
+    "reported_frozen_runtime": true,
+    "self_test": "SELFTEST_PASS",
+    "unifieddb_inspect": "PASS",
+    "fresh_clay_build": "PASS",
+    "fresh_clay_run_result": 42,
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_machine_acceptance": false
+  },
+  "unusual_experiment_accounting": {
+    "count_for_go_macro_cycle": 1,
+    "experiment": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "evidence_source": "source workflow attempt 2",
+    "additional_local_unusual_experiment_performed": false,
+    "reason": "The exact-head canonical workflow already executed the one bounded unusual experiment required by the go macro-cycle; local work remained a normal portability replication to avoid double-counting."
+  },
+  "grf_collapse": {
+    "observed_reality": "The exact EntityOS binary produced on the self-hosted Linux/x86_64 lane also executed successfully in a separate isolated Linux/x86_64 sandbox without rebuilding it.",
+    "preferred_hypothesis": "The tested one-file runtime boundary is not accidentally coupled only to the producing runner's working directory or immediate host environment.",
+    "strongest_counterhypothesis": "Successful execution depends on untested host libraries, devices, persistent services, or acceptance-host state outside the exercised commands.",
+    "discriminator": "Continue clean-environment and accepted-host testing while adding canonical typed Bytes/Buffer plus String/argv/effect semantics; do not infer whole-machine portability from this replication.",
+    "outcome": "RETAIN",
+    "confidence": "HIGH_FOR_EXECUTED_PORTABILITY_PROBE_LOW_FOR_WHOLE_MACHINE"
+  },
+  "release_blocker": "Whole-machine acceptance remains false. The current canonical frontier is the minimal Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface shared by CM-DATA and CM-TERM, followed by one provenance-bound typed/effect IR -> single ClayVM process/data path.",
+  "next_executable_action": "Implement and deterministically gate the minimal Clay Bytes/Buffer + String/argv/effect signature surface across checker, executable TypedIR and ClayVM; route one real process/data request through that canonical path; rebuild EntityOS and rerun the exact one-file acceptance gates.",
+  "authority": {
+    "together_api": "FORBIDDEN",
+    "training_authorized": false,
+    "whole_machine_pass_claimed": false
+  }
+}

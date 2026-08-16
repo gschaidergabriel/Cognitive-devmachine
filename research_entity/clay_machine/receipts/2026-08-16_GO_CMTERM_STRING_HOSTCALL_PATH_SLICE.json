@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_CMTERM_STRING_HOSTCALL_PATH_SLICE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstreams": ["CM-TERM", "CM-DATA", "CM-05-VIRTUAL-CLAY-MACHINE", "CM-08-LINUX-INTEROP"],
+  "timestamp_local": "2026-08-16T17:08:09+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed_at_cycle_end": "4249f30a92133b226347f82ed61809595cdb80e9",
+  "candidate_branch": "clay/go-string-hostcall-path-20260816",
+  "candidate_branch_base": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "candidate_head": "4bd75d55b7f81b5797441ca1c451b88cef178af3",
+  "candidate_pr": 749,
+  "candidate_pr_state": "DRAFT_OPEN_UNMERGED",
+  "observed_anchors": [
+    {
+      "path": "claymachine/clayvm.py",
+      "observation": "Before the candidate, OP_CONST_TEXT serialized String constants but OP_HOSTCALL rejected every non-Int value with TYPE_TRAP. Clay function parameters remain Int-only."
+    },
+    {
+      "path": "claymachine/executable_ir_adapter.py",
+      "observation": "Before the candidate, the admitted Linux process hostcall signature table contained only linux.process.spawn.v0::(Int)->Int."
+    },
+    {
+      "path": "claymachine/host_process_vm.py",
+      "observation": "The retained VM process bridge mapped one Int request id to an immutable argv request and did not transport String values from the VM."
+    },
+    {
+      "path": "claymachine/host_process.py",
+      "observation": "The existing CM-13 boundary already enforces direct argv, no shell, String-only argv elements, NUL rejection, absolute executable path, bounded timeout/output and clean environment."
+    }
+  ],
+  "generated_reality": "The first safe String-valued process effect can be narrower than general argv: one explicitly named String signature can mean only an absolute executable path and become argv[0] with no additional arguments.",
+  "causal_mechanism": "Admit linux.process.spawn_path.v0::(String)->Int in the executable-IR signature table, allow VM hostcalls to transport VMValue rather than enforcing a universal Int fence, then enforce the exact String type inside the admitted HostProcessVMHost binding before delegating to the existing CM-13 process boundary.",
+  "strongest_counter_reality": "Removing the VM-wide Int-only hostcall fence could silently weaken type safety or turn one String into an implicit shell/general-argv encoding.",
+  "falsifier_and_controls": [
+    "Existing linux.process.spawn.v0::(Int)->Int request-id route must still execute as the control.",
+    "Wrong TypedIR argument type for the new signature must fail closed.",
+    "Raw VM invocation of the new call id with Int instead of String must TYPE_TRAP at the host binding.",
+    "linux.process.spawn.v1::(String)->Int must remain unadmitted.",
+    "Receipt argv for the new path must contain exactly one element equal to the supplied String."
+  ],
+  "candidate_delta": {
+    "new_hostcall_id": "HOSTCALL_LINUX_PROCESS_SPAWN_PATH_V0=3",
+    "new_signature": "linux.process.spawn_path.v0::(String)->Int",
+    "semantics": "One absolute executable-path String only; exactly argv[0]; no extra argv; no shell parsing.",
+    "function_call_type_surface": "UNCHANGED_INT_ONLY",
+    "general_argv_surface": "OPEN",
+    "bytes_buffer_surface": "OPEN"
+  },
+  "caller_sandbox_result": {
+    "test": "tests/clay_go_string_hostcall_path.py",
+    "status": "PASS_STRING_HOSTCALL_PATH",
+    "checks": [
+      "legacy Int request control executed successfully",
+      "String path signature admitted and /usr/bin/true returned 0",
+      "receipt argv exactly matched the one supplied path",
+      "no shell or additional argv semantics appeared",
+      "missing process capability failed closed",
+      "TypedIR wrong argument type failed closed",
+      "raw VM wrong type produced TYPE_TRAP",
+      "unsafe single-String general argv signature remained unadmitted",
+      "bounded unusual Unicode executable-path experiment executed and round-tripped exactly"
+    ],
+    "scope": "NARROW_COMPONENT_SANDBOX_ONLY_NOT_EXACT_FROZEN_ENTITYOS"
+  },
+  "unusual_experiment": {
+    "name": "UNICODE_EXECUTABLE_PATH_STRING_ROUNDTRIP",
+    "count_for_macro_cycle": 1,
+    "method": "Create one temporary UTF-8/emoji symlink path to /usr/bin/true and send the exact path String through ExecutableTypedIR -> serialized ClayVM -> hostcall -> Linux.",
+    "result": "PASS; process returned 0 and the receipt argv matched the Unicode path exactly.",
+    "rollback": "Temporary path removed with the sandbox directory; no persistent host mutation."
+  },
+  "external_design_constraint": "POSIX process execution models argv as an array of separate strings; therefore this candidate deliberately does not reinterpret one String as general argv or shell text. A future canonical argv surface requires an explicit collection/value contract such as a Clay list/vector of Strings rather than implicit splitting.",
+  "exact_allowed_sandbox_validation": {
+    "workflow": "Go String Hostcall Path Sandbox",
+    "workflow_run": 31940774689,
+    "job": 95149506502,
+    "head": "4bd75d55b7f81b5797441ca1c451b88cef178af3",
+    "result": "BLOCKED_BEFORE_ANY_STEP",
+    "runner_id": 0,
+    "steps": [],
+    "github_annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+    "classification": "INFRASTRUCTURE_BILLING_BLOCK_NOT_CODE_TEST_RESULT"
+  },
+  "entityos_artifact": {
+    "candidate_rebuild_in_this_cycle": "BLOCKED",
+    "reason": "The only configured exact full-repository sandbox build gate could not start due GitHub Actions billing/spending state; current owner policy forbids VPS/self-hosted/production-host test fallback.",
+    "whole_clay_machine_acceptance": "NOT_CLAIMED"
+  },
+  "main_drift": {
+    "status": "DIVERGED_AFTER_BRANCH_BASE",
+    "main_ahead_commits": 7,
+    "candidate_ahead_commits": 5,
+    "observed_overlap": "Main drift changed seven workflow files only; none of the three candidate runtime files or the new candidate test changed on main. Exact-head regression is still required before merge."
+  },
+  "collapse": {
+    "string_literal_hostcall_transport": "RETAIN_CANDIDATE_SUPPORTED_BY_CALLER_SANDBOX",
+    "general_single_string_argv_or_shell_semantics": "REJECT",
+    "merge_to_main": "DEFER_UNTIL_ALLOWED_EXACT_HEAD_SANDBOX_RUNS",
+    "whole_clay_machine_pass": "NOT_PROMOTED"
+  },
+  "still_open": [
+    "Canonical Clay Vec<String>/argv value plus ownership/lifetime semantics.",
+    "Canonical Bytes/Buffer ingress and Clay-visible stdout/stderr transport.",
+    "String-valued Clay function parameters with versioned serialized VM type metadata.",
+    "PTY/session/signals/cancellation and separately explicit shell semantics.",
+    "Exact rebuilt one-file EntityOS regression/self-test/copy-run on an actually-started allowed sandbox."
+  ],
+  "next_executable_step": "Restore an allowed ephemeral sandbox execution path by resolving the GitHub Actions billing/spending block, refresh/rebase the candidate onto current main, then run the existing go-string-hostcall-path sandbox workflow unchanged to regress the Int path and VM, rebuild EntityOS twice reproducibly, execute the exact frozen EntityOS self-test and copy-run, and only then consider merging PR 749.",
+  "outcome": "RESEARCH_DELTA_RECORDED_CANDIDATE_UNMERGED_ENTITYOS_BLOCKED"
+}

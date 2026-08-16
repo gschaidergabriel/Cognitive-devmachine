@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "research_base_observed": "33888e3be5bb58cb2d052f91744f7a72ed6b1ba6",
+  "product_main_observed": "1b851e3f680f4208a2632380e5cd8b25111c5b94",
+  "scope": ["CM-06", "CM-DATA", "CM-VIS", "CM-AUDIO", "Clay Bytes/Buffer ownership and provenance"],
+  "grf": {
+    "observed_anchor": "Current Clay Machine workspace already rejects readonly-memoryview-as-immutability and proposes snapshot/copy for mutable or unknown exporters until a lease/epoch contract is selected.",
+    "generated_reality": "An eager bytes copy at ingress is sufficient to make a mutable borrowed buffer provenance-stable.",
+    "counter_reality": "If the exporter can mutate concurrently while the copy is in progress, the resulting owned bytes can be an internally mixed state that never existed as one coherent producer epoch.",
+    "falsifier": "Copy a shared mutable byte buffer repeatedly while a separate process alternates the whole buffer between two uniform byte states; require every admitted copy to equal one complete producer state if copy-alone is coherent.",
+    "outcome": "COUNTERHYPOTHESIS_SUPPORTED",
+    "confidence": "HIGH_FOR_MECHANISM_CLASS"
+  },
+  "unusual_experiment": {
+    "name": "CONCURRENT_SHARED_BUFFER_SNAPSHOT_COHERENCE",
+    "count_for_this_go_macro_cycle": 1,
+    "environment": "isolated local container; Python multiprocessing shared_memory; no VPS/self-hosted/production execution",
+    "buffer_size_bytes": 262144,
+    "rounds": 400,
+    "writer": "separate process alternated complete buffer between byte 0x41 and 0x42",
+    "reader": "bytes(shared_memory.buf) snapshot",
+    "baseline": {
+      "concurrent_writer": false,
+      "expected": "uniform 0x41",
+      "result": "PASS"
+    },
+    "results": {
+      "pure_0x41": 76,
+      "pure_0x42": 64,
+      "mixed_snapshots": 260,
+      "first_mixed_round": 17,
+      "first_mixed_transition_count": 1,
+      "first_mixed_sha256": "6423e6b3732a37233798d3e06ff2d54ac33d66f35e0bd7b69370c1d16186d952",
+      "first_mixed_prefix": "0x42 repeated",
+      "first_mixed_suffix": "0x41 repeated"
+    },
+    "classification": "COPY_CAN_TEAR_WITH_CONCURRENT_MUTABLE_EXPORTER",
+    "rollback": "shared memory unlinked; child process stopped; no persistent runtime mutation"
+  },
+  "implication": {
+    "retained": "Built-in immutable bytes may remain the strongest zero-copy reference substrate where identity/provenance are otherwise bound.",
+    "rejected": "Do not treat snapshot/copy from an actively mutable borrowed exporter as automatically coherent merely because the resulting object is immutable.",
+    "required_contract": "Canonical Clay Bytes/Buffer ingress must select and test at least one coherence mechanism for mutable concurrent exporters: producer quiescence, ownership transfer, immutable generation/epoch, lease/freeze handshake, or an equivalent mechanism that binds the copied bytes to one declared producer state.",
+    "receipt_rule": "If coherence cannot be proven, fail closed or classify the ingress as opaque/untrusted bytes with explicit uncertainty; do not mint provenance-stable semantic identity.",
+    "media_impact": "The same condition applies to image/video/audio buffers and high-rate streams; low-copy transport requires lifetime/epoch semantics rather than readonly-view flags alone."
+  },
+  "candidate_pr_review": {
+    "pr_741": "Bytes/CLAYVM2 candidate snapshot_clay_bytes copies mutable bytearray/memoryview and is therefore directionally safer than borrowed views, but this experiment shows copy-alone needs a concurrent-exporter coherence contract before promotion as provenance-stable ingress.",
+    "pr_744": "String path candidate is orthogonal but overlaps clayvm.py; future fusion must avoid creating parallel ClayValue/type-normalization authorities.",
+    "promotion": "NO_SEMANTIC_PROMOTION_FROM_THIS_EXPERIMENT_ALONE"
+  },
+  "execution_surface": {
+    "vercel_sandbox": "VERIFIED_EXECUTION_MECHANISM from receipt 2026-08-16_VERCEL_SANDBOX_EXECUTION_VERIFIED.json",
+    "next_vercel_start": "BLOCKED_BY_CURRENT_FREE_ONLY_ACCOUNT_SPECIFIC_COST_AUTHORITY",
+    "github_hosted_rerun": "attempted exact EntityOS job rerun; completed again with zero steps and therefore no code or artifact evidence"
+  },
+  "next_discriminator": "Fresh-main fuse the smallest single ClayValue/Bytes/String type authority before opening host effects. Add deterministic regression for mutable concurrent exporter admission: mutable borrowed buffers must require an explicit epoch/lease/quiescence proof or fail closed. Then run the fused exact head in an allowed actually-started isolated zero-cost sandbox and rebuild/test the exact one-file EntityOS.",
+  "whole_clay_machine_acceptance": false,
+  "entityos_artifact": "NOT_BUILT_IN_THIS_CYCLE"
+}

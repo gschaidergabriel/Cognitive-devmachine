@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+  "trigger": "go",
+  "research_head_before": "a40a282f97e07b86ddd33378f4b3169ed8802e31",
+  "product_main_observed": "cb3fe8058c1043e6cfbabc7d7f44ef39e1c23899",
+  "grf": {
+    "observed_reality": "Merged #603 removed repeated TypeRef alias-ancestry set copying, but current production canonicalization still materializes repeated alias-DAG branches as fresh TypeRef trees.",
+    "hypothesis": "Per-call memoization plus immutable TypeRef structural sharing can preserve current nominal alias/cycle semantics while reducing repeated alias-DAG materialization from exponential tree duplication to O(unique canonical subtrees).",
+    "strongest_counterhypothesis": "Memoization leaks path-sensitive alias ancestry, masks contextual cycles, or simply moves exponential work into equality over the resulting DAG.",
+    "discriminator": "Preserve direct-cycle, parameter-wrapped-cycle, sibling-provenance and deep linear-chain controls while representing a repeated binary alias diamond with O(depth) unique TypeRef objects; equality must track already-compared DAG identity pairs."
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "ALIAS_DIAMOND_INDEPENDENT_REPLICATION",
+    "classification": "INDEPENDENT_REPLICATION_AFTER_LIVE_OVERLAP_DISCOVERY",
+    "environment": "ChatGPT Linux sandbox faithful standalone reconstruction of the current production _canonical traversal because direct git clone was blocked by sandbox DNS; not accepted release/VPS evidence",
+    "shape": "A0 -> Pair<A1,A1> recursively to terminal Int",
+    "baseline_measurements": [
+      {"depth": 8, "visits": 511, "builds": 255, "seconds": 0.00333, "peak_bytes": 23976},
+      {"depth": 12, "visits": 8191, "builds": 4095, "seconds": 0.06514, "peak_bytes": 484699},
+      {"depth": 16, "visits": 131071, "builds": 65535, "seconds": 1.0804, "peak_bytes": 9328456},
+      {"depth": 18, "visits": 524287, "builds": 262143, "seconds": 4.7033, "peak_bytes": 37640832}
+    ],
+    "linear_depth_18_control_seconds": 0.0000327,
+    "outcome": "CONFIRMED_EXPONENTIAL_MATERIALIZATION_IN_CURRENT_MECHANISM"
+  },
+  "live_coordination": {
+    "canonical_prior_issue": 640,
+    "canonical_prior_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_ALIAS_DAG_MATERIALIZATION.json",
+    "duplicate_issue_created_then_closed": 641,
+    "duplicate_structural_sharing_pr_created_then_closed_unmerged": 647,
+    "preferred_structural_sharing_pr": 645,
+    "budget_candidate_pr": 643,
+    "budget_candidate_interpretation": "Useful defense-in-depth / independent counterdesign, but weaker as the primary CM-02 repair than structural sharing because it bounds the symptom rather than removing repeated representation/work.",
+    "coordination_outcome": "COLLAPSED_TO_ONE_PRIMARY_STRUCTURAL_SHARING_LANE"
+  },
+  "target_candidate_evidence": {
+    "pull_request": 645,
+    "head_sha": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "workflow_run_id": 31920728069,
+    "workflow_name": "ClayCode TypeRef DAG sharing candidate VPS",
+    "job_id": 95100090497,
+    "runner_class": "self-hosted Linux/X64",
+    "status": "COMPLETED_SUCCESS",
+    "exact_head_fetch": "PASS",
+    "pinned_dependency_setup": "PASS",
+    "candidate_compile": "PASS",
+    "detached_structural_sharing_regressions": "PASS",
+    "evidence_binding": "PASS",
+    "artifact_upload": "PASS",
+    "cleanup": "PASS",
+    "production_typechecker_wired": false,
+    "interpretation": "SUPPORTED_ON_TARGET_AS_DETACHED_CANDIDATE_NOT_PRODUCTION"
+  },
+  "retained_candidate": {
+    "mechanism": [
+      "one alias cache per canonicalization call",
+      "reuse immutable completed canonical TypeRef subtrees",
+      "preserve mutable DFS active-alias path and explicit leave frames",
+      "do not cache a subtree that observed a cycle during construction",
+      "make _same DAG-aware with already-compared identity pairs"
+    ],
+    "next_falsifier": "Compose the minimal production integration on fresh current main and run the unchanged production TypeRef totality gate plus the alias-DAG sharing gate on the exact same PR head/self-hosted Linux/X64 evidence context.",
+    "separate_followup": "_render_type_ref can still expand a logically shared DAG into an exponentially large diagnostic string and needs independent output/resource hardening."
+  },
+  "negative_results_and_limits": [
+    "A deterministic materialization/work budget alone is retained only as defense-in-depth, not the preferred primary repair.",
+    "This macrocycle did not merge or mutate production TypeRef semantics.",
+    "Detached candidate PASS does not imply CM-02 production PASS or whole Clay Machine acceptance.",
+    "Direct local repository clone was unavailable due sandbox DNS; no local checkout PASS is claimed."
+  ],
+  "authority": {
+    "product_production_semantics_changed_by_this_macrocycle": false,
+    "accepted_target_candidate_verified": true,
+    "production_integration_verified": false,
+    "whole_clay_machine_acceptance": false,
+    "effect_authority": "NONE",
+    "together_used": false,
+    "final_training": "NOT_TOUCHED_OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "outcome": "SUPPORTED_TARGET_CANDIDATE_REENTER_CM02_PRODUCTION_INTEGRATION"
+}

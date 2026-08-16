@@ -1,0 +1,46 @@
+{
+  "schema": "ClayResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "scope": "Cross-build single-owner Vercel Sandbox start hardening for preferred PR781 lane",
+  "preferred_product_lane_observed": {
+    "pr": 781,
+    "head": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "current_local_claim": "atomic wx marker under build-instance os.tmpdir",
+    "known_limit": "does not by itself establish exclusion across physically separate Vercel build instances"
+  },
+  "primary_upstream_evidence": {
+    "provider": "Vercel",
+    "sdk": "@vercel/sandbox",
+    "current_lane_pin": "2.9.2",
+    "facts": [
+      "Named sandboxes have a unique name within a project.",
+      "Sandbox.create accepts a name and a persistent flag; persistence defaults true and can be disabled.",
+      "Sandbox.getOrCreate is documented as idempotent for named sandboxes.",
+      "The upstream @vercel/sandbox changelog records getOrCreate support before version 2.9.2, so the pinned lane is in the supporting series."
+    ]
+  },
+  "candidate_mechanism": {
+    "name": "EXACT_HEAD_NAMED_EPHEMERAL_SANDBOX_SINGLE_OWNER",
+    "proposal": "Derive a deterministic provider-level sandbox name from exact source head/deployment contract and create it as non-persistent. Let the provider project-level unique-name constraint, rather than only a process-local tmp marker, arbitrate concurrent starts. Preserve fail-closed handling for duplicate/conflict outcomes and delete/stop bounded state after execution.",
+    "benefit_if_supported": "Could prevent two separate Vercel build instances for the same exact admitted execution identity from independently starting duplicate Sandboxes while retaining the build-internal-only execution surface."
+  },
+  "strongest_counterhypotheses": [
+    "A same-name concurrent create may not provide the exact atomic conflict semantics assumed by the SDK client.",
+    "A non-persistent named Sandbox may still leave name metadata or delayed cleanup that blocks legitimate fresh independent replication.",
+    "getOrCreate/resume semantics could accidentally reintroduce state reuse, violating fresh exact-state acceptance if used instead of create-only fail-closed semantics.",
+    "Provider name scope or OIDC project resolution may differ from the current build's intended project identity."
+  ],
+  "falsifier": "Only after Vercel build capacity returns, use an authorized isolated build-internal Vercel test to exercise two same-identity create attempts plus stop/delete/recreate behavior. Require exactly one fresh Sandbox session to start concurrently, deterministic conflict/fail-closed behavior for the loser, no resumed stale filesystem state, and successful later fresh recreation after bounded cleanup.",
+  "promotion_state": "DEFER_UNTIL_VERCEL_EXECUTABLE_DISCRIMINATOR",
+  "product_change": "NONE",
+  "unusual_experiment_count": 0,
+  "authorized_go_unusual_experiment_consumed": false,
+  "reason_not_executed": "Current exact PR781 Vercel preview/build is rate-limited before Sandbox creation; no local/VPS/self-hosted substitute is admissible for this provider-semantic discriminator.",
+  "entityos_impact": "Coordination hardening only. It does not establish Bytes, EntityOS build/runtime, artifact, or whole-machine PASS.",
+  "next_step": "Keep PR781 unchanged on this point until the provider-semantic discriminator can run in Vercel; if confirmed, integrate provider-level unique-name ownership without persistent/resumed state and rerun the full exact-head EntityOS batch."
+}

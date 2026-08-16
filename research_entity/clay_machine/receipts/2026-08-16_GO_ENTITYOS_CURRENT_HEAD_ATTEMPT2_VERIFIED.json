@@ -1,0 +1,109 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "CURRENT_HEAD_EXACT_ENTITYOS_ATTEMPT2_VERIFIED_NOT_WHOLE_ACCEPTANCE",
+  "supersedes_for_current_head_claims": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_CURRENT_HEAD_CANCELLATION_BLOCK.json",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_head": "57759c6bc0d52fa531a7b26993223c22f4549282",
+  "product_head_delta": "EntityOS selftest now verifies an already-admitted effectful ClayExecutableTypedIR/v1 hostcall through the serialized single ClayVM into the capability-gated Linux process boundary. It does not mint new ClayCode source syntax.",
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31926943891,
+    "run_attempt": 2,
+    "job_id": 95116001473,
+    "event": "push",
+    "conclusion": "success",
+    "source_regression": "PASS",
+    "one_file_build": "PASS",
+    "entityos_gates": "PASS",
+    "builtin_unusual_experiment": "PASS",
+    "evidence_binding": "PASS",
+    "artifact_upload": "PASS",
+    "artifact_id": 9258135713,
+    "artifact_archive_digest": "sha256:5b947fd4d680982b0b79bc894fe5b984689257d54db8c576b15130fc43197e50"
+  },
+  "entityos_artifact": {
+    "name": "EntityOS",
+    "format": "ELF 64-bit LSB executable, x86-64",
+    "build_head": "57759c6bc0d52fa531a7b26993223c22f4549282",
+    "sha256": "5b8d9445e154028a7bfb509524e2e6a23a8fd6076ce8bf416450a920c0a6eb1e",
+    "size_bytes": 11932640,
+    "mode": "0755",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_machine_acceptance": false
+  },
+  "exact_head_ci_evidence": {
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "source_regression_rc": 0,
+    "unusual_experiment_count": 1,
+    "unusual_experiment": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "whole_entityos_completion": false
+  },
+  "independent_local_cross_check": {
+    "environment": "active ChatGPT Linux sandbox outside repository tree",
+    "downloaded_exact_workflow_artifact": true,
+    "executable_sha256_matches_ci": true,
+    "status": "PASS",
+    "status_build_head_matches_current_product_head": true,
+    "self_test": "PASS",
+    "self_test_vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "typed_ir_vm_process_result": 0,
+    "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK",
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_without_capability_rc": 1,
+    "host_with_capability": "ENTITYOS_LATEST_LOCAL_OK",
+    "host_with_capability_rc": 0,
+    "whole_machine_acceptance": false
+  },
+  "semantic_boundary_observed": {
+    "retained": [
+      "effectful TypedIR can lower to a hostcall in the single serialized ClayVM",
+      "ClayVM hostcall is bound to linux.process.spawn.v0 capability",
+      "process execution returns the real exit status into the VM",
+      "captured stdout/stderr remain available as a host-side receipt",
+      "one-file packaging contains the modules needed for this path"
+    ],
+    "not_promoted": [
+      "new ClayCode source syntax for process effects",
+      "canonical Clay String value",
+      "canonical Clay Bytes/Buffer value",
+      "canonical Clay argv/env/cwd/stdin/stdout/stderr values",
+      "Clay-visible byte streaming",
+      "PTY/session semantics",
+      "CM-NET closure",
+      "CM-DATA/CM-VIS/CM-AUDIO closure",
+      "persistent state/recovery closure",
+      "self-hosting/bootstrap equivalence",
+      "whole EntityOS / whole Clay Machine acceptance"
+    ],
+    "current_bridge_shape": "Int request_id in ClayVM -> immutable host-side VMProcessRequest argv tuple -> canonical capability-gated host process adapter"
+  },
+  "grf": {
+    "observed_reality": "The exact current product head now produces a one-file EntityOS that passes source regression, canonical runtime gates, typed-IR VM process-effect verification and an independent local artifact cross-check.",
+    "retained_hypothesis": "The one-file product boundary can carry the current effectful single-VM process bridge without backend-local semantic duplication.",
+    "strongest_counter_reality": "The successful process probe still hides String/Bytes/argv ownership and lifetime semantics outside Clay behind an integer request handle, so apparent process integration can overstate canonical language/runtime closure.",
+    "falsifier": "Introduce the smallest provenance-bound canonical String/Bytes/argv plus ownership/lifetime/effect-signature surface through checker -> ClayExecutableTypedIR -> single ClayVM -> ClayOS, then rebuild and rerun the exact one-file EntityOS gates without a host-side semantic shadow path.",
+    "outcome": "RETAIN_PRODUCT_BOUNDARY_AND_EFFECT_BRIDGE; DO_NOT_PROMOTE_CM_TERM_CLOSURE"
+  },
+  "unusual_experiment_accounting": {
+    "this_worker_local_experiment_count": 1,
+    "this_worker_local_experiment": "UNICODE_SPACE_PATH_FOREIGN_CWD_LOCAL_REPLICATION on predecessor 5b1fd8f",
+    "attempt2_builtin_experiment_count": 1,
+    "attempt2_builtin_experiment": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD on current head 57759c6",
+    "workflow_rerun_invoked_by_this_worker": false,
+    "coordination_result": "PROTOCOL_CARDINALITY_CONFLICT_PRESERVED",
+    "interpretation": "The shared environment restarted attempt 2 and its unconditional unusual-experiment step executed after a prior worker-local unusual experiment had already consumed the user-triggered cycle slot. If both are assigned to the same shared go macro-cycle, the exactly-one law was exceeded. Do not erase this negative coordination result.",
+    "next_coordination_fix": "Bind unusual-experiment admission to a shared macrocycle/lease or make the CI unusual step conditional on an unconsumed experiment slot so parallel workers and reruns cannot double-consume the same go cycle."
+  },
+  "next_discriminator": "Select the smallest canonical provenance-bound String/Bytes/argv plus ownership/lifetime/effect-signature surface shared by CM-TERM and CM-DATA, wire it through checker -> ClayExecutableTypedIR -> single ClayVM -> ClayOS, rebuild EntityOS at the then-current head, and rerun ordinary exact one-file gates. Separately close the shared unusual-experiment lease/cardinality defect before relying on global 1/1 accounting.",
+  "training_authorized": false,
+  "together_api_used": false
+}

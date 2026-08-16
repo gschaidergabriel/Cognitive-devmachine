@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_CMTERM_TYPED_EFFECT_VM_PROCESS_PROMOTION",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "worker_model": "GPT-5.6 Sol",
+  "research_head_before_write": "a883a0403cabba799d8126c8fdce2b39a56d9a54",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "scope": "CM-TERM bounded canonical executable TypedIR -> single ClayVM -> existing CM-13 Linux host-process slice",
+  "observed_reality": {
+    "starting_process_component": {
+      "merge": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
+      "capability": "linux.process.spawn.v0",
+      "facts": [
+        "The retained CM-13 component already owned absolute argv execution with shell=false, bounded stdout/stderr capture, timeout/output-limit handling, clean environment and process-group semantics.",
+        "It was outside the canonical ClayExecutableTypedIR/v1 -> serialized ClayVM execution path."
+      ]
+    },
+    "canonical_execution_gap": [
+      "ClayVM already had OP_HOSTCALL and runtime capability checking but compile_typed_ir did not lower a hostcall expression.",
+      "The executable IR adapter admitted only the pure Int/Bool overlap and rejected host/effect nodes.",
+      "Canonical source/typecheck host intrinsic Clay signatures remain unbound; source-level host intrinsic admission is therefore still open."
+    ],
+    "concurrency_event": "An initial duplicate process-adapter direction was discarded after current main advanced with the CM-13 host-process merge. The retained implementation reuses that component instead of creating a second Linux process runtime."
+  },
+  "grf": {
+    "generated_hypothesis": "The highest-information nonduplicate CM-TERM step is to close only the typed/effect IR -> OP_HOSTCALL -> already-canonical CM-13 process boundary while preserving fail-closed capability/effect identity.",
+    "strongest_counter_reality": "A VM hostcall extension could become a shadow authority channel, silently introduce shell interpretation, duplicate the host-process runtime or falsely look like a full ClayCode process path even though source host signatures and String/Bytes/argv values are absent.",
+    "discriminators": [
+      "Only the named linux.process.spawn.v0 capability maps to the new fixed hostcall ID.",
+      "Executable TypedIR must explicitly carry EXTERNAL_COMMUNICATION effect identity for the hostcall.",
+      "ClayHost capability denial remains authoritative at runtime.",
+      "The VM bridge delegates to the existing CM-13 run_host_process implementation rather than implementing spawn again.",
+      "A shell-metacharacter argv decoy must remain literal and produce no shell side effect."
+    ],
+    "collapse": "The bounded TypedIR/VM/process edge is supported and promoted. Full source-level ClayCode process semantics and full CM-TERM remain open."
+  },
+  "implementation": {
+    "pull_request": 700,
+    "final_tested_head": "b2d852cb849ef7614bca33d9a9bf89fc77c3d004",
+    "merge_commit": "7995e78e234e9825faba7ad76ffe960f9e77577b",
+    "merge_verified_on_product_main": true,
+    "changed_paths": [
+      ".github/workflows/clay-cm-term-vm-process.yml",
+      "claymachine/clayvm.py",
+      "claymachine/executable_ir_adapter.py",
+      "claymachine/host_process_vm.py",
+      "tests/clay_cm_term_vm_process_gate.py"
+    ],
+    "mechanism": [
+      "compile_typed_ir admits an explicit integer-argument hostcall bootstrap node and lowers it into the pre-existing OP_HOSTCALL instruction.",
+      "ClayExecutableTypedIR/v1 adapter admits only linux.process.spawn.v0 for this slice and requires EXTERNAL_COMMUNICATION in both the hostcall node and observed typecheck-effect identity.",
+      "HostProcessVMHost maps one integer request handle to an immutable VMProcessRequest and delegates execution to the pre-existing CM-13 run_host_process boundary.",
+      "The real process exit status re-enters the VM as Int; captured stdout/stderr remain verification receipts rather than Clay-visible streaming values."
+    ],
+    "no_duplicate_process_runtime": true
+  },
+  "exact_head_execution": {
+    "workflow": "Clay CM-TERM VM Process",
+    "run_id": 31925494411,
+    "job_id": 95112301714,
+    "runner": "clay-3",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "tested_head": "b2d852cb849ef7614bca33d9a9bf89fc77c3d004",
+    "conclusion": "SUCCESS",
+    "successful_steps": [
+      "Fetch exact candidate head",
+      "Bind candidate bytes",
+      "Preserve existing VM and CM-13 regressions",
+      "Gate typed effect to real Linux process",
+      "Upload bounded evidence",
+      "Cleanup"
+    ],
+    "gate_contract": "The workflow exits nonzero on test failure and additionally greps PASS_CM_TERM_TYPED_IR_VM_PROCESS_SLICE plus unusual_experiment_count=1 from the emitted result JSON.",
+    "raw_log_connector_note": "GitHub log download endpoint returned empty content through the available connector; no raw-log details beyond job/step status are invented."
+  },
+  "exactly_one_bounded_unusual_experiment_for_this_go": {
+    "name": "SHELL_METACHARACTER_DECOY",
+    "count": 1,
+    "setup": "Pass one argv element containing semicolon, command-substitution syntax and a touch command to /usr/bin/printf through the canonical CM-13 shell=false process boundary; a temporary marker path is embedded in the literal payload.",
+    "required_observations": [
+      "stdout is byte-for-byte the literal payload",
+      "the marker file does not exist after execution"
+    ],
+    "result": "PASS_ON_FINAL_EXACT_HEAD",
+    "interpretation": "No implicit shell interpretation was observed in the tested path.",
+    "additional_unusual_experiments_after_this": 0
+  },
+  "ordinary_negative_controls": {
+    "capability_denied": "PASS_FAIL_CLOSED",
+    "unknown_process_request": "PASS_FAIL_CLOSED",
+    "missing_external_effect_identity": "PASS_REJECTED_AT_LOWERING",
+    "unknown_process_capability": "PASS_REJECTED_AT_LOWERING",
+    "nonzero_linux_exit_status": "PASS_OBSERVED_BY_VM"
+  },
+  "external_primary_source_fusion": {
+    "linux_execve": "Linux execve defines explicit path, argv[] and envp[] process-image inputs; this supports keeping argv/environment as explicit typed data rather than a shell command string.",
+    "linux_pty": "Linux PTY documentation defines a master/slave bidirectional terminal channel; PTY semantics are a separate boundary from ordinary pipe-based process execution.",
+    "python_subprocess": "Current Python subprocess documentation recommends sequence args and documents shell=False as the default; current CM-13 implementation already follows this explicit-argv/no-shell shape.",
+    "architecture_consequence": "Keep direct argv execution and PTY/shell as separate explicit capabilities. Do not add shell parsing to the new VM process hostcall."
+  },
+  "counterevidence_and_nonclaims": [
+    "The test constructs the effectful ClayExecutableTypedIR/v1 fixture directly; canonical source materialization/typechecking still cannot emit a typed process intrinsic.",
+    "Nominal host signatures remain untyped at the Clay language boundary.",
+    "ClayVM still lacks canonical String/Bytes/argv/env values and typed function-parameter metadata for those values.",
+    "stdout/stderr are receipt bytes only; Clay-visible streaming stdin/stdout/stderr is not implemented.",
+    "PTY, explicit shell capability, terminal sizing/modes, signals and cancellation are not implemented by this slice.",
+    "No full CM-TERM baseline PASS is claimed.",
+    "No whole Clay Machine acceptance is claimed."
+  ],
+  "cross_frontier_fusion": {
+    "related_research_receipt": "2026-08-16_GO_CMDATA_CLAYVM_TYPED_BYTES_BOUNDARY.json",
+    "constraint": "Do not widen VM values ad hoc. CM-DATA and CM-TERM should converge on an explicit typed value/module-format/runtime admission contract for String/Bytes/argv/buffer semantics with provenance and fail-closed type admission.",
+    "next_falsifier": "Design the smallest explicitly typed/versioned ClayVM value boundary that can carry one owned immutable Bytes/String argv value from canonical source/typecheck into ClayExecutableTypedIR/v1 and the single VM. Prove wrong-type admission fails, process argv remains literal, and the same value contract can be reused by CM-DATA. Only after that add Clay-visible streaming byte channels; treat PTY as a separate explicit channel/capability."
+  },
+  "promotion": {
+    "outcome": "PROMOTED_CMTERM_TYPED_EFFECT_VM_PROCESS_SLICE",
+    "cm08_linux_interop_complete": false,
+    "cmterm_complete": false,
+    "whole_clay_machine_acceptance": false
+  },
+  "authority": {
+    "together_used": false,
+    "training_authorized_or_started": false,
+    "implicit_shell_added": false,
+    "whole_machine_completion_claimed": false
+  }
+}

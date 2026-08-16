@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "research_parent_observed": "a194388163e38831b23fbae1aa826c6df67859d9",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 781,
+  "preferred_branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+  "preferred_head_observed": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+  "parallel_batch5_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "parallel_batch5_head_observed": "67586cd21e1970e65437eaada02943b1282104cc",
+  "vercel_observations": {
+    "ready_deployment": "dpl_6dT9WsEySQsfMfDB85UJwdhffXEX",
+    "ready_deployment_source_head": "d2013fd9e718707793bb59c5ed324670241bd0fd",
+    "ready_deployment_result": "BUILD_READY_BUT_BATCH_SKIPPED_NON_TARGET_PREVIEW",
+    "sandbox_started_in_ready_deployment": false,
+    "latest_batch5_head_status": "FAILURE_DEPLOYMENT_RATE_LIMIT_RETRY_IN_24_HOURS",
+    "latest_batch5_head_deployment_created": false,
+    "executable_entityos_claim_from_batch5": false
+  },
+  "experiment_accounting_conflict": {
+    "canonical_accounting_source": "mcp/vercel-sandbox-mcp/GO_EXPERIMENT_ACCOUNTING.json on preferred PR781",
+    "global_limit": 1,
+    "global_count_already_consumed": 1,
+    "additional_unusual_experiments_allowed": false,
+    "parallel_batch5_runner_declares_new_unusual_experiment_count": 1,
+    "parallel_batch5_experiment": "CONTROLLED_SHARED_BUFFER_TRANSACTION_MIDPOINT_COPY",
+    "collision": true,
+    "promotion_rule": "DO_NOT_EXECUTE_OR_PROMOTE_BATCH5_AS_WRITTEN; convert it to regression/acceptance-only or discard its duplicate experiment path. Existing cross-epoch counterexample evidence is retained and must not be re-counted."
+  },
+  "useful_parallel_delta": {
+    "released_view_regression_adds_owned_immutable_bytes_control": true,
+    "classification": "ORDINARY_REGRESSION_CANDIDATE",
+    "fusion_rule": "May be absorbed into preferred PR781 without adding an unusual experiment."
+  },
+  "current_frontier": "Keep PR781 as the single promotion lane, absorb only non-duplicative ordinary regression value, then obtain an actually-started exact-head Vercel Sandbox when build capacity returns. Require raw-tree/shallow-safe provenance, epoch-safe Bytes v2, double one-file EntityOS build with identical digest, status/self-test/no-host-Python/state-restart/capability/relocation gates, DENY_ALL during tests, and successful Sandbox stop.",
+  "new_unusual_experiments_executed_by_this_coordination_pass": 0,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT"
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "status": "TESTING_EXACT_HEAD_PENDING",
+  "observed_product_state": {
+    "product_main_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "merged_provider_resolver": {
+      "pr": 660,
+      "merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+      "schema": "ClayPackageResolution/v1",
+      "scope": "MODULE_PROVIDER_ONLY",
+      "symbol_semantics_claim": "NOT_SELECTED"
+    },
+    "execution_safety_boundary": {
+      "pr": 648,
+      "state": "MERGED",
+      "meaning": "ClayEnv build remains fail-closed for sources containing use until canonical package/name/link semantics are admitted"
+    },
+    "authorized_corpus_counterexample": {
+      "importing_source": "claycode/frank_memory.clay",
+      "plain_use": "frank.entity.Frank",
+      "provider_source": "claycode/frank_entity.clay",
+      "provider_module": "frank.entity",
+      "provider_decl": "entity Frank",
+      "observation": "Canonical parser mode MODULE is syntactic no-wildcard intent; this observed target is symbol-shaped and is not the declared module identity frank.entity.Frank."
+    }
+  },
+  "grf": {
+    "observed": "Merged v1 provider resolution requires every use target, including plain MODULE mode, to match an exact module identity while simultaneously claiming symbol semantics are not selected.",
+    "generated_hypothesis": "Only syntactically explicit wildcard targets can currently be treated as exact module-provider questions without inventing plain-use name semantics.",
+    "counter_reality": "Some plain uses may legitimately denote exact modules; rejecting them all at the provider stage may be conservative but incomplete.",
+    "discriminator": "Preserve WILDCARD exact-module provider resolution, force plain MODULE to PLAIN_USE_NAME_BINDING_UNSELECTED, and separately classify canonical corpus targets before choosing module-vs-symbol binding semantics.",
+    "collapse": "Provider identity and name binding must remain separate. Plain MODULE cannot be promoted to exact-module semantics from path shape alone."
+  },
+  "candidate_product_delta": {
+    "pr": 674,
+    "head": "0fe6d68e023a2c201f6663448774ff02e042335b",
+    "draft": true,
+    "resolver_schema": "ClayPackageResolution/v2",
+    "resolver_scope": "WILDCARD_MODULE_PROVIDER_ONLY",
+    "plain_use_semantics": "NOT_SELECTED_FAIL_CLOSED",
+    "symbol_semantics": "NOT_SELECTED",
+    "execution_gate": "UNCHANGED_FAIL_CLOSED",
+    "exact_head_ci_at_receipt_write": "QUEUED_OR_PENDING"
+  },
+  "unusual_experiment": {
+    "name": "PLAIN_USE_DUAL_ROLE_COLLISION",
+    "count_for_this_macrocycle": 1,
+    "environment": "isolated in-memory mechanism probe",
+    "world": {
+      "plain_target": "clay.lib.Widget",
+      "exact_module_viable": true,
+      "parent_symbol_viable": true,
+      "viable_interpretations": 2
+    },
+    "baseline": "SELECT_MODULE:clay.lib.Widget",
+    "candidate": "PLAIN_USE_NAME_BINDING_UNSELECTED",
+    "discriminator": true,
+    "external_effect": false,
+    "rollback": "discard in-memory synthetic world",
+    "repository_reproduction": "ordinary regression only; new_unusual_experiment_count=0 in CI"
+  },
+  "coordination": {
+    "merged_v1_review_comment_added": 660,
+    "module_binding_candidates_blocked_to_draft": [678, 679],
+    "reason": "Both downstream plans assumed MODULE-mode exact-module provider semantics that the authorized corpus counterexample does not establish.",
+    "separate_cm02_deconflict": {
+      "preferred_pr": 681,
+      "closed_duplicate": 667,
+      "preserved_negative_result": "TypeRef DAG structural sharing does not by itself bound diagnostic renderer expansion."
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Rust Reference: Name resolution",
+      "finding": "Name resolution is an explicit staged compiler process and ambiguities are validated rather than accepted by incidental order.",
+      "role": "architecture comparison only; not Clay language authority"
+    },
+    {
+      "source": "Go Modules Reference: Resolving a package to a module",
+      "finding": "Provider resolution requires exactly one provider and errors for zero or multiple providers.",
+      "role": "provider-cardinality comparison only; not Clay language authority"
+    }
+  ],
+  "hard_boundaries": {
+    "plain_use_name_binding": "NOT_SELECTED",
+    "wildcard_symbol_expansion": "NOT_SELECTED",
+    "imported_symbol_visibility": "NOT_SELECTED",
+    "call_ownership": "NOT_SELECTED",
+    "linking": "NOT_SELECTED",
+    "clayenv_build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Obtain exact-head self-hosted result for PR #674, then run a corpus-wide ordinary classification of every authorized plain MODULE target against exact module identities and parent-module declared-name inventories. Use that evidence to specify one explicit module-vs-symbol name-binding contract with collision/provenance rules; only after that may the nominal checker/linker path be widened, and #648 must remain fail-closed until the whole exact-head route is green."
+}

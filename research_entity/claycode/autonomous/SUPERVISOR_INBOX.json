@@ -1,29 +1,27 @@
 {
-  "schema_version": "7.6",
-  "latest_cycle": "go-20260816-release-manifest-trust-boundary",
+  "schema_version": "7.7",
+  "latest_cycle": "go-20260816-release-manifest-trust-boundary-supervisor-sync",
   "needs_review": false,
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "component_target": "CLAYCODE_COMPILER_VM_FRONTIER",
-  "control_sync_required_before_research_spend": true,
-  "next_focus": "Supervisor State 7.1/control 3.5 work selection is now stale with respect to executed repository reality. PR630 exact head 1c9bcb51401d6657cceb9f80cf7b07e62771748f was reviewed against current main, marked ready and merged as 4643ee5f77d9c3ea75b4c5ba620a44e5963544c1. PR632 exact head 70ee97ecbb7a9ffaf2814298c2f3f129f7c534c8 was then recomposed against that main: compare merge-base was exactly PR630 head and the remaining delta was six ClayOS/policy/test files; it was marked ready and merged as 44fdf86474e32cd976f3d071df97078c544d24d1. Exact-head self-hosted Ubuntu provenance, strict ClayOS, ClayEnv, single-VM, VM-bootstrap, runtime-nominal, parser-fidelity and Deep-Integrity runs were successful before merge. The public ClayOS path is now artifact-only and trusted vm_blob_sha256 is checked before process admission, but release authenticity is still OPEN because expectation/manifest origin is not independently authenticated. Exactly one bounded unusual experiment MANIFEST_DOUBLE_WORLD showed that caller-selected manifest+artifact pairs admit both legitimate and substituted internally consistent worlds, while an independently pinned Ed25519 release key accepted the legitimate signed manifest and rejected the attacker-signed substituted manifest. Next highest-information implementation is a minimal ClayReleaseManifest/v1 trust boundary with independently provisioned/pinned release root, rollback/epoch protection and fail-closed verification before ClayOS.exec_artifact. Prefer standards-aligned TUF/in-toto/Sigstore concepts; do not invent custom cryptography. Continue semantic expansion only through ClayExecutableTypedIR/v1 and one VM; 429/464 unresolved Calls and 22 MethodChain/member contracts remain authority-unselected. FREE_ONLY hard, no paid fallback/Together, no live provider capability without accepted Ubuntu external-effect receipt, Goodman ancestry collapse, no canonical semantics from model consensus, no Frank Harness mutation.",
+  "control_sync_required_before_research_spend": false,
+  "next_focus": "Supervisor State 7.2 and CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL 3.6 are synchronized to executed repository reality. PR630 exact head 1c9bcb51401d6657cceb9f80cf7b07e62771748f is merged as 4643ee5f77d9c3ea75b4c5ba620a44e5963544c1; PR632 exact head 70ee97ecbb7a9ffaf2814298c2f3f129f7c534c8 is merged after it as 44fdf86474e32cd976f3d071df97078c544d24d1. Do not repeat their merge/recomposition work unless relevant bytes change. The next highest-information frontier is an independently rooted ClayReleaseManifest/v1 ahead of ClayEnv/ClayOS. MANIFEST_DOUBLE_WORLD is retained as executable counterevidence that matching caller-selected artifact+manifest hashes establish only self-consistency. Require a non-self-selected pinned release root, signature verification, expiry/version/epoch checks, anti-rollback state persisted across restart, and artifact/VM/source/grammar/executable-IR identity binding before process admission. Preserve ProvenanceExpectation as a second-stage gate, one canonical ClayExecutableTypedIR/v1, one VM, 40-authorized/36-parsed corpus, 429/464 unresolved Calls and 22 MethodChain/member segments as authority-unselected. FREE_ONLY hard, no paid fallback/Together, no live provider capability without accepted Ubuntu external-effect receipt, Goodman ancestry collapse, no BASE or Frank-v0.1 PASS from consensus, no canonical semantics from host/model agreement, no Frank Harness mutation.",
   "verified_updates": {
-    "product_main_before_merge": "7b54a420172e1d4a8099071eb49352f895943636",
+    "supervisor_state_version": "7.2",
+    "autonomous_control_version": "3.6",
+    "autonomous_control_synced": true,
+    "product_main_observed": "0a94c67121582c6d7a2165b776323758fc80ea55",
     "pr630_state": "MERGED",
     "pr630_head": "1c9bcb51401d6657cceb9f80cf7b07e62771748f",
     "pr630_merge_commit": "4643ee5f77d9c3ea75b4c5ba620a44e5963544c1",
     "pr632_state": "MERGED_AFTER_PR630",
     "pr632_head": "70ee97ecbb7a9ffaf2814298c2f3f129f7c534c8",
     "pr632_merge_commit": "44fdf86474e32cd976f3d071df97078c544d24d1",
-    "pr632_compare_merge_base_after_pr630": "1c9bcb51401d6657cceb9f80cf7b07e62771748f",
-    "pr632_remaining_changed_files_after_pr630": 6,
-    "pr632_required_observed_runs": "ALL_COMPLETED_SUCCESS_EXACT_HEAD_SELF_HOSTED_UBUNTU",
     "artifact_only_public_clayos": true,
     "trusted_vm_identity_checked_before_process_admission": true,
-    "release_manifest_authority": "OPEN",
+    "release_manifest_authority": "OPEN_REQUIRE_INDEPENDENT_TRUST_ROOT",
     "unusual_experiment": "MANIFEST_DOUBLE_WORLD",
-    "unusual_baseline_legitimate_accept": true,
     "unusual_baseline_substituted_accept": true,
-    "unusual_signed_legitimate_accept": true,
     "unusual_signed_attacker_substituted_accept": false,
     "authorized_sources": 40,
     "parsed_authorized_sources": 36,
@@ -34,8 +32,8 @@
     "live_free_provider_capability": "NO_NEW_ACCEPTED_UBUNTU_EXTERNAL_EFFECT_RECEIPT"
   },
   "receipt_gaps": {
-    "autonomous_control_work_selection": "STALE_CURRENT_FOCUS_STILL_DESCRIBES_PR630_PR632_AS_OPEN; SYNC BEFORE NEXT RESEARCH SPEND",
     "trusted_expectation_origin_release_authority": "OPEN_REQUIRE_NON_SELF_SELECTED_RELEASE_ROOT_OR_EQUIVALENT",
+    "release_metadata_signature_and_identity_binding": "OPEN",
     "release_metadata_rollback_epoch": "OPEN",
     "release_root_rotation_recovery": "OPEN",
     "physical_process_sandboxing": "OPEN_REPOSITORY_API_NON_BYPASS_ONLY",
@@ -45,5 +43,5 @@
     "alias_dag_resource_totality": "OPEN_MATERIALIZATION_BUDGET_OR_STRUCTURAL_SHARING",
     "productstart_storage": "OPEN_HOSTINGER_PRODUCTIVE_AUTHORITY_SEPARATE"
   },
-  "instruction": "Do not repeat PR630/PR632 merge work. First synchronize autonomous control focus to the merged main frontier. Then implement/falsify a minimal independently rooted ClayReleaseManifest/v1 boundary ahead of ClayEnv/ClayOS admission, including substituted manifest+artifact rejection, stale signed metadata rejection and restart rollback resistance. Preserve one canonical admitted IR, one VM, artifact-only public ClayOS, fail-closed unsupported semantics, explicit Call/member authority, FREE_ONLY, Goodman ancestry collapse, BASE freeze, ProductStart separation and zero Frank-Harness mutation."
+  "instruction": "Implement/falsify a minimal independently rooted ClayReleaseManifest/v1 before ClayOS admission. Reject substituted artifact+manifest worlds under untrusted roots, reject stale/expired signed metadata and rollback after a newer accepted epoch, persist/reobserve rollback state across restart, and reject bound artifact/VM/executable-IR identity mismatch before PID admission. Preserve all FREE_ONLY, Goodman, BASE-freeze, ProductStart separation, single-IR/single-VM and zero-Harness-mutation rules."
 }

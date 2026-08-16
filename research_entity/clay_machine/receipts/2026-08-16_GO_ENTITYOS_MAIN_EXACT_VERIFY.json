@@ -1,0 +1,85 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "MAIN_EXACT_ARTIFACT_VERIFIED_CANDIDATE_NOT_WHOLE_ACCEPTANCE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_candidate_merge_pr": 704,
+  "canonical_candidate_merge_commit": "0c4b8ce470ac2389f49e8fcb523a9c13e23ac78f",
+  "tested_main_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31926373645,
+    "job_id": 95114507239,
+    "event": "push",
+    "runner_class": "self-hosted Linux X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "conclusion": "success",
+    "source_regression": 0,
+    "unusual_experiment_count": 0,
+    "note": "The macro-cycle unusual experiment was already executed exactly once on the accepted PR-head candidate run 31926217568; the main-push workflow intentionally skipped repeating it."
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "size_bytes": 11930688,
+    "sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "format": "ELF 64-bit LSB executable, x86-64",
+    "mode": "0755",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "build_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+    "whole_machine_acceptance": false
+  },
+  "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+  "main_ci_verified_gates": [
+    "exact main head fetched",
+    "pinned freezer and parser prepared",
+    "canonical source pipeline regression passed",
+    "exact one-file EntityOS built",
+    "EntityOS status reports exact build_head and frozen_runtime=true",
+    "EntityOS self-test passed",
+    "Clay source build/run returned 42",
+    "provenance-bound trusted manifest run passed",
+    "linux.process.spawn.v0 denied without capability",
+    "linux.process.spawn.v0 admitted only with explicit grant",
+    "exact main artifact uploaded"
+  ],
+  "local_cross_check": {
+    "environment": "active ChatGPT Linux sandbox outside repository tree",
+    "artifact_sha256_matches_ci": true,
+    "status": "PASS",
+    "self_test": "PASS",
+    "self_test_vm_result": 42,
+    "clay_build_run_result": 42,
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_capability": "ENTITYOS_MAIN_LOCAL_OK"
+  },
+  "macro_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "RENAMED_UNICODE_CWD_DECOUPLING",
+    "source_run": 31926217568,
+    "result": "PASS_BYTE_IDENTICAL",
+    "repeated_on_main": false
+  },
+  "negative_results_preserved": [
+    "initial PR #703 transitional zipapp probe used an obsolete executable-IR shape and failed before repair; branch was closed as superseded",
+    "earlier one-file host-Python path depended on host Python and initially failed clean execution when lark was absent",
+    "PR #704 clean freeze initially failed until lark==1.3.1 was explicitly pinned alongside PyInstaller==6.21.0"
+  ],
+  "not_promoted": [
+    "whole EntityOS / whole Clay Machine acceptance",
+    "accepted Hostinger final-release acceptance",
+    "canonical source-level String/Bytes/argv/env/cwd/stdin/stdout/stderr/PTY closure",
+    "CM-NET closure",
+    "CM-DATA/CM-VIS/CM-AUDIO closure",
+    "persistent service/state/recovery closure",
+    "self-hosting/bootstrap equivalence"
+  ],
+  "next_discriminator": "Select the smallest provenance-bound canonical String/Bytes/argv plus ownership/lifetime/effect-signature surface shared by CM-TERM and CM-DATA, wire it through checker -> ClayExecutableTypedIR -> the single ClayVM -> ClayOS process boundary, then rebuild and rerun this exact one-file EntityOS gate on current main.",
+  "training_authorized": false,
+  "together_api_used": false
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_head_observed_before_write": "dd1da5effc2256056b1c726f8c7cc5e9a82e939d",
+  "product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "canonical_vps_run": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31929090825,
+    "run_number": 27,
+    "status": "completed",
+    "conclusion": "success",
+    "artifact_id": 9258758674,
+    "artifact_archive_sha256": "1bc3828fbf00b5a272ecf4d43074a62c5192fb0895576f6316dff855e9119afd"
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "size_bytes": 12820496,
+    "format": "ELF 64-bit LSB x86-64",
+    "mode": "0755",
+    "pyinstaller_onefile": true,
+    "pyinstaller_pythonhashseed": "1",
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true,
+    "whole_machine_acceptance": false
+  },
+  "local_exact_artifact_recheck": {
+    "self_test": "PASS",
+    "status_build_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "frozen_runtime": true,
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "visual_grounded_queries": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "RELOCATED_UNICODE_READONLY_FOREIGN_CWD",
+    "baseline": "Exact prior EntityOS artifact self-test from ordinary writable working directory.",
+    "intervention": "Copy the exact artifact into a Unicode temporary path, make its containing directory and a foreign working directory read-only, then run --self-test-json from that foreign working directory.",
+    "observed_binary_exit_code": 0,
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "selftest_output_sha256": "02f275d54c954015a18536b4031819aa5dcef3b2d61475fc685cf48b917f5f27",
+    "rollback": "Temporary experiment tree removed; no persistent EntityOS state modified.",
+    "counterevidence": "The outer container command wrapper reported status 1 after the experiment even though the captured EntityOS exit code was 0 and a follow-up ordinary observation confirmed byte-identical outputs and rollback. Preserve this as a tool-environment anomaly rather than product PASS evidence."
+  },
+  "grf_collapse": {
+    "observed": "The current product head builds two bit-identical one-file freezes on the accepted self-hosted Linux/x64 workflow, and the resulting exact EntityOS bytes independently pass the canonical local self-test after artifact download.",
+    "retained_hypothesis": "The one-file carrier and build reproducibility boundary are strong enough to remain the release carrier while semantic capability coverage expands.",
+    "counter_reality": "Reproducible one-file packaging and self-test success can still coexist with a functionally incomplete Clay Machine.",
+    "decision": "RETAIN_ENTITYOS_CARRIER_WITHOUT_WHOLE_MACHINE_PROMOTION"
+  },
+  "release_blocker": {
+    "status": "BLOCKED",
+    "exact_blocking_invariant": "EntityOS itself reports whole_machine_acceptance=false. Current CLAY_MACHINE workspace still lacks the canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface needed to drive real process/data semantics through ClayCode -> TypedIR -> single ClayVM -> ClayOS, with broader runtime/network/media obligations still open.",
+    "next_executable_step": "Select and implement the smallest provenance-bound canonical String/Bytes/argv value and effect-signature slice, drive one real process request through the existing TypedIR/ClayVM/ClayOS path without backend-local request-id semantics, then rebuild the double-freeze EntityOS and rerun exact one-file acceptance gates."
+  },
+  "workspace_update": "NO_DIRECT_WORKSPACE_MUTATION_TO_AVOID_PARALLEL_FRONTIER_COLLISION"
+}

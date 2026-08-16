@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "execution_truth": "ACTUALLY_STARTED_EXACT_IDENTITY_VERCEL_SANDBOX_ONLY_FOR_EXECUTABLE_PRODUCT_CLAIMS",
+  "research_head_before_write": "2f5aae6edda23bdaf1f81bfe4317fdf125257823",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "observations": {
+    "vercel_project": "dr-unterweger",
+    "latest_started_build_deployment": "dpl_3GtAfZ8H2wSv23nQRhLKm8wH6swe",
+    "latest_started_build_head": "8df127fbf7d97b4f3abfdc5e705bfb49a028c7fd",
+    "latest_started_build_branch": "chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325",
+    "latest_started_build_result": "FAIL_BEFORE_SANDBOX_START",
+    "latest_started_build_failure": "VERCEL_GIT_SOURCE_TREE_DIRTY",
+    "failure_context": "Vercel installs dependencies before vercel-build, so ambient checkout dirt can exist even when exact committed Git objects remain available.",
+    "current_repair_head": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+    "current_repair": "stage source from immutable committed Git tree objects and keep ambient checkout bytes non-authoritative",
+    "current_repair_vercel_status": "DEPLOYMENT_RATE_LIMITED_BEFORE_NEW_DEPLOYMENT",
+    "current_repair_vercel_message": "Deployment rate limited — retry in 24 hours.",
+    "current_repair_sandbox_started": false,
+    "current_repair_promotion": "BLOCKED_UNVERIFIED"
+  },
+  "alternative_source_staging_evidence": {
+    "historical_head": "0b4ea450695273df6f05bfb0559b2ea0004b089d",
+    "observed": "deterministic committed-tree staging twin produced identical archive SHA256 twice in one Vercel build",
+    "archive_sha256": "17454ef695b717d28d380862c372623f34482a98b05f9db280c795f013cb2882",
+    "scope": "BUILD_STAGING_ONLY_NOT_SANDBOX_OR_ENTITYOS_PASS"
+  },
+  "batch4_bytes_candidate": {
+    "pr": 777,
+    "head": "fcf198ceb0318285bad8e2332e21dbec93804ff8",
+    "base": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "state": "DRAFT_UNVERIFIED",
+    "mechanism": "CLAYVM/2 typed Bytes params/returns with owned immutable bytes materialization and released-memoryview fail-closed trap",
+    "counterhypothesis": "copying a concurrently mutated shared exporter can produce bytes that are owned after admission but are not producer-epoch-consistent; ownership alone does not establish coherent snapshot semantics",
+    "architectural_consequence": "do not promote memoryview/shared-buffer admission to release-grade CM-06/CM-DATA snapshot semantics without explicit lease/epoch/stability or an intentionally weaker documented observation contract"
+  },
+  "next_unusual_experiment": {
+    "name": "CM06_CONCURRENT_SHARED_EXPORTER_EPOCH_COHERENCE",
+    "status": "PLANNED_NOT_EXECUTED",
+    "reason_not_executed": "current exact candidate could not start a new Vercel Sandbox because the repair head deployment was rate-limited",
+    "required_execution_surface": "ACTUALLY_STARTED_ISOLATED_VERCEL_SANDBOX",
+    "bounded_design": "use a harmless shared-memory or mmap byte buffer with a producer alternating two complete epoch-tagged patterns while the candidate Bytes ingress repeatedly snapshots a memoryview; detect whether any admitted snapshot contains a hybrid epoch/payload combination that cannot correspond to one complete producer epoch",
+    "preferred_prediction": "if current copy-only admission is producer-epoch coherent, no hybrid snapshot occurs",
+    "counter_prediction": "if producer mutation races the copy, at least one hybrid snapshot may occur under sufficient bounded repetitions",
+    "promotion_rule": "a negative bounded run is not proof of coherence; positive hybrid observation refutes producer-epoch-consistent snapshot semantics and forces lease/epoch/stability or narrower admission",
+    "new_unusual_experiment_count_this_trigger": 0
+  },
+  "go_collapse": {
+    "retain": [
+      "build-internal only Vercel execution; no reusable public command endpoint",
+      "committed Git tree bytes as source authority instead of ambient post-install checkout state",
+      "PR777 Bytes candidate remains unpromoted until exact isolated Vercel execution",
+      "CM-06 producer-epoch consistency remains an explicit blocker"
+    ],
+    "reject": [
+      "treating Vercel deployment READY as Sandbox evidence",
+      "treating the 8df ambient-checkout dirty failure as a product semantic failure",
+      "claiming memoryview copy alone proves coherent concurrent snapshot semantics"
+    ],
+    "defer": [
+      "PR744 String-path fusion until Bytes and execution-lane candidates have exact Sandbox evidence"
+    ]
+  },
+  "next_executable_sequence_when_vercel_capacity_returns": [
+    "execute PR776 head f84aef16b5e93797dffa5d87268925f36bcc2b38 and require the build-internal runner to actually create a Vercel Sandbox",
+    "verify exact source head/tree, hash-bound source archive and Git provenance, clean reconstructed Git state and deny-all transition",
+    "run current baseline matrix, double-build exact one-file EntityOS, require identical SHA256, self-test/status, PATH-without-host-Python, capability and relocation gates",
+    "only after the execution lane is green, execute the fresh-main PR777 Bytes slice with its Bytes-v2 and released-view regressions",
+    "consume exactly one new unusual experiment for this go family as CM06_CONCURRENT_SHARED_EXPORTER_EPOCH_COHERENCE in the actually-started Vercel Sandbox",
+    "if Bytes is green and counterhypothesis is not refuted adversely, three-way fuse the preferred PR744 String path without creating parallel VM semantics and repeat exact EntityOS artifact gates"
+  ],
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_RATE_LIMIT_BEFORE_CURRENT_REPAIR_SANDBOX"
+}

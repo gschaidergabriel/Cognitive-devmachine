@@ -1,0 +1,60 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "observed_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "artifact": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "build_head": "f525e3cf28c8c7a586da50d52242730ef534fc9b",
+    "workflow_run": 31927513690,
+    "workflow_artifact_id": 9258281758,
+    "name": "EntityOS",
+    "baseline_sha256": "7cf8d7f415417dfd25fbcc74592a09a5827bb79e69e945ed9c3c1a43c82c7c8a",
+    "baseline_size_bytes": 11932320,
+    "format_observed_locally": "ELF 64-bit LSB executable x86-64",
+    "whole_machine_acceptance": false
+  },
+  "ordinary_verification": {
+    "downloaded_exact_workflow_artifact": true,
+    "status": "PASS",
+    "self_test": "SELFTEST_PASS",
+    "host_without_grant": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_explicit_grant": "LOCAL_HOST_OK"
+  },
+  "go_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "TRAILING_BYTE_SELF_ATTESTATION",
+    "bounded_intervention": "Copy the exact EntityOS artifact, append exactly one byte 0xA5, execute status and --self-test, then delete the copy.",
+    "baseline_sha256": "7cf8d7f415417dfd25fbcc74592a09a5827bb79e69e945ed9c3c1a43c82c7c8a",
+    "intervention_sha256": "865cac3ace9f28979202cce170d840f79d4d7b08d5c8f587a2537f73f43790c5",
+    "baseline_size_bytes": 11932320,
+    "intervention_size_bytes": 11932321,
+    "status_rc": 0,
+    "self_test_rc": 0,
+    "self_test_output": "SELFTEST_PASS",
+    "result": "REFUTED_SELF_ATTESTATION",
+    "rollback": "tampered copy deleted; canonical artifact untouched"
+  },
+  "external_primary_evidence": {
+    "source": "PyInstaller upstream documentation/source history",
+    "finding": "PyInstaller CArchive tooling supports back-to-front archive-magic search so executables may contain data appended after the embedded package, including signature-like trailing data. Therefore successful execution after an appended byte is compatible with the packaging substrate and must not be treated as outer-file integrity evidence."
+  },
+  "grf_collapse": {
+    "observed_anchor": "The exact f525e3cf EntityOS artifact is a valid one-file candidate and passes its current canonical self-test, while reporting whole_machine_acceptance=false.",
+    "hypothesis": "The frozen EntityOS runtime detects modification of its own outer executable bytes before accepting itself as the same artifact.",
+    "counterhypothesis": "Build-time SHA/provenance exists outside or beside runtime admission, so modified outer EntityOS bytes can still boot and self-test as if unchanged.",
+    "discriminator": "Change exactly one trailing byte without touching the canonical artifact and run status plus --self-test.",
+    "outcome": "REFUTED",
+    "scope": "This establishes a missing runtime outer-file self-attestation check for this mutation class. It does not prove arbitrary malicious modifications are executable or that external workflow SHA verification is ineffective."
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE_TEST_OBLIGATION",
+    "affected_boundary": "EntityOS one-file release identity/provenance",
+    "requirement": "Before whole-machine acceptance, define a non-circular authenticated release identity mechanism or an explicitly scoped tamper-evident seal, bind it to startup admission, and prove fail-closed behavior on a modified outer EntityOS artifact.",
+    "strongest_counterpoint": "If acceptance deliberately delegates outer-file authenticity to an external trusted launcher/package-verifier, runtime self-attestation may be redundant; that authority boundary must then be canonical and compatible with the owner-fixed one-file product contract.",
+    "anti_goodhart": "An unkeyed footer hash alone is not authenticity because an attacker able to rewrite the executable can recompute it. Do not promote a checksum-only self-seal as a security proof."
+  },
+  "entityos_artifact_state": "CURRENT_CANDIDATE_VERIFIED_BUT_WHOLE_MACHINE_BLOCKED",
+  "next_executable_step": "Select the release trust root (runtime-internal signature verification versus canonical external verifier), implement the smallest fail-closed admission check for the frozen EntityOS identity, rebuild exact main, rerun ordinary canonical gates, and reuse this trailing-byte mutation as a regression test rather than as a new unusual experiment.",
+  "remaining_semantic_frontier": "In parallel, the workspace's highest shared semantic discriminator remains canonical Bytes/String/argv and effect-signature admission through source/typecheck -> ClayExecutableTypedIR/v1 -> the single ClayVM -> Linux process path; PR #708 is existing noncanonical typed-value research and must not be duplicated."
+}

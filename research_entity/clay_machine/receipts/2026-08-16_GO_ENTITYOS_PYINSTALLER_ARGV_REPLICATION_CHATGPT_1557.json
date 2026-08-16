@@ -1,0 +1,73 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "worker_provenance": "temporary Clay research/build/test worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only": true,
+    "vps_test_performed": false,
+    "self_hosted_test_triggered": false,
+    "together_used": false,
+    "training_authorized_or_started": false
+  },
+  "r0_observed": {
+    "product_main_observed": "4aa41ae0490c4eed4eec57a93bb2de910e78b29b",
+    "research_main_before_write": "bffd1ef9d411a0627161b641267ba15315e15c6f",
+    "current_entityos_builder_blob": "3409eddadd6a5f75952132965ce15fa46de3977d",
+    "current_vm_blob": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
+    "current_process_vm_bridge_blob": "fa4dbc557d89ff1da24d6cf700645df5737b2e57",
+    "builder_state": "Current main builds EntityOS with PyInstaller --onefile, embeds the Python runtime/application dependencies, performs two builds, and rejects SHA-256 mismatch; receipt still declares whole_machine_acceptance=false.",
+    "vm_state": "Current VM admits String literal/return but requires all function parameter types to be Int and exposes ClayHost calls as Callable[[list[int]], int].",
+    "process_bridge_state": "Current HostProcessVMHost maps one Int request_id to a host-owned immutable tuple[str,...]; canonical Clay String/argv/Bytes do not cross the VM hostcall ABI.",
+    "current_exact_entityos_execution": "BLOCKED_IN_THIS_WORKER"
+  },
+  "historical_sandbox_baseline": {
+    "workflow_run": 31926045909,
+    "head": "6e566e38a38b66323c7a3be7e24c00ac035503ab",
+    "artifact_sha256": "b8c134a6b70514c68551863bd336d6f39ff5f3273d50bb0fc14b6facd294c19d",
+    "artifact_size_bytes": 75728,
+    "self_test_vm_result": 42,
+    "process_probe": "PASS",
+    "whole_machine_acceptance": false,
+    "scope": "Historical executable baseline only; not current-main acceptance evidence."
+  },
+  "grf": {
+    "hypothesis": "The highest shared semantic blocker is no longer the one-file packaging mechanism itself; it is the missing canonical Clay value/effect ABI carrying String/argv and Bytes/Buffer through checker -> executable IR -> single VM -> capability-gated Linux boundary.",
+    "strongest_counterhypothesis": "The current PyInstaller onefile path may still fail to freeze or execute on an actually-started isolated runner, making packaging/toolchain execution the immediate blocker before value-ABI work can be validated.",
+    "discriminator": "Obtain one actually-started isolated current-main build; require two byte-identical EntityOS freezes, execute that exact file, then route one canonical typed process request through the VM instead of an Int request handle."
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "EMBEDDED_NUL_ARGV_FAIL_CLOSED_REPLICATION",
+    "execution_location": "isolated ChatGPT sandbox against the downloaded historical EntityOS payload using host_process.py whose blob matched the then-observed current component",
+    "intervention": "Pass argv element A\\x00B to the retained direct no-shell process boundary.",
+    "result": "PASS_FAIL_CLOSED",
+    "error": "ARGV_NUL_DENIED",
+    "interpretation_scope": "Independent replication of the argv embedded-NUL invariant at the retained host adapter; not evidence that canonical Clay String/argv is implemented.",
+    "novelty_status": "REPLICATION_NOT_NEW_CANONICAL_PROMOTION",
+    "rollback": "No product source or persistent runtime state changed."
+  },
+  "coordination": {
+    "overlap_found": "Existing receipt 2026-08-16_GO_ARGV_NUL_BOUNDARY_AND_SANDBOX_RETRY.json independently tested the same semantic hazard and reached the same retain decision.",
+    "duplicate_runtime_patch_avoided": true,
+    "reason": "Product main moved repeatedly during this cycle and no open PR was found implementing the exact canonical String/Bytes hostcall ABI; writing a stale parallel backend-local patch would violate current coordination and semantic-source rules."
+  },
+  "collapse": {
+    "retain": [
+      "Current one-file packaging architecture is materially stronger than the historical zipapp baseline because the current builder embeds the Python runtime and enforces two-build SHA identity.",
+      "Do not treat one-file packaging progress as whole-machine acceptance; the current builder explicitly records whole_machine_acceptance=false.",
+      "Keep process argv semantically distinct from opaque arbitrary Bytes and preserve explicit embedded-NUL rejection.",
+      "Replace the Int request-id process convention only through canonical checker/type/effect -> executable TypedIR -> ClayVM value ABI -> capability-gated host boundary, not by adding a second backend-local semantic path."
+    ],
+    "counterevidence": [
+      "The current exact EntityOS could not be built in this worker because the local sandbox could not resolve GitHub for a source checkout and the current GitHub-hosted build lane observed earlier did not start execution.",
+      "Therefore no current-main binary SHA or current-main runtime PASS is claimed."
+    ],
+    "outcome": "MERGE"
+  },
+  "entityos_artifact_state": "BLOCKED_CURRENT_HEAD_VERIFICATION",
+  "exact_blocker": "NO_EXECUTED_ISOLATED_CURRENT_MAIN_FREEZE: current source proves a reproducible PyInstaller onefile build design, but this worker has no actually-executed isolated current-main build artifact. Independently, canonical Clay String/argv and Bytes/Buffer values still do not cross the VM hostcall ABI; CM-TERM currently uses an Int request handle.",
+  "next_executable_action": "On an actually-started isolated sandbox for current main, execute entityos/build_canonical_onefile.py and require its two-build SHA match plus execution of the exact resulting EntityOS. Then implement the smallest canonical String/argv plus Bytes/Buffer value/effect surface through the semantic checker and ClayExecutableTypedIR into the single ClayVM, replace the Int request-id process bridge for one real process call, add positive/negative provenance/effect tests, and rebuild/retest that exact EntityOS."
+}

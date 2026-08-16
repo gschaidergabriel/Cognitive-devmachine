@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "subject_pr": 761,
+  "subject_head": "ac64e4769f44626fad8386e0403f9c9822aaeeff",
+  "subject_file": "mcp/vercel-sandbox-mcp/scripts/stage-go-source.mjs",
+  "observed_vercel_failure": {
+    "deployment": "dpl_GBaZjp3ivTWJqrovA3NT14fRqaxr",
+    "status": "ERROR",
+    "error": "VERCEL_GIT_SOURCE_TREE_DIRTY",
+    "sandbox_started": false
+  },
+  "experiment": {
+    "name": "SANITIZED_SHALLOW_GIT_ARCHIVE_REPRODUCIBILITY",
+    "classification": "BOUNDED_UNUSUAL_EXPERIMENT",
+    "count": 1,
+    "environment": "isolated temporary local tool container",
+    "design": "Create one source Git commit, independently stage that exact commit twice through shallow file:// fetch + detached checkout, remove FETCH_HEAD and reflogs, run git read-tree --reset HEAD, then archive the full staged checkout including .git using fixed GNU tar metadata and gzip -n -9.",
+    "control": "Both stages target the identical commit and are clean before serialization.",
+    "expected_if_candidate_is_reproducible": "raw tar SHA-256 and gzip SHA-256 are byte-identical across independent stages",
+    "observed": {
+      "same_source_commit": true,
+      "stage1_clean": true,
+      "stage2_clean": true,
+      "tar_identical": false,
+      "gzip_identical": false,
+      "git_index_identical": false,
+      "stage1_tar_sha256": "24cbbf88cc9b57f75a569a7f7c1c83112c3dbecfbb698301fc72f5bbbbb60129",
+      "stage2_tar_sha256": "4ac5a7191aaeda7fd3d47ae1c658f8d943adbdf2124d8954bb784e5e5979260c",
+      "stage1_gzip_sha256": "97b7a123518305fe34625506a1611ef16917412f4f623b1f25ab3eaceefee7d4",
+      "stage2_gzip_sha256": "7fea0b665950b8a3dba52987930af46c1e1666bdf1fd1f3e3ca89ad439556cb5"
+    },
+    "result": "REFUTED_CURRENT_FULL_GIT_ARCHIVE_REPRODUCIBILITY_CLAIM",
+    "rollback": "temporary experiment directory deleted automatically"
+  },
+  "grf": {
+    "observed_anchor": "PR761 attempts to reconcile the canonical EntityOS builder's clean exact Git provenance requirement with Vercel source staging by archiving a sanitized shallow exact-head checkout including .git.",
+    "hypothesis": "Removing transport traces and fixing tar/gzip metadata makes the shallow checkout a reproducible source artifact while retaining Git provenance.",
+    "strongest_counterhypothesis": "Mutable Git checkout metadata, especially .git/index stat-cache fields, remains stage-instance-dependent and changes the archive bytes even when source HEAD and file tree are identical.",
+    "discriminator": "Two independent exact-head shallow stages serialized with the candidate canonicalization procedure.",
+    "collapse": "COUNTERHYPOTHESIS_OBSERVED; DO_NOT_PROMOTE_PR761_UNCHANGED"
+  },
+  "candidate_fusion": {
+    "preferred_property_split": [
+      "bind immutable committed source/tree bytes reproducibly outside the sandbox",
+      "inside the sandbox reconstruct or attest only the provenance material required by the canonical builder without admitting checkout-instance metadata"
+    ],
+    "active_alternative": "external EntityOSSourceSnapshotAttestation/v1 lane on clay/go-entityos-attested-snapshot-20260816",
+    "alternative_status": "CANDIDATE_UNVERIFIED_WHILE_VERCEL_DEPLOYMENT_QUEUED",
+    "warning": "Do not weaken build provenance merely to restore a green matrix; prove exact file set, mode, content digest, expected commit binding, and fail-closed mutation controls."
+  },
+  "coordination": {
+    "product_pr_comment_id": 5308455760,
+    "duplicate_product_patch_created": false,
+    "new_vercel_sandbox_started_by_this_worker": false,
+    "reason_no_new_sandbox": "A coordinated attestation candidate deployment was already queued; starting duplicate compute would violate batch coordination."
+  },
+  "entityos_artifact_this_cycle": "NOT_BUILT",
+  "exact_entityos_blocker": "No current-main or accepted provenance-fused candidate has a fresh successful isolated Vercel Sandbox matrix after the main replay hotfix and build-provenance hardening. PR761 fails before Sandbox start; the attested-snapshot replacement remains queued/unverified.",
+  "next_executable_step": "Let the already-queued attested-snapshot Vercel preview execute. If it starts a sandbox, require exact source-head/file-manifest/archive binding, mutation-negative controls, double-build identical EntityOS SHA-256, status/self-test, PATH-without-host-Python, relocation/copy execution, DENY_ALL during offline tests, and clean sandbox stop before considering fusion to current main.",
+  "whole_clay_machine_acceptance": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false,
+  "production_host_test_used": false,
+  "together_api_used": false
+}

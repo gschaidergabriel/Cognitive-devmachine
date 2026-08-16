@@ -1,0 +1,77 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+  "observed": {
+    "research_main_before_write": "76635176955a0dac6e9fef36b728b2fbe2ab0ea6",
+    "product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "latest_semantic_product_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "latest_semantic_product_merge_pr": 660,
+    "cm07_provider_resolver_state": "MERGED_EXACT_MODULE_PROVIDER_ONLY_SYMBOL_SEMANTICS_NOT_SELECTED",
+    "cm02_issue": 640,
+    "detached_candidate_pr": 645,
+    "production_integration_pr": 664,
+    "production_integration_head": "c7c0058d5c24faab788eb196fd2656846ddd4824",
+    "production_integration_base_semantic_head": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "production_integration_changed_files": [
+      "runtime/claycode_typecheck_v1/typecheck.py",
+      "tests/claycode_typeref_production_totality_gate.py",
+      ".github/workflows/claycode-typeref-production-totality-vps.yml"
+    ],
+    "exact_head_workflow": 31923180217,
+    "exact_head_job": 95106406542,
+    "exact_head_workflow_state_at_receipt": "QUEUED",
+    "whole_clay_machine_acceptance": false
+  },
+  "grf": {
+    "generated_hypothesis": "Per-canonicalization immutable alias structural sharing removes repeated-subtree materialization without changing admitted nominal alias or cycle semantics.",
+    "counter_reality": "Structural sharing alone may make canonicalization compact while equality still re-traverses the same shared node pairs exponentially.",
+    "discriminator": "Compare two independently allocated but structurally identical shared binary TypeRef DAGs with current pair traversal versus visited-pair traversal.",
+    "collapse": "The counter-reality was observed: sharing requires DAG-aware pair memoization in _same. The production candidate therefore integrates both mechanisms as one repair."
+  },
+  "unusual_experiment": {
+    "name": "SHARED_DAG_PAIR_REVISIT_DISCRIMINATOR",
+    "count_for_this_macrocycle": 1,
+    "environment": "isolated local Python mechanism probe",
+    "depth_18": {
+      "baseline_pair_visits": 524287,
+      "baseline_seconds_approx": 0.23242,
+      "memoized_pair_visits": 19,
+      "memoized_seconds_approx": 0.000068
+    },
+    "depth_22": {
+      "baseline_pair_visits": 8388607,
+      "baseline_seconds_approx": 3.294896,
+      "memoized_pair_visits": 23,
+      "memoized_seconds_approx": 0.000091,
+      "pair_visit_ratio_approx": 364722
+    },
+    "result": "DAG_AWARE_EQUALITY_REQUIRED_WITH_STRUCTURAL_SHARING",
+    "interpretation": "Mechanism evidence only; exact-head self-hosted production evidence remains required."
+  },
+  "production_delta": {
+    "canonicalization": "Per-call alias cache reuses completed immutable TypeRef subtrees; cache promotion is suppressed for a subtree if a cycle event occurs during construction; mutable active-alias DFS path and fail-closed cycle diagnostics are preserved.",
+    "equality": "_same tracks visited (id(left), id(right)) pairs to prevent exponential revisits of shared DAG nodes.",
+    "gate": "Production gate adds depth-18 diamond identity bound, sibling sharing, depth-22 same/mismatch regression, and retains direct/wrapped cycle plus depth-32768 totality/scaling controls.",
+    "ci_provenance": "Workflow now checks out github.event.pull_request.head.sha on pull requests and retains github.sha only as merge-context metadata."
+  },
+  "coordination": {
+    "cm07_parallel_advance": "While this CM-02 lane was built, PR #660 merged canonical exact module-provider resolution after #635/#653; the CM-02 branch was recomposed on merge 6cf1fc3925c58230e223292fc193374753b370e2.",
+    "later_product_main_delta": "Main advanced to a17681e01fe92d59f23e1d493d1aa669fb357a9a only through runtime/vps_integrity evidence files; compare showed no overlap with PR #664 files.",
+    "stale_write_avoided": true
+  },
+  "hard_boundaries": {
+    "production_cm02_pass": "PENDING_EXACT_HEAD_SELF_HOSTED_RESULT",
+    "generic_semantics": "NOT_SELECTED",
+    "render_type_ref_output_size_hardening": "OPEN_SEPARATE_FOLLOWUP",
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Require run 31923180217 to execute on self-hosted Linux/X64 at exact PR head c7c0058d5c24faab788eb196fd2656846ddd4824. If green, inspect overlapping TypeRef workflows and merge PR #664 only with expected-head binding; if red, preserve the failing observation and repair the smallest violated invariant.",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_VPS"
+}

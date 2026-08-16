@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "grf": {
+    "observed_reality": [
+      "Two prior builds of product head e517f9bc0b5228894acd9a82e3be33affa9a3738 on the EntityOS Initial Grant VPS lane both passed functional grant gates but produced different EntityOS bytes: sha256 71282db788d642cf365b25fd4cf0d28ac2a765838a7cdc0c10e65684d8b5535d versus 4e042a45f3b43b3883b8f92e5e1383f90771ba3876a201c2ce76cf2246068438.",
+      "Current product head advanced to fe8a35c600cab120bad9d1f93248eb1116ce3874 with the native X11 UnifiedDB visual shell before this repair was committed."
+    ],
+    "generated_hypothesis": "Unpinned Python hash randomization is sufficient to explain the observed PyInstaller one-file byte drift on the accepted build lane.",
+    "counter_reality": "The drift is caused by another nondeterministic source such as timestamp, path, bootloader, archive ordering, or environment metadata, so pinning PYTHONHASHSEED will not yield matching artifacts.",
+    "discriminating_intervention": "On top of the newer visual-shell head, set PYTHONHASHSEED=1 only for the PyInstaller subprocess, record the seed in EntityOSBuildReceipt/v1, and independently build the exact resulting product head through two existing self-hosted Linux/X64 workflows.",
+    "outcome": "RETAIN hypothesis for this exact build path; counter-reality not observed in the two-build discriminator. This does not establish cross-host or whole-machine reproducibility."
+  },
+  "primary_external_evidence": {
+    "source": "PyInstaller official documentation, Advanced Topics / Creating a Reproducible Build",
+    "finding": "PyInstaller documents setting PYTHONHASHSEED to a known integer when identical build bits are required."
+  },
+  "product_delta": {
+    "commit": "9fe685f944a895b90d372335f1fa3778281fc486",
+    "parent": "fe8a35c600cab120bad9d1f93248eb1116ce3874",
+    "file": "entityos/build_canonical_onefile.py",
+    "change": "PyInstaller subprocess receives PYTHONHASHSEED=1; build receipt records pyinstaller_pythonhashseed=1.",
+    "preserved_parallel_delta": "Native X11 visual shell and entityos submodule collection from parent head were preserved."
+  },
+  "exact_current_artifact": {
+    "name": "EntityOS",
+    "build_head": "9fe685f944a895b90d372335f1fa3778281fc486",
+    "sha256": "69b27f432b20b4e4bc5782beb1c86aafcf33249e9379297a6f72115e9681c890",
+    "size_bytes": 12819952,
+    "pyinstaller_onefile": true,
+    "pyinstaller_pythonhashseed": "1",
+    "visual_host_boundary": "linux.x11.ctypes",
+    "whole_machine_acceptance": false
+  },
+  "independent_build_receipts": [
+    {
+      "workflow": "EntityOS Initial Grant VPS",
+      "run_id": 31928824245,
+      "result": "success",
+      "sha256": "69b27f432b20b4e4bc5782beb1c86aafcf33249e9379297a6f72115e9681c890",
+      "size_bytes": 12819952,
+      "grant_evidence": "missing state fail-closed; first accept PASS; second launch without reprompt PASS; unsafe state permissions fail-closed"
+    },
+    {
+      "workflow": "EntityOS Canonical One-File VPS",
+      "run_id": 31928824264,
+      "result": "success",
+      "sha256": "69b27f432b20b4e4bc5782beb1c86aafcf33249e9379297a6f72115e9681c890",
+      "size_bytes": 12819952,
+      "canonical_evidence": "SELFTEST_PASS; source regression rc=0; exact-head self-hosted Linux/X64 evidence bound"
+    }
+  ],
+  "local_exact_artifact_recheck": {
+    "sha256": "69b27f432b20b4e4bc5782beb1c86aafcf33249e9379297a6f72115e9681c890",
+    "self_test": "SELFTEST_PASS",
+    "status_build_head": "9fe685f944a895b90d372335f1fa3778281fc486",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "whole_machine_acceptance": false
+  },
+  "unusual_experiment_accounting": {
+    "protocol_requirement": "exactly one bounded unusual experiment per go macro-cycle",
+    "observed_count_this_cycle": 2,
+    "deviation": true,
+    "cause": "A manual sidecar-dependency lesion was already executed earlier in this go. The subsequently triggered pre-existing EntityOS Canonical One-File VPS workflow automatically executed its own unusual relocated-binary/Unicode-extraction-root step.",
+    "action": "No additional unusual experiment was executed after detecting the collision. Preserve this as negative coordination evidence; future go cycles must inspect auto-triggered workflows before manually consuming the unusual-experiment budget."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_BUILD_CONSTRAINT",
+    "affected_workstreams": ["EntityOS release packaging", "CM-10-TOOLING-OBSERVABILITY-RECOVERY"],
+    "rule": "For the current PyInstaller-based EntityOS build path, keep the Python hash seed explicit and receipt-bound; do not infer clean-build reproducibility merely from functional PASS.",
+    "non_claims": [
+      "Whole Clay Machine acceptance is not passed.",
+      "No work package is promoted to COMPLETE by this receipt.",
+      "Cross-host bit reproducibility is not established.",
+      "Canonical Clay Bytes/Buffer and String/argv/effect semantics remain open."
+    ],
+    "next_falsifier": "Repeat exact-head build on a second clean compatible Ubuntu builder or fresh-machine lane with pinned toolchain and compare the EntityOS digest; independently continue the workspace-selected Bytes/Buffer + String/argv/effect-signature path through TypedIR and the single VM."
+  }
+}

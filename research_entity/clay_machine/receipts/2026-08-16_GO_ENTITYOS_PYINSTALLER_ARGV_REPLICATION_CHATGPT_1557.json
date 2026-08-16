@@ -13,21 +13,24 @@
     "training_authorized_or_started": false
   },
   "r0_observed": {
-    "product_main_observed": "4aa41ae0490c4eed4eec57a93bb2de910e78b29b",
-    "research_main_before_write": "bffd1ef9d411a0627161b641267ba15315e15c6f",
+    "product_main_semantic_snapshot": "4aa41ae0490c4eed4eec57a93bb2de910e78b29b",
+    "product_main_final_refresh": "d0078a832dd2e4a5cadba0d63b2239938f88c4ed",
+    "final_refresh_delta": "CI safety-only change cancelling forbidden self-hosted execution; no observed ClayVM/process/builder semantic change in that commit.",
+    "research_main_before_first_write": "bffd1ef9d411a0627161b641267ba15315e15c6f",
     "current_entityos_builder_blob": "3409eddadd6a5f75952132965ce15fa46de3977d",
     "current_vm_blob": "d4915d4bd167dfb2ee816c4f9b41f75ab1f0a791",
     "current_process_vm_bridge_blob": "fa4dbc557d89ff1da24d6cf700645df5737b2e57",
-    "builder_state": "Current main builds EntityOS with PyInstaller --onefile, embeds the Python runtime/application dependencies, performs two builds, and rejects SHA-256 mismatch; receipt still declares whole_machine_acceptance=false.",
-    "vm_state": "Current VM admits String literal/return but requires all function parameter types to be Int and exposes ClayHost calls as Callable[[list[int]], int].",
-    "process_bridge_state": "Current HostProcessVMHost maps one Int request_id to a host-owned immutable tuple[str,...]; canonical Clay String/argv/Bytes do not cross the VM hostcall ABI.",
+    "builder_state": "Observed current main builds EntityOS with PyInstaller --onefile, embeds the Python runtime/application dependencies, performs two builds, and rejects SHA-256 mismatch; the builder receipt still declares whole_machine_acceptance=false.",
+    "vm_state": "Observed current VM admits String literal/return but requires all function parameter types to be Int and exposes ClayHost calls as Callable[[list[int]], int].",
+    "process_bridge_state": "Observed current HostProcessVMHost maps one Int request_id to a host-owned immutable tuple[str,...]; canonical Clay String/argv/Bytes do not cross the VM hostcall ABI.",
     "current_exact_entityos_execution": "BLOCKED_IN_THIS_WORKER"
   },
   "historical_sandbox_baseline": {
     "workflow_run": 31926045909,
     "head": "6e566e38a38b66323c7a3be7e24c00ac035503ab",
-    "artifact_sha256": "b8c134a6b70514c68551863bd336d6f39ff5f3273d50bb0fc14b6facd294c19d",
+    "artifact_sha256": "92e1a55f3c4008fe402737ea019a5f45a06720ee3dd7cfb68fafdf64be7da3c0",
     "artifact_size_bytes": 75728,
+    "artifact_hash_verified_against": ["downloaded EntityOS bytes", "build.json", "result.json"],
     "self_test_vm_result": 42,
     "process_probe": "PASS",
     "whole_machine_acceptance": false,
@@ -62,7 +65,8 @@
       "Replace the Int request-id process convention only through canonical checker/type/effect -> executable TypedIR -> ClayVM value ABI -> capability-gated host boundary, not by adding a second backend-local semantic path."
     ],
     "counterevidence": [
-      "The current exact EntityOS could not be built in this worker because the local sandbox could not resolve GitHub for a source checkout and the current GitHub-hosted build lane observed earlier did not start execution.",
+      "The current exact EntityOS could not be built in this worker because the local sandbox could not resolve GitHub for a source checkout and the current GitHub-hosted isolated build lane observed earlier did not start execution.",
+      "A self-hosted exact-main workflow was observed pending later, but current owner policy forbids relying on self-hosted/VPS testing, so it is not admissible acceptance evidence and was not triggered or used by this worker.",
       "Therefore no current-main binary SHA or current-main runtime PASS is claimed."
     ],
     "outcome": "MERGE"

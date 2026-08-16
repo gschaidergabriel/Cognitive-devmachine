@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "kind": "GO_STRING_PATH_MAIN_SYNC_AND_UNICODE_PATH_IDENTITY",
+  "observed_at": "2026-08-16T23:42:00+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_string_process_pr": 744,
+  "pr_head_before_sync": "64530ed97303623849b92f2503abb0fa0ad24598",
+  "pr_head_after_sync": "5e29cf8f81b4bf88612580225fe6399e02adda54",
+  "sync_method": "non-force merge commit using current main tree plus the six pre-existing PR #744 candidate blobs exactly",
+  "changed_candidate_paths": [
+    ".github/workflows/go-string-path-hostcall-sandbox.yml",
+    "claymachine/clayvm.py",
+    "claymachine/executable_ir_adapter.py",
+    "claymachine/host_process.py",
+    "claymachine/host_process_vm.py",
+    "tests/clay_go_string_path_hostcall_gate.py"
+  ],
+  "overlap_check": {
+    "result": "PASS_NO_MAIN_CHANGES_ON_THE_SIX_CANDIDATE_PATHS_SINCE_PR_BASE",
+    "interpretation": "sync preserved independent current-main security/Vercel work without inventing a parallel runtime implementation"
+  },
+  "bounded_unusual_experiment": {
+    "count": 1,
+    "name": "UNICODE_NORMALIZATION_PATH_IDENTITY",
+    "environment": "isolated local Linux sandbox",
+    "setup": "two visually/canonically equivalent Unicode path spellings: NFC U+00E9 symlinked to /usr/bin/true and NFD U+0065 U+0301 symlinked to /usr/bin/false",
+    "observations": {
+      "utf8_path_bytes_distinct": true,
+      "nfc_return_code": 0,
+      "nfd_return_code": 1
+    },
+    "result": "PASS_DISTINCT_LINUX_PATH_IDENTITIES",
+    "design_constraint": "Clay String/path transport must not silently apply Unicode normalization to executable path identity"
+  },
+  "execution_evidence": {
+    "local_repo_clone": "BLOCKED_DNS_NETWORK_UNAVAILABLE",
+    "exact_head_vercel_status": "DEPLOYMENT_RATE_LIMITED_BEFORE_SANDBOX_START",
+    "vercel_status_text": "Deployment rate limited — retry in 24 hours.",
+    "direct_vercel_sandbox_connector_available": false,
+    "vps_or_self_hosted_testing_used": false,
+    "production_testing_used": false
+  },
+  "entityos": {
+    "artifact_built_for_exact_head": false,
+    "artifact_verified_for_exact_head": false,
+    "whole_machine_acceptance": false,
+    "classification": "BLOCKED_EXTERNAL_ISOLATED_EXECUTION_AVAILABILITY_NOT_CODE_FAILURE"
+  },
+  "next_executable_action": "When an allowed isolated lane can actually start, compose the existing String-path candidate with the retained build-internal Vercel test lane; run the String-path gate plus current CM-TERM/single-VM regressions, build EntityOS twice with equal SHA-256, execute the exact EntityOS and a moved copy, then only consider semantic promotion. General argv and canonical Bytes/Buffer ownership/lifetime remain open afterward.",
+  "authority": {
+    "together_used": false,
+    "training_authorized": false,
+    "training_started": false
+  }
+}

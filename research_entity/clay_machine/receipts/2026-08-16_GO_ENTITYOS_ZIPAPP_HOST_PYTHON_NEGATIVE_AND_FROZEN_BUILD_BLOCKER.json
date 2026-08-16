@@ -1,0 +1,70 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build/test worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "entityos_product_directive": "research_entity/global/ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE.md"
+  },
+  "observed_product_state": {
+    "main_head_at_final_refresh": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "canonical_string_merge": "2b1a7fbae158c36910dd623234b2fdfa8550a563",
+    "zipapp_builder": "tools/build_entityos.py",
+    "frozen_builder": "entityos/build_canonical_onefile.py",
+    "current_frozen_sandbox_workflow": ".github/workflows/entityos-semantic-onefile-rebuild-vps.yml"
+  },
+  "sandbox_runtime_recheck": {
+    "artifact_source": "downloaded exact GitHub Actions artifact EntityOS-2b1a7fbae158c36910dd623234b2fdfa8550a563",
+    "artifact_build_context": "historical self-hosted build; not promoted as current build evidence under sandbox-only directive",
+    "entityos_sha256": "42bf8a37a84925d37d98816cdb8f73c177e07906ea0fe51ad2fda52cfcbc7f1b",
+    "entityos_bytes": 1212993,
+    "baseline": {
+      "command": "./EntityOS self-test",
+      "execution_location": "isolated ChatGPT sandbox",
+      "returncode": 0,
+      "status": "PASS_ENTITYOS_SINGLE_FILE_SMOKE"
+    },
+    "bounded_unusual_experiment": {
+      "count_for_this_go_cycle": 1,
+      "name": "ZIPAPP_WITH_EMPTY_ENV_AND_NO_DISCOVERABLE_HOST_PYTHON",
+      "execution_location": "isolated ChatGPT sandbox",
+      "artifact_sha256_unchanged": true,
+      "sidecar_file_count": 0,
+      "environment": "env -i PATH=/definitely-no-python HOME=/tmp LANG=C.UTF-8",
+      "returncode": 127,
+      "stderr": "env: ‘python3’: No such file or directory",
+      "outcome": "REFUTED_AS_SELF_CONTAINED_RUNTIME",
+      "rollback": "environment-only; artifact unchanged"
+    }
+  },
+  "mechanistic_falsifier": {
+    "source_evidence": "tools/build_entityos.py uses zipapp.create_archive(... interpreter='/usr/bin/env python3')",
+    "interpretation": "the zipapp one-file path vendors Python modules but still requires a discoverable host Python interpreter",
+    "counterhypothesis_rejected": "single file plus vendored Python modules is sufficient to meet the owner-fixed zero-install self-contained runtime requirement"
+  },
+  "current_repair_path": {
+    "builder": "entityos/build_canonical_onefile.py",
+    "mechanism": "PyInstaller --onefile with contained Python runtime and deterministic double freeze",
+    "current_main_sandbox_workflow_run": 31930154546,
+    "current_main_sandbox_workflow_head": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "workflow_result": "NO_SEMANTIC_RESULT_INFRASTRUCTURE_NONEXECUTION",
+    "job_steps_executed": 0,
+    "reason": "GitHub hosted sandbox job terminated before any step",
+    "local_sandbox_build_attempt": {
+      "reconstructed_semantic_source_roots_from_exact_2b1_zipapp": true,
+      "pyinstaller_present": false,
+      "pinned_pyinstaller_install_attempt": "BLOCKED_NO_NETWORK_DNS",
+      "complete_current_private_source_tree_materialized": false
+    }
+  },
+  "release_effect": {
+    "zipapp_path": "DEVELOPMENT_ONLY_UNTIL_EXPLICITLY_DEMOTED_OR_FENCED",
+    "frozen_runtime_path": "RETAIN_AS_CANONICAL_CANDIDATE",
+    "whole_entityos_acceptance": false,
+    "blocking_invariant": "no exact-current EntityOS has yet been built and validated inside an isolated sandbox using the frozen self-contained runtime builder",
+    "next_executable_step": "materialize exact current product source plus pinned PyInstaller 6.21.0 inside an isolated sandbox, run entityos/build_canonical_onefile.py with its double-freeze reproducibility gate, then execute the exact resulting EntityOS normal status/self-test/String/host-effect gates and add a permanent no-host-Python regression gate without adding another unusual experiment to this already-consumed go cycle"
+  },
+  "outcome": "NEGATIVE_RESULT_RECORDED; ZIPAPP_NOT_RELEASE_SELF_CONTAINED; CURRENT_FROZEN_SANDBOX_BUILD_BLOCKED"
+}

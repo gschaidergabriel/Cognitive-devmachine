@@ -1,0 +1,66 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_ATTEMPT2_REPLICATION_31929090825",
+  "observed_at_utc": "2026-08-16T05:40:57Z",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "INDEPENDENT_EXACT_HEAD_REPLICATION_PASS_RELEASE_OPEN",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "workflow_run_id": 31929090825,
+  "workflow_attempt_job_id": 95122163292,
+  "workflow_attempt_result": "SUCCESS",
+  "runner": "clay-2",
+  "machine": "clayverse",
+  "evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
+  "artifact": {
+    "artifact_id": 9258876082,
+    "name": "EntityOS",
+    "binary_size_bytes": 12820496,
+    "binary_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "artifact_zip_sha256": "92d2dd412cd56b8f07d228ae94a23d0d6fbc266c9f4501063ed4626b593eb1a4",
+    "mode": "0755",
+    "file_kind": "ELF 64-bit LSB x86-64 GNU/Linux",
+    "pyinstaller_onefile": true,
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true
+  },
+  "runtime": {
+    "source_pipeline_checks": "16/16",
+    "source_pipeline_status": "PASS_CLAY_EXECUTABLE_IR_SINGLE_VM",
+    "self_test": "SELFTEST_PASS",
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "integration_probe_result": 42,
+    "process_denied_without_capability": true,
+    "process_allowed_with_linux_process_spawn_v0": true,
+    "initial_grant_first_launch": "FAIL_CLOSED_WITHOUT_GRANT",
+    "initial_grant_acceptance": "PERSISTED_ONCE",
+    "initial_grant_second_launch": "REUSED_WITHOUT_PROMPT",
+    "visual_data_source": "UnifiedDB",
+    "whole_machine_acceptance": false
+  },
+  "unusual_experiment": {
+    "count_for_this_go_macro_cycle": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "selftest_json_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT",
+    "rollback": "TEMP_PATH_REMOVED"
+  },
+  "grf_collapse": {
+    "observed_reality": "A second exact-head self-hosted VPS execution independently rebuilt and exercised the same current EntityOS head after the first successful attempt.",
+    "preferred_hypothesis": "The admitted one-file build and tested runtime boundary are reproducible on the current self-hosted Ubuntu/Linux lane.",
+    "strongest_counterhypothesis": "The first successful artifact was a one-off build or extraction-path accident.",
+    "discriminator": "Rerun the exact canonical one-file job at the unchanged product main head and compare binary identity plus runtime gates.",
+    "outcome": "RETAIN",
+    "confidence": "HIGH_FOR_TESTED_BOUNDARIES_LOW_FOR_WHOLE_MACHINE"
+  },
+  "release_blocker": "Whole-machine acceptance remains false. The current frontier is the smallest canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface shared by CM-DATA and CM-TERM, followed by one provenance-bound typed/effect IR -> single ClayVM process/data path.",
+  "next_executable_action": "Implement and deterministically gate the minimal Clay Bytes/Buffer + String/argv/effect signature surface across checker, executable TypedIR and ClayVM; route one real process/data request through that canonical path; then rebuild and rerun the exact one-file EntityOS acceptance gates.",
+  "authority": {
+    "together_api": "FORBIDDEN",
+    "whole_machine_pass_claimed": false
+  }
+}

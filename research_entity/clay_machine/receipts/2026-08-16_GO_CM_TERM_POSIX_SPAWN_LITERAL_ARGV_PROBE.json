@@ -1,0 +1,60 @@
+{
+  "schema": "clay_go_receipt_v1",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "frontier": "CM-TERM",
+  "status": "TESTING",
+  "research_head_observed_before_write": "47bb8751f3d2f1d9e906d5661595c1a01ea78b43",
+  "product_main_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "coordination": {
+    "duplicate_avoidance": "Current canonical next discriminator CM-DATA was concurrently active: research main already contained a fresh CM-DATA PR #693 receipt. This cycle therefore explored the independent OPEN CM-TERM capability instead of opening a duplicate CM-DATA implementation lane.",
+    "workspace_mutated": false,
+    "product_repository_mutated": false
+  },
+  "observed_anchor": "CLAY_MACHINE_WORKSPACE.json keeps CM-TERM OPEN because no canonical Clay argv/env/cwd/stdin/stdout/stderr/PTY value/effect path executes a real Linux process without implicit shell/harness semantics.",
+  "hypothesis": "A direct argv-vector Linux process primitive can provide the host execution mechanism for CM-TERM while preserving arguments literally and capturing stdout, stderr and exit status without invoking a shell.",
+  "counterhypothesis": "A process primitive that appears direct may still acquire hidden shell/harness semantics or may be unusable at the canonical Clay boundary because authority, provenance, environment, cwd, stream and PTY contracts are absent.",
+  "discriminating_test": "Compile a standalone C probe whose parent uses posix_spawn with an explicit argv vector, pipe-backed stdout/stderr capture and waitpid exit capture; compare a normal baseline with one bounded adversarial literal-argument experiment.",
+  "local_environment": {
+    "kernel": "Linux 6.18.35 x86_64",
+    "compiler": "Debian GCC 14.2.0",
+    "libc": "glibc 2.41",
+    "probe_binary_sha256": "84879d8133a98e7a7aa48b0d84be40f9dfedc669de87a3f1ecadee8592de55b9",
+    "accepted_vps": false
+  },
+  "baseline": {
+    "argv": ["alpha", "two words"],
+    "exit": 0,
+    "stdout_exact_argument_preservation": true,
+    "stderr_captured": true,
+    "result": "PASS"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "description": "Pass shell metacharacter payloads $(touch /tmp/cmterm-marker) and ;touch /tmp/cmterm-marker, plus an embedded newline and UTF-8 argument, through the explicit posix_spawn argv vector; verify they remain literal and do not create the marker file.",
+    "exit": 0,
+    "literal_shell_metacharacters_preserved": true,
+    "embedded_newline_preserved": true,
+    "utf8_argument_preserved": true,
+    "marker_exists_after_child": false,
+    "result": "PASS"
+  },
+  "observed_result": "The Linux primitive mechanism is supported on this local host: direct argv launch preserved spaces, shell metacharacters, newline and UTF-8 literally; stdout/stderr and exit status were captured; no shell side effect occurred.",
+  "grf_collapse": {
+    "hypothesis": "RETAIN_MECHANISM_ONLY",
+    "counterhypothesis": "RETAIN_FOR_CANONICAL_INTEGRATION",
+    "reason": "The probe falsifies an implicit-shell requirement for the host mechanism, but does not prove canonical Clay typing, effect authority, provenance, stream/PTY semantics, or accepted-target behavior."
+  },
+  "nonclaims": [
+    "not a canonical Clay argv/env/cwd/process/PTY type or effect contract",
+    "not wired through canonical checker or typed/effect IR",
+    "not wired through the single ClayVM",
+    "not a ClayOS terminal implementation",
+    "not an accepted Ubuntu/VPS receipt",
+    "not a CM-TERM PASS",
+    "not a whole Clay Machine acceptance result"
+  ],
+  "next_falsifier": "Select the smallest canonical Clay ProcessSpec/ProcessResult boundary (argv, env, cwd, stdin/stdout/stderr, authority/provenance) and route one direct non-shell executable through checker -> typed/effect IR -> single ClayVM -> Linux adapter; then repeat literal-metacharacter and failure/exit receipts on an accepted Linux target before adding PTY semantics.",
+  "rollback": "Delete this append-only research receipt. No product code, workspace status or canonical language semantics were changed by the probe."
+}

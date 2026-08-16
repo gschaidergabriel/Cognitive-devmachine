@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_CANONICAL_ZIPAPP_RUNNER_PASS",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "worker_model": "GPT-5.6 Sol",
+  "owner_product_boundary": "exactly one executable file named EntityOS",
+  "research_head_before_write": "6cfeef749370553dcd1222df1d7a83380637b589",
+  "product_main_verified": "33e79fdbf85fcc61187aa8794a28d74ae8cc2b69",
+  "grf": {
+    "observed_reality": [
+      "The canonical product repository now has tools/build_entityos.py and an EntityOS single-file gate on main.",
+      "The first GitHub-hosted gate at 42f43252f3d076b31c4f82193fe70e70ab66cd99 did not start any job steps because GitHub reported failed account payments or spending-limit state; this is infrastructure evidence, not code evidence.",
+      "On the accepted self-hosted Linux lane, exact head d93f276233226c2264b129bb2e7df2e1796e0da4 built EntityOS successfully but self-test failed because pathlib attempted to read FRANK_STRUCTURED_V1.lark through EntityOS/... as if the zipapp were a directory.",
+      "The failure was independently reproduced from the exact uploaded d93f runner artifact in the active sandbox.",
+      "A local transport-only fallback reading the exact packaged grammar bytes from the zipapp removed that failure and passed the full EntityOS smoke test, showing the blocker was resource transport rather than Clay grammar semantics.",
+      "Product main 33e79fdbf85fcc61187aa8794a28d74ae8cc2b69 selected a deterministic build-time grammar embedding fix instead of changing canonical grammar semantics.",
+      "Self-hosted run 31926209698 job 95114092409 passed every EntityOS gate step, including build, baseline self-test, amputated single-file launch, CLI surface, runtime evidence and artifact upload."
+    ],
+    "generated_reality": "The canonical ClayCode/TypedIR/single-ClayVM/ClayOS stack can be collapsed into one executable Python zipapp if all runtime dependencies and filesystem-hostile boot resources are transformed into archive-safe transport without changing their semantic bytes.",
+    "strongest_counter_reality": "A one-file package may build yet remain semantically unusable because existing components assume directory-backed resources or host site-packages; packaging success alone is therefore not runtime acceptance.",
+    "discriminator": "Build exact product main into one EntityOS on the accepted self-hosted Ubuntu lane, launch only that file, and execute canonical source -> ClayExecutableTypedIR/v1 -> single ClayVM plus controlled Linux interop.",
+    "outcome": "SUPPORTED_ENTITYOS_PRODUCT_BOUNDARY_SMOKE_NOT_WHOLE_MACHINE_ACCEPTANCE"
+  },
+  "negative_results": [
+    {
+      "head": "42f43252f3d076b31c4f82193fe70e70ab66cd99",
+      "run": 31926059181,
+      "result": "NOT_CODE_EVIDENCE",
+      "reason": "GitHub Actions job never started; billing/spending annotation."
+    },
+    {
+      "head": "d93f276233226c2264b129bb2e7df2e1796e0da4",
+      "run": 31926143241,
+      "result": "BUILD_PASS_RUNTIME_FAIL",
+      "artifact_sha256": "86e57e0f7802a4d0a51702de9c0168e6490563d744d6b83dc19fd5199374a762",
+      "artifact_bytes": 1206142,
+      "failure": "NotADirectoryError reading runtime/clay_wp04_type_effect_v1/FRANK_STRUCTURED_V1.lark through zipapp filesystem path"
+    }
+  ],
+  "canonical_pass": {
+    "product_head": "33e79fdbf85fcc61187aa8794a28d74ae8cc2b69",
+    "workflow_run": 31926209698,
+    "workflow_job": 95114092409,
+    "runner": "clay-3",
+    "machine": "clayverse",
+    "runtime": "Ubuntu Linux x86_64; Python 3.12.3",
+    "artifact": "EntityOS",
+    "artifact_sha256": "ff65a8475f40b399f9b43d50fed0c161d31a082a07d183356566322feb89d86e",
+    "artifact_bytes": 1212772,
+    "source_commit_bound_in_artifact": "33e79fdbf85fcc61187aa8794a28d74ae8cc2b69",
+    "checks": {
+      "build_exact_single_file": "PASS",
+      "claycode_to_executable_ir": "PASS",
+      "single_clayvm_executes": "PASS vm_result=42",
+      "bundled_lark_parser": "PASS",
+      "minimal_clayos_present": "PASS",
+      "controlled_linux_interop": "PASS",
+      "source_provenance_present": "PASS",
+      "vm_blob_hash_bound": "PASS",
+      "amputated_single_file_launch": "PASS",
+      "cli_surface": "PASS",
+      "artifact_upload": "PASS"
+    }
+  },
+  "independent_local_verification": {
+    "artifact_source": "downloaded exact workflow artifact 9257897114 from canonical pass run",
+    "sha256_matches_runner": true,
+    "self_test": "PASS_ENTITYOS_SINGLE_FILE_SMOKE",
+    "vm_result": 42
+  },
+  "worker_exactly_one_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "HOSTILE_SIDECAR_DECOY_INDEPENDENCE",
+    "setup": "Place three decoy sidecars beside a local one-file EntityOS spike: EntityOS.state, state.json and .env, including unreadable permissions; compare executable hash, state and self-test against baseline; then remove decoys.",
+    "result": "PASS_NO_EFFECT",
+    "rollback": "all decoy files removed; baseline artifact retained",
+    "scope": "local integration spike only; the separately observed canonical CI amputated-launch gate is a repository test, not this worker-selected unusual experiment"
+  },
+  "coordination": {
+    "duplicate_product_branch_created": false,
+    "pr_702_comment_id": 5305672509,
+    "reason": "A parallel worker already owned the bounded static bootstrap lane, so independent evidence was fused into that PR rather than creating a second runtime path."
+  },
+  "nonclaims": [
+    "Whole Clay Machine acceptance is not passed.",
+    "EntityOS currently reports CANDIDATE_NOT_FINAL.",
+    "A green single-file smoke does not close CM-06 memory/concurrency/runtime, CM-08 full typed Linux interop, CM-11 self-hosting, network, portability, data, visual, audio, persistent service/state, recovery or other current workspace gates.",
+    "Final paid/model training remains owner-gated and was not started."
+  ],
+  "next_discriminator": "Keep EntityOS as the mandatory release boundary and advance the canonical shared CM-DATA/CM-TERM surface: smallest versioned owned immutable Bytes/String/argv plus effect signatures from ClayCode/typecheck through ClayExecutableTypedIR/v1 into the single ClayVM, then rebuild and rerun the exact EntityOS gate. In parallel acceptance terms, state continuity/recovery and the remaining network/media/portability gates must eventually be exercised through the same one-file artifact rather than sidecar product paths.",
+  "authority": {
+    "together_used": false,
+    "training_started": false,
+    "whole_machine_completion_claimed": false
+  }
+}

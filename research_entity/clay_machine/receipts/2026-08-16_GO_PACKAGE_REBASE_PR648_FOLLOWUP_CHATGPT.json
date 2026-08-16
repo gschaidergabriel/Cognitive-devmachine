@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-07 package identity candidate after concurrent PR #648 package-resolution fail-closed merge",
+  "observed": [
+    "Product main advanced to 79d7eafd618950d6ff0ef85a751f0ccea8f5c4a9 via PR #648 after PR #650 was opened.",
+    "PR #648 adds _require_single_source_module_boundary and refuses clayenv build for sources with unresolved use declarations.",
+    "PR #650 was updated to preserve that exact fail-closed boundary while adding only package-index metadata/CLI surface; it still does not resolve or execute imports."
+  ],
+  "candidate": {
+    "pr": 650,
+    "head": "1d46abdf5a94679f173e01cb6abac7d04431ad56",
+    "workflow_run": 31920964957,
+    "workflow_state_at_write": "QUEUED",
+    "exact_head_pass_claimed": false,
+    "new_unusual_experiment_count": 0
+  },
+  "retained_invariants": [
+    "No source containing use declarations may pass single-source clayenv build merely because package metadata can be indexed.",
+    "Package indexing is identity/provenance only until import mode and linker semantics are canonical.",
+    "Current external trusted-manifest boundary remains unchanged.",
+    "No second VM or ClayOS launch path is introduced."
+  ],
+  "next_falsifier": "Exact-head self-hosted Linux/X64 completion for PR #650 head 1d46abdf5a94679f173e01cb6abac7d04431ad56; until then promotion is blocked.",
+  "non_claims": [
+    "No cross-module execution.",
+    "No package resolver acceptance.",
+    "No whole Clay Machine acceptance.",
+    "Together API not used.",
+    "No training authorized."
+  ]
+}

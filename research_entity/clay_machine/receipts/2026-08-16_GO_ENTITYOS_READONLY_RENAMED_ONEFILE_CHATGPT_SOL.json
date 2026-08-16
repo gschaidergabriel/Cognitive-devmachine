@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "execution_policy": "SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed_at_close": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
+  "current_head_entityos_sandbox_run": 31930505961,
+  "current_head_entityos_sandbox_job": 95124420211,
+  "current_head_entityos_sandbox_result": "BLOCKED_BEFORE_STEP_ZERO",
+  "current_head_entityos_sandbox_steps_observed": 0,
+  "baseline_artifact": {
+    "source_run": 31930112424,
+    "build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+    "filename": "EntityOS",
+    "size_bytes": 12821560,
+    "sha256": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+    "status_gate": "PASS_IN_LOCAL_ISOLATED_SANDBOX",
+    "self_test_gate": "PASS_IN_LOCAL_ISOLATED_SANDBOX",
+    "whole_machine_acceptance": false,
+    "limitation": "Historical baseline only. Current product main contains later semantic changes, so this artifact is not current-head acceptance evidence."
+  },
+  "grf": {
+    "observed_anchor": "A frozen one-file EntityOS baseline executes from its normal extracted artifact location, but final one-file packaging should not secretly require a writable launch directory or its canonical filename.",
+    "hypothesis": "The frozen one-file boundary is launch-path independent enough to execute after rename from a read-only containing directory without emitting mandatory release sidecars beside itself.",
+    "counter_reality": "The apparent one-file product may depend on its filename or write hidden/required state beside the executable, which would fail under rename/read-only launch-directory lesion.",
+    "falsifier": "Run the exact same artifact under an unprivileged uid from a renamed path inside a read-only containing directory, compare against a normal control, and inspect directory contents before/after.",
+    "outcome": "RETAIN_HYPOTHESIS_FOR_BASELINE_ONLY"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "READ_ONLY_RENAMED_LAUNCH_DIRECTORY_LESION",
+    "control": "Same SHA-256 EntityOS baseline in a normal launch directory.",
+    "intervention": "Same SHA-256 bytes renamed to E, containing directory mode 0555, executed as uid/gid 65534 with writable HOME/TMPDIR kept outside the launch directory.",
+    "rollback": "Discard temporary directories; original downloaded artifact unchanged.",
+    "measurements": {
+      "control_status_exit": 0,
+      "intervention_status_exit": 0,
+      "control_self_test": "PASS",
+      "intervention_self_test": "PASS",
+      "control_build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+      "intervention_build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+      "single_file_candidate": true,
+      "frozen_runtime": true,
+      "release_sidecars_created_in_control_launch_dir": 0,
+      "release_sidecars_created_in_intervention_launch_dir": 0
+    },
+    "result": "PASS_READONLY_RENAMED_NO_RELEASE_SIDECAR",
+    "scope": "Packaging/launch-boundary evidence for historical baseline only; does not prove no temporary extraction elsewhere, full static portability, persistence semantics, or current-head acceptance."
+  },
+  "fusion": {
+    "supported_delta": "Keep a rename + non-writable launch-directory gate as a useful future exact-current EntityOS portability discriminator.",
+    "counterevidence_preserved": "Current head cannot be promoted because the allowed GitHub-hosted sandbox job reaches zero executable steps and the current private source tree is not materialized in this local sandbox.",
+    "whole_clay_machine_acceptance": false
+  },
+  "next_sandbox_executable_step": "Restore an actually-startable isolated source-bearing sandbox lane for exact current product main ca39aac2663fbbbb47341335d915d5b31c6d2beb (or newer refreshed head), rebuild exactly one EntityOS there, then rerun source->TypedIR->single-VM/self-test plus the rename/read-only launch-dir portability discriminator on that exact artifact. Do not use VPS/self-hosted execution as current test evidence."
+}

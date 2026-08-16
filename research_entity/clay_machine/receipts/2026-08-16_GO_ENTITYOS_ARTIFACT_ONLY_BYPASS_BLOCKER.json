@@ -1,0 +1,69 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "worker_provenance": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "observed_product_main": "4c2607d8b4cfc427ad5a8bed0d203f5020f2aacf",
+  "verified_onefile_reference": {
+    "build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "workflow_run": 31929651652,
+    "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "whole_machine_acceptance": false
+  },
+  "candidate": {
+    "pull_request": 719,
+    "latest_head_observed": "73815560077d104fe8f2cfecd415afe55f2c5bfb",
+    "purpose": "canonical String literal admission through ClayExecutableTypedIR and the single ClayVM",
+    "string_parameters_argv_bytes_effect_signatures": "OPEN_FAIL_CLOSED"
+  },
+  "negative_evidence": {
+    "workflow": "ClayOS strict artifact launch",
+    "run": 31929814000,
+    "job": 95122833059,
+    "tested_head": "50926ae30eda609dd60e89a6e3fee959bcff333f",
+    "status": "FAIL_CLAYMACHINE_ARTIFACT_ONLY_POLICY",
+    "violation": "entityos/canonical_entry.py:21: forbidden low-level import load_module",
+    "canonical_entry_blob": "e5f33ebe87416fdb84c0e78e34272cc96d97137c",
+    "same_blob_present_on_b32_main_ancestor": true,
+    "interpretation": "The stricter gate exposed a pre-existing EntityOS product-boundary bypass; it is not caused by the String literal semantic delta."
+  },
+  "grf": {
+    "hypothesis": "A String-literal-only widening can be safely admitted without changing the provenance boundary.",
+    "counter_reality": "Existing EntityOS self-test code bypasses the provenance-bound artifact route by importing the raw ClayVM loader directly, so feature-level green tests can coexist with a product-boundary regression.",
+    "discriminator": "Run the exact low-level import policy and strict artifact-launch gates on the candidate head.",
+    "observed": "Counter-reality supported: raw loader import detected and gate failed closed.",
+    "outcome": "RETAIN_BLOCKER",
+    "promotion": "DO_NOT_MERGE_STRING_CANDIDATE_UNTIL_ARTIFACT_ONLY_GATE_GREEN"
+  },
+  "repair_candidate": {
+    "state": "PROPOSED_NOT_EXECUTED",
+    "steps": [
+      "Do not weaken the low-level import allowlist.",
+      "Permit ClayOS to use an explicitly supplied ClayHost/HostProcessVMHost with ambiguous host+capability configuration rejected.",
+      "Compile the process probe with compile_bound_executable_ir.",
+      "Construct ProvenanceExpectation from the exact compilation receipt.",
+      "Execute the probe only through ClayOS.exec_artifact with the specialized host.",
+      "Rerun low-level import policy, strict artifact launch, provenance artifact, single-VM, CM-TERM, and one-file EntityOS gates."
+    ],
+    "product_issue": 725
+  },
+  "unusual_experiment": {
+    "count_for_go_cycle": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "source": "canonical EntityOS workflow run 31929651652",
+    "result": "PASS",
+    "note": "No second unusual experiment was executed by this worker; all PR/CI checks here are ordinary release discriminators."
+  },
+  "release_consequence": {
+    "entityos_artifact": "LAST_EXACT_REFERENCE_VERIFIED_B32",
+    "current_exact_head_artifact": "NOT_VERIFIED",
+    "whole_machine_release": "BLOCKED",
+    "additional_independent_release_blocker": "SQLite WAL-reset/runtime trust evidence remains unresolved in the current canonical research state."
+  },
+  "research_state": "COMMITTED_NEGATIVE_PRODUCT_BOUNDARY_EVIDENCE"
+}

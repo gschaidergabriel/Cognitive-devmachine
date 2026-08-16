@@ -26,10 +26,29 @@
       "number": 660,
       "base": "a7878e4d293b486eec0ee4875c70437c5ca99650",
       "head": "a993083ff58081c2078d92f1769e649e366e3988",
-      "state_when_receipted": "OPEN_CI_QUEUED",
+      "merge_commit": "6cf1fc3925c58230e223292fc193374753b370e2",
+      "state": "MERGED_EXACT_HEAD_CI_PASS",
       "workflow_run": 31923122223,
+      "workflow_conclusion": "SUCCESS",
+      "runner": "clay-4",
+      "runner_labels": ["self-hosted", "Linux", "X64"],
       "scope": "ClayPackageResolution/v1 exact module-provider selection only"
     }
+  },
+  "exact_head_evidence": {
+    "tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
+    "workflow_run": 31923122223,
+    "job": "resolve",
+    "conclusion": "SUCCESS",
+    "successful_steps": [
+      "Checkout exact candidate head",
+      "Bind exact revision",
+      "Provision pinned parser",
+      "Run resolver and package regressions",
+      "Bind semantic boundary",
+      "Upload bounded evidence",
+      "Clean environment"
+    ]
   },
   "grf": {
     "observed": "Package identity and import-mode intent existed as separately tested candidates; build remained fail-closed for all use declarations.",
@@ -79,5 +98,5 @@
     "final_training_authorized_or_started": false
   },
   "next_falsifier": "Define explicit imported symbol ownership/collision semantics and prove they feed the existing nominal checker -> ClayExecutableTypedIR/v1 -> single serialized ClayVM without bypassing provenance or #648 fail-closed behavior.",
-  "status": "SUPPORTED_PENDING_EXACT_HEAD_CI"
+  "status": "SUPPORTED_MERGED_EXACT_HEAD_CI_PASS"
 }

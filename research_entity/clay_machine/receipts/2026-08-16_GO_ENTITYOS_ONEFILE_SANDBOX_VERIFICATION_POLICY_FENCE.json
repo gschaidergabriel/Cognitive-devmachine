@@ -1,21 +1,30 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "trigger": "go",
   "date": "2026-08-16",
   "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
+  "final_refresh": {
+    "research_main": "845a00e5f6a04a10545b9d74c09892d1a54dab6a before this corrective receipt update",
+    "product_main": "399ee6e223617efcda19e09d5b2ce271258391b1",
+    "concurrent_semantic_merge": "88250019ffe717e72c4f78be5f08d5e0429c2ae4",
+    "semantic_merge_finding": "String literal/call-return path is merged into the canonical single-VM route; String parameters remain deliberately fail-closed under VM_BOOTSTRAP_PARAMS_INT_ONLY.",
+    "current_exact_head_sandbox_rebuild_run": 31930154546,
+    "current_exact_head_sandbox_rebuild_result": "FAILED_BEFORE_STEPS_OR_EVIDENCE; no current-head artifact promoted"
+  },
   "grf": {
     "observed_reality": [
-      "Product main was 4c2607d8b4cfc427ad5a8bed0d203f5020f2aacf at final refresh.",
-      "The last successful canonical one-file artifact was built from b32ec5a5f577099f90d74a038b5e3aee4db0c43e; comparison b32ec5a5...4c2607d8 shows the only product-repository delta is an added typed-value CI workflow file, not EntityOS/runtime source.",
       "Current PROGRAM_STATE schema 4.5 requires SANDBOX_ONLY_TESTING and forbids VPS/self-hosted/production-host testing as current evidence.",
-      "The downloaded canonical artifact is an ELF x86-64 PyInstaller one-file executable named EntityOS with external SHA-256 1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1 and size 12820848 bytes."
+      "A concurrent product merge 88250019ffe717e72c4f78be5f08d5e0429c2ae4 added the first canonical String literal/call-return path while preserving fail-closed String parameter behavior.",
+      "Product main subsequently moved to 399ee6e223617efcda19e09d5b2ce271258391b1, which changes the semantic one-file rebuild workflow to ubuntu-latest isolated sandbox execution.",
+      "The exact-head sandbox rebuild for 399ee6e223617efcda19e09d5b2ce271258391b1 failed before executable workflow steps/evidence, so no exact-current artifact exists from that run.",
+      "The last downloaded successful one-file baseline was built from b32ec5a5f577099f90d74a038b5e3aee4db0c43e and is an ELF x86-64 PyInstaller one-file executable named EntityOS with external SHA-256 1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1 and size 12820848 bytes."
     ],
-    "generated_hypothesis": "The existing one-file candidate can be treated as a usable current product-code baseline in sandbox while whole-machine acceptance remains false.",
-    "counter_reality": "A successful historical VPS build or a component/self-test PASS could be mistaken for current whole-machine acceptance, especially after the execution-policy change.",
-    "falsifier": "Execute the exact downloaded EntityOS only in the isolated local sandbox, inspect its embedded build identity and whole_machine_acceptance field, and compare the successful build commit to current product main.",
-    "outcome": "RETAIN baseline as sandbox-verified one-file artifact; REJECT any promotion to whole-machine PASS or current VPS evidence."
+    "generated_hypothesis": "The existing b32 one-file candidate remains useful as a sandbox runtime/package baseline, while the concurrent String merge narrows the semantic frontier without making that old binary current-head evidence.",
+    "counter_reality": "A historical one-file PASS or newly merged String support could be mistaken for an exact-current EntityOS or whole-machine acceptance.",
+    "falsifier": "Execute the exact downloaded baseline only in the isolated local sandbox, inspect its embedded build identity and whole_machine_acceptance field, separately refresh current product head, and require an exact-head sandbox rebuild before promoting current artifact identity.",
+    "outcome": "RETAIN b32 artifact only as sandbox-verified baseline; RETAIN concurrent String literal merge as source-level progress; REJECT current-head/whole-machine promotion."
   },
   "sandbox_artifact_verification": {
     "artifact": "EntityOS",
@@ -39,20 +48,21 @@
     },
     "embedded_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
     "embedded_whole_machine_acceptance": false,
-    "scope": "Isolated sandbox verification of an existing canonical one-file artifact only; not a new build in this go and not whole-machine acceptance."
+    "scope": "Isolated sandbox verification of an existing baseline one-file artifact only; not a new/current-head build in this go and not whole-machine acceptance."
   },
   "exactly_one_bounded_unusual_experiment": {
     "name": "ARGV_EMBEDDED_NUL_REJECTION",
     "environment": "isolated local sandbox",
     "intervention": "Attempt one direct /usr/bin/printf subprocess argv element containing A\\u0000B through the Python exec substrate.",
     "result": "ValueError: embedded null byte",
-    "interpretation": "Canonical Clay String/argv semantics must reject embedded NUL deterministically before Linux process dispatch; String alone is insufficient as an argv contract.",
+    "interpretation": "Canonical Clay String/argv semantics must reject embedded NUL deterministically before Linux process dispatch; generic String support alone is insufficient as an argv contract.",
     "rollback": "No persistent state or product source was changed by the experiment."
   },
   "execution_policy_fence": {
     "current_policy": "SANDBOX_ONLY_TESTING",
     "supersedes": "Earlier project state that allowed/used self-hosted VPS test runners.",
     "worker_dispatch_correction": "A self-hosted branch workflow was dispatched before the newly refreshed sandbox-only directive was observed. It failed during dependency installation; EntityOS build and test steps were skipped. After refresh, the workflow file was deleted from the branch and no result from that run is promoted.",
+    "current_product_correction": "Product main now contains an ubuntu-latest isolated-sandbox semantic rebuild workflow; its exact-head run 31930154546 failed before executable steps/evidence and therefore is a blocker, not a code failure or PASS.",
     "forbidden_as_current_evidence": [
       "VPS testing",
       "self-hosted VPS runner testing",
@@ -61,14 +71,16 @@
   },
   "architecture_delta": {
     "state": "SUPPORTED_RESEARCH_CONSTRAINT",
-    "affected_workstreams": ["CM-TERM", "CM-05-VIRTUAL-CLAY-MACHINE", "CM-08-LINUX-INTEROP", "EntityOS release gate"],
-    "rule": "When canonical String/argv reaches the VM/effect path, embedded NUL must fail closed before host dispatch; preserve exact typed/provenance-bound argv semantics rather than delegating this semantic decision to host exec errors.",
+    "affected_workstreams": ["CM-TERM", "CM-DATA", "CM-05-VIRTUAL-CLAY-MACHINE", "CM-08-LINUX-INTEROP", "EntityOS release gate"],
+    "rule": "When canonical argv reaches the VM/effect path, embedded NUL must fail closed before host dispatch; preserve exact typed/provenance-bound argv semantics rather than delegating this semantic decision to host exec errors.",
+    "concurrent_progress_not_owned_by_this_worker": "String literal/call-return support merged concurrently at 88250019ffe717e72c4f78be5f08d5e0429c2ae4; String parameters remain explicitly fail-closed.",
     "non_claims": [
-      "No canonical String/Bytes/argv VM implementation was merged by this go.",
-      "No current-head EntityOS was rebuilt from source in the sandbox because the active environment did not contain a private-repository checkout/source tree.",
+      "This worker did not merge the concurrent String implementation.",
+      "No canonical String-parameter/argv effect path or Bytes/Buffer ownership/lifetime VM contract was merged by this go.",
+      "No exact-current-head EntityOS was rebuilt successfully in sandbox; run 31930154546 failed before executable evidence.",
       "No VPS/self-hosted result is promoted under PROGRAM_STATE 4.5.",
       "Whole Clay Machine acceptance remains false."
     ],
-    "next_sandbox_executable_step": "Obtain the current product source tree in an isolated sandbox, implement the smallest canonical String/argv plus Bytes/Buffer ownership/effect-signature surface through checker -> ClayExecutableTypedIR -> serialized ClayVM, add deterministic embedded-NUL rejection before linux.process.spawn.v0, then rebuild the exact one-file EntityOS and rerun the existing artifact/self-test/grant/process gates entirely in sandbox."
+    "next_sandbox_executable_step": "Make the exact-head ubuntu-latest sandbox rebuild actually start, then use its source-to-single-VM gate to validate the merged String literal path. Next, implement the smallest canonical String-parameter/argv plus Bytes/Buffer ownership/effect-signature surface through checker -> ClayExecutableTypedIR -> serialized ClayVM, including deterministic embedded-NUL rejection before linux.process.spawn.v0, and rebuild/test the exact one-file EntityOS entirely in sandbox."
   }
 }

@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16-GO-PLAIN-USE-CORPUS-COUNTEREVIDENCE-AND-CENSUS",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "status": "SYNC_PENDING_EXACT_HEAD",
+  "observed_product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "observed_research_workspace_sha": "461c4b36d37fca9d0d3e87b71a88c95cd17416ae",
+  "anchors": [
+    {
+      "kind": "MERGED_PROVIDER_RESOLVER",
+      "pr": 660,
+      "merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+      "tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
+      "exact_head_run": 31923122223,
+      "result": "PASS",
+      "claim_boundary": "ClayPackageResolution/v1 exact module-provider selection only; symbol semantics not selected"
+    },
+    {
+      "kind": "AUTHORIZED_CORPUS_COUNTEREVIDENCE",
+      "source": "claycode/frank_memory.clay",
+      "source_sha": "7206577ab67213ba7393c51e0e49e264995455c6",
+      "observation": "module frank.memory contains plain use frank.entity.Frank"
+    },
+    {
+      "kind": "AUTHORIZED_CORPUS_COUNTEREVIDENCE",
+      "source": "claycode/frank_entity.clay",
+      "source_sha": "e90e88ac85fe77a3d7358594505121b3d9cf23ee",
+      "observation": "module frank.entity declares entity Frank; module identity is not frank.entity.Frank"
+    }
+  ],
+  "grf": {
+    "observed_reality": "Merged resolver v1 is green for its tested exact-module contract, but current authorized corpus falsifies the stronger interpretation that every plain MODULE use path denotes an exact module identity.",
+    "generated_reality": "Plain use may represent at least an exact module reference or a named declaration in a parent module; path shape alone is insufficient authority.",
+    "counter_reality": "Some plain uses may still legitimately denote exact modules. Failing all plain-use semantics closed is therefore a conservative correction, not proof that plain use always denotes a symbol.",
+    "collapse": "Do not expand imported symbols or reopen ClayEnv execution until plain-use name-binding semantics are explicitly discriminated against the authorized corpus."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "id": "PREFIX_PACKAGE_PROVIDER_SHADOW_REVERSAL",
+    "count": 1,
+    "scope": "local read-only mechanism probe",
+    "candidate_world": "A naive provider selector chooses the first package whose name is a prefix of target clay.std.identity.core; providers clay.std and clay.std.identity are supplied in opposite orders.",
+    "measured": {
+      "naive_order_A_B": "clay.std",
+      "naive_order_B_A": "clay.std.identity",
+      "exact_module_order_A_B": "clay.std.identity",
+      "exact_module_order_B_A": "clay.std.identity"
+    },
+    "outcome": "REFUTED_PREFIX_PROVIDER_AUTHORITY",
+    "external_effect": false,
+    "rollback": "probe was in-memory/read-only"
+  },
+  "coordination_negative_results": [
+    {
+      "pr": 669,
+      "result": "CLOSED_UNMERGED_DUPLICATE",
+      "reason": "PR #660 landed the same provider-resolution frontier while the candidate was being assembled; newer canonical bytes were preserved."
+    },
+    {
+      "pr": 687,
+      "result": "CLOSED_UNMERGED_SEMANTICALLY_PREMATURE",
+      "reason": "A staged symbol-binding candidate extended resolver v1 before current corpus counterevidence and active correction #674 had adjudicated plain-use scope."
+    }
+  ],
+  "active_semantic_correction": {
+    "pr": 674,
+    "head_observed": "d5719fa49b7e0c437b80dd2a2313fb7858e7f664",
+    "candidate_contracts": [
+      "ClayPackageIndex/v2 records ordered lossless use_decls inside package identity",
+      "ClayPackageResolution/v2 resolves only explicit WILDCARD module providers",
+      "plain MODULE use fails closed as PLAIN_USE_NAME_BINDING_UNSELECTED",
+      "existing ClayEnv unresolved-use execution fence remains closed"
+    ],
+    "exact_head_workflow": 31923455418,
+    "workflow_state_at_receipt": "QUEUED",
+    "promotion": "NOT_GRANTED"
+  },
+  "measurement_candidate": {
+    "pr": 690,
+    "head": "89899af0e09d8c40b8410ff474c73fa438681b23",
+    "schema": "ClayPlainUseCensus/v1",
+    "purpose": "Measure direct exact-module and direct parent-declaration candidate shapes across CLAYCODE_CORPUS_AUTHORITY_V1 without selecting semantics.",
+    "categories": [
+      "DIRECT_EXACT_MODULE_ONLY",
+      "DIRECT_PARENT_DECLARATION_ONLY",
+      "DIRECT_DUAL_ROLE",
+      "NO_DIRECT_CANDIDATE"
+    ],
+    "semantic_authority": "NONE_MEASUREMENT_ONLY",
+    "execution_admission": "NOT_AUTHORIZED",
+    "exact_head_workflow": 31923550531,
+    "workflow_state_at_receipt": "QUEUED",
+    "new_unusual_experiment_count": 0,
+    "promotion": "NOT_GRANTED"
+  },
+  "external_primary_comparison": [
+    {
+      "source": "Go Modules Reference",
+      "url": "https://go.dev/ref/mod",
+      "use": "architecture comparison only: provider ambiguity can be an explicit error",
+      "authority_for_clay_semantics": false
+    },
+    {
+      "source": "Rust Reference - Name resolution",
+      "url": "https://doc.rust-lang.org/reference/names/name-resolution.html",
+      "use": "architecture comparison only: name resolution is staged and ambiguity is validated",
+      "authority_for_clay_semantics": false
+    }
+  ],
+  "next_discriminator": "Obtain exact-head census evidence for PR #690 and exact-head correction evidence for PR #674. Use measured corpus shapes to specify the smallest explicit plain-use name-binding/visibility contract; ambiguous or unsupported shapes remain fail-closed. Only then integrate a single resolution surface into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. PR #648 stays closed until end-to-end executable closure is proven.",
+  "claim_boundary": {
+    "whole_clay_machine_pass": false,
+    "resolver_v2_pass": false,
+    "plain_use_semantics_selected": false,
+    "symbol_binding_authorized": false,
+    "execution_admission": false,
+    "effect_authority": false,
+    "linux_interop_authorized": false,
+    "together_used": false,
+    "final_training_authorized": false
+  }
+}

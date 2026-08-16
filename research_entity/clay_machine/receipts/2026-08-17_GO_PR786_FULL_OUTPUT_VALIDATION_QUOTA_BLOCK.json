@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "preferred_head_observed": "14afbd6d6ae6630c69ba481afe951dc4d236a38a",
+  "source_reconciliation": {
+    "pr781_absorbed_closed_unmerged": true,
+    "raw_tree_stage_v5_and_shallow_provenance": "RECONCILED",
+    "sandbox_sdk": "2.9.2",
+    "single_owner_build_execution": "RECONCILED",
+    "measured_heredoc_and_git_head_receipt_defects": "REPAIRED_IN_SOURCE",
+    "global_unusual_experiment_accounting": "CONSUMED_1_OF_1_PRIOR_EVIDENCE",
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "new_unusual_experiments_authorized": 0,
+    "buildtime_runner_accounting": "RECONCILED",
+    "full_sandbox_stdout_validation": "RECONCILED",
+    "diagnostic_stdout_compaction_only": true
+  },
+  "full_output_hardening_reason": "Acceptance markers and EntityOS digest parsing now use complete Sandbox stdout while only emitted diagnostics are compacted, preventing long successful matrices from losing required markers due diagnostic truncation.",
+  "strongest_started_sandbox_evidence": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "raw_tree_binding": "PASS",
+    "system_toolchain_provision": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "failure": "PINNED_PYTHON_TOOLCHAIN_HEREDOC_SYNTAX",
+    "sandbox_stop": "PASS",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false
+  },
+  "current_exact_head_execution_state": {
+    "source_head": "14afbd6d6ae6630c69ba481afe951dc4d236a38a",
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "entityos_sha256": null,
+    "runtime_acceptance": "UNVERIFIED"
+  },
+  "next_executable_step": "Run the unchanged existing regression/acceptance batch in one actually-started exact-current-head Vercel Sandbox and require Stage-v5 exact provenance, DENY_ALL, Bytes-v2/released-view regressions with zero new unusual experiments, CM-07/canonical source-to-single-VM, pristine byte-identical twin one-file EntityOS builds, exact SHA-256, status/self-test/no-host-Python/state-restart/capability/relocation and successful Sandbox stop before merge/promotion.",
+  "cm_term_follow_on": "Deferred from fusion into this unexecuted acceptance candidate to avoid widening the diagnostic surface before exact PR786 Sandbox evidence. Older String/argv candidates remain separate bounded evidence until resynchronized against current main and policy.",
+  "new_unusual_experiments_executed": 0,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_DEPLOYMENT_QUOTA"
+}

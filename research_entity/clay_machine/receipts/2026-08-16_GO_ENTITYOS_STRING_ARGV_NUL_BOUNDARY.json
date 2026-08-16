@@ -1,0 +1,42 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "status": "SUPPORTED_RESEARCH_CONSTRAINT",
+  "active_program": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "observed_product_head_before_write": "d0d40503b9ba29618a6a8789b8f0dc0208115635",
+  "owner_execution_policy": "SANDBOX_ONLY_TESTING",
+  "scope": "String/argv semantic boundary; research reference experiment only, not product runtime PASS",
+  "observed_anchors": [
+    "Current canonical source-to-single-VM gate admits String literal/return but explicitly rejects String parameters.",
+    "Current merged CM-TERM bridge has an explicit typed hostcall signature but direct Clay String argv remains open.",
+    "POSIX/Linux exec argv elements are null-terminated character strings; embedded NUL therefore cannot be represented as one host argv element."
+  ],
+  "generated_reality": "Clay String should remain an internal length-delimited semantic value; the Linux process boundary should encode String->argv explicitly and reject embedded NUL before any host process effect.",
+  "counter_reality": "If Clay String is implicitly modeled as a host C-string everywhere, internal values can silently truncate or backend-local argv restrictions can leak backward into language semantics.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "embedded_nul_string_to_linux_argv_boundary",
+    "execution_context": "LOCAL_ISOLATED_LINUX_SANDBOX_REFERENCE_MODEL",
+    "baseline": "Length-delimited internal bytes for ENTITYOS_STRING round-trip and execute as a normal /usr/bin/printf argv element.",
+    "intervention": "Insert one embedded NUL byte into the internal UTF-8 byte sequence before Linux argv encoding.",
+    "baseline_internal_roundtrip": true,
+    "baseline_linux_argv": true,
+    "perturbed_internal_bytes_preserved": true,
+    "perturbed_internal_length": 16,
+    "reference_boundary_fail_closed": true,
+    "host_python_rejects_embedded_nul": true,
+    "result": "PASS_REFERENCE_BOUNDARY_DISCRIMINATOR"
+  },
+  "falsifier": "A future canonical Clay String/argv implementation fails this constraint if internal String silently truncates at NUL, or if the Linux argv adapter accepts an embedded-NUL String without a deterministic pre-effect rejection.",
+  "test_obligation": "When direct Clay String argv is admitted, add one canonical source->TypedIR->single-VM->Linux-boundary gate that preserves ordinary String values and rejects embedded NUL before hostcall execution/receipt creation; do not treat this reference-model result as product evidence.",
+  "external_primary_sources": [
+    "https://pubs.opengroup.org/onlinepubs/9799919799/functions/exec.html",
+    "https://man7.org/linux/man-pages/man2/execve.2.html"
+  ],
+  "current_entityos_build_evidence": "BLOCKED: exact current GitHub-hosted EntityOS sandbox run at ca39aac2663fbbbb47341335d915d5b31c6d2beb failed before workflow steps due account payment/spending-limit state; no current-head build PASS was produced in this cycle.",
+  "promotion_state": "RETAIN_AS_TEST_OBLIGATION",
+  "whole_clay_machine_acceptance": false
+}

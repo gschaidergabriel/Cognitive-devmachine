@@ -7,7 +7,7 @@
   "stage": "CLAY_MACHINE",
   "execution_policy": "SANDBOX_ONLY",
   "product_repository": "gschaidergabriel/Dr.-Unterweger",
-  "product_main_observed_at_close": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
+  "product_main_observed_at_receipt_write": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
   "current_head_entityos_sandbox_run": 31930505961,
   "current_head_entityos_sandbox_job": 95124420211,
   "current_head_entityos_sandbox_result": "BLOCKED_BEFORE_STEP_ZERO",
@@ -55,5 +55,5 @@
     "counterevidence_preserved": "Current head cannot be promoted because the allowed GitHub-hosted sandbox job reaches zero executable steps and the current private source tree is not materialized in this local sandbox.",
     "whole_clay_machine_acceptance": false
   },
-  "next_sandbox_executable_step": "Restore an actually-startable isolated source-bearing sandbox lane for exact current product main ca39aac2663fbbbb47341335d915d5b31c6d2beb (or newer refreshed head), rebuild exactly one EntityOS there, then rerun source->TypedIR->single-VM/self-test plus the rename/read-only launch-dir portability discriminator on that exact artifact. Do not use VPS/self-hosted execution as current test evidence."
+  "next_sandbox_executable_step": "Restore an actually-startable isolated source-bearing sandbox lane for exact current product main (refresh head immediately before execution), rebuild exactly one EntityOS there, then rerun source->TypedIR->single-VM/self-test plus the rename/read-only launch-dir portability discriminator on that exact artifact. Do not use VPS/self-hosted execution as current test evidence."
 }

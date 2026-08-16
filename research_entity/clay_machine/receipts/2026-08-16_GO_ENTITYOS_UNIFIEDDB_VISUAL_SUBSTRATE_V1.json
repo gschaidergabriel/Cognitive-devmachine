@@ -1,0 +1,81 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "status": "SUPPORTED_COMPONENT_DELTA",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "owner_requirement_anchor": "08775c4aef154fd35cda44c6d2407a02586d9cb0",
+  "owner_requirement": "UnifiedDB packets are the sole visual information substrate and unrelated or unavailable knowledge fails visibly as exact NO DATA",
+  "implementation": {
+    "packet_store_commit": "70edceea0c97486cce466ce1b281dfb827864d25",
+    "visual_route_commit": "2a4aedcb3cdb32c5cfd3b91becbc85cbd5a58b25",
+    "exact_gate_commit": "7ddd48d7d26706f85333f14712844de202be70c1",
+    "packet_schema": "UnifiedDBEntityPacket/v1",
+    "builder_schema": "EntityOSBuilderBox/v1",
+    "visual_data_source": "UnifiedDB",
+    "topic_boundary": "unsupported topic -> exact NO DATA",
+    "renderer_provenance_rule": "every visible Builder Box component source must begin UnifiedDB:"
+  },
+  "exact_head_ci": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31928129136,
+    "run_number": 13,
+    "runner": "self-hosted Linux X64",
+    "tested_sha": "7ddd48d7d26706f85333f14712844de202be70c1",
+    "conclusion": "success",
+    "source_regression": 0,
+    "canonical_one_file_gates": "PASS",
+    "unifieddb_visual_gates": "PASS",
+    "whole_entityos_completion": false
+  },
+  "final_exact_artifact": {
+    "build_head": "7ddd48d7d26706f85333f14712844de202be70c1",
+    "sha256": "3a57fae21a9e3d1818ca1371a7ef4e1e6727009c8961c673ec49cb9aaeebab28",
+    "size_bytes": 11942848,
+    "mode": "0755",
+    "format": "ELF 64-bit x86-64",
+    "single_file_runtime": true,
+    "security_concept_sha256": "82bc1d409506a4a7f463b181c65befa16afa8605bd3d405fb31b5cb220e4be32",
+    "whole_machine_acceptance": false
+  },
+  "exact_runtime_evidence": {
+    "selftest": "SELFTEST_PASS",
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "performance_query": "PASS via UnifiedDBEntityPacket/v1",
+    "performance_probe_result": 42,
+    "ci_performance_probe_elapsed_ns_single_observation": 585690481,
+    "local_recheck_performance_probe_elapsed_ns_single_observation": 396305320,
+    "what_is_a_claymachine_query": "PASS via UnifiedDBEntityPacket/v1",
+    "foreign_query": "weather in graz",
+    "foreign_query_result": "NO DATA",
+    "foreign_html_query_result": "NO DATA",
+    "html_white_surface_marker": true,
+    "html_input_marker": true,
+    "html_visible_source_prefix": "UnifiedDB:"
+  },
+  "macrocycle_unusual_experiment": {
+    "selected_branch": "ONEFILE_STERILE_ENVIRONMENT",
+    "result": "BYTE_IDENTICAL_PASS",
+    "note": "The exact-head one-file workflow also retains its standing relocation/Unicode extraction regression. That standing CI regression is not treated as an additional GRF-selected experiment for this go macrocycle."
+  },
+  "standing_onefile_regression": {
+    "id": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "run13_baseline_sha256": "cce3434e3e2ac894ad8ba52a2f22eb9d0b3efc0cbd88da134a5772b5ac76e74b",
+    "run13_intervention_sha256": "cce3434e3e2ac894ad8ba52a2f22eb9d0b3efc0cbd88da134a5772b5ac76e74b",
+    "result": "BYTE_IDENTICAL",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT"
+  },
+  "counterevidence_and_open_gates": [
+    "whole_machine_acceptance remains false",
+    "UnifiedDBVisualStore is a deliberately minimal validated visual packet substrate, not evidence that the complete persistent transactional Clay Machine UnifiedDB is finished",
+    "inspect-html proves generated white-surface composition and provenance but not an accepted-target interactive browser event loop",
+    "a browser/server implementation must not introduce a bypass network/effect path before the relevant ClayOS capability boundary is admitted",
+    "terminal PTY streaming, typed Bytes/Buffer ownership and streaming, full network, visual/video, audio, persistent state continuity, self-hosting and other Clay Machine package gates remain open unless separately proven by current receipts"
+  ],
+  "next_discriminating_action": "Implement and test the accepted interactive visual input/render loop so user input re-enters EntityOS and resolves strictly through UnifiedDB packets, while preserving exact NO DATA and without opening a bypass network/effect path. Gate the exact one-file artifact on that end-to-end interaction before any visual-app acceptance promotion.",
+  "outcome": "RETAIN_AND_ADVANCE",
+  "promotion_scope": "Verified only for the exact one-file candidate, typed UnifiedDB visual packet boundary, Builder Box sole-source provenance rule, grounded performance/Clay Machine queries, exact NO DATA topic boundary and listed runtime gates; not a whole Clay Machine acceptance promotion."
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "research_parent_observed": "dd1da5effc2256056b1c726f8c7cc5e9a82e939d",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "product_commit": {
+    "message": "test(entityos): enforce bit-identical double freeze",
+    "builder_change": "The canonical one-file builder now performs two independent PyInstaller freezes with separate work/spec/dist paths under fixed PYTHONHASHSEED=1 and fails closed if the two EntityOS SHA-256 values differ."
+  },
+  "hypothesis": "For the exact accepted build toolchain and host, fixing PYTHONHASHSEED and independently freezing the same source/build identity should remove the remaining observed PyInstaller archive-order nondeterminism and produce bit-identical EntityOS executables.",
+  "counter_hypothesis": "Hidden time/path/cache/toolchain entropy can still change the final one-file ELF even when PYTHONHASHSEED is fixed.",
+  "discriminating_test": "Build the exact same product head twice in isolated PyInstaller work/spec/dist trees and compare the final EntityOS SHA-256 before accepting the build.",
+  "accepted_host_execution": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31929090825,
+    "run_number": 27,
+    "job_id": 95121136050,
+    "runner": "self-hosted Linux X64",
+    "runner_name": "clay",
+    "machine_name": "clayverse",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "python": "3.12.3",
+    "pyinstaller": "6.21.0",
+    "lark": "1.3.1",
+    "glibc_build_host": "2.39",
+    "conclusion": "success"
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "format": "ELF 64-bit LSB x86-64",
+    "sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "size_bytes": 12820496,
+    "mode": "0755",
+    "pyinstaller_onefile": true,
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true,
+    "whole_machine_acceptance": false,
+    "workflow_artifact_id": 9258758674
+  },
+  "gates": {
+    "canonical_source_pipeline": "PASS_CLAY_EXECUTABLE_IR_SINGLE_VM 16/16",
+    "entityos_self_test": "PASS",
+    "clay_build_run_result": 42,
+    "initial_grant_first_launch": "FAIL_CLOSED_WITHOUT_GRANT",
+    "initial_grant_second_launch": "REUSED_WITHOUT_PROMPT",
+    "initial_grant_state_dir_mode": "0700",
+    "initial_grant_state_file_mode": "0600",
+    "linux_process_without_capability": "DENIED",
+    "linux_process_with_linux.process.spawn.v0": "PASS",
+    "unifieddb_visual_grounding": "PASS",
+    "unknown_query_boundary": "NO DATA"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "intervention": "Copy exact EntityOS into a path containing spaces and Unicode, use a Unicode TMPDIR, execute from foreign cwd '/', and compare self-test JSON against baseline.",
+    "baseline_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+    "intervention_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT",
+    "rollback": "TEMP_PATH_REMOVED",
+    "outcome": "SUPPORTED"
+  },
+  "local_exact_byte_recheck": {
+    "same_artifact_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "self_test": "PASS",
+    "status_build_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7"
+  },
+  "grf_collapse": {
+    "decision": "RETAIN_AND_STRENGTHEN_ENTITYOS_RELEASE_CARRIER",
+    "retained": "On the exact current accepted build lane, fixed-seed independent double-freeze reproducibility is verified and now enforced as a build invariant.",
+    "counterevidence_preserved": "This does not establish cross-distribution portability or whole Clay Machine completion; the build host used glibc 2.39 and the canonical language/runtime/effect surface remains incomplete."
+  },
+  "release_blocker": {
+    "status": "IN_PROGRESS",
+    "exact_blocking_invariant": "Whole-machine acceptance remains false because canonical Clay Bytes/Buffer ownership+lifetime and String/argv/effect-signature semantics plus broader process/network/media/runtime capability paths are not yet fully admitted through ClayCode -> TypedIR -> single ClayVM -> ClayOS.",
+    "next_executable_step": "Implement and gate the smallest canonical String/Bytes/argv value plus effect-signature slice that drives one provenance-bound real process request through TypedIR, the single ClayVM and ClayOS without backend-local semantics, then rebuild and re-run the exact one-file EntityOS gates."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_base_observed": "a7878e4d293b486eec0ee4875c70437c5ca99650",
+  "product_pull_request": 667,
+  "product_head": "6c5ade0fade9d3b03ada60da05b51454d770e488",
+  "hypothesis": "Per-canonicalization immutable alias-subtree memoization plus DAG-aware node-pair equality can remove repeated alias-DAG materialization without changing current nominal alias or cycle semantics.",
+  "strongest_counterhypothesis": "Memoization may leak across active alias-cycle paths or sibling branches, or merely move the resource explosion into another consumer such as diagnostic rendering.",
+  "production_delta": {
+    "canonicalization": "Per-call completed-alias subtree cache; active DFS alias path retained; cycle-observing subtrees are not cached.",
+    "equality": "Visited canonical node-pair identities prevent repeated comparison of shared DAG pairs.",
+    "semantic_widening": false,
+    "generic_semantics_selected": false,
+    "effect_authority": "NONE"
+  },
+  "ordinary_regressions": {
+    "new_production_dag_gate": "COMMITTED_PENDING_SELF_HOSTED_EXECUTION",
+    "existing_production_typeref_totality_gate": {
+      "run_id": 31923163157,
+      "head": "6c5ade0fade9d3b03ada60da05b51454d770e488",
+      "runner": "clay-2",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "status": "PASS"
+    },
+    "direct_dag_integration_run": {
+      "run_id": 31923163231,
+      "status_at_receipt": "QUEUED"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "SHARED_DAG_DIAGNOSTIC_RENDER_EXPANSION",
+    "scope": "DISPOSABLE_LOCAL_MECHANISM_PROBE",
+    "alias_diamond_depth": 17,
+    "canonical_unique_typeref_nodes": 18,
+    "existing_renderer_output_characters": 1441784,
+    "local_render_wall_seconds_approx": 0.190141075,
+    "local_tracemalloc_peak_mib_approx": 6.40646,
+    "outcome": "COUNTERHYPOTHESIS_PARTIALLY_SUPPORTED",
+    "interpretation": "Structural sharing bounds canonical TypeRef object materialization but the existing diagnostic renderer can still unfold a shared DAG exponentially into text. No new diagnostic syntax or truncation contract was selected in this GO."
+  },
+  "grf_collapse": {
+    "repeated_alias_dag_materialization_is_required_by_current_semantics": "REJECT",
+    "per_call_structural_sharing_is_safe_for_production": "TESTING",
+    "structural_sharing_alone_bounds_all_typeref_resource_paths": "REJECT",
+    "diagnostic_renderer_followup": "RETAIN_AS_SEPARATE_BLOCKER"
+  },
+  "promotion": "NOT_PROMOTED",
+  "whole_clay_machine_acceptance": false,
+  "together_api_used": false,
+  "final_paid_training_started": false,
+  "next_falsifier": "Require exact-head self-hosted PASS for the direct production DAG integration workflow, then separately define and test a bounded diagnostic-render contract without changing Clay type semantics."
+}

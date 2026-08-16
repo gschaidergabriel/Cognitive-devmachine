@@ -82,13 +82,19 @@
       "tested_head": "3e965a328e82168923feb8857363938d7ad13ca9",
       "result": "PASS",
       "scope": "ClayCode Frontier Integration VPS"
+    },
+    {
+      "pr": 635,
+      "run_id": 31921439348,
+      "tested_head": "3e965a328e82168923feb8857363938d7ad13ca9",
+      "result": "PASS",
+      "scope": "ClayCode Package Import VPS: package and namespace-shadow gate, semantic differential, package syntax compilation"
     }
   ],
-  "negative_and_blocked_evidence": [
+  "negative_evidence": [
     "A GitHub-hosted migration attempt was never started because the hosted runner was blocked by account billing/spending state; no production bytes were modified.",
     "A self-hosted attempt failed during system-pip provisioning before migration; no production bytes were modified.",
-    "A later isolated-venv attempt rejected a stale expected grammar anchor before migration; no production bytes were modified.",
-    "Final-head ClayCode Package Import VPS run 31921439348 was still queued at receipt time and therefore is NOT claimed PASS."
+    "A later isolated-venv attempt rejected a stale expected grammar anchor before migration; no production bytes were modified."
   ],
   "product_candidate": {
     "pr": 635,

@@ -1,0 +1,74 @@
+{
+  "schema": "ClayGoResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_product_main": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "observed_research_main_before_write": "1955a11c218b638adaf72a2a9c7127490843b34e",
+  "observed_workspace_schema": "2.2",
+  "r0": [
+    "Merged PR #660 established ClayPackageResolution/v1 exact module-provider resolution, but its symbol semantics remain NOT_SELECTED and executable use remains fenced by PR #648.",
+    "Current corpus contains claycode/frank_memory.clay: `use frank.entity.Frank`, while claycode/frank_entity.clay declares `module frank.entity` and top-level `entity Frank`.",
+    "Therefore the universal hypothesis `UseDecl.mode == MODULE implies the complete qid is an exact module identity` is falsified by current source evidence.",
+    "Draft PR #674 is the active plain-use scope correction and keeps plain-use name binding unselected/fail-closed while retaining exact wildcard module-provider resolution as a candidate.",
+    "Parallel namespace/binding candidates must not outrun #674 or create a second provider-resolution authority.",
+    "Project trust evidence now requires model-generated PR code to remain non-executing on the persistent self-hosted runner until explicit source admission or ephemeral isolation exists."
+  ],
+  "generated_candidate": {
+    "hypothesis": "Imported source-name ownership can be represented as a separate, non-executing layer over the single canonical provider universe, with exact wildcard module ownership and fail-closed named/namespace collisions.",
+    "product_pr": 688,
+    "state": "CLOSED_UNMERGED_DEFERRED",
+    "branch": "chatgpt/go-20260816-clayenv-symbol-resolution-v1",
+    "head": "6d091c01abed01932b9021ba072d09c300f444dd",
+    "candidate_schema": "ClayImportResolution/v1",
+    "execution_admission": "NOT_AUTHORIZED",
+    "build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "why_closed": "Preserve the mechanism as branch evidence without leaving model-generated PR bytes eligible for unrelated legacy self-hosted PR workflows; semantic selection also depends on the #674 plain-use correction and subsequent namespace/binding fusion."
+  },
+  "counter_reality": {
+    "strongest_counterhypothesis": "Plain-use semantics may include multiple legitimate namespace forms, and longest-module-prefix plus one source declaration may still be the wrong canonical rule even though it explains `frank.entity.Frank`.",
+    "consequence": "Do not promote the candidate from source shape or local mechanism tests. Select semantics only after #674 scope correction, trusted exact-head execution and nominal-checker integration evidence."
+  },
+  "local_mechanism_evidence": {
+    "synthetic_suite": "6/6 PASS before corpus falsification",
+    "interpretation": "Bounded mechanism evidence only; the corpus counterexample proved that the initial exact-module reading was semantically incomplete, so the local PASS is not language truth or promotion evidence."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "WILDCARD_BINDING_ORDER_PERMUTATION",
+    "bounded": true,
+    "reversible": true,
+    "external_effect": false,
+    "method": "On a disposable synthetic package universe, reverse provider, module, export and use enumeration order; separately include a duplicate visible wildcard name collision.",
+    "result": "Canonical semantic ownership remained byte-identical under the permutations, and the deliberate duplicate visible wildcard name failed closed rather than selecting first/last provider.",
+    "limitation": "This discriminates ordering authority only. It does not establish the correct Clay plain-use or wildcard symbol semantics.",
+    "accounting": "Exactly one unusual experiment was executed by this GO macro-cycle. Unusual experiments recorded by concurrent GO workers are separate cycles and are not merged into this count."
+  },
+  "trust_boundary_result": {
+    "superseded_candidate_run": 31923520401,
+    "superseded_candidate_result": "CANCELLED_BEFORE_RUNNER_ASSIGNMENT",
+    "final_candidate_head": "6d091c01abed01932b9021ba072d09c300f444dd",
+    "final_candidate_gate": "SKIPPED_FAIL_CLOSED_AWAITING_SOURCE_ADMISSION_OR_EPHEMERAL_ISOLATION",
+    "semantic_test_status": "BLOCKED_NOT_PASS",
+    "target_ci_pass": false,
+    "source_admission": false,
+    "ephemeral_isolation_proven": false
+  },
+  "grf_outcome": {
+    "refuted": "Universal exact-module interpretation of every plain use qid.",
+    "retained": "Single provider truth plus a separately testable non-executing symbol-ownership layer is architecturally plausible.",
+    "deferred": "Specific plain named-import and wildcard visibility semantics until #674 and namespace/binding dependencies converge under a trusted execution surface.",
+    "promotion": "DEFER"
+  },
+  "next_falsifier": "First obtain trusted exact-head evidence for #674 under explicit source admission or ephemeral isolation. Then fuse the smallest corpus-backed namespace/symbol ownership contract with the single provider surface, rebase a non-duplicative candidate, and test exact source bindings plus ambiguity controls. Only checker-admitted imported semantics may lower into ClayExecutableTypedIR/v1 -> single ClayVM; PR #648 remains fail-closed until that end-to-end closure exists.",
+  "safety": {
+    "together_api": "NOT_USED_FORBIDDEN",
+    "final_paid_training": "NOT_AUTHORIZED_NOT_STARTED",
+    "effect_authority_widened": false,
+    "whole_clay_machine_pass_claimed": false
+  }
+}

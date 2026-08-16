@@ -1,12 +1,12 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
   "trigger": "go",
   "date": "2026-08-16",
   "endpoint": "EntityOS",
   "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
-  "research_head_before_write": "1ca531b82e6d8c4832b3c39035cefd112ead39a2",
+  "research_head_before_correction": "4201371163286b553fa56efedde2faa83c4cb4ed",
   "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
   "coordination": {
     "preferred_fusion_pr": 781,
@@ -29,14 +29,17 @@
     "source_materialization": "GIT_LS_TREE_PLUS_CAT_FILE_RAW_BLOBS",
     "git_archive_semantics_applied": false,
     "git_bundle": "exact SHA-bound credential-free provenance capsule",
-    "sandbox_sdk": "@vercel/sandbox@2.9.2 pinned and runtime-verified",
+    "sandbox_sdk": "@vercel/sandbox@2.9.2 pinned and runtime-verified by the candidate runner",
     "duplicate_start_guard": "atomic single-owner claim",
     "execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
     "network_policy_during_offline_matrix": "DENY_ALL",
+    "runner_experiment_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "runner_new_unusual_experiment_count": 0,
     "release_freeze": "two independent pristine-source one-file EntityOS builds require identical SHA256 and cmp byte identity",
     "runtime_matrix": [
       "build provenance",
       "canonical source to single ClayVM",
+      "epoch-safe Bytes v2 and released-view regressions",
       "status/self-test",
       "PATH without host Python",
       "initial-grant state/restart",
@@ -47,6 +50,7 @@
   },
   "execution_evidence": {
     "exact_candidate_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "exact_candidate_vercel_target_class": "upgradeToPro=build-rate-limit",
     "exact_candidate_sandbox_started": false,
     "exact_candidate_entityos_artifact_built": false,
     "exact_candidate_bytes_pass_fail": "UNEXECUTED",
@@ -54,9 +58,15 @@
     "whole_entityos_acceptance": false
   },
   "experiment_accounting": {
-    "authorized_go_unusual_experiment_count": 0,
-    "reason": "Earlier local/container counterexamples are retained as bounded mechanism evidence but do not count as the authorized global GO unusual experiment. Vercel build capacity rejected the candidate before Sandbox creation.",
-    "next_rule": "Do not execute/count another local substitute. The single authorized unusual intervention may be consumed only inside an actually-started admitted isolated Vercel Sandbox."
+    "global_go_unusual_experiment_limit": 1,
+    "global_go_unusual_experiment_count": 1,
+    "global_slot_consumed": true,
+    "source_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_BYTES_CONCURRENT_EPOCH_COUNTEREXAMPLE.json",
+    "experiment_scope": "bounded isolated 32 MiB concurrent shared-exporter producer-epoch snapshot discriminator",
+    "result": "torn owned snapshot observed; ownership-by-copy alone does not imply producer-epoch consistency",
+    "independent_parallel_replication_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_CM06_SHARED_EXPORTER_TORN_SNAPSHOT.json",
+    "promotion_scope": "NON_VERCEL_MECHANISM_COUNTEREVIDENCE_ONLY; not EntityOS executable PASS/FAIL",
+    "next_rule": "No second unusual experiment is allowed in this user-triggered GO macro-cycle. PR781 Vercel execution must remain regression/acceptance-only with new_unusual_experiment_count=0."
   },
   "capability_frontier": {
     "CM_NET": "OPEN",
@@ -66,7 +76,7 @@
     "CM_VIS": "OPEN",
     "CM_AUDIO": "OPEN"
   },
-  "next_exact_executable_step": "When Vercel capacity permits, refresh PR781 head and product main, then run one coordinated exact-head isolated Vercel Sandbox batch proving source-stage-v5 raw-tree identity, exact reconstructed Git HEAD/tree/clean/no-remotes, pinned SDK and atomic single-owner start, Bytes/released/mixed-V2 plus current CM-07/single-VM regressions, two pristine one-file EntityOS freezes with identical SHA256/bytes, runtime/pathless/state/capability/relocation gates, DENY_ALL and successful stop. Only that Sandbox may establish executable PASS/FAIL and consume the one authorized unusual intervention.",
+  "next_exact_executable_step": "When Vercel capacity permits, refresh PR781 head and product main, then run one coordinated exact-head isolated Vercel Sandbox regression/acceptance batch proving source-stage-v5 raw-tree identity, exact reconstructed Git HEAD/tree/clean/no-remotes, pinned SDK and atomic single-owner start, Bytes/released/mixed-V2 plus current CM-07/single-VM regressions, two pristine one-file EntityOS freezes with identical SHA256/bytes, runtime/pathless/state/capability/relocation gates, DENY_ALL and successful stop. Do not add a new unusual intervention in this GO macro-cycle. Only the actually-started exact-head Vercel Sandbox may establish executable PASS/FAIL.",
   "vps_or_self_hosted_test_evidence_used": false,
   "together_api_used": false
 }

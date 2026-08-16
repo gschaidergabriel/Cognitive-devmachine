@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "research_main_before_write": "cef573573129f13ca16e9996d89790514babe99a",
+  "product_main_observed": "7a228d3d3fc33a2681e635e8725d44c06518e891",
+  "coordinated_branch": "chatgpt/go-vercel-cm07-entityos-20260816",
+  "previous_verified_entityos_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+  "latest_staged_head": "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+  "relation_to_product_main": "AHEAD_14_BEHIND_0",
+  "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+  "latest_deployment_id": "dpl_8CArsKnsHGstKi46oSYBWazwt79X",
+  "latest_deployment_state": "READY",
+  "observed_delta": {
+    "deterministic_source_staging": {
+      "status": "SUPPORTED_AT_VERCEL_BUILD_STAGE",
+      "source_head": "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+      "stage_schema": "ClayGoSourceStage/v2",
+      "archive_sha256_first": "8a6f6de8573f75cf28ea3d590ace20392f0b5887dbc6f3ef6a06a851d0684a9d",
+      "archive_sha256_second": "8a6f6de8573f75cf28ea3d590ace20392f0b5887dbc6f3ef6a06a851d0684a9d",
+      "archive_bytes": 1273112,
+      "build_repetitions_observed": 2,
+      "result": "PASS_SAME_SHA256",
+      "scope_limit": "This closes the prior source-staging nondeterminism defect at the Vercel build-staging layer only; it is not whole-machine runtime evidence."
+    },
+    "path_without_host_python_gate": {
+      "status": "STAGED_NOT_EXECUTED",
+      "test_head": "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+      "mechanism": "run exact EntityOS with env -i and PATH=/nonexistent while separately proving python3 lookup returns 127",
+      "runtime_result": "UNKNOWN"
+    },
+    "latest_entityos_runtime_matrix": {
+      "status": "BLOCKED_BEFORE_HANDLER",
+      "reason": "Vercel protection-bypass creation returned HTTP 429 through the available MCP fetch path; subsequent runtime-log query found no invocation logs for the latest deployment.",
+      "code_failure_inferred": false,
+      "sandbox_failure_inferred": false
+    }
+  },
+  "grf": {
+    "observed_reality": "A prior exact Vercel matrix at 40b3599 built and verified a reproducible single-file EntityOS; two later branch commits repair deterministic source staging and add a PATH-without-host-Python gate.",
+    "hypothesis": "The latest branch can preserve the prior one-file EntityOS behavior while closing host-Python and deterministic-staging release gaps.",
+    "strongest_counter_reality": "The frozen one-file artifact or its build pipeline may regress at 6c67081 even though Vercel source staging itself is deterministic.",
+    "falsifier": "Actually start the 6c67081 isolated Vercel sandbox matrix and require all prior gates plus PATH-without-host-Python to pass on the exact rebuilt EntityOS.",
+    "outcome": "DEFER_RUNTIME_PROMOTION"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "VERCEL_PROTECTION_BYPASS_CONTROL_PLANE_FENCE",
+    "purpose": "Discriminate an execution-control-plane block from a sandbox/runtime failure on the newest staged EntityOS head.",
+    "baseline": "Earlier Vercel exact-head matrix at 40b3599 reached Sandbox and passed.",
+    "intervention": "Invoke the latest protected preview through the currently available authenticated Vercel MCP fetch/bypass path and cross-check latest deployment runtime logs.",
+    "observed": "Protection bypass creation returned 429 before handler execution; latest deployment runtime logs contained no invocation.",
+    "interpretation": "BLOCKED_CONTROL_PLANE_NOT_PRODUCT_RESULT",
+    "rollback": "No product/runtime state mutated; no sandbox was created by the blocked call."
+  },
+  "entityos": {
+    "last_verified_single_file_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+    "last_verified_sha256": "39ae46bbc7a5a1c4f5b5ef9686bdab473169254f31bdb1559bdb80acc801ad2d",
+    "latest_head_artifact_status": "BLOCKED_NOT_RUNTIME_VERIFIED",
+    "whole_machine_acceptance": false
+  },
+  "next_executable_step": "Reinvoke the READY 6c67081 preview once the Vercel protection-bypass quota/path is available (or through an already-authorized direct invocation path), require an actually-started isolated sandbox, run the full offline GO matrix including PATH-without-host-Python, rebuild EntityOS reproducibly, record exact SHA256 and then adjudicate promotion against current product main."
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-07 canonical package identity/index with current ClayEnv safety boundaries",
+  "research_head_before_write": "e4d71bc860c248ae61c20b513cfdb2810e42c3b1",
+  "product_main_observed": "20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
+  "observed": [
+    "Merged #644 requires an externally supplied trusted manifest SHA-256 before ClayEnv run.",
+    "Merged #648 requires clayenv build to fail closed on every source containing use until canonical package resolution exists.",
+    "Parallel package PRs #638, #639 and fresh composition #652 were closed/unmerged during live overlap/freshness races.",
+    "PR #650 remains open from a pre-#648 base and was explicitly deconflicted as stale unless independently recomposed after #648.",
+    "PR #653 is the current fresh-semantic-main package identity/index candidate and preserves both #644 and #648 boundaries.",
+    "PR #635 now contains a one-shot mechanical helper that can add a lossless Module.use_decls projection, but the production syntax.py/grammar bytes are not themselves changed by that PR; import/link semantics therefore remain unselected."
+  ],
+  "product_candidate": {
+    "pull_request": 653,
+    "head": "1ac68d1e190fd5478645b32664e4e1db5c38a243",
+    "semantic_base": "79d7eafd618950d6ff0ef85a751f0ccea8f5c4a9",
+    "latest_main_at_pr_creation": "20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
+    "latest_main_delta_from_semantic_base": "runtime evidence-only receipt; no overlap with candidate ClayEnv/package files",
+    "state": "OPEN_NOT_PROMOTED",
+    "mergeable_observed": true,
+    "dedicated_workflow_run": 31921054505,
+    "dedicated_workflow_state_at_receipt": "QUEUED",
+    "exact_head_pass": "NOT_OBSERVED",
+    "promotion": "DEFER_PENDING_EXACT_HEAD_SELF_HOSTED_PASS"
+  },
+  "candidate_semantics": [
+    "ClayPackageManifest/v1 binds an explicit package name to explicitly listed package-relative Clay source files and logical module names.",
+    "ClayPackageIndex/v1 validates source module declaration equality, package namespace containment, canonical relative paths, traversal/alias rejection, source hashes and one grammar hash.",
+    "Package content identity excludes absolute host root so relocation does not mint a different logical package.",
+    "Observed use targets are retained only as RECORDED_NOT_RESOLVED metadata.",
+    "clayenv package-index is non-executing tooling; clayenv build still invokes the merged #648 unresolved-use fail-closed boundary.",
+    "clayenv run still requires the merged #644 trusted-manifest digest boundary."
+  ],
+  "this_go_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "DUPLICATE_PACKAGE_PROVIDER_ROOT_ORDER_REVERSAL",
+    "execution_surface": "LOCAL_ISOLATED_MECHANISM_PROBE",
+    "treatment": "Create two roots claiming the same logical package identity and resolve them in both caller orders.",
+    "result": "PASS",
+    "observations": {
+      "both_orders_fail_closed": true,
+      "diagnostic_order_invariant": true,
+      "search_order_winner": false
+    },
+    "epistemic_limit": "The probe supports a future multi-package ambiguity invariant only. PR #653 does not yet implement multi-package provider resolution.",
+    "rollback": "temporary directories only"
+  },
+  "ordinary_regressions_not_new_experiments": [
+    "Package manifest input order determinism.",
+    "Package/module declaration identity match.",
+    "Duplicate module identity failure.",
+    "Package namespace escape failure.",
+    "Source path traversal failure.",
+    "Use target recording without resolution claim.",
+    "Absolute-root relocation invariance carried forward as a regression of prior #638 evidence.",
+    "Current tests.test_clayenv_cli is included in the dedicated workflow so #644 trusted-run and #648 unresolved-use build rejection must remain green."
+  ],
+  "external_primary_research": {
+    "source": "Go Modules Reference",
+    "retained_invariant": "Ambiguous package providers should be an error rather than silently selected by search/root order.",
+    "non_adoption": "Clay does not adopt Go module/version semantics from this analogy."
+  },
+  "grf_collapse": {
+    "generated_reality": "The broader Clay.toml resolver or any earlier package-index branch can be promoted because its isolated package tests are green.",
+    "strongest_counter_reality": "Live main changed the ClayEnv trust and unresolved-use boundaries while those branches were in flight; stale CLI composition can silently weaken a newly merged safety invariant.",
+    "observed_discriminator": "Freshness checks repeatedly found same-surface main changes (#644 then #648), causing #639 and #652 to be closed rather than promoted. The final candidate #653 is built after the semantic #648 boundary and later main drift was evidence-only/non-overlapping.",
+    "outcome": "RETAIN_FRESH_MAIN_PACKAGE_IDENTITY_CANDIDATE_DEFER_PROMOTION_UNTIL_EXACT_HEAD_CI"
+  },
+  "coordination": {
+    "closed_stale_candidate": 652,
+    "deconflict_comment_pr_650": 5305261275,
+    "prior_order_invariant_reentry_comment_pr_638": 5305234219,
+    "import_mode_candidate": 635,
+    "rule": "Do not merge overlapping ClayEnv candidates from stale ancestry; recompute against semantic current main and rerun exact-head evidence."
+  },
+  "next_discriminators": [
+    "Observe exact-head self-hosted Linux/X64 result for PR #653; failure must be repaired before any promotion.",
+    "Promote lossless MODULE versus WILDCARD information into the canonical production AST/grammar, not only a metadata side index or edit helper.",
+    "Then define one package dependency/provider graph with explicit duplicate-provider ambiguity failure independent of search order.",
+    "Feed the resolved closure into the existing nominal checker -> executable TypedIR -> single ClayVM path and only then relax #648 for proven-resolved imports.",
+    "Add a minimal stdlib/SDK only on top of that single selected package/import contract."
+  ],
+  "non_claims": [
+    "PR #653 is not PASS while its dedicated workflow is queued.",
+    "No package system is canonical/merged by this receipt.",
+    "No cross-module resolution or execution is claimed.",
+    "No stdlib/SDK completion is claimed.",
+    "No Linux effect authority or ClayOS capability was widened.",
+    "No whole Clay Machine acceptance is claimed.",
+    "Together API was not used.",
+    "No model/final training was authorized or started."
+  ]
+}

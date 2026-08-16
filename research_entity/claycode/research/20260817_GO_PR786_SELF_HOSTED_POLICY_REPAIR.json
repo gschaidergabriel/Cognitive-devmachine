@@ -1,0 +1,36 @@
+{
+  "schema": "ClayGOResearchReceipt/v1",
+  "date": "2026-08-17",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_pr": 786,
+  "predecessor_head": "ad4a7dff6db3132f11c61e553ee4c762c0c378a2",
+  "repaired_head": "6feeec91dc97004b869db64e6f6afd500eda4a6e",
+  "finding": {
+    "workflow_run": 31962016028,
+    "workflow": "Clay environment minimal build-run",
+    "runner": "clay-3",
+    "runner_id": 23,
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "result": "success",
+    "promotion_credit": false,
+    "reason": "Active owner policy forbids self-hosted GitHub runners; green execution is therefore invalid acceptance evidence."
+  },
+  "repair": {
+    "file": ".github/workflows/clayenv-minimal.yml",
+    "change": "runs-on [self-hosted, Linux, X64] -> ubuntu-latest",
+    "commit": "6feeec91dc97004b869db64e6f6afd500eda4a6e",
+    "post_repair_run": 31968442095,
+    "post_repair_runner_labels": ["ubuntu-latest"],
+    "post_repair_runner_id": 0,
+    "post_repair_steps": 0,
+    "post_repair_classification": "INFRASTRUCTURE_NON_EXECUTION"
+  },
+  "acceptance": {
+    "entityos_pass": false,
+    "artifact_sha256": null,
+    "approved_isolated_exact_head_run": false,
+    "new_unusual_experiment_count": 0
+  },
+  "next_gate": "Wait for an approved zero-cost isolated exact-head execution surface; require an actually-started isolated Sandbox, full Batch-5 matrix, twin identical EntityOS SHA-256, relocation identity, self-test identity and successful stop. Never substitute VPS or self-hosted GitHub runner evidence."
+}

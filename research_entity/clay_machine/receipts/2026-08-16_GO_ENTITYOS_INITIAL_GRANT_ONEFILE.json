@@ -1,19 +1,23 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "receipt_id": "2026-08-16_GO_ENTITYOS_INITIAL_GRANT_ONEFILE",
   "trigger": "go",
   "project": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "product": "EntityOS",
   "product_boundary": "ONE_EXECUTABLE_FILE",
-  "status": "SUPPORTED_COMPONENT_DELTA",
+  "status": "SUPPORTED_COMPONENT_DELTA_WITH_COORDINATION_ANOMALY",
   "whole_entityos_acceptance": false,
   "observed_reality": {
     "research_repo_pre_receipt_head": "eda5054529974c461e12d6e2f534de24a2157563",
     "product_repo_final_tested_head": "e517f9bc0b5228894acd9a82e3be33affa9a3738",
     "canonical_onefile_semantic_head": "f94918ed3cb1a0ef282238aacb73c9747645ad2d",
+    "canonical_integrated_grant_head": "ef0713427cd4c4d115bfaa58cc97a350cf224664",
     "canonical_onefile_workflow_run": 31928244956,
     "canonical_onefile_job": 95119043886,
     "canonical_onefile_result": "PASS",
+    "canonical_integrated_grant_workflow_run": 31928303441,
+    "canonical_integrated_grant_job": 95119197232,
+    "canonical_integrated_grant_result": "PASS",
     "initial_grant_workflow_run": 31928307572,
     "initial_grant_job": 95119207475,
     "initial_grant_result": "PASS",
@@ -67,7 +71,21 @@
       "actions_artifact_id": 9258492620,
       "actions_artifact_archive_digest": "sha256:a39495de77394c8f389a1f84dda0f696bb8d4c55b647b065bf94c925d1a5ec9e"
     },
-    "persistent_initial_grant": {
+    "canonical_integrated_initial_grant": {
+      "head": "ef0713427cd4c4d115bfaa58cc97a350cf224664",
+      "run": 31928303441,
+      "job": 95119197232,
+      "result": "PASS",
+      "checks": [
+        "full canonical one-file regression/build/status/self-test gates PASS",
+        "missing initial grant fails closed",
+        "isolated deterministic acceptance persists once",
+        "state directory mode 0700 and state file mode 0600",
+        "second launch reuses grant without prompt",
+        "UnifiedDB visual and canonical Clay build/run gates remain in same successful workflow"
+      ]
+    },
+    "persistent_initial_grant_tamper_gate": {
       "head": "e517f9bc0b5228894acd9a82e3be33affa9a3738",
       "run": 31928307572,
       "job": 95119207475,
@@ -85,13 +103,18 @@
     }
   },
   "unusual_experiment": {
-    "count": 1,
+    "designated_experiment_count": 1,
     "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
-    "run": 31928244956,
-    "result": "PASS",
+    "designated_run": 31928244956,
+    "designated_result": "PASS",
     "intervention": "Copy the exact one-file EntityOS to a path containing spaces and Unicode, run from foreign cwd with a Unicode TMPDIR, compare self-test JSON against baseline and require extraction-root cleanup.",
     "baseline_comparison": "Workflow gate passed byte-identical baseline/intervention self-test comparison and empty runtime extraction root after exit.",
-    "rollback": "Temporary relocated path removed."
+    "rollback": "Temporary relocated path removed.",
+    "parallel_replication_observed": true,
+    "parallel_replication_run": 31928303441,
+    "parallel_replication_result": "PASS",
+    "observed_execution_count_across_overlapping_workers": 2,
+    "protocol_assessment": "COORDINATION_ANOMALY: exactly one experiment design was selected for this go, but an overlapping worker amended the same canonical workflow and automatically caused a second execution of the identical unusual probe. Preserve as a negative coordination result; do not claim strict project-wide execution-count compliance."
   },
   "primary_external_evidence": [
     {
@@ -104,6 +127,7 @@
     }
   ],
   "negative_results_and_limits": [
+    "Strict project-wide exactly-one unusual-experiment execution count was exceeded by one automatic parallel replication of the same experiment; experiment-design count remained one.",
     "The final graphical one-click first-start UX is not implemented; current normal TTY launch uses one explicit text confirmation.",
     "The persistent grant records intended internal capability classes but does not yet prove that every future network/media/state capability implementation consumes the grant through a single non-bypassable policy path.",
     "Whole Clay Machine/EntityOS acceptance remains false because active network, canonical process/PTY, data/buffer, visual/video, audio, recovery and other workspace gates remain incomplete.",
@@ -113,6 +137,7 @@
     "product_commits": [
       "5d02acd263f8349cde796fb075b54eb42afe3d01",
       "f94918ed3cb1a0ef282238aacb73c9747645ad2d",
+      "ef0713427cd4c4d115bfaa58cc97a350cf224664",
       "e517f9bc0b5228894acd9a82e3be33affa9a3738"
     ],
     "research_commits_before_receipt": [
@@ -121,6 +146,7 @@
       "eda5054529974c461e12d6e2f534de24a2157563"
     ],
     "next_executable_step": "Bind the persistent initial-grant state to the actual EntityOS runtime capability-policy plane and expose the same one-time action through the canonical Builder Box/visual surface, then rebuild the exact one-file EntityOS and prove GUI/visual first launch, restart continuity and fail-closed tamper behavior without weakening Linux/effect authority.",
-    "parallel_frontier_preserved": "Continue current Clay Machine CM-NET, CM-TERM, CM-DATA, CM-VIS and CM-AUDIO gates; this receipt does not promote them."
+    "parallel_frontier_preserved": "Continue current Clay Machine CM-NET, CM-TERM, CM-DATA, CM-VIS and CM-AUDIO gates; this receipt does not promote them.",
+    "coordination_fix": "Future overlapping workers should allocate unusual-experiment ownership before modifying workflows that auto-run the designated unusual probe, or gate duplicate CI executions as explicit replication outside the macro-cycle accounting."
   }
 }

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "scope": "Cross-candidate discriminator for PR #741 ClayVM Bytes/v2 and PR #744 String path process hostcall; sandbox-only evidence, not product acceptance.",
+  "product_heads": {
+    "bytes_candidate_pr_741": "0a23254125d0eb0fbb3b98ede45c5f9ebb754cef",
+    "string_path_candidate_pr_744": "81f1b99c70af56d9459d81190a1244484748d32f",
+    "product_main_observed_after_experiment": "b543cf126eda90ccf8c1478653274631f1301398"
+  },
+  "grf": {
+    "observed_reality": [
+      "PR #741 extends ClayValue with immutable bytes snapshots.",
+      "PR #744 defines linux.process.spawn.path.v1::(String)->Int and fails closed when its path hostcall receives a non-string value."
+    ],
+    "generated_hypothesis": "The two candidates can be fused while preserving a nominal String-vs-Bytes authority boundary.",
+    "counter_reality": "A future fusion may implicitly UTF-8 decode Bytes and accidentally grant path/process authority to opaque byte values.",
+    "falsifier": "Pass a byte-exact valid-UTF8 pathname doppelganger through the String path dispatch shape and require fail-closed rejection.",
+    "outcome": "RETAIN the nominal separation as a fusion invariant; whole-machine acceptance remains false."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "UTF8_BYTES_DOPPELGANGER_PATH_MUST_NOT_GAIN_STRING_PROCESS_AUTHORITY",
+    "environment": {
+      "python": "3.13.5",
+      "platform": "Linux 6.18.35 x86_64 GNU/Linux",
+      "execution_context": "isolated local sandbox"
+    },
+    "string_control": {
+      "path": "/usr/bin/true",
+      "executed": true,
+      "return_code": 0
+    },
+    "bytes_control": {
+      "payload": "b'/usr/bin/true'",
+      "snapshot_preserves_payload": true
+    },
+    "intervention": "Pass the byte-exact valid-UTF8 path-shaped Bytes value into the PR #744 String path hostcall dispatch shape.",
+    "observed_result": "PROCESS_PATH_HOSTCALL_STRING_REQUIRED",
+    "fail_closed": true,
+    "status": "PASS",
+    "local_receipt_sha256": "28c4894401ce93513f499dbcf01eb8c18950f8c3acb725a6c577e5bf000b7ab6",
+    "rollback": "No product mutation; experiment-only local probe."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+    "affected_workstreams": ["CM-05-VIRTUAL-CLAY-MACHINE", "CM-08-LINUX-INTEROP", "CM-TERM", "CM-DATA"],
+    "fusion_requirement": "Retain nominal String-vs-Bytes separation at process/effect hostcall signatures. Do not auto-decode Clay Bytes to String merely because the byte payload is valid UTF-8 or pathname-shaped.",
+    "merged_regression_requirement": "When #741/#744 semantics are composed, assert the exact valid-UTF8 Bytes pathname doppelganger case as an ordinary regression; do not count it as a new unusual experiment again.",
+    "non_claims": [
+      "No product repository code was changed by this experiment.",
+      "No current-head EntityOS artifact was built or verified by this experiment.",
+      "No Clay Machine acceptance is claimed."
+    ]
+  },
+  "coordination": {
+    "product_pr_comment": "PR #744 comment id 5306862002 records the same fusion invariant for overlapping workers.",
+    "duplicate_work_avoidance": "No product patch was made because parallel candidate work already existed and safety workflow migrations were being landed by other workers."
+  },
+  "entityos": {
+    "artifact_status": "BLOCKED_CURRENT_HEAD",
+    "current_blocker_observed_from_shared_go_receipt": "GitHub-hosted EntityOS Semantic One-File run 31941590015 was blocked before runner start by repository Actions billing/spending-limit state.",
+    "historical_reference_only": {
+      "build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+      "local_binary_sha256": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+      "self_test": "PASS component path; whole_machine_acceptance=false"
+    },
+    "next_executable_step": "After the GitHub Actions billing/spending-limit block is cleared, rerun the sandbox-only EntityOS Semantic One-File workflow on ubuntu-latest, consume the resulting current-head artifact in an isolated sandbox, and run status plus --self-test-json before any promotion."
+  }
+}

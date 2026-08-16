@@ -1,0 +1,52 @@
+{
+  "schema": "ClayResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "scope": "Vercel build-internal exact-source staging provenance before EntityOS Sandbox execution",
+  "observed": {
+    "research_base_before_write": "01143bccb41ff6d4b3fd69068664d4add305cb0b",
+    "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "fusion_pr": 776,
+    "fusion_branch": "chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325",
+    "fusion_head_after_repair": "99f7ae429ed000f41aa3b864355dc97ec5f5a048",
+    "latest_observed_older_vercel_build_failure": "VERCEL_GIT_SOURCE_TREE_DIRTY",
+    "latest_exact_repair_head_vercel_status": "DEPLOYMENT_RATE_LIMITED_RETRY_IN_24_HOURS",
+    "exact_repair_head_vercel_sandbox_started": false,
+    "exact_repair_head_entityos_artifact_built": false
+  },
+  "hypothesis": "A canonical committed-tree source TAR derived with git archive can differ from the raw Git tree because committed export attributes can transform or omit tracked blobs, weakening exact source-tree provenance even when the Git tree SHA is recorded separately.",
+  "strongest_counterhypothesis": "git archive is sufficiently exact for source staging because it is derived from the immutable commit object and therefore cannot materially diverge from committed source bytes.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "GIT_ARCHIVE_EXPORT_ATTRIBUTE_PROVENANCE_DRIFT",
+    "execution_surface": "isolated local tool container",
+    "promotion_authority": "MECHANISM_ONLY_NOT_ENTITYOS_EXECUTABLE_TRUTH",
+    "intervention": "Synthetic Git repository committed payload.txt with export-subst and secret.txt with export-ignore, then archived exact HEAD with git archive and compared extracted bytes/presence against raw HEAD blobs.",
+    "result": {
+      "payload_raw_equals_archive": false,
+      "export_ignored_tracked_blob_present_in_archive": false,
+      "classification": "COUNTERHYPOTHESIS_REFUTED_GIT_ARCHIVE_CAN_DRIFT_FROM_RAW_TREE"
+    }
+  },
+  "repair": {
+    "product_commit": "99f7ae429ed000f41aa3b864355dc97ec5f5a048",
+    "file": "mcp/vercel-sandbox-mcp/scripts/stage-go-source.mjs",
+    "mechanism": "Replace git archive source materialization with git ls-tree -r -z plus git cat-file raw blobs, preserving tracked regular/executable/symlink modes and failing closed on unsupported tree entries or non-UTF8 paths; retain separate SHA-bound credential-free Git bundle for exact commit provenance.",
+    "manifest_schema": "ClayGoSourceStage/v5",
+    "local_deterministic_regression": "PASS for export-subst, export-ignore, executable mode and symlink preservation",
+    "local_regression_authority": "NON_PROMOTABLE_MECHANISM_EVIDENCE"
+  },
+  "grf_outcome": "RETAIN_REPAIR_PENDING_VERCEL_SANDBOX",
+  "entityos_impact": "Strengthens exact-source identity of the build-internal path that must eventually produce and validate the one-file EntityOS artifact. Does not establish current EntityOS build/runtime PASS.",
+  "next_discriminator": "When Vercel build-rate capacity permits, run PR #776 exact head 99f7ae429ed000f41aa3b864355dc97ec5f5a048 through the build-internal lane, require source stage v5/raw-tree identity, actually-started isolated Sandbox, exact reconstructed HEAD/tree/clean state, offline matrix, deterministic one-file EntityOS build/runtime/pathless/relocation gates and successful Sandbox stop. If the branch advances, bind and test the new exact head instead.",
+  "hard_non_claims": [
+    "No Vercel Sandbox started for repair head",
+    "No exact-head EntityOS artifact exists from repair head",
+    "No whole EntityOS or Clay Machine PASS",
+    "No VPS/self-hosted/production-host test evidence"
+  ]
+}

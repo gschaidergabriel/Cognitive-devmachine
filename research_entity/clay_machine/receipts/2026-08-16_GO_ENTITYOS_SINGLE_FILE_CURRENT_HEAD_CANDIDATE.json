@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_ENTITYOS_SINGLE_FILE_CURRENT_HEAD_CANDIDATE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "ENTITYOS",
+  "timestamp_local": "2026-08-16T11:18:00+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "owner_product_boundary": "exactly one executable file named EntityOS",
+  "observed_anchors": {
+    "product_main_tested": "33e79fdbf85fcc61187aa8794a28d74ae8cc2b69",
+    "workflow_run": 31926209698,
+    "workflow_job": 95114092409,
+    "runner": "self-hosted Linux X64 / clay",
+    "python_runtime": "Python 3.12.3",
+    "entityos_sha256": "ff65a8475f40b399f9b43d50fed0c161d31a082a07d183356566322feb89d86e",
+    "entityos_bytes": 1212772,
+    "embedded_grammar_sha256": "c63336fb5f335420cb436f42d4e4bfcaf100d0f559d2ebc9badbc0a9fe3b2b69",
+    "artifact_schema": "EntityOS/v0",
+    "artifact_acceptance_label": "CANDIDATE_NOT_FINAL"
+  },
+  "verified_candidate_checks": {
+    "single_file_build": true,
+    "bundled_lark_parser": true,
+    "claycode_to_executable_ir": true,
+    "single_clayvm_executes": true,
+    "minimal_clayos_present": true,
+    "controlled_linux_interop": true,
+    "source_provenance_present": true,
+    "vm_blob_hash_bound": true,
+    "vm_smoke_result": 42,
+    "clean_single-file_directory_launch": true,
+    "local_session_replay_of_exact_downloaded_bytes": "PASS"
+  },
+  "failure_then_repair": {
+    "failed_head": "d93f276233226c2264b129bb2e7df2e1796e0da4",
+    "failure": "NotADirectoryError reading runtime/clay_wp04_type_effect_v1/FRANK_STRUCTURED_V1.lark through pathlib from inside the EntityOS zipapp",
+    "falsifier": "archive-hostile canonical resource read prevented parser boot although dependency vendoring and build succeeded",
+    "repair_head": "33e79fdbf85fcc61187aa8794a28d74ae8cc2b69",
+    "repair": "deterministically embed the exact canonical grammar bytes at build time and bind their SHA-256 in the build receipt",
+    "post_repair_exact_head_gate": "PASS"
+  },
+  "generated_reality": "A single-file archive can package the real current ClayCode -> Executable IR -> ClayVM path plus ClayRuntime, ClayEnv, ClayOS and controlled LinuxInterop without runtime sidecar files.",
+  "strongest_counter_reality": "A one-file zipapp can look self-contained while still depending on a host Python interpreter and while canonical Clay process/data semantics remain too narrow for final Clay Machine acceptance.",
+  "collapse": {
+    "one_file_packaging_smoke": "PROMOTE_TO_VERIFIED_CANDIDATE",
+    "whole_clay_machine_acceptance": "NOT_PROMOTED",
+    "final_entityos_release": "BLOCKED"
+  },
+  "current_go_unusual_experiment": {
+    "name": "HOST_OUTPUT_FLOOD_BOUND",
+    "location": "superseded draft PR #701 branch",
+    "intervention": "direct absolute /usr/bin/yes through the bounded linux.process.spawn.v0 development spike path; no shell",
+    "observed": "fail-closed return; exactly 1048576 retained stdout bytes; OUTPUT_LIMITED; bounded by host timeout",
+    "negative_result": "overflow was checked only after cmd.Wait(); the 1 MiB memory cap did not itself prove immediate producer cancellation",
+    "outcome": "RETAIN_MEMORY_BOUND_REJECT_PROMPT_OVERFLOW_CANCELLATION_CLAIM",
+    "note": "The canonical main workflow also contains a pre-existing isolation smoke step. It is external concurrent CI evidence, not a second experiment designed by this temporary worker."
+  },
+  "superseded_duplicate_control": {
+    "pr": 701,
+    "state": "CLOSED_UNMERGED",
+    "reason": "canonical main now packages the actual ClayCode/IR/ClayVM/ClayOS path; merging the independent Go subset would create a divergent runtime"
+  },
+  "primary_external_evidence": {
+    "python_zipapp": "Python documentation states that a zipapp single-file executable still requires a suitable Python interpreter to be installed on the target system.",
+    "implication": "current EntityOS/v0 proves one-file/no-sidecar packaging, not zero-host-runtime final self-containment"
+  },
+  "remaining_blockers": [
+    "EntityOS/v0 launcher is #!/usr/bin/env python3 and therefore still depends on host Python; clean-Ubuntu zero-install acceptance is not yet proven.",
+    "Canonical ClayCode process execution still lacks admitted String/argv/Bytes values and effectful executable TypedIR/VM wiring to the merged host-process component.",
+    "Canonical Bytes/Buffer ownership/lifetime, streaming, recovery and broader Clay Machine acceptance invariants remain open.",
+    "Self-hosting/bootstrap equivalence remains open."
+  ],
+  "next_executable_action": "Add a clean-host dependency gate that deliberately removes Python from PATH / uses an environment without a suitable interpreter to falsify zero-install self-containment; in parallel select the smallest canonical String/argv + Bytes/Buffer ownership/effect ABI before widening EntityOS semantics. Do not declare final EntityOS until both product-boundary and canonical semantic gates pass.",
+  "whole_clay_machine_acceptance": false,
+  "outcome": "ENTITYOS_SINGLE_FILE_CANDIDATE_VERIFIED_RELEASE_BLOCKED"
+}

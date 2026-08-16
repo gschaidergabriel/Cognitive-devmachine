@@ -1,0 +1,96 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_main_observed": "4c2607d8b4cfc427ad5a8bed0d203f5020f2aacf",
+  "entityos_verified_candidate": {
+    "build_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "canonical_workflow_run": 31929651652,
+    "workflow_conclusion": "success",
+    "local_status_build_head_match": true,
+    "local_selftest": "PASS",
+    "current_main_delta_note": "Product main 4c2607d differs from b32ec5a only by the added source-admitted typed-value VPS workflow; no EntityOS product-source mutation was observed. The binary remains honestly build-head-bound to b32ec5a and is not relabeled as an exact 4c2607d build.",
+    "whole_machine_acceptance": false
+  },
+  "bounded_unusual_experiment": {
+    "count_for_this_worker_go_cycle": 1,
+    "name": "FROZEN_RUNTIME_WITH_EMPTY_ENV_AND_POISONED_HOST_PYTHON",
+    "artifact_build_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "baseline_selftest_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+    "intervention_selftest_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+    "intervention": "empty environment with isolated HOME/TMPDIR, PATH=/nonexistent, deliberately invalid PYTHONHOME/PYTHONPATH, LC_ALL=C",
+    "result": "BYTE_IDENTICAL_SELF_TEST",
+    "rollback": "environment only",
+    "interpretation": "supports that the frozen one-file runtime does not silently depend on host Python environment resolution",
+    "scope_note": "Concurrent pre-existing CI workflows may contain their own standing resilience checks; this receipt counts only the single unusual experiment selected by this worker's go cycle."
+  },
+  "code_candidate": {
+    "pull_request": 718,
+    "branch": "clay/go-string-literal-vm-20260816-1239",
+    "head": "42fd87a37ddb44594904115848ce8c93e7bb4ca5",
+    "mergeable_when_observed": true,
+    "merged": false,
+    "changes": [
+      "ClayExecutableTypedIR/v1 admits canonical String literals",
+      "executable IR adapter lowers String literals and String returns while keeping String parameters fail-closed",
+      "serialized ClayVM adds deterministic UTF-8 String constants and String return values",
+      "single-VM gate compares source-tree and serialized-VM String result ENTITYOS_STRING",
+      "ClayOS accepts an explicitly injected ClayHost only through the provenance-strict artifact facade",
+      "EntityOS typed process selftest no longer imports or calls raw load_module; it binds ClayVMArtifact/v1 and launches through ClayOS.exec_artifact"
+    ],
+    "deliberate_non_widening": [
+      "String parameters remain rejected",
+      "argv/env/cwd/stdin/stdout/stderr/PTY value semantics remain open",
+      "Bytes/Buffer ownership and lifetime remain open",
+      "whole-machine acceptance is not claimed"
+    ],
+    "ci_observed": {
+      "earlier_string_head_relevant_gates": {
+        "ClayCode Executable TypedIR V1": "PASS",
+        "Clay Machine VM bootstrap": "PASS",
+        "Clay Executable IR Single VM": "PASS",
+        "Clay CM-TERM VM Process": "PASS"
+      },
+      "preexisting_policy_defect_exposed": "entityos/canonical_entry.py imported raw load_module and caused ClayOS strict artifact launch to fail",
+      "latest_head_strict_artifact_gate_run": 31929927947,
+      "latest_head_strict_artifact_gate": "PASS",
+      "other_latest_head_gates_when_recorded": "QUEUED_OR_IN_PROGRESS",
+      "merge_decision": "DEFER_UNTIL_ALL_RELEVANT_LATEST_HEAD_GATES_COMPLETE; do not merge on partial CI"
+    }
+  },
+  "release_priority_fusion": {
+    "repo_runtime_evidence": {
+      "accepted_target_sqlite_runtime": "3.45.1",
+      "accepted_target_package": "3.45.1-1ubuntu2.7",
+      "existing_release_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_SQLITE_WAL_RESET_RELEASE_BLOCKER.json",
+      "existing_outcome": "RETAIN_BLOCKER"
+    },
+    "primary_upstream_verification": {
+      "sqlite_wal_documentation": "https://sqlite.org/wal.html",
+      "sqlite_3_51_3_release": "https://sqlite.org/releaselog/3_51_3.html",
+      "finding": "SQLite upstream states the WAL-reset bug is likely present from 3.7.0 through 3.51.2, fixed in 3.51.3 and later, with named backports 3.44.6 and 3.50.7."
+    },
+    "ubuntu_package_verification": {
+      "package_page": "https://packages.ubuntu.com/noble/amd64/libsqlite3-0",
+      "observed_version": "3.45.1-1ubuntu2.7",
+      "interpretation": "Version alone cannot rule out a downstream equivalent backport; the blocker is retained because the separate exact runtime, installed changelog and published source-patch checks recorded in the existing receipt did not establish the required fix/trust anchor."
+    },
+    "grf_hypothesis": "String return support is a useful CM-TERM/CM-DATA semantic increment, but the accepted EntityOS release remains dominated by the fail-closed SQLite WAL-reset persistence gate.",
+    "strongest_counterhypothesis": "Ubuntu may contain a semantically equivalent WAL-reset fix under an unrecognized patch identity despite the 3.45.1 base version.",
+    "falsifier": "prove exact loaded SQLite library/source identity contains the upstream fix or upgrade/embed a fixed runtime and bind it non-bypassably, then pass crash/restart/WAL lifecycle tests on the accepted Ubuntu target",
+    "outcome": "MERGE_STRING_CANDIDATE_WHEN_CI_GREEN; PRIORITIZE_SQLITE_FOR_RELEASE"
+  },
+  "next_executable_actions": [
+    "Resolve the SQLite release gate by using a fixed SQLite runtime (upstream >=3.51.3 or explicitly proven fixed backport), bind exact source/build/loaded-library identity and reject downgrade/library substitution, then rerun productive persistence plus crash/restart/WAL lifecycle gates on the accepted Ubuntu target.",
+    "After PR #718 has all relevant latest-head gates green, merge it in a clean coordinated cycle and rebuild/test an exact-head one-file EntityOS so String support is present in the delivered binary.",
+    "Continue from String return to the smallest canonical String parameter/argv plus Bytes/Buffer ownership-lifetime surface required by CM-TERM and CM-DATA without backend-local semantics."
+  ],
+  "research_state": "SUPPORTED_CANDIDATE_PLUS_RETAINED_RELEASE_BLOCKER",
+  "release_state": "NOT_PASSED"
+}

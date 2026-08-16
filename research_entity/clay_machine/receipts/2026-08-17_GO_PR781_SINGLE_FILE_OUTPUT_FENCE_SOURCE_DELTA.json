@@ -1,0 +1,54 @@
+{
+  "schema": "ClayEntityOSSourceDeltaReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "preferred_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head_after_delta": "8d88cfe08daf979ad5ee7c02d9ec519ef32af523"
+  },
+  "source_delta": {
+    "builder_commit": "7ef450b3c3331ce0b77e2e937d4031d1b983a26d",
+    "test_commit": "8d88cfe08daf979ad5ee7c02d9ec519ef32af523",
+    "builder_changes": [
+      "reject pre-existing output sidecars instead of silently leaving them beside EntityOS",
+      "verify each canonical PyInstaller dist has exactly one top-level entry",
+      "require that entry to be the regular non-symlink executable EntityOS",
+      "apply the same exact-one-file shape verification to the reproducibility build"
+    ],
+    "tests_added_to_existing_matrix_module": [
+      "accept exact single regular EntityOS file",
+      "reject companion sidecar directory",
+      "reject symlink EntityOS output"
+    ],
+    "classification": "SOURCE_HARDENED_AWAIT_EXECUTION"
+  },
+  "vercel": {
+    "exact_head_status": "FAILURE_BUILD_RATE_LIMIT",
+    "deployment_created_for_exact_head": false,
+    "isolated_sandbox_started_for_exact_head": false,
+    "runtime_verified": false
+  },
+  "experiment_accounting": {
+    "global_limit": 1,
+    "global_count": 1,
+    "global_slot_consumed": true,
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "new_unusual_experiments_executed_by_this_delta": 0
+  },
+  "whole_entityos_acceptance": false,
+  "promotion": "BLOCKED_UNTIL_EXACT_HEAD_VERCEL_SANDBOX",
+  "next_executable_step": "Run the exact then-current PR781 head in one isolated build-internal Vercel Sandbox when build capacity admits it. Require Stage-v5 exact source provenance, repaired toolchain probe, DENY_ALL before offline tests, Bytes-v2/released-view gates, builder output-shape tests, deterministic twin one-file EntityOS builds, exact digest and relocation byte identity, status/self-test/no-host-Python/state/capability gates, and successful Sandbox stop.",
+  "safety": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_testing": "NOT_USED_FORBIDDEN",
+    "production_host_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "final_paid_training": "NOT_ATTEMPTED_OWNER_AUTHORIZATION_REQUIRED"
+  }
+}

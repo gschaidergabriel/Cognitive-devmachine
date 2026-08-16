@@ -1,0 +1,90 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_endpoint": "EntityOS",
+  "release_form": "ONE_EXECUTABLE_FILE",
+  "status": "BLOCKED_EXTERNAL_EXECUTION_QUOTA",
+  "observed_reality": {
+    "product_main_at_candidate_fork": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "product_main_security_state": "repository-static go-cycle-v2 execution is BUILD_INTERNAL_ONLY",
+    "candidate_branch": "chatgpt/go-batch3-buildinternal-git-20260816",
+    "candidate_head": "7be9e00b8f8f5f7c7167d8d4c7bf098c188dd488",
+    "candidate_pr": 771,
+    "candidate_pr_state": "DRAFT_UNMERGED",
+    "candidate_diff_scope": [
+      "mcp/vercel-sandbox-mcp/package.json",
+      "mcp/vercel-sandbox-mcp/scripts/stage-go-source.mjs",
+      "mcp/vercel-sandbox-mcp/scripts/run-batch3-buildinternal-sandbox.mjs",
+      "mcp/vercel-sandbox-mcp/scripts/run-go-matrix.sh"
+    ],
+    "candidate_ahead_of_base_commits": 5,
+    "candidate_behind_base_commits": 0,
+    "vercel_status_context": "Vercel",
+    "vercel_status": "failure",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "vercel_status_observed_on_candidate_head": true,
+    "sandbox_started_for_candidate_head": false
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE_UNTESTED",
+    "mechanism": "Build-internal preview runner stages a credential-free shallow exact-HEAD Git repository, verifies exact commit/clean index/no remote, provisions toolchain before network deny-all, and runs the EntityOS matrix in one Vercel Sandbox.",
+    "pristine_freeze_source": "Component regressions execute in /vercel/sandbox/src; canonical one-file freeze unpacks the exact source archive again into /vercel/sandbox/buildsrc and re-verifies HEAD, clean index, no remote and no ignored artifacts before invoking build_canonical_onefile.py.",
+    "security_boundary": "Does not restore repository-static HTTP sandbox execution; main BUILD_INTERNAL_ONLY endpoint remains untouched.",
+    "deduplication": "Per-deployment sentinel prevents a second Sandbox start when Vercel invokes the build hook twice.",
+    "test_network_policy": "DENY_ALL after provisioning",
+    "host_python_path_gate": true,
+    "relocation_regression_retained": true
+  },
+  "alternatives_considered": [
+    {
+      "name": "committed-tree archive without Git metadata",
+      "outcome": "REJECT_FOR_CANONICAL_FREEZE",
+      "reason": "Current canonical EntityOS builder requires exact Git HEAD and clean worktree provenance."
+    },
+    {
+      "name": "external snapshot attestation accepted by builder",
+      "outcome": "DEFER",
+      "reason": "Would expand the builder trust/authority contract when exact sanitized Git provenance can preserve the existing contract."
+    },
+    {
+      "name": "sanitized exact Git provenance with pristine second freeze checkout",
+      "outcome": "RETAIN_PENDING_SANDBOX",
+      "reason": "Preserves existing builder authority and prevents preceding py_compile/unittest caches from contaminating the release freeze source."
+    }
+  ],
+  "single_unusual_experiment": {
+    "count": 1,
+    "name": "ignored-import-artifact provenance blindspot falsifier",
+    "result": "SUPPORTED_AND_MERGED",
+    "product_pr": 757,
+    "merge_sha": "6c0ce7e8c6131b6295d8621ef47d79994ff3dd4c",
+    "finding": "A Git-clean checkout can still contain ignored import-capable artifacts such as __pycache__ bytecode that can influence a Python freeze. The EntityOS builder now fails closed on relevant ignored import artifacts.",
+    "follow_on_batch3_unusual_experiment_count": 0
+  },
+  "negative_results": [
+    "A committed-tree-only Vercel batch reached offline_go_matrix and failed after toolchain provisioning; absence of Git provenance was not sufficient for the hardened canonical builder path.",
+    "The exact Batch-3 candidate could not start because Vercel rejected the deployment before build execution due to deployment rate limiting.",
+    "Static review found and fixed an unescaped Bash parameter expansion embedded in a JavaScript template literal before any candidate Sandbox run."
+  ],
+  "forbidden_evidence_excluded": {
+    "vps_tests": true,
+    "self_hosted_runner_tests": true,
+    "production_host_tests": true,
+    "note": "Observed REAL_SELF_HOSTED_UBUNTU_EXECUTION receipts are not used for EntityOS promotion under the current sandbox-only directive."
+  },
+  "promotion_gate": {
+    "required": true,
+    "exact_next_action": "When Vercel permits another deployment, execute PR 771 current/rebased exact head in exactly one isolated Vercel Sandbox and require PASS for sanitized exact Git provenance, pristine freeze source, canonical source pipeline, reproducible one-file EntityOS, runtime gates, PATH-without-host-Python, relocation byte identity, DENY_ALL during tests, and clean Sandbox stop.",
+    "merge_before_green": false,
+    "whole_machine_acceptance": false,
+    "entityos_artifact_for_batch3": "BLOCKED_NOT_BUILT_ON_CANDIDATE_HEAD"
+  },
+  "confidence": "HIGH_ON_BLOCKER_AND_CANDIDATE_DESIGN_MEDIUM_ON_UNEXECUTED_BATCH3",
+  "provenance": {
+    "research_main_before_write": "5522fc4e8d0b4055164208f0f226f41770ff5b20",
+    "product_candidate_status_observed_at": "2026-08-16T16:34:48Z"
+  }
+}

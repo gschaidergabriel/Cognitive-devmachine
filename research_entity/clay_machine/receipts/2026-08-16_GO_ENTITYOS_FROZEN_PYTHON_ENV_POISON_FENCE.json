@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_FROZEN_PYTHON_ENV_POISON_FENCE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "evidence_class": "LOCAL_SANDBOX_HISTORICAL_ARTIFACT_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "current_product_main_observed": "f9cea2647073ca3d44cfc7cba16dba742bc3d713",
+  "tested_artifact_source_workflow_run": 31930112424,
+  "tested_artifact_build_head": "950d1642437de5d940035cd04c90d50e8d34a64e",
+  "tested_artifact_outer_sha256": "28950f0dcb5fda1dd24fca7f92eef036eed1d051a2460b881506bf012d8ef758",
+  "tested_artifact_size_bytes": 12821560,
+  "tested_artifact_format": "ELF_64_X86_64_PYINSTALLER_ONEFILE",
+  "baseline": {
+    "command": "EntityOS --self-test-json",
+    "status": "PASS",
+    "frozen_runtime": true,
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "hypothesis": "A properly frozen one-file EntityOS should not depend on host CPython module-discovery variables PYTHONHOME or PYTHONPATH for its admitted self-test path.",
+  "counterhypothesis": "Host Python environment poisoning can perturb module/runtime discovery despite the frozen one-file boundary.",
+  "unusual_experiment": {
+    "name": "FROZEN_RUNTIME_PYTHON_ENV_POISONING",
+    "count": 1,
+    "bounded": true,
+    "reversible": true,
+    "intervention": "Run the exact byte-identical artifact under env -i with normal /usr/bin:/bin PATH, PYTHONHOME=/definitely/missing/entityos-python-home and PYTHONPATH=/definitely/missing/entityos-python-path.",
+    "result": "PASS_ISOLATED_FROM_HOST_PYTHON_ENV",
+    "stderr_bytes": 0,
+    "semantic_key_deltas_vs_baseline": {},
+    "observed_status": "PASS",
+    "observed_frozen_runtime": true
+  },
+  "collapse": {
+    "outcome": "RETAIN_AS_NARROW_PORTABILITY_EVIDENCE",
+    "supports": "For the exact 950d164 artifact and tested path, PYTHONHOME/PYTHONPATH poisoning does not alter admitted self-test semantics.",
+    "does_not_support": [
+      "current-main EntityOS acceptance",
+      "accepted Hostinger VPS acceptance",
+      "absence of temporary-extraction dependencies",
+      "absence of dynamic-loader/glibc dependencies",
+      "whole Clay Machine completion"
+    ]
+  },
+  "coordination": {
+    "open_product_pr_737_head": "1fa96792c3cfc2fd2eb7cbdd658cace508d8e5d8",
+    "pr_737_scope": "String hostcall discriminator plus exact one-file EntityOS rebuild",
+    "pr_737_workflow_run": 31937859152,
+    "pr_737_job": 95142518655,
+    "pr_737_observation": "FAILURE_BEFORE_ANY_STEP_STARTED",
+    "pr_737_steps_started": 0,
+    "interpretation": "Infrastructure non-execution; not semantic PASS or FAIL. This receipt intentionally does not duplicate PR737's NUL-bearing String experiment."
+  },
+  "primary_reference": {
+    "source": "PyInstaller official documentation",
+    "urls": [
+      "https://pyinstaller.org/en/stable/usage.html",
+      "https://pyinstaller.org/en/stable/runtime-information.html"
+    ],
+    "note": "PyInstaller one-file remains a host-interoperable frozen runtime with temporary extraction/library-environment behavior; this experiment tests only two host-Python discovery variables."
+  },
+  "entityos_artifact": "BLOCKED_CURRENT_HEAD",
+  "exact_blocker": "No actually-started isolated current-head build/test lane is available for current product main f9cea264; PR737's hosted job ended before step execution. The locally executable artifact is bound to older head 950d164 and cannot be promoted as current.",
+  "next_executable_step": "When an accepted isolated runner actually starts, execute PR737's discriminator, rebuild EntityOS from the exact current candidate head through entityos/build_canonical_onefile.py, verify reproducible outer SHA plus self-test/copy-run, then add the PYTHONHOME/PYTHONPATH poison fence as a zero-new-experiment regression if desired.",
+  "whole_machine_acceptance": false
+}

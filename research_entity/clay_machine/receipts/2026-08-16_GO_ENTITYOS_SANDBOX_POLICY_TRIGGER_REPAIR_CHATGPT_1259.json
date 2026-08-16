@@ -1,0 +1,61 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "framework": "GRF",
+  "status": "SUPPORTED_DELTA_WITH_EXTERNAL_BUILD_BLOCKER",
+  "active_program": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_head_observed_before_write": "441a4fe65ca5473bf17bdfedbce23b25cb0edda0",
+  "product_head_after_repairs": "d0d40503b9ba29618a6a8789b8f0dc0208115635",
+  "observed_conflict": "Product main temporarily restored an EntityOS semantic rebuild and a merged hostcall regression lane to self-hosted execution despite current owner-fixed SANDBOX_ONLY_TESTING policy.",
+  "product_deltas": [
+    {
+      "commit": "777895270357908e49a079fb2c308844c6469b83",
+      "effect": "Canonical EntityOS semantic one-file rebuild restored to ubuntu-latest isolated sandbox and receipt execution_context=ISOLATED_GITHUB_HOSTED_SANDBOX."
+    },
+    {
+      "commit": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
+      "effect": "Semantic rebuild triggers expanded to clayenv/**, claycode/** and runtime/** so canonical semantic-root changes cannot silently leave EntityOS stale."
+    },
+    {
+      "commit": "dff992a3fce2ddde2eb0ef15754d87657f895bc2",
+      "effect": "Historical SEMANTIC_DOPPELGANGER_SIGNATURE hostcall experiment reclassified as an ordinary deterministic regression; reruns now mint new_unusual_experiment_count=0."
+    },
+    {
+      "commit": "d0d40503b9ba29618a6a8789b8f0dc0208115635",
+      "effect": "Merged hostcall-signature regression workflow changed from self-hosted branch execution to manual ubuntu-latest isolated-sandbox execution and aligned to the canonical pinned PyInstaller 6.21.0 lane."
+    }
+  ],
+  "coordination": {
+    "closed_duplicate_pr": 731,
+    "reason": "Unique semantic-root trigger delta was integrated directly on current main; PR was closed as superseded to avoid duplicate/stale work."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "SEMANTIC_ROOT_PATHFILTER_LESION",
+    "scope": "isolated pure path-selection model; no repository/runtime/host effect",
+    "baseline_change": "runtime/claycode_executable_typed_ir_v1.py",
+    "baseline_trigger": false,
+    "intervention": "add runtime/** plus clayenv/** and claycode/** to canonical EntityOS rebuild path filters",
+    "candidate_trigger": true,
+    "rollback": "pure model discarded; no persistent state mutation by experiment itself",
+    "outcome": "SUPPORTED: old filter can miss a canonical semantic-root change; expanded filter observes it."
+  },
+  "exact_sandbox_evidence": {
+    "head": "ca39aac2663fbbbb47341335d915d5b31c6d2beb",
+    "workflow_run": 31930505961,
+    "job": 95124420211,
+    "label": "ubuntu-latest",
+    "runner_id": 0,
+    "steps_executed": 0,
+    "conclusion": "failure",
+    "annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "classification": "INFRASTRUCTURE_NON_EXECUTION_NOT_SEMANTIC_FAILURE"
+  },
+  "entityos_artifact_state": "BLOCKED_CURRENT_HEAD_BUILD",
+  "whole_clay_machine_acceptance": false,
+  "exact_blocker": "GITHUB_HOSTED_SANDBOX_CANNOT_START_DUE_ACCOUNT_PAYMENT_OR_SPENDING_LIMIT; owner policy forbids substituting VPS/self-hosted/production execution.",
+  "next_executable_action": "Resolve GitHub Actions billing/spending-limit access, then run the canonical EntityOS semantic one-file sandbox workflow on the exact latest main head and require a two-build reproducibility match, source-to-single-VM gate, frozen EntityOS self-test, String path and fail-closed host-effect gate before promoting any artifact.",
+  "next_semantic_frontier_after_build_lane_recovers": "Direct canonical Clay String/Bytes/argv transport through typed/effect IR and the single ClayVM; current request-id bridge remains an intermediate compatibility surface."
+}

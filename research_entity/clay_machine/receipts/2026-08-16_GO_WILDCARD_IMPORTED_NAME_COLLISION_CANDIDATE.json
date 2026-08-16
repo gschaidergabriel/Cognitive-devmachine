@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "organ": "chatgpt-gpt-5.6-sol-temporary-clay-worker",
+  "trigger": "go",
+  "timestamp_context": "2026-08-16T10:05+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_base_sha": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "product_candidate_head_sha": "d13c62ed96c4a8163594be92ec11276dc0eff000",
+  "product_pr": 682,
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "observed_anchor": {
+    "canonical_provider_resolution": "ClayPackageResolution/v1 from merged PR #660",
+    "provider_resolution_semantic_scope": "MODULE_PROVIDER_ONLY",
+    "symbol_semantics_before_candidate": "NOT_SELECTED",
+    "executable_use_gate": "FAIL_CLOSED_UNCHANGED"
+  },
+  "generated_reality": {
+    "hypothesis": "A deterministic import-time collision surface can prevent provider-order-dependent wildcard name ownership before linker semantics exist.",
+    "candidate_schema": "ClaySymbolResolution/v0-candidate",
+    "wildcard_rule": "Target declared top-level names enter a conservative collision surface only.",
+    "module_interop_rule": "MODULE leaf names are represented only as occupied names needed for mixed collision discrimination; canonical MODULE ownership is deferred to the coordination winner among MODULE-only candidates.",
+    "authority": "NONE",
+    "executable_imports": false
+  },
+  "counter_reality": {
+    "strongest": "Wildcard conflicts may be better represented as multiple candidates and rejected only at ambiguous use sites, rather than failing at import time.",
+    "external_design_evidence": [
+      "Rust Reference: name resolution is staged; ambiguous glob imports may coexist until a conflicting name is used.",
+      "Go Specification: dot imports declare exported package identifiers directly in the importing file block."
+    ],
+    "interpretation": "These are incompatible precedents and therefore design evidence only; neither mints Clay semantics."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "WILDCARD_DIAMOND_PROVIDER_ORDER_REVERSAL",
+    "bounded": true,
+    "reversible": true,
+    "environment": "disposable local model only",
+    "intervention": "Two provider modules expose the same bare candidate name id; provider/use ordering is reversed.",
+    "bad_last_wins_observation": "Selected owner changed with ordering.",
+    "fail_closed_observation": "Both orderings reject the same duplicate-name class.",
+    "outcome": "RETAIN_FAIL_CLOSED_COLLISION_AS_CANDIDATE",
+    "repository_regression_new_unusual_experiment_count": 0
+  },
+  "coordination": {
+    "parallel_module_only_candidates": [678, 679],
+    "decision": "Do not claim a competing canonical MODULE binding architecture. Keep PR #682 scoped to wildcard and mixed collision semantics; compose later with whichever MODULE-only plan wins.",
+    "superseded_product_pr": 665,
+    "superseded_reason": "Closed without merge when PR #660 landed the canonical provider-resolution layer during this same macro-cycle."
+  },
+  "product_delta": [
+    "clayenv/symbol_resolver_candidate.py",
+    "tests/test_clayenv_symbol_resolver_candidate.py",
+    ".github/workflows/clayenv-symbol-resolution-candidate.yml",
+    ".github/workflows/clayenv-package-resolver.yml composed on candidate branch"
+  ],
+  "tests": {
+    "target": "self-hosted Linux/X64 exact PR head",
+    "workflow_run": 31923321291,
+    "workflow_name": "ClayEnv deterministic package resolver",
+    "head_sha": "d13c62ed96c4a8163594be92ec11276dc0eff000",
+    "state_at_receipt": "QUEUED",
+    "runner_assignment_at_receipt": "NONE",
+    "semantic_execution_result": "UNKNOWN_NOT_EXECUTED",
+    "pass_claim": false
+  },
+  "grf_collapse": [
+    "Provider order may select wildcard symbol owner: REJECT as acceptable semantics.",
+    "Import-time fail-closed wildcard collisions: RETAIN as candidate, not verified language law.",
+    "Use-site-aware ambiguity: RETAIN as strongest countercandidate.",
+    "Component candidate or queued CI => Clay Machine PASS: REJECT."
+  ],
+  "next_falsifier": "After exact-head CI executes, compare import-time wildcard rejection against a use-site-aware ambiguity model on actual canonical ClayCode import/name usage; only then select one name contract and integrate provenance-bound imported references into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM while preserving the #648 executable-use fence until end-to-end closure.",
+  "non_claims": [
+    "No canonical wildcard/export semantics selected.",
+    "No call ownership or linker semantics selected.",
+    "No executable import path admitted.",
+    "No Linux/effect authority widened.",
+    "No whole Clay Machine acceptance.",
+    "No Together usage.",
+    "No final/model training."
+  ]
+}

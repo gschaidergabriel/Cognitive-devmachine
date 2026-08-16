@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "scope": "sandbox reference prototype plus exact current product-source inspection; NOT product code and NOT Clay Machine PASS",
+  "product_head_observed": "4249f30a92133b226347f82ed61809595cdb80e9",
+  "grf": {
+    "observed_reality": [
+      "Current claymachine/clayvm.py permits text constants/results but VM activation args and ClayHost hostcall args are still list[int].",
+      "Current HostProcessVMHost bridges one Int request_id to a pre-admitted VMProcessRequest argv tuple[str,...], so canonical Clay String/argv values do not yet cross the VM hostcall boundary.",
+      "Current CM-TERM gate explicitly reports source text host intrinsic typing and Clay-visible streaming I/O as OPEN."
+    ],
+    "generated_hypothesis": "A small canonical Clay runtime value lane admitting Int/Bool/String/Bytes can preserve current Int behavior while making argv byte-faithful and fail-closed at the hostcall boundary.",
+    "counter_reality": "The current integer-handle bridge may be sufficient and adding first-class String/Bytes values could expand verifier/object/lifetime complexity without enough benefit.",
+    "falsifier": "Prototype canonical value normalization and one argv effect boundary, then test ordinary argv and one adversarially mixed Unicode/empty/large argv specimen plus a wrong-type fence.",
+    "outcome": "RETAIN as implementation candidate only; product integration remains unverified"
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "UNICODE_EMPTY_8K_ARGV_ROUNDTRIP",
+    "environment": {
+      "python": "3.13.5",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+    },
+    "input_shape": ["Unicode UTF-8 argument", "empty argument", "8192-byte ASCII argument"],
+    "unicode_argument": "Grüße-កម្ពុជា",
+    "encoded_lengths": [29, 0, 8192],
+    "roundtrip_exact": true,
+    "receipt_sha256": "e3ebaad953cb60915ea1ec51838e84f4604223d45e69fff3c86520fb89105439",
+    "rollback": "prototype-only; no product mutation",
+    "result": "Canonicalized String argv bytes round-tripped exactly in the sandbox prototype."
+  },
+  "ordinary_controls": {
+    "baseline_ascii_argv": {
+      "argv": ["alpha", "beta"],
+      "encoded_lengths": [5, 4],
+      "roundtrip_exact": true,
+      "receipt_sha256": "4163834372780d81f2af66f279e9f9561be95535729c56c283fe298aee15582e"
+    },
+    "wrong_type_fence": {
+      "input": ["ok", 7],
+      "result": "TypeError: ARGV_REQUIRES_STRING",
+      "fail_closed": true
+    }
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "affected_workstreams": ["CM-05-VIRTUAL-CLAY-MACHINE", "CM-08-LINUX-INTEROP", "CM-TERM", "CM-DATA"],
+    "candidate": "Replace the process-only Int request-id semantic escape hatch with a canonical typed value crossing that admits String argv and later provenance-bound Bytes, while preserving capability/effect admission and deterministic receipts.",
+    "strongest_counterhypothesis": "Retain integer handles as the VM ABI and move all String/Bytes ownership into a separate canonical object table; compare verifier complexity, provenance fidelity and lifecycle safety before selecting either design.",
+    "non_claims": [
+      "No product repository code changed.",
+      "No exact ClayVM product test was executed in this session because a private repository checkout could not be materialized into the local sandbox.",
+      "No canonical Clay Bytes/Buffer ownership or lifetime contract was selected.",
+      "No EntityOS artifact was built, updated or verified.",
+      "No whole CM-TERM or Clay Machine acceptance is claimed."
+    ],
+    "next_discriminator": "On a source-admitted isolated sandbox, patch the canonical checker/ExecutableTypedIR/ClayVM/ClayHost boundary so one process intrinsic accepts String argv directly, then run the existing CM-TERM gate plus this exact Unicode+empty+8KiB argv roundtrip and capability-denial controls. Compare against the existing integer-handle bridge before promotion."
+  }
+}

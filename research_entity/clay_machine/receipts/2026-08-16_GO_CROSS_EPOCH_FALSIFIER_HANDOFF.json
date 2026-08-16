@@ -1,16 +1,26 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "stage": "CLAY_MACHINE",
   "trigger": "go",
   "date": "2026-08-16",
   "endpoint": "EntityOS",
   "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
-  "research_head_before_write": "4201371163286b553fa56efedde2faa83c4cb4ed",
+  "research_head_before_original_write": "4201371163286b553fa56efedde2faa83c4cb4ed",
   "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "accounting_reconciliation": {
+    "authoritative_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_UNUSUAL_EXPERIMENT_ACCOUNTING_RECONCILIATION.json",
+    "authoritative_research_commit_observed": "46577d1cabd77741a9fc24b8ac3b64f854b8a91a",
+    "global_go_unusual_experiment_count": 1,
+    "required_count": 1,
+    "state": "CONSUMED_1_OF_1",
+    "no_second_unusual_experiment_allowed_this_macrocycle": true,
+    "correction": "The original handoff was written before the concurrent research reconciliation became visible and incorrectly recorded the global unusual-experiment slot as unconsumed. That field is superseded here; the product/non-executable observations remain valid."
+  },
   "preferred_fusion": {
     "pr": 781,
-    "head_observed": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "head_observed_originally": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "head_observed_after_reconciliation": "843703b949ac0fb2d44eeda69f2adb708cffcc38",
     "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
     "status": "PREFERRED_UNPROMOTED_PENDING_VERCEL_SANDBOX"
   },
@@ -22,24 +32,22 @@
     "canonical_promotion_lane": "PR781_ONLY",
     "pr781_review_handoff_id": 4946696986
   },
-  "new_candidate_falsifier": {
+  "deferred_candidate_falsifier": {
     "name": "CONTROLLED_SHARED_BUFFER_TRANSACTION_MIDPOINT_COPY",
     "target_claim": "An owned copy of borrowed mutable storage alone guarantees producer-epoch consistency.",
     "mechanism": "Shared mmap begins entirely at epoch A. Producer writes only the first half to epoch B and pauses at an explicit transaction midpoint. A naive owned copy at that point is B|A, a stable value corresponding to neither complete producer epoch. Producer then completes epoch B.",
     "predicted_discriminator": "CROSS_EPOCH_COPY_OBSERVED",
     "entityos_contract": "CM-DATA Bytes/Buffer ownership, lease, epoch and stability semantics",
-    "execution_surface_required": "ACTUALLY_STARTED_ISOLATED_VERCEL_SANDBOX",
-    "executed": false,
-    "authorized_go_unusual_experiment_count_consumed": 0,
-    "reason_not_executed": "Exact candidate Vercel previews are currently rejected by provider build-rate limit before build/Sandbox creation.",
-    "local_or_vps_substitute_allowed": false
+    "executed_in_this_macrocycle": false,
+    "counted_in_this_macrocycle": false,
+    "defer_reason": "The global GO unusual-experiment slot is already consumed 1/1 by SHARED_EXPORTER_TORN_TOBYTES_SNAPSHOT. Executing this candidate now would violate experiment accounting.",
+    "eligible_future_use": "Only in a later user-triggered macrocycle if still non-duplicate and high-information after refreshing current research/product state."
   },
   "observed_execution_block": {
     "parallel_internal_batch5_head": "67586cd21e1970e65437eaada02943b1282104cc",
     "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
     "vercel_description": "Deployment rate limited — retry in 24 hours.",
     "sandbox_started": false,
-    "experiment_executed": false,
     "entityos_artifact_built": false
   },
   "current_capability_frontier": {
@@ -50,14 +58,14 @@
     "CM_VIS": "OPEN",
     "CM_AUDIO": "OPEN"
   },
-  "next_exact_executable_step": "When Vercel capacity permits, refresh PR781 exact head and product main; run one coordinated exact-head Vercel Sandbox batch. Preserve PR781 SourceStage v5/raw-tree provenance, pinned Sandbox SDK, atomic owner claim, Bytes/mixed-V2 regressions, two pristine byte-identical EntityOS freezes and full runtime/pathless/state/capability/relocation matrix. If this macro-cycle's one unusual intervention is still unconsumed and the candidate remains relevant, execute CONTROLLED_SHARED_BUFFER_TRANSACTION_MIDPOINT_COPY exactly once inside that admitted Sandbox and record its result; never count a merely staged or local substitute.",
+  "next_exact_executable_step": "When Vercel capacity permits, refresh PR781 exact head and product main and run PR781's coordinated exact-head Vercel Sandbox regression/acceptance batch only: SourceStage v5 raw-tree identity, pinned Sandbox SDK, atomic owner claim, exact reconstructed Git HEAD/tree/clean/no-remotes, Bytes/released/mixed-V2 plus current CM-07/dirfd/build-provenance/source-single-VM gates, two pristine one-file EntityOS freezes with identical SHA256 and cmp byte identity, runtime/self-test/pathless/state/capability/relocation gates, DENY_ALL and successful Sandbox stop. Do not add a second unusual experiment in this macrocycle.",
   "hard_non_claims": [
-    "No authorized unusual experiment executed in this GO",
-    "No exact-head Vercel Sandbox started for the preferred candidate",
-    "No fresh one-file EntityOS artifact built",
-    "No Bytes executable PASS/FAIL established",
-    "No whole EntityOS or Clay Machine PASS",
-    "No VPS/self-hosted/production-host test evidence used"
+    "The deferred midpoint falsifier was not executed and does not count in this GO.",
+    "No exact-head Vercel Sandbox started for the preferred candidate.",
+    "No fresh one-file EntityOS artifact built.",
+    "No exact-head Bytes executable PASS/FAIL established.",
+    "No whole EntityOS or Clay Machine PASS.",
+    "No VPS/self-hosted/production-host test evidence used."
   ],
   "together_api_used": false
 }

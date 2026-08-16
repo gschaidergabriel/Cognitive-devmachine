@@ -1,0 +1,42 @@
+{
+  "schema": "ClayGoResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed": [
+    "PR #660 is merged and established ClayPackageResolution/v1 exact module-provider resolution with prior exact-head self-hosted evidence.",
+    "Authorized corpus evidence in the current workspace shows plain `use frank.entity.Frank` while the provider source declares `module frank.entity` and top-level `entity Frank`; therefore plain-use syntax cannot be universally promoted to exact-module identity.",
+    "Draft PR #674 narrows the candidate contract to ClayPackageResolution/v2 with WILDCARD_MODULE_PROVIDER_ONLY and PLAIN_USE_NAME_BINDING_UNSELECTED, while keeping executable uses fail-closed.",
+    "PR #674 exact candidate head observed as 07f0bf7bc19e398f4820cd346a58190f98e596c6.",
+    "GitHub Actions run 31923593584 / job 95107444133 concluded failure with runner_id=0 and steps=[], so no candidate checkout or test step executed. This is runner-dispatch/infrastructure evidence, not a code falsifier and not PASS."
+  ],
+  "hypothesis": "CM-07 should preserve explicit wildcard module-provider resolution while plain-use name binding remains fail-closed until an explicit ownership/visibility contract is selected from corpus-backed semantics.",
+  "counterhypothesis": "Some plain uses may legitimately denote exact modules or other namespace forms; therefore the current corpus counterexample falsifies only the universal exact-module rule, not every possible exact-module plain-use case.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "TRIPLE_IDENTICAL_IMPORT_MULTIPLICITY",
+    "bounded": true,
+    "reversible": true,
+    "external_effect": false,
+    "method": "Static mechanism differential over active resolver candidate patches using the multiset `use dep.util`, `use dep.extra`, `use dep.util` across its three distinct orderings.",
+    "result": "The #659 candidate carried duplicate identical imports into resolved edges, whereas the #669 candidate rejected each ordering fail-closed as DUPLICATE_USE_DECLARATION. This supports duplicate-import rejection as the safer collision boundary; it does not promote either superseded candidate to canonical execution."
+  },
+  "durable_coordination": [
+    "Product PR #669 comment 5305439862 recorded the resolver-candidate convergence and unusual-experiment result.",
+    "Product PR #682 comment 5305653703 recorded legacy WP04 explicit-symbol/ambiguity counterevidence against silently freezing leaf-module namespace semantics.",
+    "Product PR #674 comment 5305469596 recorded that ephemeral run 31923593584 instantiated no runner/steps and therefore supplies no code execution evidence."
+  ],
+  "outcome": "RETAIN_FAIL_CLOSED_CORRECTION_BLOCK_PROMOTION",
+  "promotion_state": "BLOCKED_NOT_PASS",
+  "next_falsifier": "Obtain actually instantiated isolated or explicitly admitted exact-head execution for PR #674, then select the smallest corpus-backed plain-use and wildcard symbol ownership/visibility/collision contract and feed it into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM path without relaxing PR #648 prematurely.",
+  "safety": {
+    "together_api": "NOT_USED_FORBIDDEN",
+    "final_paid_training": "NOT_AUTHORIZED_NOT_STARTED",
+    "effect_authority_widened": false,
+    "whole_clay_machine_pass_claimed": false
+  }
+}

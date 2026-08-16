@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "organ": "ChatGPT temporary Clay research/build/test worker",
+  "date": "2026-08-16",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "observed_research_main_before_write": "bab8898815a9de2dd1c3963101f5ba9082ecbb90",
+  "observed_product_main": "950544e33ea179557cf3e54fc970a4a3954fe9cd",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "candidate_branch": "chatgpt/go-clayvm-typed-value-contract-v1-20260816-1131",
+  "candidate_branch_head_observed": "82c1dab22a6d1566f32b651831e3789259311a6c",
+  "candidate_pr": 708,
+  "candidate_pr_state": "CLOSED_UNMERGED",
+  "grf": {
+    "observed_anchors": [
+      "The detached ClayVMTypedValueContract/v1 research candidate snapshots admitted mutable bytearray input by converting it to bytes and then binds a SHA-256 digest to the immutable snapshot.",
+      "The prior candidate admitted subclasses through isinstance(value, (bytes, bytearray)); Python special-method semantics allow bytes(obj) to invoke type(obj).__bytes__ when provided.",
+      "Current EntityOS whole-machine sandbox evidence remains unavailable because exact-current-main run 31938018528 retry job 95143236160 completed failure with steps=null; this is runner/infrastructure no-start evidence, not code evidence."
+    ],
+    "generated_reality": "A bytearray subclass can be admitted as if it were ordinary mutable byte storage while overriding __bytes__ to return data unrelated to its physical bytearray contents; the resulting OwnedBytes digest then authenticates the substituted representation rather than the underlying admitted source bytes.",
+    "counter_reality": "bytes(value) necessarily copies the underlying bytearray storage even for subclasses, so subclass admission cannot spoof the snapshot.",
+    "falsifier": "Create a bytearray subclass whose underlying storage is b'PHYSICAL' but whose __bytes__ returns b'FORGED'; pass it through the old OwnedBytes.snapshot path and compare physical storage, stored snapshot and digest verification.",
+    "predicted_if_generated_reality": "snapshot.data is b'FORGED' and digest verification succeeds over b'FORGED' despite underlying bytearray storage remaining b'PHYSICAL'.",
+    "predicted_if_counter_reality": "snapshot.data remains b'PHYSICAL' or admission fails.",
+    "collapse": "Generated reality supported; prior candidate form refuted for provenance-stable source admission."
+  },
+  "unusual_experiment": {
+    "name": "BYTEARRAY_SUBCLASS_BYTES_OVERRIDE_SNAPSHOT_SPOOF",
+    "new_unusual_experiment_count": 1,
+    "execution_boundary": "ISOLATED_CHATGPT_CONTAINER",
+    "bounded": true,
+    "baseline": "ordinary built-in bytearray snapshot copies current storage into immutable bytes and remains unchanged after later source mutation",
+    "intervention": "bytearray subclass underlying b'PHYSICAL' overrides __bytes__ to return b'FORGED'",
+    "observed": {
+      "underlying_storage": "PHYSICAL",
+      "snapshot_data": "FORGED",
+      "snapshot_digest_verified": true
+    },
+    "result": "REFUTED_ISINSTANCE_BASED_BYTEARRAY_SOURCE_ADMISSION",
+    "rollback": "in-memory objects only; no external or persistent effect"
+  },
+  "candidate_fix": {
+    "mechanism": "At the Python reference boundary admit only exact built-in bytes, bytearray or byte-oriented memoryview using type(value) is ...; reject subclasses/unknown exporters before snapshot. Keep the resulting OwnedBytes payload exact built-in immutable bytes and reverify its digest at admission.",
+    "local_regression": "PASS_CLAYVM_TYPED_VALUE_CONTRACT 13/13; bytearray subclass now fails with BYTES_SOURCE_REQUIRED",
+    "candidate_files": [
+      "claymachine/typed_value_contract_candidate.py",
+      "tests/clayvm_typed_value_contract_candidate_gate.py"
+    ],
+    "production_clayvm_widened": false,
+    "whole_machine_acceptance": false,
+    "promotion_state": "RESEARCH_CANDIDATE_ONLY"
+  },
+  "primary_external_evidence": [
+    {
+      "source": "Python 3.14 data model documentation",
+      "fact": "object.__bytes__ is called by bytes to compute an object's byte-string representation.",
+      "role": "mechanism corroboration; local experiment is the direct evidence"
+    },
+    {
+      "source": "Python 3.14 built-in functions documentation",
+      "fact": "bytes returns an immutable bytes object; constructor interpretation follows the documented bytes/bytearray conversion rules.",
+      "role": "reference semantics"
+    }
+  ],
+  "counterevidence_and_limits": [
+    "The defect is in the detached research candidate's Python reference admission boundary; it is not evidence that current production ClayVM or EntityOS already has this exact vulnerability because Bytes is not yet a canonical production VM value path.",
+    "Exact built-in type admission is a conservative reference-substrate fence, not yet the final Clay Bytes/Buffer ownership/lifetime contract.",
+    "The current shared frontier still requires canonical String/Bytes/argv/effect semantics through checker -> ClayExecutableTypedIR/v1 -> single ClayVM -> Linux process boundary.",
+    "No actually-started current isolated PyInstaller-capable sandbox has rebuilt and executed exact-current EntityOS, so product promotion remains blocked."
+  ],
+  "outcome": "PROMOTE_TEST_OBLIGATION_RETAIN_FIXED_CANDIDATE_UNMERGED",
+  "entityos_artifact": "BLOCKED",
+  "artifact_blocker": "Exact-current product head 950544e33ea179557cf3e54fc970a4a3954fe9cd still lacks an actually-started isolated one-file EntityOS build/run. Retry job 95143236160 for run 31938018528 completed failure with steps=null; the active local container lacks the complete private repo/PyInstaller build path.",
+  "next_executable_step": "Restore an actually-starting isolated PyInstaller-capable sandbox; rebuild and execute exact-current one-file EntityOS and current security/grant gates. Separately carry the proven exact-source Bytes admission invariant plus strict String/Bytes separation into the smallest canonical checker -> ClayExecutableTypedIR/v1 -> single ClayVM process-effect slice, then rerun those regressions against the exact produced EntityOS file before promotion.",
+  "paid_training_authorized": false,
+  "whole_machine_acceptance": false
+}

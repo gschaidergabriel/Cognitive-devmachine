@@ -1,0 +1,76 @@
+{
+  "schema": "ClayResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "research_base_before_write": "1ca531b82e6d8c4832b3c39035cefd112ead39a2",
+  "product_main": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "active_product_candidate": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "state": "OPEN_DRAFT_PREFERRED_SINGLE_BATCH4_LANE",
+    "mergeable_observed": true,
+    "ahead_of_product_main": 16,
+    "behind_product_main": 0
+  },
+  "fusion": {
+    "bytes_semantics": "CLAYVM/2 typed Int/Bytes identity; immutable built-in bytes only; mutable bytearray and living memoryview fail closed pending explicit Buffer lease/epoch/stability; released view maps to BYTES_VIEW_RELEASED",
+    "mixed_v2_gate": true,
+    "string_argv_fusion_deferred_until_bytes_sandbox_green": true,
+    "source_stage": "ClayGoSourceStage/v5",
+    "source_materialization": "GIT_LS_TREE_PLUS_CAT_FILE_RAW_BLOBS",
+    "git_archive_source_authority": false,
+    "sandbox_sdk_pin": "@vercel/sandbox@2.9.2",
+    "atomic_single_owner_claim": true,
+    "network_offline_matrix": "DENY_ALL",
+    "entityos_twin_freeze_required": true,
+    "entityos_twin_sha256_and_cmp_identity_required": true,
+    "reusable_http_execution_endpoint": false
+  },
+  "coordination": {
+    "single_active_batch4_lane": 781,
+    "superseded_duplicate_prs_closed": [780, 782, 783],
+    "authorized_go_unusual_experiment_count": 0,
+    "local_container_discriminators_count_as_authorized_experiment": false,
+    "reason_unusual_experiment_not_executed": "Vercel provider rejects the exact candidate before build/Sandbox creation; current coordination forbids substituting local/container execution."
+  },
+  "vercel_observation": {
+    "exact_head": "7f3cac7e70f693199bd89cd9eec5a937694341c1",
+    "status_context": "Vercel",
+    "status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "status_timestamp_utc": "2026-08-16T16:57:16Z",
+    "deployment_created_for_exact_head": false,
+    "sandbox_started_for_exact_head": false,
+    "entityos_artifact_built_for_exact_head": false,
+    "bytes_semantic_pass_fail_observed_for_exact_head": false,
+    "twin_freeze_digest_observed": false,
+    "authorized_unusual_experiment_observed": false
+  },
+  "adversarial_review": {
+    "product_diff_expected_files_only": true,
+    "product_diff_changed_file_count": 9,
+    "stale_or_duplicate_canonical_lane_removed": true,
+    "negative_evidence_preserved": [
+      "Earlier Vercel lineage build failed before Sandbox start with VERCEL_GIT_SOURCE_TREE_DIRTY.",
+      "Current exact preferred head is provider rate-limited before Sandbox creation.",
+      "No local/static evidence is promoted to executable EntityOS truth."
+    ]
+  },
+  "next_exact_executable_step": "When Vercel build capacity permits, execute the then-current exact PR #781 head through the build-internal preview lane. Require Stage-v5 raw-tree identity, pinned SDK, atomic single-owner Sandbox start, exact Git HEAD/tree/clean/no-remotes, Bytes/released/mixed-V2 plus CM-07/dirfd/build-provenance/source-single-VM gates, two pristine one-file EntityOS freezes with identical SHA-256 and cmp byte identity, runtime/self-test/pathless/state/capability/relocation gates, DENY_ALL offline execution, exact artifact digest, and successful Sandbox stop. Only an admitted isolated Sandbox may execute/count the macrocycle's single bounded unusual intervention.",
+  "grf_outcome": "PROMOTE_FUSION_STRUCTURE_NOT_EXECUTABLE_CLAIM; BLOCKED_ON_EXACT_VERCEL_SANDBOX",
+  "hard_non_claims": [
+    "No exact-head Vercel Sandbox started",
+    "No exact-head EntityOS artifact exists",
+    "No exact-head Bytes PASS or FAIL observed",
+    "No authorized unusual experiment executed in this macrocycle",
+    "No whole EntityOS or Clay Machine PASS",
+    "No VPS/self-hosted/production-host test evidence used"
+  ],
+  "together_api_used": false,
+  "final_paid_model_training_started": false
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "observed_research_head_before_write": "21fb991e9025f3da6c1a580adeb75fa8758e20bb",
+  "product_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+  "product_head_message": "fix(entityos): probe X11 reachability before GUI boot",
+  "grf_decision_trace": {
+    "observed_reality": [
+      "The active product boundary is one executable file named EntityOS.",
+      "Current product main b32ec5a5f577099f90d74a038b5e3aee4db0c43e changes graphical availability probing so a configured DISPLAY is insufficient unless the X11/XWayland endpoint can actually be opened.",
+      "The exact-head canonical one-file workflow completed successfully on the self-hosted Linux X64 lane.",
+      "The emitted EntityOS receipt explicitly keeps whole-machine acceptance false."
+    ],
+    "generated_hypothesis": "The exact current product head can be reproducibly frozen as one executable EntityOS and retain the admitted ClayCode->TypedIR->ClayVM->ClayOS path plus bounded Linux interop and initial-grant semantics outside the source tree.",
+    "counter_reality": "The source tree may pass while the frozen artifact fails after extraction, relocation, capability gating, initial-grant persistence, or independent execution.",
+    "discriminating_observation": "Require exact-head double-freeze identity, execute the frozen artifact gates, run exactly one relocated Unicode-TMPDIR/foreign-CWD perturbation, then download the produced artifact and independently execute status/self-test/Clay build+run/process capability checks.",
+    "outcome": "RETAIN as verified component/runtime evidence; DO_NOT_PROMOTE whole Clay Machine acceptance."
+  },
+  "exact_head_workflow": {
+    "run_id": 31929651652,
+    "job_id": 95122460806,
+    "name": "EntityOS Canonical One-File VPS",
+    "result": "success",
+    "runner_scope": "self-hosted Linux X64",
+    "tested_sha": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "source_pipeline_regression_rc": 0,
+    "double_freeze_sha256_match": true,
+    "initial_grant_first_launch": "FAIL_CLOSED_WITHOUT_GRANT",
+    "initial_grant_acceptance": "PERSISTED_ONCE",
+    "initial_grant_second_launch": "REUSED_WITHOUT_PROMPT",
+    "linux_process_without_grant": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "whole_entityos_completion": false
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "count": 1,
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT",
+    "rollback": "TEMP_PATH_REMOVED",
+    "note": "No second unusual perturbation was run in this go cycle."
+  },
+  "artifact": {
+    "workflow_artifact_id": 9258908699,
+    "workflow_artifact_name": "entityos-canonical-onefile-31929651652",
+    "entityos_sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "mode": "0755",
+    "format": "ELF 64-bit LSB executable, x86-64, GNU/Linux",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "visual_data_source": "UnifiedDB",
+    "whole_machine_acceptance": false
+  },
+  "independent_downloaded_artifact_verification": {
+    "environment": "current ChatGPT Linux container; independent of GitHub Actions runner",
+    "status_command": "PASS",
+    "self_test": "SELFTEST_PASS",
+    "clay_build": "BUILT",
+    "clay_run_result": 42,
+    "process_without_grant_rc": 1,
+    "process_without_grant_error": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "process_with_explicit_grant": "ENTITYOS_LOCAL_OK",
+    "downloaded_sha256_matches_workflow": true
+  },
+  "architecture_delta": {
+    "state": "VERIFIED_COMPONENT_EVIDENCE",
+    "affected_workstreams": [
+      "CM-04-COMPILER-LOWERING-BYTECODE",
+      "CM-05-VIRTUAL-CLAY-MACHINE",
+      "CM-08-LINUX-INTEROP",
+      "CM-09-MINIMAL-CLAYOS",
+      "CM-10-TOOLING-OBSERVABILITY-RECOVERY"
+    ],
+    "supported_claim": "Current product head b32ec5a5 can be delivered and independently executed as one frozen EntityOS file while preserving the currently admitted canonical compiler/VM/ClayOS path, fail-closed process capability gate, deterministic test grant persistence, and UnifiedDB-backed inspection surface.",
+    "counterevidence_and_non_claims": [
+      "The artifact reports whole_machine_acceptance=false and the workflow binds whole_entityos_completion=false.",
+      "This does not close canonical Clay Bytes/Buffer ownership/lifetime semantics, String/argv/effectful TypedIR, network/media paths, persistent ClayOS services/recovery, self-hosting, or full accepted-host release gates.",
+      "The deterministic test-only initial-grant acceptance is not evidence of a physical final-product user click on the accepted host.",
+      "X11 host reachability is a host boundary observation and does not mint ClayCode semantic authority."
+    ],
+    "next_discriminator": "Select and execute the smallest canonical Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface required by CM-DATA and CM-TERM, wire it through checker/effectful TypedIR into the existing single VM and merged process component, then rebuild and rerun this exact one-file EntityOS lane without weakening the current reproducibility, grant, capability, provenance, UnifiedDB, or unusual-experiment controls."
+  }
+}

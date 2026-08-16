@@ -9,8 +9,8 @@
   "work_packages": {
     "CM-01-LANGUAGE-SPEC-PARSER-IR": {
       "status": "IN_PROGRESS",
-      "evidence": "40 authorized sources; 36 parsed; syntax-only call ownership partition merged in PR #598.",
-      "blocker": "Parser corpus remains incomplete and unresolved call/member ownership semantics remain open."
+      "evidence": "40 authorized sources; 36 parsed; syntax-only call ownership partition merged in PR #598. Draft PR #635 preserves plain versus wildcard use intent in the canonical grammar/AST while retaining legacy Module.uses; final exact-head self-hosted use-decl fidelity run 31921439509 and existing opaque/plain parser fidelity run 31921439331 passed on head 3e965a328e82168923feb8857363938d7ad13ca9.",
+      "blocker": "Parser corpus remains incomplete and unresolved call/member ownership semantics remain open; import intent is now preserved as a candidate but canonical package/name resolution is not yet selected or merged."
     },
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
@@ -38,8 +38,8 @@
     },
     "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #626 merged minimal clayenv. Exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. ClayEnvManifest/v1 deterministically binds artifact/source/grammar/executable-IR identities and run launches only through strict ClayOS.",
-      "blocker": "No canonical module/package system or meaningful stdlib/SDK yet; current environment is a minimal host-side build/run bootstrap."
+      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. ClayEnvManifest/v1 deterministically binds artifact/source/grammar/executable-IR identities and run launches only through strict ClayOS. Merged PR #648 now rejects every use declaration fail-closed until canonical resolution exists. Draft PR #653 has exact-head self-hosted PASS run 31921054505 for a deterministic package identity/index while explicitly leaving import semantics RECORDED_NOT_RESOLVED. Draft PR #635 has final-head PASS runs 31921439509 (canonical use-decl fidelity), 31921439331 (opaque/plain parser fidelity), 31921439318 (frontier integration) and 31921439348 (package import/namespace-shadow differential) at 3e965a328e82168923feb8857363938d7ad13ca9.",
+      "blocker": "Package identity and lossless import-mode intent are supported candidates but not yet promoted into one canonical resolver. Define deterministic provider/package/name resolution with explicit ambiguity/collision failure, then retain PR #648 fail-closed use execution until exact-head resolver plus ClayEnv integration evidence is green; meaningful stdlib/SDK remains open."
     },
     "CM-08-LINUX-INTEROP": {
       "status": "OPEN",
@@ -62,7 +62,7 @@
     }
   },
   "frontier": {
-    "repository_head_observed": "6a8ef1950e03e1b29b7b98c27e1f9cee6eb146e2",
+    "repository_head_observed": "20100a0f8f526aac82ec7816b6bf3f4a6008ae1b",
     "latest_clay_machine_semantic_merge": "60612d0ffc5798879bce7045f5b3d22093698e2d",
     "typeref_repair_merge": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
     "canonical_executable_ir_merge": "1bf95a2bf6912c7d40585a70d4a65221cf8fcd19",
@@ -74,9 +74,12 @@
     "minimal_clayenv_merge": "60612d0ffc5798879bce7045f5b3d22093698e2d",
     "minimal_clayenv_tested_head": "6cd811ed767c0dc8f90d43382c9783430263e7fc",
     "minimal_clayenv_run": 31911536923,
-    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED",
+    "canonical_import_mode_candidate_pr": 635,
+    "canonical_import_mode_candidate_head": "3e965a328e82168923feb8857363938d7ad13ca9",
+    "canonical_package_identity_candidate_pr": 653,
+    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_AND_IMPORT_MODE_SUPPORTED_CANDIDATES_NOT_YET_RESOLVED",
     "release": "NOT_PASSED",
-    "next_discriminator": "CM-02 bounded implementation target is product issue #640: integrate per-call immutable alias structural sharing + DAG-aware _same and reproduce cycle/sibling/resource controls on exact PR-head self-hosted Linux/X64. In parallel, expand canonical already-admitted semantics through executable-IR/single-VM and establish canonical modules/stdlib packaging in ClayEnv; then define typed Linux effects and persistent/recoverable ClayOS services."
+    "next_discriminator": "CM-07: fuse canonical package identity plus lossless use_decls into one deterministic provider/package/import resolver with explicit ambiguity and namespace-collision failure, feeding the existing nominal checker -> Executable TypedIR -> single ClayVM path while PR #648 continues to reject use execution until exact-head ClayEnv integration passes. CM-02 issue #640 alias-DAG structural sharing remains a parallel high-value blocker."
   },
   "progress": {
     "work_packages_total": 11,
@@ -92,7 +95,8 @@
     "research_entity/clay_machine/receipts/2026-08-16_GO_STRICT_CLAYOS_ARTIFACT_LAUNCH.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CLAYOS_LOWLEVEL_IMPORT_INTERNALIZATION.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_MINIMAL_CLAYENV_BUILD_RUN.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_ALIAS_DAG_MATERIALIZATION.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_ALIAS_DAG_MATERIALIZATION.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CANONICAL_IMPORT_MODE_EXACT_RUNTIME_DELTA.json"
   ],
   "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. CAS/lease discipline remains required. This macrocycle also exposed a CI provenance pitfall: github.sha on pull_request is the merge ref unless workflows explicitly checkout and assert github.event.pull_request.head.sha.",
   "laws": [

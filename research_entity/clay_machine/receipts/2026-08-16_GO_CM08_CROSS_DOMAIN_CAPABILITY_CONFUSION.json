@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_CM08_CROSS_DOMAIN_CAPABILITY_CONFUSION",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "affected_frontier": ["CM-08-LINUX-INTEROP", "CM-NET", "CM-TERM"],
+  "state": "SUPPORTED_RESEARCH_CONSTRAINT",
+  "observed_anchor": "Current CM-08 is OPEN: typed filesystem/process/network/device/FFI effects with receipts, byte-stream values and fail-closed authority are not accepted. The fixed I/O plan requires transport and semantic interpretation to remain distinct.",
+  "hypothesis": "A small typed host-effect envelope can share authorization/fencing machinery across capability domains if semantic domains remain explicit and are checked fail-closed.",
+  "counterhypothesis": "A shared envelope flattens domain semantics and becomes a confused-deputy boundary that permits a capability from one host-effect domain to authorize another.",
+  "unusual_experiment_count": 1,
+  "unusual_experiment": {
+    "name": "cross-capability confusion substitution",
+    "scope": "bounded local prototype only; no product or repository runtime mutation",
+    "baseline": "PROCESS EffectRequest generation 7 authorized by PROCESS Capability generation 7",
+    "intervention": "substitute NETWORK Capability generation 7 for the same PROCESS request",
+    "rollback": "ephemeral process exit; no persistent state",
+    "expected_if_hypothesis": "baseline ALLOW; cross-domain substitute DENY",
+    "expected_if_counterhypothesis": "cross-domain substitute can ALLOW or domain identity is not enforced",
+    "runtime": "Python 3.13.5 isolated container process",
+    "result": {
+      "baseline": true,
+      "cross_domain_mutant": false,
+      "assertions": "PASS"
+    }
+  },
+  "interpretation": "Explicit capability-domain equality plus execution-generation equality is sufficient to reject the tested cross-domain substitution in the local reference prototype. This is necessary-style evidence for a shared envelope, not sufficient evidence for production authority, receipts, backend binding, artifact binding, byte-stream semantics, or CM-08 acceptance.",
+  "counterevidence_preserved": "The experiment does not test same-domain capability confusion, stale-but-equal metadata, forged identifiers, request/receipt replay, backend substitution, TOCTOU, real Linux effects, or product integration.",
+  "canonical_frontier_reentry": "Do not displace the newer canonical highest-value discriminator. Current workspace selects the smallest canonical Clay Bytes/Buffer ownership+lifetime contract for CM-DATA/CM-VIS/CM-AUDIO, then one provenance-bound opaque-byte ingress through typed/effect IR and the single VM.",
+  "next_falsifier": "When the Bytes/Buffer contract is selected, bind any host-effect request to explicit domain, execution generation, provenance-bearing byte/buffer identity and durable receipt fields; then test stale/foreign bindings in the real admitted VM path.",
+  "product_code_changed": false,
+  "whole_machine_acceptance": false
+}

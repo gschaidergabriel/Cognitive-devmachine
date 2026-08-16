@@ -12,6 +12,25 @@ Workers MAY intelligently use all tools and execution capabilities available thr
 
 This authorization applies globally to all current and future workers unless a newer owner directive supersedes it.
 
+## Empirical source-of-truth law
+
+**Vercel Sandbox is the empirical source of truth for executable EntityOS behavior.**
+
+This applies to claims about builds, tests, runtime behavior, effects, failure behavior, portability, performance measurements and the exact `EntityOS` artifact.
+
+Only an actually started isolated Vercel Sandbox with bound exact source/artifact identity and captured evidence may establish an executable PASS/FAIL claim at that scope.
+
+The authority layers are intentionally separated:
+- newest explicit owner directives are policy/product authority and define what must be built and what execution is allowed;
+- GitHub is the canonical source-code, history, coordination and durable receipt ledger and defines which bytes/revisions are being discussed;
+- Vercel Sandbox observation is the empirical authority for what those exact bytes/artifacts actually build and do when executed.
+
+A GitHub source expectation, CI/status label, receipt, model conclusion, static analysis result, Vercel deployment READY state or historical run does not override a contradictory exact-identity Vercel Sandbox observation. If a durable record says PASS but a correctly bound fresh Sandbox rerun says FAIL, the executable claim is FAIL/REGRESSED until the discrepancy is resolved.
+
+Every Sandbox result is scoped to its exact source SHA, artifact digest, environment, command/effect contract and captured run. Never generalize a PASS to a different repository head or artifact without new execution evidence.
+
+Observed Sandbox truth should be persisted back into GitHub as a bounded receipt. GitHub is the durable ledger of executable evidence; Vercel Sandbox is its empirical origin for current executable claims.
+
 ## Batch execution law
 
 Work MUST be organized into coordinated, high-information batches rather than wasteful one-test-per-sandbox execution.
@@ -31,7 +50,7 @@ Parallelism is permitted when it reduces wall-clock cost without creating duplic
 
 ## EntityOS convergence priority
 
-The objective is not generic Vercel usage. Every batch must converge toward the exact one-file product `EntityOS`.
+The objective is not generic Vercel usage. Every batch must converge toward the exact one-file product `EntityOS` — the single-file Clay Computer.
 
 When technically possible, batches should include the strongest relevant sequence among:
 - exact-head source/test gates;
@@ -80,10 +99,12 @@ A Vercel deployment being READY is not test evidence. A Sandbox capability probe
 
 Unknown/unexecuted remains UNKNOWN/BLOCKED, never PASS.
 
+When static/source reasoning and Vercel Sandbox evidence disagree about executable behavior, record the discrepancy and use the exact-identity Sandbox observation as the current executable truth while investigating the cause. Static reasoning still governs hypotheses and code review; it does not replace execution.
+
 ## Coordination law for ALL workers
 
 Before starting Vercel compute, each worker must refresh shared coordination state and avoid overlapping execution already owned by another active batch. Equivalent candidates should be fused/adjudicated, not independently promoted.
 
 All workers should prefer one coordinated multi-variant/multi-gate Vercel batch over many small redundant sandbox starts when test independence and provenance allow it.
 
-This directive is compatible with and strengthens `SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`: Vercel Sandbox is the preferred authorized isolated execution surface for current EntityOS work.
+This directive is compatible with and strengthens `SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`: Vercel Sandbox is the preferred authorized isolated execution surface and the empirical source of truth for current executable EntityOS claims.

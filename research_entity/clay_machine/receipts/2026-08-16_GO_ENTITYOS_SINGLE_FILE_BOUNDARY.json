@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_SINGLE_FILE_BOUNDARY",
+  "trigger": "go",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "tested_product_commit": "33e79fdbf85fcc61187aa8794a28d74ae8cc2b69",
+  "workflow": {
+    "name": "EntityOS single-file gate",
+    "run_id": 31926209698,
+    "runner": "self-hosted Linux X64",
+    "result": "PASS",
+    "artifact_id": 9257897114
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "bytes": 1212772,
+    "sha256": "ff65a8475f40b399f9b43d50fed0c161d31a082a07d183356566322feb89d86e",
+    "delivery_boundary": "single-executable-file",
+    "status": "VERIFIED_CANDIDATE_NOT_FINAL"
+  },
+  "baseline_checks": {
+    "bundled_lark_parser": true,
+    "claycode_to_executable_ir": true,
+    "single_clayvm_executes": true,
+    "minimal_clayos_present": true,
+    "controlled_linux_interop": true,
+    "source_provenance_present": true,
+    "vm_blob_hash_bound": true,
+    "vm_result": 42
+  },
+  "failure_chain_preserved": [
+    {
+      "run_id": 31926059181,
+      "outcome": "BLOCKED_INFRASTRUCTURE",
+      "evidence": "GitHub-hosted job never started because account billing/spending state blocked the runner; not code evidence."
+    },
+    {
+      "run_id": 31926094184,
+      "outcome": "FAIL_DEPENDENCY_CLOSURE",
+      "evidence": "EntityOS built on self-hosted Linux but self-test failed with ModuleNotFoundError: lark."
+    },
+    {
+      "run_id": 31926143241,
+      "outcome": "FAIL_ARCHIVE_RESOURCE_ACCESS",
+      "evidence": "Pinned Lark was bundled; EntityOS built but self-test failed because pathlib read_text treated the embedded .lark resource as an external filesystem path."
+    },
+    {
+      "run_id": 31926209698,
+      "outcome": "PASS_SINGLE_FILE_BOUNDARY",
+      "evidence": "Pinned parser vendored; canonical grammar bytes embedded deterministically; baseline self-test, amputated single-file test, CLI smoke, evidence binding and artifact upload all passed."
+    }
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "name": "amputated launch with zero sidecars",
+    "intervention": "Copy only EntityOS into an otherwise empty temporary directory and run its self-test.",
+    "baseline": "Same exact EntityOS self-test in exact-head checkout.",
+    "rollback": "Delete temporary directory; no persistent runtime state modified.",
+    "result": "PASS",
+    "interpretation": "The tested compiler/parser/VM/ClayOS/Linux-process smoke path no longer requires repository sidecars or host site-packages beyond the Python interpreter/host OS boundary."
+  },
+  "counterevidence": [
+    "The artifact self-identifies as CANDIDATE_NOT_FINAL.",
+    "Whole Clay Machine acceptance remains false: canonical Bytes/Buffer ownership/lifetime, String/argv/effectful TypedIR/VM process path, network, visual, audio, portability and self-hosting gates remain open.",
+    "Single-file packaging success is not proof that all included modules are semantically complete or exercised."
+  ],
+  "grf_collapse": {
+    "preferred_reality": "A zipapp-style single-file boundary can carry the current ClayCode parser/compiler path, one ClayVM, ClayEnv/ClayOS surface and controlled Linux process smoke when runtime dependency closure and archive-hostile resources are explicitly captured.",
+    "counter_reality_rejected": "Current Clay Machine source necessarily requires a multi-file runtime merely to execute the admitted smoke path.",
+    "promotion": "PROMOTE_TO_VERIFIED for the exact single-file smoke boundary only; NOT whole-machine acceptance."
+  },
+  "next_discriminator": "Advance the canonical semantic frontier rather than packaging breadth: select the smallest Clay Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface and route one provenance-bound opaque-byte/process request through canonical checker -> effectful ExecutableTypedIR -> single ClayVM -> ClayOS Linux boundary without backend-local semantics.",
+  "whole_clay_machine_completion": false,
+  "final_training_authorized": false
+}

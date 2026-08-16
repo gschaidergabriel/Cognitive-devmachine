@@ -1,0 +1,66 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "worker_provenance": "temporary Clay research/build worker via ChatGPT GPT-5.6 Sol",
+  "authority": {
+    "sandbox_only_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "research_head_before_write": "2a8c7af295be1ffb98028711f5cd8a5907572ed7",
+    "product_head_observed": "777895270357908e49a079fb2c308844c6469b83",
+    "vps_or_self_hosted_testing_used": false
+  },
+  "frontier": {
+    "active_product": "one executable file named EntityOS",
+    "relevant_workstreams": ["CM-PORT", "CM-DATA", "CM-VIS", "CM-AUDIO"],
+    "question": "Can immutable runtime resources be carried inside the one executable without a release sidecar while preserving explicit integrity failure semantics?"
+  },
+  "grf_candidate": {
+    "hypothesis": "A Linux ELF can remain directly executable with an opaque resource payload appended after the ELF image, and the runtime can recover and integrity-check that payload from /proc/self/exe without a companion file.",
+    "counterhypothesis": "Appending data will either break normal ELF execution or make integrity-bounded payload recovery unreliable enough to be unsuitable as an EntityOS packaging primitive.",
+    "falsifier": "Baseline executable, appended valid payload, and single-byte-tampered payload must produce three discriminating outcomes: missing, valid, and integrity failure."
+  },
+  "unusual_experiment": {
+    "count_for_this_go_cycle": 1,
+    "name": "ELF_APPENDED_SELF_RESOURCE_INTEGRITY_FENCE",
+    "execution_context": "isolated local sandbox /tmp",
+    "bounded": true,
+    "reversible": true,
+    "prototype": "small stripped C ELF reading /proc/self/exe; 94-byte opaque payload plus 24-byte footer; FNV-1a-64 used only as an experiment integrity discriminator, not a production cryptographic primitive",
+    "baseline": {
+      "condition": "unmodified ELF without appended payload",
+      "exit_code": 2,
+      "observation": "PAYLOAD_MISSING",
+      "sha256": "dc39f4cca2f08be79838278e457d51cb4e42f1a2861332434ed15078a027b0d1",
+      "size_bytes": 14536
+    },
+    "intervention": {
+      "condition": "same ELF plus 94-byte payload and footer",
+      "exit_code": 0,
+      "observation": "PAYLOAD_OK len=94 hash=6538ceabb08c1112 first=45 last=3f",
+      "sha256": "c4ab9f45cfc50e3b4cf2a3961e45e706595333726969bc0803a73650b84a3dbf",
+      "size_bytes": 14654
+    },
+    "counter_probe": {
+      "condition": "one byte flipped in appended payload while footer expectation remained unchanged",
+      "exit_code": 4,
+      "observation": "PAYLOAD_HASH_MISMATCH expected=6538ceabb08c1112 got=377851e6fff7cac3",
+      "sha256": "25b6896b522e76c7ab9cad0f9e82e8569000be2d62a5640ac8ddd4580258658d"
+    },
+    "outcome": "RETAIN_AS_PACKAGING_PRIMITIVE_CANDIDATE",
+    "promotion_limit": "This experiment does not prove the current Python/PyInstaller EntityOS build, runtime self-containment, cryptographic authenticity, portability, or whole-machine acceptance."
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_RESEARCH_CANDIDATE",
+    "candidate": "Allow build-time immutable Clay grammar/stdlib/manifest/media-schema resource packs to be appended inside the final ELF and accessed directly from the executable, with production-grade cryptographic digest/signature and version/provenance metadata selected separately.",
+    "expected_effect": "Can reduce mandatory runtime sidecars and support the one-file product boundary without requiring every embedded resource to be compiled into source constants.",
+    "rollback": "Do not adopt; keep PyInstaller/native resource embedding path unchanged.",
+    "next_discriminator": "Integrate one real canonical EntityOS resource (for example the Clay grammar) into the actual one-file build and prove byte-identical semantic behavior plus tamper fail-closed inside an isolated sandbox."
+  },
+  "entityos_artifact": {
+    "current_exact_head_build": "BLOCKED_OR_PENDING_EXTERNAL_SANDBOX",
+    "reason": "Latest policy-compliant GitHub-hosted sandbox run for product head 777895270357908e49a079fb2c308844c6469b83 was pending when this receipt was prepared; the local sandbox lacks the exact private source checkout and pinned PyInstaller 6.21.0 installation needed to execute the canonical current build script.",
+    "whole_machine_acceptance": false
+  },
+  "outcome": "CONCRETE_PACKAGING_RESEARCH_DELTA_WITH_EXACT_ONE_UNUSUAL_EXPERIMENT"
+}

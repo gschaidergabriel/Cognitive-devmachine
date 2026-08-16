@@ -10,12 +10,12 @@
     "CM-01-LANGUAGE-SPEC-PARSER-IR": {
       "status": "IN_PROGRESS",
       "evidence": "40 authorized sources; 36 parsed; syntax-only call ownership partition merged in PR #598. PR #635 merged lossless canonical UseDecl MODULE/WILDCARD intent while retaining legacy Module.uses; exact-head self-hosted use-decl fidelity run 31921439509 and parser fidelity run 31921439331 passed on head 3e965a328e82168923feb8857363938d7ad13ca9.",
-      "blocker": "Parser corpus remains incomplete and unresolved call/member ownership semantics remain open. Provider identity is now resolved separately; imported symbol ownership/visibility semantics are not yet selected."
+      "blocker": "Parser corpus remains incomplete and unresolved call/member ownership semantics remain open. Provider identity is separately testable, but plain-use name binding and imported symbol ownership/visibility remain unselected."
     },
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #603 merged TypeRef alias-ancestry complexity repair; exact-head self-hosted run 31910197430 passed 12/12 including depth 32768 and bounded scaling ratio. GO alias-DAG discriminator reproduced exponential repeated subtree materialization at depth 18 (262144 unique TypeRef objects / 36.006 MiB tracemalloc peak) while an iterative per-call memo + immutable structural-sharing prototype preserved bounded cycle/sibling controls with 19 unique objects / 0.011 MiB. Canonical receipt committed and product issue #640 opened.",
-      "blocker": "Integrate resource-safe alias-DAG structural sharing into the production checker and prove it on exact PR-head self-hosted Linux/X64 without changing nominal alias/cycle semantics; _same must also avoid re-expanding shared DAG pairs."
+      "evidence": "PR #603 merged TypeRef alias-ancestry complexity repair; exact-head self-hosted run 31910197430 passed 12/12 including depth 32768 and bounded scaling ratio. GO alias-DAG materialization discriminator reproduced exponential subtree expansion while detached PR #645 proved a structural-sharing candidate on exact-head self-hosted Linux/X64. A separate GO pair-revisit discriminator measured depth-22 equality at 8,388,607 visited pairs without pair memo versus 23 with (id(left),id(right)) memo. Live deconflict closed duplicate production PR #664 unmerged. Preferred production lane is PR #673 head 75b96b9d70b6228d768f6ec5a3e000bc15405745: per-call immutable sharing, cycle-contamination protection, DAG-aware _same, a dedicated DAG regression and the unchanged production totality gate.",
+      "blocker": "PR #673 exact-head self-hosted Linux/X64 workflow 31923213166 remains queued; production PASS/merge is blocked until that exact head and overlapping TypeRef regressions are green. _render_type_ref can still expand a compact shared DAG into large diagnostic text and remains a separate resource-surface follow-up."
     },
     "CM-03-EVALUATOR-INTERPRETER": {
       "status": "IN_PROGRESS",
@@ -38,8 +38,8 @@
     },
     "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. PR #648 keeps every use declaration fail-closed at executable build. PR #653 merged deterministic ClayPackageIndex/v1 after exact-head self-hosted PASS run 31921054505. PR #635 merged lossless MODULE/WILDCARD use intent after exact-head PASS runs 31921439509, 31921439331, 31921439318 and 31921439348. PR #660 then merged ClayPackageResolution/v1 exact module-provider selection; exact-head self-hosted Linux/X64 run 31923122223 passed on head a993083ff58081c2078d92f1769e649e366e3988. Duplicate candidate PR #663 was closed without merge after #660 won the coordination race.",
-      "blocker": "Provider identity is now canonical at the tested scope, but imported symbol ownership/visibility, MODULE versus WILDCARD expansion, namespace collision/shadowing, call ownership and cycle legality remain unselected. Define the smallest explicit symbol contract and feed it into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM while retaining PR #648 fail-closed executable use gate until end-to-end closure is proven; meaningful stdlib/SDK remains open."
+      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. PR #648 keeps every use declaration fail-closed at executable build. PR #653 merged deterministic ClayPackageIndex/v1 after exact-head self-hosted PASS run 31921054505. PR #635 merged lossless MODULE/WILDCARD use intent after exact-head PASS runs 31921439509, 31921439331, 31921439318 and 31921439348. PR #660 merged ClayPackageResolution/v1 exact module-provider selection; exact-head self-hosted Linux/X64 run 31923122223 passed on head a993083ff58081c2078d92f1769e649e366e3988. Fresh canonical-corpus inspection supplies counterevidence to the breadth of that v1 law: claycode/frank_memory.clay contains plain `use frank.entity.Frank`, while claycode/frank_entity.clay declares `module frank.entity` and `entity Frank`; current resolver v1 nevertheless requires every use target to equal an exact module identity. PR #674 is the active semantic-correction candidate that keeps plain-use name binding fail-closed while retaining only unambiguous wildcard-module provider binding. PR #677 separately explores short MODULE namespace collision rejection and must not outrun the corrected plain-use contract.",
+      "blocker": "Do not treat merged provider-resolution PASS as proof that every plain use denotes a module. First adjudicate the corpus-backed plain-use ambiguity and correct/fail-close that scope (current candidate #674). Then define the smallest explicit imported-symbol ownership/visibility/collision contract for plain versus wildcard use and feed one canonical resolution surface into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. PR #648 remains fail-closed until end-to-end executable closure is proven; meaningful stdlib/SDK remains open."
     },
     "CM-08-LINUX-INTEROP": {
       "status": "OPEN",
@@ -81,9 +81,15 @@
     "canonical_module_provider_resolution_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
     "canonical_module_provider_resolution_tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
     "canonical_module_provider_resolution_run": 31923122223,
-    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_PLUS_LOSSLESS_USE_MODE_PLUS_EXACT_MODULE_PROVIDER_RESOLUTION_MERGED; SYMBOL_SEMANTICS_NOT_SELECTED",
+    "cm07_plain_use_semantic_correction_pr": 674,
+    "cm07_module_namespace_collision_pr": 677,
+    "cm02_detached_sharing_candidate_pr": 645,
+    "cm02_preferred_production_integration_pr": 673,
+    "cm02_preferred_production_head": "75b96b9d70b6228d768f6ec5a3e000bc15405745",
+    "cm02_preferred_exact_head_workflow": 31923213166,
+    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_PLUS_LOSSLESS_USE_MODE_PLUS_EXACT_MODULE_PROVIDER_RESOLUTION_MERGED; PLAIN_USE_SCOPE_COUNTEREVIDENCE_REQUIRES_CORRECTION; CM02_PRODUCTION_DAG_SHARING_PENDING_EXACT_HEAD",
     "release": "NOT_PASSED",
-    "next_discriminator": "CM-07: specify and falsify the smallest imported-symbol ownership/collision contract for MODULE versus WILDCARD use, then connect the surviving semantics to the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM without relaxing the fail-closed executable use gate prematurely. CM-02 issue #640 alias-DAG structural sharing remains a parallel high-value blocker."
+    "next_discriminator": "CM-07: adjudicate corpus-backed plain-use ambiguity and correct/fail-close resolver scope before symbol expansion (candidate #674). In parallel CM-02: obtain exact-head self-hosted evidence for preferred production PR #673 and merge only if unchanged totality plus dedicated DAG gate are green."
   },
   "progress": {
     "work_packages_total": 11,
@@ -102,13 +108,15 @@
     "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_ALIAS_DAG_MATERIALIZATION.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CANONICAL_IMPORT_MODE_EXACT_RUNTIME_DELTA.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_DETERMINISTIC_MODULE_PROVIDER_RESOLVER.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_PROVIDER_RESOLVER_COORDINATION_CYCLIC_ORDER.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_PROVIDER_RESOLVER_COORDINATION_CYCLIC_ORDER.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM02_PRODUCTION_TYPEREF_DAG_SHARING.json"
   ],
-  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. CAS/lease discipline remains required. This run additionally confirmed that equivalent valid implementations should not become parallel canonical paths: PR #663 was closed without merge after #660 landed and passed exact-head CI; only the distinct cyclic-order research evidence was retained. Pull-request workflows must checkout and assert github.event.pull_request.head.sha rather than treating github.sha merge refs as exact candidate evidence.",
+  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent valid implementations must not become parallel canonical paths: PR #663 was closed after #660 landed, and duplicate production CM-02 PR #664 was closed after the stronger #673 lane appeared. Distinct measurements were retained as research evidence. Pull-request workflows must checkout and assert github.event.pull_request.head.sha rather than treating github.sha merge refs as exact candidate evidence; workspace writes use compare-and-swap and must fuse rather than overwrite concurrent updates.",
   "laws": [
     "ClayVerse/Clay Machine is the only active program.",
     "GRF expands hypotheses but does not mint truth.",
     "Legacy Frank/self.root/UCM2 paths are evidence only.",
+    "Unknown language/import/host semantics fail closed; path shape and names do not grant semantic authority.",
     "No hidden host semantics, generic semantics, effect authority or completion claims from names/model consensus.",
     "Together API is forbidden.",
     "No final paid training without explicit owner authorization."

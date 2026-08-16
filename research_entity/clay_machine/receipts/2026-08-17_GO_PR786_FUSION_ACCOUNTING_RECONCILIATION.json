@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "superseded_product_pr": 781,
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "preferred_head_observed": "40aad4c3061214e97aeac7ee769004e1ac6e005c",
+  "fusion_state": {
+    "pr781_closed_unmerged": true,
+    "pr786_single_promotion_lane": true,
+    "stage_v5_raw_git_tree_provenance_absorbed": true,
+    "shallow_boundary_reconstruction_absorbed": true,
+    "sandbox_sdk_pinned": "2.9.2",
+    "single_owner_build_execution_absorbed": true,
+    "bytes_v2_epoch_fence_absorbed": true,
+    "measured_heredoc_escape_fix_absorbed": true,
+    "measured_sanitized_git_head_fix_absorbed": true
+  },
+  "global_unusual_experiment_accounting": {
+    "global_limit": 1,
+    "global_count_already_consumed": 1,
+    "global_slot_consumed": true,
+    "mechanism_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_BYTES_CONCURRENT_EPOCH_COUNTEREXAMPLE.json",
+    "additional_unusual_experiment_allowed": false,
+    "batch5_matrix_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "batch5_matrix_new_unusual_experiment_count": 0
+  },
+  "remaining_code_reconciliation": {
+    "batch5_matrix_accounting_fence": "PASS_SOURCE_INSPECTION",
+    "buildtime_runner_accounting_alignment": "OPEN",
+    "observed_runner_mismatch": "run-buildtime-go-sandbox.mjs still requires GO_UNUSUAL_EXPERIMENT_COUNT=1 and CROSS_EPOCH_COPY_OBSERVED and would report new_unusual_experiment_count=1 on success, while the canonical Batch-5 matrix now asserts consumed 1/1 prior evidence and GO_NEW_UNUSUAL_EXPERIMENT_COUNT=0.",
+    "promotion_rule": "FAIL_CLOSED_UNTIL_RUNNER_REQUIRES_REGRESSION_ONLY_MARKERS_AND_REPORTS_ZERO_NEW_EXPERIMENTS"
+  },
+  "strongest_current_cycle_vercel_sandbox_evidence": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "absorbed_from_pr": 781,
+    "raw_tree_source_binding": "PASS",
+    "system_toolchain_provision": "PASS",
+    "shallow_safe_git_reconstruction": "PASS",
+    "failure": "PROVISION_PINNED_PYTHON_TOOLCHAIN_HEREDOC_SYNTAX",
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false,
+    "sandbox_stopped": true
+  },
+  "current_exact_head_execution_state": {
+    "source_head": "40aad4c3061214e97aeac7ee769004e1ac6e005c",
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "sandbox_started": false,
+    "runtime_acceptance": "UNVERIFIED"
+  },
+  "current_frontier": "Align the PR786 buildtime runner with the already-consumed 1/1 regression-only accounting, then obtain an actually-started exact-head Vercel Sandbox regression/acceptance batch. Require Stage-v5 exact raw-tree/shallow provenance, pinned SDK/single-owner, Bytes-v2/released-view regressions with zero new unusual experiments, CM-07/canonical source-to-single-VM, pristine byte-identical twin one-file EntityOS builds, exact artifact digest, status/self-test/no-host-Python/state-restart/capability/relocation gates, DENY_ALL and successful Sandbox stop.",
+  "new_unusual_experiments_executed_by_this_reconciliation": 0,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_RUNNER_ACCOUNTING_ALIGNMENT_AND_EXTERNAL_VERCEL_DEPLOYMENT_QUOTA"
+}

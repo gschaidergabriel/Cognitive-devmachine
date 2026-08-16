@@ -1,0 +1,63 @@
+{
+  "schema": "ClayGoExactHeadExecutionReceipt/v1",
+  "date": "2026-08-17",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "preferred_lane": {
+    "pull_request": 786,
+    "base": "main",
+    "base_sha": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+    "exact_head": "ad4a7dff6db3132f11c61e553ee4c762c0c378a2",
+    "state": "DRAFT_UNMERGED"
+  },
+  "current_exact_head_execution": {
+    "vercel_status": "PROVIDER_RATE_LIMIT_BEFORE_DEPLOYMENT",
+    "provider_code": "api-deployments-free-per-day",
+    "sandbox_started": false,
+    "entityos_built": false,
+    "entityos_sha256": null,
+    "whole_entityos_acceptance": false
+  },
+  "ready_nonexecution_control": {
+    "deployment_id": "dpl_6dT9WsEySQsfMfDB85UJwdhffXEX",
+    "deployment_state": "READY",
+    "build_log_result": "SKIP_NON_TARGET_PREVIEW",
+    "sandbox_started": false,
+    "acceptance_evidence": false
+  },
+  "last_empirical_sandbox_truth": {
+    "deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "exact_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "sandbox_started": true,
+    "raw_git_tree_source_binding": "PASS",
+    "system_freeze_toolchain": "PASS",
+    "shallow_safe_exact_git_reconstruction": "PASS",
+    "pinned_python_toolchain": "FAIL_JS_TEMPLATE_HEREDOC_ESCAPE",
+    "network_policy_deny_all_reached": false,
+    "offline_entityos_matrix_started": false,
+    "entityos_built": false,
+    "entityos_sha256": null,
+    "sandbox_stopped": true,
+    "classification": "RUNNER_FAIL_NOT_ENTITYOS_SEMANTIC_FAIL"
+  },
+  "source_hardening_present_on_preferred_lane": {
+    "measured_heredoc_escape_repair": true,
+    "sanitized_git_head_receipt_repair": true,
+    "raw_git_blob_stage_v5": true,
+    "sandbox_sdk_pinned_2_9_2": true,
+    "sandbox_persistent_false": true,
+    "regression_acceptance_only": true,
+    "new_unusual_experiment_count": 0,
+    "global_unusual_experiment_slot": "CONSUMED_1_OF_1_PRIOR_EVIDENCE",
+    "bytes_v2_immutable_owned_fence": true,
+    "canonical_builder_exact_one_regular_non_symlink_entityos": true,
+    "preexisting_sidecar_rejection": true,
+    "twin_build_sha_and_cmp_gate": true,
+    "relocation_copy_rename_sha_cmp_runtime_identity_gate": true
+  },
+  "promotion_gate": {
+    "status": "BLOCKED_TRANSIENT_PROVIDER_QUOTA",
+    "required_next_execution": "One actually-started isolated Vercel Sandbox on the exact then-current PR786 head; verify Stage-v5/exact provenance, switch DENY_ALL, complete Bytes/CM07/EntityOS twin one-file matrix, self-test/pathless/state/capability/relocation gates, record artifact SHA-256, then stop Sandbox successfully.",
+    "vps_self_hosted_production_substitution": false
+  }
+}

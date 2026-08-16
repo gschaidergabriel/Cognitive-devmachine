@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_CM13_BOUNDED_LINUX_HOST_PROCESS",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE_BUILD",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "research_entity_base": "58be0c9754207e0100b03bee35c22dc90787decc",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_base": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "product_candidate": "fa6a88f2c1abca32c1f851525700dd14256b9ee2",
+  "product_pr": 695,
+  "product_pr_state_at_receipt": "READY_FOR_REVIEW_OPEN_MERGEABLE",
+  "frontier": "CM-TERM / CM-08-LINUX-INTEROP / CM-13 terminal-subprocess family",
+  "outcome": "RETAIN_PARTIAL_VERIFIED",
+  "promotion_scope": "Capability-gated bounded non-interactive Linux host-process primitive only; not full CM-TERM/CM-13 acceptance.",
+  "observed_anchors": [
+    "Current ClayMachine already had a capability-aware host boundary but no accepted real Linux process path.",
+    "Canonical ClayCode executable surface does not yet provide the string/argv lowering needed to claim an end-to-end ClayCode process effect.",
+    "Interactive PTY remains a separate mandatory release obligation."
+  ],
+  "generated_reality": {
+    "hypothesis": "A shell-free argv process primitive with explicit capability admission, clean environment, bounded dual-pipe capture, timeout and fresh process-group termination can safely establish the first real CM-TERM control-plane foothold without inventing PTY or ClayCode string semantics.",
+    "mechanism": "ClayOS checks linux.process.spawn.v0 before process admission; subprocess.Popen receives an absolute argv vector with shell=False, DEVNULL stdin, explicit clean env, cwd=/, close_fds and start_new_session. A selector drains stdout and stderr under one hard byte budget; timeout/output overflow kills the child process group and yields an observable receipt.",
+    "strongest_counter_reality": "Dual stdout/stderr pipe pressure can deadlock a superficially bounded subprocess wrapper, especially when one pipe fills while the controller waits on the other stream; therefore a passing small-output test would be misleading.",
+    "falsifier": "Concurrent no-newline output larger than common pipe capacity on both stdout and stderr must complete exactly within a bounded timeout and preserve both byte streams.",
+    "predicted_if_hypothesis": "Both streams drain completely, exact lengths/content survive, no timeout/output-limit occurs.",
+    "predicted_if_counter": "Child stalls, timeout fires, or one stream is truncated/corrupted despite budget being sufficient."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "DUAL_PIPE_70K_NO_NEWLINE",
+    "bounded": true,
+    "reversible": true,
+    "environment": "local Linux sandbox",
+    "input": "Child writes 70000 byte A payload to stdout and 70000 byte B payload to stderr with no newline; timeout 2.0 s; combined output budget 200000 bytes.",
+    "observed": {
+      "returncode": 0,
+      "stdout_bytes": 70000,
+      "stderr_bytes": 70000,
+      "stdout_exact": true,
+      "stderr_exact": true,
+      "timed_out": false,
+      "output_limited": false,
+      "duration_ms": 21.779
+    },
+    "result": "COUNTER_REALITY_NOT_OBSERVED_FOR_THIS_SHAPE",
+    "scope_limit": "This falsifies the tested dual-pipe deadlock shape only; it does not establish PTY, interactive streaming, arbitrary workloads or whole CM-TERM correctness."
+  },
+  "implementation_delta": [
+    "claymachine/host_process.py adds linux.process.spawn.v0, request validation, direct argv execution, clean env, nonblocking dual-pipe drain, hard output budget, timeout/process-group kill and HostProcessReceipt.",
+    "claymachine/clayos.py adds capability-gated exec_host_process with process-table state, hashes, byte counts and terminal states EXITED/TIMED_OUT/OUTPUT_LIMITED/TRAPPED.",
+    "tests/test_clay_host_process.py adds seven deterministic regressions including capability-before-admission, shell non-interpretation, relative executable rejection, timeout, combined output bound and dual-pipe pressure.",
+    ".github/workflows/clay-cm13-host-process-vps.yml binds exact candidate head to a self-hosted Linux/X64 execution receipt."
+  ],
+  "accepted_vps_evidence": {
+    "workflow": "Clay CM-13 Host Process VPS",
+    "run_id": 31925042613,
+    "job_id": 95111167203,
+    "status": "SUCCESS",
+    "evidence_context": "EXACT_PR_HEAD_SELF_HOSTED_LINUX_X64",
+    "tested_sha": "fa6a88f2c1abca32c1f851525700dd14256b9ee2",
+    "host_process_blob": "e6775117c923dd4d52aee09a3b926c682830eba8",
+    "clayos_blob": "29ce2594c565322eeadc5d6e530be49fbdee7fd0",
+    "gate_blob": "822663229355732454e56a59e7c74eb521082b5f",
+    "python": "Python 3.12.3",
+    "kernel": "Linux 6.8.0-84-generic x86_64 GNU/Linux",
+    "tests": "7/7 unittest PASS in 0.114 s",
+    "evidence_flags": {
+      "process_capability": "linux.process.spawn.v0",
+      "shell_interpretation": "DENIED",
+      "ambient_environment": "DENIED",
+      "stdin": "DEVNULL",
+      "combined_output_budget": "ENFORCED",
+      "timeout_process_group_kill": "ENFORCED",
+      "interactive_pty": "NOT_CLAIMED",
+      "claycode_string_lowering": "NOT_CLAIMED",
+      "new_unusual_experiment_count_in_ci": 0,
+      "whole_cm13_completion": false,
+      "whole_clay_machine_completion": false
+    },
+    "artifact_id": 5847571926
+  },
+  "overlap_regressions_same_candidate": [
+    {"workflow": "Clay Machine VM bootstrap", "run_id": 31925042561, "conclusion": "SUCCESS"},
+    {"workflow": "Clay environment minimal build-run", "run_id": 31925042618, "conclusion": "SUCCESS"},
+    {"workflow": "ClayCode runtime nominal boundary repair VPS", "run_id": 31925042592, "conclusion": "SUCCESS"},
+    {"workflow": "Clay Executable IR Single VM", "run_id": 31925042554, "conclusion": "SUCCESS"},
+    {"workflow": "ClayOS strict artifact launch", "run_id": 31925042518, "conclusion": "SUCCESS"}
+  ],
+  "remaining_blockers": [
+    "Interactive PTY and live bidirectional terminal stream semantics.",
+    "Canonical ClayCode string/argv/env/cwd/stdin/stdout/stderr values and lowering through checker -> executable IR -> single ClayVM -> ClayOS effect boundary.",
+    "Typed authority/receipt integration for broader filesystem/process/network/device effects.",
+    "Whole CM-TERM/CM-13 and whole ClayMachine acceptance remain false."
+  ],
+  "next_discriminator": "Add the smallest canonical Clay byte/string plus argv value needed to transport one literal ClayCode command argument through executable IR into the single VM, then bind that value to the admitted process capability without shell semantics. PTY should follow only after the value/effect boundary is explicit.",
+  "negative_results_preserved": [
+    "A newly added pull_request workflow showed no run before GitHub registered/triggered the candidate workflow set; absence of a run was not treated as PASS.",
+    "The first attempted local unusual-experiment tool invocation did not start because the tool session was unavailable and therefore was not counted as an experiment.",
+    "The first research re-entry branch was based on fe62e1f9 while canonical main advanced to 58be0c97; its PR #277 was non-mergeable and was superseded rather than forced."
+  ],
+  "authority": {
+    "together_used": false,
+    "training_started": false,
+    "release_claimed": false
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_ENTITYOS_EXACT_ARTIFACT_STRING_EFFECT_FRONTIER_RECEIPT",
+  "date": "2026-08-16",
+  "actor": "temporary_clay_research_build_worker_gpt_5_6_sol",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "pre_write_research_head": "92b6c9ba7c737047b35654d5db1da755ba5c9bc0",
+  "product_repo": "gschaidergabriel/Dr.-Unterweger",
+  "product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "exact_artifact": {
+    "name": "EntityOS",
+    "sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "size_bytes": 49716056,
+    "carrier": "ELF64_x86_64_PyInstaller_onefile",
+    "github_actions_run_id": 31929090825,
+    "github_actions_job_id": 95121136050,
+    "github_actions_artifact_id": 9258758674,
+    "exact_head_ci_result": "PASS",
+    "whole_machine_acceptance": false,
+    "accepted_hostinger_target_provenance_verified_here": false
+  },
+  "observed_runtime_evidence": [
+    "Downloaded the exact workflow artifact and independently verified its SHA-256 against the CI receipt.",
+    "The exact artifact returned SELFTEST_PASS locally.",
+    "The exact artifact compiled and ran a pure ClayCode Int program through the executable TypedIR/ClayVM path and returned 42.",
+    "The exact artifact denied direct Linux process execution without linux.process.spawn.v0 and allowed /usr/bin/printf with that explicit grant.",
+    "claymachine/host_process.py already implements a bounded direct shell-false process boundary with canonical String argv, NUL rejection, absolute executable binding, bounded env, timeout and byte stdout/stderr.",
+    "A ClayCode function returning String is syntactically admitted but executable TypedIR lowering fails closed with: literal outside executable TypedIR v1 PURE subset: STRING."
+  ],
+  "grf": {
+    "observed_anchor": "One-file packaging and a bounded Python host-process boundary exist and pass exact-head tests; the executable ClayCode TypedIR remains Int/PURE constrained.",
+    "generated_reality": "The shortest product-convergent path is to make String, then Bytes/Buffer and declared process effects canonical across checker -> executable TypedIR -> compiler -> single VM, reusing the already-bounded host process boundary rather than inventing a second process architecture.",
+    "strongest_counter_reality": "The process boundary itself is missing and should be built first.",
+    "discriminator": "Inspect host_process.py and execute an exact-artifact String-return program through EntityOS.",
+    "observed_result": "The host boundary exists; the String-return program fails specifically at executable TypedIR lowering.",
+    "outcome": "REJECT_MISSING_HOST_PROCESS_BOUNDARY; RETAIN_CANONICAL_TYPED_VALUE_EFFECT_PIPELINE_GAP",
+    "confidence": 0.96
+  },
+  "normal_falsifier": {
+    "source": "module clay.entityos.stringprobe; fn main() -> String { return \"ENTITYOS_STRING\" }",
+    "artifact_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "observed_exit_code": 2,
+    "observed_error": "ERROR: literal outside executable TypedIR v1 PURE subset: STRING",
+    "interpretation": "String syntax is not yet executable canonical TypedIR semantics."
+  },
+  "unusual_experiment_accounting": {
+    "count": 1,
+    "name": "RELOCATED_BINARY_UNICODE_EXTRACTION_ROOT",
+    "execution_source": "exact-head GitHub Actions run 31929090825",
+    "artifact_product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "outcome": "PASS",
+    "additional_unusual_experiment_executed_by_this_worker": false,
+    "note": "No second unusual experiment was executed in this go cycle."
+  },
+  "next_executable_action": {
+    "order": [
+      "Extend runtime/claycode_executable_typed_ir_v1.py TypeRef/literal/call semantics from Int-only to canonical String while preserving fail-closed nominal type checking.",
+      "Propagate canonical typed String values through compiler lowering and the single ClayVM without host-language semantic reconstruction.",
+      "Add canonical Bytes plus bounded Buffer append/len/slice semantics and byte-preserving stdout/stderr transport.",
+      "Add explicit effect vocabulary/routing for linux.process.spawn.v0 with canonical argv and no shell interpolation or implicit decoding.",
+      "Rebuild the single-file EntityOS and run source-vs-IR, restart/state, grant-denial/grant-success and exact artifact integrity tests.",
+      "Run the resulting exact EntityOS on the accepted Hostinger Ubuntu VPS and capture machine identity/provenance before any whole-machine PASS."
+    ]
+  },
+  "non_claims": [
+    "No accepted Hostinger VPS execution is claimed by this receipt.",
+    "No whole-machine EntityOS acceptance is claimed.",
+    "No final model training authorization is implied.",
+    "No Harness self-mutation is authorized."
+  ]
+}

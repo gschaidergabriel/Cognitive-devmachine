@@ -1,0 +1,44 @@
+{
+  "schema": "ClayGoResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAY_MACHINE",
+  "product_head_observed": "f9cea2647073ca3d44cfc7cba16dba742bc3d713",
+  "execution_policy": "ISOLATED_SANDBOXES_ONLY",
+  "entityos_artifact": {
+    "current_main_status": "BLOCKED",
+    "blocker": "The policy-valid GitHub-hosted canonical EntityOS sandbox lane observed on predecessor head 828106fac3cb388410dd7d524ebbdbd39efcf4c4 did not start because GitHub reported failed account payments or an insufficient spending limit; therefore it is infrastructure evidence, not code-failure evidence. Current head f9cea2647073ca3d44cfc7cba16dba742bc3d713 advanced after that observation and still requires exact-head sandbox execution.",
+    "historical_branch_candidate_head": "4486a320a3a321c70f3f0b52a12a85d3957be1a7",
+    "historical_branch_candidate_local_fresh_sandbox_selftest": "PASS",
+    "historical_branch_candidate_sha256": "eb6b1ebc2fd6b8e2ce9defe89867bb22f879e390fc9255aa6301c4a84b614bf6",
+    "historical_branch_candidate_size_bytes": 8919008,
+    "whole_machine_acceptance": false
+  },
+  "hypothesis": "Canonical arbitrary Bytes/Buffer payloads and process argv String values require distinct value contracts at the shared CM-DATA/CM-TERM boundary.",
+  "counterhypothesis": "A single undifferentiated value representation can safely carry arbitrary byte payloads and argv text without ambiguity or boundary-specific rejection.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "NUL_BOUNDARY_STRING_VS_BYTES",
+    "environment": "isolated ChatGPT Linux sandbox",
+    "control": {
+      "payload_length": 16,
+      "payload_sha256": "b82534c5f141dc9ca8e9a1bf4960d70281a4bf102bb076658cfc612d659ffaf8",
+      "stdin_stdout_byte_exact": true
+    },
+    "intervention": {
+      "process_argv_contains_embedded_nul": true,
+      "accepted": false,
+      "error_class": "ValueError",
+      "error_message": "embedded null byte"
+    },
+    "outcome": "RETAIN_TYPE_SEPARATION_REQUIREMENT",
+    "rollback": "No persistent mutation; subprocess-only experiment."
+  },
+  "current_frontier": "Select the smallest canonical Clay Bytes/Buffer ownership+lifetime contract plus direct String/argv contract, then carry one provenance-bound process/data request through canonical effectful TypedIR and the single ClayVM without backend-local semantics.",
+  "next_falsifier": "Run an exact-head policy-valid isolated sandbox rebuild and self-test of EntityOS at or after f9cea2647073ca3d44cfc7cba16dba742bc3d713, then test canonical direct String argv and Bytes/Buffer ingress through ClayCode -> effectful TypedIR -> ClayVM -> ClayOS.",
+  "negative_results": [
+    "Current GitHub-hosted canonical sandbox evidence observed in this cycle did not execute because the runner was blocked before start; it must not be interpreted as a code failure or PASS.",
+    "The fresh local PASS belongs only to the historical branch candidate 4486a320a3a321c70f3f0b52a12a85d3957be1a7 and does not verify current main."
+  ],
+  "promotion": "NO_WHOLE_MACHINE_PASS"
+}

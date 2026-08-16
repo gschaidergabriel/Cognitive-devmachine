@@ -1,0 +1,73 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "observed": {
+    "research_main_before_write": "1f867fa4cdd603464070f29f8ed8cb2ce3d38bbb",
+    "product_main_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "canonical_module_provider_resolution_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "canonical_module_provider_resolution_pr": 660,
+    "lossless_use_mode_pr": 635,
+    "package_identity_pr": 653,
+    "fusion_candidate_pr": 657,
+    "fusion_candidate_final_head": "7e521058263edd6de0b8333f9c4193d242be1fc1",
+    "fusion_candidate_state": "CLOSED_WITHOUT_MERGE",
+    "import_symbol_candidate_pr": 672,
+    "import_symbol_candidate_head": "536029b390648bfedb754042f52c2459cd7882f1",
+    "import_symbol_candidate_run": 31923228247,
+    "import_symbol_candidate_run_state_at_receipt": "QUEUED",
+    "whole_clay_machine_acceptance": false
+  },
+  "grf": {
+    "generated_hypothesis": "Carry canonical Module.use_decls directly into ClayPackageIndex/v1 so package identity and MODULE/WILDCARD import intent share one deterministic provenance surface before provider/name resolution.",
+    "counter_reality": "The extra package-index surface does not remove the resolver's required source parse for typed exports and mutates the v1 package payload/hash without a measured downstream benefit, creating duplicated semantic ownership.",
+    "discriminator": "Compare the surviving import-resolver architecture against the proposed enriched package index: if the resolver must still parse the exact index-bound source for export surfaces, package-level duplication of use_decls is not necessary to close the next gate.",
+    "collapse": "Counter-reality retained. PR #672 already reparses the exact source for canonical use_decls plus typed exports, while #660 owns provider identity. Enriching ClayPackageIndex/v1 would add another canonical representation without eliminating a parse or resolver responsibility.",
+    "outcome": "DEFER_NO_MERGE"
+  },
+  "unusual_experiment": {
+    "name": "DUPLICATE_TARGET_MIXED_MODE_COLLAPSE",
+    "count_for_this_macrocycle": 1,
+    "environment": "isolated local mechanism probe",
+    "baseline": "DICT_BY_MODULE",
+    "baseline_cardinality_after_MODULE_and_WILDCARD_same_target": 1,
+    "candidate": "ORDERED_USE_DECLS",
+    "candidate_cardinality": 2,
+    "compatibility_projection_match": true,
+    "result": "COUNTERREALITY_CONFIRMED",
+    "interpretation": "Keying import intent only by module target loses MODULE versus WILDCARD distinction. This supports the already-merged canonical ordered Module.use_decls representation, but does not justify duplicating that representation into ClayPackageIndex/v1. Mechanism evidence only."
+  },
+  "production_actions": {
+    "two_parent_fusion_commit_created": "303b186f01e73a90d8e001cfeaa76b3a518c933d",
+    "candidate_branch": "clay/go-20260816-cm07-use-package-fusion",
+    "candidate_pr": 657,
+    "candidate_pr_outcome": "CLOSED_UNMERGED_AS_SUPERSEDED",
+    "main_sync_pr": 676,
+    "main_sync_merge": "7e521058263edd6de0b8333f9c4193d242be1fc1",
+    "final_candidate_diff_files": [
+      "clayenv/package.py",
+      "tests/test_clayenv_package.py"
+    ],
+    "runtime_receipt_reversion_detected_and_prevented": true,
+    "canonical_product_bytes_changed_on_main_by_this_macrocycle": false
+  },
+  "coordination": {
+    "reason_for_no_merge": "Shared CM-07 frontier advanced during the run: #635 and #653 were merged, #660 won exact provider resolution, and #672 owns the next non-executing imported-symbol/collision candidate. A second package/import representation would violate single-path coordination without measured benefit.",
+    "negative_result_preserved": true,
+    "stale_vps_evidence_overwrite_avoided": true
+  },
+  "hard_boundaries": {
+    "clayenv_use_execution_gate": "UNCHANGED_FAIL_CLOSED",
+    "import_symbol_semantics_canonical": false,
+    "checker_executable_ir_integration": "OPEN",
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Observe exact-head self-hosted result for PR #672. If green, inspect its MODULE/WILDCARD ownership/collision contract for one-path integration into the existing nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM while PR #648 remains fail-closed until end-to-end executable import closure is proven. If red, preserve the failure and repair only the violated resolver invariant.",
+  "status": "NEGATIVE_ARCHITECTURE_RESULT_RECORDED_DECONFLICTED"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "scope": "Main-line Vercel GO endpoint replay-surface hardening; no new unusual experiment.",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_hotfix": "7640638664266196f52d38dc63f8a51a04190f9d",
+  "observed_finding": "Current main still exposed the historical preview GO Sandbox route gated by repository-static replay material, despite exact-head EntityOS Sandbox evidence being otherwise valid only for its tested SHA.",
+  "security_classification": "REPLAYABLE_REMOTE_SANDBOX_START_SURFACE_NOT_ACCEPTABLE_FOR_REUSABLE_ENDPOINT",
+  "product_change": {
+    "pull_request": 760,
+    "candidate_head": "cc8f48ee185c2c0b3ef38d44c6164e7027023745",
+    "merge_commit": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+    "file": "mcp/vercel-sandbox-mcp/api/go-cycle-v2.js",
+    "change": "Replace the remotely executable preview job handler with an inert fail-closed 404 BUILD_INTERNAL_ONLY endpoint.",
+    "merge_result": "MERGED_TO_MAIN"
+  },
+  "validation": {
+    "isolated_tool_container_node_syntax_check": "PASS",
+    "new_vercel_sandbox_batch_started": false,
+    "vps_test_used": false,
+    "self_hosted_test_used": false,
+    "production_host_test_used": false
+  },
+  "grf": {
+    "observed_anchor": "The exact HTTP route contained reusable repository-static replay material and could start the fixed Sandbox job on the matching preview ref.",
+    "hypothesis": "The safest immediate main-line repair is to remove remote execution authority entirely while preserving prior exact-head Sandbox receipts as historical evidence.",
+    "strongest_counterhypothesis": "Keeping the reusable HTTP route is necessary for future Vercel execution and deleting it would destroy the only viable isolated lane.",
+    "discriminator": "Check whether current main itself requires this HTTP route for accepted product execution; it does not. Build-internal invocation can be reconstructed separately from fresh main when a later exact-head batch is selected.",
+    "collapse": "PROMOTE_FAIL_CLOSED_MAIN_HOTFIX; RETAIN_BUILD_INTERNAL_REPLACEMENT_AS_FRESH_FUTURE_CANDIDATE"
+  },
+  "coordination": {
+    "closed_superseded_stack_pr": 759,
+    "reason": "Its base branch moved/closed concurrently; useful build-internal design is retained as reference but must not become a stale parallel promotion path.",
+    "historical_entityos_receipts_remain_exact_sha_scoped": true
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment": false,
+    "coordinated_go_unusual_experiment": "BUILD_STAGE_CURRENT_EXACT_HEAD_THEN_ISOLATED_SANDBOX_OFFLINE",
+    "coordinated_go_unusual_experiment_count": 1
+  },
+  "whole_clay_machine_acceptance": false,
+  "next_executable_step": "From fresh current main, select one credential-free reproducible source-provenance staging mechanism; only after it is deterministic and fail-closed, reconstruct the fixed build-internal Vercel Sandbox batch and obtain one exact-head EntityOS rebuild/runtime receipt before promotion. Continue CM-DATA Bytes/Buffer lifetime and CM-TERM canonical String/argv/effect work after the execution/provenance lane is trustworthy.",
+  "together_api_used": false
+}

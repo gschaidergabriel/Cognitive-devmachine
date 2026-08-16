@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "worker": "chatgpt-gpt-5.6-sol-temporary-clay-organ",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "scope": "EntityOS canonical one-file build provenance hardening plus source-staging counterevidence; no whole-machine or current-main artifact acceptance.",
+  "observed_product_state": {
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed_end": "7640638664266196f52d38dc63f8a51a04190f9d",
+    "accepted_semantic_delta_merge": "6c0ce7e8c6131b6295d8621ef47d79994ff3dd4c",
+    "pr": 757,
+    "pr_head": "5563064b42cd63d7d7305bf5cbb623f67e895665",
+    "note": "The later product-main tip is a self-hosted/VPS receipt write and its runtime measurements are excluded from Clay Machine acceptance under current owner policy."
+  },
+  "grf": {
+    "observed_reality": [
+      "The canonical EntityOS build provenance gate rejected mismatched HEAD and ordinary dirty/untracked source but relied on git status for source cleanliness.",
+      "The repository intentionally ignores __pycache__ and *.pyc while the PyInstaller freeze adds the repository to import search paths and collects EntityOS/runtime submodules.",
+      "A Vercel SourceStage/v3 deployment for exact head f5bc74baa3373b609265b3df824a23eeb1b0db65 emitted different archive SHA-256 values on two vercel-build invocations despite the same recorded source tree."
+    ],
+    "generated_hypothesis": "Ignored import-capable files can evade the dirty-tree provenance signal and therefore weaken exact-source attribution of a one-file EntityOS freeze.",
+    "counter_reality": "Ignored files are build-irrelevant, or PyInstaller never admits them into module discovery, so rejecting them would only add noise.",
+    "discriminator": "Create one ignored import-capable artifact under an admitted import root, verify ordinary git status remains clean, then test a fail-closed provenance fence while retaining a build-only ignored .venv control outside import roots.",
+    "outcome": "PROMOTE provenance fence; DEFER any claim that a particular ignored artifact changes the frozen EntityOS bytes until a separate exact-artifact test demonstrates that effect."
+  },
+  "exactly_one_bounded_unusual_experiment": {
+    "count": 1,
+    "name": "IGNORED_IMPORT_ARTIFACT_GIT_STATUS_BLINDSPOT",
+    "environment": "isolated local sandbox container",
+    "result": "PASS as discriminator",
+    "observations": {
+      "git_status_after_ignored_pyc": "empty",
+      "git_ls_files_ignored": "reported ignored pyc"
+    },
+    "rollback": "temporary repository destroyed after measurement"
+  },
+  "implementation": {
+    "state": "MERGED",
+    "merge": "6c0ce7e8c6131b6295d8621ef47d79994ff3dd4c",
+    "changes": [
+      "verify git rev-parse --show-toplevel equals expected source root",
+      "enumerate ignored/untracked files with git ls-files --others --ignored --exclude-standard",
+      "fail closed on ignored import-capable artifacts under EntityOS/runtime import roots",
+      "retain existing GIT_* sanitization, exact-head and dirty-tree gates",
+      "permit ignored build-only .venv artifacts outside runtime import roots"
+    ],
+    "isolated_regression": {
+      "passed": 9,
+      "failed": 0,
+      "coverage": [
+        "exact clean head",
+        "spoofed head",
+        "dirty tracked source",
+        "ordinary untracked source",
+        "invalid or short head",
+        "inherited GIT_WORK_TREE redirect",
+        "ignored import artifact",
+        "ignored build-only .venv control",
+        "nested repository root"
+      ]
+    }
+  },
+  "source_staging_counterevidence": {
+    "deployment": "dpl_AJx43pUyNZ1nd2ZH7NTS2UfhGovZ",
+    "head": "f5bc74baa3373b609265b3df824a23eeb1b0db65",
+    "tree": "4d87ff1783aa058bce1153dff74baa846c9926bb",
+    "first_archive_sha256": "821f595ba1324b47574c70b98c938ed35c6f3f49494fa3527460b80e1b7f4650",
+    "second_archive_sha256": "f5afb1e36fa239f4d89c0f4913ccf45078f8c09bc8214dcc48348cecf58b7367",
+    "status": "NONDETERMINISTIC_ACROSS_BUILD_INVOCATIONS",
+    "cause": "UNKNOWN",
+    "important_nonclaim": "The mismatch does not by itself prove tracked source-content divergence; it proves the emitted staging archive bytes were not reproducible under the claimed v3 staging path."
+  },
+  "primary_source_constraints": [
+    "Git git-archive documentation: commit/tag archives use recorded commit time unless --mtime overrides it; tar archives can carry commit identity in a global pax header; tar.umask and Git attributes/config can affect archive output.",
+    "GNU gzip documentation: -n/--no-name suppresses original name and timestamp in the gzip header."
+  ],
+  "entityos_artifact": {
+    "current_macro_current_head_built": false,
+    "current_macro_current_head_verified": false,
+    "older_exact_head_sandbox_artifact_receipt": "research_entity/clay_machine/receipts/2026-08-16_GO_VERCEL_SANDBOX_ENTITYOS_EXACT_HEAD.json",
+    "whole_machine_acceptance": false
+  },
+  "next_falsifier": "Make staging reproducibility fail-closed across repeated Vercel build invocations using a sanitized Git/config environment and/or explicit archive-byte cross-invocation assertion; then consume the next go macro-cycle's single unusual experiment on one exact current-head Vercel Sandbox batch that freezes and executes EntityOS after the merged provenance fence."
+}

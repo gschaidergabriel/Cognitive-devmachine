@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "b4cdfb3a57a9aa842eeae38f1461d4cc385a6a05",
+  "research_base_observed": "72b82481fecc0e00061f6bda5c9679afa9ec745f",
+  "candidate_pr": 751,
+  "candidate_head": "c618118010eff2d461130666454b333645f29be3",
+  "observed": {
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "vercel_project_name": "dr-unterweger",
+    "deployment_id": "dpl_4LVgAjmQ6xzW1oe6f7oAXdnF9HaZ",
+    "deployment_state": "READY",
+    "deployment_bound_commit": "b4cdfb3a57a9aa842eeae38f1461d4cc385a6a05",
+    "deployment_target": "production",
+    "build_clone_branch": "main",
+    "build_clone_commit_short": "b4cdfb3",
+    "healthz_status": 404,
+    "healthz_vercel_error": "NOT_FOUND"
+  },
+  "grf": {
+    "observed_anchor": "The previously empty/inconsistent Vercel project/deployment read surface now resolves the team, project, READY deployment, deployment metadata and build logs.",
+    "hypothesis": "The prior connector read-scope blocker is gone; the remaining immediate deployment blocker is topology/configuration: the live Vercel project currently deploys repository root/main, while PR #751's Next/MCP app lives under mcp/vercel-sandbox-mcp and has no committed package-lock.json.",
+    "counterhypothesis": "The existing production deployment might already route the PR #751 control plane despite root-level repository deployment.",
+    "falsifier": "Fetch /healthz from the actual READY deployment. A 200 control-plane health response supports the counterhypothesis; a Vercel NOT_FOUND supports the root/topology mismatch hypothesis.",
+    "prediction_hypothesis": "GET /healthz returns 404 NOT_FOUND.",
+    "prediction_counterhypothesis": "GET /healthz returns the PR #751 health response.",
+    "outcome": "RETAIN",
+    "confidence": "HIGH"
+  },
+  "unusual_experiment": {
+    "name": "PROBE_CONTROL_PLANE_HEALTH_ON_EXISTING_ROOT_DEPLOYMENT",
+    "count": 1,
+    "bounded": true,
+    "result": "GET https://dr-unterweger.vercel.app/healthz returned HTTP 404 with x-vercel-error NOT_FOUND. No mutation and no Sandbox start occurred."
+  },
+  "evidence_class": "REAL_VERCEL_CONTROL_PLANE_READ_PLUS_LIVE_HTTP_NEGATIVE_PROBE",
+  "claims_not_made": [
+    "No PR #751 Preview deployment PASS.",
+    "No Vercel Sandbox microVM was started.",
+    "No CM-07 execution PASS.",
+    "No new EntityOS artifact was built.",
+    "No EntityOS runtime acceptance is claimed.",
+    "No whole Clay Machine acceptance is claimed."
+  ],
+  "next_executable_step": "Make the Vercel project deploy mcp/vercel-sandbox-mcp (project Root Directory or equivalent isolated preview configuration), commit a real package-lock.json, then trigger/read an exact PR #751 Preview deployment and require /healthz before any Sandbox start."
+}

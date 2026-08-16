@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "research_endpoint": "EntityOS",
+  "product_form": "ONE_EXECUTABLE_FILE",
+  "research_head_joined": "2f5aae6edda23bdaf1f81bfe4317fdf125257823",
+  "product_main_joined": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "execution_truth": "VERCEL_SANDBOX_ONLY_FOR_EXECUTABLE_CLAIMS",
+  "observations": {
+    "vercel_project": "dr-unterweger",
+    "last_actually_started_build_inspected": {
+      "deployment_id": "dpl_3GtAfZ8H2wSv23nQRhLKm8wH6swe",
+      "source_head": "8df127fbf7d97b4f3abfdc5e705bfb49a028c7fd",
+      "branch": "chatgpt/go-vercel-gitbundle-buildinternal-20260816-2325",
+      "result": "BUILD_FAILED_BEFORE_SANDBOX_START",
+      "exact_failure": "VERCEL_GIT_SOURCE_TREE_DIRTY",
+      "classification": "AMBIENT_VERCEL_CHECKOUT_MUTATION_PROVENANCE_STAGING_BLOCKER_NOT_ENTITYOS_CODE_RESULT"
+    },
+    "preferred_replay_safe_lane": {
+      "pr": 776,
+      "head": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+      "source_staging_change": "canonical source archive is materialized from immutable committed Git tree; ambient post-install checkout bytes are explicitly non-authoritative",
+      "current_status": "DEPLOYMENT_RATE_LIMITED_BEFORE_NEW_DEPLOYMENT_OR_SANDBOX",
+      "status_observed": "Deployment rate limited — retry in 24 hours."
+    },
+    "bytes_candidate": {
+      "pr": 777,
+      "head": "fcf198ceb0318285bad8e2332e21dbec93804ff8",
+      "state": "OPEN_DRAFT_UNVERIFIED",
+      "static_review": [
+        "CLAYVM/1 remains selected for modules whose admitted signatures contain no Bytes",
+        "CLAYVM/2 serializes parameter type identity for Bytes-capable modules",
+        "Bytes ingress snapshots bytearray and contiguous byte memoryview into owned immutable bytes",
+        "non-contiguous and released memoryviews fail closed through Clay Trap paths",
+        "provenance artifact binds declared VM format to the actual VM blob format"
+      ],
+      "runtime_evidence": "NONE_FOR_THIS_HEAD"
+    }
+  },
+  "counterhypothesis": {
+    "claim": "A module-wide transition to CLAYVM/2 may preserve an all-Bytes test while regressing Int function parameter metadata or Int execution for mixed Int+Bytes modules.",
+    "why_material": "compile_typed_ir selects the VM format at module scope as soon as any function uses Bytes; therefore legacy Int functions can be encoded through the V2 function-table path even though the current Bytes gate primarily exercises Bytes-only signatures.",
+    "falsifier": "Compile one canonical module containing both Int and Bytes functions, require CLAYVM/2, verify exact decoded per-function param_types, execute both functions, and retain the legacy standalone Int module CLAYVM/1 control."
+  },
+  "next_batch_obligations": [
+    "run PR776 exact-head replay-safe build-internal source/provenance staging in an actually-started Vercel Sandbox",
+    "run PR777 exact Bytes-v2 and released-view regressions",
+    "add/run mixed Int+Bytes CLAYVM/2 module regression before Bytes promotion",
+    "rerun current IR/VM/provenance baselines",
+    "double-build exact one-file EntityOS and require identical SHA256",
+    "run EntityOS status/self-test, PATH-without-host-Python, capability and relocation gates",
+    "only after Bytes is green, three-way fuse preferred PR744 String-path work and repeat the exact EntityOS batch"
+  ],
+  "unusual_experiment": {
+    "required_for_go": true,
+    "executed": false,
+    "reason": "No new exact-identity Vercel Sandbox could be started because the current preferred Vercel head is deployment-rate-limited. Sandbox-only policy forbids substituting local, VPS, self-hosted, production-host or deployment READY evidence.",
+    "accounting": "UNSATISFIED_DUE_EXTERNAL_EXECUTION_BLOCKER"
+  },
+  "code_promotion": "NONE",
+  "whole_entityos_acceptance": false,
+  "outcome": "BLOCKED_BEFORE_NEW_SANDBOX_EXECUTION_WITH_NEW_MIXED_V2_DISCRIMINATOR_PRESERVED",
+  "vps_or_self_hosted_test_evidence_used": false
+}

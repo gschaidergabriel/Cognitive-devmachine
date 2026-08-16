@@ -1,0 +1,105 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "worker_model": "GPT-5.6 Sol",
+  "research_head_before_write": "4612f3e13948684b912716f0260b9996ddca3f12",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_product_head_before_candidate": "66e466c9c57d72c520e98085f221afcaffab9494",
+  "entityos_current_head_evidence": {
+    "workflow_run": 31927007084,
+    "workflow_conclusion": "success",
+    "artifact_id": 9258143200,
+    "artifact_sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "artifact_size_bytes": 11931208,
+    "independent_local_status": "PASS",
+    "independent_local_selftest": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "typed_ir_vm_process_result": 0,
+    "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK",
+    "capability_denial_without_grant": "PASS_FAIL_CLOSED",
+    "whole_machine_acceptance": false,
+    "note": "Exact current-head EntityOS verification is already recorded separately by the serialized-current-head receipt; it is referenced here only as the product baseline for this candidate."
+  },
+  "grf": {
+    "observed_reality": [
+      "The current canonical single ClayVM module format/runtime is still Int-oriented at function parameter admission.",
+      "The current CM-TERM VM process bridge uses an Int request handle and explicitly leaves canonical String/Bytes/argv values open.",
+      "The current CM-DATA research receipt rejects a duplicate Python-only byte substrate and selects a typed module/runtime admission contract as the next discriminator."
+    ],
+    "generated_reality": "A minimal explicit typed-value contract can preserve current ClayVM module identity while making Int/Bool/Bytes function signatures and immutable Bytes admission independently testable before changing the production VM format.",
+    "strongest_counter_reality": "A detached signature contract can become a shadow sidecar and provide no canonical safety unless the winning representation is wired through source/typecheck -> ClayExecutableTypedIR/v1 -> the single serialized ClayVM admission path.",
+    "discriminator": "Bind typed signatures to the exact existing VM module SHA-256; require exact runtime type admission; prove immutable Bytes snapshot/tamper rejection; reject signature transplantation to sibling module bytes.",
+    "outcome": "RETAIN_AS_BOUNDED_RESEARCH_CANDIDATE_NOT_PRODUCTION_PROMOTION"
+  },
+  "candidate": {
+    "pull_request": 708,
+    "state": "DRAFT",
+    "branch": "chatgpt/go-clayvm-typed-value-contract-v1-20260816-1131",
+    "head": "e25b240b65216155cbc84e1d5422a4d2dd3b8761",
+    "base": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "schema": "ClayVMTypedValueContract/v1",
+    "admitted_types": ["Int", "Bool", "Bytes"],
+    "production_clayvm_widened": false,
+    "second_vm_created": false,
+    "files": [
+      "claymachine/typed_value_contract_candidate.py",
+      "tests/clayvm_typed_value_contract_candidate_gate.py",
+      ".github/workflows/clayvm-typed-value-contract-candidate.yml"
+    ]
+  },
+  "local_gate": {
+    "status": "PASS",
+    "checks": 12,
+    "total": 12,
+    "controls": [
+      "Int admission and return",
+      "Bool rejected as Int",
+      "Owned immutable Bytes admission and return",
+      "Bytes rejected as Int",
+      "mutable bytearray snapshot cannot mutate admitted value",
+      "content-digest tamper rejected",
+      "non-byte-oriented memoryview rejected",
+      "canonical encode/decode round trip",
+      "contract transplant to different module bytes rejected",
+      "function declaration order canonicalized",
+      "unknown type rejected",
+      "duplicate function rejected"
+    ]
+  },
+  "github_hosted_ci": {
+    "run_id": 31927072270,
+    "job_id": 95116200981,
+    "tested_head": "e25b240b65216155cbc84e1d5422a4d2dd3b8761",
+    "github_conclusion": "failure",
+    "semantic_classification": "NO_TEST_EXECUTION_INFRASTRUCTURE_OR_RUNNER_ADMISSION",
+    "executed_steps": 0,
+    "candidate_gate_result": "UNKNOWN_NOT_RUN",
+    "policy": "Do not weaken the gate or move unadmitted candidate execution onto a persistent self-hosted runner merely to obtain green status."
+  },
+  "unusual_experiment_accounting": {
+    "worker_macrocycle_count": 1,
+    "name": "ENTITYOS_RELOCATED_UNICODE_SPACE_CWD_DECOUPLING",
+    "result": "PASS_BYTE_IDENTICAL",
+    "candidate_added_unusual_experiments": 0,
+    "coordination_note": "A separate parallel current-main EntityOS workflow also contains its own bounded unusual experiment under its own workflow execution. This receipt does not count or claim that external parallel run as a second worker experiment; shared macrocycle slot ownership remains a separate coordination problem already preserved by the current EntityOS research receipt."
+  },
+  "promotion_boundary": {
+    "state": "DEFER",
+    "reason": "Local deterministic candidate evidence exists, but no exact CI/VPS execution of the candidate occurred and the contract is not yet in the production ClayVM/module admission path.",
+    "next_falsifier": "Integrate the smallest winning typed metadata/value representation into the real canonical module/runtime boundary so Int->Int rejects Bytes and Bytes->Bytes accepts one immutable module-bound value; then carry one canonical Bytes/String/argv value through checker -> ClayExecutableTypedIR/v1 -> single ClayVM -> ClayOS process boundary and rebuild/retest the one-file EntityOS at the then-current main head."
+  },
+  "authority": {
+    "external_effect_added": false,
+    "new_capability_added": false,
+    "harness_authority_changed": false,
+    "training_authorized_or_started": false,
+    "together_used": false,
+    "whole_machine_completion_claimed": false
+  }
+}

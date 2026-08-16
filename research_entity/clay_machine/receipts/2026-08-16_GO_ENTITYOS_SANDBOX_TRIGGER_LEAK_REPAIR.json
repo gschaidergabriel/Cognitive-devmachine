@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_ENTITYOS_SANDBOX_TRIGGER_LEAK_REPAIR",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date_local": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY_TESTING",
+  "canonical_anchor": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "observed_reality": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_at_cycle_start": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+    "product_main_after_repairs": "4249f30a92133b226347f82ed61809595cdb80e9",
+    "active_candidate_pr": 744,
+    "candidate_head_observed": "81f1b99c70af56d9459d81190a1244484748d32f",
+    "candidate_scope": "path-only String hostcall through the single ClayVM",
+    "current_head_entityos_acceptance": false,
+    "hosted_sandbox_state": "BLOCKED_BEFORE_RUNNER_START_BY_GITHUB_BILLING_OR_SPENDING_STATE"
+  },
+  "hypothesis": "Legacy pull-request workflows targeting persistent self-hosted/VPS runners were the highest-priority policy violation because they could execute candidate code outside the owner-fixed isolated-sandbox-only test surface.",
+  "strongest_counterhypothesis": "Changing runner labels could reduce useful test coverage without improving safety if jobs silently fell back to persistent runners or if the current policy still admitted VPS validation.",
+  "discriminating_observations": [
+    {
+      "workflow": "Clay CM-TERM VM Process",
+      "historical_pr_run": 31939686852,
+      "historical_surface": "self-hosted",
+      "additional_issue": "stale assertion expected unusual_experiment_count=1 although schema reports new_unusual_experiment_count=0 and historical_unusual_regression=SHELL_METACHARACTER_DECOY"
+    },
+    {
+      "workflow": "ClayOS strict artifact launch",
+      "historical_pr_surface": "self-hosted"
+    },
+    {
+      "workflow": "ClayCode runtime nominal boundary repair",
+      "historical_pr_surface": "self-hosted"
+    },
+    {
+      "workflow": "Frank execution gate directory anchor repair",
+      "historical_pr_run": 31939686702,
+      "historical_surface": "self-hosted clay-4"
+    },
+    {
+      "workflow": "Frank Deep Integrity",
+      "historical_pr_run": 31939686715,
+      "historical_surface": "self-hosted clay-4"
+    },
+    {
+      "workflow": "Frank self.root current-head v2",
+      "historical_pr_run": 31939686716,
+      "historical_surface": "self-hosted clay-3"
+    },
+    {
+      "workflow": "Frank fresh-main effect fence + provider contract",
+      "historical_pr_run": 31939686690,
+      "historical_surface": "self-hosted clay-2"
+    }
+  ],
+  "product_repairs": [
+    {
+      "commit": "a01f6b69ffacc689cbd3c755954cb28fe412852b",
+      "path": ".github/workflows/clay-cm-term-vm-process.yml",
+      "change": "self-hosted PR test -> ubuntu-latest isolated sandbox; repair stale experiment-accounting assertions"
+    },
+    {
+      "commit": "c9780834dd6eac077e6b4ff2df6756d798caa84e",
+      "path": ".github/workflows/clayos-strict-artifact-launch.yml",
+      "change": "self-hosted PR test -> ubuntu-latest isolated sandbox"
+    },
+    {
+      "commit": "05c910705fe9a430ee0f958760639f54217aa9da",
+      "path": ".github/workflows/claycode-runtime-nominal-boundary-oob-vps.yml",
+      "change": "self-hosted/VPS test -> ubuntu-latest isolated sandbox"
+    },
+    {
+      "commit": "9279479b9afa737272f54446da05f6ed86ed335c",
+      "path": ".github/workflows/frank-deep-integrity.yml",
+      "change": "main/pull-request integrity test -> ubuntu-latest isolated sandbox; billing failure now fails closed rather than falling back"
+    },
+    {
+      "commit": "8cfb5cab5d87ec883a32990651a343cbee99e253",
+      "path": ".github/workflows/frank-execution-gate-directory-anchor-repair-vps.yml",
+      "change": "self-hosted/VPS test -> ubuntu-latest isolated sandbox"
+    },
+    {
+      "commit": "3a44a13a5274a07d0c62851e909a1ca9fea20900",
+      "path": ".github/workflows/frank-self-root-current-head-v2.yml",
+      "change": "self-hosted test -> ubuntu-latest isolated sandbox"
+    },
+    {
+      "commit": "4249f30a92133b226347f82ed61809595cdb80e9",
+      "path": ".github/workflows/frank-provider-fence-fresh-main-vps.yml",
+      "change": "self-hosted/VPS effect/provider integration -> ubuntu-latest isolated sandbox"
+    }
+  ],
+  "post_repair_safety_observation": {
+    "workflow": "Frank Deep Integrity",
+    "run": 31940728787,
+    "head": "4249f30a92133b226347f82ed61809595cdb80e9",
+    "requested_label": "ubuntu-latest",
+    "runner_id": 0,
+    "steps": 0,
+    "conclusion": "failure",
+    "interpretation": "FAIL_CLOSED_BEFORE_EXECUTION; NO_SELF_HOSTED_FALLBACK"
+  },
+  "exact_entityos_evidence": {
+    "artifact_source_commit": "14fbd477ad3a2ae1ca6082ea9c21e510f583b258",
+    "local_artifact_sha256": "5dcbecb7982fdefdcc1971cefaf223bcb4f613c824a4db01f53109d3ec545c73",
+    "size_bytes": 1213311,
+    "scope": "HISTORICAL_ONE_FILE_CANDIDATE_ONLY_NOT_CURRENT_HEAD",
+    "about": "PASS",
+    "self_test": "PASS",
+    "observed_components": [
+      "bundled parser",
+      "ClayCode to TypedIR",
+      "single ClayVM",
+      "minimal ClayOS",
+      "controlled Linux process interop",
+      "provenance and VM hash checks"
+    ],
+    "current_release_acceptance": false
+  },
+  "unusual_experiment": {
+    "count_this_go_cycle": 1,
+    "name": "PYTHON_SITE_STARVATION_ONE_FILE_BOOT",
+    "baseline": "Historical EntityOS 14fbd477 self-test PASS in isolated local sandbox.",
+    "intervention": "Copied only EntityOS to a clean temporary directory and launched with env -i, PATH=/usr/bin:/bin, HOME=/tmp, PYTHONNOUSERSITE=1 and /usr/bin/python3 -S.",
+    "result": "PASS",
+    "interpretation": "Supports parser/site-package independence for historical 14fbd477 only; does not establish current-head or whole-machine acceptance.",
+    "rollback": "Temporary directory removed; no canonical state or external effect mutated."
+  },
+  "secondary_negative_result": {
+    "area": "EntityOS explicit persistent-state root",
+    "observation": "Current source logic accepted a symlink in an ancestor of ENTITYOS_STATE_HOME in the local deterministic falsifier; a previously proposed resolve-based fence rejected the redirect.",
+    "promotion": "DEFERRED",
+    "reason": "Current supervisor frontier prioritizes eliminating forbidden persistent-runner triggers before state-root hardening."
+  },
+  "collapse": {
+    "legacy_persistent_runner_pr_evidence": "NON_ADMISSIBLE_UNDER_CURRENT_POLICY",
+    "sandbox_runner_repairs": "PROMOTED_TO_PRODUCT_MAIN",
+    "current_pr744_string_path_semantics": "RETAIN_CANDIDATE_NOT_PROMOTED",
+    "historical_entityos_one_file_candidate": "VERIFIED_IN_LOCAL_SANDBOX_WITH_LIMITED_SCOPE",
+    "current_head_entityos": "BLOCKED_UNVERIFIED",
+    "whole_clay_machine_acceptance": "NOT_PROMOTED"
+  },
+  "exact_blocker": "No allowed current-head isolated GitHub-hosted runner presently starts: requested ubuntu-latest jobs fail before runner assignment because of GitHub billing/spending state. Therefore PR744 and the current main cannot receive admissible exact-head build/test evidence or a newly accepted current-head EntityOS artifact in this cycle.",
+  "next_exact_executable_step": "Continue static enumeration of remaining workflows that can execute tests on self-hosted/VPS and move or disable those test surfaces; once an allowed isolated Ubuntu sandbox can actually start without increasing spend, run exact PR744 head plus CM-TERM/single-VM regressions, rebuild EntityOS from the accepted head, execute that exact one-file artifact, and only then promote or merge semantic changes. After the runner-safety frontier is closed, re-enter the explicit-state-root ancestor-symlink falsifier.",
+  "owner_gates_respected": {
+    "paid_capacity_changed": false,
+    "training_started": false,
+    "together_used": false,
+    "vps_test_execution_started": false
+  },
+  "entityos_artifact": "BLOCKED_CURRENT_HEAD",
+  "outcome": "SAFETY_POLICY_CONVERGENCE_WITH_CURRENT_HEAD_ENTITYOS_STILL_BLOCKED"
+}

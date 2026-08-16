@@ -1,0 +1,72 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "ENTITYOS_EXACT_BYTES_LOCALLY_VERIFIED_WITH_UNLINKED_EXECUTABLE_NEGATIVE_RESULT",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "tested_product_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+  "source_ci": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31926373645,
+    "conclusion": "success",
+    "artifact_id": 9257962341,
+    "artifact_name": "entityos-canonical-onefile-31926373645"
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "size_bytes": 11930688,
+    "sha256": "f2ba2c8d7eabee85daacea8065493b07e6b3f032e7b2a280e630c1a024901995",
+    "format": "ELF 64-bit LSB executable, x86-64",
+    "mode": "0755",
+    "build_head": "5b1fd8fda29c88f540533b9c6b73903716360723",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "whole_machine_acceptance": false
+  },
+  "local_exact_byte_crosscheck": {
+    "environment": "active ChatGPT Linux sandbox outside repository tree",
+    "sha256_matches_ci": true,
+    "status": "PASS",
+    "self_test": "PASS",
+    "clay_build_run_result": 42,
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_capability": "LOCAL_ENTITYOS_OK"
+  },
+  "macro_cycle_unusual_experiment": {
+    "count": 1,
+    "name": "UNLINKED_EXECUTABLE_FD_PATH_INDEPENDENCE",
+    "baseline": "EntityOS --self-test-json from normal on-disk path",
+    "intervention": "copy EntityOS, open the copy, unlink its pathname, then exec it through /proc/self/fd/N from cwd=/ while preserving only the open descriptor",
+    "result": "REFUTED",
+    "baseline_rc": 0,
+    "intervention_rc": 255,
+    "baseline_stdout_sha256": "11a829799476107e5d9cf83ee9860d51fe1a5868f903e3e4c320401e8556a944",
+    "intervention_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "[PYI-437:ERROR] Could not load PyInstaller's embedded PKG archive from the executable (.../EntityOS.ephemeral (deleted))",
+    "rollback": "ephemeral copy was already unlinked, descriptor closed, no runtime/repository mutation",
+    "interpretation": "The frozen one-file candidate still depends on a resolvable executable backing file while PyInstaller loads its embedded archive. This is not a normal copy/move/restart failure and does not invalidate the accepted one-file candidate gates; it is a portability boundary to preserve as negative evidence."
+  },
+  "grf": {
+    "observed_anchor": "main-push CI and local exact-byte gates pass",
+    "hypothesis": "EntityOS runtime is independent of its original checkout and ordinary launch path after freezing",
+    "counter_reality": "the one-file freezer may still require a persistent executable backing pathname during boot",
+    "discriminator": "unlink the copied executable before exec while retaining an open fd",
+    "outcome": "counter-reality retained for post-unlink execution; ordinary copied-file portability remains supported by existing evidence"
+  },
+  "not_promoted": [
+    "whole EntityOS / whole Clay Machine acceptance",
+    "accepted Hostinger final-release acceptance",
+    "canonical source-level String/Bytes/argv/env/cwd/stdin/stdout/stderr/PTY closure",
+    "CM-NET closure",
+    "CM-DATA/CM-VIS/CM-AUDIO closure",
+    "persistent service/state/recovery closure",
+    "self-hosting/bootstrap equivalence"
+  ],
+  "next_discriminator": "Keep the merged one-file EntityOS as the release candidate boundary; next wire the smallest provenance-bound String/Bytes/argv plus ownership/lifetime/effect-signature surface through checker -> ClayExecutableTypedIR -> single ClayVM -> ClayOS process boundary, then rebuild and rerun the exact EntityOS main gate.",
+  "training_authorized": false,
+  "together_api_used": false
+}

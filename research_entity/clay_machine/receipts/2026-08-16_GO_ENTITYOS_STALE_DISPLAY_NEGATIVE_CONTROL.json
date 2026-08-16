@@ -1,0 +1,76 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_STALE_DISPLAY_NEGATIVE_CONTROL",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "SUPPORTED_NEGATIVE_RESULT_TEST_OBLIGATION",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+  "artifact": {
+    "name": "EntityOS",
+    "binary_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "binary_size_bytes": 12820496,
+    "build_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "whole_machine_acceptance": false
+  },
+  "observed_controls": [
+    {
+      "name": "HEADLESS_DISPLAY_UNSET",
+      "environment_delta": "DISPLAY unset; isolated ENTITYOS_STATE_HOME",
+      "first_launch_rc": 73,
+      "first_launch_stderr": "ENTITYOS_INITIAL_GRANT_REQUIRED",
+      "test_grant_rc": 0,
+      "second_launch_rc": 0,
+      "second_launch_stderr_bytes": 0,
+      "result": "PASS_EXPECTED_HEADLESS_FALLBACK"
+    },
+    {
+      "name": "STALE_UNREACHABLE_DISPLAY",
+      "environment_delta": "DISPLAY=:65534; isolated ENTITYOS_STATE_HOME",
+      "first_launch_rc": 73,
+      "first_launch_stderr": [
+        "ENTITYOS_INITIAL_GRANT_GUI_ERROR:ENTITYOS_X11_DISPLAY_OPEN_FAILED",
+        "ENTITYOS_INITIAL_GRANT_DECLINED"
+      ],
+      "result": "NEGATIVE_FALSE_GRAPHICAL_AVAILABILITY_CLASSIFICATION"
+    }
+  ],
+  "same_artifact_functional_control": {
+    "self_test": "SELFTEST_PASS",
+    "clay_build_run_result": 42,
+    "process_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "process_with_linux_process_spawn_v0": "CURRENT_HEAD_OK"
+  },
+  "grf_collapse": {
+    "observed_reality": "The exact current EntityOS binary behaves correctly when DISPLAY is absent but classifies a non-empty unreachable DISPLAY as graphical availability and then fails at XOpenDisplay.",
+    "preferred_hypothesis": "The availability predicate is weaker than the actual X11 connection requirement: environment presence plus libX11 presence can be true while XOpenDisplay fails.",
+    "strongest_counterhypothesis": "The failure is an unrelated artifact/container incompatibility rather than the display-availability predicate.",
+    "discriminator": "Run the same binary and state protocol with only DISPLAY changed from absent to an unreachable endpoint.",
+    "outcome": "RETAIN",
+    "confidence": "HIGH_FOR_CLASSIFICATION_DEFECT_ON_TESTED_ENVIRONMENT"
+  },
+  "code_observation": {
+    "boot_entry": "entityos/boot_entry.py calls entityos.visual_shell.graphical_display_available before GUI grant and product-surface selection.",
+    "visual_shell": "graphical_display_available currently checks non-empty DISPLAY plus find_library('X11'); _X11 later calls XOpenDisplay and rejects a null connection.",
+    "upstream_semantics": "X.org XOpenDisplay documentation states that XOpenDisplay establishes the X-server connection and returns NULL on failure."
+  },
+  "affected_gates": [
+    "CM-PORT",
+    "CM-09-MINIMAL-CLAYOS",
+    "CM-10-TOOLING-OBSERVABILITY-RECOVERY",
+    "ENTITYOS_FIRST_START_PERMISSION_CONTINUITY"
+  ],
+  "test_obligation": "Add a deterministic stale/unreachable DISPLAY regression gate. Graphical availability must require an actually usable display connection or the boot boundary must otherwise fall back/fail without misclassifying an unreachable display as a declined user grant.",
+  "next_executable_action": "Implement a bounded XOpenDisplay connectivity probe or equivalent safe fallback in the EntityOS graphical-availability boundary, add the stale-DISPLAY regression test, then rebuild and rerun the exact one-file EntityOS canonical gates. Do not weaken host/effect authority.",
+  "unusual_experiment": {
+    "count_added_by_this_receipt": 0,
+    "note": "This was a normal discriminating control. The go macro-cycle unusual-experiment budget remains the already executed ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD experiment."
+  },
+  "authority": {
+    "together_api": "FORBIDDEN",
+    "whole_machine_pass_claimed": false
+  }
+}

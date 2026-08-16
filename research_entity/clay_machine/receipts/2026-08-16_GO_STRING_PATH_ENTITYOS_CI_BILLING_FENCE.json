@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_STRING_PATH_ENTITYOS_CI_BILLING_FENCE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date_local": "2026-08-16",
+  "execution_policy": "SANDBOX_ONLY; VPS, self-hosted VPS runners and production-host testing are forbidden as test evidence.",
+  "research_main_observed_before_write": "5084d53a2941befc94b064b6baee14e4daa21033",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "observed_reality": {
+    "canonical_active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+    "canonical_stage": "CLAY_MACHINE",
+    "release_artifact": "EntityOS",
+    "release_form": "ONE_EXECUTABLE_FILE",
+    "current_main_whole_machine_acceptance": false,
+    "allowed_execution": "ISOLATED_SANDBOXES_ONLY"
+  },
+  "overlap_coordination": {
+    "stronger_active_candidate_pr": 744,
+    "stronger_active_candidate_head": "efc461e9b7a391fd74e966f34e3d8d1cf5fa345f",
+    "stronger_candidate_scope": "linux.process.spawn.path.v1::(String)->Int path-only String hostcall with fail-closed UTF-8 scalar validation",
+    "redundant_candidate_branch": "clay/go-string-path-v1-20260816",
+    "redundant_candidate_head_after_ci_alignment": "bf42dcc251f4112d01c881bab71ae3d20e68f8d3",
+    "disposition": "DO_NOT_PROMOTE_DUPLICATE; retain only non-overlapping evidence and converge on PR744 after exact allowed sandbox evidence"
+  },
+  "hypothesis": "The path-only String process slice can advance CM-TERM without requiring general argv/Bytes semantics, provided nominal type boundaries and fail-closed host validation remain explicit.",
+  "strongest_counterhypothesis": "The apparent String-path advance may fail once composed with the full repository/EntityOS pipeline, or may admit malformed text/return-type mismatches not seen by narrow component tests.",
+  "discriminating_observation": {
+    "candidate_full_repo_ci": "BLOCKED_BEFORE_RUNNER_START",
+    "reason": "GitHub Actions annotation states recent account payments failed or the spending limit must be increased; runner_id=0 and steps=[]",
+    "code_result": "UNKNOWN_NOT_EXECUTED",
+    "whole_entityos_result": "UNKNOWN_NOT_BUILT_AT_CURRENT_CANDIDATE_HEAD"
+  },
+  "product_ci_delta": {
+    "branch": "clay/go-string-path-v1-20260816",
+    "commit": "bf42dcc251f4112d01c881bab71ae3d20e68f8d3",
+    "change": "Aligned stale Go String hostcall workflow assertions and branch trigger with the promoted String-path test contract.",
+    "resulting_run": 31940521249,
+    "result": "INFRASTRUCTURE_BLOCKED_BEFORE_STEPS",
+    "promotion": "NO_CODE_PASS_CLAIM"
+  },
+  "baseline_entityos_control": {
+    "source_workflow_run": 31930333315,
+    "source_head": "4486a320a3a321c70f3f0b52a12a85d3957be1a7",
+    "artifact_sha256": "eb6b1ebc2fd6b8e2ce9defe89867bb22f879e390fc9255aa6301c4a84b614bf6",
+    "artifact_size_bytes": 8919008,
+    "local_isolated_sandbox_self_test": "PASS",
+    "frozen_runtime": true,
+    "typed_ir_vm_process_effect": "PASS",
+    "visual_grounded_queries": "PASS",
+    "whole_machine_acceptance": false,
+    "evidence_scope": "Historical successful one-file baseline only; not evidence for PR744 or bf42dcc current candidate."
+  },
+  "unusual_experiment": {
+    "name": "SIDECAR_STARVATION_MINIMAL_ENV",
+    "count": 1,
+    "context": "ISOLATED_LOCAL_SANDBOX_ON_LAST_SUCCESSFUL_ENTITYOS_BASELINE",
+    "baseline": "Downloaded exact prior successful one-file EntityOS artifact self-tested PASS in the sandbox.",
+    "intervention": "Copied only EntityOS into an otherwise empty directory, removed companion files, chmod 0555, and launched with env -i plus only PATH, HOME=/nonexistent and LC_ALL=C.",
+    "result": "PASS",
+    "observed": {
+      "directory_contents_before_execution": ["EntityOS"],
+      "self_test_status": "PASS",
+      "frozen_runtime": true,
+      "typed_ir_vm_process_effect": "PASS",
+      "visual_grounded_queries": "PASS",
+      "whole_machine_acceptance": false
+    },
+    "interpretation": "Supports sidecar-independent relocation/minimal-environment behavior for the older 4486a320 baseline only; does not promote the current candidate or whole Clay Machine acceptance."
+  },
+  "collapse": {
+    "path_only_string_semantics": "RETAIN_AS_OVERLAPPING_PR744_CANDIDATE",
+    "duplicate_bf42_branch": "DEFER_NOT_PROMOTE",
+    "one_file_sidecar_independence_baseline": "SUPPORTED_FOR_4486A320_ONLY",
+    "current_candidate_entityos": "BLOCKED_UNVERIFIED",
+    "whole_clay_machine_acceptance": "NOT_PROMOTED"
+  },
+  "next_exact_executable_step": "Make an allowed isolated Ubuntu sandbox actually start for exact PR744 head efc461e9b7a391fd74e966f34e3d8d1cf5fa345f (restore GitHub Actions billing/spending or provide an authenticated equivalent isolated sandbox), then run the String-path gate plus existing CM-TERM/single-VM regressions, build EntityOS twice with byte-identical SHA-256, execute its self-test, and copy-execute the exact one-file artifact before any merge/promotion.",
+  "after_that_frontier": "Select canonical Bytes/Buffer ownership+lifetime and general argv/effect semantics without backend-local language invention.",
+  "entityos_artifact": "BLOCKED_CURRENT_CANDIDATE",
+  "whole_clay_machine_acceptance": false,
+  "outcome": "INFRASTRUCTURE_BLOCKED_WITH_DURABLE_EVIDENCE_AND_DUPLICATE_PATH_FUSED_AWAY"
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program_stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+  "product_change": "fix(entityos): probe X11 reachability before GUI boot",
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31929651652,
+    "job_id": 95122460806,
+    "runner_class": "self-hosted Linux X64",
+    "conclusion": "success",
+    "all_steps_completed": true,
+    "artifact_id": 9258908699
+  },
+  "observed_reality": {
+    "artifact": "EntityOS",
+    "artifact_form": "single ELF x86-64 executable",
+    "size_bytes": 12820848,
+    "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "build_head_bound": true,
+    "frozen_runtime": true,
+    "single_file_candidate": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_machine_acceptance": false
+  },
+  "grf": {
+    "hypothesis": "DISPLAY presence alone is insufficient for product boot selection; probing the configured X11/XWayland endpoint before entering the GUI path prevents stale or unreachable display endpoints from causing a graphical boot failure.",
+    "strongest_counterhypothesis": "Opening an X11 probe could itself perturb launch semantics or leave a resource behind, and the added branch could regress headless fallback or one-time grant continuity.",
+    "discriminating_test": "Execute the exact b32ec5a5 artifact through the canonical one-file VPS workflow, including source regression, deterministic double-freeze, status/self-test, initial-grant fail-closed/persist/reuse, Clay build/run, process capability denial/admission, and the single bounded relocation experiment.",
+    "outcome": "RETAIN",
+    "promotion_scope": "component/runtime boot-boundary evidence only; not whole-machine acceptance"
+  },
+  "exact_gates": {
+    "source_regression_rc": 0,
+    "double_freeze_sha256_match": true,
+    "self_test": "SELFTEST_PASS",
+    "clay_integration_result": 42,
+    "initial_grant_first_noninteractive": "FAIL_CLOSED_RC_73",
+    "initial_grant_acceptance": "PERSISTED_ONCE",
+    "initial_grant_second_launch": "REUSED_WITHOUT_PROMPT",
+    "initial_grant_state_dir_mode": "700",
+    "initial_grant_state_file_mode": "600",
+    "host_without_capability": "DENIED",
+    "host_with_linux_process_spawn_v0": "ENTITYOS_OK",
+    "unifieddb_visual_data_source": true
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT",
+    "rollback": "TEMP_PATH_REMOVED",
+    "note": "No second unusual experiment was performed in the local artifact recheck."
+  },
+  "local_recheck": {
+    "environment": "temporary ChatGPT Linux execution container, not acceptance authority",
+    "artifact_sha256_match": true,
+    "status_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "self_test": "SELFTEST_PASS",
+    "initial_grant_required_rc": 73,
+    "initial_grant_reuse_stderr_bytes": 0,
+    "clay_integration_result": 42,
+    "host_capability_fail_closed_then_granted": true
+  },
+  "counterevidence_and_limits": [
+    "EntityOS status explicitly reports whole_machine_acceptance=false.",
+    "This receipt does not close canonical typed String/Bytes/argv/effect paths, networking, media transport, recovery, self-hosting, or final ProductStart acceptance.",
+    "The automated deterministic initial-grant test proves the persistence mechanism, not a physical human click on the final accepted desktop host.",
+    "The local ChatGPT container recheck is portability evidence only and does not replace the self-hosted Linux/VPS workflow receipt."
+  ],
+  "next_executable_step": "Advance the shared CM-DATA/CM-TERM semantic frontier: admit the smallest provenance-bound owned Bytes plus String/argv/effect-signature surface through canonical checker -> ClayExecutableTypedIR/v1 -> the existing single ClayVM, then rebuild and rerun this exact EntityOS gate without weakening fail-closed authority.",
+  "research_state": "SUPPORTED_COMPONENT_DELTA",
+  "release_state": "NOT_PASSED"
+}

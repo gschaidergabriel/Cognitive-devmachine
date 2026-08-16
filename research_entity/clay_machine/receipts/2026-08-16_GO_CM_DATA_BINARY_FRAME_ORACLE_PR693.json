@@ -1,0 +1,61 @@
+{
+  "schema": "clay_go_receipt_v1",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "frontier": "CM-DATA",
+  "status": "TESTING",
+  "research_head_observed_before_write": "fe576be9a2512592c72b82c0ed1b7b4a9b288192",
+  "product_main_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "product_pr": 693,
+  "candidate_branch": "chatgpt/go-cm-data-binary-frame-20260816",
+  "candidate_head": "a988f0bb6793626a8b9799b28953a4ad9550fd29",
+  "candidate_files": [
+    "claymachine/data_plane.py",
+    "tests/test_clay_data_plane.py"
+  ],
+  "hypothesis": "A minimal byte-exact deterministic framed-stream oracle can provide a falsifiable CM-DATA migration baseline before canonical Clay Bytes/Buffer ownership and VM-ingress semantics are selected.",
+  "counterhypothesis": "A Python framing oracle can become an architectural dead end if its host-language copy/framing behavior is mistaken for canonical Clay value, ownership, effect, or runtime semantics.",
+  "mechanism": {
+    "frame": "MAGIC | payload_length:u32le | crc32:u32le | payload",
+    "default_max_payload_bytes": 16777216,
+    "ingress": "bytes-like inputs are snapshotted to immutable bytes",
+    "decode": "strict exact-frame decode plus incremental fragmented/concatenated stream decode",
+    "failure_policy": "bad magic, oversize, checksum mismatch, truncation and trailing bytes fail closed"
+  },
+  "observed_local_evidence": {
+    "command": "python3 -m unittest -v tests.test_clay_data_plane",
+    "tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "covered_falsifiers": [
+      "all octets 0x00..0xff round-trip",
+      "fragmented and concatenated stream frames",
+      "checksum tamper fails closed",
+      "oversized advertised length fails before payload",
+      "truncated stream fails on finish",
+      "exact decoder rejects trailing bytes",
+      "readonly memoryview over mutable bytearray is snapshotted before later producer mutation"
+    ]
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "description": "Embed the framing MAGIC itself plus NUL/0xff bytes inside the payload, then deliver the complete encoded frame one byte at a time and compare against single-shot decode.",
+    "result": "PASS",
+    "interpretation": "Self-similar binary content and maximal fragmentation did not confuse frame boundaries; streamed decode matched the baseline exactly."
+  },
+  "fusion": "The current mutable-buffer provenance fence strengthens snapshot-at-ingress as the conservative reference behavior: readonly host access alone is not evidence that producer backing storage is immutable. Zero-copy remains deferred until explicit immutable provenance or lease/epoch ownership semantics exist.",
+  "nonclaims": [
+    "not a canonical Clay Bytes/Buffer type",
+    "not a canonical Clay ownership/lifetime contract",
+    "not wired through canonical typed/effect IR",
+    "not wired through the single ClayVM ingress path",
+    "no accepted Ubuntu VPS receipt for this candidate",
+    "no CM-NET, CM-VIS or CM-AUDIO readiness claim",
+    "no whole Clay Machine acceptance",
+    "no owner-gated model training authorization"
+  ],
+  "promotion_gate": "Retain as TESTING until current-head CI is observed and equivalent provenance-bound opaque-byte semantics are selected and wired through canonical Clay type/effect IR into the single VM, followed by accepted-target evidence.",
+  "next_falsifier": "Define the smallest canonical Clay Bytes/Buffer ownership+lifetime contract, then prove one opaque-byte ingress through checker -> typed/effect IR -> single ClayVM with deterministic snapshot/borrow semantics and accepted Ubuntu evidence.",
+  "rollback": "Close PR #693 and delete the candidate branch; no product main or canonical workspace status was mutated by this receipt."
+}

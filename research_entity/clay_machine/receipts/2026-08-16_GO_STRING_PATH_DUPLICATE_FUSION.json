@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "observed_product_main": "b543cf126eda90ccf8c1478653274631f1301398",
+  "observed_research_main_before_write": "f34d413ba0b5a4425cc56a0e859dd405cdea6201",
+  "frontier": "CM-TERM / CM-DATA String executable-path hostcall",
+  "preferred_product_pr": 744,
+  "closed_duplicate_pr": 749,
+  "coordination_action": "FUSE_UNIQUE_EVIDENCE_AND_CLOSE_PARALLEL_IMPLEMENTATION",
+  "comparison": {
+    "pr744_runtime_files": [
+      "claymachine/clayvm.py",
+      "claymachine/executable_ir_adapter.py",
+      "claymachine/host_process_vm.py",
+      "claymachine/host_process.py"
+    ],
+    "pr749_runtime_files": [
+      "claymachine/clayvm.py",
+      "claymachine/executable_ir_adapter.py",
+      "claymachine/host_process_vm.py"
+    ],
+    "reason_prefer_744": "Same narrow path-only String mechanism plus shared host_process UTF-8-scalar fail-closed validation and regression.",
+    "unique_evidence_preserved_from_749": "UNICODE_EXECUTABLE_PATH_STRING_ROUNDTRIP: valid UTF-8/emoji symlink path round-tripped through TypedIR -> serialized ClayVM -> hostcall -> Linux and returned 0."
+  },
+  "new_unusual_experiment_count": 0,
+  "new_unusual_experiment": null,
+  "sandbox_status": "BLOCKED_BEFORE_RUNNER_START",
+  "sandbox_blocker": "GitHub-hosted Actions billing/spending state previously prevented runner allocation; no exact-head EntityOS build/self-test/copy-run is claimed.",
+  "promotion_state": "DRAFT_BLOCKED",
+  "next": [
+    "Synchronize preferred PR 744 onto then-current product main without weakening String/Int signature fences.",
+    "Require an actually-started allowed isolated GitHub-hosted Ubuntu sandbox.",
+    "Run current String-path, CM-TERM and single-VM regressions on exact synchronized head.",
+    "Build EntityOS twice reproducibly, compare SHA-256, self-test exact binary and moved copy, retain artifact/receipt.",
+    "Only then consider promotion; general argv, Bytes, streaming and PTY remain open."
+  ],
+  "whole_clay_machine_acceptance": false
+}

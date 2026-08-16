@@ -1,0 +1,62 @@
+{
+  "schema": "ClayResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "research_head_observed_before_write": "f0b1942d838779f106e08fa51875f903dd242dd4",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_product_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "exact_head_observed": "00274abbee85d283cdbe823a9ef4aef5ad387c75",
+    "state": "OPEN_DRAFT_UNPROMOTED",
+    "duplicate_or_superseded_prs": [776, 777, 780, 782]
+  },
+  "product_candidate": {
+    "bytes_boundary": "immutable built-in bytes admitted; bytearray and living memoryview fail closed pending explicit Buffer lease/epoch/stability semantics; released views normalize fail-closed",
+    "source_stage": "ClayGoSourceStage/v5",
+    "source_materialization": "GIT_LS_TREE_PLUS_CAT_FILE_RAW_BLOBS",
+    "sandbox_sdk": "@vercel/sandbox@2.9.2 pinned and runtime-verified",
+    "duplicate_start_guard": "atomic single-owner claim",
+    "network_policy_for_offline_matrix": "DENY_ALL",
+    "entityos_reproducibility_gate": "two independently pristine one-file freezes require identical SHA256 and cmp byte identity"
+  },
+  "experiment_accounting": {
+    "authoritative_reconciliation": "research_entity/clay_machine/receipts/2026-08-16_GO_UNUSUAL_EXPERIMENT_ACCOUNTING_RECONCILIATION.json",
+    "global_unusual_experiment_count": 1,
+    "required_count": 1,
+    "state": "CONSUMED_1_OF_1",
+    "counted_experiment": "SHARED_EXPORTER_TORN_TOBYTES_SNAPSHOT",
+    "authority": "CM-DATA mechanism counterexample only; no EntityOS executable authority",
+    "runner_new_unusual_experiment_count": 0,
+    "no_second_unusual_experiment_allowed_this_macrocycle": true
+  },
+  "coordination_delta": {
+    "pr781_body_reconciled_to_authoritative_1_of_1_accounting": true,
+    "parallel_duplicate_paths_not_promoted": true,
+    "closed_duplicate_pr780_preserved_unmerged": true
+  },
+  "vercel_exact_head": {
+    "head": "00274abbee85d283cdbe823a9ef4aef5ad387c75",
+    "status": "FAILURE_BUILD_RATE_LIMIT",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "entityos_artifact_built": false,
+    "bytes_executable_pass_fail": "UNEXECUTED",
+    "entityos_twin_build_digest": "UNEXECUTED",
+    "entityos_runtime_acceptance": "UNEXECUTED"
+  },
+  "hard_nonclaims": [
+    "No exact-head Vercel Sandbox started for PR781 head 00274abbee85d283cdbe823a9ef4aef5ad387c75.",
+    "No fresh exact-head EntityOS artifact or digest exists.",
+    "No current exact-head Bytes PASS or FAIL exists.",
+    "No whole EntityOS or Clay Computer PASS.",
+    "No VPS/self-hosted/production-host test evidence used.",
+    "Together API not used."
+  ],
+  "next_exact_executable_step": "When Vercel build capacity permits, refresh product main and PR781 exact head and execute the coordinated build-internal Vercel Sandbox regression/acceptance batch only: Stage-v5 raw-tree identity, pinned Sandbox SDK and atomic owner claim, exact Git HEAD/tree/clean/no-remotes, Bytes/released/mixed-V2 plus current CM-07/dirfd/build-provenance/source-single-VM gates, two independently pristine one-file EntityOS freezes with identical SHA256 and byte identity, runtime/self-test/pathless/state/capability/relocation gates, DENY_ALL and successful Sandbox stop. Do not add another unusual experiment in this macrocycle.",
+  "acceptance": "BLOCKED"
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "observed_research_main": "acc507781b2f10dc28e3826a01668d6164c3d2c2",
+  "observed_product_main": "f9cea2647073ca3d44cfc7cba16dba742bc3d713",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "grf": {
+    "observed_reality": [
+      "entityos/boot_entry.py at product main rejects a configured state root when the final component itself is a symlink",
+      "the same implementation used Path.absolute plus final-component Path.is_symlink and did not reject pre-existing symlink ancestors",
+      "EntityOS Initial Grant Sandbox run 31930675508 at exact product main completed FAILURE with job 95124859932 showing steps=[] and runner_id=0, so it is infrastructure/no-start evidence rather than code execution evidence"
+    ],
+    "generated_reality": "A non-symlink final ENTITYOS_STATE_HOME beneath a symlinked parent can redirect persisted grant authority while bypassing the final-component symlink check.",
+    "counter_reality": "Path.is_symlink on the final configured path or the subsequent mkdir/is_symlink check might indirectly expose the symlinked ancestor and fail closed.",
+    "falsifier": "Construct a temporary real parent and a symlink alias to it, configure a normal child state directory through the alias, then execute the exact relevant state-root and state-dir logic and observe whether the child is created below the real target.",
+    "prediction_if_hypothesis": "final path reports is_symlink=false and the redirected child is created under the real symlink target",
+    "prediction_if_counter": "state-root or state-dir validation raises ENTITYOS_STATE_DIR_SYMLINK_REJECTED and no redirected child is created"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ANCESTOR_SYMLINK_GRANT_STATE_REDIRECT",
+    "scope": "local isolated temporary-directory sandbox; no VPS or production host",
+    "baseline_result": "SUPPORTED",
+    "observations": {
+      "requested_final_component_is_symlink": false,
+      "ancestor_is_symlink": true,
+      "redirect_target_child_created": true,
+      "outcome": "ANCESTOR_SYMLINK_REDIRECT_ACCEPTED"
+    },
+    "rollback": "temporary directory deleted automatically; no persistent host state"
+  },
+  "intervention": {
+    "product_branch": "go/20260816-entityos-ancestor-symlink-fence",
+    "product_pr": 736,
+    "product_pr_head": "3050e13036d927766907067b35662d88e1284209",
+    "changes": [
+      "add _reject_symlink_components and apply it to explicit state roots and secured state directories",
+      "add exact one-file workflow regression for a symlinked parent with a normal child state path"
+    ],
+    "local_rescue_validation": [
+      "patched helper py_compile PASS",
+      "direct final-component symlink rejection PASS",
+      "ancestor symlink rejection PASS with ENTITYOS_STATE_DIR_SYMLINK_REJECTED",
+      "normal non-symlink state directory creation PASS"
+    ]
+  },
+  "primary_external_evidence": [
+    {
+      "source": "Linux openat2(2) manual",
+      "claim_used": "RESOLVE_NO_SYMLINKS affects symbolic links in all pathname components, unlike final-component-only no-follow behavior; this supports treating ancestor symlinks as a distinct path-resolution security condition."
+    },
+    {
+      "source": "Python pathlib documentation",
+      "claim_used": "Path.absolute makes a path absolute without resolving symlinks, while Path.is_symlink identifies the specific path object as a symlink; therefore ancestor components require separate treatment."
+    }
+  ],
+  "counterevidence_and_limits": [
+    "The patch closes the demonstrated static pre-existing ancestor-symlink redirect only.",
+    "Userspace Path.is_symlink checks do not prove absence of path-component swap/TOCTOU races between validation and later creation/replacement.",
+    "Rejecting all symlink components can reduce compatibility on intentionally symlinked state paths; current use is security-specific and remains a candidate until exact product regression executes."
+  ],
+  "outcome": "RETAIN_CANDIDATE_UNMERGED",
+  "entityos_artifact": "BLOCKED",
+  "artifact_blocker": "No actually-started isolated sandbox has rebuilt and tested exact PR736 head as the one-file EntityOS artifact; current main hosted sandbox run 31930675508 failed before any step started, and local sandbox could not clone the private repository because outbound DNS to github.com was unavailable.",
+  "next_executable_step": "Run the exact PR736 head in an actually-started isolated sandbox using entityos/build_canonical_onefile.py, then execute the initial-grant regression matrix including the new ancestor-symlink case against the exact produced EntityOS file. Do not merge/promote before that evidence.",
+  "whole_machine_acceptance": false,
+  "paid_training_authorized": false
+}

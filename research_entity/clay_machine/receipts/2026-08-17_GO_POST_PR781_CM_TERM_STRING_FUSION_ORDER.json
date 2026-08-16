@@ -1,0 +1,60 @@
+{
+  "schema": "ClayEntityOSFrontierAdjudication/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "research_parent_observed": "7e9bf25b8d9c00e40629e39c615ec855b10c4e5f",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_current_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head_observed": "1334610341674e92abda50c3ca887bf4ca035107",
+    "role": "Bytes-v2 plus exact-source/provenance one-file EntityOS promotion lane",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "exact_head_sandbox_execution": false
+  },
+  "next_existing_cm_term_lane": {
+    "pr": 744,
+    "branch": "clay/go-string-path-hostcall-20260816-1632",
+    "head_observed": "5e29cf8f81b4bf88612580225fe6399e02adda54",
+    "role": "narrow String executable-path hostcall candidate",
+    "hard_overlap_with_pr781": [
+      "claymachine/clayvm.py",
+      "claymachine/executable_ir_adapter.py"
+    ],
+    "nonoverlap_candidate_files": [
+      "claymachine/host_process.py",
+      "claymachine/host_process_vm.py",
+      "tests/clay_go_string_path_hostcall_gate.py"
+    ],
+    "stale_execution_surface": ".github/workflows/go-string-path-hostcall-sandbox.yml",
+    "stale_execution_reason": "Current owner directive requires isolated Sandbox execution and forbids GitHub-hosted/self-hosted/VPS/production-host test evidence; Vercel Sandbox is the authorized empirical source of executable truth."
+  },
+  "adjudication": {
+    "decision": "SERIALIZE_FRONTIERS_DO_NOT_COMPOUND_UNVERIFIED_CORE",
+    "reason": "PR781 and PR744 both mutate the canonical VM and executable-IR adapter. Fusing String semantics before PR781 receives exact-head Sandbox acceptance would confound Bytes/provenance validation and make failures less discriminating.",
+    "sequence": [
+      "Obtain an actually-started exact-head Vercel Sandbox run for the current PR781 head and require its full regression/one-file EntityOS gate before promotion.",
+      "Only after the accepted PR781 bytes are fixed as the new base, rebase/fuse the narrow PR744 String-path semantics onto that exact accepted CLAYVM/2-capable core.",
+      "Preserve PR781 Int/Bytes parameter identity and fail-closed Bytes ownership/epoch fences while adding String only through explicit typed signatures; do not resurrect a second VM or backend-local semantics.",
+      "Replace PR744's stale GitHub-hosted workflow with a build-internal Vercel Sandbox regression path bound to the exact fused source head and exact resulting EntityOS artifact.",
+      "Require direct no-shell Linux process semantics, UTF-8-scalar fail-closed controls, capability denial, legacy Int control, deterministic twin EntityOS build, status/self-test/no-host-Python/relocation/state-restart gates, DENY_ALL during offline tests, and successful Sandbox stop before promotion."
+    ]
+  },
+  "frontier_family": [
+    "CM-DATA Bytes/Buffer ownership and epoch stability",
+    "CM-TERM String/argv/direct Linux process execution",
+    "CM-PORT exact one-file EntityOS reproducibility and relocation"
+  ],
+  "counterhypothesis": "The String-path candidate may reveal incompatibilities with CLAYVM/2 metadata or provenance serialization even after PR781 passes; therefore future fusion must be tested as a fresh exact artifact rather than inferred from independent component evidence.",
+  "new_unusual_experiments_executed": 0,
+  "global_unusual_experiment_accounting": "1/1_CONSUMED; no additional experiment permitted in this shared go macro-cycle",
+  "product_semantics_changed_by_this_receipt": false,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false,
+  "whole_entityos_acceptance": false,
+  "acceptance": "IN_PROGRESS_EXTERNAL_VERCEL_CAPACITY_BLOCKS_CURRENT_PROMOTION"
+}

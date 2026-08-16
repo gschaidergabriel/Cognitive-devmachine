@@ -1,0 +1,72 @@
+{
+  "schema": "ClayMachineGoReceipt/v1",
+  "date": "2026-08-16",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "work_package": "CM-02-TYPE-EFFECT-SYSTEM",
+  "correction_of": "research_entity/clay_machine/receipts/2026-08-16_GO_TYPEREF_PRODUCTION_DAG_SHARING.json",
+  "reason": "Concurrent CM-02 workers independently converged on the same production alias-DAG sharing mechanism. PR #667 was closed without merge in favor of the fresher-main PR #681; preserve both workers' distinct experimental evidence but keep one production integration lane.",
+  "current_product_base_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+  "canonical_product_candidate": {
+    "pull_request": 681,
+    "head": "54daa13c838f2755233f625e019ab90708a525e8",
+    "state": "DRAFT_PENDING_EXACT_HEAD_SELF_HOSTED_GATES",
+    "mergeable_observed": true,
+    "changed_files": 3,
+    "delta": "Production NominalTypeChecker._canonical uses per-call acyclic alias-subtree structural sharing; _same uses visited canonical node-pair identities; new exact-head self-hosted production regression workflow added."
+  },
+  "superseded_parallel_candidate": {
+    "pull_request": 667,
+    "head": "6c5ade0fade9d3b03ada60da05b51454d770e488",
+    "state": "CLOSED_NOT_MERGED_SUPERSEDED_BY_681"
+  },
+  "hypothesis": "Per-canonicalization immutable alias-subtree memoization plus DAG-aware equality can bound repeated alias-DAG materialization without widening Clay nominal alias/cycle semantics.",
+  "strongest_counterhypotheses": [
+    "A cycle-observing alias subtree could be cached and later suppress path-local cycle behavior or diagnostics.",
+    "Structural sharing may bound canonical object count while another consumer such as diagnostic rendering still expands the DAG exponentially."
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ALIAS_CYCLE_TAINT_WITH_SHARED_SAFE_SIBLING",
+    "scope": "DISPOSABLE_LOCAL_MECHANISM_PROBE",
+    "shape": "A -> Pair<C,S>; C -> Box<C>; S -> Int; root repeats A and S",
+    "observed": {
+      "baseline_equals_candidate": true,
+      "baseline_cycle_events": ["C", "C"],
+      "candidate_cycle_events": ["C", "C"],
+      "cycle_bearing_A_subtree_reused": false,
+      "clean_S_subtree_reused": true,
+      "clean_S_child_shared_across_cycle_bearing_A_expansions": true
+    },
+    "interpretation": "The candidate cache-taint boundary behaved as intended in this discriminator: cycle-bearing parent aliases were not memoized while independently clean sibling aliases remained shareable."
+  },
+  "retained_parallel_counterevidence": {
+    "source_pull_request": 667,
+    "experiment": "SHARED_DAG_DIAGNOSTIC_RENDER_EXPANSION",
+    "depth": 17,
+    "canonical_unique_typeref_nodes": 18,
+    "rendered_characters": 1441784,
+    "local_render_wall_seconds_approx": 0.190141075,
+    "local_tracemalloc_peak_mib_approx": 6.40646,
+    "interpretation": "Canonical TypeRef structural sharing does not by itself bound diagnostic output expansion; renderer hardening remains a separate CM-02 follow-up and is not fused into PR #681."
+  },
+  "exact_head_validation": {
+    "production_sharing_run_id": 31923290794,
+    "production_sharing_status_at_receipt": "QUEUED",
+    "other_relevant_pull_request_workflows_status_at_receipt": "QUEUED",
+    "pass_claim": false
+  },
+  "grf_collapse": {
+    "repeated_alias_tree_materialization_is_semantically_required": "REJECT",
+    "per_call_structural_sharing_production_candidate": "TESTING",
+    "cycle_taint_cache_counterhypothesis": "NOT_OBSERVED_IN_BOUNDED_DISCRIMINATOR",
+    "structural_sharing_bounds_all_typeref_resource_paths": "REJECT",
+    "single_canonical_production_lane": "PR_681"
+  },
+  "promotion": "NOT_PROMOTED_PENDING_EXACT_HEAD_SELF_HOSTED_EVIDENCE",
+  "whole_clay_machine_acceptance": false,
+  "together_api_used": false,
+  "final_paid_training_started": false,
+  "next_falsifier": "Require exact PR #681 head self-hosted PASS for the production sharing gate plus existing TypeRef/Nominal regressions. If green, refresh main/overlap state before any merge; keep diagnostic renderer/output-size hardening separate."
+}

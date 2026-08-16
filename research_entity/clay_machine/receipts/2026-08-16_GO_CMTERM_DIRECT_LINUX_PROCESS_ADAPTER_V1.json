@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_CMTERM_DIRECT_LINUX_PROCESS_ADAPTER_CANDIDATE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "CM-TERM",
+  "timestamp_local": "2026-08-16T10:48:00+07:00",
+  "observed_research_head_before_write": "47bb8751f3d2f1d9e906d5661595c1a01ea78b43",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+  "candidate_pr": 694,
+  "candidate_branch": "chatgpt/go-cmterm-direct-process-v1-20260816",
+  "candidate_head": "c85ce119db9b522abf7a89beac978ec7ecc366e2",
+  "candidate_files": {
+    "claymachine/linux_process.py": {
+      "github_blob_sha": "d1b498159638fe26d704109c8ffc5969e8c424c1",
+      "local_exact_copy_sha256": "7c89e4f39d8cab5faed56437ed12a98492bfc5f10638fff73292a408e17f02c3"
+    },
+    "tests/test_claymachine_linux_process.py": {
+      "github_blob_sha": "22ac7f14a76a3577df1f25274e76158aadc52687",
+      "local_exact_copy_sha256": "763f03d1416fc5da3563d10fe242e1a5aabdfa5e0edd877ef258e36b61d7a78f"
+    }
+  },
+  "r0": {
+    "program_contract": "Direct process/terminal execution with no implicit hidden shell/harness is a fixed Clay Machine completion obligation.",
+    "existing_clayhost_surface": "Observed current ClayHost only exposes linux.uname_hash.",
+    "existing_clayos_surface": "Observed current ClayOS only admits provenance-bound ClayVM artifacts; no direct argv/env/cwd Linux process surface was present.",
+    "cm08_status": "OPEN"
+  },
+  "hypothesis": "A smallest explicit no-shell Linux host adapter can establish request/receipt and failure semantics now without inventing Clay language semantics, then be reached later through the canonical ClayCode -> typed/effect IR -> ClayVM -> ClayOS path.",
+  "strongest_counterhypothesis": "A Python subprocess adapter may be the wrong final substrate or may hide host semantics; only end-to-end TypedIR/VM capability routing plus PTY/signal/streaming/cancellation evidence can promote CM-TERM.",
+  "intervention": {
+    "type": "BOUNDED_PRODUCT_CANDIDATE",
+    "properties": [
+      "absolute executable required",
+      "no ambient PATH lookup",
+      "explicit argv/env/cwd",
+      "byte stdin/stdout/stderr",
+      "shell=false fixed",
+      "close_fds=true",
+      "new process session",
+      "timeout kills process group",
+      "exit/signal/timeout observation",
+      "request snapshot before spawn",
+      "request/output SHA-256 receipt binding",
+      "fail-closed validation/spawn classification"
+    ]
+  },
+  "primary_mechanism_evidence": [
+    {
+      "source": "Linux man-pages execve(2)",
+      "url": "https://man7.org/linux/man-pages/man2/execve.2.html",
+      "relevance": "execve-style path/argv/envp process semantics"
+    },
+    {
+      "source": "Python 3.14 subprocess documentation",
+      "url": "https://docs.python.org/3/library/subprocess.html",
+      "relevance": "Popen sequence args, fully-qualified executable guidance, shell=False, env/cwd, close_fds and start_new_session behavior"
+    }
+  ],
+  "local_test_environment": {
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "python_path": "/opt/pyvenv/bin/python3"
+  },
+  "deterministic_tests": {
+    "command": "PYTHONPATH=. python3 -m unittest -v tests.test_claymachine_linux_process",
+    "result": "PASS",
+    "passed": 8,
+    "failed": 0,
+    "elapsed_seconds": 0.076,
+    "coverage": [
+      "direct argv/stdout",
+      "explicit exact environment",
+      "nonzero exit status",
+      "missing executable fail-closed",
+      "missing cwd distinct fail-closed",
+      "relative executable/PATH rejected",
+      "timeout process-session kill",
+      "sole bounded unusual shell-metacharacter literalization experiment"
+    ]
+  },
+  "unusual_experiment": {
+    "name": "SHELL_METACHAR_LITERAL_ARGV",
+    "count_for_go_cycle": 1,
+    "setup": "Pass an injection-looking '; touch <temporary-marker>' string as one argv element to /usr/bin/printf through the candidate adapter.",
+    "prediction_if_direct_no_shell": "stdout equals the literal payload and marker does not exist.",
+    "prediction_if_implicit_shell": "payload can be interpreted as command syntax and marker may be created.",
+    "observed": "stdout was literal payload; marker did not exist.",
+    "outcome": "SUPPORTED_FOR_EXERCISED_ADAPTER_PATH"
+  },
+  "review_delta": {
+    "found": "Initial candidate computed receipt request hash after execution from caller-owned mutable env mapping, creating a possible receipt/request mismatch.",
+    "repair": "Snapshot full request before validation/spawn and compute request hash from the snapshot; add finite timeout validation and distinct missing-cwd classification.",
+    "retest": "8/8 PASS on exact hardened local copy."
+  },
+  "promotion_state": "CANDIDATE_LOCAL_SUPPORTED_NOT_CANONICAL",
+  "not_claimed": [
+    "CM-TERM baseline PASS",
+    "CM-08 PASS",
+    "ClayCode process-effect semantics",
+    "TypedIR/lowering integration",
+    "ClayVM capability routing",
+    "ClayOS lifecycle integration",
+    "PTY/interactive shell path",
+    "isolated exact-head target Linux evidence",
+    "whole Clay Machine acceptance"
+  ],
+  "next_falsifier": "Select the smallest explicit ClayCode process effect and carry it through typed/effect IR and ClayVM capability routing to an explicit ClayOS host adapter, then prove direct executable I/O plus negative cases on an actually isolated/source-admitted exact-head Linux execution lane. PTY/shell remains a separately explicit effect.",
+  "outcome": "RETAIN"
+}

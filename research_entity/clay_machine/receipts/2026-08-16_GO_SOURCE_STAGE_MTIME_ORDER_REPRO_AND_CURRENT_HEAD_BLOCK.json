@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_product_main_at_close": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+  "last_vercel_verified_product_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+  "last_vercel_verified_entityos": {
+    "receipt": "research_entity/clay_machine/receipts/2026-08-16_VERCEL_BATCH1_ENTITYOS_ONEFILE_VERIFIED.json",
+    "artifact": "EntityOS",
+    "single_file": true,
+    "sha256": "39ae46bbc7a5a1c4f5b5ef9686bdab473169254f31bdb1559bdb80acc801ad2d",
+    "size_bytes": 9165200,
+    "runtime_status": "PASS",
+    "self_test": "PASS",
+    "reproducible_double_build": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "candidate_lane": {
+    "branch": "chatgpt/go-vercel-cm07-entityos-20260816",
+    "observed_head": "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+    "relation_to_current_product_main": "DIVERGED_AHEAD_5_BEHIND_7",
+    "promotion_allowed": false,
+    "changed_frontier_after_last_verified_head": [
+      "deterministic source staging",
+      "PATH-without-host-Python EntityOS runtime gate"
+    ]
+  },
+  "vercel_build_stage_evidence": {
+    "deployment": "dpl_8CArsKnsHGstKi46oSYBWazwt79X",
+    "candidate_head": "6c67081fb4a6b1f80705d0853d02ee8029a609ed",
+    "stage_script": "mcp/vercel-sandbox-mcp/scripts/stage-go-source.mjs",
+    "invocations_observed": 2,
+    "archive_sha256_first": "8a6f6de8573f75cf28ea3d590ace20392f0b5887dbc6f3ef6a06a851d0684a9d",
+    "archive_sha256_second": "8a6f6de8573f75cf28ea3d590ace20392f0b5887dbc6f3ef6a06a851d0684a9d",
+    "archive_bytes": 1273112,
+    "classification": "DETERMINISTIC_SOURCE_STAGING_VERIFIED_AT_VERCEL_BUILD_STAGE",
+    "not_claimed": "No exact-head EntityOS sandbox runtime PASS for 6c67081 is inferred from build-stage staging success."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "MTIME_CREATION_ORDER_SCRAMBLE",
+    "execution_surface": "ISOLATED_LOCAL_CONTAINER",
+    "mechanism_under_test": "Canonical tar path ordering plus fixed metadata plus gzip -n should make staged source bytes invariant to filesystem creation order and mtimes when Git-tracked bytes and modes are unchanged.",
+    "baseline_archive_sha256": "53e135e941c131a88daeb932213399ba7844ef299e959c60b529f3bb08e6f2f0",
+    "intervention": "Scramble creation order and apply extreme 2037/2001 mtimes while preserving tracked bytes and modes; verify git diff remains clean; repack with the candidate algorithm.",
+    "treatment_archive_sha256": "53e135e941c131a88daeb932213399ba7844ef299e959c60b529f3bb08e6f2f0",
+    "byte_identical": true,
+    "outcome": "PASS",
+    "rollback": "Disposable synthetic repository only; no product/runtime mutation."
+  },
+  "grf": {
+    "observed_reality": "The last exact Vercel Sandbox EntityOS runtime evidence belongs to 40b359, while the deterministic staging/PATH candidate moved ahead and product main later advanced independently.",
+    "generated_reality": "Deterministic staging is a valid repair for the prior tar reproducibility defect, but runtime promotion must follow exact-current-main synchronization and a fresh Vercel Sandbox execution.",
+    "strongest_counter_reality": "Build-stage archive determinism or local packaging invariance might be mistaken for whole EntityOS runtime equivalence on a newer source head.",
+    "discriminator": "Synchronize the two candidate deltas plus current canonical provenance gate onto then-current product main and execute the exact resulting head in one authorized Vercel Sandbox matrix.",
+    "collapse": "RETAIN_DETERMINISTIC_STAGING; DO_NOT_PROMOTE_CURRENT_CANDIDATE; REQUIRE_EXACT_HEAD_VERCEL_RUNTIME"
+  },
+  "negative_results_and_policy_conflicts": {
+    "current_preview_invocation_from_available_connector": "BLOCKED_BY_VERCEL_DEPLOYMENT_PROTECTION_SSO_BEFORE_FUNCTION_EXECUTION",
+    "current_candidate_exact_head_matrix": "NOT_EXECUTED",
+    "current_candidate_entityos_artifact": "NOT_VERIFIED",
+    "product_main_out_of_band_vps_receipt_commit": "OBSERVED_AT_f3cb02d7_BUT_EXCLUDED_FROM_ACCEPTANCE_EVIDENCE_BY_CURRENT_SANDBOX_ONLY_OWNER_POLICY",
+    "whole_entityos_acceptance": "NOT_PASSED"
+  },
+  "next_executable_step": "Create one fresh integration descendant of then-current product main that contains the deterministic source-staging repair and PATH-without-host-Python gate while preserving the merged build-provenance gate; deploy that exact head to Vercel Preview; invoke one authenticated authorized Vercel Sandbox matrix; require exact source SHA, reproducible one-file EntityOS SHA, status/self-test/PATH lesion/relocation/provenance gates; then promote only the exact tested head. Do not use VPS or self-hosted runners as substitutes.",
+  "together_api_used": false,
+  "vps_test_used_by_this_go": false,
+  "self_hosted_test_used_by_this_go": false
+}

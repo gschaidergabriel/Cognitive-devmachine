@@ -1,0 +1,80 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "EXACT_MAIN_ENTITYOS_TYPED_VM_PROCESS_SLICE_VERIFIED",
+  "supersedes_for_current_head_claims": "research_entity/clay_machine/receipts/2026-08-16_GO_ENTITYOS_CURRENT_HEAD_CANCELLATION_BLOCK.json",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "tested_product_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+  "semantic_product_delta_commit": "57759c6bc0d52fa531a7b26993223c22f4549282",
+  "semantic_product_delta": "EntityOS canonical selftest now exercises the already-admitted EXTERNAL_COMMUNICATION process effect through ClayExecutableTypedIR/v1 -> serialized ClayVM -> HostProcessVMHost -> capability-gated Linux process execution, without inventing new ClayCode source syntax.",
+  "head_followup_delta": "66e466c9c57d72c520e98085f221afcaffab9494 only changes EntityOS workflow concurrency from cancel-in-progress=true to false and is a direct descendant of the semantic product delta.",
+  "exact_head_workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31927007084,
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "runner_class": "self-hosted Linux X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "source_regression_rc": 0,
+    "single_file_runtime": true,
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_entityos_completion": false
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "schema": "EntityOSBuildReceipt/v1",
+    "build_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "size_bytes": 11931208,
+    "mode": "0755",
+    "pyinstaller_onefile": true,
+    "status": "BUILT_AND_EXECUTED",
+    "whole_machine_acceptance": false
+  },
+  "exact_artifact_local_replication": {
+    "sha256_match": true,
+    "status_command": "PASS",
+    "frozen_runtime": true,
+    "canonical_vm_result": 42,
+    "direct_clayos_host_process": "PASS",
+    "capability_denied_without_grant": "PASS",
+    "typed_ir_vm_process_effect": "PASS",
+    "typed_ir_vm_process_result": 0,
+    "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK"
+  },
+  "grf": {
+    "observed_anchors": [
+      "The prior exact-head attempt was cancelled during packaging and therefore could not support a current-artifact claim.",
+      "The semantic delta imports existing canonical VM-process bridge components into the one-file selftest.",
+      "Exact descendant main 66e466c9 built and executed the frozen one-file artifact successfully on self-hosted Linux X64.",
+      "The downloaded exact artifact independently reproduced status and selftest locally with the typed IR VM process effect PASS."
+    ],
+    "retained_hypothesis": "Binding the existing VM process-effect bridge into EntityOS selftest strengthens product-boundary evidence without creating a second runtime or backend-local process semantics.",
+    "strongest_counter_reality": "PyInstaller dependency closure or frozen-resource behavior could make the process-effect path pass in source tests but fail in the delivered one-file runtime.",
+    "discriminating_test": "Build exact current main as one PyInstaller file and require its own selftest to execute the TypedIR hostcall through ClayVM to the capability-gated Linux process boundary.",
+    "observed_result": "Counter-reality falsified for this admitted slice on tested Linux X64 runtime: exact one-file selftest passes the VM process-effect path.",
+    "outcome": "PROMOTE_TO_VERIFIED_SLICE_ONLY"
+  },
+  "unusual_experiment": {
+    "distinct_design_count": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "result": "PASS_BYTE_IDENTICAL_AND_RUNTIME_TMP_CLEANUP",
+    "rollback": "TEMP_PATH_REMOVED",
+    "coordination_note": "The same bounded relocation intervention was automatically replicated by exact-head CI across descendant heads after a local preflight. No second distinct unusual experiment design was introduced; repeated executions are preserved as a coordination artifact rather than hidden."
+  },
+  "remaining_blockers": [
+    "Whole Clay Machine acceptance remains false.",
+    "Canonical ClayCode source-level process intrinsic typing and first-class String/Bytes/argv/env/cwd/stdin/stdout/stderr streaming semantics remain open.",
+    "PTY/shell, signals/cancellation and broader filesystem/network/device/FFI effect paths remain incomplete.",
+    "CM-NET, CM-PORT full fresh-host gate, CM-DATA canonical ownership/lifetime stream path, CM-VIS and CM-AUDIO baseline acceptance remain open.",
+    "The older zipapp EntityOS builder/workflow remains a parallel delivery lane and should be explicitly retired or demoted once canonical PyInstaller one-file authority is selected."
+  ],
+  "next_executable_action": "Make the smallest source-authoritative Clay String/Bytes/argv process request cross parser/type-effect -> ClayExecutableTypedIR/v1 -> single ClayVM -> HostProcessVMHost inside EntityOS, with fail-closed capability/effect checks and byte-preserving stdout receipt; do not add backend-only syntax or a second process runtime.",
+  "training_authorized": false,
+  "together_api_used": false
+}

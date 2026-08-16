@@ -1,0 +1,65 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_MINIMAL_ENV_REVERIFY",
+  "timestamp_local": "2026-08-16T12:39:00+07:00",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "product_boundary": "ONE_EXECUTABLE_FILE",
+  "status": "VERIFIED_EXACT_ARTIFACT_RELEASE_OPEN",
+  "observed_anchors": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "canonical_onefile_workflow_run": 31929090825,
+    "workflow_attempt_1_job": 95121136050,
+    "workflow_attempt_1_result": "SUCCESS",
+    "workflow_runner": "self-hosted Linux X64",
+    "artifact_workflow_id": 9258758674,
+    "artifact_name": "EntityOS",
+    "artifact_size_bytes": 12820496,
+    "artifact_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "artifact_file_kind": "ELF 64-bit LSB x86-64 GNU/Linux",
+    "build_reproducibility_builds": 2,
+    "build_reproducibility_sha256_match": true,
+    "local_reverification_status": "SELFTEST_PASS",
+    "whole_machine_acceptance": false
+  },
+  "exact_runtime_reverification": {
+    "status_schema": "EntityOSCanonicalOneFile/v1",
+    "build_head_matches_product_main": true,
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "process_capability": "linux.process.spawn.v0",
+    "unifieddb_packet_schema": "UnifiedDBEntityPacket/v1",
+    "visual_data_source": "UnifiedDB",
+    "self_test": "SELFTEST_PASS"
+  },
+  "unusual_experiment": {
+    "count_for_this_go_macro_cycle": 1,
+    "name": "MINIMAL_ENV_EMPTY_PATH_NO_HOME_FOREIGN_CWD",
+    "intervention": "Invoke the exact downloaded EntityOS artifact from / with env -i, PATH=/nonexistent, no HOME, LC_ALL=C, and an isolated TMPDIR.",
+    "baseline_selftest_json_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+    "intervention_selftest_json_sha256": "3d543743745be9c767a1b326bb04d75406d314432857e4a0c5742e514bdc1a69",
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT",
+    "rollback": "TEMP_EXPERIMENT_DIRECTORY_REMOVABLE",
+    "interpretation": "At the tested self-test boundary the one-file candidate did not depend on HOME, PATH lookup, repository cwd, or persistent extraction residue. This is bounded portability evidence, not whole-machine acceptance."
+  },
+  "grf_collapse": {
+    "observed_reality": "An exact one-file EntityOS built from current product main is available as a workflow artifact and passed the canonical self-hosted Linux X64 gate.",
+    "preferred_hypothesis": "The current single-file bootstrap is materially portable at its admitted self-test boundary and does not hide a basic HOME/PATH/cwd dependency.",
+    "strongest_counterhypothesis": "The frozen artifact only succeeds in the workflow runner environment and implicitly needs normal user environment variables or repository-relative working-directory state.",
+    "discriminator": "Re-run the exact artifact under an almost empty environment and foreign cwd, compare deterministic self-test output, and inspect temporary extraction cleanup.",
+    "outcome": "RETAIN",
+    "confidence": "HIGH_FOR_TESTED_BOOT_SELFTEST_BOUNDARY_LOW_FOR_WHOLE_MACHINE"
+  },
+  "release_blocker": "Whole-machine acceptance remains false. The current canonical workspace still requires the smallest Clay-native Bytes/Buffer ownership+lifetime plus String/argv/effect-signature surface shared by CM-DATA and CM-TERM, followed by a provenance-bound canonical typed/effect IR -> single ClayVM path and rebuild/retest of EntityOS.",
+  "next_executable_action": "Implement and test the smallest admitted Clay Bytes/Buffer plus String/argv/effect signature surface across checker/executable TypedIR/ClayVM, route one real process request without integer request-handle indirection or backend-local semantics, then rebuild and rerun the exact one-file EntityOS gates.",
+  "authority_notes": {
+    "grf": "reasoning_framework_only",
+    "together_api": "FORBIDDEN",
+    "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED"
+  }
+}

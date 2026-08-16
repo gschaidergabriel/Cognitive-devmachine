@@ -9,61 +9,91 @@
   "work_packages": {
     "CM-01-LANGUAGE-SPEC-PARSER-IR": {
       "status": "IN_PROGRESS",
-      "evidence": "40 authorized sources; 36 parsed; syntax-only call ownership partition merged in PR #598. PR #635 merged lossless canonical UseDecl MODULE/WILDCARD intent while retaining legacy Module.uses; exact-head self-hosted use-decl fidelity run 31921439509 and parser fidelity run 31921439331 passed on head 3e965a328e82168923feb8857363938d7ad13ca9.",
-      "blocker": "Parser corpus remains incomplete and unresolved call/member ownership semantics remain open. Provider identity is separately testable, but plain-use name binding and imported symbol ownership/visibility remain unselected."
+      "evidence": "40 authorized sources; 36 parsed. PR #635 preserves canonical MODULE/WILDCARD UseDecl intent; exact-head parser/use-decl fidelity gates passed.",
+      "blocker": "Parser corpus remains incomplete. Plain-use name binding and imported symbol ownership/visibility remain unselected."
     },
     "CM-02-TYPE-EFFECT-SYSTEM": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #603 merged TypeRef alias-ancestry complexity repair; exact-head self-hosted run 31910197430 passed 12/12 including depth 32768 and bounded scaling ratio. GO alias-DAG materialization evidence and detached PR #645 support per-call immutable structural sharing. Independent GO pair-revisit evidence measured depth-22 equality at 8,388,607 visited pairs without pair memo versus 23 with (id(left),id(right)) memo. Duplicate production lanes #664, #667 and #673 are now closed unmerged after deconfliction. Consolidated production lane is draft PR #681 head c0a275b35869bc5838ea1f775a557f3534ae4635: per-call immutable sharing, cycle-taint protection, safe-sibling reuse, DAG-aware _same, its production-sharing regressions, existing alias-totality gate, and the unchanged production TypeRef totality gate fused from #673.",
-      "blocker": "PR #681 exact-head self-hosted Linux/X64 production-sharing workflow 31923469033 is queued; separate production-totality run 31923469219 is pending. Production PASS/merge remains blocked until the exact consolidated head and overlapping TypeRef regressions are green. _render_type_ref can still expand a compact shared DAG into large diagnostic text and remains a separate resource-surface follow-up."
+      "evidence": "PR #603 merged alias-ancestry complexity repair. Consolidated PR #681 head c0a275b35869bc5838ea1f775a557f3534ae4635 passed exact-head production-sharing workflow 31923469033, production-totality run 31923469219 and overlapping ClayCode gates, then merged as e56f1228d0a37e79d8ccc5cc849e0672d2555f7b. Production now has per-call immutable alias-DAG sharing, cycle-taint protection, safe-sibling reuse and DAG-aware _same pair memoization. Duplicate production lanes #664, #667 and #673 remain closed unmerged.",
+      "blocker": "CM-02 remains incomplete: _render_type_ref can expand compact shared DAGs into large diagnostic text; broader type/effect surface required by Clay Machine I/O, process/network and buffer semantics remains unselected."
     },
     "CM-03-EVALUATOR-INTERPRETER": {
       "status": "IN_PROGRESS",
-      "evidence": "Existing structured parser/evaluator is now used as the semantic source for canonical executable IR rather than reparsing body_tokens.",
+      "evidence": "Structured parser/evaluator is used as semantic source for canonical executable IR rather than reparsing body_tokens.",
       "blocker": "Executable coverage remains a deliberately small admitted subset."
     },
     "CM-04-COMPILER-LOWERING-BYTECODE": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #609 merged ClayExecutableTypedIR/v1 with exact-head 12/12; PR #614 merged deterministic canonical executable IR -> one serialized ClayVM with exact-head 12/12 IR + 9/9 VM + 16/16 integration.",
-      "blocker": "Expand lowering only for semantics already admitted by the canonical checker/IR; no backend-local language or type reinvention."
+      "evidence": "PR #609 merged ClayExecutableTypedIR/v1; PR #614 merged deterministic canonical executable IR -> one serialized ClayVM with exact-head IR/VM/integration gates.",
+      "blocker": "Expand lowering only for semantics already admitted by canonical checker/IR; no backend-local language/type reinvention."
     },
     "CM-05-VIRTUAL-CLAY-MACHINE": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #608 merged the single serialized ClayVM with VM-owned frames, depth-1500 call regression and explicit frame limit; PR #619 added ClayVMArtifact/v1 provenance binding; PR #623 made package ClayOS artifact-strict.",
-      "blocker": "Instruction/type/object surface remains narrow; broader verifier/object/runtime semantics remain open."
+      "evidence": "Single serialized ClayVM, VM-owned frames, provenance-bound ClayVMArtifact/v1 and artifact-strict ClayOS launch are merged.",
+      "blocker": "Instruction/type/object surface remains narrow; broader verifier/object/runtime and byte/buffer semantics remain open."
     },
     "CM-06-MEMORY-CONCURRENCY-RUNTIME": {
       "status": "OPEN",
-      "blocker": "VM memory/object lifetime, concurrency/scheduling and failure semantics are not yet defined as a release-grade contract."
+      "evidence": "GO mutable-buffer experiment proved readonly memoryview does not imply provenance-stable immutable backing storage.",
+      "blocker": "VM memory/object lifetime, buffer ownership/lease/epoch semantics, concurrency/scheduling and failure semantics are not release-grade contracts."
     },
     "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #626 merged minimal clayenv; exact-head run 31911536923 passed 20/20 plus real CLI build/run smoke with result 42. PR #648 keeps every use declaration fail-closed at executable build. PR #653 merged deterministic ClayPackageIndex/v1 after exact-head self-hosted PASS run 31921054505. PR #635 merged lossless MODULE/WILDCARD use intent after exact-head PASS runs 31921439509, 31921439331, 31921439318 and 31921439348. PR #660 merged ClayPackageResolution/v1 exact module-provider selection; exact-head self-hosted Linux/X64 run 31923122223 passed on head a993083ff58081c2078d92f1769e649e366e3988. Canonical-corpus counterevidence remains decisive against the breadth of that v1 law: claycode/frank_memory.clay contains plain `use frank.entity.Frank`, while claycode/frank_entity.clay declares `module frank.entity` and `entity Frank`. Corrective branch chatgpt/go-cm07-plain-use-failclosed-20260816 reached head 07f0bf7bc19e398f4820cd346a58190f98e596c6 with ClayPackageIndex/v2 (lossless ordered use_decls changes the canonical hash domain), ClayPackageResolution/v2 scoped to WILDCARD_MODULE_PROVIDER_ONLY, and plain use fail-closed as name-binding unselected. PR #674 was closed unmerged to prevent promotion without a trusted execution lane. Its GitHub-hosted ubuntu-latest candidate run 31923593584 / job 95107444133 never instantiated a runner or steps because GitHub blocked the job for account payment/spending-limit state; classify this as infrastructure billing block, not code FAIL or PASS. Resolver and package-index pull-request self-hosted gates on the branch were converted to fail-closed skipped markers; audit also confirmed clayenv-minimal.yml checks out pull_request.head.sha and executes repository Python on persistent self-hosted infrastructure.",
-      "blocker": "CM-07 code correctness for the v2 correction is UNTESTED. Restore an actually-started ephemeral/isolated or explicitly source-admitted exact-head execution path for preserved head 07f0bf7bc19e398f4820cd346a58190f98e596c6; do not use persistent self-hosted PR execution as a shortcut. If green, rebuild on fresh main and then define the smallest explicit plain-use versus wildcard imported-symbol ownership/visibility/collision contract. Feed one canonical resolution surface into the nominal checker -> ClayExecutableTypedIR/v1 -> single ClayVM. PR #648 remains fail-closed until end-to-end executable closure is proven; meaningful stdlib/SDK remains open."
+      "evidence": "Minimal clayenv build/run, package index v1, lossless use mode and exact module-provider resolution v1 are merged. Canonical corpus refuted v1 breadth for plain `use frank.entity.Frank`. Preserved corrective head 07f0bf7bc19e398f4820cd346a58190f98e596c6 contains ClayPackageIndex/v2, WILDCARD_MODULE_PROVIDER_ONLY resolution v2 and fail-closed plain-use semantics. PR #674 is closed unmerged. GitHub-hosted run 31923593584/job 95107444133 was blocked before runner start by account billing/spending state and is not code evidence.",
+      "blocker": "V2 correction remains UNTESTED. Require an actually-started ephemeral/isolated or explicitly source-admitted exact-head execution path; do not use persistent self-hosted PR execution as shortcut. Then select smallest explicit plain-use/imported-symbol ownership/visibility/collision law and feed one canonical resolution surface through checker -> executable IR -> single VM."
     },
     "CM-08-LINUX-INTEROP": {
       "status": "OPEN",
-      "evidence": "Single VM contains only a narrow capability bootstrap.",
-      "blocker": "Typed filesystem/process/network/device/FFI effects with receipts and fail-closed authority are not accepted."
+      "evidence": "Single VM currently exposes only a narrow capability bootstrap.",
+      "blocker": "Typed filesystem/process/network/device/FFI effects with receipts, byte-stream values and fail-closed authority are not accepted."
     },
     "CM-09-MINIMAL-CLAYOS": {
       "status": "IN_PROGRESS",
-      "evidence": "PR #623 merged provenance-strict package ClayOS; PR #627 removed package-level raw loader export and exact-head policy scan found 0 violations across 177 production Python files; PR #626 provides the first canonical Clay environment CLI build/run route through ClayOS.exec_artifact.",
-      "blocker": "ClayOS is still a minimal process facade: persistent services/state, scheduling, filesystem/module services and recovery remain open."
+      "evidence": "Provenance-strict package ClayOS, low-level loader internalization and minimal clayenv CLI build/run route are merged.",
+      "blocker": "ClayOS remains a minimal process facade; persistent services/state, scheduling, filesystem/module services and recovery remain open."
     },
     "CM-10-TOOLING-OBSERVABILITY-RECOVERY": {
       "status": "IN_PROGRESS",
-      "evidence": "Exact-head provenance/tamper/transplant gates, strict launch gates, raw-loader import policy and manifest/artifact identity checks are merged. PR #627 quarantines raw loader use to two audited internal bridges for repository/package/release policy.",
-      "blocker": "Arbitrary Python private-module introspection is not physically sandboxed; replay/recovery/long-horizon artifact lineage and stronger process isolation remain open."
+      "evidence": "Provenance/tamper/transplant gates, strict launch gates, raw-loader policy and artifact identity checks are merged. GO mutable-buffer evidence adds a provenance tripwire for borrowed media/data buffers.",
+      "blocker": "Arbitrary Python private-module introspection is not physically sandboxed; replay/recovery/long-horizon artifact lineage, stronger process isolation and buffer lifetime receipts remain open."
     },
     "CM-11-SELF-HOSTING-BOOTSTRAP": {
       "status": "OPEN",
-      "blocker": "No selected compiler/runtime component is yet self-hosted in ClayCode with bootstrap-equivalence evidence."
+      "blocker": "No selected compiler/runtime component is self-hosted in ClayCode with bootstrap-equivalence evidence."
+    }
+  },
+  "capability_frontier": {
+    "CM-NET": {
+      "status": "OPEN",
+      "blocker": "No canonical Clay byte/stream value plus typed DNS/socket/TLS/network effect path exists yet."
+    },
+    "CM-PORT": {
+      "status": "OPEN",
+      "blocker": "Minimal clayenv exists, but no fresh-machine copied self-contained directory proof with move/rename/restart and no mandatory install dependency has been accepted."
+    },
+    "CM-TERM": {
+      "status": "OPEN",
+      "blocker": "No canonical Clay argv/env/cwd/stdin/stdout/stderr/PTY value/effect path executes a real Linux process without implicit shell/harness semantics."
+    },
+    "CM-DATA": {
+      "status": "IN_PROGRESS",
+      "evidence": "Receipt 2026-08-16_GO_CLAY_IO_MUTABLE_BUFFER_PROVENANCE_FENCE.json: exactly one bounded experiment refuted readonly-view provenance immutability; local ClayIOEnvelope/v1 reference candidate passed 7/7 deterministic sandbox tests. For the Python reference substrate, zero-copy is retained only for C-contiguous views ultimately backed by built-in immutable bytes; mutable/unknown exporters require snapshot/copy until an explicit lease/epoch contract is selected.",
+      "blocker": "No canonical Clay Bytes/Buffer ownership/lifetime type, VM ingress path, incremental stream envelope or admitted performance contract exists. Full-buffer hashing dominated the 1 MiB sandbox prototype and needs streaming/incremental design before any low-latency claim."
+    },
+    "CM-VIS": {
+      "status": "OPEN",
+      "evidence": "Mutable-buffer provenance fence applies directly to image/video passthrough and prevents treating readonly host views as immutable visual frames.",
+      "blocker": "No canonical typed visual buffer/stream value is wired through ClayCode -> IR -> VM -> deterministic sink/concrete adapter."
+    },
+    "CM-AUDIO": {
+      "status": "OPEN",
+      "evidence": "Mutable-buffer provenance fence applies to audio packet/sample transport without requiring decode.",
+      "blocker": "No canonical typed audio buffer/stream value is wired through the VM/runtime path."
     }
   },
   "frontier": {
-    "repository_head_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
-    "latest_clay_machine_semantic_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "repository_head_observed": "504dbb12f34d13da010032cbdad94a1e51ec0b87",
+    "latest_clay_machine_semantic_merge": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
     "typeref_repair_merge": "2a83f79c8d7fe31a835fdb6c8f20c94b702eb834",
     "canonical_executable_ir_merge": "1bf95a2bf6912c7d40585a70d4a65221cf8fcd19",
     "single_clayvm_merge": "94efad064602689dfc3c9a5b3e9cab0136ed9d0a",
@@ -72,31 +102,23 @@
     "strict_clayos_merge": "ac86a23a9d6e766ac5709b7dbfe0664c7a7560b7",
     "lowlevel_import_internalization_merge": "217dfa3aebeb585706ac6707d41aa8d3b2a728c5",
     "minimal_clayenv_merge": "60612d0ffc5798879bce7045f5b3d22093698e2d",
-    "minimal_clayenv_tested_head": "6cd811ed767c0dc8f90d43382c9783430263e7fc",
-    "minimal_clayenv_run": 31911536923,
     "canonical_import_mode_merge": "2e3f46e5c46c03a305fc6b1a0a30496b2cf79215",
-    "canonical_import_mode_tested_head": "3e965a328e82168923feb8857363938d7ad13ca9",
     "canonical_package_identity_merge": "0533f84909358ed8ae17c3dbcbfdbd4f837c4644",
-    "canonical_package_identity_tested_head": "1ac68d1e190fd5478645b32664e4e1db5c38a243",
     "canonical_module_provider_resolution_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
-    "canonical_module_provider_resolution_tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
     "canonical_module_provider_resolution_run": 31923122223,
     "cm07_plain_use_semantic_correction_pr": 674,
     "cm07_plain_use_semantic_correction_state": "CLOSED_UNMERGED_BLOCKED_SAFE_EXECUTION",
     "cm07_plain_use_semantic_correction_head": "07f0bf7bc19e398f4820cd346a58190f98e596c6",
-    "cm07_package_index_candidate_schema": "ClayPackageIndex/v2",
-    "cm07_resolver_candidate_schema": "ClayPackageResolution/v2",
-    "cm07_ephemeral_candidate_run": 31923593584,
-    "cm07_ephemeral_candidate_job": 95107444133,
     "cm07_ephemeral_candidate_result": "BLOCKED_BILLING_BEFORE_RUNNER_START_NOT_CODE_RESULT",
-    "cm02_detached_sharing_candidate_pr": 645,
-    "cm02_closed_duplicate_production_prs": [664, 667, 673],
-    "cm02_preferred_production_integration_pr": 681,
-    "cm02_preferred_production_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
-    "cm02_preferred_exact_head_workflow": 31923469033,
-    "state": "CANONICAL_SOURCE_TO_PROVENANCE_BOUND_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; PACKAGE_IDENTITY_PLUS_LOSSLESS_USE_MODE_PLUS_EXACT_MODULE_PROVIDER_RESOLUTION_V1_MERGED; PLAIN_USE_SCOPE_V1_OVERCLAIM_HAS_V2_FAIL_CLOSED_CANDIDATE_BUT_TRUSTED_EXECUTION_IS_BLOCKED; CM02_SINGLE_CONSOLIDATED_PRODUCTION_DAG_LANE_PENDING_EXACT_HEAD",
+    "cm02_production_integration_pr": 681,
+    "cm02_production_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+    "cm02_exact_head_workflow": 31923469033,
+    "cm02_production_totality_run": 31923469219,
+    "cm02_merge": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
+    "cm02_state": "MERGED_AFTER_EXACT_HEAD_GREEN",
+    "state": "CANONICAL_SOURCE_TO_SINGLE_VM_TO_STRICT_CLAYOS_TO_MINIMAL_CLAYENV_BUILD_RUN_MERGED; MODULE_PROVIDER_V1_MERGED_WITH_PLAIN_USE_V2_CORRECTION_BLOCKED_ON_SAFE_EXECUTION; CM02_PRODUCTION_ALIAS_DAG_SHARING_MERGED; CLAY_IO_MUTABLE_BUFFER_PROVENANCE_FENCE_SUPPORTED_RESEARCH_CONSTRAINT",
     "release": "NOT_PASSED",
-    "next_discriminator": "CM-07: execute preserved v2 correction head 07f0bf7bc19e398f4820cd346a58190f98e596c6 on an actually-started ephemeral/isolated or explicitly source-admitted runner; current GitHub-hosted attempt was blocked before runner start by billing/spending state and is not code evidence. Audit remaining pull_request -> persistent self-hosted execution surfaces before reopening promotion. In parallel CM-02: obtain exact-head evidence for consolidated PR #681 and merge only if production-sharing + alias-totality + unchanged production-totality and overlapping ClayCode gates are green."
+    "next_discriminator": "Highest-value unblocked semantic frontier: select the smallest canonical Clay Bytes/Buffer ownership+lifetime contract needed by CM-DATA/CM-VIS/CM-AUDIO, then wire one provenance-bound opaque-byte ingress through typed/effect IR and the single VM with deterministic tests. In parallel, CM-07 remains blocked on a trusted actually-started isolated/source-admitted runner for preserved v2 head 07f0bf7bc19e398f4820cd346a58190f98e596c6. CM-02 next resource follow-up is bounded diagnostic rendering, not another alias-DAG implementation lane."
   },
   "progress": {
     "work_packages_total": 11,
@@ -120,14 +142,16 @@
     "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_PLAIN_USE_SEMANTIC_FENCE.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_PLAIN_USE_SCOPE_TRUST_GATE.json",
     "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_EPHEMERAL_GATE_BILLING_BLOCK.json",
-    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_IMPORT_SEMANTICS_AND_EPHEMERAL_DISPATCH.json"
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CM07_IMPORT_SEMANTICS_AND_EPHEMERAL_DISPATCH.json",
+    "research_entity/clay_machine/receipts/2026-08-16_GO_CLAY_IO_MUTABLE_BUFFER_PROVENANCE_FENCE.json"
   ],
-  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent valid implementations must not become parallel canonical paths: PR #663 was closed after #660 landed; CM-02 production duplicates #664, #667 and #673 were closed after fusion into #681. Distinct pair-revisit, cache-taint and diagnostic-expansion observations were preserved as research evidence. Pull-request workflows that directly execute candidate repository bytes on persistent self-hosted runners are not trusted merely because they assert github.event.pull_request.head.sha: exact provenance and source-admission/isolation are separate requirements. CM-07 corrective work converted its direct resolver/package-index self-hosted gates to fail-closed skipped markers and exposed clayenv-minimal.yml as another candidate-byte execution surface. Workspace writes use compare-and-swap and must fuse rather than overwrite concurrent updates.",
+  "coordination_negative_result": "Parallel GO workers can collide on unusual-experiment accounting and shared frontiers. Equivalent implementations must not become parallel canonical paths: #663 was closed after #660; CM-02 duplicates #664/#667/#673 were closed after fusion into #681. Persistent self-hosted pull_request execution of candidate repository bytes is not trusted merely from asserted head SHA; source admission/isolation is separate. CM-07 remains fail-closed on that boundary. New I/O negative result: readonly buffer access does not imply immutable producer storage or stable provenance; do not optimize copy count by silently borrowing mutable backing memory.",
   "laws": [
     "ClayVerse/Clay Machine is the only active program.",
     "GRF expands hypotheses but does not mint truth.",
     "Legacy Frank/self.root/UCM2 paths are evidence only.",
-    "Unknown language/import/host semantics fail closed; path shape and names do not grant semantic authority.",
+    "Unknown language/import/host semantics fail closed; names/path shape do not grant authority.",
+    "Readonly host views are not automatically immutable provenance.",
     "No hidden host semantics, generic semantics, effect authority or completion claims from names/model consensus.",
     "Together API is forbidden.",
     "No final paid training without explicit owner authorization."

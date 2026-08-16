@@ -1,0 +1,76 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "observed": {
+    "product_main_after_resolver_merge": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "package_identity_pr": 653,
+    "package_identity_merge": "0533f84909358ed8ae17c3dbcbfdbd4f837c4644",
+    "use_mode_pr": 635,
+    "use_mode_merge": "2e3f46e5c46c03a305fc6b1a0a30496b2cf79215",
+    "canonical_resolver_pr": 660,
+    "canonical_resolver_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "canonical_resolver_head": "a993083ff58081c2078d92f1769e649e366e3988",
+    "canonical_resolver_workflow": 31923122223,
+    "canonical_resolver_workflow_conclusion": "SUCCESS",
+    "duplicate_candidate_pr": 663,
+    "duplicate_candidate_state": "CLOSED_WITHOUT_MERGE_SUPERSEDED_BY_660"
+  },
+  "grf": {
+    "generated_hypothesis": "Provider identity can be canonicalized independently from imported symbol visibility and import-cycle legality.",
+    "counter_reality": "A provider resolver may accidentally depend on provider list order or require a topological ordering, thereby silently minting cycle semantics.",
+    "discriminator": "Permute a cyclic three-package provider graph across every provider-input ordering while canonicalizing only provider identities and use modes.",
+    "collapse": "Provider-only binding remained order invariant in the isolated mechanism probe. This supports the phase split, but does not establish whether Clay import cycles are legal or how wildcard symbols behave."
+  },
+  "unusual_experiment": {
+    "name": "CYCLIC_PROVIDER_ORDER_INVARIANCE",
+    "count_for_this_macrocycle": 1,
+    "environment": "isolated in-memory mechanism probe",
+    "graph": [
+      "a.main --MODULE--> b.api",
+      "b.api --WILDCARD--> a.main",
+      "c.util --MODULE--> a.main"
+    ],
+    "provider_order_permutations": 6,
+    "unique_canonical_hashes": 1,
+    "canonical_hash": "f3a3064a0132074c9258e552b6b09f1b8be4d7b6817bfa94d05cd577631bb371",
+    "result": "ORDER_INVARIANT_PROVIDER_BINDING_WITH_CYCLE_SEMANTICS_UNSELECTED",
+    "interpretation": "A cycle need not force provider identity resolution to inherit host ordering or prematurely choose cycle legality. The result is design evidence only, not a Clay language rule."
+  },
+  "coordination": {
+    "parallel_result": "PR #660 reached and merged the same provider-resolution frontier before local candidate PR #663 completed CI.",
+    "action": "Closed PR #663 without merge to preserve one canonical resolver implementation.",
+    "negative_result": "Independent useful work can still become architecturally harmful duplication if a parallel worker lands equivalent semantics first.",
+    "preserved_evidence": "The distinct cyclic-order experiment is retained as research evidence; the duplicate code path is rejected."
+  },
+  "external_design_evidence": [
+    {
+      "source": "Go language specification/import declarations",
+      "role": "design evidence only",
+      "finding": "Go has explicit package import binding and rejects import cycles; this is not adopted as Clay semantics."
+    },
+    {
+      "source": "Rust Reference/name resolution/use declarations",
+      "role": "design evidence only",
+      "finding": "Rust resolves use declarations under its own name-resolution and glob ambiguity rules; these are not adopted as Clay semantics."
+    }
+  ],
+  "hard_boundaries": {
+    "provider_resolution": "MERGED_SUPPORTED_EXACT_HEAD_PASS",
+    "symbol_semantics": "NOT_SELECTED",
+    "wildcard_expansion": "NOT_SELECTED",
+    "namespace_collision_semantics": "NOT_SELECTED",
+    "cycle_legality": "NOT_SELECTED",
+    "call_ownership": "NOT_SELECTED",
+    "clayenv_build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Define the smallest explicit imported-symbol ownership/collision contract for MODULE versus WILDCARD uses, then prove it feeds the existing nominal checker -> ClayExecutableTypedIR/v1 -> single serialized ClayVM without bypassing the current fail-closed ClayEnv use gate until executable closure evidence exists.",
+  "status": "SUPPORTED_COORDINATION_DELTA"
+}

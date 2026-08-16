@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "kind": "CLAY_MACHINE_GO_CMTERM_PARALLEL_ADAPTER_FUSION",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "workstream": "CM-TERM",
+  "timestamp_local": "2026-08-16T10:52:00+07:00",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_after_fusion": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
+  "parallel_lanes": {
+    "pr_694": {
+      "head": "c85ce119db9b522abf7a89beac978ec7ecc366e2",
+      "state": "CLOSED_UNMERGED_DECONFLICTED",
+      "unique_evidence": [
+        "explicit argv/env/cwd/stdin request shape",
+        "immutable request snapshot before spawn",
+        "request/output digest binding",
+        "distinct missing executable/cwd/permission/spawn error classifications",
+        "local hardened 8/8 deterministic tests",
+        "SHELL_METACHAR_LITERAL_ARGV sole unusual experiment for this GO"
+      ]
+    },
+    "pr_695": {
+      "head": "fa6a88f2c1abca32c1f851525700dd14256b9ee2",
+      "merge": "d36ff25cb732fa74d7283f978f0e1191cda41d10",
+      "state": "MERGED_SINGLE_IMPLEMENTATION_LANE",
+      "stronger_properties": [
+        "ClayOS capability gate linux.process.spawn.v0",
+        "ClayOS host-process lifecycle/process-table integration",
+        "selector-based simultaneous stdout/stderr reads",
+        "combined hard output-capture budget",
+        "timeout and output-limit terminal states",
+        "fresh process group and shell=false direct argv"
+      ]
+    }
+  },
+  "fusion_decision": "PR #695 is the sole retained implementation lane. PR #694 was closed unmerged to prevent two host-process architectures. Its unique semantic/provenance requirements remain follow-up obligations and research evidence, not a second runtime.",
+  "review_reentry": "A fusion review was posted to PR #695 preserving the #694-only requirements and the canonical type/effect/VM blockers. The review was coordination evidence; #695 had already merged by final refresh.",
+  "remaining_fixed_cmterm_gaps": [
+    "Clay-visible stdin remains unimplemented in the merged lane (currently DEVNULL).",
+    "Clay-visible explicit environment remains unimplemented in the merged lane (currently fixed clean env).",
+    "Clay-visible cwd remains unimplemented in the merged lane (currently '/').",
+    "interactive PTY and separately explicit shell effect remain open.",
+    "asynchronous/live byte streaming API remains open.",
+    "canonical request snapshot/digest semantics should be selected before mutable caller-owned env/argv/buffers are admitted."
+  ],
+  "canonical_semantic_blocker": [
+    "Nominal typechecker has effect classifications but no Clay parameter/return signatures for host intrinsics.",
+    "ClayExecutableTypedIR/v1 is PURE-only and rejects host/effect call kinds.",
+    "Current VM lacks the canonical String/Bytes/argv value surface required for CM-TERM.",
+    "Therefore merged host-process code is component infrastructure, not ClayCode process-effect completion."
+  ],
+  "execution_evidence_boundary": "Any persistent self-hosted pull_request execution of candidate repository bytes must not be treated as trusted solely from exact-head checkout; source admission/isolation is an independent project gate.",
+  "unusual_experiment": "NONE_NEW. This macro-cycle used exactly one bounded unusual experiment: SHELL_METACHAR_LITERAL_ARGV, already recorded in the paired CM-TERM adapter receipt.",
+  "whole_clay_machine_acceptance": "NOT_CLAIMED",
+  "outcome": "MERGE_PARALLEL_EVIDENCE_CLOSE_DUPLICATE_RETAIN_SINGLE_IMPLEMENTATION"
+}

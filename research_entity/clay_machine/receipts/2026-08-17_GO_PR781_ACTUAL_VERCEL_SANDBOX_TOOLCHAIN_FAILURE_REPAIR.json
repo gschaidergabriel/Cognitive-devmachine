@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "endpoint": "EntityOS",
+  "preferred_product_pr": 781,
+  "preferred_branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "actual_sandbox_run": {
+    "vercel_deployment_id": "dpl_DAUg8yPV9MS581NDrWC1zd86488v",
+    "source_head": "bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "source_tree": "1e1c9fafce44fa39a5dba863e7fe635906f819c8",
+    "source_tree_entries": 1282,
+    "source_checkout_shallow": true,
+    "source_archive_sha256": "e6e1972572dabf27739f71a709ed5f67fdbb8b1391e0313729f70f3c73cd842d",
+    "source_git_bundle_sha256": "e27494578cd4dbdfb47ff80819291ba1fdd9a2d1eb675c172b3256277c9e3f3a",
+    "sandbox_sdk_version": "2.9.2",
+    "sandbox_started": true,
+    "execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "reusable_http_execution_endpoint": false,
+    "new_unusual_experiment_count": 0,
+    "regression_only": true,
+    "steps": [
+      {"label": "unpack_and_bind_raw_git_tree_source_bytes", "exit_code": 0},
+      {"label": "provision_system_freeze_toolchain_sudo", "exit_code": 0},
+      {"label": "reconstruct_exact_git_provenance_without_checkout_index", "exit_code": 0},
+      {"label": "provision_pinned_python_toolchain", "exit_code": 1}
+    ],
+    "sandbox_stopped": true,
+    "stop_error": null,
+    "network_policy_during_tests": null,
+    "offline_entityos_matrix_started": false,
+    "entityos_artifact_built": false
+  },
+  "verified_positive_evidence": {
+    "raw_git_blob_source_unpack_and_digest_binding": "PASS",
+    "system_freeze_toolchain_provisioning": "PASS",
+    "exact_shallow_git_provenance_reconstruction": "PASS",
+    "clean_status_and_zero_remotes": "PASS",
+    "sandbox_stop": "PASS"
+  },
+  "failure": {
+    "class": "RUNNER_TOOLCHAIN_SCRIPT_GENERATION",
+    "step": "provision_pinned_python_toolchain",
+    "mechanism": "JavaScript template literal converted an intended Python backslash-n escape into a physical newline inside the generated Python heredoc",
+    "observed_error": "SyntaxError: unterminated string literal",
+    "entityos_code_result": false
+  },
+  "same_lane_repairs_observed_after_failure": {
+    "current_head": "1334610341674e92abda50c3ca887bf4ca035107",
+    "python_heredoc_escape_repaired": true,
+    "sanitized_git_head_printf_repaired": true,
+    "source_binding_contract_spelling_repaired": true,
+    "parallel_canonical_lane_created": false,
+    "current_head_executable_evidence": "BLOCKED_BY_VERCEL_DEPLOYMENT_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX"
+  },
+  "experiment_accounting": {
+    "global_unusual_experiment_limit": 1,
+    "global_unusual_experiment_count": 1,
+    "global_slot_consumed": true,
+    "new_unusual_experiment_executed_by_this_pass": 0,
+    "acceptance_runner_mode": "REGRESSION_ACCEPTANCE_ONLY"
+  },
+  "interpretation": "This run upgrades the evidence state from provider non-execution to an actually-started exact-identity Vercel Sandbox negative result for bdca4ea. It validates the raw-tree and shallow provenance prefix of the pipeline but falsifies the runner at toolchain-script generation. The failure is repaired in source on the same preferred lane but the repair remains unverified until an exact-current-head Sandbox starts.",
+  "current_frontier": "Obtain an actually-started Vercel Sandbox for exact PR781 head 1334610341674e92abda50c3ca887bf4ca035107 and rerun regression/acceptance-only. Require repaired toolchain step, DENY_ALL before offline tests, CM-07/dirfd/source-to-single-VM/Bytes-v2 gates, pristine twin one-file EntityOS builds with identical SHA-256, exact artifact runtime/no-host-Python/state/capability/relocation gates, and successful stop. No second unusual experiment.",
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT_AFTER_REPAIRED_SOURCE",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

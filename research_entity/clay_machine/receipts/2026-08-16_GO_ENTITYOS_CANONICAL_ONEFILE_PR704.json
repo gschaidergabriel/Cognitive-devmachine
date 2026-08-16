@@ -1,0 +1,92 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "outcome": "SUPPORTED_CANDIDATE_NOT_WHOLE_MACHINE_ACCEPTANCE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "candidate_pr": 704,
+  "candidate_head": "6ecb16b8d0d215d1bbc7808e780c489d5a920565",
+  "observed_product_main_after_run": "33e79fdbf85fcc61187aa8794a28d74ae8cc2b69",
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31926217568,
+    "job_id": 95114115287,
+    "runner_class": "self-hosted Linux X64",
+    "kernel": "Linux 6.8.0-117-generic x86_64 GNU/Linux",
+    "conclusion": "success",
+    "tested_exact_head": true
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "size_bytes": 11928288,
+    "sha256": "675cf484577ea6e83644b991018e17dcaad6e5afa2005cbccdb149c7b77f4a0c",
+    "format": "ELF 64-bit LSB executable, x86-64",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "build_head_bound": "6ecb16b8d0d215d1bbc7808e780c489d5a920565",
+    "whole_machine_acceptance": false
+  },
+  "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+  "verified_gates": [
+    "pinned freezer and parser environment: PyInstaller 6.21.0 + lark 1.3.1",
+    "canonical source pipeline regression rc=0",
+    "exact one-file frozen build",
+    "EntityOS --self-test PASS",
+    "EntityOS build/run of Clay main() returning 42",
+    "provenance-bound artifact run with trusted manifest digest",
+    "linux.process.spawn.v0 denied without capability",
+    "linux.process.spawn.v0 succeeds only with explicit grant",
+    "artifact uploaded from exact successful workflow run"
+  ],
+  "local_cross_check_after_artifact_download": {
+    "environment": "active ChatGPT Linux sandbox outside repository tree",
+    "sha256_matches_ci": true,
+    "status_command": "PASS",
+    "self_test": "PASS",
+    "clay_build_run_result": 42,
+    "host_without_capability": "CAPABILITY_DENIED:linux.process.spawn.v0",
+    "host_with_capability": "ENTITYOS_LOCAL_OK"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "RENAMED_UNICODE_CWD_DECOUPLING",
+    "bounded": true,
+    "intervention": "copy exact EntityOS to a path containing spaces and Unicode and execute self-test-json from foreign cwd /",
+    "baseline": "self-test-json from original artifact path",
+    "result": "PASS_BYTE_IDENTICAL",
+    "rollback": "temporary intervention path removed",
+    "interpretation": "supports path/cwd decoupling for this exact candidate only"
+  },
+  "negative_results_preserved": [
+    "earlier transitional zipapp lane PR #703 failed its first exact Linux run because its local probe used obsolete executable-IR field names; PR #703 was closed as superseded rather than promoted",
+    "current-main earlier EntityOS line produced a one-file launcher but failed on clean VPS execution with missing lark before later main repairs",
+    "PR #704 earlier exact-head run failed because lark was absent from the clean freezer venv; the discriminating repair was to pin lark==1.3.1 alongside PyInstaller==6.21.0"
+  ],
+  "hypothesis": "Freezing the already-canonical ClayCode->TypedIR->ClayVM->ClayOS reference path into a single executable can satisfy the owner-fixed one-file product boundary without creating a second language or VM.",
+  "strongest_counterhypothesis": "Single-file packaging could hide host/repository dependencies or change canonical semantics, so apparent one-file success would be a packaging illusion rather than a real product boundary.",
+  "falsifiers_used": [
+    "clean exact-head self-hosted Linux freeze",
+    "source tree independent artifact execution",
+    "canonical Clay program build/run",
+    "capability-denied/admitted host effect checks",
+    "renamed Unicode path plus foreign cwd intervention"
+  ],
+  "collapse": "RETAIN_AS_SUPPORTED_ENTITYOS_PRODUCT_BOUNDARY_CANDIDATE",
+  "not_promoted": [
+    "whole Clay Machine acceptance",
+    "clean accepted Hostinger final-release acceptance",
+    "CM-NET closure",
+    "canonical source-level String/Bytes/argv/env/cwd/stdin/stdout/stderr/PTY closure",
+    "CM-DATA/CM-VIS/CM-AUDIO closure",
+    "persistent service/state/recovery closure",
+    "self-hosting/bootstrap equivalence"
+  ],
+  "next_discriminator": "Rebase/fuse the canonical one-file candidate onto the newest product main without losing its exact-head green gates, then extend the canonical language/IR/VM value surface with the smallest provenance-bound String/Bytes/argv contract shared by CM-TERM and CM-DATA and rerun the exact EntityOS artifact gate.",
+  "training_authorized": false,
+  "together_api_used": false
+}

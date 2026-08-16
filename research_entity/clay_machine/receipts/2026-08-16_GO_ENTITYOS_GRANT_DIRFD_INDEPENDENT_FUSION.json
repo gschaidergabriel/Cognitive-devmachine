@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "execution_policy": "ISOLATED_SANDBOX_ONLY",
+  "observed_research_main_before_write": "839d03d91e65bc1414dd84633edc987ce9bdb8c7",
+  "observed_product_main": "7eb7fc63d38c910c2bdb9c80ec32908e0b0866fe",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "coordination": {
+    "existing_static_candidate_pr": 736,
+    "existing_dirfd_candidate_pr": 742,
+    "dirfd_candidate_head": "5f1ffa834bcfe0b7ed62ee5a087a939cb750ed77",
+    "dirfd_pr_state": "CLOSED_UNMERGED_EXECUTION_SAFETY",
+    "independent_comment_id": 5306794454,
+    "duplicate_product_branch_created": false
+  },
+  "observed_real_artifact": {
+    "source_workflow_run": 31930611382,
+    "build_head": "828106fac3cb388410dd7d524ebbdbd39efcf4c4",
+    "artifact_sha256": "360dc9c364211c232ee4102864be3ab51d1dda1ff6689d3f7bd868e038f85d87",
+    "size_bytes": 12822792,
+    "executed_in_active_sandbox": true,
+    "status_observed": {
+      "single_file_candidate": true,
+      "frozen_runtime": true,
+      "whole_machine_acceptance": false
+    },
+    "ordinary_ancestor_symlink_regression": {
+      "exit_code": 0,
+      "redirected_grant_written": true,
+      "outcome": "VULNERABILITY_REPRODUCED_ON_REAL_FROZEN_ENTITYOS"
+    }
+  },
+  "grf": {
+    "observed_reality": "Current main still uses final-component-only grant-state path rejection. PR736 adds static ancestor checks but explicitly leaves post-check path-component replacement unresolved. PR742 preserves a descriptor-relative candidate but is closed because opening it queued forbidden legacy VPS/self-hosted workflows.",
+    "generated_reality": "A userspace path-lineage precheck can be correct at validation time yet stale before the authority-changing grant write if an ancestor component is replaced.",
+    "counter_reality": "Rechecking symlink ancestry before mkdir/write is sufficient to prevent redirection without descriptor anchoring.",
+    "falsifier": "Validate a legitimate state path with the static candidate, then rename its ancestor and replace that pathname with a symlink before continuing the grant write.",
+    "collapse": "The static-precheck-only candidate redirected the write and is REFUTED as sufficient for this TOCTOU world. Descriptor-relative anchoring survived the same treatment arm in the active sandbox and is retained as the stronger candidate mechanism, not yet product-accepted."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "TOCTOU_ANCESTOR_SWAP_AFTER_VALIDATION",
+    "scope": "single local temporary-directory sandbox; no VPS, production host or external provider",
+    "baseline_static_candidate": {
+      "preexisting_ancestor_symlink_rejected": true
+    },
+    "treatment_static_candidate": {
+      "ancestor_swapped_after_validation": true,
+      "redirect_target_written": true,
+      "outcome": "COUNTER_REALITY_SUPPORTED_STATIC_PRECHECK_INSUFFICIENT"
+    },
+    "same_experiment_dirfd_treatment_arm": {
+      "normal_write_read": "PASS",
+      "static_ancestor_symlink": "FAIL_CLOSED",
+      "post_anchor_swap": "FAIL_CLOSED",
+      "redirect_target_written": false
+    },
+    "rollback": "temporary trees deleted; no persistent host authority/state"
+  },
+  "primary_evidence": [
+    {
+      "source": "Linux man-pages openat2(2)",
+      "claim_used": "RESOLVE_NO_SYMLINKS applies to all path components and differs from O_NOFOLLOW, which addresses only the final component."
+    },
+    {
+      "source": "Python os documentation",
+      "claim_used": "os.open supports dir_fd and os.replace supports src_dir_fd/dst_dir_fd, enabling descriptor-relative operations on the Linux target."
+    }
+  ],
+  "candidate_state": {
+    "pr736_static_candidate": "REFUTED_AS_SUFFICIENT_FOR_TOCTOU_WORLD",
+    "pr742_dirfd_candidate": "RETAIN_TESTING_UNMERGED",
+    "promotion_blocker": "No safe actually-started exact-head lane currently exists that can build the canonical one-file EntityOS without also queuing forbidden VPS/self-hosted workflows; active ChatGPT sandbox lacks PyInstaller/full private checkout.",
+    "next_executable_step": "First repair PR/workflow trigger isolation so only allowed GitHub-hosted/isolated sandbox jobs can start. Then execute preserved PR742 head 5f1ffa834bcfe0b7ed62ee5a087a939cb750ed77 regressions, double-build reproducible one-file EntityOS, and run the exact artifact status/self-test/copy-run grant-state matrix before any merge/promotion."
+  },
+  "entityos_artifact": "BLOCKED",
+  "whole_machine_acceptance": false,
+  "paid_training_authorized": false
+}

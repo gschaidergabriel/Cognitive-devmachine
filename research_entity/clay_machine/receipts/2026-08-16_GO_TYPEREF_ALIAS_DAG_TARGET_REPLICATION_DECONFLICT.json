@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "work_package": "CM-02-CLAYCODE-COMPILER-VM",
+  "research_head_before_write_observed": "ad89328171e7778820771878045668304f745042",
+  "product_main_observed": "79d7eafd618950d6ff0ef85a751f0ccea8f5c4a9",
+  "grf": {
+    "observed_reality": "Production NominalTypeChecker._canonical is stack-safe and path-correct for alias cycles/siblings, but repeated structural occurrences are rebuilt into separate TypeRef trees; _same iterates pairs without a visited-pair set.",
+    "generated_hypothesis": "A compact alias DAG can force exponential logical TypeRef materialization even though alias-chain ancestry is now linearized.",
+    "strongest_counterhypothesis": "The current iterative canonicalizer is already effectively linear or memoized on repeated alias subtrees, so compact fan-out does not materially amplify work.",
+    "discriminator": "HYDRA alias DAG Hn = Pair<Hn+1,Hn+1> with a terminal Int, compared against the existing 32768-deep linear alias regression.",
+    "collapse": "Counterhypothesis falsified. Compact fan-out reproduced exponential logical materialization. Live overlap refresh then found prior TYPEREF_ALIAS_DAG_EXPANSION_BOMB evidence, so this run is classified as independent replication rather than novelty."
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "HYDRA_ALIAS_DAG_REPLICATION",
+    "classification": "INDEPENDENT_REPLICATION_AFTER_OVERLAP_REFRESH",
+    "shape": "Hn=Pair<Hn+1,Hn+1>; terminal Int",
+    "linear_alias_depth_32768": {
+      "elapsed_seconds_approx": 0.390,
+      "peak_bytes_approx": 8341530,
+      "logical_nodes": 32769
+    },
+    "hydra_depth_12": {
+      "logical_nodes": 8191,
+      "elapsed_seconds_approx": 0.058,
+      "peak_bytes_approx": 590194
+    },
+    "hydra_depth_14": {
+      "logical_nodes": 32767,
+      "elapsed_seconds_approx": 0.230,
+      "peak_bytes_approx": 2358934
+    },
+    "hydra_depth_16": {
+      "logical_nodes": 131071,
+      "elapsed_seconds_approx": 0.908,
+      "peak_bytes_approx": 9437638
+    },
+    "hydra_depth_18": {
+      "logical_nodes": 524287,
+      "elapsed_seconds_approx": 3.785,
+      "peak_bytes_approx": 37753414
+    },
+    "outcome": "REPRODUCED_RESOURCE_AMPLIFICATION",
+    "second_unusual_experiment_executed": false
+  },
+  "live_coordination": {
+    "resource_bound_countercandidate_pr": 643,
+    "resource_bound_disposition": "CLOSED_UNMERGED_AFTER_DECONFLICT",
+    "resource_bound_role": "FALLBACK_DEFENSE_IN_DEPTH_NOT_PREFERRED_PRODUCTION_LANE",
+    "preferred_structural_sharing_pr": 645,
+    "preferred_candidate_head": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "issue": 640,
+    "review_receipt_id": 4945176470,
+    "issue_reentry_comment_id": 5305257416
+  },
+  "target_candidate_evidence": {
+    "pull_request": 645,
+    "workflow_run": 31920728069,
+    "job": 95100090497,
+    "runner_name": "clay-3",
+    "runner_group": "clayverse",
+    "runner_class": "self-hosted Linux/X64",
+    "tested_sha": "c50026c2462a6debebae5db13eb330c66fda2c85",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "kernel": "Linux 6.8.0-117-generic x86_64",
+    "gate": "PASS_CLAYCODE_TYPEREF_DAG_SHARING_CANDIDATE_GATE",
+    "checks": "PASS_7_OF_7",
+    "candidate_elapsed_seconds": 0.079,
+    "deep_chain_depth": 32768,
+    "diamond_depth": 18,
+    "diamond_unique_nodes": 19,
+    "production_typechecker_wired": false,
+    "effect_authority": "NONE",
+    "whole_clay_machine_completion": false
+  },
+  "supported_mechanism": {
+    "state": "SUPPORTED_TARGET_CANDIDATE_NOT_PRODUCTION_PASS",
+    "mechanism": "Per-call immutable completed-alias subtree sharing plus cycle-sensitive cache admission and DAG-aware visited object-pair equality.",
+    "semantic_invariants": [
+      "WP04 remains unchanged: only non-parameterized alias references resolve.",
+      "Direct and parameter-wrapped alias cycles retain fail-closed diagnostics.",
+      "Sibling alias-path provenance remains isolated.",
+      "32768-deep finite alias structure remains host-stack total.",
+      "No memo survives a canonicalization call/module epoch."
+    ]
+  },
+  "counterevidence_and_limits": [
+    "PR 645 is detached; production NominalTypeChecker._canonical and _same remain unchanged.",
+    "A successful detached candidate does not prove production admission or whole CM-02 completion.",
+    "_render_type_ref can still expand a logically shared DAG into a large diagnostic string; output-size/resource totality is a separate residual surface.",
+    "The 65536-node resource bound from closed PR 643 was not promoted as a language law.",
+    "No Linux effect authority was widened and no whole Clay Machine acceptance is claimed."
+  ],
+  "next_discriminators": [
+    "Fresh-main minimal integration of structural sharing into production NominalTypeChecker._canonical and DAG-aware visited-pair logic into _same.",
+    "Run unchanged tests/claycode_typeref_production_totality_gate.py on the exact integration head.",
+    "Add direct alias-diamond object-identity/unique-node and equality/mismatch controls on the exact integration head.",
+    "Run those gates on self-hosted Linux/X64 with SHA/blob/environment binding.",
+    "Keep issue 640 OPEN until production_typechecker_wired=true and exact-head target evidence passes."
+  ],
+  "authority": {
+    "together_used": false,
+    "final_training": "NOT_TOUCHED_OWNER_AUTHORIZATION_REQUIRED",
+    "external_effect_authority": "NONE",
+    "whole_clay_machine_acceptance": false
+  },
+  "outcome": "SUPPORTED_TARGET_STRUCTURAL_SHARING_CANDIDATE_DEDUPLICATED_PRODUCTION_INTEGRATION_OPEN"
+}

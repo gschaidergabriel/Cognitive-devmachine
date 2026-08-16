@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "ClayEnv semantic identity and pre-ClayOS release trust admission",
+  "research_head_before_write_observed": "241888f61141a586b21c58518b3e37f6e80ce278",
+  "product_main_before_cycle_observed": "0a94c67121582c6d7a2165b776323758fc80ea55",
+  "observed": [
+    "Current public ClayOS launch is artifact-only and the current ClayEnv manifest binds source, grammar, executable IR, VM blob and artifact hashes.",
+    "The current ClayCode structured AST already carries Module.name, but ClayEnvManifest/v1 remains a single-source artifact manifest rather than a canonical module/package manifest.",
+    "A stale/diverged branch contained a useful external trusted-manifest-digest boundary but was not current-main integrated.",
+    "Parallel current research independently isolated the canonical module-resolution fusion gap; that remains compatible with this release-trust lane."
+  ],
+  "bounded_unusual_experiment": {
+    "count": 1,
+    "name": "CLAYENV_PACKAGE_ROOT_RELOCATION",
+    "class": "REVERSIBLE_SELF_HOSTED_REGRESSION_DISCRIMINATOR",
+    "candidate_head": "fb2bbdf132b6027c9b8927283ced0e2d7edc9d8a",
+    "workflow_run": 31920556179,
+    "workflow_job": 95099668209,
+    "runner": "clay-3",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "treatment": "Identical Clay source bytes were placed under materially different directory roots and different source/artifact/manifest filenames.",
+    "required_result": "Build result objects, artifact bytes and canonical manifest bytes remain identical, and both strict ClayOS launches return 42.",
+    "result": "PASS",
+    "interpretation": "No hidden host-root or filename coupling was detected in current ClayEnv build identity for identical Clay source bytes.",
+    "merged_pr": 636,
+    "merge_commit": "6a8ef1950e03e1b29b7b98c27e1f9cee6eb146e2",
+    "rollback": "Test-only candidate; merged delta is one regression test and can be reverted independently.",
+    "whole_clay_machine_pass_claimed": false
+  },
+  "external_manifest_trust_boundary": {
+    "pr": 644,
+    "candidate_head": "d02b1298149253a1ec28a9c6c0825f0ae471a106",
+    "workflow_run": 31920703578,
+    "workflow_job": 95100025422,
+    "runner": "clay",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "result": "PASS",
+    "merge_commit": "cb3fe8058c1043e6cfbabc7d7f44ef39e1c23899",
+    "mechanism": [
+      "clayenv build reports the canonical manifest SHA-256 without changing ClayCode/TypedIR/VM semantics.",
+      "clayenv run requires trusted_manifest_sha256 as an input from outside the candidate artifact/manifest pair.",
+      "Manifest bytes must match that digest before canonical manifest parsing, artifact provenance checks and ClayOS.exec_artifact.",
+      "A different internally valid replacement manifest is rejected when presented under the original external manifest digest."
+    ],
+    "ordinary_regression_not_new_unusual_experiment": true,
+    "claim_boundary": "This is a trust-input interface, not an authenticated release-root authority."
+  },
+  "grf_collapse": {
+    "generated_reality": "ClayEnv identity might accidentally depend on filesystem placement, making packages non-relocatable.",
+    "counter_reality": "Build identity is content/provenance based and relocation invariant.",
+    "outcome": "RETAIN_CONTENT_PROVENANCE_REALITY_FOR_TESTED_SINGLE_SOURCE_BOUNDARY",
+    "release_reality": "An internally coherent artifact+manifest pair is sufficient release authority.",
+    "release_counter_reality": "A coherent pair still needs an independently anchored trust origin before execution.",
+    "release_outcome": "REJECT_SELF_AUTHENTICATING_PAIR; RETAIN_EXTERNAL_TRUST_INPUT_BOUNDARY"
+  },
+  "architecture_delta": {
+    "state": "SUPPORTED_COMPONENT_MECHANISM",
+    "decision": "Preserve path-independent ClayEnv build identity and require an external trusted-manifest digest before launch, while keeping actual release-root authentication outside the candidate bundle.",
+    "affected": ["CM-04", "CM-07", "CM-09", "CM-10"],
+    "parallel_frontier": "Canonical module/use identity and module-resolution fusion remain OPEN and should converge with release-manifest construction rather than create a second parser or package semantics path."
+  },
+  "remaining_falsifiers": [
+    "Define ClayReleaseManifest/v1 around an independently provisioned/pinned release root using standards-aligned mechanisms rather than custom cryptography.",
+    "Add release epoch/rollback rejection and prove stale-but-valid metadata cannot re-admit an older artifact.",
+    "Define root rotation/recovery semantics and fail closed when no trusted root is available.",
+    "Fuse canonical module/package closure identity into release construction once lossless module/use semantics are available.",
+    "Re-run exact self-hosted Ubuntu admission after those bytes change."
+  ],
+  "non_claims": [
+    "No full ClayReleaseManifest/v1 exists yet.",
+    "No caller-provided digest is treated as trust authority by itself.",
+    "No Linux interoperability authority was widened.",
+    "No second ClayVM or ClayOS execution path was added.",
+    "No whole Clay Machine acceptance is claimed.",
+    "Together API was not used.",
+    "No final/model training was authorized or started."
+  ]
+}

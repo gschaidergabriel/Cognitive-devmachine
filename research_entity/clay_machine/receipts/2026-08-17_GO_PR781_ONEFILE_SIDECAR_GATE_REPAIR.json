@@ -1,0 +1,67 @@
+{
+  "schema": "ClayEntityOSAcceptanceHarnessRepair/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "preferred_lane": {
+    "pr": 781,
+    "branch": "chatgpt/go-entityos-bytes-provenance-fusion-20260816",
+    "head_observed_after_repair": "7ef450b3c3331ce0b77e2e937d4031d1b983a26d",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_SANDBOX_START",
+    "exact_repaired_head_sandbox_executed": false
+  },
+  "observed_gap": {
+    "classification": "ACCEPTANCE_HARNESS_ONEFILE_OVERCLAIM",
+    "mechanism": "The prior matrix required exactly one top-level regular file but did not require exactly one top-level entry, so a regular EntityOS plus a directory or symlink sidecar could satisfy the regular-file count while still violating the final one-file product law.",
+    "whole_entityos_implication": "ENTITYOS_ONEFILE_PASS_NOT_STRONG_ENOUGH_BEFORE_REPAIR"
+  },
+  "repairs": [
+    {
+      "commit": "4f8d8d214038d0edb5aa810297eb9850c93077a6",
+      "scope": "Vercel offline acceptance matrix",
+      "delta": "Require EntityOS to be a regular executable non-symlink and require exactly one total top-level output entry as well as one regular file."
+    },
+    {
+      "commit": "7ef450b3c3331ce0b77e2e937d4031d1b983a26d",
+      "scope": "canonical one-file builder",
+      "delta": "Fail closed on pre-existing output sidecars and verify both primary and reproducibility dist directories contain exactly one entry, exactly the non-symlink regular EntityOS target."
+    }
+  ],
+  "adjacent_relocation_hardening": {
+    "matrix_commit": "71289f9ad7386fa83755693f568e406f2d121e91",
+    "runner_commit": "b97c6b78268233511f5d8454a0ef3b321441215d",
+    "state": "SOURCE_HARDENED_AWAITING_EXACT_HEAD_SANDBOX_EXECUTION"
+  },
+  "grf": {
+    "observed": "The previous one-file check measured regular-file cardinality, not release-directory entry cardinality.",
+    "counterhypothesis": "PyInstaller currently normally emits only EntityOS, so the weaker check may never misclassify the ordinary build.",
+    "falsifier": "Acceptance must reject any output containing EntityOS plus any companion entry regardless of entry type; repaired source now encodes that invariant, but exact Vercel execution is still required.",
+    "outcome": "REPAIR_SOURCE_AND_GATE; DEFER_RUNTIME_PROMOTION"
+  },
+  "unusual_experiment_accounting": {
+    "global_limit": 1,
+    "global_count": 1,
+    "global_slot_consumed": true,
+    "new_unusual_experiments_executed_by_this_repair": 0
+  },
+  "evidence_boundary": {
+    "source_repair_observed": true,
+    "exact_repaired_head_vercel_sandbox_verified": false,
+    "entityos_artifact_built_for_repaired_head": false,
+    "whole_entityos_acceptance": false
+  },
+  "next_executable_step": "When Vercel build capacity admits the exact then-current PR781 head, run the build-internal regression-only Sandbox batch and require Stage-v5 exact source binding, DENY_ALL offline tests, Bytes-v2/released-view, canonical source-to-single-VM, exact one-entry one-file twin EntityOS build with byte-identical digests, runtime/status/self-test/no-host-Python/state/capability/relocation gates, relocation digest equality and successful Sandbox stop before promotion.",
+  "safety": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_testing": "NOT_USED_FORBIDDEN",
+    "production_host_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "final_paid_training": "NOT_ATTEMPTED_OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_CAPACITY"
+}

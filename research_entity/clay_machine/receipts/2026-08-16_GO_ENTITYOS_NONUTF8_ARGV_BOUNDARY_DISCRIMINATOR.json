@@ -1,0 +1,86 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_NONUTF8_ARGV_BOUNDARY_DISCRIMINATOR",
+  "observed_at_local": "2026-08-16T12:38:00+07:00",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "status": "HOST_ARGV_BYTE_TRANSPARENCY_OBSERVED_CANONICAL_CLAY_BYTES_STILL_OPEN",
+  "authority_scope": "BOUNDARY_EVIDENCE_ONLY_NOT_CANONICAL_CLAY_SEMANTICS_NOT_WHOLE_MACHINE_ACCEPTANCE",
+  "tested_artifact": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "product_head": "d4fc929d33c69ecd61524d6f620d92b165aafbe7",
+    "workflow_run_id": 31929090825,
+    "artifact_id": 9258876082,
+    "binary_size_bytes": 12820496,
+    "binary_sha256": "fade26ac184bc857fbb5e984d62d71347709ef8dc8ad72d54dec3fa6fd2e8f98",
+    "file_kind": "ELF 64-bit LSB x86-64 GNU/Linux",
+    "self_test": "PASS",
+    "whole_machine_acceptance": false
+  },
+  "latest_head_reverification_after_experiment": {
+    "product_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+    "head_delta": "X11 reachability probe before graphical boot",
+    "workflow_run_id": 31929651652,
+    "workflow_result": "SUCCESS",
+    "artifact_id": 9258908699,
+    "binary_size_bytes": 12820848,
+    "binary_sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "local_status_build_head_match": true,
+    "local_self_test": "PASS",
+    "whole_machine_acceptance": false,
+    "note": "No second unusual experiment was run on the newer head; only normal status/self-test verification was performed."
+  },
+  "unusual_experiment": {
+    "count_for_this_go_macro_cycle": 1,
+    "name": "NON_UTF8_ARGV_BYTE_ROUNDTRIP_THROUGH_ENTITYOS_HOST_BOUNDARY",
+    "bounded": true,
+    "baseline_arg_hex": "415f757466385f42",
+    "baseline_child_observed_hex": "415f757466385f42",
+    "intervention_arg_hex": "41ff42",
+    "intervention_expected_child_hex": "41ff42",
+    "intervention_actual_child_hex": "41ff42",
+    "intervention_return_code": 0,
+    "byte_identical_roundtrip": true,
+    "rollback": "No persistent state; child exited and argv was discarded."
+  },
+  "grf_collapse": {
+    "observed_anchor": "The exact downloaded EntityOS one-file artifact accepted a capability-gated host process request containing argv bytes A FF B and the child reconstructed the same 41ff42 bytes.",
+    "generated_reality": "The Python/EntityOS host CLI string boundary necessarily destroys non-UTF8 argv bytes before Linux process spawn.",
+    "strongest_counter_reality": "The Unix Python filesystem encoding/surrogateescape path can preserve otherwise undecodable argv bytes for round-trip back to the OS boundary.",
+    "discriminator": "Pass one non-UTF8 byte through the exact EntityOS host boundary and compare the child process os.fsencode(sys.argv[1]) bytes.",
+    "outcome": "REJECT_GENERATED_REALITY_FOR_EXACT_TESTED_HOST_PATH",
+    "confidence": "HIGH_FOR_EXACT_TESTED_BYTE_MEDIUM_ONLY_FOR_HOST_BOUNDARY_GENERALIZATION",
+    "promotion_limit": "This does not establish canonical Clay Bytes, String, argv, ownership/lifetime, effect signatures or TypedIR/ClayVM transport semantics."
+  },
+  "repo_evidence": {
+    "clayvm_current_limit": "ClayVM v1 frame arguments and runtime stack are Int/Bool only; compile_typed_ir rejects parameter types outside Int and returns outside Int/Bool.",
+    "executable_ir_adapter_current_limit": "Executable-TypedIR lowering admits Int literals/locals/call parameters/hostcall arguments only.",
+    "related_pr": 708,
+    "related_pr_state": "OPEN_DRAFT_SIDE_CANDIDATE_NOT_CANONICAL_INTEGRATION"
+  },
+  "external_primary_evidence": {
+    "pep_383": "Python PEP 383 specifies surrogateescape so non-decodable POSIX command-line bytes can be represented in str and recreated as original bytes.",
+    "python_os_docs": "Python os/sys documentation describes filesystem encoding plus surrogateescape and os.fsencode/fsdecode round-trip behavior on Unix."
+  },
+  "affected_work_packages": [
+    "CM-DATA",
+    "CM-TERM",
+    "CM-05",
+    "CM-08"
+  ],
+  "architecture_delta": {
+    "state": "SUPPORTED_BOUNDARY_CONSTRAINT",
+    "delta": "Do not solve canonical Clay argv by assuming the host transport is inherently lossy. Keep String text semantics separate from opaque Bytes semantics; integrate owned Bytes/type metadata into the existing canonical TypedIR -> single ClayVM path instead of adding a second host/runtime sidecar.",
+    "strongest_counterhypothesis": "A future non-Python backend or a different locale/encoding configuration may not preserve the same byte round-trip, so canonical Clay semantics must not depend on CPython surrogateescape behavior.",
+    "falsifier": "After real Clay Bytes integration, run canonical TypedIR -> ClayVM -> capability-gated process tests over opaque bytes and reject any backend where declared byte identity changes.",
+    "rollback": "No product code changed in this receipt; reject the architecture delta if canonical multi-backend evidence contradicts it."
+  },
+  "next_executable_action": "Integrate explicit typed value metadata and owned Bytes into the real ClayVM module/function boundary and Executable-TypedIR adapter, add deterministic negative gates for type confusion/mutation/replay, then add the smallest explicit String/argv/effect-signature surface for one provenance-bound process request through the same single ClayVM; rebuild and rerun EntityOS one-file acceptance gates.",
+  "authority": {
+    "together_api": "FORBIDDEN",
+    "final_paid_training_authorized": false,
+    "whole_machine_pass_claimed": false
+  }
+}

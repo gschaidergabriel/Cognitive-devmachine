@@ -1,0 +1,63 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "work_package": "CM-07-CLAY-ENVIRONMENT-STDLIB-SDK",
+  "observed_product_state": {
+    "product_main_observed": "a17681e01fe92d59f23e1d493d1aa669fb357a9a",
+    "canonical_provider_resolver_merge": "6cf1fc3925c58230e223292fc193374753b370e2",
+    "canonical_provider_resolver_pr": 660,
+    "canonical_provider_resolver_tested_head": "a993083ff58081c2078d92f1769e649e366e3988",
+    "canonical_provider_resolver_run": 31923122223,
+    "current_resolver_schema": "ClayPackageResolution/v1",
+    "current_resolver_claimed_scope": "MODULE_PROVIDER_ONLY",
+    "symbol_semantics": "NOT_SELECTED",
+    "executable_use_gate": "UNCHANGED_FAIL_CLOSED"
+  },
+  "grf": {
+    "observed": "Merged v1 resolves every canonical use target by exact module identity, including plain MODULE-mode uses.",
+    "generated_hypothesis": "Plain use A.B denotes an exact module B whenever an exact module provider exists.",
+    "counter_reality": "Plain use A.B can denote an exported name B from parent module A, so exact path shape alone is insufficient to choose module-provider semantics.",
+    "discriminating_observation": "Authorized corpus: claycode/frank_memory.clay declares `use frank.entity.Frank`; claycode/frank_entity.clay declares `module frank.entity` and exports `entity Frank`, not module frank.entity.Frank.",
+    "collapse": "The generic v1 plain-use exact-module interpretation is REFUTED_AS_CANONICAL_SEMANTICS. Exact provider lookup remains useful only where module semantics are independently justified, such as a future proven wildcard-module contract."
+  },
+  "product_coordination": {
+    "refuted_candidate_pr": 683,
+    "refuted_candidate_head": "2e875566e4d85e346d3c5e3469a159f093fb864d",
+    "refuted_candidate_action": "CLOSED_WITHOUT_MERGE",
+    "reason": "Exposing the v1 resolver through ClayEnv would make an overbroad plain-use interpretation more accessible even though executable use remained fail-closed.",
+    "correction_candidate_pr": 674,
+    "correction_candidate_head": "0fe6d68e023a2c201f6663448774ff02e042335b",
+    "correction_candidate_state_at_receipt_write": "OPEN_DRAFT_EXACT_HEAD_CI_QUEUED",
+    "correction_candidate_scope": "ClayPackageResolution/v2 WILDCARD_MODULE_PROVIDER_ONLY; plain MODULE use fails PLAIN_USE_NAME_BINDING_UNSELECTED"
+  },
+  "unusual_experiment": {
+    "name": "NEAR_PREFIX_MISSING_TARGET_DECEPTION",
+    "count_for_this_macrocycle": 1,
+    "environment": "isolated in-memory mechanism probe mirroring the merged v1 exact dictionary lookup branch",
+    "baseline": "exact clay.lib.util key present -> selected provider",
+    "intervention": "remove exact key; retain only clay.lib.utility and clay.lib.util.extra",
+    "observed_result": "MISSING_MODULE_PROVIDER:clay.app:clay.lib.util",
+    "discriminator_passed": true,
+    "classification": "LOCAL_MECHANISM_PASS_WITH_SEMANTIC_SCOPE_LIMIT",
+    "interpretation": "v1 does not fall back to near-prefix names; this does not prove that plain use denotes a module.",
+    "external_effect": false,
+    "rollback": "discard in-memory dictionaries"
+  },
+  "hard_boundaries": {
+    "plain_use_semantics": "UNSELECTED_FAIL_CLOSED_REQUIRED",
+    "wildcard_export_visibility": "NOT_SELECTED",
+    "call_ownership": "NOT_SELECTED",
+    "linking": "NOT_SELECTED",
+    "cross_module_execution": false,
+    "linux_effects": "UNCHANGED",
+    "effect_authority": "NONE",
+    "clayenv_build_use_gate": "UNCHANGED_FAIL_CLOSED",
+    "whole_clay_machine_acceptance": false,
+    "together_api_used": false,
+    "final_training_authorized_or_started": false
+  },
+  "next_falsifier": "Obtain exact-head self-hosted evidence for the v2 correction that resolves only syntactically explicit wildcard-module providers while rejecting all plain MODULE uses as name-binding-unselected; only then design the smallest explicit plain-name/export visibility contract from authorized corpus evidence.",
+  "status": "CANONICAL_V1_SEMANTIC_OVERCLAIM_REFUTED_CORRECTION_PENDING_EXACT_HEAD"
+}

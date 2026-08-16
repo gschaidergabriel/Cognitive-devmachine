@@ -1,0 +1,47 @@
+{
+  "schema": "ClayEntityOSRunnerHardeningReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "runner_hardening_commit": "14afbd6d6ae6630c69ba481afe951dc4d236a38a",
+  "live_pr_head_after_parallel_fusion": "fd6a057423fb86fb9783d4871dc9f323c9d68295",
+  "runner_hardening_is_ancestor_of_live_head": true,
+  "delta": {
+    "problem": "The Vercel build-internal runner compacted command stdout to 32000 characters before returning it to PASS-marker and EntityOS SHA-256 validation, allowing a long successful matrix to lose a required middle marker and be misclassified as failure.",
+    "repair": "Keep full command stdout in-memory for machine validation while storing/emitting only compact bounded diagnostic stdout in step receipts and build logs.",
+    "semantic_scope": "RUNNER_RECEIPT_VALIDATION_ONLY",
+    "clay_semantics_changed": false,
+    "new_unusual_experiment_count": 0
+  },
+  "global_experiment_accounting": {
+    "slot": "CONSUMED_1_OF_1_PRIOR_EVIDENCE",
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "new_unusual_experiment_count": 0
+  },
+  "executable_evidence": {
+    "exact_live_head_sandbox_started": false,
+    "exact_live_head_entityos_built": false,
+    "exact_live_head_entityos_sha256": null,
+    "github_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "strongest_actual_sandbox_evidence_remains": "dpl_DAUg8yPV9MS581NDrWC1zd86488v@bdca4ea235735b6838696a8b1828a6d7e8212649",
+    "strongest_actual_sandbox_result": "FAIL_RUNNER_TOOLCHAIN_HEREDOC_BEFORE_OFFLINE_MATRIX; SANDBOX_STOP_PASS"
+  },
+  "coordination": {
+    "pr781": "CLOSED_SUPERSEDED_BY_PR786",
+    "pr786": "PREFERRED_SINGLE_PROMOTION_LANE",
+    "cmterm_string_pr744": "SERIALIZED_UNTIL_PR786_BYTES_PROVENANCE_CORE_ACCEPTED",
+    "parallel_duplicate_semantic_path_created": false
+  },
+  "next_executable_step": "When Vercel build capacity admits the exact then-current PR786 head, run the build-internal regression/acceptance-only isolated Sandbox. Require Stage-v5 exact raw-tree/shallow provenance, pinned SDK and single-owner gate, DENY_ALL before offline tests, Bytes-v2/released-view and adjacent regressions with zero new unusual experiments, CM-07/canonical source-to-single-VM, pristine twin one-file EntityOS builds with identical bytes and SHA-256, exact artifact status/self-test/no-host-Python/state/restart/capability/relocation gates, and successful Sandbox stop.",
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "production_host_test_evidence_used": false,
+  "together_api_used": false
+}

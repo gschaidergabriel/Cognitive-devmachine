@@ -1,0 +1,75 @@
+{
+  "schema": "ClayGoEntityOSExactHeadReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "product_head": "b32ec5a5f577099f90d74a038b5e3aee4db0c43e",
+  "research_head_observed_before_write": "75ef96615adf2260257476366a9a6379a0abd137",
+  "workflow": {
+    "name": "EntityOS Canonical One-File VPS",
+    "run_id": 31929651652,
+    "job_id": 95122460806,
+    "runner_name": "clay",
+    "machine_name": "clayverse",
+    "evidence_context": "EXACT_HEAD_SELF_HOSTED_LINUX_X64",
+    "conclusion": "success"
+  },
+  "artifact": {
+    "name": "EntityOS",
+    "artifact_id": 9258908699,
+    "sha256": "1a65554a6bc3a8c79c1eb033714c013e76a52d26877eb88c0349da4b72ff19e1",
+    "size_bytes": 12820848,
+    "mode": "0755",
+    "format": "ELF 64-bit x86-64",
+    "single_file_candidate": true,
+    "frozen_runtime": true,
+    "reproducibility_builds": 2,
+    "reproducibility_sha256_match": true,
+    "whole_machine_acceptance": false
+  },
+  "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+  "verified_gates": {
+    "source_pipeline_checks": "16/16",
+    "entityos_self_test": "PASS",
+    "claycode_build_run_result": 42,
+    "initial_grant_first_launch": "FAIL_CLOSED_WITHOUT_GRANT",
+    "initial_grant_acceptance": "PERSISTED_ONCE",
+    "initial_grant_second_launch": "REUSED_WITHOUT_PROMPT",
+    "linux_process_without_capability": "DENIED",
+    "linux_process_with_explicit_capability": "ENTITYOS_OK",
+    "unifieddb_visual_data_source": "UnifiedDB"
+  },
+  "independent_session_verification": {
+    "artifact_downloaded_from_workflow": true,
+    "sha256_match": true,
+    "status_command": "PASS",
+    "self_test": "PASS",
+    "claycode_build_run_result": 42,
+    "linux_process_without_grant_rc": 1,
+    "linux_process_with_explicit_grant": "ENTITYOS_OK"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "experiment": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "baseline_vs_intervention": "BYTE_IDENTICAL",
+    "runtime_tmp_cleanup": "EMPTY_AFTER_EXIT",
+    "rollback": "TEMP_PATH_REMOVED",
+    "outcome": "RETAIN"
+  },
+  "grf_decision_trace": {
+    "observed_anchor": "Current exact product head can produce and execute one frozen EntityOS file on self-hosted Linux and the downloaded identical artifact also executes in an independent session container.",
+    "hypothesis": "The one-file product boundary is now a functioning integration substrate for the admitted ClayCode/VM/ClayOS slice.",
+    "strongest_counterhypothesis": "A green one-file slice could still hide path/extraction coupling or be mistaken for whole-machine completion while major capability streams remain unimplemented.",
+    "discriminating_evidence": "Bit-identical double freeze plus relocated Unicode TMPDIR/foreign-CWD experiment plus independent downloaded-artifact status/self-test/build/run checks.",
+    "result": "One-file substrate hypothesis retained; whole-machine completion counterclaim rejected. Acceptance remains false.",
+    "next_discriminator": "Select the smallest canonical Clay String/Bytes/argv and effect-signature surface shared by CM-DATA and CM-TERM, then route one provenance-bound process/data request through typed/effect IR and the single VM without backend-local semantics."
+  },
+  "release_state": "IN_PROGRESS",
+  "negative_evidence_preserved": [
+    "whole_machine_acceptance=false",
+    "Current workspace has 0 complete work packages and open capability frontiers.",
+    "Separate SQLite provenance workflows on the same product head still report failures and are not overridden by this EntityOS component/integration PASS."
+  ]
+}

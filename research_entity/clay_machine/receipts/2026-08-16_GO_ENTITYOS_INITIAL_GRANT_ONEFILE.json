@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_ENTITYOS_INITIAL_GRANT_ONEFILE",
+  "trigger": "go",
+  "project": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product": "EntityOS",
+  "product_boundary": "ONE_EXECUTABLE_FILE",
+  "status": "SUPPORTED_COMPONENT_DELTA",
+  "whole_entityos_acceptance": false,
+  "observed_reality": {
+    "research_repo_pre_receipt_head": "eda5054529974c461e12d6e2f534de24a2157563",
+    "product_repo_final_tested_head": "e517f9bc0b5228894acd9a82e3be33affa9a3738",
+    "canonical_onefile_semantic_head": "f94918ed3cb1a0ef282238aacb73c9747645ad2d",
+    "canonical_onefile_workflow_run": 31928244956,
+    "canonical_onefile_job": 95119043886,
+    "canonical_onefile_result": "PASS",
+    "initial_grant_workflow_run": 31928307572,
+    "initial_grant_job": 95119207475,
+    "initial_grant_result": "PASS",
+    "local_deterministic_probe": "ENTITYOS_INITIAL_GRANT_UNIT_PASS"
+  },
+  "architecture_delta": {
+    "product_file": "entityos/boot_entry.py",
+    "builder_file": "entityos/build_canonical_onefile.py",
+    "mechanism": "A thin product boot boundary persists the one-time internal initial grant in a user-state location and delegates all Clay language/compiler/VM/ClayOS semantics to the existing canonical entry. The one-file builder freezes this boot boundary as the EntityOS executable entry.",
+    "state_schema": "EntityOSInitialGrant/v1",
+    "state_policy_version": 1,
+    "persisted_capability_intents": [
+      "clay.runtime",
+      "persistent.state",
+      "linux.interop.requests",
+      "network.requests",
+      "visual.audio.io"
+    ],
+    "state_safety": [
+      "state directory mode 0700",
+      "state file mode 0600",
+      "atomic tempfile write plus fsync plus replace",
+      "unsafe symlink or permissions fail closed",
+      "test-only acceptance requires explicit isolated ENTITYOS_STATE_HOME"
+    ],
+    "authority_boundary": "The persisted internal grant is not Linux/host authorization and does not bypass consequential effect gates, provenance checks, provider authorization or owner authority."
+  },
+  "grf": {
+    "hypothesis": "A persistent launch-time state boundary can satisfy one-time EntityOS internal approval continuity without minting new Clay semantics or weakening the canonical effect boundary.",
+    "strongest_counterhypothesis": "A persisted grant can become an authority bypass or a mandatory companion installation artifact, violating fail-closed effect semantics or the one-file release law.",
+    "discriminator": "Build the exact one-file EntityOS, require missing state to fail closed, admit the grant only in an isolated explicit test state root, verify mode/schema and unchanged state across the second launch, corrupt permissions and require fail-closed behavior, then rerun canonical EntityOS gates.",
+    "predicted_if_hypothesis": "First acceptance persists; second launch does not reprompt; state tamper is rejected; canonical compiler/VM/ClayOS and one-file gates stay green.",
+    "predicted_if_counterhypothesis": "The second launch requires another grant, modified/unsafe state is accepted, canonical gates regress, or runtime requires a release sidecar/install dependency.",
+    "outcome": "RETAIN",
+    "confidence": "SUPPORTED_ON_EXACT_SELF_HOSTED_LINUX_X64_COMPONENT_SCOPE"
+  },
+  "tests": {
+    "canonical_onefile": {
+      "head": "f94918ed3cb1a0ef282238aacb73c9747645ad2d",
+      "run": 31928244956,
+      "job": 95119043886,
+      "result": "PASS",
+      "checks": [
+        "source-path regression PASS",
+        "one executable named EntityOS built",
+        "canonical status/self-test PASS",
+        "ClayCode build/run through admitted pipeline PASS",
+        "host capability denied by default and explicit grant path PASS",
+        "UnifiedDB visual grounded-query gates PASS"
+      ],
+      "actions_artifact_id": 9258492620,
+      "actions_artifact_archive_digest": "sha256:a39495de77394c8f389a1f84dda0f696bb8d4c55b647b065bf94c925d1a5ec9e"
+    },
+    "persistent_initial_grant": {
+      "head": "e517f9bc0b5228894acd9a82e3be33affa9a3738",
+      "run": 31928307572,
+      "job": 95119207475,
+      "result": "PASS",
+      "checks": [
+        "missing initial state returns exit 73 and ENTITYOS_INITIAL_GRANT_REQUIRED",
+        "explicit isolated first acceptance creates EntityOSInitialGrant/v1 state",
+        "state file mode is 0600",
+        "second launch succeeds without reprompt and state hash is unchanged",
+        "chmod 0644 state tamper returns exit 73 and fails closed",
+        "exact built artifact reports tested build_head and single_file_candidate=true"
+      ],
+      "actions_artifact_id": 9258511388,
+      "actions_artifact_archive_digest": "sha256:7f1def48a814120dbc60b624d320728f2640ba62d105ca7f583064976ed09338"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ONEFILE_RELOCATED_UNICODE_TMPDIR_FOREIGN_CWD",
+    "run": 31928244956,
+    "result": "PASS",
+    "intervention": "Copy the exact one-file EntityOS to a path containing spaces and Unicode, run from foreign cwd with a Unicode TMPDIR, compare self-test JSON against baseline and require extraction-root cleanup.",
+    "baseline_comparison": "Workflow gate passed byte-identical baseline/intervention self-test comparison and empty runtime extraction root after exit.",
+    "rollback": "Temporary relocated path removed."
+  },
+  "primary_external_evidence": [
+    {
+      "source": "freedesktop.org XDG Base Directory Specification",
+      "relevance": "XDG_STATE_HOME is the standardized location for user-specific application state intended to persist between restarts."
+    },
+    {
+      "source": "PyInstaller 6.21.0 official runtime documentation",
+      "relevance": "One-file frozen runtime behavior supports treating the release executable as the packaging boundary while keeping modular source as build input."
+    }
+  ],
+  "negative_results_and_limits": [
+    "The final graphical one-click first-start UX is not implemented; current normal TTY launch uses one explicit text confirmation.",
+    "The persistent grant records intended internal capability classes but does not yet prove that every future network/media/state capability implementation consumes the grant through a single non-bypassable policy path.",
+    "Whole Clay Machine/EntityOS acceptance remains false because active network, canonical process/PTY, data/buffer, visual/video, audio, recovery and other workspace gates remain incomplete.",
+    "GitHub Actions artifact archive digest is recorded separately from the internal EntityOS binary SHA256; do not treat the archive digest as the binary digest."
+  ],
+  "reentry": {
+    "product_commits": [
+      "5d02acd263f8349cde796fb075b54eb42afe3d01",
+      "f94918ed3cb1a0ef282238aacb73c9747645ad2d",
+      "e517f9bc0b5228894acd9a82e3be33affa9a3738"
+    ],
+    "research_commits_before_receipt": [
+      "dc2e151d2d18e8c3e9b15cc859aa5964bf2bdec5",
+      "a830a240120bd1848d8eefc2ee3e5b9d24679f57",
+      "eda5054529974c461e12d6e2f534de24a2157563"
+    ],
+    "next_executable_step": "Bind the persistent initial-grant state to the actual EntityOS runtime capability-policy plane and expose the same one-time action through the canonical Builder Box/visual surface, then rebuild the exact one-file EntityOS and prove GUI/visual first launch, restart continuity and fail-closed tamper behavior without weakening Linux/effect authority.",
+    "parallel_frontier_preserved": "Continue current Clay Machine CM-NET, CM-TERM, CM-DATA, CM-VIS and CM-AUDIO gates; this receipt does not promote them."
+  }
+}

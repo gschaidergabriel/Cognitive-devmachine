@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_CM02_MERGE_CMTERM_SHELL_BOUNDARY",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "recorded_at_utc": "2026-08-16T03:42:29Z",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "grf": {
+    "observed_reality": [
+      "Product main was a17681e01fe92d59f23e1d493d1aa669fb357a9a before CM-02 promotion.",
+      "PR #681 exact head was c0a275b35869bc5838ea1f775a557f3534ae4635.",
+      "Exact-head workflow 31923469033 completed success.",
+      "Exact-head production-totality workflow 31923469219 completed success.",
+      "The exact PR head exposed 16 completed checks with no observed failure, queued, or in-progress check and GitHub reported mergeable=true, mergeable_state=clean.",
+      "PR #681 was marked ready and squash-merged as e56f1228d0a37e79d8ccc5cc849e0672d2555f7b.",
+      "After merge, product main was observed at 504dbb12f34d13da010032cbdad94a1e51ec0b87; its direct parent is the CM-02 merge e56f1228d0a37e79d8ccc5cc849e0672d2555f7b."
+    ],
+    "generated_reality": "A direct Clay process effect can preserve executable path and argv as data if it maps to an exec-style host primitive without an implicit shell; shell and PTY behavior should be separate explicit effect surfaces.",
+    "counter_reality": "A convenient shell-backed process adapter could appear equivalent for ordinary commands while silently reinterpreting metacharacters and therefore changing Clay-visible semantics and security behavior.",
+    "discriminator": "Run one bounded hostile-path experiment where the executable pathname itself contains a shell metacharacter and compare direct argv/path launch with an explicit shell launch.",
+    "outcome": "RETAIN direct-process versus explicit-shell separation; reject implicit-shell equivalence."
+  },
+  "cm02": {
+    "result": "MERGED",
+    "pr": 681,
+    "tested_head": "c0a275b35869bc5838ea1f775a557f3534ae4635",
+    "merge_commit": "e56f1228d0a37e79d8ccc5cc849e0672d2555f7b",
+    "workflow_runs": {
+      "production_sharing": 31923469033,
+      "production_totality": 31923469219
+    },
+    "scope": "Per-call immutable TypeRef alias-DAG sharing, cycle-taint protection, safe-sibling reuse, DAG-aware equality, existing alias-totality and unchanged production-totality coverage.",
+    "not_claimed": [
+      "CM-02 complete",
+      "bounded _render_type_ref diagnostic expansion",
+      "whole Clay Machine PASS"
+    ],
+    "remaining_counterevidence": "_render_type_ref may still expand a compact shared DAG into large diagnostic text."
+  },
+  "fixed_capability_refresh": {
+    "CM-NET": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-PORT": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-TERM": "RESEARCH_DELTA_ONLY_BASELINE_NOT_PROMOTED",
+    "CM-DATA": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-VIS": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-AUDIO": "OPEN_BASELINE_NOT_PROMOTED"
+  },
+  "cm_term_primary_evidence": {
+    "posix_exec": "POSIX.1-2024 exec family specifies path/argv/envp as the process-image execution interface; successful exec replaces the current process image. This is host/standard behavior evidence, not Clay semantic authority.",
+    "linux_tty": "Linux kernel TTY documentation shows PTYs/TTYs introduce a line-discipline layer with transformations including echo, signals, job-control-related behavior and special-character processing. This supports keeping PTY semantics separate from a raw direct-process effect."
+  },
+  "unusual_experiment": {
+    "count_this_macro_cycle": 1,
+    "id": "CM-TERM-ODD-METACHAR-PATH",
+    "bounded": true,
+    "reversible": true,
+    "setup": "Created a temporary executable whose pathname was 'probe;touch HACKED'.",
+    "direct_branch": {
+      "mechanism": "direct argv/path launch with shell disabled",
+      "returncode": 0,
+      "stdout": "DIRECT_OK",
+      "marker_created": false
+    },
+    "explicit_shell_control": {
+      "mechanism": "/bin/sh -c with the same unquoted pathname string",
+      "returncode": 0,
+      "stdout": "",
+      "stderr_class": "first path segment not found before shell separator",
+      "marker_created": true
+    },
+    "result": "Direct launch preserved the semicolon as pathname data; explicit shell reinterpreted the same bytes as shell syntax.",
+    "falsification": "Any CM-TERM implementation that routes PROCESS_DIRECT through an implicit shell is semantically non-equivalent and must fail the direct-process contract.",
+    "rollback": "Temporary directory and marker were deleted immediately after measurement."
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE_TEST_OBLIGATION",
+    "proposal": [
+      "Define PROCESS_DIRECT and SHELL_EXPLICIT as distinct Clay effects/capabilities.",
+      "PROCESS_DIRECT must carry executable path, argv, env, cwd and stream bindings without shell parsing.",
+      "PTY_INTERACTIVE should be a third explicit surface because TTY line-discipline semantics can transform I/O and signal behavior.",
+      "Add a canonical regression with metacharacters in executable path and argv; success requires no shell side effect on PROCESS_DIRECT.",
+      "Keep all three surfaces provenance/receipt-bound and fail closed on unknown effect mode."
+    ],
+    "promotion_gate": "No implementation PASS until a canonical ClayCode -> typed/effect IR -> ClayVM -> Clay Environment path launches a real Linux executable and reproduces the no-implicit-shell regression."
+  },
+  "coordination": {
+    "cm07": "Still blocked on trusted isolated/source-admitted exact-head execution of preserved v2 correction head 07f0bf7bc19e398f4820cd346a58190f98e596c6; billing-blocked GitHub-hosted attempt is not code evidence.",
+    "workspace_update": "Not overwritten in this cycle because the live workspace snapshot was stale relative to newly observed product-main movement; this receipt is intended for subsequent compare-and-swap fusion rather than blind replacement."
+  },
+  "result": "CONCRETE_CODE_MERGE_PLUS_CM_TERM_RESEARCH_FALSIFICATION_DELTA",
+  "whole_clay_machine_acceptance": false
+}

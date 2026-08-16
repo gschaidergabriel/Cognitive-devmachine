@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "execution_policy": "SANDBOX_ONLY",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "frontier": [
+    "ENTITYOS_BUILD_PROVENANCE",
+    "CM-10-TOOLING-OBSERVABILITY-RECOVERY",
+    "ONE_FILE_RELEASE_BOUNDARY"
+  ],
+  "observed_anchors": {
+    "candidate_pr": 754,
+    "candidate_initial_head": "355051c3ff7776e95c86ff6cb4bb7f97d9cd6b5d",
+    "candidate_final_head": "822fafeb6db51dcd798db7563bc21bf6008a5f53",
+    "merged_commit": "7b8ba167eb37493f857d517ee64b678b061e0b2b",
+    "product_main_observed_after_merge": "f3cb02d7e80eb5f3d067f0c7226ec81f5ea221c9",
+    "last_exact_vercel_verified_product_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+    "last_exact_vercel_verified_entityos_sha256": "39ae46bbc7a5a1c4f5b5ef9686bdab473169254f31bdb1559bdb80acc801ad2d",
+    "whole_machine_acceptance": false
+  },
+  "grf": {
+    "observed_reality": "PR 754 added an exact Git HEAD and clean-worktree check before freezing EntityOS, but its git subprocess inherited the caller environment.",
+    "generated_reality": "The new provenance gate would bind the one-file build receipt to the actual checked-out clean product source revision.",
+    "strongest_counter_reality": "Ambient Git environment variables can redirect repository/worktree interpretation so the verifier measures different bytes than PyInstaller freezes.",
+    "discriminator": "Redirect GIT_WORK_TREE to a clean alternate worktree while mutating the actual build root, then call the candidate provenance verifier against the exact expected HEAD.",
+    "outcome": "COUNTER_REALITY_CONFIRMED",
+    "collapse": "SANITIZE_INHERITED_GIT_ENVIRONMENT_AND_RETAIN_EXACT_HEAD_PLUS_DIRTY_TREE_GATE"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "GIT_WORK_TREE_PROVENANCE_REDIRECT",
+    "execution_surface": "CHATGPT_ISOLATED_CONTAINER_SANDBOX",
+    "baseline": {
+      "cases": 5,
+      "result": "5/5 PASS",
+      "coverage": [
+        "exact clean head accepted",
+        "spoofed head rejected",
+        "dirty tracked source rejected",
+        "untracked source rejected",
+        "invalid or short head rejected"
+      ]
+    },
+    "intervention": "Mutate the real tracked build source and set inherited GIT_WORK_TREE to a separate clean worktree before invoking the candidate verifier.",
+    "treatment_result": "BYPASS_CONFIRMED",
+    "security_effect": "The candidate verifier accepted the expected HEAD while the actual source root used by the build contained modified tracked bytes.",
+    "rollback": "Ephemeral repositories and alternate worktree were temporary; no canonical source mutation came from the experiment itself."
+  },
+  "product_delta": {
+    "fix_commit": "604104bcd10b993ceda82fb02974377e5c7d6473",
+    "regression_commit": "822fafeb6db51dcd798db7563bc21bf6008a5f53",
+    "fix": "Remove inherited GIT_* variables from the environment of provenance git subprocesses before resolving HEAD and worktree cleanliness.",
+    "regression": "Add a GIT_WORK_TREE redirect case that must reject the dirty real build source.",
+    "post_fix_isolated_regression": "6/6 PASS",
+    "merge": "PR 754 merged as 7b8ba167eb37493f857d517ee64b678b061e0b2b"
+  },
+  "execution_evidence": {
+    "github_hosted_pr_entityos_job": "FAILED_BEFORE_ANY_STEP_NO_CODE_EVIDENCE",
+    "prior_vercel_entityos_receipt": "research_entity/clay_machine/receipts/2026-08-16_VERCEL_BATCH1_ENTITYOS_ONEFILE_VERIFIED.json",
+    "prior_verified_head": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+    "prior_verified_entityos_sha256": "39ae46bbc7a5a1c4f5b5ef9686bdab473169254f31bdb1559bdb80acc801ad2d",
+    "current_exact_head_entityos_rebuilt_in_this_cycle": false
+  },
+  "negative_results_preserved": {
+    "current_product_main_exact_entityos": "NOT_VERCEL_REBUILT_AFTER_PROVENANCE_MERGE",
+    "github_hosted_lane": "NO_STARTED_STEPS_FOR_PR_HEAD",
+    "legacy_self_hosted_vps_receipt_descendant": "NOT_ADMISSIBLE_AS_CURRENT_CLAY_MACHINE_TEST_EVIDENCE_UNDER_SANDBOX_ONLY_OWNER_POLICY",
+    "whole_machine_acceptance": "NOT_PASSED"
+  },
+  "coordination": {
+    "vercel_executor_branch": "chatgpt/go-vercel-cm07-entityos-20260816",
+    "vercel_executor_head_observed": "33424a2e86545ef45ee6824a900fd0c6845f7a0b",
+    "compare_against_product_main": "DIVERGED",
+    "merge_base": "40b35996306911076de7bb2686f4c3ed637e6ee1",
+    "executor_ahead_by": 5,
+    "executor_behind_by": 7,
+    "constraint": "Do not force-overwrite either lane; fuse current main with the executor improvements and retest an exact descendant in Vercel Sandbox."
+  },
+  "entityos_artifact_status": "BLOCKED_CURRENT_EXACT_HEAD",
+  "next_executable_step": "Create a fresh non-stale fusion descendant of current product main that preserves the merged EntityOS provenance fence and the five Vercel executor-lane improvements, then run the authorized Vercel Sandbox matrix on that exact SHA and persist the resulting EntityOS SHA256, reproducibility, runtime, relocation and recovery receipts. Do not use VPS, self-hosted runners, or production hosts as test evidence.",
+  "together_api_used": false,
+  "vps_test_used": false,
+  "self_hosted_test_used": false
+}

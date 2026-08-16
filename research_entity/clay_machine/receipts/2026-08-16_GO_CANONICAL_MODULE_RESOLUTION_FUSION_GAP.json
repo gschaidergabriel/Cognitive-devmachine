@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "focus": "CM-07 canonical module/package prerequisite",
+  "product_head_observed": "6a8ef1950e03e1b29b7b98c27e1f9cee6eb146e2",
+  "research_head_before_write_observed": "5bf58d2a50c62851a05f659f0c3c4d37afef01ba",
+  "observed": [
+    "The current structured parser AST has first-class Module.name and Module.uses.",
+    "The current ClayExecutableTypedIR/v1 materializer does not emit module name or use declarations; it emits provenance hashes plus reachable executable functions.",
+    "The current grammar distinguishes bare use qid from use qid.* but syntax lowering stores only _text(kids[0]), so wildcard-vs-bare form is not explicitly preserved in Module.uses.",
+    "A legacy/current-tree WP04 module_symbol_resolver candidate exists and builds deterministic fail-closed module/symbol environments, but reparses source with regex rather than consuming the canonical structured AST.",
+    "dependency_trust.py builds a content-addressed transitive module closure on top of that resolver and explicitly grants no trust by itself.",
+    "Minimal clayenv is provenance-strict but remains single-source and has no canonical package/module resolution path."
+  ],
+  "hypothesis": "The smallest safe path to a canonical package/module system is to make use declarations lossless in the canonical AST, carry module/import identity through canonical executable/build metadata, then migrate the existing deterministic resolver/closure algorithm to consume those canonical structures instead of reparsing source.",
+  "counterhypothesis": "The legacy regex resolver could be wired directly into clayenv as a host-side package layer without changing executable semantics.",
+  "counterhypothesis_rejection_reason": "That would create a second source parser/semantic boundary beside the current parser/analyzer/TypedIR path and risks divergence between build semantics and package resolution.",
+  "discriminating_next_tests": [
+    "Parser gate: prove bare use and wildcard use remain distinguishable after canonical AST lowering.",
+    "Resolver equivalence gate: on the existing 40-source corpus, compare legacy resolver environments to an AST-consuming resolver where both are defined; preserve disagreements as counterevidence.",
+    "Duplicate-module gate: two files claiming the same canonical module identity must fail closed before artifact admission.",
+    "Closure provenance gate: changing any transitive imported source must change the dependency closure identity and the ClayEnv build identity.",
+    "Relocation control: moving an unchanged package root must not change semantic package identity."
+  ],
+  "bounded_unusual_experiment": {
+    "name": "ghost-module twin",
+    "class": "SYNTHETIC_STATIC",
+    "baseline": "module clay.alpha with main returning 42",
+    "variant": "same executable body with module renamed to clay.beta",
+    "result": "Source/provenance hash changes, while the non-provenance executable payload shape is identical and has no explicit module identity.",
+    "interpretation": "Current provenance detects the rename but does not constitute a first-class executable module identity or resolver contract.",
+    "production_pass_claimed": false,
+    "rollback": "No repository/product mutation was performed by the experiment."
+  },
+  "architecture_delta": {
+    "state": "CANDIDATE",
+    "decision": "Do not wire the regex resolver directly into clayenv. First make canonical use/module identity lossless, then fuse the resolver/closure algorithm onto that boundary.",
+    "affected": ["CM-01", "CM-04", "CM-07", "CM-09", "CM-10"],
+    "whole_clay_machine_completion": "NOT_CLAIMED"
+  },
+  "execution_limits": {
+    "local_repo_clone": "BLOCKED_BY_CONTAINER_DNS",
+    "product_runtime_test_in_this_cycle": "NOT_EXECUTED",
+    "github_reads": "EXECUTED",
+    "research_write": "COMMITTED_BY_CREATE_FILE_IF_TOOL_SUCCEEDS"
+  }
+}

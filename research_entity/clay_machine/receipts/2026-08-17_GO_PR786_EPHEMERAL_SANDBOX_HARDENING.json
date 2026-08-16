@@ -1,0 +1,44 @@
+{
+  "schema": "ClayEntityOSRunnerHardeningReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "endpoint": "EntityOS",
+  "endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "trigger": "go",
+  "preferred_product_pr": 786,
+  "preferred_branch": "chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348",
+  "product_main_observed": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "product_delta_commit": "5dbff2cfb89a22cdc621b17ff26a494b3fb0e0bd",
+  "delta": {
+    "problem": "With @vercel/sandbox v2, persistence is enabled by default; an acceptance worker that only calls stop can therefore retain snapshot lifecycle state that is unnecessary for a bounded build/test sandbox.",
+    "repair": "Create the build-internal EntityOS acceptance Sandbox with persistent:false and record sandbox_persistent:false in the bounded runner receipt.",
+    "semantic_scope": "SANDBOX_LIFECYCLE_AND_PROVENANCE_HARDENING_ONLY",
+    "clay_semantics_changed": false,
+    "new_unusual_experiment_count": 0
+  },
+  "global_experiment_accounting": {
+    "slot": "CONSUMED_1_OF_1_PRIOR_EVIDENCE",
+    "runner_mode": "REGRESSION_ACCEPTANCE_ONLY",
+    "new_unusual_experiment_count": 0
+  },
+  "verification": {
+    "git_diff_reviewed": true,
+    "only_intended_functional_changes": [
+      "summary.sandbox_persistent=false",
+      "Sandbox.create(... persistent:false)"
+    ],
+    "exact_head_vercel_status": "FAILURE_BUILD_RATE_LIMIT_BEFORE_DEPLOYMENT_OR_SANDBOX",
+    "exact_head_sandbox_started": false,
+    "exact_head_entityos_built": false,
+    "exact_head_entityos_sha256": null
+  },
+  "strongest_actual_sandbox_evidence_remains": "dpl_DAUg8yPV9MS581NDrWC1zd86488v@bdca4ea235735b6838696a8b1828a6d7e8212649",
+  "strongest_actual_sandbox_result": "RAW_TREE_BIND_PASS; SYSTEM_TOOLCHAIN_PASS; SHALLOW_GIT_PROVENANCE_PASS; PYTHON_TOOLCHAIN_HEREDOC_FAIL; SANDBOX_STOP_PASS; OFFLINE_ENTITYOS_MATRIX_NOT_STARTED",
+  "next_executable_step": "When Vercel build capacity admits the exact then-current PR786 head, execute the regression/acceptance-only build-internal Sandbox with zero new unusual experiments and require exact source binding, DENY_ALL offline matrix, Bytes/CM-07/source-to-single-VM gates, pristine twin byte-identical one-file EntityOS builds, artifact digest, status/self-test/no-host-Python/state/restart/capability/relocation gates, and successful stop.",
+  "whole_entityos_acceptance": false,
+  "acceptance": "BLOCKED_EXTERNAL_VERCEL_BUILD_RATE_LIMIT",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "production_host_test_evidence_used": false,
+  "together_api_used": false
+}

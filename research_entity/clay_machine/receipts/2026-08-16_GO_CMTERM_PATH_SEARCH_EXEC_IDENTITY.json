@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "2026-08-16_GO_CMTERM_PATH_SEARCH_EXEC_IDENTITY",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "trigger": "go",
+  "recorded_date": "2026-08-16",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "scope": "CM-TERM direct Linux process semantics; research/test obligation only",
+  "observed_reality": [
+    "Current owner-fixed Clay Machine plan requires direct Linux process execution without an implicit shell and keeps CM-NET, CM-PORT, CM-TERM, CM-DATA, CM-VIS and CM-AUDIO first-class until baseline promotion.",
+    "Product PR #681 merged as e56f1228d0a37e79d8ccc5cc849e0672d2555f7b; subsequent product main evidence commit 504dbb12f34d13da010032cbdad94a1e51ec0b87 was observed.",
+    "A concurrent research receipt 2026-08-16_GO_CM02_MERGE_CMTERM_SHELL_BOUNDARY already discriminated direct path/argv launch from explicit shell interpretation, so this receipt does not duplicate that discriminator.",
+    "Current workspace CM-07 v2 import correction remains blocked on trusted isolated/source-admitted execution; billing-blocked hosted dispatch is not code evidence."
+  ],
+  "grf": {
+    "generated_reality": "A CM-TERM PROCESS_DIRECT effect that merely promises no shell is still underspecified: command-name PATH lookup and exact/pinned executable identity are materially different host semantics.",
+    "counter_reality": "Direct exec-family launch by command name may appear equivalent to launching an expected executable path in benign environments, while a changed PATH can select a different executable without any shell being involved.",
+    "discriminator": "With a temporary executable named printf placed first in PATH, compare Linux execve on the explicit /usr/bin/printf pathname against execvp on the bare name printf.",
+    "outcome": "RETAIN the distinction. No-implicit-shell is necessary but insufficient to define executable identity."
+  },
+  "unusual_experiment": {
+    "count_this_invocation": 1,
+    "id": "PATH_SHADOWED_DIRECT_EXEC",
+    "bounded": true,
+    "reversible": true,
+    "environment": {
+      "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+      "libc": "Debian GLIBC 2.41-12+deb13u3",
+      "compiler": "Debian GCC 14.2.0-19"
+    },
+    "setup": "Built a disposable executable named printf that prints SHADOW_EXECUTED and prepended its temporary directory to PATH.",
+    "baseline": {
+      "mechanism": "execve('/usr/bin/printf', argv, envp) with the hostile PATH still present in envp",
+      "observed_stdout": "EXPLICIT_PATH_OK",
+      "returncode": 0,
+      "real_executable_sha256": "e7c954d7c89a494227b35c537a0a42fe315b4ea687b90a90b3eeee06c52927dd"
+    },
+    "treatment": {
+      "mechanism": "execvp('printf', argv) after setting PATH=temp:/usr/bin:/bin",
+      "observed_stdout": "SHADOW_EXECUTED",
+      "returncode": 0,
+      "shadow_executable_sha256": "b7019ee56b354b1a6dce17c6a844d428bacbba63739865d5e4a5afed9d565fab"
+    },
+    "result": "The direct name-based exec path selected the PATH shadow while the explicit pathname selected /usr/bin/printf. Both paths avoided an implicit shell.",
+    "rollback": "The shadow executable and temporary directory were deleted; the explicit rollback check observed shadow_removed=true.",
+    "external_effects": "Disposable local/container process and filesystem only; no product repository mutation, VPS mutation, network/provider effect, Clay authority, training or canonical runtime state mutation."
+  },
+  "primary_evidence": [
+    {
+      "source": "Linux man-pages exec(3)",
+      "url": "https://www.man7.org/linux/man-pages/man3/execvp.3.html",
+      "finding": "execvp/execlp search PATH when the file argument contains no slash; pathname-taking exec variants do not perform that search."
+    },
+    {
+      "source": "Linux man-pages execve(2)",
+      "url": "https://www.man7.org/linux/man-pages/man2/execve.2.html",
+      "finding": "execve executes the program referred to by the supplied path and directly supplies argv/envp."
+    },
+    {
+      "source": "POSIX.1-2024 exec",
+      "url": "https://pubs.opengroup.org/onlinepubs/9799919799/functions/exec.html",
+      "finding": "execvp performs PATH-based pathname construction for a file name without slash; fexecve identifies the executable by file descriptor."
+    },
+    {
+      "source": "Linux man-pages fexecve(3)",
+      "url": "https://www.man7.org/linux/man-pages/man3/fexecve.3.html",
+      "finding": "fexecve executes the file referred to by an fd and is explicitly motivated by avoiding pathname replacement between integrity checking and execution; mutable-file permissions remain a separate caveat."
+    },
+    {
+      "source": "Linux man-pages execveat(2)",
+      "url": "https://man7.org/linux/man-pages/man2/execveat.2.html",
+      "finding": "execveat with AT_EMPTY_PATH can execute the file referred to by a file descriptor and provides a Linux-specific object-bound candidate surface."
+    }
+  ],
+  "architecture_delta": {
+    "state": "CANDIDATE_TEST_OBLIGATION",
+    "proposal": [
+      "Keep PROCESS_DIRECT, SHELL_EXPLICIT and PTY_INTERACTIVE separate as already supported by the concurrent CM-TERM shell-boundary receipt.",
+      "Within PROCESS_DIRECT, make executable resolution mode Clay-visible rather than implicit: at minimum distinguish EXACT_PATH from PATH_SEARCH; unknown mode fails closed.",
+      "A PATH_SEARCH request must receipt-bind the requested name, effective PATH/search inputs and the actually resolved executable identity before claiming the observed outcome belongs to that command.",
+      "For security-/release-sensitive launches, evaluate an FD_PINNED mode based on fexecve or execveat(AT_EMPTY_PATH) so integrity observation and execution can refer to the same opened object; this is a candidate, not yet selected semantics.",
+      "Do not claim that an executable digest alone solves mutability/TOCTOU; permissions/object mutability and interpreter-script behavior require their own tests.",
+      "Canonical CM-TERM regression should include a PATH-shadow case and require deterministic distinction between exact/pinned and search-based modes."
+    ],
+    "strongest_counterhypothesis": "A portable Clay Environment may intentionally rely on PATH search for ordinary user commands, and forbidding it would reduce usability. The proposed contract therefore does not ban PATH search; it makes it explicit, observable and separately authorizable.",
+    "promotion_gate": "No CM-TERM implementation PASS from this receipt. Promotion requires the canonical ClayCode -> typed/effect IR -> ClayVM -> Clay Environment path to exercise the selected modes on real Linux, with streaming I/O, exit/failure/cancellation semantics and receipts."
+  },
+  "fixed_capability_refresh": {
+    "CM-NET": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-PORT": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-TERM": "RESEARCH_DELTA_ONLY_BASELINE_NOT_PROMOTED",
+    "CM-DATA": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-VIS": "OPEN_BASELINE_NOT_PROMOTED",
+    "CM-AUDIO": "OPEN_BASELINE_NOT_PROMOTED"
+  },
+  "coordination": {
+    "duplicate_avoidance": "This receipt composes with, rather than repeats, the concurrent direct-vs-shell receipt: shell separation answers interpretation semantics; this receipt answers executable-resolution/identity semantics inside direct execution.",
+    "workspace_write": "Not performed to avoid overwriting a concurrently moving workspace snapshot; unique receipt is the durable re-entry surface for later compare-and-swap fusion."
+  },
+  "result": "CONCRETE_CM_TERM_FALSIFICATION_DELTA",
+  "whole_clay_machine_acceptance": false
+}

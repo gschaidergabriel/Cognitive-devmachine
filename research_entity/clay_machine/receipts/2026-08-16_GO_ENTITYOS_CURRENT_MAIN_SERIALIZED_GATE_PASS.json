@@ -1,0 +1,53 @@
+{
+  "schema": "ClayMachineResearchReceipt/v1",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product": "EntityOS",
+  "outcome": "CURRENT_MAIN_EXACT_ENTITYOS_VERIFIED_AFTER_CI_SERIALIZATION_FIX",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "product_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+  "parent_product_head": "57759c6bc0d52fa531a7b26993223c22f4549282",
+  "head_delta_scope": "CI-only: entityos-canonical-onefile-vps.yml changed cancel-in-progress from true to false; runtime/compiler/VM/ClayOS source was unchanged by this commit.",
+  "exact_head_gate": {
+    "workflow": "EntityOS Canonical One-File VPS",
+    "run_id": 31927007084,
+    "conclusion": "success",
+    "artifact_id": 9258143200,
+    "artifact_archive_digest_sha256": "63933da2617e7a11d1f55bc22ba523dc9f24399879860333112f067170c96e1e",
+    "entityos_sha256": "538263d313c175dbef2ab677b0236ad2e5ab9d1de220731444f7489e4b18799d",
+    "entityos_size_bytes": 11931208,
+    "single_file_runtime": true,
+    "source_regression": 0,
+    "canonical_pipeline": "ClayCode->ClayExecutableTypedIR/v1->ClayVMArtifact/v1->ClayVM->ClayOS",
+    "whole_entityos_completion": false
+  },
+  "local_replication": {
+    "sha256_matches_upstream": true,
+    "status": "PASS",
+    "build_head": "66e466c9c57d72c520e98085f221afcaffab9494",
+    "self_test": "PASS",
+    "vm_result": 42,
+    "typed_ir_vm_process_effect": "PASS",
+    "typed_ir_vm_process_result": 0,
+    "typed_ir_vm_process_stdout": "ENTITYOS_VM_HOST_OK",
+    "capability_denied_without_grant": "PASS",
+    "capability_granted_process": "PASS"
+  },
+  "evidence_boundary": {
+    "artifact_status": "VERIFIED_EXACT_HEAD_CANDIDATE",
+    "whole_machine_acceptance": false,
+    "reason": "Current exact one-file artifact passes its present compiler/VM/ClayOS and process-effect gates, but the active CLAY_MACHINE completion law still requires broader canonical language/effect, network, terminal, data/media, portability, recovery and related capability closure."
+  },
+  "grf": {
+    "observed_reality": "The current main head has an exact successful self-hosted Linux one-file build and the same bytes pass independent local status/selftest/capability checks.",
+    "retained_hypothesis": "Serializing EntityOS evidence builds removes cancellation races without changing runtime semantics and preserves the one-file product boundary.",
+    "strongest_counter_reality": "The current one-file candidate can still fail on older supported glibc, unsuitable/noexec temporary extraction filesystems, or after the pending canonical String/Bytes/Buffer/argv/effect expansion.",
+    "outcome": "RETAIN"
+  },
+  "next_discriminator": "Advance the smallest shared CM-TERM/CM-DATA semantic slice: canonical String plus Bytes/Buffer ownership+lifetime plus argv/effect-signature semantics through checker -> ClayExecutableTypedIR -> single ClayVM -> ClayOS, rebuild EntityOS, and rerun exact-head one-file plus declared Linux compatibility-floor/temp-extraction gates.",
+  "training_authorized": false,
+  "together_api_used": false
+}

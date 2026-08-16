@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-ENTITYOS-STRING-VM-ARTIFACT-REPLICATION-2026-08-16",
+  "date": "2026-08-16",
+  "trigger": "go",
+  "status": "SUPPORTED_REPLICATION_NOT_RELEASE_ACCEPTANCE",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "product": "EntityOS",
+  "observed_frontier": {
+    "product_repository": "gschaidergabriel/Dr.-Unterweger",
+    "verified_artifact_source_commit": "ee044bbb2fe1bca62059ffe20b68fd03e37bdcba",
+    "concurrent_branch": "clay/go-string-literal-vm-20260816-1239",
+    "concurrent_branch_head_observed_after_artifact": "42fd87a37ddb44594904115848ce8c93e7bb4ca5",
+    "latest_head_not_claimed_verified": true
+  },
+  "counterevidence": {
+    "earlier_source_commit": "826d8c0ec9ec0fdba33aad69ffa75ec12013a04a",
+    "observation": "The packaged EntityOS self-test could pass while a real ClayCode String return still failed at ClayVM compilation with VM_V0_TYPE_SURFACE_INT_BOOL_ONLY.",
+    "meaning": "Packaging/self-test PASS was insufficient evidence for the newly added String semantic path."
+  },
+  "independent_replication": {
+    "artifact_path_local_worker": "/mnt/data/EntityOS",
+    "artifact_form": "single executable Python zipapp with shebang and embedded ZIP payload",
+    "artifact_size_bytes": 1212989,
+    "artifact_sha256": "f0425299fac27e4567140d6c9d7b52e43913c6ed573ee2eaa61fb5d5622300d0",
+    "about_source_commit": "ee044bbb2fe1bca62059ffe20b68fd03e37bdcba",
+    "about_acceptance": "CANDIDATE_NOT_FINAL",
+    "self_test": "PASS_ENTITYOS_SINGLE_FILE_SMOKE",
+    "claycode_string_probe": {
+      "source_shape": "String-returning helper called by String-returning main",
+      "result": "ENTITYOS_STRING",
+      "deterministic_recompile_equal": true,
+      "vm_blob_sha256": "5896dc8f8c5d96591c72d83b316cbf43dadd3c59c98b810aae031cedc942178e",
+      "vm_blob_bytes": 93,
+      "status": "PASS"
+    }
+  },
+  "bounded_unusual_experiment": {
+    "count": 1,
+    "experiment": "amputated EntityOS launch with zero release sidecars",
+    "source": ".github/workflows/entityos-single-file.yml",
+    "observed_on_verified_artifact_lineage": true,
+    "result": "PASS",
+    "interpretation": "Supports the one-file launch boundary only; does not imply full Clay Machine release acceptance."
+  },
+  "current_discriminator": {
+    "host_contract_fact": "runtime/claycode_eval_v1/host.py still binds host intrinsics by arity/effect class without nominal Clay parameter/return types.",
+    "typechecker_fact": "HOST_INTRINSIC_TYPE_SIGNATURE_UNBOUND remains a fail-closed diagnostic.",
+    "vm_adapter_fact": "claymachine/executable_ir_adapter.py still requires Int hostcall args and Int hostcall return on the observed branch head.",
+    "next_step": "Select the smallest canonical String/argv plus Bytes/Buffer ownership/lifetime and explicit effect-signature surface, then route one provenance-bound process request from real ClayCode through nominal type/effect checking, ClayExecutableTypedIR, strict ClayVM artifact admission, and linux.process.spawn.v0 without backend-local semantic invention."
+  },
+  "release_claims": {
+    "accepted_vps_tested_by_this_worker": false,
+    "whole_clay_machine_acceptance": false,
+    "release_passed": false,
+    "final_training_started": false
+  },
+  "negative_result_preserved": true,
+  "duplicate_implementation_created": false
+}

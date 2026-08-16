@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-16",
+  "research_endpoint": "EntityOS",
+  "product_form": "ONE_EXECUTABLE_FILE",
+  "research_head_joined": "d021a280146fdb20422138116baccbe68c05d05f",
+  "product_main_joined": "bfd3bdf5c74d9b0419e83350258b9cf72f6367db",
+  "product_candidate": {
+    "pr": 777,
+    "head": "fcf198ceb0318285bad8e2332e21dbec93804ff8",
+    "scope": "CLAYVM/2 typed Bytes ingress and provenance-bound VM transport",
+    "promotion_state": "DRAFT_UNVERIFIED"
+  },
+  "execution_truth_rule": "Only exact-identity Vercel Sandbox observation may establish executable EntityOS truth. This receipt contains exploratory isolated-sandbox mechanism evidence only and must not be promoted as EntityOS or exact-PR runtime PASS.",
+  "unusual_experiment": {
+    "name": "SHARED_EXPORTER_TORN_TOBYTES_SNAPSHOT",
+    "count_for_this_user_go": 1,
+    "environment": "isolated ChatGPT container; NOT Vercel Sandbox",
+    "setup": "32 MiB multiprocessing.shared_memory buffer; independent writer process repeatedly alternated the whole producer buffer between byte values 0x11 and 0xEE while the reader admitted a contiguous one-byte memoryview and called tobytes().",
+    "bounded_iterations": 120,
+    "observation": {
+      "torn_snapshot_observed": true,
+      "first_torn_iteration_zero_based": 1,
+      "snapshot_size_bytes": 33554432,
+      "byte_values_present": [17, 238],
+      "count_0x11": 31292048,
+      "count_0xEE": 2262384
+    },
+    "classification": "COUNTERHYPOTHESIS_SUPPORTED",
+    "counterhypothesis": "An owned copy produced by memoryview.tobytes() is not by itself a producer-epoch-consistent snapshot when the underlying exporter can be mutated concurrently outside the copying process.",
+    "what_this_refutes": "The broad inference that contiguous bytes-like memoryview + copy automatically yields provenance-stable Clay Bytes for shared or externally mutable exporters.",
+    "what_this_does_not_refute": "A copy performed while an enforceable exclusive lease/epoch is held, or immutable built-in bytes backing, may still be valid. This experiment does not establish general semantics for every bytearray or exporter implementation."
+  },
+  "ordinary_followup_control": {
+    "status": "PASS_PROTOTYPE_ONLY",
+    "candidate_fence": "Reject memoryview exporters outside an explicitly admitted ownership set before copying; unknown/shared mmap-backed exporters fail closed as BYTES_VIEW_EXPORTER_UNLEASED.",
+    "controls": {
+      "immutable_bytes_roundtrip": true,
+      "direct_bytearray_snapshot_preserved_in_prototype": true,
+      "memoryview_bytearray_snapshot_preserved_in_prototype": true,
+      "released_view_still_fails_closed": true,
+      "mmap_backed_memoryview_rejected": true
+    },
+    "production_code_changed": false
+  },
+  "architecture_collapse": {
+    "retain": [
+      "Clay Bytes must represent owned immutable bytes after admission.",
+      "Unknown/shared borrowed exporters cannot be promoted merely because a copy operation is requested.",
+      "A separate mutable/shared Buffer contract needs explicit ownership/lease/epoch semantics before zero-copy or snapshot claims are accepted."
+    ],
+    "preferred_safe_direction": "Keep canonical Bytes fail-closed for shared/unknown mutable exporters; introduce Buffer/lease/epoch semantics separately rather than hiding concurrency authority inside host memoryview behavior.",
+    "strongest_remaining_counter_reality": "Direct bytearray or memoryview(bytearray) copying may be safe under a restricted single-owner contract, but the current Clay boundary does not encode or prove that ownership contract."
+  },
+  "vercel_state": {
+    "latest_started_deployment_inspected": "dpl_3GtAfZ8H2wSv23nQRhLKm8wH6swe",
+    "latest_started_result": "BUILD_FAILED_BEFORE_SANDBOX_START:VERCEL_GIT_SOURCE_TREE_DIRTY",
+    "preferred_repaired_staging_pr": 776,
+    "preferred_repaired_staging_head": "f84aef16b5e93797dffa5d87268925f36bcc2b38",
+    "current_external_block": "deployment rate limit prevents fresh exact-head Sandbox execution"
+  },
+  "next_exact_sandbox_discriminator": [
+    "Run repaired PR776 staging head in an actually-started Vercel Sandbox to restore trusted exact-source execution.",
+    "On a fresh PR777-derived head, add a deterministic shared/unknown-exporter fail-closed regression and mixed Int+Bytes CLAYVM/2 regression.",
+    "Choose the minimal canonical Bytes-versus-Buffer ownership boundary; do not treat host copy behavior as Clay semantics.",
+    "Then rerun typed IR -> single ClayVM -> provenance artifact regressions and the exact one-file EntityOS double-build/runtime/pathless/relocation matrix."
+  ],
+  "whole_entityos_acceptance": false,
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
 
@@ -10,11 +9,10 @@ class BridgeStateError(RuntimeError):
 
 
 class ClayVerseEffectBridge:
-    """Stdio MCP for effects only; turn state is automatic via Claude lifecycle hooks."""
+    """Stdio MCP effect adapter over the same TurnLifecycle used by Claude hooks."""
 
     def __init__(self, db, user_id: str, session_id: str, entityos_bridge=None):
-        from .effects import EffectGate
-        from .workspace import Workspace
+        from .turn_lifecycle import TurnLifecycle
 
         if user_id not in {"gabriel", "andreas"} or session_id != f"session:{user_id}":
             raise PermissionError("invalid terminal/session binding")
@@ -22,8 +20,7 @@ class ClayVerseEffectBridge:
         self.db = db
         self.user_id = user_id
         self.session_id = session_id
-        self.workspace = Workspace(db)
-        self.effects = EffectGate(db, allow_process=False, entityos_bridge=entityos_bridge)
+        self.lifecycle = TurnLifecycle(db, user_id, session_id, entityos_bridge)
 
     @classmethod
     def from_env(cls):
@@ -49,27 +46,7 @@ class ClayVerseEffectBridge:
             bridge.verify()
         return cls(db, user_id, session_id, bridge)
 
-    def _active(self):
-        row = self.db.db.execute(
-            "SELECT w.*,t.provenance FROM workspace_episodes w "
-            "JOIN turns t ON t.turn_id=w.observation_turn_id "
-            "WHERE w.session_id=? AND w.state IN ('OPEN','SELECTED') ORDER BY w.ts DESC LIMIT 1",
-            (self.session_id,),
-        ).fetchone()
-        if row is None:
-            raise BridgeStateError("no active canonical turn; effect denied")
-        try:
-            provenance = json.loads(row["provenance"])
-        except Exception as exc:
-            raise BridgeStateError("active turn provenance is invalid") from exc
-        generation = provenance.get("session_generation")
-        if not isinstance(generation, int):
-            raise BridgeStateError("active turn lacks reasoning-generation provenance")
-        return row, generation
-
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
-        from .effects import EffectRequest
-
         if capability not in {"entityos.exec", "state.noop"}:
             raise PermissionError("capability denied")
         if not isinstance(target, str) or not target or len(target) > 2048 or "\x00" in target:
@@ -84,38 +61,32 @@ class ClayVerseEffectBridge:
         else:
             argv = None
 
-        active, generation = self._active()
-        if active["state"] == "OPEN":
-            self.workspace.select(active["episode_id"], "request_effect")
-        req = EffectRequest(
-            self.user_id,
-            self.session_id,
-            capability,
-            target,
-            argv,
-            generation,
-        )
-        effect_id, outcome = self.effects.execute(req, active["episode_id"])
-        return {
-            "effect_id": effect_id,
-            "causal_id": self.effects.causal_for_effect(effect_id),
-            "verified": bool(isinstance(outcome, dict) and outcome.get("ok") is True),
-            "outcome": outcome,
-            "boundary": "ClayVerse EffectGate -> EntityOS" if capability == "entityos.exec" else "ClayVerse EffectGate",
-        }
+        try:
+            result = self.lifecycle.request_effect(capability, target, argv)
+        except Exception as exc:
+            from .turn_lifecycle import TurnLifecycleError
+            if isinstance(exc, TurnLifecycleError):
+                raise BridgeStateError(str(exc)) from exc
+            raise
+        result["boundary"] = "ClayVerse TurnLifecycle -> EffectGate -> EntityOS" if capability == "entityos.exec" else "ClayVerse TurnLifecycle -> EffectGate"
+        return result
 
     def session_state(self) -> dict:
-        active = self.db.db.execute(
-            "SELECT episode_id,state FROM workspace_episodes WHERE session_id=? AND state IN ('OPEN','SELECTED') ORDER BY ts DESC LIMIT 1",
-            (self.session_id,),
-        ).fetchone()
+        active = self.lifecycle.active()
+        active_episode = None
+        if active is not None:
+            ws = self.db.db.execute(
+                "SELECT episode_id,state FROM workspace_episodes WHERE episode_id=?",
+                (active["episode_id"],),
+            ).fetchone()
+            active_episode = dict(ws) if ws else None
         return {
             "user_id": self.user_id,
             "session_id": self.session_id,
             "generation": self.db.session_generation(self.session_id),
-            "active_episode": dict(active) if active else None,
-            "capabilities": self.effects.available_capabilities(),
-            "entityos_execution_enabled": self.effects.entityos_bridge is not None,
+            "active_episode": active_episode,
+            "capabilities": self.lifecycle.effects.available_capabilities(),
+            "entityos_execution_enabled": self.lifecycle.effects.entityos_bridge is not None,
         }
 
 

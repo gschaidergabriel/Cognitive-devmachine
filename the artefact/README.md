@@ -8,90 +8,96 @@ Canonical product workspace for ClayVerse: **one immutable OCI/Docker-compatible
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
 - Release object: **one exact immutable ClayVerse OCI image digest**.
+- Final runtime: exact image inside an independent VM/microVM guest-kernel envelope.
 - UnifiedDB is canonical state/world/memory/data/wiki authority; ClayGraph is derived/rebuildable only.
-- Gabriel and Andreas are equal-rights perspectives into the same central entity and one global live generation.
 - Complete accepted EntityOS is mandatory inside the final image but is not the product endpoint.
 - Root filesystem is read-only; durable writes are limited to declared persistent state/workspace surfaces and scratch to bounded tmpfs/RAM.
-- Claude Code remains the managed interactive terminal-native product surface where admitted; token/API models remain inference only and never become state/effect authority.
-- `consciousness_daemon` is excluded.
+- Gabriel and Andreas are equal-rights perspectives into the same central entity/global generation.
+- Snapshot/WAL/EffectJournal recovery must self-heal without blind external-effect replay.
 
 ## Canonical machine loop
 
-`INGRESS -> UnifiedDB canonicalize/record -> retrieval/context -> selected LLM -> response re-ingested -> policy/authority validation -> EffectGate/EntityOS -> managed result -> UnifiedDB causal re-entry -> repeat -> EGRESS`
+`INGRESS -> UnifiedDB canonicalize/record -> retrieval/context -> selected LLM -> response re-ingested -> policy/authority validation -> EffectGate/EntityOS -> managed Linux PTY/tmux execution when admitted -> stdout/stderr/result -> UnifiedDB causal re-entry -> repeat -> EGRESS`
 
 Model output never self-authorizes execution.
 
-## Outer isolation
-
-Final acceptance requires the exact accepted OCI digest behind an **independent guest-kernel VM/microVM boundary**.
-
-The Kubernetes/Kata reference profile remains a deployment option and must retain its fail-closed contracts: default-deny networking, current-supported runtime/hypervisor configuration, read-only root, declared volumes, no host authority, distinct `/healthz` liveness and `/readyz` readiness, image-authoritative EntityOS identity, and real Tier-2 full sandbox/VM replacement rather than an in-place container restart. Its state/workspace PVCs use `ReadWriteOncePod`, not node-scoped `ReadWriteOnce`; final Kubernetes evidence must identify an admitted CSI stack that actually enforces single-Pod writable attachment and must show that an overlapping stale/replacement Pod cannot acquire the same writable ClayVerse claims.
-
-For the mandatory final sandbox acceptance run, the **Vercel Sandbox Firecracker microVM itself may serve as the independent guest-kernel envelope** when its guest identity/kernel is attested and the exact accepted ClayVerse OCI digest runs inside it through Docker/OCI runtime. A second nested KVM guest is not required merely to satisfy the guest-kernel invariant.
-
-## Final test of tests — mandatory owner gate
+## LLM provider law
 
 Current authority:
 
-`research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md`
+`research_entity/global/CLAYVERSE_GENERIC_LLM_PROVIDER_DIRECTIVE.md`
 
-The final acceptance test is a real end-to-end execution:
+ClayVerse is **provider-agnostic** at the cognition boundary.
 
-`Vercel Sandbox Firecracker microVM`
-`-> securely acquire/verify exact private source as required`
-`-> build/reproduce exact ClayVerse OCI digest`
-`-> Docker/OCI runtime inside the Sandbox guest`
-`-> run EXACT accepted ClayVerse image`
-`-> retrieve Mistral API token at runtime from approved Vault/secret store`
-`-> inject token transiently into ClayVerse`
-`-> real Mistral cognition through canonical UnifiedDB turn`
-`-> response re-ingested before any effect`
-`-> safe EffectGate/EntityOS round-trip`
-`-> causal outcome re-entry`
-`-> persistence + two-user/global-generation checks`
-`-> Tier-1 recovery`
-`-> full appliance/Sandbox recreation from SAME image digest`
-`-> UnifiedDB/WAL/snapshot/EffectJournal recovery under new generation`
-`-> reacquire Mistral token from Vault`
-`-> reject stale results / no blind replay`
-`-> real Mistral cognition again after recovery`
-`-> final auth/terminal/concurrency gates`
-`-> WHOLE_CLAYVERSE_PASS only if the complete admitted vector succeeds`.
+- **Claude Code** remains the preferred native terminal provider: normal interactive CLI inside the managed PTY/tmux continuum, authenticated through its direct terminal login/session flow.
+- **Token/API models** use bounded audited inference adapters. They receive inference authority only — never terminal, filesystem, EntityOS, EffectGate, memory or identity authority.
+- Mistral is the **first concrete API acceptance/test profile**, not a unique ClayVerse authority.
+- GLM or another API may be added through the same provider contract; APIs with different wire protocols receive explicit audited adapters rather than arbitrary runtime plugin code.
+- Provider switching must preserve the same UnifiedDB turn/session/global generation and must never fork the entity.
+- Provider credentials are transient secrets and never enter UnifiedDB, snapshots, receipts, logs, image layers or model-visible context.
 
-`fully functional` means this integrated path actually operates. A green build, a live process, one direct API response, one component test or one container-only run is insufficient.
+The older statement that Mistral is the unique mandatory final product provider is superseded.
 
-## Mistral provider/secret law
+## Two-stage API-provider acceptance
 
-Mistral is a **mandatory token/API inference provider for the final test-of-tests**.
+### Stage 1 — direct/internal provider injection
 
-- credential is acquired at runtime from the approved Vault/secret store;
-- credential is transient and never committed, baked into the image, persisted in UnifiedDB/ClayGraph/snapshots/workspace, or written to logs/receipts;
-- secret is reacquired after full appliance recreation rather than recovered from ClayVerse state;
-- Mistral receives no direct PTY/filesystem/EntityOS/EffectGate authority;
-- Mistral output is bound to the same canonical turn/session/global generation and re-ingested before action authority;
-- a direct Mistral API call outside ClayVerse creates no product evidence.
+First inject a provider token transiently into an authorized disposable sandbox and run the provider directly through the canonical ClayVerse causal spine:
 
-Existing Claude Code/GLM research lanes remain bounded functionality unless separately superseded. The Mistral final gate does not fork ClayVerse or introduce another canonical authority.
+`UnifiedDB/context -> provider -> response -> UnifiedDB pre-effect re-ingest -> generation check -> optional safe EffectGate/EntityOS effect -> causal result re-entry`.
 
-## GitHub source-token correction
+Capture every useful **sanitized** artifact: provider/model identity, request/response digests, turn/session/workspace/causal IDs, global/session generation, EffectJournal/effect IDs, terminal stdout/stderr/exit status for admitted effects, state checkpoint/hash, recovery/failure events and process logs. Provider tokens are excluded from all captures.
 
-Current authority:
+Stage 1 gives no Clerk/browser auth credit and no whole-product PASS.
 
-`research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md`
+### Stage 2 — real-user pass-through
 
-The former rule **"GITHUB_READ_TOKEN must never enter the Sandbox" is superseded**.
+Only after Stage 1 succeeds, run the same selected API provider through the normal authenticated user path:
 
-A scoped read-only `GITHUB_READ_TOKEN` **may be securely injected into the authorized disposable Vercel Sandbox** to fetch the exact private Research/EntityOS inputs. It must never be committed, logged, persisted or baked into the OCI image. Exact requested Git/object/artifact identities must be verified before assertions receive provenance credit.
+`Clerk -> WebSocket -> canonical user-bound ClayVerse PTY/tmux/session -> same UnifiedDB generation -> selected API provider -> response re-ingest -> EffectGate/EntityOS -> result re-entry -> user-visible output`.
 
-Historical Vercel runs that stopped because the token was absent remain valid historical observations, but token forwarding itself is no longer policy-blocked.
+This is the requested "wie ein echter User" discriminator. It must prove that swapping Claude cognition for an API provider does not bypass or change identity, state, terminal, effect, persistence, recovery or concurrency laws.
 
-## Runtime details for the final Vercel run
+## Generic API runtime lane
 
-- Vercel Sandbox admission has already been observed through the retained #810 bridge; Sandbox creation itself is not the unresolved product assertion.
-- Docker-inside-Sandbox is the intended final test mechanism.
-- HTTPS from the inner Docker container must use the admitted trust path for the Vercel Sandbox proxy CA or equivalent, so a TLS infrastructure error is not mislabeled as ClayVerse/Mistral semantic failure.
-- Network egress remains narrow/reviewed: only required auth/provider/test paths are opened; representative non-admitted flows remain denied.
-- Mistral secret presence is not evidence by itself; real canonical cognition must succeed before and after recovery.
+Draft PR **#683** (`gpt56sol/generic-llm-api-provider-20260818`) is the current provider-generalization lane.
+
+It adds:
+
+- a generic bounded `chat-completions-json-v1` adapter;
+- a fixed Mistral profile using the official Mistral chat-completions endpoint and `MISTRAL_API_KEY`;
+- a configurable OpenAI-compatible profile using a dedicated `CLAYVERSE_LLM_API_TOKEN` secret;
+- fixed HTTPS endpoint validation, redirect refusal and secret-redacted failure behavior;
+- the same fail-closed inference decision parser used by ClayVerse (`entityos.exec` / `state.noop`; `process.exec` rejected);
+- a generic direct acceptance probe on the existing `ClayVerseEngine` / UnifiedDB / EffectGate source path;
+- `python -m clayverse.api_probe_cli` as a direct-provider sandbox entry point;
+- generic canonical integration tests adapted from the existing Mistral probe.
+
+### Exact focused evidence
+
+The exact PR #683 `api_providers.py`, exact current `inference_protocol.py` and exact generic provider tests were reconstructed and executed in an isolated OpenAI Linux sandbox:
+
+**10/10 PASS + py_compile PASS.**
+
+Covered: Mistral profile, generic compatible profile, allowed EntityOS intent, forbidden `process.exec`, HTTPS endpoint-smuggling rejection, arbitrary secret-env rejection, non-stop response rejection, HTTP-error secret redaction, malformed/oversized responses and redirect refusal.
+
+This is `FOCUSED_TEST_PASS`, not full UnifiedDB integration or runtime PASS.
+
+### Current live-provider boundary
+
+No `MISTRAL_API_KEY`, generic API token or prior Mistral token is available in this worker's current isolated runtime. Therefore **no real Mistral request was fabricated or claimed**.
+
+The next direct live step is simply:
+
+`transient MISTRAL_API_KEY + selected Mistral model -> python -m clayverse.api_probe_cli -> capture sanitized logs -> verify re-ingest/effect/checkpoint`.
+
+After that passes, proceed to Stage 2 real-user pass-through.
+
+## Outer isolation / appliance law
+
+Final acceptance still requires the exact accepted ClayVerse OCI digest behind an independent guest-kernel VM/microVM boundary. The same image must retain read-only root, declared volumes only, no host authority, complete accepted EntityOS, managed Linux terminal and Tier-1/Tier-2 recovery.
+
+A normal container-only provider PASS is supporting evidence only. Final acceptance must prove the same provider-independent ClayVerse laws on the exact accepted image inside the admitted microVM/sandbox envelope.
 
 ## Retained convergence lanes
 
@@ -99,73 +105,29 @@ Historical Vercel runs that stopped because the token was absent remain valid hi
 - **#622** Python hash-lock generator — source candidate; accepted product lock requires real isolated execution.
 - **#623** auth/identity/readiness/reauth drift — bounded source/mechanism candidate until exact runtime execution.
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
-- **#810** retained Vercel Sandbox controller — single execution bridge/controller lane; do not create a duplicate controller merely to bypass credentials.
-
-## Current source convergence
-
-Parallel work before this owner update had already strengthened the MicroVM deployment contract around current-supported Kata/runtime/hypervisor identity, runtime-mutating annotation fences, non-root persistent-volume semantics, image-authoritative EntityOS digest binding, and full Pod/Kata-sandbox Tier-2 replacement. Those source changes remain bounded by their own exact receipts; no runtime credit is transferred to later bytes without execution.
-
-This cycle closed additional deployment-source gaps. The StatefulSet keeps the normal client-facing `clayverse` Service separate from the required `clayverse-headless` governing Service, and both persistent claims use `ReadWriteOncePod`. The deployment contract and manifest require the admitted CSI stack to prove the single-Pod writer fence by rejecting an overlapping stale/replacement writable attachment. Durable bounded receipts include `receipts/2026-08-17_GO_2304_STATEFULSET_HEADLESS_GOVERNING_SERVICE_GPT56SOL.json`, `receipts/2026-08-17_GO_2311_RWOP_SINGLE_WRITER_RECOVERY_FENCE_GPT56SOL.json`, and `receipts/2026-08-17_GO_2300_MICROVM_TIER2_FULL_SANDBOX_REPLACEMENT_GPT56SOL.json`. These are source/mechanism hardening, not Kubernetes/Kata/CSI runtime PASS.
-
-The Mistral implementation obligation has progressed beyond documentation. Current `clayverse/adapters.py` contains the `MistralInference` boundary and the shared `clayverse/inference_protocol.py` accepts only schema-validated `entityos.exec`/`state.noop` effect intents; `process.exec` is rejected before EffectGate. An earlier exact Git slice for the adapter/protocol/test path passed its focused isolated regression; later parallel hardening added redirect refusal and exception-context secret sanitization, so that older focused PASS remains bounded to its exact historical blobs and is not promoted to current-head runtime credit.
-
-The causal spine is now explicitly hardened around the owner-required ordering: `ClayVerseEngine` persists the assistant/provider proposal to UnifiedDB with `phase=pre-effect-reingest`, reasoning generation and workspace episode identity **before** any requested effect can reach EffectGate. A denied effect re-enters afterward as a separate causal/system event. The internal `final_acceptance_probe.py` and `python -m clayverse.service --mistral-once` use the same UnifiedDB/engine/EffectGate path rather than creating a second chat or state authority; the probe serializes only IDs/generations/content hashes and a strictly validated non-secret Mistral receipt, and explicitly grants neither auth credit nor whole-product PASS. Current source tests additionally fence reasoning/session/entity-generation equality, workspace-episode identity and stale-generation rejection. Durable receipt: `receipts/2026-08-17_GO_2249_MISTRAL_CAUSAL_REINGEST_GPT56SOL.json`.
+- **#683** generic API inference provider — Stage-1 source/focused-test candidate; real provider + full canonical integration remain open.
+- **#810** retained Vercel Sandbox controller — historical/execution bridge evidence; do not let controller setup block independent source/component/provider tests.
 
 ## Testing authority
 
-`TESTING_STRATEGY.md` makes the final evidence ladder:
+`TESTING_STRATEGY.md` remains mandatory. Evidence ladder:
 
-`SOURCE_INSPECTED`
-`-> STATIC_CONTRACT_PASS`
-`-> FOCUSED_TEST_PASS`
-`-> ADJACENT_REGRESSION_PASS`
-`-> COMPONENT_RUNTIME_PASS`
-`-> MULTICOMPONENT_INTEGRATION_PASS`
-`-> EXACT_OCI_COMPONENT_PASS`
-`-> EXACT_MICROVM_COMPONENT_PASS`
-`-> FINAL_SANDBOX_TEST_OF_TESTS_PASS`
-`-> WHOLE_CLAYVERSE_PASS`.
+`SOURCE_INSPECTED -> STATIC_CONTRACT_PASS -> FOCUSED_TEST_PASS -> ADJACENT_REGRESSION_PASS -> COMPONENT_RUNTIME_PASS -> MULTICOMPONENT_INTEGRATION_PASS -> EXACT_OCI_COMPONENT_PASS -> EXACT_MICROVM_COMPONENT_PASS -> WHOLE_CLAYVERSE_PASS`.
 
 A higher class is never inferred from a lower one.
 
-## Current execution frontier
+## Latest cycle delta — 2026-08-18 00:27 +07:00
 
-The host-only-token policy blocker is gone, but the latest observed retained Vercel controller run still did not receive the token. Deployment `dpl_G5m2brg1e29g5QysdZxye7Dgkysi` created Sandbox `tomato-weary-porpoise-K4wNz6`, observed a Firecracker guest-kernel identity (`Linux 6.12.76`, `x86_64`) and then stopped before source staging with `github_secret_forwarded_to_sandbox:false` / `BLOCKED_MISSING_GITHUB_READ_TOKEN`. Accordingly, that run earns bounded outer guest-kernel component evidence but **zero private-source or OCI runtime credit**.
-
-The retained controller now supports the owner-authorized one-shot runtime ingress instead of Vercel Preview secret coupling. The latest READY Preview observed in this cycle is `dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9` at controller ancestor `ba52934acff8bd620e1d968dfa437bf96dbf1a54`; the retained controller branch itself was observed at `d2be9c870dc4c2b223f6c202a946aba9dd36f264`, and no exact-current-head deployment was observed in the fresh deployment list. The protected `/api/go-cycle-v2` surface returned a Vercel SSO redirect from this connector, so this organ cannot safely manufacture the required authenticated start request or synthesize the owner-held scoped token. The next executable step is an owner-authenticated one-shot POST supplying the scoped read-only `GITHUB_READ_TOKEN` to the retained exact-current controller. Only after that may the same path claim private-source identity, exact OCI build/runtime, approved Vault acquisition of `MISTRAL_API_KEY`, canonical in-image Mistral cognition, EffectGate/EntityOS re-entry, Tier-2 full Sandbox/appliance recreation from the same digest, secret reacquisition and post-recovery cognition.
-
-Durable re-entry receipts: `receipts/2026-08-17_GO_2315_VERCEL_FIRECRACKER_MISTRAL_GATE_REENTRY_GPT56SOL.json`, `receipts/2026-08-17_GO_2300_MICROVM_TIER2_FULL_SANDBOX_REPLACEMENT_GPT56SOL.json`, `receipts/2026-08-17_GO_2320_VERCEL_FIRECRACKER_CREDENTIAL_GATE_RECHECK_GPT56SOL.json`, `receipts/2026-08-17_GO_2249_MISTRAL_CAUSAL_REINGEST_GPT56SOL.json`, and `receipts/2026-08-18_GO_0018_RUNTIME_TOKEN_INGRESS_RECHECK_GPT56SOL.json`.
-
-## Latest cycle delta — 2026-08-17 23:28 +07:00
-
-- refreshed live owner authority and adopted the mandatory final Vercel Firecracker + exact OCI + Vault/Mistral test-of-tests;
-- corrected the stale credential interpretation: scoped read-only `GITHUB_READ_TOKEN` forwarding into the disposable authorized Sandbox is allowed, while historical token-missing runs remain valid evidence;
-- retained the Tier-2 recovery discriminator: in-place container/Pod restart cannot masquerade as full appliance recovery; the full sandbox/VM identity must change for Tier-2 credit;
-- preserved compatible parallel MicroVM hardening instead of overwriting it, including rolling Kata security, headless StatefulSet governance, `ReadWriteOncePod`, CSI/node-local network caveats and image-authoritative EntityOS identity;
-- repaired the canonical causal order so the model/provider assistant proposal is re-ingested into UnifiedDB before EffectGate can execute any requested effect;
-- fused the Mistral provider into one canonical `adapters.MistralInference` path, removed the transient duplicate path, and preserved parallel redirect/exception-context secret hardening;
-- added the internal final-sandbox Mistral probe on the same UnifiedDB/engine/EffectGate path plus `service --mistral-once`; it is deliberately not a second public chat/auth/state authority and explicitly grants `auth_credit:false` / `whole_product_pass:false`;
-- added source falsifiers for persisted Mistral receipt identity, reasoning/session/entity generations, workspace-episode identity, required verified effect and stale-generation failure;
-- current direct-main commit had no PR-triggered GitHub Actions run, so no CI/runtime credit was inferred for the newest probe bytes;
-- the connected Vercel plugin still exposes no Sandbox create/exec or secret-mutation action to this organ, so no final Firecracker/OCI/Vault/Mistral runtime was fabricated;
-- wrote `receipts/2026-08-17_GO_2249_MISTRAL_CAUSAL_REINGEST_GPT56SOL.json` with exact evidence boundaries and zero current final-runtime credit;
-- no unusual experiment was executed because the cross-worker atomic experiment-lease protocol could not derive a shared immutable trigger identity from this interface and therefore failed closed;
-- no whole-product PASS is claimed.
-
-## Latest cycle delta — 2026-08-18 00:18 +07:00
-
-- refreshed canonical Research `main` at `958e3c5fa2406b42d187727e2adb6099b6ed0aa2` before durable work;
-- confirmed the owner-authorized runtime one-shot `GITHUB_READ_TOKEN` ingress remains the accepted source-staging path and did not regress to the superseded host-only/no-forward rule;
-- observed retained controller branch `clay/fusion-vcr-native-20260817` at `d2be9c870dc4c2b223f6c202a946aba9dd36f264` while the latest READY Preview remained ancestor deployment `dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9` on `ba52934acff8bd620e1d968dfa437bf96dbf1a54`;
-- observed no exact-current controller deployment in the fresh Vercel list and therefore transferred no READY/runtime credit to `d2be9c87...`;
-- probed the protected runtime endpoint and observed a Vercel SSO `302`, classified as access-boundary evidence rather than a ClayVerse test failure;
-- did not attempt a credential-bearing POST because no owner-held scoped GitHub token is exposed to this organ; no secret was guessed, recovered, logged or fabricated;
-- rejected the counterhypothesis that READY/source inspection is enough for private-source/OCI credit; exact credential-bearing execution remains mandatory;
-- wrote `receipts/2026-08-18_GO_0018_RUNTIME_TOKEN_INGRESS_RECHECK_GPT56SOL.json` as bounded durable evidence;
-- product code remained `NO_CHANGE` because duplicating the controller or changing ClayVerse semantics would not remove the actual authenticated-start dependency;
-- unusual experiment remained `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because this trigger exposes only minute-precision message metadata and no shared immutable request/turn id;
+- owner clarified that Mistral is a test provider, while ClayVerse must accept arbitrary model APIs through bounded adapters;
+- wrote `research_entity/global/CLAYVERSE_GENERIC_LLM_PROVIDER_DIRECTIVE.md`, superseding Mistral-only/GLM-only provider interpretations;
+- opened Draft PR #683 with generic chat-completions adapter, Mistral profile, generic compatible profile, direct canonical API probe and source integration tests;
+- executed exact provider boundary tests in an isolated sandbox: **10/10 PASS + py_compile PASS**;
+- no Mistral/API token exists in the current isolated runtime, so no live provider call or token persistence/logging occurred;
+- full byte-exact UnifiedDB integration execution remains open because the private repository cannot be cloned into this worker's local isolated container;
+- next sequence is **Stage 1 live Mistral direct probe with sanitized full logs, then Stage 2 Clerk/WebSocket real-user pass-through**;
+- durable receipt: `receipts/2026-08-18_0027_GENERIC_LLM_API_PROVIDER_MISTRAL_STAGE1_GPT56SOL.json`;
 - no whole-product PASS is claimed.
 
 ## Verification
 
-ClayVerse remains **IN_PROGRESS**. Whole-product PASS requires the complete exact-digest test-of-tests to execute successfully with durable evidence. Source, documentation, focused tests, Sandbox creation and isolated API calls are not substitutes.
+ClayVerse remains **IN_PROGRESS**. The provider architecture is now generic, the focused boundary is tested, and the missing live discriminator is a transient provider credential plus an executable repo-capable sandbox for the canonical direct probe. Source/component tests do not substitute for final exact-image/microVM/user-path acceptance.

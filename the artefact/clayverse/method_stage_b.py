@@ -9,13 +9,11 @@ from .method_memory import (
     ACTIVE_METHOD_KINDS,
     COUNTER_METHOD_KINDS,
     METHOD_RECEIPT_SCHEMA,
-    MethodMemoryManager,
     MethodRecord,
     MethodRecordError,
     canonical_problem_signature,
     structural_similarity,
 )
-from .problem_signature import ProblemSignatureAdmission
 from .store import UnifiedDB
 
 STAGE_B_TRIGGERS = frozenset({"UNKNOWN", "UNDERCOVERED", "OOD", "CONFLICT", "STRATEGY"})
@@ -36,8 +34,8 @@ class StageBShadowRetrieval:
 
     def __init__(self, db: UnifiedDB):
         self.db = db
-        self.methods = MethodMemoryManager(db)
-        self.signatures = ProblemSignatureAdmission(db)
+        self.methods = db.method_manager()
+        self.signatures = db.problem_signature_admission()
 
     @staticmethod
     def _canonical(value: Any) -> str:
@@ -81,7 +79,13 @@ class StageBShadowRetrieval:
         if row is None:
             raise MethodRecordError("Stage-B requires active canonical turn")
         expected = (user_id, turn_id, episode_id, causal_id, int(generation))
-        observed = (str(row["user_id"]), str(row["turn_id"]), str(row["episode_id"]), str(row["causal_id"]), int(row["generation"]))
+        observed = (
+            str(row["user_id"]),
+            str(row["turn_id"]),
+            str(row["episode_id"]),
+            str(row["causal_id"]),
+            int(row["generation"]),
+        )
         if observed != expected:
             raise MethodRecordError("Stage-B causal identity mismatch")
 
@@ -192,6 +196,7 @@ class StageBShadowRetrieval:
         signature_json = self._canonical({key: list(values) for key, values in signature.items()})
         signature_hash = hashlib.sha256(signature_json.encode("utf-8")).hexdigest()
         refs_hash = hashlib.sha256(self._canonical(refs).encode("utf-8")).hexdigest()
+
         if trigger not in STAGE_B_TRIGGERS:
             return {
                 "fact_status": evidence_status,
@@ -236,8 +241,16 @@ class StageBShadowRetrieval:
         replay = self.methods.read_use_receipt(subject=subject, user_id=user_id)
         if replay is not None:
             receipt_id, receipt = replay
-            if receipt["request_identity_sha256"] != request_hash:
-                raise MethodRecordError("Stage-B replay request identity mismatch")
+            expected_receipt_identity = {
+                "signature_receipt_id": signature_receipt_id,
+                "signature_identity_sha256": signature_receipt["signature_identity_sha256"],
+                "problem_signature_sha256": signature_hash,
+                "resource_refs_sha256": refs_hash,
+                "request_identity_sha256": request_hash,
+            }
+            for field, expected in expected_receipt_identity.items():
+                if receipt[field] != expected:
+                    raise MethodRecordError(f"Stage-B replay {field} mismatch")
             selected = self._decode_selected(
                 list(receipt["selected_method_ids"]), user_id, signature, ACTIVE_METHOD_KINDS
             )
@@ -256,8 +269,6 @@ class StageBShadowRetrieval:
                     "mode": "SHADOW_METHOD_V1",
                     "policy_version": self.POLICY_VERSION,
                     "signature_status": "ADMITTED",
-                    "signature_receipt_id": signature_receipt_id,
-                    "resource_refs_sha256": refs_hash,
                     "fact_status_unchanged": evidence_status,
                     "replayed": True,
                 },
@@ -273,16 +284,32 @@ class StageBShadowRetrieval:
                 methods.append((score, record))
             else:
                 counters.append((score, record))
-        methods.sort(key=lambda pair: (pair[0], pair[1].calibration, pair[1].support_count, pair[1].memory_id or ""), reverse=True)
-        counters.sort(key=lambda pair: (pair[0], pair[1].calibration, pair[1].support_count, pair[1].memory_id or ""), reverse=True)
+        methods.sort(
+            key=lambda pair: (
+                pair[0], pair[1].calibration, pair[1].support_count, pair[1].memory_id or ""
+            ),
+            reverse=True,
+        )
+        counters.sort(
+            key=lambda pair: (
+                pair[0], pair[1].calibration, pair[1].support_count, pair[1].memory_id or ""
+            ),
+            reverse=True,
+        )
         counter_by_id = {record.memory_id: (score, record) for score, record in counters}
 
         selected: list[tuple[float, MethodRecord]] = []
         blockers: list[tuple[float, MethodRecord]] = []
         chars = 0
         for score, record in methods:
-            linked = [counter_by_id[mid] for mid in record.counterexample_memory_ids if mid in counter_by_id]
-            linked_blockers = [pair for pair in linked if pair[0] >= self.COUNTEREXAMPLE_BLOCK_SCORE]
+            linked = [
+                counter_by_id[mid]
+                for mid in record.counterexample_memory_ids
+                if mid in counter_by_id
+            ]
+            linked_blockers = [
+                pair for pair in linked if pair[0] >= self.COUNTEREXAMPLE_BLOCK_SCORE
+            ]
             if linked_blockers:
                 blockers.extend(linked_blockers)
                 continue
@@ -302,7 +329,9 @@ class StageBShadowRetrieval:
         for score, record in blockers:
             if record.memory_id is not None:
                 counter_map[record.memory_id] = (score, record)
-        counter_selected = sorted(counter_map.values(), key=lambda pair: (pair[0], pair[1].memory_id or ""), reverse=True)[:limit]
+        counter_selected = sorted(
+            counter_map.values(), key=lambda pair: (pair[0], pair[1].memory_id or ""), reverse=True
+        )[:limit]
 
         receipt_payload = {
             "schema": METHOD_RECEIPT_SCHEMA,
@@ -315,10 +344,17 @@ class StageBShadowRetrieval:
             "generation": int(generation),
             "evidence_status": evidence_status,
             "trigger": trigger,
+            "signature_receipt_id": signature_receipt_id,
+            "signature_identity_sha256": signature_receipt["signature_identity_sha256"],
             "problem_signature_sha256": signature_hash,
+            "resource_refs_sha256": refs_hash,
             "request_identity_sha256": request_hash,
-            "selected_method_ids": [record.memory_id for _, record in selected if record.memory_id is not None],
-            "counterexample_memory_ids": [record.memory_id for _, record in counter_selected if record.memory_id is not None],
+            "selected_method_ids": [
+                record.memory_id for _, record in selected if record.memory_id is not None
+            ],
+            "counterexample_memory_ids": [
+                record.memory_id for _, record in counter_selected if record.memory_id is not None
+            ],
             "limit": limit,
             "budget_chars": budget_chars,
             "served": False,
@@ -334,15 +370,15 @@ class StageBShadowRetrieval:
             "method_context": [],
             "counterevidence": [],
             "shadow_method_context": [self._public(record, score) for score, record in selected],
-            "shadow_counterevidence": [self._public(record, score) for score, record in counter_selected],
+            "shadow_counterevidence": [
+                self._public(record, score) for score, record in counter_selected
+            ],
             "receipt": {
                 **receipt_payload,
                 "memory_id": receipt_id,
                 "mode": "SHADOW_METHOD_V1",
                 "policy_version": self.POLICY_VERSION,
                 "signature_status": "ADMITTED",
-                "signature_receipt_id": signature_receipt_id,
-                "resource_refs_sha256": refs_hash,
                 "fact_status_unchanged": evidence_status,
                 "replayed": False,
             },

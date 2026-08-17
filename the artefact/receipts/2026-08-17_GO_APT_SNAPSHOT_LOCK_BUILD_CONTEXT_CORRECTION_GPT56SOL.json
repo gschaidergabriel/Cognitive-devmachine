@@ -1,0 +1,55 @@
+{
+  "schema": "ClayVerseGoReceiptCorrection/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "branch": "go/apt-snapshot-lock-20260817-1343",
+  "corrects_receipt": "the artefact/receipts/2026-08-17_GO_APT_SNAPSHOT_LOCK_GPT56SOL.json",
+  "base_main_at_original_branch": "14e0df35b96d6bc815d20d540ab2e1f5356ae61c",
+  "tested_candidate_head_before_this_receipt": "2afd8fc4ba52e66a2406151befff9e4edd8327e0",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no immutable shared request id was exposed and available user-message metadata is only minute precision"
+  },
+  "adversarial_finding": {
+    "classification": "SOURCE_INTEGRATION_DEFECT_FOUND_AND_REPAIRED",
+    "defect": "the original candidate copied build/configure_pinned_apt.py from the Dockerfile but the default-deny .dockerignore did not explicitly unignore that file, so an actual OCI build would omit it from the build context and fail before APT configuration",
+    "counterhypothesis": "source-level snapshot logic can be internally correct while the image build remains impossible because the new input never enters the builder context",
+    "repair": "explicitly unignore !build/configure_pinned_apt.py while preserving the existing default-deny context"
+  },
+  "exact_tested_blobs": {
+    "the artefact/build/configure_pinned_apt.py": "6cf4544adcadfee43a0e981254f9853869fe1ce5",
+    "the artefact/SOURCE_LOCK.json": "927c958c2069d00f6734a82324e2e88a6117cbc8",
+    "the artefact/Dockerfile": "c06b13dd6ffebaeae5ae1ea364113c2284f1e74b",
+    "the artefact/.dockerignore": "d9a58c210fc4d3f336379c73b89f559e51a69e0d",
+    "the artefact/tests/test_supply_chain_apt_snapshot.py": "e28a9319d4d259a3c2d5f6d49b37af1d63c3a90e"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "vps": false,
+    "production": false,
+    "identity_check": "all five staged files were reconstructed byte-for-byte and their Git blob SHA-1 values matched the GitHub branch blob identities before execution",
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "command": "python -m pytest -q tests/test_supply_chain_apt_snapshot.py",
+    "result": "5 passed in 0.06s"
+  },
+  "primary_dependency_evidence": [
+    "Docker build-context documentation states that .dockerignore removes matching files before they are sent to the builder and COPY of an ignored file fails",
+    "Debian snapshot documentation supports timestamped historical archive URLs and disabling Valid-Until for immutable historical snapshots"
+  ],
+  "classification": "MECHANISM_SUPPORTED_SOURCE_GATE_ONLY",
+  "whole_product_pass": false,
+  "remaining_gates": [
+    "actual authorized isolated OCI build of exact then-current head",
+    "observation of snapshot.debian.org metadata resolution and exact ca-certificates/tmux package selection",
+    "image digest capture and startup/readiness",
+    "Python dependency --require-hashes closure remains separate",
+    "full ClayVerse runtime/auth/restart/concurrency acceptance remains open"
+  ]
+}

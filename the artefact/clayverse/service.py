@@ -8,12 +8,19 @@ import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from .api_providers import build_api_inference_from_env
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
+from .engine import ClayVerseEngine
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .final_acceptance_probe import run_mistral_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .logical_snapshot import LogicalSnapshotManager
+from .provider_terminal_broker import (
+    ProviderTerminalBroker,
+    clear_active_provider_terminal_broker,
+    install_active_provider_terminal_broker,
+)
 from .readiness import claude_readiness
 from .recovery import RecoveryIntegrityError, recover_incomplete_episodes
 from .runtime_identity import collect_runtime_identity
@@ -124,6 +131,13 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
         **verified,
     }
     return (candidate if enable_exec else None), status
+
+
+def _terminal_provider_mode() -> str:
+    value = os.environ.get("CLAYVERSE_TERMINAL_PROVIDER", "claude").strip().lower()
+    if value not in {"claude", "api"}:
+        raise RuntimeError("CLAYVERSE_TERMINAL_PROVIDER must be claude or api")
+    return value
 
 
 def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
@@ -365,20 +379,78 @@ def main():
     publishable_key, frontend_api = _web_config(clerk_config.issuer)
     verifier = ClerkTokenVerifier(clerk_config)
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
+    provider_mode = _terminal_provider_mode()
+    provider_broker: ProviderTerminalBroker | None = None
+    provider_status: dict[str, object] = {"terminal_provider": provider_mode}
     try:
         claude_status = claude_readiness(required=require_claude)
-        _, entityos_status = _entityos_config()
-        terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
+        entityos_bridge, entityos_status = _entityos_config()
+        terminals = TerminalSessionManager(
+            state_root,
+            os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"),
+        )
+        if provider_mode == "api":
+            inference = build_api_inference_from_env()
+            if not inference.available():
+                raise RuntimeError("selected API provider credential is unavailable")
+            provider_engine = ClayVerseEngine(
+                db,
+                clerk_map,
+                inference=inference,
+                entityos_bridge=entityos_bridge,
+            )
+            broker_path = os.environ.get(
+                "CLAYVERSE_PROVIDER_BROKER_SOCKET",
+                "/tmp/clayverse/provider-terminal.sock",
+            ).strip()
+            provider_broker = ProviderTerminalBroker(
+                broker_path,
+                engine=provider_engine,
+                clerk_map=clerk_map,
+            )
+            provider_broker.start()
+            install_active_provider_terminal_broker(provider_broker)
+            provider_status.update(
+                {
+                    "provider": inference.config.provider,
+                    "protocol": inference.config.protocol,
+                    "model": inference.config.model,
+                    "endpoint_identity_sha256": inference.config.endpoint_identity_sha256,
+                    "broker": "unix-peercred-exact-pane-pid",
+                }
+            )
+
         terminal_status = {}
         for user_id in ("gabriel", "andreas"):
-            binding = terminals.ensure(user_id)
-            terminal_status[user_id] = {
-                "session_id": binding.session_id,
-                "tmux_name": binding.tmux_name,
-                "home": str(binding.home),
-                "generation": db.session_generation(binding.session_id),
-            }
+            if provider_broker is not None:
+                binding, target, pane_pid = terminals.ensure_api_provider(
+                    user_id,
+                    provider_broker.socket_path,
+                    provider_broker.register_peer,
+                )
+                terminal_status[user_id] = {
+                    "session_id": binding.session_id,
+                    "tmux_name": binding.tmux_name,
+                    "home": str(binding.home),
+                    "generation": db.session_generation(binding.session_id),
+                    "provider_window": target,
+                    "provider_pane_pid": pane_pid,
+                }
+            else:
+                binding = terminals.ensure(user_id)
+                terminal_status[user_id] = {
+                    "session_id": binding.session_id,
+                    "tmux_name": binding.tmux_name,
+                    "home": str(binding.home),
+                    "generation": db.session_generation(binding.session_id),
+                }
     except Exception:
+        if provider_broker is not None:
+            clear_active_provider_terminal_broker(provider_broker)
+            try:
+                provider_broker.stop()
+            except Exception:
+                pass
         db.close()
         raise
 
@@ -395,10 +467,15 @@ def main():
     )
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
+    surface = (
+        "clerk-browser-pty-provider-api-via-canonical-tmux"
+        if provider_mode == "api"
+        else "clerk-browser-pty-normal-claude-code-cli"
+    )
     print(json.dumps({
         "service": "clayverse",
         "status": "candidate_ready",
-        "surface": "clerk-browser-pty-normal-claude-code-cli",
+        "surface": surface,
         "state_root": state_root,
         "checkpoint": cid,
         "state_hash": digest,
@@ -406,6 +483,7 @@ def main():
         "users": ["gabriel", "andreas"],
         "rights": "equal",
         "claude_code": claude_status.as_dict(),
+        "provider": provider_status,
         "terminals": terminal_status,
         "auth": "clerk",
         "recovery": recovery,
@@ -426,6 +504,9 @@ def main():
             ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES,
         )
     finally:
+        if provider_broker is not None:
+            clear_active_provider_terminal_broker(provider_broker)
+            provider_broker.stop()
         db.checkpoint("shutdown")
         db.close()
     return 0

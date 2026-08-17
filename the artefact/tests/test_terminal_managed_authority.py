@@ -51,6 +51,7 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
     monkeypatch.setenv("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "1")
     monkeypatch.setenv("CLAYVERSE_ENTITYOS_PATH", "/opt/entityos/EntityOS")
     monkeypatch.setenv("CLAYVERSE_ENTITYOS_SHA256", "ab" * 32)

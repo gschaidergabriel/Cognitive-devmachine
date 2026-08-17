@@ -58,10 +58,9 @@ def test_phase_progress_requires_review_and_cannot_be_declared_by_model(tmp_path
     assert status == "SUCCEEDED"
     assert db.db.execute("SELECT status FROM agency_milestones WHERE milestone_id=?", (concept,)).fetchone()[0] == "READY_FOR_REVIEW"
 
-    # A later phase cannot run merely because model text says the concept is done.
-    cycle2 = agency.begin_cycle()
-    assert cycle2 is not None
-    assert agency.claim_next(cycle2) is None
+    # Waiting for review is idle, not an empty background cycle and not permission
+    # for the model to move itself into a later phase.
+    assert agency.begin_cycle() is None
     assert db.db.execute("SELECT status FROM agency_milestones WHERE milestone_id=?", (prototype,)).fetchone()[0] == "PENDING"
 
     with pytest.raises(AgencyPolicyError, match="owner mismatch"):
@@ -85,4 +84,56 @@ def test_only_review_transition_can_complete_goal(tmp_path):
     assert db.db.execute("SELECT status FROM agency_goals WHERE goal_id=?", (goal,)).fetchone()[0] == "ACTIVE"
     agency.review_milestone(milestone, "gabriel", "PASS", "accepted")
     assert db.db.execute("SELECT status FROM agency_goals WHERE goal_id=?", (goal,)).fetchone()[0] == "COMPLETE"
+    db.close()
+
+
+def test_caller_cannot_forge_success_when_effect_journal_says_denied(tmp_path):
+    db, agency = _agency(tmp_path)
+    goal = agency.create_goal("gabriel", "Ground truth", "use persisted evidence", "no forged progress")
+    milestone = agency.add_milestone(goal, "CONCEPT", "Attempt", "verified outcome")
+    cycle = agency.begin_cycle()
+    work = agency.claim_next(cycle)
+    generation = db.entity_generation()
+    effect_id = db.record_effect(
+        None,
+        "gabriel",
+        "entityos.exec",
+        "bounded-target",
+        generation,
+        "DENIED",
+        outcome={"ok": True, "denied": True},
+    )
+
+    status = agency.complete_attempt(
+        work.attempt_id,
+        {"text": "I claim success"},
+        effect_id,
+        {"ok": True},
+    )
+    assert status == "FAILED"
+    assert db.db.execute("SELECT status FROM agency_milestones WHERE milestone_id=?", (milestone,)).fetchone()[0] == "ACTIVE"
+    db.close()
+
+
+def test_ers_does_not_reward_state_noop(tmp_path):
+    db, agency = _agency(tmp_path)
+    goal = agency.create_goal("gabriel", "Telemetry", "avoid reward gaming", "review")
+    agency.add_milestone(goal, "CONCEPT", "Noop", "no-op does not earn reputation")
+    cycle = agency.begin_cycle()
+    work = agency.claim_next(cycle)
+    effect_id = db.record_effect(
+        None,
+        "gabriel",
+        "state.noop",
+        "noop",
+        db.entity_generation(),
+        "VERIFIED",
+        outcome={"ok": True},
+    )
+    assert agency.complete_attempt(work.attempt_id, {"text": "noop"}, effect_id, {"ok": True}) == "SUCCEEDED"
+    metrics = agency.metrics("gabriel")
+    assert metrics["verified_effect_steps"] == 0
+    assert metrics["failed_effect_steps"] == 0
+    assert metrics["ers"] == 0.0
+    assert metrics["ers_role"] == "telemetry_only_not_authority"
     db.close()

@@ -85,6 +85,12 @@ class AutonomyController:
             raise AutonomyStateError("autonomy state is not canonical JSON") from exc
 
     @staticmethod
+    def _target_digest(target: str) -> str:
+        if not isinstance(target, str) or not target or len(target) > 2048 or "\x00" in target:
+            raise ValueError("invalid completion target")
+        return EffectJournal._target_receipt(target)["sha256"]
+
+    @staticmethod
     def _empty() -> dict[str, Any]:
         return {"schema": STATE_SCHEMA, "revision": 0, "goals": {}, "queue": []}
 
@@ -130,12 +136,29 @@ class AutonomyController:
         if not isinstance(goal["priority"], int) or not 0 <= goal["priority"] <= 100 or goal["status"] not in GOAL_STATUSES:
             raise AutonomyStateError("invalid goal scheduling state")
         contract = goal["completion_contract"]
-        if not isinstance(contract, dict) or set(contract) != {"mode", "required_capability"} or contract["mode"] not in COMPLETION_MODES:
+        if not isinstance(contract, dict):
             raise AutonomyStateError("invalid completion contract")
-        if contract["mode"] == "verified_effect" and contract["required_capability"] not in EFFECT_CAPABILITIES:
-            raise AutonomyStateError("invalid required capability")
-        if contract["mode"] == "user_ack" and contract["required_capability"] is not None:
-            raise AutonomyStateError("user_ack cannot require an effect")
+        allowed_contract_fields = {"mode", "required_capability", "required_target_sha256"}
+        if not {"mode", "required_capability"}.issubset(contract) or not set(contract).issubset(allowed_contract_fields):
+            raise AutonomyStateError("invalid completion contract")
+        if contract["mode"] not in COMPLETION_MODES:
+            raise AutonomyStateError("invalid completion contract")
+        if contract["mode"] == "verified_effect":
+            if contract["required_capability"] not in EFFECT_CAPABILITIES:
+                raise AutonomyStateError("invalid required capability")
+            digest = contract.get("required_target_sha256")
+            if digest is not None and (
+                not isinstance(digest, str)
+                or len(digest) != 64
+                or digest.lower() != digest
+                or any(ch not in "0123456789abcdef" for ch in digest)
+            ):
+                raise AutonomyStateError("invalid completion target digest")
+        else:
+            if contract["required_capability"] is not None:
+                raise AutonomyStateError("user_ack cannot require an effect")
+            if contract.get("required_target_sha256") is not None:
+                raise AutonomyStateError("user_ack cannot require a target")
         budget = goal["budget"]
         if not isinstance(budget, dict) or set(budget) != {"max_steps", "max_retries_per_step", "max_effects"}:
             raise AutonomyStateError("invalid goal budget")
@@ -194,21 +217,33 @@ class AutonomyController:
 
     def create_goal_from_turn(
         self, user_id: str, session_id: str, source_turn_id: str, *, completion_mode: str,
-        required_capability: str | None = None, priority: int = 50, budget: GoalBudget | None = None,
+        required_capability: str | None = None, required_target: str | None = None,
+        priority: int = 50, budget: GoalBudget | None = None,
     ) -> dict[str, Any]:
         self.db.assert_session_owner(session_id, user_id)
         generation = self.db.session_generation(session_id)
         self.db.assert_live_generation(session_id, generation)
         if completion_mode not in COMPLETION_MODES:
             raise ValueError("invalid completion mode")
-        if completion_mode == "verified_effect" and required_capability not in AUTOMATIC_COMPLETION_CAPABILITIES:
-            raise ValueError("verified_effect requires an independently verifiable effect capability")
-        if completion_mode == "user_ack" and required_capability is not None:
-            raise ValueError("user_ack does not accept required_capability")
+        if completion_mode == "verified_effect":
+            if required_capability not in AUTOMATIC_COMPLETION_CAPABILITIES:
+                raise ValueError("verified_effect requires an independently verifiable effect capability")
+            if required_target is None:
+                raise ValueError("verified_effect requires an explicit completion target")
+            completion_contract = {
+                "mode": completion_mode,
+                "required_capability": required_capability,
+                "required_target_sha256": self._target_digest(required_target),
+            }
+        else:
+            if required_capability is not None:
+                raise ValueError("user_ack does not accept required_capability")
+            if required_target is not None:
+                raise ValueError("user_ack does not accept required_target")
+            completion_contract = {"mode": completion_mode, "required_capability": None}
         if not isinstance(priority, int) or not 0 <= priority <= 100:
             raise ValueError("priority out of range")
         budget = (budget or GoalBudget()).validate()
-        completion_contract = {"mode": completion_mode, "required_capability": required_capability}
         budget_state = {
             "max_steps": int(budget.max_steps),
             "max_retries_per_step": int(budget.max_retries_per_step),
@@ -306,6 +341,22 @@ class AutonomyController:
     def _effect_receipt_matches_step(cls, step: dict[str, Any], row) -> bool:
         expected_target, expected_argv = cls._effect_intent_receipts(step["effect"])
         return row["target"] == expected_target and row["argv"] == expected_argv
+
+    @classmethod
+    def _step_matches_completion_target(cls, goal: dict[str, Any], step: dict[str, Any]) -> bool:
+        contract = goal["completion_contract"]
+        required_digest = contract.get("required_target_sha256")
+        if not isinstance(required_digest, str):
+            return False
+        effect = step.get("effect")
+        if not isinstance(effect, dict):
+            return False
+        if effect.get("capability") != contract.get("required_capability"):
+            return False
+        try:
+            return cls._target_digest(effect.get("target")) == required_digest
+        except ValueError:
+            return False
 
     @classmethod
     def _causal_effect_row(cls, db, goal: dict[str, Any], effect_id: str, step_id: str):
@@ -495,7 +546,7 @@ class AutonomyController:
                     step
                     and step["kind"] == "effect"
                     and step["status"] == "SUCCEEDED"
-                    and step["effect"]["capability"] == required
+                    and self._step_matches_completion_target(goal, step)
                 ):
                     for effect_id in goal["evidence_effect_ids"]:
                         try:

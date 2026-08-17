@@ -38,18 +38,11 @@ def _goal_and_step(db, *, target: str):
     return controller, goal, step
 
 
-def test_prior_final_effect_blocks_blind_retry_of_same_goal_step(db):
-    controller, goal, step = _goal_and_step(db, target="lost-handoff")
+def _lose_effect_handoff(db, controller, goal, step, target: str):
     lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
-
-    lifecycle.begin_autonomous(
-        "First attempt", goal["goal_id"], step["step_id"]
-    )
-    first = lifecycle.request_effect("state.noop", "lost-handoff", None)
+    lifecycle.begin_autonomous("First attempt", goal["goal_id"], step["step_id"])
+    first = lifecycle.request_effect("state.noop", target, None)
     assert first["verified"] is True
-
-    # Simulate loss after EffectGate/EffectJournal completed but before the
-    # controller consumed the returned effect identity.
     lifecycle.abort_autonomous(
         "consumer_result_lost_before_controller_reconciliation",
         goal["goal_id"],
@@ -61,18 +54,54 @@ def test_prior_final_effect_blocks_blind_retry_of_same_goal_step(db):
         "consumer_result_lost_before_controller_reconciliation",
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
+    return first
 
+
+def test_canonical_bridge_reconciles_prior_final_effect_without_reexecution(db):
+    controller, goal, step = _goal_and_step(db, target="lost-handoff")
+    first = _lose_effect_handoff(db, controller, goal, step, "lost-handoff")
+
+    lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
     lifecycle.begin_autonomous(
         "Retry must reconcile prior evidence instead of executing again",
         goal["goal_id"],
         step["step_id"],
     )
     bridge = ClayVerseEffectBridge(lifecycle)
+    reconciled = bridge.request_autonomy_effect(goal["goal_id"], step["step_id"])
+
+    assert reconciled["reconciled_prior_effect"] is True
+    assert reconciled["effect_id"] == first["effect_id"]
+    assert reconciled["verified"] is True
+    assert reconciled["autonomy"]["verified"] is True
+    assert reconciled["autonomy"]["status"] == "ACTIVE"
+    assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 1
+
+    completed = lifecycle.complete_autonomous(
+        "Prior verified receipt reconciled; no effect re-executed",
+        goal["goal_id"],
+        step["step_id"],
+    )
+    assert completed["completed"] is True
+    assert completed["effect_id"] is None
+    assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 1
+
+
+def test_effect_gate_itself_blocks_blind_cross_attempt_reexecution(db):
+    controller, goal, step = _goal_and_step(db, target="gate-fallback")
+    first = _lose_effect_handoff(db, controller, goal, step, "gate-fallback")
+
+    lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
+    lifecycle.begin_autonomous(
+        "A caller that bypasses bridge reconciliation must still fail closed",
+        goal["goal_id"],
+        step["step_id"],
+    )
     with pytest.raises(
         RuntimeError,
         match="prior final autonomous effect requires controller reconciliation before retry",
     ):
-        bridge.request_autonomy_effect(goal["goal_id"], step["step_id"])
+        lifecycle.request_effect("state.noop", "gate-fallback", None)
 
     effects = db.db.execute(
         "SELECT effect_id,status FROM effects ORDER BY ts,effect_id"
@@ -108,6 +137,7 @@ def test_replay_fence_is_step_scoped_not_goal_wide(db):
     second = bridge.request_autonomy_effect(goal["goal_id"], second_step["step_id"])
 
     assert second["verified"] is True
+    assert second["reconciled_prior_effect"] is False
     assert second["effect_id"] != first["effect_id"]
     assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 2
 

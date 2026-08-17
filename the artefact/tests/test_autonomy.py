@@ -5,6 +5,7 @@ import time
 import pytest
 
 from clayverse.autonomy import (
+    AutonomyBudgetExceeded,
     AutonomyController,
     AutonomyStateError,
     CompletionNotVerified,
@@ -250,6 +251,28 @@ def test_process_exec_is_denied_at_proposal_boundary(tmp_path):
             "effect",
             "bypass",
             effect={"capability": "process.exec", "target": "host", "argv": ["id"]},
+        )
+
+
+def test_reasoning_remains_runnable_when_effect_budget_is_zero(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    goal = _goal(
+        db,
+        controller,
+        completion_mode="user_ack",
+        required_capability=None,
+        budget=GoalBudget(max_steps=2, max_retries_per_step=0, max_effects=0),
+    )
+    step = controller.propose_step(goal["goal_id"], "reason", "Reason without effect authority")
+    controller.admit_step(goal["goal_id"], step["step_id"])
+    controller.record_reason_success(goal["goal_id"], step["step_id"])
+    with pytest.raises(AutonomyBudgetExceeded, match="effect budget exhausted"):
+        controller.propose_step(
+            goal["goal_id"],
+            "effect",
+            "Effect remains forbidden",
+            effect={"capability": "state.noop", "target": "x", "argv": None},
         )
 
 

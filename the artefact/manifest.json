@@ -14,7 +14,7 @@
   "entity_model": "one persistent central entity with two user-bound conversation perspectives",
   "persistent_state_root": "/var/lib/clayverse",
   "container_boundary": "one OCI/Docker-compatible image",
-  "build_context": "default-deny allowlist; only Dockerfile, requirements, SOURCE_LOCK, digest-checking Claude/xterm build helpers, live ClayVerse runtime, managed policy, runtime contract, vendored terminal assets and staged EntityOS enter OCI build context; retired headless/custom-chat runtimes are excluded",
+  "build_context": "default-deny allowlist; only Dockerfile, requirements, SOURCE_LOCK, digest/snapshot-checking APT/Claude/xterm build helpers, live ClayVerse runtime, managed policy, runtime contract, vendored terminal assets and staged EntityOS enter OCI build context; retired headless/custom-chat runtimes are excluded",
   "visible_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code CLI",
   "terminal_sessions": {
     "gabriel": "clayverse-gabriel",
@@ -49,7 +49,7 @@
   "direct_process_exec": "FORBIDDEN_FAIL_CLOSED",
   "consciousness_daemon": "EXCLUDED",
   "supply_chain_open_gates": [
-    "apt package bytes are not yet snapshot/hash pinned",
+    "Debian APT source selection is snapshot-locked and Debian-signature/hash-chain bounded in source, but exact package resolution/download must still be observed in an authorized isolated OCI build",
     "Python requirements are version pinned but not yet installed with --require-hashes",
     "exact native Claude archive and exact digest-locked xterm archive install/startup must still be observed in the authorized isolated OCI build"
   ],
@@ -63,12 +63,13 @@
   "unverified_current_source_candidates": [
     "MicroClay query-sensitive shadow retrieval",
     "MicroClay causal outcome learning and entry-point policy",
-    "MicroClay replay/idempotency/current-turn-echo exclusion tests added but exact-current-head execution not yet observed"
+    "MicroClay replay/idempotency/current-turn-echo exclusion tests added but exact-current-head execution not yet observed",
+    "Debian APT snapshot lock and fail-closed source renderer; exact OCI resolution remains unobserved"
   ],
   "requires_for_final_pass": [
     "exact_current_head_full_test_suite_in_authorized_isolated_execution",
     "isolated exact OCI container build and runtime receipt",
-    "MicroClay deterministic retrieval falsifiers and schema migration on exact-current-head execution",
+    "MicroClay deterministic retrieval falsifiers and schema migration on exact-current_head execution",
     "MicroClay shadow-vs-baseline replay/held-out benchmark with relevance, miss, contamination, stale-state and unnecessary-personalization metrics",
     "explicit user-correction/retrieval-miss feedback contract and rollback-safe ACTIVE promotion gate",
     "full structured temporal + FTS/vector + bounded ClayGraph entry-point comparison before selecting final retrieval topology",

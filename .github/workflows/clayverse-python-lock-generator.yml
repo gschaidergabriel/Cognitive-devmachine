@@ -71,5 +71,10 @@ jobs:
             --only-binary=:all: --require-hashes \
             -r /tmp/requirements.lock.1 -d /tmp/wheelhouse
           echo -n 'WHEELHOUSE_FILE_COUNT='; find /tmp/wheelhouse -maxdepth 1 -type f | wc -l
+          echo 'WHEELHOUSE_SHA256_BEGIN'
+          while IFS= read -r wheel; do
+            printf '%s  %s\n' "$(sha256sum "$wheel" | awk '{print $1}')" "${wheel##*/}"
+          done < <(find /tmp/wheelhouse -maxdepth 1 -type f -print | LC_ALL=C sort)
+          echo 'WHEELHOUSE_SHA256_END'
           printf 'LOCK_GZIP_B64='; gzip -n -c /tmp/requirements.lock.1 | base64 -w0; printf '\n'
           INNER

@@ -1,0 +1,72 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "status": "SOURCE_CONVERGENCE_WITH_EXECUTION_BLOCKED",
+  "canonical_head_observed_before_receipt": "f2baef5586b8902a246a5c7342136cbfb9dedee6",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "authority_refresh": {
+    "current_artifact_product_endpoint": "ClayVerse",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "entityos_role": "internal sha256-pinned execution/security/runtime substrate candidate",
+    "external_entityos_runtime_mount": "FORBIDDEN",
+    "direct_process_exec": "FORBIDDEN_FAIL_CLOSED"
+  },
+  "observed_blocker": "The service had an EntityOSBridge-capable engine path but service boot did not bind a verified EntityOSBridge into ClayVerseEngine. During concurrent fusion the product boundary was also tightened so EntityOS must ultimately be embedded in the single ClayVerse image rather than supplied as a host runtime mount.",
+  "source_deltas_this_cycle": [
+    {
+      "commit": "c20357729729d90547e4a09f29f7abadf4230538",
+      "delta": "added fail-closed EntityOS readiness verification surface"
+    },
+    {
+      "commit": "70330fae35a82a27c445f5b4eb671152eb1d0c5d",
+      "delta": "wired verified EntityOS bridge through service boot into ClayVerseEngine"
+    },
+    {
+      "commit": "dd1ef850203471d13626c56c2a4ff4a68534df99",
+      "delta": "added boot-binding regressions for missing/partial/relative/digest-drift/symlink cases"
+    },
+    {
+      "commit": "8ffc8914e82a4c47742b3d9acc19563979fe42f7",
+      "delta": "aligned Docker image default with deferred internal EntityOS embedding"
+    }
+  ],
+  "parallel_fusion_observed": [
+    {
+      "commit": "af62fa851d80cefc43f8c5b3bce101eb55c2d473",
+      "delta": "removed generic direct host process execution from the artifact effect boundary"
+    },
+    {
+      "commit": "3f2c02f3033c9aa33c2f0b26f5e6a7ce43ad4ef4",
+      "delta": "removed external EntityOS runtime mount dependency from Compose"
+    },
+    {
+      "commit": "cb5e0d7c09666476af94b1ac66946c7c785e100b",
+      "delta": "made exact EntityOS image embedding an explicit final-pass gate"
+    },
+    {
+      "current_file": "the artefact/clayverse/entityos_bridge.py",
+      "delta": "hardened bridge to SHA-256 verified sealed executable memfd snapshot so later path replacement cannot alter the object crossing the boundary"
+    }
+  ],
+  "tests": {
+    "source_obligations_added": true,
+    "executed_in_this_cycle": false,
+    "reason": "The connected Vercel tool surface exposed project/deployment/log management but no isolated Sandbox create/exec action. Deployment READY is not accepted as sandbox execution evidence. VPS/self-hosted/production execution remained forbidden."
+  },
+  "unusual_experiment": {
+    "required_by_go": true,
+    "executed": false,
+    "status": "BLOCKED_NOT_EXECUTED",
+    "reason": "No authorized isolated Sandbox execution action was available in the connected tool surface; no substitute environment was used and no experiment result was fabricated."
+  },
+  "negative_results_preserved": [
+    "A host bind-mounted EntityOS executable is not an admissible baseline dependency for the one-container ClayVerse artifact.",
+    "Vercel deployment READY is not executable sandbox evidence.",
+    "Source tests added in this cycle remain unverified until an exact-head isolated run actually starts."
+  ],
+  "next_exact_sandbox_step": "Build the exact current the artefact head with an accepted EntityOS binary embedded inside the OCI image, set the internal absolute path and exact SHA-256 at image/runtime configuration, run the full test suite with nonzero tests and zero unexpected skips, boot the container, verify EntityOS readiness identity, exercise one entityos.exec round trip and causal re-entry, then restart with persistent UnifiedDB state and verify recovery. Use exactly one bounded path-replacement/tamper intervention only if the macro-cycle unusual-experiment slot is available; otherwise keep it regression-only.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

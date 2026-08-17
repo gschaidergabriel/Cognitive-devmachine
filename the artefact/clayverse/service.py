@@ -4,7 +4,7 @@ import json
 import os
 import sys
 
-from .adapters import ClerkConfig, ClerkTokenVerifier
+from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
@@ -84,8 +84,6 @@ def main():
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
 
-    # A bounded diagnostic probe must not advance the live entity generation or
-    # consume crash-recovery state. Real generation fencing belongs only to a real boot.
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()
         cid, digest = db.checkpoint("state-probe")

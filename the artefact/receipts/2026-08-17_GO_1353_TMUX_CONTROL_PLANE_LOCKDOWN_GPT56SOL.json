@@ -1,0 +1,81 @@
+{
+  "schema": "clayverse-go-candidate-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:01:10+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "source": {
+    "branch": "go/tmux-control-plane-lockdown-20260817-1353-gpt56sol",
+    "base_main_sha": "ebb16ac031780c920fe9e4617b404ade73c4dd20",
+    "candidate_head_before_receipt": "6b61ca6cf999fd0d0ce7ba3ec1993218a79f9ec1",
+    "pr": 492,
+    "pr_base_sha_at_open": "262f7142e1a3c930b37627bf6e14911d2035a3cd"
+  },
+  "observed_problem": {
+    "classification": "TMUX_INTERACTIVE_CONTROL_PLANE_BYPASS_CANDIDATE",
+    "source_facts": [
+      "terminal_gateway forwards authenticated browser terminal bytes to the attached PTY",
+      "TerminalSessionManager attaches the PTY to tmux",
+      "current-main TerminalSessionManager had no managed tmux -f policy",
+      "Dockerfile creates runtime user clayverse with /bin/bash while Claude direct-shell protection only guards the Claude shell path"
+    ],
+    "upstream_tmux_facts": [
+      "default prefix is C-b",
+      "C-b c runs new-window",
+      "C-b : opens the tmux command prompt",
+      "new-window and split-window may execute a supplied shell-command",
+      "prefix/prefix2 may be set to None and unbind-key -a removes key bindings"
+    ],
+    "counterhypothesis": "Claude Bash/tool denial alone is sufficient because the browser cannot obtain another process-control surface",
+    "falsifier": "a browser-controlled tmux client retaining default prefix/command bindings disproves that counterhypothesis"
+  },
+  "candidate_delta": [
+    "add policy/tmux.conf with prefix=None, prefix2=None, unbind-key -a, mouse/status off",
+    "set tmux default-command to existing /opt/clayverse/runtime/deny-shell as defense in depth",
+    "install /etc/clayverse/tmux.conf root-owned mode 0444 in the OCI image",
+    "bind every tmux has-session/new-session/attach-session invocation to the managed policy with -f",
+    "add focused policy/session/attach/container regressions"
+  ],
+  "isolated_local_mechanism_check": {
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "tmux_binary": "UNAVAILABLE",
+      "docker_binary": "UNAVAILABLE",
+      "podman_binary": "UNAVAILABLE"
+    },
+    "scope": "focused reconstruction of changed tmux argv/policy mechanism; not an exact full-tree runtime execution",
+    "command_class": "py_compile + focused pytest",
+    "result": "PASS_4_OF_4",
+    "runtime_credit": "MECHANISM_ONLY"
+  },
+  "github_actions": {
+    "run_id": 32004008229,
+    "job_id": 95309737875,
+    "workflow": "Research Entity Identity Guard",
+    "status": "completed",
+    "conclusion": "failure",
+    "executed_steps": 0,
+    "job_log": "UNAVAILABLE_404_BLOB_NOT_FOUND",
+    "adjudication": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION_NOT_TEST_FAILURE"
+  },
+  "vercel": {
+    "direct_connected_mcp_sandbox_create_start_exec": "NOT_EXPORTED",
+    "current_main_bridge_evidence": "preview-to-Sandbox path exists but latest fresh tmux attempt was blocked before Sandbox/test start by Vercel build-rate admission",
+    "new_sandbox_execution_by_this_lane": false
+  },
+  "coordination": {
+    "overlapping_tmux_control_plane_pr_found_before_build": false,
+    "unusual_experiment": "NOT_EXECUTED_BY_THIS_LANE_COORDINATION_BLOCKED_MINUTE_PRECISION_TRIGGER_TIMESTAMP",
+    "vps_used": false,
+    "deployment_host_used_for_test": false
+  },
+  "adjudication": {
+    "security_mechanism": "SOURCE_SUPPORTED_CANDIDATE",
+    "exact_tmux_runtime": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "whole_product_pass": false,
+    "next_discriminator": "actually-started isolated tmux/OCI run proving C-b c, C-b :, split/new-window and bare new-window cannot create a shell/control path while normal Claude PTY interaction remains functional"
+  }
+}

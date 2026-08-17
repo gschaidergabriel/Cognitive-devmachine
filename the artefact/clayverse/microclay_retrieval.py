@@ -81,12 +81,22 @@ class MicroClayRetrieval:
 
     @contextlib.contextmanager
     def _credit_tx(self):
-        """Join a canonical outer turn transaction or create one standalone credit transaction."""
-        if self.db.db.in_transaction:
-            yield self.db.db
-        else:
+        """Keep outcome-credit policy mutation + receipt atomic inside outer transactions."""
+        if not self.db.db.in_transaction:
             with self.db.tx() as db:
                 yield db
+            return
+
+        savepoint = f"microclay_credit_{uuid.uuid4().hex}"
+        self.db.db.execute(f"SAVEPOINT {savepoint}")
+        try:
+            yield self.db.db
+        except BaseException:
+            self.db.db.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+            self.db.db.execute(f"RELEASE SAVEPOINT {savepoint}")
+            raise
+        else:
+            self.db.db.execute(f"RELEASE SAVEPOINT {savepoint}")
 
     @staticmethod
     def _tokens(text: str) -> set[str]:

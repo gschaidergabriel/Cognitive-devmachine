@@ -13,6 +13,10 @@ class EffectJournal:
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
     @staticmethod
     def _credit(status,outcome): return 1.0 if status=='VERIFIED' and isinstance(outcome,dict) and outcome.get('ok') is True else 0.0
+    @staticmethod
+    def _target_receipt(target):
+        raw=str(target).encode('utf-8')
+        return {'audit':'redacted-target-v1','sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
     @classmethod
     def _argv_receipt(cls,argv):
         if not argv: return None
@@ -38,8 +42,9 @@ class EffectJournal:
             if not row: raise PermissionError('session owner mismatch')
             if int(row[0])!=int(generation): raise StaleGeneration(session_id)
             if lease is not None: self._assert_lease_tx(db,lease)
+            audit_target=self._target_receipt(target)
             audit_argv=self._argv_receipt(argv)
-            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,target,json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))
+            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,self._payload(audit_target),json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))
         return eid
     def _reenter_tx(self,db,effect_id,status,outcome):
         row=db.execute('SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1',(effect_id,)).fetchone()
@@ -49,8 +54,6 @@ class EffectJournal:
         episode_id=effect['episode_id']; observation_turn_id=None
         if episode_id:
             ws=db.execute('SELECT observation_turn_id FROM workspace_episodes WHERE episode_id=?',(episode_id,)).fetchone(); observation_turn_id=ws[0] if ws else None
-        # UserPromptSubmit creates the causal identity before reasoning. If the effect
-        # belongs to that active turn, verification re-enters through exactly that ID.
         active=db.execute('SELECT causal_id FROM active_turns WHERE episode_id=?',(episode_id,)).fetchone() if episode_id else None
         cid=active['causal_id'] if active else str(uuid.uuid4())
         existing=db.execute('SELECT effect_id FROM causal_episodes WHERE causal_id=?',(cid,)).fetchone()

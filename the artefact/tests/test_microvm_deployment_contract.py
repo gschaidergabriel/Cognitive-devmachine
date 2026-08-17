@@ -73,6 +73,15 @@ def test_kata_persistent_volumes_are_bound_to_nonroot_runtime_group():
     assert "unsupported or uncertain non-root volume ownership is `BLOCKED`" in contract
 
 
+def test_kata_persistent_volumes_are_single_pod_writer_fenced():
+    text = TEMPLATE.read_text()
+    stateful = next(doc for doc in _yaml_documents(text) if "kind: StatefulSet" in doc)
+    claims = stateful.split("volumeClaimTemplates:", 1)[1]
+    assert claims.count('accessModes: ["ReadWriteOncePod"]') == 2
+    assert 'accessModes: ["ReadWriteOnce"]' not in claims
+    assert "single-writer appliance" in claims
+
+
 def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
     text = TEMPLATE.read_text()
     policies = [doc for doc in _yaml_documents(text) if "kind: NetworkPolicy" in doc]

@@ -182,10 +182,12 @@ def _main() -> int:
     if len(sys.argv) != 2 or sys.argv[1] not in {"user_prompt", "stop", "stop_failure"}:
         print("invalid terminal hook invocation", file=sys.stderr)
         return 2
+    payload: dict[str, Any] | None = None
     try:
-        payload = json.load(sys.stdin)
-        if not isinstance(payload, dict):
+        raw = json.load(sys.stdin)
+        if not isinstance(raw, dict):
             raise TerminalHookError("hook input must be an object")
+        payload = raw
         result = {
             "user_prompt": user_prompt,
             "stop": stop,
@@ -195,6 +197,8 @@ def _main() -> int:
         return 0
     except Exception as exc:
         print(f"ClayVerse hook blocked: {type(exc).__name__}: {exc}", file=sys.stderr)
+        if sys.argv[1] == "stop" and isinstance(payload, dict) and payload.get("stop_hook_active") is True:
+            return 0
         return 2 if sys.argv[1] in {"user_prompt", "stop"} else 0
 
 

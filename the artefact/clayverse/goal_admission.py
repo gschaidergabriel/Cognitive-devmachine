@@ -40,12 +40,7 @@ def admit_explicit_user_goal(
     source_turn_id: str,
     prompt: str,
 ) -> GoalAdmission | None:
-    """Atomically promote only explicit user intent into autonomous persistent state.
-
-    Goal, first step and source receipt are one transaction in the same UnifiedDB.
-    The source receipt is OBSERVATION, not completion evidence, so merely asking for
-    a goal can never prove that the goal was achieved.
-    """
+    """Atomically promote only exact live canonical user intent into autonomous state."""
     objective = explicit_goal_objective(prompt)
     if objective is None:
         return None
@@ -74,6 +69,7 @@ def admit_explicit_user_goal(
         "source_turn_id": source_turn_id,
         "user_id": user_id,
         "objective": objective,
+        "generation": generation,
     }
     receipt_json = _canonical_json(receipt_payload)
     receipt_hash = hashlib.sha256(receipt_json.encode("utf-8")).hexdigest()
@@ -81,13 +77,24 @@ def admit_explicit_user_goal(
     with db.tx() as conn:
         user = conn.execute("SELECT 1 FROM users WHERE user_id=?", (user_id,)).fetchone()
         turn = conn.execute(
-            "SELECT 1 FROM turns WHERE turn_id=? AND user_id=? AND role='user'",
+            "SELECT content,provenance FROM turns WHERE turn_id=? AND user_id=? AND role='user'",
             (source_turn_id, user_id),
         ).fetchone()
         if not user or not turn:
             raise PermissionError("goal admission source is not a canonical user turn")
+        if turn["content"] != prompt:
+            raise PermissionError("goal admission prompt differs from its canonical source turn")
+        try:
+            provenance = json.loads(turn["provenance"])
+        except (TypeError, json.JSONDecodeError) as exc:
+            raise PermissionError("goal admission source provenance is invalid") from exc
+        if not isinstance(provenance, dict) or provenance.get("source") != "claude-hook:UserPromptSubmit":
+            raise PermissionError("goal admission source is not an admitted UserPromptSubmit turn")
+        if int(provenance.get("entity_generation", -1)) != generation:
+            raise RuntimeError("goal admission source turn belongs to a stale entity generation")
         if generation != db.entity_generation():
             raise RuntimeError("entity generation changed during goal admission")
+
         conn.execute(
             "INSERT INTO autonomy_goals(goal_id,creator_user_id,objective,success_contract,priority,status,autonomous,attempt_budget,attempts_used,created_generation,created_at,updated_at) VALUES(?,?,?,?,100,'ACTIVE',1,?,0,?,?,?)",
             (

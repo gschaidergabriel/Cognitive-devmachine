@@ -1,0 +1,84 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T21:04:00+07:00",
+  "trigger": "go",
+  "worker": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "GO_CYCLE_CLOSURE_IN_PROGRESS",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "canonical_workspace": "the artefact/",
+  "retained_lane": {
+    "pr": 625,
+    "branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+    "latest_observed_head": "41473e8dcc8df1cadde7aee3cce2bb627c143dd5",
+    "state": "OPEN_DRAFT_MOVING_CONCURRENTLY_NOT_MERGE_READY",
+    "rule": "Do not force-rewrite or infer promotion from a stale branch head; refresh and rejoin once before an executable promotion gate."
+  },
+  "material_deltas": [
+    "Retained tokenless baseline removes private EntityOS bytes as a mandatory baseline OCI prerequisite while preserving fail-closed digest/size/lock requirements when EntityOS is deliberately embedded.",
+    "Unsafe recursive build-assets/entityos wildcard was removed by parallel #625 work and fenced by exact-file allowlist regression.",
+    "Manifest authority drift was repaired so build_context, EntityOS role/transport/admission and final-pass obligations match the optional-baseline law.",
+    "The normal service-side optional EntityOS contract and sealed-memfd bridge boundary were further hardened/tested by concurrent work in the same retained PR625 lane rather than creating a duplicate runtime path."
+  ],
+  "bounded_evidence": {
+    "manifest_optional_entityos_fence": {
+      "receipt": "the artefact/receipts/2026-08-17_GO_2053_PR625_MANIFEST_OPTIONAL_ENTITYOS_FENCE_GPT56SOL.json",
+      "manifest_blob": "c89269e8dd65aa7dd173dcb53a248c1c88aa8d39",
+      "test_blob": "85508bef83aac154d0cfe845cd875dea5b479183",
+      "focused_result": "6/6 PASS",
+      "scope": "SOURCE_CONTRACT_MECHANISM_ONLY"
+    },
+    "entityos_memfd_component": {
+      "receipt": "the artefact/receipts/2026-08-17_GO_2101_PR625_ENTITYOS_MEMFD_COMPONENT_GPT56SOL.json",
+      "bridge_blob": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+      "result": "4/4 PASS",
+      "scope": "EXACT_SOURCE_BOUNDED_LINUX_COMPONENT_RUNTIME_ONLY"
+    }
+  },
+  "execution_surface_refresh": {
+    "vercel_team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_projects_observed": [
+      {
+        "id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+        "name": "dr-unterweger",
+        "latest_deployment_id": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+        "latest_deployment_state": "ERROR"
+      }
+    ],
+    "research_repo_direct_vercel_project": "NOT_OBSERVED",
+    "openai_isolated_oci_cli": {
+      "docker": "ABSENT",
+      "podman": "ABSENT",
+      "buildah": "ABSENT",
+      "nerdctl": "ABSENT"
+    },
+    "classification": "FINAL_OCI_GATE_DEFERRED_NOT_PRODUCT_TEST_FAIL"
+  },
+  "living_readme": {
+    "status": "REFRESHED_ON_MAIN_AND_THEN_ADVANCED_BY_PARALLEL_FUSION",
+    "latest_observed_blob": "f1bc128ff05e84a28d886bad600ea4df938c6b18",
+    "latest_cycle_time_in_readme": "2026-08-17 21:01 +07:00"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "No shared immutable request/turn identifier and only minute-precision user-message timestamp were available; ordinary deterministic regression/component checks remained allowed."
+  },
+  "nonclaims": [
+    "No exact OCI image build or digest was observed.",
+    "No final Docker build-context transfer semantics were observed.",
+    "No packaged baseline service startup/readiness/restart was observed.",
+    "No real Clerk/browser/PTy/native-Claude whole path was accepted.",
+    "No whole ClayVerse PASS is claimed."
+  ],
+  "next_exact_gate": "Refresh current main and moving PR625, rejoin the retained lane exactly once without losing concurrent deltas, then on the first authorized Docker/OCI-capable isolated surface prove actual context membership, baseline build without EntityOS, startup/readiness, optional digest-bound EntityOS positive/negative embedding, image digest, and continue into in-image tmux/Python-lock/native-Claude/recovery/concurrency acceptance.",
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  }
+}

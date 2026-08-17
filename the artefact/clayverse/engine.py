@@ -6,7 +6,7 @@ import threading
 import time
 import uuid
 
-from .agency import AgencyState
+from .agency import AgencyView
 from .effects import EffectGate, EffectRequest
 from .entityos_bridge import EntityOSBridge
 from .graph import ClayGraphProjection
@@ -38,7 +38,7 @@ class ClayVerseEngine:
     ):
         self.db = db
         self.identity = IdentityRouter(db, clerk_map)
-        self.agency = AgencyState(db)
+        self.agency = AgencyView(db)
         self.memory = MemoryManager(db)
         self.world = WorldAssembler(db)
         self.workspace = Workspace(db)
@@ -83,11 +83,7 @@ class ClayVerseEngine:
         self.memory.compact(sid)
 
         world = self.world.assemble(sid, resources)
-        world["agency"] = self.agency.snapshot(
-            user_id=uid,
-            max_goals=8,
-            max_attempts_per_milestone=5,
-        )
+        world["agency"] = self.agency.snapshot(user_id=uid)
         world["runtime_capabilities"] = list(self.effects.available_capabilities())
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)

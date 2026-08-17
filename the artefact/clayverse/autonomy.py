@@ -240,10 +240,10 @@ class AutonomyController:
         return state, goal
 
     @staticmethod
-    def _budget(goal: dict[str, Any]) -> None:
+    def _budget(goal: dict[str, Any], *, effect: bool = False) -> None:
         if goal["counters"]["steps"] >= goal["budget"]["max_steps"]:
             raise AutonomyBudgetExceeded("step budget exhausted")
-        if goal["counters"]["effects"] >= goal["budget"]["max_effects"]:
+        if effect and goal["counters"]["effects"] >= goal["budget"]["max_effects"]:
             raise AutonomyBudgetExceeded("effect budget exhausted")
 
     @staticmethod
@@ -280,7 +280,7 @@ class AutonomyController:
                 raise AutonomyStateError("goal is not runnable")
             if goal["current_step"] and goal["current_step"]["status"] in {"PROPOSED", "ADMITTED"}:
                 raise AutonomyStateError("goal already has an unfinished step")
-            self._budget(goal)
+            self._budget(goal, effect=(kind == "effect"))
             step = {"step_id": str(uuid.uuid4()), "kind": kind, "description": description, "effect": effect, "attempts": 0, "status": "PROPOSED", "created_at": time.time()}
             goal["current_step"] = step
             goal["status"] = "VERIFYING" if kind == "complete_candidate" else ("WAITING" if kind == "wait" else "ACTIVE")
@@ -296,7 +296,7 @@ class AutonomyController:
                 raise AutonomyStateError("step not admissible")
             if step["attempts"] > goal["budget"]["max_retries_per_step"]:
                 raise AutonomyBudgetExceeded("retry budget exhausted")
-            self._budget(goal)
+            self._budget(goal, effect=(step["kind"] == "effect"))
             step["attempts"] += 1
             step["status"] = "ADMITTED"
             goal["counters"]["steps"] += 1
@@ -410,6 +410,66 @@ class AutonomyController:
             goal["status"], goal["blocked_reason"], goal["updated_at"] = "CANCELLED", None, time.time()
             self._save(db, state)
             return {"goal_id": goal_id, "status": "CANCELLED"}
+
+    def recover_generation(self, *, expected_generation: int | None = None) -> dict[str, int]:
+        """Rebind durable goals after recovery without replaying ambiguous effects.
+
+        Generation fencing must kill stale writers, not durable user intent. Safe/no-effect
+        work is rebound to the new live generation. An effect step that was ADMITTED at
+        the crash boundary is different: without an exact step->effect receipt binding,
+        replay or success would both be guesses, so the goal is rebound but BLOCKED with
+        explicit uncertainty for later canonical reconciliation.
+        """
+        live = self.db.entity_generation()
+        if expected_generation is not None and int(expected_generation) != live:
+            raise StaleGeneration("autonomy-recovery")
+        counts = {
+            "rebound": 0,
+            "interrupted_no_effect_requeued": 0,
+            "ambiguous_effect_blocked": 0,
+            "blocked_preserved": 0,
+            "terminal_preserved": 0,
+        }
+        changed = False
+        with self.db.tx() as db:
+            state = self._load(db)
+            now = time.time()
+            for goal_id in state["queue"]:
+                goal = state["goals"][goal_id]
+                prior_generation = int(goal["generation"])
+                if prior_generation == live:
+                    continue
+                if prior_generation > live:
+                    raise AutonomyStateError("goal generation is ahead of live entity")
+                if goal["status"] in {"COMPLETED", "CANCELLED"}:
+                    counts["terminal_preserved"] += 1
+                    continue
+
+                step = goal["current_step"]
+                goal["generation"] = int(live)
+                if step and step["status"] == "ADMITTED" and step["kind"] == "effect":
+                    step["status"] = "FAILED"
+                    goal["status"] = "BLOCKED"
+                    goal["blocked_reason"] = "unknown_effect_after_generation_change"
+                    counts["ambiguous_effect_blocked"] += 1
+                elif step and step["status"] in {"PROPOSED", "ADMITTED"}:
+                    step["status"] = "FAILED"
+                    goal["status"] = "ACTIVE"
+                    goal["blocked_reason"] = "recovered_interrupted_no_effect_step"
+                    counts["interrupted_no_effect_requeued"] += 1
+                elif goal["status"] == "BLOCKED":
+                    counts["blocked_preserved"] += 1
+                else:
+                    if goal["status"] in {"WAITING", "VERIFYING"}:
+                        goal["status"] = "ACTIVE"
+                    goal["blocked_reason"] = None
+                    counts["rebound"] += 1
+                goal["updated_at"] = now
+                changed = True
+
+            if changed:
+                self._save(db, state)
+        return counts
 
     def next_runnable(self, *, user_id: str | None = None) -> dict[str, Any] | None:
         with self.db.tx() as db:

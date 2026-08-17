@@ -115,16 +115,12 @@ def _runtime_ready(db: UnifiedDB) -> bool:
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
-        users = db.db.execute(
-            "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
-        ).fetchone()
-        session_rows = db.db.execute(
-            "SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id"
-        ).fetchall()
+        users = db.db.execute("SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')").fetchone()
+        session_rows = db.db.execute("SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id").fetchall()
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
         return bool(
-            schema and schema[0] == "6"
+            schema and schema[0] == "8"
             and entity_generation >= 1
             and users and int(users[0]) == 2
             and set(sessions) == {"gabriel", "andreas"}
@@ -152,23 +148,15 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     @app.get("/healthz")
     async def healthz():
-        return JSONResponse({
-            "status": "ok",
-            "scope": "liveness",
-            "surface": "permanent-claude-code-terminal",
-            "users": ["gabriel", "andreas"],
-            "consciousness_daemon": False,
-        })
+        return JSONResponse({"status": "ok", "scope": "liveness", "surface": "permanent-claude-code-terminal",
+                             "users": ["gabriel", "andreas"], "consciousness_daemon": False})
 
     @app.get("/readyz")
     async def readyz():
         ready = _runtime_ready(db)
-        return JSONResponse({
-            "status": "ready" if ready else "not_ready",
-            "scope": "runtime",
-            "canonical_state": "unifieddb",
-            "surface": "permanent-claude-code-terminal",
-        }, status_code=200 if ready else 503)
+        return JSONResponse({"status": "ready" if ready else "not_ready", "scope": "runtime",
+                             "canonical_state": "unifieddb", "surface": "permanent-claude-code-terminal"},
+                            status_code=200 if ready else 503)
 
     @app.get("/", response_class=HTMLResponse)
     async def index():
@@ -255,12 +243,7 @@ window.addEventListener('load', async () => {{
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
             terminals.resize(attach_fd, rows, cols)
-            await send_json({
-                "type": "ready",
-                "user_id": user_id,
-                "session_id": session_id,
-                "auth_expires_at": int(auth_expires_at),
-            })
+            await send_json({"type": "ready", "user_id": user_id, "session_id": session_id, "auth_expires_at": int(auth_expires_at)})
 
             async def pump_out():
                 while True:
@@ -298,10 +281,7 @@ window.addEventListener('load', async () => {{
                                 expected_subject=clerk_subject,
                                 expected_clerk_session_id=clerk_session_id,
                             )
-                            await send_json({
-                                "type": "reauthenticated",
-                                "auth_expires_at": int(auth_expires_at),
-                            })
+                            await send_json({"type": "reauthenticated", "auth_expires_at": int(auth_expires_at)})
                             continue
                         if control.get("type") != "resize":
                             raise ValueError("unsupported terminal control message")

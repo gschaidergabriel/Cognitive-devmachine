@@ -1,0 +1,74 @@
+{
+  "schema": "ClayVerseInfrastructureEvidence/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_base": "f0ba800618408936c41ddd1cc8ecc0ac85d9e5ba",
+  "scope": "Vercel Sandbox / OCI / VCR execution-surface discrimination only",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "unusual_experiment_count_added_by_this_receipt": 0,
+  "observations": [
+    {
+      "kind": "VERCEL_SANDBOX_EXECUTION_SURFACE",
+      "status": "SUPPORTED",
+      "evidence": "Existing exact-identity Vercel build-internal Sandbox execution in the linked Dr.-Unterweger project ran the EntityOS deterministic suite with 195 tests passed plus 12 subtests and stopped the sandbox cleanly.",
+      "limitation": "This proves the Vercel Sandbox execution mechanism, not current ClayVerse behavior."
+    },
+    {
+      "kind": "PRIVATE_CROSS_REPO_FETCH",
+      "status": "BLOCKED_FAIL_CLOSED",
+      "deployment": "dpl_4kaGYMRgKNu64MGnreZ7i166twFN",
+      "harness_commit": "7f2b87f124f6693ce7404cff5ad20d5d88892c9c",
+      "evidence": "The linked Vercel build host could clone Dr.-Unterweger but an exact git fetch of the second private research repository failed with 'could not read Username for https://github.com'. No Sandbox was started by that failed source-staging attempt.",
+      "implication": "Ambient credentials from one linked private repository must not be assumed to authorize another private repository."
+    },
+    {
+      "kind": "NESTED_OCI_TOOLCHAIN_IN_SANDBOX",
+      "status": "BLOCKED_ON_DEFAULT_SANDBOX_IMAGE",
+      "deployment": "dpl_84M7gmb85kvx5KV4tG9ZqLL9oy4t",
+      "evidence": "A Vercel Sandbox on the default Amazon Linux 2023 environment could not install podman or buildah from the available dnf repositories; the observed run failed closed and the sandbox was stopped.",
+      "implication": "Repeating dnf-based podman/buildah provisioning is low-information duplication. This does not prove that Vercel custom images or VCR are unusable."
+    },
+    {
+      "kind": "VCR_CLI_PREFLIGHT_1",
+      "status": "COMMAND_NOT_IN_USER_BUILD_PATH",
+      "deployment": "dpl_48UEVTo4CFY12WtBLokT1F7hrHYj",
+      "harness_commit": "cfbe0e6be19d8912b14709141f821fdea13b88c3",
+      "evidence": "Vercel build orchestration reported CLI 58.1.0, but spawnSync('vercel') inside npm run vercel-build returned ENOENT. /usr/bin/buildah was present on the build host, while docker and podman were absent.",
+      "policy_note": "Build-host buildah is not accepted as ClayVerse build evidence because current execution law requires isolated Sandbox validation."
+    },
+    {
+      "kind": "VCR_CLI_PREFLIGHT_2",
+      "status": "PROVIDER_BUILD_RATE_LIMIT",
+      "harness_commit": "09fabac24e839a08677b8b92f32536a042b037f2",
+      "evidence": "The follow-up pinned vercel@58.1.0 locally and was limited to read-only `vcr --help` / `vcr build --help` capability inspection, with no registry writes. GitHub's Vercel status for the exact commit failed with target_url containing upgradeToPro=build-rate-limit, so no new deployment/build evidence exists for this preflight.",
+      "implication": "Do not infer VCR builder semantics from documentation alone; exact executable observation remains pending."
+    },
+    {
+      "kind": "VERCEL_PROJECT_BINDING",
+      "status": "CURRENTLY_SINGLE_PROJECT",
+      "evidence": "The connected Vercel team currently exposes one project, `dr-unterweger`, linked to the private Dr.-Unterweger repository. No directly linked clay-global-research-entity project is exposed through the current connector surface.",
+      "implication": "A dedicated research-repo Vercel source binding would eliminate the stale cross-repo fixture transport if/when such project creation/linking is available through an authorized surface."
+    }
+  ],
+  "external_primary_direction": {
+    "status": "SUPPORTED_BY_VERCEL_DOCUMENTATION_NOT_YET_EXECUTABLY_VERIFIED",
+    "mechanism": "Vercel Container Registry plus Sandbox custom image",
+    "notes": [
+      "Vercel documents `vercel vcr build docker . <repository>:<tag> --push` for OCI image build/push.",
+      "Vercel documents `Sandbox.create({ image: ... })` for starting a Sandbox from an existing container image.",
+      "VCR authentication is documented as short-lived project-scoped OIDC for docker/podman/buildah.",
+      "The exact current CLI/build-engine behavior remains empirically unresolved because the read-only preflight is provider-rate-limited."
+    ]
+  },
+  "rejected_shortcuts": [
+    "Do not use Vercel READY as test evidence.",
+    "Do not use build-host buildah as accepted ClayVerse build evidence.",
+    "Do not assume credentials from the linked Dr.-Unterweger repository authorize the private research repository.",
+    "Do not promote the stale SHA-bound ClayVerse snapshot staged in Dr.-Unterweger to current canonical evidence.",
+    "Do not add a reusable remote arbitrary-command endpoint or expose credentials to work around source transport."
+  ],
+  "current_blocker": "Exact-current-head ClayVerse OCI build/runtime evidence cannot yet be obtained through the observed path: default Vercel Sandbox cannot provision podman/buildah from its repos, the linked Vercel project cannot ambient-fetch the second private research repo, and the read-only VCR CLI discriminator is currently blocked by Vercel build-rate limiting.",
+  "next_executable_step": "When the Vercel build-rate gate permits another preview, run only the already-prepared read-only pinned VCR CLI preflight. If it confirms an admitted VCR builder path, use a directly bound current research source (prefer a dedicated Vercel project linked to clay-global-research-entity over copied fixtures), produce an exact-digest OCI image, then start that exact image in Vercel Sandbox and run current-head tests plus boot/restart/auth/persistence/effect gates. If the CLI proves it requires a local engine unavailable inside Sandbox, retain OCI validation as BLOCKED rather than weakening sandbox-only policy.",
+  "acceptance": "IN_PROGRESS"
+}

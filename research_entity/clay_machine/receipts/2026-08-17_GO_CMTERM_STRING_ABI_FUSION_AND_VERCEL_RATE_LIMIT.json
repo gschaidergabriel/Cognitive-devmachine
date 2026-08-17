@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-17",
+  "research_endpoint": "EntityOS",
+  "product_form": "ONE_EXECUTABLE_FILE",
+  "research_head_joined": "5097f893be9f075d00cb81bd6264e93095a8c16a",
+  "product_main_joined": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "execution_truth": "VERCEL_SANDBOX_ONLY_FOR_EXECUTABLE_CLAIMS",
+  "observations": {
+    "product_main": {
+      "head": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+      "relevant_state": [
+        "CLAYVM/2 Bytes parameter path is already present on main",
+        "immutable Bytes remain admitted while mutable/borrowed exporters fail closed pending explicit epoch/stability semantics"
+      ]
+    },
+    "preferred_entityos_lane": {
+      "pr": 787,
+      "state": "OPEN_DRAFT",
+      "head_observed_at_receipt_write": "2473a30b6efc0915ac5ae4818e767ac9ef04f2a8",
+      "architecture": "single shared ClayHostcallABI/v1 authority across lowering, serialized VM validation, runtime and host adapters",
+      "last_bounded_exact_sandbox_pass_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+      "last_bounded_exact_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+      "pass_scope_note": "historical exact-head bounded evidence only; it does not transfer to descendants and is not whole EntityOS acceptance",
+      "current_descendant_executable_state": "UNVERIFIED_RATE_LIMITED_BEFORE_SANDBOX_START"
+    },
+    "string_path_fusion_attempt": {
+      "temporary_pr": 808,
+      "exact_head": "6ee6bfb459ebff4b99b9b783fb656018937cb643",
+      "candidate_mechanism": "typed String parameter through CLAYVM/2 into path-only direct no-shell process spawn while retaining Bytes epoch fences",
+      "vercel_status": "Deployment rate limited — retry in 24 hours.",
+      "sandbox_started": false,
+      "executable_result": "NONE",
+      "promotion": "REJECTED_AS_STANDALONE_PATH"
+    },
+    "abi_collision_found": {
+      "temporary_candidate_problem": "temporary PR808 independently allocated hostcall id 3 for String path",
+      "canonical_lane_fact": "PR787 ClayHostcallABI/v1 already owns call id 3 for linux.process.stdout.v0::(Int)->Bytes",
+      "classification": "SEMANTIC_IDENTITY_COLLISION_PARALLEL_BACKEND_LOCAL_ABI",
+      "resolution": "do not merge temporary bytes; fuse future String path only through the shared ABI registry after refreshing the then-current free id"
+    },
+    "deduplication": {
+      "closed_unmerged": [808, 744],
+      "evidence_preserved": true,
+      "preferred_lane": 787,
+      "reason": "avoid a second permanent CM-TERM String/process path and preserve one hostcall identity authority"
+    }
+  },
+  "grf_collapse": {
+    "observed_anchor": "Bytes/CLAYVM2 is already on product main; current convergence lane has a shared hostcall ABI and bounded stdout Bytes path.",
+    "retained_mechanism": "extend the then-current shared ABI with a String path contract and make CLAYVM/2 serialize String parameter identity; use the existing direct no-shell host-process boundary.",
+    "strongest_counterhypothesis": "a standalone String hostcall can appear locally correct while silently colliding with another canonical ABI call id or creating a second semantic authority.",
+    "falsifier_result": "COUNTERHYPOTHESIS_SUPPORTED: call id 3 collision was observed against the current preferred ABI lane.",
+    "outcome": "MERGE_CONCEPT_INTO_SHARED_ABI_LANE_REJECT_STANDALONE_IMPLEMENTATION"
+  },
+  "next_exact_delta": {
+    "precondition": "refresh PR787 exact head and ClayHostcallABI/v1 immediately before any write because parallel fusion is active",
+    "code_shape": [
+      "add String to the admitted CLAYVM/2 parameter type surface without changing legacy CLAYVM/1 Int modules",
+      "register linux.process.spawn.path.v1::(String)->Int in ClayHostcallABI/v1 using the then-current next free call id",
+      "bind lowering, VM load/runtime validation and HostProcessVMHost implementation through the shared registry",
+      "retain direct shell=false execution, absolute executable, UTF-8-scalar/NUL, timeout and bounded-output fences",
+      "retain immutable Bytes and mutable/borrowed epoch fail-closed behavior",
+      "do not admit general argv/env/stdin/streaming/PTY/shell semantics by implication"
+    ],
+    "execution_gate": [
+      "Vercel must first admit a Git-bound build",
+      "run exact raw-tree/archive/attestation staging",
+      "run full pytest with nonzero tests, zero skips and locked wheel/hash evidence under DENY_ALL",
+      "run String path + existing stdout Bytes and Bytes epoch regressions with zero new unusual experiments",
+      "perform Git-free attested twin EntityOS one-file build and require byte identity",
+      "run runtime/self-test/no-host-Python/relocation and attested-vs-Git-clean identity gates",
+      "stop the Sandbox successfully"
+    ]
+  },
+  "unusual_experiment": {
+    "global_go_accounting": "CONSUMED_1_OF_1",
+    "origin": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED on exact historical PR787 head 92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count_this_fusion": 0,
+    "all_future_descendant_runs_in_this_go": "REGRESSION_ONLY"
+  },
+  "negative_evidence": [
+    "exact temporary String fusion head 6ee6bfb459ebff4b99b9b783fb656018937cb643 was Vercel deployment-rate-limited before Sandbox start",
+    "standalone String candidate collided with canonical hostcall id ownership and therefore was intentionally closed unmerged",
+    "no current descendant inherits executable PASS from 92b629566452d8f45fd208fba943b823ddd37e8c"
+  ],
+  "code_promotion": "NONE_FROM_THIS_FUSION_ATTEMPT",
+  "research_write": "THIS_RECEIPT",
+  "whole_entityos_acceptance": false,
+  "outcome": "FUSED_COORDINATION_AND_NEGATIVE_EVIDENCE_PRESERVED_EXECUTABLE_PROMOTION_BLOCKED_BY_VERCEL_RATE_LIMIT",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

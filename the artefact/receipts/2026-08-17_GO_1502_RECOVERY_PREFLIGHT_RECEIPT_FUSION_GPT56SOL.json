@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse.source-mechanism-receipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:02:00+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "rejoin_main": "7ba2a384ac3710a568b6f3165e938b5dc00cdae3",
+  "branch": "go/recovery-preflight-receipt-fusion-current-20260817-sol",
+  "code_head_before_receipt": "8a1478ecbc2bc5c789b50d21ec18db91461232e7",
+  "source": {
+    "recovery_blob": "a7aecd25573c5827470310f8389e6efdca12d14f",
+    "focused_test_blob": "463ec1c9404d02e884a6933871a373303fb2571f",
+    "base_recovery_blob": "66540a9d2d20860fed015033da8013965ef830be",
+    "delta": "read-only active causal-spine preflight before recover_pending; re-check at mutation transaction boundary; exact active causal_id lookup; preserve merged redacted-outcome identity and zero-credit reconstruction semantics"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "network_used": false,
+    "exact_recovery_blob_verified_with_git_hash_object": true,
+    "observed_recovery_blob": "a7aecd25573c5827470310f8389e6efdca12d14f",
+    "py_compile_exit": 0,
+    "probe_kind": "deterministic source-mechanism harness with stubbed non-target dependencies",
+    "probe_results": [
+      "PASS_FOREIGN_CAUSAL_PRE_MUTATION calls=0",
+      "PASS_MISSING_WORKSPACE_PRE_MUTATION calls=0",
+      "PASS_COHERENT_SPINE_REACHES_RECOVER_PENDING calls=1"
+    ],
+    "classification": "EXACT_SOURCE_MECHANISM_PASS",
+    "full_branch_pytest_executed": false,
+    "oci_build_executed": false,
+    "runtime_restart_executed": false
+  },
+  "coordination": {
+    "unusual_experiment_added_by_this_fusion": 0,
+    "single_go_unusual_experiment": "recovery_receipt_semantic_forgery_discriminator",
+    "further_unusual_experiments_forbidden": true
+  },
+  "execution_admission": {
+    "vercel_git_preview_sandbox_bridge": "CONFIRMED_HISTORICALLY_IN_CURRENT_GO",
+    "current_fresh_vercel_preview": "BLOCKED_BY_FREE_DAILY_DEPLOYMENT_CAP",
+    "github_actions_recent_behavior": "RUNNER_OR_PRE_STEP_ADMISSION_FAILURE_ZERO_TEST_CREDIT",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "claims": {
+    "preflight_source_mechanism_supported": true,
+    "full_branch_pass": false,
+    "exact_oci_pass": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "On the next actually-started authorized isolated current-source batch, run the focused causal-preflight regression together with restart recovery, effect journal/gate, active-turn fencing, generation, receipt-identity/zero-credit and MicroClay effect-learning regressions; if green, continue into exact OCI build/start/readiness/restart/concurrency acceptance.",
+  "evidence_scope": "BOUND_EXACT_RECOVERY_SOURCE_MECHANISM_ONLY"
+}

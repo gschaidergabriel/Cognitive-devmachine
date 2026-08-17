@@ -1,0 +1,80 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "bf385acd61b117af2064c041e432d179a6bb66b7",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_lane": {
+    "pr": 787,
+    "head_observed": "893c31a5b8a7c18c1adf2fb74c4cb0a9e50e6bb1",
+    "state": "DRAFT_SOURCE_DESCENDANT_UNVERIFIED"
+  },
+  "source_reentry": {
+    "hostcall_abi_authority": "ClayHostcallABI/v1",
+    "runtime_contract_resolution_by_module_vm_version": true,
+    "serialized_loadtime_contract_for_vm_validation": true,
+    "serialized_loadtime_wrong_arity_rejected": true,
+    "real_stdout_bytes_clayvm2_only": true,
+    "real_stderr_bytes_slice_fused_on_current_head": true,
+    "full_pytest_uv_cli_require_hashes": true,
+    "full_pytest_uv_cli_only_binary_all": true,
+    "build_requirements_file_require_hashes": true,
+    "build_requirements_file_only_binary_all": true,
+    "buildtime_uv_cli_explicit_require_hashes": false,
+    "buildtime_uv_cli_explicit_only_binary_all": false,
+    "interpretation": "The build requirements file itself instructs uv to require hashes and wheels only, but the canonical v7 build command does not redundantly mirror those two restrictions on the uv CLI. This is a source-hardening asymmetry, not executable PASS or evidence that the requirements-file restrictions are ignored."
+  },
+  "key_product_commits": {
+    "abi_vm_version_registry": "19be6e721dedc56676d5cf02a36c6bf925334e11",
+    "abi_vm_version_registry_tests": "c5530915ae0be757a7bef8efa84ab68ba32874bf",
+    "stdout_bytes_pytest_fusion": "fb31107ca7392ec65a6e170d903fbad149817f9e",
+    "generic_runtime_registry_enforcement": "2511ea3e76379beb1701ca17562b26792b367c46",
+    "runtime_exact_vm_version_fence": "1c3bc9373605af77d39be0c41f607aaba59b8945",
+    "loadtime_vm_version_and_arity_fence": "b1b52d5842e0c0d0ed0151af7f2e327fe0e7cbe3",
+    "full_pytest_explicit_uv_hash_wheel_flags": "71910c90086e6a72bb8b815632508eddd457dcac",
+    "current_head_stderr_bytes_fusion": "893c31a5b8a7c18c1adf2fb74c4cb0a9e50e6bb1"
+  },
+  "coordination": {
+    "duplicate_hostcall_abi_prs_closed_unmerged": [793, 794, 796, 799, 800],
+    "single_canonical_product_lane": 787,
+    "stale_write_attempt_on_clayvm_rejected_by_github_409": true,
+    "stale_write_overwrite_occurred": false,
+    "parallel_canonical_change_was_refreshed_and_retained": true
+  },
+  "execution": {
+    "exact_head_checked": "893c31a5b8a7c18c1adf2fb74c4cb0a9e50e6bb1",
+    "vercel_provider_state": "RATE_LIMIT_BEFORE_SANDBOX_START",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "UNVERIFIED",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "historical exact-head evidence does not transfer to descendants or whole EntityOS acceptance"
+  },
+  "adversarial_state": {
+    "preferred_mechanism": "one VM-versioned hostcall ABI authority consumed by lowering, serialized module validation, runtime and host adapters, with exact wheel/hash dependency authority",
+    "strongest_counterhypothesis": "the rapidly fused source set may still contain an integration or packaging regression that source inspection cannot expose; only an exact-current-head Vercel Sandbox can discriminate this",
+    "next_executable_falsifier": "on the then-current PR787 head run regression-only exact source staging, full pytest zero-skips, ABI/CM-TERM gates, canonical v7 twin EntityOS build, digest equality, runtime/self-test/no-host-Python/relocation, Batch-5, attested-vs-Git-clean byte identity, and successful Sandbox stop",
+    "optional_pre_execution_hardening": "mirror --require-hashes --only-binary :all: explicitly on the v7 build uv CLI as defense-in-depth while preserving the already-embedded requirements-file authority"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "claims": {
+    "canonical_hostcall_abi_source_fused": true,
+    "runtime_vm_version_fence_source_present": true,
+    "loadtime_vm_version_fence_source_present": true,
+    "loadtime_hostcall_arity_fence_source_present": true,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

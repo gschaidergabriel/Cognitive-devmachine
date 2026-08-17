@@ -17,6 +17,7 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     root = Path(__file__).parents[1]
     settings = json.loads((root / "policy" / "managed-settings.json").read_text())
     managed_mcp = json.loads((root / "policy" / "managed-mcp.json").read_text())
+    source_lock = json.loads((root / "SOURCE_LOCK.json").read_text())
 
     assert settings["allowManagedHooksOnly"] is True
     assert settings["allowManagedPermissionRulesOnly"] is True
@@ -24,17 +25,30 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     assert settings["allowedMcpServers"] == [
         {"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}
     ]
+    assert settings["allowedChannelPlugins"] == []
+    assert settings["channelsEnabled"] is False
+    assert settings["crossSessionInbound"] == "refuse"
     assert settings["permissions"]["disableBypassPermissionsMode"] == "disable"
     assert settings["permissions"]["deny"] == ["Bash"]
-    assert settings["autoMemoryEnabled"] is False
-    assert settings["crossSessionInbound"] == "refuse"
+    assert settings["disableAgentView"] is True
+    assert settings["disableArtifact"] is True
+    assert settings["disableAutoMode"] == "disable"
     assert settings["disableBundledSkills"] is True
     assert settings["disableClaudeAiConnectors"] is True
+    assert settings["disableDeepLinkRegistration"] == "disable"
     assert settings["disableRemoteControl"] is True
     assert settings["disableSideloadFlags"] is True
     assert settings["disableSkillShellExecution"] is True
+    assert settings["disableWorkflows"] is True
+    assert settings["isolatePeerMachines"] is True
+    assert settings["env"]["CLAUDE_CODE_DISABLE_ATTACHMENTS"] == "1"
     assert settings["env"]["CLAUDE_CODE_DISABLE_BACKGROUND_TASKS"] == "1"
+    assert settings["env"]["CLAUDE_CODE_DISABLE_CRON"] == "1"
+    assert settings["env"]["CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS"] == "1"
+    assert settings["env"]["CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL"] == "1"
     assert settings["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
+    assert settings["autoMemoryEnabled"] is False
+    assert tuple(int(part) for part in source_lock["claude_code"]["version"].split(".")) >= (2, 1, 224)
     assert list(managed_mcp["mcpServers"]) == ["clayverse"]
     server = managed_mcp["mcpServers"]["clayverse"]
     assert server["command"] == "/usr/local/bin/python"
@@ -67,7 +81,11 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
     assert "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1" in argv
     assert "CLAUDE_CODE_SHELL_PREFIX=/opt/clayverse/runtime/deny-shell" in argv
+    assert "--setting-sources" in argv and argv[argv.index("--setting-sources") + 1] == ""
+    assert "--tools" in argv and argv[argv.index("--tools") + 1] == ""
     assert "mcp__clayverse__*" in argv
+    assert "--remote-control" not in argv
+    assert "--bg" not in argv
     assert not any(item.startswith("CLERK_JWT_KEY=") for item in argv)
 
 

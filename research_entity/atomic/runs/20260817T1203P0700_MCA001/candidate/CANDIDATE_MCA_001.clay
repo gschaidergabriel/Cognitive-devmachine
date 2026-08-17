@@ -1,0 +1,129 @@
+module clay.atomic.mca001
+version "0.1-research-candidate-2026-08-17"
+status TESTED_SYNTHETIC_POSSIBILITY_NOT_ARCHITECTURE_AUTHORITY
+
+// Current product target: ClayVerse single-container artifact.
+// UnifiedDB remains the only canonical durable state authority.
+// ClayGraph remains derived/rebuildable. This candidate grants no effect authority.
+
+class ChangePolarity = MONOTONE_APPEND | NONMONOTONE_RESOLVE | RETRACT | EXTERNAL_EFFECT | UNKNOWN
+class ApertureDecision = PARALLEL_APPEND | REQUIRE_APERTURE | DENY
+class ClaimState = ASSERTED | CONTESTED | RESOLVED | RETRACTED
+
+record ClaimAtom {
+  claim_id: Qid;
+  subject: Qid;
+  predicate: Qid;
+  value: Bytes;
+  source_ref: Ref;
+  causal_ref: Ref;
+  provenance_hash: Hash;
+  created_epoch: Int;
+}
+
+record ContestEdge {
+  contest_id: Qid;
+  left_claim: Qid;
+  right_claim: Qid;
+  relation: CONTRADICTS | SUPERSEDES_CANDIDATE | DUPLICATES;
+  provenance_hash: Hash;
+}
+
+record ResolutionIntent {
+  subject: Qid;
+  candidate_claims: Set<Qid>;
+  chosen_claim: Optional<Qid>;
+  expected_context_hash: Hash;
+  expected_session_generation: Int;
+  lease_resource: Qid;
+}
+
+record CausalApertureReceipt {
+  operation_id: Qid;
+  polarity: ChangePolarity;
+  subject: Qid;
+  decision: ApertureDecision;
+  context_hash: Optional<Hash>;
+  session_generation: Int;
+  lease_ref: Optional<Ref>;
+  effect_ref: Optional<Ref>;
+  provenance_hash: Hash;
+}
+
+fn classify_change(op: ClayCode) -> ChangePolarity {
+  if is_immutable_claim_append(op)
+     && preserves_prior_claim_atoms(op)
+     && preserves_contradictions_as_explicit_contest_edges(op)
+     && mints_no_resolution(op)
+     && requests_no_external_effect(op) {
+    return MONOTONE_APPEND;
+  }
+  if requests_external_effect(op) { return EXTERNAL_EFFECT; }
+  if retracts_prior_canonical_information(op) { return RETRACT; }
+  if collapses_alternatives_or_assumes_absence(op) { return NONMONOTONE_RESOLVE; }
+  return UNKNOWN;
+}
+
+fn aperture_decision(op: ClayCode) -> ApertureDecision {
+  let polarity = classify_change(op);
+  if polarity == MONOTONE_APPEND { return PARALLEL_APPEND; }
+  if polarity in {NONMONOTONE_RESOLVE, RETRACT, EXTERNAL_EFFECT, UNKNOWN} {
+    return REQUIRE_APERTURE;
+  }
+  return DENY;
+}
+
+fn admit_monotone_append(op: ClayCode, db: UnifiedDB) -> CausalApertureReceipt {
+  require aperture_decision(op) == PARALLEL_APPEND;
+  require immutable_append_only(op);
+  require no_delete(op);
+  require no_single_winner_projection_as_authority(op);
+  require no_effect(op);
+  require provenance_complete(op);
+  // Append-only concurrency is allowed only because prior facts/alternatives survive.
+  let atom = materialize_claim_atom(op);
+  db.append(atom);
+  db.append(all_detected_contest_edges(atom));
+  return receipt(op, MONOTONE_APPEND, PARALLEL_APPEND, None, None, None);
+}
+
+fn admit_nonmonotone(op: ClayCode, ctx: ContextWitness, db: UnifiedDB) -> CausalApertureReceipt {
+  require aperture_decision(op) == REQUIRE_APERTURE;
+  require ctx.exact_context_hash == recompute_context_hash(db, ctx.read_scope);
+  require ctx.session_generation == db.session_generation(ctx.session_id);
+  require ctx.lease != None;
+  require db.assert_lease(ctx.lease);
+  if classify_change(op) == EXTERNAL_EFFECT {
+    // Existing ClayVerse/EntityOS effect gate remains mandatory and stronger than MCA.
+    require ctx.lease.resource == "effect:entityos.exec";
+    require admitted_effect_gate(op);
+  }
+  if classify_change(op) == UNKNOWN {
+    // Unknown may never silently become monotone.
+    require explicit_owner_or_typed_contract_resolution(op);
+  }
+  return execute_under_aperture(op, ctx, db);
+}
+
+fn resolved_view(subject: Qid, db: UnifiedDB) -> DerivedProjection {
+  // A resolved/single-winner representation is a projection, never a second authority.
+  return derive_from_claim_atoms_and_contest_edges(db, subject);
+}
+
+invariant UNIFIEDDB_IS_ONLY_DURABLE_STATE_AUTHORITY
+invariant CLAYGRAPH_IS_DERIVED_REBUILDABLE_ONLY
+invariant MONOTONE_APPEND_NEVER_DELETES_OR_OVERWRITES_PRIOR_CLAIMS
+invariant CONTRADICTION_SURVIVES_AS_EXPLICIT_CONTEST_EDGE
+invariant RESOLUTION_RETRACTION_ABSENCE_ASSUMPTION_ALWAYS_CROSSES_APERTURE
+invariant EXTERNAL_EFFECT_ALWAYS_CROSSES_EXISTING_EFFECT_GATE_AND_ENTITYOS_LEASE
+invariant UNKNOWN_CLASSIFICATION_FAILS_CLOSED
+invariant MCA_MINTS_NO_TRUTH_EFFECT_OR_TRAINING_AUTHORITY
+invariant TESTED_SYNTHETIC_RESULT_IS_POSSIBILITY_NOT_PRODUCT_PASS
+
+// Required ablations / falsifiers.
+experiment F1_MISCLASSIFY_1_PERCENT_NONMONOTONE_AS_MONOTONE
+experiment F2_STALE_CONTEXT_HASH_ON_RESOLUTION
+experiment F3_CONCURRENT_CONTRADICTORY_APPEND_PRESERVES_BOTH
+experiment F4_EFFECT_ATTEMPT_WITHOUT_ENTITYOS_APERTURE_DENIED
+experiment F5_UNKNOWN_OPERATION_FAILS_CLOSED
+experiment F6_COMPARE_FULL_RESOURCE_LOCK_VS_CONTEXT_WITNESS_VS_MCA

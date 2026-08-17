@@ -10,6 +10,7 @@ from clayverse.terminal_sessions import TerminalSessionManager
 class _Completed:
     returncode = 0
     stderr = ""
+    stdout = ""
 
 
 def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
@@ -17,14 +18,11 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     settings = json.loads((root / "policy" / "managed-settings.json").read_text())
     managed_mcp = json.loads((root / "policy" / "managed-mcp.json").read_text())
     source_lock = json.loads((root / "SOURCE_LOCK.json").read_text())
-
     assert settings["allowManagedHooksOnly"] is True
     assert settings["allowManagedPermissionRulesOnly"] is True
     assert settings["allowManagedMcpServersOnly"] is True
     assert settings["allowedChannelPlugins"] == []
-    assert settings["allowedMcpServers"] == [
-        {"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}
-    ]
+    assert settings["allowedMcpServers"] == [{"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}]
     assert settings["permissions"]["disableBypassPermissionsMode"] == "disable"
     assert settings["permissions"]["deny"] == ["Bash", "Artifact"]
     assert settings["autoMemoryEnabled"] is False
@@ -59,7 +57,9 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_enforce_tmux_policy", lambda binding: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
     monkeypatch.setenv("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "1")
     monkeypatch.setenv("CLAYVERSE_ENTITYOS_PATH", "/opt/entityos/EntityOS")
     monkeypatch.setenv("CLAYVERSE_ENTITYOS_SHA256", "ab" * 32)
@@ -67,7 +67,7 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     calls = []
 
     def fake_run(argv, **kwargs):
-        calls.append(argv)
+        calls.append(list(argv))
         return _Completed()
 
     monkeypatch.setattr(subprocess, "run", fake_run)
@@ -81,6 +81,7 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     assert "CLAYVERSE_ENABLE_ENTITYOS_EXEC=1" in argv
     assert "CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS" in argv
     assert "CLAYVERSE_ENTITYOS_SHA256=" + "ab" * 32 in argv
+    assert "DISABLE_UPDATES=1" in argv
     assert "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1" in argv
     assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
     assert "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1" in argv
@@ -99,12 +100,7 @@ def test_direct_shell_guard_fails_closed_without_executing_payload(tmp_path):
     root = Path(__file__).parents[1]
     guard = root / "policy" / "deny-shell"
     marker = tmp_path / "must-not-exist"
-    cp = subprocess.run(
-        ["/bin/sh", str(guard), f"touch {marker}"],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    cp = subprocess.run(["/bin/sh", str(guard), f"touch {marker}"], capture_output=True, text=True, check=False)
     assert cp.returncode == 126
     assert cp.stdout == ""
     assert "direct shell execution is disabled" in cp.stderr

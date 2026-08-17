@@ -9,6 +9,13 @@ from clayverse.store import UnifiedDB
 from clayverse.turn_lifecycle import TurnLifecycle
 
 
+class _VerifiedEffectBridge:
+    sha256 = "a" * 64
+
+    def run(self, argv):
+        return {"ok": True, "exit": 0, "stdout": "", "stderr": ""}
+
+
 def _db(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     IdentityRouter(db, {})
@@ -40,9 +47,14 @@ def _prepare_verified_uncredited_outcome(db):
             json.dumps({"source": "test"}),
         ),
     )
-    life = TurnLifecycle(db, "gabriel", "session:gabriel")
+    life = TurnLifecycle(
+        db,
+        "gabriel",
+        "session:gabriel",
+        entityos_bridge=_VerifiedEffectBridge(),
+    )
     first = life.begin("outer orchid verified procedure")
-    effect = life.request_effect("state.noop", "outer-tx-credit")
+    effect = life.request_effect("entityos.exec", "outer-tx-credit", ["verified-outcome"])
     assert effect["verified"] is True
     assert life.complete("done")["completed"] is True
     assert db.db.execute(

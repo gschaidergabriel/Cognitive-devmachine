@@ -7,7 +7,7 @@ from .api_acceptance_probe import run_api_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .recovery import recover_incomplete_episodes
-from .service import _acceptance_bool, _clerk_map, _entityos_config
+from .service import _acceptance_effect_policy, _clerk_map, _entityos_config
 from .store import UnifiedDB
 
 
@@ -22,8 +22,12 @@ def main() -> int:
         clerk_map = _clerk_map()
         clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
         prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
-        require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+        require_effect, required_effect_capability = _acceptance_effect_policy()
         entityos_bridge, entityos_status = _entityos_config()
+        if required_effect_capability == "entityos.exec" and entityos_bridge is None:
+            raise RuntimeError(
+                "final EntityOS acceptance effect is required but EntityOS execution is disabled"
+            )
 
         payload = run_api_acceptance_probe(
             db,
@@ -32,6 +36,7 @@ def main() -> int:
             prompt,
             entityos_bridge=entityos_bridge,
             require_effect=require_effect,
+            required_effect_capability=required_effect_capability,
         )
         checkpoint_id, state_hash = db.checkpoint("generic-api-direct-probe")
         payload.update(

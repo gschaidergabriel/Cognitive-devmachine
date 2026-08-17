@@ -1,0 +1,78 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_at_join": "b5f862218752ceb24cfb3e2e1067522a0076db92",
+  "product_endpoint": "ClayVerse OCI image from the artefact/",
+  "status": "FUSED_CANDIDATE_BLOCKED_ON_EXECUTION_ADMISSION",
+  "integration": {
+    "branch": "go/integration-microclay-current-20260817-1315",
+    "head": "5083801c375b1f33dda3b6d1f265896a0b645eaa",
+    "draft_pr": 402,
+    "fused_candidates": [
+      {"pr": 393, "contract": "shared serving/shadow packing primitive and budget parity"},
+      {"pr": 396, "contract": "same-causal replay request identity including budget/limit; schema v7; readiness alignment"},
+      {"pr": 394, "contract": "bounded canonical retrieval receipt preserved into Claude world context"},
+      {"pr": 387, "contract": "MicroClay learning credit derives only from canonical causally re-entered verified outcomes"}
+    ],
+    "main_promoted": false
+  },
+  "coordination": {
+    "duplicate_closed": 398,
+    "reason": "PR #398 duplicates the replay-request identity mechanism retained more completely in #396; #396 additionally aligns schema-7 readiness/manifest and has broader regression obligations."
+  },
+  "execution": {
+    "vercel_sandbox_start_exec_surface_available": false,
+    "fallback_surface": "GitHub-hosted ubuntu-latest isolated runner",
+    "attempts": [
+      {
+        "source_head": "c67b15a58fb39c3bfad012bbfd78a58d6a35dab8",
+        "workflow_run": 32001249777,
+        "job": 95301879714,
+        "conclusion": "failure_before_step_execution",
+        "steps": null
+      },
+      {
+        "source_head": "5083801c375b1f33dda3b6d1f265896a0b645eaa",
+        "workflow_run": 32001305576,
+        "job": 95302030181,
+        "conclusion": "failure_before_step_execution",
+        "steps": null
+      }
+    ],
+    "executable_pass_claimed": false,
+    "failure_classification": "RUNNER_OR_CONTROL_PLANE_ADMISSION_FAILURE_NOT_TEST_FAILURE"
+  },
+  "planned_exact_regression_set": [
+    "tests/test_microclay_retrieval_budget_parity.py",
+    "tests/test_microclay_replay_full_identity.py",
+    "tests/test_microclay_replay_identity.py",
+    "tests/test_microclay_replay_integration.py",
+    "tests/test_microclay_receipt_context.py",
+    "causal-outcome learning regressions carried by PR #387"
+  ],
+  "unusual_experiment": {
+    "name": "DURABLE_RECEIPT_BUDGET_TAMPER",
+    "contract": "after one canonical retrieval, corrupt persisted retrieval_episodes.budget_chars while keeping the original causal/query request; exact replay must fail closed with retrieval_identity rather than serve or learn",
+    "execution_state": "NOT_EXECUTED_RUNNER_ADMISSION_FAILED",
+    "macrocycle_slot": "0/1_consumed"
+  },
+  "claims": {
+    "source_fusion_observed": true,
+    "mergeability_of_fused_candidates_observed": true,
+    "runtime_or_test_behavior_observed": false,
+    "microclay_active_promotion_authorized": false,
+    "whole_clayverse_pass": false
+  },
+  "next_exact_gate": "On the next actually-started authorized isolated execution surface, execute integration head 5083801c375b1f33dda3b6d1f265896a0b645eaa (or a freshly rebased byte-equivalent successor) with the focused regression set, the single DURABLE_RECEIPT_BUDGET_TAMPER experiment, adjacent restart/generation/current-turn-echo/UNKNOWN invariants, then only if green run the broader ClayVerse suite and exact OCI build/runtime lane. Capture exact source SHA, commands, step logs, exit codes and artifact/image digest.",
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

@@ -6,6 +6,7 @@ import threading
 import time
 import uuid
 
+from .agency import AgencyState
 from .effects import EffectGate, EffectRequest
 from .entityos_bridge import EntityOSBridge
 from .graph import ClayGraphProjection
@@ -37,6 +38,7 @@ class ClayVerseEngine:
     ):
         self.db = db
         self.identity = IdentityRouter(db, clerk_map)
+        self.agency = AgencyState(db)
         self.memory = MemoryManager(db)
         self.world = WorldAssembler(db)
         self.workspace = Workspace(db)
@@ -60,8 +62,6 @@ class ClayVerseEngine:
         }
         receipt = decision.get("inference_receipt") if isinstance(decision, dict) else None
         if isinstance(receipt, dict):
-            # Provider adapters may attach non-secret identity/digest metadata only.
-            # UnifiedDB serialisation remains the independent fail-closed boundary.
             provenance["inference_receipt"] = receipt
         return provenance
 
@@ -88,6 +88,9 @@ class ClayVerseEngine:
         self.memory.compact(sid)
 
         world = self.world.assemble(sid, resources)
+        # Identity/goals/autonomy are canonical state, not prose instructions. Every
+        # inference receives the same grounded snapshot derived from UnifiedDB.
+        world["agency"] = self.agency.snapshot(max_goals=8, max_attempts_per_milestone=5)
         world["runtime_capabilities"] = list(self.effects.available_capabilities())
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)

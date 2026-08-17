@@ -1,56 +1,79 @@
-# ClayVerse testing strategy — maximum evidence before final OCI gate
+# ClayVerse testing strategy — maximum evidence before final MicroVM gate
 
 This policy applies to every product-convergent ClayVerse cycle until replaced by a later owner directive.
 
 ## Operating rule
 
-The unavailable direct Vercel Git-project connection is **not a development blocker**. Exact whole-container OCI/Sandbox execution remains the final acceptance gate, but source/product convergence continues without waiting for it.
+Missing one external execution surface is **not a development blocker**. Source/product convergence continues while every independently executable evidence layer is maximized.
 
-Every change must be tested as broadly as the currently authorized isolated tools permit. Missing one execution surface must not suppress independent tests that are still possible.
+No source/component/container result may be promoted to whole-product PASS. Final `WHOLE_CLAYVERSE_PASS` requires the exact accepted ClayVerse OCI image to execute successfully **inside the mandatory independent guest-kernel VM/microVM envelope** defined by `deployment/MICROVM_DEPLOYMENT_CONTRACT.md`.
 
-No source/component result may be promoted to whole-product PASS. The final ClayVerse container remains `IN_PROGRESS` until an exact admitted OCI image executes the whole required path.
+Direct host-kernel OCI execution remains useful development/component evidence only.
 
 ## Required test fan-out
 
 For each material change, select every applicable independent layer rather than a single happy-path test:
 
 1. **Static/source integrity** — syntax/compile/import checks, schema validation, source-order/authority guards, forbidden-path scans, exact lock/digest checks and source-diff review.
-2. **Unit and contract tests** — focused unit tests plus cross-module invariants for UnifiedDB authority, ClayGraph derivation, canonical users/sessions, managed hooks, EffectGate and packaging boundaries.
-3. **Negative/fail-closed tests** — missing/corrupt/stale identity, malformed input, wrong digest, expired/replayed auth, unknown tmux diagnostics, forbidden effects, absent runtime dependencies and partial state.
-4. **Adversarial and mutation tests** — deliberately perturb trusted assumptions and verify the candidate rejects or recovers correctly. Unusual experiments still require the project coordination lease; ordinary deterministic adversarial regression does not consume that slot.
-5. **Persistence/restart tests** — process death, clean/unclean restart, stale sessions, interrupted writes, recovery/idempotency and generation continuity, using disposable isolated state only.
-6. **Concurrency/race tests** — Gabriel/Andreas simultaneous sessions, reauth during work, competing hooks/effects, duplicate delivery, ordering changes and global-generation fencing.
-7. **Property/fuzz tests** — bounded randomized inputs or state-machine sequences where deterministic unit cases cannot adequately cover the state space. Seeds and failing cases must be preserved in receipts/tests.
+2. **Unit and contract tests** — focused unit tests plus cross-module invariants for UnifiedDB authority, ClayGraph derivation, canonical users/sessions, managed hooks, EffectGate, provider boundaries, packaging and deployment boundaries.
+3. **Negative/fail-closed tests** — missing/corrupt/stale identity, malformed input, wrong digest, expired/replayed auth, unknown tmux diagnostics, forbidden effects, absent runtime dependencies, leaked/missing model credentials and partial state.
+4. **Adversarial and mutation tests** — deliberately perturb trusted assumptions and verify the candidate rejects or recovers correctly. Ordinary deterministic adversarial regression does not consume the unusual-experiment slot.
+5. **Persistence/restart tests** — process death, clean/unclean restart, stale sessions, interrupted writes, recovery/idempotency and generation continuity using disposable isolated state.
+6. **Concurrency/race tests** — Gabriel/Andreas simultaneous sessions, reauth during work, provider switching, competing hooks/effects, duplicate delivery, ordering changes and global-generation fencing.
+7. **Property/fuzz tests** — bounded randomized inputs/state-machine sequences with preserved seeds/failing cases.
 8. **Supply-chain/reproducibility tests** — source locks, hashes, exact filenames/versions, offline installation where applicable, double-build/double-generation byte comparisons and dependency identity capture.
-9. **Runtime-component tests** — real tmux/Claude/PTY/process behavior on any authorized disposable execution surface available to the worker, while clearly recording when the runtime is not the exact final OCI runtime.
-10. **Integration simulations** — exercise Clerk/JWT, WebSocket PTY, hooks, UnifiedDB, recovery and EffectGate boundaries together using mocks/fakes only where real external services are unavailable; mocks never count as external-runtime proof.
-11. **Resource/failure injection** — bounded timeouts, cancellation, process termination, locked database, unavailable dependency/network and other safe disposable failure modes when relevant. Never run destructive tests against production, VPS or persistent owner systems.
-12. **Regression breadth** — after a focused fix passes, run the largest relevant adjacent suite the available environment can support so repairs do not silently regress retained lanes.
+9. **Runtime-component tests** — real tmux/Claude/PTY/EntityOS/provider-client behavior on authorized disposable execution surfaces, clearly recording when the runtime is not the exact final MicroVM runtime.
+10. **Integration simulations** — Clerk/JWT, WebSocket PTY, hooks, UnifiedDB, LLM provider boundary, recovery and EffectGate together; mocks never count as external-runtime proof.
+11. **Resource/failure injection** — timeouts, cancellation, process termination, locked database, unavailable dependency/network and safe resource pressure on disposable state only.
+12. **Regression breadth** — after a focused fix passes, run the broadest relevant adjacent suite the available environment supports.
 
 ## Mandatory machine-continuum crash/recovery matrix
 
-The final architecture is a sealed VM-like ingress/process/egress continuum with automatic known-good snapshot recovery. Recovery is therefore a first-class product behavior, not an optional reliability feature.
+Every material recovery implementation must cover every applicable case below:
 
-Every material recovery implementation must cover every applicable case below with disposable state:
-
-- kill EntityOS during idle and during an active command;
-- kill the managed terminal/PTY/tmux child while a causal turn remains open;
+- kill EntityOS idle and during an active command;
+- kill managed PTY/tmux/Claude client while a causal turn remains open;
+- fail GLM request/timeout and inject a stale GLM response after generation change;
 - crash before an external effect is emitted, after emission but before acknowledgement, and after durable acknowledgement;
-- interrupt UnifiedDB writes/WAL activity and verify recovery returns to one internally consistent canonical generation;
-- inject a stale result from the pre-crash generation after recovery and require fail-closed rejection;
-- corrupt or truncate the newest snapshot candidate and require fallback to the previous accepted known-good snapshot;
-- crash again while recovery is in progress and require bounded/idempotent recovery rather than split-brain state;
-- verify pending or ambiguous external effects become `UNKNOWN_AFTER_CRASH`/equivalent and are not blindly replayed;
-- verify explicitly idempotent effects may replay only when the EffectJournal proves replay safety;
-- verify ingress is frozen while the machine continuum is inconsistent and resumes only after UnifiedDB, EntityOS, terminal, Claude and policy/readiness attestations rejoin one generation;
-- verify snapshot metadata binds UnifiedDB checkpoint identity, global/session generations, EntityOS/config/policy hashes, causal queue position and EffectJournal state;
-- verify no snapshot restore can resurrect stale authorization, stale terminal sessions, stale effect leases or an old global generation.
+- interrupt UnifiedDB writes/WAL and recover to one consistent canonical generation;
+- inject stale pre-crash results after recovery and require fail-closed rejection;
+- corrupt/truncate newest snapshot and require fallback to the previous accepted known-good snapshot;
+- crash again during recovery and require bounded/idempotent recovery rather than split brain;
+- ambiguous effects become `UNKNOWN_AFTER_CRASH`/equivalent and are not blindly replayed;
+- idempotent effects replay only when the EffectJournal proves replay safety;
+- ingress remains frozen while the continuum is inconsistent;
+- snapshot metadata binds UnifiedDB checkpoint, generations, EntityOS/config/policy hashes, causal queue position and EffectJournal state;
+- snapshot restore cannot resurrect stale authorization, terminal sessions, effect leases or generations.
 
-A process-memory/CRIU/filesystem snapshot may be tested as an implementation optimization, but it never substitutes for these logical consistency and effect-replay guarantees.
+## Mandatory LLM-provider matrix
+
+- Claude Code authenticates and operates through the managed internal terminal login/runtime path;
+- Claude credential/session material is not canonical UnifiedDB cognition/memory and does not appear in receipts/logs;
+- GLM token is injected only through the secret boundary and never appears in source, UnifiedDB, snapshots, receipts or logs;
+- GLM receives no terminal/filesystem/EntityOS/EffectGate authority;
+- provider switching preserves the same causal turn/session/global generation;
+- model output from either provider is re-ingested as proposed action and cannot self-authorize execution.
+
+## Mandatory MicroVM outer-envelope matrix
+
+Final acceptance additionally requires all applicable checks below on the exact accepted image digest:
+
+- launch through a VM/microVM OCI runtime such as the admitted Kata RuntimeClass rather than the default host-kernel runtime;
+- prove the image digest executed in the guest equals the accepted image digest exactly;
+- capture/attest microVM runtime identity/version and guest-kernel identity;
+- prove the workload is behind an independent guest-kernel execution boundary;
+- prove root filesystem read-only enforcement and undeclared-write denial;
+- prove there is no `hostPath`, host PID/IPC/network authority or hidden host-shell execution path;
+- prove only declared state/workspace persistent volumes survive full workload/microVM replacement;
+- kill EntityOS and prove Tier-1 reconstruction;
+- destroy/recreate the full workload/microVM and prove Tier-2 recovery from the same image digest plus UnifiedDB/WAL/known-good logical snapshot;
+- prove stale results from the destroyed generation are rejected;
+- crash around effect acknowledgement and prove no blind external replay;
+- prove Claude direct-terminal login path and GLM inference-only secret boundary still satisfy their contracts inside the guest.
+
+A normal OCI/container PASS without this independent guest-kernel layer is bounded evidence only.
 
 ## Evidence ladder
-
-Use the strongest honest classification supported by execution:
 
 - `SOURCE_INSPECTED`
 - `STATIC_CONTRACT_PASS`
@@ -59,22 +82,21 @@ Use the strongest honest classification supported by execution:
 - `COMPONENT_RUNTIME_PASS`
 - `MULTICOMPONENT_INTEGRATION_PASS`
 - `EXACT_OCI_COMPONENT_PASS`
+- `EXACT_MICROVM_COMPONENT_PASS`
 - `WHOLE_CLAYVERSE_PASS`
 
-A higher class must not be inferred from a lower one. Historical or different-version runtime evidence remains bounded supporting evidence.
+A higher class must not be inferred from a lower one.
 
-## Final deferred gate
+## Final exact gate
 
-When an authorized isolated OCI/Sandbox route becomes available, perform one exact closure from freshly refreshed canonical bytes:
+`exact source -> reproducible OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only runtime -> same exact digest launched inside VM/microVM guest kernel -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> full microVM/workload destruction/recreation -> WAL/snapshot/new-generation recovery/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> final acceptance`.
 
-`exact source -> reproducible image/digest -> resolved dependency identities -> sealed ingress/egress boundary -> complete accepted EntityOS + UnifiedDB machine continuum -> managed Linux terminal/PTY/tmux -> Claude cognition/re-ingest/execute/result loop -> crash/snapshot automatic recovery -> Clerk/WebSocket PTY -> managed hooks -> EffectGate -> persistence/restart/recovery -> dual-user concurrency/global-generation -> final acceptance`.
-
-Until that exact closure succeeds, continue maximizing all lower evidence layers rather than waiting on Vercel setup.
+Until that exact closure succeeds, continue maximizing all lower evidence layers.
 
 ## Safety boundaries
 
-- No VPS/self-hosted/production-host testing.
+- No VPS/self-hosted/production-host testing unless separately authorized as deployment validation.
 - No Together API.
-- No secret persistence in source, receipts or logs.
+- No secret persistence in source, UnifiedDB, snapshots, receipts or logs.
 - Paid/final training remains owner-authorization-only.
-- Tests use disposable/isolated state and must not endanger canonical owner data.
+- Destructive tests use disposable/isolated state only.

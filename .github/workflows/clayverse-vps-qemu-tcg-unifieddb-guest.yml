@@ -121,7 +121,9 @@ jobs:
           if actual_sha != expected_sha:
               raise SystemExit(f'PRODUCT_SOURCE_SHA_MISMATCH:{actual_sha}:{expected_sha}')
           spec=importlib.util.spec_from_file_location('clayverse_store_exact',store_path)
-          mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+          mod=importlib.util.module_from_spec(spec)
+          sys.modules[spec.name]=mod
+          spec.loader.exec_module(mod)
           db_path='/var/lib/clayverse-smoke/unified.db'
           pathlib.Path(db_path).parent.mkdir(parents=True,exist_ok=True)
           db=mod.UnifiedDB(db_path)
@@ -320,7 +322,7 @@ jobs:
           pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
           print(json.dumps(payload,sort_keys=True))
           if not payload['guest_runtime_pass']:
-              raise SystemExit(61)
+            raise SystemExit(61)
           PY
 
       - name: Upload bounded guest product receipt

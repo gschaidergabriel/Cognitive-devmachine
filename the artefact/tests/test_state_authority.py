@@ -68,7 +68,7 @@ def test_schema2_hidden_raw_ledger_is_retired_on_open(tmp_path):
 
     reopened = UnifiedDB(path)
     assert not _table_exists(reopened, "turn_ledger")
-    assert reopened.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "3"
+    assert reopened.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "5"
     assert reopened.db.execute("SELECT content FROM turns WHERE turn_id=?", (turn_id,)).fetchone()[0] == "ordinary full turn"
     reopened.close()
 

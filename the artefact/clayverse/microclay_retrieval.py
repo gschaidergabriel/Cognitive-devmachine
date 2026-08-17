@@ -350,12 +350,13 @@ class MicroClayRetrieval:
         signal_class: str,
         receipt_id: str | None = None,
     ) -> dict[str, Any]:
-        """Apply provenance-bound outcome credit to retrieval policy only.
+        """Apply only the canonical causally re-entered effect outcome to retrieval policy.
 
-        Replaying the same receipt is idempotent; stale generations are rejected.
-        No durable-memory row is changed.
+        Caller-supplied credit, signal class and receipt identity are treated as claims
+        to verify against UnifiedDB, not as learning authority. Replays are idempotent;
+        stale generations and forged/missing outcome evidence fail closed. Durable
+        memory content and semantic truth remain untouched.
         """
-        value = max(-1.0, min(1.0, float(credit)))
         row = self.db.db.execute(
             "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",
             (causal_id,),
@@ -366,9 +367,29 @@ class MicroClayRetrieval:
             raise StaleGeneration("retrieval_generation")
         self.db.assert_live_generation(row["session_id"], generation)
 
-        rid = receipt_id or hashlib.sha256(
-            f"{row['retrieval_id']}\x1f{causal_id}\x1f{generation}\x1f{signal_class}\x1f{value:.9f}".encode()
+        outcome = self.db.db.execute(
+            "SELECT c.credit,e.status FROM causal_episodes c "
+            "JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE c.causal_id=? AND c.reentered=1",
+            (causal_id,),
+        ).fetchone()
+        if not outcome:
+            return {"applied": False, "reason": "unverified_outcome"}
+
+        value = max(-1.0, min(1.0, float(outcome["credit"])))
+        expected_signal = f"effect_outcome:{outcome['status']}"
+        try:
+            claimed_value = max(-1.0, min(1.0, float(credit)))
+        except (TypeError, ValueError):
+            return {"applied": False, "reason": "outcome_claim_mismatch"}
+        if claimed_value != value or str(signal_class) != expected_signal:
+            return {"applied": False, "reason": "outcome_claim_mismatch"}
+
+        rid = hashlib.sha256(
+            f"{row['retrieval_id']}\x1f{causal_id}\x1f{generation}\x1f{expected_signal}\x1f{value:.9f}".encode()
         ).hexdigest()
+        if receipt_id is not None and str(receipt_id) != rid:
+            return {"applied": False, "reason": "receipt_identity_mismatch", "receipt_id": rid}
         exists = self.db.db.execute(
             "SELECT 1 FROM retrieval_feedback WHERE receipt_id=?", (rid,)
         ).fetchone()
@@ -402,7 +423,7 @@ class MicroClayRetrieval:
         self.db.db.execute(
             "INSERT INTO retrieval_feedback(receipt_id,retrieval_id,causal_id,generation,"
             "credit,signal_class,ts) VALUES(?,?,?,?,?,?,?)",
-            (rid, row["retrieval_id"], causal_id, int(generation), value, str(signal_class)[:80], now),
+            (rid, row["retrieval_id"], causal_id, int(generation), value, expected_signal, now),
         )
         return {
             "applied": True,

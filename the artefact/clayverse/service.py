@@ -15,6 +15,24 @@ from .terminal_gateway import create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
 
+_WEBSOCKET_MAX_MESSAGE_BYTES = 65_536
+_WEBSOCKET_MAX_QUEUE = 8
+
+
+def _uvicorn_transport_config(host: str, port: int) -> dict[str, object]:
+    """Bound WebSocket buffering before terminal frames reach the ASGI application."""
+    return {
+        "host": host,
+        "port": port,
+        "workers": 1,
+        "access_log": False,
+        "ws": "websockets",
+        "ws_max_size": _WEBSOCKET_MAX_MESSAGE_BYTES,
+        "ws_max_queue": _WEBSOCKET_MAX_QUEUE,
+        "ws_per_message_deflate": False,
+    }
+
+
 def _clerk_map() -> dict[str, str]:
     raw = os.environ.get("CLAYVERSE_CLERK_MAP_JSON", "")
     if not raw:
@@ -146,7 +164,7 @@ def main():
     }), flush=True)
 
     try:
-        uvicorn.run(app, host=host, port=port, workers=1, access_log=False)
+        uvicorn.run(app, **_uvicorn_transport_config(host, port))
     finally:
         db.checkpoint("shutdown")
         db.close()

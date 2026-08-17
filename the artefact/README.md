@@ -53,6 +53,8 @@ Deployment authority:
 
 The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs`, runs exactly one ClayVerse replica, disables host PID/IPC/network authority, disables automatic ServiceAccount-token mounting, drops capabilities, enforces a read-only root filesystem, uses memory-backed `/tmp` and `/run`, and persists only declared ClayVerse state/workspace volumes.
 
+The same template now also selects the ClayVerse pod with an explicit **default-deny `NetworkPolicy` for both ingress and egress**. It is intentionally network-nonfunctional until a separate deployment-specific reviewed allow policy is supplied. `hostNetwork: false` alone is not treated as network isolation. Final acceptance must bind the exact allow-policy bytes/identity, prove the chosen CNI actually enforces NetworkPolicy, and show that only admitted flows open while tested non-admitted flows remain denied.
+
 The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
 ### Retained convergence lanes
@@ -72,6 +74,8 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 - an independent guest-kernel boundary rather than host-kernel execution;
 - read-only root and denial of undeclared writes/host mounts;
 - only declared persistent volumes survive full appliance replacement;
+- baseline ClayVerse ingress+egress deny is actually enforced by the deployed CNI;
+- the exact reviewed network allow policy opens only admitted paths while tested non-admitted flows remain denied;
 - Tier-1 EntityOS/internal recovery;
 - Tier-2 full microVM/workload replacement from the same image digest;
 - UnifiedDB/WAL/snapshot recovery under a new generation;
@@ -82,26 +86,25 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 ### Current execution boundary
 
-The architecture and deployable Kata profile are now canonical source. **Actual Kata/microVM execution has not yet been observed for the exact final ClayVerse image**, so no VM-isolation runtime credit or whole-product PASS is claimed.
+The architecture and fail-closed Kata deployment profile are now canonical source. **Actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
-Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The final release discriminator is now stronger: the completed exact image must also pass inside the mandatory VM/microVM outer envelope.
+Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The final release discriminator is stronger: the completed exact image must also pass inside the mandatory VM/microVM outer envelope with its admitted network boundary enforced.
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 21:17 +07:00 — architecture strengthened: the outer VM/microVM envelope is now mandatory for final ClayVerse acceptance, not an optional future hardening.**
+**2026-08-17 22:50 +07:00 — MicroVM network boundary hardened fail-closed on canonical `main`.**
 
-- new global directive: `research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md`;
-- new deployment contract: `the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md`;
-- new concrete Kata StatefulSet template: `the artefact/deployment/clayverse-kata-statefulset.template.yaml`;
-- new static deployment-contract regression: `the artefact/tests/test_microvm_deployment_contract.py`;
-- the product artifact remains one ClayVerse OCI image; the MicroVM is an execution envelope, not a second product/entity;
-- Claude Code remains direct terminal-login; GLM remains token/API inference-only;
-- no actual final MicroVM runtime test has been executed in this architecture cycle, therefore acceptance remains `IN_PROGRESS`.
+- the Kata StatefulSet template now contains `clayverse-default-deny`, selecting `app=clayverse` with both `Ingress` and `Egress` policy types and empty rule sets;
+- `MICROVM_DEPLOYMENT_CONTRACT.md` now states explicitly that `hostNetwork: false` is insufficient and requires a separate deployment-specific reviewed allow policy whose exact identity is acceptance evidence;
+- `tests/test_microvm_deployment_contract.py` now fences the deny-all policy and rejects broad `0.0.0.0/0` / `::/0` source-template escapes;
+- this closes the source-level gap previously identified on the retained #623 lane without creating a second network authority or a duplicate product path;
+- this is **source/contract hardening only**: no exact Kubernetes/Kata/CNI runtime enforcement test has executed for the final image, so runtime credit remains zero for this boundary;
+- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because this user trigger exposes only minute-precision immutable message time and no shared immutable request/turn id; ordinary source review/regression work remains allowed.
 
 ## Verification
 
-Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract.
+Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including actual enforcement of the accepted ingress/egress policy.

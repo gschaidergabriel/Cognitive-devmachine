@@ -73,7 +73,7 @@ Whole-product PASS requires this exact closure. Source inspection, static tests,
 
 ### Latest cycle delta
 
-**2026-08-17 20:58 +07:00 — #625 tokenless baseline was hardened at build-context, Compose and normal runtime boundaries.**
+**2026-08-17 21:01 +07:00 — #625 tokenless baseline was hardened at build-context, Compose, normal runtime and retained boot-regression boundaries.**
 
 - Adversarial build-context review removed recursive optional-EntityOS sibling admission and added focused source-contract coverage; the parallel retained-lane receipt reports **5 focused tests PASS** plus valid/wrong-digest/symlink staging checks on an isolated non-production surface. This remains bounded source-contract evidence, not Docker/OCI runtime credit.
 - Compose integration review found that `compose.yaml` still required `CLAYVERSE_ENTITYOS_SHA256` even though the Dockerfile baseline made EntityOS optional. The same #625 lane now permits an absent digest in Compose while retaining execution-disabled baseline and mandatory Clerk/auth interpolation. Exact Git blobs used for the focused rerun: Compose `de5766a950bec7dc7768b5944d6fa4b5aced2f9b`, regression `4adc5944be46c7a216223560e7260ecc7a625697`, Dockerfile `2ee2fe84f1fd7219869380ce3c864cade90c6c31`, `.gitignore` `8bdddac545b4b691f2c74a164d53261fbe64438d`. Exact reconstructed focused regression: **3/3 PASS**; YAML parse PASS. No Docker/Podman binary was available, so resolved Compose/OCI behavior remains unobserved. Receipt: `the artefact/receipts/2026-08-17_GO_2053_PR625_COMPOSE_TOKENLESS_ENTITYOS_FENCE_GPT56SOL.json`.
@@ -82,7 +82,9 @@ Whole-product PASS requires this exact closure. Source inspection, static tests,
 - Expanded `tests/test_service_entityos_optional_baseline.py` covers absent baseline, execution-without-pin, unpinned regular bytes, unpinned symlink, pinned-but-exec-disabled verification, and pinned+exec-enabled bridge exposure.
 - Exact Git blobs observed after the runtime write: `service.py` `c9151e339c0ec4b23a454ee7684a6bd9255bf229`; expanded optional-runtime regression `a9bc8e2941800591bb38a7becac1e2ea81e1652b`.
 - Bounded exact-function/test-slice check on an isolated non-production container: `py_compile` PASS and **6/6 pytest PASS in 0.06s**. This is not full-branch pytest, OCI build or packaged service runtime evidence.
-- Runtime-fence receipt: `the artefact/receipts/2026-08-17_GO_2058_PR625_OPTIONAL_ENTITYOS_RUNTIME_FENCE_GPT56SOL.json`.
+- The retained `tests/test_entityos_boot_binding.py` still asserted the retired `CLAYVERSE_REQUIRE_ENTITYOS` contract. It was synchronized in commit `96ccdc6ec66ddd90cdd35d7a6f824907bdeabdd1` to the current execution-gated optional-EntityOS contract; exact Git blob `e672c112a8c14445cbc387f36786290a9f5c3f82`.
+- A bounded combined boot/runtime contract reconstruction exercised the updated boot regression together with the expanded optional-runtime slice: **14/14 PASS in 0.04s**. This evidence is explicitly not a byte-for-byte full-branch checkout, full pytest, OCI build or packaged service runtime result.
+- Runtime/boot receipts: `the artefact/receipts/2026-08-17_GO_2058_PR625_OPTIONAL_ENTITYOS_RUNTIME_FENCE_GPT56SOL.json` and `the artefact/receipts/2026-08-17_GO_2101_PR625_ENTITYOS_BOOT_REGRESSION_SYNC_GPT56SOL.json`.
 - No duplicate packaging/runtime lane was created; parallel #625 hardening was adopted into the same retained branch.
 - GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed.
 - No whole-product PASS, VPS/self-hosted/production testing, Together API, paid/final training or secret persistence is claimed.

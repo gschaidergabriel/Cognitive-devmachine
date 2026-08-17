@@ -16,11 +16,13 @@ class WorldAssembler:
         self.methods = MicroClayMethodRetrieval(db)
 
     def _extracted_fragments(self, turn_id):
+        excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
         rows = self.db.db.execute(
             "SELECT kind,value,provenance FROM durable_memory "
-            "WHERE source_turn_id=? AND kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+            "WHERE source_turn_id=? "
+            f"AND kind NOT IN ({','.join('?' for _ in excluded)}) "
             "ORDER BY ts LIMIT 20",
-            (turn_id,),
+            (turn_id, *excluded),
         ).fetchall()
         return [dict(r) for r in rows]
 
@@ -141,7 +143,6 @@ class WorldAssembler:
                     "method_present": bool(method_context or counterevidence),
                 }]
         else:
-            # Legacy/non-product callers cannot collapse method memory into facts.
             excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
             memories = [
                 dict(r)

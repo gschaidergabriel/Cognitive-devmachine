@@ -13,6 +13,7 @@ from .effect_journal import EffectJournal
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
+_CANONICAL_USERS = frozenset({"gabriel", "andreas"})
 
 
 @dataclass(frozen=True)
@@ -50,10 +51,9 @@ class MicroClayRetrieval:
     The adaptive policy starts in SHADOW. Classical retrieval remains the serving
     path until an explicit externally validated promotion changes the mode.
 
-    Policy version 3 adds learned query-cue -> exact-memory entry routes. Entry-policy
-    keys are version-scoped so persisted v1/v2 capital cannot silently change v3
-    behavior. A persisted ACTIVE mode from a different policy version is treated
-    as SHADOW until that exact policy version is explicitly promoted.
+    Policy version 3 binds all adaptive capital to one canonical user perspective
+    and binds learned query cues to exact memory identities. Persisted v1/v2 capital
+    is not silently reinterpreted under the stronger scope semantics.
     """
 
     POLICY_VERSION = 3
@@ -80,14 +80,16 @@ class MicroClayRetrieval:
         return "cue:" + hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
 
     @classmethod
-    def _policy_key(cls, key: str) -> str:
-        return f"v{cls.POLICY_VERSION}:{key}"
+    def _policy_key(cls, user_id: str, key: str) -> str:
+        if user_id not in _CANONICAL_USERS:
+            raise ValueError("MicroClay policy requires canonical user scope")
+        return f"v{cls.POLICY_VERSION}:user:{user_id}:{key}"
 
     @classmethod
-    def _route_key(cls, token: str, memory_id: str) -> str:
+    def _route_key(cls, user_id: str, token: str, memory_id: str) -> str:
         cue = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
         target = hashlib.sha256(memory_id.encode("utf-8")).hexdigest()[:16]
-        return cls._policy_key(f"route:{cue}:{target}")
+        return cls._policy_key(user_id, f"route:{cue}:{target}")
 
     @staticmethod
     def _safe_provenance(raw: str) -> dict[str, Any]:
@@ -105,7 +107,6 @@ class MicroClayRetrieval:
         budget_chars: int,
         allow_learned_route: bool = False,
     ) -> tuple[list[RetrievalCandidate], int]:
-        """Apply the existing count/character budget to one ranked candidate list."""
         selected: list[RetrievalCandidate] = []
         chars = 0
         for item in candidates:
@@ -114,9 +115,6 @@ class MicroClayRetrieval:
             ):
                 continue
             item_chars = len(item.value)
-            # Preserve the current serving contract: the first item may exceed the
-            # retrieval-local budget; the later whole-context bound remains the
-            # final fail-closed envelope.
             if selected and chars + item_chars > budget_chars:
                 continue
             selected.append(item)
@@ -135,16 +133,19 @@ class MicroClayRetrieval:
             return self.DEFAULT_MODE
         return row["mode"]
 
-    def _policy_capitals(self) -> dict[str, float]:
+    def _policy_capitals(self, user_id: str) -> dict[str, float]:
+        prefix = self._policy_key(user_id, "")
         return {
             str(row["entry_key"]): float(row["capital"])
             for row in self.db.db.execute(
-                "SELECT entry_key,capital FROM retrieval_entrypoint_policy"
+                "SELECT entry_key,capital FROM retrieval_entrypoint_policy WHERE entry_key LIKE ?",
+                (prefix + "%",),
             ).fetchall()
         }
 
     def _entry_keys(
         self,
+        user_id: str,
         kind: str,
         subject: str,
         memory_id: str,
@@ -152,26 +153,23 @@ class MicroClayRetrieval:
         value_tokens: set[str],
     ) -> tuple[str, ...]:
         keys = [
-            self._policy_key(f"kind:{kind}"),
-            self._policy_key(f"subject:{subject}"),
+            self._policy_key(user_id, f"kind:{kind}"),
+            self._policy_key(user_id, f"subject:{subject}"),
         ]
         for token in sorted(query_tokens.intersection(value_tokens)):
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
-            keys.append(self._policy_key(self._token_key(token)))
-        # Query-only cues are bounded hashed proposals to this exact durable memory.
-        # They are learned only when that evidence was actually served and later
-        # receives canonical outcome credit. Generic kind/subject capital therefore
-        # cannot open a sibling memory on a lexical miss.
+            keys.append(self._policy_key(user_id, self._token_key(token)))
         for token in sorted(query_tokens.difference(value_tokens)):
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
-            keys.append(self._route_key(token, memory_id))
+            keys.append(self._route_key(user_id, token, memory_id))
         return tuple(keys)
 
     def _score_candidate(
         self,
         row,
+        user_id: str,
         query_tokens: set[str],
         now: float,
         capitals: dict[str, float],
@@ -194,25 +192,20 @@ class MicroClayRetrieval:
         structured = 1.0 if kind in {
             "fact", "decision", "task", "commitment", "preference", "open", "open_question"
         } else 0.4
-        # No cue match means UNKNOWN on the deterministic serving baseline. The
-        # adaptive policy may only propose a miss via a positively learned route.
         baseline = (
             (0.82 * lexical) + (0.12 * recency) + (0.06 * structured)
             if lexical > 0.0 else 0.0
         )
 
-        keys = self._entry_keys(kind, subject, memory_id, query_tokens, value_tokens)
+        keys = self._entry_keys(user_id, kind, subject, memory_id, query_tokens, value_tokens)
         bounded_capitals = {
             key: max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, capitals.get(key, 0.0)))
             for key in keys
         }
         learned = sum(bounded_capitals.values()) / max(1, len(keys))
+        route_prefix = self._policy_key(user_id, "route:")
         learned_route = max(
-            (
-                capital
-                for key, capital in bounded_capitals.items()
-                if key.startswith(self._policy_key("route:"))
-            ),
+            (capital for key, capital in bounded_capitals.items() if key.startswith(route_prefix)),
             default=0.0,
         )
         adaptive = baseline + 0.08 * learned
@@ -231,12 +224,7 @@ class MicroClayRetrieval:
         )
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume only known, reward-eligible effect outcomes from retrieval episodes.
-
-        Learning is delayed until a causally re-entered external outcome exists. Pure
-        conversational completion is not reward. Uncertain/stale outcomes and capabilities
-        explicitly marked non-rewarding by EffectJournal must not create access-rent pulls.
-        """
+        """Consume only known, reward-eligible effect outcomes from retrieval episodes."""
         self.db.assert_live_generation(session_id, generation)
         statuses = tuple(sorted(self.AUTOMATIC_OUTCOME_STATUSES))
         non_rewarding = tuple(sorted(EffectJournal.NON_REWARDING_CAPABILITIES))
@@ -286,6 +274,8 @@ class MicroClayRetrieval:
     ) -> dict[str, Any]:
         if not isinstance(query, str) or not query.strip():
             raise ValueError("MicroClay retrieval requires a non-empty query")
+        if user_id not in _CANONICAL_USERS:
+            raise ValueError("MicroClay retrieval requires canonical user scope")
         if limit < 1 or limit > 100:
             raise ValueError("invalid retrieval limit")
         if budget_chars < 256 or budget_chars > 200_000:
@@ -304,7 +294,9 @@ class MicroClayRetrieval:
         if existing:
             if (
                 existing["session_id"] != session_id
+                or existing["user_id"] != user_id
                 or int(existing["generation"]) != int(generation)
+                or int(existing["policy_version"]) != self.POLICY_VERSION
                 or existing["query_hash"] != query_hash
             ):
                 raise StaleGeneration("retrieval_identity")
@@ -359,55 +351,30 @@ class MicroClayRetrieval:
             (user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
         now = time.time()
-        capitals = self._policy_capitals()
-        candidates = [self._score_candidate(row, query_tokens, now, capitals) for row in rows]
-        baseline = sorted(
-            candidates,
-            key=lambda x: (x.baseline_score, x.ts, x.memory_id),
-            reverse=True,
-        )
-        adaptive = sorted(
-            candidates,
-            key=lambda x: (x.adaptive_score, x.ts, x.memory_id),
-            reverse=True,
-        )
+        capitals = self._policy_capitals(user_id)
+        candidates = [self._score_candidate(row, user_id, query_tokens, now, capitals) for row in rows]
+        baseline = sorted(candidates, key=lambda x: (x.baseline_score, x.ts, x.memory_id), reverse=True)
+        adaptive = sorted(candidates, key=lambda x: (x.adaptive_score, x.ts, x.memory_id), reverse=True)
 
         baseline_selected, baseline_chars = self._pack_candidates(
-            baseline,
-            limit=limit,
-            budget_chars=budget_chars,
+            baseline, limit=limit, budget_chars=budget_chars
         )
         adaptive_selected, adaptive_chars = self._pack_candidates(
-            adaptive,
-            limit=limit,
-            budget_chars=budget_chars,
-            allow_learned_route=True,
+            adaptive, limit=limit, budget_chars=budget_chars, allow_learned_route=True
         )
         mode = self.mode()
-        if mode == "ACTIVE":
-            selected, chars = adaptive_selected, adaptive_chars
-        else:
-            selected, chars = baseline_selected, baseline_chars
+        selected, chars = (adaptive_selected, adaptive_chars) if mode == "ACTIVE" else (baseline_selected, baseline_chars)
 
         retrieval_id = str(uuid.uuid4())
         token_hashes = [self._token_key(x)[4:] for x in sorted(query_tokens)]
         selected_ids = [x.memory_id for x in selected]
         shadow_ids = [x.memory_id for x in adaptive_selected]
-
-        # Generic cue/kind/subject priors may learn from all served evidence. New
-        # query->memory routes are more dangerous: bind them to rank-1 served
-        # evidence only so one successful turn cannot spray an alias over the pack.
-        route_prefix = self._policy_key("route:")
+        route_prefix = self._policy_key(user_id, "route:")
         non_route_keys = {
-            key
-            for item in selected
-            for key in item.entry_keys
-            if not key.startswith(route_prefix)
+            key for item in selected for key in item.entry_keys if not key.startswith(route_prefix)
         }
         rank1_route_keys = {
-            key
-            for key in (selected[0].entry_keys if selected else ())
-            if key.startswith(route_prefix)
+            key for key in (selected[0].entry_keys if selected else ()) if key.startswith(route_prefix)
         }
         entry_keys = sorted(non_route_keys | rank1_route_keys)[:256]
 
@@ -421,8 +388,7 @@ class MicroClayRetrieval:
                 retrieval_id, turn_id, episode_id, causal_id, session_id, user_id, int(generation),
                 self.POLICY_VERSION, mode, query_hash, json.dumps(token_hashes),
                 json.dumps(selected_ids), json.dumps(shadow_ids), json.dumps(entry_keys),
-                int(budget_chars), int(chars),
-                "PRESENT" if selected else "UNKNOWN", now,
+                int(budget_chars), int(chars), "PRESENT" if selected else "UNKNOWN", time.time(),
             ),
         )
 
@@ -453,14 +419,7 @@ class MicroClayRetrieval:
         signal_class: str,
         receipt_id: str | None = None,
     ) -> dict[str, Any]:
-        """Atomically apply provenance-bound outcome credit to retrieval policy only.
-
-        The duplicate-receipt check, all policy-capital mutations and the feedback
-        receipt are one BEGIN IMMEDIATE transaction. A crash/failure before the
-        receipt insert therefore rolls back the capital mutations as well.
-        Replaying the same receipt is idempotent; stale generations are rejected.
-        No durable-memory row is changed.
-        """
+        """Atomically apply provenance-bound outcome credit to retrieval policy only."""
         value = max(-1.0, min(1.0, float(credit)))
         with self.db.tx() as db:
             row = db.execute(
@@ -471,6 +430,8 @@ class MicroClayRetrieval:
                 return {"applied": False, "reason": "no_retrieval_episode"}
             if int(row["generation"]) != int(generation):
                 raise StaleGeneration("retrieval_generation")
+            if int(row["policy_version"]) != self.POLICY_VERSION:
+                raise StaleGeneration("retrieval_policy_version")
             self.db.assert_live_generation(row["session_id"], generation)
 
             rid = receipt_id or hashlib.sha256(
@@ -483,6 +444,9 @@ class MicroClayRetrieval:
                 return {"applied": False, "reason": "duplicate_receipt", "receipt_id": rid}
 
             keys = json.loads(row["entry_keys"])
+            expected_prefix = self._policy_key(str(row["user_id"]), "")
+            if any(not isinstance(key, str) or not key.startswith(expected_prefix) for key in keys):
+                raise StaleGeneration("retrieval_policy_scope")
             now = time.time()
             for key in keys:
                 current = db.execute(

@@ -286,6 +286,10 @@ window.addEventListener('load', async () => {{
                         message = await asyncio.wait_for(ws.receive(), timeout=remaining)
                     except asyncio.TimeoutError as exc:
                         raise AuthenticationError("Clerk session token expired") from exc
+                    # wait_for() and websocket receive completion race at the deadline.
+                    # Re-check the lease before any received frame can affect PTY/control state.
+                    if auth_expires_at <= time.time():
+                        raise AuthenticationError("Clerk session token expired")
                     if message.get("type") == "websocket.disconnect":
                         return
                     if message.get("bytes") is not None:

@@ -1,0 +1,107 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_rebase_point": "4428331c192d523a20cf3923d4caeac9167b1baf",
+  "issue": 446,
+  "research_pr": 456,
+  "repair_branch": "go/effect-active-turn-linearization-20260817-sol",
+  "repair_code_head": "aa394a18f39ef044dbe18b43f4fdb8ffe99fe8df",
+  "finding": {
+    "class": "EFFECT_ACTIVE_TURN_TOCTOU",
+    "source_observation": "TurnLifecycle.request_effect commits SELECTED/request_effect and workspace_selected before EffectGate.execute reaches EffectJournal.begin. A successor prompt may retire the predecessor in that gap without advancing entity_generation.",
+    "pre_repair_consequence": "Current-main EffectJournal.begin validates generation/lease/duplicate but not exact current active-turn authority, so a retired predecessor may journal PENDING and reach external EntityOS execution before later causal reconciliation rejects divergence.",
+    "authority_affected": "explicit causal turn lifecycle plus fail-closed EffectGate external execution boundary"
+  },
+  "repair": {
+    "mechanism": "Treat PENDING journal insertion as the effect linearization point and revalidate active turn plus SELECTED/request_effect in the same UnifiedDB BEGIN IMMEDIATE transaction before insertion.",
+    "requirements": [
+      "exact episode_id/session_id/user_id/generation active-turn identity",
+      "workspace_selected=1",
+      "active effect_id is NULL",
+      "workspace state=SELECTED and selected=request_effect",
+      "existing per-episode persisted-effect replay fence remains"
+    ],
+    "parallel_main_delta_preserved": "state.noop remains NON_REWARDING and _credit remains capability-aware from main",
+    "new_state_authority": false,
+    "new_capability": false
+  },
+  "exact_source_identity": {
+    "baseline_current_main_effect_journal_blob": "bf80be1a53de07398c3c2773ccc405c171fe7174",
+    "patched_rebased_effect_journal_blob": "d03b698f0b9c96b62486d160a51fcb38b8e0955a",
+    "current_effects_blob": "a9fbb88dbbae258680e6ed5e968bd502d5638d40",
+    "branch_regression": "the artefact/tests/test_effect_active_turn_linearization.py"
+  },
+  "source_validation": {
+    "workspace_selected_literal_confirmed": "request_effect",
+    "workspace_selected_state_confirmed": "SELECTED",
+    "active_turn_schema_fields_confirmed": ["session_id","user_id","episode_id","causal_id","generation","effect_id","workspace_selected"],
+    "turn_begin_generation_result_confirmed": true,
+    "selection_to_execute_transaction_gap_confirmed": true,
+    "latest_main_still_missing_active_turn_fence_at_rebase": true,
+    "classification": "SOURCE_CANDIDATE_REBASED"
+  },
+  "deterministic_regression_obligations": [
+    "retirement commits first -> stale active effect rejected before bridge call; zero effect row",
+    "PENDING insert commits first -> successor retirement blocked while effect remains pending"
+  ],
+  "previous_github_runner_observation": {
+    "pre_rebase_research_branch_commit": "6c422b14d09ec59adcec9d42c7d956acecaedd4b",
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "visible_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_TEST_STEP",
+    "patch_test_fail": false
+  },
+  "vercel_sandbox_attempt": {
+    "staging_repo": "gschaidergabriel/Dr.-Unterweger",
+    "staging_pr": 834,
+    "staging_branch": "chatgpt/go-effect-linearization-vercel-20260817-sol",
+    "staging_commit": "9b189828dd693f90de7a95d748e3c9febac6af7e",
+    "staged_source_scope": "pre-rebase effect_journal/effects discriminator",
+    "orchestrator": "@vercel/sandbox 2.9.2 via Vercel Git preview and VERCEL_OIDC_TOKEN",
+    "planned_runtime": "python3.13",
+    "planned_network_policy": "deny-all",
+    "planned_persistent": false,
+    "planned_stop_in_finally": true,
+    "provider_status_context": "Vercel",
+    "provider_status_state": "failure",
+    "provider_target": "upgradeToPro=build-rate-limit",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "test_command_started": false,
+    "product_behavior_executed": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "test_credit": "ZERO",
+    "staging_pr_closed_without_merge": true,
+    "note": "Because no build/Sandbox/test started, the later rebase does not invalidate any runtime evidence; there is none. A future run must stage the new rebased blobs."
+  },
+  "experiment_accounting": {
+    "new_distinct_unusual_experiment_run_by_this_delta": false,
+    "classification": "NORMAL_DETERMINISTIC_REGRESSION_ABLATION",
+    "unusual_experiment_count_added": 0
+  },
+  "acceptance": {
+    "repair_source_status": "SOURCE_CANDIDATE_REBASED",
+    "mechanism_runtime_status": "UNOBSERVED_ON_AUTHORIZED_ISOLATED_RUNTIME",
+    "focused_branch_pytest": "UNOBSERVED",
+    "whole_clayverse_oci_pass": false,
+    "merge_authorized_by_this_receipt": false
+  },
+  "next_exact_step": [
+    "Refresh main and PR 456 immediately before execution and preserve any new non-overlapping effect-journal semantics.",
+    "When Vercel preview admission is available, stage the exact then-current rebased blobs and run focused effect/lifecycle regressions inside a started isolated Vercel Sandbox with source/blob identity captured.",
+    "Run adjacent effect fencing, pending-effect recovery, predecessor interruption and causal re-entry regressions before promotion.",
+    "Only after component evidence, continue broader exact ClayVerse OCI build/start/restart/concurrency gates; do not infer whole-product PASS from this component."
+  ],
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

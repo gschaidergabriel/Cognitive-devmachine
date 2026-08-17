@@ -57,7 +57,7 @@ def _validated_token(value: str) -> str:
     if (
         not token
         or len(token) > _MAX_TOKEN_CHARS
-        or any(ord(char) < 0x21 or ord(char) == 0x7F for char in token)
+        or any(ord(char) < 0x21 or ord(char) > 0x7E for char in token)
     ):
         raise GLMInferenceError("GLM API token is missing or malformed")
     return token

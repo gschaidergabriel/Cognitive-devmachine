@@ -70,7 +70,7 @@ Draft **#623** changes only this request-time boundary: it reads and validates t
 
 Counter-reality retained: `_runtime_ready()` currently projects session rows into a dict keyed by user before checking the canonical set, so duplicate user-session rows can be collapsed in readiness evaluation. #623 fences actual authenticated resolution, but readiness should later require exactly two session rows as well. No broad `terminal_gateway.py` edit was made without executable regression evidence.
 
-The automatically-triggered GitHub workflow for #623 head `b519ee8…` ended before every step (`steps=[]`, `runner_id=0`). Therefore the four new tests are **UNEXECUTED**, and this is runner/admission failure rather than test failure. #623 is not merged/promoted.
+The automatically-triggered GitHub workflow for #623 head `b519ee8…` ended before every step (`steps=[]`, `runner_id=0`). A deliberate regression rerun was then requested and accepted; rerun job **`95389126338`** also completed `failure` with **0 steps**. Therefore the four new tests remain **UNEXECUTED**. Both outcomes are runner/admission failures rather than semantic test failures, and #623 is not merged/promoted.
 
 ### Browser/frontend evidence
 
@@ -94,14 +94,14 @@ Whole-product PASS requires the complete path. Source inspection, PRs, CI defini
 
 ### Latest cycle delta
 
-**2026-08-17 19:33 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; next OCI closure refreshed and a bounded authenticated-session fail-closed candidate added; primary runtime blocker remains host-side private-source credential provisioning**
+**2026-08-17 19:34 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; #623 runner-admission failure independently replicated; primary OCI credential blocker unchanged**
 
-- The existing execution-closure lane now has prepared closure `218b51c…` / tree `f16c877…`, carrying current #622 supply-chain bytes with #611 and preserved exercised ancestry; it remains unexecuted.
-- PR810 remains the single controller; latest actually-started evidence still proves `Sandbox.create=PASS_CREATED` and then fail-closed missing `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
-- Architecture audit found request-time session bootstrap at the Clerk boundary. Draft PR **#623** (`b519ee8…`) now makes authenticated resolution read/validate-only and generation-fenced with four focused regression obligations.
-- #623 is **not merged** because its GitHub job failed before steps (`runner_id=0`); no test PASS is claimed.
-- Browser/frontend runtime testing was **not reached** because the accepted product source/image/service path is still blocked before source staging; no proxy result was substituted.
-- Current PR810 source-only head at final refresh: `78d92753…`; no new Vercel deployment was observed for later source-only hardening.
+- Prepared next OCI closure remains `218b51c…` / tree `f16c877…`, carrying current #622 supply-chain bytes with #611 and preserved exercised ancestry; it remains unexecuted.
+- PR810 remains the single controller at source-only v6 head `78d92753…`; latest actually-started evidence still proves `Sandbox.create=PASS_CREATED` and then fail-closed missing `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
+- Draft #623 remains the bounded request-time auth/session fail-closed candidate and is still unexecuted.
+- Its original GitHub job failed before steps, and independent rerun job `95389126338` again completed with **0 steps**. This strengthens the runner-admission classification only; it does not count as ClayVerse TEST_FAIL or PASS.
+- Browser/frontend runtime testing remains **not reached** because the accepted product source/image/service path is blocked before source staging; no proxy result is substituted.
+- Durable #623 rerun receipt: `the artefact/receipts/2026-08-17_GO_1934_PR623_GITHUB_RUNNER_ADMISSION_RERUN_GPT56SOL.json`.
 - Durable identity receipt: `the artefact/receipts/2026-08-17_GO_1931_IDENTITY_SESSION_DRIFT_FAILCLOSED_GPT56SOL.json`.
 - Durable refreshed-closure receipt: `the artefact/receipts/2026-08-17_GO_1931_OCI_CLOSURE_REBIND_CURRENT_PR622_GPT56SOL.json`.
 - Whole-product acceptance remains **IN_PROGRESS**.

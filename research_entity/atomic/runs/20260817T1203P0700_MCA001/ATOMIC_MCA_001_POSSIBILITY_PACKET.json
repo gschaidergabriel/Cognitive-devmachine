@@ -4,14 +4,15 @@
   "candidate":{
     "candidate_id":"MCA-001",
     "name":"Monotone Causal Aperture",
-    "version":"0.1",
+    "version":"0.2",
     "status":"PROMISING",
     "novelty":"NOVEL_COMBINATION_CANDIDATE",
     "semantic_source":"candidate/CANDIDATE_MCA_001.clay",
-    "base_research_sha":"c01a23a0ba69c4c81edb6c171fc908744c64c1fb"
+    "base_research_sha":"c01a23a0ba69c4c81edb6c171fc908744c64c1fb",
+    "late_arrival_reentry_sha":"cb61431e8f06fd0ac7d76751801e9003863f6630"
   },
-  "problem":"ClayVerse has one canonical UnifiedDB entity and two concurrent user perspectives; current generation/resource/effect fences do not define which durable knowledge-state operations can safely commute and which require semantic revalidation/serialization.",
-  "mechanism":"Classify canonical changes by information polarity. Immutable contradiction-preserving appends may commute. Resolution, retraction, absence/uniqueness assumptions, external effects and unknown operations cross a fail-closed causal aperture with exact validation; external effects retain the existing EntityOS lease/generation/journal boundary.",
+  "problem":"ClayVerse has one canonical UnifiedDB entity and two concurrent user perspectives. Current main now has a global entity_generation for real boot/recovery and a strict global EntityOS-effect lease, but still no semantic rule defining which ordinary durable knowledge-state operations may commute and which require exact context revalidation/serialization.",
+  "mechanism":"Classify canonical changes by information polarity. Immutable contradiction-preserving appends may commute inside the same live global entity generation. Resolution, retraction, absence/uniqueness assumptions, external effects and unknown operations cross a fail-closed causal aperture with exact context validation. Any boot/recovery generation advance invalidates all in-flight MCA operations. External effects retain the existing global EntityOS lease/generation/journal boundary.",
   "measurement":{
     "surface":"OpenAI isolated container reference simulation; non-VPS",
     "exact_product_runtime":false,
@@ -24,6 +25,12 @@
     "resource_or_occ_coordination_rate":0.36107,
     "misclassification_ablation_violation_rate":0.008418,
     "interpretation":"internal synthetic discriminator only; safety oracle is constructed around monotonicity and is not independent runtime validation"
+  },
+  "late_arrival":{
+    "observed":"current main added meta.entity_generation, assert_live_generation(), recovery-time advancement fencing both permanent sessions, and a label-independent global lease for entityos.exec",
+    "effect_on_candidate":"RETAIN_AND_REVISE",
+    "revision":"MCA now composes under the global entity generation as a mandatory lifetime/recovery epoch; it does not replace or weaken it",
+    "new_falsifier":"boot/recovery generation advance must invalidate both monotone and nonmonotone in-flight MCA operations"
   },
   "prior_art_collision":{
     "closest_families":[
@@ -40,13 +47,14 @@
     "MCA adds no value over exact context-witness OCC",
     "operation polarity cannot be typed safely across real ClayVerse durable operations",
     "append-preserving claim topology causes unacceptable storage/retrieval amplification",
-    "SQLite transaction semantics already dominate the claimed gain",
+    "SQLite transaction semantics plus current global generation already dominate the claimed gain",
     "resolved projections become a hidden competing authority"
   ],
-  "strongest_remaining_falsifier":"Exact-current-head isolated dual-session UnifiedDB replay with a closed typed operation set, restart/recovery, stale resolve/retract, unknown-class rejection, strict EntityOS effect boundary, and matched full-resource-lease + exact-context-witness baselines.",
+  "strongest_remaining_falsifier":"Exact-current-head isolated dual-session UnifiedDB replay with a closed typed operation set, global-generation boot/recovery invalidation, restart/recovery, stale resolve/retract, unknown-class rejection, strict EntityOS effect boundary, and matched full-resource-lease + exact-context-witness baselines.",
   "integration_prerequisites":[
     "typed operation polarity contract accepted",
     "real UnifiedDB replay discriminator passes",
+    "global entity-generation compatibility regression passes",
     "unknown classification proven fail-closed",
     "external effect path unchanged and regression-green",
     "state growth/retrieval cost bounded",

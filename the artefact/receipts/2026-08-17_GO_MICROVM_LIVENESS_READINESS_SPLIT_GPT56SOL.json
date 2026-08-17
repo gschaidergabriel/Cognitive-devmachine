@@ -1,0 +1,44 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "NEW_SOURCE_HARDENING_WITH_BOUNDED_FOCUSED_REPRODUCTION",
+  "product_scope": "MicroVM/Kata deployment probe semantics",
+  "problem": "The canonical Kata StatefulSet used /readyz for both readinessProbe and livenessProbe even though the ClayVerse application exposes /healthz as process liveness and /readyz as full runtime readiness. Temporary readiness loss could therefore trigger unnecessary full workload/microVM restart instead of remaining a readiness-only condition.",
+  "source_evidence": {
+    "application_health_surface": "the artefact/clayverse/terminal_gateway.py exposes /healthz for liveness and /readyz for runtime readiness",
+    "template_before_blob": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "template_fix_commit": "17cc74daddfcf1046dee6fdbd6c72ec076351e94",
+    "template_after_blob": "b075755d24fcd3dbd203b02f67eeff8a5a8c571b",
+    "test_fence_commit": "208c9c41f0ecfb7aaa8e07c47386453e1a670207",
+    "test_after_blob": "a03de2e8fe1473c7e019dce66710bc04d244aa75"
+  },
+  "change": {
+    "readinessProbe": "/readyz retained",
+    "livenessProbe": "/healthz",
+    "regression_fence": "test_kata_template_separates_liveness_from_full_readiness"
+  },
+  "isolated_execution": {
+    "surface": "authorized non-production local isolated container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "scope": "manually reconstructed focused MicroVM template/contract subset; not an exact full repository checkout",
+    "command": "pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "2 passed in 0.11s",
+    "credit": "BOUNDED_SOURCE_MECHANISM_ONLY"
+  },
+  "counterhypothesis": "Using /readyz as liveness might intentionally force appliance restart whenever canonical runtime readiness is lost.",
+  "counterhypothesis_resolution": "Rejected as the default deployment behavior because the application explicitly separates liveness (/healthz) from runtime readiness (/readyz), and the product recovery law distinguishes Tier-1/internal readiness recovery from Tier-2 full appliance restart when invariants cannot be trusted. A readiness-only failure is not itself proof that the process/appliance must be killed.",
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "runtime_credit": {
+    "exact_oci": 0,
+    "kubernetes": 0,
+    "kata_microvm": 0,
+    "cni_networkpolicy": 0,
+    "whole_product": 0
+  },
+  "current_external_execution_blocker": "Retained Vercel exact private-source/OCI batch remains blocked before private source staging by missing sensitive host-side GITHUB_READ_TOKEN; no secret was committed, logged, or forwarded into a Sandbox.",
+  "acceptance": "IN_PROGRESS"
+}

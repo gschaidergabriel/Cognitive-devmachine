@@ -5,7 +5,7 @@ import os
 import sys
 from typing import Any
 
-from .autonomy_context import bounded_autonomy_context
+from .autonomy_context import admit_explicit_goal_from_turn, bounded_autonomy_context
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -122,11 +122,24 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, _, session_id, lifecycle = _runtime()
+    db, user_id, session_id, lifecycle = _runtime()
     try:
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
-            result["autonomy"] = bounded_autonomy_context(db, result["user_id"])
+            pass
+        try:
+            admit_explicit_goal_from_turn(
+                db,
+                user_id=user_id,
+                session_id=session_id,
+                source_turn_id=result["turn_id"],
+                prompt=prompt,
+            )
+            result["autonomy"] = bounded_autonomy_context(db, user_id)
             additional_context = _bounded_hook_context(result)
+        except Exception:
+            if lifecycle.active() is not None:
+                lifecycle.abort("user_prompt_post_admission_failure")
+            raise
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",

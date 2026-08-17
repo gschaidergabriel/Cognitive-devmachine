@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T22:50:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_observed": "4b6771d39218d6ecd4f4578d1dd879ca41e60f9b",
+  "branch": "gpt56sol/go-microvm-network-default-deny-20260817-2250",
+  "classification": "SOURCE_REPAIR_WITH_BOUNDED_SUPPORTING_ISOLATED_MECHANISM_EVIDENCE",
+  "problem": {
+    "observed": "The mandatory Kata StatefulSet template had hostNetwork=false but no Kubernetes NetworkPolicy, so normal pod ingress/egress remained outside the source-level sealed-boundary contract.",
+    "counterhypothesis": "hostNetwork=false may appear sufficient because the workload does not join the node network namespace, but Kubernetes pod networking still permits policy-dependent cluster/Internet reachability unless a CNI-enforced NetworkPolicy or equivalent boundary exists.",
+    "discriminator": "Require an explicit ClayVerse-selecting ingress+egress default-deny NetworkPolicy, keep the baseline Service internal, and fence the source contract with deterministic static regressions before any real CNI/Kata runtime acceptance."
+  },
+  "delta": {
+    "deployment_template_blob": "b11f4fa82bab446213cb664a3b21f1aae2487907",
+    "deployment_contract_blob": "544b3e7578149cadfc2332fdf425ff8450772b8e",
+    "deployment_test_blob": "4c3005acda99a09e6b0536dfea2ee12166c92ad8",
+    "readme_blob": "0f53943bc27c4424437d71ff959a5dbd8831fd9f",
+    "changes": [
+      "add ingress+egress default-deny NetworkPolicy selecting app=clayverse",
+      "make Service explicitly ClusterIP-only",
+      "require deployment-specific target-bound ingress/egress admission",
+      "forbid wildcard Internet/private-network egress as baseline acceptance mechanism",
+      "extend static deployment regression to fence NetworkPolicy, ClusterIP and no wildcard CIDRs",
+      "refresh living artefact README"
+    ]
+  },
+  "supporting_execution": {
+    "environment": "isolated non-production OpenAI container",
+    "scope": "reconstructed deployment source slice; not an exact full-branch checkout and not a real Kubernetes/Kata runtime",
+    "command_class": "pytest static deployment contract + PyYAML parse",
+    "observed": {
+      "pytest": "5 passed in 0.06s",
+      "yaml_parse": "PASS",
+      "documents": ["Service", "NetworkPolicy", "StatefulSet"]
+    },
+    "credit": "MECHANISM_SUPPORT_ONLY"
+  },
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "No immutable shared request/turn id or uniquely reproducible sub-second trigger identity is exposed to this organ."
+  },
+  "nonclaims": [
+    "No exact full-branch pytest PASS claimed.",
+    "No real Kubernetes CNI NetworkPolicy enforcement observed.",
+    "No Kata/guest-kernel execution observed.",
+    "No exact final OCI build/image digest observed in this cycle.",
+    "No Clerk/Claude/GLM live network path acceptance claimed.",
+    "No whole ClayVerse PASS claimed."
+  ],
+  "next_gate": [
+    "rebind this lane to then-current main before promotion",
+    "run exact deployment regression from a full authorized isolated checkout",
+    "apply template plus site-specific allow policy on a real NetworkPolicy-enforcing CNI with Kata runtime",
+    "prove default deny blocks non-admitted cluster/private/Internet destinations",
+    "prove admitted authenticated ingress and exact dependency/effect egress still work",
+    "bind the same accepted ClayVerse OCI digest inside the guest kernel and continue Tier-1/Tier-2 recovery acceptance"
+  ],
+  "acceptance": "IN_PROGRESS"
+}

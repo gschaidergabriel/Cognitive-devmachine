@@ -1,0 +1,57 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "classification": "SOURCE_FUSION_COMPLETE_EXECUTION_BLOCKED_BEFORE_SANDBOX",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "exact_product_head_observed": "36b97c080de99280f69ed3fe0f4db1690715f048",
+  "source_delta": {
+    "hostcall_abi": "shared ClayHostcallABI/v1 authority with VM-version binding",
+    "load_time_fence_commit": "b1b52d5842e0c0d0ed0151af7f2e327fe0e7cbe3",
+    "load_time_fence": "serialized hostcall VM-version/id/arity rejected before execution",
+    "clayos_value_surface": "ClayValueInput -> ClayValue so canonical provenance-strict launch can carry Bytes",
+    "clayos_stdout_regression": "ExecutableIR -> ClayVMArtifact/v1 -> ClayOS.exec_artifact -> single ClayVM -> HostProcessVMHost -> exact opaque stdout Bytes",
+    "stdout_contract": "linux.process.stdout.v0::(Int)->Bytes; call id 3; CLAYVM/2 only",
+    "stderr_contract": "DEFERRED_NOT_ADMITTED",
+    "orphan_stderr_test_removed_commit": "f6d0d3eed8a6992733a9cc764b594415252e91ef",
+    "process_string_boundary": "UTF-8 scalar + NUL + absolute path + no-shell fences retained",
+    "new_unusual_experiment_count": 0
+  },
+  "coordination": {
+    "temporary_duplicate_pr_797": "CLOSED_SUPERSEDED_BY_787",
+    "string_donor_pr_808": "CLOSED_SUPERSEDED_DONOR_DO_NOT_MERGE_AS_IS",
+    "string_donor_rejection_reason": "call-id collision with stdout plus donor can serialize String-literal hostcall as CLAYVM/1",
+    "future_string_recomposition_rule": "refresh canonical registry; allocate only then-free id; String path must be CLAYVM/2-only; serializer must select VM2 from admitted hostcall contract, not only function parameter/return surface",
+    "stderr_parallel_slice": "REVERTED_DEFERRED_UNTIL_STDOUT_EXACT_HEAD_SANDBOX_PROMOTION"
+  },
+  "execution": {
+    "vercel_status_for_exact_product_head": "failure",
+    "provider_reason": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "entityos_artifact_for_exact_head_observed": false,
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_scope_transfer": false
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "second_order_decision": "Do not widen to stderr or String process semantics before the admitted stdout Bytes descendant is revalidated as an exact one-file EntityOS candidate in an actually-started Vercel Sandbox.",
+  "next_executable_step": "Refresh the then-current PR787 head after Vercel build admission; run exact-identity ordinary full pytest and canonical v7 in Vercel Sandbox; require zero skips, exact wheel/tool/source/tree/archive/attestation identities, stdout-Bytes + hostcall ABI regressions, DENY_ALL runtime/self-test/no-host-Python/relocation, twin EntityOS byte identity, exact artifact digest, zero new unusual experiments, and successful Sandbox stop.",
+  "claims": {
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_acceptance_used": false,
+    "together_used": false
+  }
+}

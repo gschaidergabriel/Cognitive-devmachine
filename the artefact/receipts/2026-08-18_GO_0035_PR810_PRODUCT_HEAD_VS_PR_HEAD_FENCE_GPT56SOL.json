@@ -1,0 +1,79 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:35:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "672f305251181a34f6966a875c4b9b596dd880a3",
+  "classification": "CONTROL_PLANE_ADMISSION_FENCE_FALSE_POSITIVE",
+  "scope": "source/control-plane falsifier only; no ClayVerse product/runtime promotion",
+  "retained_research_candidate": {
+    "pull_request": 680,
+    "live_pr_head_observed": "0a678b758b37a2df0cec54783750d4c4f315f59d",
+    "frozen_product_test_byte_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "frozen_product_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "latest_live_head_delta_class": "receipt-only re-entry update",
+    "product_byte_drift_proven_by_live_head_difference": false
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "live_head_observed": "1b44a9f9b3d3868d508c3d24efa2f5f0ab1cc811",
+    "live_head_fence_source_commit": "83fc6531d93bf31a018c5d0037497ee7c794d164",
+    "bound_research_sha": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "bound_research_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "fence_behavior": "verifyResearchCandidateHead requires open PR680 head.sha to equal bound RESEARCH_SHA both before and after private fetch",
+    "predicted_current_result_before_sandbox": "RESEARCH_CANDIDATE_HEAD_MISMATCH:0a678b758b37a2df0cec54783750d4c4f315f59d",
+    "credential_should_be_spent_before_repair": false
+  },
+  "falsifier": {
+    "claim": "Exact equality between the current PR coordination head and the frozen product/test-byte commit is a valid stale-product fence.",
+    "result": "REJECTED",
+    "reason": "The retained PR can advance through admitted receipt/coordination-only commits without changing the frozen product/test bytes. Exact PR-head equality therefore creates a false-positive admission failure and conflates coordination identity with product-byte identity."
+  },
+  "repair_contract": {
+    "must_preserve": [
+      "exact bound product commit/tree identity",
+      "pre-fetch and post-fetch TOCTOU stale-product checks",
+      "fail-closed behavior for any intervening product/build/test/policy/runtime closure drift"
+    ],
+    "acceptable_direction": "If live PR head differs, compare bound product commit to live PR head and allow only explicitly admitted non-product coordination/receipt-only drift; otherwise fail closed. A dedicated immutable candidate_product_head/tree authority field is an equivalent stronger separation if its authority and update law are explicit.",
+    "must_not_do": "Do not weaken the fence into trusting arbitrary later PR-head bytes and do not rebind repeatedly to receipt-only churn."
+  },
+  "parallel_controller_progress_observed": {
+    "detached_named_sandbox_start": true,
+    "bounded_status_polling": true,
+    "sdk_source_guard": true,
+    "sandbox_timeout_ms": 2580000,
+    "snapshot_expiration_ms": 86400000,
+    "final_test_of_tests_pass_claimed": false,
+    "whole_product_pass_claimed": false,
+    "note": "The earlier orphan/stale detached-path gaps were substantially repaired in the retained PR810 lane; this receipt records the narrower current admission fence defect only."
+  },
+  "external_primary_contract_check": {
+    "provider": "Vercel Sandbox",
+    "result": "Current official Vercel documentation supports named persistent sandboxes, detached/long-running workflows, Python 3.13, and plan-bounded session timeout semantics. No external source changes ClayVerse acceptance authority.",
+    "runtime_credit": 0
+  },
+  "coordination": {
+    "pr810_comment_id": 5318233874,
+    "action": "Routed the exact falsifier and repair direction into the single retained controller lane; no duplicate controller created."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable per-trigger request identity is exposed to this organ; minute-precision trigger time is insufficient for the atomic lease."
+  },
+  "runtime_credit_added": {
+    "private_source": 0,
+    "full_regression": 0,
+    "exact_oci": 0,
+    "real_mistral": 0,
+    "entityos_roundtrip": 0,
+    "tier2_replacement": 0,
+    "whole_product": 0
+  },
+  "next_exact_step": "Repair the retained PR810 stale-product fence so receipt-only PR680 head drift does not cause false rejection while real product closure drift still fails closed. Obtain an exact READY deployment of that repaired controller. Only then spend the owner-held scoped read-only GitHub token on the detached source/regression/EntityOS/OCI component run; if it passes, continue the same retained lane with Vault-backed real Mistral, canonical re-ingest before effects, verified EffectGate/EntityOS, Tier-1, full same-digest Tier-2 Sandbox recreation, secret reacquisition, second cognition, and remaining auth/PTY/two-user/concurrency gates.",
+  "acceptance": "IN_PROGRESS"
+}

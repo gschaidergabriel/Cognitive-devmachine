@@ -259,9 +259,13 @@ window.addEventListener('load', async () => {{
             attach_pid, attach_fd, binding = await asyncio.to_thread(terminals.attach_pty, user_id)
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
+            # PTY/tmux attachment is a blocking trust-boundary transition. If the
+            # verified Clerk lease expired while it blocked, do not mutate terminal
+            # state (including its initial size) under an expired authorization.
+            _require_auth_lease_live(auth_expires_at)
             terminals.resize(attach_fd, rows, cols)
-            # Authentication can expire while PTY/tmux attachment is blocking in a
-            # worker thread. Never publish readiness for an already-expired lease.
+            # Resize may itself cross a scheduling/blocking boundary. Never publish
+            # readiness after the lease has expired in that interval.
             _require_auth_lease_live(auth_expires_at)
             await send_json({
                 "type": "ready",

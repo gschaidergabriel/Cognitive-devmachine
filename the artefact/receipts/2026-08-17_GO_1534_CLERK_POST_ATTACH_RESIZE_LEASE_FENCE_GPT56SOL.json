@@ -1,0 +1,50 @@
+{
+  "schema": "clayverse.source-slice-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:34+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "candidate_branch": "go/clerk-post-attach-resize-lease-fence-20260817-1534-sol",
+  "candidate_base": "00391e228ef24c34506c1d0a2e22fb0fbe263108",
+  "problem": "After verified Clerk authentication, terminal_ws may block in attach_pty. Current main re-checks the Clerk lease only after terminals.resize, so a token that expires during attach can still mutate PTY terminal size before the fail-closed expiry check.",
+  "observed_source": {
+    "terminal_gateway_blob": "3b1aa61ea54409d545f13cdc0ff019f6e8f7cec9",
+    "existing_post_attach_test_blob": "e3f03f80be65c57456cf719c560145de2572503d",
+    "current_order": "attach_pty -> binding identity check -> terminals.resize -> _require_auth_lease_live -> ready",
+    "existing_test_gap": "test_expiry_during_pty_attach_fails_before_ready proves no ready frame, but does not assert that terminal resize/state mutation is absent after expiry"
+  },
+  "hypothesis": "Move a Clerk lease re-check before the initial terminals.resize while retaining the existing post-resize re-check. This prevents known-expired authorization from mutating terminal state and still prevents ready publication if expiry occurs during resize.",
+  "counterhypothesis": "The existing post-attach check before ready is sufficient because initial resize is harmless setup rather than an authenticated terminal-state mutation.",
+  "counterhypothesis_result": "REJECTED_AT_SOURCE_MECHANISM_SCOPE: resize is a control mutation on the authenticated PTY path and executes after a potentially blocking attach; allowing it after lease expiry violates the gateway's own effect/control lease boundary.",
+  "repair": {
+    "terminal_gateway": "require live Clerk lease immediately after attach identity binding and before initial terminal resize; retain second lease check after resize before ready",
+    "regression": "new TestClient regression advances the fake clock past exp during attach_pty and requires an expired error plus zero resize calls"
+  },
+  "candidate_commits": [
+    "03358cc841c6dcdc76121ecb79d8277c5acb513f",
+    "07a718a5a0f140a5d62f119c5015082ec4032f22"
+  ],
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "classification": "BOUNDED_MECHANISM_SIMULATION_NOT_EXACT_PRODUCT_RUNTIME",
+    "current_order_result": "FAIL_expired_resize; calls=['resize']",
+    "candidate_order_result": "PASS_no_expired_resize; calls=[]",
+    "network_observation": "github.com DNS unavailable from the current isolated container, so exact private-repo checkout was not possible there",
+    "credit": "mechanism discrimination only; zero OCI, real Clerk, live tmux or whole-product acceptance credit"
+  },
+  "provider_state": {
+    "vercel": "latest inspected Vercel Sandbox orchestration did start an isolated microVM but its Python 3.13 runtime lacked _sqlite3 before product assertions; this run targeted an earlier MicroClay stack, not this candidate",
+    "vercel_latest_inspected_deployment": "dpl_7H6XmBbeCzqXeLBEH6fD9vYc47uG",
+    "daytona": "authorized fallback; current documented orchestration path remains DNS-blocked before provider contact from this worker context",
+    "vps": "FORBIDDEN_FOR_TEST_EVIDENCE"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT: exact go trigger identity available to this worker is minute precision only, so the repository atomic lease protocol forbids consuming the shared unusual-experiment slot"
+  },
+  "evidence_boundary": "SOURCE FIX + TARGETED REGRESSION CANDIDATE + BOUNDED MECHANISM DISCRIMINATION ONLY. NOT exact-current-head isolated product execution, NOT real Clerk, NOT live tmux, NOT OCI and NOT ClayVerse PASS.",
+  "next_isolated_gate": "Run test_terminal_ws_auth_resize_fence.py together with existing post-attach/lease/reauth gateway regressions on an exact candidate checkout in an authorized SQLite-capable isolated sandbox, then broaden to the whole terminal suite and exact OCI/real-Clerk path when admitted."
+}

@@ -5,6 +5,7 @@ from clayverse.effect_journal import EffectJournal
 from clayverse.identity import IdentityRouter
 from clayverse.recovery import recover_incomplete_episodes
 from clayverse.store import UnifiedDB
+from clayverse.turn_lifecycle import TurnLifecycle
 from clayverse.workspace import Workspace
 
 
@@ -69,8 +70,23 @@ def test_restart_never_replays_selected_effect_without_persisted_outcome(tmp_pat
 
 def test_restart_reenters_exact_effectjournal_receipt_without_reexecution_or_reward_remint(tmp_path):
     db = UnifiedDB(tmp_path / "state.db")
-    session_id, _, episode_id = _episode(db, selection="request_effect")
-    generation = db.session_generation(session_id)
+    IdentityRouter(db, {})
+    lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
+    opened = lifecycle.begin("recover me")
+    session_id = opened["session_id"]
+    episode_id = opened["episode_id"]
+    generation = opened["generation"]
+
+    # Current EffectJournal admits episode-bound effects only after the canonical
+    # active turn has selected request_effect. Model the crash window directly at
+    # that linearization point while still bypassing external execution.
+    with db.tx() as sql:
+        lifecycle.workspace.select_in_tx(episode_id, "request_effect")
+        sql.execute(
+            "UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",
+            (session_id, opened["causal_id"]),
+        )
+
     outcome = {
         "ok": True,
         "exit": 0,
@@ -127,12 +143,13 @@ def test_restart_reenters_exact_effectjournal_receipt_without_reexecution_or_rew
     }
     assert first["reentered_effects"] == 1
     assert first["uncertain_effects"] == 0
+    assert first["active_turns_closed"] == 1
     assert second["scanned"] == 0
     assert db.db.execute("SELECT COUNT(*) FROM effects WHERE effect_id=?", (effect_id,)).fetchone()[0] == 1
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 1
     assert db.db.execute(
         "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)
-    ).fetchone()[0] == "RECOVERED_LEGACY_EFFECT_REENTERED"
+    ).fetchone()[0] == "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY"
 
 
 def test_restart_reenters_denied_effect_with_zero_credit(tmp_path):

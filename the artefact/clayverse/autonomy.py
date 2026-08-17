@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS entity_profile(
     mission TEXT NOT NULL,
     operating_mode TEXT NOT NULL CHECK(operating_mode IN ('HIGH_AGENCY_GROUNDED')),
     identity_version INTEGER NOT NULL,
-    updated_at REAL NOT NULL
+    created_at REAL NOT NULL
 );
 CREATE TABLE IF NOT EXISTS goals(
     goal_id TEXT PRIMARY KEY,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS goal_cycles(
     goal_id TEXT NOT NULL REFERENCES goals(goal_id) ON DELETE CASCADE,
     generation INTEGER NOT NULL,
     ordinal INTEGER NOT NULL,
-    status TEXT NOT NULL CHECK(status IN ('RUNNING','WAITING','EFFECT_RECORDED','FAILED','ABORTED','COMPLETED')),
+    status TEXT NOT NULL CHECK(status IN ('RUNNING','WAITING','FAILED','ABORTED','COMPLETED')),
     proposal_sha256 TEXT,
     proposal_summary TEXT,
     effect_id TEXT REFERENCES effects(effect_id),
@@ -79,12 +79,11 @@ class GoalClaim:
 
 
 class AutonomousGoalKernel:
-    """Deterministic goal-state and completion authority inside canonical UnifiedDB.
+    """Deterministic autonomy state machine inside the one canonical UnifiedDB.
 
-    The kernel deliberately does not infer goals, decide truth from model prose, or
-    execute arbitrary actions.  A model/provider may propose a next action, but only
-    canonical user turns create goals and only typed external evidence can complete
-    them.  This keeps high-agency iteration separate from epistemic authority.
+    Models have proposal authority only. Goals originate from persisted human user
+    turns, resource budgets are hard state, and completion is decided from typed
+    canonical evidence rather than model prose or self-evaluation.
     """
 
     ENTITY_NAME = "ClayVerse"
@@ -100,27 +99,6 @@ class AutonomousGoalKernel:
         self.db = db
         self._install_schema()
 
-    def _install_schema(self) -> None:
-        # Same SQLite connection / same state authority; this is a schema extension,
-        # not a second database, agent identity, or lifecycle ledger.
-        self.db.db.executescript(AUTONOMY_SCHEMA)
-        now = time.time()
-        with self.db.tx() as sql:
-            sql.execute(
-                "INSERT INTO entity_profile(singleton,entity_name,mission,operating_mode,identity_version,updated_at) "
-                "VALUES(1,?,?,?,?,?) "
-                "ON CONFLICT(singleton) DO UPDATE SET "
-                "entity_name=excluded.entity_name,mission=excluded.mission,"
-                "operating_mode=excluded.operating_mode,identity_version=excluded.identity_version,updated_at=excluded.updated_at",
-                (self.ENTITY_NAME, self.MISSION, self.OPERATING_MODE, AUTONOMY_SCHEMA_VERSION, now),
-            )
-            sql.execute(
-                "INSERT INTO meta(key,value) VALUES('autonomy_schema_version',?) "
-                "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
-                (str(AUTONOMY_SCHEMA_VERSION),),
-            )
-            self._refresh_state_hash_in_tx(sql)
-
     @staticmethod
     def _canonical_json(value: Any) -> str:
         return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
@@ -130,6 +108,36 @@ class AutonomousGoalKernel:
         if not isinstance(value, str) or not value or len(value) > max_chars or "\x00" in value:
             raise ValueError(f"invalid {name}")
         return value
+
+    def _install_schema(self) -> None:
+        # This extends the canonical database itself; it does not create a second
+        # memory, identity, scheduler ledger, or state authority.
+        self.db.db.executescript(AUTONOMY_SCHEMA)
+        now = time.time()
+        expected = (
+            self.ENTITY_NAME,
+            self.MISSION,
+            self.OPERATING_MODE,
+            AUTONOMY_SCHEMA_VERSION,
+        )
+        with self.db.tx() as sql:
+            row = sql.execute(
+                "SELECT entity_name,mission,operating_mode,identity_version FROM entity_profile WHERE singleton=1"
+            ).fetchone()
+            if row is None:
+                sql.execute(
+                    "INSERT INTO entity_profile(singleton,entity_name,mission,operating_mode,identity_version,created_at) "
+                    "VALUES(1,?,?,?,?,?)",
+                    (*expected, now),
+                )
+            elif tuple(row) != expected:
+                raise AutonomyError("persisted ClayVerse entity profile conflicts with runtime contract")
+            sql.execute(
+                "INSERT INTO meta(key,value) VALUES('autonomy_schema_version',?) "
+                "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                (str(AUTONOMY_SCHEMA_VERSION),),
+            )
+            self._refresh_state_hash_in_tx(sql)
 
     @classmethod
     def _normalize_contract(cls, contract: Any) -> dict[str, Any]:
@@ -141,24 +149,19 @@ class AutonomousGoalKernel:
                 raise GoalContractError("human_confirmation contract has unexpected fields")
             return {"type": "human_confirmation"}
         if kind == "verified_effect":
-            expected = {"type", "capability", "target_sha256"}
-            if set(contract) != expected:
-                raise GoalContractError("verified_effect contract must bind exact capability and target digest")
+            if set(contract) != {"type", "capability", "target_sha256"}:
+                raise GoalContractError("verified_effect must bind exact capability and target digest")
             capability = contract.get("capability")
-            target_sha256 = contract.get("target_sha256")
+            digest = contract.get("target_sha256")
             if capability != "entityos.exec":
                 raise GoalContractError("automatic completion currently requires entityos.exec evidence")
             if (
-                not isinstance(target_sha256, str)
-                or len(target_sha256) != 64
-                or any(ch not in "0123456789abcdef" for ch in target_sha256)
+                not isinstance(digest, str)
+                or len(digest) != 64
+                or any(ch not in "0123456789abcdef" for ch in digest)
             ):
-                raise GoalContractError("verified_effect target_sha256 must be lowercase SHA-256")
-            return {
-                "type": "verified_effect",
-                "capability": capability,
-                "target_sha256": target_sha256,
-            }
+                raise GoalContractError("target_sha256 must be lowercase SHA-256")
+            return {"type": kind, "capability": capability, "target_sha256": digest}
         raise GoalContractError("unsupported goal success contract")
 
     def identity_snapshot(self) -> dict[str, Any]:
@@ -171,11 +174,20 @@ class AutonomousGoalKernel:
             "operating_mode": row["operating_mode"],
             "identity_version": int(row["identity_version"]),
             "state_authority": "UnifiedDB",
+            "model_authority": "PROPOSAL_ONLY",
             "epistemic_law": (
                 "Capability, action, progress, and completion claims require canonical evidence; "
                 "model statements are proposals, never receipts."
             ),
         }
+
+    def goal(self, goal_id: str) -> dict[str, Any]:
+        row = self.db.db.execute("SELECT * FROM goals WHERE goal_id=?", (goal_id,)).fetchone()
+        if row is None:
+            raise KeyError(goal_id)
+        result = dict(row)
+        result["success_contract"] = json.loads(result["success_contract"])
+        return result
 
     def create_goal_from_user_turn(
         self,
@@ -194,22 +206,29 @@ class AutonomousGoalKernel:
         if isinstance(max_failures, bool) or not isinstance(max_failures, int) or not 1 <= max_failures <= 1000:
             raise ValueError("invalid max_failures")
         contract = self._normalize_contract(success_contract)
-
-        turn = self.db.db.execute(
-            "SELECT turn_id,session_id,user_id,role,content FROM turns WHERE turn_id=?",
-            (source_turn_id,),
-        ).fetchone()
-        if turn is None:
-            raise KeyError(source_turn_id)
-        if turn["role"] != "user":
-            raise PermissionError("only a canonical human user turn may create a goal")
-        objective = self._clean_text(turn["content"], "goal objective", self.MAX_OBJECTIVE_CHARS)
-        self.db.assert_session_owner(turn["session_id"], turn["user_id"])
-        self.db.assert_live_generation(turn["session_id"], self.db.session_generation(turn["session_id"]))
-
         goal_id = str(uuid.uuid4())
         now = time.time()
         with self.db.tx() as sql:
+            turn = sql.execute(
+                "SELECT session_id,user_id,role,content FROM turns WHERE turn_id=?",
+                (source_turn_id,),
+            ).fetchone()
+            if turn is None:
+                raise KeyError(source_turn_id)
+            if turn["role"] != "user":
+                raise PermissionError("only a canonical human user turn may create a goal")
+            objective = self._clean_text(turn["content"], "goal objective", self.MAX_OBJECTIVE_CHARS)
+            owner = sql.execute(
+                "SELECT user_id,generation FROM sessions WHERE session_id=?",
+                (turn["session_id"],),
+            ).fetchone()
+            global_generation = int(
+                sql.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()[0]
+            )
+            if owner is None or owner["user_id"] != turn["user_id"]:
+                raise PermissionError("goal source session identity mismatch")
+            if int(owner["generation"]) != global_generation:
+                raise StaleGeneration("entity_generation")
             sql.execute(
                 "INSERT INTO goals(goal_id,user_id,session_id,source_turn_id,objective,success_contract,status,priority,max_cycles,max_failures,cycle_count,failure_count,blocked_reason,created_at,updated_at,completed_at) "
                 "VALUES(?,?,?,?,?,?,'ACTIVE',?,?,?,0,0,NULL,?,?,NULL)",
@@ -230,14 +249,6 @@ class AutonomousGoalKernel:
             self._refresh_state_hash_in_tx(sql)
         return goal_id
 
-    def goal(self, goal_id: str) -> dict[str, Any]:
-        row = self.db.db.execute("SELECT * FROM goals WHERE goal_id=?", (goal_id,)).fetchone()
-        if row is None:
-            raise KeyError(goal_id)
-        item = dict(row)
-        item["success_contract"] = json.loads(item["success_contract"])
-        return item
-
     def runnable_goals(self) -> list[dict[str, Any]]:
         rows = self.db.db.execute(
             "SELECT * FROM goals WHERE status='ACTIVE' "
@@ -248,13 +259,12 @@ class AutonomousGoalKernel:
 
     def claim_next(self, worker_id: str, *, ttl: float = 30.0) -> GoalClaim | None:
         worker_id = self._clean_text(worker_id, "worker id", 256)
-        if not isinstance(ttl, (int, float)) or isinstance(ttl, bool) or ttl <= 0 or ttl > 300:
+        if not isinstance(ttl, (int, float)) or isinstance(ttl, bool) or not 0 < ttl <= 300:
             raise ValueError("invalid goal lease ttl")
         self.enforce_budgets()
         for row in self.runnable_goals()[:32]:
-            resource = f"goal:{row['goal_id']}"
             try:
-                lease = self.db.acquire_lease(resource, worker_id, ttl=float(ttl))
+                lease = self.db.acquire_lease(f"goal:{row['goal_id']}", worker_id, ttl=float(ttl))
             except LeaseConflict:
                 continue
             return GoalClaim(row["goal_id"], lease)
@@ -272,25 +282,10 @@ class AutonomousGoalKernel:
         if claim.lease.resource != f"goal:{claim.goal_id}":
             raise AutonomyError("goal claim resource mismatch")
         self.db.assert_lease(claim.lease)
-        goal = self.goal(claim.goal_id)
-        if goal["status"] != "ACTIVE":
-            raise AutonomyError("goal is not active")
-        if int(goal["cycle_count"]) >= int(goal["max_cycles"]):
-            self.enforce_budgets()
-            raise AutonomyError("goal cycle budget exhausted")
-        if int(goal["failure_count"]) >= int(goal["max_failures"]):
-            self.enforce_budgets()
-            raise AutonomyError("goal failure budget exhausted")
-
-        generation = self.db.entity_generation()
-        self.db.assert_live_generation(goal["session_id"], generation)
         cycle_id = str(uuid.uuid4())
         now = time.time()
         with self.db.tx() as sql:
-            lease = sql.execute(
-                "SELECT holder,generation,expires_at,nonce FROM leases WHERE resource=?",
-                (claim.lease.resource,),
-            ).fetchone()
+            lease = sql.execute("SELECT * FROM leases WHERE resource=?", (claim.lease.resource,)).fetchone()
             if (
                 lease is None
                 or lease["holder"] != claim.lease.holder
@@ -299,22 +294,32 @@ class AutonomousGoalKernel:
                 or float(lease["expires_at"]) <= now
             ):
                 raise StaleGeneration(claim.lease.resource)
-            current = sql.execute("SELECT * FROM goals WHERE goal_id=?", (claim.goal_id,)).fetchone()
-            if current is None or current["status"] != "ACTIVE":
-                raise AutonomyError("goal changed before cycle admission")
-            ordinal = int(current["cycle_count"]) + 1
-            if ordinal > int(current["max_cycles"]):
+            goal = sql.execute("SELECT * FROM goals WHERE goal_id=?", (claim.goal_id,)).fetchone()
+            if goal is None or goal["status"] != "ACTIVE":
+                raise AutonomyError("goal is not active")
+            global_generation = int(
+                sql.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()[0]
+            )
+            session_generation = int(
+                sql.execute("SELECT generation FROM sessions WHERE session_id=?", (goal["session_id"],)).fetchone()[0]
+            )
+            if session_generation != global_generation:
+                raise StaleGeneration("entity_generation")
+            if int(goal["cycle_count"]) >= int(goal["max_cycles"]):
                 raise AutonomyError("goal cycle budget exhausted")
+            if int(goal["failure_count"]) >= int(goal["max_failures"]):
+                raise AutonomyError("goal failure budget exhausted")
+            ordinal = int(goal["cycle_count"]) + 1
             cur = sql.execute(
                 "UPDATE goals SET cycle_count=?,updated_at=? WHERE goal_id=? AND status='ACTIVE' AND cycle_count=?",
-                (ordinal, now, claim.goal_id, int(current["cycle_count"])),
+                (ordinal, now, claim.goal_id, int(goal["cycle_count"])),
             )
             if cur.rowcount != 1:
                 raise AutonomyError("goal changed during cycle admission")
             sql.execute(
-                "INSERT INTO goal_cycles(cycle_id,goal_id,generation,ordinal,status,proposal_sha256,proposal_summary,effect_id,evidence,started_at,finished_at) "
-                "VALUES(?,?,?,?, 'RUNNING',NULL,NULL,NULL,'{}',?,NULL)",
-                (cycle_id, claim.goal_id, generation, ordinal, now),
+                "INSERT INTO goal_cycles(cycle_id,goal_id,generation,ordinal,status,evidence,started_at) "
+                "VALUES(?,?,?,?,'RUNNING','{}',?)",
+                (cycle_id, claim.goal_id, global_generation, ordinal, now),
             )
             self._refresh_state_hash_in_tx(sql)
         return self.cycle_context(cycle_id)
@@ -354,14 +359,13 @@ class AutonomousGoalKernel:
         }
 
     def record_proposal(self, cycle_id: str, proposal: Any) -> str:
-        # Proposals are auditable input to the controller, never evidence of success.
-        payload = self._canonical_json(proposal)
+        try:
+            payload = self._canonical_json(proposal)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("proposal must be canonical JSON data") from exc
         digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
-        if isinstance(proposal, dict):
-            text = proposal.get("text", "")
-            summary = text if isinstance(text, str) else ""
-        else:
-            summary = ""
+        summary = proposal.get("text", "") if isinstance(proposal, dict) else ""
+        summary = summary if isinstance(summary, str) else ""
         summary = summary[: self.MAX_PROPOSAL_SUMMARY_CHARS]
         with self.db.tx() as sql:
             row = sql.execute("SELECT status FROM goal_cycles WHERE cycle_id=?", (cycle_id,)).fetchone()
@@ -377,9 +381,9 @@ class AutonomousGoalKernel:
         return digest
 
     @staticmethod
-    def _effect_target_sha(effect_row: Any) -> str | None:
+    def _target_sha(raw_target_receipt: Any) -> str | None:
         try:
-            receipt = json.loads(effect_row["target"])
+            receipt = json.loads(raw_target_receipt)
         except (TypeError, json.JSONDecodeError):
             return None
         digest = receipt.get("sha256") if isinstance(receipt, dict) else None
@@ -387,55 +391,64 @@ class AutonomousGoalKernel:
 
     def record_verified_effect(self, cycle_id: str, effect_id: str) -> bool:
         effect_id = self._clean_text(effect_id, "effect id", 256)
-        row = self.db.db.execute(
-            "SELECT c.goal_id,c.generation,c.started_at,g.user_id,g.session_id,g.success_contract,e.effect_id,e.user_id AS effect_user,e.capability,e.target,e.requested_generation,e.status,e.outcome,e.ts,ce.causal_id,ce.reentered "
-            "FROM goal_cycles c "
-            "JOIN goals g ON g.goal_id=c.goal_id "
-            "JOIN effects e ON e.effect_id=? "
-            "LEFT JOIN causal_episodes ce ON ce.effect_id=e.effect_id "
-            "WHERE c.cycle_id=?",
-            (effect_id, cycle_id),
-        ).fetchone()
-        if row is None:
-            raise KeyError(cycle_id)
-        contract = json.loads(row["success_contract"])
-        if contract.get("type") != "verified_effect":
-            raise GoalContractError("goal does not accept effect evidence")
-        if row["effect_user"] != row["user_id"]:
-            raise PermissionError("effect user does not match goal owner")
-        if int(row["requested_generation"]) != int(row["generation"]):
-            raise StaleGeneration("goal_effect_generation")
-        self.db.assert_live_generation(row["session_id"], int(row["generation"]))
-        if float(row["ts"]) < float(row["started_at"]):
-            raise AutonomyError("effect predates goal cycle")
-        if row["status"] != "VERIFIED" or not row["causal_id"] or int(row["reentered"] or 0) != 1:
-            raise AutonomyError("effect is not verified and causally re-entered")
-        if row["capability"] != contract["capability"]:
-            raise AutonomyError("effect capability does not satisfy goal contract")
-        if self._effect_target_sha(row) != contract["target_sha256"]:
-            raise AutonomyError("effect target does not satisfy goal contract")
-        try:
-            outcome = json.loads(row["outcome"]) if row["outcome"] else None
-        except json.JSONDecodeError as exc:
-            raise AutonomyError("verified effect outcome receipt is malformed") from exc
-        if not isinstance(outcome, dict) or outcome.get("ok") is not True:
-            raise AutonomyError("verified effect lacks positive receipt")
-
-        evidence = {
-            "kind": "verified_effect",
-            "effect_id": effect_id,
-            "causal_id": row["causal_id"],
-            "capability": row["capability"],
-            "target_sha256": contract["target_sha256"],
-            "generation": int(row["generation"]),
-        }
         now = time.time()
         with self.db.tx() as sql:
-            cycle = sql.execute("SELECT status FROM goal_cycles WHERE cycle_id=?", (cycle_id,)).fetchone()
-            if cycle is None:
+            row = sql.execute(
+                "SELECT c.goal_id,c.generation,c.started_at,c.status AS cycle_status,"
+                "g.user_id,g.session_id,g.success_contract,g.status AS goal_status,"
+                "e.user_id AS effect_user,e.capability,e.target,e.requested_generation,e.status AS effect_status,e.outcome,e.ts,"
+                "ce.causal_id,ce.reentered,w.session_id AS effect_session "
+                "FROM goal_cycles c "
+                "JOIN goals g ON g.goal_id=c.goal_id "
+                "JOIN effects e ON e.effect_id=? "
+                "LEFT JOIN causal_episodes ce ON ce.effect_id=e.effect_id "
+                "LEFT JOIN workspace_episodes w ON w.episode_id=e.episode_id "
+                "WHERE c.cycle_id=?",
+                (effect_id, cycle_id),
+            ).fetchone()
+            if row is None:
                 raise KeyError(cycle_id)
-            if cycle["status"] not in {"RUNNING", "WAITING"}:
-                raise AutonomyError("goal cycle is already terminal or has effect evidence")
+            if row["cycle_status"] not in {"RUNNING", "WAITING"} or row["goal_status"] != "ACTIVE":
+                raise AutonomyError("goal or cycle is not open for completion")
+            contract = json.loads(row["success_contract"])
+            if contract.get("type") != "verified_effect":
+                raise GoalContractError("goal does not accept effect evidence")
+            if row["effect_user"] != row["user_id"] or row["effect_session"] != row["session_id"]:
+                raise PermissionError("effect identity does not match goal owner/session")
+            global_generation = int(
+                sql.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()[0]
+            )
+            session_generation = int(
+                sql.execute("SELECT generation FROM sessions WHERE session_id=?", (row["session_id"],)).fetchone()[0]
+            )
+            if (
+                int(row["generation"]) != global_generation
+                or session_generation != global_generation
+                or int(row["requested_generation"]) != global_generation
+            ):
+                raise StaleGeneration("goal_effect_generation")
+            if float(row["ts"]) < float(row["started_at"]):
+                raise AutonomyError("effect predates goal cycle")
+            if row["effect_status"] != "VERIFIED" or not row["causal_id"] or int(row["reentered"] or 0) != 1:
+                raise AutonomyError("effect is not verified and causally re-entered")
+            if row["capability"] != contract["capability"]:
+                raise AutonomyError("effect capability does not satisfy goal contract")
+            if self._target_sha(row["target"]) != contract["target_sha256"]:
+                raise AutonomyError("effect target does not satisfy goal contract")
+            try:
+                outcome = json.loads(row["outcome"]) if row["outcome"] else None
+            except json.JSONDecodeError as exc:
+                raise AutonomyError("verified effect outcome receipt is malformed") from exc
+            if not isinstance(outcome, dict) or outcome.get("ok") is not True:
+                raise AutonomyError("verified effect lacks positive receipt")
+            evidence = {
+                "kind": "verified_effect",
+                "effect_id": effect_id,
+                "causal_id": row["causal_id"],
+                "generation": global_generation,
+                "capability": row["capability"],
+                "target_sha256": contract["target_sha256"],
+            }
             sql.execute(
                 "UPDATE goal_cycles SET effect_id=?,evidence=?,status='COMPLETED',finished_at=? WHERE cycle_id=?",
                 (effect_id, self._canonical_json(evidence), now, cycle_id),
@@ -451,33 +464,35 @@ class AutonomousGoalKernel:
         return True
 
     def confirm_goal(self, goal_id: str, confirmation_turn_id: str) -> bool:
-        goal = self.goal(goal_id)
-        contract = goal["success_contract"]
-        if contract.get("type") != "human_confirmation":
-            raise GoalContractError("goal does not use human confirmation")
-        turn = self.db.db.execute(
-            "SELECT session_id,user_id,role,ts FROM turns WHERE turn_id=?",
-            (confirmation_turn_id,),
-        ).fetchone()
-        if turn is None:
-            raise KeyError(confirmation_turn_id)
-        if turn["role"] != "user" or turn["user_id"] != goal["user_id"] or turn["session_id"] != goal["session_id"]:
-            raise PermissionError("confirmation must be a later canonical turn from the goal owner")
-        if float(turn["ts"]) < float(goal["created_at"]):
-            raise PermissionError("confirmation predates goal")
+        confirmation_turn_id = self._clean_text(confirmation_turn_id, "confirmation turn id", 256)
         now = time.time()
         with self.db.tx() as sql:
+            goal = sql.execute("SELECT * FROM goals WHERE goal_id=?", (goal_id,)).fetchone()
+            if goal is None:
+                raise KeyError(goal_id)
+            contract = json.loads(goal["success_contract"])
+            if contract.get("type") != "human_confirmation":
+                raise GoalContractError("goal does not use human confirmation")
+            if goal["status"] != "ACTIVE":
+                raise AutonomyError("goal is not active at confirmation")
+            turn = sql.execute(
+                "SELECT session_id,user_id,role,ts FROM turns WHERE turn_id=?",
+                (confirmation_turn_id,),
+            ).fetchone()
+            if turn is None:
+                raise KeyError(confirmation_turn_id)
+            if turn["role"] != "user" or turn["user_id"] != goal["user_id"] or turn["session_id"] != goal["session_id"]:
+                raise PermissionError("confirmation must be a later canonical turn from the goal owner")
+            if float(turn["ts"]) < float(goal["created_at"]):
+                raise PermissionError("confirmation predates goal")
             sql.execute(
                 "INSERT INTO goal_confirmations(goal_id,confirmation_turn_id,confirmed_at) VALUES(?,?,?)",
                 (goal_id, confirmation_turn_id, now),
             )
-            cur = sql.execute(
-                "UPDATE goals SET status='COMPLETED',completed_at=?,updated_at=?,blocked_reason=NULL "
-                "WHERE goal_id=? AND status='ACTIVE'",
+            sql.execute(
+                "UPDATE goals SET status='COMPLETED',completed_at=?,updated_at=?,blocked_reason=NULL WHERE goal_id=?",
                 (now, now, goal_id),
             )
-            if cur.rowcount != 1:
-                raise AutonomyError("goal is not active at confirmation")
             self._refresh_state_hash_in_tx(sql)
         return True
 
@@ -492,22 +507,23 @@ class AutonomousGoalKernel:
             ).fetchone()
             if row is None:
                 raise KeyError(cycle_id)
-            if row["status"] not in {"RUNNING", "WAITING"}:
-                raise AutonomyError("goal cycle is already terminal")
+            if row["status"] not in {"RUNNING", "WAITING"} or row["goal_status"] != "ACTIVE":
+                raise AutonomyError("goal cycle is already terminal or goal is inactive")
             failures = int(row["failure_count"]) + 1
             sql.execute(
                 "UPDATE goal_cycles SET status='FAILED',evidence=?,finished_at=? WHERE cycle_id=?",
                 (self._canonical_json({"kind": "failure", "reason": reason}), now, cycle_id),
             )
-            blocked = failures >= int(row["max_failures"]) or int(row["cycle_count"]) >= int(row["max_cycles"])
-            status = "BLOCKED" if blocked else row["goal_status"]
+            exhausted_failures = failures >= int(row["max_failures"])
+            exhausted_cycles = int(row["cycle_count"]) >= int(row["max_cycles"])
+            blocked = exhausted_failures or exhausted_cycles
             blocked_reason = (
-                "failure_budget_exhausted" if failures >= int(row["max_failures"]) else
-                "cycle_budget_exhausted" if blocked else None
+                "failure_budget_exhausted" if exhausted_failures else
+                "cycle_budget_exhausted" if exhausted_cycles else None
             )
             sql.execute(
                 "UPDATE goals SET failure_count=?,status=?,blocked_reason=?,updated_at=? WHERE goal_id=?",
-                (failures, status, blocked_reason, now, row["goal_id"]),
+                (failures, "BLOCKED" if blocked else "ACTIVE", blocked_reason, now, row["goal_id"]),
             )
             self._refresh_state_hash_in_tx(sql)
         return self.goal(row["goal_id"])
@@ -522,10 +538,9 @@ class AutonomousGoalKernel:
                 "WHERE status='ACTIVE' AND (failure_count>=max_failures OR cycle_count>=max_cycles)",
                 (now,),
             )
-            changed = cur.rowcount
-            if changed:
+            if cur.rowcount:
                 self._refresh_state_hash_in_tx(sql)
-        return int(changed)
+            return int(cur.rowcount)
 
     def set_status(self, goal_id: str, status: str, *, reason: str | None = None) -> None:
         if status not in {"ACTIVE", "PAUSED", "BLOCKED", "CANCELLED"}:

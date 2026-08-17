@@ -5,6 +5,7 @@ from .store import UnifiedDB,StaleGeneration,Lease
 class EffectJournal:
     """Transactional causal journal inside UnifiedDB; never a second state authority."""
     FINAL={'VERIFIED','DENIED','FAILED','STALE_OUTCOME','UNKNOWN_AFTER_RESTART'}
+    SAFE_OUTCOME_FIELDS=('ok','exit','boundary','entityos_sha256','denied','reason','error','certainty')
     def __init__(self,db:UnifiedDB):
         self.db=db
         self.recover_pending()
@@ -12,13 +13,27 @@ class EffectJournal:
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
     @staticmethod
     def _credit(status,outcome): return 1.0 if status=='VERIFIED' and isinstance(outcome,dict) and outcome.get('ok') is True else 0.0
+    @classmethod
+    def _argv_receipt(cls,argv):
+        if not argv: return None
+        raw=json.dumps(argv,ensure_ascii=False,separators=(',',':')).encode()
+        return {'audit':'redacted-argv-v1','argc':len(argv),'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
+    @classmethod
+    def _outcome_receipt(cls,outcome):
+        payload=cls._payload(outcome).encode()
+        receipt={'audit':'redacted-outcome-v1','sha256':hashlib.sha256(payload).hexdigest(),'bytes':len(payload)}
+        if isinstance(outcome,dict):
+            for key in cls.SAFE_OUTCOME_FIELDS:
+                if key in outcome and isinstance(outcome[key],(str,int,float,bool,type(None))): receipt[key]=outcome[key]
+        return receipt
     def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None):
         eid=str(uuid.uuid4())
         with self.db.tx() as db:
             row=db.execute('SELECT generation FROM sessions WHERE session_id=? AND user_id=?',(session_id,user_id)).fetchone()
             if not row: raise PermissionError('session owner mismatch')
             if int(row[0])!=int(generation): raise StaleGeneration(session_id)
-            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,generation,time.time()))
+            audit_argv=self._argv_receipt(argv)
+            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,target,json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))
         return eid
     def _reenter_tx(self,db,effect_id,status,outcome):
         row=db.execute('SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1',(effect_id,)).fetchone()
@@ -35,7 +50,8 @@ class EffectJournal:
         row=db.execute('SELECT status FROM effects WHERE effect_id=?',(effect_id,)).fetchone()
         if not row: raise KeyError(effect_id)
         if row['status']!='PENDING': raise RuntimeError(f"effect is not pending: {row['status']}")
-        db.execute('UPDATE effects SET status=?,outcome=?,verified_at=? WHERE effect_id=?',(status,self._payload(outcome),time.time(),effect_id))
+        audit_outcome=self._outcome_receipt(outcome)
+        db.execute('UPDATE effects SET status=?,outcome=?,verified_at=? WHERE effect_id=?',(status,self._payload(audit_outcome),time.time(),effect_id))
         return self._reenter_tx(db,effect_id,status,outcome)
     def complete(self,effect_id,outcome,status):
         if status not in self.FINAL-{'VERIFIED'}: raise ValueError(status)

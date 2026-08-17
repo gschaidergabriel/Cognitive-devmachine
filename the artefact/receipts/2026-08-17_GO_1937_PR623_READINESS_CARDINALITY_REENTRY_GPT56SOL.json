@@ -1,0 +1,47 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T19:37:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project worker",
+  "trigger": "go",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "3a4a7d0f8f11d0631962512d9d5202310a27b6f9",
+  "frontier": "authenticated identity/session drift hardening while exact OCI runtime remains blocked before private source staging",
+  "observations": {
+    "pr623": {
+      "head": "831e7e6fa9c9de9e7ace49476cbfcff56e420587",
+      "status": "DRAFT_SOURCE_CANDIDATE_UNEXECUTED",
+      "identity_change": "request-time IdentityRouter.resolve is read/validate-only and rejects missing, duplicate, noncanonical-terminal or stale-generation permanent sessions",
+      "readiness_change": "_runtime_ready now requires exact canonical session-row cardinality before projecting rows by user, so duplicate canonical sessions fail closed before terminal probing",
+      "readiness_test": "test_runtime_readiness_rejects_duplicate_canonical_session_before_terminal_probe"
+    },
+    "workflow": {
+      "run_id": 32030737590,
+      "job_id": 95389934157,
+      "conclusion": "failure",
+      "steps": [],
+      "runner_id": 0,
+      "classification": "RUNNER_ADMISSION_FAILURE_NOT_SEMANTIC_TEST_FAILURE"
+    },
+    "oci_execution": {
+      "strongest_observed_sandbox_admission": "PASS_CREATED",
+      "current_blocker": "HOST_SIDE_VERCEL_PREVIEW_GITHUB_READ_TOKEN_MISSING_BEFORE_PRIVATE_SOURCE_FETCH",
+      "source_runtime_credit": 0,
+      "oci_runtime_credit": 0
+    }
+  },
+  "counterhypothesis": "A source-level exact-cardinality guard can still be wrong or regress adjacent runtime behavior; no promotion is justified until an authorized isolated execution actually runs the focused and adjacent regressions at exact identity.",
+  "anti_duplication": "The duplicate-session readiness defect was discovered independently during this go but was already repaired by the existing PR623 lane before a competing patch was written; no second identity/readiness lane was created.",
+  "unusual_experiment": {
+    "count": 0,
+    "reason": "COORDINATION_BLOCKED_NO_IMMUTABLE_SHARED_GO_REQUEST_ID_FOR_ATOMIC_EXPERIMENT_LEASE"
+  },
+  "security": {
+    "vps_test_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false,
+    "secret_exposed": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass_claimed": false
+}

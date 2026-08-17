@@ -1,5 +1,7 @@
+import pytest
+
 from clayverse.agency import AgencyState
-from clayverse.autonomy import AutonomyRunner
+from clayverse.autonomy import AutonomyRunner, UserHomeClaudeInferenceRouter
 from clayverse.identity import IdentityRouter
 from clayverse.store import UnifiedDB
 
@@ -47,6 +49,15 @@ def _db(tmp_path):
     db = UnifiedDB(tmp_path / "autonomy.db")
     IdentityRouter(db, {"g": "gabriel", "a": "andreas"})
     return db
+
+
+def test_user_home_router_derives_auth_home_only_from_canonical_owner(tmp_path):
+    router = UserHomeClaudeInferenceRouter(tmp_path)
+    adapter = router._adapter("gabriel")
+    assert adapter._subprocess_env()["HOME"] == str(tmp_path / "users" / "gabriel" / "home")
+    assert router._adapter("gabriel") is adapter
+    with pytest.raises(PermissionError, match="unknown autonomous goal owner"):
+        router._adapter("mallory")
 
 
 def test_daemon_cycle_spends_zero_inference_when_no_goal_exists(tmp_path):

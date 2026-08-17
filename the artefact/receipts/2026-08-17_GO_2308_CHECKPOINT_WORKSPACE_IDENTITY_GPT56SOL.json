@@ -1,0 +1,50 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at": "2026-08-17T23:08:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "trigger": "go",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CANDIDATE_WITH_SUPPORTING_MECHANISM_EVIDENCE",
+  "observed_main_at_pr_creation": "a6475420ba9ffd41d096b659bd16ab54a735a7fa",
+  "pull_request": 641,
+  "branch": "gpt56sol/go-checkpoint-workspace-binding-20260817-2259",
+  "tested_source_head_before_receipt": "a84272604feb2ddb1b9cc9911e5e18062c92c8e8",
+  "source_blobs": {
+    "the artefact/clayverse/store.py": "5366f8c28aa50023b7a1af4e1022583d5921b7e1",
+    "the artefact/tests/test_checkpoint_workspace_identity.py": "e179713d8acf2e063c2c4d2babbdf0a38cb77653"
+  },
+  "observed_defect": "UnifiedDB.checkpoint state_hash omitted workspace_episodes even though workspace episode state/selection is part of the canonical causal/recovery spine.",
+  "repair": "Add workspace_episodes to the canonical checkpoint hash payload while continuing to exclude checkpoints self-reference and rebuildable ClayGraph graph_nodes/graph_edges.",
+  "focused_regressions_added": [
+    "workspace episode OPEN -> SELECTED transition must change checkpoint state_hash",
+    "derived ClayGraph-only graph_nodes mutation must not change checkpoint state_hash"
+  ],
+  "supporting_mechanism_execution": {
+    "surface": "isolated OpenAI non-production container",
+    "scope": "deterministic SQLite reconstruction of the checkpoint table-selection mechanism; not exact branch pytest",
+    "old_workspace_transition_changes_hash": false,
+    "new_workspace_transition_changes_hash": true,
+    "new_graph_projection_changes_hash": false,
+    "old_before": "e1ad7f405de7a1fd6769e6ea9436b793b7ec6ce1e036203b487874f859d41984",
+    "old_after": "e1ad7f405de7a1fd6769e6ea9436b793b7ec6ce1e036203b487874f859d41984",
+    "new_before": "eedf85556099db03be914b49a5e9f7329c13729f163f06ae5de99dc7952a9901",
+    "new_after": "7bf51ecaf701eb6387c11d85541eccac8c93c0a1cdb2a93e44ee37ec27d79bdc"
+  },
+  "execution_boundary": {
+    "exact_branch_pytest": "UNOBSERVED",
+    "exact_oci": "UNOBSERVED",
+    "snapshot_restore": "UNOBSERVED",
+    "kata_microvm": "UNOBSERVED",
+    "vercel": "SANDBOX_ADMISSION_PREVIOUSLY_CONFIRMED_BUT_PRIVATE_SOURCE_STAGE_BLOCKED_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_WORKER_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiments_executed": 0,
+  "counterhypothesis": "Checkpoint identity should exclude ephemeral/derived workspace state; rejected because workspace_episodes carries canonical episode selection/state used by effects, active turns and restart recovery, whereas ClayGraph remains explicitly derived and is still excluded.",
+  "promotion_gate": "Execute exact PR head focused regression in an authorized isolated full checkout, then carry it through exact OCI known-good snapshot and Tier-1/Tier-2 recovery acceptance before product promotion.",
+  "whole_product_pass": false,
+  "notes": "No VPS/self-hosted/production test, Together API, secret exposure or owner-gated paid/final training was used. Source/component/mechanism evidence does not imply whole ClayVerse PASS."
+}

@@ -1,0 +1,101 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "2e114efc9ee196bd115a2c80b7c90bf64c0cb130",
+  "classification": "SELF_CORRECTION_PRIMARY_PROVIDER_EVIDENCE_OVERRIDES_EARLIER_MISREAD",
+  "supersedes_in_full_or_material_part": [
+    "the artefact/receipts/2026-08-18_GO_VERCEL_SNAPSHOT_LIFECYCLE_CORRECTION_GPT56SOL.json",
+    "the artefact/receipts/2026-08-18_GO_VERCEL_SNAPSHOT_CARRIER_ADJUDICATION_GPT56SOL.json"
+  ],
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "corrected_primary_provider_evidence": {
+    "provider": "Vercel",
+    "checked_at": "2026-08-18T01:48+07:00",
+    "sources": [
+      {
+        "url": "https://vercel.com/kb/guide/vercel-sandbox-duration-and-persistence",
+        "last_updated": "2026-06-29",
+        "finding": "Snapshots persist on the sandbox's own filesystem and are tied to its lifecycle. For data that must outlive the sandbox entirely, Vercel directs users to Vercel Drive."
+      },
+      {
+        "url": "https://vercel.com/kb/guide/vercel-drives",
+        "last_updated": "2026-06-29",
+        "finding": "A Drive has a lifecycle independent from any sandbox. Deleting a sandbox leaves mounted Drive contents untouched; a later sandbox can mount the same Drive. The same guide states deleting a sandbox deletes its snapshots."
+      },
+      {
+        "url": "https://vercel.com/changelog/drives-for-vercel-sandbox-in-private-beta",
+        "published": "2026-06-05",
+        "finding": "Vercel Drives are persistent attachable storage with sandbox-independent lifecycle and currently require the beta Sandbox SDK/CLI plus private-beta access."
+      }
+    ],
+    "producer_sandbox_delete_implies_snapshot_survival": false,
+    "snapshot_as_independent_post_delete_tier2_carrier": "REJECT",
+    "vercel_drive_as_provider_supported_independent_carrier": "RETAIN_AS_ARCHITECTURE_CANDIDATE_ONLY"
+  },
+  "why_the_earlier_receipts_were_wrong": "The earlier reading conflated snapshot retention/expiry and separate snapshot resource operations with independence from the producing Sandbox. The June 29 provider guidance explicitly resolves that ambiguity in the opposite direction.",
+  "controller_adjudication": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "latest_guard_head_observed_before_receipt": "8aeec51d413db963d311009fe343d993e09b0d0c",
+    "fail_closed_snapshot_rejection": "RETAIN",
+    "do_not_restore_snapshot_carrier_guard": true,
+    "snapshot_handler_runtime_credit": 0,
+    "tier2_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "independent_source_fixes_that_remain_valid": {
+    "phase1_network_policy_commit": "cfc375ca9809c1c557dde8f382d00b14f5d0c4b6",
+    "effect_tier1_network_policy_commit": "0b07d083dfe179d820be86ea45b8e572580a911b",
+    "finding": "These handlers were changed from stale networkPolicy {allow: domains} to the documented custom policy shape {mode:'custom', allowedDomains, allowedCIDRs, deniedCIDRs}; this is independent of Tier2 storage-carrier selection and remains source-only until executed."
+  },
+  "vercel_drive_frontier": {
+    "lifecycle_fit": "SUPPORTED_BY_PRIMARY_PROVIDER_DOCS",
+    "private_beta": true,
+    "documented_plans": ["Pro", "Enterprise"],
+    "current_project_beta_enablement": "UNVERIFIED",
+    "current_controller_sdk_beta_admission": "UNVERIFIED_NOT_AUTHORIZED_BY_SOURCE_INSPECTION",
+    "runtime_probe_executed": false,
+    "required_fail_closed_sequence_if_admitted": [
+      "create one temporary integrity-bound Drive",
+      "mount in source sandbox and export only declared logical state/workspace/exact OCI transfer bundle",
+      "hash and receipt every declared transfer artifact",
+      "unmount/detach and delete the source sandbox",
+      "create a genuinely new persistent:false sandbox mounting the same Drive",
+      "verify manifest, exact OCI identity and absence of undeclared authority",
+      "restore under a new entity generation",
+      "reject stale writers and do not blindly replay unknown effects",
+      "reacquire provider secret through fresh Vercel OIDC to HCP WIF",
+      "run the second canonical cognition turn",
+      "delete the temporary Drive only after a bounded recovery receipt"
+    ]
+  },
+  "execution_admission": {
+    "latest_visible_vercel_deployment": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "latest_visible_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "state": "ERROR",
+    "current_pr810_head_deployment_visible": false,
+    "classification": "CURRENT_HEAD_EXECUTION_NOT_ADMITTED",
+    "runtime_credit_added": 0
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "global_go_slot_already_consumed": true
+  },
+  "epistemic_status": {
+    "self_correction_committed": true,
+    "external_primary_mechanism_support": true,
+    "drive_availability_for_current_project": "UNKNOWN",
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Before changing Tier2 runtime code, determine through the authorized Vercel control plane whether Drives private beta is enabled for this project/team and whether the beta Sandbox SDK may be admitted. If yes, implement the single retained PR810 Drive carrier with exact cleanup/integrity fences and execute it in an admitted exact-head Preview. If no, retain zero Tier2 credit and select another already-authorized sandbox-independent durable store."
+}

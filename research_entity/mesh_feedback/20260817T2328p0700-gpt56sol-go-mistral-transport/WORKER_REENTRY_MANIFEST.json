@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260817T2328p0700-gpt56sol-go-mistral-transport",
+  "routing_mode": "TARGETED_BY_SEMANTIC_AND_WORK_DEPENDENCY",
+  "routes": [
+    {
+      "route_id": "72d5bea0ead12bb64dc3a422035740d3ce029c947c3c39d464a0795678fdc1b8",
+      "receiver": "github:pull/670",
+      "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
+      "urgency": "BEFORE_NEXT_MATERIAL_WRITE_OR_PROMOTION",
+      "decision": "ADOPT",
+      "summary": "PR670 is the retained minimal hardening lane for the already-integrated adapters.MistralInference transport. In addition to its non-finite JSON fences, bind provider-reported model identity exactly to the requested model: require a present bounded model field and model_returned == self.model before receipt creation. The current main/PR transport only requires a non-empty returned model, so gateway/provider substitution can weaken provenance.",
+      "required_revalidation": "Refresh PR670 head and current main before the next write; preserve its single existing Mistral transport and strict JSON changes; add negatives for missing and mismatched provider model plus exact-match control; do not import the duplicate Mistral transport from PR629. Run focused transport regressions in an authorized isolated surface before promotion; no real-token/OCI/runtime credit from source structure alone.",
+      "payload_digest": "f71d4ccaed920f7a1a4835093521461366b582ba7cdba9dbb3da3a817e4e1ff7",
+      "requires_reply_or_observable_action": true,
+      "delivery": {
+        "status": "PENDING",
+        "channel": "github_pr_comment"
+      }
+    }
+  ],
+  "delivery_state": "PR670_MODEL_IDENTITY_PENDING",
+  "causal_credit": "NONE_FROM_DELIVERY_ALONE"
+}

@@ -18,7 +18,7 @@ def test_canonical_users_have_disjoint_tmux_server_sockets(tmp_path):
     assert andreas.tmux_name == "clayverse-andreas"
 
 
-def test_session_creation_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch):
+def test_session_creation_uses_only_bound_server_and_managed_tmux_policy(tmp_path, monkeypatch):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     calls: list[list[str]] = []
@@ -38,11 +38,13 @@ def test_session_creation_uses_only_the_bound_users_tmux_server(tmp_path, monkey
     andreas_calls = [argv for argv in calls if "clayverse-andreas" in argv]
     assert gabriel_calls
     assert andreas_calls
+    for argv in calls:
+        assert argv[0:3] == ["tmux", "-f", str(TerminalSessionManager.MANAGED_TMUX)]
     assert all(argv[argv.index("-L") + 1] == "clayverse-gabriel" for argv in gabriel_calls)
     assert all(argv[argv.index("-L") + 1] == "clayverse-andreas" for argv in andreas_calls)
 
 
-def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch):
+def test_attach_pty_uses_only_bound_server_and_managed_tmux_policy(tmp_path, monkeypatch):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     binding = manager.binding("andreas")
     monkeypatch.setattr(manager, "ensure", lambda user_id: binding)
@@ -61,6 +63,8 @@ def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch)
     assert program == "tmux"
     assert argv == [
         "tmux",
+        "-f",
+        "/etc/clayverse/tmux.conf",
         "-L",
         "clayverse-andreas",
         "attach-session",

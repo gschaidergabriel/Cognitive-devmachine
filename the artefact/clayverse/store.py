@@ -15,6 +15,7 @@ CREATE INDEX IF NOT EXISTS idx_turns_session_ord ON turns(session_id, ordinal DE
 CREATE TABLE IF NOT EXISTS durable_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL,subject TEXT NOT NULL,value TEXT NOT NULL,source_turn_id TEXT REFERENCES turns(turn_id),user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS workspace_episodes(episode_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),ts REAL NOT NULL,observation_turn_id TEXT REFERENCES turns(turn_id),salience REAL NOT NULL,alternatives TEXT NOT NULL,selected TEXT,state TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS effects(effect_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),user_id TEXT NOT NULL,capability TEXT NOT NULL,target TEXT NOT NULL,argv TEXT,requested_generation INTEGER NOT NULL,status TEXT NOT NULL,outcome TEXT,ts REAL NOT NULL,verified_at REAL);
+CREATE TABLE IF NOT EXISTS effect_requests(request_key TEXT PRIMARY KEY,request_hash TEXT NOT NULL,effect_id TEXT NOT NULL UNIQUE,status TEXT NOT NULL CHECK(status IN ('PENDING','VERIFIED','FAILED','DENIED')),outcome TEXT,ts REAL NOT NULL,terminal_at REAL);
 CREATE TABLE IF NOT EXISTS causal_episodes(causal_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),effect_id TEXT REFERENCES effects(effect_id),observation_turn_id TEXT REFERENCES turns(turn_id),outcome_hash TEXT,credit REAL NOT NULL DEFAULT 0,reentered INTEGER NOT NULL DEFAULT 0,ts REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS leases(resource TEXT PRIMARY KEY,holder TEXT NOT NULL,generation INTEGER NOT NULL,expires_at REAL NOT NULL,nonce TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS checkpoints(checkpoint_id TEXT PRIMARY KEY,ts REAL NOT NULL,state_hash TEXT NOT NULL,note TEXT NOT NULL);
@@ -33,7 +34,7 @@ class UnifiedDB:
     def __init__(self,path):
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
-        self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('schema_version','1')")
+        self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self.db.execute("INSERT OR REPLACE INTO meta(key,value) VALUES('schema_version','2')")
     def close(self): self.db.close()
     @contextlib.contextmanager
     def tx(self):
@@ -83,9 +84,29 @@ class UnifiedDB:
     def assert_lease(self,lease):
         row=self.db.execute("SELECT * FROM leases WHERE resource=?",(lease.resource,)).fetchone()
         if not row or row['holder']!=lease.holder or int(row['generation'])!=lease.generation or row['nonce']!=lease.nonce or float(row['expires_at'])<=time.time(): raise StaleGeneration(lease.resource)
+    def reserve_effect_request(self,request_key,request_hash):
+        if not request_key or not request_hash: raise ValueError('effect request identity required')
+        with self.tx() as db:
+            row=db.execute("SELECT * FROM effect_requests WHERE request_key=?",(request_key,)).fetchone()
+            if row: return dict(row),False
+            eid=str(uuid.uuid4()); now=time.time(); db.execute("INSERT INTO effect_requests(request_key,request_hash,effect_id,status,outcome,ts,terminal_at) VALUES(?,?,?,'PENDING',NULL,?,NULL)",(request_key,request_hash,eid,now)); return dict(db.execute("SELECT * FROM effect_requests WHERE request_key=?",(request_key,)).fetchone()),True
+    def complete_reserved_effect(self,request_key,episode_id,user_id,capability,target,requested_generation,argv,outcome,status='VERIFIED'):
+        if status not in {'VERIFIED','DENIED'}: raise ValueError('invalid terminal effect status')
+        with self.tx() as db:
+            row=db.execute("SELECT * FROM effect_requests WHERE request_key=?",(request_key,)).fetchone()
+            if not row or row['status']!='PENDING': raise RuntimeError('EFFECT_RESERVATION_LOST')
+            eid=row['effect_id']; now=time.time(); encoded=json.dumps(outcome,sort_keys=True)
+            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,encoded,now,now))
+            db.execute("UPDATE effect_requests SET status=?,outcome=?,terminal_at=? WHERE request_key=?",(status,encoded,now,request_key))
+        return eid
+    def fail_reserved_effect(self,request_key,outcome):
+        with self.tx() as db:
+            row=db.execute("SELECT status FROM effect_requests WHERE request_key=?",(request_key,)).fetchone()
+            if not row or row['status']!='PENDING': raise RuntimeError('EFFECT_RESERVATION_LOST')
+            db.execute("UPDATE effect_requests SET status='FAILED',outcome=?,terminal_at=? WHERE request_key=?",(json.dumps(outcome,sort_keys=True),time.time(),request_key))
     def record_effect(self,episode_id,user_id,capability,target,requested_generation,status,argv=None,outcome=None):
         eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
     def checkpoint(self,note):
         payload=[]
-        for table in ("users","sessions","turns","durable_memory","effects","causal_episodes","leases"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
+        for table in ("users","sessions","turns","durable_memory","effects","effect_requests","causal_episodes","leases"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
         digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest

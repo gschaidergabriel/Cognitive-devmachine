@@ -1,10 +1,10 @@
 name: clayverse-artifact-ci
 
+# GitHub-hosted runner admission is currently failing before any step
+# (run 31995907177: runner_id=0, steps=[]). Keep this exact OCI gate manual
+# until an isolated runner can actually start; do not manufacture false-red
+# executable evidence from control-plane rejection.
 on:
-  push:
-    paths:
-      - "the artefact/**"
-      - ".github/workflows/clayverse-artifact-ci.yml"
   workflow_dispatch:
 
 permissions:
@@ -108,7 +108,9 @@ jobs:
           for raw in sys.argv[1:]:
               doc = json.loads(raw)
               assert doc["service"] == "clayverse"
-              assert doc["status"] in {"ok", "ready"}
+              assert doc["status"] == "probe_ok"
+              assert doc["scope"] == "state_only"
+              assert doc["ready"] is False
               assert len(doc["state_hash"]) == 64
           PY
 
@@ -135,5 +137,6 @@ jobs:
             echo "- docker-save sha256: $ARCHIVE_SHA256"
             echo "- tests: full candidate pytest suite"
             echo "- runtime: non-root uid 10001, network=none, read-only rootfs, cap-drop=ALL, no-new-privileges"
-            echo "- continuity: two isolated container restarts against one persistent state volume"
+            echo "- continuity: two isolated state-only --once probes against one persistent state volume"
+            echo "- readiness claim: none; --once is explicitly probe_ok/state_only/ready=false"
           } >> "$GITHUB_STEP_SUMMARY"

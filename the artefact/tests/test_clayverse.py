@@ -1,4 +1,3 @@
-import sqlite3
 import sys
 import tempfile
 import unittest
@@ -57,6 +56,38 @@ class ClayVerseCoreTests(unittest.TestCase):
             self.assertEqual(types, [
                 "EFFECT_REQUEST", "EFFECT_OUTCOME", "EFFECT_VERIFIED", "CAUSAL_REENTRY", "CREDIT_UPDATE"
             ])
+
+    def test_pending_effect_after_restart_fails_closed_instead_of_reexecuting(self):
+        # Regression discriminator for the crash window discovered after the
+        # first green run. This is regression-only, not a second unusual experiment.
+        request = {"kind": "process", "argv": ["/bin/echo", "once"], "timeout": 5.0}
+        from clayverse import canonical_json
+        import hashlib
+        request_hash = hashlib.sha256(canonical_json(request).encode()).hexdigest()
+        with ClayVerse(self.root) as cv:
+            cv.db.execute("BEGIN IMMEDIATE")
+            epoch = cv._next_epoch()
+            cv._append_event("EFFECT_REQUEST", "crash-window", request, epoch=epoch)
+            cv.db.execute(
+                "INSERT INTO effects(effect_id,request_hash,request_json,status,result_json,verified,request_epoch,terminal_epoch) "
+                "VALUES(?,?,?,?,NULL,0,?,NULL)",
+                ("crash-window", request_hash, canonical_json(request), "PENDING", epoch),
+            )
+            cv.db.execute("COMMIT")
+        with ClayVerse(self.root) as cv:
+            before = cv.epoch()
+            with self.assertRaisesRegex(RuntimeError, "EFFECT_RECOVERY_REQUIRED"):
+                cv.run_process_effect(
+                    "crash-window", ["/bin/echo", "once"], verifier=lambda p: True
+                )
+            self.assertEqual(cv.epoch(), before)
+
+    def test_manager_tick_keeps_integrity_contract_live(self):
+        with ClayVerse(self.root) as cv:
+            cv.open_session("A")
+            snap = cv.manager_tick()
+            self.assertEqual(snap["identity"], CLAYVERSE_ID)
+            self.assertTrue(snap["event_head"])
 
     def test_failed_effect_verification_gets_no_credit(self):
         with ClayVerse(self.root) as cv:

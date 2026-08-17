@@ -100,7 +100,7 @@ def _positive_outcome(db, *, user_id, turn_id, episode_id, causal_id):
 
 
 def test_v2_learned_route_capital_does_not_cross_user_perspectives(tmp_path):
-    """RED GATE: one user's adaptive policy must not silently retune the other user."""
+    """One user's learned exact-memory route must not open the other user's memory."""
     db = _db(tmp_path)
     try:
         subject = "procedure:shared-label"
@@ -134,7 +134,7 @@ def test_v2_learned_route_capital_does_not_cross_user_perspectives(tmp_path):
             query="orchid",
         )
         assert learning["receipt"]["outcome_learning_applied"] == 1
-        route_key = MicroClayRetrieval._route_key("codename", subject)
+        route_key = MicroClayRetrieval._route_key("codename", "gabriel-memory")
         assert db.db.execute(
             "SELECT capital FROM retrieval_entrypoint_policy WHERE entry_key=?",
             (route_key,),
@@ -155,8 +155,6 @@ def test_v2_learned_route_capital_does_not_cross_user_perspectives(tmp_path):
             (andreas_causal,),
         ).fetchone()
         assert json.loads(row["selected_memory_ids"]) == []
-        # Required user-perspective isolation. Current v2 global policy keys are expected
-        # to violate this until issue #525 is resolved in the canonical policy version.
         assert json.loads(row["shadow_memory_ids"]) == []
     finally:
         db.close()

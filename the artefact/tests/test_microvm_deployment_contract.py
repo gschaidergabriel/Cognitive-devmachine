@@ -160,6 +160,9 @@ def test_kata_final_acceptance_requires_current_supported_rolling_release():
     assert "unsupported prior release is `BLOCKED`" in text
     assert "GHSA-mp2j-xm59-qfgw / CVE-2026-50540" in text
     assert "GHSA-7fhf-v3p3-rp56" in text
+    assert "GHSA-fgm4-mv68-h344" in text
+    assert "Dragonball hypervisor path" in text
+    assert "selected hypervisor path" in text
     assert "`3.31.0` is **not an admissible current final-acceptance target**" in text
     assert "reject unreviewed `io.katacontainers.*` workload annotations" in text
     assert "effective admitted Pod annotations" in text

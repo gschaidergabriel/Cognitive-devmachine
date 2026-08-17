@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import math
-import re
 from dataclasses import dataclass
 from typing import Any
 
@@ -98,8 +97,7 @@ def _normalize_signature(raw: Any) -> dict[str, list[str]]:
         values = _bounded_string_list(value, field=f"problem_signature.{key}", allow_empty=False)
         if len(values) > _MAX_SIGNATURE_VALUES:
             raise ValueError("problem_signature facet exceeds bound")
-        norm = sorted({x.strip().lower() for x in values})
-        out[key.strip().lower()] = norm
+        out[key.strip().lower()] = sorted({x.strip().lower() for x in values})
     return out
 
 
@@ -126,8 +124,7 @@ def validate_method_payload(kind: str, raw_value: str) -> dict[str, Any]:
         if status not in {"PROMOTED", "CANDIDATE"}:
             raise ValueError("counterevidence status invalid")
         payload["problem_signature"] = _normalize_signature(payload.get("problem_signature"))
-        blocks = payload.get("blocks_method_ids", [])
-        payload["blocks_method_ids"] = _bounded_string_list(blocks, field="blocks_method_ids")
+        payload["blocks_method_ids"] = _bounded_string_list(payload.get("blocks_method_ids", []), field="blocks_method_ids")
         return payload
 
     if kind == "method_receipt":
@@ -149,6 +146,8 @@ def validate_method_payload(kind: str, raw_value: str) -> dict[str, Any]:
         payload[field] = _bounded_string_list(
             payload[field], field=field, allow_empty=(field not in {"method_steps", "falsifiers", "source_episode_ids"})
         )
+    if len(set(payload["source_episode_ids"])) < 2:
+        raise ValueError("promoted method requires at least two distinct source episodes")
     if not isinstance(payload["abstraction_version"], int) or payload["abstraction_version"] < 1:
         raise ValueError("abstraction_version invalid")
     for field in ("support_count", "success_count", "failure_count"):
@@ -228,7 +227,7 @@ class MethodContext:
 
 
 class MethodMemoryRetriever:
-    """Stage-B structural method retrieval. It can propose methods, never facts."""
+    """Stage-B structural method retrieval. It proposes methods, never factual truth."""
 
     POLICY_MODE = "SHADOW"
 
@@ -258,7 +257,7 @@ class MethodMemoryRetriever:
 
         query_facets = derive_problem_signature(query)
         rows = self.db.db.execute(
-            "SELECT * FROM durable_memory "
+            "SELECT * FROM method_memory "
             "WHERE kind IN ('framework','heuristic','framework_candidate','heuristic_candidate',"
             "'failure_pattern','counterexample') "
             "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 1000",
@@ -268,7 +267,6 @@ class MethodMemoryRetriever:
         methods: list[MethodContext] = []
         counters: list[tuple[str, float, dict[str, Any], dict[str, Any], str]] = []
         invalid: list[str] = []
-
         for row in rows:
             kind = str(row["kind"])
             memory_id = str(row["memory_id"])
@@ -290,7 +288,6 @@ class MethodMemoryRetriever:
         for _, score, payload, _, _ in counters:
             if score > 0.0:
                 blocked_ids.update(str(x) for x in payload.get("blocks_method_ids", []))
-
         methods = [item for item in methods if item.memory_id not in blocked_ids]
         methods.sort(key=lambda item: (item.score, float(item.payload.get("calibration", 0.0)), item.memory_id), reverse=True)
         counters.sort(key=lambda item: (item[1], item[0]), reverse=True)
@@ -310,7 +307,6 @@ class MethodMemoryRetriever:
             }
             for memory_id, score, payload, provenance, subject in counters[:_MAX_COUNTER]
         ]
-
         return {
             "triggered": True,
             "fact_status": str(fact_status).upper(),

@@ -95,6 +95,22 @@ class TerminalSessionManager:
             *args,
         ]
 
+    @staticmethod
+    def _tmux_process_env(binding: TerminalBinding) -> dict[str, str]:
+        """Return the complete environment admitted to tmux clients and servers.
+
+        The first tmux client may create the persistent per-user server. Therefore the
+        control process itself must never inherit the ClayVerse supervisor environment:
+        provider tokens, Clerk configuration, build credentials, and unrelated host
+        variables are outside the interactive terminal authority boundary.
+        """
+        return {
+            "HOME": str(binding.home),
+            "PATH": "/usr/local/bin:/usr/bin:/bin",
+            "TERM": "xterm-256color",
+            "LANG": "C.UTF-8",
+        }
+
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
         """Fail closed unless the connected tmux server is transport-only.
 
@@ -121,6 +137,7 @@ class TerminalSessionManager:
             try:
                 cp = subprocess.run(
                     self._tmux_argv(binding, *args),
+                    env=self._tmux_process_env(binding),
                     capture_output=True,
                     text=True,
                     check=False,
@@ -173,6 +190,7 @@ class TerminalSessionManager:
         try:
             cp = subprocess.run(
                 self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
+                env=self._tmux_process_env(binding),
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 check=False,
@@ -195,6 +213,7 @@ class TerminalSessionManager:
         try:
             cp = subprocess.run(
                 self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
+                env=self._tmux_process_env(binding),
                 capture_output=True,
                 text=True,
                 check=False,
@@ -267,6 +286,7 @@ class TerminalSessionManager:
                     "new-session", "-d", "-s", binding.tmux_name,
                     "-c", str(self.workspace), *env_argv,
                 ),
+                env=self._tmux_process_env(binding),
                 capture_output=True,
                 text=True,
                 check=False,
@@ -286,16 +306,10 @@ class TerminalSessionManager:
         binding = self.ensure(user_id)
         pid, fd = pty.fork()
         if pid == 0:
-            env = {
-                "HOME": str(binding.home),
-                "PATH": "/usr/local/bin:/usr/bin:/bin",
-                "TERM": os.environ.get("TERM", "xterm-256color"),
-                "LANG": "C.UTF-8",
-            }
             os.execvpe(
                 "tmux",
                 self._tmux_argv(binding, "attach-session", "-t", binding.tmux_name),
-                env,
+                self._tmux_process_env(binding),
             )
         return pid, fd, binding
 

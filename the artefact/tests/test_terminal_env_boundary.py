@@ -45,6 +45,7 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
         "ANTHROPIC_AUTH_TOKEN=",
         "CLAUDE_API_KEY=",
         "GLM_API_TOKEN=",
+        "MISTRAL_API_KEY=",
         "CLERK_ISSUER=",
         "CLERK_JWKS_URL=",
         "CLERK_AUDIENCE=",
@@ -55,3 +56,60 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
     )
     assert not any(item.startswith(forbidden_secret_env) for item in argv)
     assert argv[-1] == "/opt/clayverse/runtime/CLAUDE.md"
+
+
+def test_tmux_server_and_control_clients_do_not_inherit_supervisor_environment(tmp_path, monkeypatch):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    monkeypatch.setattr(manager, "_require_programs", lambda: None)
+    monkeypatch.setenv("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0")
+    monkeypatch.setenv("GLM_API_TOKEN", "should-never-reach-tmux")
+    monkeypatch.setenv("MISTRAL_API_KEY", "should-never-reach-tmux")
+    monkeypatch.setenv("GITHUB_READ_TOKEN", "should-never-reach-tmux")
+    monkeypatch.setenv("CLERK_ISSUER", "should-never-reach-tmux")
+    monkeypatch.setenv("UNRELATED_SUPERVISOR_SECRET", "should-never-reach-tmux")
+    monkeypatch.setenv("TERM", "supervisor-term-must-not-flow-through")
+    calls = []
+
+    expected_options = {
+        "@clayverse_managed_policy": manager.MANAGED_TMUX_POLICY_ID,
+        "prefix": "None",
+        "prefix2": "None",
+        "status": "off",
+        "mouse": "off",
+        "default-shell": str(manager.DIRECT_SHELL_GUARD),
+    }
+
+    def fake_run(argv, **kwargs):
+        calls.append((argv, kwargs))
+        if "has-session" in argv:
+            return subprocess.CompletedProcess(argv, 1, stdout="", stderr="")
+        if "show-options" in argv:
+            return subprocess.CompletedProcess(
+                argv,
+                0,
+                stdout=expected_options[argv[-1]] + "\n",
+                stderr="",
+            )
+        return subprocess.CompletedProcess(argv, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    binding = manager.ensure("gabriel")
+
+    expected_env = {
+        "HOME": str(binding.home),
+        "PATH": "/usr/local/bin:/usr/bin:/bin",
+        "TERM": "xterm-256color",
+        "LANG": "C.UTF-8",
+    }
+    assert calls
+    assert any("new-session" in argv for argv, _ in calls)
+    assert any("source-file" in argv for argv, _ in calls)
+    assert any("show-options" in argv for argv, _ in calls)
+    for argv, kwargs in calls:
+        assert argv[0] == "tmux"
+        assert kwargs["env"] == expected_env
+        assert "GLM_API_TOKEN" not in kwargs["env"]
+        assert "MISTRAL_API_KEY" not in kwargs["env"]
+        assert "GITHUB_READ_TOKEN" not in kwargs["env"]
+        assert "CLERK_ISSUER" not in kwargs["env"]
+        assert "UNRELATED_SUPERVISOR_SECRET" not in kwargs["env"]

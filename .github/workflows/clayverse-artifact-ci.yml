@@ -108,7 +108,10 @@ jobs:
           for raw in sys.argv[1:]:
               doc = json.loads(raw)
               assert doc["service"] == "clayverse"
-              assert doc["status"] in {"ok", "ready"}
+              assert doc["status"] == "probe_ok"
+              assert doc["scope"] == "state_only"
+              assert doc["ready"] is False
+              assert isinstance(doc["checkpoint"], int) and doc["checkpoint"] > 0
               assert len(doc["state_hash"]) == 64
           PY
 
@@ -135,5 +138,6 @@ jobs:
             echo "- docker-save sha256: $ARCHIVE_SHA256"
             echo "- tests: full candidate pytest suite"
             echo "- runtime: non-root uid 10001, network=none, read-only rootfs, cap-drop=ALL, no-new-privileges"
-            echo "- continuity: two isolated container restarts against one persistent state volume"
+            echo "- continuity: two isolated state-only probe restarts against one persistent state volume"
+            echo "- readiness claim: none; --once must report probe_ok with ready=false"
           } >> "$GITHUB_STEP_SUMMARY"

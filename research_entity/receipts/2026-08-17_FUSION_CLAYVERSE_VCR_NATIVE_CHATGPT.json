@@ -1,0 +1,67 @@
+{
+  "schema": "ClayVerseFusionReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "fusion",
+  "organ": "ChatGPT / GPT-5.6 Sol fusion organ",
+  "authority": {
+    "research_head_at_write": "5d8af013343da0f9e4ba6dff1be945ce60f967c9",
+    "product_endpoint": "ClayVerse",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "entityos_role": "OPTIONAL_INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE",
+    "bootstrap_source_role": "FAST_CACHE_ONLY"
+  },
+  "observed": {
+    "sha_bound_staging": {
+      "product_branch": "clay/go-clayverse-container-sandbox-20260817",
+      "product_sha": "efde98e8406f920aa9626da00a72afe77e509ed8",
+      "research_sha": "edaee6307c56669819164cd95b0f2dbca0985e1e",
+      "artefact_tree_sha": "35ca41cf1ac44a61eab2222c60ff65519156172a",
+      "deployment_id": "dpl_9Q28fMrNLwGkSwWJZx342duTyuwT",
+      "result": "SOURCE_CLOSURE_PASS_THEN_PODMAN_PROVISION_FAIL"
+    },
+    "podman_sandbox": {
+      "result": "REJECT_NESTED_DNF_PODMAN_PROVISION_PATH",
+      "evidence": "dnf: No match for argument: podman",
+      "scope": "Does not reject OCI images or native Vercel Container Registry"
+    },
+    "parallel_vcr_preflight": {
+      "product_branch": "chatgpt/go-vercel-oci-surface-20260817-1155",
+      "product_sha": "cfbe0e6be19d8912b14709141f821fdea13b88c3",
+      "deployment_id": "dpl_48UEVTo4CFY12WtBLokT1F7hrHYj",
+      "vercel_oidc_present": true,
+      "child_global_vercel_cli": "ENOENT",
+      "host_buildah": "/usr/bin/buildah",
+      "writes_attempted": false,
+      "result": "REJECT_GLOBAL_CHILD_PATH_CLI_ASSUMPTION_ONLY"
+    },
+    "fusion_branch": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "branch": "clay/fusion-vcr-native-20260817",
+      "head": "3e9fdad4467e84b20d7e0220c9b123b265b1ca4f",
+      "draft_pr": 810,
+      "local_cli_pin": "vercel@58.4.4",
+      "candidate_route": "exact source closure -> native VCR build/push -> isolated full source regression -> fresh image-backed Vercel Sandbox -> deny-all runtime check -> sandbox stop receipts",
+      "status": "UNEXECUTED_BUILD_RATE_LIMIT",
+      "vcr_candidate": "RETAIN_UNVERIFIED",
+      "semantic_product_changes": "NONE"
+    }
+  },
+  "fusion_decision": {
+    "nested_podman_provisioning": "REJECT",
+    "global_child_vercel_cli_assumption": "REJECT",
+    "native_vcr_build_image_sandbox": "RETAIN_PENDING_EXACT_EXECUTION",
+    "duplication_control": "Parallel VCR capability evidence fused; no duplicate unusual experiment was started",
+    "merge_state": "DO_NOT_MERGE_ON_SOURCE_INSPECTION_ALONE"
+  },
+  "unusual_experiment_count_added": 0,
+  "existing_unusual_experiment_treatment": "REGRESSION_ONLY",
+  "counterhypothesis": "A pinned local Vercel CLI may still fail native VCR authentication/build/push, or the resulting exact VCR image may fail to start or execute the ClayVerse runtime in a fresh image-backed Sandbox.",
+  "falsifier": "An actually-started Vercel deployment of fusion head 3e9fdad4467e84b20d7e0220c9b123b265b1ca4f, or a provenance-equivalent rebased head with unchanged source binding and harness semantics, must PASS exact source closure, VCR build/push, the complete source pytest suite in an isolated Sandbox, a fresh image-backed Sandbox runtime --once under deny-all networking, Claude Code CLI presence, and both Sandbox stop receipts.",
+  "blocking": {
+    "current": "VERCEL_BUILD_RATE_LIMIT",
+    "evidence": "GitHub Vercel status for fusion head is failure with target URL indicating upgradeToPro=build-rate-limit",
+    "interpretation": "NO_RUN_STARTED; this is not a ClayVerse code failure and not a VCR failure"
+  },
+  "promotion": "NO_WHOLE_PRODUCT_PASS",
+  "next_executable_step": "When Vercel build execution is available, execute exactly PR #810 head or a provenance-equivalent rebased head without weakening source identity, run the VCR build/push + source regression + image-backed Sandbox gate, and capture deployment/log/image/stop evidence before promotion."
+}

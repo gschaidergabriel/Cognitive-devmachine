@@ -5,6 +5,31 @@
     "reference": "python:3.13.14-slim-trixie",
     "index_digest": "sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91"
   },
+  "debian_apt": {
+    "schema": "ClayVerseDebianSnapshot/v1",
+    "snapshot": "20260817T000000Z",
+    "archives": [
+      {
+        "archive": "debian",
+        "uri": "http://snapshot.debian.org/archive/debian/20260817T000000Z/",
+        "suite": "trixie",
+        "components": ["main"],
+        "signed_by": "/usr/share/keyrings/debian-archive-keyring.gpg",
+        "check_valid_until": false
+      },
+      {
+        "archive": "debian-security",
+        "uri": "http://snapshot.debian.org/archive/debian-security/20260817T000000Z/",
+        "suite": "trixie-security",
+        "components": ["main"],
+        "signed_by": "/usr/share/keyrings/debian-archive-keyring.gpg",
+        "check_valid_until": false
+      }
+    ],
+    "packages": ["ca-certificates", "tmux"],
+    "integrity": "DEBIAN_SIGNED_RELEASE_TO_PACKAGES_TO_DEB_HASH_CHAIN",
+    "mutable_mirror_fallback": false
+  },
   "claude_code": {
     "version": "2.1.233",
     "source": "anthropics/claude-code GitHub release v2.1.233",
@@ -26,7 +51,7 @@
     "sha512": "4d0c037501adc300edfb67202832e7d0845a4b162ed6d4948e029aad20e450cd193624915c5a63c44b2f73f66073992ae68989f95d1af3f908336583dec30e62"
   },
   "known_open_supply_chain_gates": [
-    "apt repository package bytes are not yet snapshot/hash pinned",
+    "Debian APT source selection is snapshot-locked and signature/hash-chain bounded in source, but exact package resolution and downloaded bytes still require an authorized isolated OCI build receipt",
     "Python requirements are version pinned but not yet installed with --require-hashes",
     "repository-owned xterm SHA-512 lock is present, but exact registry tarball bytes have not yet been independently observed against that digest in an authorized isolated execution surface",
     "real Clerk browser/runtime supply chain and key-rotation behavior remain external acceptance gates"

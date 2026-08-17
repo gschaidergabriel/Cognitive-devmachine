@@ -1,0 +1,36 @@
+{
+  "schema": "ClayVerseAutonomyReceipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_observed": "ae5cc353559c5bc14c2ada85c6a4beb6ea8f538a",
+  "source_fix_commit": "f5007745b0d60c33269fb435cba5fffba406fdb0",
+  "regression_commit": "ca4ad90f452b70f6bc8c626f04243c49dcf7b844",
+  "defect": "AutonomyController._budget applied max_effects exhaustion to every step kind, so a goal with max_effects=0 could not propose or admit reason/wait work even though no effect authority was requested.",
+  "repair": {
+    "controller": "the artefact/clayverse/autonomy.py",
+    "test": "the artefact/tests/test_autonomy.py",
+    "invariant": "Effect budget is checked only for effect steps; global step budget remains checked for every admitted step.",
+    "effect_authority_changed": false,
+    "new_scheduler_or_daemon": false,
+    "new_state_authority": false
+  },
+  "regression_obligation": "test_reasoning_remains_runnable_when_effect_budget_is_zero",
+  "execution_evidence": {
+    "github_actions_run_id": 32064469448,
+    "job_id": 95493112004,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "steps_observed": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS",
+    "semantic_test_failure": false,
+    "exact_test_execution_observed": false
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported_by_code_review": true,
+    "exact_runtime_verified": false,
+    "whole_product_pass": false
+  },
+  "remaining_gate": "Run the committed autonomy regression and adjacent autonomy suite against the exact current canonical UnifiedDB/store.py in an authorized isolated full checkout, then continue exact causal episode/request/effect integration without adding a second autonomy or effect authority."
+}

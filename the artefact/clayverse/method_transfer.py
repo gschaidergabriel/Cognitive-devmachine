@@ -181,6 +181,23 @@ class MethodTransfer:
         tokens = MethodTransfer._tokens(query)
         return bool(tokens & MethodTransfer.STRATEGY_WORDS)
 
+    def _terminal_state(self, memory_id: str, user_id: str) -> str | None:
+        row = self.db.db.execute(
+            "SELECT value FROM durable_memory WHERE kind='method_receipt' AND subject=? "
+            "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 1",
+            (f"method-state:{memory_id}", user_id),
+        ).fetchone()
+        if not row:
+            return None
+        try:
+            receipt = json.loads(row["value"])
+        except Exception as exc:
+            raise StaleGeneration("method_state_receipt") from exc
+        action = str(receipt.get("action", "")).upper()
+        if action in {"DEMOTE", "RETIRE"}:
+            return action
+        raise StaleGeneration("method_state_receipt")
+
     def retrieve(self, *, query: str, signature: dict[str, Any], evidence_status: str,
                  user_id: str, session_id: str, turn_id: str, episode_id: str,
                  causal_id: str, generation: int, limit: int = 4) -> dict[str, Any]:
@@ -216,6 +233,7 @@ class MethodTransfer:
         ).fetchall()
         positive, negatives = [], []
         malformed = 0
+        state_blocked = 0
         qtokens = self._tokens(query)
         for row in rows:
             try:
@@ -224,6 +242,9 @@ class MethodTransfer:
                 malformed += 1
                 continue
             struct = self.structural_score(normalized_sig, rec["problem_signature"])
+            if row["kind"] in SERVABLE_KINDS and self._terminal_state(str(row["memory_id"]), user_id) is not None:
+                state_blocked += 1
+                continue
             if row["kind"] in NEGATIVE_KINDS:
                 negatives.append((row, rec, struct))
                 continue
@@ -248,22 +269,29 @@ class MethodTransfer:
         items = [{
             "memory_id": x.memory_id, "kind": x.kind, "subject": x.subject,
             "problem_signature": x.record["problem_signature"],
+            "goal_shape": x.record.get("goal_shape"),
             "preconditions": x.record.get("preconditions",[]),
             "method_steps": x.record.get("method_steps",[]),
+            "invariants": x.record.get("invariants",[]),
+            "expected_observations": x.record.get("expected_observations",[]),
             "falsifiers": x.record.get("falsifiers",[]),
             "failure_modes": x.record.get("failure_modes",[]),
             "scope_limits": x.record.get("scope_limits",[]),
+            "source_episode_ids": x.record.get("source_episode_ids",[]),
+            "supporting_memory_ids": x.record.get("supporting_memory_ids",[]),
+            "provenance": x.record.get("provenance",{}),
             "calibration": x.record.get("calibration"),
             "structural_score": x.structural_score,
-            "counterexample_memory_ids": list(x.counterevidence),
+            "counterexample_memory_ids": sorted(set(x.record.get("counterexample_memory_ids",[])) | set(x.counterevidence)),
             "truth_authority": False, "effect_authority": False,
         } for x in selected]
-        counters = sorted({cid for x in selected for cid in x.counterevidence})
+        counters = sorted({cid for x in selected for cid in x.counterevidence} | {cid for x in selected for cid in x.record.get("counterexample_memory_ids",[])})
         method_status = "PRESENT" if items else "UNKNOWN"
         receipt = dict(receipt_base)
         receipt.update({
             "selected_method_ids": [x["memory_id"] for x in items],
             "malformed_rejected": malformed,
+            "state_blocked": state_blocked,
             "fact_status": status,
             "method_status": method_status,
             "fact_status_unchanged": True,

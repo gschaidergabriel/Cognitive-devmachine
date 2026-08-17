@@ -1,0 +1,40 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "trigger_key": "2026-08-17T13-34+07-00__go__4cd0e21a9a07",
+  "claim_path": "research_entity/continuity/go_experiment_claims/2026-08-17T13-34+07-00__go__4cd0e21a9a07.json",
+  "claim_commit": "9a345828baf747ccc1c9fa6d003ddff56624bbc4",
+  "experiment_name": "METHOD_PROMOTION_OPEN_EPISODE_SMUGGLE",
+  "source_candidate": {
+    "pr": 405,
+    "head": "2246c991833047b35b758913d65fb0e152337615",
+    "path": "the artefact/clayverse/method_memory.py",
+    "observed_mechanism": "MethodMemoryManager.promote() validates source_episode_ids by workspace_episodes existence only before emitting promotion receipt/promoted memory; it does not itself require terminal workspace state, causal re-entry, or same-user session scope."
+  },
+  "counterexample_donor": {
+    "pr": 410,
+    "head": "57149fa8102495ef738df653f0856c50becaf459",
+    "path": "the artefact/clayverse/method_memory.py",
+    "observed_mechanism": "_assert_references requires COMPLETED|ABORTED plus matching causal_episodes.reentered=1 and canonical user/session scope."
+  },
+  "execution_surface": "OpenAI isolated non-production container mechanism discriminator",
+  "environment": {
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64"
+  },
+  "intervention_identity": {
+    "script_sha256": "47b81428957474f7ae37cf1bcaaa56a5f1bd88680efba17b9b13d9c700c37d11",
+    "source_episode_ids": ["ep-open-a", "ep-open-b"],
+    "workspace_state": "OPEN",
+    "causal_reentered": false
+  },
+  "observed_result": {
+    "pr405_existence_only_gate_accepts": true,
+    "terminal_causal_gate_accepts": false,
+    "falsifier_triggered": true
+  },
+  "classification": "FAIL_FOR_DONOR_AS_STANDALONE_PROMOTION_EVIDENCE_GATE",
+  "fusion_decision": "Retain PR #405 dedicated atomic candidate->PROMOTE receipt->promoted-memory lifecycle, but replace its source-episode evidence predicate with the stricter PR #410 terminal+causal-reentry+user/session scope check. Do not transplant #405 promotion validation as-is into PR #411.",
+  "whole_product_evidence": false,
+  "evidence_boundary": "This is bounded source-mechanism discrimination, not exact fused-branch execution, not OCI runtime evidence, and not ClayVerse PASS.",
+  "unusual_experiment_slot": "CONSUMED_1_OF_1_FOR_THIS_TRIGGER"
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "ClayVerseArtifactReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "scope": "typed public /api/chat input boundary and parallel-fusion coordination",
+  "observed_research_main_before_receipt": "0c40b8599cebc05a4d2cffa2e0601b1648b48b2a",
+  "observed_product_main": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "finding": {
+    "mechanism": "the prior request handler coerced body.content through Python str(...), so non-string JSON values could cross the public typed boundary as representation text; non-object JSON could also escape the intended validation path",
+    "focused_pre_repair_probe": {
+      "environment": "OpenAI isolated non-VPS execution",
+      "scope": "reproduction of the exact relevant request-handler logic with stub verifier and engine",
+      "payload": {"content": {"secret": "typed-object"}},
+      "observed_http_status": 200,
+      "observed_engine_content": "{'secret': 'typed-object'}",
+      "whole_artifact_execution": false
+    }
+  },
+  "canonical_fusion": {
+    "commit": "cd118260c5e4b7df2cb5ede8d849fdc5bdae4c50",
+    "contract": [
+      "request body must be a JSON object",
+      "only content and resources fields are admitted",
+      "content must already be a string and is never coerced from unknown JSON types",
+      "resources must be a list of strings",
+      "invalid payloads fail before engine.ingest"
+    ],
+    "tests_added": "the artefact/tests/test_api_typed_boundary.py",
+    "stronger_than_local_candidate": true
+  },
+  "coordination": {
+    "superseded_prs": [314, 320],
+    "reason": "main advanced rapidly and independently landed a stronger fail-closed implementation; merging the local candidates would duplicate or weaken the canonical path",
+    "parallel_path_retained": false
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "additional_count": 0,
+    "global_go_budget_state": "already 1/1 consumed elsewhere in the concurrent owner-triggered go; no second unusual intervention executed"
+  },
+  "evidence_limits": [
+    "no GitHub Actions run was present for the canonical typed-boundary commit when checked",
+    "the focused local probe/regression is not a Vercel Sandbox exact-current-head full-suite run",
+    "no live Clerk, authenticated Claude Code, exact embedded EntityOS, OCI runtime, restart/persistence or deployment PASS is claimed"
+  ],
+  "current_product_contract": "ClayVerse is the product endpoint as one OCI/Docker-compatible container image; EntityOS is an internal gated execution/security/runtime substrate candidate",
+  "acceptance": "IN_PROGRESS",
+  "whole_system_pass": false,
+  "vps_mutated": false,
+  "together_api_used": false
+}

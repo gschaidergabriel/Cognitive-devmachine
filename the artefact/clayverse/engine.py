@@ -1,5 +1,5 @@
 from __future__ import annotations
-import hashlib,json,time,uuid
+import hashlib,json,threading,time,uuid
 from .store import UnifiedDB
 from .identity import IdentityRouter
 from .memory import MemoryManager
@@ -14,11 +14,16 @@ class DeterministicTestInference(InferenceAdapter):
     def reason(self,world,observation): return {"text":f"ack:{observation}","selection":"respond","effect":None}
 class ClayVerseEngine:
     def __init__(self,db:UnifiedDB,clerk_map,inference=None,allow_process=False,entityos_bridge:EntityOSBridge|None=None):
-        self.db=db; self.identity=IdentityRouter(db,clerk_map); self.memory=MemoryManager(db); self.world=WorldAssembler(db); self.workspace=Workspace(db); self.effects=EffectGate(db,allow_process,entityos_bridge); self.graph=ClayGraphProjection(db); self.inference=inference or DeterministicTestInference()
+        self.db=db; self.identity=IdentityRouter(db,clerk_map); self.memory=MemoryManager(db); self.world=WorldAssembler(db); self.workspace=Workspace(db); self.effects=EffectGate(db,allow_process,entityos_bridge); self.graph=ClayGraphProjection(db); self.inference=inference or DeterministicTestInference(); self._turn_lock=threading.RLock()
     @staticmethod
     def _causal_credit(outcome):
         return 1.0 if isinstance(outcome,dict) and outcome.get('ok') is True else 0.0
     def ingest(self,clerk_subject,content,*,resources=None):
+        # One central ClayVerse entity has one causal turn frontier. Requests may
+        # arrive concurrently, but observation->reason->effect->re-entry is serialized.
+        with self._turn_lock:
+            return self._ingest_locked(clerk_subject,content,resources=resources)
+    def _ingest_locked(self,clerk_subject,content,*,resources=None):
         resources=resources or []; uid,sid=self.identity.resolve(clerk_subject); tid=self.db.append_turn(sid,uid,'user',content,resources=resources,provenance={'source':'clerk-terminal'}); self.memory.extract_explicit(tid,uid,content); self.memory.compact(sid); world=self.world.assemble(sid,resources); ws=self.workspace.open(sid,tid,content,resources); reasoning_generation=self.db.session_generation(sid); decision=self.inference.reason(world,content); self.workspace.select(ws['episode_id'],decision.get('selection','respond')); effect_id=None; outcome=None
         eff=decision.get('effect')
         if eff: effect_id,outcome=self.effects.execute(EffectRequest(uid,sid,eff['capability'],eff['target'],eff.get('argv'),reasoning_generation),ws['episode_id'])

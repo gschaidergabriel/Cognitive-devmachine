@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import sys
@@ -7,6 +8,8 @@ from typing import Any
 
 from .autonomy import AUTONOMY_TURN_SOURCE, AutonomyController
 from .autonomy_context import admit_explicit_goal_from_turn, bounded_autonomy_context
+from .autonomy_dispatch import AutonomyDispatch, consume_dispatch_prompt
+from .autonomy_planner import AutonomyDecisionError, AutonomyPlanner
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -35,7 +38,7 @@ def _runtime() -> tuple[UnifiedDB, str, str, TurnLifecycle]:
     return db, user_id, session_id, TurnLifecycle(db, user_id, session_id, entityos_bridge=None)
 
 
-def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
+def _active_turn_provenance(db: UnifiedDB, session_id: str) -> dict[str, Any] | None:
     row = db.db.execute(
         "SELECT t.provenance FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id WHERE a.session_id=?",
         (session_id,),
@@ -43,11 +46,58 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     if not row:
         return None
     try:
-        provenance = json.loads(row["provenance"])
-    except Exception:
+        value = json.loads(row["provenance"])
+    except Exception as exc:
+        raise TerminalHookError("active turn provenance malformed") from exc
+    if not isinstance(value, dict):
+        raise TerminalHookError("active turn provenance must be an object")
+    return value
+
+
+def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
+    provenance = _active_turn_provenance(db, session_id)
+    if provenance is None:
         return None
-    value = provenance.get("claude_session_id") if isinstance(provenance, dict) else None
+    value = provenance.get("claude_session_id")
     return value if isinstance(value, str) and value else None
+
+
+def _bind_autonomy_transport_in_tx(
+    db: UnifiedDB,
+    *,
+    turn_id: str,
+    goal_id: str,
+    step_id: str,
+    claude_session_id: str,
+    dispatch_nonce: str,
+) -> None:
+    """Bind the one-shot terminal transport to the autonomous observation atomically."""
+    if not db.db.in_transaction:
+        raise TerminalHookError("autonomy transport binding requires admission transaction")
+    row = db.db.execute("SELECT provenance FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
+    if row is None:
+        raise TerminalHookError("autonomous observation missing during transport bind")
+    try:
+        provenance = AutonomyController._loads(row["provenance"] or "{}")
+    except Exception as exc:
+        raise TerminalHookError("autonomous observation provenance malformed") from exc
+    if (
+        provenance.get("source") != AUTONOMY_TURN_SOURCE
+        or provenance.get("goal_id") != goal_id
+        or provenance.get("autonomy_step_id") != step_id
+    ):
+        raise TerminalHookError("autonomous observation identity drift during transport bind")
+    if "claude_session_id" in provenance or "dispatch_nonce_sha256" in provenance:
+        raise TerminalHookError("autonomous transport already bound")
+    provenance["claude_session_id"] = claude_session_id
+    provenance["dispatch_transport"] = "one-shot-unifieddb-lease"
+    provenance["dispatch_nonce_sha256"] = hashlib.sha256(dispatch_nonce.encode("ascii")).hexdigest()
+    updated = db.db.execute(
+        "UPDATE turns SET provenance=? WHERE turn_id=?",
+        (json.dumps(provenance, sort_keys=True), turn_id),
+    )
+    if updated.rowcount != 1:
+        raise TerminalHookError("autonomous transport bind lost observation")
 
 
 def _active_autonomy_preemption(db: UnifiedDB, session_id: str, user_id: str) -> dict[str, Any] | None:
@@ -91,7 +141,7 @@ def _active_autonomy_preemption(db: UnifiedDB, session_id: str, user_id: str) ->
 
 
 def _reconcile_preempted_autonomy(db: UnifiedDB, user_id: str, captured: dict[str, Any] | None) -> dict[str, Any]:
-    """Re-enter a human-preempted goal step without replaying effects or inventing success."""
+    """Re-enter a preempted/failed goal step without replaying effects or inventing success."""
     if captured is None:
         return {"reconciled": False, "reason": "no_autonomous_predecessor"}
     controller = AutonomyController(db)
@@ -171,6 +221,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "hyperpositions": result.get("hyperpositions", []),
         "context": result["context"],
         "autonomy": result.get("autonomy", {}),
+        "autonomy_dispatch": result.get("autonomy_dispatch"),
         "effect_law": "Ordinary effects use mcp__clayverse__request_effect. An already-admitted autonomy effect step must use mcp__clayverse__request_autonomy_effect(goal_id,step_id), which dispatches only the stored canonical intent. Only verified EffectJournal outcomes are operational truth.",
     }
 
@@ -218,6 +269,36 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
     return text
 
 
+def _admit_dispatch_turn(
+    db: UnifiedDB,
+    lifecycle: TurnLifecycle,
+    dispatch: AutonomyDispatch,
+    claude_session_id: str,
+) -> dict[str, Any]:
+    with lifecycle.begin_autonomous_admission(
+        dispatch.instruction,
+        dispatch.goal_id,
+        dispatch.step_id,
+    ) as result:
+        _bind_autonomy_transport_in_tx(
+            db,
+            turn_id=result["turn_id"],
+            goal_id=dispatch.goal_id,
+            step_id=dispatch.step_id,
+            claude_session_id=claude_session_id,
+            dispatch_nonce=dispatch.nonce,
+        )
+    result["autonomy"] = bounded_autonomy_context(db, dispatch.user_id)
+    result["autonomy_dispatch"] = {
+        "source": "one-shot-unifieddb-lease",
+        "goal_id": dispatch.goal_id,
+        "step_id": dispatch.step_id,
+        "generation": dispatch.generation,
+        "terminal_prompt_is_authority": False,
+    }
+    return result
+
+
 def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if payload.get("hook_event_name") != "UserPromptSubmit":
         raise TerminalHookError("unexpected hook event")
@@ -230,6 +311,32 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, user_id, session_id, lifecycle = _runtime()
     try:
+        dispatch = consume_dispatch_prompt(
+            db,
+            user_id=user_id,
+            session_id=session_id,
+            prompt=prompt,
+        )
+        if dispatch is not None:
+            try:
+                result = _admit_dispatch_turn(db, lifecycle, dispatch, claude_session_id)
+                additional_context = _bounded_hook_context(result)
+            except Exception:
+                if lifecycle.active() is not None:
+                    lifecycle.abort_autonomous(
+                        "autonomy_dispatch_post_admission_failure",
+                        dispatch.goal_id,
+                        dispatch.step_id,
+                    )
+                raise
+            return {
+                "hookSpecificOutput": {
+                    "hookEventName": "UserPromptSubmit",
+                    "additionalContext": additional_context,
+                },
+                "suppressOutput": True,
+            }
+
         preempted = _active_autonomy_preemption(db, session_id, user_id)
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             pass
@@ -259,6 +366,62 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
         db.close()
 
 
+def _finish_autonomous_stop(
+    db: UnifiedDB,
+    lifecycle: TurnLifecycle,
+    provenance: dict[str, Any],
+    message: str,
+) -> dict[str, Any]:
+    goal_id = provenance.get("goal_id")
+    step_id = provenance.get("autonomy_step_id")
+    if not isinstance(goal_id, str) or not goal_id or not isinstance(step_id, str) or not step_id:
+        raise TerminalHookError("autonomous Stop identity missing")
+    try:
+        generation = int(provenance.get("entity_generation"))
+    except (TypeError, ValueError) as exc:
+        raise TerminalHookError("autonomous Stop generation missing") from exc
+
+    lifecycle_result = lifecycle.complete_autonomous(message, goal_id, step_id)
+    controller = AutonomyController(db)
+    snapshot = controller.snapshot(user_id=lifecycle.user_id)
+    goal = next((item for item in snapshot["goals"] if item["goal_id"] == goal_id), None)
+    if goal is None:
+        raise TerminalHookError("autonomous goal missing after Stop")
+    step = goal.get("current_step")
+    if not isinstance(step, dict) or step.get("step_id") != step_id:
+        # A verified-effect completion may already terminalize but must not replace the
+        # exact current effect step before Stop. Anything else is state drift.
+        raise TerminalHookError("autonomous step changed before Stop re-entry")
+
+    transition: dict[str, Any] | None = None
+    if step.get("kind") == "reason" and step.get("status") == "ADMITTED":
+        try:
+            transition = AutonomyPlanner(db).ingest_reason_response(
+                goal_id,
+                step_id,
+                message,
+                expected_generation=generation,
+            )
+        except AutonomyDecisionError:
+            raise
+    elif step.get("kind") == "effect" and step.get("status") == "ADMITTED":
+        transition = controller.record_step_failure(
+            goal_id,
+            step_id,
+            "autonomy_effect_not_dispatched_before_stop",
+            expected_generation=generation,
+        )
+    elif step.get("kind") not in {"reason", "effect"}:
+        raise TerminalHookError("autonomous Stop encountered unsupported step kind")
+
+    return {
+        "lifecycle": lifecycle_result,
+        "transition": transition,
+        "goal_id": goal_id,
+        "step_id": step_id,
+    }
+
+
 def stop(payload: dict[str, Any]) -> dict[str, Any]:
     if payload.get("hook_event_name") != "Stop":
         raise TerminalHookError("unexpected hook event")
@@ -274,7 +437,11 @@ def stop(payload: dict[str, Any]) -> dict[str, Any]:
             raise TerminalHookError("no active canonical turn for Stop hook")
         if _active_claude_session(db, session_id) != claude_session_id:
             raise TerminalHookError("Stop belongs to a different Claude session")
-        lifecycle.complete(message)
+        provenance = _active_turn_provenance(db, session_id) or {}
+        if provenance.get("source") == AUTONOMY_TURN_SOURCE:
+            _finish_autonomous_stop(db, lifecycle, provenance, message)
+        else:
+            lifecycle.complete(message)
         return {"suppressOutput": True}
     finally:
         db.close()
@@ -286,11 +453,23 @@ def stop_failure(payload: dict[str, Any]) -> dict[str, Any]:
     claude_session_id = payload.get("session_id")
     if not isinstance(claude_session_id, str) or not claude_session_id:
         return {"suppressOutput": True}
-    db, _, session_id, lifecycle = _runtime()
+    db, user_id, session_id, lifecycle = _runtime()
     try:
         if lifecycle.active() is not None and _active_claude_session(db, session_id) == claude_session_id:
             failure = str(payload.get("error", payload.get("error_type", "stop_failure")))[:500]
-            lifecycle.abort("claude_stop_failure:" + failure)
+            provenance = _active_turn_provenance(db, session_id) or {}
+            if provenance.get("source") == AUTONOMY_TURN_SOURCE:
+                captured = _active_autonomy_preemption(db, session_id, user_id)
+                if captured is None:
+                    raise TerminalHookError("autonomous StopFailure lost predecessor identity")
+                lifecycle.abort_autonomous(
+                    "claude_autonomy_stop_failure:" + failure,
+                    captured["goal_id"],
+                    captured["step_id"],
+                )
+                _reconcile_preempted_autonomy(db, user_id, captured)
+            else:
+                lifecycle.abort("claude_stop_failure:" + failure)
         return {"suppressOutput": True}
     finally:
         db.close()

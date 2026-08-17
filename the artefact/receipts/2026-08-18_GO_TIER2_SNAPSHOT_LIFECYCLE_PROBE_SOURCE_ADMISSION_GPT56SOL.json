@@ -1,0 +1,89 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:44:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "TIER2_SNAPSHOT_LIFECYCLE_PROBE_SOURCE_PRESENT_EXECUTION_ADMISSION_BLOCKED",
+  "canonical_main_observed_before_write": "0a10fabf3216c5e26bbc486b9df6851a82b49f8a",
+  "immutable_runtime_freeze": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "517587ab97bf0a0fd9e78a7d9a3d38a10a120936",
+    "draft": true,
+    "mergeable": true,
+    "runtime_credit": 0
+  },
+  "probe_source": {
+    "path": "mcp/vercel-sandbox-mcp/api/snapshot-lifecycle-probe.js",
+    "introduced_commit": "98e7447f1017364394fc8e940e5494cab0908367",
+    "blob_observed_on_current_head": "883729220861e40e0900d4bc54bcf06124e072d5",
+    "classification": "ORDINARY_PROVIDER_CONTRACT_ACCEPTANCE_TEST",
+    "purpose": "Discriminate the current Vercel documentation conflict by testing whether an explicit manual snapshot remains addressable after full deletion of its named source sandbox and can instantiate a distinct persistent:false replacement with exact sentinel-byte recovery.",
+    "sequence": [
+      "create disposable persistent:false Vercel Sandbox with deny-all network",
+      "write random non-secret sentinel and local SHA-256",
+      "create explicit manual snapshot and bind snapshot_id",
+      "delete source sandbox",
+      "require source sandbox to be unretrievable with resume:false",
+      "call Snapshot.get on the exact snapshot_id after source deletion",
+      "create distinct persistent:false replacement from exact snapshot_id",
+      "verify replacement session identity differs from source",
+      "verify restored sentinel bytes and SHA-256 exactly match",
+      "delete replacement/source/snapshot resources in finally"
+    ],
+    "declared_credit": {
+      "tier2_credit": 0,
+      "whole_product_credit": 0,
+      "unusual_experiment_count_added": 0
+    }
+  },
+  "source_evidence": {
+    "probe_present_on_observed_pr810_head": true,
+    "probe_executed": false,
+    "snapshot_survival_after_source_delete": "UNKNOWN",
+    "tier2_independent_carrier_verified": false,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "execution_admission": {
+    "canonical_current_blocker": "VERCEL_BUILD_RATE_LIMIT",
+    "canonical_blocker_receipt": "the artefact/receipts/2026-08-18_GO_PR810_SHA_GUARD_AND_TIER2_CARRIER_FENCE_GPT56SOL.json",
+    "latest_directly_observed_vercel_deployment_in_this_organ": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "latest_directly_observed_deployment_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "latest_directly_observed_deployment_state": "ERROR_SOURCE_GUARD_BEFORE_PRODUCT_RUNTIME",
+    "exact_probe_head_deployment_observed": false,
+    "vercel_deploy_connector_attempt": "FAILED_TOOL_SCHEMA_MISMATCH_REQUIRES_UNEXPOSED_TARGET_NAME_FILES",
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "coordination": {
+    "preview_trigger_commit_by_this_organ": "15510d1fe199991b1cc0174fbdaf199afcf18659",
+    "preview_trigger_produced_exact_deployment_in_observed_window": false,
+    "pr810_snapshot_comment_supersession_id": 5318763096,
+    "duplicate_controller_path_added": false,
+    "research_product_bytes_changed": false,
+    "controller_test_infrastructure_changed": true,
+    "owner_credentials_used": false,
+    "paid_or_beta_storage_provisioned": false
+  },
+  "carrier_alternatives_checked": {
+    "vercel_drive": "DEFERRED_PRIVATE_BETA_OWNER_AUTHORIZATION_UNPROVEN",
+    "vercel_container_registry": "DEFERRED_BETA_OR_USAGE_BILLING_OWNER_AUTHORIZATION_UNPROVEN",
+    "vercel_private_blob": "DEFERRED_BETA_OWNER_AUTHORIZATION_UNPROVEN",
+    "public_blob": "REJECTED_WITHOUT_SEPARATELY_ADMITTED_ENCRYPTION_AND_KEY_RECOVERY_CONTRACT"
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "The shared go unusual-experiment slot was already consumed/unsafe to duplicate; the snapshot lifecycle discriminator is explicitly classified by current canonical Research as an ordinary provider contract acceptance test."
+  },
+  "next_exact_step": "Restore authorized Vercel build/execution admission, obtain a Preview whose deployment metadata exactly binds the retained PR810 head containing blob 883729220861e40e0900d4bc54bcf06124e072d5 and passes source guards, then execute the bounded snapshot lifecycle probe. If lifecycle passes, continue full declared Tier2 transfer/OCI/generation/effect/secret-reacquisition/second-cognition gates; if it fails, reject direct manual snapshot carriage and evaluate only explicitly authorized independent durable carriers."
+}

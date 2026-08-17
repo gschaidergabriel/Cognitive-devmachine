@@ -60,6 +60,27 @@ def _activate(db, session_id, generation, turn_id, episode_id, causal_id):
     )
 
 
+def _finish_source_episode(db, *, turn_id, episode_id, causal_id):
+    db.db.execute(
+        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+        "VALUES(?,?,?,?,?,?,?,?)",
+        (
+            causal_id,
+            episode_id,
+            None,
+            turn_id,
+            hashlib.sha256(f"source:{episode_id}".encode()).hexdigest(),
+            0.0,
+            1,
+            time.time(),
+        ),
+    )
+    db.db.execute(
+        "UPDATE workspace_episodes SET selected='respond',state='COMPLETED' WHERE episode_id=?",
+        (episode_id,),
+    )
+
+
 def _finish_external(db, *, session_id, generation, turn_id, episode_id, causal_id, status):
     effect_id = f"effect:{episode_id}"
     outcome_hash = hashlib.sha256(f"{episode_id}:{status}".encode()).hexdigest()
@@ -131,12 +152,17 @@ def _admit_candidate(db, episodes):
 
 
 def _validated_candidate(db, session_id, generation):
-    a = _make_episode(db, session_id, generation, "a", 1)
-    b = _make_episode(db, session_id, generation, "b", 2)
-    candidate_id = _admit_candidate(db, [a[1], b[1]])
+    source_a = _make_episode(db, session_id, generation, "source-a", 1)
+    source_b = _make_episode(db, session_id, generation, "source-b", 2)
+    _finish_source_episode(db, turn_id=source_a[0], episode_id=source_a[1], causal_id=source_a[2])
+    _finish_source_episode(db, turn_id=source_b[0], episode_id=source_b[1], causal_id=source_b[2])
+    candidate_id = _admit_candidate(db, [source_a[1], source_b[1]])
+
+    held_out_a = _make_episode(db, session_id, generation, "held-out-a", 3)
+    held_out_b = _make_episode(db, session_id, generation, "held-out-b", 4)
     validator = CandidateValidation(db)
     use_ids = []
-    for index, identity in enumerate((a, b)):
+    for index, identity in enumerate((held_out_a, held_out_b)):
         turn_id, episode_id, causal_id = identity
         _activate(db, session_id, generation, turn_id, episode_id, causal_id)
         use_ids.append(

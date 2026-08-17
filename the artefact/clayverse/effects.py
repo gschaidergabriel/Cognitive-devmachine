@@ -18,6 +18,7 @@ class EffectGate:
         if self.entityos_bridge is not None: capabilities.add('entityos.exec')
         return tuple(sorted(capabilities))
     def causal_for_effect(self,effect_id): return self.journal.causal_for(effect_id)
+    def status_for_effect(self,effect_id): return self.journal.status_for(effect_id)
     @classmethod
     def _lease_resource(cls,req:EffectRequest):
         if req.capability!='entityos.exec': raise ValueError('automatic lease only defined for entityos.exec')

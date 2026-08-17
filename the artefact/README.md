@@ -21,6 +21,12 @@ Canonical product workspace for ClayVerse: **one immutable OCI/Docker-compatible
 
 Model output never self-authorizes execution.
 
+## Deterministic autonomy candidate
+
+Autonomous goal pursuit is now specified as a **canonical state-machine contract**, not a model identity claim. The source-candidate controller in `clayverse/autonomy.py` stores bounded goal state inside UnifiedDB, adopts durable objectives only from canonical owner `user` turns, generation-fences stale work, limits steps/retries/effects, preserves `UNKNOWN`, and accepts completion only from an independent verified EffectJournal outcome or explicit owner acknowledgement.
+
+`CLAIM != EVIDENCE`, `PROPOSAL != EXECUTION`, and `MODEL_COMPLETION != GOAL_COMPLETION` are architectural laws. Calling the cognition model "autonomous" or "AGI" grants no capability. The scheduler primitive is `next_runnable()` and must be fused into the existing ClayVerse supervisor/re-entry path; no second consciousness/autonomy daemon is admitted. See `AUTONOMY_ARCHITECTURE.md`.
+
 ## LLM provider law
 
 Current authority:
@@ -177,3 +183,15 @@ ClayVerse remains **IN_PROGRESS**. This cycle produced one concrete controller r
 - no owner credential was used and no second unusual experiment was consumed.
 - durable receipt: `the artefact/receipts/2026-08-18_GO_TIER2_PERSISTENT_CARRIER_DONOR_SOURCE_GPT56SOL.json`.
 - no whole-product PASS is claimed.
+
+## Latest cycle delta — 2026-08-18 deterministic autonomy source lane
+
+- added `clayverse/autonomy.py`: canonical goal-state controller backed by UnifiedDB rather than a prompt persona;
+- durable goals are copied from canonical owner `user` turns, so cognition cannot invent the durable objective;
+- added hard generation, step, retry and effect fences plus `state.noop` / `entityos.exec` capability allowlisting;
+- added independent completion contracts: verified EffectJournal outcome or explicit canonical owner acknowledgement;
+- model `complete_candidate` is deliberately non-authoritative;
+- updated `runtime_CLAUDE.md` so proactive/autonomous behavior never implies hidden AGI status, memory, access or successful effects;
+- added `AUTONOMY_ARCHITECTURE.md` defining scheduler fusion into the existing supervisor/re-entry loop and explicitly excluding a second autonomy/consciousness daemon;
+- bounded isolated mechanism harness passed 11/11 before commit; the committed exact-current test suite still requires an authorized full-checkout run against canonical `store.py` before promotion;
+- source lane does not claim OCI, microVM, live-provider, effect-round-trip or whole-product PASS.

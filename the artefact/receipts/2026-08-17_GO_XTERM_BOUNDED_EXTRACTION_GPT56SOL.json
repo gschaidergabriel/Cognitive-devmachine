@@ -1,0 +1,75 @@
+{
+  "schema": "ClayVerseGoXtermBoundedExtractionReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6-Sol temporary research/build organ",
+  "trigger": "go",
+  "product_boundary": "ClayVerse single OCI/Docker-compatible container image from the artefact/; EntityOS is internal substrate",
+  "selected_frontier": "digest-locked xterm build path still admitted unbounded archive input, extracted the full package surface, and had lost the explicit exact-registry-byte verification gate",
+  "canonical_fusion": {
+    "pull_request": 389,
+    "merge_commit": "673d29f394398a778b4c055090254646764a9874",
+    "duplicate_prs_closed": [376, 380],
+    "implementation": [
+      "20 MiB compressed download bound",
+      "4096 archive-member bound",
+      "64 MiB declared unpacked regular-file bound",
+      "duplicate member rejection",
+      "existing traversal/link/device/type and package-identity checks retained",
+      "only package.json, lib/xterm.js, and css/xterm.css installed",
+      "exact registry-tarball byte verification restored as an explicit open supply-chain gate"
+    ]
+  },
+  "exact_blob_binding": {
+    "install_pinned_xterm.py": "902f9a9dc2743c15a0b84e57f0fceee181635429",
+    "test_pinned_xterm_supply_chain.py": "b93940a0717843e5e443e558ac77eccdb07ee98a",
+    "SOURCE_LOCK.json": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "Dockerfile": "d42024163e7e3012d14c39a9383bbbd7806d055d",
+    ".dockerignore": "74ab0a192ba32e26fa4cfdd5f970b97f725c864f"
+  },
+  "isolated_regression": {
+    "surface": "OpenAI isolated container execution",
+    "command": "python -m unittest -v tests/test_pinned_xterm_supply_chain.py",
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "scope": "exact materialized GitHub blobs for the xterm helper/test/source lock plus unchanged Dockerfile/.dockerignore; regression and invariant validation only, not OCI acceptance",
+    "blob_identity_check": "local git hash-object values matched the GitHub blob SHAs listed above",
+    "unusual_experiment": "NONE_ADDED; existing unusual-experiment accounting for the macro-cycle was not extended by this lane"
+  },
+  "counterhypotheses": [
+    {
+      "claim": "digest pinning alone is sufficient for the build-time xterm input surface",
+      "result": "REJECTED_BY_SOURCE_REVIEW: a correct digest does not bound parser/resource exposure or the installed runtime surface"
+    },
+    {
+      "claim": "installing the full authenticated package is harmless because all bytes are digest locked",
+      "result": "REJECTED_BY_MINIMALITY: ClayVerse only consumes package.json, lib/xterm.js and css/xterm.css; extra authenticated files are unnecessary build/runtime surface"
+    }
+  ],
+  "compatibility_support": {
+    "npm_public_package_page": "@xterm/xterm 6.0.0 remains the published stable package",
+    "public_unpacked_size_observation": "approximately 5.7 MB, well below the 64 MiB bound",
+    "authority_limit": "public indexes support plausibility only and do not replace exact registry-tarball observation"
+  },
+  "open_gates": [
+    "independently fetch exact @xterm/xterm@6.0.0 registry tarball in an authorized isolated execution surface and rehash against the repository SHA-512",
+    "exact current-head OCI build/runtime with native Claude Code and xterm assets",
+    "apt repository package bytes are not snapshot/hash pinned",
+    "Python requirements are not installed with --require-hashes",
+    "real Clerk browser/runtime supply chain and key-rotation behavior remain external acceptance gates"
+  ],
+  "execution_constraints": {
+    "vercel_sandbox_start_exec_available_in_session": false,
+    "github_actions_started": false,
+    "github_actions_reason": "account billing/spending limit prevented job startup on inspected xterm PR runs",
+    "vps_or_production_testing_used": false,
+    "together_api_used": false,
+    "final_paid_training_used": false
+  },
+  "acceptance": {
+    "xterm_source_hardening": "MERGED",
+    "focused_exact_blob_regression": "PASS_7_OF_7",
+    "xterm_exact_registry_byte_gate": "OPEN",
+    "whole_clayverse_container": "IN_PROGRESS"
+  }
+}

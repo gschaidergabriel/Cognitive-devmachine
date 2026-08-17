@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-17T19:29:28+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REFINES",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_fusion": "39112b675ebc30f2edc439d85f2183c9eaaae525",
+  "frontier": "Python dependency lock generator bootstrap trust while the primary OCI lane is independently blocked on host-side Vercel private-source credential provisioning",
+  "coordination": {
+    "retained_python_lock_pr": 622,
+    "retained_python_lock_branch": "go/python-lock-py313-generator-20260817-1742-sol",
+    "retained_python_lock_head": "08f1fe82211676d5140723eeccc225b05bb6ea5f",
+    "parallel_oci_execution_branch": "go/oci-execution-closure-20260817-1919-sol",
+    "parallel_oci_execution_closure_observed": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "parallel_oci_controller_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "parallel_oci_controller_head_observed": "a86f4355d02dc34331a3746128b6c3b959977439",
+    "duplicate_oci_lane_created": false,
+    "reentry": "ADOPT_REQUIRED_AT_NEXT_SAFE_CHECKPOINT: refresh/rebind #622 because 5e5adce contains predecessor #622 blobs, not the current resolver-wheel binding"
+  },
+  "observed": {
+    "current_product_dockerfile_base": "python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91",
+    "predecessor_pr622_generator_install": "version-pinned pip-tools==7.5.3 from index without a locally bound resolver-wheel hash",
+    "official_pypi_pip_tools_7_5_3_wheel": "pip_tools-7.5.3-py3-none-any.whl",
+    "official_pypi_pip_tools_7_5_3_wheel_sha256": "3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e",
+    "pip_hash_checking_rule": "complete hash-checking requires hashes for all requirements and dependencies; partial hashing is insufficient for full closure",
+    "new_pr622_workflow_runs_observed_immediately_after_head_write": 0
+  },
+  "hypothesis": "Binding the resolver executable wheel before install narrows the lock generator trust root and makes replacement of the pip-tools resolver bytes fail closed.",
+  "counterhypothesis": "Pinning only the pip-tools wheel does not establish complete generator supply-chain integrity because its transitive bootstrap dependencies remain index-resolved and unhashed.",
+  "counterhypothesis_status": "RETAINED",
+  "source_delta": {
+    "source_lock_blob": "a355fec6fb871a48112c8c0b79b4bf337b3e0644",
+    "workflow_blob": "fe31bd52e0d2dd9250cd5e3e9e96df01249bdb51",
+    "source_binding_test_blob": "737a64f025882396d56789cbeb98721e97010c7a",
+    "changes": [
+      "SOURCE_LOCK now binds pip-tools 7.5.3 wheel filename and SHA-256",
+      "generator workflow binds SOURCE_LOCK SHA into the exact product Python base",
+      "generator workflow downloads binary-only/no-deps resolver wheel, verifies the source-locked SHA before installation, and installs from the verified local wheel",
+      "generator workflow emits deterministic installed-environment freeze SHA and BEGIN/END envelope",
+      "source-binding regression now requires these contracts and preserves the transitive-dependency gate"
+    ]
+  },
+  "evidence_class": "SOURCE_CANDIDATE_UNEXECUTED",
+  "runtime_credit": 0,
+  "source_runtime_credit": 0,
+  "oci_runtime_credit": 0,
+  "unusual_experiment": {
+    "executed": false,
+    "valid_credit": 0,
+    "reason": "shared trigger identity lacks safely reproducible immutable request/turn identity; deterministic hardening only"
+  },
+  "acceptance": "IN_PROGRESS",
+  "open_gates": [
+    "authorized isolated execution of exact PR622 head",
+    "complete pre-admission local hash closure for transitive generator bootstrap dependencies",
+    "canonical requirements.lock.txt materialization only after accepted generator evidence",
+    "Docker switch to --require-hashes only after accepted lock",
+    "rebind retained PR810 OCI controller to then-current #611/#622 identity before next private-source-capable run",
+    "host-side sensitive Vercel Preview GITHUB_READ_TOKEN remains the immediate primary OCI execution prerequisite"
+  ],
+  "security": {
+    "secret_exposed": false,
+    "vps_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false
+  }
+}

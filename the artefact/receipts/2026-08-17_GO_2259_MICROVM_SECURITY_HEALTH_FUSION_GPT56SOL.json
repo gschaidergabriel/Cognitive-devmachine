@@ -37,6 +37,26 @@
       "commit": "2451ff482d0c0619a019b3db076161e34e177f89",
       "path": "the artefact/tests/test_mistral_exception_context.py",
       "delta": "regression candidate requiring Mistral HTTP/transport failures to expose neither secret text nor provider exception through __cause__/__context__"
+    },
+    {
+      "commit": "1627265a74e6d1545dcfe9d2408b7991b6a978a8",
+      "path": "the artefact/clayverse/adapters.py",
+      "delta": "clear the local bearer token and bearer-bearing urllib Request reference immediately after transport so later parsing/validation tracebacks do not retain the credential in adapter frame locals"
+    },
+    {
+      "commit": "2b4a3440f374ecc6ef6a4d0dddd5393604446efe",
+      "path": "the artefact/tests/test_mistral_traceback_secret_boundary.py",
+      "delta": "regression candidate walks adapter traceback frames after malformed post-transport provider data and requires token scrub plus request=None with no secret in locals"
+    },
+    {
+      "commit": "84edf7eba6b91e4ad4f36611c3e4dc2e7f6ea7c3",
+      "path": "the artefact/clayverse/final_acceptance_probe.py",
+      "delta": "bind the canonical Mistral final-sandbox probe to the assistant provenance reasoning_generation and workspace_episode_id; fail closed unless reasoning generation is still live for both session and global entity"
+    },
+    {
+      "commit": "44756c00d9fbb1b67de43827ce3bcdddbdca2f3f",
+      "path": "the artefact/tests/test_final_acceptance_probe_generation.py",
+      "delta": "regression candidate checks normal generation/workspace equality and an adversarial generation advance during inference that must be rejected as stale"
     }
   ],
   "owner_authority_reentry": {
@@ -73,9 +93,12 @@
     "canonical_adapter": "the artefact/clayverse/adapters.py::MistralInference",
     "duplicate_provider_module_removed_by_parallel_fusion": true,
     "canonical_response_reingest_before_effectgate": "the artefact/clayverse/engine.py",
-    "prior_focused_source_regression": "6/6 PASS recorded by current repository evidence for the pre-exception-context slice",
+    "canonical_final_probe": "the artefact/clayverse/final_acceptance_probe.py",
+    "prior_focused_source_regression": "8/8 PASS recorded on predecessor hardened adapter blob 566df232ada2d0f6dc5ed0b622408b1cd4e5bfdc; PASS is not transferred to later canonical adapter/probe bytes",
     "new_exception_context_regression_executed": false,
-    "new_exception_context_runtime_credit": 0,
+    "new_traceback_secret_regression_executed": false,
+    "new_generation_binding_regression_executed": false,
+    "new_source_runtime_credit": 0,
     "real_mistral_api_request_observed": false,
     "vault_secret_acquisition_observed": false,
     "tier2_secret_reacquisition_and_second_mistral_turn_observed": false
@@ -89,7 +112,9 @@
   "test_execution": {
     "health_regression_full_execution": false,
     "mistral_exception_context_regression_full_execution": false,
-    "reason": "connected GitHub status for the new commit has no executed checks and connected Vercel control exposes no secret mutation/direct Sandbox lifecycle action; no false PASS or TEST_FAIL inferred",
+    "mistral_traceback_secret_regression_full_execution": false,
+    "mistral_generation_binding_regression_full_execution": false,
+    "reason": "connected GitHub status for new canonical commits has no executed checks and connected Vercel control exposes no secret mutation/direct Sandbox lifecycle action; no false PASS or TEST_FAIL inferred",
     "source_bytes_rechecked_on_main_after_parallel_fusion": true
   },
   "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
@@ -101,7 +126,7 @@
     "together": false,
     "paid_final_training": false
   },
-  "current_primary_blocker": "Operationally provide the approved scoped read-only GITHUB_READ_TOKEN to retained Vercel controller #810 through an authorized secret-management surface and retrigger it; this connected organ cannot mutate Vercel environment secrets. Then bind exact current source/EntityOS, build and run the exact OCI inside Firecracker, acquire MISTRAL_API_KEY from approved runtime Vault, execute canonical Mistral re-ingest/effect/recovery, fully recreate the appliance from the same digest, reacquire the secret and execute the second Mistral turn.",
+  "current_primary_blocker": "Operationally provide the approved scoped read-only GITHUB_READ_TOKEN to retained Vercel controller #810 through an authorized secret-management surface and retrigger it; this connected organ cannot mutate Vercel environment secrets. Then bind exact current source/EntityOS, execute current deterministic regressions, build and run the exact OCI inside Firecracker, acquire MISTRAL_API_KEY from approved runtime Vault, execute the generation-bound canonical Mistral re-ingest/effect/recovery probe, fully recreate the appliance from the same digest, reacquire the secret and execute the second Mistral turn.",
   "whole_product_pass": false,
   "acceptance": "IN_PROGRESS"
 }

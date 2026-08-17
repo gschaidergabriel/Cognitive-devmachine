@@ -1,17 +1,19 @@
 from __future__ import annotations
 import json
+from .microclay_methods import METHOD_KINDS, MicroClayMethodRetrieval
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Bounded world assembly with separate evidence and method retrieval lanes."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
+        self.methods = MicroClayMethodRetrieval(db)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
@@ -58,8 +60,6 @@ class WorldAssembler:
         user_id = session["user_id"]
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
-        # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -82,6 +82,15 @@ class WorldAssembler:
             "truth_authority": False,
             "effect_authority": False,
         }
+        method_receipt = {
+            "route": "method",
+            "status": "METHOD_NOT_REQUESTED",
+            "truth_authority": False,
+            "effect_authority": False,
+        }
+        method_context = []
+        counterevidence = []
+        unknowns = []
         supplied = {
             "query": query,
             "turn_id": turn_id,
@@ -105,16 +114,42 @@ class WorldAssembler:
                 generation=int(supplied["generation"]),
             )
             memories = result["items"]
-            retrieval_receipt = result["receipt"]
+            retrieval_receipt = dict(result["receipt"])
+
+            # Conservative Stage-B admission: factual UNKNOWN only. Method presence
+            # cannot mutate or replace the Stage-A evidence status.
+            if retrieval_receipt.get("status") == "UNKNOWN":
+                methods = self.methods.retrieve(
+                    query=str(supplied["query"]),
+                    user_id=user_id,
+                    session_id=session_id,
+                    turn_id=str(supplied["turn_id"]),
+                    episode_id=str(supplied["episode_id"]),
+                    causal_id=str(supplied["causal_id"]),
+                    generation=int(supplied["generation"]),
+                )
+                method_context = [
+                    item for item in methods["items"] if item.get("kind") != "counterexample"
+                ]
+                counterevidence = [
+                    item for item in methods["items"] if item.get("kind") == "counterexample"
+                ]
+                method_receipt = dict(methods["receipt"])
+                unknowns = [{
+                    "status": "FACT_UNKNOWN",
+                    "query_sha256": retrieval_receipt.get("query_sha256"),
+                    "method_present": bool(method_context or counterevidence),
+                }]
         else:
-            # Compatibility path for legacy tests/non-product callers with no active
-            # causal turn. Product Claude hooks always have an active turn here.
+            # Legacy/non-product callers cannot collapse method memory into facts.
+            excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
             memories = [
                 dict(r)
                 for r in self.db.db.execute(
-                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+                    "SELECT * FROM durable_memory "
+                    f"WHERE kind NOT IN ({','.join('?' for _ in excluded)}) "
                     "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                    (user_id,),
+                    (*excluded, user_id),
                 )
             ]
 
@@ -122,7 +157,11 @@ class WorldAssembler:
             "own_recent": own,
             "cross_session_collision": other,
             "durable_memory": memories,
+            "method_context": method_context,
+            "unknowns": unknowns,
+            "counterevidence": counterevidence,
             "retrieval_receipt": retrieval_receipt,
+            "method_receipt": method_receipt,
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

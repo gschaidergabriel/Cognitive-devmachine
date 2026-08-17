@@ -260,7 +260,7 @@ class MicroClayRetrieval:
         if not ids:
             return
         rows = self.db.db.execute(
-            "SELECT memory_id,kind FROM durable_memory WHERE memory_id IN (%s)"
+            "SELECT memory_id,kind,user_id,source_turn_id FROM durable_memory WHERE memory_id IN (%s)"
             % ",".join("?" for _ in ids),
             tuple(ids),
         ).fetchall()
@@ -268,6 +268,17 @@ class MicroClayRetrieval:
             raise StaleGeneration("retrieval_route_contract")
         excluded_kinds = METHOD_KINDS | _CONTROL_KINDS
         if any(str(row["kind"]) in excluded_kinds for row in rows):
+            raise StaleGeneration("retrieval_route_contract")
+        if any(
+            row["user_id"] is not None and str(row["user_id"]) != str(existing["user_id"])
+            for row in rows
+        ):
+            raise StaleGeneration("retrieval_route_contract")
+        if any(
+            row["source_turn_id"] is not None
+            and str(row["source_turn_id"]) == str(existing["turn_id"])
+            for row in rows
+        ):
             raise StaleGeneration("retrieval_route_contract")
 
     def retrieve(
@@ -427,7 +438,6 @@ class MicroClayRetrieval:
                 "PRESENT" if selected else "UNKNOWN", now,
             ),
         )
-
         return {
             "items": [x.public() for x in selected],
             "receipt": {

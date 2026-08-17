@@ -48,7 +48,7 @@ class EffectJournal:
     @staticmethod
     def _assert_active_effect_intent_tx(db,episode_id,session_id,user_id,generation):
         active=db.execute(
-            'SELECT workspace_selected,effect_id FROM active_turns WHERE episode_id=? AND session_id=? AND user_id=? AND generation=?',
+            'SELECT workspace_selected,effect_id,causal_id FROM active_turns WHERE episode_id=? AND session_id=? AND user_id=? AND generation=?',
             (episode_id,session_id,user_id,int(generation)),
         ).fetchone()
         if not active: raise StaleGeneration('effect_active_turn')
@@ -57,6 +57,11 @@ class EffectJournal:
         workspace=db.execute('SELECT state,selected FROM workspace_episodes WHERE episode_id=? AND session_id=?',(episode_id,session_id)).fetchone()
         if not workspace or workspace['state']!='SELECTED' or workspace['selected']!='request_effect':
             raise PermissionError('effect workspace selection mismatch')
+        causal_rows=db.execute('SELECT causal_id FROM causal_episodes WHERE episode_id=? ORDER BY ts,causal_id',(episode_id,)).fetchall()
+        if any(row['causal_id']!=active['causal_id'] for row in causal_rows):
+            raise StaleGeneration('effect_causal_spine')
+        if causal_rows:
+            raise RuntimeError('active causal identity already consumed before effect begin')
     def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None,lease:Lease|None=None):
         eid=str(uuid.uuid4())
         with self.db.tx() as db:

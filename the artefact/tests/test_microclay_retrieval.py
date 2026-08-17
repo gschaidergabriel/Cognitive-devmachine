@@ -169,7 +169,7 @@ def test_verified_effect_outcome_updates_entrypoint_on_next_turn_only(tmp_path):
         db.close()
 
 
-def test_state_noop_cannot_self_award_positive_retrieval_credit(tmp_path):
+def test_state_noop_is_consumed_without_retrieval_policy_mutation(tmp_path):
     db = _db(tmp_path)
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
@@ -186,17 +186,39 @@ def test_state_noop_cannot_self_award_positive_retrieval_credit(tmp_path):
         assert float(causal["credit"]) == 0.0
         life.complete("done")
 
+        before_policy = [
+            tuple(row) for row in db.db.execute(
+                "SELECT entry_key,capital,reward_ema,pulls,updated_at "
+                "FROM retrieval_entrypoint_policy ORDER BY entry_key"
+            ).fetchall()
+        ]
         second = life.begin("orchid procedure again")
-        assert second["context"]["retrieval_receipt"]["outcome_learning_applied"] == 1
-        feedback = db.db.execute("SELECT credit,signal_class FROM retrieval_feedback").fetchone()
-        assert float(feedback["credit"]) == 0.0
-        assert feedback["signal_class"] == "effect_outcome:VERIFIED"
-        policy = db.db.execute(
-            "SELECT capital,reward_ema,pulls FROM retrieval_entrypoint_policy WHERE entry_key='subject:procedure:orchid'"
+        assert second["context"]["retrieval_receipt"]["outcome_learning_applied"] == 0
+
+        feedback = db.db.execute(
+            "SELECT credit,signal_class FROM retrieval_feedback WHERE causal_id=?",
+            (first["causal_id"],),
         ).fetchone()
-        assert policy is not None
-        assert float(policy["capital"]) <= 0.0
-        assert int(policy["pulls"]) == 1
+        assert feedback is not None
+        assert float(feedback["credit"]) == 0.0
+        assert feedback["signal_class"] == "effect_outcome:VERIFIED:non_rewarding"
+        after_policy = [
+            tuple(row) for row in db.db.execute(
+                "SELECT entry_key,capital,reward_ema,pulls,updated_at "
+                "FROM retrieval_entrypoint_policy ORDER BY entry_key"
+            ).fetchall()
+        ]
+        assert after_policy == before_policy
+
+        # The non-learning receipt consumes the outcome once, so it cannot reappear
+        # and apply ACCESS_RENT on later turns.
+        assert MicroClayRetrieval(db).learn_from_verified_outcomes(
+            session_id="session:gabriel", generation=second["generation"]
+        ) == {"eligible": 0, "applied": 0}
+        assert db.db.execute(
+            "SELECT COUNT(*) FROM retrieval_feedback WHERE causal_id=?",
+            (first["causal_id"],),
+        ).fetchone()[0] == 1
         life.abort("test-end")
     finally:
         db.close()

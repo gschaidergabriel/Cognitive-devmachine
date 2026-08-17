@@ -14,7 +14,7 @@
   "entity_model": "one persistent central entity with two user-bound conversation perspectives",
   "persistent_state_root": "/var/lib/clayverse",
   "container_boundary": "one OCI/Docker-compatible image",
-  "build_context": "default-deny allowlist; only Dockerfile, requirements, SOURCE_LOCK, digest-checking Claude build helper, live ClayVerse runtime, managed policy, runtime contract, vendored terminal assets and staged EntityOS enter OCI build context; retired headless/custom-chat runtimes are excluded",
+  "build_context": "default-deny allowlist; only Dockerfile, requirements, SOURCE_LOCK, digest-checking Claude/xterm build helpers, live ClayVerse runtime, managed policy, runtime contract, vendored terminal assets and staged EntityOS enter OCI build context; retired headless/custom-chat runtimes are excluded",
   "visible_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code CLI",
   "terminal_sessions": {
     "gabriel": "clayverse-gabriel",
@@ -26,7 +26,7 @@
   "claude_turn_state_spine": "managed UserPromptSubmit/Stop/StopFailure hooks -> one UnifiedDB active-turn/causal lifecycle; automatic, not model-optional",
   "claude_state_effect_bridge": "strict local stdio ClayVerse MCP; effect-only plus read-only session state",
   "claude_side_memory": "DISABLED: transcript/prompt-history persistence, auto-memory and CLAUDE.md memory inputs are off; UnifiedDB is sole durable cognition-memory authority",
-  "claude_code_supply_chain": "native Claude Code v2.1.233 is selected by TARGETARCH and whole-archive SHA-256 verified from SOURCE_LOCK.json before extraction; npm is retained only for the separately vendored xterm web asset",
+  "claude_code_supply_chain": "native Claude Code v2.1.233 is selected by TARGETARCH and whole-archive SHA-256 verified from SOURCE_LOCK.json before extraction; npm is not required for Claude or xterm; xterm browser assets are selected from the @xterm/xterm 6.0.0 registry archive only after repository-owned SHA-512 SRI verification",
   "conversation_window": "newest 20 full; older stream progressively compressed to 1-2 word trace",
   "compression_source_policy": "no hidden raw source_archive after compaction; non-reversible SHA-256 receipt plus extracted durable semantic memories",
   "cross_session_policy": "collision-triggered only; compressed trace plus bounded extracted fragments, never wholesale other-session injection",
@@ -45,7 +45,8 @@
   "supply_chain_open_gates": [
     "apt package bytes are not yet snapshot/hash pinned",
     "Python requirements are version pinned but not yet installed with --require-hashes",
-    "vendored xterm npm package is version-addressed but not yet repository hash locked",
+    "browser Clerk supply-chain provenance remains separately open",
+    "xterm registry archive is source-locked by repository SHA-512 SRI but exact authorized OCI retrieval/install remains unobserved",
     "exact native Claude archive install and startup must still be observed in the authorized isolated OCI build"
   ],
   "verified_targeted_non_vps_receipts": [

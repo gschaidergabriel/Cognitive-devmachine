@@ -12,9 +12,9 @@ def test_two_equal_users_one_db(db):
     r=IdentityRouter(db,{'g':'gabriel','a':'andreas'}); assert r.resolve('g')[0]=='gabriel' and r.resolve('a')[0]=='andreas'; assert {x['rights'] for x in db.db.execute('select * from users')}=={'equal'}
 def test_unmapped_identity_fails_closed(db):
     with pytest.raises(PermissionError): IdentityRouter(db,{}).resolve('unknown')
-def test_last_20_remain_full_and_older_compress(db):
+def test_last_20_remain_full_and_semantically_cleared_older_turns_compress(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); mm=MemoryManager(db)
-    for i in range(45): db.append_turn(sid,uid,'user',f'turn {i} '+('x '*50))
+    for i in range(45): db.append_turn(sid,uid,'user',f'FACT: turn {i} '+('x '*50))
     mm.compact(sid); rows=db.all_turns(sid); assert all(x['fidelity']=='full' for x in rows[-20:]); assert any(x['fidelity']!='full' for x in rows[:-20])
 def test_explicit_durable_memory_only(db):
     e=engine(db); e.ingest('clerk-g','FACT: alpha is beta\nnormal sentence'); mem=db.memories(); assert len(mem)==1 and mem[0]['value']=='alpha is beta'

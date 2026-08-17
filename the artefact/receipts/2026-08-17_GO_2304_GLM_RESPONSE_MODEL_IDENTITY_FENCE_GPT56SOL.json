@@ -1,0 +1,80 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:04:29+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "glm_token_inference_response_model_identity_fence",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_main_commit_observed_via_pr_base": "89a7287928afb2130818eb8b9b8b71f3fa965978",
+  "retained_pr": 629,
+  "pr_head_before_receipt": "871a7cdab2cf9b39dbb6f44efea85fbab64eef83",
+  "exact_git_blobs": {
+    "the artefact/clayverse/glm_inference.py": "10eb799eab4f1aef180c2c5e5731bc8f57ca40db",
+    "the artefact/tests/test_glm_inference_boundary.py": "c341d74648eba70369ea76f1ab39ccdc29961d64",
+    "the artefact/tests/test_glm_inference_model_identity.py": "8e673f1644c867351b7acffcfc45efdc1bdc700a"
+  },
+  "adversarial_falsifier": {
+    "pre_repair_source_blob": "f2e73735e89f389ac0b358f9844a9c86529a6986",
+    "stimulus": "requested model glm-5.2; provider response model glm-4.7",
+    "pre_repair_observation": "DEFECT_ACCEPTED_MODEL_DRIFT",
+    "pre_repair_returned_model": "glm-4.7",
+    "repair": "validate provider-reported model then require exact equality with the requested model; mismatch fails closed before a decision is returned"
+  },
+  "blob_reconstruction": {
+    "method": "reconstructed exact GitHub file bytes in an isolated non-production container and verified with git hash-object before execution",
+    "source_blob_match": true,
+    "existing_test_blob_match": true,
+    "new_test_blob_match": true
+  },
+  "deterministic_regression": {
+    "command": "PYTHONPATH=. python -m pytest -q test_glm_inference_boundary.py test_glm_inference_model_identity.py",
+    "exit_code": 0,
+    "result": "15 passed in 0.06s",
+    "py_compile": "PASS"
+  },
+  "external_primary_evidence": {
+    "source": "Zhipu AI / BigModel official API documentation",
+    "endpoint": "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+    "authentication": "Authorization: Bearer <token>",
+    "requested_model_example": "glm-5.2",
+    "response_contract_includes_model_field": true
+  },
+  "authority_result": {
+    "token_authority": "SECRET_ONLY_NOT_STATE",
+    "provider": "GLM_TOKEN_API_INFERENCE_ONLY",
+    "effect_authority": false,
+    "terminal_authority": false,
+    "state_authority": false,
+    "model_identity_drift": "FAIL_CLOSED"
+  },
+  "runtime_credit": {
+    "real_glm_token_call": 0,
+    "exact_full_pr_checkout": 0,
+    "exact_oci": 0,
+    "microvm": 0,
+    "whole_clayverse": 0
+  },
+  "execution_frontier": {
+    "vercel_latest_confirmed": "Sandbox.create succeeds but exact private Research/EntityOS source staging remains blocked by absent host-side Preview GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "next_exact_gate": "provision approved host-side Vercel Preview GITHUB_READ_TOKEN without forwarding it into Sandbox; refresh/rebind the retained OCI controller to current product-relevant main and admitted lanes; then execute exact source regressions, OCI build/digest, packaged terminal/Claude/GLM boundaries and subsequent microVM acceptance"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the exact user go trigger exposes only minute-precision immutable message time and no shared immutable request/turn id; ordinary deterministic adversarial regression is allowed",
+    "count_executed": 0
+  },
+  "non_claims": [
+    "no real GLM-token network inference executed",
+    "no exact full PR checkout PASS",
+    "no exact OCI image build or image digest",
+    "no packaged provider-switching runtime evidence",
+    "no VM/microVM runtime evidence",
+    "no whole-product PASS"
+  ]
+}

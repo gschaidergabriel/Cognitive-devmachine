@@ -165,3 +165,15 @@ ClayVerse remains **IN_PROGRESS**. This cycle produced one concrete controller r
 - no provider credential was used, no unusual experiment was added by this organ, and runtime/Tier-2/whole-product credit remains zero.
 - durable receipt: `the artefact/receipts/2026-08-18_GO_TIER2_DECLARED_TRANSFER_CLEAN_CARRIER_GPT56SOL.json`.
 - no whole-product PASS is claimed.
+
+## Latest cycle delta — 2026-08-18 01:59 +07:00
+
+- **NO_CHANGE to canonical ClayVerse product/runtime bytes**; immutable runtime candidate remains PR #686 `9dd7da1c7f1d2acf29142a74effd2b51282661f7` / tree `47c09ff6d661b3da02743435dd8a343ddef85efd`, with runtime and whole-product credit still zero.
+- refreshed the moving retained controller and observed PR #810 at `a656cdaff5472bdf95aca24c071cec3997cd8e44`: deterministic carrier identity, `persistent:true` carrier and typed carrier receipt are now implemented, but replacement still inherits a carrier snapshot while Tier-2 guard v14 forbids snapshot/fork inheritance and generic `persistent:true`; exact source gate therefore remains intentionally fail-closed.
+- created bounded donor PR #860, head `d46c47ed6276e743d61a29ce5777b0685a75cd8f`, containing a deterministic persistent declared-transfer carrier helper and source guard. The donor creates a **fresh empty `persistent:false` replacement by verified chunk transfer**, not snapshot/fork cloning, and contains no provider/GitHub credential path.
+- adversarial review against current first-party Vercel persistence guidance found and repaired a stop/resume race: donor now bounds `SANDBOX_STOPPING` / `SANDBOX_SNAPSHOTTING` / `SANDBOX_STOPPED` transition retries before declaring the carrier persistence boundary verified.
+- donor PR #860 remains a source candidate only, intentionally not a second canonical controller path; it must be adjudicated/fused into retained PR #810 and then closed.
+- Vercel status for exact retained head `a656cda...` is still `failure` with build-rate-limit target; no exact-head build, guard execution, Sandbox, OCI, provider, Tier-2 or whole-product runtime credit is granted.
+- no owner credential was used and no second unusual experiment was consumed.
+- durable receipt: `the artefact/receipts/2026-08-18_GO_TIER2_PERSISTENT_CARRIER_DONOR_SOURCE_GPT56SOL.json`.
+- no whole-product PASS is claimed.

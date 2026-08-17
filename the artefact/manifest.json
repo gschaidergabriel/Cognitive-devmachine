@@ -39,17 +39,18 @@
   "ingress_policy": "only explicit admitted authenticated/verified inputs cross inward; inputs are normalized, causally identified and reconciled with UnifiedDB before cognition/execution; Kubernetes reference deployment starts from default-deny and requires an exact reviewed allow policy",
   "internal_processing_loop": "INGRESS -> UnifiedDB canonicalize/record -> retrieval/context -> selected LLM cognition -> response re-ingested -> policy/authority validation -> EntityOS/managed terminal execution -> stdout/stderr/result/effect receipt -> UnifiedDB causal re-entry -> repeat as needed -> EGRESS",
   "terminal_control": "accepted ClayVerse/EntityOS execution layer directly controls managed Linux PTY/tmux stdin/stdout/stderr/exit/process/filesystem operations within policy; unmediated generic host process.exec is forbidden",
-  "egress_policy": "only explicit admitted outputs/effects or bounded admitted token/API inference requests cross outward and remain bound to canonical causal turn/effect receipts; the mandatory final test-of-tests provider is Mistral; Kubernetes reference deployment starts default-deny and requires an exact reviewed allow policy; stale/replayed/unknown/unauthorized effects fail closed",
+  "egress_policy": "only explicit admitted outputs/effects or bounded admitted token/API inference requests cross outward and remain bound to canonical causal turn/effect receipts; token/API providers use explicitly audited adapters and remain inference-only; Kubernetes reference deployment starts default-deny and requires an exact reviewed allow policy; stale/replayed/unknown/unauthorized effects fail closed",
   "build_context": "default-deny allowlist; only explicitly consumed product bytes enter OCI build context; retired headless/custom-chat runtimes and secrets are excluded",
-  "visible_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code CLI; Mistral is the mandatory token/API inference-only provider for the final test-of-tests; GLM remains bounded legacy/research functionality unless separately superseded",
+  "visible_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code CLI; generic token/API inference is a separate bounded provider path; Mistral is the first concrete acceptance/test profile, not unique product authority; GLM remains bounded legacy/research functionality unless admitted through the generic provider contract",
   "terminal_sessions": {
     "gabriel": "clayverse-gabriel",
     "andreas": "clayverse-andreas"
   },
   "llm_provider_law": {
     "claude_code": "interactive terminal-native inference path inside managed PTY/tmux; authenticate through direct Claude Code terminal login; no hidden Claude API-token replacement for the primary path",
-    "mistral": "mandatory final test-of-tests token/API inference path; credential is acquired at runtime from the approved Vault/secret store and remains transient; no PTY/filesystem/EntityOS/EffectGate authority; output must be re-ingested into UnifiedDB before any effect authority",
-    "glm": "bounded legacy/research token/API inference functionality only unless separately superseded; token stays in secret boundary; no PTY/filesystem/EntityOS/EffectGate authority; not the mandatory final test-of-tests provider",
+    "generic_api": "explicitly audited API adapters have inference authority only; provider output must re-ingest into UnifiedDB before policy/EffectGate evaluation; credentials remain transient runtime secrets; no PTY/filesystem/EntityOS/EffectGate authority and no arbitrary dynamic provider code loading",
+    "mistral": "first concrete generic API acceptance/test profile using transient MISTRAL_API_KEY; Mistral is not unique product authority; no PTY/filesystem/EntityOS/EffectGate authority; output must be re-ingested into UnifiedDB before any effect authority",
+    "glm": "bounded legacy/research token/API inference functionality only unless admitted through the generic provider contract; token stays in secret boundary; no PTY/filesystem/EntityOS/EffectGate authority",
     "provider_switching": "must preserve the same UnifiedDB causal turn/session/generation; provider switching never forks entity or state",
     "common_rule": "model output is proposed reasoning/action only and must be re-ingested and policy-checked before any execution"
   },
@@ -120,7 +121,7 @@
     "exact reviewed deployment network allow policy identity captured and only admitted flows open while tested non-admitted flows remain denied",
     "node-local, metadata-service and relevant control-plane routes explicitly probed and every non-admitted route denied by deployment/microVM boundary",
     "sealed ingress/egress boundary and full cognition-reingest-terminal-result loop",
-    "Claude Code direct terminal-login/runtime verification plus Mistral Vault/secret-store token secrecy, inference-only authority and real canonical-turn verification",
+    "Claude Code direct terminal-login/runtime verification plus at least one admitted generic token/API provider completing Stage-1 direct canonical inference/effect/recovery and Stage-2 real-user pass-through; Mistral is the current first concrete acceptance profile unless superseded",
     "automatic tier-1 internal recovery plus tier-2 full microVM/workload replacement",
     "tier-2 replacement proves a new Pod UID and new Kata sandbox/VM identity rather than an in-place container restart",
     "known-good snapshot recovery across UnifiedDB generation and EffectJournal",

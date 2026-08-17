@@ -3,7 +3,7 @@ import json
 import pytest
 
 from clayverse.final_acceptance_probe import run_mistral_acceptance_probe
-from clayverse.store import UnifiedDB
+from clayverse.store import StaleGeneration, UnifiedDB
 
 
 class FakeMistral:
@@ -44,7 +44,10 @@ def test_probe_uses_canonical_engine_and_returns_only_sanitized_receipt(tmp_path
         assert payload["auth_credit"] is False
         assert payload["whole_product_pass"] is False
         assert payload["user_id"] == "gabriel"
+        assert payload["reasoning_generation"] == payload["session_generation"]
+        assert payload["session_generation"] == payload["entity_generation"]
         assert payload["entity_generation"] == db.entity_generation()
+        assert payload["workspace_episode_id"]
         assert payload["effect"] == {
             "required": False,
             "effect_id": None,
@@ -66,6 +69,8 @@ def test_probe_uses_canonical_engine_and_returns_only_sanitized_receipt(tmp_path
         provenance = json.loads(assistant["provenance"])
         assert provenance["phase"] == "pre-effect-reingest"
         assert provenance["inference_receipt"]["response_id"] == "cmpl-probe"
+        assert provenance["reasoning_generation"] == payload["reasoning_generation"]
+        assert provenance["workspace_episode_id"] == payload["workspace_episode_id"]
     finally:
         db.close()
 
@@ -102,6 +107,25 @@ def test_probe_fails_closed_when_required_effect_is_missing(tmp_path):
                 "no effect",
                 inference=FakeMistral(),
                 require_effect=True,
+            )
+    finally:
+        db.close()
+
+
+def test_probe_fails_closed_when_reasoning_generation_is_stale(tmp_path, monkeypatch):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        def reject_generation(session_id, generation):
+            raise StaleGeneration("forced stale probe generation")
+
+        monkeypatch.setattr(db, "assert_live_generation", reject_generation)
+        with pytest.raises(RuntimeError, match="reasoning generation is stale"):
+            run_mistral_acceptance_probe(
+                db,
+                {"subject-g": "gabriel", "subject-a": "andreas"},
+                "subject-g",
+                "probe stale generation",
+                inference=FakeMistral(),
             )
     finally:
         db.close()

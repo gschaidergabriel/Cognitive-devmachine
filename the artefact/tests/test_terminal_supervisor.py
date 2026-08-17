@@ -63,12 +63,26 @@ def test_terminal_supervisor_binds_only_the_two_owner_perspectives():
         supervisor.for_user("mallory")
 
 
-def test_unexpected_child_exit_is_reaped_without_stale_terminal_identity():
-    terminal = PermanentTerminal("gabriel", [sys.executable, "-c", "raise SystemExit(7)"])
+def test_unexpected_child_exit_preserves_final_output_until_drain():
+    terminal = PermanentTerminal(
+        "gabriel",
+        [sys.executable, "-u", "-c", "import os; os.write(1,b'FINAL'); raise SystemExit(7)"],
+    )
     terminal.start()
     deadline = time.monotonic() + 2.0
     while terminal.alive() and time.monotonic() < deadline:
         time.sleep(0.01)
     assert not terminal.alive()
     assert terminal.pid is None
+
+    # This is the bounded unusual experiment for this go: the child is already
+    # dead, but its final PTY bytes must survive the lifecycle transition.
+    output = _read_until(terminal, b"FINAL")
+    assert b"FINAL" in output
+
+    # Drain the PTY to EOF/EIO so the master descriptor is released.
+    deadline = time.monotonic() + 2.0
+    while terminal.master_fd is not None and time.monotonic() < deadline:
+        terminal.read()
+        time.sleep(0.01)
     assert terminal.master_fd is None

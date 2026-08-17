@@ -16,7 +16,7 @@ def db(tmp_path):
     d.close()
 
 
-def test_old_conversation_is_really_compressed_and_collision_uses_extracted_fragments(db):
+def test_mixed_old_turn_defers_until_complete_semantic_clearance_then_collision_uses_fragments(db):
     router = IdentityRouter(db, {"g": "gabriel", "a": "andreas"})
     guid, gsid = router.resolve("g")
     _, asid = router.resolve("a")
@@ -25,6 +25,33 @@ def test_old_conversation_is_really_compressed_and_collision_uses_extracted_frag
     first_id = db.append_turn(gsid, guid, "user", original, resources=["repo:x"])
     for i in range(125):
         db.append_turn(gsid, guid, "user", f"filler {i} " + ("x " * 40))
+
+    mm.compact(gsid)
+    first = db.db.execute("SELECT * FROM turns WHERE turn_id=?", (first_id,)).fetchone()
+    assert first["compression_generation"] == 0
+    assert first["content"] == original
+    receipt = db.db.execute(
+        "SELECT value,provenance FROM durable_memory WHERE kind='compression_receipt' AND source_turn_id=?",
+        (first_id,),
+    ).fetchone()
+    assert receipt["value"] == hashlib.sha256(original.encode("utf-8")).hexdigest()
+    receipt_provenance = json.loads(receipt["provenance"])
+    assert receipt_provenance["durable_extraction_count"] == 1
+    assert receipt_provenance["semantic_clearance"] is False
+    assert receipt_provenance["status"] == "deferred_incomplete_semantic_coverage"
+
+    # Stand-in for a stronger semantic extractor: it captures the untyped durable
+    # information, then grants complete coverage bound to the exact original bytes.
+    db.add_memory(
+        "fact", guid, "heliotrope durable content", first_id, guid,
+        {"extractor": "semantic-test", "source": "precompression"},
+    )
+    mm.record_semantic_clearance(
+        first_id,
+        guid,
+        source_sha256=hashlib.sha256(original.encode("utf-8")).hexdigest(),
+        extractor="semantic-test",
+    )
     mm.compact(gsid)
 
     first = db.db.execute("SELECT * FROM turns WHERE turn_id=?", (first_id,)).fetchone()
@@ -35,25 +62,26 @@ def test_old_conversation_is_really_compressed_and_collision_uses_extracted_frag
         "SELECT 1 FROM durable_memory WHERE kind='source_archive' AND source_turn_id=?", (first_id,)
     ).fetchone()
 
-    receipt = db.db.execute(
-        "SELECT value,provenance FROM durable_memory WHERE kind='compression_receipt' AND source_turn_id=?",
-        (first_id,),
-    ).fetchone()
-    assert receipt["value"] == hashlib.sha256(original.encode("utf-8")).hexdigest()
-    assert json.loads(receipt["provenance"])["lossless_source_retained"] is False
-    fact = db.db.execute(
-        "SELECT value FROM durable_memory WHERE kind='fact' AND source_turn_id=?", (first_id,)
-    ).fetchone()
-    assert fact["value"] == "alpha is beta"
-
     world = WorldAssembler(db).assemble(asid, [])
     assert "heliotrope" not in json.dumps(world, sort_keys=True)
-
     collision = WorldAssembler(db).assemble(asid, ["repo:x"])
-    item = collision["cross_session_collision"][0]
+    item = [x for x in collision["cross_session_collision"] if x["turn_id"] == first_id][0]
     assert "heliotrope" not in item["content"]
     assert item["retrieval_fidelity"] == "compressed_with_extracted_fragments"
-    assert {x["value"] for x in item["extracted_fragments"]} == {"alpha is beta"}
+    assert {x["value"] for x in item["extracted_fragments"]} == {
+        "alpha is beta", "heliotrope durable content"
+    }
+
+
+def test_hash_bound_semantic_clearance_rejects_stale_source(db):
+    router = IdentityRouter(db, {"g": "gabriel"})
+    uid, sid = router.resolve("g")
+    mm = MemoryManager(db)
+    turn_id = db.append_turn(sid, uid, "user", "ordinary durable sentence")
+    with pytest.raises(ValueError, match="digest mismatch"):
+        mm.record_semantic_clearance(
+            turn_id, uid, source_sha256="0" * 64, extractor="semantic-test"
+        )
 
 
 def test_recompression_does_not_duplicate_extracted_semantic_memory(db):
@@ -74,7 +102,7 @@ def test_recompression_does_not_duplicate_extracted_semantic_memory(db):
     assert count == 1
 
 
-def test_compression_receipt_is_not_a_claygraph_semantic_node(db):
+def test_compression_control_records_are_not_claygraph_semantic_nodes(db):
     router = IdentityRouter(db, {"g": "gabriel"})
     uid, sid = router.resolve("g")
     turn_id = db.append_turn(sid, uid, "user", "FACT: visible semantic fact")

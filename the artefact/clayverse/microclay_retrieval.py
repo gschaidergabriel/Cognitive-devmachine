@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import math
@@ -71,6 +72,15 @@ class MicroClayRetrieval:
 
     def __init__(self, db: UnifiedDB):
         self.db = db
+
+    @contextlib.contextmanager
+    def _credit_tx(self):
+        """Join a canonical outer turn transaction or create one standalone credit transaction."""
+        if self.db.db.in_transaction:
+            yield self.db.db
+        else:
+            with self.db.tx() as db:
+                yield db
 
     @staticmethod
     def _tokens(text: str) -> set[str]:
@@ -450,11 +460,12 @@ class MicroClayRetrieval:
     ) -> dict[str, Any]:
         """Atomically apply one canonical causally re-entered effect outcome.
 
-        Policy-capital mutation and the feedback idempotency receipt are one UnifiedDB
-        transaction. Any failure before COMMIT rolls both back, so crash/retry cannot
-        partially or multiply apply the same canonical learning outcome.
+        Policy-capital mutation and the feedback idempotency receipt share the current
+        canonical transaction. Standalone calls create one transaction; turn assembly
+        joins the already-open admission transaction so crash/rollback cannot partially
+        or multiply apply the same learning outcome.
         """
-        with self.db.tx() as db:
+        with self._credit_tx() as db:
             row = db.execute(
                 "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",
                 (causal_id,),

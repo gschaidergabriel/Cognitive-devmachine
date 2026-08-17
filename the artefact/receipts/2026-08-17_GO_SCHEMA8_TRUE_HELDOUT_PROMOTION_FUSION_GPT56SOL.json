@@ -1,0 +1,76 @@
+{
+  "schema": "clayverse-mechanism-fusion-receipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "retained_pr": 484,
+  "retained_branch": "fusion/microclay-stageb-schema8-20260817",
+  "observed_head_before_receipt": "b3f739cffb83283dfdd8b55dbffe26308d47a5f2",
+  "issue": 425,
+  "donor_gate_pr": 494,
+  "donor_repair_pr": 538,
+  "source_fusion": {
+    "parallel_two_success_commit": "eb94e71c54223afc0d117d17f3fae9433589836d",
+    "shadow_nonpoison_commit": "28858b03c9873a3c87e02b7046904458a04b219f",
+    "retained_regression_commit": "36c168a0f7a911186e7ed04654dedbb8cc00a3b5",
+    "method_validation_blob": "b0ed95b2c8b3e304754ed88fe314b3d654e6ced3",
+    "promotion_fence_test_blob": "e07bc37795c1c38de13f294cd15c744b908e3b7e",
+    "method_memory_blob_at_observed_head": "d5c9774efadf9f3267c46443b0044949ed3024ac"
+  },
+  "promotion_contract": {
+    "formation_source_episodes": "provenance only; never counted as reusable-method utility",
+    "eligible_receipts": "durable candidate-validation receipts with evaluation_mode HELD_OUT and episode_id disjoint from candidate source_episode_ids",
+    "minimum_distinct_heldout_episodes": 2,
+    "minimum_distinct_heldout_causal_instances": 2,
+    "minimum_successes": 2,
+    "falsifier_checked": "at least one eligible held-out instance",
+    "failure_receipts": "remain support/calibration evidence",
+    "shadow_and_in_sample_history": "durable/auditable but excluded from promotion statistics; cannot count as success and cannot permanently poison later true held-out transfer",
+    "caller_candidate_counters": "non-authoritative",
+    "truth_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "lineage_revalidation": {
+    "promotion_receipt_contains_validation_receipt_ids": true,
+    "promotion_receipt_contains_validation_evidence_sha256": true,
+    "promoted_method_read_rederives_stats": true,
+    "receipt_and_provenance_evidence_drift_fail_closed": true
+  },
+  "retained_regressions": {
+    "one_success_plus_one_failure": "must not promote reusable method",
+    "shadow_then_two_heldout_successes": "promotion allowed; receipt binds only the two HELDOUT validation receipts",
+    "recursive_method_memory_as_support": "rejected",
+    "promotion_lineage_tamper_on_reopen": "rejected"
+  },
+  "bounded_mechanism_evidence": {
+    "classification": "MECHANISM_SUPPORTED",
+    "observed_logic_cases": [
+      "SHADOW + 2 disjoint HELDOUT successes -> eligible; SHADOW excluded",
+      "1 HELDOUT success + 1 failure -> rejected",
+      "formation/source-only HELDOUT receipts -> rejected",
+      "SHADOW-only receipts -> rejected"
+    ],
+    "limitations": "No actually-started exact full-repository Vercel Sandbox run exists for this retained head. GitHub source/receipt and bounded logic evidence are not OCI/runtime/Clerk/Claude/whole-product acceptance."
+  },
+  "coordination": {
+    "stale_write_guard_observed": "GitHub returned 409 when the retained branch advanced concurrently; source was refreshed before applying only missing semantics",
+    "duplicate_permanent_method_path_added": false,
+    "donor_intent": "PR 538 is superseded as implementation donor after fusion; PR 494 remains useful as red-gate/contract evidence until exact execution"
+  },
+  "execution_admission": {
+    "vercel_sandbox_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_AT_VERCEL_SANDBOX",
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
+    "current_preview_admission": "BLOCKED_BEFORE_SANDBOX_START_BY_VERCEL_BUILD_DEPLOYMENT_RATE_LIMIT",
+    "exact_retained_head_full_source_tests": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED"
+  },
+  "experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_by_this_work": false
+  },
+  "acceptance": "SOURCE_FUSED_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+  "whole_clayverse_container_pass": false,
+  "forbidden_fallbacks_not_used": ["VPS", "self-hosted VPS runner", "production host", "Together API"],
+  "next_exact_gate": "Refresh the retained PR head and execute the exact schema-8 Stage-A/Stage-B/promotion suite in an actually-started authorized Vercel Sandbox, followed by adjacent lifecycle/privacy/restart regressions and then exact OCI build/start/readiness/restart."
+}

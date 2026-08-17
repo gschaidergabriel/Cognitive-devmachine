@@ -1,5 +1,6 @@
 from __future__ import annotations
 import hashlib
+import json
 import re
 from .store import UnifiedDB
 
@@ -8,12 +9,12 @@ SEMANTIC_KINDS = {"fact", "decision", "task", "commitment", "preference", "open"
 
 
 class MemoryManager:
-    """Progressive conversation compression without a hidden full-text archive.
+    """Progressive conversation compression with an extract-or-defer safety gate.
 
-    The newest 20 turns remain full fidelity. Before any destructive compression this
-    manager extracts deterministic durable markers and stores a non-reversible source
-    receipt (SHA-256 + size metadata). The old conversation stream itself is then allowed
-    to age down to a 1-2 word minimum trace.
+    The newest 20 turns remain full fidelity. Older turns may be destructively
+    compressed only after at least one durable semantic item has been extracted for
+    that exact source turn. Untyped prose is therefore deferred rather than silently
+    destroyed until a stronger semantic extractor records durable memory.
     """
 
     LEVELS = (
@@ -54,32 +55,43 @@ class MemoryManager:
             )
         return ids
 
-    def _record_precompression_once(self, row):
-        existing = self.db.db.execute(
-            "SELECT memory_id FROM durable_memory WHERE kind='compression_receipt' AND source_turn_id=? LIMIT 1",
-            (row["turn_id"],),
-        ).fetchone()
-        if existing:
-            return existing[0]
-
-        self.extract_explicit(row["turn_id"], row["user_id"], row["content"])
-        raw = row["content"].encode("utf-8")
-        digest = hashlib.sha256(raw).hexdigest()
-        semantic_count = int(
+    def _semantic_count(self, turn_id):
+        return int(
             self.db.db.execute(
                 "SELECT COUNT(*) FROM durable_memory WHERE source_turn_id=? AND kind IN (%s)"
                 % ",".join("?" for _ in SEMANTIC_KINDS),
-                (row["turn_id"], *sorted(SEMANTIC_KINDS)),
+                (turn_id, *sorted(SEMANTIC_KINDS)),
             ).fetchone()[0]
         )
-        return self.db.add_memory(
+
+    def _record_precompression_once(self, row):
+        self.extract_explicit(row["turn_id"], row["user_id"], row["content"])
+        semantic_count = self._semantic_count(row["turn_id"])
+        existing = self.db.db.execute(
+            "SELECT memory_id,provenance FROM durable_memory WHERE kind='compression_receipt' AND source_turn_id=? LIMIT 1",
+            (row["turn_id"],),
+        ).fetchone()
+        if existing:
+            provenance = json.loads(existing["provenance"])
+            if int(provenance.get("durable_extraction_count", -1)) != semantic_count:
+                provenance["durable_extraction_count"] = semantic_count
+                provenance["status"] = "cleared" if semantic_count > 0 else "deferred_no_semantic_extraction"
+                self.db.db.execute(
+                    "UPDATE durable_memory SET provenance=? WHERE memory_id=?",
+                    (json.dumps(provenance, sort_keys=True), existing["memory_id"]),
+                )
+            return semantic_count
+
+        raw = row["content"].encode("utf-8")
+        digest = hashlib.sha256(raw).hexdigest()
+        self.db.add_memory(
             "compression_receipt",
             row["session_id"],
             digest,
             row["turn_id"],
             row["user_id"],
             {
-                "archive": "sha256-precompression-v2",
+                "archive": "sha256-precompression-v3",
                 "lossless_source_retained": False,
                 "source_sha256": digest,
                 "source_bytes": len(raw),
@@ -88,8 +100,10 @@ class MemoryManager:
                 "original_fidelity": row["fidelity"],
                 "original_generation": int(row["compression_generation"]),
                 "durable_extraction_count": semantic_count,
+                "status": "cleared" if semantic_count > 0 else "deferred_no_semantic_extraction",
             },
         )
+        return semantic_count
 
     @staticmethod
     def _compress(text, level):
@@ -109,6 +123,7 @@ class MemoryManager:
         rows = self.db.all_turns(session_id)
         n = len(rows)
         changed = 0
+        compressed_turn_ids = []
         for i, row in enumerate(rows):
             age = n - i
             if age <= self.full_window:
@@ -116,20 +131,25 @@ class MemoryManager:
             level = min(5, 1 + (age - self.full_window - 1) // 20)
             if row["compression_generation"] >= level:
                 continue
-            self._record_precompression_once(row)
+            semantic_count = self._record_precompression_once(row)
+            if semantic_count < 1:
+                # Explicit-only extraction cannot prove that ordinary prose is disposable.
+                # Keep source truth intact until a stronger extractor stores durable semantics.
+                continue
             self.db.db.execute(
                 "UPDATE turns SET content=?, fidelity=?, compression_generation=? WHERE turn_id=?",
                 (self._compress(row["content"], level), self.LEVELS[level], level, row["turn_id"]),
             )
+            compressed_turn_ids.append(row["turn_id"])
             changed += 1
 
-        # Candidate databases created by older artifact revisions may contain a complete
-        # pre-compression transcript in source_archive. That would defeat the directive's
-        # destructive conversation-stream compression. Receipts and extracted semantic
-        # memories above are retained; the duplicate full-text archive is not.
-        self.db.db.execute(
-            "DELETE FROM durable_memory WHERE kind='source_archive' AND source_turn_id IN "
-            "(SELECT turn_id FROM turns WHERE session_id=?)",
-            (session_id,),
-        )
+        # Older artifact generations may have retained full source archives. Retire them
+        # only after the corresponding turn has actually crossed the semantic-clearance
+        # gate and been compressed; never delete the only recoverable copy of a deferred turn.
+        if compressed_turn_ids:
+            placeholders = ",".join("?" for _ in compressed_turn_ids)
+            self.db.db.execute(
+                f"DELETE FROM durable_memory WHERE kind='source_archive' AND source_turn_id IN ({placeholders})",
+                tuple(compressed_turn_ids),
+            )
         return changed

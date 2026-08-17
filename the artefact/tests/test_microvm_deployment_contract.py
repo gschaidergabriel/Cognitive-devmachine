@@ -1,8 +1,10 @@
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "deployment" / "MICROVM_DEPLOYMENT_CONTRACT.md"
 TEMPLATE = ROOT / "deployment" / "clayverse-kata-statefulset.template.yaml"
+MANIFEST = ROOT / "manifest.json"
 
 
 def _yaml_documents(text: str) -> list[str]:
@@ -75,6 +77,20 @@ def test_network_contract_requires_real_enforcement_not_yaml_only():
     assert "combine additively" in text
     assert "complete additive set of policies" in text
     assert "representative undeclared ingress and egress remain denied" in text
+
+
+def test_manifest_network_gates_match_the_deployment_contract():
+    manifest = json.loads(MANIFEST.read_text())
+    outer = manifest["outer_isolation"]
+
+    assert outer["required_for_final_pass"] is True
+    assert outer["network_policy_baseline"] == "DEFAULT_DENY_INGRESS_AND_EGRESS_FOR_APP_CLAYVERSE"
+    assert outer["functional_network_access"] == "SEPARATE_DEPLOYMENT_SPECIFIC_REVIEWED_ALLOW_POLICY_REQUIRED"
+    assert "ENFORCES_NETWORKPOLICY" in outer["network_policy_enforcement"]
+
+    required = set(manifest["requires_for_final_pass"])
+    assert "baseline ClayVerse NetworkPolicy default-deny ingress+egress actually enforced by the deployed CNI" in required
+    assert "exact reviewed deployment network allow policy identity captured and only admitted flows open while tested non-admitted flows remain denied" in required
 
 
 def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():

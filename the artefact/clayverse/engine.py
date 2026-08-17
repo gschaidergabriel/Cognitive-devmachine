@@ -173,6 +173,12 @@ class ClayVerseEngine:
                     (causal_id, ws["episode_id"], None, tid, None, time.time()),
                 )
                 cur = db.execute(
+                    "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
+                    (ws["episode_id"],),
+                )
+                if cur.rowcount != 1:
+                    raise RuntimeError("workspace did not terminalize after engine response")
+                cur = db.execute(
                     "DELETE FROM active_turns WHERE session_id=? AND causal_id=?",
                     (sid, causal_id),
                 )
@@ -198,9 +204,10 @@ class ClayVerseEngine:
             if effect_causal_id != causal_id:
                 raise RuntimeError("effect re-entered through wrong causal identity")
 
-            # The journal has durably re-entered the outcome. Retire the ephemeral
-            # active row only under the same live generation. A crash or generation
-            # change before this commit intentionally leaves it for recovery.
+            # The journal has durably re-entered the outcome. Terminalize the workspace
+            # and retire the ephemeral active row only under the same live generation.
+            # A crash or generation change before this commit intentionally leaves the
+            # selected workspace + active row for canonical Recovery.
             with self.db.tx() as db:
                 self.db.assert_live_generation(sid, reasoning_generation)
                 active = db.execute(
@@ -237,6 +244,12 @@ class ClayVerseEngine:
                     decision = dict(decision)
                     prior = str(decision.get("text", "")).strip()
                     decision["text"] = f"{prior}\n\n{notice}" if prior else notice
+                cur = db.execute(
+                    "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
+                    (ws["episode_id"],),
+                )
+                if cur.rowcount != 1:
+                    raise RuntimeError("workspace did not terminalize after effect re-entry")
                 cur = db.execute(
                     "DELETE FROM active_turns WHERE session_id=? AND causal_id=?",
                     (sid, causal_id),

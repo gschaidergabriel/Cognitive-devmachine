@@ -31,6 +31,7 @@ def test_restart_aborts_open_non_effect_episode_and_is_idempotent(tmp_path):
     assert first == {
         "scanned": 1,
         "reentered_effects": 0,
+        "non_reentered_effects": 0,
         "aborted_no_effect": 1,
         "uncertain_effects": 0,
         "ambiguous_effects": 0,
@@ -54,7 +55,7 @@ def test_restart_never_replays_selected_effect_without_persisted_outcome(tmp_pat
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 0
 
 
-def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecution(tmp_path):
+def test_restart_reenters_exactly_one_persisted_verified_effect_outcome_without_reexecution(tmp_path):
     db = UnifiedDB(tmp_path / "state.db")
     session_id, _, episode_id = _episode(db, selection="request_effect")
     generation = db.session_generation(session_id)
@@ -85,6 +86,7 @@ def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecuti
         "reentered": 1,
     }
     assert first["reentered_effects"] == 1
+    assert first["non_reentered_effects"] == 0
     assert second["scanned"] == 0
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 1
     assert db.db.execute(
@@ -92,7 +94,7 @@ def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecuti
     ).fetchone()[0] == "RECOVERED_EFFECT_REENTERED"
 
 
-def test_restart_reenters_denied_effect_with_zero_credit(tmp_path):
+def test_restart_keeps_denied_effect_as_evidence_without_reentry(tmp_path):
     db = UnifiedDB(tmp_path / "state.db")
     session_id, _, episode_id = _episode(db, selection="request_effect")
     outcome = {
@@ -115,11 +117,14 @@ def test_restart_reenters_denied_effect_with_zero_credit(tmp_path):
 
     result = recover_incomplete_episodes(db)
 
-    row = db.db.execute(
-        "SELECT credit,reentered FROM causal_episodes WHERE episode_id=?", (episode_id,)
-    ).fetchone()
-    assert tuple(row) == (0.0, 1)
-    assert result["reentered_effects"] == 1
+    assert db.db.execute(
+        "SELECT COUNT(*) FROM causal_episodes WHERE episode_id=?", (episode_id,)
+    ).fetchone()[0] == 0
+    assert result["reentered_effects"] == 0
+    assert result["non_reentered_effects"] == 1
+    assert db.db.execute(
+        "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)
+    ).fetchone()[0] == "RECOVERY_EFFECT_NOT_REENTERED"
 
 
 def test_restart_fails_closed_on_multiple_effect_records(tmp_path):

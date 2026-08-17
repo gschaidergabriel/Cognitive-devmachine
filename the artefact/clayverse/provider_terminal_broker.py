@@ -7,13 +7,41 @@ import stat
 import struct
 import threading
 from pathlib import Path
-from typing import Callable
 
 from .engine import ClayVerseEngine
 
 
 class ProviderTerminalBrokerError(RuntimeError):
     pass
+
+
+_ACTIVE_BROKER: "ProviderTerminalBroker | None" = None
+_ACTIVE_BROKER_LOCK = threading.RLock()
+
+
+def install_active_provider_terminal_broker(broker: "ProviderTerminalBroker") -> None:
+    global _ACTIVE_BROKER
+    if not isinstance(broker, ProviderTerminalBroker):
+        raise TypeError("active provider terminal broker type invalid")
+    with _ACTIVE_BROKER_LOCK:
+        if _ACTIVE_BROKER is not None and _ACTIVE_BROKER is not broker:
+            raise ProviderTerminalBrokerError("a different provider terminal broker is already active")
+        _ACTIVE_BROKER = broker
+
+
+def active_provider_terminal_broker() -> "ProviderTerminalBroker":
+    with _ACTIVE_BROKER_LOCK:
+        broker = _ACTIVE_BROKER
+    if broker is None:
+        raise ProviderTerminalBrokerError("provider terminal broker is not active")
+    return broker
+
+
+def clear_active_provider_terminal_broker(broker: "ProviderTerminalBroker") -> None:
+    global _ACTIVE_BROKER
+    with _ACTIVE_BROKER_LOCK:
+        if _ACTIVE_BROKER is broker:
+            _ACTIVE_BROKER = None
 
 
 class ProviderTerminalBroker:
@@ -56,8 +84,6 @@ class ProviderTerminalBroker:
         if isinstance(pid, bool) or not isinstance(pid, int) or pid <= 1:
             raise ValueError("provider terminal peer PID is invalid")
         with self._peer_lock:
-            # One live provider pane per canonical user. Re-registration replaces an
-            # older pane PID but never broadens authority to a UID or process group.
             for existing_pid, identity in list(self._allowed_peers.items()):
                 if identity[0] == user_id:
                     del self._allowed_peers[existing_pid]
@@ -174,12 +200,7 @@ class ProviderTerminalBroker:
                 try:
                     self._handle(conn)
                 except Exception as exc:
-                    # Return only a bounded failure class; never exception text, which
-                    # could contain provider/library data. Canonical state stays in DB.
-                    failure = {
-                        "ok": False,
-                        "error_type": type(exc).__name__,
-                    }
+                    failure = {"ok": False, "error_type": type(exc).__name__}
                     encoded = (json.dumps(failure, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
                     try:
                         conn.sendall(encoded)

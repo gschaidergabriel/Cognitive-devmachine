@@ -19,6 +19,9 @@ RUN apt-get update \
 WORKDIR /opt/clayverse
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+RUN mkdir -p /etc/claude-code
+COPY --chown=root:root policy/managed-mcp.json /etc/claude-code/managed-mcp.json
+RUN chmod 0444 /etc/claude-code/managed-mcp.json
 COPY clayverse ./clayverse
 RUN useradd --system --uid 10001 --create-home clayverse \
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude /opt/entityos \

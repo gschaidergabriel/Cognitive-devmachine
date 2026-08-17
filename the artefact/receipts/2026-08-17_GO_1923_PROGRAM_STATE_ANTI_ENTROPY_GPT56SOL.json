@@ -1,0 +1,37 @@
+{
+  "schema": "clayverse.go.receipt/v1",
+  "timestamp_local": "2026-08-17T19:23:24+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "NO_CHANGE_PRODUCT_BYTES_COORDINATION_STATE_REPAIR",
+  "canonical_research_main_observed_before_write": "0e8101d83638bdabde8eb3831783e6b133512846",
+  "observations": {
+    "program_state_blob_before_repair": "4b1d331beb0fb99c39a41cceff185b989856ce04",
+    "program_state_last_updated_before_repair": "2026-08-17T18:04:00+07:00",
+    "living_readme_blob": "c17b5301663525dfbbd0ca6d4ba8bccacb54a715",
+    "retained_pr810_head": "1c96b76184d95a9357b24fde5dcb4c884319f19e",
+    "retained_pr810_state": "OPEN_DRAFT_MERGEABLE",
+    "latest_observed_pr810_vercel_deployment": "dpl_6uKu7KsYM3XazJX4K4dwG7Rd5GqY",
+    "latest_observed_pr810_deployed_head": "c98a68ff16794c086db7932744b9853ac53969fb",
+    "latest_observed_pr810_deployment_state": "ERROR",
+    "latest_observed_pr810_failure_boundary": "VERCEL_BUILD_STARTED_THEN_CURRENT_TARGET_PATCH_IDENTITY_MISMATCH_PRIVATE_ARCHIVE_SIGNATURE_BEFORE_SANDBOX_CREATE",
+    "current_pr810_head_has_observed_vercel_deployment": false,
+    "runtime_credit": 0,
+    "last_bound_execution_closure": "f4c91d0129bbcd9d5e83bceb66b44c2e52f517ee",
+    "last_bound_execution_tree": "ff89be29ea79df92edd547b32abce9c7eceb34da",
+    "last_bound_execution_base_main": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "retained_pr611_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "retained_pr622_head": "eb603ea054a307544de1b8281632a9daa8f830c2",
+    "retained_pr622_workflow_blob": "ad34476c0092b7e724240c927a7cb14858d1a8dc",
+    "retained_pr622_test_blob": "ed77f5c9446295fa973512ddf7e9d11ea3292010"
+  },
+  "defect": "PROGRAM_STATE retained an older 18:04 Vercel rate-limit/controller identity after later evidence had already established a real c98 Vercel build admission, a fail-closed pre-Sandbox wrapper mismatch, a repaired retained PR810 head 1c96, and a newer fused PR622 lane. Because BOOTSTRAP_MINIMAL loads PROGRAM_STATE before task-specific artefact state, the stale dynamic blocker could misroute later workers.",
+  "repair_scope": "Refresh only canonical coordination/execution-state metadata. Do not change ClayVerse product/runtime bytes, do not create a second OCI controller, do not rebind fast-moving execution branches while no executor is admitted, and do not mint retry-only commits to force Vercel compute.",
+  "evidence_boundary": "GitHub/Vercel control-plane and source-state evidence only. No current-head Sandbox.create, source staging, EntityOS reproduction, OCI build, image digest, in-image tmux/service assertion, canonical Python hash lock, Clerk/browser, lifecycle, recovery or whole-product PASS is claimed.",
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "The shared 19:20 trigger exposes only minute-precision identity and no immutable shared request/turn id."
+  },
+  "next_discriminator": "At the first actually-started authorized isolated current-target executor, refresh main and rebind the single retained PR810 lane once to the then-current PR611 plus fused PR622 bytes, then execute Sandbox source binding -> EntityOS reproduction/staging -> full source regression -> exact OCI build/image/dependency identity -> in-image PR611/service evidence -> PR622 canonical lock materialization."
+}

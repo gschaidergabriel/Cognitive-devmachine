@@ -1,0 +1,92 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_base_observed": "ef91bdba55c548d5e757e87539ec40d2dba60d12",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "active_entityos_head_observed": "fa7ca80b668b1cf59b48f2b314c046b3a4c772f2",
+  "execution_classification": "SOURCE_FUSION_REVIEW_PLUS_EXTERNAL_EXECUTION_BLOCKER_OBSERVATION",
+  "supersedes_observation_note": "This receipt updates the runtime-enforcement and duplicate-authority observations recorded in 2026-08-17_GO_ENTITYOS_PYTHON_WHEEL_ARTIFACT_LOCK_SOURCE_DELTA.json; it does not erase that earlier bounded evidence.",
+  "observed_source_state": {
+    "canonical_artifact_lock": "entityos/python_artifact_lock_v1.json",
+    "artifact_lock_schema": "EntityOSPythonArtifactLock/v1",
+    "scope": "linux/x86_64/cpython-3.13",
+    "distribution_policy": "WHEEL_ONLY",
+    "hash_policy": "EXACTLY_ONE_SHA256_PER_DISTRIBUTION",
+    "build_distribution_count": 6,
+    "full_pytest_distribution_count": 10,
+    "requirements_build_has_require_hashes": true,
+    "requirements_build_has_only_binary_all": true,
+    "requirements_test_inherits_hashed_build_surface": true,
+    "verifier_consumes_canonical_artifact_lock": true,
+    "verifier_checks_requirements_hashes_against_lock": true,
+    "verifier_checks_exact_installed_distribution_set": true,
+    "duplicate_fixture_lock_present": false,
+    "canonical_lock_regression_test_present": true
+  },
+  "coordination_event": {
+    "stale_write_attempt_rejected": true,
+    "github_result": "409_CONTENT_SHA_MISMATCH",
+    "forced_overwrite_used": false,
+    "interpretation": "Concurrent product work advanced PR #787; stale writes were not forced. The competing artifact-lock representations were subsequently fused to one canonical lock and the duplicate fixture was removed at fa7ca80b668b1cf59b48f2b314c046b3a4c772f2."
+  },
+  "primary_source_basis": {
+    "uv": "Official uv documentation supports all-or-nothing hash checking for --require-hashes and wheel-only restriction with --only-binary :all:. These upstream semantics support the candidate mechanism but do not substitute for Vercel Sandbox execution.",
+    "pypi": "Official PyPI release metadata supplied the exact wheel filenames and SHA-256 values represented by the canonical artifact lock.",
+    "authority_limit": "Source inspection and primary documentation cannot establish that the exact current head successfully provisions, tests, freezes or runs EntityOS."
+  },
+  "vercel_observation": {
+    "exact_head": "fa7ca80b668b1cf59b48f2b314c046b3a4c772f2",
+    "github_vercel_status": "failure",
+    "status_description": "Deployment rate limited — retry in 24 hours.",
+    "exact_head_deployment_created": false,
+    "exact_head_sandbox_started": false,
+    "exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "latest_promoted_exact_head_sandbox_evidence_remains": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "latest_promoted_entityos_sha256_for_that_older_scope": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "non_equivalence": "The older exact-head PASS does not generalize to fa7ca80b668b1cf59b48f2b314c046b3a4c772f2."
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by_prior_evidence": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "architecture_outcome": {
+    "artifact_hash_authority": "RETAIN_SOURCE_IMPLEMENTATION_PENDING_EXACT_HEAD_SANDBOX",
+    "duplicate_authority": "REJECTED_AND_REMOVED",
+    "whole_entityos_acceptance": "OPEN",
+    "next_shared_architecture_frontier_after_package_authority": "canonical typed VM-to-host ABI authority for Bytes/Int/effect/capability contracts, without generic untyped ClayValue widening"
+  },
+  "next_executable_discriminator": [
+    "At the next Vercel build allowance, refresh the then-current #787 head before execution.",
+    "Run the canonical static dependency/source preflight and exact raw-tree/archive/attestation staging.",
+    "Provision the six build and ten full-pytest distributions under the canonical single-hash wheel-only requirements and emit artifact-lock plus requirements-lock receipts.",
+    "Run full pytest with nonzero tests, zero skips and new_unusual_experiment_count=0.",
+    "Run the Git-free attested twin EntityOS freeze, runtime/self-test, no-host-Python, relocation, sanitized-Git and Batch-5 regressions under the existing canonical path.",
+    "Bind the exact EntityOS SHA-256 only if that same exact-head Sandbox passes and stops successfully."
+  ],
+  "capability_frontier_preserved": {
+    "CM_NET": "OPEN",
+    "CM_PORT": "OPEN",
+    "CM_TERM": "OPEN",
+    "CM_DATA": "OPEN",
+    "CM_VIS": "OPEN",
+    "CM_AUDIO": "OPEN"
+  },
+  "claims": {
+    "product_source_artifact_hash_lane_present": true,
+    "single_canonical_artifact_lock_observed": true,
+    "current_exact_head_sandbox_pass": false,
+    "current_exact_head_sandbox_fail": false,
+    "current_exact_head_unexecuted_due_provider_rate_limit": true,
+    "whole_entityos_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

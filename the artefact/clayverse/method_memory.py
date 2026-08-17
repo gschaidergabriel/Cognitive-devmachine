@@ -109,6 +109,7 @@ def canonical_problem_signature(raw: Any) -> dict[str, list[str]]:
 
 
 def infer_problem_signature(text: str, resource_refs: list[str] | None = None) -> dict[str, list[str]]:
+    """Diagnostic/SHADOW helper only; never an ACTIVE Stage-B serving authority."""
     if not isinstance(text, str) or not text.strip():
         raise MethodRecordError("cannot infer signature from empty text")
     lowered = " ".join(text.lower().split())
@@ -246,6 +247,10 @@ class MethodMemory:
     V1 is deliberately user-scoped. Cross-user/global method promotion requires a later
     explicit declassification/share contract; this baseline cannot broaden session/user
     accessibility merely because an abstraction looks generic.
+
+    Ordinary admission can persist candidates and bounded negative method memory. It
+    cannot mint reusable promoted frameworks/heuristics. Positive promotion requires a
+    separate atomic causal promotion lifecycle that does not exist in this baseline yet.
     """
 
     def __init__(self, db: UnifiedDB):
@@ -280,6 +285,10 @@ class MethodMemory:
     ) -> str:
         if user_id not in {"gabriel", "andreas"}:
             raise MethodRecordError("v1 method admission requires an explicit canonical user scope")
+        if kind in PROMOTABLE_KINDS:
+            raise MethodRecordError(
+                "framework/heuristic admission requires dedicated promotion lifecycle"
+            )
         if not isinstance(subject, str) or not subject.strip() or len(subject) > 300:
             raise MethodRecordError("invalid method subject")
         if not isinstance(provenance, dict) or not provenance:
@@ -325,8 +334,10 @@ class MethodMemory:
         status = str(evidence_status).upper()
         if status not in {"PRESENT", "UNDERCOVERED", "UNKNOWN"}:
             raise MethodRecordError("invalid evidence status")
+        if problem_signature is None:
+            raise MethodRecordError("explicit problem_signature required for Stage-B serving")
         trigger = status in {"UNDERCOVERED", "UNKNOWN"} or self.strategy_intent(query)
-        query_signature = canonical_problem_signature(problem_signature) if problem_signature is not None else infer_problem_signature(query, resource_refs)
+        query_signature = canonical_problem_signature(problem_signature)
         if not trigger:
             return {
                 "triggered": False,

@@ -1,0 +1,44 @@
+{
+  "kind": "clayverse_go_receipt",
+  "observed_at": "2026-08-17T15:40+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "f9e403aa8728a0215926f83aba0b626dcc06cba7",
+  "branch": "go/live-terminal-readiness-20260817-1418",
+  "candidate_head_before_receipt": "846263e340b451615431a81a758032c0881b25c3",
+  "classification": "SOURCE_MECHANISM_SUPPORTED_RUNTIME_UNOBSERVED",
+  "problem": "The older live-terminal readiness candidate implemented a second tmux subprocess/control path in terminal_gateway instead of reusing the hardened canonical TerminalSessionManager path.",
+  "repair": {
+    "gateway_owns_subprocess": false,
+    "manager_owned_liveness": true,
+    "manager_owned_policy_attestation": true,
+    "readiness_mutates_tmux": false,
+    "readyz_off_event_loop": true,
+    "fails_closed_on_missing_session": true,
+    "fails_closed_on_policy_error": true
+  },
+  "exact_git_blobs": {
+    "terminal_gateway.py": "326b187baf120459208bb53b2e184b8a3b07b70f",
+    "test_live_terminal_readiness.py": "d3ad7f6361876c19caadb24157b7ba33c0db83c9",
+    "test_container_healthcheck.py": "d931f24d73e107efcc0d065dd5804446c994eeb5",
+    "current_main_terminal_sessions.py": "185a748f80011b324b2c4786644ad42ff369203e"
+  },
+  "supporting_probe": {
+    "environment": "OpenAI isolated non-production Python environment",
+    "scope": "reconstructed helper mechanism only",
+    "result": "PASS",
+    "cases": [
+      "both canonical manager-owned liveness and policy checks pass",
+      "missing Andreas session returns false before policy probe",
+      "policy attestation error propagates to the runtime fail-closed boundary"
+    ]
+  },
+  "execution_admission": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_REACHED",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "vps": "FORBIDDEN"
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "evidence_boundary": "No live tmux, native Claude, Clerk browser/WebSocket PTY, exact OCI build/start/restart/concurrency, or whole-product PASS is claimed.",
+  "next_exact_gate": "On the next admitted SQLite-capable isolated sandbox, bind the then-current exact head; run readiness plus adjacent terminal/auth tests; build/start the exact OCI image; require ready with both managed sessions, 503 after one session/policy/process fault, and recovery only through the admitted product path."
+}

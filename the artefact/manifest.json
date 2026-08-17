@@ -39,16 +39,17 @@
   "ingress_policy": "only explicit admitted authenticated/verified inputs cross inward; inputs are normalized, causally identified and reconciled with UnifiedDB before cognition/execution; Kubernetes reference deployment starts from default-deny and requires an exact reviewed allow policy",
   "internal_processing_loop": "INGRESS -> UnifiedDB canonicalize/record -> retrieval/context -> selected LLM cognition -> response re-ingested -> policy/authority validation -> EntityOS/managed terminal execution -> stdout/stderr/result/effect receipt -> UnifiedDB causal re-entry -> repeat as needed -> EGRESS",
   "terminal_control": "accepted ClayVerse/EntityOS execution layer directly controls managed Linux PTY/tmux stdin/stdout/stderr/exit/process/filesystem operations within policy; unmediated generic host process.exec is forbidden",
-  "egress_policy": "only explicit admitted outputs/effects or bounded GLM inference requests cross outward and remain bound to canonical causal turn/effect receipts; Kubernetes reference deployment starts default-deny and requires an exact reviewed allow policy; stale/replayed/unknown/unauthorized effects fail closed",
+  "egress_policy": "only explicit admitted outputs/effects or bounded admitted token/API inference requests cross outward and remain bound to canonical causal turn/effect receipts; the mandatory final test-of-tests provider is Mistral; Kubernetes reference deployment starts default-deny and requires an exact reviewed allow policy; stale/replayed/unknown/unauthorized effects fail closed",
   "build_context": "default-deny allowlist; only explicitly consumed product bytes enter OCI build context; retired headless/custom-chat runtimes and secrets are excluded",
-  "visible_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code CLI; GLM is a separate token/API inference-only path",
+  "visible_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code CLI; Mistral is the mandatory token/API inference-only provider for the final test-of-tests; GLM remains bounded legacy/research functionality unless separately superseded",
   "terminal_sessions": {
     "gabriel": "clayverse-gabriel",
     "andreas": "clayverse-andreas"
   },
   "llm_provider_law": {
     "claude_code": "interactive terminal-native inference path inside managed PTY/tmux; authenticate through direct Claude Code terminal login; no hidden Claude API-token replacement for the primary path",
-    "glm": "token/API inference only; token stays in secret boundary; no PTY/filesystem/EntityOS/EffectGate authority",
+    "mistral": "mandatory final test-of-tests token/API inference path; credential is acquired at runtime from the approved Vault/secret store and remains transient; no PTY/filesystem/EntityOS/EffectGate authority; output must be re-ingested into UnifiedDB before any effect authority",
+    "glm": "bounded legacy/research token/API inference functionality only unless separately superseded; token stays in secret boundary; no PTY/filesystem/EntityOS/EffectGate authority; not the mandatory final test-of-tests provider",
     "provider_switching": "must preserve the same UnifiedDB causal turn/session/generation; provider switching never forks entity or state",
     "common_rule": "model output is proposed reasoning/action only and must be re-ingested and policy-checked before any execution"
   },
@@ -119,7 +120,7 @@
     "exact reviewed deployment network allow policy identity captured and only admitted flows open while tested non-admitted flows remain denied",
     "node-local, metadata-service and relevant control-plane routes explicitly probed and every non-admitted route denied by deployment/microVM boundary",
     "sealed ingress/egress boundary and full cognition-reingest-terminal-result loop",
-    "Claude Code direct terminal-login/runtime verification and GLM token secrecy/inference-only verification",
+    "Claude Code direct terminal-login/runtime verification plus Mistral Vault/secret-store token secrecy, inference-only authority and real canonical-turn verification",
     "automatic tier-1 internal recovery plus tier-2 full microVM/workload replacement",
     "tier-2 replacement proves a new Pod UID and new Kata sandbox/VM identity rather than an in-place container restart",
     "known-good snapshot recovery across UnifiedDB generation and EffectJournal",

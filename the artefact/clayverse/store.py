@@ -3,7 +3,14 @@ import contextlib, hashlib, json, sqlite3, time, uuid
 from dataclasses import dataclass
 from pathlib import Path
 
-from .method_memory import METHOD_KINDS, MethodMemoryValidationError, canonical_method_json, decode_method_json
+from .method_memory import (
+    METHOD_KINDS,
+    MethodMemoryValidationError,
+    canonical_method_json,
+    decode_method_json,
+    sqlite_validate_method_row,
+    validate_existing_method_rows,
+)
 
 SCHEMA = r'''
 PRAGMA journal_mode=WAL;
@@ -14,6 +21,9 @@ CREATE TABLE IF NOT EXISTS sessions(session_id TEXT PRIMARY KEY,user_id TEXT NOT
 CREATE TABLE IF NOT EXISTS turns(turn_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(user_id),ordinal INTEGER NOT NULL,ts REAL NOT NULL,role TEXT NOT NULL CHECK(role IN ('user','assistant','system','tool')),content TEXT NOT NULL,fidelity TEXT NOT NULL DEFAULT 'full',compression_generation INTEGER NOT NULL DEFAULT 0,resource_refs TEXT NOT NULL DEFAULT '[]',causal_refs TEXT NOT NULL DEFAULT '[]',provenance TEXT NOT NULL DEFAULT '{}',UNIQUE(session_id, ordinal));
 CREATE INDEX IF NOT EXISTS idx_turns_session_ord ON turns(session_id, ordinal DESC);
 CREATE TABLE IF NOT EXISTS durable_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL,subject TEXT NOT NULL,value TEXT NOT NULL,source_turn_id TEXT REFERENCES turns(turn_id),user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL);
+CREATE TRIGGER IF NOT EXISTS durable_method_memory_validate_insert BEFORE INSERT ON durable_memory WHEN NEW.kind IN ('framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample','method_receipt') BEGIN SELECT clay_validate_method_memory(NEW.kind,NEW.subject,NEW.value,NEW.provenance); END;
+CREATE TRIGGER IF NOT EXISTS durable_method_memory_validate_update BEFORE UPDATE OF kind,subject,value,provenance ON durable_memory WHEN NEW.kind IN ('framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample','method_receipt') BEGIN SELECT clay_validate_method_memory(NEW.kind,NEW.subject,NEW.value,NEW.provenance); END;
+CREATE TRIGGER IF NOT EXISTS durable_method_memory_no_fact_smuggling BEFORE UPDATE OF kind ON durable_memory WHEN OLD.kind IN ('framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample','method_receipt') AND NEW.kind NOT IN ('framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample','method_receipt') BEGIN SELECT RAISE(ABORT,'method memory cannot become evidence memory'); END;
 CREATE TABLE IF NOT EXISTS workspace_episodes(episode_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),ts REAL NOT NULL,observation_turn_id TEXT REFERENCES turns(turn_id),salience REAL NOT NULL,alternatives TEXT NOT NULL,selected TEXT,state TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS effects(effect_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),user_id TEXT NOT NULL,capability TEXT NOT NULL,target TEXT NOT NULL,argv TEXT,requested_generation INTEGER NOT NULL,status TEXT NOT NULL,outcome TEXT,ts REAL NOT NULL,verified_at REAL);
 CREATE TABLE IF NOT EXISTS causal_episodes(causal_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),effect_id TEXT REFERENCES effects(effect_id),observation_turn_id TEXT REFERENCES turns(turn_id),outcome_hash TEXT,credit REAL NOT NULL DEFAULT 0,reentered INTEGER NOT NULL DEFAULT 0,ts REAL NOT NULL);
@@ -40,8 +50,9 @@ class UnifiedDB:
     def __init__(self,path):
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
+        self.db.create_function("clay_validate_method_memory",4,sqlite_validate_method_row,deterministic=True)
         try:
-            self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
+            self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger(); validate_existing_method_rows(self.db)
             self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','6') ON CONFLICT(key) DO UPDATE SET value='6'")
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
             self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")

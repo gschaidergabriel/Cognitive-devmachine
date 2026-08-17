@@ -16,7 +16,7 @@ from clayverse.method_stageb import (
     QUERY_ADMISSION_VERSION,
     QUERY_SCHEMA,
 )
-from clayverse.method_validation import CandidateValidation
+from clayverse.method_validation import CandidateValidation, MethodValidationError
 from clayverse.store import UnifiedDB
 
 
@@ -75,7 +75,15 @@ def _candidate(db: UnifiedDB, sid: str):
     return candidate_id, {ep1, ep2}
 
 
-def _finalize_external_success(db: UnifiedDB, sid: str, candidate_id: str, *, falsifier_checked: bool):
+def _finalize_external_result(
+    db: UnifiedDB,
+    sid: str,
+    candidate_id: str,
+    *,
+    success: bool,
+    falsifier_checked: bool,
+    outcome_ok: bool | None = None,
+):
     turn_id, episode_id, causal_id, generation = _active(db, sid, "held-out validation case")
     validator = CandidateValidation(db)
     use_id = validator.begin(
@@ -84,19 +92,29 @@ def _finalize_external_success(db: UnifiedDB, sid: str, candidate_id: str, *, fa
         problem_signature={"goal": ["diagnose"], "mechanism": ["causal_boundary"]},
         evaluation_mode="HELD_OUT", falsifier_checked=falsifier_checked,
     )
-    effect_id = str(uuid.uuid4()); now = time.time(); outcome_hash = hashlib.sha256(b"held-out-success").hexdigest()
+    status = "VERIFIED" if success else "FAILED"
+    payload_ok = success if outcome_ok is None else bool(outcome_ok)
+    payload = json.dumps({"ok": payload_ok}, sort_keys=True)
+    effect_id = str(uuid.uuid4()); now = time.time()
+    outcome_hash = hashlib.sha256(f"{status}:{payload}:{causal_id}".encode()).hexdigest()
     db.db.execute(
         "INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-        (effect_id, episode_id, "gabriel", "entityos.exec", "{}", None, generation, "VERIFIED", "{}", now, now),
+        (effect_id, episode_id, "gabriel", "entityos.exec", "{}", None, generation, status, payload, now, now),
     )
     db.db.execute("UPDATE workspace_episodes SET selected='respond',state='COMPLETED' WHERE episode_id=?", (episode_id,))
     db.db.execute(
         "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",
-        (causal_id, episode_id, effect_id, turn_id, outcome_hash, 1.0, now),
+        (causal_id, episode_id, effect_id, turn_id, outcome_hash, 1.0 if success else -1.0, now),
     )
     db.db.execute("DELETE FROM active_turns WHERE session_id=?", (sid,))
     validation_id = validator.finalize(candidate_use_receipt_id=use_id)
     return episode_id, validation_id
+
+
+def _finalize_external_success(db: UnifiedDB, sid: str, candidate_id: str, *, falsifier_checked: bool):
+    return _finalize_external_result(
+        db, sid, candidate_id, success=True, falsifier_checked=falsifier_checked
+    )
 
 
 def _promoted_method(db: UnifiedDB, sid: str):
@@ -146,6 +164,44 @@ def test_promotion_stats_come_from_distinct_heldout_receipts_not_candidate_claim
         assert promoted["value"]["support_count"] == 2 and promoted["value"]["success_count"] == 2
         assert len(promoted["provenance"]["validation_receipt_ids"]) == 2
         assert len(promoted["provenance"]["validation_evidence_sha256"]) == 64
+    finally: db.close()
+
+
+def test_one_success_one_failure_cannot_promote_reusable_method(tmp_path):
+    db, sid = _db(tmp_path)
+    try:
+        candidate_id, _ = _candidate(db, sid)
+        _finalize_external_result(db, sid, candidate_id, success=True, falsifier_checked=True)
+        _finalize_external_result(db, sid, candidate_id, success=False, falsifier_checked=False)
+        before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
+        with pytest.raises(MethodMemoryValidationError, match="held-out causal validation receipts"):
+            db.promote_method_memory(
+                candidate_id,
+                evaluation="one anecdotal success is insufficient transfer evidence",
+                provenance={"source": "anti-anecdote-test"},
+            )
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind IN ('framework','heuristic')").fetchone()[0] == 0
+    finally: db.close()
+
+
+def test_verified_positive_credit_requires_outcome_ok_true(tmp_path):
+    db, sid = _db(tmp_path)
+    try:
+        candidate_id, _ = _candidate(db, sid)
+        before = db.db.execute(
+            "SELECT COUNT(*) FROM durable_memory WHERE kind='method_receipt' AND subject LIKE ?",
+            (f"candidate_validation:{candidate_id}:%",),
+        ).fetchone()[0]
+        with pytest.raises(MethodValidationError, match="outcome ok=true"):
+            _finalize_external_result(
+                db, sid, candidate_id, success=True, falsifier_checked=True, outcome_ok=False
+            )
+        after = db.db.execute(
+            "SELECT COUNT(*) FROM durable_memory WHERE kind='method_receipt' AND subject LIKE ?",
+            (f"candidate_validation:{candidate_id}:%",),
+        ).fetchone()[0]
+        assert after == before == 0
     finally: db.close()
 
 

@@ -115,15 +115,13 @@ def _checkpoint_state_hash(conn: sqlite3.Connection) -> str:
 
     UnifiedDB.checkpoint() hashes these exact canonical tables in this exact order.
     Recomputing the same digest on the copied database fences the checkpoint->backup
-    race: if any canonical state changed after the checkpoint but before backup, the
+    race: if canonical state changed after the checkpoint but before backup, the
     snapshot is rejected rather than mislabeled as that older checkpoint.
     """
 
     payload = []
     for table in _CANONICAL_STATE_TABLES:
-        payload.append(
-            (table, [dict(row) for row in conn.execute(f"SELECT * FROM {table} ORDER BY 1")])
-        )
+        payload.append((table, _rows(conn, f"SELECT * FROM {table} ORDER BY 1")))
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()

@@ -7,6 +7,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .effect_journal import EffectJournal
 from .store import StaleGeneration, UnifiedDB
 
 STATE_KEY = "autonomy_state_v1"
@@ -264,6 +265,18 @@ class AutonomyController:
             argv = None
         return {"capability": capability, "target": target, "argv": argv}
 
+    @staticmethod
+    def _effect_intent_receipts(effect: dict[str, Any]) -> tuple[str, str | None]:
+        target = EffectJournal._payload(EffectJournal._target_receipt(effect["target"]))
+        argv_receipt = EffectJournal._argv_receipt(effect.get("argv"))
+        argv = EffectJournal._payload(argv_receipt) if argv_receipt is not None else None
+        return target, argv
+
+    @classmethod
+    def _effect_receipt_matches_step(cls, step: dict[str, Any], row) -> bool:
+        expected_target, expected_argv = cls._effect_intent_receipts(step["effect"])
+        return row["target"] == expected_target and row["argv"] == expected_argv
+
     def propose_step(self, goal_id: str, kind: str, description: str, *, effect=None, expected_generation=None) -> dict[str, Any]:
         if kind not in STEP_KINDS:
             raise ValueError("invalid step kind")
@@ -338,13 +351,18 @@ class AutonomyController:
             step = goal["current_step"]
             if not step or step["step_id"] != step_id or step["status"] != "ADMITTED" or step["kind"] != "effect":
                 raise AutonomyStateError("effect step is not active")
-            row = db.execute("SELECT user_id,capability,requested_generation,status,outcome FROM effects WHERE effect_id=?", (effect_id,)).fetchone()
+            row = db.execute(
+                "SELECT user_id,capability,target,argv,requested_generation,status,outcome FROM effects WHERE effect_id=?",
+                (effect_id,),
+            ).fetchone()
             if row is None:
                 raise AutonomyStateError("effect receipt missing")
             if row["user_id"] != goal["user_id"] or row["capability"] != step["effect"]["capability"]:
                 raise PermissionError("effect receipt identity mismatch")
             if int(row["requested_generation"]) != goal["generation"]:
                 raise StaleGeneration(effect_id)
+            if not self._effect_receipt_matches_step(step, row):
+                raise PermissionError("effect receipt intent mismatch")
             if row["status"] == "PENDING":
                 raise AutonomyStateError("effect outcome is pending")
             verified = row["status"] == "VERIFIED" and self._loads(row["outcome"] or "{}").get("ok") is True
